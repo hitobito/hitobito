@@ -5,6 +5,7 @@
 
 = render "roles_table", title: Role.model_name.human(count: 2), roles: @roles
 = render("roles_table", title: FutureRole.model_name.human(count: 2), roles: @future_roles)
+= render("roles_table", title: t('.inactive_roles_title'), roles: @inactive_roles)
 
 = render_extensions :history_members_form
 

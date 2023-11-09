@@ -1,4 +1,28 @@
 # frozen_string_literal: true
+
+# == Schema Information
+#
+# Table name: roles
+#
+#  id                :integer          not null, primary key
+#  archived_at       :datetime
+#  beitragskategorie :string(255)
+#  convert_on        :date
+#  convert_to        :string(255)
+#  delete_on         :date
+#  deleted_at        :datetime
+#  label             :string(255)
+#  type              :string(255)      not null
+#  created_at        :datetime
+#  updated_at        :datetime
+#  group_id          :integer          not null
+#  person_id         :integer          not null
+#
+# Indexes
+#
+#  index_roles_on_person_id_and_group_id  (person_id,group_id)
+#  index_roles_on_type                    (type)
+#
 #
 # Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
 # hitobito_sac_cas and licensed under the Affero General Public License version 3
@@ -55,6 +79,22 @@ describe FutureRole do
       expect(role).not_to receive(:reset_primary_group)
       role.destroy!
     end
+
+    it 'customizes item_type of papertrail versions', versioning: true do
+      role = build.tap(&:save!)
+      expect(PaperTrail::Version.find_by(item_type: 'FutureRole', event: :create)).to be_present
+      role.destroy!
+      expect(PaperTrail::Version.find_by(item_type: 'FutureRole', event: :destroy)).to be_present
+    end
+  end
+
+  describe '#destroy' do
+    it 'does not soft delete roles' do
+      role = build.tap(&:save!)
+      expect { travel_to(1.year.from_now) { role.destroy } }
+        .to change { Role.count }.by(-1)
+        .and not_change { Role.deleted.count }
+    end
   end
 
   describe '#to_s' do
@@ -71,6 +111,12 @@ describe FutureRole do
       role = build(attrs).tap(&:save!)
       expect { role.convert! }.not_to change { Role.unscoped.count }
       expect(person.roles.where(attrs.except(:created_at).merge(type: role_type))).to be_exist
+    end
+
+    it 'raises if role has invalid type' do
+      role = build.tap(&:save!)
+      FutureRole.where(id: role.id).update(convert_to: 'Group::TopLayer::TopAdmin')
+      expect { role.convert! }.not_to raise_error
     end
   end
 end

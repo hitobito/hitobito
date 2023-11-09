@@ -14,7 +14,6 @@ describe People::CreateRolesJob do
   let(:role_type) { Group::TopGroup::Member.sti_name }
   let(:tomorrow) { Time.zone.tomorrow }
 
-
   subject(:job) { described_class.new }
 
   def create_future_role(attrs = {})

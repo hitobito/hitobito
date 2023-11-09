@@ -27,7 +27,7 @@ namespace :delayed_job do
     end
 
     if missing.any?
-      puts "Missing: #{missing.to_sentence}"
+      puts 'Missing: ' + missing.to_sentence
       exit false
     else
       puts 'All expected jobs are scheduled.'
@@ -75,6 +75,7 @@ module HitobitoDelayedJobs
       DownloadCleanerJob,
       Payments::EbicsImportJob,
       People::DuplicateLocatorJob,
+      People::CreateRolesJob,
       People::DestroyRolesJob,
       ReoccuringMailchimpSynchronizationJob,
       SessionsCleanerJob,

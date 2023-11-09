@@ -59,6 +59,29 @@ describe Role do
     end
   end
 
+  describe '::inactive scope' do
+    subject(:inactive) { Role.inactive }
+
+    it 'excludes active roles' do
+      expect(inactive).to be_empty
+    end
+
+    it 'includes deleted roles' do
+      roles(:bottom_member).update(deleted_at: 1.day.ago)
+      expect(inactive).to have(1).item
+    end
+
+    it 'includes archived roles from the past' do
+      roles(:bottom_member).update(archived_at: 3.days.ago)
+      expect(inactive).to have(1).item
+    end
+
+    it 'excludes archived roles from the future' do
+      roles(:bottom_member).update(archived_at: 3.days.from_now)
+      expect(inactive).to be_empty
+    end
+  end
+
   context 'class' do
     subject { described_class }
 

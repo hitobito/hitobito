@@ -14,6 +14,7 @@ class Person::HistoryController < ApplicationController
   def index
     @roles = fetch_roles(:with_deleted, :without_future)
     @future_roles = fetch_roles(:future)
+    @inactive_roles = fetch_roles(:inactive)
     @participations_by_event_type = participations_by_event_type
   end
 

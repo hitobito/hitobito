@@ -67,16 +67,27 @@ describe 'Future Roles behaviour' do
   end
 
   describe 'person history' do
-    it 'lists future roles in seperate section' do
+    let(:role) { roles(:bottom_member) }
+
+    it 'lists future roles in separate section' do
       create_future_role
-      visit history_group_person_path(bottom_layer, bottom_member, locale: :de)
+      visit history_group_person_path(role.group, role.person, locale: :de)
       expect(page).to have_css 'h2', text: 'Zukünftige Rollen'
       expect(page).to have_text "Top / TopGroup Member (ab #{I18n.l(tomorrow)}) #{I18n.l(tomorrow)}"
     end
 
-    it 'does not show section if no future roles exist' do
-      visit history_group_person_path(bottom_layer, bottom_member, locale: :de)
+    it 'does show inactive roles in separate section' do
+      Fabricate(Group::BottomLayer::Leader.sti_name, person: role.person, group: role.group)
+      role.update_columns(deleted_at: 3.days.ago)
+      visit history_group_person_path(role.group, role.person, locale: :de)
+      expect(page).to have_css 'h2', text: 'Inaktive Rollen'
+      expect(page).to have_text 'Bottom One Member'
+    end
+
+    it 'does only show those sections if roles exist' do
+      visit history_group_person_path(role.group, role.person, locale: :de)
       expect(page).not_to have_css 'h2', text: 'Zukünftige Rollen'
+      expect(page).not_to have_css 'h2', text: 'Inaktive Rollen'
     end
   end
 
@@ -106,6 +117,10 @@ describe 'Future Roles behaviour' do
       find('#role_type_select ul.chosen-results').find('li', text: role).click
     end
 
+    def deselect_role
+      find('.search-choice-close').click
+    end
+
     it 'can create new future role', :js do
       visit group_person_path(bottom_layer, bottom_member, locale: :de)
 
@@ -121,6 +136,18 @@ describe 'Future Roles behaviour' do
       expect(role.convert_to).to eq 'Group::BottomLayer::Member'
       expect(role.convert_on).to eq tomorrow
       expect(role.created_at.to_date).to eq Time.zone.today
+    end
+
+    it 'keeps start date when not selecting a role', :js do
+      visit group_person_path(bottom_layer, bottom_member, locale: :de)
+      click_on 'Rolle hinzufügen'
+      fill_in 'Von', with: tomorrow
+      deselect_role
+      expect do
+        first(:button, 'Speichern').click
+      end.not_to change { bottom_member.roles.count }
+      expect(page).to have_css '.alert-error', text: 'Rolle muss ausgefüllt werden'
+      expect(page).to have_field('Von', with: I18n.l(tomorrow))
     end
 
     it 'can convert type of future role on people list', :js do

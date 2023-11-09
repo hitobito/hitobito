@@ -1352,6 +1352,9 @@ de:
           approved: "Die Zugriffsanfrage für %{person} wurde bereits freigegeben."
           rejected: "Die Zugriffsanfrage für %{person} wurde bereits abgelehnt."
 
+    history:
+      index:
+        inactive_roles_title: 'Inaktive Rollen'
     households:
       form:
         address_updated: "Adresse aktualisiert"

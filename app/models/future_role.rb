@@ -16,6 +16,8 @@ class FutureRole < Role
   skip_callback :destroy, :after, :reset_contact_data_visible
   skip_callback :destroy, :after, :reset_primary_group
 
+  after_commit :update_version_type
+
   validates :person, :group, presence: true
   validates :convert_to, inclusion: { within: :group_role_types }, if: :group
   validates_date :convert_on, on_or_after: -> { Time.zone.today }
@@ -26,19 +28,33 @@ class FutureRole < Role
 
   def convert!
     Role.transaction do
-      group.roles.create!(relevant_attrs)
+      create_new_role!
       really_destroy!
     end
   end
 
+  def destroy(always_soft_destroy: false) # rubocop:disable Rails/ActiveRecordOverride
+    really_destroy!
+  end
+
   private
+
+  def update_version_type
+    versions.update_all(item_type: 'FutureRole') # rubocop:disable Rails/SkipsValidations
+  end
+
+  def create_new_role!
+    type = group.class.find_role_type!(convert_to).new
+    type.attributes = relevant_attrs.merge(type: convert_to)
+    type.save!
+  end
 
   def group_role_types
     group.role_types.map(&:sti_name)
   end
 
   def relevant_attrs
-    attributes.except(*IGNORED_ATTRS).merge(created_at: Time.zone.now, type: convert_to)
+    attributes.except(*IGNORED_ATTRS).merge(group: group, created_at: Time.zone.now)
   end
 
   def formatted_start_date

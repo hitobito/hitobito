@@ -8,6 +8,7 @@
 class People::CreateRolesJob < RecurringJob
 
   run_every 15.minutes
+
   Error = Class.new(StandardError)
 
   def perform
@@ -17,7 +18,7 @@ class People::CreateRolesJob < RecurringJob
   private
 
   def future_roles
-    FutureRole.where('convert_on <= ?', Time.zone.today).order(:convert_on)
+    FutureRole.where('convert_on <= :today', today: Time.zone.today).order(:convert_on)
   end
 
   def convert(role)

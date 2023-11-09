@@ -1,7 +1,7 @@
 - if roles.present?
   %h2=title
 
-  = table(roles, class: 'table table-striped') do |t|
+  = table(roles, class: 'table table-striped table-fixed') do |t|
     - t.col(Group.model_name.human) do |r|
       = GroupDecorator.new(r.group).link_with_layer
     - t.col(Role.model_name.human) do |r|

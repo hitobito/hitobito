@@ -12,13 +12,7 @@
         - grouped_roles.each do |group, roles|
           %tr
             %td
-              - if can?(:primary_group, entry)
-                = link_to(icon('star', filled: (entry.primary_group_id == group.id)),
-                          primary_group_group_person_path(@group, entry, primary_group_id: group.id),
-                          title: t('.set_main_group'),
-                          alt: t('.set_main_group'),
-                          class: "group-#{group.id}",
-                          data: {method: :put, remote: true})
+              = GroupDecorator.new(group).primary_group_toggle_link(entry, @group)
 
             %td
               %strong= GroupDecorator.new(group).link_with_layer

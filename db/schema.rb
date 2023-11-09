@@ -978,6 +978,7 @@ ActiveRecord::Schema.define(version: 2023_11_15_131813) do
     t.date "delete_on"
     t.date "convert_on"
     t.string "convert_to"
+    t.boolean "terminated", default: false, null: false
     t.index ["person_id", "group_id"], name: "index_roles_on_person_id_and_group_id"
     t.index ["type"], name: "index_roles_on_type"
   end

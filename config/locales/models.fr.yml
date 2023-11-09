@@ -967,11 +967,6 @@ fr:
         email: Réponse à l'adresse e-mail
         payee: Paiement à
         payment_slip: Bulletin de versement
-        logo_position: Emplacement du logo
-        logo_positions:
-          disabled: Pas de logo
-          left: Gauche
-          right: Droite
         payment_slips:
           qr: Facture QR
           no_ps: Aucun

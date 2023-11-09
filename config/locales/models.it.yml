@@ -965,11 +965,6 @@ it:
         beneficiary: A favore di
         email: risposta all'indirizzo e-mail
         payee: Versamento per
-        logo_position: Posizione del logo
-        logo_positions:
-          disabled: Nessun logo
-          left: Sinistra
-          right: Giusto
         payment_slip: Polizza di versamento
         payment_slips:
           qr: Fattura QR

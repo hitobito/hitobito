@@ -91,6 +91,8 @@ describe Role do
 
     its(:visible_types) { should_not include(Group::BottomGroup::Member) }
 
+    its(:terminatable) { should eq false }
+
     it 'should have two types with permission :layer_and_below_full' do
       expect(described_class.types_with_permission(:layer_and_below_full).to_set)
         .to eq([Group::TopGroup::Leader, Group::BottomLayer::Leader].to_set)
@@ -389,6 +391,40 @@ describe Role do
     context 'group without long key' do
       let(:role) { Group::BottomGroup::Leader }
       it { is_expected.to eq 'Leader Bottom Group' }
+    end
+  end
+
+  context '#terminatable?' do
+    let(:role_class) { Class.new(Role) }
+
+    context 'when ::terminatable=false' do
+      it 'is false by default' do
+        assert !role_class.terminatable
+        expect(role_class.new.terminatable?).to eq false
+      end
+    end
+
+    context 'when ::terminatable=true' do
+      before { role_class.terminatable = true }
+
+      it 'is true' do
+        expect(role_class.new.terminatable?).to eq true
+      end
+
+      it 'is false if role is terminated' do
+        role = role_class.new(terminated: true)
+        expect(role.terminatable?).to eq false
+      end
+
+      it 'is false if role is archived' do
+        role = role_class.new(archived_at: 1.day.from_now)
+        expect(role.terminatable?).to eq false
+      end
+
+      it 'is false if role is deleted' do
+        role = role_class.new(deleted_at: 1.day.from_now)
+        expect(role.terminatable?).to eq false
+      end
     end
   end
 

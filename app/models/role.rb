@@ -50,6 +50,9 @@ class Role < ActiveRecord::Base
   class_attribute :superior_attributes
   self.superior_attributes = []
 
+  # Marks the role as terminatable by the user.
+  class_attribute :terminatable, default: false, instance_accessor: false
+
   # TOTP as 2FA is enforced on this role.
   class_attribute :two_factor_authentication_enforced
   self.two_factor_authentication_enforced = false
@@ -174,6 +177,13 @@ class Role < ActiveRecord::Base
   # Set always_soft_destroy to true if you want to soft destroy even if the role is not old enough.
   def destroy!(always_soft_destroy: false)
     destroy(always_soft_destroy: always_soft_destroy) || _raise_record_not_destroyed
+  end
+
+  def terminatable?
+    self.class.terminatable && # class is marked as terminatable
+      !terminated? && # role is not already terminated
+      !archived? && # role is not archived
+      !deleted? # role is not deleted
   end
 
   def archived?

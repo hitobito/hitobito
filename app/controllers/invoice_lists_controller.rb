@@ -42,6 +42,7 @@ class InvoiceListsController < CrudController
   def new
     assign_attributes
 
+    entry.invoice.payment_information = entry.invoice_config.payment_information
     session[:invoice_referer] = request.referer
   end
 

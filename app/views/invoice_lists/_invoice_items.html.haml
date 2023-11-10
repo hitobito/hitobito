@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= f.input_field(:name, class: 'span2', placeholder: InvoiceItem.human_attribute_name(:name), readonly: f.object.dynamic)
+= f.input_field(:name, class: 'span2', placeholder: InvoiceItem.human_attribute_name(:name))
 = f.input_field(:description, class: 'span2', rows: 1, placeholder: InvoiceItem.human_attribute_name(:description))
 = f.input_field(:cost_center, class: 'span2', data: { provide: :typeahead, source: InvoiceArticle.cost_centers }, placeholder: InvoiceItem.human_attribute_name(:cost_center) )
 = f.input_field(:account,  class: 'span2',  data: { provide: :typeahead, source: InvoiceArticle.accounts }, placeholder: InvoiceItem.human_attribute_name(:account) )

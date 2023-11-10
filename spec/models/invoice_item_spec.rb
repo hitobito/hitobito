@@ -3,6 +3,14 @@ require 'spec_helper'
 describe InvoiceItem do
   let(:invoice) { invoices(:invoice) }
 
+  class InvoiceItem::NilCostDynamic < ::InvoiceItem
+    self.dynamic = true
+
+    def dynamic_cost
+      nil
+    end
+  end
+
 
   it 'can calculate total, cost and vat' do
     item = InvoiceItem.new(invoice: invoice,
@@ -122,5 +130,41 @@ describe InvoiceItem do
     expect do
       item.update(name: :utensils)
     end.to_not change { new_invoice.reload }
+  end
+
+  context 'dynamic invoice item' do
+    it 'returns nil vat for nil dynamic cost' do
+      new_invoice = Fabricate(:invoice, group: invoice.group, recipient: people(:bottom_member),
+                              invoice_items_attributes: {
+                                '0' => {
+                                  name: :pens,
+                                  count: 1,
+                                  unit_cost: 0,
+                                  vat_rate: 10,
+                                  type: 'InvoiceItem::NilCostDynamic'
+                                }
+                              })
+
+      item = new_invoice.invoice_items.first
+
+      expect(item.vat).to be_nil
+    end
+
+    it 'returns nil total for nil dynamic cost' do
+      new_invoice = Fabricate(:invoice, group: invoice.group, recipient: people(:bottom_member),
+                              invoice_items_attributes: {
+                                '0' => {
+                                  name: :pens,
+                                  count: 1,
+                                  unit_cost: 0,
+                                  vat_rate: 10,
+                                  type: 'InvoiceItem::NilCostDynamic'
+                                }
+                              })
+
+      item = new_invoice.invoice_items.first
+
+      expect(item.total).to be_nil
+    end
   end
 end

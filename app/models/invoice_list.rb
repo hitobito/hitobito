@@ -96,4 +96,8 @@ class InvoiceList < ActiveRecord::Base
       Person.where(id: recipient_ids.split(','))
     end
   end
+
+  def invoice_config
+    group.layer_group.invoice_config
+  end
 end

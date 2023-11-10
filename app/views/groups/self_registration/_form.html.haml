@@ -3,12 +3,13 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= entry_form(url: entry.last_step? ? group_self_registration_path : group_self_registration_step_path, cancel_url: '', submit_label: t('.submit'), buttons_top: false) do |f|
+= entry_form(url: entry.last_step? ? group_self_registration_path : group_self_registration_step_path, cancel_url: '', buttons_top: false, buttons_bottom: false) do |f|
   = f.honeypot(:verification)
   = render Steps::StepsComponent.new(steps: entry.steps, step: entry.step, form: f, policy_finder: policy_finder)
 
   - if entry.first_step?
-    = f.indented do
-      = f.help_block do
-        = t('groups.self_registration.form.has_account')
-        = link_to(t('groups.self_registration.form.to_login_page'), group_self_inscription_path)
+    .row
+      = f.indented do
+        = f.help_block do
+          = t('groups.self_registration.form.has_account')
+          = link_to(t('groups.self_registration.form.to_login_page'), group_self_inscription_path)

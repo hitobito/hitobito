@@ -5,3 +5,11 @@
 
 .step-content{class: "#{component.name.dasherize} #{active_class}"}
   = render @component.new(form: @form, **@args)
+  .btn-toolbar.bottom
+    - unless entry.first_step?
+      = back_link
+    - unless entry.last_step?
+      = next_button
+
+  - if entry.last_step?
+    = form_buttons(form, toolbar_class: 'bottom')

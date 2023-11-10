@@ -11,13 +11,19 @@ module Steps
 
     public :stimulus_action
 
-    attr_accessor :component
+    attr_accessor :component, :form
+
+    delegate :form_buttons, to: :helpers
 
     def initialize(component:, component_iteration:, step:, form:, **args)
       super(iterator: component_iteration, step: step)
       @component = component
       @form = form
       @args = args
+    end
+
+    def entry
+      form.object
     end
 
     def next_button(title = t('steps.steps_component.next_link'))

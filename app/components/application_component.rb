@@ -7,16 +7,16 @@
 
 class ApplicationComponent < ViewComponent::Base
 
+  def stimulus_action(action, event: nil)
+    prefix = [event, stimulus_controller].compact.join('->')
+    [prefix, action].join('#')
+  end
+
   private
 
   def stimulus_controller
     cls = respond_to?(:component_class) ? component_class : self.class
     cls.name.underscore.gsub('/', '--').tr('_', '-')
-  end
-
-  def stimulus_action(action, event: nil)
-    prefix = [event, stimulus_controller].compact.join('->')
-    [prefix, action].join('#')
   end
 
   def stimulus_value(name, value)

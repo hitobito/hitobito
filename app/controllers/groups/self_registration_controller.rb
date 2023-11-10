@@ -20,6 +20,17 @@ class Groups::SelfRegistrationController < CrudController
 
   helper_method :policy_finder
 
+  def step_or_create
+    # Use the same action for step and create so we can stay on the same URL and so validations
+    # and back button can work correctly
+    if entry.last_step?
+      create
+    else
+      entry.increment_step if entry.valid?
+      render 'new'
+    end
+  end
+
   def create
     super do
       next unless entry.person.errors.delete(:email, :taken)

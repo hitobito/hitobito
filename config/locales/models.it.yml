@@ -35,6 +35,7 @@ it:
         must_exist: non può essere lasciato vuoto
         readonly: non può venir cambiato
         cannot_be_later_than_today: non può essere più tardi di oggi
+        cannot_be_later_than_delete_on: deve avvenire prima o lo stesso giorno della partenza
       models:
         cors_origin:
           attributes:
@@ -92,6 +93,8 @@ it:
                   email" tutti gli indirizzi che sono assegnati come email principale
                   ad altre persone (il campo per l'email principale può essere lasciato
                   vuoto).
+            self_registration_reason_custom_text:
+              either_preset_or_custom: non può essere impostato se è stato selezionato un motivo di inserimento predefinito.
         person/add_request:
           attributes:
             person_id:
@@ -130,6 +133,8 @@ it:
             account_number:
               required: 'deve essere compilato'
               invalid_check_digit: 'non valido; cifra di controllo non corretta'
+            logo:
+              attached_unless_disabled: 'deve essere specificato se si seleziona una posizione del logo'
             payee:
               to_long: 'può contenere al massimo 2 righe'
               must_have_3_lines: 'deve contenere esattamente 3 righe'
@@ -384,6 +389,10 @@ it:
               m: Caro %{first_name}
               w: Cara %{first_name}
               other: Caro %{first_name}
+      self_registration_reason:
+        one: Motivo dell'ingresso
+        many: Motivi di ingresso
+        other: Motivi di ingresso
       service_token:
         one: Chi
         many: Chiavi API
@@ -480,6 +489,9 @@ it:
         language: Lingua
         primary_group_id: Gruppo principale
         layer_group_label: Livello principale
+        self_registration_reason: Motivo di ingresso predefinito
+        self_registration_reason_text: Motivo dell'ingresso
+        self_registration_reason_custom_text: Motivo di ingresso definito dall'utente
       person_duplicate:
         birth_year: Anno di nascita
         roles_list: Ruoli
@@ -527,6 +539,18 @@ it:
         privacy_policy_title: DPD/Dichiarazione di protezione dei dati Titolo
         privacy_policy: DPD/Dichiarazione di protezione dei dati
         remove_privacy_policy: Eliminare la DPD/dichiarazione di protezione dei dati
+        letter_logo: Logo della lettera
+        remove_letter_logo: Rimuovere il logo della lettera
+        letter_address_position: Posizione dell'indirizzo
+        letter_address_positions:
+          left: Sinistra
+          right: Destra
+        text_message_provider: Fornitore di SMS
+        text_message_providers:
+          aspsms: Aspsms
+        text_message_username: Nome utente SMS
+        text_message_password: Password SMS
+        text_message_originator: Mittente SMS
       event:
         group_ids: Gruppi
         groups: Gruppi
@@ -723,6 +747,7 @@ it:
         dates: Date
         created_at: Da
         deleted_at: Al
+        delete_on: A
         class:
           archived: '%{role_kind} (archiviato)'
           permission:
@@ -964,6 +989,11 @@ it:
         contact_id: Persona di contatto
         beneficiary: A favore di
         email: risposta all'indirizzo e-mail
+        logo_position: Posizione del logo
+        logo_positions:
+          disabled: Nessun logo
+          left: Sinistra
+          right: Destra
         payee: Versamento per
         payment_slip: Polizza di versamento
         payment_slips:
@@ -972,6 +1002,7 @@ it:
         participant_number: Numero di partecipante
         participant_number_internal: Numero interno del partecipante
         payment_reminder_configs: Solleciti
+        remove_logo: Rimuovere il logo attuale
         vat_number: Numero IVA
         donation_increase_percentage: aumento in %
         donation_calculation_year_amount: numero di anni

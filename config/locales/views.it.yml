@@ -193,6 +193,7 @@ it:
       new:
         sign_in: Login
       form:
+        login_identity: Email principale
         sign_in: Login
       oauth_info:
         sign_in: 'Entrato come %{name}'
@@ -656,6 +657,7 @@ it:
       hint_external_registration: 'Non è possibile selezionare ruoli con diritti di scrittura'
     form_tabs:
       general: 'Generale'
+      messages: 'Notizie'
     global:
       link:
         add: Creare un gruppo
@@ -680,10 +682,21 @@ it:
       form:
         privacy_policy_caption: "Dichiaro di essere d'accordo con le seguenti disposizioni:"
         submit: Crea un account
+        has_account: Avete già un login?
+        to_login_page: Registrazione e iscrizione
       create:
         email_taken: L'e-mail è già in uso. Accedere o registrarsi con un altro indirizzo e-mail.
         flash:
           privacy_policy_not_accepted: Per concludere la registrazione deve venir accettata la dichiarazione di protezione dei dati.
+    self_inscription:
+      new:
+        role_exists: Avete già questo ruolo in questo gruppo.
+        disabled: La registrazione esterna è disattivata per questo gruppo
+      create:
+        role_saved: Il ruolo è stato salvato con successo
+      form:
+        inscribe: Iscrizione
+        description: Potete iscrivervi al gruppo qui.
   group/deleted_people:
     list:
       confirm_delete: "Tutti i dati relativi a %{person} verranno cancellati definitivamente,  incluse le partecipazioni e le qualifiche. Cancella questa persona solo se nessuno ha più bisogno di questi dati."
@@ -723,6 +736,7 @@ it:
       to: A
   import/csv_parser:
     read_error: "errore nella lettura di %{filename}: %{error}"
+    encoding_error: "Purtroppo non è stato possibile riconoscere la codifica. Si tratta di un file binario?"
     contains_no_data: "non contiene nessun dato"
     read_success:
       one: "%{count} record è stato letto con successo."
@@ -762,6 +776,8 @@ it:
       due_at: Scade il
       creator: Emittente della fattura
       vat_number: Numero IVA
+      payment: Pagamento ricevuto
+      amount_open: Importo in sospeso
       payment_slip_qr:
         receipt_title: Ricevuta
         payment_title: Sezione pagamento
@@ -797,6 +813,7 @@ it:
     form_tabs:
       general: In generale
       email: E-mail
+      layout: Layout
     update:
       flash:
         success: Le impostazioni per le fatture sono state aggiornate con successo
@@ -816,12 +833,18 @@ it:
       donation_increase_percentage_explanation: Percento per il calcolo delle donazioni
     email_fields:
       email_help: Le risposte alle e-mail di fatturazione devono essere inviate all'indirizzo dell'utente corrente o all'indirizzo configurato qui.
+      email_validation: Non deve essere un indirizzo e-mail.
       sender_name_help: Le e-mail di fatturazione vengono inviate con questo nome.
     reminder_fields:
       third_level: 'Per tutti i prossimi solleciti, verrà ripetuto il terzo livello di sollecito'
     provider_fields:
       reset_payment_provider_warning: 'Se i dati dovessero venir cambiati qui il processo di inizializzazione dell''interfaccia di fatturazione dovrà venir rifatto.'
   invoice_lists:
+    destroys:
+      show:
+        title: Annullamento di fatture collettive
+        non_draft_info: 'La fattura collettiva contiene almeno una fattura che non ha lo stato "Bozza" o "Cancellato". Pertanto, la fattura collettiva non può essere annullata.'
+        confirm_delete: Vuoi davvero annullare la fattura collettiva?
     form:
       invoice_articles:
         variable_donation:
@@ -1546,6 +1569,9 @@ it:
     create:
       flash:
         success: Sei stato registrato con successo
+  self_registration_reasons:
+    destroy:
+      foreign_key_error: Ci sono persone che utilizzano questa voce per questo motivo, quindi non è possibile annullarla.
   roles:
     full_entry_label: '%{model_label} <i>%{role}</i> per <i>%{person}</i> in <i>%{group}</i>'
     role_changed: '%{full_entry_label} cambiato in <i>%{new_role}</i>.'

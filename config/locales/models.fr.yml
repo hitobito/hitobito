@@ -35,6 +35,7 @@ fr:
         must_exist: doivent être présents
         readonly: ne peut pas être modifié
         cannot_be_later_than_today: ne peut pas être plus tard qu'aujourd'hui
+        cannot_be_later_than_delete_on: doit avoir lieu avant ou le même jour que la sortie
       models:
         cors_origin:
           attributes:
@@ -93,6 +94,8 @@ fr:
                   mêmes si elles sont déjà attribuées en tant qu'adresse principale
                   d'un autre utilisateur. (Dans ce cas, tu peux laisser "adresse e-mail
                   principale" vide.)
+            self_registration_reason_custom_text:
+              either_preset_or_custom: ne peut pas être activé si un motif d'entrée prédéfini a été sélectionné.
         person/add_request:
           attributes:
             person_id:
@@ -131,6 +134,8 @@ fr:
             account_number:
               required: 'doit être renseigné'
               invalid_check_digit: 'n''est pas valable ; code de vérification incorrect'
+            logo:
+              attached_unless_disabled: 'doit être indiqué si une position de logo est sélectionnée'
             payee:
               to_long: 'doit contenir 2 lignes au maximum'
               must_have_3_lines: 'doit contenir exactement 3 lignes'
@@ -385,6 +390,10 @@ fr:
               m: Cher %{first_name},
               w: Chère  %{first_name},
               other: Cher %{first_name},
+      self_registration_reason:
+        one: Motif d'entrée
+        many: Motifs d'entrée
+        other: Motifs d'entrée
       service_token:
         one: API-Key
         many: Clefs API
@@ -481,6 +490,9 @@ fr:
         language: Langue
         primary_group_id: Groupe principal
         layer_group_label: Niveau
+        self_registration_reason: Motif d'entrée prédéfini
+        self_registration_reason_text: Motif d'entrée
+        self_registration_reason_custom_text: Motif d'entrée prédéfini
       person_duplicate:
         birth_year: Année de naissance
         roles_list: Rôles
@@ -528,6 +540,18 @@ fr:
         privacy_policy_title: Déclaration de protection des données - Titre
         privacy_policy: Déclaration de protection des données
         remove_privacy_policy: Déclaration de protection des données - supprimer
+        letter_logo: Logo de la lettre
+        remove_letter_logo: Supprimer le logo de la lettre
+        letter_address_position: Position de l'adresse
+        letter_address_positions:
+          left: Gauche
+          right: Droite
+        text_message_provider: Fournisseur de SMS
+        text_message_providers:
+          aspsms: Aspsms
+        text_message_username: Nom d'utilisateur SMS
+        text_message_password: Mot de passe SMS
+        text_message_originator: Expéditeur du SMS
       event:
         group_ids: Groupes
         groups: Groupes
@@ -724,6 +748,7 @@ fr:
         dates: Dates
         created_at: De
         deleted_at: Jusqu'à
+        delete_on: Jusqu'à
         class:
           archived: '%{role_kind} (archivé)'
           permission:
@@ -965,6 +990,11 @@ fr:
         contact_id: Personne de contact
         beneficiary: En faveur de
         email: Réponse à l'adresse e-mail
+        logo_position: Position du logo
+        logo_positions:
+          disabled: Pas de logo
+          left: Gauche
+          right: Droite
         payee: Paiement à
         payment_slip: Bulletin de versement
         payment_slips:
@@ -973,6 +1003,7 @@ fr:
         participant_number: Numéro du participant
         participant_number_internal: Numéro du participant interne
         payment_reminder_configs: Rappels
+        remove_logo: Supprimer le logo actuel
         vat_number: N° TVA
         donation_increase_percentage: Augmentation en %
         donation_calculation_year_amount: Nombre d'années

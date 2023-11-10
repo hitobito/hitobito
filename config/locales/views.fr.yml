@@ -193,6 +193,7 @@ fr:
       new:
         sign_in: Inscription
       form:
+        login_identity: Adresse e-mail principale
         sign_in: Inscription
       oauth_info:
         sign_in: 'Se connecter avec %{name}'
@@ -658,6 +659,7 @@ fr:
       hint_external_registration: 'Aucun rôle avec droit d''écriture ne peut être choisi'
     form_tabs:
       general: 'Généralités'
+      messages: 'Messages'
     global:
       link:
         add: Créer un groupe
@@ -682,10 +684,21 @@ fr:
       form:
         privacy_policy_caption: "J'accepte les conditions suivantes:"
         submit: Créer un compte
+        has_account: Tu as déjà un compte?
+        to_login_page: Enregistrer et s'inscrire
       create:
         email_taken: L'e-mail est déjà utilisé. Connecte-toi ou enregistre-toi avec une autre adresse e-mail.
         flash:
           privacy_policy_not_accepted: Pour terminer l'inscription, il faut accepter la déclaration de protection des données.
+    self_inscription:
+      new:
+        role_exists: Tu as déjà ce rôle dans ce groupe.
+        disabled: L'enregistrement externe est désactivé pour ce groupe
+      create:
+        role_saved: Le rôle a été enregistré avec succès
+      form:
+        inscribe: Inscription
+        description: Ici, tu peux t'inscrire au groupe.
   group/deleted_people:
     list:
       confirm_delete: "Toutes les données sur %{person} vont être définitivement effacées, y compris les participations et les qualifications. N'efface cette personne que si personne n'aura jamais plus besoin de ces données. "
@@ -725,6 +738,7 @@ fr:
       to: à
   import/csv_parser:
     read_error: "Erreur lors de la lecture de %{filename}: %{error}"
+    encoding_error: "Malheureusement, l'encodage n'a pas pu être reconnu. Est-ce un fichier binaire ?"
     contains_no_data: "Ne contient pas de données"
     read_success:
       one: "%{count} entrée lue avec succès."
@@ -821,6 +835,7 @@ fr:
       donation_increase_percentage_explanation: Pourcentage pour le calcul des dons
     email_fields:
       email_help: Les réponses à des e-mails concernant les factures doivent être envoyées à l'adresse de l'utilisateur.rice actuel.le ou à l'adresse configurée ici.
+      email_validation: Ne doit pas être une adresse e-mail.
       sender_name_help: Les e-mails de facturation sont envoyés sous ce nom.
     reminder_fields:
       third_level: 'Pour tous les rappels suivants, les données du troisième rappel sont reprises.'
@@ -1554,6 +1569,9 @@ fr:
     create:
       flash:
         success: Tu as été enregistré·e avec succès
+  self_registration_reasons:
+    destroy:
+      foreign_key_error: Certaines personnes utilisent ce motif d'entrée, la suppression n'est donc pas possible.
   roles:
     full_entry_label: '%{model_label} <i>%{role}</i> pour <i>%{person}</i> dans <i>%{group}</i>'
     role_changed: '%{full_entry_label} modifié en <i>%{new_role}</i>.'

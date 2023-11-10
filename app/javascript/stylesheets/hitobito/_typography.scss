@@ -75,6 +75,11 @@ dl {
 .dl-horizontal {
   dd {
     &:last-child { margin-bottom: 0; }
+
+    // display empty multiline fields correctly with whitespace
+    .multiline::before {
+      content: "\00a0";
+    }
   }
 
   @include responsive(mediaTablet) {

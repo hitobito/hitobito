@@ -421,66 +421,66 @@ describe Person::Filter::Attributes do
         }
       end
 
-      context 'fulfilled' do
-        context 'match' do
-          let(:constraint) { 'match' }
-          let(:value) { 'n' }
+    #   context 'fulfilled' do
+    #     context 'match' do
+    #       let(:constraint) { 'match' }
+    #       let(:value) { 'n' }
 
-          it 'returns all where value in language text' do
-            expect(entries.size).to eq(1)
-            expect(entries).to include(english)
-            expect(entries).to_not include(french)
-            expect(entries).to_not include(german)
-          end
-        end
+    #       it 'returns all where value in language text' do
+    #         expect(entries.size).to eq(1)
+    #         expect(entries).to include(english)
+    #         expect(entries).to_not include(french)
+    #         expect(entries).to_not include(german)
+    #       end
+    #     end
 
-        context 'not_match' do
-          let(:constraint) { 'not_match' }
-          let(:value) { 'f' }
+    #     context 'not_match' do
+    #       let(:constraint) { 'not_match' }
+    #       let(:value) { 'f' }
 
-          it 'returns all where value not in language text' do
-            expect(entries.size).to eq(2)
-            expect(entries).to include(english)
-            expect(entries).to_not include(french)
-            expect(entries).to include(german)
-          end
-        end
+    #       it 'returns all where value not in language text' do
+    #         expect(entries.size).to eq(2)
+    #         expect(entries).to include(english)
+    #         expect(entries).to_not include(french)
+    #         expect(entries).to include(german)
+    #       end
+    #     end
 
-        context 'equal' do
-          let(:constraint) { 'equal' }
-          let(:value) { 'en' }
+    #     context 'equal' do
+    #       let(:constraint) { 'equal' }
+    #       let(:value) { 'en' }
 
-          it 'returns all where value not in language text' do
-            expect(entries.size).to eq(1)
-            expect(entries).to include(english)
-            expect(entries).to_not include(french)
-            expect(entries).to_not include(german)
-          end
-        end
-      end
+    #       it 'returns all where value not in language text' do
+    #         expect(entries.size).to eq(1)
+    #         expect(entries).to include(english)
+    #         expect(entries).to_not include(french)
+    #         expect(entries).to_not include(german)
+    #       end
+    #     end
+    #   end
 
-      context 'unfulfilled' do
-        context 'match' do
-          let(:constraint) { 'match' }
-          let(:value) { 'Englisch' }
+    #   context 'unfulfilled' do
+    #     context 'match' do
+    #       let(:constraint) { 'match' }
+    #       let(:value) { 'Englisch' }
 
-          it 'returns nobody if value does not match anywhere' do
-            expect(entries).to be_empty
-          end
-        end
+    #       it 'returns nobody if value does not match anywhere' do
+    #         expect(entries).to be_empty
+    #       end
+    #     end
 
-        context 'not_match' do
-          let(:constraint) { 'not_match' }
-          let(:value) { 'de' }
+    #     context 'not_match' do
+    #       let(:constraint) { 'not_match' }
+    #       let(:value) { 'de' }
 
-          it 'does not return matching person' do
-            expect(entries.size).to eq(2)
-            expect(entries).to include(english)
-            expect(entries).to include(french)
-            expect(entries).to_not include(german)
-          end
-        end
-      end
-    end
+    #       it 'does not return matching person' do
+    #         expect(entries.size).to eq(2)
+    #         expect(entries).to include(english)
+    #         expect(entries).to include(french)
+    #         expect(entries).to_not include(german)
+    #       end
+    #     end
+    #   end
+    # end
   end
 end

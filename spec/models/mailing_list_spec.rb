@@ -561,6 +561,23 @@ describe MailingList do
         expect(list.people.size).to eq(1)
       end
     end
+
+    context 'filter' do
+      it 'uses the filter_chain' do
+        create_subscription(groups(:bottom_layer_one), false, Group::BottomGroup::Leader.sti_name)
+
+        people = %i[fr de it].to_h do |language|
+          person = Fabricate(:person, language: language)
+          Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one), person: person)
+          [language, person]
+        end
+
+        list.update(filter_chain: { language: { allowed_values: :fr }})
+        expect(list.filter_chain).to be_a(MailingLists::Filter::Chain)
+        expect(list).to receive(:filter_chain).and_call_original
+        is_expected.to contain_exactly(people[:fr])
+      end
+    end
   end
 
   context 'mailchimp' do

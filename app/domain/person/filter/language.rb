@@ -16,7 +16,7 @@ class Person::Filter::Language < Person::Filter::Base
   end
 
   def to_hash
-    { allowed_values: allowed_values }
+    { allowed_values: allowed_values.map(&:to_s) }
   end
 
   def to_params

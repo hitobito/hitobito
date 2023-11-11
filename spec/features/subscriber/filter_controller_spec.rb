@@ -20,13 +20,21 @@ describe Subscriber::FilterController, js: true do
   it 'edit the language filter for mailing list' do 
     visit edit_group_mailing_list_filter_path(group.to_param, list.to_param)
     
-    find('a.accordeon-toggle.header[href="#languages]').click
+    find('a.accordion-toggle.header[href="#languages"]').click
 
     check('filters_language_allowed_values_de')
     	
     all('form .btn-toolbar').first.click_button 'Speichern'
 
     expect(page).to have_content('Globale Bedingungen wurden erfolgreich aktualisiert')
+
     expect(find('#main')).to have_content('Sprache ist Deutsch')
+
+    
+  end
+
+  it 'show the language filter for mailing list' do 
+    mailing_list.update(filter_chain: { language: { allowed_values: [:de] }})
+
   end
 end

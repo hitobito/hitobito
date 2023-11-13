@@ -85,6 +85,6 @@ class FeatureGate
   end
 
   def self_registration_reason_enabled?
-    SelfRegistrationReason.table_exists? && SelfRegistrationReason.exists?
+    SelfRegistrationReason.exists?
   end
 end

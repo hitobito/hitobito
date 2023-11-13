@@ -132,7 +132,8 @@ class Role < ActiveRecord::Base
   scope :without_archived, -> { where(archived_at: nil) }
   scope :only_archived, -> { where.not(archived_at: nil).where(archived_at: ..Time.now.utc) }
   scope :future, -> { where(type: FutureRole.sti_name) }
-  scope :inactive, -> { with_deleted.where('deleted_at IS NOT NULL OR archived_at <= ?', Time.now.utc) }
+  scope :inactive, -> { with_deleted.where('deleted_at IS NOT NULL OR archived_at <= ?',
+                                           Time.now.utc) }
 
   ### CLASS METHODS
 

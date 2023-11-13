@@ -10,9 +10,10 @@ module Groups::SelfRegistrations
 
     attr_accessor :form
 
-    def initialize(form:, policy_finder:)
+    def initialize(form:, policy_finder:, active:)
       @form = form
       @policy_finder = policy_finder
+      @active = active
       super()
     end
 
@@ -22,6 +23,10 @@ module Groups::SelfRegistrations
 
     def self.title
       I18n.t("sac_cas.groups.self_registration.form.person_title")
+    end
+
+    def self.valid?(entry)
+      entry.person.valid?
     end
   end
 end

@@ -4,7 +4,7 @@
 -#  https://github.com/hitobito/hitobito.
 
 .step-content{class: "#{component.name.dasherize} #{active_class}"}
-  = render @component.new(form: @form, **@args)
+  = render @component.new(form: @form, active: active?, **@args)
   .btn-toolbar.bottom
     - unless entry.first_step?
       = back_link

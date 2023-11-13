@@ -33,7 +33,9 @@ class Groups::SelfRegistration
   end
 
   def valid?
-    person.valid?
+    return current_step.valid?(self) unless last_step?
+
+    steps.all { |step| step.valid?(self) }
   end
 
   def person
@@ -54,6 +56,10 @@ class Groups::SelfRegistration
 
   def first_step?
     @step.zero?
+  end
+
+  def current_step
+    steps[@step]
   end
 
   def self.base_class

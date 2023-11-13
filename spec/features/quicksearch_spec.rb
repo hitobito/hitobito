@@ -20,7 +20,7 @@ describe 'Quicksearch', sphinx: true do
 
         dropdown = find('.typeahead.dropdown-menu')
         expect(dropdown).to have_content('Top Leader, Supertown')
-        expect(dropdown).to have_content('Top > TopGroup')
+        expect(dropdown).to have_content('Top → TopGroup')
         expect(dropdown).to have_content('Top')
         expect(dropdown).to have_content('Top: Top Course (TOP-007)')
       end

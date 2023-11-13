@@ -173,9 +173,9 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
     @type = @group.class.find_role_type!(type)
 
     if start_at&.future?
-      FutureRole.new(convert_to: @type, convert_on: start_at)
+      FutureRole.new(convert_to: @type, convert_on: start_at, created_at: Time.zone.now)
     else
-      @type.new
+      @type.new(created_at: start_at)
     end
   end
 

@@ -1,9 +1,10 @@
 # Hitobito Changelog
 
-## Unreleased
+## unreleased
 
 *  Rollen mit Start-Datum in der Zukunft können erfasst werden (hitobito#2237)
 *  Eigener JSON:API Endpoint für Gruppen (hitobito#2243)
+*  Personendaten können basierend von Spezifikationen im Wagon automatisiert gelöscht werden. Standardmässig abgestellt (#2106)
 
 ## Version 1.30
 

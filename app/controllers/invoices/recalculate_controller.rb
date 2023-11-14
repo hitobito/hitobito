@@ -22,7 +22,8 @@ class Invoices::RecalculateController < ApplicationController
   def build_entry
     invoice = Invoice.new
     if params.dig(:invoice_list, :invoice).present?
-      invoice.attributes = params.require(:invoice_list).require(:invoice).permit(InvoicesController.permitted_attrs)
+      invoice.attributes = params.require(:invoice_list).require(:invoice)
+                                 .permit(InvoicesController.permitted_attrs)
     else
       invoice.attributes = params.require(:invoice).permit(InvoicesController.permitted_attrs)
     end

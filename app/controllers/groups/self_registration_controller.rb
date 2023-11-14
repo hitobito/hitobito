@@ -11,7 +11,7 @@ class Groups::SelfRegistrationController < CrudController
   skip_authorization_check
   skip_authorize_resource
 
-  before_action :assert_empty_honeypot, only: [:create, :step]
+  before_action :assert_empty_honeypot, only: [:create]
   before_create :set_privacy_policy_acceptance
   before_action :redirect_to_group_if_necessary
   after_create :send_notification_email

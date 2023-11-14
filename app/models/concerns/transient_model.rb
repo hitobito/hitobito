@@ -11,6 +11,7 @@ module TransientModel
   extend ActiveSupport::Concern
 
   include ActiveModel::Model
+  include ActiveModel::Validations
   extend ActiveModel::Naming
 
   def self.base_class

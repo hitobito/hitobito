@@ -263,6 +263,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def nested_fields_for(assoc, partial_name = nil, record_object = nil, options = nil, &block)
+    record_object ||= options&.fetch(:model_object)
     content_tag(:div, id: "#{assoc}_fields") do
       fields_for(assoc, record_object) do |fields|
         block_given? ? capture(fields, &block) : render(partial_name, f: fields)

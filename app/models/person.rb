@@ -459,6 +459,10 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     end
   end
 
+  def has_no_name?
+    !company? && first_name.blank? && last_name.blank? && nickname.blank?
+  end
+
   private
 
   def override_blank_email
@@ -480,9 +484,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def assert_has_any_name
-    if !company? && first_name.blank? && last_name.blank? && nickname.blank?
-      errors.add(:base, :name_missing)
-    end
+    errors.add(:base, :name_missing) if has_no_name?
   end
 
   # Destroy all related roles before destroying this person.

@@ -8,7 +8,7 @@
 class Groups::SelfRegistration
   include TransientModel
 
-  attr_accessor :group, :person_attributes, :step, :single
+  attr_accessor :group, :person, :person_attributes, :step, :single
 
   class_attribute :steps, default: [Groups::SelfRegistrations::PersonComponent]
 

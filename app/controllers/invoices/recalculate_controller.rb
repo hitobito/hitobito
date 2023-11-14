@@ -10,7 +10,6 @@ class Invoices::RecalculateController < ApplicationController
   respond_to :js
   before_action :authorize_action
   helper_method :entry
-  prepend_before_action :group
 
   def new;end
 

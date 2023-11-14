@@ -7,9 +7,9 @@
   = render @component.new(form: @form, active: active?, **@args)
   .btn-toolbar.bottom
     - unless entry.first_step?
-      = back_link
-    - unless entry.last_step?
+      .btn-group
+        = back_link
+    - if entry.last_step?
+      = submit_button(form, t('global.button.save'))
+    - else
       = next_button
-
-  - if entry.last_step?
-    = form_buttons(form, toolbar_class: 'bottom')

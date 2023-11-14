@@ -7,13 +7,8 @@ app = window.App ||= {}
 
 app.Invoices = {
   recalculate: () ->
-    if document.getElementById('new_invoice_list')
-      invoice_type = "invoice_list"
-    else
-      invoice_type = "invoices"
-
     form = $('form[data-group]')
-    $.ajax(url: "#{form.data('group')}/#{invoice_type}/new?#{form.serialize()}", dataType: 'script')
+    $.ajax(url: "#{form.data('group')}/invoices/recalculate/new?#{form.serialize()}")
 }
 
 $(document).on('input', 'form #invoice_items_fields :input[data-recalculate]', app.Invoices.recalculate)

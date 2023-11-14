@@ -43,14 +43,10 @@ class InvoicesController < CrudController
   after_destroy :update_invoice_list_total
 
   def new
-    if params.dig(:invoice).present?
-      recalculate_invoice
-    else
-      recipient = model_params && Person.find(model_params[:recipient_id])
-      if recipient && can?(:update, recipient)
-        entry.recipient_id = recipient.id
-        entry.send(:set_recipient_fields)
-      end
+    recipient = model_params && Person.find(model_params[:recipient_id])
+    if recipient && can?(:update, recipient)
+      entry.recipient_id = recipient.id
+      entry.send(:set_recipient_fields)
     end
     entry.attributes = { payment_information: entry.invoice_config.payment_information }
   end
@@ -202,16 +198,6 @@ class InvoicesController < CrudController
     if invoice_list
       @year_from ||= invoice_list.created_at.year
     end
-  end
-
-  def recalculate_invoice
-    params.dig(:invoice, :invoice_items_attributes).values.each do |item|
-      invoice_item = InvoiceItem.new(unit_cost: item[:unit_cost],
-                                     vat_rate: item[:vat_rate],
-                                     count: item[:count])
-      entry.invoice_items << invoice_item unless true?(item[:_destroy])
-    end
-    entry.recalculate
   end
 
 end

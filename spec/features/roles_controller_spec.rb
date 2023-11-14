@@ -65,7 +65,7 @@ describe RolesController, js: true do
     it 'sets delete_on and rerenders' do
       visit edit_group_role_path(group_id: role.group_id, id: role.id)
       fill_in 'Bis', with: tomorrow
-      all('form .btn-toolbar').first.click_button 'Speichern'
+      all('form .bottom .btn-group').first.click_button 'Speichern'
       expect(page).to have_content "Rolle Member (Bis #{tomorrow.strftime('%d.%m.%Y')}) für " \
         'Bottom Member in Bottom One wurde erfolgreich aktualisiert'
       expect(role.reload.delete_on).to eq tomorrow

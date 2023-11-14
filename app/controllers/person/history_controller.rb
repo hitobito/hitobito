@@ -12,7 +12,7 @@ class Person::HistoryController < ApplicationController
   decorates :group, :person
 
   def index
-    @roles = fetch_roles(:with_deleted, :without_future)
+    @roles = fetch_roles(:without_deleted, :without_future)
     @future_roles = fetch_roles(:future)
     @inactive_roles = fetch_roles(:inactive)
     @participations_by_event_type = participations_by_event_type

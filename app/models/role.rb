@@ -195,6 +195,10 @@ class Role < ActiveRecord::Base
     convert_on || created_at&.to_date || Time.zone.today
   end
 
+  def end_on
+    delete_on || deleted_at&.to_date
+  end
+
   private
 
   def nextcloud_group_details

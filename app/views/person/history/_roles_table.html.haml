@@ -12,5 +12,5 @@
     - t.col(Role.model_name.human) do |r|
       = r.to_s
     - t.attr(:created_at, t('global.from')) { |r| I18n.l(r.start_on) }
-    - t.attr(:deleted_at, t('global.until'))
+    - t.attr(:deleted_at, t('global.until')) { |r| r.end_on.present? ? I18n.l(r.end_on) : '' }
     - render_extensions :history_columns, locals: { t: t }

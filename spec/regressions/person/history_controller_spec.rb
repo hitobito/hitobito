@@ -39,7 +39,7 @@ describe Person::HistoryController, type: :controller do
       role.destroy
       get :index, params: params
       expect(dom.all('table tbody tr').size).to eq 2
-      role_row = dom.find('table tbody tr:eq(1)')
+      role_row = dom.find('div.table-responsive:last table tbody tr')
       expect(role_row.find('td:eq(1) a:eq(2)').text).to eq 'Group 11'
       expect(role_row.find('td:eq(2)').text.strip).to eq 'Member'
       expect(role_row.find('td:eq(3)').text).to be_present
@@ -61,7 +61,7 @@ describe Person::HistoryController, type: :controller do
       role.destroy
       get :index, params: params
       expect(dom.all('table tbody tr').size).to eq 2
-      role_row = dom.find('table tbody tr:eq(2)')
+      role_row = dom.find('div.table-responsive:last table tbody tr')
       expect(role_row.find('td:eq(1) a:eq(2)').text).to eq 'TopGroup'
       expect(role_row.find('td:eq(4)').text).to be_present
     end

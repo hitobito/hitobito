@@ -33,6 +33,8 @@ class Groups::SelfRegistration
   end
 
   def valid?
+    set_self_in_nested
+
     return current_step.valid?(self) unless last_step?
 
     steps.all { |step| step.valid?(self) }
@@ -90,6 +92,10 @@ class Groups::SelfRegistration
 
     params = required ? params.require(key).permit(*permitted_attrs) : params.permit(Hash[key, permitted_attrs])[key]
     array ? params.values : params
+  end
+
+  def set_self_in_nested
+    # For overriding in wagons
   end
 
 end

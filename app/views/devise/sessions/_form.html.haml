@@ -8,7 +8,7 @@
 
 = standard_form(resource, {url: form_url, stacked: true}) do |f|
   = f.error_messages
-  = f.labeled_input_field(:login_identity, autocomplete: "login", autofocus: autofocus_login, label: t('.login_identity'), class: 'span6')
+  = f.labeled_input_field(:login_identity, autocomplete: "login", autofocus: autofocus_login, label: t('.login_identity'), class: 'mw-100 mw-md-60ch ')
   = f.labeled_input_field(:password)
   = f.labeled_boolean_field(:remember_me)
   = f.indented(submit_button(f, t('.sign_in')))

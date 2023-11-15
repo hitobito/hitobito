@@ -9,6 +9,21 @@ class RoleDecorator < ApplicationDecorator
   decorates :role
 
   def for_aside
-    content_tag(:strong, model.to_s)
+    text = content_tag(:strong, model.to_s)
+    return text unless model.outdated?
+
+    safe_join(
+      [helpers.icon(:exclamation_triangle, title: outdated_role_title), text],
+      FormatHelper::EMPTY_STRING
+    )
+  end
+
+  def outdated_role_title
+    case model
+    when FutureRole
+      translate(:outdated_future_role, date: I18n.l(model.convert_on))
+    else
+      translate(:outdated_deleted_role, date: I18n.l(model.delete_on))
+    end
   end
 end

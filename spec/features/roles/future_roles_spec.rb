@@ -15,6 +15,7 @@ describe 'Future Roles behaviour' do
   let(:bottom_layer) { groups(:bottom_layer_one) }
   let(:role_type) { Group::TopGroup::Member.sti_name }
   let(:tomorrow) { Time.zone.tomorrow }
+  let(:yesterday) { Time.zone.yesterday }
 
   let(:current_roles_aside) { 'section:nth-of-type(2)' }
   let(:future_roles_aside) { 'section:nth-of-type(3)' }
@@ -188,6 +189,15 @@ describe 'Future Roles behaviour' do
       fill_in 'Von', with: tomorrow
       first(:button, 'Speichern').click
       expect(page).to have_css '.alert-error', text: 'Von kann nicht später als heute sein'
+    end
+
+    it 'saving outdated future role converts role' do
+      role = create_future_role.tap { |r| r.update_columns(convert_on: yesterday) }
+      visit edit_group_role_path(group_id: top_group.id, id: role.id, locale: :de)
+      expect(page).to have_field 'Von', with: yesterday.strftime('%d.%m.%Y')
+      first(:button, 'Speichern').click
+      expect(page).not_to have_css '.roles', text: 'TopGroup / Member'
+      expect(page).not_to have_css 'h2', text: 'Zukünftige Rollen'
     end
   end
 end

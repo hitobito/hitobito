@@ -152,6 +152,7 @@ class Role < ActiveRecord::Base
   def to_s(format = :default)
     model_name = self.class.label
     string = label? ? "#{model_name} (#{label})" : model_name
+    string += " (#{formatted_delete_date})" if delete_on
     if format == :long
       I18n.t('activerecord.attributes.role.string_long', role: string, group: group.to_s)
     else
@@ -198,6 +199,10 @@ class Role < ActiveRecord::Base
 
   def end_on
     delete_on || deleted_at&.to_date
+  end
+
+  def outdated?
+    [convert_on, delete_on].compact.any? { |date| date <= Time.zone.today }
   end
 
   private
@@ -267,6 +272,10 @@ class Role < ActiveRecord::Base
   end
 
   def reset_person_minimized_at
-    person&.update!(minimized_at: nil)
+    person&.update_attribute(:minimized_at, nil)
+  end
+
+  def formatted_delete_date
+    [I18n.t('global.until'), I18n.l(delete_on)].join(' ')
   end
 end

@@ -22,7 +22,7 @@ paths:
           - parent
           - layer_group
           nullable: true
-      - name: extra_fields
+      - name: extra_fields[groups]
         in: query
         required: false
         schema:
@@ -41,6 +41,11 @@ paths:
           - Group::BottomGroup
           - Group::MountedAttrsGroup
           - Group::GlobalGroup
+      - name: filter[with_archived]
+        in: query
+        required: false
+        schema:
+          type: boolean
       responses:
         '200':
           description: successful
@@ -149,10 +154,29 @@ paths:
                         last_name:
                           type: string
                       description: Person attributes
-                    extra_fields:
-                      type: array
-                      items:
-                        type: string
+                    relationships:
+                      type: object
+                      properties:
+                        phone_numbers:
+                          type: object
+                          properties:
+                            data:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    enum:
+                                    - phone_numbers
+                                    default: phone_numbers
+                                  id:
+                                    type: string
+                                  method:
+                                    type: string
+                                    enum:
+                                    - update
+                                    default: update
                 included:
                   type: array
                   items:
@@ -161,13 +185,8 @@ paths:
                       type:
                         type: string
                         enum:
-                        - contact
-                        - creator
-                        - updater
-                        - deleter
-                        - parent
-                        - layer_group
-                        default: contact
+                        - phone_numbers
+                        default: phone_numbers
                       id:
                         type: string
                       attributes:

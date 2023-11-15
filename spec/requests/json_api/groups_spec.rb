@@ -11,13 +11,10 @@ require 'swagger_helper'
 RSpec.describe 'json_api/groups', type: :request do
   let(:'X-TOKEN') { service_tokens(:permitted_top_layer_token).token }
   let(:token) { service_tokens(:permitted_top_layer_token).token }
+  let(:data) { JSON.parse(response.body).dig('data') }
   let(:include) { [] }
 
   path '/api/groups' do
-
-    # add pagination
-    # add filter for updated_at
-
     get('list groups') do
       parameter(
         name: 'include',
@@ -31,8 +28,9 @@ RSpec.describe 'json_api/groups', type: :request do
         }
       )
 
-      parameter(name: 'extra_fields', in: :query, required: false, schema: { type: :string, enum: %w(logo) })
+      parameter(name: 'extra_fields[groups]', in: :query, required: false, schema: { type: :string, enum: %w(logo) })
       parameter(name: 'filter[type][eq]', in: :query, required: false, schema: { type: :string, enum: Group.all_types })
+      parameter(name: 'filter[with_archived]', in: :query, required: false, schema: { type: :boolean })
 
       response(200, 'successful') do
         after do |example|
@@ -49,6 +47,29 @@ RSpec.describe 'json_api/groups', type: :request do
         let(:include) { %w(contact creator updater deleter parent layer_group) }
         run_test!
       end
+
+      response(200, 'successful') do
+        let(:'extra_fields[groups]') { 'logo' }
+        run_test! do
+          expect(data.dig(0, 'attributes')).to have_key('logo')
+
+        end
+      end
+
+      response(200, 'successful') do
+        let(:'filter[type][eq]') { %w(Group::TopGroup) }
+        run_test! do
+          expect(data).to have(1).item
+        end
+      end
+
+      response(200, 'successful') do
+        let(:'filter[with_archived]') { 'true' }
+        before { Group.first.update_columns(archived_at: Time.zone.now) }
+        run_test! do
+          expect(data.size).to eq Group.count
+        end
+      end
     end
   end
 
@@ -58,13 +79,6 @@ RSpec.describe 'json_api/groups', type: :request do
 
     get('fetch group') do
       response(200, 'successful') do
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/vnd.json+api' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
         run_test!
       end
     end

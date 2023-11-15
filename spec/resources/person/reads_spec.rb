@@ -10,10 +10,12 @@ require 'spec_helper'
 describe PersonResource, type: :resource do
   let(:user) { user_role.person }
   let(:ability) { Ability.new(user) }
+  let(:top_group) { groups(:top_group) }
+  let(:bottom_layer_one) { groups(:bottom_layer_one) }
 
   describe 'serialization' do
     let!(:person) { Fabricate(:person, birthday: Date.today, gender: 'm') }
-    let!(:role) { Fabricate(Group::BottomLayer::Member.name, person: person, group: groups(:bottom_layer_one)) }
+    let!(:role) { Fabricate(Group::BottomLayer::Member.name, person: person, group: bottom_layer_one) }
 
     def serialized_attrs
       [
@@ -56,7 +58,7 @@ describe PersonResource, type: :resource do
     end
 
     context 'with appropriate permission' do
-      let!(:user_role) { Fabricate(Group::BottomLayer::Leader.name, person: Fabricate(:person), group: role.group) }
+      let!(:user_role) { Fabricate(Group::BottomLayer::Leader.name, group: role.group) }
 
       it 'works' do
         render
@@ -79,7 +81,7 @@ describe PersonResource, type: :resource do
     end
 
     context 'with show_details permission, it' do
-      let!(:user_role) { Fabricate(Group::BottomLayer::Leader.name, person: Fabricate(:person), group: role.group) }
+      let!(:user_role) { Fabricate(Group::BottomLayer::Leader.name, group: role.group) }
       it 'includes restricted attrs' do
         render
 
@@ -89,8 +91,8 @@ describe PersonResource, type: :resource do
 
     context 'without show_details permission, it' do
       # Both have contact_data, so they can see each other, but not each other's details
-      let!(:role) { Fabricate(Group::BottomLayer::Leader.name, person: person, group: groups(:bottom_layer_one)) }
-      let!(:user_role) { Fabricate(Group::TopGroup::Member.name, person: Fabricate(:person), group: groups(:top_group)) }
+      let!(:role) { Fabricate(Group::BottomLayer::Leader.name, person: person, group: bottom_layer_one) }
+      let!(:user_role) { Fabricate(Group::TopGroup::Member.name, group: top_group) }
       it 'does not include restricted attrs' do
         render
 
@@ -99,7 +101,7 @@ describe PersonResource, type: :resource do
     end
 
     context 'with person language' do
-      let!(:user_role) { Fabricate(Group::BottomLayer::Leader.name, person: Fabricate(:person), group: role.group) }
+      let!(:user_role) { Fabricate(Group::BottomLayer::Leader.name, group: role.group) }
 
       context 'enabled' do
         it 'includes language' do
@@ -141,9 +143,9 @@ describe PersonResource, type: :resource do
   end
 
   describe 'filtering' do
-    let!(:user_role) { Fabricate(Group::BottomLayer::Leader.name, person: Fabricate(:person), group: groups(:bottom_layer_one)) }
-    let!(:role1) { Fabricate(Group::BottomLayer::Leader.name, person: Fabricate(:person), group: groups(:bottom_layer_one)) }
-    let!(:role2) { Fabricate(Group::BottomLayer::Leader.name, person: Fabricate(:person), group: groups(:bottom_layer_one)) }
+    let!(:user_role) { Fabricate(Group::BottomLayer::Leader.name, group: bottom_layer_one) }
+    let!(:role1) { Fabricate(Group::BottomLayer::Leader.name, group: bottom_layer_one) }
+    let!(:role2) { Fabricate(Group::BottomLayer::Leader.name, group: bottom_layer_one) }
     let(:person1) { role1.person }
     let(:person2) { role2.person }
 
@@ -162,8 +164,9 @@ describe PersonResource, type: :resource do
       before do
         person1.update_attribute(:updated_at, 1.minute.ago)
         person2.update_attribute(:updated_at, 1.day.ago)
-        params[:filter] = { updated_at: { gt: 1.hour.ago.to_s }}
+        params[:filter] = { updated_at: { gt: 1.hour.ago.to_s } }
       end
+
       it 'works' do
         render
         expect(d.map(&:id)).to include(person1.id)
@@ -173,9 +176,9 @@ describe PersonResource, type: :resource do
   end
 
   describe 'sorting' do
-    let!(:user_role) { Fabricate(Group::BottomLayer::Leader.name, person: Fabricate(:person), group: groups(:bottom_layer_one)) }
-    let!(:role1) { Fabricate(Group::BottomLayer::Leader.name, person: Fabricate(:person), group: groups(:bottom_layer_one)) }
-    let!(:role2) { Fabricate(Group::BottomLayer::Leader.name, person: Fabricate(:person), group: groups(:bottom_layer_one)) }
+    let!(:user_role) { Fabricate(Group::BottomLayer::Leader.name, group: bottom_layer_one) }
+    let!(:role1) { Fabricate(Group::BottomLayer::Leader.name, group: bottom_layer_one) }
+    let!(:role2) { Fabricate(Group::BottomLayer::Leader.name, group: bottom_layer_one) }
     let(:person1) { role1.person }
     let(:person2) { role2.person }
 
@@ -209,7 +212,7 @@ describe PersonResource, type: :resource do
   end
 
   describe 'sideloading' do
-    let!(:user_role) { Fabricate(Group::BottomLayer::Leader.name, person: Fabricate(:person), group: groups(:bottom_layer_one)) }
+    let!(:user_role) { Fabricate(Group::BottomLayer::Leader.name, group: bottom_layer_one) }
     let(:role) { roles(:bottom_member) }
     let!(:person) { role.person }
 

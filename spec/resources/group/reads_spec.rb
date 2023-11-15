@@ -8,6 +8,7 @@
 require 'spec_helper'
 
 describe GroupResource, type: :resource do
+  include Rails.application.routes.url_helpers
 
   describe 'serialization' do
     let!(:group) { groups(:bottom_group_two_one) }
@@ -48,9 +49,9 @@ describe GroupResource, type: :resource do
     end
 
     def read_attr(attr)
-      return 'http://example.com/groups/944618784/self_registration' if attr =~ /self_registration_url/
+      return group.public_send(attr) unless attr.match(/self_registration_url/)
 
-      group.public_send(attr)
+      group_self_registration_url(group)
     end
 
     it 'works' do
@@ -93,8 +94,24 @@ describe GroupResource, type: :resource do
   end
 
   describe 'filtering' do
+    let(:group) { groups(:top_group) }
+
     it 'can filter by type' do
       params[:filter] = { type: 'Group::TopGroup' }
+      render
+      expect(d).to have(1).item
+    end
+
+    it 'excludes archived group by default' do
+      group.update_columns(archived_at: Time.zone.now)
+      params[:filter] = { type: 'Group::TopGroup' }
+      render
+      expect(d).to be_empty
+    end
+
+    it 'can include archived group via filter default' do
+      group.update_columns(archived_at: Time.zone.now)
+      params[:filter] = { type: 'Group::TopGroup', with_archived: true }
       render
       expect(d).to have(1).item
     end

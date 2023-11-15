@@ -9,8 +9,7 @@ require 'spec_helper'
 
 describe RoleResource, type: :resource do
   let!(:role) { roles(:bottom_member) }
-  let(:user) { user_role.person }
-  let(:ability) { Ability.new(user) }
+  let(:person) { user_role.person }
 
   before do
     allow(Graphiti.context[:object]).to receive(:can?).and_return(true)
@@ -28,7 +27,7 @@ describe RoleResource, type: :resource do
     before { params[:filter] = { id: { eq: role.id } } }
 
     context 'without appropriate permission' do
-      let(:user) { Fabricate(:person) }
+      let(:person) { Fabricate(:person) }
 
       it 'does not expose data' do
         render
@@ -37,7 +36,7 @@ describe RoleResource, type: :resource do
     end
 
     context 'with appropriate permission' do
-      let!(:user_role) { Fabricate(Group::BottomLayer::Leader.name, person: Fabricate(:person), group: role.group) }
+      let(:person) { Fabricate(Group::BottomLayer::Leader.name, group: role.group).person }
 
       it 'works' do
         render
@@ -66,7 +65,7 @@ describe RoleResource, type: :resource do
       before { params[:include] = 'person' }
 
       context 'without appropriate permission' do
-        let(:user) { Fabricate(:person) }
+        let(:person) { Fabricate(:person) }
 
         it 'does not expose data' do
           render
@@ -75,7 +74,7 @@ describe RoleResource, type: :resource do
       end
 
       context 'with appropriate permission' do
-        let!(:user_role) { Fabricate(Group::BottomLayer::Leader.name, person: Fabricate(:person), group: role.group) }
+        let(:person) { Fabricate(Group::BottomLayer::Leader.name, group: role.group).person }
 
         it 'it works' do
           render
@@ -90,7 +89,7 @@ describe RoleResource, type: :resource do
       before { params[:include] = 'group' }
 
       context 'without appropriate permission' do
-        let(:user) { Fabricate(:person) }
+        let(:person) { Fabricate(:person) }
 
         it 'does not expose data' do
           render
@@ -99,7 +98,7 @@ describe RoleResource, type: :resource do
       end
 
       context 'with appropriate permission' do
-        let!(:user_role) { Fabricate(Group::BottomLayer::Leader.name, person: Fabricate(:person), group: role.group) }
+        let(:person) { Fabricate(Group::BottomLayer::Leader.name, group: role.group).person }
 
         it 'it works' do
           render
@@ -114,7 +113,7 @@ describe RoleResource, type: :resource do
       before { params[:include] = 'layer_group' }
 
       context 'without appropriate permission' do
-        let(:user) { Fabricate(:person) }
+        let(:person) { Fabricate(:person) }
 
         it 'does not expose data' do
           render
@@ -123,7 +122,7 @@ describe RoleResource, type: :resource do
       end
 
       context 'with appropriate permission' do
-        let!(:user_role) { Fabricate(Group::BottomLayer::Leader.name, person: Fabricate(:person), group: role.group) }
+        let(:person) { Fabricate(Group::BottomLayer::Leader.name, group: role.group).person }
 
         it 'it works' do
           render

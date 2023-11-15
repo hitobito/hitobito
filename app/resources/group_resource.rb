@@ -52,6 +52,12 @@ class GroupResource < ApplicationResource
     end
   end
 
+  filter :with_archived, :boolean, :single do
+    eq do |scope, _value|
+      scope.unscope(where: :archived_at)
+    end
+  end
+
   def authorize_create(model)
     # Writing groups is disabled for now
     raise CanCan::AccessDenied
@@ -64,5 +70,9 @@ class GroupResource < ApplicationResource
 
   def index_ability
     JsonApi::GroupAbility.new(current_ability)
+  end
+
+  def base_scope
+    Group.without_archived
   end
 end

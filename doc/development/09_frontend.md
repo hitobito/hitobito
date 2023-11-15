@@ -74,3 +74,11 @@ aktuell verwenden wir Jquery in der Version 1.12.4
 längerfristig soll Jquery komplett aus Hitobito entfernt werden. Die verwendete Bootstrap 2 Version benötigt Jquery. Bootstrap 5 kommt ohne Jquery aus.
 
 Jquery UI ist in der Version 1.12.1 vorhanden. Auch diese Abhängigkeit soll komplett ersetzt werden. (z.B. mit Bootstrap 5)
+
+## Icons
+
+Für Icons wird Font-Awesome free 5.x verwendet.
+
+https://github.com/FortAwesome/Font-Awesome
+
+Der Katalog der verfügbaren Icons gibt's hier: https://fontawesome.com/v5/search?m=free

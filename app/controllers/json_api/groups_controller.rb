@@ -8,19 +8,13 @@
 class JsonApi::GroupsController < JsonApiController
   def index
     authorize!(:index, Group)
-    resources = resource_class.all(params, without_archived)
+    resources = resource_class.all(params)
     render(jsonapi: resources)
   end
 
   def show
-    group = without_archived.find(params[:id])
+    group = Group.find(params[:id])
     authorize!(:show, group)
     super
-  end
-
-  private
-
-  def without_archived
-    Group.without_archived
   end
 end

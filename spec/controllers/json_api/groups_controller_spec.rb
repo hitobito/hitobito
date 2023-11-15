@@ -42,6 +42,12 @@ describe JsonApi::PeopleController, type: [:request] do
       expect(JSON.parse(response.body)['data'].size).to eq Group.count - 1
     end
 
+    it 'GET#index does include archived group via filter' do
+      jsonapi_get '/api/groups', params: params.merge(filter: { with_archived: true })
+      expect(response).to have_http_status(200)
+      expect(JSON.parse(response.body)['data'].size).to eq Group.count
+    end
+
     it 'GET#show does find archived group' do
       groups(:bottom_group_two_one).update!(archived_at: Time.zone.now)
       jsonapi_get "/api/groups/#{group.id}", params: params

@@ -5,11 +5,22 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 #
-class People::DestroyRolesJob < RecurringJob
-  run_every 15.minutes
+class People::DestroyRolesJob < People::RolesBaseJob
+  run_every 1.hour
+
+  Error = Class.new(StandardError)
 
   def perform_internal
-    roles = Role.where('delete_on <= ?', Time.zone.today)
-    roles.find_each(&:destroy!)
+    obsolete_roles.find_each do |role|
+      with_handled_exception(role) do
+        role.destroy!
+      end
+    end
+  end
+
+  private
+
+  def obsolete_roles
+    Role.where('delete_on <= ?', Time.zone.today).order(:delete_on)
   end
 end

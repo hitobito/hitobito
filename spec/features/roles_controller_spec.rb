@@ -27,14 +27,22 @@ describe RolesController, js: true do
       visit edit_group_role_path(group_id: role.group_id, id: role.id)
       fill_in 'Bis', with: tomorrow
       all('form .btn-toolbar').first.click_button 'Speichern'
-      expect(page).to have_content 'Rolle Member für Bottom Member in Bottom One wurde erfolgreich aktualisiert'
+      expect(page).to have_content "Rolle Member (Bis #{tomorrow.strftime('%d.%m.%Y')}) für Bottom Member in Bottom One wurde erfolgreich aktualisiert"
       expect(role.reload.delete_on).to eq tomorrow
     end
 
     it 'shows delete_on date' do
       role.update(delete_on: tomorrow)
       visit edit_group_role_path(group_id: role.group_id, id: role.id)
-      expect(page).to have_field 'Bis', with: tomorrow.strftime("%d.%m.%Y")
+      expect(page).to have_field 'Bis', with: tomorrow.strftime('%d.%m.%Y')
+    end
+
+    it 'saving outdated role deletes role' do
+      role.update_columns(delete_on: Time.zone.yesterday)
+      visit edit_group_role_path(group_id: role.group_id, id: role.id)
+      expect do
+        all('form .btn-toolbar').first.click_button 'Speichern'
+      end.to change { people(:bottom_member).roles.count }.by(-1)
     end
   end
 

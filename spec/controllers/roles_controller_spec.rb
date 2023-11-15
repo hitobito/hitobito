@@ -270,12 +270,38 @@ describe RolesController do
         end
       end
     end
+  end
 
+  describe 'GET edit' do
+    before { role } # create it
+    let(:page) { Capybara::Node::Simple.new(response.body) }
+    let(:today) { Time.zone.today }
+    let(:today_localized) { I18n.l(today) }
+
+    render_views
+
+    it 'renders no flash message if role is not outdated' do
+      get :edit, params: { group_id: group.id, id: role.id }
+      expect(page).to have_css '#flash', text: ''
+    end
+
+    it 'renders flash message for outedated deleted role' do
+      role.update_columns(delete_on: Time.zone.today)
+      get :edit, params: { group_id: group.id, id: role.id }
+      expect(page).to have_css('#flash .alert.alert-error', text: 'Die Rolle konnte nicht ' \
+                               "wie geplant am #{today_localized} terminiert werden")
+    end
+
+    it 'renders flash message for outedated future role' do
+      Role.where(id: role.id).update_all(type: FutureRole.sti_name, convert_to: role.type, convert_on: today)
+      get :edit, params: { group_id: group.id, id: role.id }
+      expect(page).to have_css('#flash .alert.alert-error', text: 'Die Rolle konnte nicht wie ' \
+                               "geplant per #{today_localized} aktiviert werden")
+    end
   end
 
   describe 'PUT update' do
     before { role } # create it
-
 
     it 'without type displays error' do
       put :update, params: { group_id: group.id, id: role.id, role: { group_id: group.id, person_id: person.id, type: "" } }
@@ -328,7 +354,7 @@ describe RolesController do
           put :update, params: { group_id: group.id, id: role.id, role: { delete_on: yesterday } }
         end.to change { Role.count }.by(-1)
         expect(response).to redirect_to(person_path(person))
-        expect(flash[:notice]).to eq "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich gelöscht."
+        expect(flash[:notice]).to eq "Rolle <i>Member (Bis #{yesterday.strftime('%d.%m.%Y')})</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich gelöscht."
       end
 
       it 'renders edit and error messages if destroy does not succeed' do
@@ -337,7 +363,7 @@ describe RolesController do
           put :update, params: { group_id: group.id, id: role.id, role: { delete_on: yesterday } }
         end.not_to change { Role.count }
         expect(response).to render_template('edit')
-        expect(flash.now[:alert]).to eq "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> konnte nicht gelöscht werden."
+        expect(flash.now[:alert]).to eq "Rolle <i>Member (Bis #{yesterday.strftime('%d.%m.%Y')})</i> für <i>#{person}</i> in <i>TopGroup</i> konnte nicht gelöscht werden."
       end
     end
 

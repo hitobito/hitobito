@@ -21,17 +21,27 @@ describe People::CreateRolesJob do
     Fabricate(:future_role, defaults.merge(attrs))
   end
 
-  it 'noops if not scheduled' do
+  it 'noops and reschedules if no future role exists' do
     expect { job.perform }.to not_change { person.roles.count }
+      .and change { Delayed::Job.count }.by(1)
+    expect(Delayed::Job.last.run_at).to eq 1.hour.from_now.beginning_of_hour
   end
 
-  it 'noops if node is scheduled for tomorrow' do
+  it 'noops if role is scheduled for tomorrow' do
     create_future_role(convert_on: Time.zone.tomorrow)
     expect { job.perform }.to not_change { person.roles.where(type: role_type).count }
       .and not_change { person.roles.where(type: FutureRole.sti_name).count }
   end
 
   it 'destroys and creates role if scheduled for today' do
+    create_future_role(convert_on: Time.zone.today)
+    expect { job.perform }.to change { person.roles.where(type: role_type).count }.by(1)
+      .and change { person.roles.where(type: FutureRole.sti_name).count }.by(-1)
+  end
+
+  it 'destroys and creates role even if person is invalid' do
+    person.update_columns(first_name: nil, last_name: nil, email: nil)
+    expect(person).not_to be_valid
     create_future_role(convert_on: Time.zone.today)
     expect { job.perform }.to change { person.roles.where(type: role_type).count }.by(1)
       .and change { person.roles.where(type: FutureRole.sti_name).count }.by(-1)
@@ -59,4 +69,3 @@ describe People::CreateRolesJob do
       .and change { Role.where(type: FutureRole.sti_name).count }.by(-1)
   end
 end
-

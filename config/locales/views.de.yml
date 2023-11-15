@@ -1718,6 +1718,12 @@ de:
     destroy:
       foreign_key_error: Es gibt Personen, die diesen Eintrittsgrund verwenden, löschen ist daher nicht möglich.
 
+  role_decorator:
+    outdated_future_role: Die Rolle konnte nicht wie geplant per %{date} aktiviert werden. Falls
+      das Speichern der Rolle diese nicht aktiviert, wende dich bitte an den Support.
+    outdated_deleted_role: Die Rolle konnte nicht wie geplant am %{date} terminiert werden. Falls
+      das Speichern der Rolle diese nicht terminiert, wende dich bitte an den Support.
+
   roles:
     full_entry_label: '%{model_label} <i>%{role}</i> für <i>%{person}</i> in <i>%{group}</i>'
     role_changed: '%{full_entry_label} zu <i>%{new_role}</i> geändert.'

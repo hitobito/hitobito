@@ -16,6 +16,8 @@ describe People::DestroyRolesJob do
 
   it 'noops if not scheduled' do
     expect { job.perform }.to not_change { person.roles.count }
+      .and change { Delayed::Job.count }.by(1)
+    expect(Delayed::Job.last.run_at).to eq 1.hour.from_now.beginning_of_hour
   end
 
   it 'noops if not scheduled in the future' do
@@ -25,6 +27,13 @@ describe People::DestroyRolesJob do
 
   it 'destroys role if scheduled today' do
     role.update!(delete_on: Time.zone.today.to_date)
+    expect { job.perform }.to change { person.roles.count }.by(-1)
+  end
+
+  it 'destroys even if person is invalid' do
+    role.update!(delete_on: Time.zone.today.to_date)
+    person.update_columns(first_name: nil, last_name: nil, email: nil)
+    expect(person).not_to be_valid
     expect { job.perform }.to change { person.roles.count }.by(-1)
   end
 
@@ -39,11 +48,16 @@ describe People::DestroyRolesJob do
     expect { job.perform }.to change { Role.count }.by(-2)
   end
 
-  it 'raises if any role fails to destroy' do
+  it 'logs errors and continues' do
     role.update!(created_at: 3.days.ago, delete_on: Time.zone.yesterday.to_date)
     roles(:top_leader).update!(delete_on: Time.zone.today.to_date)
-    allow_any_instance_of(Role).to receive(:destroy!).and_raise('ouch')
-    expect { job.perform }.to raise_error 'ouch'
+    allow_any_instance_of(Role).to receive(:destroy!).and_wrap_original do |m|
+      raise 'ouch' if m.receiver == role
+      m.call
+    end
+    expect(Raven).to receive(:capture_exception).with(described_class::Error.new("ouch - Group::BottomLayer::Member(#{role.id})"))
+
+    expect { job.perform }.to change { Role.count }.by(-1)
   end
 end
 

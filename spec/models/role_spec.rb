@@ -237,6 +237,55 @@ describe Role do
     end
   end
 
+  context '#to_s' do
+    let(:group) { groups(:bottom_layer_one) }
+    let(:date) { Date.new(2023, 11, 15) }
+
+    def build_role(attrs = {})
+      Fabricate.build(Group::BottomLayer::Leader.sti_name, attrs.merge(group: group))
+    end
+
+    it 'includes group specific role type' do
+      expect(build_role.to_s).to eq 'Leader'
+    end
+
+    it 'appends label if set' do
+      expect(build_role(label: 'test').to_s).to eq 'Leader (test)'
+    end
+
+    it 'appends delete_on if set' do
+      expect(build_role(delete_on: date).to_s).to eq 'Leader (Bis 15.11.2023)'
+    end
+
+    it 'combines label and delete_on if both are set' do
+      expect(build_role(label: 'test', delete_on: date).to_s).to eq 'Leader (test) (Bis 15.11.2023)'
+    end
+  end
+
+  context '#outdated?' do
+    let(:group) { groups(:bottom_layer_one) }
+
+    def build_role(attrs = {})
+      Fabricate.build(Group::BottomLayer::Leader.sti_name, attrs.merge(group: group))
+    end
+
+    it 'is not outdated by default' do
+      expect(build_role).not_to be_outdated
+    end
+
+    it 'is outdated if delete_on is today or earlier' do
+      expect(build_role(delete_on: Time.zone.tomorrow)).not_to be_outdated
+      expect(build_role(delete_on: Time.zone.yesterday)).to be_outdated
+      expect(build_role(delete_on: Time.zone.today)).to be_outdated
+    end
+
+    it 'is outdated if convert_on is today or earlier' do
+      expect(build_role(convert_on: Time.zone.tomorrow)).not_to be_outdated
+      expect(build_role(convert_on: Time.zone.yesterday)).to be_outdated
+      expect(build_role(convert_on: Time.zone.today)).to be_outdated
+    end
+  end
+
   context '#available_labels' do
     before { described_class.sweep_available_labels }
     subject { Group::BottomLayer::Leader.available_labels }

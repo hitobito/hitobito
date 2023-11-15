@@ -26,6 +26,7 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
 
   before_action :set_person_id, only: [:new] # rubocop:disable Rails/LexicallyScopedActionFilter
   before_action :remember_primary_group, only: [:destroy, :update]
+  before_action :set_outdated_flash_message, only: [:edit]
   after_action :last_primary_group_role_deleted, only: [:destroy, :update]
 
   def create
@@ -293,5 +294,9 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
 
   def delete_model_param(key)
     model_params&.delete(key).presence
+  end
+
+  def set_outdated_flash_message
+    flash.now[:alert] = entry.decorate.outdated_role_title if entry.outdated?
   end
 end

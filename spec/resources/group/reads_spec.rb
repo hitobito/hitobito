@@ -109,11 +109,20 @@ describe GroupResource, type: :resource do
       expect(d).to be_empty
     end
 
-    it 'can include archived group via filter default' do
-      group.update_columns(archived_at: Time.zone.now)
-      params[:filter] = { type: 'Group::TopGroup', with_archived: true }
-      render
-      expect(d).to have(1).item
+    context 'by with_archived' do
+      before { group.update_columns(archived_at: Time.zone.now) }
+
+      it 'when true it includes archived groups' do
+        params[:filter] = { type: 'Group::TopGroup', with_archived: true }
+        render
+        expect(d).to have(1).item
+      end
+
+      it 'when false it excludes archived groups' do
+        params[:filter] = { type: 'Group::TopGroup', with_archived: false }
+        render
+        expect(d).to be_empty
+      end
     end
   end
 

@@ -53,7 +53,9 @@ class GroupResource < ApplicationResource
   end
 
   filter :with_archived, :boolean, :single do
-    eq do |scope, _value|
+    eq do |scope, value|
+      next scope unless value
+
       scope.unscope(where: :archived_at)
     end
   end

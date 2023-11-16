@@ -89,7 +89,7 @@ class Groups::SelfRegistration
     return {} if params.nil?
 
     params = required ? params.require(key).permit(*permitted_attrs) : params.permit(Hash[key, permitted_attrs])[key]
-    array ? params.values : params
+    array ? params&.values : params
   end
 
   def set_self_in_nested

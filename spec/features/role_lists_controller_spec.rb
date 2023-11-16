@@ -11,8 +11,6 @@ require 'spec_helper'
 
 describe RoleListsController, js: true do
 
-  subject { page }
-
   let(:group)   { groups(:top_group) }
   let!(:role1)  { Fabricate(Group::TopGroup::Member.name.to_sym, group: group) }
   let!(:role2)  { Fabricate(Group::TopGroup::Member.name.to_sym, group: group) }
@@ -33,8 +31,8 @@ describe RoleListsController, js: true do
     find('button', text: 'Entfernen').click
     expect(page).to have_content '2 Rollen wurden entfernt'
 
-    is_expected.not_to have_content(role1.person.first_name)
-    is_expected.not_to have_content(role2.person.first_name)
+    expect(page).not_to have_content(role1.person.to_s)
+    expect(page).not_to have_content(role2.person.to_s)
   end
 
   it 'deletes selected roles' do
@@ -46,13 +44,13 @@ describe RoleListsController, js: true do
     click_link('Rollen entfernen')
     expect(page).to have_content 'Welche Rollen sollen gelöscht werden?'
 
-    find(:css,"input[name='role[types][Group::TopGroup::Member]']").set(false)
+    find(:css, "input[name='role[types][Group::TopGroup::Member]']").set(false)
     find('button', text: 'Entfernen').click
 
     expect(page).to have_content 'Eine Rolle wurde entfernt'
-    is_expected.to     have_content(role1.person.first_name)
-    is_expected.to     have_content(role2.person.first_name)
-    is_expected.not_to have_content(leader.person.first_name)
+    expect(page).to     have_content(role1.person.first_name)
+    expect(page).to     have_content(role2.person.first_name)
+    expect(page).not_to have_content(leader.person.first_name)
   end
 
   it 'creates multiple roles' do
@@ -66,9 +64,9 @@ describe RoleListsController, js: true do
     expect(page).to have_button '2 Rollen erstellen'
     find('button', text: '2 Rollen erstellen').click
 
-    is_expected.to have_content('2 Rollen wurden erstellt')
-    is_expected.to have_css("tr#person_#{role1.person.id} td p", text: 'Leader')
-    is_expected.to have_css("tr#person_#{role2.person.id} td p", text: 'Leader')
+    expect(page).to have_content('2 Rollen wurden erstellt')
+    expect(page).to have_css("tr#person_#{role1.person.id} td p", text: 'Leader')
+    expect(page).to have_css("tr#person_#{role2.person.id} td p", text: 'Leader')
   end
 
   it 'moves multiple roles' do
@@ -85,14 +83,14 @@ describe RoleListsController, js: true do
     find(:css,"input[name='role[types][Group::TopGroup::Leader]']").set(false)
     find('button', text: 'Rollen verschieben').click
 
-    is_expected.to have_content('3 Rollen wurden verschoben')
-    is_expected.to have_css("tr#person_#{role1.person.id} td p", text: 'Secretary')
-    is_expected.to have_css("tr#person_#{role2.person.id} td p", text: 'Secretary')
-    is_expected.to have_css("tr#person_#{leader.person.id} td p", text: 'Secretary')
+    expect(page).to have_content('3 Rollen wurden verschoben')
+    expect(page).to have_css("tr#person_#{role1.person.id} td p", text: 'Secretary')
+    expect(page).to have_css("tr#person_#{role2.person.id} td p", text: 'Secretary')
+    expect(page).to have_css("tr#person_#{leader.person.id} td p", text: 'Secretary')
 
-    is_expected.not_to have_css("tr#person_#{role1.person.id} td p", text: 'Member')
-    is_expected.not_to have_css("tr#person_#{role2.person.id} td p", text: 'Member')
-    is_expected.to     have_css("tr#person_#{leader.person.id} td p", text: 'Leader')
+    expect(page).not_to have_css("tr#person_#{role1.person.id} td p", text: 'Member')
+    expect(page).not_to have_css("tr#person_#{role2.person.id} td p", text: 'Member')
+    expect(page).to     have_css("tr#person_#{leader.person.id} td p", text: 'Leader')
   end
 
 end

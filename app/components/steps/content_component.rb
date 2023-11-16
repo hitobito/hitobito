@@ -13,8 +13,6 @@ module Steps
 
     attr_accessor :component, :form
 
-    delegate :submit_button, to: :helpers
-
     def initialize(component:, component_iteration:, step:, form:, **args)
       super(iterator: component_iteration, step: step)
       @component = component
@@ -27,8 +25,12 @@ module Steps
     end
 
     def next_button(title = nil)
-      label = title || component.try(:next_button_label) || t('steps.steps_component.next_link')
+      label = component.try(:next_button_label) || title || t('steps.steps_component.next_link')
       helpers.submit_button(@form, label, name: 'groups_self_registration[step]', value: @index)
+    end
+
+    def submit_button(title = nil)
+      next_button(t('global.button.save'))
     end
 
     def back_link

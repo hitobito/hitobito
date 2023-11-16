@@ -26,7 +26,12 @@ module Groups::SelfRegistrations
     end
 
     def self.valid?(entry)
-      entry.person.valid?
+      result = entry.person.valid?
+      if entry.person.errors.delete(:email, :taken)
+        key = 'groups.self_registration.create.email_taken'
+        entry.person.errors.add(:base, I18n.t(key))
+      end
+      return result
     end
   end
 end

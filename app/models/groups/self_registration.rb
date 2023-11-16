@@ -19,6 +19,7 @@ class Groups::SelfRegistration
   end
 
   def save
+    return false unless valid?
     Person.transaction do
       person_model = create_person
       create_role(person_model)
@@ -37,7 +38,7 @@ class Groups::SelfRegistration
 
     return current_step.valid?(self) unless last_step?
 
-    steps.all { |step| step.valid?(self) }
+    steps.all? { |step| step.valid?(self) }
   end
 
   def person

@@ -31,14 +31,6 @@ class Groups::SelfRegistrationController < CrudController
     end
   end
 
-  def create
-    super do
-      next unless entry.person.errors.delete(:email, :taken)
-
-      entry.person.errors.add(:base, t('.email_taken'))
-    end
-  end
-
   private
 
   def send_notification_email

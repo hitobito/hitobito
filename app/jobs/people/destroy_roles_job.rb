@@ -8,7 +8,7 @@
 class People::DestroyRolesJob < RecurringJob
   run_every 15.minutes
 
-  def perform
+  def perform_internal
     roles = Role.where('delete_on <= ?', Time.zone.today)
     roles.find_each(&:destroy!)
   end

@@ -46,7 +46,7 @@ class Groups::SelfRegistrationController < CrudController
   end
 
   def save_entry
-    privacy_policy_accepted? && entry.save
+    privacy_policy_accepted? && entry.save!
   end
 
   def return_path

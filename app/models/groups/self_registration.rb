@@ -18,15 +18,12 @@ class Groups::SelfRegistration
     @person_attributes = extract_attrs(params, :person_attributes)
   end
 
-  def save
-    return false unless valid?
+  def save!
+    raise ActiveRecord::RecordInvalid unless valid?
     Person.transaction do
       person_model = create_person
       create_role(person_model)
     end
-    true
-  rescue
-    false
   end
 
   def set_privacy_policy_acceptance(value)

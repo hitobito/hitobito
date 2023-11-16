@@ -13,6 +13,7 @@ class Role
 
     def initialize(root_type)
       @root = root_type
+      @excluded = [FutureRole]
       compose
     end
 
@@ -24,6 +25,7 @@ class Role
       @role_types.flat_map do |layer, groups|
         groups.flat_map do |group, roles|
           next roles unless block_given?
+
           roles.map { |role| yield role, group, layer }
         end
       end
@@ -104,6 +106,8 @@ class Role
       seen_types = []
       group.child_types.each do |child|
         child.role_types.each do |role|
+          next if @excluded.include?(role)
+
           process_global_role(seen_types, role, global)
         end
       end
@@ -118,7 +122,9 @@ class Role
     end
 
     def local_role_types(group)
-      group.role_types.select { |r| !r.restricted? && local_role_type?(r) }
+      group.role_types.select do |r|
+        !r.restricted? && local_role_type?(r) && @excluded.exclude?(r)
+      end
     end
 
     def local_role_type?(type)

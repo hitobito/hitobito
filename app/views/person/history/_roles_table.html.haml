@@ -1,0 +1,16 @@
+-# Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+-# hitobito_sac_cas and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito
+
+- if roles.present?
+  %h2=title
+
+  = table(roles, class: 'table table-striped table-fixed') do |t|
+    - t.col(Group.model_name.human) do |r|
+      = GroupDecorator.new(r.group).link_with_layer
+    - t.col(Role.model_name.human) do |r|
+      = r.to_s
+    - t.attr(:created_at, t('global.from')) { |r| I18n.l(r.start_on) }
+    - t.attr(:deleted_at, t('global.until')) { |r| r.end_on.present? ? I18n.l(r.end_on) : '' }
+    - render_extensions :history_columns, locals: { t: t }

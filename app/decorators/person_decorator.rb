@@ -85,6 +85,14 @@ class PersonDecorator < ApplicationDecorator
     super.without_archived
   end
 
+  def current_roles_grouped
+    @current_roles_grouped ||= roles_grouped(scope: person.roles.without_future)
+  end
+
+  def future_roles_grouped
+    @future_roles_grouped ||= roles_grouped(scope: person.roles.future)
+  end
+
   def roles_list(group = nil, multiple_groups = false)
     roles_short(group, multiple_groups, edit: false)
   end
@@ -100,13 +108,6 @@ class PersonDecorator < ApplicationDecorator
       filtered_functions(roles.to_a, :group).select { |r| group.subgroup_ids.include? r.group_id }
     else
       filtered_functions(roles.to_a, :group, group)
-    end
-  end
-
-  # returns roles grouped by their group
-  def roles_grouped
-    roles.each_with_object(Hash.new { |h, k| h[k] = [] }) do |role, memo|
-      memo[role.group] << role
     end
   end
 
@@ -141,6 +142,13 @@ class PersonDecorator < ApplicationDecorator
 
   def restored_group(default_group)
     last_role.group.deleted_at? ? default_group : last_role.group
+  end
+
+  # returns roles grouped by their group
+  def roles_grouped(scope: roles)
+    scope.each_with_object(Hash.new { |h, k| h[k] = [] }) do |role, memo|
+      memo[role.group] << role
+    end
   end
 
   private

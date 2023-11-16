@@ -11,14 +11,21 @@
 #
 #  id          :integer          not null, primary key
 #  archived_at :datetime
+#  convert_on  :date
+#  convert_to  :string(255)
 #  delete_on   :date
 #  deleted_at  :datetime
 #  label       :string(255)
 #  type        :string(255)      not null
 #  created_at  :datetime
 #  updated_at  :datetime
-#  deleted_at  :datetime
-#  archived_at :datetime
+#  group_id    :integer          not null
+#  person_id   :integer          not null
+#
+# Indexes
+#
+#  index_roles_on_person_id_and_group_id  (person_id,group_id)
+#  index_roles_on_type                    (type)
 #
 
 require 'spec_helper'
@@ -27,6 +34,7 @@ describe Role do
 
   context 'validates' do
     let(:group) { groups(:bottom_layer_one) }
+
     def build(attrs)
       Fabricate.build(:'Group::BottomLayer::Leader', attrs.merge(group: group))
     end
@@ -48,6 +56,29 @@ describe Role do
       expect(role).to have(2).error_on(:created_at)
       expect(role.errors[:created_at][0]).to eq 'muss ausgefüllt werden'
       expect(role.errors[:created_at][1]).to eq 'ist kein gültiges Datum'
+    end
+  end
+
+  describe '::inactive scope' do
+    subject(:inactive) { Role.inactive }
+
+    it 'excludes active roles' do
+      expect(inactive).to be_empty
+    end
+
+    it 'includes deleted roles' do
+      roles(:bottom_member).update(deleted_at: 1.day.ago)
+      expect(inactive).to have(1).item
+    end
+
+    it 'includes archived roles from the past' do
+      roles(:bottom_member).update(archived_at: 3.days.ago)
+      expect(inactive).to have(1).item
+    end
+
+    it 'excludes archived roles from the future' do
+      roles(:bottom_member).update(archived_at: 3.days.from_now)
+      expect(inactive).to be_empty
     end
   end
 
@@ -227,6 +258,27 @@ describe Role do
     end
   end
 
+  context '#start_on' do
+    let(:tomorrow) { Time.zone.tomorrow }
+    let(:today) { Time.zone.today }
+
+    def build(attrs = {})
+      Fabricate.build(:'Group::BottomLayer::Leader', attrs)
+    end
+
+    it 'returns today if created_at and convert_on is nil' do
+      expect(build.start_on).to eq today
+    end
+
+    it 'returns created_at date if created_at is present and convert_on is nil' do
+      expect(build(created_at: 1.day.ago).start_on).to eq Time.zone.yesterday
+    end
+
+    it 'returns convert_on if convert_on and created_at is set' do
+      expect(build(created_at: 1.day.ago, convert_on: tomorrow).start_on).to eq tomorrow
+    end
+  end
+
   context '#destroy' do
     it 'deleted young roles from database' do
       a = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo',
@@ -366,7 +418,6 @@ describe Role do
     end
   end
 
-
   context 'nextcloud groups' do
     let(:person) { Fabricate(:person) }
     let(:group) { groups(:bottom_layer_one) }
@@ -480,7 +531,6 @@ describe Role do
         )
       end
     end
-
   end
 
 end

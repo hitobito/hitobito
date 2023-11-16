@@ -23,6 +23,7 @@ de:
     chosen_no_results: Keine Einträge gefunden mit
     selected: Ausgewählt
     columns: Spalten
+    start_on: ab %{date}
 
     gender:
       male: männlich
@@ -1351,6 +1352,9 @@ de:
           approved: "Die Zugriffsanfrage für %{person} wurde bereits freigegeben."
           rejected: "Die Zugriffsanfrage für %{person} wurde bereits abgelehnt."
 
+    history:
+      index:
+        inactive_roles_title: 'Inaktive Rollen'
     households:
       form:
         address_updated: "Adresse aktualisiert"
@@ -1570,6 +1574,7 @@ de:
 
     roles:
       title: Aktive Rollen
+      convertable_title: Zukünftige Rollen
 
     roles_aside:
       add_role: Rolle hinzufügen

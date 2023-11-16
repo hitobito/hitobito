@@ -12,17 +12,19 @@ class Person::HistoryController < ApplicationController
   decorates :group, :person
 
   def index
-    @roles = fetch_roles
+    @roles = fetch_roles(:without_deleted, :without_future)
+    @future_roles = fetch_roles(:future)
+    @inactive_roles = fetch_roles(:inactive)
     @participations_by_event_type = participations_by_event_type
   end
 
   private
 
-  def fetch_roles
-    Person::PreloadGroups.for([entry]).first.roles.
-      with_deleted.
-      includes(group: :parent).
-      sort_by { |r| GroupDecorator.new(r.group).name_with_layer }
+  def fetch_roles(*scopes)
+    scope = Person::PreloadGroups.for([entry]).first.roles.includes(group: :parent)
+    scopes
+      .inject(scope) { |current, additional| current.send(additional) }
+      .sort_by { |r| GroupDecorator.new(r.group).name_with_layer }
   end
 
   def fetch_participations

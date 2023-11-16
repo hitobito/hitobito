@@ -72,6 +72,8 @@ module RolesHelper
   end
 
   def existing_role(role)
+    return role.convert_to if role.is_a?(FutureRole)
+
     role ? role.type : nil
   end
 

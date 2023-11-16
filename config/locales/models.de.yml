@@ -230,6 +230,9 @@ de:
       event/date:
         one: Datum
         other: Daten
+      future_role:
+        one: Zukünftige Rolle
+        other: Zukünftige Rollen
       family_member:
         one: Familienmitglied
         other: Familienmitglieder
@@ -667,6 +670,7 @@ de:
         participation: Person
         remove_participant_role: Allfällige Teilnehmer*Innen-Rolle entfernen
 
+
       family_member:
         kind: Verwandschaftsverhältnis
         kinds:
@@ -775,6 +779,9 @@ de:
             external:
               one: Extern
               other: Externe
+            future:
+              one: Zukünftig
+              other: Zukünftige
 
       contact_account:
         predefined_labels:

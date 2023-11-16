@@ -23,7 +23,7 @@ module Role::Types
                              group_and_below_full: :group_and_below_read,
                              group_full: :group_read }
 
-  Kinds = [:member, :passive, :external]
+  Kinds = [:member, :passive, :external, :future]
 
   # All possible permissions with writing permission
   WRITING_PERMISSIONS = [

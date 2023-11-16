@@ -21,7 +21,7 @@
                           GroupDecorator.decorate(@group).possible_roles,
                           :sti_name,
                           :label,
-                          { },
+                          roles_type_select_options(@group, entry),
                           { class: 'chosen-select',
                             data: { remote: true,
                                     url: details_group_roles_path(@group),
@@ -37,4 +37,6 @@
   - if @person_id
     = f.hidden_field :person_id, value: @person_id
 
+  = f.hidden_field :convert_on, value: entry.convert_on
+  = f.hidden_field :delete_on, value: entry.delete_on
   = form_buttons(f, submit_label: ti(:"button.save"), cancel_url: '#')

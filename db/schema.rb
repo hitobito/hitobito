@@ -10,7 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_10_16_092502) do
+ActiveRecord::Schema.define(version: 2023_10_16_131405) do
+
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "body", size: :long
@@ -974,6 +975,8 @@ ActiveRecord::Schema.define(version: 2023_10_16_092502) do
     t.datetime "deleted_at"
     t.datetime "archived_at"
     t.date "delete_on"
+    t.date "convert_on"
+    t.string "convert_to"
     t.index ["person_id", "group_id"], name: "index_roles_on_person_id_and_group_id"
     t.index ["type"], name: "index_roles_on_type"
   end

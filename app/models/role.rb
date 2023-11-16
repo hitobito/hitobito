@@ -11,6 +11,8 @@
 #
 #  id          :integer          not null, primary key
 #  archived_at :datetime
+#  convert_on  :date
+#  convert_to  :string(255)
 #  delete_on   :date
 #  deleted_at  :datetime
 #  label       :string(255)
@@ -122,12 +124,16 @@ class Role < ActiveRecord::Base
   after_destroy :reset_contact_data_visible
   after_destroy :reset_primary_group
 
-  before_save :prevent_changes, if: ->(r) { r.archived? }
+  before_save :prevent_changes, if: :archived?
 
   ### SCOPES
 
+  scope :without_future, -> { where.not(type: FutureRole.sti_name) }
   scope :without_archived, -> { where(archived_at: nil) }
   scope :only_archived, -> { where.not(archived_at: nil).where(archived_at: ..Time.now.utc) }
+  scope :future, -> { where(type: FutureRole.sti_name) }
+  scope :inactive, -> { with_deleted.where('deleted_at IS NOT NULL OR archived_at <= ?',
+                                           Time.now.utc) }
 
   ### CLASS METHODS
 
@@ -185,6 +191,14 @@ class Role < ActiveRecord::Base
     end
   end
 
+  def start_on
+    convert_on || created_at&.to_date || Time.zone.today
+  end
+
+  def end_on
+    delete_on || deleted_at&.to_date
+  end
+
   private
 
   def nextcloud_group_details
@@ -231,6 +245,8 @@ class Role < ActiveRecord::Base
   end
 
   def assert_type_is_allowed_for_group
+    return if type == FutureRole.sti_name
+
     if type && group && !group.role_types.collect(&:sti_name).include?(type)
       errors.add(:type, :type_not_allowed)
     end

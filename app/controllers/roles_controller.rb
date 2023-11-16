@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class RolesController < CrudController
+class RolesController < CrudController # rubocop:disable Metrics/ClassLength
   include PrivacyPolicyAcceptable
 
   respond_to :js
@@ -167,11 +167,15 @@ class RolesController < CrudController
 
   def build_role
     type = extract_model_attr(:type)
-    if type.present?
-      @type = @group.class.find_role_type!(type)
-      @type.new
+    start_at = extract_start_at
+    return Role.new(convert_on: start_at) if type.blank?
+
+    @type = @group.class.find_role_type!(type)
+
+    if start_at&.future?
+      FutureRole.new(convert_to: @type, convert_on: start_at, created_at: Time.zone.now)
     else
-      Role.new
+      @type.new(created_at: start_at)
     end
   end
 
@@ -190,7 +194,7 @@ class RolesController < CrudController
   def permitted_params(role_type = entry.class)
     @permitted_params ||=
       begin
-        permitted_attrs = role_type.used_attributes
+        permitted_attrs = role_type.used_attributes + [:convert_on]
         permitted_attrs -= [:deleted_at, :delete_on] unless can?(:destroy, @role)
         model_params.permit(permitted_attrs)
       end
@@ -281,4 +285,13 @@ class RolesController < CrudController
     entry.group
   end
 
+  def extract_start_at
+    Date.parse(delete_model_param(:created_at) || delete_model_param(:convert_on))
+  rescue TypeError, Date::Error
+    nil
+  end
+
+  def delete_model_param(key)
+    model_params&.delete(key).presence
+  end
 end

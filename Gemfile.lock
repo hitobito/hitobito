@@ -88,13 +88,13 @@ GEM
       airbrake-ruby (~> 6.0)
     airbrake-ruby (6.2.2)
       rbtree3 (~> 0.6)
+    amazing_print (1.5.0)
     annotate (3.2.0)
       activerecord (>= 3.2, < 8.0)
       rake (>= 10.4, < 14.0)
     ast (2.4.2)
     awesome_nested_set (3.6.0)
       activerecord (>= 4.0.0, < 7.2)
-    awesome_print (1.9.2)
     aws-eventstream (1.2.0)
     aws-partitions (1.834.0)
     aws-sdk-core (3.185.1)
@@ -719,9 +719,9 @@ DEPENDENCIES
   activerecord-session_store
   acts-as-taggable-on
   airbrake
+  amazing_print
   annotate
   awesome_nested_set
-  awesome_print
   aws-sdk-s3
   bcrypt
   better_errors

@@ -135,7 +135,7 @@ group :test do
 end
 
 group :console do
-  gem 'awesome_print'
+  gem 'amazing_print'
   gem 'hirb'
   gem 'pry-remote'
   gem 'pry-stack_explorer'

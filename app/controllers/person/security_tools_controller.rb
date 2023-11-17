@@ -46,6 +46,14 @@ class Person::SecurityToolsController < ApplicationController
     end
   end
 
+  def block_person
+    if !herself? && person.update!(blocked_at: Time.zone.now)
+      redirect_to security_tools_group_person_path(group, person), notice: t('.flashes.success')
+    else
+      redirect_to security_tools_group_person_path(group, person), alert: t('.flashes.error')
+    end
+  end
+
   private
 
   def person

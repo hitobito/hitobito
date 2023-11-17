@@ -61,4 +61,38 @@ describe Person::SecurityToolsController do
       end
     end
   end
+
+  describe 'POST#block_person' do
+    let(:person) { bottom_member }
+    let(:nesting) { { group_id: person.primary_group.id, id: person.id } }
+    subject(:block_person) { post :block_person, params: nesting }
+
+    it 'sets the blocked_at attribute' do
+      expect(person.blocked_at).to be_nil
+      block_person
+      expect(response).to redirect_to(security_tools_group_person_path(person.primary_group.id, person.id))
+      expect(flash[:notice]).to eq(I18n.t('person.security_tools.block_person.flashes.success'))
+      expect(person.reload.blocked_at).to be > 1.minute.ago
+    end
+
+    context 'without permissions' do
+      let(:person) { top_leader }
+      it 'cannot block a person' do
+        sign_in(bottom_member)
+        expect { block_person }.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    context 'with herself' do
+      let(:person) { top_leader }
+      it 'cannot block herself' do
+        expect(person.blocked_at).to be_nil
+        block_person
+        expect(response).to redirect_to(security_tools_group_person_path(person.primary_group.id, person.id))
+        expect(flash[:alert]).to eq(I18n.t('person.security_tools.block_person.flashes.error'))
+        expect(person.blocked_at).to be_nil
+      end
+    end
+
+  end
 end

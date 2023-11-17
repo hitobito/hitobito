@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_10_16_131405) do
+ActiveRecord::Schema.define(version: 2023_11_17_123807) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -112,6 +112,18 @@ ActiveRecord::Schema.define(version: 2023_10_16_131405) do
     t.index ["job_name"], name: "index_background_job_log_entries_on_job_name"
   end
 
+  create_table "black_lists", id: :integer, charset: "utf8mb4", force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.string "pbs_number"
+    t.string "email"
+    t.string "phone_number"
+    t.string "reference_name"
+    t.string "reference_phone_number"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "calendar_groups", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "calendar_id", null: false
     t.bigint "group_id", null: false
@@ -138,12 +150,30 @@ ActiveRecord::Schema.define(version: 2023_10_16_131405) do
     t.index ["group_id"], name: "index_calendars_on_group_id"
   end
 
+  create_table "censuses", id: :integer, charset: "utf8mb4", force: :cascade do |t|
+    t.integer "year", null: false
+    t.date "start_at"
+    t.date "finish_at"
+    t.index ["year"], name: "index_censuses_on_year", unique: true
+  end
+
   create_table "cors_origins", charset: "utf8mb4", force: :cascade do |t|
     t.string "auth_method_type"
     t.bigint "auth_method_id"
     t.string "origin", null: false
     t.index ["auth_method_type", "auth_method_id"], name: "index_cors_origins_on_auth_method_type_and_auth_method_id"
     t.index ["origin"], name: "index_cors_origins_on_origin"
+  end
+
+  create_table "crises", id: :integer, charset: "utf8mb4", force: :cascade do |t|
+    t.integer "creator_id", null: false
+    t.integer "group_id", null: false
+    t.boolean "acknowledged", default: false, null: false
+    t.boolean "completed", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "index_crises_on_creator_id"
+    t.index ["group_id"], name: "index_crises_on_group_id"
   end
 
   create_table "custom_content_translations", charset: "utf8mb4", force: :cascade do |t|
@@ -201,6 +231,23 @@ ActiveRecord::Schema.define(version: 2023_10_16_131405) do
     t.boolean "rejected", default: false, null: false
     t.boolean "waiting_list", default: false, null: false
     t.text "waiting_list_comment"
+    t.integer "waiting_list_setter_id"
+  end
+
+  create_table "event_approvals", id: :integer, charset: "utf8mb4", force: :cascade do |t|
+    t.integer "application_id", null: false
+    t.string "layer", null: false
+    t.boolean "approved", default: false, null: false
+    t.boolean "rejected", default: false, null: false
+    t.text "comment"
+    t.datetime "approved_at"
+    t.integer "approver_id"
+    t.string "current_occupation"
+    t.string "current_level"
+    t.text "occupation_assessment"
+    t.text "strong_points"
+    t.text "weak_points"
+    t.index ["application_id"], name: "index_event_approvals_on_application_id"
   end
 
   create_table "event_attachments", id: :integer, charset: "utf8mb4", force: :cascade do |t|
@@ -268,6 +315,7 @@ ActiveRecord::Schema.define(version: 2023_10_16_131405) do
     t.string "short_name"
     t.text "general_information"
     t.text "application_conditions"
+    t.text "documents_text"
     t.index ["event_kind_id"], name: "index_event_kind_translations_on_event_kind_id"
     t.index ["locale"], name: "index_event_kind_translations_on_locale"
   end
@@ -278,6 +326,11 @@ ActiveRecord::Schema.define(version: 2023_10_16_131405) do
     t.datetime "deleted_at"
     t.integer "minimum_age"
     t.integer "kind_category_id"
+    t.string "kurs_id_fiver"
+    t.string "vereinbarungs_id_fiver"
+    t.boolean "campy", default: false, null: false
+    t.boolean "can_have_confirmations", default: false, null: false
+    t.string "confirmation_name"
   end
 
   create_table "event_participations", id: :integer, charset: "utf8mb4", force: :cascade do |t|
@@ -289,6 +342,10 @@ ActiveRecord::Schema.define(version: 2023_10_16_131405) do
     t.boolean "active", default: false, null: false
     t.integer "application_id"
     t.boolean "qualified"
+    t.date "canceled_at"
+    t.string "state", limit: 60
+    t.decimal "bsv_days", precision: 6, scale: 2
+    t.timestamp "j_s_data_sharing_accepted_at"
     t.index ["application_id"], name: "index_event_participations_on_application_id"
     t.index ["event_id", "person_id"], name: "index_event_participations_on_event_id_and_person_id", unique: true
     t.index ["event_id"], name: "index_event_participations_on_event_id"
@@ -311,6 +368,7 @@ ActiveRecord::Schema.define(version: 2023_10_16_131405) do
     t.boolean "multiple_choices", default: false, null: false
     t.boolean "required", default: false, null: false
     t.boolean "admin", default: false, null: false
+    t.boolean "pass_on_to_supercamp", default: false, null: false
     t.index ["event_id"], name: "index_event_questions_on_event_id"
   end
 
@@ -369,7 +427,63 @@ ActiveRecord::Schema.define(version: 2023_10_16_131405) do
     t.boolean "globally_visible"
     t.string "shared_access_token"
     t.boolean "notify_contact_on_participations", default: false, null: false
+    t.decimal "training_days", precision: 12, scale: 1
+    t.boolean "tentative_applications", default: false, null: false
+    t.boolean "language_de", default: false, null: false
+    t.boolean "language_fr", default: false, null: false
+    t.boolean "language_it", default: false, null: false
+    t.boolean "language_en", default: false, null: false
+    t.string "express_fee"
+    t.boolean "requires_approval_abteilung", default: false, null: false
+    t.boolean "requires_approval_region", default: false, null: false
+    t.boolean "requires_approval_kantonalverband", default: false, null: false
+    t.boolean "requires_approval_bund", default: false, null: false
+    t.integer "expected_participants_wolf_f"
+    t.integer "expected_participants_wolf_m"
+    t.integer "expected_participants_pfadi_f"
+    t.integer "expected_participants_pfadi_m"
+    t.integer "expected_participants_pio_f"
+    t.integer "expected_participants_pio_m"
+    t.integer "expected_participants_rover_f"
+    t.integer "expected_participants_rover_m"
+    t.integer "expected_participants_leitung_f"
+    t.integer "expected_participants_leitung_m"
+    t.string "canton", limit: 2
+    t.string "coordinates"
+    t.string "altitude"
+    t.string "emergency_phone"
+    t.text "landlord"
+    t.boolean "landlord_permission_obtained", default: false, null: false
+    t.string "j_s_kind"
+    t.boolean "j_s_security_snow", default: false, null: false
+    t.boolean "j_s_security_mountain", default: false, null: false
+    t.boolean "j_s_security_water", default: false, null: false
+    t.boolean "participants_can_apply", default: false, null: false
+    t.boolean "participants_can_cancel", default: false, null: false
+    t.boolean "al_present", default: false, null: false
+    t.boolean "al_visiting", default: false, null: false
+    t.date "al_visiting_date"
+    t.boolean "coach_visiting", default: false, null: false
+    t.date "coach_visiting_date"
+    t.boolean "coach_confirmed", default: false, null: false
+    t.boolean "local_scout_contact_present", default: false, null: false
+    t.text "local_scout_contact"
+    t.boolean "camp_reminder_sent", default: false, null: false
+    t.boolean "paper_application_required", default: false, null: false
+    t.boolean "lagerreglement_applied", default: false, null: false
+    t.boolean "kantonalverband_rules_applied", default: false, null: false
+    t.boolean "j_s_rules_applied", default: false, null: false
+    t.decimal "bsv_days", precision: 6, scale: 2
+    t.date "camp_submitted_at"
+    t.boolean "has_confirmations", default: true, null: false
+    t.integer "parent_id"
+    t.boolean "allow_sub_camps", default: false, null: false
+    t.integer "lft"
+    t.integer "rgt"
+    t.text "contact_attrs_passed_on_to_supercamp"
     t.index ["kind_id"], name: "index_events_on_kind_id"
+    t.index ["lft"], name: "index_events_on_lft"
+    t.index ["rgt"], name: "index_events_on_rgt"
     t.index ["shared_access_token"], name: "index_events_on_shared_access_token"
   end
 
@@ -388,6 +502,15 @@ ActiveRecord::Schema.define(version: 2023_10_16_131405) do
     t.index ["other_id"], name: "index_family_members_on_other_id"
     t.index ["person_id", "other_id"], name: "index_family_members_on_person_id_and_other_id", unique: true
     t.index ["person_id"], name: "index_family_members_on_person_id"
+  end
+
+  create_table "geolocations", id: :integer, charset: "utf8mb4", force: :cascade do |t|
+    t.string "lat"
+    t.string "long"
+    t.string "geolocatable_type"
+    t.integer "geolocatable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "group_translations", charset: "utf8mb4", force: :cascade do |t|
@@ -436,6 +559,16 @@ ActiveRecord::Schema.define(version: 2023_10_16_131405) do
     t.string "text_message_originator"
     t.string "letter_address_position", default: "left", null: false
     t.string "letter_logo"
+    t.boolean "pta", default: false, null: false
+    t.boolean "vkp", default: false, null: false
+    t.boolean "pbs_material_insurance", default: false, null: false
+    t.string "website"
+    t.string "pbs_shortname", limit: 15
+    t.string "bank_account"
+    t.string "application_approver_role"
+    t.string "gender", limit: 1
+    t.date "try_out_day_at"
+    t.boolean "group_health", default: false, null: false
     t.index ["layer_group_id"], name: "index_groups_on_layer_group_id"
     t.index ["lft", "rgt"], name: "index_groups_on_lft_and_rgt"
     t.index ["parent_id"], name: "index_groups_on_parent_id"
@@ -583,6 +716,12 @@ ActiveRecord::Schema.define(version: 2023_10_16_131405) do
     t.index ["sequence_number"], name: "index_invoices_on_sequence_number"
   end
 
+  create_table "kantonalverband_cantons", id: :integer, charset: "utf8mb4", force: :cascade do |t|
+    t.integer "kantonalverband_id", null: false
+    t.string "canton", limit: 2, null: false
+    t.index ["kantonalverband_id", "canton"], name: "index_kantonalverband_cantons_on_kantonalverband_id_and_canton", unique: true
+  end
+
   create_table "label_format_translations", charset: "utf8mb4", force: :cascade do |t|
     t.integer "label_format_id", null: false
     t.string "locale", null: false
@@ -647,6 +786,30 @@ ActiveRecord::Schema.define(version: 2023_10_16_131405) do
     t.text "mailchimp_result"
     t.boolean "mailchimp_include_additional_emails", default: false
     t.index ["group_id"], name: "index_mailing_lists_on_group_id"
+  end
+
+  create_table "member_counts", id: :integer, charset: "utf8mb4", force: :cascade do |t|
+    t.integer "kantonalverband_id", null: false
+    t.integer "region_id"
+    t.integer "abteilung_id", null: false
+    t.integer "year", null: false
+    t.integer "leiter_f"
+    t.integer "leiter_m"
+    t.integer "biber_f"
+    t.integer "biber_m"
+    t.integer "woelfe_f"
+    t.integer "woelfe_m"
+    t.integer "pfadis_f"
+    t.integer "pfadis_m"
+    t.integer "pios_f"
+    t.integer "pios_m"
+    t.integer "rover_f"
+    t.integer "rover_m"
+    t.integer "pta_f"
+    t.integer "pta_m"
+    t.index ["abteilung_id", "year"], name: "index_member_counts_unique_per_year", unique: true
+    t.index ["kantonalverband_id", "year"], name: "index_member_counts_on_kantonalverband_id_and_year"
+    t.index ["region_id", "year"], name: "index_member_counts_on_region_id_and_year"
   end
 
   create_table "message_recipients", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -862,6 +1025,21 @@ ActiveRecord::Schema.define(version: 2023_10_16_131405) do
     t.timestamp "privacy_policy_accepted_at"
     t.bigint "self_registration_reason_id"
     t.string "self_registration_reason_custom_text", limit: 100
+    t.string "nationality_j_s"
+    t.string "ahv_number"
+    t.string "j_s_number"
+    t.string "salutation"
+    t.string "title"
+    t.integer "grade_of_school"
+    t.date "entry_date"
+    t.date "leaving_date"
+    t.string "correspondence_language", limit: 5
+    t.boolean "brother_and_sisters", default: false, null: false
+    t.integer "kantonalverband_id"
+    t.string "pbs_number"
+    t.boolean "prefers_digital_correspondence", default: false, null: false
+    t.datetime "inactivity_block_warning_sent_at"
+    t.datetime "blocked_at"
     t.index ["authentication_token"], name: "index_people_on_authentication_token"
     t.index ["confirmation_token"], name: "index_people_on_confirmation_token", unique: true
     t.index ["email"], name: "index_people_on_email", unique: true
@@ -883,6 +1061,14 @@ ActiveRecord::Schema.define(version: 2023_10_16_131405) do
     t.timestamp "created_at"
     t.timestamp "updated_at"
     t.index ["group_id", "group_type"], name: "index_people_filters_on_group_id_and_group_type"
+  end
+
+  create_table "people_managers", charset: "utf8mb4", force: :cascade do |t|
+    t.integer "manager_id", null: false
+    t.integer "managed_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["manager_id", "managed_id"], name: "index_people_managers_on_manager_id_and_managed_id", unique: true
   end
 
   create_table "people_relations", id: :integer, charset: "utf8mb4", force: :cascade do |t|
@@ -945,6 +1131,7 @@ ActiveRecord::Schema.define(version: 2023_10_16_131405) do
     t.datetime "updated_at"
     t.datetime "deleted_at"
     t.integer "reactivateable"
+    t.boolean "manual", default: true, null: false
   end
 
   create_table "qualifications", id: :integer, charset: "utf8mb4", force: :cascade do |t|
@@ -953,6 +1140,8 @@ ActiveRecord::Schema.define(version: 2023_10_16_131405) do
     t.date "start_at", null: false
     t.date "finish_at"
     t.string "origin"
+    t.integer "event_participation_id"
+    t.index ["event_participation_id"], name: "fk_rails_d7d845e1ad"
     t.index ["person_id"], name: "index_qualifications_on_person_id"
     t.index ["qualification_kind_id"], name: "index_qualifications_on_qualification_kind_id"
   end
@@ -981,7 +1170,7 @@ ActiveRecord::Schema.define(version: 2023_10_16_131405) do
     t.index ["type"], name: "index_roles_on_type"
   end
 
-  create_table "self_registration_reason_translations", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "self_registration_reason_translations", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "self_registration_reason_id", null: false
     t.string "locale", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -991,12 +1180,12 @@ ActiveRecord::Schema.define(version: 2023_10_16_131405) do
     t.index ["self_registration_reason_id"], name: "index_d351072d2828208df6f5a55e3d6d5f361a7c23ea"
   end
 
-  create_table "self_registration_reasons", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "self_registration_reasons", charset: "utf8mb4", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "service_tokens", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "service_tokens", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "layer_group_id", null: false
     t.string "name", null: false
     t.text "description"
@@ -1011,6 +1200,8 @@ ActiveRecord::Schema.define(version: 2023_10_16_131405) do
     t.boolean "event_participations", default: false, null: false
     t.boolean "mailing_lists", default: false, null: false
     t.string "permission", default: "layer_read", null: false
+    t.boolean "group_health", default: false, null: false
+    t.boolean "census_evaluations", default: false, null: false
   end
 
   create_table "sessions", id: :integer, charset: "utf8mb4", force: :cascade do |t|
@@ -1105,6 +1296,7 @@ ActiveRecord::Schema.define(version: 2023_10_16_131405) do
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
   add_foreign_key "people", "self_registration_reasons"
+  add_foreign_key "qualifications", "event_participations", on_delete: :nullify
   add_foreign_key "subscription_tags", "subscriptions"
   add_foreign_key "subscription_tags", "tags"
 end

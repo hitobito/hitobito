@@ -47,7 +47,15 @@ class Person::SecurityToolsController < ApplicationController
   end
 
   def block_person
-    if !herself? && person.update!(blocked_at: Time.zone.now)
+    if !herself? && !herself_through_impersonation? && person.update!(blocked_at: Time.zone.now)
+      redirect_to security_tools_group_person_path(group, person), notice: t('.flashes.success')
+    else
+      redirect_to security_tools_group_person_path(group, person), alert: t('.flashes.error')
+    end
+  end
+
+  def unblock_person
+    if !herself? && !herself_through_impersonation? && person.update!(blocked_at: nil)
       redirect_to security_tools_group_person_path(group, person), notice: t('.flashes.success')
     else
       redirect_to security_tools_group_person_path(group, person), alert: t('.flashes.error')
@@ -62,6 +70,10 @@ class Person::SecurityToolsController < ApplicationController
 
   def herself?
     person.id == current_user.id
+  end
+
+  def herself_through_impersonation?
+    person.id == origin_user&.id
   end
 
   def group

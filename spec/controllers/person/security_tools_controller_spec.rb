@@ -68,11 +68,20 @@ describe Person::SecurityToolsController do
     subject(:block_person) { post :block_person, params: nesting }
 
     it 'sets the blocked_at attribute' do
-      expect(person.blocked_at).to be_nil
       block_person
       expect(response).to redirect_to(security_tools_group_person_path(person.primary_group.id, person.id))
       expect(flash[:notice]).to eq(I18n.t('person.security_tools.block_person.flashes.success'))
       expect(person.reload.blocked_at).to be > 1.minute.ago
+    end
+
+    it 'logs a message with paper_trail' do
+      pending
+      expect { block_person }.to change { PaperTrail::Version.count }.by(1)
+    end
+
+    it 'notifies the user' do
+      pending
+      expect { block_person }.to change { ActionMailer::Base.deliveries.count }.by(1)
     end
 
     context 'without permissions' do
@@ -85,8 +94,8 @@ describe Person::SecurityToolsController do
 
     context 'with herself' do
       let(:person) { top_leader }
+
       it 'cannot block herself' do
-        expect(person.blocked_at).to be_nil
         block_person
         expect(response).to redirect_to(security_tools_group_person_path(person.primary_group.id, person.id))
         expect(flash[:alert]).to eq(I18n.t('person.security_tools.block_person.flashes.error'))
@@ -94,5 +103,44 @@ describe Person::SecurityToolsController do
       end
     end
 
+    context 'with impersonation' do
+      let(:impersonator_role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
+      let(:person) { impersonator_role.person }
+
+      it 'cannot block impersonator' do
+        allow(controller).to receive(:session).and_return(origin_user: impersonator_role.person.id)
+        block_person
+        expect(response).to redirect_to(security_tools_group_person_path(person.primary_group.id, person.id))
+        expect(flash[:alert]).to eq(I18n.t('person.security_tools.block_person.flashes.error'))
+        expect(person.blocked_at).to be_nil
+      end
+    end
+  end
+
+  describe 'POST#unblock_person' do
+    let(:person) { bottom_member }
+    let(:nesting) { { group_id: person.primary_group.id, id: person.id } }
+    subject(:unblock_person) { post :unblock_person, params: nesting }
+
+    it 'resets the blocked_at attribute' do
+      person.update(blocked_at: 1.month.ago)
+      unblock_person
+      expect(response).to redirect_to(security_tools_group_person_path(person.primary_group.id, person.id))
+      expect(flash[:notice]).to eq(I18n.t('person.security_tools.unblock_person.flashes.success'))
+      expect(person.reload.blocked_at).to be_nil
+    end
+
+    it 'logs a message with paper_trail' do
+      pending
+      expect { unblock_person }.to change { PaperTrail::Version.count }.by(1)
+    end
+
+    context 'without permissions' do
+      let(:person) { top_leader }
+      it 'cannot block a person' do
+        sign_in(bottom_member)
+        expect { unblock_person }.to raise_error(CanCan::AccessDenied)
+      end
+    end
   end
 end

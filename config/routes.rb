@@ -122,6 +122,7 @@ Hitobito::Application.routes.draw do
           post 'totp_disable' => 'people/totp_disable#create', as: 'totp_disable'
           post 'password_override' => 'person/security_tools#password_override'
           post 'block' => 'person/security_tools#block_person'
+          post 'unblock' => 'person/security_tools#unblock_person'
 
           get 'history' => 'person/history#index'
           get 'log' => 'person/log#index'

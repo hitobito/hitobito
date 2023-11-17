@@ -1467,6 +1467,11 @@ de:
         flashes:
           success: Das Passwort wurde überschrieben. Die Person wurde informiert und kann über die Funktion "Passwort vergessen" jederzeit ein neues Passwort anfordern.
 
+      block_person:
+        flashes:
+          success: TBD! BLOCKED.
+          error: TBD! You cannot block yourself.
+
   person/csv_imports:
     invalid_file: Bitte wählen Sie eine gültige CSV Datei aus.
 

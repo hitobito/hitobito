@@ -203,6 +203,7 @@ Capybara.register_driver :chrome do |app|
   options.args << '--window-size=1800,1000'
   options.args << '--crash-dumps-dir=/tmp'
   options.add_option('prefs', {'intl.accept_languages': 'de-CH,de'})
+  options.add_option('binary', ENV['CAPYBARA_CHROME_BINARY']) if ENV['CAPYBARA_CHROME_BINARY'].present?
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
 

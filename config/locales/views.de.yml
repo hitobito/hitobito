@@ -1466,6 +1466,11 @@ de:
           success: TBD! BLOCKED.
           error: TBD! You cannot block yourself.
 
+      unblock_person:
+        flashes:
+          success: TBD! UNBLOCKED.
+          error: TBD! You cannot unblock yourself.
+
   person/csv_imports:
     invalid_file: Bitte wählen Sie eine gültige CSV Datei aus.
 

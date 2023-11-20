@@ -11,7 +11,7 @@
   app.activateTomSelect = function(i, element) {
     return app.tomSelect = new TomSelect('#' + element.id, {
       plugins: ['remove_button'],
-      create: true,
+      create: false,
       onItemAdd: function() {
         this.setTextboxValue('');
         this.refreshOptions();

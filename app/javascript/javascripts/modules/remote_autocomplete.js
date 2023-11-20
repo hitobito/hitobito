@@ -99,7 +99,7 @@
   }
 
   function highlightQuery(label, query) {
-    const words = query.trim().split(/\s+/);
+    const words = query.trim().replace(/\//g, '').split(/\s+/);
 
     for (const word of words) {
       if (word.trim() === "") continue;

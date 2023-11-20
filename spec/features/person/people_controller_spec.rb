@@ -74,7 +74,7 @@ describe PeopleController, js: true do
           fill_in('role_label', with: 'dummy')
 
           click_button 'Speichern'
-          expect(page).to have_selector('.popover .alert-error', text: 'Rolle muss ausgefüllt werden')
+          expect(page).to have_selector('.popover .alert-danger', text: 'Rolle muss ausgefüllt werden')
 
           find('#role_type_select a.chosen-single').click
           find('#role_type_select ul.chosen-results').find('li', text: 'Leader').click

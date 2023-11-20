@@ -80,9 +80,8 @@ describe 'Person Autocomplete', js: true do
         visit new_group_role_path(group)
 
         fill_in 'Person', with: 'Top /'
-        expect(page).to have_selector('ul[role="listbox"] li[role="option"]', text: 'Top Leader')
+        expect(page).to have_selector('ul[role="listbox"] li[role="option"]', text: 'Top / Leader')
         expect(find('ul[role="listbox"] li[role="option"]')).to have_selector('strong', text: 'Top')
-        expect(find('ul[role="listbox"] li[role="option"]')).to have_selector('strong', text: '/')
       end
     end
 

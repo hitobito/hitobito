@@ -34,7 +34,7 @@ describe :login, js: true do
     fill_in 'Passwort', with: password
     click_button 'Anmelden'
 
-    expect(page).to have_selector('#flash .alert.alert-error', text: 'Ungültige Anmeldedaten.')
+    expect(page).to have_selector('#flash .alert.alert-danger', text: 'Ungültige Anmeldedaten.')
     expect(page).to have_current_path(new_person_session_path)
   end
 

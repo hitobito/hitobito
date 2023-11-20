@@ -48,10 +48,10 @@ describe :invoice_configs do
       end
 
       it 'requires a logo when logo_position is not "Kein Logo"' do
-        select 'Rechts', from: 'invoice_config[logo_position]'
+        select 'Rechts', from: 'invoice_config_logo_position'
         expect(page).to have_selector "input[type='file'][required]"
 
-        select 'Kein Logo', from: 'invoice_config[logo_position]'
+        select 'Kein Logo', from: 'invoice_config_logo_position'
         expect(page).to have_selector("input[type='file']:not([required])")
       end
 

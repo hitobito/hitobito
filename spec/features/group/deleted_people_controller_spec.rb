@@ -61,7 +61,7 @@ describe Group::DeletedPeopleController, js: true do
         find('#role_group_id_chosen ul.chosen-results').find('li', text: 'Group 12').click
         fill_in('role_label', with: 'dummy')
         click_button 'Speichern'
-        expect(page).to have_selector('.popover .alert-error', text: 'Rolle muss ausgefüllt werden')
+        expect(page).to have_selector('.popover .alert-danger', text: 'Rolle muss ausgefüllt werden')
 
         find('#role_type_select a.chosen-single').click
         find('#role_type_select ul.chosen-results').find('li', text: 'Leader').click

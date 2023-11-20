@@ -85,10 +85,13 @@ class Groups::SelfRegistration
     )
   end
 
-  def extract_attrs(params, key, permitted_attrs: PeopleController.permitted_attrs, array: false, required: true)
+  def extract_attrs(params, key, permitted_attrs: PeopleController.permitted_attrs, array: false,
+                    required: true)
     return {} if params.nil?
 
-    params = required ? params.require(key).permit(*permitted_attrs) : params.permit(Hash[key, permitted_attrs])[key]
+    params = required ?
+               params.require(key).permit(*permitted_attrs) :
+               params.permit(Hash[key, permitted_attrs])[key]
     array ? params&.values : params
   end
 

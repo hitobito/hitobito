@@ -123,6 +123,9 @@ jobs:
           # git
           git config --global advice.detachedHead false
 
+          # add hitobito-core to path
+          echo "hitobito/bin" >> $GITHUB_PATH
+
       - name: 'Configure Git-User for the Release-Commits'
         run: |
           # we could use gitub-actor for workflow_call, and last committers of
@@ -138,5 +141,5 @@ jobs:
         run: |
           echo "Preparing $NEXT_VERSION for $RELEASE_STAGE"
 
-          hitobito/bin/release version
-          hitobito/bin/release "$RELEASE_STAGE" "$NEXT_VERSION"
+          release version
+          release "$RELEASE_STAGE" "$NEXT_VERSION"

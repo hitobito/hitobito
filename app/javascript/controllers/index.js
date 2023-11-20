@@ -7,7 +7,10 @@ import { Controller } from "@hotwired/stimulus"
 
 const stimulus = Application.start()
 
-const ctrlContext = require.context("controllers", true, /_controller\.js$/)
-stimulus.load(definitionsFromContext(ctrlContext))
+const coreCtrlContext = require.context("controllers", true, /_controller\.js$/)
+stimulus.load(definitionsFromContext(coreCtrlContext))
+
+const coreViewComponentContext = require.context("../../components/", true, /_controller\.js$/)
+stimulus.load(definitionsFromContext(coreViewComponentContext))
 
 export { Application, Controller, stimulus, definitionsFromContext }

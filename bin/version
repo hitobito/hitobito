@@ -39,11 +39,6 @@ class ReleaseVersion
       case style.to_sym
       when :patch
         ->(parts) { parts[0..1] + [parts[2].succ] }
-      when :current_month
-        ->(parts) do
-          current_month = Date.today.strftime('%Y-%m')
-          parts[0..1] + [current_month]
-        end
       end
 
     current_version(:production).split('.').then { |parts| incrementor[parts] }.join('.')
@@ -122,14 +117,6 @@ parser.add_command('suggest') do |cmd|
     end
   end
 
-  cmd.add_command('current-month') do |subcmd|
-    subcmd.short_desc = 'set patch to current "YEAR-MONTH"'
-    subcmd.takes_commands = false
-    subcmd.action do
-      puts ReleaseVersion.new.next_version(:current_month)
-    end
-  end
-
   cmd.add_command('integration') do |subcmd|
     subcmd.short_desc = 'append number to days to current production version'
     subcmd.takes_commands = false
@@ -187,7 +174,7 @@ parser.add_command('all') do |cmd|
     end
   end
 
-  cmd.add_command('production', default: true, &all_versions['production']) 
+  cmd.add_command('production', default: true, &all_versions['production'])
   cmd.add_command('integration', &all_versions['integration'])
 end
 

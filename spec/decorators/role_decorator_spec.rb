@@ -61,4 +61,26 @@ describe RoleDecorator, :draper_with_helpers do
       end
     end
   end
+
+  context 'terminated role' do
+    let(:context) { double('context') }
+    let(:role) { roles(:bottom_member) }
+
+    [:for_aside, :for_history].each do |method|
+      describe "##{method}" do
+        it 'should return the role name' do
+          assert decorator.terminated? == false
+
+          expect(decorator.send(method)).to eq '<strong>Member</strong>'
+        end
+
+        it 'should return the role name and the termination date' do
+          role.terminated = true
+          role.deleted_at = Date.today
+
+          expect(decorator.send(method)).to eq "<strong>Member</strong><br><span>Austritt per #{I18n.l(role.terminated_on)}</span>"
+        end
+      end
+    end
+  end
 end

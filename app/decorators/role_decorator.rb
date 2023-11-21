@@ -25,5 +25,14 @@ class RoleDecorator < ApplicationDecorator
     else
       translate(:outdated_deleted_role, date: I18n.l(model.delete_on))
     end
+    name = content_tag(:strong, model.to_s)
+
+    if model.terminated
+      terminated = content_tag(:span, translate('terminates_on', date: l(model.terminated_on)))
+    end
+
+    safe_join([name, terminated].compact, tag.br)
   end
+
+  alias_method :for_history, :for_aside
 end

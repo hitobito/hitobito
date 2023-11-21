@@ -65,6 +65,15 @@ module RolesHelper
     options.merge(selected: selected)
   end
 
+  def terminate_role_link(role)
+    return unless role.terminatable? && can?(:terminate, role)
+
+    link_to(t('roles/terminations.global.title'),
+            new_group_role_termination_path(role_id: role.id, group_id: role.group.id),
+            class: 'btn btn-primary btn-xs float-right',
+            remote: true)
+  end
+
   private
 
   def default_role(group)

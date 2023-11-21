@@ -1756,6 +1756,21 @@ de:
         (Gruppen, Anlässe und Abos; keine anderen Personen) sehen.
       only_visible_from_above: Diese Rolle ist nur von Personen in dieser Ebene sichtbar, nicht von Personen aus darüber liegenden Ebenen.
 
+  roles/terminations:
+    global:
+      title: Austritt
+      submit: Austreten
+      warning: Dieser Vorgang kann nicht rückgängig gemacht werden.
+      role:
+        text: Bist du sicher, dass du aus dieser Gruppe austreten möchtest?
+      # Add translations for specific role types like this:
+      # leader:
+      #   text: Bist du sicher, dass du als Leiter/-in austreten möchtest?
+      # group/bottom_layer/member:
+      #   text: Bist du sicher, dass du als Mitglied austreten möchtest?
+    flash:
+      success: Du bist erfolgreich ausgetreten per %{date}.
+
   role_lists:
     available:
       no_entries: Keine für Sie löschbare Rollen vorhanden

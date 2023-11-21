@@ -35,6 +35,26 @@ de:
     deleted_info: Gelöscht
     archived_info: Archiviert
 
+  activemodel:
+    models:
+      roles/termination:
+        one: Austritt
+        other: Austritte
+
+    attributes:
+      roles/termination:
+        terminate_on: Austrittsdatum
+
+    errors:
+      models:
+        roles/termination:
+          attributes:
+            terminate_on:
+              too_early: "muss in der Zukunft liegen"
+              too_late: "darf nicht nach dem %{date} sein"
+            role:
+              not_terminatable: "ist nicht kündbar"
+
   activerecord:
     errors:
       messages:

@@ -164,6 +164,8 @@ Hitobito::Application.routes.draw do
           get :details
           get :role_types
         end
+
+        resources :terminations, module: :roles, only: %w[new create]
       end
       get 'roles' => 'roles#new' # route required for language switch
       get 'roles/:id' => 'roles#edit' # route required for language switch

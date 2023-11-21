@@ -186,6 +186,10 @@ class Role < ActiveRecord::Base
       !deleted? # role is not deleted
   end
 
+  def terminated_on
+    delete_on || deleted_at&.to_date if terminated?
+  end
+
   def archived?
     archived_at.present?
   end

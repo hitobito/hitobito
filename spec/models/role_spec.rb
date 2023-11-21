@@ -442,6 +442,33 @@ describe Role do
     end
   end
 
+  context '#terminated_on' do
+    def role(**attrs)
+      Role.new(attrs.reverse_merge(terminated: false, delete_on: nil, deleted_at: nil))
+    end
+
+    it 'returns nil if role is not terminated' do
+      expect(role(delete_on: 1.day.from_now).terminated_on).to be_nil
+      expect(role(deleted_at: 1.day.from_now).terminated_on).to be_nil
+    end
+
+    it 'returns delete_on if role is terminated' do
+      date = 1.day.from_now.to_date
+      expect(role(terminated: true, delete_on: date).terminated_on).to eq date
+    end
+
+    it 'returns deleted_at if role is terminated' do
+      date = 1.day.from_now.to_date
+      expect(role(terminated: true, deleted_at: date).terminated_on).to eq date
+    end
+
+    it 'delete_on takes precedence over deleted_at' do
+      delete_on = 1.day.from_now.to_date
+      deleted_at = 2.days.from_now.to_date
+      expect(role(terminated: true, delete_on: delete_on, deleted_at: deleted_at).terminated_on).to eq delete_on
+    end
+  end
+
   context 'paper trails', versioning: true do
     let(:person) { people(:top_leader) }
 

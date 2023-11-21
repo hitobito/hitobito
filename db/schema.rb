@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_10_16_131405) do
+ActiveRecord::Schema.define(version: 2023_11_15_131813) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -992,12 +992,18 @@ ActiveRecord::Schema.define(version: 2023_10_16_131405) do
     t.index ["self_registration_reason_id"], name: "index_d351072d2828208df6f5a55e3d6d5f361a7c23ea"
   end
 
-  create_table "self_registration_reasons", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "self_registration_reasons", charset: "utf8mb4", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "service_tokens", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "sequences", charset: "utf8mb4", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "current_value", default: 0, null: false
+    t.index ["name"], name: "index_sequences_on_name", unique: true
+  end
+
+  create_table "service_tokens", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "layer_group_id", null: false
     t.string "name", null: false
     t.text "description"

@@ -380,6 +380,20 @@ describe Role do
     end
   end
 
+  context '#in_primary_group?' do
+    let(:role) { roles(:bottom_member) }
+
+    it 'is true if role is in primary group' do
+      role.person.update!(primary_group: role.group)
+      expect(role.in_primary_group?).to eq true
+    end
+
+    it 'is false if role is not in primary group' do
+      role.person.update!(primary_group: groups(:top_group))
+      expect(role.in_primary_group?).to eq false
+    end
+  end
+
   context '#label_long adds group to role', focus: true do
     subject { role.label_long }
 

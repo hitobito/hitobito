@@ -267,7 +267,7 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
   end
 
   def belongs_to_persons_primary_group?(role)
-    role.group_id == role.person.primary_group_id
+    role.in_primary_group?
   end
 
   def set_person_id

@@ -279,6 +279,21 @@ describe Role do
     end
   end
 
+  context '#create' do
+    let(:person) { people(:top_leader) }
+
+    it 'nullifies minimized_at of person' do
+      person.update!(minimized_at: Time.zone.now)
+      expect(person.minimized_at).to be_present
+
+      Group::TopGroup::Member.create!(person: person, group: groups(:top_group))
+
+      person.reload
+
+      expect(person.minimized_at).to be_nil
+    end
+  end
+
   context '#destroy' do
     it 'deleted young roles from database' do
       a = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo',

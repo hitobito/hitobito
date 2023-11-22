@@ -11,6 +11,14 @@ on:
         required: false
         default: ''
         type: string
+      core_ref:
+        description: Use a specific version of the core for the workflow run. Defaults to master.
+        type: string
+        default: 'master'
+      wagon_dependency_ref:
+        description: Use a specific version of the wagon dependency for the workflow run. Defaults to master.
+        type: string
+        default: 'master'
     secrets:
       HEARTBEAT_URL:
         description: 'URL to the heartbeat-application'
@@ -70,17 +78,11 @@ jobs:
           repository=${{github.repository}}
           echo "WAGON_NAME=${repository##*/}" >> $GITHUB_ENV
 
-      - name: 'Choose branch for dependencies'
-        run: |
-          echo "BRANCH_NAME: $BRANCH_NAME"
-          HITOBITO_BRANCH=$([[ $BRANCH_NAME = 'stable' ]] && echo 'stable' || echo 'master')
-          echo "HITOBITO_BRANCH=$HITOBITO_BRANCH" >> $GITHUB_ENV
-
       - name: 'Checkout hitobito'
         uses: actions/checkout@v3
         with:
           repository: 'hitobito/hitobito'
-          ref: '${{ env.HITOBITO_BRANCH }}'
+          ref: ${{ inputs.core_ref }}
           path: 'hitobito'
 
       - name: 'Set up Ruby'
@@ -112,7 +114,7 @@ jobs:
         if: ${{ inputs.wagon_dependency_repository != '' }}
         with:
           repository: hitobito/${{ inputs.wagon_dependency_repository }}
-          ref: '${{ env.HITOBITO_BRANCH }}'
+          ref: ${{ inputs.wagon_dependency_ref }}
           path: ${{ inputs.wagon_dependency_repository }}
 
       - name: Checkout ${{ env.WAGON_NAME }}
@@ -185,7 +187,7 @@ jobs:
   notify_statuscope:
     uses: ./.github/workflows/notify-statuscope.yml
     needs: [ build_test ]
-    if: ( success() || failure() ) && ( github.ref_name == 'master' )
+    if: ( success() || failure() ) && ( github.ref_name == 'master' ) && ( inputs.core_ref == 'master' ) && ( inputs.wagon_dependency_ref == 'master' )
     with:
       repository: ${{ inputs.wagon_repository }}
       test_result: ${{ needs.build_test.result == 'success' }}

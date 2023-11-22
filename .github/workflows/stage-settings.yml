@@ -1,4 +1,4 @@
-name: 'Composition Repo - Determine Settings'
+name: "Composition Repo - Determine Settings"
 
 on:
   workflow_call:

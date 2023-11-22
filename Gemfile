@@ -126,6 +126,7 @@ end
 group :test do
   gem 'capybara'
   gem 'capybara-screenshot'
+  gem 'cmdparse'
   gem 'database_cleaner'
   gem 'fabrication'
   gem 'headless'

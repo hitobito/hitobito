@@ -131,11 +131,6 @@ parser.add_command(CmdParse::VersionCommand.new)
 parser.add_command('suggest') do |cmd|
   cmd.short_desc = 'Suggest a new version-number'
 
-  # regular
-  # patch
-  # custom $next_version
-  # integration
-
   cmd.add_command('patch', default: true) do |subcmd|
     subcmd.short_desc = 'Increment Patch-version'
     subcmd.takes_commands = false
@@ -143,6 +138,16 @@ parser.add_command('suggest') do |cmd|
       puts ReleaseVersion.new.next_version(:patch)
     end
   end
+
+  cmd.add_command('regular') do |subcmd|
+    subcmd.short_desc = 'Increment Minor-version'
+    subcmd.takes_commands = false
+    subcmd.action do
+      puts ReleaseVersion.new.next_version(:regular)
+    end
+  end
+
+  # custom $next_version
 
   cmd.add_command('integration') do |subcmd|
     subcmd.short_desc = 'append number to days to current production version'

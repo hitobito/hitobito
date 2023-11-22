@@ -67,7 +67,11 @@ class ReleaseVersion
   end
 
   def next_regular_version(parts)
-    [parts[0], parts[1].succ, 0]
+    if days_since(parts.join('.')) > 7
+      [parts[0], parts[1].succ, 0]
+    else
+      parts
+    end
   end
 
   def current_sha

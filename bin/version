@@ -99,7 +99,7 @@ end
 # basic setup
 parser = CmdParse::CommandParser.new(handle_exceptions: true)
 parser.main_options.program_name = 'version'
-parser.main_options.version = '1.0.0'
+parser.main_options.version = '2.0.0'
 parser.main_options.banner = 'Show and Suggest version-numbers'
 
 parser.add_command(CmdParse::HelpCommand.new)

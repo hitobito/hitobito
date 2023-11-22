@@ -28,6 +28,10 @@ describe 'version' do
     it 'can mirror a custom version-number' do
       expect(version("#{cmd} custom XP-NG-NT4")).to eql 'XP-NG-NT4'
     end
+
+    it 'suggests only new minor-versions for regular releases' do
+      expect(version("#{cmd} regular")).to match(/\d+\.\d+\.0/)
+    end
   end
 
   context 'current' do

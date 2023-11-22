@@ -39,13 +39,24 @@ describe ReleaseVersion do
     end
 
     describe 'regular' do
-      context 'with a release within the last 7 days, it' do
+      context 'with a minor-release within the last 7 days, it' do
         let(:days_since) { 5 }
 
         it 'keeps the current version' do
           expect(current_version).to eql '1.23.0'
           expect(subject.days_since('1.23.0')).to be <= 7
           expect(subject.next_version(:regular)).to eql '1.23.0'
+        end
+      end
+
+      context 'with a patch-release within the last 7 days, it' do
+        let(:days_since) { 5 }
+        let(:current_version) { '1.23.1' }
+
+        it 'keeps the current version' do
+          expect(current_version).to eql '1.23.1'
+          expect(subject.days_since('1.23.1')).to be <= 7
+          expect(subject.next_version(:regular)).to eql '1.24.0'
         end
       end
 

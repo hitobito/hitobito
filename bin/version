@@ -84,8 +84,8 @@ class ReleaseVersion
   end
 
   def next_regular_version(parts)
-    if days_since(parts.join('.')) > 7
-      [parts[0], parts[1].succ, 0]
+    if parts[2] != '0' || days_since(parts.join('.')) > 7
+      [parts[0], parts[1].succ, '0']
     else
       parts
     end

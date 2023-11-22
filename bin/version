@@ -44,11 +44,11 @@ class ReleaseVersion
     end
   end
 
-  def next_version(style = :patch)
+  def next_version(style = :patch, version = nil)
     incrementor = \
       case style.to_sym
-      when :patch then method(:next_patch_version)
-      when :regular then method(:next_regular_version)
+      when :patch, :regular then method(:"next_#{style}_version")
+      when :custom then ->(_parts) { version.split('.').to_a }
       end
 
     current_version(:production)
@@ -151,7 +151,13 @@ parser.add_command('suggest') do |cmd|
     end
   end
 
-  # custom $next_version
+  cmd.add_command('custom') do |subcmd|
+    subcmd.short_desc = 'Set custom-version number'
+    subcmd.takes_commands = false
+    subcmd.action do |version|
+      puts ReleaseVersion.new.next_version(:custom, version)
+    end
+  end
 
   cmd.add_command('integration') do |subcmd|
     subcmd.short_desc = 'append number to days to current production version'

@@ -60,8 +60,8 @@ describe ReleaseVersion do
       end
     end
 
-    xit 'custom (with version)' do
-      expect(subject.next_version(:custom, '2.0.0')).to eql '2.0.0'
+    it 'custom (with version)' do
+      expect(subject.next_version(:custom, '98.SP3')).to eql '98.SP3'
     end
   end
 

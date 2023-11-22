@@ -27,11 +27,11 @@ class ReleaseVersion
     end
   end
 
-  def next_version(style = :patch)
+  def next_version(style = :patch, version = nil)
     incrementor = \
       case style.to_sym
-      when :patch then method(:next_patch_version)
-      when :regular then method(:next_regular_version)
+      when :patch, :regular then method(:"next_#{style}_version")
+      when :custom then ->(_parts) { version.split('.').to_a }
       end
 
     current_version(:production)

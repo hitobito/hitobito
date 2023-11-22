@@ -7,7 +7,8 @@
 
 require 'date'
 
-# This is used by bin/version
+# This is used by bin/version and integrated into it
+# with `rake bin/version`
 class ReleaseVersion
   def current_version(stage = :production)
     `#{tag_lookup_cmd(stage)} | head -n 1`.chomp
@@ -29,11 +30,14 @@ class ReleaseVersion
   def next_version(style = :patch)
     incrementor = \
       case style.to_sym
-      when :patch
-        ->(parts) { parts[0..1] + [parts[2].succ] }
+      when :patch then method(:next_patch_version)
+      when :regular then method(:next_regular_version)
       end
 
-    current_version(:production).split('.').then { |parts| incrementor[parts] }.join('.')
+    current_version(:production)
+      .split('.')
+      .then { |parts| incrementor[parts] }
+      .join('.')
   end
 
   def all_versions(stage = :production)
@@ -51,11 +55,19 @@ class ReleaseVersion
     `#{cmd}`
   end
 
-  private
-
   def days_since(version)
     tag_date = `git log #{version} -1 --format="%ct"`.chomp
     (Time.now.utc.to_date - Time.at(tag_date.to_i).to_date).to_i # rubocop:disable Rails/TimeZone
+  end
+
+  private
+
+  def next_patch_version(parts)
+    parts[0..1] + [parts[2].succ]
+  end
+
+  def next_regular_version(parts)
+    [parts[0], parts[1].succ, 0]
   end
 
   def current_sha

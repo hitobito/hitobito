@@ -29,7 +29,7 @@ describe ReleaseVersion do
     end
 
     it 'assumes 42 days since the last release' do
-      expect(subject.send(:days_since, current_version)).to eql 42
+      expect(subject.days_since(current_version)).to eql 42
     end
   end
 
@@ -38,7 +38,9 @@ describe ReleaseVersion do
       expect(subject.next_version(:patch)).to eql '1.23.1'
     end
 
-    xit 'regular' do
+    it 'regular' do
+      expect(current_version).to eql '1.23.0'
+      expect(subject.days_since('1.23.0')).to be > 7
       expect(subject.next_version(:regular)).to eql '1.24.0'
     end
 

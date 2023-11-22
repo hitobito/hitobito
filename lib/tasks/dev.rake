@@ -120,3 +120,26 @@ namespace :dev do
     end
   end
 end
+
+task 'bin/version': ['app/domain/release_version.rb'] do |file|
+  content = Pathname.new(file.name).read
+
+  start_marker = '### RELEASE_VERSION_CODE START'
+  end_marker = '### RELEASE_VERSION_CODE END'
+  pattern = /(.*)#{start_marker}.*#{end_marker}(.*)/m
+
+  matches = content.match(pattern)
+
+  before = matches[1]
+  lib = Pathname.new(file.prerequisites.first).read
+  after = matches[2]
+
+  Pathname.new(file.name).open('w') do |f|
+    f << before
+    f << "#{start_marker}\n"
+    f << lib
+    f << end_marker
+    f << after
+  end
+end
+file 'app/domain/release_version.rb'

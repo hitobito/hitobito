@@ -18,10 +18,18 @@ describe 'version' do
     end
   end
 
+  context 'suggest' do
+    let(:cmd) { 'suggest' }
+
+    it 'outputs a suggested version' do
+      expect(version(cmd)).to match(/\d+\.\d+\.\d+/)
+    end
+  end
+
   context 'current' do
     let(:cmd) { 'current' }
 
-    it 'outputs the current version ' do
+    it 'outputs the current version' do
       expect(version(cmd)).to match(/\d+\.\d+\.\d+/)
     end
   end

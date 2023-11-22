@@ -7,9 +7,14 @@ on:
         description: "Composition repository, e.g. hitobito/ose_composition_pbs"
         type: string
         required: true
-      next_version:
-        description: "Type of next version, patch or current-month"
+      release_type:
+        description: "Type of Release: regular, patch or custom"
         required: true
+        type: string
+        default: "regular"
+      next_version:
+        description: "next version number, if release-type is custom"
+        required: false
         type: string
       stage:
         description: "Stage of Release to be prepared"
@@ -30,7 +35,7 @@ jobs:
     with:
       repository: ${{ inputs.composition }}
       stage: ${{ inputs.stage }}
-      version_type: ${{ inputs.next_version }}
+      release_type: ${{ inputs.release_type }}
 
   version:
     runs-on: ubuntu-latest
@@ -64,10 +69,11 @@ jobs:
       - name: 'Determine next version'
         id: determine
         env:
-          VERSION_TYPE: ${{ needs.settings.outputs.version_type }}
+          RELEASE_TYPE: ${{ needs.settings.outputs.release_type }}
+          NEXT_VERSION: ${{ inputs.next_version }}
         run: |
-          echo "Requesting next '$VERSION_TYPE'-version"
-          next_version=$(bin/version suggest "$VERSION_TYPE")
+          echo "Requesting next '$RELEASE_TYPE'-version"
+          next_version=$(bin/version suggest "$RELEASE_TYPE" "$NEXT_VERSION")
           echo "version=${next_version}" >> "$GITHUB_OUTPUT"
 
   prepare_release:

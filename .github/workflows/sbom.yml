@@ -168,7 +168,7 @@ jobs:
           --header "X-Api-Key: ${{ secrets.DEPENDENCY_TRACK_API_KEY }}" \
           --header "Content-Type: multipart/form-data" \
           --form "autoCreate=true" \
-          --form "projectName=${inputs.project_name}" \
+          --form "projectName=${{ inputs.project_name }}" \
           --form "projectVersion=latest" \
           --form "bom=@sbom.xml"
 

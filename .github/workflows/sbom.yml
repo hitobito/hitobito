@@ -7,11 +7,27 @@ on:
         type: string
         description: "Project name to report to dependency track"
         required: true
+      dependency_track_url:
+        type: string
+        description: "Base URL of the dependency track instance"
+        required: true
+      dependency_track_api_key:
+        type: string
+        description: "API key to use for sending data to dependency track"
+        required: true
   workflow_call:
     inputs:
       project_name:
         type: string
         description: "Project name to report to dependency track"
+        required: true
+      dependency_track_url:
+        type: string
+        description: "Base URL of the dependency track instance"
+        required: true
+      dependency_track_api_key:
+        type: string
+        description: "API key to use for sending data to dependency track"
         required: true
 
 jobs:
@@ -164,8 +180,8 @@ jobs:
       - name: 'Push merged SBOM to dependency track'
         working-directory: hitobito
         run: |
-          curl --verbose -s --location --request POST ${{ secrets.DEPENDENCY_TRACK_URL }}/api/v1/bom \
-          --header "X-Api-Key: ${{ secrets.DEPENDENCY_TRACK_API_KEY }}" \
+          curl --verbose -s --location --request POST ${{ inputs.dependency_track_url }}/api/v1/bom \
+          --header "X-Api-Key: ${{ inputs.dependency_track_api_key }}" \
           --header "Content-Type: multipart/form-data" \
           --form "autoCreate=true" \
           --form "projectName=${{ inputs.project_name }}" \

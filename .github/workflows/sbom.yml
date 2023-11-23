@@ -1,0 +1,182 @@
+name: Generate and push an SBOM dependency list
+
+on:
+  workflow_dispatch: # Allow triggering manually
+    inputs:
+      project_name:
+        type: string
+        description: "Project name to report to dependency track"
+        required: true
+  workflow_call:
+    inputs:
+      project_name:
+        type: string
+        description: "Project name to report to dependency track"
+        required: true
+
+jobs:
+  generate-and-push-sbom:
+    runs-on: 'ubuntu-20.04'
+    env:
+      HEADLESS: true
+      RAILS_DB_ADAPTER: mysql2
+      RAILS_DB_HOST: 127.0.0.1
+      RAILS_DB_PORT: 33066
+      RAILS_DB_USERNAME: hitobito
+      RAILS_DB_PASSWORD: hitobito
+      RAILS_DB_NAME: hitobito_test
+      RAILS_TEST_DB_NAME: hitobito_test
+
+    services:
+      mysql:
+        image: 'mysql:5.7'
+        env:
+          MYSQL_USER: 'hitobito'
+          MYSQL_PASSWORD: 'hitobito'
+          MYSQL_DATABASE: 'hitobito_test'
+          MYSQL_ROOT_PASSWORD: 'root'
+        ports:
+          - '33066:3306'
+        options: >-
+          --health-cmd "mysqladmin ping"
+          --health-interval 10s
+          --health-timeout 10s
+          --health-retries 10
+      memcached:
+        image: 'memcached'
+        ports: [ '11211:11211' ]
+
+    steps:
+      - name: 'Checkout composition repository'
+        uses: actions/checkout@v3
+
+      - name: 'Checkout hitobito core submodule and wagon submodules'
+        run: git submodule update --init --recursive
+
+      - name: 'Set up Ruby'
+        env:
+          ImageOS: ubuntu20
+        uses: ruby/setup-ruby@v1
+        with:
+          working-directory: hitobito
+
+      - name: 'Set up Node'
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
+      - name: 'Setup OS'
+        run: |
+          sudo apt-get -qq update
+          sudo apt-get install sphinxsearch
+          echo "ruby version: $(ruby -v)"
+          echo "node version: $(node -v)"
+          echo "yarn version: $(yarn -v)"
+
+      - name: 'Copy Wagonfile.ci'
+        working-directory: hitobito
+        run: |
+          cp -v Wagonfile.ci Wagonfile
+
+      - name: 'Create cache key'
+        working-directory: hitobito
+        run: cp Gemfile.lock Gemfile.lock.backup
+
+      - uses: actions/cache@v3
+        with:
+          path: hitobito/vendor/bundle
+          key: ${{ runner.os }}-ruby-bundle-${{ hashFiles('**/Gemfile.lock.backup') }}
+          restore-keys: |
+            ${{ runner.os }}-ruby-bundle-
+
+      - uses: actions/cache@v3
+        if: ${{ inputs.wagon_dependency_repository != '' }}
+        with:
+          path: ${{ inputs.wagon_dependency_repository }}/vendor/bundle
+          key: ${{ runner.os }}-ruby-bundle-${{ hashFiles('**/Gemfile.lock.backup') }}
+          restore-keys: |
+            ${{ runner.os }}-ruby-bundle-
+
+      # Commented out for now because we would have to loop over all used wagons doing this
+#      - uses: actions/cache@v3
+#        with:
+#          path: ${{ env.WAGON_NAME }}/vendor/bundle
+#          key: ${{ runner.os }}-ruby-bundle-${{ hashFiles('**/Gemfile.lock.backup') }}
+#          restore-keys: |
+#            ${{ runner.os }}-ruby-bundle-
+
+      - name: 'Bundle install core'
+        working-directory: hitobito
+        run: |
+          bundle install --jobs 4 --retry 3 --path vendor/bundle
+
+      - name: 'Make changes to Gemfile.lock transparent'
+        working-directory: hitobito
+        run: |
+          git diff Gemfile.lock || true
+
+#      - name: 'Bundle install wagons'
+#        run: |
+#          hitobito_dir=$(realpath ./)
+#          for d in $hitobito_dir/../hitobito_*; do
+#            cd $d
+#            cp -v $hitobito_dir/Gemfile.lock ./
+#            bundle install --jobs 4 --retry 3 --path vendor/bundle
+#          done
+
+      - uses: actions/cache@v3
+        with:
+          path: hitobito/node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
+
+      - name: 'Yarn install'
+        working-directory: hitobito
+        run: |
+          yarn install --frozen-lockfile
+
+      - name: 'Remove installed dependency code, because lockfiles in there would yield false positives with cdxgen. We are only interested in our own lockfiles.'
+        working-directory: hitobito
+        run: |
+          rm -rf vendor
+          rm -rf node_modules
+
+      - name: 'Generate SBOM for ruby dependencies'
+        working-directory: hitobito
+        env:
+          SCAN_DEBUG_MODE: debug
+        run: |
+          npm install -g @cyclonedx/cdxgen
+          cdxgen -o ./sbom-ruby.xml -t ruby --spec-version 1.4 .
+
+      - name: 'Generate SBOM for npm dependencies'
+        working-directory: hitobito
+        run: |
+          npm install -g @cyclonedx/cdxgen
+          cdxgen -o ./sbom-npm.xml -t npm --spec-version 1.4 .
+
+      - name: 'Merge frontend and backend SBOMs'
+        working-directory: hitobito
+        run: |
+          docker run --rm -v $(pwd):/data cyclonedx/cyclonedx-cli merge --input-files data/sbom-ruby.xml data/sbom-npm.xml --output-file data/sbom.xml
+
+      - name: 'Push merged SBOM to dependency track'
+        working-directory: hitobito
+        run: |
+          curl --verbose -s --location --request POST ${{ secrets.DEPENDENCY_TRACK_URL }}/api/v1/bom \
+          --header "X-Api-Key: ${{ secrets.DEPENDENCY_TRACK_API_KEY }}" \
+          --header "Content-Type: multipart/form-data" \
+          --form "autoCreate=true" \
+          --form "projectName=${inputs.project_name}" \
+          --form "projectVersion=latest" \
+          --form "bom=@sbom.xml"
+
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: sboms
+          path: |
+            ./hitobito/sbom-npm.xml
+            ./hitobito/sbom-ruby.xml
+            ./hitobito/sbom.xml

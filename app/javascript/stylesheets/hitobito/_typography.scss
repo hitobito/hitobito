@@ -6,7 +6,7 @@
 /* Typo */
 // -------------------------
 h1, h2 {
-  font-family: $headingFontFamily;
+  font-family: $heading-font-family;
   margin-top: 0;
 }
 
@@ -37,7 +37,7 @@ h5, .h5 {
 .content-header {
   margin-bottom: 0px;
   @include responsive(mediaTablet){
-  margin-bottom: $vSpace;
+  margin-bottom: $v-space;
   }
   h1 { margin-bottom: 0px; }
 }
@@ -60,12 +60,12 @@ td p, address {
 }
 
 .btn-group + .link {
-  margin-left: $vSpace;
+  margin-left: $v-space;
 }
 
 h1 .btn, h2 .btn, h3 .btn, h4 .btn {
   font-weight: normal;
-  font-family: $baseFontFamily;
+  font-family: $base-font-family;
 }
 
 // Definition list
@@ -88,8 +88,8 @@ dl {
   }
 
   &:last-child {
-    border-bottom: 1px solid $borderColor;
-    margin-bottom: $vSpace;
+    border-bottom: 1px solid $border-color;
+    margin-bottom: $v-space;
   }
 
   dt {
@@ -117,13 +117,13 @@ dl {
 
 .dl-vertical {
   dd {
-    margin-bottom: calc($vSpace / 4);
+    margin-bottom: calc($v-space / 4);
   }
 }
 
 // Table
 table.table {
-  border-bottom: 1px solid $borderColor;
+  border-bottom: 1px solid $border-color;
 }
 
 div.table {
@@ -134,7 +134,7 @@ div.table {
   td, th {
     padding: 4px;
     padding-left: 0;
-    border-color: $borderColor; // new
+    border-color: $border-color; // new
     &:last-child { padding-right: 0; }
   }
 }
@@ -147,7 +147,7 @@ div.table {
 
 .table-hover tbody tr:hover > td,
 .table-hover tbody tr:hover > th {
-  background-color: $tableColorHover;
+  background-color: $table-color-hover;
 }
 
 .table-grouped {

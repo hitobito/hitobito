@@ -2,7 +2,7 @@
   margin: 1rem 0;
 
   label {
-    border: 1px solid $borderColor;
+    border: 1px solid $border-color;
     border-radius: 6px;
     padding: 0.75rem 0.75rem 0.75rem 2rem;
 
@@ -21,7 +21,7 @@
     }
     > .label {
       margin-left: 0.25rem;
-      background: $grayLight;
+      background: $gray-light;
       color: $black;
       text-shadow: none;
       border-radius: 3px;

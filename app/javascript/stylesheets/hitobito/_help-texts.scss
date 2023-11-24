@@ -7,7 +7,7 @@
   margin-top: -20px;
   padding: 4px 10px;
   border-radius: 3px;
-  background-color: $grayLighter;
+  background-color: $gray-lighter;
 }
 h1 + .help-text {
   margin: 0 -10px;
@@ -61,11 +61,11 @@ div + .help-text-trigger {
 
   cursor: pointer;
 
-  background-color: $grayLighter;
+  background-color: $gray-lighter;
   color: $gray;
 
   &:hover {
-    background-color: $grayLight;
+    background-color: $gray-light;
   }
   &:active {
     background-color: $gray;

@@ -1,6 +1,6 @@
 .well {
   border: none;
-  background: $grayLighter;
+  background: $gray-lighter;
   min-height: 20px;
   padding: 19px;
   margin-bottom: 20px;
@@ -17,7 +17,7 @@
 
   &.panel {
     margin-top: 5px;
-    border: 2px solid $grayLighter;
+    border: 2px solid $gray-lighter;
     background: none;
     box-shadow: none;
     -webkit-box-shadow: none;

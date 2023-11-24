@@ -1,7 +1,7 @@
 // Profil
 .profil, .profil-big {
   background: $white;
-  border: 1px solid $grayLight;
+  border: 1px solid $gray-light;
   overflow: hidden;
   @include border-radius(3px);
 }
@@ -31,7 +31,7 @@
     margin: 50px auto;
     padding: 5px;
     background: $white;
-    border: 1px solid $grayLight;
+    border: 1px solid $gray-light;
     overflow: hidden;
     @include border-radius(3px);
   }

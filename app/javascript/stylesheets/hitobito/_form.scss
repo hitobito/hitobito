@@ -7,19 +7,19 @@
 // -------------------------
 .btn-toolbar {
   margin-top: 0;
-  margin-bottom: $vSpace;
+  margin-bottom: $v-space;
 }
 
 .btn {
-  color: $blueDark;
+  color: $blue-dark;
 
   &:hover,
   &:focus,
   &:active {
     color: $white;
     background: $purple;
-    text-shadow: 0 -1px 1px false $purpleDark;
-    border-color: $purpleDark;
+    text-shadow: 0 -1px 1px false $purple-dark;
+    border-color: $purple-dark;
 
     .icon,
     [class^="icon-"],
@@ -40,7 +40,7 @@
   }
 
   .caret {
-    border-top-color: $blueDark;
+    border-top-color: $blue-dark;
   }
 
   &.btn-primary, &.btn-primary:hover,
@@ -63,13 +63,13 @@
   color: $white;
   background: $blue;
   border-color: $blue;
-  text-shadow: 0 -1px 1px false $blueDark;
+  text-shadow: 0 -1px 1px false $blue-dark;
 }
 
 .btn-group.open .btn.dropdown-toggle {
-  background: $purpleDark;
+  background: $purple-dark;
   color: $white;
-  border-color: $purpleDark;
+  border-color: $purple-dark;
 }
 
 .table-display-dropdown li {
@@ -159,7 +159,7 @@ fieldset {
 
 .form-striped {
   fieldset:nth-of-type(2n) {
-  background-color: $grayLighter;
+  background-color: $gray-lighter;
 }
 
 }
@@ -292,7 +292,7 @@ label.radio {
     margin-left: 0 !important;
 
     &:hover {
-      background: $grayLighter;
+      background: $gray-lighter;
     }
   }
 }
@@ -347,7 +347,7 @@ textarea {
 
 .fields-separation hr {
   margin: 7px 0 15px;
-  border-top-color: $grayLight;
+  border-top-color: $gray-light;
 }
 
 .control-group.required > label {
@@ -358,7 +358,7 @@ textarea {
     font-size: 9pt;
   }
 
-  @media all and (max-width: $mediaPhone) {
+  @media all and (max-width: $media-phone) {
     transform: none;
   }
 }
@@ -373,7 +373,7 @@ textarea {
 
 .fields {
   .controls-row {
-    border-bottom: 1px solid $grayLight;
+    border-bottom: 1px solid $gray-light;
     margin-bottom: 10px;
     padding-top: 10px;
     padding-bottom: 5px;

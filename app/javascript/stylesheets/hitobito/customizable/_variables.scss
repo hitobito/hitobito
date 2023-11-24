@@ -11,58 +11,58 @@
 // Grays
 // -------------------------
 $black:                 #474E5D !default;
-$grayDarker:            #797E89 !default;
-$grayDark:              #8b8b8b !default;
+$gray-darker:           #797E89 !default;
+$gray-dark:             #8b8b8b !default;
 $gray:                  #979CA6 !default;
-$grayLight:             #E8EBF0 !default;
-$grayLighter:           #F8F9FA !default;
+$gray-light:            #E8EBF0 !default;
+$gray-lighter:          #F8F9FA !default;
 $white:                 #fff !default;
 
 // Colors
 // ----------------------------
 $blue:                  #329897 !default;
-$blueDark:              darken($blue, 10%) !default;
+$blue-dark:             darken($blue, 10%) !default;
 $green:                 #8DB850 !default;
-$greenDark:             darken($green, 10%) !default;
+$green-dark:            darken($green, 10%) !default;
 
 $orange:                #DC795B;
-$orangeDark:            #C75B3B;
+$orange-dark:           #C75B3B;
 $purple:                #925D97;
-$purpleDark:            #6A396F;
+$purple-dark:           #6A396F;
 
-$textColor:             $black !default;
-$borderColor:           $grayLight !default;
+$text-color:            $black !default;
+$border-color:          $gray-light !default;
 
-$pageBackground:        lighten($green, 5%);
-$contentBackground:     $grayLight;
-$footerBackground:      $blue;
-$bodyBackground:        $blue;
+$page-background:       lighten($green, 5%);
+$content-background:    $gray-light;
+$footer-background:     $blue;
+$body-background:       $blue;
 
-$focusColor:            $purple;
-$shadowColor:           darken($pageBackground, 10%);
+$focus-color:           $purple;
+$shadow-color:          darken($page-background, 10%);
 $link-color:            $blue !default;
-$link-hover-color:      $purpleDark !default;
+$link-hover-color:      $purple-dark !default;
 
-$footerColor:           $white;
-$footerColorHover:      $white;
+$footer-color:          $white;
+$footer-color-hover:    $white;
 
-$tableColorHover:       lighten($purple, 50%);
+$table-color-hover:      lighten($purple, 50%);
 
 // Typography
 // -------------------------
 
-$sansFontFamily:        'Noto Sans', sans-serif;
-$headingFontFamily:     'Noto Sans', sans-serif; //'Quicksand', $sansFontFamily !default;
-$baseFontFamily:        'Noto Sans', sans-serif; //'Varela Round', $sansFontFamily !default;
-$headingsFontWeight:    normal !default; // instead of browser default, bold
+$sans-font-family:      'Noto Sans', sans-serif;
+$heading-font-family:   'Noto Sans', sans-serif; //'Quicksand', $sans-font-family !default;
+$base-font-family:      'Noto Sans', sans-serif; //'Varela Round', $sans-font-family !default;
+$headings-font-weight:  normal !default; // instead of browser default, bold
 
 // Decoration
 // -------------------------
-$borderRadius:           6px;
+$border-radius:         6px;
 
 // Rhythm
 // -------------------------
-$vSpace:                24px;
+$v-space:               24px;
 
 
 // FLUID GRID
@@ -70,18 +70,18 @@ $vSpace:                24px;
 
 // Default
 // -------------------------
-$fluidGridColumnWidth:         6.382978723% !default;
-$fluidGridGutterWidth:         2.127659574% !default;
+$fluid-grid-column-width:        6.382978723% !default;
+$fluid-grid-gutter-width:        2.127659574% !default;
 
 // Portrait tablet to default desktop
 // -------------------------
-$fluidGridColumnWidthTablet:   5.801104972% !default;
-$fluidGridGutterWidthTablet:   2.762430939% !default;
+$fluid-grid-column-width-tablet:  5.801104972% !default;
+$fluid-grid-gutter-width-tablet:  2.762430939% !default;
 
 // Large desktop and up
 // -------------------------
-$fluidGridColumnWidthLarge:    5.982905983% !default;
-$fluidGridGutterWidthLarge:    2.564102564% !default;
+$fluid-grid-column-width-large:   5.982905983% !default;
+$fluid-grid-gutter-width-large:   2.564102564% !default;
 
 
 // RESPONSIVE DESIGN
@@ -89,7 +89,8 @@ $fluidGridGutterWidthLarge:    2.564102564% !default;
 
 // Media widths
 // -------------------------
-$mediaPhone:              480px !default;
-$mediaTablet:             768px !default;
-$mediaDesktop:            980px !default;
-$mediaLarge:              1200px !default; // and upper
+$media-phone:           480px !default;
+$media-tablet:          768px !default;
+$media-desktop:         980px !default;
+$media-large:           1200px !default; // and upper
+

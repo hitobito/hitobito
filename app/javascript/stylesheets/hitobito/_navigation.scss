@@ -12,8 +12,8 @@
 .nav-sub {
   @include clearfix;
   line-height: 2.3;
-  //font-family: $headingFontFamily;
-  border-bottom: 1px solid $borderColor;
+  //font-family: $heading-font-family;
+  border-bottom: 1px solid $border-color;
   clear: both;
   font-size: 0.938em;
   & > li {
@@ -27,7 +27,7 @@
       border-bottom: 2px solid transparent;
       &:hover {
         background: none;
-        border-color: $grayLight;
+        border-color: $gray-light;
       }
     }
   }
@@ -41,7 +41,7 @@
 
 .level {
   display: block;
-  font-family: $headingFontFamily;
+  font-family: $heading-font-family;
   font-size: 1.5em !important;
   font-weight: bold;
   line-height: 1.25em;
@@ -57,7 +57,7 @@
     border: none;
   }
   .active a {
-    color: $grayDark;
+    color: $gray-dark;
   }
 }
 
@@ -97,7 +97,7 @@
 }
 .pagination ul > .active > a,
 .pagination ul > .active > span {
-  color: $grayDark;
+  color: $gray-dark;
 }
 
 .pagination ul > .disabled {
@@ -130,7 +130,7 @@
 .nav-pills > li > a {
   padding-top: 7px;
   padding-bottom: 7px;
-  border: 1px solid $grayLight;
+  border: 1px solid $gray-light;
   margin-top: 0;
   margin-bottom: 0;
   margin-right: 0;

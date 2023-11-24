@@ -21,11 +21,11 @@
 */
 
 // Can be configured in config/settings.yml
-$logoWidth: <%= Settings.application.logo.width %>px !default;
-$logoHeight: <%= Settings.application.logo.height %>px !default;
-$logoBackgroundColor: <%= Settings.application.logo.background_color %> !default;
+$logo-width: <%= Settings.application.logo.width %>px !default;
+$logo-height: <%= Settings.application.logo.height %>px !default;
+$logo-background-color: <%= Settings.application.logo.background_color %> !default;
 <% if Settings.application.page_background.try(ENV['RAILS_HOST_NAME'] || "dev") %>
-  $pageBackground: <%= Settings.application.page_background.send(ENV['RAILS_HOST_NAME']  || "dev") %>;
+  $page-background: <%= Settings.application.page_background.send(ENV['RAILS_HOST_NAME']  || "dev") %>;
 <% end %>
 
 // Import the wagons' specific variables or fall back to core variables

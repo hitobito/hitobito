@@ -400,7 +400,7 @@ describe GroupAbility do
       end
 
       it 'may not show deleted subgroups' do
-        is_expected.not_to be_able_to(:deleted_subgroups, group)
+        is_expected.not_to be_able_to(:deleted_subgroups, Group.new)
       end
     end
 
@@ -411,7 +411,7 @@ describe GroupAbility do
       end
 
       it 'may not show deleted subgroups' do
-        is_expected.not_to be_able_to(:deleted_subgroups, group)
+        is_expected.not_to be_able_to(:deleted_subgroups, group.children.new)
       end
     end
 
@@ -479,7 +479,7 @@ describe GroupAbility do
       end
 
       it 'may not show deleted subgroups' do
-        is_expected.not_to be_able_to(:deleted_subgroups, group)
+        is_expected.not_to be_able_to(:deleted_subgroups, Group.new)
       end
     end
 

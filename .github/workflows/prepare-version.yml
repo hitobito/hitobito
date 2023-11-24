@@ -26,7 +26,6 @@ on:
         type: string
         default: "master"
 
-
 permissions:
   contents: write
 
@@ -139,7 +138,6 @@ jobs:
           # all wagons for scheduled releases. for now, this is fine.
           git config --global user.name "$(cd hitobito && git --no-pager log --format=format:'%an' -n 1)"
           git config --global user.email "$(cd hitobito && git --no-pager log --format=format:'%ae' -n 1)"
-
 
       - name: "Prepare composition-repo for release"
         env:

@@ -18,7 +18,7 @@ class Role
       people.map do |person|
         role = build_role(person.id)
         authorize!(:create, role, message: access_denied_flash(person))
-        role.attributes
+        role.attributes.except('terminated')
       end
     end
 

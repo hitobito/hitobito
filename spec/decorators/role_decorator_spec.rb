@@ -75,7 +75,7 @@ describe RoleDecorator, :draper_with_helpers do
         end
 
         it 'should return the role name and the termination date' do
-          role.terminated = true
+          role.write_attribute(:terminated, true)
           role.deleted_at = Date.today
 
           expect(decorator.send(method)).to eq "<strong>Member</strong><br><span>Austritt per #{I18n.l(role.terminated_on)}</span>"

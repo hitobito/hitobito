@@ -186,6 +186,12 @@ class Role < ActiveRecord::Base
       !deleted? # role is not deleted
   end
 
+  # Overwritten setter to prevent direct assignment of terminated.
+  # Use Roles::Termination instead.
+  def terminated=(_value)
+    raise 'do not set terminated directly, use Roles::Termination instead'
+  end
+
   def terminated_on
     delete_on || deleted_at&.to_date if terminated?
   end

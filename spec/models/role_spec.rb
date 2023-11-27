@@ -408,6 +408,18 @@ describe Role do
     end
   end
 
+  context '#terminated' do
+    it 'can not be assigned directly' do
+      role = Role.new
+      expect { role.terminated = true }.to raise_error(/do not set terminated directly/)
+    end
+
+    it 'can not be updated directly' do
+      role = roles(:bottom_member)
+      expect { role.update!(terminated: true) }.to raise_error(/do not set terminated directly/)
+    end
+  end
+
   context '#terminatable?' do
     let(:role_class) { Class.new(Role) }
 
@@ -426,7 +438,7 @@ describe Role do
       end
 
       it 'is false if role is terminated' do
-        role = role_class.new(terminated: true)
+        role = role_class.new.tap {|r| r.write_attribute(:terminated, true) }
         expect(role.terminatable?).to eq false
       end
 
@@ -444,7 +456,10 @@ describe Role do
 
   context '#terminated_on' do
     def role(**attrs)
-      Role.new(attrs.reverse_merge(terminated: false, delete_on: nil, deleted_at: nil))
+      terminated = attrs.delete(:terminated) || false
+      Role.new(attrs.reverse_merge(delete_on: nil, deleted_at: nil)).tap do |r|
+        r.write_attribute(:terminated, terminated)
+      end
     end
 
     it 'returns nil if role is not terminated' do

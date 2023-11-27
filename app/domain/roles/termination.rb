@@ -18,9 +18,13 @@ class Roles::Termination
   validate :terminatable
 
   def call
-    valid?.tap do |valid|
-      role.update!(terminated: true, delete_on: terminate_on) if valid
-    end
+    return false unless valid?
+
+    role.delete_on = terminate_on
+    role.write_attribute(:terminated, true)
+    role.save!
+
+    true
   end
 
   private

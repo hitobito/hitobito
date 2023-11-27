@@ -70,6 +70,12 @@ module Release
                     failure: 'No changes in translations'
     end
 
+    def changes_to_be_committed?
+      execute_check 'test $(git diff --name-only --staged | wc -l) -gt 0',
+                    success: 'Staged changes found',
+                    failure: 'No staged changes found'
+    end
+
     def update_version(file:, to: @version)
       notify "writing version to #{file}"
       case file
@@ -79,7 +85,7 @@ module Release
         execute %(sed -i "s/VERSION\s*=\s*'[0-9.]*'/VERSION = '#{to}'/" #{file})
       end
       add file
-      commit 'Bump Version for Release'
+      commit 'Bump Version for Release' if changes_to_be_committed?
     end
 
     def update_changelog(file: 'CHANGELOG.md', to: @version)
@@ -109,7 +115,7 @@ module Release
     def record_submodule_state(with: @message)
       add 'hitobito'
       add 'hitobito_*'
-      commit with
+      commit with if changes_to_be_committed?
       submodule_status
     end
 

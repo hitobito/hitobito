@@ -13,7 +13,6 @@ class GroupAbility < AbilityDsl::Base
     permission(:any).
       may(:read, :index_events, :'index_event/courses', :index_mailing_lists).
       if_any_role
-    permission(:any).may(:deleted_subgroups).if_member
 
     permission(:contact_data).may(:index_people).all
 
@@ -24,12 +23,14 @@ class GroupAbility < AbilityDsl::Base
       in_same_group_or_below
 
     permission(:group_full)
-      .may(:index_full_people, :export_events, :'export_event/courses', :reactivate)
+      .may(:index_full_people, :export_events, :'export_event/courses', :reactivate,
+            :deleted_subgroups)
       .in_same_group
     permission(:group_full).may(:update).in_same_group_if_active
 
     permission(:group_and_below_full)
-      .may(:index_full_people, :reactivate, :export_events, :'export_event/courses')
+      .may(:index_full_people, :reactivate, :export_events, :'export_event/courses', 
+            :deleted_subgroups)
       .in_same_group_or_below
     permission(:group_and_below_full).may(:update).in_same_group_or_below_if_active
     permission(:group_and_below_full).may(:create).with_parent_in_same_group_hierarchy
@@ -45,7 +46,7 @@ class GroupAbility < AbilityDsl::Base
     permission(:layer_full).may(:index_service_tokens).service_token_in_same_layer
     permission(:layer_full)
       .may(:index_person_add_requests, :index_notes, :index_deleted_people, :show_statistics,
-           :index_calendars).in_same_layer
+           :index_calendars, :deleted_subgroups).in_same_layer
     permission(:layer_full)
       .may(:update, :reactivate,
            :manage_person_tags, :activate_person_add_requests, :deactivate_person_add_requests)
@@ -61,7 +62,7 @@ class GroupAbility < AbilityDsl::Base
     permission(:layer_and_below_full).may(:destroy).in_same_layer_or_below_except_permission_giving
     permission(:layer_and_below_full).
       may(:update, :reactivate, :index_person_add_requests, :index_notes, :show_statistics,
-          :manage_person_tags, :index_deleted_people).in_same_layer_or_below
+          :manage_person_tags, :index_deleted_people, :deleted_subgroups).in_same_layer_or_below
     permission(:layer_and_below_full).may(:modify_superior).in_below_layers_if_active
     permission(:layer_and_below_full).may(:index_service_tokens).service_token_in_same_layer
     permission(:layer_and_below_full).may(:index_calendars).in_same_layer

@@ -57,4 +57,9 @@ Rails.application.configure do
   config.i18n.load_path += locales_path
 
   config.assets.compile = true
+
+  unless ENV['RAILS_ENABLE_TEST_LOG']
+    config.logger = Logger.new(nil)
+    config.log_level = :fatal
+  end
 end

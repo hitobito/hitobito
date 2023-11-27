@@ -39,6 +39,10 @@ For executing a single feature spec call:
 
     spring rspec --tag type:feature spec/features/role_lists_controller_spec.rb
 
+For performance reasons, loggin is disabled in test env. If you need logging for debugging, active it by:
+
+    RAILS_ENABLE_TEST_LOG=1 rspec spec/controllers/addresses_controller_spec.rb
+
 ### JavaScript
 
 Start Webpack development server with live-reload (then visit your Puma's http://localhost:3000):

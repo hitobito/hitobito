@@ -8,6 +8,9 @@
 // GLOBAL VALUES
 // --------------------------------------------------
 
+// Suppress the vast amount of color contrast warnings for now
+$min-contrast-ratio: 1;
+
 // Grays
 // -------------------------
 $black:                 #474E5D !default;
@@ -93,4 +96,3 @@ $media-phone:           480px !default;
 $media-tablet:          768px !default;
 $media-desktop:         980px !default;
 $media-large:           1200px !default; // and upper
-

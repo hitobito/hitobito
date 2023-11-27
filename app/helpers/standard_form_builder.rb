@@ -64,13 +64,15 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   # Render a password field
   def password_field(attr, html_options = {})
-    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-60ch form-control form-control-sm'
+    html_options[:class] = html_options[:class].to_s +
+                           ' mw-100 mw-md-60ch form-control form-control-sm'
     super(attr, html_options)
   end
 
   # Render a text_area.
   def text_area(attr, html_options = {})
-    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-60ch form-control form-control-sm'
+    html_options[:class] = html_options[:class].to_s +
+                           ' mw-100 mw-md-60ch form-control form-control-sm'
     html_options[:rows] ||= 5
     super(attr, html_options)
   end
@@ -84,7 +86,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a number field.
   def number_field(attr, html_options = {})
     html_options[:size] ||= 10
-    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-15ch form-control form-control-sm'
+    html_options[:class] = html_options[:class].to_s +
+                           ' mw-100 mw-md-15ch form-control form-control-sm'
     text_field(attr, html_options)
   end
   alias integer_field number_field
@@ -94,12 +97,14 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a standard string field with column contraints.
   def string_field(attr, html_options = {})
     html_options[:maxlength] ||= column_property(@object, attr, :limit)
-    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-60ch form-control form-control-sm'
+    html_options[:class] = html_options[:class].to_s +
+                           ' mw-100 mw-md-60ch form-control form-control-sm'
     text_field(attr, html_options)
   end
 
   def email_field(attr, html_options = {})
-    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-60ch form-control form-control-sm'
+    html_options[:class] = html_options[:class].to_s +
+                           ' mw-100 mw-md-60ch form-control form-control-sm'
     super(attr, html_options)
   end
 
@@ -125,7 +130,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a field to select a date. You might want to customize this.
   def date_field(attr, html_options = {})
     html_options[:value] ||= date_value(attr)
-    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-15ch date form-control form-control-sm'
+    html_options[:class] = html_options[:class].to_s +
+                           ' mw-100 mw-md-15ch date form-control form-control-sm'
     content_tag(:div, class: 'input-group') do
       content_tag(:span, icon(:'calendar-alt'), class: 'input-group-text') +
       text_field(attr, html_options)
@@ -222,7 +228,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # To pass a custom element list, specify the list with the :list key or
   # define an instance variable with the pluralized name of the association.
   def belongs_to_field(attr, html_options = {})
-    html_options[:class] = html_options[:class].to_s + ' form-select form-select-sm mw-100 mw-md-60ch'
+    html_options[:class] = html_options[:class].to_s +
+                           ' form-select form-select-sm mw-100 mw-md-60ch'
     list = association_entries(attr, html_options)
     if list.present?
       collection_select(attr, list, :id, :to_s,
@@ -240,7 +247,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # define an instance variable with the pluralized name of the association.
   def has_many_field(attr, html_options = {}) # rubocop:disable Naming/PredicateName
     html_options[:multiple] = true
-    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-60ch form-control form-control-sm'
+    html_options[:class] = html_options[:class].to_s +
+                           ' mw-100 mw-md-60ch form-control form-control-sm'
     add_css_class(html_options, 'multiselect')
     belongs_to_field(attr, html_options)
   end
@@ -276,7 +284,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
           nested_fields_for(assoc, partial_name, record_object) do |fields|
             content = block_given? ? capture(fields, &block) : render(partial_name, f: fields)
 
-            content << help_inline(fields.link_to_remove(I18n.t('global.associations.remove'), class: 'float-end me-4 mt-1'))
+            content << help_inline(fields.link_to_remove(I18n.t('global.associations.remove'),
+                                   class: 'float-end me-4 mt-1'))
             content_tag(:div, content, html_options)
           end
         end
@@ -296,7 +305,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def readonly_value(attr, html_options = {})
-    html_options[:class] ||= 'inline'
+    html_options[:class] ||= 'mt-2'
     value = html_options.delete(:value) || template.format_attr(object, attr)
     content_tag(:div, value, html_options)
   end
@@ -412,9 +421,11 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def with_addon(addon, content = nil)
-    content_tag(:div, class: 'input-append') do
+    content_tag(:div, class: 'input-group input-group-sm') do
       (block_given? ? yield : content) +
-        content_tag(:span, addon, class: 'add-on')
+        content_tag(:div, class: 'input-group-append') do
+          content_tag(:span, addon, class: 'input-group-text')
+        end
     end
   end
 

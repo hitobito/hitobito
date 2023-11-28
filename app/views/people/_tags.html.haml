@@ -19,7 +19,8 @@
                                   class: 'form-control form-control-sm me-3',
                                   data: { provide: 'entity',
                                           url: group_person_tags_query_path(group_id: @group.id,
-                                                                            person_id: entry.id) })
+                                                                            person_id: entry.id),
+                                          submit: true })
 
         %button.btn.btn-sm.btn-primary{type: :submit}
           = t('global.ok')

@@ -20,12 +20,13 @@ import { mark } from '@tarekraafat/autocomplete.js/src/helpers/io';
 
   function setupRemoteTypeahead(input) {
     input.setAttribute("autocomplete", "off");
+    const submit = Boolean(input.dataset.submit);
     const isQuickSearch = input.id === QUICKSEARCH_ID;
 
     let autoCompleteInput = new autoComplete({
       selector: `#${input.id}`,
       placeHolder: input.placeholder,
-      submit: true,
+      submit,
       data: {
         src: async (query) => {
           try {

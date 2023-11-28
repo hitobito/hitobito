@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -27,7 +27,7 @@ class RoleDecorator < ApplicationDecorator
     end
     name = content_tag(:strong, model.to_s)
 
-    if model.terminated
+    if model.terminated?
       terminated = content_tag(:span, translate('terminates_on', date: l(model.terminated_on)))
     end
 

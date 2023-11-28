@@ -3,6 +3,8 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
+= render_extensions :index_notice
+
 = render "roles_table", title: Role.model_name.human(count: 2), roles: @roles
 = render("roles_table", title: FutureRole.model_name.human(count: 2), roles: @future_roles)
 = render("roles_table", title: t('.inactive_roles_title'), roles: @inactive_roles)

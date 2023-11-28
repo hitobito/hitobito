@@ -29,7 +29,7 @@ module TagListsHelper
 
   def tag_checkbox(tag, count)
     label_tag(nil, class: 'checkbox ') do
-      out = check_box_tag("tags[]", tag.name, false)
+      out = check_box_tag("tags[]", tag.name, false, class: 'me-2')
       out << tag
       out << content_tag(:div, class: 'role-count') do
         count.to_s

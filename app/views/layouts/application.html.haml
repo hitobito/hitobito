@@ -17,10 +17,6 @@
 
     = stylesheet_pack_tag 'application', media: 'screen', 'data-turbolinks-track': true
     = stylesheet_pack_tag 'print', media: 'print'
-    -# TODO: Remove this import, import tom-select in application.scss.erb
-    = stylesheet_link_tag "https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.bootstrap5.min.css"
-    -# TODO: Remove this import, import autocomplete.js in application.js
-    = javascript_include_tag "https://cdnjs.cloudflare.com/ajax/libs/tarekraafat-autocomplete.js/10.2.7/autoComplete.min.js"
     - if Rails.env.test?
       = stylesheet_pack_tag 'disable_animations'
     = javascript_pack_tag 'application', 'data-turbolinks-track': true

@@ -2,7 +2,9 @@
 //  hitobito and licensed under the Affero General Public License version 3
 //  or later. See the COPYING file at the top-level directory or at
 //  https://github.com/hitobito/hitobito.
-import { mark } from '@tarekraafat/autocomplete.js/src/helpers/io';
+
+import autoComplete from "@tarekraafat/autocomplete.js";
+import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
 
 (function() {
   const QUICKSEARCH_ID = "quicksearch";

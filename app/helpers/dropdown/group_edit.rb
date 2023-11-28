@@ -24,8 +24,11 @@ module Dropdown
     private
 
     def init_items # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-      unless group.archived?
+      unless group.archived? || merge_candidates?
         add_item(translate(:merge), template.merge_group_path(group))
+      end
+
+      unless group.archived? || move_candidates?
         add_item(translate(:move), template.move_group_path(group))
       end
 
@@ -39,6 +42,24 @@ module Dropdown
         add_item(template.ti('link.delete'), template.group_path(group),
                  data: { confirm: template.ti(:confirm_delete), method: :delete })
       end
+    end
+
+    def merge_candidates?
+      groups = group.sister_groups
+      @candidates = groups.select {|group| template.can?(:update, group) }
+      @candidates.empty? 
+    end
+
+    def move_candidates?
+      @candidates = mover.candidates.select { |candidate| template.can?(:update, candidate) }.
+                                     group_by { |candidate| candidate.class.label }
+      @candidates.values.each { |groups| groups.sort_by(&:name) }
+      @candidates.empty?
+      
+    end
+
+    def mover
+      @mover ||= Group::Mover.new(group)
     end
   end
 end

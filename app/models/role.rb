@@ -225,6 +225,10 @@ class Role < ActiveRecord::Base
     [convert_on, delete_on].compact.any? { |date| date <= Time.zone.today }
   end
 
+  def active_period
+    start_on..end_on
+  end
+
   def in_primary_group?
     group_id == person.primary_group_id
   end

@@ -59,7 +59,8 @@ Rails.application.configure do
   config.assets.compile = true
 
   unless ENV['RAILS_ENABLE_TEST_LOG']
-    config.logger = ActiveSupport::Logger.new(nil)
+    logger = ActiveSupport::Logger.new(nil)
+    config.logger = ActiveSupport::TaggedLogging.new(logger)
     config.log_level = :fatal
   end
 end

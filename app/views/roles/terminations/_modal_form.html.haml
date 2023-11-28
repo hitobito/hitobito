@@ -25,7 +25,8 @@
           .row-fluid
             .errors= render('errors', entry: entry)
         .modal-footer
-          = form.submit(ti('.submit'))
-          = link_to(ti('button.cancel'), '#',
-            class: 'link cancel',
-            onclick: "event.preventDefault(); $('#role-termination').modal('hide')")
+          .btn-group
+            = form.submit(ti('.submit'), class: 'btn')
+            = link_to(ti('button.cancel'), '#',
+              class: 'btn btn-link',
+              onclick: "event.preventDefault(); $('#role-termination').modal('hide')")

@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -70,7 +70,7 @@ module RolesHelper
 
     link_to(t('roles/terminations.global.title'),
             new_group_role_termination_path(role_id: role.id, group_id: role.group.id),
-            class: 'btn btn-primary btn-xs float-right',
+            class: 'btn btn-xs float-right',
             remote: true)
   end
 

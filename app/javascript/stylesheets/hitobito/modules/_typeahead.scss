@@ -21,6 +21,12 @@
     mark {
       font-weight: 900;
       background-color: transparent;
+      padding: 0;
+    }
+
+    &[aria-selected="true"] {
+      background-color: $dropdown-link-active-bg;
+      color: $dropdown-link-active-color;
     }
   }
 

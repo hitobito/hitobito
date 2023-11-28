@@ -2,41 +2,46 @@
 //  hitobito and licensed under the Affero General Public License version 3
 //  or later. See the COPYING file at the top-level directory or at
 //  https://github.com/hitobito/hitobito.
+import { mark } from '@tarekraafat/autocomplete.js/src/helpers/io';
 
 (function() {
+  const QUICKSEARCH_ID = "quicksearch";
   var app = window.App || (window.App = {});
 
   app.setupQuicksearch = function() {
-    var qs;
-    qs = $('#quicksearch');
-    return setupRemoteTypeahead(qs);
+    const input = document.getElementById(QUICKSEARCH_ID);
+    return setupRemoteTypeahead(input);
   };
 
   app.setupEntityTypeahead = function() {
-    var input = $(this);
+    const input = $(this)[0];
     setupRemoteTypeahead(input);
   };
 
   function setupRemoteTypeahead(input) {
-    input.attr('autocomplete', "off");
+    input.setAttribute("autocomplete", "off");
+    const isQuickSearch = input.id === QUICKSEARCH_ID;
+
     let autoCompleteInput = new autoComplete({
-      selector: '#' + input[0].id ,
-      placeHolder: input[0].placeholder,
+      selector: `#${input.id}`,
+      placeHolder: input.placeholder,
+      submit: true,
       data: {
         src: async (query) => {
           try {
-            if (input[0].id === "quicksearch") {
-              document.getElementById("quicksearch").classList.add('input-loading')
+            if (isQuickSearch) {
+              document.getElementById(QUICKSEARCH_ID).classList.add("input-loading");
             }
-            let url = document.getElementById(input[0].id).dataset.url
-            let queryKey = document.getElementById(input[0].id).dataset.param || 'q';
-            const source = await fetch(
-              url + '?' + queryKey + '=' + query
-            );
+
+            // Fetch data via AJAX request
+            const url = new URL(input.dataset.url, location.origin)
+            const queryKey = document.getElementById(input.id).dataset.param || "q";
+            url.searchParams.set(queryKey, query)
+            const source = await fetch(url);
             const data = await source.json();
 
-            if (input[0].id === "quicksearch") {
-              document.getElementById("quicksearch").classList.remove('input-loading')
+            if (isQuickSearch) {
+              document.getElementById(QUICKSEARCH_ID).classList.remove("input-loading");
             }
             return data;
           } catch (error) {
@@ -47,30 +52,31 @@
       resultsList: {
         noResults: true,
         maxResults: 15,
-        tabSelect: true
+        tabSelect: true,
+      },
+      resultItem: {
+        highlight: true,
       },
       events: {
         input: {
           selection: (event) => {
             var selection = event.detail.selection.value;
-            if (event.target.id === "quicksearch") {
-              var urlKey = event.detail.selection.value.type + "Url"
-              window.location = event.target.dataset[urlKey] + '/' + event.detail.selection.value.id;
-              autoCompleteInput.input.value = selection.label + " wird geöffnet..."
+            autoCompleteInput.input.value = selection.label;
+
+            if (isQuickSearch) {
+              // Visit selected entry
+              var urlKey = `${event.detail.selection.value.type}Url`;
+              window.location = `${event.target.dataset[urlKey]}/${event.detail.selection.value.id}`;
             } else {
-              autoCompleteInput.input.value = selection.label;
-              if (input.data('updater')) {
-                var updaterString = autoCompleteInput.input.dataset.updater;
-                var updaterFunction = app;
-                updaterString.split('.').forEach(function (part) {
-                  updaterFunction = updaterFunction[part];
-                });
+              if (input.dataset.updater) {
+                // Call custom updater function
+                var updater = autoCompleteInput.input.dataset.updater;
+                const updaterFunction = updater.split(".").reduce((result, part) => result[part], app);
                 updaterFunction(JSON.stringify(selection));
-              } else {
-                setEntityId(autoCompleteInput, selection)
-                if (document.getElementById(autoCompleteInput.input.dataset.idField).dataset.url) {
-                  getIdFieldUrl(document.getElementById(autoCompleteInput.input.dataset.idField))
-                }
+              } else if(autoCompleteInput.input.dataset.idField) {
+                // Assign id value to hidden id field
+                const idField = document.getElementById(adjustSelector(autoCompleteInput.input.dataset.idField));
+                idField.value = selection.id;
               }
             }
           }
@@ -79,57 +85,41 @@
       debounce: 450,
       threshold: 3,
       searchEngine: function(query, record) {
-        return labelWithIcon(record.icon, highlightQuery(record.label, query))
+        // Render item with icon (if present), applying autocomplete.js' highlight function
+        return labelWithIcon(record.icon, record.label.replace(query, mark(query)))
       }
     });
   }
 
   app.setupStaticTypeahead = function() {
-    var input = $(this);
-    input.attr('autocomplete', "off");
+    const input = $(this)[0];
+    input.setAttribute("autocomplete", "off");
+
     new autoComplete({
-      selector: '#' + input[0].id,
+      selector: `#${input.id}`,
       data: {
-        src: JSON.parse(input[0].dataset.source)
+        src: input.dataset.source ? JSON.parse(input.dataset.source) : [],
+      },
+      resultsList: {
+        tabSelect: true,
       },
       resultItem: {
         highlight: true,
-      }
+      },
+      events: {
+        input: {
+          selection: (event) => {
+            // On selection, assign item value to input
+            var selection = event.detail.selection.value;
+            input.value = selection;
+          }
+        }
+      },
     });
-  }
-
-  function highlightQuery(label, query) {
-    const words = query.trim().replace(/\//g, '').split(/\s+/);
-
-    for (const word of words) {
-      if (word.trim() === "") continue;
-      const regex = new RegExp('(' + word.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&') + ')', 'ig');
-      label = label.replace(regex, '<strong>$1</strong>');
-    }
-
-    return label;
-  }
-
-  function setEntityId(autoCompleteInput, selection) {
-    document.getElementById(adjustSelector(autoCompleteInput.input.dataset.idField)).value = selection.id;
-  }
-
-  function getIdFieldUrl(idField) {
-    let idFieldUrl = idField.dataset.url
-    let name = idField.name
-    let id = idField.value
-    $.ajax({
-      url: idFieldUrl + '?' + name + '=' + id,
-      method: 'GET'
-    });
-  }
+  };
 
   function labelWithIcon(icon, label) {
-    if (icon) {
-      return '<i class="fa fa-' + icon + '"></i> ' + label;
-    } else {
-      return label;
-    }
+    return icon ? `<i class="fa fa-${icon}"></i> ${label}` : label;
   }
 
   function adjustSelector(selector) {
@@ -138,18 +128,18 @@
 
   // set insertFields function for nested-form gem
   window.nestedFormEvents.insertFields = function(content, assoc, link) {
-    var el = $(link).closest('form').find("#" + assoc + "_fields");
+    var el = $(link).closest('form').find(`#${assoc}_fields`);
     var nel = el.append($(content));
-    nel.find('[data-provide=entity]').each(app.setupEntityTypeahead);
+    nel.find("[data-provide=entity]").each(app.setupEntityTypeahead);
     return nel;
   };
 
-  $(document).on('turbolinks:load', function() {
+  $(document).on("turbolinks:load", function() {
     app.setupQuicksearch();
-    $('[data-provide=entity]').each(app.setupEntityTypeahead);
-    $('[data-provide=typeahead]').each(app.setupStaticTypeahead);
-    return $('[data-provide]').each(function() {
-      return $(this).attr('autocomplete', "off");
+    $("[data-provide=entity]").each(app.setupEntityTypeahead);
+    $("[data-provide=typeahead]").each(app.setupStaticTypeahead);
+    return $("[data-provide]").each(function() {
+      return $(this).attr("autocomplete", "off");
     });
   });
 

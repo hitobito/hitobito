@@ -48,11 +48,12 @@ describe :invoice_configs do
       end
 
       it 'requires a logo when logo_position is not "Kein Logo"' do
-        select 'Rechts', from: 'invoice_config_logo_position'
-        expect(page).to have_selector "input[type='file'][required]"
+        select 'Rechts', from: 'invoice_config[logo_position]'
+        click_button 'Rechnungseinstellungen aktualisieren'
 
-        select 'Kein Logo', from: 'invoice_config_logo_position'
-        expect(page).to have_selector("input[type='file']:not([required])")
+        expect(page).to have_content 'Logo muss angegeben werden, wenn eine Logoposition gewählt ist'
+        click_link 'Layout'
+        expect(page).to have_selector "#invoice_config_logo.is-invalid"
       end
 
       it 'attaches logo when file is selected' do

@@ -13,12 +13,3 @@
   = f.labeled_i18n_enum_field :logo_position, InvoiceConfig.logo_position_labels.to_a, class: 'form-select form-select-sm'
 
 = render_extensions(:layout_fields, locals: { f: f })
-
-:javascript
-  $(document).ready(function() {
-    var logoPositionSelect = document.getElementById('invoice_config_logo_position');
-
-    logoPositionSelect.addEventListener("change", (event) => {
-      document.querySelector('input[type="file"]').required=event.target.value !== "disabled";
-    });
-  });

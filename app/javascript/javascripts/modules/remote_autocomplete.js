@@ -77,6 +77,10 @@ import { mark } from '@tarekraafat/autocomplete.js/src/helpers/io';
                 // Assign id value to hidden id field
                 const idField = document.getElementById(adjustSelector(autoCompleteInput.input.dataset.idField));
                 idField.value = selection.id;
+
+                if (idField.dataset.url) {
+                  fetchIdFieldUrl(idField)
+                }
               }
             }
           }
@@ -89,6 +93,21 @@ import { mark } from '@tarekraafat/autocomplete.js/src/helpers/io';
         return labelWithIcon(record.icon, record.label.replace(query, mark(query)))
       }
     });
+  }
+
+  /**
+   * Executes an AJAX GET request to the URL defined on the
+   * idField. The result may contain JavaScript, that will be
+   * interpreted to perform an action after selection (e.g. update
+   * UI).
+   */
+  function fetchIdFieldUrl(idField) {
+    const url = new URL(idField.dataset.url, location.origin);
+    url.searchParams.set(idField.name, idField.value);
+    $.ajax({
+      url,
+      method: 'GET'
+    })
   }
 
   app.setupStaticTypeahead = function() {

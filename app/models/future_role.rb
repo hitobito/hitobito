@@ -17,6 +17,7 @@ class FutureRole < Role
   skip_callback :destroy, :after, :reset_primary_group
 
   after_commit :update_version_type
+  before_validation :run_final_type_validations
 
   validates :person, :group, presence: true
   validates :convert_to, inclusion: { within: :group_role_types }, if: :group
@@ -39,14 +40,23 @@ class FutureRole < Role
 
   private
 
+  def run_final_type_validations
+    final_role = build_new_role
+    final_role.valid? || self.errors.merge!(final_role.errors)
+  end
+
   def update_version_type
     versions.update_all(item_type: 'FutureRole') # rubocop:disable Rails/SkipsValidations
   end
 
+  def build_new_role
+    group.class.find_role_type!(convert_to).new.tap do |role|
+      role.attributes = relevant_attrs.merge(type: convert_to)
+    end
+  end
+
   def create_new_role!
-    type = group.class.find_role_type!(convert_to).new
-    type.attributes = relevant_attrs.merge(type: convert_to)
-    type.save!
+    build_new_role.save!
   end
 
   def group_role_types

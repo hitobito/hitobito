@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe :roles_terminations do
+describe :roles_terminations, js: true do
   let(:role) { roles(:bottom_member) }
   let(:person) { role.person }
 
@@ -21,6 +21,10 @@ describe :roles_terminations do
 
     # wait for modal to appear before we continue
     expect(page).to have_selector('#role-termination.modal')
+  end
+
+  after do
+    Group::BottomLayer::Member.terminatable = false
   end
 
   def submit_with_terminate_on(date)

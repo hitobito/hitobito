@@ -9,7 +9,7 @@ class FutureRole < Role
   self.kind = :future
   self.basic_permissions_only = true
 
-  IGNORED_ATTRS = %w(id type convert_on convert_to created_at).freeze
+  IGNORED_ATTRS = %w(id type convert_on convert_to created_at terminated).freeze
 
   skip_callback :create, :after, :set_first_primary_group
   skip_callback :create, :after, :set_contact_data_visible

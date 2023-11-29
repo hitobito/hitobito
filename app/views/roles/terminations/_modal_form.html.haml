@@ -1,0 +1,32 @@
+-# frozen_string_literal: true
+
+-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+#role-termination.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.bold.modal-title
+          %b= ti('title')
+
+      = standard_form entry, url: group_role_terminations_path(role_id: role.id, group_id: role.group_id), remote: true do |form|
+        .modal-body
+          .row-fluid
+            .confirm-text= termination_confirm_dialog_text(entry)
+          = render_extensions :additional_confirmation_text
+          .row-fluid
+            .warning-text= ti('warning')
+          = render_extensions :additional_fields, locals: { form: form }
+          .row-fluid
+            = form.labeled_date_field :terminate_on, class: 'col-6 date'
+          .row-fluid
+            .errors= render('errors', entry: entry)
+        .modal-footer
+          .btn-group
+            = form.submit(ti('.submit'), class: 'btn')
+            = link_to(ti('button.cancel'), '#',
+              class: 'btn btn-link',
+              onclick: "event.preventDefault(); $('#role-termination').modal('hide')")

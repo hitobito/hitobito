@@ -50,6 +50,9 @@ class Role < ActiveRecord::Base
   class_attribute :superior_attributes
   self.superior_attributes = []
 
+  # Marks the role as terminatable by the user.
+  class_attribute :terminatable, default: false, instance_accessor: false
+
   # TOTP as 2FA is enforced on this role.
   class_attribute :two_factor_authentication_enforced
   self.two_factor_authentication_enforced = false
@@ -176,6 +179,23 @@ class Role < ActiveRecord::Base
     destroy(always_soft_destroy: always_soft_destroy) || _raise_record_not_destroyed
   end
 
+  def terminatable?
+    self.class.terminatable && # class is marked as terminatable
+      !terminated? && # role is not already terminated
+      !archived? && # role is not archived
+      !deleted? # role is not deleted
+  end
+
+  # Overwritten setter to prevent direct assignment of terminated.
+  # Use Roles::Termination instead.
+  def terminated=(_value)
+    raise 'do not set terminated directly, use Roles::Termination instead'
+  end
+
+  def terminated_on
+    delete_on || deleted_at&.to_date if terminated?
+  end
+
   def archived?
     archived_at.present?
   end
@@ -203,6 +223,10 @@ class Role < ActiveRecord::Base
 
   def outdated?
     [convert_on, delete_on].compact.any? { |date| date <= Time.zone.today }
+  end
+
+  def in_primary_group?
+    group_id == person.primary_group_id
   end
 
   private

@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -9,13 +9,20 @@ class RoleDecorator < ApplicationDecorator
   decorates :role
 
   def for_aside
-    text = content_tag(:strong, model.to_s)
-    return text unless model.outdated?
+    name = content_tag(:strong, model.to_s)
 
-    safe_join(
-      [helpers.icon(:exclamation_triangle, title: outdated_role_title), text],
-      FormatHelper::EMPTY_STRING
-    )
+    if model.outdated?
+      name = safe_join(
+        [helpers.icon(:exclamation_triangle, title: outdated_role_title), name],
+        FormatHelper::EMPTY_STRING)
+    end
+
+    if model.terminated?
+      terminated = content_tag(:span, translate('terminates_on', date: l(model.terminated_on)))
+      name = safe_join([name, terminated].compact, tag.br)
+    end
+
+    name
   end
 
   def outdated_role_title
@@ -26,4 +33,7 @@ class RoleDecorator < ApplicationDecorator
       translate(:outdated_deleted_role, date: I18n.l(model.delete_on))
     end
   end
+
+  alias_method :for_history, :for_aside
+
 end

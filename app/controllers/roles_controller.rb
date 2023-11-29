@@ -144,7 +144,7 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
   end
 
   def copy_errors(new_role)
-    entry.attributes = new_role.attributes.except('id')
+    entry.attributes = new_role.attributes.except('id', 'terminated')
     new_role.errors.each do |error|
       entry.errors.add(error.attribute, error.message)
     end
@@ -267,7 +267,7 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
   end
 
   def belongs_to_persons_primary_group?(role)
-    role.group_id == role.person.primary_group_id
+    role.in_primary_group?
   end
 
   def set_person_id

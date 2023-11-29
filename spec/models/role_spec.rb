@@ -91,6 +91,8 @@ describe Role do
 
     its(:visible_types) { should_not include(Group::BottomGroup::Member) }
 
+    its(:terminatable) { should eq false }
+
     it 'should have two types with permission :layer_and_below_full' do
       expect(described_class.types_with_permission(:layer_and_below_full).to_set)
         .to eq([Group::TopGroup::Leader, Group::BottomLayer::Leader].to_set)
@@ -378,6 +380,20 @@ describe Role do
     end
   end
 
+  context '#in_primary_group?' do
+    let(:role) { roles(:bottom_member) }
+
+    it 'is true if role is in primary group' do
+      role.person.update!(primary_group: role.group)
+      expect(role.in_primary_group?).to eq true
+    end
+
+    it 'is false if role is not in primary group' do
+      role.person.update!(primary_group: groups(:top_group))
+      expect(role.in_primary_group?).to eq false
+    end
+  end
+
   context '#label_long adds group to role', focus: true do
     subject { role.label_long }
 
@@ -389,6 +405,82 @@ describe Role do
     context 'group without long key' do
       let(:role) { Group::BottomGroup::Leader }
       it { is_expected.to eq 'Leader Bottom Group' }
+    end
+  end
+
+  context '#terminated' do
+    it 'can not be assigned directly' do
+      role = Role.new
+      expect { role.terminated = true }.to raise_error(/do not set terminated directly/)
+    end
+
+    it 'can not be updated directly' do
+      role = roles(:bottom_member)
+      expect { role.update!(terminated: true) }.to raise_error(/do not set terminated directly/)
+    end
+  end
+
+  context '#terminatable?' do
+    let(:role_class) { Class.new(Role) }
+
+    context 'when ::terminatable=false' do
+      it 'is false by default' do
+        assert !role_class.terminatable
+        expect(role_class.new.terminatable?).to eq false
+      end
+    end
+
+    context 'when ::terminatable=true' do
+      before { role_class.terminatable = true }
+
+      it 'is true' do
+        expect(role_class.new.terminatable?).to eq true
+      end
+
+      it 'is false if role is terminated' do
+        role = role_class.new.tap {|r| r.write_attribute(:terminated, true) }
+        expect(role.terminatable?).to eq false
+      end
+
+      it 'is false if role is archived' do
+        role = role_class.new(archived_at: 1.day.from_now)
+        expect(role.terminatable?).to eq false
+      end
+
+      it 'is false if role is deleted' do
+        role = role_class.new(deleted_at: 1.day.from_now)
+        expect(role.terminatable?).to eq false
+      end
+    end
+  end
+
+  context '#terminated_on' do
+    def role(**attrs)
+      terminated = attrs.delete(:terminated) || false
+      Role.new(attrs.reverse_merge(delete_on: nil, deleted_at: nil)).tap do |r|
+        r.write_attribute(:terminated, terminated)
+      end
+    end
+
+    it 'returns nil if role is not terminated' do
+      expect(role(delete_on: 1.day.from_now).terminated_on).to be_nil
+      expect(role(deleted_at: 1.day.from_now).terminated_on).to be_nil
+    end
+
+    it 'returns delete_on if role is terminated' do
+      date = 1.day.from_now.to_date
+      expect(role(terminated: true, delete_on: date).terminated_on).to eq date
+    end
+
+    it 'returns deleted_at if role is terminated' do
+      date = 1.day.from_now.to_date
+      expect(role(terminated: true, deleted_at: date).terminated_on).to eq date
+    end
+
+    it 'delete_on takes precedence over deleted_at' do
+      delete_on = 1.day.from_now.to_date
+      deleted_at = 2.days.from_now.to_date
+      expect(role(terminated: true, delete_on: delete_on, deleted_at: deleted_at).terminated_on).to eq delete_on
     end
   end
 

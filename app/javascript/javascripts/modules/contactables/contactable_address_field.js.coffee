@@ -7,7 +7,7 @@ app.AddressTypeahead = {
     form = $('.address-input-fields').closest('form')
     app.AddressTypeahead.find_form_element(form, 'zip_code').value = data.zip_code
     app.AddressTypeahead.find_form_element(form, 'town').value = data.town
-    "#{data.street} #{data.number || ''}"
+    [data.street, data.number || ''].filter(Boolean).join(' ')
 
   checkIfTypeaheadAvailable: (e) ->
     typeaheadSupportedCountries = JSON.parse(e.target.dataset.typeaheadSupportedCountries)

@@ -31,6 +31,8 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
       submit,
       data: {
         src: async (query) => {
+          if (input.dataset.typeaheadDisabled === "true") return;
+
           try {
             if (isQuickSearch) {
               document.getElementById(QUICKSEARCH_ID).classList.add("input-loading");
@@ -75,7 +77,7 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
                 // Call custom updater function
                 var updater = autoCompleteInput.input.dataset.updater;
                 const updaterFunction = updater.split(".").reduce((result, part) => result[part], app);
-                updaterFunction(JSON.stringify(selection));
+                input.value = updaterFunction(JSON.stringify(selection));
               } else if(autoCompleteInput.input.dataset.idField) {
                 // Assign id value to hidden id field
                 const idField = document.getElementById(adjustSelector(autoCompleteInput.input.dataset.idField));

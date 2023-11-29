@@ -35,6 +35,8 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
       new_person = entry.person.new_record?
       created = create_entry_and_person
       add_privacy_policy_not_accepted_error if new_person
+      return destroy_and_redirect if entry.delete_on&.past?
+
       respond_with(entry, success: created, location: after_create_location(new_person))
     end
   end
@@ -45,7 +47,7 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
       change_type
     else
       assign_attributes
-      return destroy_from_update if entry.delete_on&.past?
+      return destroy_and_redirect if entry.delete_on&.past?
 
       super(location: after_update_location)
     end
@@ -74,7 +76,7 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
 
   private
 
-  def destroy_from_update
+  def destroy_and_redirect
     destroyed = run_callbacks(:destroy) { entry.destroy }
     if destroyed
       redirect_to(after_update_location, notice: flash_message(:success, :destroy))

@@ -1,13 +1,11 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2014, Jungwacht Blauring Schweiz, Pfadibewegung Schweiz.
 #  This file is part of hitobito and licensed under the Affero General Public
 #  License version 3 or later. See the COPYING file at the top-level
 #  directory or at https://github.com/hitobito/hitobito.
 
-
 require 'spec_helper'
-
 
 describe RolesController, js: true do
 
@@ -16,6 +14,47 @@ describe RolesController, js: true do
   let!(:role1)  { Fabricate(Group::TopGroup::Member.name.to_sym, group: group) }
   let!(:role2)  { Fabricate(Group::TopGroup::Member.name.to_sym, group: group) }
   let!(:leader) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: group) }
+
+  def choose_role(role, current_selection: nil)
+    find('#role_type_select a.chosen-single').click
+    expect(page).to have_css('#role_type_select a.chosen-single > span', text: current_selection)
+    find('#role_type_select ul.chosen-results').find('li', text: role).click
+  end
+
+  describe 'create' do
+    let(:bottom_member) { people(:bottom_member) }
+    let(:bottom_layer) { groups(:bottom_layer_one) }
+    let(:yesterday) { Time.zone.yesterday }
+    let(:top_leader) { people(:top_leader) }
+
+    before do
+      sign_in(top_leader)
+      visit group_person_path(bottom_layer, bottom_member)
+      click_on 'Rolle hinzufügen'
+      choose_role 'Member'
+    end
+
+    it 'soft deletes role if bis in the past' do
+      fill_in 'Von', with: yesterday - 3.months
+      fill_in 'Bis', with: yesterday
+      expect do
+        first(:button, 'Speichern').click
+      end.to change { bottom_member.roles.with_deleted.count }.by(1)
+      expect(page).to have_content "Rolle Member (Bis #{I18n.l(yesterday)}) für Bottom Member in " \
+        'Bottom One wurde erfolgreich gelöscht.'
+    end
+
+    it 'hard deletes role if bis in the past and not valid for archive' do
+      fill_in 'Von', with: yesterday - 1
+      fill_in 'Bis', with: yesterday
+      expect do
+        first(:button, 'Speichern').click
+      end.to not_change { bottom_member.roles.with_deleted.count }
+        .and not_change { bottom_member.roles.count }
+      expect(page).to have_content "Rolle Member (Bis #{I18n.l(yesterday)}) für Bottom Member in " \
+        'Bottom One wurde erfolgreich gelöscht.'
+    end
+  end
 
   describe 'updating delete_on', js: false do
     let(:role) { roles(:bottom_member) }
@@ -27,7 +66,8 @@ describe RolesController, js: true do
       visit edit_group_role_path(group_id: role.group_id, id: role.id)
       fill_in 'Bis', with: tomorrow
       all('form .btn-toolbar').first.click_button 'Speichern'
-      expect(page).to have_content "Rolle Member (Bis #{tomorrow.strftime('%d.%m.%Y')}) für Bottom Member in Bottom One wurde erfolgreich aktualisiert"
+      expect(page).to have_content "Rolle Member (Bis #{tomorrow.strftime('%d.%m.%Y')}) für " \
+        'Bottom Member in Bottom One wurde erfolgreich aktualisiert'
       expect(role.reload.delete_on).to eq tomorrow
     end
 
@@ -195,20 +235,20 @@ describe RolesController, js: true do
       is_expected.to have_css("tr#person_#{person_with_two_roles.id} td p", text: 'Member')
 
       # Click person row to alter role of person and expect role popup
-      person_with_two_roles_row.find_all("a[title=\"Bearbeiten\"]").first.click
-      is_expected.to have_css("div.popover")
+      person_with_two_roles_row.find_all('a[title="Bearbeiten"]').first.click
+      is_expected.to have_css('div.popover')
 
       # Change role
-      find("div.popover div#role_type_select").click
-      is_expected.to have_css("div.popover div.chosen-drop", visible: true)
+      find('div.popover div#role_type_select').click
+      is_expected.to have_css('div.popover div.chosen-drop', visible: true)
 
-      role_select_menu = find("div.popover div.chosen-drop", visible: true)
+      role_select_menu = find('div.popover div.chosen-drop', visible: true)
       expect(role_select_menu).to have_content('Leader')
 
-      role_select_menu.find_all("li").last.click
+      role_select_menu.find_all('li').last.click
 
       # Click save
-      find("button[data-disable-with=\"Speichern\"]").click
+      find('button[data-disable-with="Speichern"]').click
 
       # Expect role Leader and External
       is_expected.to have_css("tr#person_#{person_with_two_roles.id} td p", text: 'Leader')
@@ -216,7 +256,7 @@ describe RolesController, js: true do
 
       # Expect role field to have no more roles than person has in db
       person_db_role_count = person_with_two_roles.roles.count
-      expect(person_with_two_roles_row.find_all("td[style=\"display: table-cell;\"] > p").count).to eq(person_db_role_count)
+      expect(person_with_two_roles_row.find_all('td[style="display: table-cell;"] > p').count).to eq(person_db_role_count)
     end
   end
 
@@ -228,8 +268,10 @@ describe RolesController, js: true do
       image = ActiveStorage::Blob.create_and_upload!(io: File.open(file, 'rb'),
                                                      filename: 'logo.png',
                                                      content_type: 'image/png').signed_id
-      group.layer_group.update(privacy_policy: image, privacy_policy_title: 'Privacy Policy Top Layer')
-      bottom_layer.update(privacy_policy: image, privacy_policy_title: 'Additional Policies Bottom Layer')
+      group.layer_group.update(privacy_policy: image,
+                               privacy_policy_title: 'Privacy Policy Top Layer')
+      bottom_layer.update(privacy_policy: image,
+                          privacy_policy_title: 'Additional Policies Bottom Layer')
     end
 
     it 'creates person if privacy policy is accepted' do
@@ -243,7 +285,7 @@ describe RolesController, js: true do
         is_expected.to have_content('Privacy Policy Top Layer')
         is_expected.to have_content('Additional Policies Bottom Layer')
 
-        find("input#role_new_person_privacy_policy_accepted").click
+        find('input#role_new_person_privacy_policy_accepted').click
 
         all('form .btn-toolbar').first.click_button 'Speichern'
 

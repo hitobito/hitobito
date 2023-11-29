@@ -187,7 +187,7 @@ require 'capybara/rails'
 require 'capybara-screenshot/rspec'
 
 Capybara.server_port = ENV['CAPYBARA_SERVER_PORT'].to_i if ENV['CAPYBARA_SERVER_PORT']
-Capybara.default_max_wait_time = 6
+Capybara.default_max_wait_time = ENV.fetch('CAPYBARA_MAX_WAIT_TIME', 6).to_f
 Capybara.automatic_label_click = true
 
 Capybara::Screenshot.prune_strategy = :keep_last_run

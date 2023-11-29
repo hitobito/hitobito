@@ -29,6 +29,33 @@ describe 'Future Roles behaviour' do
     Fabricate(:role, type: FutureRole.sti_name, person: person, group: group, convert_on: convert_on, convert_to: type)
   end
 
+
+  def choose_role(role, current_selection: nil)
+    find('#role_type_select a.chosen-single').click
+    expect(page).to have_css('#role_type_select a.chosen-single > span', text: current_selection)
+    find('#role_type_select ul.chosen-results').find('li', text: role).click
+  end
+  describe 'create' do
+    let(:bottom_member) { people(:bottom_member) }
+    let(:bottom_layer) { groups(:bottom_layer_one) }
+    let(:yesterday) { Time.zone.yesterday }
+
+    it 'creates destroyed role when bis is in the past' do
+      sign_in(top_leader)
+      visit group_person_path(bottom_layer, bottom_member)
+      click_on 'Rolle hinzufügen'
+      choose_role 'Member'
+      fill_in 'Von', with: yesterday - 3.months
+      fill_in 'Bis', with: yesterday
+      expect do
+        first(:button, 'Speichern').click
+      end.to change { bottom_member.roles.count }.by(1)
+      expect(page).to have_content "Rolle Member (Bis #{I18n.l(yesterday)}) für Bottom Member in " \
+        'Bottom One wurde erfolgreich erstellt.'
+    end
+  end
+
+
   describe 'group bottom_members list' do
     it 'hides pill if no future roles exist' do
       visit group_people_path(top_group, locale: :de)

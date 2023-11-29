@@ -5,4 +5,4 @@
 ### `terminatable`
 
 Rollen, welche das class attribute `terminatable` auf `true` gesetzt haben,
-können von der Person selbstständig beendet werden.
+können auf Person#history, auch von der Person selber beendet werden.

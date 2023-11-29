@@ -17,6 +17,13 @@
         this.setTextboxValue("");
         this.refreshOptions();
       },
+      render: {
+        no_results() {
+          // Render localized "no results" message
+          const message = this.input.dataset.chosenNoResults || "No results found";
+          return `<div class="no-results">${message}</div>`;
+        },
+      }
     });
   };
 

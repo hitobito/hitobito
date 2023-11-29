@@ -715,8 +715,28 @@ label.required::after {
 
 .form-select {
   width: 250px;
-  height: 36px;
+  min-height: 31px !important; // Make selects as height as normal text fields (use min-height since multi item tom-selects can grow to multiple lines)
   display: initial;
+}
+
+.ts-wrapper.form-select.single .ts-control {
+  // Fix alignment of selected item in single selects
+  // Example: http://0.0.0.0:3000/en/groups/1/roles/new → "Role" select when group "Geschäftsstelle" is selected
+  padding-top: calc((1.5em + 0.5rem + 2px - 1.3125rem - 4px) / 2 - 2px);
+  padding-left: 1rem;
+}
+.ts-wrapper.form-select:not(.has-items) .ts-control {
+  // Adjust padding to make sure the select field is always 31px height, also when no item is selected
+  // Examples: http://0.0.0.0:3000/en/list_courses → "Organizer" field
+  // and http://0.0.0.0:3000/en/groups/1/roles/new → "Role" select when group "Geschäftsstelle" is selected
+  padding-top: calc((31px - 1.5 * 1rem) / 2 - 1px);
+  padding-bottom: calc((31px - 1.5 * 1rem) / 2 - 1px);
+}
+
+.has-items .ts-control > input {
+  // Fix vertical centering of text input within tom-select's wrapper
+  // Example: http://0.0.0.0:3000/en/list_courses → "Organizer" field
+  margin-top: calc((1.5em + 0.5rem + 2px - 1.3125rem - 4px) / 2 * -1) !important;
 }
 
 #custom_content_body,

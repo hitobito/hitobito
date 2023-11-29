@@ -7,40 +7,30 @@
   var app;
 
   app = window.App || (window.App = {});
+  app.tomSelects = {};
 
-  app.activateTomSelect = function(i, element) {
-    return app.tomSelect = new TomSelect('#' + element.id, {
-      plugins: ['remove_button'],
+  app.activateTomSelect = function(element) {
+    app.tomSelects[element.id] = new TomSelect(`#${element.id}`, {
+      plugins: isMultipleSelect(element) ? ["remove_button"] : undefined,
       create: false,
-      onItemAdd: function() {
-        this.setTextboxValue('');
+      onItemAdd() {
+        this.setTextboxValue("");
         this.refreshOptions();
       },
-      render: {
-        option: function(data, escape) {
-          return '<div class="d-flex"><span>' + escape(data.text) + '</span></div>';
-        },
-        item: function(data, escape) {
-          return '<div>' + escape(data.text) + '</div>';
-        }
-      }
     });
   };
 
+  function isMultipleSelect(element) {
+    return element.nodeName === "INPUT" || element.nodeName === "SELECT" && element.getAttribute("multiple")
+  }
+
   $(document).on('turbolinks:load', function() {
     // enable tom-select
-    $('.tom-select').each(app.activateTomSelect);
-    $('#group-filter-clear').on('click', function() {
-      return app.tomSelect.clear();
-    });
-    return $('#group-filter-add').on('click', function() {
-      return app.tomSelect.add();
-    });
+    document.querySelectorAll(".tom-select").forEach(app.activateTomSelect);
   });
 
   // enable tom select on popover open event
-  $(document).on('shown.bs.popover', function() {
-    return $('.popover .tom-select').each(app.activateTomSelect);
+  document.addEventListener("shown.bs.popover", () => {
+    document.querySelectorAll('.popover .tom-select').forEach(app.activateTomSelect)
   });
-
 }).call(this);

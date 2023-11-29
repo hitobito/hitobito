@@ -7,13 +7,13 @@
                  options_from_collection_for_select(course_groups, :id, :name, @group_ids),
                  {},
                  { id: 'group-filter-select',
-                   class: 'form-select form-select-sm tom-select',
+                   class: 'form-select form-select-sm tom-select w-100',
                    multiple: true,
                    data: { chosen_no_results: t('global.chosen_no_results'),
                            placeholder: t('.select_layers') } })
 
       .group-filter-quick-add-tags
-        %button.chip.chip-add.group-filter-clear{id: "group-filter-clear", type: :button }
+        %button.chip.chip-add.group-filter-clear{id: "group-filter-clear", type: :button, data: {'clear-values': 'group-filter-select'} }
           = t('.all_layers')
           = icon(:times)
         - quick_select_course_groups.each do |group|

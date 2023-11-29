@@ -1,11 +1,10 @@
 = field_set_tag do
   - if Settings.groups&.self_registration&.enabled
     = f.labeled(:self_registration_role_type, class: 'd-flex') do
-      .col-3
-        = f.select(:self_registration_role_type,
-          entry.allowed_roles_for_self_registration.map { |r| [r.label, r.sti_name ] },
-            { include_blank: ta(:not_allowed) },
-              class: 'form-select form-select-sm')
+      = f.select(:self_registration_role_type,
+        entry.allowed_roles_for_self_registration.map { |r| [r.label, r.sti_name ] },
+          { include_blank: ta(:not_allowed) },
+            class: 'form-select form-select-sm')
       = f.help_inline(t('groups.form.hint_external_registration'))
     = f.labeled_input_fields(:custom_self_registration_title)
     = f.labeled_input_fields(:self_registration_notification_email)

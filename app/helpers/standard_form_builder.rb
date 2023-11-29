@@ -186,14 +186,15 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-60ch'
     html_options[:class] += ' is-invalid' if errors_on?(attr)
 
-    content_tag(:div, class: 'd-flex') do
-      content_tag(:div, class: 'col-2') do
+    content_tag(:div, class: 'd-flex align-items-center') do
+      content_tag(:div, class: 'col-2 me-1') do
         date_field("#{attr}_date")
       end +
-      ' ' +
-      hours_select("#{attr}_hour") +
-      ' : ' +
-      minutes_select("#{attr}_min")
+        hours_select("#{attr}_hour") +
+        content_tag(:div) do
+          ":"
+        end +
+        minutes_select("#{attr}_min")
     end
   end
 

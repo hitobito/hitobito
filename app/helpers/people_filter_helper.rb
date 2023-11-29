@@ -39,14 +39,14 @@ module PeopleFilterHelper
     end
 
     content_tag(:div,
-                class: 'people_filter_attribute_form d-flex
+                class: 'people_filter_attribute_form d-flex align-items-center
                         justify-content-between mb-2 controls controls-row') do
       content = hidden_field_tag("filters[attributes][#{time}][key]",
                                  key,
                                  disabled: attr.blank?,
                                  class: 'attribute_key_hidden_field')
 
-      content << content_tag(:div, class: 'col-2 me-5') do
+      content << content_tag(:div, class: 'flex-none') do
                     select(:filters, "attributes[#{time}][key]",
                         people_filter_attributes_for_select,
                         { selected: key },
@@ -55,25 +55,25 @@ module PeopleFilterHelper
                                                   form-select-sm'))
       end
 
-      content << content_tag(:div, class: 'col-2 me-5') do
+      content << content_tag(:div, class: 'flex-none') do
                     select(:filters, "attributes[#{time}][constraint]",
                       filters,
                       { selected: constraint },
                       html_options.merge(class:
                                          'attribute_constraint_dropdown
-                                         ms-2 form-select form-select-sm'))
+                                         ms-3 form-select form-select-sm'))
       end
 
-      attribute_value_class = "form-control form-control-sm ms-3 mt-1
+      attribute_value_class = "form-control form-control-sm ms-3
                                attribute_value_input#{type == :date ? ' date' : ''}"
-      content << content_tag(:div, class: 'col-2') do
+      content << content_tag(:div, class: 'flex-none') do
         text_field_tag("filters[attributes][#{time}][value]",
                                 value,
                                 html_options.merge(class: attribute_value_class))
         end
 
       content << link_to(icon(:'trash-alt', filled: false), '#',
-                         class: 'remove_filter_attribute col-1 me-auto lh-lg ps-4 pt-1')
+                         class: 'remove_filter_attribute flex-auto lh-lg ms-3')
     end
   end
 

@@ -28,13 +28,11 @@
       %label=t('.prompt_role_duration')
       %div.d-flex
         %div.input-group
-          %div.input-group-prepend
-            %span.input-group-text= icon(:'calendar-alt')
+          %span.input-group-text= icon(:'calendar-alt')
           = text_field_tag("filters[role][start_at]", filter && filter.args[:start_at], class: 'date col-2 form-control form-control-sm')
         %label.mx-2.mt-1=t('.prompt_role_duration_until')
         %div.input-group
-          %div.input-group-prepend
-            %span.input-group-text= icon(:'calendar-alt')
+          %span.input-group-text= icon(:'calendar-alt')
           = text_field_tag("filters[role][finish_at]", filter && filter.args[:finish_at], class: 'date col-2 form-control form-control-sm')
     %div.row.mt-3
       - %w(active created deleted).each do |key|

@@ -29,12 +29,13 @@ describe 'Future Roles behaviour' do
     Fabricate(:role, type: FutureRole.sti_name, person: person, group: group, convert_on: convert_on, convert_to: type)
   end
 
-
   def choose_role(role, current_selection: nil)
+    expect(page).to have_css('#role_type_select a.chosen-single')
     find('#role_type_select a.chosen-single').click
     expect(page).to have_css('#role_type_select a.chosen-single > span', text: current_selection)
     find('#role_type_select ul.chosen-results').find('li', text: role).click
   end
+
   describe 'create' do
     let(:bottom_member) { people(:bottom_member) }
     let(:bottom_layer) { groups(:bottom_layer_one) }
@@ -144,13 +145,6 @@ describe 'Future Roles behaviour' do
   describe 'managing future roles' do
     def existing_role_attrs
       bottom_member.roles.find_by(type: 'FutureRole').attributes.symbolize_keys
-    end
-
-    def choose_role(role, current_selection: nil)
-      expect(page).to have_css('#role_type_select a.chosen-single')
-      find('#role_type_select a.chosen-single').click
-      expect(page).to have_css('#role_type_select a.chosen-single > span', text: current_selection)
-      find('#role_type_select ul.chosen-results').find('li', text: role).click
     end
 
     def deselect_role

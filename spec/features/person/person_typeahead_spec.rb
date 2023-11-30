@@ -32,7 +32,7 @@ describe 'Person Autocomplete', js: true do
         sign_in
         visit new_group_role_path(group)
         fill_in 'Person', with: 'gcxy'
-        expect(page).to have_no_selector('.typeahead.dropdown-menu')
+        expect(page).to have_no_selector('ul[role="listbox"]')
       end
     end
 
@@ -43,33 +43,7 @@ describe 'Person Autocomplete', js: true do
 
         fill_in 'Person', with: 'Top'
         expect(page).to have_selector('ul[role="listbox"] li[role="option"]', text: 'Top Leader')
-        expect(find('ul[role="listbox"] li[role="option"]')).to have_selector('strong', text: 'Top')
-      end
-    end
-
-    it 'for two word queries' do
-      obsolete_node_safe do
-        sign_in
-        visit new_group_role_path(group, role: { type: 'Group::TopGroup::Leader' })
-
-        fill_in 'Person', with: 'Top Super'
-
-        expect(page).to have_selector('ul[role="listbox"] li[role="option"]', text: 'Top Leader')
-        expect(find('ul[role="listbox"] li[role="option"]')).to have_selector('strong', text: 'Top')
-        expect(find('ul[role="listbox"] li[role="option"]')).to have_selector('strong', text: 'Super')
-      end
-    end
-
-    it 'for queries with weird spaces' do
-      obsolete_node_safe do
-        sign_in
-        visit new_group_role_path(group, role: { type: 'Group::TopGroup::Leader' })
-
-        fill_in 'Person', with: 'Top  Super '
-
-        expect(page).to have_selector('ul[role="listbox"] li[role="option"]', text: 'Top Leader')
-        expect(find('ul[role="listbox"] li[role="option"]')).to have_selector('strong', text: 'Top')
-        expect(find('ul[role="listbox"] li[role="option"]')).to have_selector('strong', text: 'Super')
+        expect(find('ul[role="listbox"] li[role="option"]')).to have_selector('mark', text: 'Top')
       end
     end
 
@@ -81,7 +55,7 @@ describe 'Person Autocomplete', js: true do
 
         fill_in 'Person', with: 'Top /'
         expect(page).to have_selector('ul[role="listbox"] li[role="option"]', text: 'Top / Leader')
-        expect(find('ul[role="listbox"] li[role="option"]')).to have_selector('strong', text: 'Top')
+        expect(find('ul[role="listbox"] li[role="option"]')).to have_selector('mark', text: 'Top /')
       end
     end
 

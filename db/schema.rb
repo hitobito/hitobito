@@ -983,7 +983,7 @@ ActiveRecord::Schema.define(version: 2023_11_15_131813) do
     t.index ["type"], name: "index_roles_on_type"
   end
 
-  create_table "self_registration_reason_translations", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "self_registration_reason_translations", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "self_registration_reason_id", null: false
     t.string "locale", null: false
     t.datetime "created_at", precision: 6, null: false

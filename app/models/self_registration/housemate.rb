@@ -58,7 +58,7 @@ class SelfRegistration::Housemate
     person.then do |person|
       unless person.valid?
         (person.errors.attribute_names & attrs).each do |attr|
-          errors.add(attr, person.errors[attr])
+          errors.add(attr, person.errors[attr]) unless errors.key?(attr)
         end
       end
     end

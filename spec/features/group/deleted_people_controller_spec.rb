@@ -45,8 +45,8 @@ describe Group::DeletedPeopleController, js: true do
 
     it 'creates role' do
       obsolete_node_safe do
-        find('#role_type_select a.chosen-single').click
-        find('#role_type_select ul.chosen-results').find('li', text: 'Leader').click
+        find('#role_type_select #role_type').click
+        find('#role_type_select #role_type').find('option', text: 'Leader').click
 
         click_button 'Speichern'
         expect(page).to have_no_css('.popover')

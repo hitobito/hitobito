@@ -16,9 +16,10 @@ describe RolesController, js: true do
   let!(:leader) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: group) }
 
   def choose_role(role, current_selection: nil)
-    find('#role_type_select a.chosen-single').click
-    expect(page).to have_css('#role_type_select a.chosen-single > span', text: current_selection)
-    find('#role_type_select ul.chosen-results').find('li', text: role).click
+    expect(page).to have_css('#role_type_select #role_type')
+    find('#role_type_select #role_type').click
+    expect(page).to have_css('#role_type_select #role_type option', text: role)
+    find('#role_type_select #role_type').find('option', text: role).click
   end
 
   describe 'create' do
@@ -81,7 +82,7 @@ describe RolesController, js: true do
       role.update_columns(delete_on: Time.zone.yesterday)
       visit edit_group_role_path(group_id: role.group_id, id: role.id)
       expect do
-        all('form .btn-toolbar').first.click_button 'Speichern'
+        all('form .bottom .btn-group').first.click_button 'Speichern'
       end.to change { people(:bottom_member).roles.count }.by(-1)
     end
   end

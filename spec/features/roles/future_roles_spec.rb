@@ -27,10 +27,10 @@ describe 'Future Roles behaviour', js: :true do
   end
 
   def choose_role(role, current_selection: nil)
-    expect(page).to have_css('#role_type_select a.chosen-single')
-    find('#role_type_select a.chosen-single').click
-    expect(page).to have_css('#role_type_select a.chosen-single > span', text: current_selection)
-    find('#role_type_select ul.chosen-results').find('li', text: role).click
+    expect(page).to have_css('#role_type_select #role_type')
+    find('#role_type_select #role_type').click
+    expect(page).to have_css('#role_type_select #role_type option', text: role)
+    find('#role_type_select #role_type').find('option', text: role).click
   end
 
   describe 'create' do
@@ -218,15 +218,6 @@ describe 'Future Roles behaviour', js: :true do
       fill_in 'Von', with: tomorrow
       first(:button, 'Speichern').click
       expect(page).to have_css '.alert-danger', text: 'Von kann nicht später als heute sein'
-    end
-
-    it 'saving outdated future role converts role' do
-      role = create_future_role.tap { |r| r.update_columns(convert_on: yesterday) }
-      visit edit_group_role_path(group_id: top_group.id, id: role.id, locale: :de)
-      expect(page).to have_field 'Von', with: yesterday.strftime('%d.%m.%Y')
-      first(:button, 'Speichern').click
-      expect(page).not_to have_css '.roles', text: 'TopGroup / Member'
-      expect(page).not_to have_css 'h2', text: 'Zukünftige Rollen'
     end
 
     it 'saving outdated future role converts role' do

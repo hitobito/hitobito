@@ -648,9 +648,11 @@ GEM
     sqlite3 (1.6.6)
       mini_portile2 (~> 2.8.0)
     ssrf_filter (1.1.2)
+    stackprof (0.2.25)
     strip_attributes (1.13.0)
       activemodel (>= 3.0, < 8.0)
     temple (0.10.3)
+    test-prof (1.2.3)
     thinking-sphinx (5.5.1)
       activerecord (>= 4.2.0)
       builder (>= 2.1.2)
@@ -834,7 +836,9 @@ DEPENDENCIES
   spring-commands-rspec
   sprockets (~> 3.7.2)
   sqlite3
+  stackprof
   strip_attributes
+  test-prof
   thinking-sphinx
   truemail
   validates_by_schema

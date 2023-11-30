@@ -6,8 +6,8 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  config.cache_classes = true
-  config.autoloader = :classic
+  config.cache_classes = false
+  config.autoloader = :zeitwerk
 
   # Do not eager load code on boot. This avoids loading your whole application
   # just for the purpose of running a single test. If you are using a tool that
@@ -25,7 +25,7 @@ Rails.application.configure do
   config.action_controller.perform_caching = false
 
   # Set to false for faster wagon tests once db is setup
-  config.active_record.maintain_test_schema = true
+  config.active_record.maintain_test_schema = %w[1 true].exclude?(ENV["DISABLE_TEST_SCHEMA_MAINTENANCE"])
 
   # Raise exceptions instead of rendering exception templates.
   config.action_dispatch.show_exceptions = false

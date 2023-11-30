@@ -19,6 +19,13 @@ require 'graphiti_spec_helpers/rspec'
 require 'view_component/test_helpers'
 require 'view_component/system_test_helpers'
 
+require "test_prof/recipes/logging"
+
+TestProf::StackProf.configure do |config|
+  config.format = 'json'
+end
+
+
 # Needed for feature specs
 WebMock.disable_net_connect!(
   allow_localhost: true,

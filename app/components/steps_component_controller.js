@@ -9,10 +9,6 @@ import { Controller } from "controllers"
 
 export default class extends Controller {
 
-  connect() {
-    this.preventKeyboardSubmit()
-  }
-
   activate(event) {
     event.preventDefault()
     event.stopPropagation()
@@ -49,14 +45,6 @@ export default class extends Controller {
       toolbars[0].classList.remove('hidden')
       toolbars[1].classList.add('hidden')
     }
-  }
-
-  preventKeyboardSubmit() {
-    this.element.closest('form').addEventListener('keypress', function(e) {
-      if (e.keyCode === 13) {
-        e.preventDefault();
-      }
-    });
   }
 
   back(event) {

@@ -172,6 +172,8 @@ event:
       - application/zip
     max_file_size: 10 # MB
   globally_visible_by_default: true # previous behaviour
+  participations:
+    delete_additional_information_after_months: 1200
 
 downloads:
   folder: <%= Rails.root.join('tmp', 'downloads') %>

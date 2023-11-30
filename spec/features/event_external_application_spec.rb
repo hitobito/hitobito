@@ -11,7 +11,7 @@ describe :event_external_application do
   it 'creates an external event participation' do
     visit group_public_event_path(group_id: group, id: event)
 
-    within '.row-fluid article:nth-of-type(2)' do
+    within '.row article:nth-of-type(2)' do
       fill_in 'Haupt-E-Mail', with: 'max.muster@hitobito.example.com'
       click_button('Weiter')
     end

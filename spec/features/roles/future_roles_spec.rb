@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe 'Future Roles behaviour' do
+describe 'Future Roles behaviour', js: :true do
 
   let(:top_leader) { people(:top_leader) }
   let(:bottom_member) { people(:bottom_member) }
@@ -39,17 +39,17 @@ describe 'Future Roles behaviour' do
     let(:yesterday) { Time.zone.yesterday }
 
     it 'creates destroyed role when bis is in the past' do
-      sign_in(top_leader)
-      visit group_person_path(bottom_layer, bottom_member)
+      visit group_person_path(bottom_layer, bottom_member, locale: :de)
+
       click_on 'Rolle hinzufügen'
       choose_role 'Member'
       fill_in 'Von', with: yesterday - 3.months
       fill_in 'Bis', with: yesterday
       expect do
         first(:button, 'Speichern').click
-      end.to change { bottom_member.roles.count }.by(1)
+      end.to change { bottom_member.roles.with_deleted.count }.by(1)
       expect(page).to have_content "Rolle Member (Bis #{I18n.l(yesterday)}) für Bottom Member in " \
-        'Bottom One wurde erfolgreich erstellt.'
+        'Bottom One wurde erfolgreich gelöscht.'
     end
   end
 
@@ -148,7 +148,7 @@ describe 'Future Roles behaviour' do
       find('.search-choice-close').click
     end
 
-    it 'can create new future role', :js do
+    it 'can create new future role' do
       visit group_person_path(bottom_layer, bottom_member, locale: :de)
 
       click_on 'Rolle hinzufügen'
@@ -165,7 +165,7 @@ describe 'Future Roles behaviour' do
       expect(role.created_at.to_date).to eq Time.zone.today
     end
 
-    it 'keeps start date when not selecting a role', :js do
+    it 'keeps start date when not selecting a role' do
       visit group_person_path(bottom_layer, bottom_member, locale: :de)
       click_on 'Rolle hinzufügen'
       fill_in 'Von', with: tomorrow
@@ -177,7 +177,7 @@ describe 'Future Roles behaviour' do
       expect(page).to have_field('Von', with: I18n.l(tomorrow))
     end
 
-    it 'can convert type of future role on people list', :js do
+    it 'can convert type of future role on people list' do
       create_future_role
       visit group_people_path(top_group, locale: :de)
       click_on 'Zukünftige (1)'
@@ -192,7 +192,7 @@ describe 'Future Roles behaviour' do
         .and not_change { existing_role_attrs[:convert_on] }
     end
 
-    it 'can convert future role to active role via person show page', :js do
+    it 'can convert future role to active role via person show page' do
       create_future_role
       visit group_person_path(bottom_layer, bottom_member, locale: :de)
       expect(page).to have_css("#{future_roles_aside} h2", text: 'Zukünftige Rollen')

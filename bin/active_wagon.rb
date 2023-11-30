@@ -13,16 +13,25 @@ require 'pathname'
 class Setup
 
   USED_RUBY_VERSION = '3.0.6'
+  USED_NODE_VERSION = '16.15.0'
+  USED_YARN_VERSION = '1.22.19'
 
   def run
-    write_and_copy('.envrc', environment)
     write_and_copy('.tool-versions', <<~TOOL_VERSION)
       ruby #{USED_RUBY_VERSION}
-      nodejs 14.18.1
-      yarn 1.22.19
+      nodejs #{USED_NODE_VERSION}
+      yarn #{USED_YARN_VERSION}
     TOOL_VERSION
     write_and_copy('.ruby-version', USED_RUBY_VERSION)
+
     write('Wagonfile', gemfile)
+    write('.envrc', environment)
+
+    wagons.each do |wagon|
+      write("../hitobito_#{wagon}/.envrc", environment(core: false))
+      FileUtils.touch("../hitobito_#{wagon}/config/environment.rb") # needed for rails-vim
+    end
+
     FileUtils.rm_rf(root.join('tmp'))
   end
 
@@ -32,8 +41,8 @@ class Setup
 
   def write_and_copy(name, content)
     write(name, content)
-    wagons.each do |w|
-      FileUtils.cp(root.join(name), root.join("../hitobito_#{w}")) unless core?
+    (wagons - core_aliases).each do |w|
+      FileUtils.cp(root.join(name), root.join("../hitobito_#{w}"))
     end
   end
 
@@ -60,16 +69,22 @@ class Setup
     GEMFILE
   end
 
-  def environment
+  def environment(core: true)
     <<~DIRENV
       PATH_add bin
       export RAILS_DB_ADAPTER=mysql2
-      export RAILS_DB_NAME=hit_#{wagon}_development
-      export RAILS_TEST_DB_NAME=hit_#{wagon}_test
-      export RAILS_PRODUCTION_DB_NAME=hit_#{wagon}_production
-      export SPRING_APPLICATION_ID=hit_#{wagon}
+      export RAILS_DB_HOST=127.0.0.1
+      export RAILS_DB_PORT=33066
+      export RAILS_DB_USERNAME=hitobito
+      export RAILS_DB_PASSWORD=hitobito
+      export RAILS_DB_NAME=hit_#{wagon}_dev
+      export RAILS_TEST_DB_NAME=hit_#{core ? "core_test" : "#{wagon}_test"}
+      export SPRING_APPLICATION_ID=hit_#{core ? "core" : wagon}
       export RUBYOPT=-W0
       export PRIMARY_WAGON=#{wagon}
+      export DISABLE_SPRING=1
+      export DISABLE_TEST_SCHEMA_MAINTENANCE=1
+      export CAPYBARA_MAX_WAIT_TIME=0.5
       #{'export WAGONS="' + wagons.join(' ') + '"' if wagons.any?}
       log_status "hitobito now uses: #{wagons.any? ? wagons.join(', ') : 'just the core'}"
       source_up
@@ -94,10 +109,6 @@ class Setup
     @available ||= root.parent.entries
       .collect { |x| x.to_s[/hitobito_(.*)/, 1]  }
       .compact.reject(&:empty?) - excluded + core_aliases
-  end
-
-  def core?
-    core_aliases.include?(wagon)
   end
 
   def core_aliases

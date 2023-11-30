@@ -11,22 +11,22 @@ describe AddressesController, js: true do
 
       fill_in 'person_address', with: 'Belp'
 
-      dropdown = find('.typeahead.dropdown-menu')
+      dropdown = find('ul[role="listbox"]')
       expect(dropdown).to have_content('Belpstrasse 3007 Bern')
       expect(dropdown).to have_content('Belpstrasse 3007 Muri b. Bern')
 
-      find('.typeahead.dropdown-menu li', text: 'Belpstrasse 3007 Bern').click
+      find('ul[role="listbox"] li[role="option"]', text: 'Belpstrasse 3007 Bern').click
 
       expect(page).to have_field('person_zip_code', with: '3007')
       expect(page).to have_field('person_town', with: 'Bern')
       expect(page).to have_field('person_address', with: 'Belpstrasse ')
 
       fill_in 'person_address', with: 'Belpstrasse 4'
-      dropdown = find('.typeahead.dropdown-menu')
+      dropdown = find('ul[role="listbox"]')
       expect(dropdown).to have_content('Belpstrasse 40 Bern')
       expect(dropdown).to have_content('Belpstrasse 41 Bern')
 
-      find('.typeahead.dropdown-menu li', text: 'Belpstrasse 41 Bern').click
+      find('ul[role="listbox"] li[role="option"]', text: 'Belpstrasse 41 Bern').click
       expect(page).to have_field('person_address', with: 'Belpstrasse 41')
       expect(page).to have_field('person_zip_code', with: '3007')
       expect(page).to have_field('person_town', with: 'Bern')
@@ -46,7 +46,7 @@ describe AddressesController, js: true do
 
       fill_in 'person_address', with: 'Belp'
 
-      expect(page).to_not have_css('.typeahead.dropdown-menu')
+      expect(page).to_not have_css('ul[role="listbox"]')
     end
   end
 end

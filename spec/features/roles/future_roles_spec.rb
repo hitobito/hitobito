@@ -20,10 +20,7 @@ describe 'Future Roles behaviour' do
   let(:current_roles_aside) { 'section:nth-of-type(2)' }
   let(:future_roles_aside) { 'section:nth-of-type(3)' }
 
-  before do
-    sign_in(top_leader)
-    Capybara.default_max_wait_time = 0.5
-  end
+  before { sign_in(top_leader) }
 
   def create_future_role(person: bottom_member, group: top_group, type: role_type, convert_on: tomorrow)
     Fabricate(:role, type: FutureRole.sti_name, person: person, group: group, convert_on: convert_on, convert_to: type)

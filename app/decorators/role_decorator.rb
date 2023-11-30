@@ -9,20 +9,14 @@ class RoleDecorator < ApplicationDecorator
   decorates :role
 
   def for_aside
-    name = content_tag(:strong, model.to_s)
+    formatted_model_name
+      .then { |markup| with_outdated_info(markup) }
+      .then { |markup| with_termination_line(markup) }
+  end
 
-    if model.outdated?
-      name = safe_join(
-        [helpers.icon(:exclamation_triangle, title: outdated_role_title), name],
-        FormatHelper::EMPTY_STRING)
-    end
-
-    if model.terminated?
-      terminated = content_tag(:span, translate('terminates_on', date: l(model.terminated_on)))
-      name = safe_join([name, terminated].compact, tag.br)
-    end
-
-    name
+  def for_history
+    formatted_model_name(keys: :label)
+      .then { |markup| with_outdated_info(markup) }
   end
 
   def outdated_role_title
@@ -34,6 +28,35 @@ class RoleDecorator < ApplicationDecorator
     end
   end
 
-  alias_method :for_history, :for_aside
+  private
 
+  def with_termination_line(markup)
+    return markup unless model.terminated?
+
+    terminated = content_tag(:span, translate(:terminates_on, date: l(model.terminated_on)))
+    safe_join([markup, terminated].compact, tag.br)
+  end
+
+  def with_outdated_info(markup)
+    return markup unless model.outdated?
+
+    triangle_icon = helpers.icon(:exclamation_triangle, title: outdated_role_title)
+    safe_join([triangle_icon, markup], FormatHelper::EMPTY_STRING)
+  end
+
+  def formatted_model_name(keys: default_model_name_keys)
+    parts = title.parts(*keys)
+    name = content_tag(:strong, title.model_name)
+    parts.any? ? name + content_tag(:span, title.parts.join(' '), class: 'ms-1') : name
+  end
+
+  def default_model_name_keys
+    Role::Title::KEYS.then do |keys|
+      keys.excluding(:delete_on) if model.terminated?
+    end
+  end
+
+  def title
+    @title ||= Role::Title.new(model)
+  end
 end

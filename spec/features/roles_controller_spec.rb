@@ -40,7 +40,7 @@ describe RolesController, js: true do
       expect do
         first(:button, 'Speichern').click
       end.to change { bottom_member.roles.with_deleted.count }.by(1)
-      expect(page).to have_content "Rolle Member (Bis #{I18n.l(yesterday)}) für Bottom Member in " \
+      expect(page).to have_content 'Rolle Member für Bottom Member in ' \
         'Bottom One wurde erfolgreich gelöscht.'
     end
 
@@ -51,7 +51,7 @@ describe RolesController, js: true do
         first(:button, 'Speichern').click
       end.to not_change { bottom_member.roles.with_deleted.count }
         .and not_change { bottom_member.roles.count }
-      expect(page).to have_content "Rolle Member (Bis #{I18n.l(yesterday)}) für Bottom Member in " \
+      expect(page).to have_content 'Rolle Member für Bottom Member in ' \
         'Bottom One wurde erfolgreich gelöscht.'
     end
   end
@@ -66,7 +66,7 @@ describe RolesController, js: true do
       visit edit_group_role_path(group_id: role.group_id, id: role.id)
       fill_in 'Bis', with: tomorrow
       all('form .btn-toolbar').first.click_button 'Speichern'
-      expect(page).to have_content "Rolle Member (Bis #{tomorrow.strftime('%d.%m.%Y')}) für " \
+      expect(page).to have_content 'Rolle Member für ' \
         'Bottom Member in Bottom One wurde erfolgreich aktualisiert'
       expect(role.reload.delete_on).to eq tomorrow
     end

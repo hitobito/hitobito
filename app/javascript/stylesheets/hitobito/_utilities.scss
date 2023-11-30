@@ -6,3 +6,8 @@
 .no-margin {
   margin: 0;
 }
+
+// bootstrap 5 compability
+.ms-1 {
+  margin-left: 0.25rem !important;
+}

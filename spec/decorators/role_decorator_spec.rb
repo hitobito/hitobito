@@ -8,87 +8,173 @@
 require 'spec_helper'
 
 describe RoleDecorator, :draper_with_helpers do
+  let(:group) { groups(:top_group) }
   let(:role) { roles(:top_leader) }
+  let(:role) { Fabricate.build(Group::TopGroup::Leader.sti_name, group: group) }
   let(:today) { Time.zone.local(2023, 11, 13) }
-
+  let(:tomorrow) { Time.zone.tomorrow }
   let(:decorator) { described_class.new(role) }
+  let(:triangle_icon) { 'i.fa.fa-exclamation-triangle' }
+  let(:triangle_title) { node.find_css(triangle_icon)[0].attr('title') }
 
   around do |example|
-    travel_to(today.midnight) { example.run }
+    travel_to(today.midnight) do
+      role.created_at = today.midnight
+      example.run
+    end
   end
 
-  describe 'outdated roles' do
-    let(:tomorrow) { Time.zone.tomorrow }
-    let(:title) { node.find_css('i.fa.fa-exclamation-triangle')[0].attr('title') }
+  describe '#outdated_role_title' do
+    subject(:text) { decorator.outdated_role_title  }
 
+    it 'includes text and delete_on date' do
+      role.delete_on = today
+      expect(text).to eq 'Die Rolle konnte nicht wie geplant am 13.11.2023 terminiert ' \
+        'werden. Falls das Speichern der Rolle diese nicht terminiert, wende dich bitte ' \
+        'an den Support.'
+    end
+
+    context "FutureRole" do
+      let(:role) do
+        Fabricate.build(:future_role, convert_to: group.role_types.first, group: group, convert_on: today)
+      end
+
+      it "includes text and convert_on date" do
+        expect(text).to eq 'Die Rolle konnte nicht wie geplant per 13.11.2023 aktiviert ' \
+          'werden. Falls das Speichern der Rolle diese nicht aktiviert, wende dich bitte an ' \
+          'den Support.'
+      end
+    end
+  end
+
+  describe '#for_aside' do
     subject(:node) { Capybara::Node::Simple.new(decorator.for_aside) }
 
-    it 'wraps role#to_s in strong tag wihtout triangle' do
-      expect(node).to have_css('strong', text: role.to_s)
-      expect(node).not_to have_css('i.fa.fa-exclamation-triangle')
+    it 'includes role type in strong tag' do
+      expect(node).to have_css(:strong, text: 'Leader')
+      expect(node).not_to have_css(triangle_icon)
+      expect(node).not_to have_css(:br)
     end
 
-    context 'role marked for deletion' do
-      it 'does not render triangle if delete_on is in the future' do
-        role.delete_on = tomorrow
-        expect(node).not_to have_css('i.fa.fa-exclamation-triangle')
-      end
-
-      it 'does renders triangle if outdated' do
-        role.delete_on = today
-        expect(node).to have_css('i.fa.fa-exclamation-triangle')
-        expect(node).to have_css('strong', text: role.to_s)
-        expect(title).to eq 'Die Rolle konnte nicht wie geplant am 13.11.2023 terminiert werden. Falls das Speichern der Rolle diese nicht terminiert, wende dich bitte an den Support.'
-      end
+    it 'includes label in span tag' do
+      role.label = 'test'
+      expect(node).to have_css(:strong, text: 'Leader')
+      expect(node).to have_css(:span, class: 'ms-1', text: '(test)')
     end
 
-    context 'role marked for conversion' do
-      let(:group) { groups(:top_group) }
+    it 'includes deletion date in span tag' do
+      role.label = 'test'
+      role.delete_on = tomorrow
+      expect(node).to have_css(:strong, text: 'Leader')
+      expect(role).not_to be_terminated
+      expect(node).to have_css(:span, class: 'ms-1', text: '(test) (bis 14.11.2023)')
+      expect(node).not_to have_css('br + span')
+    end
+
+    it 'includes triangle icon if outdated' do
+      role.delete_on = today
+      expect(node).to have_css(triangle_icon)
+      expect(triangle_title).to eq 'Die Rolle konnte nicht wie geplant am 13.11.2023 terminiert ' \
+        'werden. Falls das Speichern der Rolle diese nicht terminiert, wende dich bitte an ' \
+        'den Support.'
+    end
+
+    it 'includes termination text on seperate line if terminated' do
+      role.label = 'test'
+      expect(role).to receive(:terminatable?).and_return(true)
+      Roles::Termination.new(role: role, terminate_on: tomorrow).call
+      expect(node).to have_css(:strong, text: 'Leader')
+      expect(node).to have_css(:span, class: 'ms-1', text: '(test)')
+      expect(node).to have_css('br + span', text: 'Austritt per 14.11.2023')
+    end
+
+    context "FutureRole" do
       let(:role) do
-        Fabricate.build(:future_role, convert_to: group.role_types.first, group: group)
+        Fabricate.build(:future_role, convert_to: group.role_types.first, group: group, convert_on: tomorrow)
       end
 
-      it 'does not render triangle if delete_on is in the future' do
-        role.convert_on = tomorrow
-        expect(node).not_to have_css('i.fa.fa-exclamation-triangle')
+      it 'includes role type in strong and conversion date in span tag' do
+        expect(node).to have_css(:strong, text: 'Leader')
+        expect(node).to have_css(:span, class: 'ms-1', text: '(ab 14.11.2023)')
+        expect(node).not_to have_css(triangle_icon)
       end
 
-      it 'does renders triangle if outdated' do
+      it 'includes label in span tag' do
+        role.label = 'test'
+        expect(node).to have_css(:strong, text: 'Leader')
+        expect(node).to have_css(:span, class: 'ms-1', text: '(test) (ab 14.11.2023)')
+        expect(node).not_to have_css(triangle_icon)
+      end
+
+      it 'icnludes triangle icon if outdated' do
         role.convert_on = today
-        expect(node).to have_css('i.fa.fa-exclamation-triangle')
-        expect(node).to have_css('strong', text: role.to_s)
-        expect(title).to eq 'Die Rolle konnte nicht wie geplant per 13.11.2023 aktiviert werden. Falls das Speichern der Rolle diese nicht aktiviert, wende dich bitte an den Support.'
+        expect(node).to have_css(triangle_icon)
+        expect(triangle_title).to eq 'Die Rolle konnte nicht wie geplant per 13.11.2023 aktiviert ' \
+          'werden. Falls das Speichern der Rolle diese nicht aktiviert, wende dich bitte an ' \
+          'den Support.'
       end
     end
   end
 
-  context 'terminated role' do
-    let(:context) { double('context') }
-    let(:role) { roles(:bottom_member) }
+  describe '#for_history' do
+    subject(:node) { Capybara::Node::Simple.new(decorator.for_history) }
 
-    [:for_aside, :for_history].each do |method|
-      describe "##{method}" do
-        it 'should return the role name' do
-          assert decorator.terminated? == false
+    it 'includes role type in strong tag' do
+      expect(node).to have_css(:strong, text: 'Leader')
+      expect(node).not_to have_css(triangle_icon)
+    end
 
-          expect(decorator.send(method)).to eq '<strong>Member</strong>'
-        end
+    it 'includes label in span tag' do
+      role.label = 'test'
+      expect(node).to have_css(:strong, text: 'Leader')
+      expect(node).to have_css(:span, class: 'ms-1', text: '(test)')
+    end
 
-        it 'should return the role name and the termination date' do
-          role.write_attribute(:terminated, true)
-          role.deleted_at = today
+    it 'does include triangle if oudated' do
+      role.delete_on = today
+      expect(node).to have_css(triangle_icon)
+      expect(triangle_title).to start_with 'Die Rolle konnte nicht wie geplant'
+    end
 
-          expect(decorator.send(method)).to eq "<strong>Member</strong><br><span>Austritt per #{I18n.l(role.terminated_on)}</span>"
-        end
+    it 'does not include deletion date' do
+      role.delete_on = tomorrow
+      expect(node).to have_css(:strong, text: 'Leader')
+      expect(node).not_to have_text('(bis 14.11.2023)')
+    end
 
-        it 'should return the role name, outdated info and the termination date' do
-          role.write_attribute(:terminated, true)
-          role.delete_on = today
+    it 'does not include termination' do
+      expect(role).to receive(:terminatable?).and_return(true)
+      Roles::Termination.new(role: role, terminate_on: tomorrow).call
+      expect(node).not_to have_text('Austritt per 14.11.2023')
+    end
 
-          outdated_and_terminated_text = "<i title=\"Die Rolle konnte nicht wie geplant am 13.11.2023 terminiert werden. Falls das Speichern der Rolle diese nicht terminiert, wende dich bitte an den Support.\" class=\"fa fa-exclamation-triangle\"></i>&nbsp;<strong>Member (Bis 13.11.2023)</strong><br><span>Austritt per 13.11.2023</span>" 
+    context "FutureRole" do
+      let(:role) do
+        Fabricate.build(:future_role, convert_to: group.role_types.first, group: group, convert_on: tomorrow)
+      end
 
-          expect(decorator.send(method)).to eq outdated_and_terminated_text
-        end
+      it 'includes role type and conversion date' do
+        expect(node).to have_css(:strong, text: 'Leader')
+        expect(node).not_to have_text('(ab 14.11.2023)')
+        expect(node).not_to have_css(triangle_icon)
+      end
+
+      it 'does include triangle if outdated' do
+        role.convert_on = today
+        expect(node).to have_css(triangle_icon)
+        expect(triangle_title).to start_with 'Die Rolle konnte nicht wie geplant'
+      end
+
+      it 'does not include deletion date' do
+        role.delete_on = tomorrow
+        expect(node).to have_css(:strong, text: 'Leader')
+        expect(node).not_to have_text('(bis 14.11.2023)')
+      end
+
+      it 'does not include termination' do
+        expect(role).to receive(:terminatable?).and_return(true)
+        Roles::Termination.new(role: role, terminate_on: tomorrow).call
+        expect(node).not_to have_text('Austritt per 14.11.2023')
       end
     end
   end

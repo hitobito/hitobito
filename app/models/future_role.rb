@@ -22,8 +22,8 @@ class FutureRole < Role
   validates :convert_to, inclusion: { within: :group_role_types }, if: :group
   validates_date :convert_on, on_or_after: -> { Time.zone.today }
 
-  def to_s(_long = nil)
-    "#{convert_to_model_name} (#{formatted_start_date})"
+  def to_s(*args)
+    Role::Title.new(self).to_s
   end
 
   def convert!
@@ -57,11 +57,4 @@ class FutureRole < Role
     attributes.except(*IGNORED_ATTRS).merge(group: group, created_at: Time.zone.now)
   end
 
-  def formatted_start_date
-    I18n.t('global.start_on', date: I18n.l(convert_on))
-  end
-
-  def convert_to_model_name
-    convert_to.constantize.model_name.human
-  end
 end

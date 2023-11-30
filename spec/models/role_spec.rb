@@ -16,6 +16,7 @@
 #  delete_on   :date
 #  deleted_at  :datetime
 #  label       :string(255)
+#  terminated  :boolean          default(FALSE), not null
 #  type        :string(255)      not null
 #  created_at  :datetime
 #  updated_at  :datetime
@@ -255,12 +256,8 @@ describe Role do
       expect(build_role(label: 'test').to_s).to eq 'Leader (test)'
     end
 
-    it 'appends delete_on if set' do
-      expect(build_role(delete_on: date).to_s).to eq 'Leader (Bis 15.11.2023)'
-    end
-
-    it 'combines label and delete_on if both are set' do
-      expect(build_role(label: 'test', delete_on: date).to_s).to eq 'Leader (test) (Bis 15.11.2023)'
+    it 'does not append delete_on if set' do
+      expect(build_role(delete_on: date).to_s).to eq 'Leader'
     end
   end
 

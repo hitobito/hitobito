@@ -153,14 +153,7 @@ class Role < ActiveRecord::Base
   delegate :layer_group, to: :group
 
   def to_s(format = :default)
-    model_name = self.class.label
-    string = label? ? "#{model_name} (#{label})" : model_name
-    string += " (#{formatted_delete_date})" if delete_on
-    if format == :long
-      I18n.t('activerecord.attributes.role.string_long', role: string, group: group.to_s)
-    else
-      string
-    end
+    Title.new(self, format: format).to_s
   end
 
   # Soft destroy if older than certain amount of days, hard if younger.
@@ -299,7 +292,4 @@ class Role < ActiveRecord::Base
     person&.update_attribute(:minimized_at, nil)
   end
 
-  def formatted_delete_date
-    [I18n.t('global.until'), I18n.l(delete_on)].join(' ')
-  end
 end

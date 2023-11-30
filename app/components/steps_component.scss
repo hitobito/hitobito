@@ -12,18 +12,17 @@ ol.step-headers {
 
   li:before {
     content: counter(steps) " ";
-    display: inline-flex;
-    flex-direction: column;
-    justify-content: space-around;
     text-align: center;
     height: 1.5rem;
-    width: 1.75rem;
+    width: 1.5rem;
     margin-right: 0.5em;
     margin-left: 0;
     border-radius: 50%;
-    display: inline-block;
     color: black;
     border: 1px solid black;
+    display: inline-flex;
+    justify-content: space-around;
+    flex-direction: column;
   }
 
   li {

@@ -75,7 +75,8 @@ class Setup
       export RAILS_DB_ADAPTER=mysql2
       export RAILS_DB_HOST=127.0.0.1
       export RAILS_DB_PORT=33066
-      export RAILS_DB_USERNAME=root
+      export RAILS_DB_USERNAME=hitobito
+      export RAILS_DB_PASSWORD=hitobito
       export RAILS_DB_NAME=hit_#{wagon}_dev
       export RAILS_TEST_DB_NAME=hit_#{core ? "core_test" : "#{wagon}_test"}
       export SPRING_APPLICATION_ID=hit_#{core ? "core" : wagon}

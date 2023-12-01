@@ -8,18 +8,16 @@
 require 'spec_helper'
 
 describe SelfRegistration do
-  let(:group) { groups(:top_group) }
   let(:params) { {} }
+  let(:role_type) { Group::TopGroup::Member }
+  let(:group) { groups(:top_group).tap { |g| g.update!(self_registration_role_type: role_type) } }
+
 
   subject(:registration) { build(params) }
 
   def build(params)
     nested_params = { self_registration: params }
     described_class.new(group: group, params: nested_params)
-  end
-
-  before do
-    allow(group).to receive(:self_registration_role_type).and_return(Group::TopGroup::Member)
   end
 
   describe 'constructor' do
@@ -55,15 +53,13 @@ describe SelfRegistration do
     it 'saves person with role without household key' do
       registration.main_person_attributes = { first_name: 'test' }
       expect { registration.save! }.to change { Person.count }.by(1)
-        .and change { Role.count }.by(1)
+        .and change { group.roles.where(type: role_type.sti_name).count }.by(1)
       expect(Person.find_by(first_name: 'test').household_key).to be_nil
-      expect(registration.main_person_role).to be_present
     end
 
     it 'raises if save! fails' do
-      expect_any_instance_of(Person).to receive(:save!).and_raise
-      registration.main_person_attributes = { first_name: 'test', last_name: 'test' }
-      expect { registration.save! }.to raise_error
+      registration.main_person_attributes = { email: 'top.leader@example.com' }
+      expect { registration.save! }.to raise_error(ActiveRecord::RecordInvalid)
     end
   end
 end

@@ -21,60 +21,85 @@ describe SelfRegistration::Housemate do
   end
 
   describe 'validations' do
-    it 'validates 5 fields' do
+    it 'validates 5 fields for presence' do
       expect(mate).not_to be_valid
       expect(mate.errors).to have(5).items
+      expect(mate.errors.attribute_names).to eq [
+        :first_name,
+        :last_name,
+        :email,
+        :birthday
+      ]
     end
 
-    it 'validates first_name' do
+    it 'can control which fields are validated' do
       mate.required_attrs = [:first_name]
       expect(mate).not_to be_valid
-      mate.first_name = 'test'
-      expect(mate).to be_valid
+      expect(mate.errors).to have(1).items
+      expect(mate.errors.attribute_names).to eq [:first_name]
     end
 
     it 'validates email for syntax' do
       mate.required_attrs = [:email]
       mate.email = 'test'
-      expect(mate).not_to be_valid
-      mate.email = 'test@example.com'
-      expect(mate).to be_valid
+      expect(mate).to have(1).error_on(:email)
+      expect(mate.errors[:email]).to eq(["ist nicht gültig"])
     end
 
-    it 'validates email for existing' do
-      Fabricate(:person, email: 'test@example.com')
+    it 'validates email for uniqueness' do
       mate.required_attrs = [:email]
-      expect(mate).not_to be_valid
-      mate.email = 'other@example.com'
-      expect(mate).to be_valid
+      mate.email = 'top_leader@example.com'
+      expect(mate).to have(1).error_on(:email)
+      expect(mate.errors[:email]).to eq(["ist bereits vergeben"])
+    end
+
+    it 'accepts email once in household' do
+      mate.required_attrs = [:email]
+      mate.household_emails = %w(test@example.com)
+      mate.email = 'top.leader@example.com'
+      expect(mate).to have(0).error_on(:email)
     end
 
     it 'validates email only occurs once in household' do
       mate.required_attrs = [:email]
-      mate.household_emails = %w(test@example.com)
-      mate.email = 'test@example.com'
-      expect(mate).to be_valid
-
       mate.household_emails = %w(test@example.com test@example.com)
+      mate.email = 'test@example.com'
+      expect(mate).to have(1).error_on(:email)
+      expect(mate.errors[:email]).to eq(["ist bereits vergeben"])
+    end
+
+    it 'validates role' do
+      group = groups(:top_group)
+      group.update_columns(self_registration_role_type: 'Group::TopLayer::TopAdmin')
+      mate.required_attrs = [:first_name]
+      mate.first_name = 'test'
+      mate.primary_group = group
       expect(mate).not_to be_valid
+      expect(mate).to have(1).error_on(:type)
+      expect(mate.errors[:type]).to eq(['kann hier nicht erstellt werden'])
     end
 
     describe 'person validations' do
-      TestPerson = Class.new(described_class) do # rubocop:disable Lint/ConstantDefinitionInBlock
-        self.attrs += [:zip_code]
-        self.required_attrs = [:email]
-        attr_accessor :zip_code
+      def stub_test_person
+        stub_const("TestPerson", Class.new(described_class) do # rubocop:disable Lint/ConstantDefinitionInBlock
+          self.attrs += [:zip_code]
+          self.required_attrs = [:email]
+          attr_accessor :zip_code
+        end)
       end
+
+      before { stub_test_person }
 
       it 'copies validation errors from person model' do
         person = TestPerson.new(zip_code: 'test')
         expect(person).to have(1).error_on(:zip_code)
+        expect(person.errors[:zip_code]).to eq(['ist nicht gültig'])
       end
 
       it 'does not duplicate errors errors from person model' do
         person = TestPerson.new(email: 'top_leader@example.com')
         expect(person).to have(1).error_on(:email)
-        expect(person.errors['email'].first).to start_with('ist bereits vergeben')
+        expect(person.errors['email']).to eq(['ist bereits vergeben'])
       end
     end
   end
@@ -86,20 +111,30 @@ describe SelfRegistration::Housemate do
     end
 
     it 'reflects on association on person' do
-      expect(mate.class.reflect_on_association(:phone_numbers)).to be_kind_of(ActiveRecord::Reflection::HasManyReflection)
+      expect(mate.class.reflect_on_association(:phone_numbers))
+        .to be_kind_of(ActiveRecord::Reflection::HasManyReflection)
     end
 
     it 'reads human attribute name from person on association on person' do
       expect(mate.class.human_attribute_name(:first_name)).to eq 'Vorname'
     end
+  end
 
-    it 'save! calls save!' do
+  describe '#save!' do
+    let(:role_type) { Group::TopGroup::Member }
+    let(:group) { groups(:top_group).tap { |g| g.update!(self_registration_role_type: role_type) } }
+
+    it 'saves person and role' do
       mate.first_name = 'test'
-      expect { mate.save! }.to change { Person.count }.by(1)
+      mate.primary_group = group
+      expect(mate.person).to be_valid
+      expect { mate.save! }
+        .to change { Person.count }.by(1)
+        .and change { group.roles.where(type: role_type.sti_name).count }.by(1)
     end
 
     it 'save! raises as expected' do
-      expect { mate.save! }.to raise_error
+      expect { mate.save! }.to raise_error(ActiveRecord::RecordInvalid)
     end
   end
 end

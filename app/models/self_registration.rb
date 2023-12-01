@@ -7,7 +7,6 @@
 
 class SelfRegistration
   include ActiveModel::Model
-  extend ActiveModel::Naming
 
   attr_accessor :group, :main_person_attributes, :housemates_attributes, :step, :single
 
@@ -21,9 +20,7 @@ class SelfRegistration
 
   def save!
     Person.transaction do
-      person = main_person.person.tap(&:save!)
-      @role = create_role(person)
-
+      main_person.save!
       yield if block_given?
     end
   end
@@ -34,14 +31,6 @@ class SelfRegistration
 
   def main_person
     @main_person ||= build_person(@main_person_attributes, MainPerson)
-  end
-
-  def main_person_email
-    main_person.email
-  end
-
-  def main_person_role
-    @role
   end
 
   def increment_step
@@ -59,24 +48,8 @@ class SelfRegistration
   private
 
   def build_person(attrs, model_class)
-    attrs = attrs.merge(extra_person_attrs)
-    model_class.new(attrs)
-  end
-
-  def extra_person_attrs
-    { primary_group_id: @group.id }
-  end
-
-  def create_role(person)
-    Role.create!(role_attrs(person))
-  end
-
-  def role_attrs(person)
-    {
-      group: @group,
-      type: @group.self_registration_role_type,
-      person: person
-    }
+    attrs = yield attrs if block_given?
+    model_class.new(attrs.merge(primary_group: group))
   end
 
   def extract_attrs(nested_params, key, array: false)

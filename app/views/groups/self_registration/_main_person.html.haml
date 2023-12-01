@@ -5,7 +5,7 @@
 
 = f.fields_for(:main_person_attributes, f.object.main_person) do |f|
   = field_set_tag do
-    = render('shared/error_messages', errors: f.object.errors, object: f.object)
+    = f.error_messages
 
     - [:first_name, :last_name, :nick_name, :company_name].each do |attr|
       = f.labeled_input_field attr, { required: c.required?(attr) } if c.attr?(attr)

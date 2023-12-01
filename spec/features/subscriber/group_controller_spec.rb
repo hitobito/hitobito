@@ -22,6 +22,8 @@ describe Subscriber::GroupController, js: true do
     # trigger autocomplete
     fill_in 'subscription_subscriber', with: 'Bottom'
 
+    expect(page).to have_selecto('ul[role="listbox"]')
+
     expect(find('ul[role="listbox"]')).to have_content(/Top . Bottom One/)
     expect(find('ul[role="listbox"]')).to have_content(/Bottom One . Group 11/)
 
@@ -40,6 +42,7 @@ describe Subscriber::GroupController, js: true do
       # check role and submit
       check('subscription_role_types_group::bottomgroup::leader')
 
+      expect(page).to have_selector('form .bottom .btn-group', text: 'Speichern')
       all('form .bottom .btn-group').first.click_button 'Speichern'
 
       expect(page).to have_content('Abonnent Bottom One wurde erfolgreich')

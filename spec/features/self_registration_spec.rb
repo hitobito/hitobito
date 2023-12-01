@@ -50,13 +50,13 @@ describe :self_registration, js: true do
       visit group_self_registration_path(group_id: group)
       complete_main_person_form
 
-      expect do
-        click_on 'Registrieren'
-      end.to change { Person.count }.by(1)
+      expect { click_on 'Registrieren' }
+        .to change { Person.count }.by(1)
         .and change { Role.count }.by(1)
         .and change { ActionMailer::Base.deliveries.count }.by(1)
 
-      expect(page).to have_text('Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.')
+      expect(page).to have_text('Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine ' \
+                                'E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.')
 
       person = Person.find_by(email: 'max.muster@hitobito.example.com')
       expect(person).to be_present
@@ -102,7 +102,7 @@ describe :self_registration, js: true do
         complete_main_person_form
         expect do
           click_on 'Registrieren'
-        end.not_to change { Person.count }
+        end.not_to(change { Person.count })
 
         field = page.find_field('Ich erkläre mich mit den folgenden Bestimmungen einverstanden:')
         expect(field.native.attribute('validationMessage')).to eq 'Please check this box if you want to proceed.'

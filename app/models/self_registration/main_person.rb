@@ -22,7 +22,7 @@ class SelfRegistration::MainPerson < SelfRegistration::Housemate
   validate :assert_privacy_policy
 
   def person
-    Person.new(attributes)
+    @person ||= Person.new(attributes)
   end
 
   private

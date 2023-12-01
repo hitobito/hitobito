@@ -68,13 +68,13 @@ class Groups::SelfRegistrationController < ApplicationController
 
     ::Groups::SelfRegistrationNotificationMailer
       .self_registration_notification(group.self_registration_notification_email,
-                                      entry.main_person_role).deliver_later
+                                      entry.main_person.role).deliver_later
   end
 
   def send_password_reset_email
-    return if entry.main_person_email.blank?
+    return if entry.main_person.email.blank?
 
-    Person.send_reset_password_instructions(email: entry.main_person_email)
+    Person.send_reset_password_instructions(email: entry.main_person.email)
   end
 
   def success_message

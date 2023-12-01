@@ -8,23 +8,22 @@
 
 class SelfRegistration::Housemate
   include ActiveModel::Model
-  include ActiveModel::Validations
-  extend ActiveModel::Naming
 
   class_attribute :required_attrs, default: [
     :first_name, :last_name, :email, :birthday
   ]
   class_attribute :attrs, default: required_attrs + [
-    :gender, :primary_group_id, :household_key, :_destroy, :household_emails
+    :gender, :primary_group, :household_key, :_destroy, :household_emails
   ]
 
   attr_accessor(*attrs)
 
+  delegate :gender_label, to: :person
+
   validate :assert_required_attrs
   validate :assert_email, if: -> { required_attrs.include?(:email) }
-  validate :assert_person
-
-  delegate :save!, :gender_label, to: :person
+  validate :assert_person_valid
+  validate :assert_role_valid, if: :primary_group
 
   def self.human_attribute_name(attr, options = {})
     Person.human_attribute_name(attr, options)
@@ -38,8 +37,16 @@ class SelfRegistration::Housemate
     attrs.index_with { |attr| send(attr) }.compact
   end
 
+  def save!
+    person.save! && role.save!
+  end
+
   def person
-    Person.new(attributes.except(:_destroy, :household_emails))
+    @person ||= Person.new(attributes.except(:_destroy, :household_emails))
+  end
+
+  def role
+    @role ||= Role.new(person: person, group: primary_group, type: role_type)
   end
 
   private
@@ -54,12 +61,18 @@ class SelfRegistration::Housemate
     end
   end
 
-  def assert_person
-    person.then do |person|
-      unless person.valid?
-        (person.errors.attribute_names & attrs).each do |attr|
-          errors.add(attr, person.errors[attr]) unless errors.key?(attr)
-        end
+  def assert_role_valid
+    unless role.valid?
+      role.errors.attribute_names.each do |attr|
+        errors.add(attr, role.errors[attr].join(', '))
+      end
+    end
+  end
+
+  def assert_person_valid
+    unless person.valid?
+      (person.errors.attribute_names & attrs).each do |attr|
+        errors.add(attr, person.errors[attr].join(', ')) unless errors.key?(attr)
       end
     end
   end
@@ -71,5 +84,9 @@ class SelfRegistration::Housemate
       end
     end
     present.all?
+  end
+
+  def role_type
+    primary_group.self_registration_role_type
   end
 end

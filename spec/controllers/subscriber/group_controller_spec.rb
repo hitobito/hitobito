@@ -17,47 +17,61 @@ describe Subscriber::GroupController do
   context 'GET query' do
     subject { response.body }
 
-    context 'top group' do
-      before do
-        get :query, params: { q: 'bot', group_id: group.id, mailing_list_id: list.id }
-      end
+    [['with static_name', true], ['with database name', false]].each do |c, s|
+      context c do
+        let(:static_name) { s }
+        let(:label) { group.static_name ? group.class.label : group.name }
 
-      it { is_expected.to match(/Top → Bottom One/) }
-      it { is_expected.to match(/Bottom One → Group 11/) }
-      it { is_expected.to match(/Bottom One → Group 12/) }
-      it { is_expected.to match(/Top → Bottom Two/) }
-      it { is_expected.to match(/Bottom Two → Group 21/) }
-      it { is_expected.not_to match(/Bottom One → Group 111/) }
+        around do |example|
+          group.class.static_name = static_name
 
-      context 'archived bottom layer' do
-        before do
-          groups(:bottom_layer_one).save!
-          groups(:bottom_layer_one).archive!
-          get :query, params: { q: 'bot', group_id: group.id, mailing_list_id: list.id }
+          example.run
+
+          group.class.static_name = false
         end
 
-        it { is_expected.to_not match(/Top → Bottom One/) }
-        it { is_expected.to_not match(/Bottom One → Group 11/) }
-        it { is_expected.to_not match(/Bottom One → Group 12/) }
+        context 'top group' do
+          before do
+            get :query, params: { q: 'bot', group_id: group.id, mailing_list_id: list.id }
+          end
+
+          it { is_expected.to match(/#{label} → Bottom One/) }
+          it { is_expected.to match(/Bottom One → Group 11/) }
+          it { is_expected.to match(/Bottom One → Group 12/) }
+          it { is_expected.to match(/#{label} → Bottom Two/) }
+          it { is_expected.to match(/Bottom Two → Group 21/) }
+          it { is_expected.not_to match(/Bottom One → Group 111/) }
+
+          context 'archived bottom layer' do
+            before do
+              groups(:bottom_layer_one).save!
+              groups(:bottom_layer_one).archive!
+              get :query, params: { q: 'bot', group_id: group.id, mailing_list_id: list.id }
+            end
+
+            it { is_expected.to_not match(/Top → Bottom One/) }
+            it { is_expected.to_not match(/Bottom One → Group 11/) }
+            it { is_expected.to_not match(/Bottom One → Group 12/) }
+          end
+        end
+
+        context 'bottom layer' do
+          let(:group) { groups(:bottom_layer_one) }
+          let(:list) { MailingList.create!(group: group, name: 'bottom_layer') }
+
+          before do
+            Group::BottomLayer::Leader.create!(group: group, person: people(:top_leader))
+            get :query, params: { q: 'bot', group_id: group.id, mailing_list_id: list.id }
+          end
+
+          it 'does not include sister group or their descendants' do
+            is_expected.to match(/Top → #{label}/)
+            is_expected.not_to match(/Top → Bottom Two/)
+            is_expected.not_to match(/Bottom Two → Group 21/)
+          end
+        end
       end
     end
-
-    context 'bottom layer' do
-      let(:group) { groups(:bottom_layer_one) }
-      let(:list) { MailingList.create!(group: group, name: 'bottom_layer') }
-
-      before do
-        Group::BottomLayer::Leader.create!(group: group, person: people(:top_leader))
-        get :query, params: { q: 'bot', group_id: group.id, mailing_list_id: list.id }
-      end
-
-      it 'does not include sister group or their descendants' do
-        is_expected.to match(/Top → Bottom One/)
-        is_expected.not_to match(/Top → Bottom Two/)
-        is_expected.not_to match(/Bottom Two → Group 21/)
-      end
-    end
-
   end
 
   context 'GET roles.js' do

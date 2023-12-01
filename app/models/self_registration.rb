@@ -68,11 +68,15 @@ class SelfRegistration
   end
 
   def create_role(person)
-    Role.create!(
+    Role.create!(role_attrs(person))
+  end
+
+  def role_attrs(person)
+    {
       group: @group,
       type: @group.self_registration_role_type,
       person: person
-    )
+    }
   end
 
   def extract_attrs(nested_params, key, array: false)

@@ -68,6 +68,7 @@ config.lograge_activejob.custom_options = lambda do |event|
   end
 end
 
+config.lograge_sql.keep_default_active_record_log = !Rails.env.production?
 config.lograge_sql.extract_event = lambda do |event|
   # to include actual query: `sql: event.payload[:sql]`
   { name: event.payload[:name], duration: event.duration.to_f.round(2) }

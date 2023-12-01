@@ -6,6 +6,7 @@
 *  Eigener JSON:API Endpoint für Gruppen (hitobito#2243)
 *  Personendaten können basierend von Spezifikationen im Wagon automatisiert gelöscht werden. Standardmässig abgestellt (#2106)
 *  Rollen können mit dem class attribute `terminatable`, markiert werden, dass sie von der Person selbstständig beendet werden können (hitobito_sac_cas#133)
+*  Die Bemerkungen einer Anlassteilnahme können automatisiert nach einer gewissen Zeit gelöscht werden. Standardmässig abgestellt (#2129)
 
 ## Version 1.30
 

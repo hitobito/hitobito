@@ -9,7 +9,7 @@ describe AddressesController, js: true do
 
       visit edit_group_person_path(member.groups.first, member)
 
-      fill_in 'person_address', with: 'Belp'
+      fill_in 'Adresse', with: 'Belp'
 
       dropdown = find('ul[role="listbox"]')
       expect(dropdown).to have_content('Belpstrasse 3007 Bern')
@@ -19,21 +19,22 @@ describe AddressesController, js: true do
 
       expect(page).to have_field('person_zip_code', with: '3007')
       expect(page).to have_field('person_town', with: 'Bern')
-      expect(page).to have_field('person_address', with: 'Belpstrasse ')
+      expect(page).to have_field('Adresse', with: 'Belpstrasse ')
 
-      fill_in 'person_address', with: 'Belpstrasse 4'
+      fill_in 'Adresse', with: 'Belpstrasse 4'
       dropdown = find('ul[role="listbox"]')
       expect(dropdown).to have_content('Belpstrasse 40 Bern')
       expect(dropdown).to have_content('Belpstrasse 41 Bern')
 
       find('ul[role="listbox"] li[role="option"]', text: 'Belpstrasse 41 Bern').click
-      expect(page).to have_field('person_address', with: 'Belpstrasse 41')
+
+      expect(page).to have_field('Adresse', with: 'Belpstrasse 41')
       expect(page).to have_field('person_zip_code', with: '3007')
       expect(page).to have_field('person_town', with: 'Bern')
     end
   end
 
-  it 'shows no typeahead on non supported country' do
+  it 'shows no autocomplete on non supported country' do
     obsolete_node_safe do
       index_sphinx
       sign_in
@@ -41,10 +42,10 @@ describe AddressesController, js: true do
 
       visit edit_group_person_path(member.groups.first, member)
 
-      find('#person_country_chosen').click
-      find('#person_country_chosen ul.chosen-results li.active-result', text: 'Vereinigte Staaten').click
+      find('#person_country').click
+      find('#person_country_chosen div.ts-dropdown div.option', text: 'Vereinigte Staaten').click
 
-      fill_in 'person_address', with: 'Belp'
+      fill_in 'Adresse', with: 'Belp'
 
       expect(page).to_not have_css('ul[role="listbox"]')
     end

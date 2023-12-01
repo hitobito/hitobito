@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe Role::Title do
+describe Roles::Title do
   let(:group) { groups(:bottom_layer_one) }
   let(:date) { Date.new(2023, 11, 15) }
 

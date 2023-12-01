@@ -51,12 +51,12 @@ class RoleDecorator < ApplicationDecorator
   end
 
   def default_model_name_keys
-    Role::Title::KEYS.then do |keys|
+    Roles::Title::KEYS.then do |keys|
       keys.excluding(:delete_on) if model.terminated?
     end
   end
 
   def title
-    @title ||= Role::Title.new(model)
+    @title ||= Roles::Title.new(model)
   end
 end

@@ -106,7 +106,7 @@ describe RoleDecorator, :draper_with_helpers do
         expect(node).not_to have_css(triangle_icon)
       end
 
-      it 'icnludes triangle icon if outdated' do
+      it 'includes triangle icon if outdated' do
         role.convert_on = today
         expect(node).to have_css(triangle_icon)
         expect(triangle_title).to eq 'Die Rolle konnte nicht wie geplant per 13.11.2023 aktiviert ' \

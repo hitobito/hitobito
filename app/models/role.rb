@@ -153,7 +153,7 @@ class Role < ActiveRecord::Base
   delegate :layer_group, to: :group
 
   def to_s(format = :default)
-    Title.new(self, format: format).to_s
+    Roles::Title.new(self, format: format).to_s
   end
 
   # Soft destroy if older than certain amount of days, hard if younger.

@@ -5,7 +5,7 @@
 # or later. See the COPYING file at the top-level directory or at
 # https://github.com/hitobito/hitobito
 
-class Role::Title
+class Roles::Title
   delegate :group, :convert_to, :convert_on, :convert_on?, :delete_on, :delete_on?, :label, :label?,
     to: '@role'
 

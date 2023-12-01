@@ -23,7 +23,7 @@ class FutureRole < Role
   validates_date :convert_on, on_or_after: -> { Time.zone.today }
 
   def to_s(*args)
-    Role::Title.new(self).to_s
+    Roles::Title.new(self).to_s
   end
 
   def convert!

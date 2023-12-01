@@ -14,7 +14,6 @@ describe Group::DeletedPeopleController, js: true do
   subject { page }
 
   context 'inline creation of role' do
-
     let(:group) { groups(:bottom_layer_one) }
     let(:row)   { find('#content table.table').all('tr').last }
     let(:cell)  { row.all('td')[2] }
@@ -39,6 +38,7 @@ describe Group::DeletedPeopleController, js: true do
     it 'cancel closes popover' do
       obsolete_node_safe do
         click_link 'Abbrechen'
+        sleep(2)
         expect(page).to have_no_css('.popover')
       end
     end

@@ -258,7 +258,7 @@ describe RolesController, js: true do
 
       # Expect role field to have no more roles than person has in db
       person_db_role_count = person_with_two_roles.roles.count
-      expect(person_with_two_roles_row.find_all('td[style="display: table-cell;"] > p').count).to eq(person_db_role_count)
+      expect(person_with_two_roles_row.find_all('td > p > span').count).to eq(person_db_role_count)
     end
   end
 

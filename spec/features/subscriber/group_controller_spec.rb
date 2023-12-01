@@ -22,7 +22,7 @@ describe Subscriber::GroupController, js: true do
     # trigger autocomplete
     fill_in 'subscription_subscriber', with: 'Bottom'
 
-    expect(page).to have_selecto('ul[role="listbox"]')
+    expect(page).to have_selector('ul[role="listbox"]')
 
     expect(find('ul[role="listbox"]')).to have_content(/Top . Bottom One/)
     expect(find('ul[role="listbox"]')).to have_content(/Bottom One . Group 11/)

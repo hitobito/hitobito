@@ -38,7 +38,7 @@ module Release
     end
 
     def submodules(action)
-      notify 'executing action in all submodule'
+      notify "executing '#{action}' in all submodules"
       execute "git submodule foreach '#{action}'"
     end
 

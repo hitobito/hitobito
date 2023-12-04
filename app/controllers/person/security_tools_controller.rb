@@ -13,6 +13,8 @@ class Person::SecurityToolsController < ApplicationController
   DATALEAK_SOLUTION = 'dataleak_solution_id'
   SUSPEND_PERSON_SITUATION = 'suspend_person_situation_id'
   SUSPEND_PERSON_SOLUTION = 'suspend_person_solution_id'
+  BLOCKED_PERSON_SITUATION = 'blocked_person_situation_id'
+  BLOCKED_PERSON_SOLUTION = 'blocked_person_solution_id'
 
   before_action :authorize_action
 
@@ -22,7 +24,8 @@ class Person::SecurityToolsController < ApplicationController
   :password_compromised_situation_text, :password_compromised_solution_text,
   :email_compromised_situation_text, :email_compromised_solution_text,
   :dataleak_situation_text, :dataleak_solution_text,
-  :suspend_person_situation_text, :suspend_person_solution_text
+  :suspend_person_situation_text, :suspend_person_solution_text,
+  :blocked_person_situation_text, :blocked_person_solution_text
 
   def index
     respond_to do |format|
@@ -48,6 +51,7 @@ class Person::SecurityToolsController < ApplicationController
 
   def block_person
     if !herself? && !herself_through_impersonation? && person.update!(blocked_at: Time.zone.now)
+      PaperTrail::Version.create(main: person, item: person, whodunnit: current_user, event: :block_person)
       redirect_to security_tools_group_person_path(group, person), notice: t('.flashes.success')
     else
       redirect_to security_tools_group_person_path(group, person), alert: t('.flashes.error')
@@ -56,6 +60,7 @@ class Person::SecurityToolsController < ApplicationController
 
   def unblock_person
     if !herself? && !herself_through_impersonation? && person.update!(blocked_at: nil)
+      PaperTrail::Version.create(main: person, item: person, whodunnit: current_user, event: :unblock_person)
       redirect_to security_tools_group_person_path(group, person), notice: t('.flashes.success')
     else
       redirect_to security_tools_group_person_path(group, person), alert: t('.flashes.error')
@@ -113,6 +118,8 @@ class Person::SecurityToolsController < ApplicationController
     @dataleak_solution_text = get_content(Person::SecurityToolsController::DATALEAK_SOLUTION)
     @suspend_person_situation_text = get_content(Person::SecurityToolsController::SUSPEND_PERSON_SITUATION)
     @suspend_person_solution_text = get_content(Person::SecurityToolsController::SUSPEND_PERSON_SOLUTION)
+    @blocked_person_situation_text = get_content(Person::SecurityToolsController::BLOCKED_PERSON_SITUATION)
+    @blocked_person_solution_text = get_content(Person::SecurityToolsController::BLOCKED_PERSON_SOLUTION)
   end
   # rubocop:enable Layout/LineLength
 

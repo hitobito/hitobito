@@ -34,6 +34,12 @@ CustomContent.seed_once(
   { key: Person::SecurityToolsController::SUSPEND_PERSON_SOLUTION,
     placeholders_required: 'person-name',
     placeholders_optional: nil },
+  { key: Person::SecurityToolsController::BLOCKED_PERSON_SITUATION,
+    placeholders_required: 'person-name',
+    placeholders_optional: nil },
+  { key: Person::SecurityToolsController::BLOCKED_PERSON_SOLUTION,
+    placeholders_required: 'person-name',
+    placeholders_optional: nil },
   { key: Event::ParticipationMailer::CONTENT_CONFIRMATION,
     placeholders_required: 'event-details, application-url',
     placeholders_optional: 'recipient-name' },
@@ -102,6 +108,8 @@ dataleak_situation_id = CustomContent.get(Person::SecurityToolsController::DATAL
 dataleak_solution_id = CustomContent.get(Person::SecurityToolsController::DATALEAK_SOLUTION).id
 suspend_person_situation_id = CustomContent.get(Person::SecurityToolsController::SUSPEND_PERSON_SITUATION).id
 suspend_person_solution_id = CustomContent.get(Person::SecurityToolsController::SUSPEND_PERSON_SOLUTION).id
+blocked_person_situation_id = CustomContent.get(Person::SecurityToolsController::BLOCKED_PERSON_SITUATION).id
+blocked_person_solution_id = CustomContent.get(Person::SecurityToolsController::BLOCKED_PERSON_SOLUTION).id
 participation_confirmation_id = CustomContent.get(Event::ParticipationMailer::CONTENT_CONFIRMATION).id
 participation_pending_id = CustomContent.get(Event::ParticipationMailer::CONTENT_PENDING).id
 participation_notification_id = CustomContent.get(Event::ParticipationMailer::CONTENT_NOTIFICATION).id
@@ -320,6 +328,42 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
   {custom_content_id: suspend_person_solution_id,
    locale: 'en',
    label: 'Delete main email'},
+
+  {custom_content_id: blocked_person_situation_id,
+   locale: 'de',
+   label: 'Person blockieren',
+   subject: 'Sicherheitsübersicht: Person entblockieren?',
+   body: "TBD"},
+
+  {custom_content_id: blocked_person_situation_id,
+   locale: 'fr',
+   label: 'TBD'},
+
+  {custom_content_id: blocked_person_situation_id,
+   locale: 'it',
+   label: 'TBD'},
+
+  {custom_content_id: blocked_person_situation_id,
+   locale: 'en',
+   label: 'TBD'},
+
+  {custom_content_id: blocked_person_solution_id,
+   locale: 'de',
+   label: 'Person enblockieren',
+   subject: 'TBD',
+   body: "Person {person-name} enblockieren" },
+
+  {custom_content_id: blocked_person_solution_id,
+   locale: 'fr',
+   label: 'Débloquer la personne'},
+
+  {custom_content_id: blocked_person_solution_id,
+   locale: 'it',
+   label: 'Sbloccare persona'},
+
+  {custom_content_id: blocked_person_solution_id,
+   locale: 'en',
+   label: 'Unblock person'},
 
   {custom_content_id: participation_confirmation_id,
    locale: 'de',

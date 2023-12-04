@@ -416,6 +416,11 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     email == Settings.root_email
   end
 
+  # Is this person blocked?
+  def blocked?
+    blocked_at.present?
+  end
+
   ### OTHER INSTANCE METHODS
 
   def save(**) # rubocop:disable Rails/ActiveRecordOverride Overwritten to handle uniqueness validation race conditions

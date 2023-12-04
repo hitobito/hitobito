@@ -25,7 +25,9 @@ module PeopleHelper
         password_email_sent: 'user-clock',
         login: 'user-check',
         two_factors: 'user-shield',
-        status_off: 'minus-circle'
+        status_off: 'minus-circle',
+        blocked: 'lock',
+        not_blocked: 'lock-open'
     }
     icon(
         icons.fetch(status),

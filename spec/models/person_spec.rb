@@ -864,4 +864,16 @@ describe Person do
       expect(person.self_registration_reason_text).to be_nil
     end
   end
+
+  describe "#blocked?" do
+    it 'returns true if blocked_at is present' do
+      person = Fabricate.build(:person, blocked_at: Time.zone.now)
+      expect(person.blocked?).to be_truthy
+    end
+
+    it 'returns false if blocked_at is blank' do
+      person = Fabricate.build(:person, blocked_at: nil)
+      expect(person.blocked?).to be_falsey
+    end
+  end
 end

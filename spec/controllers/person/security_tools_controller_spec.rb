@@ -75,13 +75,7 @@ describe Person::SecurityToolsController do
     end
 
     it 'logs a message with paper_trail' do
-      pending
       expect { block_person }.to change { PaperTrail::Version.count }.by(1)
-    end
-
-    it 'notifies the user' do
-      pending
-      expect { block_person }.to change { ActionMailer::Base.deliveries.count }.by(1)
     end
 
     context 'without permissions' do
@@ -123,15 +117,16 @@ describe Person::SecurityToolsController do
     subject(:unblock_person) { post :unblock_person, params: nesting }
 
     it 'resets the blocked_at attribute' do
-      person.update(blocked_at: 1.month.ago)
+      person.update(blocked_at: 1.month.ago, inactivity_block_warning_sent_at: 2.months.ago)
       unblock_person
       expect(response).to redirect_to(security_tools_group_person_path(person.primary_group.id, person.id))
       expect(flash[:notice]).to eq(I18n.t('person.security_tools.unblock_person.flashes.success'))
-      expect(person.reload.blocked_at).to be_nil
+      person.reload
+      expect(person.blocked_at).to be_nil
+      expect(person.inactivity_block_warning_sent_at).to be_nil
     end
 
     it 'logs a message with paper_trail' do
-      pending
       expect { unblock_person }.to change { PaperTrail::Version.count }.by(1)
     end
 

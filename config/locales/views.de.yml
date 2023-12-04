@@ -1462,6 +1462,12 @@ de:
         groups_and_roles_that_see_me: Rollen, die auf mich Zugriff haben
         load_roles_that_see_me: 'Gruppen und Rollen laden'
         load_roles_that_see_me_hint: 'Dies kann einige Sekunden dauern'
+        block_person: Zugang blockieren
+        confirm_block_person: "Achtung: Damit kann sich diese Person nicht mehr einloggen. Willst du das wirklich?"
+        unblock_person: Zugang entblockieren
+        confirm_unblock_person: "Achtung: Damit kann ist die Person nicht mehr blockiert. Willst du das wirklich?"
+        person_blocked: Zugang ist blockiert
+        person_not_blocked: Zugang ist nicht blockiert
 
       password_override:
         flashes:
@@ -1643,6 +1649,8 @@ de:
       login: Login ist aktiv
       two_factors: Login mit 2FA ist aktiv
       status_off: Nicht vorhanden
+      blocked: Blockiert
+      not_blocked: Nicht blockiert
 
   participations:
     destroy:

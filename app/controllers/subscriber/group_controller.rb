@@ -47,10 +47,17 @@ module Subscriber
     def groups_query
       possible = Subscription.new(mailing_list: @mailing_list).possible_groups
       possible.where(search_condition('groups.name', 'parents_groups.name')).
+               or(possible.where(id: group_ids_by_static_name(possible))).
                includes(:parent).
                references(:parent).
                reorder("#{Group.quoted_table_name}.lft").
                limit(10)
+    end
+
+    def group_ids_by_static_name(possible)
+      possible.select do |group|
+        group.static_name && group.class.label.downcase.include?(search_param.downcase)
+      end.collect(&:id)
     end
 
     def assign_attributes

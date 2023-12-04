@@ -75,11 +75,13 @@ module HitobitoDelayedJobs
       DownloadCleanerJob,
       Payments::EbicsImportJob,
       People::DuplicateLocatorJob,
+      People::CleanupJob,
       People::CreateRolesJob,
       People::DestroyRolesJob,
       ReoccuringMailchimpSynchronizationJob,
       SessionsCleanerJob,
-      WorkerHeartbeatCheckJob
+      WorkerHeartbeatCheckJob,
+      Event::ParticipationCleanupJob
     ]
   end
 

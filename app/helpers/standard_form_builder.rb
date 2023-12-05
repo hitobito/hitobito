@@ -52,7 +52,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     elsif respond_to?(custom_field_method)
       send(custom_field_method, attr, html_options)
     else
-      html_options[:class] = html_options[:class].to_s + ' form-control form-control-sm mw-100 mw-md-60ch '
+      html_options[:class] = html_options[:class].to_s +
+          ' form-control form-control-sm mw-100 mw-md-60ch '
       text_field(attr, html_options)
     end
   end

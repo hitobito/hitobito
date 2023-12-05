@@ -481,7 +481,7 @@ li.form {
   }
 
   .bottom.allign-with-form {
-    margin-left: 0;
+    margin-left: 0 !important;
   }
 }
 
@@ -497,7 +497,7 @@ li.form {
   }
 
   .allign-with-form {
-    margin-left: 0%;
+    margin-left: 0 !important;;
   }
 }
 
@@ -510,7 +510,7 @@ li.form {
   }
 
   .allign-with-form {
-    margin-left: 26%;
+    margin-left: 26% !important;;
   }
 }
 
@@ -523,7 +523,7 @@ li.form {
   }
 
   .allign-with-form {
-    margin-left: 26%;
+    margin-left: 26% !important;;
   }
 }
 
@@ -536,7 +536,7 @@ li.form {
   }
 
   .allign-with-form {
-    margin-left: 17%;
+    margin-left: 17% !important;;
   }
 }
 
@@ -788,4 +788,9 @@ label.required::after {
 .fields > div > .inline > input,
 .fields > div > .inline > div > input {
   width: 90%
+}
+
+.hidden {
+  display: none;
+  visibility: hidden;
 }

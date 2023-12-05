@@ -109,7 +109,7 @@ class StepsComponent < ApplicationComponent
 
     def back_link
       data = { action: stimulus_action(:back), index: index - 1 }
-      link_to(t('global.button.back'), '#', class: 'link cancel', data: data)
+      link_to(t('global.button.back'), '#', class: 'link cancel mt-2 pt-1', data: data)
     end
 
     private

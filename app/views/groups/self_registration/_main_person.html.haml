@@ -53,8 +53,10 @@
     - if c.attr?(:phone_number_attributes)
       = field_set_tag do
         = f.labeled_inline_fields_for :phone_numbers do |ff|
-          = ff.input_field(:number, class: 'span4', placeholder: PhoneNumber.human_attribute_name(:number))
-          = ff.collection_select(:translated_label, PhoneNumber.available_labels, :to_s, :to_s, {}, class: 'span2')
+          %div.col-5.inline
+            = ff.input_field(:number, placeholder: PhoneNumber.human_attribute_name(:number))
+          %div.col-2.inline.row
+            = ff.collection_select(:translated_label, PhoneNumber.available_labels, :to_s, :to_s, {}, class: 'form-select form-select-sm h-100')
           = ff.hidden_field(:public)
 
     - if c.attr?(:additional_information)

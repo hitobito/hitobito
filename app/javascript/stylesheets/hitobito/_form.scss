@@ -479,6 +479,10 @@ li.form {
       }
     }
   }
+
+  .bottom.allign-with-form {
+    margin-left: 0;
+  }
 }
 
 @media screen and (min-width: 480px) and (max-width: 768px) {
@@ -491,6 +495,10 @@ li.form {
       }
     }
   }
+
+  .allign-with-form {
+    margin-left: 0%;
+  }
 }
 
 @media screen and (min-width: 768px) and (max-width: 980px) {
@@ -499,6 +507,10 @@ li.form {
   .uneditable-input.col-6,
   .col-6.input-span6 {
     width: calc(100vw - 550px);
+  }
+
+  .allign-with-form {
+    margin-left: 26%;
   }
 }
 
@@ -509,6 +521,10 @@ li.form {
   .col-6.input-span6 {
     width: 446px;
   }
+
+  .allign-with-form {
+    margin-left: 26%;
+  }
 }
 
 @media screen and (min-width: 1200px) {
@@ -517,6 +533,10 @@ li.form {
   .uneditable-input.col-6,
   .col-6.input-span6 {
     width: 570px;
+  }
+
+  .allign-with-form {
+    margin-left: 17%;
   }
 }
 

@@ -20,23 +20,25 @@
 
     - if c.attr?(:zip_code)
       = f.labeled(:zip_code, t('contactable.fields.zip_town'), required: c.required?(:zip_code)) do
-        .zip-code-and-town-input-fields.address-input-fields.span6.input-span6
-          = f.string_field(:zip_code, class: 'span-none zip-code-field', maxlength: 10, required: c.required?(:zip_code))
-          = f.string_field(:town, class: 'span-none town-field', required: c.required?(:zip_code))
+        .zip-code-and-town-input-fields.address-input-fields.row
+          .col-1
+            = f.string_field(:zip_code, class: 'span-none zip-code-field', maxlength: 10, required: c.required?(:zip_code))
+          .col-3
+            = f.string_field(:town, class: 'span-none town-field', required: c.required?(:zip_code))
 
       = f.labeled(:country, required: required) do
-        .span6.input-span6.shown{style: 'margin-left: 0px'}
+        .shown.ms-0
           = f.country_select('country',
                           { priority_countries: Settings.countries.prioritized,
                             selected: f.object.country.presence || Settings.addresses.imported_countries.first,
-                            include_blank: false },
-                          { class: 'chosen-select',
+                          },
+                          { class: 'form-select form-select-sm tom-select',
                             data: { placeholder: ' ',
                                     chosen_no_results: t('global.chosen_no_results'),
                                     typeahead_supported_countries: Settings.addresses.imported_countries } })
 
     - if c.attr?(:email)
-      = f.labeled_input_field :email, help_inline: t('people.email_field.used_as_login'), required: c.required?(:email)
+      = f.labeled_input_field :email, help_inline: t('people.email_field.used_as_login'), required: c.required?(:email), class: 'd-inline'
 
     - if c.attr?(:gender)
       = field_set_tag do
@@ -65,6 +67,6 @@
 
   = render_extensions :main_person, f: f
 
-.btn-toolbar.bottom
+.btn-toolbar.bottom.allign-with-form
   = c.next_button
 

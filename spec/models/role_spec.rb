@@ -330,6 +330,64 @@ describe Role do
     end
   end
 
+  context '#end_on' do
+    let(:tomorrow) { Time.zone.tomorrow }
+    let(:today) { Time.zone.today }
+
+    def build(attrs = {})
+      Fabricate.build(:'Group::BottomLayer::Leader', attrs)
+    end
+
+    it 'returns nil if delete_on and deleted_at is nil' do
+      expect(build.end_on).to be_nil
+    end
+
+    it 'returns delete_on if delete_on is present and deleted_at is nil' do
+      expect(build(delete_on: tomorrow).end_on).to eq tomorrow
+    end
+
+    it 'returns deleted_at if deleted_at is present and delete_on is nil' do
+      expect(build(deleted_at: 1.day.ago).end_on).to eq Time.zone.yesterday
+    end
+
+    it 'returns delete_on if delete_on and deleted_at is set' do
+      expect(build(deleted_at: 1.day.ago, delete_on: tomorrow).end_on).to eq tomorrow
+    end
+  end
+
+  context '#active_period' do
+    let(:tomorrow) { Time.zone.tomorrow }
+    let(:today) { Time.zone.today }
+
+    def build(attrs = {})
+      Fabricate.build(:'Group::BottomLayer::Leader', attrs)
+    end
+
+    it 'returns today..nil if created_at and convert_on is nil' do
+      expect(build.active_period).to eq today..nil
+    end
+
+    it 'returns created_at..nil if created_at is present and convert_on is nil' do
+      expect(build(created_at: 1.day.ago).active_period).to eq Time.zone.yesterday..nil
+    end
+
+    it 'returns convert_on..nil if convert_on and created_at is set' do
+      expect(build(created_at: 1.day.ago, convert_on: tomorrow).active_period).to eq tomorrow..nil
+    end
+
+    it 'returns today..delete_on if delete_on and deleted_at is nil' do
+      expect(build(delete_on: tomorrow).active_period).to eq today..tomorrow
+    end
+
+    it 'returns today..deleted_at if deleted_at is present and delete_on is nil' do
+      expect(build(deleted_at: 1.day.ago).active_period).to eq today..Time.zone.yesterday
+    end
+
+    it 'returns today..delete_on if delete_on and deleted_at is set' do
+      expect(build(deleted_at: 1.day.ago, delete_on: tomorrow).active_period).to eq today..tomorrow
+    end
+  end
+
   context '#create' do
     let(:person) { people(:top_leader) }
 

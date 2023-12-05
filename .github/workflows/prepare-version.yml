@@ -25,6 +25,11 @@ on:
         required: false
         type: string
         default: "master"
+      dry_run:
+        description: "Only show commands to prepare, do not execute them"
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -143,8 +148,9 @@ jobs:
         env:
           NEXT_VERSION: ${{ needs.version.outputs.version }}
           RELEASE_STAGE: ${{ inputs.stage }}
+          DRY_RUN: ${{ inputs.dry_run == 'true' && '-n' || '' }}
         run: |
-          echo "Preparing $NEXT_VERSION for $RELEASE_STAGE"
+          echo "Preparing $NEXT_VERSION for $RELEASE_STAGE $DRY_RUN"
 
           release version
-          release "$RELEASE_STAGE" "$NEXT_VERSION"
+          release "$RELEASE_STAGE" "$NEXT_VERSION" "$DRY_RUN"

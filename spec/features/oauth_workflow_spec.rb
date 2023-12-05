@@ -23,7 +23,7 @@ describe 'OauthWorkflow' do
   end
 
   it 'creates access_grant for the user' do
-    skip("window_handles not supported on travis")
+    skip "window_handles not supported on travis"
     app = Oauth::Application.create!(name: 'MyApp', redirect_uri: redirect_uri)
     visit oauth_application_path(app)
     click_link 'Autorisierungen'

@@ -81,7 +81,7 @@ describe Subscriber::GroupController, js: true do
 
     it 'assigns multiple included tags' do
       obsolete_node_safe do
-        skip("doesnt load options for select")
+        skip "doesnt load options for select"
         collection_select = find('#subscription_included_subscription_tags_ids + div .ts-control')
 
         expect(collection_select).to have_no_selector('div.item')
@@ -109,7 +109,7 @@ describe Subscriber::GroupController, js: true do
 
     it 'assigns multiple excluded tags' do
       obsolete_node_safe do
-        skip("doesnt load options for select")
+        skip "doesnt load options for select"
         collection_select = find('#subscription_excluded_subscription_tags_ids + div .ts-control')
 
         expect(collection_select).to have_no_selector('div.item')
@@ -135,7 +135,7 @@ describe Subscriber::GroupController, js: true do
 
     it 'assigns same tag as excluded and included' do
       obsolete_node_safe do
-        skip("doesnt load options for select")
+        skip "doesnt load options for select"
         excluded_collection_select = find('#subscription_excluded_subscription_tags_ids + div .ts-control')
 
         expect(excluded_collection_select).to have_no_selector('div.item')

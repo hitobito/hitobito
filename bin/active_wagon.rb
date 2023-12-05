@@ -80,11 +80,8 @@ class Setup
       export RAILS_DB_NAME=hit_#{wagon}_dev
       export RAILS_TEST_DB_NAME=hit_#{core ? "core_test" : "#{wagon}_test"}
       export SPRING_APPLICATION_ID=hit_#{core ? "core" : wagon}
-      export RUBYOPT=-W0
       export PRIMARY_WAGON=#{wagon}
-      export DISABLE_SPRING=1
       export DISABLE_TEST_SCHEMA_MAINTENANCE=1
-      export CAPYBARA_MAX_WAIT_TIME=0.5
       #{'export WAGONS="' + wagons.join(' ') + '"' if wagons.any?}
       log_status "hitobito now uses: #{wagons.any? ? wagons.join(', ') : 'just the core'}"
       source_up

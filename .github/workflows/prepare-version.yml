@@ -79,6 +79,8 @@ jobs:
         run: |
           echo "Requesting next '$RELEASE_TYPE'-version"
           next_version=$(bin/version suggest "$RELEASE_TYPE" "$NEXT_VERSION")
+
+          echo "next version: ${next_version}"
           echo "version=${next_version}" >> "$GITHUB_OUTPUT"
 
   prepare_release:

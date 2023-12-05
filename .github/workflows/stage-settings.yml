@@ -16,6 +16,11 @@ on:
         required: true
         type: string
         default: "regular"
+      dry_run:
+        description: "Do not execute the commands"
+        required: false
+        type: boolean
+        default: false
 
     outputs:
       project:
@@ -30,6 +35,8 @@ on:
         value: ${{ jobs.settings.outputs.release_stage }}
       release_type:
         value: ${{ jobs.settings.outputs.release_type }}
+      dry_run:
+        value: ${{ jobs.settings.outputs.dry_run }}
 
 jobs:
   settings:
@@ -42,6 +49,8 @@ jobs:
       composition_branch: ${{ steps.determine.outputs.branch }}
       release_stage: ${{ steps.determine.outputs.stage }}
       release_type: ${{ steps.determine.outputs.release_type }}
+      dry_run: ${{ steps.determine.outputs.dry_run }}
+
 
     steps:
       - name: Infer project-name and stage-settings
@@ -50,12 +59,19 @@ jobs:
           STAGE: ${{ inputs.stage }}
           REPO: ${{ inputs.repository }}
           RELEASE_TYPE: ${{ inputs.release_type }}
+          DRY_RUN: ${{ inputs.dry_run }}
         run: |
           echo "stage=${STAGE}" >> "$GITHUB_OUTPUT"
           echo "repo_name=${REPO}" >> "$GITHUB_OUTPUT"
 
           echo "repo_url=https://github.com/${REPO}.git" >> "$GITHUB_OUTPUT"
           echo "project=${REPO##hitobito/ose_composition_}" >> "$GITHUB_OUTPUT"
+
+          if [[ "${DRY_RUN}" = 'true' ]]; then
+            echo 'dry_run="-n"' >> "$GITHUB_OUTPUT"
+          else
+            echo 'dry_run=""' >> "$GITHUB_OUTPUT"
+          fi
 
           case $STAGE in
             production)

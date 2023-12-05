@@ -72,6 +72,7 @@ class Setup
   def environment(core: true)
     <<~DIRENV
       PATH_add bin
+      #{ "PATH_add ../hitobito/bin" unless core }
       export RAILS_DB_ADAPTER=mysql2
       export RAILS_DB_HOST=127.0.0.1
       export RAILS_DB_PORT=33066

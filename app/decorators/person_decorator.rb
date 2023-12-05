@@ -133,7 +133,7 @@ class PersonDecorator < ApplicationDecorator
 
   def last_role_new_link(group)
     path = h.new_group_role_path(restored_group(group), role_id: last_role.id)
-    role_popover_link(path, "role_#{last_role.id}")
+    role_popover_link(path, "role_#{last_role.id}", 'popover_toggler ps-1')
   end
 
   def last_role
@@ -198,11 +198,11 @@ class PersonDecorator < ApplicationDecorator
 
   def popover_edit_link(function)
     path = h.edit_group_role_path(function.group, function)
-    role_popover_link(path)
+    role_popover_link(path, nil, "ps-1")
   end
 
-  def role_popover_link(path, html_id = nil)
-    content_tag(:span, class: 'ps-1', id: html_id) do
+  def role_popover_link(path, html_id = nil, html_classes = "")
+    content_tag(:span, class: html_classes, id: html_id) do
       h.link_to(h.icon(:edit),
                 path,
                 title: h.t('global.link.edit'),

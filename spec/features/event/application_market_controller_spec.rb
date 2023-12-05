@@ -261,9 +261,11 @@ describe Event::ApplicationMarketController do
       expect(page).to have_selector("#applications ##{appl2_id} td .fa-minus")
 
       find("#applications ##{appl2_id} td div a", text: 'Warteliste').click
+      sleep(2)
       expect(body).to have_selector(".popover[role='tooltip']", count: 1)
 
       find("#applications ##{appl1_id} td div a", text: 'Warteliste').click
+      sleep(2)
       expect(body).to have_selector(".popover[role='tooltip']", count: 1)
     end
 

@@ -173,6 +173,7 @@ de:
     activate_totp: Zwei-Faktor-Authentifizierung einrichten
     reset_totp: Zwei-Faktor-Authentifizierung zurücksetzen
     disable_totp: Zwei-Faktor-Authentifizierung deaktivieren
+    unblock_person: Login entsperren
 
   dropdown/invoices:
     download: 'Export'
@@ -1462,12 +1463,12 @@ de:
         groups_and_roles_that_see_me: Rollen, die auf mich Zugriff haben
         load_roles_that_see_me: 'Gruppen und Rollen laden'
         load_roles_that_see_me_hint: 'Dies kann einige Sekunden dauern'
-        block_person: Zugang blockieren
+        block_person: Login sperren
         confirm_block_person: "Achtung: Damit kann sich diese Person nicht mehr einloggen. Willst du das wirklich?"
-        unblock_person: Zugang entblockieren
+        unblock_person: Login entsperren
         confirm_unblock_person: "Achtung: Damit kann ist die Person nicht mehr blockiert. Willst du das wirklich?"
-        person_blocked: Zugang ist blockiert
-        person_not_blocked: Zugang ist nicht blockiert
+        person_blocked: Login ist gesperrt
+        person_not_blocked: Login ist nicht gesperrt
 
       password_override:
         flashes:

@@ -392,6 +392,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def login_status
+    return :blocked if blocked?
     return :two_factors if two_factor_authentication
     return :login if email? && password?
     return :password_email_sent if reset_password_period_valid?

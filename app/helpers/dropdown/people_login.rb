@@ -71,7 +71,14 @@ module Dropdown
     def disable_totp
       if @user.two_factor_authentication_registered? && template.can?(:totp_disable, @user)
         add_item(translate('.disable_totp'),
-                 template.totp_disable_group_person_path, method: :post)
+                 template.totp_disable_group_person_path)
+      end
+    end
+
+    def update_password
+      if @user.blocked? && template.can?(:update, @user)
+        add_item(translate('.unblock_person'),
+                 template.unblock_group_person_path(template.parent, @user), method: :post)
       end
     end
   end

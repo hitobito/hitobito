@@ -26,7 +26,7 @@ module PeopleHelper
         login: 'user-check',
         two_factors: 'user-shield',
         status_off: 'minus-circle',
-        blocked: 'lock',
+        blocked: 'user-lock',
         not_blocked: 'lock-open'
     }
     icon(

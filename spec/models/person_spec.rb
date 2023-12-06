@@ -869,6 +869,7 @@ describe Person do
     it 'returns true if blocked_at is present' do
       person = Fabricate.build(:person, blocked_at: Time.zone.now)
       expect(person.blocked?).to be_truthy
+      expect(person.login_status).to eq(:blocked)
     end
 
     it 'returns false if blocked_at is blank' do

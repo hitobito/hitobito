@@ -108,7 +108,7 @@
         %br
         = action_button(t('.unblock_person'),
                         unblock_group_person_path(group, person),
-                        :lock,
+                        :"lock-open",
                         method: :post,
                         class: 'btn-secondary',
                         data: { confirm: t('.confirm_unblock_person') },

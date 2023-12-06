@@ -331,8 +331,8 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: blocked_person_situation_id,
    locale: 'de',
-   label: 'Person blockieren',
-   subject: 'Sicherheitsübersicht: Person entblockieren?',
+   label: 'Login gesperrt',
+   subject: 'Sicherheitsübersicht: Login entsperren?',
    body: "TBD"},
 
   {custom_content_id: blocked_person_situation_id,

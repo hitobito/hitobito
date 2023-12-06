@@ -68,9 +68,9 @@ jobs:
           echo "project=${REPO##hitobito/ose_composition_}" >> "$GITHUB_OUTPUT"
 
           if [[ "${DRY_RUN}" = 'true' ]]; then
-            echo 'dry_run="-n"' >> "$GITHUB_OUTPUT"
+            echo 'dry_run=-n' >> "$GITHUB_OUTPUT"
           else
-            echo 'dry_run=""' >> "$GITHUB_OUTPUT"
+            echo 'dry_run=' >> "$GITHUB_OUTPUT"
           fi
 
           case $STAGE in

@@ -17,7 +17,7 @@ class Group::PrivacyPolicyFinder
   end
 
   def acceptance_needed?
-    !already_accepted? && groups.any?
+    groups.any? && !already_accepted?
   end
 
   def groups
@@ -29,7 +29,8 @@ class Group::PrivacyPolicyFinder
   private
 
   def already_accepted?
-    @person.privacy_policy_accepted?
-  end
+    return false unless @person.is_a?(ActiveRecord::Base)
 
+    @person.privacy_policy_accepted? && @person.changes.keys.exclude?('privacy_policy_accepted_at')
+  end
 end

@@ -17,8 +17,8 @@ class Groups::SelfRegistrationController < ApplicationController
   def create
     return render :new unless entry.valid?
 
-    if params.key?(:step)
-      entry.increment_step
+    if params.key?(:next)
+      entry.move_on
       render :new, entry: entry
     else
       save_entry

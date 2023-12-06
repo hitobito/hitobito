@@ -5,6 +5,7 @@
 
 = standard_form(entry, url: group_self_registration_path) do |f|
   = f.honeypot(:verification)
+  = hidden_field_tag(:step, entry.step)
   = render StepsComponent.new(partials: entry.partials, step: entry.step, form: f)
 
 - if entry.first_step?

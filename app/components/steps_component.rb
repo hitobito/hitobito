@@ -92,7 +92,7 @@ class StepsComponent < ApplicationComponent
       if last?
         helpers.submit_button(@form, t('groups.self_registration.form.submit'))
       else
-        helpers.submit_button(@form, title, name: :step, value: index)
+        helpers.submit_button(@form, title, next_submit_button_options)
       end
     end
 
@@ -119,6 +119,15 @@ class StepsComponent < ApplicationComponent
     end
 
     private
+
+    def next_submit_button_options
+      options = past? ? {formnovalidate: true} : {}
+      options.merge(name: :next, value: index + 1)
+    end
+
+    def past?
+      index < @form.object.step
+    end
 
     def markup
       render(@partial, f: @form, c: self, required: false)

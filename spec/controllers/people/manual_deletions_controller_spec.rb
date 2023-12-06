@@ -19,6 +19,10 @@ describe People::ManualDeletionsController do
   before { sign_in(user) }
 
   describe 'GET #show' do
+    def get_show
+      get :show, xhr: true, params: { group_id: bottom_layer.id, person_id: person_with_expired_roles.id }, format: :js
+    end
+
     context 'with feature disabled' do
       before do
         allow(Settings.people.manual_deletion).to receive(:enabled).and_return(false)
@@ -29,7 +33,7 @@ describe People::ManualDeletionsController do
 
         it 'is disabled' do
           expect do
-            get :show, xhr: true, params: { group_id: bottom_layer.id, person_id: person_with_expired_roles.id }, format: :js
+            get_show
           end.to raise_error(FeatureGate::FeatureGateError)
         end
       end
@@ -39,7 +43,7 @@ describe People::ManualDeletionsController do
 
         it 'is disabled' do
           expect do
-            get :show, xhr: true, params: { group_id: bottom_layer.id, person_id: person_with_expired_roles.id }, format: :js
+            get_show
           end.to raise_error(FeatureGate::FeatureGateError)
         end
       end
@@ -55,8 +59,18 @@ describe People::ManualDeletionsController do
 
         it 'is unauthorized' do
           expect do
-            get :show, params: { group_id: bottom_layer.id, person_id: person_with_expired_roles.id }
+            get_show
           end.to raise_error(CanCan::AccessDenied)
+        end
+      end
+
+      context 'as leader' do
+        let(:user) { bottom_leader }
+
+        it 'is disabled' do
+          get_show
+          expect(response).to be_successful
+          expect(response).to render_template 'people/manual_deletions/show'
         end
       end
     end

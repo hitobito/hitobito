@@ -78,25 +78,14 @@ class StepsComponent < ApplicationComponent
 
     public :stimulus_action
 
-    delegate :object, to: '@form'
-
     def initialize(partial:, partial_iteration:, step:, form:)
       super(iterator: partial_iteration, step: step)
       @form = form
       @partial = partial.to_s
-      @submodel = partial.to_s.split('/').last
     end
 
     def call
       content_tag(:div, markup, class: %W[step-content #{@partial.dasherize} #{active_class}])
-    end
-
-    def attr?(attr)
-      model.attrs.include?(attr)
-    end
-
-    def required?(attr)
-      model.required_attrs.include?(attr)
     end
 
     def next_button(title = t('steps_component.next_link'))
@@ -112,14 +101,27 @@ class StepsComponent < ApplicationComponent
       link_to(t('global.button.back'), '#', class: 'link cancel mt-2 pt-1', data: data)
     end
 
+    # Lazy way of handling optional and required attributes
+    # - yield markup to with_model(f.object) and use c.attr? and c.required?
+    def with_model(model)
+      @model = model
+      yield
+    end
+
+    def attr?(attr)
+      raise 'wrap in `with_model(model){}' unless @model
+      @model.attrs.include?(attr)
+    end
+
+    def required?(attr)
+      raise 'wrap in `with_model(model){}' unless @model
+      @model.required_attrs.include?(attr)
+    end
+
     private
 
     def markup
       render(@partial, f: @form, c: self, required: false)
-    end
-
-    def model
-      @model ||= object.respond_to?(@submodel) ? object.send(@submodel) : object
     end
   end
 end

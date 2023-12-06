@@ -50,8 +50,8 @@ class Person::SecurityToolsController < ApplicationController
   end
 
   def block_person
-    if !herself? && !herself_through_impersonation? && person.update!(blocked_at: Time.zone.now)
-      PaperTrail::Version.create(main: person, item: person, whodunnit: current_user, event: :block_person)
+    if !herself? && !herself_through_impersonation? &&
+        Person::BlockService.new(person, current_user: current_user).block!
       redirect_to security_tools_group_person_path(group, person), notice: t('.flashes.success')
     else
       redirect_to security_tools_group_person_path(group, person), alert: t('.flashes.error')
@@ -59,8 +59,8 @@ class Person::SecurityToolsController < ApplicationController
   end
 
   def unblock_person
-    if !herself? && !herself_through_impersonation? && person.update!(blocked_at: nil)
-      PaperTrail::Version.create(main: person, item: person, whodunnit: current_user, event: :unblock_person)
+    if !herself? && !herself_through_impersonation? &&
+        Person::BlockService.new(person, current_user: current_user).unblock!
       redirect_to security_tools_group_person_path(group, person), notice: t('.flashes.success')
     else
       redirect_to security_tools_group_person_path(group, person), alert: t('.flashes.error')

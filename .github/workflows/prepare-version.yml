@@ -156,4 +156,7 @@ jobs:
           echo "Preparing $NEXT_VERSION for $RELEASE_STAGE $DRY_RUN"
 
           release version
+          version version
+
+          echo "release $RELEASE_STAGE $NEXT_VERSION $DRY_RUN"
           release "$RELEASE_STAGE" "$NEXT_VERSION" "$DRY_RUN"

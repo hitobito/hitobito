@@ -60,7 +60,7 @@ class Event::ApplicationDecorator < ::ApplicationDecorator
     if approved
       ['&#x2713;'.html_safe, 'success', translate('approval.approved')]
     elsif rejected
-      ['&#x00D7;'.html_safe, 'important', translate('approval.rejected')]
+      ['&#x00D7;'.html_safe, 'danger', translate('approval.rejected')]
     else
       ['?', 'warning', translate('approval.missing')]
     end

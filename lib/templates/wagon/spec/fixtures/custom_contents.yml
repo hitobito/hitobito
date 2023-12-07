@@ -107,3 +107,7 @@ blocked_person_solution_id:
 content_user_password_override:
   key: content_user_password_override
   placeholders_required: recipient-name, taker-name
+
+content_inactivity_block_warning:
+  key: content_inactivity_block_warning
+  placeholders_required: recipient-name

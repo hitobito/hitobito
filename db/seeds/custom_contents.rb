@@ -82,6 +82,9 @@ CustomContent.seed_once(
   { key: Person::UserPasswordOverrideMailer::CONTENT_USER_PASSWORD_OVERRIDE,
     placeholders_required: 'taker-name, recipient-name',
     placeholders_optional: nil },
+  { key: Person::InactivityBlockMailer::CONTENT_INACTIVITY_BLOCK_WARNING,
+    placeholders_required: 'recipient-name',
+    placeholders_optional: nil },
   { key: DeliveryReportMailer::CONTENT_BULK_MAIL_SUCCESS,
     placeholders_required: 'mail-subject, delivered-at, mail-to, total-recipients',
     placeholders_optional: nil },
@@ -124,6 +127,7 @@ add_request_rejected_id = CustomContent.get(Person::AddRequestMailer::CONTENT_AD
 invoice_notification_id = CustomContent.get(InvoiceMailer::CONTENT_INVOICE_NOTIFICATION).id
 user_impersonation_id = CustomContent.get(Person::UserImpersonationMailer::CONTENT_USER_IMPERSONATION).id
 user_password_override_id = CustomContent.get(Person::UserPasswordOverrideMailer::CONTENT_USER_PASSWORD_OVERRIDE).id
+inactivity_block_warning_id = CustomContent.get(Person::InactivityBlockMailer::CONTENT_INACTIVITY_BLOCK_WARNING).id
 bulk_mail_success_id = CustomContent.get(DeliveryReportMailer::CONTENT_BULK_MAIL_SUCCESS).id
 bulk_mail_with_failed_id = CustomContent.get(DeliveryReportMailer::CONTENT_BULK_MAIL_WITH_FAILED).id
 address_validation_checks_id = CustomContent.get(Address::ValidationChecksMailer::CONTENT_ADDRESS_VALIDATION_CHECKS).id

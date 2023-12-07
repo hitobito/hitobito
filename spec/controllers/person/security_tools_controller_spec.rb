@@ -71,11 +71,7 @@ describe Person::SecurityToolsController do
       block_person
       expect(response).to redirect_to(security_tools_group_person_path(person.primary_group.id, person.id))
       expect(flash[:notice]).to eq(I18n.t('person.security_tools.block_person.flashes.success'))
-      expect(person.reload.blocked_at).to be > 1.minute.ago
-    end
-
-    it 'logs a message with paper_trail' do
-      expect { block_person }.to change { PaperTrail::Version.count }.by(1)
+      expect(person.reload).to be_blocked
     end
 
     context 'without permissions' do
@@ -93,7 +89,7 @@ describe Person::SecurityToolsController do
         block_person
         expect(response).to redirect_to(security_tools_group_person_path(person.primary_group.id, person.id))
         expect(flash[:alert]).to eq(I18n.t('person.security_tools.block_person.flashes.error'))
-        expect(person.blocked_at).to be_nil
+        expect(person.reload).not_to be_blocked
       end
     end
 

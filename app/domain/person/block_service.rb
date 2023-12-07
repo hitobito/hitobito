@@ -14,6 +14,11 @@ class Person::BlockService
     true
   end
 
+  def inactivity_warning!
+    Person::InactivityBlockMailer.inactivity_block_warning(@person).deliver &&
+      @person.update!(inactivity_block_warning_sent_at: Time.zone.now)
+  end
+
   protected
 
   def log(event)

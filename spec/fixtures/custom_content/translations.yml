@@ -113,3 +113,11 @@ content_user_password_override:
   subject: Login für hitobito von Top Leader verhindert,
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
+
+content_inactivity_block_warning:
+  custom_content_id: <%= ActiveRecord::FixtureSet.identify(:content_inactivity_block_warning) %>
+  locale: de
+  label: Login wird bald blockiert,
+  subject: Login für hitobito von Top Leader wird bald blockiert,
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>

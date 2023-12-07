@@ -7,6 +7,7 @@
 
 class Devise::Hitobito::RegistrationsController < Devise::RegistrationsController
 
+  skip_before_action :reject_blocked_person!
   before_action :authorize_update_password, only: [:edit, :update]
   before_action :has_old_password, only: [:edit, :update]
   before_action :reject_non_password_params, only: [:update]

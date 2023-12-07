@@ -15,6 +15,7 @@ class Devise::Hitobito::SessionsController < Devise::SessionsController
   respond_to :html
   respond_to :json, only: [:new, :create]
 
+  skip_before_action :reject_blocked_person!
   before_action :reset_two_factor_authentication,
                 if: :two_factor_authentication_pending?,
                 only: [:new]

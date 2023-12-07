@@ -101,6 +101,11 @@ de:
 
   modal_crud: *crud
 
+  blocked:
+    index:
+      title: Login gesperrt
+      explanation: 'Du must dich entsperrt werden bevor du auf diese Resource zugreifen kannst.'
+
   contactable:
     address_or_email: "%{address} oder %{email}"
     fields:
@@ -296,6 +301,12 @@ de:
 
   errors:
     link_to_main: 'Hauptseite'
+    '401':
+      title: 'Login benötigt'
+      explanation: 'Du must dich einloggen bevor du auf diese Resource zugreifen kannst.'
+    '403':
+      title: 'Zugriff verweigert'
+      explanation: 'Du bist nicht berechtigt auf diese Resource zuzugreifen.'
     '404':
       title: 'Diese Seite gibt es leider nicht (404)'
       explanation: 'Vielleicht haben Sie die Adresse falsch eingegeben oder die Seite ist inzwischen gelöscht worden.'
@@ -306,12 +317,6 @@ de:
       title: 'Entschuldigung, die Seite ist momentan nicht verfügbar (503)'
       explanation: 'Wir arbeiten gerade an dieser Seite, deshalb ist sie nicht verfügbar. Das sollte nicht all zu lange dauern.'
       instruction: 'Bitte versuchen Sie es später nochmals.'
-    '403':
-      title: 'Zugriff verweigert'
-      explanation: 'Du bist nicht berechtigt auf diese Resource zuzugreifen.'
-    '401':
-      title: 'Login benötigt'
-      explanation: 'Du must dich einloggen bevor du auf diese Resource zugreifen kannst.'
     unsupported_page_size:
       title: 'Seitengrösse ist nicht unterstützt'
       explanation: 'Die angefragte Seitengrösse page[size]=%{size} ist grösser als die maximale Seitengrösse %{max}. '
@@ -859,7 +864,6 @@ de:
       creator: Rechnungssteller
       vat_number: MwSt. Nummer
       payment: Eingegangene Zahlung
-      amount_open: Offener Betrag
       payment_slip_qr:
         receipt_title: Empfangsschein
         payment_title: Zahlteil

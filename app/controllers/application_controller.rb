@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
   helper_method :person_home_path
   helper_method :true?
 
-  before_action :set_no_cache
+  before_action :reject_blocked_person!, :set_no_cache
   around_action :store_current_person
 
   class_attribute :skip_translate_inheritable
@@ -54,6 +54,11 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def reject_blocked_person!
+    return true unless current_person&.blocked?
+    redirect_to blocked_path
+  end
 
   def fetch_person
     if current_person.roles.present?

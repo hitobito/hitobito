@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_11_15_131813) do
+ActiveRecord::Schema.define(version: 2023_11_17_123807) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -864,6 +864,8 @@ ActiveRecord::Schema.define(version: 2023_11_15_131813) do
     t.timestamp "minimized_at"
     t.bigint "self_registration_reason_id"
     t.string "self_registration_reason_custom_text", limit: 100
+    t.datetime "inactivity_block_warning_sent_at"
+    t.datetime "blocked_at"
     t.index ["authentication_token"], name: "index_people_on_authentication_token"
     t.index ["confirmation_token"], name: "index_people_on_confirmation_token", unique: true
     t.index ["email"], name: "index_people_on_email", unique: true

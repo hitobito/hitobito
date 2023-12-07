@@ -36,6 +36,7 @@ Hitobito::Application.routes.draw do
       get code, to: "errors#show#{code}"
     end
 
+    get '/blocked' => 'blocked#index', as: :blocked
 
     get '/addresses/query' => 'addresses#query'
 

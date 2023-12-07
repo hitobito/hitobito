@@ -1,7 +1,25 @@
 .selfregister-conditions {
-  margin-left: 215px;
   .title {
     font-weight: bold;
   }
   margin-bottom: 10px;
+}
+
+
+@media screen and (max-width: 768px) {
+  #new_self_registration > div.row > div > .btn-group {
+    margin-left: 0
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1199px) {
+  #new_self_registration > div.row > div > .btn-group {
+    margin-left: 26%
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  #new_self_registration > div.row > div > .btn-group {
+    margin-left: 17%
+  }
 }

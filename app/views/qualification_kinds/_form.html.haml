@@ -5,7 +5,7 @@
 
 = entry_form(buttons_bottom: false) do |f|
   = f.labeled_input_fields :label, :description
-  = f.labeled_input_field(:validity, help_inline: t('.help_validity_in_years'))
-  = f.labeled_input_field(:reactivateable, help_inline: t('.help_reactivateable_in_years'))
+  = f.labeled_input_field(:validity, help_inline: t('.help_validity_in_years'), class: 'd-inline ')
+  = f.labeled_input_field(:reactivateable, help_inline: t('.help_reactivateable_in_years'), class: 'd-inline ')
 
   = render_extensions 'fields', locals: { f: f }

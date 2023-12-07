@@ -13,13 +13,13 @@ module FilterHelper
     label ||= model_class.human_attribute_name(attr)
     html += label_tag(attr, label, class: 'control-label').html_safe if label
     html += capture(&block)
-    content_tag(:div, html, class: 'control-group').html_safe
+    content_tag(:div, html, class: 'control-group row ms-2').html_safe
   end
   # rubocop:enable Rails/OutputSafety
 
   def direct_filter_select(attr, list, label = nil, options = {})
     options.reverse_merge!(prompt: t('global.all'), value_method: :first, text_method: :second)
-    add_css_class(options, 'control-group')
+    add_css_class(options, 'input-group form-select form-select-sm h-100 mx-2')
     options[:data] ||= {}
     options[:data][:submit] = true
     select_options = options_from_collection_for_select(list,
@@ -30,17 +30,17 @@ module FilterHelper
   end
 
   def direct_filter_date(attr, label = nil, options = {})
-    options[:class] ||= 'span2 date'
+    options[:class] ||= 'col-2 date form-control form-control-sm'
     direct_filter(attr, label) do
-      content_tag(:div, class: 'input-prepend') do
-        content_tag(:span, icon(:'calendar-alt'), class: 'add-on') +
-          text_field(nil, attr, options)
+      content_tag(:div, class: 'input-group') do
+          content_tag(:span, icon(:'calendar-alt'), class: 'input-group-text') +
+            text_field(nil, attr, options)
       end
     end
   end
 
   def direct_filter_time(attr, label = nil, **options)
-    options[:class] ||= 'span2 time'
+    options[:class] ||= 'col-2 time form-control form-control-sm'
     direct_filter(attr, label) do
       time_field(nil, attr, options)
     end

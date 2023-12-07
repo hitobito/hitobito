@@ -17,7 +17,7 @@
 }
 
 .note {
-  border-top: 1px solid $grayLight;
+  border-top: 1px solid $gray-light;
   padding: 5px 0 10px;
   position: relative;
   display: flex;
@@ -51,7 +51,7 @@
     width: 100%;
   }
 
-  @include responsive(phone, $mediaTablet) {
+  @include responsive(phone, $media-tablet) {
     .note-subject {
       width: 100%;
       clear: both;

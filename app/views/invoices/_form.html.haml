@@ -10,7 +10,7 @@
     = f.labeled_input_fields :title, :description, rows: 3
     = f.labeled_input_field :due_at
     = f.labeled_input_field :issued_at
-    = f.labeled_input_field :hide_total
+    = f.labeled_boolean_field :hide_total
 
   = field_set_tag do
     = f.labeled_input_field :recipient_email
@@ -26,6 +26,6 @@
     = render "invoice_lists/invoice_articles", f: f, group: parent
 
   = field_set_tag do
-    = f.labeled_inline_fields_for :invoice_items, 'invoice_lists/invoice_items'
+    = f.labeled_inline_fields_for :invoice_items, 'invoice_lists/invoice_items', class: 'd-flex'
 
   = render "invoice_lists/calculated", invoice: entry.decorate

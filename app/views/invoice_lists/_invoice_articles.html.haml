@@ -6,7 +6,8 @@
 - unless group.invoice_articles.empty?
   = f.labeled(:invoice_item_article) do
     = select("temp", "invoice_article_id", nil,
-      { include_blank: true },
-      { id: "invoice_item_article" }) do
-      = group.invoice_articles.pluck(:number, :name, :id, :description).each do |ia| 
+      { include_blank: ""},
+      { id: "invoice_item_article", class: "form-select form-select-sm" },
+      ) do
+      = group.invoice_articles.pluck(:number, :name, :id, :description).each do |ia|
         = content_tag(:option, "#{ia[0]} - #{ia[1]}", value: ia[2], data: { name: ia[0], description: ia[3] })

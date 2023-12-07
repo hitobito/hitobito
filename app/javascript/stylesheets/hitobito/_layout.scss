@@ -9,7 +9,7 @@
 body {
   padding: 0;
   height: 100vh;
-  background: $bodyBackground;
+  background: $body-background;
 }
 
 /* Header */
@@ -21,9 +21,9 @@ body {
   padding: 0.5rem;
   z-index: 100;
   // for a box around the logo, if the Logo cannot be directly on the page background:
-  @if ($logoBackgroundColor != none) {
+  @if ($logo-background-color != none) {
     padding: 10px;
-    background-color: $logoBackgroundColor;
+    background-color: $logo-background-color;
     border-radius: 6px;
   }
 }
@@ -32,15 +32,15 @@ body {
   display: block;
   position: relative;
 
-  width: $logoWidth;
-  height: $logoHeight;
+  width: $logo-width;
+  height: $logo-height;
   object-fit: contain;
   object-position: center center;
   text-align: center;
 
   img {
-    max-width: $logoWidth;
-    max-height: $logoHeight;
+    max-width: $logo-width;
+    max-height: $logo-height;
   }
 }
 
@@ -63,7 +63,7 @@ body {
   }
   margin: 0;
   width: 100%;
-  background: $pageBackground;
+  background: $page-background;
   overflow-y: visible;
 
   display: flex;
@@ -73,15 +73,15 @@ body {
   align-content: space-around;
 
   .nav-left {
-    @if $logoWidth < 200px {
+    @if $logo-width < 200px {
       min-width: 280px;
     } @else {
-      min-width: ($logoWidth+40px);
+      min-width: ($logo-width+40px);
     }
     width: 30%;
     max-width: 25rem;
     z-index: 1;
-    margin-top: $logoHeight + 40px;
+    margin-top: $logo-height + 40px;
     margin-right: -1.5rem;
   }
 
@@ -149,28 +149,28 @@ body {
 
 .sheet,
 #content {
-  @include border-radius($borderRadius);
+  @include border-radius($border-radius);
   color: $black;
 }
 
 .sheet.parent {
   padding-bottom: 1px;
-  background: lighten($contentBackground, 3%);
-  box-shadow: 0 2px 8px $shadowColor;
+  background: lighten($content-background, 3%);
+  box-shadow: 0 2px 8px $shadow-color;
   .sheet {
     margin: 0 3px 3px;
     @include responsive(mediaTablet){
       margin: 0 -10px -30px 10px;
     }
     &.parent {
-      background: lighten($contentBackground, 6%);
+      background: lighten($content-background, 6%);
     }
   }
   .level { color: $gray; }
 }
 
 #content {
-  box-shadow: 0 2px 8px $shadowColor;
+  box-shadow: 0 2px 8px $shadow-color;
   background: $white;
   padding: 10px 10px 20px;
   @include responsive(mediaTablet){
@@ -178,16 +178,16 @@ body {
   }
 
   aside {
-    @include responsive(phone, $mediaDesktop) {
-      margin-top: $vSpace;
+    @include responsive(phone, $media-desktop) {
+      margin-top: $v-space;
     }
-    margin-bottom: $vSpace;
+    margin-bottom: $v-space;
   }
 
   section {
     @include clearfix;
     clear: both;
-    margin-top: $vSpace;
+    margin-top: $v-space;
     &:first-child { margin-top:0; }
   }
 
@@ -212,10 +212,10 @@ body {
 /* Footer */
 #page-footer {
   padding-top: 0;
-  color: $footerColor;
+  color: $footer-color;
   margin-top: -3rem;
-  background-color: $footerBackground;
-  @include responsive(phone, $mediaTablet) {
+  background-color: $footer-background;
+  @include responsive(phone, $media-tablet) {
     padding: 20px;
   }
 
@@ -245,16 +245,16 @@ body {
     padding-top: 20px;
     padding-bottom: 20px;
     a {
-      color: $footerColor;
+      color: $footer-color;
 
       &:hover {
-        color: $footerColorHover;
+        color: $footer-color-hover;
       }
     }
   }
 }
 
-.form-inline .quicksearch {
+.input-group.quicksearch {
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -269,7 +269,7 @@ body {
 // Adaptions for phone size / Responsiveness
 
 
-@include responsive(phone, $mediaTablet) {
+@include responsive(phone, $media-tablet) {
   .logo {
     display: none;
     .is-logged-out & {
@@ -310,7 +310,7 @@ body {
 
     .nav-left > nav {
       z-index: 1;
-      background-color: $grayLighter;
+      background-color: $gray-lighter;
       width: 100%;
       height: 100%;
     }

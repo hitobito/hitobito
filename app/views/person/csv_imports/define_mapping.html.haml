@@ -29,12 +29,12 @@
     = f.labeled :role_type, Role.model_name.human do
       = select_tag(:role_type,
                    options_from_collection_for_select(@group.possible_roles, :sti_name, :label, @role_type),
-                   { class: 'span4', prompt: I18n.t('helpers.select.prompt') })
+                   { class: 'form-select form-select-sm mw-100 mw-md-60ch me-3', prompt: I18n.t('helpers.select.prompt') })
       = f.help_block t('.choose_role_help')
 
   = field_set_tag t('.assign_columns_to_fields') do
     = f.labeled(nil, content_tag(:i, t('.column_from_csv'))) do
-      %i{style: 'line-height: 30px'}= t('.field_in_database')
+      %i.lh-lg= t('.field_in_database')
     %br/
     - parser.headers.each do |column_name|
       = f.labeled(column_name, column_name) do
@@ -42,7 +42,7 @@
                               application_person_fields,
                               :key,
                               :value,
-                              { include_blank: true, selected: guess(column_name) },
-                              { class: 'span4' })
+                              { include_blank: "", selected: guess(column_name) },
+                              { class: 'form-select form-select-sm mw-100 mw-md-60ch' })
 
   = form_buttons(f, submit_label: t('.preview'), cancel_url: group_people_path(group))

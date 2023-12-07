@@ -3,13 +3,13 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-#main.row-fluid
-  .span5
+#main.row
+  .col-5
     = standard_form(:csv_import, url: define_mapping_group_csv_imports_path, builder: PlainObjectFormBuilder) do |f|
       = form_buttons(f, submit_label: t('.upload_button'), cancel_url: group_people_path(group))
       = f.labeled(:file, t('.csv_file')) do
-        = f.file_field(:file)
+        = f.file_field(:file, class: 'form-control form-control-sm')
 
-  .span7
+  .col-7
     .well.help
       = render 'description'

@@ -14,7 +14,7 @@
               = hidden_field_tag('ids', @manageable_people.map(&:id).join(','))
               = f.text_field(:tags,
                              name: :tags,
-                             class: 'tag-list-add',
+                             class: 'tag-list-add form-control form-control-sm',
                              data: { provide: 'entity',
                                      url: group_person_tags_query_path(group_id: group.id, person_id: @manageable_people.first.id) })
               = f.help_inline t('.separate_multiple_tags_with_comma')

@@ -8,7 +8,7 @@
     = f.labeled_input_fields :name, :description
 
   %fieldset
-    = f.labeled(model_class.human_attribute_name(:range), nil, nil, style: 'display: flex; flex-direction: column;') do
+    = f.labeled(model_class.human_attribute_name(:range), nil, nil, class: 'd-flex flex-column') do
       %span
         = f.inline_radio_button(:permission, :layer_read, model_class.human_attribute_name(:layer_read))
       %span
@@ -18,7 +18,7 @@
       %span
         = f.inline_radio_button(:permission, :layer_and_below_full, model_class.human_attribute_name(:layer_and_below_full))
 
-    = f.labeled(model_class.human_attribute_name(:abilities), nil, nil, style: 'display: flex; flex-direction: column;') do
+    = f.labeled(model_class.human_attribute_name(:abilities), nil, nil, class: 'd-flex flex-column') do
       = f.boolean_field(:people, caption: model_class.human_attribute_name(:people))
       = f.boolean_field(:groups, caption: model_class.human_attribute_name(:groups))
       = f.boolean_field(:events, caption: model_class.human_attribute_name(:events))
@@ -30,6 +30,6 @@
       = render_extensions :fields, locals: { f: f }
 
   = f.labeled_inline_fields_for :cors_origins do |nested_f|
-    - nested_f.input_field(:origin, placeholder: 'https://example.org')
+    - nested_f.input_field(:origin, placeholder: 'https://example.org', class: 'd-inline ')
   = f.indented do
     = f.help_block(t('.help_cors_origins'))

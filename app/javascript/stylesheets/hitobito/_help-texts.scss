@@ -4,9 +4,10 @@
 //  https://github.com/hitobito/hitobito.
 
 .help-text {
+  margin-top: -20px;
   padding: 4px 10px;
   border-radius: 3px;
-  background-color: $grayLighter;
+  background-color: $gray-lighter;
 }
 h1 + .help-text {
   margin: 0 -10px;
@@ -33,19 +34,38 @@ h1 + .help-text {
   }
 }
 
+input + .help-text-trigger {
+  top: -26px;
+  margin-left: 475px;
+}
+
+textarea + .help-text-trigger {
+  top: -112px;
+  margin-left: 475px;
+}
+
+.form-check + .help-text-trigger {
+  top: -18px;
+  margin-left: 475px;
+}
+
+div + .help-text-trigger {
+  top: -26px;
+  margin-left: 160px;
+}
+
 .help-text-trigger {
   position: relative;
-  top: -3px;
   padding: 0 4px;
   border-radius: 4px;
 
   cursor: pointer;
 
-  background-color: $grayLighter;
+  background-color: $gray-lighter;
   color: $gray;
 
   &:hover {
-    background-color: $grayLight;
+    background-color: $gray-light;
   }
   &:active {
     background-color: $gray;
@@ -54,6 +74,8 @@ h1 + .help-text {
 
   h1 & {
     font-size: 14px;
+    margin-left: 5px;
+    top: -2px;
   }
 }
 

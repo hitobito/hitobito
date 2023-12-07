@@ -18,8 +18,10 @@
           = f.text_field(:name, placeholder: t('events.add_tag'),
                                         data: { provide: 'entity',
                                                 url: group_event_tags_query_path(group_id: @group.id,
-                                                                                 event_id: entry.id) })
+                                                                                 event_id: entry.id),
+                                                submit: true },
+                                                class: 'form-control form-control-sm')
 
-          %button.btn{type: :submit}
+          %button.btn.btn-sm.btn-primary.d-inline{type: :submit}
             = t('global.ok')
             = spinner

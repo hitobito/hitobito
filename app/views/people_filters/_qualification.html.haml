@@ -32,41 +32,46 @@
       = t('people_filters.simple_radio.match.all')
 
 = field_set_tag(t('.prompt_validity')) do
-  = render 'simple_radio',
-            attr: "filters[qualification][validity]",
-            value: 'active',
-            checked: true # first item is checked per default
-  = render 'simple_radio',
-            attr: "filters[qualification][validity]",
-            value: 'reactivateable',
-            checked: filter && filter.args[:validity] == 'reactivateable'
-  = render 'simple_radio',
-            attr: "filters[qualification][validity]",
-            value: 'all',
-            checked: filter && filter.args[:validity] == 'all'
+  %div.row
+    = render 'simple_radio',
+              attr: "filters[qualification][validity]",
+              value: 'active',
+              checked: true # first item is checked per default
+    = render 'simple_radio',
+              attr: "filters[qualification][validity]",
+              value: 'reactivateable',
+              checked: filter && filter.args[:validity] == 'reactivateable'
+    = render 'simple_radio',
+              attr: "filters[qualification][validity]",
+              value: 'all',
+              checked: filter && filter.args[:validity] == 'all'
 
-= field_set_tag(t('.prompt_year'), id: 'year-scope', class: 'form-horizontal', style: filter.try(:year_scope?) ? '' : 'display:none') do
+= field_set_tag(t('.prompt_year'), id: 'year-scope', class: 'form-horizontal') do
   .control-group
     = label_tag(:start_at_year_from, t('.start_at_year_label'), class: 'control-label')
     .controls
-      = number_field_tag("filters[qualification][start_at_year_from]", filter && filter.args[:start_at_year_from], class: 'span2', placeholder: 'YYYY' )
-      %span.text
-        &nbsp;
-        = t('.start_at_year_infix')
-        &nbsp;
-      = number_field_tag("filters[qualification][start_at_year_until]", filter && filter.args[:start_at_year_until], class: 'span2', placeholder: 'YYYY')
-      %span.text
-        &nbsp;
-        = t('.start_at_year_suffix')
+      %div.col-2
+        = number_field_tag("filters[qualification][start_at_year_from]", filter && filter.args[:start_at_year_from], class: 'col-2 form-control form-control-sm', placeholder: 'YYYY' )
+        %span.text
+          &nbsp;
+          = t('.start_at_year_infix')
+          &nbsp;
+      %div.col-2
+        = number_field_tag("filters[qualification][start_at_year_until]", filter && filter.args[:start_at_year_until], class: 'col-2 form-control form-control-sm', placeholder: 'YYYY')
+        %span.text
+          &nbsp;
+          = t('.start_at_year_suffix')
   .control-group
     = label_tag(:finish_at_year_from, t('.finish_at_year_label'), class: 'control-label')
     .controls
-      = number_field_tag("filters[qualification][finish_at_year_from]", filter && filter.args[:finish_at_year_from], class: 'span2', placeholder: 'YYYY')
-      %span.text
-        &nbsp;
-        = t('.finish_at_year_infix')
-        &nbsp;
-      = number_field_tag("filters[qualification][finish_at_year_until]", filter && filter.args[:finish_at_year_until], class: 'span2', placeholder: 'YYYY'  )
-      %span.text
-        &nbsp;
-        = t('.finish_at_year_suffix')
+      %div.col-2
+        = number_field_tag("filters[qualification][finish_at_year_from]", filter && filter.args[:finish_at_year_from], class: 'col-2 form-control form-control-sm', placeholder: 'YYYY')
+        %span.text
+          &nbsp;
+          = t('.finish_at_year_infix')
+          &nbsp;
+      %div.col-2
+        = number_field_tag("filters[qualification][finish_at_year_until]", filter && filter.args[:finish_at_year_until], class: 'col-2 form-control form-control-sm', placeholder: 'YYYY'  )
+        %span.text
+          &nbsp;
+          = t('.finish_at_year_suffix')

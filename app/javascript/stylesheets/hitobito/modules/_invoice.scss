@@ -1,5 +1,5 @@
 .invoice-state {
-  background: $grayLighter;
+  background: $gray-lighter;
   margin-left: -20px;
   margin-right: -20px;
   padding: 10px 21px;
@@ -61,7 +61,7 @@
 
   .invoice-articles-table {
     table.header {
-      border-bottom: 1px solid $grayLight;
+      border-bottom: 1px solid $gray-light;
       width: 100%;
       font-size: 16px;
       margin-bottom: 10px;
@@ -80,7 +80,7 @@
         float: right;
         width: 250px;
         tr {
-          border-bottom: 1px solid $grayLight;
+          border-bottom: 1px solid $gray-light;
         }
         tr:first-child {
           border-bottom: none;
@@ -103,5 +103,5 @@
 }
 
 .invoice-evaluation-actions > div {
-  margin-bottom: 1.2rem;
+  margin-bottom: 0.3rem;
 }

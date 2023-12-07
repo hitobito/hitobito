@@ -7,10 +7,10 @@
 
 = entry_form(buttons_bottom: false) do |f|
   - if entry.new_record?
-    = f.labeled_collection_select(:context, @contexts, :first, :second, {}, class: 'span6')
+    = f.labeled_collection_select(:context, @contexts, :first, :second, {}, class: 'form-select form-select-sm')
 
     - @keys.each do |context, group|
-      %div.help_text_context_keys.hidden{ id: context }
-        = f.labeled_grouped_collection_select(:key, group, :list, :label, :first, :second)
+      %div.help_text_context_keys.d-none{ id: context }
+        = f.labeled_grouped_collection_select(:key, group, :list, :label, :first, :second, {}, class: 'form-select form-select-sm')
 
   = f.labeled_rich_text_area :body, rows: 20

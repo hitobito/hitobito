@@ -13,12 +13,12 @@
 = field_set_tag do
   = f.labeled_input_fields(*entry.decorate.used_attributes(:first_name, :last_name, :nickname))
   - entry.decorate.used?(:company_name) do
-    = f.labeled_string_field(:company_name,
+    = f.labeled_input_field(:company_name,
                              placeholder: I18n.t('global.search.placeholder_company_name'),
                              data: { provide: 'entity',
                                      url: query_company_name_path })
   - entry.decorate.used?(:company) do
-    = f.labeled_input_fields :company
+    = f.labeled_boolean_field :company
 
   = render_extensions :name_fields, locals: { f: f }
 
@@ -32,14 +32,14 @@
   = f.labeled_string_field(:birthday,
                            value: f.date_value(:birthday),
                            help_inline: t('.format_birthday'),
-                           class: 'span2')
+                           class: 'col-2 form-control form-control-sm d-inline')
   - FeatureGate.if(:person_language) do
     = f.labeled_collection_select(:language,
                                   Person::LANGUAGES,
                                   :first,
                                   :last,
                                   { prompt: true },
-                                  class: 'span6')
+                                  class: 'form-select form-select-sm')
 
 
 = render_extensions :fields, locals: { f: f }

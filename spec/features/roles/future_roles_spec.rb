@@ -27,10 +27,10 @@ describe 'Future Roles behaviour', js: :true do
   end
 
   def choose_role(role, current_selection: nil)
-    expect(page).to have_css('#role_type_select a.chosen-single')
-    find('#role_type_select a.chosen-single').click
-    expect(page).to have_css('#role_type_select a.chosen-single > span', text: current_selection)
-    find('#role_type_select ul.chosen-results').find('li', text: role).click
+    expect(page).to have_css('#role_type_select #role_type')
+    find('#role_type_select #role_type').click
+    expect(page).to have_css('#role_type_select #role_type option', text: role)
+    find('#role_type_select #role_type').find('option', text: role).click
   end
 
   describe 'create' do
@@ -144,8 +144,18 @@ describe 'Future Roles behaviour', js: :true do
       bottom_member.roles.find_by(type: 'FutureRole').attributes.symbolize_keys
     end
 
+    def choose_role(role, current_selection: nil)
+      expect(page).to have_css('#role_type_select #role_type')
+      find('#role_type_select #role_type').click
+      expect(page).to have_css('#role_type_select #role_type option', text: role)
+      find('#role_type_select #role_type').find('option', text: role).click
+    end
+
     def deselect_role
-      find('.search-choice-close').click
+      expect(page).to have_css('#role_type_select #role_type')
+      find('#role_type_select #role_type').click
+      expect(page).to have_css('#role_type_select #role_type option', text: "")
+      find('#role_type_select #role_type').find_all('option', text: "").first.click
     end
 
     it 'can create new future role' do
@@ -173,7 +183,7 @@ describe 'Future Roles behaviour', js: :true do
       expect do
         first(:button, 'Speichern').click
       end.not_to change { bottom_member.roles.count }
-      expect(page).to have_css '.alert-error', text: 'Rolle muss ausgefüllt werden'
+      expect(page).to have_css '.alert-danger', text: 'Rolle muss ausgefüllt werden'
       expect(page).to have_field('Von', with: I18n.l(tomorrow))
     end
 
@@ -181,7 +191,7 @@ describe 'Future Roles behaviour', js: :true do
       create_future_role
       visit group_people_path(top_group, locale: :de)
       click_on 'Zukünftige (1)'
-      expect(page).to have_css('li.active', text: 'Zukünftige (1)')
+      expect(page).to have_css('a.nav-link.active', text: 'Zukünftige (1)')
       click_on 'Bearbeiten'
       choose_role 'Leader', current_selection: 'Member'
       expect do
@@ -207,7 +217,7 @@ describe 'Future Roles behaviour', js: :true do
       within(current_roles_aside) { click_on 'Bearbeiten' }
       fill_in 'Von', with: tomorrow
       first(:button, 'Speichern').click
-      expect(page).to have_css '.alert-error', text: 'Von kann nicht später als heute sein'
+      expect(page).to have_css '.alert-danger', text: 'Von kann nicht später als heute sein'
     end
 
     it 'saving outdated future role converts role' do

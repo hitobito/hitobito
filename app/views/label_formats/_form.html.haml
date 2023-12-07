@@ -6,25 +6,24 @@
 = entry_form(buttons_bottom: false) do |f|
   = hidden_field_tag :global, params[:global]
 
-  #main.row-fluid
-    %article.span6
+  #main.row
+    %article.col-6
       = f.labeled_input_fields :name
-      = f.labeled_collection_select(:page_size, LabelFormat.available_page_sizes, :to_s, :to_s, {}, class: 'span4')
+      = f.labeled_collection_select(:page_size, LabelFormat.available_page_sizes, :to_s, :to_s, {}, class: 'col-4 form-select form-select-sm')
       = f.labeled(:landscape) do
         = f.inline_radio_button(:landscape, false, t('.portrait'))
         = f.inline_radio_button(:landscape, true, t('.landscape'))
       = f.labeled_input_fields :font_size, :count_horizontal, :count_vertical
-      = f.labeled_input_field :width, help_inline: 'mm'
-      = f.labeled_input_field :height, help_inline: 'mm'
-      = f.labeled_input_field :padding_top, help_inline: 'mm'
-      = f.labeled_input_field :padding_left, help_inline: 'mm'
-      = f.labeled_input_field :nickname if Person.used_attributes.include?(:nickname)
-      = f.labeled(:pp_post) do
-        .input-prepend.input-append
-          %span.add-on
-            = 'P.P.'
-          = f.input_field :pp_post, :placeholder => 'CH-3030 Bern'
-          %span.add-on
-            = 'Post CH AG'
-    %aside.span6
+      = f.labeled_input_field :width, help_inline: 'mm', class: 'd-inline form-control form-control-sm'
+      = f.labeled_input_field :height, help_inline: 'mm', class: 'd-inline form-control form-control-sm'
+      = f.labeled_input_field :padding_top, help_inline: 'mm', class: 'd-inline form-control form-control-sm'
+      = f.labeled_input_field :padding_left, help_inline: 'mm', class: 'd-inline form-control form-control-sm'
+      = f.labeled_boolean_field :nickname if Person.used_attributes.include?(:nickname)
+      = f.labeled(:pp_post, class: 'input-group input-group-sm') do
+        %span.input-group-text
+          = 'P.P.'
+        = f.input_field :pp_post, :placeholder => 'CH-3030 Bern'
+        %span.input-group-text
+          = 'Post CH AG'
+    %aside.col-6
       = image_pack_tag("label_formats.png", size: '426x323')

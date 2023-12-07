@@ -5,7 +5,7 @@
 
     .control-group.has-feedback.has-clear
       = label_tag(:q, t('global.button.search'), class: 'control-label')
-      = search_field_tag :q, params[:q], class: 'form-control', placeholder: t('global.button.search'), data: { submit: true }, style: 'height: 20px'
+      = search_field_tag :q, params[:q], class: 'form-control form-control-sm', placeholder: t('global.button.search'), data: { submit: true }
       %span.form-control-feedback{data: { clear: true }}
         = icon(:times)
 
@@ -15,7 +15,7 @@
       = direct_filter_select(:due_since, invoice_due_since_options, t('.due_since'))
 
     %div
-      .pull-right.invoices-daterange-filter
+      .float-end.invoices-daterange-filter.pt-5
         = direct_filter_date(:from, t('.from'), value: params[:from] || "1.1.#{@year_from || Time.zone.today.year}", data: { submit: true })
         = direct_filter_date(:to, t('.to'), value: params[:to] || "31.12.#{Time.zone.today.year}", data: { submit: true })
 - params[:q] = nil # Reset param so quicksearch filter does not get populated

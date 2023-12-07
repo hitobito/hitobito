@@ -46,8 +46,8 @@ describe PeopleController, js: true do
 
       it 'changes role' do
         obsolete_node_safe do
-          find('#role_type_select a.chosen-single').click
-          find('#role_type_select ul.chosen-results').find('li', text: 'Leader').click
+          find('#role_type_select #role_type').click
+          find('#role_type_select #role_type').find('option', text: 'Leader').click
 
           click_button 'Speichern'
           expect(page).to have_no_css('.popover')
@@ -57,11 +57,11 @@ describe PeopleController, js: true do
 
       it 'changes role and group' do
         obsolete_node_safe do
-          find('#role_group_id_chosen a.chosen-single').click
-          find('#role_group_id_chosen ul.chosen-results').find('li', text: 'Group 111').click
+          find('#role_group_id_chosen #role_type').click
+          find('#role_group_id_chosen #role_type').find('option', text: 'Group 111').click
 
-          find('#role_type_select a.chosen-single').click
-          find('#role_type_select ul.chosen-results').find('li', text: 'Leader').click
+          find('#role_type_select #role_type').click
+          find('#role_type_select #role_type').find('option', text: 'Leader').click
           click_button 'Speichern'
           expect(cell).to have_text 'Group 111'
         end
@@ -69,15 +69,15 @@ describe PeopleController, js: true do
 
       it 'informs about missing type selection' do
         obsolete_node_safe do
-          find('#role_group_id_chosen a.chosen-single').click
-          find('#role_group_id_chosen ul.chosen-results').find('li', text: 'Group 111').click
+          find('#role_group_id_chosen #role_type').click
+          find('#role_group_id_chosen #role_type').find('option', text: 'Group 111').click
           fill_in('role_label', with: 'dummy')
 
           click_button 'Speichern'
-          expect(page).to have_selector('.popover .alert-error', text: 'Rolle muss ausgefüllt werden')
+          expect(page).to have_selector('.popover .alert-danger', text: 'Rolle muss ausgefüllt werden')
 
-          find('#role_type_select a.chosen-single').click
-          find('#role_type_select ul.chosen-results').find('li', text: 'Leader').click
+          find('#role_type_select #role_type').click
+          find('#role_type_select #role_type').find('option', text: 'Leader').click
           click_button 'Speichern'
           expect(cell).to have_text 'Group 111'
         end
@@ -115,9 +115,10 @@ describe PeopleController, js: true do
           is_expected.to have_content 'Beziehungen'
 
           expect do
+            expect(page).to have_selector('a[data-association="relations_to_tails"]')
             find('a[data-association="relations_to_tails"]', text: 'Eintrag hinzufügen').click
             find('#relations_to_tails_fields input[data-provide=entity]').set('Bottom')
-            find('#relations_to_tails_fields ul.typeahead li').click
+            find('#relations_to_tails_fields ul[role="listbox"] li[role="option"]').click
 
             all('button', text: 'Speichern').first.click
             expect(page).to have_content('erfolgreich aktualisiert')
@@ -135,7 +136,8 @@ describe PeopleController, js: true do
           is_expected.to have_content 'Beziehungen'
 
           expect do
-            find('#relations_to_tails_fields .remove_nested_fields').first.click
+            expect(page).to have_selector('#relations_to_tails_fields .remove_nested_fields')
+            all('#relations_to_tails_fields .remove_nested_fields').first.click
 
             all('button', text: 'Speichern').first.click
             expect(page).to have_content('erfolgreich aktualisiert')

@@ -65,8 +65,11 @@ module FormHelper
   end
 
   def button_toolbar(form, toolbar_class:, &block)
-    content_tag(:div, class: "btn-toolbar #{toolbar_class}") do
-      capture(form, &block)
+    offset_classes = toolbar_class == 'bottom' ? 'offset-md-3 offset-xl-2' : ''
+    content_tag(:div, class: 'row mb-2 mt-0') do
+      content_tag(:div, class: "#{toolbar_class} #{offset_classes}") do
+        capture(form, &block)
+      end
     end
   end
 
@@ -83,14 +86,15 @@ module FormHelper
 
   def add_another_button(form, label, options = {})
     content_tag(:div, class: 'btn-group') do
-      form.button(label, options.merge(name: :add_another, class: 'btn btn-primary',
+      form.button(label, options.merge(name: :add_another, class: 'btn btn-sm btn-primary mt-2',
                                        data: { disable: true }))
     end
   end
 
   def submit_button(form, label, options = {})
     content_tag(:div, class: 'btn-group') do
-      form.button(label, options.merge(class: 'btn btn-primary', data: { disable_with: label }))
+      form.button(label, options.merge(class: 'btn btn-sm btn-primary mt-2',
+                  data: { disable_with: label }))
     end
   end
 

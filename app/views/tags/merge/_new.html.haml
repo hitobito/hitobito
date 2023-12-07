@@ -11,12 +11,12 @@
             .control-group
               %label.control-label= t('tags_merge.tags')
               .controls
-                %div{style: 'padding-top: 5px;'}= @tag_names
+                %div.pt-1= @tag_names
           .row-fluid
             .control-group
               %label.control-label= t('tags_merge.name')
               .controls
-                = f.text_field(:name, value: @name, placeholder: @name)
+                = f.text_field(:name, value: @name, placeholder: @name, class: 'form-control form-control-sm')
             = f.hidden_field(:dst_tag_id, value: @dst_tag.id)
             = f.hidden_field(:src_tag_ids, value: @src_tag_ids)
         .modal-footer

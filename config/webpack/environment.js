@@ -15,8 +15,13 @@ environment.loaders.prepend('coffee', coffee)
 environment.loaders.append('erb', erb)
 
 // Bundle images referenced within SASS files
-environment.loaders.find(l => l.key === 'sass').value.use
-  .splice(-1, 0, { loader: 'resolve-url-loader' })
+const sass = environment.loaders.find(l => l.key === 'sass').value
+sass.use.splice(-1, 0, { loader: 'resolve-url-loader' })
+
+// Remove postcss-loader to avoid a parsing bug with PostCSS
+// 7.0.39. This would be fixed with 8.4.31, but @rails/webpacker is
+// not maintained anymore, so can't update.
+sass.use = sass.use.filter(({loader}) => loader !== 'postcss-loader')
 
 // Old-school libraries must be made globally accessible by exposing
 // them to the window object.

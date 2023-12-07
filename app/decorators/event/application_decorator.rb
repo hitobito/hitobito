@@ -37,7 +37,7 @@ class Event::ApplicationDecorator < ::ApplicationDecorator
            else
              waiting_list? ? 'Warteliste' : nil
            end
-    content_tag(:span, prio, class: 'badge badge-info') if prio
+    content_tag(:span, prio, class: 'badge bg-info') if prio
   end
 
   def precondition_warnings(event)
@@ -60,7 +60,7 @@ class Event::ApplicationDecorator < ::ApplicationDecorator
     if approved
       ['&#x2713;'.html_safe, 'success', translate('approval.approved')]
     elsif rejected
-      ['&#x00D7;'.html_safe, 'important', translate('approval.rejected')]
+      ['&#x00D7;'.html_safe, 'danger', translate('approval.rejected')]
     else
       ['?', 'warning', translate('approval.missing')]
     end

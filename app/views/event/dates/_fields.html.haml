@@ -3,8 +3,8 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= f.labeled_string_field(:label, help_inline: f.link_to_remove(ta(:remove)))
-= f.labeled_string_field(:location)
+= f.labeled_string_field(:label, help_inline: f.link_to_remove(ta(:remove)), class: 'mt-1 d-inline')
+= f.labeled_string_field(:location, class: 'mt-1')
 = f.labeled_datetime_field(:start_at)
 = f.labeled_datetime_field(:finish_at)
 .controls.fields-separation

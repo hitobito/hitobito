@@ -6,9 +6,9 @@
 	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
 	background-color: $white;
 
-	$navLeftPadding: 1rem;
-	$navLeftIconWidth: 2rem;
-	$navLeftPaddingFull: $navLeftPadding + $navLeftIconWidth;
+	$nav-left-padding: 1rem;
+	$nav-left-icon-width: 2rem;
+	$nav-left-padding-full: $nav-left-padding + $nav-left-icon-width;
 
 	// list resets
 
@@ -18,7 +18,7 @@
 
 	a {
 		display: block;
-		padding-left: $navLeftPaddingFull;
+		padding-left: $nav-left-padding-full;
 		line-height: 95%;
 		padding-top: 0.2rem;
 		padding-bottom: 0.2rem;
@@ -31,23 +31,23 @@
 	}
 
 	a.is-active, li.is-active > a {
-		background-color: desaturate(lighten($linkColor, 50%), 20%);
-		border-left: 3px solid $linkColor;
+		background-color: desaturate(lighten($link-color, 50%), 20%);
+		border-left: 3px solid $link-color;
 	}
 
 	a.is-archived, li.is-archived > a {
-		color: desaturate(lighten($linkColor, 20%), 80%);
+		color: desaturate(lighten($link-color, 20%), 80%);
 	}
 
 	.nav-left-section {
-		background-color: $grayLighter;
-		border-top: 1px solid $grayLight;
+		background-color: $gray-lighter;
+		border-top: 1px solid $gray-light;
 		& > a {
 			font-size: 1.2rem;
 			padding: 0.9rem;
-			padding-left: $navLeftPadding;
+			padding-left: $nav-left-padding;
 			i {
-				width: $navLeftIconWidth
+				width: $nav-left-icon-width
 			}
 		}
 		&.active {
@@ -68,7 +68,7 @@
 		font-size: 1rem;
 		padding-top: 0.4rem;
 		padding-bottom: 0.4rem;
-		padding-left: $navLeftPaddingFull;
+		padding-left: $nav-left-padding-full;
 		font-weight: bold;
 	}
 
@@ -78,10 +78,10 @@
 
 	.divider {
 		display: block;
-		color: $grayDarker;
+		color: $gray-darker;
 		text-transform: uppercase;
 		font-size: 0.7rem;
-		padding-left: $navLeftPaddingFull;
+		padding-left: $nav-left-padding-full;
 		margin-top: 1rem;
 		border-left: 3px solid transparent;
 	}
@@ -101,7 +101,7 @@
 			padding: 0rem;
 		}
 		.lang {
-			padding-left: $navLeftPaddingFull;
+			padding-left: $nav-left-padding-full;
 		}
 	  .lang .active {
 	  	color: $black;
@@ -111,12 +111,12 @@
 
 	// typgraphical hierarchy
 
-	$hierarchyShiftWidth: 0.7rem;
+	$hierarchy-shift-width: 0.7rem;
 
-	ul ul ul a { 										padding-left: 1 * $hierarchyShiftWidth + $navLeftPaddingFull;}
-	ul ul ul ul a { 								padding-left: 2 * $hierarchyShiftWidth + $navLeftPaddingFull; }
-	ul ul ul ul ul a { 							padding-left: 3 * $hierarchyShiftWidth + $navLeftPaddingFull; }
-	ul ul ul ul ul ul ul a { 				padding-left: 4 * $hierarchyShiftWidth + $navLeftPaddingFull; }
-	ul ul ul ul ul ul ul ul a { 		padding-left: 5 * $hierarchyShiftWidth + $navLeftPaddingFull; }
-	ul ul ul ul ul ul ul ul ul a { 	padding-left: 6 * $hierarchyShiftWidth + $navLeftPaddingFull; }
+	ul ul ul a { 										padding-left: 1 * $hierarchy-shift-width + $nav-left-padding-full;}
+	ul ul ul ul a { 								padding-left: 2 * $hierarchy-shift-width + $nav-left-padding-full; }
+	ul ul ul ul ul a { 							padding-left: 3 * $hierarchy-shift-width + $nav-left-padding-full; }
+	ul ul ul ul ul ul ul a { 				padding-left: 4 * $hierarchy-shift-width + $nav-left-padding-full; }
+	ul ul ul ul ul ul ul ul a { 		padding-left: 5 * $hierarchy-shift-width + $nav-left-padding-full; }
+	ul ul ul ul ul ul ul ul ul a { 	padding-left: 6 * $hierarchy-shift-width + $nav-left-padding-full; }
 }

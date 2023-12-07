@@ -4,12 +4,12 @@
 = f.labeled_input_field :payment_information, rows: 2, help: t('.payment_information_help')
 = f.labeled_input_field :vat_number
 
-%h3.form-subtitle= t('.payment')
+%h3.form-subtitle.mt-5= t('.payment')
 = f.labeled_input_field :payee, rows: 3, help: t('.payee_help')
 = f.labeled_input_field :iban, help: t('.iban_example')
 = f.labeled(:payment_slip) do
-  = f.collection_select(:payment_slip, InvoiceConfig.payment_slip_labels.to_a, :first, :second, {}, class: 'span6')
+  = f.collection_select(:payment_slip, InvoiceConfig.payment_slip_labels.to_a, :first, :second, {}, class: 'form-select form-select-sm')
 
-%h3.form-subtitle= t('.variable_donation_appeal')
+%h3.form-subtitle.mt-5= t('.variable_donation_appeal')
 = f.labeled_input_field :donation_calculation_year_amount, help: t('.donation_calculation_year_amount_explanation')
 = f.labeled_input_field :donation_increase_percentage, help: t('.donation_increase_percentage_explanation')

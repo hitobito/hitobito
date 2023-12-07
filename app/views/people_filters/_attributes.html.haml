@@ -5,12 +5,12 @@
 
 - filter = entry.filter_chain[:attributes]
 
-.people_filter_attribute_form_template.hidden
+.people_filter_attribute_form_template.d-none
   = people_filter_attribute_form_template
 .control_group{data: { types: people_filter_types_for_data_attribute } }
   #people_filter_attribute_forms
     = people_filter_attribute_forms(filter)
 
-  = select(:attribute, :filter, people_filter_attributes_for_select, include_blank: true)
+  = select(:attribute, :filter, people_filter_attributes_for_select, { include_blank: "" }, { class: "form-select form-select-sm" })
 
 

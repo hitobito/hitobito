@@ -8,19 +8,19 @@
   %h2
     = Note.model_name.human(count: 2)
     - if can?(:create, entry.notes.new)
-      %span.pull-right
+      %span.float-end
         = action_button(t('notes.new_note'),
                         '#',
                         'plus',
                         id: 'notes-new-button',
-                        class: 'btn-small notes-swap',
+                        class: 'btn-sm notes-swap btn-outline-primary',
                         data: { swap: 'notes-swap' })
 
   #notes-form.notes-swap{ style: 'display: none;', data: { swap: 'notes-swap' } }
-    #notes-error.alert.alert-error{ style: 'display: none;' }
+    #notes-error.alert.alert-danger{ style: 'display: none;' }
 
     = form_for(Note.new, url: create_path, remote: true) do |f|
-      = f.text_area(:text, rows: 5, class: 'input-block-level')
+      = f.text_area(:text, rows: 5, class: 'input-block-level form-control form-control-sm')
       = form_buttons(f)
 
   = render 'notes/list',

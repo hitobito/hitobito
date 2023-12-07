@@ -17,13 +17,13 @@ describe 'OauthWorkflow' do
     fill_in 'Redirect URI', with: 'urn:ietf:wg:oauth:2.0:oob'
     check 'name', id: 'oauth_application_scope_name'
     check 'email'
-    within('.btn-toolbar.bottom') do
+    within('.bottom') do
       click_button 'Speichern'
     end
   end
 
   it 'creates access_grant for the user' do
-    skip("window_handles not supported on travis")
+    skip "window_handles not supported on travis"
     app = Oauth::Application.create!(name: 'MyApp', redirect_uri: redirect_uri)
     visit oauth_application_path(app)
     click_link 'Autorisierungen'

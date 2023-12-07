@@ -12,7 +12,7 @@
 
   = render 'range', f: f
 
-  .accordion
+  .accordion.mb-3
     = render(layout: 'filter', locals: { type: :role }) do
       = render 'role', f: f
 
@@ -29,6 +29,7 @@
         = render 'tag_absence', f: f
 
   - if can?(:create, entry)
-    = f.labeled_input_field :name, placeholder: t('.save_filter_placeholder')
+    %label.required=PeopleFilter.human_attribute_name(:name)
+    = f.input_field :name, placeholder: t('.save_filter_placeholder'), class: 'mb-3 ', required: false
 
   = render 'search_or_save_buttons', f: f

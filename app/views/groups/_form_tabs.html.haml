@@ -1,9 +1,9 @@
 %ul.nav.nav-tabs
-  %li.active= link_to(t('groups.form_tabs.general'), '#general', data: { toggle: 'tab' })
-  %li= link_to(Group.human_attribute_name(:contactable), '#contactable', data: { toggle: 'tab' })
-  %li= link_to(Group.human_attribute_name(:self_registration_link), '#self-registration', data: { toggle: 'tab' })
-  %li= link_to(MailingList.model_name.human(count: 2), '#mailing_lists', data: { toggle: 'tab' })
+  %li.nav-item= link_to(t('groups.form_tabs.general'), '#general', data: { bs_toggle: 'tab' }, class: 'active nav-link')
+  %li.nav-item= link_to(Group.human_attribute_name(:contactable), '#contactable', data: { bs_toggle: 'tab' }, class: 'nav-link')
+  %li.nav-item= link_to(Group.human_attribute_name(:self_registration_link), '#self-registration', data: { bs_toggle: 'tab' }, class: 'nav-link')
+  %li.nav-item= link_to(MailingList.model_name.human(count: 2), '#mailing_lists', data: { bs_toggle: 'tab' }, class: 'nav-link')
   - entry.model.class.mounted_attr_configs_by_category&.keys&.each do |key|
-    %li= link_to(t("mounted_attributes.form_tabs.#{entry.model.class.sti_name.underscore}.#{key}"), "##{key}", data: { toggle: 'tab' })
+    %li.nav-item= link_to(t("mounted_attributes.form_tabs.#{entry.model.class.sti_name.underscore}.#{key}"), "##{key}", data: { bs_toggle: 'tab' }, class: 'nav-link')
 
   = render_extensions :form_tabs

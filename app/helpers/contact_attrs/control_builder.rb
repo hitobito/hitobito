@@ -63,9 +63,9 @@ module ContactAttrs
     end
 
     def radio_button(attr, disabled, option, checked = false)
-      f.label("#{for_label(attr)}_#{option}", class: 'radio inline') do
+      f.label("#{for_label(attr)}_#{option}", class: 'radio inline mt-2') do
         checked ||= checked?(attr, option)
-        options = { disabled: disabled, checked: checked }
+        options = { disabled: disabled, checked: checked, class: 'me-2' }
         f.radio_button(for_label(attr), option, options) +
           option_label(option)
       end
@@ -73,7 +73,7 @@ module ContactAttrs
 
     def assoc_checkbox(assoc)
       f.label(for_label(assoc), class: 'checkbox inline') do
-        options = { checked: assoc_hidden?(assoc) }
+        options = { checked: assoc_hidden?(assoc), class: 'me-2 mt-2' }
         f.check_box(for_label(assoc), options, :hidden) +
           option_label(:hidden)
       end

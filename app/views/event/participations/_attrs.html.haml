@@ -3,8 +3,8 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-#main.row-fluid
-  %article.span6
+#main.row
+  %article.col-6
     = render 'people/contact_data', person: entry.person, only_public: cannot?(:show_details, entry)
 
     = render_attrs(entry.person, :layer_group, :birthday, :gender)
@@ -28,7 +28,7 @@
       = section t('activerecord.attributes.event/participation.additional_information') do
         %p.multiline= entry.additional_information || '-'
 
-  %aside.span5.offset1
+  %aside.col-5.offset-1
     = render 'apply_to'
 
     = render 'roles'

@@ -35,7 +35,7 @@ describe :event_participation do
 
       find('input#event_participation_contact_data_privacy_policy_accepted').click
 
-      find_all('.btn-toolbar.bottom .btn-group button[type="submit"]').first.click # "Weiter"
+      find_all('.bottom .btn-group button[type="submit"]').first.click # "Weiter"
 
       expect do
         click_button('Anmelden')
@@ -58,7 +58,7 @@ describe :event_participation do
       is_expected.to have_content('Privacy Policy Top Layer')
       is_expected.to have_content('Additional Policies Bottom Layer')
 
-      find_all('.btn-toolbar.bottom .btn-group button[type="submit"]').first.click # "Weiter"
+      find_all('.bottom .btn-group button[type="submit"]').first.click # "Weiter"
 
       expect(current_path).to eq(contact_data_group_event_participations_path(group, event))
     end

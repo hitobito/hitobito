@@ -2,7 +2,7 @@
   margin: 1rem 0;
 
   label {
-    border: 1px solid $borderColor;
+    border: 1px solid $border-color;
     border-radius: 6px;
     padding: 0.75rem 0.75rem 0.75rem 2rem;
 
@@ -21,9 +21,11 @@
     }
     > .label {
       margin-left: 0.25rem;
-      background: $grayLight;
+      background: $gray-light;
       color: $black;
       text-shadow: none;
+      border-radius: 3px;
+      padding: 2px 4px;
     }
     > p {
       margin: 0;
@@ -36,7 +38,7 @@
   label.selected,
   label:hover {
     border-color: $blue;
-    background: desaturate(lighten($linkColor, 50%), 20%);
+    background: desaturate(lighten($link-color, 50%), 20%);
   }
 
   #merge-hint {

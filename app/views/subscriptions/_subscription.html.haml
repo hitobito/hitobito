@@ -7,10 +7,10 @@
   %h4= subscription.subscriber.with_layer.join(' / ')
   - subscription.grouped_role_types.each do |layer, groups|
     %h5= layer
-    %dl.dl-horizontal.dl-borderless
+    %dl.dl-horizontal.dl-borderless.row
       - groups.each do |group, role_types|
-        %dt= group
-        %dd= role_types.map(&:label).join(', ')
+        %dt.col-2.ms-5= group
+        %dd.col-9.ms-2= role_types.map(&:label).join(', ')
   - if subscription.subscription_tags.included.present?
     %p
       = t('.only_persons_with')

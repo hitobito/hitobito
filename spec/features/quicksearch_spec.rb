@@ -18,7 +18,7 @@ describe 'Quicksearch', sphinx: true do
 
         fill_in 'quicksearch', with: 'top'
 
-        dropdown = find('.typeahead.dropdown-menu')
+        dropdown = find('ul[role="listbox"]')
         expect(dropdown).to have_content('Top Leader, Supertown')
         expect(dropdown).to have_content('Top → TopGroup')
         expect(dropdown).to have_content('Top')

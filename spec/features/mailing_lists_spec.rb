@@ -20,12 +20,12 @@ describe MailingListsController, js: true do
     visit edit_group_mailing_list_path(list.group, list)
 
     all('span.chip a')[0].click
-    find('.btn-toolbar.top button[type=submit]').click
+    find('.top button[type=submit]').click
     expect(page).not_to have_content 'Mutter'
 
     visit edit_group_mailing_list_path(list.group, list)
     all('span.chip a')[0].click
-    find('.btn-toolbar.top button[type=submit]').click
+    find('.top button[type=submit]').click
     expect(page).not_to have_content 'Vater'
   end
 
@@ -38,7 +38,7 @@ describe MailingListsController, js: true do
     page.find('body').click # blur
     expect(page).to have_content 'Vater'
 
-    find('.btn-toolbar.top button[type=submit]').click
+    find('.top button[type=submit]').click
 
     expect(page).to have_content 'Vater'
   end
@@ -56,7 +56,7 @@ describe MailingListsController, js: true do
     page.find('body').click # blur
     expect(page).to have_content 'Mutter'
 
-    find('.btn-toolbar.top button[type=submit]').click
+    find('.top button[type=submit]').click
 
     expect(page).to have_content 'Mutter, Vater'
   end

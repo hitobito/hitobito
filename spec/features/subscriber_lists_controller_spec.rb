@@ -29,9 +29,9 @@ describe Subscriber::SubscriberListsController, js: true do
     click_link('Zu Abo hinzufügen')
     find('#q').fill_in with: 'News'
     sleep 0.5 # to avoid race condition in remote-typeahead
-    dropdown = find('.typeahead.dropdown-menu')
+    dropdown = find('ul[role="listbox"]')
     expect(dropdown).to have_content('Newsletter')
-    click_link('Newsletter')
+    find('ul[role="listbox"] li[role="option"]', text: 'Newsletter').click
 
     expect do
       find('button', text: 'Hinzufügen').click

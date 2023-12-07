@@ -97,7 +97,7 @@ module FormatHelper
     content = safe_join(attrs) do |a|
       labeled_attr(obj, a) if !block_given? || yield(a)
     end
-    content_tag(:dl, content, class: 'dl-horizontal') if content.present?
+    content_tag(:dl, content, class: 'dl-horizontal m-0 p-2 border-top') if content.present?
   end
 
   # Like #render_attrs, but only for attributes with a present value.

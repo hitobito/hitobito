@@ -3,5 +3,5 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-%li{class: "#{'active' if page.current?}"}
-  = link_to page, page.current? ? '#' : url, {:remote => remote, :rel => page.next? ? 'next' : page.prev? ? 'prev' : nil}
+%li{class: "#{'active' if page.current?} page-item"}
+  = link_to page, page.current? ? '#' : url, {:remote => remote, :rel => page.next? ? 'next' : page.prev? ? 'prev' : nil, :class => 'page-link'}

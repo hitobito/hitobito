@@ -96,8 +96,8 @@ describe 'Person Tags', js: true do
       within '.person-tags-add-form' do
         fill_in 'acts_as_taggable_on_tag[name]', :with => 'pas'
       end
-      expect(page).to have_selector('ul.typeahead li a', text: 'pasta')
-      find('ul.typeahead li a').click
+      expect(page).to have_selector('ul[role="listbox"] li[role="option"]', text: 'pasta')
+      find('ul[role="listbox"] li[role="option"]').click
       find('.person-tags-add-form button').click
       expect(page).to have_selector('.person-tag', text: 'pasta')
       person.reload

@@ -32,7 +32,7 @@ app.HouseHolds = {
   showHouseholdAddressChangeWarning: ->
     if $('#household').is(':checked')
       $('.address-updated').remove()
-      $('.updates-household-address').removeClass('hidden')
+      $('.updates-household-address').removeClass('d-none')
 
 }
 $(document).on('change', '[data-household] :checkbox[name=household]', app.HouseHolds.showPeopleTypeAhead)

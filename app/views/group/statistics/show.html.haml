@@ -22,7 +22,7 @@
           %td= maybe_value(age_group.send(col))
         %td
           .progress
-            .bar{style: "width: #{distribution_bar_width(age_group.relative_count, @max_relative_count)}"}
+            .progress-bar{style: "width: #{distribution_bar_width(age_group.relative_count, @max_relative_count)}"}
     %tr
       %td
         %strong= t('global.all')

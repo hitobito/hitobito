@@ -5,8 +5,8 @@
 
 -title event.to_s
 
-.row-fluid
-  .btn-toolbar.span9
+.row
+  .btn-toolbar.col-9
     - if can?(:new, @event.participations.new)
       = Dropdown::Event::ParticipantAdd.new(self,
                                             @group,
@@ -15,32 +15,32 @@
                                             :plus,
                                             for_someone_else: true)
 
-  .span3
+  .col-3
     %span#booking_info= event.booking_info
 
-#main.row-fluid
-  %article.span6
+#main.row
+  %article.col-6
     %h2= t('.assigned_participants')
-    %p{style: 'padding-top: 7px; margin-bottom: 25px;'}
+    %p.pt-1.mb-3
       %span#active_participants_info= event.active_participants_info
 
-    %div{style: "max-width: 550px;"}
+    %div.mw-100
       %table.table.table-striped.table-hover
         %tbody#participants
           - @participants.each do |p|
             = render 'participant', p: p
 
 
-  %article.span6
+  %article.col-6
     %h2= Event::Application.label_plural
     .pending_applications_info
       %span= "#{@applications.count} #{Event::Application.label(count: @applications.count)}"
-      %span.hidden.one=Event::Application.label
-      %span.hidden.other=Event::Application.label_plural
+      %span.d-none.one=Event::Application.label
+      %span.d-none.other=Event::Application.label_plural
 
     = render 'prio_buttons'
 
-    %div{style: "max-width: 600px;"}
+    %div.mw-100
       %table.table.table-striped.table-hover
         %tbody#applications
           - @applications.each do |p|

@@ -8,10 +8,11 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.14.0",
+    "@popperjs/core": "^2.11.6",
     "@rails/actiontext": "^6.0.3-3",
     "@rails/webpacker": "5.4.3",
-    "bootstrap-sass": "~2.3.2",
-    "chosen-js": "~1.8.7",
+    "@tarekraafat/autocomplete.js": "^10.2.7",
+    "bootstrap": "^5.2.0",
     "coffee-loader": "^1.0.0",
     "coffeescript": "1.12.7",
     "expose-loader": "^1.0.0",
@@ -25,6 +26,7 @@
     "resolve-url-loader": "^5.0.0",
     "sass": "^1.49.7",
     "stimulus": "^3.2.2",
+    "tom-select": "^2.2.2",
     "trix": "^1.2.0",
     "turbolinks": "~5.0.1"
   },

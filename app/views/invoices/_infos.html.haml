@@ -5,12 +5,12 @@
 
 .invoice-info.clearfix
   %dl.dl-horizontal
-    .invoice-recipient-address
+    .invoice-recipient-address.pt-3
       .contactable
         .address
           = invoice_receiver_address(entry)
 
-    .invoice-payment
+    .invoice-payment.pt-3
       = labeled(captionize(:payment_slip, object_class(entry)), entry.payment_slip_label)
       = labeled_attr(entry, :payee)
       = labeled_attr(entry, :beneficiary) if entry.bank?

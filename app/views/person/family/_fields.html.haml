@@ -4,10 +4,12 @@
 -#  https://github.com/hitobito/hitobito.
 
 - if f.object.new_record?
-  = f.person_field(:other, class: 'span4')
-  = f.collection_select(:kind, FamilyMember.kind_labels, :first, :second, {}, class: 'span2')
+  %div.col-5.inline
+    = f.person_field(:other)
+  %div.col-2.inline.row
+    = f.collection_select(:kind, FamilyMember.kind_labels, :first, :second, {}, class: 'form-select form-select-sm h-100')
 - else
-  .span4
+  .col-4
     = f.object.other&.full_name
     %i
       = f.object.kind_label

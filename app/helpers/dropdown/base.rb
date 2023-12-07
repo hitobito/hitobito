@@ -20,14 +20,14 @@ module Dropdown
       @label = label
       @icon = icon
       @main_link = nil
-      @button_class = 'btn'
+      @button_class = 'btn btn-outline-primary btn-sm'
       @items = []
     end
 
     def to_s
-      template.button_group do
+      template.content_tag(:div, class: 'btn-group dropdown') do
         render_dropdown_button +
-        render_items
+          render_items
       end
     end
 
@@ -55,10 +55,10 @@ module Dropdown
         content_tag(:a,
                     class: "dropdown-toggle #{button_class}",
                     href: '#',
-                    data: { toggle: 'dropdown' }) do
-          safe_join([label_without_link,
-                     content_tag(:b, '', class: 'caret')].compact, ' ')
-        end
+                    data: { 'bs_toggle': 'dropdown' }) do
+                      safe_join([label_without_link,
+                                 content_tag(:b, '', class: 'caret')].compact, ' ')
+                    end
       ].compact, ' ')
     end
 
@@ -79,7 +79,8 @@ module Dropdown
     end
 
     def render_items
-      template.content_tag_nested(:ul, items, class: 'dropdown-menu', role: 'menu') do |item|
+      html_options = { class: 'dropdown-menu', role: 'menu' }
+      template.content_tag_nested(:ul, items, html_options) do |item|
         item.render(template)
       end
     end
@@ -108,7 +109,7 @@ module Dropdown
       end
     end
 
-    def link(template, label, url, options)
+    def link(template, label, url, html_options = {})
       return disabled_link(template) if disabled_msg
 
       new_url = case url
@@ -117,22 +118,29 @@ module Dropdown
       else url
       end
 
-      return template.link_to(label, new_url, options) unless disabled_msg
+      html_options[:class] = 'dropdown-item'
+      if sub_items?
+        html_options[:class] += ' dropdown-toggle'
+      end
+
+      return template.link_to(label, new_url, html_options)
     end
 
     def disabled_link(template)
-      template.content_tag(:a, class: 'disabled', title: disabled_msg) do
+      template.content_tag(:a, class: 'dropdown-item disabled', title: disabled_msg) do
         label
       end
     end
 
     def css_class
-      'dropdown-submenu' if sub_items?
+      'dropdown dropend' if sub_items?
     end
 
     def render_sub_items(template)
       if sub_items?
-        template.content_tag_nested(:ul, sub_items, class: 'dropdown-menu') do |sub|
+        html_options = { class: 'dropdown-menu submenu', role: 'menu' }
+
+        template.content_tag_nested(:ul, sub_items, html_options) do |sub|
           sub.render(template)
         end
       end
@@ -142,7 +150,7 @@ module Dropdown
 
   class Divider
     def render(template)
-      template.content_tag(:li, '', class: 'divider')
+      template.content_tag(:hr, '', class: 'dropdown-divider')
     end
   end
 

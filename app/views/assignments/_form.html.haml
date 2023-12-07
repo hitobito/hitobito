@@ -3,11 +3,11 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= entry_form do |f|
-  .control-group
-    %label.control-label
+= entry_form(html: { class: 'pt-3' }) do |f|
+  .row
+    %label.col-form-label.col-md-3.col-xl-2.pb-1.text-md-end
       = t('.attachment.subject')
-    .controls.attachment_subject
+    .attachment_subject.col-md.col-form-label
       = entry.attachment.subject
   - unless entry.persisted?
     = f.labeled(:person, Person.model_name.human) do

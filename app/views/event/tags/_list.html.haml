@@ -2,7 +2,7 @@
   - if tags.present?
     - tags.each do |category, category_tags|
       .event-tags-category
-        .event-tags-category-title{class: tags.length == 1 && category == :other ? 'hidden' : nil}
+        .event-tags-category-title{class: tags.length == 1 && category == :other ? 'd-none' : nil}
           = format_tag_category(category)
         .event-tags-category-list
           - category_tags.each do |tag|

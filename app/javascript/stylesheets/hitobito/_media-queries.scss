@@ -11,32 +11,32 @@
 @mixin responsive($media, $max: '') {
   @if $max != '' {
     @if $media == mediaLarge {
-      @media screen and (min-width:$mediaLarge) and (max-width:$max - 1px) { @content; }
+      @media screen and (min-width:$media-large) and (max-width:$max - 1px) { @content; }
     }
     @else if $media == mediaDesktop {
-      @media screen and (min-width:$mediaDesktop) and (max-width:$max - 1px) { @content; }
+      @media screen and (min-width:$media-desktop) and (max-width:$max - 1px) { @content; }
     }
     @else if $media == mediaTablet {
-      @media screen and (min-width:$mediaTablet) and (max-width:$max - 1px) { @content; }
+      @media screen and (min-width:$media-tablet) and (max-width:$max - 1px) { @content; }
     }
     @else if $media == mediaPhone {
-      @media screen and (min-width:$mediaPhone) and (max-width:$max - 1px) { @content; }
+      @media screen and (min-width:$media-phone) and (max-width:$max - 1px) { @content; }
     }
     @else if $media == phone {
       @media screen and (min-width:0) and (max-width:$max - 1px) { @content; }
     }
   } @else {
     @if $media == mediaLarge {
-      @media screen and (min-width:$mediaLarge) { @content; }
+      @media screen and (min-width:$media-large) { @content; }
     }
     @else if $media == mediaDesktop {
-      @media screen and (min-width:$mediaDesktop) { @content; }
+      @media screen and (min-width:$media-desktop) { @content; }
     }
     @else if $media == mediaTablet {
-      @media screen and (min-width:$mediaTablet) { @content; }
+      @media screen and (min-width:$media-tablet) { @content; }
     }
     @else if $media == mediaPhone {
-      @media screen and (min-width:$mediaPhone) { @content; }
+      @media screen and (min-width:$media-phone) { @content; }
     }
   }
 }

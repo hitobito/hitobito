@@ -26,23 +26,21 @@
   = field_set_tag '' do
     = label_tag(:duration) do
       %label=t('.prompt_role_duration')
-      .input-prepend
-        %span{class: 'add-on'}
-          = icon(:'calendar-alt')
-        = text_field_tag("filters[role][start_at]", filter && filter.args[:start_at], class: 'date span2')
-      %div{style: 'vertical-align: middle; margin: 0px 5px 15px 5px; display: inline-block;'}
+      %div.d-flex
+        %div.input-group
+          %span.input-group-text= icon(:'calendar-alt')
+          = text_field_tag("filters[role][start_at]", filter && filter.args[:start_at], class: 'date col-2 form-control form-control-sm')
+        %label.mx-2.mt-1=t('.prompt_role_duration_until')
+        %div.input-group
+          %span.input-group-text= icon(:'calendar-alt')
+          = text_field_tag("filters[role][finish_at]", filter && filter.args[:finish_at], class: 'date col-2 form-control form-control-sm')
+    %div.row.mt-3
+      - %w(active created deleted).each do |key|
+        = render 'simple_radio',
+            attr: "filters[role][kind]",
+            value: key,
+            checked: filter && filter.args[:kind] == key
 
-        =t('.prompt_role_duration_until')
-      .input-prepend
-        %span{class: 'add-on'}
-          = icon(:'calendar-alt')
-        = text_field_tag("filters[role][finish_at]", filter && filter.args[:finish_at], class: 'date span2')
-    - %w(active created deleted).each do |key|
-      = render 'simple_radio',
-          attr: "filters[role][kind]",
-          value: key,
-          checked: filter && filter.args[:kind] == key
-
-    = label_tag(nil, 'filters_role_include_archived', class: 'checkbox inline') do
-      = check_box_tag('filters[role][include_archived]', true, filter && true?(filter.args[:include_archived]))
-      = t('.include_archived')
+      = label_tag(nil, 'filters_role_include_archived', class: 'checkbox inline mt-2') do
+        = check_box_tag('filters[role][include_archived]', true, filter && true?(filter.args[:include_archived]))
+        = t('.include_archived')

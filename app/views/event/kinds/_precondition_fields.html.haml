@@ -1,21 +1,21 @@
 = f.labeled(Event::Kind.human_attribute_name(:preconditions)) do
   - kinds = entry.qualification_kinds('precondition', 'participant').group_by(&:id)
 
-  #precondition_summary.inline{style: 'padding-bottom: 5px;',
-                               data: { and: t('event.kinds.qualifications.and'),
+  #precondition_summary.inline.mb-1{data: { and: t('event.kinds.qualifications.and'),
                                  or: t('event.kinds.qualifications.or'),
                                  validity_valid: t('activerecord.attributes.event/kind_qualification_kinds.validities.valid'),
                                  validity_valid_or_reactivatable: t('activerecord.attributes.event/kind_qualification_kinds.validities.valid_or_reactivatable'),
                                  validity_valid_or_expired: t('activerecord.attributes.event/kind_qualification_kinds.validities.valid_or_expired')} }
     - entry.grouped_qualification_kind_ids_and_validity('precondition', 'participant').each_with_index do |ids, index|
-      .precondition-grouping
+      %div.precondition-grouping.row.mt-3
         - ids.each do |id|
           = hidden_field_tag("event_kind[precondition_qualification_kinds][#{index}][qualification_kind_ids][]", id[0])
 
         - if index > 0
           %span.muted= t('event.kinds.qualifications.or')
-        = ids.collect { |id| kinds[id[0]].first.to_s }.sort.to_sentence
-        = link_to(icon(:'trash-alt', filled: false), '#', class: 'remove-precondition-grouping')
+        %div
+          = ids.collect { |id| kinds[id[0]].first.to_s }.sort.to_sentence
+          = link_to(icon(:'trash-alt', filled: false), '#', class: 'remove-precondition-grouping')
 
         %label.radio.precondition-validity{for: "event_kind_precondition_qualification_kinds_#{index}_validity_valid"}
           = t('activerecord.attributes.event/kind_qualification_kinds.validities.valid')
@@ -33,8 +33,8 @@
     = select_tag('event_kind_precondition_kind_ids',
                  options_from_collection_for_select(@preconditions, :id, :to_s),
                  multiple: true,
-                 class: 'span6')
+                 class: 'form-select form-select-sm tom-select')
     .help-block
       .btn-group
-        = button_tag(t('.add_precondition'), class: 'btn btn-default')
+        = button_tag(t('.add_precondition'), class: 'btn btn-sm btn-default')
       = link_to(t('global.button.cancel'), '#', class: 'link cancel')

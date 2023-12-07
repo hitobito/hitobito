@@ -8,7 +8,7 @@
     = f.labeled_input_fields(:privacy_policy_title)
 
     = f.labeled :privacy_policy do
-      = f.file_field :privacy_policy, type: :file, accept: '.pdf'
+      = f.file_field :privacy_policy, type: :file, accept: '.pdf', class: 'mt-1 form-control form-control-sm w-25'
 
     - if upload_exists?(entry, :privacy_policy)
       = f.labeled :remove_privacy_policy do

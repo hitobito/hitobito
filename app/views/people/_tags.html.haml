@@ -16,11 +16,13 @@
       = form_for(entry.tags.new, url: group_person_tags_path(@group, entry), remote: true,
                  html: {class: 'person-tags-add-form', style: 'display:none'}) do |f|
         = f.text_field(:name, placeholder: t('.add_tag'),
+                                  class: 'form-control form-control-sm me-3',
                                   data: { provide: 'entity',
                                           url: group_person_tags_query_path(group_id: @group.id,
-                                                                            person_id: entry.id) })
+                                                                            person_id: entry.id),
+                                          submit: true })
 
-        %button.btn{type: :submit}
+        %button.btn.btn-sm.btn-primary{type: :submit}
           = t('global.ok')
           = spinner
     - elsif @tags.blank?

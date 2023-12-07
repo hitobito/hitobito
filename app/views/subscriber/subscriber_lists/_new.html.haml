@@ -17,7 +17,7 @@
             = hidden_field_tag('ids', @people_ids)
             = text_field_tag('q', nil,
               placeholder: t('.mailing_list_search'),
-              class: 'mailing-list-add',
+              class: 'mailing-list-add form-control form-control-sm',
               data: { provide: 'entity',
               updater: 'SubscriberLists.updatePath',
               url: typeahead_group_subscriber_list_path(group, format: :json, type: @event_type) })

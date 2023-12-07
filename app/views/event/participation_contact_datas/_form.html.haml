@@ -5,7 +5,7 @@
 = render 'event/participation_contact_datas/address_fields', f: f
 
 - if entry.show_attr?(:email)
-  = f.labeled_input_field :email, help_inline: t('people.email_field.used_as_login')
+  = f.labeled_input_field :email, help_inline: t('people.email_field.used_as_login'), class: 'd-inline '
 
 - Event::ParticipationContactData.contact_associations.each do |a|
   = field_set_tag do
@@ -27,7 +27,7 @@
     = f.labeled_string_field(:birthday,
                              value: f.date_value(:birthday),
                              help_inline: t('people.fields.format_birthday'),
-                             class: 'span2')
+                             class: 'col-2 d-inline')
 
   - FeatureGate.if(:person_language) do
     = f.labeled_collection_select(:language,
@@ -35,7 +35,7 @@
                                   :first,
                                   :last,
                                   { prompt: true },
-                                  class: 'span6')
+                                  class: 'form-select form-select-sm')
 
 = render_extensions :fields, locals: { f: f }
 

@@ -55,7 +55,7 @@ module PersonDuplicates
     end
 
     def label_class(selected)
-      selected && persons_valid? ? 'radio selected' : 'radio'
+      selected && persons_valid? ? 'radio mb-1 selected' : 'radio mb-1'
     end
 
     def label_for(p_nr)
@@ -63,7 +63,7 @@ module PersonDuplicates
     end
 
     def person_label(person)
-      return f.content_tag(:span, person.to_s) if person.roles.empty?
+      return f.content_tag(:span, person.to_s, class: 'd-inline') if person.roles.empty?
 
       link_to(person.to_s,
               group_person_path(person.primary_group, person),
@@ -72,7 +72,7 @@ module PersonDuplicates
 
     def details(person)
       detail_values(person).compact.map do |v|
-        f.content_tag(:div, v, class: 'label')
+        f.content_tag(:div, v, class: 'label d-inline')
       end.join.html_safe
     end
 
@@ -87,7 +87,7 @@ module PersonDuplicates
 
       if persons_valid?
         style_class = ''
-        style_class += ' hidden' if p_nr.eql?(:person_1)
+        style_class += ' d-none' if p_nr.eql?(:person_1)
         f.content_tag(:div, id: 'merge-hint', class: style_class) do
           [WARNING_ICON, t('.merge_hint')].join(' ')
         end

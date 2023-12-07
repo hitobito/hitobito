@@ -53,7 +53,7 @@ describe :invoice_configs do
 
         expect(page).to have_content 'Logo muss angegeben werden, wenn eine Logoposition gewählt ist'
         click_link 'Layout'
-        expect(page).to have_selector ".error label", text: 'Logo'
+        expect(page).to have_selector "#invoice_config_logo.is-invalid"
       end
 
       it 'attaches logo when file is selected' do

@@ -75,7 +75,7 @@ module Dropdown
       end
     end
 
-    def update_password
+    def unblock_person
       if @user.blocked? && template.can?(:update, @user)
         add_item(translate('.unblock_person'),
                  template.unblock_group_person_path(template.parent, @user), method: :post)

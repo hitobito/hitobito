@@ -141,7 +141,7 @@ describe People::ManualDeletionsController do
           it 'does not minimize' do
             expect do
               post :minimize, params: { group_id: bottom_layer.id, person_id: person_with_expired_roles.id }
-            end.to raise_error(ActiveRecord::RecordInvalid)
+            end.to raise_error(StandardError)
           end
         end
 
@@ -171,7 +171,7 @@ describe People::ManualDeletionsController do
           it 'does not minimize' do
             expect do
               post :minimize, params: { group_id: bottom_layer.id, person_id: person_with_expired_roles.id }
-            end.to raise_error(ActiveRecord::RecordInvalid)
+            end.to raise_error(StandardError)
           end
         end
       end
@@ -238,7 +238,7 @@ describe People::ManualDeletionsController do
           it 'does not delete' do
             expect do
               post :delete, params: { group_id: bottom_layer.id, person_id: person_with_expired_roles.id }
-            end.to raise_error(ActiveRecord::RecordInvalid)
+            end.to raise_error(StandardError)
           end
         end
 

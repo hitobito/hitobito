@@ -22,7 +22,7 @@ class People::ManualDeletionsController < ApplicationController
   def show; end
 
   def minimize
-    raise ActiveRecord::RecordInvalid unless minimizeable?
+    raise StandardError.new('can not minimize') unless minimizeable?
 
     People::Minimizer.new(entry).run
 
@@ -30,7 +30,7 @@ class People::ManualDeletionsController < ApplicationController
   end
 
   def delete
-    raise ActiveRecord::RecordInvalid unless deleteable?
+    raise StandardError.new('can not delete') unless deleteable?
 
     People::Destroyer.new(entry).run
 

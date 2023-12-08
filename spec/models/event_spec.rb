@@ -469,7 +469,7 @@ describe Event do
   context 'participant and application counts' do
     def create_participation(prio, attrs = { active: true })
       participation_attrs = prio == :prio1 ? { event: event } : { event: another_event }
-      application_attrs = prio == :prio1 ? { priority_1: event } : { priority_1: another_event, priority_2: event } # rubocop:disable Metrics/LineLength
+      application_attrs = prio == :prio1 ? { priority_1: event } : { priority_1: another_event, priority_2: event } # rubocop:disable Layout/LineLength
 
       participation = Fabricate(:event_participation, participation_attrs.merge(attrs))
       participation.create_application!(application_attrs)
@@ -661,7 +661,7 @@ describe Event do
       event.update({ hidden_contact_attrs: ['email'] })
 
       expect(event.errors.full_messages.first)
-        .to match(/'email' ist ein Pflichtfeld und kann nicht als optional oder 'nicht anzeigen' gesetzt werden/) # rubocop:disable Metrics/LineLength
+        .to match(/'email' ist ein Pflichtfeld und kann nicht als optional oder 'nicht anzeigen' gesetzt werden/) # rubocop:disable Layout/LineLength
     end
 
     it 'is not possible to set contact association as required' do

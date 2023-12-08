@@ -42,7 +42,7 @@ describe JsonApi::PeopleController, type: [:request] do
         let(:permitted_service_token) { service_tokens(:permitted_top_layer_token) }
         let(:params) { { token: permitted_service_token.token } }
 
-        it 'returns all people with roles for top_layer token with layer_and_below_read permission' do # rubocop:disable Metrics/LineLength
+        it 'returns all people with roles for top_layer token with layer_and_below_read permission' do # rubocop:disable Layout/LineLength
           Fabricate(:role, type: 'Group::BottomLayer::Leader', group: groups(:bottom_layer_two))
 
           jsonapi_get '/api/people', params: params

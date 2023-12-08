@@ -24,7 +24,7 @@
 #  index_message_recipients_on_person_id                    (person_id)
 #  index_message_recipients_on_person_message_address       (person_id,message_id,address) UNIQUE
 #  index_message_recipients_on_person_message_email         (person_id,message_id,email) UNIQUE
-#  index_message_recipients_on_person_message_phone_number  (person_id,message_id,phone_number) UNIQUE # rubocop:disable Metrics/LineLength
+#  index_message_recipients_on_person_message_phone_number  (person_id,message_id,phone_number) UNIQUE # rubocop:disable Layout/LineLength
 #
 
 class MessageRecipient < ActiveRecord::Base

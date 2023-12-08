@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-# rubocop:disable Metrics/MethodLength, Metrics/LineLength, Metrics/AbcSize
+# rubocop:disable Metrics/MethodLength, Layout/LineLength, Metrics/AbcSize
 class PaymentProviders::Xtc < Epics::GenericUploadRequest
   def header
     Nokogiri::XML::Builder.new do |xml|
@@ -36,4 +36,4 @@ class PaymentProviders::Xtc < Epics::GenericUploadRequest
     end.doc.root
   end
 end
-# rubocop:enable Metrics/MethodLength, Metrics/LineLength, Metrics/AbcSize
+# rubocop:enable Metrics/MethodLength, Layout/LineLength, Metrics/AbcSize

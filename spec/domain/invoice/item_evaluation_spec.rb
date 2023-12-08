@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-# rubocop:disable Naming/VariableNumber,Metrics/LineLength
+# rubocop:disable Naming/VariableNumber,Layout/LineLength
 
 describe Invoice::ItemEvaluation do
   let(:top_layer) { groups(:top_layer) }
@@ -317,4 +317,4 @@ describe Invoice::ItemEvaluation do
   end
 end
 
-# rubocop:enable Naming/VariableNumber,Metrics/LineLength
+# rubocop:enable Naming/VariableNumber,Layout/LineLength

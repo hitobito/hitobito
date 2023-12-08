@@ -22,7 +22,7 @@ module TarantulaConfig
     t.crawl
   end
 
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/LineLength
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Layout/LineLength
   def configure_urls(t, person)
     # some links use example.com as a domain, allow them
     t.skip_uri_patterns.delete(/^http/)

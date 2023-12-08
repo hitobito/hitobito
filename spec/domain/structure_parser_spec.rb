@@ -186,13 +186,13 @@ describe StructureParser do
     end
 
     it 'has the expected roles on a certain group' do
-      # rubocop:disable Metrics/LineLength
+      # rubocop:disable Layout/LineLength
       expect(subject.result[1].roles.map(&:to_s)).to match_array [
         'Role Präsident/-in with [:layer_read, :group_and_below_full, :contact_data] in group DachverbandVorstand',
         'Role Kassier/-in with [:layer_and_below_read, :finance, :contact_data] in group DachverbandVorstand',
         'Role Mitglied with [:layer_read, :contact_data] in group DachverbandVorstand'
       ]
-      # rubocop:enable Metrics/LineLength
+      # rubocop:enable Layout/LineLength
     end
 
     it 'has the expected structure' do

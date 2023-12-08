@@ -82,7 +82,7 @@ describe Person::AddRequestMailer do
     its(:body)     { should =~ /Leader in Bottom One/ }
     its(:body)     { should have_css 'a', text: 'Anfrage beantworten' }
     its(:body)     do
-      should =~ /test.host\/groups\/#{person_layer.id}\/person_add_requests\?body_id=#{group.id}&body_type=Group&person_id=#{person.id}/ # rubocop:disable Metrics/LineLength
+      should =~ /test.host\/groups\/#{person_layer.id}\/person_add_requests\?body_id=#{group.id}&body_type=Group&person_id=#{person.id}/ # rubocop:disable Layout/LineLength
     end
 
   end

@@ -118,6 +118,10 @@ class StepsComponent < ApplicationComponent
       @model.required_attrs.include?(attr)
     end
 
+    def render?
+      index <= @step
+    end
+
     private
 
     def next_submit_button_options

@@ -15,6 +15,7 @@ class SelfRegistration
   def initialize(group:, params:)
     @group = group
     @step = params[:step].to_i
+    @next = params[:next].to_i
     @main_person_attributes = extract_attrs(params, :main_person_attributes).to_h
   end
 
@@ -26,15 +27,13 @@ class SelfRegistration
   end
 
   def valid?
-    main_person.valid?
+    partials_for_validation.collect do |partial|
+      move_to_unless_valid?(partial, send("#{partial}_valid?"))
+    end.all?
   end
 
   def main_person
     @main_person ||= build_person(@main_person_attributes, MainPerson)
-  end
-
-  def increment_step
-    @step += 1
   end
 
   def last_step?
@@ -45,7 +44,30 @@ class SelfRegistration
     @step.zero?
   end
 
+  def move_on
+    @step = @next
+  end
+
   private
+
+  def partials_for_validation
+    partials.take(@step + 1).reverse
+  end
+
+  def main_person_valid?
+    main_person.valid?
+  end
+
+  def move_to_unless_valid?(partial, valid)
+    valid.tap do
+      next if @step_resetted
+
+      unless valid
+        @step = partials.index(partial)
+        @step_resetted = true
+      end
+    end
+  end
 
   def build_person(attrs, model_class)
     attrs = yield attrs if block_given?

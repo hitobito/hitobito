@@ -298,7 +298,6 @@ en:
     kinds:
       form:
         help_minimum_age: 'Years (vintage on the first course date is decisive)'
-        help_select_qualifications: 'With <Ctrl> + click multiple kinds of qualifications can be selected.'
         qualifications:
           for_participants: 'Qualifications for participants'
           for_leaders: 'Qualifications for leaders'

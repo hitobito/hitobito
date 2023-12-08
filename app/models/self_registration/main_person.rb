@@ -9,7 +9,8 @@
 class SelfRegistration::MainPerson < SelfRegistration::Person
   self.attrs = [
     :first_name, :last_name, :nickname, :company_name, :company, :email,
-    :privacy_policy_accepted
+    :privacy_policy_accepted,
+    :primary_group
   ]
 
   self.required_attrs = [

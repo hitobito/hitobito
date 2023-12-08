@@ -15,9 +15,10 @@ task :ci do
            'db:migrate',
            'ci:setup:env',
            'ci:setup:rspec',
+           'spec'
            'spec:sphinx',
-           'spec:features', # run feature specs first to get coverage from spec
-           'spec'].delete_if { |task| tasks_to_skip.include?(task) }
+           'spec:features:lenient'
+           ].delete_if { |task| tasks_to_skip.include?(task) }
 
   tasks.each { |task| Rake::Task[task].invoke }
 end

@@ -43,11 +43,20 @@ class FutureRole < Role
     versions.update_all(item_type: 'FutureRole') # rubocop:disable Rails/SkipsValidations
   end
 
-  def create_new_role!
-    type = group.class.find_role_type!(convert_to).new
-    type.attributes = relevant_attrs.merge(type: convert_to)
-    type.save!
+  def target_type
+    group.class.find_role_type!(convert_to)
   end
+
+  def build_new_role
+    target_type.new.tap do |role|
+      role.attributes = relevant_attrs.merge(type: convert_to)
+    end
+  end
+
+  def create_new_role!
+    build_new_role.save!
+  end
+
 
   def group_role_types
     group.role_types.map(&:sti_name)

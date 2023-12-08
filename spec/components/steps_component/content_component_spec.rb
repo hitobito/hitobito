@@ -11,7 +11,7 @@ describe StepsComponent::ContentComponent, type: :component do
   let(:form) { double(:form) }
   let(:iterator) { double(:iterator, index: 1, last?: false) }
   subject(:component) do
-    described_class.new(partial: :partial, partial_iteration: iterator, form: form, step: :step)
+    described_class.new(partial: :partial, partial_iteration: iterator, form: form, step: 0)
   end
 
   it 'back link renders link for stimulus controller iterator based index' do
@@ -61,8 +61,9 @@ describe StepsComponent::ContentComponent, type: :component do
     let(:component) do
       described_class.new(partial: 'groups/self_registration/main_person',
                           partial_iteration: iterator,
-                          form: form, step: :step)
+                          form: form, step: 0)
     end
+    let(:iterator) { double(:iterator, index: 0, last?: false) }
     let(:policy_finder) { double(:policy_finder, acceptance_needed?: true, groups: []) }
     let(:entry) { double(:entry, partials: [:partial]) }
 
@@ -71,6 +72,11 @@ describe StepsComponent::ContentComponent, type: :component do
     before do
       allow_any_instance_of(ActionView::Base).to receive(:entry).and_return(entry)
       allow_any_instance_of(ActionView::Base).to receive(:policy_finder).and_return(policy_finder)
+    end
+
+    it 'does not render if partial index is above current step' do
+      expect(iterator).to receive(:index).and_return(1)
+      expect(component).not_to be_render
     end
 
     it 'renders first_name last_name and email' do

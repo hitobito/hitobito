@@ -9,7 +9,6 @@ class People::ManualDeletionsController < ApplicationController
 
   RECENT_EVENT_CUTOFF_DURATION = 10.years
 
-  before_action :assert_feature_enabled
   before_action :entry
   before_action :authorize_action
   before_action :ensure_rules
@@ -90,10 +89,6 @@ class People::ManualDeletionsController < ApplicationController
 
   def group
     @group ||= Group.find(params[:group_id])
-  end
-
-  def assert_feature_enabled
-    FeatureGate.assert!('people.manual_deletion')
   end
 
 end

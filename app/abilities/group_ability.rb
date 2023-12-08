@@ -29,7 +29,7 @@ class GroupAbility < AbilityDsl::Base
     permission(:group_full).may(:update).in_same_group_if_active
 
     permission(:group_and_below_full)
-      .may(:index_full_people, :reactivate, :export_events, :'export_event/courses', 
+      .may(:index_full_people, :reactivate, :export_events, :'export_event/courses',
             :deleted_subgroups)
       .in_same_group_or_below
     permission(:group_and_below_full).may(:update).in_same_group_or_below_if_active
@@ -77,7 +77,9 @@ class GroupAbility < AbilityDsl::Base
 
     permission(:admin).may(:manage_person_duplicates).if_layer_group_if_active
     permission(:layer_and_below_full).may(:manage_person_duplicates).if_permission_in_layer
-    permission(:layer_and_below_full).may(:manually_delete_people).if_permission_in_layer
+    permission(:layer_and_below_full).
+      may(:manually_delete_people).
+      if_permission_in_layer_and_manual_deletion_enabled
 
     permission(:layer_full).may(:log).in_same_layer_if_active
     permission(:layer_and_below_full).may(:log).in_same_layer_or_below_if_active
@@ -91,6 +93,10 @@ class GroupAbility < AbilityDsl::Base
             :activate_person_add_requests,
             :deactivate_person_add_requests).
       if_layer_group
+  end
+
+  def if_permission_in_layer_and_manual_deletion_enabled
+    FeatureGate.enabled?('people.manual_deletion') && if_permission_in_layer
   end
 
   def if_permission_in_layer

@@ -663,6 +663,10 @@ de:
         success: Gruppe wurde erfolgreich archiviert.
         failure: Es ist ein Fehler beim Archivieren der Gruppe aufgetreten.
 
+    deleted_people:
+      list:
+        manual_deletion: Datenlöschung
+
     merge:
       select:
         title: '%{group} fusionieren'
@@ -1558,6 +1562,20 @@ de:
 
     log:
       no_changes: Bisher wurden keine Änderungen aufgezeichnet.
+
+    manual_deletions:
+      show:
+        title: "%{full_name} löschen?"
+        minimize: 'Person minimieren'
+        delete: 'Person definitiv löschen'
+        explanation: "Sollte die Person gelöscht werden, werden die Daten der Person unwiderruflich gelöscht. Bei der Minimierung wird die Person nicht gelöscht, es werden aber die meisten Personspezifischen Daten entfernt."
+      minimize:
+        success: "%{full_name} wurde erfolgreich minimiert."
+      delete:
+        success: "%{full_name} wurde erfolgreich gelöscht."
+      errors:
+        participated_in_recent_event: 'Person nahm kürzlich an einem Anlass teil'
+        already_minimized: 'Person wurde bereits minimiert'
 
     pdf:
       cannot_fit: Die Adressen passen nicht in das definierte Etikettenformat.

@@ -37,5 +37,9 @@
         - link_to icon(:'trash-alt', filled: false), group_person_path(@group, p),
                   class: 'action', title: ti(:"link.delete"), alt: ti(:"link.delete"),
                   data: { confirm: ti(:confirm_delete, person: p), method: :delete }
+    - if can?(:manually_delete_people, @group)
+      - t.col(t('.manual_deletion')) do |p|
+        - link_to icon(:'trash-alt', filled: false), group_person_manual_deletion_path(@group, p, format: :js), remote: true,
+            class: 'action', title: ti(:"link.delete"), alt: ti(:"link.delete")
 
 = paginate @people

@@ -144,6 +144,8 @@ people:
   default_sort: name
   abos: true
   totp_drift: 15
+  manual_deletion:
+    enabled: true
   cleanup_cutoff_duration:
     regarding_current_sign_in_at: 1000 # months
     regarding_roles: 1000 # months

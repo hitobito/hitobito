@@ -9,148 +9,81 @@ require 'spec_helper'
 
 describe People::CleanupFinder do
 
-  let(:people_without_roles) { 3.times.map { Fabricate(:person) } }
-  let(:people_with_expired_roles) { 3.times.map { Fabricate(Group::BottomGroup::Member.name.to_sym,
-                                                            group: groups(:bottom_group_one_one),
-                                                            created_at: 11.months.ago,
-                                                            deleted_at: 10.months.ago).person } }
-  let(:people_with_roles) { 3.times.map { Fabricate(Group::BottomGroup::Member.name.to_sym,
-                                                    group: groups(:bottom_group_one_one)).person } }
+  let!(:entries) { Fabricate.times(3, :person) }
 
-  subject { People::CleanupFinder.new.run }
+  let(:sign_in_cutoff_time) { Settings.people.cleanup_cutoff_duration.regarding_current_sign_in_at.months.ago }
+  let(:role_cutoff_time) { Settings.people.cleanup_cutoff_duration.regarding_roles.months.ago }
+  let(:participation_cutoff_time) { Settings.people.cleanup_cutoff_duration.regarding_participations.years.ago }
+
+  let(:future_event) { Fabricate(:event, dates: [Event::Date.new(start_at: 10.days.from_now)]) }
+  let(:past_event) { Fabricate(:event, dates: [Event::Date.new(start_at: 10.days.ago, finish_at: 5.days.ago)]) }
+
+  def create_role(person, created_at: 100.years.ago, deleted_at:)
+    Fabricate(
+      Group::BottomGroup::Member.name.to_sym,
+      person: person,
+      group: groups(:bottom_group_one_one),
+      created_at: created_at,
+      deleted_at: deleted_at
+    )
+  end
+
   context '#run' do
-    context 'people with expired roles outside cutoff duration' do
-      let!(:people) { people_with_expired_roles }
-
-      before do
-        expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_roles).and_return(9)
-      end
-
-      context 'with current_sign_in_at outside cutoff duration' do
-        before do
-          expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_current_sign_in_at).and_return(12)
-          people.each { |p| p.update!(current_sign_in_at: 13.months.ago) }
-        end
-
-        it 'finds them' do
-          expect(subject).to match_array(people)
-        end
-
-        it 'does not find them with event participation in the future' do
-          event = Fabricate(:event, dates: [Event::Date.new(start_at: 10.days.from_now)])
-          people.each do |p|
-            Event::Participation.create!(event: event, person: p)
-          end
-
-          expect(subject).to_not match_array(people)
-        end
-
-        it 'finds them with event participation in the past' do
-          event = Fabricate(:event, dates: [Event::Date.new(start_at: 10.days.ago)])
-          people.each do |p|
-            Event::Participation.create!(event: event, person: p)
-          end
-
-          expect(subject).to match_array(people)
-        end
-      end
-
-      context 'with current_sign_in_at nil' do
-        before do
-          expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_current_sign_in_at).and_return(12)
-
-          people.each { |p| p.update!(current_sign_in_at: nil) }
-        end
-
-        it 'finds them' do
-          expect(subject).to match_array(people)
-        end
-      end
-
-      context 'with current_sign_in_at inside cutoff duration' do
-        before do
-          expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_current_sign_in_at).and_return(12)
-          people.each { |p| p.update!(current_sign_in_at: 11.months.ago) }
-        end
-
-        it 'does not find them' do
-          expect(subject).to_not match_array(people)
-        end
-      end
+    it 'finds matching people' do
+      expect(subject.run).to include(*entries)
     end
 
-    context 'people with expired roles inside cutoff duration' do
-      let!(:people) { people_with_expired_roles }
-
-      before do
-        expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_roles).and_return(12)
-      end
-
-      context 'with current_sign_in_at outside cutoff duration' do
-        before do
-          expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_current_sign_in_at).and_return(12)
-          people.each { |p| p.update!(current_sign_in_at: 13.months.ago) }
-        end
-
-        it 'does not find them' do
-          expect(subject).to_not match_array(people)
-        end
-
-        it 'does not find them' do
-          expect(subject).to_not match_array(people)
-        end
-
-        it 'does not find them with event participation in the future' do
-          event = Fabricate(:event, dates: [Event::Date.new(start_at: 10.days.from_now)])
-          people.each do |p|
-            Event::Participation.create!(event: event, person: p)
-          end
-
-          expect(subject).to_not match_array(people)
-        end
-
-        it 'does not find them with event participation in the past' do
-          event = Fabricate(:event, dates: [Event::Date.new(start_at: 10.days.ago, finish_at: 5.days.ago)])
-          people.each do |p|
-            Event::Participation.create!(event: event, person: p)
-          end
-
-          expect(subject).to_not match_array(people)
-        end
-      end
-
-      context 'with current_sign_in_at nil' do
-        before do
-          expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_current_sign_in_at).and_return(12)
-
-          people.each { |p| p.update!(current_sign_in_at: nil) }
-        end
-
-        it 'does not find them' do
-          expect(subject).to_not match_array(people)
-        end
-      end
-
-      context 'with current_sign_in_at inside cutoff duration' do
-        before do
-          expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_current_sign_in_at).and_return(12)
-          people.each { |p| p.update!(current_sign_in_at: 11.months.ago) }
-        end
-
-        it 'does not find them' do
-          expect(subject).to_not match_array(people)
-        end
-      end
+    it 'finds people without roles' do
+      expect(entries.first.roles.with_deleted).to be_empty
+      expect(subject.run).to include(entries.first)
     end
 
-    it 'finds people without any roles' do
-      people_without_roles
-      expect(subject).to match_array(people_without_roles)
+    it 'finds people with deleted roles older or equal than the cutoff time' do
+      create_role(entries.first, deleted_at: role_cutoff_time - 1)
+      create_role(entries.second, deleted_at: role_cutoff_time)
+      expect(subject.run).to include(entries.first, entries.second)
+    end
+
+    it 'does not find people with deleted roles younger than the cutoff time' do
+      create_role(entries.first, deleted_at: role_cutoff_time + 1)
+      expect(subject.run).not_to include(entries.first)
+    end
+
+    it 'does not find people with deleted roles older and younger than the cutoff time' do
+      create_role(entries.first, deleted_at: role_cutoff_time - 1)
+      create_role(entries.first, deleted_at: role_cutoff_time + 1)
+      expect(subject.run).not_to include(entries.first)
     end
 
     it 'does not find people with active roles' do
-      people_with_roles
-      expect(subject).to_not match_array(people_with_roles)
+      create_role(entries.first, deleted_at: nil)
+      expect(subject.run).not_to include(entries.first)
+    end
+
+    it 'finds people with participations at past events' do
+      Event::Participation.create!(event: past_event, person: entries.first)
+      expect(subject.run).to include(entries.first)
+    end
+
+    it 'does not find people with participations at future events' do
+      Event::Participation.create!(event: future_event, person: entries.first)
+      expect(subject.run).not_to include(entries.first)
+    end
+
+    it 'does not find people with participations at past and future events' do
+      Event::Participation.create!(event: past_event, person: entries.first)
+      Event::Participation.create!(event: future_event, person: entries.first)
+      expect(subject.run).not_to include(entries.first)
+    end
+
+    it 'finds people with current_sign_in_at older than the cutoff time' do
+      entries.first.update!(current_sign_in_at: sign_in_cutoff_time - 1)
+      expect(subject.run).to include(entries.first)
+    end
+
+    it 'does not find people with current_sign_in_at younger than the cutoff time' do
+      entries.first.update!(current_sign_in_at: sign_in_cutoff_time + 1)
+      expect(subject.run).not_to include(entries.first)
     end
   end
 

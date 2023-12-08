@@ -1,0 +1,28 @@
+-#  Copyright (c) 2023, Pfadibewegung Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+#people-manual-deletion.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.bold.modal-title
+          %b= t('.title', full_name: @entry.full_name)
+
+      .modal-body
+        .row-fluid
+          .alert.alert-info
+            = t('.explanation')
+          - @all_errors.each do |error|
+            .alert.alert-danger
+              = error
+      .modal-footer
+        .row-fluid.col-md-12.d-flex.justify-content-around.align-items-baseline
+          = standard_form(@entry, url: delete_group_person_manual_deletion_path(@group, @entry), method: :post) do |f|
+            = submit_button(f, t('.delete'), disabled: @deleteable_errors.any?)
+          = standard_form(@entry, url: minimize_group_person_manual_deletion_path(@group, @entry), method: :post) do |f|
+            = submit_button(f, t('.minimize'), disabled: @minimizeable_errors.any?)
+          = link_to(ti('button.cancel'), '#',
+            class: 'link cancel',
+            onclick: "event.preventDefault(); $('#people-manual-deletion').modal('hide')")

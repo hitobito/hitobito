@@ -325,6 +325,7 @@ fr:
     kinds:
       form:
         help_minimum_age: 'ans (selon année de naissance au premier jour du cours)'
+        help_select_qualifications: 'On peut sélectionner plusieurs types de qualifications en cliquant dessus tout en maintenant la touche <Ctrl> enfoncée.'
         qualifications:
           for_participants: 'Qualifications des participants'
           for_leaders: 'Qualifications des responsables'

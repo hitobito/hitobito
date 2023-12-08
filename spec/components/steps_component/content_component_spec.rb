@@ -29,7 +29,7 @@ describe StepsComponent::ContentComponent, type: :component do
     allow_any_instance_of(StepsComponent::ContentComponent).to receive(:markup) do |component|
       expect(form).to receive(:button)
         .with('Weiter',
-              { class: 'btn btn-primary',
+              { class: 'btn btn-sm btn-primary mt-2',
                 data: { disable_with: 'Weiter' }, name: :step, value: 1 })
       component.next_button
     end
@@ -40,7 +40,7 @@ describe StepsComponent::ContentComponent, type: :component do
     allow_any_instance_of(StepsComponent::ContentComponent).to receive(:markup) do |component|
       expect(form).to receive(:button)
         .with('Test',
-              { class: 'btn btn-primary',
+              { class: 'btn btn-sm btn-primary mt-2',
                 data: { disable_with: 'Test' }, name: :step, value: 1 })
       component.next_button('Test')
     end

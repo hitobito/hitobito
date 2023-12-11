@@ -21,6 +21,7 @@ class FutureRole < Role
   validates :person, :group, presence: true
   validates :convert_to, inclusion: { within: :group_role_types }, if: :group
   validates_date :convert_on, on_or_after: -> { Time.zone.today }
+  validate :target_type_validations, if: :validate_target_type?
 
   def to_s(_long = nil)
     "#{convert_to_model_name} (#{formatted_start_date})"
@@ -35,6 +36,14 @@ class FutureRole < Role
 
   def destroy(always_soft_destroy: false) # rubocop:disable Rails/ActiveRecordOverride
     really_destroy!
+  end
+
+  # If this method returns true, then on validating the FutureRole instance, the validity
+  # of the target type will also be checked and errors will be added to the FutureRole instance.
+  # Override this method in wagon if target_type validity should be checked on FutureRole.
+  # See SacCas wagon for an example.
+  def validate_target_type?
+    false
   end
 
   private
@@ -57,7 +66,6 @@ class FutureRole < Role
     build_new_role.save!
   end
 
-
   def group_role_types
     group.role_types.map(&:sti_name)
   end
@@ -72,5 +80,19 @@ class FutureRole < Role
 
   def convert_to_model_name
     convert_to.constantize.model_name.human
+  end
+
+  def target_type_validations
+    becoming = build_new_role
+    becoming.validate
+
+    becoming_errors = becoming.errors.reject do |e|
+      # A FutureRole will have a convert_on date in the future, this will become the
+      # created_at date of the new role. But the created_at date cannot be in the future.
+      # So we ignore this specific error.
+      e.attribute == :created_at && e.options[:message] == :cannot_be_later_than_today
+    end
+
+    becoming_errors.each { |e| errors.import(e) }
   end
 end

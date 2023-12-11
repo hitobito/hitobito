@@ -63,6 +63,37 @@ describe FutureRole do
       expect(build(convert_to: Group::TopLayer::TopAdmin.sti_name)).to have(1).error_on(:convert_to)
       expect(build(convert_to: Group::TopGroup::Leader.sti_name)).to be_valid
     end
+
+    context 'target_type validations' do
+      before do
+        stub_const('TargetRole', Class.new(Role) do
+          attr_accessor :target_type_valid
+          validates :target_type_valid, presence: true
+        end)
+        top_group.class.role_types += [TargetRole]
+      end
+
+      after do
+        top_group.class.role_types -= [TargetRole]
+      end
+
+      let(:role) { build(convert_to: TargetRole.sti_name) }
+
+      it 'are checked if validate_target_type? returns true' do
+        allow(role).to receive(:validate_target_type?).and_return(true)
+        role.validate
+
+        expect(role.errors[:target_type_valid]).to include("muss ausgefüllt werden")
+      end
+
+      it 'are skipped if validate_target_type? returns false' do
+        allow(role).to receive(:validate_target_type?).and_return(false)
+        role.validate
+
+        expect(role.errors[:target_type_valid]).to be_blank
+      end
+    end
+
   end
 
   describe 'callbacks' do

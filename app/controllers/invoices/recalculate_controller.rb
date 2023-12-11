@@ -21,24 +21,20 @@ class Invoices::RecalculateController < ApplicationController
 
   def build_entry
     invoice = Invoice.new
-    if params.dig(:invoice_list, :invoice).present?
-      invoice.attributes = params.require(:invoice_list).require(:invoice)
-                                 .permit(InvoicesController.permitted_attrs)
-    else
-      invoice.attributes = params.require(:invoice).permit(InvoicesController.permitted_attrs)
-    end
+
+    invoice.attributes = permittes_params
+
     invoice.group = group
     invoice
   end
 
-  def group
-    @group ||= Group.find(params[:group_id])
+  def permittes_params
+    invoice_params = params.key?(:invoice_list) ? params.require(:invoice_list).require(:invoice) : params.require(:invoice)
+    invoice_params.permit(InvoicesController.permitted_attrs)
   end
 
-  class << self
-    def model_class
-      @model_class = Invoice
-    end
+  def group
+    @group ||= Group.find(params[:group_id])
   end
 
   def authorize_action

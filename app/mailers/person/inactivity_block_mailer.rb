@@ -23,4 +23,13 @@ class Person::InactivityBlockMailer < ApplicationMailer
   def placeholder_recipient_name
     @recipient.greeting_name
   end
+
+
+  def placeholder_warn_after
+    Person::BlockService.warn? && distance_of_time_in_words(Person::BlockService.warn_after)
+  end
+
+  def placeholder_block_after
+    Person::BlockService.block? && distance_of_time_in_words(Person::BlockService.block_after)
+  end
 end

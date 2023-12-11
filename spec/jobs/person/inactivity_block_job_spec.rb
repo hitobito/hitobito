@@ -9,16 +9,15 @@ require 'spec_helper'
 
 describe Person::InactivityBlockJob do
   subject(:job) { described_class.new }
-  subject(:block_scope) { job.block_scope(block_after&.ago) }
+  subject(:block_scope) { job.block_scope }
   let!(:person) { people(:bottom_member) }
   let(:block_after) { 1.months }
   let(:inactivity_block_warning_sent_at) { (block_after + 1.month).ago }
   before do
-    allow(Person::BlockService).to receive(:block_after).and_return(block_after.to_s)
-    person.update(last_sign_in_at: (block_after && block_after.ago - 1.month),
+    allow(Person::BlockService).to receive(:block_after).and_return(block_after)
+    person.update(last_sign_in_at: (inactivity_block_warning_sent_at&.-(1.month)),
                   inactivity_block_warning_sent_at: inactivity_block_warning_sent_at)
   end
-
 
   context 'with warned inactive person' do
     let(:block_service){ double("BlockService") }

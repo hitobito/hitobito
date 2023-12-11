@@ -288,14 +288,14 @@ describe RolesController do
     it 'renders flash message for outedated deleted role' do
       role.update_columns(delete_on: Time.zone.today)
       get :edit, params: { group_id: group.id, id: role.id }
-      expect(page).to have_css('#flash .alert.alert-error', text: 'Die Rolle konnte nicht ' \
+      expect(page).to have_css('#flash .alert.alert-danger', text: 'Die Rolle konnte nicht ' \
                                "wie geplant am #{today_localized} terminiert werden")
     end
 
     it 'renders flash message for outedated future role' do
       Role.where(id: role.id).update_all(type: FutureRole.sti_name, convert_to: role.type, convert_on: today)
       get :edit, params: { group_id: group.id, id: role.id }
-      expect(page).to have_css('#flash .alert.alert-error', text: 'Die Rolle konnte nicht wie ' \
+      expect(page).to have_css('#flash .alert.alert-danger', text: 'Die Rolle konnte nicht wie ' \
                                "geplant per #{today_localized} aktiviert werden")
     end
   end

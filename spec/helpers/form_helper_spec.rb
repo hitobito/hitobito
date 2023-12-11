@@ -119,8 +119,8 @@ describe FormHelper do
         e
       end
 
-      it { is_expected.to have_selector("div#error_explanation") }
-      it { is_expected.to have_selector("div.control-group.error input[name='crud_test_model[name]'][type=text]") }
+      it { is_expected.to have_selector("div#error_explanation.alert.alert-danger") }
+      it { is_expected.to have_selector("input[name='crud_test_model[name]'][type=text].is-invalid") }
       it { is_expected.to have_selector("input[name=_method][type=hidden][value=patch]", visible: false) }
     end
   end

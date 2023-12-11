@@ -70,12 +70,11 @@ describe Event::ApplicationMarketController, type: :controller do
       it 'displays warning badge' do
         get :index, params: { group_id: group.id, event_id: course.id }
 
-        expect(dom).to have_selector('.badge.badge-warning', text: '!')
-        badge = dom.all('.badge.badge-warning', text: '!')[0]
+        expect(dom).to have_selector('.badge.bg-warning', text: '!')
+        badge = dom.all('.badge.bg-warning', text: '!')[0]
         expect(badge[:title]).to include('Vorbedingungen für Anmeldung sind nicht erfüllt')
       end
     end
   end
-
 
 end

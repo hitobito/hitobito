@@ -80,7 +80,7 @@ class Event::ParticipationContactData
   end
 
   def required_attr?(a)
-    required_attributes.include?(a.to_s)
+    required_attrs.include?(a)
   end
 
   def attribute_keys
@@ -112,9 +112,9 @@ class Event::ParticipationContactData
     nil
   end
 
-  def required_attributes
-    @required_attributes ||= event.required_contact_attrs +
-      self.class.mandatory_contact_attrs.map(&:to_s)
+  def required_attrs
+    @required_attrs ||= event.required_contact_attrs +
+      self.class.mandatory_contact_attrs
   end
 
   private
@@ -122,10 +122,10 @@ class Event::ParticipationContactData
   attr_reader :model_params, :event
 
   def assert_required_contact_attrs_valid
-    required_attributes.each do |a|
-      next assert_phone_number_present if a == 'phone_numbers'
+    required_attrs.each do |a|
+      next assert_phone_number_present if a == :phone_numbers
 
-      if model_params[a.to_s].blank?
+      if model_params[a].blank?
         errors.add(a, t('errors.messages.blank'))
       end
     end

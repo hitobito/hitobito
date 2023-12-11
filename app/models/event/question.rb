@@ -42,11 +42,11 @@ class Event::Question < ActiveRecord::Base
   scope :application, -> { where(admin: false) }
   scope :admin, -> { where(admin: true) }
 
-  def required_attributes
+  def required_attrs
     [
       # needed for the required attribute mark in forms
       # as the relevant validation is conditional
-      'question'
+      :question
     ]
   end
 

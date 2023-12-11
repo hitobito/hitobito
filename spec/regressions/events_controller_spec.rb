@@ -66,7 +66,7 @@ describe EventsController, type: :controller do
         get :index, params: { group_id: group.id }
         expect(dom.all('#main table tbody tr').count).to eq 1
         expect(dom.find('#main table tbody tr').text).to include ev.name
-        expect(dom.find_link(today.year.to_s).native.parent[:class]).to eq 'active'
+        expect(dom.find_link(today.year.to_s).native.parent[:class]).to eq 'page-item active'
       end
 
       it 'pages per year' do
@@ -76,7 +76,7 @@ describe EventsController, type: :controller do
         expect(dom.all('.pagination li').count).to eq 6
         expect(dom.all('#main table tbody tr').count).to eq 1
         expect(dom.find('#main table tbody tr').text).to include ev.name
-        expect(dom.find_link(last_year.year.to_s).native.parent[:class]).to eq 'active'
+        expect(dom.find_link(last_year.year.to_s).native.parent[:class]).to eq 'page-item active'
       end
 
       def event_with_date(opts = {})

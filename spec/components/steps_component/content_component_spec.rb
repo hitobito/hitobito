@@ -95,9 +95,9 @@ describe StepsComponent::ContentComponent, type: :component do
 
     it 'can control if field is required' do
       object.main_person.required_attrs -= [:first_name]
-      expect(html).to have_css('.control-group.required', text: 'Haupt-E-Mail')
-      expect(html).to have_css('.control-group', text: 'Vorname')
-      expect(html).not_to have_css('.control-group.required', text: 'Vorname')
+      expect(html).to have_css('label.required', text: 'Haupt-E-Mail')
+      expect(html).to have_css('label', text: 'Vorname')
+      expect(html).not_to have_css('label.required', text: 'Vorname')
     end
 
     it 'shows check if policy_finder needs acceptance' do

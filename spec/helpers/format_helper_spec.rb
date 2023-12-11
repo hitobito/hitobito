@@ -37,21 +37,21 @@ describe FormatHelper do
 
       it { is_expected.to be_html_safe }
       # its(:squish) { should == '<div class="labeled"> <label>label</label> <div class="value">value</div> </div>'.gsub('"', "'") }
-      its(:squish) { should == '<dt class="muted">label</dt> <dd>value</dd>'.gsub('"', "'") }
+      its(:squish) { should == '<dt class="muted float-start text-end">label</dt> <dd class="mb-2">value</dd>'.gsub('"', "'") }
     end
 
     context 'with empty value' do
       subject { labeled('label') { '' } }
 
       it { is_expected.to be_html_safe }
-      its(:squish) { should == '<dt class="muted">label</dt> <dd>'.gsub('"', "'") + FormatHelper::EMPTY_STRING + '</dd>' }
+      its(:squish) { should == '<dt class="muted float-start text-end">label</dt> <dd class="mb-2">'.gsub('"', "'") + FormatHelper::EMPTY_STRING + '</dd>' }
     end
 
     context 'with unsafe value' do
       subject { labeled('label') { 'value <unsafe>' } }
 
       it { is_expected.to be_html_safe }
-      its(:squish) { should == '<dt class="muted">label</dt> <dd>value &lt;unsafe&gt;</dd>'.gsub('"', "'") }
+      its(:squish) { should == '<dt class="muted float-start text-end">label</dt> <dd class="mb-2">value &lt;unsafe&gt;</dd>'.gsub('"', "'") }
     end
   end
 
@@ -59,7 +59,7 @@ describe FormatHelper do
     subject { labeled_attr('foo', :size) }
 
     it { is_expected.to be_html_safe }
-    its(:squish) {  should == '<dt class="muted">Size</dt> <dd>3 chars</dd>'.gsub('"', "'") }
+    its(:squish) {  should == '<dt class="muted float-start text-end">Size</dt> <dd class="mb-2">3 chars</dd>'.gsub('"', "'") }
   end
 
   describe '#f' do

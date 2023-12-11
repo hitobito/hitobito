@@ -482,9 +482,9 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def dynamic_required?(attr)
-    return false unless @object.respond_to?(:required_attributes)
+    return false unless @object.respond_to?(:required_attrs)
 
-    @object.required_attributes.include?(attr.to_s)
+    @object.required_attrs.include?(attr)
   end
 
   def no_attachments?(attr)

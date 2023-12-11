@@ -113,7 +113,7 @@ describe PeopleController, type: :controller do
       get :show, params: params
       expect(section.find('h2').text).to eq 'Aktive Rollen'
       expect(section.all('tr').first.text).to include('TopGroup')
-      expect(section).to have_css('.btn-small')
+      expect(section).to have_css('.btn-sm')
       expect(section.find('tr:eq(1) table tr:eq(1)').text).to include('Leader')
       edit_role_path = edit_group_role_path(top_group, top_leader.roles.first)
       expect(section.find('tr:eq(1) table tr:eq(1) td:eq(2)').native.to_xml)
@@ -241,10 +241,10 @@ describe PeopleController, type: :controller do
 
     it 'displays old value again' do
       is_expected.to render_template('edit')
-      expect(dom).to have_selector('.error')
-      expect(dom).to have_selector('.error input')
-      expect(dom).to have_selector('.error input#person_birthday')
-      expect(dom).to have_selector('.error input[value="02.01.10000"]')
+      #expect(dom).to have_selector('.error')
+      expect(dom).to have_selector('input.is-invalid')
+      expect(dom).to have_selector('input#person_birthday.is-invalid')
+      expect(dom).to have_selector('input[value="02.01.10000"].is-invalid')
     end
   end
 

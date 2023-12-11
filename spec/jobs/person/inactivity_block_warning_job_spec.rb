@@ -9,12 +9,12 @@ require 'spec_helper'
 
 describe Person::InactivityBlockWarningJob do
   subject(:job) { described_class.new }
-  subject(:people_scope) { job.people_scope(warning_period&.ago) }
+  subject(:warn_scope) { job.warn_scope(warn_after&.ago) }
   let!(:person) { people(:bottom_member) }
-  let(:warning_period) { 18.months }
+  let(:warn_after) { 18.months }
   before do
-    allow(Settings).to receive_message_chain(:inactivity_block, :warning_after).and_return(warning_period.to_s)
-    person.update(last_sign_in_at: (warning_period && warning_period.ago - 1.month),
+    allow(Person::BlockService).to receive(:warn_after).and_return(warn_after.to_s)
+    person.update(last_sign_in_at: (warn_after && warn_after.ago - 1.month),
                   inactivity_block_warning_sent_at: nil)
   end
 
@@ -24,7 +24,7 @@ describe Person::InactivityBlockWarningJob do
     it 'sends the inactivity_block_warning' do
       expect(Person::BlockService).to receive(:new).with(person).and_return(block_service)
       expect(block_service).to receive(:inactivity_warning!)
-      expect(people_scope).to include(person)
+      expect(warn_scope).to include(person)
       expect(job.perform).to be_truthy
     end
   end
@@ -34,7 +34,7 @@ describe Person::InactivityBlockWarningJob do
 
     it 'ignores person' do
       expect(Person::BlockService).not_to receive(:new)
-      expect(people_scope).not_to include(person)
+      expect(warn_scope).not_to include(person)
       expect(job.perform).to be_truthy
     end
   end
@@ -44,7 +44,7 @@ describe Person::InactivityBlockWarningJob do
 
     it 'ignores person' do
       expect(Person::BlockService).not_to receive(:new)
-      expect(people_scope).not_to include(person)
+      expect(warn_scope).not_to include(person)
       expect(job.perform).to be_truthy
     end
   end
@@ -54,13 +54,13 @@ describe Person::InactivityBlockWarningJob do
 
     it 'ignores person' do
       expect(Person::BlockService).not_to receive(:new)
-      expect(people_scope).not_to include(person)
+      expect(warn_scope).not_to include(person)
       expect(job.perform).to be_truthy
     end
   end
 
-  context 'with no warning_period set' do
-    let(:warning_period) { nil }
+  context 'with no warn_after set' do
+    let(:warn_after) { nil }
 
     it 'returns early' do
       expect(Person::BlockService).not_to receive(:new)

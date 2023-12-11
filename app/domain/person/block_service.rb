@@ -19,6 +19,22 @@ class Person::BlockService
       @person.update!(inactivity_block_warning_sent_at: Time.zone.now)
   end
 
+  def self.warn_after
+    Settings.inactivity_block&.warn_after&.to_i
+  end
+
+  def self.block_after
+    Settings.inactivity_block&.block_after&.to_i
+  end
+
+  def self.warn?
+    warn_after.present? && warn_after.positive?
+  end
+
+  def self.block?
+    block_after.present? && block_after.positive?
+  end
+
   protected
 
   def log(event)

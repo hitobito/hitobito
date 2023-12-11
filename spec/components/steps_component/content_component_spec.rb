@@ -88,7 +88,6 @@ describe StepsComponent::ContentComponent, type: :component do
     end
 
     it 'can control if field is required' do
-      skip "required fields bugged currently"
       object.main_person.required_attrs -= [:first_name]
       expect(html).to have_css('label.required', text: 'Haupt-E-Mail')
       expect(html).to have_css('label', text: 'Vorname')

@@ -151,8 +151,8 @@ people:
     regarding_roles: 1000 # months
     regarding_event_participations: 100 # years
   inactivity_block:
-    warning_after:
-    block_after:
+    warning_after: # e.g. <%= 18.months %>
+    block_after: # e.g. <%= 1.month %>
 
 event:
   attachments:

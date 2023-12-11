@@ -52,4 +52,49 @@ describe Person::BlockService do
     end
   end
 
+  describe '::block_after' do
+    subject(:block_after) { described_class.block_after }
+    before { allow(Settings).to receive_message_chain(:inactivity_block, :block_after).and_return(block_after_value) }
+
+    context 'with unset value' do
+      let(:block_after_value) { nil }
+
+      it 'returns nil' do
+        expect(block_after).to be_nil
+        expect(described_class.block?).to be_falsy
+      end
+    end
+
+    context 'with string value' do
+      let(:block_after_value) { '900' }
+
+      it 'returns duration' do
+        expect(block_after).to eq(15.minutes)
+        expect(described_class.block?).to be_truthy
+      end
+    end
+  end
+
+  describe '::warn_after' do
+    subject(:warn_after) { described_class.warn_after }
+    before { allow(Settings).to receive_message_chain(:inactivity_block, :warn_after).and_return(warn_after_value) }
+
+    context 'with unset value' do
+      let(:warn_after_value) { nil }
+
+      it 'returns nil' do
+        expect(warn_after).to be_nil
+        expect(described_class.warn?).to be_falsy
+      end
+    end
+
+    context 'with string value' do
+      let(:warn_after_value) { '900' }
+
+      it 'returns duration' do
+        expect(warn_after).to eq(15.minutes)
+        expect(described_class.warn?).to be_truthy
+      end
+    end
+  end
 end

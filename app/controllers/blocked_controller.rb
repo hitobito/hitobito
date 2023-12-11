@@ -16,10 +16,10 @@ class BlockedController < ApplicationController
   skip_before_action :reject_blocked_person!
 
   def index
-    @warn_after = Person::BlockService.warn? &&
-                    distance_of_time_in_words(Person::BlockService.warn_after)
-    @block_after = Person::BlockService.block? &&
-                    distance_of_time_in_words(Person::BlockService.block_after)
+    # @warn_after = Person::BlockService.warn? &&
+    #                 distance_of_time_in_words(Person::BlockService.warn_after)
+    # @block_after = Person::BlockService.block? &&
+    #                 distance_of_time_in_words(Person::BlockService.block_after)
 
     render 'index', status: 403, formats: request.format.json? ? [:json] : [:html]
   end

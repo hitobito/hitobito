@@ -14,6 +14,7 @@ describe 'person/security_tools/index.html.haml' do
   let(:current_user) { people(:top_leader) }
 
   subject do
+    person.touch(:last_sign_in_at)
     allow(controller).to receive_messages(current_user: current_user)
     allow(view).to receive_messages(parent: top_group, group: group, current_user: current_user,
                                     person: PersonDecorator.decorate(person))

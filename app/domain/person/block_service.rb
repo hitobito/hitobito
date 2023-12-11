@@ -20,11 +20,11 @@ class Person::BlockService
   end
 
   def self.warn_after
-    Settings.inactivity_block&.warn_after&.to_i
+    Settings.inactivity_block&.warn_after&.to_i&.seconds
   end
 
   def self.block_after
-    Settings.inactivity_block&.block_after&.to_i
+    Settings.inactivity_block&.block_after&.to_i&.seconds
   end
 
   def self.warn?

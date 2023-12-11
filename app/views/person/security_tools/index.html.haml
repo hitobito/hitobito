@@ -75,8 +75,7 @@
                       data: { confirm: t('.confirm_reset') },
                       title: t('.override_password'))
 
-      -# - if person.last_sign_in_at? && !person.blocked?
-      - if !person.blocked?
+      - if person.last_sign_in_at? && !person.blocked?
         = action_button(t('.block_person'),
                         block_group_person_path(group, person),
                         :lock,

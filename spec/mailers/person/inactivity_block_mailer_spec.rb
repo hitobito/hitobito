@@ -14,7 +14,7 @@ describe Person::InactivityBlockMailer do
     subject(:mail) { described_class.inactivity_block_warning(recipient) }
 
     it { expect(mail.to).to contain_exactly(recipient.email) }
-    it { expect(mail.subject).to have_content("TBD") }
+    it { expect(mail.subject).to have_content("Login für hitobito von Top Leader wird bald blockiert") }
     it { expect(mail.body).to have_content("TBD") }
   end
 end

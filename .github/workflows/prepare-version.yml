@@ -138,7 +138,7 @@ jobs:
           git config --global advice.detachedHead false
 
           # add hitobito-core to path
-          echo "hitobito/bin" >> $GITHUB_PATH
+          echo "${PWD}/hitobito/bin" >> $GITHUB_PATH
 
       - name: "Configure Git-User for the Release-Commits"
         run: |
@@ -154,9 +154,9 @@ jobs:
           DRY_RUN: ${{ needs.settings.outputs.dry_run }}
         run: |
           echo "Preparing $NEXT_VERSION for $RELEASE_STAGE $DRY_RUN"
-
+          echo "---"
           release version
           version version
-
+          echo "---"
           echo "release $RELEASE_STAGE $NEXT_VERSION $DRY_RUN"
           release "$RELEASE_STAGE" "$NEXT_VERSION" "$DRY_RUN"

@@ -29,7 +29,9 @@ class Invoices::RecalculateController < ApplicationController
   end
 
   def permittes_params
-    invoice_params = params.key?(:invoice_list) ? params.require(:invoice_list).require(:invoice) : params.require(:invoice)
+    invoice_params = params.key?(:invoice_list) ?
+      params.require(:invoice_list).require(:invoice) :
+      params.require(:invoice)
     invoice_params.permit(InvoicesController.permitted_attrs)
   end
 

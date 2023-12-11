@@ -200,6 +200,9 @@ Capybara.automatic_label_click = true
 Capybara::Screenshot.prune_strategy = :keep_last_run
 Capybara::Screenshot::RSpec::REPORTERS['RSpec::Core::Formatters::ProgressFormatter'] =
 CapybaraScreenshotPlainTextReporter
+Capybara::Screenshot.register_driver(:chrome) do |driver, path|
+  driver.browser.save_screenshot(path)
+end
 
 Capybara.register_driver :chrome do |app|
   options = Selenium::WebDriver::Chrome::Options.new

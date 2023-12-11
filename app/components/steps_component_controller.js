@@ -5,20 +5,21 @@
 //  or later. See the COPYING file at the top-level directory or at
 //  https://github.com/hitobito/hitobito_sac_cas.
 
-import { Controller } from "controllers"
+import { Controller } from "controllers";
 
 export default class extends Controller {
-
   activate(event) {
-    event.preventDefault()
-    event.stopPropagation()
+    event.preventDefault();
+    event.stopPropagation();
     const index = this.getIndex(event.target.parentElement);
-    this.activateStep(index)
+    this.activateStep(index);
   }
 
   activateStep(index) {
-    const headers = Array.from(this.element.querySelectorAll('ol.step-headers li'))
-    const contents = Array.from(this.element.querySelectorAll('.step-content'))
+    const headers = Array.from(
+      this.element.querySelectorAll("ol.step-headers li")
+    );
+    const contents = Array.from(this.element.querySelectorAll(".step-content"));
 
     headers.forEach(elem => elem.classList.remove('active'))
     contents.forEach(elem => elem.classList.remove('active'))
@@ -32,9 +33,13 @@ export default class extends Controller {
   }
 
   toggleHousemateButtons(event) {
-    const mates = document.querySelectorAll('.household .fields:not([style="display: none;"])')
-    const toolbars = Array.from(document.querySelectorAll('.household .btn-toolbar'))
-    const mode = event.target.dataset['mode']
+    const mates = document.querySelectorAll(
+      '.household .fields:not([style="display: none;"])'
+    );
+    const toolbars = Array.from(
+      document.querySelectorAll(".household .btn-toolbar")
+    );
+    const mode = event.target.dataset["mode"];
 
     if(mates.length == 0 && mode == 'add') {
       toolbars[0].classList.add('hidden')
@@ -48,8 +53,8 @@ export default class extends Controller {
   }
 
   back(event) {
-    event.preventDefault()
-    const index = parseInt(event.target.dataset['index'])
-    this.activateStep(index)
+    event.preventDefault();
+    const index = parseInt(event.target.dataset["index"]);
+    this.activateStep(index);
   }
 }

@@ -9,7 +9,7 @@ require 'spec_helper'
 
 describe Person::InactivityBlockJob do
   subject(:job) { described_class.new }
-  subject(:people_scope) { job.people_scope(block_period&.ago) }
+  subject(:warn_scope) { job.warn_scope(block_period&.ago) }
   let!(:person) { people(:bottom_member) }
   let(:block_period) { 1.months }
   let(:inactivity_block_warning_sent_at) { (block_period + 1.month).ago }
@@ -26,7 +26,7 @@ describe Person::InactivityBlockJob do
     it 'blocks the person' do
       expect(Person::BlockService).to receive(:new).with(person).and_return(block_service)
       expect(block_service).to receive(:block!)
-      expect(people_scope).to include(person)
+      expect(warn_scope).to include(person)
       expect(job.perform).to be_truthy
     end
   end
@@ -35,7 +35,7 @@ describe Person::InactivityBlockJob do
     before { Person::BlockService.new(person).block! }
 
     it 'ignores person' do
-      expect(people_scope).not_to include(person)
+      expect(warn_scope).not_to include(person)
       expect(job.perform).to be_truthy
     end
   end
@@ -44,7 +44,7 @@ describe Person::InactivityBlockJob do
     before { person.touch(:last_sign_in_at) }
 
     it 'ignores person' do
-      expect(people_scope).not_to include(person)
+      expect(warn_scope).not_to include(person)
       expect(job.perform).to be_truthy
     end
   end
@@ -53,7 +53,7 @@ describe Person::InactivityBlockJob do
     let(:inactivity_block_warning_sent_at) { nil }
 
     it 'ignores person' do
-      expect(people_scope).not_to include(person)
+      expect(warn_scope).not_to include(person)
       expect(job.perform).to be_truthy
     end
   end
@@ -62,7 +62,7 @@ describe Person::InactivityBlockJob do
     let(:inactivity_block_warning_sent_at) { (block_period / 2).ago }
 
     it 'ignores person' do
-      expect(people_scope).not_to include(person)
+      expect(warn_scope).not_to include(person)
       expect(job.perform).to be_truthy
     end
   end

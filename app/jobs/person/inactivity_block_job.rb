@@ -10,14 +10,15 @@ class Person::InactivityBlockJob < RecurringJob
     period = Settings.inactivity_block&.block_after&.to_i
     return if period.blank? || period.zero?
 
-    people_scope(period.seconds.ago).find_each do |person|
+    block_scope(period.seconds.ago).find_each do |person|
       Person::BlockService.new(person).block!
     end
     true
   end
 
-  def people_scope(since)
-    Person.where(blocked_at: nil)
+  def block_scope(since)
+    Person.where.not(last_sign_in_at: nil)
+          .where(blocked_at: nil)
           .where(Person.arel_table[:last_sign_in_at].lt(since))
           .where(Person.arel_table[:inactivity_block_warning_sent_at].lt(since))
   end

@@ -44,7 +44,9 @@ class People::CleanupFinder
   end
 
   def with_roles_outside_cutoff(scope)
-    scope.where('roles.deleted_at <= ?', last_role_deleted_at)
+    scope.where(id: Role.with_deleted.having('MAX(roles.deleted_at) <= ?', last_role_deleted_at)
+                        .group('person_id')
+                        .pluck(:person_id))
   end
 
   def without_participating_in_future_events(scope)

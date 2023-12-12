@@ -39,19 +39,19 @@ describe People::CleanupFinder do
     end
 
     it 'finds people with deleted roles older or equal than the cutoff time' do
-      create_role(entries.first, deleted_at: role_cutoff_time - 1)
+      create_role(entries.first, deleted_at: role_cutoff_time - 100)
       create_role(entries.second, deleted_at: role_cutoff_time)
       expect(subject.run).to include(entries.first, entries.second)
     end
 
     it 'does not find people with deleted roles younger than the cutoff time' do
-      create_role(entries.first, deleted_at: role_cutoff_time + 1)
+      create_role(entries.first, deleted_at: role_cutoff_time + 100)
       expect(subject.run).not_to include(entries.first)
     end
 
     it 'does not find people with deleted roles older and younger than the cutoff time' do
-      create_role(entries.first, deleted_at: role_cutoff_time - 1)
-      create_role(entries.first, deleted_at: role_cutoff_time + 1)
+      create_role(entries.first, deleted_at: role_cutoff_time - 100)
+      create_role(entries.first, deleted_at: role_cutoff_time + 100)
       expect(subject.run).not_to include(entries.first)
     end
 
@@ -77,12 +77,12 @@ describe People::CleanupFinder do
     end
 
     it 'finds people with current_sign_in_at older than the cutoff time' do
-      entries.first.update!(current_sign_in_at: sign_in_cutoff_time - 1)
+      entries.first.update!(current_sign_in_at: sign_in_cutoff_time - 100)
       expect(subject.run).to include(entries.first)
     end
 
     it 'does not find people with current_sign_in_at younger than the cutoff time' do
-      entries.first.update!(current_sign_in_at: sign_in_cutoff_time + 1)
+      entries.first.update!(current_sign_in_at: sign_in_cutoff_time + 100)
       expect(subject.run).not_to include(entries.first)
     end
   end

@@ -110,5 +110,18 @@ describe :self_registration, js: true do
         expect(page).not_to have_text('Um die Registrierung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden.')
       end
     end
+
+    it 'keyboard submit works' do
+      visit group_self_registration_path(group_id: group)
+      complete_main_person_form
+
+      expect { send_key(:return) }
+        .to change { Person.count }.by(1)
+                                   .and change { Role.count }.by(1)
+                                                             .and change { ActionMailer::Base.deliveries.count }.by(1)
+
+      expect(page).to have_text('Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine ' \
+                                  'E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.')
+    end
   end
 end

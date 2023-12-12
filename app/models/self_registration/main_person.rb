@@ -6,24 +6,19 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 
-class SelfRegistration::MainPerson < SelfRegistration::Housemate
+class SelfRegistration::MainPerson < SelfRegistration::Person
   self.attrs = [
     :first_name, :last_name, :nickname, :company_name, :company, :email,
-    :privacy_policy_accepted
+    :privacy_policy_accepted,
+    :primary_group
   ]
 
   self.required_attrs = [
     :first_name, :last_name
   ]
 
-  attr_accessor(*attrs)
-
-  delegate :phone_numbers, :gender_label, :privacy_policy_accepted?, to: :person
+  delegate  :phone_numbers, :privacy_policy_accepted?, to: :person
   validate :assert_privacy_policy
-
-  def person
-    @person ||= Person.new(attributes)
-  end
 
   private
 

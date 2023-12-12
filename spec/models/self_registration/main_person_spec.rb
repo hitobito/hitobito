@@ -11,7 +11,7 @@ describe SelfRegistration::MainPerson do
   subject(:model) { described_class.new }
 
   it 'is a Housemate' do
-    expect(model).to be_kind_of(SelfRegistration::Housemate)
+    expect(model).to be_kind_of(SelfRegistration::Person)
   end
 
   describe 'attribute assignments accept additiional attributes' do

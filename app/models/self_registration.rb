@@ -20,7 +20,7 @@ class SelfRegistration
   end
 
   def save!
-    Person.transaction do
+    ::Person.transaction do
       main_person.save!
       yield if block_given?
     end

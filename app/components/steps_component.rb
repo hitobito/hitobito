@@ -101,23 +101,6 @@ class StepsComponent < ApplicationComponent
       link_to(t('global.button.back'), '#', class: 'link cancel mt-2 pt-1', data: data)
     end
 
-    # Lazy way of handling optional and required attributes
-    # - yield markup to with_model(f.object) and use c.attr? and c.required?
-    def with_model(model)
-      @model = model
-      yield
-    end
-
-    def attr?(attr)
-      raise 'wrap in `with_model(model){}' unless @model
-      @model.attrs.include?(attr)
-    end
-
-    def required?(attr)
-      raise 'wrap in `with_model(model){}' unless @model
-      @model.required_attrs.include?(attr)
-    end
-
     def render?
       index <= @step
     end

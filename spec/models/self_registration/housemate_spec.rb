@@ -23,20 +23,13 @@ describe SelfRegistration::Housemate do
   describe 'validations' do
     it 'validates 5 fields for presence' do
       expect(mate).not_to be_valid
-      expect(mate.errors).to have(5).items
+      expect(mate.errors).to have(4).items
       expect(mate.errors.attribute_names).to eq [
         :first_name,
         :last_name,
         :email,
         :birthday
       ]
-    end
-
-    it 'can control which fields are validated' do
-      mate.required_attrs = [:first_name]
-      expect(mate).not_to be_valid
-      expect(mate.errors).to have(1).items
-      expect(mate.errors.attribute_names).to eq [:first_name]
     end
 
     it 'validates email for syntax' do
@@ -81,10 +74,8 @@ describe SelfRegistration::Housemate do
 
     describe 'person validations' do
       def stub_test_person
-        stub_const("TestPerson", Class.new(described_class) do # rubocop:disable Lint/ConstantDefinitionInBlock
-          self.attrs += [:zip_code]
-          self.required_attrs = [:email]
-          attr_accessor :zip_code
+        stub_const("TestPerson", Class.new(SelfRegistration::Person) do # rubocop:disable Lint/ConstantDefinitionInBlock
+          self.attrs = [:zip_code, :primary_group]
         end)
       end
 

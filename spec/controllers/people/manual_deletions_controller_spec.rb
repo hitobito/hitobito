@@ -34,7 +34,7 @@ describe People::ManualDeletionsController do
         it 'is disabled' do
           expect do
             get_show
-          end.to raise_error(FeatureGate::FeatureGateError)
+          end.to raise_error(CanCan::AccessDenied)
         end
       end
 
@@ -44,7 +44,7 @@ describe People::ManualDeletionsController do
         it 'is disabled' do
           expect do
             get_show
-          end.to raise_error(FeatureGate::FeatureGateError)
+          end.to raise_error(CanCan::AccessDenied)
         end
       end
     end
@@ -88,7 +88,7 @@ describe People::ManualDeletionsController do
         it 'is disabled' do
           expect do
             post :minimize, params: { group_id: bottom_layer.id, person_id: person_with_expired_roles.id }
-          end.to raise_error(FeatureGate::FeatureGateError)
+          end.to raise_error(CanCan::AccessDenied)
         end
       end
 
@@ -98,7 +98,7 @@ describe People::ManualDeletionsController do
         it 'is disabled' do
           expect do
             post :minimize, params: { group_id: bottom_layer.id, person_id: person_with_expired_roles.id }
-          end.to raise_error(FeatureGate::FeatureGateError)
+          end.to raise_error(CanCan::AccessDenied)
         end
       end
     end
@@ -190,7 +190,7 @@ describe People::ManualDeletionsController do
         it 'is disabled' do
           expect do
             post :delete, params: { group_id: bottom_layer.id, person_id: person_with_expired_roles.id }
-          end.to raise_error(FeatureGate::FeatureGateError)
+          end.to raise_error(CanCan::AccessDenied)
         end
       end
 
@@ -200,7 +200,7 @@ describe People::ManualDeletionsController do
         it 'is disabled' do
           expect do
             post :delete, params: { group_id: bottom_layer.id, person_id: person_with_expired_roles.id }
-          end.to raise_error(FeatureGate::FeatureGateError)
+          end.to raise_error(CanCan::AccessDenied)
         end
       end
     end

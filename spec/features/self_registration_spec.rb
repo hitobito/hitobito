@@ -42,8 +42,7 @@ describe :self_registration, js: true do
     it 'validates required fields' do
       visit group_self_registration_path(group_id: group)
       click_on 'Registrieren'
-      field = page.find_field('Vorname')
-      expect(field.native.attribute('validationMessage')).to eq 'Please fill out this field.'
+      expect(page.find_field('Vorname')[:class]).to include('is-invalid')
     end
 
     it 'self registers and creates new person' do

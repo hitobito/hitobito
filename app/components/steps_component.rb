@@ -89,10 +89,12 @@ class StepsComponent < ApplicationComponent
     end
 
     def next_button(title = t('steps_component.next_link'))
+      type = active? ? 'submit' : 'button'
+
       if last?
-        helpers.submit_button(@form, t('groups.self_registration.form.submit'))
+        helpers.submit_button(@form, t('groups.self_registration.form.submit'), type: type)
       else
-        helpers.submit_button(@form, title, next_submit_button_options)
+        helpers.submit_button(@form, title, next_submit_button_options.merge(type: type))
       end
     end
 

@@ -1,2 +1,2 @@
 $(document).on 'nested:fieldRemoved', (event) ->
-  event.target.remove()
+  $('[required]', event.field).removeAttr('required')

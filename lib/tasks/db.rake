@@ -19,6 +19,13 @@ namespace :db do
     Rake::Task['delayed_job:schedule'].invoke
   end
 
+  namespace :migrate do
+    desc 'Display status of migrations including the originating wagon name'
+    task :status_all do
+      Rake::Task['wagon:migrate:status'].invoke
+    end
+  end
+
   desc 'Rebuild Nested-Set'
   task rebuild_nested_set: [:environment] do
     puts 'Rebuilding nested set...'

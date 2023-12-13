@@ -188,6 +188,15 @@ RSpec.configure do |config|
   config.before :each do
     handle_request_exceptions(false)
   end
+
+  if defined?(RescueRegistry)
+    # RescueRegistry.context must be reset between requests. This normally happens in a standard Rails middleware.
+    # We must reset it manually as most tests bypass the middleware
+    config.after do
+      RescueRegistry.context = nil
+    end
+  end
+
 end
 
 require 'capybara/rails'

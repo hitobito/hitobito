@@ -9,8 +9,6 @@
 require 'spec_helper'
 
 describe :self_registration, js: true do
-  Capybara.default_max_wait_time = 0.5
-
   class Group::SelfRegistrationGroup < Group
     self.layer = true
 

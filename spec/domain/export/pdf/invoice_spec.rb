@@ -23,7 +23,6 @@ describe Export::Pdf::Invoice do
   context 'with articles' do
     let(:invoice) do
       build_invoice(
-        sequence_number: '1-1',
         payment_slip: :qr,
         total: 1500,
         iban: 'CH93 0076 2011 6238 5295 7',

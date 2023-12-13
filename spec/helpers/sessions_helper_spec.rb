@@ -32,22 +32,16 @@ describe SessionsHelper do
   describe '#render_self_registration_link' do
     it 'does not render link if FeatureGate disabled' do
       allow(group).to receive(:self_registration_active).and_return(true)
-      allow(Settings.groups.enabled).to receive(:self_registration).and_return(false)
-
       expect(render_self_registration_link).to be_blank
     end
 
     it 'does not render link if Group#self_registration_active?=false' do
-      allow(Settings.groups.enabled).to receive(:self_registration).and_return(true)
       allow(group).to receive(:self_registration_active).and_return(false)
-
       expect(render_self_registration_link).to be_blank
     end
 
     it 'renders link if Group#self_registration_active?=true' do
-      allow(Settings.groups.enabled).to receive(:self_registration).and_return(true)
       allow(group).to receive(:self_registration_active).and_return(true)
-
       expect(render_self_registration_link).to be_blank
     end
   end

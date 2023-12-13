@@ -1,6 +1,6 @@
 %h3.form-subtitle.mt-3= Message::Letter.model_name.human(count: 2)
 = f.labeled :letter_logo do
-  = f.file_field :letter_logo, type: :file, accept: Group::LetterLogoUploader.accept_extensions, class: 'form-control form-control-sm w-25'
+  = f.file_field :letter_logo, type: :file, accept: Settings.application.image_upload.content_types, class: 'form-control form-control-sm w-25'
 
 - if upload_exists?(entry, :letter_logo)
   = f.labeled :remove_letter_logo do

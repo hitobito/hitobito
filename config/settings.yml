@@ -15,6 +15,10 @@ application:
     background_color: none # optional backgroundcolor, creates a box around the logo, if changed from 'none'
   image_upload:
     max_dimension: 8000 # pixel
+    content_types:
+      - image/jpeg
+      - image/gif
+      - image/png
   footer:
     #logo_image: logo_hitobito.png
     logo_url: http://puzzle.ch
@@ -158,8 +162,6 @@ people:
 
 event:
   attachments:
-    # file_extensions is carrierwave, content_types is activestorage
-    file_extensions: jpg jpeg gif png pdf txt rtf doc docx xls xlsx ppt pptx odt ods odp zip
     content_types:
       - image/jpeg
       - image/gif

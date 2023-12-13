@@ -24,7 +24,6 @@ class Event::Attachment < ActiveRecord::Base
 
   belongs_to :event
 
-  mount_uploader :carrierwave_file, Event::AttachmentUploader, mount_on: 'file'
   # this could become a has_many_attached on Event
   has_one_attached :file
 

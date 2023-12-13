@@ -32,7 +32,6 @@ module Oauth
     has_many :cors_origins, as: :auth_method, dependent: :delete_all
     accepts_nested_attributes_for :cors_origins, allow_destroy: true
 
-    mount_uploader :carrierwave_logo, Oauth::LogoUploader, mount_on: 'logo'
     has_one_attached :logo do |attachable|
       attachable.variant :thumb, resize_to_fill: [64, 64]
     end

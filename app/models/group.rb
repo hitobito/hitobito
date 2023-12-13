@@ -66,10 +66,8 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
                   skip: [:lft, :rgt, :layer_group_id, :deleter_id, :require_person_add_requests,
                          :updated_at, :updater_id]
 
-  mount_uploader :carrierwave_logo, Group::LogoUploader, mount_on: 'logo'
   has_one_attached :logo
   has_one_attached :privacy_policy
-  mount_uploader :carrierwave_logo, Group::LetterLogoUploader, mount_on: 'letter_logo'
   has_one_attached :letter_logo
 
   ### ATTRIBUTES

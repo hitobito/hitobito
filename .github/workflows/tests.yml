@@ -103,11 +103,21 @@ jobs:
         run: |
           bundle exec rake webpacker:compile
 
-      - name: 'Run Lint and Tests'
+      - name: 'Rubocop'
         run: |
-          bundle exec rake db:create --trace
-          bundle exec bin/rails db:environment:set RAILS_ENV=test
-          bundle exec rake ci --trace
+          bundle exec rake rubocop
+
+      - name: 'Main Specs without features'
+        run: |
+          bundle exec rake ci:setup:env spec:without_features
+
+      - name: 'Sphinx'
+        run: |
+          bundle exec rake ci:setup:env spec:sphinx
+
+      - name: 'Features'
+        run: |
+          bundle exec rake ci:setup:env spec:features:lenient
 
   notify_statuscope:
     uses: ./.github/workflows/notify-statuscope.yml

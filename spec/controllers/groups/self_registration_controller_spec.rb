@@ -203,7 +203,7 @@ describe Groups::SelfRegistrationController do
                 main_person_attributes: { first_name: 'Bob', last_name: 'Miller' }
               }
             }
-          end.to raise_error
+          end.to raise_error(RuntimeError)
         end
 
         it 'raises when role save! fails' do
@@ -215,7 +215,7 @@ describe Groups::SelfRegistrationController do
                 main_person_attributes: { first_name: 'Bob', last_name: 'Miller' }
               }
             }
-          end.to raise_error
+          end.to raise_error(RuntimeError)
         end
 
         it 'does not send any emails when no email provided', :tests_active_jobs do

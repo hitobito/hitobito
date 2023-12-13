@@ -19,6 +19,6 @@ describe SessionsCleanerJob do
     end.to change { Session.count }.by(-1)
 
     expect { outdated.reload }.to raise_error ActiveRecord::RecordNotFound
-    expect { current.reload }.not_to raise_error ActiveRecord::RecordNotFound
+    expect { current.reload }.not_to raise_error
   end
 end

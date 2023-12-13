@@ -33,7 +33,7 @@ module Import
       error.blank?
     end
 
-    def map_data(header_mapping) # rubocop:disable Layout/MethodLength
+    def map_data(header_mapping) # rubocop:disable Metrics/MethodLength
       if header_mapping.is_a?(ActionController::Parameters)
         header_mapping = header_mapping.to_unsafe_h
       end

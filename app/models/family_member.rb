@@ -81,7 +81,7 @@ class FamilyMember < ApplicationRecord
 
   private
 
-  def create_or_copy_family_key # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/AbcSize,Metric/PerceivedComplexity
+  def create_or_copy_family_key # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/AbcSize,Metrics/PerceivedComplexity
     return false if person.blank? || other.blank?
 
     if person.family_key.blank? && other.family_key.blank?

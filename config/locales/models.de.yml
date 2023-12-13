@@ -1188,10 +1188,6 @@ de:
       on_or_before: "muss %{restriction} oder davor sein"
       after: "muss  nach %{restriction} sein"
       on_or_after: "muss %{restriction} oder danach sein"
-      # carrierwave
-      extension_whitelist_error: "akzeptiert nur die folgenden Dateitypen: %{allowed_types}"
-      dimensions_too_large: "akzeptiert nur Bilder mit einer Grösse kleiner als %{maximum} Pixel"
-      filesize_too_large: "darf nicht grösser als %{maximum} MB sein"
       # devise
       expired: "ist abgelaufen, bitte neu anfordern"
       not_found: "nicht gefunden"

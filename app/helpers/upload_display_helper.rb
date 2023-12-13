@@ -6,8 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module UploadDisplayHelper
-  # This method provides a facade to serve uploads either from ActiveStorage or
-  # CarrierWave
+  # This method provides a facade to serve uploads
   #
   # Usage:
   #
@@ -28,7 +27,7 @@ module UploadDisplayHelper
   def upload_url(model, name, size: nil, default: model.class.name.underscore, variant: nil) # rubocop:disable Metrics/MethodLength
     return upload_variant(model, name, variant, default: default) if variant.present?
 
-    if model.send(name.to_sym).attached?
+    if upload_exists?(model, name)
       model.send(name.to_sym).yield_self do |pic|
         if size
           # variant passes to mini_magick or vips, I assume mini_magick here
@@ -37,8 +36,6 @@ module UploadDisplayHelper
           pic
         end
       end
-    elsif model.respond_to?(:"carrierwave_#{name}") && model.send(:"carrierwave_#{name}")
-      model.send(:"carrierwave_#{name}_url")
     else
       upload_default(model, name, default)
     end
@@ -46,30 +43,18 @@ module UploadDisplayHelper
 
   # return the filename of the uploaded file
   def upload_name(model, name)
-    if model.send(name.to_sym).attached?
-      model.send(name.to_sym).filename.to_s
-    elsif model.respond_to?(:"carrierwave_#{name}_identifier")
-      model.send(:"carrierwave_#{name}_identifier")
-    end
+    model.send(name.to_sym).filename.to_s if upload_exists?(model, name)
   end
 
   def upload_exists?(model, name)
-    return true if model.send(name.to_sym).attached?
-
-    if model.respond_to?(:"carrierwave_#{name}")
-      model.send(:"carrierwave_#{name}").present?
-    else
-      false
-    end
+    model.send(name.to_sym).attached?
   end
 
   private
 
   def upload_variant(model, name, variant, default: model.name.underscore)
-    if model.send(name.to_sym).attached?
+    if upload_exists?(model, name)
       model.send(name.to_sym).variant(variant.to_sym)
-    elsif model.respond_to?(:"carrierwave_#{name}")
-      model.send(:"carrierwave_#{name}").send(variant.to_sym).url
     else
       default_variant = [default, variant].compact.map(&:to_s).join('_')
       name_variant = [name, variant].compact.map(&:to_s).join('_')

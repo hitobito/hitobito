@@ -228,3 +228,4 @@ steuern. Solange der Wechsel nicht komplett abgeschlossen ist, muss man das gem
 ### mvi 2023-12-13
 
 Das Gem "nochmal" wurde entfernt, da vorerst kein weiterer Wechsel geplant ist.
+Die Uploader wurden als Abschluss der CarrierWave-Migration entfernt.

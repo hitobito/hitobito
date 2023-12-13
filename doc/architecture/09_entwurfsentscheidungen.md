@@ -224,3 +224,7 @@ muss vorher getestet werden.
 Wenn man mehrere ActiveStorage-Stores definiert, kann man den Wechsel per ENV
 steuern. Solange der Wechsel nicht komplett abgeschlossen ist, muss man das gem
 "nochmal" im Gemfile behalten und auch produktiv deployen.
+
+### mvi 2023-12-13
+
+Das Gem "nochmal" wurde entfernt, da vorerst kein weiterer Wechsel geplant ist.

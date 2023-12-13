@@ -113,7 +113,7 @@ describe :self_registration, js: true do
       visit group_self_registration_path(group_id: group)
       complete_main_person_form
 
-      expect { send_key(:return) }
+      expect { send_keys(:return) }
         .to change { Person.count }.by(1)
                                    .and change { Role.count }.by(1)
                                                              .and change { ActionMailer::Base.deliveries.count }.by(1)

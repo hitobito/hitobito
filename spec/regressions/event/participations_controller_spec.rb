@@ -87,7 +87,7 @@ describe Event::ParticipationsController, type: :controller do
     end
     it 'renders person field when passed for_someone_else param' do
       get :new, params: { group_id: group.id, event_id: course.id, for_someone_else: true }
-      person_field = subject.all('form .control-group')[0]
+      person_field = subject.all('form .row')[0]
       expect(person_field).to have_content 'Person'
       expect(person_field).to have_css('input', visible: false, count: 2)
       expect(person_field.all('input', visible: false).first[:type]).to eq 'hidden'

@@ -25,6 +25,7 @@ class HitobitoLogEntry < ApplicationRecord
        _prefix: true
 
   validates_by_schema
+  validates :category, presence: true # maybe obsolete after validates_by_schema upgrade
 
   belongs_to :subject, polymorphic: true
 end

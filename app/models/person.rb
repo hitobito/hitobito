@@ -238,10 +238,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   validate :assert_has_any_name
   validates :address, length: { allow_nil: true, maximum: 1024 }
 
-  if ENV['NOCHMAL_MIGRATION'].blank? # if not migrating RIGHT NOW, i.e. normal case
-    validates :picture, dimension: { width: { max: 8_000 }, height: { max: 8_000 } },
-                        content_type: ['image/jpeg', 'image/gif', 'image/png']
-  end
+  validates :picture, dimension: { width: { max: 8_000 }, height: { max: 8_000 } },
+                      content_type: ['image/jpeg', 'image/gif', 'image/png']
   # more validations defined by devise
 
 

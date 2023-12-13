@@ -164,10 +164,8 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   validate :assert_valid_self_registration_notification_email
 
-  if ENV['NOCHMAL_MIGRATION'].blank? # if not migrating RIGHT NOW, i.e. normal case
-    validates :logo, dimension: { width: { max: 8_000 }, height: { max: 8_000 } },
-                     content_type: ['image/jpeg', 'image/gif', 'image/png']
-  end
+  validates :logo, dimension: { width: { max: 8_000 }, height: { max: 8_000 } },
+                   content_type: ['image/jpeg', 'image/gif', 'image/png']
 
   scope :without_archived, -> { where(archived_at: nil) }
 

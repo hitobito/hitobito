@@ -205,7 +205,6 @@ ActiveRecord::Schema.define(version: 2023_12_15_154134) do
 
   create_table "event_attachments", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.integer "event_id", null: false
-    t.string "file"
     t.index ["event_id"], name: "index_event_attachments_on_event_id"
   end
 
@@ -423,7 +422,6 @@ ActiveRecord::Schema.define(version: 2023_12_15_154134) do
     t.integer "deleter_id"
     t.boolean "require_person_add_requests", default: false, null: false
     t.text "description"
-    t.string "logo"
     t.datetime "archived_at"
     t.string "self_registration_role_type"
     t.string "self_registration_notification_email"
@@ -435,7 +433,6 @@ ActiveRecord::Schema.define(version: 2023_12_15_154134) do
     t.string "text_message_provider", default: "aspsms", null: false
     t.string "text_message_originator"
     t.string "letter_address_position", default: "left", null: false
-    t.string "letter_logo"
     t.index ["layer_group_id"], name: "index_groups_on_layer_group_id"
     t.index ["lft", "rgt"], name: "index_groups_on_lft_and_rgt"
     t.index ["parent_id"], name: "index_groups_on_parent_id"
@@ -758,7 +755,6 @@ ActiveRecord::Schema.define(version: 2023_12_15_154134) do
     t.boolean "confidential", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "logo"
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
@@ -839,7 +835,6 @@ ActiveRecord::Schema.define(version: 2023_12_15_154134) do
     t.datetime "last_sign_in_at"
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
-    t.string "picture"
     t.integer "last_label_format_id"
     t.integer "creator_id"
     t.integer "updater_id"

@@ -49,10 +49,7 @@ describe StepsComponent::ContentComponent, type: :component do
 
   context 'real partial' do
     let(:object) do
-      SelfRegistration.new(group: groups(:top_group), params: {}).tap do |obj|
-        obj.main_person.attrs = [:first_name, :last_name, :email]
-        obj.main_person.required_attrs = obj.main_person.attrs
-      end
+      SelfRegistration.new(group: groups(:top_group), params: {})
     end
     let(:form) do
       StandardFormBuilder.new(:obj, object, vc_test_controller.view_context,
@@ -74,6 +71,15 @@ describe StepsComponent::ContentComponent, type: :component do
       allow_any_instance_of(ActionView::Base).to receive(:policy_finder).and_return(policy_finder)
     end
 
+    def stub_test_person
+      stub_const("TestPerson", Class.new(SelfRegistration::Person) do # rubocop:disable Lint/ConstantDefinitionInBlock
+        yield self
+        self.attrs += [:privacy_policy_accepted]  ## needed for internal validations
+      end)
+      expect(object).to receive(:main_person).and_return(TestPerson.new)
+    end
+
+
     it 'does not render if partial index is above current step' do
       expect(iterator).to receive(:index).and_return(1)
       expect(component).not_to be_render
@@ -86,7 +92,10 @@ describe StepsComponent::ContentComponent, type: :component do
     end
 
     it 'does not render attrs that are not listed on model' do
-      object.main_person.attrs -= [:first_name, :last_name]
+      stub_test_person do |test_person|
+        test_person.attrs = [:email]
+        test_person.required_attrs = [:email]
+      end
 
       expect(html).to have_field('Haupt-E-Mail')
       expect(html).not_to have_field('Vorname')
@@ -94,7 +103,10 @@ describe StepsComponent::ContentComponent, type: :component do
     end
 
     it 'can control if field is required' do
-      object.main_person.required_attrs -= [:first_name]
+      stub_test_person do |test_person|
+        test_person.attrs = [:email, :first_name]
+        test_person.required_attrs = [:email]
+      end
       expect(html).to have_css('label.required', text: 'Haupt-E-Mail')
       expect(html).to have_css('label', text: 'Vorname')
       expect(html).not_to have_css('label.required', text: 'Vorname')

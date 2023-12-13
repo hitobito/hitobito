@@ -123,7 +123,7 @@ class Event::ParticipationContactData
 
   def assert_required_contact_attrs_valid
     required_attrs.each do |a|
-      next assert_phone_number_present if a == :phone_numbers
+      next assert_phone_number_present if a.to_sym == :phone_numbers
 
       if model_params[a].blank?
         errors.add(a, t('errors.messages.blank'))

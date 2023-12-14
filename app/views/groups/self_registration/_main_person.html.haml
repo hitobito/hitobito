@@ -13,29 +13,8 @@
     - if f.object.attr?(:company)
       = f.labeled_boolean_field :company
 
-    - if f.object.attr?(:address)
-      = f.labeled_text_area(:address, rows: 2, data: { provide: 'entity',
-                                                      updater: 'AddressTypeahead.update',
-                                                      url: addresses_query_url })
-
-    - if f.object.attr?(:zip_code)
-      = f.labeled(:zip_code, t('contactable.fields.zip_town')) do
-        .zip-code-and-town-input-fields.address-input-fields.row
-          .col-1
-            = f.string_field(:zip_code, class: 'span-none zip-code-field', maxlength: 10)
-          .col-3
-            = f.string_field(:town, class: 'span-none town-field')
-
-      = f.labeled(:country) do
-        .shown.ms-0
-          = f.country_select('country',
-                          { priority_countries: Settings.countries.prioritized,
-                            selected: f.object.country.presence || Settings.addresses.imported_countries.first,
-                          },
-                          { class: 'form-select form-select-sm tom-select',
-                            data: { placeholder: ' ',
-                                    chosen_no_results: t('global.chosen_no_results'),
-                                    typeahead_supported_countries: Settings.addresses.imported_countries } })
+    - if [:address, :zip_code, :town, :country].all? { |field| f.object.attr?(field) }
+      = render 'contactable/address_fields', f: f
 
     - if f.object.attr?(:email)
       = f.labeled_input_field :email, help_inline: t('people.email_field.used_as_login'), class: 'd-inline'

@@ -12,7 +12,9 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
 
   app.setupQuicksearch = function() {
     const input = document.getElementById(QUICKSEARCH_ID);
-    return setupRemoteTypeahead(input);
+    if(input) {
+      return setupRemoteTypeahead(input);
+    }
   };
 
   app.setupEntityTypeahead = function() {

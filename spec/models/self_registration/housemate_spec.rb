@@ -43,7 +43,7 @@ describe SelfRegistration::Housemate do
       mate.required_attrs = [:email]
       mate.email = 'top_leader@example.com'
       expect(mate).to have(1).error_on(:email)
-      expect(mate.errors[:email]).to eq(["ist bereits vergeben"])
+      expect(mate.errors[:email][0]).to start_with("ist bereits vergeben. Diese Adresse muss")
     end
 
     it 'accepts email once in household' do
@@ -58,7 +58,7 @@ describe SelfRegistration::Housemate do
       mate.household_emails = %w(test@example.com test@example.com)
       mate.email = 'test@example.com'
       expect(mate).to have(1).error_on(:email)
-      expect(mate.errors[:email]).to eq(["ist bereits vergeben"])
+      expect(mate.errors[:email][0]).to start_with("ist bereits vergeben. Diese Adresse muss")
     end
 
     it 'validates role' do
@@ -90,7 +90,7 @@ describe SelfRegistration::Housemate do
       it 'does not duplicate errors errors from person model' do
         person = TestPerson.new(email: 'top_leader@example.com')
         expect(person).to have(1).error_on(:email)
-        expect(person.errors['email']).to eq(['ist bereits vergeben'])
+        expect(person.errors[:email][0]).to start_with("ist bereits vergeben. Diese Adresse muss")
       end
     end
   end

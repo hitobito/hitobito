@@ -5,7 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-
 class SelfRegistration::Person
   include ActiveModel::Model
   include ActiveModel::Attributes
@@ -45,7 +44,7 @@ class SelfRegistration::Person
     super
   end
 
-  validate :assert_email, if: -> { required_attrs.include?(:email) && email.present? }
+  validate :assert_email, if: -> { email.present? }
   validate :assert_person_valid
   validate :assert_role_valid, if: :primary_group
 
@@ -87,7 +86,7 @@ class SelfRegistration::Person
     end
 
     unless Person.where(email: email).none? && household_emails.to_a.count(email) <= 1
-      errors.add(:email, :taken)
+      errors.add(:email, I18n.t('activerecord.errors.models.person.attributes.email.taken'))
     end
   end
 

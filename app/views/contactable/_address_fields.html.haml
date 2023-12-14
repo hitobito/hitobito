@@ -6,7 +6,7 @@
 .address-input-fields
   %div.alert.alert-warning.updates-household-address.d-none
     = t('.updates_household_address')
-  = f.labeled_input_field(:address, rows: 2, data: { provide: 'entity',
+  = f.labeled_text_area(:address, rows: 2, data: { provide: 'entity',
                                                    updater: 'AddressTypeahead.update',
                                                    url: addresses_query_url })
   = f.labeled(:zip_code, t('contactable.fields.zip_town'), class: 'row') do

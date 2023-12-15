@@ -54,7 +54,10 @@ describe Person::BlockService do
 
   describe '::block_after' do
     subject(:block_after) { described_class.block_after }
+    let(:block_after_value) { nil }
+    let(:warn_after_value) { nil }
     before { allow(Settings).to receive_message_chain(:inactivity_block, :block_after).and_return(block_after_value) }
+    before { allow(Settings).to receive_message_chain(:inactivity_block, :warn_after).and_return(warn_after_value) }
 
     context 'with unset value' do
       let(:block_after_value) { nil }
@@ -71,6 +74,16 @@ describe Person::BlockService do
       it 'returns duration' do
         expect(block_after).to eq(15.minutes)
         expect(described_class.block?).to be_truthy
+      end
+    end
+
+    context 'with value < warn_after' do
+      let(:block_after_value) { '337' }
+      let(:warn_after_value) { '1000' }
+
+      it 'adds the periods' do
+        expect(described_class.warn_after).to eq(1000.seconds)
+        expect(described_class.block_after).to eq(1337.seconds)
       end
     end
   end

@@ -31,7 +31,10 @@ class Person::BlockService
   end
 
   def self.block_after
-    Settings.inactivity_block&.block_after&.to_i&.seconds
+    block_after = Settings.inactivity_block&.block_after&.to_i&.seconds
+    return block_after + warn_after if warn_after.present? && block_after&.<(warn_after)
+
+    block_after
   end
 
   def self.warn?

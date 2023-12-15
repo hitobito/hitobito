@@ -12,12 +12,11 @@ describe Person::InactivityBlockJob do
   subject(:job) { described_class.new }
   subject(:block_scope) { job.block_scope }
   let!(:person) { people(:bottom_member) }
-  let(:block_after) { 1.months }
-  let(:inactivity_block_warning_sent_at) { (block_after + 1.month).ago }
+  let(:block_after) { 6.months }
+  let(:last_sign_in_at) {  }
   before do
     allow(Person::BlockService).to receive(:block_after).and_return(block_after)
-    person.update(last_sign_in_at: (inactivity_block_warning_sent_at&.-(1.month)),
-                  inactivity_block_warning_sent_at: inactivity_block_warning_sent_at)
+    person.update(last_sign_in_at: last_sign_in_at)
   end
 
   context 'with warned inactive person' do
@@ -50,19 +49,10 @@ describe Person::InactivityBlockJob do
   end
 
   context 'with warning not sent' do
-    let(:inactivity_block_warning_sent_at) { nil }
+    before { person.update(inactivity_block_warning_sent_at: nil) }
 
-    it 'ignores person' do
-      expect(block_scope).not_to include(person)
-      expect(job.perform).to be_truthy
-    end
-  end
-
-  context 'with warning not sent' do
-    let(:inactivity_block_warning_sent_at) { (block_after / 2).ago }
-
-    it 'ignores person' do
-      expect(block_scope).not_to include(person)
+    it 'includes person' do
+      expect(block_scope).to include(person)
       expect(job.perform).to be_truthy
     end
   end

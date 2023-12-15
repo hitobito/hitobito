@@ -15,13 +15,14 @@ shared_examples 'group types' do |options|
         expect(Group).to be_no_duplicates_for_columns
         expect(Group).to be_all_roots_valid
         expect(Group).to be_valid
-      rescue => e
+      rescue RSpec::Expectations::ExpectationNotMetError => e
         puts e
         Group.rebuild!
         puts 'valid are:'
         Group.order(:lft).each do |g|
           puts '  ' * g.level + "#{g.name} lft: #{g.lft}, rgt: #{g.rgt}"
         end
+        raise e
       end
     end
 

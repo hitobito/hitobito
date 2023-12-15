@@ -10,60 +10,29 @@ require 'spec_helper'
 
 describe Person::InactivityBlockJob do
   subject(:job) { described_class.new }
-  subject(:block_scope) { job.block_scope }
   let!(:person) { people(:bottom_member) }
-  let(:block_after) { 6.months }
-  let(:last_sign_in_at) {  }
+  let(:block_after_value) { 6.months }
+  let(:last_sign_in_at) { block_after_value&.+(3.months)&.ago }
+
   before do
-    allow(Person::BlockService).to receive(:block_after).and_return(block_after)
+    allow(Person::BlockService).to receive(:block_after).and_return(block_after_value)
     person.update(last_sign_in_at: last_sign_in_at)
   end
 
-  context 'with warned inactive person' do
-    let(:block_service){ double("BlockService") }
+  context "with no block_after set" do
+    let(:block_after_value) { nil }
+    it { expect(job.perform).to be_falsy }
+    it { expect(Person::BlockService).not_to receive(:new) }
+  end
 
-    it 'blocks the person' do
+  context "with block_after set" do
+    let(:block_after_value) { 6.months }
+    let(:block_service) { double("BlockService") }
+    before do
       expect(Person::BlockService).to receive(:new).with(person).and_return(block_service)
       expect(block_service).to receive(:block!)
-      expect(block_scope).to include(person)
-      expect(job.perform).to be_truthy
     end
-  end
 
-  context 'with already blocked person' do
-    before { Person::BlockService.new(person).block! }
-
-    it 'ignores person' do
-      expect(block_scope).not_to include(person)
-      expect(job.perform).to be_truthy
-    end
-  end
-
-  context 'with active person' do
-    before { person.touch(:last_sign_in_at) }
-
-    it 'ignores person' do
-      expect(block_scope).not_to include(person)
-      expect(job.perform).to be_truthy
-    end
-  end
-
-  context 'with warning not sent' do
-    before { person.update(inactivity_block_warning_sent_at: nil) }
-
-    it 'includes person' do
-      expect(block_scope).to include(person)
-      expect(job.perform).to be_truthy
-    end
-  end
-
-  context 'with no block_after set' do
-    let(:inactivity_block_warning_sent_at) { nil }
-    let(:block_after) { nil }
-
-    it 'returns early' do
-      expect(Person::BlockService).not_to receive(:new)
-      expect(job.perform).to be_falsy
-    end
+    it { expect(job.perform).to be_truthy }
   end
 end

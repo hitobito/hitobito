@@ -11,6 +11,10 @@ describe Person::BlockService do
 
   let(:person) { people(:top_leader) }
   subject(:block_service) { described_class.new(person) }
+  let(:block_after_value) { nil }
+  let(:warn_after_value) { nil }
+  before { allow(Settings).to receive_message_chain(:inactivity_block, :block_after).and_return(block_after_value) }
+  before { allow(Settings).to receive_message_chain(:inactivity_block, :warn_after).and_return(warn_after_value) }
 
   describe '#block!' do
     subject(:block!) { block_service.block! }
@@ -54,10 +58,6 @@ describe Person::BlockService do
 
   describe '::block_after' do
     subject(:block_after) { described_class.block_after }
-    let(:block_after_value) { nil }
-    let(:warn_after_value) { nil }
-    before { allow(Settings).to receive_message_chain(:inactivity_block, :block_after).and_return(block_after_value) }
-    before { allow(Settings).to receive_message_chain(:inactivity_block, :warn_after).and_return(warn_after_value) }
 
     context 'with unset value' do
       let(:block_after_value) { nil }
@@ -107,6 +107,121 @@ describe Person::BlockService do
       it 'returns duration' do
         expect(warn_after).to eq(15.minutes)
         expect(described_class.warn?).to be_truthy
+      end
+    end
+  end
+
+  describe '::block_scope' do
+    subject(:block_scope) { described_class.block_scope }
+    let(:person) { people(:bottom_member) }
+    let(:block_after_value) { 6.months }
+    let(:last_sign_in_at) { block_after_value&.+(3.months)&.ago }
+
+    before do
+      person.update(last_sign_in_at: last_sign_in_at)
+    end
+
+    context 'with inactive person' do
+      it 'blocks the person' do
+        expect(block_scope).to include(person)
+      end
+    end
+
+    context 'with already blocked person' do
+      before { block_service.block! }
+
+      it 'ignores person' do
+        expect(block_scope).not_to include(person)
+      end
+    end
+
+    context 'with active person' do
+      before { person.touch(:last_sign_in_at) }
+
+      it 'ignores person' do
+        expect(block_scope).not_to include(person)
+      end
+    end
+
+    context 'with warning not sent' do
+      before { person.update(inactivity_block_warning_sent_at: nil) }
+
+      it 'includes person' do
+        expect(block_scope).to include(person)
+      end
+    end
+
+    context 'with never logged in' do
+      let(:last_sign_in_at) { nil }
+
+      it 'ignores person' do
+        expect(block_scope).not_to include(person)
+      end
+    end
+
+    context 'with no block_after set' do
+      let(:inactivity_block_warning_sent_at) { nil }
+      let(:block_after_value) { nil }
+
+      it 'returns early' do
+        expect(block_scope).to be_nil
+      end
+    end
+  end
+
+  describe '::warn_scope' do
+    subject(:warn_scope) { described_class.warn_scope }
+    let(:person) { people(:bottom_member) }
+    let(:warn_after_value) { 6.months }
+    let(:last_sign_in_at) { warn_after_value&.+(3.months)&.ago }
+
+    before do
+      person.update(last_sign_in_at: last_sign_in_at)
+    end
+
+    context 'with inactive person' do
+      it 'includes the person' do
+        expect(warn_scope).to include(person)
+      end
+    end
+
+    context 'with already blocked person' do
+      before { block_service.block! }
+
+      it 'ignores person' do
+        expect(warn_scope).not_to include(person)
+      end
+    end
+
+    context 'with active person' do
+      before { person.touch(:last_sign_in_at) }
+
+      it 'ignores person' do
+        expect(warn_scope).not_to include(person)
+      end
+    end
+
+    context 'with warning already sent' do
+      before { person.update(inactivity_block_warning_sent_at: 3.months.ago) }
+
+      it 'ignores person' do
+        expect(warn_scope).not_to include(person)
+      end
+    end
+
+    context 'with never logged in' do
+      let(:last_sign_in_at) { nil }
+
+      it 'ignores person' do
+        expect(warn_scope).not_to include(person)
+      end
+    end
+
+    context 'with no warn_after set' do
+      let(:warn_after_value) { nil }
+
+      it 'returns early' do
+        expect(warn_scope).to be_nil
       end
     end
   end

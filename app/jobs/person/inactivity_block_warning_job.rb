@@ -9,13 +9,8 @@ class Person::InactivityBlockWarningJob < RecurringJob
   def perform
     return unless Person::BlockService.warn?
 
-    warn_scope.find_each { |person| Person::BlockService.new(person).inactivity_warning! }
+    Person::BlockService.warn_scope.find_each { |person| Person::BlockService.new(person).inactivity_warning! }
     true
   end
 
-  def warn_scope(warn_after = Person::BlockService.warn_after)
-    Person.where.not(last_sign_in_at: nil)
-          .where(Person.arel_table[:last_sign_in_at].lt(warn_after&.ago))
-          .where(inactivity_block_warning_sent_at: nil, blocked_at: nil)
-  end
 end

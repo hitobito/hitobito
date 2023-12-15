@@ -9,13 +9,7 @@ class Person::InactivityBlockJob < RecurringJob
   def perform
     return unless Person::BlockService.block?
 
-    block_scope.find_each { |person| Person::BlockService.new(person).block! }
+    Person::BlockService.block_scope.find_each { |person| Person::BlockService.new(person).block! }
     true
-  end
-
-  def block_scope(block_after = Person::BlockService.block_after)
-    Person.where.not(last_sign_in_at: nil)
-          .where(blocked_at: nil)
-          .where(Person.arel_table[:last_sign_in_at].lt(block_after&.ago))
   end
 end

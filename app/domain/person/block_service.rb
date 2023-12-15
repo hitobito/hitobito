@@ -45,6 +45,22 @@ class Person::BlockService
     block_after.present? && block_after.positive?
   end
 
+  def self.block_scope(block_after = self.block_after)
+    return unless block?
+
+    Person.where.not(last_sign_in_at: nil)
+          .where(blocked_at: nil)
+          .where(Person.arel_table[:last_sign_in_at].lt(block_after&.ago))
+  end
+
+  def self.warn_scope(warn_after = self.warn_after)
+    return unless warn?
+
+    Person.where.not(last_sign_in_at: nil)
+          .where(Person.arel_table[:last_sign_in_at].lt(warn_after&.ago))
+          .where(inactivity_block_warning_sent_at: nil, blocked_at: nil)
+  end
+
   protected
 
   def log(event)

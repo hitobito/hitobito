@@ -6,7 +6,7 @@
 - if entry.layer?
   = field_set_tag do
     = f.labeled :logo do
-      = f.file_field :logo, type: :file, accept: Settings.application.image_upload.content_types, class: 'mt-1 form-control form-control-sm w-25'
+      = f.file_field :logo, type: :file, accept: Settings.application.image_upload.content_types.join(','), class: 'mt-1 form-control form-control-sm w-25'
 
     - if upload_exists?(entry, :logo)
       = f.labeled :remove_logo do

@@ -6,7 +6,7 @@
 = field_set_tag do
   = f.labeled :picture do
     %div.col-3.mt-1
-      = f.file_field :picture, type: :file, accept: Settings.application.image_upload.content_types, class: 'form-control form-control-sm'
+      = f.file_field :picture, type: :file, accept: Settings.application.image_upload.content_types.join(','), class: 'form-control form-control-sm'
 
   - if upload_exists?(entry, :picture)
     = f.labeled :remove_picture do

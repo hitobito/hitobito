@@ -769,7 +769,7 @@ de:
         dates: Daten
         created_at: Von
         deleted_at: Bis
-        delete_on: Bis
+        delete_on: bis
         class:
           archived: '%{role_kind} (archiviert)'
           permission:

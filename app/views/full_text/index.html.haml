@@ -11,15 +11,15 @@
 
   - else
     %ul.nav.nav-tabs
-      %li{class: tab_class(:people)}= link_to(Person.model_name.human(count: 2), '#people', data: { toggle: 'tab' })
-      %li{class: tab_class(:groups)}= link_to(Group.model_name.human(count: 2), '#groups', data: { toggle: 'tab' })
-      %li{class: tab_class(:events)}= link_to(Event.model_name.human(count: 2), '#events', data: { toggle: 'tab' })
+      %li.nav-item= link_to(Person.model_name.human(count: 2), '#people', class: "nav-link #{active_tab_class(:people)}", 'data-bs-toggle': 'tab')
+      %li.nav-item= link_to(Group.model_name.human(count: 2), '#groups', class: "nav-link #{active_tab_class(:groups)}", 'data-bs-toggle': 'tab')
+      %li.nav-item= link_to(Event.model_name.human(count: 2), '#events', class: "nav-link #{active_tab_class(:events)}", 'data-bs-toggle': 'tab')
       - if current_user.finance_groups.any?
-        %li{class: tab_class(:invoices)}= link_to(Invoice.model_name.human(count: 2), '#invoices', data: { toggle: 'tab' })
+        %li.nav-item= link_to(Invoice.model_name.human(count: 2), '#invoices', class: "nav-link #{active_tab_class(:events)}", 'data-bs-toggle': 'tab')
 
     .tab-content
-      #people.tab-pane{class: tab_class(:people)}= render 'people'
-      #groups.tab-pane{class: tab_class(:groups)}= render 'groups'
-      #events.tab-pane{class: tab_class(:events)}= render 'events'
+      #people.tab-pane{class: active_tab_class(:people)}= render 'people'
+      #groups.tab-pane{class: active_tab_class(:groups)}= render 'groups'
+      #events.tab-pane{class: active_tab_class(:events)}= render 'events'
       - if current_user.finance_groups.any?
-        #invoices.tab-pane{class: tab_class(:invoices)}= render 'invoices'
+        #invoices.tab-pane{class: active_tab_class(:invoices)}= render 'invoices'

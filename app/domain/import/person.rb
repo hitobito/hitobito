@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module Import
-  class Person
+  class PersonEntry
 
     delegate :save, :new_record?, :persisted?, to: :person
 

@@ -20,10 +20,13 @@ class Person::HistoryController < ApplicationController
 
   private
 
+  def roles_scope
+    Person::PreloadGroups.for([entry]).first.roles.includes(group: :parent)
+  end
+
   def fetch_roles(*scopes)
-    scope = Person::PreloadGroups.for([entry]).first.roles.includes(group: :parent)
     scopes
-      .inject(scope) { |current, additional| current.send(additional) }
+      .inject(roles_scope) { |current, additional| current.send(additional) }
       .sort_by { |r| GroupDecorator.new(r.group).name_with_layer }
   end
 

@@ -15,6 +15,7 @@ class Person::SecurityToolsController < ApplicationController
   SUSPEND_PERSON_SOLUTION = 'suspend_person_solution_id'
   BLOCKED_PERSON_SITUATION = 'blocked_person_situation_id'
   BLOCKED_PERSON_SOLUTION = 'blocked_person_solution_id'
+  BLOCKED_PERSON_INTERVAL = 'blocked_person_interval_id'
 
   before_action :authorize_action
 
@@ -25,7 +26,7 @@ class Person::SecurityToolsController < ApplicationController
   :email_compromised_situation_text, :email_compromised_solution_text,
   :dataleak_situation_text, :dataleak_solution_text,
   :suspend_person_situation_text, :suspend_person_solution_text,
-  :blocked_person_situation_text, :blocked_person_solution_text
+  :blocked_person_situation_text, :blocked_person_solution_text, :blocked_person_interval_text
 
   def index
     respond_to do |format|
@@ -96,9 +97,9 @@ class Person::SecurityToolsController < ApplicationController
     end
   end
 
-  def get_content(key)
+  def get_content(key, placeholders = nil)
     content = CustomContent.get(key)
-    placeholders = {
+    placeholders ||= {
       'person-name' => h(person.full_name)
     }
     content.body_with_values(placeholders).to_s.html_safe
@@ -106,6 +107,14 @@ class Person::SecurityToolsController < ApplicationController
 
   def authorize_action
     authorize!(:update, person)
+  end
+
+  def inactivity_block_placeholders
+    {
+      'warn-after-days' => Person::BlockService.warn_after&.in_days&.to_i&.to_s,
+      'block-after-days' => Person::BlockService.block_after&.in_days&.to_i&.to_s,
+      'warn-block-period-days' => Person::BlockService.warn_block_period&.in_days&.to_i&.to_s,
+    }
   end
 
   # rubocop:disable Layout/LineLength
@@ -120,6 +129,7 @@ class Person::SecurityToolsController < ApplicationController
     @suspend_person_solution_text = get_content(Person::SecurityToolsController::SUSPEND_PERSON_SOLUTION)
     @blocked_person_situation_text = get_content(Person::SecurityToolsController::BLOCKED_PERSON_SITUATION)
     @blocked_person_solution_text = get_content(Person::SecurityToolsController::BLOCKED_PERSON_SOLUTION)
+    @blocked_person_interval_text = get_content(Person::SecurityToolsController::BLOCKED_PERSON_INTERVAL, inactivity_block_placeholders) if inactivity_block_placeholders.values.all?(&:present?)
   end
   # rubocop:enable Layout/LineLength
 

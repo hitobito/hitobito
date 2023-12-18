@@ -13,8 +13,8 @@ describe Person::BlockService do
   subject(:block_service) { described_class.new(person) }
   let(:block_after_value) { nil }
   let(:warn_after_value) { nil }
-  before { allow(Settings).to receive_message_chain(:inactivity_block, :block_after).and_return(block_after_value) }
-  before { allow(Settings).to receive_message_chain(:inactivity_block, :warn_after).and_return(warn_after_value) }
+  before { allow(Settings).to receive_message_chain(:people, :inactivity_block, :block_after).and_return(block_after_value) }
+  before { allow(Settings).to receive_message_chain(:people, :inactivity_block, :warn_after).and_return(warn_after_value) }
 
   describe '#block!' do
     subject(:block!) { block_service.block! }
@@ -88,9 +88,32 @@ describe Person::BlockService do
     end
   end
 
+  describe '::warn_block_period' do
+    subject(:warn_block_period) { described_class.warn_block_period }
+    before { allow(Settings).to receive_message_chain(:people, :inactivity_block, :warn_after).and_return(warn_after_value) }
+    before { allow(Settings).to receive_message_chain(:people, :inactivity_block, :block_after).and_return(block_after_value) }
+
+    context 'with unset value' do
+      let(:warn_after_value) { nil }
+
+      it 'returns nil' do
+        expect(warn_block_period).to be_nil
+      end
+    end
+
+    context 'both values' do
+      let(:warn_after_value) { 4.months }
+      let(:block_after_value) { 6.months }
+
+      it 'returns duration' do
+        expect(warn_block_period).to eq(2.months)
+      end
+    end
+  end
+
   describe '::warn_after' do
     subject(:warn_after) { described_class.warn_after }
-    before { allow(Settings).to receive_message_chain(:inactivity_block, :warn_after).and_return(warn_after_value) }
+    before { allow(Settings).to receive_message_chain(:people, :inactivity_block, :warn_after).and_return(warn_after_value) }
 
     context 'with unset value' do
       let(:warn_after_value) { nil }

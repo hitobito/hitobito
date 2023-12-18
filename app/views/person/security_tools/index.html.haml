@@ -105,11 +105,14 @@
       %div.well
         = @blocked_person_solution_text
         %br
+        - if @blocked_person_interval_text.present?
+          = @blocked_person_interval_text
+          %br
         = action_button(t('.unblock_person'),
                         unblock_group_person_path(group, person),
                         :"lock-open",
                         method: :post,
-                        class: 'btn-secondary',
+                        class: 'btn-danger',
                         data: { confirm: t('.confirm_unblock_person') },
                         title: t('.unblock_person'))
 

@@ -10,12 +10,11 @@ class Person::InactivityBlockMailer < ApplicationMailer
 
   CONTENT_INACTIVITY_BLOCK_WARNING = 'content_inactivity_block_warning'.freeze
 
-  # delegate :body, :person, :requester, to: :password_override
-
   def inactivity_block_warning(recipient)
     @recipient = recipient
+    values = values_for_placeholders(CONTENT_INACTIVITY_BLOCK_WARNING)
 
-    compose(recipient, CONTENT_INACTIVITY_BLOCK_WARNING)
+    custom_content_mail(recipient.email, CONTENT_INACTIVITY_BLOCK_WARNING, values)
   end
 
   private
@@ -24,12 +23,15 @@ class Person::InactivityBlockMailer < ApplicationMailer
     @recipient.greeting_name
   end
 
-
-  def placeholder_warn_after
-    Person::BlockService.warn? && distance_of_time_in_words(Person::BlockService.warn_after)
+  def placeholder_warn_after_days
+    Person::BlockService.warn_after&.in_days&.to_i&.to_s
   end
 
-  def placeholder_block_after
-    Person::BlockService.block? && distance_of_time_in_words(Person::BlockService.block_after)
+  def placeholder_block_after_days
+    Person::BlockService.block_after&.in_days&.to_i&.to_s
+  end
+
+  def placeholder_warn_block_period_days
+    Person::BlockService.warn_block_period&.in_days&.to_i&.to_s
   end
 end

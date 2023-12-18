@@ -27,14 +27,20 @@ class Person::BlockService
   end
 
   def self.warn_after
-    Settings.inactivity_block&.warn_after&.to_i&.seconds
+    Settings.people&.inactivity_block&.warn_after&.to_i&.seconds
   end
 
   def self.block_after
-    block_after = Settings.inactivity_block&.block_after&.to_i&.seconds
+    block_after = Settings.people&.inactivity_block&.block_after&.to_i&.seconds
     return block_after + warn_after if warn_after.present? && block_after&.<(warn_after)
 
     block_after
+  end
+
+  def self.warn_block_period
+    return unless warn_after && block_after
+
+    block_after - warn_after
   end
 
   def self.warn?

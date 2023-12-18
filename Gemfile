@@ -118,6 +118,7 @@ group :development do
   gem 'listen'
   gem 'redcarpet'
   gem 'request_profiler'
+  gem 'spring-commands-rspec'
 end
 
 group :test do
@@ -142,7 +143,6 @@ group :console do
   gem 'hirb'
   gem 'pry-remote'
   gem 'pry-stack_explorer'
-  gem 'spring-commands-rspec'
   gem 'wirble'
 end
 

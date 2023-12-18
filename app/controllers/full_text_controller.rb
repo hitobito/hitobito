@@ -10,7 +10,7 @@ class FullTextController < ApplicationController
 
   skip_authorization_check
 
-  helper_method :entries, :tab_class
+  helper_method :entries, :active_tab_class
 
   respond_to :html
 
@@ -56,7 +56,7 @@ class FullTextController < ApplicationController
     :people
   end
 
-  def tab_class(tab)
+  def active_tab_class(tab)
     'active' if @active_tab == tab
   end
 

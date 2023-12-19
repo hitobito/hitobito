@@ -232,13 +232,7 @@ body {
   }
 
   #detail-info.collapse {
-    visibility: hidden;
-    display: block !important;
     height: unset;
-  }
-
-  #detail-info.collapse.shown {
-    visibility: visible;
   }
 
   .footer-content {

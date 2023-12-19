@@ -37,22 +37,22 @@ describe RolesController, js: true do
 
     it 'soft deletes role if bis in the past' do
       fill_in 'Von', with: yesterday - 3.months
-      fill_in 'Bis', with: yesterday
+      fill_in 'bis', with: yesterday
       expect do
         first(:button, 'Speichern').click
       end.to change { bottom_member.roles.with_deleted.count }.by(1)
-      expect(page).to have_content "Rolle Member (Bis #{I18n.l(yesterday)}) für Bottom Member in " \
+      expect(page).to have_content "Rolle Member (bis #{I18n.l(yesterday)}) für Bottom Member in " \
         'Bottom One wurde erfolgreich gelöscht.'
     end
 
     it 'hard deletes role if bis in the past and not valid for archive' do
       fill_in 'Von', with: yesterday - 1
-      fill_in 'Bis', with: yesterday
+      fill_in 'bis', with: yesterday
       expect do
         first(:button, 'Speichern').click
       end.to not_change { bottom_member.roles.with_deleted.count }
         .and not_change { bottom_member.roles.count }
-      expect(page).to have_content "Rolle Member (Bis #{I18n.l(yesterday)}) für Bottom Member in " \
+      expect(page).to have_content "Rolle Member (bis #{I18n.l(yesterday)}) für Bottom Member in " \
         'Bottom One wurde erfolgreich gelöscht.'
     end
   end
@@ -65,9 +65,9 @@ describe RolesController, js: true do
 
     it 'sets delete_on and rerenders' do
       visit edit_group_role_path(group_id: role.group_id, id: role.id)
-      fill_in 'Bis', with: tomorrow
+      fill_in 'bis', with: tomorrow
       all('form .bottom .btn-group').first.click_button 'Speichern'
-      expect(page).to have_content "Rolle Member (Bis #{tomorrow.strftime('%d.%m.%Y')}) für " \
+      expect(page).to have_content "Rolle Member (bis #{tomorrow.strftime('%d.%m.%Y')}) für " \
         'Bottom Member in Bottom One wurde erfolgreich aktualisiert'
       expect(role.reload.delete_on).to eq tomorrow
     end
@@ -75,7 +75,7 @@ describe RolesController, js: true do
     it 'shows delete_on date' do
       role.update(delete_on: tomorrow)
       visit edit_group_role_path(group_id: role.group_id, id: role.id)
-      expect(page).to have_field 'Bis', with: tomorrow.strftime('%d.%m.%Y')
+      expect(page).to have_field 'bis', with: tomorrow.strftime('%d.%m.%Y')
     end
 
     it 'saving outdated role deletes role' do

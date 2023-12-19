@@ -354,7 +354,7 @@ describe RolesController do
           put :update, params: { group_id: group.id, id: role.id, role: { delete_on: yesterday } }
         end.to change { Role.count }.by(-1)
         expect(response).to redirect_to(person_path(person))
-        expect(flash[:notice]).to eq "Rolle <i>Member (Bis #{yesterday.strftime('%d.%m.%Y')})</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich gelöscht."
+        expect(flash[:notice]).to eq "Rolle <i>Member (bis #{yesterday.strftime('%d.%m.%Y')})</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich gelöscht."
       end
 
       it 'renders edit and error messages if destroy does not succeed' do
@@ -363,7 +363,7 @@ describe RolesController do
           put :update, params: { group_id: group.id, id: role.id, role: { delete_on: yesterday } }
         end.not_to change { Role.count }
         expect(response).to render_template('edit')
-        expect(flash.now[:alert]).to eq "Rolle <i>Member (Bis #{yesterday.strftime('%d.%m.%Y')})</i> für <i>#{person}</i> in <i>TopGroup</i> konnte nicht gelöscht werden."
+        expect(flash.now[:alert]).to eq "Rolle <i>Member (bis #{yesterday.strftime('%d.%m.%Y')})</i> für <i>#{person}</i> in <i>TopGroup</i> konnte nicht gelöscht werden."
       end
     end
 

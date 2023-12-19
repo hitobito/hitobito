@@ -16,7 +16,7 @@
             = link_to label, url, target: '_blank'
             %br/
         %p
-          %a{'data-toggle': 'collapse', href: '#detail-info'}
+          %a{'data-bs-toggle': 'collapse', href: '#detail-info'}
             %i.fa.fa-chevron-right
           - if Wagons.app_version.to_s > '0.0'
             = link_to "Version #{Wagons.app_version}", changelog_path

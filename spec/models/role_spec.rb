@@ -256,11 +256,11 @@ describe Role do
     end
 
     it 'appends delete_on if set' do
-      expect(build_role(delete_on: date).to_s).to eq 'Leader (Bis 15.11.2023)'
+      expect(build_role(delete_on: date).to_s).to eq 'Leader (bis 15.11.2023)'
     end
 
     it 'combines label and delete_on if both are set' do
-      expect(build_role(label: 'test', delete_on: date).to_s).to eq 'Leader (test) (Bis 15.11.2023)'
+      expect(build_role(label: 'test', delete_on: date).to_s).to eq 'Leader (test) (bis 15.11.2023)'
     end
   end
 

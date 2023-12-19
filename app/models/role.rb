@@ -154,12 +154,14 @@ class Role < ActiveRecord::Base
 
   def to_s(format = :default)
     model_name = self.class.label
-    string = label? ? "#{model_name} (#{label})" : model_name
-    string += " (#{formatted_delete_date})" if delete_on
+    unless format == :short
+      model_name = label? ? "#{model_name} (#{label})" : model_name
+      model_name += " (#{formatted_delete_date})" if delete_on
+    end
     if format == :long
-      I18n.t('activerecord.attributes.role.string_long', role: string, group: group.to_s)
+      I18n.t('activerecord.attributes.role.string_long', role: model_name, group: group.to_s)
     else
-      string
+      model_name
     end
   end
 
@@ -233,6 +235,10 @@ class Role < ActiveRecord::Base
     group_id == person.primary_group_id
   end
 
+  def formatted_delete_date
+    [self.class.human_attribute_name('delete_on'), I18n.l(delete_on)].join(' ')
+  end
+
   private
 
   def nextcloud_group_details
@@ -301,9 +307,5 @@ class Role < ActiveRecord::Base
 
   def reset_person_minimized_at
     person&.update_attribute(:minimized_at, nil)
-  end
-
-  def formatted_delete_date
-    [I18n.t('global.until'), I18n.l(delete_on)].join(' ')
   end
 end

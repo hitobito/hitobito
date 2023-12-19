@@ -23,8 +23,12 @@ class FutureRole < Role
   validates_date :convert_on, on_or_after: -> { Time.zone.today }
   validate :target_type_validations, if: :validate_target_type?
 
-  def to_s(_long = nil)
-    "#{convert_to_model_name} (#{formatted_start_date})"
+  def to_s(format = :default)
+    model_name = convert_to_model_name
+    unless format == :short
+      model_name = "#{model_name} (#{formatted_start_date})"
+    end
+    model_name
   end
 
   def convert!
@@ -44,6 +48,10 @@ class FutureRole < Role
   # See SacCas wagon for an example.
   def validate_target_type?
     false
+  end
+
+  def formatted_start_date
+    I18n.t('global.start_on', date: I18n.l(convert_on))
   end
 
   private
@@ -72,10 +80,6 @@ class FutureRole < Role
 
   def relevant_attrs
     attributes.except(*IGNORED_ATTRS).merge(group: group, created_at: Time.zone.now)
-  end
-
-  def formatted_start_date
-    I18n.t('global.start_on', date: I18n.l(convert_on))
   end
 
   def convert_to_model_name

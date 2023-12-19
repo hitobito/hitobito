@@ -85,6 +85,7 @@ Hitobito::Application.routes.draw do
         collection do
           resource :evaluations, only: [:show], module: :invoices, as: 'invoices_evaluations'
           resources :by_article, only: [:index], module: :invoices, as: 'invoices_by_article'
+          resources :recalculate, only: [:new], module: :invoices, as: 'recalculate'
         end
       end
       resources :invoice_articles

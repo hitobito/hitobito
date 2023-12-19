@@ -747,7 +747,6 @@ it:
         dates: Date
         created_at: Da
         deleted_at: Al
-        delete_on: A
         class:
           archived: '%{role_kind} (archiviato)'
           permission:

@@ -748,7 +748,6 @@ fr:
         dates: Dates
         created_at: De
         deleted_at: Jusqu'à
-        delete_on: Jusqu'à
         class:
           archived: '%{role_kind} (archivé)'
           permission:

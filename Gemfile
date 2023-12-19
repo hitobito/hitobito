@@ -94,6 +94,8 @@ gem 'view_component'
 gem 'wagons', '0.6.1'
 gem 'webpacker'
 
+gem 'mail' # add mail here to have it loaded
+
 # load after others because of active record inherited alias chain.
 gem 'kaminari'
 

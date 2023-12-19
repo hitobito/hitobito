@@ -601,7 +601,6 @@ en:
         string_long: '%{role} in %{group}'
         dates: Dates
         created_at: From
-        deleted_at: To
         class:
           permission:
             description:

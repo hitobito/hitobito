@@ -746,7 +746,6 @@ it:
         string_long: '%{role} in %{group}'
         dates: Date
         created_at: Da
-        deleted_at: Al
         class:
           archived: '%{role_kind} (archiviato)'
           permission:

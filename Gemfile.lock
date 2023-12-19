@@ -781,6 +781,7 @@ DEPENDENCIES
   lograge-sql
   lograge_activejob
   magiclabs-userstamp
+  mail
   mime-types
   mini_magick
   mysql2

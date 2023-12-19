@@ -236,7 +236,7 @@ class Role < ActiveRecord::Base
   end
 
   def formatted_delete_date
-    [self.class.human_attribute_name('delete_on'), I18n.l(delete_on)].join(' ')
+    [self.class.human_attribute_name('delete_on_in_name'), I18n.l(delete_on)].join(' ')
   end
 
   private

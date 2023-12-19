@@ -768,8 +768,9 @@ de:
         string_long: '%{role} in %{group}'
         dates: Daten
         created_at: Von
-        deleted_at: Bis
-        delete_on: bis
+        deleted_t: Bis
+        delete_on: Bis
+        delete_on_in_name: bis
         class:
           archived: '%{role_kind} (archiviert)'
           permission:

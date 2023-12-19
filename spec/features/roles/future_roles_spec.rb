@@ -48,7 +48,7 @@ describe 'Future Roles behaviour', js: :true do
       expect do
         first(:button, 'Speichern').click
       end.to change { bottom_member.roles.with_deleted.count }.by(1)
-      expect(page).to have_content "Rolle Member (Bis #{I18n.l(yesterday)}) für Bottom Member in " \
+      expect(page).to have_content "Rolle Member (bis #{I18n.l(yesterday)}) für Bottom Member in " \
         'Bottom One wurde erfolgreich gelöscht.'
     end
   end
@@ -106,7 +106,7 @@ describe 'Future Roles behaviour', js: :true do
       create_future_role
       visit history_group_person_path(role.group, role.person, locale: :de)
       expect(page).to have_css 'h2', text: 'Zukünftige Rollen'
-      expect(page).to have_text "Top / TopGroup Member (ab #{I18n.l(tomorrow)}) #{I18n.l(tomorrow)}"
+      expect(page).to have_text "Top / TopGroup Member #{I18n.l(tomorrow)}"
     end
 
     it 'does show inactive roles in separate section' do

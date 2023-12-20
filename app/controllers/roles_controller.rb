@@ -24,7 +24,7 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
   before_render_form :set_group_selection
   before_render_create :set_group_selection
 
-  before_action :set_person_id, only: [:new] # rubocop:disable Rails/LexicallyScopedActionFilter
+  before_action :set_person_id, only: [:new]
   before_action :remember_primary_group, only: [:destroy, :update]
   before_action :set_outdated_flash_message, only: [:edit]
   after_action :last_primary_group_role_deleted, only: [:destroy, :update]
@@ -35,7 +35,7 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
       new_person = entry.person.new_record?
       created = create_entry_and_person
       add_privacy_policy_not_accepted_error if new_person
-      return destroy_and_redirect if entry.delete_on&.past?
+      return destroy_and_redirect if destroy_on_create?
 
       respond_with(entry, success: created, location: after_create_location(new_person))
     end
@@ -84,6 +84,10 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
       flash.now[:alert] = error_messages.presence || flash_message(:failure, :destroy)
       render :edit
     end
+  end
+
+  def destroy_on_create?
+    entry.persisted? && entry.delete_on&.past?
   end
 
   def with_person_add_request(&block)

@@ -110,7 +110,7 @@ class StepsComponent < ApplicationComponent
     private
 
     def next_submit_button_options
-      options = past? ? {formnovalidate: true} : {}
+      options = past? ? { formnovalidate: true } : {}
       options.merge(name: :next, value: index + 1)
     end
 

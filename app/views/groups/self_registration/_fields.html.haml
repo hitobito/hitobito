@@ -1,3 +1,14 @@
-= fields.labeled_input_fields(*entry.person.decorate.used_attributes(:first_name, :last_name, :nickname, :company_name, :company))
-= fields.labeled_input_field :email, help_inline: t('people.email_field.used_as_login')
-= render_extensions :additional_person_fields, locals: { fields: fields }
+-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+= f.honeypot(:verification)
+= hidden_field_tag(:step, entry.step)
+= render StepsComponent.new(partials: entry.partials, step: entry.step, form: f)
+
+- if entry.first_step?
+  = standard_form(entry, {url: group_self_inscription_path, method: :get}) do |f|
+    = f.indented do
+      = f.help_block(t('groups.self_registration.form.has_account'))
+    = form_buttons(f, submit_label: t('groups.self_registration.form.to_login_page'), cancel_url: '')

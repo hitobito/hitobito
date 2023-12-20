@@ -15,7 +15,7 @@ class Groups::SelfRegistrationController < ApplicationController
   def new; end
 
   def create
-    return render :new unless entry.valid?
+    return render :new if !entry.valid? || params[:autosubmit].present?
 
     if params.key?(:next)
       entry.move_on

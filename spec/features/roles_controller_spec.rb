@@ -46,14 +46,25 @@ describe RolesController, js: true do
     end
 
     it 'hard deletes role if bis in the past and not valid for archive' do
-      fill_in 'Von', with: yesterday - 1
+      fill_in 'Von', with: yesterday - 1.day
       fill_in 'Bis', with: yesterday
       expect do
         first(:button, 'Speichern').click
       end.to not_change { bottom_member.roles.with_deleted.count }
-        .and not_change { bottom_member.roles.count }
+        .and(not_change { bottom_member.roles.count })
       expect(page).to have_content "Rolle Member (bis #{I18n.l(yesterday)}) für Bottom Member in " \
         'Bottom One wurde erfolgreich gelöscht.'
+    end
+
+    it 'displays validation message if bis is before von' do
+      fill_in 'Von', with: yesterday + 1.day
+      fill_in 'Bis', with: yesterday
+
+      expect do
+        first(:button, 'Speichern').click
+      end.to(not_change { bottom_member.roles.with_deleted.count })
+      expect(page).to have_content 'Von muss vor oder am selben Tag wie der Austritt sein'
+      expect(page).to have_css('#role_created_at.is-invalid')
     end
   end
 
@@ -243,7 +254,7 @@ describe RolesController, js: true do
       is_expected.to have_css('div.popover')
 
       # Change role
-      find("div.popover div#role_type_select").click
+      find('div.popover div#role_type_select').click
       is_expected.to have_css('div.popover option', visible: true)
 
       find('div.popover select#role_type').click

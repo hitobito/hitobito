@@ -3,6 +3,8 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
+- toggle_link ||= defined?(primary_group_link)
+
 - if grouped_roles.present?
   %section.roles
     %h2= title
@@ -12,7 +14,7 @@
         - grouped_roles.each do |group, roles|
           %tr
             %td
-              = GroupDecorator.new(group).primary_group_toggle_link(entry, @group)
+              = GroupDecorator.new(group).primary_group_toggle_link(entry, @group) if toggle_link
 
             %td
               %strong= GroupDecorator.new(group).link_with_layer

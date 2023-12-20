@@ -3,6 +3,6 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= render 'roles_aside', title: t('.title'), grouped_roles: entry.current_roles_grouped
+= render 'roles_aside', title: t('.title'), grouped_roles: entry.current_roles_grouped, primary_group_link: true
 - if entry.roles.future.any?
   = render 'roles_aside', title: t('.convertable_title'), grouped_roles: entry.future_roles_grouped

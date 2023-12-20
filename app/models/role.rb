@@ -224,7 +224,7 @@ class Role < ActiveRecord::Base
   end
 
   def outdated?
-    [convert_on, delete_on].compact.any? { |date| date <= Time.zone.today }
+    deleted_at.nil? && (conversion_pending? || deletion_pending?)
   end
 
   def active_period
@@ -240,6 +240,14 @@ class Role < ActiveRecord::Base
   end
 
   private
+
+  def conversion_pending?
+    convert_on.present? && convert_on <= Time.zone.today
+  end
+
+  def deletion_pending?
+    delete_on.present? && delete_on <= Time.zone.today
+  end
 
   def nextcloud_group_details
     return nil unless FeatureGate.enabled?('groups.nextcloud')
@@ -306,6 +314,6 @@ class Role < ActiveRecord::Base
   end
 
   def reset_person_minimized_at
-    person&.update_attribute(:minimized_at, nil)
+    person&.update_attribute(:minimized_at, nil) # rubocop:disable Rails/SkipsModelValidations
   end
 end

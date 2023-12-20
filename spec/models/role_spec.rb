@@ -267,6 +267,10 @@ describe Role do
   context '#outdated?' do
     let(:group) { groups(:bottom_layer_one) }
 
+    let(:today) { Time.zone.today }
+    let(:yesterday) { Time.zone.yesterday }
+    let(:tomorrow) { Time.zone.tomorrow }
+
     def build_role(attrs = {})
       Fabricate.build(Group::BottomLayer::Leader.sti_name, attrs.merge(group: group))
     end
@@ -275,16 +279,18 @@ describe Role do
       expect(build_role).not_to be_outdated
     end
 
-    it 'is outdated if delete_on is today or earlier' do
-      expect(build_role(delete_on: Time.zone.tomorrow)).not_to be_outdated
-      expect(build_role(delete_on: Time.zone.yesterday)).to be_outdated
-      expect(build_role(delete_on: Time.zone.today)).to be_outdated
+    it 'is outdated if convert_on is today or earlier' do
+      expect(build_role(convert_on: tomorrow)).not_to be_outdated
+      expect(build_role(convert_on: yesterday)).to be_outdated
+      expect(build_role(convert_on: today)).to be_outdated
     end
 
-    it 'is outdated if convert_on is today or earlier' do
-      expect(build_role(convert_on: Time.zone.tomorrow)).not_to be_outdated
-      expect(build_role(convert_on: Time.zone.yesterday)).to be_outdated
-      expect(build_role(convert_on: Time.zone.today)).to be_outdated
+    it 'is outdated if deleted_on is today or earlier unless deleted' do
+      expect(build_role(delete_on: tomorrow)).not_to be_outdated
+      expect(build_role(delete_on: yesterday)).to be_outdated
+      expect(build_role(delete_on: today)).to be_outdated
+      expect(build_role(delete_on: today, deleted_at: today)).not_to be_outdated
+      expect(build_role(delete_on: today, deleted_at: yesterday)).not_to be_outdated
     end
   end
 

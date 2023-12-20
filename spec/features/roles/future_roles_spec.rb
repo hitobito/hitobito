@@ -22,8 +22,10 @@ describe 'Future Roles behaviour', js: :true do
 
   before { sign_in(top_leader) }
 
-  def create_future_role(person: bottom_member, group: top_group, type: role_type, convert_on: tomorrow)
-    Fabricate(:role, type: FutureRole.sti_name, person: person, group: group, convert_on: convert_on, convert_to: type)
+  def create_future_role(person: bottom_member, group: top_group, type: role_type,
+                         convert_on: tomorrow)
+    Fabricate(:role, type: FutureRole.sti_name, person: person, group: group,
+                     convert_on: convert_on, convert_to: type)
   end
 
   def choose_role(role, current_selection: nil)
@@ -89,7 +91,11 @@ describe 'Future Roles behaviour', js: :true do
         create_future_role
         visit group_person_path(bottom_layer, bottom_member, locale: :de)
         expect(page).to have_css "#{future_roles_aside} h2", text: 'Zukünftige Rollen'
-        expect(page).to have_css future_roles_aside, text: "Top / TopGroup\nMember (ab #{I18n.l(tomorrow)})"
+        expect(page).to have_css future_roles_aside,
+                                 text: "Top / TopGroup\nMember (ab #{I18n.l(tomorrow)})"
+
+        within(current_roles_aside) { expect(page).to have_link 'Hauptgruppe setzen' }
+        within(future_roles_aside) { expect(page).not_to have_link 'Hauptgruppe setzen' }
       end
 
       it 'does not show section if no future roles exist' do
@@ -154,8 +160,8 @@ describe 'Future Roles behaviour', js: :true do
     def deselect_role
       expect(page).to have_css('#role_type_select #role_type')
       find('#role_type_select #role_type').click
-      expect(page).to have_css('#role_type_select #role_type option', text: "")
-      find('#role_type_select #role_type').find_all('option', text: "").first.click
+      expect(page).to have_css('#role_type_select #role_type option', text: '')
+      find('#role_type_select #role_type').find_all('option', text: '').first.click
     end
 
     it 'can create new future role' do
@@ -182,7 +188,7 @@ describe 'Future Roles behaviour', js: :true do
       deselect_role
       expect do
         first(:button, 'Speichern').click
-      end.not_to change { bottom_member.roles.count }
+      end.not_to(change { bottom_member.roles.count })
       expect(page).to have_css '.alert-danger', text: 'Rolle muss ausgefüllt werden'
       expect(page).to have_field('Von', with: I18n.l(tomorrow))
     end
@@ -199,7 +205,7 @@ describe 'Future Roles behaviour', js: :true do
         expect(page).not_to have_css '.popover'
       end.to change { existing_role_attrs[:convert_to] }
         .from(role_type).to('Group::TopGroup::Leader')
-        .and not_change { existing_role_attrs[:convert_on] }
+        .and(not_change { existing_role_attrs[:convert_on] })
     end
 
     it 'can convert future role to active role via person show page' do

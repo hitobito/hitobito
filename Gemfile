@@ -56,6 +56,7 @@ gem 'matrix' # required but removed from stlib since ruby 3.2
 gem 'mime-types'
 gem 'mini_magick'
 gem 'mysql2'
+gem 'pg'
 gem 'nested_form'
 gem 'nokogiri'
 gem 'oat'

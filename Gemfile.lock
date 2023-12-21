@@ -441,6 +441,8 @@ GEM
       ruby-rc4
       ttfunk
     phonelib (0.8.7)
+    pg (1.5.4)
+    phonelib (0.8.4)
     prawn (2.4.0)
       pdf-core (~> 0.9.0)
       ttfunk (~> 1.7)
@@ -786,6 +788,7 @@ DEPENDENCIES
   haml
   headless
   hirb
+  hitobito_generic!
   http_accept_language
   icalendar
   image_processing (~> 1.12)
@@ -809,6 +812,7 @@ DEPENDENCIES
   parallel_tests
   paranoia
   pdf-inspector
+  pg
   phonelib
   prawn
   prawn-markup

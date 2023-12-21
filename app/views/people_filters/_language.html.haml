@@ -1,0 +1,12 @@
+-#  Copyright (c) 2012-2023, Pfadibewegung Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- filter = entry.filter_chain[:language]
+
+- Person::LANGUAGES.map do |language_value, language_name|
+  - id = "filters_language_allowed_values_#{language_value}"
+  = label_tag(nil, class: 'checkbox ', for: id) do
+    = check_box_tag("filters[language][allowed_values][]", language_value, filter&.allowed_values&.include?(language_value.to_s), id: id) 
+    = language_name

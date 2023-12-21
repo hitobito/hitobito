@@ -37,6 +37,8 @@
 class MailingList < ActiveRecord::Base
 
   serialize :preferred_labels, Array
+  serialize :filter_chain, MailingLists::Filter::Chain
+
   attribute :mailchimp_result, Synchronize::Mailchimp::ResultType.new
 
   belongs_to :group
@@ -140,6 +142,14 @@ class MailingList < ActiveRecord::Base
 
   def path_args
     [group, self]
+  end
+  
+  def filter_chain=(value)
+    if value.is_a?(Hash)
+      super(MailingLists::Filter::Chain.new(value))
+    else
+      super
+    end
   end
 
   private

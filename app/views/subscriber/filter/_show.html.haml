@@ -1,0 +1,21 @@
+-#  Copyright (c) 2012-2023, Pfadibewegung Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+%h2
+  = t('.title')
+  = link_to edit_group_mailing_list_filter_path(@group.to_param, @mailing_list.to_param) do
+    = icon(:edit)
+
+%ul
+  - @mailing_list.filter_chain[:attributes]&.to_hash&.values&.each do |attribute_arg|
+    %li
+      = Person.filter_attrs.dig(attribute_arg[:key].to_sym, :label)
+      = t(attribute_arg[:constraint], scope: 'people_filters.attributes')
+      = attribute_arg[:value]
+  - unless @mailing_list.filter_chain[:language].blank?
+    %li
+      - languages = @mailing_list.filter_chain[:language].allowed_values.map { Person::LANGUAGES.fetch(_1.to_sym, _1) }
+      - language_sentence = languages.to_sentence(last_word_connector: t('people_filters.language.word_connector'), two_words_connector: t('people_filters.language.word_connector'))
+      = t('people_filters.language.one_of', languages: language_sentence)

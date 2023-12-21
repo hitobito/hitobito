@@ -10,7 +10,8 @@ class Person::Filter::Chain
   TYPES = [ # rubocop:disable Style/MutableConstant these are meant to be extended in wagons
     Person::Filter::Role,
     Person::Filter::Qualification,
-    Person::Filter::Attributes,
+    Person::Filter::Attributes, 
+    Person::Filter::Language,
     Person::Filter::Tag,
     Person::Filter::TagAbsence
   ]
@@ -93,7 +94,7 @@ class Person::Filter::Chain
 
   def filter_type(attr)
     key = filter_type_key(attr)
-    TYPES.find { |t| t.key == key }
+    self.class::TYPES.find { |t| t.key == key }
   end
 
   def filter_type_key(attr)

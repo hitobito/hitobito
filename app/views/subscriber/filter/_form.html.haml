@@ -1,0 +1,19 @@
+-#  Copyright (c) 2012-2023, Pfadibewegung Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- title t('subscriber.filter.show.title')
+
+= entry_form(url: group_mailing_list_filter_path(@group, @mailing_list), 
+             method: :PATCH,
+             stacked: true,
+             buttons_bottom: false,
+             cancel_url: group_mailing_list_subscriptions_path(@group, @mailing_list)) do |f|
+
+  .accordion
+    = render(layout: 'people_filters/filter', locals: { entry: @mailing_list, type: :attributes }) do
+      = render 'people_filters/attributes', f: f, entry: @mailing_list
+
+    = render(layout: 'people_filters/filter', locals: { type: :language }) do
+      = render 'people_filters/language', f: f, entry: @mailing_list

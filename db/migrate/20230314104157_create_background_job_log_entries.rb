@@ -13,7 +13,7 @@ class CreateBackgroundJobLogEntries < ActiveRecord::Migration[6.1]
       t.references :group
       t.datetime :started_at, precision: 6
       t.datetime :finished_at, precision: 6
-      t.virtual :runtime, type: :integer, as: "TIMESTAMPDIFF(MICROSECOND, started_at, finished_at)"
+      # t.virtual :runtime, type: :integer, as: "TIMESTAMPDIFF(MICROSECOND, started_at, finished_at)"
       t.integer :attempt
       t.string :status
       t.json :payload

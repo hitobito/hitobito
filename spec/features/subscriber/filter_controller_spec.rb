@@ -22,11 +22,11 @@ describe Subscriber::FilterController, js: true do
 
     visit edit_group_mailing_list_filter_path(group.to_param, list.to_param)
 
-    find('a.accordion-toggle.header[href="#languages"]').click
+    find('a.accordion-button[href="#languages"]').click
 
     check('filters_language_allowed_values_de')
 
-    all('form .btn-toolbar').first.click_button 'Speichern'
+    all('form .btn-group').first.click_button 'Speichern'
 
     expect(page).to have_content('Globale Bedingungen wurden erfolgreich aktualisiert')
 

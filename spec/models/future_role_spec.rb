@@ -43,6 +43,11 @@ describe FutureRole do
   end
 
   describe 'validations' do
+    let(:today) { Time.zone.today }
+    let(:yesterday) { Time.zone.yesterday }
+    let(:tomorrow) { Time.zone.tomorrow }
+    subject(:error_messages) { role.errors.full_messages }
+
     it 'fabrication builds valid model' do
       expect(build).to be_valid
     end
@@ -64,10 +69,17 @@ describe FutureRole do
       expect(build(convert_to: Group::TopGroup::Leader.sti_name)).to be_valid
     end
 
+    it 'validates that delete_on is not after convert_on' do
+      role = build(convert_on: tomorrow + 1, delete_on: tomorrow)
+      expect(role).to have(1).error_on(:delete_on)
+      expect(role.errors[:delete_on].first).to eq 'kann nicht vor Von sein'
+    end
+
     context 'target_type validations' do
       before do
         stub_const('TargetRole', Class.new(Role) do
           attr_accessor :target_type_valid
+
           validates :target_type_valid, presence: true
         end)
         top_group.class.role_types += [TargetRole]
@@ -83,7 +95,7 @@ describe FutureRole do
         allow(role).to receive(:validate_target_type?).and_return(true)
         role.validate
 
-        expect(role.errors[:target_type_valid]).to include("muss ausgefüllt werden")
+        expect(role.errors[:target_type_valid]).to include('muss ausgefüllt werden')
       end
 
       it 'are skipped if validate_target_type? returns false' do
@@ -124,7 +136,7 @@ describe FutureRole do
       role = build.tap(&:save!)
       expect { travel_to(1.year.from_now) { role.destroy } }
         .to change { Role.count }.by(-1)
-        .and not_change { Role.deleted.count }
+        .and(not_change { Role.deleted.count })
     end
   end
 
@@ -140,7 +152,7 @@ describe FutureRole do
     it 'really_destroys self and creates new role with same attributes' do
       attrs = { created_at: 10.days.ago.noon, delete_on: 10.days.from_now.noon, label: 'test' }
       role = build(attrs).tap(&:save!)
-      expect { role.convert! }.not_to change { Role.unscoped.count }
+      expect { role.convert! }.not_to(change { Role.unscoped.count })
       expect(person.roles.where(attrs.except(:created_at).merge(type: role_type))).to be_exist
     end
 

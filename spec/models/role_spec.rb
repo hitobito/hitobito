@@ -34,28 +34,112 @@ describe Role do
 
   context 'validates' do
     let(:group) { groups(:bottom_layer_one) }
+    let(:today) { Time.zone.today }
+    let(:yesterday) { Time.zone.yesterday }
+    let(:tomorrow) { Time.zone.tomorrow }
+    subject(:error_messages) { role.errors.full_messages }
 
-    def build(attrs)
-      Fabricate.build(:'Group::BottomLayer::Leader', attrs.merge(group: group))
+    context 'new record' do
+      subject(:role) { Fabricate.build(:'Group::BottomLayer::Leader', group: group) }
+
+      it 'is valid without created_at or delete_on attrs' do
+        expect(role).to be_valid
+      end
+
+      describe 'created_at' do
+        it 'is valid if in the past' do
+          role.created_at = yesterday
+          expect(role).to be_valid
+        end
+
+        it 'is valid if today' do
+          role.created_at = today
+          expect(role).to be_valid
+        end
+
+        it 'is invalid if in the future' do
+          role.created_at = tomorrow
+          expect(role).to have(1).error_on(:created_at)
+          expect(error_messages).to eq ['Von kann nicht später als heute sein']
+        end
+      end
+
+      describe 'delete_on' do
+        it 'is invalid if before created_at' do
+          role.created_at = today
+          role.delete_on = yesterday
+          expect(role).to have(1).error_on(:delete_on)
+          expect(error_messages).to eq ['Bis kann nicht vor Von sein']
+        end
+
+        it 'is valid if today' do
+          role.created_at = today
+          role.delete_on = today
+          expect(role).to be_valid
+        end
+
+        it 'is valid if in the future' do
+          role.created_at = yesterday
+          role.delete_on = tomorrow
+          expect(role).to be_valid
+        end
+
+        it 'is valid if blank' do
+          role.created_at = yesterday
+          role.delete_on = ''
+          expect(role).to be_valid
+        end
+      end
     end
 
-    it 'is invalid with future created_at' do
-      role = build(created_at: 1.day.from_now)
-      expect(role).to have(1).error_on(:created_at)
-      expect(role.errors[:created_at][0]).to eq 'kann nicht später als heute sein'
-    end
+    context 'persisted record' do
+      let(:role) { roles(:top_leader) }
 
-    it 'is invalid with created_at after delete_on' do
-      role = build(created_at: 1.day.ago, delete_on: 2.days.ago)
-      expect(role).to have(1).error_on(:created_at)
-      expect(role.errors[:created_at][0]).to eq 'muss vor oder am selben Tag wie der Austritt sein'
-    end
+      it 'is valid if created_at is in the past' do
+        role.created_at = yesterday
+        expect(role).to be_valid
+      end
 
-    it 'is invalid nil created_at and delete_on' do
-      role = build(created_at: nil, delete_on: 2.days.ago)
-      expect(role).to have(2).error_on(:created_at)
-      expect(role.errors[:created_at][0]).to eq 'muss ausgefüllt werden'
-      expect(role.errors[:created_at][1]).to eq 'ist kein gültiges Datum'
+      it 'is valid if created_at and delete_on are in past' do
+        role.created_at = yesterday - 1.day
+        role.delete_on = yesterday
+        expect(role).to be_valid
+      end
+
+      it 'is invalid if created_at and delete_on are in past but twisted' do
+        role.created_at = yesterday
+        role.delete_on = yesterday - 1.day
+        expect(role).to have(1).error_on(:delete_on)
+        expect(error_messages).to eq ['Bis kann nicht vor Von sein']
+      end
+
+      it 'is invalid if created_at is in the future' do
+        role.created_at = tomorrow
+        expect(role).to have(1).error_on(:created_at)
+        expect(error_messages).to eq ['Von kann nicht später als heute sein']
+      end
+
+      it 'is invalid if delete_on is before created_at' do
+        role.delete_on = (role.created_at - 1.day).noon
+        expect(role).to have(1).error_on(:delete_on)
+        expect(error_messages).to eq ['Bis kann nicht vor Von sein']
+      end
+
+      it 'is invalid if delete_on is before created_at and both are in the future' do
+        role.delete_on = tomorrow + 1.day
+        role.created_at = tomorrow
+        expect(role).to have(0).error_on(:delete_on)
+        expect(role).to have(1).error_on(:created_at)
+        expect(error_messages).to eq ['Von kann nicht später als heute sein']
+      end
+
+      it 'is invalid if delete_on is before created_at and both are in the future' do
+        role.delete_on = tomorrow + 1.day
+        role.created_at = tomorrow + 2.days
+        expect(role).to have(0).error_on(:delete_on)
+        expect(role).to have(1).error_on(:created_at)
+        expect(error_messages).to eq ['Von kann nicht später als heute sein']
+      end
     end
   end
 
@@ -432,14 +516,47 @@ describe Role do
       a.destroy
       expect(described_class.only_deleted.find(a.id)).to be_present
     end
+
+    describe 'deleted_at' do
+      let(:group) { groups(:bottom_layer_one) }
+      let(:now) { Time.zone.now }
+      before { freeze_time }
+
+      def create_role(attrs = {})
+        Fabricate(group.role_types.first.sti_name, attrs.merge(group: group))
+      end
+
+      it 'is set to now if delete_on is not set' do
+        a = create_role
+        expect { a.destroy }.to change { a.deleted_at }.from(nil).to(now)
+      end
+
+      it 'is set to now if delete_on is in the future' do
+        a = create_role(created_at: 2.days.ago, delete_on: Date.tomorrow)
+        expect { a.destroy }.to change { a.deleted_at }.from(nil).to(now)
+      end
+
+      it 'is set to delete_on at midnight if delete_on is in the past' do
+        a = create_role(created_at: 2.days.ago, delete_on: Date.yesterday)
+        expect { a.destroy }.to change { a.deleted_at }.from(nil).to(Date.yesterday.midnight)
+      end
+    end
+
+    it 'flags old roles' do
+      a = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo',
+                                                          group: groups(:bottom_layer_one))
+      a.created_at = Time.zone.now - Settings.role.minimum_days_to_archive.days - 1.day
+      a.destroy
+      expect(described_class.only_deleted.find(a.id)).to be_present
+    end
   end
 
   context '#destroy!' do
     it 'soft deletes young roles with always_soft_destroy: true' do
       a = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo',
-                    group: groups(:bottom_layer_one))
+                                                          group: groups(:bottom_layer_one))
 
-      a.destroy(always_soft_destroy: true)
+      a.destroy!(always_soft_destroy: true)
       expect(described_class.only_deleted.find(a.id)).to be_present
     end
   end
@@ -502,7 +619,7 @@ describe Role do
       end
 
       it 'is false if role is terminated' do
-        role = role_class.new.tap {|r| r.write_attribute(:terminated, true) }
+        role = role_class.new.tap { |r| r.write_attribute(:terminated, true) }
         expect(role.terminatable?).to eq false
       end
 
@@ -544,7 +661,8 @@ describe Role do
     it 'delete_on takes precedence over deleted_at' do
       delete_on = 1.day.from_now.to_date
       deleted_at = 2.days.from_now.to_date
-      expect(role(terminated: true, delete_on: delete_on, deleted_at: deleted_at).terminated_on).to eq delete_on
+      expect(role(terminated: true, delete_on: delete_on,
+                  deleted_at: deleted_at).terminated_on).to eq delete_on
     end
   end
 

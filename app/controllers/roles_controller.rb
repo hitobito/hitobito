@@ -47,7 +47,7 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
       change_type
     else
       assign_attributes
-      return destroy_and_redirect if entry.delete_on&.past?
+      return destroy_and_redirect if entry.valid? && entry.delete_on&.past?
 
       super(location: after_update_location)
     end

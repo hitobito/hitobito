@@ -66,7 +66,6 @@ de:
         must_exist: müssen vorhanden sein
         readonly: darf nicht verändert werden
         cannot_be_later_than_today: kann nicht später als heute sein
-        cannot_be_later_than_delete_on: muss vor oder am selben Tag wie der Austritt sein
       models:
         cors_origin:
           attributes:
@@ -179,6 +178,11 @@ de:
             attributes:
                 additional_sender:
                     invalid: "muss Mailadressen vom Format abcd@ee.ch oder *@ee.ch enthalten. Mehrere Adressen müssen mit ',' oder ';' abgetrennt werden."
+        role:
+          attributes:
+            delete_on:
+              must_be_later_than_created_at: kann nicht vor Von sein
+
 
     models:
       acts_as_taggable_on/tag:

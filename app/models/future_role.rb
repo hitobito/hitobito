@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
 # hitobito_sac_cas and licensed under the Affero General Public License version 3
@@ -21,6 +22,11 @@ class FutureRole < Role
   validates :person, :group, presence: true
   validates :convert_to, inclusion: { within: :group_role_types }, if: :group
   validates_date :convert_on, on_or_after: -> { Time.zone.today }
+  validates_date :delete_on,
+                 if: :delete_on,
+                 on_or_after: :convert_on,
+                 on_or_after_message: :must_be_later_than_created_at
+
   validate :target_type_validations, if: :validate_target_type?
 
   def to_s(format = :default)
@@ -38,7 +44,7 @@ class FutureRole < Role
     end
   end
 
-  def destroy(always_soft_destroy: false) # rubocop:disable Rails/ActiveRecordOverride
+  def destroy(always_soft_destroy: false)
     really_destroy!
   end
 
@@ -57,7 +63,7 @@ class FutureRole < Role
   private
 
   def update_version_type
-    versions.update_all(item_type: 'FutureRole') # rubocop:disable Rails/SkipsValidations
+    versions.update_all(item_type: 'FutureRole')
   end
 
   def target_type

@@ -25,7 +25,7 @@ FROM ruby:${RUBY_VERSION} AS build
 USER root
 
 ENV RAILS_ENV=development
-ENV RAILS_DB_ADAPTER=mysql2
+ENV RAILS_DB_ADAPTER=postgresql
 ENV BUNDLE_PATH=/opt/bundle
 
 WORKDIR /usr/src/app/hitobito

@@ -79,18 +79,31 @@ MODULE
 }
 
 function recreate_dbs() {
-  echo "Recreating dev sb (${RAILS_DB_NAME}) and test db (${RAILS_TEST_DB_NAME})"
-  if [[ -z ${RAILS_DB_NAME} || -z ${RAILS_TEST_DB_NAME} ]]; then
-    echo "RAILS_DB_NAME and RAILS_TEST_DB_NAME must both be set."
+  recreate_development_db
+  recreate_test_db
+}
+
+function recreate_development_db() {
+  recreate_db "RAILS_DB_NAME"
+}
+
+function recreate_test_db() {
+  recreate_db "RAILS_TEST_DB_NAME"
+}
+
+function recreate_db() {
+  db_name=`printenv $1`
+
+  if [[ -z ${db_name} ]]; then
+    echo "$1 must be set."
     echo "Maybe you forgot to activate a WAGON?"
     exit 1
   fi
+  echo "Recreating DB (${db_name})"
 
   cat << SQL | mysql -u "${RAILS_DB_USERNAME:-hitobito}" -p"${RAILS_DB_PASSWORD:-hitobito}" -h "${RAILS_DB_HOST:-127.0.0.1}" -P "${RAILS_DB_PORT:-33066}"
-DROP DATABASE IF EXISTS ${RAILS_DB_NAME};
-CREATE DATABASE ${RAILS_DB_NAME};
-DROP DATABASE IF EXISTS ${RAILS_TEST_DB_NAME};
-CREATE DATABASE ${RAILS_TEST_DB_NAME};
+DROP DATABASE IF EXISTS $1;
+CREATE DATABASE $1;
 SQL
 }
 
@@ -160,7 +173,7 @@ case $cmd in
   ;;
 
   reset-test-database)
-    require_wagon_name
+    recreate_test_db
     setup_test_db
   ;;
 

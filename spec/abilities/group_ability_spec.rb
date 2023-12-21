@@ -13,6 +13,10 @@ describe GroupAbility do
   subject { ability }
   let(:ability) { Ability.new(role.person.reload) }
 
+  before do
+    allow(FeatureGate).to receive(:enabled?).and_return(true)
+  end
+
   context 'layer and below full' do
     let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
 

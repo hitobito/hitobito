@@ -348,8 +348,8 @@ describe RolesController do
 
     context 'delete_on in the past' do
       let(:yesterday) { Time.zone.yesterday }
-
       it 'destroys role' do
+        role.update!(created_at: yesterday - 3.hours)
         expect do
           put :update, params: { group_id: group.id, id: role.id, role: { delete_on: yesterday } }
         end.to change { Role.count }.by(-1)
@@ -357,16 +357,26 @@ describe RolesController do
         expect(flash[:notice]).to eq "Rolle <i>Member (bis #{yesterday.strftime('%d.%m.%Y')})</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich gelöscht."
       end
 
+      it 'renders validation message if delete_in is before create_on invalid' do
+        expect do
+          put :update,
+              params: { group_id: group.id, id: role.id,
+                        role: { delete_on: yesterday, create_on: Date.today } }
+        end.not_to(change { Role.count })
+        expect(response).to render_template('edit') # with error message in form
+      end
+
       it 'renders edit and error messages if destroy does not succeed' do
+        allow_any_instance_of(Role).to receive(:valid?).and_return(true)
         allow_any_instance_of(Role).to receive(:destroy).and_return(false)
         expect do
           put :update, params: { group_id: group.id, id: role.id, role: { delete_on: yesterday } }
-        end.not_to change { Role.count }
+        end.not_to(change { Role.count })
         expect(response).to render_template('edit')
         expect(flash.now[:alert]).to eq "Rolle <i>Member (bis #{yesterday.strftime('%d.%m.%Y')})</i> für <i>#{person}</i> in <i>TopGroup</i> konnte nicht gelöscht werden."
       end
-    end
 
+    end
     context 'his own role' do
       let(:tomorrow) { Time.zone.tomorrow }
       let(:role) { roles(:top_leader) }

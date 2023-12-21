@@ -63,8 +63,8 @@ describe RolesController, js: true do
       expect do
         first(:button, 'Speichern').click
       end.to(not_change { bottom_member.roles.with_deleted.count })
-      expect(page).to have_content 'Von muss vor oder am selben Tag wie der Austritt sein'
-      expect(page).to have_css('#role_created_at.is-invalid')
+      expect(page).to have_content 'Bis kann nicht vor Von sein'
+      expect(page).to have_css('#role_delete_on.is-invalid')
     end
   end
 
@@ -90,7 +90,7 @@ describe RolesController, js: true do
     end
 
     it 'saving outdated role deletes role' do
-      role.update_columns(delete_on: Time.zone.yesterday)
+      role.update_columns(created_at: 3.days.ago, delete_on: 1.day.ago.to_date)
       visit edit_group_role_path(group_id: role.group_id, id: role.id)
       expect do
         all('form .bottom .btn-group').first.click_button 'Speichern'

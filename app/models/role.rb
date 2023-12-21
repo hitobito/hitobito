@@ -107,18 +107,18 @@ class Role < ActiveRecord::Base
   ### VALIDATIONS
 
   validates_by_schema
-  validate :assert_type_is_allowed_for_group, on: :create
-
-  validates :created_at, presence: true, if: :delete_on
-  validates_date :created_at,
-                 if: :delete_on,
-                 on_or_before: :delete_on,
-                 on_or_before_message: :cannot_be_later_than_delete_on
 
   validates_date :created_at,
-                 allow_nil: true,
+                 allow_blank: true,
                  on_or_before: -> { Time.zone.today },
                  on_or_before_message: :cannot_be_later_than_today
+
+  validates_date :delete_on,
+                 allow_blank: true,
+                 on_or_after: ->(r) { [r.created_at.to_date, Time.zone.today].compact.min },
+                 on_or_after_message: :must_be_later_than_created_at
+
+  validate :assert_type_is_allowed_for_group, on: :create
 
   ### CALLBACKS
 
@@ -167,7 +167,7 @@ class Role < ActiveRecord::Base
 
   # Soft destroy if older than certain amount of days, hard if younger.
   # Set always_soft_destroy to true if you want to soft destroy even if the role is not old enough.
-  def destroy(always_soft_destroy: false) # rubocop:disable Rails/ActiveRecordOverride
+  def destroy(always_soft_destroy: false)
     if always_soft_destroy || old_enough_to_archive?
       super()
     else
@@ -315,5 +315,9 @@ class Role < ActiveRecord::Base
 
   def reset_person_minimized_at
     person&.update_attribute(:minimized_at, nil) # rubocop:disable Rails/SkipsModelValidations
+  end
+
+  def paranoia_destroy_attributes
+    delete_on&.past? ? super.merge(deleted_at: delete_on.midnight) : super
   end
 end

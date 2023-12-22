@@ -102,8 +102,8 @@ function recreate_db() {
   echo "Recreating DB (${db_name})"
 
   cat << SQL | mysql -u "${RAILS_DB_USERNAME:-hitobito}" -p"${RAILS_DB_PASSWORD:-hitobito}" -h "${RAILS_DB_HOST:-127.0.0.1}" -P "${RAILS_DB_PORT:-33066}"
-DROP DATABASE IF EXISTS $1;
-CREATE DATABASE $1;
+DROP DATABASE IF EXISTS ${db_name};
+CREATE DATABASE ${db_name};
 SQL
 }
 

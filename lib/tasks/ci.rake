@@ -50,6 +50,7 @@ namespace :ci do
       require 'pathname'
 
       ENV['CI'] = 'true'
+      ENV['EDITOR'] = 'vi'
       ENV['PATH'] = "#{ENV['PATH']}:#{Pathname.new('./bin').expand_path}"
     end
   end

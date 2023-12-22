@@ -100,7 +100,6 @@ describe RolesController, js: true do
 
   it 'toggles people fields' do
     obsolete_node_safe do
-      skip 'expected to find visible css "#role_person" but there were no matches'
       sign_in
       visit new_group_role_path(group_id: group.id)
       is_expected.to have_content('Person hinzufügen')
@@ -203,13 +202,12 @@ describe RolesController, js: true do
       find('#role_group_id').click
       find('#role_group_id').find('option', text: 'Toppers').click
 
-      # expect(page).to have_selector('fail')
       expect(find('#role_type-ts-control')['placeholder']).to eq('Bitte auswählen')
       expect(all('#role_type option', visible: false).size).to eq(4)
 
       # select roleactiv
       find('.ts-control').click
-      find('.ts-dropdown-content').find('div span', text: 'Member').click
+      find('#role_type_select #role_type').find('option', text: 'Member').click
 
       expect(find('#role_info')).to have_content('Die Rolle Member in der Gruppe Toppers')
 

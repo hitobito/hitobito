@@ -16,18 +16,23 @@ describe :roles_terminations, js: true do
     Group::BottomLayer::Member.terminatable = true
 
     sign_in(person)
-    visit history_group_person_path(group_id: role.group_id, id: person.id)
-    click_link(href: new_group_role_termination_path(role.group_id, role.id))
-
-    # wait for modal to appear before we continue
-    expect(page).to have_selector('#role-termination.modal')
   end
 
   after do
     Group::BottomLayer::Member.terminatable = false
   end
 
-  def submit_with_terminate_on(date)
+  def visit_dialog
+    visit history_group_person_path(group_id: role.group_id, id: person.id)
+    click_link(href: /#{new_group_role_termination_path(group_id: role.group_id, role_id: role.id)}/)
+
+    # wait for modal to appear before we continue
+    expect(page).to have_selector('#role-termination.modal')
+  end
+
+  def submit_with_terminate_on(date) # rubocop:disable Metrics/AbcSize
+    visit_dialog
+
     # it seems we have to clear the field before filling it directly instead of using the picker
     fill_in('Austrittsdatum', with: '')
     fill_in('Austrittsdatum', with: date.to_date.strftime('%d.%m.%Y'))
@@ -75,5 +80,14 @@ describe :roles_terminations, js: true do
         text: "Austrittsdatum darf nicht nach dem #{formatted_max_date} sein"
       )
     end
+  end
+
+  it 'for role with delete_on set has no input field' do
+    delete_on = Time.zone.tomorrow
+    role.update(delete_on: delete_on)
+    visit_dialog
+
+    expect(page).not_to have_field('Austrittsdatum')
+    expect(page).to have_content("Austrittsdatum: #{delete_on.strftime('%d.%m.%Y')}")
   end
 end

@@ -18,12 +18,11 @@
             .confirm-text= termination_confirm_dialog_text(entry)
           = render_extensions :additional_confirmation_text
           .row-fluid
-            .warning-text= ti('warning')
-          = render_extensions :additional_fields, locals: { form: form }
-          .row-fluid
-            = form.labeled_date_field :terminate_on, class: 'col-6 date'
+            = terminate_on_field_or_text(form, entry, class: 'col-6 date col-form-label text-md', label_class: 'col-md-3 pb-1')
           .row-fluid
             .errors= render('errors', entry: entry)
+          .row-fluid
+            .warning-text= ti('warning')
         .modal-footer
           .btn-group
             = form.submit(ti('.submit'), class: 'btn')

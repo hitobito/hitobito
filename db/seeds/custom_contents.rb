@@ -341,7 +341,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    locale: 'de',
    label: 'Sicherheitsübersicht: Login gesperrt',
    subject: 'Sicherheitsübersicht: Login gesperrt',
-   body: "Das Login von ist gesperrt"},
+   body: "Das Login von {person-name} ist gesperrt"},
 
   {custom_content_id: blocked_person_situation_id,
    locale: 'fr',

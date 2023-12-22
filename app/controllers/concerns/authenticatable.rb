@@ -14,7 +14,7 @@ module Authenticatable
     end
 
     before_action :authenticate_person!, if: :authenticate?
-    before_action :reject_blocked_person!, if: :reject_blocked_person?
+    before_action :reject_blocked_person!
     check_authorization if: :authorize?
   end
 
@@ -130,13 +130,9 @@ module Authenticatable
   end
 
   def reject_blocked_person!
-    if current_person&.blocked?
-        redirect_to blocked_path
-        return false
-    end
-  end
+    return unless current_person&.blocked?
 
-  def reject_blocked_person?
-    true
+    redirect_to blocked_path
+    false
   end
 end

@@ -182,7 +182,7 @@ jobs:
       - name: 'Run wagon lint and tests'
         id: tests
         run: |
-          bundle exec rake db:create ci:wagon --trace
+          bundle exec rake db:create ci:wagon
 
   notify_statuscope:
     uses: ./.github/workflows/notify-statuscope.yml

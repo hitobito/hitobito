@@ -17,7 +17,8 @@ task :ci do
            'ci:setup:rspec',
            'spec',
            'spec:sphinx',
-           'spec:features:lenient'].delete_if { |task| tasks_to_skip.include?(task) }
+           'spec:features:lenient'
+           ].delete_if { |task| tasks_to_skip.include?(task) }
 
   tasks.each { |task| Rake::Task[task].invoke }
 end
@@ -58,7 +59,7 @@ namespace :ci do
       Rake::Task['log:clear'].invoke
       wagon_exec('DISABLE_DATABASE_ENVIRONMENT_CHECK=1 ' \
                  'bundle exec rake app:ci:setup:env ' \
-                 'app:ci:setup:rspec app:spec:features:lenient app:rubocop:report app:brakeman')
+                 'app:ci:setup:rspec spec:all app:rubocop:report app:brakeman')
       Rake::Task['erd'].invoke
     end
 

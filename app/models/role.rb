@@ -115,7 +115,7 @@ class Role < ActiveRecord::Base
 
   validates_date :delete_on,
                  allow_blank: true,
-                 on_or_after: ->(r) { [r.created_at.to_date, Time.zone.today].compact.min },
+                 on_or_after: ->(r) { [r.created_at&.to_date, Time.zone.today].compact.min },
                  on_or_after_message: :must_be_later_than_created_at
 
   validate :assert_type_is_allowed_for_group, on: :create

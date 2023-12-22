@@ -209,6 +209,11 @@ end
 require 'capybara/rails'
 require 'capybara-screenshot/rspec'
 
+# Disable driver deprecations until we upgrade to latest selenium
+Selenium::WebDriver.logger.ignore(:logger_info)
+Selenium::WebDriver.logger.ignore(:add_option)
+Selenium::WebDriver.logger.ignore(:option_symbols)
+
 Capybara.server = :puma, { Silent: true }
 Capybara.server_port = ENV['CAPYBARA_SERVER_PORT'].to_i if ENV['CAPYBARA_SERVER_PORT']
 Capybara.default_max_wait_time = ENV.fetch('CAPYBARA_MAX_WAIT_TIME', 6).to_f

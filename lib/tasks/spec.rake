@@ -10,7 +10,7 @@ if Rake::Task.task_defined?('spec:features') # only if current environment knows
   namespace :spec do
     RSpec::Core::RakeTask.new(:without_features) do |t|
       t.pattern = './spec/**/*_spec.rb'
-        t.rspec_opts = '--tag ~type:feature'
+      t.rspec_opts = '--tag ~type:feature'
     end
 
     RSpec::Core::RakeTask.new(:sphinx) do |t|
@@ -37,16 +37,18 @@ if Rake::Task.task_defined?('spec:features') # only if current environment knows
     namespace :features do
       # see https://www.puzzle.ch/de/blog/articles/2021/01/18/a-lenient-capybara
       desc 'Run feature specs at most three times to gracefully handle flaky specs'
-      task :lenient do
+      task :lenient do |t|
         sh 'rm -f tmp/examples.txt'
         puts "\nFIRST ATTEMPT\n"
-        Rake::Task['spec:features:start'].invoke
+        Rake::Task[t.name.gsub(/lenient/, 'start')].invoke
         next if $CHILD_STATUS.exitstatus.zero?
+
         puts "\nSECOND ATTEMPT\n"
-        Rake::Task['spec:features:retry'].invoke
+        Rake::Task[t.name.gsub(/lenient/, 'retry')].invoke
         next if $CHILD_STATUS.exitstatus.zero?
+
         puts "\nLAST ATTEMPT\n"
-        Rake::Task['spec:features:last'].invoke
+        Rake::Task[t.name.gsub(/lenient/, 'last')].invoke
       end
 
       RSpec::Core::RakeTask.new('start') do |t|

@@ -19,7 +19,7 @@ require 'graphiti_spec_helpers/rspec'
 require 'view_component/test_helpers'
 require 'view_component/system_test_helpers'
 
-require "test_prof/recipes/logging"
+require 'test_prof/recipes/logging'
 
 TestProf::StackProf.configure do |config|
   config.format = 'json'
@@ -59,7 +59,7 @@ end
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each do |f|
   # Do not require the core testgroup/layer files when running in wagon
-  next if f =~ %r[spec/support/group/(?!0_base.rb)] && (ENV['APP_ROOT'].present? || ENV['RAILS_USE_TEST_GROUPS'].blank?)
+  next if f =~ %r{spec/support/group/(?!0_base.rb)} && (ENV['APP_ROOT'].present? || ENV['RAILS_USE_TEST_GROUPS'].blank?)
 
   require f
 end
@@ -209,13 +209,19 @@ end
 require 'capybara/rails'
 require 'capybara-screenshot/rspec'
 
+# Disable driver deprecations until we upgrade to latest selenium
+Selenium::WebDriver.logger.ignore(:logger_info)
+Selenium::WebDriver.logger.ignore(:add_option)
+Selenium::WebDriver.logger.ignore(:option_symbols)
+
+Capybara.server = :puma, { Silent: true }
 Capybara.server_port = ENV['CAPYBARA_SERVER_PORT'].to_i if ENV['CAPYBARA_SERVER_PORT']
 Capybara.default_max_wait_time = ENV.fetch('CAPYBARA_MAX_WAIT_TIME', 6).to_f
 Capybara.automatic_label_click = true
 
 Capybara::Screenshot.prune_strategy = :keep_last_run
 Capybara::Screenshot::RSpec::REPORTERS['RSpec::Core::Formatters::ProgressFormatter'] =
-CapybaraScreenshotPlainTextReporter
+  CapybaraScreenshotPlainTextReporter
 Capybara::Screenshot.register_driver(:chrome) do |driver, path|
   driver.browser.save_screenshot(path)
 end
@@ -228,8 +234,11 @@ Capybara.register_driver :chrome do |app|
   options.args << '--disable-dev-shm-usage' # helps with docker resource limitations
   options.args << '--window-size=1800,1000'
   options.args << '--crash-dumps-dir=/tmp'
-  options.add_option('prefs', {'intl.accept_languages': 'de-CH,de'})
-  options.add_option('binary', ENV['CAPYBARA_CHROME_BINARY']) if ENV['CAPYBARA_CHROME_BINARY'].present?
+  options.add_option('prefs', { 'intl.accept_languages': 'de-CH,de' })
+  if ENV['CAPYBARA_CHROME_BINARY'].present?
+    options.add_option('binary',
+                       ENV['CAPYBARA_CHROME_BINARY'])
+  end
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
 
@@ -257,4 +266,4 @@ module ActiveRecordFixture
 end
 ActiveRecord::Fixture.prepend(ActiveRecordFixture)
 
-#GraphitiSpecHelpers::RSpec.schema!
+# GraphitiSpecHelpers::RSpec.schema!

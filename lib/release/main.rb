@@ -46,14 +46,8 @@ require_relative './commands'
 # - pull, commit or manage code other than version-files and translations
 #
 # The following environment-variables are recognized
-# - DRY_RUN=true
-#   prevents execution of commands
-# - COMMAND_LIST=true
-#   sets DRY_RUN=true and outputs all commands
 # - WAGONS='space separated list of wagons'
 #   select which wagons are handled
-# - VERSION=anything
-#   new version-number. skips calculating next version and the confirmation-question
 #
 class Release::Main
   include Release::Tooling

@@ -1,4 +1,4 @@
-name: 'Composition Repo - Prepare Release'
+name: "Composition Repo - Prepare Release"
 
 on:
   workflow_call:
@@ -7,9 +7,14 @@ on:
         description: "Composition repository, e.g. hitobito/ose_composition_pbs"
         type: string
         required: true
-      next_version:
-        description: "Type of next version, patch or current-month"
+      release_type:
+        description: "Type of Release: regular, patch or custom"
         required: true
+        type: string
+        default: "regular"
+      next_version:
+        description: "next version number, if release-type is custom"
+        required: false
         type: string
       stage:
         description: "Stage of Release to be prepared"
@@ -19,7 +24,12 @@ on:
         description: "Branch of individual repos, mostly: master"
         required: false
         type: string
-        default: master
+        default: "master"
+      dry_run:
+        description: "Only show commands to prepare, do not execute them"
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -30,7 +40,8 @@ jobs:
     with:
       repository: ${{ inputs.composition }}
       stage: ${{ inputs.stage }}
-      version_type: ${{ inputs.next_version }}
+      release_type: ${{ inputs.release_type }}
+      dry_run: ${{ inputs.dry_run }}
 
   version:
     runs-on: ubuntu-latest
@@ -42,42 +53,45 @@ jobs:
       version: ${{ steps.determine.outputs.version }}
 
     steps:
-      - name: 'Checkout hitobito'
+      - name: "Checkout hitobito"
         uses: actions/checkout@v4
         with:
           repository: "hitobito/hitobito"
           ref: ${{ inputs.target_branch }}
 
-      - name: 'Set up Ruby'
+      - name: "Set up Ruby"
         uses: ruby/setup-ruby@v1
         with:
           bundler: none
 
-      - name: 'Install dependencies'
+      - name: "Install dependencies"
         run: |
           gem install cmdparse
 
-      - name: 'Get all tags from repo to determine the version'
+      - name: "Get all tags from repo to determine the version"
         run: |
           git fetch --tags
 
-      - name: 'Determine next version'
+      - name: "Determine next version"
         id: determine
         env:
-          VERSION_TYPE: ${{ needs.settings.outputs.version_type }}
+          RELEASE_TYPE: ${{ needs.settings.outputs.release_type }}
+          NEXT_VERSION: ${{ inputs.next_version }}
         run: |
-          echo "Requesting next '$VERSION_TYPE'-version"
-          next_version=$(bin/version suggest "$VERSION_TYPE")
+          echo "Requesting next '$RELEASE_TYPE'-version"
+          next_version=$(bin/version suggest "$RELEASE_TYPE" "$NEXT_VERSION")
+
+          echo "next version: ${next_version}"
           echo "version=${next_version}" >> "$GITHUB_OUTPUT"
 
   prepare_release:
-    runs-on: 'ubuntu-latest'
+    runs-on: "ubuntu-latest"
     needs:
       - version
       - settings
 
     steps:
-      - name: 'Checkout composition repo'
+      - name: "Checkout composition repo"
         uses: actions/checkout@v4
         with:
           repository: ${{ needs.settings.outputs.repo_name }}
@@ -86,13 +100,13 @@ jobs:
           fetch-depth: 0 # ALL the historiez, including ALL the branches
           token: ${{ secrets.RELEASE_PREPARATION_TOKEN }}
 
-      - name: 'update submodules to release-state'
+      - name: "update submodules to release-state"
         env:
           TARGET_BRANCH: ${{ inputs.target_branch }}
         run: |
           git submodule foreach "git fetch && git fetch --tags"
           # although requested, the branch might not be present everywhere
-          if [[ $TARGET_BRANCH != 'master' ]]; then
+          if [[ $TARGET_BRANCH != "master" ]]; then
             git submodule foreach "git branch --all --list '*${TARGET_BRANCH}*'"
             git submodule foreach "git switch -c ${TARGET_BRANCH} --track origin/${TARGET_BRANCH}; true"
             git submodule foreach "git switch master; git switch ${TARGET_BRANCH}; true"
@@ -101,12 +115,12 @@ jobs:
           fi
           git submodule foreach "git merge --ff-only" && git submodule status
 
-      - name: 'Set up Ruby'
+      - name: "Set up Ruby"
         uses: ruby/setup-ruby@v1
         with:
           working-directory: hitobito
 
-      - name: 'Install and configure dependencies'
+      - name: "Install and configure dependencies"
         env:
           TRANSIFEX_VERSION: "v1.6.4"
           TRANSIFEX_TOKEN: ${{ secrets.TRANSIFEX_TOKEN }}
@@ -123,20 +137,26 @@ jobs:
           # git
           git config --global advice.detachedHead false
 
-      - name: 'Configure Git-User for the Release-Commits'
+          # add hitobito-core to path
+          echo "${PWD}/hitobito/bin" >> $GITHUB_PATH
+
+      - name: "Configure Git-User for the Release-Commits"
         run: |
           # we could use gitub-actor for workflow_call, and last committers of
           # all wagons for scheduled releases. for now, this is fine.
           git config --global user.name "$(cd hitobito && git --no-pager log --format=format:'%an' -n 1)"
           git config --global user.email "$(cd hitobito && git --no-pager log --format=format:'%ae' -n 1)"
 
-
-      - name: 'Prepare composition-repo for release'
+      - name: "Prepare composition-repo for release"
         env:
           NEXT_VERSION: ${{ needs.version.outputs.version }}
           RELEASE_STAGE: ${{ inputs.stage }}
+          DRY_RUN: ${{ needs.settings.outputs.dry_run }}
         run: |
-          echo "Preparing $NEXT_VERSION for $RELEASE_STAGE"
-
-          hitobito/bin/release version
-          hitobito/bin/release "$RELEASE_STAGE" "$NEXT_VERSION"
+          echo "Preparing $NEXT_VERSION for $RELEASE_STAGE $DRY_RUN"
+          echo "---"
+          release version
+          version version
+          echo "---"
+          echo "release $RELEASE_STAGE $NEXT_VERSION $DRY_RUN"
+          release "$RELEASE_STAGE" "$NEXT_VERSION" "$DRY_RUN"

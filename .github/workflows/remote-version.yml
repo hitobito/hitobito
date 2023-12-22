@@ -47,4 +47,5 @@ jobs:
           REPO: ${{ inputs.repository_url }}
         run: |
           next_version=$(bin/version remote "$STAGE" "$REPO")
+          echo "next version: ${next_version}"
           echo "version=${next_version}" >> "$GITHUB_OUTPUT"

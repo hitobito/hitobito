@@ -1,4 +1,4 @@
-name: 'Composition Repo - Determine Settings'
+name: "Composition Repo - Determine Settings"
 
 on:
   workflow_call:
@@ -11,11 +11,17 @@ on:
         description: "Stage of release to be prepared, e.g. integration"
         required: true
         type: string
-      version_type:
-        description: "Type of next version"
-        default: 'patch'
-        required: false
+      release_type:
+        description: "Type of Release: regular, patch or custom"
+        required: true
         type: string
+        default: "regular"
+      dry_run:
+        description: "Do not execute the commands"
+        required: false
+        type: boolean
+        default: false
+
     outputs:
       project:
         value: ${{ jobs.settings.outputs.project }}
@@ -27,8 +33,10 @@ on:
         value: ${{ jobs.settings.outputs.composition_branch }}
       release_stage:
         value: ${{ jobs.settings.outputs.release_stage }}
-      version_type:
-        value: ${{ jobs.settings.outputs.version_type }}
+      release_type:
+        value: ${{ jobs.settings.outputs.release_type }}
+      dry_run:
+        value: ${{ jobs.settings.outputs.dry_run }}
 
 jobs:
   settings:
@@ -40,7 +48,9 @@ jobs:
       repo_url: ${{ steps.determine.outputs.repo_url }}
       composition_branch: ${{ steps.determine.outputs.branch }}
       release_stage: ${{ steps.determine.outputs.stage }}
-      version_type: ${{ steps.determine.outputs.version_type }}
+      release_type: ${{ steps.determine.outputs.release_type }}
+      dry_run: ${{ steps.determine.outputs.dry_run }}
+
 
     steps:
       - name: Infer project-name and stage-settings
@@ -48,7 +58,8 @@ jobs:
         env:
           STAGE: ${{ inputs.stage }}
           REPO: ${{ inputs.repository }}
-          VERSION_TYPE: ${{ inputs.version_type }}
+          RELEASE_TYPE: ${{ inputs.release_type }}
+          DRY_RUN: ${{ inputs.dry_run }}
         run: |
           echo "stage=${STAGE}" >> "$GITHUB_OUTPUT"
           echo "repo_name=${REPO}" >> "$GITHUB_OUTPUT"
@@ -56,14 +67,20 @@ jobs:
           echo "repo_url=https://github.com/${REPO}.git" >> "$GITHUB_OUTPUT"
           echo "project=${REPO##hitobito/ose_composition_}" >> "$GITHUB_OUTPUT"
 
+          if [[ "${DRY_RUN}" = 'true' ]]; then
+            echo 'dry_run=-n' >> "$GITHUB_OUTPUT"
+          else
+            echo 'dry_run=' >> "$GITHUB_OUTPUT"
+          fi
+
           case $STAGE in
             production)
               echo "branch=production" >> "$GITHUB_OUTPUT"
-              echo "version_type=${VERSION_TYPE}" >> "$GITHUB_OUTPUT"
+              echo "release_type=${RELEASE_TYPE}" >> "$GITHUB_OUTPUT"
             ;;
 
             integration)
               echo "branch=devel" >> "$GITHUB_OUTPUT"
-              echo "version_type=integration" >> "$GITHUB_OUTPUT"
+              echo "release_type=integration" >> "$GITHUB_OUTPUT"
             ;;
           esac;

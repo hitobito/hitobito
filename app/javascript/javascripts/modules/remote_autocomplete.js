@@ -12,9 +12,18 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
 
   app.setupQuicksearch = function() {
     const input = document.getElementById(QUICKSEARCH_ID);
+
+
+    input.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter' && (event.target.getAttribute('aria-activedescendant') == null || event.target.wrapper.getAttribute('aria-expanded') == false)) {
+        window.location = `/full?q=${event.target.value}`;
+      }
+    });
+    
     if(input) {
       return setupRemoteTypeahead(input);
     }
+
   };
 
   app.setupEntityTypeahead = function() {
@@ -57,7 +66,7 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
         },
       },
       resultsList: {
-        noResults: true,
+        noResults: false,
         maxResults: 15,
         tabSelect: true,
       },

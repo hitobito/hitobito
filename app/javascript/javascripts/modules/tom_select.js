@@ -15,7 +15,9 @@
       create: false,
       onItemAdd() {
         this.setTextboxValue("");
-        this.refreshOptions();
+        if(!this.dropdown.classList.contains("single") ) {
+          this.refreshOptions();
+        }
       },
       render: {
         no_results() {

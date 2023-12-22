@@ -34,6 +34,52 @@
       "note": "HTML Tags ARE allowed here"
     },
     {
+      "warning_type": "Command Injection",
+      "warning_code": 14,
+      "fingerprint": "63e96ceab22ba15c8126ce8b1f79c065e3f683f09ae8ff18fdb70d7fe6a0b174",
+      "check_name": "Execute",
+      "message": "Possible command injection",
+      "file": "app/domain/release_version.rb",
+      "line": 14,
+      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
+      "code": "`#{tag_lookup_cmd(stage)} | head -n 1`",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "ReleaseVersion",
+        "method": "current_version"
+      },
+      "user_input": "tag_lookup_cmd(stage)",
+      "confidence": "Medium",
+      "cwe_id": [
+        77
+      ],
+      "note": "The parameter is matched against a whitelist"
+    },
+    {
+      "warning_type": "Command Injection",
+      "warning_code": 14,
+      "fingerprint": "85d61578afc6e686b5355788bd6a7270dae137f6e7a17a447b49aadb6e6c2efb",
+      "check_name": "Execute",
+      "message": "Possible command injection",
+      "file": "app/domain/release_version.rb",
+      "line": 44,
+      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
+      "code": "`#{tag_lookup_cmd(stage)}`",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "ReleaseVersion",
+        "method": "all_versions"
+      },
+      "user_input": "tag_lookup_cmd(stage)",
+      "confidence": "Medium",
+      "cwe_id": [
+        77
+      ],
+      "note": "The parameter is matched against a whitelist"
+    },
+    {
       "warning_type": "SQL Injection",
       "warning_code": 0,
       "fingerprint": "b216097a885c4749beec71b32c00a8da56ce498c519675a10a03a28b3eaf73a0",
@@ -55,8 +101,54 @@
         89
       ],
       "note": "This from() is not part of an SQL query builder, but rather an email builder"
+    },
+    {
+      "warning_type": "Command Injection",
+      "warning_code": 14,
+      "fingerprint": "c10c54d89f8102c5f8028a0b222b7e213db4201078c27818443479e143cc53b5",
+      "check_name": "Execute",
+      "message": "Possible command injection",
+      "file": "app/domain/release_version.rb",
+      "line": 59,
+      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
+      "code": "`git log #{version} -1 --format=\"%ct\"`",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "ReleaseVersion",
+        "method": "days_since"
+      },
+      "user_input": "version",
+      "confidence": "Medium",
+      "cwe_id": [
+        77
+      ],
+      "note": "The command can only be executed in an authenticated context or locally"
+    },
+    {
+      "warning_type": "Command Injection",
+      "warning_code": 14,
+      "fingerprint": "cfcaf1eef7adc44bbe0c6bd2519f41a6d06189feddd4e3451c6b26b6e63329e8",
+      "check_name": "Execute",
+      "message": "Possible command injection",
+      "file": "app/domain/release_version.rb",
+      "line": 55,
+      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
+      "code": "`#{\"#{remote_lookup_cmd(repo)} | #{version_grep_cmd(stage)} | sort -Vr | head -n 1\"}`",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "ReleaseVersion",
+        "method": "remote_version"
+      },
+      "user_input": "remote_lookup_cmd(repo)",
+      "confidence": "Medium",
+      "cwe_id": [
+        77
+      ],
+      "note": "The command can only be executed in an authenticated context or locally"
     }
   ],
-  "updated": "2023-04-04 06:28:46 +0000",
-  "brakeman_version": "6.0.0"
+  "updated": "2023-12-22 14:29:45 +0100",
+  "brakeman_version": "6.1.0"
 }

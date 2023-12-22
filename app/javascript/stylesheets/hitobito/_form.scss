@@ -790,6 +790,9 @@ label.required::after {
   width: 90%
 }
 
+.popover-body #role_label {
+  height: 90px;
+}
 .hidden {
   display: none;
   visibility: hidden;

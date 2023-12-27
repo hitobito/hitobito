@@ -7,13 +7,14 @@
 
 class SetBlockWarningSentAtForPeople < ActiveRecord::Migration[6.1]
   def up
-    return unless warn_after = Settings.people&.inactivity_block&.warn_after.present?
+    warn_after = Settings.people&.inactivity_block&.warn_after
+    return unless warn_after.present?
 
     connection.execute <<~SQL
       UPDATE people
       SET inactivity_block_warning_sent_at = #{connection.quote(Time.zone.now)}
       WHERE blocked_at IS NULL
-      AND last_sign_in_at < #{connection.quote(warn_after.ago)}
+      AND last_sign_in_at < #{connection.quote(warn_after.seconds.ago)}
     SQL
   end
 end

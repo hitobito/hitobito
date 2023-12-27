@@ -108,6 +108,8 @@
         - if @blocked_person_interval_text.present?
           = @blocked_person_interval_text
           %br
+        = @blocked_person_solution_text
+        %br
         = action_button(t('.unblock_person'),
                         unblock_group_person_path(group, person),
                         :"lock-open",

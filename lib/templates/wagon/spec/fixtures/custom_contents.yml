@@ -96,6 +96,10 @@ suspend_person_solution_id:
   key: suspend_person_solution_id
   placeholders_required: person-name
 
+blocked_person_title_id:
+  key: blocked_person_title_id
+  placeholders_required: person-name
+
 blocked_person_situation_id:
   key: blocked_person_situation_id
   placeholders_required: person-name

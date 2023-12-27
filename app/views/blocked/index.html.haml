@@ -5,4 +5,9 @@
 
 - title t('.title')
 
-%p= t('.explanation', warn_after: @warn_after, block_after: @block_after)
+= @blocked_person_situation_text
+%br
+- if @blocked_person_interval_text.present?
+	= @blocked_person_interval_text
+	%br
+= @blocked_person_solution_text

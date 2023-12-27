@@ -24,42 +24,69 @@ class Person::BlockService
       @person.update!(inactivity_block_warning_sent_at: Time.zone.now)
   end
 
-  def self.warn_after
-    Settings.people&.inactivity_block&.warn_after&.to_i&.seconds
-  end
+  class << self
+    def warn_after
+      Settings.people&.inactivity_block&.warn_after&.to_i&.seconds
+    end
 
-  def self.block_after
-    Settings.people&.inactivity_block&.block_after&.to_i&.seconds
-  end
+    def block_after
+      Settings.people&.inactivity_block&.block_after&.to_i&.seconds
+    end
 
-  def self.warn_block_period
-    return unless warn_after && block_after
+    def warn_block_period
+      return unless warn_after && block_after
 
-    block_after - warn_after
-  end
+      block_after - warn_after
+    end
 
-  def self.warn?
-    warn_after.present? && warn_after.positive?
-  end
+    def inactivity_block_interval_placeholders
+      {
+        'warn-after-days' => warn_after,
+        'block-after-days' => block_after,
+        'warn-block-period-days' => warn_block_period,
+      }.transform_values { _1&.in_days&.to_i&.to_s }
+    end
 
-  def self.block?
-    block_after.present? && block_after.positive?
-  end
 
-  def self.block_scope(block_after = self.block_after)
-    return unless block?
+    def warn?
+      warn_after.present? && warn_after.positive?
+    end
 
-    Person.where.not(last_sign_in_at: nil)
-          .where(blocked_at: nil)
-          .where(Person.arel_table[:last_sign_in_at].lt(block_after&.ago))
-  end
+    def block?
+      block_after.present? && block_after.positive?
+    end
 
-  def self.warn_scope(warn_after = self.warn_after)
-    return unless warn?
+    def block_scope(block_after = self.block_after)
+      return unless block?
 
-    Person.where.not(last_sign_in_at: nil)
-          .where(Person.arel_table[:last_sign_in_at].lt(warn_after&.ago))
-          .where(inactivity_block_warning_sent_at: nil, blocked_at: nil)
+      Person.where.not(last_sign_in_at: nil)
+            .where(blocked_at: nil)
+            .where(Person.arel_table[:last_sign_in_at].lt(block_after&.ago))
+    end
+
+    def block_within_scope!
+      return unless block?
+
+      block_scope.find_each do |person|
+        new(person).block!
+      end
+    end
+
+    def warn_scope(warn_after = self.warn_after)
+      return unless warn?
+
+      Person.where.not(last_sign_in_at: nil)
+            .where(Person.arel_table[:last_sign_in_at].lt(warn_after&.ago))
+            .where(inactivity_block_warning_sent_at: nil, blocked_at: nil)
+    end
+
+    def warn_within_scope!
+      return unless warn?
+
+      warn_scope.find_each do |person|
+        new(person).inactivity_warning!
+      end
+    end
   end
 
   protected

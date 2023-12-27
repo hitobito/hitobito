@@ -104,7 +104,6 @@ de:
   blocked:
     index:
       title: Login gesperrt
-      explanation: 'Du must dich entsperrt werden bevor du auf diese Resource zugreifen kannst.'
 
   contactable:
     address_or_email: "%{address} oder %{email}"

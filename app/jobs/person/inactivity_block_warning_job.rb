@@ -7,12 +7,7 @@
 
 class Person::InactivityBlockWarningJob < RecurringJob
   def perform
-    return unless Person::BlockService.warn?
-
-    Person::BlockService.warn_scope.find_each do |person|
-      Person::BlockService.new(person).inactivity_warning!
-    end
-    true
+    Person::BlockService.warn_within_scope!
   end
 
 end

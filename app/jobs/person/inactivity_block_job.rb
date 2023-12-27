@@ -7,11 +7,6 @@
 
 class Person::InactivityBlockJob < RecurringJob
   def perform
-    return unless Person::BlockService.block?
-
-    Person::BlockService.block_scope.find_each do |person|
-      Person::BlockService.new(person).block!
-    end
-    true
+    Person::BlockService.block_within_scope!
   end
 end

@@ -31,6 +31,7 @@ module Dropdown
       activate_totp
       reset_totp
       disable_totp
+      unblock_person
     end
 
     def send_login

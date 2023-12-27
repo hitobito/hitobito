@@ -34,6 +34,9 @@ CustomContent.seed_once(
   { key: Person::SecurityToolsController::SUSPEND_PERSON_SOLUTION,
     placeholders_required: 'person-name',
     placeholders_optional: nil },
+  { key: Person::SecurityToolsController::BLOCKED_PERSON_TITLE,
+    placeholders_required: 'person-name',
+    placeholders_optional: nil },
   { key: Person::SecurityToolsController::BLOCKED_PERSON_SITUATION,
     placeholders_required: 'person-name',
     placeholders_optional: nil },
@@ -114,6 +117,7 @@ dataleak_situation_id = CustomContent.get(Person::SecurityToolsController::DATAL
 dataleak_solution_id = CustomContent.get(Person::SecurityToolsController::DATALEAK_SOLUTION).id
 suspend_person_situation_id = CustomContent.get(Person::SecurityToolsController::SUSPEND_PERSON_SITUATION).id
 suspend_person_solution_id = CustomContent.get(Person::SecurityToolsController::SUSPEND_PERSON_SOLUTION).id
+blocked_person_title_id = CustomContent.get(Person::SecurityToolsController::BLOCKED_PERSON_TITLE).id
 blocked_person_situation_id = CustomContent.get(Person::SecurityToolsController::BLOCKED_PERSON_SITUATION).id
 blocked_person_solution_id = CustomContent.get(Person::SecurityToolsController::BLOCKED_PERSON_SOLUTION).id
 blocked_person_interval_id = CustomContent.get(Person::SecurityToolsController::BLOCKED_PERSON_INTERVAL).id
@@ -337,11 +341,29 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    locale: 'en',
    label: 'Delete main email'},
 
+  {custom_content_id: blocked_person_title_id,
+   locale: 'de',
+   label: 'Login gesperrt',
+   subject: 'Login gesperrt',
+   body: "Das Login von {person-name} ist gesperrt"},
+
+  {custom_content_id: blocked_person_title_id,
+   locale: 'fr',
+   label: 'TBD'},
+
+  {custom_content_id: blocked_person_title_id,
+   locale: 'it',
+   label: 'TBD'},
+
+  {custom_content_id: blocked_person_title_id,
+   locale: 'en',
+   label: 'TBD'},
+
   {custom_content_id: blocked_person_situation_id,
    locale: 'de',
-   label: 'Sicherheitsübersicht: Login gesperrt',
-   subject: 'Sicherheitsübersicht: Login gesperrt',
-   body: "Das Login von {person-name} ist gesperrt"},
+   label: 'Login gesperrt: Beschreibung',
+   subject: 'Login gesperrt: Beschreibung',
+   body: "Das Login von {person-name} wurde gesperrt, und hat daher keinen Zugriff mehr."},
 
   {custom_content_id: blocked_person_situation_id,
    locale: 'fr',
@@ -357,9 +379,9 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: blocked_person_solution_id,
    locale: 'de',
-   label: 'Sicherheitsübersicht: Login gesperrt',
-   subject: 'Sicherheitsübersicht: Login gesperrt',
-   body: "Das Login von {person-name} wurde gesperrt, und hat daher keinen Zugriff mehr." },
+   label: 'Login gesperrt: Hinweise zum Entsperren',
+   subject: 'Login gesperrt: Hinweise zum Entsperren',
+   body: "Das Login muss von jemandem mit Schreibberechtigungen auf dieser Person wieder entsperrt werden." },
 
   {custom_content_id: blocked_person_solution_id,
    locale: 'fr',

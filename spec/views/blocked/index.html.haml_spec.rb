@@ -23,6 +23,10 @@ describe 'blocked/index.html.haml' do
   end
 
   it 'shows the explanation' do
-    is_expected.to have_content I18n.t('blocked.index.explanation')
+    contents = %w[blocked_person_situation_text blocked_person_solution_text]
+    contents.each { assign(_1.to_sym, _1.to_s) }
+    contents.each do |custom_content|
+      is_expected.to have_content custom_content
+    end
   end
 end

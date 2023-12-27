@@ -70,6 +70,7 @@ class Person::BlockService
       block_scope.find_each do |person|
         new(person).block!
       end
+      true
     end
 
     def warn_scope(warn_after = self.warn_after)
@@ -86,6 +87,7 @@ class Person::BlockService
       warn_scope.find_each do |person|
         new(person).inactivity_warning!
       end
+      true
     end
   end
 

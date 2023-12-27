@@ -10,14 +10,16 @@ require 'spec_helper'
 
 describe Person::InactivityBlockJob do
   subject(:job) { described_class.new }
-  let!(:person) { people(:bottom_member) }
-  let(:block_after_value) { 6.months }
-  let(:last_sign_in_at) { block_after_value&.+(3.months)&.ago }
 
   describe '#perform' do
+    let!(:person) { people(:bottom_member) }
+    let(:block_after_value) { 6.months }
+    let(:last_sign_in_at) { block_after_value&.+(3.months)&.ago }
+
     before do
+      person.update(last_sign_in_at: last_sign_in_at)
       allow(Person::BlockService).to receive(:block_after).and_return(block_after_value)
-      expect(Person::BlockService).to receive(:block_within_scope).and_call_original
+      expect(Person::BlockService).to receive(:block_within_scope!).and_call_original
     end
 
     context "with no block_after set" do
@@ -25,8 +27,13 @@ describe Person::InactivityBlockJob do
       it { expect(job.perform).to be_falsy }
     end
 
-    context "with no block_after set" do
+    context "with block_after set" do
       it { expect(job.perform).to be_truthy }
+      it do
+        job.perform
+        person.reload
+        expect(person.blocked_at).not_to be_nil
+      end
     end
   end
 end

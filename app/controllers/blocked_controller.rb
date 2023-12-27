@@ -40,6 +40,7 @@ class BlockedController < ApplicationController
     content.body_with_values(placeholders).to_s.html_safe
   end
 
+  # rubocop:disable Layout/LineLength
   def load_info_texts
     @blocked_person_title_text = get_content(Person::SecurityToolsController::BLOCKED_PERSON_TITLE)
     @blocked_person_situation_text = get_content(Person::SecurityToolsController::BLOCKED_PERSON_SITUATION)
@@ -49,4 +50,5 @@ class BlockedController < ApplicationController
                                                   Person::BlockService.inactivity_block_interval_placeholders)
     end
   end
+  # rubocop:enable Layout/LineLength
 end

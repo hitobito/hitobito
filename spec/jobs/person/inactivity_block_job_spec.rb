@@ -14,25 +14,19 @@ describe Person::InactivityBlockJob do
   let(:block_after_value) { 6.months }
   let(:last_sign_in_at) { block_after_value&.+(3.months)&.ago }
 
-  before do
-    allow(Person::BlockService).to receive(:block_after).and_return(block_after_value)
-    person.update(last_sign_in_at: last_sign_in_at)
-  end
-
-  context "with no block_after set" do
-    let(:block_after_value) { nil }
-    it { expect(job.perform).to be_falsy }
-    it { expect(Person::BlockService).not_to receive(:new) }
-  end
-
-  context "with block_after set" do
-    let(:block_after_value) { 6.months }
-    let(:block_service) { double("BlockService") }
+  describe '#perform' do
     before do
-      expect(Person::BlockService).to receive(:new).with(person).and_return(block_service)
-      expect(block_service).to receive(:block!)
+      allow(Person::BlockService).to receive(:block_after).and_return(block_after_value)
+      expect(Person::BlockService).to receive(:block_within_scope).and_call_original
     end
 
-    it { expect(job.perform).to be_truthy }
+    context "with no block_after set" do
+      let(:block_after_value) { nil }
+      it { expect(job.perform).to be_falsy }
+    end
+
+    context "with no block_after set" do
+      it { expect(job.perform).to be_truthy }
+    end
   end
 end

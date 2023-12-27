@@ -248,4 +248,57 @@ describe Person::BlockService do
       end
     end
   end
+
+  describe '::block_within_scope' do
+    subject(:block_within_scope) { described_class.block_within_scope }
+
+    before do
+      allow(described_class).to receive(:block_after).and_return(block_after_value)
+      person.update(last_sign_in_at: last_sign_in_at)
+    end
+
+    context "with no block_after set" do
+      before { expect(described_class).not_to receive(:new) }
+      let(:block_after_value) { nil }
+
+      it { block_within_scope.to be_falsy }
+    end
+
+    context "with block_after set" do
+      let(:block_after_value) { 6.months }
+      let(:block_service) { double("BlockService") }
+      before do
+        expect(described_class).to receive(:new).with(person).and_return(block_service)
+        expect(block_service).to receive(:block!)
+      end
+
+      it { block_within_scope.to be_truthy }
+    end
+  end
+
+  describe '::warn_within_scope' do
+    subject(:warn_within_scope) { described_class.warn_within_scope }
+
+    before do
+      allow(described_class).to receive(:warn_after).and_return(warn_after_value)
+      person.update(last_sign_in_at: last_sign_in_at)
+    end
+
+    context "with no warn_after set" do
+      let(:warn_after_value) { nil }
+      it { expect(warn_within_scope).to be_falsy }
+      it { expect(described_class).not_to receive(:new) }
+    end
+
+    context "with warn_after set" do
+      let(:warn_after_value) { 6.months }
+      let(:block_service) { double("BlockService") }
+      before do
+        expect(described_class).to receive(:new).with(person).and_return(block_service)
+        expect(block_service).to receive(:inactivity_warning!)
+      end
+
+      it { expect(warn_within_scope).to be_truthy }
+    end
+
 end

@@ -13,20 +13,32 @@ describe BlockedController do
 
   render_views
 
-  context 'GET#index' do
-    it 'shows blocked text in html' do
-      get :index
+  describe 'GET#index' do
+    context 'with blocked person' do
+      before { Person::BlockService.new(top_leader).block! }
 
-      expect(response).to have_http_status(403)
-      expect(response.body).to have_content(top_leader.full_name)
-      expect(response.body).to have_content(I18n.t('blocked.index.explanation'))
+      it 'shows blocked text in html' do
+        get :index
+
+        expect(response).to have_http_status(403)
+        expect(response.body).to have_content(top_leader.full_name)
+        expect(response.body).to have_content('Login gesperrt')
+      end
+
+      it 'shows blocked text in html' do
+        get :index, format: :json
+
+        expect(response).to have_http_status(403)
+        expect(JSON.parse(response.body)).to eq({ "error" => "blocked" })
+      end
     end
 
-    it 'shows blocked text in html' do
-      get :index, format: :json
+    context 'without blocked person' do
+      it 'redirects to the root path' do
+        get :index
 
-      expect(response).to have_http_status(403)
-      expect(JSON.parse(response.body)).to eq({ "error" => "blocked" })
+        expect(response).to redirect_to(root_path)
+      end
     end
   end
 end

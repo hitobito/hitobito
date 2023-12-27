@@ -8,6 +8,7 @@
 class Person::ImpersonationController < ApplicationController
 
   before_action :authorize_action
+  skip_before_action :reject_blocked_person!, only: [:destroy]
 
   def create
     person = Person.find(params[:person_id])

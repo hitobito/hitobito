@@ -159,4 +159,8 @@ jobs:
           version version
           echo "---"
           echo "release $RELEASE_STAGE $NEXT_VERSION $DRY_RUN"
-          release "$RELEASE_STAGE" "$NEXT_VERSION" "$DRY_RUN"
+          if [[ -n "$DRY_RUN" ]]; then
+            release "$RELEASE_STAGE" "$NEXT_VERSION" "$DRY_RUN"
+          else
+            release "$RELEASE_STAGE" "$NEXT_VERSION"
+          fi

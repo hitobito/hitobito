@@ -35,6 +35,7 @@ it:
         must_exist: non può essere lasciato vuoto
         readonly: non può venir cambiato
         cannot_be_later_than_today: non può essere più tardi di oggi
+        cannot_be_later_than_delete_on: deve avvenire prima o lo stesso giorno della partenza
       models:
         cors_origin:
           attributes:
@@ -141,10 +142,6 @@ it:
           attributes:
             additional_sender:
               invalid: "deve contenere indirizzi e-mail nel formato abcd@ee.ch o *@ee.ch. In caso di più indirizzi, questi vanno separati con ',' o ';'"
-        role:
-          attributes:
-            delete_on:
-              must_be_later_than_created_at: non può essere prima di da
     models:
       acts_as_taggable_on/tag:
         one: Tag

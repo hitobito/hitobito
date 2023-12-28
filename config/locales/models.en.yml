@@ -116,10 +116,6 @@ en:
           attributes:
             additional_sender:
               invalid: "must contain mail addresses of the format abcd@ee.ch or *@ee.ch. Multiple addresses must be separated with ',' or ';'."
-        role:
-          attributes:
-            delete_on:
-              must_be_later_than_created_at: must be later than from
     models:
       acts_as_taggable_on/tag:
         one: Tag

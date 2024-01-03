@@ -9,6 +9,10 @@
 *  Die Bemerkungen einer Anlassteilnahme können automatisiert nach einer gewissen Zeit gelöscht werden. Standardmässig abgestellt (#2129)
 *  Personendaten können manuell im "Ohne Rollen" Tab einer Ebene permanent gelöscht werden. (#2105)
 
+## Version 1.31
+
+*  Umstellung auf Ruby 3
+
 ## Version 1.30
 
 *  Der Buchungsbeleg berücksichtigt neu keine Rechnungen mit dem Status "Storniert" (hitobito_sww#136)
@@ -40,13 +44,7 @@
 *  Die Ansicht um Zwei-Faktor-Authentisierung einzurichten wurde für Mobile optimiert, und man kann die Zwei-Faktor-Authentisierung jetzt auch einrichten, ohne den QR-Code zu scannen, indem man das Secret kopiert. Merci @TeamBattino! (#2046)
 *  Rollen können neu als `self.basic_permissions_only = true` markiert werden. Dies führt zu eingeschränkten Ansichten und Berechtigungen für die betroffene Person (sww#120)
 *  Die E-Mail, welche bei der "Passwort vergessen" Funktion gesendet wird, ist neu übersetzt.
-
-## Version 1.28
-
 *  Geburtstag und Geschlecht tauchen nicht mehr doppelt im "Spaltenauswahl"-Export von Personenlisten auf
-
-## Version 1.28
-
 *  Fonts werden direkt von Hitobito ausgeliefert (#1632)
 *  Die Vorbedingungen einer Kursart können neu als "Muss gültig sein" oder "Muss gültig oder weggefallen sein" deklariert werden. Wenn die Vorbedingung gültig sein muss verhält es sich wie bisher, bei gültig oder weggefallen muss der Teilnehmer die Qualifikation der Vorbedingung besitzen oder jemals besessen haben. Dies gilt unabhängig von der Gültigkeit oder Reaktivierbarkeit der besagten Qualifikation. (#1640)
 *  Neuer Personentab "Sicherheit", welcher Informationen und Vorgänge zu Sicherheitsmassnahmen aufzeigt und das Passwort einer Person zurücksetzen lässt (benötigt :update Permission auf Person) (#1688)

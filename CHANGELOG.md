@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## unreleased
+## Version 1.32
 
 *  Rollen mit Start-Datum in der Zukunft können erfasst werden (hitobito#2237)
 *  Eigener JSON:API Endpoint für Gruppen (hitobito#2243)

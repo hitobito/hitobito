@@ -58,7 +58,7 @@ describe 'StandardFormBuilder' do
   describe '#labeled_input_field' do
     context 'when required' do
       subject { form.labeled_input_field(:name) }
-      it { is_expected.to include('class="col-form-label col-md-3 col-xl-2 pb-1 text-md-end required"') }
+      it { is_expected.to include('class="col-md-3 col-xl-2 pb-1 col-form-label text-md-end required"') }
     end
 
     context 'when not required' do
@@ -73,13 +73,18 @@ describe 'StandardFormBuilder' do
 
     context 'with label' do
       subject { form.labeled_input_field(:name, label: 'Some Caption') }
-      it { is_expected.to include(form.label(:name, 'Some Caption', class: 'col-form-label col-md-3 col-xl-2 pb-1 text-md-end required')) }
+      it { is_expected.to include(form.label(:name, 'Some Caption', class: 'col-md-3 col-xl-2 pb-1 col-form-label text-md-end required')) }
     end
 
     context 'with addon' do
       subject { form.labeled_input_field(:name, addon: 'Some Addon') }
       it { is_expected.to match(/class="input-group-text"/) }
       it { is_expected.to match(/Some Addon/) }
+    end
+
+    context 'with label_class' do
+      subject { form.labeled_input_field(:name, label: 'Some Caption', label_class: 'custom-class') }
+      it { is_expected.to include(form.label(:name, 'Some Caption', class: 'custom-class col-form-label text-md-end required')) }
     end
   end
 

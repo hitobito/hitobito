@@ -349,11 +349,15 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       caption_or_content = nil
     end
     caption_or_content ||= captionize(attr, klass)
+
+    label_classes = html_options.delete(:label_class) || 'col-md-3 col-xl-2 pb-1'
+    label_classes += ' col-form-label text-md-end'
+    label_classes += ' required' if required?(attr)
+
     add_css_class(html_options, 'labeled col-md')
     css_classes = { 'no-attachments': no_attachments?(attr),
                     row: true, 'mb-2': true }
-    label_classes = 'col-form-label col-md-3 col-xl-2 pb-1 text-md-end'
-    label_classes += ' required' if required?(attr)
+
     content_tag(:div, class: css_classes.select { |_css, show| show }.keys.join(' ')) do
       label(attr, caption_or_content, class: label_classes) +
       content_tag(:div, content, html_options)
@@ -505,6 +509,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def build_labeled_field(field_method, *args)
     options = args.extract_options!
     label = options.delete(:label)
+    label_class = options.delete(:label_class)
     addon = options.delete(:addon)
 
     attr = args.first
@@ -514,7 +519,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     content = with_addon(addon, content) if addon.present?
     with_labeled_field_help(args.first, options) { |help| content << help }
 
-    labeled(attr, caption, content, required: options[:required])
+    labeled(attr, caption, content, required: options[:required], label_class: label_class)
   end
 
   def with_labeled_field_help(field, options)

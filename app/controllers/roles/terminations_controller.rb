@@ -33,7 +33,9 @@ class Roles::TerminationsController < ApplicationController
   end
 
   def terminate_on
-    params.dig(:roles_termination, :terminate_on).presence || Date.today.end_of_year
+    role.delete_on.presence ||
+      params.dig(:roles_termination, :terminate_on).presence ||
+      Date.today.end_of_year
   end
 
   def authorize

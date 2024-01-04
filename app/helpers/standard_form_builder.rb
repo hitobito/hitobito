@@ -296,11 +296,14 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     klass = [
       html_options[:class], 'mw-100', 'mw-md-60ch', 'form-control', 'form-control-sm'
     ].compact.join(' ')
+    disabled = html_options[:disabled].to_s
     klass += ' is-invalid' if errors_on?(attr)
+    disabled = html_options[:disabled].presence
     hidden_field(attr_id) +
     string_field(attr,
                  placeholder: I18n.t('global.search.placeholder_person'),
                  class: klass,
+                 disabled: disabled,
                  data: { provide: 'entity',
                          id_field: "#{object_name}_#{attr_id}",
                          url: html_options&.dig(:data, :url) || @template.query_people_path })

@@ -8,14 +8,9 @@ app = window.App ||= {}
 app.HouseHolds = {
   showPeopleTypeAhead: (e) ->
     form = $(e.target).closest('form')
-    form.find(':input[name=household_query]').toggle()
+    form.find(':input[name=household_query]').closest('div.household_query_container').toggle()
     elem = form.find('.household_key_people')
     inputs = elem.find(":input[name='person[household_people_ids][]']")
-
-    if elem.toggle().is(':visible')
-      inputs.removeAttr('disabled')
-    else
-      inputs.attr('disabled', 'disabled')
 
   update: (e) ->
     data = JSON.parse(e)

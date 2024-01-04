@@ -85,6 +85,14 @@ class PersonAbility < AbilityDsl::Base
     permission(:any).may(:update_password).if_password_present
 
     general(:send_password_instructions).not_self
+
+    class_side(:create_households).if_any_writing_permissions
+  end
+
+  def if_any_writing_permissions
+    writing_permissions = [:group_full, :group_and_below_full,
+                           :layer_full, :layer_and_below_full]
+    contains_any?(writing_permissions, user_context.all_permissions)
   end
 
   def in_layer_group

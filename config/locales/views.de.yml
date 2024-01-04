@@ -1374,6 +1374,7 @@ de:
       fields:
         lives_in_household_with: "Wohnt im Haushalt mit"
         update_denied: "Du kannst %{other_person} nicht zum Haushalt hinzufügen. Möglicherweise ist diese Person schon im Haushalt, oder du hast keine Schreibrechte."
+        cannot_create_household: 'Du benötigst Schreibrechte auf mehrere Personen um diese in einem Haushalt zusammenzuführen'
 
     family:
       fields:

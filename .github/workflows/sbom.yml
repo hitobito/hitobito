@@ -71,6 +71,7 @@ jobs:
         run: |
           sudo apt-get -qq update
           sudo apt-get install sphinxsearch
+          sudo apt-get install libimlib2 libimlib2-dev
           echo "ruby version: $(ruby -v)"
           echo "node version: $(node -v)"
           echo "yarn version: $(yarn -v)"

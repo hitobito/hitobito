@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -54,7 +54,6 @@ gem 'magiclabs-userstamp', require: 'userstamp'
 gem 'mail' # add mail here to have it loaded
 gem 'matrix' # required but removed from stlib since ruby 3.2
 gem 'mime-types'
-gem 'mini_magick'
 gem 'mysql2'
 gem 'nested_form'
 gem 'nokogiri'
@@ -80,6 +79,7 @@ gem 'rotp'
 gem 'rqrcode'
 gem 'rswag-api', '~> 2.13'
 gem 'rswag-ui', '~> 2.13'
+gem 'rszr'
 gem 'rubyzip'
 gem 'seed-fu'
 gem 'sentry-raven'

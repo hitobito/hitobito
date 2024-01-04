@@ -12,6 +12,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Install dependencies
+        run: |
+          sudo apt-get -qq update
+          sudo apt-get install libimlib2 libimlib2-dev
+
       - name: Setup Ruby and install gems
         uses: ruby/setup-ruby@v1
         env:

@@ -84,7 +84,7 @@ describe :roles_terminations, js: true do
 
   it 'for role with delete_on set has no input field' do
     delete_on = Time.zone.tomorrow
-    role.update(delete_on: delete_on)
+    role.update!(delete_on: delete_on)
     visit_dialog
 
     expect(page).not_to have_field('Austrittsdatum')

@@ -30,7 +30,7 @@ module UploadDisplayHelper
     if upload_exists?(model, name)
       model.send(name.to_sym).then do |pic|
         if size
-          # variant passes to mini_magick, rszr or vips, I assume mini_magick or rszr here
+          # variant passes to mini_magick, rszr or vips, I assume rszr here, mini_magick could work as well
           pic.variant(resize_to_limit: extract_image_dimensions(size))
         else
           pic
@@ -75,7 +75,7 @@ module UploadDisplayHelper
 
   def extract_image_dimensions(width_x_height)
     case width_x_height
-    when /^\d+x\d+$/ then width_x_height.split('x')
+    when /^\d+x\d+$/ then width_x_height.split('x').map(&:to_i)
     end
   end
 end

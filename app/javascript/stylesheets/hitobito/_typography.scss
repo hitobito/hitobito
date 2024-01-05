@@ -116,8 +116,15 @@ dl {
 }
 
 .dl-vertical {
+  display: grid;
+
+  dt {
+    text-align: left !important;
+  }
+
   dd {
     margin-bottom: calc($v-space / 4);
+    margin-left: 16px;
   }
 }
 

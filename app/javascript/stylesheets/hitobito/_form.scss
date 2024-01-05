@@ -801,3 +801,7 @@ label.required::after {
 .width-60 {
   width: 60px;
 }
+
+.dropdown-menu li:hover {
+  color: $white;
+}

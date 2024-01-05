@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Copyright (c) 2022-2022, Digisus Lab. This file is part of
+# Copyright (c) 2022-2024, Digisus Lab. This file is part of
 # hitobito and licensed under the Affero General Public License version 3
 # or later. See the COPYING file at the top-level directory or at
 # https://github.com/hitobito/hitobito.
@@ -39,5 +39,10 @@ describe ProjectAnalyzer do
   it 'finds die-mitte/staging in htbt-die-mitte-staging' do
     expect(described_class.new('htbt-die-mitte-staging').project).to eq 'die-mitte'
     expect(described_class.new('htbt-die-mitte-staging').stage).to eq 'staging'
+  end
+
+  it 'find jubla/production in hitobito-jubla-production' do
+    expect(described_class.new('hitobito-jubla-production').project).to eq 'jubla'
+    expect(described_class.new('hitobito-jubla-production').stage).to eq 'production'
   end
 end

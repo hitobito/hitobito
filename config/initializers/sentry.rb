@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2021-2023, Katholische Landjugendbewegung Paderborn. This file
+#  Copyright (c) 2021-2024, Katholische Landjugendbewegung Paderborn. This file
 #  is part of hitobito and licensed under the Affero General Public License
 #  version 3 or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -13,6 +13,7 @@ Rails.application.reloader.to_prepare do
 
     analyzer = [
       ENV['OPENSHIFT_BUILD_NAMESPACE'], # hit-jubla-int
+      "hitobito-#{ENV['HITOBITO_PROJECT']}-#{ENV['HITOBITO_STAGE']}", # hitobito-jubla-production
       (ENV['RAILS_DB_NAME'] != 'database' ? ENV['RAILS_DB_NAME'] : nil), # hit_jubla_development
       "hitobito-#{Rails.env}"           # hitobito-development
     ].compact.first.yield_self do |name|

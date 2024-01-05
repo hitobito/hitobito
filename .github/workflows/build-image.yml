@@ -64,9 +64,11 @@ jobs:
           context: .
           file: hitobito/Dockerfile
           build-args: |
-            BUILD_REPO=$GITHUB_REPOSITORY
-            BUILD_REF=$GITHUB_REF_NAME
-            BUILD_COMMIT=$GITHUB_SHA
+            BUILD_REPO=${{ inputs.composition }}
+            BUILD_REF=${{ inputs.source_ref }}
+            BUILD_COMMIT=${{ inputs.version }}
+            HITOBITO_PROJECT=${{ inputs.project }}
+            HITOBITO_STAGE=${{ inputs.stage }}
           target: app
           tags: |
             ${{ secrets.PUZZLE_REGISTRY }}/hitobito/${{ inputs.project }}/rails:latest
@@ -79,9 +81,11 @@ jobs:
           context: .
           file: hitobito/Dockerfile
           build-args: |
-            BUILD_REPO=$GITHUB_REPOSITORY
-            BUILD_REF=$GITHUB_REF_NAME
-            BUILD_COMMIT=$GITHUB_SHA
+            BUILD_REPO=${{ inputs.composition }}
+            BUILD_REF=${{ inputs.source_ref }}
+            BUILD_COMMIT=${{ inputs.version }}
+            HITOBITO_PROJECT=${{ inputs.project }}
+            HITOBITO_STAGE=${{ inputs.stage }}
           target: sphinx
           tags: |
             ${{ secrets.PUZZLE_REGISTRY }}/hitobito/${{ inputs.project }}/sphinx:latest

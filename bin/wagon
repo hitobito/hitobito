@@ -101,10 +101,19 @@ function recreate_db() {
   fi
   echo "Recreating DB (${db_name})"
 
-  cat << SQL | mysql -u "${RAILS_DB_USERNAME:-hitobito}" -p"${RAILS_DB_PASSWORD:-hitobito}" -h "${RAILS_DB_HOST:-127.0.0.1}" -P "${RAILS_DB_PORT:-33066}"
+  cmds=$( cat << SQL
 DROP DATABASE IF EXISTS ${db_name};
 CREATE DATABASE ${db_name};
 SQL
+  )
+
+  echo $cmds
+
+  if [[ $RAILS_DB_SOCKET ]]; then
+    echo "$cmds" | mysql -u "${RAILS_DB_USERNAME:-hitobito}" -p"${RAILS_DB_PASSWORD:-hitobito}"
+  else
+    echo "$cmds" | mysql -u "${RAILS_DB_USERNAME:-hitobito}" -p"${RAILS_DB_PASSWORD:-hitobito}" -h "${RAILS_DB_HOST:-127.0.0.1}" -P "${RAILS_DB_PORT:-33066}"
+  fi
 }
 
 function setup_dbs() {

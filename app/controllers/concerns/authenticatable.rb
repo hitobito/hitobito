@@ -13,7 +13,7 @@ module Authenticatable
       helper_method :current_user, :origin_user
     end
 
-    before_action :authenticate_person!
+    before_action :authenticate_person!, if: :authenticate?
     before_action :reject_blocked_person!
     check_authorization if: :authorize?
   end

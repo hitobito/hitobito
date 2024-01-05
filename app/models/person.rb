@@ -82,6 +82,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :self_registration_reason_custom_text,
     :self_registration_reason_id,
     :privacy_policy_accepted_at,
+    :blocked_at,
+    :inactivity_block_warning_sent_at,
     :minimized_at
   ]
 
@@ -419,7 +421,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   # Is this person blocked?
   def blocked?
-    blocked_at.present?
+    read_attribute(:blocked_at).present?
   end
 
   ### OTHER INSTANCE METHODS

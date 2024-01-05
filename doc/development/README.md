@@ -39,7 +39,7 @@ These documents describe different aspects that need to be considered when devel
 
 ## Contents
 
-* [Development environment](01_setup.md)
+* [Development environment](01_basics.md)
 * [Deployment](02_deployment.md)
 * [Guidelines](03_guidelines.md)
 * [Wagons](04_wagons.md)

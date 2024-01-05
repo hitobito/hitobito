@@ -174,17 +174,21 @@ case $cmd in
   create-idea-project)
     require_wagon_name
     setup_idea_project
-  ;;
+    ;;
 
   reset-database)
     recreate_dbs
     setup_dbs
-  ;;
+    ;;
+
+  create-database)
+    recreate_dbs
+    ;;
 
   reset-test-database)
     recreate_test_db
     setup_test_db
-  ;;
+    ;;
 
   gemfile)
     bundle check || bundle
@@ -356,6 +360,7 @@ function __wagon_commands() {
     configs
     core-spec
     create
+    create-database
     create-idea-project
     gemfile
     git

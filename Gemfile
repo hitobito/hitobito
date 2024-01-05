@@ -109,8 +109,9 @@ group :development, :test do
   gem 'codez-tarantula', require: 'tarantula-rails3'
   gem 'graphiti_spec_helpers'
   gem 'parallel_tests'
-  gem 'pry-byebug', require: false # slow gem according to bumbler
-  gem 'pry-doc', require: false # provides show-source/$ in the pry-console
+  gem 'pry-nav'
+  gem 'pry-byebug'
+  gem 'pry-doc' # provides show-source/$ in the pry-console
   gem 'rspec-rails', '~> 5.0'
   gem 'rswag-specs'
 end

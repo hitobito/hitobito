@@ -132,6 +132,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   has_one_attached :picture do |attachable|
     attachable.variant :thumb, resize_to_fill: [32, 32]
+    # attachable.variant :normal, resize_to_fill: [512, 512]
   end
 
   def picture_default
@@ -158,7 +159,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   ### ASSOCIATIONS
 
-  has_many :roles, inverse_of: :person
+  has_many :roles, inverse_of: :person # rubocop:disable Rails/HasManyOrHasOneDependent solved with a callback
   has_many :groups, through: :roles
 
   has_many :event_participations, class_name: 'Event::Participation',
@@ -239,8 +240,10 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   validate :assert_has_any_name
   validates :address, length: { allow_nil: true, maximum: 1024 }
 
-  validates :picture, dimension: { width: { max: 8_000 }, height: { max: 8_000 } },
-                      content_type: ['image/jpeg', 'image/gif', 'image/png']
+  validates :picture, dimension: {
+    width: { max: Settings.application.image_upload.max_dimension },
+    height: { max: Settings.application.image_upload.max_dimension }
+  }, content_type: Settings.application.image_upload.content_types
   # more validations defined by devise
 
 
@@ -337,11 +340,9 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   alias privacy_policy_accepted privacy_policy_accepted?
 
   def privacy_policy_accepted=(value)
-    if %w(1 yes true).include?(value.to_s.downcase)
-      self.privacy_policy_accepted_at = Time.now.utc
-    else
-      self.privacy_policy_accepted_at = nil
-    end
+    self.privacy_policy_accepted_at = if %w(1 yes true).include?(value.to_s.downcase)
+                                        Time.now.utc
+                                      end
   end
 
   def to_s(format = :default)
@@ -473,7 +474,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     self.email = nil if email.blank?
   end
 
-  def remove_blank_relations
+  def remove_blank_relations # rubocop:disable Metrics/CyclomaticComplexity
     relations_to_tails.each do |e|
       if !e.frozen? && e.tail_id.blank?
         e.mark_for_destruction

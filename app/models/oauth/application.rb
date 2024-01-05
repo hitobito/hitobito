@@ -34,11 +34,18 @@ module Oauth
 
     has_one_attached :logo do |attachable|
       attachable.variant :thumb, resize_to_fill: [64, 64]
+      # attachable.variant :logo, resize_to_fill: [512, 512]
     end
-    validates :logo, dimension: { width: { max: 8_000 }, height: { max: 8_000 } },
-                     content_type: ['image/jpeg', 'image/gif', 'image/png']
+    validates :logo, dimension: {
+      width: { max: Settings.application.image_upload.max_dimension },
+      height: { max: Settings.application.image_upload.max_dimension }
+    }, content_type: Settings.application.image_upload.content_types
 
     scope :list, -> { order(:name) }
+
+    def logo_default
+      'oauth_app.png'
+    end
 
     def self.human_scope(key)
       I18n.t("doorkeeper.scopes.#{key}")

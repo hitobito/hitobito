@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -67,6 +67,12 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
                          :updated_at, :updater_id]
 
   has_one_attached :logo
+  # do |attachable|
+  #   attachable.variant :logo, resize_and_pad: [
+  #     Settings.application.logo.width,
+  #     Settings.application.logo.height
+  #   ]
+  # end
   has_one_attached :privacy_policy
   has_one_attached :letter_logo
 
@@ -162,8 +168,15 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   validate :assert_valid_self_registration_notification_email
 
-  validates :logo, dimension: { width: { max: 8_000 }, height: { max: 8_000 } },
-                   content_type: ['image/jpeg', 'image/gif', 'image/png']
+  validates :logo, dimension: {
+    width: { max: Settings.application.image_upload.max_dimension },
+    height: { max: Settings.application.image_upload.max_dimension }
+  }, content_type: Settings.application.image_upload.content_types
+
+  validates :letter_logo, dimension: {
+    width: { max: Settings.application.image_upload.max_dimension },
+    height: { max: Settings.application.image_upload.max_dimension }
+  }, content_type: Settings.application.image_upload.content_types
 
   scope :without_archived, -> { where(archived_at: nil) }
 
@@ -266,8 +279,8 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
                         person_2: [{ roles: :group }, :groups, :primary_group])
   end
 
-  # TODO Concern?
-  def archive!
+  # TODO: Concern?
+  def archive! # rubocop:disable Metrics/*
     ActiveRecord::Base.transaction do
       self.archived_at = Time.zone.now
       Role.where(group_id: id).tap do |roles|
@@ -280,7 +293,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
       subscriptions.destroy_all
 
-      self.save!
+      save!
     end
   end
 

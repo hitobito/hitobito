@@ -184,6 +184,14 @@ jobs:
         run: |
           bundle exec rake db:create ci:wagon
 
+      - name: 'Make capybara output downloadable'
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: capybara-output
+          path: |
+            hitobito/tmp/capybara
+
   notify_statuscope:
     uses: ./.github/workflows/notify-statuscope.yml
     needs: [ build_test ]

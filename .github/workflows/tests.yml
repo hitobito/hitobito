@@ -119,6 +119,14 @@ jobs:
         run: |
           bundle exec rake ci:setup:env spec:features:lenient
 
+      - name: 'Make capybara output downloadable'
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: capybara-output
+          path: |
+            tmp/capybara
+
   notify_statuscope:
     uses: ./.github/workflows/notify-statuscope.yml
     needs: [ build ]

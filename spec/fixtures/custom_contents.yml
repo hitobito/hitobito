@@ -114,7 +114,7 @@ blocked_person_solution_id:
 
 blocked_person_interval_id:
   key: blocked_person_interval_id
-  placeholders_optional: warn-after-days, block-after-days, warn-block-period-days
+  placeholders_optional: warn-after-days, block-after-days
 
 content_user_password_override:
   key: content_user_password_override
@@ -123,4 +123,4 @@ content_user_password_override:
 content_inactivity_block_warning:
   key: content_inactivity_block_warning
   placeholders_required: recipient-name
-  placeholders_optional: warn-after-days, block-after-days, warn-block-period-days
+  placeholders_optional: warn-after-days, block-after-days

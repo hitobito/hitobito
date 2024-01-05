@@ -151,8 +151,10 @@ people:
     regarding_roles: 1000 # months
     regarding_event_participations: 100 # years
   inactivity_block:
-    warn_after: <%= 18.months %> # e.g. <%= 18.months %>
-    block_after: <%= 20.months %> # e.g. <%= 20.months %>
+    # durations must be specified in ISO_8601 format.
+    # see https://en.wikipedia.org/wiki/ISO_8601#Durations
+    warn_after: # e.g. P18M
+    block_after: # e.g. P1M
 
 event:
   attachments:

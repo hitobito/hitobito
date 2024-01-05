@@ -24,14 +24,11 @@ class Person::InactivityBlockMailer < ApplicationMailer
   end
 
   def placeholder_warn_after_days
-    Person::BlockService.warn_after&.in_days&.to_i&.to_s
+    Person::BlockService.warn_after_days&.to_s
   end
 
   def placeholder_block_after_days
-    Person::BlockService.block_after&.in_days&.to_i&.to_s
+    Person::BlockService.block_after_days&.to_s
   end
 
-  def placeholder_warn_block_period_days
-    Person::BlockService.warn_block_period&.in_days&.to_i&.to_s
-  end
 end

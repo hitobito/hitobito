@@ -12,56 +12,57 @@ class Person::BlockService
   end
 
   def block!
-    @person.update!(blocked_at: Time.zone.now) && log(:block_person)
+    @person.update_columns(blocked_at: Time.zone.now) &&
+      log(:block_person)
   end
 
   def unblock!
-    @person.update!(blocked_at: nil, inactivity_block_warning_sent_at: nil) && log(:unblock_person)
+    @person.update_columns(blocked_at: nil, inactivity_block_warning_sent_at: nil) &&
+      log(:unblock_person)
   end
 
   def inactivity_warning!
     Person::InactivityBlockMailer.inactivity_block_warning(@person).deliver &&
-      @person.update!(inactivity_block_warning_sent_at: Time.zone.now)
+      @person.update_columns(inactivity_block_warning_sent_at: Time.zone.now)
   end
 
   class << self
     def warn_after
-      Settings.people&.inactivity_block&.warn_after&.to_i&.seconds
+      @warn_after ||= load_duration(:warn_after)
     end
 
     def block_after
-      Settings.people&.inactivity_block&.block_after&.to_i&.seconds
+      @block_after ||= load_duration(:block_after)
     end
 
-    def warn_block_period
-      return unless warn_after && block_after
+    def warn_after_days
+      warn_after&.in_days&.to_i
+    end
 
-      block_after - warn_after
+    def block_after_days
+      block_after&.in_days&.to_i
     end
 
     def inactivity_block_interval_placeholders
       {
-        'warn-after-days' => warn_after,
-        'block-after-days' => block_after,
-        'warn-block-period-days' => warn_block_period,
-      }.transform_values { _1&.in_days&.to_i&.to_s }
+        'warn-after-days' => warn_after_days.to_s,
+        'block-after-days' => block_after_days.to_s,
+      }
     end
 
-
     def warn?
-      warn_after.present? && warn_after.positive?
+      warn_after.present?
     end
 
     def block?
-      block_after.present? && block_after.positive?
+      block_after.present?
     end
 
-    def block_scope(block_after = self.block_after)
-      return unless block?
+    def block_scope
+      return Person.none unless block?
 
-      Person.where.not(last_sign_in_at: nil)
-            .where(blocked_at: nil)
-            .where(Person.arel_table[:last_sign_in_at].lt(block_after&.ago))
+      Person.where(blocked_at: nil)
+            .where(Person.arel_table[:inactivity_block_warning_sent_at].lt(block_after&.ago))
     end
 
     def block_within_scope!
@@ -73,12 +74,12 @@ class Person::BlockService
       true
     end
 
-    def warn_scope(warn_after = self.warn_after)
-      return unless warn?
+    def warn_scope
+      return Person.none unless warn?
 
-      Person.where.not(last_sign_in_at: nil)
-            .where(Person.arel_table[:last_sign_in_at].lt(warn_after&.ago))
-            .where(inactivity_block_warning_sent_at: nil, blocked_at: nil)
+      Person.
+        where(inactivity_block_warning_sent_at: nil, blocked_at: nil).
+        where(Person.arel_table[:last_sign_in_at].lt(warn_after&.ago))
     end
 
     def warn_within_scope!
@@ -88,6 +89,18 @@ class Person::BlockService
         new(person).inactivity_warning!
       end
       true
+    end
+
+    private
+
+    def load_duration(key)
+      duration = Settings.people.inactivity_block[key].presence || return
+      ActiveSupport::Duration.parse(duration.to_s)
+    rescue ActiveSupport::Duration::ISO8601Parser::ParsingError, ArgumentError
+      raise <<~MSG
+        Settings.people.inactivity_block.#{key} must be a duration in ISO 8601 format, but is #{duration.inspect}".
+        See https://en.wikipedia.org/wiki/ISO_8601#Durations
+      MSG
     end
   end
 

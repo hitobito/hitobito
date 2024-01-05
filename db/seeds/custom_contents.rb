@@ -45,7 +45,7 @@ CustomContent.seed_once(
     placeholders_optional: nil },
   { key: Person::SecurityToolsController::BLOCKED_PERSON_INTERVAL,
     placeholders_required: nil,
-    placeholders_optional: 'warn-after-days, block-after-days, warn-block-period-days' },
+    placeholders_optional: 'warn-after-days, block-after-days' },
   { key: Event::ParticipationMailer::CONTENT_CONFIRMATION,
     placeholders_required: 'event-details, application-url',
     placeholders_optional: 'recipient-name' },
@@ -90,7 +90,7 @@ CustomContent.seed_once(
     placeholders_optional: nil },
   { key: Person::InactivityBlockMailer::CONTENT_INACTIVITY_BLOCK_WARNING,
     placeholders_required: 'recipient-name',
-    placeholders_optional: 'warn-after-days, block-after-days, warn-block-period-days' },
+    placeholders_optional: 'warn-after-days, block-after-days' },
   { key: DeliveryReportMailer::CONTENT_BULK_MAIL_SUCCESS,
     placeholders_required: 'mail-subject, delivered-at, mail-to, total-recipients',
     placeholders_optional: nil },
@@ -399,7 +399,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    locale: 'de',
    label: 'Sicherheitsübersicht: Inaktive Bentuzer automatisch sperren',
    subject: 'Sicherheitsübersicht: Inaktive Benutzer automatisch sperren',
-   body: "Personen, welche sich mehr als {warn-after-days} Tage nicht mehr bei hitobito eingeloggt haben, werden vor der Sperrung per E-Mail gewarnt. Loggen sich die Personen danach nicht ein, werden sie nach weiteren {warn-block-period-days} Tagen automatisch gesperrt" },
+   body: "Personen, welche sich mehr als {warn-after-days} Tage nicht mehr bei hitobito eingeloggt haben, werden vor der Sperrung per E-Mail gewarnt. Loggen sich die Personen danach nicht ein, werden sie nach weiteren {block-after-days} Tagen automatisch gesperrt" },
 
   {custom_content_id: blocked_person_interval_id,
    locale: 'fr',
@@ -420,7 +420,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    body: "Hallo {recipient-name}<br/><br/>" \
          "Du hast dich seit {warn-after-days} Tagen nicht mehr auf hitobito eingeloggt. " \
          "Falls du dich weiterhin einloggen können möchtest, melde dich bei hitobito an, " \
-         "ansonsten wird dein Login nach weiteren {warn-block-period-days} Tagen automatisch gesperrt."},
+         "ansonsten wird dein Login nach weiteren {block-after-days} Tagen automatisch gesperrt."},
 
   {custom_content_id: inactivity_block_warning_id,
    locale: 'fr',

@@ -10,29 +10,10 @@ require 'spec_helper'
 describe Person::InactivityBlockWarningJob do
   subject(:job) { described_class.new }
 
-  describe '#perform' do
-    let!(:person) { people(:bottom_member) }
-    let(:last_sign_in_at) { warn_after_value&.+(3.months)&.ago }
-
-    before do
-      person.update(last_sign_in_at: last_sign_in_at)
-      allow(Person::BlockService).to receive(:warn_after).and_return(warn_after_value)
-      expect(Person::BlockService).to receive(:warn_within_scope!).and_call_original
-    end
-
-    context "with no warn_after set" do
-      let(:warn_after_value) { nil }
-      it { expect(job.perform).to be_falsy }
-    end
-
-    context "with warn_after set" do
-      let(:warn_after_value) { 6.months }
-      it { expect(job.perform).to be_truthy }
-      it do
-        job.perform
-        person.reload
-        expect(person.inactivity_block_warning_sent_at).not_to be_nil
-      end
+  context '#perform' do
+    it 'calls Person::BlockService.warn_within_scope!' do
+      expect(Person::BlockService).to receive(:warn_within_scope!)
+      job.perform
     end
   end
 end

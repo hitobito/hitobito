@@ -185,7 +185,7 @@ jobs:
           bundle exec rake db:create ci:wagon
 
       - name: 'Make capybara output downloadable'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: capybara-output

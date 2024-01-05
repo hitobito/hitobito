@@ -512,6 +512,10 @@ li.form {
   .allign-with-form {
     margin-left: 26% !important;;
   }
+
+  .labeled .allign-with-form {
+    margin-left: 0 !important;
+  }
 }
 
 @media screen and (min-width: 981px) and (max-width: 1199px) {
@@ -525,6 +529,10 @@ li.form {
   .allign-with-form {
     margin-left: 26% !important;;
   }
+
+  .labeled .allign-with-form {
+    margin-left: 0 !important;
+  }
 }
 
 @media screen and (min-width: 1200px) {
@@ -537,6 +545,10 @@ li.form {
 
   .allign-with-form {
     margin-left: 17% !important;;
+  }
+
+  .labeled .allign-with-form {
+    margin-left: 0 !important;
   }
 }
 

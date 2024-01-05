@@ -51,9 +51,9 @@ app.EventKindPreconditions = {
     validOrExpiredId = 'event_kind_precondition_qualification_kinds_' + grouping + '_valid_or_expired'
     validOrReactivatableId = 'event_kind_precondition_qualification_kinds_' + grouping + '_valid_or_reactivatable'
     '<div class="row">' +
-      '<label class="precondition-validity radio" for="' + validId + '">' + $('#precondition_summary').data('validity-valid') + '<input id="' + validId + '" name="event_kind[precondition_qualification_kinds][' + grouping + '][validity]" type="radio" value="valid" /></label>' +
-      '<label class="precondition-validity radio" for="' + validOrReactivatableId + '">' + $('#precondition_summary').data('validity-valid-or-reactivatable') + '<input id="' + validOrReactivatableId + '" name="event_kind[precondition_qualification_kinds][' + grouping + '][validity]" type="radio" value="valid_or_reactivatable" checked="checked" /></label>' +
-      '<label class="precondition-validity radio" for="' + validOrExpiredId + '">' + $('#precondition_summary').data('validity-valid-or-expired') + '<input id="' + validOrExpiredId + '" name="event_kind[precondition_qualification_kinds][' + grouping + '][validity]" type="radio" value="valid_or_expired" checked="checked" /></label>' +
+      '<label class="precondition-validity radio" for="' + validId + '"><input class="me-2" id="' + validId + '" name="event_kind[precondition_qualification_kinds][' + grouping + '][validity]" type="radio" value="valid" />' + $('#precondition_summary').data('validity-valid') + '</label>' +
+      '<label class="precondition-validity radio" for="' + validOrReactivatableId + '"><input class="me-2" id="' + validOrReactivatableId + '" name="event_kind[precondition_qualification_kinds][' + grouping + '][validity]" type="radio" value="valid_or_reactivatable" checked="checked" />' + $('#precondition_summary').data('validity-valid-or-reactivatable') + '</label>' +
+      '<label class="precondition-validity radio" for="' + validOrExpiredId + '"><input class="me-2" id="' + validOrExpiredId + '" name="event_kind[precondition_qualification_kinds][' + grouping + '][validity]" type="radio" value="valid_or_expired" checked="checked" />' + $('#precondition_summary').data('validity-valid-or-expired') + '</label>' +
     '</div>'
 
 

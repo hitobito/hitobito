@@ -18,7 +18,7 @@ gem 'bcrypt'
 gem 'bleib', '~> 0.0.10'
 gem 'bootsnap', require: false
 gem 'cancancan', '< 3.2.0'
-gem 'caxlsx', '~>3.4.0'
+gem 'caxlsx', '~> 3.4.0'
 gem 'charlock_holmes', '~> 0.7.7'
 gem 'commonmarker'
 gem 'config'

@@ -92,6 +92,7 @@ You are invited to contribute new features, fixes, or updates, large or small; w
 Before opening any pull request or issue, please search for existing [issues](https://github.com/hitobito/hitobito/issues) (open and closed) and read the [contributing guidelines](CONTRIBUTING.md). If you are part of an organisation that uses Hitobito, please discuss your intent with the responsible person of your organisation.
 
 ## Community
+
 Hitobito made with 💙 and the incredible community:
 
 * Jungwacht Blauring Schweiz
@@ -110,7 +111,7 @@ Hitobito made with 💙 and the incredible community:
 * Die Mitte
 * Stiftung für junge Auslandschweizer
 * Swiss Canoe
-* Schweizerischer Sportverband öffentlicher Verkehr (SVSE) 
+* Schweizerischer Sportverband öffentlicher Verkehr (SVSE)
 * Schweizer Wanderwege
 
 Please contact [Hitobito](https://hitobito.com) if you want to be part of our community.

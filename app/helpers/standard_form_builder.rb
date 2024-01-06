@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -206,7 +206,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def inline_radio_button(attr, value, caption, inline = true, html_options = {})
-    html_options[:class].to_s += ' is-invalid' if errors_on?(attr)
+    html_options[:class] ||= ''
+    html_options[:class] += ' is-invalid' if errors_on?(attr)
 
     label(id_from_value(attr, value), class: "radio#{' inline' if inline} mt-2") do
       radio_button(attr, value, html_options) + ' ' +
@@ -233,8 +234,9 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
-  def inline_check_box(attr, value, caption, html_options = {})
-    html_options[:class].to_s += ' is-invalid' if errors_on?(attr)
+  def inline_check_box(attr, value, caption, html_options = {}) # rubocop:disable Metrics/MethodLength
+    html_options[:class] ||= ''
+    html_options[:class] += ' is-invalid' if errors_on?(attr)
     model_param = klass.model_name.param_key
     name = "#{model_param}[#{attr}][]"
     id = id_from_value(attr, value)

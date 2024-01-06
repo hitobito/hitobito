@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-# rubocop:disable Metrics/ClassLength,Rails/HelperInstanceVariable
+# rubocop:disable Metrics/ClassLength
 
 # A form builder that automatically selects the corresponding input field
 # for ActiveRecord column types. Convenience methods for each column type allow
@@ -33,7 +33,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a corresponding input field for the given attribute.
   # The input field is chosen based on the ActiveRecord column type.
   # Use additional html_options for the input element.
-  def input_field(attr, html_options = {}) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity
+  def input_field(attr, html_options = {}) # rubocop:disable Metrics/*
     type = column_type(@object, attr.to_sym)
     custom_field_method = :"#{type}_field"
     html_options[:class] = html_options[:class].to_s
@@ -52,24 +52,27 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     elsif respond_to?(custom_field_method)
       send(custom_field_method, attr, html_options)
     else
-      html_options[:class] = html_options[:class].to_s +
-          ' form-control form-control-sm mw-100 mw-md-60ch '
+      html_options[:class] = [
+        html_options[:class], 'form-control', 'form-control-sm', 'mw-100', 'mw-md-60ch'
+      ].compact.join(' ')
       text_field(attr, html_options)
     end
   end
 
   # Render a password field
   def password_field(attr, html_options = {})
-    html_options[:class] = html_options[:class].to_s +
-                           ' mw-100 mw-md-60ch form-control form-control-sm'
+    html_options[:class] = [
+      html_options[:class], 'mw-100', 'mw-md-60ch', 'form-control', 'form-control-sm'
+    ].compact.join(' ')
     html_options[:class] += ' is-invalid' if errors_on?(attr)
     super(attr, html_options)
   end
 
   # Render a text_area.
   def text_area(attr, html_options = {})
-    html_options[:class] = html_options[:class].to_s +
-                           ' mw-100 mw-md-60ch form-control form-control-sm'
+    html_options[:class] = [
+      html_options[:class], 'mw-100', 'mw-md-60ch', 'form-control', 'form-control-sm'
+    ].compact.join(' ')
     html_options[:class] += ' is-invalid' if errors_on?(attr)
     html_options[:rows] ||= 5
     super(attr, html_options)
@@ -77,7 +80,9 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   # Render an action text input field.
   def rich_text_area(attr, html_options = {})
-    html_options[:class] = html_options[:class].to_s + ' form-control form-control-sm'
+    html_options[:class] = [
+      html_options[:class], 'form-control', 'form-control-sm'
+    ].compact.join(' ')
     html_options[:class] += ' is-invalid' if errors_on?(attr)
     super(attr, html_options)
   end
@@ -85,8 +90,9 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a number field.
   def number_field(attr, html_options = {})
     html_options[:size] ||= 10
-    html_options[:class] = html_options[:class].to_s +
-                           ' mw-100 mw-md-15ch form-control form-control-sm'
+    html_options[:class] = [
+      html_options[:class], 'mw-100', 'mw-md-15ch', 'form-control', 'form-control-sm'
+    ].compact.join(' ')
     html_options[:class] += ' is-invalid' if errors_on?(attr)
     text_field(attr, html_options)
   end
@@ -97,15 +103,17 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a standard string field with column contraints.
   def string_field(attr, html_options = {})
     html_options[:maxlength] ||= column_property(@object, attr, :limit)
-    html_options[:class] = html_options[:class].to_s +
-                           ' mw-100 mw-md-60ch form-control form-control-sm'
+    html_options[:class] = [
+      html_options[:class], 'mw-100', 'mw-md-60ch', 'form-control', 'form-control-sm'
+    ].compact.join(' ')
     html_options[:class] += ' is-invalid' if errors_on?(attr)
     text_field(attr, html_options)
   end
 
   def email_field(attr, html_options = {})
-    html_options[:class] = html_options[:class].to_s +
-                           ' mw-100 mw-md-60ch form-control form-control-sm'
+    html_options[:class] = [
+      html_options[:class], 'mw-100', 'mw-md-60ch', 'form-control', 'form-control-sm'
+    ].compact.join(' ')
     html_options[:class] += ' is-invalid' if errors_on?(attr)
     super(attr, html_options)
   end
@@ -116,17 +124,18 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   # Render a boolean field.
-  def boolean_field(attr, html_options = {})
-    if html_options[:required]
-      caption   = ' ' + content_tag(:span, class: 'required-asterisk') do
-        html_options.delete(:caption).to_s
-      end
-    else
-      caption   = ' ' + html_options.delete(:caption).to_s
-    end
+  def boolean_field(attr, html_options = {}) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+    caption = ' '
+    caption += if html_options[:required]
+                 content_tag(:span, class: 'required-asterisk') do
+                   html_options.delete(:caption).to_s
+                 end
+               else
+                 html_options.delete(:caption).to_s
+               end
     checked   = html_options.delete(:checked_value) { '1' }
     unchecked = html_options.delete(:unchecked_value) { '0' }
-    html_options[:class] = html_options[:class].to_s + 'form-check-input'
+    html_options[:class] = [html_options[:class], 'form-check-input'].compact.join(' ')
     html_options[:class] += ' is-invalid' if errors_on?(attr)
 
     content_tag(:div, class: 'form-check') do
@@ -138,8 +147,9 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a field to select a date. You might want to customize this.
   def date_field(attr, html_options = {})
     html_options[:value] ||= date_value(attr)
-    html_options[:class] = html_options[:class].to_s +
-                           ' mw-100 mw-md-15ch date form-control form-control-sm'
+    html_options[:class] = [
+      html_options[:class], 'mw-100', 'mw-md-15ch', 'date', 'form-control', 'form-control-sm'
+    ].compact.join(' ')
     html_options[:class] += ' is-invalid' if errors_on?(attr)
     content_tag(:div, class: 'input-group') do
       content_tag(:span, icon(:'calendar-alt'), class: 'input-group-text') +
@@ -162,7 +172,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def time_field(attr, html_options = {})
     html_options[:class] ||= 'time'
     html_options[:class].to_s += ' is-invalid' if errors_on?(attr)
-    time_select(attr, { include_blank: "", ignore_date: true }, html_options)
+    time_select(attr, { include_blank: '', ignore_date: true }, html_options)
   end
 
   # Render a select with minutes
@@ -184,17 +194,13 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a field to enter a date and time.
   # Include DatetimeAttribute in the model to use this.
   def datetime_field(attr, html_options = {})
-    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-60ch'
+    html_options[:class] = [html_options[:class], 'mw-100 mw-md-60ch'].compact.join(' ')
     html_options[:class] += ' is-invalid' if errors_on?(attr)
 
     content_tag(:div, class: 'd-flex align-items-center') do
-      content_tag(:div, class: 'col-2 me-1') do
-        date_field("#{attr}_date")
-      end +
+      content_tag(:div, class: 'col-2 me-1') { date_field("#{attr}_date") } +
         hours_select("#{attr}_hour") +
-        content_tag(:div) do
-          ":"
-        end +
+        content_tag(:div) { ':' } +
         minutes_select("#{attr}_min")
     end
   end
@@ -217,7 +223,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     name = object_name + "[#{attr}][]"
     sanitized_id = "#{object_name}_#{index}".delete(']').gsub(/[^-a-zA-Z0-9:.]/, '_')
     checked = @object.send(attr).to_s.split(', ').include?(value)
-    hidden_field = index == 0 ? @template.hidden_field_tag(name, index) : ''
+    hidden_field = index.zero? ? @template.hidden_field_tag(name, index) : ''
 
     @template.label_tag(sanitized_id, class: 'checkbox') do
       hidden_field.html_safe +
@@ -245,14 +251,13 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # To pass a custom element list, specify the list with the :list key or
   # define an instance variable with the pluralized name of the association.
   def belongs_to_field(attr, html_options = {})
-    html_options[:class] = html_options[:class].to_s +
-                           ' form-select form-select-sm mw-100 mw-md-60ch'
+    html_options[:class] = [
+      html_options[:class], 'form-select', 'form-select-sm', 'mw-100', 'mw-md-60ch'
+    ].compact.join(' ')
     html_options[:class] += ' is-invalid' if errors_on?(attr)
     list = association_entries(attr, html_options)
     if list.present?
-      collection_select(attr, list, :id, :to_s,
-                        collection_prompt(attr, html_options),
-                        html_options)
+      collection_select(attr, list, :id, :to_s, collection_prompt(attr, html_options), html_options)
     else
       content_tag(:p, ta(:none_available, association(@object, attr)), class: 'text')
     end
@@ -265,24 +270,30 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # define an instance variable with the pluralized name of the association.
   def has_many_field(attr, html_options = {}) # rubocop:disable Naming/PredicateName
     html_options[:multiple] = true
-    html_options[:class] = html_options[:class].to_s +
-                           ' mw-100 mw-md-60ch form-control form-control-sm'
+    html_options[:class] = [
+      html_options[:class], 'mw-100', 'mw-md-60ch', 'form-control', 'form-control-sm'
+    ].compact.join(' ')
     html_options[:class] += ' is-invalid' if errors_on?(attr)
+
     add_css_class(html_options, 'multiselect')
     belongs_to_field(attr, html_options)
   end
 
   def i18n_enum_field(attr, labels, html_options = {})
-    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-60ch'
+    html_options[:class] = [
+      html_options[:class], 'mw-100', 'mw-md-60ch'
+    ].compact.join(' ')
     html_options[:class] += ' is-invalid' if errors_on?(attr)
     collection_select(attr, labels, :first, :last,
                       collection_prompt(attr, html_options),
                       html_options)
   end
 
-  def person_field(attr, html_options = {})
+  def person_field(attr, html_options = {}) # rubocop:disable Metrics/MethodLength
     attr, attr_id = assoc_and_id_attr(attr)
-    klass = html_options[:class].to_s + ' mw-100 mw-md-60ch form-control form-control-sm'
+    klass = [
+      html_options[:class], 'mw-100', 'mw-md-60ch', 'form-control', 'form-control-sm'
+    ].compact.join(' ')
     klass += ' is-invalid' if errors_on?(attr)
     hidden_field(attr_id) +
     string_field(attr,
@@ -293,8 +304,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
                          url: html_options&.dig(:data, :url) || @template.query_people_path })
   end
 
-  def labeled_inline_fields_for(assoc, partial_name = nil, record_object = nil, required = false,
-                                &block)
+  def labeled_inline_fields_for(assoc, partial = nil, record = nil, required = false, &block) # rubocop:disable Metrics/MethodLength
     html_options = { class: 'labeled col-md controls mb-3' }
     css_classes = { row: true, 'mb-2': true, required: required }
     label_classes = 'control-label col-form-label col-md-3 col-xl-2 pb-1 text-md-end'
@@ -302,11 +312,11 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     content_tag(:div, class: css_classes.select { |_css, show| show }.keys.join(' ')) do
       label(assoc, class: label_classes) +
         content_tag(:div, class: 'labeled col-md') do
-          nested_fields_for(assoc, partial_name, record_object) do |fields|
-            content = block_given? ? capture(fields, &block) : render(partial_name, f: fields)
+          nested_fields_for(assoc, partial, record) do |fields|
+            content = block_given? ? capture(fields, &block) : render(partial, f: fields)
 
             content << help_inline(fields.link_to_remove(I18n.t('global.associations.remove'),
-                                   class: 'float-end me-4 mt-1'))
+                                                         class: 'float-end me-4 mt-1'))
             content_tag(:div, content, html_options)
           end
         end
@@ -341,7 +351,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   #   labeled(:attr, content)
   #   labeled(:attr, 'Caption') { #content }
   #   labeled(:attr, 'Caption', content)
-  def labeled(attr, caption_or_content = nil, content = nil, **html_options, &block) # rubocop:disable Metrics/MethodLength
+  def labeled(attr, caption_or_content = nil, content = nil, **html_options, &block) # rubocop:disable Metrics/*
     if block_given?
       content = capture(&block)
     elsif content.nil?
@@ -408,7 +418,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   # Overriden to fullfill contract with method_missing 'labeled_' methods.
-  def respond_to?(name, include_all = false)
+  def respond_to_missing?(name, include_all = false)
     labeled_field_method?(name).present? || super(name, include_all)
   end
 
@@ -501,7 +511,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def labeled_field_method?(name)
     prefix = 'labeled_'
     if name.to_s.start_with?(prefix)
-      field_method = name.to_s[prefix.size..-1]
+      field_method = name.to_s[prefix.size..]
       field_method if respond_to?(field_method)
     end
   end
@@ -549,4 +559,4 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
 end
 
-# rubocop:enable Metrics/ClassLength,Rails/HelperInstanceVariable
+# rubocop:enable Metrics/ClassLength

@@ -383,7 +383,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   def years(comparison = Time.zone.now.to_date)
     return unless birthday?
-
+    
     birthday_has_passed =
       (comparison.month > birthday.month) ||
       (comparison.month == birthday.month && comparison.day >= birthday.day)

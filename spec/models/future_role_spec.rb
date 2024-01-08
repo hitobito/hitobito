@@ -141,10 +141,19 @@ describe FutureRole do
   end
 
   describe '#to_s' do
-    it 'includes starting date' do
-      travel_to(Time.zone.local(2023, 11, 3, 14)) do
-        expect(build.to_s).to eq 'Member (ab 04.11.2023)'
-      end
+    it 'delegates to new role' do
+      new_role = double
+      expect(new_role).to receive(:to_s).and_return('new role')
+
+      role = build
+      allow(role).to receive(:build_new_role).and_return(new_role)
+
+      expect(role.to_s).to eq 'new role'
+    end
+
+    it 'falls back to super if new role can not be built' do
+      role = build(convert_to: 'Group::TopLayer::TopAdmin')
+      expect(role.to_s).to eq 'Zukünftige Rolle (Group::TopLayer::TopAdmin)'
     end
   end
 

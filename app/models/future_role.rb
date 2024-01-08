@@ -30,11 +30,13 @@ class FutureRole < Role
   validate :target_type_validations, if: :validate_target_type?
 
   def to_s(format = :default)
-    model_name = convert_to_model_name
-    unless format == :short
-      model_name = "#{model_name} (#{formatted_start_date})"
-    end
-    model_name
+    build_new_role.to_s(format)
+  rescue ActiveRecord::RecordNotFound => err
+    # It seems we can not build the target role, convert_to seems to be invalid.
+    # Instead we call #to_s on super
+    return "#{super} (#{convert_to})" if err.message =~ /No role '.*' found/
+
+    raise err
   end
 
   def convert!

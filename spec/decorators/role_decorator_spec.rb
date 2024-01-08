@@ -24,7 +24,7 @@ describe RoleDecorator, :draper_with_helpers do
     it 'includes bis' do
       role.delete_on = Time.zone.local(2023, 12, 12)
 
-      formatted_name = '<strong>Leader</strong>&nbsp;(bis 12.12.2023)' 
+      formatted_name = '<strong>Leader</strong>&nbsp;(bis 12.12.2023)'
 
       expect(decorated_name).to eq(formatted_name)
     end
@@ -40,7 +40,7 @@ describe RoleDecorator, :draper_with_helpers do
 
     it 'includes label' do
       role.label = '42'
-      formatted_name = '<strong>Leader</strong>&nbsp;(42)' 
+      formatted_name = '<strong>Leader</strong>&nbsp;(42)'
 
       expect(decorated_name).to eq(formatted_name)
     end
@@ -48,18 +48,19 @@ describe RoleDecorator, :draper_with_helpers do
     context 'future role' do
       let(:role) do
         FutureRole.new(convert_on: Time.zone.local(2023, 12, 12),
-                      convert_to: Group::BottomLayer::Leader)
+                      convert_to: Group::BottomLayer::Leader,
+                      group: groups(:bottom_layer_one))
       end
 
       it 'includes ab' do
-        formatted_name = '<strong>Leader</strong>&nbsp;(ab 12.12.2023)' 
+        formatted_name = '<strong>Leader</strong>&nbsp;(ab 12.12.2023)'
 
         expect(decorated_name).to eq(formatted_name)
       end
 
       it 'includes ab and label' do
         role.label = '42'
-        formatted_name = '<strong>Leader</strong>&nbsp;(42)&nbsp;(ab 12.12.2023)' 
+        formatted_name = '<strong>Leader</strong>&nbsp;(42)&nbsp;(ab 12.12.2023)'
 
         expect(decorated_name).to eq(formatted_name)
       end
@@ -94,7 +95,7 @@ describe RoleDecorator, :draper_with_helpers do
 
     it 'includes label and is not bold' do
       role.label = '42'
-      formatted_name = 'Leader&nbsp;(42)' 
+      formatted_name = 'Leader&nbsp;(42)'
 
       expect(decorated_name).to eq(formatted_name)
     end
@@ -102,7 +103,8 @@ describe RoleDecorator, :draper_with_helpers do
     context 'future role' do
       let(:role) do
         FutureRole.new(convert_on: Time.zone.local(2023, 12, 12),
-                      convert_to: Group::BottomLayer::Leader)
+                      convert_to: Group::BottomLayer::Leader,
+                      group: groups(:bottom_layer_one))
       end
 
       it 'never includes ab and is not bold' do

@@ -46,38 +46,6 @@ function clone_wagon() {
       then git clone "git@github.com:hitobito/hitobito_${wagon_name}.git" ../hitobito_${wagon_name}; fi )
 }
 
-function setup_idea_project() {
-  echo "Setting up idea project"
-  mkdir -p "../hitobito_${wagon_name}/.idea"
-
-  cat << IML > "../hitobito_${wagon_name}/.idea/hitobito_${wagon_name}.xml"
-<?xml version="1.0" encoding="UTF-8"?>
-<module type="RUBY_MODULE" version="4">
-  <component name="FacetManager">
-    <facet type="RailsFacetType" name="Ruby on Rails">
-      <configuration>
-        <RAILS_FACET_CONFIG_ID NAME="RAILS_FACET_SUPPORT_REMOVED" VALUE="false" />
-        <RAILS_FACET_CONFIG_ID NAME="RAILS_TESTS_SOURCES_PATCHED" VALUE="true" />
-        <RAILS_FACET_CONFIG_ID NAME="RAILS_FACET_APPLICATION_ROOT" VALUE="\$MODULE_DIR\$" />
-      </configuration>
-    </facet>
-  </component>
-</module>
-IML
-
-  cat << MODULE > "../hitobito_${wagon_name}/.idea/modules.xml"
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="ProjectModuleManager">
-    <modules>
-      <module fileurl="file://\$PROJECT_DIR\$/../hitobito/hitobito.iml" filepath="\$PROJECT_DIR\$/../hitobito/hitobito.iml" />
-      <module fileurl="file://\$PROJECT_DIR\$/.idea/hitobito_${wagon_name}.iml" filepath="\$PROJECT_DIR\$/.idea/hitobito_${wagon_name}.iml" />
-    </modules>
-  </component>
-</project>
-MODULE
-}
-
 function recreate_dbs() {
   recreate_development_db
   recreate_test_db
@@ -169,11 +137,6 @@ case $cmd in
   clone)
     require_wagon_name
     clone_wagon
-    ;;
-
-  create-idea-project)
-    require_wagon_name
-    setup_idea_project
     ;;
 
   reset-database)
@@ -361,7 +324,6 @@ function __wagon_commands() {
     core-spec
     create
     create-database
-    create-idea-project
     gemfile
     git
     git-all
@@ -370,6 +332,7 @@ function __wagon_commands() {
     list
     overwritten-in-wagon
     reset-database
+    reset-test-database
     test-prepare
     test-speedup
     update-copyright

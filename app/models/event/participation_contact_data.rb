@@ -113,7 +113,7 @@ class Event::ParticipationContactData
   end
 
   def required_attrs
-    @required_attrs ||= event.required_contact_attrs +
+    @required_attrs ||= event.required_contact_attrs.map(&:to_sym) +
       self.class.mandatory_contact_attrs
   end
 

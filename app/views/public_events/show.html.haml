@@ -7,14 +7,14 @@
 
 #main
   .row
-    %article.col-7
+    %article.col-lg-7
       = render 'attrs_primary'
 
       = render 'events/attachments'
 
       = render_extensions 'show_left'
 
-    %aside.col-5
+    %aside.col-lg-5
       = render 'events/attrs_contact'
 
       - if render_application_attrs?

@@ -328,7 +328,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     if entry.pending?
       warn = translate(:pending, full_entry_label: full_entry_label)
       warn += '<br />' + translate(:instructions) if append_mailing_instructions?
-      flash[:warn] ||= warn
+      flash[:warning] ||= warn
       flash[:alert] ||= translate(:waiting_list) if entry.waiting_list?
     else
       notice = translate(:success, full_entry_label: full_entry_label)

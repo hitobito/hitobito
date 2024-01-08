@@ -35,7 +35,7 @@ h5, .h5 {
 }
 
 .content-header {
-  margin-bottom: 0px;
+  margin-bottom: 24px;
   @include responsive(mediaTablet){
   margin-bottom: $v-space;
   }
@@ -116,8 +116,15 @@ dl {
 }
 
 .dl-vertical {
+  display: grid;
+
+  dt {
+    text-align: left !important;
+  }
+
   dd {
     margin-bottom: calc($v-space / 4);
+    margin-left: 16px;
   }
 }
 

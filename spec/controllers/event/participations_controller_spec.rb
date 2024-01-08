@@ -406,7 +406,7 @@ describe Event::ParticipationsController do
         expect(pending_dj_handlers).to be_one{ |h| h =~ /Event::ParticipationConfirmationJob/}
 
         expect(flash[:notice]).to be_nil
-        expect(flash[:warn]).
+        expect(flash[:warning]).
           to include 'Es wurde eine Voranmeldung für Teilnahme von <i>Top Leader</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden.'
       end
 
@@ -422,7 +422,7 @@ describe Event::ParticipationsController do
         expect(pending_dj_handlers).to be_one{ |h| h =~ /Event::ParticipationConfirmationJob/}
 
         expect(flash[:notice]).to be_nil
-        expect(flash[:warn]).
+        expect(flash[:warning]).
           to include 'Es wurde eine Voranmeldung für Teilnahme von <i>Top Leader</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden.'
         expect(flash[:alert]).to include 'Es sind derzeit alle Plätze belegt, die Anmeldung ist auf der Warteliste.'
       end
@@ -440,7 +440,7 @@ describe Event::ParticipationsController do
 
         expect(flash[:notice]).
           to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
-        expect(flash[:warn]).to be_nil
+        expect(flash[:warning]).to be_nil
       end
 
       it 'creates non-active participant role for course events' do
@@ -462,7 +462,7 @@ describe Event::ParticipationsController do
         expect(participation.application).to be_present
 
         expect(flash[:notice]).to be_nil
-        expect(flash[:warn]).
+        expect(flash[:warning]).
           to include 'Es wurde eine Voranmeldung für Teilnahme von <i>Top Leader</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden.'
       end
 
@@ -484,7 +484,7 @@ describe Event::ParticipationsController do
         expect(role).to be_kind_of(TestParticipant)
 
         expect(flash[:notice]).to be_nil
-        expect(flash[:warn]).
+        expect(flash[:warning]).
           to include 'Es wurde eine Voranmeldung für Teilnahme von <i>Top Leader</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden.'
       end
 
@@ -511,7 +511,7 @@ describe Event::ParticipationsController do
         expect(application.priority_2_id).to eq other_course.id
 
         expect(flash[:notice]).to be_nil
-        expect(flash[:warn]).
+        expect(flash[:warning]).
           to include 'Es wurde eine Voranmeldung für Teilnahme von <i>Top Leader</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden.'
       end
 

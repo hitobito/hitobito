@@ -11,12 +11,12 @@
   = render 'banner_declined_invitation'
 
 #main.row
-  %article.col-7
+  %article.col-lg-7
     = render 'attrs_primary'
 
     = render_extensions 'show_left'
 
-  %aside.col-5
+  %aside.col-lg-5
     = render 'attrs_contact'
 
     - if entry.participant_types.present?

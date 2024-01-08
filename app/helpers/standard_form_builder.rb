@@ -206,7 +206,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def inline_radio_button(attr, value, caption, inline = true, html_options = {})
-    html_options[:class] ||= ''
+    html_options[:class] = html_options[:class].to_s
     html_options[:class] += ' is-invalid' if errors_on?(attr)
 
     label(id_from_value(attr, value), class: "radio#{' inline' if inline} mt-2") do
@@ -235,7 +235,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def inline_check_box(attr, value, caption, html_options = {}) # rubocop:disable Metrics/MethodLength
-    html_options[:class] ||= ''
+    html_options[:class] = html_options[:class].to_s
     html_options[:class] += ' is-invalid' if errors_on?(attr)
     model_param = klass.model_name.param_key
     name = "#{model_param}[#{attr}][]"
@@ -332,7 +332,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       end
     end +
     content_tag(:div, class: 'controls') do
-      options = options.to_h.merge(class: 'text w-100')
+      options = options.to_h.merge(class: 'text w-100 align-with-form')
       content_tag(:p, link_to_add(I18n.t('global.associations.add'), assoc, options))
     end
   end

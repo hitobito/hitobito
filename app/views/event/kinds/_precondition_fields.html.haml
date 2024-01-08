@@ -18,8 +18,8 @@
           = link_to(icon(:'trash-alt', filled: false), '#', class: 'remove-precondition-grouping')
 
         %label.radio.precondition-validity{for: "event_kind_precondition_qualification_kinds_#{index}_validity_valid"}
-          = t('activerecord.attributes.event/kind_qualification_kinds.validities.valid')
           = radio_button_tag("event_kind[precondition_qualification_kinds][#{index}][validity]", 'valid', ids.first.last == 'valid')
+          = t('activerecord.attributes.event/kind_qualification_kinds.validities.valid')
         %label.radio.precondition-validity{for: "event_kind_precondition_qualification_kinds_#{index}_validity_valid_or_reactivatable"}
           = radio_button_tag("event_kind[precondition_qualification_kinds][#{index}][validity]", 'valid_or_reactivatable', ids.first.last == 'valid_or_reactivatable')
           = t('activerecord.attributes.event/kind_qualification_kinds.validities.valid_or_reactivatable')

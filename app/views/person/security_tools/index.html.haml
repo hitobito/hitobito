@@ -88,7 +88,7 @@
   = spinner(true)
 
 :javascript
-  $(document).on('turbolinks:load', () => {
+  $(document).ready(function() {
     $('#roles-that-see-me-spinner').hide()
     $('#roles-that-see-me-load-button').on('click', (e) => {
       $(e.target).hide()

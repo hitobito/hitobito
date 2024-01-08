@@ -75,7 +75,12 @@
                       data: { confirm: t('.confirm_reset') },
                       title: t('.override_password'))
 
+    %strong.bigger-title
+      = @email_compromised_situation_text
+    %div.well
+      = @email_compromised_solution_text
       - if person.last_sign_in_at? && !person.blocked?
+        %br
         = action_button(t('.block_person'),
                         block_group_person_path(group, person),
                         :lock,
@@ -83,11 +88,6 @@
                         class: 'btn-danger',
                         data: { confirm: t('.confirm_block_person') },
                         title: t('.block_person'))
-
-    %strong.bigger-title
-      = @email_compromised_situation_text
-    %div.well
-      = @email_compromised_solution_text
 
     %strong.bigger-title
       = @dataleak_situation_text
@@ -98,6 +98,15 @@
       = @suspend_person_situation_text
     %div.well
       = @suspend_person_solution_text
+      - if person.last_sign_in_at? && !person.blocked?
+        %br
+        = action_button(t('.block_person'),
+                        block_group_person_path(group, person),
+                        :lock,
+                        method: :post,
+                        class: 'btn-danger',
+                        data: { confirm: t('.confirm_block_person') },
+                        title: t('.block_person'))
 
     - if person.blocked?
       %strong.bigger-title
@@ -118,7 +127,7 @@
                         data: { confirm: t('.confirm_unblock_person') },
                         title: t('.unblock_person'))
 
-      
+
 %h2= t('.groups_and_roles_that_see_me')
 #roles_that_see_me_placeholder
   = action_button(t('.load_roles_that_see_me'),

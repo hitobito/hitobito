@@ -480,6 +480,10 @@ li.form {
     }
   }
 
+  dt.muted.float-start.text-end {
+    margin-right: 100%;
+  }
+
   .bottom.allign-with-form {
     margin-left: 0 !important;
   }
@@ -494,6 +498,10 @@ li.form {
         width: 60%;
       }
     }
+  }
+
+  dt.muted.float-start.text-end {
+    margin-right: 100%;
   }
 
   .allign-with-form {
@@ -541,6 +549,10 @@ li.form {
   .uneditable-input.col-6,
   .col-6.input-span6 {
     width: 570px;
+  }
+
+  #course-filter div.d-grid {
+    grid-template-columns: 1fr 1fr 9fr;
   }
 
   .allign-with-form {
@@ -816,4 +828,8 @@ label.required::after {
 
 .dropdown-menu li:hover {
   color: $white;
+}
+
+.w-150-px {
+  width: 150px;
 }

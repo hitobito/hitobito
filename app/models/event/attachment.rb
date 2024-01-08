@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2015-2023, Pro Natura Schweiz. This file is part of
+#  Copyright (c) 2015-2024, Pro Natura Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -27,11 +27,11 @@ class Event::Attachment < ActiveRecord::Base
   # this could become a has_many_attached on Event
   has_one_attached :file
 
-  validates_by_schema except: :file
+  validates_by_schema
   validates :file, size: { less_than_or_equal_to: MAX_FILE_SIZE },
                    content_type: CONTENT_TYPES
 
-  scope :list, -> { order(:file) }
+  scope :list, -> { order(:id) }
 
   def to_s
     file

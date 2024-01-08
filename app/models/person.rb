@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2023, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -67,7 +67,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   PUBLIC_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
     :id, :first_name, :last_name, :nickname, :company_name, :company,
     :email, :address, :zip_code, :town, :country, :gender, :birthday,
-    :picture, :primary_group_id
+    :primary_group_id
   ]
 
   INTERNAL_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
@@ -150,7 +150,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
             deleter: false
 
   has_paper_trail meta: { main_id: ->(p) { p.id }, main_type: sti_name },
-                  skip: Person::INTERNAL_ATTRS + [:picture]
+                  skip: Person::INTERNAL_ATTRS
 
   acts_as_taggable
 
@@ -227,7 +227,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   ### VALIDATIONS
 
-  validates_by_schema except: [:email, :picture, :address]
+  validates_by_schema except: [:email, :address]
   validates :email, length: { allow_nil: true, maximum: 255 } # other email validations by devise
   validates :company_name, presence: { if: :company? }
   validates :language, inclusion: { in: LANGUAGES.keys.map(&:to_s) }

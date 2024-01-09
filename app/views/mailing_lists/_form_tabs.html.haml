@@ -1,0 +1,11 @@
+-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito
+
+%ul.nav.nav-tabs
+  %li.nav-item= link_to(t('mailing_lists.form_tabs.general'), '#general', data: { bs_toggle: 'tab' }, class: 'active nav-link')
+  %li.nav-item= link_to(t('mailing_lists.form_tabs.email'), '#email', data: { bs_toggle: 'tab' }, class: 'nav-link')
+  %li.nav-item= link_to(t('mailing_lists.form_tabs.mailchimp'), '#mailchimp', data: { bs_toggle: 'tab' }, class: 'nav-link')
+
+  = render_extensions :form_tabs

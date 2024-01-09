@@ -991,40 +991,6 @@ de:
       flash:
         success: Zahlung über %{amount} wurde erfasst.
 
-  payment_processes:
-    description:
-      header: camt.054 XML Datei
-      explain_xml_format: 'Eine camt.054 XML Datei ist die Sammelbuchungs-auflösung und Belastungs- und Gutschriftsanzeige.
-        Diese enthält eine Reihe verschiedene Buchungspositionen welche automatisiert auf Basis der ESR Nummer bestehenden
-        Rechnungen zugeordnet werden.'
-
-    invalid_file: Die hochgeladene Datei ist nicht gültig.
-    parsing_error: Die hochgeladene kann nicht verarbeitet werden (%{error}).
-    created: Es wurden %{count} Zahlungen erfasst.
-    payments:
-      valid:
-        one: Es wurde eine gültige Zahlung erkannt.
-        other: Es wurden %{count} gültige Zahlungen erkannt.
-      invalid:
-        one: Es wurde eine ungültige Zahlung erkannt.
-        other: Es wurden %{count} ungültige Zahlungen erkannt.
-    show:
-      payments_with_invoice: Zuordenbare Zahlungen
-      payments_with_invoice_and_dates: Zuordenbare Zahlungen vom %{from} bis %{to}
-      payments_without_invoice: Nicht Zuordenbar
-      amount_open: Offen
-      create:
-        zero: Zahlung importieren
-        one: Zahlung importieren
-        other: '%{count} Zahlungen importieren'
-      icon_tooltip_invoice_missing: Kann keiner Rechnung zugeordnet werden
-      icon_tooltip_settles: Begleicht die offene Rechnung
-      icon_tooltip_exceeds: Übersteigt die offene Rechnung um %{difference}
-      icon_tooltip_undercuts: Unterschreitet die offene Rechnung um %{difference}
-    new:
-      upload_button: 'Hochladen'
-      xml_file: 'XML Datei'
-
   label_formats:
     global_labels: "Globale Etikettenformate"
     own_labels: Meine Etikettenformate
@@ -1084,6 +1050,10 @@ de:
       caption_delivery_report: 'E-Mail mit Bestätigung an Absender schicken'
       help_preferred_labels: 'E-Mails werden falls vorhanden, nur an E-Mailadressen mit dieser Bezeichnung verschickt. Dabei werden auch E-Mail Adressen verwendet, die nicht als Versand-Adresse markiert sind.'
       help_mailchimp_sync: 'Abonnenten können an die MailChimp-Liste exportiert werden. Diese Aktion überschreibt die MailChimp-Liste und bestehende Kontakte werden gelöscht.'
+    form_tabs:
+      general: Allgemein
+      email: Mailing-Liste (E-Mail)
+      mailchimp: MailChimp
     imap_mails:
       manage: Mails
       mailboxes:
@@ -1281,6 +1251,39 @@ de:
       grants: Autorisierungen
       tokens: Zugangstoken
 
+  payment_processes:
+    description:
+      header: camt.054 XML Datei
+      explain_xml_format: 'Eine camt.054 XML Datei ist die Sammelbuchungs-auflösung und Belastungs- und Gutschriftsanzeige.
+        Diese enthält eine Reihe verschiedene Buchungspositionen welche automatisiert auf Basis der ESR Nummer bestehenden
+        Rechnungen zugeordnet werden.'
+
+    invalid_file: Die hochgeladene Datei ist nicht gültig.
+    parsing_error: Die hochgeladene kann nicht verarbeitet werden (%{error}).
+    created: Es wurden %{count} Zahlungen erfasst.
+    payments:
+      valid:
+        one: Es wurde eine gültige Zahlung erkannt.
+        other: Es wurden %{count} gültige Zahlungen erkannt.
+      invalid:
+        one: Es wurde eine ungültige Zahlung erkannt.
+        other: Es wurden %{count} ungültige Zahlungen erkannt.
+    show:
+      payments_with_invoice: Zuordenbare Zahlungen
+      payments_with_invoice_and_dates: Zuordenbare Zahlungen vom %{from} bis %{to}
+      payments_without_invoice: Nicht Zuordenbar
+      amount_open: Offen
+      create:
+        zero: Zahlung importieren
+        one: Zahlung importieren
+        other: '%{count} Zahlungen importieren'
+      icon_tooltip_invoice_missing: Kann keiner Rechnung zugeordnet werden
+      icon_tooltip_settles: Begleicht die offene Rechnung
+      icon_tooltip_exceeds: Übersteigt die offene Rechnung um %{difference}
+      icon_tooltip_undercuts: Unterschreitet die offene Rechnung um %{difference}
+    new:
+      upload_button: 'Hochladen'
+      xml_file: 'XML Datei'
 
   qualifications:
     in_years: '%{years} Jahre'
@@ -1700,9 +1703,9 @@ de:
       greater: grösser als
       smaller: kleiner als
 
-    language: 
+    language:
       title: Sprache
-      word_connector: ' oder ' 
+      word_connector: ' oder '
       one_of: Sprache ist %{languages}
 
     tag:

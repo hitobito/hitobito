@@ -53,6 +53,12 @@ describe FormatHelper do
       it { is_expected.to be_html_safe }
       its(:squish) { should == '<dt class="muted float-start text-end">label</dt> <dd class="mb-2">value &lt;unsafe&gt;</dd>'.gsub('"', "'") }
     end
+
+    context 'with tooltip value' do
+      subject { labeled('label', tooltip: 'a tool-tip') { 'value' } }
+
+      its(:squish) { should == "<dt class='muted float-start text-end' title='a tool-tip'>label</dt> <dd class='mb-2'>value</dd>" }
+    end
   end
 
   describe '#labeled_attr' do

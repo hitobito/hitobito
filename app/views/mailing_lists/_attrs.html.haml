@@ -4,22 +4,24 @@
 -#  https://github.com/hitobito/hitobito.
 
 #main.row-fluid
-  %article
-    = format_attr(entry, :description)
-    = render_attrs(entry, :mail_address_link, :publisher)
+  %dl.dl-horizontal.m-0.p-2.border-top
+    = labeled_attrs(entry, :description, :publisher)
+    = labeled(nil, entry.subscribable_info) if entry.subscribable_info.present?
+
+  - if entry.mail_address.present?
+    %h2.pt-2= t('mailing_lists.form_tabs.email')
+    %dl.dl-horizontal.m-0.p-2.border-top
+      = labeled_attrs(entry, :mail_address_link)
+      = labeled(nil, entry.subscribers_may_post_info) if entry.subscribers_may_post_info.present?
+      = labeled(nil, entry.anyone_may_post_info) if entry.anyone_may_post_info.present?
+      = labeled(nil, entry.delivery_report_info) if entry.delivery_report_info.present?
+      = labeled_attrs(entry, :additional_sender, :main_email, :preferred_labels)
+
     - if can?(:edit, entry)
-      = render_attrs(entry, :mailchimp_api_key,
-                            :mailchimp_list_id,
-                            :mailchimp_include_additional_emails)
-      - if entry.mailchimp? && entry.mailchimp_result
-        = render_attrs(entry, :mailchimp_sync)
-      = render_attrs(entry, :additional_sender)
+      %h2.pt-2= t('mailing_lists.form_tabs.mailchimp')
+      %dl.dl-horizontal.m-0.p-2.border-top
+        = labeled_attrs(entry, :mailchimp_list_id, :mailchimp_include_additional_emails)
+        - if entry.mailchimp? && entry.mailchimp_result
+          = labeled_attrs(entry, :mailchimp_sync)
 
-
-    = render_attrs(entry, :main_email, :preferred_labels)
-    = render_extensions :attrs
-
-    = entry.subscribable_info
-    = entry.subscribers_may_post_info
-    = entry.anyone_may_post_info
-    = entry.delivery_report_info
+  = render_extensions :attrs

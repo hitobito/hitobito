@@ -16,8 +16,8 @@ module GroupsHelper
   end
 
   def format_self_registration_link(group)
-    url = group_self_registration_url(group)
-    link_to(url, url)
+    link_to(icon('globe') + " Alle", group_self_registration_url(group)) + " | " +
+    link_to(icon('user-check') + " Angemeldete Benutzer", group_self_inscription_url(group))
   end
 
   def format_nextcloud_url(group)

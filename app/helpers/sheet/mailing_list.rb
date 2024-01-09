@@ -11,14 +11,12 @@ module Sheet
 
     tab 'global.tabs.info',
         :group_mailing_list_path,
-        alt: [:edit_group_mailing_list_path]
+        alt: [:edit_group_mailing_list_path],
+        if: :show
 
     tab 'activerecord.models.message.other',
         :group_mailing_list_messages_path,
-        if: (lambda do |view, _group, mailing_list|
-          view.can?(:update, mailing_list)
-        end)
-
+        if: :update
     tab 'activerecord.models.subscription.other',
         :group_mailing_list_subscriptions_path,
         if: :index_subscriptions,

@@ -7,13 +7,13 @@
   = render 'form_tabs'
 
   .tab-content
-    #general.tab-pane.active
+    = tab_content(:general, default_active: true) do
       %fieldset
       = f.labeled_input_fields(:name, :description, :publisher)
       = f.indented do
         = f.boolean_field(:subscribable, caption: t('.caption_subscribable'))
 
-    #email.tab-pane
+    = tab_content(:email) do
       %fieldset
         = f.labeled(:mail_name, class: 'd-flex') do
           .col-4
@@ -55,8 +55,7 @@
           = f.boolean_field(:anyone_may_post, caption: t('.caption_anyone_may_post'))
         = f.indented do
           = f.boolean_field(:delivery_report, caption: t('.caption_delivery_report'))
-
-    #mailchimp.tab-pane
+    = tab_content(:mailchimp) do
       %fieldset
         = f.labeled_input_fields(:mailchimp_list_id, help: t('.help_mailchimp_sync'))
         = f.labeled_input_fields(:mailchimp_api_key)

@@ -26,13 +26,17 @@ class app.MailingListLabels
     e.preventDefault()
     form = $(this).closest("form")
     $(this).closest('.chip').remove()
-    form.load(window.location.href + '.js', form.serialize())
+    @updateForm()
 
   update: (e)=>
     label = $("#{@selector} input[name=label]")
     label.attr('name', 'mailing_list[preferred_labels][]')
+    @updateForm()
+
+  updateForm: (e) =>
     form = $("#{@selector}")
-    form.load(window.location.href + '.js', form.serialize())
+    id = $('.tab-pane.active')[0].id
+    form.load(window.location.href + '.js', form.serialize() + "&active_tab=#{id}")
 
   preventEnterSubmit: (event) =>
     if event.keyCode == 13

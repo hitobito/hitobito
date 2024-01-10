@@ -4,8 +4,8 @@
 -#  https://github.com/hitobito/hitobito
 
 %ul.nav.nav-tabs
-  %li.nav-item= link_to(t('mailing_lists.form_tabs.general'), '#general', data: { bs_toggle: 'tab' }, class: 'active nav-link')
-  %li.nav-item= link_to(t('mailing_lists.form_tabs.email'), '#email', data: { bs_toggle: 'tab' }, class: 'nav-link')
-  %li.nav-item= link_to(t('mailing_lists.form_tabs.mailchimp'), '#mailchimp', data: { bs_toggle: 'tab' }, class: 'nav-link')
+  %li.nav-item= tab_header(t('mailing_lists.form_tabs.general'), :general, default_active: true)
+  %li.nav-item= tab_header(t('mailing_lists.form_tabs.email'), :email)
+  %li.nav-item= tab_header(t('mailing_lists.form_tabs.mailchimp'), :mailchimp)
 
   = render_extensions :form_tabs

@@ -20,6 +20,8 @@ describe MailingListsController, js: true do
     visit edit_group_mailing_list_path(list.group, list)
     click_link('Mailing-Liste (E-Mail)')
     all('span.chip a')[0].click
+    expect(page).to have_link 'Mailing-Liste (E-Mail)', class: 'active'
+    expect(page).not_to have_content 'Mutter'
     click_button 'Speichern'
 
     expect(page).not_to have_content 'Mutter'
@@ -41,8 +43,6 @@ describe MailingListsController, js: true do
     find('.chip-add').click
     fill_in id: 'label', with: 'Vater'
     page.find('body').click # blur
-    find_link('Allgemein', class: 'active') # wait for blur to complete
-    click_link('Mailing-Liste (E-Mail)')
     expect(page).to have_content 'Vater'
 
     click_button 'Speichern'
@@ -55,15 +55,11 @@ describe MailingListsController, js: true do
     find('.chip-add').click
     fill_in id: 'label', with: 'Vater'
     page.find('body').click # blur
-    find_link('Allgemein', class: 'active') # wait for blur to complete
-    click_link('Mailing-Liste (E-Mail)')
     expect(page).to have_content 'Vater'
 
     find('.chip-add').click
     fill_in id: 'label', with: 'Mutter'
     page.find('body').click # blur
-    find_link('Allgemein', class: 'active') # wait for blur to complete
-    click_link('Mailing-Liste (E-Mail)')
     expect(page).to have_content 'Mutter'
 
     click_button 'Speichern'

@@ -164,3 +164,10 @@ content_user_password_override_body:
     Dies geschieht typischerweise, wenn jemand den Verdacht hat, dass dein Passwort nicht mehr sicher ist. <br/>
     Im Moment kann sich also niemand mit deinem Account einloggen. Du kannst über die Funktion \"Passwort vergessen\"
     ein neues Passwort anfordern
+
+content_inactivity_block_warning_body:
+  record: content_inactivity_block_warning (CustomContent::Translation)
+  name: body
+  body: |
+    Hallo {recipient-name}, <br/>
+    TBD auf [#{Settings.application.name}] 

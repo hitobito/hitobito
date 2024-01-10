@@ -100,6 +100,27 @@ suspend_person_solution_id:
   key: suspend_person_solution_id
   placeholders_required: person-name
 
+blocked_person_title_id:
+  key: blocked_person_title_id
+  placeholders_required: person-name
+
+blocked_person_situation_id:
+  key: blocked_person_situation_id
+  placeholders_required: person-name
+
+blocked_person_solution_id:
+  key: blocked_person_solution_id
+  placeholders_required: person-name
+
+blocked_person_interval_id:
+  key: blocked_person_interval_id
+  placeholders_optional: warn-after-days, block-after-days
+
 content_user_password_override:
   key: content_user_password_override
   placeholders_required: recipient-name, taker-name
+
+content_inactivity_block_warning:
+  key: content_inactivity_block_warning
+  placeholders_required: recipient-name
+  placeholders_optional: warn-after-days, block-after-days

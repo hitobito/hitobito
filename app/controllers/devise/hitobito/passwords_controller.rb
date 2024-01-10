@@ -7,6 +7,8 @@
 
 class Devise::Hitobito::PasswordsController < Devise::PasswordsController
 
+  skip_before_action :reject_blocked_person!
+
   def successfully_sent?(resource)
     if resource.login?
       super

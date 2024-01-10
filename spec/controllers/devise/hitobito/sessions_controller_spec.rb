@@ -41,6 +41,12 @@ describe Devise::Hitobito::SessionsController do
         expect(controller.send(:current_person).authentication_token).to be_blank
       end
 
+      it 'resets person.inactivity_block_warning_sent_at' do
+        person.update!(inactivity_block_warning_sent_at: 1.day.ago)
+        post :create, params: { person: { login_identity: person.email, password: password } }
+        expect(person.reload.inactivity_block_warning_sent_at).to be_nil
+      end
+
       context 'with second factor authentication' do
         before do
           Authenticatable::TwoFactors::Totp.new(person, { pending_totp_secret: 'bla' }).register!

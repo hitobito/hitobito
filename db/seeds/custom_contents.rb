@@ -34,6 +34,18 @@ CustomContent.seed_once(
   { key: Person::SecurityToolsController::SUSPEND_PERSON_SOLUTION,
     placeholders_required: 'person-name',
     placeholders_optional: nil },
+  { key: Person::SecurityToolsController::BLOCKED_PERSON_TITLE,
+    placeholders_required: 'person-name',
+    placeholders_optional: nil },
+  { key: Person::SecurityToolsController::BLOCKED_PERSON_SITUATION,
+    placeholders_required: 'person-name',
+    placeholders_optional: nil },
+  { key: Person::SecurityToolsController::BLOCKED_PERSON_SOLUTION,
+    placeholders_required: 'person-name',
+    placeholders_optional: nil },
+  { key: Person::SecurityToolsController::BLOCKED_PERSON_INTERVAL,
+    placeholders_required: nil,
+    placeholders_optional: 'warn-after-days, block-after-days' },
   { key: Event::ParticipationMailer::CONTENT_CONFIRMATION,
     placeholders_required: 'event-details, application-url',
     placeholders_optional: 'recipient-name' },
@@ -76,6 +88,9 @@ CustomContent.seed_once(
   { key: Person::UserPasswordOverrideMailer::CONTENT_USER_PASSWORD_OVERRIDE,
     placeholders_required: 'taker-name, recipient-name',
     placeholders_optional: nil },
+  { key: Person::InactivityBlockMailer::CONTENT_INACTIVITY_BLOCK_WARNING,
+    placeholders_required: 'recipient-name',
+    placeholders_optional: 'warn-after-days, block-after-days' },
   { key: DeliveryReportMailer::CONTENT_BULK_MAIL_SUCCESS,
     placeholders_required: 'mail-subject, delivered-at, mail-to, total-recipients',
     placeholders_optional: nil },
@@ -102,6 +117,10 @@ dataleak_situation_id = CustomContent.get(Person::SecurityToolsController::DATAL
 dataleak_solution_id = CustomContent.get(Person::SecurityToolsController::DATALEAK_SOLUTION).id
 suspend_person_situation_id = CustomContent.get(Person::SecurityToolsController::SUSPEND_PERSON_SITUATION).id
 suspend_person_solution_id = CustomContent.get(Person::SecurityToolsController::SUSPEND_PERSON_SOLUTION).id
+blocked_person_title_id = CustomContent.get(Person::SecurityToolsController::BLOCKED_PERSON_TITLE).id
+blocked_person_situation_id = CustomContent.get(Person::SecurityToolsController::BLOCKED_PERSON_SITUATION).id
+blocked_person_solution_id = CustomContent.get(Person::SecurityToolsController::BLOCKED_PERSON_SOLUTION).id
+blocked_person_interval_id = CustomContent.get(Person::SecurityToolsController::BLOCKED_PERSON_INTERVAL).id
 participation_confirmation_id = CustomContent.get(Event::ParticipationMailer::CONTENT_CONFIRMATION).id
 participation_pending_id = CustomContent.get(Event::ParticipationMailer::CONTENT_PENDING).id
 participation_notification_id = CustomContent.get(Event::ParticipationMailer::CONTENT_NOTIFICATION).id
@@ -116,6 +135,7 @@ add_request_rejected_id = CustomContent.get(Person::AddRequestMailer::CONTENT_AD
 invoice_notification_id = CustomContent.get(InvoiceMailer::CONTENT_INVOICE_NOTIFICATION).id
 user_impersonation_id = CustomContent.get(Person::UserImpersonationMailer::CONTENT_USER_IMPERSONATION).id
 user_password_override_id = CustomContent.get(Person::UserPasswordOverrideMailer::CONTENT_USER_PASSWORD_OVERRIDE).id
+inactivity_block_warning_id = CustomContent.get(Person::InactivityBlockMailer::CONTENT_INACTIVITY_BLOCK_WARNING).id
 bulk_mail_success_id = CustomContent.get(DeliveryReportMailer::CONTENT_BULK_MAIL_SUCCESS).id
 bulk_mail_with_failed_id = CustomContent.get(DeliveryReportMailer::CONTENT_BULK_MAIL_WITH_FAILED).id
 address_validation_checks_id = CustomContent.get(Address::ValidationChecksMailer::CONTENT_ADDRESS_VALIDATION_CHECKS).id
@@ -320,6 +340,99 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
   {custom_content_id: suspend_person_solution_id,
    locale: 'en',
    label: 'Delete main email'},
+
+  {custom_content_id: blocked_person_title_id,
+   locale: 'de',
+   label: 'Login gesperrt',
+   subject: 'Login gesperrt',
+   body: "Das Login von {person-name} ist gesperrt"},
+
+  {custom_content_id: blocked_person_title_id,
+   locale: 'fr',
+   label: 'TBD'},
+
+  {custom_content_id: blocked_person_title_id,
+   locale: 'it',
+   label: 'TBD'},
+
+  {custom_content_id: blocked_person_title_id,
+   locale: 'en',
+   label: 'TBD'},
+
+  {custom_content_id: blocked_person_situation_id,
+   locale: 'de',
+   label: 'Login gesperrt: Beschreibung',
+   subject: 'Login gesperrt: Beschreibung',
+   body: "Das Login von {person-name} wurde gesperrt, und hat daher keinen Zugriff mehr."},
+
+  {custom_content_id: blocked_person_situation_id,
+   locale: 'fr',
+   label: 'TBD'},
+
+  {custom_content_id: blocked_person_situation_id,
+   locale: 'it',
+   label: 'TBD'},
+
+  {custom_content_id: blocked_person_situation_id,
+   locale: 'en',
+   label: 'TBD'},
+
+  {custom_content_id: blocked_person_solution_id,
+   locale: 'de',
+   label: 'Login gesperrt: Hinweise zum Entsperren',
+   subject: 'Login gesperrt: Hinweise zum Entsperren',
+   body: "Das Login muss von jemandem mit Schreibberechtigungen auf dieser Person wieder entsperrt werden." },
+
+  {custom_content_id: blocked_person_solution_id,
+   locale: 'fr',
+   label: 'Débloquer la personne'},
+
+  {custom_content_id: blocked_person_solution_id,
+   locale: 'it',
+   label: 'Sbloccare persona'},
+
+  {custom_content_id: blocked_person_solution_id,
+   locale: 'en',
+   label: 'Unblock person'},
+
+  {custom_content_id: blocked_person_interval_id,
+   locale: 'de',
+   label: 'Sicherheitsübersicht: Inaktive Bentuzer automatisch sperren',
+   subject: 'Sicherheitsübersicht: Inaktive Benutzer automatisch sperren',
+   body: "Personen, welche sich mehr als {warn-after-days} Tage nicht mehr bei hitobito eingeloggt haben, werden vor der Sperrung per E-Mail gewarnt. Loggen sich die Personen danach nicht ein, werden sie nach weiteren {block-after-days} Tagen automatisch gesperrt" },
+
+  {custom_content_id: blocked_person_interval_id,
+   locale: 'fr',
+   label: 'Bloquer automatiquement les utilisateurs inactifs'},
+
+  {custom_content_id: blocked_person_interval_id,
+   locale: 'it',
+   label: 'Bloccare automaticamente gli utenti inattivi'},
+
+  {custom_content_id: blocked_person_interval_id,
+   locale: 'en',
+   label: 'Automatically block inactive users'},
+
+  {custom_content_id: inactivity_block_warning_id,
+   locale: 'de',
+   label: 'Login einer inaktiven Person wird automatisch gesperrt',
+   subject: 'Dein Login auf hitobito wird in bald gesperrt',
+   body: "Hallo {recipient-name}<br/><br/>" \
+         "Du hast dich seit {warn-after-days} Tagen nicht mehr auf hitobito eingeloggt. " \
+         "Falls du dich weiterhin einloggen können möchtest, melde dich bei hitobito an, " \
+         "ansonsten wird dein Login nach weiteren {block-after-days} Tagen automatisch gesperrt."},
+
+  {custom_content_id: inactivity_block_warning_id,
+   locale: 'fr',
+   label: 'Bloquer automatiquement les utilisateurs inactifs'},
+
+  {custom_content_id: inactivity_block_warning_id,
+   locale: 'it',
+   label: 'Bloccare automaticamente gli utenti inattivi'},
+
+  {custom_content_id: inactivity_block_warning_id,
+   locale: 'en',
+   label: 'Automatically block inactive users'},
 
   {custom_content_id: participation_confirmation_id,
    locale: 'de',

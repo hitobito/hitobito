@@ -82,6 +82,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :self_registration_reason_custom_text,
     :self_registration_reason_id,
     :privacy_policy_accepted_at,
+    :blocked_at,
+    :inactivity_block_warning_sent_at,
     :minimized_at
   ]
 
@@ -392,6 +394,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def login_status
+    return :blocked if blocked?
     return :two_factors if two_factor_authentication
     return :login if email? && password?
     return :password_email_sent if reset_password_period_valid?
@@ -414,6 +417,11 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   # Is this person root?
   def root?
     email == Settings.root_email
+  end
+
+  # Is this person blocked?
+  def blocked?
+    read_attribute(:blocked_at).present?
   end
 
   ### OTHER INSTANCE METHODS

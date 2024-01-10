@@ -34,6 +34,19 @@
         %td
           = t('.person_no_login')
 
+    %tr
+      - if person.blocked?
+        %td.column-with-min-width
+          = format_login_icons(:blocked)
+        %td
+          = t('.person_blocked')
+
+      - else
+        %td.column-with-min-width
+          = format_login_icons(:not_blocked)
+        %td
+          = t('.person_not_blocked')
+
 %br
 
 %div
@@ -66,6 +79,15 @@
       = @email_compromised_situation_text
     %div.well
       = @email_compromised_solution_text
+      - if person.last_sign_in_at? && !person.blocked?
+        %br
+        = action_button(t('.block_person'),
+                        block_group_person_path(group, person),
+                        :lock,
+                        method: :post,
+                        class: 'btn-danger',
+                        data: { confirm: t('.confirm_block_person') },
+                        title: t('.block_person'))
 
     %strong.bigger-title
       = @dataleak_situation_text
@@ -76,6 +98,36 @@
       = @suspend_person_situation_text
     %div.well
       = @suspend_person_solution_text
+      - if person.last_sign_in_at? && !person.blocked?
+        %br
+        = action_button(t('.block_person'),
+                        block_group_person_path(group, person),
+                        :lock,
+                        method: :post,
+                        class: 'btn-danger',
+                        data: { confirm: t('.confirm_block_person') },
+                        title: t('.block_person'))
+
+    - if person.blocked?
+      %strong.bigger-title
+        = @blocked_person_situation_text
+      %div.well
+        = @blocked_person_solution_text
+        %br
+        - if @blocked_person_interval_text.present?
+          = @blocked_person_interval_text
+          %br
+        = @blocked_person_solution_text
+        %br
+        = action_button(t('.unblock_person'),
+                        unblock_group_person_path(group, person),
+                        :"lock-open",
+                        method: :post,
+                        class: 'btn-danger',
+                        data: { confirm: t('.confirm_unblock_person') },
+                        title: t('.unblock_person'))
+
+
 %h2= t('.groups_and_roles_that_see_me')
 #roles_that_see_me_placeholder
   = action_button(t('.load_roles_that_see_me'),

@@ -101,6 +101,10 @@ de:
 
   modal_crud: *crud
 
+  blocked:
+    index:
+      title: Login gesperrt
+
   contactable:
     address_or_email: "%{address} oder %{email}"
     fields:
@@ -173,6 +177,7 @@ de:
     activate_totp: Zwei-Faktor-Authentifizierung einrichten
     reset_totp: Zwei-Faktor-Authentifizierung zurücksetzen
     disable_totp: Zwei-Faktor-Authentifizierung deaktivieren
+    unblock_person: Login entsperren
 
   dropdown/invoices:
     download: 'Export'
@@ -295,6 +300,12 @@ de:
 
   errors:
     link_to_main: 'Hauptseite'
+    '401':
+      title: 'Login benötigt'
+      explanation: 'Du must dich einloggen bevor du auf diese Resource zugreifen kannst.'
+    '403':
+      title: 'Zugriff verweigert'
+      explanation: 'Du bist nicht berechtigt auf diese Resource zuzugreifen.'
     '404':
       title: 'Diese Seite gibt es leider nicht (404)'
       explanation: 'Vielleicht haben Sie die Adresse falsch eingegeben oder die Seite ist inzwischen gelöscht worden.'
@@ -305,12 +316,6 @@ de:
       title: 'Entschuldigung, die Seite ist momentan nicht verfügbar (503)'
       explanation: 'Wir arbeiten gerade an dieser Seite, deshalb ist sie nicht verfügbar. Das sollte nicht all zu lange dauern.'
       instruction: 'Bitte versuchen Sie es später nochmals.'
-    '403':
-      title: 'Zugriff verweigert'
-      explanation: 'Du bist nicht berechtigt auf diese Resource zuzugreifen.'
-    '401':
-      title: 'Login benötigt'
-      explanation: 'Du must dich einloggen bevor du auf diese Resource zugreifen kannst.'
     unsupported_page_size:
       title: 'Seitengrösse ist nicht unterstützt'
       explanation: 'Die angefragte Seitengrösse page[size]=%{size} ist grösser als die maximale Seitengrösse %{max}. '
@@ -858,7 +863,6 @@ de:
       creator: Rechnungssteller
       vat_number: MwSt. Nummer
       payment: Eingegangene Zahlung
-      amount_open: Offener Betrag
       payment_slip_qr:
         receipt_title: Empfangsschein
         payment_title: Zahlteil
@@ -1462,10 +1466,26 @@ de:
         groups_and_roles_that_see_me: Rollen, die auf mich Zugriff haben
         load_roles_that_see_me: 'Gruppen und Rollen laden'
         load_roles_that_see_me_hint: 'Dies kann einige Sekunden dauern'
+        block_person: Login sperren
+        confirm_block_person: "Achtung: Damit kann sich diese Person nicht mehr einloggen. Willst du das wirklich?"
+        unblock_person: Login entsperren
+        confirm_unblock_person: "Achtung: Damit kann ist die Person nicht mehr blockiert. Willst du das wirklich?"
+        person_blocked: Login ist gesperrt
+        person_not_blocked: Login ist nicht gesperrt
 
       password_override:
         flashes:
           success: Das Passwort wurde überschrieben. Die Person wurde informiert und kann über die Funktion "Passwort vergessen" jederzeit ein neues Passwort anfordern.
+
+      block_person:
+        flashes:
+          success: Login wurde erfolgreich gesperrt.
+          error: Du kannst dein eigenes Login nicht sperren.
+
+      unblock_person:
+        flashes:
+          success: Login wurde erfolgreich entsperrt.
+          error:  Du kannst dein eigenes Login nicht entsperren.
 
   person/csv_imports:
     invalid_file: Bitte wählen Sie eine gültige CSV Datei aus.
@@ -1633,6 +1653,8 @@ de:
       login: Login ist aktiv
       two_factors: Login mit 2FA ist aktiv
       status_off: Nicht vorhanden
+      blocked: Blockiert
+      not_blocked: Nicht blockiert
 
   participations:
     destroy:

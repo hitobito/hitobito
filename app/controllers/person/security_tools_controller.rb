@@ -13,6 +13,10 @@ class Person::SecurityToolsController < ApplicationController
   DATALEAK_SOLUTION = 'dataleak_solution_id'
   SUSPEND_PERSON_SITUATION = 'suspend_person_situation_id'
   SUSPEND_PERSON_SOLUTION = 'suspend_person_solution_id'
+  BLOCKED_PERSON_TITLE = 'blocked_person_title_id'
+  BLOCKED_PERSON_SITUATION = 'blocked_person_situation_id'
+  BLOCKED_PERSON_SOLUTION = 'blocked_person_solution_id'
+  BLOCKED_PERSON_INTERVAL = 'blocked_person_interval_id'
 
   before_action :authorize_action
 
@@ -22,7 +26,8 @@ class Person::SecurityToolsController < ApplicationController
   :password_compromised_situation_text, :password_compromised_solution_text,
   :email_compromised_situation_text, :email_compromised_solution_text,
   :dataleak_situation_text, :dataleak_solution_text,
-  :suspend_person_situation_text, :suspend_person_solution_text
+  :suspend_person_situation_text, :suspend_person_solution_text,
+  :blocked_person_situation_text, :blocked_person_solution_text, :blocked_person_interval_text
 
   def index
     respond_to do |format|
@@ -46,6 +51,24 @@ class Person::SecurityToolsController < ApplicationController
     end
   end
 
+  def block_person
+    if !herself? && !herself_through_impersonation? &&
+        Person::BlockService.new(person, current_user: current_user).block!
+      redirect_to security_tools_group_person_path(group, person), notice: t('.flashes.success')
+    else
+      redirect_to security_tools_group_person_path(group, person), alert: t('.flashes.error')
+    end
+  end
+
+  def unblock_person
+    if !herself? && !herself_through_impersonation? &&
+        Person::BlockService.new(person, current_user: current_user).unblock!
+      redirect_to security_tools_group_person_path(group, person), notice: t('.flashes.success')
+    else
+      redirect_to security_tools_group_person_path(group, person), alert: t('.flashes.error')
+    end
+  end
+
   private
 
   def person
@@ -54,6 +77,10 @@ class Person::SecurityToolsController < ApplicationController
 
   def herself?
     person.id == current_user.id
+  end
+
+  def herself_through_impersonation?
+    person.id == origin_user&.id
   end
 
   def group
@@ -71,9 +98,9 @@ class Person::SecurityToolsController < ApplicationController
     end
   end
 
-  def get_content(key)
+  def get_content(key, placeholders = nil)
     content = CustomContent.get(key)
-    placeholders = {
+    placeholders ||= {
       'person-name' => h(person.full_name)
     }
     content.body_with_values(placeholders).to_s.html_safe
@@ -93,6 +120,13 @@ class Person::SecurityToolsController < ApplicationController
     @dataleak_solution_text = get_content(Person::SecurityToolsController::DATALEAK_SOLUTION)
     @suspend_person_situation_text = get_content(Person::SecurityToolsController::SUSPEND_PERSON_SITUATION)
     @suspend_person_solution_text = get_content(Person::SecurityToolsController::SUSPEND_PERSON_SOLUTION)
+    @blocked_person_title_text = get_content(Person::SecurityToolsController::BLOCKED_PERSON_TITLE)
+    @blocked_person_situation_text = get_content(Person::SecurityToolsController::BLOCKED_PERSON_SITUATION)
+    @blocked_person_solution_text = get_content(Person::SecurityToolsController::BLOCKED_PERSON_SOLUTION)
+    if Person::BlockService.inactivity_block_interval_placeholders.values.all?(&:present?)
+      @blocked_person_interval_text = get_content(Person::SecurityToolsController::BLOCKED_PERSON_INTERVAL,
+                                                  Person::BlockService.inactivity_block_interval_placeholders)
+    end
   end
   # rubocop:enable Layout/LineLength
 

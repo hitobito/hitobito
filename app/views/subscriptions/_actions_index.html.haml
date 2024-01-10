@@ -16,4 +16,4 @@
   = dropdown_subscriptions_export
 
 - if can?(:create_invoices_from_list, @mailing_list.group)
-  = invoice_button(mailing_list: Draper.undecorate(entry))
+  = invoice_button(mailing_list: Draper.undecorate(parent))

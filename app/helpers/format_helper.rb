@@ -74,9 +74,9 @@ module FormatHelper
   ##############  STANDARD HTML SECTIONS  ############################
 
   # Renders an arbitrary content with the given label. Used for uniform presentation.
-  def labeled(label, content = nil, &block)
+  def labeled(label, content = nil, tooltip: nil, &block)
     content = capture(&block) if block_given?
-    render 'shared/labeled', label: label, content: content
+    render 'shared/labeled', label: label, content: content, tooltip: tooltip
   end
 
   # Transform the given text into a form as used by labels or table headers.
@@ -110,6 +110,10 @@ module FormatHelper
   # Renders the formatted content of the given attribute with a label.
   def labeled_attr(obj, attr)
     labeled(captionize(attr, object_class(obj)), format_attr(obj, attr))
+  end
+
+  def labeled_attrs(obj, *attrs)
+    safe_join(attrs.map { |a| labeled_attr(obj, a) })
   end
 
   def present_labeled_attr(obj, attr)

@@ -7,6 +7,19 @@
 
 module MailingListsHelper
 
+  def format_mailing_list_name(mailing_list)
+    content_tag(:strong) do
+      if can?(:read, mailing_list)
+        link_to(
+          mailing_list.name,
+          group_mailing_list_messages_path(mailing_list.group, mailing_list.id)
+        )
+      else
+        mailing_list.name
+      end
+    end
+  end
+
   def format_mailing_list_preferred_labels(mailing_list)
     safe_join mailing_list.preferred_labels.sort, ', '
   end

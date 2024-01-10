@@ -13,7 +13,29 @@ describe MailingListsController, js: true do
   let(:user) { people(:top_leader) }
   let(:list) { mailing_lists(:leaders) }
 
-  before { sign_in }
+  before { sign_in(user) }
+
+  context 'index' do
+    before { visit group_mailing_lists_path(list.group) }
+    subject(:list_row) { find('tr', id: "mailing_list_#{list.id}") }
+
+    context 'as user who may read list' do
+      let(:user) { people(:root) }
+
+      it 'renders list name as link if current_user can read' do
+        expect(list_row).to have_selector 'td strong a', text: list.name
+      end
+    end
+
+    context 'as user who may not read list' do
+      let(:user) { people(:bottom_member) }
+
+      it 'renders list name as text if current_user cannot read' do
+        expect(list_row).to have_selector 'td strong', text: list.name
+        expect(list_row).to have_no_selector 'td strong a', text: list.name
+      end
+    end
+  end
 
   it 'removes two labels from existing mailing' do
     list.update(preferred_labels: %w(Mutter Vater))

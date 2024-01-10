@@ -180,11 +180,13 @@ class PeopleController < CrudController
   end
 
   def prepare_entries(entries)
-    if index_full_ability?
-      entries.includes(:additional_emails, :phone_numbers)
-    else
-      entries.preload_public_accounts
-    end
+    entries = if index_full_ability?
+                entries.includes(:additional_emails, :phone_numbers)
+              else
+                entries.preload_public_accounts
+              end
+
+    entries.includes(:picture_attachment)
   end
 
   def render_tabular_entries_in_background(format)

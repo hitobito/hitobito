@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require_relative '../../lib/hitobito/config_contract'
+require_relative '../../config/settings_contract'
 
 # Setup for https://github.com/rubyconfig/config
 Config.setup do |config|
@@ -62,7 +62,7 @@ Config.setup do |config|
   #   required(:age).maybe(:int?)
   #   required(:email).filled(format?: EMAIL_REGEX)
   # end
-  config.validation_contract = Hitobito::ConfigContract.new
+  config.validation_contract = SettingsContract.new
 end
 
 # additional config-files

@@ -10,7 +10,7 @@ require 'dry-validation'
 # See:
 # - https://github.com/rubyconfig/config?tab=readme-ov-file#validation
 # - https://dry-rb.org/gems/dry-validation/1.10/
-class Hitobito::ConfigContract < Dry::Validation::Contract
+class SettingsContract < Dry::Validation::Contract
   params do
     required(:people).schema do
       required(:inactivity_block).schema do

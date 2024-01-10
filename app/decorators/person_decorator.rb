@@ -82,7 +82,7 @@ class PersonDecorator < ApplicationDecorator
   end
 
   def roles
-    super.without_archived
+    super.reject(&:archived?)
   end
 
   def current_roles_grouped

@@ -4,5 +4,5 @@
 -#  https://github.com/hitobito/hitobito.
 
 = render 'roles_aside', title: t('.title'), grouped_roles: entry.current_roles_grouped, primary_group_link: true
-- if entry.roles.future.any?
+- if entry.roles.any? { |r| r.is_a?(FutureRole) }
   = render 'roles_aside', title: t('.convertable_title'), grouped_roles: entry.future_roles_grouped

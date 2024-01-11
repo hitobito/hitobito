@@ -262,6 +262,12 @@ it:
           footer: 'Questa email è stata inviata da Hitobito'
   errors:
     link_to_main: 'pagina principale'
+    '401':
+      title: 'È necessario il login'
+      explanation: 'Devi fare il login prima che tu possa accedere a questa risorsa'
+    '403':
+      title: 'Accesso negato'
+      explanation: 'Non hai il diritto di accedere a questa risorsa.'
     '404':
       title: 'questa pagina purtroppo non esiste (404)'
       explanation: 'forse ha inserito l''indirizzo in maniera errata oppure questa pagina è stata cancellata nel frattempo.'
@@ -272,12 +278,6 @@ it:
       title: 'siamo spiacenti, questa pagina non è disponibile al momento (503)'
       explanation: 'al momento stiamo lavorando a questa pagine e per questo motivo non è disponibile. Non dovrebbe durare a lungo.'
       instruction: 'vi preghiamo di riprovare nuovamente più tardi.'
-    '403':
-      title: 'Accesso negato'
-      explanation: 'Non hai il diritto di accedere a questa risorsa.'
-    '401':
-      title: 'È necessario il login'
-      explanation: 'Devi fare il login prima che tu possa accedere a questa risorsa'
     unsupported_page_size:
       title: 'Non viene supportata la grandezza di pagina'
       explanation: 'La grandezza di pagina richiesta page[size]=%{size} è più grande della grandezza di pagina massima %{max}. '
@@ -767,6 +767,7 @@ it:
     actions_show:
       confirm_cancel: Vuole davvero annullare questa fattura?
     pdf:
+      amount_open: Importo in sospeso
       total: Importo totale
       total_vat: IVA
       cost: Subtotale
@@ -776,7 +777,6 @@ it:
       creator: Emittente della fattura
       vat_number: Numero IVA
       payment: Pagamento ricevuto
-      amount_open: Importo in sospeso
       payment_slip_qr:
         receipt_title: Ricevuta
         payment_title: Sezione pagamento
@@ -910,38 +910,6 @@ it:
     create:
       flash:
         success: Pagamento sopra i %{amount} è stato registrato
-  payment_processes:
-    description:
-      header: File camt.054 XML
-      explain_xml_format: 'Un file camt.954 XML è la'
-    invalid_file: Il documento caricato non è valido
-    parsing_error: Il documento caricato non può essere elaborato (%{error})
-    created: Sono stati registrati %{count} pagamenti
-    payments:
-      valid:
-        one: È stato individuato un pagamento valido
-        many: Sono stati individuati %{count} pagamenti validi
-        other: Sono stati individuati %{count} pagamenti validi
-      invalid:
-        one: È stato individuato un pagamento non valido
-        many: Sono stati individuati %{count} pagamenti non validi
-        other: Sono stati individuati %{count} pagamenti non validi
-    show:
-      payments_with_invoice: Pagamenti imputabili
-      payments_with_invoice_and_dates: Pagamenti imputabili da... a...
-      payments_without_invoice: Non assegnabile
-      amount_open: Aperto
-      create:
-        zero: Importare il pagamento
-        one: Importare il pagamento
-        other: 'Importare %{count} pagamenti'
-      icon_tooltip_invoice_missing: Non può essere assegnato a nessuna fattura
-      icon_tooltip_settles: Salda la fattura aperta
-      icon_tooltip_exceeds: È superiore alla fattura aperta di %{difference}
-      icon_tooltip_undercuts: È inferiore alla fattura aperta di %{difference}
-    new:
-      upload_button: 'Caricare'
-      xml_file: 'File XML'
   label_formats:
     global_labels: "Formati globali delle etichette"
     own_labels: I miei formati delle etichette
@@ -1187,6 +1155,38 @@ it:
     tabs:
       grants: Autorizzazioni
       tokens: Token di accesso
+  payment_processes:
+    description:
+      header: File camt.054 XML
+      explain_xml_format: 'Un file camt.954 XML è la'
+    invalid_file: Il documento caricato non è valido
+    parsing_error: Il documento caricato non può essere elaborato (%{error})
+    created: Sono stati registrati %{count} pagamenti
+    payments:
+      valid:
+        one: È stato individuato un pagamento valido
+        many: Sono stati individuati %{count} pagamenti validi
+        other: Sono stati individuati %{count} pagamenti validi
+      invalid:
+        one: È stato individuato un pagamento non valido
+        many: Sono stati individuati %{count} pagamenti non validi
+        other: Sono stati individuati %{count} pagamenti non validi
+    show:
+      payments_with_invoice: Pagamenti imputabili
+      payments_with_invoice_and_dates: Pagamenti imputabili da... a...
+      payments_without_invoice: Non assegnabile
+      amount_open: Aperto
+      create:
+        zero: Importare il pagamento
+        one: Importare il pagamento
+        other: 'Importare %{count} pagamenti'
+      icon_tooltip_invoice_missing: Non può essere assegnato a nessuna fattura
+      icon_tooltip_settles: Salda la fattura aperta
+      icon_tooltip_exceeds: È superiore alla fattura aperta di %{difference}
+      icon_tooltip_undercuts: È inferiore alla fattura aperta di %{difference}
+    new:
+      upload_button: 'Caricare'
+      xml_file: 'File XML'
   qualifications:
     in_years: '%{years} anni'
     valid_until: 'fino a %{date}'

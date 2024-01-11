@@ -262,6 +262,12 @@ fr:
           footer: 'Ce message a été envoyé par Hitobito'
   errors:
     link_to_main: 'Page principale'
+    '401':
+      title: 'Login nécessaire'
+      explanation: 'Tu dois te connecter avant de pouvoir accéder à cette ressource.'
+    '403':
+      title: 'Accès refusé'
+      explanation: 'Tu n''es pas autorisé·e à accéder à cette ressource.'
     '404':
       title: 'Cette page n''existe pas (404)'
       explanation: 'L''adresse entrée est erronée ou la page a été effacée.'
@@ -272,12 +278,6 @@ fr:
       title: 'Nous présentons nos excuses, cette page n''est pas disponible pour le moment (503)'
       explanation: 'Nous travaillons sur cette page, c''est pourquoi elle n''est pas disponible. Ceci ne devrait pas durer très longtemps.'
       instruction: 'Prière de réessayer plus tard.'
-    '403':
-      title: 'Accès refusé'
-      explanation: 'Tu n''es pas autorisé·e à accéder à cette ressource.'
-    '401':
-      title: 'Login nécessaire'
-      explanation: 'Tu dois te connecter avant de pouvoir accéder à cette ressource.'
     unsupported_page_size:
       title: 'La taille de la page n''est pas supportée'
       explanation: 'La taille de page demandée page[size]=%{size} est plus grande que la taille de page maximale %{max}. '
@@ -769,6 +769,7 @@ fr:
     actions_show:
       confirm_cancel: ' Voulez-vous vraiment annuler cette facture?'
     pdf:
+      amount_open: Montant en suspens
       total: montant total
       total_vat: TVA
       cost: 'Montant '
@@ -778,7 +779,6 @@ fr:
       creator: Auteur de la facture
       vat_number: No TVA
       payment: Paiement reçu
-      amount_open: Montant en suspens
       payment_slip_qr:
         receipt_title: Récépissé
         payment_title: Section paiement
@@ -912,38 +912,6 @@ fr:
     create:
       flash:
         success: La facture supérieur à %{amount} saisie.
-  payment_processes:
-    description:
-      header: Fichier camt.054 XML
-      explain_xml_format: 'Une donnée camt.054 XML est la dissolution de l''écriture récapitulative et l''avis de débit et de note de crédit. Celle-ci contient une série de différentes écritures comptables qui sont classées automatiquement sur la base des factures dépendant du numéro ESR.'
-    invalid_file: La donnée téléchargée n'est pas valable.
-    parsing_error: La donnée téléchargée ne peut pas être retravaillée (%{error}).
-    created: '%{count} paiements ont été saisis.'
-    payments:
-      valid:
-        one: '%{count} de paiements valables ont été reconnus'
-        many: '%{count} paiements ont été reconnus valables.'
-        other: '%{count} paiements ont été reconnus valables.'
-      invalid:
-        one: '%{count} de paiements non-valables ont été reconnus'
-        many: '%{count} paiements ont été reconnus non-valables.'
-        other: '%{count} paiements ont été reconnus non-valables.'
-    show:
-      payments_with_invoice: Paiements allouables
-      payments_with_invoice_and_dates: Paiements allouables du %{from} au %{to}
-      payments_without_invoice: pas attribuable
-      amount_open: ouvert
-      create:
-        zero: importer le paiement
-        one: importer le paiement
-        other: 'importer %{count} paiements.'
-      icon_tooltip_invoice_missing: Ne peut être attribué à aucune facture
-      icon_tooltip_settles: Règle la facture ouverte
-      icon_tooltip_exceeds: Dépasse la facture ouverte %{difference}
-      icon_tooltip_undercuts: Est en-dessous de la facture ouverte de %{difference}
-    new:
-      upload_button: 'télécharger'
-      xml_file: 'Fichier XML'
   label_formats:
     global_labels: "Formats globaux d'étiquettes"
     own_labels: Mes formats d'étiquettes
@@ -1189,6 +1157,38 @@ fr:
     tabs:
       grants: Autorisations
       tokens: Token d'accès
+  payment_processes:
+    description:
+      header: Fichier camt.054 XML
+      explain_xml_format: 'Une donnée camt.054 XML est la dissolution de l''écriture récapitulative et l''avis de débit et de note de crédit. Celle-ci contient une série de différentes écritures comptables qui sont classées automatiquement sur la base des factures dépendant du numéro ESR.'
+    invalid_file: La donnée téléchargée n'est pas valable.
+    parsing_error: La donnée téléchargée ne peut pas être retravaillée (%{error}).
+    created: '%{count} paiements ont été saisis.'
+    payments:
+      valid:
+        one: '%{count} de paiements valables ont été reconnus'
+        many: '%{count} paiements ont été reconnus valables.'
+        other: '%{count} paiements ont été reconnus valables.'
+      invalid:
+        one: '%{count} de paiements non-valables ont été reconnus'
+        many: '%{count} paiements ont été reconnus non-valables.'
+        other: '%{count} paiements ont été reconnus non-valables.'
+    show:
+      payments_with_invoice: Paiements allouables
+      payments_with_invoice_and_dates: Paiements allouables du %{from} au %{to}
+      payments_without_invoice: pas attribuable
+      amount_open: ouvert
+      create:
+        zero: importer le paiement
+        one: importer le paiement
+        other: 'importer %{count} paiements.'
+      icon_tooltip_invoice_missing: Ne peut être attribué à aucune facture
+      icon_tooltip_settles: Règle la facture ouverte
+      icon_tooltip_exceeds: Dépasse la facture ouverte %{difference}
+      icon_tooltip_undercuts: Est en-dessous de la facture ouverte de %{difference}
+    new:
+      upload_button: 'télécharger'
+      xml_file: 'Fichier XML'
   qualifications:
     in_years: '%{years} ans'
     valid_until: 'à %{date}'

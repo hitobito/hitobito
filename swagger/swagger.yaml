@@ -49,6 +49,366 @@ paths:
       responses:
         '200':
           description: successful
+          content:
+            application/vnd.json+api:
+              example:
+                data:
+                - id: '376803389'
+                  type: groups
+                  attributes:
+                    name: Bottom One
+                    short_name: 
+                    display_name: Bottom One
+                    description: 
+                    layer: true
+                    type: Group::BottomLayer
+                    email: bottom_layer@hitobito.example.ch
+                    address: Greatstreet 345
+                    zip_code: 3456
+                    town: Greattown
+                    country: CH
+                    require_person_add_requests: false
+                    self_registration_url: http://www.example.com/groups/376803389/self_registration
+                    archived_at: 
+                    created_at: '2024-01-11T10:56:21+01:00'
+                    updated_at: '2024-01-11T10:56:21+01:00'
+                    deleted_at: 
+                  relationships:
+                    contact:
+                      meta:
+                        included: false
+                    creator:
+                      meta:
+                        included: false
+                    updater:
+                      meta:
+                        included: false
+                    deleter:
+                      meta:
+                        included: false
+                    parent:
+                      meta:
+                        included: false
+                    layer_group:
+                      meta:
+                        included: false
+                - id: '408629838'
+                  type: groups
+                  attributes:
+                    name: Group 12
+                    short_name: 
+                    display_name: Group 12
+                    description: 
+                    layer: false
+                    type: Group::BottomGroup
+                    email: 
+                    address: 
+                    zip_code: 
+                    town: 
+                    country: 
+                    require_person_add_requests: false
+                    self_registration_url: http://www.example.com/groups/408629838/self_registration
+                    archived_at: 
+                    created_at: '2024-01-11T10:56:21+01:00'
+                    updated_at: '2024-01-11T10:56:21+01:00'
+                    deleted_at: 
+                  relationships:
+                    contact:
+                      meta:
+                        included: false
+                    creator:
+                      meta:
+                        included: false
+                    updater:
+                      meta:
+                        included: false
+                    deleter:
+                      meta:
+                        included: false
+                    parent:
+                      meta:
+                        included: false
+                    layer_group:
+                      meta:
+                        included: false
+                - id: '716185332'
+                  type: groups
+                  attributes:
+                    name: Group 111
+                    short_name: 
+                    display_name: Group 111
+                    description: 
+                    layer: false
+                    type: Group::BottomGroup
+                    email: 
+                    address: 
+                    zip_code: 
+                    town: 
+                    country: 
+                    require_person_add_requests: false
+                    self_registration_url: http://www.example.com/groups/716185332/self_registration
+                    archived_at: 
+                    created_at: '2024-01-11T10:56:21+01:00'
+                    updated_at: '2024-01-11T10:56:21+01:00'
+                    deleted_at: 
+                  relationships:
+                    contact:
+                      meta:
+                        included: false
+                    creator:
+                      meta:
+                        included: false
+                    updater:
+                      meta:
+                        included: false
+                    deleter:
+                      meta:
+                        included: false
+                    parent:
+                      meta:
+                        included: false
+                    layer_group:
+                      meta:
+                        included: false
+                - id: '834963567'
+                  type: groups
+                  attributes:
+                    name: Top
+                    short_name: 
+                    display_name: Top
+                    description: 
+                    layer: true
+                    type: Group::TopLayer
+                    email: 
+                    address: 
+                    zip_code: 
+                    town: 
+                    country: 
+                    require_person_add_requests: false
+                    self_registration_url: http://www.example.com/groups/834963567/self_registration
+                    archived_at: 
+                    created_at: '2012-09-01T14:00:00+02:00'
+                    updated_at: '2024-01-11T10:56:21+01:00'
+                    deleted_at: 
+                  relationships:
+                    contact:
+                      meta:
+                        included: false
+                    creator:
+                      meta:
+                        included: false
+                    updater:
+                      meta:
+                        included: false
+                    deleter:
+                      meta:
+                        included: false
+                    parent:
+                      meta:
+                        included: false
+                    layer_group:
+                      meta:
+                        included: false
+                - id: '872234714'
+                  type: groups
+                  attributes:
+                    name: Group 11
+                    short_name: 
+                    display_name: Group 11
+                    description: 
+                    layer: false
+                    type: Group::BottomGroup
+                    email: bottom_one@hitobito.example.ch
+                    address: 
+                    zip_code: 3020
+                    town: Churchfield
+                    country: 
+                    require_person_add_requests: false
+                    self_registration_url: http://www.example.com/groups/872234714/self_registration
+                    archived_at: 
+                    created_at: '2024-01-11T10:56:21+01:00'
+                    updated_at: '2024-01-11T10:56:21+01:00'
+                    deleted_at: 
+                  relationships:
+                    contact:
+                      meta:
+                        included: false
+                    creator:
+                      meta:
+                        included: false
+                    updater:
+                      meta:
+                        included: false
+                    deleter:
+                      meta:
+                        included: false
+                    parent:
+                      meta:
+                        included: false
+                    layer_group:
+                      meta:
+                        included: false
+                - id: '874374308'
+                  type: groups
+                  attributes:
+                    name: Toppers
+                    short_name: 
+                    display_name: Toppers
+                    description: 
+                    layer: false
+                    type: Group::GlobalGroup
+                    email: 
+                    address: 
+                    zip_code: 
+                    town: 
+                    country: 
+                    require_person_add_requests: false
+                    self_registration_url: http://www.example.com/groups/874374308/self_registration
+                    archived_at: 
+                    created_at: '2024-01-11T10:56:21+01:00'
+                    updated_at: '2024-01-11T10:56:21+01:00'
+                    deleted_at: 
+                  relationships:
+                    contact:
+                      meta:
+                        included: false
+                    creator:
+                      meta:
+                        included: false
+                    updater:
+                      meta:
+                        included: false
+                    deleter:
+                      meta:
+                        included: false
+                    parent:
+                      meta:
+                        included: false
+                    layer_group:
+                      meta:
+                        included: false
+                - id: '944618784'
+                  type: groups
+                  attributes:
+                    name: Group 21
+                    short_name: 
+                    display_name: Group 21
+                    description: 
+                    layer: false
+                    type: Group::BottomGroup
+                    email: 
+                    address: 
+                    zip_code: 
+                    town: 
+                    country: 
+                    require_person_add_requests: false
+                    self_registration_url: http://www.example.com/groups/944618784/self_registration
+                    archived_at: 
+                    created_at: '2024-01-11T10:56:21+01:00'
+                    updated_at: '2024-01-11T10:56:21+01:00'
+                    deleted_at: 
+                  relationships:
+                    contact:
+                      meta:
+                        included: false
+                    creator:
+                      meta:
+                        included: false
+                    updater:
+                      meta:
+                        included: false
+                    deleter:
+                      meta:
+                        included: false
+                    parent:
+                      meta:
+                        included: false
+                    layer_group:
+                      meta:
+                        included: false
+                - id: '954199476'
+                  type: groups
+                  attributes:
+                    name: TopGroup
+                    short_name: 
+                    display_name: TopGroup
+                    description: 
+                    layer: false
+                    type: Group::TopGroup
+                    email: 
+                    address: 
+                    zip_code: 
+                    town: 
+                    country: 
+                    require_person_add_requests: false
+                    self_registration_url: http://www.example.com/groups/954199476/self_registration
+                    archived_at: 
+                    created_at: '2024-01-11T10:56:21+01:00'
+                    updated_at: '2024-01-11T10:56:21+01:00'
+                    deleted_at: 
+                  relationships:
+                    contact:
+                      meta:
+                        included: false
+                    creator:
+                      meta:
+                        included: false
+                    updater:
+                      meta:
+                        included: false
+                    deleter:
+                      meta:
+                        included: false
+                    parent:
+                      meta:
+                        included: false
+                    layer_group:
+                      meta:
+                        included: false
+                - id: '1037278379'
+                  type: groups
+                  attributes:
+                    name: Bottom Two
+                    short_name: 
+                    display_name: Bottom Two
+                    description: 
+                    layer: true
+                    type: Group::BottomLayer
+                    email: 
+                    address: 
+                    zip_code: 
+                    town: 
+                    country: 
+                    require_person_add_requests: false
+                    self_registration_url: http://www.example.com/groups/1037278379/self_registration
+                    archived_at: 
+                    created_at: '2024-01-11T10:56:21+01:00'
+                    updated_at: '2024-01-11T10:56:21+01:00'
+                    deleted_at: 
+                  relationships:
+                    contact:
+                      meta:
+                        included: false
+                    creator:
+                      meta:
+                        included: false
+                    updater:
+                      meta:
+                        included: false
+                    deleter:
+                      meta:
+                        included: false
+                    parent:
+                      meta:
+                        included: false
+                    layer_group:
+                      meta:
+                        included: false
+                links:
+                  self: "/api/groups?include=&page%5Bnumber%5D=1&page%5Bsize%5D=20&token=PermittedToken"
+                  first: "/api/groups?include=&page%5Bnumber%5D=1&page%5Bsize%5D=20&token=PermittedToken"
+                  last: "/api/groups?include=&page%5Bnumber%5D=1&page%5Bsize%5D=20&token=PermittedToken"
+                meta: {}
   "/api/groups/{id}":
     parameters:
     - name: id
@@ -92,6 +452,87 @@ paths:
       responses:
         '200':
           description: successful
+          content:
+            application/vnd.json+api:
+              example:
+                data:
+                - id: '382461928'
+                  type: people
+                  attributes:
+                    first_name: Bottom
+                    last_name: Member
+                    nickname: 
+                    company_name: 
+                    company: false
+                    email: bottom_member@example.com
+                    address: Greatstreet 345
+                    zip_code: '3456'
+                    town: Greattown
+                    country: CH
+                    primary_group_id: 376803389
+                    gender: 
+                    birthday: 
+                    language: de
+                  relationships:
+                    primary_group:
+                      meta:
+                        included: false
+                    layer_group:
+                      meta:
+                        included: false
+                    roles:
+                      meta:
+                        included: false
+                    phone_numbers:
+                      meta:
+                        included: false
+                    social_accounts:
+                      meta:
+                        included: false
+                    additional_emails:
+                      meta:
+                        included: false
+                - id: '572407901'
+                  type: people
+                  attributes:
+                    first_name: Top
+                    last_name: Leader
+                    nickname: 
+                    company_name: 
+                    company: false
+                    email: top_leader@example.com
+                    address: 
+                    zip_code: 
+                    town: Supertown
+                    country: 
+                    primary_group_id: 954199476
+                    gender: 
+                    birthday: 
+                    language: de
+                  relationships:
+                    primary_group:
+                      meta:
+                        included: false
+                    layer_group:
+                      meta:
+                        included: false
+                    roles:
+                      meta:
+                        included: false
+                    phone_numbers:
+                      meta:
+                        included: false
+                    social_accounts:
+                      meta:
+                        included: false
+                    additional_emails:
+                      meta:
+                        included: false
+                links:
+                  self: "/api/people?include=&page%5Bnumber%5D=1&page%5Bsize%5D=20&token=PermittedToken"
+                  first: "/api/people?include=&page%5Bnumber%5D=1&page%5Bsize%5D=20&token=PermittedToken"
+                  last: "/api/people?include=&page%5Bnumber%5D=1&page%5Bsize%5D=20&token=PermittedToken"
+                meta: {}
   "/api/people/{id}":
     parameters:
     - name: id
@@ -123,12 +564,94 @@ paths:
       responses:
         '200':
           description: successful
+          content:
+            application/vnd.json+api:
+              example:
+                data:
+                  id: '382461928'
+                  type: people
+                  attributes:
+                    first_name: Bottom
+                    last_name: Member
+                    nickname: 
+                    company_name: 
+                    company: false
+                    email: bottom_member@example.com
+                    address: Greatstreet 345
+                    zip_code: '3456'
+                    town: Greattown
+                    country: CH
+                    primary_group_id: 376803389
+                    gender: 
+                    birthday: 
+                    language: de
+                  relationships:
+                    primary_group:
+                      meta:
+                        included: false
+                    layer_group:
+                      meta:
+                        included: false
+                    roles:
+                      meta:
+                        included: false
+                    phone_numbers:
+                      meta:
+                        included: false
+                    social_accounts:
+                      meta:
+                        included: false
+                    additional_emails:
+                      meta:
+                        included: false
+                meta: {}
     patch:
       summary: update person
       parameters: []
       responses:
         '200':
           description: successful
+          content:
+            application/vnd.json+api:
+              example:
+                data:
+                  id: '382461928'
+                  type: people
+                  attributes:
+                    first_name: Bobby
+                    last_name: Member
+                    nickname: 
+                    company_name: 
+                    company: false
+                    email: bottom_member@example.com
+                    address: Greatstreet 345
+                    zip_code: '3456'
+                    town: Greattown
+                    country: CH
+                    primary_group_id: 376803389
+                    gender: 
+                    birthday: 
+                    language: de
+                  relationships:
+                    primary_group:
+                      meta:
+                        included: false
+                    layer_group:
+                      meta:
+                        included: false
+                    roles:
+                      meta:
+                        included: false
+                    phone_numbers:
+                      meta:
+                        included: false
+                    social_accounts:
+                      meta:
+                        included: false
+                    additional_emails:
+                      meta:
+                        included: false
+                meta: {}
       requestBody:
         content:
           application/vnd.api+json:

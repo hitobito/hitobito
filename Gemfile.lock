@@ -1,3 +1,13 @@
+GIT
+  remote: https://github.com/puzzle/graphiti-openapi.git
+  revision: aee4d645dee149955876af527ef150881b603149
+  tag: standalone/0.1
+  specs:
+    graphiti-openapi (0.1.7)
+      dry-struct (~> 1.0)
+      graphiti (~> 1.3.9)
+      transproc
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -237,6 +247,11 @@ GEM
       dry-logic (>= 1.4, < 2)
       dry-types (>= 1.7, < 2)
       zeitwerk (~> 2.6)
+    dry-struct (1.6.0)
+      dry-core (~> 1.0, < 2)
+      dry-types (>= 1.7, < 2)
+      ice_nine (~> 0.11)
+      zeitwerk (~> 2.6)
     dry-types (1.7.1)
       concurrent-ruby (~> 1.0)
       dry-core (~> 1.0)
@@ -308,6 +323,7 @@ GEM
     icalendar (2.9.0)
       ice_cube (~> 0.16)
     ice_cube (0.16.4)
+    ice_nine (0.11.2)
     image_processing (1.12.2)
       mini_magick (>= 4.9.5, < 5)
       ruby-vips (>= 2.0.17, < 3)
@@ -316,8 +332,6 @@ GEM
     joiner (0.6.0)
       activerecord (>= 6.1.0)
     json (2.6.3)
-    json-schema (3.0.0)
-      addressable (>= 2.8)
     jsonapi-renderer (0.2.2)
     jsonapi-serializable (0.3.1)
       jsonapi-renderer (~> 0.2.0)
@@ -653,6 +667,7 @@ GEM
     tilt (2.3.0)
     timeliness (0.4.5)
     timeout (0.4.0)
+    transproc (1.1.1)
     truemail (3.0.9)
       simpleidn (~> 0.2.1)
     ttfunk (1.7.0)
@@ -754,6 +769,7 @@ DEPENDENCIES
   gibbon (~> 3.4)
   globalize
   graphiti
+  graphiti-openapi!
   graphiti-rails (~> 0.1)
   graphiti_spec_helpers
   haml

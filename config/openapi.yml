@@ -1,0 +1,73 @@
+openapi: 3.0.1
+info:
+  title: Hitobito JSON:API
+  version: v1
+  contact:
+    email: info@hitobito.com
+    name: Hitobito AG
+    url: 'https://hitobito.com/'
+
+components:
+  securitySchemes:
+    ServiceTokenAuthHeader:
+      type: apiKey
+      in: header
+      name: X-TOKEN
+    ServiceTokenAuthParam:
+      type: apiKey
+      in: query
+      name: token
+    SessionAuth:
+      type: apiKey
+      in: cookie
+      name: _session_id
+  responses:
+    '200':
+      description: OK
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/jsonapi_info'
+    '202':
+      description: Accepted
+    '204':
+      description: No Content
+    '400':
+      description: Bad Request
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/jsonapi_failure'
+    '401':
+      description: Unauthorized
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/jsonapi_failure'
+    '403':
+      description: Forbidden
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/jsonapi_failure'
+    '404':
+      description: Not Found
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/jsonapi_failure'
+    '409':
+      description: Conflict
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/jsonapi_failure'
+    '422':
+      description: Unprocessable Entity
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/jsonapi_failure'
+security:
+  - ServiceTokenAuthHeader: []
+    ServiceTokenAuthParam: []

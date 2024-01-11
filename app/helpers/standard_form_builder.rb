@@ -478,6 +478,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def errors_on?(attr)
+    return false if @object.errors.blank?
+
     attr_plain, attr_id = assoc_and_id_attr(attr)
     @object.errors.key?(attr_plain.to_sym) ||
     @object.errors.key?(attr_id.to_sym)

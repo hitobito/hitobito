@@ -21,7 +21,6 @@ describe 'mailing_lists/_list.html.haml' do
   it 'renders name as link if current_user can read' do
     allow(view).to receive(:can?).with(:read, entry).and_return(true)
     expect(subject).to have_selector 'td strong a', text: entry.name
-    binding.pry
   end
 
   it 'renders name as text if current_user cannot read' do

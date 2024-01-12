@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -28,6 +28,7 @@ class Invoice::Filter
 
   def apply_scope(relation, scope, valid_scopes)
     return relation unless valid_scopes.include?(scope)
+
     relation.send(scope)
   end
 
@@ -37,11 +38,13 @@ class Invoice::Filter
 
   def filter_by_invoice_list_id(relation)
     return relation if params[:invoice_list_id].blank?
+
     relation.where(invoice_list_id: params[:invoice_list_id])
   end
 
   def filter_by_ids(relation)
     return relation if invoice_ids.blank?
+
     relation.where(id: invoice_ids)
   end
 

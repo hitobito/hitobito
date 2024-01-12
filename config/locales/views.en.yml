@@ -237,6 +237,11 @@ en:
           footer: 'This email was sent by Hitobito'
   errors:
     link_to_main: 'Main page'
+    '401':
+      title: 'Login required'
+      explanation: 'You must log in before you can access this resource.'
+    '403':
+      title: 'Access denied'
     '404':
       title: 'Page not found (404)'
       explanation: 'Maybe you typed the address incorrectly, or the page has been deleted.'
@@ -247,11 +252,6 @@ en:
       title: 'Sorry, page is currently not available (503)'
       explanation: 'We are working on this page, so it is not available. This should not take too long.'
       instruction: 'Please try again later.'
-    '403':
-      title: 'Access denied'
-    '401':
-      title: 'Login required'
-      explanation: 'You must log in before you can access this resource.'
     unsupported_page_size:
       title: 'Page size is not supported'
   export/tabular/events/list:
@@ -762,36 +762,6 @@ en:
     create:
       flash:
         success: Payment of %{amount}has been registered.
-  payment_processes:
-    description:
-      header: camt.054 XML Datei
-      explain_xml_format: 'A camt.054 XML file is the collective posting resolution and debit and credit advice. This contains a number of different booking items which are automatically assigned to existing invoices based on the ESR number.'
-    invalid_file: Uploaded file is not valid.
-    parsing_error: The file could not be processed (%{error})I
-    created: '%{count}payments created.'
-    payments:
-      valid:
-        one: One valid payments has been detected.
-        other: '%{count}valid payments detected.'
-      invalid:
-        one: One valid payment has been detected.
-        other: '%{count}valid payments detected.'
-    show:
-      payments_with_invoice: Matching payments
-      payments_with_invoice_and_dates: Matching payments from %{from} to %{to}
-      payments_without_invoice: No invoice found
-      amount_open: Open
-      create:
-        zero: Import payments
-        one: Import payment
-        other: 'Import %{count} payments'
-      icon_tooltip_invoice_missing: Could not be matched to invoice
-      icon_tooltip_settles: Settles the open account
-      icon_tooltip_exceeds: Exceeds open account by %{difference}
-      icon_tooltip_undercuts: Undercuts open account by %{difference}
-    new:
-      upload_button: 'Upload'
-      xml_file: 'XML file'
   label_formats:
     global_labels: "Global label formats"
     own_labels: My label formats
@@ -930,6 +900,36 @@ en:
     tabs:
       grants: Grants
       tokens: Tokens
+  payment_processes:
+    description:
+      header: camt.054 XML Datei
+      explain_xml_format: 'A camt.054 XML file is the collective posting resolution and debit and credit advice. This contains a number of different booking items which are automatically assigned to existing invoices based on the ESR number.'
+    invalid_file: Uploaded file is not valid.
+    parsing_error: The file could not be processed (%{error})I
+    created: '%{count}payments created.'
+    payments:
+      valid:
+        one: One valid payments has been detected.
+        other: '%{count}valid payments detected.'
+      invalid:
+        one: One valid payment has been detected.
+        other: '%{count}valid payments detected.'
+    show:
+      payments_with_invoice: Matching payments
+      payments_with_invoice_and_dates: Matching payments from %{from} to %{to}
+      payments_without_invoice: No invoice found
+      amount_open: Open
+      create:
+        zero: Import payments
+        one: Import payment
+        other: 'Import %{count} payments'
+      icon_tooltip_invoice_missing: Could not be matched to invoice
+      icon_tooltip_settles: Settles the open account
+      icon_tooltip_exceeds: Exceeds open account by %{difference}
+      icon_tooltip_undercuts: Undercuts open account by %{difference}
+    new:
+      upload_button: 'Upload'
+      xml_file: 'XML file'
   qualifications:
     in_years: '%{years} years'
     valid_until: 'to %{date}'

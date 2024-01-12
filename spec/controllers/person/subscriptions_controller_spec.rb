@@ -14,8 +14,9 @@ describe Person::SubscriptionsController do
   let(:members)       { mailing_lists(:members) }
   let(:top_group_list){ mailing_lists(:top_group) }
 
-
   context 'GET#index' do
+    render_views
+
     it 'may not index person subscriptions if we do not have no show_detail permission' do
       sign_in(bottom_member)
       expect do

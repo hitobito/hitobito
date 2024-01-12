@@ -4,10 +4,8 @@
 - #  https://github.com/hitobito/hitobito.
 
 %h2=t('.my_subscriptions')
-= table(@subscribed, class: 'table table-striped table-hover') do |t|
-  - t.col(MailingList.human_attribute_name(:name)) do |list|
-    %strong
-      = link_to(list.name, group_mailing_list_path(list.group, list.id))
+= table(subscribed, class: 'table table-striped table-hover') do |t|
+  - t.attrs(:name)
   - t.col(MailingList.human_attribute_name(:description)) do |list|
     = list.description.to_s.truncate(60)
   - t.attrs(:publisher)
@@ -18,10 +16,8 @@
 
 
 %h2=t('.available_subscriptions')
-= table(@subscribable, class: 'table table-striped table-hover') do |t|
-  - t.col(MailingList.human_attribute_name(:name)) do |list|
-    %strong
-      = link_to(list.name, group_mailing_list_path(list.group, list.id))
+= table(subscribable, class: 'table table-striped table-hover') do |t|
+  - t.attrs(:name)
   - t.col(MailingList.human_attribute_name(:description)) do |list|
     = list.description.to_s.truncate(60)
   - t.attrs(:publisher)

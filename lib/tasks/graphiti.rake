@@ -17,7 +17,10 @@ namespace :graphiti do
     File.write("#{Rails.root}/swagger/graphiti-schema.json", schema)
   end
 
+  desc "Generate swagger.yaml from graphiti schema"
   task generate_swagger: :environment do
-
+    generator = Graphiti::OpenApi::Generator.new
+    swagger_file = Rails.root.join('swagger', 'swagger.yaml')
+    swagger_file.write(generator.to_openapi(format: :yaml))
   end
 end

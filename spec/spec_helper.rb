@@ -272,4 +272,12 @@ module ActiveRecordFixture
 end
 ActiveRecord::Fixture.prepend(ActiveRecordFixture)
 
-# GraphitiSpecHelpers::RSpec.schema!
+Graphiti.configure do |config|
+  # Find the directory containing the spec_helper.rb file which was the entry point
+  # to the test run and use this to configure the location of the schema.json file.
+  # This allows us to have separate schema.json files for the wagons.
+  basedir = caller.map {|l| l[/(.*)\/spec_helper.rb/, 1] }.compact.last
+  config.schema_path = Pathname.new(basedir).join('support', 'graphiti', 'schema.json')
+end
+
+GraphitiSpecHelpers::RSpec.schema!

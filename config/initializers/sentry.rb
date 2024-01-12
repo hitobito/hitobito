@@ -25,6 +25,7 @@ Rails.application.reloader.to_prepare do
 
     setup_and_connection_errors = [
       'ActiveRecord::ConnectionNotEstablished',
+      'Aws::S3::Errors::Http503Error',
       'Errno::ECONNREFUSED',
       'Errno::ECONNRESET',
       'Errno::EFAULT',

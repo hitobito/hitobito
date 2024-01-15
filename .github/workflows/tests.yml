@@ -104,27 +104,9 @@ jobs:
 
       - name: 'Rubocop'
         run: |
-          bundle exec rake rubocop
-
-      - name: 'Main Specs without features'
-        run: |
-          bundle exec rake ci:setup:env spec:without_features
-
-      - name: 'Sphinx'
-        run: |
-          bundle exec rake ci:setup:env spec:sphinx
-
-      - name: 'Features'
-        run: |
-          bundle exec rake ci:setup:env spec:features:lenient
-
-      - name: 'Make capybara output downloadable'
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: capybara-output
-          path: |
-            tmp/capybara
+          bundle exec rake db:create RAILS_ENV=test --trace
+          bundle exec rake db:environment:set RAILS_ENV=test
+          bundle exec rake ci --trace
 
   notify_statuscope:
     uses: ./.github/workflows/notify-statuscope.yml

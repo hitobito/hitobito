@@ -111,8 +111,8 @@ RSpec.configure do |config|
   config.include Capybara::RSpecMatchers, type: :component
 
   config.filter_run_excluding type: 'sphinx', sphinx: true
-  if ActiveRecord::Base.connection.adapter_name.downcase != 'mysql2'
-    config.filter_run_excluding :mysql
+  if ActiveRecord::Base.connection.adapter_name.downcase != 'postgresql'
+    config.filter_run_excluding :postgresql
   end
 
   config.before :all do

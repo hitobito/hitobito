@@ -6,9 +6,7 @@
 - title @group.to_s
 
 = crud_table do |t|
-  - t.col(MailingList.human_attribute_name(:name)) do |list|
-    %strong
-      = link_to(list.name, group_mailing_list_messages_path(@group, list.id))
+  - t.attrs(:name)
   - t.col(MailingList.human_attribute_name(:description)) do |list|
     = list.description.to_s.truncate(60)
   - t.attrs(:publisher)

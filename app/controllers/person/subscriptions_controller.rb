@@ -6,13 +6,11 @@
 class Person::SubscriptionsController < ApplicationController
 
   skip_authorization_check
+  helper_method :subscribed, :subscribable
 
   def index
     authorize!(:show_details, person)
     @group = Group.find(params[:group_id])
-
-    @subscribed = Person::Subscriptions.new(person).mailing_lists.includes(:group).list
-    @subscribable = MailingList.includes(:group).subscribable.where.not(id: @subscribed).list
   end
 
   def create
@@ -41,6 +39,14 @@ class Person::SubscriptionsController < ApplicationController
 
   def mailing_list
     @mailing_list ||= MailingList.find(params[:id])
+  end
+
+  def subscribed
+    @subscribed ||= Person::Subscriptions.new(person).mailing_lists.includes(:group).list
+  end
+
+  def subscribable
+    @subscribable ||= MailingList.includes(:group).subscribable.where.not(id: subscribed).list
   end
 
   def delete_subscription

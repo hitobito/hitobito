@@ -7,9 +7,9 @@ base: &generic
   adapter: <%= ENV['RAILS_DB_ADAPTER'] || 'sqlite3' %>
   pool: 20
   timeout: 5000
-<% if ENV.fetch('RAILS_DB_ADAPTER', 'sqlite3') =~ /postgres/ %>
+<% if ENV.fetch('RAILS_DB_ADAPTER', 'sqlite3') =~ /postgresql/ %>
   encoding: 'utf8'
-  collation: 'utf8_general_ci' # case insensitive search is a feature
+  # collation: 'utf8_general_ci' # case insensitive search is a feature
 <% else %>
   encoding: 'utf8'
 <% end %>

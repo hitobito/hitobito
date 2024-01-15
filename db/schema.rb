@@ -108,6 +108,7 @@ ActiveRecord::Schema.define(version: 2023_12_15_154134) do
     t.integer "attempt"
     t.string "status"
     t.json "payload"
+    # t.integer "runtime", default: -> { "\nCASE\n    WHEN ((finished_at IS NOT NULL) AND (started_at IS NOT NULL)) THEN (EXTRACT(epoch FROM (finished_at - started_at)) * (1000000)::numeric)\n    ELSE NULL::numeric\nEND" }
     t.index ["group_id"], name: "index_background_job_log_entries_on_group_id"
     t.index ["job_id", "attempt"], name: "index_background_job_log_entries_on_job_id_and_attempt", unique: true
     t.index ["job_id"], name: "index_background_job_log_entries_on_job_id"

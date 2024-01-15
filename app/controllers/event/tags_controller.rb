@@ -76,6 +76,7 @@ class Event::TagsController < ApplicationController
   end
 
   def available_tags(query)
+    require 'pry'; binding.pry
     ActsAsTaggableOn::Tag
       .where('name LIKE ?', "%#{query}%")
       .order(:name)

@@ -8,7 +8,7 @@
 
 %h3= t('.title')
 
-%ul.unstyled.approvers-list
+%ul.unstyled.approvers-list.ms-4
   - @possible_approvers.each do |approver|
     %li
       = check_box_tag("set_approver",

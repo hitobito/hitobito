@@ -99,6 +99,11 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
                 }
               }
             }
+          },
+          keydown: (event) => {
+            if (event.key === 'Enter' && (event.target.getAttribute('aria-activedescendant') == null || event.target.wrapper.getAttribute('aria-expanded') == false)) {
+              return true;
+            }
           }
         }
       },

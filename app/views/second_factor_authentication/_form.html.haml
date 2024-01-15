@@ -4,8 +4,8 @@
 -# https ://github.com/hitobito/hitobito.
 
 = form_with url: users_second_factor_path(second_factor: authentication_factor), method: :post, class: 'form-horizontal' do |f|
-  .control-group.required.row.ms-5
+  .control-group.required
     = f.label :second_factor_code, t('.totp_code'), class: 'control-label col-2'
-    %div.col-3
+    %div.col-sm-8.col-md-7.col-lg-6.col-xl-5.col-xxl-3
       = f.text_field :second_factor_code, class: 'form-control form-control-sm', autofocus: 'autofocus', autocomplete: 'one-time-code', placeholder: t('.totp_code_placeholder'), required: true
       = f.submit(t('.submit'), class: 'btn btn-sm btn-primary mt-2')

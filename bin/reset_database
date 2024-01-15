@@ -6,7 +6,7 @@ project=$(basename $(pwd))
 
 bin/stop
 
-volume=${project}_db
+volume=${project}_postgres
 echo "Removing docker volume $volume"
 docker volume rm $volume
 

@@ -2,11 +2,15 @@
 
 source $(dirname $0)/_basics
 
-dump=dumps/$(date +%F-%H-%M)-only-schema.sql
+dump="tmp/$(date +%F-%H-%M-%S)-only-schema.sql.gz"
 
-docker compose exec db bash -e -c '
-    export MYSQL_PWD="$MYSQL_ROOT_PASSWORD"
-    mysqldump --no-data -u root $MYSQL_DATABASE
-' > $dump
+docker-compose exec postgres bash -e -c "
+    pg_dump --schema-only -U \$POSTGRES_USER -d \$POSTGRES_DB | gzip > \"$dump\""
 
-du -h $dump
+mkdir -p "dumps"
+
+container_name=$(docker-compose ps -q postgres)
+
+docker cp $container_name:$dump dumps/
+
+dump="dumps/$(date +%F-%H-%M-%S)-only-schema.sql.gz"

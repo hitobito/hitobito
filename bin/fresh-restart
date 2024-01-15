@@ -2,5 +2,5 @@
 nameb=$(basename $(pwd))
 docker compose kill
 docker compose rm -vf
-docker volume rm ${nameb}_db ${nameb}_seed ${nameb}_sphinx_indexes
+docker volume rm ${nameb}_postgres ${nameb}_seed ${nameb}_sphinx_indexes
 docker compose up -d

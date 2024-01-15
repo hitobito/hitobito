@@ -14,8 +14,8 @@ if [ ! -f $dump ]; then
     exit 2
 fi
 
-zcat $dump | docker compose exec -T db bash -c '
-    mysql -uroot -p$MYSQL_ROOT_PASSWORD -D $MYSQL_DATABASE
+zcat "$dump" | docker-compose exec -T postgres bash -c '
+    psql -U $POSTGRES_USER -d $POSTGRES_DB
 '
 
 echo "Done."

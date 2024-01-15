@@ -99,10 +99,10 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./docker/mysql-setup.sql:/docker-entrypoint-initdb.d/mysql-setup.sql:ro
-      - ./docker/test-setup.sql:/docker-entrypoint-initdb.d/test-setup.sql:ro
-      - postgres:/var/lib/postgres
-
+      - ./docker/postgresql-setup.sql:/docker-entrypoint-initdb.d/postgresql-setup.sql:ro
+      - ./docker/test-setup-postgresql.sql:/docker-entrypoint-initdb.d/test-setup-postgresql.sql:ro
+      - postgres:/var/lib/postgresql/data
+      
   webpack:
     build:
       context: ./docker

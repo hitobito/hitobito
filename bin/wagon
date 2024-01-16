@@ -371,13 +371,11 @@ complete -F __wagon_completion -o default wagon
 COMPLETION
     ;;
 
-  # TODO: add these in the right place
-  # bootstrap
-  # create-idea-project
   help|*)
     echo "USAGE: $0 [activate] <WAGON>|core"
-    echo "       $0 [clone] <WAGON>"
-    echo "       $0 [reset-database|test-prepare|test-speedup|core-spec|update-copyright]"
+    echo "       $0 [clone|bootstrap] <WAGON>"
+    echo "       $0 [create-datbase|reset-database|test-prepare|test-speedup|core-spec|update-copyright]"
+    echo "       $0 [reset-test-database|overwritten-in-wagon]"
     echo "       $0 [grep] <TERM>"
     echo "       $0 [git|git-all] <ARGS>"
     echo "       $0 [gemfile|configs|binstubs|list]"

@@ -52,6 +52,14 @@ class GroupResource < ApplicationResource
     end
   end
 
+  filter :with_deleted, :boolean, :single do
+    eq do |scope, value|
+      next scope unless value
+
+      scope.unscope(where: :deleted_at)
+    end
+  end
+
   filter :with_archived, :boolean, :single do
     eq do |scope, value|
       next scope unless value
@@ -75,6 +83,6 @@ class GroupResource < ApplicationResource
   end
 
   def base_scope
-    Group.without_archived
+    Group.without_deleted.without_archived
   end
 end

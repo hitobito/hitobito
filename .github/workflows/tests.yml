@@ -15,9 +15,9 @@ jobs:
     runs-on: 'ubuntu-20.04'
     env:
       HEADLESS: true
-      RAILS_DB_ADAPTER: postgresql
+      RAILS_DB_ADAPTER: mysql2
       RAILS_DB_HOST: 127.0.0.1
-      RAILS_DB_PORT: 5432
+      RAILS_DB_PORT: 33066
       RAILS_DB_USERNAME: hitobito
       RAILS_DB_PASSWORD: hitobito
       RAILS_DB_NAME: hitobito_test
@@ -26,16 +26,17 @@ jobs:
       RAILS_USE_TEST_GROUPS: true
 
     services:
-      postgres:
-        image: postgres:12
+      mysql:
+        image: 'mysql:5.7'
         env:
-          POSTGRES_USER: hitobito
-          POSTGRES_PASSWORD: hitobito
-          POSTGRES_DB: hitobito_test
+          MYSQL_USER: 'hitobito'
+          MYSQL_PASSWORD: 'hitobito'
+          MYSQL_DATABASE: 'hitobito_test'
+          MYSQL_ROOT_PASSWORD: 'root'
         ports:
-          - '5432:5432'
+          - '33066:3306'
         options: >-
-          --health-cmd "pg_isready -U hitobito"
+          --health-cmd "mysqladmin ping"
           --health-interval 10s
           --health-timeout 10s
           --health-retries 10
@@ -104,9 +105,27 @@ jobs:
 
       - name: 'Rubocop'
         run: |
-          bundle exec rake db:create RAILS_ENV=test --trace
-          bundle exec rake db:environment:set RAILS_ENV=test
-          bundle exec rake ci --trace
+          bundle exec rake rubocop
+
+      - name: 'Main Specs without features'
+        run: |
+          bundle exec rake ci:setup:env spec:without_features
+
+      - name: 'Sphinx'
+        run: |
+          bundle exec rake ci:setup:env spec:sphinx
+
+      - name: 'Features'
+        run: |
+          bundle exec rake ci:setup:env spec:features:lenient
+
+      - name: 'Make capybara output downloadable'
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: capybara-output
+          path: |
+            tmp/capybara
 
   notify_statuscope:
     uses: ./.github/workflows/notify-statuscope.yml

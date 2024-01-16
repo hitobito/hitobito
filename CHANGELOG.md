@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## unreleased
+
+*  Nachdem Erstellen einer Person wird sogleich auf mögliche Duplikate geprüft (hitobito#2350)
+
 ## Version 2.0
 
 *  Rollen mit Start-Datum in der Zukunft können erfasst werden (hitobito#2237)

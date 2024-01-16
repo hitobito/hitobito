@@ -79,7 +79,7 @@ class Setup
       export RAILS_DB_USERNAME=hitobito
       export RAILS_DB_PASSWORD=hitobito
       export RAILS_DB_NAME=hit_#{wagon}_dev
-      export RAILS_TEST_DB_NAME=hit_#{core ? "core_test" : "#{wagon}_test"}
+      export RAILS_TEST_DB_NAME=hit_#{wagon}_test
       export SPRING_APPLICATION_ID=hit_#{core ? "core" : wagon}
       export PRIMARY_WAGON=#{wagon}
       export DISABLE_TEST_SCHEMA_MAINTENANCE=1

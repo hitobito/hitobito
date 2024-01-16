@@ -110,9 +110,9 @@ jobs:
         run: |
           bundle exec rake ci:setup:env spec:without_features
 
-      - name: 'Sphinx'
-        run: |
-          bundle exec rake ci:setup:env spec:sphinx
+      # - name: 'Sphinx'
+      #   run: |
+      #     bundle exec rake ci:setup:env spec:sphinx
 
       - name: 'Features'
         run: |

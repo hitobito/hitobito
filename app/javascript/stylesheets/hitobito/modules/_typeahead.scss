@@ -30,6 +30,14 @@
     }
   }
 
+  li[aria-selected="true"] {
+    color: white;
+
+    mark {
+      color: white;
+    }
+  }
+
   li:hover {
     background-color: #925D97;
     color: white;

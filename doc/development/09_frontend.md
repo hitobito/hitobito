@@ -67,9 +67,9 @@ Die Konfigurationzu autocomplete.js ist hier: https://github.com/hitobito/hitobi
 
 aktuell verwenden wir Jquery in der Version 1.12.4
 
-längerfristig soll Jquery komplett aus Hitobito entfernt werden. Die verwendete Bootstrap 2 Version benötigt Jquery. Bootstrap 5 kommt ohne Jquery aus.
+längerfristig soll Jquery komplett aus Hitobito entfernt werden.
 
-Jquery UI ist in der Version 1.12.1 vorhanden. Auch diese Abhängigkeit soll komplett ersetzt werden. (z.B. mit Bootstrap 5)
+Jquery UI ist in der Version 1.12.1 vorhanden. Auch diese Abhängigkeit soll komplett ersetzt werden.
 
 ## Icons
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-#  Copyright (c) 2020-2023, Puzzle ITC. This file is part of
+#  Copyright (c) 2020-2024, Puzzle ITC. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -71,8 +71,8 @@ class Setup
 
   def environment(core: true)
     <<~DIRENV
-      PATH_add bin
       #{ "PATH_add ../hitobito/bin" unless core }
+      PATH_add bin
       export RAILS_DB_ADAPTER=mysql2
       export RAILS_DB_HOST=127.0.0.1
       export RAILS_DB_PORT=33066

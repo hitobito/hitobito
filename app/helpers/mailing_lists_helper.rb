@@ -20,6 +20,14 @@ module MailingListsHelper
     end
   end
 
+  def mailing_list_name_with_group_name(mailing_list)
+    content = []
+    content << "#{mailing_list.group.name} >" unless mailing_list.group.layer?
+    content << format_mailing_list_name(mailing_list)
+
+    content_tag(:div, safe_join(content.compact, ' '))
+  end
+
   def format_mailing_list_preferred_labels(mailing_list)
     safe_join mailing_list.preferred_labels.sort, ', '
   end

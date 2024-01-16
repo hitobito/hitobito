@@ -16,7 +16,7 @@ describe 'person/subscriptions/index.html.haml' do
   before do
     allow(view).to receive(:can?)
     allow(view).to receive(:subscribed).and_return([])
-    allow(view).to receive(:subscribable).and_return([entry])
+    allow(view).to receive(:subscribable).and_return({ group => [entry] })
     allow(view).to receive(:group_person_subscriptions_path).and_return(group_person_subscriptions_path(group, person, entry))
   end
 

@@ -42,11 +42,21 @@ class Person::SubscriptionsController < ApplicationController
   end
 
   def subscribed
-    @subscribed ||= Person::Subscriptions.new(person).mailing_lists.includes(:group).list
+    @subscribed ||= grouped_by_layer(Person::Subscriptions.new(person)
+                                                          .mailing_lists
+                                                          .includes(:group)
+                                                          .list)
   end
 
   def subscribable
-    @subscribable ||= MailingList.includes(:group).subscribable.where.not(id: subscribed).list
+    @subscribable ||= grouped_by_layer(MailingList.includes(:group)
+                                                  .subscribable
+                                                  .where.not(id: subscribed.values.flatten)
+                                                  .list)
+  end
+
+  def grouped_by_layer(mailing_lists)
+    mailing_lists.includes(:group).group_by { _1.group.layer_group }
   end
 
   def delete_subscription

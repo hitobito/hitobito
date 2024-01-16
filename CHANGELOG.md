@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## unreleased
+
+*  Im Personen Tab "Abos" werden die Abos neu nach der Ebene gruppiert und angezeigt (#2337)
+
 ## Version 2.0
 
 *  Nachdem Erstellen einer Person wird sogleich auf mögliche Duplikate geprüft (hitobito#2350)

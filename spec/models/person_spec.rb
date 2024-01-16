@@ -876,4 +876,22 @@ describe Person do
       expect(person.blocked?).to be_falsey
     end
   end
+
+  describe 'after create' do
+    it 'schedules duplicate locator job after person creation' do
+      expect(People::DuplicateLocatorJob).to receive(:new)
+        .with(42)
+        .and_call_original
+
+      expect do
+        Person.create!(id: 42, first_name: 'Hansli', last_name: 'Miller')
+      end.to change {
+        Delayed::Job
+          .where(Delayed::Job
+          .arel_table[:handler]
+          .matches("%DuplicateLocatorJob%"))
+          .count 
+      }.by(1)
+    end
+  end
 end

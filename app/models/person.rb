@@ -248,6 +248,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   before_validation :remove_blank_relations
   before_destroy :destroy_roles
   before_destroy :destroy_person_duplicates
+  after_create :schedule_duplicate_locator
 
   ### Scopes
 
@@ -498,6 +499,10 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   def destroy_person_duplicates
     person_duplicates.delete_all
+  end
+
+  def schedule_duplicate_locator
+    People::DuplicateLocatorJob.new(id).enqueue!
   end
 
 end

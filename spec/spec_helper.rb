@@ -183,6 +183,12 @@ RSpec.configure do |config|
   end
 
   config.before { allow(Truemail).to receive(:valid?).and_return(true) }
+  config.before do
+    # this job is usually enqueued when a person is created. So it makes sense to
+    # prevent this in test env when using for example Fabricate
+    job_double = double({ enqueue!: nil })
+    allow(People::DuplicateLocatorJob).to receive(:new).and_return(job_double)
+  end
 
   config.include Job::TestHelpers, :tests_active_jobs
 

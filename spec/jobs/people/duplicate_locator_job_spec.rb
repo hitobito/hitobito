@@ -14,6 +14,10 @@ describe People::DuplicateLocatorJob do
   let(:role_type) { Group::TopGroup::Member.sti_name }
   let(:tomorrow) { Time.zone.tomorrow }
 
+  before do
+    # job is mocked in test env, see spec_helper
+    allow(People::DuplicateLocatorJob).to receive(:new).and_call_original
+  end
 
   context 'with no job arguments' do
     subject(:job) { described_class.new }

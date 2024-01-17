@@ -17,15 +17,19 @@
 
 
   - display_style = 'display: none' unless f.object.household_people.present?
+  - allowed = can?(:create_households, Person)
 
-  %div.col-4
+  .household_query_container.col-4{ style: display_style }
     = text_field_tag('household_query', nil,
                     placeholder: I18n.t('global.search.placeholder_person'),
-                    style: display_style,
                     class: 'form-control form-control-sm',
+                    disabled: !allowed,
                     data: { provide: 'entity',
                             updater: 'HouseHolds.update',
                             url: query_household_path(person_id: f.object.id) })
+    - unless allowed
+      = f.help_block(t('.cannot_create_household'))
+
 
     - if @invalid
       .alert.alert-danger= t('.update_denied', other_person: @other_person)

@@ -296,18 +296,22 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     klass = [
       html_options[:class], 'mw-100', 'mw-md-60ch', 'form-control', 'form-control-sm'
     ].compact.join(' ')
+    disabled = html_options[:disabled].to_s
     klass += ' is-invalid' if errors_on?(attr)
+    disabled = html_options[:disabled].presence
     hidden_field(attr_id) +
     string_field(attr,
                  placeholder: I18n.t('global.search.placeholder_person'),
                  class: klass,
+                 disabled: disabled,
                  data: { provide: 'entity',
                          id_field: "#{object_name}_#{attr_id}",
                          url: html_options&.dig(:data, :url) || @template.query_people_path })
   end
 
   def labeled_inline_fields_for(assoc, partial = nil, record = nil, required = false, &block) # rubocop:disable Metrics/MethodLength
-    html_options = { class: 'labeled col-md controls mb-3' }
+    html_options = { class: 'labeled controls mb-3 mt-1 d-flex ' \
+                            'justify-content-start align-items-baseline' }
     css_classes = { row: true, 'mb-2': true, required: required }
     label_classes = 'control-label col-form-label col-md-3 col-xl-2 pb-1 text-md-end'
     label_classes += ' required' if required
@@ -316,9 +320,9 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
         content_tag(:div, class: 'labeled col-md') do
           nested_fields_for(assoc, partial, record) do |fields|
             content = block_given? ? capture(fields, &block) : render(partial, f: fields)
+            content = content_tag(:div, content, class: 'col-md-10')
 
-            content << help_inline(fields.link_to_remove(I18n.t('global.associations.remove'),
-                                                         class: 'float-end me-4 mt-1'))
+            content << content_tag(:div, fields.link_to_remove(icon(:times)), class: 'col-md-2')
             content_tag(:div, content, html_options)
           end
         end

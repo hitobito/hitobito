@@ -14,6 +14,8 @@ AllCops:
     - tmp/**/*
     - app/assets/config.rb
     - node_modules/**/*
+  NewCops:
+    enable
 
 Style/RescueStandardError:
   Enabled: false

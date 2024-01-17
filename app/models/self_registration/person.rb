@@ -49,7 +49,8 @@ class SelfRegistration::Person
   validate :assert_role_valid, if: :primary_group
 
   def self.human_attribute_name(attr, options = {})
-    Person.human_attribute_name(attr, options)
+    value = super
+    value == attr.to_s.humanize ? Person.human_attribute_name(attr, options) : value
   end
 
   def self.reflect_on_association(*args)
@@ -75,7 +76,7 @@ class SelfRegistration::Person
   end
 
   def household_emails
-    Array.wrap(attributes["household_emails"])
+    Array.wrap(attributes['household_emails'])
   end
 
   private

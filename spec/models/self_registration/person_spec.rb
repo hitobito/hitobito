@@ -16,6 +16,16 @@ describe SelfRegistration::Person do
     end)
   end
 
+  describe '::human_attribute_name' do
+    it 'reads value from person' do
+      expect(Person.human_attribute_name(:email)).to eq 'Haupt-E-Mail'
+    end
+
+    it 'simply humanizes if value is not defined' do
+      expect(Person.human_attribute_name(:missing_attr)).to eq 'Missing attr'
+    end
+  end
+
   it 'validates email is not taken' do
     stub_test_person do |person|
       person.attrs = [:email, :primary_group]

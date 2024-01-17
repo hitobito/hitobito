@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Die Mitte Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Die Mitte Schweiz. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -10,10 +10,10 @@ class MessagesController < CrudController
   include YearBasedPaging
   include AsyncDownload
 
-  PERMITTED_TEXT_MESSAGE_ATTRS = [:text].freeze
-  PERMITTED_LETTER_ATTRS = [:subject, :body, :salutation, :send_to_households,
-                            :pp_post, :shipping_method, :date_location_text].freeze
-  PERMITTED_INVOICE_LETTER_ATTRS = [:subject, :body, :salutation, :donation_confirmation,
+  PERMITTED_TEXT_MESSAGE_ATTRS = [:text] # rubocop:disable Style/MutableConstant meant to be extended
+  PERMITTED_LETTER_ATTRS = [:subject, :body, :salutation, :send_to_households, # rubocop:disable Style/MutableConstant meant to be extended
+                            :pp_post, :shipping_method, :date_location_text]
+  PERMITTED_INVOICE_LETTER_ATTRS = [:subject, :body, :salutation, :donation_confirmation, # rubocop:disable Style/MutableConstant meant to be extended
                                     :pp_post, :shipping_method, :date_location_text,
                                     invoice_attributes: [
                                       :issued_at,
@@ -28,7 +28,7 @@ class MessagesController < CrudController
                                         :type,
                                         :_destroy
                                       ]
-                                    ]].freeze
+                                    ]]
 
   self.nesting = [Group, MailingList]
   self.remember_params += [:year]

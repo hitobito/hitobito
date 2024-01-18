@@ -14,13 +14,13 @@
       - t.col('') do |p|
         - if p.valid?
           - if p.settles?
-            %i.icon.icon-ok{title: t('.icon_tooltip_settles')}
+            %i.fas.fa-check{title: t('.icon_tooltip_settles')}
           - elsif p.undercuts?
-            %i.icon.icon-minus{title: t('.icon_tooltip_undercuts', difference: p.difference)}
+            %i.fas.fa-minus{title: t('.icon_tooltip_undercuts', difference: p.difference)}
           - elsif p.exceeds?
-            %i.icon.icon-plus{title: t('.icon_tooltip_exceeds', difference: p.difference)}
+            %i.fas.fa-plus{title: t('.icon_tooltip_exceeds', difference: p.difference)}
         - else
-          %i.icon.icon-warning-sign{title: p.errors.full_messages.join("\n")}
+          %i.fas.fa-exclamation-triangle{title: p.errors.full_messages.join("\n")}
       - t.col(Invoice.model_name.human) do |p|
         %strong=link_to(p.invoice.title, [p.invoice.group, p.invoice])
       - t.col(Invoice.human_attribute_name(:recipient)) do |p|
@@ -35,9 +35,9 @@
     = table(processor.payments_without_invoice, class: 'table table-stripped w-100') do |t|
       - t.col('') do |p|
         - if !p.invoice
-          %i.icon.icon-warning-sign{title: t('.icon_tooltip_invoice_missing')}
+          %i.fas.fa-exclamation-triangle{title: t('.icon_tooltip_invoice_missing')}
         - elsif !p.invoice.payable?
-          %i.icon.icon-warning-sign{title: t('.icon_tooltip_invoice_not_payable')}
+          %i.fas.fa-exclamation-triangle{title: t('.icon_tooltip_invoice_not_payable')}
 
       - t.col(Invoice.human_attribute_name(:esr_number)) { |p| p.esr_number }
       - t.attr :amount

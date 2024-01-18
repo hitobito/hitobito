@@ -23,6 +23,14 @@ en:
     updated_info: Changed
     deleted_info: Deleted
     archived_info: Archived
+  activemodel:
+    errors:
+      models:
+        roles/termination:
+          attributes:
+            terminate_on:
+              too_early: "has to be in the future"
+              too_late: "must not be after %{date}"
   activerecord:
     errors:
       messages:
@@ -344,6 +352,7 @@ en:
         title: Title
         description: Description
         state: Status
+        read_at: read at
       cors_origins:
         origin: Host with API access
       person:
@@ -425,6 +434,9 @@ en:
         type_name: Group type
         description: Description
         updated_at: Changed
+        self_registration_role_type: role type
+        nextcloud_url: NextCloud-URL
+        remove_logo: remove current group-logo
       event:
         group_ids: Groups
         groups: Groups

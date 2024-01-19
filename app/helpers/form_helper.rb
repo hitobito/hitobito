@@ -93,7 +93,7 @@ module FormHelper
 
   def submit_button(form, label, options = {})
     if options[:display_as_link]
-      form.button(label, options.merge(class: 'btn btn-sm btn-link pb-2',
+      form.button(label, options.merge(class: 'btn btn-sm btn-link',
                     data: { disable_with: label }))
     else
       content_tag(:div, class: 'btn-group') do

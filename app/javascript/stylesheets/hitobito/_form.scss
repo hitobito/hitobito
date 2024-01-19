@@ -829,3 +829,17 @@ label.required::after {
 .w-150-px {
   width: 150px;
 }
+
+.btn-link {
+  border: 0;
+}
+
+.btn-link:hover,
+.btn-link:focus,
+.btn-link:active,
+.btn-link:focus-visible {
+  background-color: inherit;
+  color: inherit;
+  border: 0;
+  box-shadow: inherit;
+}

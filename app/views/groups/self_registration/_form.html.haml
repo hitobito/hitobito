@@ -5,3 +5,8 @@
 
 = standard_form(entry, url: group_self_registration_path) do |f|
   = render 'fields', f: f
+
+- if entry.first_step?
+  = standard_form(entry, {url: group_self_inscription_path, method: :get}) do |f|
+    = f.help_block(t('groups.self_registration.form.has_account'), class: 'align-with-form')
+    = submit_button(f, t('groups.self_registration.form.to_login_page'), display_as_link: true)

@@ -22,7 +22,7 @@ module FilterNavigation
 
     def to_s
       content_tag(:div, class: 'toolbar-pills mb-2') do
-        content_tag(:ul, class: 'nav nav-pills group-pills border border-primary rounded') do
+        content_tag(:ul, class: 'nav nav-pills group-pills border border-light rounded') do
           template.safe_join([*main_items, dropdown_item])
         end
       end
@@ -33,7 +33,7 @@ module FilterNavigation
     def dropdown_item
       if dropdown.items.present?
         content_tag(:li,
-                    class: "dropdown nav-link border-start border-primary
+                    class: "dropdown nav-link border-start border-light
                       rounded-0 py-0 px-3 #{'active' if dropdown.active}"
                    ) do
           template.in_button_group { dropdown.to_s }
@@ -46,7 +46,7 @@ module FilterNavigation
       @main_items << content_tag(:li,
                                  link_to(caption, url, class: "nav-link rounded-0 py-1 px-3
                                          mr-0 #{'active' if active_label == label}"),
-                                 class: 'nav-item border-start border-primary')
+                                 class: 'nav-item border-start border-light')
     end
 
   end

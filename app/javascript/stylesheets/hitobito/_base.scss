@@ -12,12 +12,20 @@ a {
   text-decoration: none;
 }
 
+a:hover {
+  color: $link-hover-color;
+}
+
 ol, ul {
   padding: 0;
 }
 
 body {
   font-size: 14px;
+}
+
+.border-light {
+  border-color: #ccc !important;
 }
 
 legend {

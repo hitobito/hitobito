@@ -10,8 +10,14 @@
     = tab_content(:general, default_active: true) do
       %fieldset
       = f.labeled_input_fields(:name, :description, :publisher)
-      = f.indented do
-        = f.boolean_field(:subscribable, caption: t('.caption_subscribable'))
+      = f.labeled(:subscribable_by) do
+        = f.inline_radio_button(:subscribable_by, :none, entry.subscribable_by_label(:none), true, data: { hide: :subscribable_subscribed })
+        = f.inline_radio_button(:subscribable_by, :configured, entry.subscribable_by_label(:configured), true, data: { show: :subscribable_subscribed })
+        = f.inline_radio_button(:subscribable_by, :any, entry.subscribable_by_label(:any), true, data: { show: :subscribable_subscribed })
+      #subscribable_subscribed{style: 'display: none'}
+        = f.labeled(:subscribable_subscribed, class: 'depedent d-hide') do
+          - MailingList::SUBSCRIBABLE_SUBSCRIBED_OPTIONS.each do |key|
+            = f.inline_radio_button(:subscribable_subscribed, key, entry.subscribable_subscribed_label(key))
 
     = tab_content(:email) do
       %fieldset

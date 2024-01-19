@@ -35,6 +35,7 @@
 #
 
 class MailingList < ActiveRecord::Base
+  include I18nEnums
 
   serialize :preferred_labels, Array
   serialize :filter_chain, MailingLists::Filter::Chain
@@ -68,10 +69,15 @@ class MailingList < ActiveRecord::Base
   scope :list, -> { order(:name) }
   scope :subscribable, -> { where(subscribable: true) }
   scope :mailchimp, -> do
-    where.not(mailchimp_api_key: ['', nil]).where.not( mailchimp_list_id: ['', nil])
+    where.not(mailchimp_api_key: ['', nil]).where.not(mailchimp_list_id: ['', nil])
   end
 
   DEFAULT_LABEL = '_main'.freeze
+  SUBSCRIBABLE_OPTIONS = %w(none configured any)
+  SUBSCRIBABLE_SUBSCRIBED_OPTIONS = %w(subscribed unsubscribed)
+
+  i18n_enum :subscribable_by, SUBSCRIBABLE_OPTIONS
+  i18n_enum :subscribable_subscribed, SUBSCRIBABLE_SUBSCRIBED_OPTIONS
 
   def to_s(_format = :default)
     name

@@ -850,6 +850,15 @@ de:
         description: Beschreibung
         publisher: Herausgeber
         subscribable: Abonnenten dürfen sich selbst an/abmelden
+        subscribable_subscribed: Konfigurierte Abonnente sind standardmässig
+        subscribable_subscribeds:
+          subscribed: Angemeldet
+          unsubscribed: Abgemeldet
+        subscribable_by: Abonnenten dürfen sich selbst an/abmelden
+        subscribable_bies:
+          any: Jeder
+          configured: Nur konfigurierte
+          none: Keiner
         mail_name: Mailinglisten Adresse
         mail_address: Mailingliste
         mail_address_link: Mailingliste

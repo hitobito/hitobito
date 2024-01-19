@@ -18,6 +18,8 @@ class app.ElementToggler
 
   show: ->
     selector = $(@checkbox).data('show')
+    return if $("##{selector}").is(':visible')
+
     if @checkbox.checked
       $("##{selector}").slideDown()
     else

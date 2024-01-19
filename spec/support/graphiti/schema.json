@@ -534,6 +534,13 @@
             "lte"
           ]
         },
+        "with_deleted": {
+          "type": "boolean",
+          "operators": [
+            "eq"
+          ],
+          "single": true
+        },
         "with_archived": {
           "type": "boolean",
           "operators": [

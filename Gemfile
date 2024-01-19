@@ -75,7 +75,8 @@ gem 'rest-client'
 gem 'rexml'
 gem 'rotp'
 gem 'rqrcode'
-gem 'rswag', '>= 2.10.1'
+gem 'rswag-api', '~> 2.13'
+gem 'rswag-ui', '~> 2.13'
 gem 'rubyzip'
 gem 'seed-fu'
 gem 'sentry-raven'
@@ -111,7 +112,6 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-doc' # provides show-source/$ in the pry-console
   gem 'rspec-rails', '~> 5.0'
-  gem 'rswag-specs'
 end
 
 group :development do

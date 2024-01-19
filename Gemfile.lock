@@ -574,20 +574,12 @@ GEM
       rspec-mocks (~> 3.10)
       rspec-support (~> 3.10)
     rspec-support (3.12.1)
-    rswag (2.10.1)
-      rswag-api (= 2.10.1)
-      rswag-specs (= 2.10.1)
-      rswag-ui (= 2.10.1)
-    rswag-api (2.10.1)
-      railties (>= 3.1, < 7.1)
-    rswag-specs (2.10.1)
-      activesupport (>= 3.1, < 7.1)
-      json-schema (>= 2.2, < 4.0)
-      railties (>= 3.1, < 7.1)
-      rspec-core (>= 2.14)
-    rswag-ui (2.10.1)
-      actionpack (>= 3.1, < 7.1)
-      railties (>= 3.1, < 7.1)
+    rswag-api (2.13.0)
+      activesupport (>= 3.1, < 7.2)
+      railties (>= 3.1, < 7.2)
+    rswag-ui (2.13.0)
+      actionpack (>= 3.1, < 7.2)
+      railties (>= 3.1, < 7.2)
     rubocop (1.56.4)
       base64 (~> 0.1.1)
       json (~> 2.3)
@@ -825,8 +817,8 @@ DEPENDENCIES
   rspec-collection_matchers
   rspec-its
   rspec-rails (~> 5.0)
-  rswag (>= 2.10.1)
-  rswag-specs
+  rswag-api (~> 2.13)
+  rswag-ui (~> 2.13)
   rubocop
   rubocop-checkstyle_formatter
   rubocop-rails
@@ -856,4 +848,4 @@ DEPENDENCIES
   wirble
 
 BUNDLED WITH
-   2.4.20
+   2.5.5

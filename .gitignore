@@ -98,3 +98,7 @@ config/mail.yml
 # docker dev setup
 /jwt_signing_key.pem
 /db/seeds/development/nextcloud_oauth_app_seed.rb
+
+# generated rswag swagger files
+# (not used anymore, swagger is now generated on the fly with graphiti)
+/swagger

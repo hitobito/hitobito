@@ -877,14 +877,16 @@ describe Person do
     end
   end
 
-  describe 'after create' do
-    it 'schedules duplicate locator job after person creation' do
+  describe 'after update' do
+    let(:person) { people(:top_leader) }
+
+    it 'schedules duplicate locator job after updating duplication related attributes' do
       expect(People::DuplicateLocatorJob).to receive(:new)
-        .with(42)
+        .with(person.id)
         .and_call_original
 
       expect do
-        Person.create!(id: 42, first_name: 'Hansli', last_name: 'Miller')
+        person.update!(first_name: 'Hansli', last_name: 'Miller')
       end.to change {
         Delayed::Job
           .where(Delayed::Job
@@ -892,6 +894,14 @@ describe Person do
           .matches("%DuplicateLocatorJob%"))
           .count 
       }.by(1)
+    end
+
+    it 'does not schedule duplicate locator job if non relevant attributes are updated' do
+      expect(People::DuplicateLocatorJob).to receive(:new)
+        .with(person.id)
+        .never
+
+      person.update!(nickname: 'Hellboy')
     end
   end
 end

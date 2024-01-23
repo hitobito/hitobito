@@ -24,6 +24,24 @@ fr:
     updated_info: Modifié
     deleted_info: Supprimé
     archived_info: Archivé
+  activemodel:
+    models:
+      roles/termination:
+        one: Sortie
+        many: Départs
+        other: Sorties
+    attributes:
+      roles/termination:
+        terminate_on: Date de sortie
+    errors:
+      models:
+        roles/termination:
+          attributes:
+            terminate_on:
+              too_early: "doit se situer dans le futur"
+              too_late: "ne doit pas être postérieur à %{date} "
+            role:
+              not_terminatable: "n'est pas résiliable"
   activerecord:
     errors:
       messages:
@@ -142,6 +160,10 @@ fr:
           attributes:
             additional_sender:
               invalid: "doit contenir des adresses e-mail au format abcd@ee.ch ou *@ee.ch. Multiples adresses doivent être séparées par ',' ou ';'."
+        role:
+          attributes:
+            delete_on:
+              must_be_later_than_created_at: ne peut pas être avant "de"
     models:
       acts_as_taggable_on/tag:
         one: Tag
@@ -235,6 +257,10 @@ fr:
         one: date
         many: Dates
         other: Dates
+      future_role:
+        one: Rôle futur
+        many: Rôles futurs
+        other: Rôles futurs
       family_member:
         one: Membre de la famille
         many: Membres de la famille
@@ -746,6 +772,9 @@ fr:
         string_long: '%{role} dans %{group}'
         dates: Dates
         created_at: De
+        deleted_t: à
+        delete_on: à
+        delete_on_in_name: à
         class:
           archived: '%{role_kind} (archivé)'
           permission:
@@ -778,6 +807,10 @@ fr:
               one: Contact externe
               many: Membres externes
               other: Membres externes
+            future:
+              one: Futur
+              many: Futur
+              other: Futur
       contact_account:
         predefined_labels:
           privat: Privé

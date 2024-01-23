@@ -14,6 +14,7 @@ fr:
     chosen_no_results: Aucun résultat avec
     selected: Sélectionné
     columns: Colonnes
+    start_on: à partir de %{date}
     gender:
       male: Masculin
       female: féminin
@@ -94,6 +95,9 @@ fr:
       flash:
         success: "%{model} a été effacé avec succès."
         failure: "%{model} n'a pas pu être effacé."
+  blocked:
+    index:
+      title: Login bloqué
   contactable:
     address_or_email: "%{address} ou %{email}"
     fields:
@@ -150,6 +154,7 @@ fr:
     activate_totp: Configurer la validation en deux étapes
     reset_totp: Réinitialiser la validation en deux étapes
     disable_totp: Désactiver la validation en deux étapes
+    unblock_person: Débloquer le login
   dropdown/invoices:
     download: 'Exporter'
     print: 'Imprimer'
@@ -606,6 +611,9 @@ fr:
       flash:
         success: Le groupe a été archivé avec succès.
         failure: Une erreur est survenu lors de l'archivage du groupe.
+    deleted_people:
+      list:
+        manual_deletion: Suppression des données
     merge:
       select:
         title: 'fusionner %{group}'
@@ -681,10 +689,13 @@ fr:
       distribution: Répartition
     self_registration:
       form:
+        main_person_title: Données personnelles
         privacy_policy_caption: "J'accepte les conditions suivantes:"
         submit: Créer un compte
         has_account: Tu as déjà un compte?
         to_login_page: Enregistrer et s'inscrire
+      main_person:
+        notes: Commentaires
       create:
         email_taken: L'e-mail est déjà utilisé. Connecte-toi ou enregistre-toi avec une autre adresse e-mail.
         flash:
@@ -965,6 +976,10 @@ fr:
       caption_delivery_report: 'Envoyer l''e-mail avec confirmation à l''expéditeur'
       help_preferred_labels: 'Si disponibles, les e-mails ne sont envoyés qu''aux adresses e-mails avec cette désignation. Ce faisant, les adresses e-mail qui ne sont pas marquées comme adresses d''envoi seront également utilisées.'
       help_mailchimp_sync: 'Les personnes abonnées peuvent être exportées vers la liste MailChimp. Cette action écrase la liste MailChimp et les contacts actuels sont effacés.'
+    form_tabs:
+      general: Général
+      email: Liste de diffusion (e-mail)
+      mailchimp: MailChimp
     imap_mails:
       manage: e-mails
       mailboxes:
@@ -1260,12 +1275,16 @@ fr:
         mailing_list:
           approved: "La demande d'accès pour %{person} a déjà été validée. "
           rejected: "La demande d'accès pour %{person} a déjà été refusée. "
+    history:
+      index:
+        inactive_roles_title: 'Rôles inactifs'
     households:
       form:
         address_updated: "Adresse actualisée"
       fields:
         lives_in_household_with: "Habite dans le foyer avec"
         update_denied: "Tu ne peux pas ajouter %{other_person} au foyer. Il se peut que cette personne soit déjà dans le foyer ou que tu n'aies pas les droits d'écriture."
+        cannot_create_household: 'Tu as besoin de droits d''écriture sur plusieurs personnes pour les rassembler dans un ensemble de foyer.'
     family:
       fields:
         is_in_family_with: 'Fait partie de la famille de'
@@ -1344,9 +1363,23 @@ fr:
         groups_and_roles_that_see_me: Rôles qui ont accès à moi
         load_roles_that_see_me: 'Télécharger les groupes et les rôles'
         load_roles_that_see_me_hint: 'Cela peut prendre quelques secondes'
+        block_person: Bloquer le login
+        confirm_block_person: "Attention : tu vas empêcher cette personne de se connecter. Est-ce vraiment ce que tu veux?"
+        unblock_person: Débloquer le login
+        confirm_unblock_person: "Attention : cette personne va être débloquée. Est-ce vraiment ce que tu veux?"
+        person_blocked: Le login est maintenant bloqué
+        person_not_blocked: Le login n'est maintenant pas bloqué
       password_override:
         flashes:
           success: Le mot de passe a été écrasé. La personne a été informée et peut à tout moment demander un nouveau mot de passe via la fonction "Mot de passe oublié".
+      block_person:
+        flashes:
+          success: Le login a été bloqué avec succès.
+          error: Tu ne peux pas bloquer ton propre login.
+      unblock_person:
+        flashes:
+          success: Le login a été débloqué avec succès.
+          error: Tu ne peux pas débloquer ton propre login.
   person/csv_imports:
     invalid_file: Veuillez choisir un fichier CSV valable.
     duplicate_keys:
@@ -1437,6 +1470,19 @@ fr:
         other: "%{count} autres personnes ne sont pas visibles pour toi."
     log:
       no_changes: Aucun changement enregistré jusqu'à présent.
+    manual_deletions:
+      show:
+        title: "supprimer %{full_name}?"
+        minimize: 'Minimiser la personne'
+        delete: 'Supprimer définitivement la personne'
+        explanation: "Si la personne est supprimée, les données de la personne sont irrémédiablement supprimées. En cas de minimisation, la personne n'est pas supprimée, mais la plupart des données spécifiques à la personne sont supprimées."
+      minimize:
+        success: "%{full_name} a été minimisée avec succès."
+      delete:
+        success: "%{full_name} a été supprimé avec succès."
+      errors:
+        participated_in_recent_event: 'La personne a récemment participé à un événement'
+        already_minimized: 'La personne a déjà été minimisée'
     pdf:
       cannot_fit: Les adresses ne rentrent pas dans le format d'étiquettes défini.
     print:
@@ -1451,6 +1497,7 @@ fr:
         for_someone_else: 'Je confirme que j''ai obtenu le consentement de cette personne ou de son responsable légal pour les dispositions suivantes:'
     roles:
       title: Rôles actifs
+      convertable_title: Rôles futurs
     roles_aside:
       add_role: Ajouter un rôle
       set_main_group: Déterminer le groupe principal
@@ -1482,6 +1529,8 @@ fr:
       login: Le login est activé
       two_factors: Le login avec 2FA est activé
       status_off: Non existant
+      blocked: Bloqué
+      not_blocked: Non bloqué
   participations:
     destroy:
       flash:
@@ -1522,6 +1571,10 @@ fr:
       equal: est précis
       greater: plus grand que
       smaller: plus petit que
+    language:
+      title: Langue
+      word_connector: 'ou'
+      one_of: La langue est %{languages}
     tag:
       title: Tags
       prompt_tag_selection: Inclure les personnes qui contiennent au moins une des tags ci-dessous
@@ -1571,6 +1624,10 @@ fr:
   self_registration_reasons:
     destroy:
       foreign_key_error: Certaines personnes utilisent ce motif d'entrée, la suppression n'est donc pas possible.
+  role_decorator:
+    outdated_future_role: 'Le rôle n''a pas pu être activé par %{date} comme souhaité. Si l''enregistrement du rôle ne l''active pas, contacte le support. '
+    outdated_deleted_role: Le rôle n'a pas pu être arrêté le %{date} comme souhaité. Si l'enregistrement du rôle n’y met pas fin, contacte le support.
+    terminates_on: Sortie au %{date}
   roles:
     full_entry_label: '%{model_label} <i>%{role}</i> pour <i>%{person}</i> dans <i>%{group}</i>'
     role_changed: '%{full_entry_label} modifié en <i>%{new_role}</i>.'
@@ -1596,6 +1653,15 @@ fr:
           Le rôle %{role} du groupe %{group} ne peut voir que les données publiques
           (groupes, événements et abonnements; pas d'autres personnes).
       only_visible_from_above: Ce rôle n'est visible que pour les personnes du même niveau, pas pour les personnes d'un niveau supérieur.
+  roles/terminations:
+    global:
+      title: Sortie
+      submit: Sortir
+      warning: Cette opération est irréversible!
+      role:
+        text: Es-tu sûr de vouloir quitter ce groupe?
+    flash:
+      success: Tu es sorti avec succès par %{date}.
   role_lists:
     available:
       no_entries: Aucun rôle à effacer pour vous
@@ -1669,6 +1735,9 @@ fr:
     global:
       link:
         add: Ajouter API-Key
+  steps_component:
+    next_link: Continuer
+    prev_link: Retour
   subscriber:
     group:
       edit:
@@ -1684,6 +1753,9 @@ fr:
     exclude_person:
       form:
         exclude_subscriber: 'Exclure les abonné-e-s'
+    filter:
+      show:
+        title: Conditions globales
     subscriber_lists:
       new:
         title: Ajouter des personnes à l'abonnement
@@ -1697,6 +1769,9 @@ fr:
     success: 'Tu as été ajouté(e) à l''abonnement.'
     failure: 'Tu n''as pas pu être ajouté(e) à l''abonnement: %{errors}'
     unsubscribed: 'Tu as été retiré(e) de l''abonnement avec succès.'
+  subscriber/filter:
+    success: 'Les conditions globales ont été mises à jour avec succès'
+    failure: 'Les conditions globales n''ont pas pu être mises à jour'
   subscriber/exclude_person:
     success: '%{subscriber} a été exclu avec succès'
     failure: '%{subscriber} n''est pas un abonné'

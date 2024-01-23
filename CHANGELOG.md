@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## unreleased
+## Version 2.0
 
 *  Nachdem Erstellen einer Person wird sogleich auf mögliche Duplikate geprüft (hitobito#2350)
 

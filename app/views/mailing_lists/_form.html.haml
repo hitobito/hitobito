@@ -11,13 +11,13 @@
       %fieldset
       = f.labeled_input_fields(:name, :description, :publisher)
       = f.labeled(:subscribable_by) do
-        = f.inline_radio_button(:subscribable_by, :none, entry.subscribable_by_label(:none), true, data: { hide: :subscribable_subscribed })
-        = f.inline_radio_button(:subscribable_by, :configured, entry.subscribable_by_label(:configured), true, data: { show: :subscribable_subscribed })
-        = f.inline_radio_button(:subscribable_by, :any, entry.subscribable_by_label(:any), true, data: { show: :subscribable_subscribed })
-      #subscribable_subscribed{entry.subscribable_by == 'none' ? { style: 'display: none' }  : {}}
-        = f.labeled(:subscribable_subscribed) do
-          - MailingList::SUBSCRIBABLE_SUBSCRIBED_OPTIONS.each do |key|
-            = f.inline_radio_button(:subscribable_subscribed, key, entry.subscribable_subscribed_label(key))
+        = f.inline_radio_button(:subscribable_for, :nobody, entry.subscribable_by_label(:nobody), true, data: { hide: :subscribable_subscribed })
+        = f.inline_radio_button(:subscribable_for, :configured, entry.subscribable_by_label(:configured), true, data: { show: :subscribable_subscribed })
+        = f.inline_radio_button(:subscribable_for, :anyone, entry.subscribable_by_label(:anyone), true, data: { show: :subscribable_subscribed })
+      #subscribable_subscribed{entry.subscribable_for == 'nobody' ? { style: 'display: none' }  : {}}
+        = f.labeled(:subscribable_mode) do
+          - MailingList::SUBSCRIBABLE_MODES.each do |key|
+            = f.inline_radio_button(:subscribable_mode, key, entry.subscribable_mode_label(key))
 
     = tab_content(:email) do
       %fieldset

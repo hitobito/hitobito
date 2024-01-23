@@ -850,12 +850,12 @@ de:
         description: Beschreibung
         publisher: Herausgeber
         subscribable: Abonnenten dürfen sich selbst an/abmelden
-        subscribable_subscribed: Konfigurierte Abonnente sind standardmässig
-        subscribable_subscribeds:
+        subscribable_mode: Konfigurierte Abonnente sind standardmässig
+        subscribable_modes:
           subscribed: Angemeldet
           unsubscribed: Abgemeldet
-        subscribable_by: Abonnenten dürfen sich selbst an/abmelden
-        subscribable_bies:
+        subscribable_for: Abonnenten dürfen sich selbst an/abmelden
+        subscribable_fors:
           any: Jeder
           configured: Nur konfigurierte
           none: Keiner

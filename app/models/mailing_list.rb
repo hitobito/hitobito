@@ -58,30 +58,31 @@ class MailingList < ActiveRecord::Base
   validates :mail_name, uniqueness: { case_sensitive: false },
                         format: /\A[a-z][a-z0-9\-\_\.]*\Z/,
                         allow_blank: true
-  validates :description, length: { allow_nil: true, maximum: 2**16 - 1 }
+  validates :description, length: { allow_nil: true, maximum: (2**16) - 1 }
   validate :assert_mail_name_is_not_protected
   validates :additional_sender,
-      allow_blank: true,
-      format: /\A *(([a-z][a-z0-9\-\_\.]*|\*)@([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,} *(,|;|\Z) *)+\Z/
+            allow_blank: true,
+            format: /\A *(([a-z][a-z0-9\-\_\.]*|\*)@([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,} *(,|;|\Z) *)+\Z/
 
   after_destroy :schedule_mailchimp_destroy, if: :mailchimp?
 
   scope :list, -> { order(:name) }
-  scope :subscribable, -> { where.not(subscribable_by: :none) }
   scope :mailchimp, -> do
     where.not(mailchimp_api_key: ['', nil]).where.not(mailchimp_list_id: ['', nil])
   end
 
   DEFAULT_LABEL = '_main'.freeze
-  SUBSCRIBABLE_OPTIONS = %w(none configured any)
-  SUBSCRIBABLE_SUBSCRIBED_OPTIONS = %w(subscribed unsubscribed)
+  SUBSCRIBABLE_FORS = %w(nobody configured anyone).freeze
+  SUBSCRIBABLE_MODES = %w(opt_in opt_out).freeze
 
-  i18n_enum :subscribable_by, SUBSCRIBABLE_OPTIONS
-  i18n_enum :subscribable_subscribed, SUBSCRIBABLE_SUBSCRIBED_OPTIONS
+  i18n_enum :subscribable_for, SUBSCRIBABLE_FORS, scopes: true
+  i18n_enum :subscribable_mode, SUBSCRIBABLE_MODES, scopes: true
 
   def to_s(_format = :default)
     name
   end
+
+  def subscribable?(person); end
 
   def labels
     main_email ? preferred_labels + [DEFAULT_LABEL] : preferred_labels
@@ -161,10 +162,10 @@ class MailingList < ActiveRecord::Base
   private
 
   def assert_mail_name_is_not_protected
-    if mail_name? && application_retriever_name
-      if mail_name.casecmp(application_retriever_name.split('@', 2).first).zero?
-        errors.add(:mail_name, :not_allowed, mail_name: mail_name)
-      end
+    if mail_name? && application_retriever_name && mail_name.casecmp(application_retriever_name.split(
+      '@', 2
+    ).first).zero?
+      errors.add(:mail_name, :not_allowed, mail_name: mail_name)
     end
   end
 

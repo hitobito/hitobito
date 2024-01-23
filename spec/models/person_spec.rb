@@ -876,4 +876,32 @@ describe Person do
       expect(person.blocked?).to be_falsey
     end
   end
+
+  describe 'after update' do
+    let(:person) { people(:top_leader) }
+
+    it 'schedules duplicate locator job after updating duplication related attributes' do
+      expect(People::DuplicateLocatorJob).to receive(:new)
+        .with(person.id)
+        .and_call_original
+
+      expect do
+        person.update!(first_name: 'Hansli', last_name: 'Miller')
+      end.to change {
+        Delayed::Job
+          .where(Delayed::Job
+          .arel_table[:handler]
+          .matches("%DuplicateLocatorJob%"))
+          .count 
+      }.by(1)
+    end
+
+    it 'does not schedule duplicate locator job if non relevant attributes are updated' do
+      expect(People::DuplicateLocatorJob).to receive(:new)
+        .with(person.id)
+        .never
+
+      person.update!(nickname: 'Hellboy')
+    end
+  end
 end

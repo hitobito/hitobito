@@ -123,7 +123,7 @@ describe Groups::SelfRegistrationController do
 
           end
 
-          it 'creates person and role if privacy policy is accepted' do
+          it 'creates person and role if privacy policy is accepted, schedules duplicate locator job' do
             expect do
               post :create, params: {
                 group_id: group.id,
@@ -143,6 +143,33 @@ describe Groups::SelfRegistrationController do
             expect(person.full_name).to eq('Bob Miller')
             expect(role.type).to eq(Group::TopGroup::Member.sti_name)
             expect(role.group).to eq(group)
+
+            is_expected.to redirect_to(new_person_session_path)
+          end
+
+          it 'creates person and schedules duplicate location job' do
+            expect(People::DuplicateLocatorJob).to receive(:new)
+              .with(kind_of(Integer))
+              .and_call_original
+
+            expect do
+              post :create, params: {
+                group_id: group.id,
+                self_registration: {
+                  main_person_attributes: { first_name: 'Alfred', last_name: 'Burn', privacy_policy_accepted: '1' }
+                }
+              }
+            end.to change { Person.count }.by(1)
+              .and change {
+                Delayed::Job
+                  .where(Delayed::Job
+                  .arel_table[:handler]
+                  .matches("%DuplicateLocatorJob%"))
+                  .count 
+              }.by(1)
+
+            person = Person.find_by(first_name: 'Alfred', last_name: 'Burn')
+            expect(person.primary_group).to eq(group)
 
             is_expected.to redirect_to(new_person_session_path)
           end

@@ -15,13 +15,13 @@ class Person::SubscriptionsController < ApplicationController
 
   def create
     authorize!(:update, person)
-    create_subscription
+    subscriptions.create(mailing_list)
     redirect_with_notice
   end
 
   def destroy
     authorize!(:update, person)
-    delete_subscription || create_subscription(excluded: true)
+    subscriptions.destroy(mailing_list)
     redirect_with_notice
   end
 
@@ -53,12 +53,4 @@ class Person::SubscriptionsController < ApplicationController
     @subscriptions ||= Person::Subscriptions.new(person)
   end
 
-  def delete_subscription
-    mailing_list.subscriptions.find_by(subscriber: person)&.destroy
-  end
-
-  def create_subscription(options = {})
-    mailing_list.subscriptions.find_by(subscriber: person, excluded: true)&.destroy ||
-      mailing_list.subscriptions.create(options.merge(subscriber: person))
-  end
 end

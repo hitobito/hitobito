@@ -7,6 +7,16 @@ class Person::Subscriptions
     @scope = scope
   end
 
+  def create(mailing_list)
+    mailing_list.subscriptions.find_by(subscriber: @person, excluded: true)&.destroy ||
+      mailing_list.subscriptions.create(subscriber: @person)
+  end
+
+  def destroy(mailing_list)
+    mailing_list.subscriptions.find_by(subscriber: @person)&.destroy ||
+      mailing_list.subscriptions.create(subscriber: @person, excluded: true)
+  end
+
   def subscribed
     scope
       .where(id: direct.select('mailing_list_id'))

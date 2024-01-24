@@ -199,16 +199,16 @@ describe Person::Subscriptions do
         expect(subscribed).to be_empty
       end
 
-      it 'includes leaders when group subscriptions exists but excluded' do
+      it 'excludes leaders when group subscriptions exists but excluded' do
         create_group_subscription
         leaders.subscriptions.create!(subscriber: person, excluded: true)
-        expect(subscribed).to eq [leaders]
+        expect(subscribed).to be_empty
       end
 
-      it 'includes leaders when event subscriptions exists but excluded' do
+      it 'excludes leaders when event subscriptions exists but excluded' do
         create_event_subscription
         leaders.subscriptions.create!(subscriber: person, excluded: true)
-        expect(subscribed).to eq [leaders]
+        expect(subscribed).to be_empty
       end
     end
 

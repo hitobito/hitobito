@@ -42,12 +42,15 @@ class Person::SubscriptionsController < ApplicationController
   end
 
   def subscribed
-    @subscribed ||= Person::Subscriptions.new(person).subscribed.includes(:group).list
+    @subscribed ||= subscriptions.subscribed.list
   end
 
   def subscribable
-    @subscribable ||= Person::Subscriptions.new(person).subscribable.includes(:group)
-                                           .where.not(id: subscribed).list
+    @subscribable ||= subscriptions.subscribable.where.not(id: subscribed).list
+  end
+
+  def subscriptions
+    @subscriptions ||= Person::Subscriptions.new(person)
   end
 
   def delete_subscription
@@ -55,6 +58,7 @@ class Person::SubscriptionsController < ApplicationController
   end
 
   def create_subscription(options = {})
-    mailing_list.subscriptions.create(options.merge(subscriber: person))
+    mailing_list.subscriptions.find_by(subscriber: person, excluded: true)&.destroy ||
+      mailing_list.subscriptions.create(options.merge(subscriber: person))
   end
 end

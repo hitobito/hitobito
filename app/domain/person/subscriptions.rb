@@ -20,15 +20,21 @@ class Person::Subscriptions
     scope
       .where.not(id: exclusions.select('mailing_list_id'))
       .where(id: direct.select('mailing_list_id'))
-      .or(configured(:opt_out))
+      .or(scope.merge(from_group_or_events))
       .distinct
   end
 
   def subscribable
     scope
+      .where.not(id: direct.select('mailing_list_id'))
       .where(subscribable_for: :anyone)
-      .or(configured(:opt_in))
+      .or(scope.merge(configured(:opt_out)))
       .distinct
+
+
+    # .or(configured(:opt_in))
+    # .or(configured(:opt_out).where(id: exclusions.select('mailing_list_id')))
+    # .distinct
   end
 
   def direct
@@ -73,8 +79,7 @@ class Person::Subscriptions
   private
 
   def configured(mode)
-    scope.where(subscribable_for: :configured, subscribable_mode: mode)
-         .merge(from_group_or_events)
+    scope.where(subscribable_mode: mode).merge(from_group_or_events)
   end
 
   def tag_excluded_subscription_ids

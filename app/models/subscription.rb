@@ -28,6 +28,8 @@ class Subscription < ActiveRecord::Base
   scope :groups, -> { where(subscriber_type: Group.sti_name) }
   scope :events, -> { where(subscriber_type: Event.sti_name) }
   scope :tagged, -> { joins(:subscription_tags) }
+  scope :included, -> { where(excluded: false) }
+  scope :excluded, -> { where(excluded: true) }
 
   ### ASSOCIATIONS
 

@@ -5,7 +5,7 @@
 
 class MailingLists::Subscribers
 
-  delegate :id, :subscriptions, to: '@list'
+  delegate :id, :subscriptions, :opt_in?, to: '@list'
 
   def initialize(mailing_list, people_scope = Person.only_public_data)
     @list = mailing_list
@@ -13,6 +13,12 @@ class MailingLists::Subscribers
   end
 
   def people
+    opt_in? ? people_with_explicit_subscription : people_as_configured
+  end
+
+  private
+
+  def people_as_configured
     @list.filter_chain.filter(@people_scope).
       joins(people_joins).
       joins(subscription_joins).
@@ -21,6 +27,14 @@ class MailingLists::Subscribers
       where("people.id NOT IN (#{tag_excluded_person_ids.to_sql})").
       where(subscriber_conditions).
       distinct
+  end
+
+  def people_with_explicit_subscription
+    @list
+      .filter_chain
+      .filter(@people_scope)
+      .joins(:subscriptions)
+      .merge(subscription.people.included)
   end
 
   def people_joins
@@ -114,8 +128,6 @@ class MailingLists::Subscribers
           Event.sti_name,
           true)
   end
-
-  private
 
   def tag_excluded_person_ids
     ActsAsTaggableOn::Tagging

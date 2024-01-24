@@ -83,5 +83,6 @@ class Person::Subscriptions
     scope
       .where(id: from_events.select('mailing_list_id'))
       .or(scope.where(id: from_groups.select('mailing_list_id')))
+      .where.not(id: exclusions.select('mailing_list_id'))
   end
 end

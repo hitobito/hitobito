@@ -78,6 +78,9 @@ class MailingList < ActiveRecord::Base
   after_destroy :schedule_mailchimp_destroy, if: :mailchimp?
 
   scope :list, -> { order(:name) }
+  scope :anyone, -> { where(subscribable_for: :anyone) }
+  scope :opt_in, -> { where(subscribable_for: :configured, subscribable_mode: :opt_in) }
+  scope :opt_out, -> { where(subscribable_for: :configured, subscribable_mode: :opt_out) }
   scope :subscribable, -> { where(subscribable_for: [:anyone, :configured]) }
   scope :mailchimp, -> do
     where.not(mailchimp_api_key: ['', nil]).where.not(mailchimp_list_id: ['', nil])

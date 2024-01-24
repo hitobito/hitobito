@@ -24,52 +24,159 @@ describe Person::Subscriptions do
     leaders.subscriptions.create!(subscriber: event)
   end
 
-  describe '#subscribed' do
-    subject(:subscribed) { described_class.new(person).subscribed }
+  context 'subscribable_for anyone' do
+    before { leaders.update(subscribable_for: :anyone) }
 
-    it 'is empty without subscription' do
-      expect(subscribed).to be_empty
+    describe '#subscribed' do
+      subject(:subscribed) { described_class.new(person).subscribed }
+
+      it 'is empty without subscription' do
+        expect(subscribed).to be_empty
+      end
+
+      it 'includes leaders when direct subscription exists' do
+        leaders.subscriptions.create!(subscriber: person)
+        expect(subscribed).to eq [leaders]
+      end
+
+      it 'includes leaders when group subscription exists' do
+        create_group_subscription
+        expect(subscribed).to eq [leaders]
+      end
+
+      it 'includes leaders when event subscription exists' do
+        create_event_subscription
+        expect(subscribed).to eq [leaders]
+      end
     end
 
-    it 'includes leaders when direct subscription exists' do
-      leaders.subscriptions.create!(subscriber: person)
-      expect(subscribed).to eq [leaders]
-    end
+    describe '#subscribable' do
+      subject(:subscribable) { described_class.new(person).subscribable }
+      before { MailingList.where.not(id: leaders.id).destroy_all }
 
-    it 'includes leaders when group subscription exists' do
-      create_group_subscription
-      expect(subscribed).to eq [leaders]
-    end
+      it 'includes leaders when no subscription exists' do
+        expect(subscribable).to eq [leaders]
+      end
 
-    it 'includes leaders when event subscription exists' do
-      create_event_subscription
-      expect(subscribed).to eq [leaders]
+      it 'excludes leaders when direct subscription exists' do
+        leaders.subscriptions.create!(subscriber: person)
+        expect(subscribable).to be_empty
+      end
+
+      it 'excludes leaders when group subscription exists' do
+        create_group_subscription
+        expect(subscribable).to be_empty
+      end
+
+      it 'excludes leaders when event subscription exists' do
+        create_event_subscription
+        expect(subscribable).to be_empty
+      end
     end
   end
 
-  describe '#subscribable' do
-    subject(:subscribable) { described_class.new(person).subscribable }
-    before { MailingList.where.not(id: leader.id).update_all(subscribable_for: :nobody) }
+  context 'subscribable_for configured with mode opt_out' do
+    before { leaders.update(subscribable_for: :configured, subscribable_mode: :opt_out) }
 
-    it 'is includes leaders when no subscription exists' do
-      expect(subscribed).to be_empty
+    describe '#subscribed' do
+      subject(:subscribed) { described_class.new(person).subscribed }
+
+      it 'is empty without subscription' do
+        expect(subscribed).to be_empty
+      end
+
+      it 'includes leaders when direct subscription exists' do
+        leaders.subscriptions.create!(subscriber: person)
+        expect(subscribed).to eq [leaders]
+      end
+
+      it 'includes leaders when group subscription exists' do
+        create_group_subscription
+        expect(subscribed).to eq [leaders]
+      end
+
+      it 'includes leaders when event subscription exists' do
+        create_event_subscription
+        expect(subscribed).to eq [leaders]
+      end
     end
 
-    it 'excludes leaders when direct subscription exists' do
-      leaders.subscriptions.create!(subscriber: person)
-      expect(subscribed).to be_empty
-    end
+    describe '#subscribable' do
+      subject(:subscribable) { described_class.new(person).subscribable }
+      before { MailingList.where.not(id: leaders.id).destroy_all }
 
-    it 'excludes leaders when group subscription exists' do
-      create_group_subscription
-      expect(subscribed).to be_empty
-    end
+      it 'excludes leaders when no subscription exists' do
+        expect(subscribable).to be_empty
+      end
 
-    it 'excludes leaders when event subscription exists' do
-      create_event_subscription
-      expect(subscribed).to be_empty
+      it 'excludes leaders when direct subscription exists' do
+        leaders.subscriptions.create!(subscriber: person)
+        expect(subscribable).to be_empty
+      end
+
+      it 'excludes leaders when group subscription exists' do
+        create_group_subscription
+        expect(subscribable).to be_empty
+      end
+
+      it 'excludes leaders when event subscription exists' do
+        create_event_subscription
+        expect(subscribable).to be_empty
+      end
     end
   end
+
+  context 'subscribable_for configured with mode opt_in' do
+    before { leaders.update(subscribable_for: :configured, subscribable_mode: :opt_in) }
+
+    describe '#subscribed' do
+      subject(:subscribed) { described_class.new(person).subscribed }
+
+      it 'is empty without subscription' do
+        expect(subscribed).to be_empty
+      end
+
+      it 'includes leaders when direct subscription exists' do
+        leaders.subscriptions.create!(subscriber: person)
+        expect(subscribed).to eq [leaders]
+      end
+
+      it 'excludes leaders when group subscription exists' do
+        create_group_subscription
+        expect(subscribed).to be_empty
+      end
+
+      it 'excludes leaders when event subscription exists' do
+        create_event_subscription
+        expect(subscribed).to be_empty
+      end
+    end
+
+    describe '#subscribable' do
+      subject(:subscribable) { described_class.new(person).subscribable }
+      before { MailingList.where.not(id: leaders.id).destroy_all }
+
+      it 'excludes leaders when no subscription exists' do
+        expect(subscribable).to be_empty
+      end
+
+      it 'excludes leaders when direct subscription exists' do
+        leaders.subscriptions.create!(subscriber: person)
+        expect(subscribable).to be_empty
+      end
+
+      it 'includes leaders when group subscription exists' do
+        create_group_subscription
+        expect(subscribable).to eq [leaders]
+      end
+
+      it 'includes leaders when event subscription exists' do
+        create_event_subscription
+        expect(subscribable).to eq [leaders]
+      end
+    end
+  end
+
 
   # describe '#subscribable' do
   #   subject(:subscribable) { described_class.new(person).subscribable }

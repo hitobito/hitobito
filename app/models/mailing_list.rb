@@ -67,6 +67,7 @@ class MailingList < ActiveRecord::Base
   after_destroy :schedule_mailchimp_destroy, if: :mailchimp?
 
   scope :list, -> { order(:name) }
+  scope :subscribable, -> { where(subscribable_mode: [:anyone, :configured]) }
   scope :mailchimp, -> do
     where.not(mailchimp_api_key: ['', nil]).where.not(mailchimp_list_id: ['', nil])
   end
@@ -80,6 +81,10 @@ class MailingList < ActiveRecord::Base
 
   def to_s(_format = :default)
     name
+  end
+
+  def subscribable
+    %w(configured anyone).include?(subscribable_for)
   end
 
   def subscribable?(person); end

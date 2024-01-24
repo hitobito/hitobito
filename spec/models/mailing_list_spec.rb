@@ -693,22 +693,40 @@ describe MailingList do
   end
 
   context 'subscribable_for is configured' do
-    let(:list) { mailing_lists(:leaders).tap { |l| l.subscribable_for = 'configured' } }
+    let(:leaders) { mailing_lists(:leaders).tap { |l| l.subscribable_for = 'configured' } }
 
     it 'sets default subscribable mode if none is set' do
-      expect(list).to be_valid
-      expect(list.subscribable_mode).to eq 'opt_out'
+      expect(leaders).to be_valid
+      expect(leaders.subscribable_mode).to eq 'opt_out'
     end
 
     it 'accepts any valid subscribable mode' do
-      list.subscribable_mode = 'opt_in'
-      expect(list).to be_valid
-      expect(list.subscribable_mode).to eq 'opt_in'
+      leaders.subscribable_mode = 'opt_in'
+      expect(leaders).to be_valid
+      expect(leaders.subscribable_mode).to eq 'opt_in'
     end
 
     it 'rejects invalid subscribable mode' do
-      list.subscribable_mode = 'invalid'
-      expect(list).not_to be_valid
+      leaders.subscribable_mode = 'invalid'
+      expect(leaders).not_to be_valid
+    end
+  end
+
+  describe '::subscribable' do
+    let(:leaders) { mailing_lists(:leaders) }
+
+    it 'includes leaders as subscriable_for is configured as anyone' do
+      expect(MailingList.subscribable).to include(leaders)
+    end
+
+    it 'includes leaders if subscriable_for is configured as configured' do
+      leaders.update!(subscribable_for: :configured)
+      expect(MailingList.subscribable).to include(leaders)
+    end
+
+    it 'excludes leaders if subscriable_for is configured as nobody' do
+      leaders.update!(subscribable_for: :nobody)
+      expect(MailingList.subscribable).not_to include(leaders)
     end
   end
 

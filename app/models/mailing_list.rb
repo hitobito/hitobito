@@ -38,6 +38,9 @@
 class MailingList < ActiveRecord::Base
   include I18nEnums
 
+  SUBSCRIBABLE_FORS = %w(nobody configured anyone).freeze
+  SUBSCRIBABLE_MODES = %w(opt_out opt_in).freeze
+
   serialize :preferred_labels, Array
   serialize :filter_chain, MailingLists::Filter::Chain
 
@@ -68,20 +71,19 @@ class MailingList < ActiveRecord::Base
             allow_blank: true,
             format: /\A *(([a-z][a-z0-9\-\_\.]*|\*)@([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,} *(,|;|\Z) *)+\Z/
 
-  validates :subscribable_mode, inclusion: { in: %w(opt_in opt_out) },
+  validates :subscribable_for, inclusion: { in: SUBSCRIBABLE_FORS }
+  validates :subscribable_mode, inclusion: { in: SUBSCRIBABLE_MODES },
                                 if: :subscribable_for_configured?
 
   after_destroy :schedule_mailchimp_destroy, if: :mailchimp?
 
   scope :list, -> { order(:name) }
-  scope :subscribable, -> { where(subscribable_mode: [:anyone, :configured]) }
+  scope :subscribable, -> { where(subscribable_for: [:anyone, :configured]) }
   scope :mailchimp, -> do
     where.not(mailchimp_api_key: ['', nil]).where.not(mailchimp_list_id: ['', nil])
   end
 
   DEFAULT_LABEL = '_main'.freeze
-  SUBSCRIBABLE_FORS = %w(nobody configured anyone).freeze
-  SUBSCRIBABLE_MODES = %w(opt_out opt_in).freeze
 
   i18n_enum :subscribable_for, SUBSCRIBABLE_FORS, scopes: true
   i18n_enum :subscribable_mode, SUBSCRIBABLE_MODES, scopes: true

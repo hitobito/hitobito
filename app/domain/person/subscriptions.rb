@@ -7,15 +7,6 @@ class Person::Subscriptions
     @scope = scope
   end
 
-  def mailing_lists
-    scope
-      .where(id: direct.select('mailing_list_id'))
-      .or(scope.where(id: from_events.select('mailing_list_id')))
-      .or(scope.where(id: from_groups.select('mailing_list_id')))
-      .where.not(id: exclusions.select('mailing_list_id'))
-      .distinct
-  end
-
   def subscribed
     scope
       .where(id: direct.select('mailing_list_id'))
@@ -70,10 +61,6 @@ class Person::Subscriptions
   end
 
   private
-
-  def configured(mode)
-    scope.where(subscribable_mode: mode).merge(from_group_or_events)
-  end
 
   def tag_excluded_subscription_ids
     SubscriptionTag.where(tag_id: @person.tag_ids, excluded: true).pluck(:subscription_id)

@@ -42,7 +42,7 @@ class Person::SubscriptionsController < ApplicationController
   end
 
   def subscribed
-    @subscribed ||= Person::Subscriptions.new(person).mailing_lists.includes(:group).list
+    @subscribed ||= Person::Subscriptions.new(person).subscribed.includes(:group).list
   end
 
   def subscribable

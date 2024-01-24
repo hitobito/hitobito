@@ -3,33 +3,78 @@ require 'spec_helper'
 
 describe Person::Subscriptions do
 
-  let(:leaders)   { mailing_lists(:leaders) }
+  let(:list) { mailing_lists(:leaders) }
+  let(:leaders) { mailing_lists(:leaders) }
   let(:person)    { people(:top_leader) }
 
   let(:top_layer) { groups(:top_layer) }
   let(:top_group) { groups(:top_group) }
-  let(:scope) { MailingList.where(id: leaders.id) }
+
+  describe '#subscribed' do
+    subject(:subscribed) { described_class.new(person).subscribed }
+
+    it 'is empty without subscription' do
+      expect(subscribed).to be_empty
+    end
+
+    it 'includes leaders when direct subscription exists' do
+      leaders.subscriptions.create!(subscriber: person)
+      expect(subscribed).to eq [leaders]
+    end
+
+    it 'includes leaders when group subscription exists' do
+      leaders.subscriptions.create!(subscriber: person)
+      expect(subscribed).to eq [leaders]
+    end
+
+    it 'includes leaders when event subscription exists' do
+      event = Fabricate(:event, groups: [top_layer])
+      event.participations.create!(person: person, active: true)
+      event.reload.dates.first.update!(start_at: 10.days.ago)
+      leaders.subscriptions.create!(subscriber: event)
+    end
+
+    context 'with configured list' do
+      before do
+        MailingList.update_all(subscribable_for: :nobody)
+        leaders.update!(subscribable_for: :configured, subscribable_mode: :opt_out)
+      end
+
+      it 'includes list if group subscription matches' do
+        leaders.subscriptions.create!(subscriber: top_group,
+                                      role_types: ['Group::TopGroup::Leader'])
+        expect(subscribed).to include(leaders)
+      end
+
+      it 'includes list if event subscription matches' do
+        event = Fabricate(:event, groups: [top_layer])
+        event.participations.create!(person: person, active: true)
+        event.reload.dates.first.update!(start_at: 10.days.ago)
+        leaders.subscriptions.create!(subscriber: event)
+
+        expect(subscribed).to include(leaders)
+      end
+    end
+  end
 
   describe '#subscribable' do
-    subject(:list) { described_class.new(person).subscribable }
+    subject(:subscribable) { described_class.new(person).subscribable }
 
     it 'includes all 3 lists' do
-      expect(list).to have(3).items
+      expect(subscribable).to have(3).items
     end
 
     it 'excludes all 3 lists if configured for nobody' do
       MailingList.update_all(subscribable_for: :nobody)
-      expect(list).to be_empty
+      expect(subscribable).to be_empty
     end
 
     it 'excludes all 3 lists if configured for configured' do
       MailingList.update_all(subscribable_for: :configured)
-      expect(list).to be_empty
+      expect(subscribable).to be_empty
     end
 
     context 'with configured list' do
-      let(:leaders) { mailing_lists(:leaders) }
-
       before do
         MailingList.update_all(subscribable_for: :nobody)
         leaders.update!(subscribable_for: :configured, subscribable_mode: :opt_in)
@@ -39,7 +84,7 @@ describe Person::Subscriptions do
         leaders.subscriptions.create!(subscriber: top_group,
                                       role_types: ['Group::TopGroup::Leader'])
 
-        expect(list).to include(leaders)
+        expect(subscribable).to include(leaders)
       end
 
       it 'includes list if event subscription matches' do
@@ -48,7 +93,7 @@ describe Person::Subscriptions do
         event.reload.dates.first.update!(start_at: 10.days.ago)
         leaders.subscriptions.create!(subscriber: event)
 
-        expect(list).to include(leaders)
+        expect(subscribable).to include(leaders)
       end
     end
   end

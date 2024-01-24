@@ -48,7 +48,7 @@ module LayoutHelper
     name = name.to_s.dasherize
 
     if options.fetch(:filled, true)
-      add_css_class(options, "fa fa-#{name}")
+      add_css_class(options, "fas fa-#{name}")
     else
       add_css_class(options, "far fa-#{name}")
     end

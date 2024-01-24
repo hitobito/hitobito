@@ -32,7 +32,7 @@
 
     - t.col('') do |r|
       - if can?(:approve, r)
-        = action_button(t('.approve'), person_add_request_path(r), :ok, method: :post)
+        = action_button(t('.approve'), person_add_request_path(r), :check, method: :post)
 
     - t.col('') do |r|
       - if can?(:reject, r)

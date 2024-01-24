@@ -12,7 +12,7 @@ class MailingListsController < CrudController
 
   self.permitted_attrs = [:name, :description, :publisher, :mail_name,
                           :additional_sender, :subscribable, :subscribers_may_post,
-                          :subscribable_by, :subscribable_subscribed,
+                          :subscribable_for, :subscribable_mode,
                           :anyone_may_post, :main_email, :delivery_report,
                           :mailchimp_list_id, :mailchimp_api_key,
                           :mailchimp_include_additional_emails, { preferred_labels: [] }]
@@ -23,11 +23,6 @@ class MailingListsController < CrudController
   before_render_form :load_labels
 
   respond_to :js
-
-  def edit
-    assign_attributes if request.format.js?
-    super
-  end
 
   def index
     respond_to do |format|
@@ -43,6 +38,12 @@ class MailingListsController < CrudController
       end
     end
   end
+
+  def edit
+    assign_attributes if request.format.js?
+    super
+  end
+
 
   private
 
@@ -64,7 +65,7 @@ class MailingListsController < CrudController
     paged_entries = entries.page(params[:page])
     render json: [paging_properties(paged_entries),
                   ListSerializer.new(paged_entries, controller: self,
-                    serializer: MailingListSerializer)].inject(&:merge)
+                                                    serializer: MailingListSerializer)].inject(&:merge)
   end
 
   alias group parent

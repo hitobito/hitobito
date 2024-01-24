@@ -24,7 +24,8 @@
 #  name                                :string(255)      not null
 #  preferred_labels                    :string(255)
 #  publisher                           :string(255)
-#  subscribable                        :boolean          default(FALSE), not null
+#  subscribable_for                    :string(255)      default("nobody"), not null
+#  subscribable_mode                   :string(255)
 #  subscribers_may_post                :boolean          default(FALSE), not null
 #  group_id                            :integer          not null
 #  mailchimp_list_id                   :string(255)
@@ -55,6 +56,9 @@ class MailingList < ActiveRecord::Base
   has_many :messages, dependent: :nullify
 
   validates_by_schema
+  before_validation :set_default_subscribable_mode
+
+
   validates :mail_name, uniqueness: { case_sensitive: false },
                         format: /\A[a-z][a-z0-9\-\_\.]*\Z/,
                         allow_blank: true
@@ -63,6 +67,9 @@ class MailingList < ActiveRecord::Base
   validates :additional_sender,
             allow_blank: true,
             format: /\A *(([a-z][a-z0-9\-\_\.]*|\*)@([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,} *(,|;|\Z) *)+\Z/
+
+  validates :subscribable_mode, inclusion: { in: %w(opt_in opt_out) },
+                                if: :subscribable_for_configured?
 
   after_destroy :schedule_mailchimp_destroy, if: :mailchimp?
 
@@ -74,7 +81,7 @@ class MailingList < ActiveRecord::Base
 
   DEFAULT_LABEL = '_main'.freeze
   SUBSCRIBABLE_FORS = %w(nobody configured anyone).freeze
-  SUBSCRIBABLE_MODES = %w(opt_in opt_out).freeze
+  SUBSCRIBABLE_MODES = %w(opt_out opt_in).freeze
 
   i18n_enum :subscribable_for, SUBSCRIBABLE_FORS, scopes: true
   i18n_enum :subscribable_mode, SUBSCRIBABLE_MODES, scopes: true
@@ -165,6 +172,16 @@ class MailingList < ActiveRecord::Base
   end
 
   private
+
+  def set_default_subscribable_mode
+    if subscribable_for_configured? && subscribable_mode.blank?
+      self.subscribable_mode = 'opt_out'
+    end
+  end
+
+  def subscribable_for_configured?
+    subscribable_for.to_s == 'configured'
+  end
 
   def assert_mail_name_is_not_protected
     if mail_name? && application_retriever_name && mail_name.casecmp(application_retriever_name.split(

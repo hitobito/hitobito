@@ -1,17 +1,24 @@
 class Person::Subscriptions
 
-  def initialize(person, scope = MailingList)
+  def initialize(person)
     @person = person
-    @scope = scope
   end
 
   def mailing_lists
-    @scope
+    scope = MailingList
+
+    scope
       .where(id: direct.select('mailing_list_id'))
-      .or(@scope.where(id: from_events.select('mailing_list_id')))
-      .or(@scope.where(id: from_groups.select('mailing_list_id')))
+      .or(scope.where(id: from_events.select('mailing_list_id')))
+      .or(scope.where(id: from_groups.select('mailing_list_id')))
       .where.not(id: exclusions.select('mailing_list_id'))
       .distinct
+  end
+
+  def subscribable
+    MailingList
+      .where(subscribable_for: :anyone)
+      .or(MailingList.where(subscribable_for: :configured).merge(configured))
   end
 
   def direct
@@ -53,7 +60,16 @@ class Person::Subscriptions
       .where.not(id: exclusions.pluck(:id))
   end
 
+  private
+
   def tag_excluded_subscription_ids
     SubscriptionTag.where(tag_id: @person.tag_ids, excluded: true).pluck(:subscription_id)
+  end
+
+  def configured
+    MailingList
+      .where(id: from_events.select('mailing_list_id'))
+      .or(MailingList.where(id: from_groups.select('mailing_list_id')))
+      .where.not(id: exclusions.select('mailing_list_id'))
   end
 end

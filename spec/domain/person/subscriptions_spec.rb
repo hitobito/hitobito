@@ -3,12 +3,12 @@ require 'spec_helper'
 
 describe Person::Subscriptions do
 
-  let(:list)      { mailing_lists(:leaders) }
+  let(:leaders)   { mailing_lists(:leaders) }
   let(:person)    { people(:top_leader) }
 
   let(:top_layer) { groups(:top_layer) }
   let(:top_group) { groups(:top_group) }
-
+  let(:scope) { MailingList.where(id: leaders.id) }
 
   describe '#subscribable' do
     subject(:list) { described_class.new(person).subscribable }
@@ -30,7 +30,10 @@ describe Person::Subscriptions do
     context 'with configured list' do
       let(:leaders) { mailing_lists(:leaders) }
 
-      before { leaders.update!(subscribable_for: :configured) }
+      before do
+        MailingList.update_all(subscribable_for: :nobody)
+        leaders.update!(subscribable_for: :configured, subscribable_mode: :opt_in)
+      end
 
       it 'includes list if group subscription matches' do
         leaders.subscriptions.create!(subscriber: top_group,

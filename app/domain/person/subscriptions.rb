@@ -1,12 +1,13 @@
 class Person::Subscriptions
 
-  def initialize(person)
+  attr_reader :scope
+
+  def initialize(person, scope = MailingList)
     @person = person
+    @scope = scope
   end
 
   def mailing_lists
-    scope = MailingList
-
     scope
       .where(id: direct.select('mailing_list_id'))
       .or(scope.where(id: from_events.select('mailing_list_id')))
@@ -15,10 +16,20 @@ class Person::Subscriptions
       .distinct
   end
 
+  def subscribed
+    scope
+      .where(id: direct.select('mailing_list_id'))
+      .or(from_group_or_events)
+      .where.not(id: exclusions.select('mailing_list_id'))
+      .distinct
+  end
+
   def subscribable
-    MailingList
+    scope
       .where(subscribable_for: :anyone)
-      .or(MailingList.where(subscribable_for: :configured).merge(configured))
+      .or(scope.where(subscribable_for: :configured,
+                      subscribable_mode: :opt_in).merge(from_group_or_events))
+      .distinct
   end
 
   def direct
@@ -66,10 +77,9 @@ class Person::Subscriptions
     SubscriptionTag.where(tag_id: @person.tag_ids, excluded: true).pluck(:subscription_id)
   end
 
-  def configured
-    MailingList
+  def from_group_or_events
+    scope
       .where(id: from_events.select('mailing_list_id'))
-      .or(MailingList.where(id: from_groups.select('mailing_list_id')))
-      .where.not(id: exclusions.select('mailing_list_id'))
+      .or(scope.where(id: from_groups.select('mailing_list_id')))
   end
 end

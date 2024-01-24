@@ -26,7 +26,8 @@ class Person::Subscriptions
   end
 
   def subscribable
-    scope.anyone.or(scope.opt_in).where.not(id: subscribed.select('id')).distinct
+    scope.anyone.or(scope.opt_in.merge(from_group_or_events))
+         .where.not(id: subscribed.select('id')).distinct
   end
 
   def direct

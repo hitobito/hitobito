@@ -105,7 +105,7 @@ describe GroupDecorator, :draper_with_helpers do
 
     it 'renders link with icon and text' do
       expect(node).to have_link 'Hauptgruppe setzen'
-      expect(node).to have_css 'a i.fa.fa-star[filled=true]'
+      expect(node).to have_css 'a i.fas.fa-star[filled=true]'
       expect(node.find('a')['href']).to eq(primary_group_group_person_path(model, person, primary_group_id: model.id))
     end
   end

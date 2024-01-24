@@ -101,7 +101,7 @@ module EventsHelper
     texts = [entry.application_conditions]
     texts.unshift(entry.kind.application_conditions) if entry.course_kind?
     safe_join(texts.select(&:present?).map do |text|
-      safe_auto_link(text, html: { target: '_blank' })
+      safe_auto_link(text, html: { target: '_blank' }) + tag.br
     end)
   end
 

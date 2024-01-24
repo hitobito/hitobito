@@ -843,3 +843,13 @@ label.required::after {
   border: 0;
   box-shadow: inherit;
 }
+
+.edit_event_participation label {
+  overflow-wrap: break-word;
+}
+
+fieldset > div > div.labeled {
+  > div.controls, > p.inline {
+    padding-top: calc(0.375rem + 1px);
+  }
+}

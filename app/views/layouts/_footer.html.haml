@@ -17,7 +17,7 @@
             %br/
         %p
           %a{'data-bs-toggle': 'collapse', href: '#detail-info'}
-            %i.fa.fa-chevron-right
+            %i.fas.fa-chevron-right
           - if Wagons.app_version.to_s > '0.0'
             = link_to "Version #{Wagons.app_version}", changelog_path
           #detail-info.collapse

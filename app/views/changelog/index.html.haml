@@ -5,4 +5,5 @@
 
 - title 'Changelog'
 
-!= CommonMarker.render_html(ChangelogReader.changelog_markdown, :DEFAULT)
+%div.changelog
+    != CommonMarker.render_html(ChangelogReader.changelog_markdown, :DEFAULT)

@@ -28,10 +28,10 @@
   = render 'devise/sessions/info'
 
   .row
-    %article.col-6
+    %article.col-lg-7
       %h3= t('event.register.index.login')
       = render 'devise/sessions/form', autofocus_login: false
 
-    %article.col-6
+    %article.col-lg-5
       %h3= t('event.register.index.no_login')
       = render 'event/register/email_check'

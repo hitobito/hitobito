@@ -31,9 +31,9 @@ describe RoleDecorator, :draper_with_helpers do
 
     it 'includes outdated info' do
       role.delete_on = Time.zone.local(2023, 1, 1)
-      warning_title = node.find_css('i.fa.fa-exclamation-triangle')[0].attr('title')
+      warning_title = node.find_css('i.fas.fa-exclamation-triangle')[0].attr('title')
 
-      expect(node).to have_css('i.fa.fa-exclamation-triangle')
+      expect(node).to have_css('i.fas.fa-exclamation-triangle')
       expect(warning_title).to eq 'Die Rolle konnte nicht wie geplant am 01.01.2023 terminiert werden. Falls das Speichern der Rolle diese nicht terminiert, wende dich bitte an den Support.'
       expect(decorated_name).to include('<strong>Leader</strong>&nbsp;(bis 01.01.2023)')
     end
@@ -73,7 +73,7 @@ describe RoleDecorator, :draper_with_helpers do
 
     it 'role#to_s without strong tag and without triangle' do
       expect(node).not_to have_css('strong', text: role.to_s)
-      expect(node).not_to have_css('i.fa.fa-exclamation-triangle')
+      expect(node).not_to have_css('i.fas.fa-exclamation-triangle')
     end
 
     it 'never includes bis and is not bold' do
@@ -84,9 +84,9 @@ describe RoleDecorator, :draper_with_helpers do
 
     it 'includes outdated info and is not bold' do
       role.delete_on = Time.zone.local(2023, 1, 1)
-      warning_title = node.find_css('i.fa.fa-exclamation-triangle')[0].attr('title')
+      warning_title = node.find_css('i.fas.fa-exclamation-triangle')[0].attr('title')
 
-      expect(node).to have_css('i.fa.fa-exclamation-triangle')
+      expect(node).to have_css('i.fas.fa-exclamation-triangle')
       expect(warning_title).to eq 'Die Rolle konnte nicht wie geplant am 01.01.2023 terminiert werden. Falls das Speichern der Rolle diese nicht terminiert, wende dich bitte an den Support.'
       expect(decorated_name).not_to include('<strong>Leader</strong>&nbsp;(bis 01.01.2023)')
       expect(decorated_name).to include('Leader')

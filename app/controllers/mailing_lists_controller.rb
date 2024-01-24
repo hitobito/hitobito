@@ -69,5 +69,4 @@ class MailingListsController < CrudController
   end
 
   alias group parent
-
 end

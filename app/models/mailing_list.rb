@@ -72,8 +72,7 @@ class MailingList < ActiveRecord::Base
             format: /\A *(([a-z][a-z0-9\-\_\.]*|\*)@([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,} *(,|;|\Z) *)+\Z/
 
   validates :subscribable_for, inclusion: { in: SUBSCRIBABLE_FORS }
-  validates :subscribable_mode, inclusion: { in: SUBSCRIBABLE_MODES },
-                                if: :subscribable_for_configured?
+  validates :subscribable_mode, inclusion: { in: SUBSCRIBABLE_MODES }, if: :subscribable?
 
   after_destroy :schedule_mailchimp_destroy, if: :mailchimp?
 
@@ -95,11 +94,13 @@ class MailingList < ActiveRecord::Base
     name
   end
 
-  def subscribable
-    %w(configured anyone).include?(subscribable_for)
+  def opt_in?
+    subscribable_mode == 'opt_in'
   end
 
-  def subscribable?(person); end
+  def subscribable?
+    (SUBSCRIBABLE_FORS - %w(nobody)).include?(subscribable_for)
+  end
 
   def labels
     main_email ? preferred_labels + [DEFAULT_LABEL] : preferred_labels
@@ -179,13 +180,11 @@ class MailingList < ActiveRecord::Base
   private
 
   def set_default_subscribable_mode
-    if subscribable_for_configured? && subscribable_mode.blank?
+    if subscribable? && subscribable_mode.blank?
       self.subscribable_mode = 'opt_out'
+    elsif !subscribable?
+      self.subscribable_mode = nil
     end
-  end
-
-  def subscribable_for_configured?
-    subscribable_for.to_s == 'configured'
   end
 
   def assert_mail_name_is_not_protected

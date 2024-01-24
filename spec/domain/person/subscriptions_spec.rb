@@ -48,6 +48,18 @@ describe Person::Subscriptions do
         create_event_subscription
         expect(subscribed).to eq [leaders]
       end
+
+      it 'excludes leaders when group subscriptions exists but excluded' do
+        create_group_subscription
+        leaders.subscriptions.create!(subscriber: person, excluded: true)
+        expect(subscribed).to be_empty
+      end
+
+      it 'excludes leaders when event subscriptions exists but excluded' do
+        create_event_subscription
+        leaders.subscriptions.create!(subscriber: person, excluded: true)
+        expect(subscribed).to be_empty
+      end
     end
 
     describe '#subscribable' do
@@ -71,6 +83,18 @@ describe Person::Subscriptions do
       it 'excludes leaders when event subscription exists' do
         create_event_subscription
         expect(subscribable).to be_empty
+      end
+
+      it 'includes leaders when group subscriptions exists but excluded' do
+        create_group_subscription
+        leaders.subscriptions.create!(subscriber: person, excluded: true)
+        expect(subscribable).to eq [leaders]
+      end
+
+      it 'includes leaders when event subscriptions exists but excluded' do
+        create_event_subscription
+        leaders.subscriptions.create!(subscriber: person, excluded: true)
+        expect(subscribable).to eq [leaders]
       end
     end
   end
@@ -99,6 +123,18 @@ describe Person::Subscriptions do
         create_event_subscription
         expect(subscribed).to eq [leaders]
       end
+
+      it 'excludes leaders when group subscriptions exists but excluded' do
+        create_group_subscription
+        leaders.subscriptions.create!(subscriber: person, excluded: true)
+        expect(subscribed).to be_empty
+      end
+
+      it 'excludes leaders when event subscriptions exists but excluded' do
+        create_event_subscription
+        leaders.subscriptions.create!(subscriber: person, excluded: true)
+        expect(subscribed).to be_empty
+      end
     end
 
     describe '#subscribable' do
@@ -122,6 +158,18 @@ describe Person::Subscriptions do
       it 'excludes leaders when event subscription exists' do
         create_event_subscription
         expect(subscribable).to be_empty
+      end
+
+      it 'includes leaders when group subscriptions exists but excluded' do
+        create_group_subscription
+        leaders.subscriptions.create!(subscriber: person, excluded: true)
+        expect(subscribable).to eq [leaders]
+      end
+
+      it 'includes leaders when event subscriptions exists but excluded' do
+        create_event_subscription
+        leaders.subscriptions.create!(subscriber: person, excluded: true)
+        expect(subscribable).to eq [leaders]
       end
     end
   end
@@ -150,6 +198,18 @@ describe Person::Subscriptions do
         create_event_subscription
         expect(subscribed).to be_empty
       end
+
+      it 'includes leaders when group subscriptions exists but excluded' do
+        create_group_subscription
+        leaders.subscriptions.create!(subscriber: person, excluded: true)
+        expect(subscribed).to eq [leaders]
+      end
+
+      it 'includes leaders when event subscriptions exists but excluded' do
+        create_event_subscription
+        leaders.subscriptions.create!(subscriber: person, excluded: true)
+        expect(subscribed).to eq [leaders]
+      end
     end
 
     describe '#subscribable' do
@@ -172,6 +232,18 @@ describe Person::Subscriptions do
 
       it 'includes leaders when event subscription exists' do
         create_event_subscription
+        expect(subscribable).to eq [leaders]
+      end
+
+      it 'includes leaders when group subscriptions exists but excluded' do
+        create_group_subscription
+        leaders.subscriptions.create!(subscriber: person, excluded: true)
+        expect(subscribable).to eq [leaders]
+      end
+
+      it 'includes leaders when event subscriptions exists but excluded' do
+        create_event_subscription
+        leaders.subscriptions.create!(subscriber: person, excluded: true)
         expect(subscribable).to eq [leaders]
       end
     end

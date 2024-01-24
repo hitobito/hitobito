@@ -64,7 +64,7 @@ describe LayoutHelper do
 
   context '#icon' do
     it 'emits an html-tag with the icon css-class' do
-      expect(helper.icon(:edit)).to eq('<i class="fa fa-edit"></i>')
+      expect(helper.icon(:edit)).to eq('<i class="fas fa-edit"></i>')
     end
 
     it 'dasherizes the css-class' do
@@ -72,7 +72,7 @@ describe LayoutHelper do
     end
 
     it 'uses the filled-form by default' do
-      expect(extract_classes(helper.icon(:edit))).to include('fa')
+      expect(extract_classes(helper.icon(:edit))).to include('fas')
     end
 
     it 'can add the non-filled form' do

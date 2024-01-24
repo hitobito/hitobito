@@ -27,7 +27,7 @@ describe HelpTexts::Renderer do
       text = help_texts(:people_action_index)
       dom_id = template.dom_id(text)
 
-      expect(subject.action_trigger).to have_selector('i.fa.fa-info-circle')
+      expect(subject.action_trigger).to have_selector('i.fas.fa-info-circle')
       expect(subject.action_trigger).to have_selector("span.help-text-trigger[@data-key=#{dom_id}]")
 
       expect(subject.action_text).to have_text 'test'
@@ -61,7 +61,7 @@ describe HelpTexts::Renderer do
       text = help_texts(:person_field_name)
       dom_id = template.dom_id(text)
 
-      expect(subject.render_field('name')).to have_selector('i.fa.fa-info-circle')
+      expect(subject.render_field('name')).to have_selector('i.fas.fa-info-circle')
       expect(subject.render_field('name')).to have_selector("span.help-text-trigger[@data-key=#{dom_id}]")
 
       expect(subject.render_field('name')).to have_text 'test'

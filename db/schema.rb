@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_12_15_154134) do
+ActiveRecord::Schema.define(version: 2024_01_19_120948) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -631,7 +631,6 @@ ActiveRecord::Schema.define(version: 2023_12_15_154134) do
     t.string "publisher"
     t.string "mail_name"
     t.string "additional_sender"
-    t.boolean "subscribable", default: false, null: false
     t.boolean "subscribers_may_post", default: false, null: false
     t.boolean "anyone_may_post", default: false, null: false
     t.string "preferred_labels"
@@ -644,6 +643,8 @@ ActiveRecord::Schema.define(version: 2023_12_15_154134) do
     t.text "mailchimp_result"
     t.boolean "mailchimp_include_additional_emails", default: false
     t.text "filter_chain"
+    t.string "subscribable_for", default: "nobody", null: false
+    t.string "subscribable_mode"
     t.index ["group_id"], name: "index_mailing_lists_on_group_id"
   end
 

@@ -68,8 +68,8 @@ class MailingList < ActiveRecord::Base
   validates :description, length: { allow_nil: true, maximum: (2**16) - 1 }
   validate :assert_mail_name_is_not_protected
   validates :additional_sender,
-            allow_blank: true,
-            format: /\A *(([a-z][a-z0-9\-\_\.]*|\*)@([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,} *(,|;|\Z) *)+\Z/
+      allow_blank: true,
+      format: /\A *(([a-z][a-z0-9\-\_\.]*|\*)@([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,} *(,|;|\Z) *)+\Z/
 
   validates :subscribable_for, inclusion: { in: SUBSCRIBABLE_FORS }
   validates :subscribable_mode, inclusion: { in: SUBSCRIBABLE_MODES }, if: :subscribable?
@@ -188,10 +188,10 @@ class MailingList < ActiveRecord::Base
   end
 
   def assert_mail_name_is_not_protected
-    if mail_name? && application_retriever_name && mail_name.casecmp(application_retriever_name.split(
-      '@', 2
-    ).first).zero?
-      errors.add(:mail_name, :not_allowed, mail_name: mail_name)
+    if mail_name? && application_retriever_name
+      if mail_name.casecmp(application_retriever_name.split('@', 2).first).zero?
+        errors.add(:mail_name, :not_allowed, mail_name: mail_name)
+      end
     end
   end
 

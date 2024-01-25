@@ -1,0 +1,9 @@
+{
+  "app/domain/*.rb": {
+    "command": "domain",
+    "affinity": "model",
+    "test": "spec/domain/{}_spec.rb",
+    "related": "app/domain/{}.rb",
+    "template": "class {camelcase|capitalize|colons}\nend"
+  }
+}

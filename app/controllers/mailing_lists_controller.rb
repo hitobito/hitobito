@@ -24,6 +24,11 @@ class MailingListsController < CrudController
 
   respond_to :js
 
+  def edit
+    assign_attributes if request.format.js?
+    super
+  end
+
   def index
     respond_to do |format|
       format.html { super }
@@ -37,11 +42,6 @@ class MailingListsController < CrudController
         render json: MailingListSerializer.new(entry.decorate, controller: self)
       end
     end
-  end
-
-  def edit
-    assign_attributes if request.format.js?
-    super
   end
 
 
@@ -65,7 +65,7 @@ class MailingListsController < CrudController
     paged_entries = entries.page(params[:page])
     render json: [paging_properties(paged_entries),
                   ListSerializer.new(paged_entries, controller: self,
-                                                    serializer: MailingListSerializer)].inject(&:merge)
+                    serializer: MailingListSerializer)].inject(&:merge)
   end
 
   alias group parent

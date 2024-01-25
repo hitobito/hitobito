@@ -9,8 +9,9 @@ require 'spec_helper'
 describe 'groups/_form.html.haml' do
   let(:group) { groups(:top_layer).decorate }
   let(:stubs) { {  model_class: Group, path_args: group,
-                   entry: GroupDecorator.new(group),
+                   entry: group,
                     } }
+  let(:dom) { Capybara::Node::Simple.new(@rendered)  }
 
   before do
     allow(view).to receive_messages(stubs)
@@ -34,6 +35,24 @@ describe 'groups/_form.html.haml' do
     render partial: 'groups/form'
     partials.each do |partial|
       expect(view).to render_template(partial: partial)
+    end
+  end
+
+  it 'disables name and short_name fields' do
+    @rendered = render partial: 'groups/form'
+
+    expect(dom).to have_field('Name', disabled: false)
+    expect(dom).to have_field('Kurzname', disabled: false)
+  end
+
+  context 'static_name group' do
+    before { allow(group).to receive(:static_name).and_return(true) }
+
+    it 'disables name and short_name fields' do
+      @rendered = render partial: 'groups/form'
+
+      expect(dom).to have_field('Name', disabled: true)
+      expect(dom).to have_field('Kurzname', disabled: true)
     end
   end
 end

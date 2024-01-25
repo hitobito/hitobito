@@ -16,14 +16,16 @@ class MailingLists::Subscribers
     scope.distinct
   end
 
+  def allowed_to_opt_in
+    people_as_configured.where(group_or_event_subscriber_conditions)
+  end
+
   private
 
   def scope
     return people_as_configured.where(subscriber_conditions) unless opt_in?
 
-    people_as_configured
-      .where(group_or_event_subscriber_conditions)
-      .where(id: subscriptions.people.included.select('subscriber_id'))
+    allowed_to_opt_in.where(id: subscriptions.people.included.select('subscriber_id'))
   end
 
   def people_as_configured

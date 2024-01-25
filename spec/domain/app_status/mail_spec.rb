@@ -9,7 +9,7 @@ require 'spec_helper'
 require_dependency 'app_status/mail'
 
 describe AppStatus::Mail do
-  include MailingLists::ImapMailsSpecHelper
+  include MailingLists::SpecHelper
 
   let(:app_status) { AppStatus::Mail.new }
   let(:cache) { Rails.cache }
@@ -80,7 +80,7 @@ describe AppStatus::Mail do
   end
 
   private
-  
+
   def imap_mail(fixture)
     mail = Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', fixture)))
     Imap::Mail.build(mail)

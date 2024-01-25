@@ -1,6 +1,22 @@
 # frozen_string_literal: true
 
-module MailingLists::ImapMailsSpecHelper
+module MailingLists::SpecHelper
+
+  def create_event_subscription
+    event = Fabricate(:event, groups: [group])
+    event.participations.create!(person: person, active: true)
+    event.reload.dates.first.update!(start_at: 10.days.ago)
+    list.subscriptions.create!(subscriber: event)
+  end
+
+  def create_subscription(subscriber, excluded = false, *role_types)
+    sub = list.subscriptions.new
+    sub.subscriber = subscriber
+    sub.excluded = excluded
+    sub.related_role_types = role_types.collect { |t| RelatedRoleType.new(role_type: t) }
+    sub.save!
+    sub
+  end
 
   def build_imap_mail(plain_body: true)
     Imap::Mail.build(imap_fetch_data(plain_body: plain_body))

@@ -8,7 +8,7 @@
 require 'spec_helper'
 
 describe MailingLists::BulkMail::BounceHandler do
-  include MailingLists::ImapMailsSpecHelper
+  include MailingLists::SpecHelper
 
   let(:bounce_handler) { described_class.new(bounce_imap_mail, bulk_mail_bounce, mailing_list) }
   let(:mailing_list) { mailing_lists(:leaders) }

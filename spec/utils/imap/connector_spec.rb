@@ -10,7 +10,7 @@ require 'spec_helper'
 require 'net/imap'
 
 describe Imap::Connector do
-  include MailingLists::ImapMailsSpecHelper
+  include MailingLists::SpecHelper
 
   let(:net_imap) { double(:net_imap) }
   let(:imap_connector) { Imap::Connector.new }

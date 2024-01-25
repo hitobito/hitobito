@@ -8,7 +8,7 @@
 require 'spec_helper'
 
 describe MailingLists::BulkMail::ImapMailValidator do
-  include MailingLists::ImapMailsSpecHelper
+  include MailingLists::SpecHelper
 
   let(:validator) { described_class.new(imap_mail) }
   let(:imap_mail) { build_imap_mail(plain_body: false) }

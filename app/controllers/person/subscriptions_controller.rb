@@ -15,13 +15,13 @@ class Person::SubscriptionsController < ApplicationController
 
   def create
     authorize!(:update, person)
-    create_subscription
+    subscriptions.create(mailing_list)
     redirect_with_notice
   end
 
   def destroy
     authorize!(:update, person)
-    delete_subscription || create_subscription(excluded: true)
+    subscriptions.destroy(mailing_list)
     redirect_with_notice
   end
 
@@ -42,29 +42,21 @@ class Person::SubscriptionsController < ApplicationController
   end
 
   def subscribed
-    @subscribed ||= grouped_by_layer(Person::Subscriptions.new(person)
-                                                          .mailing_lists
-                                                          .includes(:group)
-                                                          .list)
+    @subscribed ||= grouped_by_layer(subscriptions.subscribed.list)
   end
 
   def subscribable
-    @subscribable ||= grouped_by_layer(MailingList.includes(:group)
-                                                  .subscribable
-                                                  .where.not(id: subscribed.values.flatten)
-                                                  .list)
+    @subscribable ||= grouped_by_layer(
+      subscriptions.subscribable.where.not(id: subscriptions.subscribed).list
+    )
+  end
+
+  def subscriptions
+    @subscriptions ||= Person::Subscriptions.new(person)
   end
 
   def grouped_by_layer(mailing_lists)
     mailing_lists.includes(:group).group_by { _1.group.layer_group }
   end
 
-  def delete_subscription
-    mailing_list.subscriptions.find_by(subscriber: person)&.destroy
-  end
-
-  def create_subscription(options = {})
-    mailing_list.subscriptions.create(options.merge(subscriber: person))
-  end
 end
-

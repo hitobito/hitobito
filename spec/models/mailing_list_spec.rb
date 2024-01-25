@@ -8,16 +8,31 @@
 #
 # Table name: mailing_lists
 #
-#  id                   :integer          not null, primary key
-#  name                 :string           not null
-#  group_id             :integer          not null
-#  description          :text
-#  publisher            :string
-#  mail_name            :string
-#  additional_sender    :string
-#  subscribable         :boolean          default(FALSE), not null
-#  subscribers_may_post :boolean          default(FALSE), not null
-#  anyone_may_post      :boolean          default(FALSE), not null
+#  id                                  :integer          not null, primary key
+#  additional_sender                   :string(255)
+#  anyone_may_post                     :boolean          default(FALSE), not null
+#  delivery_report                     :boolean          default(FALSE), not null
+#  description                         :text(65535)
+#  filter_chain                        :text(65535)
+#  mail_name                           :string(255)
+#  mailchimp_api_key                   :string(255)
+#  mailchimp_include_additional_emails :boolean          default(FALSE)
+#  mailchimp_last_synced_at            :datetime
+#  mailchimp_result                    :text(65535)
+#  mailchimp_syncing                   :boolean          default(FALSE)
+#  main_email                          :boolean          default(FALSE)
+#  name                                :string(255)      not null
+#  preferred_labels                    :string(255)
+#  publisher                           :string(255)
+#  subscribable_for                    :string(255)      default("nobody"), not null
+#  subscribable_mode                   :string(255)
+#  subscribers_may_post                :boolean          default(FALSE), not null
+#  group_id                            :integer          not null
+#  mailchimp_list_id                   :string(255)
+#
+# Indexes
+#
+#  index_mailing_lists_on_group_id  (group_id)
 #
 
 require 'spec_helper'
@@ -368,7 +383,7 @@ describe MailingList do
     context 'groups with excluded' do
       it 'excludes person from groups' do
         create_subscription(groups(:bottom_layer_one), false,
-                                  Group::BottomGroup::Leader.sti_name)
+                            Group::BottomGroup::Leader.sti_name)
 
         role = Group::BottomGroup::Leader.name.to_sym
         p1 = Fabricate(role, group: groups(:bottom_group_one_one)).person
@@ -599,6 +614,44 @@ describe MailingList do
     it 'delete nullifies mailing_list on message' do
       expect(message.mailing_list.destroy).to be_truthy
       expect(message.reload.mailing_list).to be_nil
+    end
+  end
+
+  context 'subscribable_for is configured' do
+    let(:leaders) { mailing_lists(:leaders).tap { |l| l.subscribable_for = 'configured' } }
+
+    it 'sets default subscribable mode if none is set' do
+      expect(leaders).to be_valid
+      expect(leaders.subscribable_mode).to eq 'opt_out'
+    end
+
+    it 'accepts any valid subscribable mode' do
+      leaders.subscribable_mode = 'opt_in'
+      expect(leaders).to be_valid
+      expect(leaders.subscribable_mode).to eq 'opt_in'
+    end
+
+    it 'rejects invalid subscribable mode' do
+      leaders.subscribable_mode = 'invalid'
+      expect(leaders).not_to be_valid
+    end
+  end
+
+  describe '::subscribable' do
+    let(:leaders) { mailing_lists(:leaders) }
+
+    it 'includes leaders as subscriable_for is configured as anyone' do
+      expect(MailingList.subscribable).to include(leaders)
+    end
+
+    it 'includes leaders if subscriable_for is configured as configured' do
+      leaders.update!(subscribable_for: :configured)
+      expect(MailingList.subscribable).to include(leaders)
+    end
+
+    it 'excludes leaders if subscriable_for is configured as nobody' do
+      leaders.update!(subscribable_for: :nobody)
+      expect(MailingList.subscribable).not_to include(leaders)
     end
   end
 

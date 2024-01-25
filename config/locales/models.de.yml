@@ -850,6 +850,15 @@ de:
         description: Beschreibung
         publisher: Herausgeber
         subscribable: Abonnenten dürfen sich selbst an/abmelden
+        subscribable_mode: Abonnente sind standardmässig
+        subscribable_modes:
+          opt_out: Angemeldet
+          opt_in: Abgemeldet
+        subscribable_for: Abonnenten dürfen sich selbst an/abmelden
+        subscribable_fors:
+          anyone: Jeder
+          configured: Nur konfigurierte
+          nobody: Keiner
         mail_name: Mailinglisten Adresse
         mail_address: Mailingliste
         mail_address_link: Mailingliste

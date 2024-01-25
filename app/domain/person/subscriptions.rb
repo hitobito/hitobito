@@ -1,18 +1,45 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 class Person::Subscriptions
 
-  def initialize(person)
+  attr_reader :scope
+
+  def initialize(person, scope = MailingList)
     @person = person
+    @scope = scope
   end
 
-  def mailing_lists
-    scope = MailingList
+  def create(mailing_list)
+    mailing_list.subscriptions.find_by(subscriber: @person, excluded: true)&.destroy ||
+      mailing_list.subscriptions.create(subscriber: @person)
+  end
 
+  def destroy(mailing_list)
+    mailing_list.subscriptions.find_by(subscriber: @person)&.destroy ||
+      mailing_list.subscriptions.create(subscriber: @person, excluded: true)
+  end
+
+  def subscribed
     scope
       .where(id: direct.select('mailing_list_id'))
-      .or(scope.where(id: from_events.select('mailing_list_id')))
-      .or(scope.where(id: from_groups.select('mailing_list_id')))
       .where.not(id: exclusions.select('mailing_list_id'))
+      .or(scope.anyone.merge(from_group_or_events))
+      .or(scope.opt_out.merge(from_group_or_events))
       .distinct
+  end
+
+  def subscribable
+    scope
+      .where(id: exclusions.select('mailing_list_id'))
+      .or(scope.anyone)
+      .or(scope.opt_in.merge(from_group_or_events))
+      .or(scope.opt_out.merge(from_group_or_events))
+      .where.not(id: subscribed.select('id')).distinct
   end
 
   def direct
@@ -58,5 +85,12 @@ class Person::Subscriptions
 
   def tag_excluded_subscription_ids
     SubscriptionTag.where(tag_id: @person.tag_ids, excluded: true).pluck(:subscription_id)
+  end
+
+  def from_group_or_events
+    scope
+      .where(id: from_events.select('mailing_list_id'))
+      .or(scope.where(id: from_groups.select('mailing_list_id')))
+      .where.not(id: exclusions.select('mailing_list_id'))
   end
 end

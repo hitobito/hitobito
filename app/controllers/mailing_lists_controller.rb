@@ -12,9 +12,10 @@ class MailingListsController < CrudController
 
   self.permitted_attrs = [:name, :description, :publisher, :mail_name,
                           :additional_sender, :subscribable, :subscribers_may_post,
+                          :subscribable_for, :subscribable_mode,
                           :anyone_may_post, :main_email, :delivery_report,
                           :mailchimp_list_id, :mailchimp_api_key,
-                          :mailchimp_include_additional_emails, preferred_labels: []]
+                          :mailchimp_include_additional_emails, { preferred_labels: [] }]
 
   decorates :group, :mailing_list
 
@@ -67,5 +68,4 @@ class MailingListsController < CrudController
   end
 
   alias group parent
-
 end

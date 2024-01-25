@@ -13,10 +13,18 @@ class MailingLists::Subscribers
   end
 
   def people
-    opt_in? ? people_with_explicit_subscription : people_as_configured
+    scope.distinct
   end
 
   private
+
+  def scope
+    return people_as_configured.where(subscriber_conditions) unless opt_in?
+
+    people_as_configured
+      .where(group_or_event_subscriber_conditions)
+      .where(id: subscriptions.people.included.select('subscriber_id'))
+  end
 
   def people_as_configured
     @list.filter_chain.filter(@people_scope).
@@ -24,21 +32,7 @@ class MailingLists::Subscribers
       joins(subscription_joins).
       where(subscriptions: { mailing_list_id: id }).
       where("people.id NOT IN (#{excluded_subscriber_ids.to_sql})").
-      where("people.id NOT IN (#{tag_excluded_person_ids.to_sql})").
-      where(subscriber_conditions).
-      distinct
-  end
-
-  def people_with_explicit_subscription
-    @list.filter_chain.filter(@people_scope).
-      joins(people_joins).
-      joins(subscription_joins).
-      where(subscriptions: { mailing_list_id: id }).
-      where(group_or_event_subscriber_conditions).
-      where(id: subscriptions.people.included.select('subscriber_id')).
-      where("people.id NOT IN (#{excluded_subscriber_ids.to_sql})").
-      where("people.id NOT IN (#{tag_excluded_person_ids.to_sql})").
-      distinct
+      where("people.id NOT IN (#{tag_excluded_person_ids.to_sql})")
   end
 
   def people_joins

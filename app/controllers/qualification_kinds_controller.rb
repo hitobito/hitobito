@@ -17,7 +17,7 @@ class QualificationKindsController < SimpleCrudController
   private
 
   def list_entries
-    super.list
+    super.select("qualification_kinds.*", "qualification_kind_translations.label").list
   end
 
 end

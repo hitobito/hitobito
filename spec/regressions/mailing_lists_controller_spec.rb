@@ -50,7 +50,7 @@ describe MailingListsController, type: :controller do
         additional_sender: nil,
         subscribable: true,
         subscribable_for: 'anyone',
-        subscribable_mode: nil,
+        subscribable_mode: 'opt_out',
         subscribers_may_post: false,
         anyone_may_post: false,
         preferred_labels: [],

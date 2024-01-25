@@ -501,15 +501,6 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     person_duplicates.delete_all
   end
 
-  def subscribable?(_mailing_list)
-    @subscriptions =
-      begin
-        lists = MailingList.where(subscribable_for: :anyone)
-                           .or(MailingList.where(subscribable_for: :configured))
-        subsciptions ||= Person::Subscriptions.new(self, lists)
-      end
-  end
-
   def schedule_duplicate_locator
     changed_attrs = previous_changes.keys
     duplicate_attrs = People::DuplicateLocator::DUPLICATION_ATTRS.collect(&:to_s)

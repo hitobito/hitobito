@@ -44,7 +44,6 @@ class MailingListsController < CrudController
     end
   end
 
-
   private
 
   def list_entries

@@ -17,6 +17,7 @@ class Person::EventQueries
       merge(Event::Participation.upcoming).
       includes(event: [:groups]).
       joins(event: :dates).
+      select("event_applications.*", "event_dates.start_at").
       order('event_dates.start_at').
       distinct.tap do |applications|
       Event::PreloadAllDates.for(applications.collect(&:event))

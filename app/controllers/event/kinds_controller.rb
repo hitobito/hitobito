@@ -31,7 +31,8 @@ class Event::KindsController < SimpleCrudController
   private
 
   def list_entries
-    super.includes(kind_category: :translations).list
+    super.includes(kind_category: :translations)
+         .select("event_kinds.*", "event_kind_translations.label").list
   end
 
   def load_assocations

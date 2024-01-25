@@ -4,25 +4,33 @@
 - #  https://github.com/hitobito/hitobito.
 
 %h2=t('.my_subscriptions')
-= table(subscribed, class: 'table table-striped table-hover') do |t|
-  - t.attrs(:name)
-  - t.col(MailingList.human_attribute_name(:description)) do |list|
-    = list.description.to_s.truncate(60)
-  - t.attrs(:publisher)
-  - t.col(MailingList.human_attribute_name(:mail_address)) do |list|
-    = mail_to list.mail_address
-  - t.col do |list|
-    = link_to t('mailing_list_decorator.unsubscribe'), group_person_subscription_path(@group, @person, list), method: :delete, class: 'btn btn-sm btn-outline-primary'
+- subscribed.each do |layer, mailing_lists|
+  %strong= layer.name
+  = table(mailing_lists, class: 'table table-striped table-hover') do |t|
+    - t.col(MailingList.human_attribute_name(:name), class: 'col-3') do |list|
+      = mailing_list_name_with_group_name(list)
+    - t.col(MailingList.human_attribute_name(:description), class: 'col-3') do |list|
+      = list.description.to_s.truncate(60)
+    - t.col(MailingList.human_attribute_name(:publisher), class: 'col-2') do |list|
+      = list.publisher
+    - t.col(MailingList.human_attribute_name(:mail_address), class: 'col-3') do |list|
+      = mail_to list.mail_address
+    - t.col(class: 'col-1') do |list|
+      = link_to t('mailing_list_decorator.unsubscribe'), group_person_subscription_path(@group, @person, list), method: :delete, class: 'btn btn-sm btn-outline-primary'
 
 
 %h2=t('.available_subscriptions')
-= table(subscribable, class: 'table table-striped table-hover') do |t|
-  - t.attrs(:name)
-  - t.col(MailingList.human_attribute_name(:description)) do |list|
-    = list.description.to_s.truncate(60)
-  - t.attrs(:publisher)
-  - t.col(MailingList.human_attribute_name(:mail_address)) do |list|
-    = mail_to list.mail_address
-  - t.col do |list|
-    = link_to t('mailing_list_decorator.subscribe'), group_person_subscriptions_path(@group, @person, id: list.id), method: :post, class: 'btn btn-sm btn-outline-primary'
+- subscribable.each do |layer, mailing_lists|
+  %strong= layer.name
+  = table(mailing_lists, class: 'table table-striped table-hover') do |t|
+    - t.col(MailingList.human_attribute_name(:name), class: 'col-3') do |list|
+      = mailing_list_name_with_group_name(list)
+    - t.col(MailingList.human_attribute_name(:description), class: 'col-3') do |list|
+      = list.description.to_s.truncate(60)
+    - t.col(MailingList.human_attribute_name(:publisher), class: 'col-2') do |list|
+      = list.publisher
+    - t.col(MailingList.human_attribute_name(:mail_address), class: 'col-3') do |list|
+      = mail_to list.mail_address
+    - t.col('', class: 'col-1') do |list|
+      = link_to t('mailing_list_decorator.subscribe'), group_person_subscriptions_path(@group, @person, id: list.id), method: :post, class: 'btn btn-sm btn-outline-primary'
 

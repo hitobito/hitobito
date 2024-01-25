@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 require 'spec_helper'
-describe MailingListDecorator  do
+describe MailingListDecorator do
   let(:mailing_list) { mailing_lists(:leaders) }
   let(:decorator)    { MailingListDecorator.new(mailing_list) }
 
@@ -15,12 +15,15 @@ describe MailingListDecorator  do
     subject { decorator.subscribable_info }
 
     context 'subscribable true' do
+      before { mailing_list.update_column(:subscribable_for, :anyone) }
       it { is_expected.to match(%r{Abonnenten dürfen sich selbst an/abmelden}) }
     end
 
     context 'subscribable false' do
-      before { mailing_list.update_column(:subscribable, false) }
-      it { is_expected.to eq 'Abonnenten dürfen sich <strong>nicht</strong> selbst an/abmelden<br />' }
+      before { mailing_list.update_column(:subscribable_for, :nobody) }
+      it {
+        is_expected.to eq 'Abonnenten dürfen sich <strong>nicht</strong> selbst an/abmelden<br />'
+      }
     end
   end
 
@@ -34,7 +37,9 @@ describe MailingListDecorator  do
     end
 
     context 'subscribers_may_post false' do
-      it { is_expected.to eq 'Abonnenten dürfen <strong>nicht</strong> auf die Mailingliste schreiben<br />' }
+      it {
+        is_expected.to eq 'Abonnenten dürfen <strong>nicht</strong> auf die Mailingliste schreiben<br />'
+      }
     end
   end
 
@@ -43,11 +48,15 @@ describe MailingListDecorator  do
 
     context 'anyone_may_post true' do
       before { mailing_list.update_column(:anyone_may_post, true) }
-      it { is_expected.to eq 'Beliebige Absender/-innen dürfen auf die Mailingliste schreiben<br />' }
+      it {
+        is_expected.to eq 'Beliebige Absender/-innen dürfen auf die Mailingliste schreiben<br />'
+      }
     end
 
     context 'anyone_may_post false' do
-      it { is_expected.to eq 'Beliebige Absender/-innen dürfen <strong>nicht</strong> auf die Mailingliste schreiben<br />' }
+      it {
+        is_expected.to eq 'Beliebige Absender/-innen dürfen <strong>nicht</strong> auf die Mailingliste schreiben<br />'
+      }
     end
   end
 

@@ -41,23 +41,23 @@ describe MailingListsController, type: :controller do
       json = JSON.parse(response.body).deep_symbolize_keys
       mailing_list = json[:mailing_lists].first
       expect(mailing_list).to eq({
-                                   id: test_entry.id.to_s,
-                                   type: 'mailing_lists',
-                                   name: 'Leaders',
-                                   description: nil,
-                                   publisher: nil,
-                                   mail_name: 'leaders',
-                                   additional_sender: nil,
-                                   subscribable: true,
-                                   subscribable_for: 'anyone',
-                                   subscribable_mode: nil,
-                                   subscribers_may_post: false,
-                                   anyone_may_post: false,
-                                   preferred_labels: [],
-                                   delivery_report: false,
-                                   main_email: false,
-                                   links: { group: group.id.to_s }
-                                 })
+        id: test_entry.id.to_s,
+        type: 'mailing_lists',
+        name: 'Leaders',
+        description: nil,
+        publisher: nil,
+        mail_name: 'leaders',
+        additional_sender: nil,
+        subscribable: true,
+        subscribable_for: 'anyone',
+        subscribable_mode: nil,
+        subscribers_may_post: false,
+        anyone_may_post: false,
+        preferred_labels: [],
+        delivery_report: false,
+        main_email: false,
+        links: { group: group.id.to_s }
+      })
     end
   end
 

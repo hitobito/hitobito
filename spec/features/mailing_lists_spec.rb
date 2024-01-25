@@ -89,4 +89,28 @@ describe MailingListsController, js: true do
     expect(page).to have_content 'Mutter, Vater'
   end
 
+  describe 'configurable list', :js do
+    it 'can set opt_out new list' do
+      visit new_group_mailing_list_path(list.group)
+      expect(page).to have_field 'Keiner', checked: true
+      expect(page).not_to have_text 'Abonnente sind standardmässig'
+      choose 'Nur konfigurierte'
+      expect(page).to have_text 'Abonnente sind standardmässig'
+      choose 'Abgemeldet'
+      fill_in 'Name', with: 'test'
+      click_button 'Speichern'
+      expect(page).to have_content 'Abonnenten müssen sich selbst an/abmelden'
+    end
+
+    it 'can set opt_out existing list' do
+      visit edit_group_mailing_list_path(list.group, list)
+      expect(page).to have_field 'Jeder', checked: true
+      expect(page).to have_field 'Angemeldet', checked: true
+      expect(page).to have_text 'Abonnente sind standardmässig'
+      choose 'Nur konfigurierte'
+      choose 'Abgemeldet'
+      click_button 'Speichern'
+      expect(page).to have_content 'Abonnenten müssen sich selbst an/abmelden'
+    end
+  end
 end

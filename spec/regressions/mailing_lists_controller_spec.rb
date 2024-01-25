@@ -24,7 +24,7 @@ describe MailingListsController, type: :controller do
       description: 'Bla bla bla',
       publisher: 'Me & You',
       mail_name: 'tester',
-      subscribable: true,
+      subscribable_for: :anyone,
       subscribers_may_post: false,
       anyone_may_post: false }
   end

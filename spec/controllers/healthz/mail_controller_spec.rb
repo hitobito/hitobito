@@ -8,7 +8,7 @@
 require 'spec_helper'
 
 describe Healthz::MailController do
-  include MailingLists::ImapMailsSpecHelper
+  include MailingLists::SpecHelper
 
   describe 'GET show' do
 

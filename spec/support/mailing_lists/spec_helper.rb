@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module MailingLists::ImapMailsSpecHelper
+module MailingLists::SpecHelper
 
   def create_event_subscription
     event = Fabricate(:event, groups: [group])

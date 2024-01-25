@@ -30,11 +30,15 @@ class MailingLists::Subscribers
   end
 
   def people_with_explicit_subscription
-    @list
-      .filter_chain
-      .filter(@people_scope)
-      .joins(:subscriptions)
-      .merge(subscription.people.included)
+    @list.filter_chain.filter(@people_scope).
+      joins(people_joins).
+      joins(subscription_joins).
+      where(subscriptions: { mailing_list_id: id }).
+      where(group_or_event_subscriber_conditions).
+      where(id: subscriptions.people.included.select('subscriber_id')).
+      where("people.id NOT IN (#{excluded_subscriber_ids.to_sql})").
+      where("people.id NOT IN (#{tag_excluded_person_ids.to_sql})").
+      distinct
   end
 
   def people_joins
@@ -43,13 +47,13 @@ class MailingLists::Subscribers
       LEFT JOIN #{Group.quoted_table_name} ON roles.group_id = #{Group.quoted_table_name}.id
     SQL
 
-    if subscriptions.events.exists?
+    if join_events?
       sql += <<~SQL
         LEFT JOIN event_participations ON event_participations.person_id = people.id
       SQL
     end
 
-    if subscriptions.groups.any?(&:subscription_tags)
+    if join_tags?
       sql += <<~SQL
         LEFT JOIN taggings AS people_taggings ON people_taggings.taggable_type = 'Person'
           AND people_taggings.taggable_id = people.id
@@ -62,7 +66,7 @@ class MailingLists::Subscribers
   def subscription_joins
     sql = ', subscriptions ' # the comma is needed because it is not a JOIN, but a second "FROM"
 
-    if subscriptions.groups.exists?
+    if join_groups?
       sql += <<~SQL
         LEFT JOIN #{Group.quoted_table_name} sub_groups
           ON subscriptions.subscriber_type = 'Group' AND subscriptions.subscriber_id = sub_groups.id
@@ -87,6 +91,13 @@ class MailingLists::Subscribers
     person_subscribers(condition) if subscriptions.people.exists?
     event_subscribers(condition) if subscriptions.events.exists?
     group_subscribers(condition) if subscriptions.groups.exists?
+    condition.to_a
+  end
+
+  def group_or_event_subscriber_conditions
+    condition = OrCondition.new
+    event_subscribers(condition)
+    group_subscribers(condition)
     condition.to_a
   end
 
@@ -118,6 +129,18 @@ class MailingLists::Subscribers
     end
 
     condition.or(sql, Group.sti_name)
+  end
+
+  def join_events?
+    opt_in? || subscriptions.events.exists?
+  end
+
+  def join_tags?
+    subscriptions.groups.any?(&:subscription_tags)
+  end
+
+  def join_groups?
+    opt_in? || subscriptions.groups.exists?
   end
 
   def event_subscribers(condition)

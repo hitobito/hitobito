@@ -288,13 +288,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   class << self
     def order_by_name
-      order(Arel.sql(order_by_name_statement.join(', ')))
-    end
-
-    def order_by_name_statement
-      [company_case_column(:company_name, :last_name),
-       company_case_column(:last_name, :first_name),
-       company_case_column(:first_name, :nickname)]
+      select('people.*', Arel.sql(order_by_name_statement)).order(Arel.sql("order_case"))
     end
 
     def only_public_data
@@ -330,12 +324,15 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
     private
 
-    def company_case_column(if_company, otherwise)
-      "CASE WHEN people.company = #{connection.quoted_true} " \
-      "THEN people.#{if_company} ELSE people.#{otherwise} END"
+    def order_by_name_statement
+      "CASE
+        WHEN people.company = #{connection.quote(true)} THEN people.company_name
+        WHEN people.last_name IS NOT NULL AND people.last_name != '' THEN people.last_name
+        WHEN people.first_name IS NOT NULL AND people.first_name != '' THEN people.first_name
+        ELSE people.nickname
+      END AS order_case"
     end
   end
-
 
   ### ATTRIBUTE INSTANCE METHODS
 

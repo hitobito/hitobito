@@ -459,11 +459,12 @@ ActiveRecord::Schema.define(version: 2024_01_19_120948) do
   create_table "hitobito_log_entries", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "category", null: false
+    t.string "category", null: false
     t.integer "level", null: false
     t.text "message", null: false
     t.string "subject_type"
     t.bigint "subject_id"
+    t.json "payload"
     t.index ["category"], name: "index_hitobito_log_entries_on_category"
     t.index ["level"], name: "index_hitobito_log_entries_on_level"
     t.index ["subject_type", "subject_id"], name: "index_hitobito_log_entries_on_subject"

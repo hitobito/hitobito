@@ -326,13 +326,7 @@ Hitobito::Application.routes.draw do
     resources :event_kinds, module: 'event', controller: 'kinds'
     resources :event_kind_categories, module: 'event', controller: 'kind_categories'
 
-    resources :hitobito_log_entries, only: :index do
-      collection do
-        Hitobito.logger.categories.each do |category|
-          get category, action: :index, defaults: {category: category}
-        end
-      end
-    end
+    get 'hitobito_log_entries(/:category)', to: 'hitobito_log_entries#index', as: :hitobito_log_entries
 
     scope 'mailing_lists', module: :mailing_lists do
       scope 'imap_mails' do

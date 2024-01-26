@@ -8,19 +8,21 @@
 class HitobitoLogEntrySeeder
 
   def seed_log_entry
-    created_at = Faker::Time.between(from: DateTime.now - 3.days, to: DateTime.now) 
+    created_at = Faker::Time.between(from: DateTime.now - 3.days, to: DateTime.now)
     HitobitoLogEntry.seed(
       { message: Faker::Hacker.say_something_smart,
         created_at: created_at,
         updated_at: created_at,
         category: random_category,
-        level: random_level })
+        level: random_level,
+        payload: {hello: Faker::Name.first_name}
+      })
   end
 
   private
 
   def random_category
-    HitobitoLogEntry.categories.keys.sample
+    HitobitoLogEntry.categories.sample
   end
 
   def random_level

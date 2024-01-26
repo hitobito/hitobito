@@ -13,7 +13,7 @@ class HitobitoLogEntriesController < ListController
   def model_scope
     model_class.
       includes(:subject).
-      public_send(category_scope).
+      yield_self(&method(:filter_category)).
       yield_self(&method(:filter_from)).
       yield_self(&method(:filter_to)).
       yield_self(&method(:filter_level)).
@@ -37,12 +37,12 @@ class HitobitoLogEntriesController < ListController
     send("#{type}_date_param")
   end
 
-  def category_scope
-    category_param ? "category_#{category_param}" : :all
-  end
-
   def level_scope
     level_param ? "level_#{level_param}" : :all
+  end
+
+  def filter_category(scope)
+    category_param ? scope.where(category: category_param) : scope
   end
 
   def filter_time(type)
@@ -75,7 +75,6 @@ class HitobitoLogEntriesController < ListController
   end
 
   def form_path
-    path_helper_name = [category_param, 'hitobito_log_entries_path'].compact.join('_')
-    public_send(path_helper_name, level: level_param)
+    hitobito_log_entries_path(category: category_param, level: level_param)
   end
 end

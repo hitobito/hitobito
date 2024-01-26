@@ -59,7 +59,7 @@ describe Person::Subscriptions do
       end
 
       it 'excludes list when event subscription exists but missing required tag' do
-        create_event_subscription(excluded_tags: %w(vip))
+        create_event_subscription(included_tags: %w(vip))
         expect(subscribed).to be_empty
       end
 
@@ -148,12 +148,12 @@ describe Person::Subscriptions do
       end
 
       it 'includes list when group subscription exists but missing required tag' do
-        create_group_subscription(excluded_tags: %w(vip))
+        create_group_subscription(included_tags: %w(vip))
         expect(subscribable).to eq [list]
       end
 
       it 'includes list when event subscription exists but missing required tag' do
-        create_event_subscription(excluded_tags: %w(vip))
+        create_event_subscription(included_tags: %w(vip))
         expect(subscribable).to eq [list]
       end
 
@@ -255,7 +255,7 @@ describe Person::Subscriptions do
       end
 
       it 'excludes list when event subscription exists but missing required tag' do
-        create_event_subscription(excluded_tags: %w(vip))
+        create_event_subscription(included_tags: %w(vip))
         expect(subscribed).to be_empty
       end
 
@@ -349,13 +349,13 @@ describe Person::Subscriptions do
       end
 
       it 'excludes list when group subscription and opt_out exists but missing required tag' do
-        create_group_subscription(excluded_tags: %w(vip))
+        create_group_subscription(included_tags: %w(vip))
         create_person_subscription(excluded: true)
         expect(subscribable).to be_empty
       end
 
       it 'excludes list when event subscription and opt_out exists but missing required tag' do
-        create_event_subscription(excluded_tags: %w(vip))
+        create_event_subscription(included_tags: %w(vip))
         create_person_subscription(excluded: true)
         expect(subscribable).to be_empty
       end
@@ -460,7 +460,7 @@ describe Person::Subscriptions do
       end
 
       it 'excludes list when event subscription exists but missing required tag' do
-        create_event_subscription(excluded_tags: %w(vip))
+        create_event_subscription(included_tags: %w(vip))
         expect(subscribed).to be_empty
       end
 
@@ -580,12 +580,12 @@ describe Person::Subscriptions do
       end
 
       it 'excludes list when group subscription exists but missing required tag' do
-        create_group_subscription(excluded_tags: %w(vip))
+        create_group_subscription(included_tags: %w(vip))
         expect(subscribable).to be_empty
       end
 
       it 'excludes list when event subscription exists but missing required tag' do
-        create_event_subscription(excluded_tags: %w(vip))
+        create_event_subscription(included_tags: %w(vip))
         expect(subscribable).to be_empty
       end
 

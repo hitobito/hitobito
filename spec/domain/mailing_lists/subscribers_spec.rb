@@ -44,6 +44,20 @@ describe MailingLists::Subscribers do
       create_subscription(person)
       expect(subject).to eq [person]
     end
+
+    it 'excludes person via global filter' do
+      create_subscription(group, false, role.type)
+      create_subscription(person)
+      list.update(filter_chain: { language: { allowed_values: :fr } })
+      expect(subject).to be_empty
+    end
+
+    it 'includes person included in global filter' do
+      create_subscription(group, false, role.type)
+      create_subscription(person)
+      list.update(filter_chain: { language: { allowed_values: :de } })
+      expect(subject).to eq [person]
+    end
   end
 
   context 'only people' do
@@ -461,6 +475,21 @@ describe MailingLists::Subscribers do
 
         expect(list.subscribed?(person)).to be_falsey
       end
+
+      it 'is false if excluded via global filter' do
+        create_subscription(person)
+        list.update(filter_chain: { language: { allowed_values: :fr } })
+
+        expect(list.subscribed?(person)).to be_falsey
+      end
+
+      it 'is true if not excluded via global filter' do
+        create_subscription(person)
+        list.update(filter_chain: { language: { allowed_values: :de } })
+
+        expect(list.subscribed?(person)).to be_truthy
+        expect(list.subscribed?(people(:top_leader))).to be_falsey
+      end
     end
 
     context 'events' do
@@ -484,6 +513,22 @@ describe MailingLists::Subscribers do
         create_subscription(p, true)
 
         expect(list.subscribed?(p)).to be_falsey
+      end
+
+      it 'is false if excluded via global filter' do
+        create_subscription(event)
+        p = Fabricate(Event::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: event)).participation.person
+        list.update(filter_chain: { language: { allowed_values: :fr } })
+
+        expect(list.subscribed?(p)).to be_falsey
+      end
+
+      it 'is true if not excluded via global filter' do
+        create_subscription(event)
+        p = Fabricate(Event::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: event)).participation.person
+        list.update(filter_chain: { language: { allowed_values: :de } })
+
+        expect(list.subscribed?(p)).to be_truthy
       end
     end
 
@@ -568,6 +613,32 @@ describe MailingLists::Subscribers do
         create_subscription(p, true)
 
         expect(list.subscribed?(p)).to be_falsey
+      end
+
+      it 'is false if excluded via global filter' do
+        sub = create_subscription(groups(:bottom_layer_one), false,
+                                  Group::BottomGroup::Leader.sti_name)
+        sub.subscription_tags = subscription_tags(%w(bar foo:baz))
+        sub.save!
+        p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
+        p.tag_list = 'foo:baz'
+        p.save!
+        list.update(filter_chain: { language: { allowed_values: :fr } })
+
+        expect(list.subscribed?(p)).to be_falsey
+      end
+
+      it 'is true if not excluded via global filter' do
+        sub = create_subscription(groups(:bottom_layer_one), false,
+                                  Group::BottomGroup::Leader.sti_name)
+        sub.subscription_tags = subscription_tags(%w(bar foo:baz))
+        sub.save!
+        p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
+        p.tag_list = 'foo:baz'
+        p.save!
+        list.update(filter_chain: { language: { allowed_values: :de } })
+
+        expect(list.subscribed?(p)).to be_truthy
       end
     end
   end

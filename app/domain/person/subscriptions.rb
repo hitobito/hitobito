@@ -42,6 +42,8 @@ class Person::Subscriptions
       .where.not(id: subscribed.select('id')).distinct
   end
 
+  private
+
   def direct
     @person.subscriptions.where(excluded: false)
   end
@@ -80,8 +82,6 @@ class Person::Subscriptions
       .where(condition.to_a)
       .where.not(id: exclusions.pluck(:id))
   end
-
-  private
 
   def tag_excluded_subscription_ids
     SubscriptionTag.where(tag_id: @person.tag_ids, excluded: true).pluck(:subscription_id)

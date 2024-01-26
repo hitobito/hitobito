@@ -9,7 +9,7 @@ require 'spec_helper'
 require_dependency 'app_status/mail'
 
 describe AppStatus::Mail do
-  include MailingLists::SpecHelper
+  include MailingLists::ImapMailsSpecHelper
 
   let(:app_status) { AppStatus::Mail.new }
   let(:cache) { Rails.cache }

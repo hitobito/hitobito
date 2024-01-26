@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe MailingLists::Subscribers do
+  include Subscriptions::SpecHelper
+
   let(:list)   { Fabricate(:mailing_list, group: groups(:top_layer)) }
   let(:person) { Fabricate(:person) }
   let(:event)  do

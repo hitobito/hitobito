@@ -5,7 +5,7 @@ require 'spec_helper'
 require 'net/imap'
 
 describe MailingLists::ImapMailsController do
-  include MailingLists::SpecHelper
+  include MailingLists::ImapMailsSpecHelper
 
   let(:top_leader) { people(:top_leader) }
 

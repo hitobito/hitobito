@@ -8,7 +8,7 @@
 require 'spec_helper'
 
 describe Subscriptions::OptInCleanupJob do
-  include MailingLists::SpecHelper
+  include Subscriptions::SpecHelper
 
   let(:role) { roles(:top_leader) }
   let(:person) { role.person }

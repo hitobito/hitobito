@@ -9,7 +9,7 @@
 require 'spec_helper'
 
 describe MailingLists::BulkMail::DeliveryReportMessageJob do
-  include MailingLists::SpecHelper
+  include MailingLists::ImapMailsSpecHelper
 
   let(:mailing_list) { mailing_lists(:leaders) }
   let(:mail_log) { MailLog.create!(mail_from: 'mr-sender@example.com') }

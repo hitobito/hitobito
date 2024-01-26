@@ -246,6 +246,7 @@ describe Person::Subscriptions do
     let(:top_layer) { groups(:top_layer) }
     let(:top_group) { groups(:top_group) }
 
+
     let!(:direct) do
       Fabricate(:mailing_list, subscribable_for: :anyone, group: top_layer).tap do |list|
         create_person_subscription(mailing_list: list)
@@ -261,7 +262,6 @@ describe Person::Subscriptions do
     let!(:from_group) do
       Fabricate(:mailing_list, subscribable_for: :anyone, group: top_layer).tap do |list|
         create_group_subscription(mailing_list: list, subscriber: top_group)
-        # list.subscriptions.create!(subscriber: top_group, role_types: ['Group::TopGroup::Leader'])
       end
     end
 

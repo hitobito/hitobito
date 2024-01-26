@@ -8,7 +8,7 @@
 require 'spec_helper'
 
 describe Imap::Mail do
-  include MailingLists::SpecHelper
+  include MailingLists::ImapMailsSpecHelper
   describe '#list_bounce?' do
     let(:bounce_imap_mail) { Imap::Mail.new }
     let(:bounce_mail) { Mail.read_from_string(File.read(Rails.root.join('spec', 'fixtures', 'email', 'list_bounce.eml'))) }

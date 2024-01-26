@@ -23,12 +23,12 @@ describe 'person/subscriptions/index.html.haml' do
   subject { Capybara::Node::Simple.new(render) }
 
   it 'renders name as link if current_user can read' do
-    allow(view).to receive(:can?).with(:read, entry).and_return(true)
+    allow(view).to receive(:can?).with(:show, entry).and_return(true)
     expect(subject).to have_selector 'td strong a', text: entry.name
   end
 
   it 'renders name as text if current_user cannot read' do
-    allow(view).to receive(:can?).with(:read, entry).and_return(false)
+    allow(view).to receive(:can?).with(:show, entry).and_return(false)
     expect(subject).to have_selector 'td strong', text: entry.name
     expect(subject).to have_no_selector 'td strong a', text: entry.name
   end

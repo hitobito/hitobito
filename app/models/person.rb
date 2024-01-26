@@ -291,6 +291,15 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
       select('people.*', Arel.sql(order_by_name_statement)).order(Arel.sql("order_case"))
     end
 
+    def order_by_name_statement
+      "CASE
+        WHEN people.company = #{connection.quote(true)} THEN people.company_name
+        WHEN people.last_name IS NOT NULL AND people.last_name != '' THEN people.last_name
+        WHEN people.first_name IS NOT NULL AND people.first_name != '' THEN people.first_name
+        ELSE people.nickname
+      END AS order_case"
+    end
+
     def only_public_data
       select(PUBLIC_ATTRS.collect { |a| "people.#{a}" })
     end
@@ -320,17 +329,6 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
     def root
       find_by(email: Settings.root_email)
-    end
-
-    private
-
-    def order_by_name_statement
-      "CASE
-        WHEN people.company = #{connection.quote(true)} THEN people.company_name
-        WHEN people.last_name IS NOT NULL AND people.last_name != '' THEN people.last_name
-        WHEN people.first_name IS NOT NULL AND people.first_name != '' THEN people.first_name
-        ELSE people.nickname
-      END AS order_case"
     end
   end
 

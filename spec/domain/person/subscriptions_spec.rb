@@ -52,6 +52,30 @@ describe Person::Subscriptions do
         create_person_subscription(excluded: true)
         expect(subscribed).to be_empty
       end
+
+      it 'excludes list when group subscriptions exists but excluded by global filter' do
+        create_group_subscription
+        list.update(filter_chain: { language: { allowed_values: :fr } })
+        expect(subscribed).to be_empty
+      end
+
+      it 'excludes list when event subscriptions exists but excluded by global filter' do
+        create_event_subscription
+        list.update(filter_chain: { language: { allowed_values: :fr } })
+        expect(subscribed).to be_empty
+      end
+
+      it 'includes list when group subscriptions exists and not excluded by global filter' do
+        create_group_subscription
+        list.update(filter_chain: { language: { allowed_values: :de } })
+        expect(subscribed).to eq [list]
+      end
+
+      it 'includes list when event subscriptions exists and not excluded by global filter' do
+        create_event_subscription
+        list.update(filter_chain: { language: { allowed_values: :de } })
+        expect(subscribed).to eq [list]
+      end
     end
 
     describe '#subscribable' do

@@ -70,7 +70,7 @@ module Sheet
     delegate :group_path, to: :view
 
     def render_breadcrumbs
-      return FormatHelper::EMPTY_STRING unless breadcrumbs?
+      return ''.html_safe unless breadcrumbs?
 
       content_tag(:div, class: 'breadcrumb') do
         content_tag(:ul) do

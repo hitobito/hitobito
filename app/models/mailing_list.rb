@@ -122,10 +122,6 @@ class MailingList < ActiveRecord::Base
     Settings.email.list_domain
   end
 
-  def subscribed?(person)
-    people.where(id: person.id).exists?
-  end
-
   def exclude_person(person)
     subscriptions
       .where(subscriber_id: person.id,
@@ -139,6 +135,10 @@ class MailingList < ActiveRecord::Base
       sub.excluded = true
       sub.save!
     end
+  end
+
+  def subscribed?(person)
+    MailingLists::Subscribers.new(self).subscribed?(person)
   end
 
   def people(people_scope = Person.only_public_data)

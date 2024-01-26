@@ -20,6 +20,10 @@ class MailingLists::Subscribers
     people_as_configured.where(group_or_event_subscriber_conditions)
   end
 
+  def subscribed?(person)
+    people.where(id: person.id).exists?
+  end
+
   private
 
   def scope

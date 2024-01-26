@@ -444,6 +444,131 @@ describe MailingLists::Subscribers do
     end
   end
 
+  describe '#subscribed?' do
+    context 'people' do
+      it 'is true if included' do
+        create_subscription(person)
+
+        expect(list.subscribed?(person)).to be_truthy
+        expect(list.subscribed?(people(:top_leader))).to be_falsey
+      end
+
+      it 'is false if excluded' do
+        create_subscription(person)
+        create_subscription(person, true)
+
+        expect(list.subscribed?(person)).to be_falsey
+      end
+    end
+
+    context 'events' do
+      it 'is true if active participation' do
+        create_subscription(event)
+        p = Fabricate(Event::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: event)).participation.person
+
+        expect(list.subscribed?(p)).to be_truthy
+      end
+
+      it 'is false if non active participation' do
+        create_subscription(event)
+        p = Fabricate(:event_participation, event: event).person
+
+        expect(list.subscribed?(p)).to be_falsey
+      end
+
+      it 'is false if explicitly excluded' do
+        create_subscription(event)
+        p = Fabricate(Event::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: event)).participation.person
+        create_subscription(p, true)
+
+        expect(list.subscribed?(p)).to be_falsey
+      end
+    end
+
+    context 'groups' do
+      it 'is true if in group' do
+        create_subscription(groups(:bottom_layer_one), false,
+                                  Group::BottomGroup::Leader.sti_name)
+        p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
+
+        expect(list.subscribed?(p)).to be_truthy
+      end
+
+      it 'is true with role with future deleted_at' do
+        create_subscription(groups(:bottom_layer_one), false,
+                                  Group::BottomGroup::Leader.sti_name)
+        p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one), created_at: Time.now.utc, deleted_at: Time.now.utc + 2.hours).person
+
+        expect(list.subscribed?(p)).to be_truthy
+      end
+
+      it 'is false if different role in group' do
+        create_subscription(groups(:bottom_layer_one), false,
+                                  Group::BottomGroup::Leader.sti_name)
+        p = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one)).person
+
+        expect(list.subscribed?(p)).to be_falsey
+      end
+
+      it 'is true if in group and all tags match' do
+        sub = create_subscription(groups(:bottom_layer_one), false,
+                                  Group::BottomGroup::Leader.sti_name)
+        sub.subscription_tags = subscription_tags(%w(bar baz))
+        sub.save!
+        p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
+        p.tag_list = 'foo:bar, geez, baz'
+        p.save!
+
+        expect(list.subscribed?(p)).to be_truthy
+      end
+
+      it 'is true if in group and not all tags match' do
+        sub = create_subscription(groups(:bottom_layer_one), false,
+                                  Group::BottomGroup::Leader.sti_name)
+        sub.subscription_tags = subscription_tags(%w(bar foo:baz))
+        sub.save!
+        p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
+        p.tag_list = 'foo:baz'
+        p.save!
+
+        expect(list.subscribed?(p)).to be_truthy
+      end
+
+      it 'is false if in group and excluded tag matches' do
+        sub = create_subscription(groups(:bottom_layer_one), false,
+                                  Group::BottomGroup::Leader.sti_name)
+        sub.subscription_tags = subscription_tags(%w(bar foo:baz))
+        sub.subscription_tags.second.update!(excluded: true)
+        sub.save!
+        p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
+        p.tag_list = 'foo:baz'
+        p.save!
+
+        expect(list.subscribed?(p)).to be_falsey
+      end
+
+      it 'is false if in group and no tags match' do
+        sub = create_subscription(groups(:bottom_layer_one), false,
+                                  Group::BottomGroup::Leader.sti_name)
+        sub.subscription_tags = subscription_tags(%w(foo:bar foo:baz))
+        sub.save!
+        p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
+        p.tag_list = 'baz'
+        p.save!
+
+        expect(list.subscribed?(p)).to be_falsey
+      end
+
+      it 'is false if explicitly excluded' do
+        create_subscription(groups(:bottom_layer_one), false,
+                                  Group::BottomGroup::Leader.sti_name)
+        p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
+        create_subscription(p, true)
+
+        expect(list.subscribed?(p)).to be_falsey
+      end
+    end
+  end
   def create_event_subscription
     event = Fabricate(:event, groups: [group])
     event.participations.create!(person: person, active: true)

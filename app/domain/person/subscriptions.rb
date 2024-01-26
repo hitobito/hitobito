@@ -63,18 +63,20 @@ class Person::Subscriptions
   end
 
   def from_events
-    event_ids = @person.event_participations.active.select('event_id')
-    Subscription.events.where(subscriber_id: event_ids)
+    Subscription.events
+                .where(subscriber_id: @person.event_participations.active.select('event_id'))
+                .left_joins(:subscription_tags)
+                .where(subscription_tags_condition, @person.tag_ids)
   end
 
   def from_groups
-    return Subscription.none unless @person.roles.without_archived.present?
+    return Subscription.none if @person.roles.without_archived.blank?
 
-    sql = <<~SQL
+    sql = <<~SQL.squish
       related_role_types.role_type = ? AND
       #{Group.quoted_table_name}.lft <= ? AND
       #{Group.quoted_table_name}.rgt >= ? AND
-      (subscription_tags.tag_id IS NULL OR (subscription_tags.excluded <> true AND subscription_tags.tag_id IN (?)))
+      #{subscription_tags_condition}
     SQL
 
     condition = OrCondition.new
@@ -90,6 +92,11 @@ class Person::Subscriptions
       .left_joins(:subscription_tags)
       .where(condition.to_a)
       .where.not(id: exclusions.pluck(:id))
+  end
+
+  def subscription_tags_condition
+    'subscription_tags.tag_id IS NULL OR ' \
+      '(subscription_tags.excluded <> true AND subscription_tags.tag_id IN (?))'
   end
 
   def tag_excluded_subscription_ids

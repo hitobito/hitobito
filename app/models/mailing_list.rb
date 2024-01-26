@@ -79,6 +79,7 @@ class MailingList < ActiveRecord::Base
 
   scope :list, -> { order(:name) }
   scope :anyone, -> { where(subscribable_for: :anyone) }
+  scope :configured, -> { where(subscribable_for: :configured) }
   scope :opt_in, -> { where(subscribable_for: :configured, subscribable_mode: :opt_in) }
   scope :opt_out, -> { where(subscribable_for: :configured, subscribable_mode: :opt_out) }
   scope :subscribable, -> { where(subscribable_for: [:anyone, :configured]) }

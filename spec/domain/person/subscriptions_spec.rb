@@ -14,8 +14,6 @@ describe Person::Subscriptions do
   let(:person)    { people(:top_leader) }
   let(:group)     { groups(:top_group) }
 
-  # let(:top_layer) { groups(:top_layer) }
-
   context 'subscribable_for anyone' do
     before { list.update(subscribable_for: :anyone) }
 

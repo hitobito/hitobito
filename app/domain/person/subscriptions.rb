@@ -30,6 +30,7 @@ class Person::Subscriptions
       .where.not(id: exclusions.select('mailing_list_id'))
       .or(scope.anyone.merge(from_group_or_events))
       .or(scope.opt_out.merge(from_group_or_events))
+      .where.not(id: lists_excluding_person_via_filter.collect(&:id))
       .distinct
   end
 
@@ -39,10 +40,18 @@ class Person::Subscriptions
       .or(scope.anyone)
       .or(scope.opt_in.merge(from_group_or_events))
       .or(scope.opt_out.merge(from_group_or_events))
-      .where.not(id: subscribed.select('id')).distinct
+      .where.not(id: subscribed.select('id'))
+      .where.not(id: lists_excluding_person_via_filter.collect(&:id))
+      .distinct
   end
 
   private
+
+  def lists_excluding_person_via_filter
+    MailingList.subscribable.with_filter_chain.select do |list|
+      list.filter_chain.filter(Person.where(id: @person.id)).none?
+    end
+  end
 
   def direct
     @person.subscriptions.where(excluded: false)

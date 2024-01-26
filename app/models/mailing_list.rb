@@ -82,6 +82,7 @@ class MailingList < ActiveRecord::Base
   scope :opt_in, -> { where(subscribable_for: :configured, subscribable_mode: :opt_in) }
   scope :opt_out, -> { where(subscribable_for: :configured, subscribable_mode: :opt_out) }
   scope :subscribable, -> { where(subscribable_for: [:anyone, :configured]) }
+  scope :with_filter_chain, -> { where.not(filter_chain: MailingLists::Filter::Chain.new({})) }
   scope :mailchimp, -> do
     where.not(mailchimp_api_key: ['', nil]).where.not(mailchimp_list_id: ['', nil])
   end

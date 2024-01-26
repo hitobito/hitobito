@@ -36,7 +36,7 @@ class Person::Subscriptions
 
   def subscribable
     scope
-      .where(id: exclusions.select('mailing_list_id'))
+      .where(id: direct_exclusions.select('mailing_list_id'))
       .or(scope.anyone)
       .or(scope.configured.merge(from_group_or_events))
       .where.not(id: subscribed.select('id'))
@@ -56,9 +56,16 @@ class Person::Subscriptions
     @person.subscriptions.where(excluded: false)
   end
 
+  def direct_exclusions
+    @direct_exclusions ||= @person.subscriptions.where(excluded: true)
+  end
+
+  def tag_exclusions
+    @tag_exclusions ||= Subscription.where(id: tag_excluded_subscription_ids)
+  end
+
   def exclusions
-    @exclusions ||= @person.subscriptions.where(excluded: true)
-                           .or(Subscription.where(id: tag_excluded_subscription_ids))
+    @exclusions ||= direct_exclusions.or(tag_exclusions)
   end
 
   def from_events

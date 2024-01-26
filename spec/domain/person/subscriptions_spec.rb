@@ -14,6 +14,39 @@ describe Person::Subscriptions do
   let(:person)    { people(:top_leader) }
   let(:group)     { groups(:top_group) }
 
+  context 'subscribable_for nobody' do
+    before { list.update(subscribable_for: :nobody) }
+
+    describe '#subscribable' do
+      subject(:subscribable) { described_class.new(person).subscribable }
+      before { MailingList.where.not(id: list.id).destroy_all }
+
+      it 'excludes list when no subscription exists' do
+        expect(subscribable).to be_empty
+      end
+
+      it 'excludes list when direct subscription exists' do
+        create_person_subscription
+        expect(subscribable).to be_empty
+      end
+
+      it 'excludes list when direct exclusion exists' do
+        create_person_subscription(excluded: true)
+        expect(subscribable).to be_empty
+      end
+
+      it 'excludes list when group subscription exists' do
+        create_group_subscription
+        expect(subscribable).to be_empty
+      end
+
+      it 'excludes list when event subscription exists' do
+        create_event_subscription
+        expect(subscribable).to be_empty
+      end
+
+    end
+  end
   context 'subscribable_for anyone' do
     before { list.update(subscribable_for: :anyone) }
 

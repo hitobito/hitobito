@@ -149,23 +149,55 @@ describe MailingList do
     end
   end
 
-  context 'subscribable_for is configured' do
-    let(:leaders) { mailing_lists(:leaders).tap { |l| l.subscribable_for = 'configured' } }
+  describe 'subscribable for and subscribable_mode' do
+    let(:leaders) { mailing_lists(:leaders) }
 
-    it 'sets default subscribable mode if none is set' do
-      expect(leaders).to be_valid
-      expect(leaders.subscribable_mode).to eq 'opt_out'
+    context 'subscribable_for is configured' do
+      before { leaders.subscribable_for = 'configured' }
+
+      it 'sets default subscribable mode if none is set' do
+        expect(leaders).to be_valid
+        expect(leaders.subscribable_mode).to eq 'opt_out'
+      end
+
+      it 'accepts any valid subscribable mode' do
+        leaders.subscribable_mode = 'opt_in'
+        expect(leaders).to be_valid
+        expect(leaders.subscribable_mode).to eq 'opt_in'
+      end
+
+      it 'rejects invalid subscribable mode' do
+        leaders.subscribable_mode = 'invalid'
+        expect(leaders).not_to be_valid
+      end
     end
 
-    it 'accepts any valid subscribable mode' do
+    it 'keeps mode when anyone may subscribe' do
       leaders.subscribable_mode = 'opt_in'
       expect(leaders).to be_valid
       expect(leaders.subscribable_mode).to eq 'opt_in'
     end
 
-    it 'rejects invalid subscribable mode' do
-      leaders.subscribable_mode = 'invalid'
-      expect(leaders).not_to be_valid
+    it 'resets mode when not subscribable' do
+      leaders.subscribable_for = 'nobody'
+      leaders.subscribable_mode = 'opt_in'
+      expect(leaders).to be_valid
+      expect(leaders.subscribable_mode).to be_blank
+    end
+
+    describe 'job scheduling' do
+      it 'schedules cleanup job if subscribable_for is configured' do
+        expect do
+          leaders.update!(subscribable_mode: :opt_in)
+        end.to change { Delayed::Job.count }.by(1)
+      end
+
+      it 'does not schedule job on other attr changes' do
+        leaders.update!(subscribable_mode: :opt_in)
+        expect do
+          leaders.update!(subscribable_for: :configured)
+        end.not_to change { Delayed::Job.count }
+      end
     end
   end
 

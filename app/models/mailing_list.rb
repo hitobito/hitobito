@@ -75,6 +75,7 @@ class MailingList < ActiveRecord::Base
   validates :subscribable_mode, inclusion: { in: SUBSCRIBABLE_MODES }, if: :subscribable?
 
   after_destroy :schedule_mailchimp_destroy, if: :mailchimp?
+  after_save :schedule_opt_in_cleanup, if: :opt_in?
 
   scope :list, -> { order(:name) }
   scope :anyone, -> { where(subscribable_for: :anyone) }
@@ -179,6 +180,12 @@ class MailingList < ActiveRecord::Base
     else
       super
     end
+  end
+
+  def schedule_opt_in_cleanup
+    return unless subscribable_mode_previously_was == 'opt_out'
+
+    Subscriptions::OptInCleanupJob.new(id).enqueue!
   end
 
   private

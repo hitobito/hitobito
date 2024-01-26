@@ -102,6 +102,10 @@ class MailingList < ActiveRecord::Base
     (SUBSCRIBABLE_FORS - %w(nobody)).include?(subscribable_for)
   end
 
+  def subscribable_for_configured?
+    subscribable_for.to_s == 'configured'
+  end
+
   def labels
     main_email ? preferred_labels + [DEFAULT_LABEL] : preferred_labels
   end

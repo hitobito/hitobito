@@ -1969,6 +1969,12 @@ de:
     list:
       excluded_people: 'Ausgeschlossene Personen'
       export_not_allowed: 'Du darfst die Abonnenten dieses Abos nicht exportieren, da diese auch Rollen und/oder Anlässe ausserhalb deines Berechtigungsbereiches enthalten.'
+      subscribable_mode_opt_out_info: >
+        Nur die hier konfigurierten Personen dürfen sich selbst an-/abmelden und sind
+        standardmässig an-gemeldet.
+      subscribable_mode_opt_in_info: >
+        Nur die hier konfigurierten Personen dürfen sich selbst an-/abmelden und sind
+        standardmässig ab-gemeldet.
     subscription:
       only_persons_with: 'Nur Personen mit:'
       persons_excluded_with: 'Personen ausschliessen mit:'

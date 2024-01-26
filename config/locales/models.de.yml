@@ -852,8 +852,8 @@ de:
         subscribable: Abonnenten dürfen sich selbst an/abmelden
         subscribable_mode: Abonnente sind standardmässig
         subscribable_modes:
-          opt_out: Angemeldet
-          opt_in: Abgemeldet
+          opt_out: An-gemeldet
+          opt_in: Ab-gemeldet
         subscribable_for: Abonnenten dürfen sich selbst an/abmelden
         subscribable_fors:
           anyone: Jeder

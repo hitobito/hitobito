@@ -141,8 +141,8 @@ class Invoice < ActiveRecord::Base
 
     # Orders by first integer, second integer
     def order_by_sequence_number_statement
-      %w(sequence_number).product(%w(1 -1)).map do |field, index|
-        "CAST(SUBSTRING_INDEX(#{field}, '-', #{index}) AS UNSIGNED)"
+      %w(sequence_number).product(%w(^[^-]+ [^-]+$)).map do |field, index|
+        "CAST(SUBSTRING(#{field} FROM '#{index}') AS INTEGER)"
       end
     end
 

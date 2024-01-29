@@ -362,6 +362,14 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     end
   end
 
+  def short_name
+    if static_name
+      self.class.label
+    else
+      super
+    end
+  end
+
   def name=(value)
     return if static_name
 

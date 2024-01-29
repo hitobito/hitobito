@@ -118,6 +118,38 @@ describe GroupsController do
       end
     end
 
+    describe 'POST create' do
+      let(:attrs) {  { type: 'Group::TopGroup', parent_id: group.id } }
+
+      it 'sets name and short_name' do
+        post :create, params: { group: attrs.merge({
+          name: 'custom_name',
+          short_name: 'custom_short_name'
+        })
+        }
+        new_group = assigns(:group)
+
+        expect(new_group.name).to eq('custom_name')
+        expect(new_group.short_name).to eq('custom_short_name')
+      end
+
+      context 'static_name group' do
+        before { allow(Group::TopGroup).to receive(:static_name).and_return(true) }
+
+        it 'does not set name and short_name' do
+          post :create, params: { group: attrs.merge({
+            name: 'custom_name',
+            short_name: 'custom_short_name'
+            })
+          }
+          new_group = assigns(:group)
+
+          expect(new_group.name).to eq('Top Group')
+          expect(new_group.short_name).to eq('Top Group')
+        end
+      end
+    end
+
     describe 'PUT update' do
       let(:attrs) { { type: 'Group::TopGroup', parent_id: group.id } }
       let(:top_leader_role) { roles(:top_leader) }
@@ -197,6 +229,40 @@ describe GroupsController do
         expect(group.text_message_provider).to eq('aspsms')
         expect(group.text_message_username).to eq('housi')
         expect(group.text_message_password).to eq('longlivesms')
+      end
+
+      it 'updates name and short_name' do
+        expect(group.name).to eq('TopGroup')
+        expect(group.short_name).to be_nil
+
+        patch :update, params: { id: group.id, group: {
+          name: 'new_name',
+          short_name: 'new_short_name' }
+        }
+
+        group.reload
+
+        expect(group.name).to eq('new_name')
+        expect(group.short_name).to eq('new_short_name')
+      end
+
+      context 'static_name group' do
+        before { allow(group).to receive(:static_name).and_return(true) }
+
+        it 'does not update name and short_name' do
+          expect(group.name).to eq('Top Group')
+          expect(group.short_name).to eq('Top Group')
+
+          patch :update, params: { id: group.id, group: {
+            name: 'new_name',
+            short_name: 'new_short_name' }
+          }
+
+          group.reload
+
+          expect(group.name).to eq('Top Group')
+          expect(group.short_name).to eq('Top Group')
+        end
       end
     end
 

@@ -104,6 +104,9 @@ class GroupsController < CrudController
     if entry.class.superior_attributes.present? && !can?(:modify_superior, entry)
       attrs -= entry.class.superior_attributes
     end
+    if entry.static_name
+      attrs -= [:name, :short_name]
+    end
     attrs
   end
 

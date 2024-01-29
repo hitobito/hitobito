@@ -19,7 +19,9 @@ class JobManager
   end
 
   def check
-    scheduled, missing = jobs.partition { _1.new.scheduled? }
+    scheduled, missing = jobs.partition do |job_class|
+      job_class.new.scheduled?
+    end
 
     puts 'Scheduled: ' + scheduled.to_sentence if scheduled.any?
     puts 'Missing: ' + missing.to_sentence if missing.any?

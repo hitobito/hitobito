@@ -19,20 +19,11 @@ describe MailingListsController, js: true do
     before { visit group_mailing_lists_path(list.group) }
     subject(:list_row) { find('tr', id: "mailing_list_#{list.id}") }
 
-    context 'as user who may read list' do
-      let(:user) { people(:root) }
+    context 'as user who may show list' do
+      let(:user) { people(:top_leader) }
 
-      it 'renders list name as link if current_user can read' do
+      it 'renders list name as link if current_user can show' do
         expect(list_row).to have_selector 'td strong a', text: list.name
-      end
-    end
-
-    context 'as user who may not read list' do
-      let(:user) { people(:bottom_member) }
-
-      it 'renders list name as text if current_user cannot read' do
-        expect(list_row).to have_selector 'td strong', text: list.name
-        expect(list_row).to have_no_selector 'td strong a', text: list.name
       end
     end
   end

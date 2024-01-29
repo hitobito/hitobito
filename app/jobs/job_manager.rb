@@ -67,6 +67,7 @@ class JobManager
   def standard_jobs
     [
       DownloadCleanerJob,
+      Event::ParticipationCleanupJob,
       Payments::EbicsImportJob,
       People::DuplicateLocatorJob,
       People::CleanupJob,
@@ -74,8 +75,7 @@ class JobManager
       People::DestroyRolesJob,
       ReoccuringMailchimpSynchronizationJob,
       SessionsCleanerJob,
-      WorkerHeartbeatCheckJob,
-      Event::ParticipationCleanupJob
+      WorkerHeartbeatCheckJob
     ]
   end
 end

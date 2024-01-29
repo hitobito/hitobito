@@ -6,7 +6,7 @@
 -#  https://github.com/hitobito/hitobito.
 
 - entry.model.class.mounted_attr_configs_by_category.each do |category, configs|
-  .tab-pane{id: category}
+  .tab-pane.mt-3{id: category}
     - configs.each do |config|
       - if config.enum.present?
         = f.labeled(config.attr_name) do

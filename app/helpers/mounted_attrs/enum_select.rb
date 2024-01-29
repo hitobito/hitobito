@@ -8,7 +8,7 @@ module MountedAttrs
     end
 
     def render
-      f.select(config.attr_name, options, { include_blank: config.null })
+      f.select(config.attr_name, options, { include_blank: config.null }, class: 'form-select form-select-sm')
     end
 
     private

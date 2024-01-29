@@ -15,7 +15,7 @@
       = list.publisher
     - t.col(MailingList.human_attribute_name(:mail_address), class: 'col-3') do |list|
       = mail_to list.mail_address
-    - t.col(class: 'col-1') do |list|
+    - t.col('', class: 'col-1') do |list|
       = link_to t('mailing_list_decorator.unsubscribe'), group_person_subscription_path(@group, @person, list), method: :delete, class: 'btn btn-sm btn-outline-primary'
 
 

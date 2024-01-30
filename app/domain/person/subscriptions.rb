@@ -26,8 +26,8 @@ class Person::Subscriptions
 
   def subscribed
     scope
-      .where(id: direct.select('mailing_list_id'))
-      .where.not(id: exclusions.select('mailing_list_id'))
+      .where(id: direct_inclusions.select('mailing_list_id'))
+      .where.not(id: direct_or_tag_exclusions.select('mailing_list_id'))
       .or(scope.anyone.merge(from_group_or_events))
       .or(scope.opt_out.merge(from_group_or_events))
       .where.not(id: lists_excluding_person_via_filter.collect(&:id))
@@ -51,20 +51,20 @@ class Person::Subscriptions
     end
   end
 
-  def direct
-    @person.subscriptions.where(excluded: false)
+  def tag_exclusions
+    @tag_exclusions ||= Subscription.where(id: tag_excluded_subscription_ids)
+  end
+
+  def direct_inclusions
+    @direct_inclusions ||=  @person.subscriptions.where(excluded: false)
   end
 
   def direct_exclusions
     @direct_exclusions ||= @person.subscriptions.where(excluded: true)
   end
 
-  def tag_exclusions
-    @tag_exclusions ||= Subscription.where(id: tag_excluded_subscription_ids)
-  end
-
-  def exclusions
-    @exclusions ||= direct_exclusions.or(tag_exclusions)
+  def direct_or_tag_exclusions
+    @direct_or_tag_exclusions ||= direct_exclusions.or(tag_exclusions)
   end
 
   def from_events
@@ -96,7 +96,7 @@ class Person::Subscriptions
       .joins(:related_role_types)
       .left_joins(:subscription_tags)
       .where(condition.to_a)
-      .where.not(id: exclusions.pluck(:id))
+      .where.not(id: direct_or_tag_exclusions.pluck(:id))
   end
 
   def subscription_tags_condition
@@ -112,6 +112,10 @@ class Person::Subscriptions
     scope
       .where(id: from_events.select('mailing_list_id'))
       .or(scope.where(id: from_groups.select('mailing_list_id')))
-      .then { |scope| excluded ? scope : scope.where.not(id: exclusions.select('mailing_list_id')) }
+      .then do |scope|
+        next scope if excluded
+
+        scope.where.not(id: direct_or_tag_exclusions.select('mailing_list_id'))
+      end
   end
 end

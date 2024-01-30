@@ -80,7 +80,7 @@ class Payments::Collection
     invoice_ids =
       @payments.select(:'invoice.state', :invoice_id)
                .joins('INNER JOIN invoices AS invoice ON invoice.id = payments.invoice_id')
-               .having('invoice.state <> "cancelled"')
+               .having('invoice.state <> \'cancelled\'')
                .group(:invoice_id)
                .map(&:invoice_id)
     @payments = @payments.where(invoice_id: invoice_ids)

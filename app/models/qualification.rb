@@ -63,12 +63,14 @@ class Qualification < ActiveRecord::Base
       date ||= Time.zone.today
       joins(:qualification_kind).
         where('qualifications.start_at <= ?', date).
-        where('qualifications.finish_at IS NULL OR ' \
-              '(qualification_kinds.reactivateable IS NULL AND ' \
-              ' qualifications.finish_at >= ?) OR ' \
-              'DATE_ADD(qualifications.finish_at, ' \
-                'INTERVAL qualification_kinds.reactivateable YEAR) >= ?',
-              date, date)
+          where(
+            'qualifications.finish_at IS NULL OR ' \
+            '(qualification_kinds.reactivateable IS NULL AND ' \
+            'qualifications.finish_at >= ?) OR ' \
+            'qualifications.finish_at + ' \
+            'qualification_kinds.reactivateable * INTERVAL \'1 year\' >= ?',
+            date, date
+          )
     end
 
     private

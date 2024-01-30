@@ -608,7 +608,7 @@ describe Group do
 
           expect(group).to be_archived
           expect(role).to be_archived
-          expect(group.archived_at).to eq(role.archived_at)
+          expect(group.archived_at).to be_within(1.second).of(role.archived_at)
         end
 
         it 'future delete_on values are set to nil' do

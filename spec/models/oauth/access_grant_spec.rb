@@ -8,7 +8,7 @@ describe Oauth::AccessGrant do
   let(:application) { Oauth::Application.create!(name: 'MyApp', redirect_uri: redirect_uri) }
 
   it '.not_expired returns models where created_at + expires_in is less than current_time',
-     :mysql do
+     :postgresql do
     grant = application.access_grants.create!(resource_owner_id: top_leader.id,
                                               expires_in: 600,
                                               redirect_uri: redirect_uri)

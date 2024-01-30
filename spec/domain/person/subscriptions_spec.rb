@@ -109,6 +109,13 @@ describe Person::Subscriptions do
         expect(subscribed).to eq [list]
       end
 
+      it 'excludes list when group subscription has included and excluded tags' do
+        create_group_subscription(excluded_tags: %w(bar foo), included_tags: %w(vip))
+        person.tag_list = %w(foo vip)
+        person.save!
+        expect(subscribed).to be_empty
+      end
+
       it 'excludes list when event subscription exists but excluded by tags' do
         create_event_subscription(excluded_tags: %w(bar foo:baz))
         person.tag_list = 'foo:baz'
@@ -122,6 +129,13 @@ describe Person::Subscriptions do
         person.tag_list = 'foo:baz'
         person.save!
         expect(subscribed).to eq [list]
+      end
+
+      it 'excludes list when event subscription has included and excluded tags' do
+        create_event_subscription(excluded_tags: %w(bar foo), included_tags: %w(vip))
+        person.tag_list = %w(foo vip)
+        person.save!
+        expect(subscribed).to be_empty
       end
 
       it 'excludes list when excluded by global filter' do
@@ -217,6 +231,13 @@ describe Person::Subscriptions do
         expect(subscribable).to be_empty
       end
 
+      it 'includes list when group subscription has included and excluded tags' do
+        create_group_subscription(excluded_tags: %w(bar foo), included_tags: %w(vip))
+        person.tag_list = %w(foo vip)
+        person.save!
+        expect(subscribable).to eq [list]
+      end
+
       it 'includes list when event subscription exists but excluded by tags' do
         create_event_subscription(excluded_tags: %w(bar foo:baz))
         person.tag_list = 'foo:baz'
@@ -230,6 +251,13 @@ describe Person::Subscriptions do
         person.tag_list = 'foo:baz'
         person.save!
         expect(subscribable).to be_empty
+      end
+
+      it 'includes list when event subscription exists has included and excluded tags' do
+        create_event_subscription(excluded_tags: %w(bar foo), included_tags: %w(vip))
+        person.tag_list = %w(foo vip)
+        person.save!
+        expect(subscribable).to eq [list]
       end
 
       it 'excludes list when when excluded by global filter' do
@@ -333,6 +361,13 @@ describe Person::Subscriptions do
         expect(subscribed).to eq [list]
       end
 
+      it 'excludes list when group subscription has included and excluded tags' do
+        create_group_subscription(excluded_tags: %w(bar foo), included_tags: %w(vip))
+        person.tag_list = %w(foo vip)
+        person.save!
+        expect(subscribed).to be_empty
+      end
+
       it 'excludes list when event subscription exists but excluded by tags' do
         create_event_subscription(excluded_tags: %w(bar foo:baz))
         person.tag_list = 'foo:baz'
@@ -346,6 +381,12 @@ describe Person::Subscriptions do
         person.tag_list = 'foo:baz'
         person.save!
         expect(subscribed).to eq [list]
+      end
+      it 'excludes list when event subscription has included and excluded tags' do
+        create_event_subscription(excluded_tags: %w(bar foo), included_tags: %w(vip))
+        person.tag_list = %w(foo vip)
+        person.save!
+        expect(subscribed).to be_empty
       end
 
       it 'excludes list when excluded by global filter' do
@@ -456,6 +497,14 @@ describe Person::Subscriptions do
         expect(subscribable).to eq [list]
       end
 
+      it 'excludes list when opt_out exists but group subscription has included and excluded tags' do
+        create_group_subscription(excluded_tags: %w(bar foo), included_tags: %w(vip))
+        create_person_subscription(excluded: true)
+        person.tag_list = %w(foo vip)
+        person.save!
+        expect(subscribable).to be_empty
+      end
+
       it 'excludes list when event subscription and opt_out exists but excluded by tags' do
         create_event_subscription(excluded_tags: %w(bar foo:baz))
         create_person_subscription(excluded: true)
@@ -471,6 +520,14 @@ describe Person::Subscriptions do
         person.tag_list = 'foo:baz'
         person.save!
         expect(subscribable).to eq [list]
+      end
+
+      it 'excludes list when opt_out exists but event subscription has included and excluded tags' do
+        create_event_subscription(excluded_tags: %w(bar foo), included_tags: %w(vip))
+        create_person_subscription(excluded: true)
+        person.tag_list = %w(foo vip)
+        person.save!
+        expect(subscribable).to be_empty
       end
 
       it 'excludes list when when excluded by global filter' do
@@ -574,6 +631,13 @@ describe Person::Subscriptions do
         expect(subscribed).to be_empty
       end
 
+      it 'excludes list when group subscription has included and excluded tags' do
+        create_group_subscription(excluded_tags: %w(bar foo), included_tags: %w(vip))
+        person.tag_list = %w(foo vip)
+        person.save!
+        expect(subscribed).to be_empty
+      end
+
       it 'excludes list when event subscription exists but excluded by tags' do
         create_event_subscription(excluded_tags: %w(bar foo:baz))
         person.tag_list = 'foo:baz'
@@ -585,6 +649,13 @@ describe Person::Subscriptions do
         create_event_subscription(excluded_tags: %w(bar foo:baz))
         create_event_subscription
         person.tag_list = 'foo:baz'
+        person.save!
+        expect(subscribed).to be_empty
+      end
+
+      it 'excludes list when event subscription has included and excluded tags' do
+        create_event_subscription(excluded_tags: %w(bar foo), included_tags: %w(vip))
+        person.tag_list = %w(foo vip)
         person.save!
         expect(subscribed).to be_empty
       end
@@ -715,6 +786,13 @@ describe Person::Subscriptions do
         expect(subscribable).to eq [list]
       end
 
+      it 'excludes list when group subscription has included and excluded tags' do
+        create_group_subscription(excluded_tags: %w(bar foo), included_tags: %w(vip))
+        person.tag_list = %w(foo vip)
+        person.save!
+        expect(subscribable).to be_empty
+      end
+
       it 'excludes list when event subscription exists but excluded by tags' do
         create_event_subscription(excluded_tags: %w(bar foo:baz))
         person.tag_list = 'foo:baz'
@@ -728,6 +806,13 @@ describe Person::Subscriptions do
         person.tag_list = 'foo:baz'
         person.save!
         expect(subscribable).to eq [list]
+      end
+
+      it 'excludes list when event subscription has included and excluded tags' do
+        create_event_subscription(excluded_tags: %w(bar foo), included_tags: %w(vip))
+        person.tag_list = %w(foo vip)
+        person.save!
+        expect(subscribable).to be_empty
       end
 
       it 'excludes list when when excluded by global filter' do

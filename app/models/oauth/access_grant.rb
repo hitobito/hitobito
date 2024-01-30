@@ -37,10 +37,10 @@ module Oauth
 
     scope :list, -> { order(created_at: :desc) }
     scope :for,  ->(uri) { where(redirect_uri: uri) }
-    scope :not_expired, -> { where('DATE_ADD(created_at, INTERVAL expires_in SECOND) > UTC_TIME') }
+    scope :not_expired, -> { where("created_at + expires_in * INTERVAL '1 second' > NOW()") }
 
     def self.active
-      if connection.adapter_name == 'Mysql2'
+      if connection.adapter_name == 'postgresql'
         not_expired.where(revoked_at: nil)
       else
         where(revoked_at: nil)

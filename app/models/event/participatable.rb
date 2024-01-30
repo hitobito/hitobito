@@ -37,7 +37,7 @@ module Event::Participatable
     @participation_role_labels ||=
       Event::Role.joins(:participation).
                   where('event_participations.event_id = ?', id).
-                  where('event_roles.label <> ""').
+                  where('event_roles.label <> \'\'').
                   distinct.order(:label).
                   pluck(:label)
   end

@@ -279,8 +279,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     where.not(address: [nil, '']).
       where.not(zip_code: [nil, '']).
       where.not(town: [nil, '']).
-      where('(last_name IS NOT NULL AND last_name <> "") OR '\
-            '(company_name IS NOT NULL AND company_name <> "")')
+      where('(last_name IS NOT NULL AND last_name <> \'\') OR '\
+            '(company_name IS NOT NULL AND company_name <> \'\')')
   }
   scope :with_mobile, -> { joins(:phone_numbers).where(phone_numbers: { label: 'Mobil' }) }
 

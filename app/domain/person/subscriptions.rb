@@ -27,19 +27,21 @@ class Person::Subscriptions
   def subscribed
     scope
       .where(id: direct_inclusions.select('mailing_list_id'))
-      .where.not(id: direct_or_tag_exclusions.select('mailing_list_id'))
       .or(scope.anyone.merge(from_group_or_events))
       .or(scope.opt_out.merge(from_group_or_events))
+      .where.not(id: direct_or_tag_exclusions.select('mailing_list_id'))
       .where.not(id: lists_excluding_person_via_filter.collect(&:id))
       .distinct
   end
 
   def subscribable
-    scope
-      .anyone
-      .or(scope.configured.merge(from_group_or_events(excluded: true)))
-      .where.not(id: lists_excluding_person_via_filter.collect(&:id))
+    scope.anyone
+      .or(
+        scope.configured.merge(from_group_or_events)
+             .where(id: direct_exclusions.or(scope.opt_in).select('mailing_list_id'))
+      )
       .where.not(id: subscribed.select('id'))
+      .where.not(id: lists_excluding_person_via_filter.collect(&:id))
       .distinct
   end
 
@@ -56,7 +58,7 @@ class Person::Subscriptions
   end
 
   def direct_inclusions
-    @direct_inclusions ||=  @person.subscriptions.where(excluded: false)
+    @direct_inclusions ||= @person.subscriptions.where(excluded: false)
   end
 
   def direct_exclusions
@@ -96,7 +98,7 @@ class Person::Subscriptions
       .joins(:related_role_types)
       .left_joins(:subscription_tags)
       .where(condition.to_a)
-      .where.not(id: direct_or_tag_exclusions.pluck(:id))
+      .where.not(id: tag_exclusions.pluck(:id))
   end
 
   def subscription_tags_condition
@@ -108,14 +110,9 @@ class Person::Subscriptions
     SubscriptionTag.where(tag_id: @person.tag_ids, excluded: true).pluck(:subscription_id)
   end
 
-  def from_group_or_events(excluded: false)
+  def from_group_or_events
     scope
       .where(id: from_events.select('mailing_list_id'))
       .or(scope.where(id: from_groups.select('mailing_list_id')))
-      .then do |scope|
-        next scope if excluded
-
-        scope.where.not(id: direct_or_tag_exclusions.select('mailing_list_id'))
-      end
   end
 end

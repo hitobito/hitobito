@@ -83,7 +83,7 @@ describe MailingListsController, js: true do
   describe 'configurable list', :js do
     it 'can set opt_out on new list' do
       visit new_group_mailing_list_path(list.group)
-      expect(page).to have_field 'Keiner', checked: true
+      expect(page).to have_field 'Niemand', checked: true
       expect(page).not_to have_text 'Abonnente sind standardmässig'
       choose 'Nur konfigurierte'
       expect(page).to have_text 'Abonnente sind standardmässig'
@@ -98,7 +98,7 @@ describe MailingListsController, js: true do
 
     it 'can set opt_in on existing list' do
       visit edit_group_mailing_list_path(list.group, list)
-      expect(page).to have_field 'Jeder', checked: true
+      expect(page).to have_field 'Beliebige Personen', checked: true
       expect(page).to have_field 'An-gemeldet', checked: true
       expect(page).to have_text 'Abonnente sind standardmässig'
       choose 'Nur konfigurierte'

@@ -65,6 +65,7 @@ class Person::Subscriptions
                 .where(subscriber_id: @person.event_participations.active.select('event_id'))
                 .left_joins(:subscription_tags)
                 .where(subscription_tags_condition, @person.tag_ids)
+                .where.not(id: tag_excluded_subscription_ids)
   end
 
   def from_groups
@@ -89,11 +90,16 @@ class Person::Subscriptions
       .joins(:related_role_types)
       .left_joins(:subscription_tags)
       .where(condition.to_a)
+      .where.not(id: tag_excluded_subscription_ids)
   end
 
   def subscription_tags_condition
     'subscription_tags.tag_id IS NULL OR ' \
       '(subscription_tags.excluded <> true AND subscription_tags.tag_id IN (?))'
+  end
+
+  def tag_excluded_subscription_ids
+    SubscriptionTag.excluded.where(tag_id: @person.tag_ids).select(:subscription_id)
   end
 
   def from_group_or_events

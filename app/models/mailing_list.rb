@@ -24,7 +24,8 @@
 #  name                                :string(255)      not null
 #  preferred_labels                    :string(255)
 #  publisher                           :string(255)
-#  subscribable                        :boolean          default(FALSE), not null
+#  subscribable_for                    :string(255)      default("nobody"), not null
+#  subscribable_mode                   :string(255)
 #  subscribers_may_post                :boolean          default(FALSE), not null
 #  group_id                            :integer          not null
 #  mailchimp_list_id                   :string(255)
@@ -35,6 +36,10 @@
 #
 
 class MailingList < ActiveRecord::Base
+  include I18nEnums
+
+  SUBSCRIBABLE_FORS = %w(nobody configured anyone).freeze
+  SUBSCRIBABLE_MODES = %w(opt_out opt_in).freeze
 
   serialize :preferred_labels, Array
   serialize :filter_chain, MailingLists::Filter::Chain
@@ -54,27 +59,54 @@ class MailingList < ActiveRecord::Base
   has_many :messages, dependent: :nullify
 
   validates_by_schema
+  before_validation :set_default_subscribable_mode
+
+
   validates :mail_name, uniqueness: { case_sensitive: false },
                         format: /\A[a-z][a-z0-9\-\_\.]*\Z/,
                         allow_blank: true
-  validates :description, length: { allow_nil: true, maximum: 2**16 - 1 }
+  validates :description, length: { allow_nil: true, maximum: (2**16) - 1 }
   validate :assert_mail_name_is_not_protected
   validates :additional_sender,
       allow_blank: true,
       format: /\A *(([a-z][a-z0-9\-\_\.]*|\*)@([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,} *(,|;|\Z) *)+\Z/
 
+  validates :subscribable_for, inclusion: { in: SUBSCRIBABLE_FORS }
+  validates :subscribable_mode, inclusion: { in: SUBSCRIBABLE_MODES }, if: :subscribable?
+
   after_destroy :schedule_mailchimp_destroy, if: :mailchimp?
+  after_save :schedule_opt_in_cleanup, if: :opt_in?
 
   scope :list, -> { order(:name) }
-  scope :subscribable, -> { where(subscribable: true) }
+  scope :anyone, -> { where(subscribable_for: :anyone) }
+  scope :configured, -> { where(subscribable_for: :configured) }
+  scope :opt_in, -> { where(subscribable_for: :configured, subscribable_mode: :opt_in) }
+  scope :opt_out, -> { where(subscribable_for: :configured, subscribable_mode: :opt_out) }
+  scope :subscribable, -> { where(subscribable_for: [:anyone, :configured]) }
+  scope :with_filter_chain, -> { where.not(filter_chain: MailingLists::Filter::Chain.new({})) }
   scope :mailchimp, -> do
-    where.not(mailchimp_api_key: ['', nil]).where.not( mailchimp_list_id: ['', nil])
+    where.not(mailchimp_api_key: ['', nil]).where.not(mailchimp_list_id: ['', nil])
   end
 
   DEFAULT_LABEL = '_main'.freeze
 
+  i18n_enum :subscribable_for, SUBSCRIBABLE_FORS, scopes: true
+  i18n_enum :subscribable_mode, SUBSCRIBABLE_MODES, scopes: true
+
   def to_s(_format = :default)
     name
+  end
+
+  def opt_in?
+    subscribable_mode == 'opt_in'
+  end
+
+  def subscribable?
+    (SUBSCRIBABLE_FORS - %w(nobody)).include?(subscribable_for)
+  end
+
+  def subscribable_for_configured?
+    subscribable_for.to_s == 'configured'
   end
 
   def labels
@@ -97,10 +129,6 @@ class MailingList < ActiveRecord::Base
     Settings.email.list_domain
   end
 
-  def subscribed?(person)
-    people.where(id: person.id).exists?
-  end
-
   def exclude_person(person)
     subscriptions
       .where(subscriber_id: person.id,
@@ -114,6 +142,10 @@ class MailingList < ActiveRecord::Base
       sub.excluded = true
       sub.save!
     end
+  end
+
+  def subscribed?(person)
+    MailingLists::Subscribers.new(self).subscribed?(person)
   end
 
   def people(people_scope = Person.only_public_data)
@@ -152,7 +184,21 @@ class MailingList < ActiveRecord::Base
     end
   end
 
+  def schedule_opt_in_cleanup
+    return unless subscribable_mode_previously_was == 'opt_out'
+
+    Subscriptions::OptInCleanupJob.new(id).enqueue!
+  end
+
   private
+
+  def set_default_subscribable_mode
+    if subscribable? && subscribable_mode.blank?
+      self.subscribable_mode = 'opt_out'
+    elsif !subscribable?
+      self.subscribable_mode = nil
+    end
+  end
 
   def assert_mail_name_is_not_protected
     if mail_name? && application_retriever_name

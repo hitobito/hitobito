@@ -15,43 +15,47 @@ class MailingListDecorator < ApplicationDecorator
 
   def subscribable_info
     html = ''.html_safe
-    html << if !subscribable
-              translate(:may_not_subscribe).html_safe
+    html << if subscribable?
+              translate(subscribable_info_text).html_safe
             else
-              translate(:may_subscribe).html_safe
+              translate(:may_not_subscribe).html_safe
             end
     html << h.tag(:br)
   end
 
   def subscribers_may_post_info
     html = ''.html_safe
-    html << if !subscribers_may_post
-              translate(:subscribers_may_not_post).html_safe
-            else
+    html << if subscribers_may_post
               translate(:subscribers_may_post).html_safe
+            else
+              translate(:subscribers_may_not_post).html_safe
             end
     html << h.tag(:br)
   end
 
   def anyone_may_post_info
     html = ''.html_safe
-    html << if !anyone_may_post
-              translate(:anyone_may_not_post).html_safe
-            else
+    html << if anyone_may_post
               translate(:anyone_may_post).html_safe
+            else
+              translate(:anyone_may_not_post).html_safe
             end
     html << h.tag(:br)
   end
 
   def delivery_report_info
     html = ''.html_safe
-    html << if !delivery_report
-              translate(:no_delivery_report).html_safe
-            else
+    html << if delivery_report
               translate(:delivery_report).html_safe
+            else
+              translate(:no_delivery_report).html_safe
             end
     html << h.tag(:br)
   end
 
+  private
 
+  def subscribable_info_text
+    opt_in? ? :subscribers_must_opt_in : :may_subscribe
+  end
 end

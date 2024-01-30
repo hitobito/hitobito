@@ -15,7 +15,7 @@ describe Person::SubscriptionsController do
   let(:bottom_member) { people(:bottom_member) }
   let(:leaders)       { mailing_lists(:leaders) }
   let(:members)       { mailing_lists(:members) }
-  let(:top_group_list){ mailing_lists(:top_group) }
+  let(:top_group_list) { mailing_lists(:top_group) }
 
   context 'GET#index' do
     render_views
@@ -43,8 +43,8 @@ describe Person::SubscriptionsController do
       expect(assigns(:subscribed)).to eq({ bottom_layer => [first], top_layer => [leaders] })
     end
 
-    it 'sorts subscribable lists by name and groups by layer' do
-      first = bottom_group.mailing_lists.create!(name: '00 - First', subscribable: true)
+    it 'sorts subscribable lists by name' do
+      first = bottom_group.mailing_lists.create!(name: '00 - First', subscribable_for: :anyone)
       sign_in(top_leader)
       get :index, params: { group_id: top_group.id, person_id: top_leader.id }
       expect(assigns(:subscribable)).to eq({ bottom_layer => [first], top_layer => [leaders, members, top_group_list] })
@@ -68,7 +68,6 @@ describe Person::SubscriptionsController do
       expect(flash[:notice]).to eq '<i>Top Leader</i> wurde für <i>Leaders</i> angemeldet.'
     end
   end
-
 
   context 'DELETE#destroy' do
     it 'may not delete subscriptions for other user' do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #  Copyright (c) 2020, Grünliberale Partei Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -5,7 +7,7 @@
 
 class MailingLists::Subscribers
 
-  delegate :id, :subscriptions, to: '@list'
+  delegate :id, :subscriptions, :opt_in?, to: '@list'
 
   def initialize(mailing_list, people_scope = Person.only_public_data)
     @list = mailing_list
@@ -13,14 +15,32 @@ class MailingLists::Subscribers
   end
 
   def people
+    scope.distinct
+  end
+
+  def allowed_to_opt_in
+    people_as_configured.where(group_or_event_subscriber_conditions)
+  end
+
+  def subscribed?(person)
+    people.exists?(id: person.id)
+  end
+
+  private
+
+  def scope
+    return people_as_configured.where(subscriber_conditions) unless opt_in?
+
+    allowed_to_opt_in.where(id: subscriptions.people.included.select('subscriber_id'))
+  end
+
+  def people_as_configured
     @list.filter_chain.filter(@people_scope).
       joins(people_joins).
       joins(subscription_joins).
       where(subscriptions: { mailing_list_id: id }).
       where("people.id NOT IN (#{excluded_subscriber_ids.to_sql})").
-      where("people.id NOT IN (#{tag_excluded_person_ids.to_sql})").
-      where(subscriber_conditions).
-      distinct
+      where("people.id NOT IN (#{tag_excluded_person_ids.to_sql})")
   end
 
   def people_joins
@@ -29,13 +49,13 @@ class MailingLists::Subscribers
       LEFT JOIN #{Group.quoted_table_name} ON roles.group_id = #{Group.quoted_table_name}.id
     SQL
 
-    if subscriptions.events.exists?
+    if join_events?
       sql += <<~SQL
         LEFT JOIN event_participations ON event_participations.person_id = people.id
       SQL
     end
 
-    if subscriptions.groups.any?(&:subscription_tags)
+    if join_tags?
       sql += <<~SQL
         LEFT JOIN taggings AS people_taggings ON people_taggings.taggable_type = 'Person'
           AND people_taggings.taggable_id = people.id
@@ -48,7 +68,7 @@ class MailingLists::Subscribers
   def subscription_joins
     sql = ', subscriptions ' # the comma is needed because it is not a JOIN, but a second "FROM"
 
-    if subscriptions.groups.exists?
+    if join_groups?
       sql += <<~SQL
         LEFT JOIN #{Group.quoted_table_name} sub_groups
           ON subscriptions.subscriber_type = 'Group' AND subscriptions.subscriber_id = sub_groups.id
@@ -73,6 +93,13 @@ class MailingLists::Subscribers
     person_subscribers(condition) if subscriptions.people.exists?
     event_subscribers(condition) if subscriptions.events.exists?
     group_subscribers(condition) if subscriptions.groups.exists?
+    condition.to_a
+  end
+
+  def group_or_event_subscriber_conditions
+    condition = OrCondition.new
+    event_subscribers(condition)
+    group_subscribers(condition)
     condition.to_a
   end
 
@@ -106,6 +133,18 @@ class MailingLists::Subscribers
     condition.or(sql, Group.sti_name)
   end
 
+  def join_events?
+    opt_in? || subscriptions.events.exists?
+  end
+
+  def join_tags?
+    subscriptions.groups.any?(&:subscription_tags)
+  end
+
+  def join_groups?
+    opt_in? || subscriptions.groups.exists?
+  end
+
   def event_subscribers(condition)
     condition
       .or('subscriptions.subscriber_type = ? AND ' \
@@ -114,8 +153,6 @@ class MailingLists::Subscribers
           Event.sti_name,
           true)
   end
-
-  private
 
   def tag_excluded_person_ids
     ActsAsTaggableOn::Tagging

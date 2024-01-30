@@ -44,12 +44,15 @@ class MailingListSerializer < ApplicationSerializer
                    :publisher,
                    :mail_name,
                    :additional_sender,
-                   :subscribable,
+                   :subscribable_for,
+                   :subscribable_mode,
                    :subscribers_may_post,
                    :anyone_may_post,
                    :preferred_labels,
                    :delivery_report,
                    :main_email
+
+    property :subscribable, item.subscribable?
 
     entity :group, item.group, GroupLinkSerializer
     entities :subscribers,
@@ -63,4 +66,5 @@ class MailingListSerializer < ApplicationSerializer
   def subscribers_includes
     [:primary_group]
   end
+
 end

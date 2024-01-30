@@ -9,7 +9,7 @@ class MailingLists::Filter::Chain < Person::Filter::Chain
 
   TYPES = [ # rubocop:disable Style/MutableConstant these are meant to be extended in wagons
     Person::Filter::Attributes,
-    Person::Filter::Language,
+    Person::Filter::Language
   ]
 
 end

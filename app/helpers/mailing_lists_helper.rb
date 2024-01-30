@@ -33,12 +33,10 @@ module MailingListsHelper
   end
 
   def button_toggle_subscription
-    if entry.subscribable?
-      if entry.subscribed?(current_user)
-        button_subscribe
-      else
-        button_unsubscribe
-      end
+    if entry.subscribed?(current_user)
+      button_subscribe
+    else
+      button_unsubscribe
     end
   end
 

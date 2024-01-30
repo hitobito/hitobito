@@ -20,8 +20,8 @@ describe MailingListsController do
 
     it 'hides mailing list when person cannot update group' do
       sign_in(bottom_member)
-      mailing_lists(:leaders).update(subscribable: false)
-      mailing_lists(:members).update(subscribable: false)
+      mailing_lists(:leaders).update(subscribable_for: :nobody)
+      mailing_lists(:members).update(subscribable_for: :nobody)
       get :index, params: { group_id: group.id }
       expect(assigns(:mailing_lists)).to be_empty
     end
@@ -60,10 +60,12 @@ describe MailingListsController do
       [
         mailing_list.slice(
           'name', 'description', 'publisher', 'mail_name',
-          'additional_sender', 'subscribable', 'subscribers_may_post', 'anyone_may_post',
-          'preferred_labels', 'delivery_report', 'main_email'
+          'additional_sender', 'subscribers_may_post', 'anyone_may_post',
+          'preferred_labels', 'delivery_report', 'main_email',
+          'subscribable_for', 'subscribable_mode'
         ),
-        { id: mailing_list.id.to_s, type: 'mailing_lists', links: { group: group.id.to_s } }
+        { id: mailing_list.id.to_s, type: 'mailing_lists', subscribable: true,
+          links: { group: group.id.to_s } }
       ].inject(&:merge).deep_symbolize_keys
     }
     before { sign_in(top_leader) }

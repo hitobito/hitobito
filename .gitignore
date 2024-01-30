@@ -73,6 +73,7 @@ TAGS
 .pry-history
 .project
 .vscode
+.nvimrc
 
 # for experiments with webpack
 

@@ -10,7 +10,7 @@ require 'spec_helper'
 describe Subscriber::SubscriberListsController do
   before { sign_in(person) }
 
-  let(:list) { Fabricate(:mailing_list, group: group, subscribable: true) }
+  let(:list) { Fabricate(:mailing_list, group: group, subscribable_for: :anyone) }
   let(:group) { groups(:top_group) }
 
   context 'POST create' do
@@ -24,7 +24,9 @@ describe Subscriber::SubscriberListsController do
         end
 
         expect do
-          post :create, params: { group_id: group.id, mailing_list_id: list.id, ids: people.map(&:id).join(',') }
+          post :create,
+               params: { group_id: group.id, mailing_list_id: list.id,
+                         ids: people.map(&:id).join(',') }
         end.to raise_error(CanCan::AccessDenied)
       end
     end
@@ -38,7 +40,9 @@ describe Subscriber::SubscriberListsController do
         end
 
         expect do
-          post :create, params: { group_id: group.id, mailing_list_id: list.id, ids: people.map(&:id).join(',') }
+          post :create,
+               params: { group_id: group.id, mailing_list_id: list.id,
+                         ids: people.map(&:id).join(',') }
         end.to change { Subscription.count }.by(10)
 
         people.each do |person|
@@ -55,7 +59,9 @@ describe Subscriber::SubscriberListsController do
         subscription_2 = Subscription.create(subscriber: people.second, mailing_list: list)
 
         expect do
-          post :create, params: { group_id: group.id, mailing_list_id: list.id, ids: people.map(&:id).join(',') }
+          post :create,
+               params: { group_id: group.id, mailing_list_id: list.id,
+                         ids: people.map(&:id).join(',') }
         end.to change { Subscription.count }.by(8)
 
         expect(Subscription.where(subscriber: subscription_1.subscriber,

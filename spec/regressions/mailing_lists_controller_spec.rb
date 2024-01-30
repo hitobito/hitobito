@@ -24,7 +24,7 @@ describe MailingListsController, type: :controller do
       description: 'Bla bla bla',
       publisher: 'Me & You',
       mail_name: 'tester',
-      subscribable: true,
+      subscribable_for: 'anyone',
       subscribers_may_post: false,
       anyone_may_post: false }
   end
@@ -42,19 +42,21 @@ describe MailingListsController, type: :controller do
       mailing_list = json[:mailing_lists].first
       expect(mailing_list).to eq({
         id: test_entry.id.to_s,
-        type: "mailing_lists",
-        name: "Leaders",
+        type: 'mailing_lists',
+        name: 'Leaders',
         description: nil,
         publisher: nil,
-        mail_name: "leaders",
+        mail_name: 'leaders',
         additional_sender: nil,
         subscribable: true,
+        subscribable_for: 'anyone',
+        subscribable_mode: 'opt_out',
         subscribers_may_post: false,
         anyone_may_post: false,
         preferred_labels: [],
         delivery_report: false,
         main_email: false,
-        links: {group: group.id.to_s}
+        links: { group: group.id.to_s }
       })
     end
   end

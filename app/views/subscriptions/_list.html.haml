@@ -8,6 +8,9 @@
 - if cannot?(:export_subscriptions, @mailing_list)
   .alert.alert-info= t('.export_not_allowed')
 
+- if @mailing_list.subscribable_for_configured?
+  .alert.alert-info= t(".subscribable_mode_#{@mailing_list.subscribable_mode}_info").html_safe
+
 - if @person_add_requests.present?
   = render 'person/add_requests/body_list'
 

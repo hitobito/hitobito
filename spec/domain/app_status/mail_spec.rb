@@ -80,7 +80,7 @@ describe AppStatus::Mail do
   end
 
   private
-  
+
   def imap_mail(fixture)
     mail = Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', fixture)))
     Imap::Mail.build(mail)

@@ -856,9 +856,9 @@ de:
           opt_in: Ab-gemeldet
         subscribable_for: Abonnenten dürfen sich selbst an/abmelden
         subscribable_fors:
-          anyone: Jeder
+          anyone: Beliebige Personen
           configured: Nur konfigurierte
-          nobody: Keiner
+          nobody: Niemand
         mail_name: Mailinglisten Adresse
         mail_address: Mailingliste
         mail_address_link: Mailingliste

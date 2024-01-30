@@ -14,13 +14,15 @@ describe Person::Subscriptions do
   let(:person)    { people(:top_leader) }
   let(:group)     { groups(:top_group) }
 
+  subject(:subscribable) { described_class.new(person).subscribable }
+  subject(:subscribed)   { described_class.new(person).subscribed }
+
+
   context 'subscribable_for nobody' do
     before { list.update(subscribable_for: :nobody) }
 
     describe '#subscribable' do
-      subject(:subscribable) { described_class.new(person).subscribable }
       before { MailingList.where.not(id: list.id).destroy_all }
-
       it 'excludes list when no subscription exists' do
         expect(subscribable).to be_empty
       end
@@ -51,8 +53,6 @@ describe Person::Subscriptions do
     before { list.update(subscribable_for: :anyone) }
 
     describe '#subscribed' do
-      subject(:subscribed) { described_class.new(person).subscribed }
-
       it 'is empty without subscription' do
         expect(subscribed).to be_empty
       end
@@ -144,9 +144,7 @@ describe Person::Subscriptions do
     end
 
     describe '#subscribable' do
-      subject(:subscribable) { described_class.new(person).subscribable }
       before { MailingList.where.not(id: list.id).destroy_all }
-
       it 'includes list when no subscription exists' do
         expect(subscribable).to eq [list]
       end
@@ -242,8 +240,6 @@ describe Person::Subscriptions do
     before { list.update(subscribable_for: :configured, subscribable_mode: :opt_out) }
 
     describe '#subscribed' do
-      subject(:subscribed) { described_class.new(person).subscribed }
-
       it 'is empty without subscription' do
         expect(subscribed).to be_empty
       end
@@ -340,9 +336,7 @@ describe Person::Subscriptions do
     end
 
     describe '#subscribable' do
-      subject(:subscribable) { described_class.new(person).subscribable }
       before { MailingList.where.not(id: list.id).destroy_all }
-
       it 'excludes list when no subscription exists' do
         expect(subscribable).to be_empty
       end
@@ -447,8 +441,6 @@ describe Person::Subscriptions do
     before { list.update(subscribable_for: :configured, subscribable_mode: :opt_in) }
 
     describe '#subscribed' do
-      subject(:subscribed) { described_class.new(person).subscribed }
-
       it 'is empty without subscription' do
         expect(subscribed).to be_empty
       end

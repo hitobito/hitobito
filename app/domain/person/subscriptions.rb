@@ -36,11 +36,10 @@ class Person::Subscriptions
 
   def subscribable
     scope
-      .where(id: direct_exclusions.select('mailing_list_id'))
-      .or(scope.anyone)
-      .or(scope.configured.merge(from_group_or_events))
-      .where.not(id: subscribed.select('id'))
+      .anyone
+      .or(scope.configured.merge(from_group_or_events(excluded: true)))
       .where.not(id: lists_excluding_person_via_filter.collect(&:id))
+      .where.not(id: subscribed.select('id'))
       .distinct
   end
 
@@ -109,10 +108,10 @@ class Person::Subscriptions
     SubscriptionTag.where(tag_id: @person.tag_ids, excluded: true).pluck(:subscription_id)
   end
 
-  def from_group_or_events
+  def from_group_or_events(excluded: false)
     scope
       .where(id: from_events.select('mailing_list_id'))
       .or(scope.where(id: from_groups.select('mailing_list_id')))
-      .where.not(id: exclusions.select('mailing_list_id'))
+      .then { |scope| excluded ? scope : scope.where.not(id: exclusions.select('mailing_list_id')) }
   end
 end

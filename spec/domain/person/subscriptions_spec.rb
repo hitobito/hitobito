@@ -352,9 +352,9 @@ describe Person::Subscriptions do
         expect(subscribable).to be_empty
       end
 
-      it 'includes list when explicit exclusion exists' do
+      it 'excludes list when explicit exclusion exists' do
         create_person_subscription(excluded: true)
-        expect(subscribable).to eq [list]
+        expect(subscribable).to be_empty
       end
 
       it 'excludes list when group subscription exists' do
@@ -583,9 +583,9 @@ describe Person::Subscriptions do
         expect(subscribable).to be_empty
       end
 
-      it 'includes list when explicit exclusion exists' do
+      it 'exludes list when explicit exclusion exists' do
         create_person_subscription(excluded: true)
-        expect(subscribable).to eq [list]
+        expect(subscribable).to be_empty
       end
 
       it 'includes list when group subscription exists' do

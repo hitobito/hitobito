@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2023-2024, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -24,7 +24,8 @@ class People::CleanupFinder
   end
 
   def base_scope
-    Person.all.where.not(id: Person.root.id)
+    Person.where.not(id: Person.root.id)
+          .where(minimized_at: nil)
   end
 
   def no_roles_exist

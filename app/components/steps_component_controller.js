@@ -54,6 +54,7 @@ export default class extends Controller {
     const mode = event.target.dataset["mode"];
 
     if (mates.length == 0 && mode == "add") {
+      document.querySelector(".household .btn-toolbar.top").classList.remove("d-none");
       toolbars.forEach((toolbar) => {
         toolbar.children[0].classList.add("hidden");
         toolbar.children[1].classList.remove("hidden");
@@ -63,6 +64,7 @@ export default class extends Controller {
     }
 
     if (mates.length == 1 && mode == "remove") {
+      document.querySelector(".household .btn-toolbar.top").classList.add("d-none");
       toolbars.forEach((toolbar) => {
         toolbar.children[0].classList.remove("hidden");
         toolbar.children[1].classList.add("hidden");

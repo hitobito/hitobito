@@ -17,6 +17,56 @@ describe Person::Subscriptions do
   subject(:subscribable) { described_class.new(person).subscribable }
   subject(:subscribed)   { described_class.new(person).subscribed }
 
+  context 'subscribable_for nobody' do
+    before { list.update!(subscribable_for: :nobody) }
+
+    describe '#subscribable' do
+      before { MailingList.where.not(id: list.id).destroy_all }
+
+      it 'excludes list when no subscription exists' do
+        expect(subscribable).to be_empty
+      end
+    end
+
+    describe '#subscribed' do
+      before { MailingList.where.not(id: list.id).destroy_all }
+
+      it 'is empty without subscription' do
+        expect(subscribed).to be_empty
+      end
+
+      it 'includes list when direct subscription exists' do
+        create_person_subscription
+        expect(subscribed).to eq [list]
+      end
+    end
+  end
+
+
+  context 'subscribable_for anyone' do
+    before { list.update!(subscribable_for: :anyone) }
+
+    describe '#subscribable' do
+      before { MailingList.where.not(id: list.id).destroy_all }
+
+      it 'includes list when no subscription exists' do
+        expect(subscribable).to eq [list]
+      end
+    end
+
+    describe '#subscribed' do
+      before { MailingList.where.not(id: list.id).destroy_all }
+
+      it 'is empty without subscription' do
+        expect(subscribed).to be_empty
+      end
+
+      it 'includes list when direct subscription exists' do
+        create_person_subscription
+        expect(subscribed).to eq [list]
+      end
+    end
+  end
 
   context 'subscribable_for nobody' do
     before { list.update(subscribable_for: :nobody) }

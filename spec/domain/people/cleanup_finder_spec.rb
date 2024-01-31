@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2023-2024, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -11,14 +11,20 @@ describe People::CleanupFinder do
 
   let!(:entries) { Fabricate.times(3, :person) }
 
-  let(:sign_in_cutoff_time) { Settings.people.cleanup_cutoff_duration.regarding_current_sign_in_at.months.ago }
-  let(:role_cutoff_time) { Settings.people.cleanup_cutoff_duration.regarding_roles.months.ago }
-  let(:participation_cutoff_time) { Settings.people.cleanup_cutoff_duration.regarding_participations.years.ago }
+  let(:cutoff_durations) { Settings.people.cleanup_cutoff_duration }
 
-  let(:future_event) { Fabricate(:event, dates: [Event::Date.new(start_at: 10.days.from_now)]) }
-  let(:past_event) { Fabricate(:event, dates: [Event::Date.new(start_at: 10.days.ago, finish_at: 5.days.ago)]) }
+  let(:sign_in_cutoff_time) { cutoff_durations.regarding_current_sign_in_at.months.ago }
+  let(:role_cutoff_time) { cutoff_durations.regarding_roles.months.ago }
+  let(:participation_cutoff_time) { cutoff_durations.regarding_participations.months.ago }
 
-  def create_role(person, created_at: 100.years.ago, deleted_at:)
+  let(:future_event) do
+    Fabricate(:event, dates: [Event::Date.new(start_at: 10.days.from_now)])
+  end
+  let(:past_event) do
+    Fabricate(:event, dates: [Event::Date.new(start_at: 10.days.ago, finish_at: 5.days.ago)])
+  end
+
+  def create_role(person, deleted_at:, created_at: 101.years.ago)
     Fabricate(
       Group::BottomGroup::Member.name.to_sym,
       person: person,

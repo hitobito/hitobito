@@ -197,6 +197,7 @@ RSpec.configure do |config|
   config.include GraphitiSpecHelpers::Sugar
   config.include Graphiti::Rails::TestHelpers
   config.include ResourceSpecHelper, type: :resource
+  config.include GraphitiSchemaSpecHelpers
 
   config.before :each do
     handle_request_exceptions(false)
@@ -280,4 +281,10 @@ Graphiti.configure do |config|
   config.schema_path = Pathname.new(basedir).join('support', 'graphiti', 'schema.json')
 end
 
-GraphitiSpecHelpers::RSpec.schema!
+# On CI check if the schema file is up to date.
+GraphitiSchemaSpecHelpers.up_to_date? if ENV.fetch('CI', false)
+
+# Check if the schema has incompatible changes.
+# Do not run this on CI as it will update the schema file, so the
+# GraphitiSchemaSpecHelpers.up_to_date? check will be meaningless.
+GraphitiSpecHelpers::RSpec.schema! unless ENV.fetch('CI', false)

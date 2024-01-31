@@ -44,4 +44,27 @@ describe SelfRegistration::Person do
 
     expect(model.errors.full_messages).to eq [error]
   end
+
+  context '::human_attribute_name' do
+    it 'uses translations of model' do
+      with_translations(
+        de: {
+          activemodel: { attributes: { 'self_registration/person': { imaginary_attribute: 'test_person#imaginary' } } },
+          activerecord: { attributes: { person: { imaginary_attribute: 'person#imaginary' } } }
+        }
+      ) do
+        expect(described_class.human_attribute_name(:imaginary_attribute)).to eq 'test_person#imaginary'
+      end
+    end
+
+    it 'falls back to Person translations' do
+      with_translations(
+        de: {
+          activerecord: { attributes: { person: { imaginary_attribute: 'person#imaginary' } } }
+        }
+      ) do
+        expect(described_class.human_attribute_name(:imaginary_attribute)).to eq 'person#imaginary'
+      end
+    end
+  end
 end

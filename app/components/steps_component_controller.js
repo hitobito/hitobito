@@ -54,17 +54,23 @@ export default class extends Controller {
     const mode = event.target.dataset["mode"];
 
     if (mates.length == 0 && mode == "add") {
-      toolbars[0].classList.add("hidden");
-      toolbars[1].classList.remove("hidden");
-      this.getSubmitButton(toolbars[0]).type = "button";
-      this.getSubmitButton(toolbars[1]).type = "submit";
+      document.querySelector(".household .btn-toolbar.top").classList.remove("d-none");
+      toolbars.forEach((toolbar) => {
+        toolbar.children[0].classList.add("hidden");
+        toolbar.children[1].classList.remove("hidden");
+        this.getSubmitButton(toolbar.children[0]).type = "button";
+        this.getSubmitButton(toolbar.children[1]).type = "submit";
+      });
     }
 
     if (mates.length == 1 && mode == "remove") {
-      toolbars[0].classList.remove("hidden");
-      toolbars[1].classList.add("hidden");
-      this.getSubmitButton(toolbars[0]).type = "submit";
-      this.getSubmitButton(toolbars[1]).type = "button";
+      document.querySelector(".household .btn-toolbar.top").classList.add("d-none");
+      toolbars.forEach((toolbar) => {
+        toolbar.children[0].classList.remove("hidden");
+        toolbar.children[1].classList.add("hidden");
+        this.getSubmitButton(toolbar.children[0]).type = "submit";
+        this.getSubmitButton(toolbar.children[1]).type = "button";
+      });
     }
   }
 

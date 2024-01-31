@@ -49,8 +49,7 @@ class SelfRegistration::Person
   validate :assert_role_valid, if: :primary_group
 
   def self.human_attribute_name(attr, options = {})
-    value = super
-    value == attr.to_s.humanize ? Person.human_attribute_name(attr, options) : value
+    super(attr, default: Person.human_attribute_name(attr, options))
   end
 
   def self.reflect_on_association(*args)

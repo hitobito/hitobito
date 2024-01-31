@@ -9,6 +9,7 @@ class People::CleanupJob < RecurringJob
   run_every 1.day
 
   def perform_internal
+    return unless FeatureGate.enabled?('people.cleanup_job')
 
     People::CleanupFinder.new.run.find_in_batches do |batch|
       batch.each do |person|

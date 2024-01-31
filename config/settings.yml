@@ -150,6 +150,8 @@ people:
   totp_drift: 15
   manual_deletion:
     enabled: false
+  cleanup_job:
+    enabled: false
   cleanup_cutoff_duration:
     regarding_current_sign_in_at: 1000 # months
     regarding_roles: 1000 # months

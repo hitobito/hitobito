@@ -34,8 +34,7 @@ module Role::Types
     :admin,
     :see_invisible_from_above,
     :finance
-  ].freeze
-
+  ]
 
   # rubocop:enable Naming/ConstantName,Style/MutableConstant
 

@@ -173,6 +173,12 @@
           "writable": false,
           "description": null
         },
+        "description": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
         "layer": {
           "type": "boolean",
           "readable": true,
@@ -215,6 +221,24 @@
           "writable": false,
           "description": null
         },
+        "require_person_add_requests": {
+          "type": "boolean",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "self_registration_url": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "archived_at": {
+          "type": "datetime",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
         "created_at": {
           "type": "datetime",
           "readable": true,
@@ -235,6 +259,11 @@
         }
       },
       "extra_attributes": {
+        "logo": {
+          "type": "string",
+          "readable": true,
+          "description": null
+        }
       },
       "sorts": {
         "id": {
@@ -244,6 +273,8 @@
         "short_name": {
         },
         "display_name": {
+        },
+        "description": {
         },
         "layer": {
         },
@@ -258,6 +289,12 @@
         "town": {
         },
         "country": {
+        },
+        "require_person_add_requests": {
+        },
+        "self_registration_url": {
+        },
+        "archived_at": {
         },
         "created_at": {
         },
@@ -309,6 +346,21 @@
           ]
         },
         "display_name": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "description": {
           "type": "string",
           "operators": [
             "eq",
@@ -416,6 +468,39 @@
             "not_match"
           ]
         },
+        "require_person_add_requests": {
+          "type": "boolean",
+          "operators": [
+            "eq"
+          ],
+          "single": true
+        },
+        "self_registration_url": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "archived_at": {
+          "type": "datetime",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
         "created_at": {
           "type": "datetime",
           "operators": [
@@ -448,9 +533,43 @@
             "lt",
             "lte"
           ]
+        },
+        "with_deleted": {
+          "type": "boolean",
+          "operators": [
+            "eq"
+          ],
+          "single": true
+        },
+        "with_archived": {
+          "type": "boolean",
+          "operators": [
+            "eq"
+          ],
+          "single": true
         }
       },
       "relationships": {
+        "contact": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "PersonResource"
+        },
+        "creator": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "PersonResource"
+        },
+        "updater": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "PersonResource"
+        },
+        "deleter": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "PersonResource"
+        },
         "parent": {
           "type": "belongs_to",
           "description": null,
@@ -540,6 +659,12 @@
           "writable": true,
           "description": null
         },
+        "primary_group_id": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
         "gender": {
           "type": "string",
           "readable": "guarded",
@@ -552,10 +677,10 @@
           "writable": "guarded",
           "description": null
         },
-        "primary_group_id": {
-          "type": "integer",
+        "language": {
+          "type": "string",
           "readable": true,
-          "writable": false,
+          "writable": true,
           "description": null
         }
       },
@@ -584,11 +709,13 @@
         },
         "country": {
         },
+        "primary_group_id": {
+        },
         "gender": {
         },
         "birthday": {
         },
-        "primary_group_id": {
+        "language": {
         }
       },
       "filters": {
@@ -745,6 +872,17 @@
             "not_match"
           ]
         },
+        "primary_group_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
         "gender": {
           "type": "string",
           "operators": [
@@ -771,15 +909,19 @@
             "lte"
           ]
         },
-        "primary_group_id": {
-          "type": "integer",
+        "language": {
+          "type": "string",
           "operators": [
             "eq",
             "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
           ]
         },
         "updated_at": {
@@ -1316,6 +1458,16 @@
     }
   ],
   "endpoints": {
+    "/api/groups": {
+      "actions": {
+        "index": {
+          "resource": "GroupResource"
+        },
+        "show": {
+          "resource": "GroupResource"
+        }
+      }
+    },
     "/api/people": {
       "actions": {
         "index": {

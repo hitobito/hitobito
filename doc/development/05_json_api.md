@@ -273,10 +273,12 @@ Response **200 OK**
 
 Checklist for creating/extending JSON:API endpoints:
 
-- Add/extend swagger specs in `specs/requests/json_api/`
-  - create/extend model schema for swagger (e.g. specs/requests/json_api/person_schema.rb)
-  - create/extend request spec
-  - run `rails rswag:specs:swaggerize` afterwards and check if Swagger ui is working as expected
+- Add/extend resource in `app/resources/` and for endpoint changes also in `app/controllers/json_api/`
+- Add/extend tests
+  + for new resources, generate tests with `rails generate graphiti:resource_test <ResourceClass>`
+  + for new endpoints, generate tests with `rails generate graphiti:api_test <ResourceClass>`
+- Add/extend ability in `app/abilities/json_api/`
+- Run tests, add `spec/support/graphiti/schema.json` to git if changed
 - Update list of endpoints in this document
 
 #### Permissions

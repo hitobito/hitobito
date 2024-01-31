@@ -8,7 +8,7 @@ Rswag::Ui.configure do |c|
   # (under swagger_root) as JSON or YAML endpoints, then the list below should
   # correspond to the relative paths for those endpoints.
 
-  c.swagger_endpoint '/api-docs/swagger.yaml', 'JSON:API Docs'
+  c.openapi_endpoint '/api/openapi.yaml', 'JSON:API Docs'
 
   # Add Basic Auth in case your API is private
   # c.basic_auth_enabled = true

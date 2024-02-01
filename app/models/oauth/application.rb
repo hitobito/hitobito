@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2019-2023, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2019-2024, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -62,6 +62,10 @@ module Oauth
       access_grants.select do |access_grant|
         !access_grant.expired? && access_grant.revoked_at.nil?
       end.count
+    end
+
+    def logo_default
+      'oauth_app.png'
     end
 
     def remove_logo

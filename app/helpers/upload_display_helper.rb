@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2022-2023, Puzzle ITC. This file is part of
+#  Copyright (c) 2022-2024, Puzzle ITC. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -28,7 +28,7 @@ module UploadDisplayHelper
     return upload_variant(model, name, variant, default: default) if variant.present?
 
     if upload_exists?(model, name)
-      model.send(name.to_sym).yield_self do |pic|
+      model.send(name.to_sym).then do |pic|
         if size
           # variant passes to mini_magick or vips, I assume mini_magick here
           pic.variant(resize_to_limit: extract_image_dimensions(size))
@@ -52,7 +52,7 @@ module UploadDisplayHelper
 
   private
 
-  def upload_variant(model, name, variant, default: model.name.underscore)
+  def upload_variant(model, name, variant, default: model.class.name.underscore)
     if upload_exists?(model, name)
       model.send(name.to_sym).variant(variant.to_sym)
     else

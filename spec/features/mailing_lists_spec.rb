@@ -84,10 +84,10 @@ describe MailingListsController, js: true do
     it 'can set opt_out on new list' do
       visit new_group_mailing_list_path(list.group)
       expect(page).to have_field 'Niemand', checked: true
-      expect(page).not_to have_text 'Abonnente sind standardmässig'
+      expect(page).not_to have_text 'Personen sind standardmässig'
       choose 'Nur konfigurierte'
-      expect(page).to have_text 'Abonnente sind standardmässig'
-      choose 'Ab-gemeldet'
+      expect(page).to have_text 'Personen sind standardmässig'
+      choose 'Abgemeldet (opt-in)'
       fill_in 'Name', with: 'test'
       click_button 'Speichern'
       expect(page).to have_content 'Abonnenten müssen sich selbst an/abmelden'
@@ -99,10 +99,10 @@ describe MailingListsController, js: true do
     it 'can set opt_in on existing list' do
       visit edit_group_mailing_list_path(list.group, list)
       expect(page).to have_field 'Beliebige Personen', checked: true
-      expect(page).to have_field 'An-gemeldet', checked: true
-      expect(page).to have_text 'Abonnente sind standardmässig'
+      expect(page).to have_field 'Angemeldet (opt-out)', checked: true
+      expect(page).to have_text 'Personen sind standardmässig'
       choose 'Nur konfigurierte'
-      choose 'An-gemeldet'
+      choose 'Angemeldet (opt-out)'
       click_button 'Speichern'
       expect(page).to have_content 'Abonnenten dürfen sich selbst an/abmelden'
       click_link 'Abonnenten'

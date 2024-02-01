@@ -850,10 +850,10 @@ de:
         description: Beschreibung
         publisher: Herausgeber
         subscribable: Abonnenten dürfen sich selbst an/abmelden
-        subscribable_mode: Abonnente sind standardmässig
+        subscribable_mode: Personen sind standardmässig
         subscribable_modes:
-          opt_out: An-gemeldet
-          opt_in: Ab-gemeldet
+          opt_out: Angemeldet (opt-out)
+          opt_in: Abgemeldet (opt-in)
         subscribable_for: Abonnenten dürfen sich selbst an/abmelden
         subscribable_fors:
           anyone: Beliebige Personen

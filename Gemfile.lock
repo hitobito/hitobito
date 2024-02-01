@@ -658,7 +658,7 @@ GEM
     thor (1.2.2)
     tilt (2.3.0)
     timeliness (0.4.5)
-    timeout (0.4.0)
+    timeout (0.4.1)
     transproc (1.1.1)
     truemail (3.0.9)
       simpleidn (~> 0.2.1)

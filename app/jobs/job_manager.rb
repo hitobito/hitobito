@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2023-2024, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
+
+# rubocop:disable Rails/Output
 
 class JobManager
   class_attribute :wagon_jobs, default: []
@@ -23,9 +25,8 @@ class JobManager
       job_class.new.scheduled?
     end
 
-    puts 'Scheduled: ' + scheduled.to_sentence if scheduled.any?
-    puts 'Missing: ' + missing.to_sentence if missing.any?
-
+    puts "Scheduled: #{scheduled.to_sentence}" if scheduled.any?
+    puts "Missing: #{missing.to_sentence}" if missing.any?
     puts 'All expected jobs are scheduled.' if missing.empty?
 
     missing.empty?
@@ -66,7 +67,7 @@ class JobManager
     end
   end
 
-  def standard_jobs
+  def standard_jobs # rubocop:disable Metrics/MethodLength
     [
       DownloadCleanerJob,
       Event::ParticipationCleanupJob,
@@ -81,3 +82,5 @@ class JobManager
     ]
   end
 end
+
+# rubocop:enable Rails/Output

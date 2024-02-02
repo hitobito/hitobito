@@ -44,38 +44,8 @@ export default class extends Controller {
     return Array.from(document.querySelectorAll("ol.step-headers li")).length;
   }
 
-  toggleHousemateButtons(event) {
-    const mates = document.querySelectorAll(
-      '.household .fields:not([style="display: none;"])'
-    );
-    const toolbars = Array.from(
-      document.querySelectorAll(".household .btn-toolbar")
-    );
-    const mode = event.target.dataset["mode"];
-
-    if (mates.length == 0 && mode == "add") {
-      document.querySelector(".household .btn-toolbar.top").classList.remove("d-none");
-      toolbars.forEach((toolbar) => {
-        toolbar.children[0].classList.add("hidden");
-        toolbar.children[1].classList.remove("hidden");
-        this.getSubmitButton(toolbar.children[0]).type = "button";
-        this.getSubmitButton(toolbar.children[1]).type = "submit";
-      });
-    }
-
-    if (mates.length == 1 && mode == "remove") {
-      document.querySelector(".household .btn-toolbar.top").classList.add("d-none");
-      toolbars.forEach((toolbar) => {
-        toolbar.children[0].classList.remove("hidden");
-        toolbar.children[1].classList.add("hidden");
-        this.getSubmitButton(toolbar.children[0]).type = "submit";
-        this.getSubmitButton(toolbar.children[1]).type = "button";
-      });
-    }
-  }
-
   getSubmitButton(element) {
-    return element.querySelector(".btn-group button.btn-primary");
+    return element.querySelector(".btn-toolbar button.btn-primary");
   }
 
   back(event) {

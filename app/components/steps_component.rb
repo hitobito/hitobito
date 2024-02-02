@@ -88,14 +88,18 @@ class StepsComponent < ApplicationComponent
       content_tag(:div, markup, class: %W[step-content #{@partial.dasherize} #{active_class}])
     end
 
-    def next_button(title = t('steps_component.next_link'))
+    def next_button(title = t('steps_component.next_link'), options = {})
       type = active? ? 'submit' : 'button'
-
       if last?
-        helpers.submit_button(@form, t('groups.self_registration.form.submit'), type: type)
+        submit_button(t('groups.self_registration.form.submit'), type, options)
       else
-        helpers.submit_button(@form, title, next_submit_button_options.merge(type: type))
+        submit_button(title, type, next_submit_button_options.merge(options))
       end
+    end
+
+    def submit_button(label, type, options)
+      helpers.add_css_class(options, 'btn btn-sm btn-primary mt-2')
+      @form.button(label, options.merge(type: type, data: { disable_with: label }))
     end
 
     def back_link

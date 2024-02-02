@@ -122,6 +122,7 @@ module Export::Pdf::Messages
     def message_recipients
       recipients = @letter.
                    message_recipients.
+                   select('*', 'people.last_name').
                    where('person_id IS NOT NULL').
                    joins(:person).
                    order('people.last_name' => :asc).

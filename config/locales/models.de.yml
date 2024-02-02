@@ -849,15 +849,15 @@ de:
         name: Name
         description: Beschreibung
         publisher: Herausgeber
-        subscribable: Abonnenten dürfen sich selbst an/abmelden
+        subscribable: Selbst an/abmelden
         subscribable_mode: Personen sind standardmässig
         subscribable_modes:
           opt_out: Angemeldet (opt-out)
           opt_in: Abgemeldet (opt-in)
-        subscribable_for: Abonnenten dürfen sich selbst an/abmelden
+        subscribable_for: Selbst an/abmelden
         subscribable_fors:
-          anyone: Beliebige Personen
-          configured: Nur konfigurierte
+          anyone: Alle
+          configured: Nur konfigurierte Abonnenten
           nobody: Niemand
         mail_name: Mailinglisten Adresse
         mail_address: Mailingliste

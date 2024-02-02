@@ -33,7 +33,7 @@ shared_examples 'graphiti schema file is up to date' do
     # of the base api. This can be the case for wagons which use the core api unchanged.
     # In this case we don't need to check the schema file as it gets already checked in
     # the core.
-    next unless context_root.glob('app/resources/**/*.rb')
+    next unless context_root.glob('app/resources/**/*.rb').present?
 
     # There are specific schema.json files for the core and the wagons.
     # We need to configure graphiti to use the correct schema.json file depending on the

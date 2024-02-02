@@ -278,7 +278,8 @@ Checklist for creating/extending JSON:API endpoints:
   + for new resources, generate tests with `rails generate graphiti:resource_test <ResourceClass>`
   + for new endpoints, generate tests with `rails generate graphiti:api_test <ResourceClass>`
 - Add/extend ability in `app/abilities/json_api/`
-- Run tests, add `spec/support/graphiti/schema.json` to git if changed
+- Run `rake graphiti:schema:generate` where you did the changes (core/wagon) to update 
+  the schema file and add it to git
 - Update list of endpoints in this document
 
 #### Permissions

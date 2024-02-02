@@ -72,7 +72,7 @@ describe Invoice::PaymentProcessor do
     expect(list.reload.recipients_paid).to eq 1
   end
 
-  it 'creates payment and saves transaction xml' do
+  it 'creates payment, saves transaction xml and payee' do
     list = InvoiceList.create!(title: :title, group: invoice.group)
     invoice.update_columns(reference: '000000000000100000000000905',
                            invoice_list_id: list.id,
@@ -92,6 +92,10 @@ describe Invoice::PaymentProcessor do
     expect(data['Amt']).to eq('710.82')
     expect(data['RltdPties']['Dbtr']['Nm']).to eq('Maria Bernasconi')
     expect(data['RltdPties']['Dbtr']['PstlAdr']).to be_present
+
+    expect(payment.payee.person).to eq(invoice.recipient)
+    expect(payment.payee.person_name).to eq('Maria Bernasconi')
+    expect(payment.payee.person_address).to eq('Place de la Gare 15, 2502 Biel/Bienne')
   end
 
   it 'uses ValDat as received_at' do

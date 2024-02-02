@@ -75,11 +75,34 @@ class Invoice::PaymentProcessor
                 transaction_identifier: transaction_identifier(net_entry, statement),
                 reference: esr_reference(statement),
                 transaction_xml: statement.to_xml(root: :TxDtls, skip_instruct: true).squish,
-                status: :xml_imported)
+                status: :xml_imported,
+                payee_attributes: {
+                  person_id: invoice(statement)&.recipient_id,
+                  person_name: person_name(statement),
+                  person_address: person_address(statement)
+                })
   end
 
   def message_id
     fetch('GrpHdr', 'MsgId')
+  end
+
+  def person_name(statement)
+    fetch('RltdPties', 'Dbtr', 'Nm', statement)
+  rescue KeyError
+    ''
+  end
+
+  def person_address(statement)
+    street, house_number, zip, town = ['StrtNm', 'BldgNb', 'PstCd', 'TwnNm'].map do |key|
+      begin
+        fetch('RltdPties', 'Dbtr', 'PstlAdr', key, statement)
+      rescue KeyError
+        ''
+      end
+    end
+
+    "#{street} #{house_number}, #{zip} #{town}"
   end
 
   def invoice(statement)

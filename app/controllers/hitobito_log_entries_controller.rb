@@ -6,7 +6,7 @@
 # https://github.com/hitobito/hitobito.
 
 class HitobitoLogEntriesController < ListController
-  helper_method :form_path, :category_param
+  helper_method :category_param
 
   private
 
@@ -72,9 +72,5 @@ class HitobitoLogEntriesController < ListController
     return scope unless level_param
 
     scope.where('level >= ?', HitobitoLogEntry.levels[level_param])
-  end
-
-  def form_path
-    hitobito_log_entries_path(category: category_param, level: level_param)
   end
 end

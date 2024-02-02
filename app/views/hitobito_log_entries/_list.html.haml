@@ -4,7 +4,7 @@
 -# https://github.com/hitobito/hitobito.
 
 = content_for :filter do
-  = form_tag(form_path, { method: :get, class: 'hitobito-log form-inline-search', role: 'search', remote: true, data: { spin: true } }) do |f|
+  = form_tag(hitobito_log_entries_path, { method: :get, class: 'hitobito-log form-inline-search', role: 'search', remote: true, data: { spin: true } }) do |f|
     = hidden_field_tag :page, 1
     = direct_filter_select(:level, Hitobito.logger.levels, nil, value_method: :itself, text_method: :itself)
     = direct_filter_date(:from_date, t('.from'), value: params[:from_date], data: { submit: true })

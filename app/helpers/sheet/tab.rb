@@ -91,7 +91,7 @@ module Sheet
       end
 
       def current_page?
-        view.current_page?(path_for(path_method))
+        view.current_page?(path_for(path_method, params))
       end
 
       def alt_path_of?(current_path)

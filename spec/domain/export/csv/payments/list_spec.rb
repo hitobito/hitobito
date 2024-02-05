@@ -16,11 +16,19 @@ describe Export::Tabular::Payments::List do
                       reference: '000037680338900000000000021',
                       transaction_identifier: '0000376803389000000000000215020220805',
                       received_at: 1.year.ago,
-                      invoice: invoices(:sent)),
+                      invoice: invoices(:sent),
+                      payee_attributes: {
+                        person_name: 'Bob Foo',
+                        person_address: 'Belpstrasse 37, 3007 Bern'
+                      }),
       Payment.create!(amount: 80,
                       reference: '000053126034700000000000016',
                       transaction_identifier: '0000531260347000000000000168020220805',
-                      received_at: 2.years.ago)
+                      received_at: 2.years.ago,
+                      payee_attributes: {
+                        person_name: 'Alice Foo',
+                        person_address: 'Hönggerstrasse 65, 8037 Zürich'
+                      })
     ]
   end
 
@@ -31,8 +39,8 @@ describe Export::Tabular::Payments::List do
   subject { csv }
 
   its(:headers) do
-    should == %w(Id Betrag Eingangsdatum Zahlungsreferenz
-                 Transaktionsidentifikator Status)
+    should == ['Id', 'Betrag', 'Eingangsdatum', 'Zahlungsreferenz', 'Transaktionsidentifikator',
+               'Status', 'Schuldner Name', 'Schuldner Adresse']
   end
 
   it 'has 2 items' do
@@ -49,6 +57,8 @@ describe Export::Tabular::Payments::List do
     its(['Eingangsdatum']) { should == I18n.l(payment.received_at) }
     its(['Zahlungsreferenz']) { should == payment.reference }
     its(['Transaktionsidentifikator']) { should == payment.transaction_identifier }
+    its(['Schuldner Name']) { should == 'Bob Foo' }
+    its(['Schuldner Adresse']) { should == 'Belpstrasse 37, 3007 Bern' }
   end
 
   context 'second row' do
@@ -63,5 +73,7 @@ describe Export::Tabular::Payments::List do
     its(['Eingangsdatum']) { should == I18n.l(payment.received_at) }
     its(['Zahlungsreferenz']) { should == payment.reference }
     its(['Transaktionsidentifikator']) { should == payment.transaction_identifier }
+    its(['Schuldner Name']) { should == 'Alice Foo' }
+    its(['Schuldner Adresse']) { should == 'Hönggerstrasse 65, 8037 Zürich' }
   end
 end

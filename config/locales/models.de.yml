@@ -1105,6 +1105,8 @@ de:
         reference: Zahlungsreferenz
         transaction_identifier: Transaktionsidentifikator
         status: Status
+        payee_person_name: Schuldner Name
+        payee_person_address: Schuldner Adresse
 
       payment_reminder:
         invoice: Rechnung

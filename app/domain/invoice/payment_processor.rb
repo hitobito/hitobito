@@ -58,7 +58,7 @@ class Invoice::PaymentProcessor
   end
 
   def valid_payments
-    @valid_payments ||= payments_with_invoice.select(&:valid?)
+    @valid_payments ||= payments.select(&:valid?)
   end
 
   def invalid_payments

@@ -40,6 +40,7 @@
           %i.fas.fa-exclamation-triangle{title: t('.icon_tooltip_invoice_not_payable')}
 
       - t.col(Invoice.human_attribute_name(:esr_number)) { |p| p.esr_number }
+      - t.col(Payment.human_attribute_name(:payee_person_name)) { |p| p.payee.person_name }
       - t.attr :amount
       - t.col(Payment.human_attribute_name(:received_at), class: 'right') { |p| l(p.received_at) }
 

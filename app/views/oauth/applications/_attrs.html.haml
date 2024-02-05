@@ -3,7 +3,7 @@
 %dl.dl-horizontal.border-top.pt-2
   %dt.muted.float-start.text-end Application Logo
   %dd
-    = image_tag(upload_variant(entry, :logo, :thumb), size: '64x64')
+    = image_tag(upload_url(entry, :logo), size: '64x64')
 
 %dl.dl-horizontal.border-top.pt-2
   %dt.muted.float-start.text-end Discovery Endpoint

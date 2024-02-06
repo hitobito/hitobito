@@ -39,7 +39,8 @@ module SearchStrategies
       @search_tables_and_fields.map do |table_field|
         table_name, field = table_field.split('.', 2)
         table = Arel::Table.new(table_name)
-        table[field].matches(Arel::Nodes::Quoted.new("%#{word}%"))
+        Arel::Nodes::NamedFunction.new(
+          'CAST', [table[field].as('TEXT')]).matches(Arel::Nodes::Quoted.new("%#{word}%"))
       end
     end
 

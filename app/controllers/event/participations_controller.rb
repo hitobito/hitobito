@@ -24,7 +24,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   self.sort_mappings = { last_name: 'people.last_name',
                          first_name: 'people.first_name',
                          roles: lambda do |event|
-                                  Person.order_by_name_statement.unshift(
+                                  [Person.order_by_name_statement].unshift(
                                     Event::Participation.order_by_role_statement(event)
                                   )
                                 end,

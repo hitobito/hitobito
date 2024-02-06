@@ -11,7 +11,7 @@ module SearchStrategies
     SEARCH_FIELDS = {
       'Person' => {
         attrs: ['people.first_name', 'people.last_name', 'people.company_name', 'people.nickname',
-                'people.company', 'people.email', 'people.address', 'people.zip_code',
+                'people.email', 'people.address', 'people.zip_code',
                 'people.town', 'people.country', 'people.birthday', 'people.additional_information',
                 'phone_numbers.number', 'social_accounts.name', 'additional_emails.email'],
         joins: ['LEFT JOIN phone_numbers ON phone_numbers.contactable_id = people.id AND ' \

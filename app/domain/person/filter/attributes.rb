@@ -80,7 +80,11 @@ class Person::Filter::Attributes < Person::Filter::Base
   end
 
   def persisted_attribute_condition_sql(key, value, constraint)
-    sql_array = ["people.#{key} #{sql_comparator(constraint)} ?", sql_value(value, constraint)]
+    sql_array = if value.is_a?(Numeric) && (constraint == "match" || constraint == "not_match")
+      ["CAST(people.#{key} AS TEXT) #{sql_comparator(constraint)} ?", sql_value(value, constraint)]
+    else
+      ["people.#{key} #{sql_comparator(constraint)} ?", sql_value(value, constraint)]
+    end
     ActiveRecord::Base.sanitize_sql_array(sql_array)
   end
 

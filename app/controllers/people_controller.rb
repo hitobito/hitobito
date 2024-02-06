@@ -115,7 +115,7 @@ class PeopleController < CrudController
   # loaded which might be before wagon that defines groups / roles has been loaded
   def self.sort_mappings_with_indifferent_access
     { roles: [Person.order_by_role_statement].
-      concat(Person.order_by_name_statement) }.with_indifferent_access
+      concat([Person.order_by_name_statement]) }.with_indifferent_access
   end
 
   private

@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## unreleased
+## Version 2.0
 
 *  Im Personen Tab "Abos" werden die Abos neu nach der Ebene gruppiert und angezeigt (#2337)
 *  Auf Abos gibt es neue Optionen im Bereich der selbstständigen Anmeldung. Zusätzlich zu den bisherigen Optionen (niemand kann sich selber anmelden oder beliebige Personen können sich fürs Abo anmelden) gibt es neu die Option "Nur konfigurierte". Ist diese aktiviert, dann können sich nur Personen mit passenden Gruppen/Rollen oder Anlässen für das Abo anmelden. In diesem Modus gibt es ausserdem die Möglichkeit, zwischen Opt-In und Opt-Out zu wählen: Beim neuen Modus Opt-In ist standardmässig niemand fürs Abo angemeldet, und die Gruppen/Rollen und Anlässe dienen ausschliesslich dazu, die erlaubte Zielgruppe für Opt-Ins festzulegen. Opt-Out ist der Modus wie es bisher funktionierte (#2334)

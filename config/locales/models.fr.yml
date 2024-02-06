@@ -845,7 +845,6 @@ fr:
         name: Nom
         description: Description
         publisher: Éditeur
-        subscribable: Les abonnés peuvent s'inscrire / se désinscrire eux-mêmes
         mail_name: Adresse de la liste de diffusion
         mail_address: Liste de diffusion
         mail_address_link: Liste de diffusion

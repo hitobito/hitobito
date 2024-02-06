@@ -844,7 +844,6 @@ it:
         name: Nome della lista
         description: Descrizione
         publisher: Mittente
-        subscribable: Gli abbonati possono iscriversi/disiscriversi personalmente.
         mail_name: Indirizzo delle mailing list
         mail_address: Mailing list
         mail_address_link: Mailinglist

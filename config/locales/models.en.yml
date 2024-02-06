@@ -674,7 +674,6 @@ en:
         name: Name
         description: Description
         publisher: Publisher
-        subscribable: Subscribers may subscribe/unsubscribe themselves.
         mail_name: Mailing list address
         mail_address: Mailing list
         mail_address_link: Mailing list

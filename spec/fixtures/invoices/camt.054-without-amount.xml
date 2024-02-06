@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.054.001.04" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <BkToCstmrDbtCdtNtfctn>
+    <GrpHdr>
+      <MsgId>M/2094650161/CAM</MsgId>
+      <CreDtTm>2021-04-29T17:23:53+02:00</CreDtTm>
+      <MsgPgntn>
+        <PgNb>1</PgNb>
+        <LastPgInd>true</LastPgInd>
+      </MsgPgntn>
+    </GrpHdr>
+    <Ntfctn>
+      <Id>M/2094650161/CAM</Id>
+      <CreDtTm>2021-04-29T17:23:53+02:00</CreDtTm>
+      <FrToDt>
+        <FrDtTm>2021-04-26T00:00:00+02:00</FrDtTm>
+        <ToDtTm>2021-04-28T00:00:00+02:00</ToDtTm>
+      </FrToDt>
+      <Acct>
+        <Id>
+          <IBAN>CH2008731549539472001</IBAN>
+        </Id>
+        <Ccy>CHF</Ccy>
+        <Ownr>
+          <Nm>Puzzle ITC</Nm>
+        </Ownr>
+        <Svcr>
+          <FinInstnId>
+            <BICFI>LINSCH23XXX</BICFI>
+          </FinInstnId>
+        </Svcr>
+      </Acct>
+      <Ntry>
+        <NtryRef>010005915</NtryRef>
+        <Amt Ccy="CHF"></Amt>
+        <CdtDbtInd>CRDT</CdtDbtInd>
+        <Sts>BOOK</Sts>
+        <BookgDt>
+          <Dt>2021-04-26</Dt>
+        </BookgDt>
+        <ValDt>
+          <Dt>2021-04-26</Dt>
+        </ValDt>
+        <AcctSvcrRef>O/460872248</AcctSvcrRef>
+        <BkTxCd>
+          <Domn>
+            <Cd>PMNT</Cd>
+            <Fmly>
+              <Cd>RCDT</Cd>
+              <SubFmlyCd>VCOM</SubFmlyCd>
+            </Fmly>
+          </Domn>
+        </BkTxCd>
+        <NtryDtls>
+          <Btch>
+            <NbOfTxs>1</NbOfTxs>
+            <TtlAmt Ccy="CHF"></TtlAmt>
+            <CdtDbtInd>CRDT</CdtDbtInd>
+          </Btch>
+          <TxDtls>
+            <Refs>
+              <MsgId>812726000000300000000000393</MsgId>
+              <InstrId>15694523908/6XXX</InstrId>
+              <EndToEndId>NOTPROVIDED</EndToEndId>
+            </Refs>
+            <Amt Ccy="CHF"></Amt>
+            <CdtDbtInd>CRDT</CdtDbtInd>
+            <BkTxCd>
+              <Domn>
+                <Cd>PMNT</Cd>
+                <Fmly>
+                  <Cd>RCDT</Cd>
+                  <SubFmlyCd>VCOM</SubFmlyCd>
+                </Fmly>
+              </Domn>
+            </BkTxCd>
+            <RltdPties>
+              <Dbtr>
+                <Nm>Hans Muster
+Musterstrasse 39
+8400 Winterthur
+Schweiz</Nm>
+                <PstlAdr>
+                  <AdrLine>Hans Muster
+Musterstrasse 39
+8400 Winterthur
+Schweiz</AdrLine>
+                </PstlAdr>
+              </Dbtr>
+              <DbtrAcct>
+                <Id>
+                  <IBAN>CH9480808007130661439</IBAN>
+                </Id>
+              </DbtrAcct>
+            </RltdPties>
+            <RmtInf>
+              <Strd>
+                <CdtrRefInf>
+                  <Tp>
+                    <CdOrPrtry>
+                      <Prtry>ISR Reference</Prtry>
+                    </CdOrPrtry>
+                  </Tp>
+                  <Ref>812726000000300000000000393</Ref>
+                </CdtrRefInf>
+              </Strd>
+            </RmtInf>
+          </TxDtls>
+        </NtryDtls>
+      </Ntry>
+    </Ntfctn>
+  </BkToCstmrDbtCdtNtfctn>
+</Document>

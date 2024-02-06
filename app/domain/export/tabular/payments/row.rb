@@ -8,11 +8,11 @@
 module Export::Tabular::Payments
   class Row < Export::Tabular::Row
     def payee_person_name
-      entry.payee.person_name
+      entry&.payee&.person_name
     end
 
     def payee_person_address
-      entry.payee.person_address
+      entry&.payee&.person_address
     end
   end
 end

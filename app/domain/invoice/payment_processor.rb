@@ -36,7 +36,12 @@ class Invoice::PaymentProcessor
   end
 
   def notice
-    translate(:valid, valid_payments.count)
+    return if valid_payments.empty?
+
+    [
+      translate(:valid_with_invoice, valid_payments_with_invoice.count),
+      translate(:valid_without_invoice, valid_payments_without_invoice.count)
+    ].select(&:present?).compact.join("\n")
   end
 
   def to
@@ -63,6 +68,14 @@ class Invoice::PaymentProcessor
 
   def invalid_payments
     @invalid_payments ||= payments - valid_payments
+  end
+
+  def valid_payments_with_invoice
+    valid_payments - payments_without_invoice
+  end
+
+  def valid_payments_without_invoice
+    valid_payments - payments_with_invoice
   end
 
   private

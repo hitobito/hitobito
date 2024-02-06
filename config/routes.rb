@@ -81,6 +81,7 @@ Hitobito::Application.routes.draw do
 
       get 'log' => 'group/log#index'
 
+      resources :payments, only: :index
       resources :invoices do
         resources :payments, only: :create
         collection do

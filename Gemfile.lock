@@ -173,7 +173,7 @@ GEM
       hpricot (~> 0.8.4)
       htmlentities (~> 4.3.0)
     commonmarker (0.23.10)
-    concurrent-ruby (1.2.2)
+    concurrent-ruby (1.2.3)
     config (4.2.1)
       deep_merge (~> 1.2, >= 1.2.1)
       dry-validation (~> 1.0, >= 1.0.0)
@@ -387,7 +387,7 @@ GEM
     mini_magick (4.12.0)
     mini_mime (1.1.5)
     mini_portile2 (2.8.5)
-    minitest (5.20.0)
+    minitest (5.22.0)
     msgpack (1.7.2)
     multi_json (1.15.0)
     mysql2 (0.5.5)
@@ -677,7 +677,7 @@ GEM
       activemodel (>= 6.0.0, < 7)
       timeliness (>= 0.3.10, < 1)
     vcard (0.3.0)
-    view_component (3.6.0)
+    view_component (3.9.0)
       activesupport (>= 5.2.0, < 8.0)
       concurrent-ruby (~> 1.0)
       method_source (~> 1.0)
@@ -709,7 +709,7 @@ GEM
     xpath (3.2.0)
       nokogiri (~> 1.8)
     yard (0.9.34)
-    zeitwerk (2.6.12)
+    zeitwerk (2.6.13)
 
 PLATFORMS
   ruby

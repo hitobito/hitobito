@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
 
 class ChangeHitobitoLogEntries < ActiveRecord::Migration[6.1]
-  def up
-    change_table :hitobito_log_entries, bulk: true do |t|
+  def up 
+    change_table :hitobito_log_entries do |t|
       t.change :category, :string, null: false
       t.column :payload, :json, null: true
     end
@@ -25,13 +25,13 @@ class ChangeHitobitoLogEntries < ActiveRecord::Migration[6.1]
 
   def down
     execute <<~SQL
-      UPDATE hitobito_log_entries
-      SET category = CASE
-          WHEN category = 'webhook' THEN 0
-          WHEN category = 'ebics' THEN 1
-          WHEN category = 'mail' THEN 2
-          ELSE category
-      END
+        UPDATE hitobito_log_entries
+        SET category = CASE
+            WHEN category = 'webhook' THEN 0
+            WHEN category = 'ebics' THEN 1
+            WHEN category = 'mail' THEN 2
+            ELSE category
+        END
     SQL
 
     change_table :hitobito_log_entries, bulk: true do |t|

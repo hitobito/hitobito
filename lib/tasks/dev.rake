@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2019-2023, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2019-2024, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_pbs.
@@ -11,7 +11,7 @@ namespace :dev do
     desc 'Obtain oauth access token'
     task :token, [:application_id, :redirect_uri, :code] => [:environment] do |_, args|
       app = Oauth::Application.find(args.fetch(:application_id))
-      sh <<-BASH.strip_heredoc
+      sh <<~BASH
         curl -v -H 'Accept: application/json' -X POST -d 'grant_type=authorization_code'  \
         -d 'client_id=#{app.uid}' -d 'client_secret=#{app.secret}' \
         -d 'redirect_uri=#{args.fetch(:redirect_uri)}' -d 'code=#{args.fetch(:code)}' \
@@ -23,7 +23,7 @@ namespace :dev do
     task :introspect, [:access_token, :token] do |_, args| # rubocop:disable Rails/RakeEnvironment
       access_token = args.fetch(:access_token)
       token = args.fetch(:token, access_token)
-      sh <<-BASH.strip_heredoc
+      sh <<~BASH
         curl -v -H 'Accept: application/json' \
         -H 'Authorization: Bearer #{access_token}' \
         -d 'token=#{token}' \
@@ -34,7 +34,7 @@ namespace :dev do
     desc 'Obtain profile information'
     task :profile, [:access_token, :scope] do |_, args| # rubocop:disable Rails/RakeEnvironment
       access_token = args.fetch(:access_token)
-      sh <<-BASH.strip_heredoc
+      sh <<~BASH
         curl -v -H 'Accept: application/json' \
         -H 'Authorization: Bearer #{access_token}' \
         -H 'X-Scope: #{args[:scope]}' \

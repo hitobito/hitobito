@@ -7,7 +7,7 @@
 
 class HitobitoLogger
   def self.categories
-    HitobitoLogEntry.categories.keys
+    HitobitoLogEntry.categories
   end
 
   def self.levels
@@ -17,19 +17,20 @@ class HitobitoLogger
   delegate :categories, :levels, to: 'class'
 
   levels.each do |level|
-    define_method level do |category, message, subject: nil|
-      log(level, category, message, subject: subject)
+    define_method level do |category, message, subject: nil, payload: nil|
+      log(level, category, message, subject: subject, payload: payload)
     end
   end
 
   private
 
-  def log(level, category, message, subject: nil)
+  def log(level, category, message, subject: nil, payload: nil)
     HitobitoLogEntry.create!(
       level: level,
       category: category,
       message: message,
-      subject: subject
+      subject: subject,
+      payload: payload
     )
   end
 end

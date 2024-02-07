@@ -36,7 +36,8 @@ describe HitobitoLogEntriesController do
         travel_to(2.days.ago.midday) do
           # from_date_param = 2.days.ago.to_date.to_s(:db)
           get :index, params: {from_time: '07:00'}
-          expect(assigns(:hitobito_log_entries)).to match_array(hitobito_log_entries(:error_webhook, :error_ebics))
+          expect(assigns(:hitobito_log_entries)).
+            to match_array(hitobito_log_entries(:error_webhook, :error_ebics, :entry_with_payload))
         end
       end
 
@@ -44,7 +45,8 @@ describe HitobitoLogEntriesController do
         travel_to(Time.now.midday) do
           from_date_param = 2.days.ago.to_date.to_s(:db)
           get :index, params: {from_date: from_date_param}
-          expect(assigns(:hitobito_log_entries)).to match_array(hitobito_log_entries(:error_webhook, :error_ebics))
+          expect(assigns(:hitobito_log_entries))
+            .to match_array(hitobito_log_entries(:error_webhook, :error_ebics, :entry_with_payload))
         end
       end
 
@@ -52,7 +54,8 @@ describe HitobitoLogEntriesController do
         travel_to(Time.now.midday) do
           from_date_param = 2.days.ago.to_date.to_s(:db)
           get :index, params: {from_date: from_date_param, from_time: '18:00' }
-          expect(assigns(:hitobito_log_entries)).to match_array([hitobito_log_entries(:error_ebics)])
+          expect(assigns(:hitobito_log_entries))
+            .to match_array(hitobito_log_entries(:error_ebics, :entry_with_payload))
         end
       end
 
@@ -92,11 +95,11 @@ describe HitobitoLogEntriesController do
       HitobitoLogger.categories.each do |category|
         context "/#{category}" do
           it 'filters by category' do
-            scope = HitobitoLogEntry.send("category_#{category}")
-            expect(scope).to be_present # make sure we actually have test objects
+            entries = HitobitoLogEntry.where(category: category)
+            expect(entries).to be_present # make sure we actually have test objects
 
             get :index, params: {category: category}
-            expect(assigns(:hitobito_log_entries)).to match_array(scope)
+            expect(assigns(:hitobito_log_entries)).to match_array(entries)
           end
         end
       end

@@ -5,13 +5,19 @@
 # Table name: hitobito_log_entries
 #
 #  id           :bigint           not null, primary key
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
 #  category     :integer          not null
 #  level        :integer          not null
 #  message      :text(65535)      not null
 #  subject_type :string(255)
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
 #  subject_id   :bigint
+#
+# Indexes
+#
+#  index_hitobito_log_entries_on_category  (category)
+#  index_hitobito_log_entries_on_level     (level)
+#  index_hitobito_log_entries_on_subject   (subject_type,subject_id)
 #
 
 # Copyright (c) 2012-2022, Hitobito AG. This file is part of
@@ -50,3 +56,13 @@ error_ebics:
   category: 'ebics'
   level: 'error'
   message: 'error_ebics'
+
+entry_with_payload:
+  created_at: <%= 1.minute.ago.to_s(:db) %>
+  category: 'webhook'
+  level: 'info'
+  message: 'entry_with_payload'
+  payload:
+    foo: 'bar'
+    baz: 'qux'
+    hello: 'world'

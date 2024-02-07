@@ -19,15 +19,24 @@ describe HitobitoLogger do
   context 'log method' do
     it 'creates record with provided attrs' do
       expected_msg = "some\nmultiline\nmessage"
+      expected_payload = { foo: 'bar', hello: {beautiful: 'world'} }
       expect {
-        subject.send('info', 'ebics', expected_msg, subject: people(:bottom_member))
+        subject.send(
+          'info',
+          'ebics',
+          expected_msg,
+          subject: people(:bottom_member),
+          payload: expected_payload
+        )
       }.to change {HitobitoLogEntry.count}.by(1)
 
-      entry = HitobitoLogEntry.last
-      expect(entry.level).to eq 'info'
-      expect(entry.category).to eq 'ebics'
-      expect(entry.message).to eq expected_msg
-      expect(entry.subject).to eq people(:bottom_member)
+      expect(HitobitoLogEntry.last).to have_attributes(
+        level: 'info',
+        category: 'ebics',
+        message: expected_msg,
+        payload: expected_payload.deep_stringify_keys,
+        subject: people(:bottom_member)
+      )
     end
 
     it 'raises validation error with invalid params' do

@@ -16,9 +16,9 @@ module HitobitoLogEntriesHelper
 
   def hitobito_log_entry_table_attrs
     if category_param
-      [:created_at, :level, :subject, :message]
+      [:created_at, :level, :subject, :message, :payload]
     else
-      [:created_at, :level, :category, :subject, :message]
+      [:created_at, :level, :category, :subject, :message, :payload]
     end
   end
 end

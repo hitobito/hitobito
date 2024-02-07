@@ -107,6 +107,10 @@ jobs:
         run: |
           bundle exec rake rubocop
 
+      - name: 'Run db migrations'
+        run: |
+          bundle exec rake db:migrate
+
       - name: 'Main Specs without features'
         run: |
           bundle exec rake ci:setup:env spec:without_features

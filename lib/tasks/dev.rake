@@ -91,6 +91,42 @@ namespace :dev do
           - #{me.roles.join("\n  - ")}
 
       MESSAGE
+
+      if me.roles.any?(&:two_factor_authentication_enforced)
+        me.two_fa_secret = %w(
+          2R7IGBJMSZV1L7TPLDI8HDO0UD8LCQ6NMVJWDYKW6I8XXM9RGU6G4II9KOJ2O8J6NUV
+          BM4DUGAKQ0EL41TVR1BKN5YHA5IVATD58BWZTQ0T46X85ED2HQ9CYZCAQYK0JMXOSKN
+          DZNEUSG5ZCS9ZURT7LB7HGK1AXD350LT9Q4PYO8ZX4ZDSCZF96N4LWFOH4C92DJ2NV
+        ).join
+        me.two_factor_authentication = 'totp'
+        me.save!(validate: false)
+
+        qr_code = Pathname.new('tmp/tom-tester-otp.png')
+        qr_code.delete if qr_code.exist?
+
+        otp = People::OneTimePassword.new(me.two_fa_secret, person: me)
+        otp.provisioning_qr_code.save(qr_code.to_s)
+
+        case ENV.fetch('TERM', nil)
+        when 'xterm-kitty'
+          puts 'This is the QR-Code for the TOTP/2FA-Setup'
+          system("kitty +kitten icat #{qr_code}")
+        else
+          puts "The QR-Code for TOTP/2FA-Setup is located a #{qr_code}"
+        end
+
+        puts 'If you have setup 2FA for a dev-hitobito already, you may ignore this'
+        puts 'as the generated codes should be the same.'
+        puts
+      end
+
+      unless me.valid?
+        puts 'This person has invalid data for this wagon. Nothing serious, just keep'
+        puts 'in mind: You need to fill additional fields if you update it.'
+        puts
+      end
+
+      puts 'Done.'
     end
   end
 

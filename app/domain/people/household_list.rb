@@ -148,8 +148,8 @@ class People::HouseholdList
         end
       end
 
-      batch_relation = relation.where("\"member_count\" < ? OR (\"member_count\" = ? AND \"id\" > ?)",
-                                      member_count_offset, member_count_offset, id_offset)
+      batch_relation = relation.where('"member_count" < ? OR ("member_count" = ? AND "id" > ?)',
+                                member_count_offset, member_count_offset, id_offset)
     end
   end
 

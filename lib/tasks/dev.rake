@@ -114,7 +114,7 @@ namespace :dev do
           puts 'This is the QR-Code for the TOTP/2FA-Setup'
           system("kitty +kitten icat #{qr_code}")
         else
-          puts "The QR-Code for TOTP/2FA-Setup is located a #{qr_code}"
+          puts "The QR-Code for TOTP/2FA-Setup is located at #{qr_code}"
         end
 
         puts 'If you have setup 2FA for a dev-hitobito already, you may ignore this'

@@ -48,7 +48,7 @@ describe People::Merger do
 
       expect(Person.where(id: duplicate.id)).not_to exist
 
-      log_hash = YAML.safe_load(person.versions.first.object_changes)
+      log_hash = YAML.load(person.versions.first.object_changes) # rubocop:disable Security/YAMLLoad
       expect(log_hash).to include(:last_name)
       expect(log_hash).not_to include(:id)
       expect(log_hash).not_to include(:primary_group_id)

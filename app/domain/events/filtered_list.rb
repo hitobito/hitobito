@@ -9,6 +9,7 @@ module Events
   class FilteredList < ::FilteredList
     def base_scope
       Event::Course
+        .select('events.*', 'event_dates.start_at')
         .includes(:events_groups, :groups, :translations)
         .joins(:dates)
         .preload(additional_course_includes)

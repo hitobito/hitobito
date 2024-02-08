@@ -45,8 +45,10 @@ namespace :dev do
 
   namespace :local do
     desc 'Create a local user with admin-permissions'
-    task :admin, [:username] => :environment do |_, args|
-      username = args.fetch(:username, 'tester@example.net')
+    task admin: :environment do
+      abort('This is for development purposes only.') unless Rails.env.development?
+
+      username = 'tester@example.net'
       password = 'hitobito is the best software to manage people in complex group hierachies'
 
       me = Person.find_by(email: username) ||

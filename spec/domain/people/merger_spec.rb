@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 
+#  Copyright (c) 2024-2024, Puzzle ITC. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
+
 require 'spec_helper'
 
 describe People::Merger do
@@ -7,7 +13,6 @@ describe People::Merger do
   let!(:person) { Fabricate(:person) }
   let!(:duplicate) { Fabricate(:person_with_address_and_phone) }
   let(:actor) { people(:root) }
-  let(:person_roles) { person.roles.with_deleted }
 
   let(:merger) { described_class.new(@source.reload, @target.reload, actor) }
 
@@ -43,7 +48,7 @@ describe People::Merger do
 
       expect(Person.where(id: duplicate.id)).not_to exist
 
-      log_hash = YAML.load(person.versions.first.object_changes)
+      log_hash = YAML.load(person.versions.first.object_changes) # rubocop:disable Security/YAMLLoad
       expect(log_hash).to include(:last_name)
       expect(log_hash).not_to include(:id)
       expect(log_hash).not_to include(:primary_group_id)
@@ -63,6 +68,7 @@ describe People::Merger do
 
       person.reload
 
+      person_roles = person.roles.with_deleted
       expect(person_roles.count).to eq(2)
       group_ids = person_roles.map(&:group_id)
       expect(group_ids).to include(groups(:bottom_group_one_one).id)
@@ -82,6 +88,7 @@ describe People::Merger do
         merger.merge!
       end.to change(Person, :count).by(-1)
 
+      person_roles = person.roles.with_deleted
       expect(person_roles.count).to eq(1)
       group_ids = person_roles.map(&:group_id)
       expect(group_ids).to include(groups(:bottom_group_one_one).id)
@@ -115,9 +122,9 @@ describe People::Merger do
       expect do
         merger.merge!
       end.to change(Person, :count).by(-1)
-         .and change { person_roles.reload.count }.by(2)
+        .and change { person.roles.with_deleted.count }.by(2) # rubocop:disable Layout/MultilineMethodCallIndentation
 
-      group_ids = person_roles.map(&:group_id)
+      group_ids = person.roles.with_deleted.map(&:group_id)
       expect(group_ids).to include(groups(:bottom_group_one_one).id)
       expect(group_ids).to include(groups(:bottom_group_two_one).id)
 

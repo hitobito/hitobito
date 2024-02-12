@@ -55,10 +55,10 @@ describe Export::Tabular::People::Households do
   end
 
   it "aggregates household people, uses first person's address" do
-    leader.update(household_key: 1)
     member.update(household_key: 1)
+    leader.update(household_key: 1)
 
-    data = households(Person.where(id: [member, leader])).data_rows.to_a
+    data = households(Person.where(id: [leader, member])).data_rows.to_a
     expect(data).to have(1).item
     expect(data[0].shift(2)).to eq [nil, 'Bottom Member, Top Leader']
     expect(data[0]).to eq ['Greatstreet 345', '3456', 'Greattown', 'Schweiz', 'Bottom One']

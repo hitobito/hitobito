@@ -16,7 +16,8 @@ class Event::Filter
   end
 
   def list_entries
-    sort_expression ? scope.distinct.select('event_translations.name').reorder(sort_expression) : scope.distinct
+    sort_expression ? scope.distinct.select('event_translations.name')
+                           .reorder(sort_expression) : scope.distinct
   end
 
   def scope

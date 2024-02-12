@@ -37,7 +37,7 @@ describe Export::Pdf::Labels do
   context 'with households' do
     let(:household) { true }
     before do
-      [top_leader, bottom_member].each do |p|
+      [bottom_member, top_leader].each do |p|
         p.update(household_key: 1)
       end
     end

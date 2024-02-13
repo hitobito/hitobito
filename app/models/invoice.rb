@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -58,9 +58,9 @@ class Invoice < ActiveRecord::Base
 
   SEQUENCE_NR_SEPARATOR = '-'
 
-  STATES = %w(draft issued sent payed reminded cancelled).freeze
-  STATES_REMINDABLE = %w(issued sent reminded).freeze
-  STATES_PAYABLE = %w(issued sent reminded).freeze
+  STATES = %w(draft issued sent partial payed excess reminded cancelled).freeze
+  STATES_REMINDABLE = %w(issued sent partial reminded).freeze
+  STATES_PAYABLE = %w(issued sent partial reminded).freeze
 
   DUE_SINCE = %w(one_day one_week one_month).freeze
 

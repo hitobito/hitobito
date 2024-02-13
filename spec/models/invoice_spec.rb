@@ -165,12 +165,12 @@ describe Invoice do
   end
 
   context '#remindable?' do
-    %w(issued sent reminded).each do |state|
+    %w(issued sent partial reminded).each do |state|
       it "#{state} invoice is remindable" do
         expect(Invoice.new(state: state)).to be_remindable
       end
     end
-    %w(draft payed cancelled).each do |state|
+    %w(draft payed excess cancelled).each do |state|
       it "#{state} invoice is not remindable" do
         expect(Invoice.new(state: state)).not_to be_remindable
       end

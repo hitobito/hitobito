@@ -37,10 +37,6 @@ class HitobitoLogEntriesController < ListController
     send("#{type}_date_param")
   end
 
-  def level_scope
-    level_param ? "level_#{level_param}" : :all
-  end
-
   def filter_category(scope)
     category_param ? scope.where(category: category_param) : scope
   end

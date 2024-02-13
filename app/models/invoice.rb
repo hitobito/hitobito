@@ -112,9 +112,9 @@ class Invoice < ActiveRecord::Base
       draft_or_issued(from: Date.new(year, 1, 1), to: Date.new(year, 12, 31))
     end
 
-    def draft_or_issued(from: , to: )
-      from ||= Date.today.beginning_of_year
-      to ||= Date.today.end_of_year
+    def draft_or_issued(from:, to:)
+      from ||= Time.zone.today.beginning_of_year
+      to ||= Time.zone.today.end_of_year
       from = Date.parse(from) if from.is_a? String
       to = Date.parse(to) if to.is_a? String
 
@@ -239,7 +239,7 @@ class Invoice < ActiveRecord::Base
     end
   end
 
-  def set_dates
+  def set_dates # rubocop:disable Metrics/CyclomaticComplexity
     self.sent_at ||= Time.zone.today if sent?
     if sent? || issued?
       self.issued_at ||= Time.zone.today

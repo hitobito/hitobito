@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2017-2018, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2017-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -138,20 +138,25 @@ describe Invoice do
     let(:now)     { Time.zone.parse('2017-09-18 14:00:00') }
     let(:invoice) { invoices(:invoice) }
     before        { travel_to(now) }
-    after         { travel_back }
 
     it 'creating sets state to draft' do
       expect(create_invoice.state).to eq 'draft'
     end
 
     it 'changing state to issued sets issued_at and due_at dates' do
-      expect { invoice.update(state: :issued) }.to change { [invoice.issued_at, invoice.due_at] }
+      expect do
+        invoice.update(state: :issued)
+      end.to(change { [invoice.issued_at, invoice.due_at] })
+
       expect(invoice.due_at).to eq(now.to_date + 30.days)
       expect(invoice.issued_at).to eq(now.to_date)
       expect(invoice.sent_at).to be_nil
     end
+
     it 'changing state to sent sets sent_at and due_at dates' do
-      expect { invoice.update(state: :sent) }.to change { [invoice.issued_at, invoice.sent_at, invoice.due_at] }
+      expect do
+        invoice.update(state: :sent)
+      end.to(change { [invoice.issued_at, invoice.sent_at, invoice.due_at] })
 
       expect(invoice.due_at).to eq(now.to_date + 30.days)
       expect(invoice.issued_at).to eq(now.to_date)
@@ -188,8 +193,10 @@ describe Invoice do
   it 'amount_open returns total amount minus payments' do
     invoice = invoices(:invoice)
     expect(invoice.amount_open).to eq 5.35
+
     invoice.payments.create!(amount: 4)
     expect(invoice.amount_open).to eq 1.35
+
     invoice.payments.create!(amount: 1.5)
     expect(invoice.amount_open).to eq(-0.15)
   end
@@ -202,7 +209,7 @@ describe Invoice do
                                 account_number: '01-162-5')
 
     Fabricate(:invoice, group: other, recipient: person)
-    expect { other.destroy }.not_to change { other.invoices.count }
+    expect { other.destroy }.not_to(change { other.invoices.count })
   end
 
   it 'hard deleting group does delete invoices' do
@@ -213,7 +220,7 @@ describe Invoice do
                                 account_number: '01-162-5')
 
     Fabricate(:invoice, group: other, recipient: person)
-    expect { other.really_destroy! }.to change { other.invoices.count }
+    expect { other.really_destroy! }.to(change { other.invoices.count })
   end
 
   it '#recipient_name is read from recipient if present' do
@@ -295,22 +302,36 @@ describe Invoice do
     end
 
     it 'lists invoices sent or drafted in 2019' do
-      expect(Invoice.draft_or_issued(from: Date.new(2019, 1, 1), to: Date.new(2019, 12, 31))).to have(2).items
+      filter = Invoice.draft_or_issued(from: today.beginning_of_year, to: today.end_of_year)
+      expect(filter).to have(2).items
     end
 
-    it 'lists no invoices sent or drafted in other years' do
-      expect(Invoice.draft_or_issued(from: Date.new(2018, 1, 1), to: Date.new(2018, 12, 31))).to be_empty
-      expect(Invoice.draft_or_issued(from: Date.new(2020, 1, 1), to: Date.new(2020, 12, 31))).to be_empty
+    it 'lists no invoices sent or drafted in earlier years' do
+      filter = Invoice.draft_or_issued(
+        from: today.advance(years: -1).beginning_of_year,
+        to: today.advance(years: -1).end_of_year
+      )
+      expect(filter).to be_empty
+    end
+
+    it 'lists no invoices sent or drafted in later years' do
+      filter = Invoice.draft_or_issued(
+        from: today.advance(years: 1).beginning_of_year,
+        to: today.advance(years: 1).end_of_year
+      )
+      expect(filter).to be_empty
     end
 
     it 'excludes invoice if issued in previous year' do
       issued.update(issued_at: 1.year.ago)
-      expect(Invoice.draft_or_issued(from: Date.new(2019, 1, 1), to: Date.new(2019, 12, 31))).to eq([invoice])
+      filter = Invoice.draft_or_issued(from: today.beginning_of_year, to: today.end_of_year)
+      expect(filter).to eq([invoice])
     end
 
     it 'excludes invoice if created in previous year' do
       invoice.update(created_at: 1.year.ago)
-      expect(Invoice.draft_or_issued(from: Date.new(2019, 1, 1), to: Date.new(2019, 12, 31))).to eq([issued])
+      filter = Invoice.draft_or_issued(from: today.beginning_of_year, to: today.end_of_year)
+      expect(filter).to eq([issued])
     end
   end
 
@@ -322,7 +343,9 @@ describe Invoice do
   end
 
   def create_invoice(attrs = {})
-    invoice = Invoice.create!(attrs.reverse_merge(title: 'invoice', group: group, recipient: person))
+    invoice = Invoice.create!(
+      attrs.reverse_merge(title: 'invoice', group: group, recipient: person)
+    )
     invoice.update_attribute(:sequence_number, attrs[:sequence_number]) if attrs[:sequence_number]
     invoice
   end

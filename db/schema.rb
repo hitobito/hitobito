@@ -465,7 +465,7 @@ ActiveRecord::Schema.define(version: 2024_01_19_120948) do
     t.string "subject_type"
     t.bigint "subject_id"
     t.json "payload"
-    t.index ["category"], name: "index_hitobito_log_entries_on_category"
+    t.index ["category", "level", "subject_id", "subject_type", "message"], name: "index_hitobito_log_entries_on_multiple_columns", length: { message: 255 }
     t.index ["level"], name: "index_hitobito_log_entries_on_level"
     t.index ["subject_type", "subject_id"], name: "index_hitobito_log_entries_on_subject"
   end

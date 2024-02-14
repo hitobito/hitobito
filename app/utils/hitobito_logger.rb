@@ -17,14 +17,22 @@ class HitobitoLogger
   delegate :categories, :levels, to: 'class'
 
   levels.each do |level|
+    # Log methods for each level
     define_method level do |category, message, subject: nil, payload: nil|
-      log(level, category, message, subject: subject, payload: payload)
+      log(level, category, message, subject, payload)
+    end
+
+    # Log methods for each level which replace matching log entries with a new one.
+    # Matching means same level, category, message and subject, but payload can be different.
+    define_method "#{level}_replace" do |category, message, subject: nil, payload: nil|
+      log_replace(level, category, message, subject, payload)
     end
   end
 
   private
 
-  def log(level, category, message, subject: nil, payload: nil)
+  # Create a log entry
+  def log(level, category, message, subject, payload)
     HitobitoLogEntry.create!(
       level: level,
       category: category,
@@ -32,5 +40,24 @@ class HitobitoLogger
       subject: subject,
       payload: payload
     )
+  end
+
+  # Delete all matching log entries
+  def unlog(level, category, message, subject)
+    HitobitoLogEntry.where(
+      level: level,
+      category: category,
+      message: message,
+      subject: subject
+    ).delete_all
+  end
+
+  # Replace matching log entries with a new one.
+  # Matching means same level, category, message and subject, but payload can be different.
+  def log_replace(level, category, message, subject, payload)
+    HitobitoLogEntry.transaction do
+      unlog(level, category, message, subject)
+      log(level, category, message, subject, payload)
+    end
   end
 end

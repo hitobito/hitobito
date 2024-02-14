@@ -26,7 +26,6 @@ class Payment < ActiveRecord::Base
 
   belongs_to :invoice, optional: true
 
-  validates :reference, uniqueness: { scope: :invoice_id, allow_nil: true, case_sensitive: false }
   validates :transaction_identifier, uniqueness: { allow_nil: true, case_sensitive: false }
 
   before_validation :set_received_at

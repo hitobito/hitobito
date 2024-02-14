@@ -49,9 +49,9 @@ describe Payment do
     expect(invoice.payments.build(amount: 1)).to be_valid
   end
 
-  it 'rejects multiple payments for same invoice without same reference' do
+  it 'allows multiple payments for same invoice with same reference' do
     invoice.payments.create!(amount: invoice.total - 1, reference: 1)
-    expect(invoice.payments.build(amount: 1, reference: 1)).not_to be_valid
+    expect(invoice.payments.build(amount: 1, reference: 1)).to be_valid
   end
 
 end

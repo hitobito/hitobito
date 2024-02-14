@@ -47,19 +47,19 @@ class Payment < ActiveRecord::Base
   end
 
   def settles?
-    invoice && invoice.amount_open == amount
+    invoice && invoice.amount_open(without: id) == amount
   end
 
   def exceeds?
-    invoice && amount > invoice.amount_open
+    invoice && amount > invoice.amount_open(without: id)
   end
 
   def undercuts?
-    invoice && amount < invoice.amount_open
+    invoice && amount < invoice.amount_open(without: id)
   end
 
   def difference
-    invoice && (amount - invoice.amount_open)
+    invoice && (amount - invoice.amount_open(without: id))
   end
 
   def esr_number
@@ -75,8 +75,16 @@ class Payment < ActiveRecord::Base
   end
 
   def update_invoice
-    if amount >= invoice.amount_open(without: id)
-      invoice.update(state: :payed)
+    new_state = if settles?
+                  :payed
+                elsif undercuts?
+                  :partial
+                elsif exceeds?
+                  :excess
+                end
+
+    if new_state
+      invoice.update(state: new_state)
     end
   end
 

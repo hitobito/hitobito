@@ -23,18 +23,25 @@ describe Payment do
   it 'marks invoice as payed with a big enough payment' do
     expect do
       invoice.payments.create!(amount: invoice.total)
-    end.to change(invoice, :state)
+    end.to change(invoice, :state).to('payed')
 
-    expect(invoice.state).to eq 'payed'
     expect(invoice.amount_open).to eq 0.0
   end
 
-  it 'does not change invoice state with a smaller payment' do
+  it 'marks invoice as partial with a smaller payment' do
     expect do
       invoice.payments.create!(amount: invoice.total - 1)
-    end.not_to change(invoice, :state)
+    end.to change(invoice, :state).to('partial')
 
     expect(invoice.amount_open).to eq 1.0
+  end
+
+  it 'marks invoice as excess with a bigger payment' do
+    expect do
+      invoice.payments.create!(amount: invoice.total + 1)
+    end.to change(invoice, :state).to('excess')
+
+    expect(invoice.amount_open).to eq(-1.0)
   end
 
   it 'allows multiple payments for same invoice without reference' do

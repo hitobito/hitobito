@@ -73,9 +73,32 @@ describe :self_registration, js: true do
       expect(current_path).to eq("#{group_person_path(group_id: group, id: person)}.html")
     end
 
+    describe 'with adult consent' do
+      let(:adult_consent_field) { page.find_field(adult_consent_text) }
+      let(:adult_consent_text) do
+        'Ich bestätige dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe.'
+      end
+
+      before do
+        group.update!(self_registration_require_adult_consent: true)
+        visit group_self_registration_path(group_id: group)
+      end
+
+      it 'cannot complete without accepting adult consent' do
+        complete_main_person_form
+        expect { click_on 'Registrieren' }.not_to(change { Person.count })
+        expect(adult_consent_field.native.attribute('validationMessage')).to eq 'Please check this box if you want to proceed.'
+      end
+
+      it 'can complete when accepting adult consent' do
+        complete_main_person_form
+        check adult_consent_text
+        expect { click_on 'Registrieren' }.to change { Person.count }.by(1)
+      end
+    end
+
     describe 'with privacy policy' do
       before do
-
         file = Rails.root.join('spec', 'fixtures', 'files', 'images', 'logo.png')
         image = ActiveStorage::Blob.create_and_upload!(io: File.open(file, 'rb'),
                                                        filename: 'logo.png',

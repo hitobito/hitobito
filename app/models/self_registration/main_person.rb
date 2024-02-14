@@ -7,15 +7,18 @@
 
 
 class SelfRegistration::MainPerson < SelfRegistration::Person
+
   self.attrs = [
     :first_name, :last_name, :nickname, :company_name, :company, :email,
     :privacy_policy_accepted,
-    :primary_group
+    :primary_group,
   ]
 
   self.required_attrs = [
     :first_name, :last_name
   ]
+
+  include SelfRegistration::AdultConsent
 
   delegate  :phone_numbers, :privacy_policy_accepted?, to: :person
   validate :assert_privacy_policy

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_02_14_074832) do
+ActiveRecord::Schema.define(version: 2024_02_14_155008) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -433,6 +433,7 @@ ActiveRecord::Schema.define(version: 2024_02_14_074832) do
     t.string "text_message_provider", default: "aspsms", null: false
     t.string "text_message_originator"
     t.string "letter_address_position", default: "left", null: false
+    t.boolean "self_registration_require_adult_consent", default: false, null: false
     t.index ["layer_group_id"], name: "index_groups_on_layer_group_id"
     t.index ["lft", "rgt"], name: "index_groups_on_lft_and_rgt"
     t.index ["parent_id"], name: "index_groups_on_parent_id"

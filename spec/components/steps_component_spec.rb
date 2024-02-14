@@ -9,7 +9,8 @@ require 'spec_helper'
 
 describe StepsComponent, type: :component do
   let(:header_css) { '.row .step-headers.offset-md-1' }
-  subject(:component) { described_class.new(partials: [], form: :form, step: :step) }
+  let(:form) { double(:form_builder, object: double(:group, self_registration_require_adult_consent: false)) }
+  subject(:component) { described_class.new(partials: [], form: form, step: :step) }
 
   before do
     allow_any_instance_of(StepsComponent::ContentComponent).to receive(:markup) do |component|
@@ -18,7 +19,7 @@ describe StepsComponent, type: :component do
   end
 
   def render(**args)
-    render_inline(described_class.new(**args.merge(form: :form)))
+    render_inline(described_class.new(**args.merge(form: form)))
   end
 
   it 'does not render when partials are empty' do

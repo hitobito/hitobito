@@ -62,7 +62,7 @@ describe StepsComponent::ContentComponent, type: :component do
     end
     let(:iterator) { double(:iterator, index: 0, last?: false) }
     let(:policy_finder) { double(:policy_finder, acceptance_needed?: true, groups: []) }
-    let(:entry) { double(:entry, partials: [:partial]) }
+    let(:entry) { double(:entry, partials: [:partial], require_adult_consent: false) }
 
     subject(:html) { render_inline(component) }
 

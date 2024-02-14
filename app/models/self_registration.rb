@@ -50,9 +50,9 @@ class SelfRegistration
   private
 
   def validate_visited_partials
-    visited_partials.all? do |partial|
+    visited_partials.collect do |partial|
       move_to_unless_valid?(partial, send("#{partial}_valid?"))
-    end
+    end.all?
   end
 
   def visited_partials

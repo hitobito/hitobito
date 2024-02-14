@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Die Mitte. This file is part of
+#  Copyright (c) 2012-2024, Die Mitte. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -12,6 +12,10 @@ describe Messages::LetterDispatch do
   let(:top_leader) { people(:top_leader) }
   let(:bottom_member) { people(:bottom_member) }
   let(:recipient_entries) { message.message_recipients }
+  let(:default_country) { Settings.countries.prioritized.first }
+  let(:not_default_country) do
+    code = Faker::Address.country_code until code != default_country
+  end
 
   subject { described_class.new(message) }
 
@@ -65,9 +69,9 @@ describe Messages::LetterDispatch do
 
   context 'household addresses' do
 
-    let(:housemate1) { Fabricate(:person_with_address, first_name: 'Anton', last_name: 'Abraham') }
-    let(:housemate2) { Fabricate(:person_with_address, first_name: 'Zora', last_name: 'Zaugg') }
-    let(:other_housemate) { Fabricate(:person_with_address, first_name: 'Altra', last_name: 'Mates') }
+    let(:housemate1) { Fabricate(:person_with_address, first_name: 'Anton', last_name: 'Abraham', country: not_default_country) }
+    let(:housemate2) { Fabricate(:person_with_address, first_name: 'Zora', last_name: 'Zaugg', country: not_default_country) }
+    let(:other_housemate) { Fabricate(:person_with_address, first_name: 'Altra', last_name: 'Mates', country: not_default_country) }
 
     before do
       Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one), person: housemate1)
@@ -171,9 +175,9 @@ describe Messages::LetterDispatch do
 
     it 'adds all names from household address to address box and sorts them alphabetically' do
       message.update!(send_to_households: true)
-      housemate3 = Fabricate(:person_with_address, first_name: 'Mark', last_name: 'Hols')
-      housemate4 = Fabricate(:person_with_address, first_name: 'Jana', last_name: 'Nicks')
-      housemate5 = Fabricate(:person_with_address, first_name: 'Olivia', last_name: 'Berms')
+      housemate3 = Fabricate(:person_with_address, first_name: 'Mark', last_name: 'Hols', country: not_default_country)
+      housemate4 = Fabricate(:person_with_address, first_name: 'Jana', last_name: 'Nicks', country: not_default_country)
+      housemate5 = Fabricate(:person_with_address, first_name: 'Olivia', last_name: 'Berms', country: not_default_country)
       Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one), person: housemate3)
       Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one), person: housemate4)
       Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one), person: housemate5)

@@ -131,7 +131,8 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def render_entries_json(entries)
-    paged_entries = entries.page(params[:page])
+    subquery = entries
+    paged_entries = Event::Participation.from(subquery, :event_participations).page(params[:page])
     render json: [paging_properties(paged_entries),
                   ListSerializer.new(paged_entries.decorate,
                                      group: group,
@@ -142,7 +143,8 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def sort_mappings_with_indifferent_access
-    list = event_participation_filter.list_entries.page(params[:page])
+    subquery = event_participation_filter.list_entries
+    list = Event::Participation.from(subquery, :event_participations).page(params[:page])
     super.merge(current_person.table_display_for(Event::Participation).sort_statements(list))
   end
 
@@ -162,7 +164,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
 
   def list_entries
     filter = event_participation_filter
-    records = filter.list_entries.includes(person: :picture_attachment).page(params[:page])
+    records = filter.list_entries.includes(person: :picture_attachment)
     @counts = filter.counts
     @pagination_options = {
       total_pages: records.total_pages,
@@ -171,7 +173,13 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     }
     sort_param = params[:sort]
 
-    records = records.reorder(Arel.sql(sort_expression)) if sort_param && sortable?(sort_param)
+    records = records.select(Arel.sql(sort_expression))
+                     .reorder(Arel.sql(sort_expression_name)) if sort_param && sortable?(sort_param)
+
+    records = Event::Participation.from(records, :event_participations)
+                                  .joins(:person)
+                                  .page(params[:page])
+
     Person::PreloadPublicAccounts.for(records.collect(&:person))
     records
   end
@@ -367,7 +375,10 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     p = event.participations.new
     role = p.roles.new(participation: p)
     if can?(:create, role)
-      @event.person_add_requests.list.includes(person: :primary_group)
+      @event.person_add_requests.select('person_add_requests.*')
+                                .list
+                                .select('person_add_requests.id')
+                                .includes(person: :primary_group)
     end
   end
 

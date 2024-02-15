@@ -59,7 +59,7 @@ describe Event::ParticipationsController do
 
     it 'lists participant and leader group by default' do
       get :index, params: { group_id: group.id, event_id: course.id }
-      expect(assigns(:participations)).to eq [@participant, @leader]
+      expect(assigns(:participations).object).to eq [@participant, @leader]
       expect(assigns(:person_add_requests)).to eq([])
     end
 
@@ -178,7 +178,7 @@ describe Event::ParticipationsController do
 
       it 'sorts based on role' do
         get :index, params: { group_id: group, event_id: course.id, sort: :roles, sort_dir: :asc }
-        expect(assigns(:participations)).to eq([@leader, @participant])
+        expect(assigns(:participations).object).to eq([@leader, @participant])
       end
     end
 

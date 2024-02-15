@@ -66,16 +66,17 @@ module Sortable
 
     # Return the sort expression to be used in the list query.
     def sort_expression
-      sort_columns.each_with_index.map do |c, index|
-        alias_name = "order_case_#{index + 1}"
-        "#{c} AS #{alias_name}"
-      end.join(', ')
+      (Array(sort_columns).map.with_index do |c, index|
+        alias_name = "order_case_#{index}"
+        # cut off current alias if sort_column already had an alias defined
+        "#{c.split(/\sAS\s/i).first} AS #{alias_name}"
+      end).join(', ')
     end
 
     def sort_expression_name
-      sort_columns.each_with_index.map do |c, index|
-        "order_case_#{index + 1} #{params[:sort_dir]}"
-      end.join(', ')
+      (Array(sort_columns).map.with_index do |c, index|
+        "order_case_#{index} #{params[:sort_dir]}"
+      end).join(', ')
     end
 
     # The sort direction, either 'asc' or 'desc'.

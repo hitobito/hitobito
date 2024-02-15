@@ -27,7 +27,7 @@ class Event::ParticipationFilter
   def list_entries
     records = params[:q].present? ? load_entries.where(search_condition) : load_entries
     @counts = populate_counts(records)
-    apply_default_sort(apply_filter_scope(records))
+    apply_default_sort(apply_filter_scope(records)).select('event_participations.id')
   end
 
   def predefined_filters
@@ -50,7 +50,7 @@ class Event::ParticipationFilter
 
   def apply_default_sort(records)
     records = records.order_by_role(event) if Settings.people.default_sort == 'role'
-    records.select("event_participations.*").merge(Person.order_by_name).to_a
+    records.select("event_participations.*").merge(Person.order_by_name)
   end
 
   def populate_counts(records)

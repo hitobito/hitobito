@@ -31,6 +31,7 @@ WebMock.disable_net_connect!(
   allow_localhost: true,
   allow: %w(
     chromedriver.storage.googleapis.com
+    storage.googleapis.com
     googlechromelabs.github.io
     edgedl.me.gvt1.com
     github.com github-releases.githubusercontent.com

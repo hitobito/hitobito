@@ -5,6 +5,7 @@
 *  Rechnungen können neu auch den Status "Teilzahlung" und "Überzahlung" haben (hitobito_sww#38)
 *  Einverständnis Erziehungsberechtigte für Selbstregistrierung (hitobito#2404)
 *  Listen von Rechnungen können nach letztem Zahlungseingang und nach insgesamt bezahltem Betrag sortiert werden (hitobito_sww#147)
+*  Zahlungen welche nicht einer Rechnung zugewiesen werden konnten, können auf der "Einzelrechnungen" Seite als CSV exportiert werden (#1494) 
 
 ## Version 2.0
 

@@ -31,7 +31,7 @@ module Sortable
 
       model_name, attribute_name = table_attr.split('.')
 
-      column_type = ActiveRecord::Base.connection.column_for_attribute(attribute_name).type
+      column_type = model_name.singularize.classify.constantize.attribute_types[attribute_name].type
 
       null_safe = 'CASE'
       null_safe << " WHEN #{table_attr} IS NULL THEN 1"

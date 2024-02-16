@@ -199,7 +199,7 @@ describe Messages::LetterDispatch do
     fake_ability = instance_double('aby', cannot?: false)
     household = Person::Household.new(person1, fake_ability, person2, top_leader)
     household.assign
-    household.save
+    household.persist!
   end
 
   def recipient_entry(person)

@@ -118,6 +118,14 @@ class Person::Household
     housemates + [person]
   end
 
+  def existing_people
+    people.select {|candidate| candidate.household_key == person.household_key }
+  end
+
+  def new_people
+    people + [other].compact - existing_people
+  end
+
   def housemates
     person.household_people
   end

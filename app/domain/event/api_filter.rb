@@ -22,6 +22,7 @@ class Event::ApiFilter < Event::Filter
 
   def list_entries
     scope = Event.where(type: type)
+                 .select("events.*")
                  .includes(:groups, :translations)
                  .with_group_id(relevant_group_ids)
                  .order_by_date

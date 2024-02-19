@@ -65,11 +65,15 @@ module Sortable
     end
 
     # Return the sort expression to be used in the list query.
-    def sort_expression
+    def sort_expression(alias: true, aggregate_function: false)
       (Array(sort_columns).map.with_index do |c, index|
         alias_name = "order_case_#{index}"
-        # cut off current alias if sort_column already had an alias defined
-        "#{c.split(/\sAS\s/i).first} AS #{alias_name}"
+        if aggregate_function
+          "MAX(#{c.split(/\sAS\s/i).first}) AS #{alias_name}"
+        else
+          # cut off current alias if sort_column already had an alias defined
+          "#{c.split(/\sAS\s/i).first} AS #{alias_name}"
+        end
       end).join(', ')
     end
 

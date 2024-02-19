@@ -21,7 +21,8 @@ class Export::EventsExportJob < Export::ExportBaseJob
                       @filter_args[:type],
                       @filter_args[:filter],
                       @filter_args[:year],
-                      @filter_args[:sort_expression])
+                      @filter_args[:sort_expression],
+                      false)
   end
 
   def group

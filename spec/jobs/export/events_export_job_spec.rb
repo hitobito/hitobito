@@ -13,7 +13,7 @@ describe Export::EventsExportJob do
   let(:user)         { people(:top_leader) }
   let(:group)        { groups(:top_layer) }
   let(:year)         { 2012 }
-  let(:event_filter) { Event::Filter.new(group, nil, 'all', year, false) }
+  let(:event_filter) { Event::Filter.new(group, nil, 'all', year, false, false) }
   let(:file) { AsyncDownloadFile.from_filename(filename, format) }
 
   before do

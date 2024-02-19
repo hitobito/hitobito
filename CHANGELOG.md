@@ -1,23 +1,22 @@
 # Hitobito Changelog
 
+## unreleased
+
+*  Rechnungen können neu auch den Status "Teilzahlung" und "Überzahlung" haben (hitobito_sww#38)
+
 ## Version 2.0
 
 *  Im Personen Tab "Abos" werden die Abos neu nach der Ebene gruppiert und angezeigt (#2337)
 *  Auf Abos gibt es neue Optionen im Bereich der selbstständigen Anmeldung. Zusätzlich zu den bisherigen Optionen (niemand kann sich selber anmelden oder beliebige Personen können sich fürs Abo anmelden) gibt es neu die Option "Nur konfigurierte". Ist diese aktiviert, dann können sich nur Personen mit passenden Gruppen/Rollen oder Anlässen für das Abo anmelden. In diesem Modus gibt es ausserdem die Möglichkeit, zwischen Opt-In und Opt-Out zu wählen: Beim neuen Modus Opt-In ist standardmässig niemand fürs Abo angemeldet, und die Gruppen/Rollen und Anlässe dienen ausschliesslich dazu, die erlaubte Zielgruppe für Opt-Ins festzulegen. Opt-Out ist der Modus wie es bisher funktionierte (#2334)
-
-## Version 2.0
-
-*  Nachdem Erstellen einer Person wird sogleich auf mögliche Duplikate geprüft (hitobito#2350)
-
-## Version 2.0
-
-*  Rollen mit Start-Datum in der Zukunft können erfasst werden (hitobito#2237)
-*  Eigener JSON:API Endpoint für Gruppen (hitobito#2243)
+*  Nachdem Erstellen einer Person wird sogleich auf mögliche Duplikate geprüft (#2350)
+*  Rollen mit Start-Datum in der Zukunft können erfasst werden (#2237)
+*  Eigener JSON:API Endpoint für Gruppen (#2243)
 *  Personendaten können basierend von Spezifikationen im Wagon automatisiert gelöscht werden. Standardmässig abgestellt (#2106)
-*  Rollen können mit dem class attribute `terminatable`, markiert werden, dass sie von der Person selbstständig beendet werden können (hitobito_sac_cas#133)
+*  Rollen können mit dem class attribute `terminatable` markiert werden, damit sie von der Person selbstständig beendet werden können (hitobito_sac_cas#133)
 *  Die Bemerkungen einer Anlassteilnahme können automatisiert nach einer gewissen Zeit gelöscht werden. Standardmässig abgestellt (#2129)
 *  Personendaten können manuell im "Ohne Rollen" Tab einer Ebene permanent gelöscht werden. (#2105)
-*  Personen die sich über einen konfigurierbaren Zeitraum nicht eingeloggt haben, können gewarnt und automatisch gesperrt werden (hitobito#2069)
+*  Personen die sich über einen konfigurierbaren Zeitraum nicht eingeloggt haben, können gewarnt und automatisch gesperrt werden (#2069)
+
 
 ## Version 1.31
 

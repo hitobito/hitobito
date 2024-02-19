@@ -47,6 +47,8 @@ namespace :dev do
     desc 'Create a local user with admin-permissions'
     task admin: :environment do
       abort('This is for development purposes only.') unless Rails.env.development?
+      abort('This needs at least one wagon to work') if Wagons.all.blank?
+      abort('This needs a group-structure to work') if Group.subclasses.blank?
 
       username = 'tester@example.net'
       password = 'hitobito is the best software to manage people in complex group hierachies'

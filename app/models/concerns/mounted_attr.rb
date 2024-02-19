@@ -62,7 +62,7 @@ module MountedAttr
 
       define_mounted_attr_getter(config)
       define_mounted_attr_setter(config)
-
+      define_mounted_attr_type_method(config)
       define_mounted_attr_validations(config)
     end
 
@@ -86,6 +86,14 @@ module MountedAttr
       define_method("#{config.attr_name}=") do |value|
         instance_variable_set("@#{config.attr_name}", value)
         value
+      end
+    end
+
+    # This is used to determine the type of the attribute in the template.
+    # See `UtilityHelper#column_type`
+    def define_mounted_attr_type_method(config)
+      define_method("#{config.attr_name}_type") do
+        config.attr_type
       end
     end
 

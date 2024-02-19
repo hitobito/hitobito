@@ -434,4 +434,12 @@ describe MountedAttr do
       end
     end
   end
+
+  describe 'type lookup method' do
+    [:string, :integer, :boolean].each do |type|
+      it "returns the type for #{type} attributes" do
+        expect(entry.send("#{type}_type")).to eq(type)
+      end
+    end
+  end
 end

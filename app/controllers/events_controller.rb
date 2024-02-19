@@ -256,15 +256,16 @@ class EventsController < CrudController
     if request.format.json?
       Event::ApiFilter.new(group, params, year)
     else
-      expression = sort_expression if sorting?
-      Event::Filter.new(group, params[:type], params[:filter], year, expression)
+      expression = sort_expression(aggregate_function: true) if sorting?
+      expression_name = sort_expression_name if sorting?
+      Event::Filter.new(group, params[:type], params[:filter], year, expression, expression_name)
     end
   end
 
   def entries_page(page_param)
     page_scope = visible_entries.page(page_param)
 
-    if page_scope.count.zero?
+    if page_scope.length.zero?
       visible_entries.page(1)
     else
       page_scope

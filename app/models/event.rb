@@ -185,18 +185,22 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
     # Default scope for event lists
     def list
-      order_by_date.
+      order_by_date(aggregate_function: true).
         includes(:translations).
         preload_all_dates.
-        distinct
+        group(:id)
     end
 
     def preload_all_dates
       all.extending(Event::PreloadAllDates)
     end
 
-    def order_by_date
-      joins(:dates).select("events.*", "event_dates.start_at").order('event_dates.start_at')
+    def order_by_date(aggregate_function: false)
+      if aggregate_function
+        joins(:dates).select("MAX(event_dates.start_at)").order('MAX(event_dates.start_at)')
+      else
+        joins(:dates).select("event_dates.start_at").order('event_dates.start_at')
+      end
     end
 
     # Events with at least one date in the given year

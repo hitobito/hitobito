@@ -6,19 +6,20 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::Filter
-  attr_reader :type, :filter, :group, :year, :sort_expression
+  attr_reader :type, :filter, :group, :year, :sort_expression, :sort_expression_name
 
-  def initialize(group, type, filter, year, sort_expression)
+  def initialize(group, type, filter, year, sort_expression, sort_expression_name)
     @group = group
     @type = type
     @filter = filter
     @year = year
     @sort_expression = sort_expression
+    @sort_expression_name = sort_expression_name
   end
 
-  def list_entries
-    sort_expression ? scope.distinct.select('event_translations.name')
-                           .reorder(sort_expression) : scope.distinct
+  def list_entries    
+    sort_expression ? scope.distinct.select('MAX(event_translations.name)')
+                           .select(sort_expression).reorder(sort_expression_name) : scope.distinct
   end
 
   def scope
@@ -32,6 +33,8 @@ class Event::Filter
       .list
       .where(type: type)
       .includes(:groups, :translations, :events_groups)
+      .unscope(:select)
+      .select('events.*' ,'MAX(event_dates.start_at)')
       .left_joins(:translations)
       .in_year(year)
       .preload_all_dates

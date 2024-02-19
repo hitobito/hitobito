@@ -20,8 +20,8 @@ module InvoicesHelper
   def format_invoice_state(invoice)
     type = case invoice.state
            when /draft|cancelled/ then 'info'
-           when /sent|issued/ then 'warning'
-           when /payed/ then 'success'
+           when /sent|issued|partial/ then 'warning'
+           when /payed|excess/ then 'success'
            when /reminded/ then 'danger'
            end
     badge(invoice_state_label(invoice), type)

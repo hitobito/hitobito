@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+#  Copyright (c) 2022-2024, Die Mitte Schweiz. This file is part of
+#  hitobito_cvp and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito_die_mitte.
+
 # == Schema Information
 #
 # Table name: invoice_lists
@@ -26,13 +31,6 @@
 #  index_invoice_lists_on_receiver_type_and_receiver_id  (receiver_type,receiver_id)
 #
 
-
-#  Copyright (c) 2022, Die Mitte Schweiz. This file is part of
-#  hitobito_cvp and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito_die_mitte.
-
-
 class InvoiceList < ActiveRecord::Base
   serialize :invalid_recipient_ids, Array
   belongs_to :group
@@ -43,6 +41,7 @@ class InvoiceList < ActiveRecord::Base
   has_many :invoices, dependent: :destroy
 
   attr_accessor :recipient_ids, :invoice
+
   validates :receiver_type, inclusion: %w(MailingList Group), allow_blank: true
 
   scope :list, -> { order(:created_at) }
@@ -60,7 +59,7 @@ class InvoiceList < ActiveRecord::Base
 
   def update_paid
     update(amount_paid: invoices.joins(:payments).sum('payments.amount'),
-           recipients_paid: invoices.payed.count)
+           recipients_paid: invoices.where(state: [:payed, :excess]).count)
   end
 
   def update_total

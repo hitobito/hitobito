@@ -174,6 +174,10 @@ class Invoice < ActiveRecord::Base
     STATES_PAYABLE.include?(state)
   end
 
+  def payed?
+    state.payed? || state.excess?
+  end
+
   def includes_dynamic_invoice_items?
     invoice_items.any?(&:dynamic)
   end

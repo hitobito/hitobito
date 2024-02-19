@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2020, CVP Schweiz. This file is part of
+#  Copyright (c) 2012-2024, CVP Schweiz. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
@@ -40,12 +40,15 @@ describe InvoiceList do
 
   it '#update_paid updates payment informations' do
     subject.update(group: group, title: :title)
+
     invoice = subject.invoices.create!(title: :title, recipient_id: person.id, total: 10, group: group)
     subject.invoices.create!(title: :title, recipient_id: other_person.id, total: 20, group: group)
     invoice.payments.create!(amount: 10)
-    subject.update_paid
-    expect(subject.amount_paid).to eq 10
-    expect(subject.recipients_paid).to eq 1
+
+    expect do
+      subject.update_paid
+    end.to change(subject, :amount_paid).from(0).to(10)
+      .and change(subject, :recipients_paid).from(0).to(1)
   end
 
   it '#to_s returns title' do

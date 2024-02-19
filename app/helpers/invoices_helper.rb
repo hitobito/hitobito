@@ -14,7 +14,7 @@ module InvoicesHelper
 
   def format_invoice_list_amount_total(invoice_list)
     invoice = invoice_list.invoice || invoice_list.group.invoices.build
-    invoice.decorate.format_currency(invoice_list.amount_total) if invoice
+    invoice.decorate.format_currency(invoice_list.amount_total)
   end
 
   def format_invoice_state(invoice)

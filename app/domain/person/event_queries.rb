@@ -25,14 +25,17 @@ class Person::EventQueries
   end
 
   def upcoming_events
-    person.events.
+    person.
+      events.
       upcoming.
       merge(Event::Participation.active).
       merge(Event::Participation.upcoming).
+      group(:id).
       distinct.
       includes(:groups).
       preload_all_dates.
-      order_by_date
+      order_by_date(aggregate_function: true).
+      select("events.*")
   end
 
   def alltime_participations

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023-2023, Puzzle ITC. This file is part of
+#  Copyright (c) 2023-2024, Puzzle ITC. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -10,7 +10,7 @@ describe 'version' do
     let(:cmd) { 'version' }
 
     it 'has a version itself' do
-      expect(version(cmd)).to match('2.0.0')
+      expect(version(cmd)).to match('2.1.0')
     end
 
     it 'has a banner' do
@@ -31,6 +31,13 @@ describe 'version' do
 
     # it 'suggests only new minor-versions for regular releases' do
     #   expect(version("#{cmd} regular")).to match(/\d+\.\d+\.0/)
+    # end
+
+    # it 'can provide a preview of suggestions' do
+    #   expect(version("#{cmd} preview"))
+    #     .to match(/^patch:\s+\d+\.\d+\.\d+/)
+    #     .and match(/^regular:\s+\d+\.\d+\.0/)
+    #     .and match(/^integration:\s+\d+\.\d+\.\d+-\d+/)
     # end
   end
 

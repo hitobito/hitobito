@@ -199,7 +199,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
       if aggregate_function
         joins(:dates).select("MAX(event_dates.start_at)").order('MAX(event_dates.start_at)')
       else
-        joins(:dates).select("event_dates.start_at").order('event_dates.start_at')
+        joins(:dates).select("events.*, event_dates.start_at").order('event_dates.start_at')
       end
     end
 

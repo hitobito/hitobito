@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -26,7 +26,6 @@ class Payment < ActiveRecord::Base
 
   belongs_to :invoice, optional: true
 
-  validates :reference, uniqueness: { scope: :invoice_id, allow_nil: true, case_sensitive: false }
   validates :transaction_identifier, uniqueness: { allow_nil: true, case_sensitive: false }
 
   before_validation :set_received_at
@@ -47,19 +46,19 @@ class Payment < ActiveRecord::Base
   end
 
   def settles?
-    invoice && invoice.amount_open == amount
+    invoice && invoice.amount_open(without: id) == amount
   end
 
   def exceeds?
-    invoice && amount > invoice.amount_open
+    invoice && amount > invoice.amount_open(without: id)
   end
 
   def undercuts?
-    invoice && amount < invoice.amount_open
+    invoice && amount < invoice.amount_open(without: id)
   end
 
   def difference
-    invoice && amount - invoice.amount_open
+    invoice && (amount - invoice.amount_open(without: id))
   end
 
   def esr_number
@@ -75,8 +74,16 @@ class Payment < ActiveRecord::Base
   end
 
   def update_invoice
-    if amount >= invoice.amount_open(without: id)
-      invoice.update(state: :payed)
+    new_state = if settles?
+                  :payed
+                elsif undercuts?
+                  :partial
+                elsif exceeds?
+                  :excess
+                end
+
+    if new_state
+      invoice.update(state: new_state)
     end
   end
 

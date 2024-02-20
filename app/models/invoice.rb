@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -58,9 +58,9 @@ class Invoice < ActiveRecord::Base
 
   SEQUENCE_NR_SEPARATOR = '-'
 
-  STATES = %w(draft issued sent payed reminded cancelled).freeze
-  STATES_REMINDABLE = %w(issued sent reminded).freeze
-  STATES_PAYABLE = %w(issued sent reminded).freeze
+  STATES = %w(draft issued sent partial payed excess reminded cancelled).freeze
+  STATES_REMINDABLE = %w(issued sent partial reminded).freeze
+  STATES_PAYABLE = %w(issued sent partial reminded).freeze
 
   DUE_SINCE = %w(one_day one_week one_month).freeze
 
@@ -112,9 +112,9 @@ class Invoice < ActiveRecord::Base
       draft_or_issued(from: Date.new(year, 1, 1), to: Date.new(year, 12, 31))
     end
 
-    def draft_or_issued(from: , to: )
-      from ||= Date.today.beginning_of_year
-      to ||= Date.today.end_of_year
+    def draft_or_issued(from:, to:)
+      from ||= Time.zone.today.beginning_of_year
+      to ||= Time.zone.today.end_of_year
       from = Date.parse(from) if from.is_a? String
       to = Date.parse(to) if to.is_a? String
 
@@ -172,6 +172,10 @@ class Invoice < ActiveRecord::Base
 
   def payable?
     STATES_PAYABLE.include?(state)
+  end
+
+  def payed?
+    state.payed? || state.excess?
   end
 
   def includes_dynamic_invoice_items?
@@ -239,7 +243,7 @@ class Invoice < ActiveRecord::Base
     end
   end
 
-  def set_dates
+  def set_dates # rubocop:disable Metrics/CyclomaticComplexity
     self.sent_at ||= Time.zone.today if sent?
     if sent? || issued?
       self.issued_at ||= Time.zone.today

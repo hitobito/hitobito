@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -14,14 +14,14 @@ module InvoicesHelper
 
   def format_invoice_list_amount_total(invoice_list)
     invoice = invoice_list.invoice || invoice_list.group.invoices.build
-    invoice.decorate.format_currency(invoice_list.amount_total) if invoice
+    invoice.decorate.format_currency(invoice_list.amount_total)
   end
 
   def format_invoice_state(invoice)
     type = case invoice.state
            when /draft|cancelled/ then 'info'
-           when /sent|issued/ then 'warning'
-           when /payed/ then 'success'
+           when /sent|issued|partial/ then 'warning'
+           when /payed|excess/ then 'success'
            when /reminded/ then 'danger'
            end
     badge(invoice_state_label(invoice), type)
@@ -48,12 +48,13 @@ module InvoicesHelper
   end
 
   def invoice_button(people: [], mailing_list: nil, filter: nil, group: nil)
-    Dropdown::InvoiceNew.new(self, 
-                             people: people,
-                             mailing_list: mailing_list,
-                             group: group,
-                             filter: filter
-                            ).button_or_dropdown
+    Dropdown::InvoiceNew.new(
+      self,
+      people: people,
+      mailing_list: mailing_list,
+      group: group,
+      filter: filter
+    ).button_or_dropdown
   end
 
   def invoices_export_dropdown
@@ -65,7 +66,7 @@ module InvoicesHelper
   end
 
   def invoices_print_dropdown
-    if parent.is_a?(InvoiceList) && Message::LetterWithInvoice.where(invoice_list: parent).exists?
+    if parent.is_a?(InvoiceList) && Message::LetterWithInvoice.exists?(invoice_list: parent)
       Dropdown::LetterWithInvoice.new(self, params, :print).print
     else
       Dropdown::Invoices.new(self, params, :print).print
@@ -82,13 +83,14 @@ module InvoicesHelper
 
   def invoice_receiver_address(invoice)
     return unless invoice.recipient_address
-    recipient_address_lines = invoice.recipient_address.split(/\n/)
+
+    recipient_address_lines = invoice.recipient_address.split("\n")
     content_tag(:p) do
       safe_join([
-        content_tag(:b) { recipient_address_lines.first },
-        *recipient_address_lines.drop(1),
-        mail_to(entry.recipient_email)
-      ], '<br/>'.html_safe)
+                  content_tag(:b) { recipient_address_lines.first },
+                  *recipient_address_lines.drop(1),
+                  mail_to(entry.recipient_email)
+                ], '<br/>'.html_safe)
     end
   end
 end

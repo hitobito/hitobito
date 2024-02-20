@@ -285,10 +285,37 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
 
   def load_priorities
     if entry.application && event.priorization && current_user
+
+      group_columns = Group.columns.map(&:name)
+      event_columns = Event.columns.map(&:name)
+
+      
+      max_event_columns = event_columns.map do |column_name|
+        column = Event.columns_hash[column_name]
+
+        if column && column.type != :boolean
+          "MAX(events.#{column_name}) AS #{column_name}"
+        else
+          "bool_and(events.#{column.name})"
+        end
+      end
+
+      max_group_columns = group_columns.map do |column_name|
+        column = Group.columns_hash[column_name]
+        if column && column.type != :boolean
+          "MAX(groups.#{column.name}) AS group_#{column.name}"
+        else
+          "bool_and(groups.#{column.name})"
+        end
+      end
+
+      select_list = max_event_columns + max_group_columns
+
       @alternatives = event.class.application_possible
                            .where(kind_id: event.kind_id)
                            .in_hierarchy(current_user)
-                           .includes(:groups)
+                           .joins(:groups)
+                           .select(select_list.join(', '))
                            .list
       @priority_2s = @priority_3s = (@alternatives.to_a - [event])
     end

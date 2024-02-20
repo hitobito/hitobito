@@ -285,40 +285,36 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
 
   def load_priorities
     if entry.application && event.priorization && current_user
-
-      group_columns = Group.columns.map(&:name)
-      event_columns = Event.columns.map(&:name)
-
-      
-      max_event_columns = event_columns.map do |column_name|
-        column = Event.columns_hash[column_name]
-
-        if column && column.type != :boolean
-          "MAX(events.#{column_name}) AS #{column_name}"
-        else
-          "bool_and(events.#{column.name})"
-        end
-      end
-
-      max_group_columns = group_columns.map do |column_name|
-        column = Group.columns_hash[column_name]
-        if column && column.type != :boolean
-          "MAX(groups.#{column.name}) AS group_#{column.name}"
-        else
-          "bool_and(groups.#{column.name})"
-        end
-      end
-
-      select_list = max_event_columns + max_group_columns
-
       @alternatives = event.class.application_possible
                            .where(kind_id: event.kind_id)
                            .in_hierarchy(current_user)
                            .joins(:groups)
-                           .select(select_list.join(', '))
+                           .select(generate_aggregate_queries("group", "event"))
                            .list
       @priority_2s = @priority_3s = (@alternatives.to_a - [event])
     end
+  end
+
+  # generates select list with MAX aggregate function with all arguments of passed model
+  def generate_aggregate_queries(*table_names)
+    select_list = []
+
+    table_names.each do |table_name|
+      columns = table_name.classify.constantize.columns
+      table = table_name.classify.constantize.arel_table
+
+      max_columns = columns.map do |column|
+        if column.type != :boolean
+          "MAX(#{table_name.pluralize}.#{column.name}) AS #{column.name}"
+        else
+          "bool_and(#{table_name.pluralize}.#{column.name}) AS #{column.name}"
+        end
+      end
+
+      select_list.concat(max_columns)
+    end
+
+    select_list.join(', ')
   end
 
   def load_answers

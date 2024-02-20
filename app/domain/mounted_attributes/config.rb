@@ -7,13 +7,14 @@
 
 module MountedAttributes
   class Config
-    attr_reader :target_class, :attr_name, :attr_type, :options,
-                :null, :enum, :default, :category
+    attr_reader :target_class, :attr_name, :attr_type, :type,
+                :options, :null, :enum, :default, :category
 
     def initialize(target_class, attr_name, attr_type, **options)
       @target_class = target_class
       @attr_name = attr_name
       @attr_type = attr_type
+      @type = ActiveModel::Type.lookup(attr_type)
 
       initialize_options(options)
     end

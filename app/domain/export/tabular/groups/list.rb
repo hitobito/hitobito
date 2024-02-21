@@ -15,6 +15,7 @@ module Export::Tabular::Groups
                         encrypted_text_message_username encrypted_text_message_password
                         letter_address_position text_message_provider text_message_originator
                         self_registration_notification_email custom_self_registration_title
+                        self_registration_require_adult_consent
                         main_self_registration_group privacy_policy_title privacy_policy)
     # rubocop:enable Style/MutableConstant
 

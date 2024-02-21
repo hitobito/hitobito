@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -8,7 +8,6 @@
 module Sheet
   class Invoice < Base
     def title
-      title = ::Invoice.model_name.human(count: 2)
       invoice_list ? invoice_list.title : ::Invoice.model_name.human(count: 2)
     end
 

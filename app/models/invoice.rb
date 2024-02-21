@@ -113,10 +113,8 @@ class Invoice < ActiveRecord::Base
     end
 
     def draft_or_issued(from:, to:)
-      from ||= Time.zone.today.beginning_of_year
-      to ||= Time.zone.today.end_of_year
-      from = Date.parse(from) if from.is_a? String
-      to = Date.parse(to) if to.is_a? String
+      from = Date.parse(from.to_s) rescue Time.zone.today.beginning_of_year # rubocop:disable Style/RescueModifier
+      to = Date.parse(to.to_s) rescue Time.zone.today.end_of_year # rubocop:disable Style/RescueModifier
 
       condition = OrCondition.new
       condition.or('issued_at >= :from AND issued_at <= :to', from: from, to: to)

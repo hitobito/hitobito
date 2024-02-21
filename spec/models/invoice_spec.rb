@@ -333,6 +333,12 @@ describe Invoice do
       filter = Invoice.draft_or_issued(from: today.beginning_of_year, to: today.end_of_year)
       expect(filter).to eq([issued])
     end
+
+    it 'does not crash with invalid dates' do
+      expect(Invoice.draft_or_issued(from: '0', to: Date.new(2019, 12, 31))).to have(2).items
+      expect(Invoice.draft_or_issued(from: Date.new(2019, 1, 1), to: nil)).to have(2).items
+      expect(Invoice.draft_or_issued(from: 'blørbaël', to: 'Zórgðœ')).to have(2).items
+    end
   end
 
   context 'sorting' do

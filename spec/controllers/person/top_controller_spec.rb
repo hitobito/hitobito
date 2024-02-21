@@ -16,9 +16,9 @@ describe Person::TopController do
   context 'GET show' do
 
     context 'html' do
-      it 'keeps flash' do
+      it 'keeps flash, does not add .html to url' do
         get :show, params: { id: top_leader.id }
-        is_expected.to redirect_to(group_person_path(top_leader.primary_group_id, top_leader.id, format: :html))
+        is_expected.to redirect_to(group_person_path(top_leader.primary_group_id, top_leader.id, format: nil))
       end
     end
 

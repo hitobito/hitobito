@@ -22,7 +22,9 @@ class Person::TopController < ApplicationController
 
   def redirect_to_home
     flash.keep if html_request?
-    redirect_to person_home_path(entry, format: request.format.to_sym)
+    format = request.format.to_sym
+    format = format == :html ? nil : format
+    redirect_to person_home_path(entry, format: format)
   end
 
   def authorize_action

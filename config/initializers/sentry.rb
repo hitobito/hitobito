@@ -41,6 +41,7 @@ Rails.application.reloader.to_prepare do
 
     misbehaving_client_errors = [
       'ActionDispatch::Http::MimeNegotiation::InvalidType',
+      'EOFError',
     ]
 
     config.excluded_exceptions += [

@@ -507,6 +507,6 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
     return unless changed_attrs.any? { |a| duplicate_attrs.include?(a) }
 
-    People::DuplicateLocatorJob.new(id).enqueue!
+    Person::DuplicateLocatorJob.new(id).enqueue!
   end
 end

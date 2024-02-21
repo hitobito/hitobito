@@ -9,39 +9,13 @@
 require 'spec_helper'
 
 describe People::DuplicateLocatorJob do
-  let(:person) { people(:bottom_member) }
-  let(:top_group) { groups(:top_group) }
-  let(:role_type) { Group::TopGroup::Member.sti_name }
-  let(:tomorrow) { Time.zone.tomorrow }
+  subject(:job) { described_class.new }
 
-  before do
-    # job is mocked in test env, see spec_helper
-    allow(People::DuplicateLocatorJob).to receive(:new).and_call_original
-  end
-
-  context 'with no job arguments' do
-    subject(:job) { described_class.new }
-
-    it 'Runs job concerning all person entries' do
-      expect(People::DuplicateLocator).to receive(:new)
-        .with(no_args)
-        .and_call_original
-
-      job.perform
-    end
-  end
-
-  context 'with specific person id' do
-    let(:people_ids) { Person.first.id }
-    subject(:job) { described_class.new(people_ids) }
-
-    it 'Runs job for a single person entry' do
-      people_scope = Person.where(id: Person.first.id)
-      expect(People::DuplicateLocator).to receive(:new)
-        .with(people_scope)
-        .and_call_original
-
-      job.perform
-    end
+  it 'calls Locator run and reschedules for next day' do
+    freeze_time
+    expect(People::DuplicateLocator).to receive_message_chain(:new, :run)
+    expect { job.perform }.to not_change { Person.count }
+      .and change { job.delayed_jobs.count }.by(1)
+    expect(job.delayed_jobs.first.run_at).to eq 1.day.from_now
   end
 end

@@ -6,21 +6,11 @@
 #  https://github.com/hitobito/hitobito.
 
 class People::DuplicateLocatorJob < RecurringJob
-  self.parameters = [:people_ids]
   run_every 1.day
 
-  def initialize(people_ids = nil)
-    super()
-    @people_scope = Person.where(id: people_ids) if people_ids
-  end
+  private
 
-  def perform
-    if @people_scope
-      locator = People::DuplicateLocator.new(@people_scope)
-    else
-      locator = People::DuplicateLocator.new
-    end
-    locator.run
+  def perform_internal
+    People::DuplicateLocator.new.run
   end
-
 end

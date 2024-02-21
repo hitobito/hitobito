@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -13,7 +13,10 @@ module Sheet
     end
 
     def parent_sheet
-      @parent_sheet ||= invoice_list ? create_parent(Sheet::InvoiceList) : nil
+      @parent_sheet ||= begin
+        parent_sheet_class = invoice_list ? Sheet::InvoiceList : Sheet::Group
+        create_parent(parent_sheet_class)
+      end
     end
 
     def invoice_list

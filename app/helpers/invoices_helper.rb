@@ -35,6 +35,10 @@ module InvoicesHelper
     end
   end
 
+  def format_invoice_last_payment_at(invoice)
+    f(invoice.payments.last&.received_at)
+  end
+
   def invoice_state_label(invoice)
     text = invoice.state_label
     text << " (#{invoice.payment_reminders.list.last.title})" if invoice.reminded?

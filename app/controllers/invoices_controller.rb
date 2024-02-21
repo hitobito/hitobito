@@ -15,7 +15,8 @@ class InvoicesController < CrudController
   self.nesting = Group
   self.optional_nesting = [InvoiceList]
 
-  self.sort_mappings = { recipient: Person.order_by_name_statement,
+  self.sort_mappings = { last_payment_at: Invoice.order_by_payment_statement,
+                         recipient: Person.order_by_name_statement,
                          sequence_number: Invoice.order_by_sequence_number_statement }
   self.remember_params += [:year, :state, :due_since, :invoice_list_id]
 
@@ -154,6 +155,7 @@ class InvoicesController < CrudController
   def list_entries
     scope = super.list
     scope = scope.includes(:recipient).references(:recipient)
+    scope = scope.joins(Invoice.last_payments_information)
     scope = scope.standalone if parent.is_a?(Group)
     scope = scope.page(params[:page]).per(50) unless params[:ids]
     Invoice::Filter.new(params).apply(scope)

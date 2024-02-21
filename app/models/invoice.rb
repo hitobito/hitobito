@@ -144,6 +144,21 @@ class Invoice < ActiveRecord::Base
         "CAST(SUBSTRING_INDEX(#{field}, '-', #{index}) AS UNSIGNED)"
       end
     end
+
+    def order_by_payment_statement
+      'last_payments.received_at'
+    end
+
+    def last_payments_information
+      <<~SQL.squish
+        LEFT OUTER JOIN (
+          SELECT invoice_id,
+                 MAX(received_at) AS received_at
+          FROM payments
+          GROUP BY invoice_id
+        ) AS last_payments ON invoices.id = last_payments.invoice_id
+      SQL
+    end
   end
 
   delegate :logo_position, to: :invoice_config

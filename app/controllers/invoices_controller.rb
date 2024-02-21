@@ -16,6 +16,7 @@ class InvoicesController < CrudController
   self.optional_nesting = [InvoiceList]
 
   self.sort_mappings = { last_payment_at: Invoice.order_by_payment_statement,
+                         amount_paid: Invoice.order_by_amount_paid_statement,
                          recipient: Person.order_by_name_statement,
                          sequence_number: Invoice.order_by_sequence_number_statement }
   self.remember_params += [:year, :state, :due_since, :invoice_list_id]

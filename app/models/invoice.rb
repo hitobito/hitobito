@@ -149,11 +149,16 @@ class Invoice < ActiveRecord::Base
       'last_payments.received_at'
     end
 
+    def order_by_amount_paid_statement
+      'last_payments.amount_paid'
+    end
+
     def last_payments_information
       <<~SQL.squish
         LEFT OUTER JOIN (
           SELECT invoice_id,
-                 MAX(received_at) AS received_at
+                 MAX(received_at) AS received_at,
+                 SUM(amount) AS amount_paid
           FROM payments
           GROUP BY invoice_id
         ) AS last_payments ON invoices.id = last_payments.invoice_id

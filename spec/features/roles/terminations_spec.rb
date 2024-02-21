@@ -45,8 +45,7 @@ describe :roles_terminations, js: true do
 
     submit_with_terminate_on(terminate_on)
 
-    expect(page).to have_current_path(group_person_path(group_id: role.group_id, id: person.id,
-                                                        format: :html))
+    expect(page).to have_current_path(group_person_path(group_id: role.group_id, id: person.id))
     within('#flash') do
       formatted_date = I18n.l(terminate_on)
       expect(page).to have_content("Du bist erfolgreich ausgetreten per #{formatted_date}")

@@ -62,7 +62,7 @@ describe StepsComponent::ContentComponent, type: :component do
     end
     let(:iterator) { double(:iterator, index: 0, last?: false) }
     let(:policy_finder) { double(:policy_finder, acceptance_needed?: true, groups: []) }
-    let(:entry) { double(:entry, partials: [:partial]) }
+    let(:entry) { double(:entry, partials: [:partial], require_adult_consent: false) }
 
     subject(:html) { render_inline(component) }
 
@@ -75,6 +75,7 @@ describe StepsComponent::ContentComponent, type: :component do
       stub_const("TestPerson", Class.new(SelfRegistration::Person) do # rubocop:disable Lint/ConstantDefinitionInBlock
         yield self
         self.attrs += [:privacy_policy_accepted]  ## needed for internal validations
+        def requires_adult_consent?; false; end
       end)
       expect(object).to receive(:main_person).and_return(TestPerson.new)
     end

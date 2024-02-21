@@ -3,50 +3,51 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
-= f.fields_for(:main_person_attributes, f.object.main_person) do |f|
+= f.fields_for(:main_person_attributes, f.object.main_person) do |ff|
   = field_set_tag do
-    = f.error_messages
+    = ff.error_messages
 
     - [:first_name, :last_name, :nick_name, :company_name].each do |attr|
-      = f.labeled_input_field attr if f.object.attr?(attr)
+      = ff.labeled_input_field attr if ff.object.attr?(attr)
 
-    - if f.object.attr?(:company)
-      = f.labeled_boolean_field :company
+    - if ff.object.attr?(:company)
+      = ff.labeled_boolean_field :company
 
-    - if [:address, :zip_code, :town, :country].all? { |field| f.object.attr?(field) }
-      = render 'contactable/address_fields', f: f
+    - if [:address, :zip_code, :town, :country].all? { |field| ff.object.attr?(field) }
+      = render 'contactable/address_fields', f: ff
 
-    - if f.object.attr?(:email)
-      = f.labeled_input_field :email, help_inline: t('people.email_field.used_as_login'), class: 'd-inline'
+    - if ff.object.attr?(:email)
+      = ff.labeled_input_field :email, help_inline: t('people.email_field.used_as_login'), class: 'd-inline'
 
-    - if f.object.attr?(:gender)
+    - if ff.object.attr?(:gender)
       = field_set_tag do
-        = f.labeled(:gender) do
+        = ff.labeled(:gender) do
           - (Person::GENDERS + ['']).each do |key|
-            = f.inline_radio_button(:gender, key, f.object.gender_label(key))
+            = ff.inline_radio_button(:gender, key, ff.object.gender_label(key))
 
 
-    - if f.object.attr?(:birthday)
-      = f.labeled_date_field :birthday
+    - if ff.object.attr?(:birthday)
+      = ff.labeled_date_field :birthday
 
-    - if f.object.attr?(:phone_number_attributes)
+    - if ff.object.attr?(:phone_number_attributes)
       = field_set_tag do
-        = f.labeled_inline_fields_for :phone_numbers do |ff|
+        = ff.labeled_inline_fields_for :phone_numbers do |ff|
           %div.col-5.inline
-            = ff.input_field(:number, placeholder: PhoneNumber.human_attribute_name(:number))
+            = fff.input_field(:number, placeholder: PhoneNumber.human_attribute_name(:number))
           %div.col-2.inline.row
-            = ff.collection_select(:translated_label, PhoneNumber.available_labels, :to_s, :to_s, {}, class: 'form-select form-select-sm h-100')
-          = ff.hidden_field(:public)
+            = fff.collection_select(:translated_label, PhoneNumber.available_labels, :to_s, :to_s, {}, class: 'form-select form-select-sm h-100')
+          = fff.hidden_field(:public)
 
-    - if f.object.attr?(:additional_information)
-      = f.labeled(:additional_information, t('.notes')) do
-        = f.text_area(:additional_information)
+    - if ff.object.attr?(:additional_information)
+      = ff.labeled(:additional_information, t('.notes')) do
+        = ff.text_area(:additional_information)
 
   - if entry.partials.one?
+    = render 'groups/self_registration/adult_consent_field', f: ff
     = field_set_tag(nil, class: 'privacy-policy-fields') do
-      = render('people/privacy_policy_acceptance_field', f: f, policy_finder: policy_finder)
+      = render('people/privacy_policy_acceptance_field', f: ff, policy_finder: policy_finder)
 
-  = render_extensions :main_person, locals: { f: f }
+  = render_extensions :main_person, locals: { f: ff }
 
 .btn-toolbar.bottom.align-with-form
   = c.next_button

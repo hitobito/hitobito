@@ -15,6 +15,7 @@ class SelfRegistration::Person
   class_attribute :attrs, default: required_attrs + [
     :gender, :primary_group, :household_key, :_destroy, :household_emails
   ]
+  class_attribute :active_model_only, default: []
 
   def initialize(attributes = {})
     # We call `define_attributes` here, because we want to be able to override the attributes
@@ -79,6 +80,10 @@ class SelfRegistration::Person
   end
 
   private
+
+  def attributes
+    super.except(*active_model_only.collect(&:to_s))
+  end
 
   def assert_email
     unless Truemail.validate(email.to_s, with: :regex).result.success

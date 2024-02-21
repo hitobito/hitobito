@@ -725,6 +725,9 @@ de:
       no_deleted_sub_groups: 'Keine gelöschten Gruppen vorhanden.'
     form:
       help_contact: 'Adresse und öffentliche Telefonnummern dieser Person verwenden.'
+      help_self_registration_require_adult_consent:
+        Bei der Registrierung abfragen, ob die Person schon 18 Jahre ist bzw. das Einverständnis der
+        Erziehungsberechtigten hat.
       help_main_self_registration_group: 'Den Registrierungslink dieser Gruppe auf der Hauptloginseite anzeigen.'
       hint_external_registration: 'Es sind keine Rollen mit Schreibrechten auswählbar'
     form_tabs:
@@ -759,6 +762,9 @@ de:
         to_login_page: Anmelden und Einschreiben
       main_person:
         notes: Bemerkungen
+      adult_consent_field:
+        caption: Ich bestätige dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner
+          Erziehungsberechtigten habe.
       create:
         email_taken: E-Mail wird bereits verwendet. Melde dich an oder registrier dich mit einer anderen E-Mail-Adresse.
         flash:

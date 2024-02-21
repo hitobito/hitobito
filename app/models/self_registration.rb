@@ -28,9 +28,7 @@ class SelfRegistration
   end
 
   def valid?
-    partials_for_validation.collect do |partial|
-      move_to_unless_valid?(partial, send("#{partial}_valid?"))
-    end.all?
+    super && validate_visited_partials
   end
 
   def main_person
@@ -51,7 +49,13 @@ class SelfRegistration
 
   private
 
-  def partials_for_validation
+  def validate_visited_partials
+    visited_partials.collect do |partial|
+      move_to_unless_valid?(partial, send("#{partial}_valid?"))
+    end.all?
+  end
+
+  def visited_partials
     partials.take(@step + 1).reverse
   end
 

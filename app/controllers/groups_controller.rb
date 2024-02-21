@@ -21,6 +21,7 @@ class GroupsController < CrudController
     :remove_privacy_policy,
     :self_registration_notification_email,
     :self_registration_role_type,
+    :self_registration_require_adult_consent,
     :main_self_registration_group,
     :custom_self_registration_title
   ]

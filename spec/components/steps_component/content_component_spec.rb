@@ -75,6 +75,7 @@ describe StepsComponent::ContentComponent, type: :component do
       stub_const("TestPerson", Class.new(SelfRegistration::Person) do # rubocop:disable Lint/ConstantDefinitionInBlock
         yield self
         self.attrs += [:privacy_policy_accepted]  ## needed for internal validations
+        def requires_adult_consent?; false; end
       end)
       expect(object).to receive(:main_person).and_return(TestPerson.new)
     end

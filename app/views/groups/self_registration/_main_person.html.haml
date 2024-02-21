@@ -43,7 +43,7 @@
         = ff.text_area(:additional_information)
 
   - if entry.partials.one?
-    = render 'adult_consent_field', f: ff
+    = render 'groups/self_registration/adult_consent_field', f: ff
     = field_set_tag(nil, class: 'privacy-policy-fields') do
       = render('people/privacy_policy_acceptance_field', f: ff, policy_finder: policy_finder)
 

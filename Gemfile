@@ -88,6 +88,7 @@ gem 'sqlite3' # required for asset generation
 gem 'strip_attributes' # strip whitespace of attributes
 gem 'thinking-sphinx'
 gem 'truemail'
+gem 'turbo-rails'
 gem 'validates_by_schema'
 gem 'validates_timeliness'
 gem 'vcard'

@@ -5,15 +5,15 @@
     %meta{charset: 'utf-8'}
     %title= "#{Settings.application.name} - #{title}"
     %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0'}
-    %meta{name: 'turbolinks-cache-control', content: 'no-cache'}
+    %meta{name: 'turbo-cache-control', content: 'no-cache'}
 
     = csrf_meta_tag
     = wagon_favicon_pack_tag 'favicon.ico'
 
-    = stylesheet_pack_tag 'oauth', media: 'screen', 'data-turbolinks-track': true
+    = stylesheet_pack_tag 'oauth', media: 'screen', 'data-turbo-track': true
     - if Rails.env.test?
       = stylesheet_pack_tag 'disable_animations'
-    = javascript_pack_tag 'application', 'data-turbolinks-track': true
+    = javascript_pack_tag 'application', 'data-turbo-track': true
 
     = yield(:head)
 

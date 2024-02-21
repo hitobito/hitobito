@@ -3,7 +3,6 @@
   - if can?(:manage_tags, person)
     = link_to icon(:times),
               group_person_tags_path(person_id: person.id, name: tag.name),
-              method: :delete,
-              data: { tag_id: tag.id },
+              data: { tag_id: tag.id, method: :delete },
               remote: true,
               class: 'person-tag-remove'

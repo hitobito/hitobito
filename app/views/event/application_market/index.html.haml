@@ -18,7 +18,7 @@
   .col-3
     %span#booking_info= event.booking_info
 
-#main.row
+#main.row{data: { turbo: 'false' }}
   %article.col-6
     %h2= t('.assigned_participants')
     %p.pt-1.mb-3

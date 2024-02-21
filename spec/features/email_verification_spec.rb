@@ -40,6 +40,7 @@ describe 'Email verification', js: true do
       fill_in 'E-Mail', with: 'test@example.com'
       expect do
         first(:button, 'Speichern').click
+        expect(page).to have_content 'Person Bottom Member wurde erfolgreich aktualisiert.'
       end.to change { person.reload.email }.to('test@example.com')
       is_expected.not_to have_text('E-Mail-Adresse muss noch bestätigt werden')
     end
@@ -81,8 +82,8 @@ describe 'Email verification', js: true do
       fill_in 'E-Mail', with: 'test@example.com'
       expect do
         first(:button, 'Speichern').click
+        is_expected.to have_text('E-Mail-Adresse muss noch bestätigt werden')
       end.not_to change { person.reload.email }
-      is_expected.to have_text('E-Mail-Adresse muss noch bestätigt werden')
     end
   end
 
@@ -99,7 +100,6 @@ describe 'Email verification', js: true do
       fill_in 'person_login_identity', with: person.email
       fill_in 'person_password', with: password
       click_button 'Anmelden'
-
       is_expected.to have_text('Du musst Deinen Account bestätigen, bevor Du fortfahren kannst.')
     end
   end
@@ -119,6 +119,7 @@ describe 'Email verification', js: true do
         fill_in 'Neues Passwort', with: password
         fill_in 'Neues Passwort bestätigen', with: password
         click_button 'Passwort ändern'
+        expect(page).to have_content 'Dein Passwort wurde geändert.'
       end.to change { person.reload.confirmed_at }.from(nil)
     end
 
@@ -130,6 +131,7 @@ describe 'Email verification', js: true do
         fill_in 'Neues Passwort', with: password
         fill_in 'Neues Passwort bestätigen', with: password
         click_button 'Passwort ändern'
+        expect(page).to have_content 'Dein Passwort wurde geändert.'
       end.not_to change { person.reload.confirmed_at }.from(nil)
     end
   end
@@ -148,6 +150,7 @@ describe 'Email verification', js: true do
         fill_in 'Neues Passwort', with: password
         fill_in 'Neues Passwort bestätigen', with: password
         click_button 'Passwort ändern'
+        expect(page).to have_content 'Dein Passwort wurde geändert.'
       end.to change { person.reload.confirmed_at }.from(nil)
     end
 
@@ -165,6 +168,7 @@ describe 'Email verification', js: true do
         fill_in 'Neues Passwort', with: password
         fill_in 'Neues Passwort bestätigen', with: password
         click_button 'Passwort ändern'
+        expect(page).to have_content 'Dein Passwort wurde geändert.'
       end.not_to change { person.reload.confirmed_at }.from(nil)
     end
   end
@@ -191,6 +195,7 @@ describe 'Email verification', js: true do
         fill_in 'Neues Passwort', with: password
         fill_in 'Neues Passwort bestätigen', with: password
         click_button 'Passwort ändern'
+        expect(page).to have_content 'Dein Passwort wurde geändert.'
       end.not_to change { person.reload.email }
     end
 
@@ -213,6 +218,7 @@ describe 'Email verification', js: true do
         fill_in 'Neues Passwort', with: password
         fill_in 'Neues Passwort bestätigen', with: password
         click_button 'Passwort ändern'
+        expect(page).to have_content 'Dein Passwort wurde geändert.'
       end.not_to change { person.reload.email }
     end
   end

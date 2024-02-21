@@ -7,7 +7,7 @@
 - if entries.present?
   .mt-3
     = invoice_sending_dropdown
-    = action_button(t('invoices.cancel'), group_invoice_list_path(group, invoice_list_id: invoice_list&.id), :'trash-alt', method: :delete, data: { checkable: true })
+    = action_button(t('invoices.cancel'), group_invoice_list_path(group, invoice_list_id: invoice_list&.id), :'trash-alt', 'data-method': :delete, data: { checkable: true })
     = invoices_export_dropdown
     = invoices_print_dropdown
 

@@ -353,7 +353,7 @@ describe RolesController do
         expect do
           put :update, params: { group_id: group.id, id: role.id, role: { delete_on: yesterday } }
         end.to change { Role.count }.by(-1)
-        expect(response).to redirect_to(person_path(person))
+        expect(response).to redirect_to(person_path(person, format: :html))
         expect(flash[:notice]).to eq "Rolle <i>Member (bis #{yesterday.strftime('%d.%m.%Y')})</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich gelöscht."
       end
 

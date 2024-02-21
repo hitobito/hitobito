@@ -49,12 +49,11 @@ describe 'Future Roles behaviour', js: :true do
       fill_in 'Bis', with: yesterday
       expect do
         first(:button, 'Speichern').click
+        expect(page).to have_content "Rolle Member (bis #{I18n.l(yesterday)}) für Bottom Member in " \
+          'Bottom One wurde erfolgreich gelöscht.'
       end.to change { bottom_member.roles.with_deleted.count }.by(1)
-      expect(page).to have_content "Rolle Member (bis #{I18n.l(yesterday)}) für Bottom Member in " \
-        'Bottom One wurde erfolgreich gelöscht.'
     end
   end
-
 
   describe 'group bottom_members list' do
     it 'hides pill if no future roles exist' do
@@ -172,6 +171,8 @@ describe 'Future Roles behaviour', js: :true do
       fill_in 'Von', with: tomorrow
       expect do
         first(:button, 'Speichern').click
+        expect(page).to have_content "Rolle Member (ab #{I18n.l(tomorrow)}) für Bottom Member in " \
+          'Bottom One wurde erfolgreich erstellt.'
       end.to change { bottom_member.roles.count }.by(1)
 
       role = bottom_member.roles.last
@@ -203,6 +204,7 @@ describe 'Future Roles behaviour', js: :true do
       expect do
         click_on 'Speichern'
         expect(page).not_to have_css '.popover'
+        expect(page).to have_text 'Leader (ab'
       end.to change { existing_role_attrs[:convert_to] }
         .from(role_type).to('Group::TopGroup::Leader')
         .and(not_change { existing_role_attrs[:convert_on] })

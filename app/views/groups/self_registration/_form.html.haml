@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
-= standard_form(entry, url: group_self_registration_path) do |f|
+= standard_form(entry, url: group_self_registration_path, data: { turbo: 'false' }) do |f|
   = render 'fields', f: f
 
 - if entry.first_step?

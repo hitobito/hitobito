@@ -45,7 +45,7 @@ describe PersonDuplicates::IgnoreController do
       it 'ignores duplicate entry' do
         sign_in(layer_leader)
 
-        post :create, xhr: true, params: { group_id: layer.id, id: duplicate_entry.id }
+        post :create, params: { group_id: layer.id, id: duplicate_entry.id }
 
         expect(response).to redirect_to(group_person_duplicates_path(layer))
 

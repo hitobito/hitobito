@@ -8,7 +8,7 @@
 class Event::ParticipationBanner
 
   delegate :t, :action_button, :can?, :group_event_participation_path,
-    :content_tag, :safe_join, :parent, to: :@context
+           :content_tag, :safe_join, :parent, to: :@context
   delegate :pending?, :waiting_list?, to: :@user_participation
 
   def initialize(user_participation, event, context)
@@ -32,13 +32,13 @@ class Event::ParticipationBanner
   end
 
   def status_text
-    if waiting_list?
-      key = 'waiting_list'
-    elsif pending?
-      key = 'pending'
-    else
-      key = 'explanation'
-    end
+    key = if waiting_list?
+            'waiting_list'
+          elsif pending?
+            'pending'
+          else
+            'explanation'
+          end
 
     t("event.participations.cancel_application.#{key}")
   end
@@ -61,7 +61,7 @@ class Event::ParticipationBanner
         confirm: t('event.participations.cancel_application.confirmation'),
         method: :delete
       },
-      class: "ms-2"
+      class: 'ms-2'
     )
   end
 

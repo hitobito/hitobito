@@ -40,7 +40,7 @@ describe PersonDuplicates::MergeController do
       it 'merges duplicate entry' do
         sign_in(layer_leader)
 
-        post :create, xhr: true, params: { group_id: layer.id, id: duplicate_entry.id, person_duplicate: { dst_person: 'person_2' }}
+        post :create, params: { group_id: layer.id, id: duplicate_entry.id, person_duplicate: { dst_person: 'person_2' }}
 
         expect(PersonDuplicate.where(id: duplicate_entry.id)).not_to exist
         expect(Person.where(id: person_1.id)).not_to exist

@@ -58,10 +58,10 @@ module Sheet
     end
 
     tab 'groups.tabs.logs',
-      :group_log_path,
-      if: (lambda do |view, group|
-        view.can?(:log, group)
-      end)
+        :group_log_path,
+        if: (lambda do |view, group|
+          view.can?(:log, group)
+        end)
 
     tab 'groups.tabs.deleted',
         :deleted_subgroups_group_path,
@@ -103,7 +103,7 @@ module Sheet
 
     def breadcrumbs
       entry.parent.hierarchy.collect do |g|
-        link_to(g.to_s, group_path(g), data: { disable_with: g.to_s })
+        link_to(g.to_s, group_path(g), data: { turbo_submits_with: g.to_s })
       end
     end
 
@@ -116,7 +116,7 @@ module Sheet
     end
 
     def belongs_to
-      translate(:belongs_to).html_safe + # rubocop:disable Rails/OutputSafety
+      translate(:belongs_to).html_safe +
         FormatHelper::EMPTY_STRING +
         FormatHelper::EMPTY_STRING
     end

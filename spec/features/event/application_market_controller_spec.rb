@@ -180,6 +180,7 @@ describe Event::ApplicationMarketController do
 
           find('#waiting_list').set(true)
           click_button('Aktualisieren')
+          expect(page).to have_css('#applications tr', count: 2)
 
           participants = find('#participants').text
           applications = find('#applications').text
@@ -272,6 +273,7 @@ describe Event::ApplicationMarketController do
     it 'may be closed with cancel link' do
       sign_in
       visit group_event_application_market_index_path(group.id, event.id)
+      sleep 0.1 # wait for popover to be setup
 
       appl1_id = "event_participation_#{appl_prio_1.id}"
       expect(page).to have_selector("#applications ##{appl1_id} td .fa-minus")

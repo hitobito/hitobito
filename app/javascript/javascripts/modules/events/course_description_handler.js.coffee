@@ -56,6 +56,6 @@ app.EventDescription = {
 
 $(document).on('change', 'select#event_kind_id', app.EventDescription.changeEventKind)
 $(document).on('click', '.standard-description-link', app.EventDescription.insertDescription)
-$(document).on('turbolinks:load', ->
+$(document).on('turbo:load', ->
   $('select#event_kind_id').each((i, e) ->
     app.EventDescription.enableDefaultLink($(e).val())))

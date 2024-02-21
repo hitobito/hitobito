@@ -1,4 +1,4 @@
-$(document).on('turbolinks:load', ->
+$(document).on('turbo:load', ->
   $('.collapse.in').addClass('shown')
 
   $('.collapse').on 'shown', () ->

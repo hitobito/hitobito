@@ -13,7 +13,7 @@ module Dropdown
 
     def initialize(template, params)
       super(template, translate(:button), :envelope)
-      @params      = params
+      @params = params
       @invoice_list_id = template.invoice_list&.id
       init_items
     end

@@ -34,7 +34,7 @@ $(document).on('change', 'input#range_deep', (e) -> showAllGroups(e.target))
 $(document).on('change', 'input#range_layer', (e) -> showSameLayerGroups(e.target))
 $(document).on('change', 'input#range_group', (e) -> showSameGroup(e.target))
 
-$(document).on('turbolinks:load', ->
+$(document).on('turbo:load', ->
   $('input#range_deep').each((i, e) -> showAllGroups(e))
   $('input#range_layer').each((i, e) -> showSameLayerGroups(e))
   $('input#range_group').each((i, e) -> showSameGroup(e))

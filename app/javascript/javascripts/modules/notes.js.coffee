@@ -28,7 +28,7 @@ app.Notes = {
 }
 
 
-$(document).on('turbolinks:load', ->
+$(document).on('turbo:load', ->
   $('#notes-new-button').on('click', app.Notes.focus)
   $('#notes-form .cancel').on('click', new app.ElementSwapper().swap)
   $('#notes-form .cancel').on('click', ->

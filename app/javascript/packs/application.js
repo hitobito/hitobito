@@ -23,9 +23,7 @@ import 'regenerator-runtime/runtime';
  */
 import 'jquery';
 import Rails from 'jquery-ujs';
-// Rails.start();
 import 'moment'; // used by events/date_period_validator.js.coffee
-import 'jquery.turbolinks/vendor/assets/javascripts/jquery.turbolinks';
 
 // jQuery UI
 import 'jquery-ui/ui/widgets/datepicker';
@@ -41,7 +39,7 @@ import 'bootstrap/js/src/button'
 import 'bootstrap/js/src/collapse'
 import 'bootstrap/js/src/dropdown'
 import 'bootstrap/js/src/modal'
-import 'bootstrap/js/src/popover'
+import  Popover  from 'bootstrap/js/src/popover'
 import 'bootstrap/js/src/scrollspy'
 import 'bootstrap/js/src/tab'
 // import 'bootstrap/js/src/toast'
@@ -64,9 +62,16 @@ import "controllers";
 
 // Custom scripts from all wagons
 import '../javascripts/wagons';
+import '@hotwired/turbo-rails';
 
-import * as turbolinks from 'turbolinks';
-turbolinks.start();
+import { Application } from "@hotwired/stimulus"
+import { Turbo } from "@hotwired/turbo-rails"
+
+const application = Application.start()
+// application.debug = true
+window.Stimulus   = application
+window.Popover = Popover
+
 
 /**
  * Images

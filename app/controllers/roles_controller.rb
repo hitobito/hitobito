@@ -242,7 +242,8 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
   def after_update_location
     return group_person_path(entry.group_id, entry.person_id) unless entry.deleted?
 
-    can?(:show, entry.person) ? person_path(entry.person_id) : group_path(parent)
+    # NOTE - as people#show responds to explicit result turbo_stream format
+    can?(:show, entry.person) ? person_path(entry.person_id, format: :html) : group_path(parent)
   end
 
   def set_group_selection

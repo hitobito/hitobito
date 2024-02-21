@@ -173,7 +173,7 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
     return nel;
   };
 
-  $(document).on("turbolinks:load", function() {
+  $(document).on("turbo:load turbo:frame-load", function() {
     app.setupQuicksearch();
     $("[data-provide=entity]").each(app.setupEntityTypeahead);
     $("[data-provide=typeahead]").each(app.setupStaticTypeahead);
@@ -181,5 +181,6 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
       return $(this).attr("autocomplete", "off");
     });
   });
+
 
 }).call(this);

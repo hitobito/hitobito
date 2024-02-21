@@ -103,7 +103,7 @@ module Sheet
         group_name   = sanitize(decorated.to_s, tags: %w(i))
 
         li + link_to(display_name, active_path(group),
-                     title: group_name, data: { disable_with: display_name })
+                     title: group_name, data: { turbo_submits_with: display_name })
       end
 
       def render_deleted_people_link
@@ -123,7 +123,7 @@ module Sheet
             l.use_hierarchy_from_parent(layer)
             content_tag(:li, class: l.archived_class) do
               link_to(l.display_name, active_path(l),
-                      title: l.to_s, data: { disable_with: l.display_name })
+                      title: l.to_s, data: { turbo_submits_with: l.display_name })
             end
           end
         end

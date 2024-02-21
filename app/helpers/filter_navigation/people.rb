@@ -39,7 +39,7 @@ module FilterNavigation
       Role::Kinds.each do |kind|
         name = if group.archived?
                  I18n.t('activerecord.attributes.role.class.archived',
-                      role_kind: I18n.t("activerecord.attributes.role.class.kind.#{kind}.other"))
+                        role_kind: I18n.t("activerecord.attributes.role.class.kind.#{kind}.other"))
                else
                  I18n.t("activerecord.attributes.role.class.kind.#{kind}.other")
                end

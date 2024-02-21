@@ -10,16 +10,17 @@
     %meta{charset: 'utf-8'}
     %title= "#{Settings.application.name} - #{title}"
     %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0'}
-    %meta{name: 'turbolinks-cache-control', content: 'no-cache'}
+    %meta{name: 'turbo-cache-control', content: 'no-cache'}
+    %meta{name: 'turbo-prefetch', content: 'false'}
 
     = csrf_meta_tag
     = wagon_favicon_pack_tag 'favicon.ico'
 
-    = stylesheet_pack_tag 'application', media: 'screen', 'data-turbolinks-track': true
+    = stylesheet_pack_tag 'application', media: 'screen', 'data-turbo-track': true
     = stylesheet_pack_tag 'print', media: 'print'
     - if Rails.env.test?
       = stylesheet_pack_tag 'disable_animations'
-    = javascript_pack_tag 'application', 'data-turbolinks-track': true
+    = javascript_pack_tag 'application', 'data-turbo-track': true
 
     = yield(:head)
 
@@ -47,7 +48,7 @@
             - else
               = render 'layouts/languages'
             = link_to current_user, person_home_path(current_user), class: 'd-none d-md-block'
-            = link_to t('layouts.nav.sign_out'), sign_out_path, method: "delete", class: 'd-none d-md-block'
+            = link_to t('layouts.nav.sign_out'), sign_out_path, 'data-method': :delete, class: 'd-none d-md-block'
           - elsif current_user.nil? # nil without login, false on error
             = render 'layouts/unauthorized'
 

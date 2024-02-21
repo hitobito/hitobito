@@ -20,6 +20,7 @@ module Dropdown
     def init_items
       ::Event.all_types.each do |event|
         next unless authorized?(event)
+
         add_item(event.label,
                  build_event_participation_lists_path(event),
                  **participation_lists_options)

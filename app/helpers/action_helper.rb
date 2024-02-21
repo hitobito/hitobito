@@ -11,14 +11,14 @@ module ActionHelper
   # Uses the current record if none is given.
   def button_action_show(path = nil, options = {})
     path ||= path_args(entry)
-    action_button ti(:"link.show"), path, 'zoom-in', options
+    action_button ti(:'link.show'), path, 'zoom-in', options
   end
 
   # Standard button action to the edit page of a given record.
   # Uses the current record if none is given.
   def button_action_edit(path = nil, options = {})
     path ||= path_args(entry)
-    action_button ti(:"link.edit"),
+    action_button ti(:'link.edit'),
                   path.is_a?(String) ? path : edit_polymorphic_path(path),
                   'edit',
                   options
@@ -30,14 +30,14 @@ module ActionHelper
     path ||= path_args(entry)
     options[:data] ||= {}
     options[:data].reverse_merge!(confirm: ti(:confirm_delete), method: :delete)
-    action_button ti(:"link.delete"), path, 'trash-alt', options
+    action_button ti(:'link.delete'), path, 'trash-alt', options
   end
 
   # Standard button action to the list page.
   # Links to the current model_class if no path is given.
   def button_action_index(path = nil, url_options = { returning: true }, options = {})
     path ||= path_args(model_class)
-    action_button ti(:"link.list"),
+    action_button ti(:'link.list'),
                   path.is_a?(String) ? path : polymorphic_path(path, url_options),
                   'list',
                   options
@@ -47,7 +47,7 @@ module ActionHelper
   # Links to the current model_class if no path is given.
   def button_action_add(path = nil, url_options = {}, options = {})
     path ||= path_args(model_class)
-    action_button ti(:"link.add"),
+    action_button ti(:'link.add'),
                   path.is_a?(String) ? path : new_polymorphic_path(path, url_options),
                   'plus',
                   options
@@ -60,8 +60,8 @@ module ActionHelper
     remote = options[:remote]
     link_to(icon(:edit),
             path.is_a?(String) ? path : edit_polymorphic_path(path),
-            title: ti(:"link.edit"),
-            alt: ti(:"link.edit"),
+            title: ti(:'link.edit'),
+            alt: ti(:'link.edit'),
             remote: remote)
   end
 
@@ -72,10 +72,9 @@ module ActionHelper
     link_to label,
             path,
             class: 'action',
-            title: ti(:"link.delete"),
-            alt: ti(:"link.delete"),
-            data: { confirm: ti(:confirm_delete),
-                    method: :delete }
+            title: ti(:'link.delete'),
+            alt: ti(:'link.delete'),
+            data: { confirm: ti(:confirm_delete), method: :delete }
   end
 
   private

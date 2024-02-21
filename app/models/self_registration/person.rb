@@ -60,7 +60,7 @@ class SelfRegistration::Person
   delegate :gender_label, to: :person
 
   def save!
-    person.save! && role.save!
+    person.save! && role.save! && enqueue_duplicate_locator_job
   end
 
   def person
@@ -80,6 +80,10 @@ class SelfRegistration::Person
   end
 
   private
+
+  def enqueue_duplicate_locator_job
+    ::Person::DuplicateLocatorJob.new(person.id).enqueue!
+  end
 
   def attributes
     super.except(*active_model_only.collect(&:to_s))

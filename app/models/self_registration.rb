@@ -23,7 +23,6 @@ class SelfRegistration
   def save!
     ::Person.transaction do
       main_person.save!
-      Person::DuplicateLocatorJob.new(main_person.person.id).enqueue!
       yield if block_given?
     end
   end

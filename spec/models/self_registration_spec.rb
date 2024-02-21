@@ -93,6 +93,14 @@ describe SelfRegistration do
         expect(Person.find_by(first_name: 'test').household_key).to be_nil
       end
 
+      it 'enqueues DuplicateLocatorJob for newly created person' do
+        registration.main_person_attributes = { first_name: 'test' }
+        registration.save!
+        person = Person.find_by(first_name: 'test')
+        job = Delayed::Job.find_by("handler like '%Person::DuplicateLocatorJob%person_id: #{person.id}%'")
+        expect(job).to be_present
+      end
+
       it 'raises if save! fails' do
         registration.main_person_attributes = { email: 'top.leader@example.com' }
         expect { registration.save! }.to raise_error(ActiveRecord::RecordInvalid)

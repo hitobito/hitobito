@@ -23,19 +23,16 @@ describe :event_external_application do
 
     expect do
       find_all('.bottom .btn-group button[type="submit"]').first.click # submit
+      is_expected.to have_text('Anmeldung als Teilnehmer/-in')
     end.to change { Person.count }.by(1)
 
     fill_in('Bemerkungen', with: 'Wichtige Bemerkungen über meine Teilnahme')
 
     expect do
       click_button('Anmelden')
+      is_expected.to have_text("Teilnahme von Max Muster in #{event.name} wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.")
+      is_expected.to have_text('Wichtige Bemerkungen über meine Teilnahme')
     end.to change { Event::Participation.count }.by(1)
-
-    person = Person.find_by(email: 'max.muster@hitobito.example.com')
-    expect(person).to be_present
-
-    is_expected.to have_text("Teilnahme von #{person.full_name} in #{event.name} wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.")
-    is_expected.to have_text('Wichtige Bemerkungen über meine Teilnahme')
 
   end
 end

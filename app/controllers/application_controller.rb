@@ -16,6 +16,7 @@ class ApplicationController < ActionController::Base
   include Sentry
   include ParamConverters
   include PaperTrailed
+  include Turbo::Redirection
 
   # protect with null_session only in specific api controllers
   protect_from_forgery with: :exception

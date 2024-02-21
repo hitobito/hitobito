@@ -34,7 +34,7 @@ module Dropdown
     end
 
     def render_items
-      options = { class: 'dropdown-menu float-end', data: { persistent: true }, role: 'menu' }
+      options = { class: 'dropdown-menu float-end', data: { turbo_permanent: true }, role: 'menu' }
 
       content_tag(:ul, options) do
         items = table_display.available(@list).collect do |column|
@@ -68,7 +68,7 @@ module Dropdown
       {
         id: dom_id(parent),
         class: 'table-display-dropdown',
-        data: { turbolinks_permanent: 1 }
+        data: { turbo_permanent: 1 }
       }
     end
 

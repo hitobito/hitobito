@@ -73,8 +73,8 @@ module FormHelper
     end
   end
 
-  def form_buttons(form, submit_label: ti(:"button.save"), cancel_url: nil, toolbar_class: nil,
-                          add_another: false, add_another_label: ti(:"button.add_another"))
+  def form_buttons(form, submit_label: ti(:'button.save'), cancel_url: nil, toolbar_class: nil,
+                   add_another: false, add_another_label: ti(:'button.add_another'))
     button_toolbar(form, toolbar_class: toolbar_class) do
       content = submit_button(form, submit_label)
       content << add_another_button(form, add_another_label) if add_another.present?
@@ -94,17 +94,17 @@ module FormHelper
   def submit_button(form, label, options = {})
     if options[:display_as_link]
       form.button(label, options.merge(class: 'btn btn-sm btn-link',
-                    data: { disable_with: label }))
+                                       data: { turbo_submits_with: label }))
     else
       content_tag(:div, class: 'btn-group') do
         form.button(label, options.merge(class: 'btn btn-sm btn-primary mt-2',
-                    data: { disable_with: label }))
+                                         data: { turbo_submits_with: label }))
       end
     end
   end
 
   def cancel_link(url)
-    link_to(ti(:"button.cancel"), url, class: 'link cancel')
+    link_to(ti(:'button.cancel'), url, class: 'link cancel')
   end
 
   def spinner(visible = false)
@@ -122,7 +122,11 @@ module FormHelper
   # 3. Use polymorphic_path(object)
   def get_cancel_url(object, options)
     if params[:return_url].present?
-      url = URI.parse(params[:return_url]).path rescue nil
+      url = begin
+        URI.parse(params[:return_url]).path
+      rescue
+        nil
+      end
       return url if url
     end
 

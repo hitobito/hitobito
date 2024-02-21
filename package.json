@@ -8,6 +8,8 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.14.0",
+    "@hotwired/stimulus": "^3.2.2",
+    "@hotwired/turbo-rails": "^8.0.2",
     "@popperjs/core": "^2.11.6",
     "@rails/actiontext": "^6.0.3-3",
     "@rails/webpacker": "5.4.3",
@@ -19,7 +21,6 @@
     "jquery": "~1.12.4",
     "jquery-ui": "~1.13.2",
     "jquery-ujs": "~1.2.2",
-    "jquery.turbolinks": "~2.1.0",
     "js-cookie": "~2.2.0",
     "moment": "~2.29.4",
     "rails-erb-loader": "^5.5.2",
@@ -27,8 +28,7 @@
     "sass": "^1.49.7",
     "stimulus": "^3.2.2",
     "tom-select": "^2.2.2",
-    "trix": "^1.2.0",
-    "turbolinks": "~5.0.1"
+    "trix": "^1.2.0"
   },
   "devDependencies": {
     "@webpack-cli/serve": "^1.6.1",

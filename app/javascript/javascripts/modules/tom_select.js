@@ -33,7 +33,7 @@
     return element.nodeName === "INPUT" || element.nodeName === "SELECT" && element.getAttribute("multiple")
   }
 
-  $(document).on('turbolinks:load', function() {
+  $(document).on('turbo:load', function() {
     // enable tom-select
     document.querySelectorAll(".tom-select").forEach(app.activateTomSelect);
   });

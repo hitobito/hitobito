@@ -27,7 +27,7 @@ app.Multiselect = {
 }
 
 $(document).on('change', 'table[data-checkable=true] input[type=checkbox]', app.Multiselect.toggleActions)
-$(document).on('turbolinks:load', ->
+$(document).on('turbo:load', ->
   app.Multiselect.toggleActions
 )
 

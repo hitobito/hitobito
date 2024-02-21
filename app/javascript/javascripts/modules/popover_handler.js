@@ -4,45 +4,36 @@
 // https://github.com/hitobito/hitobito.
 
 (function() {
-  var app = window.App || (window.App = {});
 
-  app.PopoverHandler = (function() {
-    function PopoverHandler() {}
-
-    PopoverHandler.prototype.toggle = function(event) {
-      // close all other popovers
-      $('[data-bs-toggle=popover]').not(event.target).popover('hide')
-    };
-
-    PopoverHandler.prototype.close = function(event) {
-      $(event.target).popover('hide')
-    };
-
-    PopoverHandler.prototype.bind = function() {
-      var self = this;
-      $('[data-bs-toggle=popover]').each(function() {
-        $(this).popover({
-          container: 'body',
-          sanitize: false,
-          html: true
-        })
-      });
-      $(document).on('click', '[data-bs-toggle=popover]', function(e) {
-        self.toggle(e);
-      });
-
-      $(document).on('click', '.popover a.cancel', function(e) {
-        self.close(e);
-      });
-      $(document).on('click', '.popover button:submit', function(e) {
-        self.close(e);
-      });
-    };
-    return PopoverHandler;
-  })();
-
-  $(document).on('turbolinks:load', function() {
-    new app.PopoverHandler().bind();
+  // this popover handling is confusing - it appears to keep an internal state and our
+  // manual hide operations interfere with that state - that is why we sometimes have to click twice
+  // to get the expected result
+  //
+  // see https://getbootstrap.com/docs/5.0/components/popovers/
+  $(document).on('turbo:load', function() {
+    $(document).on('click', '.popover button:submit', function(e) {
+      $(e.target).closest('.popover').hide();
+    });
+    //
+    $(document).on('click', '.popover a.cancel', function(e) {
+      e.preventDefault();
+      $(e.target).closest('.popover').hide();
+    })
+    //
+    $(document).on('click', '[data-bs-toggle="popover"]', function(e) {
+      $('.popover').hide();
+      const el = $(e.target).closest('[data-bs-toggle="popover"]');
+      const instance = Popover.getInstance(el);
+      if(!instance) {
+        console.log('no instance - creating')
+        Popover.getOrCreateInstance(el,
+          {
+            container: 'body',
+            sanitize: false,
+            html: true
+          }
+        ).show();
+      }
+    })
   });
-
 }).call(this);

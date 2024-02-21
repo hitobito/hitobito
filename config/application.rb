@@ -99,6 +99,9 @@ module Hitobito
       config.logger = ActiveSupport::TaggedLogging.new(logger)
     end
 
+    config.responders.error_status = :unprocessable_entity
+    config.responders.redirect_status = :see_other
+
     config.generators do |g|
       g.test_framework :rspec, fixture: true
     end

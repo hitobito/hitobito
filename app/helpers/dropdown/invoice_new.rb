@@ -8,7 +8,7 @@
 module Dropdown
   class InvoiceNew < Base
     def initialize(template, people: [], mailing_list: nil, filter: nil, # rubocop:disable Metrics/ParameterLists
-                             group: nil, invoice_items: nil, label: nil)
+                   group: nil, invoice_items: nil, label: nil)
       super(template, label, :plus)
       @people = people
       @group = group

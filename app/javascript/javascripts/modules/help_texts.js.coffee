@@ -21,6 +21,6 @@ app.HelpTextForm = {
 $(document).on 'click', '.help-text-trigger', app.HelpTextToggler.toggle
 $(document).on 'change', '#help_text_context', app.HelpTextForm.syncSelectFields
 
-$(document).on 'turbolinks:load', () ->
+$(document).on 'turbo:load', () ->
   app.HelpTextToggler.hideAll()
   app.HelpTextForm.syncSelectFields()

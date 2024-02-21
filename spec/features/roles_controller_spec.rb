@@ -30,7 +30,7 @@ describe RolesController, js: true do
 
     before do
       sign_in(top_leader)
-      visit group_person_path(bottom_layer, bottom_member)
+      visit group_person_path(group_id: bottom_layer.id, id: bottom_member.id)
       click_on 'Rolle hinzufügen'
       choose_role 'Member'
     end
@@ -40,9 +40,9 @@ describe RolesController, js: true do
       fill_in 'Bis', with: yesterday
       expect do
         first(:button, 'Speichern').click
+        expect(page).to have_content "Rolle Member (bis #{I18n.l(yesterday)}) für Bottom Member in " \
+          'Bottom One wurde erfolgreich gelöscht.'
       end.to change { bottom_member.roles.with_deleted.count }.by(1)
-      expect(page).to have_content "Rolle Member (bis #{I18n.l(yesterday)}) für Bottom Member in " \
-        'Bottom One wurde erfolgreich gelöscht.'
     end
 
     it 'hard deletes role if bis in the past and not valid for archive' do
@@ -135,9 +135,8 @@ describe RolesController, js: true do
       page.find('ul[role="listbox"] li[role="option"]').click
 
       all('form .btn-group').first.click_button 'Speichern'
-
-      expect(current_path).to eq(group_people_path(group))
       is_expected.to have_content 'Rolle Leader für Top Leader in TopGroup wurde erfolgreich erstellt.'
+      expect(current_path).to eq(group_people_path(group))
     end
   end
 
@@ -214,8 +213,8 @@ describe RolesController, js: true do
       # save
       all('form .btn-group').first.click_button 'Speichern'
 
-      expect(current_path).to eq(group_people_path(groups(:toppers)))
       is_expected.to have_content 'Rolle Member für Top Leader in Toppers wurde erfolgreich erstellt.'
+      expect(current_path).to eq(group_people_path(groups(:toppers)))
     end
   end
 

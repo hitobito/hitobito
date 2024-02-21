@@ -88,6 +88,7 @@ describe :messages, js: true do
       fill_in_trix_editor 'message_body', with: Faker::Lorem.sentences.join
       expect do
         click_button('Speichern')
+        expect(page).to have_content 'Letter with love wurde erfolgreich erstellt.'
       end.to change { Message::Letter.count }.by(1)
 
       is_expected.to have_selector('a', text: 'Druckauftrag erstellen')
@@ -98,6 +99,7 @@ describe :messages, js: true do
       fill_in 'Beschreibung', with: 'Paper: A4, portrait, extra thick'
       expect do
         all('button', text: 'Speichern').first.click
+        expect(page).to have_content 'Print print print! wurde erfolgreich erstellt.'
       end.to change { printer.assignments.count }.by(1)
 
       is_expected.to have_selector('a', text: 'Anhang')

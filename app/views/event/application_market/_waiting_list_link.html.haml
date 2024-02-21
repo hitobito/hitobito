@@ -11,5 +11,5 @@
 
   - else
     .popover-small
-      %a{ title: t('.title_inactive'), data: { bs_toggle: 'popover', bs_content: render('popover_waiting_list', p: p).to_str.html_safe }}
+      %a{ title: t('.title_inactive'), data: { bs_toggle: 'popover', bs_content: render('popover_waiting_list', p: p).to_str.html_safe, bs_html: 'true' }}
         = "#{icon(:minus)}&nbsp; #{t('.label')}".html_safe

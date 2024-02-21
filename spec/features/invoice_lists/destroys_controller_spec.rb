@@ -43,8 +43,8 @@ describe InvoiceLists::DestroysController, js: true do
 
       expect do
         modal.find('button[type="submit"]').click
+        expect(page).to have_css('#flash .alert-success', text: "Sammelrechnung membership fee wurde erfolgreich gelöscht.")
       end.to change { InvoiceList.count }.by(-1)
-      expect(page).to have_css('#flash .alert-success', text: "Sammelrechnung membership fee wurde erfolgreich gelöscht.")
     end
   end
 

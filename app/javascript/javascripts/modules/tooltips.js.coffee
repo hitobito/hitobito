@@ -3,8 +3,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-# only bind events for non-document elements in turbolinks:load
-$(document).on('turbolinks:load', ->
+# only bind events for non-document elements in turbo:load
+$(document).on('turbo:load', ->
   # wire up tooltips
-  $(document).tooltip({ selector: '[rel^=tooltip]', placement: 'right' })
+  # $(document).tooltip({ selector: '[rel^=tooltip]', placement: 'right' })
 )

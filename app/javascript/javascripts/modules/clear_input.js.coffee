@@ -21,5 +21,5 @@ class ClearInput
 
 new ClearInput().bind()
 
-$(document).on 'turbolinks:load', ->
+$(document).on 'turbo:load', ->
   $('.has-clear input').each((i, e) -> new ClearInput().toggleHide($(e)))

@@ -35,6 +35,7 @@ describe Subscriber::SubscriberListsController, js: true do
 
     expect do
       find('button', text: 'Hinzufügen').click
+      expect(page).to have_content "2 Personen wurden erfolgreich zum Abo 'Newsletter' hinzugefügt"
     end.to change { Subscription.count }.by(2)
 
     is_expected.to have_text("2 Personen wurden erfolgreich zum Abo 'Newsletter' hinzugefügt")

@@ -20,5 +20,5 @@
   = action_button(t('.impersonate_user'),
                   group_person_impersonate_path(parent, entry),
                   nil,
-                  method: :post,
+                  data: { method: :post },
                   title: t('.impersonate_user_tooltip'))

@@ -951,7 +951,7 @@ describe PeopleController do
 
       it 'can delete person' do
         delete :destroy, params: { group_id: member.primary_group.id, id: member.id }
-        expect(response.status).to eq(302)
+        expect(response).to redirect_to(group_people_path(member.primary_group_id, returning: true))
       end
 
       it 'deletes person' do

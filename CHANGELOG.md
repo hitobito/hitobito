@@ -3,6 +3,7 @@
 ## unreleased
 
 *  Rechnungen können neu auch den Status "Teilzahlung" und "Überzahlung" haben (hitobito_sww#38)
+*  Einverständnis Erziehungsberechtigte für Selbstregistrierung (hitobito#2404)
 
 ## Version 2.0
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2019-2023, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2019-2024, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_pbs.
@@ -11,7 +11,7 @@ namespace :dev do
     desc 'Obtain oauth access token'
     task :token, [:application_id, :redirect_uri, :code] => [:environment] do |_, args|
       app = Oauth::Application.find(args.fetch(:application_id))
-      sh <<-BASH.strip_heredoc
+      sh <<~BASH
         curl -v -H 'Accept: application/json' -X POST -d 'grant_type=authorization_code'  \
         -d 'client_id=#{app.uid}' -d 'client_secret=#{app.secret}' \
         -d 'redirect_uri=#{args.fetch(:redirect_uri)}' -d 'code=#{args.fetch(:code)}' \
@@ -23,7 +23,7 @@ namespace :dev do
     task :introspect, [:access_token, :token] do |_, args| # rubocop:disable Rails/RakeEnvironment
       access_token = args.fetch(:access_token)
       token = args.fetch(:token, access_token)
-      sh <<-BASH.strip_heredoc
+      sh <<~BASH
         curl -v -H 'Accept: application/json' \
         -H 'Authorization: Bearer #{access_token}' \
         -d 'token=#{token}' \
@@ -34,7 +34,7 @@ namespace :dev do
     desc 'Obtain profile information'
     task :profile, [:access_token, :scope] do |_, args| # rubocop:disable Rails/RakeEnvironment
       access_token = args.fetch(:access_token)
-      sh <<-BASH.strip_heredoc
+      sh <<~BASH
         curl -v -H 'Accept: application/json' \
         -H 'Authorization: Bearer #{access_token}' \
         -H 'X-Scope: #{args[:scope]}' \
@@ -45,8 +45,12 @@ namespace :dev do
 
   namespace :local do
     desc 'Create a local user with admin-permissions'
-    task :admin, [:username] => :environment do |_, args|
-      username = args.fetch(:username, 'tester@example.net')
+    task admin: :environment do
+      abort('This is for development purposes only.') unless Rails.env.development?
+      abort('This needs at least one wagon to work') if Wagons.all.blank?
+      abort('This needs a group-structure to work') if Group.subclasses.blank?
+
+      username = 'tester@example.net'
       password = 'hitobito is the best software to manage people in complex group hierachies'
 
       me = Person.find_by(email: username) ||
@@ -91,6 +95,42 @@ namespace :dev do
           - #{me.roles.join("\n  - ")}
 
       MESSAGE
+
+      if me.roles.any?(&:two_factor_authentication_enforced)
+        me.two_fa_secret = %w(
+          2R7IGBJMSZV1L7TPLDI8HDO0UD8LCQ6NMVJWDYKW6I8XXM9RGU6G4II9KOJ2O8J6NUV
+          BM4DUGAKQ0EL41TVR1BKN5YHA5IVATD58BWZTQ0T46X85ED2HQ9CYZCAQYK0JMXOSKN
+          DZNEUSG5ZCS9ZURT7LB7HGK1AXD350LT9Q4PYO8ZX4ZDSCZF96N4LWFOH4C92DJ2NV
+        ).join
+        me.two_factor_authentication = 'totp'
+        me.save!(validate: false)
+
+        qr_code = Pathname.new('tmp/tom-tester-otp.png')
+        qr_code.delete if qr_code.exist?
+
+        otp = People::OneTimePassword.new(me.two_fa_secret, person: me)
+        otp.provisioning_qr_code.save(qr_code.to_s)
+
+        case ENV.fetch('TERM', nil)
+        when 'xterm-kitty'
+          puts 'This is the QR-Code for the TOTP/2FA-Setup'
+          system("kitty +kitten icat #{qr_code}")
+        else
+          puts "The QR-Code for TOTP/2FA-Setup is located at #{qr_code}"
+        end
+
+        puts 'If you have setup 2FA for a dev-hitobito already, you may ignore this'
+        puts 'as the generated codes should be the same.'
+        puts
+      end
+
+      unless me.valid?
+        puts 'This person has invalid data for this wagon. Nothing serious, just keep'
+        puts 'in mind: You need to fill additional fields if you update it.'
+        puts
+      end
+
+      puts 'Done.'
     end
   end
 

@@ -65,11 +65,8 @@ class SelfRegistration
 
   def move_to_unless_valid?(partial, valid)
     valid.tap do
-      next if @step_resetted
-
       unless valid
         @step = partials.index(partial)
-        @step_resetted = true
       end
     end
   end

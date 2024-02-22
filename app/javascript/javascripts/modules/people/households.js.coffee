@@ -12,6 +12,11 @@ app.HouseHolds = {
     elem = form.find('.household_key_people')
     inputs = elem.find(":input[name='person[household_people_ids][]']")
 
+    if elem.toggle().is(':visible')
+      inputs.removeAttr('disabled')
+    else
+      inputs.attr('disabled', 'disabled')
+
   update: (e) ->
     data = JSON.parse(e)
     form = $('[data-household]').closest('form')

@@ -1008,6 +1008,7 @@ de:
         due_at: Fällig am
         issued_at: Gestellt am
         sent_at: Verschickt am
+        last_payment_at: Zahlung am
         cost: Betrag
         total: Rechnungsbetrag
         total_inkl_vat: Total inkl. MwSt.

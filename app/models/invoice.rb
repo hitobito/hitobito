@@ -113,10 +113,8 @@ class Invoice < ActiveRecord::Base
     end
 
     def draft_or_issued(from:, to:)
-      from ||= Time.zone.today.beginning_of_year
-      to ||= Time.zone.today.end_of_year
-      from = Date.parse(from) if from.is_a? String
-      to = Date.parse(to) if to.is_a? String
+      from = Date.parse(from.to_s) rescue Time.zone.today.beginning_of_year # rubocop:disable Style/RescueModifier
+      to = Date.parse(to.to_s) rescue Time.zone.today.end_of_year # rubocop:disable Style/RescueModifier
 
       condition = OrCondition.new
       condition.or('issued_at >= :from AND issued_at <= :to', from: from, to: to)
@@ -143,6 +141,26 @@ class Invoice < ActiveRecord::Base
       %w(sequence_number).product(%w(1 -1)).map do |field, index|
         "CAST(SUBSTRING_INDEX(#{field}, '-', #{index}) AS UNSIGNED)"
       end
+    end
+
+    def order_by_payment_statement
+      'last_payments.received_at'
+    end
+
+    def order_by_amount_paid_statement
+      'last_payments.amount_paid'
+    end
+
+    def last_payments_information
+      <<~SQL.squish
+        LEFT OUTER JOIN (
+          SELECT invoice_id,
+                 MAX(received_at) AS received_at,
+                 SUM(amount) AS amount_paid
+          FROM payments
+          GROUP BY invoice_id
+        ) AS last_payments ON invoices.id = last_payments.invoice_id
+      SQL
     end
   end
 

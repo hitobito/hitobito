@@ -333,6 +333,36 @@ describe Invoice do
       filter = Invoice.draft_or_issued(from: today.beginning_of_year, to: today.end_of_year)
       expect(filter).to eq([issued])
     end
+
+    it 'does not crash with invalid dates' do
+      expect(Invoice.draft_or_issued(from: '0', to: Date.new(2019, 12, 31))).to have(2).items
+      expect(Invoice.draft_or_issued(from: Date.new(2019, 1, 1), to: nil)).to have(2).items
+      expect(Invoice.draft_or_issued(from: 'blørbaël', to: 'Zórgðœ')).to have(2).items
+    end
+  end
+
+  context 'sorting' do
+    it 'needs to know about last payments' do
+      expect(described_class.last_payments_information).to match(
+        /LEFT OUTER JOIN \(.*\) AS last_payments ON invoices.id = last_payments.invoice_id/
+      )
+
+      expect(described_class.last_payments_information)
+        .to match(/\( SELECT .* FROM payments GROUP BY invoice_id \)/)
+
+      expect(described_class.last_payments_information)
+        .to match(/invoice_id, MAX\(received_at\) AS received_at, SUM\(amount\) AS amount_paid/)
+    end
+
+    it 'supports sorting by last payment-date' do
+      expect(described_class.order_by_payment_statement)
+        .to eql 'last_payments.received_at'
+    end
+
+    it 'supports sorting by totally paid amount' do
+      expect(described_class.order_by_amount_paid_statement)
+        .to eql 'last_payments.amount_paid'
+    end
   end
 
   private

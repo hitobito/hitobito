@@ -24,7 +24,7 @@ describe Invoice::PaymentProcessor do
     invoice.update_columns(reference: '000000000000100000000000905')
     payment = parser.payments.first
 
-    expect(parser.notice).to eq "Es wurde eine gültige Zahlung mit dazugehörigen Rechnung erkannt.\n" \
+    expect(parser.notice).to eq "Es wurde eine gültige Zahlung mit dazugehöriger Rechnung erkannt.\n" \
                                 'Es wurden 4 gültige Zahlungen ohne dazugehörige Rechnungen erkannt.'
     expect(parser.alert).to be_nil
     expect(payment).to be_valid
@@ -38,7 +38,7 @@ describe Invoice::PaymentProcessor do
     end.to change { Payment.count }.by(5)
 
     expect(parser.alert).to be_nil
-    expect(parser.notice).to eq "Es wurde eine gültige Zahlung mit dazugehörigen Rechnung erkannt.\n" \
+    expect(parser.notice).to eq "Es wurde eine gültige Zahlung mit dazugehöriger Rechnung erkannt.\n" \
                                 'Es wurden 4 gültige Zahlungen ohne dazugehörige Rechnungen erkannt.'
     expect(invoice.reload).to be_payed
   end
@@ -67,7 +67,7 @@ describe Invoice::PaymentProcessor do
     end.to change { Payment.count }.by(5)
 
     expect(parser.alert).to be_nil
-    expect(parser.notice).to eq "Es wurde eine gültige Zahlung mit dazugehörigen Rechnung erkannt.\n" \
+    expect(parser.notice).to eq "Es wurde eine gültige Zahlung mit dazugehöriger Rechnung erkannt.\n" \
                                 'Es wurden 4 gültige Zahlungen ohne dazugehörige Rechnungen erkannt.'
 
     expect(invoice.reload).to be_payed
@@ -85,7 +85,7 @@ describe Invoice::PaymentProcessor do
     end.to change { Payment.count }.by(5)
 
     expect(parser.alert).to be_nil
-    expect(parser.notice).to eq "Es wurde eine gültige Zahlung mit dazugehörigen Rechnung erkannt.\n" \
+    expect(parser.notice).to eq "Es wurde eine gültige Zahlung mit dazugehöriger Rechnung erkannt.\n" \
                                 'Es wurden 4 gültige Zahlungen ohne dazugehörige Rechnungen erkannt.'
 
     payment = invoice.payments.first
@@ -136,7 +136,7 @@ describe Invoice::PaymentProcessor do
     payment = payments.first
 
     expect(payment).to be_valid
-    expect(parser.notice).to eq 'Es wurde eine gültige Zahlung ohne dazugehörigen Rechnung erkannt.'
+    expect(parser.notice).to eq 'Es wurde eine gültige Zahlung ohne dazugehörige Rechnung erkannt.'
     expect(parser.alert).to be_nil
     expect(payment.reference).to be_nil
   end
@@ -144,7 +144,7 @@ describe Invoice::PaymentProcessor do
   it 'invalid and valid payments set alert and notice' do
     invoice.update_columns(reference: '000000000000100000000000905')
     expect(parser.alert).to be_nil
-    expect(parser.notice).to eq "Es wurde eine gültige Zahlung mit dazugehörigen Rechnung erkannt.\n" \
+    expect(parser.notice).to eq "Es wurde eine gültige Zahlung mit dazugehöriger Rechnung erkannt.\n" \
                                 'Es wurden 4 gültige Zahlungen ohne dazugehörige Rechnungen erkannt.'
   end
 

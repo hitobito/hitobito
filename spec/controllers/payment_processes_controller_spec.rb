@@ -42,7 +42,7 @@ describe PaymentProcessesController do
     post :create, params: { group_id: group.id, payment_process: { file: file } }
     expect(response).to be_successful
     expect(flash[:alert]).to_not be_present
-    expect(flash[:notice]).to eq "Es wurde eine gültige Zahlung mit dazugehörigen Rechnung erkannt.\n" \
+    expect(flash[:notice]).to eq "Es wurde eine gültige Zahlung mit dazugehöriger Rechnung erkannt.\n" \
                                  'Es wurden 4 gültige Zahlungen ohne dazugehörige Rechnungen erkannt.'
   end
 

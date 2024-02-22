@@ -1272,10 +1272,10 @@ de:
     created: Es wurden %{count} Zahlungen erfasst.
     payments:
       valid_with_invoice:
-        one: Es wurde eine gültige Zahlung mit dazugehörigen Rechnung erkannt.
+        one: Es wurde eine gültige Zahlung mit dazugehöriger Rechnung erkannt.
         other: Es wurden %{count} gültige Zahlungen mit dazugehörige Rechnungen erkannt.
       valid_without_invoice:
-        one: Es wurde eine gültige Zahlung ohne dazugehörigen Rechnung erkannt.
+        one: Es wurde eine gültige Zahlung ohne dazugehörige Rechnung erkannt.
         other: Es wurden %{count} gültige Zahlungen ohne dazugehörige Rechnungen erkannt.
       invalid:
         one: Es wurde eine ungültige Zahlung erkannt.

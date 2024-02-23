@@ -27,6 +27,18 @@ class Roles::Termination
     true
   end
 
+  def affected_roles
+    [role]
+  end
+
+  def main_person
+    role.person
+  end
+
+  def affected_people
+    []
+  end
+
   private
 
   def validate_terminate_on

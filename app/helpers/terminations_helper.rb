@@ -22,6 +22,17 @@ module TerminationsHelper
     end
   end
 
+  def termination_main_person_text(termination)
+    t('roles/terminations.main_person_text', person: termination.main_person)
+  end
+
+  def termination_affected_people_text(termination)
+    people = termination.affected_people.map(&:full_name).sort
+    return nil unless people.present?
+
+    t('roles/terminations.affected_people_text', affected_people: people.join(', '))
+  end
+
   private
 
   def role_ancestors_i18n_keys(role, key)

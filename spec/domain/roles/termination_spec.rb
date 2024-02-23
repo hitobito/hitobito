@@ -78,4 +78,14 @@ describe Roles::Termination do
         and not_change { role.reload.delete_on }.from(nil)
     end
   end
+
+  it '#main_person returns role.person' do
+    subject.role = roles(:bottom_member)
+    expect(subject.main_person).to eq subject.role.person
+  end
+
+  it '#affected_people is empty' do
+    subject.role = roles(:bottom_member)
+    expect(subject.affected_people).to be_empty
+  end
 end

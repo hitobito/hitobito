@@ -9,10 +9,10 @@
   = f.labeled_text_area(:address, rows: 2, data: { provide: 'entity',
                                                    updater: 'AddressTypeahead.update',
                                                    url: addresses_query_url })
-  = f.labeled(:zip_code, t('contactable.fields.zip_town'), class: 'row') do
-    %div.col-1
+  = f.labeled(:zip_code, t('contactable.fields.zip_town'), class: 'd-flex') do
+    %div.col-5.col-md-4.col-lg-3
       = f.string_field(:zip_code, class: 'span-none zip-code-field', maxlength: 10)
-    %div.col-5
+    %div.col-6.col-md-7.col-lg-8.offset-1
       = f.string_field(:town, class: 'span-none town-field')
   = f.labeled(:country) do
     .shown.ms-0

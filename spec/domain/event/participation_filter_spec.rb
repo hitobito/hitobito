@@ -15,7 +15,7 @@ RSpec.describe Event::ParticipationFilter, type: :domain do
 
   context 'without search string' do
     it 'lists all entries' do
-      expect(subject.list_entries.unscope(:select).count).to eq(2)
+      expect(subject.list_entries.length).to eq(2)
     end
   end
 
@@ -24,7 +24,7 @@ RSpec.describe Event::ParticipationFilter, type: :domain do
 
     it 'and list matching entries' do
       participants = subject.list_entries
-      expect(participants.unscope(:select).count).to eq(1)
+      expect(participants.length).to eq(1)
       expect(participants.first.person).to eq(person)
     end
   end
@@ -33,8 +33,8 @@ RSpec.describe Event::ParticipationFilter, type: :domain do
     let(:params) { { filter: 'all', q: 'ember' } }
 
     it 'and list matching entries' do
-      participants = subject.list_entries.unscope(:select)
-      expect(participants.unscope(:select).count).to eq(1)
+      participants = subject.list_entries
+      expect(participants.length).to eq(1)
       expect(participants.first.person).to eq(people(:bottom_member))
     end
   end
@@ -43,8 +43,8 @@ RSpec.describe Event::ParticipationFilter, type: :domain do
     let(:params) { { filter: 'all', q: 'bambi' } }
 
     it 'and list matching entries' do
-      participants = subject.list_entries.unscope(:select)
-      expect(participants.count).to eq(1)
+      participants = subject.list_entries
+      expect(participants.length).to eq(1)
       expect(participants.first.person).to eq(person)
     end
   end

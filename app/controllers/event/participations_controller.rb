@@ -289,32 +289,10 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
                            .where(kind_id: event.kind_id)
                            .in_hierarchy(current_user)
                            .joins(:groups)
-                           .select(generate_aggregate_queries("group", "event"))
+                           .select(SqlSelectStatements.new.generate_aggregate_queries("group", "event"))
                            .list
       @priority_2s = @priority_3s = (@alternatives.to_a - [event])
     end
-  end
-
-  # generates select list with MAX aggregate function with all arguments of passed model
-  def generate_aggregate_queries(*table_names)
-    select_list = []
-
-    table_names.each do |table_name|
-      columns = table_name.classify.constantize.columns
-      table = table_name.classify.constantize.arel_table
-
-      max_columns = columns.map do |column|
-        if column.type != :boolean
-          "MAX(#{table_name.pluralize}.#{column.name}) AS #{column.name}"
-        else
-          "bool_and(#{table_name.pluralize}.#{column.name}) AS #{column.name}"
-        end
-      end
-
-      select_list.concat(max_columns)
-    end
-
-    select_list.join(', ')
   end
 
   def load_answers

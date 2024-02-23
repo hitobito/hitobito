@@ -196,7 +196,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
       order_by_date(aggregate_function: true).
         includes(:translations).
         preload_all_dates.
-        group(:id)
+        group(:id).select(SqlSelectStatements.new.generate_aggregate_queries("event"))
     end
 
     def preload_all_dates

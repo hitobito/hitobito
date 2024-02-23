@@ -22,6 +22,7 @@ class Export::EventsExportJob < Export::ExportBaseJob
                       @filter_args[:filter],
                       @filter_args[:year],
                       @filter_args[:sort_expression],
+                      false,
                       false)
   end
 

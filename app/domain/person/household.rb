@@ -12,7 +12,7 @@ class Person::Household
     @person = person
     @ability = ability
     @other = other
-    @current_user = user
+    @current_user = user || ability&.user
   end
 
   def valid?

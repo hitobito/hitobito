@@ -53,8 +53,9 @@ class Person::Household
 
   def save
     raise 'invalid' unless valid?
+    return unless any_change?
 
-    if any_change?
+    Person.transaction do
       household_log(person, people, person.household_key?)
       person.update(household_key: key)
       housemates.each do |housemate|
@@ -64,15 +65,17 @@ class Person::Household
   end
 
   def remove
-    household_log_entry(person, people, :remove_from_household) if person.household_key?
-    if people.size == 2
-      household_log_entry(person, people, :remove_from_household, item: housemates.first)
-      housemates.first.update(household_key: nil)
+    Person.transaction do
+      household_log_entry(person, people, :remove_from_household) if person.household_key?
+      if people.size == 2
+        household_log_entry(person, people, :remove_from_household, item: housemates.first)
+        housemates.first.update(household_key: nil)
+      end
+      housemates.each do |housemate|
+        household_log_entry(housemate, people, :remove_from_household, item: person)
+      end
+      person.update(household_key: nil)
     end
-    housemates.each do |housemate|
-      household_log_entry(housemate, people, :remove_from_household, item: person)
-    end
-    person.update(household_key: nil)
   end
 
   def writable_people

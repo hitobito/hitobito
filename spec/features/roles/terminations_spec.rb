@@ -40,6 +40,38 @@ describe :roles_terminations, js: true do
     click_button 'Austreten'
   end
 
+  it 'lists all affected roles' do
+    allow_any_instance_of(Roles::Termination).
+      to receive(:affected_roles).and_return([roles(:top_leader), roles(:bottom_member)])
+
+    visit_dialog
+
+    within('.modal-dialog') do
+      expect(page).to have_content "Top / TopGroup / Leader"
+      expect(page).to have_content "Bottom One / Member"
+    end
+  end
+
+  it 'mentions the role person' do
+    visit_dialog
+
+    within('.modal-dialog') do
+      expect(page).to have_content /Austritt erfolgt für.*#{role.person.full_name}/
+    end
+  end
+
+  it 'mentions the affected people' do
+    allow_any_instance_of(Roles::Termination).
+      to receive(:affected_people).and_return([people(:top_leader), people(:bottom_member)])
+
+    visit_dialog
+
+    within('.modal-dialog') do
+      expect(page).to have_content /sowie für.*#{people(:top_leader).full_name}/
+      expect(page).to have_content /sowie für.*#{people(:bottom_member).full_name}/
+    end
+  end
+
   it 'with valid date it terminates role' do
     terminate_on = Time.zone.tomorrow
 

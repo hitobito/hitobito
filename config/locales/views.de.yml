@@ -1833,11 +1833,10 @@ de:
       # Add translations for specific role types like this:
       # leader:
       #   text: Bist du sicher, dass du als Leiter/-in austreten möchtest?
-      #   no_permission: "Du hast keine Berechtigung, als Leiter/-in auszutreten."
       # group/bottom_layer/member:
       #   text: Bist du sicher, dass du als Mitglied austreten möchtest?
-      #   no_permission: "Du hast keine Berechtigung, als Mitglied auszutreten."
-
+    main_person_text: "Der Austritt erfolgt für: %{person}"
+    affected_people_text: "sowie für: %{affected_people}"
     flash:
       success: Du bist erfolgreich ausgetreten per %{date}.
 

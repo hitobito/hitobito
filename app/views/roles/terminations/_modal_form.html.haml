@@ -15,17 +15,21 @@
       = standard_form entry, url: group_role_terminations_path(role_id: role.id, group_id: role.group_id), remote: true do |form|
         .modal-body
           .row-fluid
-            .confirm-text= termination_confirm_dialog_text(entry)
-          = render_extensions :additional_confirmation_text
+            .alert.alert-danger= ti('warning')
           .row-fluid
+            .confirm-text= termination_confirm_dialog_text(entry)
+          .row-fluid.mt-1
+            = render partial: 'role', collection: entry.affected_roles
+          .row-fluid.mt-1
             = terminate_on_field_or_text(form, entry, class: 'col-6 date col-form-label text-md', label_class: 'col-md-3 pb-1')
+          .row-fluid.mt-1
+            = termination_main_person_text(entry)
+          .row-fluid
+            = termination_affected_people_text(entry)
           .row-fluid
             .errors= render('errors', entry: entry)
-          .row-fluid
-            .warning-text= ti('warning')
         .modal-footer
-          .btn-group
-            = form.submit(ti('.submit'), class: 'btn')
-            = link_to(ti('button.cancel'), '#',
-              class: 'btn btn-link',
-              onclick: "event.preventDefault(); $('#role-termination').modal('hide')")
+          = form.submit(ti('.submit'), class: 'btn')
+          = link_to(ti('button.cancel'), '#',
+            class: 'btn btn-link',
+            onclick: "event.preventDefault(); $('#role-termination').modal('hide')")

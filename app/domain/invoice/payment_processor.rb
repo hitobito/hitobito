@@ -36,7 +36,12 @@ class Invoice::PaymentProcessor
   end
 
   def notice
-    translate(:valid, valid_payments.count)
+    return if valid_payments.empty?
+
+    [
+      translate(:valid_with_invoice, valid_payments_with_invoice.count),
+      translate(:valid_without_invoice, valid_payments_without_invoice.count)
+    ].select(&:present?).compact.join("\n")
   end
 
   def to
@@ -58,11 +63,19 @@ class Invoice::PaymentProcessor
   end
 
   def valid_payments
-    @valid_payments ||= payments_with_invoice.select(&:valid?)
+    @valid_payments ||= payments.select(&:valid?)
   end
 
   def invalid_payments
     @invalid_payments ||= payments - valid_payments
+  end
+
+  def valid_payments_with_invoice
+    valid_payments - payments_without_invoice
+  end
+
+  def valid_payments_without_invoice
+    valid_payments - payments_with_invoice
   end
 
   private
@@ -75,11 +88,34 @@ class Invoice::PaymentProcessor
                 transaction_identifier: transaction_identifier(net_entry, statement),
                 reference: esr_reference(statement),
                 transaction_xml: statement.to_xml(root: :TxDtls, skip_instruct: true).squish,
-                status: :xml_imported)
+                status: :xml_imported,
+                payee_attributes: {
+                  person_id: invoice(statement)&.recipient_id,
+                  person_name: person_name(statement),
+                  person_address: person_address(statement)
+                })
   end
 
   def message_id
     fetch('GrpHdr', 'MsgId')
+  end
+
+  def person_name(statement)
+    fetch('RltdPties', 'Dbtr', 'Nm', statement)
+  rescue KeyError
+    ''
+  end
+
+  def person_address(statement)
+    street, house_number, zip, town = ['StrtNm', 'BldgNb', 'PstCd', 'TwnNm'].map do |key|
+      begin
+        fetch('RltdPties', 'Dbtr', 'PstlAdr', key, statement)
+      rescue KeyError
+        ''
+      end
+    end
+
+    "#{street} #{house_number}, #{zip} #{town}"
   end
 
   def invoice(statement)

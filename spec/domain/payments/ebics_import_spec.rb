@@ -75,7 +75,9 @@ describe Payments::EbicsImport do
 
     payment = invoice.payments.first
     expect(payment.invoice).to eq(invoice)
-    expect(payment.transaction_identifier).to eq("20180314001221000006915084508216000000000000100000000000800710.822018-03-15 00:00:00 +0100CH6309000000250097798")
+    expect(payment.transaction_identifier).to eq('20180314001221000006915084508216000000000000100000000000800710.822018-03-15 00:00:00 +0100CH6309000000250097798')
+    expect(payment.payee.person_name).to eq('Maria Bernasconi')
+    expect(payment.payee.person_address).to eq('Place de la Gare 15, 2502 Biel/Bienne')
     expect(list.reload.amount_paid.to_s).to eq('710.82')
 
     expect(payments['ebics_imported']).to have(1).item
@@ -104,6 +106,8 @@ describe Payments::EbicsImport do
     payment = invoice.payments.first
     expect(payment.invoice).to eq(invoice)
     expect(payment.transaction_identifier).to eq("20180314001221000006915084508216000000000000100000000000800710.822018-03-15 00:00:00 +0100CH6309000000250097798")
+    expect(payment.payee.person_name).to eq('Maria Bernasconi')
+    expect(payment.payee.person_address).to eq('Place de la Gare 15, 2502 Biel/Bienne')
     expect(list.reload.amount_paid.to_s).to eq('710.82')
 
     expect(payments['ebics_imported']).to have(1).item

@@ -41,8 +41,9 @@ describe PaymentProcessesController do
     invoice.update_columns(reference: '000000000000100000000000905')
     post :create, params: { group_id: group.id, payment_process: { file: file } }
     expect(response).to be_successful
-    expect(flash[:alert]).to be_present
-    expect(flash[:notice]).to be_present
+    expect(flash[:alert]).to_not be_present
+    expect(flash[:notice]).to eq "Es wurde eine gültige Zahlung mit dazugehöriger Rechnung erkannt.\n" \
+                                 'Es wurden 4 gültige Zahlungen ohne dazugehörige Rechnungen erkannt.'
   end
 
   it 'POST#create with data persists valid payments' do

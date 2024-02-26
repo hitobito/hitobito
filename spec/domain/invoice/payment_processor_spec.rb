@@ -20,32 +20,34 @@ describe Invoice::PaymentProcessor do
     expect(parser.payments).to have(5).items
   end
 
-  it 'first payment is marked as valid' do
+  it 'first payment is assigned to an invoice' do
     invoice.update_columns(reference: '000000000000100000000000905')
     payment = parser.payments.first
 
-    expect(parser.alert).to eq 'Es wurden 4 ungültige Zahlungen erkannt.'
-    expect(parser.notice).to eq 'Es wurde eine gültige Zahlung erkannt.'
+    expect(parser.notice).to eq "Es wurde eine gültige Zahlung mit dazugehöriger Rechnung erkannt.\n" \
+                                'Es wurden 4 gültige Zahlungen ohne dazugehörige Rechnungen erkannt.'
+    expect(parser.alert).to be_nil
     expect(payment).to be_valid
   end
 
-  it 'creates payment and marks invoice as payed' do
+  it 'creates payments and marks invoice as payed' do
     invoice.update_columns(reference: '000000000000100000000000905',
                            total: 710.82)
     expect do
-      expect(parser.process).to eq 1
-    end.to change { Payment.count }.by(1)
+      expect(parser.process).to eq 5
+    end.to change { Payment.count }.by(5)
 
-    expect(parser.alert).to eq 'Es wurden 4 ungültige Zahlungen erkannt.'
-    expect(parser.notice).to eq 'Es wurde eine gültige Zahlung erkannt.'
+    expect(parser.alert).to be_nil
+    expect(parser.notice).to eq "Es wurde eine gültige Zahlung mit dazugehöriger Rechnung erkannt.\n" \
+                                'Es wurden 4 gültige Zahlungen ohne dazugehörige Rechnungen erkannt.'
     expect(invoice.reload).to be_payed
   end
 
   it 'builds transaction identifier' do
     identifiers = parser.payments.map(&:transaction_identifier)
 
-    expect(parser.alert).to eq 'Es wurden 5 ungültige Zahlungen erkannt.'
-    expect(parser.notice).to be_nil
+    expect(parser.alert).to be_nil
+    expect(parser.notice).to eq 'Es wurden 5 gültige Zahlungen ohne dazugehörige Rechnungen erkannt.'
 
     expect(identifiers).to eq(
       ['20180314001221000006905084508206000000000000100000000000905710.822018-03-15 00:00:00 +0100CH6309000000250097798',
@@ -61,28 +63,30 @@ describe Invoice::PaymentProcessor do
                            invoice_list_id: list.id,
                            total: 710.82)
     expect do
-      expect(parser.process).to eq 1
-    end.to change { Payment.count }.by(1)
+      expect(parser.process).to eq 5
+    end.to change { Payment.count }.by(5)
 
-    expect(parser.alert).to eq 'Es wurden 4 ungültige Zahlungen erkannt.'
-    expect(parser.notice).to eq 'Es wurde eine gültige Zahlung erkannt.'
+    expect(parser.alert).to be_nil
+    expect(parser.notice).to eq "Es wurde eine gültige Zahlung mit dazugehöriger Rechnung erkannt.\n" \
+                                'Es wurden 4 gültige Zahlungen ohne dazugehörige Rechnungen erkannt.'
 
     expect(invoice.reload).to be_payed
     expect(list.reload.amount_paid.to_s).to eq '710.82'
     expect(list.reload.recipients_paid).to eq 1
   end
 
-  it 'creates payment and saves transaction xml' do
+  it 'creates payment, saves transaction xml and payee' do
     list = InvoiceList.create!(title: :title, group: invoice.group)
     invoice.update_columns(reference: '000000000000100000000000905',
                            invoice_list_id: list.id,
                            total: 710.82)
     expect do
-      expect(parser.process).to eq 1
-    end.to change { Payment.count }.by(1)
+      expect(parser.process).to eq 5
+    end.to change { Payment.count }.by(5)
 
-    expect(parser.alert).to eq 'Es wurden 4 ungültige Zahlungen erkannt.'
-    expect(parser.notice).to eq 'Es wurde eine gültige Zahlung erkannt.'
+    expect(parser.alert).to be_nil
+    expect(parser.notice).to eq "Es wurde eine gültige Zahlung mit dazugehöriger Rechnung erkannt.\n" \
+                                'Es wurden 4 gültige Zahlungen ohne dazugehörige Rechnungen erkannt.'
 
     payment = invoice.payments.first
     xml = payment.transaction_xml
@@ -92,6 +96,10 @@ describe Invoice::PaymentProcessor do
     expect(data['Amt']).to eq('710.82')
     expect(data['RltdPties']['Dbtr']['Nm']).to eq('Maria Bernasconi')
     expect(data['RltdPties']['Dbtr']['PstlAdr']).to be_present
+
+    expect(payment.payee.person).to eq(invoice.recipient)
+    expect(payment.payee.person_name).to eq('Maria Bernasconi')
+    expect(payment.payee.person_address).to eq('Place de la Gare 15, 2502 Biel/Bienne')
   end
 
   it 'uses ValDat as received_at' do
@@ -105,34 +113,39 @@ describe Invoice::PaymentProcessor do
                            esr_number: '00 00000 00000 10000 00000 00905',
                            total: 710.82)
     expect do
-      expect(parser.process).to eq 1
-    end.to change { Payment.count }.by(1)
+      expect(parser.process).to eq 5
+    end.to change { Payment.count }.by(5)
     expect(invoice.reload).to be_payed
   end
 
 
   it 'invalid payments only produce set alert' do
-    expect(parser.alert).to eq 'Es wurden 5 ungültige Zahlungen erkannt.'
+    parser = parser('camt.054-without-amount')
+    expect(parser.alert).to eq 'Es wurde eine ungültige Zahlung erkannt.'
     expect(parser.notice).to be_nil
   end
 
   it 'creates valid payment although esr reference is not found' do
-    payments = parser('camt.054-without-esr-reference').payments
+    parser = parser('camt.054-without-esr-reference')
+    parser.process
+
+    payments = parser.payments
 
     expect(payments.size).to eq(1)
 
     payment = payments.first
 
     expect(payment).to be_valid
-    expect(parser.alert).to eq 'Es wurde eine ungültige Zahlung erkannt.'
-    expect(parser.notice).to be_nil
+    expect(parser.notice).to eq 'Es wurde eine gültige Zahlung ohne dazugehörige Rechnung erkannt.'
+    expect(parser.alert).to be_nil
     expect(payment.reference).to be_nil
   end
 
   it 'invalid and valid payments set alert and notice' do
     invoice.update_columns(reference: '000000000000100000000000905')
-    expect(parser.alert).to eq 'Es wurden 4 ungültige Zahlungen erkannt.'
-    expect(parser.notice).to eq 'Es wurde eine gültige Zahlung erkannt.'
+    expect(parser.alert).to be_nil
+    expect(parser.notice).to eq "Es wurde eine gültige Zahlung mit dazugehöriger Rechnung erkannt.\n" \
+                                'Es wurden 4 gültige Zahlungen ohne dazugehörige Rechnungen erkannt.'
   end
 
   it 'falls back to more general dates if no payment date is included' do

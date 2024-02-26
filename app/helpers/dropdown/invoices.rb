@@ -43,6 +43,8 @@ module Dropdown
 
     def csv_links
       add_item(translate(:csv), export_path(:csv), **item_options)
+      add_item(translate(:payments_without_invoice_csv),
+               payment_export_path(:csv, { state: :without_invoice }))
     end
 
     def item_options
@@ -51,6 +53,10 @@ module Dropdown
 
     def export_path(format, options = {})
       params.merge(options).merge(format: format)
+    end
+
+    def payment_export_path(format, options = {})
+      template.group_payments_path(params.to_unsafe_h.merge(options).merge(format: format))
     end
   end
 end

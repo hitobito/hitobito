@@ -4,13 +4,13 @@
 -#  https://github.com/hitobito/hitobito.
 
 #main.row-fluid
-  - if processor.from && processor.to
-    %h3=t('.payments_with_invoice_and_dates', from: l(processor.from), to: l(processor.to))
-  - else
-    %h3=t('.payments_with_invoice')
 
   = standard_form(:payment_process, url: group_payment_process_path(group)) do |f|
-    = table(processor.payments_with_invoice, class: 'table table-stripped') do |t|
+    - if processor.from && processor.to
+      %h3=t('.valid_payments_with_invoice_and_dates', from: l(processor.from), to: l(processor.to))
+    - else
+      %h3=t('.valid_payments_with_invoice')
+    = table(processor.valid_payments_with_invoice, class: 'table table-stripped') do |t|
       - t.col('') do |p|
         - if p.valid?
           - if p.settles?
@@ -31,8 +31,21 @@
       - t.attr :amount
       - t.col(Payment.human_attribute_name(:received_at), class: 'right') { |p| l(p.received_at) }
 
-    %h3=t('.payments_without_invoice')
-    = table(processor.payments_without_invoice, class: 'table table-stripped w-100') do |t|
+    - if processor.from && processor.to
+      %h3=t('.valid_payments_without_invoice_and_dates', from: l(processor.from), to: l(processor.to))
+    - else
+      %h3=t('.valid_payments_without_invoice')
+    = table(processor.valid_payments_without_invoice, class: 'table table-stripped w-100') do |t|
+      - t.col('') do |p|
+        %i.fas.fa-exclamation-triangle{title: t('.icon_tooltip_invoice_missing')}
+
+      - t.col(Invoice.human_attribute_name(:esr_number)) { |p| p.esr_number }
+      - t.col(Payment.human_attribute_name(:payee_person_name)) { |p| p.payee.person_name }
+      - t.attr :amount
+      - t.col(Payment.human_attribute_name(:received_at), class: 'right') { |p| l(p.received_at) }
+
+    %h3=t('.invalid_payments')
+    = table(processor.invalid_payments, class: 'table table-stripped w-100') do |t|
       - t.col('') do |p|
         - if !p.invoice
           %i.fas.fa-exclamation-triangle{title: t('.icon_tooltip_invoice_missing')}
@@ -40,6 +53,7 @@
           %i.fas.fa-exclamation-triangle{title: t('.icon_tooltip_invoice_not_payable')}
 
       - t.col(Invoice.human_attribute_name(:esr_number)) { |p| p.esr_number }
+      - t.col(Payment.human_attribute_name(:payee_person_name)) { |p| p.payee.person_name }
       - t.attr :amount
       - t.col(Payment.human_attribute_name(:received_at), class: 'right') { |p| l(p.received_at) }
 

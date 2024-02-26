@@ -415,6 +415,9 @@ describe MountedAttr do
 
         expect_persisted(nil, attrs)
       end
+
+      it 'does not persist entry when value set to default' do
+      end
     end
 
     context 'integer attribute' do
@@ -450,10 +453,6 @@ describe MountedAttr do
         expect_persisted(nil, attrs)
       end
     end
-
-    it 'does not persist new records with default value'
-
-    it 'does not persist records with unchanged value'
   end
 
   describe 'type lookup method' do

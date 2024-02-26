@@ -378,8 +378,8 @@ de:
               w: Liebe %{first_name}
               other: Liebe*r %{first_name}
       self_registration_reason:
-        one: Eintrittsgrund
-        other: Eintrittsgründe
+        one: Vordefinierter Eintrittsgrund
+        other: Vordefinierte Eintrittsgründe
       service_token:
         one: API-Key
         other: API-Keys
@@ -479,7 +479,7 @@ de:
         language: Sprache
         primary_group_id: Hauptgruppe
         layer_group_label: Hauptebene
-        self_registration_reason: Vordefinierter Eintrittsgrund
+        self_registration_reason: Eintrittsgrund
         self_registration_reason_text: Eintrittsgrund
         self_registration_reason_custom_text: Benutzerdefinierter Eintrittsgrund
 

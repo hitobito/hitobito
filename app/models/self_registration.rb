@@ -8,14 +8,15 @@
 class SelfRegistration
   include ActiveModel::Model
 
-  attr_accessor :group, :main_person_attributes, :housemates_attributes, :step, :single
+  attr_accessor :group, :main_person_attributes, :housemates_attributes, :single
+  attr_reader :step, :next_step
 
   class_attribute :partials, default: [:main_person]
 
   def initialize(group:, params:)
     @group = group
     @step = params[:step].to_i
-    @next = params[:next].to_i
+    @next_step = (params[:next] || @step + 1).to_i
     @main_person_attributes = extract_attrs(params, :main_person_attributes).to_h
   end
 
@@ -28,7 +29,7 @@ class SelfRegistration
   end
 
   def valid?
-    super && validate_visited_partials
+    super && partials_valid?
   end
 
   def main_person
@@ -44,34 +45,29 @@ class SelfRegistration
   end
 
   def move_on
-    @step = @next
+    @step = first_invalid_or_next_step
   end
 
   private
 
-  def validate_visited_partials
-    visited_partials.collect do |partial|
-      move_to_unless_valid?(partial, send("#{partial}_valid?"))
-    end.all?
+  def first_invalid_or_next_step
+    [next_step, partials.index(first_invalid_partial)].compact.min
   end
 
-  def visited_partials
-    partials.take(@step + 1).reverse
+  def partials_valid?
+    seen_partials.all? { |partial| send("#{partial}_valid?") }
+  end
+
+  def first_invalid_partial
+    seen_partials.find { |partial| !send("#{partial}_valid?") }
+  end
+
+  def seen_partials
+    partials.take(@step + 1)
   end
 
   def main_person_valid?
     main_person.valid?
-  end
-
-  def move_to_unless_valid?(partial, valid)
-    valid.tap do
-      next if @step_resetted
-
-      unless valid
-        @step = partials.index(partial)
-        @step_resetted = true
-      end
-    end
   end
 
   def build_person(attrs, model_class)

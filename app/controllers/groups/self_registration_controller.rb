@@ -15,18 +15,19 @@ class Groups::SelfRegistrationController < ApplicationController
   def new; end
 
   def create
-    return render :new if !entry.valid? || params[:autosubmit].present?
+    return render :new if params[:autosubmit].present?
+    return save_and_redirect if entry.valid? && entry.last_step?
 
-    if params.key?(:next)
-      entry.move_on
-      render :new, entry: entry
-    else
-      save_entry
-      redirect_to new_person_session_path, notice: success_message
-    end
+    entry.move_on
+    render :new
   end
 
   private
+
+  def save_and_redirect
+    save_entry
+    redirect_to new_person_session_path, notice: success_message
+  end
 
   def save_entry
     Person.transaction do

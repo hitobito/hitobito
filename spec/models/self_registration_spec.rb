@@ -14,24 +14,37 @@ describe SelfRegistration do
 
   subject(:registration) { described_class.new(group: group, params: params) }
 
-  describe 'populating step and next' do
-    it 'step defaults to 0' do
-      expect(registration.step).to eq 0
+  it 'step defaults to 0' do
+    expect(registration.step).to eq 0
+  end
+
+  it 'step is set according to param' do
+    params[:step] = 1
+    expect(registration.step).to eq 1
+  end
+
+  describe '#move_on' do
+    it 'moves one step if partial is valid' do
+      registration.partials = [:a]
+      expect(registration).to receive(:a_valid?).and_return(true)
+      expect { registration.move_on }.to change { registration.step }.from(0).to(1)
     end
 
-    it 'step is set according to param' do
-      params[:step] = 1
-      expect(registration.step).to eq 1
-    end
-
-    it '#move_on does not move if next is blank' do
+    it 'stays on current step if partial is invalid' do
+      registration.partials = [:a]
+      expect(registration).to receive(:a_valid?).and_return(false)
       expect { registration.move_on }.not_to change { registration.step }
     end
 
-    it '#move_on does move if next is present' do
-      params[:step] = 2
-      params[:next] = 4
-      expect { registration.move_on }.to change { registration.step }.from(2).to(4)
+    it 'stays on current step if partial is valid but next is set to current step' do
+      params[:step] = 1
+      params[:next] = 1
+      registration.partials = [:a, :b, :c]
+
+      expect(registration.step).to eq 1
+      expect(registration).to receive(:a_valid?).and_return(true)
+      expect(registration).to receive(:b_valid?).and_return(true)
+      expect { registration.move_on }.not_to change { registration.step }
     end
   end
 
@@ -69,29 +82,6 @@ describe SelfRegistration do
       it 'is valid if required attributes are present' do
         registration.main_person_attributes = { first_name: 'test', last_name: 'test' }
         expect(registration.main_person).to be_valid
-      end
-
-      describe 'activating step according to validations' do
-        before do
-          params[:step] = 1
-          params[:next] = 2
-          registration.partials = [:a, :b, :c]
-        end
-
-        it 'validates up to next step' do
-          expect(registration).to receive(:a_valid?)
-          expect(registration).to receive(:b_valid?)
-          expect(registration).not_to receive(:c_valid?)
-          registration.valid?
-        end
-
-        it 'sets step according to validation result' do
-          expect(registration).to receive(:a_valid?).and_return(false)
-          expect(registration).to receive(:b_valid?).and_return(true)
-          expect do
-            expect(registration).not_to be_valid
-          end.to change { registration.step }.from(1).to(0)
-        end
       end
     end
 

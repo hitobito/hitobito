@@ -43,6 +43,10 @@ class GroupDecorator < ApplicationDecorator
     end
   end
 
+  def supports_self_registration?
+    allowed_roles_for_self_registration.present?
+  end
+
   def to_s(*args)
     model.to_s(*args) + archived_suffix
   end

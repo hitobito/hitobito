@@ -45,6 +45,18 @@ describe GroupDecorator, :draper_with_helpers do
     end
   end
 
+  describe 'supports_self_registration?' do
+    it 'returns true if it has any allowed_roles_for_self_registration' do
+      allow(subject).to receive(:allowed_roles_for_self_registration).and_return([double])
+      expect(subject.supports_self_registration?).to be true
+    end
+
+    it 'returns false if it has no allowed_roles_for_self_registration' do
+      allow(subject).to receive(:allowed_roles_for_self_registration).and_return([])
+      expect(subject.supports_self_registration?).to be false
+    end
+  end
+
   describe 'selecting attributes' do
     class DummyGroup < Group # rubocop:disable Lint/ConstantDefinitionInBlock
       self.used_attributes += [:foo, :bar]

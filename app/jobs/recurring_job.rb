@@ -16,6 +16,7 @@ class RecurringJob < BaseJob
     def run_every(seconds)
       self.interval = seconds
     end
+
   end
 
   run_every 15.minutes

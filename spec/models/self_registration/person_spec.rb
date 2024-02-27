@@ -67,4 +67,28 @@ describe SelfRegistration::Person do
       end
     end
   end
+
+  describe '#save!'  do
+    let(:group) { groups(:top_layer) }
+    let(:jobs) { Delayed::Job.where("handler like '%person_id: #{model.person.id}%'") }
+
+    before do
+      stub_test_person do |person|
+        person.attrs = [:first_name, :email, :primary_group]
+        person.required_attrs = [:email]
+      end
+
+      group.update!(self_registration_role_type: group.role_types.first)
+
+      model.first_name = 'test'
+      model.primary_group = groups(:top_layer)
+      model.email = 'test@example.com'
+    end
+
+    it 'creates person, role and duplicate locator job' do
+      expect { model.save! }.to change { Person.count }.by(1)
+        .and change { Role.count }.by(1)
+        .and change { jobs.count }.by(1)
+    end
+  end
 end

@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -17,18 +17,29 @@ class Invoice::History
 
   def to_s
     content_tag :table do
-      table_rows = [
-        invoice_history_entry(invoice_issued_data, 'blue'),
-        invoice_history_entry(invoice_sent_data, 'blue')
-      ]
-
-      table_rows << invoice_reminder_rows
-      table_rows << invoice_payment_rows
-      table_rows.compact.join.html_safe # rubocop:disable Rails/OutputSafety
+      invoice_history_entries
+        .sort_by { |row| sortable_date(row) }
+        .join
+        .html_safe # rubocop:disable Rails/OutputSafety
     end
   end
 
   private
+
+  def invoice_history_entries
+    [
+      invoice_history_entry(invoice_issued_data, 'blue'),
+      invoice_history_entry(invoice_sent_data, 'blue'),
+      *invoice_reminder_rows,
+      *invoice_payment_rows
+    ].compact
+  end
+
+  def sortable_date(row)
+    date = Nokogiri.parse(row).css('tr td')[1].text
+
+    Date.parse(date)
+  end
 
   def invoice_reminder_rows
     invoice.payment_reminders.list.collect.with_index do |reminder, count|
@@ -44,6 +55,7 @@ class Invoice::History
 
   def invoice_history_entry(data, color)
     return unless data
+
     content_tag :tr do
       data.collect do |d|
         concat content_tag(:td, d, class: color)

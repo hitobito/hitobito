@@ -370,7 +370,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     label_classes += ' col-form-label text-md-end'
     label_classes += ' required' if required?(attr)
 
-    add_css_class(html_options, 'labeled col-md')
+    add_css_class(html_options, 'labeled col-md-9 col-lg-8 col-xl-8 mw-63ch')
     css_classes = { 'no-attachments': no_attachments?(attr),
                     row: true, 'mb-2': true }
 

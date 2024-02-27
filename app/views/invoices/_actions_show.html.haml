@@ -11,4 +11,4 @@
 
 - if entry.payable?
   = action_button(t('crud.new.title', model: Payment.model_name.human),
-    '#', :plus, { data: { turbo: false, toggle: 'collapse', target: '#payment' } })
+    '#', :plus, { data: { turbo: false, bs_toggle: 'collapse', bs_target: '#payment' } })

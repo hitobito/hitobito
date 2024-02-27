@@ -148,7 +148,7 @@ describe Groups::SelfRegistrationController do
           end
 
           it 'creates person and schedules duplicate location job' do
-            expect(People::DuplicateLocatorJob).to receive(:new)
+            expect(Person::DuplicateLocatorJob).to receive(:new)
               .with(kind_of(Integer))
               .and_call_original
 
@@ -165,7 +165,7 @@ describe Groups::SelfRegistrationController do
                   .where(Delayed::Job
                   .arel_table[:handler]
                   .matches("%DuplicateLocatorJob%"))
-                  .count 
+                  .count
               }.by(1)
 
             person = Person.find_by(first_name: 'Alfred', last_name: 'Burn')

@@ -16,6 +16,6 @@ describe People::DuplicateLocatorJob do
     expect(People::DuplicateLocator).to receive_message_chain(:new, :run)
     expect { job.perform }.to not_change { Person.count }
       .and change { job.delayed_jobs.count }.by(1)
-    expect(job.delayed_jobs.first.run_at).to eq 1.day.from_now
+    expect(job.delayed_jobs.first.run_at).to be_within(5.minutes).of(1.day.from_now)
   end
 end

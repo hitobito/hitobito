@@ -881,7 +881,7 @@ describe Person do
     let(:person) { people(:top_leader) }
 
     it 'schedules duplicate locator job after updating duplication related attributes' do
-      expect(People::DuplicateLocatorJob).to receive(:new)
+      expect(Person::DuplicateLocatorJob).to receive(:new)
         .with(person.id)
         .and_call_original
 
@@ -891,13 +891,13 @@ describe Person do
         Delayed::Job
           .where(Delayed::Job
           .arel_table[:handler]
-          .matches("%DuplicateLocatorJob%"))
-          .count 
+          .matches("%Person::DuplicateLocatorJob%"))
+          .count
       }.by(1)
     end
 
     it 'does not schedule duplicate locator job if non relevant attributes are updated' do
-      expect(People::DuplicateLocatorJob).to receive(:new)
+      expect(Person::DuplicateLocatorJob).to receive(:new)
         .with(person.id)
         .never
 

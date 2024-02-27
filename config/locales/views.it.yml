@@ -1178,18 +1178,11 @@ it:
     parsing_error: Il documento caricato non può essere elaborato (%{error})
     created: Sono stati registrati %{count} pagamenti
     payments:
-      valid:
-        one: È stato individuato un pagamento valido
-        many: Sono stati individuati %{count} pagamenti validi
-        other: Sono stati individuati %{count} pagamenti validi
       invalid:
         one: È stato individuato un pagamento non valido
         many: Sono stati individuati %{count} pagamenti non validi
         other: Sono stati individuati %{count} pagamenti non validi
     show:
-      payments_with_invoice: Pagamenti imputabili
-      payments_with_invoice_and_dates: Pagamenti imputabili da... a...
-      payments_without_invoice: Non assegnabile
       amount_open: Aperto
       create:
         zero: Importare il pagamento

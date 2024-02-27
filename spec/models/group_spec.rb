@@ -628,7 +628,10 @@ describe Group do
         end
 
         it 'future roles are hard deleted' do
-          Fabricate(:future_role, person: role.person, group: group, convert_to: group.role_types.first)
+          Fabricate(:future_role,
+                    person: role.person,
+                    group: group,
+                    convert_to: group.role_types.first)
           expect do
             group.archive!
           end.to change { group.roles.with_deleted.future.count }.by(-1)
@@ -721,8 +724,8 @@ describe Group do
       expect(top_layer.foundation_year).to eq(1942)
     end
 
-    it 'does not persist attribute entry if blank value' do
-      top_layer.custom_name = ''
+    it 'does not persist attribute entry if nil value' do
+      top_layer.custom_name = nil
 
       expect do
         top_layer.save!

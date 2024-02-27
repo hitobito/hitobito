@@ -35,7 +35,7 @@ describe MountedAttr do
     ]
   end
 
-  let(:entry) do
+  let!(:entry) do
     Group::MountedAttrsGroup.new(name: 'MountedAttrsTest', parent: groups(:bottom_layer_one))
   end
 
@@ -415,9 +415,6 @@ describe MountedAttr do
 
         expect_persisted(nil, attrs)
       end
-
-      it 'does not persist entry when value set to default' do
-      end
     end
 
     context 'integer attribute' do
@@ -461,5 +458,41 @@ describe MountedAttr do
         expect(entry.send("#{type}_type")).to eq(type)
       end
     end
+  end
+
+  describe '#save_mounted_attributes' do
+
+    def test_entry(&block)
+      # create an entry for a custom group that has mounted attributes defined on the fly
+      stub_const('TestGroup', Class.new(Group) do
+        self.layer = true
+        instance_eval(&block)
+      end).new(name: 'TestGroup').tap(&:save!)
+    end
+
+    it 'does not persist new records with default value' do
+      entry = test_entry { mounted_attr :test, :string, default: :hello_world }
+      expect { entry.save_mounted_attributes }.not_to change { MountedAttribute.count }
+    end
+
+    it 'does not persist new records with default value' do
+      entry = test_entry { mounted_attr :test, :string, default: :hello_world }
+      entry.test = 'non-default value'
+      expect { entry.save_mounted_attributes }.to change { MountedAttribute.count }
+    end
+
+    it 'does update existing records with default value' do
+      entry = test_entry { mounted_attr :test, :string, default: :hello_world }
+      entry.update!(test: 'non-default value')
+      expect(entry.mounted_attributes.find_by(key: :test).value).to eq 'non-default value'
+
+      expect {
+        entry.test = 'hello_world'
+        entry.save_mounted_attributes
+      }.to not_change { MountedAttribute.count }.
+        and change { entry.mounted_attributes.find_by(key: :test).value }.
+        from('non-default value').to('hello_world')
+    end
+
   end
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2021, Die Mitte. This file is part of
+#  Copyright (c) 2021-2024, Die Mitte. This file is part of
 #  hitobito_die_mitte and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_die_mitte.
@@ -12,17 +12,17 @@ class Payments::EbicsImportJob < RecurringJob
 
   def initialize
     super
-    @payments = Hash.new {|hash, key| hash[key] = []}
+    @payments = Hash.new { |hash, key| hash[key] = [] }
     @errors = []
   end
 
   def perform_internal
     payment_provider_configs.find_each do |provider_config|
       Payments::EbicsImport.new(provider_config).run.each do |status, status_payments|
-        payments[status] += status_payments
+        @payments[status] += status_payments
       end
     rescue StandardError => e
-      errors << e
+      @errors << e
       error(self, e, payment_provider_config: provider_config)
     end
   end

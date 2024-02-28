@@ -51,7 +51,7 @@ namespace :dev do
       abort('This needs a group-structure to work') if Group.subclasses.blank?
 
       username = 'tester@example.net'
-      password = 'hitobito is the best software to manage people in complex group hierachies'
+      password = 'hitobito is the best software to manage people in complex group hierarchies'
 
       me = Person.find_by(email: username) ||
         Person.new(first_name: 'Tom', last_name: 'Tester',

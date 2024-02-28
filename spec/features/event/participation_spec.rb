@@ -39,10 +39,9 @@ describe :event_participation do
 
       expect do
         click_button('Anmelden')
+        is_expected.to have_text("Teilnahme von #{person.full_name} in #{event.name} wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.")
       end.to change { Event::Participation.count }.by(1)
-
-      is_expected.to have_text("Teilnahme von #{person.full_name} in #{event.name} wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.")
-
+      
       participation = Event::Participation.find_by(event: event, person: person)
 
       expect(participation).to be_present

@@ -1829,11 +1829,15 @@ de:
       warning: Dieser Vorgang kann nicht rückgängig gemacht werden.
       role:
         text: Bist du sicher, dass du aus dieser Gruppe austreten möchtest?
+        no_permission: ""
       # Add translations for specific role types like this:
       # leader:
       #   text: Bist du sicher, dass du als Leiter/-in austreten möchtest?
+      #   no_permission: "Du hast keine Berechtigung, als Leiter/-in auszutreten."
       # group/bottom_layer/member:
       #   text: Bist du sicher, dass du als Mitglied austreten möchtest?
+      #   no_permission: "Du hast keine Berechtigung, als Mitglied auszutreten."
+
     flash:
       success: Du bist erfolgreich ausgetreten per %{date}.
 

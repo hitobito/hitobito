@@ -15,21 +15,46 @@ module MountedAttr
 
   def save_mounted_attributes
     self.class.mounted_attr_configs.each do |c|
-      value = send(c.attr_name)
-      next unless value.present?
+      value = mounted_attr_value(c.attr_name)
+      entry = mounted_attr_entry(c.attr_name, value)
 
-      entry = mounted_attr_entry(c.attr_name)
-
-      # do not persist a record when default value
-      next if entry.unset? && value == c.default
+      next if value == c.default && entry.new_record? # Do not persist default value for new record
 
       entry.value = value
-      entry.save! if entry.value_changed?
+      entry.save! if entry.value_changed? # Only save if the value has changed
     end
   end
 
-  def mounted_attr_entry(attr_name)
-    mounted_attributes.find_or_initialize_by(key: attr_name)
+  private
+
+  def mounted_attr_entry(attr_name, value = nil)
+    mounted_attributes.find_by(key: attr_name) ||
+      MountedAttribute.new(entry: self, key: attr_name, value: value)
+  end
+
+  def mounted_attr_cached?(attr_name)
+    instance_variable_defined?("@#{attr_name}")
+  end
+
+  def mounted_attr_cached_value(attr_name)
+    instance_variable_get("@#{attr_name}")
+  end
+
+  def mounted_attr_cache_value(attr_name, value)
+    instance_variable_set("@#{attr_name}", value)
+  end
+
+  def mounted_attr_value(attr_name)
+    if mounted_attr_cached?(attr_name)
+      # Use the MountedAttribute accessor which handles type casting and default values.
+      MountedAttribute.new(
+        entry: self,
+        key: attr_name,
+        value: mounted_attr_cached_value(attr_name)
+      ).value
+    else
+      mounted_attr_entry(attr_name).value
+    end
   end
 
   module ClassMethods
@@ -57,35 +82,34 @@ module MountedAttr
 
     private
 
+    # `attr_type` should be a type symbol registered with the ActiveModel type registry.
+    # See `ActiveModel::Type` for default types or register your own.
     def mounted_attr(attr, attr_type, options = {})
       config = mounted_attr_registry.register(self, attr, attr_type, options)
 
       define_mounted_attr_getter(config)
       define_mounted_attr_setter(config)
-
+      define_mounted_attr_type_lookup_method(config)
       define_mounted_attr_validations(config)
     end
 
     def define_mounted_attr_getter(config)
       define_method(config.attr_name) do
-        var_name = "@#{config.attr_name}"
-        value = if instance_variable_defined?(var_name)
-                  instance_variable_get(var_name)
-                else
-                  mounted_attr_entry(config.attr_name).casted_value
-                end
-
-        return config.default if
-          !config.default.nil? && (value.nil? || value.try(:empty?) || value.try(:zero?))
-
-        value
+        mounted_attr_value(config.attr_name)
       end
     end
 
     def define_mounted_attr_setter(config)
       define_method("#{config.attr_name}=") do |value|
-        instance_variable_set("@#{config.attr_name}", value)
-        value
+        mounted_attr_cache_value(config.attr_name, value)
+      end
+    end
+
+    # This is used to determine the type of the attribute in the template.
+    # See `UtilityHelper#column_type`
+    def define_mounted_attr_type_lookup_method(config)
+      define_method("#{config.attr_name}_type") do
+        config.attr_type
       end
     end
 

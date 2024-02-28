@@ -18,21 +18,25 @@ class MountedAttribute < ActiveRecord::Base
                 .config_for(entry.class, key)
   end
 
-  def casted_value
-    case config.attr_type
-    when :integer
-      value.presence && Integer(value)
-    else
-      value
-    end
+  def value=(new_value)
+    value = with_default(cast_value(new_value))
+    write_attribute(:value, value)
   end
 
-  def unset?
-    case config.attr_type
-    when :integer
-      casted_value.nil? || casted_value.zero?
-    else
-      value.blank?
-    end
+  def value
+    with_default(read_attribute(:value))
+  end
+
+  private
+
+  def cast_value(value)
+    config.type.cast(value)
+  end
+
+  def with_default(value)
+    return config.default if
+      !config.default.nil? && (value.nil? || value.try(:empty?) || value.try(:zero?))
+
+    value
   end
 end

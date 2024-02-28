@@ -35,7 +35,7 @@ describe MountedAttr do
     ]
   end
 
-  let(:entry) do
+  let!(:entry) do
     Group::MountedAttrsGroup.new(name: 'MountedAttrsTest', parent: groups(:bottom_layer_one))
   end
 
@@ -237,6 +237,22 @@ describe MountedAttr do
         end
       end
 
+      it 'casts "1" to true' do
+        boolean_attrs.each do |attr|
+          entry.send("#{attr}=", "1")
+          expect(entry.send(attr)).to eq(true),
+                                      "expected #{attr} to be true but was #{entry.send(attr).inspect}"
+        end
+      end
+
+      it 'casts "0" to false' do
+        boolean_attrs.each do |attr|
+          entry.send("#{attr}=", "0")
+          expect(entry.send(attr)).to eq(false),
+                                      "expected #{attr} to be false but was #{entry.send(attr).inspect}"
+        end
+      end
+
       it 'sets nil for attribute without default' do
         [:boolean, :boolean_nullable, :boolean_non_nullable].each do |attr|
           entry.send("#{attr}=", nil)
@@ -370,6 +386,7 @@ describe MountedAttr do
       string_attrs.each { |attr| entry.send("#{attr}=", 'some-valid-string') }
       integer_attrs.each { |attr| entry.send("#{attr}=", 12_345) }
       boolean_attrs.each { |attr| entry.send("#{attr}=", true) }
+      entry.save!
 
       # set the provided value for the specified attributes
       attrs.each { |attr| entry.send("#{attr}=", value) }
@@ -433,5 +450,49 @@ describe MountedAttr do
         expect_persisted(nil, attrs)
       end
     end
+  end
+
+  describe 'type lookup method' do
+    [:string, :integer, :boolean].each do |type|
+      it "returns the type for #{type} attributes" do
+        expect(entry.send("#{type}_type")).to eq(type)
+      end
+    end
+  end
+
+  describe '#save_mounted_attributes' do
+
+    def test_entry(&block)
+      # create an entry for a custom group that has mounted attributes defined on the fly
+      stub_const('TestGroup', Class.new(Group) do
+        self.layer = true
+        instance_eval(&block)
+      end).new(name: 'TestGroup').tap(&:save!)
+    end
+
+    it 'does not persist new records with default value' do
+      entry = test_entry { mounted_attr :test, :string, default: :hello_world }
+      expect { entry.save_mounted_attributes }.not_to change { MountedAttribute.count }
+    end
+
+    it 'does not persist new records with default value' do
+      entry = test_entry { mounted_attr :test, :string, default: :hello_world }
+      entry.test = 'non-default value'
+      expect { entry.save_mounted_attributes }.to change { MountedAttribute.count }
+    end
+
+    it 'does update existing records with default value' do
+      entry = test_entry { mounted_attr :test, :string, default: :hello_world }
+      entry.update!(test: 'non-default value')
+      expect(entry.mounted_attributes.find_by(key: :test).value).to eq 'non-default value'
+
+      expect {
+        entry.test = 'hello_world'
+        entry.save_mounted_attributes
+      }.to not_change { MountedAttribute.count }.
+        and change { entry.mounted_attributes.find_by(key: :test).value }.
+        from('non-default value').to('hello_world')
+    end
+
   end
 end

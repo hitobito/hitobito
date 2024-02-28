@@ -66,12 +66,7 @@ module RolesHelper
   end
 
   def terminate_role_link(role)
-    return unless role.terminatable? && can?(:terminate, role)
-
-    link_to(t('roles/terminations.global.title'),
-            new_group_role_termination_path(role_id: role.id, group_id: role.group.id),
-            class: 'btn btn-xs float-right',
-            remote: true)
+    Roles::TerminateRoleLink.new(role, self).render
   end
 
   private

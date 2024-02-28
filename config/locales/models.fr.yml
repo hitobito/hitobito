@@ -415,10 +415,6 @@ fr:
               m: Cher %{first_name},
               w: Chère  %{first_name},
               other: Cher %{first_name},
-      self_registration_reason:
-        one: Motif d'entrée
-        many: Motifs d'entrée
-        other: Motifs d'entrée
       service_token:
         one: API-Key
         many: Clefs API
@@ -515,7 +511,6 @@ fr:
         language: Langue
         primary_group_id: Groupe principal
         layer_group_label: Niveau
-        self_registration_reason: Motif d'entrée prédéfini
         self_registration_reason_text: Motif d'entrée
         self_registration_reason_custom_text: Motif d'entrée prédéfini
       person_duplicate:

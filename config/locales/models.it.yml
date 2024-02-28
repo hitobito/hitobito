@@ -414,10 +414,6 @@ it:
               m: Caro %{first_name}
               w: Cara %{first_name}
               other: Caro %{first_name}
-      self_registration_reason:
-        one: Motivo dell'ingresso
-        many: Motivi di ingresso
-        other: Motivi di ingresso
       service_token:
         one: Chi
         many: Chiavi API
@@ -514,7 +510,6 @@ it:
         language: Lingua
         primary_group_id: Gruppo principale
         layer_group_label: Livello principale
-        self_registration_reason: Motivo di ingresso predefinito
         self_registration_reason_text: Motivo dell'ingresso
         self_registration_reason_custom_text: Motivo di ingresso definito dall'utente
       person_duplicate:

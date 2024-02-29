@@ -252,7 +252,7 @@ end
 Capybara.current_driver = :chrome
 Capybara.javascript_driver = :chrome
 
-puts "Using chromedriver version #{Webdrivers::Chromedriver.current_version}"
+warn "Using chromedriver version #{Webdrivers::Chromedriver.current_version}"
 
 Devise::Test::ControllerHelpers.prepend(Module.new do
   # Make sure the email address is confirmed before logging in

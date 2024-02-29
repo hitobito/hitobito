@@ -203,7 +203,8 @@ RSpec.configure do |config|
   end
 
   if defined?(RescueRegistry)
-    # RescueRegistry.context must be reset between requests. This normally happens in a standard Rails middleware.
+    # RescueRegistry.context must be reset between requests. This normally
+    # happens in a standard Rails middleware.
     # We must reset it manually as most tests bypass the middleware
     config.after do
       RescueRegistry.context = nil

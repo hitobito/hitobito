@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 #  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-# A view helper to standartize often used functions like formatting,
+# A view helper to standardize often used functions like formatting,
 # tables, forms or action links. This helper is ideally defined in the
 # ApplicationController.
 module FormatHelper
@@ -16,14 +18,14 @@ module FormatHelper
   # (integers are not formatted, since years etc. should not contain delimiters)
   def f(value) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity
     case value
-    when Float, BigDecimal then
+    when Float, BigDecimal
       number_with_precision(value,
                             precision: t('number.format.precision'),
                             delimiter: t('number.format.delimiter'))
     when Date   then l(value)
     when Time   then l(value, format: :time)
-    when true   then t(:"global.yes")
-    when false  then t(:"global.no")
+    when true   then t(:'global.yes')
+    when false  then t(:'global.no')
     when nil    then EMPTY_STRING
     else value.to_s
     end
@@ -32,10 +34,11 @@ module FormatHelper
   # Formats single decimal and integer values
   def fnumber(value)
     case value
-    when Float, BigDecimal then
+    when Float, BigDecimal
       number_with_precision(value, precision: t('number.format.precision'),
                                    delimiter: t('number.format.delimiter').html_safe)
-    when nil then EMPTY_STRING
+    when nil
+      EMPTY_STRING
     else
       number_with_delimiter(value.to_i, delimiter: t('number.format.delimiter').html_safe)
     end
@@ -67,7 +70,7 @@ module FormatHelper
       "format_#{obj.class.base_class.name.underscore}_#{attr}"
     else
       "format_#{obj.class.name.underscore}_#{attr}"
-    end.gsub(/\//, '_') # deal with nested models
+    end.gsub('/', '_') # deal with nested models
   end
 
 
@@ -130,9 +133,9 @@ module FormatHelper
     return EMPTY_STRING if val.nil?
 
     case type
-    when :time    then f(val.to_time) # rubocop:disable Rails/Date
+    when :time    then f(val.to_time)
     when :date    then f(val.to_date)
-    when :datetime, :timestamp then "#{f(val.to_date)} #{f(val.to_time)}" # rubocop:disable Rails/Date
+    when :datetime, :timestamp then "#{f(val.to_date)} #{f(val.to_time)}"
     when :text    then val.present? ? h(val) : EMPTY_STRING
     when :decimal then f(val.to_s.to_f)
     else f(val)
@@ -220,7 +223,7 @@ module FormatHelper
 
   # Returns true if no link should be created when formatting the given association.
   def assoc_link?(val)
-    respond_to?("#{val.class.base_class.model_name.singular_route_key}_path".to_sym) &&
+    respond_to?(:"#{val.class.base_class.model_name.singular_route_key}_path") &&
       can?(:show, val)
   end
 

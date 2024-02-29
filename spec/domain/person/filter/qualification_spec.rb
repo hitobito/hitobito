@@ -47,8 +47,8 @@ describe Person::Filter::Qualification do
     qualification_kinds.each do |key|
       kind = qualification_kinds(key)
       start = case validity
-              when 'active'         then Date.today
-              when 'reactivateable' then Date.today - kind.validity.years - 1.year
+              when 'active'         then Time.zone.today
+              when 'reactivateable' then Time.zone.today - kind.validity.years - 1.year
               when Integer          then Date.new(validity, 1, 1)
               else Date.today - 20.years
               end

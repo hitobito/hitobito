@@ -83,8 +83,10 @@ describe TableDisplay do
       subject.selected = %W[event_question_1 event_question_#{question.id} event_question_2]
       statements = subject.sort_statements(top_course.participations)
       expect(statements).to have(1).item
-      expect(statements[:"event_question_#{question.id}"]).to eq 'CASE event_questions.id ' \
-      "WHEN #{question.id} THEN 0 ELSE 1 END, TRIM(event_answers.answer)"
+      expect(statements[:"event_question_#{question.id}"])
+        .to eq 'CASE event_questions.id ' \
+               "WHEN #{question.id} THEN 0 " \
+               'ELSE 1 END, TRIM(event_answers.answer)'
     end
 
     it 'rejects unregistered person attributes' do

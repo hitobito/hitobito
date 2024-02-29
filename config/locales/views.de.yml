@@ -765,7 +765,7 @@ de:
         notes: Bemerkungen
       adult_consent_field:
         caption: Ich bestätige dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner
-          Erziehungsberechtigten habe.
+          Erziehungsberechtigten habe
       create:
         email_taken: E-Mail wird bereits verwendet. Melde dich an oder registrier dich mit einer anderen E-Mail-Adresse.
         flash:

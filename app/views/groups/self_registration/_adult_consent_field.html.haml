@@ -5,4 +5,6 @@
 
 - if f.object.requires_adult_consent?
   = f.labeled(:adult_consent, '&nbsp'.html_safe) do
-    = f.boolean_field(:adult_consent, required: true, caption: t('.caption'))
+    = f.label(:adult_consent, class: 'd-block mt-2') do
+      = f.check_box :adult_consent
+      = t('.caption')

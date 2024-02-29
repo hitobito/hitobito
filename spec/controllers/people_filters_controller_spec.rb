@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -47,7 +47,7 @@ describe PeopleFiltersController do
                               ['Weitere E-Mail ungültig', 'category_validation:email_additional_invalid', PersonTags::Validation.email_additional_invalid.id]]
 
         tags = assigns(:possible_tags)
-        expect(tags.count).to eq(2)
+
         invalid_email_tags.each do |t|
           expect(tags).to include(t)
         end

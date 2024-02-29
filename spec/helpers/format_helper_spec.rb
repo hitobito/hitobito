@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -70,7 +70,7 @@ describe FormatHelper do
 
   describe '#f' do
 
-    context 'Fixnums' do
+    context 'Integers' do
       it 'should print small values unchanged' do
         expect(f(10)).to eq('10')
       end
@@ -152,7 +152,7 @@ describe FormatHelper do
   end
 
   describe '#fnumber' do
-    context 'Fixnums' do
+    context 'Integer' do
       it 'should print small values unchanged' do
         expect(fnumber(10)).to eq('10')
       end

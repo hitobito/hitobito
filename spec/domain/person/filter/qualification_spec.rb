@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2017, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -49,7 +49,7 @@ describe Person::Filter::Qualification do
       start = case validity
               when 'active'         then Date.today
               when 'reactivateable' then Date.today - kind.validity.years - 1.year
-              when Fixnum           then Date.new(validity, 1, 1)
+              when Integer          then Date.new(validity, 1, 1)
               else Date.today - 20.years
               end
       Fabricate(:qualification, person: person, qualification_kind: kind, start_at: start)

@@ -1180,18 +1180,11 @@ fr:
     parsing_error: La donnée téléchargée ne peut pas être retravaillée (%{error}).
     created: '%{count} paiements ont été saisis.'
     payments:
-      valid:
-        one: '%{count} de paiements valables ont été reconnus'
-        many: '%{count} paiements ont été reconnus valables.'
-        other: '%{count} paiements ont été reconnus valables.'
       invalid:
         one: '%{count} de paiements non-valables ont été reconnus'
         many: '%{count} paiements ont été reconnus non-valables.'
         other: '%{count} paiements ont été reconnus non-valables.'
     show:
-      payments_with_invoice: Paiements allouables
-      payments_with_invoice_and_dates: Paiements allouables du %{from} au %{to}
-      payments_without_invoice: pas attribuable
       amount_open: ouvert
       create:
         zero: importer le paiement
@@ -1284,7 +1277,6 @@ fr:
       fields:
         lives_in_household_with: "Habite dans le foyer avec"
         update_denied: "Tu ne peux pas ajouter %{other_person} au foyer. Il se peut que cette personne soit déjà dans le foyer ou que tu n'aies pas les droits d'écriture."
-        cannot_create_household: 'Tu as besoin de droits d''écriture sur plusieurs personnes pour les rassembler dans un ensemble de foyer.'
     family:
       fields:
         is_in_family_with: 'Fait partie de la famille de'

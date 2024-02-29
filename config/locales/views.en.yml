@@ -908,16 +908,10 @@ en:
     parsing_error: The file could not be processed (%{error})I
     created: '%{count}payments created.'
     payments:
-      valid:
-        one: One valid payments has been detected.
-        other: '%{count}valid payments detected.'
       invalid:
         one: One valid payment has been detected.
         other: '%{count}valid payments detected.'
     show:
-      payments_with_invoice: Matching payments
-      payments_with_invoice_and_dates: Matching payments from %{from} to %{to}
-      payments_without_invoice: No invoice found
       amount_open: Open
       create:
         zero: Import payments

@@ -16,8 +16,8 @@ describe Person::Household do
     Fabricate(role.name.to_s, group: group).person
   end
 
-  def household(person)
-    Person::Household.new(person, Ability.new(person), nil, user)
+  def household(person, other = nil)
+    Person::Household.new(person, Ability.new(person), other, user)
   end
 
   context '#assign' do
@@ -102,6 +102,31 @@ describe Person::Household do
       expect(other.household_people_ids).to eq [leader.id, member.id]
       expect(household).not_to be_address_changed
       expect(household).to be_people_changed
+    end
+  end
+
+  context '#leave' do
+    it 'clears household_people_ids' do
+      leader.household_people_ids = [member.id]
+      subject = household(leader)
+
+      expect { subject.leave }.
+        to change { leader.household_people_ids }.from([member.id]).to([])
+
+      expect(subject).to be_people_changed
+    end
+
+    it 'changes emtpy? to true' do
+      leader.household_people_ids = [member.id]
+      subject = household(leader)
+
+      expect { subject.leave }.
+        to change { household(leader).empty? }.from(false).to(true)
+    end
+
+    it 'returns self' do
+      subject = household(leader)
+      expect(subject.leave).to eq subject
     end
   end
 

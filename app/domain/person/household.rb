@@ -41,6 +41,12 @@ class Person::Household
     end
   end
 
+  def leave
+    person.household_people_ids = []
+    @people_changed = true
+    self
+  end
+
   def persist!
     Person.transaction do
       empty? ? remove : save

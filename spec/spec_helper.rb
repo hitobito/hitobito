@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -72,7 +72,7 @@ RSpec::Matchers.define_negated_matcher :not_change, :change
 
 RSpec.configure do |config|
 
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  config.fixture_path = Rails.root / 'spec' / 'fixtures'
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
@@ -97,8 +97,8 @@ RSpec.configure do |config|
     c.max_formatted_output_length = 1000
   end
 
-  config.include(MailerMacros)
-  config.include(EventMacros)
+  config.include MailerMacros
+  config.include EventMacros
   config.include I18nHelpers
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::IntegrationHelpers, type: :request
@@ -109,7 +109,6 @@ RSpec.configure do |config|
   config.include ViewComponent::SystemTestHelpers, type: :component
   config.include Capybara::RSpecMatchers, type: :component
 
-  # config.filter_run_excluding type: 'feature', performance: true
   config.filter_run_excluding type: 'sphinx', sphinx: true
   if ActiveRecord::Base.connection.adapter_name.downcase != 'mysql2'
     config.filter_run_excluding :mysql

@@ -1,3 +1,11 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2019-2024, Puzzle ITC. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
+
 require 'spec_helper'
 
 describe TableDisplay do
@@ -28,7 +36,9 @@ describe TableDisplay do
   it 'rejects unregistered attributes' do
     TableDisplay.register_column(Person, TableDisplays::PublicColumn, [:first_name])
 
-    subject.person_id = 1
+    person = people(:top_leader)
+
+    subject.person_id = person.id
     subject.table_model_class = Person
     subject.selected = %w(name first_name id confirm)
     expect { subject.save! }.not_to raise_error
@@ -93,7 +103,9 @@ describe TableDisplay do
       TableDisplay.register_column(Event::Participation, TableDisplays::PublicColumn,
                                    [:'person.first_name'])
 
-      subject.person_id = 1
+      person = people(:top_leader)
+
+      subject.person_id = person.id
       subject.selected = %w(name person.id person.first_name)
       expect(subject.save).to eq true
       expect(subject.selected).not_to include 'name'

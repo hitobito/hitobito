@@ -41,7 +41,6 @@ gem 'gibbon', '~> 3.4'
 gem 'globalize'
 gem 'graphiti'
 gem 'graphiti-rails', '~> 0.1'
-gem 'graphiti-openapi', github: 'puzzle/graphiti-openapi', tag: 'standalone/0.2'
 gem 'haml'
 gem 'http_accept_language'
 gem 'icalendar'
@@ -50,6 +49,7 @@ gem 'lograge'
 gem 'lograge_activejob'
 gem 'lograge-sql'
 gem 'magiclabs-userstamp', require: 'userstamp'
+gem 'mail' # add mail here to have it loaded
 gem 'mime-types'
 gem 'mini_magick'
 gem 'mysql2'
@@ -96,9 +96,8 @@ gem 'view_component'
 gem 'wagons', '0.6.1'
 gem 'webpacker'
 
-gem 'mail' # add mail here to have it loaded
-
-# load after others because of active record inherited alias chain.
+# load after others because dependencies
+gem 'graphiti-openapi', github: 'puzzle/graphiti-openapi', tag: 'standalone/0.2'
 gem 'kaminari'
 
 gem 'active_storage_validations' # validate filesize, dimensions and content-type of uploads

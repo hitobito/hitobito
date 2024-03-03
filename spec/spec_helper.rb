@@ -214,11 +214,7 @@ end
 
 require 'capybara/rails'
 require 'capybara-screenshot/rspec'
-
-# Disable driver deprecations until we upgrade to latest selenium
-Selenium::WebDriver.logger.ignore(:logger_info)
-Selenium::WebDriver.logger.ignore(:add_option)
-Selenium::WebDriver.logger.ignore(:option_symbols)
+require 'selenium-webdriver'
 
 Capybara.server = :puma, { Silent: true }
 Capybara.server_port = ENV['CAPYBARA_SERVER_PORT'].to_i if ENV['CAPYBARA_SERVER_PORT']
@@ -240,7 +236,7 @@ Capybara.register_driver :chrome do |app|
   options.args << '--disable-dev-shm-usage' # helps with docker resource limitations
   options.args << '--window-size=1800,1000'
   options.args << '--crash-dumps-dir=/tmp'
-  options.add_option('prefs', { 'intl.accept_languages': 'de-CH,de' })
+  options.add_preference('intl.accept_languages', 'de-CH,de')
   if ENV['CAPYBARA_CHROME_BINARY'].present?
     options.add_option('binary',
                        ENV['CAPYBARA_CHROME_BINARY'])
@@ -250,8 +246,6 @@ end
 
 Capybara.current_driver = :chrome
 Capybara.javascript_driver = :chrome
-
-warn "Using chromedriver version #{Webdrivers::Chromedriver.current_version}"
 
 Devise::Test::ControllerHelpers.prepend(Module.new do
   # Make sure the email address is confirmed before logging in

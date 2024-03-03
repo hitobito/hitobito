@@ -614,7 +614,10 @@ GEM
       activesupport (>= 3.1)
     seed-fu-ndo (0.0.3)
       seed-fu (>= 2.2.0)
-    selenium-webdriver (4.10.0)
+    selenium-devtools (0.122.0)
+      selenium-webdriver (~> 4.2)
+    selenium-webdriver (4.18.1)
+      base64 (~> 0.2)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
@@ -691,10 +694,6 @@ GEM
       seed-fu-ndo (>= 0.0.3)
     warden (1.2.9)
       rack (>= 2.0.9)
-    webdrivers (5.3.1)
-      nokogiri (~> 1.6)
-      rubyzip (>= 1.3.0)
-      selenium-webdriver (~> 4.0, < 4.11)
     webmock (3.19.1)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
@@ -829,6 +828,7 @@ DEPENDENCIES
   ruby-prof
   rubyzip
   seed-fu
+  selenium-devtools
   sentry-raven
   simple_xlsx_reader
   simpleidn
@@ -847,7 +847,6 @@ DEPENDENCIES
   vcard
   view_component
   wagons (= 0.6.1)
-  webdrivers
   webmock
   webpacker
   wirble

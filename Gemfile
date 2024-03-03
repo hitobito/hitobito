@@ -135,9 +135,9 @@ group :test do
   gem 'rails-controller-testing'
   gem 'rspec-collection_matchers'
   gem 'rspec-its'
+  gem 'selenium-devtools'
   gem 'stackprof'
   gem 'test-prof'
-  gem 'webdrivers'
   gem 'webmock'
 end
 

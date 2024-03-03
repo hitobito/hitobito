@@ -8,6 +8,7 @@
 source 'https://rubygems.org'
 
 gem 'rails', '= 6.1.7.6'
+gem 'wagons', '0.6.1'
 
 gem 'activerecord-session_store'
 gem 'acts-as-taggable-on'
@@ -18,7 +19,7 @@ gem 'bcrypt'
 gem 'bleib', '~> 0.0.10'
 gem 'bootsnap', require: false
 gem 'cancancan', '< 3.2.0'
-gem 'caxlsx', '~> 3.4.0'
+gem 'caxlsx'
 gem 'charlock_holmes', '~> 0.7.7'
 gem 'commonmarker'
 gem 'config'
@@ -34,6 +35,7 @@ gem 'doorkeeper-i18n'
 gem 'doorkeeper-openid_connect'
 gem 'draper'
 gem 'draper-cancancan'
+gem 'dry-validation'
 gem 'epics' # client for EBICS-connections to banks
 gem 'faker'
 gem 'faraday'
@@ -93,7 +95,6 @@ gem 'validates_by_schema'
 gem 'validates_timeliness'
 gem 'vcard'
 gem 'view_component'
-gem 'wagons', '0.6.1'
 gem 'webpacker'
 
 # load after others because dependencies
@@ -111,7 +112,7 @@ group :development, :test do
   gem 'parallel_tests'
   gem 'pry-byebug'
   gem 'pry-doc' # provides show-source/$ in the pry-console
-  gem 'rspec-rails', '~> 5.0'
+  gem 'rspec-rails', '~> 6.0'
 end
 
 group :development do

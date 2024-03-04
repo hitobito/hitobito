@@ -7,7 +7,7 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '= 6.1.7.6'
+gem 'rails', '= 6.1.7.7'
 gem 'wagons', '0.6.1'
 
 gem 'activerecord-session_store'

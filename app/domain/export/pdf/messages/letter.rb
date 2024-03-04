@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2020-2022, Die Mitte. This file is part of
+#  Copyright (c) 2020-2024, Die Mitte. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -10,7 +10,6 @@ module Export::Pdf::Messages
 
     MARGIN = 2.5.cm
     PREVIEW_LIMIT = 4
-    BODY_FONT_SIZE = 9 # meant to be overridden in wagons
 
     class << self
       def export(_format, letter)
@@ -26,6 +25,7 @@ module Export::Pdf::Messages
       @letter = letter
       @options = options
       @async_download_file = options.delete(:async_download_file)
+      @body_font_size = Settings.messages.body_font_size
     end
 
     def pdf
@@ -67,7 +67,7 @@ module Export::Pdf::Messages
 
     def render_sections(recipient)
       sections.each do |section|
-        section.render(recipient, font_size: BODY_FONT_SIZE)
+        section.render(recipient, font_size: @body_font_size)
       end
     end
 

@@ -12,6 +12,8 @@ describe GroupResource, type: :resource do
 
   describe 'serialization' do
     let!(:group) { groups(:bottom_group_two_one) }
+    before { group.update!(self_registration_role_type: Group::BottomGroup::Member.sti_name) }
+
     def serialized_attrs
       [
         :name,
@@ -70,6 +72,22 @@ describe GroupResource, type: :resource do
 
       date_time_attrs.each do |attr|
         expect(data.public_send(attr)&.to_time).to eq(group.public_send(attr))
+      end
+    end
+
+    describe 'attribute self_registration_url' do
+      it 'is present if group.self_registration_active?' do
+        allow_any_instance_of(Group).to receive(:self_registration_active?).and_return(true)
+        render
+
+        expect(jsonapi_data[0]['self_registration_url']).to eq(group_self_registration_url(group))
+      end
+
+      it 'is blank if group.self_registration_active? is false' do
+        allow_any_instance_of(Group).to receive(:self_registration_active?).and_return(false)
+        render
+
+        expect(jsonapi_data[0]['self_registration_url']).to be_blank
       end
     end
 

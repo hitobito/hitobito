@@ -1807,7 +1807,7 @@ de:
       edit_role_for_person: Rolle für %{person} bearbeiten
       new_role_for_person: Neue Rolle erstellen
 
-    fields:
+    label:
       help_optional_label: Optionale Bezeichnung der Rolle dieser Person
 
     person_fields:

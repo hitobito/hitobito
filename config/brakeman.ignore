@@ -57,25 +57,6 @@
       "note": "The parameter is matched against a whitelist"
     },
     {
-      "warning_type": "Unmaintained Dependency",
-      "warning_code": 123,
-      "fingerprint": "715ee6d743a8af33c7b930d728708ce19c765fb40e2ad9d2b974db04d92dc7d1",
-      "check_name": "EOLRuby",
-      "message": "Support for Ruby 3.0.6 ends on 2024-03-31",
-      "file": ".ruby-version",
-      "line": 1,
-      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
-      "code": null,
-      "render_path": null,
-      "location": null,
-      "user_input": null,
-      "confidence": "Weak",
-      "cwe_id": [
-        1104
-      ],
-      "note": "We will upgrade soon (TM)"
-    },
-    {
       "warning_type": "Command Injection",
       "warning_code": 14,
       "fingerprint": "85d61578afc6e686b5355788bd6a7270dae137f6e7a17a447b49aadb6e6c2efb",
@@ -168,6 +149,6 @@
       "note": "The command can only be executed in an authenticated context or locally"
     }
   ],
-  "updated": "2024-01-31 09:33:27 +0100",
-  "brakeman_version": "6.1.1"
+  "updated": "2024-03-04 08:40:02 +0100",
+  "brakeman_version": "6.1.2"
 }

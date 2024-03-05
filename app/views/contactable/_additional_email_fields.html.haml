@@ -14,7 +14,7 @@
 - if entry.is_a?(Person)
   = f.label(:mailings, class: 'ms-5 col-1') do
     = f.check_box(:mailings)
-    %span{rel: 'tooltip', title: t('.tooltip_mailings')}
+    %span{'data-bs-toggle': 'tooltip', title: t('.tooltip_mailings')}
       = t(:"activerecord.attributes.additional_emails.mailings")
       %i.fas.fa-info
 

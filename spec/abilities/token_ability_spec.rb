@@ -349,6 +349,24 @@ describe TokenAbility do
     end
   end
 
+  describe :event do
+    context 'authorized' do
+      let(:token) { service_tokens(:permitted_top_layer_token) }
+
+      it 'may list_available' do
+        is_expected.to be_able_to(:list_available, Event)
+      end
+    end
+
+    context 'unauthorized' do
+      let(:token) { service_tokens(:rejected_top_layer_token) }
+
+      it 'may list_available' do
+        is_expected.not_to be_able_to(:list_available, Event)
+      end
+    end
+  end
+
   describe :event_participations do
     let(:event_participation) { event_participations(:top) }
 

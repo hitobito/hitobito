@@ -69,6 +69,8 @@ class TokenAbility
   end
 
   def define_event_abilities
+    can :list_available, Event
+
     can :show, Event do |e|
       e.groups.any? { |g| token_layer_and_below.include?(g) }
     end

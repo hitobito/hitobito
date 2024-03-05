@@ -144,6 +144,223 @@
       }
     },
     {
+      "name": "EventResource",
+      "type": "events",
+      "graphql_entrypoint": "events",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "group_ids": {
+          "type": "array_of_integers",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "type": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "kind_id": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "name": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "state": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "number": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "motto": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "cost": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "location": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "dates": {
+          "type": "array_of_event_dates",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "application_opening_at": {
+          "type": "date",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "application_closing_at": {
+          "type": "date",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "participant_count": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "application_contact_id": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "applicant_count": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "maximum_participants": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "created_at": {
+          "type": "datetime",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "updated_at": {
+          "type": "datetime",
+          "readable": true,
+          "writable": false,
+          "description": null
+        }
+      },
+      "extra_attributes": {
+      },
+      "sorts": {
+        "id": {
+        }
+      },
+      "filters": {
+        "id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "kind_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "state": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "updated_at": {
+          "type": "datetime",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "operators": [
+            "eq"
+          ]
+        },
+        "group_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq"
+          ]
+        },
+        "before_or_on": {
+          "type": "date",
+          "operators": [
+            "eq"
+          ],
+          "single": true
+        },
+        "after_or_on": {
+          "type": "date",
+          "operators": [
+            "eq"
+          ],
+          "single": true
+        }
+      },
+      "relationships": {
+        "contact": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "PersonResource"
+        }
+      },
+      "stats": {
+        "total": [
+          "count"
+        ]
+      }
+    },
+    {
       "name": "GroupResource",
       "type": "groups",
       "graphql_entrypoint": "groups",
@@ -1458,6 +1675,16 @@
     }
   ],
   "endpoints": {
+    "/api/events": {
+      "actions": {
+        "index": {
+          "resource": "EventResource"
+        },
+        "show": {
+          "resource": "EventResource"
+        }
+      }
+    },
     "/api/groups": {
       "actions": {
         "index": {
@@ -1572,6 +1799,10 @@
       "description": "Base Type."
     },
     "array_of_datetimes": {
+      "kind": "array",
+      "description": "Base Type."
+    },
+    "array_of_event_dates": {
       "kind": "array",
       "description": "Base Type."
     }

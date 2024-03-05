@@ -8,7 +8,7 @@
 class Invoice::History
   attr_reader :template, :invoice
 
-  delegate :content_tag, :l, :t, :concat, :number_to_currency, to: :template
+  delegate :content_tag, :t, :concat, to: :template
 
   def initialize(template, invoice)
     @template = template
@@ -18,7 +18,8 @@ class Invoice::History
   def to_s
     content_tag :table do
       invoice_history_entries
-        .sort_by { |row| sortable_date(row) }
+        .sort
+        .map { |entry| entry.to_html(template) }
         .join
         .html_safe # rubocop:disable Rails/OutputSafety
     end
@@ -28,80 +29,74 @@ class Invoice::History
 
   def invoice_history_entries
     [
-      invoice_history_entry(invoice_issued_data, 'blue'),
-      invoice_history_entry(invoice_sent_data, 'blue'),
-      *invoice_reminder_rows,
-      *invoice_payment_rows
-    ].compact
+      invoice_issued_entry,
+      invoice_sent_entry,
+      *reminder_sent_entries,
+      *payment_entries
+    ].select(&:valid?)
   end
 
-  def sortable_date(row)
-    date = Nokogiri.parse(row).css('tr td')[1].text
-
-    Date.parse(date)
-  end
-
-  def invoice_reminder_rows
-    invoice.payment_reminders.list.collect.with_index do |reminder, count|
-      invoice_history_entry(reminder_sent_data(reminder, count + 1), 'red')
+  def reminder_sent_entries
+    invoice.payment_reminders.list.map.with_index do |reminder, count|
+      reminder_sent_entry(reminder, count + 1)
     end
   end
 
-  def invoice_payment_rows
-    invoice.payments.list.collect do |payment|
-      invoice_history_entry(payment_data(payment), 'green')
+  def payment_entries
+    invoice.payments.list.map { |payment| payment_data(payment) }
+  end
+
+  class HistoryEntryData
+    attr_reader :date
+
+    def initialize(date, event, color)
+      @date = date
+      @event = event
+      @color = color
+    end
+
+    def valid?
+      @date.present?
+    end
+
+    def <=>(other)
+      @date <=> other.date
+    end
+
+    def data_row
+      ['⬤', I18n.l(date, format: :long), @event]
+    end
+
+    def to_html(template)
+      return '' unless valid?
+
+      template.content_tag :tr do
+        data_row.map do |d|
+          template.concat template.content_tag(:td, d, class: @color)
+        end.to_s.html_safe # rubocop:disable Rails/OutputSafety
+      end
     end
   end
 
-  def invoice_history_entry(data, color)
-    return unless data
-
-    content_tag :tr do
-      data.collect do |d|
-        concat content_tag(:td, d, class: color)
-      end.to_s.html_safe # rubocop:disable Rails/OutputSafety
-    end
+  def invoice_issued_entry
+    HistoryEntryData.new(invoice.issued_at, t('invoices.issued'), 'blue')
   end
 
-  def invoice_issued_data
-    if invoice.issued_at?
-      [
-        '⬤', # Middle Dot
-        long_date(invoice.issued_at),
-        t('invoices.issued')
-      ]
-    end
+  def invoice_sent_entry
+    HistoryEntryData.new(invoice.sent_at, t('invoices.sent'), 'blue')
   end
 
-  def invoice_sent_data
-    if invoice.sent_at?
-      [
-        '⬤', # Middle Dot
-        long_date(invoice.sent_at),
-        t('invoices.sent')
-      ]
-    end
-  end
+  def reminder_sent_entry(reminder, count)
+    message = "#{count}. #{t('invoices.reminder_sent',
+                             title: reminder.title,
+                             date: template.l(reminder.due_at, format: :long))}"
 
-  def reminder_sent_data(reminder, count)
-    [
-      '⬤', # Middle Dot
-      long_date(reminder.created_at.to_date),
-      "#{count}. #{t('invoices.reminder_sent',
-                     title: reminder.title,
-                     date: long_date(reminder.due_at))}"
-    ]
+    HistoryEntryData.new(reminder.created_at.to_date, message, 'red')
   end
 
   def payment_data(payment)
-    [
-      '⬤', # Middle Dot
-      long_date(payment.received_at),
-      "#{invoice.decorate.format_currency(payment.amount)} #{t('invoices.payed')}"
-    ]
-  end
+    message = "#{invoice.decorate.format_currency(payment.amount)} #{t('invoices.payed')}"
 
-  def long_date(date)
-    l(date, format: :long)
+    HistoryEntryData.new(payment.received_at, message, 'green')
   end
 end

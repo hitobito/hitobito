@@ -2,6 +2,7 @@
 
 ## unreleased
 
+*  Eigener JSON:API Endpoint für Events (hitobito_sac#229)
 *  Rechnungen können neu auch den Status "Teilzahlung" und "Überzahlung" haben (hitobito_sww#38)
 *  Einverständnis Erziehungsberechtigte für Selbstregistrierung (hitobito#2404)
 *  Listen von Rechnungen können nach letztem Zahlungseingang und nach insgesamt bezahltem Betrag sortiert werden (hitobito_sww#147)

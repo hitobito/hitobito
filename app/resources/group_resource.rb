@@ -85,6 +85,6 @@ class GroupResource < ApplicationResource
   end
 
   def base_scope
-    Group.without_deleted.without_archived
+    super.without_deleted.without_archived
   end
 end

@@ -215,6 +215,14 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
               start_date: start_date, end_date: end_date).distinct
     end
 
+    def before_or_on(date)
+      joins(:dates).where(event_dates: { start_at: ..date.end_of_day })
+    end
+
+    def after_or_on(date)
+      joins(:dates).where(event_dates: { start_at: date.midnight.. })
+    end
+
     # Events from groups in the hierarchy of the given user.
     def in_hierarchy(user)
       with_group_id(user.groups_hierarchy_ids)

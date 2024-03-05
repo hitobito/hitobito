@@ -241,6 +241,44 @@ describe Event do
       end
     end
 
+    context '.before_or_on' do
+      it 'excludes events starting after date' do
+        expect(Event.before_or_on(Date.new(2012, 2, 28))).to be_empty
+      end
+
+      it 'includes events starting before date' do
+        expect(Event.before_or_on(Date.new(2012, 3, 2))).to have(2).items
+      end
+
+      it 'includes events starting on date' do
+        expect(Event.before_or_on(Date.new(2012, 3, 1))).to have(2).items
+      end
+
+      it 'includes event if any date is before' do
+        event.dates.create!(start_at: '2012-2-1')
+        expect(Event.before_or_on(Date.new(2012, 2, 28))).to have(1).items
+      end
+    end
+
+    context '.after_or_on' do
+      it 'excludes events starting before date' do
+        expect(Event.after_or_on(Date.new(2012, 3, 2))).to be_empty
+      end
+
+      it 'includes events starting after date' do
+        expect(Event.after_or_on(Date.new(2012, 2, 28))).to have(2).items
+      end
+
+      it 'includes events starting on date' do
+        expect(Event.after_or_on(Date.new(2012, 3, 1))).to have(2).items
+      end
+
+      it 'includes event if any date is after' do
+        event.dates.create!(start_at: '2012-3-3')
+        expect(Event.after_or_on(Date.new(2012, 3, 2))).to have(1).items
+      end
+    end
+
     context '.upcoming' do
       subject { Event.upcoming }
       it 'does not find past events' do

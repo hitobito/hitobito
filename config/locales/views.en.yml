@@ -1235,8 +1235,6 @@ en:
       add_role_for_person: Create role for %{person}
       edit_role_for_person: Edit role for %{person}
       new_role_for_person: Create role
-    fields:
-      help_optional_label: Optional name of the role of this person
     person_fields:
       create_new_person: Add new person
       search_existing_person: Find existing person

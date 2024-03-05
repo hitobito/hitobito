@@ -11,18 +11,18 @@
   = render 'form_tabs'
 
   .tab-content
-    #general.tab-pane.active
+    = tab_content(:general, default_active: true) do
       = render 'general_fields', f: f
       = render_extensions :fields, locals: { f: f }
 
-    #contactable.tab-pane
+    = tab_content(:contactable) do
       = render 'contactable/fields', f: f
 
-    - FeatureGate.if('groups.self_registration') do
-      #self-registration.tab-pane
+    - if FeatureGate.enabled?('groups.self_registration') && entry.supports_self_registration?
+      = tab_content(:self_registration) do
         = render 'self_registration_fields', f: f
 
-    #mailing_lists.tab-pane
+    = tab_content(:mailing_lists) do
       = render 'mailing_lists_fields', f: f
 
     = render 'mounted_attributes/form_tabs', f: f

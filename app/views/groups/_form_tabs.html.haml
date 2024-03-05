@@ -1,9 +1,10 @@
 %ul.nav.nav-tabs
-  %li.nav-item= link_to(t('groups.form_tabs.general'), '#general', data: { bs_toggle: 'tab' }, class: 'active nav-link')
-  %li.nav-item= link_to(Group.human_attribute_name(:contactable), '#contactable', data: { bs_toggle: 'tab' }, class: 'nav-link')
-  %li.nav-item= link_to(Group.human_attribute_name(:self_registration_link), '#self-registration', data: { bs_toggle: 'tab' }, class: 'nav-link')
-  %li.nav-item= link_to(MailingList.model_name.human(count: 2), '#mailing_lists', data: { bs_toggle: 'tab' }, class: 'nav-link')
+  %li.nav-item= tab_header(t('groups.form_tabs.general'), :general, default_active: true)
+  %li.nav-item= tab_header(Group.human_attribute_name(:contactable), :contactable)
+  - if FeatureGate.enabled?('groups.self_registration') && entry.supports_self_registration?
+    %li.nav-item= tab_header(Group.human_attribute_name(:self_registration_link), :self_registration)
+  %li.nav-item= tab_header(MailingList.model_name.human(count: 2), :mailing_lists)
   - entry.model.class.mounted_attr_configs_by_category&.keys&.each do |key|
-    %li.nav-item= link_to(t("mounted_attributes.form_tabs.#{entry.model.class.sti_name.underscore}.#{key}"), "##{key}", data: { bs_toggle: 'tab' }, class: 'nav-link')
+    %li.nav-item= tab_header(t("mounted_attributes.form_tabs.#{entry.model.class.sti_name.underscore}.#{key}"), key)
 
   = render_extensions :form_tabs

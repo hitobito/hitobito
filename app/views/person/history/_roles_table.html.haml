@@ -4,7 +4,7 @@
 -# https://github.com/hitobito/hitobito
 
 - if roles.present?
-  %h2=title
+  %h2.mt-2=title
 
   = table(roles, class: 'table table-striped table-fixed') do |t|
     - t.col(Group.model_name.human) do |r|

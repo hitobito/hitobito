@@ -23,6 +23,22 @@ describe Qualification do
   let(:qualification) { Fabricate(:qualification) }
   let(:person) { qualification.person }
 
+  describe '.order_by_date' do
+    subject(:scope) { described_class.order_by_date }
+
+    def create_qualification(kind)
+      Fabricate(:qualification, person: people(:top_leader), qualification_kind: qualification_kinds(kind))
+    end
+
+    it 'orders by finish_at descending with nulls first' do
+      sl = create_qualification(:sl) # validity 2 year
+      gl = create_qualification(:gl) # validity 1 year
+      ql = create_qualification(:ql) # no validity, i.e. no finished_at set
+
+      expect(described_class.order_by_date).to eq [ql, sl, gl]
+    end
+  end
+
   context '#to_s' do
     it 'includes qualification kind and finish_at' do
       quali = Fabricate(:qualification, qualification_kind: qualification_kinds(:sl),
@@ -209,6 +225,27 @@ describe Qualification do
       it { expect(q).to be_reactivateable }
       it { expect(q.reactivateable?(today + 2.years)).to be_falsey }
         it { expect(Qualification.reactivateable(today + 2.years)).not_to include q }
+    end
+  end
+
+  describe '#reactivateable_until' do
+    let(:today) { Time.zone.today }
+    let(:qualification) { Qualification.new }
+
+    it 'is nil when qualification_kind is not reactivateable' do
+      qualification.qualification_kind = qualification_kinds(:sl)
+      expect(qualification.reactivateable_until).to be_nil
+    end
+
+    it 'is nil when qualification_kind is reactivateable but finish_at is not set' do
+      qualification.qualification_kind = qualification_kinds(:gl_leader)
+      expect(qualification.reactivateable_until).to be_nil
+    end
+
+    it 'equals finish_at added by reactivateable years of kind' do
+      qualification.finish_at = Date.new(2024, 3, 6)
+      qualification.qualification_kind = qualification_kinds(:gl_leader)
+      expect(qualification.reactivateable_until).to eq Date.new(2026, 3, 6)
     end
   end
 

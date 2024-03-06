@@ -24,6 +24,8 @@
 
 class Qualification < ActiveRecord::Base
 
+  attr_writer :first_of_kind
+
   ### ASSOCIATIONS
 
   belongs_to :person
@@ -48,7 +50,7 @@ class Qualification < ActiveRecord::Base
   class << self
 
     def order_by_date
-      order('finish_at DESC')
+      order(Arel.sql('CASE WHEN finish_at IS NULL THEN 0 ELSE 1 END, finish_at DESC'))
     end
 
     def active(date = nil)
@@ -77,9 +79,15 @@ class Qualification < ActiveRecord::Base
     @duration ||= Duration.new(start_at, finish_at)
   end
 
+  def reactivateable_until
+    return unless finish_at
+
+    finish_at + qualification_kind.reactivateable.to_i.years
+  end
+
   def reactivateable?(date = nil)
     date ||= Time.zone.today
-    finish_at.nil? || (finish_at + qualification_kind.reactivateable.to_i.years) >= date
+    finish_at.nil? || (reactivateable_until && reactivateable_until >= date)
   end
 
   def to_s(format = :default)
@@ -87,6 +95,10 @@ class Qualification < ActiveRecord::Base
            kind: qualification_kind.to_s,
            finish_at: finish_at? ? I18n.l(finish_at) : nil,
            origin: origin)
+  end
+
+  def first_reactivateable?
+    @first_of_kind && reactivateable?
   end
 
   private

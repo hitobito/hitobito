@@ -34,6 +34,31 @@ describe Person::HistoryController do
       end
     end
 
+
+    context 'qualifications' do
+      render_views
+
+      let(:body) { Capybara::Node::Simple.new(response.body) }
+      let(:sl_leader) { qualification_kinds(:sl_leader) }
+      let(:gl) { qualification_kinds(:gl) }
+
+      it 'does not render qualifications if no qualifications exist' do
+        get :index, params: { group_id: groups(:top_group).id, id: top_leader.id }
+        expect(body).not_to have_css 'h2.mt-4', text: 'Qualifikationen'
+      end
+
+      it 'lists and marks first qualifications of kind' do
+        Fabricate(:qualification, person: top_leader, qualification_kind: gl, finish_at: 1.year.ago.to_date)
+        Fabricate(:qualification, person: top_leader, qualification_kind: sl_leader)
+
+        get :index, params: { group_id: groups(:top_group).id, id: top_leader.id }
+        expect(body).to have_css 'h2.mt-4', text: 'Qualifikationen'
+        expect(body).to have_css 'tbody td strong', text: sl_leader.to_s
+        expect(body).to have_css 'tbody td', text: gl.to_s
+        expect(body).not_to have_css 'tbody td strong', text: gl.to_s
+      end
+    end
+
   end
 
 end

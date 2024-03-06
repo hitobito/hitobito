@@ -198,7 +198,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:class] += ' is-invalid' if errors_on?(attr)
 
     content_tag(:div, class: 'd-flex align-items-center') do
-      content_tag(:div, class: 'col-2 me-1') { date_field("#{attr}_date") } +
+      content_tag(:div, class: 'col-4 me-1') { date_field("#{attr}_date") } +
         hours_select("#{attr}_hour") +
         content_tag(:div) { ':' } +
         minutes_select("#{attr}_min")

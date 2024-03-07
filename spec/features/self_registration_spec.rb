@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2012-2024, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -8,17 +8,19 @@
 
 require 'spec_helper'
 
-describe :self_registration, js: true do
-  class Group::SelfRegistrationGroup < Group
-    self.layer = true
+# a group to test self-registration
+class Group::SelfRegistrationGroup < Group
+  self.layer = true
 
-    class ReadOnly < ::Role
-      self.permissions = [:group_read]
-    end
-
-    roles ReadOnly
+  # a suitable role to register as
+  class ReadOnly < ::Role
+    self.permissions = [:group_read]
   end
 
+  roles ReadOnly
+end
+
+describe :self_registration, js: true do
   let(:group) { groups(:top_group) }
 
   let(:self_registration_role) { group.decorate.allowed_roles_for_self_registration.first }
@@ -52,8 +54,10 @@ describe :self_registration, js: true do
         .and change { Role.count }.by(1)
         .and change { ActionMailer::Base.deliveries.count }.by(1)
 
-      expect(page).to have_text('Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine ' \
-                                'E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.')
+      expect(page).to have_text(
+        'Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine ' \
+        'E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.'
+      )
 
       person = Person.find_by(email: 'max.muster@hitobito.example.com')
       expect(person).to be_present
@@ -76,7 +80,8 @@ describe :self_registration, js: true do
     describe 'with adult consent' do
       let(:adult_consent_field) { page.find_field(adult_consent_text) }
       let(:adult_consent_text) do
-        'Ich bestätige dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe.'
+        'Ich bestätige, dass ich mindestens 18 Jahre alt bin oder ' \
+          'das Einverständnis meiner Erziehungsberechtigten habe.'
       end
 
       before do
@@ -86,8 +91,10 @@ describe :self_registration, js: true do
 
       it 'cannot complete without accepting adult consent' do
         complete_main_person_form
+
         expect { click_on 'Registrieren' }.not_to(change { Person.count })
-        expect(adult_consent_field.native.attribute('validationMessage')).to eq 'Please check this box if you want to proceed.'
+        expect(adult_consent_field.native.attribute('validationMessage'))
+          .to eq 'Please check this box if you want to proceed.'
       end
 
       it 'can complete when accepting adult consent' do
@@ -125,10 +132,13 @@ describe :self_registration, js: true do
         end.not_to(change { Person.count })
 
         field = page.find_field('Ich erkläre mich mit den folgenden Bestimmungen einverstanden:')
-        expect(field.native.attribute('validationMessage')).to eq 'Please check this box if you want to proceed.'
+        expect(field.native.attribute('validationMessage'))
+          .to eq 'Please check this box if you want to proceed.'
 
         # flash not rendered because of native html require
-        expect(page).not_to have_text('Um die Registrierung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden.')
+        expect(page).not_to have_text(
+          'Um die Registrierung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden.'
+        )
       end
     end
 
@@ -138,11 +148,13 @@ describe :self_registration, js: true do
 
       expect { send_keys(:return) }
         .to change { Person.count }.by(1)
-                                   .and change { Role.count }.by(1)
-                                                             .and change { ActionMailer::Base.deliveries.count }.by(1)
+        .and change { Role.count }.by(1)
+        .and change { ActionMailer::Base.deliveries.count }.by(1)
 
-      expect(page).to have_text('Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine ' \
-                                  'E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.')
+      expect(page).to have_text(
+        'Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine ' \
+        'E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.'
+      )
     end
   end
 end

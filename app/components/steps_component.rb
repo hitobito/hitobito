@@ -98,8 +98,10 @@ class StepsComponent < ApplicationComponent
     end
 
     def submit_button(label, type, options)
-      helpers.add_css_class(options, 'btn btn-sm btn-primary mt-2')
-      @form.button(label, options.merge(type: type, data: { disable_with: label }))
+      content_tag(:div, class: 'btn-group') do
+        helpers.add_css_class(options, 'btn btn-sm btn-primary mt-2')
+        @form.button(label, options.merge(type: type, data: { disable_with: label }))
+      end
     end
 
     def back_link

@@ -161,6 +161,8 @@ people:
     # see https://en.wikipedia.org/wiki/ISO_8601#Durations
     warn_after: # e.g. P18M
     block_after: # e.g. P1M
+  family_members:
+    enabled: true
 
 event:
   attachments:

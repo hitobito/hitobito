@@ -9,8 +9,6 @@ class Event::ParticipationContactData
 
   attr_reader :person
 
-  T_PERSON_ATTRS = 'activerecord.attributes.person.'.freeze
-
   class_attribute :mandatory_contact_attrs,
                   :contact_attrs,
                   :contact_associations

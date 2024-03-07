@@ -221,7 +221,9 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   has_many :message_recipients, dependent: :nullify
 
   accepts_nested_attributes_for :relations_to_tails, allow_destroy: true
-  accepts_nested_attributes_for :family_members, allow_destroy: true
+  FeatureGate.if('people.family_members') do
+    accepts_nested_attributes_for :family_members, allow_destroy: true
+  end
 
   attr_accessor :household_people_ids, :shared_access_token
 

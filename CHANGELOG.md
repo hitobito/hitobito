@@ -6,6 +6,7 @@
 *  Einverständnis Erziehungsberechtigte für Selbstregistrierung (hitobito#2404)
 *  Listen von Rechnungen können nach letztem Zahlungseingang und nach insgesamt bezahltem Betrag sortiert werden (hitobito_sww#147)
 *  Zahlungen welche nicht einer Rechnung zugewiesen werden konnten, können auf der Seite "Einzelrechnungen" als CSV exportiert werden (#1494)
+*  Das Familienmitglieder-Feature kann jetzt via Settings im Wagon komplett ausgeschaltet werden
 
 ## Version 2.0
 

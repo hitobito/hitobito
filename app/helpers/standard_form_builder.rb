@@ -148,7 +148,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def date_field(attr, html_options = {})
     html_options[:value] ||= date_value(attr)
     html_options[:class] = [
-      html_options[:class], 'mw-100', 'mw-md-15ch', 'date', 'form-control', 'form-control-sm'
+      html_options[:class], 'mw-100', 'mw-md-20ch', 'date', 'form-control', 'form-control-sm'
     ].compact.join(' ')
     html_options[:class] += ' is-invalid' if errors_on?(attr)
     content_tag(:div, class: 'input-group') do
@@ -198,7 +198,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:class] += ' is-invalid' if errors_on?(attr)
 
     content_tag(:div, class: 'd-flex align-items-center') do
-      content_tag(:div, class: 'col-2 me-1') { date_field("#{attr}_date") } +
+      content_tag(:div, class: 'col-7 col-md-7 
+                                col-lg-5 col-xl-4 col-xxl-2 me-1') { date_field("#{attr}_date") } +
         hours_select("#{attr}_hour") +
         content_tag(:div) { ':' } +
         minutes_select("#{attr}_min")
@@ -370,7 +371,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     label_classes += ' col-form-label text-md-end'
     label_classes += ' required' if required?(attr)
 
-    add_css_class(html_options, 'labeled col-md-9 col-lg-8 col-xl-8 mw-63ch')
+    add_css_class(html_options, 'labeled col-md')
     css_classes = { 'no-attachments': no_attachments?(attr),
                     row: true, 'mb-2': true }
 

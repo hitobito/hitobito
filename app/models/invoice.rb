@@ -58,11 +58,13 @@ class Invoice < ActiveRecord::Base
 
   SEQUENCE_NR_SEPARATOR = '-'
 
-  STATES = %w(draft issued sent partial payed excess reminded cancelled).freeze
-  STATES_REMINDABLE = %w(issued sent partial reminded).freeze
-  STATES_PAYABLE = %w(issued sent partial reminded).freeze
+  # rubocop:disable Style/MutableConstant meant to be extended in wagons
+  STATES = %w(draft issued sent partial payed excess reminded cancelled)
+  STATES_REMINDABLE = %w(issued sent partial reminded)
+  STATES_PAYABLE = %w(issued sent partial reminded)
 
-  DUE_SINCE = %w(one_day one_week one_month).freeze
+  DUE_SINCE = %w(one_day one_week one_month)
+  # rubocop:enable Style/MutableConstant meant to be extended in wagons
 
   belongs_to :group
   belongs_to :recipient, class_name: 'Person'

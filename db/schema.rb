@@ -767,7 +767,7 @@ ActiveRecord::Schema.define(version: 2024_02_14_155008) do
     t.index ["access_grant_id"], name: "fk_rails_77114b3b09"
   end
 
-  create_table "payees", charset: "utf8mb4", force: :cascade do |t|
+  create_table "payees", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "person_id"
     t.bigint "payment_id", null: false
     t.string "person_name"
@@ -778,7 +778,7 @@ ActiveRecord::Schema.define(version: 2024_02_14_155008) do
     t.index ["person_id"], name: "index_payees_on_person_id"
   end
 
-  create_table "payment_provider_configs", charset: "utf8mb4", force: :cascade do |t|
+  create_table "payment_provider_configs", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "payment_provider"
     t.bigint "invoice_config_id"
     t.integer "status", default: 0, null: false

@@ -289,7 +289,8 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
                            .where(kind_id: event.kind_id)
                            .in_hierarchy(current_user)
                            .joins(:groups)
-                           .select(SqlSelectStatements.new.generate_aggregate_queries("group", "event"))
+                           .select(SqlSelectStatements.new.generate_aggregate_queries("group", 
+                                                                                      "event"))
                            .list
       @priority_2s = @priority_3s = (@alternatives.to_a - [event])
     end

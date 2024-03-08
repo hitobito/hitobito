@@ -611,6 +611,7 @@ de:
         state_translated: Status
         priorization: Priorisierung
         requires_approval: Freigabe
+        training_days: Ausbildungstage
 
       event/date:
         label: Bezeichnung
@@ -740,6 +741,7 @@ de:
         updated_at: Geändert
         deleted_at: Gelöscht
         reactivateable: Reaktivierbar
+        required_training_days: Erforderliche Ausbildungstage
 
       relations_to_tails:
         tail_id: Beziehung

@@ -35,8 +35,6 @@
 
   = render 'location_fields', f: f
 
-  - entry.used?(:globally_visible) do
-    = f.labeled_boolean_field :globally_visible,
-      caption: t('events.form.caption_globally_visible', model_name: entry.model_name.human)
+  = render 'additional_fields', f: f
 
 = render_extensions 'fields', locals: { f: f }

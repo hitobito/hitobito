@@ -49,6 +49,7 @@ module Export::Tabular::Events
       add_used_attribute_label(labels, :maximum_participants)
       add_used_attribute_label(labels, :external_applications)
       add_used_attribute_label(labels, :priorization)
+      add_used_attribute_label(labels, :training_days)
     end
 
     def add_count_labels(labels)

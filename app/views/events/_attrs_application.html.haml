@@ -10,7 +10,6 @@
 
   - if entry.any_conditions_present?
     %dl.dl-horizontal
-
       - entry.used?(:application_conditions) do
         = labeled(entry.class.human_attribute_name(:application_conditions)) do
           %p.multiline
@@ -27,6 +26,8 @@
                 entry.kind.qualification_kinds('qualification', 'participant').join(', '))
       = labeled(Event::Kind.human_attribute_name(:prolongations),
                 entry.kind.qualification_kinds('prolongation', 'participant').join(', '))
+      - entry.used?(:training_days) do
+        = present_labeled_attr(entry, :training_days)
 
   = render_present_attrs(entry, *entry.used_attributes(:signature, :signature_confirmation))
 

@@ -18,7 +18,13 @@ describe QualificationKindsController, type: :controller do
   end
 
   let(:test_entry) { qualification_kinds(:sl) }
-  let(:test_entry_attrs) { { label: 'Super Leader', description: 'More bla', validity: 3 } }
+  let(:test_entry_attrs) do
+    { label: 'Super Leader',
+      description: 'More bla',
+      validity: 3,
+      reactivateable: 3,
+      required_training_days: 5 }
+  end
 
   before { sign_in(people(:top_leader)) }
 

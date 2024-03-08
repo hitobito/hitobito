@@ -90,11 +90,11 @@ module EventsHelper
   def quick_select_course_groups
     (current_user.groups.course_offerers +
      current_user.primary_group&.hierarchy&.course_offerers.to_a).
-        uniq
+      uniq
   end
 
   def format_training_days(event)
-    number_with_precision(event.training_days, precision: 1)
+    number_to_condensed(event.training_days)
   end
 
   def format_event_application_conditions(entry)

@@ -25,6 +25,10 @@ module QualificationsHelper
     end
   end
 
+  def format_required_training_days(kind)
+    number_to_condensed(kind.required_training_days)
+  end
+
   private
 
   def format_unbounded_value(value, text = t('qualifications.unlimited'))

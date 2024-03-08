@@ -198,7 +198,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:class] += ' is-invalid' if errors_on?(attr)
 
     content_tag(:div, class: 'd-flex align-items-center') do
-      content_tag(:div, class: 'col-7 col-md-7 
+      content_tag(:div, class: 'col-7 col-md-7
                                 col-lg-5 me-1') { date_field("#{attr}_date") } +
         hours_select("#{attr}_hour") +
         content_tag(:div) { ':' } +
@@ -437,7 +437,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Generates a help block for fields
   def help_block(text = nil, options = {}, &block)
     additional_classes = Array(options.delete(:class))
-    content_tag(:span, text, class: "form-text #{additional_classes.join(' ')}", &block)
+    content_tag(:div, text, class: "form-text #{additional_classes.join(' ')}", &block)
   end
 
   # Returns the list of association entries, either from options[:list],
@@ -525,31 +525,30 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
-  def build_labeled_field(field_method, *args)
+  def build_labeled_field(field_method, *args) # rubocop:disable Metrics/MethodLength
     options = args.extract_options!
     label = options.delete(:label)
     label_class = options.delete(:label_class)
     addon = options.delete(:addon)
+    help = options.delete(:help)
+    help_inline = options.delete(:help_inline)
 
     attr = args.first
     caption = label if label.present?
 
     content = send(field_method, *(args << options))
     content = with_addon(addon, content) if addon.present?
-    with_labeled_field_help(args.first, options) { |help| content << help }
+    with_labeled_field_help(attr, help, help_inline) { |element| content << element }
 
     labeled(attr, caption, content, required: options[:required], label_class: label_class)
   end
 
-  def with_labeled_field_help(field, options)
-    help = options.delete(:help)
-    help_inline = options.delete(:help_inline)
-
+  def with_labeled_field_help(attr, help, help_inline)
     if help.present?
       yield help_inline(help_inline) if help_inline.present?
       yield help_block(help)
     else
-      yield help_texts.render_field(field)
+      yield help_texts.render_field(attr)
       yield help_inline(help_inline) if help_inline.present?
     end
   end

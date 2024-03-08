@@ -48,8 +48,8 @@ describe Person::HistoryController do
       end
 
       it 'lists and marks first qualifications of kind' do
-        Fabricate(:qualification, person: top_leader, qualification_kind: gl, finish_at: 1.year.ago.to_date)
-        Fabricate(:qualification, person: top_leader, qualification_kind: sl_leader)
+        Fabricate(:qualification, person: top_leader, qualification_kind: gl, start_at: 30.months.ago, finish_at: 1.year.ago.to_date)
+        Fabricate(:qualification, person: top_leader, qualification_kind: sl_leader, start_at: 1.week.from_now)
 
         get :index, params: { group_id: groups(:top_group).id, id: top_leader.id }
         expect(body).to have_css 'h2.mt-4', text: 'Qualifikationen'

@@ -40,10 +40,10 @@ module Dropdown
         add_item(translate('.send_login'),
                  template.send_password_instructions_group_person_path(template.parent, @user),
                  method: :post,
-                 'data-bs-toggle' => 'tooltip',
-                 'data-bs-container' => 'body',
-                 'data-bs-html' => 'true',
-                 'title': template.send_login_tooltip_text,
+                 'data-bs-toggle': 'tooltip',
+                 'data-bs-container': 'body',
+                 'data-bs-html': 'true',
+                 title: template.send_login_tooltip_text,
                  remote: true)
       end
     end

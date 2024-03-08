@@ -726,7 +726,7 @@ de:
         start_at: Seit
         origin: Ursprung
         finish_at: Bis
-        reactivateable_until: Reaktiviert bis
+        reactivateable_until: Reaktivierbar bis
         string: '%{kind}'
         string_with_origin: '%{kind} (von %{origin})'
         string_with_finish_at: '%{kind} (bis %{finish_at})'

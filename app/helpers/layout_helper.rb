@@ -58,7 +58,7 @@ module LayoutHelper
   def badge(label, type = nil, tooltip = nil)
     options = { class: "badge bg-#{type || 'default'}" }
     if tooltip.present?
-      options.merge!(rel: :tooltip, title: tooltip)
+      options.merge!('data-bs-toggle': 'tooltip', title: tooltip)
     end
     content_tag(:span, label, options)
   end

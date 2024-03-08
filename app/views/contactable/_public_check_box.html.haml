@@ -5,6 +5,6 @@
 
 = f.label(:public, class: 'ms-5 checkbox col-1') do
   = f.check_box(:public)
-  %span{rel: 'tooltip', title: t('.tooltip')}
+  %span{'data-bs-toggle': 'tooltip', title: t('.tooltip')}
     = t(:"activerecord.attributes.social_account.public")
     %i.fas.fa-info

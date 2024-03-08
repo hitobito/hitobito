@@ -1633,8 +1633,6 @@ it:
       add_role_for_person: 'Inserire un ruolo per %{person} '
       edit_role_for_person: 'Modificare il ruolo per %{person} '
       new_role_for_person: Creare un nuovo ruolo
-    fields:
-      help_optional_label: Designazione opzionale del ruolo di questa persona
     person_fields:
       create_new_person: Inserire una nuova persona
       search_existing_person: Cercare persona esistente

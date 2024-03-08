@@ -91,7 +91,7 @@ gem 'strip_attributes' # strip whitespace of attributes
 gem 'thinking-sphinx'
 gem 'truemail'
 gem 'turbo-rails'
-gem 'validates_by_schema'
+gem 'validates_by_schema', '~> 0.3.0' # 0.5.1 does not work well with wagons / wagon-migrations
 gem 'validates_timeliness'
 gem 'vcard'
 gem 'view_component'

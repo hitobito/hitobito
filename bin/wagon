@@ -223,6 +223,45 @@ case $cmd in
     rspec $@
     ;;
 
+  spec-all)
+    for wagon in $(existing_wagon_names); do
+      echo "$wagon" | red
+      wagon spec $@
+    done
+    ;;
+
+  spec)
+    require_wagon_name
+    shift # loose the "spec" argument
+    shift # loose the wagon-name argument
+
+    previous_wagon=$(grep PRIMARY_WAGON .envrc | sed 's/.*=//')
+
+    # setup
+
+    # write and allow .envrc
+    $0 activate "$wagon_name"
+    if [[ -x $(command -v direnv) ]]; then direnv allow; fi
+
+    # setup for specs
+    direnv exec ../hitobito/ $0 gemfile
+    direnv exec ../hitobito/ $0 reset-test-database
+
+    # prepare DB
+    export RAILS_ENV=test
+    direnv exec ../hitobito/ bundle exec rake db:migrate
+    direnv exec ../hitobito/ bundle exec rake wagon:migrate
+
+    # run specs in subshell to return to current directory
+    (
+      cd "../hitobito_${wagon_name}" \
+      && direnv exec "../hitobito_${wagon_name}" rspec $@
+    )
+
+    # reset
+    $0 activate "$previous_wagon"
+    ;;
+
   git-all)
     shift # loose the "git-all" argument
     echo "hitobito" | red
@@ -333,6 +372,8 @@ function __wagon_commands() {
     overwritten-in-wagon
     reset-database
     reset-test-database
+    spec
+    spec-all
     test-prepare
     test-speedup
     update-copyright
@@ -360,7 +401,7 @@ function __wagon_completion() {
       return
       ;;
 
-    activate)
+    activate | spec)
       COMPREPLY=( $( compgen -W "$(__wagon_list)" -- "$cur" ) )
       return
       ;;
@@ -375,7 +416,8 @@ COMPLETION
     echo "USAGE: $0 [activate] <WAGON>|core"
     echo "       $0 [clone|bootstrap] <WAGON>"
     echo "       $0 [create-datbase|reset-database|test-prepare|test-speedup|core-spec|update-copyright]"
-    echo "       $0 [reset-test-database|overwritten-in-wagon]"
+    echo "       $0 [spec] <WAGON>"
+    echo "       $0 [spec-all|reset-test-database|overwritten-in-wagon]"
     echo "       $0 [grep] <TERM>"
     echo "       $0 [git|git-all] <ARGS>"
     echo "       $0 [gemfile|configs|binstubs|list]"

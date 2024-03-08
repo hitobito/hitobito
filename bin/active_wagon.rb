@@ -12,7 +12,7 @@ require 'pathname'
 # Allows switching wagons quickly (depends on https://direnv.net/)
 class Setup
 
-  USED_RUBY_VERSION = '3.0.6'
+  USED_RUBY_VERSION = '3.2.3'
   USED_NODE_VERSION = '16.15.0'
   USED_YARN_VERSION = '1.22.19'
 

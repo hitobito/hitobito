@@ -7,7 +7,8 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '= 6.1.7.6'
+gem 'rails', '= 6.1.7.7'
+gem 'wagons', '0.6.1'
 
 gem 'activerecord-session_store'
 gem 'acts-as-taggable-on'
@@ -18,7 +19,7 @@ gem 'bcrypt'
 gem 'bleib', '~> 0.0.10'
 gem 'bootsnap', require: false
 gem 'cancancan', '< 3.2.0'
-gem 'caxlsx', '~> 3.4.0'
+gem 'caxlsx'
 gem 'charlock_holmes', '~> 0.7.7'
 gem 'commonmarker'
 gem 'config'
@@ -34,6 +35,7 @@ gem 'doorkeeper-i18n'
 gem 'doorkeeper-openid_connect'
 gem 'draper'
 gem 'draper-cancancan'
+gem 'dry-validation'
 gem 'epics' # client for EBICS-connections to banks
 gem 'faker'
 gem 'faraday'
@@ -41,7 +43,6 @@ gem 'gibbon', '~> 3.4'
 gem 'globalize'
 gem 'graphiti'
 gem 'graphiti-rails', '~> 0.1'
-gem 'graphiti-openapi', github: 'puzzle/graphiti-openapi', tag: 'standalone/0.2'
 gem 'haml'
 gem 'http_accept_language'
 gem 'icalendar'
@@ -50,6 +51,7 @@ gem 'lograge'
 gem 'lograge_activejob'
 gem 'lograge-sql'
 gem 'magiclabs-userstamp', require: 'userstamp'
+gem 'mail' # add mail here to have it loaded
 gem 'mime-types'
 gem 'mini_magick'
 gem 'mysql2'
@@ -93,12 +95,10 @@ gem 'validates_by_schema'
 gem 'validates_timeliness'
 gem 'vcard'
 gem 'view_component'
-gem 'wagons', '0.6.1'
 gem 'webpacker'
 
-gem 'mail' # add mail here to have it loaded
-
-# load after others because of active record inherited alias chain.
+# load after others because dependencies
+gem 'graphiti-openapi', github: 'puzzle/graphiti-openapi', tag: 'standalone/0.2'
 gem 'kaminari'
 
 gem 'active_storage_validations' # validate filesize, dimensions and content-type of uploads
@@ -112,7 +112,7 @@ group :development, :test do
   gem 'parallel_tests'
   gem 'pry-byebug'
   gem 'pry-doc' # provides show-source/$ in the pry-console
-  gem 'rspec-rails', '~> 5.0'
+  gem 'rspec-rails', '~> 6.0'
 end
 
 group :development do
@@ -135,9 +135,9 @@ group :test do
   gem 'rails-controller-testing'
   gem 'rspec-collection_matchers'
   gem 'rspec-its'
+  gem 'selenium-devtools'
   gem 'stackprof'
   gem 'test-prof'
-  gem 'webdrivers'
   gem 'webmock'
 end
 

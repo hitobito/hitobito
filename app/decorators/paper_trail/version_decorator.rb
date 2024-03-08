@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -188,7 +188,12 @@ module PaperTrail
     def reify(version)
       item_type = version.item_type.constantize
       return version.reify unless item_type.column_names.include?('type')
-      model_type = YAML.load(version.object)['type']
+
+      model_type = YAML.safe_load(
+        version.object,
+        permitted_classes: [Date, Time, Symbol]
+      )['type']
+
       Object.const_defined?(model_type) ? version.reify : Wrapped.new(model_type)
     end
 

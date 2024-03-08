@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -72,7 +72,7 @@ RSpec::Matchers.define_negated_matcher :not_change, :change
 
 RSpec.configure do |config|
 
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  config.fixture_path = Rails.root / 'spec' / 'fixtures'
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
@@ -97,8 +97,8 @@ RSpec.configure do |config|
     c.max_formatted_output_length = 1000
   end
 
-  config.include(MailerMacros)
-  config.include(EventMacros)
+  config.include MailerMacros
+  config.include EventMacros
   config.include I18nHelpers
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::IntegrationHelpers, type: :request
@@ -109,7 +109,6 @@ RSpec.configure do |config|
   config.include ViewComponent::SystemTestHelpers, type: :component
   config.include Capybara::RSpecMatchers, type: :component
 
-  # config.filter_run_excluding type: 'feature', performance: true
   config.filter_run_excluding type: 'sphinx', sphinx: true
   if ActiveRecord::Base.connection.adapter_name.downcase != 'mysql2'
     config.filter_run_excluding :mysql
@@ -203,7 +202,8 @@ RSpec.configure do |config|
   end
 
   if defined?(RescueRegistry)
-    # RescueRegistry.context must be reset between requests. This normally happens in a standard Rails middleware.
+    # RescueRegistry.context must be reset between requests. This normally
+    # happens in a standard Rails middleware.
     # We must reset it manually as most tests bypass the middleware
     config.after do
       RescueRegistry.context = nil
@@ -214,11 +214,7 @@ end
 
 require 'capybara/rails'
 require 'capybara-screenshot/rspec'
-
-# Disable driver deprecations until we upgrade to latest selenium
-Selenium::WebDriver.logger.ignore(:logger_info)
-Selenium::WebDriver.logger.ignore(:add_option)
-Selenium::WebDriver.logger.ignore(:option_symbols)
+require 'selenium-webdriver'
 
 Capybara.server = :puma, { Silent: true }
 Capybara.server_port = ENV['CAPYBARA_SERVER_PORT'].to_i if ENV['CAPYBARA_SERVER_PORT']
@@ -240,7 +236,7 @@ Capybara.register_driver :chrome do |app|
   options.args << '--disable-dev-shm-usage' # helps with docker resource limitations
   options.args << '--window-size=1800,1000'
   options.args << '--crash-dumps-dir=/tmp'
-  options.add_option('prefs', { 'intl.accept_languages': 'de-CH,de' })
+  options.add_preference('intl.accept_languages', 'de-CH,de')
   if ENV['CAPYBARA_CHROME_BINARY'].present?
     options.add_option('binary',
                        ENV['CAPYBARA_CHROME_BINARY'])
@@ -250,8 +246,6 @@ end
 
 Capybara.current_driver = :chrome
 Capybara.javascript_driver = :chrome
-
-puts "Using chromedriver version #{Webdrivers::Chromedriver.current_version}"
 
 Devise::Test::ControllerHelpers.prepend(Module.new do
   # Make sure the email address is confirmed before logging in

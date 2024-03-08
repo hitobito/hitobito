@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2021, CVP Schweiz. This file is part of
+#  Copyright (c) 2021-2024, CVP Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -70,8 +70,8 @@ describe Messages::BulkMailDispatch do
     context 'with recipients' do
       let(:recipient1_email) { 'recipient1@example.com' }
       let(:recipient2_email) { 'recipient2@example.com' }
-      let!(:recipient1) { MessageRecipient.create!(message_id: message.id, person_id: top_leader.id, state: :pending, email: recipient1_email) }
-      let!(:recipient2) { MessageRecipient.create!(message_id: message.id, person_id: top_leader.id, state: :pending, email: recipient2_email) }
+      let!(:recipient1) { Fabricate(:message_recipient, message: message, email: recipient1_email) }
+      let!(:recipient2) { Fabricate(:message_recipient, message: message, email: recipient2_email) }
       let(:delivery) { double }
 
       def setup_delivery

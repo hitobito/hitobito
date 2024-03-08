@@ -1,3 +1,8 @@
+#  Copyright (c) 2019, Pfadibewegung Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: payment_reminder_configs
@@ -25,8 +30,8 @@ class PaymentReminderConfig < ActiveRecord::Base
       30,
       'Zahlungserinnerung',
       'Im hektischen Alltag kann es vorkommen, eine fällige Zahlung zu übersehen. ' \
-      "\nDanke, dass Sie die Überweisung in den nächsten "\
-      "Tagen vornehmen. Sollten Sie die Zahlung bereits veranlasst haben, betrachten Sie bitte " \
+      "\nDanke, dass Sie die Überweisung in den nächsten " \
+      'Tagen vornehmen. Sollten Sie die Zahlung bereits veranlasst haben, betrachten Sie bitte ' \
       'dieses Schreiben als gegenstandslos.'
     ],
     [

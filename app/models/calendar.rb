@@ -5,6 +5,21 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+# == Schema Information
+#
+# Table name: calendars
+#
+#  id          :bigint           not null, primary key
+#  description :text(65535)
+#  name        :string(255)      not null
+#  token       :string(255)      not null
+#  group_id    :bigint           not null
+#
+# Indexes
+#
+#  index_calendars_on_group_id  (group_id)
+#
+
 class Calendar < ActiveRecord::Base
 
   belongs_to :group

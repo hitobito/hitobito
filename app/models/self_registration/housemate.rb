@@ -5,7 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-
 class SelfRegistration::Housemate < SelfRegistration::Person
 
   self.required_attrs = [

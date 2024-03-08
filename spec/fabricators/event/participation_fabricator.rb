@@ -1,11 +1,17 @@
 # encoding: utf-8
+
+#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: event_participations
 #
 #  id                     :integer          not null, primary key
 #  active                 :boolean          default(FALSE), not null
-#  additional_information :text(16777215)
+#  additional_information :text(65535)
 #  qualified              :boolean
 #  created_at             :datetime
 #  updated_at             :datetime
@@ -21,10 +27,6 @@
 #  index_event_participations_on_person_id               (person_id)
 #
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
 Fabricator(:event_participation, class_name: 'Event::Participation') do
   person
   event

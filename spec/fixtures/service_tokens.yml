@@ -2,12 +2,13 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: service_tokens
 #
 #  id                   :integer          not null, primary key
-#  description          :text(16777215)
+#  description          :text(65535)
 #  event_participations :boolean          default(FALSE), not null
 #  events               :boolean          default(FALSE)
 #  groups               :boolean          default(FALSE)
@@ -16,6 +17,7 @@
 #  mailing_lists        :boolean          default(FALSE), not null
 #  name                 :string(255)      not null
 #  people               :boolean          default(FALSE)
+#  permission           :string(255)      default("layer_read"), not null
 #  token                :string(255)      not null
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null

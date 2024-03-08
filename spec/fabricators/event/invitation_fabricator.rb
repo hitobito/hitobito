@@ -9,13 +9,19 @@
 #
 # Table name: event_invitations
 #
-#  id                     :integer          not null, primary key
-#  participation_type     :string           not null
-#  declined_at            :datetime
-#  event_id               :integer          not null
-#  person_id              :integer          not null
-#  created_at             :datetime
-#  updated_at             :datetime
+#  id                 :bigint           not null, primary key
+#  declined_at        :datetime
+#  participation_type :string(255)      not null
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  event_id           :bigint           not null
+#  person_id          :bigint           not null
+#
+# Indexes
+#
+#  index_event_invitations_on_event_id                (event_id)
+#  index_event_invitations_on_event_id_and_person_id  (event_id,person_id) UNIQUE
+#  index_event_invitations_on_person_id               (person_id)
 #
 
 Fabricator(:event_invitation, class_name: 'Event::Invitation') do

@@ -4,14 +4,17 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: custom_contents
 #
 #  id                    :integer          not null, primary key
 #  key                   :string(255)      not null
-#  placeholders_required :string(255)
+#  label                 :string(255)      not null
 #  placeholders_optional :string(255)
+#  placeholders_required :string(255)
+#  subject               :string(255)
 #
 
 class CustomContent < ActiveRecord::Base

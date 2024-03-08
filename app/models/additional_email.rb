@@ -12,7 +12,7 @@
 #  contactable_type :string(255)      not null
 #  email            :string(255)      not null
 #  label            :string(255)
-#  mailings         :boolean          default(FALSE), not null
+#  mailings         :boolean          default(TRUE), not null
 #  public           :boolean          default(TRUE), not null
 #  contactable_id   :integer          not null
 #

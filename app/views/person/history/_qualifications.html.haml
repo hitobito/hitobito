@@ -1,0 +1,16 @@
+- # frozen_string_literal: true
+-
+- #  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+- #  hitobito_sac_cas and licensed under the Affero General Public License version 3
+- #  or later. See the COPYING file at the top-level directory or at
+- #  https://github.com/hitobito/hitobito.
+
+- if qualifications.present?
+  %h2.mt-4=Qualification.model_name.human(count: 2)
+  = table(qualifications, class: 'table table-striped table-fixed') do |t|
+    - t.attr(:qualification_kind) do |q|
+      - if q.first_reactivateable?
+        %strong= q.qualification_kind
+      - else
+        = q.qualification_kind
+    - t.attrs(:origin, :start_at, :finish_at, :reactivateable_until)

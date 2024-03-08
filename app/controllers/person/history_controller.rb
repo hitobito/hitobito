@@ -16,6 +16,7 @@ class Person::HistoryController < ApplicationController
     @future_roles = fetch_roles(:future)
     @inactive_roles = fetch_roles(:inactive)
     @participations_by_event_type = participations_by_event_type
+    @qualifications = Qualifications::List.new(entry).qualifications
   end
 
   private

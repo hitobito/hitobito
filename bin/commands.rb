@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -24,10 +22,10 @@ when 'console'
   require 'rails/commands/console'
   require APP_PATH
   Rails.application.require_environment!
-  
+
   ### ADDED THIS LINE FOR FINE-GRAINED BUNDLER GROUPS
   Bundler.require(:console)
-  
+
   Rails::Console.start(Rails.application)
 
 when 'server'
@@ -41,10 +39,10 @@ when 'server'
     # We need to require application after the server sets environment,
     # otherwise the --environment option given to the server won't propagate.
     require APP_PATH
-    
+
     ### ADDED THIS LINE FOR FINE-GRAINED BUNDLER GROUPS
     Bundler.require(:assets)
-    
+
     Dir.chdir(Rails.application.root)
     server.start
   }

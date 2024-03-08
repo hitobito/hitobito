@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -109,7 +107,7 @@ describe Event::RolesController do
         expect(participation.answers.size).to eq(2)
         is_expected.to redirect_to(group_event_participations_path(group, course))
       end
-      
+
       it 'creates role and if participant removes participant' do
         participation = Fabricate(:event_participation, event: course, person: user)
         participant_role = Fabricate(Event::Role::Participant.name, participation: participation)

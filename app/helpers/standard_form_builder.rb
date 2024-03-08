@@ -199,7 +199,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
     content_tag(:div, class: 'd-flex align-items-center') do
       content_tag(:div, class: 'col-7 col-md-7 
-                                col-lg-5 col-xl-4 col-xxl-2 me-1') { date_field("#{attr}_date") } +
+                                col-lg-5 me-1') { date_field("#{attr}_date") } +
         hours_select("#{attr}_hour") +
         content_tag(:div) { ':' } +
         minutes_select("#{attr}_min")

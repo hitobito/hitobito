@@ -235,4 +235,10 @@ module FormatHelper
     auto_link(strip_tags(content), options)
   end
 
+  def number_to_condensed(number)
+    return unless number
+
+    number_with_precision(number, precision: 2).remove(/0*$/, /[,.]$/)
+  end
+
 end

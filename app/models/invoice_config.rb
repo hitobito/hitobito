@@ -4,27 +4,29 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: invoice_configs
 #
 #  id                               :integer          not null, primary key
 #  account_number                   :string(255)
-#  address                          :text(16777215)
-#  beneficiary                      :text(16777215)
+#  address                          :text(65535)
+#  beneficiary                      :text(65535)
 #  currency                         :string(255)      default("CHF"), not null
+#  donation_calculation_year_amount :integer
+#  donation_increase_percentage     :integer
 #  due_days                         :integer          default(30), not null
 #  email                            :string(255)
 #  iban                             :string(255)
+#  logo_position                    :string(255)      default("disabled"), not null
 #  participant_number               :string(255)
 #  participant_number_internal      :string(255)
-#  payee                            :text(16777215)
-#  payment_information              :text(16777215)
-#  payment_slip                     :string(255)      default("ch_es"), not null
+#  payee                            :text(65535)
+#  payment_information              :text(65535)
+#  payment_slip                     :string(255)      default("qr"), not null
+#  sender_name                      :string(255)
 #  sequence_number                  :integer          default(1), not null
-#  vat_number                       :string(255)
-#  donation_calculation_year_amount :integer
-#  donation_increase_percentage     :integer
 #  vat_number                       :string(255)
 #  group_id                         :integer          not null
 #
@@ -37,13 +39,13 @@ class InvoiceConfig < ActiveRecord::Base
   include I18nEnums
   include ValidatedEmail
 
-  IBAN_REGEX = /\A[A-Z]{2}[0-9]{2}\s?([A-Z]|[0-9]\s?){12,30}\z/.freeze
-  ACCOUNT_NUMBER_REGEX = /\A[0-9]{2}-[0-9]{2,20}-[0-9]\z/.freeze
-  PARTICIPANT_NUMBER_INTERNAL_REGEX = /\A[0-9]{6}\z/.freeze
+  IBAN_REGEX = /\A[A-Z]{2}[0-9]{2}\s?([A-Z]|[0-9]\s?){12,30}\z/
+  ACCOUNT_NUMBER_REGEX = /\A[0-9]{2}-[0-9]{2,20}-[0-9]\z/
+  PARTICIPANT_NUMBER_INTERNAL_REGEX = /\A[0-9]{6}\z/
   PAYMENT_SLIPS = %w(qr no_ps).freeze
   LOGO_MAX_DIMENSION = Settings.application.image_upload.max_dimension
 
-  class_attribute :logo_positions, default: %w[disabled left right]
+  class_attribute :logo_positions, default: %w(disabled left right)
 
   i18n_enum :payment_slip, PAYMENT_SLIPS, scopes: true, queries: true
   i18n_enum :logo_position, scopes: false, queries: false do
@@ -73,9 +75,9 @@ class InvoiceConfig < ActiveRecord::Base
   validates :donation_increase_percentage, numericality: { greater_than: 0,
                                                            allow_nil: true }
 
-  validates :logo, attached: {message: :attached_unless_disabled}, if: :logo_enabled?
+  validates :logo, attached: { message: :attached_unless_disabled }, if: :logo_enabled?
   validates :logo, dimension: { max: LOGO_MAX_DIMENSION..LOGO_MAX_DIMENSION }
-  validates :logo_position, inclusion: { in: ->(_){logo_positions} }
+  validates :logo_position, inclusion: { in: ->(_) { logo_positions } }
 
   validate :correct_check_digit
   validate :correct_payee_qr_format, if: :qr?
@@ -102,14 +104,14 @@ class InvoiceConfig < ActiveRecord::Base
   end
 
   def variable_donation_configured?
-    self.donation_calculation_year_amount.present? &
-      self.donation_increase_percentage.present?
+    donation_calculation_year_amount.present? &
+      donation_increase_percentage.present?
   end
 
   private
 
   def correct_address_wordwrap
-    return if payee.to_s.split(/\n/).length <= 2
+    return if payee.to_s.split("\n").length <= 2
 
     errors.add(:payee, :to_long)
   end

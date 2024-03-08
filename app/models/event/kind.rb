@@ -10,10 +10,14 @@
 # Table name: event_kinds
 #
 #  id                     :integer          not null, primary key
+#  application_conditions :text(65535)
+#  deleted_at             :datetime
+#  general_information    :text(65535)
+#  label                  :string(255)      not null
+#  minimum_age            :integer
+#  short_name             :string(255)
 #  created_at             :datetime
 #  updated_at             :datetime
-#  deleted_at             :datetime
-#  minimum_age            :integer
 #  kind_category_id       :integer
 #
 

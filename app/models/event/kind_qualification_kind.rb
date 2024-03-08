@@ -13,6 +13,7 @@
 #  category              :string(255)      not null
 #  grouping              :integer
 #  role                  :string(255)      not null
+#  validity              :string(255)      default("valid_or_expired"), not null
 #  event_kind_id         :integer          not null
 #  qualification_kind_id :integer          not null
 #

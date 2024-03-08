@@ -13,12 +13,13 @@
 #  additional_sender                   :string(255)
 #  anyone_may_post                     :boolean          default(FALSE), not null
 #  delivery_report                     :boolean          default(FALSE), not null
-#  description                         :text(16777215)
+#  description                         :text(65535)
+#  filter_chain                        :text(65535)
 #  mail_name                           :string(255)
 #  mailchimp_api_key                   :string(255)
 #  mailchimp_include_additional_emails :boolean          default(FALSE)
 #  mailchimp_last_synced_at            :datetime
-#  mailchimp_result                    :text(16777215)
+#  mailchimp_result                    :text(65535)
 #  mailchimp_syncing                   :boolean          default(FALSE)
 #  main_email                          :boolean          default(FALSE)
 #  name                                :string(255)      not null

@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+#  Copyright (c) 2023-2024, Schweizer Alpen Club. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: self_registration_reasons
@@ -9,10 +14,6 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito_sac_cas.
 
 class SelfRegistrationReason < ApplicationRecord
   validates_by_schema

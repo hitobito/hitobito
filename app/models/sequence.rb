@@ -5,6 +5,19 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
+# == Schema Information
+#
+# Table name: sequences
+#
+#  id            :bigint           not null, primary key
+#  current_value :bigint           default(0), not null
+#  name          :string(255)      not null
+#
+# Indexes
+#
+#  index_sequences_on_name  (name) UNIQUE
+#
+
 # As long as we use MySQL as database, we have the limitation that we can only have one auto-
 # incrementing column per table. As a workaround, we can use this Sequence model to generate
 # a reliable incrementing sequence of numbers.

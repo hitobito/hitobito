@@ -5,6 +5,19 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+# == Schema Information
+#
+# Table name: mounted_attributes
+#
+#  id         :bigint           not null, primary key
+#  entry_type :string(255)      not null
+#  key        :string(255)      not null
+#  value      :text(65535)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  entry_id   :integer          not null
+#
+
 class MountedAttribute < ActiveRecord::Base
   belongs_to :entry, polymorphic: true
 

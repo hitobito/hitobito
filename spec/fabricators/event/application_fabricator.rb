@@ -4,6 +4,7 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: event_applications
@@ -12,7 +13,7 @@
 #  approved             :boolean          default(FALSE), not null
 #  rejected             :boolean          default(FALSE), not null
 #  waiting_list         :boolean          default(FALSE), not null
-#  waiting_list_comment :text(16777215)
+#  waiting_list_comment :text(65535)
 #  priority_1_id        :integer          not null
 #  priority_2_id        :integer
 #  priority_3_id        :integer

@@ -1,9 +1,28 @@
 # frozen_string_literal: true
 
+
 #  Copyright (c) 2021, Katholische Landjugendbewegung Paderborn. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
+# == Schema Information
+#
+# Table name: family_members
+#
+#  id         :bigint           not null, primary key
+#  family_key :string(255)      not null
+#  kind       :string(255)      not null
+#  other_id   :bigint           not null
+#  person_id  :bigint           not null
+#
+# Indexes
+#
+#  index_family_members_on_family_key              (family_key)
+#  index_family_members_on_other_id                (other_id)
+#  index_family_members_on_person_id               (person_id)
+#  index_family_members_on_person_id_and_other_id  (person_id,other_id) UNIQUE
+#
 
 # The different kinds could be a "type" and be solved with STI-classes. Once
 # we support multiple types of FamilyMembers, we should think about using STI
@@ -19,7 +38,7 @@ class FamilyMember < ApplicationRecord
   # TODO: extract exception to its own file
   class FamilyKeyMismatch < StandardError
     def initialize(family)
-      super <<~MESSAGE
+      super(<<~MESSAGE)
         Attempted to create a family-bond between
         #{family.person} and #{family.other},
         but they seem to already to belong to different
@@ -38,7 +57,7 @@ class FamilyMember < ApplicationRecord
   # TODO: extract exception to its own file
   class NoRelationTransitivenessDefined < StandardError
     def initialize(family)
-      super <<~MESSAGE
+      super(<<~MESSAGE)
         The given kind of FamilyMember (#{family.kind_label})
         has no defined behaviour to handle the transitive
         relation.
@@ -49,7 +68,7 @@ class FamilyMember < ApplicationRecord
   # TODO: extract exception to its own file
   class NoRelationInversionDefined < StandardError
     def initialize(family)
-      super <<~MESSAGE
+      super(<<~MESSAGE)
         The given kind of FamilyMember (#{family.kind_label})
         has no defined behaviour to handle the inverse
         relation.

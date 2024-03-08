@@ -4,23 +4,23 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: invoice_articles
 #
-#  id                 :integer          not null, primary key
-#  account            :string(255)
-#  category           :string(255)
-#  cost_center        :string(255)
-#  description        :text(16777215)
-#  name               :string(255)      not null
-#  number             :string(255)
-#  unit_cost          :decimal(12, 2)
-#  vat_rate           :decimal(5, 2)
-#  variable_donation  :boolean          default(FALSE), not null
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
-#  group_id           :integer          not null
+#  id          :integer          not null, primary key
+#  account     :string(255)
+#  category    :string(255)
+#  cost_center :string(255)
+#  description :text(65535)
+#  name        :string(255)      not null
+#  number      :string(255)
+#  unit_cost   :decimal(12, 2)
+#  vat_rate    :decimal(5, 2)
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  group_id    :integer          not null
 #
 # Indexes
 #

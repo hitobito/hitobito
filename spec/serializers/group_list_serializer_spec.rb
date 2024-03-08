@@ -1,4 +1,10 @@
 # encoding: utf-8
+
+#  Copyright (c) 2014, CEVI Regionalverband ZH-SH-GL. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: groups
@@ -27,19 +33,17 @@
 #  description                 :text(65535)
 #
 
-#  Copyright (c) 2014, CEVI Regionalverband ZH-SH-GL. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
 
 require 'spec_helper'
 
 describe GroupListSerializer do
 
   let(:group) { groups(:top_group).decorate }
-  let(:controller) { double().as_null_object }
-  let(:serializer) { ListSerializer.new(Group.where(id: group.id), serializer: GroupListSerializer, 
-                                                                   controller: controller) }
+  let(:controller) { double.as_null_object }
+  let(:serializer) do
+    ListSerializer.new(Group.where(id: group.id), serializer: GroupListSerializer,
+                                                  controller: controller)
+  end
 
   subject(:hash) { serializer.to_hash[:groups].first }
 

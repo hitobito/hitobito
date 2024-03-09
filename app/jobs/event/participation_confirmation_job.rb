@@ -32,7 +32,7 @@ class Event::ParticipationConfirmationJob < BaseJob
   end
 
   def send_approval
-    return unless @send_approval && participation.pending?
+    return unless @send_approval && !participation.application.approved && (participation.pending? || participation.active)
     return unless participation.event.requires_approval?
 
     recipients = approvers

@@ -300,8 +300,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     disabled = html_options[:disabled].to_s
     klass += ' is-invalid' if errors_on?(attr)
     disabled = html_options[:disabled].presence
+    display_value = html_options[:display_value] || @object.send(attr).to_s
     hidden_field(attr_id) +
     string_field(attr,
+                 value: display_value,
                  placeholder: I18n.t('global.search.placeholder_person'),
                  class: klass,
                  disabled: disabled,

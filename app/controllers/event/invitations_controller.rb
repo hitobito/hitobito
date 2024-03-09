@@ -19,6 +19,12 @@ class Event::InvitationsController < CrudController
 
   prepend_before_action :parent, :group
 
+
+  ## def index: respond_to
+  ## see hitobito/app/controllers/events_controller.rb
+  ## + job
+  ## + ..
+
   def create
     super(location: group_event_invitations_path(@group, @event))
   end

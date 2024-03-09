@@ -266,6 +266,49 @@ describe SearchStrategies::Sphinx, sphinx: true do
           expect(result).to eq([])
         end
       end
+
+      it 'for the addresses' do
+        [
+          {
+            :address => addresses(:stossstrasse_bern),
+            :search_terms => ['stos', 'stosss', 'stoss bern']
+          },
+          {
+            :address => addresses(:bahnhofstrasse_erlenbach),
+            :search_terms => ['bah', 'hofst', 'bahn erlenbach']
+          },
+          {
+            :address => addresses(:seestrasse_erlenbach),
+            :search_terms => ['see', 'seestrasse', 'seestrasse erlenbach', 'erlenbach']
+          },
+          {
+            :address => addresses(:rennweg_zuerich),
+            :search_terms => ['renn','rennweg', 'rennweg zürich', 'zürich']
+          },
+          {
+            :address => addresses(:dorfstrasse_teufen),
+            :search_terms => ['dorf', 'dorfstrasse', 'dorfstrasse teufen', 'teufen']
+          },
+          {
+            :address => addresses(:fallenstettenweg_reutlingen),
+            :search_terms => ['fall', 'stetten', 'fallenstettenweg', 'fallenstettenweg reutlingen', 'reutlingen']
+          },
+          {
+            :address => addresses(:wiesendangerstrasse_stadel),
+            :search_terms => ['wiesen', 'dange', 'wiesendangerstrasse', 'wiesendangerstrasse stadel', 'stadel']
+          },
+          {
+            :address => addresses(:spitzweg_winterthur),
+            :search_terms => ['spitz', 'spitzweg', 'spitzweg winterthur', 'winterthur']
+          }
+        ].each do |address|
+            address[:search_terms].each do |term|
+              result = strategy(term).query_addresses
+
+              expect(result).to include(address[:address]), "'#{address[:address]}' should be found with '#{term}'"
+            end
+          end
+      end
     end
   end
 

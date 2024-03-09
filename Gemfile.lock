@@ -346,7 +346,7 @@ GEM
     jmespath (1.6.2)
     joiner (0.6.0)
       activerecord (>= 6.1.0)
-    json (2.7.1)
+    json (2.6.3)
     jsonapi-renderer (0.2.2)
     jsonapi-serializable (0.3.1)
       jsonapi-renderer (~> 0.2.0)
@@ -798,6 +798,7 @@ DEPENDENCIES
   http_accept_language
   icalendar
   image_processing (~> 1.12)
+  json (< 2.7.0)
   kaminari
   launchy
   listen

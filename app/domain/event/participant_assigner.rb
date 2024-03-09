@@ -113,6 +113,6 @@ class Event::ParticipantAssigner
   end
 
   def send_confirmation
-    Event::ParticipationConfirmationJob.new(participation, send_approval: false).enqueue!
+    Event::ParticipationConfirmationJob.new(participation).enqueue!
   end
 end

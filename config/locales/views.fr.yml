@@ -920,6 +920,7 @@ fr:
       one: "La facture a été annulée."
       other: "%{count} factures ont été annulées."
   payments:
+    export_enqueued: 'L''exportation a commencé en tâche de fond et sera téléchargée une fois terminée.'
     create:
       flash:
         success: La facture supérieur à %{amount} saisie.
@@ -1185,6 +1186,9 @@ fr:
         many: '%{count} paiements ont été reconnus non-valables.'
         other: '%{count} paiements ont été reconnus non-valables.'
     show:
+      valid_payments_with_invoice: Paiements allouables
+      valid_payments_with_invoice_and_dates: Paiements allouables du %{from} au %{to}
+      valid_payments_without_invoice: pas attribuable
       amount_open: ouvert
       create:
         zero: importer le paiement
@@ -1277,6 +1281,7 @@ fr:
       fields:
         lives_in_household_with: "Habite dans le foyer avec"
         update_denied: "Tu ne peux pas ajouter %{other_person} au foyer. Il se peut que cette personne soit déjà dans le foyer ou que tu n'aies pas les droits d'écriture."
+        cannot_create_household: 'Tu as besoin de droits d''écriture sur plusieurs personnes pour les rassembler dans un ensemble de foyer.'
     family:
       fields:
         is_in_family_with: 'Fait partie de la famille de'
@@ -1633,6 +1638,8 @@ fr:
       add_role_for_person: Créer un rôle pour %{person}
       edit_role_for_person: Modifier un rôle pour %{person}
       new_role_for_person: Créer un nouveau rôle
+    label:
+      help_optional_label: désignation facultative du rôle de cette personne
     person_fields:
       create_new_person: Saisir une nouvelle personne
       search_existing_person: Rechercher une personne existante

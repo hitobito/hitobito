@@ -510,6 +510,7 @@ it:
         language: Lingua
         primary_group_id: Gruppo principale
         layer_group_label: Livello principale
+        self_registration_reason: Motivo dell'ingresso
         self_registration_reason_text: Motivo dell'ingresso
         self_registration_reason_custom_text: Motivo di ingresso definito dall'utente
       person_duplicate:
@@ -839,6 +840,9 @@ it:
         name: Nome della lista
         description: Descrizione
         publisher: Mittente
+        subscribable_fors:
+          anyone: Tutti
+          nobody: Nessuno
         mail_name: Indirizzo delle mailing list
         mail_address: Mailing list
         mail_address_link: Mailinglist
@@ -966,7 +970,9 @@ it:
           draft: Bozza
           issued: Emesso
           sent: inviato per e-mail
+          partial: Pagamento parziale
           payed: Pagato
+          excess: Pagamento in eccesso
           reminded: Sollecitato
           cancelled: Cancellato
         recipient: Destinatario

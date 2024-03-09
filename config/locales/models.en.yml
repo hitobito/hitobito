@@ -424,6 +424,7 @@ en:
         country: Country
         contact_id: Contact person
         contact: Contact Person
+        contactable: Contact details
         phone_numbers: Phone numbers
         social_accounts: Social Media
         additional_emails: Further e-mails

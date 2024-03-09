@@ -92,6 +92,9 @@ en:
       flash:
         success: "%{model} was successfully deleted."
         failure: "%{model} could not be deleted."
+  blocked:
+    index:
+      title: Login blocked
   contactable:
     address_or_email: "%{address} or %{email}"
     fields:
@@ -120,6 +123,8 @@ en:
     xlsx: Excel
   dropdown/event/role_add:
     add: 'Add person'
+  dropdown/event/invitation_add:
+    add: 'Invite person'
   dropdown/event/participant_add:
     as: 'as %{role}'
   dropdown/group_edit:
@@ -184,6 +189,7 @@ en:
       new:
         sign_in: Sign in
       form:
+        login_identity: Main email
         sign_in: Sign in
       oauth_info:
         sign_in: 'Log in with %{name}'
@@ -211,7 +217,10 @@ en:
       success: 'You have successfully logged in to your %{kind} account.'
       failure: 'You couldn''t login to your %{kind} account because "%{reason}".'
     registrations:
+      signed_up: 'You have registered successfully.'
+      signed_up_but_unconfirmed: 'You have registered successfully. You will receive an email shortly  with instructions on how to activate your account.'
       updated: 'Your password has been updated.'
+      update_needs_confirmation: "Your information has been updated, but you must confirm your new email address. An email will be sent to you shortly which you must complete to finalize the change."
       destroyed: 'Your account has been deleted.'
       edit:
         change_password: "Change password"
@@ -226,8 +235,14 @@ en:
         subject: 'Instructions for confirming your email address'
         body:
           greeting: 'Hello %{name}!'
+          information_html: 'You can confirm your email address using the following link:'
+          footer: 'This email was sent by Hitobito'
       reset_password_instructions:
         subject: 'Instructions for setting your password'
+        body:
+          greeting: '%{name}Hello !'
+          reset_instructions:
+            with_password: 'You can reset your %{application_name} password using the following link.'
       unlock_instructions:
         subject: 'Instruction for unlocking your account.'
         body:
@@ -242,6 +257,7 @@ en:
       explanation: 'You must log in before you can access this resource.'
     '403':
       title: 'Access denied'
+      explanation: 'You are not authorized to access this resource.'
     '404':
       title: 'Page not found (404)'
       explanation: 'Maybe you typed the address incorrectly, or the page has been deleted.'
@@ -312,6 +328,9 @@ en:
         title: Contact details of the participating person
         wizard_title: Contact data
         save: Next
+      update:
+        flash:
+          privacy_policy_not_accepted: 'To complete the registration, you must agree to the data protection declaration.'
     participations:
       edit:
         title: Registration
@@ -350,6 +369,8 @@ en:
         incomplete: Required data is missing
       cancel_application:
         explanation: You are registered for this event.
+        pending: You are pre-registered for this event. The registration is not yet final and must be confirmed by the organizer.
+        waiting_list: You are on the waiting list for this event.
         caption: Cancel registration
         confirmation: "Are you sure, that you want to cancel your registration?"
     qualifications:
@@ -361,6 +382,8 @@ en:
     register:
       register:
         title: Contact details of the participating person
+        flash:
+          privacy_policy_not_accepted: To complete the registration, you must agree to the data protection declaration.
       index:
         sign_in: Register
         login: Login
@@ -390,8 +413,10 @@ en:
       failure: One-Time Code incorrect
     new:
       title: Two-factor authentication
+      copy_secret: "Here"
     form:
       totp_code: One-Time Code
+      submit: Send
   events:
     courses:
       filter:
@@ -411,6 +436,7 @@ en:
     attachments:
       add: "add"
     banner_open_invitation:
+      explanation: You've been invited to this event.
       buttons:
         accept: Register
         decline: Cancel registration
@@ -480,6 +506,7 @@ en:
   event/precondition_checker:
     preconditions_not_fulfilled: '<b>Prerequisites for registration are not met.</ b>'
     below_minimum_age: "Age limit falls below %{course_minimum_age}"
+    qualifications_missing: "The following qualifications are missing or have expired: %{missing}"
     some_qualifications_missing: "Missing required qualifications"
   event/register:
     not_logged_in: "You must log in for the registration of the event '%{event}'. "
@@ -586,6 +613,9 @@ en:
       no_deleted_sub_groups: 'No deleted groups found.'
     form:
       help_contact: 'Use public address and telephone number of this person.'
+    form_tabs:
+      general: 'General'
+      messages: 'Messages'
     global:
       link:
         add: Create group
@@ -606,6 +636,24 @@ en:
       age: Age
       count: Number
       distribution: Distribution
+    self_registration:
+      form:
+        main_person_title: Personal data
+        privacy_policy_caption: "I agree to the following provisions:"
+        submit: Register
+        has_account: Do you already have a login?
+        to_login_page: Sign up and register
+      main_person:
+        notes: Remarks
+      adult_consent_field:
+        caption: I confirm that I am at least 18 years old or have the consent of my legal guardian.
+      create:
+        email_taken: Email is already in use. Log in or register with a different email address.
+        flash:
+          privacy_policy_not_accepted: To complete the registration, you must agree to the data protection declaration.
+    self_inscription:
+      form:
+        inscribe: Register
   group/person_add_requests:
     deactivated: Manual approval deactivated
     activated: Manual approval activated
@@ -691,6 +739,8 @@ en:
   invoice_configs:
     form_tabs:
       general: general
+      email: Email
+      layout: Layout
     update:
       flash:
         success: Invoice settings succesfully updated
@@ -779,6 +829,8 @@ en:
       sign_out: 'Sign out'
     unauthorized:
       forgot_password: 'Forgot your password?'
+      need_confirmation_email: 'Didn''t receive a confirmation email?'
+      main_self_registration: 'No account yet? Register here.'
     footer:
       available_under_license: 'licensed under the'
       developed_by: 'Developed by'
@@ -997,6 +1049,8 @@ en:
         address_updated: "Address updated"
       fields:
         lives_in_household_with: "Lives in household with"
+        update_denied: "You cannot add %{other_person} to the household. This person may already be in the household, or you may not have write permissions.\n "
+        cannot_create_household: 'You need write permissions for multiple individuals in order to merge them into one household'
     csv_imports:
       description:
         header: CSV files
@@ -1057,6 +1111,15 @@ en:
           email_primary_invalid: Main email is invalid
           email_additional_invalid: Further email is invalid
           address_invalid: Address not in directory
+    security_tools:
+      index:
+        account: Account
+        last_sign_in_at: 'Last Login:'
+        security_and_privacy: Security and privacy
+        override_password: "Overwrite password"
+        confirm_reset: "Attention: This will overwrite the password. Do you really want that?"
+        groups_and_roles_that_see_me: Roles that have access to me
+        load_roles_that_see_me_hint: 'This may take a few seconds'
   person/csv_imports:
     invalid_file: Please select a valid CSV file.
     duplicate_keys:
@@ -1095,6 +1158,7 @@ en:
     tabs:
       history: History
       log: log
+      security_tools: Security
       colleagues: Colleagues
       invoices: Invoices
       subscriptions: Subscriptions
@@ -1314,6 +1378,9 @@ en:
     global:
       link:
         add: Add API key
+  steps_component:
+    next_link: Next
+    prev_link: Back
   subscriber:
     group:
       edit:
@@ -1329,6 +1396,9 @@ en:
     exclude_person:
       form:
         exclude_subscriber: 'Exclude person'
+    subscriber_lists:
+      new:
+        submit: Add
   subscriber/base:
     blank: '%{model_label} must be selected'
     taken: '%{model_label} has already been added'

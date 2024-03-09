@@ -918,6 +918,7 @@ it:
       one: "La fattura è stata annullata"
       other: "%{count} fatture sono state annullate."
   payments:
+    export_enqueued: 'L''esportazione viene iniziata in retroscena e verrà scaricata al termine.'
     create:
       flash:
         success: Pagamento sopra i %{amount} è stato registrato
@@ -1183,6 +1184,9 @@ it:
         many: Sono stati individuati %{count} pagamenti non validi
         other: Sono stati individuati %{count} pagamenti non validi
     show:
+      valid_payments_with_invoice: Pagamenti imputabili
+      valid_payments_with_invoice_and_dates: Pagamenti imputabili da %{from} a %{to}
+      valid_payments_without_invoice: Non assegnabile
       amount_open: Aperto
       create:
         zero: Importare il pagamento
@@ -1275,6 +1279,7 @@ it:
       fields:
         lives_in_household_with: "Vive nello stesso nucleo famigliare di"
         update_denied: "Non è possibile aggiungere %{other_person} alla famigliare. Forse questa persona fa già parte della famigliare o non si ha accesso alla scrittura."
+        cannot_create_household: 'È necessario l''accesso in scrittura a più persone per unirle in un unico nucleo familiare.'
     family:
       fields:
         is_in_family_with: 'È parte della famiglia di'
@@ -1633,6 +1638,8 @@ it:
       add_role_for_person: 'Inserire un ruolo per %{person} '
       edit_role_for_person: 'Modificare il ruolo per %{person} '
       new_role_for_person: Creare un nuovo ruolo
+    label:
+      help_optional_label: Designazione opzionale del ruolo di questa persona
     person_fields:
       create_new_person: Inserire una nuova persona
       search_existing_person: Cercare persona esistente

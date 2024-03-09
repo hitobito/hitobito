@@ -511,6 +511,7 @@ fr:
         language: Langue
         primary_group_id: Groupe principal
         layer_group_label: Niveau
+        self_registration_reason: Motif d'entrée
         self_registration_reason_text: Motif d'entrée
         self_registration_reason_custom_text: Motif d'entrée prédéfini
       person_duplicate:
@@ -840,6 +841,9 @@ fr:
         name: Nom
         description: Description
         publisher: Éditeur
+        subscribable_fors:
+          anyone: Tous
+          nobody: Personne
         mail_name: Adresse de la liste de diffusion
         mail_address: Liste de diffusion
         mail_address_link: Liste de diffusion
@@ -967,7 +971,9 @@ fr:
           draft: Projet
           issued: Établie
           sent: Envoyée par courriel
+          partial: Paiement partiel
           payed: Payé
+          excess: Trop-perçu
           reminded: Rappel envoyé
           cancelled: Annulé
         recipient: Destinataire

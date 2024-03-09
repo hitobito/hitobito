@@ -49,8 +49,8 @@ class Event::InvitationListsController < SimpleCrudController
   def flash_message(type, attrs = {})
     attrs[:event] = event.name
     attrs[:event_type] = event.class.label
-    I18n.t("event.invitation_lists.#{action_name}.#{type}", attrs) +
-      I18n.t("event.invitation_lists.#{action_name}.hint", attrs)
+    I18n.t("event.invitation_lists.#{action_name}.#{type}", **attrs) +
+        I18n.t("event.invitation_lists.#{action_name}.hint", **attrs)
   end
 
   def role_type

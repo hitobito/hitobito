@@ -52,6 +52,7 @@ gem 'lograge_activejob'
 gem 'lograge-sql'
 gem 'magiclabs-userstamp', require: 'userstamp'
 gem 'mail' # add mail here to have it loaded
+gem 'matrix' # required but removed from stlib since ruby 3.2
 gem 'mime-types'
 gem 'mini_magick'
 gem 'mysql2'
@@ -124,7 +125,6 @@ group :development do
 end
 
 group :test do
-  gem 'matrix' # required for capybara
   gem 'capybara'
   gem 'capybara-screenshot'
   gem 'cmdparse'

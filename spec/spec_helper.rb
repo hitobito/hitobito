@@ -229,7 +229,7 @@ Capybara::Screenshot.register_driver(:chrome) do |driver, path|
 end
 
 Capybara.register_driver :chrome do |app|
-  options = Selenium::WebDriver::Chrome::Options.new
+  options = Selenium::WebDriver::Chrome::Options.new(binary: ENV['CAPYBARA_CHROME_BINARY'])
   options.args << '--headless' if ENV['HEADLESS'] != 'false'
   options.args << '--disable-gpu' # required for windows
   options.args << '--no-sandbox' # required for docker
@@ -237,10 +237,6 @@ Capybara.register_driver :chrome do |app|
   options.args << '--window-size=1800,1000'
   options.args << '--crash-dumps-dir=/tmp'
   options.add_preference('intl.accept_languages', 'de-CH,de')
-  if ENV['CAPYBARA_CHROME_BINARY'].present?
-    options.add_option('binary',
-                       ENV['CAPYBARA_CHROME_BINARY'])
-  end
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
 

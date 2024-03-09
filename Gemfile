@@ -124,6 +124,7 @@ group :development do
 end
 
 group :test do
+  gem 'matrix' # required for capybara
   gem 'capybara'
   gem 'capybara-screenshot'
   gem 'cmdparse'

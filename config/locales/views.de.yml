@@ -460,7 +460,7 @@ de:
           one: "Eine Person wurde erfolgreich zum %{event_type} '%{event}' eingeladen"
           other: "%{count} Personen wurden erfolgreich zum %{event_type} '%{event}' eingeladen"
       new:
-        title: Personen einem %{event_label} einladen
+        title: Personen zu einem %{event_label} einladen
         event_search: Anlass Suchen...
         submit: Einladen
 

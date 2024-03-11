@@ -77,7 +77,7 @@ SQL
 
   echo $cmds
 
-  if [[ $RAILS_DB_SOCKET ]]; then
+  if [[ -v RAILS_DB_SOCKET ]]; then
     echo "$cmds" | mysql -u "${RAILS_DB_USERNAME:-hitobito}" -p"${RAILS_DB_PASSWORD:-hitobito}"
   else
     echo "$cmds" | mysql -u "${RAILS_DB_USERNAME:-hitobito}" -p"${RAILS_DB_PASSWORD:-hitobito}" -h "${RAILS_DB_HOST:-127.0.0.1}" -P "${RAILS_DB_PORT:-33066}"
@@ -294,9 +294,27 @@ case $cmd in
     for wagon in $(echo ${WAGONS:-''} | tr " " "\n"); do
       (
         cd "../hitobito_${wagon}" && (echo "$wagon" | red) &&
-        git diff --staged --name-only | xargs -L1 $core_bin_dir/single-file-update-copyright
+          git diff --staged --name-only | xargs -L1 $core_bin_dir/single-file-update-copyright
       )
     done
+    ;;
+
+  build)
+    require_wagon_name
+    shift # loose the "build" argument
+    shift # loose the wagon-name argument
+    target=${1:-app}
+
+    if [[ $target == 'app' ]]; then
+      name='rails'
+    else
+      name=$target
+    fi
+
+    (
+      cd "../ose_composition_${wagon_name}" \
+        && docker buildx build . --file hitobito/Dockerfile --target $target -t hitobito/$wagon_name/$name:latest
+    )
     ;;
 
   create)
@@ -357,6 +375,7 @@ function __wagon_commands() {
   echo '
     activate
     binstubs
+    build
     bootstrap
     clone
     configs
@@ -401,7 +420,7 @@ function __wagon_completion() {
       return
       ;;
 
-    activate | spec)
+    activate | spec | build)
       COMPREPLY=( $( compgen -W "$(__wagon_list)" -- "$cur" ) )
       return
       ;;
@@ -416,7 +435,7 @@ COMPLETION
     echo "USAGE: $0 [activate] <WAGON>|core"
     echo "       $0 [clone|bootstrap] <WAGON>"
     echo "       $0 [create-datbase|reset-database|test-prepare|test-speedup|core-spec|update-copyright]"
-    echo "       $0 [spec] <WAGON>"
+    echo "       $0 [spec|build] <WAGON>"
     echo "       $0 [spec-all|reset-test-database|overwritten-in-wagon]"
     echo "       $0 [grep] <TERM>"
     echo "       $0 [git|git-all] <ARGS>"

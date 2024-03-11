@@ -169,7 +169,7 @@ This ID token is a JWT token which, when decoded, contains standardized OIDC fie
 }
 ```
 
-`iss` is the issuer, which is the URL of the identity provider. `sub` is the id of the user who just logged in. The token is signed using the hitobito server's private key.
+The token is signed using the hitobito server's private key. `iss` is the issuer, which is the URL of the identity provider. `sub` is the id of the user who just logged in. When using the `email` scope, the JWT token payload additionally contains an `email` field containing the main email address of the authenticated person.
 
 ### Accessing the JSON-API
 

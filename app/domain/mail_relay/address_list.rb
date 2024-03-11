@@ -48,6 +48,8 @@ module MailRelay
     end
 
     def additional_emails(person)
+      return person.additional_emails if person.new_record?
+
       @additional_emails ||= additional_emails_scope.
         each_with_object(hash_with_array) do |email, memo|
           memo[email.contactable_id] << email

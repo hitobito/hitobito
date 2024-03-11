@@ -80,6 +80,16 @@ describe MailRelay::AddressList do
     ])
   end
 
+  it 'works for new records' do
+    person = Fabricate(:person)
+    e1 = Fabricate(:additional_email, contactable: person, mailings: true)
+    Fabricate(:additional_email, contactable: bottom_member, mailings: false)
+    expect(entries(person)).to match_array([
+      person.email,
+      e1.email
+    ])
+  end
+
   def entries(people = Person.all, labels = [])
     described_class.new(people, labels).entries
   end

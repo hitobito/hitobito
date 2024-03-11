@@ -95,8 +95,6 @@ ARG TZ="Europe/Zurich"
 
 FROM ruby:${RUBY_VERSION} AS build
 
-ENV NODE_OPTIONS="--openssl-legacy-provider"
-
 # arguments for steps
 ARG HOME
 ARG PRE_INSTALL_SCRIPT

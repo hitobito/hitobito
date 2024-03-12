@@ -262,7 +262,7 @@ describe TableHelper do
       it { is_expected.to be_html_safe }
 
       it 'should render table' do
-        is_expected.to match(/^\<div class="table-responsive"\>\<table.*\<\/table\>\<\/div\>$/)
+        is_expected.to match(/^\<div class="table-responsive pb-3"\>\<table.*\<\/table\>\<\/div\>$/)
       end
 
       it 'should contain attrs' do

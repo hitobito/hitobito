@@ -82,6 +82,7 @@ Doorkeeper::OpenidConnect.configure do
           group_id: role.group_id,
           group_name: role.group.name,
           role: role.class.model_name,
+          role_class: role.class.model_name,
           role_name: role.class.model_name.human
         }
       end

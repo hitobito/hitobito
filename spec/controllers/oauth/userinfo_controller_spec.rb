@@ -60,6 +60,30 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
       end
     end
 
+    context 'with with_roles scope' do
+      let(:token) do
+        app.access_tokens.create!(resource_owner_id: user.id,
+                                  scopes: 'openid with_roles', expires_in: 2.hours)
+      end
+
+      it 'shows the userinfo' do
+        get :show, params: { access_token: token.token }
+        expect(response.status).to eq 200
+        expect(JSON.parse(response.body)).to eq(
+          'sub' => user.id.to_s,
+          'roles' => [
+            {
+              'group_id' => user.roles.first.group_id,
+              'group_name' => user.roles.first.group.name,
+              'role' => user.roles.first.class.name,
+              'role_class' => user.roles.first.class.name,
+              'role_name' => user.roles.first.class.model_name.human
+            }
+          ]
+        )
+      end
+    end
+
     context 'with nextcloud scope' do
       let(:token) do
         app.access_tokens.create!(

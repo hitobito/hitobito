@@ -29,6 +29,7 @@ describe EventResource, type: :resource do
         :motto,
         :number,
         :participant_count,
+        :training_days,
         :state,
         :type,
         :updated_at

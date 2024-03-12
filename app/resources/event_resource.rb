@@ -24,6 +24,7 @@ class EventResource < ApplicationResource
     attribute :application_opening_at, :date
     attribute :application_closing_at, :date
     attribute :participant_count, :integer
+    attribute :training_days, :float
     attribute :application_contact_id, :integer
     attribute :applicant_count, :integer
     attribute :maximum_participants, :integer

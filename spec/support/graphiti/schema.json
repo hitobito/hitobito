@@ -233,6 +233,12 @@
           "writable": false,
           "description": null
         },
+        "training_days": {
+          "type": "float",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
         "application_contact_id": {
           "type": "integer",
           "readable": true,
@@ -1804,7 +1810,7 @@
     },
     "array_of_event_dates": {
       "kind": "array",
-      "description": "Base Type."
+      "description": "List of Event Dates."
     }
   }
 }

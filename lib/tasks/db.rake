@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -21,7 +21,7 @@ namespace :db do
 
   namespace :migrate do
     desc 'Display status of migrations including the originating wagon name'
-    task :status_all do
+    task status_all: [:environment] do
       Rake::Task['wagon:migrate:status'].invoke
     end
   end
@@ -39,11 +39,11 @@ namespace :db do
     puts 'Moving Groups in alphabetical order...'
 
     bar = begin
-            require 'ruby-progressbar'
-            ProgressBar.create(format: '%a |%w>%i| %c/%C | %E ', total: Group.count)
-          rescue LoadError
-            Class.new { def increment; end }.new
-          end
+      require 'ruby-progressbar'
+      ProgressBar.create(format: '%a |%w>%i| %c/%C | %E ', total: Group.count)
+    rescue LoadError
+      Class.new { def increment; end }.new
+    end
 
     Group.find_each do |group|
       group.send(:move_to_alphabetic_position)
@@ -90,6 +90,25 @@ namespace :db do
     ENV['NO_ENV'] = '1'
     Rake::Task['db:seed'].invoke
     Rake::Task['wagon:seed'].invoke
+  end
+
+  desc 'Export database similar to a backup, can be imported with "rake db:import"'
+  task export: [:environment] do
+    command = <<~SH.squish
+      mysqldump
+        -u$RAILS_DB_USERNAME
+        -p$RAILS_DB_PASSWORD
+        -h$RAILS_DB_HOST
+        -P$RAILS_DB_PORT
+        --skip-lock-tables
+        --quick
+        --add-drop-database
+        --routines
+        $RAILS_DB_NAME
+      | gzip > tmp/exported-database.sql.gz
+    SH
+
+    sh(command)
   end
 
   desc 'Remove "seeded"-markers'

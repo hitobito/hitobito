@@ -7,7 +7,7 @@
 
 class Event::ParticipationConfirmationJob < BaseJob
 
-  self.parameters = [:participation_id, :locale]
+  self.parameters = [:participation_id, :send_approval, :locale]
 
   def initialize(participation, send_approval: true)
     super()

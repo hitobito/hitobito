@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/puzzle/graphiti-openapi.git
-  revision: 1fb5be621bbdcaeeebc7043d80f941d78eac9568
-  tag: standalone/0.2
+  revision: a462cafe92fae0913c31836c92e1e1be890a0bec
+  tag: standalone/0.3
   specs:
     graphiti-openapi (0.1.7)
       dry-struct (~> 1.0)

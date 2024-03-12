@@ -171,6 +171,26 @@ This ID token is a JWT token which, when decoded, contains standardized OIDC fie
 
 The token is signed using the hitobito server's private key. `iss` is the issuer, which is the URL of the identity provider. `sub` is the id of the user who just logged in. When using the `email` scope, the JWT token payload additionally contains an `email` field containing the main email address of the authenticated person.
 
+#### Userinfo endpoint
+
+Using the access token, the standardized OIDC Userinfo endpoint can also be queried. This endpoint is similar to the profile endpoint of the OAuth flow, and will yield information depending on the used scopes. Here is an example response from the /oauth/userinfo endpoint, when using the `email` and `with_roles` scopes:
+
+```json
+{
+  "sub": "34",
+  "email": "julia@example.com",
+  "roles": [
+    {
+      "group_id": 1,
+      "group_name": "hitobito",
+      "role": "Group::Bund::MitarbeiterGs",
+      "role_class": "Group::Bund::MitarbeiterGs",
+      "role_name": "Mitarbeiter*in GS"
+    }
+  ]
+}
+```
+
 ### Accessing the JSON-API
 
 All endpoints from the [JSON API](05_rest_api.md) can be used with a personal OAuth access token, if the token has the `api` scope. There are two possibilities to use the API:

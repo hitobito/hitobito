@@ -7,10 +7,6 @@
 
 module PeopleHelper
 
-  def format_gender(person)
-    person.gender_label
-  end
-
   def format_person_email(person)
     mail_to(person.email)
   end

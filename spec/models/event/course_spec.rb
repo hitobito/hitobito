@@ -134,4 +134,18 @@ describe Event::Course do
   it 'makes participations visible to all participants by default' do
     is_expected.to be_participations_visible
   end
+
+  describe '#minimum_age' do
+    subject(:course) { described_class.new }
+
+    it 'is nil if no kind is set' do
+      expect(course.minimum_age).to be_nil
+    end
+
+    it 'is read from kind if kind has value set' do
+      course.kind = Event::Kind.new(minimum_age: 2)
+      expect(course.minimum_age).to eq 2
+    end
+  end
+
 end

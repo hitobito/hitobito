@@ -149,6 +149,11 @@ describe FormatHelper do
       expect(string).to be_html_safe
       expect(string).to eq('<ul><li>AAAAA</li><li>BBBBB</li></ul>')
     end
+
+    it 'reads translated i18n_enum labels' do
+      gender = format_attr(Person.new(gender: :m), :gender)
+      expect(gender).to eq 'männlich'
+    end
   end
 
   describe '#fnumber' do

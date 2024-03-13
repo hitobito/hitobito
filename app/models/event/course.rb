@@ -109,6 +109,10 @@ class Event::Course < Event
     end
   end
 
+  def minimum_age
+    kind&.minimum_age
+  end
+
   private
 
   def make_participations_visible_to_participants

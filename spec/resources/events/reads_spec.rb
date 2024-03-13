@@ -21,7 +21,6 @@ describe EventResource, type: :resource do
         :name,
         :cost,
         :created_at,
-        :dates,
         :group_ids,
         :kind_id,
         :location,
@@ -49,15 +48,17 @@ describe EventResource, type: :resource do
       expect(data.jsonapi_type).to eq('events')
       expect(data.attributes['type']).to be_blank
     end
+  end
 
-    it 'serializes dates in iso8601 format' do
-      course.dates.update_all('finish_at = start_at')
-      params[:filter] = { id: { eq: course.id } }
+  describe 'including' do
+    it 'may include event dates' do
+      params[:include] = 'dates'
       render
-      date = jsonapi_data[0].attributes['dates'].first
-      expect(date.keys).to match_array %w(label start_at finish_at location)
-      expect(date['start_at']).to eq "2012-03-01T00:00:00+01:00"
-      expect(date['finish_at']).to eq "2012-03-01T00:00:00+01:00"
+      date = d[0].sideload(:dates)[0]
+      expect(date.label).to eq 'Kurs'
+      expect(date.location).to be_blank
+      expect(date.start_at).to eq "2012-03-01T00:00:00+01:00"
+      expect(date.finish_at).to be_blank
     end
   end
 

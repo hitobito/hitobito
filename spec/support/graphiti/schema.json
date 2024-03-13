@@ -144,6 +144,92 @@
       }
     },
     {
+      "name": "Event::DateResource",
+      "type": "dates",
+      "graphql_entrypoint": "dates",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "event_id": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "label": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "location": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "start_at": {
+          "type": "datetime",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "finish_at": {
+          "type": "datetime",
+          "readable": true,
+          "writable": false,
+          "description": null
+        }
+      },
+      "extra_attributes": {
+      },
+      "sorts": {
+        "id": {
+        }
+      },
+      "filters": {
+        "id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "event_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        }
+      },
+      "relationships": {
+        "event": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "EventResource"
+        }
+      },
+      "stats": {
+        "total": [
+          "count"
+        ]
+      }
+    },
+    {
       "name": "EventResource",
       "type": "events",
       "graphql_entrypoint": "events",
@@ -205,12 +291,6 @@
         },
         "location": {
           "type": "string",
-          "readable": true,
-          "writable": false,
-          "description": null
-        },
-        "dates": {
-          "type": "array_of_event_dates",
           "readable": true,
           "writable": false,
           "description": null
@@ -358,6 +438,11 @@
           "type": "belongs_to",
           "description": null,
           "resource": "PersonResource"
+        },
+        "dates": {
+          "type": "has_many",
+          "description": null,
+          "resource": "Event::DateResource"
         }
       },
       "stats": {
@@ -1807,10 +1892,6 @@
     "array_of_datetimes": {
       "kind": "array",
       "description": "Base Type."
-    },
-    "array_of_event_dates": {
-      "kind": "array",
-      "description": "List of Event Dates."
     }
   }
 }

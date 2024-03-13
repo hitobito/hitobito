@@ -57,7 +57,7 @@ describe Export::Tabular::Events::List do
       before { allow(course).to receive(:dates).and_return([date]) }
       its([7]) { is_expected.to eq 'Hauptanlass' }
       its([8]) { is_expected.to eq 'somewhere' }
-      its([9]) { is_expected.to eq '09.06.2013 - 12.06.2013' }
+      its([9]) { is_expected.to eq 'So 09.06.2013 - Mi 12.06.2013' }
       its([10]) { is_expected.to eq '' }
     end
 

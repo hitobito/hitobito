@@ -189,7 +189,7 @@ describe PeopleController, type: :controller do
         URL
         expect(label_link.text).to match(/Eventus/)
         expect(label.text).to match(/Top/)
-        expect(dates).to eq "#{I18n.l(date)} - #{I18n.l(date + 5.days)}"
+        expect(dates).to eq "#{I18n.l(date, format: :with_day)} - #{I18n.l(date + 5.days, format: :with_day)}"
       end
     end
 
@@ -197,7 +197,7 @@ describe PeopleController, type: :controller do
       let(:section) { dom.all('aside section')[2] }
       let(:date) { 2.days.from_now }
       let(:pretty_date) do
-        "#{date.strftime('%d.%m.%Y %H:%M')} - #{(date + 5.days).strftime('%d.%m.%Y %H:%M')}"
+        "#{I18n.l(date, format: '%a %d.%m.%Y %H:%M')} - #{I18n.l(date + 5.days, format: '%a %d.%m.%Y %H:%M')}"
       end
 
       it 'is missing if we have no events' do

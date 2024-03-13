@@ -16,6 +16,7 @@ de:
       default: ! '%d.%m.%Y'
       long: ! '%e %B %Y'
       short: ! '%e %b'
+      with_day: ! '%a %d.%m.%Y'
 
   number:
     currency:

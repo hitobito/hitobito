@@ -51,14 +51,14 @@ describe Event::ParticipationMailer do
     it 'renders dates if set' do
       event.dates.clear
       event.dates.build(label: 'Vorweekend', start_at: Date.parse('2012-10-18'), finish_at: Date.parse('2012-10-21'))
-      is_expected.to match(/Daten:<br\/>Vorweekend: 18.10.2012 - 21.10.2012/)
+      is_expected.to match(/Daten:<br\/>Vorweekend: Do 18.10.2012 - So 21.10.2012/)
     end
 
     it 'renders multiple dates below each other' do
       event.dates.clear
       event.dates.build(label: 'Vorweekend', start_at: Date.parse('2012-10-18'), finish_at: Date.parse('2012-10-21'))
       event.dates.build(label: 'Kurs', start_at: Date.parse('2012-10-21'))
-      is_expected.to match(/Daten:<br\/>Vorweekend: 18.10.2012 - 21.10.2012<br\/>Kurs: 21.10.2012/)
+      is_expected.to match(/Daten:<br\/>Vorweekend: Do 18.10.2012 - So 21.10.2012<br\/>Kurs: So 21.10.2012/)
     end
 
     it 'renders participant info' do
@@ -163,14 +163,14 @@ describe Event::ParticipationMailer do
     it 'renders dates if set' do
       event.dates.clear
       event.dates.build(label: 'Vorweekend', start_at: Date.parse('2012-10-18'), finish_at: Date.parse('2012-10-21'))
-      is_expected.to match(/Daten:<br\/>Vorweekend: 18.10.2012 - 21.10.2012/)
+      is_expected.to match(/Daten:<br\/>Vorweekend: Do 18.10.2012 - So 21.10.2012/)
     end
 
     it 'renders multiple dates below each other' do
       event.dates.clear
       event.dates.build(label: 'Vorweekend', start_at: Date.parse('2012-10-18'), finish_at: Date.parse('2012-10-21'))
       event.dates.build(label: 'Anlass', start_at: Date.parse('2012-10-21'))
-      is_expected.to match(/Daten:<br\/>Vorweekend: 18.10.2012 - 21.10.2012<br\/>Anlass: 21.10.2012/)
+      is_expected.to match(/Daten:<br\/>Vorweekend: Do 18.10.2012 - So 21.10.2012<br\/>Anlass: So 21.10.2012/)
     end
 
     it 'renders the headers' do

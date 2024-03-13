@@ -6,8 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class EventResource < ApplicationResource
-  require_relative 'types' # for custom event_dates type
-
   primary_endpoint 'events', [:index, :show]
 
   with_options writable: false, filterable: false, sortable: false do
@@ -20,7 +18,6 @@ class EventResource < ApplicationResource
     attribute :motto, :string
     attribute :cost, :string
     attribute :location, :string
-    attribute :dates, :array_of_event_dates
     attribute :application_opening_at, :date
     attribute :application_closing_at, :date
     attribute :participant_count, :integer
@@ -33,6 +30,7 @@ class EventResource < ApplicationResource
   end
 
   belongs_to :contact, resource: PersonResource, writable: false
+  has_many :dates, resource: Event::DateResource, writable: false
 
   filter :type, only: [:eq] do
     eq do |scope, types|
@@ -56,6 +54,10 @@ class EventResource < ApplicationResource
   end
 
   def base_scope
-    Event.includes(:groups, :dates).list
+    Event.includes(:groups).list
+  end
+
+  def index_ability
+    JsonApi::EventAbility.new(current_ability)
   end
 end

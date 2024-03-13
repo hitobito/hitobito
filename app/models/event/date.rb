@@ -34,7 +34,7 @@ class Event::Date < ActiveRecord::Base
 
 
   def duration
-    @duration ||= Duration.new(start_at, finish_at)
+    @duration ||= Duration.new(start_at, finish_at, date_format: :with_day)
   end
 
   def to_s(_format = :default)

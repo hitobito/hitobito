@@ -9,9 +9,10 @@ class Duration
 
   attr_reader :start_at, :finish_at
 
-  def initialize(start_at, finish_at)
+  def initialize(start_at, finish_at, date_format: :default)
     @start_at  = start_at
     @finish_at = finish_at
+    @date_format = date_format
   end
 
   def to_s(format = :long)
@@ -83,7 +84,7 @@ class Duration
   end
 
   def format_date(value)
-    I18n.l(value.to_date)
+    I18n.l(value.to_date, format: @date_format)
   end
 
   def date_only?(value)

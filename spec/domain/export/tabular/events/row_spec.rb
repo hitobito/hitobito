@@ -85,7 +85,7 @@ describe Export::Tabular::Events::Row do
     before { allow(course).to receive_messages(dates: [date]) }
 
     it { expect(row.fetch(:date_0_label)).to eq 'Hauptanlass' }
-    it { expect(row.fetch(:date_0_duration)).to eq '09.06.2013 - 12.06.2013' }
+    it { expect(row.fetch(:date_0_duration)).to eq 'So 09.06.2013 - Mi 12.06.2013' }
 
     it 'has keys for two more dates' do
       expect(row.fetch(:date_1_label)).to eq nil

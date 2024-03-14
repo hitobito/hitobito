@@ -21,7 +21,7 @@
     = tab_content(:email) do
       %fieldset
         = f.labeled(:mail_name, class: 'd-flex') do
-          .col-4
+          .col
             .input-group.input-group-sm
               = f.input_field(:mail_name)
               %span.input-group-text= "@#{entry.mail_domain}"

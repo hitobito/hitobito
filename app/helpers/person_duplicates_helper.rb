@@ -4,7 +4,7 @@ module PersonDuplicatesHelper
 
   def person_duplicates_table(entries)
     if entries.present?
-      content_tag(:div, class: 'table-responsive') do
+      content_tag(:div, class: 'table-responsive pb-3') do
         PersonDuplicateTableBuilder.table(entries, @group, self)
       end
     else

@@ -4,7 +4,6 @@
   }
 
   width: 100%;
-  padding-bottom: 15px;
   overflow-x: auto;
   overflow-y: inherit;
   -ms-overflow-style: -ms-autohiding-scrollbar;
@@ -21,6 +20,12 @@
 
 .table-fixed {
   table-layout: fixed;
+}
+
+@media (max-width: 768px) {
+  .table-fixed {
+    table-layout: auto;
+  }
 }
 
 td.action {

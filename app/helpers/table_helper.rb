@@ -12,7 +12,7 @@ module TableHelper
   def table(entries, *attrs) # rubocop:disable Metrics/MethodLength
     entries.to_a # force evaluation of relation
     if entries.present?
-      content_tag(:div, class: 'table-responsive') do
+      content_tag(:div, class: 'table-responsive pb-3') do
         StandardTableBuilder.table(entries, self, attrs.extract_options!) do |t|
           t.attrs(*attrs)
           yield t if block_given?

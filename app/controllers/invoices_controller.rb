@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -13,7 +13,7 @@ class InvoicesController < CrudController
   decorates :invoice
 
   self.nesting = Group
-  self.optional_nesting = [InvoiceList]
+  self.optional_nesting = [Group, InvoiceList]
 
   self.sort_mappings = { last_payment_at: Invoice.order_by_payment_statement,
                          amount_paid: Invoice.order_by_amount_paid_statement,

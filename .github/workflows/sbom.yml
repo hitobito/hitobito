@@ -149,19 +149,19 @@ jobs:
         env:
           SCAN_DEBUG_MODE: debug
         run: |
-          npm install -g @cyclonedx/cdxgen
-          cdxgen -o ./sbom-ruby.xml -t ruby --spec-version 1.4 .
+          npm install -g @cyclonedx/cdxgen@10
+          cdxgen -o ./sbom-ruby.json -t ruby --spec-version 1.4 .
 
       - name: 'Generate SBOM for npm dependencies'
         working-directory: hitobito
         run: |
-          npm install -g @cyclonedx/cdxgen
-          cdxgen -o ./sbom-npm.xml -t npm --spec-version 1.4 .
+          npm install -g @cyclonedx/cdxgen@10
+          cdxgen -o ./sbom-npm.json -t npm --spec-version 1.4 .
 
       - name: 'Merge frontend and backend SBOMs'
         working-directory: hitobito
         run: |
-          docker run --rm -v $(pwd):/data cyclonedx/cyclonedx-cli merge --input-files data/sbom-ruby.xml data/sbom-npm.xml --output-file data/sbom.xml
+          docker run --rm -v $(pwd):/data cyclonedx/cyclonedx-cli merge --input-files data/sbom-ruby.json data/sbom-npm.json --output-file data/sbom.json
 
       - name: 'Push merged SBOM to dependency track'
         working-directory: hitobito
@@ -172,13 +172,13 @@ jobs:
           --form "autoCreate=true" \
           --form "projectName=${{ inputs.project_name }}" \
           --form "projectVersion=latest" \
-          --form "bom=@sbom.xml"
+          --form "bom=@sbom.json"
 
       - uses: actions/upload-artifact@v2
         if: always()
         with:
           name: sboms
           path: |
-            ./hitobito/sbom-npm.xml
-            ./hitobito/sbom-ruby.xml
-            ./hitobito/sbom.xml
+            ./hitobito/sbom-npm.json
+            ./hitobito/sbom-ruby.json
+            ./hitobito/sbom.json

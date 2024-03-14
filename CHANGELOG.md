@@ -12,6 +12,7 @@
 *  Upgrade auf Ruby 3.2 (#2242)
 *  Filtermöglichkeit für Personen mit keinen gültigen, aber reaktivierbaren Qualifikationen, inklusive Stichdatum (hitobito_sac_cas#333)
 *  Filtermöglichkeit für Personen mit keinen gültigen Qualifikationen, inklusive Stichdatum (hitobito_sac_cas#334)
+*  JSON:API OpenAPI Dokumentation weist 'extra_fields' korrekt aus (request parameter, entity schema attributes) (hitobito_sac_cas#275)
 
 ## Version 2.0
 

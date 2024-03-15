@@ -132,6 +132,7 @@ group :test do
   gem 'fabrication'
   gem 'headless'
   gem 'launchy'
+  gem 'open_api-schema_validator'
   gem 'pdf-inspector', require: 'pdf/inspector'
   gem 'rails-controller-testing'
   gem 'rspec-collection_matchers'

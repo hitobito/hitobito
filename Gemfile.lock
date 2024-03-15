@@ -335,6 +335,8 @@ GEM
     joiner (0.6.0)
       activerecord (>= 6.1.0)
     json (2.7.1)
+    json-schema (4.2.0)
+      addressable (>= 2.8)
     jsonapi-renderer (0.2.2)
     jsonapi-serializable (0.3.1)
       jsonapi-renderer (~> 0.2.0)
@@ -414,6 +416,8 @@ GEM
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     oat (0.6.1)
+    open_api-schema_validator (0.2.0)
+      json-schema
     orm_adapter (0.5.0)
     paper_trail (15.1.0)
       activerecord (>= 6.1)
@@ -798,6 +802,7 @@ DEPENDENCIES
   nested_form
   nokogiri
   oat
+  open_api-schema_validator
   paper_trail
   parallel_tests
   paranoia

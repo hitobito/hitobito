@@ -118,7 +118,7 @@ module Dropdown
       else url
       end
 
-      html_options[:class] = 'dropdown-item'
+      html_options[:class] = [html_options[:class], 'dropdown-item'].compact.uniq.join(' ')
       if sub_items?
         html_options[:class] += ' dropdown-toggle'
       end

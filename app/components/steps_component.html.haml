@@ -4,6 +4,7 @@
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
 %div{data: { controller: stimulus_controller} }
+  = hidden_field_tag(:step, @step, data: stimulus_target('step'))
   .row
     %ol.step-headers.offset-md-1
       = render(HeaderComponent.with_collection(@partials, step: @step))

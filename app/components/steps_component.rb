@@ -53,7 +53,9 @@ class StepsComponent < ApplicationComponent
     end
 
     def call
-      content_tag(:li, markup, class: active_class)
+      content_tag(:li, markup,
+                  class: active_class ,
+                  data: stimulus_target('stepHeader'))
     end
 
     def render?
@@ -85,7 +87,9 @@ class StepsComponent < ApplicationComponent
     end
 
     def call
-      content_tag(:div, markup, class: %W[step-content #{@partial.dasherize} #{active_class}])
+      content_tag(:div, markup,
+                  class: %W[step-content #{@partial.dasherize} #{active_class}],
+                  data: stimulus_target('stepContent'))
     end
 
     def next_button(title = t('steps_component.next_link'), options = {})

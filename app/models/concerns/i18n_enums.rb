@@ -29,7 +29,8 @@ module I18nEnums
 
       define_method("#{attr}_label") do |value = nil|
         value ||= send(attr)
-        I18n.t("#{prefix}.#{value.to_s.downcase.presence || NIL_KEY}")
+        translation = I18n.t("#{prefix}.#{value.to_s.downcase.presence || NIL_KEY}")
+        translation.ends_with?(NIL_KEY) ? nil : translation
       end
 
       define_singleton_method("#{attr}_labels") do

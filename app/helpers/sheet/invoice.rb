@@ -16,7 +16,7 @@ module Sheet
     end
 
     def parent_sheet
-     @parent_sheet ||= begin
+      @parent_sheet ||= begin
         parent_sheet_class = invoice_list ? Sheet::InvoiceList : Sheet::Group
         create_parent(parent_sheet_class)
       end

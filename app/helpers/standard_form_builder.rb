@@ -16,6 +16,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   include NestedForm::BuilderMixin
 
   REQUIRED_MARK = ' <span class="required">*</span>'.html_safe
+  WIDTH_CLASSES = %w(mw-100 mw-md-60ch)
+  FORM_CONTROL = %w(form-control form-control-sm)
+  FORM_CONTROL_WITH_WIDTH = %w(form-control form-control-sm) + WIDTH_CLASSES
+  FORM_CONTROL_SELECT_WITH_WIDTH = %w(form-select form-select-sm) + WIDTH_CLASSES
 
   attr_reader :template
 
@@ -53,7 +57,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       send(custom_field_method, attr, html_options)
     else
       html_options[:class] = [
-        html_options[:class], 'form-control', 'form-control-sm', 'mw-100', 'mw-md-60ch'
+        html_options[:class], *FORM_CONTROL_WITH_WIDTH
       ].compact.join(' ')
       text_field(attr, html_options)
     end
@@ -62,7 +66,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a password field
   def password_field(attr, html_options = {})
     html_options[:class] = [
-      html_options[:class], 'mw-100', 'mw-md-60ch', 'form-control', 'form-control-sm'
+      html_options[:class], *FORM_CONTROL_WITH_WIDTH
     ].compact.join(' ')
     html_options[:class] += ' is-invalid' if errors_on?(attr)
     super(attr, html_options)
@@ -71,7 +75,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a text_area.
   def text_area(attr, html_options = {})
     html_options[:class] = [
-      html_options[:class], 'mw-100', 'mw-md-60ch', 'form-control', 'form-control-sm'
+      html_options[:class], *FORM_CONTROL_WITH_WIDTH
     ].compact.join(' ')
     html_options[:class] += ' is-invalid' if errors_on?(attr)
     html_options[:rows] ||= 5
@@ -81,7 +85,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render an action text input field.
   def rich_text_area(attr, html_options = {})
     html_options[:class] = [
-      html_options[:class], 'form-control', 'form-control-sm'
+      html_options[:class], *FORM_CONTROL
     ].compact.join(' ')
     html_options[:class] += ' is-invalid' if errors_on?(attr)
     super(attr, html_options)
@@ -91,7 +95,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def number_field(attr, html_options = {})
     html_options[:size] ||= 10
     html_options[:class] = [
-      html_options[:class], 'mw-100', 'mw-md-15ch', 'form-control', 'form-control-sm'
+      html_options[:class], 'mw-100', 'mw-md-15ch', *FORM_CONTROL
     ].compact.join(' ')
     html_options[:class] += ' is-invalid' if errors_on?(attr)
     text_field(attr, html_options)
@@ -104,7 +108,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def string_field(attr, html_options = {})
     html_options[:maxlength] ||= column_property(@object, attr, :limit)
     html_options[:class] = [
-      html_options[:class], 'mw-100', 'mw-md-60ch', 'form-control', 'form-control-sm'
+      html_options[:class], *FORM_CONTROL_WITH_WIDTH
     ].compact.join(' ')
     html_options[:class] += ' is-invalid' if errors_on?(attr)
     text_field(attr, html_options)
@@ -112,7 +116,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   def email_field(attr, html_options = {})
     html_options[:class] = [
-      html_options[:class], 'mw-100', 'mw-md-60ch', 'form-control', 'form-control-sm'
+      html_options[:class], *FORM_CONTROL_WITH_WIDTH
     ].compact.join(' ')
     html_options[:class] += ' is-invalid' if errors_on?(attr)
     super(attr, html_options)
@@ -148,7 +152,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def date_field(attr, html_options = {})
     html_options[:value] ||= date_value(attr)
     html_options[:class] = [
-      html_options[:class], 'mw-100', 'mw-md-20ch', 'date', 'form-control', 'form-control-sm'
+      html_options[:class], 'mw-100', 'mw-md-20ch', 'date', *FORM_CONTROL
     ].compact.join(' ')
     html_options[:class] += ' is-invalid' if errors_on?(attr)
     content_tag(:div, class: 'input-group') do
@@ -194,7 +198,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a field to enter a date and time.
   # Include DatetimeAttribute in the model to use this.
   def datetime_field(attr, html_options = {})
-    html_options[:class] = [html_options[:class], 'mw-100 mw-md-60ch'].compact.join(' ')
+    html_options[:class] = [html_options[:class], *FORM_CONTROL_WITH_WIDTH].compact.join(' ')
     html_options[:class] += ' is-invalid' if errors_on?(attr)
 
     content_tag(:div, class: 'd-flex align-items-center') do
@@ -255,7 +259,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # define an instance variable with the pluralized name of the association.
   def belongs_to_field(attr, html_options = {})
     html_options[:class] = [
-      html_options[:class], 'form-select', 'form-select-sm', 'mw-100', 'mw-md-60ch'
+      html_options[:class], *FORM_CONTROL_SELECT_WITH_WIDTH
     ].compact.join(' ')
     html_options[:class] += ' is-invalid' if errors_on?(attr)
     list = association_entries(attr, html_options)
@@ -274,7 +278,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def has_many_field(attr, html_options = {}) # rubocop:disable Naming/PredicateName
     html_options[:multiple] = true
     html_options[:class] = [
-      html_options[:class], 'mw-100', 'mw-md-60ch', 'form-control', 'form-control-sm'
+      html_options[:class], *FORM_CONTROL_SELECT_WITH_WIDTH
     ].compact.join(' ')
     html_options[:class] += ' is-invalid' if errors_on?(attr)
 
@@ -284,7 +288,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   def i18n_enum_field(attr, labels, html_options = {})
     html_options[:class] = [
-      html_options[:class], 'mw-100', 'mw-md-60ch'
+      html_options[:class], *FORM_CONTROL_SELECT_WITH_WIDTH
     ].compact.join(' ')
     html_options[:class] += ' is-invalid' if errors_on?(attr)
     collection_select(attr, labels, :first, :last,
@@ -295,7 +299,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def person_field(attr, html_options = {}) # rubocop:disable Metrics/MethodLength
     attr, attr_id = assoc_and_id_attr(attr)
     klass = [
-      html_options[:class], 'mw-100', 'mw-md-60ch', 'form-control', 'form-control-sm'
+      html_options[:class], *FORM_CONTROL_WITH_WIDTH
     ].compact.join(' ')
     disabled = html_options[:disabled].to_s
     klass += ' is-invalid' if errors_on?(attr)

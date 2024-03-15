@@ -13,7 +13,7 @@ class InvoicesController < CrudController
   decorates :invoice
 
   self.nesting = Group
-  self.optional_nesting = [Group, InvoiceList]
+  self.optional_nesting = [InvoiceList]
 
   self.sort_mappings = { last_payment_at: Invoice.order_by_payment_statement,
                          amount_paid: Invoice.order_by_amount_paid_statement,
@@ -157,7 +157,7 @@ class InvoicesController < CrudController
     scope = super.list
     scope = scope.includes(:recipient).references(:recipient)
     scope = scope.joins(Invoice.last_payments_information)
-    scope = scope.standalone if parent.is_a?(Group)
+    scope = scope.standalone unless parents.any?(InvoiceList)
     scope = scope.page(params[:page]).per(50) unless params[:ids]
     Invoice::Filter.new(params).apply(scope)
   end

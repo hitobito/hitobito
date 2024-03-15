@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -49,28 +49,22 @@ module Nestable
   # These are ActiveRecords or namespace symbols, corresponding
   # to the defined nesting attribute.
   def parents
-    @parents ||= load_parents
+    @parents ||= load_fixed_parents + load_optional_parents
   end
 
-  def load_parents
-    if optional_nesting.present?
-      load_optional_parent || load_fixed_parents
-    else
-      load_fixed_parents
-    end
-  end
+  def load_optional_parents
+    return [] if optional_nesting.blank?
 
-  def load_optional_parent
-    parent = nil
-    Array(optional_nesting).each do |clazz|
+    Array(optional_nesting).map do |clazz|
+      next unless clazz.is_a?(Class)
+
       key = parent_key_name(clazz)
       id = params["#{key}_id"].to_i
+
       if id && request.path.include?("/#{key.pluralize}/#{id}/")
-        parent = [parent_entry(clazz)]
-        break
+        parent_entry(clazz)
       end
-    end
-    parent
+    end.compact
   end
 
   def load_fixed_parents
@@ -92,7 +86,6 @@ module Nestable
   def parent_key_name(clazz)
     clazz.name.demodulize.underscore
   end
-
 
   # The model scope for the current parent resource.
   def parent_scope

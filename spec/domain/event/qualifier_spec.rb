@@ -38,7 +38,7 @@ describe Event::Qualifier do
   let(:quali_date)       { Date.new(2012, 10, 20) }
 
   def create_qualification(person, date, kind)
-    Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(kind), start_at: date)
+    Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(kind), start_at: date, qualified_at: date)
   end
 
   def obtained_qualification_kinds(person)
@@ -244,6 +244,132 @@ describe Event::Qualifier do
 
       participant_qualifier.issue
       expect(participant_qualifier).to be_nothing_changed
+    end
+  end
+
+  context 'prolongations conditional to required training days' do
+    let(:gl) { qualification_kinds(:gl) }
+    let(:sl) { qualification_kinds(:sl) }
+    let!(:qualification) { create_qualification(participant, Date.new(2011, 3, 10), :gl) }
+
+    def obtained_qualification(person, kind)
+      person.qualifications.find_by(origin: course.name, qualification_kind: kind)
+    end
+
+    def create_course_participation(training_days: nil, start_at:)
+      course = Fabricate.build(:course, kind: event_kind, training_days: training_days)
+      course.dates.build(start_at: start_at)
+      course.save!
+      Fabricate(:event_participation, event: course, person: participation.person, qualified: true)
+    end
+
+    def create_event_kind_qualification_kind(event_kind, qualification_kind)
+      Event::KindQualificationKind.create!(
+        event_kind: event_kind,
+        qualification_kind: qualification_kind,
+        category: :prolongation,
+        role: :participant
+      )
+    end
+
+    before do
+      event_kind_qualification_kinds(:slksl_qual).destroy
+
+      gl.update!(required_training_days: 2, validity: 1)
+    end
+
+    it 'noops if current course does not have required trainings days' do
+      course.update(training_days: 1.5)
+      expect { participant_qualifier.issue }.not_to change { participant.qualifications.count }
+    end
+
+    it 'noops if current and existing courses combined do not have required training days' do
+      course.update(training_days: 1)
+      create_course_participation(start_at: Date.new(2012, 1, 1), training_days: 0.5)
+      expect { participant_qualifier.issue }.not_to change { participant.qualifications.count }
+    end
+
+    it 'noops if current and existing courses combined have required training days but outside of validity period' do
+      course.update(training_days: 1)
+      create_course_participation(start_at: Date.new(2009, 1, 1), training_days: 0.5)
+      create_course_participation(start_at: Date.new(2010, 1, 1), training_days: 0.5)
+      expect { participant_qualifier.issue }.not_to change { participant.qualifications.count }
+    end
+
+    it 'prolongs with identical start_at and qualified_at if current course has required trainings days' do
+      course.update(training_days: 2)
+      expect { participant_qualifier.issue }.to change { participant.qualifications.count }.by(1)
+
+      qualification = obtained_qualification(participant, gl)
+      expect(qualification.start_at).to eq quali_date
+      expect(qualification.qualified_at).to eq quali_date
+    end
+
+    it 'prolongs with separate start_at and qualified_at if current and existing courses combined have required training days' do
+      course.update(training_days: 0.5)
+      create_course_participation(start_at: Date.new(2011, 1, 1), training_days: 1.5)
+      create_course_participation(start_at: Date.new(2012, 1, 1), training_days: 1.5)
+      expect { participant_qualifier.issue }.to change { participant.qualifications.count }.by(1)
+
+      qualification = obtained_qualification(participant, gl)
+      expect(qualification.start_at).to eq Date.new(2012, 1, 1)
+      expect(qualification.qualified_at).to eq quali_date
+    end
+
+    it 'prolongs multiple matching qualifications' do
+      sl.update!(required_training_days: 2, validity: 1)
+      course.update(training_days: 2)
+      create_qualification(participant, Date.new(2012, 3, 10), :sl)
+      create_event_kind_qualification_kind(course.kind, sl)
+      expect { participant_qualifier.issue }.to change { participant.qualifications.count }.by(2)
+    end
+
+    it 'prolongs multiple matching qualifications from two different courses' do
+      sl.update!(required_training_days: 3, validity: 1)
+      course.update(training_days: 2)
+      create_qualification(participant, Date.new(2011, 11, 1), :sl)
+
+      create_event_kind_qualification_kind(event_kinds(:slk), sl)
+      create_course_participation(start_at: Date.new(2012, 1, 1), training_days: 1)
+      expect { participant_qualifier.issue }.to change { participant.qualifications.count }.by(2)
+
+      sl_quali = obtained_qualification(participant, sl)
+      expect(sl_quali.start_at).to eq Date.new(2012, 1, 1)
+      expect(sl_quali.qualified_at).to eq quali_date
+
+      gl_quali = obtained_qualification(participant, gl)
+      expect(gl_quali.start_at).to eq quali_date
+      expect(gl_quali.qualified_at).to eq quali_date
+    end
+
+    context 'with existing qualification and required training days met' do
+      before do
+        course.update(training_days: 0.5)
+        create_course_participation(start_at: Date.new(2012, 1, 1), training_days: 2)
+      end
+
+      it 'noops if qualification has been issued in previous course' do
+        qualification.update(start_at: Date.new(2012, 1, 1), qualified_at: Date.new(2012, 1, 1))
+        expect { participant_qualifier.issue }.not_to change { participant.qualifications.count }
+      end
+
+      it 'noops if qualification has been issued manually without qualified_at' do
+        qualification.update(start_at: Date.new(2012, 1, 1), qualified_at: nil)
+        expect { participant_qualifier.issue }.not_to change { participant.qualifications.count }
+      end
+
+      it 'noops if qualification has been issued manually after computed start_at' do
+        qualification.update(start_at: Date.new(2012, 2, 1), qualified_at: nil)
+        expect { participant_qualifier.issue }.not_to change { participant.qualifications.count }
+      end
+
+      it 'creates an later qualification if qualification has been issued manually on before start_at' do
+        qualification.update(start_at: Date.new(2011, 12, 1), qualified_at: nil)
+        expect { participant_qualifier.issue }.to change { participant.qualifications.count }.by(1)
+        qualification = obtained_qualification(participant, gl)
+        expect(qualification.start_at).to eq Date.new(2012, 1, 1)
+        expect(qualification.qualified_at).to eq quali_date
+      end
     end
   end
 end

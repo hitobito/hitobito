@@ -79,7 +79,7 @@ describe Event::QualificationsController do
         before do
           qualification_kind_id = event.kind.qualification_kinds('qualification', 'participant').first.id
           participant_1.person.qualifications.create!(qualification_kind_id: qualification_kind_id,
-                                                      start_at: start_at)
+                                                      start_at: start_at, qualified_at: start_at)
         end
 
         context 'issued before qualification date' do

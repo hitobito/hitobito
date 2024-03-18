@@ -73,14 +73,35 @@ class Event::Qualifier
   # tracks what could and could not be prolonged
   def prolong_existing(kinds)
     @prolonged = prolongable_qualification_kinds(kinds)
-    @prolonged.each { |kind| create(kind) }
+    @prolonged.each do |kind|
+      if kind.required_training_days?
+        with_calculated_start_at(kind) do |start_at|
+          create(kind, start_at: start_at)
+        end
+      else
+        create(kind)
+      end
+    end
   end
 
-  def create(kind)
-    person.qualifications
-      .where(qualification_kind_id: kind.id, start_at: qualification_date)
-      .first_or_create!(origin: event.to_s)
+  def with_calculated_start_at(kind)
+    @calculator ||= TrainingDaysCalculator.new(@participation, @role, prolongation_kinds)
+    start_at = @calculator.start_at(kind)
+    if start_at && person_qualifications(kind).where('start_at >= ?', start_at).none?
+      yield start_at
+    end
   end
+
+  def create(kind, start_at: qualification_date)
+    person_qualifications(kind)
+      .where(qualified_at: qualification_date)
+      .first_or_create!(origin: event.to_s, start_at: start_at)
+  end
+
+  def person_qualifications(kind)
+    person.qualifications.where(qualification_kind_id: kind.id)
+  end
+
 
   def prolongable_qualification_kinds(kinds)
     person.qualifications
@@ -95,8 +116,8 @@ class Event::Qualifier
   end
 
   # Qualifications set for this qualification_date (via preceeding #issue call in controller)
-  def obtained(kinds = [])
-    @obtained ||= person.qualifications.where(start_at: qualification_date,
+  def obtained(kinds = [], qualified_at = qualification_date)
+    @obtained ||= person.qualifications.where(qualified_at: qualified_at,
                                               qualification_kind_id: kinds.map(&:id)).to_a
   end
 
@@ -107,5 +128,4 @@ class Event::Qualifier
   def prolongation_kinds
     event.kind.qualification_kinds('prolongation', @role)
   end
-
 end

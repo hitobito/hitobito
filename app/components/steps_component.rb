@@ -91,7 +91,7 @@ class StepsComponent < ApplicationComponent
     end
 
     def next_button(title = t('steps_component.next_link'), options = {})
-      type = active? ? 'submit' : 'button'
+      type = 'submit'
       if last?
         submit_button(t('groups.self_registration.form.submit'), type, options)
       else

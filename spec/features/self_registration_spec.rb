@@ -192,14 +192,17 @@ describe :self_registration, js: true do
     it 'can go back and forth' do
       click_on 'Zurück'
       assert_step 'SecondStep'
+      click_on 'Weiter'
+      assert_step 'ThirdStep'
+      click_on 'Zurück'
       click_on 'Zurück'
       assert_step 'FirstStep'
       click_on 'Weiter'
       assert_step 'SecondStep'
+      click_on 'Zurück'
+      click_on 'Weiter'
       click_on 'Weiter'
       assert_step 'ThirdStep'
-      click_on 'Zurück'
-      assert_step 'SecondStep'
     end
 
     context 'when step is invalid' do

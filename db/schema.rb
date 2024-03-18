@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_03_08_135107) do
+ActiveRecord::Schema.define(version: 2024_03_19_080613) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -969,6 +969,7 @@ ActiveRecord::Schema.define(version: 2024_03_08_135107) do
     t.date "start_at", null: false
     t.date "finish_at"
     t.string "origin"
+    t.date "qualified_at"
     t.index ["person_id"], name: "index_qualifications_on_person_id"
     t.index ["qualification_kind_id"], name: "index_qualifications_on_qualification_kind_id"
   end

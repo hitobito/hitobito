@@ -65,9 +65,7 @@ class StepsComponent < ApplicationComponent
     private
 
     def markup
-      return title unless index <= @step
-
-      link_to(title, '#', data: { action: stimulus_action(:activate) })
+      title
     end
 
     def title

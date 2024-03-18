@@ -189,7 +189,7 @@ describe :self_registration, js: true do
       within('.step-headers') { click_on link_text }
     end
 
-    it 'works with buttons' do
+    it 'can go back and forth' do
       click_on 'Zurück'
       assert_step 'SecondStep'
       click_on 'Zurück'
@@ -200,19 +200,6 @@ describe :self_registration, js: true do
       assert_step 'ThirdStep'
       click_on 'Zurück'
       assert_step 'SecondStep'
-    end
-
-    it 'works with breadcrumb links' do
-      click_on_breadcrumb 'FirstStep'
-      assert_step 'FirstStep'
-      click_on_breadcrumb 'ThirdStep'
-      assert_step 'ThirdStep'
-      click_on_breadcrumb 'SecondStep'
-      assert_step 'SecondStep'
-      click_on_breadcrumb 'FirstStep'
-      assert_step 'FirstStep'
-      click_on_breadcrumb 'ThirdStep'
-      assert_step 'ThirdStep'
     end
 
     context 'when step is invalid' do

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -79,7 +79,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
         entries
         @person_add_requests = fetch_person_add_requests
       end
-      format.pdf           { render_pdf(filter_entries.collect(&:person), group) }
+      format.pdf           { render_entries_pdf(filter_entries) }
       format.csv           { render_tabular_in_background(:csv) }
       format.vcf           { render_vcf(filter_entries.includes(person: :phone_numbers)
                                                       .collect(&:person)) }
@@ -114,6 +114,10 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   private
+
+  def render_entries_pdf(entries)
+    render_pdf(entries.collect(&:person), group)
+  end
 
   def render_entry_json
     render json: EventParticipationSerializer.new(

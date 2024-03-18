@@ -4,8 +4,8 @@ class SqlSelectStatements
     select_list = []
 
     table_names.each do |table_name|
-      columns = table_name.classify.constantize.columns
-      table = table_name.classify.constantize.arel_table
+      columns = table_name.titleize.gsub(' ', '::').constantize.columns
+      table = table_name.titleize.gsub(' ', '::').constantize.arel_table
 
       max_columns = columns.map do |column|
         if column.type != :boolean

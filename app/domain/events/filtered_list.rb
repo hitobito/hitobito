@@ -9,11 +9,14 @@ module Events
   class FilteredList < ::FilteredList
     def base_scope
       Event::Course
-        .select('events.*', 'event_dates.start_at')
+        .group(:id)
+        .select(SqlSelectStatements.new.generate_aggregate_queries("event"), 
+                'MAX(event_dates.start_at)')
         .includes(:events_groups, :groups, :translations)
         .joins(:dates)
         .preload(additional_course_includes)
         .joins(additional_course_includes)
+        .select(additional_course_includes.present? ? "MAX(event_kind_translations.label)" : "")
         .order(course_ordering)
     end
 
@@ -40,7 +43,8 @@ module Events
     end
 
     def course_ordering
-      kind_used? ? 'event_kind_translations.label, event_dates.start_at' : 'event_dates.start_at'
+      kind_used? ? 'MAX(event_kind_translations.label), MAX(event_dates.start_at)' : 
+                   'MAX(event_dates.start_at)'
     end
 
     def kind_used?

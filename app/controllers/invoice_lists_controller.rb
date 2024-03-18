@@ -149,7 +149,9 @@ class InvoiceListsController < CrudController
     group = Group.find(params.dig(:filter, :group_id))
     filter_params = params[:filter].to_unsafe_h.transform_values(&:presence)
     filter = Person::Filter::List.new(group, current_user, filter_params)
-    filter.entries.pluck(:id).join(',')
+    Person.from("(#{filter.entries.select("people.id AS person_id").to_sql}) AS subquery")
+          .pluck("subquery.person_id")
+          .join(',')
   end
 
   def authorize_class

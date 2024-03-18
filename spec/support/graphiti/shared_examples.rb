@@ -56,6 +56,7 @@ shared_examples 'graphiti schema file is up to date' do
   describe 'GET /api-docs', type: :request do
     it 'openapi spec is valid' do
       get '/api/openapi.json'
+      expect(response).to have_http_status(:ok)
       json = JSON.parse(response.body)
       expect(OpenApi::SchemaValidator.validate!(json, 3)).to be_truthy, <<~MSG
         The generated OpenAPI specification file does not conform to the official OpenAPI 3 standard.

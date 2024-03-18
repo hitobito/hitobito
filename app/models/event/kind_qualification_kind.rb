@@ -61,4 +61,9 @@ class Event::KindQualificationKind < ActiveRecord::Base
 
   i18n_enum :validity, %w(valid valid_or_expired valid_or_reactivatable)
 
+  scope :prolongation, -> { where(category: :prolongation) }
+
+  def prolongation?
+    category.to_sym == :prolongation
+  end
 end

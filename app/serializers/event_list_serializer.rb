@@ -58,6 +58,7 @@ class EventListSerializer < ApplicationSerializer
                    :description,
                    :motto,
                    :cost,
+                   :number,
                    :maximum_participants,
                    :participant_count,
                    :location,

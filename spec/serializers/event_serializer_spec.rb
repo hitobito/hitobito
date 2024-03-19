@@ -116,6 +116,10 @@ describe EventSerializer do
 
       expect(subject[:links]).to have_key(:kind)
     end
+
+    it 'includes number key' do
+      is_expected.to have_key(:number)
+    end
   end
 
   context 'attachments' do

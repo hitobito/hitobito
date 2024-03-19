@@ -50,6 +50,7 @@ module FormatHelper
   # If the value is an associated model, renders the label of this object.
   # Otherwise, calls format_type.
   def format_attr(obj, attr) # rubocop:disable Metrics/MethodLength
+    binding.pry if attr == :sac_newsletter_mailing_list_id
     format_type_attr_method = format_type_attr_method(obj, attr)
     format_attr_method = :"format_#{attr}"
     if respond_to?(format_type_attr_method)

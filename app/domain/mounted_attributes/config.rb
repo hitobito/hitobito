@@ -16,7 +16,7 @@ module MountedAttributes
       @target_class = target_class
       @attr_name = attr_name
       @attr_type = attr_type
-      @type = ActiveModel::Type.lookup(attr_type)
+      @type = attr_type.respond_to?(:cast) ? attr_type : ActiveModel::Type.lookup(attr_type)
       @null = null
 
       initialize_options(options)

@@ -11,5 +11,8 @@
       - if config.enum.present?
         = f.labeled(config.attr_name) do
           = MountedAttrs::EnumSelect.new(self, config, f).render
+      - elsif config.type.is_a?(ActiveModelTypes::Reference)
+        = f.labeled(config.attr_name) do
+          = f.collection_select(config.attr_name, config.type.reference_class.all, :id, :to_s)
       - else
         = f.labeled_input_field(config.attr_name)

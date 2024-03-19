@@ -160,8 +160,11 @@ case $cmd in
     ;;
 
   configs)
+    shift # loose the "configs" argument
+    configs_to_copy=${@:-.rspec}
+
     echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -L1 -I% \
-      cp -v .rspec "../hitobito_%/"
+      cp -v $configs_to_copy "../hitobito_%/"
     ;;
 
   binstubs)

@@ -8,7 +8,11 @@
 module Sheet
   class Invoice < Base
     def title
-      invoice_list ? invoice_list.title : ::Invoice.model_name.human(count: 2)
+      if invoice_list
+        invoice_list.title
+      else
+        ::Invoice.model_name.human(count: 2)
+      end
     end
 
     def parent_sheet
@@ -16,10 +20,6 @@ module Sheet
         parent_sheet_class = invoice_list ? Sheet::InvoiceList : Sheet::Group
         create_parent(parent_sheet_class)
       end
-    end
-
-    def invoice_list
-      @invoice_list ||= ::InvoiceList.find_by(id: view.params[:invoice_list_id])
     end
 
     def left_nav?
@@ -30,5 +30,10 @@ module Sheet
       view.render('invoices/nav_left')
     end
 
+    private
+
+    def invoice_list
+      @invoice_list ||= ::InvoiceList.find_by(id: view.params[:invoice_list_id])
+    end
   end
 end

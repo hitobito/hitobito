@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module Sheet
-  class PaymentProcess < Base
+  class PaymentProcess < Sheet::Invoice
     self.parent_sheet = Sheet::Invoice
 
     def title

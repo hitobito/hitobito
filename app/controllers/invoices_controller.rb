@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -157,7 +157,7 @@ class InvoicesController < CrudController
     scope = super.list
     scope = scope.includes(:recipient).references(:recipient)
     scope = scope.joins(Invoice.last_payments_information)
-    scope = scope.standalone if parent.is_a?(Group)
+    scope = scope.standalone unless parents.any?(InvoiceList)
     scope = scope.page(params[:page]).per(50) unless params[:ids]
     Invoice::Filter.new(params).apply(scope)
   end

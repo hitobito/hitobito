@@ -1,15 +1,13 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2022, Schweizer Wanderwege. This file is part of
+#  Copyright (c) 2022-2024, Schweizer Wanderwege. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class Invoices::EvaluationsController < ApplicationController
-  prepend Nestable
-
   decorates :group
-  helper_method :group, :from, :to
+  helper_method :group, :from, :to, :parents
 
   before_action :authorize_action
   prepend_before_action :entries
@@ -36,6 +34,10 @@ class Invoices::EvaluationsController < ApplicationController
 
   def group
     @group ||= Group.find(params[:group_id])
+  end
+
+  def parents
+    [group].compact
   end
 
   def table_rows

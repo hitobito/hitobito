@@ -7,10 +7,7 @@
 
 
 module Sheet
-  class InvoiceList < Sheet::Base
-
-    self.parent_sheet = Sheet::Group
-
+  class InvoiceList < Base
     def title
       if entry && !entry.receiver
         ::Invoice.model_name.human
@@ -19,16 +16,16 @@ module Sheet
       end
     end
 
+    def parent_sheet
+      create_parent(Sheet::Group)
+    end
+
     def left_nav?
       true
     end
 
     def render_left_nav
-      if form?
-        parent_sheet.render_left_nav
-      else
-        view.render('invoices/nav_left')
-      end
+      view.render('invoices/nav_left')
     end
 
     # Needs spacing because parent has no tabs
@@ -39,14 +36,5 @@ module Sheet
     def link_url
       view.group_invoice_lists_path(view.group, returning: true)
     end
-
-    def parent_sheet
-      create_parent(Sheet::Group) if form?
-    end
-
-    def form?
-      %w(new create).include?(view.action_name)
-    end
-
   end
 end

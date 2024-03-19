@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -19,10 +19,19 @@ describe Event::KindsController do
     expect(destroyed.reload).not_to be_deleted
   end
 
-  it 'GET index lists destroyed entries last' do
+  it 'GET index lists only existing entries and orders by label ASC' do
     get :index
-    expect(assigns(:kinds).last).to eq(destroyed)
+    expect(assigns(:kinds).length).to eq 3
+    expect(assigns(:kinds).first.label).to eq("Fortbildungskurs")
+    expect(assigns(:kinds).last.label).to eq("Scharleiterkurs")
   end
+
+  it 'GET index only list destroyed entries' do
+    get :index, params: { deleted_only: true }
+    expect(assigns(:kinds).length).to eq 1
+    expect(assigns(:kinds).first.label).to eq(destroyed.label)
+  end
+
 
   it 'POST create accepts qualification_conditions and general_information' do
     post :create, params: {
@@ -134,3 +143,4 @@ describe Event::KindsController do
 
 
 end
+

@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -33,7 +33,16 @@ class Event::KindsController < SimpleCrudController
   private
 
   def list_entries
-    super.includes(kind_category: :translations).list
+    query = super.includes(kind_category: :translations)
+             .select("event_kinds.*, event_kind_translations.label")
+
+    if params[:deleted_only].present?
+      query = query.where.not(deleted_at: nil)
+    else
+      query = query.where(deleted_at: nil)
+    end
+
+    @entries = query.list
   end
 
   def load_assocations
@@ -119,3 +128,4 @@ class Event::KindsController < SimpleCrudController
   end
 
 end
+

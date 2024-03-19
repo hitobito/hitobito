@@ -569,6 +569,9 @@ de:
         add: Kursart erstellen
     new:
       title: Kursart erstellen
+    tabs:
+      overview: Übersicht
+      deleted: Gelöscht
 
   event/participations:
     full_entry_label: '%{model_label} von <i>%{person}</i> in <i>%{event}</i>'

@@ -1,4 +1,3 @@
-# encoding: utf-8
 # == Schema Information
 #
 # Table name: person_add_request_ignored_approvers

@@ -1,4 +1,3 @@
-# encoding: utf-8
 # == Schema Information
 #
 # Table name: label_formats

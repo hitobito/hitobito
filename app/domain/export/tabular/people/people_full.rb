@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -12,7 +10,7 @@ module Export::Tabular::People
       Person.column_names.collect(&:to_sym) -
         Person::INTERNAL_ATTRS -
         excluded_person_attributes +
-        [:layer_group, :roles, :tags] 
+        [:layer_group, :roles, :tags]
     end
 
     def excluded_person_attributes

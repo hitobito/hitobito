@@ -5,9 +5,23 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+# == Schema Information
+#
+# Table name: async_download_files
+#
+#  id         :bigint           not null, primary key
+#  filetype   :string(255)
+#  name       :string(255)      not null
+#  progress   :integer
+#  timestamp  :string(255)      not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  person_id  :integer          not null
+#
+
 class AsyncDownloadFile < ApplicationRecord
   class << self
-    FILENAME_REGEX = /\A(.*)_(\d+)-(\d+)\z/.freeze
+    FILENAME_REGEX = /\A(.*)_(\d+)-(\d+)\z/
 
     def create_name(filename, person_id)
       "#{filename.to_s.parameterize}_#{Time.now.to_i}-#{person_id}"

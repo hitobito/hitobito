@@ -11,9 +11,12 @@
 #
 #  id          :integer          not null, primary key
 #  archived_at :datetime
+#  convert_on  :date
+#  convert_to  :string(255)
 #  delete_on   :date
 #  deleted_at  :datetime
 #  label       :string(255)
+#  terminated  :boolean          default(FALSE), not null
 #  type        :string(255)      not null
 #  created_at  :datetime
 #  updated_at  :datetime

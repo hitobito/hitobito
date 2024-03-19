@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2015, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -17,6 +15,7 @@
 #
 #  person_add_request_ignored_approvers_index  (group_id,person_id) UNIQUE
 #
+
 class Person::AddRequest::IgnoredApprover < ActiveRecord::Base
 
   belongs_to :group, class_name: '::Group'

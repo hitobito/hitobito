@@ -1,18 +1,20 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: roles
 #
 #  id          :integer          not null, primary key
 #  archived_at :datetime
+#  convert_on  :date
+#  convert_to  :string(255)
 #  delete_on   :date
 #  deleted_at  :datetime
 #  label       :string(255)
+#  terminated  :boolean          default(FALSE), not null
 #  type        :string(255)      not null
 #  created_at  :datetime
 #  updated_at  :datetime

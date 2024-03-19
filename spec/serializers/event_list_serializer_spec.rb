@@ -2,7 +2,7 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-#
+
 # == Schema Information
 #
 # Table name: events
@@ -53,8 +53,8 @@ require 'spec_helper'
 describe EventListSerializer do
 
   let(:event)      { events(:top_event).decorate }
-  let(:controller) { double().as_null_object }
-  let(:serializer) { EventListSerializer.new(event, controller: controller)}
+  let(:controller) { double.as_null_object }
+  let(:serializer) { EventListSerializer.new(event, controller: controller) }
   let(:hash)       { serializer.to_hash.with_indifferent_access }
 
   subject { hash[:events].first }
@@ -63,8 +63,8 @@ describe EventListSerializer do
   context 'event properties' do
     it 'includes all keys' do
       keys = [:name, :description, :motto, :cost, :maximum_participants, :participant_count,
-       :location, :application_opening_at, :application_closing_at, :application_conditions,
-       :state, :teamer_count, :external_application_link, :links]
+              :location, :application_opening_at, :application_closing_at, :application_conditions,
+              :state, :teamer_count, :external_application_link, :links]
 
       keys.each do |key|
         is_expected.to have_key(key)

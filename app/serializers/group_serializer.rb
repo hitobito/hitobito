@@ -47,7 +47,7 @@ class GroupSerializer < ApplicationSerializer
   include ContactableSerializer
 
   schema do # rubocop:disable Metrics/BlockLength
-    details = h.can?(:show_details, item)
+    details = h.can?(:show_details, Draper.undecorate(item))
 
     json_api_properties
 

@@ -278,12 +278,24 @@ describe TokenAbility do
         is_expected.to be_able_to(:show, token.layer)
       end
 
+      it 'may show details of layer' do
+        is_expected.to be_able_to(:show_details, token.layer)
+      end
+
       it 'may show subgroup' do
         is_expected.to be_able_to(:show, groups(:top_group))
       end
 
+      it 'may show details of subgroup' do
+        is_expected.to be_able_to(:show_details, groups(:top_group))
+      end
+
       it 'may show subgroup from other layer' do
         is_expected.to be_able_to(:show, groups(:bottom_layer_one))
+      end
+
+      it 'may show details of subgroup from other layer' do
+        is_expected.to be_able_to(:show_details, groups(:bottom_layer_one))
       end
     end
 

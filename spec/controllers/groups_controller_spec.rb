@@ -75,6 +75,7 @@ describe GroupsController do
           json = JSON.parse(response.body)
           group = json['groups'].first
           expect(group['links']['children'].size).to eq(4)
+          expect(group).to include(:created_at, :updated_at, :deleted_at)
         end
       end
 

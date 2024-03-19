@@ -26,23 +26,38 @@ describe SelfRegistration::Person do
     end
   end
 
-  it 'validates email is not taken' do
-    stub_test_person do |person|
-      person.attrs = [:email, :primary_group]
-      person.required_attrs = [:email]
+  context 'email' do
+    before do
+      stub_test_person do |person|
+        person.attrs = [:email, :primary_group]
+        person.required_attrs = [:email]
+      end
     end
 
-    model.email = 'top_leader@example.com'
-    expect(model).to have(1).error_on(:email)
+    it 'validates validity' do
+      model.email = 'test@example.com'
 
-    error = <<-ERROR.squish << "\n"
-      Haupt-E-Mail ist bereits vergeben. Diese Adresse muss für alle Personen eindeutig sein, da sie
-      beim Login verwendet wird. Du kannst jedoch unter 'Weitere E-Mails' Adressen eintragen, welche
-      bei anderen Personen als Haupt-E-Mail vergeben sind (Die Haupt-E-Mail kann leer gelassen
-      werden).
-    ERROR
+      allow(Truemail).to receive(:valid?).and_return(false)
+      expect(model).to have(1).error_on(:email)
+      expect(model.errors.full_messages).to eq ['Haupt-E-Mail ist nicht gültig']
 
-    expect(model.errors.full_messages).to eq [error]
+      allow(Truemail).to receive(:valid?).and_return(true)
+      expect(model).to have(0).error_on(:email)
+    end
+
+    it 'validates not taken' do
+      model.email = 'top_leader@example.com'
+      expect(model).to have(1).error_on(:email)
+
+      error = <<-ERROR.squish << "\n"
+        Haupt-E-Mail ist bereits vergeben. Diese Adresse muss für alle Personen eindeutig sein, da sie
+        beim Login verwendet wird. Du kannst jedoch unter 'Weitere E-Mails' Adressen eintragen, welche
+        bei anderen Personen als Haupt-E-Mail vergeben sind (Die Haupt-E-Mail kann leer gelassen
+        werden).
+      ERROR
+
+      expect(model.errors.full_messages).to eq [error]
+    end
   end
 
   context '::human_attribute_name' do

@@ -91,6 +91,20 @@ Doorkeeper::OpenidConnect.configure do
 end
 
 Rails.application.config.to_prepare do
+  # Add some of the claims after the wagons have loaded
+
+  Person::PUBLIC_ATTRS.each do |attr|
+    key = "with_roles_#{attr}".to_sym
+    Doorkeeper::OpenidConnect.configuration.claims[key] =
+      Doorkeeper::OpenidConnect::Claims::NormalClaim.new(
+        name: attr.to_sym,
+        scope: :with_roles,
+        generator: Proc.new do |resource_owner|
+          resource_owner.send(attr)
+        end
+      )
+  end
+
   FeatureGate.if('groups.nextcloud') do
     Doorkeeper::OpenidConnect.configuration.claims[:name] =
       Doorkeeper::OpenidConnect::Claims::NormalClaim.new(

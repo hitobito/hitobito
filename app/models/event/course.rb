@@ -91,10 +91,7 @@ class Event::Course < Event
 
   # The date on which qualification obtained in this course start
   def qualification_date
-    @qualification_date ||= begin
-      last = dates.reorder('event_dates.start_at DESC').first
-      last.finish_at || last.start_at
-    end.to_date
+    @qualification_date ||= last_finish_or_start_at
   end
 
   def start_date
@@ -117,5 +114,10 @@ class Event::Course < Event
 
   def make_participations_visible_to_participants
     self.participations_visible = true if new_record?
+  end
+
+  def last_finish_or_start_at
+    last_date = dates.sort_by(&:start_at).last
+    (last_date.finish_at || last_date.start_at).to_date
   end
 end

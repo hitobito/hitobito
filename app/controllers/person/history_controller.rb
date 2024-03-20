@@ -32,7 +32,7 @@ class Person::HistoryController < ApplicationController
   end
 
   def fetch_participations
-    Person::EventQueries.new(entry).alltime_participations
+    Person::EventQueries.new(entry).alltime_participations.includes(event: :translations)
   end
 
   def participations_by_event_type

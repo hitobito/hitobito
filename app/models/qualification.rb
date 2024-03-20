@@ -25,6 +25,7 @@
 class Qualification < ActiveRecord::Base
 
   attr_writer :first_of_kind
+  attr_accessor :open_training_days
 
   ### ASSOCIATIONS
 

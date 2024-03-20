@@ -74,34 +74,23 @@ class Event::Qualifier
   def prolong_existing(kinds)
     @prolonged = prolongable_qualification_kinds(kinds)
     @prolonged.each do |kind|
-      if kind.required_training_days?
-        with_calculated_start_at(kind) do |start_at|
-          create(kind, start_at: start_at)
-        end
-      else
-        create(kind)
-      end
+      next create(kind) if kind.required_training_days.blank?
+
+      start_at = calculator.start_at(kind)
+      create(kind, start_at: start_at) if start_at
     end
   end
 
-  def with_calculated_start_at(kind)
-    @calculator ||= TrainingDaysCalculator.new(@participation, @role, prolongation_kinds)
-    start_at = @calculator.start_at(kind)
-    if start_at && person_qualifications(kind).where('start_at >= ?', start_at).none?
-      yield start_at
-    end
+  def calculator
+    @calculator ||= StartAtCalculator.new(@participation, prolongation_kinds, @role)
   end
 
   def create(kind, start_at: qualification_date)
-    person_qualifications(kind)
+    person.qualifications
+      .where(qualification_kind_id: kind.id)
       .where(qualified_at: qualification_date)
       .first_or_create!(origin: event.to_s, start_at: start_at)
   end
-
-  def person_qualifications(kind)
-    person.qualifications.where(qualification_kind_id: kind.id)
-  end
-
 
   def prolongable_qualification_kinds(kinds)
     person.qualifications

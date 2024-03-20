@@ -1680,6 +1680,12 @@ de:
       flash:
         success: Anmeldung wurde erfolgreich gelöscht.
 
+  qualification_decorator:
+    open_training_days_active: Damit die Qualifikation am %{finish_at} nicht abläuft, bitten wir
+      dich %{days} Fortbildungstage zu absolvieren
+    open_training_days_reactivatable: Um deine Qualifikation zu reaktivieren, bitten wir dich
+      %{days} Fortbildungstage bis spätestens %{reactivateable_until} zu absolvieren
+
   event_invitations:
     create:
       flash:

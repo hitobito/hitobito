@@ -733,6 +733,7 @@ de:
         string_with_origin: '%{kind} (von %{origin})'
         string_with_finish_at: '%{kind} (bis %{finish_at})'
         string_with_finish_at_and_origin: '%{kind} (bis %{finish_at}, von %{origin})'
+        open_training_days: Offene Ausbildungstage
 
       qualification_kind:
         label: Bezeichnung

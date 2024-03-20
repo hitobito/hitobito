@@ -206,15 +206,6 @@ case $cmd in
     done
     ;;
 
-  core-spec)
-    export WAGONS=''
-    export RAILS_ENV=test
-    export RAILS_TEST_DB_NAME=hit_core_test
-    shift # loose the "core-spec" argument
-    rake db:migrate # ensure that schema.rb is current for the test-db to load
-    rspec $@
-    ;;
-
   spec-all)
     for wagon in $(existing_wagon_names); do
       echo "$wagon" | red
@@ -371,7 +362,6 @@ function __wagon_commands() {
     bootstrap
     clone
     configs
-    core-spec
     create
     create-database
     gemfile
@@ -425,7 +415,7 @@ COMPLETION
   help|*)
     echo "USAGE: $0 [activate] <WAGON>|core"
     echo "       $0 [clone|bootstrap] <WAGON>"
-    echo "       $0 [create-datbase|reset-database|test-prepare|core-spec|update-copyright]"
+    echo "       $0 [create-datbase|reset-database|test-prepare|update-copyright]"
     echo "       $0 [spec|build] <WAGON>"
     echo "       $0 [spec-all|reset-test-database|overwritten-in-wagon]"
     echo "       $0 [grep] <TERM>"

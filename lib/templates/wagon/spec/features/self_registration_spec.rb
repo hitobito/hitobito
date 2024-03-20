@@ -5,14 +5,16 @@ require 'spec_helper'
 describe :self_registration do
   subject { page }
 
-  class Group::SelfRegistrationGroup < Group # rubocop:disable Lint/ConstantDefinitionInBlock
-    self.layer = true
-
-    class ReadOnly < ::Role
+  before do
+    stub_const('Group::SelfRegistrationGroup::ReadOnly', Class.new(Role) do
       self.permissions = [:group_read]
-    end
+    end)
 
-    roles ReadOnly
+    stub_const('Group::SelfRegistrationGroup', Class.new(Group) do
+      self.layer = true
+
+      roles Group::SelfRegistrationGroup::ReadOnly
+    end)
   end
 
   let(:group) do

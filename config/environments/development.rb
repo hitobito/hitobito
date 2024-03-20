@@ -83,4 +83,9 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   config.hosts.clear
+
+  config.after_initialize do
+    ActiveRecord::Base.logger = nil if ENV["RAILS_SILENCE_ACTIVE_RECORD"] == "1"
+  end
+
 end

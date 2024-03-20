@@ -77,15 +77,7 @@ Doorkeeper::OpenidConnect.configure do
     claim(:country, scope: :name)    { |resource_owner| resource_owner.country }
 
     claim(:roles, scope: :with_roles) do |resource_owner|
-      resource_owner.roles.includes(:group).collect do |role|
-        {
-          group_id: role.group_id,
-          group_name: role.group.name,
-          role: role.class.model_name,
-          role_class: role.class.model_name,
-          role_name: role.class.model_name.human
-        }
-      end
+      resource_owner.decorate.roles_for_oauth
     end
   end
 end

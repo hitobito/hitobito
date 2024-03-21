@@ -113,7 +113,7 @@ module Person::Groups
     end
 
     def order_by_role_statement
-      statement = ['CASE MIN(roles.type)']
+      statement = ['CASE MAX(roles.type)']
       Role.all_types.each_with_index do |t, i|
         statement << "WHEN '#{t.sti_name}' THEN #{i}"
       end

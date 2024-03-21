@@ -92,7 +92,7 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
           town: user.town,
           country: user.country,
           gender: user.gender,
-          birthday: user.birthday,
+          birthday: user.birthday.to_s.presence,
           primary_group_id: user.primary_group_id,
           language: user.language,
           roles: [

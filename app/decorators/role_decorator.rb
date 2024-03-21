@@ -23,7 +23,7 @@ class RoleDecorator < ApplicationDecorator
       role: object.class.model_name,
       role_class: object.class.model_name,
       role_name: object.class.model_name.human,
-      permissions: role.class.permissions
+      permissions: role.class.permissions.uniq
     }
   end
 

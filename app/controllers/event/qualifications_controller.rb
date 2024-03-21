@@ -47,7 +47,7 @@ class Event::QualificationsController < ApplicationController
   end
 
   def participations(*role_types)
-    event.participations_for(*role_types).includes(:roles, :event)
+    event.participations_for(*role_types).includes(:roles, :event).select(:id)
   end
 
   def authorize_write

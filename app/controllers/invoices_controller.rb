@@ -153,7 +153,7 @@ class InvoicesController < CrudController
 
   def list_entries
     scope = super.list
-    scope = scope.includes(:recipient).references(:recipient)
+    scope = scope.includes(:recipient).references(:recipient).select(:id)
     scope = scope.joins(Invoice.last_payments_information)
     scope = scope.standalone unless parents.any?(InvoiceList)
     scope = scope.page(params[:page]).per(50) unless params[:ids]

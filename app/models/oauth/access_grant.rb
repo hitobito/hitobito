@@ -40,7 +40,7 @@ module Oauth
     scope :not_expired, -> { where("created_at + expires_in * INTERVAL '1 second' > NOW()") }
 
     def self.active
-      if connection.adapter_name == 'postgresql'
+      if connection.adapter_name == 'PostgreSQL'
         not_expired.where(revoked_at: nil)
       else
         where(revoked_at: nil)

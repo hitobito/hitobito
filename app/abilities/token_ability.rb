@@ -98,6 +98,10 @@ class TokenAbility
     can :show, Group do |g|
       token_layer_and_below.include?(g)
     end
+
+    can :show_details, Group do |g|
+      token_layer_and_below.include?(g)
+    end
   end
 
   def define_invoice_abilities

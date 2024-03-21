@@ -75,6 +75,7 @@ describe GroupsController do
           json = JSON.parse(response.body)
           group = json['groups'].first
           expect(group['links']['children'].size).to eq(4)
+          expect(group).to include('created_at', 'updated_at', 'deleted_at')
         end
       end
 
@@ -329,6 +330,26 @@ describe GroupsController do
         expect do
           get :show, params: { id: group.id, token: 'RejectedToken' }
         end.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    context 'json' do
+      render_views
+
+      it 'shows output when token is valid' do
+        get :show, params: { id: group.id, token: 'PermittedToken' }, format: :json
+        json = JSON.parse(response.body)
+        expect(json).not_to include('error')
+        group = json['groups'].first
+        expect(group['links']['children'].size).to eq(4)
+        expect(group).to include('created_at', 'updated_at', 'deleted_at')
+      end
+
+      it 'does not show output for unpermitted token' do
+        get :show, params: { id: group.id, token: 'RejectedToken' }, format: :json
+        json = JSON.parse(response.body)
+        expect(json).not_to include('groups')
+        expect(json).to include('error' => 'Sie sind nicht berechtigt, diese Seite anzuzeigen')
       end
     end
   end

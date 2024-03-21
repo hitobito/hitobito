@@ -82,7 +82,7 @@ Doorkeeper::OpenidConnect.configure do
   end
 end
 
-Rails.application.config.to_prepare do
+Rails.application.config.after_initialize do
   # Add some of the claims after the wagons have loaded
 
   Person::PUBLIC_ATTRS.each do |attr|

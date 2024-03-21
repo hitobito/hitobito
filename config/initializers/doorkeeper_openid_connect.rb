@@ -85,12 +85,13 @@ end
 Rails.application.config.after_initialize do
   # Add some of the claims after the wagons have loaded
 
-  Person::PUBLIC_ATTRS.each do |attr|
+  (Person::PUBLIC_ATTRS - [:id]).each do |attr|
     key = "with_roles_#{attr}".to_sym
     Doorkeeper::OpenidConnect.configuration.claims[key] =
       Doorkeeper::OpenidConnect::Claims::NormalClaim.new(
         name: attr.to_sym,
         scope: :with_roles,
+        response: [:user_info],
         generator: Proc.new do |resource_owner|
           resource_owner.send(attr)
         end
@@ -117,5 +118,29 @@ Rails.application.config.after_initialize do
           resource_owner.roles.map(&:nextcloud_group).uniq.compact.map(&:to_h)
         end
       )
+  end
+end
+
+class Doorkeeper::OpenidConnect::ClaimsBuilder
+  # Patch the claims generate method, because doorkeeper does not allow to serve the same claim on
+  # two different scopes and also ignores its own NormalClaim#name attribute, so we can't have
+  # multiple separate claims with different scopes and the same name either.
+  def self.generate(access_token, response)
+    resource_owner = Doorkeeper::OpenidConnect.configuration.resource_owner_from_access_token.call(access_token)
+
+    Doorkeeper::OpenidConnect.configuration.claims.to_h.map do |name, claim|
+      if access_token.scopes.exists?(claim.scope) && claim.response.include?(response)
+        # Only change is on the next line: We use claim.name instead of name as key
+        [claim.name, claim.generator.call(resource_owner, access_token.scopes, access_token)]
+      end
+    end.compact.to_h
+  end
+end
+
+class Doorkeeper::OpenidConnect::UserInfo
+  # Patch the claims JSON encode method for the userinfo endpoint, to disable filtering out
+  # empty and nil values.
+  def as_json(*_)
+    claims #.reject { |_, value| value.nil? || value == '' }
   end
 end

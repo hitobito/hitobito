@@ -81,6 +81,20 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
         expect(response.status).to eq 200
         expect(JSON.parse(response.body)).to match({
           sub: user.id.to_s,
+          first_name: user.first_name,
+          last_name: user.last_name,
+          nickname: user.nickname,
+          company_name: user.company_name,
+          company: user.company,
+          email: user.email,
+          address: user.address,
+          zip_code: user.zip_code,
+          town: user.town,
+          country: user.country,
+          gender: user.gender,
+          birthday: user.birthday,
+          primary_group_id: user.primary_group_id,
+          language: user.language,
           roles: [
             {
               group_id: user.roles.first.group_id,

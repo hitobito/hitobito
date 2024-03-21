@@ -22,7 +22,9 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
     it 'shows the userinfo' do
       get :show, params: { access_token: token.token }
       expect(response.status).to eq 200
-      expect(JSON.parse(response.body)).to eq('sub' => user.id.to_s)
+      expect(JSON.parse(response.body)).to eq({
+        sub: user.id.to_s
+      }.deep_stringify_keys)
     end
 
     context 'with name scope' do
@@ -39,11 +41,16 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
       it 'shows the userinfo' do
         get :show, params: { access_token: token.token }
         expect(response.status).to eq 200
-        expect(JSON.parse(response.body)).to eq(
-          'sub' => user.id.to_s, 'first_name' => user.first_name, 'last_name' => user.last_name,
-          'nickname' => 'Filou',
-          'address' => 'Teststrasse 7', 'zip_code' => '8000', 'town' => 'Zürich', 'country' => 'CH'
-        )
+        expect(JSON.parse(response.body)).to eq({
+          sub: user.id.to_s,
+          first_name: user.first_name,
+          last_name: user.last_name,
+          nickname: 'Filou',
+          address: 'Teststrasse 7',
+          zip_code: '8000',
+          town: 'Zürich',
+          country: 'CH'
+        }.deep_stringify_keys)
       end
     end
 
@@ -56,7 +63,10 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
       it 'shows the userinfo' do
         get :show, params: { access_token: token.token }
         expect(response.status).to eq 200
-        expect(JSON.parse(response.body)).to eq('sub' => user.id.to_s, 'email' => user.email)
+        expect(JSON.parse(response.body)).to eq({
+          sub: user.id.to_s,
+          email: user.email
+        }.deep_stringify_keys)
       end
     end
 
@@ -69,18 +79,19 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
       it 'shows the userinfo' do
         get :show, params: { access_token: token.token }
         expect(response.status).to eq 200
-        expect(JSON.parse(response.body)).to eq(
-          'sub' => user.id.to_s,
-          'roles' => [
+        expect(JSON.parse(response.body)).to match({
+          sub: user.id.to_s,
+          roles: [
             {
-              'group_id' => user.roles.first.group_id,
-              'group_name' => user.roles.first.group.name,
-              'role' => user.roles.first.class.name,
-              'role_class' => user.roles.first.class.name,
-              'role_name' => user.roles.first.class.model_name.human
+              group_id: user.roles.first.group_id,
+              group_name: user.roles.first.group.name,
+              role: 'Group::TopGroup::Leader',
+              role_class: 'Group::TopGroup::Leader',
+              role_name: 'Leader',
+              permissions: ['admin', 'finance', 'layer_and_below_full', 'contact_data', 'impersonation']
             }
           ]
-        )
+        }.deep_stringify_keys)
       end
     end
 
@@ -124,15 +135,15 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
         get :show, params: { access_token: token.token }
         expect(response.status).to eq 200
 
-        expect(JSON.parse(response.body)).to eq(
-          'sub' => user.id.to_s,
-          'email' => 'top_leader@example.com',
-          'name' => 'Tom Tester',
-          'groups' => [
-            { 'displayName' => 'Admins', 'gid' => 'hitobito-Admins' },
-            { 'displayName' => 'Test',   'gid' => '1024' }
+        expect(JSON.parse(response.body)).to eq({
+          sub: user.id.to_s,
+          email: 'top_leader@example.com',
+          name: 'Tom Tester',
+          groups: [
+            { displayName: 'Admins', gid: 'hitobito-Admins' },
+            { displayName: 'Test', gid: '1024' }
           ]
-        )
+        }.deep_stringify_keys)
       end
     end
   end

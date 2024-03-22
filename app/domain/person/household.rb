@@ -30,10 +30,6 @@ class Person::Household
     Array(person.household_people_ids).empty?
   end
 
-  def same_address?(person)
-    readonly_people.all? { |p| address_attrs(person) == address_attrs(p) }
-  end
-
   def assign
     person.household_people_ids ||= housemates.collect(&:id)
 
@@ -45,10 +41,32 @@ class Person::Household
     end
   end
 
+  def leave
+    person.household_people_ids = []
+    @people_changed = true
+    self
+  end
+
   def persist!
     Person.transaction do
       empty? ? remove : save
     end
+  end
+
+  def address_changed?
+    # for address changed in the form
+    @address_changed
+  end
+
+  def people_changed?
+    # for people changed in the form
+    @people_changed
+  end
+
+  private
+
+  def same_address?(person)
+    readonly_people.all? { |p| address_attrs(person) == address_attrs(p) }
   end
 
   def save
@@ -90,16 +108,6 @@ class Person::Household
     @key ||= last_people_key || next_key
   end
 
-  def address_changed?
-    # for address changed in the form
-    @address_changed
-  end
-
-  def people_changed?
-    # for people changed in the form
-    @people_changed
-  end
-
   def changed_address_or_people?
     people.map { |p| [address_attrs(p), p.household_key] }.uniq.count > 1
   end
@@ -116,11 +124,17 @@ class Person::Household
     housemates + [person]
   end
 
+  def existing_people
+    people.select {|candidate| candidate.household_key == person.household_key }
+  end
+
+  def new_people
+    people + [other].compact - existing_people
+  end
+
   def housemates
     person.household_people
   end
-
-  private
 
   # NOTE: this may lead to inconsistency when params are manipulated
   def last_people_key

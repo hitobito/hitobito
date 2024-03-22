@@ -65,13 +65,38 @@ class Qualification < ActiveRecord::Base
         where('qualifications.start_at <= ?', date).
         where('qualifications.finish_at IS NULL OR ' \
               '(qualification_kinds.reactivateable IS NULL AND ' \
-              ' qualifications.finish_at >= ?) OR ' \
+              ' qualifications.finish_at >= :date) OR ' \
               'DATE_ADD(qualifications.finish_at, ' \
-                'INTERVAL qualification_kinds.reactivateable YEAR) >= ?',
-              date, date)
+              ' INTERVAL qualification_kinds.reactivateable YEAR) >= :date',
+              date: date)
     end
 
-    private
+    def only_reactivateable(date = nil)
+      date ||= Time.zone.today
+      joins(:qualification_kind).
+        where.not(finish_at: nil).
+        where.not(qualification_kinds: { reactivateable: nil }).
+        where('qualifications.finish_at < :date AND ' \
+              'DATE_ADD(qualifications.finish_at, ' \
+              ' INTERVAL qualification_kinds.reactivateable YEAR) >= :date',
+              date: date)
+    end
+
+    def not_active(qualification_kind_ids = [], date = nil) # rubocop:disable Metrics/MethodLength
+      date ||= Time.zone.today
+      kind_condition =
+        if qualification_kind_ids.present?
+          'q2.qualification_kind_id IN (:qualification_kind_ids)'
+        else
+          'q2.qualification_kind_id = qualifications.qualification_kind_id'
+        end
+      where('NOT EXISTS (SELECT 1 FROM qualifications q2 ' \
+            'WHERE q2.person_id = qualifications.person_id ' \
+            "AND #{kind_condition} " \
+            'AND q2.start_at <= :date  ' \
+            'AND (q2.finish_at IS NULL OR q2.finish_at >= :date))',
+            qualification_kind_ids: qualification_kind_ids, date: date)
+    end
 
   end
 

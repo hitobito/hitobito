@@ -8,7 +8,7 @@
 class Person::Filter::Qualification < Person::Filter::Base
 
   self.required_ability = :full
-  self.permitted_args = [:qualification_kind_ids, :validity, :match,
+  self.permitted_args = [:qualification_kind_ids, :validity, :match, :reference_date,
                          :start_at_year_from, :start_at_year_until,
                          :finish_at_year_from, :finish_at_year_until]
 
@@ -18,7 +18,9 @@ class Person::Filter::Qualification < Person::Filter::Base
   end
 
   def apply(scope)
-    if args[:match].to_s == 'all'
+    if args[:validity].to_s == 'not_active'
+      match_no_qualification_kind(scope)
+    elsif args[:match].to_s == 'all'
       match_all_qualification_kinds(scope)
     else
       match_one_qualification_kind(scope)
@@ -65,6 +67,12 @@ class Person::Filter::Qualification < Person::Filter::Base
       merge(qualification_scope(scope))
   end
 
+  def match_no_qualification_kind(scope)
+    scope.
+      left_joins(:qualifications).
+      merge(::Qualification.not_active(args[:qualification_kind_ids], reference_date))
+  end
+
   def qualification_scope(scope)
     scope = qualification_validity_scope(scope)
     return scope unless year_scope?
@@ -102,10 +110,25 @@ class Person::Filter::Qualification < Person::Filter::Base
 
   def qualification_validity_scope(_scope)
     case args[:validity].to_s
-    when 'active'         then ::Qualification.active
-    when 'reactivateable' then ::Qualification.reactivateable
+    when 'active'         then ::Qualification.active(reference_date)
+    when 'reactivateable' then ::Qualification.reactivateable(reference_date)
+    when 'not_active_but_reactivateable' then not_active_but_reactivateable(reference_date)
     else ::Qualification.all
     end
+  end
+
+  def not_active_but_reactivateable(date)
+    ::Qualification.
+      not_active(args[:qualification_kind_ids], date).
+      only_reactivateable(date)
+  end
+
+  def reference_date
+    return if args[:reference_date].blank?
+
+    Date.parse(args[:reference_date])
+  rescue ArgumentError
+    nil
   end
 
 end

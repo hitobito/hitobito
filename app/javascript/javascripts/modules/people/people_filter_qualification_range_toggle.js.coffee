@@ -8,6 +8,8 @@ $(document).on 'click', 'input[id^=filters_qualification_validity]', () ->
     $('input#match_one').prop('checked', true)
     $('input#match_all').prop('checked', false).attr('disabled', 'disabled')
     $('fieldset#year-scope').show()
+    $('fieldset#reference-date').hide()
   else
     $('fieldset#year-scope').hide()
+    $('fieldset#reference-date').show()
     $('input#match_all').prop('checked', false).removeAttr('disabled')

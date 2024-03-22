@@ -44,10 +44,28 @@
                 checked: filter && filter.args[:validity] == 'reactivateable'
       = render 'simple_radio',
                 attr: "filters[qualification][validity]",
+                value: 'not_active_but_reactivateable',
+                checked: filter && filter.args[:validity] == 'not_active_but_reactivateable'
+      = render 'simple_radio',
+                attr: "filters[qualification][validity]",
+                value: 'not_active',
+                checked: filter && filter.args[:validity] == 'not_active'
+      = render 'simple_radio',
+                attr: "filters[qualification][validity]",
                 value: 'all',
                 checked: filter && filter.args[:validity] == 'all'
 
-= field_set_tag(t('.prompt_year'), id: 'year-scope', class: 'form-horizontal', style: 'display: none;') do
+= field_set_tag(t('.prompt_date'), id: 'reference-date', class: 'form-horizontal', style: "display: #{filter && filter.args[:validity] == 'all' ? 'none' : 'block'};") do
+  .control-group.row
+    .col-2
+      .input-group
+        %span.input-group-text= icon(:'calendar-alt')
+        = text_field_tag("filters[qualification][reference_date]", filter && filter.args[:reference_date], class: 'date form-control form-control-sm')
+    .col-10.col-form-label
+      = t('.reference_date_help_inline')
+
+
+= field_set_tag(t('.prompt_year'), id: 'year-scope', class: 'form-horizontal', style: "display: #{filter && filter.args[:validity] == 'all' ? 'block' : 'none'};") do
   .control-group.row
     = label_tag(:start_at_year_from, t('.start_at_year_label'), class: 'control-label col-form-label col-2')
     .col-2

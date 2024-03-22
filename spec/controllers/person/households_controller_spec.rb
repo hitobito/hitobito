@@ -77,6 +77,21 @@ describe Person::HouseholdsController do
       expect(person.household_people_ids).to match_array [other.id.to_s, member.id]
       expect(person.changes).to include 'address'
     end
+
+    it 'does not add people if household is invalid' do
+      expect_any_instance_of(Person::Household).to receive(:valid?).and_return(false)
+
+      get :new, xhr: true, params: parameters(person: leader, other: member)
+      expect(person.household_people_ids).to eq []
+    end
+
+    it 'does not forget previously added person if household is invalid' do
+      expect_any_instance_of(Person::Household).to receive(:valid?).and_return(false)
+      other = create(Group::TopGroup::Leader, groups(:top_group))
+
+      get :new, xhr: true, params: parameters(person: leader, other: member, ids: [other.id])
+      expect(person.household_people_ids).to eq [other.id.to_s]
+    end
   end
 
   context 'as member with non writable person' do

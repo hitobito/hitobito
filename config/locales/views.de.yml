@@ -1757,10 +1757,8 @@ de:
       prompt_kind: In welchem Bereich soll gesucht werden?
       start_at_year_label: Erhalten zwischen
       start_at_year_infix: und
-      start_at_year_suffix: ''
       finish_at_year_label: Abgelaufen zwischen
       finish_at_year_infix: und
-      finish_at_year_suffix: ''
       not_enough_permissions: Du verfügst nicht über ausreichende Berechtigungen, um Personen mit diesem Filter zu suchen.
 
     simple_radio:

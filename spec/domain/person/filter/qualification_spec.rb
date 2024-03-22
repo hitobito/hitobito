@@ -71,12 +71,12 @@ describe Person::Filter::Qualification do
 
     %w(start_at finish_at).product(%w(year_from year_until)).each do |pre, post|
       it "is year_scope if #{pre}_#{post} is present" do
-        filter = described_class.new(:qualification, :"#{pre}_#{post}" => nil)
+        filter = described_class.new(:qualification, :"#{pre}_#{post}" => nil, validity: 'all')
         expect(filter).not_to be_year_scope
       end
 
       it "is not year_scope if #{pre}_#{post} is present but blank" do
-        filter = described_class.new(:qualification, :"#{pre}_#{post}" => 1)
+        filter = described_class.new(:qualification, :"#{pre}_#{post}" => 1, validity: 'all')
         expect(filter).to be_year_scope
       end
     end
@@ -347,50 +347,6 @@ describe Person::Filter::Qualification do
                       start_at: Date.today)
 
             expect(entries).to match_array([@bg_leader])
-          end
-
-          context 'loads entry with start_at between' do
-            let(:start_at) { Date.today - 2.years }
-            let(:additional_filters) do
-              {
-                start_at_year_from: start_at.year,
-                start_at_year_until: start_at.year
-              }
-            end
-
-            it 'correctly' do
-              @bg_leader.qualifications.
-                find { |q| q.qualification_kind == qualification_kinds(:ql) }.
-                update!(start_at: start_at)
-              Fabricate(:qualification,
-                        person: @bg_leader,
-                        qualification_kind: qualification_kinds(:sl),
-                        start_at: start_at)
-
-              expect(entries).to match_array([@bg_leader])
-            end
-          end
-
-          context 'does not contain entries outside start_at between' do
-            let(:start_at) { Date.today - 2.years }
-            let(:additional_filters) do
-              {
-                start_at_year_from: start_at.year - 2,
-                start_at_year_until: start_at.year - 1
-              }
-            end
-
-            it 'correctly' do
-              @bg_leader.qualifications.
-                find { |q| q.qualification_kind == qualification_kinds(:ql) }.
-                update!(start_at: start_at)
-              Fabricate(:qualification,
-                        person: @bg_leader,
-                        qualification_kind: qualification_kinds(:sl),
-                        start_at: start_at)
-
-              expect(entries).to match_array([])
-            end
           end
 
           it 'does not contain people with all, but expired qualifications' do

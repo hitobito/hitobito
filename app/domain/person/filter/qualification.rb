@@ -36,10 +36,11 @@ class Person::Filter::Qualification < Person::Filter::Base
   end
 
   def year_scope?
-    %w(start_at finish_at).product(%w(year_from year_until)).any? do |pre, post|
-      key = [pre, post].join('_')
-      args[key.to_sym].present? || args[key].present?
-    end
+    args[:validity].to_s == 'all' &&
+      %w(start_at finish_at).product(%w(year_from year_until)).any? do |pre, post|
+        key = [pre, post].join('_')
+        args[key.to_sym].present? || args[key].present?
+      end
   end
 
   private
@@ -76,8 +77,9 @@ class Person::Filter::Qualification < Person::Filter::Base
 
   def grouped_most_recent_qualifications_ids
     Qualification.
-      group(:person_id, :qualification_kind_id).select('max(id)').
-      where(qualification_kind_id: args[:qualification_kind_ids])
+      group(:person_id, :qualification_kind_id).
+      where(qualification_kind_id: args[:qualification_kind_ids]).
+      select('max(id)')
   end
 
   def finish_scope

@@ -62,7 +62,7 @@ module Qualifications
       Event::TrainingDays::CoursesLoader.new(
         @person,
         :participant,
-        @person.qualifications.pluck(:qualification_kind_id).uniq,
+        ordered_qualifications.pluck(:qualification_kind_id).uniq,
         minimal_qualification_start_at_per_kind,
         today
       ).load

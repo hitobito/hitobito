@@ -17,7 +17,7 @@ module Event::TrainingDays
     def load
       Event::Course
         .between(@start_date, @end_date)
-        .includes(kind: { event_kind_qualification_kinds: :qualification_kind })
+        .includes(:dates, kind: { event_kind_qualification_kinds: :qualification_kind })
         .joins(:participations, kind: { event_kind_qualification_kinds: :qualification_kind })
         .where(event_participations: { qualified: true, person: @person_id })
         .where(event_kind_qualification_kinds: {

@@ -51,7 +51,9 @@ class Qualification < ActiveRecord::Base
   class << self
 
     def order_by_date
-      order(Arel.sql('CASE WHEN finish_at IS NULL THEN 0 ELSE 1 END, finish_at DESC'))
+      order(
+        Arel.sql('CASE WHEN finish_at IS NULL THEN 0 ELSE 1 END, finish_at DESC, start_at DESC')
+      )
     end
 
     def active(date = nil)

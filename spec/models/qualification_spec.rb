@@ -25,9 +25,13 @@ describe Qualification do
 
   describe '.order_by_date' do
     subject(:scope) { described_class.order_by_date }
+    let(:today) { Time.zone.today }
 
-    def create_qualification(kind)
-      Fabricate(:qualification, person: people(:top_leader), qualification_kind: qualification_kinds(kind))
+    def create_qualification(kind, attrs = {})
+      Fabricate(:qualification, attrs.merge(
+        person: people(:top_leader),
+        qualification_kind: qualification_kinds(kind)
+      ))
     end
 
     it 'orders by finish_at descending with nulls first' do
@@ -36,6 +40,13 @@ describe Qualification do
       ql = create_qualification(:ql) # no validity, i.e. no finished_at set
 
       expect(described_class.order_by_date).to eq [ql, sl, gl]
+    end
+
+    it 'orders by start_at descending if finish_at is equal' do
+      sl = create_qualification(:sl, start_at: today, finish_at: 1.year.from_now)
+      gl = create_qualification(:gl, start_at: today - 1.day, finish_at: 1.year.from_now)
+
+      expect(described_class.order_by_date).to eq [sl, gl]
     end
   end
 

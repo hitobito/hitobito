@@ -8,11 +8,11 @@ class Event::Qualifier::StartAtCalculator
 
   delegate :qualification_date, to: :event, prefix: true
 
-  attr_reader :event, :person
+  attr_reader :event
 
-  def initialize(participation, prolongation_kinds, role)
-    @event = participation.event
-    @person = participation.person
+  def initialize(person, event, prolongation_kinds, role)
+    @person = person
+    @event = event
     @prolongation_kinds = prolongation_kinds
     @role = role
   end
@@ -25,7 +25,7 @@ class Event::Qualifier::StartAtCalculator
   private
 
   def no_qualification_since?(kind, start_at)
-    person.qualifications
+    @person.qualifications
       .where(qualification_kind_id: kind.id).where('start_at >= ?', start_at)
       .none?
   end
@@ -41,7 +41,7 @@ class Event::Qualifier::StartAtCalculator
     Event::TrainingDays::CoursesLoader.new(
       @person.id,
       @role,
-      @prolongation_kinds.collect(&:id),
+      @prolongation_kinds.map(&:id),
       earliest_qualification_date,
       event_qualification_date).load
   end

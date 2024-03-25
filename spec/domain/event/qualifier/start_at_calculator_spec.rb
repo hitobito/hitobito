@@ -7,27 +7,25 @@
 require 'spec_helper'
 
 describe Event::Qualifier::StartAtCalculator do
-
   let(:person) { people(:bottom_member) }
   let(:slk) { event_kinds(:slk) }
   let(:gl) { qualification_kinds(:gl) }
   let(:role) { :participant }
   let(:today) { Time.zone.today }
-  let!(:participation) { create_course_participation(training_days: 1, start_at: today - 1.month) }
+  let!(:course) { create_course(training_days: 1, start_at: today - 1.month) }
 
   it 'does not fail on empty prolongation kinds' do
-    expect(described_class.new(participation, [], role).start_at(gl)).to be_nil
+    expect(described_class.new(person, course, [], role).start_at(gl)).to be_nil
   end
 
   it 'does not fail on empty prolongation kinds without validity' do
     gl.update(validity: nil)
-    expect(described_class.new(participation, [gl], role).start_at(gl)).to be_nil
+    expect(described_class.new(person, course, [gl], role).start_at(gl)).to be_nil
   end
 
-  def create_course_participation(kind: slk, qualified: false, training_days: nil, start_at:)
-    course = Fabricate.build(:course, kind: kind, training_days: training_days)
-    course.dates.build(start_at: start_at)
-    course.save!
-    Fabricate(:event_participation, event: course, person: person, qualified: qualified)
+  def create_course(kind: slk, qualified: false, training_days: nil, start_at:)
+    Fabricate.build(:course, kind: kind, training_days: training_days).tap do |course|
+      course.dates.build(start_at: start_at)
+    end
   end
 end

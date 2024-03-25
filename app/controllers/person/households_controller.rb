@@ -8,8 +8,9 @@ class Person::HouseholdsController < ApplicationController
   def new
     authorize!(:update, person)
     person.attributes = permitted_params
+    @invalid = !household.valid?
     household.assign
-    if @invalid = !household.valid?
+    if @invalid
       # we must remove again the other_person and its potential housemates from the list,
       # otherwise the user won't be able to save the form as there is no ui to remove them
       person.household_people_ids -= other_person_and_household_people_ids

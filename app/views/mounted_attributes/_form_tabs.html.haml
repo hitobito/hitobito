@@ -8,8 +8,9 @@
 - entry.model.class.mounted_attr_configs_by_category.each do |category, configs|
   .tab-pane.mt-3{id: category}
     - configs.each do |config|
+      - readonly = cannot?(:update, entry.model, config.attr_name)
       - if config.enum.present?
         = f.labeled(config.attr_name) do
-          = MountedAttrs::EnumSelect.new(self, config, f).render
+          = MountedAttrs::EnumSelect.new(self, config, f).render(disabled: readonly)
       - else
-        = f.labeled_input_field(config.attr_name)
+        = f.labeled_input_field(config.attr_name, disabled: readonly)

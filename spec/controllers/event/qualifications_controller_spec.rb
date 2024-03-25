@@ -153,9 +153,12 @@ describe Event::QualificationsController do
     end
   end
 
-  def obtained_qualifications(person = participant_1)
-    q = Event::Qualifier.for(person)
-    q.send(:obtained, q.send(:qualification_kinds))
+  def obtained_qualifications(participation = participant_1)
+    role = participation.roles.any? { |role| role.class.leader? } ? 'leader' : 'participant'
+    qualification_kinds = participation.event.kind.qualification_kinds(:qualification, role)
+    participation.person.qualifications
+      .where(qualified_at: participation.event.qualification_date)
+      .where(qualification_kind_id: qualification_kinds.map(&:id)).to_a
   end
 
 end

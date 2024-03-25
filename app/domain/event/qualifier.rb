@@ -9,7 +9,10 @@ class Event::Qualifier
 
   class << self
     def for(participation)
-      new(participation, qualifier_role(participation))
+      person = participation.person
+      event = participation.event
+      role = qualifier_role(participation)
+      return new(person, event, role, participation)
     end
 
     private
@@ -23,13 +26,15 @@ class Event::Qualifier
     end
   end
 
-  attr_reader :created, :prolonged, :participation, :role
+  attr_reader :created, :prolonged, :participation, :person, :event, :role
 
-  delegate :person, :event, to: :participation
+
   delegate :qualification_date, to: :event
 
-  def initialize(participation, role)
+  def initialize(person, event, role, participation = nil)
     @participation = participation
+    @person = person
+    @event = event
 
     @created = []
     @prolonged = []
@@ -37,13 +42,17 @@ class Event::Qualifier
   end
 
   def issue
-    issue_qualifications
-    participation.update_column(:qualified, true)
+    Qualification.transaction do
+      issue_qualifications
+      participation&.update_column(:qualified, true)
+    end
   end
 
   def revoke
-    revoke_qualifications
-    participation.update_column(:qualified, false)
+    Qualification.transaction do
+      revoke_qualifications
+      participation&.update_column(:qualified, false)
+    end
   end
 
   def nothing_changed?
@@ -53,68 +62,19 @@ class Event::Qualifier
   private
 
   def issue_qualifications
-    Qualification.transaction do
-      create_qualifications
-      prolong_existing(prolongation_kinds)
-    end
+    @created = QualifyAction.new(person, event, qualification_kinds).run
+    @prolonged = ProlongAction.new(person, event, prolongation_kinds, role).run
   end
 
   def revoke_qualifications
-    Qualification.transaction do
-      remove(qualification_kinds + prolongation_kinds)
-    end
+    RevokeAction.new(person, event, qualification_kinds + prolongation_kinds).run
   end
 
-  def create_qualifications
-    @created = qualification_kinds.map { |kind| create(kind) }
+  def qualification_kinds(kind = event.kind)
+    kind.qualification_kinds('qualification', @role)
   end
 
-  # Creates new qualification for prolongable qualifications,
-  # tracks what could and could not be prolonged
-  def prolong_existing(kinds)
-    @prolonged = prolongable_qualification_kinds(kinds)
-    @prolonged.each do |kind|
-      next create(kind) if kind.required_training_days.blank?
-
-      start_at = calculator.start_at(kind)
-      create(kind, start_at: start_at) if start_at
-    end
-  end
-
-  def calculator
-    @calculator ||= StartAtCalculator.new(@participation, prolongation_kinds, @role)
-  end
-
-  def create(kind, start_at: qualification_date)
-    person.qualifications
-      .where(qualification_kind_id: kind.id)
-      .where(qualified_at: qualification_date)
-      .first_or_create!(origin: event.to_s, start_at: start_at)
-  end
-
-  def prolongable_qualification_kinds(kinds)
-    person.qualifications
-      .includes(:qualification_kind)
-      .where(qualification_kind_id: kinds.map(&:id))
-      .select { |quali| quali.reactivateable?(event.start_date) }
-      .map(&:qualification_kind)
-  end
-
-  def remove(kinds)
-    obtained(kinds).each(&:destroy)
-  end
-
-  # Qualifications set for this qualification_date (via preceeding #issue call in controller)
-  def obtained(kinds = [], qualified_at = qualification_date)
-    @obtained ||= person.qualifications.where(qualified_at: qualified_at,
-                                              qualification_kind_id: kinds.map(&:id)).to_a
-  end
-
-  def qualification_kinds
-    event.kind.qualification_kinds('qualification', @role)
-  end
-
-  def prolongation_kinds
-    event.kind.qualification_kinds('prolongation', @role)
+  def prolongation_kinds(kind = event.kind)
+    kind.qualification_kinds('prolongation', @role)
   end
 end

@@ -18,7 +18,7 @@ module Oauth
 
     def show
       if scope.blank? || doorkeeper_token.acceptable?(scope)
-        render json: email_attrs.merge(scope_attrs || {})
+        render json: basic_attrs.merge(scope_attrs || {})
       else
         render json: { error: "invalid scope: #{scope}" }, status: :forbidden
       end
@@ -27,11 +27,14 @@ module Oauth
     private
 
     def scope_attrs
-      case scope
-      when /name/
-        person.attributes.slice('first_name', 'last_name', 'nickname')
-      when /with_roles/
-        public_attrs_with_roles
+      return if scope.blank?
+
+      claims = Doorkeeper::OpenidConnect.configuration.claims.to_h.values.select do |claim|
+        claim.scope == scope.to_sym
+      end
+
+      claims.each_with_object({}) do |claim, data|
+        data[claim.name.to_s] = claim.generator.call(person)
       end
     end
 
@@ -43,20 +46,7 @@ module Oauth
       @person ||= Person.find(doorkeeper_token.resource_owner_id)
     end
 
-    def public_attrs_with_roles
-      roles = person.roles.includes(:group).collect do |role|
-        {
-          group_id: role.group_id,
-          group_name: role.group.name,
-          role_name: role.class.model_name.human,
-          role_class: role.class.name,
-          permissions: role.class.permissions
-        }
-      end
-      person.attributes.slice(*Person::PUBLIC_ATTRS.collect(&:to_s)).merge(roles: roles)
-    end
-
-    def email_attrs
+    def basic_attrs
       { id: person.id, email: person.email }
     end
   end

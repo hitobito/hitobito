@@ -151,6 +151,10 @@ class PersonDecorator < ApplicationDecorator
     end
   end
 
+  def roles_for_oauth
+    object.roles.includes(:group).collect(&:decorate).collect(&:for_oauth)
+  end
+
   private
 
   def event_queries

@@ -328,6 +328,90 @@ describe Person::Filter::Role do
         end
       end
 
+      context :inactive do
+        before do
+          person.roles.each(&:really_destroy!)
+        end
+
+        context 'with only inactive role' do
+          let(:role_type) { Group::TopGroup::Member }
+          let!(:role) { person.roles.create!(type: role_type.sti_name, group: group) }
+
+          it 'does not find person with inactive role deleted before timeframe' do
+            role.update(created_at: 2.days.ago, deleted_at: 1.day.ago)
+            expect(filter(kind: 'inactive', start_at: now).entries).to be_empty
+          end
+
+          it 'does not find person with inactive role deleted within range' do
+            role.update(deleted_at: now)
+            expect(filter(kind: 'inactive', start_at: now, finish_at: now).entries).to be_empty
+          end
+
+          it 'does not find person with inactive role created within range' do
+            role.update(created_at: now)
+            expect(filter(kind: 'inactive', start_at: now, finish_at: now).entries).to be_empty
+          end
+        end
+
+        context 'with inactive and other role' do
+          let(:role_type) { Group::TopGroup::Member }
+          let(:other_role_type) { Group::TopGroup::Leader }
+          let!(:role) { person.roles.create!(type: role_type.sti_name, group: group) }
+          let!(:other_role) { person.roles.create!(type: other_role_type.sti_name, group: group) }
+
+          it 'finds person with inactive role deleted before timeframe' do
+            role.update(created_at: 2.days.ago, deleted_at: 1.day.ago)
+            expect(filter(kind: 'inactive', start_at: now).entries).to have(1).item
+          end
+
+          it 'does not find person with inactive role deleted within range' do
+            role.update(deleted_at: now)
+            expect(filter(kind: 'inactive', start_at: now, finish_at: now).entries).to be_empty
+          end
+
+          it 'does not find person with inactive role created within range' do
+            role.update(created_at: now)
+            expect(filter(kind: 'inactive', start_at: now, finish_at: now).entries).to be_empty
+          end
+
+          it 'does not find person with other role deleted before timeframe' do
+            other_role.update(created_at: 2.days.ago, deleted_at: 1.day.ago)
+            expect(filter(kind: 'inactive', start_at: now).entries).to be_empty
+          end
+
+          it 'does not find person with other role deleted within range' do
+            other_role.update(deleted_at: now)
+            expect(filter(kind: 'inactive', start_at: now, finish_at: now).entries).to be_empty
+          end
+
+          it 'does not find person with other role created within range' do
+            other_role.update(created_at: now)
+            expect(filter(kind: 'inactive', start_at: now, finish_at: now).entries).to be_empty
+          end
+        end
+
+        context 'with only other role' do
+          let(:role_type) { Group::TopGroup::Member }
+          let(:other_role_type) { Group::TopGroup::Leader }
+          let!(:role) { person.roles.create!(type: other_role_type.sti_name, group: group) }
+
+          it 'does not find person with other role deleted before timeframe' do
+            role.update(created_at: 2.days.ago, deleted_at: 1.day.ago)
+            expect(filter(kind: 'inactive', start_at: now).entries).to be_empty
+          end
+
+          it 'does not find person with other role deleted within range' do
+            role.update(deleted_at: now)
+            expect(filter(kind: 'inactive', start_at: now, finish_at: now).entries).to be_empty
+          end
+
+          it 'finds person with other role created within range' do
+            role.update(created_at: now)
+            expect(filter(kind: 'inactive', start_at: now, finish_at: now).entries).to have(1).item
+          end
+        end
+      end
+
       context :active do
         let(:role_type) { Group::TopGroup::Member }
         let(:role) { person.roles.create!(type: role_type.sti_name, group: group) }

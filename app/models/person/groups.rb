@@ -109,11 +109,15 @@ module Person::Groups
 
     # Order people by the order role types are listed in their group types.
     def order_by_role
-      select(Arel.sql(order_by_role_statement)).order(Arel.sql("role_order_case"))
+      select(Arel.sql(order_by_role_statement(aggregate_function: true))).order(Arel.sql("role_order_case"))
     end
 
-    def order_by_role_statement
-      statement = ['CASE MAX(roles.type)']
+    def order_by_role_statement(aggregate_function: false)
+      if aggregate_function
+        statement = ['CASE MAX(roles.type)']
+      else
+        statement = ['CASE roles.type']
+      end
       Role.all_types.each_with_index do |t, i|
         statement << "WHEN '#{t.sti_name}' THEN #{i}"
       end

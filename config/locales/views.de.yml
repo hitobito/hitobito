@@ -24,6 +24,7 @@ de:
     selected: Ausgewählt
     columns: Spalten
     start_on: ab %{date}
+    not_allowed: 'fehlende Berechtigung'
 
     gender:
       male: männlich

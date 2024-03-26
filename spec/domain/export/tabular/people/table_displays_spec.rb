@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2018, Schweizer Blasmusikverband. This file is part of
+#  Copyright (c) 2012-2024, Schweizer Blasmusikverband. This file is part of
 #  hitobito_sbv and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -58,7 +58,7 @@ describe Export::Tabular::People::TableDisplays do
       table_display.selected = [:additional_information]
       expect(people_list.labels.last).to eq 'Zusätzliche Angaben'
       expect(people_list.attributes.last).to eq :additional_information
-      expect(people_list.data_rows.first.last).to be_nil
+      expect(people_list.data_rows.first.last).to eq 'fehlende Berechtigung'
     end
 
     it 'does not include the same attribute twice' do
@@ -186,7 +186,7 @@ describe Export::Tabular::People::TableDisplays do
           person.update!(additional_information: 'bla bla')
           expect(people_list.labels.last).to eq 'Zusätzliche Angaben'
           expect(people_list.attributes.last).to eq :'person.additional_information'
-          expect(people_list.data_rows.first.last).to be_blank
+          expect(people_list.data_rows.first.last).to eq 'fehlende Berechtigung'
         end
       end
 
@@ -201,7 +201,7 @@ describe Export::Tabular::People::TableDisplays do
           table_display.selected = [:event_question_1,
                                     :"event_question_#{question.id}",
                                     :event_question_2]
-          expect(people_list.data_rows.first.last).to be_blank
+          expect(people_list.data_rows.first.last).to eq 'fehlende Berechtigung'
         end
       end
     end

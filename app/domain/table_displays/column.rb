@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2018, Schweizer Blasmusikverband. This file is part of
+#  Copyright (c) 2012-2024, Schweizer Blasmusikverband. This file is part of
 #  hitobito_sbv and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -33,6 +33,8 @@ module TableDisplays
       if target.present? && target_attr.present?
         if allowed?(target, target_attr, object, attr)
           allowed_value_for(target, target_attr, &block)
+        else
+          I18n.t('global.not_allowed')
         end
       end
     end

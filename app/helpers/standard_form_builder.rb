@@ -212,7 +212,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   def inline_radio_button(attr, value, caption, inline = true, html_options = {})
     html_options[:class] = html_options[:class].to_s
-    html_options[:class] += ' form-check-input allign-label'
+    html_options[:class] += ' form-check-input align-label'
     invalid = errors_on?(attr) ? " is-invalid" : ""
     html_options[:class] += invalid
 
@@ -237,7 +237,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
     @template.check_box_tag(name, index + 1, checked, 
                             id: sanitized_id, 
-                            class: "form-check-input allign-label" + invalid) +
+                            class: "form-check-input align-label" + invalid) +
     hidden_field.html_safe +
     @template.label_tag(sanitized_id, class: "checkbox mt-2 form-check-label " + invalid) do
       value

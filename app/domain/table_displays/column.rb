@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #  Copyright (c) 2012-2018, Schweizer Blasmusikverband. This file is part of
 #  hitobito_sbv and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -69,7 +71,7 @@ module TableDisplays
       raise 'implement in subclass'
     end
 
-    def allowed?(object, attr, original_object, original_attr)
+    def allowed?(object, attr, _original_object, _original_attr)
       ability.can? required_permission(attr), object
     end
 

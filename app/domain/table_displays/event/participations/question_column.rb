@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #  Copyright (c) 2022, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -19,7 +21,7 @@ module TableDisplays::Event::Participations
       end
     end
 
-    def required_model_attrs(attr)
+    def required_model_attrs(_attr)
       []
     end
 

@@ -1312,7 +1312,7 @@ de:
       help_reactivateable_in_years: 'Jahre ab Gültigkeitsende'
       help_required_training_days: |
         Mindestens so viele Ausbildungstage sind während der Gültigkeitsdauer zu absolvieren, um bestehende Qualifikationen zu verlängern.
-        Diese können auch über mehrere Kurse aufgeteilt werden. 
+        Diese können auch über mehrere Kurse aufgeteilt werden.
         Leer lassen, um Ausbildungstage nicht zu berücksichtigen und Qualifikationen unmittelbar bei jedem entsprechenden Kursbesuch zu verlängern.
     new:
       title: Qualifikationsart erstellen

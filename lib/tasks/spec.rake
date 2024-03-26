@@ -7,20 +7,21 @@
 
 if Rake::Task.task_defined?('spec:features') # only if current environment knows rspec
   Rake::Task['spec:features'].actions.clear
+
   namespace :spec do
     RSpec::Core::RakeTask.new(:without_features) do |t|
       t.pattern = './spec/**/*_spec.rb'
-      t.rspec_opts = '--tag ~type:feature'
+      t.rspec_opts = '--tag ~type:feature --format Fivemat'
     end
 
     RSpec::Core::RakeTask.new(:sphinx) do |t|
       t.pattern = './spec/**/*_spec.rb'
-      t.rspec_opts = '--tag sphinx'
+      t.rspec_opts = '--tag sphinx --format Fivemat'
     end
 
     RSpec::Core::RakeTask.new(:features) do |t|
       t.pattern = './spec/features/**/*_spec.rb'
-      t.rspec_opts = '--tag type:feature'
+      t.rspec_opts = '--tag type:feature --format Fivemat'
     end
 
     spec_dirs = Pathname.new('spec').children.select(&:directory?).map(&:basename).map(&:to_s)
@@ -34,6 +35,7 @@ if Rake::Task.task_defined?('spec:features') # only if current environment knows
 
       RSpec::Core::RakeTask.new(dir) do |t|
         t.pattern = "./spec/#{dir}/**/*_spec.rb"
+        t.rspec_opts = '--format Fivemat'
       end
     end
 
@@ -56,15 +58,15 @@ if Rake::Task.task_defined?('spec:features') # only if current environment knows
 
       RSpec::Core::RakeTask.new('start') do |t|
         t.pattern = './spec/features/**/*_spec.rb'
-        t.rspec_opts = '--tag type:feature'
+        t.rspec_opts = '--tag type:feature --format Fivemat'
         t.fail_on_error = false # don't stop the whole run
       end
       RSpec::Core::RakeTask.new('retry') do |t|
-        t.rspec_opts = '--only-failures'
+        t.rspec_opts = '--only-failures --format Fivemat'
         t.fail_on_error = false # don't stop the whole run
       end
       RSpec::Core::RakeTask.new('last') do |t|
-        t.rspec_opts = '--only-failures'
+        t.rspec_opts = '--only-failures --format Fivemat'
         t.fail_on_error = true # do fail the run
       end
     end

@@ -31,12 +31,10 @@ module Sortable
 
       model_name, attribute_name = table_attr.split('.')
 
-      column_type = model_name.titleize
-                              .gsub(' ', '::')
-                              .singularize
-                              .constantize
-                              .attribute_types[attribute_name]
-                              .type
+      column_type = ActiveSupport::Inflector.classify(model_name)
+                                            .constantize
+                                            .attribute_types[attribute_name]
+                                            .type
 
       null_safe = 'CASE'
       null_safe << " WHEN #{table_attr} IS NULL THEN 1"

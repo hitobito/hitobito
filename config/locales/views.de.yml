@@ -1712,6 +1712,7 @@ de:
         active: war die Rolle aktiv.
         created: wurde die Rolle erstellt.
         deleted: wurde die Rolle gelöscht.
+        inactive: war die Rolle inaktiv.
 
     attributes:
       title: Felder

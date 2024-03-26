@@ -18,7 +18,7 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def apply(scope)
-    scope = scope.where(type_conditions)
+    scope = scope.where(type_conditions(scope))
                  .where(duration_conditions)
     if include_archived?
       scope
@@ -85,8 +85,14 @@ class Person::Filter::Role < Person::Filter::Base
     args[:role_types].map { |t| role_map[t] }.compact
   end
 
-  def type_conditions
-    [[:roles, { type: args[:role_types] }]].to_h if args[:role_types].present?
+  def type_conditions(scope)
+    return if args[:role_types].blank?
+
+    if args[:kind] == 'inactive'
+      ['people.id NOT IN (?)', scope.where(roles: { type: args[:role_types] }).pluck(:id)]
+    else
+      [[:roles, { type: args[:role_types] }]].to_h
+    end
   end
 
   def duration_conditions
@@ -95,7 +101,7 @@ class Person::Filter::Role < Person::Filter::Base
     case args[:kind]
     when 'created' then [[:roles, { created_at: time_range }]].to_h
     when 'deleted' then [[:roles, { deleted_at: time_range }]].to_h
-    when 'active' then [active_role_condition, min: time_range.min, max: time_range.max]
+    when 'active', 'inactive' then [active_role_condition, min: time_range.min, max: time_range.max]
     end
   end
 

@@ -23,7 +23,15 @@ if Rake::Task.task_defined?('spec:features') # only if current environment knows
       t.rspec_opts = '--tag type:feature'
     end
 
-    [:abilities, :decorators, :domain, :jobs, :regressions].each do |dir|
+    spec_dirs = Pathname.new('spec').children.select(&:directory?).map(&:basename).map(&:to_s)
+    (spec_dirs - %w(
+      features
+      fabricators fixtures
+      support
+      coverage reports
+    )).each do |dir|
+      Rake::Task["spec:#{dir}"].actions.clear
+
       RSpec::Core::RakeTask.new(dir) do |t|
         t.pattern = "./spec/#{dir}/**/*_spec.rb"
       end

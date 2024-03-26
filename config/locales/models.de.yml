@@ -110,6 +110,8 @@ de:
             mail_name:
               not_allowed: "'%{mail_name}' darf nicht verwendet werden"
             mail_name_not_allowed:
+            additional_sender:
+              invalid: "muss Mailadressen vom Format abcd@ee.ch oder *@ee.ch enthalten. Mehrere Adressen müssen mit ',' oder ';' abgetrennt werden."
         message/letter_with_invoice:
           attributes:
             base:
@@ -175,10 +177,6 @@ de:
             payee:
               to_long: 'darf höchstens 2 Zeilen enthalten'
               must_have_3_lines: 'muss genau 3 Zeilen enthalten'
-        mailing_list:
-            attributes:
-                additional_sender:
-                    invalid: "muss Mailadressen vom Format abcd@ee.ch oder *@ee.ch enthalten. Mehrere Adressen müssen mit ',' oder ';' abgetrennt werden."
         role:
           attributes:
             delete_on:
@@ -397,6 +395,8 @@ de:
     attributes:
       acts_as_taggable_on/tag:
         name: Name
+        taggings_count: Anzahl
+        category: Kategorie
 
       cantons:
         ag: Aargau
@@ -840,7 +840,6 @@ de:
         email: E-Mail
         name: Weitere E-Mail
         label: Weitere E-Mail Typ
-        label: Typ
         public: Öffentlich
         mailings: Versand
 
@@ -1167,11 +1166,6 @@ de:
         event_participations: Teilnehmende von Anlässen
         mailing_lists: Abonnent/-innen von Mailinglisten
         cors_origins: Hosts mit API-Zugriff
-
-      acts_as_taggable_on/tag:
-        taggings_count: Anzahl
-        category: Kategorie
-        name: Name
 
       calendar:
         name: Name

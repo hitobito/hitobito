@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #  Copyright (c) 2022, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -19,22 +21,8 @@ module TableDisplays::Event::Participations
       end
     end
 
-    def required_model_attrs(attr)
+    def required_model_attrs(_attr)
       []
-    end
-
-    def value_for(object, attr)
-      target, target_attr = resolve(object, attr)
-      if target.present? && target_attr.present? && allowed?(target, target_attr, object, attr)
-        target = target.answers.find do |answer|
-          answer.question_id.to_s == question_id(target_attr)
-        end
-        target_attr = :answer
-
-        return target, target_attr unless block_given?
-
-        yield target, target_attr
-      end
     end
 
     def label(attr)
@@ -60,6 +48,17 @@ module TableDisplays::Event::Participations
 
     def question_id(attr)
       attr[QUESTION_REGEX, 1]
+    end
+
+    private
+
+    def allowed_value_for(target, target_attr, &block)
+      target = target.answers.find do |answer|
+        answer.question_id.to_s == question_id(target_attr)
+      end
+      target_attr = :answer
+
+      super(target, target_attr, &block)
     end
   end
 end

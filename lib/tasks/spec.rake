@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -40,18 +40,18 @@ if Rake::Task.task_defined?('spec:features') # only if current environment knows
     namespace :features do
       # see https://www.puzzle.ch/de/blog/articles/2021/01/18/a-lenient-capybara
       desc 'Run feature specs at most three times to gracefully handle flaky specs'
-      task :lenient do |t|
+      task :lenient do |t| # rubocop:disable Rails/RakeEnvironment
         sh 'rm -f tmp/examples.txt'
         puts "\nFIRST ATTEMPT\n"
-        Rake::Task[t.name.gsub(/lenient/, 'start')].invoke
+        Rake::Task[t.name.gsub('lenient', 'start')].invoke
         next if $CHILD_STATUS.exitstatus.zero?
 
         puts "\nSECOND ATTEMPT\n"
-        Rake::Task[t.name.gsub(/lenient/, 'retry')].invoke
+        Rake::Task[t.name.gsub('lenient', 'retry')].invoke
         next if $CHILD_STATUS.exitstatus.zero?
 
         puts "\nLAST ATTEMPT\n"
-        Rake::Task[t.name.gsub(/lenient/, 'last')].invoke
+        Rake::Task[t.name.gsub('lenient', 'last')].invoke
       end
 
       RSpec::Core::RakeTask.new('start') do |t|

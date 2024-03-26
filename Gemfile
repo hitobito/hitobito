@@ -130,6 +130,7 @@ group :test do
   gem 'cmdparse'
   gem 'database_cleaner'
   gem 'fabrication'
+  gem 'fivemat'
   gem 'headless'
   gem 'launchy'
   gem 'open_api-schema_validator'

@@ -28,12 +28,12 @@ module TableDisplays
       raise 'implement in subclass'
     end
 
-    def value_for(object, attr)
+    def value_for(object, attr, &block)
       target, target_attr = resolve(object, attr)
-      if target.present? && target_attr.present? && allowed?(target, target_attr, object, attr)
-        return target, target_attr unless block_given?
-
-        yield target, target_attr
+      if target.present? && target_attr.present?
+        if allowed?(target, target_attr, object, attr)
+          allowed_value_for(target, target_attr, &block)
+        end
       end
     end
 
@@ -97,6 +97,14 @@ module TableDisplays
       relation, relation_path = path.to_s.split('.', 2)
       relation_class = model_class.reflect_on_association(relation).class_name.constantize
       resolve_database_column(relation_path, relation_class)
+    end
+
+    def allowed_value_for(target, target_attr, &block)
+      if block.present?
+        block.call(target, target_attr)
+      else
+        [target, target_attr]
+      end
     end
   end
 end

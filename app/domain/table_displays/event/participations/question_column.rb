@@ -25,20 +25,6 @@ module TableDisplays::Event::Participations
       []
     end
 
-    def value_for(object, attr)
-      target, target_attr = resolve(object, attr)
-      if target.present? && target_attr.present? && allowed?(target, target_attr, object, attr)
-        target = target.answers.find do |answer|
-          answer.question_id.to_s == question_id(target_attr)
-        end
-        target_attr = :answer
-
-        return target, target_attr unless block_given?
-
-        yield target, target_attr
-      end
-    end
-
     def label(attr)
       Event::Question.find(question_id(attr)).label
     end
@@ -62,6 +48,17 @@ module TableDisplays::Event::Participations
 
     def question_id(attr)
       attr[QUESTION_REGEX, 1]
+    end
+
+    private
+
+    def allowed_value_for(target, target_attr, &block)
+      target = target.answers.find do |answer|
+        answer.question_id.to_s == question_id(target_attr)
+      end
+      target_attr = :answer
+
+      super(target, target_attr, &block)
     end
   end
 end

@@ -212,10 +212,13 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   def inline_radio_button(attr, value, caption, inline = true, html_options = {})
     html_options[:class] = html_options[:class].to_s
-    html_options[:class] += ' is-invalid' if errors_on?(attr)
+    html_options[:class] += ' form-check-input allign-label'
+    invalid = errors_on?(attr) ? " is-invalid" : ""
+    html_options[:class] += invalid
 
-    label(id_from_value(attr, value), class: "radio#{' inline' if inline} mt-2") do
-      radio_button(attr, value, html_options) + ' ' +
+    radio_button(attr, value, html_options) +
+    label(id_from_value(attr, value), 
+          class: "radio#{' inline' if inline} mt-2 form-check-label" + invalid) do
       caption
     end
   end
@@ -230,11 +233,13 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     sanitized_id = "#{object_name}_#{index}".delete(']').gsub(/[^-a-zA-Z0-9:.]/, '_')
     checked = @object.send(attr).to_s.split(', ').include?(value)
     hidden_field = index.zero? ? @template.hidden_field_tag(name, index) : ''
+    invalid = errors_on?(attr) ? " is-invalid" : ""
 
-    @template.label_tag(sanitized_id, class: 'checkbox') do
-      hidden_field.html_safe +
-      @template.check_box_tag(name, index + 1, checked, id: sanitized_id) +
-      ' ' +
+    @template.check_box_tag(name, index + 1, checked, 
+                            id: sanitized_id, 
+                            class: "form-check-input allign-label" + invalid) +
+    hidden_field.html_safe +
+    @template.label_tag(sanitized_id, class: "checkbox mt-2 form-check-label " + invalid) do
       value
     end
   end

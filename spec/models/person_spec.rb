@@ -116,6 +116,17 @@ describe Person do
     expect(Person.order_by_name.collect(&:to_s)).to eq([p1, p3, p5, " / AD", p2, p4, p6, " / BD"].collect(&:to_s))
   end
 
+  it '#order_by_name orders people with same last_name by first_name' do
+    Person.destroy_all
+    p1 = Person.create(last_name: "AA")
+    p2 = Person.create(last_name: "BB", first_name: "AA")
+    p3 = Person.create(last_name: "BB", first_name: "BB")
+    p4 = Person.create(last_name: "CC")
+
+    # Checking order by name with hardcoded nickname prefixes
+    expect(Person.order_by_name.collect(&:to_s)).to eq([p1, p2, p3, p4].collect(&:to_s))
+  end
+
   context 'with one role' do
     let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
 

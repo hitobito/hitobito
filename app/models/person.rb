@@ -294,9 +294,17 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     def order_by_name_statement
       "CASE
         WHEN people.company = #{connection.quote(true)} THEN people.company_name
-        WHEN people.last_name IS NOT NULL AND people.last_name != '' THEN people.last_name
-        WHEN people.first_name IS NOT NULL AND people.first_name != '' THEN people.first_name
-        ELSE people.nickname
+        WHEN people.last_name IS NOT NULL AND people.last_name != '' THEN 
+          CASE
+            WHEN people.first_name IS NOT NULL AND people.first_name != '' THEN 
+              CONCAT(people.last_name, ', ', people.first_name)
+            ELSE 
+              people.last_name
+          END 
+        WHEN people.first_name IS NOT NULL AND people.first_name != '' THEN 
+          people.first_name
+        ELSE
+          people.nickname
       END AS order_case"
     end
 

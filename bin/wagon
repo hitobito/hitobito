@@ -178,25 +178,14 @@ case $cmd in
     bundle exec rake db:drop db:create
     echo 'Migrating Core'
     bundle exec rake db:migrate
-    echo 'Migrating Wagons'
-    bundle exec rake wagon:migrate
 
-    echo 'Compile Assets to match the selected wagons to ensure better spec-results'
-    bin/webpack-test-compile
-    ;;
+    if [[ "$RAILS_TEST_DB_NAME" != "hit_core_test" ]]; then
+      echo 'Migrating Wagons'
+      bundle exec rake wagon:migrate
 
-  test-speedup)
-    wagon test-prepare
-
-    echo 'Running Wagon-Tests to prime the DB'
-    rake wagon:test || true # do not fail, it's more about the setup than the result
-
-    echo 'Changing environment-config'
-    sed -i 's/\(config.active_record.maintain_test_schema\) = true/\1 = false/' config/environments/test.rb
-
-    git diff config/environments/test.rb
-
-    echo 'Running specs with spring in the wagon is now faster.'
+      echo 'Compile Assets to match the selected wagons to ensure better spec-results'
+      bin/webpack-test-compile
+    fi
     ;;
 
   grep)
@@ -215,15 +204,6 @@ case $cmd in
       echo ">> grepping in ../hitobito_$wagon/ <<" | highlight_phrases
       (cd "../hitobito_$wagon/"; git grep --color=always "${@:2}")
     done
-    ;;
-
-  core-spec)
-    export WAGONS=''
-    export RAILS_ENV=test
-    export RAILS_TEST_DB_NAME=hit_core_test
-    shift # loose the "core-spec" argument
-    rake db:migrate # ensure that schema.rb is current for the test-db to load
-    rspec $@
     ;;
 
   spec-all)
@@ -382,7 +362,6 @@ function __wagon_commands() {
     bootstrap
     clone
     configs
-    core-spec
     create
     create-database
     gemfile
@@ -397,7 +376,6 @@ function __wagon_commands() {
     spec
     spec-all
     test-prepare
-    test-speedup
     update-copyright
   ' | xargs
 }
@@ -437,7 +415,7 @@ COMPLETION
   help|*)
     echo "USAGE: $0 [activate] <WAGON>|core"
     echo "       $0 [clone|bootstrap] <WAGON>"
-    echo "       $0 [create-datbase|reset-database|test-prepare|test-speedup|core-spec|update-copyright]"
+    echo "       $0 [create-datbase|reset-database|test-prepare|update-copyright]"
     echo "       $0 [spec|build] <WAGON>"
     echo "       $0 [spec-all|reset-test-database|overwritten-in-wagon]"
     echo "       $0 [grep] <TERM>"

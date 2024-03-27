@@ -27,6 +27,7 @@ $logo-background-color: <%= Settings.application.logo.background_color %> !defau
 <% if Settings.application.page_background.try(ENV['RAILS_HOST_NAME'] || "dev") %>
   $page-background: <%= Settings.application.page_background.send(ENV['RAILS_HOST_NAME']  || "dev") %>;
 <% end %>
+$min-contrast-ratio: 2.5;
 
 // Import the wagons' specific variables or fall back to core variables
 <% absolute_wagon_file_paths(

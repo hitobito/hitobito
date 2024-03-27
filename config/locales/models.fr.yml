@@ -91,6 +91,10 @@ fr:
           attributes:
             self_registration_role_type:
               blank: '§doit être rempli si "Affichage sur la page de connexion" est sélectionné'
+        mailing_list:
+          attributes:
+            additional_sender:
+              invalid: "doit contenir des adresses e-mail au format abcd@ee.ch ou *@ee.ch. Multiples adresses doivent être séparées par ',' ou ';'."
         message/letter_with_invoice:
           attributes:
             base:
@@ -156,10 +160,6 @@ fr:
             payee:
               to_long: 'doit contenir 2 lignes au maximum'
               must_have_3_lines: 'doit contenir exactement 3 lignes'
-        mailing_list:
-          attributes:
-            additional_sender:
-              invalid: "doit contenir des adresses e-mail au format abcd@ee.ch ou *@ee.ch. Multiples adresses doivent être séparées par ',' ou ';'."
         role:
           attributes:
             delete_on:
@@ -432,6 +432,10 @@ fr:
         many: Tags
         other: Tags
     attributes:
+      acts_as_taggable_on/tag:
+        name: Nom
+        taggings_count: Nombre
+        category: Catégorie
       cantons:
         ag: Argovie
         ai: Appenzell Rhodes Intérieures
@@ -828,7 +832,6 @@ fr:
       additional_email:
         email: Adresse e-mail
         name: Adresse e-mail supplémentaire
-        label: Type
         public: Public
         mailings: Envoi
       additional_emails:
@@ -1120,10 +1123,6 @@ fr:
         event_participations: Participants d'évènements
         mailing_lists: Abonné·e·s des mailing listes
         cors_origins: ordinateurs hôte avec accès via une interface
-      acts_as_taggable_on/tag:
-        taggings_count: Nombre
-        category: Catégorie
-        name: Nom
       calendar:
         name: Nom
         description: Description

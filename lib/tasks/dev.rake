@@ -105,7 +105,9 @@ namespace :dev do
         me.two_factor_authentication = 'totp'
         me.save!(validate: false)
 
-        qr_code = Pathname.new('tmp/tom-tester-otp.png')
+        tmp_dir = Pathname.new('tmp')
+        tmp_dir.mkpath
+        qr_code = tmp_dir.join('tom-tester-otp.png')
         qr_code.delete if qr_code.exist?
 
         otp = People::OneTimePassword.new(me.two_fa_secret, person: me)

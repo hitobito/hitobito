@@ -31,5 +31,10 @@
       = f.help_block(t('.cannot_create_household'))
 
 
-    - if @invalid
-      .alert.alert-danger= t('.update_denied', other_person: @other_person)
+  - if @invalid
+    .household_pleople_ids_errors.p-2
+      .alert.alert-danger
+        - if f.object.errors.include?(:household_people_ids)
+          = simple_format(f.object.errors[:household_people_ids].join("\n"))
+        - else
+          = t('.update_denied', other_person: @other_person)

@@ -6,7 +6,7 @@
 = entry_form(buttons_bottom: false) do |f|
   = f.labeled_input_fields :label, :short_name
   - if kind_categories_used?
-    = f.labeled_input_field :kind_category_id
+    = render 'kind_category_field', f: f
   = f.labeled_input_field :minimum_age, help_inline: t('.help_minimum_age'), class: 'd-inline '
   = f.labeled_input_fields :general_information, :application_conditions
 

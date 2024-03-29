@@ -935,7 +935,6 @@ en:
       is_at: "must be at %{restriction}"
       before: "must be before %{restriction}"
       on_or_before: "must be on or before %{restriction}"
-      after: "must be after %{restriction}"
       on_or_after: "must be on or after %{restriction}"
       expired: "has expired, please request a new"
       not_found: "not found"

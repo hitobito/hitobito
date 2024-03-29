@@ -1154,7 +1154,6 @@ fr:
       is_at: "doit être %{restriction}"
       before: "doit être antérieur à %{restriction}"
       on_or_before: "doit être %{restriction} ou antérieur"
-      after: "doit être ultérieur à %{restriction}"
       on_or_after: "doit être %{restriction} ou ultérieur"
       expired: "est échu, prière d'en refaire demande"
       not_found: "pas trouvé"

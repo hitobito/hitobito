@@ -1153,7 +1153,6 @@ it:
       is_at: "deve essere %{restriction}"
       before: "deve essere prima di %{restriction} "
       on_or_before: "deve essere %{restriction} oppure prima"
-      after: "deve essere dopo %{restriction}"
       on_or_after: "deve essere %{restriction} oppure dopo"
       expired: "è scaduto, per favore richiedere nuovamente"
       not_found: "non trovato"

@@ -15,7 +15,6 @@ it:
     selected: Selezionato
     columns: Colonna
     start_on: da %{date}
-    not_allowed: 'mancanta di autorizzazione'
     gender:
       male: maschile
       female: femminile

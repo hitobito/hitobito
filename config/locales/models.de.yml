@@ -560,6 +560,7 @@ de:
         contact: Kontaktperson
         notify_contact_on_participations: Kontaktperson über neue Anmeldung per Mail benachrichtigen
         maximum_participants: Maximale Teilnehmerzahl
+        minimum_participants: Minimale Teilnehmerzahl
         contact_id: Kontaktperson
         description: Beschreibung
         location: Ort / Adresse

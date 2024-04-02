@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_03_19_080613) do
+ActiveRecord::Schema.define(version: 2024_04_02_092444) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -369,6 +369,7 @@ ActiveRecord::Schema.define(version: 2024_03_19_080613) do
     t.string "shared_access_token"
     t.boolean "notify_contact_on_participations", default: false, null: false
     t.decimal "training_days", precision: 5, scale: 2
+    t.integer "minimum_participants"
     t.index ["kind_id"], name: "index_events_on_kind_id"
     t.index ["shared_access_token"], name: "index_events_on_shared_access_token"
   end

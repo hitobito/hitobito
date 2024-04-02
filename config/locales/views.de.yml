@@ -58,6 +58,7 @@ de:
       add: Erstellen
       delete: Löschen
       list: Liste
+      override: Werte übernehmen
 
     errors:
       header:

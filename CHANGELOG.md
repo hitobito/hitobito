@@ -2,6 +2,7 @@
 
 ## unreleased
 
+*  Neues Attribut Minimale Teilnehmeranzahl auf Event (hitobito_sac_cas#358)
 *  Der OIDC /userinfo Endpoint und der OAuth /profile Endpoint geben von nun an immer dieselben (zum Scope passenden) Informationen aus (hitobito#2490)
 *  Eigener JSON:API Endpoint für Events (hitobito_sac_cas#229)
 *  Rechnungen können neu auch den Status "Teilzahlung" und "Überzahlung" haben (hitobito_sww#38)

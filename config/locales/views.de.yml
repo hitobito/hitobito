@@ -510,8 +510,6 @@ de:
         decline: Abmelden
     banner_declined_invitation:
       explanation: Du wurdest zu diesem Anlass eingeladen und hast dich abgemeldet.
-    default_description_link:
-      insert_general_information: Standardbeschreibung einsetzen
     form:
       caption_external_applications: "Externe können sich für diesen Anlass anmelden."
       caption_prioritization: "Teilnehmende können bei der Anmeldung zwei weitere Kurse als Alternativen angeben."

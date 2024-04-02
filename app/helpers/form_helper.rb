@@ -103,6 +103,21 @@ module FormHelper
     end
   end
 
+  def field_inheritance_values(list, fields)
+    model = model_class.new
+    options = list.flat_map do |entity|
+      fields.collect do |field, source_method = field|
+        content_tag(:option, '', data: {
+          source_id: entity.id,
+          target_field: [entry.model_name.param_key, field].join('_'),
+          value: entity.send(source_method),
+          default: model.send(field).to_s
+        })
+      end
+    end
+    content_tag(:datalist, safe_join(options))
+  end
+
   def cancel_link(url)
     link_to(ti(:'button.cancel'), url, class: 'link cancel')
   end

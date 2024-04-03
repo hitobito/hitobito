@@ -59,7 +59,7 @@ class Event::ParticipationConfirmationJob < BaseJob
 
   def send_approval?
     @send_approval &&
-      !participation.application.approved &&
+      !participation&.application&.approved &&
       participation.event.requires_approval?
   end
 end

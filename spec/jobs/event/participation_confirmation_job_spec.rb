@@ -54,6 +54,16 @@ describe Event::ParticipationConfirmationJob do
                                                                            APPROVAL_SUBJECT])
     end
 
+    it 'sends participation confirmation for participation without application entry' do
+      participation.application.destroy!
+
+      subject.perform
+
+      expect(ActionMailer::Base.deliveries.size).to eq(2)
+      expect(ActionMailer::Base.deliveries.map(&:subject)).to match_array([CONFIRMATION_SUBJECT,
+                                                                           APPROVAL_SUBJECT])
+    end
+
   end
 
   context 'with approvers' do

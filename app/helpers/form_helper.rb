@@ -110,7 +110,7 @@ module FormHelper
         content_tag(:option, '', data: {
           source_id: entity.id,
           target_field: [entry.model_name.param_key, field].join('_'),
-          value: entity.send(source_method),
+          value: entity.send(source_method).to_s,
           default: model.send(field).to_s
         })
       end

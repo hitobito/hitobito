@@ -101,6 +101,12 @@ class Event::Course < Event
     @qualification_date ||= last_finish_or_start_at
   end
 
+  # True when qualifications are ready to be displayed to participants.
+  # Overridden in wagons
+  def qualifications_visible?
+    qualifying? && qualification_date < Time.zone.today
+  end
+
   def start_date
     @start_date ||= dates.first.start_at.to_date
   end

@@ -1,0 +1,17 @@
+#events.mt-2
+  = render(layout: 'shared/grouped_table',
+           locals: { grouped_lists: @participations_by_event_type,
+                     column_count: 4 }) do |participation|
+    - event = participation.event
+    %td
+      %strong= event.labeled_link
+    %td= participation.list_roles
+    %td= event.dates_full
+    %td
+      - if event.is_a?(Event::Course)
+        - if event.qualifications_visible?
+          = t("person.history.index.#{participation.qualified ? '' : 'not_'}qualified")
+          %br
+        - if event.training_days?
+          - days = participation.event.training_days
+          = t('person.history.index.training_days', count: days.to_i == days ? days.to_i : days)

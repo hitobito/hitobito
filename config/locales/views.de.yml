@@ -1381,6 +1381,11 @@ de:
     history:
       index:
         inactive_roles_title: "Inaktive Rollen"
+        qualified: "Bestanden"
+        not_qualified: "Nicht bestanden"
+        training_days: 
+          one: "%{count} Ausbildungstag"
+          other: "%{count} Ausbildungstage"
     households:
       form:
         address_updated: "Adresse aktualisiert"

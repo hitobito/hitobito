@@ -52,7 +52,7 @@ describe :payment_process, js: true do
 
     expect do
       find('button.btn', text: '5 Zahlungen importieren').click
-      sleep 0.5
+      expect(page).to have_content('Es wurden 5 Zahlungen erfasst.')
     end.to change { Payment.count }.by(5)
 
     expect(invoice.payments.count).to eq(1)

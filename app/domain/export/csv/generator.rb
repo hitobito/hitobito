@@ -34,7 +34,7 @@ module Export
 
       def generate
         CSVSafe.generate(**options) do |generator|
-          generator << exportable.labels
+          generator << exportable.labels if exportable.labels.present?
           exportable.data_rows(:csv) do |row|
             generator << row
           end

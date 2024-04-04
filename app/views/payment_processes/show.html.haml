@@ -10,7 +10,7 @@
       %h3=t('.valid_payments_with_invoice_and_dates', from: l(processor.from), to: l(processor.to))
     - else
       %h3=t('.valid_payments_with_invoice')
-    = table(processor.valid_payments_with_invoice, class: 'table table-stripped') do |t|
+    = table(processor.valid_payments_with_invoice, class: 'table table-stripped', id: 'payments-with-invoice') do |t|
       - t.col('') do |p|
         - if p.valid?
           - if p.settles?
@@ -35,7 +35,7 @@
       %h3=t('.valid_payments_without_invoice_and_dates', from: l(processor.from), to: l(processor.to))
     - else
       %h3=t('.valid_payments_without_invoice')
-    = table(processor.valid_payments_without_invoice, class: 'table table-stripped w-100') do |t|
+    = table(processor.valid_payments_without_invoice, class: 'table table-stripped w-100', id: 'payments-without-invoice') do |t|
       - t.col('') do |p|
         %i.fas.fa-exclamation-triangle{title: t('.icon_tooltip_invoice_missing')}
 

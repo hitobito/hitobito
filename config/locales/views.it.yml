@@ -467,8 +467,6 @@ it:
         decline: log out
     banner_declined_invitation:
       explanation: Siete stati invitati a questo evento e avete disdetto.
-    default_description_link:
-      insert_general_information: Inserire informazioni generali
     form:
       caption_external_applications: 'Esterni possono iscriversi a questo evento.'
       caption_prioritization: 'I partecipanti possono dare durante l''iscrizione due ulteriori corsi come alternative.'

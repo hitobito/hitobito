@@ -469,8 +469,6 @@ fr:
         decline: Désinscription
     banner_declined_invitation:
       explanation: Tu as été invité·e à cet événement et tu as annulé ton inscription.
-    default_description_link:
-      insert_general_information: Placer une description standard
     form:
       caption_external_applications: 'Les personnes externes peuvent s''inscrire à cet événement.'
       caption_prioritization: 'Les participants peuvent indiquer deux autres cours alternatifs lors de l''inscription.'

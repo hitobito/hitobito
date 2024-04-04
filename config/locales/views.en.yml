@@ -449,8 +449,6 @@ en:
       buttons:
         accept: Register
         decline: Cancel registration
-    default_description_link:
-      insert_general_information: Insert standard description
     form:
       caption_external_applications: 'Externals can sign up for this event'
       caption_prioritization: 'Participants may set two additional courses as alternatives.'

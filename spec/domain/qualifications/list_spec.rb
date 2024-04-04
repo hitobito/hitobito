@@ -63,35 +63,43 @@ describe Qualifications::List do
       let(:gl) { qualification_kinds(:gl).tap { |k| k.update!(required_training_days: 1) } }
       let(:qualifying_date) { Date.new(2024, 1, 1) }
       subject(:qualifications) { list.qualifications }
+      before { travel_to(qualifying_date + 3.months) }
 
-      it 'is 0 if participation is older than before start_of qualification' do
-        Fabricate(:qualification, person: person, qualification_kind: gl, start_at: qualifying_date)
-        create_course_participation(training_days: 0.5, start_at: qualifying_date - 1.day)
+      it 'is nil if qualification is neither active nor reactivateable' do
+        Fabricate(:qualification, person: person, qualification_kind: gl, start_at: qualifying_date - 3.years)
+        expect(qualifications[0].open_training_days).to be_nil
+      end
+
+      it 'is nil if qualification is not active and not within reactivateable period' do
+        gl.update!(reactivateable: 1)
+        Fabricate(:qualification, person: person, qualification_kind: gl, start_at: qualifying_date - 3.years)
+        expect(qualifications[0].open_training_days).to be_nil
+      end
+
+      it 'is present if qualification is not active and but within reactivateable period' do
+        gl.update!(reactivateable: 3)
+        Fabricate(:qualification, person: person, qualification_kind: gl, start_at: qualifying_date - 3.years)
         expect(qualifications[0].open_training_days).to eq 1
       end
 
-      it 'is still nil older qualification of a different kind exists' do
-        Fabricate(:qualification, person: person, qualification_kind: sl, start_at: qualifying_date - 2.years)
-        Fabricate(:qualification, person: person, qualification_kind: gl, start_at: qualifying_date)
-        create_course_participation(training_days: 0.5, start_at: qualifying_date - 1.day)
-        expect(qualifications).to have(2).items
+      it 'is present if qualification is active' do
+        Fabricate(:qualification, person: person, qualification_kind: gl, start_at: qualifying_date - 3.months)
         expect(qualifications[0].open_training_days).to eq 1
-        expect(qualifications[1].open_training_days).to be_nil
       end
 
-      it 'returns summed open training days if participations after qualification' do
+      it 'summes trainings after qualifying_date' do
         Fabricate(:qualification, person: person, qualification_kind: gl, start_at: qualifying_date)
+        create_course_participation(training_days: 0.1, start_at: qualifying_date - 1.day)
         create_course_participation(training_days: 0.5, start_at: qualifying_date + 1.day)
         create_course_participation(training_days: 0.3, start_at: qualifying_date + 10.day)
         expect(qualifications[0].open_training_days).to eq 0.2
       end
 
-      it 'is only set for first qualification' do
+      it 'only sets value on most recent qualification for kind' do
         Fabricate(:qualification, person: person, qualification_kind: gl, start_at: qualifying_date - 2.years)
         Fabricate(:qualification, person: person, qualification_kind: gl, start_at: qualifying_date)
         create_course_participation(training_days: 0.5, start_at: qualifying_date + 1.day)
-        create_course_participation(training_days: 0.3, start_at: qualifying_date + 10.day)
-        expect(qualifications[0].open_training_days).to eq 0.2
+        expect(qualifications[0].open_training_days).to eq 0.5
         expect(qualifications[1].open_training_days).to be_nil
       end
     end

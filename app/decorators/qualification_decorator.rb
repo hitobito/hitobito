@@ -11,7 +11,9 @@ class QualificationDecorator < ApplicationDecorator
     return unless model.open_training_days
 
     days = helpers.number_to_condensed(model.open_training_days)
-    helpers.content_tag(:span, days, title: open_training_days_title(days))
+    title = open_training_days_title(days)
+    icon = helpers.icon(:'info-circle', class: 'p-1', title: title)
+    helpers.content_tag(:span, safe_join([content_tag(:span, days), icon]))
   end
 
   private

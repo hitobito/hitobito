@@ -43,7 +43,8 @@ module Qualifications
     end
 
     def training_days?(quali)
-      quali.qualification_kind.required_training_days.present?
+      quali.qualification_kind.required_training_days.present? &&
+        (quali.active? || quali.reactivateable?)
     end
 
     def calculate_open_training_days(item)

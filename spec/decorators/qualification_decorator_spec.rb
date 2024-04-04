@@ -10,6 +10,7 @@ describe QualificationDecorator do
   let(:qualification) { Fabricate.build(:qualification) }
 
   subject(:open_training_days) { qualification.decorate.open_training_days }
+  subject(:open_training_days_dom) { Capybara::Node::Simple.new(open_training_days) }
   subject(:tooltip) { open_training_days[/title="(.*)"/,1] }
   let(:now) { Date.new(2024, 3, 22) }
 
@@ -21,8 +22,9 @@ describe QualificationDecorator do
     before { qualification.open_training_days = 1.5 }
     around { |example| travel_to(now) { example.run } }
 
-    it 'returns formatted training days' do
-      expect(open_training_days).to have_text "1.5"
+    it 'returns formatted training days with icon' do
+      expect(open_training_days).to have_text '1.5'
+      expect(open_training_days_dom).to have_css 'i.fas.fa-info-circle.p-1'
     end
 
     it 'has no tooltip for active qualification without finish_at' do

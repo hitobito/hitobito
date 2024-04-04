@@ -100,9 +100,10 @@ module EventsHelper
   def format_event_application_conditions(entry)
     texts = [entry.application_conditions]
     texts.unshift(entry.kind.application_conditions) if entry.course_kind?
-    safe_join(texts.select(&:present?).map do |text|
-      safe_auto_link(text, html: { target: '_blank' }) + tag.br
-    end)
+    html = texts.uniq.select(&:present?).map do |text|
+      safe_auto_link(text, html: { target: '_blank' })
+    end
+    safe_join(html, tag.br)
   end
 
   def format_event_state(event)

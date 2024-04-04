@@ -5,6 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+# rubocop:disable Layout/LineLength
+
 # == Schema Information
 #
 # Table name: message_recipients
@@ -32,6 +34,7 @@
 #  index_message_recipients_on_person_message_phone_number  (person_id,message_id,phone_number) UNIQUE
 #
 
+# rubocop:enable Layout/LineLength
 class MessageRecipient < ActiveRecord::Base
   include I18nEnums
   validates_by_schema

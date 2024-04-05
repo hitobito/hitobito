@@ -40,9 +40,15 @@ namespace :ci do
     Rake::Task['log:clear'].invoke
     Rake::Task['db:migrate'].invoke
     Rake::Task['wagon:migrate'].invoke
+    wagons.each do |wagon|
+      FileUtils.mkdir_p("#{wagon.root}/lib/tasks")
+      FileUtils.cp('lib/tasks/spec.rake', "#{wagon.root}/lib/tasks/spec.rake", verbose: true)
+    end
 
     wagon_exec('DISABLE_DATABASE_ENVIRONMENT_CHECK=1 ' \
-               'bundle exec rake app:rubocop app:ci:setup:rspec spec:all')
+               'bundle exec rake app:ci:setup:rspec ' \
+               'spec:without_features spec:features:lenient ' \
+               'app:rubocop')
   end
 
   namespace :setup do

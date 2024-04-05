@@ -91,6 +91,20 @@ namespace :graphiti do
       MSG
     end
 
+    desc 'Generate openapi spec'
+    task generate_openapi: ['graphiti:schema:setup', :file_exists] do
+      generator = Graphiti::OpenApi::Generator.new(
+        schema: Graphiti.config.schema_path,
+        jsonapi: Rails.root.join('config', 'jsonapi.json')
+      )
+      schema = generator.to_openapi
+      openapi_json = Rails.root.join("tmp/openapi.json")
+      openapi_json.write(JSON.pretty_generate(schema))
+
+      puts green <<~MSG
+        Openapi schema has been written: #{openapi_json.relative_path_from(Pathname.pwd)}
+      MSG
+    end
   end
 
 end

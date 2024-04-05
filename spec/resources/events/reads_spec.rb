@@ -8,16 +8,22 @@
 require 'spec_helper'
 
 describe EventResource, type: :resource do
+  include Rails.application.routes.url_helpers
   let(:event) { events(:top_event) }
   let(:course) { events(:top_course) }
 
   describe 'serialization' do
+    before do
+      params[:filter] = { id: { eq: event.id } }
+    end
+
     let(:serialized_attrs) do
       [
-        :applicant_count,
         :application_closing_at,
         :application_contact_id,
         :application_opening_at,
+        :application_conditions,
+        :description,
         :name,
         :cost,
         :created_at,
@@ -26,19 +32,14 @@ describe EventResource, type: :resource do
         :location,
         :maximum_participants,
         :motto,
-        :number,
-        :participant_count,
-        :training_days,
-        :state,
+        :external_application_link,
         :type,
         :updated_at
       ]
     end
 
     it 'works' do
-      params[:filter] = { id: { eq: event.id } }
       render
-
       data = jsonapi_data[0]
 
       expect(data.attributes.symbolize_keys.keys).to match_array [:id,
@@ -47,6 +48,21 @@ describe EventResource, type: :resource do
       expect(data.id).to eq(event.id)
       expect(data.jsonapi_type).to eq('events')
       expect(data.attributes['type']).to be_blank
+    end
+
+    describe 'external_application_link' do
+      it 'is nil if not available' do
+        render
+        expect(jsonapi_data[0].attributes['external_application_link']).to be_nil
+      end
+
+      it 'is returned using first group' do
+        event.update!(external_applications: true)
+        render
+        expect(jsonapi_data[0].attributes['external_application_link']).to eq(
+          'http://example.com/groups/834963567/public_events/783393749'
+        )
+      end
     end
   end
 
@@ -59,6 +75,12 @@ describe EventResource, type: :resource do
       expect(date.location).to be_blank
       expect(date.start_at).to eq "2012-03-01T00:00:00+01:00"
       expect(date.finish_at).to be_blank
+    end
+
+    it 'may include kind' do
+      params[:include] = 'kind'
+      render
+      expect(d[0].sideload(:kind)).to be_present
     end
   end
 

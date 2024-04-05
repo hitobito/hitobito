@@ -8,27 +8,38 @@
 require 'spec_helper'
 
 describe EventResource, type: :resource do
+  include Rails.application.routes.url_helpers
   let(:event) { events(:top_event) }
   let(:course) { events(:top_course) }
 
   describe 'serialization' do
+    before do
+      params[:filter] = { id: { eq: event.id } }
+    end
+
     let(:serialized_attrs) do
       [
         :applicant_count,
         :application_closing_at,
         :application_contact_id,
         :application_opening_at,
+        :application_conditions,
+        :description,
         :name,
         :cost,
         :created_at,
         :group_ids,
         :kind_id,
+        :leaders,
         :location,
         :maximum_participants,
+        :minimum_participants,
         :motto,
         :number,
         :participant_count,
         :training_days,
+        :teamer_count,
+        :external_application_link,
         :state,
         :type,
         :updated_at
@@ -36,9 +47,7 @@ describe EventResource, type: :resource do
     end
 
     it 'works' do
-      params[:filter] = { id: { eq: event.id } }
       render
-
       data = jsonapi_data[0]
 
       expect(data.attributes.symbolize_keys.keys).to match_array [:id,
@@ -48,6 +57,46 @@ describe EventResource, type: :resource do
       expect(data.jsonapi_type).to eq('events')
       expect(data.attributes['type']).to be_blank
     end
+
+    describe 'external_application_link' do
+      it 'is nil if not available' do
+        render
+        expect(jsonapi_data[0].attributes['external_application_link']).to be_nil
+      end
+
+      it 'is returned using first group' do
+        event.update!(external_applications: true)
+        render
+        expect(jsonapi_data[0].attributes['external_application_link']).to eq(
+          'http://example.com/groups/834963567/public_events/783393749'
+        )
+      end
+    end
+
+    describe 'leaders' do
+      def create_role(type, **attrs)
+        person = Fabricate(:person, attrs)
+        participation = Fabricate(:event_participation, person: person, event: event, active: true)
+        "Event::Role::#{type.to_s.classify}".constantize.create(participation: participation)
+      end
+
+      it 'is empty array if none are set' do
+        render
+        expect(jsonapi_data[0].attributes['leaders']).to eq []
+      end
+
+      it 'contains only leader roles' do
+        create_role(:leader, first_name: 'main', last_name: 'leader')
+        create_role(:assistant_leader, first_name: 'assi', last_name: nil)
+        create_role(:cook)
+        render
+        expect(jsonapi_data[0].attributes['leaders']).to match_array [
+          "main leader",
+          "assi"
+        ]
+      end
+    end
+
   end
 
   describe 'including' do

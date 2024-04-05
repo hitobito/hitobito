@@ -265,6 +265,18 @@
           "writable": false,
           "description": null
         },
+        "description": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "application_conditions": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
         "state": {
           "type": "string",
           "readable": true,
@@ -331,8 +343,32 @@
           "writable": false,
           "description": null
         },
+        "teamer_count": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "external_application_link": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
         "maximum_participants": {
           "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "minimum_participants": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "leaders": {
+          "type": "array_of_strings",
           "readable": true,
           "writable": false,
           "description": null

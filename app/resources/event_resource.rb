@@ -13,6 +13,8 @@ class EventResource < ApplicationResource
     attribute :type, :string
     attribute :kind_id, :integer, filterable: true
     attribute :name, :string
+    attribute :description, :string
+    attribute :application_conditions, :string
     attribute :state, :string, filterable: true
     attribute :number, :string
     attribute :motto, :string
@@ -24,7 +26,20 @@ class EventResource < ApplicationResource
     attribute :training_days, :float
     attribute :application_contact_id, :integer
     attribute :applicant_count, :integer
+    attribute :teamer_count, :integer
+    attribute :external_application_link, :string do
+      next unless @object.external_applications?
+
+      params = { group_id: @object.groups.first.id, id: @object.id }
+      context.group_public_event_url(params)
+    end
     attribute :maximum_participants, :integer
+    attribute :minimum_participants, :integer
+    attribute :leaders, :array_of_strings do
+      @object.participations.flat_map do |p|
+        [p.person.first_name, p.person.last_name].reject(&:blank?).compact.join(' ')
+      end
+    end
     attribute :created_at, :datetime
     attribute :updated_at, :datetime, filterable: true
   end
@@ -54,10 +69,22 @@ class EventResource < ApplicationResource
   end
 
   def base_scope
-    Event.includes(:groups).list
+    Event.includes(:groups, :translations).list
   end
 
   def index_ability
     JsonApi::EventAbility.new(current_ability)
+  end
+
+  def resolve(scope)
+    leaders = Event::Participation.joins(:roles).where({
+      event_roles: { type: [
+        Event::Role::Leader.sti_name,
+        Event::Role::AssistantLeader.sti_name
+      ] }
+    })
+    ActiveRecord::Associations::Preloader.new.preload(leaders, :person, Person.only_public_data)
+    ActiveRecord::Associations::Preloader.new.preload(scope, :participations, leaders)
+    scope.to_a
   end
 end

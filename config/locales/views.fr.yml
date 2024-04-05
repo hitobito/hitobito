@@ -46,21 +46,21 @@ fr:
       list: Liste
     errors:
       header:
-        one: "Un erreur est apparu"
-        many: "%{count} erreurs sont apparues, l'entrée suivante n'a pas pu être enregistrée :"
-        other: "%{count} erreurs sont apparues, l'entrée suivante n'a pas pu être enregistrée :"
+        one: 'Un erreur est apparu'
+        many: '%{count} erreurs sont apparues, l''entrée suivante n''a pas pu être enregistrée :'
+        other: '%{count} erreurs sont apparues, l''entrée suivante n''a pas pu être enregistrée :'
     tabs:
       info: Informations
       settings: Paramètres
     search:
-      placeholder: "Recherche..."
-      placeholder_person: "Chercher une personne …"
-      placeholder_group: "Chercher un groupe …."
-      placeholder_event: "Chercher un événement …."
-      placeholder_company_name: "Chercher un nom d'entreprise…"
+      placeholder: 'Recherche...'
+      placeholder_person: 'Chercher une personne …'
+      placeholder_group: 'Chercher un groupe ….'
+      placeholder_event: 'Chercher un événement ….'
+      placeholder_company_name: 'Chercher un nom d''entreprise…'
   list:
     index:
-      title: "%{models}"
+      title: '%{models}'
   crud:
     show:
       title: "%{model}"
@@ -115,211 +115,211 @@ fr:
       updates_household_address: l'adresse est actualisée pour l'ensemble du foyer
   custom_content_decorator:
     available_placeholders: "éléments de substitution disponibles:  %{placeholders}"
-    available_placeholders_empty: "Pas d'éléments de substitution disponibles"
+    available_placeholders_empty: 'Pas d''éléments de substitution disponibles'
   dropdown:
-    last_used: "utilisé pour la dernière fois "
+    last_used: 'utilisé pour la dernière fois '
   dropdown/event/group_filter:
-    all_groups: "Tous les groupes"
+    all_groups: 'Tous les groupes'
   dropdown/event/events_export:
     button: Exporter
     csv: CSV
     xlsx: Excel
   dropdown/event/role_add:
-    add: "Ajouter une personne"
+    add: 'Ajouter une personne'
   dropdown/event/invitation_add:
-    add: "Inviter une personne"
+    add: 'Inviter une personne'
   dropdown/event/participant_add:
-    as: "en tant que %{role}"
+    as: 'en tant que %{role}'
   dropdown/group_edit:
-    move: "Déplacer"
-    merge: "Fusionner"
-    archive: "Archiver"
+    move: 'Déplacer'
+    merge: 'Fusionner'
+    archive: 'Archiver'
   dropdown/people_export:
-    button: "Exporter"
-    csv: "CSV"
-    xlsx: "Excel"
-    vcard: "vCard"
-    labels: "Etiquettes"
-    pdf: "PDF"
-    emails: "Adresses électroniques"
-    emails_outlook: "Adresses électroniques (Outlook)"
-    addresses: "Liste d'adresses"
-    households: "Liste des foyers"
-    everything: "Toutes les informations"
-    household_option: "Rassembler les foyers"
-    selection: "Colonnes choisies"
+    button: 'Exporter'
+    csv: 'CSV'
+    xlsx: 'Excel'
+    vcard: 'vCard'
+    labels: 'Etiquettes'
+    pdf: 'PDF'
+    emails: 'Adresses électroniques'
+    emails_outlook: 'Adresses électroniques (Outlook)'
+    addresses: 'Liste d''adresses'
+    households: 'Liste des foyers'
+    everything: 'Toutes les informations'
+    household_option: 'Rassembler les foyers'
+    selection: 'Colonnes choisies'
   dropdown/people_login:
-    button: "Login"
+    button: 'Login'
     send_login: Envoyer login
     activate_totp: Configurer la validation en deux étapes
     reset_totp: Réinitialiser la validation en deux étapes
     disable_totp: Désactiver la validation en deux étapes
     unblock_person: Débloquer le login
   dropdown/invoices:
-    download: "Exporter"
-    print: "Imprimer"
-    labels: "Etiquettes"
-    full: "Facture avec bulletin de versement"
-    esr_only: "bulletin de versement séparé"
-    articles_only: "Facture séparée"
-    csv: "CSV"
-    pdf: "PDF"
+    download: 'Exporter'
+    print: 'Imprimer'
+    labels: 'Etiquettes'
+    full: 'Facture avec bulletin de versement'
+    esr_only: 'bulletin de versement séparé'
+    articles_only: 'Facture séparée'
+    csv: 'CSV'
+    pdf: 'PDF'
   dropdown/invoice_new:
-    invoice: "Facture normale"
+    invoice: 'Facture normale'
   dropdown/invoice_sending:
-    button: "Établir une facture / un rappel"
-    set_state: "Saisir le statut (facture/rappel)"
-    send_mail: "Saisir le statut (facture/rappel) et envoyer par mail"
+    button: 'Établir une facture / un rappel'
+    set_state: 'Saisir le statut (facture/rappel)'
+    send_mail: 'Saisir le statut (facture/rappel) et envoyer par mail'
   dropdown/letter_with_invoice:
     print: Imprimer
     letters_with_invoice: Factures
   dropdown/letter_with_invoice_new:
-    invoice: "Facture normale"
+    invoice: 'Facture normale'
   dropdown/invoices/evaluation:
-    download: "Exporter"
-    csv: "CSV"
-    xlsx: "XLSX"
+    download: 'Exporter'
+    csv: 'CSV'
+    xlsx: 'XLSX'
   devise:
     failure:
-      already_authenticated: "Tu es déjà inscrit(e)."
-      unauthenticated: "Tu dois t'authentifier ou t'enregistrer avant de pouvoir continuer."
-      unconfirmed: "Tu dois confirmer ton compte avant de pouvoir continuer."
-      last_attempt: "Tu as encore une tentative avant que ton compte ne soit bloqué."
-      locked: "Ton compte est bloqué pour 1 heure."
-      invalid: "Données d'authentification incorrectes."
-      invalid_token: "Le jeton d'authentification n'est pas valable."
-      timeout: "Ta session est arrivée à échéance, merci de d'authentifier à nouveau."
-      inactive: "Ton compte n'est pas actif."
-      not_found_in_database: "Données d'authentification incorrectes."
-      signin_not_allowed: "Tu n'es pas autorisé(e) à t'inscrire ici."
-      not_permitted_to_view_page: "Vous n'êtes pas autorisé à visualiser cette page."
+      already_authenticated: 'Tu es déjà inscrit(e).'
+      unauthenticated: 'Tu dois t''authentifier ou t''enregistrer avant de pouvoir continuer.'
+      unconfirmed: 'Tu dois confirmer ton compte avant de pouvoir continuer.'
+      last_attempt: 'Tu as encore une tentative avant que ton compte ne soit bloqué.'
+      locked: 'Ton compte est bloqué pour 1 heure.'
+      invalid: 'Données d''authentification incorrectes.'
+      invalid_token: 'Le jeton d''authentification n''est pas valable.'
+      timeout: 'Ta session est arrivée à échéance, merci de d''authentifier à nouveau.'
+      inactive: 'Ton compte n''est pas actif.'
+      not_found_in_database: 'Données d''authentification incorrectes.'
+      signin_not_allowed: 'Tu n''es pas autorisé(e) à t''inscrire ici.'
+      not_permitted_to_view_page: 'Vous n''êtes pas autorisé à visualiser cette page.'
     sessions:
-      signed_out: "Tu es maintenant déconnecté(e)."
+      signed_out: 'Tu es maintenant déconnecté(e).'
       new:
         sign_in: Inscription
       form:
         login_identity: Adresse e-mail principale
         sign_in: Inscription
       oauth_info:
-        sign_in: "Se connecter avec %{name}"
-        info: "Veuillez vous connecter sur %{oauth_app}pour continuer."
+        sign_in: 'Se connecter avec %{name}'
+        info: 'Veuillez vous connecter sur %{oauth_app}pour continuer.'
     passwords:
-      send_instructions: "Dans quelques minutes, tu recevras un courriel qui t'expliquera comment réinitialiser ton mot de passe."
-      updated: "Ton mot de passe a été modifié. Tu es maintenant authentifié(e)."
-      updated_not_active: "Ton mot de passe a été modifié."
+      send_instructions: 'Dans quelques minutes, tu recevras un courriel qui t''expliquera comment réinitialiser ton mot de passe.'
+      updated: 'Ton mot de passe a été modifié. Tu es maintenant authentifié(e).'
+      updated_not_active: 'Ton mot de passe a été modifié.'
       send_paranoid_instructions: "Si ton adresse électronique est enregistrée dans notre base de données, tu recevras dans quelques instants un courriel t'expliquant comment réinitialiser ton mot de passe."
-      no_token: "Vous ne pouvez accéder à cette page qu'en cliquant sur le lien indiqué dans un courriel de récupération de mot de passe. Si vous avez copié le lien dans un courriel de récupération de mot de passe, veuillez vous assurer que vous avez copié l'URL en entier."
+      no_token: 'Vous ne pouvez accéder à cette page qu''en cliquant sur le lien indiqué dans un courriel de récupération de mot de passe. Si vous avez copié le lien dans un courriel de récupération de mot de passe, veuillez vous assurer que vous avez copié l''URL en entier.'
       new:
-        reset_password_button: "Réinitialiser le mot de passe"
+        reset_password_button: 'Réinitialiser le mot de passe'
     confirmations:
       new:
-        resend_confirmation_instructions: "Confirmer l'adresse e-mail"
-        submit: "Envoyer un message de confirmation"
-      send_instructions: "Tu recevras dans quelques minutes un courriel qui te permettra de confirmer ton adresse e-mail."
-      send_paranoid_instructions: "Si ton adresse e-mail existe déjà dans notre base de données, tu recevras dans quelques minutes un courriel qui te permettra de la confirmer."
-      confirmed: "Merci d'avoir confirmé ton adresse e-mail. Tu peux maintenant t'inscrire."
+        resend_confirmation_instructions: 'Confirmer l''adresse e-mail'
+        submit: 'Envoyer un message de confirmation'
+      send_instructions: 'Tu recevras dans quelques minutes un courriel qui te permettra de confirmer ton adresse e-mail.'
+      send_paranoid_instructions: 'Si ton adresse e-mail existe déjà dans notre base de données, tu recevras dans quelques minutes un courriel qui te permettra de la confirmer.'
+      confirmed: 'Merci d''avoir confirmé ton adresse e-mail. Tu peux maintenant t''inscrire.'
     unlocks:
-      send_instructions: "Dans quelques minutes tu recevras un courriel t'expliquant comment débloquer ton compte."
-      unlocked: "Ton compte a été dévérouillé avec succès."
+      send_instructions: 'Dans quelques minutes tu recevras un courriel t''expliquant comment débloquer ton compte.'
+      unlocked: 'Ton compte a été dévérouillé avec succès.'
       send_paranoid_instructions: "Si ton adresse e-mail est enregistrée dans notre base de données, tu recevras dans quelques instants un courriel t'expliquant comment débloquer ton compte."
     omniauth_callbacks:
-      success: "Ton authentification avec ton compte %{kind} est réussie."
+      success: 'Ton authentification avec ton compte %{kind} est réussie.'
       failure: 'Ton authentification avec ton compte %{kind} n''a pas fonctionné car "%{reason}".'
     registrations:
-      signed_up: "Tu t'es inscrit·e avec succès."
-      signed_up_but_unconfirmed: "Tu t'es inscrit·e avec succès. Tu recevras dans quelques instants un courriel contenant les instructions pour activer ton compte."
-      signed_up_but_inactive: "Tu t'es inscrit·e avec succès. Mais nous n'avons pas encore pu t'enregistrer car ton compte est inactif."
-      signed_up_but_locked: "Tu t'es inscrit·e avec succès. Mais nous n'avons pas encore pu t'enregistrer car ton compte est bloqué."
-      signed_up_but_no_email: "Tu t'es inscrit·e avec succès. Mais nous n'avons pas pu t'enregistrer car tu n'as pas indiqué d'adresse e-mail."
-      updated: "Ton mot de passe a été actualisé."
+      signed_up: 'Tu t''es inscrit·e avec succès.'
+      signed_up_but_unconfirmed: 'Tu t''es inscrit·e avec succès. Tu recevras dans quelques instants un courriel contenant les instructions pour activer ton compte.'
+      signed_up_but_inactive: 'Tu t''es inscrit·e avec succès. Mais nous n''avons pas encore pu t''enregistrer car ton compte est inactif.'
+      signed_up_but_locked: 'Tu t''es inscrit·e avec succès. Mais nous n''avons pas encore pu t''enregistrer car ton compte est bloqué.'
+      signed_up_but_no_email: 'Tu t''es inscrit·e avec succès. Mais nous n''avons pas pu t''enregistrer car tu n''as pas indiqué d''adresse e-mail.'
+      updated: 'Ton mot de passe a été actualisé.'
       update_needs_confirmation: "Tes données ont été mises à jour, mais tu dois confirmer ta nouvelle adresse e-mail. Tu recevras dans quelques minutes un courriel qui te permettra de finaliser la modification de ton adresse e-mail."
-      destroyed: "Ton compte a été supprimé."
+      destroyed: 'Ton compte a été supprimé.'
       edit:
         change_password: "Modifier le mot de passe"
         set_password: "Initialiser le mot de passe"
-        old_password: "Ancien mot de passe"
-        new_password: "Nouveau mot de passe"
-        new_password_confirmation: "Confirmer le nouveau mot de passe"
+        old_password: 'Ancien mot de passe'
+        new_password: 'Nouveau mot de passe'
+        new_password_confirmation: 'Confirmer le nouveau mot de passe'
       person:
-        updated: "Ton mot de passe a été actualisé."
+        updated: 'Ton mot de passe a été actualisé.'
     mailer:
       confirmation_instructions:
-        subject: "Instructions pour confirmer ton adresse e-mail"
+        subject: 'Instructions pour confirmer ton adresse e-mail'
         body:
-          greeting: "Salut %{name} !"
-          information_html: "Tu peux confirmer ton adresse e-mail en cliquant sur le lien suivant :"
-          link_text: "Confirmer %{email} "
-          footer: "Ce message a été envoyé par Hitobito"
+          greeting: 'Salut %{name} !'
+          information_html: 'Tu peux confirmer ton adresse e-mail en cliquant sur le lien suivant :'
+          link_text: 'Confirmer %{email} '
+          footer: 'Ce message a été envoyé par Hitobito'
       reset_password_instructions:
-        subject: "Instructions pour initialiser ton mot de passe"
+        subject: 'Instructions pour initialiser ton mot de passe'
         body:
-          greeting: "Salut %{name}!"
+          greeting: 'Salut %{name}!'
           reset_instructions:
-            with_password: "Tu peux réinitialiser ton mot de passe pour %{application_name} en cliquant sur le lien suivant."
-            without_password_html: "Bienvenue chez %{application_name}! Tu as été nouvellement enregistré et tu as reçu un login.<br>Veuillez définir un mot de passe sous le lien suivant."
-          ignore_information_html: "Si tu ne veux pas changer ton mot de passe, tu peux ignorer cet e-mail.<br><br>Ton mot de passe ne changera pas sans que tu ailles sur le lien ci-dessus et que tu y donnes un nouveau mot de passe."
+            with_password: 'Tu peux réinitialiser ton mot de passe pour %{application_name} en cliquant sur le lien suivant.'
+            without_password_html: 'Bienvenue chez %{application_name}! Tu as été nouvellement enregistré et tu as reçu un login.<br>Veuillez définir un mot de passe sous le lien suivant.'
+          ignore_information_html: 'Si tu ne veux pas changer ton mot de passe, tu peux ignorer cet e-mail.<br><br>Ton mot de passe ne changera pas sans que tu ailles sur le lien ci-dessus et que tu y donnes un nouveau mot de passe.'
       unlock_instructions:
-        subject: "Instructions pour débloquer ton compte"
+        subject: 'Instructions pour débloquer ton compte'
         body:
-          greeting: "Bonjour %{name}!"
-          information_html: "Ton compte a été bloqué à cause d'un trop grand nombre de fausses tentatives. <br> Appuie sur le lien suivant pour le dévérouiller:"
-          link_text: "Dévérouiller mon compte"
-          footer: "Ce message a été envoyé par Hitobito"
+          greeting: 'Bonjour %{name}!'
+          information_html: 'Ton compte a été bloqué à cause d''un trop grand nombre de fausses tentatives. <br> Appuie sur le lien suivant pour le dévérouiller:'
+          link_text: 'Dévérouiller mon compte'
+          footer: 'Ce message a été envoyé par Hitobito'
   errors:
-    link_to_main: "Page principale"
+    link_to_main: 'Page principale'
     '401':
-      title: "Login nécessaire"
-      explanation: "Tu dois te connecter avant de pouvoir accéder à cette ressource."
+      title: 'Login nécessaire'
+      explanation: 'Tu dois te connecter avant de pouvoir accéder à cette ressource.'
     '403':
-      title: "Accès refusé"
-      explanation: "Tu n'es pas autorisé·e à accéder à cette ressource."
+      title: 'Accès refusé'
+      explanation: 'Tu n''es pas autorisé·e à accéder à cette ressource.'
     '404':
-      title: "Cette page n'existe pas (404)"
-      explanation: "L'adresse entrée est erronée ou la page a été effacée."
+      title: 'Cette page n''existe pas (404)'
+      explanation: 'L''adresse entrée est erronée ou la page a été effacée.'
     '500':
-      title: "Nous présentons nos excuses, une erreur s'est produite (500)"
-      explanation: "Nous avons reçu une notification et allons nous occuper du problème dès que possible."
+      title: 'Nous présentons nos excuses, une erreur s''est produite (500)'
+      explanation: 'Nous avons reçu une notification et allons nous occuper du problème dès que possible.'
     '503':
-      title: "Nous présentons nos excuses, cette page n'est pas disponible pour le moment (503)"
-      explanation: "Nous travaillons sur cette page, c'est pourquoi elle n'est pas disponible. Ceci ne devrait pas durer très longtemps."
-      instruction: "Prière de réessayer plus tard."
+      title: 'Nous présentons nos excuses, cette page n''est pas disponible pour le moment (503)'
+      explanation: 'Nous travaillons sur cette page, c''est pourquoi elle n''est pas disponible. Ceci ne devrait pas durer très longtemps.'
+      instruction: 'Prière de réessayer plus tard.'
     unsupported_page_size:
-      title: "La taille de la page n'est pas supportée"
-      explanation: "La taille de page demandée page[size]=%{size} est plus grande que la taille de page maximale %{max}. "
+      title: 'La taille de la page n''est pas supportée'
+      explanation: 'La taille de page demandée page[size]=%{size} est plus grande que la taille de page maximale %{max}. '
   export/tabular/events/list:
-    group_names: "organisateurs"
+    group_names: 'organisateurs'
     duration: Délai
     date: "Date %{index}"
   event:
-    run_by: "Réalisé par "
+    run_by: 'Réalisé par '
     applied_to: Inscription auprès de
     alternative_dates: Dates alternatives
-    priorities: "Priorité d'inscription"
+    priorities: 'Priorité d''inscription'
     lists:
       courses:
-        title: "Cours enregistrés"
+        title: 'Cours enregistrés'
         no_category: les autres cours
-        explanation: "Les cours de ton groupe ainsi que des groupes hiérarchiquement supérieurs sont indiqués ici. Tu trouveras d'autres cours auprès des groupes qui les organisent."
-        csv_export_button: "Export CSV"
-        ical_export_button: "Export du calendrier"
+        explanation: 'Les cours de ton groupe ainsi que des groupes hiérarchiquement supérieurs sont indiqués ici. Tu trouveras d''autres cours auprès des groupes qui les organisent.'
+        csv_export_button: 'Export CSV'
+        ical_export_button: 'Export du calendrier'
       events:
-        title: "Evénements prévus prochainement"
-        explanation: "Les événements de ton groupe ainsi que des groupes hiérarchiquement supérieurs sont indiqués ici. Tu trouveras d'autres événements auprès des groupes qui les organisent."
-      apply_until: "jusqu'au %{date}"
+        title: 'Evénements prévus prochainement'
+        explanation: 'Les événements de ton groupe ainsi que des groupes hiérarchiquement supérieurs sont indiqués ici. Tu trouveras d''autres événements auprès des groupes qui les organisent.'
+      apply_until: 'jusqu''au %{date}'
     application_market:
-      already_assigned: "Cette personne est déjà attribuée à un autre endroit."
+      already_assigned: 'Cette personne est déjà attribuée à un autre endroit.'
       participation:
-        registered_at: "Inscription le %{datetime}"
+        registered_at: 'Inscription le %{datetime}'
         town: Domicile
       prio_buttons:
-        national_waitinglist: "liste d'attente nationale"
+        national_waitinglist: 'liste d''attente nationale'
       index:
-        assigned_participants: "Participants attribués"
+        assigned_participants: 'Participants attribués'
         add_participant: Ajouter un/e participant/e
       waiting_list_link:
-        title_active: "Retirer de la liste d'attente"
-        title_inactive: "Ajouter à la liste d'attente"
-        label: "Liste d'attente"
+        title_active: 'Retirer de la liste d''attente'
+        title_inactive: 'Ajouter à la liste d''attente'
+        label: 'Liste d''attente'
       popover_waiting_list:
         waiting_list_info: Ajouter la personne à la liste d'attente pour cette catégorie de cours %{event_kind}.
     attachments:
@@ -329,13 +329,13 @@ fr:
         failure: "Échec de la suppression: %{errors}."
     kinds:
       form:
-        help_minimum_age: "ans (selon année de naissance au premier jour du cours)"
+        help_minimum_age: 'ans (selon année de naissance au premier jour du cours)'
         qualifications:
-          for_participants: "Qualifications des participants"
-          for_leaders: "Qualifications des responsables"
+          for_participants: 'Qualifications des participants'
+          for_leaders: 'Qualifications des responsables'
       precondition_fields:
-        add_precondition_grouping: "+ Ajouter une condition préalable"
-        add_precondition: "Ajouter"
+        add_precondition_grouping: '+ Ajouter une condition préalable'
+        add_precondition: 'Ajouter'
       qualifications:
         or: ou
         and: et
@@ -346,29 +346,29 @@ fr:
         save: Continuer
       update:
         flash:
-          privacy_policy_not_accepted: "Pour terminer l'inscription, il faut accepter la déclaration de protection des données."
+          privacy_policy_not_accepted: 'Pour terminer l''inscription, il faut accepter la déclaration de protection des données.'
     participations:
       edit:
         title: Inscription
       approvals:
         title: Autorisation
-      specific_information: "Informations spécifiques"
+      specific_information: 'Informations spécifiques'
       application_answers: Données pour l'inscription
       admin_answers: Données administratives
-      no_answer_given: "(pas de réponse)"
+      no_answer_given: '(pas de réponse)'
       actions_show:
-        change_contact_data_button: "Modifier les données de contact"
+        change_contact_data_button: 'Modifier les données de contact'
       actions_approval:
-        approve_button: "Autoriser"
-        reject_button: "Refuser"
+        approve_button: 'Autoriser'
+        reject_button: 'Refuser'
       form:
         title_new: "Inscription en tant que %{role}"
         title_edit: "Modifier l'inscription de %{person}"
-        apply: "Inscription"
-        explain_required_checkmark: "* = réponse obligatoire"
+        apply: 'Inscription'
+        explain_required_checkmark: '* = réponse obligatoire'
       application_fields:
-        alternative_dates_info: "S'il-te-plaît, indique d'autres cours qui pourraient te convenir."
-        course_information: "Informations au sujet des cours"
+        alternative_dates_info: 'S''il-te-plaît, indique d''autres cours qui pourraient te convenir.'
+        course_information: 'Informations au sujet des cours'
       print:
         signature: Signature
         signature_confirmation: Prénom, nom, signature
@@ -420,10 +420,10 @@ fr:
         event_search: Chercher un événement
         submit: Ajouter
   assignments:
-    attachment: "afficher les pièces jointes"
+    attachment: 'afficher les pièces jointes'
     form:
       attachment:
-        subject: "Objet du message"
+        subject: 'Objet du message'
   second_factor_authentication:
     flash:
       success:
@@ -470,10 +470,10 @@ fr:
     banner_declined_invitation:
       explanation: Tu as été invité·e à cet événement et tu as annulé ton inscription.
     form:
-      caption_external_applications: "Les personnes externes peuvent s'inscrire à cet événement."
-      caption_prioritization: "Les participants peuvent indiquer deux autres cours alternatifs lors de l'inscription."
-      caption_requires_approval: "Le responsable de troupe est informé et doit confirmer l'inscription."
-      caption_participations_visible: "Les participants peuvent se voir les uns les autres dans la liste des participants."
+      caption_external_applications: 'Les personnes externes peuvent s''inscrire à cet événement.'
+      caption_prioritization: 'Les participants peuvent indiquer deux autres cours alternatifs lors de l''inscription.'
+      caption_requires_approval: 'Le responsable de troupe est informé et doit confirmer l''inscription.'
+      caption_participations_visible: 'Les participants peuvent se voir les uns les autres dans la liste des participants.'
       times_are_optional: L'heure est optionnelle.
       explain_application_questions: Ici, tu peux demander des informations supplémentaires pour les inscriptions.
       explain_choices: Laissez vide pour la réponse en texte libre, une ou plusieurs options de réponse (séparées par des virgules) pour la sélection.
@@ -482,7 +482,7 @@ fr:
       caption_applications_cancelable: Les participants peuvent se désinscrire eux-mêmes.
       caption_display_booking_info: Le nombre d'inscrits et de places libres est visible pour tous sur la liste de cours.
       caption_waiting_list: S'il n'y a plus de places disponibles, les nouvelles inscriptions se retrouvent automatiquement sur la liste d'attente.
-      caption_globally_visible: "%{model_name} est visible dans toute la base de données"
+      caption_globally_visible: '%{model_name} est visible dans toute la base de données'
       label_notify_contact_on_participations: Notification
     form_tabs:
       general: Général
@@ -494,26 +494,26 @@ fr:
         add_event: Créer un événement
         add_event/course: Créer un cours
         duplicate: Copier
-    minimum_age_with_years: "au moins %{minimum_age}  ans (année de naissance)"
+    minimum_age_with_years: 'au moins %{minimum_age}  ans (année de naissance)'
     new:
       title_event: Créer un événement
       title_event/course: Créer un cours
-    preconditions: "qualifications requises"
+    preconditions: 'qualifications requises'
     tabs:
-      participants: "Participants"
-    export_enqueued: "l'exportation débute en arrière-plan et est téléchargée quand elle est terminée"
+      participants: 'Participants'
+    export_enqueued: 'l''exportation débute en arrière-plan et est téléchargée quand elle est terminée'
     add_tag: Rajouter tag
     invitations:
-      description: "Les personnes invitées peuvent s'inscrire ou se désinscrire via le site %{model_name}. Elles ne recevront pas de mail automatique."
+      description: 'Les personnes invitées peuvent s''inscrire ou se désinscrire via le site %{model_name}. Elles ne recevront pas de mail automatique.'
   event/applications:
-    approved: "L'inscription a été autorisée."
-    rejected: "L'inscription a été refusée."
-    directly_to_waiting_list: "Toutes les places sont prises, donc l'inscription est directement sur la liste d'attente."
+    approved: 'L''inscription a été autorisée.'
+    rejected: 'L''inscription a été refusée.'
+    directly_to_waiting_list: 'Toutes les places sont prises, donc l''inscription est directement sur la liste d''attente.'
   event/application_decorator:
     approval:
-      approved: "Autorisation du cours confirmée"
-      rejected: "Autorisation du cours refusée"
-      missing: "Autorisation du cours en cours"
+      approved: 'Autorisation du cours confirmée'
+      rejected: 'Autorisation du cours refusée'
+      missing: 'Autorisation du cours en cours'
   event/kinds:
     global:
       link:
@@ -521,80 +521,80 @@ fr:
     new:
       title: Créer une catégorie de cours
   event/participations:
-    full_entry_label: "%{model_label} de <i>%{person}</i> dans <i>%{event}</i>"
-    success: "%{full_entry_label} a été ajouté avec succès."
-    instructions: "Pour l'inscription définitive, tu dois imprimer cette page en utilisant l'option <i>imprimer</i>, puis la signer et l'envoyer par poste à l'adresse indiquée."
-    export_enqueued: "l'exportation débute en arrière-plan et est téléchargée quand elle est terminée"
-    waiting_list: "Toutes les places sont actuellement prises, l'inscription est sur la liste d'attente."
-    pending: " Une pré-entrée a été créée pour  %{full_entry_label}. La participation n'est pas encore définitive et doit être confirmée par la direction de l'événement."
+    full_entry_label: '%{model_label} de <i>%{person}</i> dans <i>%{event}</i>'
+    success: '%{full_entry_label} a été ajouté avec succès.'
+    instructions: 'Pour l''inscription définitive, tu dois imprimer cette page en utilisant l''option <i>imprimer</i>, puis la signer et l''envoyer par poste à l''adresse indiquée.'
+    export_enqueued: 'l''exportation débute en arrière-plan et est téléchargée quand elle est terminée'
+    waiting_list: 'Toutes les places sont actuellement prises, l''inscription est sur la liste d''attente.'
+    pending: ' Une pré-entrée a été créée pour  %{full_entry_label}. La participation n''est pas encore définitive et doit être confirmée par la direction de l''événement.'
     show:
       link:
-        delete: "Effacer l'inscription"
+        delete: 'Effacer l''inscription'
   event/participation_decorator:
     tooltips:
-      ok: "Marque la réussite du cours et attribue les qualifications."
-      remove: "Marque l'échec du cours et retire les qualifications."
+      ok: 'Marque la réussite du cours et attribue les qualifications.'
+      remove: 'Marque l''échec du cours et retire les qualifications.'
   event/precondition_checker:
-    preconditions_not_fulfilled: "<b>Des conditions d'inscription ne sont pas remplies.</b>"
+    preconditions_not_fulfilled: '<b>Des conditions d''inscription ne sont pas remplies.</b>'
     below_minimum_age: "L'âge limite de %{course_minimum_age} n'est pas atteint."
     qualifications_missing: "Les qualifications suivantes manquent ou sont expirées: %{missing}"
     some_qualifications_missing: "Des qualifications requises manquent."
   event/register:
     not_logged_in: "Tu dois t'authentifier afin de pouvoir t'inscrire à l'événement '%{event}'."
-    person_found: "Nous t'avons trouvé(e) dans notre base de données."
-    email_sent: "Nous t'avons envoyer un courriel. Dans ce courriel il y a un lien avec lequel tu pourras t'inscrire directement à cet événement."
-    email_invalid: "Indique une adresse e-mail valide, s'il te plaît"
-    form_data_missing: "Prière de remplir le formulaire suivant avant de t'inscrire à cet événement."
-    registered: "Tes données personnelles ont été enregistrées. Prière d'apporter les indications complémentaires suivantes en vue de l'inscription."
-    application_window_closed: "La fenêtre d'inscription pour cet événement est close."
+    person_found: 'Nous t''avons trouvé(e) dans notre base de données.'
+    email_sent: 'Nous t''avons envoyer un courriel. Dans ce courriel il y a un lien avec lequel tu pourras t''inscrire directement à cet événement.'
+    email_invalid: 'Indique une adresse e-mail valide, s''il te plaît'
+    form_data_missing: 'Prière de remplir le formulaire suivant avant de t''inscrire à cet événement.'
+    registered: 'Tes données personnelles ont été enregistrées. Prière d''apporter les indications complémentaires suivantes en vue de l''inscription.'
+    application_window_closed: 'La fenêtre d''inscription pour cet événement est close.'
   event/roles:
     full_entry_label: "Rôle <i>%{role}</i> pour <i>%{person}</i>"
   event_decorator:
-    apply: "Inscription"
-    applied: "inscrit"
-    not_possible: "impossible"
+    apply: 'Inscription'
+    applied: 'inscrit'
+    not_possible: 'impossible'
     participants_info:
-      one: "%{count} inscription"
-      many: "%{count} inscriptions"
-      other: "%{count} inscriptions"
+      one: '%{count} inscription'
+      many: '%{count} inscriptions'
+      other: '%{count} inscriptions'
     participants_info_with_limit:
-      one: "%{count} inscription pour %{limit} places"
-      many: "%{count} inscriptions pour %{limit} places"
-      other: "%{count} inscriptions pour %{limit} places"
+      one: '%{count} inscription pour %{limit} places'
+      many: '%{count} inscriptions pour %{limit} places'
+      other: '%{count} inscriptions pour %{limit} places'
     active_participants_info:
-      one: "%{count} inscription attribuée"
-      many: "%{count} inscriptions attribuées"
-      other: "%{count} inscriptions attribuées"
-    issue_only: "Attribue la %{model} %{issued} à la date du %{until} (dernier jour du cours)."
+      one: '%{count} inscription attribuée'
+      many: '%{count} inscriptions attribuées'
+      other: '%{count} inscriptions attribuées'
+    issue_only: 'Attribue la %{model} %{issued} à la date du %{until} (dernier jour du cours).'
     prolong_only:
-      one: "Prolonge la qualification existante %{prolonged} à la date du %{until} (dernier jour du cours)."
-      many: "Prolonge les qualifications existantes %{prolonged} à la date du %{until} (dernier jour du cours)."
-      other: "Prolonge les qualifications existantes %{prolonged} à la date du %{until} (dernier jour du cours)."
-    issue_and_prolong: "Attribue la %{model} %{issued} et prolonge les qualifications existantes %{prolonged} à la date du %{until} (dernier jour du cours)."
+      one: 'Prolonge la qualification existante %{prolonged} à la date du %{until} (dernier jour du cours).'
+      many: 'Prolonge les qualifications existantes %{prolonged} à la date du %{until} (dernier jour du cours).'
+      other: 'Prolonge les qualifications existantes %{prolonged} à la date du %{until} (dernier jour du cours).'
+    issue_and_prolong: 'Attribue la %{model} %{issued} et prolonge les qualifications existantes %{prolonged} à la date du %{until} (dernier jour du cours).'
   event_feeds:
     integrate: Intégrer dans le calendrier
     show:
       title: Intégrer mes évènements dans le calendrier
-      url: "URL:%{url}"
+      url: 'URL:%{url}'
       create_url: Créer une adresse
-      url_description: "Avec cette adresse, tu as accès à tous tes évènements. Attention: ne donne cette adresse qu'à des personnes qui peuvent voir tous les détails de tes rendez-vous."
+      url_description: 'Avec cette adresse, tu as accès à tous tes évènements. Attention: ne donne cette adresse qu''à des personnes qui peuvent voir tous les détails de tes rendez-vous.'
       reset_url: Réinitialiser l'URL
-      reset_url_description: "Si tu crains un abus, tu peux réinitialiser l'adresse internet de ton calendrier, ce qui désactive celle que tu utilises maintenant. Ainsi, tous les calendriers qui ne connaissent que l'ancienne adresse ne pourront plus voir tes évènements."
+      reset_url_description: 'Si tu crains un abus, tu peux réinitialiser l''adresse internet de ton calendrier, ce qui désactive celle que tu utilises maintenant. Ainsi, tous les calendriers qui ne connaissent que l''ancienne adresse ne pourront plus voir tes évènements.'
     update:
       flash:
         create: L'adresse a été créée.
         reset: L'adresse a été actualisée.
   filter_navigation/dropdown:
-    additional_views: "Autres vues"
+    additional_views: 'Autres vues'
   filter_navigation/people:
-    custom_filter: "Filtre personnel"
-    entire_layer: "Tous les niveaux"
-    entire_group: "Tout le groupe"
-    new_filter: "Nouveau filtre…"
-    duplicates: "Duplicatas"
+    custom_filter: 'Filtre personnel'
+    entire_layer: 'Tous les niveaux'
+    entire_group: 'Tout le groupe'
+    new_filter: 'Nouveau filtre…'
+    duplicates: 'Duplicatas'
   filter_navigation/events:
-    all: "Tous"
-    layer: "uniquement %{layer}"
+    all: 'Tous'
+    layer: 'uniquement %{layer}'
   filter_navigation/event/participations:
     predefined_filters:
       all: Toutes les personnes
@@ -602,8 +602,8 @@ fr:
       participants: Participants
   full_text:
     index:
-      title: "Résultats"
-      incomplete_search_request: "Prière d'entrer au moins deux caractères."
+      title: 'Résultats'
+      incomplete_search_request: 'Prière d''entrer au moins deux caractères.'
   group:
     archive:
       flash:
@@ -614,15 +614,15 @@ fr:
         manual_deletion: Suppression des données
     merge:
       select:
-        title: "fusionner %{group}"
+        title: 'fusionner %{group}'
         explanation: >
             En fusionnant deux groupes, tous les sous-groupes, évènements et personnes
             (rôles inclus) des deux groupes seront réunis. Les abonnements ne seront
             pas repris. Les groupes actuels seront encore visibles sous 'effacés'.
         merge_is_irreversible: Cette opération est irréversible!
-        new_group_name: "Nom du nouveau groupe"
-        merge_group_with: "fusionner avec %{group}"
-        merge_button: "Fusionner le groupe"
+        new_group_name: 'Nom du nouveau groupe'
+        merge_group_with: 'fusionner avec %{group}'
+        merge_button: 'Fusionner le groupe'
     move:
       select:
         title: "Déplacer un groupe"
@@ -645,39 +645,39 @@ fr:
         approve: Accepter
         reject: refuser
       approvers:
-        title: "Notification à"
+        title: 'Notification à'
   groups:
     actions_show:
-      export_subgroups: "Sous-groupes CSV"
-      reactivate: "Réactiver"
+      export_subgroups: 'Sous-groupes CSV'
+      reactivate: 'Réactiver'
       confirm_archive: >
           Voulez-vous vraiment archiver ce groupe? Le groupe ne pourra plus être modifié
           et les rôles attribués seront aussi archivés.
     attrs:
-      contact_details: "Contacts"
-      additional_information: "Informations supplémentaires"
+      contact_details: 'Contacts'
+      additional_information: 'Informations supplémentaires'
     deleted_subgroups:
-      no_deleted_sub_groups: "Pas de groupes effacés."
+      no_deleted_sub_groups: 'Pas de groupes effacés.'
     form:
-      help_contact: "Utiliser l'adresse et le numéro de téléphone public de cette personne"
-      help_main_self_registration_group: "Afficher le lien d'inscription de ce groupe sur la page de connexion principale."
-      hint_external_registration: "Aucun rôle avec droit d'écriture ne peut être choisi"
+      help_contact: 'Utiliser l''adresse et le numéro de téléphone public de cette personne'
+      help_main_self_registration_group: 'Afficher le lien d''inscription de ce groupe sur la page de connexion principale.'
+      hint_external_registration: 'Aucun rôle avec droit d''écriture ne peut être choisi'
     form_tabs:
-      general: "Généralités"
-      messages: "Messages"
+      general: 'Généralités'
+      messages: 'Messages'
     global:
       link:
         add: Créer un groupe
         deleted_person: Sans Rôle
     new:
-      title: "Créer un %{model}"
+      title: 'Créer un %{model}'
     reactivated: "Le groupe <i>%{group}</i> a été réactivé avec succès."
-    subgroups: "Sous-groupes"
+    subgroups: 'Sous-groupes'
     tabs:
-      deleted: "Eléments effacés"
-      statistics: "Statistiques"
+      deleted: 'Eléments effacés'
+      statistics: 'Statistiques'
       logs: Journal
-    export_enqueued: "L'exportation est lancée en arrière-plan et téléchargée une fois terminée."
+    export_enqueued: 'L''exportation est lancée en arrière-plan et téléchargée une fois terminée.'
     statistics:
       title: Statistiques
       description: "%{subject} in %{groups}"
@@ -719,23 +719,23 @@ fr:
     global:
       no_list_entries: Il n’y a pas de requête ouverte pour l’instant.
   group/merge:
-    success: "Les groupes sélectionnés ont été fusionnés dans le nouveau groupe %{new_group_name}."
-    failure: "Les groupes sélectionnés ne peuvent pas être fusionnés."
+    success: 'Les groupes sélectionnés ont été fusionnés dans le nouveau groupe %{new_group_name}.'
+    failure: 'Les groupes sélectionnés ne peuvent pas être fusionnés.'
     no_candidates: >
         Il n'y a pas de groupes similaires avec lesquels fusionner ou tu n'as pas
         les autorisations nécessaires.
-    group_name_missing: "Le nom du nouveau groupe doit être défini."
-    no_group_selected: "Sélectionne un groupe avec lequel fusionner."
-    not_allowed: "Tu n'as pas les autorisations nécessaires pour fusionner ces groupes."
+    group_name_missing: 'Le nom du nouveau groupe doit être défini.'
+    no_group_selected: 'Sélectionne un groupe avec lequel fusionner.'
+    not_allowed: 'Tu n''as pas les autorisations nécessaires pour fusionner ces groupes.'
     invoice_config_not_merged: >
         Les réglages de la factures ne seront pas repris automatiquement. Procède
         aux réglages corrects manuellement stp.
   group/move:
-    success: "%{group} a été déplacé vers %{target}."
-    failure: "Ce groupe ne peut pas être déplacé ou tu n'as pas les autorisations nécessaires."
-    choose_group: "Sélectionne un groupe, s'il-te-plaît."
+    success: '%{group} a été déplacé vers %{target}.'
+    failure: 'Ce groupe ne peut pas être déplacé ou tu n''as pas les autorisations nécessaires.'
+    choose_group: 'Sélectionne un groupe, s''il-te-plaît.'
   group_decorator:
-    archived_suffix: "(archivé)"
+    archived_suffix: '(archivé)'
   hitobito_log_entries:
     tabs:
       all: Tous
@@ -797,7 +797,7 @@ fr:
         esr_number_heading: Numéro de référence
         currency: Devise
         amount: Montant
-    export_enqueued: "L'exportation a commencé en tâche de fond et sera téléchargée une fois terminée."
+    export_enqueued: 'L''exportation a commencé en tâche de fond et sera téléchargée une fois terminée.'
     recipients_empty: La liste des destinataires est vide. Impossible de créer un PDF.
     evaluations:
       show:
@@ -811,7 +811,7 @@ fr:
           vat: TVA
           account: Compte
           cost_center: Centre de coûts
-          total: "Total:"
+          total: 'Total:'
         filter:
           from: De
           to: Au
@@ -830,15 +830,15 @@ fr:
         provider_initialization_failed: La mise en place de l'interface pour le paiment %{payment_provider}a échoué.
         provider_initialization_succeeded: La mise en place de l'interface pour le paiment %{payment_provider} a réussi.
     general_fields:
-      payment: "Paiement"
-      payment_information_help: "Apparaît sur chaque facture, mais peut être adapté pour une facture"
-      address_help: "Adresse de l'expéditeur qui apparaît sur la lettre"
-      payee_help: "apparaît sur le bulletin de versement"
-      beneficiary_help: "apparaît sur le bulletin de versement"
-      account_number_example: "exemple : 01-162-5"
-      participant_number_internal_example: "Exemple: 999999"
-      iban_example: "exemple : CH93 2011 0076 6238 5295 7"
-      variable_donation_appeal: "demande de dons variable"
+      payment: 'Paiement'
+      payment_information_help: 'Apparaît sur chaque facture, mais peut être adapté pour une facture'
+      address_help: 'Adresse de l''expéditeur qui apparaît sur la lettre'
+      payee_help: 'apparaît sur le bulletin de versement'
+      beneficiary_help: 'apparaît sur le bulletin de versement'
+      account_number_example: 'exemple : 01-162-5'
+      participant_number_internal_example: 'Exemple: 999999'
+      iban_example: 'exemple : CH93 2011 0076 6238 5295 7'
+      variable_donation_appeal: 'demande de dons variable'
       donation_calculation_year_amount_explanation: Nombre d'années précédentes prises en compte pour le calcul des dons.
       donation_increase_percentage_explanation: Pourcentage pour le calcul des dons
     email_fields:
@@ -846,9 +846,9 @@ fr:
       email_validation: Ne doit pas être une adresse e-mail.
       sender_name_help: Les e-mails de facturation sont envoyés sous ce nom.
     reminder_fields:
-      third_level: "Pour tous les rappels suivants, les données du troisième rappel sont reprises."
+      third_level: 'Pour tous les rappels suivants, les données du troisième rappel sont reprises.'
     provider_fields:
-      reset_payment_provider_warning: "En cas de modification de données ici, il est nécessaire de refaire le processus d'initialisation de l'interface de facturation."
+      reset_payment_provider_warning: 'En cas de modification de données ici, il est nécessaire de refaire le processus d''initialisation de l''interface de facturation.'
   invoice_lists:
     destroys:
       show:
@@ -871,7 +871,7 @@ fr:
       other: "La facture<i>%{title}</i> a été établie pour %{count} destinataires."
     create_batch: "La facture <i>%{title}</i>est créée pour %{count} destinataire-s en arrière-plan."
     update:
-      zero: "Choisir au moins une facture."
+      zero: 'Choisir au moins une facture.'
       model_error: "La facture %{number} n'est pas valable - %{error}."
       issued:
         one: "%{count} les factures ont été établies."
@@ -918,7 +918,7 @@ fr:
       one: "La facture a été annulée."
       other: "%{count} factures ont été annulées."
   payments:
-    export_enqueued: "L'exportation a commencé en tâche de fond et sera téléchargée une fois terminée."
+    export_enqueued: 'L''exportation a commencé en tâche de fond et sera téléchargée une fois terminée.'
     create:
       flash:
         success: La facture supérieur à %{amount} saisie.
@@ -927,8 +927,8 @@ fr:
     own_labels: Mes formats d'étiquettes
     see_global_labels: "Afficher les formats globaux d'étiquettes"
     form:
-      portrait: "Format portrait"
-      landscape: "Format paysage"
+      portrait: 'Format portrait'
+      landscape: 'Format paysage'
     global:
       link:
         add: Créer un format d'étiquette
@@ -936,25 +936,25 @@ fr:
       title: Créer un format d'étiquette
   layouts:
     nav:
-      sign_out: "Déconnexion"
+      sign_out: 'Déconnexion'
     unauthorized:
-      forgot_password: "Mot de passe oublié?"
-      need_confirmation_email: "Pas reçu de message de confirmation ?"
-      main_self_registration: "Vous n'avez pas de compte ? Inscrivez-vous ici."
+      forgot_password: 'Mot de passe oublié?'
+      need_confirmation_email: 'Pas reçu de message de confirmation ?'
+      main_self_registration: 'Vous n''avez pas de compte ? Inscrivez-vous ici.'
     footer:
-      available_under_license: "disponible sous"
-      developed_by: "Développé par"
-      source_code: "Code source"
+      available_under_license: 'disponible sous'
+      developed_by: 'Développé par'
+      source_code: 'Code source'
     user_impersonation:
       info: "Tu es maintenant enregistré en tant que %{user}"
       end: "Terminer l'imitation"
     file_download:
-      wait_for_downloads: "Les téléchargements sont en cours de préparation, prière d'attendre."
-      cancel_downloads: "interrompre les téléchargements"
+      wait_for_downloads: 'Les téléchargements sont en cours de préparation, prière d''attendre.'
+      cancel_downloads: 'interrompre les téléchargements'
     synchronization:
-      wait_for_synchronization: "Vos données sont actuellement envoyées à MailChimp. Cela peut prendre un moment. Ensuite, la liste sélectionnée avec les contacts de hitobito sera mise à jour."
-      synchronization_failed: "Une erreur s'est produite lors de l'envoi des données à MailChimp. (%{error})."
-      cancel_synchronization: "Annuler l'exportation"
+      wait_for_synchronization: 'Vos données sont actuellement envoyées à MailChimp. Cela peut prendre un moment. Ensuite, la liste sélectionnée avec les contacts de hitobito sera mise à jour.'
+      synchronization_failed: 'Une erreur s''est produite lors de l''envoi des données à MailChimp. (%{error}).'
+      cancel_synchronization: 'Annuler l''exportation'
   mailing_lists:
     subscriber_lists:
       create:
@@ -966,15 +966,15 @@ fr:
       link:
         add: Créer un abo
     form:
-      help_additional_sender: "Cette adresse électronique est autorisée à envoyer des messages à la liste de diffusion (en plus des administrateurs)."
-      caption_main_email: "Envoi uniquement à l'adresse e-mail principale"
-      caption_main_email_with_preferred_labels: "Envoi également à l'adresse e-mail principale"
-      caption_subscribable: "Les abonnés peuvent s'inscrire/se désinscrire eux-mêmes."
-      caption_subscribers_may_post: "Les abonnés peuvent éditer la liste de diffusion."
-      caption_anyone_may_post: "Tous les expéditeurs peuvent écrire à la liste de diffusion."
-      caption_delivery_report: "Envoyer l'e-mail avec confirmation à l'expéditeur"
-      help_preferred_labels: "Si disponibles, les e-mails ne sont envoyés qu'aux adresses e-mails avec cette désignation. Ce faisant, les adresses e-mail qui ne sont pas marquées comme adresses d'envoi seront également utilisées."
-      help_mailchimp_sync: "Les personnes abonnées peuvent être exportées vers la liste MailChimp. Cette action écrase la liste MailChimp et les contacts actuels sont effacés."
+      help_additional_sender: 'Cette adresse électronique est autorisée à envoyer des messages à la liste de diffusion (en plus des administrateurs).'
+      caption_main_email: 'Envoi uniquement à l''adresse e-mail principale'
+      caption_main_email_with_preferred_labels: 'Envoi également à l''adresse e-mail principale'
+      caption_subscribable: 'Les abonnés peuvent s''inscrire/se désinscrire eux-mêmes.'
+      caption_subscribers_may_post: 'Les abonnés peuvent éditer la liste de diffusion.'
+      caption_anyone_may_post: 'Tous les expéditeurs peuvent écrire à la liste de diffusion.'
+      caption_delivery_report: 'Envoyer l''e-mail avec confirmation à l''expéditeur'
+      help_preferred_labels: 'Si disponibles, les e-mails ne sont envoyés qu''aux adresses e-mails avec cette désignation. Ce faisant, les adresses e-mail qui ne sont pas marquées comme adresses d''envoi seront également utilisées.'
+      help_mailchimp_sync: 'Les personnes abonnées peuvent être exportées vers la liste MailChimp. Cette action écrase la liste MailChimp et les contacts actuels sont effacés.'
     form_tabs:
       general: Général
       email: Liste de diffusion (e-mail)
@@ -1004,13 +1004,13 @@ fr:
       not_available: Aucun e-mail ne se trouve dans cette boîte mail.
       flash:
         deleted:
-          one: "l'email a été effacé avec succès"
-          many: "%{count} e-mails ont été effacés avec succès"
-          other: "%{count} e-mails ont été effacés avec succès"
+          one: 'l''email a été effacé avec succès'
+          many: '%{count} e-mails ont été effacés avec succès'
+          other: '%{count} e-mails ont été effacés avec succès'
         moved:
-          one: "un e-mail déplacé avec succès"
-          many: "%{count} e-mails déplacés avec succès"
-          other: "%{count} e-mails déplacés avec succès"
+          one: 'un e-mail déplacé avec succès'
+          many: '%{count} e-mails déplacés avec succès'
+          other: '%{count} e-mails déplacés avec succès'
         server_error: La liaison avec le serveur mail est impossible pour l'instant, veuillez réessayer plus tard svp.
     recipient_counts:
       index:
@@ -1064,16 +1064,16 @@ fr:
                 many: "Il reste %{count} sans numéros de portables complets."
                 other: "Il reste %{count} sans numéros de portables complets."
   mailing_list_decorator:
-    may_subscribe: "Les abonnés peuvent s'inscrire / se désinscrire eux-même"
-    may_not_subscribe: "Les abonnés <strong>ne peuvent pas</strong> s'inscrire / se désinscrire eux-même"
-    subscribers_may_post: "les abonnés peuvent éditer la liste de diffusion"
-    subscribers_may_not_post: "Les abonnés <strong>ne peuvent pas</strong> éditer la liste de diffusion"
-    anyone_may_post: "Tous les expéditeurs peuvent écrire à la liste de diffusion."
-    anyone_may_not_post: "Les abonnés <strong>ne peuvent pas</strong> éditer la liste de diffusion"
-    delivery_report: "Les expéditeurs reçoivent un e-mail de confirmation d'envoi"
-    no_delivery_report: "Les expéditeurs ne reçoivent pas d'e-mail de confirmation d'envoi"
-    subscribe: "Inscription"
-    unsubscribe: "Désinscription"
+    may_subscribe: 'Les abonnés peuvent s''inscrire / se désinscrire eux-même'
+    may_not_subscribe: 'Les abonnés <strong>ne peuvent pas</strong> s''inscrire / se désinscrire eux-même'
+    subscribers_may_post: 'les abonnés peuvent éditer la liste de diffusion'
+    subscribers_may_not_post: 'Les abonnés <strong>ne peuvent pas</strong> éditer la liste de diffusion'
+    anyone_may_post: 'Tous les expéditeurs peuvent écrire à la liste de diffusion.'
+    anyone_may_not_post: 'Les abonnés <strong>ne peuvent pas</strong> éditer la liste de diffusion'
+    delivery_report: 'Les expéditeurs reçoivent un e-mail de confirmation d''envoi'
+    no_delivery_report: 'Les expéditeurs ne reçoivent pas d''e-mail de confirmation d''envoi'
+    subscribe: 'Inscription'
+    unsubscribe: 'Désinscription'
   messages:
     attrs:
       dispatch_infos: En cours de traitement
@@ -1122,7 +1122,7 @@ fr:
         unknown_recipient: Destinataire inconnu
         retrieved: Recevoir
         bounce_rejected: Bounce refusé
-    export_enqueued: "L'export est démarré en arrière-plan et sera téléchargé après complétion."
+    export_enqueued: 'L''export est démarré en arrière-plan et sera téléchargé après complétion.'
     show:
       recipients_empty: La liste de distribution est vide, aucun PDF ne peut être créé.
     export:
@@ -1134,17 +1134,17 @@ fr:
           received_from: "nous avons en %{year} "
           acknowledgement: "Nous vous remercions pour votre confiance et votre engagement!"
   navigation:
-    menu: "Menu"
-    groups: "Groupes"
-    events: "Activités"
-    courses: "Cours"
-    admin: "Paramètres"
-    admin/event_feed: "Intégrer le calendrier"
-    admin/oauth_authorizations: "Autoriser OAuth"
-    imap_mails: "e-mails"
-    invoices: "Factures"
-    invoices/single: "Factures individuelles"
-    invoices/evaluations: "Pièce comptable"
+    menu: 'Menu'
+    groups: 'Groupes'
+    events: 'Activités'
+    courses: 'Cours'
+    admin: 'Paramètres'
+    admin/event_feed: 'Intégrer le calendrier'
+    admin/oauth_authorizations: 'Autoriser OAuth'
+    imap_mails: 'e-mails'
+    invoices: 'Factures'
+    invoices/single: 'Factures individuelles'
+    invoices/evaluations: 'Pièce comptable'
   notes:
     new_note: Ajouter une note
     note:
@@ -1174,7 +1174,7 @@ fr:
   payment_processes:
     description:
       header: Fichier camt.054 XML
-      explain_xml_format: "Une donnée camt.054 XML est la dissolution de l'écriture récapitulative et l'avis de débit et de note de crédit. Celle-ci contient une série de différentes écritures comptables qui sont classées automatiquement sur la base des factures dépendant du numéro ESR."
+      explain_xml_format: 'Une donnée camt.054 XML est la dissolution de l''écriture récapitulative et l''avis de débit et de note de crédit. Celle-ci contient une série de différentes écritures comptables qui sont classées automatiquement sur la base des factures dépendant du numéro ESR.'
     invalid_file: La donnée téléchargée n'est pas valable.
     parsing_error: La donnée téléchargée ne peut pas être retravaillée (%{error}).
     created: '%{count} paiements ont été saisis.'
@@ -1191,29 +1191,29 @@ fr:
       create:
         zero: importer le paiement
         one: importer le paiement
-        other: "importer %{count} paiements."
+        other: 'importer %{count} paiements.'
       icon_tooltip_invoice_missing: Ne peut être attribué à aucune facture
       icon_tooltip_settles: Règle la facture ouverte
       icon_tooltip_exceeds: Dépasse la facture ouverte %{difference}
       icon_tooltip_undercuts: Est en-dessous de la facture ouverte de %{difference}
     new:
-      upload_button: "télécharger"
-      xml_file: "Fichier XML"
+      upload_button: 'télécharger'
+      xml_file: 'Fichier XML'
   qualifications:
-    in_years: "%{years} ans"
-    valid_until: "à %{date}"
-    unlimited: "illimité"
+    in_years: '%{years} ans'
+    valid_until: 'à %{date}'
+    unlimited: 'illimité'
   qualification_kinds:
     global:
       link:
         add: Créer une catégorie de qualification
     form:
-      help_validity_in_years: "années à partir de la date de qualification; jusqu'à la fin de l'année concernée."
-      help_reactivateable_in_years: "années après échéance de la validité"
+      help_validity_in_years: 'années à partir de la date de qualification; jusqu''à la fin de l''année concernée.'
+      help_reactivateable_in_years: 'années après échéance de la validité'
     new:
       title: Créer une catégorie de qualification
   paper_trail/version_decorator:
-    by: "modifié par %{author}"
+    by: 'modifié par %{author}'
   person_duplicates:
     merge:
       new:
@@ -1272,17 +1272,17 @@ fr:
           rejected: "La demande d'accès pour %{person} a déjà été refusée. "
     history:
       index:
-        inactive_roles_title: "Rôles inactifs"
+        inactive_roles_title: 'Rôles inactifs'
     households:
       form:
         address_updated: "Adresse actualisée"
       fields:
         lives_in_household_with: "Habite dans le foyer avec"
         update_denied: "Tu ne peux pas ajouter %{other_person} au foyer. Il se peut que cette personne soit déjà dans le foyer ou que tu n'aies pas les droits d'écriture."
-        cannot_create_household: "Tu as besoin de droits d'écriture sur plusieurs personnes pour les rassembler dans un ensemble de foyer."
+        cannot_create_household: 'Tu as besoin de droits d''écriture sur plusieurs personnes pour les rassembler dans un ensemble de foyer.'
     family:
       fields:
-        is_in_family_with: "Fait partie de la famille de"
+        is_in_family_with: 'Fait partie de la famille de'
     csv_imports:
       description:
         header: Fichiers CSV
@@ -1294,17 +1294,17 @@ fr:
         special_fields: Valeurs de champs spéciales
         explain_special_fields_html: Les champs suivant doivent contenir l'une des valeurs en <em>italique</em>.
       preview_table:
-        icon_tooltip_invalid: "Valeurs non valables."
-        icon_tooltip_updated: "En cours d'actualisation"
-        icon_tooltip_created: "Est saisi à nouveau"
-        icon_tooltip_request: "Va être demandé"
+        icon_tooltip_invalid: 'Valeurs non valables.'
+        icon_tooltip_updated: 'En cours d''actualisation'
+        icon_tooltip_created: 'Est saisi à nouveau'
+        icon_tooltip_request: 'Va être demandé'
       define_mapping:
-        choose_role: "Choisir un rôle"
-        choose_role_help: "Ce rôle est attribué à toutes les personnes importées."
-        assign_columns_to_fields: "Relier les colonnes aux champs."
-        column_from_csv: "Colonnes du fichier CSV"
-        field_in_database: "Champ dans la base de données"
-        preview: "Aperçu"
+        choose_role: 'Choisir un rôle'
+        choose_role_help: 'Ce rôle est attribué à toutes les personnes importées.'
+        assign_columns_to_fields: 'Relier les colonnes aux champs.'
+        column_from_csv: 'Colonnes du fichier CSV'
+        field_in_database: 'Champ dans la base de données'
+        preview: 'Aperçu'
         update_behaviour: Procédé d'actualisation
         keep_behaviour: >
             N'actualiser que les champs vides avec des données provenant du CSV, les
@@ -1320,8 +1320,8 @@ fr:
             données de données. L'inscription de nouvelles personnes doit être entièrement
             effectuée en conformité avec les données du CSV.
       new:
-        upload_button: "Télécharger"
-        csv_file: "Fichier CSV"
+        upload_button: 'Télécharger'
+        csv_file: 'Fichier CSV'
       preview:
         import_now_button: Importer les personnes
         import_details_html: >
@@ -1346,8 +1346,8 @@ fr:
     security_tools:
       index:
         account: Compte
-        last_sign_in_at: "Dernière connexion: "
-        no_last_sign_in: "Aucune connexion enregistrée jusqu'à présent"
+        last_sign_in_at: 'Dernière connexion: '
+        no_last_sign_in: 'Aucune connexion enregistrée jusqu''à présent'
         person_has_2FA: Cette personne a activé l'authentification à deux facteurs
         person_no_2FA: Cette personne n'a pas activé l'authentification à deux facteurs
         person_has_login: Cette personne a une adresse e-mail principale et a donc accès au système
@@ -1356,8 +1356,8 @@ fr:
         override_password: "Écraser le mot de passe"
         confirm_reset: "Attention : le mot de passe est alors remplacé. Est-ce vraiment ce que tu veux ?"
         groups_and_roles_that_see_me: Rôles qui ont accès à moi
-        load_roles_that_see_me: "Télécharger les groupes et les rôles"
-        load_roles_that_see_me_hint: "Cela peut prendre quelques secondes"
+        load_roles_that_see_me: 'Télécharger les groupes et les rôles'
+        load_roles_that_see_me_hint: 'Cela peut prendre quelques secondes'
         block_person: Bloquer le login
         confirm_block_person: "Attention : tu vas empêcher cette personne de se connecter. Est-ce vraiment ce que tu veux?"
         unblock_person: Débloquer le login
@@ -1378,43 +1378,43 @@ fr:
   person/csv_imports:
     invalid_file: Veuillez choisir un fichier CSV valable.
     duplicate_keys:
-      one: "%{list} a été attribué plusieurs fois."
-      many: "%{list} ont été attribués plusieurs fois."
-      other: "%{list} ont été attribués plusieurs fois."
+      one: '%{list} a été attribué plusieurs fois.'
+      many: '%{list} ont été attribués plusieurs fois.'
+      other: '%{list} ont été attribués plusieurs fois.'
     preview:
       new:
-        one: "%{count} %{role} va être importé à nouveau."
-        many: "%{count} %{role} vont être importés à nouveau. "
-        other: "%{count} %{role} vont être importés à nouveau. "
+        one: '%{count} %{role} va être importé à nouveau.'
+        many: '%{count} %{role} vont être importés à nouveau. '
+        other: '%{count} %{role} vont être importés à nouveau. '
       updated:
-        one: "%{count} %{role} va être actualisé."
-        many: "%{count} %{role} vont être actualisés."
-        other: "%{count} %{role} vont être actualisés."
+        one: '%{count} %{role} va être actualisé.'
+        many: '%{count} %{role} vont être actualisés.'
+        other: '%{count} %{role} vont être actualisés.'
       failed:
-        one: "%{count} %{role} ne va pas être importé."
-        many: "%{count} %{role} ne vont pas être importés."
-        other: "%{count} %{role} ne vont pas être importés."
+        one: '%{count} %{role} ne va pas être importé.'
+        many: '%{count} %{role} ne vont pas être importés.'
+        other: '%{count} %{role} ne vont pas être importés.'
       requests:
-        one: "%{count} %{role} va recevoir une demande d'accès pour ses données personnelles, les données ne seront pas importées."
-        many: "%{count} %{role} vont recevoir une demande d'accès pour leurs données personnelles, les données ne seront pas importées."
-        other: "%{count} %{role} vont recevoir une demande d'accès pour leurs données personnelles, les données ne seront pas importées."
+        one: '%{count} %{role} va recevoir une demande d''accès pour ses données personnelles, les données ne seront pas importées.'
+        many: '%{count} %{role} vont recevoir une demande d''accès pour leurs données personnelles, les données ne seront pas importées.'
+        other: '%{count} %{role} vont recevoir une demande d''accès pour leurs données personnelles, les données ne seront pas importées.'
     create:
       new:
-        one: "%{count} %{role} a été importé avec succès."
-        many: "%{count} %{role} ont été importés avec succès."
-        other: "%{count} %{role} ont été importés avec succès."
+        one: '%{count} %{role} a été importé avec succès.'
+        many: '%{count} %{role} ont été importés avec succès.'
+        other: '%{count} %{role} ont été importés avec succès.'
       updated:
-        one: "%{count} %{role} a été actualisé avec succès."
-        many: "%{count} %{role} ont été actualisés avec succès. "
-        other: "%{count} %{role} ont été actualisés avec succès. "
+        one: '%{count} %{role} a été actualisé avec succès.'
+        many: '%{count} %{role} ont été actualisés avec succès. '
+        other: '%{count} %{role} ont été actualisés avec succès. '
       failed:
-        one: "%{count} %{role} n'a pas été importé."
-        many: "%{count} %{role} n'ont pas été importés."
-        other: "%{count} %{role} n'ont pas été importés."
+        one: '%{count} %{role} n''a pas été importé.'
+        many: '%{count} %{role} n''ont pas été importés.'
+        other: '%{count} %{role} n''ont pas été importés.'
       requests:
-        one: "%{count} %{role} a reçu une demande d'accès pour ses données personnelles. Des changements éventuels dus à cette importation doivent être ré-effectués après cette confirmation."
-        many: "%{count} %{role} ont reçu une demande d'accès pour leurs données personnelles. Des changements éventuels dus à cette importation doivent être ré-effectués après cette confirmation."
-        other: "%{count} %{role} ont reçu une demande d'accès pour leurs données personnelles. Des changements éventuels dus à cette importation doivent être ré-effectués après cette confirmation."
+        one: '%{count} %{role} a reçu une demande d''accès pour ses données personnelles. Des changements éventuels dus à cette importation doivent être ré-effectués après cette confirmation.'
+        many: '%{count} %{role} ont reçu une demande d''accès pour leurs données personnelles. Des changements éventuels dus à cette importation doivent être ré-effectués après cette confirmation.'
+        other: '%{count} %{role} ont reçu une demande d''accès pour leurs données personnelles. Des changements éventuels dus à cette importation doivent être ré-effectués après cette confirmation.'
   people:
     send_password_instructions: Les données d'authentification ont été envoyées.
     send_password_instructions_invalid_email: Les informations de login n'ont pas été envoyées étant donné que l'adresse e-mail indiquée n'est pas valable.
@@ -1439,8 +1439,8 @@ fr:
       import_list: Importer une liste
       person_duplicate_list: Duplicatas
     add_requests:
-      approve_title: "Accepter la requête"
-      reject_title: "Refuser la requête"
+      approve_title: 'Accepter la requête'
+      reject_title: 'Refuser la requête'
     attrs:
       additional_data: Indications supplémentaires
       events: Mes prochains événements
@@ -1468,16 +1468,16 @@ fr:
     manual_deletions:
       show:
         title: "supprimer %{full_name}?"
-        minimize: "Minimiser la personne"
-        delete: "Supprimer définitivement la personne"
+        minimize: 'Minimiser la personne'
+        delete: 'Supprimer définitivement la personne'
         explanation: "Si la personne est supprimée, les données de la personne sont irrémédiablement supprimées. En cas de minimisation, la personne n'est pas supprimée, mais la plupart des données spécifiques à la personne sont supprimées."
       minimize:
         success: "%{full_name} a été minimisée avec succès."
       delete:
         success: "%{full_name} a été supprimé avec succès."
       errors:
-        participated_in_recent_event: "La personne a récemment participé à un événement"
-        already_minimized: "La personne a déjà été minimisée"
+        participated_in_recent_event: 'La personne a récemment participé à un événement'
+        already_minimized: 'La personne a déjà été minimisée'
     pdf:
       cannot_fit: Les adresses ne rentrent pas dans le format d'étiquettes défini.
     print:
@@ -1488,8 +1488,8 @@ fr:
       mobile_phone: "Mobile"
     privacy_policy_acceptance_field:
       acceptance_caption:
-        for_self: "J'accepte les conditions suivantes:"
-        for_someone_else: "Je confirme que j'ai obtenu le consentement de cette personne ou de son responsable légal pour les dispositions suivantes:"
+        for_self: 'J''accepte les conditions suivantes:'
+        for_someone_else: 'Je confirme que j''ai obtenu le consentement de cette personne ou de son responsable légal pour les dispositions suivantes:'
     roles:
       title: Rôles actifs
       convertable_title: Rôles futurs
@@ -1499,8 +1499,8 @@ fr:
     tags:
       add_tag: Ajouter un tag…
       no_entry: (aucun)
-    export_enqueued: "L'exportation commence en arrière-plan et sera téléchargé après avoir été complété."
-    export_email_needed: "Adresse e-mail requise pour l'export."
+    export_enqueued: 'L''exportation commence en arrière-plan et sera téléchargé après avoir été complété.'
+    export_email_needed: 'Adresse e-mail requise pour l''export.'
     multiselect_actions:
       role_actions:
         button: Rôles
@@ -1533,14 +1533,14 @@ fr:
   event_invitations:
     create:
       flash:
-        success: "L'invitation de %{recipient_name} en tant que %{participation_type} a été créé."
+        success: 'L''invitation de %{recipient_name} en tant que %{participation_type} a été créé.'
     invalid_existing_person: "a déjà été invité à ce %{model_name}."
     decline:
       flash:
         success: L'invitation a été rejetée.
     destroy:
       flash:
-        success: "L'invitation pour %{recipient_name} a été supprimée."
+        success: 'L''invitation pour %{recipient_name} a été supprimée.'
   people_filters:
     form:
       save_search: Sauvegarder cette recherche
@@ -1568,7 +1568,7 @@ fr:
       smaller: plus petit que
     language:
       title: Langue
-      word_connector: "ou"
+      word_connector: 'ou'
       one_of: La langue est %{languages}
     tag:
       title: Tags
@@ -1624,10 +1624,10 @@ fr:
     outdated_deleted_role: Le rôle n'a pas pu être arrêté le %{date} comme souhaité. Si l'enregistrement du rôle n’y met pas fin, contacte le support.
     terminates_on: Sortie au %{date}
   roles:
-    full_entry_label: "%{model_label} <i>%{role}</i> pour <i>%{person}</i> dans <i>%{group}</i>"
-    role_changed: "%{full_entry_label} modifié en <i>%{new_role}</i>."
-    role_changed_to_group: "%{full_entry_label} changé en <i>%{new_role}</i> dans <i>%{new_group}</i>."
-    role_primary_group_changed: "Groupe principal modifié sur <i>%{new_group}</i>."
+    full_entry_label: '%{model_label} <i>%{role}</i> pour <i>%{person}</i> dans <i>%{group}</i>'
+    role_changed: '%{full_entry_label} modifié en <i>%{new_role}</i>.'
+    role_changed_to_group: '%{full_entry_label} changé en <i>%{new_role}</i> dans <i>%{new_group}</i>.'
+    role_primary_group_changed: 'Groupe principal modifié sur <i>%{new_group}</i>.'
     create:
       flash:
         privacy_policy_not_accepted: Pour terminer l'inscription, il faut accepter la déclaration de protection des données.
@@ -1665,18 +1665,18 @@ fr:
       success:
         zero: Aucun rôle a été effacé
         one: Un rôle a été effacé
-        other: "%{count} rôles ont été effacés "
+        other: '%{count} rôles ont été effacés '
     create:
       success:
         zero: Aucun rôle a été créé
         one: Un rôle a été créé
-        other: "%{count} rôles ont été créé"
+        other: '%{count} rôles ont été créé'
       failure: Veuillez entrer un rôle valide
     update:
       success:
         zero: Aucun rôle n'a été déplacé
         one: Un rôle a été déplacé
-        other: "%{count} rôles ont été déplacés"
+        other: '%{count} rôles ont été déplacés'
       failure: Veuillez entrer un rôle valide
     move:
       title: Où les personnes doivent-elles être transférées?
@@ -1690,9 +1690,9 @@ fr:
     new:
       title: 'Où les nouveaux rôles devraient-ils être créés? '
       submit:
-        one: "Créer un rôle"
-        many: "Créer %{count} rôles"
-        other: "Créer %{count} rôles"
+        one: 'Créer un rôle'
+        many: 'Créer %{count} rôles'
+        other: 'Créer %{count} rôles'
   tags:
     multiselect_actions:
       merge_tags: Merge
@@ -1704,12 +1704,12 @@ fr:
       success:
         zero: Aucun tag n'a été enlevé
         one: Un tag a été enlevé
-        other: "%{count} tags ont été enlevés"
+        other: '%{count} tags ont été enlevés'
     create:
       success:
         zero: Aucun tag n'a été créé
         one: Un tag a été créé
-        other: "%{count} tags ont été créés"
+        other: '%{count} tags ont été créés'
     deletable:
       title: Quels tags doivent-être supprimés?
       no_entries: Aucun tag ne peut être supprimé parmi les personnes sélectionnées
@@ -1719,9 +1719,9 @@ fr:
       no_entries: Aucun tag ne peut être créé sur les personnes sélectionnées.
       separate_multiple_tags_with_comma: Séparez les tags par des virgules
       submit:
-        one: "Créer des tags sur une personne"
-        many: "Créer des tags sur %{count} personnes"
-        other: "Créer des tags sur %{count} personnes"
+        one: 'Créer des tags sur une personne'
+        many: 'Créer des tags sur %{count} personnes'
+        other: 'Créer des tags sur %{count} personnes'
   service_tokens:
     abilities:
       read: Lecture
@@ -1738,16 +1738,16 @@ fr:
       edit:
         title: Modifier abonnés
       form:
-        subgroups_selectable: "Seuls des groupes à un niveau inférieur du groupe d'abonnement peuvent être sélectionnés."
-        subgroups_and_siblings_selectable: "Seuls des groupes à un niveau inférieur du groupe d'abonnement ou inférieur aux groupes voisins de type %{type} peuvent être sélectionnés."
+        subgroups_selectable: 'Seuls des groupes à un niveau inférieur du groupe d''abonnement peuvent être sélectionnés.'
+        subgroups_and_siblings_selectable: 'Seuls des groupes à un niveau inférieur du groupe d''abonnement ou inférieur aux groupes voisins de type %{type} peuvent être sélectionnés.'
       roles:
         please_choose_group: S'il te plaît, choisis un groupe.
       tags:
-        only_add_persons_with_tags: "Ne sélectionner que les personnes qui ont l'une des étiquettes suivantes:"
-        exclude_persons_with_tags: "Exclure les contacts avec un des tags suivants:"
+        only_add_persons_with_tags: 'Ne sélectionner que les personnes qui ont l''une des étiquettes suivantes:'
+        exclude_persons_with_tags: 'Exclure les contacts avec un des tags suivants:'
     exclude_person:
       form:
-        exclude_subscriber: "Exclure les abonné-e-s"
+        exclude_subscriber: 'Exclure les abonné-e-s'
     filter:
       show:
         title: Conditions globales
@@ -1756,26 +1756,26 @@ fr:
         title: Ajouter des personnes à l'abonnement
         mailing_list_search: Rechercher un abonnement
         submit: Ajouter
-        mailing_lists_in_local_hierarchy_hint: "Possibilité de sélectionner des abonnements de sur- et sous-groupes du groupe actuel"
+        mailing_lists_in_local_hierarchy_hint: 'Possibilité de sélectionner des abonnements de sur- et sous-groupes du groupe actuel'
   subscriber/base:
-    blank: "%{model_label} doit être sélectionné"
-    taken: "%{model_label} a déjà été ajouté"
+    blank: '%{model_label} doit être sélectionné'
+    taken: '%{model_label} a déjà été ajouté'
   subscriber/user:
-    success: "Tu as été ajouté(e) à l'abonnement."
-    failure: "Tu n'as pas pu être ajouté(e) à l'abonnement: %{errors}"
-    unsubscribed: "Tu as été retiré(e) de l'abonnement avec succès."
+    success: 'Tu as été ajouté(e) à l''abonnement.'
+    failure: 'Tu n''as pas pu être ajouté(e) à l''abonnement: %{errors}'
+    unsubscribed: 'Tu as été retiré(e) de l''abonnement avec succès.'
   subscriber/filter:
-    success: "Les conditions globales ont été mises à jour avec succès"
-    failure: "Les conditions globales n'ont pas pu être mises à jour"
+    success: 'Les conditions globales ont été mises à jour avec succès'
+    failure: 'Les conditions globales n''ont pas pu être mises à jour'
   subscriber/exclude_person:
-    success: "%{subscriber} a été exclu avec succès"
-    failure: "%{subscriber} n'est pas un abonné"
+    success: '%{subscriber} a été exclu avec succès'
+    failure: '%{subscriber} n''est pas un abonné'
   sheet/person/csv_import:
-    title: "Importer les personnes par CSV"
+    title: 'Importer les personnes par CSV'
   sheet/group:
-    belongs_to: "Fait partie de"
-    deleted: "(effacé)"
-    layer_upwards: "< vers le niveau supérieur"
+    belongs_to: 'Fait partie de'
+    deleted: '(effacé)'
+    layer_upwards: '< vers le niveau supérieur'
   sheet/payment_process:
     title: Importer des paiements par XML
   subscriptions:
@@ -1783,14 +1783,14 @@ fr:
       add_person: Ajouter une personne
       add_group_roles: Ajouter un rôle/group
       add_event: Ajouter un événement
-      exclude_person: "Exclure une personne"
+      exclude_person: 'Exclure une personne'
     list:
-      excluded_people: "Personnes exclues"
-      export_not_allowed: "Tu n'as pas le droit d'exporté les abonnés de cet abonnement, car ils contiennent des rôles ou des activités qui ne font pas partie de ton domaine d'autorisation."
+      excluded_people: 'Personnes exclues'
+      export_not_allowed: 'Tu n''as pas le droit d''exporté les abonnés de cet abonnement, car ils contiennent des rôles ou des activités qui ne font pas partie de ton domaine d''autorisation.'
     subscription:
-      only_persons_with: "Seulement personnes avec:"
-      persons_excluded_with: "Personnes exclues avec:"
-    export_enqueued: "L'exportation commence en arrière-plan et sera téléchargé après avoir été complété."
+      only_persons_with: 'Seulement personnes avec:'
+      persons_excluded_with: 'Personnes exclues avec:'
+    export_enqueued: 'L''exportation commence en arrière-plan et sera téléchargé après avoir été complété.'
   version:
     attribute_change:
       from_to: "%{attr} a été changé de <i>%{from}</i> à <i>%{to}</i>."
@@ -1832,23 +1832,23 @@ fr:
       exclude_subgroups: Aussi exclure les sous-groupes
       all_event_types: Tous
     tags:
-      or: "ou"
+      or: 'ou'
       explanation_included:
-        one: "Seuls les %{events} dont le tag est %{tags} sont inclus."
-        other: "Seuls les %{events} dont les tags sont %{tags} sont inclus."
+        one: 'Seuls les %{events} dont le tag est %{tags} sont inclus.'
+        other: 'Seuls les %{events} dont les tags sont %{tags} sont inclus.'
       explanation_excluded:
-        one: "%{events} dont le tag est %{tags} sont exclus. "
-        other: "%{events} dont les tags sont %{tags} sont exclus."
+        one: '%{events} dont le tag est %{tags} sont exclus. '
+        other: '%{events} dont les tags sont %{tags} sont exclus.'
   calendar_groups:
-    explanation_included_with_subgroups: "%{events} de %{group_name} et sous-groupes sont inclus. "
-    explanation_included: "%{events} de %{group_name} sont inclus."
-    explanation_excluded_with_subgroups: "Tous les %{events} de %{group_name} et sous-groupes sont exclus. "
-    explanation_excluded: "Tous les %{events} de %{group_name} sont exclus."
+    explanation_included_with_subgroups: '%{events} de %{group_name} et sous-groupes sont inclus. '
+    explanation_included: '%{events} de %{group_name} sont inclus.'
+    explanation_excluded_with_subgroups: 'Tous les %{events} de %{group_name} et sous-groupes sont exclus. '
+    explanation_excluded: 'Tous les %{events} de %{group_name} sont exclus.'
   views:
     pagination:
-      next: ">>"
-      previous: "<<"
+      next: '>>'
+      previous: '<<'
       first: premier
       last: dernier
-      truncate: "..."
+      truncate: '...'
   json_api: JSON:API

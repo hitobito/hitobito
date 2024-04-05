@@ -91,6 +91,10 @@ it:
           attributes:
             self_registration_role_type:
               blank: 'I dati di contatto devono essere compilati se si seleziona "Visualizzazione nella pagina di login".'
+        mailing_list:
+          attributes:
+            additional_sender:
+              invalid: "deve contenere indirizzi e-mail nel formato abcd@ee.ch o *@ee.ch. In caso di più indirizzi, questi vanno separati con ',' o ';'"
         message/letter_with_invoice:
           attributes:
             base:
@@ -155,10 +159,6 @@ it:
             payee:
               to_long: 'può contenere al massimo 2 righe'
               must_have_3_lines: 'deve contenere esattamente 3 righe'
-        mailing_list:
-          attributes:
-            additional_sender:
-              invalid: "deve contenere indirizzi e-mail nel formato abcd@ee.ch o *@ee.ch. In caso di più indirizzi, questi vanno separati con ',' o ';'"
         role:
           attributes:
             delete_on:
@@ -431,6 +431,10 @@ it:
         many: Tags
         other: Tags
     attributes:
+      acts_as_taggable_on/tag:
+        name: Nome
+        taggings_count: Numero
+        category: Categoria
       cantons:
         ag: Argovia
         ai: Appenzello Interno
@@ -1118,10 +1122,6 @@ it:
         event_participations: Partecipanti ad eventi
         mailing_lists: Abbonate/i a mailing lists
         cors_origins: host con accesso API
-      acts_as_taggable_on/tag:
-        taggings_count: Numero
-        category: Categoria
-        name: Nome
       calendar:
         name: Nome
         description: Descrizione

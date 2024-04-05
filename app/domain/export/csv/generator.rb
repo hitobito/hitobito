@@ -17,10 +17,13 @@ module Export
     end
 
     class Generator
-      attr_reader :exportable
+      attr_reader :encoding, :exportable, :options, :utf8_bom
 
-      def initialize(exportable)
+      def initialize(exportable, **options)
         @exportable = exportable
+        @options = options
+        @encoding = extract_option(:encoding, default: Settings.csv.encoding)
+        @utf8_bom = extract_option(:utf8_bom, default: Settings.csv.utf8_bom)
       end
 
       # Generate CSV and convert it to a configurable encoding. By default, it
@@ -33,7 +36,7 @@ module Export
       private
 
       def generate
-        CSVSafe.generate(**options) do |generator|
+        CSVSafe.generate(**default_options.merge(options)) do |generator|
           generator << exportable.labels if exportable.labels.present?
           exportable.data_rows(:csv) do |row|
             generator << row
@@ -44,18 +47,22 @@ module Export
       # Allow different encodings (e.g. ISO-8859-1), configurable in the settings file.
       # Using the BOM header helps M$ excel to recognize utf8 files.
       def convert(data)
-        if Settings.csv.utf8_bom.present?
+        if utf8_bom.present?
           data = UTF8_BOM + data
         end
-        if Settings.csv.encoding.present?
-          data.encode(Settings.csv.encoding, undef: :replace, invalid: :replace)
+        if encoding.present?
+          data.encode(encoding, undef: :replace, invalid: :replace)
         else
           data
         end
       end
 
-      def options
+      def default_options
         { col_sep: Settings.csv.separator.strip }
+      end
+
+      def extract_option(key, default: nil)
+        options.key?(key) ? options.delete(key) : default
       end
 
     end

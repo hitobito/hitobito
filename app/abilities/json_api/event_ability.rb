@@ -10,7 +10,9 @@ module JsonApi
     include CanCan::Ability
 
     def initialize(main_ability)
-      can :read, Event if main_ability.can?(:list_available, Event)
+      can :read, ::Event if main_ability.can?(:list_available, ::Event)
+      can :read, ::Event::Course if main_ability.can?(:list_available, ::Event)
+      can :read, ::Event::Kind if main_ability.can?(:list_available, ::Event)
     end
   end
 end

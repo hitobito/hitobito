@@ -82,6 +82,8 @@ class TokenAbility
     can :'index_event/courses', Group do |g|
       token_layer_and_below.include?(g)
     end
+
+    can :read, Event::Kind
   end
 
   def define_event_participation_abilities

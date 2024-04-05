@@ -5,18 +5,14 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Event::DateResource < ApplicationResource
+class Event::KindCategoryResource < ApplicationResource
+  self.type = 'event_kind_categories'
+
   with_options writable: false, filterable: false, sortable: false do
-    attribute :event_id, :integer, filterable: true
     attribute :label, :string
-    attribute :location, :string
-    attribute :start_at, :datetime
-    attribute :finish_at, :datetime
   end
 
-  belongs_to :event
-
   def base_scope
-    Event::Date
+    Event::KindCategory.where(deleted_at: nil).list
   end
 end

@@ -230,6 +230,139 @@
       }
     },
     {
+      "name": "Event::KindCategoryResource",
+      "type": "event_kind_categories",
+      "graphql_entrypoint": "kindCategories",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "label": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        }
+      },
+      "extra_attributes": {
+      },
+      "sorts": {
+        "id": {
+        }
+      },
+      "filters": {
+        "id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        }
+      },
+      "relationships": {
+      },
+      "stats": {
+        "total": [
+          "count"
+        ]
+      }
+    },
+    {
+      "name": "Event::KindResource",
+      "type": "event_kinds",
+      "graphql_entrypoint": "kinds",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "label": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "short_name": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "general_information": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "application_conditions": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "minimum_age": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "created_at": {
+          "type": "datetime",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "updated_at": {
+          "type": "datetime",
+          "readable": true,
+          "writable": false,
+          "description": null
+        }
+      },
+      "extra_attributes": {
+      },
+      "sorts": {
+        "id": {
+        }
+      },
+      "filters": {
+        "id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        }
+      },
+      "relationships": {
+        "kind_category": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "Event::KindCategoryResource"
+        }
+      },
+      "stats": {
+        "total": [
+          "count"
+        ]
+      }
+    },
+    {
       "name": "EventResource",
       "type": "events",
       "graphql_entrypoint": "events",
@@ -2019,6 +2152,16 @@
     }
   ],
   "endpoints": {
+    "/api/event_kinds": {
+      "actions": {
+        "index": {
+          "resource": "Event::KindResource"
+        },
+        "show": {
+          "resource": "Event::KindResource"
+        }
+      }
+    },
     "/api/events": {
       "actions": {
         "index": {

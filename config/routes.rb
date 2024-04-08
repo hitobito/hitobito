@@ -407,6 +407,7 @@ Hitobito::Application.routes.draw do
     resources :people, only: [:index, :show, :update]
     resources :groups, only: [:index, :show]
     resources :events, only: [:index, :show]
+    resources :invoices, only: [:index, :show, :update]
   end
 
   # The priority is based upon order of creation:

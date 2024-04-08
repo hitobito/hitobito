@@ -896,6 +896,259 @@
       }
     },
     {
+      "name": "InvoiceItemResource",
+      "type": "invoice_items",
+      "graphql_entrypoint": "invoiceItems",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "invoice_id": {
+          "type": "integer",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "name": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "description": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "unit_cost": {
+          "type": "float",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "vat_rate": {
+          "type": "float",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "cost": {
+          "type": "integer",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "count": {
+          "type": "integer",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "cost_center": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "account": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        }
+      },
+      "extra_attributes": {
+      },
+      "sorts": {
+        "id": {
+        }
+      },
+      "filters": {
+        "id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "invoice_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        }
+      },
+      "relationships": {
+        "invoice": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "InvoiceResource"
+        }
+      },
+      "stats": {
+        "total": [
+          "count"
+        ]
+      }
+    },
+    {
+      "name": "InvoiceResource",
+      "type": "invoices",
+      "graphql_entrypoint": "invoices",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "title": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "description": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "state": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "group_id": {
+          "type": "integer",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "recipient_id": {
+          "type": "integer",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "due_at": {
+          "type": "date",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "issued_at": {
+          "type": "date",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "recipient_email": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "payment_information": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "payment_purpose": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "hide_total": {
+          "type": "boolean",
+          "readable": true,
+          "writable": true,
+          "description": null
+        }
+      },
+      "extra_attributes": {
+      },
+      "sorts": {
+        "id": {
+        }
+      },
+      "filters": {
+        "id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "group_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "recipient_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        }
+      },
+      "relationships": {
+        "group": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "GroupResource"
+        },
+        "recipient": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "PersonResource"
+        },
+        "invoice_items": {
+          "type": "has_many",
+          "description": null,
+          "resource": "InvoiceItemResource"
+        }
+      },
+      "stats": {
+        "total": [
+          "count"
+        ]
+      }
+    },
+    {
       "name": "PersonResource",
       "type": "people",
       "graphql_entrypoint": "people",
@@ -1783,6 +2036,19 @@
         },
         "show": {
           "resource": "GroupResource"
+        }
+      }
+    },
+    "/api/invoices": {
+      "actions": {
+        "index": {
+          "resource": "InvoiceResource"
+        },
+        "show": {
+          "resource": "InvoiceResource"
+        },
+        "update": {
+          "resource": "InvoiceResource"
         }
       }
     },

@@ -85,6 +85,6 @@ class GroupResource < ApplicationResource
   end
 
   def base_scope
-    super.without_deleted.without_archived
+    super.without_deleted.without_archived.includes(:translations)
   end
 end

@@ -317,13 +317,20 @@ describe TokenAbility do
     context 'authorized' do
       let(:token) { service_tokens(:permitted_top_layer_token) }
 
+      it 'may index' do
+        is_expected.to be_able_to(:index, Invoice)
+        is_expected.to be_able_to(:index, InvoiceItem)
+      end
+
       it 'may show' do
         is_expected.to be_able_to(:show, token.layer.invoices.build)
+        is_expected.to be_able_to(:show, token.layer.invoices.build.invoice_items.build)
       end
 
       it 'may show independently if group access' do
         token.update!(groups: false)
         is_expected.to be_able_to(:show, token.layer.invoices.build)
+        is_expected.to be_able_to(:show, token.layer.invoices.build.invoice_items.build)
       end
 
       it 'may index_invoices' do

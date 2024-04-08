@@ -25,12 +25,17 @@ describe InvoiceAbility do
       let(:reminder) { invoice.payment_reminders.build }
       let(:payment)  { invoice.payments.build }
 
-      it 'may not index' do
-        is_expected.not_to be_able_to(:index, Invoice)
+      it 'may index' do
+        is_expected.to be_able_to(:index, Invoice)
+      end
+
+      it 'may not index InvoiceItem' do
+        is_expected.not_to be_able_to(:index, InvoiceItem)
       end
 
       it 'may not manage' do
         is_expected.not_to be_able_to(:manage, Invoice)
+        is_expected.not_to be_able_to(:manage, InvoiceItem)
       end
 
       context 'in own group' do
@@ -39,6 +44,12 @@ describe InvoiceAbility do
         %w(create edit show update destroy).each do |action|
           it "may #{action} invoices in #{own_group}" do
             is_expected.to be_able_to(action.to_sym, invoice)
+          end
+        end
+
+        %w(create edit show update destroy).each do |action|
+          it "may #{action} invoice_item in #{own_group}" do
+            is_expected.to be_able_to(action.to_sym, invoice.invoice_items.build)
           end
         end
 
@@ -67,6 +78,12 @@ describe InvoiceAbility do
         %w(create edit show update destroy).each do |action|
           it "may not #{action} invoices in #{other_group}" do
             is_expected.not_to be_able_to(action.to_sym, invoice)
+          end
+        end
+
+        %w(create edit show update destroy).each do |action|
+          it "may not #{action} invoices in #{other_group}" do
+            is_expected.not_to be_able_to(action.to_sym, invoice.invoice_items.build)
           end
         end
 
@@ -104,13 +121,17 @@ describe InvoiceAbility do
     it 'top_leader may work only with abos in his layer' do
       expect(ability(:top_leader)).to be_able_to(:create, invoice_list(:top_layer, :top_layer))
       expect(ability(:top_leader)).to be_able_to(:create, invoice_list(:top_layer, :top_group))
-      expect(ability(:top_leader)).not_to be_able_to(:create, invoice_list(:top_layer, :bottom_layer_one))
+      expect(ability(:top_leader)).not_to be_able_to(:create,
+invoice_list(:top_layer, :bottom_layer_one))
     end
 
     it 'bottom_member may work only with abos in his layer' do
-      expect(ability(:bottom_member)).to be_able_to(:create, invoice_list(:bottom_layer_one, :bottom_layer_one))
-      expect(ability(:bottom_member)).not_to be_able_to(:create, invoice_list(:bottom_layer_one, :top_group))
-      expect(ability(:bottom_member)).not_to be_able_to(:create, invoice_list(:bottom_layer_one, :top_layer))
+      expect(ability(:bottom_member)).to be_able_to(:create,
+invoice_list(:bottom_layer_one, :bottom_layer_one))
+      expect(ability(:bottom_member)).not_to be_able_to(:create,
+invoice_list(:bottom_layer_one, :top_group))
+      expect(ability(:bottom_member)).not_to be_able_to(:create,
+invoice_list(:bottom_layer_one, :top_layer))
     end
   end
 

@@ -109,9 +109,8 @@ class TokenAbility
       token.layer == group
     end
 
-    can :show, Invoice do |invoice|
-      token.layer == invoice.group
-    end
+    can [:read, :update], Invoice, { group: { layer_group_id: token.layer.id } }
+    can [:read, :update], InvoiceItem, { invoice: { group: { layer_group_id: token.layer.id } } }
   end
 
   def define_mailing_list_abilities

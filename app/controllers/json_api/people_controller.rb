@@ -21,6 +21,8 @@ class JsonApi::PeopleController < JsonApiController
     super
   end
 
+  private
+
   def entry
     @entry ||= Person.find(params[:id])
   end

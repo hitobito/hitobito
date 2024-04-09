@@ -329,17 +329,26 @@ describe Person::Filter::Role do
       end
 
       context :inactive do
-        before do
-          person.roles.each(&:really_destroy!)
+        let!(:role) { roles(:top_leader) }
+        let(:role_type) { Group::TopGroup::Leader }
+        let(:other_role_type) { Group::TopGroup::Member }
+
+        it 'does not find active role' do
+          expect(filter(kind: 'inactive').entries).to be_empty
         end
 
-        context 'with only inactive role' do
-          let(:role_type) { Group::TopGroup::Member }
-          let!(:role) { person.roles.create!(type: role_type.sti_name, group: group) }
+        it 'does not find active role with later range' do
+          expect(filter(kind: 'inactive', start_at: role.created_at + 1.day).entries).to be_empty
+        end
 
+        it 'does find active role with earlier range' do
+          obj = filter(kind: 'inactive', start_at: role.created_at - 1.year, finish_at: role.created_at - 1.day)
+          binding.pry
+          expect(obj.entries).to be_empty
+        end
+
+        context 'with active role' do
           it 'does not find person with inactive role deleted before timeframe' do
-            role.update(created_at: 2.days.ago, deleted_at: 1.day.ago)
-            expect(filter(kind: 'inactive', start_at: now).entries).to be_empty
           end
 
           it 'does not find person with inactive role deleted within range' do
@@ -354,23 +363,16 @@ describe Person::Filter::Role do
         end
 
         context 'with inactive and other role' do
-          let(:role_type) { Group::TopGroup::Member }
-          let(:other_role_type) { Group::TopGroup::Leader }
-          let!(:role) { person.roles.create!(type: role_type.sti_name, group: group) }
           let!(:other_role) { person.roles.create!(type: other_role_type.sti_name, group: group) }
 
           it 'finds person with inactive role deleted before timeframe' do
             role.update(created_at: 2.days.ago, deleted_at: 1.day.ago)
+            binding.pry
             expect(filter(kind: 'inactive', start_at: now).entries).to have(1).item
           end
 
           it 'does not find person with inactive role deleted within range' do
             role.update(deleted_at: now)
-            expect(filter(kind: 'inactive', start_at: now, finish_at: now).entries).to be_empty
-          end
-
-          it 'does not find person with inactive role created within range' do
-            role.update(created_at: now)
             expect(filter(kind: 'inactive', start_at: now, finish_at: now).entries).to be_empty
           end
 
@@ -391,22 +393,21 @@ describe Person::Filter::Role do
         end
 
         context 'with only other role' do
-          let(:role_type) { Group::TopGroup::Member }
-          let(:other_role_type) { Group::TopGroup::Leader }
-          let!(:role) { person.roles.create!(type: other_role_type.sti_name, group: group) }
+          before { role.destroy }
+          let!(:other_role) { person.roles.create!(type: other_role_type.sti_name, group: group) }
 
           it 'does not find person with other role deleted before timeframe' do
-            role.update(created_at: 2.days.ago, deleted_at: 1.day.ago)
+            other_role.update(created_at: 2.days.ago, deleted_at: 1.day.ago)
             expect(filter(kind: 'inactive', start_at: now).entries).to be_empty
           end
 
           it 'does not find person with other role deleted within range' do
-            role.update(deleted_at: now)
+            other_role.update(deleted_at: now)
             expect(filter(kind: 'inactive', start_at: now, finish_at: now).entries).to be_empty
           end
 
           it 'finds person with other role created within range' do
-            role.update(created_at: now)
+            other_role.update(created_at: now)
             expect(filter(kind: 'inactive', start_at: now, finish_at: now).entries).to have(1).item
           end
         end

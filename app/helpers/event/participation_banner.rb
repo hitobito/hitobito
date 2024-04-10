@@ -23,6 +23,8 @@ class Event::ParticipationBanner
     end
   end
 
+  private
+
   def banner_content
     content = [status_text]
     if can_destroy?

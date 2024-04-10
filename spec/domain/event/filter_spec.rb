@@ -40,7 +40,11 @@ describe Event::Filter do
     expect(filter('layer', 'event_translations.name desc').list_entries.first.name).to eq 'Top Event'
   end
 
-  it 'does not beak with pagination' do
+  it 'does not break with string sort condition' do
+    expect(filter(nil, 'event_dates.start_at asc').list_entries).to have(3).entries
+  end
+
+  it 'does not break with pagination' do
     expect(filter(nil, 'event_dates.start_at' => 'asc').list_entries).to have(3).entries
 
     Fabricate.times(20, :event, groups: [group])

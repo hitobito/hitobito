@@ -16,7 +16,7 @@
 
       - if entry.course_kind?
         = labeled(Event::Kind.human_attribute_name(:minimum_age),
-                  entry.kind.minimum_age? ? t('events.minimum_age_with_years', minimum_age: entry.kind.minimum_age) : '')
+                  entry.minimum_age.present? ? t('events.minimum_age_with_years', minimum_age: entry.minimum_age) : '')
         = labeled(t('events.preconditions'), grouped_qualification_kinds_string(entry.kind, 'precondition', 'participant'))
 
   - if entry.course_kind?

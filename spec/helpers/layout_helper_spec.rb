@@ -89,4 +89,33 @@ describe LayoutHelper do
                     .split(' ')
     end
   end
+
+  describe '#badge' do
+    def build_node(text)
+      Capybara::Node::Simple.new(text)
+    end
+
+    it 'renders badge with text' do
+      node = build_node(badge('label'))
+      expect(node).to have_css 'span.badge.bg-default', text: 'label'
+    end
+
+    it 'second argument styles badge' do
+      node = build_node(badge('label', 'secondary'))
+      expect(node).to have_css 'span.badge.bg-secondary'
+    end
+
+    it 'third argument sets a tooltip and bootstrap toggle' do
+      node = build_node(badge('label', nil, 'the title'))
+      expect(node).to have_css  'span[data-bs-toggle=tooltip]'
+      expect(node).to have_css  "span[title='the title']"
+    end
+
+    it 'sets bs-html when passing html content' do
+      node = build_node(badge('label', nil, 'the <i>title</i>'))
+      expect(node).to have_css  'span[data-bs-toggle=tooltip]'
+      expect(node).to have_css  'span[data-bs-html=true]'
+      expect(node).to have_css  "span[title='the <i>title</i>']"
+    end
+  end
 end

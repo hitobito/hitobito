@@ -353,7 +353,6 @@ describe Person::Filter::Role do
           expect(entries(start_at: 1.day.ago)).to be_empty
         end
 
-        # isnt this somewhat unexpected and potentially confusing
         it 'does not find inactive role even when include_archived' do
           role.update(deleted_at: 2.days.ago)
           expect(entries(start_at: 1.day.ago, finish_at: now, include_archived: true)).to be_empty
@@ -373,13 +372,13 @@ describe Person::Filter::Role do
           end
 
           it 'does not find person deleted after range' do
-            role.update(deleted_at: 2.days.from_now)
+            role.update(delete_on: 2.days.from_now)
             expect(entries(start_at: 1.day.ago, finish_at: now)).to be_empty
           end
 
-          it 'does not find person with empty range' do
+          it 'does find person with empty range' do
             role.update(deleted_at: 2.days.ago)
-            expect(entries).to be_empty
+            expect(entries).to have(1).item
           end
 
           it 'does find person with empty range if role never existed' do

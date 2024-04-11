@@ -93,11 +93,18 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def inactive_type_conditions(scope)
-    excluded_people_ids = scope.where(duration_conditions)
+    excluded_people_ids = scope.where(excluded_roles_duration_conditions)
                                .where(roles: { type: args[:role_types] })
                                .pluck(:id)
 
     ['people.id NOT IN (?)', excluded_people_ids] if excluded_people_ids.any?
+  end
+
+  def excluded_roles_duration_conditions
+    [active_role_condition, {
+      min: parse_day(args[:start_at], Time.zone.now, :beginning_of_day),
+      max: parse_day(args[:finish_at], Time.zone.now, :end_of_day)
+    }]
   end
 
   def duration_conditions

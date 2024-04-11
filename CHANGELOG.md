@@ -2,6 +2,7 @@
 
 ## unreleased
 
+*  JSON:API OpenAPI Dokumentation weist 'extra_fields' korrekt aus (request parameter, entity schema attributes) (hitobito_sac_cas#275)
 *  Neues Attribut Minimale Teilnehmeranzahl auf Event (hitobito_sac_cas#358)
 *  Der OIDC /userinfo Endpoint und der OAuth /profile Endpoint geben von nun an immer dieselben (zum Scope passenden) Informationen aus (hitobito#2490)
 *  Eigener JSON:API Endpoint für Events (hitobito_sac_cas#229)

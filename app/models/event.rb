@@ -355,6 +355,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     # do nothing by default
   end
 
+  def course?
+    is_a?(Event::Course)
+  end
+
   def course_kind?
     kind_class == Event::Kind && kind.present?
   end

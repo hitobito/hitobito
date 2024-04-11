@@ -1,42 +1,55 @@
-= field_set_tag do
-  - [:first_name, :last_name, :nickname, :company_name].each do |a|
-    = f.labeled_input_field(a) if entry.show_attr?(a)
+-#  Copyright (c) 2012-2024, Pfadibewegung Schweiz. This file is part of
+-#  hitobito_pbs and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
 
-= render 'event/participation_contact_datas/address_fields', f: f
+= crud_form(entry,
+  { cancel_url: group_event_path(group, event),
+    buttons_bottom: true,
+    buttons_top: local_assigns.fetch(:buttons_top, true),
+    submit_label: t('event.participation_contact_datas.edit.save'),
+    url: contact_data_group_event_participations_path(group, event,
+      {event_role: { type: params[:event_role][:type] }})}) do |f|
 
-- if entry.show_attr?(:email)
-  = f.labeled_input_field :email, help_inline: t('people.email_field.used_as_login'), class: 'd-inline '
-
-- Event::ParticipationContactData.contact_associations.each do |a|
   = field_set_tag do
-    - unless entry.hidden_contact_attrs.include?(a)
-      = f.labeled_inline_fields_for a, "contactable/#{a.to_s.singularize}_fields"
+    - [:first_name, :last_name, :nickname, :company_name].each do |a|
+      = f.labeled_input_field(a) if entry.show_attr?(a)
 
-= field_set_tag do
-  - unless entry.hidden_contact_attrs.include?(:phone_numbers)
-    = f.labeled_inline_fields_for :phone_numbers, "contactable/phone_number_fields",
-                                  nil, entry.required_attr?(:phone_numbers)
+  = render 'event/participation_contact_datas/address_fields', f: f
 
-= field_set_tag do
-  - if entry.show_attr?(:gender)
-    = f.labeled(:gender) do
-      - (Person::GENDERS + ['']).each do |key|
-        = f.inline_radio_button(:gender, key, entry.gender_label(key))
+  - if entry.show_attr?(:email)
+    = f.labeled_input_field :email, help_inline: t('people.email_field.used_as_login'), class: 'd-inline '
 
-  - if entry.show_attr?(:birthday)
-    = f.labeled_string_field(:birthday,
-                             value: f.date_value(:birthday),
-                             help_inline: t('people.fields.format_birthday'),
-                             class: 'col-2 d-inline')
+  - Event::ParticipationContactData.contact_associations.each do |a|
+    = field_set_tag do
+      - unless entry.hidden_contact_attrs.include?(a)
+        = f.labeled_inline_fields_for a, "contactable/#{a.to_s.singularize}_fields"
 
-  - FeatureGate.if(:person_language) do
-    = f.labeled_collection_select(:language,
-                                  Person::LANGUAGES,
-                                  :first,
-                                  :last,
-                                  { prompt: true },
-                                  class: 'form-select form-select-sm')
+  = field_set_tag do
+    - unless entry.hidden_contact_attrs.include?(:phone_numbers)
+      = f.labeled_inline_fields_for :phone_numbers, "contactable/phone_number_fields",
+                                    nil, entry.required_attr?(:phone_numbers)
 
-= render_extensions :fields, locals: { f: f }
+  = field_set_tag do
+    - if entry.show_attr?(:gender)
+      = f.labeled(:gender) do
+        - (Person::GENDERS + ['']).each do |key|
+          = f.inline_radio_button(:gender, key, entry.gender_label(key))
 
-= render('people/privacy_policy_acceptance_field', policy_finder: @policy_finder, f: f)
+    - if entry.show_attr?(:birthday)
+      = f.labeled_string_field(:birthday,
+                              value: f.date_value(:birthday),
+                              help_inline: t('people.fields.format_birthday'),
+                              class: 'col-2 d-inline')
+
+    - FeatureGate.if(:person_language) do
+      = f.labeled_collection_select(:language,
+                                    Person::LANGUAGES,
+                                    :first,
+                                    :last,
+                                    { prompt: true },
+                                    class: 'form-select form-select-sm')
+
+  = render_extensions :fields, locals: { f: f }
+
+  = render('people/privacy_policy_acceptance_field', policy_finder: @policy_finder, f: f)

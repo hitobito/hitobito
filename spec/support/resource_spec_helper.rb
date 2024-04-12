@@ -10,7 +10,7 @@ module ResourceSpecHelper
 
   included do
     let(:ability) { Ability.new(person) }
-    let(:person) { people(:top_leader) }
+    let(:person) { Fabricate(:person) }
     let(:url_options) { { host: 'example.com' } }
 
     let(:context) do

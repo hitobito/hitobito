@@ -9,7 +9,7 @@ class EventResource < ApplicationResource
   primary_endpoint 'events', [:index, :show]
 
   self.polymorphic = [
-    "EventResource",
+    'EventResource',
     'Event::CourseResource'
   ]
 
@@ -42,8 +42,8 @@ class EventResource < ApplicationResource
 
   filter :type, only: [:eq] do
     eq do |scope, types|
-      types_with_nil = types.map { |type| type == "null" ? nil : type }
-      scope.where(type:  types_with_nil)
+      types_with_nil = types.map { |type| type == 'null' ? nil : type }
+      scope.where(type: types_with_nil)
     end
   end
 

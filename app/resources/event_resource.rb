@@ -14,7 +14,7 @@ class EventResource < ApplicationResource
     attribute :kind_id, :integer, filterable: true
     attribute :name, :string
     attribute :state, :string, filterable: true
-    attribute :number, :string
+    attribute :number, :string, filterable: true
     attribute :motto, :string
     attribute :cost, :string
     attribute :location, :string

@@ -61,7 +61,7 @@ describe PeopleController, js: true do
         sign_in_and_create_filter
 
         find('h4.filter-toggle', text: 'Top Layer').click
-        expect(page).to have_css('#roles input:checked', count: 7)
+        expect(page).to have_css('#roles input:checked', count: 8)
 
         find('h4.filter-toggle', text: 'Top Layer').click
         expect(page).to have_css('#roles input:checked', count: 0)
@@ -73,7 +73,7 @@ describe PeopleController, js: true do
         sign_in_and_create_filter
 
         find('h5.filter-toggle', text: 'Top Group').click
-        expect(page).to have_css('#roles input:checked', count: 6)
+        expect(page).to have_css('#roles input:checked', count: 7)
 
         find('h5.filter-toggle', text: 'Top Group').click
         expect(page).to have_css('#roles input:checked', count: 0)

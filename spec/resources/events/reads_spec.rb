@@ -156,7 +156,7 @@ describe EventResource, type: :resource do
         expect(jsonapi_data).to have(1).items
       end
 
-      it 'returns only events wih number having a specific prefix' do
+      it 'returns only events with number having a specific prefix' do
         params[:filter] = { number: { prefix: 'COURSE-' } }
         render
         expect(jsonapi_data).to have(2).items

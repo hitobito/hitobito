@@ -8,4 +8,4 @@
 - unless params[:for_someone_else]
   = render 'event/participations/step_wizard', step: 2
 
-= render 'form'
+= render 'form', submit_label: t('event.participations.form.apply')

@@ -7,7 +7,7 @@
 
 = entry_form(stacked: true,
              buttons_top: false,
-             submit_label: entry.new_record? ? t('.apply') : t('global.button.save'),
+             submit_label: submit_label,
              cancel_url_new: group_event_path(@group, @event)) do |f|
 
   - if params[:event_role]

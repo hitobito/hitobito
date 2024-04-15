@@ -1,0 +1,42 @@
+= field_set_tag do
+  - [:first_name, :last_name, :nickname, :company_name].each do |a|
+    = f.labeled_input_field(a) if entry.show_attr?(a)
+
+= render 'event/participation_contact_datas/address_fields', f: f
+
+- if entry.show_attr?(:email)
+  = f.labeled_input_field :email, help_inline: t('people.email_field.used_as_login'), class: 'd-inline '
+
+- Event::ParticipationContactData.contact_associations.each do |a|
+  = field_set_tag do
+    - unless entry.hidden_contact_attrs.include?(a)
+      = f.labeled_inline_fields_for a, "contactable/#{a.to_s.singularize}_fields"
+
+= field_set_tag do
+  - unless entry.hidden_contact_attrs.include?(:phone_numbers)
+    = f.labeled_inline_fields_for :phone_numbers, "contactable/phone_number_fields",
+                                  nil, entry.required_attr?(:phone_numbers)
+
+= field_set_tag do
+  - if entry.show_attr?(:gender)
+    = f.labeled(:gender) do
+      - (Person::GENDERS + ['']).each do |key|
+        = f.inline_radio_button(:gender, key, entry.gender_label(key))
+
+  - if entry.show_attr?(:birthday)
+    = f.labeled_string_field(:birthday,
+                            value: f.date_value(:birthday),
+                            help_inline: t('people.fields.format_birthday'),
+                            class: 'col-2 d-inline')
+
+  - FeatureGate.if(:person_language) do
+    = f.labeled_collection_select(:language,
+                                  Person::LANGUAGES,
+                                  :first,
+                                  :last,
+                                  { prompt: true },
+                                  class: 'form-select form-select-sm')
+
+= render_extensions :fields, locals: { f: f }
+
+= render('people/privacy_policy_acceptance_field', policy_finder: @policy_finder, f: f)

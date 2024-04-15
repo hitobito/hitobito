@@ -33,7 +33,7 @@
       #admin_questions.tab-pane
         = render 'admin_questions_fields', f: f
 
-    - if entry.participant_types.present?
+    - if render_event_contact_attr_fields?
       #contact_attrs.tab-pane
         = render 'contact_attr_fields', f: f
 

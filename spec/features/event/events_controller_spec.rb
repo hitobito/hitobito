@@ -1,4 +1,6 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+# frozen_string_literal: true
+
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -78,65 +80,29 @@ describe EventsController, js: true do
     end
   end
 
-  context 'standard course description' do
+  context 'standard course description gets updated from event kind' do
     let(:form_path) { new_group_event_path(event.group_ids.first, event.id, event: { type: Event::Course }, format: :html) }
+    let(:prefill_description) { 'Test description' }
 
-    context 'if textarea is empty' do
-      before :each do
-        sign_in
-        visit form_path
-      end
+    before :each do
+      sign_in
+      visit form_path
+    end
 
-      it 'fills default description' do
-        obsolete_node_safe do
-          select 'SLK (Scharleiterkurs)', from: 'event_kind_id'
-          expect(find('#event_description').value).to eq event.kind.general_information
-        end
-      end
-
-      it 'does not display description insertion link' do
-        obsolete_node_safe do
-          select 'SLK (Scharleiterkurs)', from: 'event_kind_id'
-          expect(page).to have_selector('.standard-description-link', visible: false)
-        end
+    it 'fills default description if empty' do
+      obsolete_node_safe do
+        select 'SLK (Scharleiterkurs)', from: 'event_kind_id'
+        expect(find('#event_description').value).to eq event.kind.general_information
       end
     end
 
-    context 'if textarea is not empty' do
-      let(:prefill_description) { 'Test description' }
 
-      before :each do
-        sign_in
-        visit form_path
-
+    it 'does not fill textarea' do
+      obsolete_node_safe do
         fill_in 'event_description', with: prefill_description
-      end
-
-      it 'displays description insertion link' do
-        obsolete_node_safe do
-          select 'SLK (Scharleiterkurs)', from: 'event_kind_id'
-          expect(page).to have_selector('.standard-description-link', visible: true)
-        end
-      end
-
-      it 'does not fill textarea' do
-        obsolete_node_safe do
-          select 'SLK (Scharleiterkurs)', from: 'event_kind_id'
-          expect(find('#event_description').value).to eq prefill_description
-        end
-      end
-
-      it 'fills textarea if clicked on description insertion link' do
-        obsolete_node_safe do
-          select 'SLK (Scharleiterkurs)', from: 'event_kind_id'
-
-          find('.standard-description-link').click
-
-          concat_description = prefill_description + ' ' + event.kind.general_information
-          expect(find('#event_description').value).to eq concat_description
-        end
+        select 'SLK (Scharleiterkurs)', from: 'event_kind_id'
+        expect(find('#event_description').value).to eq prefill_description
       end
     end
   end
-
 end

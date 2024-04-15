@@ -18,14 +18,18 @@ require 'spec_helper'
 
 describe Qualification do
 
-  let(:qualification) { Fabricate(:qualification) }
-  let(:person) { qualification.person }
+  let(:qualification) { Fabricate(:qualification, person: person) }
+  let(:person) { Fabricate(:person) }
 
   describe '.order_by_date' do
     subject(:scope) { described_class.order_by_date }
+    let(:today) { Time.zone.today }
 
-    def create_qualification(kind)
-      Fabricate(:qualification, person: people(:top_leader), qualification_kind: qualification_kinds(kind))
+    def create_qualification(kind, attrs = {})
+      Fabricate(:qualification, attrs.merge(
+        person: people(:top_leader),
+        qualification_kind: qualification_kinds(kind)
+      ))
     end
 
     it 'orders by finish_at descending with nulls first' do
@@ -34,6 +38,13 @@ describe Qualification do
       ql = create_qualification(:ql) # no validity, i.e. no finished_at set
 
       expect(described_class.order_by_date).to eq [ql, sl, gl]
+    end
+
+    it 'orders by start_at descending if finish_at is equal' do
+      sl = create_qualification(:sl, start_at: today, finish_at: 1.year.from_now)
+      gl = create_qualification(:gl, start_at: today - 1.day, finish_at: 1.year.from_now)
+
+      expect(described_class.order_by_date).to eq [sl, gl]
     end
   end
 
@@ -172,7 +183,7 @@ describe Qualification do
     let(:today) { Time.zone.today }
     let(:kind) { qualification_kinds(:sl) }
     let(:start_date) { today - 1.years }
-    let(:q) { Fabricate(:qualification, qualification_kind: kind, person: person, start_at: start_date) }
+    let!(:q) { Fabricate(:qualification, qualification_kind: kind, person: person, start_at: start_date) }
 
     context 'not reactivateable' do
       context 'active qualification' do
@@ -216,13 +227,37 @@ describe Qualification do
       end
     end
 
+    context 'not_active' do
+      before { kind.update_column(:reactivateable, 2) }
+
+      it { expect(Qualification.not_active).to be_blank }
+      it { expect(Qualification.not_active([kind.id])).to be_blank }
+      it { expect(Qualification.not_active([], today + 2.years)).to match_array([q]) }
+      it { expect(Qualification.not_active([kind.id], today + 2.years)).to match_array([q]) }
+
+    end
+
+    context 'only_reactivateable' do
+      before { kind.update_column(:reactivateable, 2) }
+
+      before do
+        @reactivatable = Fabricate(:qualification, qualification_kind: kind, person: person, start_at: today - 3.year) # reactivateable
+        @expired = Fabricate(:qualification, qualification_kind: kind, person: person, start_at: today - 5.years) # expired
+      end
+
+      it { expect(Qualification.only_reactivateable).to match_array([@reactivatable]) }
+      it { expect(Qualification.only_reactivateable(today + 2.years)).to match_array([q]) }
+      it { expect(Qualification.only_reactivateable(today + 4.years)).to be_blank }
+
+    end
+
     context '#reactivateable? takes parameter' do
       let(:start_date) { today - 3.years }
       before { kind.update_column(:reactivateable, 2) }
 
       it { expect(q).to be_reactivateable }
       it { expect(q.reactivateable?(today + 2.years)).to be_falsey }
-        it { expect(Qualification.reactivateable(today + 2.years)).not_to include q }
+      it { expect(Qualification.reactivateable(today + 2.years)).not_to include q }
     end
   end
 

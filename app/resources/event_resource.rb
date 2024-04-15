@@ -8,22 +8,30 @@
 class EventResource < ApplicationResource
   primary_endpoint 'events', [:index, :show]
 
+  self.polymorphic = [
+    "EventResource",
+    'Event::CourseResource'
+  ]
+
   with_options writable: false, filterable: false, sortable: false do
     attribute(:group_ids, :array_of_integers) { @object.group_ids }
     attribute :type, :string
     attribute :kind_id, :integer, filterable: true
     attribute :name, :string
-    attribute :state, :string, filterable: true
-    attribute :number, :string
+    attribute :description, :string
+    attribute :application_conditions, :string
     attribute :motto, :string
     attribute :cost, :string
     attribute :location, :string
     attribute :application_opening_at, :date
     attribute :application_closing_at, :date
-    attribute :participant_count, :integer
-    attribute :training_days, :float
     attribute :application_contact_id, :integer
-    attribute :applicant_count, :integer
+    attribute :external_application_link, :string do
+      next unless @object.external_applications?
+
+      params = { group_id: @object.groups.first.id, id: @object.id }
+      context.group_public_event_url(params)
+    end
     attribute :maximum_participants, :integer
     attribute :created_at, :datetime
     attribute :updated_at, :datetime, filterable: true
@@ -39,7 +47,7 @@ class EventResource < ApplicationResource
     end
   end
 
-  filter :group_id, :integer, only: [:eq, :not_eq]  do
+  filter :group_id, :integer, only: [:eq, :not_eq] do
     eq do |scope, group_ids|
       scope.references(:groups).where(groups: { id: group_ids })
     end
@@ -54,7 +62,7 @@ class EventResource < ApplicationResource
   end
 
   def base_scope
-    Event.includes(:groups).list
+    Event.accessible_by(index_ability).includes(:groups, :translations).list
   end
 
   def index_ability

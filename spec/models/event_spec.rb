@@ -9,35 +9,51 @@
 #
 # Table name: events
 #
-#  id                          :integer          not null, primary key
-#  type                        :string
-#  name                        :string           not null
-#  number                      :string
-#  motto                       :string
-#  cost                        :string
-#  maximum_participants        :integer
-#  contact_id                  :integer
-#  description                 :text
-#  location                    :text
-#  application_opening_at      :date
-#  application_closing_at      :date
-#  application_conditions      :text
-#  kind_id                     :integer
-#  state                       :string(60)
-#  priorization                :boolean          default(FALSE), not null
-#  requires_approval           :boolean          default(FALSE), not null
-#  created_at                  :datetime
-#  updated_at                  :datetime
-#  participant_count           :integer          default(0)
-#  application_contact_id      :integer
-#  external_applications       :boolean          default(FALSE)
-#  applicant_count             :integer          default(0)
-#  teamer_count                :integer          default(0)
-#  signature                   :boolean
-#  signature_confirmation      :boolean
-#  signature_confirmation_text :string
-#  creator_id                  :integer
-#  updater_id                  :integer
+#  id                               :integer          not null, primary key
+#  applicant_count                  :integer          default(0)
+#  application_closing_at           :date
+#  application_conditions           :text(65535)
+#  application_opening_at           :date
+#  applications_cancelable          :boolean          default(FALSE), not null
+#  cost                             :string(255)
+#  description                      :text(65535)
+#  display_booking_info             :boolean          default(TRUE), not null
+#  external_applications            :boolean          default(FALSE)
+#  globally_visible                 :boolean
+#  hidden_contact_attrs             :text(65535)
+#  location                         :text(65535)
+#  maximum_participants             :integer
+#  minimum_participants             :integer
+#  motto                            :string(255)
+#  name                             :string(255)
+#  notify_contact_on_participations :boolean          default(FALSE), not null
+#  number                           :string(255)
+#  participant_count                :integer          default(0)
+#  participations_visible           :boolean          default(FALSE), not null
+#  priorization                     :boolean          default(FALSE), not null
+#  required_contact_attrs           :text(65535)
+#  requires_approval                :boolean          default(FALSE), not null
+#  shared_access_token              :string(255)
+#  signature                        :boolean
+#  signature_confirmation           :boolean
+#  signature_confirmation_text      :string(255)
+#  state                            :string(60)
+#  teamer_count                     :integer          default(0)
+#  training_days                    :decimal(5, 2)
+#  type                             :string(255)
+#  waiting_list                     :boolean          default(TRUE), not null
+#  created_at                       :datetime
+#  updated_at                       :datetime
+#  application_contact_id           :integer
+#  contact_id                       :integer
+#  creator_id                       :integer
+#  kind_id                          :integer
+#  updater_id                       :integer
+#
+# Indexes
+#
+#  index_events_on_kind_id              (kind_id)
+#  index_events_on_shared_access_token  (shared_access_token)
 #
 
 require 'spec_helper'

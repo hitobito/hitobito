@@ -8,6 +8,7 @@
 class EventDecorator < ApplicationDecorator
   decorates :event
   decorates_association :contact
+  decorates_association :kind
 
   class_attribute :icons
   self.icons = {
@@ -76,35 +77,19 @@ class EventDecorator < ApplicationDecorator
     end
   end
 
+  def issued_qualifications_info_for_leaders
+    kind.issued_qualifications_info_for_leaders(qualification_date)
+  end
+
+  def issued_qualifications_info_for_participants
+    kind.issued_qualifications_info_for_participants(qualification_date)
+  end
+
   def new_role
     p = participations.new
     role = p.roles.new
     role.participation = p
     role
-  end
-
-  def issued_qualifications_info_for_leaders
-    qualis = kind.qualification_kinds('qualification', 'leader').list.to_a
-    prolongs = kind.qualification_kinds('prolongation', 'leader').list.to_a
-    variables = { until: quali_date,
-                  model: quali_model_name(qualis),
-                  issued: qualis.join(', '),
-                  prolonged: prolongs.join(', '),
-                  count: prolongs.size }
-
-    translate_issued_qualifications_info(qualis, prolongs, variables)
-  end
-
-  def issued_qualifications_info_for_participants
-    qualis = kind.qualification_kinds('qualification', 'participant').list.to_a
-    prolongs = kind.qualification_kinds('prolongation', 'participant').list.to_a
-    variables = { until: quali_date,
-                  model: quali_model_name(qualis),
-                  issued: qualis.join(', '),
-                  prolonged: prolongs.join(', '),
-                  count: prolongs.size }
-
-    translate_issued_qualifications_info(qualis, prolongs, variables)
   end
 
   def as_typeahead
@@ -130,27 +115,4 @@ class EventDecorator < ApplicationDecorator
       (object.used_attributes.include?(:application_conditions) &&
        application_conditions.present?)
   end
-
-  private
-
-  def translate_issued_qualifications_info(qualis, prolongs, variables)
-    if qualis.present? && prolongs.present?
-      translate(:issue_and_prolong, variables)
-    elsif qualis.present?
-      translate(:issue_only, variables)
-    elsif prolongs.present?
-      translate(:prolong_only, variables)
-    else
-      ''
-    end
-  end
-
-  def quali_model_name(list)
-    Qualification.model_name.human(count: list.size)
-  end
-
-  def quali_date
-    h.f(qualification_date)
-  end
-
 end

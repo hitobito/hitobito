@@ -270,6 +270,22 @@ describe TokenAbility do
     end
   end
 
+  describe :event_kinds do
+    let(:token) { service_tokens(:rejected_top_layer_token) }
+
+    it 'may read event kind when token has event flag' do
+      token.update!(events: true)
+      is_expected.to be_able_to(:index, Event::Kind)
+      is_expected.to be_able_to(:show, Event::Kind.new)
+    end
+
+    it 'may not read event kind when token does not have event flag' do
+      token.update!(events: false)
+      is_expected.not_to be_able_to(:index, Event::Kind)
+      is_expected.not_to be_able_to(:show, Event::Kind.new)
+    end
+  end
+
   describe :groups do
     context 'authorized' do
       let(:token) { service_tokens(:permitted_top_layer_token) }
@@ -317,13 +333,20 @@ describe TokenAbility do
     context 'authorized' do
       let(:token) { service_tokens(:permitted_top_layer_token) }
 
+      it 'may index' do
+        is_expected.to be_able_to(:index, Invoice)
+        is_expected.to be_able_to(:index, InvoiceItem)
+      end
+
       it 'may show' do
         is_expected.to be_able_to(:show, token.layer.invoices.build)
+        is_expected.to be_able_to(:show, token.layer.invoices.build.invoice_items.build)
       end
 
       it 'may show independently if group access' do
         token.update!(groups: false)
         is_expected.to be_able_to(:show, token.layer.invoices.build)
+        is_expected.to be_able_to(:show, token.layer.invoices.build.invoice_items.build)
       end
 
       it 'may index_invoices' do

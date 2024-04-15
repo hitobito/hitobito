@@ -80,6 +80,8 @@ class TokenAbility
     can :'index_event/courses', Group do |g|
       token_layer_and_below.include?(g)
     end
+
+    can :read, Event::Kind
   end
 
   def define_event_participation_abilities
@@ -107,9 +109,8 @@ class TokenAbility
       token.layer == group
     end
 
-    can :show, Invoice do |invoice|
-      token.layer == invoice.group
-    end
+    can [:read, :update], Invoice, { group: { layer_group_id: token.layer.id } }
+    can [:read, :update], InvoiceItem, { invoice: { group: { layer_group_id: token.layer.id } } }
   end
 
   def define_mailing_list_abilities

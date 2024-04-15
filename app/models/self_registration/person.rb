@@ -56,7 +56,7 @@ class SelfRegistration::Person
     Person.reflect_on_association(*args)
   end
 
-  delegate :gender_label, to: :person
+  delegate :gender_label, :valid_email?, to: :person
 
   def save!
     person.save! && role.save! && enqueue_duplicate_locator_job
@@ -89,9 +89,7 @@ class SelfRegistration::Person
   end
 
   def assert_email
-    unless Truemail.validate(email.to_s, with: :regex).result.success
-      errors.add(:email, :invalid)
-    end
+    errors.add(:email, :invalid) unless valid_email?
 
     unless Person.where(email: email).none? && household_emails.to_a.count(email) <= 1
       errors.add(:email, I18n.t('activerecord.errors.models.person.attributes.email.taken'))

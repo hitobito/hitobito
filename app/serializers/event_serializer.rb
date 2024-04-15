@@ -21,6 +21,7 @@
 #  hidden_contact_attrs             :text(65535)
 #  location                         :text(65535)
 #  maximum_participants             :integer
+#  minimum_participants             :integer
 #  motto                            :string(255)
 #  name                             :string(255)
 #  notify_contact_on_participations :boolean          default(FALSE), not null
@@ -36,6 +37,7 @@
 #  signature_confirmation_text      :string(255)
 #  state                            :string(60)
 #  teamer_count                     :integer          default(0)
+#  training_days                    :decimal(5, 2)
 #  type                             :string(255)
 #  waiting_list                     :boolean          default(TRUE), not null
 #  created_at                       :datetime

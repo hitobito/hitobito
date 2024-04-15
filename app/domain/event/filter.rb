@@ -12,6 +12,7 @@ class Event::Filter
     @filter = filter
     @year = year
     @sort_expression = sort_expression
+    @sort_expression = Arel.sql(sort_expression) if sort_expression.is_a?(String)
   end
 
   def list_entries

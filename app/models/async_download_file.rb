@@ -24,7 +24,7 @@ class AsyncDownloadFile < ApplicationRecord
     FILENAME_REGEX = /\A(.*)_(\d+)-(\d+)\z/
 
     def create_name(filename, person_id)
-      "#{filename.to_s.parameterize}_#{Time.now.to_i}-#{person_id}"
+      "#{filename.to_s.parameterize(preserve_case: true)}_#{Time.now.to_i}-#{person_id}"
     end
 
     def parse_filename(filename)

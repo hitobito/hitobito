@@ -144,6 +144,268 @@
       }
     },
     {
+      "name": "Event::CourseResource",
+      "type": "courses",
+      "graphql_entrypoint": "courses",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "group_ids": {
+          "type": "array_of_integers",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "type": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "kind_id": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "name": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "description": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "application_conditions": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "motto": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "cost": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "location": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "application_opening_at": {
+          "type": "date",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "application_closing_at": {
+          "type": "date",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "application_contact_id": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "external_application_link": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "maximum_participants": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "created_at": {
+          "type": "datetime",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "updated_at": {
+          "type": "datetime",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "state": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "training_days": {
+          "type": "float",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "applicant_count": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "participant_count": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "minimum_participants": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "number": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "teamer_count": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        }
+      },
+      "extra_attributes": {
+      },
+      "sorts": {
+        "id": {
+        }
+      },
+      "filters": {
+        "id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "kind_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "updated_at": {
+          "type": "datetime",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "operators": [
+            "eq"
+          ]
+        },
+        "group_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq"
+          ]
+        },
+        "before_or_on": {
+          "type": "date",
+          "operators": [
+            "eq"
+          ],
+          "single": true
+        },
+        "after_or_on": {
+          "type": "date",
+          "operators": [
+            "eq"
+          ],
+          "single": true
+        },
+        "state": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        }
+      },
+      "relationships": {
+        "contact": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "PersonResource"
+        },
+        "dates": {
+          "type": "has_many",
+          "description": null,
+          "resource": "Event::DateResource"
+        },
+        "kind": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "Event::KindResource"
+        },
+        "leaders": {
+          "type": "has_many",
+          "description": null,
+          "resource": "Person::NameResource"
+        }
+      },
+      "stats": {
+        "total": [
+          "count"
+        ]
+      }
+    },
+    {
       "name": "Event::DateResource",
       "type": "dates",
       "graphql_entrypoint": "dates",
@@ -230,6 +492,139 @@
       }
     },
     {
+      "name": "Event::KindCategoryResource",
+      "type": "event_kind_categories",
+      "graphql_entrypoint": "kindCategories",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "label": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        }
+      },
+      "extra_attributes": {
+      },
+      "sorts": {
+        "id": {
+        }
+      },
+      "filters": {
+        "id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        }
+      },
+      "relationships": {
+      },
+      "stats": {
+        "total": [
+          "count"
+        ]
+      }
+    },
+    {
+      "name": "Event::KindResource",
+      "type": "event_kinds",
+      "graphql_entrypoint": "kinds",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "label": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "short_name": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "general_information": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "application_conditions": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "minimum_age": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "created_at": {
+          "type": "datetime",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "updated_at": {
+          "type": "datetime",
+          "readable": true,
+          "writable": false,
+          "description": null
+        }
+      },
+      "extra_attributes": {
+      },
+      "sorts": {
+        "id": {
+        }
+      },
+      "filters": {
+        "id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        }
+      },
+      "relationships": {
+        "kind_category": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "Event::KindCategoryResource"
+        }
+      },
+      "stats": {
+        "total": [
+          "count"
+        ]
+      }
+    },
+    {
       "name": "EventResource",
       "type": "events",
       "graphql_entrypoint": "events",
@@ -265,13 +660,13 @@
           "writable": false,
           "description": null
         },
-        "state": {
+        "description": {
           "type": "string",
           "readable": true,
           "writable": false,
           "description": null
         },
-        "number": {
+        "application_conditions": {
           "type": "string",
           "readable": true,
           "writable": false,
@@ -307,26 +702,14 @@
           "writable": false,
           "description": null
         },
-        "participant_count": {
-          "type": "integer",
-          "readable": true,
-          "writable": false,
-          "description": null
-        },
-        "training_days": {
-          "type": "float",
-          "readable": true,
-          "writable": false,
-          "description": null
-        },
         "application_contact_id": {
           "type": "integer",
           "readable": true,
           "writable": false,
           "description": null
         },
-        "applicant_count": {
-          "type": "integer",
+        "external_application_link": {
+          "type": "string",
           "readable": true,
           "writable": false,
           "description": null
@@ -377,21 +760,6 @@
             "gte",
             "lt",
             "lte"
-          ]
-        },
-        "state": {
-          "type": "string",
-          "operators": [
-            "eq",
-            "not_eq",
-            "eql",
-            "not_eql",
-            "prefix",
-            "not_prefix",
-            "suffix",
-            "not_suffix",
-            "match",
-            "not_match"
           ]
         },
         "updated_at": {
@@ -449,7 +817,12 @@
         "total": [
           "count"
         ]
-      }
+      },
+      "polymorphic": true,
+      "children": [
+        "EventResource",
+        "Event::CourseResource"
+      ]
     },
     {
       "name": "GroupResource",
@@ -888,6 +1261,317 @@
           "description": null,
           "resource": "GroupResource"
         }
+      },
+      "stats": {
+        "total": [
+          "count"
+        ]
+      }
+    },
+    {
+      "name": "InvoiceItemResource",
+      "type": "invoice_items",
+      "graphql_entrypoint": "invoiceItems",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "invoice_id": {
+          "type": "integer",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "name": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "description": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "unit_cost": {
+          "type": "float",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "vat_rate": {
+          "type": "float",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "cost": {
+          "type": "integer",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "count": {
+          "type": "integer",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "cost_center": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "account": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        }
+      },
+      "extra_attributes": {
+      },
+      "sorts": {
+        "id": {
+        }
+      },
+      "filters": {
+        "id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "invoice_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        }
+      },
+      "relationships": {
+        "invoice": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "InvoiceResource"
+        }
+      },
+      "stats": {
+        "total": [
+          "count"
+        ]
+      }
+    },
+    {
+      "name": "InvoiceResource",
+      "type": "invoices",
+      "graphql_entrypoint": "invoices",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "title": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "description": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "state": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "group_id": {
+          "type": "integer",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "recipient_id": {
+          "type": "integer",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "due_at": {
+          "type": "date",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "issued_at": {
+          "type": "date",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "recipient_email": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "payment_information": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "payment_purpose": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "hide_total": {
+          "type": "boolean",
+          "readable": true,
+          "writable": true,
+          "description": null
+        }
+      },
+      "extra_attributes": {
+      },
+      "sorts": {
+        "id": {
+        }
+      },
+      "filters": {
+        "id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "group_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "recipient_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        }
+      },
+      "relationships": {
+        "group": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "GroupResource"
+        },
+        "recipient": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "PersonResource"
+        },
+        "invoice_items": {
+          "type": "has_many",
+          "description": null,
+          "resource": "InvoiceItemResource"
+        }
+      },
+      "stats": {
+        "total": [
+          "count"
+        ]
+      }
+    },
+    {
+      "name": "Person::NameResource",
+      "type": "person-name",
+      "graphql_entrypoint": "names",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "first_name": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "last_name": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        }
+      },
+      "extra_attributes": {
+      },
+      "sorts": {
+        "id": {
+        }
+      },
+      "filters": {
+        "id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "leads_course_id": {
+          "type": "integer",
+          "operators": [
+            "eq"
+          ]
+        }
+      },
+      "relationships": {
       },
       "stats": {
         "total": [
@@ -1766,6 +2450,16 @@
     }
   ],
   "endpoints": {
+    "/api/event_kinds": {
+      "actions": {
+        "index": {
+          "resource": "Event::KindResource"
+        },
+        "show": {
+          "resource": "Event::KindResource"
+        }
+      }
+    },
     "/api/events": {
       "actions": {
         "index": {
@@ -1783,6 +2477,19 @@
         },
         "show": {
           "resource": "GroupResource"
+        }
+      }
+    },
+    "/api/invoices": {
+      "actions": {
+        "index": {
+          "resource": "InvoiceResource"
+        },
+        "show": {
+          "resource": "InvoiceResource"
+        },
+        "update": {
+          "resource": "InvoiceResource"
         }
       }
     },

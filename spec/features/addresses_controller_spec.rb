@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe AddressesController, js: true do
+describe AddressesController, js: true, sphinx: true do
   it 'finds address, fills form fields and finds number' do
     obsolete_node_safe do
       index_sphinx

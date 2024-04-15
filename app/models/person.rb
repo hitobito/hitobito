@@ -112,13 +112,15 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   GENDERS = %w(m w).freeze
 
+  # rubocop:disable Style/MutableConstant meant to be extended in wagons
   LANGUAGES = Settings.application
                       .languages
                       .to_hash
                       .merge(Settings.application
-                                     .additional_languages&.to_hash || {}).freeze
+                                     .additional_languages&.to_hash || {})
 
-  ADDRESS_ATTRS = %w(address zip_code town country) # rubocop:disable Style/MutableConstant meant to be extended in wagons
+  ADDRESS_ATTRS = %w(address zip_code town country)
+  # rubocop:enable Style/MutableConstant meant to be extended in wagons
 
   # Configure which Person attributes can be used to identify a person for login.
   class_attribute :devise_login_id_attrs, default: [:email]

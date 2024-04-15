@@ -100,7 +100,11 @@ An example response could be (formatted here for readability):
   "email": "julia@example.com",
   "first_name": "Julia",
   "last_name": "Keller",
-  "nickname": "Polka"
+  "nickname": "Polka",
+  "address": null,
+  "zip_code": "",
+  "town": null,
+  "country": null
 }
 ```
 
@@ -124,8 +128,6 @@ When using the `with_roles` scope, the /oauth/profile endpoint yields all public
   "gender": null,
   "birthday": "1999-09-09",
   "primary_group_id": 1,
-  "title": null,
-  "salutation": null,
   "language": "de",
   "roles": [
     {
@@ -173,19 +175,35 @@ The token is signed using the hitobito server's private key. `iss` is the issuer
 
 #### Userinfo endpoint
 
-Using the access token, the standardized OIDC Userinfo endpoint can also be queried. This endpoint is similar to the profile endpoint of the OAuth flow, and will yield information depending on the used scopes. Here is an example response from the /oauth/userinfo endpoint, when using the `email` and `with_roles` scopes:
+Using the access token, the standardized OIDC Userinfo endpoint can also be queried. This endpoint is similar to the profile endpoint of the OAuth flow, and will yield information depending on the used scopes. Here is an example response from the /oauth/userinfo endpoint, when using the `email` and `with_roles` scopes (additionally to the mandatory `openid` scope):
 
 ```json
 {
   "sub": "34",
   "email": "julia@example.com",
+  "first_name": "Julia",
+  "last_name": "Keller",
+  "nickname": "Polka",
+  "company_name": null,
+  "company": false,
+  "address": null,
+  "zip_code": "",
+  "town": null,
+  "country": null,
+  "gender": null,
+  "birthday": "1999-09-09",
+  "primary_group_id": 1,
+  "language": "de",
   "roles": [
     {
       "group_id": 1,
       "group_name": "hitobito",
       "role": "Group::Bund::MitarbeiterGs",
       "role_class": "Group::Bund::MitarbeiterGs",
-      "role_name": "Mitarbeiter*in GS"
+      "role_name": "Mitarbeiter*in GS",
+      "permissions": [
+        "layer_and_below_full"
+      ]
     }
   ]
 }
@@ -193,7 +211,7 @@ Using the access token, the standardized OIDC Userinfo endpoint can also be quer
 
 ### Accessing the JSON-API
 
-All endpoints from the [JSON API](05_rest_api.md) can be used with a personal OAuth access token, if the token has the `api` scope. There are two possibilities to use the API:
+All endpoints from the [JSON API](05_rest_api.md) can be used with a personal OAuth access token, if the token has the `api` scope. Individual endpoints can also be accessed if the token has the matching scope: `events`, `groups`, `people`, `invoices`, `mailing_lists`. There are two possibilities to use the API:
 
 * **Query parameter**: Send `access_token` as query parameter in the URL, and append `.json` to the URL path
 ```bash

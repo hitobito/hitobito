@@ -17,6 +17,8 @@ Currently the following endpoints are provided:
 | GET    | /api/groups/:id                                   | Fetch a single group entry, replace :id with the groups's primary key           |
 | GET    | /api/events/                                      | List all accessible events                                                      |
 | GET    | /api/events/:id                                   | Fetch a single event entry, replace :id with the event's primary key            |
+| GET    | /api/event_kinds/                                 | List all accessible events kinds                                                |
+| GET    | /api/event_kinds/:id                              | Fetch a single event kind, replace :id with the event's primary key             |
 
 Visit your hitobito's swagger UI [/api-docs](/api-docs) for detailed documentation and a sandbox for testing/developing requests.
 

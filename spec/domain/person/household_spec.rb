@@ -16,8 +16,8 @@ describe Person::Household do
     Fabricate(role.name.to_s, group: group).person
   end
 
-  def household(person)
-    Person::Household.new(person, Ability.new(person), nil, user)
+  def household(person, other = nil)
+    Person::Household.new(person, Ability.new(person), other, user)
   end
 
   context '#assign' do
@@ -105,6 +105,31 @@ describe Person::Household do
     end
   end
 
+  context '#leave' do
+    it 'clears household_people_ids' do
+      leader.household_people_ids = [member.id]
+      subject = household(leader)
+
+      expect { subject.leave }.
+        to change { leader.household_people_ids }.from([member.id]).to([])
+
+      expect(subject).to be_people_changed
+    end
+
+    it 'changes emtpy? to true' do
+      leader.household_people_ids = [member.id]
+      subject = household(leader)
+
+      expect { subject.leave }.
+        to change { household(leader).empty? }.from(false).to(true)
+    end
+
+    it 'returns self' do
+      subject = household(leader)
+      expect(subject.leave).to eq subject
+    end
+  end
+
   context "#valid?" do
     it 'true if person address is identical to readonly person address' do
       member.household_people_ids = [leader.id]
@@ -130,7 +155,7 @@ describe Person::Household do
     it 'persists new household', versioning: true do
       leader.household_people_ids = [member.id]
       expect do
-        household(leader).save
+        household(leader).send(:save)
       end.to change { member.versions.count }.by(2)
 
       expect(leader.reload.household_key).to eq member.reload.household_key
@@ -142,7 +167,7 @@ describe Person::Household do
     it 'persists new household with readonly person' do
       member.attributes = leader.attributes.slice(*Person::ADDRESS_ATTRS)
       member.household_people_ids = [leader.id]
-      household(member).save
+      household(member).send(:save)
 
       expect(member.reload.household_key).to eq leader.reload.household_key
       expect(member.household_key).to be_present
@@ -153,7 +178,7 @@ describe Person::Household do
     it 'adds person to persisted household' do
       member.update(household_key: 1)
       leader.household_people_ids = [member.id]
-      household(leader).save
+      household(leader).send(:save)
 
       expect(leader.reload.household_key).to eq '1'
       expect(leader.household_people).to eq [member]
@@ -166,7 +191,7 @@ describe Person::Household do
 
       other.attributes = leader.attributes.slice(*Person::ADDRESS_ATTRS)
       other.household_people_ids = [leader.id, member.id]
-      household(other).save
+      household(other).send(:save)
 
       expect(other.reload.household_key).to eq '1'
       expect(other.household_people).to match_array [leader, member]
@@ -177,7 +202,7 @@ describe Person::Household do
     it 'raises if person address attrs differ from readonly person address attrs' do
       member.household_people_ids = [leader.id]
       expect do
-        household(member).save
+        household(member).send(:save)
       end.to raise_error 'invalid'
     end
 
@@ -187,14 +212,14 @@ describe Person::Household do
       member.attributes = leader.attributes.slice(*Person::ADDRESS_ATTRS)
 
       expect do
-        household(member).save
+        household(member).send(:save)
       end.to raise_error 'invalid'
     end
 
     it 'creates append_to_household version' do
       leader.household_people_ids = [member.id]
       expect do
-        household(leader).save
+        household(leader).send(:save)
       end.to change { PaperTrail::Version.count }.by(2)
       expect(leader.versions.last.event).to eq 'append_to_household'
       expect(member.versions.last.event).to eq 'append_to_household'
@@ -202,11 +227,11 @@ describe Person::Household do
 
     it 'creates household_update version' do
       leader.household_people_ids = [member.id]
-      household(leader).save
+      household(leader).send(:save)
 
       leader.town = 'Greattown'
       expect do
-        household(leader).save
+        household(leader).send(:save)
       end.to change { PaperTrail::Version.count }.by(2)
       expect(leader.versions.last.event).to eq 'household_updated'
       expect(member.versions.last.event).to eq 'household_updated'
@@ -214,11 +239,11 @@ describe Person::Household do
 
     it 'does not create household_updated version when addesss and people are unchanged' do
       leader.household_people_ids = [member.id]
-      household(leader).save
-      
+      household(leader).send(:save)
+
       leader.nickname = 'Nik'
       expect do
-        household(leader).save
+        household(leader).send(:save)
       end.to change { PaperTrail::Version.count }.by(0)
     end
 
@@ -229,7 +254,7 @@ describe Person::Household do
       member.update(household_key: 1)
       leader.update(household_key: 1)
 
-      household(leader).remove
+      household(leader).send(:remove)
       expect(leader.reload.household_key).to be_nil
       expect(member.reload.household_key).to be_nil
     end
@@ -241,7 +266,7 @@ describe Person::Household do
       other.update(household_key: 1)
 
       expect do
-        household(leader).remove
+        household(leader).send(:remove)
       end.to change { PaperTrail::Version.count }.by(3)
       expect(leader.reload.household_key).to be_nil
       expect(leader.household_people).to be_empty
@@ -253,7 +278,7 @@ describe Person::Household do
       leader.update(household_key: 1)
 
       expect do
-        household(leader).remove
+        household(leader).send(:remove)
       end.to change { PaperTrail::Version.count }.by(2)
       expect(leader.versions.last.event).to eq 'remove_from_household'
       expect(member.versions.last.event).to eq 'remove_from_household'
@@ -266,7 +291,7 @@ describe Person::Household do
       other.update(household_key: 1)
 
       expect do
-        household(leader).remove
+        household(leader).send(:remove)
       end.to change { PaperTrail::Version.count }.by(3)
     end
 
@@ -275,7 +300,7 @@ describe Person::Household do
       # test needed, because an unchecked checkbox triggers the remove method
       leader.nickname = 'Nik'
       expect do
-        household(leader).remove
+        household(leader).send(:remove)
       end.to change { PaperTrail::Version.count }.by(0)
     end
   end

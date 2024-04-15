@@ -20,7 +20,7 @@ RSpec.describe 'events#index', type: :request do
         expect(EventResource).to receive(:all).and_call_original
         make_request
         expect(response.status).to eq(200), response.body
-        expect(d.map(&:jsonapi_type).uniq).to match_array(['events'])
+        expect(d.map(&:jsonapi_type).uniq).to match_array(%w(events courses))
         expect(d.map(&:id)).to match_array(Event.pluck(:id))
       end
     end

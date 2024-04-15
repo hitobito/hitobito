@@ -23,6 +23,8 @@ class Event::ParticipationBanner
     end
   end
 
+  private
+
   def banner_content
     content = [status_text]
     if can_destroy?
@@ -61,7 +63,8 @@ class Event::ParticipationBanner
         confirm: t('event.participations.cancel_application.confirmation'),
         method: :delete
       },
-      class: 'ms-2'
+      class: 'ms-2',
+      in_button_group: true
     )
   end
 

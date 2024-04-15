@@ -32,7 +32,6 @@ describe Person::HistoryController do
       end
     end
 
-
     context 'qualifications' do
       render_views
 
@@ -55,8 +54,24 @@ describe Person::HistoryController do
         expect(body).to have_css 'tbody td', text: gl.to_s
         expect(body).not_to have_css 'tbody td strong', text: gl.to_s
       end
+
+      it 'includes open trainings days' do
+        gl.update(required_training_days: 3)
+        Fabricate(:qualification, person: top_leader, qualification_kind: gl, start_at: 3.months.ago, finish_at: 6.months.from_now)
+        create_course_participation(training_days: 1.5, start_at: 2.months.ago)
+        create_course_participation(training_days: 1, start_at: 3.months.ago)
+
+        get :index, params: { group_id: groups(:top_group).id, id: top_leader.id }
+        expect(body).to have_css 'thead th', text: 'Offene Ausbildungstage'
+        expect(body).to have_css 'tbody td', text: '0.5'
+      end
+
+      def create_course_participation(kind: event_kinds(:slk), qualified: true, training_days: nil, start_at:)
+        course = Fabricate.build(:course, kind: kind, training_days: training_days)
+        course.dates.build(start_at: start_at)
+        course.save!
+        Fabricate(:event_participation, event: course, person: top_leader, qualified: qualified)
+      end
     end
-
   end
-
 end

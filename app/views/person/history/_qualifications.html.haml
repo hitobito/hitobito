@@ -14,3 +14,5 @@
       - else
         = q.qualification_kind
     - t.attrs(:origin, :start_at, :finish_at, :reactivateable_until)
+    - t.attr(:open_training_days) do |q|
+      = q.decorate.open_training_days

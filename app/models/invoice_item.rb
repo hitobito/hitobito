@@ -54,6 +54,8 @@ class InvoiceItem < ActiveRecord::Base
 
   belongs_to :invoice
 
+  delegate :group, to: :invoice # required for abilities
+
   scope :list, -> { order(:name) }
 
   validates :unit_cost, money: true, allow_nil: true

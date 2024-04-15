@@ -1,0 +1,10 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club SAC. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito
+
+%noscript
+  = button_tag(label, formmethod: :get, formaction: formaction, hidden: true)
+- data = { forwarder_target: :click }
+- data[:turbo_frame] = turbo_frame if local_assigns.has_key?(:turbo_frame)
+= button_tag(label, formmethod: :get, formaction: formaction, data: data, hidden: true)

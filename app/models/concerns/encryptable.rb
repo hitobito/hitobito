@@ -21,7 +21,7 @@ module Encryptable
         end
 
         define_method(attribute) do
-          data = self.send("encrypted_#{attribute}".to_sym)
+          data = send(:"encrypted_#{attribute}")
           return '' if data.blank?
 
           encrypted_value = data[:encrypted_value]

@@ -782,6 +782,15 @@ describe Group do
 
   end
 
+  context 'encrypted attributes' do
+    it 'can be blank' do
+      group = groups(:top_layer)
+      group.encrypted_text_message_username = ''
+
+      expect(group.text_message_username).to be_empty
+    end
+  end
+
   context 'name' do
     let(:group) { groups(:bottom_layer_one) }
 

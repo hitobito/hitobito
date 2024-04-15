@@ -22,7 +22,7 @@ module Encryptable
 
         define_method(attribute) do
           data = self.send("encrypted_#{attribute}".to_sym)
-          return '' if data.nil?
+          return '' if data.blank?
 
           encrypted_value = data[:encrypted_value]
           iv = data[:iv]

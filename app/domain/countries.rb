@@ -17,9 +17,9 @@ module Countries
     ISO3166::Country.translations(lang)
   end
 
-  def label(country)
+  def label(country, locale: I18n.locale)
     c = ISO3166::Country.new(country)
-    c ? c.translations[I18n.locale.to_s] || c.name.presence : country
+    c ? c.translations[locale.to_s] || c.name.presence : country
   end
 
   def normalize(value)

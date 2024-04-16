@@ -3,7 +3,7 @@
 - #  or later. See the COPYING file at the top-level directory or at
 - #  https://github.com/hitobito/hitobito.
 
-- if @event.try(:kind)
+- if @event.try(:kind_id)
   %p.muted= t('.waiting_list_info', event_kind: @event.kind)
   %br/
 

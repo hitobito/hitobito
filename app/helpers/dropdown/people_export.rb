@@ -51,6 +51,8 @@ module Dropdown
       item.sub_items << Item.new(translate(:everything),
                                  path.merge(details: true),
                                  data: { checkable: true }) if @details
+
+      item
     end
 
     def vcard_link

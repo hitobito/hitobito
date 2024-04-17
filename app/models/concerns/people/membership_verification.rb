@@ -8,18 +8,22 @@
 module People::MembershipVerification
   extend ActiveSupport::Concern
 
-  included do
-    validates :membership_verify_token, uniqueness: { allow_blank: true }
+  def membership_verify_token
+    (new_record? || super.present?) ? super : init_membership_verify_token
   end
 
-  def membership_verify_token
-    token = super
+  # token should not be set manually
+  def membership_verify_token=(_value); end
 
-    if token.nil?
-      token = SecureRandom.base58(24)
-      update!(membership_verify_token: token)
+  private
+
+  def init_membership_verify_token
+    token = SecureRandom.base58(24)
+    if Person.where(membership_verify_token: token).exists?
+      raise 'token must be unique'
     end
-
+    update_column(:membership_verify_token, token)
     token
   end
+
 end

@@ -2101,3 +2101,9 @@ de:
       last: Letzte
       truncate: "..."
   json_api: JSON:API
+
+  verify_membership:
+    title: Verifizierung Mitgliedschaft
+    not_found: Ungültiger Verifikationscode
+    status_valid: Mitgliedschaft gültig
+    status_invalid: Keine gültige Mitgliedschaft

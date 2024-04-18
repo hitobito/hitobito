@@ -81,7 +81,7 @@ jobs:
       - name: 'Checkout hitobito'
         uses: actions/checkout@v4
         with:
-          repository: 'hitobito/hitobito'
+          repository: 'njaeggi/hitobito'
           ref: ${{ inputs.core_ref || 'master' }}
           path: 'hitobito'
 
@@ -113,7 +113,7 @@ jobs:
         uses: actions/checkout@v4
         if: ${{ inputs.wagon_dependency_repository != '' }}
         with:
-          repository: hitobito/${{ inputs.wagon_dependency_repository }}
+          repository: njaeggi/${{ inputs.wagon_dependency_repository }}
           ref: ${{ inputs.wagon_dependency_ref || 'master' }}
           path: ${{ inputs.wagon_dependency_repository }}
 

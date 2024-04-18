@@ -20,8 +20,8 @@ cmd=${1:-'help'}
 wagon_name=${2-'no wagon selected'}
 
 # useful variables
-core_bin_dir="$(readlink -f $(dirname "$0"))" # bin-directory of hitobito (-core)
-core_dir="$(readlink -f $(dirname "$core_bin_dir"))" # directory of hitobito (-core)
+core_bin_dir="$(readlink -f "$(dirname "$0")")" # bin-directory of hitobito (-core)
+core_dir="$(readlink -f "$(dirname "$core_bin_dir")")" # directory of hitobito (-core)
 
 # helpers
 function require_wagon_name() {

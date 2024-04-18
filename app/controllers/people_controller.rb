@@ -276,7 +276,7 @@ class PeopleController < CrudController
   end
 
   def model_scope
-    super.yield_self do |scope|
+    super.then do |scope|
       action_name == 'show' ? scope.includes(roles: :group) : scope
     end
   end

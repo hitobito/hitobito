@@ -24,4 +24,3 @@ app.AddressTypeahead = {
 };
 
 $(document).on('change', '#person_country', app.AddressTypeahead.checkIfTypeaheadAvailable);
-

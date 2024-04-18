@@ -32,7 +32,7 @@ describe Contactable::AddressValidator do
     street_attrs = [:street_short,
                     :street_short_old,
                     :street_long,
-                    :street_long_old].each_with_object({}) { |k, o| o[k] = street }
+                    :street_long_old].index_with { |_k| street }
 
     Address.create!(street_attrs.merge(zip_code: person.zip_code,
                                        town: person.town,
@@ -53,7 +53,7 @@ describe Contactable::AddressValidator do
     street_attrs = [:street_short,
                     :street_short_old,
                     :street_long,
-                    :street_long_old].each_with_object({}) { |k, o| o[k] = street }
+                    :street_long_old].index_with { |_k| street }
 
     Address.create!(street_attrs.merge(zip_code: person.zip_code,
                                        town: person.town,

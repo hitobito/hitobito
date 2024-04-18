@@ -130,7 +130,7 @@ describe Person::Household do
     end
   end
 
-  context "#valid?" do
+  context '#valid?' do
     it 'true if person address is identical to readonly person address' do
       member.household_people_ids = [leader.id]
       member.attributes = leader.attributes.slice(*Person::ADDRESS_ATTRS)

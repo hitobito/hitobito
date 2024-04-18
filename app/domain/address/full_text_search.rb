@@ -9,7 +9,7 @@ class Address::FullTextSearch
 
   attr_reader :query, :search_strategy
 
-  ADDRESS_WITH_NUMBER_REGEX = /^(.*)[^\d](\d+[A-Za-z]?)/.freeze
+  ADDRESS_WITH_NUMBER_REGEX = /^(.*)[^\d](\d+[A-Za-z]?)/
 
   def initialize(query, search_strategy)
     @query = query

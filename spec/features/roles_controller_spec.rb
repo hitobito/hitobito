@@ -15,7 +15,7 @@ describe RolesController, js: true do
   let!(:role2)  { Fabricate(Group::TopGroup::Member.name.to_sym, group: group) }
   let!(:leader) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: group) }
 
-  def choose_role(role, current_selection: nil)
+  def choose_role(role, _current_selection: nil)
     expect(page).to have_css('#role_type_select #role_type')
     find('#role_type_select #role_type').click
     expect(page).to have_css('#role_type_select #role_type option', text: role)

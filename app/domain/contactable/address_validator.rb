@@ -14,8 +14,8 @@ module Contactable
 
         if invalid?(person)
           tag_invalid!(person, person.address)
-        else
-          remove_invalid_tagging!(person) if invalid_tagging_exists?(person)
+        elsif invalid_tagging_exists?(person)
+          remove_invalid_tagging!(person)
         end
       end
 

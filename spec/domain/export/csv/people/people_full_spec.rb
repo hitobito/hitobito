@@ -20,8 +20,10 @@ describe Export::Tabular::People::PeopleFull do
     person.update_attribute(:gender, 'm')
     person.social_accounts << SocialAccount.new(label: 'skype', name: 'foobar')
     person.phone_numbers << PhoneNumber.new(label: 'vater', number: 123, public: false)
-    person.additional_emails << AdditionalEmail.new(label: 'vater', email: 'vater@example.com', public: false)
-    person.relations_to_tails << PeopleRelation.new(tail_id: people(:bottom_member).id, kind: 'parent')
+    person.additional_emails << AdditionalEmail.new(label: 'vater', email: 'vater@example.com',
+                                                    public: false)
+    person.relations_to_tails << PeopleRelation.new(tail_id: people(:bottom_member).id,
+                                                    kind: 'parent')
     person.save
     I18n.locale = lang
   end

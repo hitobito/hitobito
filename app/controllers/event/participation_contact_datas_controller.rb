@@ -23,7 +23,7 @@ class Event::ParticipationContactDatasController < ApplicationController
       redirect_to after_update_success_path
     else
       add_privacy_policy_not_accepted_error(entry)
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 

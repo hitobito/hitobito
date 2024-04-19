@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -121,6 +121,11 @@ module EventsHelper
     elsif groups.present?
       simple_list(groups) { |group| linker[group] }
     end
+  end
+
+  def render_event_contact_attr_fields?
+    entry.participant_types.present? &&
+      entry.used_attributes(:required_contact_attrs, :hidden_contact_attrs).any?
   end
 
   private

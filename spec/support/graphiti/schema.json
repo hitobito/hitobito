@@ -1260,6 +1260,21 @@
           "type": "belongs_to",
           "description": null,
           "resource": "GroupResource"
+        },
+        "phone_numbers": {
+          "type": "has_many",
+          "description": null,
+          "resource": "PhoneNumberResource"
+        },
+        "social_accounts": {
+          "type": "has_many",
+          "description": null,
+          "resource": "SocialAccountResource"
+        },
+        "additional_emails": {
+          "type": "has_many",
+          "description": null,
+          "resource": "AdditionalEmailResource"
         }
       },
       "stats": {

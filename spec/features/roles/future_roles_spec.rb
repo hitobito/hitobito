@@ -78,8 +78,8 @@ describe 'Future Roles behaviour', js: :true do
         click_on 'Rollen'
 
         # Counts are without future role
-        expect(page).to have_css('#roles .same-layer .checkbox.inline', count: 8)
-        expect(page).to have_css('#roles .same-group .checkbox.inline', count: 6)
+        expect(page).to have_css('#roles .same-layer .checkbox.inline', count: 9)
+        expect(page).to have_css('#roles .same-group .checkbox.inline', count: 7)
       end
     end
   end

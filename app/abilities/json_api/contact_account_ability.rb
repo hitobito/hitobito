@@ -15,46 +15,54 @@ module JsonApi
       SocialAccount
     ]
 
+    attr_reader :main_ability
+
     def initialize(main_ability)
       @main_ability = main_ability
 
+      # Person ContactAccounts
       # allow reading public contacts of people on which the user has :show permission
       can :read, CONTACT_ACCOUNT_MODELS,
-          public: true,
-          contactable: readable_people(main_ability)
-
+          public: true, contactable: readable_people
       # allow reading all contacts of people on which the user has :show_details permissions
-      can :read, CONTACT_ACCOUNT_MODELS,
-          contactable: details_readable_people(main_ability)
+      can :read, CONTACT_ACCOUNT_MODELS, contactable: details_readable_people
 
-      can :create, CONTACT_ACCOUNT_MODELS,
-          contactable: details_writable_people(main_ability)
+      can :create, CONTACT_ACCOUNT_MODELS, contactable: details_writable_people
 
-      can :update, CONTACT_ACCOUNT_MODELS,
-          contactable: details_writable_people(main_ability)
+      can :update, CONTACT_ACCOUNT_MODELS, contactable: details_writable_people
 
-      can :destroy, CONTACT_ACCOUNT_MODELS,
-          contactable: details_writable_people(main_ability)
+      can :destroy, CONTACT_ACCOUNT_MODELS, contactable: details_writable_people
 
-      # TODO: implement rules for Group contactables (and any other existing contactable classes)
+      # Group ContactAccounts
+      can :read, CONTACT_ACCOUNT_MODELS, public: true, contactable: readable_groups
+
+      can :read, CONTACT_ACCOUNT_MODELS, contactable: details_readable_groups
     end
 
     private
 
-    def readable_people(main_ability)
+    def readable_people
       Person.accessible_by(PersonReadables.new(main_ability.user)).
         unscope(:select)
     end
 
-    def details_readable_people(main_ability)
+    def details_readable_people
       Person.accessible_by(PersonDetailsReadables.new(main_ability.user)).
         unscope(:select)
     end
 
-    def details_writable_people(main_ability)
-      details_readable_people(main_ability).
+    def details_writable_people
+      details_readable_people.
         accessible_by(PersonWritables.new(main_ability.user)).
         unscope(:select)
+    end
+
+    def readable_groups
+      Group.accessible_by(GroupReadables.new(main_ability.user))
+    end
+
+    def details_readable_groups
+      Group.accessible_by(GroupDetailsReadables.new(main_ability.user))
     end
   end
 end

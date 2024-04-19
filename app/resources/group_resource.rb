@@ -54,6 +54,10 @@ class GroupResource < ApplicationResource
     end
   end
 
+  polymorphic_has_many :phone_numbers, as: :contactable
+  polymorphic_has_many :social_accounts, as: :contactable
+  polymorphic_has_many :additional_emails, as: :contactable
+
   filter :with_deleted, :boolean, :single do
     eq do |scope, value|
       next scope unless value

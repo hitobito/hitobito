@@ -69,9 +69,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
           send_notification_email
         end
       end
-
-      location = after_create_path if entry.valid?
-      respond_with(entry, success: created, location: location)
+      respond_with(entry, success: created, location: return_path)
     end
   end
 
@@ -156,21 +154,10 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     end
   end
 
-  def after_create_path(collection: false)
-    if return_path
-      return_path
-    elsif collection
-      group_event_participations_path(group, event)
-    else
-      group_event_participation_path(group, event, entry)
-    end
-
-  end
-
   def with_person_add_request(&block)
     creator = Person::AddRequest::Creator::Event.new(entry.roles.first, current_ability)
     msg = creator.handle(&block)
-    redirect_to after_create_path(collection: true), alert: msg if msg
+    redirect_to return_path || group_event_participations_path(group, event), alert: msg if msg
   end
 
   def list_entries

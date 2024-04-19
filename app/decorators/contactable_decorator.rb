@@ -16,7 +16,9 @@ module ContactableDecorator
 
     prepend_complete_address(html)
 
-    html << safe_join(address.split("\n"), br) << br if address?
+    html << address_care_of if address_care_of?
+    html << model.address << br if model.address.present?
+    html << postbox if postbox?
     html << zip_code.to_s if zip_code?
     html << ' ' << town if town?
     html << country_unless_ignored

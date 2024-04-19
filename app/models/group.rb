@@ -159,7 +159,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   ### VALIDATIONS
 
-  validates_by_schema except: [:logo, :address]
+  validates_by_schema except: [:logo]
   validates :type, uniqueness: { scope: :parent_id }, if: :static_name
   validates :name, presence: true, unless: :static_name
   validates :email, format: Devise.email_regexp, allow_blank: true
@@ -240,7 +240,9 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   ## readers and query methods for contact info
-  [:address, :town, :zip_code, :country].each do |attribute|
+  [
+    :address_care_of, :street, :housenumber, :postbox, :town, :zip_code, :country
+  ].each do |attribute|
     [attribute, :"#{attribute}?"].each do |method|
       define_method(method) do
         (contact && contact.public_send(method).presence) || super()

@@ -84,8 +84,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   PUBLIC_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
     :id, :first_name, :last_name, :nickname, :company_name, :company,
-    :email, :address, :zip_code, :town, :country, :gender, :birthday,
-    :primary_group_id
+    :email, :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
+    :gender, :birthday, :primary_group_id
   ]
 
   INTERNAL_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
@@ -107,8 +107,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   ]
 
   FILTER_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
-    :first_name, :last_name, :nickname, :company_name, :email, :address, :zip_code, :town, :country,
-    :gender, [:years, :integer], :birthday
+    :first_name, :last_name, :nickname, :company_name, :email, :address_care_of, :street,
+    :housenumber, :postbox, :zip_code, :town, :country, :gender, [:years, :integer], :birthday
   ]
 
   GENDERS = %w(m w).freeze
@@ -120,7 +120,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
                       .merge(Settings.application
                                      .additional_languages&.to_hash || {})
 
-  ADDRESS_ATTRS = %w(address zip_code town country)
+  ADDRESS_ATTRS = %w(address_care_of street housenumber postbox zip_code town country)
   # rubocop:enable Style/MutableConstant meant to be extended in wagons
 
   # Configure which Person attributes can be used to identify a person for login.
@@ -251,7 +251,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   ### VALIDATIONS
 
-  validates_by_schema except: [:email, :address]
+  validates_by_schema except: [:email]
   validates :email, length: { allow_nil: true, maximum: 255 } # other email validations by devise
   validates :company_name, presence: { if: :company? }
   validates :language, inclusion: { in: LANGUAGES.keys.map(&:to_s) }
@@ -259,7 +259,6 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
             timeliness: { type: :date, allow_blank: true, before: Date.new(10_000, 1, 1) }
   validates :additional_information, length: { allow_nil: true, maximum: (2**16) - 1 }
   validate :assert_has_any_name
-  validates :address, length: { allow_nil: true, maximum: 1024 }
 
   validates :picture, dimension: { width: { max: 8_000 }, height: { max: 8_000 } },
                       content_type: ['image/jpeg', 'image/gif', 'image/png']
@@ -278,7 +277,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   scope :household, -> { where.not(household_key: nil) }
   scope :with_address, -> {
-    where.not(address: [nil, '']).
+    where.not(street: [nil, '']).
+      where.not(housenumber: [nil, '']).
       where.not(zip_code: [nil, '']).
       where.not(town: [nil, '']).
       where('(last_name IS NOT NULL AND last_name <> "") OR ' \

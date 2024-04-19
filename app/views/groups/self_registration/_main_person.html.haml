@@ -13,7 +13,7 @@
     - if ff.object.attr?(:company)
       = ff.labeled_boolean_field :company
 
-    - if [:address, :zip_code, :town, :country].all? { |field| ff.object.attr?(field) }
+    - if [:address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country].all? { |field| ff.object.attr?(field) }
       = render 'contactable/address_fields', f: ff
 
     - if ff.object.attr?(:email)

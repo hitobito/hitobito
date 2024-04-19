@@ -37,6 +37,10 @@ module Contactable
     validate :assert_is_valid_swiss_post_code
   end
 
+  def address
+    [street, housenumber].compact.join(' ')
+  end
+
   def country_label
     Countries.label(country)
   end

@@ -14,7 +14,7 @@
 - params[:q] = nil # Reset param so quicksearch filter does not get populated
 
 .pagination-bar
-  = paginate entries
+  = paginate(entries, **(@pagination_options || {}))
 
   .pagination-info
 
@@ -40,4 +40,4 @@
   = render_extensions :list, locals: { table: t }
   - render_table_display_columns(Event::Participation, t)
 
-= paginate entries
+= paginate(entries, **(@pagination_options || {}))

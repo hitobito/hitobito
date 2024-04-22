@@ -123,6 +123,10 @@ class Event::Course < Event
     kind&.minimum_age
   end
 
+  def required_attrs
+    used_attributes.include?(:kind_id) ? [:kind_id] : []
+  end
+
   private
 
   def make_participations_visible_to_participants

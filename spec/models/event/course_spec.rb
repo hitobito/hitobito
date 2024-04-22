@@ -86,6 +86,19 @@ describe Event::Course do
       expect(events(:top_course).label_detail).to eq '123 Top'
     end
 
+    describe 'required_attrs' do
+      subject(:required_attrs) { events(:top_course).required_attrs }
+
+      it 'is empty when kind_id is not used' do
+        expect(required_attrs).to be_empty
+      end
+
+      it 'contains kind_id if kind_id is used' do
+        Event::Course.used_attributes += [:kind_id]
+        expect(required_attrs).to eq [:kind_id]
+      end
+    end
+
     after { Event::Course.used_attributes += [:kind_id] }
   end
 

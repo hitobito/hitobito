@@ -54,7 +54,7 @@ class InvoiceListsController < CrudController
       redirect_to return_path, notice: message
       session.delete :invoice_referer
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 

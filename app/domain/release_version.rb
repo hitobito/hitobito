@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023-2023, Puzzle ITC. This file is part of
+#  Copyright (c) 2023-2024, Puzzle ITC. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -8,7 +8,8 @@
 require 'date'
 
 # This is used by bin/version and integrated into it
-# with `rake bin/version`
+# with `rake bin/version`. The original lives in
+# app/domain/release_version.rb.
 class ReleaseVersion
   def current_version(stage = :production)
     `#{tag_lookup_cmd(stage)} | head -n 1`.chomp
@@ -28,7 +29,7 @@ class ReleaseVersion
   end
 
   def next_version(style = :patch, version = nil)
-    incrementor = \
+    incrementor =
       case style.to_sym
       when :patch, :regular then method(:"next_#{style}_version")
       when :custom then ->(_parts) { version.split('.').to_a }

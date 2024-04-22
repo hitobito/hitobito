@@ -34,11 +34,11 @@ class Event::RegisterController < ApplicationController
         # register_new_person
         @person = Person.new(email: email)
         flash.now[:notice] = translate(:form_data_missing)
-        render 'register'
+        render 'register', status: :unprocessable_entity
       end
     else
       flash.now[:alert] = translate(:email_invalid)
-      render 'index'
+      render 'index', status: :unprocessable_entity
     end
   end
 
@@ -51,7 +51,7 @@ class Event::RegisterController < ApplicationController
       redirect_to return_path || new_group_event_participation_path(group, event)
     else
       add_privacy_policy_not_accepted_error(entry)
-      render 'register'
+      render 'register', status: :unprocessable_entity
     end
   end
 

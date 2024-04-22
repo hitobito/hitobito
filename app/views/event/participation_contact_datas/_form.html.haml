@@ -9,6 +9,6 @@
     buttons_top: local_assigns.fetch(:buttons_top, true),
     submit_label: t('event.participation_contact_datas.edit.save'),
     url: contact_data_group_event_participations_path(group, event,
-      {event_role: { type: params[:event_role][:type] }})}) do |f|
+      {event_role: { type: params.dig(:event_role, :type) }})}) do |f|
 
-  = render 'fields', f: f
+  = render 'event/participation_contact_datas/fields', f: f

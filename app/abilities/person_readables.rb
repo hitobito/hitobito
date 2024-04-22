@@ -4,7 +4,7 @@
 #  https://github.com/hitobito/hitobito.
 
 # This class is only used for fetching lists based on a group association.
-class PersonReadables < GroupBasedReadables
+class PersonReadables < PersonFetchables
 
   attr_reader :group
 

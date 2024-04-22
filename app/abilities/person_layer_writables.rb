@@ -4,7 +4,7 @@
 #  https://github.com/hitobito/hitobito_pbs.
 #
 # Fetches people for which the user has write access via layer permissions.
-class PersonLayerWritables < PersonFetchables
+class PersonLayerWritables < GroupBasedFetchables
 
   self.same_group_permissions = []
   self.above_group_permissions = []

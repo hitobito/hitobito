@@ -164,6 +164,11 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     filter = event_participation_filter
     records = filter.list_entries.includes(person: :picture_attachment).page(params[:page])
     @counts = filter.counts
+    @pagination_options = {
+      total_pages: records.total_pages,
+      current_page: records.current_page,
+      per_page: records.limit_value
+    }
     sort_param = params[:sort]
 
     records = records.reorder(Arel.sql(sort_expression)) if sort_param && sortable?(sort_param)

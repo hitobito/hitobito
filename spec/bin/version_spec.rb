@@ -33,12 +33,12 @@ describe 'version' do
       expect(version("#{cmd} regular")).to match(/\d+\.\d+\.0/)
     end
 
-    # it 'can provide a preview of suggestions' do
-    #   expect(version("#{cmd} preview"))
-    #     .to match(/^patch:\s+\d+\.\d+\.\d+/)
-    #     .and match(/^regular:\s+\d+\.\d+\.0/)
-    #     .and match(/^integration:\s+\d+\.\d+\.\d+-\d+/)
-    # end
+    it 'can provide a preview of suggestions' do
+      expect(version("#{cmd} preview"))
+        .to match(/^patch:\s+\d+\.\d+\.\d+/)
+        .and match(/^regular:\s+\d+\.\d+\.0/)
+        .and match(/^integration:\s+\d+\.\d+\.\d+-\d+/)
+    end
   end
 
   context 'current' do

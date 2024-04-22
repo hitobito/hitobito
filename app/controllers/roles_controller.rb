@@ -82,7 +82,7 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
       redirect_to(after_update_location, notice: flash_message(:success, :destroy))
     else
       flash.now[:alert] = error_messages.presence || flash_message(:failure, :destroy)
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -119,7 +119,7 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
       change_type_successfull
     else
       copy_errors(@new_role)
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 

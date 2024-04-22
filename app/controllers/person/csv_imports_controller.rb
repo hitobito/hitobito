@@ -155,7 +155,7 @@ class Person::CsvImportsController < ApplicationController
       fields = Import::Person.fields.each_with_object({}) { |f, o| o[f[:key]] = f[:value] }
       list = duplicates.collect { |d| fields[d.to_s] }.join(', ')
       flash.now[:alert] = translate(:duplicate_keys, count: duplicates.size, list: list)
-      render :define_mapping
+      render :define_mapping, status: :unprocessable_entity
       false
     else
       true

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -780,6 +780,15 @@ describe Group do
       expect(custom_cat_attr_names).to include(:custom_name)
     end
 
+  end
+
+  context 'encrypted attributes' do
+    it 'can be blank' do
+      group = groups(:top_layer)
+      group.encrypted_text_message_username = ''
+
+      expect(group.text_message_username).to be_empty
+    end
   end
 
   context 'name' do

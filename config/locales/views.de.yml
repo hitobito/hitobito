@@ -1691,6 +1691,10 @@ de:
       dich %{days} Fortbildungstage zu absolvieren
     open_training_days_reactivatable: Um deine Qualifikation zu reaktivieren, bitten wir dich
       %{days} Fortbildungstage bis spätestens %{reactivateable_until} zu absolvieren
+    open_training_days_no_longer_reactivatable: Diese Qualifikation ist seit dem
+      %{reactivateable_until} abgelaufen. Falls du davor Aus- oder Fortbildungen besucht hast und
+      du für diese eine Kursbestätigung besitzt, kannst du diese mit deinem Tourenchef teilen.
+      Allenfalls kann dies zu einer Reaktivierung deiner bereits abgelaufenen Qualifikation führen.
 
   event_invitations:
     create:

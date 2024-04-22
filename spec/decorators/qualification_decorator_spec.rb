@@ -18,6 +18,25 @@ describe QualificationDecorator do
     expect(open_training_days).to be_blank
   end
 
+  context 'without training days' do
+    around { |example| travel_to(now) { example.run } }
+
+    it 'is nil if qualification is active' do
+      expect(qualification).to be_active
+      expect(open_training_days).to be_nil
+    end
+
+    it 'has tooltip when expired and not reactivateable' do
+      qualification.finish_at = now - 1.day
+      expect(qualification).not_to be_active
+      expect(qualification).not_to be_reactivateable
+      expect(tooltip).to eq 'Diese Qualifikation ist seit dem 21.03.2024 abgelaufen. Falls du ' \
+        'davor Aus- oder Fortbildungen besucht hast und du für diese eine Kursbestätigung ' \
+        'besitzt, kannst du diese mit deinem Tourenchef teilen. Allenfalls kann dies zu einer ' \
+        'Reaktivierung deiner bereits abgelaufenen Qualifikation führen.'
+    end
+  end
+
   context 'with training days' do
     before { qualification.open_training_days = 1.5 }
     around { |example| travel_to(now) { example.run } }

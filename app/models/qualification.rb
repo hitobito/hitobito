@@ -123,8 +123,12 @@ class Qualification < ActiveRecord::Base
            origin: origin)
   end
 
+  def first_of_kind?
+    @first_of_kind
+  end
+
   def first_reactivateable?
-    @first_of_kind && reactivateable?
+    first_of_kind? && reactivateable?
   end
 
   private

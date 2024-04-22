@@ -9,8 +9,8 @@ ARG NODEJS_VERSION="16"
 ARG YARN_VERSION="1.22.19"
 
 # Packages
-ARG BUILD_PACKAGES="nodejs git sqlite3 libsqlite3-dev imagemagick build-essential default-libmysqlclient-dev"
-ARG RUN_PACKAGES="imagemagick shared-mime-info pkg-config libmagickcore-dev libmagickwand-dev default-libmysqlclient-dev libjemalloc-dev libjemalloc2"
+ARG BUILD_PACKAGES="nodejs git sqlite3 libsqlite3-dev libimlib2 libimlib2-dev build-essential default-libmysqlclient-dev"
+ARG RUN_PACKAGES="shared-mime-info pkg-config libimlib2 libimlib2-dev default-libmysqlclient-dev libjemalloc-dev libjemalloc2"
 
 # Scripts
 ARG PRE_INSTALL_SCRIPT="\

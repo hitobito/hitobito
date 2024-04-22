@@ -21,17 +21,17 @@ describe 'version' do
   context 'suggest' do
     let(:cmd) { 'suggest' }
 
-    # it 'outputs a suggested version' do
-    #   expect(version(cmd)).to match(/\d+\.\d+\.\d+/)
-    # end
+    it 'outputs a suggested version' do
+      expect(version(cmd)).to match(/\d+\.\d+\.\d+/)
+    end
 
     it 'can mirror a custom version-number' do
       expect(version("#{cmd} custom XP-NG-NT4")).to eql 'XP-NG-NT4'
     end
 
-    # it 'suggests only new minor-versions for regular releases' do
-    #   expect(version("#{cmd} regular")).to match(/\d+\.\d+\.0/)
-    # end
+    it 'suggests only new minor-versions for regular releases' do
+      expect(version("#{cmd} regular")).to match(/\d+\.\d+\.0/)
+    end
 
     # it 'can provide a preview of suggestions' do
     #   expect(version("#{cmd} preview"))
@@ -44,9 +44,9 @@ describe 'version' do
   context 'current' do
     let(:cmd) { 'current' }
 
-    # it 'outputs the current version' do
-    #   expect(version(cmd)).to match(/\d+\.\d+\.\d+/)
-    # end
+    it 'outputs the current version' do
+      expect(version(cmd)).to match(/\d+\.\d+\.\d+/)
+    end
   end
 
   def version(args)

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-#  copyright (c) 2024, schweizer alpen-club. this file is part of
-#  hitobito and licensed under the affero general public license version 3
-#  or later. see the copying file at the top-level directory or at
+#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class People::Membership::VerificationQrCode

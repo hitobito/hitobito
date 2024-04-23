@@ -15,11 +15,12 @@
   %body
     #membership-verify
       %header
-        - logo = Settings.application.membership_verify_logo
-        - if logo
-          = wagon_image_pack_tag(logo.image, alt: Settings.application.name)
-        - else
-          = image_pack_tag('logo.png', alt: 'define logo in wagon settings (membership_verify_logo)')
+        %div{:id => 'logo'}
+          - logo = Settings.application.membership_verify_logo
+          - if logo
+            = wagon_image_pack_tag(logo.image, alt: Settings.application.name)
+          - else
+            = image_pack_tag('logo.png', alt: 'define logo in wagon settings (membership_verify_logo)')
         #root-address
           %strong
             = root.name

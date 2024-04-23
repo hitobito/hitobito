@@ -11,7 +11,15 @@
   header {
     display: flex;
     justify-content: space-between;
+    #logo {
+      width: 60%;
+      img {
+        width: 100%;
+        max-width: 300px;
+      }
+    }
     #root-address {
+      width: 40%;
       padding-top: 20px;
       padding-right: 10px;
       text-align: right;

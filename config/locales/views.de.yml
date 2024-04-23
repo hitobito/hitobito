@@ -536,6 +536,8 @@ de:
       application_questions: Anmeldeangaben
       admin_questions: Administrationsangaben
       contact_attrs: Kontaktangaben
+    general_fields:
+      kind_overrides_link_title: 'Folgende Felder werden übernommen: Beschreibung'
     global:
       link:
         add_event: Anlass erstellen

@@ -9,7 +9,9 @@
   - entry.used?(:kind_id) do
     = f.labeled(:kind_id) do
       = f.input_field(:kind_id, data: { action: 'form-field-inheritance#inherit' })
-      .form-text= link_to(t('global.link.override'), '#', data: { action: "form-field-inheritance#override"})
+      .form-text
+        = link_to(t('global.link.override'), '#', title: t('.kind_overrides_link_title'),
+            data: { action: "form-field-inheritance#override"})
 
   - entry.used?(:state) do
     - if entry.possible_states.present?

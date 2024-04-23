@@ -27,10 +27,10 @@ describe People::Membership::VerifyController, type: :controller do
     end
 
     context 'with feature enabled' do
-      before { allow(People::MembershipVerifier).to receive(:enabled?).and_return(true) }
+      before { allow(People::Membership::Verifier).to receive(:enabled?).and_return(true) }
 
       it 'confirms active membership' do
-        People::MembershipVerifier.any_instance.stub(:member?).and_return(true)
+        People::Membership::Verifier.any_instance.stub(:member?).and_return(true)
 
         get :show, params: { verify_token: verify_token }
 
@@ -43,7 +43,7 @@ describe People::Membership::VerifyController, type: :controller do
       end
 
       it 'confirms invalid membership' do
-        People::MembershipVerifier.any_instance.stub(:member?).and_return(false)
+        People::Membership::Verifier.any_instance.stub(:member?).and_return(false)
 
         get :show, params: { verify_token: verify_token }
 

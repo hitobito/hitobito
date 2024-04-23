@@ -30,7 +30,7 @@ describe People::Membership::VerifyController, type: :controller do
       before { allow(People::Membership::Verifier).to receive(:enabled?).and_return(true) }
 
       it 'confirms active membership' do
-        People::Membership::Verifier.any_instance.stub(:member?).and_return(true)
+        allow_any_instance_of(People::Membership::Verifier).to receive(:member?).and_return(true)
 
         get :show, params: { verify_token: verify_token }
 
@@ -43,7 +43,7 @@ describe People::Membership::VerifyController, type: :controller do
       end
 
       it 'confirms invalid membership' do
-        People::Membership::Verifier.any_instance.stub(:member?).and_return(false)
+        allow_any_instance_of(People::Membership::Verifier).to receive(:member?).and_return(false)
 
         get :show, params: { verify_token: verify_token }
 
@@ -52,7 +52,7 @@ describe People::Membership::VerifyController, type: :controller do
         expect(dom).to have_selector('#membership-verify #details .alert-danger span.fa-times-circle')
       end
 
-      it 'returns 404 with not found text for non existent verify token' do
+      it 'returns invalid code message for non existent verify token' do
         get :show, params: { verify_token: 'gits-nid' }
 
         expect(dom).to have_selector('#membership-verify header #root-address strong', text: 'Top')

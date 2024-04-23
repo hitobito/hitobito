@@ -356,7 +356,7 @@ de:
       waiting_list_link:
         title_active: "Entfernen von der Warteliste"
         title_inactive: "Hinzufügen zur Warteliste"
-        label: "Warteliste"
+        label: "nationale Warteliste"
       popover_waiting_list:
         waiting_list_info: Setze diese Person auf die Warteliste für Kurse der Art %{event_kind}.
 

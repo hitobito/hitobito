@@ -272,7 +272,8 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def directly_assign_place?
-    event.places_available? && !(event.attr_used?(:priorization) && event.priorization)
+    event.places_available? &&
+      (event.attr_used?(:automatic_assignment) && event.automatic_assignment?)
   end
 
   def directly_assign_place

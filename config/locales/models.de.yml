@@ -582,9 +582,10 @@ de:
         applications_cancelable: Abmeldung möglich
         display_booking_info: Anzeige Anmeldestand
         participations_visible: Teilnehmersichtbarkeit
-        waiting_list: Warteliste
+        waiting_list: Nationale Warteliste
         requires_approval: Empfehlung nötig
         globally_visible: Sichtbarkeit
+        automatic_assignment: Automatische Zuteilung
 
       event/contact_attrs:
         required: Obligatorisch

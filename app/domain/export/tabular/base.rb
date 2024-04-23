@@ -80,7 +80,8 @@ module Export::Tabular
     end
 
     def attribute_label(attr)
-      human_attribute(attr)
+      label_method = "#{attr}_label"
+      respond_to?(label_method) ? send(label_method) : human_attribute(attr)
     end
 
     def human_attribute(attr)

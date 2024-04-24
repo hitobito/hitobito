@@ -7,31 +7,48 @@
 class QualificationDecorator < ApplicationDecorator
   decorates :qualification
 
-  def open_training_days
-    days = helpers.number_to_condensed(model.open_training_days)
-    title = open_training_days_title(days)
+  delegate :open_training_days, to: :model
 
-    if title || model.open_training_days
-      icon = helpers.icon(:'info-circle', class: 'p-1', title: title)
-      helpers.content_tag(:span, safe_join([content_tag(:span, days), icon]))
-    end
+  def open_training_days_info
+    return if [open_training_days, tooltip].none?(&:present?)
+
+    infos = [icon(tooltip)]
+    infos.unshift(content_tag(:span, formatted_days)) if open_training_days&.positive?
+    helpers.content_tag(:span, safe_join(infos))
   end
 
   private
 
-  def open_training_days_title(days)
-    if model.active? && model.finish_at
-      translate(:open_training_days_active, days: days, finish_at: I18n.l(model.finish_at))
-    elsif model.reactivateable_until
-      if model.reactivateable?
-        translate(:open_training_days_reactivatable,
-                  days: days,
-                  reactivateable_until: I18n.l(model.reactivateable_until))
-      else
-        translate(:open_training_days_no_longer_reactivatable,
-                  days: days,
-                  reactivateable_until: I18n.l(model.reactivateable_until))
+  def icon(tooltip)
+    helpers.icon(:'info-circle', class: 'p-1', title: tooltip)
+  end
+
+  def tooltip
+    @tooltip ||=
+      if model.active? && model.finish_at
+        translate(:open_training_days_active,
+                  days: formatted_days_for_tooltip,
+                  finish_at: I18n.l(model.finish_at))
+      elsif model.reactivateable_until
+        if model.reactivateable?
+          translate(:open_training_days_reactivatable,
+                    days: formatted_days_for_tooltip,
+                    reactivateable_until: I18n.l(model.reactivateable_until))
+        else
+          translate(:open_training_days_no_longer_reactivatable,
+                    days: formatted_days_for_tooltip,
+                    reactivateable_until: I18n.l(model.reactivateable_until))
+        end
       end
-    end
+  end
+
+  def formatted_days
+    helpers.number_to_condensed(open_training_days)
+  end
+
+  def formatted_days_for_tooltip
+    value = model.open_training_days
+    value = model.qualification_kind.required_training_days if value&.zero?
+    helpers.number_to_condensed(value)
   end
 end

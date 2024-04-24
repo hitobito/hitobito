@@ -16,4 +16,4 @@
     - t.attrs(:origin, :start_at, :finish_at, :reactivateable_until)
     - t.attr(:open_training_days) do |q|
       - if q.first_of_kind?
-        = q.decorate.open_training_days
+        = q.decorate.open_training_days_info

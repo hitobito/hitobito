@@ -1690,7 +1690,7 @@ de:
 
   qualification_decorator:
     open_training_days_active: Damit die Qualifikation am %{finish_at} nicht abläuft, bitten wir
-      dich %{days} Fortbildungstage zu absolvieren
+      dich bis dahin %{days} Fortbildungstage zu absolvieren
     open_training_days_reactivatable: Um deine Qualifikation zu reaktivieren, bitten wir dich
       %{days} Fortbildungstage bis spätestens %{reactivateable_until} zu absolvieren
     open_training_days_no_longer_reactivatable: Diese Qualifikation ist seit dem

@@ -116,19 +116,19 @@ class Qualification < ActiveRecord::Base
     finish_at.nil? || (reactivateable_until && reactivateable_until >= date)
   end
 
-  def to_s(format = :default)
-    I18n.t("activerecord.attributes.qualification.#{to_s_key(format)}",
-           kind: qualification_kind.to_s,
-           finish_at: finish_at? ? I18n.l(finish_at) : nil,
-           origin: origin)
-  end
-
   def first_of_kind?
     @first_of_kind
   end
 
   def first_reactivateable?
     first_of_kind? && reactivateable?
+  end
+
+  def to_s(format = :default)
+    I18n.t("activerecord.attributes.qualification.#{to_s_key(format)}",
+           kind: qualification_kind.to_s,
+           finish_at: finish_at? ? I18n.l(finish_at) : nil,
+           origin: origin)
   end
 
   private

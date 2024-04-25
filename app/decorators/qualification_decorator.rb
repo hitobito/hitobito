@@ -27,26 +27,22 @@ class QualificationDecorator < ApplicationDecorator
     @tooltip ||=
       if model.active? && model.finish_at
         translate(:open_training_days_active,
-                  days: formatted_days_for_tooltip,
+                  days: formatted_days,
                   finish_at: I18n.l(model.finish_at))
       elsif model.reactivateable_until
         if model.reactivateable?
           translate(:open_training_days_reactivatable,
-                    days: formatted_days_for_tooltip,
+                    days: formatted_days,
                     reactivateable_until: I18n.l(model.reactivateable_until))
         else
           translate(:open_training_days_no_longer_reactivatable,
-                    days: formatted_days_for_tooltip,
+                    days: formatted_days,
                     reactivateable_until: I18n.l(model.reactivateable_until))
         end
       end
   end
 
   def formatted_days
-    helpers.number_to_condensed(open_training_days)
-  end
-
-  def formatted_days_for_tooltip
     value = model.open_training_days
     value = model.qualification_kind.required_training_days if value&.zero?
     helpers.number_to_condensed(value)

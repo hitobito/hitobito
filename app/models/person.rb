@@ -389,10 +389,11 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   def household_people
     Person.
-      includes(:groups).
+      where(id: household_people_ids).or(
+          Person.where.not(household_key: nil).where(household_key: household_key)
+      ).
       where.not(id: id).
-      where('id IN (?) OR (household_key IS NOT NULL AND household_key = ?)',
-            household_people_ids, household_key)
+      includes(:groups)
   end
 
   def greeting_name

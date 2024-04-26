@@ -17,12 +17,18 @@ describe Person::HistoryController do
 
       it 'all group roles ordered by group and layer' do
         person = Fabricate(:person)
-        r1 = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one), person: person)
-        r2 = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_two_one), person: person, created_at: Date.today - 3.years, deleted_at: Date.today - 2.years)
-        r3 = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_two_one), person: person)
-        r4 = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one_one), person: person)
-        r5 = FutureRole.create!(group: groups(:bottom_group_two_one), convert_to: Group::BottomGroup::Member.name, person: person, created_at: Time.zone.now, convert_on: 10.days.from_now, delete_on: 20.days.from_now)
-        r6 = FutureRole.create!(group: groups(:bottom_group_two_one), convert_to: Group::BottomGroup::Member.name, person: person, convert_on: 10.days.from_now)
+        r1 = Fabricate(Group::BottomGroup::Member.name.to_sym,
+                       group: groups(:bottom_group_one_one), person: person)
+        r2 = Fabricate(Group::BottomGroup::Member.name.to_sym,
+                       group: groups(:bottom_group_two_one), person: person, created_at: Date.today - 3.years, deleted_at: Date.today - 2.years)
+        r3 = Fabricate(Group::BottomGroup::Leader.name.to_sym,
+                       group: groups(:bottom_group_two_one), person: person)
+        r4 = Fabricate(Group::BottomGroup::Member.name.to_sym,
+                       group: groups(:bottom_group_one_one_one), person: person)
+        r5 = FutureRole.create!(group: groups(:bottom_group_two_one),
+                                convert_to: Group::BottomGroup::Member.name, person: person, created_at: Time.zone.now, convert_on: 10.days.from_now, delete_on: 20.days.from_now)
+        r6 = FutureRole.create!(group: groups(:bottom_group_two_one),
+                                convert_to: Group::BottomGroup::Member.name, person: person, convert_on: 10.days.from_now)
 
         get :index, params: { group_id: groups(:bottom_group_one_one).id, id: person.id }
 
@@ -45,8 +51,10 @@ describe Person::HistoryController do
       end
 
       it 'lists and marks first qualifications of kind' do
-        Fabricate(:qualification, person: top_leader, qualification_kind: gl, start_at: 30.months.ago, finish_at: 1.year.ago.to_date)
-        Fabricate(:qualification, person: top_leader, qualification_kind: sl_leader, start_at: 1.week.from_now)
+        Fabricate(:qualification, person: top_leader, qualification_kind: gl,
+                                  start_at: 30.months.ago, finish_at: 1.year.ago.to_date)
+        Fabricate(:qualification, person: top_leader, qualification_kind: sl_leader,
+                                  start_at: 1.week.from_now)
 
         get :index, params: { group_id: groups(:top_group).id, id: top_leader.id }
         expect(body).to have_css 'h2.mt-4', text: 'Qualifikationen'
@@ -57,16 +65,18 @@ describe Person::HistoryController do
 
       it 'includes open trainings days' do
         gl.update(required_training_days: 3)
-        Fabricate(:qualification, person: top_leader, qualification_kind: gl, start_at: 3.months.ago, finish_at: 6.months.from_now)
+        Fabricate(:qualification, person: top_leader, qualification_kind: gl,
+                                  start_at: 3.months.ago, finish_at: 6.months.from_now)
         create_course_participation(training_days: 1.5, start_at: 2.months.ago)
-        create_course_participation(training_days: 1, start_at: 3.months.ago)
+        create_course_participation(training_days: 1, start_at: 1.month.ago)
 
         get :index, params: { group_id: groups(:top_group).id, id: top_leader.id }
         expect(body).to have_css 'thead th', text: 'Offene Ausbildungstage'
         expect(body).to have_css 'tbody td', text: '0.5'
       end
 
-      def create_course_participation(kind: event_kinds(:slk), qualified: true, training_days: nil, start_at:)
+      def create_course_participation(start_at:, kind: event_kinds(:slk), qualified: true,
+                                      training_days: nil)
         course = Fabricate.build(:course, kind: kind, training_days: training_days)
         course.dates.build(start_at: start_at)
         course.save!

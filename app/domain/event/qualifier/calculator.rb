@@ -44,8 +44,8 @@ class Event::Qualifier::Calculator
 
   def build_course_records
     sorted_courses_with_training_days.flat_map do |course|
-      prolonging_qualification_kind_ids(course).map do |id, start_of_validity_period|
-        next if course.qualification_date < start_of_validity_period
+      prolonging_qualification_kind_ids(course).map do |id, start_of_relevant_period|
+        next if course.qualification_date < start_of_relevant_period
 
         @days[id] += course.training_days.to_f
         CourseRecord.new(id, course.qualification_date, course.training_days.to_f, @days[id])
@@ -55,21 +55,22 @@ class Event::Qualifier::Calculator
 
   def prolonging_qualification_kind_ids(course)
     course.kind.event_kind_qualification_kinds
-      .select(&:prolongation?)
-      .select { |q| q.qualification_kind.required_training_days }
-      .select { |q| q.role == @role.to_s }
-      .map { |q| [q.qualification_kind_id, start_of_validity_period(q.qualification_kind)] }
-      .uniq
+          .select(&:prolongation?)
+          .select { |q| q.qualification_kind.required_training_days }
+          .select { |q| q.role == @role.to_s }
+          .map { |q| [q.qualification_kind_id, start_of_relevant_period(q.qualification_kind)] }
+          .uniq
   end
 
   def qualification_date(qualification_kind_id, course)
     @qualification_dates[qualification_kind_id] || course.qualification_date
   end
 
-  def start_of_validity_period(qualification_kind)
-    start_of_validity = @end_date - qualification_kind.validity.years
-    specifc_start_of_validity = @qualification_dates[qualification_kind.id]
-    [start_of_validity, specifc_start_of_validity].compact.max
+  def start_of_relevant_period(qualification_kind)
+    start_of_period = @end_date - qualification_kind.validity.years
+    start_of_qualification = @qualification_dates[qualification_kind.id]
+    start_of_qualification += 1.day if start_of_qualification
+    [start_of_period, start_of_qualification].compact.max
   end
 
   def sorted_courses_with_training_days

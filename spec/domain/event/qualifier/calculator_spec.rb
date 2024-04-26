@@ -1,4 +1,3 @@
-
 # frozen_string_literal: true
 
 #  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of hitobito and licensed under the
@@ -8,16 +7,19 @@
 require 'spec_helper'
 
 describe Event::Qualifier::Calculator do
-  let(:gl) { qualification_kinds(:gl)  }
+  let(:gl) { qualification_kinds(:gl) }
   let(:slk) { event_kinds(:slk) }
 
   let(:role) { :participant }
   let(:person) { Fabricat.build(:person) }
 
-  let(:begin_of_validity) { gl.validity.years.ago.to_date }
+  let(:begin_of_period) { gl.validity.years.ago.to_date }
   let(:qualification_dates) { {} }
 
-  let(:obj) { described_class.new(@courses.to_a.shuffle, Time.zone.today, qualification_dates: qualification_dates) }
+  let(:obj) do
+    described_class.new(@courses.to_a.shuffle, Time.zone.today,
+                        qualification_dates: qualification_dates)
+  end
 
   before do
     @courses = []
@@ -64,38 +66,51 @@ describe Event::Qualifier::Calculator do
       expect(gl_records).to have(2).items
     end
 
-    describe 'validity period' do
-      it 'ignores course starting outside of validity period' do
-        add_course(training_days: 0.5, start_at: begin_of_validity - 1.day)
+    describe 'relevant period' do
+      it 'ignores course starting outside of relevant period' do
+        add_course(training_days: 0.5, start_at: begin_of_period - 1.day)
         expect(gl_records).to be_nil
       end
 
-      it 'accepts course starting on first day of of validity period' do
-        add_course(training_days: 0.5, start_at: begin_of_validity)
+      it 'accepts course starting on second day of relevant period' do
+        add_course(training_days: 0.5, start_at: begin_of_period)
         expect(gl_records).to be_present
       end
 
-      it 'accepts course finishing on first day of of validity period' do
-        add_course(training_days: 0.5, start_at: begin_of_validity - 1.day, finish_at: begin_of_validity)
+      it 'accepts course finishing on second day of relevant period' do
+        add_course(training_days: 0.5, start_at: begin_of_period - 1.day,
+                   finish_at: begin_of_period)
         expect(gl_records).to be_present
       end
 
       describe 'qualification specific dates' do
-        it 'accepts course if occuring after specific validity date' do
-          qualification_dates[gl.id] = begin_of_validity - 1.day
-          add_course(training_days: 0.5, start_at: begin_of_validity)
+        it 'accepts course if occuring after qualification date at start of relevant period' do
+          qualification_dates[gl.id] = begin_of_period - 1.day
+          add_course(training_days: 0.5, start_at: begin_of_period)
           expect(gl_records).to be_present
         end
 
-        it 'accepts course if occuring on specific validity date' do
-          qualification_dates[gl.id] = begin_of_validity
-          add_course(training_days: 0.5, start_at: begin_of_validity)
+        it 'ignores course if occuring on qualification date at start of relevant period' do
+          qualification_dates[gl.id] = begin_of_period
+          add_course(training_days: 0.5, start_at: begin_of_period)
+          expect(gl_records).to be_nil
+        end
+
+        it 'accepts course if occuring after qualification date in relevant period' do
+          qualification_dates[gl.id] = 300.days.ago.to_date
+          add_course(training_days: 0.5, start_at: 299.days.ago.to_date)
           expect(gl_records).to be_present
         end
 
-        it 'ignores course if occuring before specific validity date' do
-          qualification_dates[gl.id] = begin_of_validity + 1.months
-          add_course(training_days: 0.5, start_at: begin_of_validity)
+        it 'ignores course if occuring on qualification date in relevant period' do
+          qualification_dates[gl.id] = 300.days.ago.to_date
+          add_course(training_days: 0.5, start_at: 300.days.ago.to_date)
+          expect(gl_records).to be_nil
+        end
+
+        it 'ignores course if occuring before qualification date in relevant period' do
+          qualification_dates[gl.id] = 300.days.ago.to_date
+          add_course(training_days: 0.5, start_at: 301.days.ago.to_date)
           expect(gl_records).to be_nil
         end
       end
@@ -117,7 +132,7 @@ describe Event::Qualifier::Calculator do
 
       it 'populates for multiple qualification kinds from multiple courses' do
         create_event_kind_qualification_kind(glk, sl)
-        add_course(kind: glk, training_days: 3, start_at: 1.months.ago)
+        add_course(kind: glk, training_days: 3, start_at: 1.month.ago)
         expect(course_records.keys).to eq([gl.id, sl.id])
       end
 
@@ -151,7 +166,7 @@ describe Event::Qualifier::Calculator do
     it 'equals start_at of first course that matches or exceeds training days' do
       add_course(training_days: 1, start_at: 3.months.ago)
       add_course(training_days: 1, start_at: 2.months.ago)
-      add_course(training_days: 1, start_at: 1.months.ago)
+      add_course(training_days: 1, start_at: 1.month.ago)
       expect(obj.start_at(gl)).to eq 2.months.ago.to_date
     end
 
@@ -174,30 +189,30 @@ describe Event::Qualifier::Calculator do
     end
 
     it 'is full amount when course is outside validity period' do
-      add_course(training_days: 2, start_at: begin_of_validity - 1.day)
+      add_course(training_days: 2, start_at: begin_of_period - 1.day)
       expect(open_training_days).to eq 2
     end
 
     it 'subtracts single course training_days when course is in validity period' do
-      add_course(training_days: 0.5, start_at: begin_of_validity)
+      add_course(training_days: 0.5, start_at: begin_of_period)
       expect(open_training_days).to eq 1.5
     end
 
     it 'substracts all matching courses from required training days' do
-      add_course(training_days: 0.5, start_at: begin_of_validity)
-      add_course(training_days: 0.5, start_at: begin_of_validity + 1.week)
-      add_course(training_days: 0.5, start_at: begin_of_validity + 2.weeks)
+      add_course(training_days: 0.5, start_at: begin_of_period)
+      add_course(training_days: 0.5, start_at: begin_of_period + 1.week)
+      add_course(training_days: 0.5, start_at: begin_of_period + 2.weeks)
       expect(open_training_days).to eq 0.5
     end
 
     it 'caps out at zero if required training days are exceeded' do
-      add_course(training_days: 0.5, start_at: begin_of_validity)
-      add_course(training_days: 2.5, start_at: begin_of_validity + 1.week)
+      add_course(training_days: 0.5, start_at: begin_of_period)
+      add_course(training_days: 2.5, start_at: begin_of_period + 1.week)
       expect(open_training_days).to eq 0
     end
   end
 
-  def add_course(kind: slk, qualified: true, training_days: nil, start_at:, finish_at: nil)
+  def add_course(start_at:, kind: slk, qualified: true, training_days: nil, finish_at: nil)
     course = Fabricate.build(:course, kind: kind, training_days: training_days)
     course.dates.build(start_at: start_at, finish_at: finish_at)
     course.tap { @courses += [course] }

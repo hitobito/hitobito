@@ -13,7 +13,7 @@ module Qualifications
     end
 
     def qualifications
-      @qualification ||= prepare
+      @qualifications ||= prepare
     end
 
     private
@@ -28,7 +28,8 @@ module Qualifications
     end
 
     def ordered_qualifications
-      @ordered_qualifications ||= @person
+      @ordered_qualifications ||=
+        @person
         .qualifications
         .order_by_date
         .includes(qualification_kind: :translations)
@@ -74,8 +75,8 @@ module Qualifications
     end
 
     def maximum_qualification_dates_per_kind
-      @maximum_qualification_dates_per_kind ||= @person
-        .qualifications.group(:qualification_kind_id).maximum(:start_at)
+      @maximum_qualification_dates_per_kind ||=
+        @person.qualifications.group(:qualification_kind_id).maximum(:start_at)
     end
 
     def today

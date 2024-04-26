@@ -74,6 +74,7 @@ TAGS
 .project
 .vscode
 .nvimrc
+.byebug_history
 
 # for experiments with webpack
 

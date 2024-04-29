@@ -12,7 +12,7 @@ on:
       - '**.md'
 
 jobs:
-  build:
+  rubocop:
     runs-on: 'ubuntu-20.04'
     env:
       HEADLESS: true
@@ -49,76 +49,142 @@ jobs:
       - name: 'Checkout'
         uses: actions/checkout@v4
 
-      - name: 'Set up Ruby'
-        uses: ruby/setup-ruby@v1
-        env:
-          ImageOS: ubuntu20
-
-      - name: Read .tool-versions
-        uses: marocchino/tool-versions-action@v1
-        id: readToolVersions
-
-      - name: Set up Node.js ${{ steps.readToolVersions.outputs.nodejs }}
-        uses: actions/setup-node@v4
+      - name: 'Prepare'
+        uses: ./.github/actions/core-ci-setup
         with:
-          node-version: ${{ steps.readToolVersions.outputs.nodejs }}
-
-      - name: 'Setup OS'
-        run: |
-          sudo apt-get -qq update
-          sudo apt-get install sphinxsearch
-          echo "ruby version: $(ruby -v)"
-          echo "bundle version: $(bundle -v)"
-          echo "node version: $(node -v)"
-          echo "yarn version: $(yarn -v)"
-
-      - name: 'create cache key'
-        run: cp Gemfile.lock Gemfile.lock.backup
-
-      - uses: actions/cache@v4
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-ruby-bundle-${{ hashFiles('**/Gemfile.lock.backup') }}
-          restore-keys: |
-            ${{ runner.os }}-ruby-bundle-
-
-      - name: 'Bundle install'
-        run: |
-          bundle install --jobs 4 --retry 3 --path vendor/bundle
-
-      - name: 'Make changes to Gemfile.lock transparent'
-        run: git diff Gemfile.lock || true
-
-      - uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules-
-
-      - name: 'Yarn install'
-        run: |
-          yarn install --frozen-lockfile
-
-      - name: 'Run Webpacker'
-        run: |
-          bundle exec rake webpacker:compile
+          migrations: false
 
       - name: 'Rubocop'
         run: |
           bundle exec rake rubocop
 
-      - name: 'Run db migrations'
-        run: |
-          bundle exec rake db:migrate
+  main-specs:
+    runs-on: 'ubuntu-20.04'
+    env:
+      HEADLESS: true
+      RAILS_DB_ADAPTER: mysql2
+      RAILS_DB_HOST: 127.0.0.1
+      RAILS_DB_PORT: 33066
+      RAILS_DB_USERNAME: hitobito
+      RAILS_DB_PASSWORD: hitobito
+      RAILS_DB_NAME: hitobito_test
+      RAILS_TEST_DB_NAME: hitobito_test
+      TZ: Europe/Berlin
+      RAILS_USE_TEST_GROUPS: true
+
+    services:
+      mysql:
+        image: 'mysql:5.7'
+        env:
+          MYSQL_USER: 'hitobito'
+          MYSQL_PASSWORD: 'hitobito'
+          MYSQL_DATABASE: 'hitobito_test'
+          MYSQL_ROOT_PASSWORD: 'root'
+        ports:
+          - '33066:3306'
+        options: >-
+          --health-cmd "mysqladmin ping"
+          --health-interval 10s
+          --health-timeout 10s
+          --health-retries 10
+      memcached:
+        image: 'memcached'
+        ports: [ '11211:11211' ]
+
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v4
+
+      - name: 'Prepare'
+        uses: ./.github/actions/core-ci-setup
 
       - name: 'Main Specs without features'
         run: |
           bundle exec rake ci:setup:env spec:without_features
 
+  sphinx-specs:
+    runs-on: 'ubuntu-20.04'
+    env:
+      HEADLESS: true
+      RAILS_DB_ADAPTER: mysql2
+      RAILS_DB_HOST: 127.0.0.1
+      RAILS_DB_PORT: 33066
+      RAILS_DB_USERNAME: hitobito
+      RAILS_DB_PASSWORD: hitobito
+      RAILS_DB_NAME: hitobito_test
+      RAILS_TEST_DB_NAME: hitobito_test
+      TZ: Europe/Berlin
+      RAILS_USE_TEST_GROUPS: true
+
+    services:
+      mysql:
+        image: 'mysql:5.7'
+        env:
+          MYSQL_USER: 'hitobito'
+          MYSQL_PASSWORD: 'hitobito'
+          MYSQL_DATABASE: 'hitobito_test'
+          MYSQL_ROOT_PASSWORD: 'root'
+        ports:
+          - '33066:3306'
+        options: >-
+          --health-cmd "mysqladmin ping"
+          --health-interval 10s
+          --health-timeout 10s
+          --health-retries 10
+      memcached:
+        image: 'memcached'
+        ports: [ '11211:11211' ]
+
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v4
+
+      - name: 'Prepare'
+        uses: ./.github/actions/core-ci-setup
+
       - name: 'Sphinx'
         run: |
           bundle exec rake ci:setup:env spec:sphinx
+
+  feature-specs:
+    runs-on: 'ubuntu-20.04'
+    env:
+      HEADLESS: true
+      RAILS_DB_ADAPTER: mysql2
+      RAILS_DB_HOST: 127.0.0.1
+      RAILS_DB_PORT: 33066
+      RAILS_DB_USERNAME: hitobito
+      RAILS_DB_PASSWORD: hitobito
+      RAILS_DB_NAME: hitobito_test
+      RAILS_TEST_DB_NAME: hitobito_test
+      TZ: Europe/Berlin
+      RAILS_USE_TEST_GROUPS: true
+
+    services:
+      mysql:
+        image: 'mysql:5.7'
+        env:
+          MYSQL_USER: 'hitobito'
+          MYSQL_PASSWORD: 'hitobito'
+          MYSQL_DATABASE: 'hitobito_test'
+          MYSQL_ROOT_PASSWORD: 'root'
+        ports:
+          - '33066:3306'
+        options: >-
+          --health-cmd "mysqladmin ping"
+          --health-interval 10s
+          --health-timeout 10s
+          --health-retries 10
+      memcached:
+        image: 'memcached'
+        ports: [ '11211:11211' ]
+
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v4
+
+      - name: 'Prepare'
+        uses: ./.github/actions/core-ci-setup
 
       - name: 'Features'
         run: |
@@ -134,7 +200,7 @@ jobs:
 
   notify_statuscope:
     uses: ./.github/workflows/notify-statuscope.yml
-    needs: [ build ]
+    needs: [ rubocop, main-specs, sphinx-specs, feature-specs ]
     if: ( success() || failure() ) && ( github.ref_name == 'master' )
     with:
       repository: 'hitobito'

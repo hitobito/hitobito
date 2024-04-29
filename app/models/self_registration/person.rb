@@ -58,8 +58,11 @@ class SelfRegistration::Person
 
   delegate :gender_label, :valid_email?, to: :person
 
-  def save!
-    person.save! && role.save! && enqueue_duplicate_locator_job
+  # validation context can be provided and is forwarded to saving the person and role
+  def save!(context: nil)
+    person.save!(context: context) &&
+      role.save!(context: context) &&
+      enqueue_duplicate_locator_job
   end
 
   def person
@@ -97,7 +100,7 @@ class SelfRegistration::Person
   end
 
   def assert_role_valid
-    unless role.valid?
+    unless role.valid?(validation_context)
       role.errors.attribute_names.each do |attr|
         errors.add(attr, role.errors[attr].join(', '))
       end
@@ -105,7 +108,7 @@ class SelfRegistration::Person
   end
 
   def assert_person_valid
-    unless person.valid?
+    unless person.valid?(validation_context)
       (person.errors.attribute_names & attrs).each do |attr|
         errors.add(attr, person.errors[attr].join(', ')) unless errors.key?(attr)
       end

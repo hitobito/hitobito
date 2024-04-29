@@ -78,9 +78,9 @@ describe FutureRole do
     context 'target_type validations' do
       before do
         stub_const('TargetRole', Class.new(Role) do
-          attr_accessor :target_type_valid
+          attr_accessor :some_attribute
 
-          validates :target_type_valid, presence: true
+          validates :some_attribute, presence: true, on: [:create, :update]
         end)
         top_group.class.role_types += [TargetRole]
       end
@@ -95,14 +95,20 @@ describe FutureRole do
         allow(role).to receive(:validate_target_type?).and_return(true)
         role.validate
 
-        expect(role.errors[:target_type_valid]).to include('muss ausgefüllt werden')
+        expect(role.errors[:some_attribute]).to include('muss ausgefüllt werden')
       end
 
       it 'are skipped if validate_target_type? returns false' do
         allow(role).to receive(:validate_target_type?).and_return(false)
         role.validate
 
-        expect(role.errors[:target_type_valid]).to be_blank
+        expect(role.errors[:some_attribute]).to be_blank
+      end
+
+      it 'can be skipped by setting non-matching validation context' do
+        allow(role).to receive(:validate_target_type?).and_return(true)
+        role.validate(:skip_target_type)
+        expect(role.errors[:some_attribute]).to be_blank
       end
     end
 

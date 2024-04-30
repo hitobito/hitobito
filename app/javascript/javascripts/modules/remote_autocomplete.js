@@ -186,14 +186,12 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
     return nel;
   };
 
-  $(document).on("turbo:load turbo:frame-load", function() {
+  app.setupRemoteAutocomplete = function() {
     app.setupQuicksearch();
     $("[data-provide=entity]").each(app.setupEntityTypeahead);
     $("[data-provide=typeahead]").each(app.setupStaticTypeahead);
     return $("[data-provide]").each(function() {
       return $(this).attr("autocomplete", "off");
     });
-  });
-
-
+  };
 }).call(this);

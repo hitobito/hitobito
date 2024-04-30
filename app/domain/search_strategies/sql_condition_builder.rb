@@ -5,6 +5,8 @@
 
 module SearchStrategies
   class SqlConditionBuilder
+    class_attribute :matchers, default: {}
+
 
     def initialize(search_string, search_tables_and_fields)
       @search_string = search_string
@@ -35,11 +37,9 @@ module SearchStrategies
 
     def search_column_condition(word)
       @search_tables_and_fields.map do |table_field|
-        table_name, field = table_field.split('.', 2)
-        table = Arel::Table.new(table_name)
-        table[field].matches(Arel::Nodes::Quoted.new("%#{word}%"))
-      end
+        matcher = matchers.fetch(table_field, Matcher).new(table_field, word)
+        matcher.match if matcher.applies?
+      end.compact
     end
-
   end
 end

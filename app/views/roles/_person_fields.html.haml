@@ -1,6 +1,6 @@
 
 = swappable_role_add_fieldset(:create_new, :search_existing) do
-  = f.labeled_person_field(:person)
+  = f.labeled_person_field(:person, display_value: entry.person.new_record? ? '' : entry.person.to_s)
 
 
 = swappable_role_add_fieldset(:search_existing, :create_new) do

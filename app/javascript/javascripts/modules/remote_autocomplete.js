@@ -173,7 +173,7 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
     return nel;
   };
 
-  $(document).on("turbo:load turbo:frame-load", function() {
+  $(document).on("turbo:render turbo:frame-load", function() {
     app.setupQuicksearch();
     $("[data-provide=entity]").each(app.setupEntityTypeahead);
     $("[data-provide=typeahead]").each(app.setupStaticTypeahead);

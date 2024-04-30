@@ -24,7 +24,7 @@
 
     = yield(:head)
 
-  %body{class: ('is-logged-out' unless person_signed_in?) }
+  %body{class: ('is-logged-out' unless person_signed_in?), data: { controller: 'remote-autocomplete' } }
     #modal-placeholder
     %main
       = render 'layouts/file_download' if current_user

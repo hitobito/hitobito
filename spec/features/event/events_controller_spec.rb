@@ -65,6 +65,20 @@ describe EventsController, js: true do
       end
     end
 
+    it 'shows no results message for contact and does not interact with message click' do
+      sign_in
+      visit edit_path
+
+      notification_checkbox_visible(false)
+
+      query = 'querythatdoesnotmatch'
+      fill_in 'Kontaktperson', with: query
+      expect(find('ul[role="listbox"] li[role="option"]')).to have_content 'Keine Einträge gefunden.'
+      find('ul[role="listbox"] li[role="option"]').click
+
+      expect(find('#event_contact').value).to eq(query)
+    end
+
     it 'toggles participation notifications' do
       event.update(contact: people(:top_leader))
 

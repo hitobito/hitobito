@@ -316,6 +316,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
                  disabled: disabled,
                  data: { provide: 'entity',
                          id_field: "#{object_name}_#{attr_id}",
+                         no_results_message: I18n.t('global.no_list_entries'),
                          url: html_options&.dig(:data, :url) || @template.query_people_path })
   end
 

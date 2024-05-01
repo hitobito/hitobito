@@ -42,11 +42,13 @@ class PersonReadables < GroupBasedReadables
     if user.root?
       Person.only_public_data
     else
-      Person.only_public_data
-            .joins(@roles_join)
-            .where(groups: { deleted_at: nil })
-            .where(accessible_conditions.to_a)
-            .distinct
+      scope = Person.only_public_data.where(accessible_conditions.to_a).distinct
+      if has_group_based_conditions?
+        # Only add these joins when really necessary, because they are extremely expensive to
+        # compute when there are a lot of people and roles
+        scope = scope.joins(@roles_join).where(groups: { deleted_at: nil })
+      end
+      scope
     end
   end
 
@@ -57,6 +59,14 @@ class PersonReadables < GroupBasedReadables
       see_invisible_from_above_condition(condition)
       append_group_conditions(condition)
     end
+  end
+
+  def has_group_based_conditions?
+    layer_groups_see_invisible_from_above.present? ||
+      groups_same_group.present? ||
+      groups_above_group.present? ||
+      layer_groups_same_layer.present? ||
+      layer_groups_above.present?
   end
 
   def contact_data_condition

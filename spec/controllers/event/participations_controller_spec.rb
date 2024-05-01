@@ -11,7 +11,7 @@ describe Event::ParticipationsController do
 
   let(:group) { groups(:top_layer) }
 
-  let(:other_course) do
+  let!(:other_course) do
     other = Fabricate(:course, groups: [group], kind: course.kind)
     other.dates << Fabricate(:event_date, event: other, start_at: course.dates.first.start_at)
     other
@@ -42,7 +42,6 @@ describe Event::ParticipationsController do
     user.qualifications << Fabricate(:qualification, qualification_kind: qualification_kinds(:gl),
                                                      start_at: course.dates.first.start_at)
     sign_in(user)
-    other_course
   end
 
 
@@ -379,21 +378,19 @@ describe Event::ParticipationsController do
     let(:pending_dj_handlers) { Delayed::Job.all.pluck(:handler) }
 
     context 'for current user' do
-      let(:person)  { Fabricate(:person, email: 'anybody@example.com') }
+      let(:user) { people(:bottom_member) }
       let(:app1)    { Fabricate(:person, email: 'approver1@example.com') }
       let(:app2)    { Fabricate(:person, email: 'approver2@example.com') }
 
       before do
-        # create one person with two approvers
+        # create two approvers for user
         Fabricate(Group::BottomLayer::Leader.name.to_sym, person: app1,
                                                           group: groups(:bottom_layer_one))
         Fabricate(Group::BottomLayer::Leader.name.to_sym, person: app2,
                                                           group: groups(:bottom_layer_one))
-        Fabricate(Group::BottomGroup::Leader.name.to_sym, person: person,
-                                                          group: groups(:bottom_group_one_one))
 
-        person.qualifications << Fabricate(:qualification,
-                                           qualification_kind: qualification_kinds(:sl))
+        user.qualifications << Fabricate(:qualification,
+                                         qualification_kind: qualification_kinds(:sl))
       end
 
       it 'creates pending confirmation and notification job for course' do
@@ -407,7 +404,7 @@ describe Event::ParticipationsController do
 
         expect(flash[:notice]).to be_nil
         expect(flash[:warning]).
-          to include 'Es wurde eine Voranmeldung für Teilnahme von <i>Top Leader</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden.'
+          to include "Es wurde eine Voranmeldung für Teilnahme von <i>#{user}</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden."
       end
 
       it 'creates pending confirmation with waiting list info' do
@@ -423,7 +420,7 @@ describe Event::ParticipationsController do
 
         expect(flash[:notice]).to be_nil
         expect(flash[:warning]).
-          to include 'Es wurde eine Voranmeldung für Teilnahme von <i>Top Leader</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden.'
+          to include "Es wurde eine Voranmeldung für Teilnahme von <i>#{user}</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden."
         expect(flash[:alert]).to include 'Es sind derzeit alle Plätze belegt, die Anmeldung ist auf der Warteliste.'
       end
 
@@ -439,7 +436,7 @@ describe Event::ParticipationsController do
         expect(pending_dj_handlers).to be_one{ |h| h =~ /Event::ParticipationConfirmationJob/}
 
         expect(flash[:notice]).
-          to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
+          to include "Teilnahme von <i>#{user}</i> in <i>Eventus</i> wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an."
         expect(flash[:warning]).to be_nil
       end
 
@@ -463,7 +460,7 @@ describe Event::ParticipationsController do
 
         expect(flash[:notice]).to be_nil
         expect(flash[:warning]).
-          to include 'Es wurde eine Voranmeldung für Teilnahme von <i>Top Leader</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden.'
+          to include "Es wurde eine Voranmeldung für Teilnahme von <i>#{user}</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden."
       end
 
       it 'creates specific non-active participant role for course events' do
@@ -485,7 +482,7 @@ describe Event::ParticipationsController do
 
         expect(flash[:notice]).to be_nil
         expect(flash[:warning]).
-          to include 'Es wurde eine Voranmeldung für Teilnahme von <i>Top Leader</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden.'
+          to include "Es wurde eine Voranmeldung für Teilnahme von <i>#{user}</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden."
       end
 
       it 'creates new participation with application' do
@@ -512,7 +509,7 @@ describe Event::ParticipationsController do
 
         expect(flash[:notice]).to be_nil
         expect(flash[:warning]).
-          to include 'Es wurde eine Voranmeldung für Teilnahme von <i>Top Leader</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden.'
+          to include "Es wurde eine Voranmeldung für Teilnahme von <i>#{user}</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden."
       end
 
       it 'creates new participation with all answers' do
@@ -529,6 +526,26 @@ describe Event::ParticipationsController do
 
         participation = assigns(:participation)
         expect(participation.answers.size).to eq(2)
+      end
+
+      it 'fails if required answers are missing' do
+        expect_any_instance_of(described_class).not_to receive(:set_success_notice)
+        course.questions.first.update!(required: true)
+
+        post :create,
+             params: {
+               group_id: group.id,
+               event_id: course.id,
+               event_participation: {
+                 answers: {
+                   1 => { question_id: course.questions.first.id, answer: '' }
+                 }
+               }
+             }
+
+        expect(response).to render_template('new')
+        expect(flash[:notice]).to be_nil
+        expect(flash[:warning]).to be_nil
       end
 
       it 'fails for invalid event role' do
@@ -574,6 +591,7 @@ describe Event::ParticipationsController do
     end
 
     context 'other user' do
+      let(:user) { people(:top_leader) }
       let(:bottom_member) { people(:bottom_member) }
       let(:participation) { assigns(:participation) }
 

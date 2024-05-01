@@ -61,7 +61,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     with_person_add_request do
       created = with_callbacks(:create, :save) do
         entry.transaction do
-          next unless save_entry
+          next false unless save_entry
 
           # a confirmation email gets sent automatically when assigning a
           # place. in the other case, send one explicitely

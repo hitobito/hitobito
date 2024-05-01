@@ -5,7 +5,7 @@
 
 
 = field_set_tag do
-  = f.labeled_input_fields(*entry.used_attributes(:application_opening_at, :application_closing_at, :application_conditions, :maximum_participants, :minimum_participants, :automatic_assignment))
+  = f.labeled_input_fields(*entry.used_attributes(:application_opening_at, :application_closing_at, :application_conditions, :maximum_participants, :minimum_participants))
 
   - entry.used?(:external_applications) do
     = f.labeled_boolean_field(:external_applications, caption: t('events.form.caption_external_applications'))
@@ -17,6 +17,9 @@
 
   - entry.used?(:priorization) do
     = f.labeled_boolean_field(:priorization, caption: t('events.form.caption_prioritization'))
+
+  - entry.used?(:automatic_assignment) do
+    = f.labeled_boolean_field(:automatic_assignment, caption: t('events.form.caption_automatic_assignment'))
 
   - entry.used?(:waiting_list) do
     = f.labeled_boolean_field(:waiting_list, caption: t('events.form.caption_waiting_list'))

@@ -17,7 +17,10 @@ class AddAutomaticAssignmentToEvents < ActiveRecord::Migration[6.1]
     remove_column :events, :automatic_assignment
   end
 
+  private
+
   def event_types_using_priorization
     Event.all_types.select { |e| e.attr_used?(:priorization) }
+      .map(&:sti_name)
   end
 end

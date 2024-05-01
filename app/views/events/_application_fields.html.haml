@@ -18,6 +18,9 @@
   - entry.used?(:priorization) do
     = f.labeled_boolean_field(:priorization, caption: t('events.form.caption_prioritization'))
 
+  - entry.used?(:automatic_assignment) do
+    = f.labeled_boolean_field(:automatic_assignment, caption: t('events.form.caption_automatic_assignment'))
+
   - entry.used?(:waiting_list) do
     = f.labeled_boolean_field(:waiting_list, caption: t('events.form.caption_waiting_list'))
 

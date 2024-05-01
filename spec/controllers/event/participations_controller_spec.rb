@@ -425,7 +425,7 @@ describe Event::ParticipationsController do
       end
 
       it 'without waiting list directly assigns place and creates confirmation' do
-        course.update!(waiting_list: false, maximum_participants: 2, participant_count: 1, priorization: false)
+        course.update!(waiting_list: false, maximum_participants: 2, participant_count: 1, automatic_assignment: true)
 
         expect do
           post :create, params: { group_id: group.id, event_id: course.id, event_participation: {} }

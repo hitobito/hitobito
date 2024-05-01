@@ -7,8 +7,8 @@
 
 class Person::QueryController < ApplicationController
 
-  class_attribute :serializer
-  self.serializer = :as_typeahead
+  class_attribute :serializer, default: :as_typeahead
+  class_attribute :limit, default: 10
 
   before_action :authorize_action
 
@@ -18,7 +18,7 @@ class Person::QueryController < ApplicationController
   def index
     people = []
     if search_param.size >= 3
-      people = list_entries.limit(10)
+      people = list_entries.limit(limit)
       people = decorate(people)
     end
     if limit_by_permission

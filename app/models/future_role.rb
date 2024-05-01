@@ -117,7 +117,7 @@ class FutureRole < Role
 
   def target_type_validations
     becoming = build_new_role
-    becoming.validate
+    becoming.validate(validation_context)
 
     becoming_errors = becoming.errors.reject do |e|
       # A FutureRole will have a convert_on date in the future, this will become the

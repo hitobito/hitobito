@@ -4,12 +4,12 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: event_attachments
 #
 #  id       :integer          not null, primary key
-#  file     :string(255)      not null
 #  event_id :integer          not null
 #
 # Indexes

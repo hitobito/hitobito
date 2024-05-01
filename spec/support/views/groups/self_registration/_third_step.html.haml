@@ -1,0 +1,19 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito
+
+%h1
+  THIRD STEP
+
+= f.fields_for(:main_person_attributes, f.object.main_person) do |ff|
+  = field_set_tag do
+    = ff.error_messages
+
+    = ff.labeled_input_field :email, help_inline: t('people.email_field.used_as_login'), class: 'd-inline'
+    - [:first_name, :last_name, :nick_name, :company_name].each do |attr|
+      = ff.labeled_input_field attr if ff.object.attr?(attr)
+
+.btn-toolbar.bottom.align-with-form
+  = c.next_button
+  = c.back_link

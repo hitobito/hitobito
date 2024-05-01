@@ -1,4 +1,6 @@
-#  Copyright (c) 2012-2018, Schweizer Blasmusikverband. This file is part of
+# frozen_string_literal: true
+
+#  Copyright (c) 2012-2024, Schweizer Blasmusikverband. This file is part of
 #  hitobito_sbv and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -26,12 +28,14 @@ module TableDisplays
       raise 'implement in subclass'
     end
 
-    def value_for(object, attr)
+    def value_for(object, attr, &block)
       target, target_attr = resolve(object, attr)
-      if target.present? && target_attr.present? && allowed?(target, target_attr, object, attr)
-        return target, target_attr unless block_given?
-
-        yield target, target_attr
+      if target.present? && target_attr.present?
+        if allowed?(target, target_attr, object, attr)
+          allowed_value_for(target, target_attr, &block)
+        else
+          I18n.t('global.not_allowed')
+        end
       end
     end
 
@@ -69,7 +73,7 @@ module TableDisplays
       raise 'implement in subclass'
     end
 
-    def allowed?(object, attr, original_object, original_attr)
+    def allowed?(object, attr, _original_object, _original_attr)
       ability.can? required_permission(attr), object
     end
 
@@ -95,6 +99,14 @@ module TableDisplays
       relation, relation_path = path.to_s.split('.', 2)
       relation_class = model_class.reflect_on_association(relation).class_name.constantize
       resolve_database_column(relation_path, relation_class)
+    end
+
+    def allowed_value_for(target, target_attr, &block)
+      if block.present?
+        block.call(target, target_attr)
+      else
+        [target, target_attr]
+      end
     end
   end
 end

@@ -21,6 +21,7 @@ de:
       group/top_group/secretary: Secretary
       group/top_group/local_guide: Local Guide
       group/top_group/local_secretary: Local Secretary
+      group/top_group/group_manager: Group Manager
       group/top_group/member: Member
       group/top_group/invisible_people_manager: Invisible People Manager
       group/bottom_layer/leader: Leader

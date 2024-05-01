@@ -7,7 +7,11 @@
   = f.labeled_input_field(:name)
 
   - entry.used?(:kind_id) do
-    = f.labeled_input_field(:kind_id)
+    = f.labeled(:kind_id) do
+      = f.input_field(:kind_id, data: { action: 'form-field-inheritance#inherit' })
+      .form-text
+        = link_to(t('global.link.override'), '#', title: t('.kind_overrides_link_title'),
+            data: { action: "form-field-inheritance#override"})
 
   - entry.used?(:state) do
     - if entry.possible_states.present?
@@ -21,8 +25,9 @@
     = f.labeled_input_field(:number)
 
   - entry.used?(:description) do
-    - link = entry.kind_class == Event::Kind ? render('default_description_link') : nil
-    = f.labeled_input_field(:description, help: link)
+    = f.labeled_input_field(:description)
+    - if entry.kind_class == Event::Kind
+      = field_inheritance_values(@kinds, { description: :general_information })
 
   = f.labeled_input_fields(*entry.used_attributes(:motto, :cost))
 
@@ -35,8 +40,6 @@
 
   = render 'location_fields', f: f
 
-  - entry.used?(:globally_visible) do
-    = f.labeled_boolean_field :globally_visible,
-      caption: t('events.form.caption_globally_visible', model_name: entry.model_name.human)
+  = render 'additional_fields', f: f
 
 = render_extensions 'fields', locals: { f: f }

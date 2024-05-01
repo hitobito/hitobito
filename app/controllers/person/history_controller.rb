@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2015, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -15,14 +13,14 @@ class Person::HistoryController < ApplicationController
     @roles = fetch_roles(:without_deleted, :without_future)
     @future_roles = fetch_roles(:future)
     @inactive_roles = fetch_roles(:inactive)
-    @participations_by_event_type = participations_by_event_type
     @qualifications = Qualifications::List.new(entry).qualifications
+    @participations_by_event_type = participations_by_event_type
   end
 
   private
 
   def roles_scope
-    Person::PreloadGroups.for([entry]).first.roles.includes(group: :parent)
+    Person::PreloadGroups.for([entry]).first.roles.includes(:group)
   end
 
   def fetch_roles(*scopes)
@@ -32,7 +30,8 @@ class Person::HistoryController < ApplicationController
   end
 
   def fetch_participations
-    Person::EventQueries.new(entry).alltime_participations
+    Person::EventQueries.new(entry)
+      .alltime_participations
   end
 
   def participations_by_event_type

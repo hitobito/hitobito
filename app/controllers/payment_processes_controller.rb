@@ -6,7 +6,7 @@
 class PaymentProcessesController < ApplicationController
   before_action :authorize_action
 
-  helper_method :group, :parent, :processor
+  helper_method :group, :parent, :processor, :parents
 
   def new; end
 
@@ -70,6 +70,10 @@ class PaymentProcessesController < ApplicationController
     io.respond_to?(:content_type) &&
     # windows sends csv files as application/vnd.excel, windows 10 as application/octet-stream
     io.content_type =~ %r{text/xml}
+  end
+
+  def parents
+    [parent]
   end
 
 end

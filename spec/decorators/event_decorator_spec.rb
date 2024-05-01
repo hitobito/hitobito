@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -38,50 +36,50 @@ describe EventDecorator, :draper_with_helpers do
     it 'joins multiple dates' do
       add_date(start_at: '2002-01-01')
       add_date(start_at: '2002-01-01')
-      expect(subject.dates_info).to eq '01.01.2002<br />01.01.2002'
+      expect(subject.dates_info).to eq 'Di 01.01.2002<br />Di 01.01.2002'
     end
 
     context 'date objects'  do
       it 'start_at only' do
         add_date(start_at: '2002-01-01')
-        expect(subject.dates_info).to eq '01.01.2002'
+        expect(subject.dates_info).to eq 'Di 01.01.2002'
       end
 
       it 'start and finish' do
         add_date(start_at: '2002-01-01', finish_at: '2002-01-13')
-        expect(subject.dates_info).to eq '01.01.2002 - 13.01.2002'
+        expect(subject.dates_info).to eq 'Di 01.01.2002 - So 13.01.2002'
       end
 
       it 'start and finish on same day' do
         add_date(start_at: '2002-01-01', finish_at: '2002-01-01')
-        expect(subject.dates_info).to eq '01.01.2002'
+        expect(subject.dates_info).to eq 'Di 01.01.2002'
       end
     end
 
     context 'time objects' do
       it 'start_at only' do
         add_date(start_at: '2002-01-01 13:30')
-        expect(subject.dates_info).to eq '01.01.2002 13:30'
+        expect(subject.dates_info).to eq 'Di 01.01.2002 13:30'
       end
 
       it 'start and finish' do
         add_date(start_at: '2002-01-01 13:30', finish_at: '2002-01-13 15:30')
-        expect(subject.dates_info).to eq '01.01.2002 13:30 - 13.01.2002 15:30'
+        expect(subject.dates_info).to eq 'Di 01.01.2002 13:30 - So 13.01.2002 15:30'
       end
 
       it 'start and finish on same day, start time' do
         add_date(start_at: '2002-01-01', finish_at: '2002-01-01 13:30')
-        expect(subject.dates_info).to eq '01.01.2002 00:00 - 13:30'
+        expect(subject.dates_info).to eq 'Di 01.01.2002 00:00 - 13:30'
       end
 
       it 'start and finish on same day, finish time' do
         add_date(start_at: '2002-01-01 13:30', finish_at: '2002-01-01 13:30')
-        expect(subject.dates_info).to eq '01.01.2002 13:30'
+        expect(subject.dates_info).to eq 'Di 01.01.2002 13:30'
       end
 
       it 'start and finish on same day, both times' do
         add_date(start_at: '2002-01-01 13:30', finish_at: '2002-01-01 15:30')
-        expect(subject.dates_info).to eq '01.01.2002 13:30 - 15:30'
+        expect(subject.dates_info).to eq 'Di 01.01.2002 13:30 - 15:30'
       end
     end
 

@@ -9,17 +9,21 @@
 #
 # Table name: payment_provider_configs
 #
-#  id                        :integer          not null, primary key
-#  payment_provider          :string(255)
-#  invoice_config_id         :integer
-#  status                    :integer          default(0)
-#  partner_identifier        :string(255)
-#  user_identifier           :string(255)
-#  encrypted_password        :string(255)
-#  encrypted_keys            :text(16777215)
-#  synced_at                 :datetime
-#  created_at                :datetime
-#  updated_at                :datetime
+#  id                 :bigint           not null, primary key
+#  encrypted_keys     :text(16777215)
+#  encrypted_password :string(255)
+#  partner_identifier :string(255)
+#  payment_provider   :string(255)
+#  status             :integer          default("draft"), not null
+#  synced_at          :datetime
+#  user_identifier    :string(255)
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  invoice_config_id  :bigint
+#
+# Indexes
+#
+#  index_payment_provider_configs_on_invoice_config_id  (invoice_config_id)
 #
 
 postfinance:

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -96,5 +94,23 @@ describe 'Dropdown::PeopleExport' do
 
       expect(submenu_entries('Etiketten')).not_to include 'SampleFormat (A4, 3x8)'
     end
+  end
+
+  it '#tabular_links can be customized in subclass' do
+    subclass = Class.new(Dropdown::PeopleExport) do
+      def tabular_links(format)
+        super.tap do |item|
+          item.sub_items <<
+            ::Dropdown::Item.new("Hello World", '/hello-world', data: { checkable: true })
+        end
+      end
+    end
+
+    # Replace the original class with the subclass instead of using it directly,
+    # so I18n will find the original translations.
+    stub_const('Dropdown::PeopleExport', subclass)
+
+    expect(top_menu_entries).to match_array %w[CSV Excel vCard PDF Etiketten]
+    expect(submenu_entries('CSV')).to match_array %w[Spaltenauswahl Adressliste Haushaltsliste Hello\ World]
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_02_14_155008) do
+ActiveRecord::Schema.define(version: 2024_04_02_092444) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -368,6 +368,8 @@ ActiveRecord::Schema.define(version: 2024_02_14_155008) do
     t.boolean "globally_visible"
     t.string "shared_access_token"
     t.boolean "notify_contact_on_participations", default: false, null: false
+    t.decimal "training_days", precision: 5, scale: 2
+    t.integer "minimum_participants"
     t.index ["kind_id"], name: "index_events_on_kind_id"
     t.index ["shared_access_token"], name: "index_events_on_shared_access_token"
   end
@@ -959,6 +961,7 @@ ActiveRecord::Schema.define(version: 2024_02_14_155008) do
     t.datetime "updated_at"
     t.datetime "deleted_at"
     t.integer "reactivateable"
+    t.decimal "required_training_days", precision: 5, scale: 2
   end
 
   create_table "qualifications", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
@@ -967,6 +970,7 @@ ActiveRecord::Schema.define(version: 2024_02_14_155008) do
     t.date "start_at", null: false
     t.date "finish_at"
     t.string "origin"
+    t.date "qualified_at"
     t.index ["person_id"], name: "index_qualifications_on_person_id"
     t.index ["qualification_kind_id"], name: "index_qualifications_on_qualification_kind_id"
   end

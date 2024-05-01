@@ -42,8 +42,8 @@ Before an external application can read the user's data, it must first get the a
 * `response_type` For the authorization request we always use the value `code`
 * `client_id` The UId of the external application, this will be provided to you by your hitobito root group admin
 * `redirect_uri` A URL where your application can receive the authorization code once the user grants the permission request. The hitobito root group admin needs to know this URL (or all possible URLs if the external application has multiple) in advance in order to create your `client_id`.
-* * The URLs must have the `https://` protocol. Exception: On integration environments only, `localhost` URLs can also be used with `http://` (for testing and development purposes).
-* * If you want to only test the OAuth functionality, you can use the special value `urn:ietf:wg:oauth:2.0:oob`, which will display the authorization token instead of redirecting the browser
+  * The URLs must have the `https://` protocol. Exception: On integration environments only, `localhost` URLs can also be used with `http://` (for testing and development purposes).
+  * If you want to only test the OAuth functionality, you can use the special value `urn:ietf:wg:oauth:2.0:oob`, which will display the authorization token instead of redirecting the browser
 * `scope` One or more scopes (see above) needed by your application, separated by spaces or `%20`. The hitobito root group admin needs to know this list in advance in order to create your `client_id`
 
 An example of the full URL, where your application could redirect the user for asking permission:
@@ -76,7 +76,7 @@ curl -X POST \
 The response will contain the access token (formatted here for readability):
 ```json
 {
-  "access_token": "a3922ce7b6776e293c40d1d47a16d3787b860fb31ee7b121793f40492bae309f",
+  "access_token": "A5t3yMUvKCZLxasqJbQBhu0bRKMvWdwcBSw2DJbUiaQ",
   "token_type": "Bearer",
   "expires_in": 7200,
   "scope": "email name",
@@ -88,7 +88,7 @@ The response will contain the access token (formatted here for readability):
 
 The freshly acquired token can be used in the `Authorization` HTTP header when accessing the OAuth profile endpoint. You also have to set the `X-Scope` HTTP header to one of the scopes you requested when asking the user for permission.
 ```bash
-curl -H "Authorization: Bearer a3922ce7b6776e293c40d1d47a16d3787b860fb31ee7b121793f40492bae309f" \
+curl -H "Authorization: Bearer A5t3yMUvKCZLxasqJbQBhu0bRKMvWdwcBSw2DJbUiaQ" \
      -H "X-Scope: name" \
      https://demo.hitobito.com/oauth/profile
 ```
@@ -100,22 +100,127 @@ An example response could be (formatted here for readability):
   "email": "julia@example.com",
   "first_name": "Julia",
   "last_name": "Keller",
-  "nickname": "Polka"
+  "nickname": "Polka",
+  "address": null,
+  "zip_code": "",
+  "town": null,
+  "country": null
+}
+```
+
+#### `with_roles` scope
+
+When using the `with_roles` scope, the /oauth/profile endpoint yields all public attributes of the logged in person, as well as a list of their roles:
+
+```json
+{
+  "id": 34,
+  "email": "julia@example.com",
+  "first_name": "Julia",
+  "last_name": "Keller",
+  "nickname": "Polka",
+  "company_name": null,
+  "company": false,
+  "address": null,
+  "zip_code": "",
+  "town": null,
+  "country": null,
+  "gender": null,
+  "birthday": "1999-09-09",
+  "primary_group_id": 1,
+  "language": "de",
+  "roles": [
+    {
+      "group_id": 1,
+      "group_name": "hitobito",
+      "role_name": "Mitarbeiter*in GS",
+      "role_class": "Group::Bund::MitarbeiterGs",
+      "permissions": [
+        "layer_and_below_full",
+        "contact_data",
+        "admin"
+      ]
+    }
+  ]
+}
+```
+
+### OpenID Connect (OIDC)
+
+When using the `oidc` scope, the flow initially works exactly the same as for OAuth 2.0. The response to the /oauth/token endpoint will contain an additional `id_token` field:
+```json
+{
+  "access_token": "A5t3yMUvKCZLxasqJbQBhu0bRKMvWdwcBSw2DJbUiaQ",
+  "token_type": "Bearer",
+  "expires_in": 7200,
+  "scope": "openid name",
+  "created_at": 1709940937,
+  "id_token": "eyJraWQiOiJha2NwUWpvYjVaSGdKUmpsZWdidlZuUjVyYjRZYWxyVDlJNnpjN3NTOERJIiwiYWxnIjoiUlMyNTYifQ.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjMwMDAiLCJzdWIiOiIxIiwiYXVkIjoiWEM5LUhXQndBbGdmaUFvVFh6bXVPbnlUX0FraHhNaUZ3WlZRdGpCcXdCNCIsImV4cCI6MTcwOTk0MTA1NywiaWF0IjoxNzA5OTQwOTM3LCJub25jZSI6ImRvN243ZzV4NXVpIn0.OCGY2-cNx7FeQwqGVAI3_puPt17yagwZGcAvRJjOifhQDIMBKqulcWP3OwdeZjhD62BmMwNPBtUsRF-jsoaF6iDqrFGWXPkjuPxSypF6g8r0eGk5vkL9KlAbhr5pBxrAgMhryDPh-o48YdV7iFe5pGu7Amc5ufAIWpa0eE8hhMYJIE-M37b8ZqjCYiB7UfV1gz24aEYbWk-dC78-tn3A1OLGc8hPQZqXI0KqMQ7Dub7FHi6d7IAGitzftLLkmJl-ObSuDemjX43-xFQQQ91RGR6LJ2Y-RzmkNPfJrSS1-Gf-kSluHSKGQ0aZbq4E2e-xP1Gf-rKzCmB1l62--ZnmBw"
+}
+```
+
+This ID token is a JWT token which, when decoded, contains standardized OIDC fields:
+```json
+{
+  "iss": "https://demo.hitobito.com",
+  "sub": "34",
+  "aud": "XC9-HWBwAlgfiAoTXzmuOnyT_AkhxMiFwZVQtjBqwB4",
+  "exp": 1709941057,
+  "iat": 1709940937,
+  "nonce": "do7n7g5x5ui"
+}
+```
+
+The token is signed using the hitobito server's private key. `iss` is the issuer, which is the URL of the identity provider. `sub` is the id of the user who just logged in. When using the `email` scope, the JWT token payload additionally contains an `email` field containing the main email address of the authenticated person.
+
+#### Userinfo endpoint
+
+Using the access token, the standardized OIDC Userinfo endpoint can also be queried. This endpoint is similar to the profile endpoint of the OAuth flow, and will yield information depending on the used scopes. Here is an example response from the /oauth/userinfo endpoint, when using the `email` and `with_roles` scopes (additionally to the mandatory `openid` scope):
+
+```json
+{
+  "sub": "34",
+  "email": "julia@example.com",
+  "first_name": "Julia",
+  "last_name": "Keller",
+  "nickname": "Polka",
+  "company_name": null,
+  "company": false,
+  "address": null,
+  "zip_code": "",
+  "town": null,
+  "country": null,
+  "gender": null,
+  "birthday": "1999-09-09",
+  "primary_group_id": 1,
+  "language": "de",
+  "roles": [
+    {
+      "group_id": 1,
+      "group_name": "hitobito",
+      "role": "Group::Bund::MitarbeiterGs",
+      "role_class": "Group::Bund::MitarbeiterGs",
+      "role_name": "Mitarbeiter*in GS",
+      "permissions": [
+        "layer_and_below_full"
+      ]
+    }
+  ]
 }
 ```
 
 ### Accessing the JSON-API
 
-All endpoints from the [JSON API](05_rest_api.md) can be used with a personal OAuth access token, if the token has the `api` scope. There are two possibilities to use the API:
+All endpoints from the [JSON API](05_rest_api.md) can be used with a personal OAuth access token, if the token has the `api` scope. Individual endpoints can also be accessed if the token has the matching scope: `events`, `groups`, `people`, `invoices`, `mailing_lists`. There are two possibilities to use the API:
 
 * **Query parameter**: Send `access_token` as query parameter in the URL, and append `.json` to the URL path
 ```bash
-curl "https://demo.hitobito.com/de/groups/1.json?access_token=a3922ce7b6776e293c40d1d47a16d3787b860fb31ee7b121793f40492bae309f"
+curl "https://demo.hitobito.com/de/groups/1.json?access_token=A5t3yMUvKCZLxasqJbQBhu0bRKMvWdwcBSw2DJbUiaQ"
 ```
 
 * **Request headers**: Set the following headers on the HTTP request: `Authorization: Bearer <access_token>` and `Accept: application/json`
 ```bash
-curl -H "Authorization: Bearer a3922ce7b6776e293c40d1d47a16d3787b860fb31ee7b121793f40492bae309f" \
+curl -H "Authorization: Bearer A5t3yMUvKCZLxasqJbQBhu0bRKMvWdwcBSw2DJbUiaQ" \
      -H "Accept: application/json" \
      https://demo.hitobito.com/de/groups/1
 ```

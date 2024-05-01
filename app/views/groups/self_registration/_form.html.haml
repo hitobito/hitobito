@@ -1,12 +1,7 @@
--#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+-#  Copyright (c) 2023-2024, Schweizer Alpen-Club. This file is part of
 -#  hitobito_sac_cas and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
--#  https://github.com/hitobito/hitobito_sac_cas.
+-#  https://github.com/hitobito/hitobito
 
 = standard_form(entry, url: group_self_registration_path, data: { turbo: 'false' }) do |f|
   = render 'fields', f: f
-
-- if entry.first_step?
-  = standard_form(entry, {url: group_self_inscription_path, method: :get}) do |f|
-    = f.help_block(t('groups.self_registration.form.has_account'), class: 'align-with-form')
-    = submit_button(f, t('groups.self_registration.form.to_login_page'), display_as_link: true)

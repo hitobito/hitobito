@@ -4,7 +4,7 @@
 -#  https://github.com/hitobito/hitobito.
 
 = entry_form cancel_url_new: typed_group_events_path(@group, entry.klass),
-             html: { class: 'tabbed' } do |f|
+  html: { class: 'tabbed', data: { controller: 'form-field-inheritance' } } do |f|
   - if entry.new_record?
     = f.hidden_field :type
 
@@ -33,7 +33,7 @@
       #admin_questions.tab-pane
         = render 'admin_questions_fields', f: f
 
-    - if entry.participant_types.present?
+    - if render_event_contact_attr_fields?
       #contact_attrs.tab-pane
         = render 'contact_attr_fields', f: f
 

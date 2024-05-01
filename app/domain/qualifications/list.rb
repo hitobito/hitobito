@@ -13,25 +13,74 @@ module Qualifications
     end
 
     def qualifications
-      @qualification ||= prepare
+      @qualifications ||= prepare
     end
 
     private
 
     def prepare
-      list = load_qualifications
-      by_kind = list.group_by(&:qualification_kind_id)
-      list.each do |item|
-        item.first_of_kind = true if first?(item, by_kind)
+      ordered_qualifications.each do |item|
+        next unless first?(item)
+
+        item.first_of_kind = true
+        item.open_training_days = calculate_open_training_days(item) if training_days?(item)
       end
     end
 
-    def load_qualifications
-      @person.qualifications.order_by_date.includes(:qualification_kind)
+    def ordered_qualifications
+      @ordered_qualifications ||=
+        @person
+        .qualifications
+        .order_by_date
+        .includes(qualification_kind: :translations)
     end
 
-    def first?(quali, by_kind)
+    def by_kind
+      @by_kind ||= ordered_qualifications.group_by(&:qualification_kind_id)
+    end
+
+    def first?(quali)
       by_kind[quali.qualification_kind_id].first == quali
+    end
+
+    def training_days?(quali)
+      quali.qualification_kind.required_training_days.present? &&
+        (quali.active? || quali.reactivateable?)
+    end
+
+    def calculate_open_training_days(item)
+      item.open_training_days = calculator.open_training_days(item.qualification_kind)
+    end
+
+    def calculator
+      @calculator ||= Event::Qualifier::Calculator.new(
+        courses,
+        today,
+        qualification_dates: maximum_qualification_dates_per_kind
+      )
+    end
+
+    def courses
+      Event::TrainingDays::CoursesLoader.new(
+        @person,
+        :participant,
+        ordered_qualifications.pluck(:qualification_kind_id).uniq,
+        minimal_qualification_start_at_per_kind,
+        today
+      ).load
+    end
+
+    def minimal_qualification_start_at_per_kind
+      maximum_qualification_dates_per_kind.values.compact.min
+    end
+
+    def maximum_qualification_dates_per_kind
+      @maximum_qualification_dates_per_kind ||=
+        @person.qualifications.group(:qualification_kind_id).maximum(:start_at)
+    end
+
+    def today
+      @today ||= Time.zone.today
     end
   end
 end

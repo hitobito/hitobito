@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -11,6 +9,7 @@ describe Event::ParticipationConfirmationJob do
 
   CONFIRMATION_SUBJECT = 'Bestätigung der Anmeldung'
   PENDING_CONFIRMATION_SUBJECT = 'Voranmeldung eingegangen'
+  APPROVAL_SUBJECT = 'Freigabe einer Kursanmeldung'
 
   let(:course) { Fabricate(:course, groups: [groups(:top_layer)], priorization: true) }
 
@@ -45,11 +44,22 @@ describe Event::ParticipationConfirmationJob do
   context 'for active participation' do
     let(:participation_active) { true }
 
-    it 'sends participation confirmation' do
+    it 'sends participation confirmation and approval' do
       subject.perform
 
-      expect(ActionMailer::Base.deliveries.size).to eq(1)
-      expect(last_email.subject).to eq(CONFIRMATION_SUBJECT)
+      expect(ActionMailer::Base.deliveries.size).to eq(2)
+      expect(ActionMailer::Base.deliveries.map(&:subject)).to match_array([CONFIRMATION_SUBJECT,
+                                                                           APPROVAL_SUBJECT])
+    end
+
+    it 'sends participation confirmation for participation without application entry' do
+      participation.application.destroy!
+
+      subject.perform
+
+      expect(ActionMailer::Base.deliveries.size).to eq(2)
+      expect(ActionMailer::Base.deliveries.map(&:subject)).to match_array([CONFIRMATION_SUBJECT,
+                                                                           APPROVAL_SUBJECT])
     end
 
   end
@@ -75,8 +85,41 @@ describe Event::ParticipationConfirmationJob do
 
         first_email = ActionMailer::Base.deliveries.first
         expect(last_email.to.to_set).to eq([app1.email, app2.email].to_set)
-        expect(last_email.subject).to eq('Freigabe einer Kursanmeldung')
+        expect(last_email.subject).to eq(APPROVAL_SUBJECT)
         expect(first_email.subject).to eq(PENDING_CONFIRMATION_SUBJECT)
+      end
+
+      it 'sends approval for active participation' do
+        course.update_column(:requires_approval, true)
+        participation.update(active: true)
+        subject.perform
+
+        first_email = ActionMailer::Base.deliveries.first
+        expect(last_email.to.to_set).to eq([app1.email, app2.email].to_set)
+        expect(last_email.subject).to eq(APPROVAL_SUBJECT)
+        expect(first_email.subject).to eq(CONFIRMATION_SUBJECT)
+      end
+
+      it 'sends approval for passive participation' do
+        course.update_column(:requires_approval, true)
+        participation.update(active: false)
+        subject.perform
+
+        first_email = ActionMailer::Base.deliveries.first
+        expect(last_email.to.to_set).to eq([app1.email, app2.email].to_set)
+        expect(last_email.subject).to eq(APPROVAL_SUBJECT)
+        expect(first_email.subject).to eq(PENDING_CONFIRMATION_SUBJECT)
+      end
+
+      it 'does not send approval for participation with approved application' do
+        course.update_column(:requires_approval, true)
+        participation.application.toggle_approval(true)
+        subject.perform
+
+        expect(ActionMailer::Base.deliveries.size).to eq(1)
+
+        expect(last_email.to.to_set).to eq([person.email].to_set)
+        expect(last_email.subject).to eq(PENDING_CONFIRMATION_SUBJECT)
       end
 
       it 'does only send confirmation but not approvals to approvers if send_approval false' do

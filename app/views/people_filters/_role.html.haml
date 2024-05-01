@@ -35,7 +35,7 @@
           %span.input-group-text= icon(:'calendar-alt')
           = text_field_tag("filters[role][finish_at]", filter && filter.args[:finish_at], class: 'date col-2 form-control form-control-sm')
     %div.row.mt-3
-      - %w(active created deleted).each do |key|
+      - %w(active created deleted inactive).each do |key|
         = render 'simple_radio',
             attr: "filters[role][kind]",
             value: key,

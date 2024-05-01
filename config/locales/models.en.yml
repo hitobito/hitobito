@@ -71,6 +71,10 @@ en:
           attributes:
             person_id:
               taken: is already registered
+        mailing_list:
+          attributes:
+            additional_sender:
+              invalid: "must contain mail addresses of the format abcd@ee.ch or *@ee.ch. Multiple addresses must be separated with ',' or ';'."
         person:
           name_missing: 'Please enter a name'
           readonly: "You do not have write access to all persons in the household. Remove %{name} from the household to adjust the address."
@@ -120,10 +124,6 @@ en:
               invalid_check_digit: 'is not valid; Incorrect check digit'
             payee:
               to_long: 'is too long, may only have 2 lines'
-        mailing_list:
-          attributes:
-            additional_sender:
-              invalid: "must contain mail addresses of the format abcd@ee.ch or *@ee.ch. Multiple addresses must be separated with ',' or ';'."
     models:
       acts_as_taggable_on/tag:
         one: Tag
@@ -321,6 +321,10 @@ en:
         one: Tag
         other: Tags
     attributes:
+      acts_as_taggable_on/tag:
+        name: name
+        taggings_count: Number
+        category: Category
       cantons:
         ag: Aargau
         ai: Appenzell Innerrhoden
@@ -662,7 +666,6 @@ en:
       additional_email:
         email: E-Mail
         name: Further e-mail
-        label: Type
         public: Public
         mailings: Mailing
       additional_emails:
@@ -913,10 +916,6 @@ en:
         events: Events
         invoices: Invoices
         cors_origins: Hosts with API access
-      acts_as_taggable_on/tag:
-        taggings_count: Number
-        category: Category
-        name: name
       calendar:
         name: Name
         description: Description
@@ -936,7 +935,6 @@ en:
       is_at: "must be at %{restriction}"
       before: "must be before %{restriction}"
       on_or_before: "must be on or before %{restriction}"
-      after: "must be after %{restriction}"
       on_or_after: "must be on or after %{restriction}"
       expired: "has expired, please request a new"
       not_found: "not found"

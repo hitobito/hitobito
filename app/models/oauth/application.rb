@@ -5,7 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
 # == Schema Information
 #
 # Table name: oauth_applications
@@ -13,7 +12,7 @@
 #  id           :integer          not null, primary key
 #  confidential :boolean          default(TRUE), not null
 #  name         :string(255)      not null
-#  redirect_uri :text(16777215)   not null
+#  redirect_uri :text(65535)      not null
 #  scopes       :string(255)      default(""), not null
 #  secret       :string(255)      not null
 #  uid          :string(255)      not null

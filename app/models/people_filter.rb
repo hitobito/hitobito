@@ -1,15 +1,14 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: people_filters
 #
 #  id           :integer          not null, primary key
-#  filter_chain :text(16777215)
+#  filter_chain :text(65535)
 #  group_type   :string(255)
 #  name         :string(255)      not null
 #  range        :string(255)      default("deep")

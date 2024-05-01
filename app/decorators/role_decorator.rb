@@ -16,6 +16,17 @@ class RoleDecorator < ApplicationDecorator
     formatted_name
   end
 
+  def for_oauth
+    {
+      group_id: group_id,
+      group_name: group.name,
+      role: object.class.model_name,
+      role_class: object.class.model_name,
+      role_name: object.class.model_name.human,
+      permissions: role.class.permissions.uniq
+    }
+  end
+
   def outdated_role_title
     case model
     when FutureRole

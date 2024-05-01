@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz, Pfadibewegung Schweiz.
 #  This file is part of hitobito and licensed under the Affero General Public
 #  License version 3 or later. See the COPYING file at the top-level
@@ -246,6 +244,43 @@ describe PeopleController, js: true do
 
       expect(person.reload.household_key).to be_nil
       expect(housemate.reload.household_key).to be_nil
+    end
+
+    it 'does not add person to household if household is invalid' do
+      expect_any_instance_of(Person::Household).to receive(:valid?).and_return(false)
+      person.update!(household_key: 'my-household')
+      create_person('Housemate', household_key: 'my-household')
+
+      prospective_housemate = create_person('Prospective Housemate')
+
+      visit edit_group_person_path(group_id: person.primary_group_id, id: person.id)
+      expect(page).to have_field('household', checked: true)
+      expect(page).to have_field('household_query')
+      # for the preexisting housemate
+      expect(household_key_people_container).to have_field(type: :hidden, count: 1)
+
+      fill_in('household_query', with: prospective_housemate.first_name)
+      find('#autoComplete_result_0').click
+
+      # for the preexisting housemate, but not the new one
+      expect(household_key_people_container).to have_field(type: :hidden, count: 1)
+      expect(page).to have_selector('.household_pleople_ids_errors', text: /Du kannst .* nicht zum Haushalt hinzufügen/)
+    end
+
+    it 'does show errors on person.household_people_ids if household is invalid' do
+      expect_any_instance_of(Person::Household).to receive(:valid?) do |household|
+        household.person.errors.add(:household_people_ids, 'Invalid, so not added to household')
+        false
+      end
+
+      prospective_housemate = create_person('Prospective Housemate')
+
+      visit edit_group_person_path(group_id: person.primary_group_id, id: person.id)
+      check('household')
+      fill_in('household_query', with: prospective_housemate.first_name)
+      find('#autoComplete_result_0').click
+
+      expect(page).to have_selector('.household_pleople_ids_errors', text: 'Invalid, so not added to household')
     end
   end
 end

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -57,7 +55,7 @@ describe Export::Tabular::Events::List do
       before { allow(course).to receive(:dates).and_return([date]) }
       its([7]) { is_expected.to eq 'Hauptanlass' }
       its([8]) { is_expected.to eq 'somewhere' }
-      its([9]) { is_expected.to eq '09.06.2013 - 12.06.2013' }
+      its([9]) { is_expected.to eq 'So 09.06.2013 - Mi 12.06.2013' }
       its([10]) { is_expected.to eq '' }
     end
 

@@ -77,7 +77,7 @@ SQL
 
   echo $cmds
 
-  if [[ $RAILS_DB_SOCKET ]]; then
+  if [[ -v RAILS_DB_SOCKET ]]; then
     echo "$cmds" | mysql -u "${RAILS_DB_USERNAME:-hitobito}" -p"${RAILS_DB_PASSWORD:-hitobito}"
   else
     echo "$cmds" | mysql -u "${RAILS_DB_USERNAME:-hitobito}" -p"${RAILS_DB_PASSWORD:-hitobito}" -h "${RAILS_DB_HOST:-127.0.0.1}" -P "${RAILS_DB_PORT:-33066}"
@@ -160,8 +160,11 @@ case $cmd in
     ;;
 
   configs)
+    shift # loose the "configs" argument
+    configs_to_copy=${@:-.rspec}
+
     echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -L1 -I% \
-      cp -v .rspec "../hitobito_%/"
+      cp -v $configs_to_copy "../hitobito_%/"
     ;;
 
   binstubs)
@@ -175,25 +178,14 @@ case $cmd in
     bundle exec rake db:drop db:create
     echo 'Migrating Core'
     bundle exec rake db:migrate
-    echo 'Migrating Wagons'
-    bundle exec rake wagon:migrate
 
-    echo 'Compile Assets to match the selected wagons to ensure better spec-results'
-    bin/webpack-test-compile
-    ;;
+    if [[ "$RAILS_TEST_DB_NAME" != "hit_core_test" ]]; then
+      echo 'Migrating Wagons'
+      bundle exec rake wagon:migrate
 
-  test-speedup)
-    wagon test-prepare
-
-    echo 'Running Wagon-Tests to prime the DB'
-    rake wagon:test || true # do not fail, it's more about the setup than the result
-
-    echo 'Changing environment-config'
-    sed -i 's/\(config.active_record.maintain_test_schema\) = true/\1 = false/' config/environments/test.rb
-
-    git diff config/environments/test.rb
-
-    echo 'Running specs with spring in the wagon is now faster.'
+      echo 'Compile Assets to match the selected wagons to ensure better spec-results'
+      bin/webpack-test-compile
+    fi
     ;;
 
   grep)
@@ -212,15 +204,6 @@ case $cmd in
       echo ">> grepping in ../hitobito_$wagon/ <<" | highlight_phrases
       (cd "../hitobito_$wagon/"; git grep --color=always "${@:2}")
     done
-    ;;
-
-  core-spec)
-    export WAGONS=''
-    export RAILS_ENV=test
-    export RAILS_TEST_DB_NAME=hit_core_test
-    shift # loose the "core-spec" argument
-    rake db:migrate # ensure that schema.rb is current for the test-db to load
-    rspec $@
     ;;
 
   spec-all)
@@ -294,9 +277,27 @@ case $cmd in
     for wagon in $(echo ${WAGONS:-''} | tr " " "\n"); do
       (
         cd "../hitobito_${wagon}" && (echo "$wagon" | red) &&
-        git diff --staged --name-only | xargs -L1 $core_bin_dir/single-file-update-copyright
+          git diff --staged --name-only | xargs -L1 $core_bin_dir/single-file-update-copyright
       )
     done
+    ;;
+
+  build)
+    require_wagon_name
+    shift # loose the "build" argument
+    shift # loose the wagon-name argument
+    target=${1:-app}
+
+    if [[ $target == 'app' ]]; then
+      name='rails'
+    else
+      name=$target
+    fi
+
+    (
+      cd "../ose_composition_${wagon_name}" \
+        && docker buildx build . --file hitobito/Dockerfile --target $target -t hitobito/$wagon_name/$name:latest
+    )
     ;;
 
   create)
@@ -357,10 +358,10 @@ function __wagon_commands() {
   echo '
     activate
     binstubs
+    build
     bootstrap
     clone
     configs
-    core-spec
     create
     create-database
     gemfile
@@ -375,7 +376,6 @@ function __wagon_commands() {
     spec
     spec-all
     test-prepare
-    test-speedup
     update-copyright
   ' | xargs
 }
@@ -401,7 +401,7 @@ function __wagon_completion() {
       return
       ;;
 
-    activate | spec)
+    activate | spec | build)
       COMPREPLY=( $( compgen -W "$(__wagon_list)" -- "$cur" ) )
       return
       ;;
@@ -415,8 +415,8 @@ COMPLETION
   help|*)
     echo "USAGE: $0 [activate] <WAGON>|core"
     echo "       $0 [clone|bootstrap] <WAGON>"
-    echo "       $0 [create-datbase|reset-database|test-prepare|test-speedup|core-spec|update-copyright]"
-    echo "       $0 [spec] <WAGON>"
+    echo "       $0 [create-datbase|reset-database|test-prepare|update-copyright]"
+    echo "       $0 [spec|build] <WAGON>"
     echo "       $0 [spec-all|reset-test-database|overwritten-in-wagon]"
     echo "       $0 [grep] <TERM>"
     echo "       $0 [git|git-all] <ARGS>"

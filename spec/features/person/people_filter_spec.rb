@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2014, Jungwacht Blauring Schweiz, Pfadibewegung Schweiz.
 #  This file is part of hitobito and licensed under the Affero General Public
 #  License version 3 or later. See the COPYING file at the top-level
@@ -63,7 +61,7 @@ describe PeopleController, js: true do
         sign_in_and_create_filter
 
         find('h4.filter-toggle', text: 'Top Layer').click
-        expect(page).to have_css('#roles input:checked', count: 7)
+        expect(page).to have_css('#roles input:checked', count: 8)
 
         find('h4.filter-toggle', text: 'Top Layer').click
         expect(page).to have_css('#roles input:checked', count: 0)
@@ -75,7 +73,7 @@ describe PeopleController, js: true do
         sign_in_and_create_filter
 
         find('h5.filter-toggle', text: 'Top Group').click
-        expect(page).to have_css('#roles input:checked', count: 6)
+        expect(page).to have_css('#roles input:checked', count: 7)
 
         find('h5.filter-toggle', text: 'Top Group').click
         expect(page).to have_css('#roles input:checked', count: 0)

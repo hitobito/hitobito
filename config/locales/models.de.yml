@@ -16,6 +16,7 @@ de:
       default: ! '%d.%m.%Y'
       long: ! '%e %B %Y'
       short: ! '%e %b'
+      with_day: ! '%a %d.%m.%Y'
 
   number:
     currency:
@@ -109,6 +110,8 @@ de:
             mail_name:
               not_allowed: "'%{mail_name}' darf nicht verwendet werden"
             mail_name_not_allowed:
+            additional_sender:
+              invalid: "muss Mailadressen vom Format abcd@ee.ch oder *@ee.ch enthalten. Mehrere Adressen müssen mit ',' oder ';' abgetrennt werden."
         message/letter_with_invoice:
           attributes:
             base:
@@ -174,10 +177,6 @@ de:
             payee:
               to_long: 'darf höchstens 2 Zeilen enthalten'
               must_have_3_lines: 'muss genau 3 Zeilen enthalten'
-        mailing_list:
-            attributes:
-                additional_sender:
-                    invalid: "muss Mailadressen vom Format abcd@ee.ch oder *@ee.ch enthalten. Mehrere Adressen müssen mit ',' oder ';' abgetrennt werden."
         role:
           attributes:
             delete_on:
@@ -396,6 +395,8 @@ de:
     attributes:
       acts_as_taggable_on/tag:
         name: Name
+        taggings_count: Anzahl
+        category: Kategorie
 
       cantons:
         ag: Aargau
@@ -559,6 +560,7 @@ de:
         contact: Kontaktperson
         notify_contact_on_participations: Kontaktperson über neue Anmeldung per Mail benachrichtigen
         maximum_participants: Maximale Teilnehmerzahl
+        minimum_participants: Minimale Teilnehmerzahl
         contact_id: Kontaktperson
         description: Beschreibung
         location: Ort / Adresse
@@ -611,6 +613,7 @@ de:
         state_translated: Status
         priorization: Priorisierung
         requires_approval: Freigabe
+        training_days: Ausbildungstage
 
       event/date:
         label: Bezeichnung
@@ -731,6 +734,7 @@ de:
         string_with_origin: '%{kind} (von %{origin})'
         string_with_finish_at: '%{kind} (bis %{finish_at})'
         string_with_finish_at_and_origin: '%{kind} (bis %{finish_at}, von %{origin})'
+        open_training_days: Offene Ausbildungstage
 
       qualification_kind:
         label: Bezeichnung
@@ -740,6 +744,7 @@ de:
         updated_at: Geändert
         deleted_at: Gelöscht
         reactivateable: Reaktivierbar
+        required_training_days: Erforderliche Ausbildungstage
 
       relations_to_tails:
         tail_id: Beziehung
@@ -837,7 +842,6 @@ de:
         email: E-Mail
         name: Weitere E-Mail
         label: Weitere E-Mail Typ
-        label: Typ
         public: Öffentlich
         mailings: Versand
 
@@ -1165,11 +1169,6 @@ de:
         mailing_lists: Abonnent/-innen von Mailinglisten
         cors_origins: Hosts mit API-Zugriff
 
-      acts_as_taggable_on/tag:
-        taggings_count: Anzahl
-        category: Kategorie
-        name: Name
-
       calendar:
         name: Name
         description: Beschreibung
@@ -1203,7 +1202,7 @@ de:
       is_at: "muss %{restriction} sein"
       before: "muss vor %{restriction} sein"
       on_or_before: "muss %{restriction} oder davor sein"
-      after: "muss  nach %{restriction} sein"
+      after: "muss nach %{restriction} sein"
       on_or_after: "muss %{restriction} oder danach sein"
       # devise
       expired: "ist abgelaufen, bitte neu anfordern"

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz, Pfadibewegung Schweiz.
 #  This file is part of hitobito and licensed under the Affero General Public
 #  License version 3 or later. See the COPYING file at the top-level
@@ -97,6 +95,7 @@ describe InvoicesController do
         click_link('Rechnung inkl. Einzahlungsschein')
       end.to change { Delayed::Job.count }.by(1)
       expect(page).to have_current_path("/groups/#{group.id}/invoices/#{invoice.id}?returning=true")
+      expect(page).to have_content(/Die Downloads werden vorbereitet, bitte warten/)
     end
 
     it 'exports only articles' do
@@ -105,6 +104,7 @@ describe InvoicesController do
         click_link('Rechnung separat')
       end.to change { Delayed::Job.count }.by(1)
       expect(page).to have_current_path("/groups/#{group.id}/invoices/#{invoice.id}?returning=true")
+      expect(page).to have_content(/Die Downloads werden vorbereitet, bitte warten/)
     end
 
     it 'exports only esr' do
@@ -113,6 +113,7 @@ describe InvoicesController do
         click_link('Einzahlungsschein separat')
       end.to change { Delayed::Job.count }.by(1)
       expect(page).to have_current_path("/groups/#{group.id}/invoices/#{invoice.id}?returning=true")
+      expect(page).to have_content(/Die Downloads werden vorbereitet, bitte warten/)
     end
   end
 

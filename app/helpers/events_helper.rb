@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -90,19 +90,20 @@ module EventsHelper
   def quick_select_course_groups
     (current_user.groups.course_offerers +
      current_user.primary_group&.hierarchy&.course_offerers.to_a).
-        uniq
+      uniq
   end
 
   def format_training_days(event)
-    number_with_precision(event.training_days, precision: 1)
+    number_to_condensed(event.training_days)
   end
 
   def format_event_application_conditions(entry)
     texts = [entry.application_conditions]
     texts.unshift(entry.kind.application_conditions) if entry.course_kind?
-    safe_join(texts.select(&:present?).map do |text|
-      safe_auto_link(text, html: { target: '_blank' }) + tag.br
-    end)
+    html = texts.uniq.select(&:present?).map do |text|
+      safe_auto_link(text, html: { target: '_blank' })
+    end
+    safe_join(html, tag.br)
   end
 
   def format_event_state(event)
@@ -120,6 +121,11 @@ module EventsHelper
     elsif groups.present?
       simple_list(groups) { |group| linker[group] }
     end
+  end
+
+  def render_event_contact_attr_fields?
+    entry.participant_types.present? &&
+      entry.used_attributes(:required_contact_attrs, :hidden_contact_attrs).any?
   end
 
   private

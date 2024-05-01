@@ -89,13 +89,18 @@ RSpec.describe 'GET oauth/profile', type: :request do
 
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to eq('application/json; charset=utf-8')
-        expect(response.body).to eq("{" +
-          "\"id\":#{user.id}," +
-          "\"email\":\"#{user.email}\"," +
-          "\"first_name\":\"#{user.first_name}\"," +
-          "\"last_name\":\"#{user.last_name}\"," +
-          "\"nickname\":null" +
-          "}")
+        json = JSON.parse(response.body)
+        expect(json).to match({
+                             id: user.id,
+                             email: user.email,
+                             first_name: user.first_name,
+                             last_name: user.last_name,
+                             nickname: nil,
+                             address: user.address,
+                             zip_code: user.zip_code,
+                             town: user.town,
+                             country: user.country,
+                           }.deep_stringify_keys)
       end
     end
 
@@ -105,7 +110,32 @@ RSpec.describe 'GET oauth/profile', type: :request do
 
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to eq('application/json; charset=utf-8')
-        expect(response.body).to include('"group_name":"Bottom One","role_name":"Member"')
+        json = JSON.parse(response.body)
+        expect(json).to match({
+                             id: user.id,
+                             first_name: user.first_name,
+                             last_name: user.last_name,
+                             nickname: user.nickname,
+                             company_name: user.company_name,
+                             company: user.company,
+                             email: user.email,
+                             address: user.address,
+                             zip_code: user.zip_code,
+                             town: user.town,
+                             country: user.country,
+                             gender: user.gender,
+                             birthday: user.birthday.to_s.presence,
+                             primary_group_id: user.primary_group_id,
+                             language: user.language,
+                             roles: [{
+                                       group_id: user.roles.first.group_id,
+                                       group_name: user.roles.first.group.name,
+                                       role: 'Group::BottomLayer::Member',
+                                       role_class: 'Group::BottomLayer::Member',
+                                       role_name: 'Member',
+                                       permissions: ['layer_and_below_read', 'finance']
+                                     }]
+                           }.deep_stringify_keys)
       end
     end
   end

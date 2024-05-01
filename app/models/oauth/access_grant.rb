@@ -1,3 +1,10 @@
+# frozen_string_literal: true
+
+# Copyright (c) 2021, CVP Schweiz. This file is part of
+# hitobito and licensed under the Affero General Public License version 3
+# or later. See the COPYING file at the top-level directory or at
+# https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: oauth_access_grants
@@ -6,7 +13,7 @@
 #  code_challenge        :string(255)
 #  code_challenge_method :string(255)
 #  expires_in            :integer          not null
-#  redirect_uri          :text(16777215)   not null
+#  redirect_uri          :text(65535)      not null
 #  revoked_at            :datetime
 #  scopes                :string(255)
 #  token                 :string(255)      not null

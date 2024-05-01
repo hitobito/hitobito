@@ -8,6 +8,12 @@
 class InvoiceAbility < AbilityDsl::Base
 
   on(Invoice) do
+    class_side(:index).any_finance_group
+    permission(:finance).may(:show).in_layer
+    permission(:finance).may(:create, :edit, :update, :destroy).in_layer_if_active
+  end
+
+  on(InvoiceItem) do
     permission(:finance).may(:show).in_layer
     permission(:finance).may(:create, :edit, :update, :destroy).in_layer_if_active
   end

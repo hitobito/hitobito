@@ -20,6 +20,7 @@ require 'view_component/test_helpers'
 require 'view_component/system_test_helpers'
 
 require 'test_prof/recipes/logging'
+require "test_prof/recipes/rspec/let_it_be"
 
 TestProf::StackProf.configure do |config|
   config.format = 'json'
@@ -100,6 +101,7 @@ RSpec.configure do |config|
   config.include MailerMacros
   config.include EventMacros
   config.include I18nHelpers
+  config.include ViewHelpers
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::IntegrationHelpers, type: :request
   config.include FeatureHelpers, type: :feature
@@ -114,10 +116,7 @@ RSpec.configure do |config|
     config.filter_run_excluding :mysql
   end
 
-  config.before :all do
-    # load all fixtures
-    self.class.fixtures :all
-  end
+  config.global_fixtures = :all
 
   config.before(:each) do
     ActionMailer::Base.deliveries = []

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -148,6 +146,11 @@ describe FormatHelper do
       string = format_attr(crud_test_models(:CCCCC), :others)
       expect(string).to be_html_safe
       expect(string).to eq('<ul><li>AAAAA</li><li>BBBBB</li></ul>')
+    end
+
+    it 'reads translated i18n_enum labels' do
+      gender = format_attr(Person.new(gender: :m), :gender)
+      expect(gender).to eq 'männlich'
     end
   end
 

@@ -26,7 +26,7 @@ shared_examples 'jsonapi authorized requests' do
 end
 
 shared_examples 'graphiti schema file is up to date' do
-  it do
+  it 'graphiti schema file is up to date' do
     context_root = Pathname.new(Dir.pwd)
 
     # If no resources are defined, we assume the current context has no customizations
@@ -51,5 +51,17 @@ shared_examples 'graphiti schema file is up to date' do
       The schema file is outdated: #{Graphiti.config.schema_path.relative_path_from(Pathname.new(Dir.pwd).parent)}
       Please run `bundle exec rake graphiti:schema:generate` and commit the file to the git repository.
     MSG
+  end
+
+  describe 'GET /api-docs', type: :request do
+    it 'openapi spec is valid' do
+      get '/api/openapi.json'
+      json = JSON.parse(response.body)
+      expect(OpenApi::SchemaValidator.validate!(json, 3)).to be_truthy, <<~MSG
+        The generated OpenAPI specification file does not conform to the official OpenAPI 3 standard.
+        Please paste the output of /api/openapi.json or /api/openapi.yaml into
+        https://editor.swagger.io, and fix all reported errors.
+      MSG
+    end
   end
 end

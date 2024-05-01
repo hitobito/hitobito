@@ -10,7 +10,7 @@ module JsonApi
     include CanCan::Ability
 
     def initialize(main_ability)
-      can :read, Group if main_ability.user&.roles&.present?
+      can :read, Group if main_ability.user&.roles&.present? || main_ability.user&.root?
     end
   end
 end

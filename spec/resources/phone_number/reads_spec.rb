@@ -9,12 +9,7 @@ require 'spec_helper'
 
 describe PhoneNumberResource, type: :resource do
   let(:user) { user_role.person }
-
-  around do |example|
-    RSpec::Mocks.with_temporary_scope do
-      Graphiti.with_context(double({ current_ability: Ability.new(user) })) { example.run }
-    end
-  end
+  let(:ability) { Ability.new(user) }
 
   describe 'serialization' do
     let(:role) { roles(:bottom_member) }

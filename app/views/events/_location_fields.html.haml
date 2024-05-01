@@ -1,2 +1,3 @@
 - entry.used?(:location) do
   = f.labeled_input_field(:location)
+= render_extensions 'location_fields', locals: { f: f }

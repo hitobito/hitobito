@@ -1,13 +1,21 @@
 # Hitobito Changelog
 
-## unreleased
+## Version 2.1
 
+*  JSON:API OpenAPI Dokumentation weist 'extra_fields' korrekt aus (request parameter, entity schema attributes) (hitobito_sac_cas#275)
+*  Neues Attribut Minimale Teilnehmeranzahl auf Event (hitobito_sac_cas#358)
+*  Der OIDC /userinfo Endpoint und der OAuth /profile Endpoint geben von nun an immer dieselben (zum Scope passenden) Informationen aus (hitobito#2490)
+*  Eigener JSON:API Endpoint für Events (hitobito_sac_cas#229)
+*  Eigener JSON:API Endpoint für Rechnung (hitobito_sac_cas#338)
 *  Rechnungen können neu auch den Status "Teilzahlung" und "Überzahlung" haben (hitobito_sww#38)
 *  Einverständnis Erziehungsberechtigte für Selbstregistrierung (hitobito#2404)
 *  Listen von Rechnungen können nach letztem Zahlungseingang und nach insgesamt bezahltem Betrag sortiert werden (hitobito_sww#147)
 *  Zahlungen welche nicht einer Rechnung zugewiesen werden konnten, können auf der Seite "Einzelrechnungen" als CSV exportiert werden (#1494)
 *  Das Familienmitglieder-Feature kann jetzt via Settings im Wagon komplett ausgeschaltet werden
 *  Upgrade auf Ruby 3.2 (#2242)
+*  Filtermöglichkeit für Personen mit keinen gültigen, aber reaktivierbaren Qualifikationen, inklusive Stichdatum (hitobito_sac_cas#333)
+*  Filtermöglichkeit für Personen mit keinen gültigen Qualifikationen, inklusive Stichdatum (hitobito_sac_cas#334)
+*  Filtermöglichkeit nach inaktiver Rolle (hitobito_sac_cas#335)
 
 ## Version 2.0
 

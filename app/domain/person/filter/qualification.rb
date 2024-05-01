@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -8,7 +6,7 @@
 class Person::Filter::Qualification < Person::Filter::Base
 
   self.required_ability = :full
-  self.permitted_args = [:qualification_kind_ids, :validity, :match,
+  self.permitted_args = [:qualification_kind_ids, :validity, :match, :reference_date,
                          :start_at_year_from, :start_at_year_until,
                          :finish_at_year_from, :finish_at_year_until]
 
@@ -18,7 +16,9 @@ class Person::Filter::Qualification < Person::Filter::Base
   end
 
   def apply(scope)
-    if args[:match].to_s == 'all'
+    if args[:validity].to_s == 'not_active'
+      match_no_qualification_kind(scope)
+    elsif args[:match].to_s == 'all'
       match_all_qualification_kinds(scope)
     else
       match_one_qualification_kind(scope)
@@ -36,10 +36,11 @@ class Person::Filter::Qualification < Person::Filter::Base
   end
 
   def year_scope?
-    %w(start_at finish_at).product(%w(year_from year_until)).any? do |pre, post|
-      key = [pre, post].join('_')
-      args[key.to_sym].present? || args[key].present?
-    end
+    args[:validity].to_s == 'all' &&
+      %w(start_at finish_at).product(%w(year_from year_until)).any? do |pre, post|
+        key = [pre, post].join('_')
+        args[key.to_sym].present? || args[key].present?
+      end
   end
 
   private
@@ -64,6 +65,12 @@ class Person::Filter::Qualification < Person::Filter::Base
       merge(qualification_scope(scope))
   end
 
+  def match_no_qualification_kind(scope)
+    scope.
+      left_joins(:qualifications).
+      merge(::Qualification.not_active(args[:qualification_kind_ids], reference_date))
+  end
+
   def qualification_scope(scope)
     scope = qualification_validity_scope(scope)
     return scope unless year_scope?
@@ -76,8 +83,9 @@ class Person::Filter::Qualification < Person::Filter::Base
 
   def grouped_most_recent_qualifications_ids
     Qualification.
-      group(:person_id, :qualification_kind_id).select('max(id)').
-      where(qualification_kind_id: args[:qualification_kind_ids])
+      group(:person_id, :qualification_kind_id).
+      where(qualification_kind_id: args[:qualification_kind_ids]).
+      select('max(id)')
   end
 
   def finish_scope
@@ -100,10 +108,25 @@ class Person::Filter::Qualification < Person::Filter::Base
 
   def qualification_validity_scope(_scope)
     case args[:validity].to_s
-    when 'active'         then ::Qualification.active
-    when 'reactivateable' then ::Qualification.reactivateable
+    when 'active'         then ::Qualification.active(reference_date)
+    when 'reactivateable' then ::Qualification.reactivateable(reference_date)
+    when 'not_active_but_reactivateable' then not_active_but_reactivateable(reference_date)
     else ::Qualification.all
     end
+  end
+
+  def not_active_but_reactivateable(date)
+    ::Qualification.
+      not_active(args[:qualification_kind_ids], date).
+      only_reactivateable(date)
+  end
+
+  def reference_date
+    return if args[:reference_date].blank?
+
+    Date.parse(args[:reference_date])
+  rescue ArgumentError
+    nil
   end
 
 end

@@ -18,7 +18,7 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def apply(scope)
-    scope = scope.where(type_conditions)
+    scope = scope.where(type_conditions(scope))
                  .where(duration_conditions)
     if include_archived?
       scope
@@ -42,7 +42,7 @@ class Person::Filter::Role < Person::Filter::Base
 
   def roles_join
     case args[:kind]
-    when 'active' then active_roles_join
+    when 'active', 'inactive' then any_roles_join
     when 'deleted' then deleted_roles_join
     end
   end
@@ -85,8 +85,26 @@ class Person::Filter::Role < Person::Filter::Base
     args[:role_types].map { |t| role_map[t] }.compact
   end
 
-  def type_conditions
-    [[:roles, { type: args[:role_types] }]].to_h if args[:role_types].present?
+  def type_conditions(scope)
+    return if args[:role_types].blank?
+    return inactive_type_conditions(scope) if args[:kind].eql?('inactive')
+
+    [[:roles, { type: args[:role_types] }]].to_h
+  end
+
+  def inactive_type_conditions(scope)
+    excluded_people_ids = scope.where(excluded_roles_duration_conditions)
+                               .where(roles: { type: args[:role_types] })
+                               .pluck(:id)
+
+    ['people.id NOT IN (?)', excluded_people_ids] if excluded_people_ids.any?
+  end
+
+  def excluded_roles_duration_conditions
+    [active_role_condition, {
+      min: parse_day(args[:start_at], Time.zone.now, :beginning_of_day),
+      max: parse_day(args[:finish_at], Time.zone.now, :end_of_day)
+    }]
   end
 
   def duration_conditions
@@ -95,7 +113,7 @@ class Person::Filter::Role < Person::Filter::Base
     case args[:kind]
     when 'created' then [[:roles, { created_at: time_range }]].to_h
     when 'deleted' then [[:roles, { deleted_at: time_range }]].to_h
-    when 'active' then [active_role_condition, min: time_range.min, max: time_range.max]
+    when 'active', 'inactive' then [active_role_condition, min: time_range.min, max: time_range.max]
     end
   end
 
@@ -114,7 +132,7 @@ class Person::Filter::Role < Person::Filter::Base
     SQL
   end
 
-  def active_roles_join
+  def any_roles_join
     <<~SQL.split.map(&:strip).join(' ')
       INNER JOIN roles ON roles.person_id = people.id
       INNER JOIN #{Group.quoted_table_name} ON roles.group_id = #{Group.quoted_table_name}.id

@@ -13,6 +13,7 @@
 #  category              :string(255)      not null
 #  grouping              :integer
 #  role                  :string(255)      not null
+#  validity              :string(255)      default("valid_or_expired"), not null
 #  event_kind_id         :integer          not null
 #  qualification_kind_id :integer          not null
 #
@@ -61,4 +62,9 @@ class Event::KindQualificationKind < ActiveRecord::Base
 
   i18n_enum :validity, %w(valid valid_or_expired valid_or_reactivatable)
 
+  scope :prolongation, -> { where(category: :prolongation) }
+
+  def prolongation?
+    category.to_sym == :prolongation
+  end
 end

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -28,7 +26,7 @@ describe 'event/participations/_form.html.haml' do
 
     allow(view).to receive_messages(path_args: [group, event, decorated])
     allow(view).to receive_messages(entry: decorated)
-    allow(view).to receive_messages(model_class: Event::Participation)
+    allow(view).to receive_messages(model_class: Event::Participation, submit_label: 'Speichern')
     allow(view).to receive(:current_user) { user }
 
     allow(controller).to receive_messages(current_user: user)

@@ -8,28 +8,31 @@
 # == Schema Information
 #
 # Table name: messages
-
+#
 #  id                    :bigint           not null, primary key
+#  date_location_text    :string(255)
+#  donation_confirmation :boolean          default(FALSE), not null
 #  failed_count          :integer          default(0)
 #  invoice_attributes    :text(65535)
+#  pp_post               :string(255)
+#  raw_source            :text(16777215)
 #  recipient_count       :integer          default(0)
 #  salutation            :string(255)
+#  send_to_households    :boolean          default(FALSE), not null
 #  sent_at               :datetime
+#  shipping_method       :string(255)      default("own")
 #  state                 :string(255)      default("draft")
-#  subject               :string(988)
+#  subject               :string(998)
 #  success_count         :integer          default(0)
 #  text                  :text(65535)
 #  type                  :string(255)      not null
+#  uid                   :string(255)
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
+#  bounce_parent_id      :integer
 #  invoice_list_id       :bigint
 #  mailing_list_id       :bigint
 #  sender_id             :bigint
-#  pp_post               :string
-#  shipping_method       :string           default("own")
-#  send_to_households    :boolean          default(FALSE)
-#  donation_confirmation :boolean          default(FALSE)
-#  date_location_text    :string
 #
 # Indexes
 #
@@ -37,6 +40,7 @@
 #  index_messages_on_mailing_list_id  (mailing_list_id)
 #  index_messages_on_sender_id        (sender_id)
 #
+
 
 class Message < ActiveRecord::Base
   include I18nEnums
@@ -49,7 +53,7 @@ class Message < ActiveRecord::Base
   has_one :group, through: :mailing_list
 
   # bulk mail only
-  has_one :mail_log, foreign_key: :message_id, dependent: :nullify, inverse_of: :message
+  has_one :mail_log, dependent: :nullify, inverse_of: :message
 
   has_many :assignments, as: :attachment, dependent: :destroy
 
@@ -89,8 +93,8 @@ class Message < ActiveRecord::Base
 
   def dispatch!
     recipients = MailingLists::RecipientCounter.new(mailing_list,
-                                                   self.class.name,
-                                                   send_to_households?)
+                                                    self.class.name,
+                                                    send_to_households?)
     update!(
       recipient_count: recipients.valid,
       state: :pending

@@ -24,7 +24,7 @@
   <% end %>
 
   <div class="actions row">
-    <%= form_tag oauth_authorization_path, method: :post, class: 'col-6' do %>
+    <%= form_tag oauth_authorization_path, method: :post, class: 'col-6', data: { turbo: false } do %>
       <%= hidden_field_tag :client_id, @pre_auth.client.uid %>
       <%= hidden_field_tag :redirect_uri, @pre_auth.redirect_uri %>
       <%= hidden_field_tag :state, @pre_auth.state %>
@@ -35,7 +35,7 @@
       <%= hidden_field_tag :code_challenge_method, @pre_auth.code_challenge_method %>
       <%= submit_tag t('doorkeeper.authorizations.buttons.authorize'), class: "btn btn-sm btn-success btn-lg btn-block w-100" %>
     <% end %>
-    <%= form_tag oauth_authorization_path, method: :delete, class: 'col-6' do %>
+    <%= form_tag oauth_authorization_path, method: :delete, class: 'col-6', data: { turbo: false } do %>
       <%= hidden_field_tag :client_id, @pre_auth.client.uid %>
       <%= hidden_field_tag :redirect_uri, @pre_auth.redirect_uri %>
       <%= hidden_field_tag :state, @pre_auth.state %>

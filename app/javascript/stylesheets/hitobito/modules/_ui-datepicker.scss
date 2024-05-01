@@ -4,7 +4,8 @@
   width: 17em;
   padding: .2em .2em 0;
   display: none;
-  z-index: 1050 !important;
+  // must be higher than popover at #1050
+  z-index: 1070 !important;
   background-color: #f5f5f5;
   border: 1px solid gray;
 }

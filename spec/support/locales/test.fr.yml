@@ -22,6 +22,7 @@ fr:
       group/top_group/secretary: Secretary
       group/top_group/local_guide: Guide Local
       group/top_group/local_secretary: Local Secretary
+      group/top_group/group_manager: Manager de Groupe
       group/top_group/member: Membre
       group/bottom_layer/leader: Leadre
       group/bottom_layer/local_guide: Guide Local

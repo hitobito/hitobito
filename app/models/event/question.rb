@@ -5,14 +5,15 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
 # == Schema Information
 #
 # Table name: event_questions
 #
 #  id               :integer          not null, primary key
 #  admin            :boolean          default(FALSE), not null
+#  choices          :string(255)
 #  multiple_choices :boolean          default(FALSE), not null
+#  question         :text(65535)
 #  required         :boolean          default(FALSE), not null
 #  event_id         :integer
 #

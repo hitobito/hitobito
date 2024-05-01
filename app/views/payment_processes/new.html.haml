@@ -5,7 +5,7 @@
 
 #main.row-fluid.row
   .col-5
-    = standard_form(:payment_process, url: group_payment_process_path(group), builder: PlainObjectFormBuilder) do |f|
+    = standard_form(:payment_process, url: group_payment_process_path(group), builder: PlainObjectFormBuilder, data: { turbo:false }) do |f|
       = form_buttons(f, submit_label: t('.upload_button'), cancel_url: group_invoices_path(group))
       = f.labeled(:file, t('.xml_file')) do
         = f.file_field(:file, class: 'form-control form-control-sm')

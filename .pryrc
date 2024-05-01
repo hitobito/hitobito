@@ -5,10 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-def gr(resource, scope: nil, params: {}, as: Role.first.person)
+def gr(resource, scope: nil, params: {}, ability: nil, as: Role.first.person)
   raise "#{resource} is not a resource class" unless resource <= ApplicationResource
 
-  context = OpenStruct.new(current_ability: Ability.new(as))
+  context = OpenStruct.new(current_ability: ability || Ability.new(as))
   Graphiti.with_context(context, params: params) do
     action_controller_params = ActionController::Parameters.new(params)
     resources = resource.all(action_controller_params, scope || resource.new.base_scope)

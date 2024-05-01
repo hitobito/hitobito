@@ -89,4 +89,30 @@ describe I18nEnums do
       expect(Individual.gender_identity_labels).to eq(m: 'maskulin', w: 'feminin')
     end
   end
+
+  context 'does not return nil key when not set' do
+    before do
+      clazz = Class.new(Person) do
+        attr_accessor :gender_identity
+        i18n_enum :gender_identity, Person::GENDERS, i18n_prefix: 'foo.bar'
+      end
+      stub_const('Individual', clazz)
+    end
+    around do |example|
+      with_translations(
+        de: { foo: { bar: { m: 'maskulin', w: 'feminin'} } },
+        fr: { foo: { bar: { m: 'mâle', w: 'femelle'} } }
+      ) do
+        example.call
+      end
+    end
+
+    let(:individual) { Individual.new(first_name: 'Dummy') }
+
+    it 'does not return nil when not defined' do
+      I18n.locale = :de
+      individual.gender_identity = nil
+      expect(individual.gender_identity_label).to be_blank
+    end
+  end
 end

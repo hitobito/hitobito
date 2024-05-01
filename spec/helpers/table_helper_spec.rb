@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -262,7 +260,7 @@ describe TableHelper do
       it { is_expected.to be_html_safe }
 
       it 'should render table' do
-        is_expected.to match(/^\<div class="table-responsive"\>\<table.*\<\/table\>\<\/div\>$/)
+        is_expected.to match(/^\<div class="table-responsive pb-3"\>\<table.*\<\/table\>\<\/div\>$/)
       end
 
       it 'should contain attrs' do

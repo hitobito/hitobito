@@ -4,13 +4,13 @@
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
-#
+
 # == Schema Information
 #
 # Table name: addresses
 #
 #  id               :bigint           not null, primary key
-#  numbers          :text(16777215)
+#  numbers          :text(65535)
 #  state            :string(128)      not null
 #  street_long      :string(128)      not null
 #  street_long_old  :string(128)      not null
@@ -32,7 +32,7 @@ bs_bern:
   town: Bern
   state: BE
   zip_code: 3007
-  numbers: ['36', '37', '38', '40', '41', '5a', '5b', '6A', '6B']
+  numbers: ["36", "37", "38", "40", "41", "5a", "5b", "6A", "6B"]
 
 bs_muri:
   street_short: Belpstrasse
@@ -42,7 +42,7 @@ bs_muri:
   town: Muri b. Bern
   state: BE
   zip_code: 3007
-  numbers: ['3']
+  numbers: ["3"]
 
 ls_zurich:
   street_short: Limmatstrasse
@@ -53,3 +53,84 @@ ls_zurich:
   state: ZH
   zip_code: 8005
   numbers: ['214','215','217']
+
+stossstrasse_bern:
+  street_short: Stossstrasse
+  street_short_old: Stossstrasse
+  street_long: Stossstrasse
+  street_long_old: Stossstrasse
+  town: Bern
+  state: ZH
+  zip_code: 3008
+  numbers: ['4','69','112']
+
+bahnhofstrasse_erlenbach:
+  street_short: Bahnhofstrasse
+  street_short_old: Bahnhofstrasse
+  street_long: Bahnhofstrasse
+  street_long_old: Bahnhofstrasse
+  town: Erlenbach
+  state: ZH
+  zip_code: 8703
+  numbers: ['44','42','112']
+
+seestrasse_erlenbach:
+  street_short: Seestrasse
+  street_short_old: Seestrasse
+  street_long: Seestrasse
+  street_long_old: Seestrasse
+  town: Erlenbach
+  state: ZH
+  zip_code: 8703
+  numbers: ['42','78','112']
+
+rennweg_zuerich:
+  street_short: Rennweg
+  street_short_old: Rennweg
+  street_long: Rennweg
+  street_long_old: Rennweg
+  town: Zürich
+  state: ZH
+  zip_code: 8001
+  numbers: ['35','78','112']
+
+
+dorfstrasse_teufen:
+  street_short: Dorfstrasse
+  street_short_old: Dorfstrasse
+  street_long: Dorfstrasse
+  street_long_old: Dorfstrasse
+  town: Teufen
+  state: ZH
+  zip_code: 8428
+  numbers: ['18', '42']
+
+fallenstettenweg_reutlingen:
+  street_short: Fallenstettenweg
+  street_short_old: Fallenstettenweg
+  street_long: Fallenstettenweg
+  street_long_old: Fallenstettenweg
+  town: Reutlingen (Winterthur)
+  state: ZH
+  zip_code: 8404
+  numbers: ['12']
+
+wiesendangerstrasse_stadel:
+  street_short: Wiesendangerstrasse
+  street_short_old: Wiesendangerstrasse
+  street_long: Wiesendangerstrasse
+  street_long_old: Wiesendangerstrasse
+  town: Stadel (Winterthur)
+  state: ZH
+  zip_code: 8404
+  numbers: ['108']
+
+spitzweg_winterthur:
+  street_short: Spitzweg
+  street_short_old: Spitzweg
+  street_long: Spitzweg
+  street_long_old: Spitzweg
+  town: Winterthur
+  state: ZH
+  zip_code: 8404
+  numbers: ['17']

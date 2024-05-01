@@ -1,0 +1,11 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club SAC. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito
+
+- title t('event.participations.form.title_new', role: entry.roles.first.class.model_name.human)
+
+- unless params[:for_someone_else]
+  = render 'event/participations/step_wizard', step: 2
+
+= render 'form', submit_label: t('event.participations.form.apply')

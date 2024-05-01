@@ -7,7 +7,7 @@
 
 class Event::ParticipationConfirmationJob < BaseJob
 
-  self.parameters = [:participation_id, :locale]
+  self.parameters = [:participation_id, :send_approval, :locale]
 
   def initialize(participation, send_approval: true)
     super()
@@ -32,8 +32,7 @@ class Event::ParticipationConfirmationJob < BaseJob
   end
 
   def send_approval
-    return unless @send_approval && participation.pending?
-    return unless participation.event.requires_approval?
+    return unless send_approval?
 
     recipients = approvers
     return if recipients.blank?
@@ -56,5 +55,11 @@ class Event::ParticipationConfirmationJob < BaseJob
 
   def participation
     @participation ||= Event::Participation.find_by(id: @participation_id)
+  end
+
+  def send_approval?
+    @send_approval &&
+      !participation&.application&.approved &&
+      participation.event.requires_approval?
   end
 end

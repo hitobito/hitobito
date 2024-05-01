@@ -54,6 +54,8 @@ module FormatHelper
     format_attr_method = :"format_#{attr}"
     if respond_to?(format_type_attr_method)
       send(format_type_attr_method, obj)
+    elsif i18n_enum_type?(obj, attr)
+      obj.send("#{attr}_label")
     elsif respond_to?(format_attr_method)
       send(format_attr_method, obj)
     elsif (assoc = association(obj, attr, :belongs_to))
@@ -216,6 +218,11 @@ module FormatHelper
     end
   end
 
+  def i18n_enum_type?(obj, attr)
+    model_class = obj.respond_to?(:model) ? obj.model.class : obj.class
+    obj.respond_to?("#{attr}_label") && model_class.respond_to?("#{attr}_labels")
+  end
+
   # Renders a link to the given association entry.
   def assoc_link(val)
     link_to_if(assoc_link?(val), val.to_s, val)
@@ -233,6 +240,12 @@ module FormatHelper
 
   def safe_auto_link(content, options = {})
     auto_link(strip_tags(content), options)
+  end
+
+  def number_to_condensed(number)
+    return unless number
+
+    number_with_precision(number, precision: 2).remove(/0*$/, /[,.]$/)
   end
 
 end

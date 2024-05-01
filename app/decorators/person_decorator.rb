@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -149,6 +147,10 @@ class PersonDecorator < ApplicationDecorator
     scope.each_with_object(Hash.new { |h, k| h[k] = [] }) do |role, memo|
       memo[role.group] << role
     end
+  end
+
+  def roles_for_oauth
+    object.roles.includes(:group).collect(&:decorate).collect(&:for_oauth)
   end
 
   private

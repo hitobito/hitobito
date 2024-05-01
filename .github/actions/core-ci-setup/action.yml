@@ -1,0 +1,77 @@
+name: 'Setup steps for core CI'
+description: 'DRY yaml setup setup steps which are used multiple times in the core CI workflow'
+
+inputs:
+  migrations:
+    description: Unless set to false, migrations will be run as part of the setup.
+    default: true
+
+runs:
+  using: composite
+  steps:
+    - name: 'Set up Ruby'
+      uses: ruby/setup-ruby@v1
+      env:
+        ImageOS: ubuntu20
+
+    - name: Read .tool-versions
+      uses: marocchino/tool-versions-action@v1
+      id: readToolVersions
+
+    - name: Set up Node.js ${{ steps.readToolVersions.outputs.nodejs }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ steps.readToolVersions.outputs.nodejs }}
+
+    - name: 'Setup OS'
+      run: |
+        sudo apt-get -qq update
+        sudo apt-get install sphinxsearch
+        echo "ruby version: $(ruby -v)"
+        echo "bundle version: $(bundle -v)"
+        echo "node version: $(node -v)"
+        echo "yarn version: $(yarn -v)"
+      shell: bash
+
+    - name: 'create cache key'
+      run: cp Gemfile.lock Gemfile.lock.backup
+      shell: bash
+
+    - uses: actions/cache@v4
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-ruby-bundle-${{ hashFiles('**/Gemfile.lock.backup') }}
+        restore-keys: |
+          ${{ runner.os }}-ruby-bundle-
+
+    - name: 'Bundle install'
+      run: |
+        bundle install --jobs 4 --retry 3 --path vendor/bundle
+      shell: bash
+
+    - name: 'Make changes to Gemfile.lock transparent'
+      run: git diff Gemfile.lock || true
+      shell: bash
+
+    - uses: actions/cache@v4
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-node_modules-
+
+    - name: 'Yarn install'
+      run: |
+        yarn install --frozen-lockfile
+      shell: bash
+
+    - name: 'Run Webpacker'
+      run: |
+        bundle exec rake webpacker:compile
+      shell: bash
+
+    - name: 'Run db migrations'
+      if: inputs.migrations
+      run: |
+        bundle exec rake db:migrate
+      shell: bash

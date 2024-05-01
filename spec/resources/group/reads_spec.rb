@@ -190,5 +190,20 @@ describe GroupResource, type: :resource do
         expect(person_attrs).to be_present
       end
     end
+
+    %i[phone_numbers social_accounts additional_emails].each do |assoc|
+      it "includes #{assoc} if asked to do so" do
+        Fabricate(assoc.to_s.singularize.to_sym, contactable: group)
+        Fabricate(assoc.to_s.singularize.to_sym, contactable: group)
+
+        params[:include] = assoc.to_s
+
+        render
+
+        assoc_data = d[0].sideload(assoc)
+        expect(assoc_data).to have(2).items
+        expect(assoc_data.map(&:id)).to match_array(group.send(assoc).map(&:id))
+      end
+    end
   end
 end

@@ -10,15 +10,13 @@
 
   - if entry.any_conditions_present?
     %dl.dl-horizontal
-
       - entry.used?(:application_conditions) do
         = labeled(entry.class.human_attribute_name(:application_conditions)) do
-          %p.multiline
-            = format_event_application_conditions(entry)
+          %p.multiline= format_event_application_conditions(entry)
 
       - if entry.course_kind?
         = labeled(Event::Kind.human_attribute_name(:minimum_age),
-                  entry.kind.minimum_age? ? t('events.minimum_age_with_years', minimum_age: entry.kind.minimum_age) : '')
+                  entry.minimum_age.present? ? t('events.minimum_age_with_years', minimum_age: entry.minimum_age) : '')
         = labeled(t('events.preconditions'), grouped_qualification_kinds_string(entry.kind, 'precondition', 'participant'))
 
   - if entry.course_kind?
@@ -27,6 +25,8 @@
                 entry.kind.qualification_kinds('qualification', 'participant').join(', '))
       = labeled(Event::Kind.human_attribute_name(:prolongations),
                 entry.kind.qualification_kinds('prolongation', 'participant').join(', '))
+      - entry.used?(:training_days) do
+        = present_labeled_attr(entry, :training_days)
 
   = render_present_attrs(entry, *entry.used_attributes(:signature, :signature_confirmation))
 

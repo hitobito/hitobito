@@ -16,6 +16,7 @@
 #  delete_on   :date
 #  deleted_at  :datetime
 #  label       :string(255)
+#  terminated  :boolean          default(FALSE), not null
 #  type        :string(255)      not null
 #  created_at  :datetime
 #  updated_at  :datetime

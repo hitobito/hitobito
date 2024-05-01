@@ -5,8 +5,9 @@
 
 %h2
   = t('.title')
-  = link_to edit_group_mailing_list_filter_path(@group.to_param, @mailing_list.to_param) do
-    = icon(:edit)
+  - if can?(:update, @mailing_list, :filter_chain)
+    = link_to edit_group_mailing_list_filter_path(@group.to_param, @mailing_list.to_param) do
+      = icon(:edit)
 
 %ul.ms-4
   - @mailing_list.filter_chain[:attributes]&.to_hash&.values&.each do |attribute_arg|

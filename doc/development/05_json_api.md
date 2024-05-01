@@ -15,6 +15,10 @@ Currently the following endpoints are provided:
 | PATCH  | /api/people/:id                                   | Update a person entry, replace :id with the person's primary key                |
 | GET    | /api/groups/                                      | List all accessible groups                                                      |
 | GET    | /api/groups/:id                                   | Fetch a single group entry, replace :id with the groups's primary key           |
+| GET    | /api/events/                                      | List all accessible events                                                      |
+| GET    | /api/events/:id                                   | Fetch a single event entry, replace :id with the event's primary key            |
+| GET    | /api/event_kinds/                                 | List all accessible events kinds                                                |
+| GET    | /api/event_kinds/:id                              | Fetch a single event kind, replace :id with the event's primary key             |
 
 Visit your hitobito's swagger UI [/api-docs](/api-docs) for detailed documentation and a sandbox for testing/developing requests.
 
@@ -278,7 +282,7 @@ Checklist for creating/extending JSON:API endpoints:
   + for new resources, generate tests with `rails generate graphiti:resource_test <ResourceClass>`
   + for new endpoints, generate tests with `rails generate graphiti:api_test <ResourceClass>`
 - Add/extend ability in `app/abilities/json_api/`
-- Run `rake graphiti:schema:generate` where you did the changes (core/wagon) to update 
+- Run `rake graphiti:schema:generate` where you did the changes (core/wagon) to update
   the schema file and add it to git
 - Update list of endpoints in this document
 

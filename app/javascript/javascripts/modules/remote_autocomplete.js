@@ -44,21 +44,30 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
           if (input.dataset.typeaheadDisabled === "true") return;
 
           try {
-            if (isQuickSearch) {
-              document.getElementById(QUICKSEARCH_ID).classList.add("input-loading");
-            }
+            input.classList.add("input-loading");
 
             // Fetch data via AJAX request
-            const url = new URL(input.dataset.url, location.origin)
-            const queryKey = document.getElementById(input.id).dataset.param || "q";
-            url.searchParams.set(queryKey, query)
+            const url = new URL(input.dataset.url, location.origin);
+            const queryKey =
+              document.getElementById(input.id).dataset.param || "q";
+            url.searchParams.set(queryKey, query);
             const source = await fetch(url);
             const data = await source.json();
 
-            if (isQuickSearch) {
-              document.getElementById(QUICKSEARCH_ID).classList.remove("input-loading");
+            input.classList.remove("input-loading");
+            var noResultsMessage =
+              autoCompleteInput.input.dataset.noResultsMessage;
+            if (!!noResultsMessage && !data.length) {
+              return [
+                {
+                  id: null,
+                  label: noResultsMessage,
+                  noResultsItem: true,
+                },
+              ];
+            } else {
+              return data;
             }
-            return data;
           } catch (error) {
             return error;
           }
@@ -76,6 +85,10 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
         input: {
           selection: (event) => {
             var selection = event.detail.selection.value;
+            if (selection.noResultsItem) {
+              return;
+            }
+
             autoCompleteInput.input.value = selection.label;
 
             if (isQuickSearch) {

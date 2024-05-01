@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, insieme Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -82,7 +80,8 @@ module Export::Tabular
     end
 
     def attribute_label(attr)
-      human_attribute(attr)
+      label_method = "#{attr}_label"
+      respond_to?(label_method) ? send(label_method) : human_attribute(attr)
     end
 
     def human_attribute(attr)

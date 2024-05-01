@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito_sac_cas.
+#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of hitobito and licensed under the
+#  Affero General Public License version 3 or later. See the COPYING file at the top-level directory
+#  or at https://github.com/hitobito/hitobito.
 
 class SelfRegistration::Person
   include ActiveModel::Model
@@ -57,7 +56,7 @@ class SelfRegistration::Person
     Person.reflect_on_association(*args)
   end
 
-  delegate :gender_label, to: :person
+  delegate :gender_label, :valid_email?, to: :person
 
   def save!
     person.save! && role.save! && enqueue_duplicate_locator_job
@@ -90,9 +89,7 @@ class SelfRegistration::Person
   end
 
   def assert_email
-    unless Truemail.validate(email.to_s, with: :regex).result.success
-      errors.add(:email, :invalid)
-    end
+    errors.add(:email, :invalid) unless valid_email?
 
     unless Person.where(email: email).none? && household_emails.to_a.count(email) <= 1
       errors.add(:email, I18n.t('activerecord.errors.models.person.attributes.email.taken'))

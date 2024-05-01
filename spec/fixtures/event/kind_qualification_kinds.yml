@@ -2,6 +2,7 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: event_kind_qualification_kinds
@@ -10,6 +11,7 @@
 #  category              :string(255)      not null
 #  grouping              :integer
 #  role                  :string(255)      not null
+#  validity              :string(255)      default("valid_or_expired"), not null
 #  event_kind_id         :integer          not null
 #  qualification_kind_id :integer          not null
 #
@@ -22,61 +24,59 @@
 slkgl_pre:
   event_kind: slk
   qualification_kind: gl
-  category: 'precondition'
-  role: 'participant'
+  category: "precondition"
+  role: "participant"
 
 slksl_qual:
   event_kind: slk
   qualification_kind: sl
-  category: 'qualification'
-  role: 'participant'
+  category: "qualification"
+  role: "participant"
 
 slkgl_pro:
   event_kind: slk
   qualification_kind: gl
-  category: 'prolongation'
-  role: 'participant'
+  category: "prolongation"
+  role: "participant"
 
 slksl_leader_qual:
   event_kind: slk
   qualification_kind: sl_leader
-  category: 'qualification'
-  role: 'leader'
-
+  category: "qualification"
+  role: "leader"
 
 glkgl_qual:
   event_kind: glk
   qualification_kind: gl
-  category: 'qualification'
-  role: 'participant'
+  category: "qualification"
+  role: "participant"
 
 glkgl_leader_qual:
   event_kind: glk
   qualification_kind: gl_leader
-  category: 'qualification'
-  role: 'leader'
-
+  category: "qualification"
+  role: "leader"
 
 fkgl_pro:
   event_kind: fk
   qualification_kind: gl
-  category: 'prolongation'
-  role: 'participant'
+  category: "prolongation"
+  role: "participant"
 
 fksl_pro:
   event_kind: fk
   qualification_kind: sl
-  category: 'prolongation'
-  role: 'participant'
+  category: "prolongation"
+  role: "participant"
 
 fkgl_leader_pro:
   event_kind: fk
   qualification_kind: gl_leader
-  category: 'prolongation'
-  role: 'leader'
+  category: "prolongation"
+  role: "leader"
 
 fksl_leader_pro:
   event_kind: fk
   qualification_kind: sl_leader
-  category: 'prolongation'
-  role: 'leader'
+  category: "prolongation"
+  role: "leader"

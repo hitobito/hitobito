@@ -10,17 +10,22 @@
 # Table name: background_job_log_entries
 #
 #  id          :bigint           not null, primary key
-#  job_id      :bigint           not null
-#  job_name    :string(255)      not null
-#  group_id    :bigint
-#  started_at  :datetime
-#  finished_at :datetime
-#  runtime     :integer
 #  attempt     :integer
+#  finished_at :datetime
+#  job_name    :string(255)      not null
+#  payload     :json
+#  runtime     :integer
+#  started_at  :datetime
 #  status      :string(255)
-#  payload     :text(4294967295)
-#  created_at  :datetime         default(NULL), not null
-#  updated_at  :datetime         default(NULL), not null
+#  group_id    :bigint
+#  job_id      :bigint           not null
+#
+# Indexes
+#
+#  index_background_job_log_entries_on_group_id            (group_id)
+#  index_background_job_log_entries_on_job_id              (job_id)
+#  index_background_job_log_entries_on_job_id_and_attempt  (job_id,attempt) UNIQUE
+#  index_background_job_log_entries_on_job_name            (job_name)
 #
 
 class BackgroundJobLogEntry < ApplicationRecord

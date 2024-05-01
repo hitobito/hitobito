@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2018, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -69,6 +67,8 @@ class TokenAbility
   end
 
   def define_event_abilities
+    can :list_available, Event
+
     can :show, Event do |e|
       e.groups.any? { |g| token_layer_and_below.include?(g) }
     end
@@ -80,6 +80,8 @@ class TokenAbility
     can :'index_event/courses', Group do |g|
       token_layer_and_below.include?(g)
     end
+
+    can :read, Event::Kind
   end
 
   def define_event_participation_abilities
@@ -96,6 +98,10 @@ class TokenAbility
     can :show, Group do |g|
       token_layer_and_below.include?(g)
     end
+
+    can :show_details, Group do |g|
+      token_layer_and_below.include?(g)
+    end
   end
 
   def define_invoice_abilities
@@ -103,9 +109,8 @@ class TokenAbility
       token.layer == group
     end
 
-    can :show, Invoice do |invoice|
-      token.layer == invoice.group
-    end
+    can [:read, :update], Invoice, { group: { layer_group_id: token.layer.id } }
+    can [:read, :update], InvoiceItem, { invoice: { group: { layer_group_id: token.layer.id } } }
   end
 
   def define_mailing_list_abilities

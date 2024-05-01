@@ -1,9 +1,8 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: event_dates
@@ -34,7 +33,7 @@ class Event::Date < ActiveRecord::Base
 
 
   def duration
-    @duration ||= Duration.new(start_at, finish_at)
+    @duration ||= Duration.new(start_at, finish_at, date_format: :with_day)
   end
 
   def to_s(_format = :default)

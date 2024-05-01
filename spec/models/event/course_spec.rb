@@ -86,6 +86,19 @@ describe Event::Course do
       expect(events(:top_course).label_detail).to eq '123 Top'
     end
 
+    describe 'required_attrs' do
+      subject(:required_attrs) { events(:top_course).required_attrs }
+
+      it 'is empty when kind_id is not used' do
+        expect(required_attrs).to be_empty
+      end
+
+      it 'contains kind_id if kind_id is used' do
+        Event::Course.used_attributes += [:kind_id]
+        expect(required_attrs).to eq [:kind_id]
+      end
+    end
+
     after { Event::Course.used_attributes += [:kind_id] }
   end
 
@@ -99,7 +112,7 @@ describe Event::Course do
     expect(course.signature_confirmation).to be_truthy
   end
 
-  context '#duplicate' do
+  describe '#duplicate' do
 
     let(:event) { events(:top_course) }
 
@@ -134,4 +147,39 @@ describe Event::Course do
   it 'makes participations visible to all participants by default' do
     is_expected.to be_participations_visible
   end
+
+  describe '#minimum_age' do
+    subject(:course) { described_class.new }
+
+    it 'is nil if no kind is set' do
+      expect(course.minimum_age).to be_nil
+    end
+
+    it 'is read from kind if kind has value set' do
+      course.kind = Event::Kind.new(minimum_age: 2)
+      expect(course.minimum_age).to eq 2
+    end
+  end
+
+  describe '#qualifications_visible?' do
+    subject(:course) { Fabricate.build(:course) }
+
+    it 'is true if kind is qualifiying and qualification_date is yesterday' do
+      course.dates.build(start_at: 1.day.ago)
+      expect(course.qualifications_visible?).to be_truthy
+    end
+
+    it 'is false if kind is not qualifiying' do
+      course.kind = event_kinds(:old)
+      course.dates.build(start_at: 1.day.ago)
+
+      expect(course.qualifications_visible?).to be_falsy
+    end
+
+    it 'is false if qualification date is today' do
+      course.dates.build(start_at: 0.days.ago)
+      expect(course.qualifications_visible?).to be_falsy
+    end
+  end
+
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2022-2023, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2022-2024, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -38,4 +38,7 @@ Rails.application.config.to_prepare do
                                "person.layer_group_label")
   TableDisplay.register_multi_column(Event::Participation,
                                      TableDisplays::Event::Participations::QuestionColumn)
+  TableDisplay.register_column(Event::Participation,
+                               TableDisplays::Event::Participations::ShowDetailsOrEventLeaderColumn,
+                               :additional_information)
 end

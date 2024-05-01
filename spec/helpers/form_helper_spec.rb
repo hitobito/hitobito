@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -139,4 +137,53 @@ describe FormHelper do
 
   end
 
+  describe '#field_inheritance_values' do
+    let(:entry) { Event::Course.new }
+    subject(:dom) { Capybara::Node::Simple.new(field_inheritance_values(@list, @mapping)) }
+
+    before { @list, @mapping = [], [] }
+
+    def model_class
+      Event::Course
+    end
+
+    it 'creates empty datalist when passed list is empty' do
+      expect(dom).to have_css('datalist', count: 1)
+      expect(dom).not_to have_css('option')
+    end
+
+    it 'creates empty datalist when fields are empty' do
+      @list += [Fabricate.build(:event_kind)]
+      expect(dom).to have_css('datalist', count: 1)
+      expect(dom).not_to have_css('option')
+    end
+
+    it 'creates single datalist with multiple options when arguments are present' do
+      @list += [Fabricate.build(:event_kind), Fabricate.build(:event_kind)]
+      @mapping += [:minimum_age]
+      expect(dom).to have_css('datalist', count: 1)
+      expect(dom).to have_css('option', count: 2)
+    end
+
+    it 'option has target-field value and default data attributes' do
+      @list += [Fabricate.build(:event_kind, minimum_age: 6)]
+      @mapping += [:minimum_age]
+      option = dom.find('option')
+      expect(option['data-target-field']).to eq 'event_minimum_age'
+      expect(option['data-value']).to eq '6'
+      expect(option['data-default']).to eq ''
+    end
+
+    it 'option does render nil value as empty string' do
+      @list += [Fabricate.build(:event_kind)]
+      @mapping += [:minimum_age]
+      expect(dom.find('option')['data-value']).to eq ''
+    end
+
+    it 'passing hash allows to override target-field' do
+      @list += [Fabricate.build(:event_kind, minimum_age: 6)]
+      @mapping = { participant_count: :minimum_age }
+      expect(dom.find('option')['data-target-field']).to eq 'event_participant_count'
+    end
+  end
 end

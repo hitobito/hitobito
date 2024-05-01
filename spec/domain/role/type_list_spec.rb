@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -16,7 +14,8 @@ describe Role::TypeList do
        { 'Top Layer' => [Group::TopLayer::TopAdmin],
          'Top Group' => [Group::TopGroup::Leader, Group::TopGroup::LocalGuide,
                          Group::TopGroup::Secretary, Group::TopGroup::LocalSecretary,
-                         Group::TopGroup::Member, Group::TopGroup::InvisiblePeopleManager] }],
+                         Group::TopGroup::GroupManager, Group::TopGroup::Member,
+                         Group::TopGroup::InvisiblePeopleManager] }],
 
       ['Bottom Layer',
        { 'Bottom Layer' => [Group::BottomLayer::Leader, Group::BottomLayer::LocalGuide,
@@ -50,7 +49,8 @@ describe Role::TypeList do
       ['Top Group',
        { 'Top Group' => [Group::TopGroup::Leader, Group::TopGroup::LocalGuide,
                          Group::TopGroup::Secretary, Group::TopGroup::LocalSecretary,
-                         Group::TopGroup::Member, Group::TopGroup::InvisiblePeopleManager],
+                         Group::TopGroup::GroupManager, Group::TopGroup::Member,
+                         Group::TopGroup::InvisiblePeopleManager],
          'Global Group' => [Group::GlobalGroup::Leader, Group::GlobalGroup::Member] }],
       ['Global',
        { 'Global' => [Role::External] }],
@@ -75,10 +75,10 @@ describe Role::TypeList do
       list = Role::TypeList.new(Group::TopLayer)
       expect(list.flatten.map(&:name)).to eq(%w(Group::TopLayer::TopAdmin Group::TopGroup::Leader
         Group::TopGroup::LocalGuide Group::TopGroup::Secretary Group::TopGroup::LocalSecretary
-        Group::TopGroup::Member Group::TopGroup::InvisiblePeopleManager Group::BottomLayer::Leader
-        Group::BottomLayer::LocalGuide Group::BottomLayer::Member Group::BottomLayer::BasicPermissionsOnly
-        Group::BottomGroup::Leader Group::BottomGroup::Member Group::GlobalGroup::Leader
-        Group::GlobalGroup::Member Role::External))
+        Group::TopGroup::GroupManager Group::TopGroup::Member Group::TopGroup::InvisiblePeopleManager
+        Group::BottomLayer::Leader Group::BottomLayer::LocalGuide Group::BottomLayer::Member
+        Group::BottomLayer::BasicPermissionsOnly Group::BottomGroup::Leader
+        Group::BottomGroup::Member Group::GlobalGroup::Leader Group::GlobalGroup::Member Role::External))
     end
 
     it 'with block' do
@@ -89,6 +89,7 @@ describe Role::TypeList do
         { layer: 'Top Layer', group: 'Top Group', role: Group::TopGroup::LocalGuide },
         { layer: 'Top Layer', group: 'Top Group', role: Group::TopGroup::Secretary },
         { layer: 'Top Layer', group: 'Top Group', role: Group::TopGroup::LocalSecretary },
+        { layer: 'Top Layer', group: 'Top Group', role: Group::TopGroup::GroupManager },
         { layer: 'Top Layer', group: 'Top Group', role: Group::TopGroup::Member },
         { layer: 'Top Layer', group: 'Top Group', role: Group::TopGroup::InvisiblePeopleManager },
         { layer: 'Bottom Layer', group: 'Bottom Layer', role: Group::BottomLayer::Leader },

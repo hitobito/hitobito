@@ -100,7 +100,7 @@ gem 'view_component'
 gem 'webpacker'
 
 # load after others because dependencies
-gem 'graphiti-openapi', github: 'puzzle/graphiti-openapi', tag: 'standalone/0.2'
+gem 'graphiti-openapi', github: 'puzzle/graphiti-openapi', tag: 'standalone/0.6.3'
 gem 'kaminari'
 
 gem 'active_storage_validations' # validate filesize, dimensions and content-type of uploads
@@ -131,8 +131,10 @@ group :test do
   gem 'cmdparse'
   gem 'database_cleaner'
   gem 'fabrication'
+  gem 'fivemat'
   gem 'headless'
   gem 'launchy'
+  gem 'open_api-schema_validator'
   gem 'pdf-inspector', require: 'pdf/inspector'
   gem 'rails-controller-testing'
   gem 'rspec-collection_matchers'

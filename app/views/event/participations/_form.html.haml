@@ -3,18 +3,11 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- if entry.new_record?
-  - title t('.title_new', role: entry.roles.first.class.model_name.human)
-  - unless params[:for_someone_else]
-    = render 'event/participations/step_wizard', step: 2
-- else
-  - title t('.title_edit', person: entry.person)
-
 = render_extensions :info
 
 = entry_form(stacked: true,
              buttons_top: false,
-             submit_label: entry.new_record? ? t('.apply') : t('global.button.save'),
+             submit_label: submit_label,
              cancel_url_new: group_event_path(@group, @event)) do |f|
 
   - if params[:event_role]

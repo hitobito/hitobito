@@ -19,11 +19,15 @@ class ApplicationComponent < ViewComponent::Base
     [prefix, action].join('#')
   end
 
+  def stimulus_target(name)
+    { [stimulus_controller, 'target'].join('-') => name }
+  end
+
   def stimulus_value(name, value)
-    [[[stimulus_controller, name, 'value'].join('-'), value]].to_h
+    { [stimulus_controller, name, 'value'].join('-') => value }
   end
 
   def stimulus_param(name, value)
-    [[[stimulus_controller, name, 'param'].join('-'), value]].to_h
+    { [stimulus_controller, name, 'param'].join('-') => value }
   end
 end

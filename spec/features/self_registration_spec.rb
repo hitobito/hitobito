@@ -8,18 +8,6 @@
 
 require 'spec_helper'
 
-# a group to test self-registration
-class Group::SelfRegistrationGroup < Group
-  self.layer = true
-
-  # a suitable role to register as
-  class ReadOnly < ::Role
-    self.permissions = [:group_read]
-  end
-
-  roles ReadOnly
-end
-
 describe :self_registration, js: true do
   let(:group) { groups(:top_group) }
 
@@ -155,6 +143,86 @@ describe :self_registration, js: true do
         'Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine ' \
         'E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.'
       )
+    end
+  end
+
+  describe 'multi step wizard navigation' do
+    prepend_view_path Rails.root.join('spec', 'support', 'views')
+
+    before do
+      stub_const('SelfRegistration::MultiStep' ,Class.new(SelfRegistration) do
+        self.partials = [:first_step, :second_step, :third_step]
+
+        def first_step_valid? = true
+        def second_step_valid? = true
+        def third_step_valid? = main_person.valid?
+      end)
+
+      allow_any_instance_of(Groups::SelfRegistrationController).to receive(:entry) do |controller|
+        controller.instance_eval do
+          @entry ||= SelfRegistration::MultiStep.new(
+          group: group,
+          params: params.to_unsafe_h.deep_symbolize_keys
+        )
+        end
+      end
+
+      I18n.backend.store_translations :de, groups: {  self_registration: { form: {
+        first_step_title: 'FirstStep',
+        second_step_title: 'SecondStep',
+        third_step_title: 'ThirdStep'
+      } } }
+
+      visit group_self_registration_path(group_id: group)
+      click_on 'Weiter'
+      click_on 'Weiter'
+      complete_main_person_form
+      assert_step 'ThirdStep'
+    end
+
+    def assert_step(step_name)
+      expect(page).to have_css('.step-headers li.active', text: step_name),
+                      "expected step '#{step_name}' to be active, but step '#{find('.step-headers li.active', wait: 0).text}' is active"
+    end
+
+    def click_on_breadcrumb(link_text)
+      within('.step-headers') { click_on link_text }
+    end
+
+    it 'can go back and forth' do
+      click_on 'Zurück'
+      assert_step 'SecondStep'
+      click_on 'Weiter'
+      assert_step 'ThirdStep'
+      click_on 'Zurück'
+      click_on 'Zurück'
+      assert_step 'FirstStep'
+      click_on 'Weiter'
+      assert_step 'SecondStep'
+      click_on 'Zurück'
+      click_on 'Weiter'
+      click_on 'Weiter'
+      assert_step 'ThirdStep'
+    end
+
+    context 'when step is invalid' do
+      before do
+        allow_any_instance_of(SelfRegistration::MultiStep).
+          to receive(:second_step_valid?).and_return(false)
+
+        visit group_self_registration_path(group_id: group)
+        click_on 'Weiter'
+      end
+
+      it 'can not continue' do
+        click_on 'Weiter'
+        assert_step 'SecondStep'
+      end
+
+      it 'can go back' do
+        click_on 'Zurück'
+        assert_step 'FirstStep'
+      end
     end
   end
 end

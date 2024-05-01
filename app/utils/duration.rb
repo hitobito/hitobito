@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -9,9 +7,10 @@ class Duration
 
   attr_reader :start_at, :finish_at
 
-  def initialize(start_at, finish_at)
+  def initialize(start_at, finish_at, date_format: :default)
     @start_at  = start_at
     @finish_at = finish_at
+    @date_format = date_format
   end
 
   def to_s(format = :long)
@@ -83,7 +82,7 @@ class Duration
   end
 
   def format_date(value)
-    I18n.l(value.to_date)
+    I18n.l(value.to_date, format: @date_format)
   end
 
   def date_only?(value)

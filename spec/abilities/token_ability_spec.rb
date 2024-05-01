@@ -270,6 +270,22 @@ describe TokenAbility do
     end
   end
 
+  describe :event_kinds do
+    let(:token) { service_tokens(:rejected_top_layer_token) }
+
+    it 'may read event kind when token has event flag' do
+      token.update!(events: true)
+      is_expected.to be_able_to(:index, Event::Kind)
+      is_expected.to be_able_to(:show, Event::Kind.new)
+    end
+
+    it 'may not read event kind when token does not have event flag' do
+      token.update!(events: false)
+      is_expected.not_to be_able_to(:index, Event::Kind)
+      is_expected.not_to be_able_to(:show, Event::Kind.new)
+    end
+  end
+
   describe :groups do
     context 'authorized' do
       let(:token) { service_tokens(:permitted_top_layer_token) }
@@ -278,12 +294,24 @@ describe TokenAbility do
         is_expected.to be_able_to(:show, token.layer)
       end
 
+      it 'may show details of layer' do
+        is_expected.to be_able_to(:show_details, token.layer)
+      end
+
       it 'may show subgroup' do
         is_expected.to be_able_to(:show, groups(:top_group))
       end
 
+      it 'may show details of subgroup' do
+        is_expected.to be_able_to(:show_details, groups(:top_group))
+      end
+
       it 'may show subgroup from other layer' do
         is_expected.to be_able_to(:show, groups(:bottom_layer_one))
+      end
+
+      it 'may show details of subgroup from other layer' do
+        is_expected.to be_able_to(:show_details, groups(:bottom_layer_one))
       end
     end
 
@@ -305,13 +333,20 @@ describe TokenAbility do
     context 'authorized' do
       let(:token) { service_tokens(:permitted_top_layer_token) }
 
+      it 'may index' do
+        is_expected.to be_able_to(:index, Invoice)
+        is_expected.to be_able_to(:index, InvoiceItem)
+      end
+
       it 'may show' do
         is_expected.to be_able_to(:show, token.layer.invoices.build)
+        is_expected.to be_able_to(:show, token.layer.invoices.build.invoice_items.build)
       end
 
       it 'may show independently if group access' do
         token.update!(groups: false)
         is_expected.to be_able_to(:show, token.layer.invoices.build)
+        is_expected.to be_able_to(:show, token.layer.invoices.build.invoice_items.build)
       end
 
       it 'may index_invoices' do
@@ -345,6 +380,24 @@ describe TokenAbility do
 
       it 'may not index_invoices of sub layer' do
         is_expected.not_to be_able_to(:index_invoices, groups(:bottom_layer_one))
+      end
+    end
+  end
+
+  describe :event do
+    context 'authorized' do
+      let(:token) { service_tokens(:permitted_top_layer_token) }
+
+      it 'may list_available' do
+        is_expected.to be_able_to(:list_available, Event)
+      end
+    end
+
+    context 'unauthorized' do
+      let(:token) { service_tokens(:rejected_top_layer_token) }
+
+      it 'may list_available' do
+        is_expected.not_to be_able_to(:list_available, Event)
       end
     end
   end

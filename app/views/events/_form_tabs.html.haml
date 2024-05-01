@@ -15,6 +15,6 @@
     %li.nav-item= link_to(t('events.form_tabs.application_questions'), '#application_questions', data: { bs_toggle: 'tab' }, class: 'nav-link')
     %li.nav-item= link_to(t('events.form_tabs.admin_questions'), '#admin_questions', data: { bs_toggle: 'tab' }, class: 'nav-link')
 
-  - if entry.participant_types.present?
+  - if render_event_contact_attr_fields?
     %li.nav-item= link_to(t('events.form_tabs.contact_attrs'), '#contact_attrs', data: { bs_toggle: 'tab' }, class: 'nav-link')
 

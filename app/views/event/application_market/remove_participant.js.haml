@@ -7,6 +7,7 @@ handler = new App.ApplicationMarket()
 handler.moveElementToBottom('#{dom_id(@participation)}', 'applications', function() {
 $('##{dom_id(@participation)}').remove();
 $('#applications').append('#{j(render('application', p: @participation))}');
+$('#applications [data-bs-toggle="tooltip"]').tooltip();
 handler.updateCount();
 });
 $('#booking_info').html('#{j(event.booking_info)}');

@@ -7,6 +7,10 @@
 
 module ContactableDecorator
 
+  def address
+    model.address
+  end
+
   def address_name
     content_tag(:strong, to_s)
   end

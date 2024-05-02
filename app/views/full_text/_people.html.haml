@@ -9,3 +9,4 @@
   - t.col(Person.human_attribute_name(:emails))   { |p| p.decorate.all_emails(true) }
   - t.col(PhoneNumber.model_name.human(count: 2)) { |p| p.decorate.all_phone_numbers(true) }
   - t.col(Person.human_attribute_name(:address))  { |p| p.decorate.complete_address }
+  = render_extensions(:people_columns, locals: { t: t })

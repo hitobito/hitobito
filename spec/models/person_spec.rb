@@ -574,8 +574,7 @@ describe Person do
     end
 
     it 'sends sentry notification if correct email is invalid' do
-      allow(Truemail).to receive(:valid?).and_return(false)
-      person.email = 'dude@blabliblablu.ch'
+      person.email = 'dude@domainungueltig42.ch'
 
       expect(Raven).to receive(:capture_message)
         .exactly(:once)

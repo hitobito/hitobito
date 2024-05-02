@@ -9,6 +9,8 @@ DB_CLEANER_STRATEGY = :truncation
 
 ENV['RAILS_ENV'] = 'test'
 ENV['RAILS_GROUPS'] = 'assets'
+ENV['RAILS_STRUCTURED_ADDRESSES'] = '1'
+ENV['RAILS_ADDRESS_MIGRATION'] = '0'
 require File.expand_path('../config/environment', __dir__)
 require 'rspec/rails'
 require 'cancan/matchers'

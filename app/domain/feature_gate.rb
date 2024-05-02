@@ -46,6 +46,10 @@ class FeatureGate
     def enabled?(feature)
       new.enabled?(feature)
     end
+
+    def disabled?(feature)
+      new.disabled?(feature)
+    end
   end
 
   def assert!(feature)
@@ -56,6 +60,10 @@ class FeatureGate
 
   def if(feature)
     yield if enabled?(feature)
+  end
+
+  def disabled?(feature)
+    !enabled?(feature)
   end
 
   def enabled?(feature)
@@ -86,5 +94,13 @@ class FeatureGate
 
   def self_registration_reason_enabled?
     SelfRegistrationReason.exists?
+  end
+
+  def structured_addresses_enabled?
+    ENV['RAILS_STRUCTURED_ADDRESSES'].to_s == '1'
+  end
+
+  def address_migration_enabled?
+    ENV['RAILS_ADDRESS_MIGRATION'].to_s == '1'
   end
 end

@@ -17,6 +17,9 @@ module Export::Tabular::Groups
                         self_registration_notification_email custom_self_registration_title
                         self_registration_require_adult_consent
                         main_self_registration_group privacy_policy_title privacy_policy)
+    if FeatureGate.enabled?('structured_addresses')
+      EXCLUDED_ATTRS << 'address'
+    end
     # rubocop:enable Style/MutableConstant
 
     self.model_class = Group

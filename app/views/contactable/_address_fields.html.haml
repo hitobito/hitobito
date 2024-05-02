@@ -7,13 +7,19 @@
   %div.alert.alert-warning.updates-household-address.d-none
     = t('.updates_household_address')
 
-  = f.labeled_input_field(:address_care_of)
-  = f.labeled(:address, class: 'd-flex') do
-    %div.col-9
-      = f.input_field(:street, data: { provide: 'entity', updater: 'AddressTypeahead.update', url: addresses_query_url })
-    %div.col-2.offset-1
-      = f.input_field(:housenumber)
-  = f.labeled_input_field(:postbox)
+  - if FeatureGate.disabled?('address_migration')
+    - if FeatureGate.enabled?('structured_addresses')
+      = f.labeled_input_field(:address_care_of)
+      = f.labeled(:address, class: 'd-flex') do
+        %div.col-9
+          = f.input_field(:street, data: { provide: 'entity', updater: 'AddressTypeahead.update', url: addresses_query_url })
+        %div.col-2.offset-1
+          = f.input_field(:housenumber)
+      = f.labeled_input_field(:postbox)
+    - else
+      = f.labeled_text_area(:address, rows: 2, data: { provide: 'entity',
+                                                       updater: 'AddressTypeahead.update',
+                                                       url: addresses_query_url })
 
   = f.labeled(:zip_code, t('contactable.fields.zip_town'), class: 'd-flex') do
     %div.col-5.col-md-4.col-lg-3

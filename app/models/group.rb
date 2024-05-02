@@ -88,10 +88,17 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   # All attributes actually used (and mass-assignable) by the respective STI type.
   # This must contain the superior attributes as well.
   class_attribute :used_attributes
-  self.used_attributes = [:name, :short_name, :email, :contact_id, :text_message_username,
-                          :text_message_password, :text_message_provider, :text_message_originator,
-                          :letter_address_position,
-                          :address, :zip_code, :town, :country, :description]
+  self.used_attributes = [
+    :name, :short_name, :email, :contact_id, :text_message_username,
+    :text_message_password, :text_message_provider, :text_message_originator,
+    :letter_address_position, :address_care_of, :street, :housenumber,
+    :postbox, :zip_code, :town, :country, :description
+  ]
+
+  if FeatureGate.disabled?('structured_addresses')
+    used_attributes << :address
+  end
+
   FeatureGate.if('groups.nextcloud') do
     used_attributes << :nextcloud_url
   end

@@ -9,9 +9,13 @@ app.AddressTypeahead = {
     form = $('.address-input-fields').closest('form');
     app.AddressTypeahead.find_form_element(form, 'zip_code').value = data.zip_code;
     app.AddressTypeahead.find_form_element(form, 'town').value = data.town;
-    app.AddressTypeahead.find_form_element(form, 'housenumber').value = (data.number || '');
 
-    return data.street;
+    if (!!find_form_element('address')) {
+      return [data.street, data.number || ''].filter(Boolean).join(' ');
+    } else {
+      app.AddressTypeahead.find_form_element(form, 'housenumber').value = (data.number || '');
+      return data.street;
+    }
   },
   checkIfTypeaheadAvailable: function(e) {
     var addressField, form, typeaheadSupportedCountries;

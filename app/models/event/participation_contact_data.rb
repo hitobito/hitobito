@@ -17,6 +17,23 @@ class Event::ParticipationContactData
                         :address_care_of, :street, :housenumber, :postbox, :zip_code, :town,
                         :country, :gender, :birthday, :phone_numbers, :language]
 
+  if FeatureGate.disabled?('structured_addresses')
+    contact_attrs.delete(:address_care_of)
+    contact_attrs.delete(:street)
+    contact_attrs.delete(:housenumber)
+    contact_attrs.delete(:postbox)
+
+    if FeatureGate.disabled?('address_migration')
+      contact_attrs << :address
+    end
+  end
+  if FeatureGate.enabled?('address_migration')
+    contact_attrs.delete(:address_care_of)
+    contact_attrs.delete(:street)
+    contact_attrs.delete(:housenumber)
+    contact_attrs.delete(:postbox)
+  end
+
   self.contact_associations = [:additional_emails, :social_accounts]
 
   delegate(*contact_attrs, to: :person)

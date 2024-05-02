@@ -70,25 +70,27 @@ describe Contactable::AddressValidator do
   end
 
   it 'does not tag person with valid address without street number' do
-    person.address = address.street_short
+    person.street = address.street_short
+    person.housenumber = nil
     person.zip_code = address.zip_code
     person.town = address.town
     person.save!
 
     expect do
       validator.validate_people
-    end.to_not change { ActsAsTaggableOn::Tagging.count }
+    end.to_not(change { ActsAsTaggableOn::Tagging.count })
   end
 
   it 'does not tag person with valid address with street number' do
-    person.address = "#{address.street_short} #{address.numbers.first}"
+    person.street = address.street_short
+    person.housenumber = address.numbers.first
     person.zip_code = address.zip_code
     person.town = address.town
     person.save!
 
     expect do
       validator.validate_people
-    end.to_not change { ActsAsTaggableOn::Tagging.count }
+    end.to_not(change { ActsAsTaggableOn::Tagging.count })
   end
 
   it 'does not tag person with valid address and invalid street number' do
@@ -99,7 +101,7 @@ describe Contactable::AddressValidator do
 
     expect do
       validator.validate_people
-    end.to change { ActsAsTaggableOn::Tagging.count }
+    end.to(change { ActsAsTaggableOn::Tagging.count })
   end
 
   it 'does not tag people from non imported countries' do
@@ -107,7 +109,7 @@ describe Contactable::AddressValidator do
 
     expect do
       validator.validate_people
-    end.to_not change { ActsAsTaggableOn::Tagging.count }
+    end.to_not(change { ActsAsTaggableOn::Tagging.count })
   end
 
   it 'does not tag people if tagged as override' do
@@ -118,7 +120,7 @@ describe Contactable::AddressValidator do
 
     expect do
       validator.validate_people
-    end.to_not change { ActsAsTaggableOn::Tagging.count }
+    end.to_not(change { ActsAsTaggableOn::Tagging.count })
   end
 
   it 'does not tag people if already tagged as invalid' do
@@ -130,7 +132,7 @@ describe Contactable::AddressValidator do
 
     expect do
       validator.validate_people
-    end.to_not change { ActsAsTaggableOn::Tagging.count }
+    end.to_not(change { ActsAsTaggableOn::Tagging.count })
   end
 
   it 'tags people only once' do
@@ -140,6 +142,6 @@ describe Contactable::AddressValidator do
 
     expect do
       validator.validate_people
-    end.to_not change { ActsAsTaggableOn::Tagging.count }
+    end.to_not(change { ActsAsTaggableOn::Tagging.count })
   end
 end

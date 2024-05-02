@@ -1,4 +1,4 @@
-#  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2017-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -174,7 +174,8 @@ describe InvoicesController do
 
       it 'does render pdf Letter renderer renderer' do
         top_leader.update(
-          address: 'Greatstreet 345',
+          street: 'Greatstreet',
+          housenumber: '345',
           zip_code: 3456,
           town: 'Greattown',
           country: 'CH'

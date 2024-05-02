@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -8,7 +8,10 @@ require 'spec_helper'
 describe ContactableDecorator do
   before do
     Draper::ViewContext.clear!
-    group = Group.new(id: 1, name: 'foo', address: 'foostreet 3', zip_code: '4242', town: 'footown', email: 'foo@foobar.com', country: 'CH')
+    group = Group.new(
+      id: 1, name: 'foo', street: 'foostreet', housenumber: '3', zip_code: '4242',
+      town: 'footown', email: 'foo@foobar.com', country: 'CH'
+    )
     group.phone_numbers.new(number: '031 12345', label: 'Home', public: true)
     group.phone_numbers.new(number: '041 12345', label: 'Work', public: true)
     group.phone_numbers.new(number: '079 12345', label: 'Mobile', public: false)

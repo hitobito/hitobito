@@ -215,7 +215,8 @@ describe Import::Person do
                   email: 'foo@example.com',
                   first_name: 'Peter',
                   last_name: 'Muster',
-                  address: 'EP 4')
+                  street: 'EP',
+                  housenumber: '4')
       end
 
       let(:data) do
@@ -228,7 +229,8 @@ describe Import::Person do
       its('first_name') { should eq 'foo' }
       its('last_name') { should eq '' }
       its('town') { should eq 'Bern' }
-      its('address') { should eq 'EP 4' }
+      its('street') { should eq 'EP' }
+      its('housenumber') { should eq '4' }
     end
 
     context 'overrides existing contact accounts' do
@@ -308,7 +310,7 @@ describe Import::Person do
       public_attributes = person.attributes.reject do |key, _value|
         Person::INTERNAL_ATTRS.include?(key.to_sym)
       end
-      expect(public_attributes.size).to eq 16 # lists tag_list
+      expect(public_attributes.size).to eq 20 # lists tag_list
       expect do
         Import::Person.new(person, public_attributes).populate
       end.not_to raise_error

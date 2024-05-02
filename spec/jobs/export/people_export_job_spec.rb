@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2017-2022, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2017-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -103,7 +103,7 @@ describe Export::PeopleExportJob do
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;.*/)
       expect(lines[0]).to match(/Zusätzliche Angaben;.*/)
-      expect(lines[0].split(';').count).to match(17)
+      expect(lines[0].split(';').count).to match(20)
     end
 
     context ', except if missing permissions to do so, it' do

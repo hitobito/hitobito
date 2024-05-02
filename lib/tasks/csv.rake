@@ -40,8 +40,9 @@ namespace :csv do
       company: Faker::Name.name,
       company_name: Faker::Name.name,
       email: "#{Faker::Internet.user_name("#{first_name} #{last_name}")}@example.com",
-      address: Faker::Address.street_address,
-      zip_code:  Faker::Address.zip_code,
+      street: Faker::Address.street_name,
+      housenumber: Faker::Address.building_number,
+      zip_code: Faker::Address.zip_code,
       town: Faker::Address.city,
       gender: %w(m w).sample,
       birthday: random_date.to_s,
@@ -56,7 +57,12 @@ namespace :csv do
       social_account_msn: Faker::Internet.user_name,
       social_account_webseite: Faker::Internet.domain_name,
       additional_information: Faker::Lorem.paragraph
-    }
+    }.then do |attrs|
+      attrs[:address_care_of] = Faker::Address.secondary_address if (1..10).to_a.shuffle == 1
+      attrs[:postbox] = Faker::Address.mail_box if (1..10).to_a.shuffle == 1
+
+      attrs
+    end
   end
 
   def enhance(person_attributes) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity

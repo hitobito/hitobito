@@ -131,7 +131,8 @@ class Invoice < ActiveRecord::Base
       invoices.collect do |invoice|
         next if invoice.recipient_address.blank?
 
-        Person.new(address: invoice.recipient_address)
+        str, no = Address::Parser.new(invoice.recipient_address).parse
+        Person.new(street: str, housenumber: no)
       end.compact
     end
 

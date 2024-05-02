@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -20,14 +20,13 @@ describe Export::Tabular::Groups::List do
   subject { csv }
 
   its(:headers) do
-    should == [
+    expected = [
       'Id',
       'Elterngruppe',
       'Name',
       'Kurzname',
       'Gruppentyp',
       'Haupt-E-Mail',
-      'Adresse',
       'PLZ',
       'Ort',
       'Land',
@@ -35,10 +34,17 @@ describe Export::Tabular::Groups::List do
       'Ebene',
       'Beschreibung',
       'Link zu Nextcloud',
+      'Strasse',
+      'Hausnummer',
+      'zusätzliche Adresszeile',
+      'Postfach',
       'Telefonnummern',
       'Anzahl Mitglieder',
       'Social Media'
     ]
+
+    should match_array expected
+    should eq expected
   end
 
   it 'has 4 items' do
@@ -57,7 +63,8 @@ describe Export::Tabular::Groups::List do
     its(['Kurzname']) { should == group.short_name }
     its(['Gruppentyp']) { should == 'Bottom Layer' }
     its(['Haupt-E-Mail']) { should == group.email }
-    its(['Adresse']) { should == contact.address }
+    its(['Strasse']) { should == contact.street }
+    its(['Hausnummer']) { should == contact.housenumber }
     its(['PLZ']) { should == contact.zip_code.to_s }
     its(['Ort']) { should == contact.town }
     its(['Land']) { should == contact.country_label }
@@ -79,7 +86,8 @@ describe Export::Tabular::Groups::List do
     its(['Elterngruppe']) { should == group.id.to_s }
     its(['Ebene']) { should == group.id.to_s }
     its(['Haupt-E-Mail']) { should == second_group.email }
-    its(['Adresse']) { should == second_group.address }
+    its(['Strasse']) { should == second_group.street }
+    its(['Hausnummer']) { should == second_group.housenumber }
     its(['PLZ']) { should == second_group.zip_code.to_s }
     its(['Ort']) { should == second_group.town }
     its(['Land']) { should == second_group.country_label }

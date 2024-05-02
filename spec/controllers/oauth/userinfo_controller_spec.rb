@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -35,7 +35,8 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
 
       before do
         user.update(nickname: 'Filou',
-                    address: 'Teststrasse 7', zip_code: '8000', town: 'Zürich', country: 'CH')
+                    street: 'Teststrasse', housenumber: '7', zip_code: '8000', town: 'Zürich',
+                    country: 'CH')
       end
 
       it 'shows the userinfo' do
@@ -87,7 +88,10 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
           company_name: user.company_name,
           company: user.company,
           email: user.email,
-          address: user.address,
+          address_care_of: user.address_care_of,
+          street: user.street,
+          housenumber: user.housenumber,
+          postbox: user.postbox,
           zip_code: user.zip_code,
           town: user.town,
           country: user.country,

@@ -473,7 +473,6 @@ en:
         applications_cancelable: Deregistration possible
         display_booking_info: Display number of registrations
         participations_visible: Visibility of participants
-        waiting_list: Waiting list
         requires_approval: Approval required
         globally_visible: Visibility
       event/contact_attrs:

@@ -608,7 +608,6 @@ it:
         applications_cancelable: Disiscrizione possibile
         display_booking_info: Visualizza stato iscrizioni
         participations_visible: Visibilità dei partecipanti
-        waiting_list: Lista d'attesa
         requires_approval: Raccomandazione necessaria
         globally_visible: Visibilità
       event/contact_attrs:

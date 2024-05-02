@@ -312,7 +312,6 @@ en:
       waiting_list_link:
         title_active: "Remove from waiting list"
         title_inactive: "Add to waiting list"
-        label: "Waiting list"
       popover_waiting_list:
         waiting_list_info: Put this person on the waiting list for courses of of %{event_kind}.
     attachments:
@@ -460,7 +459,6 @@ en:
       explain_contact_attrs: Here you can choose which contact details should be requested during registration.
       caption_applications_cancelable: Participants can cancel their registration.
       caption_display_booking_info: The number of registrations/places is visible on the course list for all
-      caption_waiting_list: If there are no more places available, new registrations automatically end up on the waiting list.
       caption_globally_visible: "%{model_name} is visible for the whole database"
       label_notify_contact_on_participations: Notification
     form_tabs:

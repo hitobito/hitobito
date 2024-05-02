@@ -319,7 +319,6 @@ it:
       waiting_list_link:
         title_active: "Eliminare dalla lista d'attesa"
         title_inactive: "Inserire nella lista d'attesa"
-        label: "Lista d'attesa"
       popover_waiting_list:
         waiting_list_info: Metti questa persona in lista d'attesa per il corso del tipo %{event_kind}.
     attachments:
@@ -479,7 +478,6 @@ it:
       explain_contact_attrs: Qui puoi scegliere quali dati di contatto devono essere chiesti al momento dell'iscrizione.
       caption_applications_cancelable: I partecipanti si possono disiscrivere personalmente.
       caption_display_booking_info: Il numero di iscrizioni/posti è visibile a tutti sulla lista del corso.
-      caption_waiting_list: Se non ci sono più posti disponibili, le nuove iscrizioni finiscono automaticamente nella lista d'attesa.
       caption_globally_visible: "%{model_name} è visibile per l'intera banca dati."
       label_notify_contact_on_participations: Notifica
     form_tabs:

@@ -320,7 +320,6 @@ fr:
       waiting_list_link:
         title_active: "Retirer de la liste d'attente"
         title_inactive: "Ajouter à la liste d'attente"
-        label: "Liste d'attente"
       popover_waiting_list:
         waiting_list_info: Ajouter la personne à la liste d'attente pour cette catégorie de cours %{event_kind}.
     attachments:
@@ -482,7 +481,6 @@ fr:
       explain_contact_attrs: Tu peux choisir les coordonnées requises pour l'inscription.
       caption_applications_cancelable: Les participants peuvent se désinscrire eux-mêmes.
       caption_display_booking_info: Le nombre d'inscrits et de places libres est visible pour tous sur la liste de cours.
-      caption_waiting_list: S'il n'y a plus de places disponibles, les nouvelles inscriptions se retrouvent automatiquement sur la liste d'attente.
       caption_globally_visible: "%{model_name} est visible dans toute la base de données"
       label_notify_contact_on_participations: Notification
     form_tabs:

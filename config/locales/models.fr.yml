@@ -609,7 +609,6 @@ fr:
         applications_cancelable: Désinscription possible
         display_booking_info: Voir l'état des inscriptions
         participations_visible: Visibilité des participants
-        waiting_list: Liste d'attente
         requires_approval: Recommandation requise
         globally_visible: Visibilité
       event/contact_attrs:

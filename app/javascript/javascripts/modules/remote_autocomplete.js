@@ -194,4 +194,8 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
       return $(this).attr("autocomplete", "off");
     });
   };
+
+  document.addEventListener('turbo:frame-load', (event) => {
+    app.setupRemoteAutocomplete();
+  });
 }).call(this);

@@ -7,7 +7,15 @@
   // this popover handling is confusing but seems to work when disposing and recreating
   // see https://getbootstrap.com/docs/5.0/components/popovers/
   $(document).on('turbo:load', function() {
-    $(document).on('click', '.popover button:submit', function(e) {
+    // remote form used in app/views/event/application_market/_popover_waiting_list.html.haml
+    // does not trigger form#submit event
+    $(document).on('click', '.popover form[data-remote] button:submit', function(e) {
+      $(e.target).closest('.popover').hide();
+    });
+
+    // normal forms e.g. sac/event/participations/_popover_cancel_sac do trigger form submit
+    // only if form validation pass (allows us to use client side validations)
+    $(document).on('click', '.popover form:submit', function(e) {
       $(e.target).closest('.popover').hide();
     });
 

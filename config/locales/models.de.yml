@@ -606,6 +606,12 @@ de:
 
       event/attachment:
         file: Datei
+        visibility: Sichtbarkeit
+        visibilities:
+          _nil: Unsichtbar
+          team: Nur für Leitungsteam sichtbar
+          participants: Für Leitungsteam und Teilnehmende sichtbar
+          global: Global sichtbar
 
       event/course:
         kind_id: Kursart

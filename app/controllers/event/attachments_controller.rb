@@ -10,12 +10,16 @@ class Event::AttachmentsController < CrudController
 
   self.nesting = Group, Event
 
-  self.permitted_attrs = [:file]
+  self.permitted_attrs = [:file, :visibility]
 
   respond_to :js
 
   def self.model_class
     Event::Attachment
+  end
+
+  def set_success_notice
+    # Skip this, this controller only serves JS
   end
 
   private

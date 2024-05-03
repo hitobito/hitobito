@@ -9,9 +9,9 @@
 #
 # Table name: event_attachments
 #
-#  id       :integer          not null, primary key
-#  event_id :integer          not null
-#  file     :string           not null
+#  id         :integer          not null, primary key
+#  event_id   :integer          not null
+#  visibility :string(255)
 #
 
 require 'spec_helper'

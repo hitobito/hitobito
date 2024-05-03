@@ -9,8 +9,9 @@
 #
 # Table name: event_attachments
 #
-#  id       :integer          not null, primary key
-#  event_id :integer          not null
+#  id         :integer          not null, primary key
+#  event_id   :integer          not null
+#  visibility :string(255)
 #
 # Indexes
 #
@@ -24,14 +25,21 @@ class Event::Attachment < ActiveRecord::Base
 
   belongs_to :event
 
+  VISIBILITIES = ['team', 'participants', 'global'].freeze
+  enum visibility: VISIBILITIES.zip(VISIBILITIES).to_h
+
   # this could become a has_many_attached on Event
   has_one_attached :file
 
   validates_by_schema
+  validates :visibility, inclusion: { in: VISIBILITIES.map(&:to_s), allow_nil: true }
   validates :file, size: { less_than_or_equal_to: MAX_FILE_SIZE },
                    content_type: CONTENT_TYPES
 
   scope :list, -> { order(:id) }
+  scope :visible_for_team, -> { where(visibility: [:team, :participants, :global]) }
+  scope :visible_for_participants, -> { where(visibility: [:participants, :global]) }
+  scope :visible_globally, -> { where(visibility: :global) }
 
   def to_s
     file

@@ -235,7 +235,7 @@ Hitobito::Application.routes.draw do
             end
           end
 
-          resources :attachments, only: [:create, :destroy]
+          resources :attachments, only: [:create, :update, :destroy]
 
           resource :participation_lists, only: :create
           resources :participations do

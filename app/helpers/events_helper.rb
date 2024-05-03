@@ -128,12 +128,44 @@ module EventsHelper
       entry.used_attributes(:required_contact_attrs, :hidden_contact_attrs).any?
   end
 
+  def attachment_visibility_button(attachment, visibility)
+    label = I18n.t(visibility, scope: 'activerecord.attributes.event/attachment.visibilities')
+    active = attachment.visibility.to_s == visibility.to_s
+    new_visibility = active ? '' : visibility
+    path = group_event_attachment_path(@group, @event, attachment,
+                                       'event_attachment[visibility]': new_visibility)
+
+    link_to attachment_visibility_icon(visibility, active), path, class: 'action mr-2',
+            title: label, alt: label, data: { method: :put, remote: true }
+  end
+
+  def readable_attachments(event, person)
+    return event.attachments if can?(:update, event)
+    return event.attachments.visible_for_team if event_team?(event, person)
+    return event.attachments.visible_for_participants if event_participant?(event, person)
+    event.attachments.visible_globally
+  end
+
   private
 
   def find_event_type
     @group.event_types.find do |t|
       (params[:type].blank? && t == Event) || t.sti_name == params[:type]
     end
+  end
+
+  def attachment_visibility_icon(visibility, active)
+    icons = { team: :'user-graduate', participants: :users, global: :globe }
+    icon(icons[visibility.to_sym], class: active ? '' : 'muted')
+  end
+
+  def event_team?(event, person)
+    team = event.role_types.select { |role_type| role_type.leader? || role_type.helper? }
+    event.participations_for(*team).pluck(:person_id).include?(person.id)
+  end
+
+  def event_participant?(event, person)
+    event.participations.pluck(:person_id).include?(person.id)
   end
 
 end

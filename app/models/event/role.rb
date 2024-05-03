@@ -81,6 +81,10 @@ class Event::Role < ActiveRecord::Base
       kind == :leader
     end
 
+    def helper?
+      kind == :helper
+    end
+
     # Whether this role is a participant type.
     def participant?
       kind == :participant

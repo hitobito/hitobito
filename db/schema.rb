@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_04_02_092444) do
+ActiveRecord::Schema.define(version: 2024_05_03_120000) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -205,6 +205,7 @@ ActiveRecord::Schema.define(version: 2024_04_02_092444) do
 
   create_table "event_attachments", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.integer "event_id", null: false
+    t.string "visibility"
     t.index ["event_id"], name: "index_event_attachments_on_event_id"
   end
 

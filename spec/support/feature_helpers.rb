@@ -19,6 +19,15 @@ module FeatureHelpers
 
   private
 
+  # retries block when expectation is not met
+  def with_retries(attempt = 0, max_attempts: 3)
+    yield
+  rescue RSpec::Expectations::ExpectationNotMetError => e
+    attempt += 1
+    retry if attempt < max_attempts
+    fail e
+  end
+
   # catch some errors occuring now and then in capybara tests
   def obsolete_node_safe
     yield

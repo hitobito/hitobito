@@ -30,4 +30,22 @@ describe Event::Attachment do
       expect(a.errors.full_messages.join).to match(/muss kleiner oder gleich 2 MB/)
     end
   end
+
+  context 'visibility' do
+    it 'allows setting visibility' do
+      a = event.attachments.new
+      file = Tempfile.new(['x', '.png'])
+      File.write(file, 'x' * 1.megabytes)
+      a.file.attach(io: file, filename: 'foo.png')
+      expect { a.visibility = :participants }.not_to raise_error
+    end
+
+    it 'validates visibility' do
+      a = event.attachments.new
+      file = Tempfile.new(['x', '.png'])
+      File.write(file, 'x' * 1.megabytes)
+      a.file.attach(io: file, filename: 'foo.png')
+      expect { a.visibility = :foo }.to raise_error("'foo' is not a valid visibility")
+    end
+  end
 end

@@ -9,14 +9,14 @@ class AddStructuredAddressFields < ActiveRecord::Migration[6.1]
   def change
     change_table :people do |t|
       t.string :street
-      t.string :housenumber
+      t.string :housenumber, limit: 20
       t.string :address_care_of
       t.string :postbox
     end
 
     change_table :groups do |t|
       t.string :street
-      t.string :housenumber
+      t.string :housenumber, limit: 20
       t.string :address_care_of
       t.string :postbox
     end

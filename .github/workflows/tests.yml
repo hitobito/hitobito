@@ -174,7 +174,7 @@ jobs:
     if: ( success() || failure() ) && ( github.ref_name == 'master' )
     with:
       repository: 'hitobito'
-      test_result: ${{ needs.build.result == 'success' }}
+      test_result: ${{ needs.rubocop.result == 'success' && needs.main-specs.result == 'success' && needs.sphinx-specs.result == 'success' && needs.feature-specs.result == 'success' }}
     secrets:
       HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}
       HEARTBEAT_TOKEN: ${{ secrets.HEARTBEAT_TOKEN }}

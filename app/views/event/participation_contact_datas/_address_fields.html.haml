@@ -8,9 +8,9 @@
     = f.labeled_input_field(:address_care_of) if entry.show_attr?(:address_care_of)
     = f.labeled(:address, class: 'd-flex') do
       %div.col-9
-        = f.input_field(:street, data: { provide: 'entity', updater: 'AddressTypeahead.update', url: addresses_query_url })
+        = f.input_field(:street, data: { provide: 'entity', updater: 'AddressTypeahead.update', url: addresses_query_url }) if entry.show_attr?(:street)
       %div.col-2.offset-1
-        = f.input_field(:housenumber)
+        = f.input_field(:housenumber) if entry.show_attr?(:housenumber)
     = f.labeled_input_field(:postbox)
   - else
     = f.labeled_text_area(:address, rows: 2) if entry.show_attr?(:address)

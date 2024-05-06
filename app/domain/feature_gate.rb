@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Copyright (c) 2022-2023, Hitobito AG. This file is part of
+# Copyright (c) 2022-2024, Hitobito AG. This file is part of
 # hitobito and licensed under the Affero General Public License version 3
 # or later. See the COPYING file at the top-level directory or at
 # https://github.com/hitobito/hitobito.
@@ -8,8 +8,10 @@
 # Restrict code-execution depending on settings-level feature-switches
 #
 # Provides the following class-level methods
-#   - assert!(feature)    # raises unless the feature is active
+#   - assert!(feature)    # raises if the feature is inactive
+#   - refute!(feature)    # raises if the feature is active
 #   - enabled?(feature)   # answers if the feature is active
+#   - disabled?(feature)  # answers if the feature is inactive
 #   - if(feature) { ... } # executes block if feature is active
 
 # In config/settings.yml any key can have a subkey "enabled" which determines
@@ -38,6 +40,11 @@ class FeatureGate
       new.assert!(feature)
     end
 
+    # Raise if the feature is enabled
+    def refute!(feature)
+      new.refute!(feature)
+    end
+
     # Execute the block if the feature is enabled
     def if(feature, &block)
       new.if(feature, &block)
@@ -56,6 +63,12 @@ class FeatureGate
     return true if enabled?(feature)
 
     raise FeatureGateError, "Feature #{feature} is not enabled"
+  end
+
+  def refute!(feature)
+    return true if disabled?(feature)
+
+    raise FeatureGateError, "Feature #{feature} is enabled"
   end
 
   def if(feature)

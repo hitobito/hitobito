@@ -51,7 +51,7 @@ namespace :address do
     scope.find_each do |contactable|
       AddressConverter.convert(
         contactable,
-        success: -> { @stderr.print('.') },
+        success: -> { $stderr.print('.') },
         failed: ->(info) { $stderr.print('F'); fails << info }, # rubocop:disable Style/Semicolon
         incomplete: ->(info) { $stderr.print('E'); errors << info } # rubocop:disable Style/Semicolon
       )
@@ -61,6 +61,7 @@ namespace :address do
         break
       end
     end
+
     print("\n")
 
     # reporting

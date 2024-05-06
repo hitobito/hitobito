@@ -9,13 +9,18 @@ class AddressConverter
   STREET_HOUSENUMBER_REGEX = %r{^(.*?)[,?[:space:]*]?((?:\d+[-/])?\d+\s?\w?)?$}
 
   # complete flow for one contactable, with callbacks to be used from a rake-task
-  def self.convert(contactable, success:, incomplete:, failed:) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity
+  def self.convert(contactable, success:, incomplete:, failed:) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
     conv = new(contactable)
     conv.split
 
     if conv.check
-      result = conv.save
-      success&.call()
+      begin
+        result = conv.save
+        success&.call()
+      rescue
+        result = false
+        failed&.call(conv.failed_info)
+      end
 
       result
     else

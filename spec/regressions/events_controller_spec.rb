@@ -180,6 +180,90 @@ describe EventsController, type: :controller do
         expect(dom.all('.alert.alert-warning')[0].text).to include waiting_list_note
       end
     end
+
+    context 'attachments' do
+      let(:dom) { Capybara::Node::Simple.new(response.body) }
+      let(:event) { events(:top_event) }
+      let!(:participation) { nil }
+      subject { dom.all('#attachments')[0].text }
+
+      before do
+        participation # force creation
+
+        create_attachment(event, 'visibility-global.pdf', :global)
+        create_attachment(event, 'visibility-participants.pdf', :participants)
+        create_attachment(event, 'visibility-team.pdf', :team)
+        create_attachment(event, 'visibility-invisible.pdf', nil)
+
+        event.update!(globally_visible: true)
+
+        sign_in(person)
+
+        get :show, params: { group_id: groups(:top_layer).id, id: events(:top_event) }
+      end
+
+      def create_attachment(event, filename, visibility)
+        file = Tempfile.new(filename)
+        a = event.attachments.build
+        a.file.attach(io: file, filename: filename)
+        a.visibility = visibility
+        a.save!
+      end
+
+      context 'as event editor' do
+        let(:person) { people(:top_leader) }
+
+        it 'shows all attachments' do
+          is_expected.to include 'visibility-global.pdf'
+          is_expected.to include 'visibility-participants.pdf'
+          is_expected.to include 'visibility-team.pdf'
+          is_expected.to include 'visibility-invisible.pdf'
+        end
+      end
+
+      context 'as event helper' do
+        let(:person) { people(:bottom_member) }
+        let!(:participation) do
+          participation = Event::Participation.create!(event: event, active: true, person: person)
+          Event::Role::Helper.create!(participation: participation)
+          participation
+        end
+
+        it 'shows global, participants-accessible and team-accessible attachments' do
+          is_expected.to include 'visibility-global.pdf'
+          is_expected.to include 'visibility-participants.pdf'
+          is_expected.to include 'visibility-team.pdf'
+          is_expected.not_to include 'visibility-invisible.pdf'
+        end
+      end
+
+      context 'as event participant' do
+        let(:person) { people(:bottom_member) }
+        let!(:participation) do
+          participation = Event::Participation.create!(event: event, active: true, person: person)
+          Event::Role::Participant.create!(participation: participation)
+          participation
+        end
+
+        it 'shows only global and participants attachments' do
+          is_expected.to include 'visibility-global.pdf'
+          is_expected.to include 'visibility-participants.pdf'
+          is_expected.not_to include 'visibility-team.pdf'
+          is_expected.not_to include 'visibility-invisible.pdf'
+        end
+      end
+
+      context 'as unrelated person' do
+        let(:person) { people(:bottom_member) }
+
+        it 'shows only global attachments' do
+          is_expected.to include 'visibility-global.pdf'
+          is_expected.not_to include 'visibility-participants.pdf'
+          is_expected.not_to include 'visibility-team.pdf'
+          is_expected.not_to include 'visibility-invisible.pdf'
+        end
+      end
+    end
   end
 
   describe 'GET #new' do

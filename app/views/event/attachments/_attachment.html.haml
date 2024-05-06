@@ -4,13 +4,15 @@
 -#  https://github.com/hitobito/hitobito.
 
 %li{id: dom_id(attachment)}
-  = link_to(upload_name(attachment, :file), upload_url(attachment, :file), target: :blank)
+  = link_to(upload_name(attachment, :file), upload_url(attachment, :file), target: :blank, class: 'mr-3')
 
   - if can?(:update, @event)
-    &nbsp;
+    = attachment_visibility_button(attachment, :team)
+    = attachment_visibility_button(attachment, :participants)
+    = attachment_visibility_button(attachment, :global)
     = link_to icon(:'trash-alt', filled: false),
               group_event_attachment_path(@group, @event, attachment),
-              class: 'action',
+              class: 'action ml-3',
               title: ti(:"link.delete"),
               alt: ti(:"link.delete"),
               data: { confirm: ti(:confirm_delete),

@@ -15,7 +15,8 @@ module SearchStrategies
         attrs: ['people.first_name', 'people.last_name', 'people.company_name', 'people.nickname',
                 'people.company', 'people.email', 'people.zip_code',
                 'people.town', 'people.country', 'people.birthday', 'people.additional_information',
-                'phone_numbers.number', 'social_accounts.name', 'additional_emails.email'].then do |attrs|
+                'phone_numbers.number', 'social_accounts.name',
+                'additional_emails.email'].then do |attrs|
                  if FeatureGate.enabled?('structured_addresses')
                    attrs << 'people.address_care_of'
                    attrs << 'people.street'

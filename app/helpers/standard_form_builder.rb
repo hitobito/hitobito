@@ -25,13 +25,17 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   delegate :association, :column_type, :column_property, :captionize, :ta, :tag,
            :content_tag, :safe_join, :capture, :add_css_class, :assoc_and_id_attr,
-           :render, :f, :icon,
+           :render, :f, :icon,  :can?, :cannot?,
            to: :template
 
   # Render multiple input fields together with a label for the given attributes.
   def labeled_input_fields(*attrs)
     options = attrs.extract_options!
     safe_join(attrs) { |a| labeled_input_field(a, options.clone) }
+  end
+
+  def cannot_update_personal_readonly_attrs
+    @cannot_update_personal_readonly_attrs ||= @template.current_ability && @template.cannot?(:update_personal_readonly_attrs, @object)
   end
 
   # Render a corresponding input field for the given attribute.
@@ -42,7 +46,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     custom_field_method = :"#{type}_field"
     html_options[:class] = html_options[:class].to_s
     html_options[:class] += ' is-invalid' if errors_on?(attr)
-
+    html_options[:readonly] = :readonly if cannot_update_personal_readonly_attrs
     if type == :text
       text_area(attr, html_options)
     elsif association_kind?(attr, type, :belongs_to)

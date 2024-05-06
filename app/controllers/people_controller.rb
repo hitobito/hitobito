@@ -136,6 +136,11 @@ class PeopleController < CrudController
     super
   end
 
+  def permitted_params
+    self.permitted_attrs -= personal_readonly_attrs if cannot?(:update_personal_readonly_attrs, entry)
+    super
+  end
+
   def load_people_add_requests
     if params[:range].blank? && can?(:create, @group.roles.new)
       @person_add_requests = @group.person_add_requests.list.includes(person: :primary_group)

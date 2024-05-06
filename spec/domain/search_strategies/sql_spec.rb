@@ -190,7 +190,7 @@ describe SearchStrategies::Sql do
       it 'finds zero people' do
         result = strategy(@bg_member.last_name[1..5]).query_people
 
-        expect(result).to eq(Person.none)
+        expect(result.to_a).to eq(Person.none.to_a)
       end
     end
 

@@ -14,7 +14,8 @@ class PersonResource < ApplicationResource
       update_ability.authorize!(:show_details, model)
     end
 
-    if model.changed_attribute_names_to_save.each(&:to_sym).intersect? Person.personal_readonly_attrs
+    changed_names = model.changed_attribute_names_to_save.each(&:to_sym)
+    if changed_names.intersect? Person.personal_readonly_attrs
       update_ability.authorize!(:update_personal_readonly_attrs, model)
     end
 

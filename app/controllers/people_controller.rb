@@ -137,7 +137,9 @@ class PeopleController < CrudController
   end
 
   def permitted_params
-    self.permitted_attrs -= personal_readonly_attrs if cannot?(:update_personal_readonly_attrs, entry)
+    if cannot?(:update_personal_readonly_attrs, entry)
+      self.permitted_attrs -= personal_readonly_attrs
+    end
     super
   end
 

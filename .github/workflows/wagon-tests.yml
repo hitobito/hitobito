@@ -14,11 +14,11 @@ on:
       core_ref:
         description: Use a specific version of the core for the workflow run. Defaults to master.
         type: string
-        default: 'master'
+        default: ''
       wagon_dependency_ref:
         description: Use a specific version of the wagon dependency for the workflow run. Defaults to master.
         type: string
-        default: 'master'
+        default: ''
     secrets:
       HEARTBEAT_URL:
         description: 'URL to the heartbeat-application'
@@ -72,23 +72,29 @@ jobs:
       - name: 'Extract branch name and determine common branch'
         env:
           WAGON_DEPENDENCY_REPO: ${{ inputs.wagon_dependency_repository }}
-          INPUT_WDEP_REF: ${{ inputs.wagon_dependency_ref || 'master' }}
-          INPUT_CORE_REF: ${{ inputs.core_ref || 'master' }}
+          INPUT_WDEP_REF: ${{ inputs.wagon_dependency_ref }}
+          INPUT_CORE_REF: ${{ inputs.core_ref }}
         run: |
           current_branch_name="$(echo ${GITHUB_REF#refs/heads/})"
 
           WAGON_DEPENDENCY_REF="$INPUT_WDEP_REF"
-          if [ "${WAGON_DEPENDENCY_REPO}" != '' ]; then
+          if [ -z "${INPUT_WDEP_REF}" -a "${WAGON_DEPENDENCY_REPO}" != '' ]; then
             dependency_branch=$(git ls-remote --heads https://github.com/hitobito/${WAGON_DEPENDENCY_REPO} | cut -d/ -f3- | grep -x "$current_branch_name")
             if [ "$dependency_branch" != '' ]; then
               WAGON_DEPENDENCY_REF="$current_branch_name"
+            else
+              WAGON_DEPENDENCY_REF="master"
             fi
           fi
 
           CORE_REF="$INPUT_CORE_REF"
-          core_branch=$(git ls-remote --heads https://github.com/hitobito/hitobito | cut -d/ -f3- | grep -x "$current_branch_name")
-          if [ "$core_branch" != '' ]; then
-            CORE_REF="$current_branch_name"
+          if [ -z "${INPUT_WDEP_REF}" ]; then
+            core_branch=$(git ls-remote --heads https://github.com/hitobito/hitobito | cut -d/ -f3- | grep -x "$current_branch_name")
+            if [ "$core_branch" != '' ]; then
+              CORE_REF="$current_branch_name"
+            else
+              CORE_REF="master"
+            fi
           fi
 
           echo "BRANCH_NAME=$current_branch_name" >> $GITHUB_ENV

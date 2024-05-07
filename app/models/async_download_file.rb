@@ -76,7 +76,7 @@ class AsyncDownloadFile < ApplicationRecord
     (person_id == person.id) && generated_file.attached?
   end
 
-  def write(data, force_encoding:)
+  def write(data, force_encoding: nil)
     io = StringIO.new
 
     case filetype.to_sym

@@ -457,7 +457,6 @@ it:
       caption_signature_confirmation: L'iscrizione deve essere confermata da una seconda firma
       signature_confirmation_text_default: Rappresentante legale (per i minorenni)
     attachments:
-      public_attachments_hint: Gli allegati sono pubblici in quanto l'evento consente registrazioni esterne
       add: "aggiungere"
     banner_open_invitation:
       explanation: Sei stato invitato a questo evento

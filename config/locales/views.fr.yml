@@ -460,7 +460,6 @@ fr:
       caption_signature_confirmation: L'inscription doit être confirmée par une deuxième signature.
       signature_confirmation_text_default: Autorité parentale (pour les mineurs)
     attachments:
-      public_attachments_hint: Les pièces jointes sont publiques, car l'événement permet des inscriptions externes
       add: "ajouter"
     banner_open_invitation:
       explanation: Tu as été invité à cet évènement.

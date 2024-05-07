@@ -113,6 +113,34 @@ describe PeopleController, js: true do
     end
   end
 
+  context 'qualifications' do
+    before do
+      sign_in
+      visit group_people_path(group, range: 'group')
+
+      click_link 'Weitere Ansichten'
+      click_link 'Neuer Filter...'
+      expect(page).to have_content 'Personen filtern'
+      click_link 'Qualifikationen'
+    end
+
+    it "adjusts filters when checking 'Alle jemals erteilten Qualifikationen'" do
+      choose 'Alle jemals erteilten Qualifikationen'
+      expect(page).to have_content 'Qualifikationsjahr einschränken'
+      expect(page).not_to have_content 'Stichdatum'
+      expect(page).not_to have_field 'Person hat ALLE diese Qualifikationen' # is disabled
+      expect(page).to have_checked_field 'Person hat mindestens EINE dieser Qualifikationen'
+    end
+
+    it "adjusts filters when checking 'Keine jemals erteilte Qualifikation'" do
+      choose 'Keine jemals erteilte Qualifikation'
+      expect(page).not_to have_content 'Qualifikationsjahr einschränken'
+      expect(page).not_to have_content 'Stichdatum'
+      expect(page).not_to have_field 'Person hat ALLE diese Qualifikationen' # is disabled
+      expect(page).to have_checked_field 'Person hat mindestens EINE dieser Qualifikationen'
+    end
+  end
+
   def sign_in_and_create_filter
     sign_in
     visit group_people_path(group)

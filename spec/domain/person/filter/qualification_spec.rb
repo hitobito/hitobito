@@ -512,7 +512,6 @@ describe Person::Filter::Qualification do
             expect(entries).to match_array([@bg_member, @bl_extern, @bg_leader, people(:bottom_member)])
           end
         end
-
       end
 
       context 'not_active_but_reactivateable validities' do
@@ -674,6 +673,44 @@ describe Person::Filter::Qualification do
                       start_at: today - 10.years)
 
             expect(entries).to match_array([@bg_member, @bl_leader])
+          end
+        end
+      end
+
+      context 'none validities' do
+        let(:match) { 'one' }
+        let(:validity) { 'none' }
+        let(:bottom_member) { people(:bottom_member) }
+
+        context 'empty qualification_kind_ids' do
+          let(:qualification_kind_ids) { [] }
+
+          it 'does no filtering on qualifications but somehow on roles excluding external' do
+            expect(entries).to match_array([@bl_leader, @bg_leader, @bg_member, bottom_member])
+          end
+        end
+
+        context 'non existing qualification_kind_id' do
+          let(:qualification_kind_ids) { [-1] }
+
+          it 'does no filtering on qualifications and also not on roles' do
+            expect(entries).to match_array([@bl_leader, @bg_leader, @bg_member, bottom_member, @bl_extern])
+          end
+        end
+
+        context 'single qualification_kind_id' do
+          let(:qualification_kind_ids) { [qualification_kinds(:sl).id] }
+
+          it 'excludes people with qualification matching sl quali kind' do
+            expect(entries).to match_array([bottom_member, @bl_extern])
+          end
+        end
+
+        context 'multiple qualification_kind_ids' do
+          let(:qualification_kind_ids) { [qualification_kinds(:sl).id, qualification_kinds(:gl_leader).id] }
+
+          it 'excludes people with qualification matching sl or gl_leader quali kind' do
+            expect(entries).to match_array([bottom_member])
           end
         end
       end

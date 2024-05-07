@@ -1731,6 +1731,7 @@ de:
         not_active_but_reactivateable: Keine gültige, aber reaktivierbare Qualifikationen
         not_active: Keine gültigen Qualifikationen
         all: Alle jemals erteilten Qualifikationen
+        none: Keine jemals erteilte Qualifikation
       filters_role_kind:
         active: war die Rolle aktiv.
         created: wurde die Rolle erstellt.

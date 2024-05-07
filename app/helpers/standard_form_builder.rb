@@ -37,7 +37,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def cannot_update_personal_readonly_attrs(attr)
     c = @template.current_ability && @template.cannot?(:update_personal_readonly_attrs, @object)
     @cannot_update_personal_readonly_attrs ||= c
-    if @object.respond_to?(:personal_readonly_attrs)
+
+    if c && @object.respond_to?(:personal_readonly_attrs)
       @object&.personal_readonly_attrs&.include?(attr.to_sym)
     end
   end
@@ -231,7 +232,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options = before_html_field(attr, html_options)
     invalid = errors_on?(attr) ? " is-invalid" : "" # todo check if correct
     radio_button(attr, value, html_options) +
-    label(id_from_value(attr, value), 
+    label(id_from_value(attr, value),
           class: "radio#{' inline' if inline} mt-2 form-check-label" + invalid) do
       caption
     end
@@ -250,8 +251,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     invalid = errors_on?(attr) ? " is-invalid" : ""
     # todo: add before_html_field
 
-    @template.check_box_tag(name, index + 1, checked, 
-                            id: sanitized_id, 
+    @template.check_box_tag(name, index + 1, checked,
+                            id: sanitized_id,
                             class: "form-check-input align-label" + invalid) +
     hidden_field.html_safe +
     @template.label_tag(sanitized_id, class: "checkbox mt-2 form-check-label " + invalid) do
@@ -324,7 +325,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
     html_options = before_html_field(attr, html_options)
     klass = html_options[:class]
-    
+
     disabled = html_options[:disabled].presence
     hidden_field(attr_id) +
     string_field(attr,

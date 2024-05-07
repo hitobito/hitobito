@@ -36,8 +36,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   def cannot_update_personal_readonly_attrs(attr)
     @cannot_update_personal_readonly_attrs ||= @template.current_ability && @template.cannot?(:update_personal_readonly_attrs, @object)
-    # TODO: hier pruefen ob das attr in der liste der readonly attrs ist.
-    false
+    @object&.personal_readonly_attrs&.include?(attr.to_sym) if @object.respond_to?(:personal_readonly_attrs)
   end
 
   # todo: move to private and change name

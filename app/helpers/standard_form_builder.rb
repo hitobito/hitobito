@@ -38,6 +38,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     c = @template.current_ability && @template.cannot?(:update_personal_readonly_attrs, @object)
     @cannot_update_personal_readonly_attrs ||= c
 
+    p [attr, @cannot_update_personal_readonly_attrs]
+    # puts @cannot_update_personal_readonly_attrs
+    # puts @object&.personal_readonly_attrs&.include?(attr.to_sym)
+
     if c && @object.respond_to?(:personal_readonly_attrs)
       @object&.personal_readonly_attrs&.include?(attr.to_sym)
     end

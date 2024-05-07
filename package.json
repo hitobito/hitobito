@@ -28,7 +28,7 @@
     "sass": "^1.49.7",
     "stimulus": "^3.2.2",
     "tom-select": "^2.2.2",
-    "trix": "^1.2.0"
+    "trix": "^2.1.1"
   },
   "devDependencies": {
     "@webpack-cli/serve": "^1.6.1",

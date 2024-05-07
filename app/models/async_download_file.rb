@@ -76,13 +76,15 @@ class AsyncDownloadFile < ApplicationRecord
     (person_id == person.id) && generated_file.attached?
   end
 
-  def write(data)
+  def write(data, force_encoding:)
     io = StringIO.new
 
     case filetype.to_sym
     when :csv then io.set_encoding(Settings.csv.encoding)
     when :pdf then io.binmode
     end
+
+    io.set_encoding(force_encoding) if force_encoding.present?
 
     io.write(data)
     io.rewind # make ActiveStorage's checksum-calculation deterministic

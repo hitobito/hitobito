@@ -36,7 +36,7 @@ class Export::ExportBaseJob < BaseJob
   end
 
   def export_file
-    async_download_file.write(data)
+    async_download_file.write(data, force_encoding: @options.fetch(:encoding, nil))
   end
 
   def data

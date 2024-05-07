@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## Unreleased
+
+*  Für jeden Anhang bei Anlässen, Kursen etc. kann neu individuell ausgewählt werden, ob der Anhang global sichtbar ist (wie bisher) oder ob nur Teilnehmende oder nur das Leitungsteam den Anhang sehen darf (hitobito_sac_cas#486)
+
 ## Version 2.1
 
 *  JSON:API OpenAPI Dokumentation weist 'extra_fields' korrekt aus (request parameter, entity schema attributes) (hitobito_sac_cas#275)

@@ -714,6 +714,36 @@ describe Person::Filter::Qualification do
           end
         end
       end
+
+      context 'only_expired' do
+        let(:match) { 'one' }
+        let(:validity) { 'only_expired' }
+        let(:bottom_member) { people(:bottom_member) }
+        let(:sl) { qualification_kinds(:sl) }
+
+        context 'single qualification_kind_id' do
+          let(:qualification_kind_ids) { [sl.id] }
+
+          it 'includes bg_leader and bl_leader' do
+            expect(entries).to match_array([@bg_leader, @bl_leader])
+          end
+        end
+
+        context 'multiple qualification_kind_ids' do
+          let(:gl_leader) { qualification_kinds(:gl_leader) }
+          let(:qualification_kind_ids) { [sl.id, gl_leader.id] }
+
+          it 'excludes bl_leader because his gl_leader quali is reactivtable' do
+            expect(entries).to match_array([@bg_leader])
+          end
+
+          it 'includes bl_leader because if gl_leader quali is no longer reactivtable' do
+            @bl_leader.qualifications
+              .find_by(qualification_kind: gl_leader).update_columns(finish_at: 3.years.ago)
+            expect(entries).to match_array([@bg_leader, @bl_leader])
+          end
+        end
+      end
     end
 
     it 'does not fail if sorting by role and person has only group_read' do

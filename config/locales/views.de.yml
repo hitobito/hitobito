@@ -1728,10 +1728,11 @@ de:
       filters_qualification_validity:
         active: Nur aktuell gültige Qualifikationen
         reactivateable: Gültige und reaktivierbare Qualifikationen
-        not_active_but_reactivateable: Keine gültige, aber reaktivierbare Qualifikationen
+        not_active_but_reactivateable: Reaktivierbare, aber nicht gültige Qualifikationen
         not_active: Keine gültigen Qualifikationen
         all: Alle jemals erteilten Qualifikationen
         none: Keine jemals erteilte Qualifikation
+        only_expired: Abgelaufene, aber nicht gültige oder reaktivierbare Qualifikationen
       filters_role_kind:
         active: war die Rolle aktiv.
         created: wurde die Rolle erstellt.

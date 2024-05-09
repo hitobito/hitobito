@@ -20,6 +20,8 @@ class Person::Filter::Qualification < Person::Filter::Base
       no_active_qualification_scope(scope)
     elsif args[:validity].to_s == 'none'
       no_qualification_scope(scope)
+    elsif args[:validity].to_s == 'only_expired'
+      only_expired_qualification_scope(scope)
     elsif args[:match].to_s == 'all'
       match_all_qualification_kinds(scope)
     else
@@ -71,6 +73,12 @@ class Person::Filter::Qualification < Person::Filter::Base
     scope.
       left_joins(:qualifications).
       merge(::Qualification.not_active(args[:qualification_kind_ids], reference_date))
+  end
+
+  def only_expired_qualification_scope(scope)
+    scope.
+      joins(:qualifications).
+      merge(::Qualification.only_expired(args[:qualification_kind_ids], reference_date))
   end
 
   def no_qualification_scope(scope)

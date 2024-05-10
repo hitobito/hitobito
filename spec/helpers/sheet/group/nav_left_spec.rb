@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2014, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -46,11 +46,9 @@ describe 'Sheet::Group::NavLeft' do
       is_expected.to_not have_link('TP', text: 'TP')
     end
 
-    # TODO: safe_join of this test's view does not behave as it should
-    # it 'displays sub layer with short name if available' do
-    #   is_expected.to have_link('One', text: 'One')
-    #   is_expected.to_not have_link('Bottom One', text: 'Bottom One')
-    # end
+    it 'displays sub layer' do
+      is_expected.to have_link('Bottom One', text: 'Bottom One')
+    end
 
     it 'displays group with short name if available' do
       is_expected.to have_link('TG', text: 'TG')

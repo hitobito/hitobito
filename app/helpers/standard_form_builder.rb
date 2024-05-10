@@ -34,16 +34,13 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     safe_join(attrs) { |a| labeled_input_field(a, options.clone) }
   end
 
-  def cannot_update_personal_readonly_attrs(attr)
-    c = @template.current_ability && @template.cannot?(:update_personal_readonly_attrs, @object)
-    @cannot_update_personal_readonly_attrs ||= c
-
-    p [attr, @cannot_update_personal_readonly_attrs]
-    # puts @cannot_update_personal_readonly_attrs
-    # puts @object&.personal_readonly_attrs&.include?(attr.to_sym)
-
-    if c && @object.respond_to?(:personal_readonly_attrs)
-      @object&.personal_readonly_attrs&.include?(attr.to_sym)
+  def can_update_personal_readonly_attrs(attr)
+    if @object.respond_to?(:personal_readonly_attrs) &&
+      @object.personal_readonly_attrs&.include?(attr.to_sym)
+      @can_readonly_attrs ||=
+        @template.current_ability && @template.can?(:update_personal_readonly_attrs, @object)
+    else
+      true
     end
   end
 
@@ -52,7 +49,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
    # todo: FORM_CONTROL_WIDTH feld auch hier rein?
     html_options[:class] = html_options[:class].to_s
     html_options[:class] += ' is-invalid' if errors_on?(attr)
-    html_options[:readonly] = :readonly if cannot_update_personal_readonly_attrs(attr)
+    html_options[:readonly] = :readonly unless can_update_personal_readonly_attrs(attr)
     html_options
   end
 

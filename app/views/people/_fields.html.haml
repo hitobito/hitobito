@@ -1,4 +1,4 @@
--#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
+-2005#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
@@ -10,20 +10,20 @@
 
 - has_relations ||= PeopleRelation.any?
 
--# = field_set_tag do
--#   = f.labeled_input_fields(*entry.decorate.used_attributes(:first_name, :last_name, :nickname))
--#   - entry.decorate.used?(:company_name) do
--#     = f.labeled_input_field(:company_name,
--#                              placeholder: I18n.t('global.search.placeholder_company_name'),
--#                              data: { provide: 'entity',
--#                                      url: query_company_name_path })
--#   - entry.decorate.used?(:company) do
--#     = f.labeled_boolean_field :company
--#
--#   = render_extensions :name_fields, locals: { f: f }
--#
--# = render 'contactable/fields', f: f
--#
+= field_set_tag do
+  = f.labeled_input_fields(*entry.decorate.used_attributes(:first_name, :last_name, :nickname))
+  - entry.decorate.used?(:company_name) do
+    = f.labeled_input_field(:company_name,
+                             placeholder: I18n.t('global.search.placeholder_company_name'),
+                             data: { provide: 'entity',
+                                     url: query_company_name_path })
+  - entry.decorate.used?(:company) do
+    = f.labeled_boolean_field :company
+
+  = render_extensions :name_fields, locals: { f: f }
+
+= render 'contactable/fields', f: f
+
 = field_set_tag do
   = f.labeled(:gender) do
     - (Person::GENDERS + ['']).each do |key|

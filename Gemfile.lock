@@ -10,7 +10,7 @@ GIT
       transproc
 
 PATH
-  remote: ../hitobito_sac
+  remote: ../hitobito_sac_cas
   specs:
     hitobito_sac_cas (0.0.1)
       hitobito_youth

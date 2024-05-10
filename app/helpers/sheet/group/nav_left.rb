@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2014-2021 Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2014-2024 Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -117,15 +117,19 @@ module Sheet
       end
 
       def render_sub_layers
-        safe_join(grouped_sub_layers) do |type, layers|
+        layers = grouped_sub_layers.map do |type, layers|
           content_tag(:li, content_tag(:span, type, class: 'divider')) +
-          safe_join(layers.map { |l| GroupDecorator.new(l) }) do |l|
-            l.use_hierarchy_from_parent(layer)
-            content_tag(:li, class: l.archived_class) do
-              link_to(l.display_name, active_path(l),
-                      title: l.to_s, data: { turbo_submits_with: l.display_name })
-            end
-          end
+            safe_join(layers.map { |l| render_sub_layer(l.decorate)  })
+
+        end
+        safe_join(layers)
+      end
+
+      def render_sub_layer(l)
+        l.use_hierarchy_from_parent(layer)
+        content_tag(:li, class: l.archived_class) do
+          link_to(l.display_name, active_path(l),
+                  title: l.to_s, data: { turbo_submits_with: l.display_name })
         end
       end
 

@@ -82,7 +82,7 @@ class Person::Filter::Qualification < Person::Filter::Base
   end
 
   def no_qualification_scope(scope)
-    kind_ids = args[:qualification_kind_ids].join(',').presence
+    kind_ids = args[:qualification_kind_ids].map(&:to_i).join(',').presence
     joined = scope.left_joins(:qualifications) unless kind_ids
     joined ||= scope.joins <<~SQL
       LEFT OUTER JOIN qualifications ON qualifications.person_id = people.id

@@ -57,6 +57,29 @@
       "note": "The parameter is matched against a whitelist"
     },
     {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "64e5a99d16c09a728727fa367b1bf78226fc636ce622393da9a0e2b8e13d176c",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/qualification.rb",
+      "line": 108,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "where(\"qualifications.finish_at <= :date AND NOT EXISTS (#{\"SELECT 1 FROM qualifications q2\\nINNER JOIN qualification_kinds qk ON qk.id = q2.qualification_kind_id\\nWHERE q2.person_id = qualifications.person_id\\nAND #{subselect_kind_condition(qualification_kind_ids)}\\nAND (\\n  (q2.start_at <= :date AND (q2.finish_at IS NULL OR q2.finish_at >= :date)) OR\\n  (q2.finish_at < :date AND DATE_ADD(q2.finish_at, INTERVAL qk.reactivateable YEAR) >= :date)\\n)\\n\"})\", :date => Time.zone.today, :qualification_kind_ids => qualification_kind_ids)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Qualification",
+        "method": "s(:self).only_expired"
+      },
+      "user_input": "subselect_kind_condition(qualification_kind_ids)",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": "The parameter is a return value from a method and will always be one of two fixed strings"
+    },
+    {
       "warning_type": "Command Injection",
       "warning_code": 14,
       "fingerprint": "85d61578afc6e686b5355788bd6a7270dae137f6e7a17a447b49aadb6e6c2efb",
@@ -78,6 +101,29 @@
         77
       ],
       "note": "The parameter is matched against a whitelist"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "944ff4646935452c5987fd8b7a464d512229fadf57160da6a4fc414f1935d4c3",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/qualification.rb",
+      "line": 90,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "where(\"NOT EXISTS (SELECT 1 FROM qualifications q2 WHERE q2.person_id = qualifications.person_id AND #{subselect_kind_condition(qualification_kind_ids)} AND q2.start_at <= :date AND (q2.finish_at IS NULL OR q2.finish_at >= :date))\", :qualification_kind_ids => qualification_kind_ids, :date => Time.zone.today)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Qualification",
+        "method": "s(:self).not_active"
+      },
+      "user_input": "subselect_kind_condition(qualification_kind_ids)",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": "The parameter is a return value from a method and will always be one of two fixed strings"
     },
     {
       "warning_type": "SQL Injection",
@@ -126,6 +172,29 @@
       "note": "The command can only be executed in an authenticated context or locally"
     },
     {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "c7638f7f989e638581d685a8efd5d137143e3f9e15484367625fc86d43b77167",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/domain/person/filter/qualification.rb",
+      "line": 89,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "scope.joins(\"LEFT OUTER JOIN qualifications ON qualifications.person_id = people.id\\nAND qualifications.qualification_kind_id IN (#{args[:qualification_kind_ids].map(&:to_i).join(\",\")})\\n\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Person::Filter::Qualification",
+        "method": "no_qualification_scope"
+      },
+      "user_input": "args[:qualification_kind_ids].map(&:to_i).join(\",\")",
+      "confidence": "Weak",
+      "cwe_id": [
+        89
+      ],
+      "note": "All input values are ensured to be integer and thus not dangerous"
+    },
+    {
       "warning_type": "Command Injection",
       "warning_code": 14,
       "fingerprint": "cfcaf1eef7adc44bbe0c6bd2519f41a6d06189feddd4e3451c6b26b6e63329e8",
@@ -149,6 +218,6 @@
       "note": "The command can only be executed in an authenticated context or locally"
     }
   ],
-  "updated": "2024-03-04 08:40:02 +0100",
+  "updated": "2024-05-13 11:39:13 +0200",
   "brakeman_version": "6.1.2"
 }

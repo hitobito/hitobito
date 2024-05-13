@@ -1,14 +1,14 @@
-#!/usr/bin/env bash
+#!/usr/bin/env ruby
 
-export WAGONS=''
-export RAILS_ENV=test
-# export RAILS_TEST_DB_NAME=hit_core_test
+ENV['WAGONS'] = ''
+ENV['RAILS_ENV'] = 'test'
+# ENV['RAILS_TEST_DB_NAME'] = 'hit_core_test'
 
-# ensure that schema.rb is current for the test-db to load
-# bundle exec rake db:migrate
+# Ensure that schema.rb is current for the test-db to load
+# system('bundle exec rake db:migrate')
 
-if [[ $DISABLE_SPRING ]]; then
-  bundle exec rspec $@
+if ENV['DISABLE_SPRING']
+  system("bundle exec rspec #{ARGV.join(' ')}")
 else
-  bundle exec spring rspec $@
-fi
+  system("bundle exec spring rspec #{ARGV.join(' ')}")
+end

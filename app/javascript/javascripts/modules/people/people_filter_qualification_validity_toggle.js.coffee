@@ -4,7 +4,7 @@
 #  https://github.com/hitobito/hitobito.
 
 $(document).on 'click', 'input[id^=filters_qualification_validity]', () ->
-  if (this.value in ['all', 'none']) && $(this).is(':checked')
+  if (this.value in ['all', 'none', 'only_expired']) && $(this).is(':checked')
     $('input#filters_qualification_match_one').prop('checked', true)
     $('input#filters_qualification_match_all').prop('checked', false).attr('disabled', 'disabled')
     if this.value == 'all'
@@ -13,6 +13,10 @@ $(document).on 'click', 'input[id^=filters_qualification_validity]', () ->
     if this.value == 'none'
       $('fieldset#year-scope').hide()
       $('fieldset#reference-date').hide()
+    if this.value == 'only_expired'
+      $('fieldset#year-scope').hide()
+      $('fieldset#reference-date').show()
+
   else
     $('fieldset#year-scope').hide()
     $('fieldset#reference-date').show()

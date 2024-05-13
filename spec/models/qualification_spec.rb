@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -33,9 +33,9 @@ describe Qualification do
     end
 
     it 'orders by finish_at descending with nulls first' do
-      sl = create_qualification(:sl) # validity 2 year
-      gl = create_qualification(:gl) # validity 1 year
-      ql = create_qualification(:ql) # no validity, i.e. no finished_at set
+      sl = create_qualification(:sl, start_at: today) # validity 2 year
+      gl = create_qualification(:gl, start_at: today) # validity 1 year
+      ql = create_qualification(:ql, start_at: today) # no validity, i.e. no finished_at set
 
       expect(described_class.order_by_date).to eq [ql, sl, gl]
     end
@@ -234,7 +234,56 @@ describe Qualification do
       it { expect(Qualification.not_active([kind.id])).to be_blank }
       it { expect(Qualification.not_active([], today + 2.years)).to match_array([q]) }
       it { expect(Qualification.not_active([kind.id], today + 2.years)).to match_array([q]) }
+    end
 
+    context 'only_expired' do
+      let(:gl_leader) { qualification_kinds(:gl_leader) }
+
+      it { expect(Qualification.only_expired).to be_blank }
+      it { expect(Qualification.only_expired([kind.id])).to be_blank }
+      it { expect(Qualification.only_expired([], today + 2.years)).to match_array([q]) }
+      it { expect(Qualification.only_expired([kind.id], today + 2.years)).to match_array([q]) }
+      it { expect(Qualification.only_expired([-1], today + 2.years)).to be_empty }
+
+
+      context 'with another reactivateable qualification' do
+        let!(:gl_leader_active) {
+          Fabricate(:qualification, qualification_kind: gl_leader, start_at: 1.day.ago)
+        }
+        it { expect(Qualification.only_expired).to be_blank }
+        it { expect(Qualification.only_expired([kind.id])).to be_blank }
+        it { expect(Qualification.only_expired([], today + 2.years)).to match_array([q]) }
+        it { expect(Qualification.only_expired([kind.id], today + 2.years)).to match_array([q]) }
+        it { expect(Qualification.only_expired([], today + 4.years)).to match_array([q, gl_leader_active]) }
+        it { expect(Qualification.only_expired([kind.id, gl_leader.id], today + 4.years)).to match_array([q, gl_leader_active]) }
+      end
+
+      context 'when qualification never expires' do
+        before { q.update_columns(finish_at: nil) }
+
+        it { expect(Qualification.only_expired).to be_blank }
+        it { expect(Qualification.only_expired([kind.id])).to be_blank }
+        it { expect(Qualification.only_expired([], today + 2.years)).to be_blank }
+        it { expect(Qualification.only_expired([kind.id], today + 2.years)).to be_blank }
+      end
+
+      context 'when qualification is reactivateable for 2 years' do
+        before { kind.update_column(:reactivateable, 2) }
+
+        it { expect(Qualification.only_expired([], today + 2.years)).to be_empty }
+        it { expect(Qualification.only_expired([kind.id], today + 2.years)).to be_empty }
+        it { expect(Qualification.only_expired([], today + 5.years)).to match_array([q]) }
+        it { expect(Qualification.only_expired([kind.id], today + 5.years)).to match_array([q]) }
+      end
+
+      context 'when another expired qualification of same kind exists' do
+        let!(:inactive) { Fabricate(:qualification, qualification_kind: kind, person: person, start_at: start_date - 10.years) }
+
+        it { expect(Qualification.only_expired).to be_blank }
+        it { expect(Qualification.only_expired([kind.id])).to be_blank }
+        it { expect(Qualification.only_expired([], today + 2.years)).to match_array([inactive, q]) }
+        it { expect(Qualification.only_expired([kind.id], today + 2.years)).to match_array([inactive, q]) }
+      end
     end
 
     context 'only_reactivateable' do

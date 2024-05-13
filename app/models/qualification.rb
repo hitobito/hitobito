@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -83,22 +83,44 @@ class Qualification < ActiveRecord::Base
               date: date)
     end
 
-    def not_active(qualification_kind_ids = [], date = nil) # rubocop:disable Metrics/MethodLength
+    def not_active(qualification_kind_ids = [], date = nil)
       date ||= Time.zone.today
-      kind_condition =
-        if qualification_kind_ids.present?
-          'q2.qualification_kind_id IN (:qualification_kind_ids)'
-        else
-          'q2.qualification_kind_id = qualifications.qualification_kind_id'
-        end
       where('NOT EXISTS (SELECT 1 FROM qualifications q2 ' \
             'WHERE q2.person_id = qualifications.person_id ' \
-            "AND #{kind_condition} " \
-            'AND q2.start_at <= :date  ' \
-            'AND (q2.finish_at IS NULL OR q2.finish_at >= :date))',
+            "AND #{subselect_kind_condition(qualification_kind_ids)} " \
+            'AND q2.start_at <= :date AND (q2.finish_at IS NULL OR q2.finish_at >= :date))',
             qualification_kind_ids: qualification_kind_ids, date: date)
     end
 
+    def only_expired(qualification_kind_ids = [], date = nil) # rubocop:disable Metrics/MethodLength
+      date ||= Time.zone.today
+      active_or_reactivateable = <<~SQL
+        SELECT 1 FROM qualifications q2
+        INNER JOIN qualification_kinds qk ON qk.id = q2.qualification_kind_id
+        WHERE q2.person_id = qualifications.person_id
+        AND #{subselect_kind_condition(qualification_kind_ids)}
+        AND (
+          (q2.start_at <= :date AND (q2.finish_at IS NULL OR q2.finish_at >= :date)) OR
+          (q2.finish_at < :date AND DATE_ADD(q2.finish_at, INTERVAL qk.reactivateable YEAR) >= :date)
+        )
+      SQL
+      where(
+        "qualifications.finish_at <= :date AND NOT EXISTS (#{active_or_reactivateable})",
+        date: date, qualification_kind_ids: qualification_kind_ids
+      ).then do |s|
+        qualification_kind_ids.present? ? s.where(qualification_kind_id: qualification_kind_ids) : s
+      end
+    end
+
+    private
+
+    def subselect_kind_condition(qualification_kind_ids)
+      if qualification_kind_ids.present?
+        'q2.qualification_kind_id IN (:qualification_kind_ids)'
+      else
+        'q2.qualification_kind_id = qualifications.qualification_kind_id'
+      end
+    end
   end
 
   def duration

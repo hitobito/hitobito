@@ -33,7 +33,7 @@
         = radio_button_tag 'filters[qualification][match]',
                            'all',
                            filter_args[:match] == 'all',
-                          { disabled: :disabled } if %w(not_active none).include?(filter_args[:validity])
+                          { disabled: :disabled } if %w(not_active none only_expired).include?(filter_args[:validity])
         = t('people_filters.simple_radio.match.all')
 
   = field_set_tag(t('.prompt_validity')) do
@@ -62,6 +62,10 @@
                 attr: "filters[qualification][validity]",
                 value: 'none',
                 checked: filter_args[:validity] == 'none'
+      = render 'simple_radio',
+                attr: "filters[qualification][validity]",
+                value: 'only_expired',
+                checked: filter_args[:validity] == 'only_expired'
 
 = field_set_tag(t('.prompt_date'), id: 'reference-date', class: 'form-horizontal', style: "display: #{%w(all none).include?(filter_args[:validity]) ? 'none' : 'block'};") do
   .control-group.row

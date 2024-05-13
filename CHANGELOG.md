@@ -20,6 +20,7 @@
 *  Filtermöglichkeit für Personen mit keinen gültigen, aber reaktivierbaren Qualifikationen, inklusive Stichdatum (hitobito_sac_cas#333)
 *  Filtermöglichkeit für Personen mit keinen gültigen Qualifikationen, inklusive Stichdatum (hitobito_sac_cas#334)
 *  Filtermöglichkeit nach inaktiver Rolle (hitobito_sac_cas#335)
+*  Filtermöglichkeit nach niemals aktiver Qualifikation (hitobito_sac_cas#499)
 
 ## Version 2.0
 

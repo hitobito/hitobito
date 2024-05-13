@@ -17,7 +17,9 @@ class Person::Filter::Qualification < Person::Filter::Base
 
   def apply(scope)
     if args[:validity].to_s == 'not_active'
-      match_no_qualification_kind(scope)
+      no_active_qualification_scope(scope)
+    elsif args[:validity].to_s == 'none'
+      no_qualification_scope(scope)
     elsif args[:match].to_s == 'all'
       match_all_qualification_kinds(scope)
     else
@@ -65,10 +67,20 @@ class Person::Filter::Qualification < Person::Filter::Base
       merge(qualification_scope(scope))
   end
 
-  def match_no_qualification_kind(scope)
+  def no_active_qualification_scope(scope)
     scope.
       left_joins(:qualifications).
       merge(::Qualification.not_active(args[:qualification_kind_ids], reference_date))
+  end
+
+  def no_qualification_scope(scope)
+    kind_ids = args[:qualification_kind_ids].join(',').presence
+    joined = scope.left_joins(:qualifications) unless kind_ids
+    joined ||= scope.joins <<~SQL
+      LEFT OUTER JOIN qualifications ON qualifications.person_id = people.id
+      AND qualifications.qualification_kind_id IN (#{kind_ids})
+    SQL
+    joined.where(qualifications: { id: nil })
   end
 
   def qualification_scope(scope)

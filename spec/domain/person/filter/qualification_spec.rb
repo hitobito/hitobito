@@ -733,11 +733,11 @@ describe Person::Filter::Qualification do
           let(:gl_leader) { qualification_kinds(:gl_leader) }
           let(:qualification_kind_ids) { [sl.id, gl_leader.id] }
 
-          it 'excludes bl_leader because his gl_leader quali is reactivtable' do
+          it 'excludes bl_leader because his gl_leader quali is reactivateable' do
             expect(entries).to match_array([@bg_leader])
           end
 
-          it 'includes bl_leader because if gl_leader quali is no longer reactivtable' do
+          it 'includes bl_leader because if gl_leader quali is no longer reactivateable' do
             @bl_leader.qualifications
               .find_by(qualification_kind: gl_leader).update_columns(finish_at: 3.years.ago)
             expect(entries).to match_array([@bg_leader, @bl_leader])

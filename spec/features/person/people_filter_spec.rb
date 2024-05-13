@@ -143,7 +143,7 @@ describe PeopleController, js: true do
     it "adjusts filters when checking 'Abgelaufene, aber nicht gültige oder reaktivierbare Qualifikationen'" do
       choose 'Keine jemals erteilte Qualifikation'
       expect(page).not_to have_content 'Qualifikationsjahr einschränken'
-      expect(page).to have_content 'Stichdatum'
+      expect(page).not_to have_content 'Stichdatum'
       expect(page).not_to have_field 'Person hat ALLE diese Qualifikationen' # is disabled
       expect(page).to have_checked_field 'Person hat mindestens EINE dieser Qualifikationen'
     end

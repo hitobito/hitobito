@@ -845,6 +845,7 @@ ActiveRecord::Schema.define(version: 2024_05_03_120000) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string "encrypted_password"
+    t.string "membership_verify_token"
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"

@@ -213,11 +213,7 @@ body {
 #page-footer {
   padding-top: 0;
   color: $footer-color;
-  margin-top: -3rem;
   background-color: $footer-background;
-  @include responsive(phone, $media-tablet) {
-    padding: 20px;
-  }
 
   a[data-toggle="collapse"] {
     margin-top: -1px;
@@ -229,6 +225,10 @@ body {
   a[data-toggle="collapse"]:active {
     text-decoration: none;
     outline-style: none;
+  }
+
+  .margin-left-col {
+    width: 2rem;
   }
 
   #detail-info.collapse {

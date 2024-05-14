@@ -26,7 +26,8 @@
     top: 0;
   }
   .img {
-    width: 512px;
+    width: 522px;
+    height: 522px;
     max-width: 98vw;
     margin: 50px auto;
     padding: 5px;
@@ -37,16 +38,16 @@
   }
 }
 .profil {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   padding: 1px;
   .table-striped & {
     margin-left: -8px;
   }
 }
 .profil-big {
-  width: 72px;
-  height: 72px;
+  width: 78px;
+  height: 78px;
   padding: 2px;
   cursor: pointer;
 }

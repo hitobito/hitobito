@@ -904,4 +904,34 @@ describe Person do
       person.update!(nickname: 'Hellboy')
     end
   end
+
+  describe 'membership_verify_token' do
+    let(:person) { people(:top_leader) }
+
+    it 'sets token on first access' do
+      token = person.membership_verify_token
+
+      expect(token.length).to eq(24)
+      expect(Person.find_by(membership_verify_token: token)).to eq(person)
+    end
+
+    it 'creates other token if token is taken already' do
+      token = person.membership_verify_token
+      other_person = Fabricate(:person)
+      other_token = 'other-sweet-token'
+
+      expect(SecureRandom).to receive(:base58).and_return(token)
+      expect(SecureRandom).to receive(:base58).and_return(other_token)
+
+      expect(other_person.membership_verify_token).to eq(other_token)
+    end
+
+    it 'is not possible to set token manually' do
+      token = person.membership_verify_token
+      other_person = Fabricate(:person)
+      other_person.update!(membership_verify_token: token)
+
+      expect(other_person.membership_verify_token).not_to eq(token)
+    end
+  end
 end

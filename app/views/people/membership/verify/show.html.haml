@@ -1,0 +1,48 @@
+-# Copyright (c) 2012-2024, Schweizerischer Kanu-Verband. This file is part of
+-# hitobito_skv and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito_skv.
+
+- title = t('verify_membership.title')
+
+%html{lang: I18n.locale}
+  %head
+    %meta{charset: 'utf-8'}
+    %title= "#{Settings.application.name} - #{title}"
+    %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0'}
+    = stylesheet_pack_tag 'application'
+    = javascript_pack_tag 'membership_verify'
+  %body
+    #membership-verify
+      %header
+        %div{:id => 'logo'}
+          - logo = Settings.application.membership_verify_logo
+          - if logo
+            = wagon_image_pack_tag(logo.image, alt: Settings.application.name)
+          - else
+            = image_pack_tag('logo.png', alt: 'define logo in wagon settings (membership_verify_logo)')
+        #root-address
+          %strong
+            = root.name
+          = root.complete_address
+      #details
+        - if person
+          #member-img
+            = image_tag(upload_url(person, :picture))
+          #member-name
+            = person.full_name
+          - if member?
+            %div{:class => 'alert alert-success'}
+              %span.fas.fa-check
+              = t('verify_membership.status_valid')
+          - else
+            %div{:class => 'alert alert-danger'}
+              %span.fas.fa-times-circle
+              = t('verify_membership.status_invalid')
+
+        - else
+          %div{:class => 'alert alert-danger'}
+            %span.fas.fa-times-circle
+            = t('verify_membership.not_found')
+      #footer
+        = render 'layouts/footer'

@@ -101,6 +101,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :self_registration_reason_id,
     :privacy_policy_accepted_at,
     :blocked_at,
+    :membership_verify_token,
     :inactivity_block_warning_sent_at,
     :minimized_at
   ]
@@ -145,6 +146,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   include TwoFactorAuthenticatable
   include PersonTags::ValidationTagged
   include People::SelfRegistrationReasons
+  include People::MembershipVerification
 
   i18n_enum :gender, GENDERS
   i18n_setter :gender, (GENDERS + [nil])
@@ -155,11 +157,11 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def picture_default
-    'profil.png'
+    'profile.svg'
   end
 
   def picture_thumb_default
-    'profil_thumb.png'
+    'profile.svg'
   end
 
   class_attribute :used_attributes

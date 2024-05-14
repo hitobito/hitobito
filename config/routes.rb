@@ -20,6 +20,8 @@ Hitobito::Application.routes.draw do
     skip_controllers :applications, :token_info, :authorized_applications
   end
 
+  get '/verify_membership/:verify_token' => 'people/membership/verify#show', as: 'verify_membership'
+
   language_scope do
     namespace :oauth do
       resource :profile, only: :show

@@ -7,9 +7,11 @@
   .container-fluid
     .row
       - footer = Settings.application.footer
-      .col-3
-        - if footer.logo_image.present?
+      - if footer.logo_image.present?
+        .col-3
           = link_to wagon_image_pack_tag(footer.logo_image), footer.logo_url, target: '_blank'
+      - else
+        .margin-left-col
       .footer-content.col-9
         %p
           - footer.links.to_hash.fetch(I18n.locale, footer.links.to_hash).each do |label, url|

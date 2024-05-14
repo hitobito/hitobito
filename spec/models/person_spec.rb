@@ -915,13 +915,15 @@ describe Person do
       expect(Person.find_by(membership_verify_token: token)).to eq(person)
     end
 
-    it 'verifies that token is unique' do
+    it 'creates other token if token is taken already' do
       token = person.membership_verify_token
       other_person = Fabricate(:person)
+      other_token = 'other-sweet-token'
+
       expect(SecureRandom).to receive(:base58).and_return(token)
-      expect do
-        other_person.membership_verify_token
-      end.to raise_error(StandardError, 'token must be unique')
+      expect(SecureRandom).to receive(:base58).and_return(other_token)
+
+      expect(other_person.membership_verify_token).to eq(other_token)
     end
 
     it 'is not possible to set token manually' do

@@ -15,6 +15,12 @@ namespace :address do
   task :split, [:limit] => [:environment] do |_, args|
     limit = args.fetch(:limit, -1).to_i
 
+    require 'csv'
+    header = CSV.generate(col_sep: ';') do |csv|
+      csv << ['Typ', 'id', 'alte Adresse', 'Ergebnis', 'c/o', 'Strasse', 'Hausnummer', 'Postfach']
+    end
+    puts header
+
     Rake::Task[:'address:convert'].execute(model: Person, limit: limit)
 
     begin
@@ -57,35 +63,24 @@ namespace :address do
       )
 
       if limit.positive? && (errors.size + fails.size) >= limit
-        errors << ['XXXXXXX', 'more than 10 errors', 'ABORTED']
+        errors << ['XXXXXXX', "more than #{limit} errors", { reason: 'ABORTED' }]
         break
       end
     end
 
-    print("\n")
+    $stderr.print("\n")
 
     # reporting
-
-    puts "----- #{name} -----"
-    if errors.any?
-      puts '----- ERRORS/Partial Conversion'
-      errors.each do |id, addr, new_addr|
-        puts [id, addr, '->', new_addr.inspect].join("\n")
-        puts
+    require 'csv'
+    report = CSV.generate(col_sep: ';') do |csv|
+      errors.each do |id, old_addr, new_addr|
+        csv << [name, id, old_addr, 'partial', *new_addr.values]
       end
-      puts '----- IDs'
-      puts errors.map(&:first).join(', ')
-    end
-    if fails.any?
-      puts '----- FAILURES/no new address extracted'
-      fails.each do |id, addr|
-        puts [id, addr].join("\n")
-        puts
+      fails.each do |id, old_addr|
+        csv << [name, id, old_addr, 'failed', nil, nil, nil, nil]
       end
-      puts '----- IDs'
-      puts fails.map(&:first).join(', ')
     end
-    puts "----- #{name} #{errors.size + fails.size} / #{count} -----"
+    puts report if report.present?
 
     warn "#{name}: #{count}"
     warn "Errors: #{errors.size}"

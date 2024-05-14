@@ -157,11 +157,11 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def picture_default
-    'profil.png'
+    'profile.svg'
   end
 
   def picture_thumb_default
-    'profil_thumb.png'
+    'profile.svg'
   end
 
   class_attribute :used_attributes

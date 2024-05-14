@@ -19,7 +19,7 @@ module People::MembershipVerification
 
   def init_membership_verify_token
     token = SecureRandom.base58(24)
-    if Person.where(membership_verify_token: token).exists?
+    while Person.where(membership_verify_token: token).exists?
       raise 'token must be unique'
     end
     update_column(:membership_verify_token, token)

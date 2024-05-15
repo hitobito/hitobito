@@ -7,7 +7,7 @@ module MailingListsHelper
 
   def format_mailing_list_name(mailing_list)
     content_tag(:strong) do
-      if can?(:show, mailing_list)
+      if can?(:update, mailing_list)
         link_to(
           mailing_list.name,
           group_mailing_list_messages_path(mailing_list.group, mailing_list.id)

@@ -72,6 +72,7 @@ jobs:
 
       - name: 'Main Specs without features'
         run: |
+          git fetch --tags
           bundle exec rake ci:setup:env spec:without_features
 
   sphinx-specs:

@@ -12,7 +12,7 @@ class Event::CourseResource < EventResource
     attribute :applicant_count, :integer
     attribute :participant_count, :integer
     attribute :minimum_participants, :integer
-    attribute :number, :string
+    attribute :number, :string, filterable: true
     attribute :teamer_count, :integer
   end
 

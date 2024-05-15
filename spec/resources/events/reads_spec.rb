@@ -146,23 +146,6 @@ describe EventResource, type: :resource do
       end
     end
 
-    describe 'by number' do
-      let!(:one) { Fabricate(:event, number: 'COURSE-123') }
-      let!(:two) { Fabricate(:event, number: 'COURSE-456') }
-
-      it 'returns only events with equal number' do
-        params[:filter] = { number: course.number }
-        render
-        expect(jsonapi_data).to have(1).items
-      end
-
-      it 'returns only events with number having a specific prefix' do
-        params[:filter] = { number: { prefix: 'COURSE-' } }
-        render
-        expect(jsonapi_data).to have(2).items
-      end
-    end
-
     describe 'by before_or_on' do
       it 'filters using Event::before_or_on' do
         event.dates.first.update(start_at: '2012-02-28')

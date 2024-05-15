@@ -73,7 +73,7 @@ describe EventResource, type: :resource do
       date = d[0].sideload(:dates)[0]
       expect(date.label).to eq 'Kurs'
       expect(date.location).to be_blank
-      expect(date.start_at).to eq "2012-03-01T00:00:00+01:00"
+      expect(date.start_at).to eq '2012-03-01T00:00:00+01:00'
       expect(date.finish_at).to be_blank
     end
 

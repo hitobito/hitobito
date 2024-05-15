@@ -5,9 +5,9 @@
 
 - if @role_types
   - @role_types.each do |layer, groups|
-    %h4.filter-toggle=layer
+    %h3.filter-toggle.mt-4=layer if groups.any?
     - groups.each do |group, role_types|
-      .control-group
+      .control-group.mt-1
         = label_tag(nil, group, class: 'control-label filter-toggle')
         .controls
           - role_types.each do |role_type|

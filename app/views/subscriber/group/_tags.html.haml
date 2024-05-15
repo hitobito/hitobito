@@ -3,9 +3,9 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-%p= t('.only_add_persons_with_tags')
+%p.mb-2= t('.only_add_persons_with_tags')
 
-.shown
+.shown.mb-4
   = f.collection_select(:included_subscription_tags_ids,
                         @possible_tags,
                         :third,
@@ -16,9 +16,9 @@
                           data: { chosen_no_results: t('global.chosen_no_results'),
                                   placeholder: ' ' } })
 
-%p= t('.exclude_persons_with_tags')
+%p.mb-2= t('.exclude_persons_with_tags')
 
-.shown
+.shown.mb-4
   = f.collection_select(:excluded_subscription_tags_ids,
                         @possible_tags,
                         :third,

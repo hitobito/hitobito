@@ -37,6 +37,8 @@ if Rake::Task.task_defined?('spec:features') # only if current environment knows
         t.pattern = "./spec/#{dir}/**/*_spec.rb"
         t.rspec_opts = '--format Fivemat'
       end
+    rescue RuntimeError
+      nil
     end
 
     namespace :features do

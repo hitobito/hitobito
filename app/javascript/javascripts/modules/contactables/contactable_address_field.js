@@ -12,11 +12,7 @@ app.AddressTypeahead = {
     app.AddressTypeahead.find_form_element(form, 'housenumber').value = (data.number || '');
     app.AddressTypeahead.find_form_element(form, 'street').value = data.street;
 
-    if (!!app.AddressTypeahead.find_form_element('address')) {
-      return [data.street, data.number || ''].filter(Boolean).join(' ');
-    } else {
-      return data.street;
-    }
+    return data.street;
   },
   checkIfTypeaheadAvailable: function(e) {
     var addressField, form, typeaheadSupportedCountries;

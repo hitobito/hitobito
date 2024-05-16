@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2021-2022, CVP Schweiz. This file is part of
+#  Copyright (c) 2021-2024, CVP Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -143,7 +143,8 @@ describe Export::Pdf::Messages::Letter::Header do
 
   describe "sender address" do
     before do
-      top_group.address = "Belpstrasse 37"
+      top_group.street = "Belpstrasse"
+      top_group.housenumber = "37"
       top_group.town = "Bern"
     end
 

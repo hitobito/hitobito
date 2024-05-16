@@ -130,8 +130,17 @@ module PeopleHelper
   end
 
   def oneline_address(message)
-    recipient = message.message_recipients.find { |r| r.person_id == @person.id }
-    recipient.address.to_s.split("\n").join(", ") if recipient
+    person = message.message_recipients.find_by(person_id: @person.id)
+
+    if FeatureGate.enabled?("structured_addresses")
+      [
+        person.address_care_of,
+        person.address,
+        person.postbox
+      ].reject(&:blank).join(", ")
+    else
+      person.address.to_s.split("\n").join(", ")
+    end
   end
 
   def person_otp_qr_code(otp)

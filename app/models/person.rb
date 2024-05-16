@@ -92,9 +92,6 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :email, :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
     :gender, :birthday, :primary_group_id
   ]
-  if FeatureGate.disabled?("structured_addresses")
-    PUBLIC_ATTRS << :address
-  end
 
   INTERNAL_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
     :authentication_token, :contact_data_visible, :created_at, :creator_id,
@@ -125,10 +122,6 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
                                                    social_accounts: [:name], additional_emails: [:email]}
   ]
 
-  if FeatureGate.disabled?("structured_addresses")
-    FILTER_ATTRS << :address
-  end
-
   GENDERS = %w[m w].freeze
 
   # rubocop:disable Style/MutableConstant meant to be extended in wagons
@@ -138,13 +131,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     .merge(Settings.application
                                      .additional_languages&.to_hash || {})
 
-  # rubocop:disable Style/ConditionalAssignment intentional for easier deletion
-  if FeatureGate.enabled?("structured_addresses")
-    ADDRESS_ATTRS = %w[address_care_of street housenumber postbox zip_code town country]
-  else
-    ADDRESS_ATTRS = %w[address zip_code town country]
-  end
-  # rubocop:enable Style/ConditionalAssignment
+  ADDRESS_ATTRS = %w[address_care_of street housenumber postbox zip_code town country]
 
   # rubocop:enable Style/MutableConstant meant to be extended in wagons
 
@@ -280,15 +267,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   ### VALIDATIONS
 
-  if FeatureGate.disabled?("structured_addresses")
-    # data_quality is used as enum in https://github.com/hitobito/hitobito_sac_cas/blob/b25bb08eaa9733f903c9c9ce220fdafea1c21865/app/models/sac_cas/person.rb#L33
-    # validates_by_schema cannot be overridden inside a wagon because of the loading order,
-    # so it must be excluded in the core instead
-    validates_by_schema except: [:email, :address, :data_quality]
-    validates :address, length: {allow_nil: true, maximum: 1024}
-  else
-    validates_by_schema except: [:email, :data_quality]
-  end
+  validates_by_schema except: [:email, :data_quality]
   validates :email, length: {allow_nil: true, maximum: 255} # other email validations by devise
   validates :company_name, presence: {if: :company?}
   validates :language, inclusion: {in: LANGUAGES.keys.map(&:to_s)}
@@ -313,15 +292,11 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   scope :household, -> { where.not(household_key: nil) }
   scope :with_address, -> {
-    if FeatureGate.enabled?("structured_addresses")
-      where.not(street: [nil, ""])
-    else
-      where.not(address: [nil, ""])
-    end
+    where.not(street: [nil, ""])
       .where.not(zip_code: [nil, ""])
       .where.not(town: [nil, ""])
-      .where("(last_name IS NOT NULL AND last_name <> '') OR " \
-            "(company_name IS NOT NULL AND company_name <> '')")
+      .where('(last_name IS NOT NULL AND last_name <> "") OR ' \
+          '(company_name IS NOT NULL AND company_name <> "")')
   }
   scope :with_mobile, -> { joins(:phone_numbers).where(phone_numbers: {label: "Mobil"}) }
   scope :preload_picture, -> { includes(picture_attachment: :blob) }

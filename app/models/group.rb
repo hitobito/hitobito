@@ -105,10 +105,6 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :postbox, :zip_code, :town, :country, :description
   ]
 
-  if FeatureGate.disabled?("structured_addresses")
-    used_attributes << :address
-  end
-
   FeatureGate.if("groups.nextcloud") do
     used_attributes << :nextcloud_url
   end

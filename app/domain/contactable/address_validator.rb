@@ -35,11 +35,8 @@ module Contactable
     end
 
     def invalid?(person)
-      street, number = if FeatureGate.enabled?("structured_addresses")
-        [person.street, person.housenumber]
-      else
-        parse(person.address)
-      end
+      street = person.street
+      number = person.housenumber
       addresses = Address.for(person.zip_code, street)
       addresses.empty? || invalid_number?(addresses, number)
     end

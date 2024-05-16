@@ -76,6 +76,9 @@ TAGS
 .nvimrc
 .byebug_history
 
+# git knows to ignore its directory, other tools only using this file do not
+.git/
+
 # for experiments with webpack
 
 /public/packs

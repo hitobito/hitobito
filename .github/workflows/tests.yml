@@ -64,12 +64,15 @@ jobs:
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v4
+        with:
+          fetch-tags: true
 
       - name: 'Prepare'
         uses: ./.github/actions/core-ci-setup
 
       - name: 'Main Specs without features'
         run: |
+          git fetch --tags
           bundle exec rake ci:setup:env spec:without_features
 
   sphinx-specs:

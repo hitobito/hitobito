@@ -36,11 +36,7 @@ class Households::Address
   end
 
   def build_street_and_number
-    if FeatureGate.enabled?("structured_addresses")
-      [attrs[:street], attrs[:housenumber]].compact_blank.join(" ")
-    else
-      attrs[:address].to_s
-    end
+    [attrs[:street], attrs[:housenumber]].compact_blank.join(" ")
   end
 
   def build_zip_code_and_town

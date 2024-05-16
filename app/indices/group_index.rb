@@ -15,8 +15,6 @@ ThinkingSphinx::Index.define_partial :group do
   indexes "#{Group.table_name}.housenumber", as: :housenumber
   indexes "#{Group.table_name}.postbox", as: :postbox
 
-  indexes address # TODO: remove when cleaning structured_addresses migration
-
   indexes parent.name, as: :parent_name
   indexes parent.short_name, as: :parent_short_name
   indexes phone_numbers.number, as: :phone_number

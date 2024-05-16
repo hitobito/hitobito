@@ -14,7 +14,6 @@ ThinkingSphinx::Index.define_partial :person do
   indexes "#{Person.table_name}.housenumber", as: :housenumber
   indexes "#{Person.table_name}.postbox", as: :postbox
 
-  indexes address # TODO: remove when cleaning structured_addresses migration
   indexes zip_code, town, country, additional_information
 
   # sphinx can not search for date

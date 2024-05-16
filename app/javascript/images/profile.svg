@@ -1,10 +1,1 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Written by Treer (gitlab.com/Treer) -->
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="600" height="600" stroke="black" stroke-width="30" fill="none">
-
-  <title>Abstract user icon</title>
-	
-  <circle cx="300" cy="300" r="265"/>
-  <circle cx="300" cy="230" r="115"/>	
-  <path d="M106.81863443903,481.4 a205,205 1 0,1 386.36273112194,0" stroke-linecap="butt"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><path fill="#d1d3d9" d="M48 5c-7 0-15 5-19 10s-5 8-5 16c-1 7 1 14 4 20 5 8 11 14 20 14s15-6 20-14c3-6 5-13 4-20 0-8-1-11-5-16S55 5 48 5zM32 71c-6 0-17 4-25 9l-7 8v8h96v-8l-7-8a61 61 0 0 0-26-9l-15 1-15-1h-1z"/></svg>

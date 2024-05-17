@@ -62,7 +62,7 @@ describe Message::LetterWithInvoice do
     expect(message.invoice_list).to be_persisted
   end
 
-  describe "reading recipients and invoices", focus: true do
+  describe 'reading recipients and invoices' do
 
     let(:recipient) { people(:bottom_member) }
     let(:group) { groups(:top_layer) }

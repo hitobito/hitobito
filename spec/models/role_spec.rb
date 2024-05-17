@@ -575,7 +575,7 @@ describe Role do
     end
   end
 
-  context '#label_long adds group to role', focus: true do
+  context '#label_long adds group to role' do
     subject { role.label_long }
 
     context 'group with long key' do

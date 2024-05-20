@@ -81,6 +81,25 @@ describe Event::CourseResource, type: :resource do
     end
   end
 
+  describe 'filtering' do
+    describe 'by number' do
+      let!(:one) { Fabricate(:course, number: 'COURSE-123') }
+      let!(:two) { Fabricate(:course, number: 'COURSE-456') }
+
+      it 'returns only courses with equal number' do
+        params[:filter] = { number: course.number }
+        render
+        expect(jsonapi_data).to have(1).items
+      end
+
+      it 'returns only courses with number having a specific prefix' do
+        params[:filter] = { number: { prefix: 'COURSE-' } }
+        render
+        expect(jsonapi_data).to have(2).items
+      end
+    end
+  end
+
   describe 'including' do
     it 'may include leaders' do
       params[:include] = 'leaders'

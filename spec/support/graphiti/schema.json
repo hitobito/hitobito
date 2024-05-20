@@ -375,6 +375,21 @@
             "match",
             "not_match"
           ]
+        },
+        "number": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
         }
       },
       "relationships": {

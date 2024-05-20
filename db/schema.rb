@@ -371,6 +371,7 @@ ActiveRecord::Schema.define(version: 2024_05_03_120000) do
     t.boolean "notify_contact_on_participations", default: false, null: false
     t.decimal "training_days", precision: 5, scale: 2
     t.integer "minimum_participants"
+    t.boolean "automatic_assignment", default: false, null: false
     t.index ["kind_id"], name: "index_events_on_kind_id"
     t.index ["shared_access_token"], name: "index_events_on_shared_access_token"
   end
@@ -845,7 +846,6 @@ ActiveRecord::Schema.define(version: 2024_05_03_120000) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string "encrypted_password"
-    t.string "membership_verify_token"
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -880,6 +880,7 @@ ActiveRecord::Schema.define(version: 2024_05_03_120000) do
     t.string "self_registration_reason_custom_text", limit: 100
     t.datetime "inactivity_block_warning_sent_at"
     t.datetime "blocked_at"
+    t.string "membership_verify_token"
     t.index ["authentication_token"], name: "index_people_on_authentication_token"
     t.index ["confirmation_token"], name: "index_people_on_confirmation_token", unique: true
     t.index ["email"], name: "index_people_on_email", unique: true

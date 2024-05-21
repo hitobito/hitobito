@@ -103,6 +103,20 @@ describe Role::TypeList do
         { layer: 'Global', group: 'Global', role: Role::External }
       ])
     end
+  end
 
+  describe 'global groups and their children' do
+    before do
+      stub_const('Group::GlobalGroupChild::Member', Class.new(Role))
+      stub_const('Group::GlobalGroupChild',Class.new(Group) do
+        roles Group::GlobalGroupChild::Member
+      end)
+      allow(Group::GlobalGroup).to receive(:child_types).and_return([Group::GlobalGroup, Group::GlobalGroupChild])
+    end
+
+    it 'lists children of global group' do
+      list = Role::TypeList.new(Group::TopLayer)
+      expect(list.to_enum.to_h['Global'].keys).to match_array(['Global Group', 'Global', 'Gruppe'])
+    end
   end
 end

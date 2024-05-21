@@ -16,6 +16,7 @@ class Person::EventQueries
       .merge(Event::Participation.upcoming)
       .includes(event: [:groups])
       .joins(event: :dates)
+      .select("event_applications.*", "event_dates.start_at")
       .order("event_dates.start_at")
       .distinct.tap do |applications|
       Event::PreloadAllDates.for(applications.collect(&:event))
@@ -23,14 +24,16 @@ class Person::EventQueries
   end
 
   def upcoming_events
-    person.events
-      .upcoming
-      .merge(Event::Participation.active)
-      .merge(Event::Participation.upcoming)
-      .distinct
-      .includes(:groups)
-      .preload_all_dates
-      .order_by_date
+    Event.select("*").from(
+      person.
+      events.
+      upcoming.
+      merge(Event::Participation.active).
+      merge(Event::Participation.upcoming).
+      distinct_on(:id).
+      includes(:groups).select("events.*", "event_dates.start_at").
+      preload_all_dates
+    ).order_by_date
   end
 
   def alltime_participations

@@ -49,6 +49,6 @@ class Person::ColleaguesController < ApplicationController
   include Sortable
 
   self.sort_mappings = {
-    roles: [Person.order_by_role_statement].concat(Person.order_by_name_statement)
+    roles: [Person.order_by_role_statement, Person.order_by_name_statement]
   }
 end

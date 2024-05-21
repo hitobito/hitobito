@@ -83,8 +83,8 @@ class Role
     def find_global_group_types(group, layer, _group_layers = {})
       group_layers = {}
       find_group_layers(group, layer, group_layers)
-      group_layers.select { |_, layers| layers.uniq.size > 1 }
-                  .collect(&:first)
+      group_types = group_layers.select { |_, layers| layers.uniq.size > 1 }.keys
+      group_types.flat_map { |type| [type] + type.child_types  }.uniq
     end
 
     def find_group_layers(group, layer, group_layers)

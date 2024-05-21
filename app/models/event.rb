@@ -239,7 +239,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
         where(start_at: ..date.end_of_day)
       else
         joins(:dates).where(event_dates: { start_at: ..date.end_of_day })
-      end 
+      end
     end
 
     def after_or_on(date, subquery = false)

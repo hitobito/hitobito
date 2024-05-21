@@ -35,10 +35,10 @@ module Event::Participatable
   def participation_role_labels
     @participation_role_labels ||=
       Event::Role.joins(:participation)
-        .where(event_participations: {event_id: id})
-        .where('event_roles.label <> ""')
-        .distinct.order(:label)
-        .pluck(:label)
+                 .where('event_participations.event_id = ?', id)
+                 .where('event_roles.label <> \'\'')
+                 .distinct.order(:label)
+                 .pluck(:label)
   end
 
   # All assigned participations (no leaders/teamers)

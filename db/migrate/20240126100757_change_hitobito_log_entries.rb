@@ -15,9 +15,9 @@ class ChangeHitobitoLogEntries < ActiveRecord::Migration[6.1]
     execute <<~SQL
       UPDATE hitobito_log_entries
       SET category = CASE
-          WHEN category = 0 THEN 'webhook'
-          WHEN category = 1 THEN 'ebics'
-          WHEN category = 2 THEN 'mail'
+          WHEN CAST(category AS INTEGER) = 0 THEN 'webhook'
+          WHEN CAST(category AS INTEGER) = 1 THEN 'ebics'
+          WHEN CAST(category AS INTEGER) = 2 THEN 'mail'
           ELSE category
       END
     SQL

@@ -25,6 +25,7 @@ module Paranoia
     module ClassMethods
       def list
         with_translations.
+          select("#{self.table_name}.*", translated_label_column).
           order(:deleted_at, translated_label_column).
           distinct
       end

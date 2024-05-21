@@ -65,9 +65,9 @@ jobs:
     runs-on: 'ubuntu-20.04'
     env:
       HEADLESS: true
-      RAILS_DB_ADAPTER: mysql2
+      RAILS_DB_ADAPTER: postgresql
       RAILS_DB_HOST: 127.0.0.1
-      RAILS_DB_PORT: 33066
+      RAILS_DB_PORT: 5432
       RAILS_DB_USERNAME: hitobito
       RAILS_DB_PASSWORD: hitobito
       RAILS_DB_NAME: hitobito_test
@@ -75,20 +75,20 @@ jobs:
       RAILS_ENV: test
 
     services:
-      mysql:
-        image: 'mysql:5.7'
-        env:
-          MYSQL_USER: 'hitobito'
-          MYSQL_PASSWORD: 'hitobito'
-          MYSQL_DATABASE: 'hitobito_test'
-          MYSQL_ROOT_PASSWORD: 'root'
-        ports:
-          - '33066:3306'
-        options: >-
-          --health-cmd "mysqladmin ping"
-          --health-interval 10s
-          --health-timeout 10s
-          --health-retries 10
+      services:
+        postgres:
+          image: postgres:16
+          env:
+            POSTGRES_USER: hitobito
+            POSTGRES_PASSWORD: hitobito
+            POSTGRES_DB: hitobito_test
+          ports:
+            - '5432:5432'
+          options: >-
+            --health-cmd "pg_isready -U hitobito"
+            --health-interval 10s
+            --health-timeout 10s
+            --health-retries 10
       memcached:
         image: 'memcached'
         ports: [ '11211:11211' ]

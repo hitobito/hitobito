@@ -204,7 +204,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     end
 
     def order_by_date
-      joins(:dates).order('event_dates.start_at')
+      order(:start_at)
     end
 
     # Events with at least one date in the given year

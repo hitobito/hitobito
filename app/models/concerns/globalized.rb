@@ -35,6 +35,7 @@ module Globalized
 
     def list
       with_translations
+        .select("#{self.table_name}.*", translated_label_column)
         .order(translated_label_column)
         .distinct
     end

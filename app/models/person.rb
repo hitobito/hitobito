@@ -302,8 +302,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     end.
       where.not(zip_code: [nil, '']).
       where.not(town: [nil, '']).
-      where('(last_name IS NOT NULL AND last_name <> "") OR ' \
-            '(company_name IS NOT NULL AND company_name <> "")')
+      where('(last_name IS NOT NULL AND last_name <> \'\') OR ' \
+            '(company_name IS NOT NULL AND company_name <> \'\')')
   }
   scope :with_mobile, -> { joins(:phone_numbers).where(phone_numbers: { label: 'Mobil' }) }
 
@@ -311,13 +311,24 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   class << self
     def order_by_name
-      order(Arel.sql(order_by_name_statement.join(', ')))
+      select(:sort_name).order(:sort_name)
     end
 
     def order_by_name_statement
-      [company_case_column(:company_name, :last_name),
-       company_case_column(:last_name, :first_name),
-       company_case_column(:first_name, :nickname)]
+      "CASE
+        WHEN people.company = #{connection.quote(true)} THEN people.company_name
+        WHEN people.last_name IS NOT NULL AND people.last_name != '' THEN 
+          CASE
+            WHEN people.first_name IS NOT NULL AND people.first_name != '' THEN 
+              CONCAT(people.last_name, ', ', people.first_name)
+            ELSE 
+              people.last_name
+          END 
+        WHEN people.first_name IS NOT NULL AND people.first_name != '' THEN 
+          people.first_name
+        ELSE
+          people.nickname
+      END AS order_case"
     end
 
     def only_public_data

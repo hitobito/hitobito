@@ -67,7 +67,8 @@ class Calendars::Events
     events = Event.arel_table
     event = Arel.sql("'Event'")
     # special case for plain Events: type is NULL in the database
-    Arel::Nodes::NamedFunction.new("IFNULL", [events[:type], event]).eq(calendar_group.event_type)
+    Arel::Nodes::NamedFunction
+        .new('COALESCE', [events[:type], event]).eq(calendar_group.event_type)
   end
 
   def included_tags_condition

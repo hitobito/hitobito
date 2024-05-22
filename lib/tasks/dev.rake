@@ -41,6 +41,16 @@ namespace :dev do
         http://localhost:3000/oauth/profile
       BASH
     end
+
+    desc 'Obtain userinfo information'
+    task :userinfo, [:access_token] do |_, args| # rubocop:disable Rails/RakeEnvironment
+      access_token = args.fetch(:access_token)
+      sh <<~BASH
+        curl -s -H 'Accept: application/json' \
+        -H 'Authorization: Bearer #{access_token}' \
+        http://localhost:3000/oauth/userinfo | jq .
+      BASH
+    end
   end
 
   namespace :local do

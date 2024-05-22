@@ -13,11 +13,7 @@
         = link_to(t('global.link.override'), '#', title: t('.kind_overrides_link_title'),
             data: { action: "form-field-inheritance#override"})
 
-  - entry.used?(:state) do
-    - if entry.possible_states.present?
-      = f.labeled_belongs_to_field(:state, list: entry.state_collection, prompt: true)
-    - else
-      = f.labeled_input_field(:state)
+  = render 'state_field', f: f
 
   = render_extensions :main_fields, locals: { f: f }
 

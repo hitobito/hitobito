@@ -55,7 +55,6 @@ Doorkeeper::OpenidConnect.configure do
   # Expiration time on or after which the ID Token MUST NOT be accepted for processing. (default 120 seconds).
   # expiration 600
 
-  # Example claims:
   # claims do
   #   normal_claim :_foo_ do |resource_owner|
   #     resource_owner.foo
@@ -67,58 +66,12 @@ Doorkeeper::OpenidConnect.configure do
   # end
 
   claims do
-    claim(:email, scope: :email, response: [:user_info, :id_token]) { |resource_owner| resource_owner.email }
-    claim(:first_name, scope: :name) { |resource_owner| resource_owner.first_name }
-    claim(:last_name, scope: :name)  { |resource_owner| resource_owner.last_name }
-    claim(:nickname, scope: :name)   { |resource_owner| resource_owner.nickname }
-    claim(:address, scope: :name)    { |resource_owner| resource_owner.address }
-    claim(:zip_code, scope: :name)   { |resource_owner| resource_owner.zip_code }
-    claim(:town, scope: :name)       { |resource_owner| resource_owner.town }
-    claim(:country, scope: :name)    { |resource_owner| resource_owner.country }
-
-    claim(:roles, scope: :with_roles) do |resource_owner|
-      resource_owner.decorate.roles_for_oauth
-    end
+    # NOTE - We need this block as a placeholder, claims are configured via OidcClaimSetup
   end
 end
 
 Rails.application.config.after_initialize do
-  # Add some of the claims after the wagons have loaded
-
-  (Person::PUBLIC_ATTRS - [:id]).each do |attr|
-    key = "with_roles_#{attr}".to_sym
-    Doorkeeper::OpenidConnect.configuration.claims[key] =
-      Doorkeeper::OpenidConnect::Claims::NormalClaim.new(
-        name: attr.to_sym,
-        scope: :with_roles,
-        response: [:user_info],
-        generator: Proc.new do |resource_owner|
-          resource_owner.send(attr)
-        end
-      )
-  end
-
-  FeatureGate.if('groups.nextcloud') do
-    Doorkeeper::OpenidConnect.configuration.claims[:name] =
-      Doorkeeper::OpenidConnect::Claims::NormalClaim.new(
-        name: :name,
-        scope: :nextcloud,
-        response: [:user_info, :id_token],
-        generator: Proc.new do |resource_owner|
-          resource_owner.to_s
-        end
-      )
-
-    Doorkeeper::OpenidConnect.configuration.claims[:groups] =
-      Doorkeeper::OpenidConnect::Claims::NormalClaim.new(
-        name: :groups,
-        scope: :nextcloud,
-        response: [:user_info, :id_token],
-        generator: Proc.new do |resource_owner|
-          resource_owner.roles.map(&:nextcloud_group).uniq.compact.map(&:to_h)
-        end
-      )
-  end
+  OidcClaimSetup.new.run
 end
 
 class Doorkeeper::OpenidConnect::ClaimsBuilder

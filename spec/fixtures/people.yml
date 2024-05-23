@@ -83,7 +83,9 @@ top_leader:
   last_name: Leader
   email: top_leader@example.com
   encrypted_password: $2a$04$NOZgQ.icGMwuv6Ww8DvyjuHxjuj98iKQCwtALCo5CBDGo8bgWzfty #foobar
-  town: Supertown
+  address: Greatstreet 345
+  zip_code: 3456
+  town: Greattown
   additional_information: bla bla
   primary_group: top_group
   contact_data_visible: true

@@ -35,7 +35,7 @@ module Export::Tabular::Events
     # only the first leader is taken into account
     def leader
       leaders = entry.role_types.select(&:leader?)
-      @leader ||= entry.participations_for(*leaders).first.try(:person)
+      @leader ||= entry.participations_for(*leaders).to_a.first.try(:person)
     end
 
     def contact

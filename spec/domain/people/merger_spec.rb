@@ -93,7 +93,28 @@ describe People::Merger do
       expect(Person.where(id: duplicate.id)).not_to exist
     end
 
-    it "does also merge deleted roles" do
+    it 'does not merge role if same role with different created at already present on destination person' do
+      @source = duplicate
+      @target = person
+
+      Group::BottomGroup::Member.create!(group: groups(:bottom_group_one_one),
+                                         person: person)
+
+      @source.update(created_at: @source.roles.first.created_at + 3.days)
+
+      expect do
+        merger.merge!
+      end.to change(Person, :count).by(-1)
+
+      person_roles = person.roles.with_deleted
+      expect(person_roles.count).to eq(1)
+      group_ids = person_roles.map(&:group_id)
+      expect(group_ids).to include(groups(:bottom_group_one_one).id)
+
+      expect(Person.where(id: duplicate.id)).not_to exist
+    end
+
+    it 'does also merge deleted roles' do
       @source = duplicate
       @target = person
 

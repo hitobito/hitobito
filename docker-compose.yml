@@ -94,7 +94,7 @@ services:
   #   env_file: ./docker/mysql.env
 
   postgres:
-    image: postgres:14
+    image: postgres:16
     env_file: ./docker/postgres.env
     ports:
       - "5432:5432"

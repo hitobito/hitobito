@@ -53,7 +53,7 @@ describe Export::Tabular::People::PersonRow do
       let(:group) { groups(:bottom_group_one_one) }
       before { Fabricate(Group::BottomGroup::Member.name.to_s, group: group, person: person) }
 
-      it { expect(row.fetch(:roles)).to eq 'Member Bottom One / Group 11, Leader Top / TopGroup' }
+      it { expect(row.fetch(:roles)).to eq 'Leader Top / TopGroup, Member Bottom One / Group 11' }
     end
   end
 

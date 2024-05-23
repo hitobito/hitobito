@@ -105,7 +105,7 @@ describe Export::Pdf::Messages::Letter do
         expect(text_with_position(analyzer)).to eq [
           [71, 654, 'Top Leader'],
           [71, 644, 'Funkystreet 42'],
-          [71, 633, '4242 Supertown'],
+          [71, 633, '4242 Greattown'],
           [71, 531, 'Information'],
           [71, 502, 'Hallo'],
           [71, 481, 'Wir laden '],
@@ -143,7 +143,7 @@ describe Export::Pdf::Messages::Letter do
           [71, 460, 'Bis bald'],
           [71, 654, 'Top Leader'],
           [71, 644, 'Funkystreet 42'],
-          [71, 633, '4242 Supertown'],
+          [71, 633, '4242 Greattown'],
           [71, 531, 'Information'],
           [71, 502, 'Hallo'],
           [71, 481, 'Wir laden '],
@@ -171,7 +171,7 @@ describe Export::Pdf::Messages::Letter do
         expect(text_with_position).to eq [
           [71, 654, 'Top Leader'],
           [71, 644, 'Funkystreet 42'],
-          [71, 633, '4242 Supertown'],
+          [71, 633, '4242 Greattown'],
           [71, 531, 'Information'],
           [71, 502, 'Hallo'],
           [71, 481, 'Wir laden '],
@@ -196,7 +196,7 @@ describe Export::Pdf::Messages::Letter do
         expect(text_with_position).to eq [
           [71, 654, 'Top Leader'],
           [71, 644, 'Funkystreet 42'],
-          [71, 633, '4242 Supertown'],
+          [71, 633, '4242 Greattown'],
           [71, 654, 'Bottom Member'],
           [71, 644, 'Greatstreet 345'],
           [71, 633, '3456 Greattown']
@@ -262,7 +262,7 @@ describe Export::Pdf::Messages::Letter do
         [71, 460, 'Bis bald'],
         [71, 654, 'Top Leader'],
         [71, 644, 'Funkystreet 42'],
-        [71, 633, '4242 Supertown'],
+        [71, 633, '4242 Greattown'],
         [71, 531, 'Information'],
         [71, 502, 'Hallo'],
         [71, 481, 'Wir laden '],

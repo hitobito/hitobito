@@ -169,7 +169,7 @@ describe Export::Pdf::Messages::LetterWithInvoice do
             [360, 158, "3456 Greattown"],
             [71, 654, "Top Leader"],
             [71, 644, "Funkystreet 42"],
-            [71, 633, "4242 Supertown"],
+            [71, 633, "4242 Greattown"],
             [28, 290, "Empfangsschein"],
             [28, 265, "Konto / Zahlbar an"],
             [28, 254, "CH93 0076 2011 6238 5295 7"],
@@ -177,7 +177,7 @@ describe Export::Pdf::Messages::LetterWithInvoice do
             [28, 187, "Zahlbar durch"],
             [28, 175, "Top Leader"],
             [28, 164, "Funkystreet 42"],
-            [28, 152, "4242 Supertown"],
+            [28, 152, "4242 Greattown"],
             [28, 103, "Währung"],
             [85, 103, "Betrag"],
             [28, 92, "CHF"],
@@ -195,7 +195,7 @@ describe Export::Pdf::Messages::LetterWithInvoice do
             [360, 193, "Zahlbar durch"],
             [360, 181, "Top Leader"],
             [360, 170, "Funkystreet 42"],
-            [360, 158, "4242 Supertown"]
+            [360, 158, "4242 Greattown"]
           ]
         end
       end
@@ -250,7 +250,7 @@ describe Export::Pdf::Messages::LetterWithInvoice do
           [360, 158, "3456 Greattown"],
           [71, 654, "Top Leader"],
           [71, 644, "Funkystreet 42"],
-          [71, 633, "4242 Supertown"],
+          [71, 633, "4242 Greattown"],
           [71, 531, "Mitgliedsbeitrag"],
           [71, 502, "Hallo"],
           [71, 481, "Dein "],
@@ -264,7 +264,7 @@ describe Export::Pdf::Messages::LetterWithInvoice do
           [28, 187, "Zahlbar durch"],
           [28, 175, "Top Leader"],
           [28, 164, "Funkystreet 42"],
-          [28, 152, "4242 Supertown"],
+          [28, 152, "4242 Greattown"],
           [28, 103, "Währung"],
           [85, 103, "Betrag"],
           [28, 92, "CHF"],
@@ -283,7 +283,7 @@ describe Export::Pdf::Messages::LetterWithInvoice do
           [360, 193, "Zahlbar durch"],
           [360, 181, "Top Leader"],
           [360, 170, "Funkystreet 42"],
-          [360, 158, "4242 Supertown"]
+          [360, 158, "4242 Greattown"]
         ]
       end
     end

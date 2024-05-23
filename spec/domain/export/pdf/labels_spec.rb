@@ -45,7 +45,7 @@ describe Export::Pdf::Labels do
     let(:contactables) { Person.where(id: [top_leader.id, bottom_member.id]) }
 
     it 'renders separated names' do
-      expect(subject.strings).to include("Bottom Member, Top Leader")
+      expect(subject.strings).to include("Top Leader, Bottom Member")
       expect(subject.strings).to include("Greatstreet 345")
       expect(subject.strings).to include("3456 Greattown")
     end

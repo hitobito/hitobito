@@ -54,6 +54,7 @@ module People
 
         next unless dst_role.new_record?
 
+        dst_role.created_at = src_role.created_at
         dst_role.deleted_at = src_role.deleted_at
         dst_role.save!
       end
@@ -126,8 +127,9 @@ module People
 
     def role_attr_keys(src_role)
       attributes = src_role.used_attributes +
-        [:type, :group, :created_at] -
-        src_role.merge_excluded_attributes
+        [:type, :group] -
+        src_role.merge_excluded_attributes -
+        [:created_at]
       attributes.uniq
     end
   end

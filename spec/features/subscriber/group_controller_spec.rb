@@ -35,7 +35,7 @@ describe Subscriber::GroupController, js: true do
       expect(find('#subscription_subscriber_id', visible: false).value).to eq subscriber_id.to_s
 
       expect(find('#roles')).to have_selector('input[type=checkbox]', count: 9) # roles
-      expect(find('#roles')).to have_selector('h4', count: 2) # layers
+      expect(find('#roles')).to have_selector('h3', count: 2) # layers
 
       # check role and submit
       check('subscription_role_types_group::bottomgroup::leader')

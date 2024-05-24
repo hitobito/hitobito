@@ -75,6 +75,7 @@ module Dropdown
 
       def render(template)
         template.content_tag(:li) do
+
           template.link_to('#', id: 'toggle-household-labels') do
             render_checkbox(template)
           end
@@ -82,10 +83,10 @@ module Dropdown
       end
 
       def render_checkbox(template)
-        template.content_tag(:div, class: 'checkbox') do
+        template.content_tag(:div, class: 'checkbox dropdown-item') do
           template.content_tag(:label, for: :household) do
             template.safe_join([
-              template.check_box_tag(:household, '1', DEFAULT_STATE),
+              template.check_box_tag(:household, '1', DEFAULT_STATE, class: "me-2"),
               template.t('dropdown/people_export.household_option')
             ].compact)
           end

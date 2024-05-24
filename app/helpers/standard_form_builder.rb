@@ -441,7 +441,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   # Generates a help inline for fields
   def help_inline(text)
-    content_tag(:span, text, class: 'form-text d-inline mt-2')
+    content_tag(:span, "", class: "d-block") +
+    content_tag(:span, text, class: 'form-text d-block')
   end
 
   # Generates a help block for fields

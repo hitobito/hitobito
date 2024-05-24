@@ -9,7 +9,6 @@
                  @contacts.collect { |p| [p.to_s(:list), p.id] },
                  { include_blank: ta(:no_entry) },
                  class: 'form-select form-select-sm')
-      %br
       = f.help_inline(t('groups.form.help_contact'))
     - else
       %p.text.mt-2= ta(:none_available)

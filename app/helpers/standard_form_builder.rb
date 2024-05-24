@@ -217,7 +217,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:class] += invalid
 
     radio_button(attr, value, html_options) +
-    label(id_from_value(attr, value), 
+    label(id_from_value(attr, value),
           class: "radio#{' inline' if inline} mt-2 form-check-label" + invalid) do
       caption
     end
@@ -235,8 +235,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     hidden_field = index.zero? ? @template.hidden_field_tag(name, index) : ''
     invalid = errors_on?(attr) ? " is-invalid" : ""
 
-    @template.check_box_tag(name, index + 1, checked, 
-                            id: sanitized_id, 
+    @template.check_box_tag(name, index + 1, checked,
+                            id: sanitized_id,
                             class: "form-check-input align-label" + invalid) +
     hidden_field.html_safe +
     @template.label_tag(sanitized_id, class: "checkbox mt-2 form-check-label " + invalid) do
@@ -441,7 +441,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   # Generates a help inline for fields
   def help_inline(text)
-    content_tag(:span, text, class: 'form-text d-inline ms-3 mt-2')
+    content_tag(:span, text, class: 'form-text d-inline mt-2')
   end
 
   # Generates a help block for fields

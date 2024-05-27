@@ -9,7 +9,7 @@ To get started with the project following steps are required:
 for the recommended 🚢 docker development setup.
 
 
-- [ ] Make sure Tests 👨‍🔬 are running, look at [Tests](01_01_testing)
+- [ ] Make sure Tests 👨‍🔬 are running, look at [Tests](02_testing)
 
 
 - [ ] Check if you can access the mailcatcher which run on [http://localhost:1080](http://localhost:1080)
@@ -81,7 +81,7 @@ Run the following rake tasks inside rails, rails-test container:
 * Authentification
   * [OAuth](08_oauth.md)
 * Deployment
-  * [Deployment](02_deployment.md)
+  * [Deployment](../operation/01_deployment)
 
 ---
 

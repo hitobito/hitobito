@@ -257,7 +257,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   validates :language, inclusion: { in: LANGUAGES.keys.map(&:to_s) }
   validates :birthday,
             timeliness: { type: :date, allow_blank: true, before: Date.new(10_000, 1, 1) }
-  validates :additional_information, length: { allow_nil: true, maximum: 2**16 - 1 }
+  validates :additional_information, length: { allow_nil: true, maximum: (2**16) - 1 }
   validate :assert_has_any_name
   validates :address, length: { allow_nil: true, maximum: 1024 }
 
@@ -270,9 +270,9 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   before_validation :override_blank_email
   before_validation :remove_blank_relations
+  after_update :schedule_duplicate_locator
   before_destroy :destroy_roles
   before_destroy :destroy_person_duplicates
-  after_update :schedule_duplicate_locator
 
   ### Scopes
 
@@ -281,7 +281,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     where.not(address: [nil, '']).
       where.not(zip_code: [nil, '']).
       where.not(town: [nil, '']).
-      where('(last_name IS NOT NULL AND last_name <> "") OR '\
+      where('(last_name IS NOT NULL AND last_name <> "") OR ' \
             '(company_name IS NOT NULL AND company_name <> "")')
   }
   scope :with_mobile, -> { joins(:phone_numbers).where(phone_numbers: { label: 'Mobil' }) }
@@ -334,7 +334,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
     def company_case_column(if_company, otherwise)
       "CASE WHEN people.company = #{connection.quoted_true} " \
-      "THEN people.#{if_company} ELSE people.#{otherwise} END"
+        "THEN people.#{if_company} ELSE people.#{otherwise} END"
     end
   end
 
@@ -359,11 +359,9 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   alias privacy_policy_accepted privacy_policy_accepted?
 
   def privacy_policy_accepted=(value)
-    if %w(1 yes true).include?(value.to_s.downcase)
-      self.privacy_policy_accepted_at = Time.now.utc
-    else
-      self.privacy_policy_accepted_at = nil
-    end
+    self.privacy_policy_accepted_at = if %w(1 yes true).include?(value.to_s.downcase)
+                                        Time.now.utc
+                                      end
   end
 
   def to_s(format = :default)
@@ -444,7 +442,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   # Is this person blocked?
   def blocked?
-    read_attribute(:blocked_at).present?
+    has_attribute?(:blocked_at) && blocked_at?
   end
 
   ### OTHER INSTANCE METHODS

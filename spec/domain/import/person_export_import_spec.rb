@@ -39,7 +39,7 @@ describe 'export import person' do
 
     import(csv_without_bom)
 
-    imported = Person.find_by_email('exporter@hitobito.example.org')
+    imported = Person.find_by(email: 'exporter@hitobito.example.org')
     expect(imported).not_to eq(exported)
 
     excluded = %w(id created_at updated_at primary_group_id contact_data_visible email last_name
@@ -58,7 +58,7 @@ describe 'export import person' do
     Export::Tabular::People::PeopleFull.csv([person])
   end
 
-  def import(csv)
+  def import(csv) # rubocop:disable Metrics/AbcSize
     parser = Import::CsvParser.new(csv)
     parser.parse
 

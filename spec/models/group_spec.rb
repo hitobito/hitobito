@@ -719,7 +719,7 @@ describe Group do
 
       expect do
         top_layer.save!
-      end.not_to change { MountedAttribute.count }
+      end.not_to(change { MountedAttribute.count })
 
       expect(top_layer.foundation_year).to eq(1942)
     end
@@ -729,7 +729,7 @@ describe Group do
 
       expect do
         top_layer.save!
-      end.not_to change { MountedAttribute.count }
+      end.not_to(change { MountedAttribute.count })
 
       top_layer.reload
 
@@ -742,7 +742,7 @@ describe Group do
 
       expect do
         top_layer.save
-      end.not_to change { MountedAttribute.count }
+      end.not_to(change { MountedAttribute.count })
 
       expect(top_layer.errors).to be_present
       expect(top_layer.errors.first.message).to eq('muss grösser als 1850 sein')
@@ -753,7 +753,7 @@ describe Group do
 
       expect do
         top_layer.save
-      end.not_to change { MountedAttribute.count }
+      end.not_to(change { MountedAttribute.count })
 
       expect(top_layer.errors).to be_present
       expect(top_layer.errors.first.message).to eq('ist kein gültiger Wert')
@@ -816,8 +816,8 @@ describe Group do
       end
 
       it '#name= noops' do
-         expect { group.name = 'Another Name' }.
-           not_to change { group.read_attribute(:name) }
+        expect { group.name = 'Another Name' }.
+          not_to(change { group.read_attribute(:name) })
       end
     end
   end
@@ -845,7 +845,7 @@ describe Group do
       end
 
       it 'uniqueness is not validated for different parent_id' do
-        duplicate.parent_id = 99999
+        duplicate.parent_id = 99_999
         duplicate.validate
         expect(duplicate.errors[:type]).to be_empty
       end
@@ -861,19 +861,19 @@ describe Group do
 
       it 'when no children exist returns possible_children' do
         expect(group.addable_child_types).to match_array([
-                                                        Group::BottomGroup,
-                                                        Group::MountedAttrsGroup,
-                                                        Group::GlobalGroup
-                                                      ])
+                                                           Group::BottomGroup,
+                                                           Group::MountedAttrsGroup,
+                                                           Group::GlobalGroup
+                                                         ])
       end
 
       it 'when children exist returns possible_children' do
         Fabricate(Group::BottomGroup.name, parent: group)
         expect(group.addable_child_types).to match_array([
-                                                        Group::BottomGroup,
-                                                        Group::MountedAttrsGroup,
-                                                        Group::GlobalGroup
-                                                      ])
+                                                           Group::BottomGroup,
+                                                           Group::MountedAttrsGroup,
+                                                           Group::GlobalGroup
+                                                         ])
       end
     end
 
@@ -883,27 +883,27 @@ describe Group do
 
       it 'when no children exist returns possible_children' do
         expect(group.addable_child_types).to match_array([
-                                                        Group::BottomGroup,
-                                                        Group::MountedAttrsGroup,
-                                                        Group::GlobalGroup
-                                                      ])
+                                                           Group::BottomGroup,
+                                                           Group::MountedAttrsGroup,
+                                                           Group::GlobalGroup
+                                                         ])
       end
 
       it 'when only deleted children exist returns possible_children' do
         Fabricate(Group::BottomGroup.name, parent: group, deleted_at: 1.day.ago)
         expect(group.addable_child_types).to match_array([
-                                                        Group::BottomGroup,
-                                                        Group::MountedAttrsGroup,
-                                                        Group::GlobalGroup
-                                                      ])
+                                                           Group::BottomGroup,
+                                                           Group::MountedAttrsGroup,
+                                                           Group::GlobalGroup
+                                                         ])
       end
 
       it 'when children exist returns possible_children minus existing child types' do
         Fabricate(Group::BottomGroup.name, parent: group)
         expect(group.addable_child_types).to match_array([
-                                                        Group::MountedAttrsGroup,
-                                                        Group::GlobalGroup
-                                                      ])
+                                                           Group::MountedAttrsGroup,
+                                                           Group::GlobalGroup
+                                                         ])
       end
     end
   end

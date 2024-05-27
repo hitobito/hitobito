@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -12,7 +12,7 @@ require 'csv-safe'
 
 namespace :csv do
   desc 'Generates dummy csv file'
-  task :generate do
+  task :generate do # rubocop:disable Rails/RakeEnvironment
     csv_string = CSVSafe.generate do |csv|
       csv << person_attributes.keys
       5.times do
@@ -27,7 +27,7 @@ namespace :csv do
   def random_date
     from = Time.new(1970)
     to = Time.new(2000)
-    Time.at(from + rand * (to.to_f - from.to_f)).to_date
+    Time.at(from + (rand * (to.to_f - from.to_f))).to_date
   end
   # rubocop:enable Rails/TimeZone
 
@@ -67,8 +67,7 @@ namespace :csv do
       when 1 then hash[k] = " #{v}"
       when 2 then hash[k] = " #{v} "
       when 3 then hash[k] = (v[v.size / 2] = 'ä'; v) # rubocop:disable Style/Semicolon
-      when 4 then hash[k] = nil
-      when 5 then hash[k] = nil
+      when 4, 5 then hash[k] = nil
       end
       hash
     end

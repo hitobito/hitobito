@@ -106,3 +106,4 @@ config/mail.yml
 # generated rswag swagger files
 # (not used anymore, swagger is now generated on the fly with graphiti)
 /swagger
+.yardoc/

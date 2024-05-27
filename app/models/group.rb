@@ -163,8 +163,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   validates :type, uniqueness: { scope: :parent_id }, if: :static_name
   validates :name, presence: true, unless: :static_name
   validates :email, format: Devise.email_regexp, allow_blank: true
-  validates :description, length: { allow_nil: true, maximum: 2**16 - 1 }
-  validates :address, length: { allow_nil: true, maximum: 1024 }
+  validates :description, length: { allow_nil: true, maximum: (2**16) - 1 }
   validates :contact, permission: :show_full, allow_blank: true, if: :contact_id_changed?
   validates :contact, inclusion: { in: ->(group) { group.people.members } }, allow_nil: true
   validates :privacy_policy_title, length: { allow_nil: true, maximum: 64 }
@@ -279,7 +278,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
                         person_2: [{ roles: :group }, :groups, :primary_group])
   end
 
-  # TODO Concern?
+  # TODO: Concern?
   def archive!
     ActiveRecord::Base.transaction do
       self.archived_at = Time.zone.now
@@ -293,7 +292,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
       subscriptions.destroy_all
 
-      self.save!
+      save!
     end
   end
 
@@ -308,9 +307,9 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   def addable_child_types
     static_name_children = possible_children.select(&:static_name).map(&:sti_name)
     existing_static_name_children = Group.
-      without_deleted.
-      where(parent_id: id, type: static_name_children).
-      pluck(:type).uniq
+                                    without_deleted.
+                                    where(parent_id: id, type: static_name_children).
+                                    pluck(:type).uniq
 
     possible_children.select do |child_class|
       existing_static_name_children.exclude?(child_class.sti_name)

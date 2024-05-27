@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -22,7 +22,7 @@ class PeopleController < CrudController
                           [household_people_ids: []] +
                           [relations_to_tails_attributes: [:id, :tail_id, :kind, :_destroy]]
   FeatureGate.if(:person_language) do
-    self.permitted_attrs << [:language]
+    permitted_attrs << :language
   end
 
   # required to allow api calls
@@ -276,7 +276,7 @@ class PeopleController < CrudController
   end
 
   def model_scope
-    super.yield_self do |scope|
+    super.then do |scope|
       action_name == 'show' ? scope.includes(roles: :group) : scope
     end
   end

@@ -51,6 +51,6 @@ class Event::Qualifier::StartAtCalculator
   end
 
   def max_validity
-    @prolongation_kinds.collect(&:validity).compact.max&.years.to_i
+    @prolongation_kinds.collect(&:validity).compact.max.to_i.years
   end
 end

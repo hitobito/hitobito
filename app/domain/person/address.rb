@@ -31,7 +31,6 @@ class Person::Address
     else
       [@person.full_name.to_s.squish]
     end
-
   end
 
   def combine_household_names(members)
@@ -39,9 +38,11 @@ class Person::Address
   end
 
   def address
-    [@person.address.to_s.strip,
-     [@person.zip_code, @person.town].compact.join(' ').squish,
-     country]
+    [
+      @person.address.to_s.strip,
+      [@person.zip_code, @person.town].compact.join(' ').squish,
+      country
+    ]
   end
 
   def country

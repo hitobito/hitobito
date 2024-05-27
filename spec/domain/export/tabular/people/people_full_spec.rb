@@ -41,7 +41,10 @@ describe Export::Tabular::People::PeopleFull do
     end
 
     context 'people relations' do
-      before { person.relations_to_tails << PeopleRelation.new(head_id: person.id, tail_id: people(:bottom_member).id, kind: 'parent') }
+      before do
+        person.relations_to_tails << PeopleRelation.new(head_id: person.id,
+                                                        tail_id: people(:bottom_member).id, kind: 'parent')
+      end
       its([:people_relation_parent]) { should eq 'Elternteil' }
     end
   end

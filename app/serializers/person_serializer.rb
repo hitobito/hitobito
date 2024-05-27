@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2014, CEVI Regionalverband ZH-SH-GL. This file is part of
+#  Copyright (c) 2014-2024, CEVI Regionalverband ZH-SH-GL. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -85,7 +85,7 @@
 class PersonSerializer < ApplicationSerializer
   include ContactableSerializer
 
-  schema do
+  schema do # rubocop:disable Metrics/BlockLength
     details = h.can?(:show_details, item)
     full = h.can?(:show_full, item)
 
@@ -98,9 +98,11 @@ class PersonSerializer < ApplicationSerializer
                    :nickname,
                    :company_name,
                    :company,
-                   :email,
-                   :address,
-                   :zip_code,
+                   :email
+
+    property :address, item.address # computed, not a real attribute
+
+    map_properties :zip_code,
                    :town,
                    :country,
                    :household_key

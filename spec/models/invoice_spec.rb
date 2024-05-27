@@ -183,7 +183,7 @@ describe Invoice do
     expect(invoice.filename(:pdf)).to eq 'Rechnung-834963567-1.pdf'
   end
 
-  it '.to_contactable' do
+  it '.to_contactables' do
     expect(contactables(recipient_address: 'test')).to have(1).item
     expect(contactables(recipient_address: 'test').first.address).to eq 'test'
     expect(contactables({})).to be_empty

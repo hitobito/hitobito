@@ -40,7 +40,8 @@ describe Event::ParticipationContactDatasController, type: :controller do
 
     it 'shows all contact fields by default' do
 
-      get :edit, params: { group_id: course.groups.first.id, event_id: course.id, event_role: { type: 'Event::Course::Role::Participant' } }
+      get :edit, params: { group_id: course.groups.first.id, event_id: course.id,
+                           event_role: { type: 'Event::Course::Role::Participant' } }
 
       contact_attrs = [:first_name, :last_name, :nickname,
                        :company_name, :zip_code, :town,
@@ -78,9 +79,13 @@ describe Event::ParticipationContactDatasController, type: :controller do
 
     it 'validates contact attributes and person attributes' do
 
-      contact_data_params = { first_name: 'Hans', last_name: 'Gugger', email: 'invalid', nickname: '' }
+      contact_data_params = { first_name: 'Hans', last_name: 'Gugger', email: 'invalid',
+                              nickname: '' }
 
-      post :update, params: { group_id: group.id, event_id: course.id, event_participation_contact_data: contact_data_params, event_role: { type: 'Event::Course::Role::Participant' } }
+      post :update,
+           params: { group_id: group.id, event_id: course.id,
+                     event_participation_contact_data: contact_data_params,
+                     event_role: { type: 'Event::Course::Role::Participant' } }
 
       is_expected.to render_template(:edit)
 

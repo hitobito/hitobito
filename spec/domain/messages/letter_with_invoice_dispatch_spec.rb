@@ -51,7 +51,7 @@ describe Messages::LetterWithInvoiceDispatch do
 
   it 'tracks error during invoice creation' do
     expect_any_instance_of(Invoice).to receive(:save).and_return(false)
-    expect { dispatch.run }.not_to change { Invoice.count }
+    expect { dispatch.run }.not_to(change { Invoice.count })
     expect(message.reload.success_count).to eq 0
     expect(message.reload.failed_count).to eq 1
     expect(message.invoice_list.recipients_processed).to eq 0

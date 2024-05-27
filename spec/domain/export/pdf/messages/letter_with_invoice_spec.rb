@@ -128,7 +128,7 @@ describe Export::Pdf::Messages::LetterWithInvoice do
 
     context "dynamic" do
       before do
-        people(:top_leader).update!(address: 'Funkystreet 42', zip_code: '4242')
+        people(:top_leader).update!(street: 'Funkystreet', housenumber: '42', zip_code: '4242')
         Fabricate(Group::BottomGroup::Member.name, group: groups(:bottom_group_one_one), person: people(:top_leader))
         Messages::LetterDispatch.new(letter).run
       end

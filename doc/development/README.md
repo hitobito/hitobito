@@ -7,7 +7,6 @@ Diese Dokumente beschreiben verschiedene Aspekte, welche bei der Entwicklung zu 
 ## Inhalt
 
 * [Getting started](01_getting_started.md)
-* [Deployment](../operation/01_deployment)
 * [Guidelines](03_guidelines.md)
 * [Wagons](04_wagons.md)
 * [CI/CD](06_ci_cd.md)
@@ -40,7 +39,6 @@ These documents describe different aspects that need to be considered when devel
 ## Contents
 
 * [Development environment](01_getting_started)
-* [Deployment](../operation/01_deployment)
 * [Guidelines](03_guidelines.md)
 * [Wagons](04_wagons.md)
 * [CI/CD](06_ci_cd.md)

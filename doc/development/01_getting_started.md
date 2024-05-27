@@ -55,7 +55,7 @@ Run the following rake tasks inside rails, rails-test container:
 
 ---
 
-### Stage 3: 
+### Stage 3: Start with coding
 
 
 - [ ] Look at the Github Board: [Github Project](https://github.com/orgs/hitobito/projects/14)

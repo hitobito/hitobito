@@ -2,12 +2,8 @@
 
 Folgende Dokumentationen sind hier zu finden:
 
-* [Betrieb](betrieb/README.md)
-* [Entwicklung](development/README.md)
-
----
 * [Developer](development/README.md)
 * [Operator](betrieb/README.md)
-* [User](betrieb/README.md)
+* [User](https://hitobito.readthedocs.io/de/latest/)
 
 Um die Code Dokumentation zu generieren, kann `rake doc:app` ausgeführt werden.

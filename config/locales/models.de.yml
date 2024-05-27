@@ -41,10 +41,15 @@ de:
       roles/termination:
         one: Austritt
         other: Austritte
+      household:
+        one: Haushalt
+        other: Haushalte
 
     attributes:
       roles/termination:
         terminate_on: Austrittsdatum
+      household:
+        members: Haushaltsmitglieder
 
     errors:
       models:
@@ -55,7 +60,15 @@ de:
               too_late: "darf nicht nach dem %{date} sein"
             role:
               not_terminatable: "ist nicht kündbar"
+        household:
+          attributes:
+            base:
+              minimum_members: Ein Haushalt muss aus mindestens zwei Personen bestehen
 
+        household_member:
+          attributes:
+            base:
+              in_other_household_present: "%{person_name} ist bereits Mitglied eines anderen Haushalts"
   activerecord:
     errors:
       messages:

@@ -10,7 +10,7 @@ require "spec_helper"
 describe DocumentationReader do
   subject { described_class.html(filename) }
 
-  let(:filename) { "development/05_json_api" }
+  let(:filename) { "developer/common/api/json_api" }
 
   it "can generate HTML form a doc-markdown" do
     is_expected.to include("<h2>")

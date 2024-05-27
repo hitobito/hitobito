@@ -1,11 +1,8 @@
-# hitobito Dokumentation
+![hitobito logo](https://user-images.githubusercontent.com/9592347/184715060-351453d4-d066-4ff6-8f82-95d3b524b62f.svg)
 
-Folgende Dokumentationen sind hier zu finden:
+# Documentation 🌄
 
-* [Architektur](architecture/README.md)
-* [Betrieb](betrieb/README.md)
-* [Entwicklung](development/README.md)
-* [E-Mail](e-mail/README.md)
-* [Optionale Features](features/README.md)
-
-Um die Code Dokumentation zu generieren, kann `rake doc:app` ausgeführt werden.
+* [Architecture](architecture/README.md)
+* [User](https://hitobito.readthedocs.io/de/latest/) (manage your organisation 🚀)
+* [Developer](developer/README.md) (dive 🤿 into coding)
+* [Operator](operator/README.md) (everything you need to know to run hitobito 🏃)

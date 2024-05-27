@@ -26,7 +26,7 @@ More information about [interfaces, api, oauth and oidc](doc/development/README.
 
 ## Architecture
 
-The architecture documentation in German can be found in [doc/architecture](doc/architecture).
+The architecture documentation in German can be found in [doc/architecture](doc/modules/common/architecture).
 
 Two topics shall be mentioned here explicitly:
 
@@ -71,7 +71,7 @@ Each role type has a set of permissions.
 They are general indications of what and where.
 All specific abilities of a user are derived from the role permissions she has in her different groups.
 
-See [Gruppen- und Rollentypen](doc/architecture/08_konzepte.md) for more details and
+See [Gruppen- und Rollentypen](doc/modules/common/architecture/08_konzepte.md) for more details and
 [hitobito_generic](https://github.com/hitobito/hitobito_generic) for a complete example group
 structure.
 

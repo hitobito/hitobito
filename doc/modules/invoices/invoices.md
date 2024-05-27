@@ -5,7 +5,7 @@
 Mit dem Rechnungsfeature von Hitobito können Rechnungen an Personen und Firmen gestellt werden. 
 
 * **Rechnung:** Einfache Rechnung mit einer oder mehreren Positionen. Kann auf einer Person, einem Event, einer Gruppe oder via Abo erstellt werden
-* **Brief:** Ein einfacher Brief, ohne Rechnungsteil. Wird über das Abo erstellt. Siehe [Messages](01_messages.md).
+* **Brief:** Ein einfacher Brief, ohne Rechnungsteil. Wird über das Abo erstellt. Siehe [Messages](../messages/messages.md).
 * **Rechnungsbrief:** Ein Brief mit einer Rechnung kombiniert. Wird über das Abo erstellt.
 
 QR Rechnungen können auf eine einfache Weise mit https://www.swiss-qr-invoice.org getestet werden.
@@ -14,7 +14,7 @@ QR Rechnungen können auf eine einfache Weise mit https://www.swiss-qr-invoice.o
 
 Damit eine Person das Rechnungsfeature nutzen kann, muss sie auf einem Layer/Gruppe eine Rolle mit :finance Permission haben. In einigen Wagons wird diese Rolle 'Kassier/In' genannt.
 
-![Auflistung Rechnungen](_diagrams/screenshots/invoices-list.png)
+![Auflistung Rechnungen](_diagrams/invoices-list.png)
 
 Rechnungen werden an Personen/Firmen gestellt und können über folgende Workflows erstellt werden:
 
@@ -22,7 +22,7 @@ Rechnungen werden an Personen/Firmen gestellt und können über folgende Workflo
 * Auf der Personenseite (Person#show) über den Button '+ Rechnung erstellen'. Die Rechnung wird nur an die ausgewählte Person gestellt.
 * Via Abo und Rechnungsbriefe. Es wird eine Sammelrechnung für alle Empfänger des Abos mit gültiger Adresse erstellt.
 
-![Neue Rechnung](_diagrams/screenshots/invoices-invoice-new.png)
+![Neue Rechnung](_diagrams/invoices-invoice-new.png)
 
 ## `Invoice`
 
@@ -40,8 +40,8 @@ In der Hauptnavigation unter **Rechnungen** können die Rechnungsartikel verwalt
 
 Sammelrechnungen dienen dazu eine Rechnung an mehrere Personen zu erstellen. Die erstellten Sammelrechnungen sind in der Hauptnavigation unter **Rechnungen** zu finden. 
 
-![Sammelrechnungen](_diagrams/screenshots/invoices-invoice-list.png)
+![Sammelrechnungen](_diagrams/invoices-invoice-list.png)
 
 ### `Message::LetterWithInvoice`
 
-Neben Briefen können für Abos (MailingList) [Rechnungsbriefe](01_messages.md#messageletterwithinvoice) für die Empfänger erstellt werden. Der `Message::LetterWithInvoice`-Eintrag wird dabei mit einer Sammelrechnung `InvoiceList` verknüpft.
+Neben Briefen können für Abos (MailingList) [Rechnungsbriefe](../messages/messages.md#messageletterwithinvoice) für die Empfänger erstellt werden. Der `Message::LetterWithInvoice`-Eintrag wird dabei mit einer Sammelrechnung `InvoiceList` verknüpft.

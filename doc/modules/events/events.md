@@ -8,7 +8,7 @@ Viele Event Features sind in den Wagons customized, diese Dokumentation bezieht 
 
 ## Participations
 
-Personen (Person) werden via [Participations](./events/participations.md) (Participation) an Events angemeldet.
+Personen (Person) werden via [Participations](participations.md) (Participation) an Events angemeldet.
 
 ## Kurse
 

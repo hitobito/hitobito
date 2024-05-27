@@ -9,9 +9,12 @@ Mit Hitobito können Nachrichten (Briefe, SMS, Mails, usw...) via Abos an versch
 
 _Klassendiagramm Messagesmodul._
 
-![Ansicht Gruppe](_diagrams/screenshots/mailing-lists.png)
+![Ansicht Gruppe](_diagrams/mailing-lists.png)
 
 _Ansicht der Abos einer Gruppe_
+
+### E-Mail
+[Detailldokumentation](e-mail/README.md)
 
 ### `Person`
 Person ist das zentrale Model in Hitobito für Personen und Firmen. Auf der Person sind auch die für das Message Modul relevanten Kontaktdaten wie E-Mail, Telefonnummer oder Postadresse gespeichert.
@@ -39,21 +42,21 @@ Das Message Model definiert die verschiedenen Message Typen von Hitobito (Single
 | `Message::BulkMailBounce` | Bounce Mail einer zuvor gesendeten BulkMail |         
 
 ### `Message::TextMessage`
-![Systemübersicht](_diagrams/screenshots/text-message.png)
+![Systemübersicht](_diagrams/text-message.png)
 
 _Ansicht einer neuen SMS Nachricht_
 
 Dieser Typ ist eine SMS (Textnachricht) und wird an eine Person versandt wenn diese eine Nummer vom Typ Mobil hat.
 
 ### `Message::Letter`
-![Systemübersicht](_diagrams/screenshots/letter.png)
+![Systemübersicht](_diagrams/letter.png)
 
 _Ansicht eines neuen Briefes_
 
 Brief für den Postversand welcher als PDF gerendert wird.
 
 ### `Message::LetterWithInvoice`
-![Systemübersicht](_diagrams/screenshots/letter-with-invoice.png)
+![Systemübersicht](_diagrams/letter-with-invoice.png)
 
 _Ansicht eines neuen Rechnungsbriefes_
 

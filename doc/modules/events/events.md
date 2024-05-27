@@ -13,3 +13,6 @@ Personen (Person) werden via [Participations](participations.md) (Participation)
 ## Kurse
 
 Bereits im Core existiert das STI Model Event::Course.
+
+## Optional Features
+* [Waiting List](optional_features/waiting-list.md)

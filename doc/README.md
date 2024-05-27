@@ -4,8 +4,6 @@ Folgende Dokumentationen sind hier zu finden:
 
 * [Betrieb](betrieb/README.md)
 * [Entwicklung](development/README.md)
-* [E-Mail](modules/messages/e-mail/README.md)
-* [Optionale Features](features/README.md)
 
 ---
 * [Developer](development/README.md)

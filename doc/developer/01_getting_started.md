@@ -64,7 +64,7 @@ Run the following rake tasks inside rails, rails-test container:
 - [ ] Grab a ticket which matches your skills
 
 
-- [ ] Check in the section below to which module your ticket belongs to.
+- [ ] Check in the section below to which module your ticket belongs to
 
 
 - [ ] Start contributing ‍💙🚀🚀

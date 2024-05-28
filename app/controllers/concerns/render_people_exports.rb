@@ -28,7 +28,7 @@ module RenderPeopleExports
     with_async_download_cookie(:pdf, filename) do |filename|
       Export::LabelsJob.new(:pdf,
                             current_user.id,
-                            people.pluck(:id),
+                            Person.from(people.select("people.id AS person_id")).pluck(:person_id),
                             group.id,
                             params.slice(:label_format_id, :household)
                                   .merge(filename: filename)).enqueue!

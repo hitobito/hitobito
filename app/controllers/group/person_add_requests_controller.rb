@@ -36,7 +36,7 @@ class Group::PersonAddRequestsController < ApplicationController
       for_layer(group).
       includes(:person,
                requester: { roles: :group }).
-      merge(Person.order_by_name)
+      order("people.sort_name")
   end
 
   def load_approvers

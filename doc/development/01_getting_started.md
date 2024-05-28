@@ -82,9 +82,6 @@ Run the following rake tasks inside rails, rails-test container:
   * [OAuth](08_oauth.md)
 * Deployment
   * [Deployment](../operation/01_deployment)
-
----
-
 * Common:
   * [In general](modules/common/common.md)
   * [Architecture](modules/common/architecture/README.md)

@@ -27,11 +27,11 @@ module RenderPeopleExports
   def render_pdf_in_background(people, group, filename)
     with_async_download_cookie(:pdf, filename) do |filename|
       Export::LabelsJob.new(:pdf,
-        current_user.id,
-        people.pluck(:id),
-        group.id,
-        params.slice(:label_format_id, :household)
-              .merge(filename: filename)).enqueue!
+                            current_user.id,
+                            Person.from(people.select("people.id AS person_id")).pluck(:person_id),
+                            group.id,
+                            params.slice(:label_format_id, :household)
+                                  .merge(filename: filename)).enqueue!
     end
   end
 

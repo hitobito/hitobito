@@ -31,11 +31,11 @@ class Group::PersonAddRequestsController < ApplicationController
   private
 
   def load_entries
-    Person::AddRequest
-      .for_layer(group)
-      .includes(:person,
-        requester: {roles: :group})
-      .merge(Person.order_by_name)
+    Person::AddRequest.
+      for_layer(group).
+      includes(:person,
+               requester: { roles: :group }).
+      order("people.sort_name")
   end
 
   def load_approvers

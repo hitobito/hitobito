@@ -191,10 +191,13 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   class << self
     # Default scope for event lists
     def list
-      order_by_date
-        .includes(:translations)
-        .preload_all_dates
-        .distinct
+      subquery = joins(:dates)
+                  .select("events.*", "event_dates.start_at")
+                  .includes(:translations)
+                  .preload_all_dates
+                  .distinct_on(:id)
+
+      Event.select("*").from(subquery, :events).order_by_date
     end
 
     def preload_all_dates
@@ -202,7 +205,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     end
 
     def order_by_date
-      joins(:dates).order("event_dates.start_at")
+      select(:start_at).order(:start_at)
     end
 
     # Events with at least one date in the given year
@@ -210,7 +213,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
       year = Time.zone.today.year if year.to_i <= 0
       start_at = Time.zone.parse "#{year}-01-01"
       finish_at = start_at + 1.year
-      joins(:dates).where(event_dates: {start_at: [start_at...finish_at]})
+      where(start_at: [start_at...finish_at])
     end
 
     # Event with start and end-date overlay

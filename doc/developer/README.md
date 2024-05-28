@@ -1,13 +1,11 @@
 ![hitobito logo](https://user-images.githubusercontent.com/9592347/184715060-351453d4-d066-4ff6-8f82-95d3b524b62f.svg)
 
-# Developer documentation
+# Developer documentation 👨‍💻
 
 These documents describe different aspects that need to be considered when developing.
 
 ## New here?
 [Getting started](01_getting_started.md)
-
----
 
 ## Intro into modules
 Hitobito is divided into several modules which hold different logic. If you are searching

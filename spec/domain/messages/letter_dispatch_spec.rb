@@ -26,6 +26,7 @@ describe Messages::LetterDispatch do
       subscriber: groups(:bottom_layer_one),
       role_types: [Group::BottomLayer::Member])
     Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one), person: top_leader)
+    top_leader.update!(address: nil, zip_code: nil, town: "Supertown")
   end
 
   it "updates success count" do

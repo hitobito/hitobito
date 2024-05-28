@@ -97,6 +97,9 @@ jobs:
             fi
           fi
 
+          repository=${{github.repository}}
+          echo "WAGON_NAME=${repository##*/}" >> $GITHUB_ENV
+
           echo "BRANCH_NAME=$current_branch_name" >> $GITHUB_ENV
           echo "WAGON_DEPENDENCY_REF=$WAGON_DEPENDENCY_REF" >> $GITHUB_ENV
           echo "CORE_REF=$CORE_REF" >> $GITHUB_ENV

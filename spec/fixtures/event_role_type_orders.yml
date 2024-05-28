@@ -1,3 +1,5 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
 event_role_leader:
   name: Event::Role::Leader
   order_weight: 1

@@ -9,11 +9,11 @@ top_group:
 bottom_layer:
   name: Group::BottomLayer
   order_weight: 3
-    
+
 bottom_group:
   name: Group::BottomGroup
   order_weight: 4
-  
+
 mounted_attrs_group:
   name: Group::MountedAttrsGroup
   order_weight: 5
@@ -21,6 +21,5 @@ mounted_attrs_group:
 toppers:
   name: Group::GlobalGroup
   order_weight: 6
-  
 
-  
+

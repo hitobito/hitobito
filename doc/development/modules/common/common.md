@@ -1,6 +1,7 @@
 # Common
 
-* [Architektur](architecture/README.md)
+* [Architecture](architecture/README.md)
+* [Interfaces](interfaces/interfaces.md)
 
 ## Optional Features
 * [Address Completion](optional_features/address-completion.md)

@@ -8,5 +8,5 @@
 - Person::LANGUAGES.map do |language_value, language_name|
   - id = "filters_language_allowed_values_#{language_value}"
   = label_tag(nil, class: 'checkbox ', for: id) do
-    = check_box_tag("filters[language][allowed_values][]", language_value, filter&.allowed_values&.include?(language_value.to_s), id: id) 
+    = check_box_tag("filters[language][allowed_values][]", language_value, filter&.allowed_values&.include?(language_value.to_s), id: id)
     = language_name

@@ -73,9 +73,6 @@ Run the following rake tasks inside rails, rails-test container:
 
 ### Where to look if you are 🔍 for.... 
 
-* API:
-  * [JSON](05_json_api.md)
-  * [REST](05_rest_api.md)
 * Accounts & Permissions
   * [Service Accounts](07_service_accounts.md)
 * Authentification
@@ -85,6 +82,7 @@ Run the following rake tasks inside rails, rails-test container:
 * Common:
   * [In general](modules/common/common.md)
   * [Architecture](modules/common/architecture/README.md)
+  * [Interfaces](modules/common/interfaces/interfaces.md)
 * Events
   * [In general](modules/events/events.md)
   * [Participations](modules/events/participations.md)

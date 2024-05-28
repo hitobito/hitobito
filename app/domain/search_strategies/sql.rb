@@ -10,17 +10,17 @@ module SearchStrategies
     MIN_TERM_LENGTH = 2
 
     SEARCH_FIELDS = {
-      "Person" => {
-        attrs: ["people.first_name", "people.last_name", "people.company_name", "people.nickname",
-          "people.company", "people.email", "people.zip_code",
-          "people.town", "people.country", "people.birthday", "people.additional_information",
-          "phone_numbers.number", "social_accounts.name",
-          "additional_emails.email"].then do |attrs|
-                 if FeatureGate.enabled?("structured_addresses")
-                   attrs << "people.address_care_of"
-                   attrs << "people.street"
-                   attrs << "people.housenumber"
-                   attrs << "people.postbox"
+      'Person' => {
+        attrs: ['people.first_name', 'people.last_name', 'people.company_name', 'people.nickname',
+                'people.email', 'people.zip_code',
+                'people.town', 'people.country', 'people.birthday', 'people.additional_information',
+                'phone_numbers.number', 'social_accounts.name',
+                'additional_emails.email'].then do |attrs|
+                 if FeatureGate.enabled?('structured_addresses')
+                   attrs << 'people.address_care_of'
+                   attrs << 'people.street'
+                   attrs << 'people.housenumber'
+                   attrs << 'people.postbox'
                  else
                    attrs << "people.address"
                  end

@@ -109,7 +109,10 @@ module Person::Groups
 
     # Order people by the order role types are listed in their group types.
     def order_by_role
-      order(Arel.sql(order_by_role_statement))
+      joins(:roles).
+      joins("INNER JOIN role_type_orders ON role_type_orders.name = roles.type")
+           .select(:order_weight)
+           .order("role_type_orders.order_weight ASC")
     end
 
     def order_by_role_statement

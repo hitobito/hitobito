@@ -28,7 +28,7 @@ describe Person::Household do
       leader.town = "dummy"
       household = assign_household(leader, Person.find(leader.id))
 
-      expect(leader.town).to eq "Supertown"
+      expect(leader.town).to eq 'Greattown'
       expect(leader.household_people_ids).to be_empty
       expect(household).to be_address_changed
       expect(household).not_to be_people_changed
@@ -59,7 +59,7 @@ describe Person::Household do
     it "adds first non writable person" do
       household = assign_household(member, leader)
 
-      expect(member.town).to eq "Supertown"
+      expect(member.town).to eq 'Greattown'
       expect(member.household_people_ids).to eq [leader.id]
       expect(household).to be_address_changed
       expect(household).to be_people_changed
@@ -82,7 +82,7 @@ describe Person::Household do
       member.update(household_key: 1)
 
       other = create(Group::TopGroup::Leader, groups(:top_group))
-      other.update(town: "Supertown")
+      other.update(town: 'Greattown', zip_code: 3456, address: 'Greatstreet 345')
       household = assign_household(member, other)
 
       expect(member.household_people_ids).to eq [leader.id, other.id]
@@ -92,7 +92,7 @@ describe Person::Household do
 
     it "does add another writable person if address is different" do
       other = create(Group::BottomLayer::Leader, groups(:bottom_layer_one))
-      other.update(town: "Supertown")
+      other.update(town: 'Greattown')
       leader.update(household_key: 1)
       other.update(household_key: 1)
 
@@ -137,7 +137,9 @@ describe Person::Household do
       expect(household(member)).to be_valid
     end
 
-    it "false if person address is not identical to readonly person address" do
+    it 'false if person address is not identical to readonly person address' do
+      leader.update!(address: nil, zip_code: nil, town: "Supertown")
+
       member.household_people_ids = [leader.id]
       expect(household(member)).not_to be_valid
       expect(member.errors).to have_key(:town)
@@ -195,8 +197,8 @@ describe Person::Household do
 
       expect(other.reload.household_key).to eq "1"
       expect(other.household_people).to match_array [leader, member]
-      expect(other.town).to eq "Supertown"
-      expect(member.reload.town).to eq "Supertown"
+      expect(other.town).to eq 'Greattown'
+      expect(member.reload.town).to eq 'Greattown'
     end
 
     it "raises if person address attrs differ from readonly person address attrs" do
@@ -229,7 +231,7 @@ describe Person::Household do
       leader.household_people_ids = [member.id]
       household(leader).send(:save)
 
-      leader.town = "Greattown"
+      leader.town = 'Supertown'
       expect do
         household(leader).send(:save)
       end.to change { PaperTrail::Version.count }.by(2)

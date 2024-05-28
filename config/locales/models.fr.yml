@@ -93,6 +93,8 @@ fr:
               blank: '§doit être rempli si "Affichage sur la page de connexion" est sélectionné'
         mailing_list:
           attributes:
+            mail_name:
+              not_allowed: "'%{mail_name}' ne peut pas être utilisé"
             additional_sender:
               invalid: "doit contenir des adresses e-mail au format abcd@ee.ch ou *@ee.ch. Multiples adresses doivent être séparées par ',' ou ';'."
         message/letter_with_invoice:
@@ -415,6 +417,10 @@ fr:
               m: Cher %{first_name},
               w: Chère  %{first_name},
               other: Cher %{first_name},
+      self_registration_reason:
+        one: Motif d'entrée prédéfini
+        many: Motifs d'entrée prédéfinis
+        other: Motifs d'entrée prédéfinis
       service_token:
         one: API-Key
         many: Clefs API
@@ -1131,10 +1137,10 @@ fr:
         excluded_calendar_tags: Tags exclues
   doorkeeper:
     scopes:
-      email: Lecture de ton adresse e-mail
-      name: Lecture de ton adresse e-mail et de ton nom
-      with_roles: Lecture de tes données de base et rôles
-      openid: Lecture de ton Token d'identité OIDC
+      email: Lecture de votre adresse e-mail. Pour que le login puisse se dérouler correctement, nous avons besoin de votre adresse e-mail.
+      name: Lecture de votre nom. Pour que le login puisse se dérouler correctement, nous avons besoin de votre nom.
+      with_roles: Lecture de vos données de base d'adresse et des permissions. Pour que les autorisations de votre compte puissent être enregistrées correctement, notre système vérifie les autorisations et les données de base de l'adresse, qui ne contiennent aucune autre information personnelle.
+      openid: Lecture de votre OpenID Connect (OIDC) Identity Tokens. Il s'agit d'une information utilisée pour authentifier votre utilisateur. Cela permet à notre système de confirmer l'identité de votre compte et de s'assurer qu'aucun accès non autorisé n'a lieu.
       api: Lire toutes les personnes, groupes, événements, abonnements et factures auxquels tu as accès via les interfaces JSON
       events: Lire tous les événements auxquels tu as accès
       groups: Lire tous les groupes auxquels tu as accès

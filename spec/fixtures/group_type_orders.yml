@@ -1,0 +1,34 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# one:
+#   column: value
+#
+# two:
+#   column: value
+
+top_layer:
+  name: Group::TopLayer
+  order_weight: 1
+
+top_group:
+  name: Group::TopGroup
+  order_weight: 2
+
+bottom_layer:
+  name: Group::BottomLayer
+  order_weight: 3
+    
+bottom_group:
+  name: Group::BottomGroup
+  order_weight: 4
+  
+mounted_attrs_group:
+  name: Group::MountedAttrsGroup
+  order_weight: 5
+
+toppers:
+  name: Group::GlobalGroup
+  order_weight: 6
+  
+
+  

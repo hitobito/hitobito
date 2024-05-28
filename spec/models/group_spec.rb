@@ -344,14 +344,14 @@ describe Group do
   context ".order_by_type" do
     it "has correct ordering without group" do
       expect(Group.order_by_type).to eq([groups(:top_layer),
-        groups(:top_group),
-        groups(:bottom_layer_one),
-        groups(:bottom_layer_two),
-        groups(:bottom_group_one_one),
-        groups(:bottom_group_one_one_one),
-        groups(:bottom_group_one_two),
-        groups(:bottom_group_two_one),
-        groups(:toppers)])
+                                         groups(:top_group),
+                                         groups(:bottom_layer_one),
+                                         groups(:bottom_layer_two),
+                                         groups(:bottom_group_two_one),
+                                         groups(:bottom_group_one_one),
+                                         groups(:bottom_group_one_one_one),
+                                         groups(:bottom_group_one_two),
+                                         groups(:toppers)])
     end
 
     it "has correct ordering with parent group" do

@@ -198,20 +198,8 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     # as they appear in possible_children, otherwise order them
     # hierarchically over all group types.
     def order_by_type(parent_group = nil)
-      reorder(Arel.sql(order_by_type_stmt(parent_group))) # acts_as_nested_set default to new order
-    end
-
-    def order_by_type_stmt(parent_group = nil)
-      types = with_child_types(parent_group)
-      if types.present?
-        statement = ["CASE #{Group.quoted_table_name}.type"]
-        types.each_with_index do |t, i|
-          statement << "WHEN '#{t.sti_name}' THEN #{i}"
-        end
-        statement << "END,"
-      end
-
-      "#{statement.join(" ")} lft"
+      joins("INNER JOIN group_type_orders ON group_type_orders.name = groups.type")
+           .reorder("group_type_orders.order_weight ASC")
     end
 
     private

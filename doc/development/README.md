@@ -1,6 +1,6 @@
 # Developer documentation
 
-These documents describe different aspects that need to be considered when developing. Using `rake doc:dev`, an HTML file with the complete documentation can be generated.
+These documents describe different aspects that need to be considered when developing.
 
 ## Contents
 

@@ -68,7 +68,7 @@ describe Invoice do
     invoice = create_invoice
     expect(invoice.recipient).to eq person
     expect(invoice.recipient_email).to eq person.email
-    expect(invoice.recipient_address).to eq "Top Leader\n\n3003 Supertown\n"
+    expect(invoice.recipient_address).to eq "Top Leader\nGreatstreet 345\n3003 Greattown\n"
   end
 
   it "#save sets esr_number but not participant_number for non esr invoice_config" do

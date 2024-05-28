@@ -105,7 +105,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :blocked_at,
     :membership_verify_token,
     :inactivity_block_warning_sent_at,
-    :minimized_at
+    :minimized_at,
+    :sort_name
   ]
 
   FILTER_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons

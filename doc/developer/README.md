@@ -18,7 +18,7 @@ for a specific module or feature take a look 🔍 at the list below.
 * Authentification
   * [OAuth](08_oauth.md)
 * Deployment
-  * [Deployment](../operation/01_deployment)
+  * [Deployment](../operator/01_deployment)
 * Common:
   * [In general](modules/common/common.md)
   * [Architecture](modules/common/architecture/README.md)

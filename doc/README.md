@@ -5,5 +5,5 @@
 Welcome to Hitobit the project FOR the people. 🫂.
 
 * [User](https://hitobito.readthedocs.io/de/latest/) (manage your organisations 🚀)
-* [Developer](development/README.md) (dive 🤿 into coding)
-* [Operator](operation/README.md) (run this shit 💩)
+* [Developer](developer/README.md) (dive 🤿 into coding)
+* [Operator](operator/README.md) (run this shit 💩)

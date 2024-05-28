@@ -18,15 +18,15 @@ A generic [user guide in German](https://hitobito.readthedocs.io/de/latest/) is 
 
 Check out our [development kit](https://github.com/hitobito/development/)
 
-More detailed development documentation can be found in [doc/development](doc/development).
+More detailed development documentation can be found in [doc/development](doc/developer).
 
-This is where you also find some [Deployment Instructions](doc/operation/01_deployment).
+This is where you also find some [Deployment Instructions](doc/operator/01_deployment).
 
-More information about [interfaces, api, oauth and oidc](doc/development/README.md#interfaces) is also avaible.
+More information about [interfaces, api, oauth and oidc](doc/developer/README.md#interfaces) is also avaible.
 
 ## Architecture
 
-The architecture documentation in German can be found in [doc/architecture](doc/development/modules/common/architecture).
+The architecture documentation in German can be found in [doc/architecture](doc/developer/modules/common/architecture).
 
 Two topics shall be mentioned here explicitly:
 
@@ -71,7 +71,7 @@ Each role type has a set of permissions.
 They are general indications of what and where.
 All specific abilities of a user are derived from the role permissions she has in her different groups.
 
-See [Gruppen- und Rollentypen](doc/development/modules/common/architecture/08_konzepte.md) for more details and
+See [Gruppen- und Rollentypen](doc/developer/modules/common/architecture/08_konzepte.md) for more details and
 [hitobito_generic](https://github.com/hitobito/hitobito_generic) for a complete example group
 structure.
 
@@ -83,7 +83,7 @@ With Wagons, arbitrary features and extensions may be created for Hitobito.
 As mentioned above, as there are no group types coming from Hitobito itself,
 at least one wagon is required to define group types in order to use Hitobito.
 
-See [Wagon Guidelines](doc/development/04_wagons.md) or [Wagons](http://github.com/codez/wagons)
+See [Wagon Guidelines](doc/developer/04_wagons.md) or [Wagons](http://github.com/codez/wagons)
 for more information on wagons and its available rake tasks.
 
 ## Contributing

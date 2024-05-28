@@ -1,21 +1,4 @@
-# Entwicklungs-Dokumentation
-
-> For English version see below
-
-Diese Dokumente beschreiben verschiedene Aspekte, welche bei der Entwicklung zu beachten sind. Mit `rake doc:dev` kann die eine HTML Datei mit der gesamten Dokumentation generiert werden.
-
-## Inhalt
-
-* [Der Einstieg](01_getting_started.md)
-* [Richtlinien](03_guidelines.md)
-* [Wagons](04_wagons.md)
-* [CI/CD](06_ci_cd.md)
-* [Schnittstellen](modules/common/interfaces/interfaces)
-* [Frontend & Assets](09_frontend/frontend)
-
-Alle Diagramme werden mit [Draw.io](https://draw.io) erstellt und jeweils als Original .xml sowie als .svg abgespeichert.
-
-# Developer documentation (English)
+# Developer documentation
 
 These documents describe different aspects that need to be considered when developing. Using `rake doc:dev`, an HTML file with the complete documentation can be generated.
 

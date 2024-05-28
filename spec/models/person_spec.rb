@@ -113,7 +113,7 @@ describe Person do
     p8 = Person.create(company: false, nickname: "BD")
 
     # Checking order by name with hardcoded nickname prefixes
-    expect(Person.order_by_name.collect(&:to_s)).to eq([p1, p3, p5, " / AD", p2, p4, p6, " / BD"].collect(&:to_s))
+    expect(Person.order_by_name.select("*").collect(&:to_s)).to eq([p1, p3, p5, " / AD", p2, p4, p6, " / BD"].collect(&:to_s))
   end
 
   it '#order_by_name orders people with same last_name by first_name' do
@@ -124,7 +124,7 @@ describe Person do
     p4 = Person.create(last_name: "CC")
 
     # Checking order by name with hardcoded nickname prefixes
-    expect(Person.order_by_name.collect(&:to_s)).to eq([p1, p3, p2, p4].collect(&:to_s))
+    expect(Person.order_by_name.select("*").collect(&:to_s)).to eq([p1, p3, p2, p4].collect(&:to_s))
   end
 
   context 'with one role' do
@@ -703,6 +703,13 @@ describe Person do
   end
 
   describe 'with_address scope' do
+
+    let(:top_leader) { people(:top_leader) }
+
+    before do
+      top_leader.update!(address: nil, zip_code: nil, town: "Supertown")
+    end
+
     it 'lists people with last_name, address, zip_code and town' do
       results = Person.with_address
 

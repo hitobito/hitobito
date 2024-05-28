@@ -18,8 +18,8 @@ module Event::Participatable
                    includes(:person).
                    references(:person).
                    order_by_role(self).
-                   merge(Person.order_by_name).
-                   distinct
+                   merge(Person.order_by_name.select("*"))
+                   #distinct?
   end
 
   def active_participations_without_affiliate_types

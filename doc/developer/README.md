@@ -11,12 +11,6 @@ These documents describe different aspects that need to be considered when devel
 Hitobito is divided into several modules which hold different logic. If you are searching
 for a specific module or feature take a look 🔍 at the list below.
 
-* Accounts & Permissions
-  * [Service Accounts](07_service_accounts.md)
-* Authentification
-  * [OAuth](08_oauth.md)
-* Deployment
-  * [Deployment](../operator/01_deployment)
 * Common:
   * [In general](modules/common/common.md)
   * [Architecture](modules/common/architecture/README.md)

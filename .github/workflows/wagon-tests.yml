@@ -88,7 +88,7 @@ jobs:
           fi
 
           CORE_REF="$INPUT_CORE_REF"
-          if [ -z "${INPUT_WDEP_REF}" ]; then
+          if [ -z "${INPUT_CORE_REF}" ]; then
             core_branch=$(git ls-remote --heads https://github.com/hitobito/hitobito | cut -d/ -f3- | grep -x "$current_branch_name")
             if [ "$core_branch" != '' ]; then
               CORE_REF="$current_branch_name"

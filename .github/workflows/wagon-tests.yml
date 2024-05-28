@@ -218,7 +218,7 @@ jobs:
   notify_statuscope:
     uses: ./.github/workflows/notify-statuscope.yml
     needs: [ build_test ]
-    if: ( success() || failure() ) && ( github.ref_name == 'master' ) && ( env.CORE_REF == 'master' ) && ( env.WAGON_DEPENDENCY_REF == 'master' )
+    if: ( success() || failure() ) && ( github.ref_name == 'master' ) && ( (inputs.core_ref || 'master') == 'master' ) && ( (inputs.wagon_dependency_ref || 'master') == 'master' )
     with:
       repository: ${{ inputs.wagon_repository }}
       test_result: ${{ needs.build_test.result == 'success' }}

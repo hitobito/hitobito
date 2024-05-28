@@ -1,0 +1,70 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+group_top_layer_top_admin:
+  name: Group::TopLayer::TopAdmin
+  order_weight: 1
+
+group_top_group_leader:
+  name: Group::TopGroup::Leader
+  order_weight: 2
+
+group_top_group_local_guide:
+  name: Group::TopGroup::LocalGuide
+  order_weight: 3
+
+group_top_group_secretary:
+  name: Group::TopGroup::Secretary
+  order_weight: 4
+
+group_top_group_local_secretary:
+  name: Group::TopGroup::LocalSecretary
+  order_weight: 5
+
+group_top_group_group_manager:
+  name: Group::TopGroup::GroupManager
+  order_weight: 6
+
+group_top_group_member:
+  name: Group::TopGroup::Member
+  order_weight: 7
+
+group_top_group_invisible_people_manager:
+  name: Group::TopGroup::InvisiblePeopleManager
+  order_weight: 8
+
+group_bottom_layer_leader:
+  name: Group::BottomLayer::Leader
+  order_weight: 9
+
+group_bottom_layer_local_guide:
+  name: Group::BottomLayer::LocalGuide
+  order_weight: 10
+
+group_bottom_layer_member:
+  name: Group::BottomLayer::Member
+  order_weight: 11
+
+group_bottom_layer_basic_permissions_only:
+  name: Group::BottomLayer::BasicPermissionsOnly
+  order_weight: 12
+
+group_bottom_group_leader:
+  name: Group::BottomGroup::Leader
+  order_weight: 13
+
+group_bottom_group_member:
+  name: Group::BottomGroup::Member
+  order_weight: 14
+
+group_global_group_leader:
+  name: Group::GlobalGroup::Leader
+  order_weight: 15
+
+group_global_group_member:
+  name: Group::GlobalGroup::Member
+  order_weight: 16
+
+role_external:
+  name: Role::External
+  order_weight: 17
+

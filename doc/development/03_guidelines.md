@@ -1,5 +1,8 @@
 ## Entwicklungs Guidelines
 
+Für Dokumentation von ArchitekturKonzepten (Fachliche Strukturen, Rolle, Anlässe, Kurse, Abilities
+..) siehe [doc/architectur/08_kozepte.md](doc/architectur/08_kozepte.md).
+
 ### Code Conventions
 
 Die Code Conventions werden mit Rubocop überprüft und sind in `.rubocop.yml` definiert.
@@ -17,21 +20,14 @@ Das selbe gilt für Warnungen, welche im CI auftreten (Brakeman, ...).
 
 Allgemeine Konventionen und Erklärungen für spezifische Bereiche.
 
-* Für jeden Link in den View mit `can?` prüfen, ob die Action auch erlaubt ist.
-* Permissions definieren grobe Bereiche, Constraints die Bedingungen für konkrete Aktionen. Eine
-Aktion entspricht in der Regel einer Controller Action und wird durch ein spezifisches Verb
-repräsentiert. Constraints sollen wenn möglich auf den bestehenden Permissions aufbauen und nur in
-Ausnahmen auf konkreten Rollen. Neue Permissions dürfen nur äusserts zurückhaltend und sehr gut
-begründet eingeführt werden.
-* Beim Überprüfen von Berechtigungen mit `can?` immer eine Action (bzw. das Symbol, welches die
-Aktion widerspiegelt) entspreched der jeweiligen Aktion verwenden. Negativbeispiel: Die Anzeige
-gewisser Attribute mit `can?(:update, entry)` überprüfen. Besser spezifisches Symbol einführen,
-falls noch nicht vorhanden, z.B. `can?(:show_sensitive_data, entry)`. Natürlich dürfen die gleichen
-Constraints wieder verwendet werden.
-* Abilities basieren immer auf einer Instanz (`subject`). Falls eine Action nicht auf einer Instanz
-agiert, sind `class_side` abilities zu definieren.
+* Commits immer mit dem Github Ticket versehen (#123).
 * Controller Specs rendern NIE eine View. Dafür sind die Regression Specs da.
-* Commits immer mit dem Redmine/Github Ticket versehen (fixes/refs #123).
+* Beim Überprüfen von Berechtigungen mit `can?` immer eine Action (bzw. das Symbol, welches die
+  Aktion widerspiegelt) entsprechend der jeweiligen Aktion verwenden. Negativbeispiel: Die Anzeige
+  gewisser Attribute mit `can?(:update, entry)` überprüfen. Besser spezifisches Symbol einführen,
+  falls noch nicht vorhanden, z.B. `can?(:show_sensitive_data, entry)`. Natürlich dürfen die
+  gleichen Constraints wieder verwendet werden.
+
 
 #### Durchklicken!
 
@@ -82,9 +78,10 @@ Ein beispielhafte Anleitung, wie in einem Wagon Attribute hinzugefügt werden k�
 * CSV Export (Adressexport? Voller Export?)
 * Log (Papertrail)
 
-#### Rollen umbennen / entfernen
+#### Rollen umbenennen / entfernen
 
 * Migration aller betroffenen `Role` Instanzen (`with_deleted`!).
+* Migration aller betroffenen `FutureRole` Instanzen.
 * Migration aller betroffenen `RelatedRoleType` Instanzen.
 * Migration aller Papertrail Versionen (`#object` und `#object_changes`).
 

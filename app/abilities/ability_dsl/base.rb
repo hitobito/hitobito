@@ -12,6 +12,7 @@ module AbilityDsl
   #
   #    permission(:group_read).may(:show).in_same_group
   #    permission(:layer_and_below_full).may(:update, :destroy).in_same_layer_or_below
+  #    general(:send_password_instructions).not_self
   #  end
   #
   # All permissions in the given block apply for a Person instance.

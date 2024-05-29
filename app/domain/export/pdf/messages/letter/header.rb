@@ -74,7 +74,7 @@ class Export::Pdf::Messages::Letter
 
     def render_shipping_info_text(width, height)
       shipping_method, text_height = shipping_methods[letter.shipping_method.to_sym]
-      text_box("#{shipping_method}<font size='8pt'>#{letter.pp_post}</font>",
+      text_box("#{shipping_method}<font size=#{8.pt}>#{letter.pp_post}</font>",
                inline_format: true, overflow: :truncate, single_line: true,
                width: width, height: height, at: [0, cursor + text_height * 0.75])
     end

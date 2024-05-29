@@ -50,6 +50,7 @@ describe Export::Pdf::Messages::Letter do
       end
 
       it 'renders text at positions without sender address' do
+
         expect(text_with_position).to match_array [
           [71, 654, 'Bottom Member'],
           [71, 644, 'Greatstreet 345'],

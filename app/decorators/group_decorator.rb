@@ -28,8 +28,12 @@ class GroupDecorator < ApplicationDecorator
     end
   end
 
+  def role_types
+    klass.role_types.sort_by(&:label)
+  end
+
   def possible_roles
-    klass.role_types.select do |type|
+    role_types.select do |type|
       # users from above cannot create non visible roles
       !type.restricted? &&
       (type.visible_from_above? || can?(:index_local_people, model))
@@ -37,7 +41,7 @@ class GroupDecorator < ApplicationDecorator
   end
 
   def allowed_roles_for_self_registration
-    klass.role_types.reject do |r|
+    role_types.reject do |r|
       r.restricted? ||
       r.permissions.any? { |p| Role::Types::WRITING_PERMISSIONS.include?(p) }
     end

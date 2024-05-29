@@ -17,22 +17,59 @@ describe GroupDecorator, :draper_with_helpers do
 
   describe 'possible roles' do
     its(:possible_roles) do
-      should eq [Group::TopGroup::Leader,
-                 Group::TopGroup::LocalGuide,
-                 Group::TopGroup::Secretary,
-                 Group::TopGroup::LocalSecretary,
-                 Group::TopGroup::GroupManager,
-                 Group::TopGroup::Member,
-                 Group::TopGroup::InvisiblePeopleManager,
-                 Role::External]
+      should eq [
+        Role::External,
+        Group::TopGroup::GroupManager,
+        Group::TopGroup::InvisiblePeopleManager,
+        Group::TopGroup::Leader,
+        Group::TopGroup::LocalGuide,
+        Group::TopGroup::LocalSecretary,
+        Group::TopGroup::Member,
+        Group::TopGroup::Secretary
+      ]
+    end
+  end
+
+  context 'Top Group Roles' do
+    let(:group) { groups(:top_group) }
+
+    it 'sorts the list alphabetically by label' do
+      common_arguments = { count: 1, scope: [:activerecord, :models] }
+
+      [[:'group/top_group/leader', 'Leader', 'X'],
+       [:'group/top_group/local_guide', 'Local guide', 'F'],
+       [:'group/top_group/secretary', 'Secretary', 'D'],
+       [:'group/top_group/local_secretary', 'Local secretary', 'L'],
+       [:'group/top_group/group_manager', 'Group manager', 'E'],
+       [:'group/top_group/member', 'Member', 'M'],
+       [:'group/top_group/invisible_people_manager', 'Invisible people manager', 'G'],
+       [:'role/external', 'External', 'H']].each do |class_path, class_name, sort_key|
+        expect(I18n).to receive(:translate).with(class_path,
+                                                 { default: [:role,
+                                                             class_name] }.merge(common_arguments))
+                                           .twice.and_return(sort_key)
+      end
+
+      expected_role_list_label = %w(D E F G H L M X)
+      expected_role_list_class = %w(Group::TopGroup::Secretary Group::TopGroup::GroupManager
+                                    Group::TopGroup::LocalGuide
+                                    Group::TopGroup::InvisiblePeopleManager
+                                    Role::External
+                                    Group::TopGroup::LocalSecretary
+                                    Group::TopGroup::Member
+                                    Group::TopGroup::Leader)
+
+      role_types = subject.role_types
+      expect(role_types.map(&:label)).to eq(expected_role_list_label)
+      expect(role_types.map(&:name)).to eq(expected_role_list_class)
     end
   end
 
   describe 'allowed_roles_for_self_registration' do
     its(:allowed_roles_for_self_registration) do
-      should eq [Group::TopGroup::LocalSecretary,
-                 Group::TopGroup::Member,
-                 Role::External]
+      should eq [Role::External,
+                 Group::TopGroup::LocalSecretary,
+                 Group::TopGroup::Member]
     end
 
     describe 'allowed_roles_for_self_registration in a bottom group' do
@@ -40,7 +77,7 @@ describe GroupDecorator, :draper_with_helpers do
 
       it 'should include roles which are not visible_from_above' do
         expect(subject.allowed_roles_for_self_registration).to eq [
-          Group::BottomGroup::Member, Role::External
+          Role::External, Group::BottomGroup::Member
         ]
       end
     end
@@ -119,7 +156,8 @@ describe GroupDecorator, :draper_with_helpers do
     it 'renders link with icon and text' do
       expect(node).to have_link 'Hauptgruppe setzen'
       expect(node).to have_css 'a i.fas.fa-star[filled=true]'
-      expect(node.find('a')['href']).to eq(primary_group_group_person_path(model, person, primary_group_id: model.id))
+      expect(node.find('a')['href']).to eq(primary_group_group_person_path(model, person,
+                                                                           primary_group_id: model.id))
     end
   end
 

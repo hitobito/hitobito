@@ -4,6 +4,7 @@
 
 *  Für jeden Anhang bei Anlässen, Kursen etc. kann neu individuell ausgewählt werden, ob der Anhang global sichtbar ist (wie bisher) oder ob nur Teilnehmende oder nur das Leitungsteam den Anhang sehen darf (hitobito_sac_cas#486)
 *  Einführung Mitgliedschaftskonzept (People::Membership) sowie Membership Verification Endpoint (Verschieben vom SKV Wagon in den Core) (hitobito#2511)
+* Die Rollentypen werden nun alphabetisch sortiert im Auswahlmenü (hitobito_sac_cas#552)
 
 ## Version 2.1
 

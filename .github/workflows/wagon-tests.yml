@@ -75,7 +75,7 @@ jobs:
           INPUT_WDEP_REF: ${{ inputs.wagon_dependency_ref }}
           INPUT_CORE_REF: ${{ inputs.core_ref }}
         run: |
-          current_branch_name="$(echo ${GITHUB_REF#refs/heads/})"
+          current_branch_name="${{github.ref_name}}"
 
           WAGON_DEPENDENCY_REF="$INPUT_WDEP_REF"
           if [ -z "${INPUT_WDEP_REF}" ] && [ "${WAGON_DEPENDENCY_REPO}" != '' ]; then
@@ -99,7 +99,6 @@ jobs:
 
           repository="${{github.repository}}"
           echo "WAGON_NAME=${repository##*/}" >> $GITHUB_ENV
-
           echo "BRANCH_NAME=$current_branch_name" >> $GITHUB_ENV
           echo "WAGON_DEPENDENCY_REF=$WAGON_DEPENDENCY_REF" >> $GITHUB_ENV
           echo "CORE_REF=$CORE_REF" >> $GITHUB_ENV

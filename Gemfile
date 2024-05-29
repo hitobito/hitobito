@@ -88,7 +88,7 @@ gem 'simpleidn'
 gem 'simple_xlsx_reader' # import data from xlsx files (used in some wagons)
 gem 'sorted_set'
 gem 'sprockets', '~> 3.7.2' # pinned to older version to avoid having an empty manifest.js
-gem 'sqlite3' # required for asset generation
+gem 'sqlite3', '~> 1.7.2' # required for asset generation
 gem 'strip_attributes' # strip whitespace of attributes
 gem 'thinking-sphinx'
 gem 'truemail'

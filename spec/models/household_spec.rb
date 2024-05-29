@@ -97,24 +97,49 @@ describe Household do
       expect(household.members.size).to eq(3)
 
       household.remove(third_person)
-      expect(household.remove_people.count).to eq(1)
-      expect(household.remove_people.first).to eq(third_person)
+      expect(household.removed_people.count).to eq(1)
+      expect(household.removed_people.first).to eq(third_person)
       expect(household.save).to eq(true)
-      expect(household.remove_people).to be_empty
+      expect(household.removed_people).to be_empty
 
       expect(household.reload.members.size).to eq(2)
     end
 
-    it 'cannot be saved if all people removed' do
+    it 'can be saved if all people removed' do
       create_household
 
       household.people.each do |p|
         household.remove(p)
       end
-      expect(household.remove_people.count).to eq(3)
-      expect(household.save).to eq(false)
+      expect(household.removed_people.count).to eq(3)
+      expect(household.save).to eq(true)
 
-      expect(household.reload.members.size).to eq(3)
+      expect(Person.where(household_key: household.household_key)).not_to exist
+    end
+
+    it 'destroys household if it has less than 2 members' do
+      create_household
+
+      household.remove(household.people.third)
+      household.remove(household.people.second)
+      expect(household.members).to have(1).item
+
+      expect(household.save).to eq(true)
+
+      expect(Person.where(household_key: household.household_key)).not_to exist
+    end
+
+    it 'yields new_people and removed_people' do
+      create_household
+
+      household.remove(other_person)
+      household.remove(third_person)
+      added_person = Fabricate(:person)
+      household.add(added_person)
+
+      expect do |b|
+        household.save(&b)
+      end.to yield_with_args(contain_exactly(added_person), contain_exactly(other_person, third_person))
     end
   end
 
@@ -132,12 +157,21 @@ describe Household do
       expect(household.errors.first.message).to eq('Hans Halt ist bereits Mitglied eines anderen Haushalts')
     end
 
-    it 'is not valid if only one or less people in household' do
-      expect(household).not_to be_valid
+    it 'is valid if only one or less people in household' do
+      expect(household).to be_valid
 
-      expect(household.errors.count).to eq(1)
-      expect(household.errors.first.attribute).to eq(:base)
-      expect(household.errors.first.message).to include('Ein Haushalt muss aus mindestens zwei Personen bestehen')
+      expect(household.errors).to be_empty
+    end
+  end
+
+  describe 'warnings' do
+    it 'has warning if only one or less people in household' do
+      expect(household).to be_valid
+
+      expect(household.errors).to be_empty
+      expect(household.warnings.count).to eq(1)
+      expect(household.warnings.first.attribute).to eq(:members)
+      expect(household.warnings.first.message).to include('Der Haushalt wird aufelöst da weniger als 2 Personen vorhanden sind.')
     end
   end
 
@@ -148,6 +182,15 @@ describe Household do
       household.destroy
 
       expect(Person.where(household_key: household.household_key)).not_to exist
+    end
+
+    it 'yields removed_people' do
+      create_household
+      original_people = household.people.dup
+
+      expect do |b|
+        household.destroy(&b)
+      end.to yield_with_args(match_array(original_people))
     end
   end
 
@@ -182,8 +225,8 @@ describe Household do
 
       household.household_members_attributes = household_attrs
 
-      expect(household.remove_people.count).to eq(1)
-      expect(household.remove_people).to include(third_person)
+      expect(household.removed_people.count).to eq(1)
+      expect(household.removed_people).to include(third_person)
       expect(household.save).to eq(true)
 
       expect(household.reload.members.size).to eq(2)

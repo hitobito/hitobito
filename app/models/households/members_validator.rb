@@ -16,7 +16,7 @@ class Households::MembersValidator < ActiveModel::Validator
 
   def minimum_members
     if @household.members.size < 2
-      @household.errors.add(:base, :minimum_members)
+      @household.warnings.add(:members, :minimum_members)
     end
   end
 

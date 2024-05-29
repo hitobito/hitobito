@@ -22,4 +22,8 @@ class HouseholdMember
     @household = household
   end
 
+  def warnings
+    @warnings ||= ActiveModel::Errors.new(self)
+  end
+
 end

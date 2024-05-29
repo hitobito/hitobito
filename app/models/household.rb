@@ -8,13 +8,10 @@
 class Household
 
   include ActiveModel::Model
+  include ActiveModel::Dirty
 
-  attr_reader :household_key, :new_people, :remove_people
-
-  with_options on: :update do
-    validates_with Households::MembersValidator
-    validate :validate_members
-  end
+  attr_reader :household_key, :members
+  define_attribute_methods :members
 
   def initialize(reference_person)
     @reference_person = reference_person
@@ -23,22 +20,28 @@ class Household
     if @household_key
       @members = fetch_members
     else
-      @household_key = init_household_key
-      @members = []
+      @household_key = next_key
       add(@reference_person)
     end
   end
 
-  def warnings
-    @warnings ||= ActiveModel::Errors.new(self)
+  with_options on: [:edit, :update] do
+    validates_with Households::MembersValidator
+    validate :validate_members
   end
 
   def add(person)
-    @new_people << person
+    return if self.members.any? { |m| m.person == person }
+
+    attribute_will_change!(:members)
+    members << HouseholdMember.new(person, self)
   end
 
   def remove(person)
-    @remove_people << person
+    return unless members.any? { |m| m.person == person }
+
+    attribute_will_change!(:members)
+    members.reject! { |m| m.person == person }
   end
 
   def valid?(context = :update)
@@ -48,18 +51,23 @@ class Household
   def save(context: :update)
     return false unless valid?(context)
 
+    members.clear if members.size < 2
+
     ActiveRecord::Base.transaction do
+      yield new_people, removed_people if block_given?
       save_removed
       save_members
-      @new_people = []
-      @remove_people = []
+      changes_applied
       true
     end
   end
 
   def destroy
-    @members.each {|m| remove(m.person) }
-    save(context: :destroy)
+    attribute_will_change!(:members)
+    members.clear
+    save(context: :destroy) do |_, removed_people|
+      yield removed_people if block_given?
+    end
   end
 
   def reload
@@ -67,40 +75,45 @@ class Household
     self
   end
 
-  def members
-    @members.concat(HouseholdMember.from(new_people, self))
-    @members.reject! {|m| remove_people.collect(&:id).include?(m.person.id) }
-    @members.uniq { |m| m.person.id }
+  def household_members_attributes=(attributes)
+    attr_ids = attributes.map { |a| a[:person_id] }
+
+    Person.where(id: attr_ids).each do |person|
+      add(person) unless person_ids.include?(person.id)
+    end
+
+    members.each do |member|
+      remove(member.person) unless attr_ids.include?(member.person.id)
+    end
   end
 
   def people
     members.collect(&:person)
   end
 
-  def household_members_attributes=(attributes)
-    attr_ids = attributes.map { |a| a[:person_id] }
+  def new_people
+    return [] unless changes[:members]
 
-    attr_ids.each do |person_id|
-      add(Person.find(person_id)) unless person_ids.include?(person_id)
-    end
+    (members - members_was).map(&:person)
+  end
 
-    person_ids.each do |person_id|
-      remove_by_id(person_id) unless attr_ids.include?(person_id)
-    end
+  def removed_people
+    return [] unless changes[:members]
+
+    (members_was - members).map(&:person)
+  end
+
+  def warnings
+    @warnings ||= ActiveModel::Errors.new(self)
   end
 
   private
-
-  def remove_by_id(person_id)
-    person = people.find { |p| p.id == person_id }
-    remove(person)
-  end
 
   def person_ids
     members.collect { |m| m.person.id }
   end
 
-  def init_household_key
+  def next_key
     loop do
       key = SecureRandom.uuid
       break key unless Person.where(household_key: key).exists?
@@ -108,9 +121,7 @@ class Household
   end
 
   def save_removed
-    Person.where(household_key: @household_key)
-      .where.not(id: person_ids)
-      .update_all(household_key: nil)
+    Person.where(id: removed_people.map(&:id)).update_all(household_key: nil)
   end
 
   def save_members
@@ -132,17 +143,18 @@ class Household
   end
 
   def init_defaults
-    @new_people = []
-    @remove_people = []
+    @members = []
     @household_key = @reference_person.household_key
   end
 
   def validate_members
     @members.each_with_index do |member, index|
-      unless member.valid?
-        member.errors.each do |error|
-          errors.add("members[#{index}].#{error.attribute}", error.message)
-        end
+      member.validate
+      member.errors.each do |error|
+        errors.add("members[#{index}].#{error.attribute}", error.message)
+      end
+      member.warnings.each do |warning|
+        warnings.add("members[#{index}].#{error.attribute}", error.message)
       end
     end
   end

@@ -62,8 +62,8 @@ de:
               not_terminatable: "ist nicht kündbar"
         household:
           attributes:
-            base:
-              minimum_members: Ein Haushalt muss aus mindestens zwei Personen bestehen
+            members:
+              minimum_members: Der Haushalt wird aufelöst da weniger als 2 Personen vorhanden sind.
 
         household_member:
           attributes:

@@ -69,17 +69,21 @@ jobs:
           mkdir hitobito
         working-directory: .
 
-      - name: 'Extract branch name, wagon name and determine common branch'
+      - name: 'Set wagon name'
+        run: |
+          repository="${{github.repository}}"
+          echo "WAGON_NAME=${repository##*/}" >> $GITHUB_ENV
+
+      - name: 'Determine common branch and set branch name'
+        if: github.event_name != 'pull_request'
         env:
           WAGON_DEPENDENCY_REPO: ${{ inputs.wagon_dependency_repository }}
           INPUT_WDEP_REF: ${{ inputs.wagon_dependency_ref }}
           INPUT_CORE_REF: ${{ inputs.core_ref }}
         run: |
-          current_branch_name="${{github.ref_name}}"
-
           WAGON_DEPENDENCY_REF="$INPUT_WDEP_REF"
           if [ -z "${INPUT_WDEP_REF}" ] && [ "${WAGON_DEPENDENCY_REPO}" != '' ]; then
-            dependency_branch=$(git ls-remote --heads https://github.com/hitobito/${WAGON_DEPENDENCY_REPO} | cut -d/ -f3- | grep -x "$current_branch_name")
+            dependency_branch=$(git ls-remote --heads https://github.com/hitobito/${WAGON_DEPENDENCY_REPO} | cut -d/ -f3- | grep -x "${{github.ref_name}}")
             if [ "$dependency_branch" != '' ]; then
               WAGON_DEPENDENCY_REF="$current_branch_name"
             else
@@ -89,7 +93,7 @@ jobs:
 
           CORE_REF="$INPUT_CORE_REF"
           if [ -z "${INPUT_CORE_REF}" ]; then
-            core_branch=$(git ls-remote --heads https://github.com/hitobito/hitobito | cut -d/ -f3- | grep -x "$current_branch_name")
+            core_branch=$(git ls-remote --heads https://github.com/hitobito/hitobito | cut -d/ -f3- | grep -x "${{github.ref_name}}")
             if [ "$core_branch" != '' ]; then
               CORE_REF="$current_branch_name"
             else
@@ -97,9 +101,26 @@ jobs:
             fi
           fi
 
-          repository="${{github.repository}}"
-          echo "WAGON_NAME=${repository##*/}" >> $GITHUB_ENV
-          echo "BRANCH_NAME=$current_branch_name" >> $GITHUB_ENV
+          echo "WAGON_DEPENDENCY_REF=$WAGON_DEPENDENCY_REF" >> $GITHUB_ENV
+          echo "CORE_REF=$CORE_REF" >> $GITHUB_ENV
+
+      - name: 'Set branch name'
+        if: github.event_name == 'pull_request'
+        env:
+          WAGON_DEPENDENCY_REPO: ${{ inputs.wagon_dependency_repository }}
+          INPUT_WDEP_REF: ${{ inputs.wagon_dependency_ref }}
+          INPUT_CORE_REF: ${{ inputs.core_ref }}
+        run: |
+          WAGON_DEPENDENCY_REF="$INPUT_WDEP_REF"
+          if [ -z "${INPUT_WDEP_REF}" ] && [ "${WAGON_DEPENDENCY_REPO}" != '' ]; then
+            WAGON_DEPENDENCY_REF="master"
+          fi
+
+          CORE_REF="$INPUT_CORE_REF"
+          if [ -z "${INPUT_CORE_REF}" ]; then
+            CORE_REF="master"
+          fi
+
           echo "WAGON_DEPENDENCY_REF=$WAGON_DEPENDENCY_REF" >> $GITHUB_ENV
           echo "CORE_REF=$CORE_REF" >> $GITHUB_ENV
 

@@ -50,7 +50,6 @@ describe Export::Pdf::Messages::Letter do
       end
 
       it 'renders text at positions without sender address' do
-
         expect(text_with_position).to match_array [
           [71, 654, 'Bottom Member'],
           [71, 644, 'Greatstreet 345'],
@@ -66,9 +65,8 @@ describe Export::Pdf::Messages::Letter do
 
       it 'renders text at positions with group sender address' do
         letter.update!(pp_post: 'Group 11, Lakeview 42, 4242 Wanaka')
-
         expect(text_with_position).to match_array [
-          [71, 672, 'Group 11, Lakeview 42, 4242 Wanaka'],
+          [71, 671, 'Group 11, Lakeview 42, 4242 Wanaka'],
           [71, 654, 'Bottom Member'],
           [71, 644, 'Greatstreet 345'],
           [71, 633, '3456 Greattown'],

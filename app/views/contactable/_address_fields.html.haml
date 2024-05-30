@@ -14,7 +14,7 @@
         %div.col-9
           = f.input_field(:street, data: { provide: 'entity', updater: 'AddressTypeahead.update', url: addresses_query_url })
         %div.col-2.offset-1
-          = f.input_field(:housenumber)
+          = f.input_field(:housenumber, placeholder: 'No')
       = f.labeled_input_field(:postbox)
     - else
       = f.labeled_text_area(:address, rows: 2, data: { provide: 'entity',

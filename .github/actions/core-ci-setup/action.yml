@@ -4,7 +4,7 @@ description: 'DRY yaml setup setup steps which are used multiple times in the co
 inputs:
   migrations:
     description: Unless set to false, migrations will be run as part of the setup.
-    default: true
+    default: 'true'
 
 runs:
   using: composite
@@ -71,7 +71,7 @@ runs:
       shell: bash
 
     - name: 'Run db migrations'
-      if: inputs.migrations
+      if: inputs.migrations == 'true'
       run: |
         bundle exec rake db:migrate
       shell: bash

@@ -4,7 +4,7 @@ description: 'DRY yaml setup setup steps which are used multiple times in the wa
 inputs:
   migrations:
     description: Unless set to false, migrations will be run as part of the setup.
-    default: true
+    default: 'true'
   wagon_repository:
     description: "Wagon repository, e.g. hitobito_pbs"
   wagon_dependency_repository:
@@ -199,6 +199,7 @@ runs:
       shell: bash
 
     - name: 'Create DB'
+      if: inputs.migrations == 'true'
       run: |
         bundle exec rake db:create
       working-directory: hitobito
@@ -211,13 +212,14 @@ runs:
       shell: bash
 
     - name: 'Run core migrations'
+      if: inputs.migrations == 'true'
       run: |
         bundle exec rake db:migrate
       working-directory: hitobito
       shell: bash
 
     - name: 'Run wagon migrations'
-      if: inputs.migrations
+      if: inputs.migrations == 'true'
       run: |
         bundle exec rake wagon:migrate
       working-directory: hitobito

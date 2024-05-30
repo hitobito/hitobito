@@ -57,6 +57,7 @@ class Household
       yield new_people, removed_people if block_given?
       save_removed
       save_members
+      Households::LogEntries.new(self).create!
       changes_applied
       true
     end
@@ -111,6 +112,14 @@ class Household
     address.attrs
   end
 
+  def new_record?
+    @reference_person.household_key.nil?
+  end
+
+  def destroy?
+    people.count.zero?
+  end
+
   private
 
   def address
@@ -133,7 +142,9 @@ class Household
   end
 
   def save_members
-    Person.where(id: person_ids).update_all(household_attrs)
+    Person.where(id: person_ids).each do |p|
+      p.update(household_attrs)
+    end
   end
 
   def household_attrs

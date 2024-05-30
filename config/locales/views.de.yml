@@ -2049,9 +2049,13 @@ de:
     impersonation_done: "Account wird nicht mehr von %{user} verwendet."
     password_override: "Passwort wurde von %{user} auf null gesetzt und das Login verhindert, bis ein neues Passwort gesetzt wird."
 
-    append_to_household: "%{item} wurde zum Haushalt (%{object_changes}) hinzugefügt."
+    household_created: "Haushalt (%{object_changes}) wurde neu erstellt."
+    household_person_appended: "%{object_name} wurde zum Haushalt (%{object_changes}) hinzugefügt."
+    household_person_removed: "%{object_name} wurde vom Haushalt (%{object_changes}) entfernt."
     household_updated: "Haushalt (%{object_changes}) wurde aktualisiert."
     remove_from_household: "%{item} wurde vom Haushalt (%{object_changes}) entfernt."
+    append_to_household: "%{item} wurde zum Haushalt (%{object_changes}) hinzugefügt."
+    household_destroyed: "Haushalt (%{object_changes}) wurde aufgelöst."
     person_merge: "Zwei Personen wurden in diesen Eintrag zusammengeführt. Gelöschte Person:"
     deleted_service_token: "Inzwischen gelöschtes %{model_name}"
 

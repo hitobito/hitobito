@@ -81,6 +81,7 @@ module PaperTrail
       content_tag(:div,
                   t_event(user: whodunnit,
                           item: item,
+                          object_name: object.object.presence,
                           object_changes: object_changes))
     end
 
@@ -118,10 +119,11 @@ module PaperTrail
       end
     end
 
-    def t_event(user: nil, item: nil, object_changes: nil)
+    def t_event(user: nil, item: nil, object_changes: nil, object_name: nil)
       I18n.t("version.#{event}",
              user: user,
              item: item,
+             object_name: object_name,
              object_changes: object_changes)
     end
 

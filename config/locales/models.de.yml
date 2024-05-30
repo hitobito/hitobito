@@ -69,7 +69,7 @@ de:
         household_member:
           attributes:
             base:
-              in_other_household_present: "%{person_name} ist bereits Mitglied eines anderen Haushalts"
+              in_other_household_present: "%{person_name} ist bereits Mitglied eines anderen Haushalts."
   activerecord:
     errors:
       messages:

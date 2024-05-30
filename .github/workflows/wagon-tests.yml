@@ -43,6 +43,7 @@ jobs:
       RAILS_DB_PASSWORD: hitobito
       RAILS_DB_NAME: hitobito_test
       RAILS_TEST_DB_NAME: hitobito_test
+      RAILS_ENV: test
 
     services:
       mysql:
@@ -230,12 +231,85 @@ jobs:
 
       - name: 'Run Webpacker'
         run: |
-          RAILS_ENV=test bundle exec rake webpacker:compile
+          bundle exec rake webpacker:compile
 
-      - name: 'Run wagon lint and tests'
-        id: tests
+      - name: 'Create DB'
         run: |
-          bundle exec rake db:create ci:wagon
+          bundle exec rake db:create
+
+      - name: 'Clear logs'
+        run: |
+          bundle exec rake log:clear
+
+      - name: 'Run core migrations'
+        run: |
+          bundle exec rake db:migrate
+
+      - name: 'Run wagon migrations'
+        run: |
+          bundle exec rake wagon:migrate
+
+      - name: ${{ inputs.wagon_dependency_repository || 'Dependency wagon' }} rubocop
+        if: ${{ inputs.wagon_dependency_repository != '' }}
+        working-directory: ${{ inputs.wagon_dependency_repository }}
+        run: |
+          bundle exec rake app:rubocop
+
+      - name: Setup ${{ inputs.wagon_dependency_repository || 'dependency wagon' }} specs
+        if: ${{ inputs.wagon_dependency_repository != '' }}
+        working-directory: ${{ inputs.wagon_dependency_repository }}
+        run: |
+          bundle exec rake app:ci:setup:rspec
+
+      - name: Check if there are any feature specs in ${{ inputs.wagon_dependency_repository || 'dependency wagon' }}
+        if: ${{ inputs.wagon_dependency_repository != '' }}
+        id: check-dependency-wagon-feature-specs
+        working-directory: ${{ inputs.wagon_dependency_repository }}
+        run: |
+          if [ -d "spec/features" ]; then
+            echo "feature_specs_exist=1" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run ${{ inputs.wagon_dependency_repository || 'dependency wagon' }} feature specs
+        if: ${{ inputs.wagon_dependency_repository != '' && steps.check-dependency-wagon-feature-specs.outputs.feature_specs_exist }}
+        working-directory: ${{ inputs.wagon_dependency_repository }}
+        run: |
+          bundle exec rake spec:features
+
+      - name: Run ${{ inputs.wagon_dependency_repository || 'dependency wagon' }} specs
+        if: ${{ inputs.wagon_dependency_repository != '' }}
+        working-directory: ${{ inputs.wagon_dependency_repository }}
+        run: |
+          bundle exec rake spec
+
+      - name: ${{ inputs.wagon_repository }} rubocop
+        working-directory: ${{ inputs.wagon_repository }}
+        run: |
+          bundle exec rake app:rubocop
+
+      - name: Setup ${{ inputs.wagon_repository }} specs
+        working-directory: ${{ inputs.wagon_repository }}
+        run: |
+          bundle exec rake app:ci:setup:rspec
+
+      - name: Check if there are any feature specs in ${{ inputs.wagon_repository }}
+        id: check-wagon-feature-specs
+        working-directory: ${{ inputs.wagon_repository }}
+        run: |
+          if [ -d "spec/features" ]; then
+            echo "feature_specs_exist=1" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run ${{ inputs.wagon_repository }} feature specs
+        if: ${{ steps.check-wagon-feature-specs.outputs.feature_specs_exist }}
+        working-directory: ${{ inputs.wagon_repository }}
+        run: |
+          bundle exec rake spec:features
+
+      - name: Run ${{ inputs.wagon_repository }} specs
+        working-directory: ${{ inputs.wagon_repository }}
+        run: |
+          bundle exec rake spec
 
       - name: 'Make capybara output downloadable'
         uses: actions/upload-artifact@v4

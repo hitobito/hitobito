@@ -154,7 +154,7 @@ describe Household do
 
       expect(household.errors.count).to eq(1)
       expect(household.errors.first.attribute).to eq(:'members[1].base')
-      expect(household.errors.first.message).to eq('Hans Halt ist bereits Mitglied eines anderen Haushalts')
+      expect(household.errors.first.message).to eq('Hans Halt ist bereits Mitglied eines anderen Haushalts.')
     end
 
     it 'is valid if only one or less people in household' do
@@ -183,7 +183,7 @@ describe Household do
       fourth_person = Fabricate(:person, address: 'Loriweg 42')
       household.add(fourth_person)
       household.save
-      expect(household).to be_valid
+      expect(household.reload).to be_valid
 
       expected_attrs = { 'address' => 'Loriweg 42',
                          'country' => nil,
@@ -280,6 +280,31 @@ describe Household do
     end
 
     it 'creates new household' do
+      household_attrs = [{ person_id: person.id },
+                         { person_id: other_person.id }]
+
+      household.household_members_attributes = household_attrs
+
+      expect(household.save).to eq(true)
+
+      expect(household.reload.members.size).to eq(2)
+    end
+
+    it 'is not created with only one person' do
+      household_attrs = [{ person_id: person.id }]
+
+      household.household_members_attributes = household_attrs
+
+      expect(household).to be_valid
+
+      expect(household.errors).to be_empty
+      expect(household.warnings.count).to eq(1)
+      expect(household.warnings.first.attribute).to eq(:members)
+      expect(household.warnings.first.message).to include('Der Haushalt wird aufelöst da weniger als 2 Personen vorhanden sind.')
+
+      expect(household.save).to eq(true)
+
+      expect(Person.where(household_key: household.household_key)).not_to exist
     end
 
     it 'removes person from household' do

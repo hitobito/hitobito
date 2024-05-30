@@ -14,7 +14,9 @@ class HouseholdMember
   validates_with Households::MemberValidator
 
   def self.from(people, household)
-    people.collect { |p| new(p, household) }
+    members = people.collect { |p| new(p, household) }
+    ref_person_id = household.reference_person.id
+    members.sort_by { |m| m.person.id == ref_person_id ? 0 : 1 }
   end
 
   def initialize(person, household)

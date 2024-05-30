@@ -10,7 +10,7 @@ class Household
   include ActiveModel::Model
   include ActiveModel::Dirty
 
-  attr_reader :household_key, :members
+  attr_reader :household_key, :members, :reference_person
   define_attribute_methods :members
 
   def initialize(reference_person)
@@ -107,7 +107,15 @@ class Household
     @warnings ||= ActiveModel::Errors.new(self)
   end
 
+  def address_attrs
+    address.attrs
+  end
+
   private
+
+  def address
+    Households::Address.new(self)
+  end
 
   def person_ids
     members.collect { |m| m.person.id }
@@ -130,10 +138,6 @@ class Household
 
   def household_attrs
     attrs = { household_key: @household_key }
-    address_attrs = @reference_person.attributes
-      .slice(*Person::ADDRESS_ATTRS).transform_values do |val|
-        val.presence
-      end
     attrs.merge(address_attrs)
   end
 

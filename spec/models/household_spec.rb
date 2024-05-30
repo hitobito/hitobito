@@ -164,6 +164,36 @@ describe Household do
     end
   end
 
+  describe 'address' do
+    it 'returns household attrs as hash' do
+      person.update!(address: 'Loriweg 42', zip_code: '6600', town: 'Locarno')
+      household.add(other_person)
+
+      expected_attrs = { 'address' => 'Loriweg 42',
+                         'country' => 'CH',
+                         'town' => 'Locarno',
+                         'zip_code' => '6600'}
+
+      expect(household.address_attrs).to eq(expected_attrs)
+    end
+
+    it 'applies address from person with address when added to household without address' do
+      create_household
+
+      fourth_person = Fabricate(:person, address: 'Loriweg 42')
+      household.add(fourth_person)
+      household.save
+      expect(household).to be_valid
+
+      expected_attrs = { 'address' => 'Loriweg 42',
+                         'country' => nil,
+                         'town' => nil,
+                         'zip_code' => nil }
+
+      expect(household.address_attrs).to eq(expected_attrs)
+    end
+  end
+
   describe 'warnings' do
     it 'has warning if only one or less people in household' do
       expect(household).to be_valid
@@ -172,6 +202,40 @@ describe Household do
       expect(household.warnings.count).to eq(1)
       expect(household.warnings.first.attribute).to eq(:members)
       expect(household.warnings.first.message).to include('Der Haushalt wird aufelöst da weniger als 2 Personen vorhanden sind.')
+    end
+
+    it 'has warnings if members have different address data' do
+      person.update!(address: 'Loriweg 42', zip_code: '6600', town: 'Locarno')
+      household.add(other_person)
+
+      expect(household).to be_valid
+
+      expect(household.errors).to be_empty
+      expect(household.warnings.count).to eq(1)
+      expect(household.warnings.first.attribute).to eq(:members)
+      expect(household.warnings.first.message).to include("Die Adresse 'Loriweg 42, 6600 Locarno' wird für alle Personen in diesem Haushalt übernommen.")
+    end
+
+    it 'has warnings if reference person does not have an address but other member' do
+      other_person.update!(address: 'Other Loriweg 42', zip_code: '6600', town: 'Locarno', country: 'it')
+      household.add(other_person)
+
+      expect(household).to be_valid
+
+      expect(household.errors).to be_empty
+      expect(household.warnings.count).to eq(1)
+      expect(household.warnings.first.attribute).to eq(:members)
+      expect(household.warnings.first.message).to include("Die Adresse 'Other Loriweg 42, 6600 Locarno' wird für alle Personen in diesem Haushalt übernommen.")
+    end
+
+    it 'has no warning of none of the members has address' do
+      person.update!(address: '', zip_code: nil, town: '   ')
+      household.add(other_person)
+
+      expect(household).to be_valid
+
+      expect(household.errors).to be_empty
+      expect(household.warnings).to be_empty
     end
   end
 
@@ -213,6 +277,9 @@ describe Household do
       expect(household.people).to include(other_person)
       expect(household.people).to include(third_person)
       expect(household.people).to include(fourth_person)
+    end
+
+    it 'creates new household' do
     end
 
     it 'removes person from household' do

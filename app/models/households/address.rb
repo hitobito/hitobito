@@ -14,7 +14,7 @@ class Households::Address
   end
 
   def attrs
-    extract_attrs(address_from_person)
+    extract_address(address_from_person)
   end
 
   def oneline
@@ -34,13 +34,13 @@ class Households::Address
   def dirty?
     household_attrs = attrs.except(:country)
     people.any? do |person|
-      extract_attrs(person).except(:country) != household_attrs
+      extract_address(person).except(:country) != household_attrs
     end
   end
 
   private
 
-  def extract_attrs(person)
+  def extract_address(person)
     person.attributes
       .slice(*Person::ADDRESS_ATTRS).transform_values do |val|
         val.presence

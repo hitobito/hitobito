@@ -13,6 +13,7 @@ class Households::MemberValidator < ActiveModel::Validator
   def validate(household_member)
     @member = household_member
     in_other_household_present
+    assert_valid_person
   end
 
   private
@@ -22,6 +23,15 @@ class Households::MemberValidator < ActiveModel::Validator
       @member.errors.add(:base,
                          :in_other_household_present,
                          person_name: person.full_name)
+    end
+  end
+
+  def assert_valid_person
+    unless person.valid?
+      person.errors.each do |error|
+        full_message = "#{person.full_name}: #{error.full_message}"
+        @member.errors.add(:person, full_message)
+      end
     end
   end
 

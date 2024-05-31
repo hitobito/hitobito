@@ -44,7 +44,10 @@ describe OidcClaimSetup do
         company_name
         company
         email
-        address
+        address_care_of
+        street
+        housenumber
+        postbox
         zip_code
         town
         country

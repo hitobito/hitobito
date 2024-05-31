@@ -166,13 +166,16 @@ describe Household do
 
   describe 'address' do
     it 'returns household attrs as hash' do
-      person.update!(address: 'Loriweg 42', zip_code: '6600', town: 'Locarno')
+      person.update!(street: 'Loriweg', housenumber: '42', zip_code: '6600', town: 'Locarno')
       household.add(other_person)
 
-      expected_attrs = { 'address' => 'Loriweg 42',
+      expected_attrs = { 'address_care_of' => nil,
+                         'street' => 'Loriweg',
+                         'housenumber' => '42',
+                         'postbox' => nil,
                          'country' => 'CH',
                          'town' => 'Locarno',
-                         'zip_code' => '6600'}
+                         'zip_code' => '6600' }
 
       expect(household.address_attrs).to eq(expected_attrs)
     end
@@ -180,12 +183,15 @@ describe Household do
     it 'applies address from person with address when added to household without address' do
       create_household
 
-      fourth_person = Fabricate(:person, address: 'Loriweg 42')
+      fourth_person = Fabricate(:person, street: 'Loriweg', housenumber: '42')
       household.add(fourth_person)
       household.save
       expect(household.reload).to be_valid
 
-      expected_attrs = { 'address' => 'Loriweg 42',
+      expected_attrs = { 'address_care_of' => nil,
+                         'street' => 'Loriweg',
+                         'housenumber' => '42',
+                         'postbox' => nil,
                          'country' => nil,
                          'town' => nil,
                          'zip_code' => nil }
@@ -201,11 +207,11 @@ describe Household do
       expect(household.errors).to be_empty
       expect(household.warnings.count).to eq(1)
       expect(household.warnings.first.attribute).to eq(:members)
-      expect(household.warnings.first.message).to include('Der Haushalt wird aufelöst da weniger als 2 Personen vorhanden sind.')
+      expect(household.warnings.first.message).to include('Der Haushalt wird aufgelöst da weniger als 2 Personen vorhanden sind.')
     end
 
     it 'has warnings if members have different address data' do
-      person.update!(address: 'Loriweg 42', zip_code: '6600', town: 'Locarno')
+      person.update!(street: 'Loriweg', housenumber: '42', zip_code: '6600', town: 'Locarno')
       household.add(other_person)
 
       expect(household).to be_valid
@@ -217,7 +223,8 @@ describe Household do
     end
 
     it 'has warnings if reference person does not have an address but other member' do
-      other_person.update!(address: 'Other Loriweg 42', zip_code: '6600', town: 'Locarno', country: 'it')
+      other_person.update!(street: 'Other Loriweg', housenumber: '42', zip_code: '6600',
+                           town: 'Locarno', country: 'it')
       household.add(other_person)
 
       expect(household).to be_valid
@@ -229,7 +236,7 @@ describe Household do
     end
 
     it 'has no warning of none of the members has address' do
-      person.update!(address: '', zip_code: nil, town: '   ')
+      person.update!(street: '', housenumber: nil, zip_code: nil, town: '   ')
       household.add(other_person)
 
       expect(household).to be_valid
@@ -300,7 +307,7 @@ describe Household do
       expect(household.errors).to be_empty
       expect(household.warnings.count).to eq(1)
       expect(household.warnings.first.attribute).to eq(:members)
-      expect(household.warnings.first.message).to include('Der Haushalt wird aufelöst da weniger als 2 Personen vorhanden sind.')
+      expect(household.warnings.first.message).to include('Der Haushalt wird aufgelöst da weniger als 2 Personen vorhanden sind.')
 
       expect(household.save).to eq(true)
 

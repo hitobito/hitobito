@@ -63,7 +63,7 @@ de:
         household:
           attributes:
             members:
-              minimum_members: Der Haushalt wird aufelöst da weniger als 2 Personen vorhanden sind.
+              minimum_members: Der Haushalt wird aufgelöst da weniger als 2 Personen vorhanden sind.
               household_address: "Die Adresse '%{address}' wird für alle Personen in diesem Haushalt übernommen."
 
         household_member:

@@ -19,8 +19,16 @@ class Households::Address
 
   def oneline
     address = attrs.dup
-    [ address[:address].to_s.strip,
-      [address[:zip_code], address[:town]].compact.join(' ').squish ].join(', ')
+    street_and_number = if FeatureGate.enabled?('structured_addresses')
+                          [address[:street], address[:housenumber]].compact_blank.join(' ')
+                        else
+                          address[:address].to_s
+                        end
+
+    [
+      street_and_number.strip,
+      [address[:zip_code], address[:town]].compact.join(' ').squish
+    ].join(', ')
   end
 
   def dirty?

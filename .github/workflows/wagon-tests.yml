@@ -81,13 +81,13 @@ jobs:
         run: |
           CORE_REF="$INPUT_CORE_REF"
           if [ -z "$INPUT_CORE_REF" ]; then
+            CORE_REF=$(git ls-remote --heads https://github.com/hitobito/hitobito | cut -d/ -f3- | grep -x "${{github.ref_name}}" || echo 'master')
             # core_branch=$(git ls-remote --heads https://github.com/hitobito/hitobito | cut -d/ -f3- | grep -x "${{github.ref_name}}")
             # if [ "$core_branch" != '' ]; then
             #   CORE_REF="${{github.ref_name}}"
             # else
             #   CORE_REF="master"
             # fi
-            CORE_REF="master"
           fi
 
           echo "CORE_REF=$CORE_REF" >> $GITHUB_ENV
@@ -100,7 +100,7 @@ jobs:
         run: |
           WAGON_DEPENDENCY_REF="$INPUT_WDEP_REF"
           if [ -z "$INPUT_WDEP_REF" ] && [ "$WAGON_DEPENDENCY_REPO" != '' ]; then
-            WAGON_DEPENDENCY_REF=$(git ls-remote --heads https://github.com/hitobito/hitobito | cut -d/ -f3- | grep -x "${{github.ref_name}}" || echo 'master')
+            WAGON_DEPENDENCY_REF=$(git ls-remote --heads https://github.com/hitobito/$WAGON_DEPENDENCY_REPO | cut -d/ -f3- | grep -x "${{github.ref_name}}" || echo 'master')
             # dependency_branch=$(git ls-remote --heads https://github.com/hitobito/$WAGON_DEPENDENCY_REPO | cut -d/ -f3- | grep -x "${{github.ref_name}}")
             # if [ "$dependency_branch" != '' ]; then
             #   WAGON_DEPENDENCY_REF="${{github.ref_name}}"

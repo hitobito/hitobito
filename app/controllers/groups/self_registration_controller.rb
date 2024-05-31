@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2021, Efficiency-Club Bern. This file is part of
+#  Copyright (c) 2023, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -11,6 +11,8 @@ class Groups::SelfRegistrationController < ApplicationController
   before_action :assert_empty_honeypot, only: [:create]
   before_action :redirect_to_group_if_necessary
   helper_method :entry, :policy_finder
+
+  delegate :self_registration_active?, to: :group
 
   def new; end
 
@@ -26,7 +28,7 @@ class Groups::SelfRegistrationController < ApplicationController
 
   def save_and_redirect
     save_entry
-    redirect_to new_person_session_path, notice: success_message
+    redirect_to redirect_path, notice: success_message
   end
 
   def save_entry
@@ -38,10 +40,25 @@ class Groups::SelfRegistrationController < ApplicationController
   end
 
   def entry
-    @entry ||= SelfRegistration.new(
+    @entry ||= model_class.new(
+      current_ability: current_ability,
       group: group,
-      params: params.to_unsafe_h.deep_symbolize_keys
+      current_step: params[:step],
+      person: current_user,
+      **model_params.to_unsafe_h
     )
+  end
+
+  def model_params
+    params[model_identifier] || ActionController::Parameters.new
+  end
+
+  def model_identifier
+    @model_identifier ||= model_class.model_name.param_key
+  end
+
+  def model_class
+    @model_class ||= RegistrationWizards.for(group, current_user)
   end
 
   def authenticate?
@@ -58,32 +75,37 @@ class Groups::SelfRegistrationController < ApplicationController
     end
   end
 
+  def role_exists?
+    !new_user? &&
+      Role.where(
+        person: current_user,
+        group: group,
+        type: group.self_registration_role_type,
+        archived_at: nil,
+        deleted_at: nil
+      ).exists?
+  end
+
   def redirect_to_group_if_necessary
-    return redirect_to group_path(group) unless group.self_registration_active?
+    return redirect_to(group_path(group), t('.disabled')) unless group.self_registration_active?
 
-    redirect_to group_self_inscription_path(group) if signed_in?
+    redirect_to(group_path(group), t('.role_exists')) if role_exists?
   end
 
-  def enqueue_notification_email
-    return if group.self_registration_notification_email.blank?
-
-    ::Groups::SelfRegistrationNotificationMailer
-      .self_registration_notification(group.self_registration_notification_email,
-                                      entry.main_person.role).deliver_later
-  end
-
-  def send_password_reset_email
-    return if entry.main_person.email.blank?
-
-    Person.send_reset_password_instructions(email: entry.main_person.email)
+  def redirect_path
+    new_user? ? new_person_session_path : group_person_path(current_user.default_group_id, current_user)
   end
 
   def success_message
-    key = entry.main_person.email.present? ? :signed_up_but_unconfirmed : :signed_up_but_no_email
-    I18n.t("devise.registrations.#{key}")
+    new_user? ? success_message_existing_user : success_message_new_user
   end
 
-  def policy_finder
-    @policy_finder ||= Group::PrivacyPolicyFinder.for(group: group, person: entry.main_person)
+  def success_message_new_user
+    key = entry.person.email.present? ? :signed_up_but_unconfirmed : :signed_up_but_no_email
+    t("devise.registrations.#{key}")
   end
+
+  def success_message_existing_user = t('.role_saved')
+
+  def new_user? = current_user.blank?
 end

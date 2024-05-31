@@ -69,7 +69,7 @@ class StepsComponent < ApplicationComponent
     end
 
     def title
-      I18n.t("groups.self_registration.form.#{@header}_title")
+      ti("#{@header}_title")
     end
   end
 
@@ -111,10 +111,6 @@ class StepsComponent < ApplicationComponent
       link_to(t('global.button.back'), '#', class: 'link cancel mt-2 pt-1', data: data)
     end
 
-    def render?
-      index <= @step
-    end
-
     private
 
     def next_submit_button_options
@@ -123,11 +119,11 @@ class StepsComponent < ApplicationComponent
     end
 
     def past?
-      index < @form.object.step
+      index < @form.object.current_step
     end
 
     def markup
-      render(@partial, f: @form, c: self, required: false)
+      render(@partial, step_index: index, f: @form, c: self, required: false)
     end
   end
 end

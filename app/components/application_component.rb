@@ -6,6 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class ApplicationComponent < ViewComponent::Base
+  include I18nHelper
 
   private
 

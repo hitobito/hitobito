@@ -74,7 +74,7 @@ class Export::Pdf::Messages::Letter
 
     def render_shipping_info_text(width, height)
       shipping_method, text_height = shipping_methods[letter.shipping_method.to_sym]
-      text_box("#{shipping_method}<font size=#{8.pt}>#{letter.pp_post}</font>",
+      text_box("#{shipping_method}<font size='8'>#{letter.pp_post}</font>",
                inline_format: true, overflow: :truncate, single_line: true,
                width: width, height: height, at: [0, cursor + text_height * 0.75])
     end
@@ -122,8 +122,8 @@ class Export::Pdf::Messages::Letter
 
     def shipping_methods
       { own: ['', 8.pt],
-        normal: ["<b><font size='12pt'>P.P.</font></b> ", 12.pt],
-        priority: ["<b><font size='12pt'>P.P.</font> <font size='24pt'>A</font></b> ", 24.pt] }
+        normal: ["<b><font size='12'>P.P.</font></b> ", 12.pt],
+        priority: ["<b><font size='12'>P.P.</font> <font size='24pt'>A</font></b> ", 24.pt] }
     end
   end
 end

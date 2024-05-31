@@ -509,9 +509,16 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     attr, attr_id = assoc_and_id_attr(attr)
     validators = klass.validators_on(attr) +
                  klass.validators_on(attr_id)
+
+    # those changes are needed to render the required mark (*) for conditional presence validation
     validators.any? do |v|
-      v.kind == :presence &&
-      !v.options.key?(:if) && !v.options.key?(:unless)
+      next unless v.kind == :presence
+
+      check_condition = ->(c) { c.is_a?(Proc) ? @object.instance_exec(&c) : @object.send(c) }
+      next if v.options.key?(:if) && !check_condition.(v.options[:if])
+      next if v.options.key?(:unless) && check_condition.(v.options[:unless])
+
+      true
     end
   end
 

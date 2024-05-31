@@ -13,7 +13,7 @@ describe QualificationDecorator do
   subject(:info) { qualification.decorate.open_training_days_info }
   subject(:dom) { Capybara::Node::Simple.new(info) }
   subject(:tooltip) { info[/title="(.*?)"/, 1] }
-  let(:now) { Date.new(2024, 3, 22) }
+  let(:now) { Time.zone.local(2024, 3, 22, 15, 30) }
 
   context 'without training days' do
     around { |example| travel_to(now) { example.run } }

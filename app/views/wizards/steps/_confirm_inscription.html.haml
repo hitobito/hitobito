@@ -3,5 +3,11 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito
 
-= f.honeypot(:verification)
-= render StepsComponent.new(partials: entry.partials, step: entry.current_step, form: f)
+%p= t('.description')
+
+= render_extensions :details
+
+= action_button(t('.inscribe'),
+                  group_self_registration_path,
+                  nil,
+                  method: :post)

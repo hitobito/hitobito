@@ -69,7 +69,7 @@ class StepsComponent < ApplicationComponent
     end
 
     def title
-      I18n.t("groups.self_registration.form.#{@header}_title")
+      ti("#{@header}_title")
     end
   end
 
@@ -90,6 +90,10 @@ class StepsComponent < ApplicationComponent
                   data: stimulus_target('stepContent'))
     end
 
+    def navigation_links(title = t('steps_component.next_link'), options = {})
+      next_button(title, options) + back_link
+    end
+
     def next_button(title = t('steps_component.next_link'), options = {})
       type = 'submit'
       if last?
@@ -107,12 +111,10 @@ class StepsComponent < ApplicationComponent
     end
 
     def back_link
+      return if index == 0
+
       data = { action: stimulus_action(:back), index: index - 1 }
       link_to(t('global.button.back'), '#', class: 'link cancel mt-2 pt-1', data: data)
-    end
-
-    def render?
-      index <= @step
     end
 
     private
@@ -123,11 +125,11 @@ class StepsComponent < ApplicationComponent
     end
 
     def past?
-      index < @form.object.step
+      index < @form.object.current_step
     end
 
     def markup
-      render(@partial, f: @form, c: self, required: false)
+      render(@partial, step_index: index, f: @form, c: self, required: false)
     end
   end
 end

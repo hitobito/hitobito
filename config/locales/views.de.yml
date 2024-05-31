@@ -780,17 +780,15 @@ de:
         disabled: Die Selbstregistrierung ist für diese Gruppe deaktiviert
       create:
         role_saved: Die Rolle wurde erfolgreich gespeichert
-      form:
-        inscribe: Einschreiben
-        description: Hier kannst du dich für die Gruppe einschreiben.
 
   group/deleted_people:
     list:
       confirm_delete: "Sämtliche Daten zu %{person} werden endgültig gelöscht, inkl. Teilnahmen und Qualifikationen. Lösche diese Person nur, wenn niemand mehr diese Daten benötigt."
 
   groups/self_registration:
-    new:
-      title: "Registrierung zu %{group_name}"
+    global:
+      wizards/steps/new_user_form:
+        title: "Registrierung zu %{group_name}"
 
   group/person_add_requests:
     deactivated: Manuelle Freigabe deaktiviert
@@ -2107,3 +2105,9 @@ de:
     not_found: Ungültiger Verifikationscode
     status_valid: Mitgliedschaft gültig
     status_invalid: Keine gültige Mitgliedschaft
+
+  wizards:
+    steps:
+      confirm_inscription:
+        description: "Hier kannst du dich für die Gruppe einschreiben."
+        inscribe: Einschreiben

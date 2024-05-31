@@ -1,0 +1,52 @@
+-#  Copyright (c) 2023-2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito
+
+= f.fields_for(entry.step_at(step_index).step_name, entry.step_at(step_index)) do |ff|
+  = field_set_tag do
+    = ff.error_messages
+
+    - [:first_name, :last_name, :nick_name, :company_name].each do |attr|
+      = ff.labeled_input_field attr if ff.object.attr?(attr)
+
+    - if ff.object.attr?(:company)
+      = ff.labeled_boolean_field :company
+
+    - if [:address, :zip_code, :town, :country].all? { |field| ff.object.attr?(field) }
+      = render 'contactable/address_fields', f: ff
+
+    - if ff.object.attr?(:email)
+      = ff.labeled_input_field :email, help_inline: t('people.email_field.used_as_login'), class: 'd-inline'
+
+    - if ff.object.attr?(:gender)
+      = field_set_tag do
+        = ff.labeled(:gender) do
+          - (Person::GENDERS + ['']).each do |key|
+            = ff.inline_radio_button(:gender, key, ff.object.gender_label(key))
+
+
+    - if ff.object.attr?(:birthday)
+      = ff.labeled_date_field :birthday
+
+    - if ff.object.attr?(:phone_number_attributes)
+      = field_set_tag do
+        = ff.labeled_inline_fields_for :phone_numbers do |ff|
+          %div.col-5.inline
+            = fff.input_field(:number, placeholder: PhoneNumber.human_attribute_name(:number))
+          %div.col-2.inline.row
+            = fff.collection_select(:translated_label, PhoneNumber.available_labels, :to_s, :to_s, {}, class: 'form-select form-select-sm h-100')
+          = fff.hidden_field(:public)
+
+    - if ff.object.attr?(:additional_information)
+      = ff.labeled(:additional_information, t('.notes')) do
+        = ff.text_area(:additional_information)
+
+  = render 'groups/self_registration/adult_consent_field', f: ff
+  = field_set_tag(nil, class: 'privacy-policy-fields') do
+    = render('people/privacy_policy_acceptance_field', f: ff, policy_finder: entry.step_at(step_index).privacy_policy_finder)
+
+  = render_extensions :main_person, locals: { f: ff }
+
+.btn-toolbar.bottom.align-with-form
+  = c.next_button

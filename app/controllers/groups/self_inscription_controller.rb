@@ -14,20 +14,44 @@ class Groups::SelfInscriptionController < CrudController
 
   delegate :self_registration_active?, to: :group
 
+  def new; end
+
   def create
-    @role = build_role
-    @role.save
-    send_notification_email
-    redirect_with_message(notice: t('.role_saved'))
+    return render :new if params[:autosubmit].present?
+    return save_and_redirect if entry.valid? && entry.last_step?
+
+    entry.move_on
+    render :new
   end
 
   protected
 
-  def build_role
-    group.self_registration_role_type.constantize.new(
+  def save_and_redirect
+    entry.save!
+    send_notification_email
+    redirect_with_message(notice: t('.role_saved'))
+  end
+
+  def entry
+    @entry ||= model_class.new(
+      current_ability: current_ability,
+      current_step: params[:step],
+      person: current_user,
       group: group,
-      person: person
+      **model_params.to_unsafe_h
     )
+  end
+
+  def model_params
+    params[model_identifier] || ActionController::Parameters.new
+  end
+
+  def model_identifier
+    @model_identifier ||= model_class.model_name.param_key
+  end
+
+  def model_class
+    @model_class ||= Wizards::InscribeInGroupWizard
   end
 
   private
@@ -51,12 +75,10 @@ class Groups::SelfInscriptionController < CrudController
   def redirect_to_group_if_necessary
     if self_registration_active?
       if Role.where(
-          person: person,
-          group: group,
-          type: group.self_registration_role_type,
-          archived_at: nil,
-          deleted_at: nil
-        ).present?
+          person: entry.role.person,
+          group: entry.role.group,
+          type: entry.role.type
+        ).exists?
 
         redirect_with_message(alert: t('.role_exists'))
       end

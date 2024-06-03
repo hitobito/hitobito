@@ -2,8 +2,6 @@
 
 # Hitobito Documentation 🌄
 
-Welcome to Hitobit the project FOR the people. 🫂.
-
 * [User](https://hitobito.readthedocs.io/de/latest/) (manage your organisations 🚀)
 * [Developer](developer/README.md) (dive 🤿 into coding)
-* [Operator](operator/README.md) (run this shit 💩)
+* [Operator](operator/README.md) (everything you need to know to run hitobito 🏃)

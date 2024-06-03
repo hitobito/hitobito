@@ -16,10 +16,10 @@ for the recommended 🚢 docker development setup.
 
 ### Stage 2: Get to know the patterns and technologies
 
-- [ ] Read and understand the [guidelines](03_guidelines.md) of Hitobito 
+- [ ] Read and understand the [guidelines](03_guidelines.md) 📜 of Hitobito 
 
 
-- [ ] Make yourself familiar with the DRY-CRUD Pattern [dry-crud-gem](https://github.com/codez/dry_crud)
+- [ ] Make yourself familiar with our most important [Gems](modules/common/gems/README.md)
 
 
 - [ ] Learn about [wagons](04_wagons.md) 🚃
@@ -29,3 +29,9 @@ for the recommended 🚢 docker development setup.
 
 
 - [ ] Understand our [CI/CD](06_ci_cd.md) Workflow 🛠️
+
+
+- [ ] Learn how to implement a change inside a wagon
+
+
+

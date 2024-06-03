@@ -1,5 +1,5 @@
-# Gems in Hitobito
-This README hold the link to the documentation of the most important gems in Hitobito.
+# Gems in Hitobito 💎
+This README holds the links to the documentation of the most important gems in Hitobito.
 
 * **Paranoia**
   

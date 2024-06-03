@@ -83,7 +83,7 @@ With Wagons, arbitrary features and extensions may be created for Hitobito.
 As mentioned above, as there are no group types coming from Hitobito itself,
 at least one wagon is required to define group types in order to use Hitobito.
 
-See [Wagon Guidelines](doc/developer/04_wagons.md) or [Wagons](http://github.com/codez/wagons)
+See [Wagon Guidelines](doc/developer/modules/common/wagons/README) or [Wagons](http://github.com/codez/wagons)
 for more information on wagons and its available rake tasks.
 
 ## Contributing

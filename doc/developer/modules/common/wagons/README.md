@@ -1,4 +1,4 @@
-## Wagons
+## Wagons 🚃
 
 Hitobito ist aufgeteilt in Core (generischer Teil) und Wagon(s) (Verbandsspezifische Erweiterungen). Um eine Gruppenstruktur zu definieren, das Verhalten der Applikation auf benutzerspezifische Bedürfnisse anzupassen oder gewisse Features für mehrere Organisationen gemeinsam verfügbar zu machen, können Wagons verwendet werden. Damit Hitobito lauffähig ist, wird mindestens ein Wagon mit einer Gruppenstruktur benötigt. Jeder Wagon wird in einem eigenen Git Repo verwaltet.
 

@@ -1,8 +1,8 @@
-# Implement wagon change
+# Implement wagon change 🚃
 
 In Hitobito we make use of the wagons gem, which lets us overwrite the basic functionality of the core.
 
-## Ruby Code
+## Ruby Code 💎
 When we want to overwrite a model to expand it with a function, we do that inside the `wagon.rb` file.
 This looks something like that
 
@@ -44,12 +44,12 @@ It should have the same name as the class you want to overwrite and it should ex
 By extending this module you can then make use of  the `included do` block. Inside this block we define what attributes
 and methods we need. After the include block you can then add the methods you want to add to the existing class.
 
-## Settings
+## Settings ⚙️
 If you have a more general change you want to make to a wagon, you can achieve that by visiting the settings.yml file of
 the specific wagon. This is useful if you want to define a root email or if you want to disable statistic settings of the 
 wagon.
 
-## View
+## View 🌆
 Another situation may be that you have to overwrite a view in your specific wagon. If that is the case
 you want to visit first the `_form.html.haml` file of your entity. Now you'll see that we import there a lot of 
 other files. Look into these templates you may find some line like this one:

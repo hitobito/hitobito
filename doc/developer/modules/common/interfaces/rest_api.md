@@ -1,5 +1,7 @@
 ## REST API
 
+This API is **decprecated**, please switch to new [JSON:API](json_api.md)
+
 Hitobito offers a read-only JSON REST API that gives access to the basic data stored in the database. The output format follows the conventions of [json:api](http://jsonapi.org) (although in an older version according to this issue https://github.com/hitobito/hitobito/issues/207).
 
 ### Authentication

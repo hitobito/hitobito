@@ -32,5 +32,27 @@ After defining our permissions we can check them over a simple if condition:
   =link_to "View", @post
 ```
 
+## Fetch records 
 
+With the permissions defined we are able to use the method `accessible_by` method which returns all 
+records which can be accessed by the current user. These permissions are given using the
+
+`can :read, record` expression
+
+An example of this would look something like this:
+
+```
+def index
+  @articles = Article.accessible_by(current_ability)
+end
+```
+
+or
+
+```
+def show
+  @article = Article.find(params[:id])
+  authorize! :read, @article
+end
+```
 

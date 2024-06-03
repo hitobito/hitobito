@@ -44,7 +44,7 @@ Sammelrechnungen dienen dazu eine Rechnung an mehrere Personen zu erstellen. Die
 
 ### `Message::LetterWithInvoice`
 
-Neben Briefen können für Abos (MailingList) [Rechnungsbriefe](../messages/README#messageletterwithinvoice) für die Empfänger erstellt werden. Der `Message::LetterWithInvoice`-Eintrag wird dabei mit einer Sammelrechnung `InvoiceList` verknüpft.
+Neben Briefen können für Abos (MailingList) [Rechnungsbriefe](../messages/README.md#messageletterwithinvoice) für die Empfänger erstellt werden. Der `Message::LetterWithInvoice`-Eintrag wird dabei mit einer Sammelrechnung `InvoiceList` verknüpft.
 
 ## Optional Features
 * [Ebics Connection](optional_features/ebics-connection.md)

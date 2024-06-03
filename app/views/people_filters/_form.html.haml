@@ -23,8 +23,9 @@
     = render(layout: 'filter', locals: { type: :attributes }) do
       = render 'attributes', f: f
 
-    = render(layout: 'filter', locals: { type: :language }) do
-      = render 'language', f: f
+    - FeatureGate.if('person_language') do
+      = render(layout: 'filter', locals: { type: :language }) do
+        = render 'language', f: f
 
     = render(layout: 'filter', locals: { type: :tag }) do
       .label-columns

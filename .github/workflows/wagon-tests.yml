@@ -33,6 +33,7 @@ defaults:
 
 jobs:
   wagon_rubocop:
+    name: ${{ inputs.wagon_repository }} rubocop
     runs-on: 'ubuntu-20.04'
 
     steps:
@@ -59,6 +60,7 @@ jobs:
           bundle exec rake app:rubocop
 
   wagon_dependency_rubocop:
+    name: ${{ inputs.wagon_dependency_repository }} rubocop
     if: ${{ inputs.wagon_dependency_repository != '' }}
     runs-on: 'ubuntu-20.04'
 
@@ -86,6 +88,7 @@ jobs:
           bundle exec rake app:rubocop
 
   wagon_specs:
+    name: ${{ inputs.wagon_repository }} specs
     runs-on: 'ubuntu-20.04'
     env:
       HEADLESS: true
@@ -140,6 +143,7 @@ jobs:
           bundle exec rake app:ci:setup:rspec spec
 
   wagon_dependency_specs:
+    name: ${{ inputs.wagon_dependency_repository }} specs
     if: ${{ inputs.wagon_dependency_repository != '' }}
     runs-on: 'ubuntu-20.04'
     env:
@@ -195,6 +199,7 @@ jobs:
           bundle exec rake app:ci:setup:rspec spec
 
   wagon_feature_specs:
+    name: ${{ inputs.wagon_repository }} feature specs
     runs-on: 'ubuntu-20.04'
     env:
       HEADLESS: true
@@ -266,6 +271,7 @@ jobs:
             hitobito/tmp/capybara
 
   wagon_dependency_feature_specs:
+    name: ${{ inputs.wagon_dependency_repository }} feature specs
     if: ${{ inputs.wagon_dependency_repository != '' }}
     runs-on: 'ubuntu-20.04'
     env:

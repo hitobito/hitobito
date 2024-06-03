@@ -3,7 +3,7 @@ This README holds the links to the documentation of the most important gems in H
 
 * **Paranoia**
   
-  Archivate your records instead of destroying them
+  Archive your records instead of destroying them
   [Paranoia Gem](paranoia/README.md)
 
 

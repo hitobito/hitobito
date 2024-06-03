@@ -1,6 +1,6 @@
 ## OAuth 2.0
 
-Hitobito is an OAuth 2.0 provider, meaning that an external application can authenticate users via hitobito (usually in the form of a "Login via hitobito" feature, similar to Google and Facebook etc.). The external application can then query information about the user or use the [REST API](modules/common/api_auth/rest_api) in the name of the user, if the user has granted this permission. This works without giving the user's password or token to the external application.
+Hitobito is an OAuth 2.0 provider, meaning that an external application can authenticate users via hitobito (usually in the form of a "Login via hitobito" feature, similar to Google and Facebook etc.). The external application can then query information about the user or use the [REST API](modules/common/api_auth/rest_api.md) in the name of the user, if the user has granted this permission. This works without giving the user's password or token to the external application.
 
 ### Setup
 
@@ -220,7 +220,7 @@ All endpoints related to OIDC, along with some machine-readable info for automat
 
 ### Accessing the JSON-API
 
-All endpoints from the [JSON API](modules/common/api_auth/rest_api) can be used with a personal OAuth access token, if the token has the `api` scope. Individual endpoints can also be accessed if the token has the matching scope: `events`, `groups`, `people`, `invoices`, `mailing_lists`. There are two possibilities to use the API:
+All endpoints from the [JSON API](modules/common/api_auth/rest_api.md) can be used with a personal OAuth access token, if the token has the `api` scope. Individual endpoints can also be accessed if the token has the matching scope: `events`, `groups`, `people`, `invoices`, `mailing_lists`. There are two possibilities to use the API:
 
 * **Query parameter**: Send `access_token` as query parameter in the URL, and append `.json` to the URL path
 ```bash

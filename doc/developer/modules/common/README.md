@@ -3,7 +3,7 @@ Over here you find the documentation about some general structures like the appl
 architecture.
 
 * [Architecture](architecture/README.md)
-* [API Authentification](api_auth/README)
+* [API Authentification](api_auth/README.md)
 
 ## Optional Features 👏
 Under this section you'll find some additional features that were implemented in our different

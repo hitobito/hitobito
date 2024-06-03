@@ -177,6 +177,11 @@ The token is signed using the hitobito server's private key. `iss` is the issuer
 
 Using the access token, the standardized OIDC Userinfo endpoint can also be queried. This endpoint is similar to the profile endpoint of the OAuth flow, and will yield information depending on the used scopes. Here is an example response from the /oauth/userinfo endpoint, when using the `email` and `with_roles` scopes (additionally to the mandatory `openid` scope):
 
+```bash
+curl -H "Authorization: Bearer A5t3yMUvKCZLxasqJbQBhu0bRKMvWdwcBSw2DJbUiaQ" \
+     https://demo.hitobito.com/oauth/userinfo
+```
+
 ```json
 {
   "sub": "34",
@@ -208,6 +213,10 @@ Using the access token, the standardized OIDC Userinfo endpoint can also be quer
   ]
 }
 ```
+
+#### Well-known openid configuration
+
+All endpoints related to OIDC, along with some machine-readable info for automated OIDC client generators, are documented at https://demo.hitobito.com/.well-known/openid-configuration
 
 ### Accessing the JSON-API
 

@@ -22,7 +22,7 @@ for the recommended 🚢 docker development setup.
 - [ ] Make yourself familiar with our most important [Gems](modules/common/gems/README.md)
 
 
-- [ ] Learn about [wagons](04_wagons.md) 🚃
+- [ ] Learn about [wagons](modules/common/wagons/README) 🚃
 
 
 - [ ] Get to know our [Frontend & Assets](09_frontend/frontend)
@@ -31,7 +31,7 @@ for the recommended 🚢 docker development setup.
 - [ ] Understand our [CI/CD](06_ci_cd.md) Workflow 🛠️
 
 
-- [ ] Learn how to implement a change inside a wagon
+- [ ] Learn how to implement a [change inside a wagon](modules/common/wagons/wagon_changes.md)
 
 
 

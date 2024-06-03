@@ -30,5 +30,8 @@ for a specific module or feature take a look 🔍 at the list below.
   * [In general](modules/roles/README)
 * Rake Tasks
   * [Table](09_rake_tasks.md)
+* Wagons
+  * [In general](modules/common/wagons/README.md)
+  * [Changes inside a wagon](modules/common/wagons/wagon_changes.md)
 
 All graphics are created using [Draw.io](https://draw.io) and are stored as original .xml as well as .svg files.

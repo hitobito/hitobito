@@ -70,7 +70,7 @@ sowie im JSON API die selben Regeln. Ist also z.B. ein Attribut öffentlich, wir
 und in der JSON Personen Liste angezeigt, wenn nicht, nur im Full CSV und im Einzelperson JSON,
 falls die Berechtigung dafür vorhanden ist.
 
-Ein beispielhafte Anleitung, wie in einem Wagon Attribute hinzugefügt werden können, findest du im Kapitel [Wagons](modules/common/wagons/README#attribute-hinzuf-gen).
+Ein beispielhafte Anleitung, wie in einem Wagon Attribute hinzugefügt werden können, findest du im Kapitel [Wagons](modules/common/wagons/README.md).
 
 #### Personenattribute
 

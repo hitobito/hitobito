@@ -12,22 +12,22 @@ Hitobito is divided into several modules which hold different logic. If you are 
 for a specific module or feature take a look 🔍 at the list below.
 
 * Common:
-  * [In general](modules/common/README)
+  * [In general](modules/common/README.md)
   * [Architecture](modules/common/architecture/README.md)
-  * [API authentification](modules/common/api_auth/README)
+  * [API authentification](modules/common/api_auth/README.md)
 * Events
-  * [In general](modules/events/README)
+  * [In general](modules/events/README.md)
   * [Participations](modules/events/participations.md)
 * Invoices
-  * [In general](modules/invoices/README)
+  * [In general](modules/invoices/README.md)
   * [Dynamic Invoice Items](modules/invoices/dynamic_invoice_items.md)
 * Messages
-  * [In general](modules/messages/README)
+  * [In general](modules/messages/README.md)
   * [E-Mail](modules/messages/e-mail/README.md)
 * People
-  * [In general](modules/people/README)
+  * [In general](modules/people/README.md)
 * Role
-  * [In general](modules/roles/README)
+  * [In general](modules/roles/README.md)
 * Rake Tasks
   * [Table](09_rake_tasks.md)
 * Wagons

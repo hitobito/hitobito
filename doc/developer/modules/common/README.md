@@ -1,7 +1,7 @@
 # Common
 
 * [Architecture](architecture/README.md)
-* [Interfaces](interfaces/interfaces.md)
+* [Interfaces](api_auth/README)
 
 ## Optional Features
 * [Address Completion](optional_features/address-completion.md)

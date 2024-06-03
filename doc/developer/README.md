@@ -12,22 +12,23 @@ Hitobito is divided into several modules which hold different logic. If you are 
 for a specific module or feature take a look 🔍 at the list below.
 
 * Common:
-  * [In general](modules/common/common.md)
+  * [In general](modules/common/README)
   * [Architecture](modules/common/architecture/README.md)
-  * [Interfaces](modules/common/interfaces/interfaces.md)
+  * [API authentification](modules/common/api_auth/README)
 * Events
-  * [In general](modules/events/events.md)
+  * [In general](modules/events/README)
   * [Participations](modules/events/participations.md)
 * Invoices
-  * [In general](modules/invoices/invoices.md)
+  * [In general](modules/invoices/README)
   * [Dynamic Invoice Items](modules/invoices/dynamic_invoice_items.md)
 * Messages
-  * [In general](modules/messages/messages.md)
+  * [In general](modules/messages/README)
   * [E-Mail](modules/messages/e-mail/README.md)
 * People
-  * [In general](modules/people/people.md)
+  * [In general](modules/people/README)
 * Role
-  * [In general](modules/roles/roles.md)
-
+  * [In general](modules/roles/README)
+* Rake Tasks
+  * [Table](09_rake_tasks.md)
 
 All graphics are created using [Draw.io](https://draw.io) and are stored as original .xml as well as .svg files.

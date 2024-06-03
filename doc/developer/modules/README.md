@@ -3,9 +3,9 @@
 Hitobito kann funktionell in verschiedene Module unterteilt werden:
 
 * [Common](common)
-* [People](people/people.md)
+* [People](people/README)
 * [Groups](undefined)
-* [Roles](roles/roles.md)
+* [Roles](roles/README)
 * [Messages](messages.md)
 * [Invoices](invoices.md)
 * [Events](events.md)

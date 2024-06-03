@@ -1,7 +1,7 @@
 ## Entwicklungs Guidelines
 
 Für Dokumentation von ArchitekturKonzepten (Fachliche Strukturen, Rolle, Anlässe, Kurse, Abilities
-..) siehe [doc/architectur/08_kozepte.md](doc/architectur/08_kozepte.md).
+..) siehe [doc/architectur/08_kozepte.md](modules/common/architecture/08_konzepte.md).
 
 ### Code Conventions
 

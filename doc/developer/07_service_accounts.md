@@ -1,6 +1,6 @@
 ## Service Accounts
 
-Service accounts allow to create a dedicated account with certain permissions for an external application. Using this account, the external application can then access the [JSON API](modules/common/api_auth/rest_api). Service accounts are created on a layer by an authorized person, and also persist once this person leaves the group or is deleted.
+Service accounts allow to create a dedicated account with certain permissions for an external application. Using this account, the external application can then access the [JSON API](modules/common/api_auth/rest_api.md). Service accounts are created on a layer by an authorized person, and also persist once this person leaves the group or is deleted.
 
 ### Permissions
 Keys can be managed by using the "API-Keys" tab by people with `:layer_and_below_full` or `:layer_full` [permissions](modules/common/architecture/08_konzepte.md) on the layer. This usually includes only the main leader roles in each layer, address manager is not enough.
@@ -22,7 +22,7 @@ During creation, the permissions of a service account and its corresponding serv
 
 ### Accessing JSON:API
 
-All endpoints from the [JSON:API](modules/common/api_auth/json_api) can be used with service accounts. There are two possibilities to use the API:
+All endpoints from the [JSON:API](modules/common/api_auth/json_api.md) can be used with service accounts. There are two possibilities to use the API:
 
 * **Query parameter**: Send `token` as query parameter in the URL, and append `.json` to the URL path
 ```bash
@@ -38,7 +38,7 @@ curl -H "X-Token: DtmPJ1iimjJi2neQQDq8efrqS5gBa7-5b8ZxboBCFdAm4HBBBP" \
 
 ### Accessing the legacy json api
 
-All endpoints from the [JSON API](modules/common/api_auth/rest_api) can be used with service accounts. There are two possibilities to use the API:
+All endpoints from the [JSON API](modules/common/api_auth/rest_api.md) can be used with service accounts. There are two possibilities to use the API:
 
 * **Query parameter**: Send `token` as query parameter in the URL, and append `.json` to the URL path
 ```bash

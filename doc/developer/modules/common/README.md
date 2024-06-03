@@ -5,7 +5,7 @@ architecture.
 * [Architecture](architecture/README.md)
 * [API Authentification](api_auth/README)
 
-## Optional Features
+## Optional Features 👏
 Under this section you'll find some additional features that were implemented in our different
 modules.
 
@@ -13,7 +13,9 @@ modules.
 * [Locations](optional_features/locations.md)
 * [Additional Table Column](optional_features/table-display-additional-columns.md)
 
-## Gems
+## Gems 💎
 Discover the most important gems in our rails project and what they are used for.
+
+* [Gem documentation](gems/README.md)
 
 

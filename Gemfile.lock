@@ -1,4 +1,11 @@
 GIT
+  remote: https://github.com/dmitrykok/hpricot.git
+  revision: 3f1f5fc980b2c3c377d53feaa85fea5cf9d5f0fb
+  ref: 3f1f5fc980b2c3c377d53feaa85fea5cf9d5f0fb
+  specs:
+    hpricot (0.8.6)
+
+GIT
   remote: https://github.com/puzzle/graphiti-openapi.git
   revision: 617a4e34747ea7c008ada10e255d822636adee3e
   tag: standalone/0.6.3
@@ -319,7 +326,6 @@ GEM
     hashery (2.1.2)
     headless (2.3.1)
     hirb (0.7.3)
-    hpricot (0.8.6)
     htmlentities (4.3.4)
     http-accept (1.7.0)
     http-cookie (1.0.5)
@@ -790,6 +796,7 @@ DEPENDENCIES
   haml
   headless
   hirb
+  hpricot!
   http_accept_language
   icalendar
   image_processing (~> 1.12)

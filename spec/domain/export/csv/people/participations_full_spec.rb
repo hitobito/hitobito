@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -46,9 +46,11 @@ describe Export::Tabular::People::ParticipationsFull do
     let(:data_without_bom) { data.gsub(Regexp.new("^#{Export::Csv::UTF8_BOM}"), '') }
     let(:csv) { CSV.parse(data_without_bom, headers: true, col_sep: Settings.csv.separator) }
     let(:full_headers) do
-      ['Vorname', 'Nachname', 'Firmenname', 'Übername', 'Firma', 'Haupt-E-Mail',
-       'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag',
-       'Zusätzliche Angaben', 'Rollen', 'Anmeldedatum', 'Hauptebene']
+      [
+        'Vorname', 'Nachname', 'Firmenname', 'Übername', 'Firma', 'Haupt-E-Mail',
+        'Strasse', 'Hausnummer', 'zusätzliche Adresszeile', 'Postfach', 'PLZ', 'Ort', 'Land',
+        'Geschlecht', 'Geburtstag', 'Zusätzliche Angaben', 'Rollen', 'Anmeldedatum', 'Hauptebene'
+      ]
     end
 
     subject { csv }

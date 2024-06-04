@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2018, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -142,11 +142,12 @@ describe Person::Household do
       member.household_people_ids = [leader.id]
       expect(household(member)).not_to be_valid
       expect(member.errors).to have_key(:town)
-      expect(member.errors.full_messages).to eq [
-        "Adresse : Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne Top Leader aus dem Haushalt, um die Adresse anzupassen.",
-         "PLZ : Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne Top Leader aus dem Haushalt, um die Adresse anzupassen.",
-         "Ort : Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne Top Leader aus dem Haushalt, um die Adresse anzupassen.",
-         "Land : Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne Top Leader aus dem Haushalt, um die Adresse anzupassen."
+      expect(member.errors.full_messages).to match_array [
+        'Strasse : Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne Top Leader aus dem Haushalt, um die Adresse anzupassen.',
+        'Hausnummer : Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne Top Leader aus dem Haushalt, um die Adresse anzupassen.',
+        'PLZ : Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne Top Leader aus dem Haushalt, um die Adresse anzupassen.',
+        'Ort : Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne Top Leader aus dem Haushalt, um die Adresse anzupassen.',
+        'Land : Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne Top Leader aus dem Haushalt, um die Adresse anzupassen.'
       ]
     end
   end

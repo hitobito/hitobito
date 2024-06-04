@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2020, CVP Schweiz. This file is part of
+#  Copyright (c) 2012-2024, CVP Schweiz. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
@@ -60,15 +60,21 @@ describe Address::CheckValidityJob do
     end
 
     it 'sends no emails if no invalid people are found' do
-      allow(Settings.addresses).to receive(:validity_job_notification_emails).and_return(['mail@example.com', 'addresses@example.com'])
-      person.update!(address: address.street_short, zip_code: address.zip_code, town: address.town)
+      allow(Settings.addresses)
+        .to receive(:validity_job_notification_emails)
+        .and_return(['mail@example.com', 'addresses@example.com'])
 
-      perform_enqueued_jobs do
-        expect do
+      person.update!(
+        street: address.street_short, housenumber: address.numbers.first,
+        zip_code: address.zip_code, town: address.town
+      )
+
+      expect do
+        perform_enqueued_jobs do
           job.perform
-        end.to_not change { ActionMailer::Base.deliveries.size }
-        expect(ActsAsTaggableOn::Tagging.count).to eq(0)
-      end
+        end
+      end.to_not(change { ActionMailer::Base.deliveries.size })
+      expect(ActsAsTaggableOn::Tagging.count).to eq(0)
     end
 
     it 'sends no emails if no mail address is defined' do
@@ -85,14 +91,16 @@ describe Address::CheckValidityJob do
     it 'sends no emails if no invalid people are found and no mail address is defined' do
       allow(Settings.addresses).to receive(:validity_job_notification_emails).and_return([])
 
-      person.update!(address: address.street_short, zip_code: address.zip_code, town: address.town)
+      person.update!(
+        street: address.street_short, housenumber: address.numbers.first,
+        zip_code: address.zip_code, town: address.town
+      )
 
-      perform_enqueued_jobs do
+      expect do
         expect do
-          job.perform
-        end.to_not change { ActionMailer::Base.deliveries.size }
-        expect(ActsAsTaggableOn::Tagging.count).to eq(0)
-      end
+          perform_enqueued_jobs { job.perform }
+        end.to_not(change { ActionMailer::Base.deliveries.size })
+      end.to_not(change { ActsAsTaggableOn::Tagging.count })
     end
   end
 end

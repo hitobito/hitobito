@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -143,8 +143,17 @@ module PeopleHelper
   end
 
   def oneline_address(message)
-    address = message.message_recipients.find_by(person_id: @person.id).address
-    address.to_s.split("\n").join(', ')
+    person = message.message_recipients.find_by(person_id: @person.id)
+
+    if FeatureGate.enabled?('structured_addresses')
+      [
+        person.address_care_of,
+        person.address,
+        person.postbox
+      ].reject(&:blank).join(', ')
+    else
+      person.address.to_s.split("\n").join(', ')
+    end
   end
 
   def person_otp_qr_code(otp)

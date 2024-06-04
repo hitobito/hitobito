@@ -5,11 +5,17 @@ class GroupSeeder
 
   def group_attributes
     {
-      address: Faker::Address.street_address,
+      street: Faker::Address.street_name,
+      housenumber: Faker::Address.building_number,
       zip_code: Faker::Address.zip_code[0..3],
       town: Faker::Address.city,
       email: Faker::Internet.safe_email
-    }
+    }.then do |attrs|
+      attrs[:address_care_of] = Faker::Address.secondary_address if (1..10).to_a.shuffle == 1
+      attrs[:postbox] = Faker::Address.mail_box if (1..10).to_a.shuffle == 1
+
+      attrs
+    end
   end
 
   def seed_social_accounts(group)

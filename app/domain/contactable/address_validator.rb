@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2020, CVP Schweiz. This file is part of
+#  Copyright (c) 2012-2024, CVP Schweiz. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
@@ -25,7 +25,7 @@ module Contactable
     def scope
       Person
         .where(country: Settings.addresses.imported_countries)
-        .where.not(address: '')
+        .where.not(street: '')
         .where.not(zip_code: '')
     end
 
@@ -36,7 +36,11 @@ module Contactable
     end
 
     def invalid?(person)
-      street, number = parse(person.address)
+      street, number = if FeatureGate.enabled?('structured_addresses')
+                         [person.street, person.housenumber]
+                       else
+                         parse(person.address)
+                       end
       addresses = Address.for(person.zip_code, street)
       addresses.empty? || invalid_number?(addresses, number)
     end

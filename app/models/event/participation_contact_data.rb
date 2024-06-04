@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2017, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Pfadibewegung Schweiz. This file is part of
 #  hitobito_youth and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_youth.
@@ -13,9 +13,27 @@ class Event::ParticipationContactData
 
   self.mandatory_contact_attrs = [:email, :first_name, :last_name]
 
-  self.contact_attrs = [:first_name, :last_name, :nickname, :company_name,
-                        :email, :address, :zip_code, :town,
+  self.contact_attrs = [:first_name, :last_name, :nickname, :company_name, :email,
+                        :address_care_of, :street, :housenumber, :postbox,
+                        :zip_code, :town,
                         :country, :gender, :birthday, :phone_numbers, :language]
+
+  if FeatureGate.disabled?('structured_addresses')
+    contact_attrs.delete(:address_care_of)
+    contact_attrs.delete(:street)
+    contact_attrs.delete(:housenumber)
+    contact_attrs.delete(:postbox)
+
+    if FeatureGate.disabled?('address_migration')
+      contact_attrs << :address
+    end
+  end
+  if FeatureGate.enabled?('address_migration')
+    contact_attrs.delete(:address_care_of)
+    contact_attrs.delete(:street)
+    contact_attrs.delete(:housenumber)
+    contact_attrs.delete(:postbox)
+  end
 
   self.contact_associations = [:additional_emails, :social_accounts]
 

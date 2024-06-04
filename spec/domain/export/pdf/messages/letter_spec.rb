@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2020-2023, CVP Schweiz. This file is part of
+#  Copyright (c) 2020-2024, CVP Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -23,7 +23,7 @@ describe Export::Pdf::Messages::Letter do
   subject { described_class.new(letter, options) }
 
   before do
-    people(:top_leader).update!(address: 'Funkystreet 42', zip_code: '4242')
+    people(:top_leader).update!(street: 'Funkystreet', housenumber: '42', zip_code: '4242')
   end
 
   it 'sanitizes filename' do

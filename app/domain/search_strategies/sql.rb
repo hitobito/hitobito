@@ -1,4 +1,6 @@
-#  Copyright (c) 2017-2021, Hitobito AG. This file is part of
+# frozen_string_literal: true
+
+#  Copyright (c) 2017-2024, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -11,14 +13,26 @@ module SearchStrategies
     SEARCH_FIELDS = {
       'Person' => {
         attrs: ['people.first_name', 'people.last_name', 'people.company_name', 'people.nickname',
-                'people.company', 'people.email', 'people.address', 'people.zip_code',
+                'people.company', 'people.email', 'people.zip_code',
                 'people.town', 'people.country', 'people.birthday', 'people.additional_information',
-                'phone_numbers.number', 'social_accounts.name', 'additional_emails.email'],
+                'phone_numbers.number', 'social_accounts.name',
+                'additional_emails.email'].then do |attrs|
+                 if FeatureGate.enabled?('structured_addresses')
+                   attrs << 'people.address_care_of'
+                   attrs << 'people.street'
+                   attrs << 'people.housenumber'
+                   attrs << 'people.postbox'
+                 else
+                   attrs << 'people.address'
+                 end
+
+                 attrs
+               end,
         joins: ['LEFT JOIN phone_numbers ON phone_numbers.contactable_id = people.id AND ' \
                 "phone_numbers.contactable_type = 'Person'",
-                'LEFT JOIN social_accounts ON social_accounts.contactable_id = people.id AND '\
+                'LEFT JOIN social_accounts ON social_accounts.contactable_id = people.id AND ' \
                 "phone_numbers.contactable_type = 'Person'",
-                'LEFT JOIN additional_emails ON additional_emails.contactable_id = people.id AND '\
+                'LEFT JOIN additional_emails ON additional_emails.contactable_id = people.id AND ' \
                 "phone_numbers.contactable_type = 'Person'"]
       },
       'Group' => {
@@ -36,11 +50,11 @@ module SearchStrategies
                 "phone_numbers.contactable_type = 'Group'",
 
                 'LEFT JOIN social_accounts ON ' \
-                "social_accounts.contactable_id = #{Group.quoted_table_name}.id AND "\
+                "social_accounts.contactable_id = #{Group.quoted_table_name}.id AND " \
                 "phone_numbers.contactable_type = 'Group'",
 
                 'LEFT JOIN additional_emails ON ' \
-                "additional_emails.contactable_id = #{Group.quoted_table_name}.id AND "\
+                "additional_emails.contactable_id = #{Group.quoted_table_name}.id AND " \
                 "phone_numbers.contactable_type = 'Group'"]
       },
       'Event' => {

@@ -6,10 +6,11 @@
 #  https://github.com/hitobito/hitobito.
 
 Rails.application.config.to_prepare do
-  show_details_person_attrs = %i(gender birthday language)
+  show_details_person_attrs = [:gender, :birthday, :language]
   public_person_attrs = (
     Person::PUBLIC_ATTRS -
-    %i(first_name last_name nickname zip_code town address picture) -
+    [:first_name, :last_name, :nickname, :picture] -
+    [:zip_code, :town, :address, :street, :housenumber, :address_care_of, :postbox] -
     show_details_person_attrs -
     Person::INTERNAL_ATTRS
   ) & Person.used_attributes
@@ -35,7 +36,7 @@ Rails.application.config.to_prepare do
                                show_details_person_attrs.map { |column| "person.#{column}" })
   TableDisplay.register_column(Event::Participation,
                                TableDisplays::People::LayerGroupLabelColumn,
-                               "person.layer_group_label")
+                               'person.layer_group_label')
   TableDisplay.register_multi_column(Event::Participation,
                                      TableDisplays::Event::Participations::QuestionColumn)
   TableDisplay.register_column(Event::Participation,

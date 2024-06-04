@@ -1,4 +1,6 @@
-#  Copyright (c) 2012-2015, Jungwacht Blauring Schweiz. This file is part of
+# frozen_string_literal: true
+
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -18,8 +20,9 @@ describe 'export import person' do
                          company: false,
                          nickname: 'Expo',
                          email: 'exporter@hitobito.example.org',
-                         address: 'Foostreet',
-                         zip_code: 'A1234',
+                         street: 'Foostreet',
+                         housenumber: '23',
+                         zip_code: '12345',
                          town: 'Berlin',
                          country: 'DE',
                          gender: 'm',

@@ -84,7 +84,7 @@ describe Messages::LetterDispatch do
       # other housemate is not part of member list, so only bottom member should be included without household address
       create_household(people(:bottom_member), other_housemate)
 
-      top_leader.update!(address: 'Fantasia 42', zip_code: '4242', town: 'Melmac')
+      top_leader.update!(street: 'Fantasia', housenumber: '42', zip_code: '4242', town: 'Melmac')
     end
 
     it 'does not concern household addresses' do

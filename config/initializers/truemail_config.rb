@@ -1,4 +1,4 @@
-#  Copyright (c) 2020-2023, Hitobito AG. This file is part of
+#  Copyright (c) 2020-2024, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -53,6 +53,7 @@ Truemail.configure do |config|
 
   if Rails.env.development? || Rails.env.test? || mailtrap?
     config.whitelisted_domains = ['duplicates.example.com', 'hitobito.example.com', 'example.com', 'example.net', 'example.org']
+    config.blacklisted_domains = ['gitsäuäniä.it', 'domainungueltig42.ch', 'email.haha']
   end
 
   # Optional parameter. With this option Truemail will validate email which contains whitelisted

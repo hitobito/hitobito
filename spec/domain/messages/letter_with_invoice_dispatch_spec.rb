@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, CVP Schweiz. This file is part of
+#  Copyright (c) 2012-2024, CVP Schweiz. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -18,7 +18,7 @@ describe Messages::LetterWithInvoiceDispatch do
     Subscription.create!(mailing_list: mailing_lists(:leaders),
                          subscriber: groups(:top_group),
                          role_types: [Group::TopGroup::Leader])
-    top_leader.update!(address: 'Fantasia 42', zip_code: '4242', town: 'Melmac')
+    top_leader.update!(street: 'Fantasia', housenumber: '42', zip_code: '4242', town: 'Melmac')
   end
 
   it 'updates message invoice_list and invoices' do

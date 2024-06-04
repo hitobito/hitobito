@@ -16,7 +16,7 @@ describe People::Membership::VerifyController, type: :controller do
   let(:dom) { Capybara::Node::Simple.new(response.body) }
   before do
     top_layer = groups(:top_layer)
-    top_layer.update!(address: 'Muhrgasse 42a', zip_code: '4242', town: 'Romyland')
+    top_layer.update!(street: 'Muhrgasse', housenumber: '42a', zip_code: '4242', town: 'Romyland')
   end
 
   describe 'GET #show' do

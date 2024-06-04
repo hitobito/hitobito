@@ -456,7 +456,9 @@ describe Group do
   end
 
   context 'contacts' do
-    let(:contactable) { { address: 'foobar', zip_code: 3600, town: 'thun', country: 'ch' } }
+    let(:contactable) do
+      { street: 'An der Foobar', housenumber: '23', zip_code: 3600, town: 'thun', country: 'ch' }
+    end
     let(:group) { groups(:top_group) }
 
     subject { group }
@@ -464,7 +466,8 @@ describe Group do
 
     context 'no contactable but contact info' do
       its(:contact)   { should be_blank }
-      its(:address)   { should eq 'foobar' }
+      its(:street)    { should eq 'An der Foobar' }
+      its(:housenumber) { should eq '23' }
       its(:town)      { should eq 'thun' }
       its(:zip_code)  { should eq 3600 }
       its(:country)   { should eq 'CH' }
@@ -472,12 +475,16 @@ describe Group do
 
     context 'discards contact info when contactable is set' do
       let(:contact) { Fabricate(:person, other_contactable) }
-      let(:other_contactable) { { address: 'barfoo', zip_code: nil } }
+      let(:other_contactable) { { street: 'barfoo', zip_code: nil } }
+      let!(:other_contactable_role) do
+        Fabricate(group.role_types.first.sti_name.to_sym, group: group, person: contact)
+      end
 
-      before { group.update_attribute(:contact, contact) }
+      before do
+        group.update_attribute(:contact, contact)
+      end
 
-      its(:address) { should eq 'barfoo' }
-      its(:address?) { should be_truthy }
+      its(:street) { should eq 'barfoo' }
       its(:zip_code?) { should be_falsey }
     end
 

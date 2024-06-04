@@ -27,7 +27,7 @@
 #  index_messages_on_mailing_list_id  (mailing_list_id)
 #  index_messages_on_sender_id        (sender_id)
 #
-#  Copyright (c) 2012-2021, CVP Schweiz. This file is part of
+#  Copyright (c) 2012-2024, CVP Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -101,7 +101,7 @@ describe Message::LetterWithInvoice do
       end
 
       it '#recipients only considers Person.with_address' do
-        recipient.update(address: nil)
+        recipient.update(street: nil)
         expect(subject.recipients).to be_empty
       end
     end

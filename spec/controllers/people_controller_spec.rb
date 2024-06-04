@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -993,7 +993,7 @@ describe PeopleController do
     it 'POST#update rerenders edit formal when not permitted to update addresse' do
       sign_in(member)
       put :update, params: { group_id: member.primary_group_id, id: member.id, person: { household_people_ids: [top_leader.id] } }
-      expect(assigns(:person)).to have(4).errors
+      expect(assigns(:person)).to have(5).errors
       expect(response).to render_template('edit')
     end
 

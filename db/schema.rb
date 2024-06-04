@@ -438,6 +438,10 @@ ActiveRecord::Schema.define(version: 2024_05_03_120000) do
     t.string "text_message_originator"
     t.string "letter_address_position", default: "left", null: false
     t.boolean "self_registration_require_adult_consent", default: false, null: false
+    t.string "street"
+    t.string "housenumber", limit: 20
+    t.string "address_care_of"
+    t.string "postbox"
     t.index ["layer_group_id"], name: "index_groups_on_layer_group_id"
     t.index ["lft", "rgt"], name: "index_groups_on_lft_and_rgt"
     t.index ["parent_id"], name: "index_groups_on_parent_id"
@@ -881,6 +885,10 @@ ActiveRecord::Schema.define(version: 2024_05_03_120000) do
     t.datetime "inactivity_block_warning_sent_at"
     t.datetime "blocked_at"
     t.string "membership_verify_token"
+    t.string "street"
+    t.string "housenumber", limit: 20
+    t.string "address_care_of"
+    t.string "postbox"
     t.index ["authentication_token"], name: "index_people_on_authentication_token"
     t.index ["confirmation_token"], name: "index_people_on_confirmation_token", unique: true
     t.index ["email"], name: "index_people_on_email", unique: true

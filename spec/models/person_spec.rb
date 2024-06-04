@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -490,7 +490,10 @@ describe Person do
     expect(attrs[:nickname]).to eq(label: 'Übername', type: :string)
     expect(attrs[:company_name]).to eq(label: 'Firmenname', type: :string)
     expect(attrs[:email]).to eq(label: 'Haupt-E-Mail', type: :string)
-    expect(attrs[:address]).to eq(label: 'Adresse', type: :text)
+    expect(attrs[:address_care_of]).to eq(label: 'zusätzliche Adresszeile', type: :string)
+    expect(attrs[:street]).to eq(label: 'Strasse', type: :string)
+    expect(attrs[:housenumber]).to eq(label: 'Hausnummer', type: :string)
+    expect(attrs[:postbox]).to eq(label: 'Postfach', type: :string)
     expect(attrs[:zip_code]).to eq(label: 'PLZ', type: :string)
     expect(attrs[:town]).to eq(label: 'Ort', type: :string)
     expect(attrs[:country]).to eq(label: 'Land', type: :string)
@@ -575,7 +578,7 @@ describe Person do
 
     it 'sends sentry notification if correct email is invalid' do
       allow(Truemail).to receive(:valid?).and_return(false)
-      person.email = 'dude@blabliblablu.ch'
+      person.email = 'dude@domainungueltig42.ch'
 
       expect(Raven).to receive(:capture_message)
         .exactly(:once)
@@ -643,7 +646,8 @@ describe Person do
     it 'removes invalid address tags when saving new address' do
       expect(taggings.count).to eq(1)
 
-      person.address = 'Belpstrasse 37'
+      person.street = 'Belpstrasse'
+      person.housenumber = '37'
       person.save!
 
       expect(taggings.reload.count).to eq(0)

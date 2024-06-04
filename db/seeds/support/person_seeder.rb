@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2022, Puzzle ITC. This file is part of
+#  Copyright (c) 2012-2024, Puzzle ITC. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -74,13 +74,19 @@ class PersonSeeder
       first_name: first_name,
       last_name: last_name,
       email: "#{Faker::Internet.user_name(specifier: "#{first_name} #{last_name}").parameterize}@hitobito.example.com",
-      address: Faker::Address.street_address,
+      street: Faker::Address.street_name,
+      housenumber: Faker::Address.building_number,
       zip_code:  Faker::Address.zip_code[0..3],
       town: Faker::Address.city,
       gender: %w(m w).shuffle.first,
       birthday: random_date,
       encrypted_password: encrypted_password
-    }
+    }.then do |attrs|
+      attrs[:address_care_of] = Faker::Address.secondary_address if (1..10).to_a.shuffle == 1
+      attrs[:postbox] = Faker::Address.mail_box if (1..10).to_a.shuffle == 1
+
+      attrs
+    end
   end
 
   def assign_role_to_root(group, role_type)

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -483,24 +483,26 @@ describe EventsController do
 
       put :update, params: { group_id: group.id, id: event.id,
                              event: { contact_attrs: { nickname: :required,
-                                                       address: :hidden,
+                                                       street: :hidden,
+                                                       housenumber: :hidden,
                                                        social_accounts: :hidden } } }
 
       expect(event.reload.required_contact_attrs).to include('nickname')
-      expect(event.reload.hidden_contact_attrs).to include('address')
+      expect(event.reload.hidden_contact_attrs).to include('street')
+      expect(event.reload.hidden_contact_attrs).to include('housenumber')
       expect(event.reload.hidden_contact_attrs).to include('social_accounts')
 
     end
 
     it 'removes contact attributes' do
 
-      event.update!({ hidden_contact_attrs: %w(social_accounts address nickname) })
+      event.update!({ hidden_contact_attrs: %w(social_accounts street nickname) })
 
       put :update, params: { group_id: group.id, id: event.id,
                              event: { contact_attrs: { nickname: :hidden } } }
 
       expect(event.reload.hidden_contact_attrs).to include('nickname')
-      expect(event.hidden_contact_attrs).not_to include('address')
+      expect(event.hidden_contact_attrs).not_to include('street')
       expect(event.hidden_contact_attrs).not_to include('social_accounts')
 
     end

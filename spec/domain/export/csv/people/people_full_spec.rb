@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -37,12 +37,18 @@ describe Export::Tabular::People::PeopleFull do
     let(:lang) { :de }
 
     it 'has correct headers' do
-      expect(csv.headers).to eq([
-                                  'Vorname', 'Nachname', 'Firmenname', 'Übername', 'Firma', 'Haupt-E-Mail',
-                                  'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag',
-                                  'Zusätzliche Angaben', 'Sprache', 'Hauptebene', 'Rollen', 'Tags', 'Weitere E-Mail Vater',
-                                  'Telefonnummer Vater', 'Social Media Adresse Skype', 'Elternteil'
-                                ])
+      expected = [
+        'Vorname', 'Nachname', 'Firmenname', 'Übername', 'Firma', 'Haupt-E-Mail',
+        'PLZ', 'Ort', 'Land',
+        'Geschlecht', 'Geburtstag', 'Zusätzliche Angaben', 'Sprache',
+        'Strasse', 'Hausnummer', 'zusätzliche Adresszeile', 'Postfach',
+        'Hauptebene', 'Rollen',
+        'Tags', 'Weitere E-Mail Vater', 'Telefonnummer Vater', 'Social Media Adresse Skype',
+        'Elternteil'
+      ]
+
+      expect(csv.headers).to match_array expected
+      expect(csv.headers).to eq expected
     end
 
     context 'first row' do
@@ -69,7 +75,6 @@ describe Export::Tabular::People::PeopleFull do
         'Surnom',
         'Entreprise',
         'Adresse e-mail principale',
-        'Adresse',
         'NPA',
         'Lieu',
         'Pays',
@@ -77,6 +82,7 @@ describe Export::Tabular::People::PeopleFull do
         'Date de naissance',
         'Données supplémentaires',
         'Langue',
+        'Strasse', 'Hausnummer', 'zusätzliche Adresszeile', 'Postfach', # TODO: needs translations
         'Niveau',
         'Rôles',
         'Tags',

@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -267,7 +267,8 @@ describe Import::PersonImporter do
       its(:company) { should eq true }
       its(:company_name) { should eq 'Mrs. Jalon Kling' }
       its(:email) { should eq 'ramiro_brown@example.com' }
-      its(:address) { should eq '1649 Georgette Circles' }
+      its(:street) { should eq 'Georgette Circles' }
+      its(:housenumber) { should eq '1649' }
       its(:zip_code) { should eq '7202' }
       its(:town) { should be_blank }
       its(:gender) { should eq 'm' }

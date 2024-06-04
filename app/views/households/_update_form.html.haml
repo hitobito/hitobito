@@ -1,0 +1,15 @@
+- #  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+- #  hitobito and licensed under the Affero General Public License version 3
+- #  or later. See the COPYING file at the top-level directory or at
+- #  https://github.com/hitobito/hitobito.
+
+= standard_form(entry, url: group_person_household_path, method: :put, data: { turbo_frame: :_top }) do |f|
+  = render "hidden_member_fields"
+
+  .offset-md-3.offset-xl-2.px-2
+    %strong= t('.shared_address_info')
+    %address= Households::Address.new(entry).oneline
+
+  = button_toolbar(f, toolbar_class: :bottom) do
+    = submit_button(f, t('global.button.save'), { disabled: !entry.valid? })
+    = link_to(ti(:'button.cancel'), parents, class: 'link cancel', data: { turbo_frame: :_top})

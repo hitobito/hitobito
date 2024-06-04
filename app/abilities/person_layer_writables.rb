@@ -11,17 +11,17 @@ class PersonLayerWritables < GroupBasedFetchables
   self.same_layer_permissions = [:layer_and_below_full, :layer_full]
   self.above_layer_permissions = [:layer_and_below_full]
 
-  def initialize(user)
+  def initialize(user, scope = Person.only_public_data)
     super(user)
-
-    can :index, Person, accessible_people { |_| true }
+    @scope = scope
+    can(:index, Person, accessible_people { |_| true })
   end
 
   private
 
   def accessible_people
     if user.root?
-      Person.only_public_data
+      @scope
     else
       accessible_people_scope
     end
@@ -30,7 +30,7 @@ class PersonLayerWritables < GroupBasedFetchables
   def accessible_people_scope
     conditions = writable_conditions
     if conditions.present?
-      Person.only_public_data.
+      @scope.
         joins(roles: :group).
         where(groups: { deleted_at: nil }).
         where(conditions.to_a).

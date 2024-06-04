@@ -1,0 +1,16 @@
+- #  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+- #  hitobito and licensed under the Affero General Public License version 3
+- #  or later. See the COPYING file at the top-level directory or at
+- #  https://github.com/hitobito/hitobito.
+
+%tr{class: row_class}
+  %td{style: 'width: 2em'}
+    - if member.person.unconfirmed_email
+      = icon(:'trash-alt', title: t('.unconfirmed_email_info'))
+    - else
+      = link_to(edit_group_person_household_path(member_ids: member_ids), data: { confirm: t('global.confirm_delete')}) do
+        = icon(:'trash-alt')
+
+  %td
+    %strong= link_to(member.person, member.person)
+    %span= "(#{member.person.years})" if member.person.years

@@ -3,31 +3,36 @@
 // or later. See the COPYING file at the top-level directory or at
 // https://github.com/hitobito/hitobito
 
-import { Controller } from "@hotwired/stimulus"
-import debounce from "lodash.debounce"
+import { Controller } from "@hotwired/stimulus";
+import debounce from "lodash.debounce";
 
 export default class extends Controller {
   static values = {
     delay: {
       type: Number,
-      default: 150
-    }
-  }
+      default: 150,
+    },
+  };
 
   initialize() {
-    this.save = this.save.bind(this)
+    this.save = this.save.bind(this);
   }
 
   connect() {
+    console.log("connected");
     if (this.delayValue > 0) {
-      this.save = debounce(this.save, this.delayValue)
+      this.save = debounce(this.save, this.delayValue);
     }
   }
 
   save(event) {
-    const submit = document.querySelector('input[name=autosubmit]')
-    submit.value = event.target.name || "autosubmit";
-    this.element.requestSubmit();
-    submit.value = '';
+    const submit = document.querySelector("input[name=autosubmit]");
+    if (submit) {
+      submit.value = event.target.name || "autosubmit";
+      this.element.requestSubmit();
+      submit.value = "";
+    } else {
+      this.element.requestSubmit();
+    }
   }
 }

@@ -43,7 +43,8 @@ Hitobito::Application.routes.draw do
     get '/addresses/query' => 'addresses#query'
 
     get '/people/query' => 'person/query#index', as: :query_people
-    get '/people/query_household' => 'person/query_household#index', as: :query_household
+    get '/people/query_household/(:person_id)' => 'person/query_household#index',
+        as: :query_household
     get '/people/company_name' => 'person/company_name#index', as: :query_company_name
     get '/people/:id' => 'person/top#show', as: :person
     get '/events/:id' => 'event/top#show', as: :event
@@ -103,7 +104,8 @@ Hitobito::Application.routes.draw do
 
       resource :invoice_list, except: [:edit, :show]
       resources :invoice_lists, only: [:index] do
-        resource :destroy, only: [:show, :destroy], module: :invoice_lists, as: 'invoice_lists_destroy'
+        resource :destroy, only: [:show, :destroy], module: :invoice_lists,
+                           as: 'invoice_lists_destroy'
         resources :invoices, only: [:index]
       end
       resource :payment_process, only: [:new, :show, :create]
@@ -111,6 +113,8 @@ Hitobito::Application.routes.draw do
       resources :notes, only: [:index, :create, :destroy]
 
       resources :people, except: [:new, :create] do
+        resource :household, except: [:new, :create]
+
         scope module: 'people' do
           resource :manual_deletion, only: [:show] do
             post :minimize
@@ -178,7 +182,7 @@ Hitobito::Application.routes.draw do
           get :role_types
         end
 
-        resources :terminations, module: :roles, only: %w[new create]
+        resources :terminations, module: :roles, only: %w(new create)
       end
       get 'roles' => 'roles#new' # route required for language switch
       get 'roles/:id' => 'roles#edit' # route required for language switch
@@ -273,10 +277,12 @@ Hitobito::Application.routes.draw do
             resources :person, only: [:new, :create], controller: 'subscriber/person'
             get 'person' => 'subscriber/person#new' # route required for language switch
 
-            resources :exclude_person, only: [:new, :create], controller: 'subscriber/exclude_person'
+            resources :exclude_person, only: [:new, :create],
+                                       controller: 'subscriber/exclude_person'
             get 'exclude_person' => 'subscriber/exclude_person#new' # route required for language switch
 
-            resources :group, only: [:new, :create, :edit, :update], controller: 'subscriber/group' do
+            resources :group, only: [:new, :create, :edit, :update],
+                              controller: 'subscriber/group' do
               collection do
                 get :query
                 get :roles
@@ -329,7 +335,8 @@ Hitobito::Application.routes.draw do
     resources :event_kinds, module: 'event', controller: 'kinds'
     resources :event_kind_categories, module: 'event', controller: 'kind_categories'
 
-    get 'hitobito_log_entries(/:category)', to: 'hitobito_log_entries#index', as: :hitobito_log_entries
+    get 'hitobito_log_entries(/:category)', to: 'hitobito_log_entries#index',
+                                            as: :hitobito_log_entries
 
     scope 'mailing_lists', module: :mailing_lists do
       scope 'imap_mails' do
@@ -362,10 +369,10 @@ Hitobito::Application.routes.draw do
     resources :help_texts, except: [:show]
 
     devise_for :service_tokens, only: [:sessions]
-    devise_for :people, skip: [:registrations], path: "users", controllers: {
-        passwords: 'devise/hitobito/passwords',
-        registrations: 'devise/hitobito/registrations',
-        sessions: 'devise/hitobito/sessions'
+    devise_for :people, skip: [:registrations], path: 'users', controllers: {
+      passwords: 'devise/hitobito/passwords',
+      registrations: 'devise/hitobito/registrations',
+      sessions: 'devise/hitobito/sessions'
     }
     devise_for :oauth_tokens, skip: :all, class_name: 'Oauth::AccessToken'
     as :person do
@@ -405,7 +412,8 @@ Hitobito::Application.routes.draw do
   get 'api/schema', to: 'json_api/schema#show'
   get 'api/openapi', to: 'json_api/openapi#show'
 
-  scope path: ApplicationResource.endpoint_namespace, module: :json_api, constraints: { format: 'jsonapi' }, defaults: { format: 'jsonapi' } do
+  scope path: ApplicationResource.endpoint_namespace, module: :json_api,
+        constraints: { format: 'jsonapi' }, defaults: { format: 'jsonapi' } do
     resources :people, only: [:index, :show, :update]
     resources :groups, only: [:index, :show]
     resources :events, only: [:index, :show]

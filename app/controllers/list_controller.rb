@@ -89,7 +89,6 @@ class ListController < ApplicationController
     authorize!(action_name.to_sym, model_class)
   end
 
-
   class << self
     # The ActiveRecord class of the model.
     def model_class
@@ -107,6 +106,7 @@ class ListController < ApplicationController
 
   end
 
+  include DryCrud::InstanceVariables
   include Searchable
   include Sortable
   include Rememberable

@@ -7,7 +7,7 @@
 
 class Households::MemberValidator < ActiveModel::Validator
 
-  delegate :person, :household, to: :'@member'
+  delegate :person, :household, to: :@member
   delegate :household_key, to: :household
 
   def validate(household_member)

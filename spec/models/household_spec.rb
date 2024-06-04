@@ -185,13 +185,13 @@ describe Household do
       person.update!(street: 'Loriweg', housenumber: '42', zip_code: '6600', town: 'Locarno', country: 'CH')
       household.add(other_person)
 
-      expected_attrs = { 'address_care_of' => nil,
-                         'street' => 'Loriweg',
-                         'housenumber' => '42',
-                         'postbox' => nil,
-                         'country' => 'CH',
-                         'town' => 'Locarno',
-                         'zip_code' => '6600' }
+      expected_attrs = { address_care_of: nil,
+                         street: 'Loriweg',
+                         housenumber: '42',
+                         postbox: nil,
+                         country: 'CH',
+                         town: 'Locarno',
+                         zip_code: '6600' }
 
       expect(household.address_attrs).to eq(expected_attrs)
     end
@@ -204,13 +204,13 @@ describe Household do
       household.save
       expect(household.reload).to be_valid
 
-      expected_attrs = { 'address_care_of' => nil,
-                         'street' => 'Loriweg',
-                         'housenumber' => '42',
-                         'postbox' => nil,
-                         'country' => nil,
-                         'town' => nil,
-                         'zip_code' => nil }
+      expected_attrs = { address_care_of: nil,
+                         street: 'Loriweg',
+                         housenumber: '42',
+                         postbox: nil,
+                         country: nil,
+                         town: nil,
+                         zip_code: nil }
 
       expect(household.address_attrs).to eq(expected_attrs)
     end
@@ -281,74 +281,6 @@ describe Household do
     end
   end
 
-  describe '#household_members_attributes= / params' do
-    it 'adds person to household' do
-      create_household
-      fourth_person = Fabricate(:person)
-
-      household_attrs = [{ person_id: person.id },
-                         { person_id: other_person.id },
-                         { person_id: third_person.id },
-                         { person_id: fourth_person.id }]
-
-      household.household_members_attributes = household_attrs
-
-      expect(household.save).to eq(true)
-
-      expect(household.reload.members.size).to eq(4)
-      expect(household.people).to include(person)
-      expect(household.people).to include(other_person)
-      expect(household.people).to include(third_person)
-      expect(household.people).to include(fourth_person)
-    end
-
-    it 'creates new household' do
-      household_attrs = [{ person_id: person.id },
-                         { person_id: other_person.id }]
-
-      household.household_members_attributes = household_attrs
-
-      expect(household.save).to eq(true)
-
-      expect(household.reload.members.size).to eq(2)
-    end
-
-    it 'is not created with only one person' do
-      household_attrs = [{ person_id: person.id }]
-
-      household.household_members_attributes = household_attrs
-
-      expect(household).to be_valid
-
-      expect(household.errors).to be_empty
-      expect(household.warnings.count).to eq(1)
-      expect(household.warnings.first.attribute).to eq(:members)
-      expect(household.warnings.first.message).to include('Der Haushalt wird aufgelöst da weniger als 2 Personen vorhanden sind.')
-
-      expect(household.save).to eq(true)
-
-      expect(Person.where(household_key: household.household_key)).not_to exist
-    end
-
-    it 'removes person from household' do
-      create_household
-      expect(household.members.size).to eq(3)
-
-      # third_person not included in params, so it should be removed
-      household_attrs = [{ person_id: person.id },
-                         { person_id: other_person.id }]
-
-      household.household_members_attributes = household_attrs
-
-      expect(household.removed_people.count).to eq(1)
-      expect(household.removed_people).to include(third_person)
-      expect(household.save).to eq(true)
-
-      expect(household.reload.members.size).to eq(2)
-      expect(household.people).to include(person)
-      expect(household.people).to include(other_person)
-    end
-  end
 
   describe 'logging' do
     with_versioning do

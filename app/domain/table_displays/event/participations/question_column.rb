@@ -37,7 +37,7 @@ module TableDisplays::Event::Participations
 
     def sort_by(attr)
       id = question_id(attr)
-      "CASE event_questions.id WHEN #{id} THEN 0 ELSE 1 END, TRIM(event_answers.answer)" if id
+      "event_questions.id = #{id} ASC, TRIM(event_answers.answer)" if id
     end
 
     protected

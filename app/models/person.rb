@@ -315,23 +315,6 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
       select(:sort_name).order(:sort_name)
     end
 
-    def order_by_name_statement
-      "CASE
-        WHEN people.company = #{connection.quote(true)} THEN people.company_name
-        WHEN people.last_name IS NOT NULL AND people.last_name != '' THEN 
-          CASE
-            WHEN people.first_name IS NOT NULL AND people.first_name != '' THEN 
-              CONCAT(people.last_name, ', ', people.first_name)
-            ELSE 
-              people.last_name
-          END 
-        WHEN people.first_name IS NOT NULL AND people.first_name != '' THEN 
-          people.first_name
-        ELSE
-          people.nickname
-      END AS order_case"
-    end
-
     def only_public_data
       select(PUBLIC_ATTRS.collect { |a| "people.#{a}" })
     end

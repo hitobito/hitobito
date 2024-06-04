@@ -200,7 +200,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     # hierarchically over all group types.
     def order_by_type(parent_group = nil)
       joins("INNER JOIN group_type_orders ON group_type_orders.name = groups.type")
-           .reorder("group_type_orders.order_weight ASC")
+           .reorder("group_type_orders.order_weight ASC, groups.name ASC")
     end
 
     private

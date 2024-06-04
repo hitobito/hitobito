@@ -24,10 +24,10 @@ module Paranoia
 
     module ClassMethods
       def list
-        with_translations.
-          select("#{self.table_name}.*", translated_label_column).
-          order(:deleted_at, translated_label_column).
-          distinct
+        with_translations.select("#{self.table_name}.*", translated_label_column)
+                         .order("#{self.table_name}.deleted_at ASC NULLS FIRST", 
+                                translated_label_column)
+                         .distinct
       end
     end
   end

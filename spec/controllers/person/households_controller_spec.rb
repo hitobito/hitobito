@@ -13,6 +13,8 @@ describe Person::HouseholdsController do
   let(:person)    { assigns(:person) }
   let(:household) { assigns(:household) }
 
+  before { leader.update!(address: nil, zip_code: nil, town: "Supertown") }
+
   context 'as leader' do
     before { sign_in(leader) }
 

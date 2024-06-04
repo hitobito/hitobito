@@ -19,7 +19,7 @@ describe Event::KindsController do
 
   it 'GET index lists destroyed entries last' do
     get :index
-    expect(assigns(:kinds).last).to eq(destroyed)
+    expect(assigns(:kinds).to_a.last).to eq(destroyed)
   end
 
   it 'POST create accepts qualification_conditions and general_information' do

@@ -111,6 +111,8 @@ group :development, :test do
   gem 'binding_of_caller'
   gem 'codez-tarantula', require: 'tarantula-rails3'
   gem 'graphiti_spec_helpers'
+  # Needs https://github.com/hpricot/hpricot/pull/71 to get it to install on newer systems
+  gem 'hpricot', github: 'dmitrykok/hpricot', ref: '3f1f5fc980b2c3c377d53feaa85fea5cf9d5f0fb'
   gem 'parallel_tests'
   gem 'pry-byebug'
   gem 'pry-doc' # provides show-source/$ in the pry-console

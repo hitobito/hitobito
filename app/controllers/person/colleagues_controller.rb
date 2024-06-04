@@ -49,6 +49,9 @@ class Person::ColleaguesController < ApplicationController
   include Sortable
 
   self.sort_mappings = {
-    roles: [Person.order_by_role_statement, Person.order_by_name_statement]
+    roles: {
+      joins: [:roles, "INNER JOIN role_type_orders ON roles.type = role_type_orders.name"],
+      order: ["role_type_orders.order_weight", "people.sort_name"]
+    }
   }
 end

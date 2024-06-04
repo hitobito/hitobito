@@ -263,7 +263,7 @@ class EventsController < CrudController
   def entries_page(page_param)
     page_scope = visible_entries.page(page_param)
 
-    if page_scope.count.zero?
+    if page_scope.size.zero?
       visible_entries.page(1)
     else
       page_scope
@@ -272,9 +272,9 @@ class EventsController < CrudController
 
   def visible_entries
     @visible_entries ||= begin
-      visible_entry_ids = entries.select { |entry| can?(:show, entry) }.map(&:id)
+      visible_entry_ids = entries.select(:id).select { |entry| can?(:show, entry) }.map(&:id)
 
-      entries.where(id: visible_entry_ids)
+      entries.select("events.*").where(id: visible_entry_ids)
     end
   end
 end

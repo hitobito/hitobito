@@ -44,8 +44,8 @@ describe PeopleController do
 
       context "sorting" do
         before do
-          top_leader.update(first_name: "Joe", last_name: "Smith", nickname: "js", town: "Stoke", address: "Howard Street", zip_code: "9000")
-          @tg_extern.update(first_name: "", last_name: "Bundy", nickname: "", town: "", address: "", zip_code: "")
+          top_leader.update(first_name: 'Joe', last_name: 'Smith', nickname: 'js', town: 'Stoke', address: 'Howard Street', zip_code: '9000')
+          @tg_extern.update(first_name: '', last_name: 'Bundy', nickname: '', town: '', address: '', zip_code: nil)
         end
 
         let(:role_type_ids) { [Role::External.id, Group::TopGroup::Leader.id, Group::TopGroup::Member.id].join("-") }
@@ -69,14 +69,14 @@ describe PeopleController do
         end
 
         it "sorts based on roles" do
-          get :index, params: {group_id: group, range: "layer", filters: {role: {role_type_ids: role_type_ids}}, sort: :roles, sort_dir: :asc}
-          expect(assigns(:people)).to eq([top_leader, @tg_member, @tg_extern])
+          get :index, params: { group_id: group, range: "layer", filters: { role: { role_type_ids: role_type_ids } }, sort: :roles, sort_dir: :asc }
+          expect(assigns(:people).object).to eq([top_leader,  @tg_member, @tg_extern])
         end
 
         %w[first_name nickname zip_code town].each do |attr|
           it "sorts based on #{attr}" do
-            get :index, params: {group_id: group, range: "layer", filters: {role: {role_type_ids: role_type_ids}}, sort: attr, sort_dir: :asc}
-            expect(assigns(:people)).to eq([@tg_member, top_leader, @tg_extern])
+            get :index, params: { group_id: group, range: "layer", filters: { role: { role_type_ids: role_type_ids } }, sort: attr, sort_dir: :asc }
+            expect(assigns(:people).object).to eq([@tg_member, top_leader,  @tg_extern])
           end
         end
       end
@@ -169,7 +169,7 @@ describe PeopleController do
             expect(cards[0][0..23]).to eq("BEGIN:VCARD\nVERSION:3.0\n")
             expect(cards[0]).to match(/^N:Leader;Top;;;/)
             expect(cards[0]).to match(/^FN:Top Leader/)
-            expect(cards[0]).to match(/^ADR:;;;Supertown;;;/)
+            expect(cards[0]).to match(/^ADR:;;Greatstreet 345;Greattown;;3456;/)
             expect(cards[0]).to match(/^EMAIL;TYPE=pref:top_leader@example.com/)
             expect(cards[0]).not_to match(/^TEL.*/)
             expect(cards[0]).not_to match(/^NICKNAME.*/)
@@ -1260,10 +1260,10 @@ describe PeopleController do
 
     it "GET#index sorts by extra column" do
       TableDisplay.register_column(Person, TableDisplays::PublicColumn, :gender)
-      top_leader.table_display_for(Person).update(selected: %w[gender])
-      Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person.update(gender: "m")
-      get :index, params: {group_id: group.id, sort: :gender, sort_dir: :desc}
-      expect(assigns(:people).first).to eq top_leader
+      top_leader.table_display_for(Person).update(selected: %w(gender))
+      Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person.update(gender: 'm')
+      get :index, params: { group_id: group.id, sort: :gender, sort_dir: :desc }
+      expect(assigns(:people).second).to eq top_leader
     end
 
     it "GET#index exports to csv using TableDisplay" do

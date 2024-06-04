@@ -24,16 +24,6 @@ module Sortable
     def sort_mappings=(hash)
       self.sort_mappings_with_indifferent_access = hash.with_indifferent_access
     end
-
-    # Puts null and empty strings last
-    def null_safe_sort(sort_expression)
-      table_attr, direction = sort_expression.split
-      null_safe = "CASE"
-      null_safe << " WHEN #{table_attr} IS NULL THEN 1"
-      null_safe << " WHEN #{table_attr} = '' THEN 1"
-      null_safe << " ELSE 0 END #{direction}"
-      [null_safe, sort_expression]
-    end
   end
 
   # Prepended methods for sorting.
@@ -43,7 +33,10 @@ module Sortable
     # Enhance the list entries with an optional sort order.
     def list_entries
       if sorting?
-        super.reorder(Arel.sql(sort_expression))
+        super.joins(join_tables)
+             .select(sort_expression)
+             .reorder(Arel.sql(sort_expression))
+             .select("*", :id)
       else
         super
       end
@@ -53,15 +46,22 @@ module Sortable
       params[:sort].present? && sortable?(params[:sort])
     end
 
-    # Return sort columns from defined mappings or as null_safe_sort from parameter.
     def sort_columns
-      sort_mappings_with_indifferent_access[params[:sort]] ||
-        self.class.null_safe_sort("#{model_class.table_name}.#{params[:sort]}")
+      sort_columns_expression = sort_mappings_with_indifferent_access[params[:sort]].is_a?(Hash) ?
+                                sort_mappings_with_indifferent_access[params[:sort]][:order] :
+                                sort_mappings_with_indifferent_access[params[:sort]]
+      sort_columns_expression ||
+        "#{params[:sort]} #{sort_dir} NULLS LAST"
+    end
+
+    def join_tables
+      sort_mappings_with_indifferent_access[params[:sort]].is_a?(Hash) ?
+      sort_mappings_with_indifferent_access[params[:sort]][:joins] : nil
     end
 
     # Return the sort expression to be used in the list query.
     def sort_expression
-      Array(sort_columns).collect { |c| "#{c} #{sort_dir}" }.join(", ")
+      Array(sort_columns).collect { |c| "#{c}" }.join(', ')
     end
 
     # The sort direction, either 'asc' or 'desc'.

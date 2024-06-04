@@ -28,3 +28,6 @@ event_role_participant:
   name: Event::Role::Participant
   order_weight: 7
 
+event_course_role_participant:
+  name: Event::Course::Role::Participant
+  order_weight: 8

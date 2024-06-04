@@ -132,7 +132,7 @@ class PersonSeeder
   def seed_additional_emails(person, shuffle = false)
     seed_account(person,
                  AdditionalEmail,
-                 { email: Faker::Internet.safe_email,
+                 { email: Faker::Internet.email,
                    mailings: [true, false].shuffle.first },
                  Settings.additional_email.predefined_labels,
                  shuffle)

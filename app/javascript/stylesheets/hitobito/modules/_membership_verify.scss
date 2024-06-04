@@ -49,9 +49,14 @@
       line-height: 4rem;
     }
 
-  }
+    .alert-success {
+      background-color: #00b050;
+      color: white;
+    }
 
-  #footer {
-    margin-left: -2rem;
+    .alert-danger {
+      background-color: #e41924;
+      color: white;
+    }
   }
 }

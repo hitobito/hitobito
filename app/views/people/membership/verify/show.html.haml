@@ -44,5 +44,8 @@
           %div{:class => 'alert alert-danger'}
             %span.fas.fa-times-circle
             = t('verify_membership.not_found')
+
+        = render_extensions(:member_details)
       #footer
+        = render_extensions(:footer)
         = render 'layouts/footer'

@@ -21,6 +21,7 @@ npm package: bootstrap: 5.2.0
 [package.json](https://github.com/hitobito/hitobito/blob/master/package.json#L13)
 
 [javascript componenten](https://github.com/hitobito/hitobito/blob/master/app/javascript/packs/application.js#L38)
+
 ```
 bootstrap-alert
 bootstrap-button
@@ -34,6 +35,7 @@ bootstrap-modal
 ```
 
 [css componenten](https://github.com/hitobito/hitobito/blob/master/app/javascript/packs/application.scss.erb)
+
 ```
 @import "bootstrap/scss/functions";
 @import "bootstrap/scss/variables";
@@ -51,7 +53,8 @@ https://tom-select.js.org/
 
 `tom-select` wird in diversen Formularen verwendet. z.B. Personen Filter -> Tags
 
-Die Konfigurationzu tom-select ist hier: https://github.com/hitobito/hitobito/blob/master/app/javascript/javascripts/modules/tom_select.js
+Eine Konfiguration zu tom-select ist hier: https://github.com/hitobito/hitobito/blob/master/app/javascript/javascripts/modules/tom_select.js
+Eine weitere (für remote fetch und multiselect) befindet sich hier: https://github.com/hitobito/hitobito/blob/master/app/javascript/controllers/tom_select_controller.js
 
 ### autocomplete.js
 

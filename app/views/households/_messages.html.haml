@@ -1,0 +1,16 @@
+- #  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+- #  hitobito and licensed under the Affero General Public License version 3
+- #  or later. See the COPYING file at the top-level directory or at
+- #  https://github.com/hitobito/hitobito.
+
+- if entry.errors.any?
+  #error_explanation.alert.alert-danger
+    %ul
+      - entry.errors.messages.values.flatten.each do |msg|
+        %li= msg
+
+- elsif entry.warnings.any?
+  #warning_explanation.alert.alert-warning
+    %ul
+      - entry.warnings.messages.values.flatten.each do |msg|
+        %li= msg

@@ -8,8 +8,8 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static values = {
     url: String,
-    label: { type: String, default: 'label' },
-    noResults: { type: String, default: 'No results found.' }
+    label: { type: String, default: "label" },
+    noResults: { type: String, default: "No results found." },
   };
 
   initialize() {
@@ -22,6 +22,9 @@ export default class extends Controller {
   connect() {
     this.tom = new TomSelect(`#${this.element.id}`, this.getOptions());
     this.tom.on("item_add", this.clearInput);
+    if (this.element.autofocus) {
+      this.tom.focus();
+    }
   }
 
   #getOptions() {
@@ -37,8 +40,8 @@ export default class extends Controller {
       create: false,
       load: this.urlValue ? this.load : undefined,
       render: {
-        no_results: this.noResults
-      }
+        no_results: this.noResults,
+      },
     };
   }
 
@@ -55,11 +58,11 @@ export default class extends Controller {
   }
 
   #clearInput() {
-    const input = document.querySelector(`#${this.element.id}-ts-control`)
+    const input = document.querySelector(`#${this.element.id}-ts-control`);
     input.value = "";
   }
 
   #noResults() {
-    return `<div class='no-results'>${this.noResultsValue}</div>`
+    return `<div class='no-results'>${this.noResultsValue}</div>`;
   }
 }

@@ -1,0 +1,16 @@
+- #  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+- #  hitobito and licensed under the Affero General Public License version 3
+- #  or later. See the COPYING file at the top-level directory or at
+- #  https://github.com/hitobito/hitobito.
+
+= standard_form(entry, url: edit_group_person_household_path, method: :get, data: { controller: 'autosubmit'}) do |f|
+  = render "hidden_member_fields"
+  = f.labeled(:add, icon(:'user-plus')) do
+    = select_tag(:'member_ids[]', nil,
+      id: 'household_add',
+      class: 'form-control',
+      placeholder: I18n.t('global.search.placeholder_person'),
+      autofocus: true,
+      data: { controller: 'tom-select', action: 'autosubmit#save',
+      tom_select_url_value: query_household_path(person_id: person.id),
+      tom_select_no_results_value: I18n.t('global.no_list_entries')})

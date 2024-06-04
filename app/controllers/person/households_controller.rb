@@ -19,7 +19,7 @@ class Person::HouseholdsController < ApplicationController
   protected
 
   def permitted_address_fields
-    %i[address zip_code town country]
+    [:address, :zip_code, :town, :country]
   end
 
   private

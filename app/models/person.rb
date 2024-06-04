@@ -408,10 +408,14 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     end
   end
 
+  def household
+    @household ||= ::Household.new(self)
+  end
+
   def household_people
     Person.
       where(id: household_people_ids).or(
-          Person.where.not(household_key: nil).where(household_key: household_key)
+        Person.where.not(household_key: nil).where(household_key: household_key)
       ).
       where.not(id: id).
       includes(:groups)
@@ -507,6 +511,10 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     if %w(1 yes true).include?(deletion_param.to_s.downcase)
       picture.purge_later
     end
+  end
+
+  def address_attrs
+    attributes.slice(*Person::ADDRESS_ATTRS).symbolize_keys
   end
 
   private

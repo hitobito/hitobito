@@ -7,59 +7,44 @@
 
 class Households::Address
 
-  delegate :reference_person, :people, to: :'@household'
+  delegate :reference_person, :people, to: :@household
 
   def initialize(household)
     @household = household
   end
 
   def attrs
-    extract_address(address_from_person)
+    @attrs ||= find_address_person&.address_attrs || {}
   end
 
   def oneline
-    address = attrs.dup
-    street_and_number = if FeatureGate.enabled?('structured_addresses')
-                          [address[:street], address[:housenumber]].compact_blank.join(' ')
-                        else
-                          address[:address].to_s
-                        end
-
     [
-      street_and_number.strip,
-      [address[:zip_code], address[:town]].compact.join(' ').squish
-    ].join(', ')
+      build_street_and_number,
+      build_zip_code_and_town
+    ].compact_blank.join(', ')
   end
 
   def dirty?
-    household_attrs = attrs.except(:country)
-    people.any? do |person|
-      extract_address(person).except(:country) != household_attrs
-    end
+    !people.map(&:address_attrs).map(&:compact_blank).uniq.one?
   end
 
   private
 
-  def extract_address(person)
-    person.attributes
-      .slice(*Person::ADDRESS_ATTRS).transform_values do |val|
-        val.presence
-      end.with_indifferent_access
-  end
-
-  def address_from_person
-    address_person = reference_person
-    people.each do |p|
-      if complete_address?(p)
-        address_person = p
-      end
+  def find_address_person
+    ([reference_person] + people).find do |person|
+      person.address_attrs.compact_blank.present?
     end
-    address_person
   end
 
-  def complete_address?(person)
-    person.address.present? ||
-      (person.zip_code.present? && person.town.present?)
+  def build_street_and_number
+    if FeatureGate.enabled?('structured_addresses')
+      [attrs[:street], attrs[:housenumber]].compact_blank.join(' ')
+    else
+      attrs[:address].to_s
+    end
   end
 
+  def build_zip_code_and_town
+    [attrs[:zip_code], attrs[:town]].compact_blank.join(' ').squish
+  end
 end

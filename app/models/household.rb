@@ -11,6 +11,7 @@ class Household
   include ActiveModel::Dirty
 
   attr_reader :household_key, :members, :reference_person
+
   define_attribute_methods :members
 
   def initialize(reference_person)
@@ -31,7 +32,7 @@ class Household
   end
 
   def add(person)
-    return if self.members.any? { |m| m.person == person }
+    return if members.any? { |m| m.person == person }
 
     attribute_will_change!(:members)
     members << HouseholdMember.new(person, self)
@@ -45,7 +46,7 @@ class Household
   end
 
   def valid?(context = :update)
-    super(context)
+    super
   end
 
   def save(context: :update)
@@ -74,18 +75,6 @@ class Household
   def reload
     initialize(@reference_person.reload)
     self
-  end
-
-  def household_members_attributes=(attributes)
-    attr_ids = attributes.map { |a| a[:person_id] }
-
-    Person.where(id: attr_ids).each do |person|
-      add(person) unless person_ids.include?(person.id)
-    end
-
-    members.each do |member|
-      remove(member.person) unless attr_ids.include?(member.person.id)
-    end
   end
 
   def people
@@ -133,17 +122,17 @@ class Household
   def next_key
     loop do
       key = SecureRandom.uuid
-      break key unless Person.where(household_key: key).exists?
+      break key unless Person.exists?(household_key: key)
     end
   end
 
   def save_removed
-    Person.where(id: removed_people.map(&:id)).update_all(household_key: nil)
+    Person.where(id: removed_people.map(&:id)).update_all(household_key: nil) # rubocop:disable Rails/SkipsModelValidations
   end
 
   def save_members
-    Person.where(id: person_ids).each do |p|
-      p.update(household_attrs)
+    Person.where(id: person_ids).find_each do |p|
+      p.update!(household_attrs)
     end
   end
 
@@ -168,7 +157,7 @@ class Household
       member.errors.each do |error|
         errors.add("members[#{index}].#{error.attribute}", error.message)
       end
-      member.warnings.each do |warning|
+      member.warnings.each do |_warning|
         warnings.add("members[#{index}].#{error.attribute}", error.message)
       end
     end

@@ -22,7 +22,7 @@ de:
     selected: Ausgewählt
     columns: Spalten
     start_on: ab %{date}
-    not_allowed: 'fehlende Berechtigung'
+    not_allowed: "fehlende Berechtigung"
 
     gender:
       male: männlich
@@ -44,6 +44,7 @@ de:
 
     button:
       save: Speichern
+      add: Hinzufügen
       add_another: Speichern und weitere erfassen
       cancel: Abbrechen
       close: Schliessen
@@ -530,9 +531,11 @@ de:
         abgefragt werden sollen.
       caption_applications_cancelable: Teilnehmende können sich selbst abmelden.
       caption_display_booking_info: Die Anzahl Anmeldungen/Plätze ist auf der Kursliste für alle sichtbar.
-      caption_automatic_assignment: Anmeldungen werden automatisch zugeteilt, sofern noch freie
+      caption_automatic_assignment:
+        Anmeldungen werden automatisch zugeteilt, sofern noch freie
         Plätze verfügbar sind.
-      caption_waiting_list: Wenn keine Plätze mehr frei sind, landen neue Anmeldungen automatisch
+      caption_waiting_list:
+        Wenn keine Plätze mehr frei sind, landen neue Anmeldungen automatisch
         auf der nationalen Warteliste.
       caption_globally_visible: "%{model_name} ist für die ganze Datenbank sichtbar"
       label_notify_contact_on_participations: Benachrichtigung
@@ -542,7 +545,7 @@ de:
       admin_questions: Administrationsangaben
       contact_attrs: Kontaktangaben
     general_fields:
-      kind_overrides_link_title: 'Folgende Felder werden übernommen: Beschreibung'
+      kind_overrides_link_title: "Folgende Felder werden übernommen: Beschreibung"
     global:
       link:
         add_event: Anlass erstellen
@@ -818,6 +821,15 @@ de:
 
   group_decorator:
     archived_suffix: " (archiviert)"
+
+  households:
+    edit:
+      title: Haushalt verwalten
+    members_table_row:
+      unconfirmed_email_info: Die E-Mail Adresse muss bestätigt werden, bevor
+        die Person aus der Familie entfernt werden kann.
+    update_form:
+      shared_address_info: Alle Personen teilen sich dieselbe Adresse.
 
   hitobito_log_entries:
     tabs:
@@ -1694,9 +1706,11 @@ de:
         success: Anmeldung wurde erfolgreich gelöscht.
 
   qualification_decorator:
-    open_training_days_active: Damit die Qualifikation am %{finish_at} nicht abläuft, bitten wir
+    open_training_days_active:
+      Damit die Qualifikation am %{finish_at} nicht abläuft, bitten wir
       dich bis dahin %{days} Fortbildungstage zu absolvieren
-    open_training_days_reactivatable: Um deine Qualifikation zu reaktivieren, bitten wir dich
+    open_training_days_reactivatable:
+      Um deine Qualifikation zu reaktivieren, bitten wir dich
       %{days} Fortbildungstage bis spätestens %{reactivateable_until} zu absolvieren
     open_training_days_no_longer_reactivatable: Diese Qualifikation ist seit dem
       %{reactivateable_until} abgelaufen. Falls du davor Aus- oder Fortbildungen besucht hast und

@@ -31,7 +31,8 @@ class Person::EventQueries
       merge(Event::Participation.active).
       merge(Event::Participation.upcoming).
       distinct_on(:id).
-      includes(:groups).select("events.*", "event_dates.start_at").
+      includes(:groups).
+      select("events.*", "event_dates.start_at").
       preload_all_dates
     ).order_by_date
   end
@@ -42,7 +43,8 @@ class Person::EventQueries
       .active
       .joins(event: :dates)
       .includes(:roles, event: [:translations, :dates, :groups])
-      .order("event_dates.start_at")
+      .select("events.*", "event_dates.start_at")
+      .order('event_dates.start_at')
       .distinct.tap do |applications|
         Event::PreloadAllDates.for(applications.collect(&:event))
       end

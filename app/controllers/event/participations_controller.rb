@@ -20,17 +20,18 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
 
   self.remember_params += [:filter]
 
-  self.sort_mappings = {last_name: "people.last_name",
-                         first_name: "people.first_name",
-                         roles: lambda do |event|
-                                  Person.order_by_name_statement.unshift(
-                                    Event::Participation.order_by_role_statement(event)
-                                  )
-                                end,
-                         nickname: "people.nickname",
-                         zip_code: "people.zip_code",
-                         town: "people.town",
-                         birthday: "people.birthday"}
+  self.sort_mappings = { last_name: 'people.last_name',
+                         first_name: 'people.first_name',
+                         roles: {
+                          joins: [:roles, "INNER JOIN event_role_type_orders ON event_roles.type
+                                          = event_role_type_orders.name"],
+                          order: ["event_role_type_orders.order_weight", "people.sort_name"]
+                         },
+                         nickname: 'people.nickname',
+                         zip_code: 'people.zip_code',
+                         town: 'people.town',
+                         birthday: 'people.birthday' }
+
 
   decorates :group, :event, :participation, :participations, :alternatives
 
@@ -162,7 +163,10 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
 
   def list_entries
     filter = event_participation_filter
-    records = filter.list_entries.includes(person: :picture_attachment).page(params[:page])
+    records = filter.list_entries
+                    .includes(person: :picture_attachment)
+                    .select("event_participations.*")
+                    .page(params[:page])
     @counts = filter.counts
     @pagination_options = {
       total_pages: records.total_pages,
@@ -171,7 +175,9 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     }
     sort_param = params[:sort]
 
-    records = records.reorder(Arel.sql(sort_expression)) if sort_param && sortable?(sort_param)
+    records = records.joins(join_tables)
+                     .select(sort_expression)
+                     .reorder(Arel.sql(sort_expression)) if sort_param && sortable?(sort_param)
     Person::PreloadPublicAccounts.for(records.collect(&:person))
     records
   end
@@ -196,10 +202,6 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   def check_preconditions
     load_precondition_warnings
     flash.now[:alert] = @precondition_warnings
-  end
-
-  def sort_columns
-    (params[:sort] == "roles") ? sort_mappings_with_indifferent_access[:roles].call(event) : super
   end
 
   def find_entry
@@ -367,7 +369,10 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     p = event.participations.new
     role = p.roles.new(participation: p)
     if can?(:create, role)
-      @event.person_add_requests.list.includes(person: :primary_group)
+      @event.person_add_requests
+            .select("person_add_requests.*")
+            .list
+            .includes(person: :primary_group)
     end
   end
 

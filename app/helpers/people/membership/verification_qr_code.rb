@@ -17,12 +17,6 @@ class People::Membership::VerificationQrCode
     RQRCode::QRCode.new(verify_url)
   end
 
-  private
-
-  def membership_verify_token
-    @person.membership_verify_token
-  end
-
   def verify_url
     host = ENV.fetch('RAILS_HOST_NAME', 'localhost:3000')
     Rails
@@ -30,6 +24,12 @@ class People::Membership::VerificationQrCode
       .routes
       .url_helpers
       .verify_membership_url(host: host, verify_token: membership_verify_token)
+  end
+
+  private
+
+  def membership_verify_token
+    @person.membership_verify_token
   end
 
   def assert_feature_enabled!

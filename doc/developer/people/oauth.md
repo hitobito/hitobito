@@ -218,7 +218,7 @@ All endpoints related to OIDC, along with some machine-readable info for automat
 
 ### Accessing the JSON-API
 
-All endpoints from the [JSON API](modules/common/api_auth/rest_api.md) can be used with a personal OAuth access token, if the token has the `api` scope. Individual endpoints can also be accessed if the token has the matching scope: `events`, `groups`, `people`, `invoices`, `mailing_lists`. There are two possibilities to use the API:
+All endpoints from the [JSON API](../common/api/json_api.md) can be used with a personal OAuth access token, if the token has the `api` scope. Individual endpoints can also be accessed if the token has the matching scope: `events`, `groups`, `people`, `invoices`, `mailing_lists`. There are two possibilities to use the API:
 
 * **Query parameter**: Send `access_token` as query parameter in the URL, and append `.json` to the URL path
 ```bash

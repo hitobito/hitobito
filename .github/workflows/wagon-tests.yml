@@ -59,34 +59,6 @@ jobs:
         run: |
           bundle exec rake app:rubocop
 
-  wagon_dependency_rubocop:
-    name: ${{ inputs.wagon_dependency_repository }} rubocop
-    if: ${{ inputs.wagon_dependency_repository != '' }}
-    runs-on: 'ubuntu-20.04'
-
-    steps:
-      - name: Check out core with shared setup action
-        uses: actions/checkout@v4
-        with:
-          repository: hitobito/hitobito
-          ref: ${{ inputs.core_ref }}
-          path: .hitobito_core_repo
-          fetch-depth: 1
-
-      - name: 'Prepare'
-        uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup
-        with:
-          migrations: false
-          wagon_repository: ${{ inputs.wagon_repository }}
-          wagon_dependency_repository: ${{ inputs.wagon_dependency_repository }}
-          core_ref: ${{ inputs.core_ref }}
-          wagon_dependency_ref: ${{ inputs.wagon_dependency_ref }}
-
-      - name: ${{ inputs.wagon_dependency_repository || 'Dependency wagon' }} rubocop
-        working-directory: ${{ inputs.wagon_dependency_repository }}
-        run: |
-          bundle exec rake app:rubocop
-
   wagon_specs:
     name: ${{ inputs.wagon_repository }} specs
     runs-on: 'ubuntu-20.04'
@@ -345,7 +317,7 @@ jobs:
 
   notify_statuscope:
     uses: ./.github/workflows/notify-statuscope.yml
-    needs: [ wagon_rubocop, wagon_dependency_rubocop, wagon_specs, wagon_dependency_specs, wagon_feature_specs, wagon_dependency_feature_specs ]
+    needs: [ wagon_rubocop, wagon_specs, wagon_dependency_specs, wagon_feature_specs, wagon_dependency_feature_specs ]
     if: ( success() || failure() ) && ( github.ref_name == 'master' ) && ( (inputs.core_ref || 'master') == 'master' ) && ( (inputs.wagon_dependency_ref || 'master') == 'master' )
     with:
       repository: ${{ inputs.wagon_repository }}

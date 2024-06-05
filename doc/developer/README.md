@@ -11,7 +11,6 @@
 * [Common](common/README.md)
   * [Architecture](common/architecture/README.md)
   * [API](common/api/README.md)
-  * [Wagons](common/gems/wagons/README.md)
   * [Rake-Tasks](common/rake_tasks.md)
 * [Events](events/README.md)
   * [Participations](events/participations.md)

@@ -1,7 +1,7 @@
 # Roles
 ## Overview
 * [Class attributes](#class-attributes)
-* [Basic Permission Roles](optional_features/basic-permission-roles.md)
+* [Basic Permission Roles](basic_permission_roles.md)
 
 ## Class Attributes
 

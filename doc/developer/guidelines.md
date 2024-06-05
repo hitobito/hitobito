@@ -1,7 +1,7 @@
 ## Entwicklungs Guidelines
 
 Für Dokumentation von ArchitekturKonzepten (Fachliche Strukturen, Rolle, Anlässe, Kurse, Abilities
-..) siehe [doc/architectur/08_kozepte.md](modules/common/architecture/08_konzepte.md).
+..) siehe [Architecture concept](common/architecture/08_konzepte.md).
 
 ### Code Conventions
 
@@ -70,7 +70,7 @@ sowie im JSON API die selben Regeln. Ist also z.B. ein Attribut öffentlich, wir
 und in der JSON Personen Liste angezeigt, wenn nicht, nur im Full CSV und im Einzelperson JSON,
 falls die Berechtigung dafür vorhanden ist.
 
-Ein beispielhafte Anleitung, wie in einem Wagon Attribute hinzugefügt werden können, findest du im Kapitel [Wagons](modules/common/wagons/README.md).
+Ein beispielhafte Anleitung, wie in einem Wagon Attribute hinzugefügt werden können, findest du im Kapitel [Wagons](common/gems/wagons/README.md).
 
 #### Personenattribute
 

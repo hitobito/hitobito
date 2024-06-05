@@ -4,6 +4,8 @@
 * [Authentication](#authentication)
 * [OAuth](#oauth)
 * [Membership](#membership)
+* [Address completion](address_completion.md)
+* [Locations](locations.md)
 
 ## Authentication
 

@@ -168,7 +168,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   validates_by_schema except: [:logo]
   validates :type, uniqueness: { scope: :parent_id }, if: :static_name
-  validates :parent, presence: true, unless: -> { Group.roots.count.zero? || id == Group.root.id }
+  validates :parent, presence: true, unless: :layer?
   validates :name, presence: true, unless: :static_name
   validates :email, format: Devise.email_regexp, allow_blank: true
   validates :description, length: { allow_nil: true, maximum: (2**16) - 1 }

@@ -510,7 +510,7 @@ describe Group do
   end
 
   describe 'parent validation' do
-    let(:group) { Group::BottomLayer.new(name: 'g', parent: parent) }
+    let(:group) { Group::TopGroup.new(name: 'g', parent: parent) }
 
     it 'top_layer must be valid' do
       expect(groups(:top_layer)).to be_valid
@@ -887,7 +887,7 @@ describe Group do
   end
 
   context 'addable_child_types' do
-    let(:group) { Fabricate(Group::BottomLayer.name) }
+    let(:group) { Fabricate(Group::BottomLayer.name, parent: groups(:top_layer)) }
     let(:child_type) { Group::BottomGroup }
 
     context 'with static_name=false' do

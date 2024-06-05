@@ -3,7 +3,7 @@
 ## Overview
 * [Participations](#participations)
 * [Courses](#participations)
-* [Waiting List](optional_features/waiting-list.md)
+* [Waiting List](waiting-list.md)
 
 ## Composition
 ![Modulübersicht](_diagrams/events-overview.svg)

@@ -6,7 +6,8 @@
 * [Config](#invoiceconfig)
 * [Article](#invoicearticle)
 * [List](#invoicelist)
-* [Ebics Connection](optional_features/ebics-connection.md)
+* [Ebics Connection](ebics-connection.md)
+* [Dynamic Invoice](dynamic_invoice_items.md)
 
 ## Composition
 ![Systemübersicht](_diagrams/invoices-overview.svg)

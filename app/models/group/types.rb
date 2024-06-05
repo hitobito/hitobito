@@ -54,7 +54,7 @@ module Group::Types
   end
 
   def set_layer_group_id
-    layer_id = self.class.layer ? id : parent&.layer_group_id
+    layer_id = self.class.layer ? id : parent.layer_group_id
     unless layer_id == layer_group_id
       self_and_descendants.
         where(layer_group_id: layer_group_id).

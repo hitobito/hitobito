@@ -12,7 +12,7 @@
   * [Architecture](common/architecture/README.md)
   * [API](common/api/README.md)
   * [Wagons](common/wagons/README.md)
-  * [Table](rake_tasks.md)
+  * [Rake-Tasks](common/rake_tasks.md)
 * [Events](events/README.md)
   * [Participations](events/participations.md)
 * [Invoices](invoices/README.md)
@@ -20,8 +20,7 @@
 * [Messages](messages/README.md)
   * [E-Mail](messages/e-mail/README.md)
 * [People](people/README.md)
-  * [Address Completion](messages/address_completion.md)
-  ...
+  * [Address Completion]()
 * [Roles](roles/README.md)
 
 All graphics are created using [Draw.io](https://draw.io) and are stored as original .xml as well as .svg files.

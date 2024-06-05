@@ -1,50 +1,56 @@
 # Invoices
 
+## Overview
+* [User](#user)
+* [Invoice](#invoice)
+* [Config](#invoiceconfig)
+* [Article](#invoicearticle)
+* [List](#invoicelist)
+* [Ebics Connection](optional_features/ebics-connection.md)
+
+## Composition
 ![Systemübersicht](_diagrams/invoices-overview.svg)
 
-Mit dem Rechnungsfeature von Hitobito können Rechnungen an Personen und Firmen gestellt werden. 
+Hitobito's invoice feature can be used to issue invoices to individuals and companies.
 
-* **Rechnung:** Einfache Rechnung mit einer oder mehreren Positionen. Kann auf einer Person, einem Event, einer Gruppe oder via Abo erstellt werden
-* **Brief:** Ein einfacher Brief, ohne Rechnungsteil. Wird über das Abo erstellt. Siehe [Messages](../messages/README).
-* **Rechnungsbrief:** Ein Brief mit einer Rechnung kombiniert. Wird über das Abo erstellt.
+* **Invoice:** Simple invoice with one or more items. Can be created for a person, an event, a group or via subscription
+* **Letter:** A simple letter, without invoice part. Is created via the subscription. See [Messages](../messages/README).
+* **Invoice letter:** A letter combined with an invoice. Is created via the subscription.
 
-QR Rechnungen können auf eine einfache Weise mit https://www.swiss-qr-invoice.org getestet werden.
+QR invoices can be tested in a simple way with https://www.swiss-qr-invoice.org.
 
-## Benutzer
+## User
 
-Damit eine Person das Rechnungsfeature nutzen kann, muss sie auf einem Layer/Gruppe eine Rolle mit :finance Permission haben. In einigen Wagons wird diese Rolle 'Kassier/In' genannt.
+For a person to be able to use the invoice feature, they must have a role with :finance permission on a layer/group. In some wagons this role is called ‘cashier’.
 
-![Auflistung Rechnungen](_diagrams/invoices-list.png)
+List of invoices](_diagrams/invoices-list.png)
 
-Rechnungen werden an Personen/Firmen gestellt und können über folgende Workflows erstellt werden:
+Invoices are issued to persons/companies and can be created via the following workflows:
 
-* Auf der Personenliste einer Gruppe über den Button '+ Rechnung erstellen'. Es wird für jede Person innerhalb der Gruppe eine Rechnung erstellt.
-* Auf der Personenseite (Person#show) über den Button '+ Rechnung erstellen'. Die Rechnung wird nur an die ausgewählte Person gestellt.
-* Via Abo und Rechnungsbriefe. Es wird eine Sammelrechnung für alle Empfänger des Abos mit gültiger Adresse erstellt.
+* On the person list of a group via the ‘+ Create invoice’ button. An invoice is created for each person within the group.
+* On the person page (Person#show) via the ‘+ Create invoice’ button. The invoice is only issued to the selected person.
+* Via subscription and invoice letters. A collective invoice is created for all recipients of the subscription with a valid address.
 
-![Neue Rechnung](_diagrams/invoices-invoice-new.png)
+![New invoice](_diagrams/invoices-invoice-new.png)
 
 ## `Invoice`
 
-Das zentrale Model repräsentiert die Rechnung selber, gehört zu einer Gruppe sowie einem Person-Entry und beinhaltet eine oder mehrere Rechnungspositionen (`InvoiceItem`).
+The central model represents the invoice itself, belongs to a group and a person entry and contains one or more invoice items (`InvoiceItem`).
 
 ## `InvoiceConfig`
 
-Die Verwaltung der Rechnungseinstellungen erfolgt pro Layer und sind in der Hauptnavigation unter **Rechnungen** zu finden. Hier können Einstellungen wie z.B. Absender Adresse, Kontoangaben und Mahntexte vorgenommen werden. 
+The invoice settings are managed per layer and can be found in the main navigation under **Invoices**. Settings such as sender address, account details and reminder texts can be made here.
 
 ## `InvoiceArticle`
 
-In der Hauptnavigation unter **Rechnungen** können die Rechnungsartikel verwaltet werden. Diese Artikel können dann beim Erstellen einer Rechnung eingefügt werden.
+The invoice articles can be managed in the main navigation under **Invoices**. These articles can then be inserted when creating an invoice.
 
 ## `InvoiceList`
 
-Sammelrechnungen dienen dazu eine Rechnung an mehrere Personen zu erstellen. Die erstellten Sammelrechnungen sind in der Hauptnavigation unter **Rechnungen** zu finden. 
+Collective invoices are used to create an invoice for several people. The collective invoices created can be found in the main navigation under **Invoices**.
 
-![Sammelrechnungen](_diagrams/invoices-invoice-list.png)
+![Collective invoices](_diagrams/invoices-invoice-list.png)
 
 ### `Message::LetterWithInvoice`
 
-Neben Briefen können für Abos (MailingList) [Rechnungsbriefe](../messages/README.md#messageletterwithinvoice) für die Empfänger erstellt werden. Der `Message::LetterWithInvoice`-Eintrag wird dabei mit einer Sammelrechnung `InvoiceList` verknüpft.
-
-## Optional Features
-* [Ebics Connection](optional_features/ebics-connection.md)
+In addition to letters, [invoice letters](../messages/README.md#messageletterwithinvoice) can be created for recipients for subscriptions (MailingList). The `Message::LetterWithInvoice` entry is linked to a collective invoice `InvoiceList`.

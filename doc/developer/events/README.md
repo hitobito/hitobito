@@ -1,18 +1,20 @@
 # Events
 
+## Overview
+* [Participations](#participations)
+* [Courses](#participations)
+* [Waiting List](optional_features/waiting-list.md)
+
+## Composition
 ![Modulübersicht](_diagrams/events-overview.svg)
 
-Hitobito besitzt ein vielseitiges System um Anlässe (Event) und Kurse (Event::Course) zu verwalten. Im pbs und jubla Wagon gibt es auch noch eine Erweiterung für Lager (Event::Camp).
+Hitobito has a versatile system for managing events (Event) and courses (Event::Course). In pbs and jubla Wagon there is also an extension for camps (Event::Camp).
 
-Viele Event Features sind in den Wagons customized, diese Dokumentation bezieht sich hauptsächlich auf die Features im Core und beschreibt teilweise die vorhandenen Wagon-Erweiterungen.
+Many event features are customised in the wagons, this documentation mainly refers to the features in the core and partly describes the existing wagon extensions.
 
 ## Participations
 
-Personen (Person) werden via [Participations](participations.md) (Participation) an Events angemeldet.
+People are registered for events via [Participations](participations.md) (participation).
 
-## Kurse
-
-Bereits im Core existiert das STI Model Event::Course.
-
-## Optional Features
-* [Waiting List](optional_features/waiting-list.md)
+## Course
+There already exists a STI Model Event::Course inside the core.

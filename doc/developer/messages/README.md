@@ -1,84 +1,90 @@
 # Messages
 
+## Overview
+* [Subscription](#subscription)
+* [Message](#message)
+* [Distribution](#message)
+
+## Composition
 ![Modulübersicht](_diagrams/messages-overview.svg)
 
-Mit Hitobito können Nachrichten (Briefe, SMS, Mails, usw...) via Abos an verschiedene Empfänger gesendet werden.
+With Hitobito, messages (letters, SMS, mails, etc...) can be sent to various recipients via subscriptions.
 
-## Abo
-![Klassendiagramm](_diagrams/messages-abo.svg)
+## Subscription
+![Class diagram](_diagrams/messages-abo.svg)
 
-_Klassendiagramm Messagesmodul._
+Class diagram messages module.
 
-![Ansicht Gruppe](_diagrams/mailing-lists.png)
+![View group](_diagrams/mailing-lists.png)
 
-_Ansicht der Abos einer Gruppe_
+_View of the subscriptions of a group_
 
-### E-Mail
-[Detailldokumentation](e-mail/README.md)
+### E-mail
+[Detailed documentation](e-mail/README.md)
 
 ### `Person`
-Person ist das zentrale Model in Hitobito für Personen und Firmen. Auf der Person sind auch die für das Message Modul relevanten Kontaktdaten wie E-Mail, Telefonnummer oder Postadresse gespeichert.
+Person is the central model in Hitobito for persons and companies. The contact data relevant for the message module such as e-mail, telephone number or postal address are also stored on the person.
 
 ### `MailingList`
-Das Abo (MailingList) ist eines der zentralen Elemente im Messages Modul. Mit Subscriptions werden die Empfänger auf einem Abo definiert. Subscribers können Gruppen und spezifische Rollen aber auch einzelne Personen sein.
+The subscription (MailingList) is one of the central elements in the Messages module. Subscriptions are used to define the recipients on a subscription. Subscribers can be groups and specific roles as well as individual persons.
 
 
 ### `MessageRecipient`
-Der `MessageRecipient` wird im `Dispatch` erstellt, sobald eine Message versendet wird. Dieser besteht aus den Personen und der Nachricht welche versendet werden. Jeder `MessageRecipient` erhält zudem einen Status, in welchem man den jeweiligen Status des Versands einsehen kann. Sollte ein Versand fehlschlagen, kann mithilfe des Status eingesehen werden, welche Personen eine Nachricht noch nicht erhalten haben.
+The `MessageRecipient` is created in the `Dispatch` as soon as a message is sent. This consists of the persons and the message which are sent. Each `MessageRecipient` also receives a status in which the respective status of the dispatch can be viewed. If a dispatch fails, the status can be used to see which people have not yet received a message.
 
 ## Message
 ![Message Types](_diagrams/messages.svg)
 
-_Klassendiagramm der Messagetypen_
+Class diagram of the message types
 
-Das Message Model definiert die verschiedenen Message Typen von Hitobito (Single Table Inheritance [STI](https://api.rubyonrails.org/classes/ActiveRecord/Inheritance.html)):
+The message model defines the different message types of Hitobito (Single Table Inheritance [STI](https://api.rubyonrails.org/classes/ActiveRecord/Inheritance.html)):
 
-| STI Model              | Beschreibung |
+| STI Model | Description |
 |------------------------|-------------------|
-| `Message::TextMessage` | Textnachricht (SMS) |         
-| `Message::Letter`      | Brief |         
-| `Message::LetterWithInvoice` | Rechnungsbrief |         
+| `Message::TextMessage` | Text Message (SMS) |         
+| `Message::Letter` | Letter |         
+| `Message::LetterWithInvoice` | Invoice letter |         
 | `Message::BulkMail` | Mail |         
-| `Message::BulkMailBounce` | Bounce Mail einer zuvor gesendeten BulkMail |         
+| `Message::BulkMailBounce` | Bounce mail of a previously sent BulkMail |
 
 ### `Message::TextMessage`
-![Systemübersicht](_diagrams/text-message.png)
+![System overview](_diagrams/text-message.png)
 
-_Ansicht einer neuen SMS Nachricht_
+View of a new SMS message
 
-Dieser Typ ist eine SMS (Textnachricht) und wird an eine Person versandt wenn diese eine Nummer vom Typ Mobil hat.
+This type is an SMS (text message) and is sent to a person if they have a mobile number.
 
 ### `Message::Letter`
-![Systemübersicht](_diagrams/letter.png)
+![System overview](_diagrams/letter.png)
 
-_Ansicht eines neuen Briefes_
+View of a new letter
 
-Brief für den Postversand welcher als PDF gerendert wird.
+Letter for mailing which is rendered as a PDF.
 
 ### `Message::LetterWithInvoice`
-![Systemübersicht](_diagrams/letter-with-invoice.png)
+![System overview](_diagrams/letter-with-invoice.png)
 
-_Ansicht eines neuen Rechnungsbriefes_
+View of a new invoice letter
 
-Briefe mit zusätzlichen Rechnungsoptionen (Rechnungsposten).
+Letters with additional invoice options (invoice items).
 
 ### `Message::BulkMail`
-Mailnachricht welche über ein externes Mailprogramm an ein Abo gesendet wird.
+Mail message which is sent to a subscription via an external mail programme.
 
 ### `Message::BulkMailBounce`
-Falls eine Bulk Mail beim Zielserver gebounced wird, wird diese zurück an den ursprünglichen Sender der Bulk Mail geschickt. Dafür wird ein BulkMailBounce Entry erstellt.
+If a bulk mail is bounced at the target server, it is sent back to the original sender of the bulk mail. A BulkMailBounce entry is created for this purpose.
 
-## Versand (Dispatch)
-Der Dispatcher ist dafür zuständig den entsprechenden Nachrichtentyp zu versenden.
+## Dispatch
+The dispatcher is responsible for sending the corresponding message type.
 
 ### `Messages::DispatchJob`
-Der für alle Message Typen generische DispatchJob (DelayedJob) wird für den Versand der Nachrichten verwendet.
+The generic DispatchJob (DelayedJob) for all message types is used to send the messages.
 
 ### `TextMessageDispatch`
-Beim Versand via SMS werden als erstes alle Empfängernummern gesammelt und in den MessageRecipients abgelegt. Danach erfolgt der Versand über eine HTTP Api von Aspsms. Kurze Zeit später werden die Empfangsbestätigungen via einem seperaten HTTP Api Aufruf geholt und die MessageRecipient entsprechend mit Status aktualisiert.
+When sending via SMS, all recipient numbers are first collected and stored in the MessageRecipients. Then the dispatch takes place via an HTTP Api from Aspsms. A short time later, the acknowledgements of receipt are retrieved via a separate HTTP Api call and the MessageRecipient is updated accordingly with the status.
 
 ### `LetterDispatch`
-Generiert alle MessageRecipient Einträge mit der Post Adresse der Empfänger. Auf Basis dieser Einträge wird dann ein entsprechendes PDF generiert.
+Generates all MessageRecipient entries with the postal address of the recipient. A corresponding PDF is then generated based on these entries.
 
-### Druckerei
-Eine Druckerei hat einen eigenen Zugang zu Hitobito und somit die Möglichkeit Briefe für den Versand als PDF herunterzuladen.
+### Print shop
+A print shop has its own access to Hitobito and can therefore download letters for dispatch as PDFs.

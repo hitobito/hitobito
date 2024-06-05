@@ -2,14 +2,11 @@
 
 Everything that does not fit in the other documentation modules is found in here.
 
+## Overview
+
 * [Architecture](architecture/README.md)
-* [API, Authentification](api_auth/README.md)
-
-## Optional Features 👏
-
-Under this section you'll find some additional features that were implemented in our different
-modules.
-
+* [API, Authentification](api/README.md)
+* [Gems](#gems-)
 * [Address Completion](optional_features/address-completion.md)
 * [Locations](optional_features/locations.md)
 * [Additional Table Column](optional_features/table-display-additional-columns.md)

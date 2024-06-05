@@ -7,9 +7,6 @@ Everything that does not fit in the other documentation modules is found in here
 * [Architecture](architecture/README.md)
 * [API, Authentification](api/README.md)
 * [Gems](#gems-)
-* [Address Completion](optional_features/address-completion.md)
-* [Locations](optional_features/locations.md)
-* [Additional Table Column](optional_features/table-display-additional-columns.md)
 
 ## Gems 💎
 

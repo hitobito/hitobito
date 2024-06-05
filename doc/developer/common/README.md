@@ -1,11 +1,12 @@
 # Common
-Over here you find the documentation about some general structures like the application
-architecture.
+
+Everything that does not fit in the other documentation modules is found in here.
 
 * [Architecture](architecture/README.md)
 * [API Authentification](api_auth/README.md)
 
 ## Optional Features 👏
+
 Under this section you'll find some additional features that were implemented in our different
 modules.
 
@@ -14,6 +15,7 @@ modules.
 * [Additional Table Column](optional_features/table-display-additional-columns.md)
 
 ## Gems 💎
+
 Discover the most important gems in our rails project and what they are used for.
 
 * [Gem documentation](gems/README.md)

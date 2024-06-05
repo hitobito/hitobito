@@ -6,12 +6,12 @@
 
 [Getting started](getting_started.md)
 
-## Overview
+## Overview 👁️
 
 * [Common](common/README.md)
   * [Architecture](common/architecture/README.md)
   * [API](common/api/README.md)
-  * [Wagons](common/wagons/README.md)
+  * [Wagons](common/gems/wagons/README.md)
   * [Rake-Tasks](common/rake_tasks.md)
 * [Events](events/README.md)
   * [Participations](events/participations.md)
@@ -26,7 +26,7 @@
 
 All graphics are created using [Draw.io](https://draw.io) and are stored as original .xml as well as .svg files.
 
-## Developer documentation guidelines
+## Developer documentation guidelines 📜
 
 - [Code](guidelines.md)
 - [Documentation](documentation_guidelines.md)

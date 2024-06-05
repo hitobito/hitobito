@@ -3,7 +3,7 @@
 Everything that does not fit in the other documentation modules is found in here.
 
 * [Architecture](architecture/README.md)
-* [API Authentification](api_auth/README.md)
+* [API, Authentification (OIDC)](api_auth/README.md)
 
 ## Optional Features 👏
 

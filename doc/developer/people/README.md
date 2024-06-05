@@ -22,6 +22,11 @@ module SacCas::Person
 end
 ```
 
+## OAuth
+
+Hitobito is an OAuth 2.0 provider, meaning that an external application can authenticate users via hitobito (usually in the form of a "Login via hitobito" feature, similar to Google and Facebook etc.). The external application can then query information about the user, if the user has granted this permission. OAuth authentication also allows the external application to use the JSON API. The external application has the same permissions as the user.
+More info: [OAuth](oauth.md)
+
 ## Membership
 
 Mit dem SKV und später dem SAC/CAS wurde das Konzept der Mitgliedschaft (Membership) eingeführt. Dieses Konzept dreht sich rund um die möglichen aktiven oder auch inaktiven Mitgliedschaften die eine Person in einem Verein haben kann.

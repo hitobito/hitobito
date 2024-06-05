@@ -1,4 +1,4 @@
-# Ebics Connection
+# Ebics
 
 ## Overview
 

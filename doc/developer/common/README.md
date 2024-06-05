@@ -2,16 +2,11 @@
 
 Everything that does not fit in the other documentation modules is found in here.
 
-## Overview
+## Overview 👁️
 
 * [Architecture](architecture/README.md)
-* [API, Authentification](api/README.md)
-* [Gems](#gems-)
-
-## Gems 💎
-
-Discover the most important gems in our rails project and what they are used for.
-
-* [Gem documentation](gems/README.md)
-
-
+* [API](api/README.md)
+* [Gems 💎](gems/README.md)
+* [Frontend](frontend/README.md)
+* [CI/CD](ci_cd.md)
+* [Testing](testing.md)

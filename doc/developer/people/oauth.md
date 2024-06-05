@@ -1,9 +1,7 @@
 ## OAuth 2.0
-
-Hitobito is an OAuth 2.0 provider, meaning that an external application can authenticate users via hitobito (usually in the form of a "Login via hitobito" feature, similar to Google and Facebook etc.). The external application can then query information about the user or use the [REST API](modules/common/api_auth/rest_api.md) in the name of the user, if the user has granted this permission. This works without giving the user's password or token to the external application.
+Hitobito is an OAuth 2.0 provider, meaning that an external application can authenticate users via hitobito (usually in the form of a "Login via hitobito" feature, similar to Google and Facebook etc.). The external application can then query information about the user or use the [API](../common/api/README.md) in the name of the user, if the user has granted this permission. This works without giving the user's password or token to the external application.
 
 ### Setup
-
 You need to create an RSA private key for JWT signing:
 
 `openssl genpkey -algorithm RSA -out key -pkeyopt rsa_keygen_bits:2048`

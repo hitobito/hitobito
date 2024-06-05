@@ -22,7 +22,9 @@
 * [People](people/README.md)
   * [Address Completion]()
 * [Roles](roles/README.md)
+  * [Basic permissions](roles/basic_permission_roles.md)
 * [Group](groups/README.md)
+  * No Content yet
 
 All graphics are created using [Draw.io](https://draw.io) and are stored as original .xml as well as .svg files.
 

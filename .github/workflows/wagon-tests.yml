@@ -140,7 +140,7 @@ jobs:
       - name: Run ${{ inputs.wagon_repository }} specs
         working-directory: ${{ inputs.wagon_repository }}
         run: |
-          bundle exec rake app:ci:setup:rspec spec
+          bundle exec rake app:ci:setup:rspec spec:without_features
 
   wagon_dependency_specs:
     name: ${{ inputs.wagon_dependency_repository }} specs
@@ -196,7 +196,7 @@ jobs:
       - name: Run ${{ inputs.wagon_dependency_repository || 'dependency wagon' }} specs
         working-directory: ${{ inputs.wagon_dependency_repository }}
         run: |
-          bundle exec rake app:ci:setup:rspec spec
+          bundle exec rake app:ci:setup:rspec spec:without_features
 
   wagon_feature_specs:
     name: ${{ inputs.wagon_repository }} feature specs

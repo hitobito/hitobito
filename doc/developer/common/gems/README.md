@@ -1,7 +1,6 @@
 # Gems in Hitobito 💎
 This README holds the links to the documentation of the most important gems in Hitobito.
 
-
 | Gem        | Description                                         | Documentation                      |
 |------------|-----------------------------------------------------|------------------------------------|
 | DryCrud    | Basic CRUD operations implemented in seconds        | [CRUD](dry_crud/README.md)         |    

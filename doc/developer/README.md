@@ -11,27 +11,19 @@ These documents describe different aspects that need to be considered when devel
 Hitobito is divided into several modules which hold different logic. If you are searching
 for a specific module or feature take a look 🔍 at the list below.
 
-* Common:
-  * [In general](modules/common/README.md)
+* [Common](modules/common/README.md)
   * [Architecture](modules/common/architecture/README.md)
   * [API authentification](modules/common/api_auth/README.md)
-* Events
-  * [In general](modules/events/README.md)
-  * [Participations](modules/events/participations.md)
-* Invoices
-  * [In general](modules/invoices/README.md)
-  * [Dynamic Invoice Items](modules/invoices/dynamic_invoice_items.md)
-* Messages
-  * [In general](modules/messages/README.md)
-  * [E-Mail](modules/messages/e-mail/README.md)
-* People
-  * [In general](modules/people/README.md)
-* Role
-  * [In general](modules/roles/README.md)
-* Rake Tasks
-  * [Table](09_rake_tasks.md)
-* Wagons
-  * [In general](modules/common/wagons/README.md)
+  * [Wagons](modules/common/wagons/README.md)
   * [Changes inside a wagon](modules/common/wagons/wagon_changes.md)
+  * [Table](09_rake_tasks.md)
+* [Events](modules/events/README.md)
+  * [Participations](modules/events/participations.md)
+* [Invoices](modules/invoices/README.md)
+  * [Dynamic Invoice Items](modules/invoices/dynamic_invoice_items.md)
+* [Messages](modules/messages/README.md)
+  * [E-Mail](modules/messages/e-mail/README.md)
+* [People](modules/people/README.md)
+* [Roles](modules/roles/README.md)
 
 All graphics are created using [Draw.io](https://draw.io) and are stored as original .xml as well as .svg files.

@@ -1,7 +1,6 @@
 # CI/CD
 
 * Tests werden auf GitHub als GitHub Actions ausgeführt
-* Deployment bei Puzzle geschieht via Jenkins.
 
 # Test-Pipelines
 

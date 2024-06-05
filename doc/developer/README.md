@@ -10,7 +10,7 @@
 
 * [Common](common/README.md)
   * [Architecture](common/architecture/README.md)
-  * [API and Authentification (OIDC)](common/api_auth/README.md)
+  * [API](common/api/README.md)
   * [Wagons](common/wagons/README.md)
   * [Table](rake_tasks.md)
 * [Events](events/README.md)
@@ -20,6 +20,15 @@
 * [Messages](messages/README.md)
   * [E-Mail](messages/e-mail/README.md)
 * [People](people/README.md)
+  * [Address Completion](messages/address_completion.md)
+  ...
 * [Roles](roles/README.md)
 
 All graphics are created using [Draw.io](https://draw.io) and are stored as original .xml as well as .svg files.
+
+## Developer documentation guidelines
+
+* Documentation is written in English (existing doc in German is being replaced)
+* Documentation is organized in modules: Common, Events, Invoices, Messages, People, Roles
+* every subfolder contains a README.md
+* every README.md contains a chapter **Overwiew** with all it's sub content listed

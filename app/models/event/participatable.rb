@@ -18,7 +18,8 @@ module Event::Participatable
                    includes(:person).
                    references(:person).
                    order_by_role(self).
-                   merge(Person.order_by_name.select("*"))
+                   merge(Person.order_by_name.select("*")).
+                   select(:id)
                    #distinct?
   end
 

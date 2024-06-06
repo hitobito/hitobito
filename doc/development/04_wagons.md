@@ -78,10 +78,10 @@ If the wagon is not for a specific organisation and does not define a group stru
 * Translations of those models in `config/locales/models.[name].de.yml`
 * seed-data: `rm -rf db/seeds`
 
-In order to have useful Testdata and to use tarantula, adjust the fixtures in the wagon according to the generated organizational structure:
+In order to have useful Testdata, adjust the fixtures in the wagon according to the generated organizational structure:
 
-* Fixtures for people, groups, roles, events, ... (`spec/fixtures`) (Groups can be exported with `rake fixtures:groups`)
-* Adjusting the tarantula tests in the wagon (`test/tarantula/tarantula_test.rb`)
+* Fixtures for people, groups, roles, events, ... (`spec/fixtures`)
+* Groups can manually created and then exported with `rake fixtures:groups` to have a realistic and usable set.
 
 ### Anleitung: Gruppenstruktur definieren
 

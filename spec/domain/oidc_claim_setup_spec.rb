@@ -27,7 +27,7 @@ describe OidcClaimSetup do
     let(:scope) { :name }
 
     it 'includes person name attributes' do
-      expect(claim_keys).to match_array %w(first_name last_name nickname address zip_code town country)
+      expect(claim_keys).to match_array %w(first_name last_name nickname address address_care_of street housenumber postbox zip_code town country)
     end
   end
 
@@ -41,6 +41,7 @@ describe OidcClaimSetup do
         first_name
         last_name
         nickname
+        address
         company_name
         company
         email

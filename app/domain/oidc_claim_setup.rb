@@ -5,7 +5,9 @@
 #  or at https://github.com/hitobito/hitobito.
 
 class OidcClaimSetup
-  NAME_ATTRS = %w(first_name last_name nickname address zip_code town country).freeze
+  NAME_ATTRS = %w(first_name last_name nickname)
+  NAME_ATTRS += %w(address address_care_of street housenumber postbox zip_code town country)
+  NAME_ATTRS.freeze
 
   def run
     add_claim(:email, scope: [:email], responses: [:user_info, :id_token])
@@ -21,7 +23,7 @@ class OidcClaimSetup
   end
 
   def add_role_scope_claims
-    (Person::PUBLIC_ATTRS - [:id]).each do |attr|
+    (Person::PUBLIC_ATTRS - [:id] + [:address]).each do |attr|
       add_claim(attr, scope: :with_roles)
     end
     add_claim(:roles, scope: :with_roles) { |owner| owner.decorate.roles_for_oauth }

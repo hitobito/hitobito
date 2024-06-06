@@ -48,6 +48,10 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
           last_name: user.last_name,
           nickname: 'Filou',
           address: 'Teststrasse 7',
+          address_care_of: nil,
+          street: 'Teststrasse',
+          housenumber: '7',
+          postbox: nil,
           zip_code: '8000',
           town: 'Zürich',
           country: 'CH'
@@ -88,6 +92,7 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
           company_name: user.company_name,
           company: user.company,
           email: user.email,
+          address: user.address,
           address_care_of: user.address_care_of,
           street: user.street,
           housenumber: user.housenumber,

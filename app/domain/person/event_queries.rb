@@ -39,16 +39,17 @@ class Person::EventQueries
   end
 
   def alltime_participations
-    person
-      .event_participations
-      .active
-      .joins(event: :dates)
-      .includes(:roles, event: [:translations, :dates, :groups])
-      .select("events.*", "event_dates.start_at")
-      .order('event_dates.start_at')
-      .distinct.tap do |applications|
-        Event::PreloadAllDates.for(applications.collect(&:event))
-      end
+    Event::Participation.select("*").from(
+      person
+        .event_participations
+        .active
+        .joins(event: :dates)
+        .select("event_participations.*", "event_dates.start_at")
+        .distinct_on(:id)
+        .includes(:roles, event: [:translations, :dates, :groups])
+    ).order(:start_at).tap do |applications|
+      Event::PreloadAllDates.for(applications.collect(&:event))
+    end
   end
 
 end

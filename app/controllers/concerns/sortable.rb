@@ -34,9 +34,9 @@ module Sortable
     def list_entries
       if sorting?
         super.joins(join_tables)
-             .select(sort_expression)
+             .select(sort_expression.include?("NULLS") ? "" : sort_expression)
              .reorder(Arel.sql(sort_expression))
-             .select("*", :id)
+             .select("*")
       else
         super
       end

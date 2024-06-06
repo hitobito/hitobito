@@ -196,7 +196,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
                   includes(:translations).
                   preload_all_dates
 
-      Event.select("*").from(subquery.distinct_on(:id), :events).order_by_date
+
+      Event.select("*").from(subquery.unscope(:order).distinct_on(:id), :events).order_by_date
     end
 
     def preload_all_dates
@@ -208,11 +209,16 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     end
 
     # Events with at least one date in the given year
-    def in_year(year)
+    def in_year(year, subquery = false)
+      #PG_TODO maybe find a cleaner solution than passing a parameter
       year = Time.zone.today.year if year.to_i <= 0
       start_at = Time.zone.parse "#{year}-01-01"
       finish_at = start_at + 1.year
-      where(start_at: [start_at...finish_at])
+      if subquery
+        where(start_at: [start_at...finish_at])
+      else
+        joins(:dates).where(event_dates: { start_at: [start_at...finish_at] })
+      end
     end
 
     # Event with start and end-date overlay

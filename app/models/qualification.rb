@@ -101,7 +101,7 @@ class Qualification < ActiveRecord::Base
         AND #{subselect_kind_condition(qualification_kind_ids)}
         AND (
           (q2.start_at <= :date AND (q2.finish_at IS NULL OR q2.finish_at >= :date)) OR
-          (q2.finish_at < :date AND DATE_ADD(q2.finish_at, INTERVAL qk.reactivateable YEAR) >= :date)
+          (q2.finish_at < :date AND q2.finish_at + INTERVAL '1 YEAR' * qk.reactivateable >= :date)
         )
       SQL
       where(

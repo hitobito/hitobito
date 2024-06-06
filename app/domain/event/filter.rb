@@ -38,7 +38,7 @@ class Event::Filter
       .where(type: type)
       .includes(:groups, :translations, :events_groups)
       .left_joins(:translations)
-      .in_year(year)
+      .in_year(year, true)
       .preload_all_dates
   end
 

@@ -26,12 +26,9 @@ class MailingLists::BulkMail::Retriever
     if validator.processed_before?
       mail_processed_before!(imap_mail)
     elsif validator.mail_too_big?
-      bulk_mail = "Too big bastard"
-      require 'pry'; binding.pry
-      MailingLists::BulkMail::SenderRejectedMessageJob.new(bulk_mail).enqueue!
-
-      # log_info("Ignored invalid email from #{imap_mail.sender_email} " \
-      #            "(E-mail to big max size is 10MB)")
+      sender = imap_mail.sender_email
+      FailureMailer.validation_checks(sender).deliver_now
+      delete_mail(mail_uid)
       return
     end
 
@@ -133,6 +130,12 @@ class MailingLists::BulkMail::Retriever
     bulk_mail_class(imap_mail).create!(
       subject: encode_subject(imap_mail),
       state: :pending)
+  end
+
+  def create_bulk_mail_alert(imap_mail)
+    bulk_mail_class(imap_mail).create!(
+      subject: "Mail: '#{encode_subject(imap_mail)}' too big",
+      state: :failed)
   end
 
   def encode_subject(imap_mail)

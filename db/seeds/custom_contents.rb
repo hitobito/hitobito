@@ -103,6 +103,9 @@ CustomContent.seed_once(
     placeholders_optional: nil },
   { key: Groups::SelfRegistrationNotificationMailer::CONTENT_SELF_REGISTRATION_NOTIFICATION,
     placeholders_required: 'person-name, group-name, person-url',
+    placeholders_optional: nil },
+  { key: FailureMailer::CONTENT_BULK_MAIL_TOO_BIG_NOTIFICATION,
+    placeholders_required: 'subject',
     placeholders_optional: nil }
 )
 
@@ -136,6 +139,7 @@ user_password_override_id = CustomContent.get(Person::UserPasswordOverrideMailer
 inactivity_block_warning_id = CustomContent.get(Person::InactivityBlockMailer::CONTENT_INACTIVITY_BLOCK_WARNING).id
 bulk_mail_success_id = CustomContent.get(DeliveryReportMailer::CONTENT_BULK_MAIL_SUCCESS).id
 bulk_mail_with_failed_id = CustomContent.get(DeliveryReportMailer::CONTENT_BULK_MAIL_WITH_FAILED).id
+bulk_mail_failure_notification_id = CustomContent.get(FailureMailer::CONTENT_BULK_MAIL_TOO_BIG_NOTIFICATION).id
 address_validation_checks_id = CustomContent.get(Address::ValidationChecksMailer::CONTENT_ADDRESS_VALIDATION_CHECKS).id
 assignment_assignee_notification_id = CustomContent.get(Assignment::AssigneeNotificationMailer::CONTENT_ASSIGNMENT_ASSIGNEE_NOTIFICATION).id
 self_registration_notification_id = CustomContent.get(Groups::SelfRegistrationNotificationMailer::CONTENT_SELF_REGISTRATION_NOTIFICATION).id
@@ -777,4 +781,22 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
   {custom_content_id: bulk_mail_with_failed_id,
    locale: 'it',
    label: 'Sendebericht Abo nicht alle erfolgreich' },
-)
+
+  {custom_content_id: bulk_mail_failure_notification_id,
+    locale: 'de',
+    label: 'Bulk Mail ist zu gross',
+    subject: 'Bulk Mail zu gross',
+    body: "Die abgesendete Mail überschreitet die Grösse von 10 MB" },
+
+  {custom_content_id: bulk_mail_failure_notification_id,
+    locale: 'fr',
+    label: 'Bulk Mail ist zu gross',
+    subject: 'Bulk Mail zu gross',
+    body: "Die abgesendete Mail überschreitet die Grösse von 10 MB" },
+
+  {custom_content_id: bulk_mail_failure_notification_id,
+    locale: 'it',
+    label: 'Bulk Mail ist zu gross',
+    subject: 'Bulk Mail zu gross',
+    body: "Die abgesendete Mail überschreitet die Grösse von 10 MB" },
+   )

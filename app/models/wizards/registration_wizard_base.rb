@@ -4,6 +4,8 @@ module Wizards
     attribute :person
     attribute :role
 
+    validates_presence_of :group, :person, :role, if: :last_step?
+
     def initialize(current_step:, current_ability: nil, **params)
       super(current_ability:, current_step:, **params)
       initialize_wizard

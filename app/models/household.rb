@@ -133,7 +133,7 @@ class Household
   end
 
   def save_removed
-    Person.where(id: removed_people.map(&:id)).update_all(household_key: nil) # rubocop:disable Rails/SkipsModelValidations
+    Person.where(id: removed_people.map(&:id)).update_all(household_key: nil) # rubocop:disable Rails/Validations
   end
 
   def save_members

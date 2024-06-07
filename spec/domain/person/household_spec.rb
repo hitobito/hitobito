@@ -82,7 +82,7 @@ describe Person::Household do
       member.update(household_key: 1)
 
       other = create(Group::TopGroup::Leader, groups(:top_group))
-      other.update(town: 'Greattown', zip_code: 3456, address: 'Greatstreet 345')
+      other.update(town: 'Greattown', zip_code: 3456, street: 'Greatstreet', housenumber: 345)
       household = assign_household(member, other)
 
       expect(member.household_people_ids).to eq [leader.id, other.id]
@@ -138,7 +138,7 @@ describe Person::Household do
     end
 
     it 'false if person address is not identical to readonly person address' do
-      leader.update!(address: nil, zip_code: nil, town: "Supertown")
+      leader.update!(street: nil, housenumber: nil, zip_code: nil, town: "Supertown")
 
       member.household_people_ids = [leader.id]
       expect(household(member)).not_to be_valid

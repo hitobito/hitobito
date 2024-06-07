@@ -11,7 +11,7 @@ class Person::ColleaguesController < ApplicationController
   respond_to :html
 
   def index
-    @colleagues = list_entries
+    @colleagues = list_entries.page(params[:page])
     respond_with(@colleagues)
   end
 
@@ -20,14 +20,12 @@ class Person::ColleaguesController < ApplicationController
   def list_entries
     return Person.none.page(1) unless person.company_name?
 
-    Person
-      .where(company_name: person.company_name)
-      .preload_public_accounts
-      .preload_groups
-      .joins(:roles)
-      .order_by_name
-      .distinct
-      .page(params[:page])
+    Person.
+      where(company_name: person.company_name)
+          .preload_public_accounts
+          .preload_groups
+          .joins(:roles)
+          .distinct_on(:id)
   end
 
   def person
@@ -51,7 +49,7 @@ class Person::ColleaguesController < ApplicationController
   self.sort_mappings = {
     roles: {
       joins: [:roles, "INNER JOIN role_type_orders ON roles.type = role_type_orders.name"],
-      order: ["role_type_orders.order_weight", "people.sort_name"]
+      order: ["order_weight", "sort_name"]
     }
   }
 end

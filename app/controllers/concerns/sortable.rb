@@ -33,11 +33,9 @@ module Sortable
     # Enhance the list entries with an optional sort order.
     def list_entries
       if sorting?
-        super.joins(join_tables)
-             .select(sort_expression.include?("NULLS") ? "" : sort_expression)
-             .reorder(Arel.sql(sort_expression))
-             .select("*")
-      else
+        # Get only the sort_expression attribute not included in 
+        # the attributes of current model_class, to select in query
+        model_class.from(super.select("#{model_class.table_name}.*", sort_expression_attrs).joins(join_tables), model_class.table_name).reorder(Arel.sql(sort_expression))      else
         super
       end
     end
@@ -50,8 +48,7 @@ module Sortable
       sort_columns_expression = sort_mappings_with_indifferent_access[params[:sort]].is_a?(Hash) ?
                                 sort_mappings_with_indifferent_access[params[:sort]][:order] :
                                 sort_mappings_with_indifferent_access[params[:sort]]
-      sort_columns_expression ||
-        "#{params[:sort]} #{sort_dir} NULLS LAST"
+      sort_columns_expression || "#{params[:sort]}"
     end
 
     def join_tables
@@ -61,7 +58,13 @@ module Sortable
 
     # Return the sort expression to be used in the list query.
     def sort_expression
-      Array(sort_columns).collect { |c| "#{c}" }.join(', ')
+      Array(sort_columns).collect { |c| "#{c} #{sort_dir} NULLS LAST" }.join(', ')
+    end
+
+    # Return the sort expression attributes without sort directory, to add to query select list
+    # Reject sort expression attributes from same table, to prevent ambiguous selection of attributes
+    def sort_expression_attrs
+      Array(sort_columns).reject { |col| model_class.column_names.include?(col) }.collect { |c| "#{c}" }.join(', ')
     end
 
     # The sort direction, either 'asc' or 'desc'.

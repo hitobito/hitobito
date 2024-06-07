@@ -45,6 +45,7 @@ module Subscriber
               .left_joins(:translations) # event_translations
               .where(search_condition(*SEARCH_COLUMNS))
               .order_by_date
+              .select("events.*")
               .distinct
     end
 

@@ -175,7 +175,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     sort_param = params[:sort]
 
     records = records.joins(join_tables)
-                     .select(sort_expression)
+                     .select(sort_expression_attrs)
                      .reorder(Arel.sql(sort_expression)) if sort_param && sortable?(sort_param)
     Person::PreloadPublicAccounts.for(records.collect(&:person))
     records

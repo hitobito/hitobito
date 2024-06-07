@@ -12,7 +12,7 @@ class Person::ColleaguesController < ApplicationController
   respond_to :html
 
   def index
-    @colleagues = list_entries
+    @colleagues = list_entries.page(params[:page])
     respond_with(@colleagues)
   end
 
@@ -26,9 +26,7 @@ class Person::ColleaguesController < ApplicationController
       preload_public_accounts.
       preload_groups.
       joins(:roles).
-      order_by_name.
-      distinct.
-      page(params[:page])
+      distinct_on(:id)
   end
 
   def person
@@ -52,7 +50,7 @@ class Person::ColleaguesController < ApplicationController
   self.sort_mappings = {
     roles: {
       joins: [:roles, "INNER JOIN role_type_orders ON roles.type = role_type_orders.name"],
-      order: ["role_type_orders.order_weight", "people.sort_name"]
+      order: ["order_weight", "sort_name"]
     }
   }
 

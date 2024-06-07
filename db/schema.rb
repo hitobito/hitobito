@@ -897,12 +897,12 @@ ActiveRecord::Schema.define(version: 2024_06_17_131402) do
     t.string "self_registration_reason_custom_text", limit: 100
     t.datetime "inactivity_block_warning_sent_at"
     t.datetime "blocked_at"
-    t.string "sort_name", default: -> { "\nCASE\n    WHEN company THEN company_name\n    WHEN ((last_name IS NOT NULL) AND (first_name IS NOT NULL)) THEN ((((last_name)::text || ' '::text) || (first_name)::text))::character varying\n    WHEN (first_name IS NOT NULL) THEN first_name\n    WHEN (nickname IS NOT NULL) THEN nickname\n    ELSE ''::character varying\nEND" }
     t.string "membership_verify_token"
     t.string "street"
     t.string "housenumber", limit: 20
     t.string "address_care_of"
     t.string "postbox"
+    t.string "sort_name", default: -> { "\nCASE\n    WHEN company THEN company_name\n    WHEN ((last_name IS NOT NULL) AND (first_name IS NOT NULL)) THEN ((((last_name)::text || ' '::text) || (first_name)::text))::character varying\n    WHEN (last_name IS NOT NULL) THEN last_name\n    WHEN (first_name IS NOT NULL) THEN first_name\n    WHEN (nickname IS NOT NULL) THEN nickname\n    ELSE ''::character varying\nEND" }
     t.index ["authentication_token"], name: "index_people_on_authentication_token"
     t.index ["confirmation_token"], name: "index_people_on_confirmation_token", unique: true
     t.index ["email"], name: "index_people_on_email", unique: true

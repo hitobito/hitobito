@@ -103,17 +103,17 @@ describe Person do
 
   it '#order_by_name orders people by company_name then last_name then first_name and then nickname' do
     Person.destroy_all
-    p1 = Person.create(company: true, company_name: "AA")
-    p2 = Person.create(company: true, company_name: "BA")
-    p3 = Person.create(company: false, last_name: "AB")
-    p4 = Person.create(company: false, last_name: "BB")
-    p5 = Person.create(company: false, first_name: "AC")
-    p6 = Person.create(company: false, first_name: "BC")
-    p7 = Person.create(company: false, nickname: "AD")
-    p8 = Person.create(company: false, nickname: "BD")
+    Person.create!(company: true, company_name: "AA")
+    Person.create!(company: true, company_name: "BA")
+    Person.create!(company: false, last_name: "AB")
+    Person.create!(company: false, last_name: "BB")
+    Person.create!(company: false, first_name: "AC")
+    Person.create!(company: false, first_name: "BC")
+    Person.create!(company: false, nickname: "AD")
+    Person.create!(company: false, nickname: "BD")
 
     # Checking order by name with hardcoded nickname prefixes
-    expect(Person.order_by_name.select("*").collect(&:to_s)).to eq([p1, p3, p5, " / AD", p2, p4, p6, " / BD"].collect(&:to_s))
+    expect(Person.order_by_name.select("*").collect(&:to_s)).to eq(["AA", "AB", "AC", " / AD", "BA", "BB", "BC", " / BD"].collect(&:to_s))
   end
 
   it '#order_by_name orders people with same last_name by first_name' do

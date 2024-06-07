@@ -153,7 +153,6 @@ Hitobito::Application.routes.draw do
           get 'tags/query' => 'tags#query'
           post 'impersonate' => 'impersonation#create'
           delete 'impersonate' => 'impersonation#destroy'
-          get 'households' => 'households#new'
         end
       end
 

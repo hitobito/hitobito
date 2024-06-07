@@ -32,7 +32,7 @@ module Messages
     end
 
     def reciept_attrs
-      @receipt_attrs ||= {message_id: @message.id, created_at: @now}
+      @reciept_attrs ||= { message_id: @message.id, created_at: @now }
     end
 
     def create_for_people!
@@ -69,7 +69,8 @@ module Messages
           )
         end
       end
-      MessageRecipient.insert_all(rows.flatten)
+      MessageRecipient.insert_all(rows.flatten) # rubocop:disable Rails/SkipsModelValidations intentional
+
       rows.size
     end
 

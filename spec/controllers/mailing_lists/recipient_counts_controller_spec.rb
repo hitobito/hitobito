@@ -87,7 +87,7 @@ describe MailingLists::RecipientCountsController do
 
   def fabricate_valid_households(num = 1)
     num.times do
-      household_key = Person::Household.new(nil, nil, nil, nil).send(:next_key)
+      household_key = Household.new(Person.new).send(:next_key)
 
       # between 2 and 6 housemates
       housemates = fabricate_recipients(:subscription_with_subscriber_with_address, rand(2..5))

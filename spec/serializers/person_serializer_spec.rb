@@ -83,6 +83,8 @@
 require "spec_helper"
 
 describe PeopleSerializer do
+  include Households::SpecHelper
+
   let(:person) do
     p = people(:top_leader)
     Fabricate(:additional_email, contactable: p, public: true)
@@ -122,7 +124,9 @@ describe PeopleSerializer do
     end
   end
 
-  context "without details" do
+  context 'without details' do
+    include Households::SpecHelper
+
     before { allow(controller).to receive(:can?).and_return(false) }
 
     it "has additional properties" do
@@ -146,12 +150,13 @@ describe PeopleSerializer do
       expect(household_key).to eq(nil)
     end
 
-    it "uses same household key if same household" do
-      other = people(:top_leader).decorate
-      person.update(household_key: "1")
-      Person::Household.new(person, Ability.new(person), other).tap(&:assign)
-      serial_person = PersonSerializer.new(person, controller: controller).to_hash[:people]
-      serial_other = PersonSerializer.new(other, controller: controller).to_hash[:people]
+    it 'uses same household key if same household' do
+      other = people(:bottom_member)
+      create_household(person, other)
+      serial_person = PersonSerializer.new(person.reload.decorate,
+                                           controller: controller).to_hash[:people]
+      serial_other = PersonSerializer.new(other.reload.decorate,
+                                          controller: controller).to_hash[:people]
       expect(serial_other.first[:household_key]).not_to eq(nil)
       expect(serial_person.first[:household_key]).to eq(serial_other.first[:household_key])
     end

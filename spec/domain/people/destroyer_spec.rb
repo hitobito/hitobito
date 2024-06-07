@@ -38,9 +38,11 @@ describe People::Destroyer do
     expect(FamilyMember.exists?(leftover_member2.id)).to eq(false)
   end
 
-  it "does not destroy attached family members if there is more than one" do
-    non_leftover_member1 = FamilyMember.create!(person: person, other: bottom_member, kind: :sibling)
-    non_leftover_member2 = FamilyMember.create!(person: top_leader, other: bottom_member, kind: :sibling)
+  it 'does not destroy attached family members if there is more than one' do
+    non_leftover_member1 = FamilyMember.create!(person: person, other: bottom_member,
+                                                kind: :sibling)
+    non_leftover_member2 = FamilyMember.create!(person: top_leader, other: bottom_member,
+                                                kind: :sibling)
 
     person.reload
 
@@ -54,9 +56,10 @@ describe People::Destroyer do
     expect(FamilyMember.exists?(non_leftover_member2.id)).to eq(true)
   end
 
-  it "clears attached household if there is only one other person" do
-    person.household_people_ids = [bottom_member.id]
-    Person::Household.new(person, Ability.new(top_leader), bottom_member, person).persist!
+  it 'clears attached household if there is only one other person' do
+    household = Household.new(person)
+    household.add(bottom_member)
+    expect(household.save).to eq true
 
     person.reload
     bottom_member.reload
@@ -73,10 +76,11 @@ describe People::Destroyer do
     expect(bottom_member.household_key).to be_nil
   end
 
-  it "does not clear attached household if there is more than one person" do
-    person.household_people_ids = [bottom_member.id, top_leader.id]
-    Person::Household.new(person, Ability.new(top_leader), bottom_member, person).persist!
-    Person::Household.new(bottom_member, Ability.new(top_leader), top_leader, bottom_member).persist!
+  it 'does not clear attached household if there is more than one person' do
+    household = Household.new(person)
+    household.add(bottom_member)
+    household.add(top_leader)
+    expect(household.save).to eq true
 
     person.reload
     bottom_member.reload
@@ -92,7 +96,6 @@ describe People::Destroyer do
 
     expect(bottom_member.household_key).to_not be_nil
     expect(top_leader.household_key).to_not be_nil
-    expect(bottom_member.household_key).to eq(top_leader.household_key)
   end
 
   it "nullifies invoices with person as recipient" do

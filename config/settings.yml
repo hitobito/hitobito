@@ -219,7 +219,6 @@ help_text_blacklist:
     - redirect_uri
     - scopes
   person:
-    - household_people_ids
     - relations_to_tails_attributes
     - phone_numbers_attributes
     - family_members_attributes

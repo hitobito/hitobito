@@ -19,7 +19,6 @@ class PeopleController < CrudController
     :gender, :birthday, :additional_information, :picture, :remove_picture] +
     Contactable::ACCESSIBLE_ATTRS +
     [family_members_attributes: [:id, :kind, :other_id, :_destroy]] +
-    [household_people_ids: []] +
     [relations_to_tails_attributes: [:id, :tail_id, :kind, :_destroy]]
   FeatureGate.if(:person_language) do
     permitted_attrs << :language
@@ -40,8 +39,6 @@ class PeopleController < CrudController
 
   before_action :index_archived, only: :index, if: :group_archived_and_no_filter
 
-  before_save :validate_household
-  after_save :persist_household
   after_save :show_email_change_info
 
   before_render_show :load_person_add_requests, if: -> { html_request? }
@@ -229,20 +226,6 @@ class PeopleController < CrudController
 
   def authorize_class
     authorize!(:index_people, group)
-  end
-
-  def validate_household
-    unless household.empty?
-      household.valid? || throw(:abort)
-    end
-  end
-
-  def persist_household
-    household.persist!
-  end
-
-  def household
-    @household ||= Person::Household.new(entry, current_ability, nil, current_user)
   end
 
   def person_filter

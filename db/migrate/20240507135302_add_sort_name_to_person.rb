@@ -7,6 +7,7 @@ class AddSortNameToPerson < ActiveRecord::Migration[6.1]
         CASE
           WHEN company THEN company_name
           WHEN last_name IS NOT NULL AND first_name IS NOT NULL THEN last_name || ' ' || first_name
+          WHEN last_name IS NOT NULL THEN last_name
           WHEN first_name IS NOT NULL THEN first_name
           WHEN nickname IS NOT NULL THEN nickname
           ELSE ''

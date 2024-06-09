@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2021, Efficiency-Club Bern. This file is part of
+#  Copyright (c) 2023, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -30,18 +30,30 @@ class Groups::SelfRegistrationController < ApplicationController
   end
 
   def save_entry
-    Person.transaction do
-      entry.save!
-      enqueue_notification_email
-      send_password_reset_email
-    end
+    entry.save!
+    enqueue_notification_email
+    send_password_reset_email
   end
 
   def entry
-    @entry ||= SelfRegistration.new(
+    @entry ||= model_class.new(
+      current_ability: current_ability,
+      current_step: params[:step],
       group: group,
-      params: params.to_unsafe_h.deep_symbolize_keys
+      **model_params.to_unsafe_h
     )
+  end
+
+  def model_params
+    params[model_identifier] || ActionController::Parameters.new
+  end
+
+  def model_identifier
+    @model_identifier ||= model_class.model_name.param_key
+  end
+
+  def model_class
+    @model_class ||= Wizards::RegisterNewUserWizard
   end
 
   def authenticate?

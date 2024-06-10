@@ -3,6 +3,7 @@ name: 'Rails Lint and Test'
 on:
   workflow_dispatch:
   push:
+    branches: [ master ]
     paths-ignore:
       - 'doc/**'
       - '**.md'

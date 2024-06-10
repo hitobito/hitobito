@@ -1816,9 +1816,9 @@ fr:
     impersonate: "Le compte a été repris par %{user}."
     impersonation_done: "Le compte n'est plus utilisé par %{user}."
     password_override: "Le mot de passe de %{user} a été effacé. La connexion est empêchée jusqu'à ce qu'un nouveau mot de passe soit défini."
-    append_to_household: "%{item} a été ajouté au ménage (%{object_changes})."
     household_updated: "Le foyer (%{object_changes}) a été actualisé."
     remove_from_household: "%{item} a été retiré du ménage (%{object_changes})."
+    append_to_household: "%{item} a été ajouté au ménage (%{object_changes})."
     person_merge: "Deux personnes ont été fusionnées sous cette entrée. Personne supprimée:"
     deleted_service_token: "Supprimé entre-temps %{model_name}"
   tags/merge:

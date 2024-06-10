@@ -1804,9 +1804,9 @@ it:
     impersonate: "L'account è stato rilevato da %{user}"
     impersonation_done: "L'account non è più utilizzato da %{user}"
     password_override: "La password è stata azzerata da %{user} e il login impedito fino a che verrà definita una nuova password."
-    append_to_household: "è stato aggiunto all'economia domestica"
     household_updated: "L'economia domestica (%{object_changes}) è stata aggiornata"
     remove_from_household: "è stato rimosso dall'economia domestica"
+    append_to_household: "è stato aggiunto all'economia domestica"
     person_merge: "Unite due persone in questa registrazione. Persona cancellata:"
     deleted_service_token: "Nel frattempo eliminato %{model_name}"
   tags/merge:

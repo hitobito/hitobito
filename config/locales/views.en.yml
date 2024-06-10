@@ -1450,9 +1450,9 @@ en:
         destroy: "Request for <i>%{label}</i> has been answered."
     impersonate: "Account took over from %{user}"
     impersonation_done: "Account impersonation from %{user} ended."
-    append_to_household: "%{item} has been added to household %{object_changes}"
     household_updated: "Household %{object_changes} updated."
     remove_from_household: "%{item} removed from household %{object_changes}"
+    append_to_household: "%{item} has been added to household %{object_changes}"
     person_merge: "Two persons have been merged. Deleted person:"
   tags/merge:
     success: Tags merged successfully.

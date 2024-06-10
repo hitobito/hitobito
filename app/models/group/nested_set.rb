@@ -39,7 +39,7 @@ module Group::NestedSet
 
   # siblings with the same type
   def sister_groups
-    self_and_sister_groups.where('id <> ?', id)
+    self_and_sister_groups.where.not(id: id)
   end
 
   def self_and_sister_groups

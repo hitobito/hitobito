@@ -21,7 +21,7 @@ module Export::Tabular::People
     end
 
     def created_at
-      normalize(participation.created_at.to_date)
+      normalize(participation.created_at&.to_date)
     end
 
     def question_attribute(attr)

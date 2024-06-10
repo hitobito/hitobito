@@ -4,7 +4,6 @@ Everything that does not fit in the other documentation modules is found in here
 
 ## Overview 👁️
 
-* [Architecture](architecture/README.md)
 * [API](api/README.md)
 * [Gems 💎](gems/README.md)
 * [Frontend](frontend/README.md)

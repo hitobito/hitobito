@@ -25,6 +25,7 @@ describe MailingLists::BulkMail::Retriever do
     allow(imap_connector).to receive(:fetch_mail_uids).with(:inbox).and_return([42])
     allow(imap_mail_validator).to receive(:valid_mail?).and_return(true)
     allow(imap_mail_validator).to receive(:processed_before?).and_return(false)
+    allow(imap_mail_validator).to receive(:mail_too_big?).and_return(false)
   end
 
   context 'mails subject' do

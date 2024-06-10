@@ -20,7 +20,7 @@ gem 'bleib', '~> 0.0.10'
 gem 'bootsnap', require: false
 gem 'cancancan', '< 3.2.0'
 gem 'caxlsx'
-gem 'charlock_holmes', '~> 0.7.7'
+gem 'charlock_holmes', github: 'rnestler/charlock_holmes', ref: 'remove-std-override'
 gem 'commonmarker'
 gem 'config'
 gem 'country_select'

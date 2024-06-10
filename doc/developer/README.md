@@ -20,6 +20,6 @@ All graphics are created using [Draw.io](https://draw.io) and are stored as orig
 
 ## General 
 
-- [Code](guidelines.md)
-- [Documentation](documentation_guidelines.md)
+- [Code Guidelines](guidelines.md)
+- [Documentation Guidelines](documentation_guidelines.md)
 - [Architecture](architecture/README.md)

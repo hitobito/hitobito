@@ -9,11 +9,12 @@ class FailureMailer < ApplicationMailer
 
   CONTENT_BULK_MAIL_TOO_BIG_NOTIFICATION = 'bulk_mail_failure_notification'.freeze
 
-  def validation_checks(sender_email)
+  def validation_checks(sender_email, subject)
+    @subject = subject
     compose(sender_email, CONTENT_BULK_MAIL_TOO_BIG_NOTIFICATION)
   end
 
   def placeholder_subject
-    "Hello World"
+    @subject
   end
 end

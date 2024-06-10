@@ -27,7 +27,8 @@ class MailingLists::BulkMail::Retriever
       mail_processed_before!(imap_mail)
     elsif validator.mail_too_big?
       sender = imap_mail.sender_email
-      FailureMailer.validation_checks(sender).deliver_now
+      subject = imap_mail.mail.subject
+      FailureMailer.validation_checks(sender, subject).deliver_now
       delete_mail(mail_uid)
       return
     end

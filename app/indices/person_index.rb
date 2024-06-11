@@ -7,7 +7,13 @@ module PersonIndex; end
 
 ThinkingSphinx::Index.define_partial :person do
   indexes first_name, last_name, company_name, nickname, company, email, sortable: true
-  indexes address_care_of, street, housenumber, postbox
+
+  # Somehow, these 4 columns are not recognized automatically
+  indexes "#{Person.table_name}.address_care_of", as: :address_care_of
+  indexes "#{Person.table_name}.street", as: :street
+  indexes "#{Person.table_name}.housenumber", as: :housenumber
+  indexes "#{Person.table_name}.postbox", as: :postbox
+
   indexes address # TODO: remove when cleaning structured_addresses migration
   indexes zip_code, town, country, additional_information
 

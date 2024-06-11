@@ -121,6 +121,24 @@ describe PeopleController, type: :controller do
     end
   end
 
+  describe 'household section' do
+    let(:params) { { group_id: top_group.id, id: test_entry.id } }
+    let(:member_one) { Fabricate(:person) }
+    let(:member_two) { Fabricate(:person) }
+    before do
+      allow_any_instance_of(HouseholdAsideMemberComponent).to receive(:show_buttons?).and_return(true)
+      create_household([top_leader, member_one, member_two])
+    end
+    before { create_household([member_one, member_two]) }
+    it 'renders household members' do
+      get :show, params: params
+      expect(dom).to have_selector('#household_aside table tr a', count: 3)
+      expect(dom).to have_selector('#household_aside a', text: top_leader.full_name)
+      expect(dom).to have_selector('#household_aside a', text: member_one.full_name)
+      expect(dom).to have_selector('#household_aside a', text: member_two.full_name)
+    end
+  end
+
   describe 'add requests section' do
     let(:section) { dom.all('aside section')[2] }
 
@@ -177,7 +195,7 @@ describe PeopleController, type: :controller do
 
       it 'is missing if we have no applications' do
         get :show, params: params
-        expect(dom).to have_css('aside section', count: 3) # only tags, roles and qualification
+        expect(dom).to have_css('aside section', count: 4) # only tags, roles and qualification
       end
 
       it 'lists application' do
@@ -189,7 +207,9 @@ describe PeopleController, type: :controller do
         URL
         expect(label_link.text).to match(/Eventus/)
         expect(label.text).to match(/Top/)
-        expect(dates).to eq "#{I18n.l(date, format: :with_day)} - #{I18n.l(date + 5.days, format: :with_day)}"
+        expect(dates).to eq "#{I18n.l(date,
+                                      format: :with_day)} - #{I18n.l(date + 5.days,
+                                                                     format: :with_day)}"
       end
     end
 
@@ -197,18 +217,20 @@ describe PeopleController, type: :controller do
       let(:section) { dom.all('aside section')[2] }
       let(:date) { 2.days.from_now }
       let(:pretty_date) do
-        "#{I18n.l(date, format: '%a %d.%m.%Y %H:%M')} - #{I18n.l(date + 5.days, format: '%a %d.%m.%Y %H:%M')}"
+        "#{I18n.l(date,
+                  format: '%a %d.%m.%Y %H:%M')} - #{I18n.l(date + 5.days,
+                                                           format: '%a %d.%m.%Y %H:%M')}"
       end
 
       it 'is missing if we have no events' do
         get :show, params: params
-        expect(dom).to have_css('aside section', count: 3) # only tags, roles and qualification
+        expect(dom).to have_css('aside section', count: 4) # only tags, roles and qualification
       end
 
       it 'is missing if we have no upcoming events' do
         create_participation(10.days.ago, active_participation: true)
         get :show, params: params
-        expect(dom).to have_css('aside section', count: 3) # only tags, roles and qualification
+        expect(dom).to have_css('aside section', count: 4) # only tags, roles and qualification
       end
 
       it 'lists event label, link and dates' do
@@ -241,7 +263,7 @@ describe PeopleController, type: :controller do
 
     it 'displays old value again' do
       is_expected.to render_template('edit')
-      #expect(dom).to have_selector('.error')
+      # expect(dom).to have_selector('.error')
       expect(dom).to have_selector('input.is-invalid')
       expect(dom).to have_selector('input#person_birthday.is-invalid')
       expect(dom).to have_selector('input[value="02.01.10000"].is-invalid')
@@ -261,4 +283,14 @@ describe PeopleController, type: :controller do
     end
   end
 
+  private
+
+  private
+
+  def create_household(people)
+    household = Household.new(test_entry)
+    people.each { |person| household.add(person) }
+    household.save
+    household.reload
+  end
 end

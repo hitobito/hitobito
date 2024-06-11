@@ -31,8 +31,31 @@ module Sheet
 
       private
 
+      def sort_list_by_name(objects)
+        children_of = {}
+        objects.each do |o|
+          children_of[o.parent_id] ||= []
+          children_of[o.parent_id] << o
+        end
+
+        children_of.each_value do |children|
+          children.sort_by! { |c| c.short_name || c.name }
+        end
+
+        results = []
+        recombine_lists(results, children_of, nil)
+        results
+      end
+
+      def recombine_lists(results, children_of, parent_id)
+        children_of[parent_id]&.each do |o|
+          results << o
+          recombine_lists(results, children_of, o.id)
+        end
+      end
+
       def groups
-        @groups ||= entry.groups_in_same_layer.without_deleted.order(:lft).to_a
+        @groups ||= sort_list_by_name entry.groups_in_same_layer.without_deleted.order(:lft)
       end
 
       def layer

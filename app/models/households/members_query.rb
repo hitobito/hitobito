@@ -10,7 +10,7 @@ class Households::MembersQuery
 
   def initialize(current_user, person_id, writables_scope = nil)
     @current_user = current_user
-    @person = current_user if current_user.id == person_id
+    @person = current_user if person_id.blank? || current_user.id == person_id
     @person ||= Person.find(person_id)
     @writables_scope = writables_scope || Person.only_public_data
   end

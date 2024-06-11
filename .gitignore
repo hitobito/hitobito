@@ -109,3 +109,6 @@ config/mail.yml
 # use BUNDLE_GEMFILE=Gemfile.local for less Gemfile.lock noise in development
 Gemfile.local
 Gemfile.local.lock
+
+/app/assets/builds/*
+!/app/assets/builds/.keep

@@ -107,3 +107,6 @@ config/mail.yml
 # (not used anymore, swagger is now generated on the fly with graphiti)
 /swagger
 .yardoc/
+
+/app/assets/builds/*
+!/app/assets/builds/.keep

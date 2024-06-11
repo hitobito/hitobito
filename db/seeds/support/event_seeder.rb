@@ -175,7 +175,7 @@ class EventSeeder
       Event::Answer.seed_once(:participation_id, :question_id, {
         participation_id: participation.id,
         question_id: q.id,
-        answer: q.choices? ? q.choice_items.shuffle.first : Faker::Lorem.sentence(1)
+        answer: q.choices? ? q.choice_items.shuffle.first : Faker::Lorem.sentences(number: 1)
       })
     end
   end

@@ -25,7 +25,8 @@ class Roles::TerminationsController < ApplicationController
   private
 
   def entry
-    @entry ||= Roles::Termination.new(role: role, terminate_on: terminate_on)
+    # @entry ||= Roles::Termination.new(role: role, terminate_on: terminate_on)
+    @entry ||= Wizards::MembershipChange.new(current_step: 0, current_ability: current_ability)
   end
 
   def role

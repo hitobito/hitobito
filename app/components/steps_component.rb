@@ -106,6 +106,10 @@ class StepsComponent < ApplicationComponent
       end
     end
 
+    def navigation_links
+      back_link + next_button
+    end
+
     def back_link
       data = { action: stimulus_action(:back), index: index - 1 }
       link_to(t('global.button.back'), '#', class: 'link cancel mt-2 pt-1', data: data)

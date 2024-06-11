@@ -1865,6 +1865,7 @@ de:
       #   text: Bist du sicher, dass du als Leiter/-in austreten möchtest?
       # group/bottom_layer/member:
       #   text: Bist du sicher, dass du als Mitglied austreten möchtest?
+      wizards/steps/choose_sektion_title: Sektion wählen
     main_person_text: "Der Austritt erfolgt für: %{person}"
     affected_people_text: "sowie für: %{affected_people}"
     flash:

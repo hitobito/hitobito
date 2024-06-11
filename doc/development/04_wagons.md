@@ -81,7 +81,7 @@ If the wagon is not for a specific organisation and does not define a group stru
 In order to have useful Testdata, adjust the fixtures in the wagon according to the generated organizational structure:
 
 * Fixtures for people, groups, roles, events, ... (`spec/fixtures`)
-* Groups can manually created and then exported with `rake fixtures:groups` to have a realistic and usable set.
+* Groups can be created manually and then exported with `rake fixtures:groups` to have a realistic and usable set.
 
 ### Anleitung: Gruppenstruktur definieren
 

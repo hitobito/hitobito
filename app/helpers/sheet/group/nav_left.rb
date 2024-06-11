@@ -55,7 +55,7 @@ module Sheet
       end
 
       def groups
-        @groups ||= sort_list_by_name entry.groups_in_same_layer.without_deleted.order(:lft)
+        @groups ||= sort_list_by_name entry.groups_in_same_layer
       end
 
       def layer

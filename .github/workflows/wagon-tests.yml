@@ -321,7 +321,7 @@ jobs:
     if: ( success() || failure() ) && ( github.ref_name == 'master' ) && ( (inputs.core_ref || 'master') == 'master' ) && ( (inputs.wagon_dependency_ref || 'master') == 'master' )
     with:
       repository: ${{ inputs.wagon_repository }}
-      test_result: ${{ needs.build_test.result == 'success' }}
+      test_result: ${{ needs.wagon_rubocop.result == 'success' && needs.wagon_specs.result == 'success' && needs.wagon_dependency_specs.result == 'success' && needs.wagon_feature_specs.result == 'success' && needs.wagon_dependency_feature_specs.result == 'success' }}
     secrets:
       HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}
       HEARTBEAT_TOKEN: ${{ secrets.HEARTBEAT_TOKEN }}

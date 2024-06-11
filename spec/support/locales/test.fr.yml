@@ -6,6 +6,8 @@
 fr:
   activerecord:
     models:
+      group/static_name_a_group: Fr 2 A
+      group/static_name_b_group: Fr 1 B
       group/top_layer: Top Layere
       group/top_group: Top Groupe
       group/bottom_layer:

@@ -39,7 +39,7 @@ module Sheet
         end
 
         children_of.each_value do |children|
-          children.sort_by! { |c| c.short_name || c.name }
+          children.sort_by!(&:display_name)
         end
 
         results = []

@@ -260,7 +260,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     accepts_nested_attributes_for :family_members, allow_destroy: true
   end
 
-  attr_accessor :household_people_ids, :shared_access_token
+  attr_accessor :shared_access_token
 
   ### VALIDATIONS
 
@@ -413,12 +413,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def household_people
-    Person.
-      where(id: household_people_ids).or(
-        Person.where.not(household_key: nil).where(household_key: household_key)
-      ).
-      where.not(id: id).
-      includes(:groups)
+    Person.where(id: household.people - [self])
   end
 
   def greeting_name

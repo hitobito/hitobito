@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/puzzle/graphiti-openapi.git
-  revision: 617a4e34747ea7c008ada10e255d822636adee3e
-  tag: standalone/0.6.3
+  revision: d779cd93b3a686dccf77292ef12a4ab37e3ae7d8
+  tag: standalone/0.6.4
   specs:
     graphiti-openapi (0.6.2)
       activemodel (~> 6.0)
@@ -486,8 +486,6 @@ GEM
       rack (>= 2.0.0)
     rack-mini-profiler (3.3.1)
       rack (>= 1.2.0)
-    rack-proxy (0.7.7)
-      rack
     rack-test (2.1.0)
       rack (>= 1.3)
     rails (6.1.7.7)
@@ -640,7 +638,6 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
-    semantic_range (3.0.0)
     sentry-raven (3.1.2)
       faraday (>= 1.0)
     set (1.1.0)
@@ -717,11 +714,6 @@ GEM
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
-    webpacker (5.4.4)
-      activesupport (>= 5.2)
-      rack-proxy (>= 0.6.1)
-      railties (>= 5.2)
-      semantic_range (>= 2.3.0)
     webrick (1.8.1)
     websocket (1.2.10)
     websocket-driver (0.7.6)
@@ -873,7 +865,6 @@ DEPENDENCIES
   view_component
   wagons (= 0.6.1)
   webmock
-  webpacker
   wirble
 
 BUNDLED WITH

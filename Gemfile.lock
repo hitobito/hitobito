@@ -1,11 +1,4 @@
 GIT
-  remote: https://github.com/dmitrykok/hpricot.git
-  revision: 3f1f5fc980b2c3c377d53feaa85fea5cf9d5f0fb
-  ref: 3f1f5fc980b2c3c377d53feaa85fea5cf9d5f0fb
-  specs:
-    hpricot (0.8.6)
-
-GIT
   remote: https://github.com/puzzle/graphiti-openapi.git
   revision: 617a4e34747ea7c008ada10e255d822636adee3e
   tag: standalone/0.6.3
@@ -179,9 +172,6 @@ GEM
       rspec (>= 2.14, < 4)
     cmdparse (3.0.7)
     coderay (1.1.3)
-    codez-tarantula (0.5.5)
-      hpricot (~> 0.8.4)
-      htmlentities (~> 4.3.0)
     commonmarker (1.1.3)
       rb_sys (~> 0.9)
     concurrent-ruby (1.2.3)
@@ -765,7 +755,6 @@ DEPENDENCIES
   charlock_holmes (~> 0.7.7)
   ci_reporter_rspec
   cmdparse
-  codez-tarantula
   commonmarker
   config
   country_select
@@ -796,7 +785,6 @@ DEPENDENCIES
   haml
   headless
   hirb
-  hpricot!
   http_accept_language
   icalendar
   image_processing (~> 1.12)

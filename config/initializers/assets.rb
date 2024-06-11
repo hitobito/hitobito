@@ -12,3 +12,6 @@
 # application.js, application.css, and all non-JS/CSS in the app/assets
 # folder are already added.
 # Rails.application.config.assets.precompile += %w(print.css ie.css ie7.css wysiwyg.css wysiwyg.js *.png *.gif *.jpg favicon.ico)
+
+# CSS entry files
+Rails.application.config.assets.precompile += %w(print.css oauth.css)

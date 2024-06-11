@@ -17,9 +17,9 @@
     = wagon_favicon_pack_tag 'favicon.ico'
 
     = stylesheet_link_tag 'application', media: 'screen', 'data-turbo-track': "reload"
-    -# = stylesheet_pack_tag 'print', media: 'print'
-    -# - if Rails.env.test?
-      = stylesheet_pack_tag 'disable_animations'
+    = stylesheet_link_tag 'print', media: 'print'
+    - if Rails.env.test?
+      = stylesheet_link_tag 'disable_animations'
     = javascript_include_tag "application", "data-turbo-track": "reload", type: "module"
 
     = yield(:head)

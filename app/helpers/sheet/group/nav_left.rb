@@ -82,7 +82,7 @@ module Sheet
       def render_layer_groups
         out = ''.html_safe
         stack = []
-        Array(groups[1..-1]).each do |group|
+        groups[1..].each do |group|
           render_stacked_group(group, stack, out)
         end
         stack.size.times do

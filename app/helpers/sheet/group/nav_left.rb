@@ -43,7 +43,7 @@ module Sheet
         end
 
         results = []
-        recombine_lists(results, children_of, nil)
+        recombine_lists(results, children_of, objects.first.parent_id)
         results
       end
 

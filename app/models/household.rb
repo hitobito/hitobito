@@ -47,6 +47,10 @@ class Household
     super
   end
 
+  def save!(context: :update)
+    raise 'error saving household' unless save(context: context)
+  end
+
   def save(context: :update)
     return false unless valid?(context)
 
@@ -104,7 +108,11 @@ class Household
   end
 
   def destroy?
-    people.count.zero?
+    members.none?
+  end
+
+  def empty?
+    members.one?
   end
 
   private
@@ -155,8 +163,8 @@ class Household
       member.errors.each do |error|
         errors.add("members[#{index}].#{error.attribute}", error.message)
       end
-      member.warnings.each do |_warning|
-        warnings.add("members[#{index}].#{error.attribute}", error.message)
+      member.warnings.each do |warning|
+        warnings.add("members[#{index}].#{warning.attribute}", warning.message)
       end
     end
   end

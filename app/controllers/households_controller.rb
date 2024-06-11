@@ -11,6 +11,7 @@ class HouseholdsController < ApplicationController
 
   self.nesting = [Group, Person]
   alias person parent
+
   before_action :entry
   before_action :authorize
   helper_method :entry, :person

@@ -19,7 +19,6 @@ export default class extends Controller {
   }
 
   connect() {
-    console.log("connected");
     if (this.delayValue > 0) {
       this.save = debounce(this.save, this.delayValue);
     }

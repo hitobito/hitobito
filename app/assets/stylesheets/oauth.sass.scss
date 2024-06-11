@@ -36,7 +36,6 @@
  */
 @import "@fortawesome/fontawesome-free/css/all";
 @import "bootstrap/scss/bootstrap";
-@import "tom-select/dist/css/tom-select.bootstrap5.css";
 
 /**
  * Core styles
@@ -44,12 +43,8 @@
 @import "./hitobito/main";
 @import "./hitobito/modal";
 @import "./hitobito/help-texts";
-@import "./actiontext";
 
-/**
- * Components
- */
-@import "../../components/steps_component";
+@import "./hitobito/oauth-dialog";
 
 /**
  * Wagon styles

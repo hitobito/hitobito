@@ -216,8 +216,9 @@ test-prepare)
     echo 'Migrating Wagons'
     bundle exec rake wagon:migrate
 
-    echo 'Compile Assets to match the selected wagons to ensure better spec-results'
-    bin/webpack-test-compile
+    # TODO: Is this still relevant post Webpacker?
+    # echo 'Compile Assets to match the selected wagons to ensure better spec-results'
+    # bin/webpack-test-compile
   fi
   ;;
 

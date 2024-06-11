@@ -26,7 +26,7 @@ gem "charlock_holmes", "~> 0.7.7"
 gem "commonmarker"
 gem "config"
 gem "country_select"
-gem 'cssbundling-rails'
+gem "cssbundling-rails"
 gem "csv-safe"
 gem "daemons"
 gem "dalli"
@@ -51,7 +51,7 @@ gem "haml"
 gem "http_accept_language"
 gem "icalendar"
 gem "image_processing", "~> 1.2"
-gem 'jsbundling-rails'
+gem "jsbundling-rails"
 gem "json", "< 2.7.0" # pinned to be able to use rdbg. Somehow it has multiple versions otherwise
 gem "lograge"
 gem "lograge_activejob"
@@ -61,6 +61,7 @@ gem "mail" # add mail here to have it loaded
 gem "matrix" # required but removed from stlib since ruby 3.2
 gem "mime-types"
 gem "mini_magick"
+gem "mysql2"
 gem "nested_form"
 gem "nokogiri"
 gem "oat"
@@ -68,6 +69,7 @@ gem "paper_trail"
 gem "parallel"
 gem "paranoia"
 gem "pg"
+gem "phonelib"
 gem "phonelib", "~> 0.8.4"
 gem "prawn"
 gem "prawn-markup"
@@ -94,17 +96,20 @@ gem "sentry-raven"
 gem "simpleidn"
 gem "simple_xlsx_reader" # import data from xlsx files (used in some wagons)
 gem "sorted_set"
+gem "sprockets", "~> 3.7.2" # pinned to older version to avoid having an empty manifest.js
 gem "sprockets-rails"
+gem "sqlite3", "~> 1.7.2" # required for asset generation
 gem "strip_attributes" # strip whitespace of attributes
+gem "thinking-sphinx"
 gem "truemail"
 gem "ttfunk", "< 1.8.0"
 gem "turbo-rails"
 gem "validates_by_schema", "~> 0.3.0" # 0.5.1 does not work well with wagons / wagon-migrations
+gem "validates_timeliness"
 gem "validates_timeliness", "~> 7.0.0.beta2"
 gem "validates_zipcode"
 gem "vcard"
 gem "view_component"
-gem "webpacker"
 
 # load after others because dependencies
 gem "kaminari"

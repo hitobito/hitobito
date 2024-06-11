@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe LayoutHelper do
-  include Webpacker::Helper
   include UploadDisplayHelper
 
   describe "#header_logo" do

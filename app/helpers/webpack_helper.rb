@@ -9,6 +9,8 @@ module WebpackHelper
   # available. This makes it possible for wagons to "override" core
   # assets with the same file name.
   def wagon_image_pack_path(name)
+    # TODO: migrate
+    return ""
     wagon_path = Webpacker.instance.manifest.lookup(wagon_media_image_path(name))
     if wagon_path
       path_to_asset(wagon_path)

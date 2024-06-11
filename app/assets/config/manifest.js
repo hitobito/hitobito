@@ -1,1 +1,2 @@
-// NOTE: Introduced by rails 7, required by sprockets, but do we use sprockets at all?
+//= link_tree ../fonts
+//= link_tree ../images

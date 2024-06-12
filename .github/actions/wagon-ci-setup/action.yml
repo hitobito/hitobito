@@ -60,18 +60,12 @@ runs:
       run: |
         WAGON_DEPENDENCY_REF="$INPUT_WDEP_REF"
         if [ -z "${INPUT_WDEP_REF}" ] && [ "${WAGON_DEPENDENCY_REPO}" != '' ]; then
-          echo "Common branch candidate for dependency-repo:"
-          echo $(git ls-remote --heads https://github.com/hitobito/$WAGON_DEPENDENCY_REPOSITORY | cut -d/ -f3- | grep -x "${{github.head_ref}}" || echo 'master')
-
-          WAGON_DEPENDENCY_REF="master"
+          WAGON_DEPENDENCY_REF=$(git ls-remote --heads https://github.com/hitobito/$WAGON_DEPENDENCY_REPO | cut -d/ -f3- | grep -x "${{github.head_ref}}" || echo 'master')
         fi
 
         CORE_REF="$INPUT_CORE_REF"
         if [ -z "${INPUT_CORE_REF}" ]; then
-          echo "Common branch candidate for core:"
-          echo $(git ls-remote --heads https://github.com/hitobito/hitobito | cut -d/ -f3- | grep -x "${{github.head_ref}}" || echo 'master')
-
-          CORE_REF="master"
+          CORE_REF=$(git ls-remote --heads https://github.com/hitobito/hitobito | cut -d/ -f3- | grep -x "${{github.head_ref}}" || echo 'master')
         fi
 
         echo "WAGON_DEPENDENCY_REF=$WAGON_DEPENDENCY_REF" >> $GITHUB_ENV

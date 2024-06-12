@@ -1,0 +1,20 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+= turbo_frame_tag "household_aside" do
+  %section
+    %h2
+      = section_name
+      - if show_buttons?
+        %span.float-end
+          .btn-group
+            - if people_in_household?
+              = edit_button + delete_button
+            - else
+              = create_button
+    - if people_in_household?
+      %table.table.table-basic
+        = render(member_component)
+

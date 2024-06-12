@@ -7,8 +7,6 @@ class HouseholdAsideComponent < ApplicationComponent
 
   delegate :can?, :households_path, to: :helpers
 
-  I18N_PREFIX = 'person.households.aside'
-
   def initialize(person:, group:)
     @person = person
     @group = group

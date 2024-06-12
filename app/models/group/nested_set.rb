@@ -90,17 +90,25 @@ module Group::NestedSet
     true
   end
 
+  def sorting_name
+    display_name.downcase
+  end
+
   private
 
+  def sorting_required?
+    name_changed? || short_name_changed?
+  end
+
   def store_new_display_name
-    @move_to_new_name = name_changed? || short_name_changed? ? display_name : false
+    @move_to_new_name = name_changed? || short_name_changed? ? sorting_name : false
     true # force callback to return true
   end
 
   def move_to_alphabetic_position
     return unless move_required?
 
-    left_neighbor = find_left_neighbor(parent, :display_name_downcase, true)
+    left_neighbor = find_left_neighbor(parent, :sorting_name, true)
     if left_neighbor
       move_to_right_of_if_change(left_neighbor)
     else
@@ -115,7 +123,7 @@ module Group::NestedSet
   end
 
   def move_to_right_of_if_change(node)
-    if node.display_name.downcase != display_name.downcase && node.rgt != lft - 1
+    if node.sorting_name != sorting_name && node.rgt != lft - 1
       move_to_right_of(node)
     end
   end

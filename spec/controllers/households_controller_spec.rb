@@ -178,11 +178,25 @@ describe HouseholdsController do
   end
 
   describe '#destroy' do
-    it 'destroys household' do
+    it 'redirects to person and updates flash on success' do
       delete :destroy, params: params
       expect(person.reload.household_key).to be_nil
       expect(bottom_member.reload.household_key).to be_nil
       expect(flash[:notice]).to eq 'Haushalt wurde erfolgreich gelöscht.'
+      expect(response).to redirect_to([group, person])
+    end
+
+    it 'redirects to person and updates flash on error' do
+      person.household.add(bottom_member)
+      expect(person.household.save).to eq true
+      allow_any_instance_of(Household).to receive(:valid?).with(:destroy) do |obj|
+        obj.errors.add(:base, 'may not be destroyed')
+        false
+      end
+      delete :destroy, params: params
+      expect(person.reload.household_key).to be_present
+      expect(bottom_member.reload.household_key).to be_present
+      expect(flash[:alert]).to eq ['may not be destroyed']
       expect(response).to redirect_to([group, person])
     end
   end

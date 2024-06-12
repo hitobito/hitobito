@@ -12,6 +12,7 @@ class HouseholdsController < ApplicationController
   self.nesting = [Group, Person]
   alias person parent
   before_action :entry
+  before_action :authorize
   helper_method :entry, :person
 
   def show
@@ -34,10 +35,11 @@ class HouseholdsController < ApplicationController
   end
 
   def destroy
-    if entry.valid? && entry.destroy
+    if entry.valid?(:destroy) && entry.destroy
       redirect_to parents, notice: success_message
     else
-      render :edit
+      flash[:alert] = entry.errors.messages.values.flatten
+      redirect_to parents
     end
   end
 
@@ -59,8 +61,10 @@ class HouseholdsController < ApplicationController
   end
 
   def entry
-    @entry ||= parent.household.tap do
-      authorize!(:create_households, Person)
-    end
+    @entry ||= parent.household
+  end
+
+  def authorize
+    authorize!(:create_households, Person)
   end
 end

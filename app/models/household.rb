@@ -26,10 +26,8 @@ class Household
     end
   end
 
-  with_options on: [:edit, :update] do
-    validates_with Households::MembersValidator
-    validate :validate_members
-  end
+  validates_with Households::MembersValidator, on: :update
+  validate :validate_members
 
   def add(person)
     return if members.any? { |m| m.person == person }
@@ -153,7 +151,7 @@ class Household
 
   def validate_members
     @members.each_with_index do |member, index|
-      member.validate
+      member.validate(validation_context)
       member.errors.each do |error|
         errors.add("members[#{index}].#{error.attribute}", error.message)
       end

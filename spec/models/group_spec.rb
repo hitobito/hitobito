@@ -613,7 +613,7 @@ describe Group do
         it 'archives all roles with same timestamp' do
           group.archive!
 
-          expect(group).to be_archived
+          expect(group.reload).to be_archived
           expect(role).to be_archived
           expect(group.archived_at).to eq(role.archived_at)
         end

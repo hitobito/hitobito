@@ -5,22 +5,21 @@ class HouseholdAsideComponent < ApplicationComponent
   include LayoutHelper
   include UtilityHelper
 
-  delegate :can?, to: :helpers
+  delegate :can?, :households_path, to: :helpers
 
   I18N_PREFIX = 'person.households.aside'
 
-  def initialize(person:)
+  def initialize(person:, group:)
     @person = person
+    @group = group
     @member_component = HouseholdAsideMemberComponent.new(person: person)
   end
 
   private
 
-  attr_reader :member_component, :person
+  attr_reader :member_component, :person, :group
 
-  def show_component?
-    return false if Rails.env.production?
-
+  def render?
     people_in_household? or show_buttons?
   end
 
@@ -30,6 +29,23 @@ class HouseholdAsideComponent < ApplicationComponent
 
   def show_buttons?
     can?(:create_households, person)
+  end
+
+  def edit_button
+    action_button(t('manage'), edit_group_person_household_path(group.id, person.id), :edit,
+                  data: { turbo_frame: '_top' },
+                  in_button_group: true)
+  end
+
+  def delete_button
+    action_button(t('destroy'), group_person_household_path(group.id, person.id), :'trash-alt',
+                  data: { method: :delete,
+                          confirm: I18n.t('global.confirm_delete') }, in_button_group: true)
+  end
+
+  def create_button
+    action_button(t('create'), group_person_household_path(group.id, person.id), :plus,
+                  data: { turbo_frame: '_top' }, in_button_group: true)
   end
 
   def people_in_household?

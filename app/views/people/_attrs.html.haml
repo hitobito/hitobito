@@ -46,6 +46,6 @@
 
       = render 'qualifications', show_buttons: true
 
-      = render(HouseholdAsideComponent.new(person: entry))
+      = render(HouseholdAsideComponent.new(person: entry, group: @group))
 
       = render_extensions :show_right

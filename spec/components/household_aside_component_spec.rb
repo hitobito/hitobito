@@ -14,12 +14,13 @@ describe HouseholdAsideComponent, type: :component do
       leader.update!(birthday: 38.years.ago)
     end
   end
-  subject(:component) { described_class.new(person: person) }
+  let(:group) { groups(:top_group) }
+  subject(:component) { described_class.new(person: person, group: group) }
   let(:member_component) { HouseholdAsideMemberComponent.new(person: person) }
   let(:member_one) { Fabricate(:person) }
   let(:member_two) { Fabricate(:person) }
   let(:rendered_component) do
-    render_inline(component).to_html
+    render_inline(component)
   end
 
   let(:helpers) do
@@ -34,57 +35,45 @@ describe HouseholdAsideComponent, type: :component do
     stub_can(:show, true)
     stub_can(:create_households, true)
     create_household([member_one, member_two])
-    expect(rendered_component).to include('Verwalten')
-    expect(rendered_component).to include('Auflösen')
+    expect(rendered_component).to have_selector('.btn', text: 'Verwalten')
+    expect(rendered_component).to have_selector('.btn', text: 'Auflösen')
   end
 
   it 'does show the create button when the household is empty' do
     stub_can(:show, true)
     stub_can(:create_households, true)
-    expect(rendered_component).to include('Erstellen')
+    expect(rendered_component).to have_selector('.btn', text: 'Erstellen')
   end
 
   it 'does not show the buttons when user does not have the right' do
     create_household([member_one, member_two])
     stub_can(:show, true)
     stub_can(:create_households, false)
-    expect(rendered_component).not_to include('Verwalten')
-    expect(rendered_component).not_to include('Auflösen')
+    expect(rendered_component).not_to have_selector('.btn', text: 'Verwalten')
+    expect(rendered_component).not_to have_selector('.btn', text: 'Auflösen')
   end
 
   it 'shows create household button when household is empty' do
     stub_can(:show, true)
     stub_can(:create_households, true)
-    expect(rendered_component).to include('Erstellen')
+    expect(rendered_component).to have_selector('.btn', text: 'Erstellen')
   end
 
   it 'returns the humanized name of the Household model' do
-    expect(component.send(:section_name)).to eq 'Haushalt'
-  end
-
-  it 'does not show the component in production' do
-    allow(Rails).to receive(:env) { 'production'.inquiry }
     stub_can(:show, true)
     stub_can(:create_households, true)
-    puts rendered_component
-    expect(rendered_component).not_to include('Haushalt')
-  end
 
-  it 'does show the component in development' do
-    stub_can(:show, true)
-    stub_can(:create_households, true)
-    allow(Rails).to receive(:env) { 'development'.inquiry }
-    expect(rendered_component).to include('Haushalt')
+    expect(rendered_component).to have_selector('h2', text: 'Haushalt')
   end
 
   it 'shows the members of the household' do
     stub_can(:show, true)
     stub_can(:create_households, true)
     household = create_household([member_one, member_two])
-    expect(rendered_component).to include(person.full_name)
-    expect(rendered_component).to include(member_one.full_name)
-    expect(rendered_component).to include(member_two.full_name)
-    expect(rendered_component).to have_selector('table tr', count: household.members.count)
+    expect(rendered_component).to have_selector('tr', text: person.full_name)
+    expect(rendered_component).to have_selector('tr', text: member_one.full_name)
+    expect(rendered_component).to have_selector('tr', text: member_two.full_name)
+    expect(rendered_component).to have_selector('tr', count: household.members.count)
   end
 
   it 'shows members linked if user has the right' do

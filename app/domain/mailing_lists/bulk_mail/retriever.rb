@@ -26,8 +26,7 @@ class MailingLists::BulkMail::Retriever
     if validator.processed_before?
       mail_processed_before!(imap_mail)
     elsif validator.mail_too_big?
-      sender = imap_mail.sender_email
-      subject = imap_mail.mail.subject
+      sender, subject = imap_mail.sender_email, imap_mail.mail.subject
       FailureMailer.validation_checks(sender, subject).deliver_now
       delete_mail(mail_uid)
       return
@@ -131,12 +130,6 @@ class MailingLists::BulkMail::Retriever
     bulk_mail_class(imap_mail).create!(
       subject: encode_subject(imap_mail),
       state: :pending)
-  end
-
-  def create_bulk_mail_alert(imap_mail)
-    bulk_mail_class(imap_mail).create!(
-      subject: "Mail: '#{encode_subject(imap_mail)}' too big",
-      state: :failed)
   end
 
   def encode_subject(imap_mail)

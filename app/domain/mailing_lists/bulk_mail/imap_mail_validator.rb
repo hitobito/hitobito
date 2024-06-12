@@ -22,7 +22,7 @@ module MailingLists::BulkMail
     end
 
     def mail_too_big?
-      (@mail.raw_source.bytesize / 1.0.megabytes) >= 10
+      @mail.raw_source.bytesize >= 10.megabytes
     end
 
     def sender_allowed?(mailing_list)

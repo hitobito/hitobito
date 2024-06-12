@@ -786,20 +786,19 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     locale: 'de',
     label: 'Bulk Mail ist zu gross',
     subject: 'Bulk Mail zu gross',
-    body: "Die Mail '{subject}' überschreitet die Grösse von 10 MB. Bitte laden Sie die Datei auf einer Cloud wie z.B.
-OneDrive hoch und hinterlegen Sie die Datei als Link." },
+    body: "Die Mail '{subject}' überschreitet die Grösse von 10 MB. Bitte laden Sie die Datei auf einer Cloud
+hoch und hinterlegen Sie die Datei als Link." },
 
   {custom_content_id: bulk_mail_failure_notification_id,
     locale: 'fr',
     label: 'Bulk Mail est trop grand',
     subject: 'Bulk Mail est trop grand',
-    body: "Le mail '{subject}' dépasse la taille de 10 Mo. Veuillez télécharger le fichier sur un cloud comme par ex.
-OneDrive et dépose le fichier sous forme de lien." },
+    body: "Le mail '{subject}' dépasse la taille de 10 Mo. Veuillez télécharger le fichier sur un cloud et dépose le fichier sous forme de lien." },
 
   {custom_content_id: bulk_mail_failure_notification_id,
     locale: 'it',
     label: 'La posta massiva è troppo grande',
     subject: 'La posta massiva è troppo grande',
-    body: "L'e-mail '{subject}' supera la dimensione di 10 MB. Si prega di caricare il file su un cloud come
-OneDrive e salvare il file come link." },
+    body: "L'e-mail '{subject}' supera la dimensione di 10 MB. Si prega di caricare il file su un cloud e salvare
+il file come link." },
    )

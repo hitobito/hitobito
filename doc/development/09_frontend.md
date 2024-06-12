@@ -1,6 +1,6 @@
 # Frontend
 
-Dokumentation rund um Webpack, Assets und Wagon Extensions befindet sich [hier](09_frontend/01_webpacker.md)
+Das [Asset Management](./09_frontend/assets.md) ist auf einer separaten Seite beschrieben.
 
 ## Custom JS Code
 

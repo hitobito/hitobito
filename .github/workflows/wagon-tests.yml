@@ -33,7 +33,7 @@ defaults:
 
 jobs:
   wagon_rubocop:
-    name: ${{ inputs.wagon_repository }} rubocop
+    name: rubocop
     runs-on: 'ubuntu-20.04'
 
     steps:
@@ -61,7 +61,7 @@ jobs:
           bundle exec rake app:rubocop
 
   wagon_specs:
-    name: ${{ inputs.wagon_repository }} specs
+    name: specs
     runs-on: 'ubuntu-20.04'
     env:
       HEADLESS: true
@@ -116,7 +116,7 @@ jobs:
           bundle exec rake app:ci:setup:rspec spec:without_features
 
   wagon_feature_specs:
-    name: ${{ inputs.wagon_repository }} feature specs
+    name: feature specs
     runs-on: 'ubuntu-20.04'
     env:
       HEADLESS: true

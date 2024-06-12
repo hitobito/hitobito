@@ -14,13 +14,14 @@ class HouseholdAsideMemberComponent < ApplicationComponent
   end
 
   def call
-    entries.map do |member|
+    members = entries.map do |member|
       content_tag :tr do
         content_tag(:td) do
           person_entry(member)
         end
       end
-    end.join.html_safe
+    end
+    safe_join(members)
   end
 
   private

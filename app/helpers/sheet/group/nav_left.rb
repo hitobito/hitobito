@@ -31,9 +31,9 @@ module Sheet
 
       private
 
-      def sort_list_by_name(objects)
+      def sort_groups_by_name(groups)
         children_of = {}
-        objects.each do |o|
+        groups.each do |o|
           children_of[o.parent_id] ||= []
           children_of[o.parent_id] << o
         end
@@ -43,19 +43,19 @@ module Sheet
         end
 
         results = []
-        recombine_lists(results, children_of, objects.first.parent_id)
+        recombine_groups(results, children_of, groups.first.parent_id)
         results
       end
 
-      def recombine_lists(results, children_of, parent_id)
+      def recombine_groups(results, children_of, parent_id)
         children_of[parent_id]&.each do |o|
           results << o
-          recombine_lists(results, children_of, o.id)
+          recombine_groups(results, children_of, o.id)
         end
       end
 
       def groups
-        @groups ||= sort_list_by_name entry.groups_in_same_layer
+        @groups ||= sort_groups_by_name entry.groups_in_same_layer
       end
 
       def layer

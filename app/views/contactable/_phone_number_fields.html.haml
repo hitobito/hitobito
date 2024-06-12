@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-%div.col-5.me-3
+%div.col-5.me-3.mb-1
   = f.input_field(:number, placeholder: PhoneNumber.human_attribute_name(:number))
 %div.col-4.d-flex.flex-row.me-3
   = f.collection_select(:translated_label, PhoneNumber.available_labels, :to_s, :to_s, {}, class: 'form-select form-select-sm h-100')

@@ -1968,6 +1968,7 @@ de:
     prev_link: Zurück
 
   household_aside_component:
+    add: Erstellen
     manage: Verwalten
     destroy: Auflösen
 

@@ -11,7 +11,7 @@
         %span.float-end
           .btn-group
             - if people_in_household?
-              = delete_button + edit_button
+              = edit_button + delete_button
             - else
               = create_button
     - if people_in_household?

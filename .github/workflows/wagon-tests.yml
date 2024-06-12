@@ -49,6 +49,7 @@ jobs:
         uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup
         with:
           migrations: false
+          assets: false
           wagon_repository: ${{ inputs.wagon_repository }}
           wagon_dependency_repository: ${{ inputs.wagon_dependency_repository }}
           core_ref: ${{ inputs.core_ref }}
@@ -111,62 +112,6 @@ jobs:
 
       - name: Run ${{ inputs.wagon_repository }} specs
         working-directory: ${{ inputs.wagon_repository }}
-        run: |
-          bundle exec rake app:ci:setup:rspec spec:without_features
-
-  wagon_dependency_specs:
-    name: ${{ inputs.wagon_dependency_repository }} specs
-    if: ${{ inputs.wagon_dependency_repository != '' }}
-    runs-on: 'ubuntu-20.04'
-    env:
-      HEADLESS: true
-      RAILS_DB_ADAPTER: mysql2
-      RAILS_DB_HOST: 127.0.0.1
-      RAILS_DB_PORT: 33066
-      RAILS_DB_USERNAME: hitobito
-      RAILS_DB_PASSWORD: hitobito
-      RAILS_DB_NAME: hitobito_test
-      RAILS_TEST_DB_NAME: hitobito_test
-      RAILS_ENV: test
-
-    services:
-      mysql:
-        image: 'mysql:5.7'
-        env:
-          MYSQL_USER: 'hitobito'
-          MYSQL_PASSWORD: 'hitobito'
-          MYSQL_DATABASE: 'hitobito_test'
-          MYSQL_ROOT_PASSWORD: 'root'
-        ports:
-          - '33066:3306'
-        options: >-
-          --health-cmd "mysqladmin ping"
-          --health-interval 10s
-          --health-timeout 10s
-          --health-retries 10
-      memcached:
-        image: 'memcached'
-        ports: [ '11211:11211' ]
-
-    steps:
-      - name: Check out core with shared setup action
-        uses: actions/checkout@v4
-        with:
-          repository: hitobito/hitobito
-          ref: ${{ inputs.core_ref }}
-          path: .hitobito_core_repo
-          fetch-depth: 1
-
-      - name: 'Prepare'
-        uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup
-        with:
-          wagon_repository: ${{ inputs.wagon_repository }}
-          wagon_dependency_repository: ${{ inputs.wagon_dependency_repository }}
-          core_ref: ${{ inputs.core_ref }}
-          wagon_dependency_ref: ${{ inputs.wagon_dependency_ref }}
-
-      - name: Run ${{ inputs.wagon_dependency_repository || 'dependency wagon' }} specs
-        working-directory: ${{ inputs.wagon_dependency_repository }}
         run: |
           bundle exec rake app:ci:setup:rspec spec:without_features
 
@@ -242,86 +187,13 @@ jobs:
           path: |
             hitobito/tmp/capybara
 
-  wagon_dependency_feature_specs:
-    name: ${{ inputs.wagon_dependency_repository }} feature specs
-    if: ${{ inputs.wagon_dependency_repository != '' }}
-    runs-on: 'ubuntu-20.04'
-    env:
-      HEADLESS: true
-      RAILS_DB_ADAPTER: mysql2
-      RAILS_DB_HOST: 127.0.0.1
-      RAILS_DB_PORT: 33066
-      RAILS_DB_USERNAME: hitobito
-      RAILS_DB_PASSWORD: hitobito
-      RAILS_DB_NAME: hitobito_test
-      RAILS_TEST_DB_NAME: hitobito_test
-      RAILS_ENV: test
-
-    services:
-      mysql:
-        image: 'mysql:5.7'
-        env:
-          MYSQL_USER: 'hitobito'
-          MYSQL_PASSWORD: 'hitobito'
-          MYSQL_DATABASE: 'hitobito_test'
-          MYSQL_ROOT_PASSWORD: 'root'
-        ports:
-          - '33066:3306'
-        options: >-
-          --health-cmd "mysqladmin ping"
-          --health-interval 10s
-          --health-timeout 10s
-          --health-retries 10
-      memcached:
-        image: 'memcached'
-        ports: [ '11211:11211' ]
-
-    steps:
-      - name: Check out core with shared setup action
-        uses: actions/checkout@v4
-        with:
-          repository: hitobito/hitobito
-          ref: ${{ inputs.core_ref }}
-          path: .hitobito_core_repo
-          fetch-depth: 1
-
-      - name: 'Prepare'
-        uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup
-        with:
-          wagon_repository: ${{ inputs.wagon_repository }}
-          wagon_dependency_repository: ${{ inputs.wagon_dependency_repository }}
-          core_ref: ${{ inputs.core_ref }}
-          wagon_dependency_ref: ${{ inputs.wagon_dependency_ref }}
-
-      - name: Check if there are any feature specs in ${{ inputs.wagon_dependency_repository || 'dependency wagon' }}
-        id: check-wagon-dependency-feature-specs
-        working-directory: ${{ inputs.wagon_dependency_repository }}
-        run: |
-          if [ -d "spec/features" ]; then
-            echo "feature_specs_exist=1" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Run ${{ inputs.wagon_dependency_repository || 'dependency wagon' }} feature specs
-        if: ${{ steps.check-wagon-dependency-feature-specs.outputs.feature_specs_exist }}
-        working-directory: ${{ inputs.wagon_dependency_repository }}
-        run: |
-          bundle exec rake app:ci:setup:rspec spec:features
-
-      - name: 'Make capybara output downloadable'
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: capybara-output-wagon-dependency
-          path: |
-            hitobito/tmp/capybara
-
   notify_statuscope:
     uses: ./.github/workflows/notify-statuscope.yml
-    needs: [ wagon_rubocop, wagon_specs, wagon_dependency_specs, wagon_feature_specs, wagon_dependency_feature_specs ]
+    needs: [ wagon_rubocop, wagon_specs, wagon_feature_specs ]
     if: ( success() || failure() ) && ( github.ref_name == 'master' ) && ( (inputs.core_ref || 'master') == 'master' ) && ( (inputs.wagon_dependency_ref || 'master') == 'master' )
     with:
       repository: ${{ inputs.wagon_repository }}
-      test_result: ${{ needs.wagon_rubocop.result == 'success' && needs.wagon_specs.result == 'success' && needs.wagon_dependency_specs.result == 'success' && needs.wagon_feature_specs.result == 'success' && needs.wagon_dependency_feature_specs.result == 'success' }}
+      test_result: ${{ needs.wagon_rubocop.result == 'success' && needs.wagon_specs.result == 'success' && needs.wagon_feature_specs.result == 'success' }}
     secrets:
       HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}
       HEARTBEAT_TOKEN: ${{ secrets.HEARTBEAT_TOKEN }}

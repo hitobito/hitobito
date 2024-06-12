@@ -5,6 +5,9 @@ inputs:
   migrations:
     description: Unless set to false, migrations will be run as part of the setup.
     default: 'true'
+  assets:
+    description: Unless set to false, the assets compilation will be run as part of the setup.
+    default: 'true'
   wagon_repository:
     description: "Wagon repository, e.g. hitobito_pbs"
   wagon_dependency_repository:
@@ -180,6 +183,7 @@ runs:
       shell: bash
 
     - uses: actions/cache@v4
+      if: inputs.assets == 'true'
       with:
         path: node_modules
         key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
@@ -187,12 +191,14 @@ runs:
           ${{ runner.os }}-node_modules-
 
     - name: 'Yarn install'
+      if: inputs.assets == 'true'
       run: |
         yarn install --frozen-lockfile
       working-directory: hitobito
       shell: bash
 
     - name: 'Run Webpacker'
+      if: inputs.assets == 'true'
       run: |
         bundle exec rake webpacker:compile
       working-directory: hitobito

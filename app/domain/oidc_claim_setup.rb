@@ -5,8 +5,8 @@
 #  or at https://github.com/hitobito/hitobito.
 
 class OidcClaimSetup
-  NAME_ATTRS = %w(first_name last_name nickname)
-  NAME_ATTRS += %w(address address_care_of street housenumber postbox zip_code town country)
+  NAME_ATTRS = %w(first_name last_name nickname) +
+               %w(address address_care_of street housenumber postbox zip_code town country)
   NAME_ATTRS.freeze
 
   def run

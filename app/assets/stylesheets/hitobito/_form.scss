@@ -24,7 +24,7 @@
     .icon,
     [class^="icon-"],
     [class*=" icon-"] {
-      background-image: url("../../images/glyphicons-halflings-white.png");
+      background-image: url("/assets/glyphicons-halflings-white.png");
     }
 
     .caret {
@@ -35,7 +35,7 @@
   .icon,
   [class^="icon-"],
   [class*=" icon-"] {
-    background-image: url("../../images/glyphicons-halflings-green.png");
+    background-image: url("/assets/glyphicons-halflings-green.png");
   }
 
   .caret {
@@ -59,7 +59,7 @@
     .icon,
     [class^="icon-"],
     [class*=" icon-"] {
-      background-image: url("../../images/glyphicons-halflings-white.png");
+      background-image: url("/assets/glyphicons-halflings-white.png");
     }
   }
 }
@@ -100,7 +100,7 @@ a.green {
   .icon,
   [class^="icon-"],
   [class*=" icon-"] {
-    background-image: url("../../images/glyphicons-halflings-green.png");
+    background-image: url("/assets/glyphicons-halflings-green.png");
   }
 }
 
@@ -244,7 +244,7 @@ input[type="color"],
 }
 
 .input-loading {
-  background-image: url("../../images/spinner.gif");
+  background-image: url("/assets/spinner.gif");
   background-size: 16px;
   background-position: right 5px center;
   background-repeat: no-repeat;

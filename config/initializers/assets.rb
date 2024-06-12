@@ -13,3 +13,14 @@ Rails.application.config.assets.version = "1.0"
 
 # CSS entry files
 Rails.application.config.assets.precompile += %w(print.css oauth.css)
+
+# Fonts
+Rails.application.config.assets.precompile += %w(*.woff2 *.woff *.ttf *.svg *.eot)
+
+# Wagons assets
+wagons_paths = Wagons.all.collect { |wagon| wagon.paths.path.to_s }
+wagon_images = wagons_paths.collect { |wagon_path| File.join(wagon_path, 'app', 'assets', 'images') }
+wagon_fonts = wagons_paths.collect { |wagon_path| File.join(wagon_path, 'app', 'assets', 'fonts') }
+
+Rails.application.config.assets.precompile += wagon_images
+Rails.application.config.assets.precompile += wagon_fonts

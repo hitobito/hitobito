@@ -3,19 +3,18 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-%div.col-5.inline
+%div.col-4.me-3
   = f.input_field(:email,
                   placeholder: t('.placeholder_value'))
-%div.col-2.inline.row
+%div.col-4.d-flex.flex-row.me-3
   = f.input_field(:translated_label,
                   placeholder: t('.placeholder_type'),
                   data: {provide: :typeahead, source: AdditionalEmail.available_labels})
 
 - if entry.is_a?(Person)
-  = f.label(:mailings, class: 'ms-5 col-1') do
+  = f.label(:mailings, class: 'col-2') do
     = f.check_box(:mailings)
     %span{'data-bs-toggle': 'tooltip', title: t('.tooltip_mailings')}
       = t(:"activerecord.attributes.additional_emails.mailings")
       %i.fas.fa-info
-
 = render 'contactable/public_check_box', f: f

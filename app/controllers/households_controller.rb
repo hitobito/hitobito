@@ -56,7 +56,7 @@ class HouseholdsController < ApplicationController
   end
 
   def people
-    @people ||= Households::MembersQuery.new(current_user, person.id, Person)
+    @people ||= Households::MembersQuery.new(current_user, person.id, Person.all)
                                         .scope.where(id: params[:member_ids])
   end
 

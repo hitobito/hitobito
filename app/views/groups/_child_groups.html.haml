@@ -4,7 +4,7 @@
 -#  https://github.com/hitobito/hitobito.
 
 - @sub_groups.each do |label, groups|
-  = section_table(label, groups.sort_by(&:name)) do |item|
+  = section_table(label, groups.sort_by(&:sorting_name)) do |item|
     %td
       = link_to(item.to_s, group_path(item.id))
 

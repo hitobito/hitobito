@@ -39,7 +39,7 @@ module Sheet
         end
 
         children_of.each_value do |children|
-          children.sort_by!(&:display_name)
+          children.sort_by!(&:sorting_name)
         end
 
         results = []
@@ -141,7 +141,6 @@ module Sheet
 
       def render_sub_layers
         layers = grouped_sub_layers.map do |type, layers|
-          layers.sort_by!(&:display_name)
           content_tag(:li, content_tag(:span, type, class: 'divider')) +
             safe_join(layers.map { |l| render_sub_layer(l.decorate)  })
 

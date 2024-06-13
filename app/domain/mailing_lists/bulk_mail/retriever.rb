@@ -23,9 +23,13 @@ class MailingLists::BulkMail::Retriever
     imap_mail = fetch_mail(mail_uid)
 
     validator = validator(imap_mail)
-
     if validator.processed_before?
       mail_processed_before!(imap_mail)
+    elsif validator.mail_too_big?
+      sender, subject = imap_mail.sender_email, imap_mail.mail.subject
+      FailureMailer.validation_checks(sender, subject).deliver_now
+      delete_mail(mail_uid)
+      return
     end
 
     mail_log = create_mail_log(imap_mail)

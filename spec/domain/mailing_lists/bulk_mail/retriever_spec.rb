@@ -12,6 +12,9 @@ describe MailingLists::BulkMail::Retriever do
 
   let(:retriever) { described_class.new }
   let(:imap_connector) { instance_double(Imap::Connector) }
+  let(:mail) { instance_double(ActionMailer::MessageDelivery) }
+
+  let(:mailer_double) { instance_double(ActionMailer::MessageDelivery, deliver_now: true) }
   let(:mailing_list) { mailing_lists(:leaders) }
   let(:imap_mail_validator) { instance_double(MailingLists::BulkMail::ImapMailValidator) }
 
@@ -22,6 +25,7 @@ describe MailingLists::BulkMail::Retriever do
     allow(imap_connector).to receive(:fetch_mail_uids).with(:inbox).and_return([42])
     allow(imap_mail_validator).to receive(:valid_mail?).and_return(true)
     allow(imap_mail_validator).to receive(:processed_before?).and_return(false)
+    allow(imap_mail_validator).to receive(:mail_too_big?).and_return(false)
   end
 
   context 'mails subject' do
@@ -39,6 +43,19 @@ describe MailingLists::BulkMail::Retriever do
         expect do
           retriever.perform
         end.to raise_error(MailingLists::BulkMail::MailProcessedBeforeError)
+      end
+    end
+
+    context 'mail too big to process' do
+      it 'calls failure mailer when email too big ' do
+        allow(imap_mail_validator).to receive(:mail_too_big?).and_return(true)
+        allow(FailureMailer).to receive(:validation_checks).and_return(mailer_double)
+
+        expect(imap_mail_validator).to receive(:mail_too_big?).and_return(true)
+        expect(FailureMailer).to receive(:validation_checks).and_return(mailer_double)
+        expect(imap_connector).to receive(:delete_by_uid).and_return(true)
+        expect(retriever).to receive(:validate_and_process).never
+        retriever.perform
       end
     end
 

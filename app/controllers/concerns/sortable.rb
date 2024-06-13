@@ -36,7 +36,10 @@ module Sortable
       if sorting?
         # Get only the sort_expression attribute not included in 
         # the attributes of current model_class, to select in query
-        model_class.from(super.select("#{model_class.table_name}.*", sort_expression_attrs).joins(join_tables), model_class.table_name).reorder(Arel.sql(sort_expression))      else
+        model_class.from(super.select("#{model_class.table_name}.*", sort_expression_attrs)
+                   .joins(join_tables), model_class.table_name)
+                   .reorder(Arel.sql(sort_expression))      
+      else
         super
       end
     end
@@ -63,9 +66,12 @@ module Sortable
     end
 
     # Return the sort expression attributes without sort directory, to add to query select list
-    # Reject sort expression attributes from same table, to prevent ambiguous selection of attributes
+    # Reject sort expression attributes from same table, to prevent ambiguous selection 
+    # of attributes
     def sort_expression_attrs
-      Array(sort_columns).reject { |col| model_class.column_names.include?(col) }.collect { |c| "#{c}" }.join(', ')
+      Array(sort_columns).reject { |col| model_class.column_names.include?(col) }
+                         .collect { |c| "#{c}" }
+                         .join(', ')
     end
 
     # The sort direction, either 'asc' or 'desc'.

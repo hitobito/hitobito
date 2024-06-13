@@ -116,7 +116,7 @@ module LayoutHelper
 
     return image_tag(upload_url(logo_group, :logo)) if logo_group
 
-    wagon_image_pack_tag(Settings.application.logo.image, alt: Settings.application.name)
+    image_tag(Settings.application.logo.image, alt: Settings.application.name)
   end
 
   private

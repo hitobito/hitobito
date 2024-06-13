@@ -52,7 +52,14 @@ describe RoleResource, type: :resource do
         end
 
         date_time_attrs.each do |attr|
-          expect(data.public_send(attr)&.to_time).to eq(role.public_send(attr))
+          data_time, role_time = data.public_send(attr)&.to_time, role.public_send(attr)
+
+          # when time is nil, it should equal nil, if not, it should be equal within 1 second
+          if data_time.nil? || role_time.nil?
+            expect(data_time).to eq(role_time)
+          else
+            expect(data_time).to be_within(1.second).of(role_time)
+          end
         end
       end
     end

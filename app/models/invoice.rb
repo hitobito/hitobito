@@ -53,7 +53,7 @@
 
 class Invoice < ActiveRecord::Base
 
-  SEARCHABLE_ATTRS = [:title, :reference, :sequence_number, 
+  SEARCHABLE_ATTRS = [:title, :reference, :sequence_number,
                      { invoice_items: [:name, :account, :cost_center] }]
 
   include I18nEnums

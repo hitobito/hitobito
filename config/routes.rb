@@ -329,7 +329,6 @@ Hitobito::Application.routes.draw do
     get 'list_events' => 'event/lists#events', as: :list_events
 
     get 'full' => 'full_text#index'
-    get 'query' => 'full_text#query'
 
     resources :event_kinds, module: 'event', controller: 'kinds'
     resources :event_kind_categories, module: 'event', controller: 'kind_categories'

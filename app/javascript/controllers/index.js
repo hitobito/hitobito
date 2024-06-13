@@ -3,7 +3,6 @@
 // or later. See the COPYING file at the top-level directory or at
 // https://github.com/hitobito/hitobito
 
-import { Application } from "stimulus"
 import { application } from "./application.js";
 
 /**

@@ -990,6 +990,7 @@ describe PeopleController do
     end
 
     it "POST#update rerenders edit formal when not permitted to update addresse" do
+      top_leader.update!(street: nil, housenumber: nil, zip_code: nil, town: "Supertown")
       sign_in(member)
       put :update, params: {group_id: member.primary_group_id, id: member.id, person: {household_people_ids: [top_leader.id]}}
       expect(assigns(:person)).to have(5).errors

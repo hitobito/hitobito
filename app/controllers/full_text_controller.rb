@@ -1,37 +1,55 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class FullTextController < ApplicationController
-  include FullTextSearchStrategy
-
   skip_authorization_check
 
   helper_method :entries, :active_tab_class
 
   respond_to :html
 
+  SEARCHABLE_MODELS = {
+    people: SearchStrategies::PersonSearch,
+    groups: SearchStrategies::GroupSearch,
+    events: SearchStrategies::EventSearch,
+    invoices: SearchStrategies::InvoiceSearch
+  }.freeze
+
   def index
-    @people = with_query { search_strategy.list_people }
-    @groups = with_query { search_strategy.query_groups }
-    @events = with_query { decorate_events(search_strategy.query_events) }
-    @invoices = with_query { decorate_invoices(search_strategy.query_invoices) }
-    @active_tab = active_tab
-  end
-
-  def query
-    people = search_strategy.query_people.collect { |i| PersonDecorator.new(i).as_quicksearch }
-    groups = search_strategy.query_groups.collect { |i| GroupDecorator.new(i).as_quicksearch }
-    events = search_strategy.query_events.collect { |i| EventDecorator.new(i).as_quicksearch }
-    invoices = search_strategy.query_invoices.collect { |i| InvoiceDecorator.new(i).as_quicksearch }
-
-    render json: results_with_separator(people, groups, events, invoices) || []
+    respond_to do |format|
+      format.html { query_results }
+      format.json do
+        render json: query_json_results || []
+      end
+    end    
   end
 
   private
+
+  def query_results
+    SEARCHABLE_MODELS.each do |key, search_class|
+      instance_variable_set("@#{key}", with_query { search_class.new(current_user, query_param, params[:page]).search_fulltext })
+    end
+    @active_tab = active_tab
+  end
+
+  def query_json_results
+    SEARCHABLE_MODELS.each do |key, search_class|
+      instance_variable_set(
+        "@#{key}", search_class.new(current_user, query_param, params[:page])
+                              .search_fulltext
+                              .collect { |i| "#{key.to_s.singularize.titleize}Decorator"
+                                                   .constantize.new(i)
+                                                   .as_quicksearch }
+      )
+    end
+
+    results_with_separator(@people, @groups, @events, @invoices)
+  end  
 
   def results_with_separator(*sets)
     sets.select(&:present?).inject do |memo, set|
@@ -70,5 +88,9 @@ class FullTextController < ApplicationController
     invoices.map do |invoice|
       InvoiceDecorator.new(invoice)
     end
+  end
+
+  def query_param
+    params[:q]
   end
 end

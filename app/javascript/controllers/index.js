@@ -4,16 +4,38 @@
 // https://github.com/hitobito/hitobito
 
 import { Application } from "stimulus"
-import { definitionsFromContext } from "stimulus/webpack-helpers"
-import { Controller } from "@hotwired/stimulus"
 
-const stimulus = Application.start()
+export const stimulus = Application.start()
 
-// Load all the controllers within this directory and all subdirectories.
-const ctrlContext = require.context("controllers", true, /_controller\.js$/)
-stimulus.load(definitionsFromContext(ctrlContext))
+/**
+ * Stimulus controllers within this directory
+ */
+import ApplicationController from "./application.js";
+stimulus.register("application", ApplicationController);
 
-// Load all the controllers from components
-const compContext = require.context('../../components', true, /\_controller.js$/)
-stimulus.load(definitionsFromContext(compContext))
-export { Application, Controller, stimulus, definitionsFromContext }
+import AutosubmitController from "./autosubmit_controller.js";
+stimulus.register("autosubmit_controller", AutosubmitController);
+
+import FormFieldInheritanceController from "./form_field_inheritance_controller.js";
+stimulus.register("form_field_inheritance_controller", FormFieldInheritanceController);
+
+import FormFieldToggleController from "./form_field_toggle_controller.js";
+stimulus.register("form_field_toggle_controller", FormFieldToggleController);
+
+import ForwarderController from "./forwarder_controller.js";
+stimulus.register("forwarder_controller", ForwarderController);
+
+import HelloController from "./hello_controller.js";
+stimulus.register("hello_controller", HelloController);
+
+import RemoteAutocompleteController from "./remote_autocomplete_controller.js";
+stimulus.register("remote_autocomplete_controller", RemoteAutocompleteController);
+
+import TomSelectController from "./tom_select_controller.js";
+stimulus.register("tom_select_controller", TomSelectController);
+
+/**
+ * Stimulus controllers within the components directory
+ */
+import StepsComponentController from "../../components/steps_component_controller.js";
+stimulus.register("steps_component_controller", StepsComponentController);

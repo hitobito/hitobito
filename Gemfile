@@ -24,6 +24,7 @@ gem 'charlock_holmes', '~> 0.7.7'
 gem 'commonmarker'
 gem 'config'
 gem 'country_select'
+gem 'cssbundling-rails'
 gem 'csv-safe'
 gem 'daemons'
 gem 'dalli'
@@ -47,6 +48,7 @@ gem 'haml'
 gem 'http_accept_language'
 gem 'icalendar'
 gem 'image_processing', '~> 1.12'
+gem 'jsbundling-rails'
 gem 'json', '< 2.7.0' # pinned to be able to use rdbg. Somehow it has multiple versions otherwise
 gem 'lograge'
 gem 'lograge_activejob'
@@ -97,10 +99,9 @@ gem 'validates_by_schema', '~> 0.3.0' # 0.5.1 does not work well with wagons / w
 gem 'validates_timeliness'
 gem 'vcard'
 gem 'view_component'
-gem 'webpacker'
 
 # load after others because dependencies
-gem 'graphiti-openapi', github: 'puzzle/graphiti-openapi', tag: 'standalone/0.6.3'
+gem 'graphiti-openapi', github: 'puzzle/graphiti-openapi', tag: 'standalone/0.6.4'
 gem 'kaminari'
 
 gem 'active_storage_validations' # validate filesize, dimensions and content-type of uploads
@@ -118,6 +119,7 @@ end
 
 group :development do
   gem 'bullet'
+  gem 'foreman'
   gem 'listen'
   gem 'redcarpet'
   gem 'request_profiler'

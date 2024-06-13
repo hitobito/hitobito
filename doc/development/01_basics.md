@@ -61,7 +61,7 @@ In the core directory (`rails db:schema:load` might be currently broken):
 In the core directory, in two separate shells:
 
     rails s
-    bin/webpack-dev-server
+    bin/dev
 
 Login on http://localhost:3000 with the root email (see `wagon/config/settings.yml`) and the password set in `HITOBITO_DEV_PASSWORD`.
 

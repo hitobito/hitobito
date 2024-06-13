@@ -7,7 +7,7 @@
   - if show_subject
     - case note.subject
     - when Group
-      = image_pack_tag('group.svg', class: 'note-image')
+      = image_tag('group.svg', class: 'note-image')
     - when Person
       %img.note-image{src: note.subject.picture}
 

@@ -32,7 +32,9 @@ class FullTextController < ApplicationController
 
   def query_results
     SEARCHABLE_MODELS.each do |key, search_class|
-      instance_variable_set("@#{key}", with_query { search_class.new(current_user, query_param, params[:page]).search_fulltext })
+      instance_variable_set("@#{key}", 
+                            with_query { search_class.new(current_user, query_param, params[:page])
+                                                                .search_fulltext })
     end
     @active_tab = active_tab
   end

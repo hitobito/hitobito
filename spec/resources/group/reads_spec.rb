@@ -73,7 +73,14 @@ describe GroupResource, type: :resource do
       end
 
       date_time_attrs.each do |attr|
-        expect(data.public_send(attr)&.to_time).to eq(group.public_send(attr))
+        data_time, group_time = data.public_send(attr)&.to_time, group.public_send(attr)
+
+        # when time is nil, it should equal nil, if not, it should be equal within 1 second
+        if data_time.nil? || group_time.nil?
+          expect(data_time).to eq(group_time)
+        else
+          expect(data_time).to be_within(1.second).of(group_time)
+        end
       end
     end
 

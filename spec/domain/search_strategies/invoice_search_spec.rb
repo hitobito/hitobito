@@ -6,6 +6,7 @@
 require "spec_helper"
 
 describe SearchStrategies::InvoiceSearch do
+
   before do
     @bl_member = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one)).person
   end
@@ -51,9 +52,11 @@ describe SearchStrategies::InvoiceSearch do
         expect(result).not_to include(invoices(:invoice))
       end
     end
+
   end
 
   def search_class(term = nil, page = nil)
     described_class.new(user, term, page)
   end
+
 end

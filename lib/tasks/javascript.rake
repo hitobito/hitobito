@@ -27,7 +27,8 @@ module Hitobito
       filename.open('w') do |f|
         f.write("// Import the wagon specific scripts\n")
         Wagons.all.each do |wagon|
-          wagon_script = File.join(wagon.paths.path.to_s, 'app', 'assets', 'javascripts', 'wagon.js.coffee')
+          wagon_script = File.join(wagon.paths.path.to_s,
+                                   'app', 'assets', 'javascripts', 'wagon.js.coffee')
           if File.exist?(wagon_script)
             f.write("import \"#{wagon_script}\"")
           end

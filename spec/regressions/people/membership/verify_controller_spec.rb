@@ -78,12 +78,12 @@ describe People::Membership::VerifyController, type: :controller do
         }
         logos[:default] = Settings.application.logo.image
 
-        # Stub wagon_image_pack_tag to return logo or use original implementation for other images
-        allow(view_context).to receive(:wagon_image_pack_tag) do |name, **options|
+        # Stub image_tag to return logo or use original implementation for other images
+        allow(view_context).to receive(:image_tag) do |name, **options|
           if logos.value?(name)
             view_context.content_tag(:img, nil, src: name, **options)
           else
-            original_view_context.wagon_image_pack_tag(name, **options)
+            original_view_context.image_tag(name, **options)
           end
         end
 

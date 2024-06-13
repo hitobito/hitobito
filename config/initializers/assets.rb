@@ -11,6 +11,9 @@ Rails.application.config.assets.version = "1.0"
 # folder are already added.
 # Rails.application.config.assets.precompile += %w(print.css ie.css ie7.css wysiwyg.css wysiwyg.js *.png *.gif *.jpg favicon.ico)
 
+# Favicon
+Rails.application.config.assets.precompile << "favicon.ico"
+
 # CSS entry files
 Rails.application.config.assets.precompile += %w(print.css oauth.css membership_verify.js)
 

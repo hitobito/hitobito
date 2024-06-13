@@ -52,8 +52,12 @@
 #
 
 class Invoice < ActiveRecord::Base
+
+  SEARCHABLE_ATTRS = [:title, :reference, :sequence_number, { invoice_items: [:name, :account, :cost_center] }]
+
   include I18nEnums
   include PaymentSlips
+  include PgSearchable
 
   ROUND_TO = BigDecimal("0.05")
 

@@ -114,6 +114,14 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :first_name, :last_name, :nickname, :company_name, :email, :address_care_of, :street,
     :housenumber, :postbox, :zip_code, :town, :country, :gender, [:years, :integer], :birthday
   ]
+
+
+  SEARCHABLE_ATTRS = [
+    :first_name, :last_name, :company_name, :nickname, :email, :address, :zip_code, :town, 
+    :country, :birthday, :additional_information, { phone_numbers: [:number], social_accounts: [:name],
+    additional_emails: [:email] }
+  ]
+
   if FeatureGate.disabled?('structured_addresses')
     FILTER_ATTRS << :address
   end
@@ -161,6 +169,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   include PersonTags::ValidationTagged
   include People::SelfRegistrationReasons
   include People::MembershipVerification
+  include PgSearchable
 
   i18n_enum :gender, GENDERS
   i18n_setter :gender, (GENDERS + [nil])

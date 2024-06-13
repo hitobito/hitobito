@@ -72,7 +72,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   require_dependency 'event/role_decorator'
   require_dependency 'event/role_ability'
 
+  SEARCHABLE_ATTRS = [:number, {translations: [:name], groups: [:name]}]
+
   include Event::Participatable
+  include PgSearchable
 
   include Globalized
   translates :application_conditions, :description, :name, :signature_confirmation_text
@@ -239,7 +242,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
       end 
     end
 
-    def after_or_on(date)
+    def after_or_on(date, subquery = false)
       if subquery
         where(start_at: date.midnight..)
       else

@@ -1,4 +1,4 @@
-//  Copyright (c) 2015 Pro Natura Schweiz. This file is part of
+//  Copyright (c) 2012-2024 Pro Natura Schweiz. This file is part of
 //  hitobito and licensed under the Affero General Public License version 3
 //  or later. See the COPYING file at the top-level directory or at
 //  https://github.com/hitobito/hitobito.
@@ -47,7 +47,7 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
             input.classList.add("input-loading");
 
             // Fetch data via AJAX request
-            const url = new URL(input.dataset.url, location.origin);
+            const url = new URL(input.dataset.url + ".json", location.origin)
             const queryKey =
               document.getElementById(input.id).dataset.param || "q";
             url.searchParams.set(queryKey, query);

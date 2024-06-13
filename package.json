@@ -3,7 +3,8 @@
   "license": "AGPL-3.0-only",
   "scripts": {
     "prebuild": "bundle exec bin/rails javascript:generate_dynamic_files",
-    "build": "esbuild app/javascript/*.* --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets",
+    "build": "./scripts/esbuild.js",
+    "//build": "esbuild app/javascript/*.* --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets",
     "prebuild:css": "bundle exec bin/rails css:generate_dynamic_files",
     "build:css": "sass ./app/assets/stylesheets/application.sass.scss:./app/assets/builds/application.css ./app/assets/stylesheets/print.sass.scss:./app/assets/builds/print.css ./app/assets/stylesheets/oauth.sass.scss:./app/assets/builds/oauth.css --no-source-map --load-path=node_modules"
   },
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "esbuild": "^0.21.5",
+    "esbuild-coffeescript": "^2.2.0",
     "sass": "^1.77.4"
   },
   "resolutions": {

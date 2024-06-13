@@ -119,6 +119,7 @@ end
 
 group :development do
   gem 'bullet'
+  gem 'foreman'
   gem 'listen'
   gem 'redcarpet'
   gem 'request_profiler'

@@ -63,7 +63,7 @@ describe Event::ParticipationMailer do
 
     it 'renders participant info' do
       is_expected.to match(%r{Teilnehmer/-in:<br/>})
-      is_expected.to match(%r{<strong>Top Leader</strong><p> Greattown</p><p><a href="mailto:top_leader@example.com">top_leader@example.com</a>})
+      is_expected.to match(%r{<strong>Top Leader</strong><p>Greatstreet 345<br />3456 Greattown</p><p><a href="mailto:top_leader@example.com">top_leader@example.com</a>})
     end
 
     it 'renders application questions if present' do

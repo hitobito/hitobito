@@ -31,13 +31,13 @@ module Hitobito
       files = find_asset_files(url)
 
       if files.empty?
-        Rails.logger.warn("Warning: Cannot find file for #{url} in public/assets directory")
+        log_asset_not_found_warning(url)
         return nil
       end
 
       if files.length > 1
         # Is this possible, when a wagon has a file name equally like a file in core?
-        Rails.logger.error("Error: Found #{matches.length} files for #{url} in public/assets directory")
+        log_multiple_assets_error(url, matches.length)
         raise
       end
 
@@ -59,6 +59,16 @@ module Hitobito
 
     def asset_files(extension)
       Dir[Rails.public_path.join('assets', "*.#{extension}")]
+    end
+
+    def log_asset_not_found_warning(url)
+      Rails.logger.warn("Warning: Cannot find file for #{url} in public/assets directory")
+    end
+
+    def log_multiple_assets_error(url, count)
+      Rails.logger.error(
+        "Error: Found #{count} files for #{url} in public/assets directory"
+      )
     end
   end
 end

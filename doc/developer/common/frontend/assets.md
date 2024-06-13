@@ -56,5 +56,8 @@ Der Server sorgt dafür, dass die Assets gebundelt resp. transpiliert werden. Es
 
 - Die JavaScript Files befinden sich im `app/javascript` Verzeichnis.
 - Mit dem jsbundling-rails Ansatz würd bei einem `rails assets:precompile` (Build) bzw. bei einem `bin/dev` (Entwicklung) der NPM Task `yarn build` ausgeführt.
-- Der `yarn build` NPM Task erstellt mit Hilfe von esbuild die JavaScript Bundles.
+- Als Vorbereitsungsschritt (`prebuild`) wird beim `yarn build` NPM Task der Rake Task `rails javascript:generate_dynamic_files` asugeführt. Dieser schreibt im `app/javascript/dynamic` Verzeichnis folgenden Files, welche im `app/javascript/application.js` importiert werden:
+  - `gems.js` bindet Scripts von legacy Gems ein.
+  - `wagon.js` bindet die custom Scripts der Wagons ein.
+- Der `yarn build` NPM Task erstellt mit Hilfe von esbuild die JavaScript Bundles nach `app/assets/builds/*.js`.
 - Die Asset Pipeline hashed die JS Files und kopiert sie ins `public/assets` Verzeichnis.

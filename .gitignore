@@ -40,6 +40,7 @@ stats.json
 .sass-cache
 app/assets/stylesheets_generated
 app/assets/stylesheets/dynamic
+app/javascript/dynamic
 public/assets
 public/404.html
 public/500.html

@@ -6,6 +6,7 @@
 require "spec_helper"
 
 describe SearchStrategies::PersonSearch do
+
   before do
     @tg_member = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person
     @tg_extern = Fabricate(Role::External.name.to_sym, group: groups(:top_group)).person
@@ -153,9 +154,11 @@ describe SearchStrategies::PersonSearch do
         expect(result).to include(@bg_member)
       end
     end
+
   end
 
   def search_class(term = nil, page = nil)
     described_class.new(user, term, page)
   end
+
 end

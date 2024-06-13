@@ -6,6 +6,7 @@
 require "spec_helper"
 
 describe SearchStrategies::EventSearch do
+
   before do
     @bl_leader = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person
   end
@@ -45,9 +46,11 @@ describe SearchStrategies::EventSearch do
         expect(result).to include(events(:top_course))
       end
     end
+
   end
 
   def search_class(term = nil, page = nil)
     described_class.new(user, term, page)
   end
+
 end

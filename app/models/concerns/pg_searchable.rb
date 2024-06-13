@@ -9,11 +9,11 @@ module PgSearchable
 
 
     model.pg_search_scope :search,
-      against: model.const_defined?(:SEARCHABLE_ATTRS) ? 
-                model::SEARCHABLE_ATTRS.select { |element| element.is_a?(Symbol) } : 
+      against: model.const_defined?(:SEARCHABLE_ATTRS) ?
+                model::SEARCHABLE_ATTRS.select { |element| element.is_a?(Symbol) } :
                 [],
-      associated_against: model.const_defined?(:SEARCHABLE_ATTRS) ? 
-                          model::SEARCHABLE_ATTRS.select { |element| element.is_a?(Hash) }.first : 
+      associated_against: model.const_defined?(:SEARCHABLE_ATTRS) ?
+                          model::SEARCHABLE_ATTRS.select { |element| element.is_a?(Hash) }.first :
                           [],
       using: {
         tsearch: { prefix: true }

@@ -331,7 +331,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
         content_tag(:div, class: 'labeled col-md') do
           nested_fields_for(assoc, partial, record) do |fields|
             content = block_given? ? capture(fields, &block) : render(partial, f: fields)
-            content = content_tag(:div, content, class: 'col-md-10')
+            content = content_tag(:div, content, class: 'col-md-11 d-flex flex-row align-items-center')
 
             content << content_tag(:div, fields.link_to_remove(icon(:times)), class: 'col-md-2')
             content_tag(:div, content, html_options)

@@ -4,9 +4,9 @@
 -#  https://github.com/hitobito/hitobito.
 
 - if f.object.new_record?
-  %div.col-5.inline
+  %div.col-5.me-3.mb-1
     = f.person_field(:other)
-  %div.col-2.inline.row
+  %div.col-4.d-flex.flex-row.me-3
     = f.collection_select(:kind, FamilyMember.kind_labels, :first, :second, {}, class: 'form-select form-select-sm h-100')
 - else
   .col-4

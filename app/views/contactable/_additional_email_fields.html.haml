@@ -3,19 +3,20 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-%div.col-5.inline
-  = f.input_field(:email,
-                  placeholder: t('.placeholder_value'))
-%div.col-2.inline.row
-  = f.input_field(:translated_label,
-                  placeholder: t('.placeholder_type'),
-                  data: {provide: :typeahead, source: AdditionalEmail.available_labels})
+%div.d-flex.flex-wrap.w-100.align-items-center
+  %div.col-11.col-md-5.me-3
+    = f.input_field(:email,
+                    placeholder: t('.placeholder_value'))
+  %div.col-11.col-md-4.d-flex.flex-row.me-3
+    = f.input_field(:translated_label,
+                    placeholder: t('.placeholder_type'),
+                    data: {provide: :typeahead, source: AdditionalEmail.available_labels})
 
-- if entry.is_a?(Person)
-  = f.label(:mailings, class: 'ms-5 col-1') do
-    = f.check_box(:mailings)
-    %span{'data-bs-toggle': 'tooltip', title: t('.tooltip_mailings')}
-      = t(:"activerecord.attributes.additional_emails.mailings")
-      %i.fas.fa-info
+  - if entry.is_a?(Person)
+    = f.label(:mailings, class: 'col-12 col-sm-2 col-md-12 col-lg-3 col-xl-3 col-xxl-2 mt-sm-2 mt-md-0') do
+      = f.check_box(:mailings)
+      %span{'data-bs-toggle': 'tooltip', title: t('.tooltip_mailings')}
+        = t(:"activerecord.attributes.additional_emails.mailings")
+        %i.fas.fa-info
 
-= render 'contactable/public_check_box', f: f
+  = render 'contactable/public_check_box', f: f

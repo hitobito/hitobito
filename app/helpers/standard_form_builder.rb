@@ -321,7 +321,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def labeled_inline_fields_for(assoc, partial = nil, record = nil, required = false, &block) # rubocop:disable Metrics/MethodLength
-    html_options = { class: 'd-flex flex-row align-items-center flex-container' }
+    html_options = { class: 'd-flex flex-row align-items-center flex-container mb-3' }
     css_classes = { row: true, 'mb-2': true, required: required }
     label_classes = 'control-label col-form-label col-md-3 col-xl-2 pb-1 text-md-end'
 

@@ -75,57 +75,13 @@ jobs:
           git fetch --tags
           bundle exec rake ci:setup:env spec:without_features
 
-  sphinx-specs:
-    runs-on: 'ubuntu-20.04'
-    env:
-      HEADLESS: true
-      RAILS_DB_ADAPTER: mysql2
-      RAILS_DB_HOST: 127.0.0.1
-      RAILS_DB_PORT: 33066
-      RAILS_DB_USERNAME: hitobito
-      RAILS_DB_PASSWORD: hitobito
-      RAILS_DB_NAME: hitobito_test
-      RAILS_TEST_DB_NAME: hitobito_test
-      TZ: Europe/Berlin
-      RAILS_USE_TEST_GROUPS: true
-
-    services:
-      mysql:
-        image: 'mysql:5.7'
-        env:
-          MYSQL_USER: 'hitobito'
-          MYSQL_PASSWORD: 'hitobito'
-          MYSQL_DATABASE: 'hitobito_test'
-          MYSQL_ROOT_PASSWORD: 'root'
-        ports:
-          - '33066:3306'
-        options: >-
-          --health-cmd "mysqladmin ping"
-          --health-interval 10s
-          --health-timeout 10s
-          --health-retries 10
-      memcached:
-        image: 'memcached'
-        ports: [ '11211:11211' ]
-
-    steps:
-      - name: 'Checkout'
-        uses: actions/checkout@v4
-
-      - name: 'Prepare'
-        uses: ./.github/actions/core-ci-setup
-
-      - name: 'Sphinx'
-        run: |
-          bundle exec rake ci:setup:env spec:sphinx
-
   feature-specs:
     runs-on: 'ubuntu-20.04'
     env:
       HEADLESS: true
-      RAILS_DB_ADAPTER: mysql2
+      RAILS_DB_ADAPTER: postgresql
       RAILS_DB_HOST: 127.0.0.1
-      RAILS_DB_PORT: 33066
+      RAILS_DB_PORT: 5432
       RAILS_DB_USERNAME: hitobito
       RAILS_DB_PASSWORD: hitobito
       RAILS_DB_NAME: hitobito_test
@@ -134,17 +90,16 @@ jobs:
       RAILS_USE_TEST_GROUPS: true
 
     services:
-      mysql:
-        image: 'mysql:5.7'
+      postgres:
+        image: 'postgres:16'
         env:
-          MYSQL_USER: 'hitobito'
-          MYSQL_PASSWORD: 'hitobito'
-          MYSQL_DATABASE: 'hitobito_test'
-          MYSQL_ROOT_PASSWORD: 'root'
+          POSTGRES_USER: hitobito
+          POSTGRES_PASSWORD: hitobito
+          POSTGRES_DB: hitobito_test
         ports:
-          - '33066:3306'
+          - '5432:5432'
         options: >-
-          --health-cmd "mysqladmin ping"
+          --health-cmd "pg_isready -U hitobito"
           --health-interval 10s
           --health-timeout 10s
           --health-retries 10
@@ -173,11 +128,11 @@ jobs:
 
   notify_statuscope:
     uses: ./.github/workflows/notify-statuscope.yml
-    needs: [ rubocop, main-specs, sphinx-specs, feature-specs ]
+    needs: [ rubocop, main-specs, feature-specs ]
     if: ( success() || failure() ) && ( github.ref_name == 'master' )
     with:
       repository: 'hitobito'
-      test_result: ${{ needs.rubocop.result == 'success' && needs.main-specs.result == 'success' && needs.sphinx-specs.result == 'success' && needs.feature-specs.result == 'success' }}
+      test_result: ${{ needs.rubocop.result == 'success' && needs.main-specs.result == 'success' && needs.feature-specs.result == 'success' }}
     secrets:
       HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}
       HEARTBEAT_TOKEN: ${{ secrets.HEARTBEAT_TOKEN }}

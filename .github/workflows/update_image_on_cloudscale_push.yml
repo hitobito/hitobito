@@ -1,0 +1,18 @@
+on:
+  push:
+    branches:
+      - feature/cloudscale
+
+jobs:
+  write_tag:
+    uses: ./.github/workflows/update_image.yml
+    secrets:
+      repository_token: ${{ secrets.DEPLOYMENT_REPOSITORY_TOKEN }}
+    with:
+      repository: gitlab.puzzle.ch/pitc_hit/deployments/hitobito.git
+      file: ./deployments/hit-sjas-int/kustomization.yaml
+      image_tag: v1.2.3
+      # same as default:
+      repository_username: git
+      image_ref: rails
+

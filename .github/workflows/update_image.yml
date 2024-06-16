@@ -1,0 +1,83 @@
+name: 'Reusable: Update image in repository'
+
+# This is a reusable build step, that is supposed to handle the generic task of building a docker
+# image and pushing it to a repo.
+# This action should be as generic as possible. Maybe extract it to a repo
+#
+# TODO: Could be made more customizable with: `jq`, `fromJSON`, `toJSON` and `join`
+
+on:
+  workflow_call:
+    inputs:
+      repository:
+        description: 'Git repository to update'
+        type: string
+        required: true
+      repository_username:
+        description: 'Username for repository login'
+        type: string
+        required: false
+        default: 'git'
+      file:
+        description: 'File in the repo to update'
+        type: string
+        required: true
+      image_tag:
+        description: 'Tag to be set'
+        type: string
+        required: true
+      image_ref:
+        description: 'Name of the image to update'
+        type: string
+        required: false
+        default: rails
+
+    secrets:
+      repository_token:
+        description: 'Token for repository login'
+        required: true
+
+jobs:
+  write_tag:
+    environment: deploy
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: Pull from repository
+        env:
+          REPO_URL: ${{ inputs.repository }}
+          REPO_USER: ${{ inputs.repository_username }}
+          REPO_TOKEN: ${{ secrets.REPOSITORY_TOKEN }}
+        run: |
+          git clone https://${REPO_USER}:${REPO_TOKEN}@${REPO_URL} ./management_repo
+          cd ./management_repo
+          git config user.name "Github Action Image updater"
+          git config user.email "robot@puzzle.ch"
+          git remote set-url origin "https://${REPO_USER}:${REPO_TOKEN}@${REPO_URL}"
+      - name: Update image tag
+        id: set_image_tag
+        uses: mikefarah/yq@master
+        env:
+          FILE: ${{ inputs.file }}
+          NEW_TAG: ${{ inputs.image_tag }}
+          IMAGE_REF: ${{ inputs.image_ref }}
+        with:
+          cmd: |
+            old_tag=$(yq '.images.[] | select(.name == env(IMAGE_REF))' "${FILE}")
+            if [[ "${old_tag}" == "${NEW_TAG}" ]]; then
+              echo "new and old tag are the same. Skipping the update."
+              tag_updated=false
+            else
+              echo "Replacing tag '${old_tag}' with ${NEW_TAG} as new tag
+              yq -i '.images.[] | select(.name == env(IMAGE_REF)) += {"newTag": env(NEW_TAG)}' "${FILE}"
+              tag_updated=true
+            fi
+      - name: Commit & push back to repository
+        if: steps.set_image_tag.outputs.tag_updated
+        env:
+          IMAGE_REF: ${{ inputs.image_ref }}
+          IMAGE_TAG: ${{ inputs.image_tag }}
+        run: |
+          git add .
+          git commit -m "Setting image reference of '${IMAGE_REF} to '${IMAGE_TAG}'"
+          git push origin master
+

@@ -39,6 +39,11 @@ trix-editor + .help-block {
   margin-top: 0.25em !important;
 }
 
+trix-editor {
+  word-wrap: break-word !important;
+  overflow-y: scroll !important;
+}
+
 .trix-content .attachment--preview, .trix-content .attachment__caption, trix-editor .attachment__caption-editor {
   text-align: left;
 }

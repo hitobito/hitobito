@@ -112,11 +112,6 @@ RSpec.configure do |config|
   config.include ViewComponent::SystemTestHelpers, type: :component
   config.include Capybara::RSpecMatchers, type: :component
 
-  config.filter_run_excluding type: 'sphinx', sphinx: true
-  if ActiveRecord::Base.connection.adapter_name.downcase != 'mysql2'
-    config.filter_run_excluding :mysql
-  end
-
   config.global_fixtures = :all
 
   config.before(:each) do

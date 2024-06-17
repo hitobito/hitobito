@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_05_03_120000) do
+ActiveRecord::Schema.define(version: 2024_06_13_103445) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -412,7 +412,6 @@ ActiveRecord::Schema.define(version: 2024_05_03_120000) do
     t.string "short_name", limit: 31
     t.string "type", null: false
     t.string "email"
-    t.text "address"
     t.integer "zip_code"
     t.string "town"
     t.string "country"
@@ -839,7 +838,6 @@ ActiveRecord::Schema.define(version: 2024_05_03_120000) do
     t.string "nickname"
     t.boolean "company", default: false, null: false
     t.string "email"
-    t.text "address"
     t.string "zip_code"
     t.string "town"
     t.string "country"

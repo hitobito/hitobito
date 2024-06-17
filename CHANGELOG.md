@@ -7,6 +7,8 @@
 *  Die Rollentypen werden nun alphabetisch sortiert im Auswahlmenü (hitobito_sac_cas#552)
 *  Die Volltextsuche sucht bei Personen neu auch nach dem Geburtstag (hitobito_sac_cas#544)
 *  Haushaltsverwaltung erfolgt auf einer eigenen Seite (hitobito#2616)
+*  Gruppen mit `static_name` werden nun gemäss aktiver Sprache sortiert dargestellt (hitobito#2677)
+*  Wagons können die Gruppen Sortierung mittels `sorting_name` überschreiben (hitobito#2677)
 
 ## Version 2.1
 

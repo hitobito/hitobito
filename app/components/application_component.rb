@@ -7,6 +7,8 @@
 
 class ApplicationComponent < ViewComponent::Base
 
+  include I18nHelper
+
   private
 
   def stimulus_controller

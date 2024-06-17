@@ -50,7 +50,6 @@ class LocationSeeder
   end
 
   def bulk_insert
-    require 'pry'; binding.pry
     data.each_slice(500).each_with_index do |values, slice|
       puts " - Location: inserting slice #{slice}"
       insert = "INSERT INTO locations (canton, zip_code, name) VALUES #{values.join(',')}"

@@ -72,7 +72,7 @@ describe Person do
     expect(Person.new(company: false, company_name: "foo")).to have(1).errors_on(:base)
   end
 
-  it "can be saved with emoji", :mysql do
+  it "can be saved with emoji" do
     person = Person.new(company: false, nickname: "foo", additional_information: " Vegetarier😝 ")
     expect(person.save).to be true
     expect(person.errors.messages[:base].size).to be_zero
@@ -101,7 +101,7 @@ describe Person do
     expect(person.save).to be_truthy
   end
 
-  it '#order_by_name orders people by company_name then last_name then first_name and then nickname' do
+  it "#order_by_name orders people by company_name then last_name then first_name and then nickname" do
     Person.destroy_all
     Person.create!(company: true, company_name: "AA")
     Person.create!(company: true, company_name: "BA")
@@ -116,7 +116,7 @@ describe Person do
     expect(Person.order_by_name.select("*").collect(&:to_s)).to eq(["AA", "AB", "AC", " / AD", "BA", "BB", "BC", " / BD"].collect(&:to_s))
   end
 
-  it '#order_by_name orders people with same last_name by first_name' do
+  it "#order_by_name orders people with same last_name by first_name" do
     Person.destroy_all
     p1 = Person.create(last_name: "AA")
     p2 = Person.create(last_name: "BB", first_name: "BB")
@@ -286,7 +286,7 @@ describe Person do
       expect(person.save(validate: false)).to be_falsey
       expect(person.errors[:email]).to eq(["ist bereits vergeben. Diese Adresse muss für alle " \
                                         "Personen eindeutig sein, da sie beim Login verwendet " \
-                                        "wird. Du kannst jedoch unter 'Weitere E-Mails' " \
+                                        "wird. Du kannst jedoch unter "Weitere E-Mails" " \
                                         "Adressen eintragen, welche bei anderen Personen als " \
                                         "Haupt-E-Mail vergeben sind (Die Haupt-E-Mail kann leer " \
                                         "gelassen werden).\n"])
@@ -479,7 +479,7 @@ describe Person do
       Fabricate(:person, zip_code: "01200", country: "DE")
       Fabricate(:person, zip_code: "1200")
       Fabricate(:person, zip_code: "1200 ", country: "DE")
-      list = Person.includes(:location).where("zip_code LIKE '%1200%'").order(:zip_code).to_a
+      list = Person.includes(:location).where("zip_code LIKE "%1200%"").order(:zip_code).to_a
       expect(list.first.location).to be_nil
       expect(list.second.location).to eq(l)
       expect(list.third.location).to be_nil
@@ -698,7 +698,7 @@ describe Person do
     end
   end
 
-  describe 'with_address scope' do
+  describe "with_address scope" do
 
     let(:top_leader) { people(:top_leader) }
 
@@ -706,7 +706,7 @@ describe Person do
       top_leader.update!(address: nil, zip_code: nil, town: "Supertown")
     end
 
-    it 'lists people with last_name, address, zip_code and town' do
+    it "lists people with last_name, address, zip_code and town" do
       results = Person.with_address
 
       expect(results.count).to eq(1)

@@ -4,6 +4,6 @@
 -#  https://github.com/hitobito/hitobito.
 
 - if @sub_groups.present?
-  = render 'child_groups'
+  = render(Groups::ChildGroups.new(sub_groups: @sub_groups))
 - else
   = t('.no_deleted_sub_groups')

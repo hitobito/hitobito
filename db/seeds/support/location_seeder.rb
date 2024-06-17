@@ -24,7 +24,6 @@ class LocationSeeder
 
   def seed
     return true if marked_as_seeded?
-    raise 'Currently, this only works with MySQL' unless mysql?
 
     truncate_locations
     bulk_insert
@@ -36,8 +35,6 @@ class LocationSeeder
 
   def marked_as_seeded?
     ActiveRecord::InternalMetadata[SEED_MARKER].present?
-
-    true
   end
 
   def mark_as_seeded!
@@ -48,15 +45,12 @@ class LocationSeeder
     Location.count == csv.count
   end
 
-  def mysql?
-    Location.connection.adapter_name.downcase =~ /mysql/
-  end
-
   def truncate_locations
     Location.connection.truncate(Location.table_name, 'Truncate Location')
   end
 
   def bulk_insert
+    require 'pry'; binding.pry
     data.each_slice(500).each_with_index do |values, slice|
       puts " - Location: inserting slice #{slice}"
       insert = "INSERT INTO locations (canton, zip_code, name) VALUES #{values.join(',')}"
@@ -66,7 +60,7 @@ class LocationSeeder
 
   def data
     csv.each_with_object([]) do |row, data|
-      data << "(\"#{row['canton'].to_s.downcase}\", \"#{row['zip_code']}\", \"#{row['town']}\")"
+      data << "(\'#{row['canton'].to_s.downcase}\', \'#{row['zip_code']}\', \'#{row['town'].gsub("'", "''")}\')"
     end.uniq
   end
 

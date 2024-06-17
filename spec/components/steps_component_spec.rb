@@ -18,6 +18,12 @@ describe StepsComponent, type: :component do
     end
   end
 
+  around do |example|
+    with_controller_class Groups::SelfRegistrationController do
+      example.run
+    end
+  end
+
   def render(**args)
     render_inline(described_class.new(**args.merge(form: form)))
   end
@@ -27,6 +33,7 @@ describe StepsComponent, type: :component do
   end
 
   it 'does render header and content' do
+    stub_header_translation(:other, 'Andere')
     html = render(partials: [:main_person, :other], step: 0)
     expect(html).to have_css("#{header_css} li.active", text: 'Personendaten')
     expect(html).to have_css('.row .step-content.main-person.active', text: 'main_person')
@@ -38,14 +45,18 @@ describe StepsComponent, type: :component do
   end
 
   it 'renders two steps with second one active' do
-    allow(I18n).to receive(:t).and_wrap_original do |m, *args|
-      args.first =~/household/  ? 'Familienmitglieder' : m.call(*args)
-    end
-
+    stub_header_translation(:household, 'Familienmitglieder')
     html = render(partials: [:main_person, :household], step: 1)
     expect(html).to have_css("#{header_css} li:nth-child(1):not(.active)", text: 'Personendaten')
     expect(html).to have_css("#{header_css} li:nth-child(2).active", text: 'Familienmitglieder')
     expect(html).to have_css('.step-content.main-person:not(.active)')
     expect(html).to have_css('.step-content.household.active')
+  end
+
+  def stub_header_translation(header, value)
+    allow_any_instance_of(StepsComponent::HeaderComponent).to receive(:ti).and_call_original
+    allow_any_instance_of(StepsComponent::HeaderComponent).to receive(:ti)
+      .with("#{header}_title")
+      .and_return(value)
   end
 end

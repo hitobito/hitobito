@@ -764,7 +764,6 @@ de:
       distribution: Verteilung
     self_registration:
       form:
-        main_person_title: Personendaten
         privacy_policy_caption: "Ich erkläre mich mit den folgenden Bestimmungen einverstanden:"
         submit: Registrieren
         has_account: Du hast bereits ein Login?
@@ -792,6 +791,8 @@ de:
       confirm_delete: "Sämtliche Daten zu %{person} werden endgültig gelöscht, inkl. Teilnahmen und Qualifikationen. Lösche diese Person nur, wenn niemand mehr diese Daten benötigt."
 
   groups/self_registration:
+    global:
+      main_person_title: Personendaten
     new:
       title: "Registrierung zu %{group_name}"
 

@@ -54,7 +54,7 @@ class StepsComponent < ApplicationComponent
 
     def call
       content_tag(:li, markup,
-                  class: active_class ,
+                  class: active_class,
                   data: stimulus_target('stepHeader'))
     end
 
@@ -69,7 +69,7 @@ class StepsComponent < ApplicationComponent
     end
 
     def title
-      I18n.t("groups.self_registration.form.#{@header}_title")
+      ti("#{@header}_title")
     end
   end
 

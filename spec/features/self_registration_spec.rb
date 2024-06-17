@@ -167,11 +167,11 @@ describe :self_registration, js: true do
         end
       end
 
-      I18n.backend.store_translations :de, groups: {  self_registration: { form: {
+      I18n.backend.store_translations :de, 'groups/self_registration': { global: {
         first_step_title: 'FirstStep',
         second_step_title: 'SecondStep',
         third_step_title: 'ThirdStep'
-      } } }
+      } }
 
       visit group_self_registration_path(group_id: group)
       click_on 'Weiter'

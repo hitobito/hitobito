@@ -106,6 +106,8 @@ module Hitobito
       g.test_framework :rspec, fixture: true
     end
 
+    config.view_component.capture_compatibility_patch_enabled = true
+
     initializer :define_sphinx_indizes, before: :add_to_prepare_blocks do |app|
       # only add here to be the last one
       app.config.to_prepare do

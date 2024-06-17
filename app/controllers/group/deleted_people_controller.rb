@@ -24,6 +24,7 @@ class Group::DeletedPeopleController < ListController
     Group::DeletedPeople.deleted_for(group)
       .includes(:additional_emails, :phone_numbers)
       .order_by_name
+      .select("*", :id)
       .page(params[:page])
   end
 

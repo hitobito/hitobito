@@ -36,15 +36,11 @@ module Oauth
     belongs_to :person, foreign_key: :resource_owner_id, inverse_of: :access_grants
 
     scope :list, -> { order(created_at: :desc) }
-    scope :for, ->(uri) { where(redirect_uri: uri) }
-    scope :not_expired, -> { where("DATE_ADD(created_at, INTERVAL expires_in SECOND) > UTC_TIME") }
+    scope :for,  ->(uri) { where(redirect_uri: uri) }
+    scope :not_expired, -> { where("created_at + interval '1 second' * expires_in > now()") }
 
     def self.active
-      if connection.adapter_name == "Mysql2"
-        not_expired.where(revoked_at: nil)
-      else
-        where(revoked_at: nil)
-      end
+      not_expired.where(revoked_at: nil)
     end
 
     def to_s

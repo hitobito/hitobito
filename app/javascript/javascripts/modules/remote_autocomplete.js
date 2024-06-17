@@ -47,7 +47,7 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
             input.classList.add("input-loading");
 
             // Fetch data via AJAX request
-            const url = new URL(input.dataset.url + ".json", location.origin)
+            const url = new URL(input.dataset.url, location.origin)
             const queryKey =
               document.getElementById(input.id).dataset.param || "q";
             url.searchParams.set(queryKey, query);

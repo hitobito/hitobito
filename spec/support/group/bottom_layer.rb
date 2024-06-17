@@ -5,6 +5,7 @@
 
 require Rails.root.join('spec/support/group/bottom_group.rb')
 require Rails.root.join('spec/support/group/mounted_attrs_group.rb')
+require Rails.root.join('spec/support/group/static_name_groups.rb')
 
 class Group::BottomLayer < Group
 
@@ -12,7 +13,7 @@ class Group::BottomLayer < Group
 
   self.event_types = [Event, Event::Course]
 
-  children Group::BottomGroup, Group::MountedAttrsGroup
+  children Group::BottomGroup, Group::MountedAttrsGroup, Group::StaticNameAGroup, Group::StaticNameBGroup
 
   class BasicPermissionsOnly < ::Role
     self.permissions = []

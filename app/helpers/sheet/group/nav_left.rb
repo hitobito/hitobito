@@ -31,8 +31,31 @@ module Sheet
 
       private
 
+      def sort_groups_by_name(groups)
+        children_of = {}
+        groups.each do |o|
+          children_of[o.parent_id] ||= []
+          children_of[o.parent_id] << o
+        end
+
+        children_of.each_value do |children|
+          children.sort_by!(&:sorting_name)
+        end
+
+        results = []
+        recombine_groups(results, children_of, groups.first.parent_id)
+        results
+      end
+
+      def recombine_groups(results, children_of, parent_id)
+        children_of[parent_id]&.each do |o|
+          results << o
+          recombine_groups(results, children_of, o.id)
+        end
+      end
+
       def groups
-        @groups ||= entry.groups_in_same_layer.without_deleted.order(:lft).to_a
+        @groups ||= sort_groups_by_name entry.groups_in_same_layer
       end
 
       def layer
@@ -59,7 +82,7 @@ module Sheet
       def render_layer_groups
         out = ''.html_safe
         stack = []
-        Array(groups[1..-1]).each do |group|
+        groups[1..].each do |group|
           render_stacked_group(group, stack, out)
         end
         stack.size.times do

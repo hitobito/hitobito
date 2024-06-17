@@ -6,6 +6,8 @@
 de:
   activerecord:
     models:
+      group/static_name_a_group: A De
+      group/static_name_b_group: B De
       group/top_layer: Top Layer
       group/top_group: Top Group
       group/bottom_layer:

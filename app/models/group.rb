@@ -394,7 +394,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   def name=(value)
     return if static_name
 
-    super(value)
+    super
   end
 
   private

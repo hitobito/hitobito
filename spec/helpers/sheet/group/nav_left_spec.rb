@@ -25,12 +25,12 @@ describe 'Sheet::Group::NavLeft' do
   it { is_expected.to have_selector('ul', count: 2) }
 
   it 'has balanced li tags' do
-    expect(html.scan(/<li/).size).to eq html.scan(/<\/li>/).size
+    expect(html.scan('<li').size).to eq html.scan('</li>').size
   end
 
   it 'has balanced li tags if last group is stacked' do
     Fabricate(Group::BottomGroup.sti_name.to_sym, parent: groups(:bottom_group_one_two))
-    expect(html.scan(/<li/).size).to eq html.scan(/<\/li>/).size
+    expect(html.scan('<li').size).to eq html.scan('</li>').size
   end
 
   context 'short name' do
@@ -53,6 +53,31 @@ describe 'Sheet::Group::NavLeft' do
     it 'displays group with short name if available' do
       is_expected.to have_link('TG', text: 'TG')
       is_expected.to_not have_link('TopGroup', text: 'TopGroup')
+    end
+  end
+
+  context 'with translated group names' do
+    before do
+      Group::StaticNameAGroup.create!(parent: groups(:bottom_layer_one))
+      Group::StaticNameBGroup.create!(parent: groups(:bottom_layer_one))
+    end
+
+    context 'with :de locale' do
+      it 'renders group names sorted by de name' do
+        I18n.with_locale(:de) do
+          expect(html.scan(/<li>.*title="([^"]*)".*<\/li>/).flatten)
+            .to eq(['A De', 'B De', 'Group 111', 'Group 12'])
+        end
+      end
+    end
+
+    context 'with :fr locale' do
+      it 'renders group names sorted by de name' do
+        I18n.with_locale(:fr) do
+          expect(html.scan(/<li>.*title="([^"]*)".*<\/li>/).flatten)
+            .to eq(['Fr 1 B', 'Fr 2 A', 'Group 111', 'Group 12'])
+        end
+      end
     end
   end
 

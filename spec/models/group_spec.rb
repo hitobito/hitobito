@@ -335,11 +335,11 @@ describe Group do
 
   context '.all_types' do
     it 'lists all types' do
-      expect(Group.all_types.count).to eq(6)
-      [Group::TopLayer, Group::TopGroup, Group::BottomLayer, Group::BottomGroup,
-       Group::GlobalGroup, Group::MountedAttrsGroup].each do |t|
-        expect(Group.all_types).to include(t)
-      end
+      expect(Group.all_types).to contain_exactly(
+        Group::TopLayer, Group::TopGroup, Group::BottomLayer, Group::BottomGroup,
+        Group::GlobalGroup, Group::MountedAttrsGroup, Group::StaticNameAGroup,
+        Group::StaticNameBGroup
+      )
     end
   end
 
@@ -613,7 +613,7 @@ describe Group do
         it 'archives all roles with same timestamp' do
           group.archive!
 
-          expect(group).to be_archived
+          expect(group.reload).to be_archived
           expect(role).to be_archived
           expect(group.archived_at).to eq(role.archived_at)
         end
@@ -830,11 +830,10 @@ describe Group do
   end
 
   context 'type' do
-    let(:group) { groups(:bottom_group_two_one) }
     let(:duplicate) { group.dup }
 
     context 'with static_name=false' do
-      before { group.class.static_name = false }
+      let(:group) { groups(:bottom_group_two_one) }
 
       it 'uniqueness is not validated' do
         duplicate.validate
@@ -843,8 +842,7 @@ describe Group do
     end
 
     context 'with static_name=true' do
-      before { group.class.static_name = true }
-      after { group.class.static_name = false }
+      let(:group) { Fabricate(Group::StaticNameAGroup.name, parent: groups(:bottom_layer_one)) }
 
       it 'uniqueness is validated for same parent_id' do
         duplicate.validate
@@ -861,56 +859,43 @@ describe Group do
 
   context 'addable_child_types' do
     let(:group) { Fabricate(Group::BottomLayer.name) }
-    let(:child_type) { Group::BottomGroup }
 
-    context 'with static_name=false' do
-      before { child_type.static_name = false }
-
-      it 'when no children exist returns possible_children' do
-        expect(group.addable_child_types).to match_array([
-                                                           Group::BottomGroup,
-                                                           Group::MountedAttrsGroup,
-                                                           Group::GlobalGroup
-                                                         ])
-      end
-
-      it 'when children exist returns possible_children' do
-        Fabricate(Group::BottomGroup.name, parent: group)
-        expect(group.addable_child_types).to match_array([
-                                                           Group::BottomGroup,
-                                                           Group::MountedAttrsGroup,
-                                                           Group::GlobalGroup
-                                                         ])
+    context 'when no children exist' do
+      it 'returns possible_children' do
+        expect(group.addable_child_types).to contain_exactly(
+          Group::BottomGroup, Group::MountedAttrsGroup, Group::GlobalGroup,
+          Group::StaticNameAGroup, Group::StaticNameBGroup
+        )
       end
     end
 
-    context 'with static_name=true' do
-      before { child_type.static_name = true }
-      after { child_type.static_name = false }
 
-      it 'when no children exist returns possible_children' do
-        expect(group.addable_child_types).to match_array([
-                                                           Group::BottomGroup,
-                                                           Group::MountedAttrsGroup,
-                                                           Group::GlobalGroup
-                                                         ])
-      end
-
-      it 'when only deleted children exist returns possible_children' do
-        Fabricate(Group::BottomGroup.name, parent: group, deleted_at: 1.day.ago)
-        expect(group.addable_child_types).to match_array([
-                                                           Group::BottomGroup,
-                                                           Group::MountedAttrsGroup,
-                                                           Group::GlobalGroup
-                                                         ])
-      end
-
-      it 'when children exist returns possible_children minus existing child types' do
+    context 'when children without static_name exist' do
+      it 'when children exist returns possible_children' do
         Fabricate(Group::BottomGroup.name, parent: group)
-        expect(group.addable_child_types).to match_array([
-                                                           Group::MountedAttrsGroup,
-                                                           Group::GlobalGroup
-                                                         ])
+        expect(group.addable_child_types).to contain_exactly(
+          Group::BottomGroup, Group::MountedAttrsGroup, Group::GlobalGroup,
+          Group::StaticNameAGroup, Group::StaticNameBGroup
+        )
+      end
+    end
+    context 'when only deleted children with static_name exist' do
+      it 'returns possible_children' do
+        Fabricate(Group::StaticNameAGroup.name, parent: group, deleted_at: 1.day.ago)
+        expect(group.addable_child_types).to contain_exactly(
+          Group::BottomGroup, Group::MountedAttrsGroup, Group::GlobalGroup,
+          Group::StaticNameAGroup, Group::StaticNameBGroup
+        )
+      end
+    end
+
+    context 'when children with static_name exist' do
+      it 'returns possible_children minus existing child types' do
+        Fabricate(Group::StaticNameAGroup.name, parent: group)
+        expect(group.addable_child_types).to contain_exactly(
+          Group::BottomGroup, Group::MountedAttrsGroup, Group::GlobalGroup,
+          Group::StaticNameBGroup
+        )
       end
     end
   end

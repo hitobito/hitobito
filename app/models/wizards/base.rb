@@ -98,7 +98,8 @@ module Wizards
       step_class = find_step(step_name)
       instances << step_class.new(self, **params[step_name] || {})
 
-      build_step_instances(step_after(step_class), instances)
+      next_step = step_after(step_class) || step_after(step_name)
+      build_step_instances(next_step, instances)
     end
 
     def step_instances

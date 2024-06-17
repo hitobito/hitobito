@@ -62,7 +62,7 @@ describe Wizards::Base do
     end
   end
 
-  describe 'TwoStepWizard' do
+  describe 'MultiStepWizard' do
     before { Wizard.steps = [One, Two] }
 
     it 'has two steps' do
@@ -132,23 +132,42 @@ describe Wizards::Base do
     end
   end
 
-  describe 'ThreeStepConditionalWizard' do
+  describe '::step_after' do
     before { Wizard.steps = [One, Two, Three] }
 
-    it 'moving on steps to Two and then Three' do
-      wizard.move_on
-      expect(wizard.current_step).to eq 1
-      expect(wizard.step_at(wizard.current_step)).to be_instance_of(Two)
-
-      wizard.move_on
-      expect(wizard.current_step).to eq 2
-      expect(wizard.step_at(wizard.current_step)).to be_instance_of(Three)
+    it 'finds next step' do
+      expect(Wizard.step_after(:_start)).to eq 'one'
+      expect(Wizard.step_after(One)).to eq 'two'
+      expect(Wizard.step_after(Two)).to eq 'three'
+      expect(Wizard.step_after(Three)).to be_nil
     end
 
-    xit 'may skip second step on steps to Two and then Three' do
-      wizard.move_on
-      expect(wizard.current_step).to eq 2
-      expect(wizard.step_at(wizard.current_step)).to be_instance_of(Three)
+    it 'finds next step with symbol' do
+      expect(Wizard.step_after(:_start)).to eq 'one'
+      expect(Wizard.step_after(:one)).to eq 'two'
+      expect(Wizard.step_after(:two)).to eq 'three'
+      expect(Wizard.step_after(:three)).to be_nil
     end
   end
+
+  describe 'Step order' do
+    before { Wizard.steps = [One, Two, Three] }
+
+    it 'by default builds steps in order as defined' do
+      expect(steps.map(&:class)).to eq [One, Two, Three]
+    end
+
+    it 'step order can be customized by overriding #step_after' do
+      allow(wizard).to receive(:step_after) do |s|
+        case s
+        when :_start then :three
+        when :three then :one
+        else nil
+        end
+      end
+
+      expect(steps.map(&:class)).to eq [Three, One]
+    end
+  end
+
 end

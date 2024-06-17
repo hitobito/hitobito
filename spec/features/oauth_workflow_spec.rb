@@ -23,29 +23,43 @@ describe 'OauthWorkflow' do
   end
 
   it 'creates access_grant for the user' do
-    skip "window_handles not supported on travis"
     app = Oauth::Application.create!(name: 'MyApp', redirect_uri: redirect_uri)
     visit oauth_application_path(app)
     click_link 'Autorisierungen'
 
-    new_window = window_opened_by { click_link 'Autorisieren' }
+    click_link 'Autorisieren'
 
-    within_window new_window do
-      expect(page).to have_content 'Autorisierung erforderlich'
-      expect(page).to have_content 'Soll MyApp für die Benutzung dieses Accounts autorisiert werden?'
-      expect(page).to have_content 'Diese Anwendung wird folgende Rechte haben:'
-      expect(page).to have_content 'Lesen deiner E-Mail Adresse'
+    expect(page).to have_text 'Autorisierung erforderlich'
+    expect(page).to have_content 'Soll MyApp zur Nutzung dieses Kontos autorisiert werden?'
+    expect(page).to have_content 'Diese Anwendung erhält folgende Berechtigungen:'
+    expect(page).to have_content 'Lesen deiner E-Mail Adresse'
 
-      expect do
-        click_button 'Autorisieren'
-        expect(page).to have_content 'Autorisierungscode'
-      end.to change { app.access_grants.count }.by(1)
+    expect do
+      click_button 'Autorisieren'
+      expect(page).to have_content 'Autorisierungscode'
+    end.to change { app.access_grants.count }.by(1)
 
-      code = find('#authorization_code').text
-      visit oauth_application_path(app)
-      click_link 'Autorisierungen'
-      expect(page).not_to have_content code
-    end
+    code = find('#authorization_code').text
+    visit oauth_application_path(app)
+    click_link 'Autorisierungen'
+    expect(page).not_to have_content code
+  end
+
+  it 'creates access_grant and skips consent' do
+    app = Oauth::Application.create!(name: 'MyApp', redirect_uri: redirect_uri, skip_consent_screen: true)
+    visit oauth_application_path(app)
+    click_link 'Autorisierungen'
+
+    expect do
+      click_link 'Autorisieren'
+
+      expect(page).to have_text 'Autorisierungscode'
+    end.to change { app.access_grants.count }.by(1)
+
+    code = find('#authorization_code').text
+    visit oauth_application_path(app)
+    click_link 'Autorisierungen'
+    expect(page).not_to have_content code
   end
 
   it 'creates access_token for the user' do

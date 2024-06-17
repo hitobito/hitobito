@@ -741,6 +741,7 @@ de:
         uid: Client ID
         secret: Client secret
         redirect_uri: Redirect URIs
+        skip_consent_screen: Einwilligung überspringen
 
       people_relation:
         head_id: Person

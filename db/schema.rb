@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_05_03_120000) do
+ActiveRecord::Schema.define(version: 2024_06_17_131402) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -766,6 +766,7 @@ ActiveRecord::Schema.define(version: 2024_05_03_120000) do
     t.boolean "confidential", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "skip_consent_screen", default: false
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 

@@ -94,14 +94,14 @@ module Group::NestedSet
     display_name.downcase
   end
 
-  private
-
   def sorting_required?
     name_changed? || short_name_changed?
   end
 
+  private
+
   def store_new_display_name
-    @move_to_new_name = name_changed? || short_name_changed? ? sorting_name : false
+    @move_to_new_name = sorting_required? ? sorting_name : false
     true # force callback to return true
   end
 

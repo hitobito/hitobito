@@ -62,7 +62,9 @@ module Sortable
     # Return the sort expression to be used in the list query.
     def sort_expression
       if sort_expression_attrs.empty?
-        Array(sort_columns).collect { |c| "#{model_class.table_name}.#{c} #{sort_dir} NULLS LAST" }.join(', ')
+        Array(sort_columns).collect { 
+                                      |c| "#{model_class.table_name}.#{c} #{sort_dir} NULLS LAST" 
+                                    }.join(', ')
       else
         Array(sort_columns).collect { |c| "#{c} #{sort_dir} NULLS LAST" }.join(', ')
       end

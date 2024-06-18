@@ -65,7 +65,7 @@ class AddressConverter
   end
 
   def failed_info
-    incomplete_info[0..1]
+    incomplete_info[0..2]
   end
 
   def incomplete?
@@ -73,7 +73,7 @@ class AddressConverter
   end
 
   def incomplete_info
-    [@contactable.id, @addr, structured_address]
+    [@contactable.id, @contactable.to_s, @addr, structured_address]
   end
 
   private
@@ -183,7 +183,8 @@ class Splitter
 
   def split
     header = CSV.generate(col_sep: ';') do |csv|
-      csv << ['Typ', 'id', 'alte Adresse', 'Ergebnis', 'c/o', 'Strasse', 'Hausnummer', 'Postfach']
+      csv << ['Typ', 'id', 'Name', 'alte Adresse', 'Ergebnis', 'c/o', 'Strasse', 'Hausnummer',
+              'Postfach']
     end
     write_report(header)
 
@@ -226,7 +227,7 @@ class Splitter
     total_batches = (count / 1000.0).ceil
 
     scope.find_in_batches(batch_size: 1000).with_index do |batch, number|
-      puts "   -> splitting #{name}-batch #{number + 1} / #{total_batches}"
+      puts "   -> splitting #{name}: Batch #{number + 1} / #{total_batches}"
       batch.each do |contactable|
         AddressConverter.convert(
           contactable,
@@ -240,11 +241,11 @@ class Splitter
 
     # reporting
     report = CSV.generate(col_sep: ';') do |csv|
-      errors.each do |id, old_addr, new_addr|
-        csv << [name, id, old_addr, 'partial', *new_addr.values]
+      errors.each do |id, title, old_addr, new_addr|
+        csv << [name, id, title, old_addr, 'partial', *new_addr.values]
       end
-      fails.each do |id, old_addr|
-        csv << [name, id, old_addr, 'failed', nil, nil, nil, nil]
+      fails.each do |id, title, old_addr|
+        csv << [name, id, title, old_addr, 'failed', nil, nil, nil, nil]
       end
     end
     write_report(report) if report.present?
@@ -306,7 +307,14 @@ class SplitAddresses < ActiveRecord::Migration[6.1]
     splitter = Splitter.new(report)
     splitter.split
 
-    ReportMailer.new(report).send
+    say_with_time 'Sending Report' do
+      say 'to STDOUT', true
+      puts report.read
+
+      say 'by mail', true
+      ReportMailer.new(report).send
+    end
+
 
     splitter.clean
   end

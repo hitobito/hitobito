@@ -685,7 +685,6 @@ fr:
       distribution: Répartition
     self_registration:
       form:
-        main_person_title: Données personnelles
         privacy_policy_caption: "J'accepte les conditions suivantes:"
         submit: Créer un compte
         has_account: Tu as déjà un compte?

@@ -643,7 +643,6 @@ en:
       distribution: Distribution
     self_registration:
       form:
-        main_person_title: Personal data
         privacy_policy_caption: "I agree to the following provisions:"
         submit: Register
         has_account: Do you already have a login?

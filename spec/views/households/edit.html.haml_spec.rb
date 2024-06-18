@@ -27,6 +27,12 @@ describe 'households/edit.html.haml' do
                                     parents: [group, person])
   end
 
+  describe 'address info' do
+    it 'renders info' do
+      expect(dom).to have_css('strong', text: 'Alle Personen teilen sich dieselbe Adresse.')
+      expect(dom).to have_css('address', text: '1235 Mustertown')
+    end
+  end
 
   describe 'messages' do
     it 'is empty without warnings or errors' do
@@ -112,11 +118,6 @@ describe 'households/edit.html.haml' do
 
   describe 'update_form' do
     let(:form) { dom.find("form[action='#{group_person_household_path}']") }
-
-    it 'renders address info' do
-      expect(form).to have_css('strong', text: 'Alle Personen teilen sich dieselbe Adresse.')
-      expect(form).to have_css('address', text: '1235 Mustertown')
-    end
 
     it 'has save button and cancel link' do
       person.save!

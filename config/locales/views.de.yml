@@ -826,11 +826,11 @@ de:
   households:
     edit:
       title: Haushalt verwalten
+      shared_address_info: Alle Personen teilen sich dieselbe Adresse.
+      placeholder_search_person: Person suchen und hinzufügen ...
     members_table_row:
       unconfirmed_email_info: Die E-Mail Adresse muss bestätigt werden, bevor
         die Person aus der Familie entfernt werden kann.
-    update_form:
-      shared_address_info: Alle Personen teilen sich dieselbe Adresse.
 
   hitobito_log_entries:
     tabs:

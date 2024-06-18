@@ -4,13 +4,13 @@
 - #  https://github.com/hitobito/hitobito.
 
 - if entry.errors.any?
-  #error_explanation.alert.alert-danger
+  #error_explanation.alert.alert-danger.mt-5
     %ul
       - entry.errors.messages.values.flatten.each do |msg|
         %li= msg
 
 - elsif entry.warnings.any?
-  #warning_explanation.alert.alert-warning
+  #warning_explanation.alert.alert-warning.mt-5
     %ul
       - entry.warnings.messages.values.flatten.each do |msg|
         %li= msg

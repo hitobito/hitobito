@@ -902,7 +902,7 @@ ActiveRecord::Schema.define(version: 2024_06_17_131402) do
     t.string "housenumber", limit: 20
     t.string "address_care_of"
     t.string "postbox"
-    t.string "sort_name", default: -> { "\nCASE\n    WHEN company THEN company_name\n    WHEN ((last_name IS NOT NULL) AND (first_name IS NOT NULL)) THEN ((((last_name)::text || ' '::text) || (first_name)::text))::character varying\n    WHEN (last_name IS NOT NULL) THEN last_name\n    WHEN (first_name IS NOT NULL) THEN first_name\n    WHEN (nickname IS NOT NULL) THEN nickname\n    ELSE ''::character varying\nEND" }
+    t.string "sort_name"
     t.index ["authentication_token"], name: "index_people_on_authentication_token"
     t.index ["confirmation_token"], name: "index_people_on_confirmation_token", unique: true
     t.index ["email"], name: "index_people_on_email", unique: true
@@ -913,6 +913,44 @@ ActiveRecord::Schema.define(version: 2024_06_17_131402) do
     t.index ["reset_password_token"], name: "index_people_on_reset_password_token", unique: true
     t.index ["self_registration_reason_id"], name: "index_people_on_self_registration_reason_id"
     t.index ["unlock_token"], name: "index_people_on_unlock_token", unique: true
+  end
+
+  reversible do |dir|
+    dir.up do
+      execute <<-SQL
+          CREATE OR REPLACE FUNCTION set_sort_name()
+          RETURNS TRIGGER AS $$
+          BEGIN
+              IF NEW.company THEN
+                  NEW.sort_name := NEW.company_name;
+              ELSIF NEW.last_name IS NOT NULL AND NEW.first_name IS NOT NULL THEN
+                  NEW.sort_name := NEW.last_name || ' ' || NEW.first_name;
+              ELSIF NEW.last_name IS NOT NULL THEN
+                  NEW.sort_name := NEW.last_name;
+              ELSIF NEW.first_name IS NOT NULL THEN
+                  NEW.sort_name := NEW.first_name;
+              ELSIF NEW.nickname IS NOT NULL THEN
+                  NEW.sort_name := NEW.nickname;
+              ELSE
+                  NEW.sort_name := '';
+              END IF;
+              RETURN NEW;
+          END;
+          $$ LANGUAGE plpgsql;
+
+          CREATE TRIGGER before_insert_or_update_set_sort_name
+          BEFORE INSERT OR UPDATE ON people
+          FOR EACH ROW
+          EXECUTE FUNCTION set_sort_name();
+        SQL
+    end
+
+    dir.down do
+      execute <<-SQL
+          DROP TRIGGER IF EXISTS before_insert_or_update_set_sort_name ON people;
+          DROP FUNCTION IF EXISTS set_sort_name();
+        SQL
+    end
   end
 
   create_table "people_filters", id: :serial, force: :cascade do |t|

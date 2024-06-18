@@ -77,9 +77,9 @@ SQL
   echo "$cmds"
 
   if [[ -v RAILS_DB_SOCKET ]]; then
-    echo "$cmds" | mysql -u "${RAILS_DB_USERNAME:-hitobito}" -p"${RAILS_DB_PASSWORD:-hitobito}"
+    echo "$cmds" | PGPASSWORD="${RAILS_DB_PASSWORD:-hitobito}" psql -U "${RAILS_DB_USERNAME:-hitobito}" -d "${db_name}"
   else
-    echo "$cmds" | mysql -u "${RAILS_DB_USERNAME:-hitobito}" -p"${RAILS_DB_PASSWORD:-hitobito}" -h "${RAILS_DB_HOST:-127.0.0.1}" -P "${RAILS_DB_PORT:-33066}"
+    echo "$cmds" | PGPASSWORD="${RAILS_DB_PASSWORD:-hitobito}" psql -U "${RAILS_DB_USERNAME:-hitobito}" -h "${RAILS_DB_HOST:-127.0.0.1}" -p "${RAILS_DB_PORT:-33066}" -d "${db_name}"
   fi
 }
 

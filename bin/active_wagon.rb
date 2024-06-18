@@ -73,7 +73,7 @@ class Setup
     <<~DIRENV
       #{ "PATH_add ../hitobito/bin" unless core }
       PATH_add bin
-      export RAILS_DB_ADAPTER=mysql2
+      export RAILS_DB_ADAPTER=postgresql
       export RAILS_DB_HOST=127.0.0.1
       export RAILS_DB_PORT=33066
       export RAILS_DB_USERNAME=hitobito

@@ -4,8 +4,14 @@
 - #  https://github.com/hitobito/hitobito.
 
 - title t('.title')
+
+.mb-5
+  %strong= t('.shared_address_info')
+  %address= Households::Address.new(entry).oneline
+
 = turbo_frame_tag(:edit_household) do
-  = render 'messages'
-  = render 'members_table'
-  = render 'edit_form'
-  = render 'update_form'
+  .household-edit
+    = render 'members_table'
+    = render 'edit_form'
+    = render 'messages'
+    = render 'update_form'

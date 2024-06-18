@@ -201,6 +201,10 @@ class Splitter
     handle_models(:erase_address)
   end
 
+  def obsolete?
+    [Person, Group].map { |model| with_address(model).count }.sum.zero?
+  end
+
   private
 
   def handle_models(method)
@@ -286,6 +290,8 @@ class ReportMailer
   end
 
   def send
+    return if sending_not_possible
+
     report = @report
 
     mail = Mail.new do
@@ -303,11 +309,26 @@ class ReportMailer
 
     mail.deliver
   end
+
+  private
+
+  def sending_not_possible
+    [
+      ENV.fetch('RAILS_HOST_NAME', nil),
+      ENV.fetch('RAILS_MAIL_DELIVERY_METHOD', nil),
+      ENV.fetch('RAILS_MAIL_DELIVERY_CONFIG', nil)
+    ].compact.empty?
+  end
 end
 
 class SplitAddresses < ActiveRecord::Migration[6.1]
   def up
     splitter = Splitter.new(String.new.dup)
+    if splitter.obsolete?
+      say 'no addresses to split found, skipping.'
+      return
+    end
+
     splitter.split
 
     say_with_time 'Sending Report' do
@@ -325,6 +346,8 @@ class SplitAddresses < ActiveRecord::Migration[6.1]
 
   def down
     # not entirely true, it would be reversible, I do not see the point
+    # if you want: just join the new structured fields into the address field
+    # and save the model.
     raise ActiveRecord::IrreversibleMigration
   end
 end

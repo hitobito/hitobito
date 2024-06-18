@@ -13,21 +13,12 @@ module SearchStrategies
     SEARCH_FIELDS = {
       'Person' => {
         attrs: ['people.first_name', 'people.last_name', 'people.company_name', 'people.nickname',
-                'people.company', 'people.email', 'people.zip_code',
-                'people.town', 'people.country', 'people.birthday', 'people.additional_information',
+                'people.company', 'people.email',
+                'people.address_care_of', 'people.street', 'people.housenumber', 'people.postbox',
+                'people.zip_code', 'people.town', 'people.country',
+                'people.birthday', 'people.additional_information',
                 'phone_numbers.number', 'social_accounts.name',
-                'additional_emails.email'].then do |attrs|
-                 if FeatureGate.enabled?('structured_addresses')
-                   attrs << 'people.address_care_of'
-                   attrs << 'people.street'
-                   attrs << 'people.housenumber'
-                   attrs << 'people.postbox'
-                 else
-                   attrs << 'people.address'
-                 end
-
-                 attrs
-               end,
+                'additional_emails.email'],
         joins: ['LEFT JOIN phone_numbers ON phone_numbers.contactable_id = people.id AND ' \
                 "phone_numbers.contactable_type = 'Person'",
                 'LEFT JOIN social_accounts ON social_accounts.contactable_id = people.id AND ' \
@@ -37,7 +28,8 @@ module SearchStrategies
       },
       'Group' => {
         attrs: ['groups.name', 'groups.short_name', 'groups.email',
-                'groups.address', 'groups.zip_code', 'groups.town',
+                'groups.address_care_of', 'groups.street', 'groups.housenumber', 'groups.postbox',
+                'groups.zip_code', 'groups.town',
                 'groups.country', 'parent.name', 'parent.short_name',
                 'phone_numbers.number', 'social_accounts.name',
                 'additional_emails.email'],

@@ -28,7 +28,8 @@ module SearchStrategies
       },
       'Group' => {
         attrs: ['groups.name', 'groups.short_name', 'groups.email',
-                'groups.address', 'groups.zip_code', 'groups.town',
+                'groups.address_care_of', 'groups.street', 'groups.housenumber', 'groups.postbox',
+                'groups.zip_code', 'groups.town',
                 'groups.country', 'parent.name', 'parent.short_name',
                 'phone_numbers.number', 'social_accounts.name',
                 'additional_emails.email'],

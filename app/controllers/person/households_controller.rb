@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2021, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -19,7 +19,7 @@ class Person::HouseholdsController < ApplicationController
   protected
 
   def permitted_address_fields
-    [:address, :zip_code, :town, :country]
+    [:address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country]
   end
 
   private

@@ -682,7 +682,6 @@ it:
       distribution: Distribuzione
     self_registration:
       form:
-        main_person_title: Dati personali
         privacy_policy_caption: "Dichiaro di essere d'accordo con le seguenti disposizioni:"
         submit: Crea un account
         has_account: Avete già un login?

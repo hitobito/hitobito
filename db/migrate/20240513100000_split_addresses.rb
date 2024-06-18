@@ -110,7 +110,8 @@ class AddressConverter
 
   def address_in_line(line)
     only_street_and_number(line)
-    return true if line == @contactable.address
+    return true if line == [@contactable.street,
+                            @contactable.housenumber].compact.join(' ').presence
 
     @contactable.restore_attributes(%w(street housenumber))
 
@@ -139,7 +140,7 @@ class AddressConverter
   def new_address
     [
       @contactable.address_care_of,
-      @contactable.address,
+      [@contactable.street, @contactable.housenumber].compact.join(' ').presence,
       @contactable.postbox
     ].compact
   end
@@ -155,7 +156,7 @@ class AddressConverter
   # checks
 
   def same_address?
-    sanitized_address == @contactable.address
+    sanitized_address == [@contactable.street, @contactable.housenumber].compact.join(' ').presence
   end
 
   def same_complete_address?
@@ -168,7 +169,7 @@ class AddressConverter
   end
 
   def address_with_question_marks?
-    sanitized_address.gsub(/\?+$/, '').strip == @contactable.address
+    sanitized_address.gsub(/\?+$/, '').strip == [@contactable.street, @contactable.housenumber].compact.join(' ').presence
   end
 
   def only_question_marks?

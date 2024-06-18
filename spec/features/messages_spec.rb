@@ -32,6 +32,8 @@ describe :messages, js: true do
     end
 
     it 'displays recipient info' do
+      people(:top_leader).update!(address: nil, zip_code: nil, town: "Supertown")
+
       click_link('Brief erstellen')
 
       is_expected.to have_selector('a', text: 'Brief wird für 3 Personen erstellt.')
@@ -81,6 +83,8 @@ describe :messages, js: true do
     end
 
     it 'creates new letter and assignment' do
+      people(:top_leader).update!(address: nil, zip_code: nil, town: "Supertown")
+
       click_link('Brief erstellen')
 
       is_expected.to have_selector('a', text: 'Brief wird für 3 Personen erstellt.')

@@ -7,7 +7,7 @@
 
 class MigrateInvoiceConfigsToQr < ActiveRecord::Migration[6.1]
   def up
-    execute 'UPDATE invoice_configs SET payment_slip="qr"'
+    execute 'UPDATE invoice_configs SET payment_slip = \'qr\''
     change_column :invoice_configs, :payment_slip, :string, default: :qr
   end
 

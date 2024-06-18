@@ -581,7 +581,7 @@ describe Event::ParticipationsController do
         expect(assigns(:participation).additional_information).to eq('Vegetarier')
       end
 
-      it 'can handle wide unicode characters (esp. emoji)', :mysql do
+      it 'can handle wide unicode characters (esp. emoji)' do
         post :create, params: { group_id: group.id, event_id: course.id,
                                 event_participation: { additional_information: 'Vegetarier😝' } }
 

@@ -25,6 +25,11 @@
 #
 
 class Address < ActiveRecord::Base
+
+  SEARCHABLE_ATTRS = :street_short, :town, :zip_code, :numbers
+
+  include PgSearchable
+
   serialize :numbers, Array
 
   validates_by_schema
@@ -62,6 +67,6 @@ class Address < ActiveRecord::Base
   end
 
   def label_with_number(number)
-    "#{street_short} #{number} #{town}"
+    "#{street_short} #{number} #{zip_code} #{town}"
   end
 end

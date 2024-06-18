@@ -16,7 +16,14 @@ class Event::Filter
   end
 
   def list_entries
-    sort_expression ? scope.distinct.reorder(sort_expression) : scope.distinct
+    if sort_expression.is_a?(String)
+      sort_expression_query_value = sort_expression.split(".")[1]
+    elsif sort_expression.is_a?(Hash)
+      sort_expression_query_value = 
+        "#{sort_expression.keys[0].split(".")[1]} #{sort_expression.values[0]}"
+    end
+
+    sort_expression ? scope.reorder(sort_expression_query_value) : scope
   end
 
   def scope
@@ -31,7 +38,7 @@ class Event::Filter
       .where(type: type)
       .includes(:groups, :translations, :events_groups)
       .left_joins(:translations)
-      .in_year(year)
+      .in_year(year, true)
       .preload_all_dates
   end
 

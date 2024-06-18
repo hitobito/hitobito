@@ -31,7 +31,7 @@ Rails.application.reloader.to_prepare do
       'Errno::EFAULT',
       'Errno::ENETUNREACH',
       'Errno::ENOMEM',
-      'Mysql2::Error::ConnectionError',
+      'PG::ConnectionBad',
       'Net::OpenTimeout',
       'Net::ReadTimeout',
       'SignalException',

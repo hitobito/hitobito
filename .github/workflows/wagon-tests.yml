@@ -75,20 +75,19 @@ jobs:
       RAILS_ENV: test
 
     services:
-      services:
-        postgres:
-          image: postgres:16
-          env:
-            POSTGRES_USER: hitobito
-            POSTGRES_PASSWORD: hitobito
-            POSTGRES_DB: hitobito_test
-          ports:
-            - '5432:5432'
-          options: >-
-            --health-cmd "pg_isready -U hitobito"
-            --health-interval 10s
-            --health-timeout 10s
-            --health-retries 10
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: hitobito
+          POSTGRES_PASSWORD: hitobito
+          POSTGRES_DB: hitobito_test
+        ports:
+          - '5432:5432'
+        options: >-
+          --health-cmd "pg_isready -U hitobito"
+          --health-interval 10s
+          --health-timeout 10s
+          --health-retries 10
       memcached:
         image: 'memcached'
         ports: [ '11211:11211' ]

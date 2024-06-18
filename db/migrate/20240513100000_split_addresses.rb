@@ -169,7 +169,9 @@ class AddressConverter
   end
 
   def address_with_question_marks?
-    sanitized_address.gsub(/\?+$/, '').strip == [@contactable.street, @contactable.housenumber].compact.join(' ').presence
+    sanitized_address.gsub(/\?+$/,
+                           '').strip == [@contactable.street,
+                                         @contactable.housenumber].compact.join(' ').presence
   end
 
   def only_question_marks?
@@ -178,8 +180,11 @@ class AddressConverter
 end
 
 class Splitter
+  attr_reader :report
+
   def initialize(report)
     @report = report
+    write_report("Database-Name: #{ActiveRecord::Base.connection.current_database}\n")
   end
 
   def split
@@ -271,7 +276,7 @@ class Splitter
   end
 
   def write_report(content)
-    File.open(@report.to_s, 'a') { |f| f << content }
+    @report << content
   end
 end
 
@@ -288,7 +293,7 @@ class ReportMailer
       to Settings.root_email
       subject 'Migration to structured addresses'
       body 'Attached is the report about the migration.'
-      add_file filename: 'report.csv', content: report.read
+      add_file filename: 'report.csv', content: report
     end
 
     mail.delivery_method(
@@ -302,20 +307,18 @@ end
 
 class SplitAddresses < ActiveRecord::Migration[6.1]
   def up
-    report = Pathname.new('/tmp/migration-report.csv')
-    report.truncate(0)
-
-    splitter = Splitter.new(report)
+    splitter = Splitter.new(String.new.dup)
     splitter.split
 
     say_with_time 'Sending Report' do
+      report = splitter.report
+
       say 'to STDOUT', true
-      puts report.read
+      puts report
 
       say 'by mail', true
       ReportMailer.new(report).send
     end
-
 
     splitter.clean
   end

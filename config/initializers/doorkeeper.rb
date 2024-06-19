@@ -228,9 +228,9 @@ Doorkeeper.configure do
   # so that the user skips the authorization step.
   # For example if dealing with a trusted application.
   #
-  # skip_authorization do |resource_owner, client|
-  #   client.superapp? or resource_owner.admin?
-  # end
+  skip_authorization do |_resource_owner, client|
+    Oauth::Application.where(uid: client.application.uid, skip_consent_screen: true).exists?
+  end
 
   # WWW-Authenticate Realm (default "Doorkeeper").
   #
@@ -256,6 +256,7 @@ end
  [Doorkeeper::AccessGrant, :token]].each do |clazz, attribute|
    clazz._validators[attribute].each do |v|
      next unless v.is_a?(ActiveRecord::Validations::UniquenessValidator)
+
      v.instance_variable_set('@options', v.options.merge(case_sensitive: false).freeze)
    end
  end

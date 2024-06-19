@@ -14,6 +14,8 @@
                         { id: "oauth_application_scope_#{scope}" })
         = format_doorkeeper_application_scope(scope).html_safe
 
+  = f.labeled_boolean_field :skip_consent_screen, caption: t('.skip_consent_screen_explanation')
+
   = field_set_tag do
     = f.labeled :logo, class: 'mt-1' do
       = f.file_field :logo, type: :file, accept: Settings.application.image_upload.content_types.join(','), class: 'form-control form-control-sm'

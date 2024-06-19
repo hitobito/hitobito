@@ -109,9 +109,7 @@ class FeatureGate
     SelfRegistrationReason.exists?
   end
 
-  def structured_addresses_enabled?
-    ENV['RAILS_STRUCTURED_ADDRESSES'].to_s == '1'
-  end
+  def structured_addresses_enabled? = true
 
   def address_migration_enabled?
     ENV['RAILS_ADDRESS_MIGRATION'].to_s == '1'

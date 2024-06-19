@@ -17,9 +17,17 @@ module Export::Tabular
 
     attr_reader :entry, :format
 
-    def initialize(entry, format = nil)
+    # setter is needed as some child-classes redefine the
+    # `initialize`-methode with only two parameters.
+    # Due to this, generic calls (i.e. from Export::Tabular::Base)
+    # can not set ability when initializing
+    # todo: refactor all child-classes to new interface
+    attr_accessor :ability
+
+    def initialize(entry, format = nil, ability = nil)
       @entry = entry
       @format = format
+      @ability = ability
     end
 
     def fetch(attr)
@@ -27,6 +35,13 @@ module Export::Tabular
     end
 
     private
+
+    def can?(*args)
+      if not ability
+        raise "Ability not initialized yet."
+      end
+      ability.can?(*args)
+    end
 
     def value_for(attr)
       if dynamic_attribute?(attr.to_s)

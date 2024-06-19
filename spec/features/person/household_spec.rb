@@ -26,6 +26,14 @@ describe HouseholdsController, js: true do
     end.to change { household.reload.members.count }.by(1)
   end
 
+  it 'can navigate to a person from the household' do
+    visit edit_group_person_household_path(groups(:top_group).id, person.id)
+    within('#edit_household') do
+      click_link(person.to_s)
+    end
+    expect(page).to have_current_path(group_person_path(groups(:top_group).id, person.id))
+  end
+
   it 'can remove person from household' do
     household.add(bottom_member)
     expect(household.save).to eq true

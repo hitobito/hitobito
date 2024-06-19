@@ -12,5 +12,5 @@
         = icon(:'trash-alt')
 
   %td
-    %strong= link_to(member.person, member.person)
+    %strong= link_to(member.person, person_home_path(member.person), data: {turbo_frame: :_top})
     %span= "(#{member.person.years})" if member.person.years

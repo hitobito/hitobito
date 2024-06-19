@@ -23,6 +23,7 @@ describe 'households/edit.html.haml' do
   before do
     controller.request.path_parameters[:group_id] = group.id
     controller.request.path_parameters[:person_id] = person.id
+    allow(view).to receive(:person_home_path).and_return('')
     allow(view).to receive_messages(entry: household, person: person,
                                     parents: [group, person])
   end

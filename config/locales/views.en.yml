@@ -15,6 +15,7 @@ en:
     selected: selected
     columns: Columns
     start_on: from%{date}
+    not_allowed: "insufficient permissions"
     gender:
       male: male
       female: female
@@ -30,6 +31,7 @@ en:
       deleted_entry: Deleted Entry %{class_name} (#%{class_id})
     button:
       save: Save
+      add: Add
       add_another: Save and add more
       cancel: Cancel
       close: close
@@ -38,6 +40,7 @@ en:
       refresh: Update
       print: Print
       copy: Copy
+      next: Next
     link:
       show: Show
       edit: Edit
@@ -245,6 +248,7 @@ en:
         body:
           greeting: "Hello %{name}!"
           information_html: "You can confirm your email address using the following link:"
+          link_text: "confirm %{email}"
           footer: "This email was sent by Hitobito"
       reset_password_instructions:
         subject: "Instructions for setting your password"
@@ -319,6 +323,8 @@ en:
         failure: "Upload failed: %{errors}."
       destroy:
         failure: "Failed to delete: %{errors}."
+      update:
+        failure: "Upload failed: %{errors}."
     kinds:
       form:
         help_minimum_age: "Years (vintage on the first course date is decisive)"

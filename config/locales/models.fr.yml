@@ -849,8 +849,14 @@ fr:
         name: Nom
         description: Description
         publisher: Éditeur
+        subscribable_mode: Par défaut, les personnes sont
+        subscribable_modes:
+          opt_out: Inscrit (opt-out)
+          opt_in: Déconnecté (opt-in)
+        subscribable_for: s'inscrire/se désinscrire soi-même
         subscribable_fors:
           anyone: Tous
+          configured: Abonnés configurés uniquement
           nobody: Personne
         mail_name: Adresse de la liste de diffusion
         mail_address: Liste de diffusion

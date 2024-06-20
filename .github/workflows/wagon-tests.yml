@@ -19,6 +19,10 @@ on:
         description: Use a specific version of the wagon dependency for the workflow run. Defaults to master.
         type: string
         default: ''
+      main_branch:
+        description: Speficy which branch should be regarded as the main branch of core and dependency wagon. Statuscope will only be notified if the core and dependency refs match this branch.
+        type: string
+        default: master
     secrets:
       HEARTBEAT_URL:
         description: 'URL to the heartbeat-application'
@@ -190,7 +194,7 @@ jobs:
   notify_statuscope:
     uses: ./.github/workflows/notify-statuscope.yml
     needs: [ wagon_rubocop, wagon_specs, wagon_feature_specs ]
-    if: ( success() || failure() ) && ( github.ref_name == 'master' ) && ( (inputs.core_ref || 'master') == 'master' ) && ( (inputs.wagon_dependency_ref || 'master') == 'master' )
+    if: ( success() || failure() ) && ( github.ref_name == 'master' ) && ( (inputs.core_ref || inputs.main_branch) == inputs.main_branch ) && ( (inputs.wagon_dependency_ref || inputs.main_branch) == inputs.main_branch )
     with:
       repository: ${{ inputs.wagon_repository }}
       test_result: ${{ needs.wagon_rubocop.result == 'success' && needs.wagon_specs.result == 'success' && needs.wagon_feature_specs.result == 'success' }}

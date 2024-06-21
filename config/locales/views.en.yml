@@ -316,6 +316,7 @@ en:
       waiting_list_link:
         title_active: "Remove from waiting list"
         title_inactive: "Add to waiting list"
+        label: "national waiting list"
       popover_waiting_list:
         waiting_list_info: Put this person on the waiting list for courses of of %{event_kind}.
     attachments:
@@ -686,6 +687,11 @@ en:
     choose_group: "Please select a group."
   group_decorator:
     archived_suffix: "(archived)"
+  households:
+    edit:
+      placeholder_search_person: Search for and add person...
+    members_table_row:
+      unconfirmed_email_info: The email address must be confirmed before the person can be removed from the family.
   hitobito_log_entries:
     tabs:
       all: All
@@ -999,6 +1005,8 @@ en:
       help_reactivateable_in_years: "Years from the expiration date"
     new:
       title: Create qualification kind
+  paper_trail/version_decorator:
+    by: "Modified by %{author}"
   person_duplicates:
     merge:
       new:
@@ -1054,6 +1062,14 @@ en:
         mailing_list:
           approved: "The request for access for %{person} has already been granted."
           rejected: "The request for access for %{person} has already been denied."
+    history:
+      index:
+        inactive_roles_title: "Inactive roles"
+        qualified: "Passed"
+        not_qualified: "Failed"
+        training_days:
+          one: "%{count} Training day"
+          other: "%{count} Training days"
     households:
       form:
         address_updated: "Address updated"
@@ -1061,6 +1077,9 @@ en:
         lives_in_household_with: "Lives in household with"
         update_denied: "You cannot add %{other_person} to the household. This person may already be in the household, or you may not have write permissions.\n "
         cannot_create_household: "You need write permissions for multiple individuals in order to merge them into one household"
+    family:
+      fields:
+        is_in_family_with: "Is part of the family of"
     csv_imports:
       description:
         header: CSV files
@@ -1125,6 +1144,9 @@ en:
       index:
         account: Account
         last_sign_in_at: "Last Login:"
+        no_last_sign_in: "No login recorded so far"
+        person_has_2FA: This person has activated two-factor authentication.
+        person_no_2FA: This person has not activated two-factor authentication.
         security_and_privacy: Security and privacy
         override_password: "Overwrite password"
         confirm_reset: "Attention: This will overwrite the password. Do you really want that?"
@@ -1215,8 +1237,13 @@ en:
       email: "E-Mail"
       home_phone: "Private"
       mobile_phone: "Mobile"
+    privacy_policy_acceptance_field:
+      acceptance_caption:
+        for_self: "I agree to the following provisions:"
+        for_someone_else: "I confirm that I have obtained the consent of this person or their legal guardian for the following provisions:"
     roles:
       title: Active roles
+      convertable_title: Future roles
     roles_aside:
       add_role: Add role
       set_main_group: Set main group
@@ -1226,10 +1253,20 @@ en:
     export_enqueued: "Export is started in the background and downloaded after completion."
     export_email_needed: "Email needed for export."
     multiselect_actions:
+      role_actions:
+        button: Roles
+        remove: Remove roles
+        move: Move roles
+        add: Add role
       add_participation: Add to event
       tag_lists: Tags
       remove_tags: Remove tags
       add_tags: Add tags
+    login_status:
+      no_login: No Login
+      login: Login is active
+      blocked: blocked
+      not_blocked: Not blocked
   participations:
     destroy:
       flash:
@@ -1247,6 +1284,7 @@ en:
       filters_qualification_validity:
         active: Only valid qualifications
         reactivateable: Valid and reactivated qualifications
+        not_active: No valid qualifications
         all: All qualifications
       filters_role_kind:
         active: role was active
@@ -1258,6 +1296,9 @@ en:
       equal: is equal
       greater: bigger than
       smaller: smaller than
+    language:
+      title: Language
+      word_connector: "or"
     tag:
       title: Tags
       prompt_tag_selection: Include persons with at least one of these tags
@@ -1293,12 +1334,17 @@ en:
       validity:
         active: Only currently valid qualifications
         reactivateable: Valid and reactivatable qualifications
+        not_active: No valid qualifications
         all: All existing qualifications
       kind:
         deep: In the current layer and all below layers and groups
         layer: In the current layer and all its groups
         group: Only in the current group
         group_deep: In the current group and all below groups
+  self_register:
+    create:
+      flash:
+        success: You have been successfully registered
   roles:
     full_entry_label: "%{model_label} <i>%{role}</i> for <i>%{person}</i> in <i>%{group}</i>"
     role_changed: "changed %{full_entry_label} for <i>%{new_role}</i>."
@@ -1391,6 +1437,9 @@ en:
   steps_component:
     next_link: Next
     prev_link: Back
+  household_aside_component:
+    add: Create
+    manage: Manage
   subscriber:
     group:
       edit:

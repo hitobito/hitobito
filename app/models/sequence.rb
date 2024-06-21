@@ -5,42 +5,16 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-# == Schema Information
-#
-# Table name: sequences
-#
-#  id            :bigint           not null, primary key
-#  current_value :bigint           default(0), not null
-#  name          :string(255)      not null
-#
-# Indexes
-#
-#  index_sequences_on_name  (name) UNIQUE
-#
-
-# As long as we use MySQL as database, we have the limitation that we can only have one auto-
-# incrementing column per table. As a workaround, we can use this Sequence model to generate
-# a reliable incrementing sequence of numbers.
-#
-# Each sequence has a name and a current_value. The current_value is incremented each time
-# `#increment!` is called. The current_value is initialized with 0 when the sequence is created.
-#
-# Once we switch to PostgreSQL, we can use the `SEQUENCE` feature of PostgreSQL instead.
-class Sequence < ApplicationRecord
-  def self.by_name(name)
-    where(name: name).first_or_create!
+class Sequence
+  def self.current_value(sequence_name)
+    sql = "SELECT currval('#{ActiveRecord::Base.connection.quote_table_name(sequence_name)}')"
+    ActiveRecord::Base.connection.select_value(sql)
+  rescue ActiveRecord::StatementInvalid
+    select("MAX(household_key::integer) AS max_household_key").take.max_household_key
   end
 
-  def self.current_value(name)
-    by_name(name).current_value
-  end
-
-  def self.increment!(name)
-    by_name(name).increment!
-  end
-
-  def increment!
-    with_lock { update!(current_value: current_value + 1) }
-    current_value
+  def self.increment!(sequence_name)
+    sql = ActiveRecord::Base.send(:sanitize_sql_array, ["SELECT nextval(?)", sequence_name])
+    ActiveRecord::Base.connection.select_value(sql)
   end
 end

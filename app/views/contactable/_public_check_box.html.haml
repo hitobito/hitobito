@@ -3,8 +3,8 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= f.label(:public, class: 'ms-5 checkbox col-1') do
+= f.label(:public, class: 'checkbox col-12 col-sm-2 col-md-12 col-lg-3 col-xl-3 col-xxl-2 mt-sm-2 mt-md-0') do
   = f.check_box(:public)
   %span{'data-bs-toggle': 'tooltip', title: t('.tooltip')}
     = t(:"activerecord.attributes.social_account.public")
-    %i.fas.fa-info
+    %i.fas.fa-info.ms-1

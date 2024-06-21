@@ -321,19 +321,19 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def labeled_inline_fields_for(assoc, partial = nil, record = nil, required = false, &block) # rubocop:disable Metrics/MethodLength
-    html_options = { class: 'labeled controls mb-3 mt-1 d-flex ' \
-                            'justify-content-start align-items-baseline' }
+    html_options = { class: 'd-flex flex-row align-items-center flex-container mb-3' }
     css_classes = { row: true, 'mb-2': true, required: required }
     label_classes = 'control-label col-form-label col-md-3 col-xl-2 pb-1 text-md-end'
+
     label_classes += ' required' if required
     content_tag(:div, class: css_classes.select { |_css, show| show }.keys.join(' ')) do
       label(assoc, class: label_classes) +
         content_tag(:div, class: 'labeled col-md') do
           nested_fields_for(assoc, partial, record) do |fields|
             content = block_given? ? capture(fields, &block) : render(partial, f: fields)
-            content = content_tag(:div, content, class: 'col-md-10')
-
-            content << content_tag(:div, fields.link_to_remove(icon(:times)), class: 'col-md-2')
+            content = content_tag(:div, content,
+                                  class: 'col-md-11 d-flex flex-row align-items-center')
+            content << content_tag(:div, fields.link_to_remove(icon(:times)), class: 'col-md-1')
             content_tag(:div, content, html_options)
           end
         end

@@ -7,10 +7,9 @@
 
 require 'spec_helper'
 
-describe AddressesController, js: true, sphinx: true do
+describe AddressesController, js: true do
   it 'finds address, fills form fields and finds number' do
     obsolete_node_safe do
-      index_sphinx
       sign_in
       member = people(:bottom_member)
 
@@ -45,7 +44,6 @@ describe AddressesController, js: true, sphinx: true do
   it 'shows no autocomplete on non supported country' do
     obsolete_node_safe do
 
-      index_sphinx
       sign_in
       member = people(:bottom_member)
 

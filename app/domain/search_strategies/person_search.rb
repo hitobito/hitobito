@@ -6,6 +6,7 @@
 module SearchStrategies
   class PersonSearch < Base
 
+    # rubocop:disable Metrics/MethodLength
     def search_fulltext
       return no_people unless term_present?
 
@@ -13,10 +14,10 @@ module SearchStrategies
 
       search_results = if date_query?(@term)
         Person.search(reformat_date(@term))
-      else  
+      else
         Person.search(@term)
       end
-      
+
       entries = search_results
                   .accessible_by(PersonReadables.new(@user))
                   .select(pg_rank_alias) # add pg_search rank to select list of base query again
@@ -34,6 +35,7 @@ module SearchStrategies
 
       entries.uniq
     end
+    # rubocop:enable Metrics/MethodLength
 
     private
 
@@ -57,7 +59,7 @@ module SearchStrategies
     def reformat_date(date_str)
       possible_formats = ["%d.%m.%Y", "%d.%m", "%d-%m-%Y", "%d-%m"]
       formatted_date = nil
-    
+
       possible_formats.each do |format|
         begin
           date = Date.strptime(date_str, format)
@@ -67,7 +69,7 @@ module SearchStrategies
           next
         end
       end
-    
+
       if has_year?(date_str)
         formatted_date
       else

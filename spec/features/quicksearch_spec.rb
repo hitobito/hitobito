@@ -35,28 +35,26 @@ describe "Quicksearch" do
     it "finds people by birthday", js: true do
       people(:top_leader).update!(birthday: Date.new(2002, 7, 11))
 
-      index_sphinx
       sign_in
       visit root_path
 
       fill_in "quicksearch", with: "11.07.2002"
 
-      dropdown = find("ul[role="listbox"]")
-      expect(dropdown).to have_content("Top Leader, Supertown")
+      dropdown = find('ul[role="listbox"]')
+      expect(dropdown).to have_content("Top Leader, Greattown")
     end
 
     it "finds people by birthday substring", js: true do
       people(:top_leader).update!(birthday: Date.new(2002, 7, 11))
       people(:bottom_member).update!(birthday: Date.new(1993, 7, 11))
 
-      index_sphinx
       sign_in
       visit root_path
 
       fill_in "quicksearch", with: "11.07"
 
-      dropdown = find("ul[role="listbox"]")
-      expect(dropdown).to have_content("Top Leader, Supertown")
+      dropdown = find('ul[role="listbox"]')
+      expect(dropdown).to have_content("Top Leader, Greattown")
       expect(dropdown).to have_content("Bottom Member, Greattown")
     end
   end

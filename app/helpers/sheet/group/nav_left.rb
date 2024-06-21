@@ -43,7 +43,7 @@ module Sheet
         end
 
         results = []
-        recombine_groups(results, children_of, groups.first.parent_id)
+        recombine_groups(results, children_of, groups.first&.parent_id)
         results
       end
 
@@ -82,7 +82,7 @@ module Sheet
       def render_layer_groups
         out = ''.html_safe
         stack = []
-        groups[1..].each do |group|
+        Array(groups[1..]).each do |group|
           render_stacked_group(group, stack, out)
         end
         stack.size.times do

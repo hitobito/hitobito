@@ -75,7 +75,7 @@ class Setup
       PATH_add bin
       export RAILS_DB_ADAPTER=postgresql
       export RAILS_DB_HOST=127.0.0.1
-      export RAILS_DB_PORT=33066
+      export RAILS_DB_PORT=5432
       export RAILS_DB_USERNAME=hitobito
       export RAILS_DB_PASSWORD=hitobito
       export RAILS_DB_NAME=hit_#{wagon}_dev

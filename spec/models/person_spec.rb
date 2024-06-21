@@ -707,7 +707,7 @@ describe Person do
     let(:top_leader) { people(:top_leader) }
 
     before do
-      top_leader.update!(address: nil, zip_code: nil, town: "Supertown")
+      top_leader.update!(street: nil, housenumber: nil, zip_code: nil, town: "Supertown")
     end
 
     it 'lists people with last_name, address, zip_code and town' do

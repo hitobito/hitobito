@@ -373,6 +373,7 @@ en:
         password: Password
         password_confirmation: Password confirmation
         current_password: Old password
+        address_care_of: additional address line
         address: Address
         zip_code: Postal Code
         town: Place
@@ -423,6 +424,7 @@ en:
         short_name: Nickname
         email: Main e-mail
         address: Address
+        address_care_of: additional address line
         zip_code: Postal Code
         town: Place
         country: Country
@@ -442,6 +444,9 @@ en:
         self_registration_role_type: role type
         nextcloud_url: NextCloud-URL
         remove_logo: remove current group-logo
+        letter_address_positions:
+          left: Left
+          right: Right
       event:
         group_ids: Groups
         groups: Groups
@@ -473,6 +478,7 @@ en:
         applications_cancelable: Deregistration possible
         display_booking_info: Display number of registrations
         participations_visible: Visibility of participants
+        waiting_list: national waiting list
         requires_approval: Approval required
         globally_visible: Visibility
       event/contact_attrs:
@@ -724,6 +730,7 @@ en:
       message/letter:
         body: Content
         salutation: Salutation
+        date_location_text: Date and location
       message_recipient:
         address: Address
         country: Country

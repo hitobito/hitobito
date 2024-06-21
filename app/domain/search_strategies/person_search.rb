@@ -11,7 +11,11 @@ module SearchStrategies
 
       pg_rank_alias = extract_pg_ranking(Person.search(@term).to_sql)
 
-      search_results = Person.search(@term)
+      search_results = if date_query?(@term)
+        Person.search(reformat_date(@term))
+      else  
+        Person.search(@term)
+      end
       
       entries = search_results
                   .accessible_by(PersonReadables.new(@user))
@@ -48,6 +52,35 @@ module SearchStrategies
       match = query.match(/ORDER BY (\w+\.\w+)/)
       return match[1] if match
       nil
+    end
+
+    def reformat_date(date_str)
+      possible_formats = ["%d.%m.%Y", "%d.%m", "%d-%m-%Y", "%d-%m"]
+      formatted_date = nil
+    
+      possible_formats.each do |format|
+        begin
+          date = Date.strptime(date_str, format)
+          formatted_date = date.strftime("%Y-%m-%d")
+          break
+        rescue ArgumentError
+          next
+        end
+      end
+    
+      if has_year?(date_str)
+        formatted_date
+      else
+        formatted_date.slice(4..-1)
+      end
+    end
+
+    def has_year?(date_string)
+      /\b\d{4}\b/.match?(date_string)
+    end
+
+    def date_query?(date_query)
+      /\A\d{2}[.-]\d{2}([.-]\d{4})?\z/.match?(date_query)
     end
   end
 end

@@ -19,7 +19,7 @@ describe HouseholdsController, js: true do
     expect(page).to have_css('h1', text: 'Haushalt verwalten')
     fill_in 'household_add-ts-control', with: 'Bottom'
     find('span.highlight', text: 'Bottom').click
-    expect(page).to have_css '.alert-warning', text: "Die Adresse 'Supertown' wird für alle"
+    expect(page).to have_css '.alert-warning', text: "Die Adresse 'Greatstreet 345, 3456 Greattown' wird für alle"
     expect do
       click_on 'Speichern'
       expect(page).to have_text 'Haushalt wurde erfolgreich aktualisiert.'

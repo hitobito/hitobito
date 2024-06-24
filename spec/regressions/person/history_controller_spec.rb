@@ -77,7 +77,12 @@ describe Person::HistoryController, type: :controller do
       events = dom.find('#events')
 
       expect(events).to have_selector('h2', text: 'Kurse')
+      course_headers = events.all('thead tr').first
+      expect(course_headers.all('th').map(&:text)).to eq(['Name / Gruppe', 'Rolle', 'Daten', 'Qualifikation'])
+
       expect(events).to have_selector('h2', text: 'Anlässe')
+      event_headers = events.all('thead tr').last
+      expect(event_headers.all('th').map(&:text)).to eq(['Name / Gruppe', 'Rolle', 'Daten', ''])
 
       expect(events.all('tr td a').size).to eq 3
     end

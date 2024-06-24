@@ -8,8 +8,9 @@ module Wizards
       return render :new if params[:autosubmit].present?
       return save_and_redirect if wizard.valid? && wizard.last_step?
 
+
       wizard.move_on
-      render :new
+      render :new, status: :unprocessable_entity # to make it work with turbo
     end
 
     private

@@ -87,7 +87,17 @@ module Wizards
       true
     end
 
+    def method_missing(name, *args, **kwargs, &block)
+      super unless step(name)
+      step(name)
+    end
+
+    def respond_to_missing?(name, include_private = false)
+      step(name) || super
+    end
+
     private
+
 
     delegate :find_step, :step_after, to: :class, private: true
 

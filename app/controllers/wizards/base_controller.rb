@@ -28,8 +28,8 @@ module Wizards
     def wizard
       @wizard ||= model_class.new(
         current_ability:,
-        params: model_params.to_unsafe_h,
-        current_step: params[:step]
+        current_step: params[:step],
+        **model_params.to_unsafe_h,
       )
     end
 

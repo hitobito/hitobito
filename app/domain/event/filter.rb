@@ -40,6 +40,7 @@ class Event::Filter
       .left_joins(:translations)
       .in_year(year, true)
       .preload_all_dates
+      .select(:id)
   end
 
   def to_h

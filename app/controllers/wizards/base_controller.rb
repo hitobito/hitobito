@@ -1,16 +1,20 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of hitobito and licensed under the
+#  Affero General Public License version 3 or later. See the COPYING file at the top-level directory
+#  or at https://github.com/hitobito/hitobito.
+
 module Wizards
   class BaseController < ApplicationController
     helper_method :wizard
 
-    def new; end
-
     def create
-      return render :new if params[:autosubmit].present?
+      return render :show if params[:autosubmit].present?
       return save_and_redirect if wizard.valid? && wizard.last_step?
 
 
       wizard.move_on
-      render :new, status: :unprocessable_entity # to make it work with turbo
+      render :show, status: :unprocessable_entity # required for turbo to update
     end
 
     private
@@ -28,9 +32,9 @@ module Wizards
 
     def wizard
       @wizard ||= model_class.new(
-        current_ability:,
+        current_ability: current_ability,
         current_step: params[:step],
-        **model_params.to_unsafe_h,
+        **model_params.to_unsafe_h
       )
     end
 
@@ -53,6 +57,5 @@ module Wizards
     def redirect_target
       raise 'Implement in subclass'
     end
-
   end
 end

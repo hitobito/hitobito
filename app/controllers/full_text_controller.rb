@@ -25,7 +25,7 @@ class FullTextController < ApplicationController
       format.json do
         render json: query_json_results || []
       end
-    end    
+    end
   end
 
   private
@@ -38,7 +38,7 @@ class FullTextController < ApplicationController
         instance_variable_set("@#{key}", with_query { send("decorate_#{key.to_s}", result) })
       else
         instance_variable_set("@#{key}", with_query { result })
-      end 
+      end
     end
     @active_tab = active_tab
   end
@@ -55,7 +55,7 @@ class FullTextController < ApplicationController
     end
 
     results_with_separator(@people, @groups, @events, @invoices)
-  end  
+  end
 
   def results_with_separator(*sets)
     sets.select(&:present?).inject do |memo, set|

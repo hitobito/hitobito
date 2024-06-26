@@ -6,8 +6,9 @@
 Rails.application.reloader.to_prepare do
   ActsAsTaggableOn.remove_unused_tags = false
   ActsAsTaggableOn.default_parser = TagCategoryParser
-  ActsAsTaggableOn::Tag.send(:include, CategorizedTags)
-  ActsAsTaggableOn::Tag.send(:include, TooltipForTags)
+  ActsAsTaggableOn::Tag.include CategorizedTags
+  ActsAsTaggableOn::Tag.include TooltipForTags
+  ActsAsTaggableOn::Tag.include IntegrateSubscriptionTags
 
   # https://github.com/rails/rails/commit/9def05385f1cfa41924bb93daa187615e88c95b9
   ActsAsTaggableOn::Tag._validators[:name].each do |v|

@@ -120,6 +120,14 @@ namespace :db do
     puts 'Done.'
   end
 
+  namespace :seed do
+    desc 'load generic seeds'
+    task no_env: [:environment] do
+      ENV['NO_ENV'] = '1'
+      Rake::Task['db:seed'].invoke
+    end
+  end
+
   namespace :structure do
     desc "Dumps the structure.sql without having to change \
           schema_format in config/application.rb. Used by bin/wagon."

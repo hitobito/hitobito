@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2020-2022, CVP Schweiz. This file is part of
+#  Copyright (c) 2020-2024, CVP Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -15,7 +15,7 @@ class Export::Pdf::Messages::Letter
 
     delegate :group, to: 'letter'
 
-    def render(recipient, font_size: 9)
+    def render(recipient, font_size: 9) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
       stamped :render_logo_right
 
       offset_cursor_from_top 60.mm
@@ -24,9 +24,8 @@ class Export::Pdf::Messages::Letter
 
         pdf.move_down 4.mm # 3mm + 1mm from text baseline, according to post factsheet
         render_address(recipient)
-
-
       end
+
       pdf.font_size font_size do
         stamped :render_date_location_text if letter.date_location_text.present?
         stamped :render_subject if letter.subject.present?
@@ -76,7 +75,7 @@ class Export::Pdf::Messages::Letter
       shipping_method, text_height = shipping_methods[letter.shipping_method.to_sym]
       text_box("#{shipping_method}<font size='8'>#{letter.pp_post}</font>",
                inline_format: true, overflow: :truncate, single_line: true,
-               width: width, height: height, at: [0, cursor + text_height * 0.75])
+               width: width, height: height, at: [0, cursor + (text_height * 0.75)])
     end
 
     def render_shipping_info_line

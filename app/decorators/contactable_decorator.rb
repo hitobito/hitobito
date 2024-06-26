@@ -21,9 +21,9 @@ module ContactableDecorator
     prepend_complete_address(html)
 
     if FeatureGate.enabled?('structured_addresses')
-      html << address_care_of if address_care_of?
+      html << address_care_of << br if address_care_of?
       html << model.address << br if model.address.present?
-      html << postbox if postbox?
+      html << postbox << br if postbox?
     else
       html << safe_join(address.split("\n"), br) << br if address? # rubocop:disable Style/IfInsideElse
     end

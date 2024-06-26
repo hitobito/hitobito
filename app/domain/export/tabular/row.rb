@@ -50,9 +50,7 @@ module Export::Tabular
       end
     end
 
-    # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength
-    # rubocop:disable Metrics/PerceivedComplexity
-    def normalize(value)
+    def normalize(value) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength Metrics/PerceivedComplexity
       if value == true
         I18n.t('global.yes')
       elsif value == false

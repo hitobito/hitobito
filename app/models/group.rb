@@ -201,10 +201,10 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
       used_attributes.include?(attr)
     end
 
-    # order groups by type. If a parent group is given, order the types
-    # as they appear in possible_children, otherwise order them
-    # hierarchically over all group types.
-    def order_by_type(parent_group = nil)
+    # order groups based on order in Group.all_types
+    # group.name as second order attribute, to get same output for all 
+    # queries where multiple groups have the same type
+    def order_by_type
       joins("INNER JOIN group_type_orders ON group_type_orders.name = groups.type")
            .reorder("group_type_orders.order_weight ASC, groups.name ASC")
     end

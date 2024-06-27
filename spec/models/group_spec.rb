@@ -357,8 +357,7 @@ describe Group do
     end
 
     it 'has correct ordering with parent group' do
-      parent = groups(:top_layer)
-      expect(parent.children.order_by_type(parent)).to eq(
+      expect(parent.children.order_by_type).to eq(
         [groups(:top_group),
          groups(:bottom_layer_one),
          groups(:bottom_layer_two),

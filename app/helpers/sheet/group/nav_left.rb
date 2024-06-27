@@ -166,7 +166,7 @@ module Sheet
         layer.children
              .without_deleted
              .where(type: sub_layer_types)
-             .order_by_type(layer)
+             .order_by_type
       end
 
       def active_path(group)

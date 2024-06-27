@@ -21,12 +21,7 @@ module SearchStrategies
                   .accessible_by(PersonReadables.new(@user))
                   .select(pg_rank_alias) # add pg_search rank to select list of base query again
 
-      if Ability.new(@user).can?(:index_people_without_role, Person)
-        entries += search_results.where('NOT EXISTS (SELECT * FROM roles ' \
-                    "WHERE (roles.deleted_at IS NULL OR
-                            roles.deleted_at > :now) AND
-                          roles.person_id = people.id)", now: Time.now.utc.to_s(:db))
-      end
+      entries += index_people_without_role?(search_results)
 
       entries += Group::DeletedPeople.deleted_for_multiple(
         deleted_people_indexable_layers
@@ -36,6 +31,15 @@ module SearchStrategies
     end
 
     private
+
+    def index_people_without_role?(search_results)
+      if Ability.new(@user).can?(:index_people_without_role, Person)
+        search_results.where('NOT EXISTS (SELECT * FROM roles ' \
+                    "WHERE (roles.deleted_at IS NULL OR
+                            roles.deleted_at > :now) AND
+                          roles.person_id = people.id)", now: Time.now.utc.to_s(:db))
+      end
+    end
 
     def no_people
       Person.none.page(1)

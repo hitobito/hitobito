@@ -1,5 +1,3 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 group_top_layer_top_admin:
   name: Group::TopLayer::TopAdmin
   order_weight: 1

@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2016, Dachverband Schweizer Jugendparlamente. This file is part of
+#  Copyright (c) 2012-2024, Dachverband Schweizer Jugendparlamente. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -80,7 +80,7 @@ describe Person::TagsController do
   end
 
   describe 'DELETE #destroy' do
-    it 'deletes person tag' do
+    it 'deletes person taggging/assignment' do
       bottom_member.tag_list.add('lorem')
       bottom_member.save!
 
@@ -90,15 +90,13 @@ describe Person::TagsController do
           person_id: bottom_member.id,
           name: 'lorem'
         }
-      end.to change(ActsAsTaggableOn::Tag, :count).by(-1)
+      end.to change(ActsAsTaggableOn::Tagging, :count).by(-1)
 
       expect(bottom_member.tags.count).to eq(0)
       is_expected.to redirect_to group_person_path(bottom_member.groups.first, bottom_member)
     end
 
-    it 'removes assignment only if tag is still assigned to other person' do
-      top_leader.tag_list.add('lorem')
-      top_leader.save!
+    it 'does not delete the tag itself' do
       bottom_member.tag_list.add('lorem')
       bottom_member.save!
 

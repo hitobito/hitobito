@@ -13,7 +13,7 @@ class People::Destroyer
 
   def run
     destroy_leftover_family_member_entries!
-    resolve_leftover_household!
+    remove_from_household! unless @person.household.empty?
     nullify_invoices!
 
     @person.destroy!
@@ -25,8 +25,9 @@ class People::Destroyer
     leftover_family_members.destroy_all
   end
 
-  def resolve_leftover_household!
-    leftover_household_person&.update!(household_key: nil)
+  def remove_from_household!
+    @person.household.remove(@person)
+    @person.household.save!
   end
 
   def nullify_invoices!
@@ -40,10 +41,6 @@ class People::Destroyer
     FamilyMember.where(family_key: @person.family_members.pluck(:family_key))
                 .having('COUNT(*) <= 2')
                 .group(:family_key)
-  end
-
-  def leftover_household_person
-    @person.household_people.first if @person.household_people.size == 1
   end
 
   def invoice_address

@@ -92,6 +92,7 @@ class StepsComponent < ApplicationComponent
 
     def next_button(title = nil, options = {})
       type = 'submit'
+      title ||= I18n.t("#{@partial.gsub('/', '.')}.next_button", default: nil)
       title ||= if last?
                   t('groups.self_registration.form.submit')
                 else

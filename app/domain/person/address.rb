@@ -27,7 +27,7 @@ class Person::Address
 
   def person_and_company_name
     if @person.company?
-      [@person.company_name.to_s.squish, @person.full_name.to_s.squish].reject(&:blank?)
+      [@person.company_name.to_s.squish, @person.full_name.to_s.squish].compact_blank
     else
       [@person.full_name.to_s.squish]
     end

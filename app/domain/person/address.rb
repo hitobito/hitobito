@@ -11,23 +11,23 @@ class Person::Address
   end
 
   def for_letter
-    (person_and_company_name + address).compact.join("\n")
+    (person_and_company_name + full_address).compact.join("\n")
   end
 
   # Intended to be overridden in wagons which have multiple addresses per person
   def for_invoice
-    for_letter
+    (person_and_company_name + short_address).compact.join("\n")
   end
 
   def for_household_letter(members)
-    [combine_household_names(members), address].compact.join("\n")
+    [combine_household_names(members), full_address].compact.join("\n")
   end
 
   private
 
   def person_and_company_name
     if @person.company?
-      [@person.company_name.to_s.squish, @person.full_name.to_s.squish].reject(&:blank?)
+      [@person.company_name.to_s.squish, @person.full_name.to_s.squish].compact_blank
     else
       [@person.full_name.to_s.squish]
     end
@@ -37,11 +37,19 @@ class Person::Address
     members.map(&:full_name).compact.join(', ')
   end
 
-  def address
+  def full_address
     [
       @person.address_care_of.to_s.strip.presence,
       @person.address.to_s.strip,
       @person.postbox.to_s.strip.presence,
+      [@person.zip_code, @person.town].compact.join(' ').squish,
+      country
+    ].compact
+  end
+
+  def short_address
+    [
+      @person.address.to_s.strip,
       [@person.zip_code, @person.town].compact.join(' ').squish,
       country
     ].compact

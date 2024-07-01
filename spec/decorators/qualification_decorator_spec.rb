@@ -7,17 +7,16 @@
 require 'spec_helper'
 
 describe QualificationDecorator do
-  let(:kind) { Fabricate.build(:qualification_kind, required_training_days: 3) }
+  let(:kind) { Fabricate(:qualification_kind, required_training_days: 3) }
   let(:qualification) { Fabricate.build(:qualification, qualification_kind: kind) }
 
   subject(:info) { qualification.decorate.open_training_days_info }
   subject(:dom) { Capybara::Node::Simple.new(info) }
   subject(:tooltip) { info[/title="(.*?)"/, 1] }
   let(:now) { Time.zone.local(2024, 3, 22, 15, 30) }
+  around { |example| travel_to(now) { example.run } }
 
   context 'without training days' do
-    around { |example| travel_to(now) { example.run } }
-
     it 'is nil if qualification is active' do
       expect(qualification).to be_active
       expect(info).to be_nil
@@ -37,7 +36,6 @@ describe QualificationDecorator do
 
   context 'with training days' do
     before { qualification.open_training_days = 1.5 }
-    around { |example| travel_to(now) { example.run } }
 
     it 'contains days and icon but no tooltip when is active and does not expire' do
       expect(qualification).to be_active

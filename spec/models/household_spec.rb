@@ -26,6 +26,46 @@ describe Household do
     end
   end
 
+  describe '#add' do
+    it 'returns self' do
+      expect(household.add(other_person)).to eq household
+    end
+
+    it 'adds person to people' do
+      expect(household.people).not_to include(other_person)
+      household.add(other_person)
+      expect(household.people).to include(other_person)
+    end
+
+    it 'does not add duplicate person' do
+      expect(household.people).to include(person)
+      expect(household.people).to have(1).item
+      household.add(person)
+      expect(household.people).to have(1).item
+    end
+  end
+
+  describe '#remove' do
+    it 'returns self' do
+      expect(household.remove(person)).to eq household
+    end
+
+    it 'removes person from people' do
+      expect(household.people).to include(person)
+      expect(household.people).to have(1).item
+      household.remove(person)
+      expect(household.people).to be_empty
+    end
+
+    it 'ignores unknown person' do
+      expect(household.people).to include(person)
+      expect(household.people).to have(1).item
+      household.remove(other_person)
+      expect(household.people).to have(1).item
+      expect(household.people).to include(person)
+    end
+  end
+
   describe '#save' do
     it 'creates new household and assigns same address to all members' do
       person.update!(street: 'Greatstreet', housenumber: '345', zip_code: '3456', town: 'Greattown', country: 'CH')

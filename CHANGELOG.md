@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## Unreleased
+## Version 2.2
 
 *  Für jeden Anhang bei Anlässen, Kursen etc. kann neu individuell ausgewählt werden, ob der Anhang global sichtbar ist (wie bisher) oder ob nur Teilnehmende oder nur das Leitungsteam den Anhang sehen darf (hitobito_sac_cas#486)
 *  Einführung Mitgliedschaftskonzept (People::Membership) sowie Membership Verification Endpoint (Verschieben vom SKV Wagon in den Core) (hitobito#2511)

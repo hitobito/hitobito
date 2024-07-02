@@ -7,7 +7,9 @@
 
 - if grouped_roles.present?
   %section.roles
-    %h2= title
+    %h2<
+      = title
+      = render_extensions :roles_aside_title if toggle_link
 
     %table.table.table-basic
       %tbody

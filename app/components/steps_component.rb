@@ -90,13 +90,15 @@ class StepsComponent < ApplicationComponent
                   data: stimulus_target('stepContent'))
     end
 
-    def next_button(title = t('steps_component.next_link'), options = {})
+    def next_button(title = nil, options = {})
       type = 'submit'
-      if last?
-        submit_button(t('groups.self_registration.form.submit'), type, options)
-      else
-        submit_button(title, type, next_submit_button_options.merge(options))
-      end
+      title ||= I18n.t("#{@partial.gsub('/', '.')}.next_button", default: nil)
+      title ||= if last?
+                  t('groups.self_registration.form.submit')
+                else
+                  t('steps_component.next_link')
+                end
+      submit_button(title, type, next_submit_button_options.merge(options))
     end
 
     def submit_button(label, type, options)

@@ -41,6 +41,14 @@ describe Wizards::Base do
       expect(wizard.step_at(1)).to be_nil
     end
 
+    it 'can access step via method missing' do
+      expect(wizard.one).to be_kind_of(One)
+    end
+
+    it 'can access step via method missing' do
+      expect { wizard.one_two }.to raise_error(NoMethodError)
+    end
+
     it 'valid? is true if step is valid' do
       expect(steps.first).to receive(:valid?).and_return(true)
       expect(wizard).to be_valid
@@ -162,7 +170,6 @@ describe Wizards::Base do
         case s
         when :_start then :three
         when :three then :one
-        else nil
         end
       end
 

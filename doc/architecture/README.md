@@ -1,6 +1,6 @@
 # Architektur Dokumentation
 
-Diese Dokumente beschreiben die wesentlichen architekturellen Aspekte von hitobito. Die Gliederung folgt [arc42](https://www.arc42.de/template). Mit `rake doc:arch` kann die eine HTML Datei mit der gesamten Dokumentation generiert werden.
+Diese Dokumente beschreiben die wesentlichen architekturellen Aspekte von hitobito. Die Gliederung folgt [arc42](https://www.arc42.de/template). Die Dokumentation wird grundsätzlich in Deutscher Sprache geführt.
 
 ## Inhalt
 
@@ -12,6 +12,9 @@ Diese Dokumente beschreiben die wesentlichen architekturellen Aspekte von hitobi
 * [Konzepte](08_konzepte.md)
 * [Entwurfsentscheidungen](09_entwurfsentscheidungen.md)
 * [Glossar](12_glossar.md)
+
+
+Mit `rake doc:arch` kann die eine HTML Datei mit der gesamten Dokumentation generiert werden.
 
 Alle Diagramme werden mit [Draw.io](http://draw.io) erstellt und jeweils als Original .xml sowie als .svg abgespeichert.
 

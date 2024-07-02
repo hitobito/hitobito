@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-mysql_sql_cmd() {
-  CMD="mysql -uroot -phitobito -e \"$1\""
-  docker compose exec db bash -c "$CMD"
+psql_sql_cmd() {
+  CMD="psql -U hitobito -d hitobito_test -c \"$1\""
+  docker compose exec postgres bash -c "$CMD"
 }
 
 setup_test_db() {
-  mysql_sql_cmd "DROP DATABASE IF EXISTS $1;"
-  mysql_sql_cmd "CREATE DATABASE $1;"
+  psql_sql_cmd "DROP DATABASE IF EXISTS $1;"
+  psql_sql_cmd "CREATE DATABASE $1;"
 }

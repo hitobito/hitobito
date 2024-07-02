@@ -3,7 +3,7 @@ source $HIT_SCRIPT_DIR/test/test_db_setup
 source $HIT_SCRIPT_DIR/test/select_test_env
 
 # make sure db is up and running
-docker compose up db -d
+docker compose up postgres -d
 
 # ask user for environment
 HIT_TEST_ENV=$(select_test_env)

@@ -1,4 +1,4 @@
--#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
+-2005#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
@@ -33,22 +33,22 @@
                            value: f.date_value(:birthday),
                            help_inline: t('.format_birthday'),
                            class: 'col-2 form-control form-control-sm d-inline')
-  - FeatureGate.if(:person_language) do
-    = f.labeled_collection_select(:language,
-                                  Person::LANGUAGES,
-                                  :first,
-                                  :last,
-                                  { prompt: true },
-                                  class: 'form-select form-select-sm')
-
-
-= render_extensions :fields, locals: { f: f }
-
-- if has_relations && PeopleRelation.possible_kinds.present?
-  = field_set_tag do
-    = f.labeled_inline_fields_for :relations_to_tails,
-                                  'people_relation_fields',
-                                  entry.relations_to_tails.includes(:tail)
-
-= field_set_tag do
-  = f.labeled_input_field(:additional_information, help: t('.no_sensitive_information'))
+  -# - FeatureGate.if(:person_language) do
+-#     = f.labeled_collection_select(:language,
+-#                                   Person::LANGUAGES,
+-#                                   :first,
+-#                                   :last,
+-#                                   { prompt: true },
+-#                                   class: 'form-select form-select-sm')
+-#
+-#
+-# = render_extensions :fields, locals: { f: f }
+-#
+-# - if has_relations && PeopleRelation.possible_kinds.present?
+-#   = field_set_tag do
+-#     = f.labeled_inline_fields_for :relations_to_tails,
+-#                                   'people_relation_fields',
+-#                                   entry.relations_to_tails.includes(:tail)
+-#
+-# = field_set_tag do
+-#   = f.labeled_input_field(:additional_information, help: t('.no_sensitive_information'))

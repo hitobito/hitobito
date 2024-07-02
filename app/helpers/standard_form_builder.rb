@@ -25,7 +25,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   delegate :association, :column_type, :column_property, :captionize, :ta, :tag,
            :content_tag, :safe_join, :capture, :add_css_class, :assoc_and_id_attr,
-           :render, :f, :icon,
+           :render, :f, :icon,  :can?, :cannot?,
            to: :template
 
   # Render multiple input fields together with a label for the given attributes.
@@ -34,15 +34,32 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     safe_join(attrs) { |a| labeled_input_field(a, options.clone) }
   end
 
+  def can_update_personal_readonly_attrs(attr)
+    if @object.respond_to?(:personal_readonly_attrs) &&
+      @object.personal_readonly_attrs&.include?(attr.to_sym)
+      @can_readonly_attrs ||=
+        @template.current_ability && @template.can?(:update_personal_readonly_attrs, @object)
+    else
+      true
+    end
+  end
+
+  # todo: move to private and change name
+  def before_html_field(attr, html_options)
+   # todo: FORM_CONTROL_WIDTH feld auch hier rein?
+    html_options[:class] = html_options[:class].to_s
+    html_options[:class] += ' is-invalid' if errors_on?(attr)
+    html_options[:readonly] = :readonly unless can_update_personal_readonly_attrs(attr)
+    html_options
+  end
+
   # Render a corresponding input field for the given attribute.
   # The input field is chosen based on the ActiveRecord column type.
   # Use additional html_options for the input element.
   def input_field(attr, html_options = {}) # rubocop:disable Metrics/*
     type = column_type(@object, attr.to_sym)
     custom_field_method = :"#{type}_field"
-    html_options[:class] = html_options[:class].to_s
-    html_options[:class] += ' is-invalid' if errors_on?(attr)
-
+    html_options = before_html_field(attr, html_options)
     if type == :text
       text_area(attr, html_options)
     elsif association_kind?(attr, type, :belongs_to)
@@ -68,7 +85,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:class] = [
       html_options[:class], *FORM_CONTROL_WITH_WIDTH
     ].compact.join(' ')
-    html_options[:class] += ' is-invalid' if errors_on?(attr)
+    html_options = before_html_field(attr, html_options)
     super(attr, html_options)
   end
 
@@ -77,7 +94,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:class] = [
       html_options[:class], *FORM_CONTROL_WITH_WIDTH
     ].compact.join(' ')
-    html_options[:class] += ' is-invalid' if errors_on?(attr)
+    html_options = before_html_field(attr, html_options)
     html_options[:rows] ||= 5
     super(attr, html_options)
   end
@@ -87,7 +104,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:class] = [
       html_options[:class], *FORM_CONTROL
     ].compact.join(' ')
-    html_options[:class] += ' is-invalid' if errors_on?(attr)
+    html_options = before_html_field(attr, html_options)
     super(attr, html_options)
   end
 
@@ -97,7 +114,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:class] = [
       html_options[:class], 'mw-100', 'mw-md-15ch', *FORM_CONTROL
     ].compact.join(' ')
-    html_options[:class] += ' is-invalid' if errors_on?(attr)
+    html_options = before_html_field(attr, html_options)
     text_field(attr, html_options)
   end
   alias integer_field number_field
@@ -110,7 +127,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:class] = [
       html_options[:class], *FORM_CONTROL_WITH_WIDTH
     ].compact.join(' ')
-    html_options[:class] += ' is-invalid' if errors_on?(attr)
+    html_options = before_html_field(attr, html_options)
     text_field(attr, html_options)
   end
 
@@ -118,12 +135,12 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:class] = [
       html_options[:class], *FORM_CONTROL_WITH_WIDTH
     ].compact.join(' ')
-    html_options[:class] += ' is-invalid' if errors_on?(attr)
+    html_options = before_html_field(attr, html_options)
     super(attr, html_options)
   end
 
   def file_field(attr, html_options = {})
-    html_options[:class] += ' is-invalid' if errors_on?(attr)
+    html_options = before_html_field(attr, html_options)
     super(attr, html_options)
   end
 
@@ -140,7 +157,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     checked   = html_options.delete(:checked_value) { '1' }
     unchecked = html_options.delete(:unchecked_value) { '0' }
     html_options[:class] = [html_options[:class], 'form-check-input'].compact.join(' ')
-    html_options[:class] += ' is-invalid' if errors_on?(attr)
+    html_options = before_html_field(attr, html_options)
 
     content_tag(:div, class: 'form-check') do
       check_box(attr, html_options, checked, unchecked) +
@@ -154,7 +171,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:class] = [
       html_options[:class], 'mw-100', 'mw-md-20ch', 'date', *FORM_CONTROL
     ].compact.join(' ')
-    html_options[:class] += ' is-invalid' if errors_on?(attr)
+    html_options = before_html_field(attr, html_options)
     content_tag(:div, class: 'input-group') do
       content_tag(:span, icon(:'calendar-alt'), class: 'input-group-text') +
       text_field(attr, html_options)
@@ -175,14 +192,14 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a field to enter a time. You might want to customize this.
   def time_field(attr, html_options = {})
     html_options[:class] ||= 'time'
-    html_options[:class].to_s += ' is-invalid' if errors_on?(attr)
+    html_options = before_html_field(attr, html_options)
     time_select(attr, { include_blank: '', ignore_date: true }, html_options)
   end
 
   # Render a select with minutes
   def minutes_select(attr, html_options = {})
     html_options[:class] ||= 'time form-select form-select-sm'
-    html_options[:class].to_s += ' is-invalid' if errors_on?(attr)
+    html_options = before_html_field(attr, html_options)
     ma = (0..59).collect { |n| [format('%02d', n), n] }
     select(attr, ma, {}, html_options)
   end
@@ -190,7 +207,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a select with hours
   def hours_select(attr, html_options = {})
     html_options[:class] ||= 'time form-select form-select-sm'
-    html_options[:class].to_s += ' is-invalid' if errors_on?(attr)
+    html_options = before_html_field(attr, html_options)
     ma = (0..23).collect { |n| [format('%02d', n), n] }
     select(attr, ma, {}, html_options)
   end
@@ -199,7 +216,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Include DatetimeAttribute in the model to use this.
   def datetime_field(attr, html_options = {})
     html_options[:class] = [html_options[:class], *FORM_CONTROL_WITH_WIDTH].compact.join(' ')
-    html_options[:class] += ' is-invalid' if errors_on?(attr)
+    html_options = before_html_field(attr, html_options)
 
     content_tag(:div, class: 'd-flex align-items-center') do
       content_tag(:div, class: 'col-7 col-md-7
@@ -213,9 +230,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def inline_radio_button(attr, value, caption, inline = true, html_options = {})
     html_options[:class] = html_options[:class].to_s
     html_options[:class] += ' form-check-input align-label'
-    invalid = errors_on?(attr) ? " is-invalid" : ""
-    html_options[:class] += invalid
-
+    html_options = before_html_field(attr, html_options)
+    invalid = errors_on?(attr) ? " is-invalid" : "" # todo check if correct
     radio_button(attr, value, html_options) +
     label(id_from_value(attr, value),
           class: "radio#{' inline' if inline} mt-2 form-check-label" + invalid) do
@@ -234,6 +250,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     checked = @object.send(attr).to_s.split(', ').include?(value)
     hidden_field = index.zero? ? @template.hidden_field_tag(name, index) : ''
     invalid = errors_on?(attr) ? " is-invalid" : ""
+    # todo: add before_html_field
 
     @template.check_box_tag(name, index + 1, checked,
                             id: sanitized_id,
@@ -245,8 +262,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def inline_check_box(attr, value, caption, html_options = {}) # rubocop:disable Metrics/MethodLength
-    html_options[:class] = html_options[:class].to_s
-    html_options[:class] += ' is-invalid' if errors_on?(attr)
+    html_options = before_html_field(attr, html_options)
     model_param = klass.model_name.param_key
     name = "#{model_param}[#{attr}][]"
     id = id_from_value(attr, value)
@@ -266,7 +282,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:class] = [
       html_options[:class], *FORM_CONTROL_SELECT_WITH_WIDTH
     ].compact.join(' ')
-    html_options[:class] += ' is-invalid' if errors_on?(attr)
+    html_options = before_html_field(attr, html_options)
     list = association_entries(attr, html_options)
     if list.present?
       collection_select(attr, list, :id, :to_s, collection_prompt(attr, html_options), html_options)
@@ -285,7 +301,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:class] = [
       html_options[:class], *FORM_CONTROL_SELECT_WITH_WIDTH
     ].compact.join(' ')
-    html_options[:class] += ' is-invalid' if errors_on?(attr)
+    html_options = before_html_field(attr, html_options)
 
     add_css_class(html_options, 'multiselect')
     belongs_to_field(attr, html_options)
@@ -295,7 +311,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:class] = [
       html_options[:class], *FORM_CONTROL_SELECT_WITH_WIDTH
     ].compact.join(' ')
-    html_options[:class] += ' is-invalid' if errors_on?(attr)
+    html_options = before_html_field(attr, html_options)
     collection_select(attr, labels, :first, :last,
                       collection_prompt(attr, html_options),
                       html_options)
@@ -307,7 +323,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       html_options[:class], *FORM_CONTROL_WITH_WIDTH
     ].compact.join(' ')
     disabled = html_options[:disabled].to_s
-    klass += ' is-invalid' if errors_on?(attr)
+
+    html_options = before_html_field(attr, html_options)
+    klass = html_options[:class]
+
     disabled = html_options[:disabled].presence
     hidden_field(attr_id) +
     string_field(attr,

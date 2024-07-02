@@ -180,6 +180,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   class_attribute :used_attributes
   self.used_attributes = PUBLIC_ATTRS + INTERNAL_ATTRS
 
+  class_attribute :personal_readonly_attrs, default: [:birthday]
+
   model_stamper
   stampable stamper_class_name: :person,
             deleter: false

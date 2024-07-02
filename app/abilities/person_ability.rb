@@ -85,6 +85,8 @@ class PersonAbility < AbilityDsl::Base
     general(:send_password_instructions).not_self
 
     class_side(:create_households).if_any_writing_permissions
+
+    permission(:any).may(:update_personal_readonly_attrs).not_self
   end
 
   def if_any_writing_permissions

@@ -29,7 +29,6 @@ describe 'StandardFormBuilder' do
   let(:form)  { StandardFormBuilder.new(:entry, entry, self, {}) }
 
   describe '#input_field' do
-
     { name: :string_field,
       password: :password_field,
       remarks: :text_area,
@@ -48,7 +47,28 @@ describe 'StandardFormBuilder' do
 
       it { expect(form.input_field(attr)).to be_html_safe }
     end
+  end
 
+  describe '#labeled_input_fields_ability' do
+
+    subject(:field) { form.labeled_input_fields(:name) }
+
+    before do
+      allow(self).to receive(:current_ability).and_return(:current_ability)
+      allow(entry).to receive(:personal_readonly_attrs).and_return([:name])
+    end
+
+    it 'renders readonly field writable if permitted to update' do
+      allow(self).to receive(:can?)
+        .with(:update_personal_readonly_attrs, entry).and_return(true)
+      expect(field).not_to match(/readonly="readonly"/)
+    end
+
+    it 'renders readonly field as readonly if not permitted to update' do
+      allow(self).to receive(:can?).with(:update_personal_readonly_attrs, entry)
+        .and_return(false)
+      expect(field).to match(/readonly="readonly"/)
+    end
   end
 
   describe '#labeled_input_fields' do

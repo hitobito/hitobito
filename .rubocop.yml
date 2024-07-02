@@ -3,7 +3,7 @@ require:
   - rubocop-rails
 
 AllCops:
-  TargetRubyVersion: 3.0
+  TargetRubyVersion: 3.2
   DisplayCopNames: true
   Exclude:
     - Rakefile

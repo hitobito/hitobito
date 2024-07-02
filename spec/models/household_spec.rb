@@ -26,6 +26,46 @@ describe Household do
     end
   end
 
+  describe '#add' do
+    it 'returns self' do
+      expect(household.add(other_person)).to eq household
+    end
+
+    it 'adds person to people' do
+      expect(household.people).not_to include(other_person)
+      household.add(other_person)
+      expect(household.people).to include(other_person)
+    end
+
+    it 'does not add duplicate person' do
+      expect(household.people).to include(person)
+      expect(household.people).to have(1).item
+      household.add(person)
+      expect(household.people).to have(1).item
+    end
+  end
+
+  describe '#remove' do
+    it 'returns self' do
+      expect(household.remove(person)).to eq household
+    end
+
+    it 'removes person from people' do
+      expect(household.people).to include(person)
+      expect(household.people).to have(1).item
+      household.remove(person)
+      expect(household.people).to be_empty
+    end
+
+    it 'ignores unknown person' do
+      expect(household.people).to include(person)
+      expect(household.people).to have(1).item
+      household.remove(other_person)
+      expect(household.people).to have(1).item
+      expect(household.people).to include(person)
+    end
+  end
+
   describe '#save' do
     it 'creates new household and assigns same address to all members' do
       person.update!(street: 'Greatstreet', housenumber: '345', zip_code: '3456', town: 'Greattown', country: 'CH')
@@ -35,8 +75,6 @@ describe Household do
       expect(household.new_people).to include(third_person)
       expect(household.save).to eq(true)
       expect(household.new_people).to be_empty
-
-      household.reload
 
       expect(household.members.size).to eq(3)
       expect(household.people).to include(person)
@@ -61,8 +99,6 @@ describe Household do
       expect(household.members.size).to eq(4)
       expect(household.save).to eq(true)
 
-      household.reload
-
       expect(household.members.size).to eq(4)
       expect(household.people).to include(person)
       expect(household.people).to include(other_person)
@@ -76,8 +112,6 @@ describe Household do
       household.add(person)
       expect(household.members.size).to eq(3)
       expect(household.save).to eq(true)
-
-      household.reload
 
       expect(household.members.size).to eq(3)
     end
@@ -103,7 +137,7 @@ describe Household do
       expect(household.save).to eq(true)
       expect(household.removed_people).to be_empty
 
-      expect(household.reload.members.size).to eq(2)
+      expect(household.members.size).to eq(2)
     end
 
     it 'can be saved if all people removed' do
@@ -141,6 +175,20 @@ describe Household do
       expect do |b|
         household.save(&b)
       end.to yield_with_args(contain_exactly(added_person), contain_exactly(other_person, third_person))
+    end
+
+    it 'yields persisted new_people and removed_people' do
+      expect(person.household_key).to be_blank
+      create_household
+
+      household.remove(other_person)
+      added_person = Fabricate(:person)
+      household.add(added_person)
+
+      household.save do |added_people, removed_people|
+        expect(added_people.first.household_key).to eq household.household_key
+        expect(removed_people.first.household_key).to be_blank
+      end
     end
   end
 
@@ -201,8 +249,7 @@ describe Household do
 
       fourth_person = Fabricate(:person, street: 'Loriweg', housenumber: '42')
       household.add(fourth_person)
-      household.save
-      expect(household.reload).to be_valid
+      household.save!
 
       expected_attrs = { address_care_of: nil,
                          street: 'Loriweg',
@@ -281,6 +328,31 @@ describe Household do
     end
   end
 
+  describe '#reload' do
+    it 'clears instance variables' do
+      household.instance_variable_set(:@dummy, 'dummy')
+      expect { household.reload }.
+        to change { household.instance_variable_defined?(:@dummy) }.
+          from(true).to(false)
+    end
+
+    it 'reloads the reference person' do
+      original_reference_person_name = household.reference_person.first_name
+      household.reference_person.first_name = 'dummy'
+      expect { household.reload }.
+        to change { household.reference_person.first_name }.
+          from('dummy').to(original_reference_person_name)
+    end
+
+    it 'reinitializes the household' do
+      original_people = household.people
+      household.remove(original_people.first)
+      expect(household.people).not_to match_array(original_people)
+
+      household.reload
+      expect(household.people).to match_array(original_people)
+    end
+  end
 
   describe 'logging' do
     with_versioning do
@@ -434,7 +506,6 @@ describe Household do
     household.add(other_person)
     household.add(third_person)
     household.save
-    household.reload
   end
 
   def create_other_household
@@ -442,7 +513,6 @@ describe Household do
     household.add(Fabricate(:person))
     household.add(Fabricate(:person))
     household.save
-    household.reload
   end
 
   def collect_log_lines(person)

@@ -16,13 +16,13 @@ class Household
 
   def initialize(reference_person)
     @reference_person = reference_person
-    init_defaults
+    @household_key = @reference_person.household_key
+    @members = []
 
-    if @household_key
+    if reference_person.household_key
       @members = fetch_members
     else
-      @household_key = next_key
-      add(@reference_person)
+      add(reference_person)
     end
   end
 
@@ -34,6 +34,7 @@ class Household
 
     attribute_will_change!(:members)
     members << HouseholdMember.new(person, self)
+    self
   end
 
   def remove(person)
@@ -41,10 +42,15 @@ class Household
 
     attribute_will_change!(:members)
     members.reject! { |m| m.person == person }
+    self
   end
 
   def valid?(context = :update)
     super
+  end
+
+  def exists?
+    !new_record?
   end
 
   def save!(context: :update)
@@ -57,9 +63,9 @@ class Household
     members.clear if members.size < 2
 
     ActiveRecord::Base.transaction do
-      yield new_people, removed_people if block_given?
       save_removed
       save_members
+      yield new_people, removed_people if block_given?
       Households::LogEntries.new(self).create!
       changes_applied
       true
@@ -75,7 +81,9 @@ class Household
   end
 
   def reload
-    initialize(@reference_person.reload)
+    p = reference_person.reload
+    self.instance_variables.each { self.remove_instance_variable(_1) }
+    initialize(p)
     self
   end
 
@@ -104,7 +112,7 @@ class Household
   end
 
   def new_record?
-    @reference_person.household_key.nil?
+    household_key.blank?
   end
 
   def destroy?
@@ -133,28 +141,22 @@ class Household
   end
 
   def save_removed
-    Person.where(id: removed_people.map(&:id)).update_all(household_key: nil) # rubocop:disable Rails/SkipsModelValidations
+    removed_people.each {|person| person.update!(household_key: nil) }
   end
 
   def save_members
-    Person.where(id: person_ids).find_each do |p|
-      p.update!(household_attrs)
-    end
+    people.each {|person| person.update!(household_attrs) }
   end
 
+  # WARNING: only call this method during save process as it will increment
+  # the household_key sequence.
   def household_attrs
-    attrs = { household_key: @household_key }
-    attrs.merge(address_attrs)
+    @household_attrs ||= { household_key: household_key || next_key }.merge(address_attrs)
   end
 
   def fetch_members
-    members = Person.where(household_key: @household_key)
+    members = Person.where(household_key: reference_person.household_key)
     HouseholdMember.from(members, self)
-  end
-
-  def init_defaults
-    @members = []
-    @household_key = @reference_person.household_key
   end
 
   def validate_members

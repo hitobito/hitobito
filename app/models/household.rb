@@ -141,13 +141,11 @@ class Household
   end
 
   def save_removed
-    Person.where(id: removed_people.map(&:id)).update_all(household_key: nil) # rubocop:disable Rails/SkipsModelValidations
+    removed_people.each {|person| person.update!(household_key: nil) }
   end
 
   def save_members
-    Person.where(id: person_ids).find_each do |p|
-      p.update!(household_attrs)
-    end
+    people.each {|person| person.update!(household_attrs) }
   end
 
   # WARNING: only call this method during save process as it will increment

@@ -7,12 +7,12 @@
 
 require 'rails_helper'
 
-RSpec.describe "people#index", type: :request do
+RSpec.describe 'people#index', type: :request do
   it_behaves_like 'jsonapi authorized requests' do
     let(:params) { {} }
 
     subject(:make_request) do
-      jsonapi_get "/api/people", params: params
+      jsonapi_get '/api/people', params:
     end
 
     describe 'basic fetch' do
@@ -22,6 +22,15 @@ RSpec.describe "people#index", type: :request do
         expect(response.status).to eq(200), response.body
         expect(d.map(&:jsonapi_type).uniq).to match_array(['people'])
         expect(d.map(&:id)).to match_array(people(:top_leader, :bottom_member).pluck(:id))
+      end
+    end
+
+    describe 'unsupported param include' do
+      let(:params) { { include: 'foobar' } }
+      it 'reports 400 instead of server error' do
+        make_request
+        expect(response.status).to eq(400), response.body
+        expect(response.body).to include('Unsupported include parameter')
       end
     end
   end

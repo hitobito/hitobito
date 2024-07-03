@@ -107,8 +107,6 @@ gem 'active_storage_validations' # validate filesize, dimensions and content-typ
 gem 'active_storage_variant' # variants for Rails < 7
 
 group :development, :test do
-  gem 'better_errors'
-  gem 'binding_of_caller'
   gem 'graphiti_spec_helpers'
   gem 'parallel_tests'
   gem 'pry-byebug'
@@ -117,6 +115,8 @@ group :development, :test do
 end
 
 group :development do
+  gem 'better_errors'
+  gem 'binding_of_caller'
   gem 'bullet'
   gem 'listen'
   gem 'redcarpet'

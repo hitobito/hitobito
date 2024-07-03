@@ -101,11 +101,13 @@ scopes.each do |scope|
     end
 
     context 'with an unacceptable scope in token' do
-      scopes.reject{ |s| s == scope }.each do |invalid_scope|
+      scopes.reject { |s| s == scope }.each do |invalid_scope|
         it "fails for #{invalid_scope} scope" do
-          token = Fabricate(:access_token, application: application, scopes: invalid_scope, resource_owner_id: user.id)
-          get url, headers: { 'Authorization': 'Bearer ' + token.token }
-          expect(response).not_to have_http_status(:success)
+          token = Fabricate(:access_token, application: application,
+                            scopes: invalid_scope, resource_owner_id: user.id)
+          expect do
+            get url, headers: { Authorization: 'Bearer ' + token.token }
+          end.to raise_error(CanCan::AccessDenied)
         end
       end
     end

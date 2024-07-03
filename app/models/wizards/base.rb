@@ -96,6 +96,12 @@ module Wizards
       step(name) || super
     end
 
+    # Find the step instance by its name.
+    def step(step_name)
+      step_instances.find { |instance| instance.step_name == step_name.to_s }
+    end
+
+
     private
 
 
@@ -114,11 +120,6 @@ module Wizards
 
     def step_instances
       @step_instances ||= build_step_instances(step_after(:_start))
-    end
-
-    # Find the step instance by its name.
-    def step(step_name)
-      step_instances.find { |instance| instance.step_name == step_name.to_s }
     end
 
     # Validate all steps up to the current step.

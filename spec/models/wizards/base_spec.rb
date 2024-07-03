@@ -45,6 +45,10 @@ describe Wizards::Base do
       expect(wizard.one).to be_kind_of(One)
     end
 
+    it 'can access step via step method' do
+      expect(wizard.step('one')).to be_kind_of(One)
+    end
+
     it 'raises when accessing non existing step' do
       expect { wizard.one_two }.to raise_error(NoMethodError)
     end

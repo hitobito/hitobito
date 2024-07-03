@@ -842,8 +842,15 @@ it:
         name: Nome della lista
         description: Descrizione
         publisher: Mittente
+        subscribable: Accedi/esci tu stesso
+        subscribable_mode: Le persone sono standard
+        subscribable_modes:
+          opt_out: Registrato (opt-out)
+          opt_in: Disconnesso (opt-in)
+        subscribable_for: Accedi/esci tu stesso
         subscribable_fors:
           anyone: Tutti
+          configured: Solo abbonati configurati
           nobody: Nessuno
         mail_name: Indirizzo delle mailing list
         mail_address: Mailing list

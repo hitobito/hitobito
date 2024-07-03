@@ -33,4 +33,15 @@ describe Wizards::Step do
       expect(partial).to eq :method
     end
   end
+
+  # rubocop:disable Style/CaseEquality, Lint/BinaryOperatorWithIdenticalOperands
+  describe '#===' do
+    it 'compares to a string' do
+      expect(One === 'one').to be true
+    end
+    it 'compares to a class' do
+      expect(One === One).to be true
+    end
+  end
+  # rubocop:enable Style/CaseEquality, Lint/BinaryOperatorWithIdenticalOperands
 end

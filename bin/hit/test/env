@@ -15,10 +15,10 @@ echo "Starting test env for: $HIT_TEST_ENV"
 setup_test_db $TEST_DB_NAME
 
 if [[ "$HIT_TEST_ENV" == "core" ]]; then
-  PREPARE_RAILS_SPEC_CMD="rails db:schema:load"
+  PREPARE_RAILS_SPEC_CMD="rails db:migrate"
   WORKDIR=/usr/src/app/hitobito
 else
-  PREPARE_RAILS_SPEC_CMD="rake app:db:schema:load app:wagon:migrate"
+  PREPARE_RAILS_SPEC_CMD="rake app:db:migrate app:wagon:migrate"
   WORKDIR="/usr/src/app/hitobito_$HIT_TEST_ENV"
 fi
 

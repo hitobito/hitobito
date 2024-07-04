@@ -5,7 +5,6 @@
 #  or at https://github.com/hitobito/hitobito.
 
 class Event::Qualifier::RevokeAction < Event::Qualifier::QualifyAction
-
   def initialize(person, event, qualification_kinds)
     @person = person
     @qualification_date = event.qualification_date
@@ -25,5 +24,4 @@ class Event::Qualifier::RevokeAction < Event::Qualifier::QualifyAction
       qualification_kind_id: @qualification_kinds.map(&:id)
     )
   end
-
 end

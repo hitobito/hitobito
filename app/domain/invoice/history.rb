@@ -64,11 +64,11 @@ class Invoice::History
     end
 
     def data_row
-      ['⬤', I18n.l(date, format: :long), @event]
+      ["⬤", I18n.l(date, format: :long), @event]
     end
 
     def to_html(template)
-      return '' unless valid?
+      return "" unless valid?
 
       template.content_tag :tr do
         data_row.map do |d|
@@ -79,24 +79,24 @@ class Invoice::History
   end
 
   def invoice_issued_entry
-    HistoryEntryData.new(invoice.issued_at, t('invoices.issued'), 'blue')
+    HistoryEntryData.new(invoice.issued_at, t("invoices.issued"), "blue")
   end
 
   def invoice_sent_entry
-    HistoryEntryData.new(invoice.sent_at, t('invoices.sent'), 'blue')
+    HistoryEntryData.new(invoice.sent_at, t("invoices.sent"), "blue")
   end
 
   def reminder_sent_entry(reminder, count)
-    message = "#{count}. #{t('invoices.reminder_sent',
-                             title: reminder.title,
-                             date: template.l(reminder.due_at, format: :long))}"
+    message = "#{count}. #{t("invoices.reminder_sent",
+      title: reminder.title,
+      date: template.l(reminder.due_at, format: :long))}"
 
-    HistoryEntryData.new(reminder.created_at.to_date, message, 'red')
+    HistoryEntryData.new(reminder.created_at.to_date, message, "red")
   end
 
   def payment_data(payment)
-    message = "#{invoice.decorate.format_currency(payment.amount)} #{t('invoices.payed')}"
+    message = "#{invoice.decorate.format_currency(payment.amount)} #{t("invoices.payed")}"
 
-    HistoryEntryData.new(payment.received_at, message, 'green')
+    HistoryEntryData.new(payment.received_at, message, "green")
   end
 end

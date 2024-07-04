@@ -5,7 +5,6 @@
 
 module AbilityDsl
   class Store
-
     def register(*classes)
       ability_classes.concat(classes)
     end
@@ -19,8 +18,8 @@ module AbilityDsl
 
     def general_constraints(subject_class, action)
       [config(Recorder::General::PERMISSION, subject_class, action),
-       config(Recorder::General::PERMISSION, subject_class, Recorder::General::ALL_ACTION)].
-        compact
+        config(Recorder::General::PERMISSION, subject_class, Recorder::General::ALL_ACTION)]
+        .compact
     end
 
     def class_side_constraints
@@ -54,6 +53,5 @@ module AbilityDsl
     def ability_classes
       @ability_classes ||= []
     end
-
   end
 end

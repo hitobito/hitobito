@@ -13,13 +13,12 @@
 # With the help of additional callbacks, it is possible to hook into the action
 # procedures without overriding the entire method.
 class CrudController < ListController
-
   class_attribute :permitted_attrs
 
   ACTIONS = [:show, :new, :create, :edit, :update, :destroy].freeze
   prepend_before_action :entry, only: ACTIONS
 
-  delegate :model_identifier, to: 'self.class'
+  delegate :model_identifier, to: "self.class"
 
   # Defines before and after callback hooks for create, update, save and destroy actions.
   define_model_callbacks :create, :update, :save, :destroy
@@ -35,9 +34,8 @@ class CrudController < ListController
 
   # Simple helper object to give access to required view helper methods.
   @@helper = Object.new
-                   .extend(ActionView::Helpers::TranslationHelper)
-                   .extend(ActionView::Helpers::OutputSafetyHelper)
-
+    .extend(ActionView::Helpers::TranslationHelper)
+    .extend(ActionView::Helpers::OutputSafetyHelper)
 
   ##############  ACTIONS  ############################################
 
@@ -166,15 +164,15 @@ class CrudController < ListController
   def flash_message(state, action = action_name)
     scope = "#{action}.flash.#{state}"
     keys = [:"#{controller_name}.#{scope}_html",
-            :"#{controller_name}.#{scope}",
-            :"crud.#{scope}_html",
-            :"crud.#{scope}"]
+      :"#{controller_name}.#{scope}",
+      :"crud.#{scope}_html",
+      :"crud.#{scope}"]
     @@helper.t(keys.shift, model: full_entry_label, default: keys)
   end
 
   # Html safe error messages of the current entry.
   def error_messages
-    @@helper.safe_join(entry.errors.full_messages, '<br/>'.html_safe)
+    @@helper.safe_join(entry.errors.full_messages, "<br/>".html_safe)
   end
 
   def return_path
@@ -188,7 +186,7 @@ class CrudController < ListController
   end
 
   def destroy_return_path(destroyed, options = {})
-    (!destroyed && request.env['HTTP_REFERER'].presence) ||
+    (!destroyed && request.env["HTTP_REFERER"].presence) ||
       (options[:location] || index_path)
   end
 
@@ -209,13 +207,11 @@ class CrudController < ListController
   # Custom Responder that handles the controller's path_args.
   # An additional :success option is used to handle action callback chain halts.
   class Responder < ActionController::Responder
-
     def initialize(controller, resources, options = {})
       super(controller, with_path_args(resources, controller), options)
     end
 
     private
-
 
     # Check whether the resource has errors. Additionally checks the :success option.
     def has_errors? # rubocop:disable Naming/PredicateName
@@ -224,11 +220,9 @@ class CrudController < ListController
 
     # Wraps the resources with the path_args for correct nesting.
     def with_path_args(resources, controller)
-      resources.size == 1 ? Array(controller.send(:path_args, resources.first)) : resources
+      (resources.size == 1) ? Array(controller.send(:path_args, resources.first)) : resources
     end
-
   end
 
   self.responder = Responder
-
 end

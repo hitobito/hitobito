@@ -5,11 +5,12 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe StepsComponent, type: :component do
-  let(:header_css) { '.row .step-headers.offset-md-1' }
+  let(:header_css) { ".row .step-headers.offset-md-1" }
   let(:form) { double(:form_builder, object: double(:group, self_registration_require_adult_consent: false)) }
+
   subject(:component) { described_class.new(partials: [], form: form, step: :step) }
 
   before do
@@ -28,29 +29,29 @@ describe StepsComponent, type: :component do
     render_inline(described_class.new(**args.merge(form: form)))
   end
 
-  it 'does not render when partials are empty' do
+  it "does not render when partials are empty" do
     expect(component).not_to be_render
   end
 
-  it 'does render header and content' do
-    stub_header_translation(:other, 'Andere')
+  it "does render header and content" do
+    stub_header_translation(:other, "Andere")
     html = render(partials: [:main_person, :other], step: 0)
-    expect(html).to have_css("#{header_css} li.active", text: 'Personendaten')
-    expect(html).to have_css('.row .step-content.main-person.active', text: 'main_person')
+    expect(html).to have_css("#{header_css} li.active", text: "Personendaten")
+    expect(html).to have_css(".row .step-content.main-person.active", text: "main_person")
   end
 
-  it 'does render header if we only have a single step' do
+  it "does render header if we only have a single step" do
     html = render(partials: [:main_person], step: 0)
     expect(html).not_to have_css("#{header_css} li")
   end
 
-  it 'renders two steps with second one active' do
-    stub_header_translation(:household, 'Familienmitglieder')
+  it "renders two steps with second one active" do
+    stub_header_translation(:household, "Familienmitglieder")
     html = render(partials: [:main_person, :household], step: 1)
-    expect(html).to have_css("#{header_css} li:nth-child(1):not(.active)", text: 'Personendaten')
-    expect(html).to have_css("#{header_css} li:nth-child(2).active", text: 'Familienmitglieder')
-    expect(html).to have_css('.step-content.main-person:not(.active)')
-    expect(html).to have_css('.step-content.household.active')
+    expect(html).to have_css("#{header_css} li:nth-child(1):not(.active)", text: "Personendaten")
+    expect(html).to have_css("#{header_css} li:nth-child(2).active", text: "Familienmitglieder")
+    expect(html).to have_css(".step-content.main-person:not(.active)")
+    expect(html).to have_css(".step-content.household.active")
   end
 
   def stub_header_translation(header, value)

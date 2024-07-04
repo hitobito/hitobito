@@ -5,41 +5,40 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Event::AttachmentsController do
-
   let(:group) { groups(:top_layer) }
   let(:event) { events(:top_event) }
 
-  it 'uploads file', js: true do
+  it "uploads file", js: true do
     sign_in
     visit group_event_path(group.id, event.id)
 
-    file = Tempfile.new(['foo', '.pdf'])
-    attach_file 'event_attachment_file', file.path, visible: false
+    file = Tempfile.new(["foo", ".pdf"])
+    attach_file "event_attachment_file", file.path, visible: false
 
-    expect(page).to have_selector('#attachments li', text: File.basename(file.path))
+    expect(page).to have_selector("#attachments li", text: File.basename(file.path))
   end
 
-  it 'cannot upload unaccepted file', js: true do
-    skip 'Unable to find modal dialog'
+  it "cannot upload unaccepted file", js: true do
+    skip "Unable to find modal dialog"
 
     sign_in
     visit group_event_path(group.id, event.id)
 
-    file = Tempfile.new(['foo', '.exe'])
+    file = Tempfile.new(["foo", ".exe"])
     accept_alert(/fehlgeschlagen/) do
-      attach_file 'event_attachment_file', file.path, visible: false
+      attach_file "event_attachment_file", file.path, visible: false
     end
 
-    expect(page).to have_no_selector('#attachments li', text: File.basename(file.path))
+    expect(page).to have_no_selector("#attachments li", text: File.basename(file.path))
   end
 
-  it 'updates visibility', js: true do
-    file = Tempfile.new(['foo', '.png'])
+  it "updates visibility", js: true do
+    file = Tempfile.new(["foo", ".png"])
     a = event.attachments.build
-    a.file.attach(io: file, filename: 'foo.png')
+    a.file.attach(io: file, filename: "foo.png")
     a.visibility = :global
     a.save!
     sign_in
@@ -54,14 +53,14 @@ describe Event::AttachmentsController do
     find("#event_attachment_#{a.id} a.action .fa-globe.muted").click
 
     expect(page).to have_selector(selector)
-    expect(a.reload.visibility).to be('global')
+    expect(a.reload.visibility).to be("global")
   end
 
-  it 'destroys existing file', js: true do
+  it "destroys existing file", js: true do
     Event::Attachment.delete_all
-    file = Tempfile.new(['foo', '.png'])
+    file = Tempfile.new(["foo", ".png"])
     a = event.attachments.build
-    a.file.attach(io: file, filename: 'foo.png')
+    a.file.attach(io: file, filename: "foo.png")
     a.save!
     sign_in
     visit group_event_path(group.id, event.id)
@@ -70,7 +69,7 @@ describe Event::AttachmentsController do
       find("#event_attachment_#{a.id} a.action .fa-trash-alt").click
     end
 
-    expect(page).to have_no_selector('#attachments li', text: File.basename(file.path))
+    expect(page).to have_no_selector("#attachments li", text: File.basename(file.path))
     # expect(event.attachments.size).to eq(0) # this assertion is very flaky for some reason
   end
 end

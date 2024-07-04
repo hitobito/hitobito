@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::SubscriptionsController < ApplicationController
-
   skip_authorization_check
   helper_method :subscribed, :subscribable
 
@@ -29,7 +28,7 @@ class Person::SubscriptionsController < ApplicationController
 
   def redirect_with_notice
     group = Group.find(params[:group_id])
-    message = t('.success', mailing_list: mailing_list, person: person)
+    message = t(".success", mailing_list: mailing_list, person: person)
     redirect_to group_person_subscriptions_path(group, person), notice: message
   end
 
@@ -58,5 +57,4 @@ class Person::SubscriptionsController < ApplicationController
   def grouped_by_layer(mailing_lists)
     mailing_lists.includes(:group).group_by { _1.group.layer_group }
   end
-
 end

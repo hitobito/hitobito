@@ -4,9 +4,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module LabelFormatsHelper
-
   def format_landscape(format)
     t(:"label_formats.form.#{format.landscape ? :landscape : :portrait}")
   end
-
 end

@@ -5,31 +5,31 @@
 
 # Let's make sure we load the logger in dev env even though eager_load is false.
 # Otherwise the logger won't subscribe to the background job log notifications.
-require_relative './logger' if Rails.env.development?
+require_relative "logger" if Rails.env.development?
 
 module BackgroundJobs
   class Logging < Delayed::Plugin
     callbacks do |lifecycle|
       lifecycle.before(:invoke_job) do |job|
-        notify(job, 'job_started', started_at: Time.zone.now)
+        notify(job, "job_started", started_at: Time.zone.now)
       end
 
       # after(:invoke_job) gets only called on success
       lifecycle.after(:invoke_job) do |job|
-        notify(job, 'job_finished',
-               finished_at: Time.zone.now,
-               status: 'success',
-               payload: job_result(job))
+        notify(job, "job_finished",
+          finished_at: Time.zone.now,
+          status: "success",
+          payload: job_result(job))
       end
 
       lifecycle.after(:error) do |_worker, job|
-        notify(job, 'job_finished',
-               # The attempt count has already been incremented once we reach here,
-               # so we must calculate the correct value.
-               attempt: job.attempts - 1,
-               finished_at: Time.zone.now,
-               status: 'error',
-               payload: {error: error_message(job)})
+        notify(job, "job_finished",
+          # The attempt count has already been incremented once we reach here,
+          # so we must calculate the correct value.
+          attempt: job.attempts - 1,
+          finished_at: Time.zone.now,
+          status: "error",
+          payload: {error: error_message(job)})
       end
     end
 

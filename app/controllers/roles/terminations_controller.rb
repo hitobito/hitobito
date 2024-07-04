@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito
 
 class Roles::TerminationsController < ApplicationController
-
   respond_to :js, only: [:new, :create]
 
   helper_method :role, :group, :entry
@@ -15,7 +14,7 @@ class Roles::TerminationsController < ApplicationController
 
   def create
     if entry.call
-      flash[:notice] = t('roles/terminations.flash.success', date: l(entry.terminate_on))
+      flash[:notice] = t("roles/terminations.flash.success", date: l(entry.terminate_on))
       render js: "window.location='#{person_path(role.person_id)}'"
     else
       render :create, format: :js
@@ -35,11 +34,10 @@ class Roles::TerminationsController < ApplicationController
   def terminate_on
     role.delete_on.presence ||
       params.dig(:roles_termination, :terminate_on).presence ||
-      Date.today.end_of_year
+      Time.zone.today.end_of_year
   end
 
   def authorize
     authorize!(:terminate, role)
   end
-
 end

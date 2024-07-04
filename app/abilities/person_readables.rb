@@ -5,13 +5,12 @@
 
 # This class is only used for fetching lists based on a group association.
 class PersonReadables < GroupBasedReadables
-
   attr_reader :group
 
   def initialize(user, group = nil, roles_join = nil)
     super(user)
 
-    @roles_join = roles_join || { roles: :group }
+    @roles_join = roles_join || {roles: :group}
     @group = group
 
     if @group.nil?
@@ -26,15 +25,15 @@ class PersonReadables < GroupBasedReadables
   def group_accessible_people
     if read_permission_for_this_group?
       can :index, Person,
-          group.people.only_public_data { |_| true }
+        group.people.only_public_data { |_| true }
 
     elsif layer_and_below_read_in_above_layer?
       can :index, Person,
-          group.people.only_public_data.visible_from_above(group) { |_| true }
+        group.people.only_public_data.visible_from_above(group) { |_| true }
 
     elsif contact_data_visible?
       can :index, Person,
-          group.people.only_public_data.contact_data_visible { |_| true }
+        group.people.only_public_data.contact_data_visible { |_| true }
     end
   end
 
@@ -46,7 +45,7 @@ class PersonReadables < GroupBasedReadables
       if has_group_based_conditions?
         # Only add these joins when really necessary, because they are extremely expensive to
         # compute when there are a lot of people and roles
-        scope = scope.joins(@roles_join).where(groups: { deleted_at: nil })
+        scope = scope.joins(@roles_join).where(groups: {deleted_at: nil})
       end
       scope
     end
@@ -70,20 +69,20 @@ class PersonReadables < GroupBasedReadables
   end
 
   def contact_data_condition
-    ['people.contact_data_visible = ?', true]
+    ["people.contact_data_visible = ?", true]
   end
 
   def herself_condition
-    ['people.id = ?', user.id]
+    ["people.id = ?", user.id]
   end
 
   def read_permission_for_this_group?
     user.root? ||
-    group_read_in_this_group? ||
-    group_read_in_above_group? ||
-    layer_read_in_same_layer? ||
-    layer_and_below_read_in_same_layer? ||
-    see_invisible_from_above_in_above_layer?
+      group_read_in_this_group? ||
+      group_read_in_above_group? ||
+      layer_read_in_same_layer? ||
+      layer_and_below_read_in_same_layer? ||
+      see_invisible_from_above_in_above_layer?
   end
 
   def contact_data_visible?
@@ -121,5 +120,4 @@ class PersonReadables < GroupBasedReadables
     @layers_see_invisible_from_above ||=
       user_context.layer_ids(user.groups_with_permission(:see_invisible_from_above).to_a)
   end
-
 end

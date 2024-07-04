@@ -7,18 +7,18 @@ class Event::InvitationAbility < AbilityDsl::Base
   include AbilityDsl::Constraints::Event::Invitation
 
   on(Event::Invitation) do
-    permission(:group_full).
-      may(:new, :create, :destroy).
-      in_same_group_and_invitations_supported
-    permission(:group_and_below_full).
-      may(:new, :create, :destroy).
-      in_same_group_or_below_and_invitations_supported
-    permission(:layer_full).
-      may(:new, :create, :destroy).
-      in_same_layer_and_invitations_supported
-    permission(:layer_and_below_full).
-      may(:new, :create, :destroy).
-      in_same_layer_or_below_and_invitations_supported
+    permission(:group_full)
+      .may(:new, :create, :destroy)
+      .in_same_group_and_invitations_supported
+    permission(:group_and_below_full)
+      .may(:new, :create, :destroy)
+      .in_same_group_or_below_and_invitations_supported
+    permission(:layer_full)
+      .may(:new, :create, :destroy)
+      .in_same_layer_and_invitations_supported
+    permission(:layer_and_below_full)
+      .may(:new, :create, :destroy)
+      .in_same_layer_or_below_and_invitations_supported
 
     permission(:any).may(:decline).own_invitation
   end

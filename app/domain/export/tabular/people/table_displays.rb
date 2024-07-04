@@ -35,6 +35,5 @@ module Export::Tabular::People
       column = table_display.column_for(attr)
       column.present? ? column.label(attr) : super
     end
-
   end
 end

@@ -19,10 +19,10 @@ class Event::ParticipationCleanupAnswersJob < RecurringJob
   end
 
   def not_participating_since_cutoff
-    Event.select('id')
+    Event.select("id")
       .joins(:dates)
-      .where('event_dates.start_at > :cutoff OR event_dates.finish_at > :cutoff', cutoff: cutoff)
-      .where('event_participations.event_id = events.id').arel.exists.not
+      .where("event_dates.start_at > :cutoff OR event_dates.finish_at > :cutoff", cutoff: cutoff)
+      .where("event_participations.event_id = events.id").arel.exists.not
   end
 
   def cutoff

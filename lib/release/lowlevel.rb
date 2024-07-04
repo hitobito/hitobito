@@ -21,20 +21,20 @@ module Release
     end
 
     def add(files)
-      notify 'staging files'
+      notify "staging files"
       execute "git add -v #{files}"
     end
 
     def commit(message)
-      notify 'committing'
-      with_env({ 'SKIP' => 'RuboCop,UpdatedLicenseHeader' }) do
+      notify "committing"
+      with_env({"SKIP" => "RuboCop,UpdatedLicenseHeader"}) do
         execute "git commit -m '#{message}'"
       end
     end
 
     def fix_submodules
-      notify 'reparing submodules'
-      execute 'git submodule init && git submodule sync && git submodule update'
+      notify "reparing submodules"
+      execute "git submodule init && git submodule sync && git submodule update"
     end
 
     def submodules(action)
@@ -43,8 +43,8 @@ module Release
     end
 
     def submodule_status
-      notify 'submodule status'
-      execute 'git submodule status'
+      notify "submodule status"
+      execute "git submodule status"
     end
 
     def tag(name)
@@ -53,8 +53,8 @@ module Release
     end
 
     def push
-      notify 'pushing code and tags'
-      confirm_and_execute 'git push origin && git push origin --force --tags'
+      notify "pushing code and tags"
+      confirm_and_execute "git push origin && git push origin --force --tags"
     end
   end
 end

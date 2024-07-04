@@ -7,17 +7,15 @@
 
 module Export::Pdf
   class Section
-
     attr_reader :pdf, :model
 
     delegate :bounds, :text, :cursor, :font_size, :text_box,
-             :fill_and_stroke_rectangle, :fill_color,
-             :image, :group, :move_cursor_to, :float,
-             :stroke_bounds, :stamp, :create_stamp, :page,
-             :bounds, :table, :cursor, :font_size, :text_box,
-             :fill_and_stroke_rectangle, :fill_color, :image,
-             to: :pdf
-
+      :fill_and_stroke_rectangle, :fill_color,
+      :image, :group, :move_cursor_to, :float,
+      :stroke_bounds, :stamp, :create_stamp, :page,
+      :bounds, :table, :cursor, :font_size, :text_box,
+      :fill_and_stroke_rectangle, :fill_color, :image,
+      to: :pdf
 
     def initialize(pdf, model, options)
       @pdf = pdf

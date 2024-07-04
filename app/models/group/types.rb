@@ -10,11 +10,11 @@ module Group::Types
 
   included do
     class_attribute :layer,
-                    :role_types,
-                    :possible_children,
-                    :default_children,
-                    :event_types,
-                    :default_role
+      :role_types,
+      :possible_children,
+      :default_children,
+      :event_types,
+      :default_role
 
     # Whether this group type builds a layer or is a regular group.
     # Layers influence some permissions.
@@ -38,7 +38,7 @@ module Group::Types
 
   def create_default_children
     # HACK: to have after_save ordering for this semantical after_create callback
-    return if created_at < Time.zone.now - 10.seconds
+    return if created_at < 10.seconds.ago
 
     default_children.each do |group_type|
       child = group_type.new(name: group_type.label)
@@ -56,15 +56,14 @@ module Group::Types
   def set_layer_group_id
     layer_id = self.class.layer ? id : parent.layer_group_id
     unless layer_id == layer_group_id
-      self_and_descendants.
-        where(layer_group_id: layer_group_id).
-        update_all(layer_group_id: layer_id) # rubocop:disable Rails/SkipsModelValidations intentionally update only one attribute
+      self_and_descendants
+        .where(layer_group_id: layer_group_id)
+        .update_all(layer_group_id: layer_id) # rubocop:disable Rails/SkipsModelValidations intentionally update only one attribute
       self.layer_group_id = layer_id
     end
   end
 
   module ClassMethods
-
     # DSL method to define children
     def children(*group_types)
       self.possible_children = group_types + possible_children
@@ -115,9 +114,9 @@ module Group::Types
 
     # All groups that may offer courses
     def course_offerers
-      where(type: course_types.map(&:sti_name)).
-        without_deleted.
-        order(:parent_id, :name)
+      where(type: course_types.map(&:sti_name))
+        .without_deleted
+        .order(:parent_id, :name)
     end
 
     # Return the group type with the given sti_name or raise an exception if not found
@@ -160,7 +159,6 @@ module Group::Types
     def tsort(types)
       TypeSorter.new(types).sort
     end
-
   end
 
   # Sorts a list of types according to the defined hierarchy

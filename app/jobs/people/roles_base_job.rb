@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 #
 class People::RolesBaseJob < RecurringJob
-
   run_every 1.hour
 
   private
@@ -23,6 +22,6 @@ class People::RolesBaseJob < RecurringJob
   end
 
   def notify(message)
-    Raven.capture_exception(self.class.const_get('Error').new(message))
+    Raven.capture_exception(self.class.const_get(:Error).new(message))
   end
 end

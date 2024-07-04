@@ -5,7 +5,6 @@
 
 module Export::Pdf::Invoice
   class Section < Export::Pdf::Section
-
     delegate :invoice_items, :address, :with_reference?, :participant_number, to: :invoice
 
     alias_method :invoice, :model
@@ -23,7 +22,7 @@ module Export::Pdf::Invoice
     end
 
     def tabelize(string)
-      string.to_s.split(/\n/).reject(&:blank?).collect { |ra| [ra] }
+      string.to_s.split("\n").compact_blank.collect { |ra| [ra] }
     end
 
     def table(table, options)

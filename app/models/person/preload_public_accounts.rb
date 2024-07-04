@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module Person::PreloadPublicAccounts
-
   def self.extended(base)
     base.do_preload_public_accounts
   end

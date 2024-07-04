@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Address::FullTextSearch
-
   attr_reader :query, :search_strategy
 
   ADDRESS_WITH_NUMBER_REGEX = /^(.*)[^\d](\d+[A-Za-z]?)/
@@ -56,7 +55,7 @@ class Address::FullTextSearch
   end
 
   def with_query
-    query.to_s.size >= 2 ? yield : []
+    (query.to_s.size >= 2) ? yield : []
   end
 
   def query_with_number?

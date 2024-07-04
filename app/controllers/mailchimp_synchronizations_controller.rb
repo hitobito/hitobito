@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class MailchimpSynchronizationsController < ApplicationController
-
   def create
     mailing_list = MailingList.find(params[:mailing_list_id])
 
@@ -15,5 +14,4 @@ class MailchimpSynchronizationsController < ApplicationController
 
     redirect_to(action: :index, controller: :subscriptions)
   end
-
 end

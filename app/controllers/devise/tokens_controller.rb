@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Devise::TokensController < DeviseController
-
   # required to allow api calls
   protect_from_forgery with: :null_session, only: [:create, :destroy]
 
@@ -36,10 +35,10 @@ class Devise::TokensController < DeviseController
   private
 
   def auth_options
-    { scope: resource_name, recall: "#{controller_path}#new" }
+    {scope: resource_name, recall: "#{controller_path}#new"}
   end
 
   def skip_trackable
-    request.env['devise.skip_trackable'] = true
+    request.env["devise.skip_trackable"] = true
   end
 end

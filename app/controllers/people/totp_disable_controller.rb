@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 #  Copyright (c) 2022, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -6,11 +7,10 @@
 #  https://github.com/hitobito/hitobito.
 
 class People::TotpDisableController < ApplicationController
-
   def create
     authorize!(:totp_disable, person)
     authenticator.disable!
-    redirect_to group_person_path(group, person), notice: t('.flashes.success')
+    redirect_to group_person_path(group, person), notice: t(".flashes.success")
   end
 
   def person
@@ -23,6 +23,6 @@ class People::TotpDisableController < ApplicationController
 
   def authenticator
     @authenticator ||= Authenticatable::TwoFactors::Totp.new(person,
-                                                             session)
+      session)
   end
 end

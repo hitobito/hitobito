@@ -10,7 +10,7 @@
 #
 # Can also be used for dynamic error pages if those static files do not exist.
 class BlockedController < ApplicationController
-  layout 'application'
+  layout "application"
 
   skip_authorization_check
   skip_before_action :reject_blocked_person!
@@ -21,13 +21,12 @@ class BlockedController < ApplicationController
     respond_to do |format|
       format.html do
         load_info_texts
-        render 'index', status: 403
+        render "index", status: 403
       end
       format.json do
-        render 'index', status: 403
+        render "index", status: 403
       end
     end
-
   end
 
   private
@@ -35,7 +34,7 @@ class BlockedController < ApplicationController
   def get_content(key, placeholders = nil)
     content = CustomContent.get(key)
     placeholders ||= {
-      'person-name' => h(current_person.full_name)
+      "person-name" => h(current_person.full_name)
     }
     content.body_with_values(placeholders).to_s.html_safe
   end
@@ -47,7 +46,7 @@ class BlockedController < ApplicationController
     @blocked_person_solution_text = get_content(Person::SecurityToolsController::BLOCKED_PERSON_SOLUTION)
     if Person::BlockService.inactivity_block_interval_placeholders.values.all?(&:present?)
       @blocked_person_interval_text = get_content(Person::SecurityToolsController::BLOCKED_PERSON_INTERVAL,
-                                                  Person::BlockService.inactivity_block_interval_placeholders)
+        Person::BlockService.inactivity_block_interval_placeholders)
     end
   end
   # rubocop:enable Layout/LineLength

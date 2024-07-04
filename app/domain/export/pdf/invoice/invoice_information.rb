@@ -13,7 +13,7 @@ module Export::Pdf::Invoice
       float do
         offset_cursor_from_top 5.1.cm
         bounding_box(address_position(invoice.group), width: bounds.width, height: 80) do
-          table(information, cell_style: { borders: [], padding: [1, 20, 0, 0] })
+          table(information, cell_style: {borders: [], padding: [1, 20, 0, 0]})
         end
       end
     end
@@ -38,7 +38,7 @@ module Export::Pdf::Invoice
 
     def labeled_information(attr, value)
       return if value.blank?
-      [I18n.t("invoices.pdf.#{attr}") + ':', value]
+      [I18n.t("invoices.pdf.#{attr}") + ":", value]
     end
   end
 end

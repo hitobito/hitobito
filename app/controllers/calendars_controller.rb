@@ -6,20 +6,19 @@
 #  https://github.com/hitobito/hitobito.
 
 class CalendarsController < CrudController
-
   helper_method :group
 
   self.nesting = Group
 
   self.permitted_attrs = [:name, :description,
-                          {
-                              included_calendar_groups_attributes: [
-                                  :id, :group_id, :excluded, :with_subgroups, :event_type, :_destroy
-                              ],
-                              excluded_calendar_groups_attributes: [
-                                  :id, :group_id, :excluded, :with_subgroups, :event_type, :_destroy
-                              ],
-                          }]
+    {
+      included_calendar_groups_attributes: [
+        :id, :group_id, :excluded, :with_subgroups, :event_type, :_destroy
+      ],
+      excluded_calendar_groups_attributes: [
+        :id, :group_id, :excluded, :with_subgroups, :event_type, :_destroy
+      ]
+    }]
 
   decorates :group
 
@@ -34,7 +33,7 @@ class CalendarsController < CrudController
 
   private
 
-  alias group parent
+  alias_method :group, :parent
 
   def authorize_class
     authorize!(:index_calendars, group)
@@ -71,5 +70,4 @@ class CalendarsController < CrudController
   def devise_controller?
     request.format.ics? # hence, no login required
   end
-
 end

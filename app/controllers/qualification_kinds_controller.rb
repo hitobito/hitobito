@@ -4,12 +4,11 @@
 #  https://github.com/hitobito/hitobito.
 
 class QualificationKindsController < SimpleCrudController
-
   self.permitted_attrs = [:label, :validity, :description, :reactivateable, :required_training_days]
 
   self.sort_mappings = {
-    label:       'qualification_kind_translations.label',
-    description: 'qualification_kind_translations.description'
+    label: "qualification_kind_translations.label",
+    description: "qualification_kind_translations.description"
   }
 
   private
@@ -17,5 +16,4 @@ class QualificationKindsController < SimpleCrudController
   def list_entries
     super.list
   end
-
 end

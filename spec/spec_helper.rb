@@ -7,38 +7,37 @@
 
 DB_CLEANER_STRATEGY = :truncation
 
-ENV['RAILS_ENV'] = 'test'
-ENV['RAILS_GROUPS'] = 'assets'
-ENV['RAILS_STRUCTURED_ADDRESSES'] = '1'
-ENV['RAILS_ADDRESS_MIGRATION'] = '0'
-require File.expand_path('../config/environment', __dir__)
-require 'rspec/rails'
-require 'cancan/matchers'
-require 'paper_trail/frameworks/rspec'
-require 'webmock/rspec'
-require 'graphiti_spec_helpers/rspec'
+ENV["RAILS_ENV"] = "test"
+ENV["RAILS_GROUPS"] = "assets"
+ENV["RAILS_STRUCTURED_ADDRESSES"] = "1"
+ENV["RAILS_ADDRESS_MIGRATION"] = "0"
+require File.expand_path("../config/environment", __dir__)
+require "rspec/rails"
+require "cancan/matchers"
+require "paper_trail/frameworks/rspec"
+require "webmock/rspec"
+require "graphiti_spec_helpers/rspec"
 
-require 'view_component/test_helpers'
-require 'view_component/system_test_helpers'
+require "view_component/test_helpers"
+require "view_component/system_test_helpers"
 
-require 'test_prof/recipes/logging'
+require "test_prof/recipes/logging"
 require "test_prof/recipes/rspec/let_it_be"
 
 TestProf::StackProf.configure do |config|
-  config.format = 'json'
+  config.format = "json"
 end
-
 
 # Needed for feature specs
 WebMock.disable_net_connect!(
   allow_localhost: true,
-  allow: %w(
+  allow: %w[
     chromedriver.storage.googleapis.com
     storage.googleapis.com
     googlechromelabs.github.io
     edgedl.me.gvt1.com
     github.com github-releases.githubusercontent.com
-  )
+  ]
 )
 
 ActiveRecord::Migration.suppress_messages do
@@ -47,7 +46,7 @@ ActiveRecord::Migration.suppress_messages do
       previous_seed_quietness = SeedFu.quiet
       SeedFu.quiet = true
 
-      Wagons.all.each do |wagon|
+      Wagons.all.each do |wagon| # rubocop:disable Rails/FindEach
         wagon.migrate
         wagon.load_seed
       end
@@ -61,9 +60,9 @@ end
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
-Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each do |f|
+Dir[Rails.root.join("spec", "support", "**", "*.rb")].sort.each do |f|
   # Do not require the core testgroup/layer files when running in wagon
-  next if f =~ %r{spec/support/group/(?!0_base.rb)} && (ENV['APP_ROOT'].present? || ENV['RAILS_USE_TEST_GROUPS'].blank?)
+  next if f =~ %r{spec/support/group/(?!0_base.rb)} && (ENV["APP_ROOT"].present? || ENV["RAILS_USE_TEST_GROUPS"].blank?)
 
   require f
 end
@@ -74,8 +73,7 @@ Faker::Config.locale = I18n.locale
 RSpec::Matchers.define_negated_matcher :not_change, :change
 
 RSpec.configure do |config|
-
-  config.fixture_path = Rails.root / 'spec' / 'fixtures'
+  config.fixture_path = Rails.root / "spec" / "fixtures"
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
@@ -91,10 +89,10 @@ RSpec.configure do |config|
   # order dependency and want to debug it, you can fix the order by providing
   # the seed, which is printed after each run.
   #     --seed 1234
-  config.order = 'random'
+  config.order = "random"
 
   config.backtrace_exclusion_patterns = [/lib\/rspec/, /asdf/]
-  config.example_status_persistence_file_path = Rails.root.join('tmp', 'examples.txt').to_s
+  config.example_status_persistence_file_path = Rails.root.join("tmp", "examples.txt").to_s
 
   config.expect_with :rspec do |c|
     c.max_formatted_output_length = 1000
@@ -113,14 +111,14 @@ RSpec.configure do |config|
   config.include ViewComponent::SystemTestHelpers, type: :component
   config.include Capybara::RSpecMatchers, type: :component
 
-  config.filter_run_excluding type: 'sphinx', sphinx: true
-  if ActiveRecord::Base.connection.adapter_name.downcase != 'mysql2'
+  config.filter_run_excluding type: "sphinx", sphinx: true
+  if ActiveRecord::Base.connection.adapter_name.downcase != "mysql2"
     config.filter_run_excluding :mysql
   end
 
   config.global_fixtures = :all
 
-  config.before(:each) do
+  config.before do
     ActionMailer::Base.deliveries = []
     Person.stamper = nil
   end
@@ -134,19 +132,19 @@ RSpec.configure do |config|
 
   config.before(:each, file_path: %r{\bspec/views/}) do
     view.extend(FormHelper,
-                TableHelper,
-                UtilityHelper,
-                I18nHelper,
-                FormatHelper,
-                LayoutHelper,
-                SheetHelper,
-                PeopleHelper,
-                EventParticipationsHelper,
-                TableDisplaysHelper,
-                EventKindsHelper,
-                ActionHelper,
-                InvoicesHelper,
-                ContactableHelper)
+      TableHelper,
+      UtilityHelper,
+      I18nHelper,
+      FormatHelper,
+      LayoutHelper,
+      SheetHelper,
+      PeopleHelper,
+      EventParticipationsHelper,
+      TableDisplaysHelper,
+      EventKindsHelper,
+      ActionHelper,
+      InvoicesHelper,
+      ContactableHelper)
   end
 
   # reset current locale and reload translations after example run
@@ -163,20 +161,20 @@ RSpec.configure do |config|
   end
 
   config.around(:each, profile: true) do |example|
-    require 'ruby-prof'
+    require "ruby-prof"
 
     # Profile the code
     result = RubyProf.profile { example.run }
 
     # Print a graph profile to text
-    dir = Rails.root.join('tmp', 'performance')
+    dir = Rails.root.join("tmp", "performance")
     filename = File.join(dir, "#{example.metadata[:full_description]} stack.html")
     FileUtils.mkdir_p(dir)
     printer = RubyProf::CallStackPrinter.new(result)
-    printer.print(File.open(filename, 'w'))
+    printer.print(File.open(filename, "w"))
   end
 
-  unless RSpec.configuration.exclusion_filter[:type] == 'feature'
+  unless RSpec.configuration.exclusion_filter[:type] == "feature"
     config.include Warden::Test::Helpers
     Warden.test_mode!
 
@@ -187,7 +185,7 @@ RSpec.configure do |config|
   config.before do
     # this job is usually enqueued when a person is created. So it makes sense to
     # prevent this in test env when using for example Fabricate
-    job_double = double({ enqueue!: nil })
+    double({enqueue!: nil})
   end
 
   config.include Job::TestHelpers, :tests_active_jobs
@@ -198,7 +196,7 @@ RSpec.configure do |config|
   config.include Graphiti::Rails::TestHelpers
   config.include ResourceSpecHelper, type: :resource
 
-  config.before :each do
+  config.before do
     handle_request_exceptions(false)
   end
 
@@ -210,34 +208,33 @@ RSpec.configure do |config|
       RescueRegistry.context = nil
     end
   end
-
 end
 
-require 'capybara/rails'
-require 'capybara-screenshot/rspec'
-require 'selenium-webdriver'
+require "capybara/rails"
+require "capybara-screenshot/rspec"
+require "selenium-webdriver"
 
-Capybara.server = :puma, { Silent: true }
-Capybara.server_port = ENV['CAPYBARA_SERVER_PORT'].to_i if ENV['CAPYBARA_SERVER_PORT']
-Capybara.default_max_wait_time = ENV.fetch('CAPYBARA_MAX_WAIT_TIME', 6).to_f
+Capybara.server = :puma, {Silent: true}
+Capybara.server_port = ENV["CAPYBARA_SERVER_PORT"].to_i if ENV["CAPYBARA_SERVER_PORT"]
+Capybara.default_max_wait_time = ENV.fetch("CAPYBARA_MAX_WAIT_TIME", 6).to_f
 Capybara.automatic_label_click = true
 
 Capybara::Screenshot.prune_strategy = :keep_last_run
-Capybara::Screenshot::RSpec::REPORTERS['RSpec::Core::Formatters::ProgressFormatter'] =
+Capybara::Screenshot::RSpec::REPORTERS["RSpec::Core::Formatters::ProgressFormatter"] =
   CapybaraScreenshotPlainTextReporter
 Capybara::Screenshot.register_driver(:chrome) do |driver, path|
   driver.browser.save_screenshot(path)
 end
 
 Capybara.register_driver :chrome do |app|
-  options = Selenium::WebDriver::Chrome::Options.new(binary: ENV['CAPYBARA_CHROME_BINARY'])
-  options.args << '--headless' if ENV['HEADLESS'] != 'false'
-  options.args << '--disable-gpu' # required for windows
-  options.args << '--no-sandbox' # required for docker
-  options.args << '--disable-dev-shm-usage' # helps with docker resource limitations
-  options.args << '--window-size=1800,1000'
-  options.args << '--crash-dumps-dir=/tmp'
-  options.add_preference('intl.accept_languages', 'de-CH,de')
+  options = Selenium::WebDriver::Chrome::Options.new(binary: ENV["CAPYBARA_CHROME_BINARY"])
+  options.args << "--headless" if ENV["HEADLESS"] != "false"
+  options.args << "--disable-gpu" # required for windows
+  options.args << "--no-sandbox" # required for docker
+  options.args << "--disable-dev-shm-usage" # helps with docker resource limitations
+  options.args << "--window-size=1800,1000"
+  options.args << "--crash-dumps-dir=/tmp"
+  options.add_preference("intl.accept_languages", "de-CH,de")
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
 
@@ -255,10 +252,10 @@ end)
 module ActiveRecordFixture
   def initialize(fixture, model_class)
     if model_class == Person
-      fixture['confirmed_at'] = 1.day.ago unless fixture.key?('confirmed_at')
+      fixture["confirmed_at"] = 1.day.ago unless fixture.key?("confirmed_at")
     end
 
-    super(fixture, model_class)
+    super
   end
 end
 ActiveRecord::Fixture.prepend(ActiveRecordFixture)

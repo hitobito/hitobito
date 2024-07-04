@@ -20,7 +20,6 @@
 #
 
 class AdditionalEmail < ActiveRecord::Base
-
   include ContactAccount
   include ValidatedEmail
 
@@ -29,12 +28,11 @@ class AdditionalEmail < ActiveRecord::Base
   validates_by_schema
 
   # A dot at the end is invalid due to translation purpose
-  validates :label, format: { without: /[.]$\z/ }
+  validates :label, format: {without: /[.]$\z/}
 
   class << self
     def predefined_labels
       Settings.additional_email.predefined_labels
     end
   end
-
 end

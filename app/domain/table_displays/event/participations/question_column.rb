@@ -58,7 +58,7 @@ module TableDisplays::Event::Participations
       end
       target_attr = :answer
 
-      super(target, target_attr, &block)
+      super
     end
   end
 end

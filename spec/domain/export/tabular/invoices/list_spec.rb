@@ -3,47 +3,47 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Export::Tabular::Invoices::List do
   let(:invoice) { invoices(:invoice) }
-  let(:list)    { Export::Tabular::Invoices::List.new([invoice]) }
+  let(:list) { Export::Tabular::Invoices::List.new([invoice]) }
 
   subject { list }
 
-  it 'uses certain attributes with tranlsations' do
+  it "uses certain attributes with tranlsations" do
     expect(subject.attributes).to eq [:title,
-                                      :sequence_number,
-                                      :state,
-                                      :esr_number,
-                                      :description,
-                                      :recipient_email,
-                                      :recipient_address,
-                                      :sent_at,
-                                      :due_at,
-                                      :cost,
-                                      :vat,
-                                      :total,
-                                      :amount_paid,
-                                      :cost_centers,
-                                      :accounts,
-                                      :payments]
+      :sequence_number,
+      :state,
+      :esr_number,
+      :description,
+      :recipient_email,
+      :recipient_address,
+      :sent_at,
+      :due_at,
+      :cost,
+      :vat,
+      :total,
+      :amount_paid,
+      :cost_centers,
+      :accounts,
+      :payments]
 
-    expect(subject.labels).to eq ['Titel',
-                                  'Nummer',
-                                  'Status',
-                                  'Referenz Nummer',
-                                  'Text',
-                                  'Empfänger E-Mail',
-                                  'Empfänger Adresse',
-                                  'Verschickt am',
-                                  'Fällig am',
-                                  'Betrag',
-                                  'MwSt.',
-                                  'Rechnungsbetrag',
-                                  'Bezahlt',
-                                  'Kostenstellen',
-                                  'Konten',
-                                  'Zahlungseingänge']
+    expect(subject.labels).to eq ["Titel",
+      "Nummer",
+      "Status",
+      "Referenz Nummer",
+      "Text",
+      "Empfänger E-Mail",
+      "Empfänger Adresse",
+      "Verschickt am",
+      "Fällig am",
+      "Betrag",
+      "MwSt.",
+      "Rechnungsbetrag",
+      "Bezahlt",
+      "Kostenstellen",
+      "Konten",
+      "Zahlungseingänge"]
   end
 end

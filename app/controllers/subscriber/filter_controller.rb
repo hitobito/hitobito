@@ -7,7 +7,6 @@
 
 module Subscriber
   class FilterController < BaseController
-
     skip_authorize_resource # must be in leaf class
 
     def update
@@ -15,8 +14,8 @@ module Subscriber
       if mailing_list.save
         redirect_to(subscriptions_path, notice: translate(:success))
       else
-        redirect_to(subscriptions_path,alert: translate(:failure,
-                                       errors: mailing_list.errors.full_messages.join(', ')))
+        redirect_to(subscriptions_path, alert: translate(:failure,
+          errors: mailing_list.errors.full_messages.join(", ")))
       end
     end
 
@@ -37,6 +36,5 @@ module Subscriber
     def subscriptions_path
       group_mailing_list_subscriptions_path(group_id: mailing_list.group.id, id: mailing_list.id)
     end
-
   end
 end

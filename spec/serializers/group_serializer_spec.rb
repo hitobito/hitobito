@@ -54,10 +54,9 @@
 #  index_groups_on_type            (type)
 #
 
-require 'spec_helper'
+require "spec_helper"
 
 describe GroupSerializer do
-
   let(:group) { groups(:top_group).decorate }
   let(:controller) { double.as_null_object }
 
@@ -68,14 +67,14 @@ describe GroupSerializer do
 
   let(:links) { subject[:links] }
 
-  it 'has different entities' do
+  it "has different entities" do
     expect(links[:parent]).to eq(group.parent_id.to_s)
     expect(links).not_to have_key(:children)
     expect(links[:layer_group]).to eq(group.parent_id.to_s)
     expect(links[:hierarchies].size).to eq(2)
   end
 
-  it 'does not include deleted children' do
+  it "does not include deleted children" do
     _ = Fabricate(Group::GlobalGroup.name.to_sym, parent: group)
     b = Fabricate(Group::GlobalGroup.name.to_sym, parent: group)
     b.update!(deleted_at: 1.month.ago)
@@ -83,18 +82,18 @@ describe GroupSerializer do
     expect(links[:children].size).to eq(1)
   end
 
-  it 'does include available roles' do
+  it "does include available roles" do
     expect(subject).to have_key(:available_roles)
     expect(subject[:available_roles]).to have(8).items
     expect(subject[:available_roles]).to match_array [
-      { name: 'External',        role_class: 'Role::External' },
-      { name: 'Leader',          role_class: 'Group::TopGroup::Leader' },
-      { name: 'Local Guide',     role_class: 'Group::TopGroup::LocalGuide' },
-      { name: 'Local Secretary', role_class: 'Group::TopGroup::LocalSecretary' },
-      { name: 'Group Manager',   role_class: 'Group::TopGroup::GroupManager'},
-      { name: 'Member',          role_class: 'Group::TopGroup::Member' },
-      { name: 'Invisible People Manager', role_class: 'Group::TopGroup::InvisiblePeopleManager' },
-      { name: 'Secretary',       role_class: 'Group::TopGroup::Secretary' }
+      {name: "External", role_class: "Role::External"},
+      {name: "Leader", role_class: "Group::TopGroup::Leader"},
+      {name: "Local Guide", role_class: "Group::TopGroup::LocalGuide"},
+      {name: "Local Secretary", role_class: "Group::TopGroup::LocalSecretary"},
+      {name: "Group Manager", role_class: "Group::TopGroup::GroupManager"},
+      {name: "Member", role_class: "Group::TopGroup::Member"},
+      {name: "Invisible People Manager", role_class: "Group::TopGroup::InvisiblePeopleManager"},
+      {name: "Secretary", role_class: "Group::TopGroup::Secretary"}
     ]
   end
 end

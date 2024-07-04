@@ -59,26 +59,24 @@
 # A course is a specialised Event that has by default applications,
 # preconditions and may give a qualification after attending it.
 class Event::Course < Event
-
   # This statement is required because this class would not be loaded otherwise.
-  require_dependency 'event/course/role/participant'
+  require_dependency "event/course/role/participant"
 
   self.used_attributes += [:number, :kind_id, :state, :priorization, :group_ids,
-                           :requires_approval, :display_booking_info, :waiting_list,
-                           :minimum_participants]
+    :requires_approval, :display_booking_info, :waiting_list,
+    :minimum_participants]
 
   self.role_types = [Event::Role::Leader,
-                     Event::Role::AssistantLeader,
-                     Event::Role::Cook,
-                     Event::Role::Helper,
-                     Event::Role::Treasurer,
-                     Event::Role::Speaker,
-                     Event::Course::Role::Participant]
+    Event::Role::AssistantLeader,
+    Event::Role::Cook,
+    Event::Role::Helper,
+    Event::Role::Treasurer,
+    Event::Role::Speaker,
+    Event::Course::Role::Participant]
 
   self.supports_applications = true
 
   self.kind_class = Event::Kind
-
 
   belongs_to :kind
 
@@ -87,7 +85,7 @@ class Event::Course < Event
   after_initialize :make_participations_visible_to_participants
 
   def label_detail
-    label = used_attributes.include?(:kind_id) ? "#{kind.short_name} " : ''
+    label = used_attributes.include?(:kind_id) ? "#{kind.short_name} " : ""
     "#{label}#{number} #{group_names}"
   end
 
@@ -134,7 +132,7 @@ class Event::Course < Event
   end
 
   def last_finish_or_start_at
-    last_date = dates.sort_by(&:start_at).last
+    last_date = dates.max_by(&:start_at)
     (last_date.finish_at || last_date.start_at).to_date
   end
 end

@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
 class MailConfig
-
-  MAIL_CONFIG_PATH = Rails.root.join('config', 'mail.yml')
+  MAIL_CONFIG_PATH = Rails.root.join("config", "mail.yml")
 
   class << self
-
     def legacy?
       config_file.blank?
     end
@@ -23,8 +21,7 @@ class MailConfig
 
     def retriever_imap_config
       config = config_file[:imap]
-      config = decode_password(config)
-      config
+      decode_password(config)
     end
 
     def decode_password(config)
@@ -41,9 +38,7 @@ class MailConfig
     def load_file
       return nil unless File.exist?(MAIL_CONFIG_PATH)
 
-      YAML.safe_load(File.read(MAIL_CONFIG_PATH)).try(:deep_symbolize_keys)
+      YAML.safe_load_file(MAIL_CONFIG_PATH).try(:deep_symbolize_keys)
     end
-
   end
-
 end

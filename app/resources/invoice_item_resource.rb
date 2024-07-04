@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class InvoiceItemResource < ApplicationResource
-
   with_options filterable: false, sortable: false do
     attribute :invoice_id, :integer, filterable: true
     attribute :name, :string

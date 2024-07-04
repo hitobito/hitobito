@@ -5,13 +5,12 @@
 
 module Sheet
   class Admin < Base
-
     def left_nav?
       true
     end
 
     def render_left_nav
-      view.render('shared/admin_left_nav')
+      view.render("shared/admin_left_nav")
     end
   end
 end

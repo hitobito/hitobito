@@ -21,6 +21,6 @@ class People::DestroyRolesJob < People::RolesBaseJob
   private
 
   def obsolete_roles
-    Role.where('delete_on <= ?', Time.zone.today).order(:delete_on)
+    Role.where(delete_on: ..Time.zone.today).order(:delete_on)
   end
 end

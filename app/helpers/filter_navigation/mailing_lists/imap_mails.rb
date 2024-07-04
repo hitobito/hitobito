@@ -7,9 +7,8 @@
 
 module FilterNavigation::MailingLists
   class ImapMails < FilterNavigation::Base
-
     def initialize(template)
-      super(template)
+      super
       init_items
     end
 
@@ -20,9 +19,9 @@ module FilterNavigation::MailingLists
     private
 
     def init_items
-      filter_item('inbox')
-      filter_item('spam')
-      filter_item('failed')
+      filter_item("inbox")
+      filter_item("spam")
+      filter_item("failed")
     end
 
     def filter_item(name)
@@ -41,6 +40,5 @@ module FilterNavigation::MailingLists
     def filter_path(name)
       template.url_for(mailbox: name.downcase, only_path: true)
     end
-
   end
 end

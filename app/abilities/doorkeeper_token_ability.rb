@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class DoorkeeperTokenAbility
-
   include CanCan::Ability
 
   attr_reader :token, :user_ability
@@ -58,8 +57,8 @@ class DoorkeeperTokenAbility
       user_ability.can?(:index_events, g)
     end
 
-    can :'index_event/courses', Group do |g|
-      user_ability.can?(:'index_event/courses', g)
+    can :"index_event/courses", Group do |g|
+      user_ability.can?(:"index_event/courses", g)
     end
 
     can :show, Event do |e|
@@ -128,5 +127,4 @@ class DoorkeeperTokenAbility
       user_ability.can?(:update, g)
     end
   end
-
 end

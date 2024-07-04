@@ -5,7 +5,6 @@
 
 module Export::Tabular::People
   class PeopleAddress < Export::Tabular::Base
-
     self.model_class = ::Person
     self.row_class = PersonRow
 
@@ -13,7 +12,7 @@ module Export::Tabular::People
 
     def person_attributes
       [:first_name, :last_name, :nickname, :company_name, :company, :email,
-       :address, :zip_code, :town, :country, :layer_group, :roles]
+        :address, :zip_code, :town, :country, :layer_group, :roles]
     end
 
     def association_attributes
@@ -47,6 +46,5 @@ module Export::Tabular::People
     def people
       list
     end
-
   end
 end

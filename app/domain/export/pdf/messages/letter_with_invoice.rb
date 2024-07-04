@@ -7,7 +7,6 @@
 
 module Export::Pdf::Messages
   class LetterWithInvoice < Letter
-
     def filename(*args)
       super(*args, Invoice.model_name.human.downcase)
     end
@@ -20,8 +19,8 @@ module Export::Pdf::Messages
 
     def customize
       super.tap do
-        ocrb_path = Rails.root.join('app', 'javascript', 'fonts', 'OCRB.ttf')
-        pdf.font_families.update('ocrb' => { normal: ocrb_path })
+        ocrb_path = Rails.root.join("app", "javascript", "fonts", "OCRB.ttf")
+        pdf.font_families.update("ocrb" => {normal: ocrb_path})
       end
     end
 

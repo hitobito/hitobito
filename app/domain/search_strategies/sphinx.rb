@@ -7,7 +7,6 @@
 
 module SearchStrategies
   class Sphinx < Base
-
     delegate :star_supported?, to: :class
 
     def query_people
@@ -15,9 +14,9 @@ module SearchStrategies
 
       query_accessible_people do |ids|
         Person.search(Riddle::Query.escape(@term),
-                      default_search_options.merge(
-                        with: { sphinx_internal_id: ids }
-                      ))
+          default_search_options.merge(
+            with: {sphinx_internal_id: ids}
+          ))
       end
     end
 
@@ -25,15 +24,15 @@ module SearchStrategies
       return Group.none.page(1) if @term.blank?
 
       Group.search(Riddle::Query.escape(@term),
-                   default_search_options)
+        default_search_options)
     end
 
     def query_events
       return Event.none.page(1) if @term.blank?
 
-      sql = { include: [:groups, :dates] }
+      sql = {include: [:groups, :dates]}
       Event.search(Riddle::Query.escape(@term),
-                   default_search_options.merge(sql: sql))
+        default_search_options.merge(sql: sql))
     end
 
     def query_addresses
@@ -47,11 +46,11 @@ module SearchStrategies
 
       # Since ThinkingSphinx handles the "-" character in the sequence_number wrongly
       # we disable stars here and wrap each term in stars manually
-      filter = { with: { group_id: @user.finance_groups.pluck(:id) }, star: false }
+      filter = {with: {group_id: @user.finance_groups.pluck(:id)}, star: false}
 
-      star_wrapped_terms = @term.split(' ').map do |term|
+      star_wrapped_terms = @term.split(" ").map do |term|
         "*#{Riddle::Query.escape(term)}*"
-      end.join(' ')
+      end.join(" ")
 
       Invoice.search(star_wrapped_terms, default_search_options.merge(filter))
     end
@@ -59,28 +58,25 @@ module SearchStrategies
     protected
 
     def default_search_options
-      { per_page: QUERY_PER_PAGE,
-        star: star_supported? }
+      {per_page: QUERY_PER_PAGE,
+       star: star_supported?}
     end
 
     def fetch_people(ids)
       Person.search(Riddle::Query.escape(@term),
-                    page: @page,
-                    order: 'last_name asc, ' \
-                           'first_name asc, ' \
-                           'weight() desc',
-                    star: star_supported?,
-                    with: { sphinx_internal_id: ids })
+        page: @page,
+        order: "last_name asc, " \
+               "first_name asc, " \
+               "weight() desc",
+        star: star_supported?,
+        with: {sphinx_internal_id: ids})
     end
 
     class << self
-
       def star_supported?
         version = Rails.application.class.sphinx_version
-        version.nil? || version >= '2.1'
+        version.nil? || version >= "2.1"
       end
-
     end
-
   end
 end

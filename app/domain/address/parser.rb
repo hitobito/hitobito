@@ -6,11 +6,10 @@
 #  https://github.com/hitobito/hitobito_cvp.
 
 class Address::Parser
-
-  REGEX = /^(.*?)[,?\s*]?(\d+\s?\w?)?$/.freeze
+  REGEX = /^(.*?)[,?\s*]?(\d+\s?\w?)?$/
 
   def initialize(string)
-    @string = string.gsub(',', '')
+    @string = string.delete(",")
   end
 
   def street
@@ -18,7 +17,7 @@ class Address::Parser
   end
 
   def number
-    match[2]&.gsub(' ', '')
+    match[2]&.delete(" ")
   end
 
   def parse
@@ -30,5 +29,4 @@ class Address::Parser
   def match
     @match ||= REGEX.match(@string)
   end
-
 end

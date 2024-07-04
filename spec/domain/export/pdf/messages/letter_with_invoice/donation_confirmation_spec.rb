@@ -8,24 +8,23 @@
 require "spec_helper"
 
 describe Export::Pdf::Messages::LetterWithInvoice::DonationConfirmation do
-
   let(:top_leader) { people(:top_leader) }
   let(:recipient) do
     MessageRecipient
       .new(message: letter_with_invoice, person: bottom_member)
   end
-  let(:top_layer)               { groups(:top_layer) }
-  let(:bottom_member)           { people(:bottom_member) }
+  let(:top_layer) { groups(:top_layer) }
+  let(:bottom_member) { people(:bottom_member) }
 
-  let(:options)                 { {} }
-  let(:letter_with_invoice)     { messages(:with_invoice) }
-  let(:pdf)                     { Prawn::Document.new }
-  let(:analyzer)                { PDF::Inspector::Text.analyze(pdf.render) }
+  let(:options) { {} }
+  let(:letter_with_invoice) { messages(:with_invoice) }
+  let(:pdf) { Prawn::Document.new }
+  let(:analyzer) { PDF::Inspector::Text.analyze(pdf.render) }
 
   subject { described_class.new(pdf, letter_with_invoice, recipient, options) }
 
   context "donation confirmation" do
-    let(:stamps) { pdf.instance_variable_get('@donation_confirmation_text') }
+    let(:stamps) { pdf.instance_variable_get(:@donation_confirmation_text) }
 
     it "renders body with donation confirmation sum" do
       fabricate_donation(200, 1.year.ago)
@@ -39,16 +38,15 @@ describe Export::Pdf::Messages::LetterWithInvoice::DonationConfirmation do
       subject.render
 
       expect(text_with_position).to eq [[36, 746, "Spenden an Top"],
-                                        [36, 723, "Hallo Bottom"],
-                                        [36, 695, "Wir danken Ihnen für Ihr Vertrauen und Ihr geschätztes Engagement!"],
-                                        [36, 667, "Spendenbestätigung #{1.year.ago.year}"],
-                                        [36, 639, "#{1.year.ago.year} haben wir von"],
-                                        [36, 615, "Bottom, Member"],
-                                        [36, 601, "Greatstreet 345"],
-                                        [36, 587, "3456 Greattown"],
-                                        [36, 563, "Spenden erhalten in der Höhe von"],
-                                        [36, 540, "CHF 700.00"]]
-
+        [36, 723, "Hallo Bottom"],
+        [36, 695, "Wir danken Ihnen für Ihr Vertrauen und Ihr geschätztes Engagement!"],
+        [36, 667, "Spendenbestätigung #{1.year.ago.year}"],
+        [36, 639, "#{1.year.ago.year} haben wir von"],
+        [36, 615, "Bottom, Member"],
+        [36, 601, "Greatstreet 345"],
+        [36, 587, "3456 Greattown"],
+        [36, 563, "Spenden erhalten in der Höhe von"],
+        [36, 540, "CHF 700.00"]]
     end
 
     it "renders nothing with zero donation value" do

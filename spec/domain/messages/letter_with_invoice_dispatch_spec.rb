@@ -5,10 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Messages::LetterWithInvoiceDispatch do
-  let(:message)    { messages(:with_invoice) }
+  let(:message) { messages(:with_invoice) }
   let(:top_leader) { people(:top_leader) }
   let(:recipient_entries) { message.message_recipients }
 
@@ -16,22 +16,22 @@ describe Messages::LetterWithInvoiceDispatch do
 
   before do
     Subscription.create!(mailing_list: mailing_lists(:leaders),
-                         subscriber: groups(:top_group),
-                         role_types: [Group::TopGroup::Leader])
-    top_leader.update!(street: 'Fantasia', housenumber: '42', zip_code: '4242', town: 'Melmac')
+      subscriber: groups(:top_group),
+      role_types: [Group::TopGroup::Leader])
+    top_leader.update!(street: "Fantasia", housenumber: "42", zip_code: "4242", town: "Melmac")
   end
 
-  it 'updates message invoice_list and invoices' do
+  it "updates message invoice_list and invoices" do
     dispatch.run
     expect(message.reload.success_count).to eq 1
     expect(message.reload.invoice_list).to be_present
   end
 
-  it 'returns a result' do
+  it "returns a result" do
     expect(dispatch.run.finished?).to be_truthy
   end
 
-  it 'creates invoice_list and invoices' do
+  it "creates invoice_list and invoices" do
     expect { dispatch.run }.to change { InvoiceList.count }.by(1)
 
     expect(recipient_entries.count).to eq(1)
@@ -40,16 +40,16 @@ describe Messages::LetterWithInvoiceDispatch do
     expect(message.invoice_list.invalid_recipient_ids).to eq []
   end
 
-  it 'creates and issues invoice' do
+  it "creates and issues invoice" do
     expect { dispatch.run }.to change { Invoice.count }.by(1)
 
     invoice = message.invoice_list.reload.invoices.first
-    expect(invoice.state).to eq 'issued'
+    expect(invoice.state).to eq "issued"
     expect(invoice.title).to eq message.subject
     expect(invoice.invoice_items).to have(1).item
   end
 
-  it 'tracks error during invoice creation' do
+  it "tracks error during invoice creation" do
     expect_any_instance_of(Invoice).to receive(:save).and_return(false)
     expect { dispatch.run }.not_to(change { Invoice.count })
     expect(message.reload.success_count).to eq 0

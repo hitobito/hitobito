@@ -14,37 +14,36 @@
 #  visibility :string(255)
 #
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Event::Attachment do
-
   let(:event) { events(:top_event) }
 
-  context 'file_size' do
-    it 'validates maximum' do
+  context "file_size" do
+    it "validates maximum" do
       a = event.attachments.new
-      file = Tempfile.new(['x', '.png'])
-      File.write(file, 'x' * 12.megabytes)
-      a.file.attach(io: file, filename: 'foo.png')
+      file = Tempfile.new(["x", ".png"])
+      File.write(file, "x" * 12.megabytes)
+      a.file.attach(io: file, filename: "foo.png")
       expect(a).not_to be_valid
       expect(a.errors.full_messages.join).to match(/muss kleiner oder gleich 2 MB/)
     end
   end
 
-  context 'visibility' do
-    it 'allows setting visibility' do
+  context "visibility" do
+    it "allows setting visibility" do
       a = event.attachments.new
-      file = Tempfile.new(['x', '.png'])
-      File.write(file, 'x' * 1.megabytes)
-      a.file.attach(io: file, filename: 'foo.png')
+      file = Tempfile.new(["x", ".png"])
+      File.write(file, "x" * 1.megabytes)
+      a.file.attach(io: file, filename: "foo.png")
       expect { a.visibility = :participants }.not_to raise_error
     end
 
-    it 'validates visibility' do
+    it "validates visibility" do
       a = event.attachments.new
-      file = Tempfile.new(['x', '.png'])
-      File.write(file, 'x' * 1.megabytes)
-      a.file.attach(io: file, filename: 'foo.png')
+      file = Tempfile.new(["x", ".png"])
+      File.write(file, "x" * 1.megabytes)
+      a.file.attach(io: file, filename: "foo.png")
       expect { a.visibility = :foo }.to raise_error("'foo' is not a valid visibility")
     end
   end

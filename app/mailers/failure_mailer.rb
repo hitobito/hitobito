@@ -6,8 +6,7 @@
 #  https://github.com/hitobito/hitobito_cvp.
 
 class FailureMailer < ApplicationMailer
-
-  CONTENT_BULK_MAIL_TOO_BIG_NOTIFICATION = 'bulk_mail_failure_notification'.freeze
+  CONTENT_BULK_MAIL_TOO_BIG_NOTIFICATION = "bulk_mail_failure_notification"
 
   def validation_checks(sender_email, subject)
     @subject = subject

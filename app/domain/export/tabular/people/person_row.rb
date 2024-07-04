@@ -5,12 +5,11 @@
 
 module Export::Tabular::People
   class PersonRow < Export::Tabular::Row
-
-    self.dynamic_attributes = { /^phone_number_/ => :phone_number_attribute,
+    self.dynamic_attributes = {/^phone_number_/ => :phone_number_attribute,
                                 /^social_account_/ => :social_account_attribute,
                                 /^additional_email_/ => :additional_email_attribute,
                                 /^people_relation_/ => :people_relation_attribute,
-                                /^qualification_kind_/ => :qualification_kind }
+                                /^qualification_kind_/ => :qualification_kind}
 
     def country
       entry.country_label
@@ -22,9 +21,9 @@ module Export::Tabular::People
 
     def roles
       if entry.try(:role_with_layer).present?
-        entry.roles.zip(entry.role_with_layer.split(', ')).map { |arr| arr.join(' ') }.join(', ')
+        entry.roles.zip(entry.role_with_layer.split(", ")).map { |arr| arr.join(" ") }.join(", ")
       else
-        entry.roles.map { |role| "#{role} #{role.group.with_layer.join(' / ')}" }.join(', ')
+        entry.roles.map { |role| "#{role} #{role.group.with_layer.join(" / ")}" }.join(", ")
       end
     end
 
@@ -51,21 +50,21 @@ module Export::Tabular::People
     end
 
     def people_relation_attribute(attr)
-      entry.relations_to_tails.
-        select { |r| attr == :"people_relation_#{r.kind}" }.
-        map { |r| r.tail.to_s }.
-        join(', ')
+      entry.relations_to_tails
+        .select { |r| attr == :"people_relation_#{r.kind}" }
+        .map { |r| r.tail.to_s }
+        .join(", ")
     end
 
     def qualification_kind(attr)
       qualification = find_qualification(attr)
-      qualification.finish_at.try(:to_s) || I18n.t('global.yes') if qualification
+      qualification.finish_at.try(:to_s) || I18n.t("global.yes") if qualification
     end
 
     def find_qualification(label)
       entry.decorate.latest_qualifications_uniq_by_kind.find do |q|
         qualification_active?(q) &&
-        ContactAccounts.key(q.qualification_kind.class, q.qualification_kind.label) == label
+          ContactAccounts.key(q.qualification_kind.class, q.qualification_kind.label) == label
       end
     end
 
@@ -80,6 +79,5 @@ module Export::Tabular::People
       end
       account.value if account
     end
-
   end
 end

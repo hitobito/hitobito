@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Ability
-
   include CanCan::Ability
   prepend Draper::CanCanCan
 
@@ -14,30 +13,30 @@ class Ability
   @@store = AbilityDsl::Store.new
 
   store.register AssignmentAbility,
-                 CalendarAbility,
-                 EventAbility,
-                 Event::ApplicationAbility,
-                 Event::InvitationAbility,
-                 Event::ParticipationAbility,
-                 Event::ParticipationContactDataAbility,
-                 Event::RoleAbility,
-                 GroupAbility,
-                 InvoiceAbility,
-                 MailingListAbility,
-                 MessageAbility,
-                 NoteAbility,
-                 OauthAbility,
-                 PeopleFilterAbility,
-                 PersonAbility,
-                 PersonDuplicateAbility,
-                 Person::AddRequestAbility,
-                 QualificationAbility,
-                 RoleAbility,
-                 SelfRegistrationReasonAbility,
-                 ServiceTokenAbility,
-                 SubscriptionAbility,
-                 TagAbility,
-                 VariousAbility
+    CalendarAbility,
+    EventAbility,
+    Event::ApplicationAbility,
+    Event::InvitationAbility,
+    Event::ParticipationAbility,
+    Event::ParticipationContactDataAbility,
+    Event::RoleAbility,
+    GroupAbility,
+    InvoiceAbility,
+    MailingListAbility,
+    MessageAbility,
+    NoteAbility,
+    OauthAbility,
+    PeopleFilterAbility,
+    PersonAbility,
+    PersonDuplicateAbility,
+    Person::AddRequestAbility,
+    QualificationAbility,
+    RoleAbility,
+    SelfRegistrationReasonAbility,
+    ServiceTokenAbility,
+    SubscriptionAbility,
+    TagAbility,
+    VariousAbility
 
   attr_reader :user_context
 
@@ -110,7 +109,7 @@ class Ability
   end
 
   def class_side_action_allowed?(c, current_user_context)
-    constraints = { c.ability_class => [c.constraint] }
+    constraints = {c.ability_class => [c.constraint]}
     return true if c.constraint == :everybody
     return false if c.constraint == :nobody
     action_allowed?(constraints, :any, c.subject_class, current_user_context)
@@ -139,5 +138,4 @@ class Ability
       constraints.all? { |constraint| ability.send(constraint) }
     end
   end
-
 end

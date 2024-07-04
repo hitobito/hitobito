@@ -5,12 +5,11 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
 module MailRelay
   class MailProcessedBeforeError < StandardError
     def initialize(mail_log)
       msg = "Mail with subject '#{mail_log.message.subject}' has already been " \
-            'processed before and is skipped. Please remove it manually ' \
+            "processed before and is skipped. Please remove it manually " \
             "from catch-all inbox and check why it could not be processed.\n" \
             "Mail Hash: #{mail_log.mail_hash}"
 

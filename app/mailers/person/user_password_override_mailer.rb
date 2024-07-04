@@ -6,8 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::UserPasswordOverrideMailer < ApplicationMailer
-
-  CONTENT_USER_PASSWORD_OVERRIDE = 'content_user_password_override'.freeze
+  CONTENT_USER_PASSWORD_OVERRIDE = "content_user_password_override"
 
   delegate :body, :person, :requester, to: :password_override
 

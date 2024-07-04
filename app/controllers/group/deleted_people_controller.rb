@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Group::DeletedPeopleController < ListController
-
   before_action :authorize_action
 
   self.nesting = Group
@@ -22,10 +21,10 @@ class Group::DeletedPeopleController < ListController
   end
 
   def list_entries
-    Group::DeletedPeople.deleted_for(group).
-      includes(:additional_emails, :phone_numbers).
-      order_by_name.
-      page(params[:page])
+    Group::DeletedPeople.deleted_for(group)
+      .includes(:additional_emails, :phone_numbers)
+      .order_by_name
+      .page(params[:page])
   end
 
   def authorize_action

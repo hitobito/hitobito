@@ -5,7 +5,6 @@
 #  or at https://github.com/hitobito/hitobito.
 
 class Event::Qualifier::ProlongAction < Event::Qualifier::QualifyAction
-
   def initialize(person, event, kinds, role)
     super(person, event, kinds)
 
@@ -28,7 +27,8 @@ class Event::Qualifier::ProlongAction < Event::Qualifier::QualifyAction
       @person,
       @event,
       prolongation_kinds,
-      @role)
+      @role
+    )
   end
 
   def prolongation_kinds

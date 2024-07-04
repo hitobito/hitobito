@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class People::Membership::VerificationQrCode
-
   def initialize(person)
     assert_feature_enabled!
 
@@ -18,7 +17,7 @@ class People::Membership::VerificationQrCode
   end
 
   def verify_url
-    host = ENV.fetch('RAILS_HOST_NAME', 'localhost:3000')
+    host = ENV.fetch("RAILS_HOST_NAME", "localhost:3000")
     Rails
       .application
       .routes
@@ -34,8 +33,7 @@ class People::Membership::VerificationQrCode
 
   def assert_feature_enabled!
     unless People::Membership::Verifier.enabled?
-      raise 'membership verification feature not enabled'
+      raise "membership verification feature not enabled"
     end
   end
-
 end

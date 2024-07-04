@@ -7,9 +7,8 @@
 
 class SearchStrategies::SqlConditionBuilder
   class Matcher
-
     def initialize(table_field, word)
-      @table_name, @field = table_field.split('.', 2)
+      @table_name, @field = table_field.split(".", 2)
       @word = word
     end
 

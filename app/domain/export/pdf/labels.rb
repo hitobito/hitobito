@@ -5,7 +5,6 @@
 
 module Export::Pdf
   class Labels
-
     attr_reader :format
 
     def initialize(format)
@@ -14,8 +13,8 @@ module Export::Pdf
 
     def generate(contactables, household = false)
       pdf = Prawn::Document.new(page_size: format.page_size,
-                                page_layout: format.page_layout,
-                                margin: 0.mm)
+        page_layout: format.page_layout,
+        margin: 0.mm)
       pdf.font Settings.pdf.labels.font_name, size: format.font_size
 
       rows = household ? to_households(contactables) : contactables
@@ -26,8 +25,8 @@ module Export::Pdf
         address = household ? household_address(contactable, name) : address(contactable, name)
 
         print_address_in_bounding_box(pdf,
-                                      address,
-                                      position(pdf, i))
+          address,
+          position(pdf, i))
       end
 
       pdf.render
@@ -46,8 +45,8 @@ module Export::Pdf
     # print with automatic line wrap
     def print_address_in_bounding_box(pdf, address, pos)
       pdf.bounding_box(pos,
-                       width: format.width.mm - min_border,
-                       height: format.height.mm - min_border) do
+        width: format.width.mm - min_border,
+        height: format.height.mm - min_border) do
         left = format.padding_left.mm
         top = format.height.mm - format.padding_top.mm - min_border
         # pdf.stroke_bounds
@@ -73,23 +72,23 @@ module Export::Pdf
     def household_address(contactable, name)
       contactable = contactable.first
 
-      address = ''
+      address = ""
       address << name << "\n" if name.present?
       address << contactable.address.to_s
-      address << "\n" unless contactable.address =~ /\n\s*$/
-      address << contactable.zip_code.to_s << ' ' << contactable.town.to_s << "\n"
+      address << "\n" unless /\n\s*$/.match?(contactable.address)
+      address << contactable.zip_code.to_s << " " << contactable.town.to_s << "\n"
       address << contactable.country_label unless contactable.ignored_country?
       address
     end
 
     def address(contactable, name)
-      address = ''
+      address = ""
       address << contactable.company_name << "\n" if print_company?(contactable, name)
       address << contactable.nickname << "\n" if print_nickname?(contactable)
       address << name << "\n" if name.present?
       address << contactable.address.to_s
-      address << "\n" unless contactable.address =~ /\n\s*$/
-      address << contactable.zip_code.to_s << ' ' << contactable.town.to_s << "\n"
+      address << "\n" unless /\n\s*$/.match?(contactable.address)
+      address << contactable.zip_code.to_s << " " << contactable.town.to_s << "\n"
       address << contactable.country_label unless contactable.ignored_country?
       address
     end
@@ -117,13 +116,12 @@ module Export::Pdf
     def print_pp_post(pdf, at)
       pdf.text_box("<u><font size='12'><b>P.P.</b></font> " \
                    "<font size='8'>#{format.pp_post}  Post CH AG</font></u>",
-                   inline_format: true,
-                   at: at)
+        inline_format: true,
+        at: at)
     end
 
     def min_border
       Settings.pdf.labels.min_border.to_i.mm
     end
-
   end
 end

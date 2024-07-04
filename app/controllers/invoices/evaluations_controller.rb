@@ -26,9 +26,9 @@ class Invoices::EvaluationsController < ApplicationController
 
   def render_tabular(format)
     exported_data = case format
-                    when :csv then Export::Tabular::Invoices::EvaluationList.csv(table_rows)
-                    when :xlsx then Export::Tabular::Invoices::EvaluationList.xlsx(table_rows)
-                    end
+    when :csv then Export::Tabular::Invoices::EvaluationList.csv(table_rows)
+    when :xlsx then Export::Tabular::Invoices::EvaluationList.xlsx(table_rows)
+    end
     send_data exported_data, type: format, filename: "invoices_evaluation_#{from}-#{to}.#{format}"
   end
 
@@ -46,7 +46,7 @@ class Invoices::EvaluationsController < ApplicationController
 
   def total_row
     [{
-      name: t('.table.total'),
+      name: t(".table.total"),
       amount_paid: total
     }]
   end

@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module EventsHelper
-
   def new_event_button
     event_type = find_event_type
     return unless event_type
@@ -13,21 +12,21 @@ module EventsHelper
     event.groups << @group
     if can?(:new, event)
       action_button(t("events.global.link.add_#{event_type.name.underscore}"),
-                    new_group_event_path(@group, event: { type: event_type.sti_name }),
-                    :plus)
+        new_group_event_path(@group, event: {type: event_type.sti_name}),
+        :plus)
     end
   end
 
   def export_events_ical_button
-    type = params[:type].presence || 'Event'
+    type = params[:type].presence || "Event"
     if can?(:"export_#{type.underscore.pluralize}", @group)
-      action_button(I18n.t('event.lists.courses.ical_export_button'),
-                    params.merge(format: :ics), :'calendar-alt')
+      action_button(I18n.t("event.lists.courses.ical_export_button"),
+        params.merge(format: :ics), :"calendar-alt")
     end
   end
 
   def export_events_button
-    type = params[:type].presence || 'Event'
+    type = params[:type].presence || "Event"
     if can?(:"export_#{type.underscore.pluralize}", @group)
       Dropdown::Event::EventsExport.new(self, params).to_s
     end
@@ -46,9 +45,9 @@ module EventsHelper
 
       button = Dropdown::Event::ParticipantAdd.for_user(self, group, event, current_user)
       if event.application_closing_at.present?
-        button ||= t('event_decorator.apply')
-        button += content_tag(:div, t('event.lists.apply_until',
-                                      date: f(event.application_closing_at)))
+        button ||= t("event_decorator.apply")
+        button += content_tag(:div, t("event.lists.apply_until",
+          date: f(event.application_closing_at)))
       end
       button
     end
@@ -89,8 +88,8 @@ module EventsHelper
 
   def quick_select_course_groups
     (current_user.groups.course_offerers +
-     current_user.primary_group&.hierarchy&.course_offerers.to_a).
-      uniq
+     current_user.primary_group&.hierarchy&.course_offerers.to_a)
+      .uniq
   end
 
   def format_training_days(event)
@@ -101,7 +100,7 @@ module EventsHelper
     texts = [entry.application_conditions]
     texts.unshift(entry.kind.application_conditions) if entry.course_kind?
     html = texts.uniq.select(&:present?).map do |text|
-      safe_auto_link(text, html: { target: '_blank' })
+      safe_auto_link(text, html: {target: "_blank"})
     end
     safe_join(html, tag.br)
   end
@@ -113,7 +112,7 @@ module EventsHelper
   def format_event_group_ids(event)
     groups = event.groups
     linker = lambda do |group|
-      link_to_if(assoc_link?(group), group.with_layer.map(&:display_name).join(' / '), group)
+      link_to_if(assoc_link?(group), group.with_layer.map(&:display_name).join(" / "), group)
     end
 
     if groups.one?
@@ -129,14 +128,14 @@ module EventsHelper
   end
 
   def attachment_visibility_button(attachment, visibility)
-    label = I18n.t(visibility, scope: 'activerecord.attributes.event/attachment.visibilities')
+    label = I18n.t(visibility, scope: "activerecord.attributes.event/attachment.visibilities")
     active = attachment.visibility.to_s == visibility.to_s
-    new_visibility = active ? '' : visibility
+    new_visibility = active ? "" : visibility
     path = group_event_attachment_path(@group, @event, attachment,
-                                       'event_attachment[visibility]': new_visibility)
+      "event_attachment[visibility]": new_visibility)
 
-    link_to attachment_visibility_icon(visibility, active), path, class: 'action mr-2',
-            title: label, alt: label, data: { method: :put, remote: true }
+    link_to attachment_visibility_icon(visibility, active), path, class: "action mr-2",
+      title: label, alt: label, data: {method: :put, remote: true}
   end
 
   def readable_attachments(event, person)
@@ -155,8 +154,8 @@ module EventsHelper
   end
 
   def attachment_visibility_icon(visibility, active)
-    icons = { team: :'user-graduate', participants: :users, global: :globe }
-    icon(icons[visibility.to_sym], class: active ? '' : 'muted')
+    icons = {team: :"user-graduate", participants: :users, global: :globe}
+    icon(icons[visibility.to_sym], class: active ? "" : "muted")
   end
 
   def event_team?(event, person)
@@ -169,5 +168,4 @@ module EventsHelper
     return unless person
     event.participations.pluck(:person_id).include?(person.id)
   end
-
 end

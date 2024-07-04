@@ -11,14 +11,14 @@ module JsonApi
 
     def initialize(main_ability)
       can :index, Invoice, build_conditions(main_ability)
-      can :index, InvoiceItem, { invoice: build_conditions(main_ability) }
+      can :index, InvoiceItem, {invoice: build_conditions(main_ability)}
     end
 
     private
 
     def build_conditions(main_ability)
       layer_group_ids = read_layer_ids(main_ability)
-      { group: { layer_group_id: layer_group_ids, archived_at: nil } }
+      {group: {layer_group_id: layer_group_ids, archived_at: nil}}
     end
 
     def read_layer_ids(main_ability)

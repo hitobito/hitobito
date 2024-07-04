@@ -6,12 +6,12 @@
 # https://github.com/hitobito/hitobito.
 
 class ProjectAnalyzer
-  SEPARATOR = /[-_]/.freeze
+  SEPARATOR = /[-_]/
 
   attr_reader :project, :stage
 
   def initialize(name = nil)
-    raise ArgumentError, 'Please pass a project-name or a database-name to this class' unless name
+    raise ArgumentError, "Please pass a project-name or a database-name to this class" unless name
 
     @project, stage_hint = splitter(name)
     @stage = determine_stage(stage_hint)
@@ -25,10 +25,10 @@ class ProjectAnalyzer
 
   def determine_stage(stage)
     case stage
-    when /^int/i  then 'integration'
-    when /^prod/i then 'production'
-    when /^sta/i  then 'staging'
-    when /^dev/i  then 'development'
+    when /^int/i then "integration"
+    when /^prod/i then "production"
+    when /^sta/i then "staging"
+    when /^dev/i then "development"
     else stage
     end
   end
@@ -38,7 +38,7 @@ class ProjectAnalyzer
     separator_char = name.scan(SEPARATOR).first
 
     case parts.count
-    when 2   then parts
+    when 2 then parts
     when 3.. then [parts[1..-2].join(separator_char), parts.last]
     end
   end

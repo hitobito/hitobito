@@ -5,16 +5,16 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Event::KindResource, type: :resource do
   let(:kind) { event_kinds(:slk) }
 
   before do
-    params[:filter] = { id: { eq: kind.id } }
+    params[:filter] = {id: {eq: kind.id}}
   end
 
-  describe 'serialization' do
+  describe "serialization" do
     let(:serialized_attrs) do
       [
         :short_name,
@@ -27,24 +27,24 @@ describe Event::KindResource, type: :resource do
       ]
     end
 
-    it 'works' do
+    it "works" do
       render
       data = jsonapi_data[0]
 
       expect(data.attributes.symbolize_keys.keys).to match_array [:id,
-                                                                  :jsonapi_type] + serialized_attrs
+        :jsonapi_type] + serialized_attrs
 
       expect(data.id).to eq(kind.id)
-      expect(data.jsonapi_type).to eq('event_kinds')
-      expect(data.attributes['type']).to be_blank
+      expect(data.jsonapi_type).to eq("event_kinds")
+      expect(data.attributes["type"]).to be_blank
     end
   end
 
-  describe 'including' do
-    it 'may include kind_category' do
+  describe "including" do
+    it "may include kind_category" do
       category = Fabricate(:event_kind_category)
       kind.update!(kind_category: category)
-      params[:include] = 'kind_category'
+      params[:include] = "kind_category"
       render
       category = d[0].sideload(:kind_category)
       expect(category).to be_present

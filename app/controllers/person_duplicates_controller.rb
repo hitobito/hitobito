@@ -12,7 +12,7 @@ class PersonDuplicatesController < ListController
 
   private
 
-  alias group parent
+  alias_method :group, :parent
 
   def authorize_class
     authorize!(:manage_person_duplicates, group)
@@ -21,5 +21,4 @@ class PersonDuplicatesController < ListController
   def list_entries
     super.list.distinct.page(params[:page]).per(20)
   end
-
 end

@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::KindResource < ApplicationResource
-  primary_endpoint 'event_kinds', [:index, :show]
+  primary_endpoint "event_kinds", [:index, :show]
 
   self.type = :event_kinds
 

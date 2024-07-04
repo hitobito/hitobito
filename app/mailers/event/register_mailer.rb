@@ -4,14 +4,13 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::RegisterMailer < ApplicationMailer
-
-  CONTENT_REGISTER_LOGIN = 'event_register_login'.freeze
+  CONTENT_REGISTER_LOGIN = "event_register_login".freeze
 
   def register_login(recipient, group, event, token)
     @recipient = recipient
-    @group     = group
-    @event     = event
-    @token     = token
+    @group = group
+    @event = event
+    @token = token
     # This email contains sensitive information and thus
     # is only sent to the main email address.
     custom_content_mail(
@@ -38,5 +37,4 @@ class Event::RegisterMailer < ApplicationMailer
   def event_url(group, event, token)
     group_event_url(group, event, onetime_token: token)
   end
-
 end

@@ -5,11 +5,10 @@
 
 module Person::AddRequest::Creator
   class Group < Base
-
-    alias role entity
+    alias_method :role, :entity
 
     def required?
-      person.persisted? && super()
+      person.persisted? && super
     end
 
     def body
@@ -23,6 +22,5 @@ module Person::AddRequest::Creator
     def request_attrs
       super.merge(role_type: entity.type)
     end
-
   end
 end

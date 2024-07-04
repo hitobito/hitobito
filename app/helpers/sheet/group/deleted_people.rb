@@ -6,11 +6,10 @@
 module Sheet
   class Group
     class DeletedPeople < Group
-
       self.tabs = []
 
       def title
-        I18n.t('groups.global.link.deleted_person')
+        I18n.t("groups.global.link.deleted_person")
       end
 
       def active_tab
@@ -30,13 +29,12 @@ module Sheet
       end
 
       def model_name
-        'group'
+        "group"
       end
 
       def translation_prefix
-        'sheet/group'
+        "sheet/group"
       end
-
     end
   end
 end

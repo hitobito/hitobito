@@ -13,7 +13,7 @@ class Export::Pdf::Messages::Letter
     ADDRESS_BOX = [58.mm, 60].freeze
     SHIPPING_INFO_BOX = [ADDRESS_BOX.first, 24].freeze
 
-    delegate :group, to: 'letter'
+    delegate :group, to: "letter"
 
     def render(recipient, font_size: 9)
       stamped :render_logo_right
@@ -24,8 +24,6 @@ class Export::Pdf::Messages::Letter
 
         pdf.move_down 4.mm # 3mm + 1mm from text baseline, according to post factsheet
         render_address(recipient)
-
-
       end
       pdf.font_size font_size do
         stamped :render_date_location_text if letter.date_location_text.present?
@@ -69,14 +67,14 @@ class Export::Pdf::Messages::Letter
     end
 
     def render_shipping_info_post_logo(width)
-      text_box('Post CH AG', align: :center, size: 7.pt, width: width, at: [0, cursor + 18.pt])
+      text_box("Post CH AG", align: :center, size: 7.pt, width: width, at: [0, cursor + 18.pt])
     end
 
     def render_shipping_info_text(width, height)
       shipping_method, text_height = shipping_methods[letter.shipping_method.to_sym]
       text_box("#{shipping_method}<font size='8'>#{letter.pp_post}</font>",
-               inline_format: true, overflow: :truncate, single_line: true,
-               width: width, height: height, at: [0, cursor + text_height * 0.75])
+        inline_format: true, overflow: :truncate, single_line: true,
+        width: width, height: height, at: [0, cursor + text_height * 0.75])
     end
 
     def render_shipping_info_line
@@ -106,14 +104,14 @@ class Export::Pdf::Messages::Letter
       elsif address_present?(group.layer_group)
         group_address(group.layer_group)
       else
-        ''
+        ""
       end
     end
 
     def group_address(group)
       [group.name.to_s.squish,
-       group.address.to_s.squish,
-       [group.zip_code, group.town].compact.join(' ').squish].compact.join("\n")
+        group.address.to_s.squish,
+        [group.zip_code, group.town].compact.join(" ").squish].compact.join("\n")
     end
 
     def address_present?(group)
@@ -121,9 +119,9 @@ class Export::Pdf::Messages::Letter
     end
 
     def shipping_methods
-      { own: ['', 8.pt],
-        normal: ["<b><font size='12'>P.P.</font></b> ", 12.pt],
-        priority: ["<b><font size='12'>P.P.</font> <font size='24pt'>A</font></b> ", 24.pt] }
+      {own: ["", 8.pt],
+       normal: ["<b><font size='12'>P.P.</font></b> ", 12.pt],
+       priority: ["<b><font size='12'>P.P.</font> <font size='24pt'>A</font></b> ", 24.pt]}
     end
   end
 end

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Export::MessageJob < Export::ExportBaseJob
-
   self.parameters = PARAMETERS + [:message_id]
 
   def initialize(format, user_id, message_id, options)
@@ -29,5 +28,4 @@ class Export::MessageJob < Export::ExportBaseJob
       }).render
     end
   end
-
 end

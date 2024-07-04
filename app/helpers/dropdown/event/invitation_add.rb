@@ -9,12 +9,11 @@
 module Dropdown
   module Event
     class InvitationAdd < Dropdown::Base
-
       attr_reader :group, :event, :person
 
       def initialize(template, group, event, person = nil)
         label = translate("add_to_#{event.klass.name.underscore}",
-                          default: full_translation_key(:add))
+          default: full_translation_key(:add))
         super(template, label, :plus)
         @group = group
         @event = event
@@ -26,12 +25,12 @@ module Dropdown
 
       def init_items
         event.role_types.each do |type|
-          event_invitation_attrs = { participation_type: type.sti_name }
+          event_invitation_attrs = {participation_type: type.sti_name}
           event_invitation_attrs[:person_id] = person.id if person
 
           link = template.new_group_event_invitation_path(group,
-                                                          event,
-                                                          event_invitation: event_invitation_attrs)
+            event,
+            event_invitation: event_invitation_attrs)
           add_item(type.label, link)
         end
       end

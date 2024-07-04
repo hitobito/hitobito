@@ -10,14 +10,13 @@
 # is called with a param returning=true, these parameters are reused to present
 # the user the same list as he left it.
 class ListController < ApplicationController
-
   # customized cancan code to authorize with #model_class
   authorize_resource except: :index
   before_action :authorize_class, only: :index
 
   helper_method :model_class, :models_label, :entries, :path_args
 
-  delegate :model_class, :models_label, to: 'self.class'
+  delegate :model_class, :models_label, to: "self.class"
 
   respond_to :html
   include DryCrud::RenderCallbacks
@@ -72,13 +71,12 @@ class ListController < ApplicationController
 
     # A human readable plural name of the model.
     def models_label(plural = true)
-      opts = { count: (plural ? 3 : 1) }
+      opts = {count: (plural ? 3 : 1)}
       opts[:default] = model_class.model_name.human.titleize
       opts[:default] = opts[:default].pluralize if plural
 
       model_class.model_name.human(opts)
     end
-
   end
 
   include DryCrud::InstanceVariables
@@ -86,5 +84,4 @@ class ListController < ApplicationController
   include Sortable
   include Rememberable
   prepend Nestable
-
 end

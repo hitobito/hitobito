@@ -12,7 +12,6 @@ module Wizards
       return render :show if params[:autosubmit].present?
       return save_and_redirect if wizard.valid? && wizard.last_step?
 
-
       wizard.move_on
       render :show, status: :unprocessable_entity # required for turbo to update
     end
@@ -47,15 +46,15 @@ module Wizards
     end
 
     def model_class
-      raise 'Implement in subclass'
+      raise "Implement in subclass"
     end
 
     def success_message
-      raise 'Implement in subclass'
+      raise "Implement in subclass"
     end
 
     def redirect_target
-      raise 'Implement in subclass'
+      raise "Implement in subclass"
     end
   end
 end

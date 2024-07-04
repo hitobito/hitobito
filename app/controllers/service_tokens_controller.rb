@@ -19,7 +19,7 @@ class ServiceTokensController < CrudController
     :event_participations,
     :mailing_lists,
     :permission,
-    cors_origins_attributes: [ :id, :origin, :_destroy ]
+    cors_origins_attributes: [:id, :origin, :_destroy]
   ]
 
   private
@@ -32,10 +32,9 @@ class ServiceTokensController < CrudController
     group_service_tokens_path(group)
   end
 
-  alias group parent
+  alias_method :group, :parent
 
   def authorize_class
     authorize!(:index_service_tokens, group)
   end
-
 end

@@ -5,14 +5,12 @@
 
 module Person::AddRequest::Status
   class MailingList < Base
-
     def created?
       Subscription.where(mailing_list_id: body_id,
-                         subscriber_id: person_id,
-                         subscriber_type: Person.name,
-                         excluded: false).
-                   exists?
+        subscriber_id: person_id,
+        subscriber_type: Person.name,
+        excluded: false)
+        .exists?
     end
-
   end
 end

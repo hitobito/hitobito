@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito
 
 class Household
-
   include ActiveModel::Model
   include ActiveModel::Dirty
 
@@ -48,7 +47,7 @@ class Household
   end
 
   def save!(context: :update)
-    raise 'error saving household' unless save(context: context)
+    raise "error saving household" unless save(context: context)
   end
 
   def save(context: :update)
@@ -143,7 +142,7 @@ class Household
   end
 
   def household_attrs
-    attrs = { household_key: @household_key }
+    attrs = {household_key: @household_key}
     attrs.merge(address_attrs)
   end
 
@@ -168,5 +167,4 @@ class Household
       end
     end
   end
-
 end

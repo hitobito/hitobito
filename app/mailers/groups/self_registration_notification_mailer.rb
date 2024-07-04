@@ -6,8 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class Groups::SelfRegistrationNotificationMailer < ApplicationMailer
-
-  CONTENT_SELF_REGISTRATION_NOTIFICATION = 'self_registration_notification'
+  CONTENT_SELF_REGISTRATION_NOTIFICATION = "self_registration_notification"
 
   def self_registration_notification(notification_email, role)
     @role = role

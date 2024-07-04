@@ -5,20 +5,19 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
 
-require 'csv'
+require "csv"
 class Address::Importer
-
   # Imports Swiss addresses
   # see https://service.post.ch/zopa/dlc/app/#/main
 
-  RECORDS = %w(
+  RECORDS = %w[
     01-zip_codes
     03-locations
     04-streets
     06-house_numbers
-  ).freeze
+  ].freeze
 
-  delegate :url, :token, to: 'Settings.addresses'
+  delegate :url, :token, to: "Settings.addresses"
 
   def run
     prepare_files if stale?
@@ -41,7 +40,7 @@ class Address::Importer
   end
 
   def dir
-    @dir ||= Rails.root.join('tmp/post')
+    @dir ||= Rails.root.join("tmp", "post", "post")
   end
 
   def streets
@@ -59,10 +58,10 @@ class Address::Importer
   private
 
   def fetch_remote
-    raise 'expected token is blank' if token.blank?
+    raise "expected token is blank" if token.blank?
 
     FileUtils.mkdir_p(dir)
-    @response = Faraday.get(url, {}, { 'Authorization' => "Basic #{token}" }).tap do |res|
+    @response = Faraday.get(url, {}, {"Authorization" => "Basic #{token}"}).tap do |res|
       log "status: #{res.status}"
     end
   end
@@ -71,7 +70,7 @@ class Address::Importer
     Zip::InputStream.open(StringIO.new(@response.body)) do |io|
       entry = io.get_next_entry # file only has 1 entry
       log "Reading entry: #{entry.name}"
-      data = io.read.force_encoding(Encoding::ISO8859_1).encode('UTF-8')
+      data = io.read.force_encoding(Encoding::ISO8859_1).encode("UTF-8")
       @file = dir.join(entry.name)
       @file.write(data)
     end
@@ -79,7 +78,7 @@ class Address::Importer
 
   def write_model_files
     records.values.each do |record|
-      File.open(record[:file], 'w') do |f|
+      File.open(record[:file], "w") do |f|
         @file.each_line do |line|
           f.write(line) if line.starts_with?(record[:key].to_s)
         end
@@ -106,12 +105,12 @@ class Address::Importer
   end
 
   def town_name(zip_code)
-    zip_code[:name] =~ /Lausanne\s+\d+/ ? 'Lausanne' : zip_code[:name]
+    /Lausanne\s+\d+/.match?(zip_code[:name]) ? "Lausanne" : zip_code[:name]
   end
 
   def parse_zip_codes
     parse(:zip_codes).collect do |row|
-      [row[1], { zip: row[4], name: row[8], short_name: row[7], state: row[9] }]
+      [row[1], {zip: row[4], name: row[8], short_name: row[7], state: row[9]}]
     end.compact.to_h
   end
 
@@ -127,7 +126,7 @@ class Address::Importer
   def parse(key)
     file = records.dig(key, :file)
     log "parsing #{file}"
-    CSV.foreach(file, col_sep: ';', quote_char: '|')
+    CSV.foreach(file, col_sep: ";", quote_char: "|")
   end
 
   def log(*args)
@@ -136,8 +135,8 @@ class Address::Importer
 
   def records
     @records ||= RECORDS.collect do |model|
-      key, name = model.split('-')
-      [name.to_sym, { key: key, file: dir.join("#{key}-#{name}.csv") }]
+      key, name = model.split("-")
+      [name.to_sym, {key: key, file: dir.join("#{key}-#{name}.csv")}]
     end.to_h
   end
 

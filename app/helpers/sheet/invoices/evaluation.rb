@@ -7,10 +7,8 @@
 
 module Sheet
   class Invoices::Evaluation < Sheet::Invoice
-
     def title
-      I18n.t('invoices.evaluations.show.title')
+      I18n.t("invoices.evaluations.show.title")
     end
-
   end
 end

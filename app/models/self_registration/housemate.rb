@@ -5,7 +5,6 @@
 #  or at https://github.com/hitobito/hitobito.
 
 class SelfRegistration::Housemate < SelfRegistration::Person
-
   self.required_attrs = [
     :first_name, :last_name, :email, :birthday
   ]
@@ -15,7 +14,6 @@ class SelfRegistration::Housemate < SelfRegistration::Person
   ]
 
   def person
-    @person ||= Person.new(attributes.except('_destroy', 'household_emails'))
+    @person ||= Person.new(attributes.except("_destroy", "household_emails"))
   end
-
 end

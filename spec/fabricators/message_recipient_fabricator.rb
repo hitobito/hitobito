@@ -32,7 +32,6 @@
 #  index_message_recipients_on_person_message_phone_number  (person_id,message_id,phone_number) UNIQUE
 #
 
-
 Fabricator(:message_recipient) do
   message { Fabricate(:letter) }
   person { Fabricate(:person) }

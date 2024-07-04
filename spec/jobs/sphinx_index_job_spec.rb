@@ -5,13 +5,12 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe SphinxIndexJob do
-
   subject { SphinxIndexJob.new }
 
-  it 'disables job if sphinx running on external host' do
+  it "disables job if sphinx running on external host" do
     allow(Hitobito::Application).to receive(:sphinx_local?).and_return(true)
     SphinxIndexJob.new.schedule
     allow(Hitobito::Application).to receive(:sphinx_local?).and_return(false)
@@ -19,5 +18,4 @@ describe SphinxIndexJob do
       subject.perform
     end.to change { Delayed::Job.count }.by(-1)
   end
-
 end

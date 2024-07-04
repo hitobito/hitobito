@@ -22,21 +22,20 @@
 #
 
 class PeopleFilter < ActiveRecord::Base
-
-  RANGES = %w(deep layer group).freeze
+  RANGES = %w[deep layer group].freeze
 
   serialize :filter_chain, Person::Filter::Chain
 
   belongs_to :group
 
   validates_by_schema
-  validates :name, uniqueness: { scope: [:group_id, :group_type], case_sensitive: false }
-  validates :range, inclusion: { in: RANGES }
+  validates :name, uniqueness: {scope: [:group_id, :group_type], case_sensitive: false}
+  validates :range, inclusion: {in: RANGES}
 
   scope :list, -> { order(:name) }
 
   def to_params
-    { name: name, range: range, filters: filter_chain.to_params }
+    {name: name, range: range, filters: filter_chain.to_params}
   end
 
   def to_s(_format = :default)
@@ -54,11 +53,10 @@ class PeopleFilter < ActiveRecord::Base
   class << self
     def for_group(group)
       includes(:group)
-        .where('group_id = ? OR group_type = ? OR ' \
-               '(group_id IS NULL AND group_type IS NULL)',
-               group.id,
-               group.type)
+        .where("group_id = ? OR group_type = ? OR " \
+               "(group_id IS NULL AND group_type IS NULL)",
+          group.id,
+          group.type)
     end
   end
-
 end

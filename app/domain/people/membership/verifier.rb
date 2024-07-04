@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class People::Membership::Verifier
-
   def self.enabled?
     new(nil).respond_to?(:member?)
   end
@@ -15,8 +14,7 @@ class People::Membership::Verifier
     @person = person
   end
 
-  #def member?
+  # def member?
   # implement me in wagon
-  #end
-
+  # end
 end

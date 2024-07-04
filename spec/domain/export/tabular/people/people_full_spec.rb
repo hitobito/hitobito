@@ -3,13 +3,12 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Export::Tabular::People::PeopleFull do
-
   before do
-    PeopleRelation.kind_opposites['parent'] = 'child'
-    PeopleRelation.kind_opposites['child'] = 'parent'
+    PeopleRelation.kind_opposites["parent"] = "child"
+    PeopleRelation.kind_opposites["child"] = "parent"
   end
 
   after do
@@ -33,27 +32,28 @@ describe Export::Tabular::People::PeopleFull do
     should eq expected
   end
 
-  context '#attribute_labels' do
+  context "#attribute_labels" do
     subject { people_list.attribute_labels }
 
-    its([:roles]) { should eq 'Rollen' }
+    its([:roles]) { should eq "Rollen" }
     its([:social_account_website]) { should be_blank }
 
-    its([:company]) { should eq 'Firma' }
-    its([:company_name]) { should eq 'Firmenname' }
+    its([:company]) { should eq "Firma" }
+    its([:company_name]) { should eq "Firmenname" }
 
-    context 'social accounts' do
-      before { person.social_accounts << SocialAccount.new(label: 'Webseite', name: 'foo.bar') }
-      its([:social_account_webseite]) { should eq 'Social Media Adresse Webseite' }
+    context "social accounts" do
+      before { person.social_accounts << SocialAccount.new(label: "Webseite", name: "foo.bar") }
+
+      its([:social_account_webseite]) { should eq "Social Media Adresse Webseite" }
     end
 
-    context 'people relations' do
+    context "people relations" do
       before do
         person.relations_to_tails << PeopleRelation.new(head_id: person.id,
-                                                        tail_id: people(:bottom_member).id, kind: 'parent')
+          tail_id: people(:bottom_member).id, kind: "parent")
       end
-      its([:people_relation_parent]) { should eq 'Elternteil' }
+
+      its([:people_relation_parent]) { should eq "Elternteil" }
     end
   end
-
 end

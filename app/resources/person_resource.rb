@@ -6,10 +6,10 @@
 #  https://github.com/hitobito/hitobito.
 
 class PersonResource < ApplicationResource
-  primary_endpoint 'people', [:index, :show, :update]
+  primary_endpoint "people", [:index, :show, :update]
 
   def authorize_update(model)
-    if model.changed_attribute_names_to_save & ['gender', 'birthday']
+    if model.changed_attribute_names_to_save & ["gender", "birthday"]
       # show_details ability is required additionally for updating gender, birthday
       update_ability.authorize!(:show_details, model)
     end
@@ -39,7 +39,7 @@ class PersonResource < ApplicationResource
 
   has_one :layer_group, resource: GroupResource, writable: false do
     params do |hash, people|
-      hash[:filter] = { id: people.flat_map {|person| person.primary_group.layer_group_id } }
+      hash[:filter] = {id: people.flat_map { |person| person.primary_group.layer_group_id }}
     end
     assign do |_people, _layer_groups|
       # We use the accessor from `NestedSet#layer_group` and there is no setter method,

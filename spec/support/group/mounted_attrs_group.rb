@@ -6,18 +6,17 @@
 #  https://github.com/hitobito/hitobito.
 
 class Group::MountedAttrsGroup < Group
-
   mounted_attr :string, :string
   mounted_attr :string_nullable, :string, null: true
   mounted_attr :string_non_nullable, :string, null: false
 
-  mounted_attr :string_with_default, :string, default: 'default'
-  mounted_attr :string_with_default_nullable, :string, default: 'default', null: true
-  mounted_attr :string_with_default_non_nullable, :string, default: 'default', null: false
+  mounted_attr :string_with_default, :string, default: "default"
+  mounted_attr :string_with_default_nullable, :string, default: "default", null: true
+  mounted_attr :string_with_default_non_nullable, :string, default: "default", null: false
 
-  mounted_attr :string_with_default_empty, :string, default: ''
-  mounted_attr :string_with_default_emtpy_nullable, :string, default: '', null: true
-  mounted_attr :string_with_default_empty_non_nullable, :string, default: '', null: false
+  mounted_attr :string_with_default_empty, :string, default: ""
+  mounted_attr :string_with_default_emtpy_nullable, :string, default: "", null: true
+  mounted_attr :string_with_default_empty_non_nullable, :string, default: "", null: false
 
   mounted_attr :string_with_default_null, :string, default: nil
   mounted_attr :string_with_default_null_nullable, :string, default: nil, null: true
@@ -54,5 +53,4 @@ class Group::MountedAttrsGroup < Group
   mounted_attr :boolean_with_default_null, :boolean, default: nil
   mounted_attr :boolean_with_default_null_nullable, :boolean, default: nil, null: true
   mounted_attr :boolean_with_default_null_non_nullable, :boolean, default: nil, null: false
-
 end

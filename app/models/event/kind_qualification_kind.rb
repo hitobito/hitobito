@@ -26,41 +26,37 @@
 class Event::KindQualificationKind < ActiveRecord::Base
   include I18nEnums
 
-  CATEGORIES = %w(qualification precondition prolongation).freeze
-  ROLES = %w(participant leader).freeze
+  CATEGORIES = %w[qualification precondition prolongation].freeze
+  ROLES = %w[participant leader].freeze
 
   class << self
-
     def grouped_qualification_kind_ids(category, role)
-      where(category: category, role: role).
-        pluck(:grouping, :qualification_kind_id).
-        group_by(&:first).
-        map { |_, v| v.map(&:last) }
+      where(category: category, role: role)
+        .pluck(:grouping, :qualification_kind_id)
+        .group_by(&:first)
+        .map { |_, v| v.map(&:last) }
     end
 
     def grouped_qualification_kind_ids_and_validity(category, role)
-      where(category: category, role: role).
-        pluck(:grouping, :qualification_kind_id, :validity).
-        group_by(&:first).
-        map { |_, v| v.map { |a| a[1..2] } }
+      where(category: category, role: role)
+        .pluck(:grouping, :qualification_kind_id, :validity)
+        .group_by(&:first)
+        .map { |_, v| v.pluck(1..2) }
     end
-
   end
-
 
   ### ASSOCIATIONS
 
-  belongs_to :event_kind, class_name: 'Event::Kind'
+  belongs_to :event_kind, class_name: "Event::Kind"
   belongs_to :qualification_kind
-
 
   ### VALIDATIONS
 
   validates_by_schema
-  validates :category, inclusion: { in: CATEGORIES }
-  validates :role, inclusion: { in: ROLES }
+  validates :category, inclusion: {in: CATEGORIES}
+  validates :role, inclusion: {in: ROLES}
 
-  i18n_enum :validity, %w(valid valid_or_expired valid_or_reactivatable)
+  i18n_enum :validity, %w[valid valid_or_expired valid_or_reactivatable]
 
   scope :prolongation, -> { where(category: :prolongation) }
 

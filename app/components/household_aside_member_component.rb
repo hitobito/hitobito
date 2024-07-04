@@ -41,7 +41,7 @@ class HouseholdAsideMemberComponent < ApplicationComponent
   end
 
   def person_link(member)
-    link_to_if(link_person?, member.full_name, member, data: { turbo_frame: '_top' })
+    link_to_if(link_person?, member.full_name, member, data: {turbo_frame: "_top"})
   end
 
   attr_reader :person

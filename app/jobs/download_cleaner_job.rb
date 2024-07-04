@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class DownloadCleanerJob < RecurringJob
-
   run_every 1.day
 
   def perform_internal
@@ -22,5 +21,4 @@ class DownloadCleanerJob < RecurringJob
   def older_than_a_day
     AsyncDownloadFile.arel_table[:timestamp].lt(1.day.ago.to_i)
   end
-
 end

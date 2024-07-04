@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::ParticipationsController < CrudController # rubocop:disable Metrics/ClassLength
-
   include RenderPeopleExports
   include AsyncDownload
   include Api::JsonPaging
@@ -16,23 +15,22 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   self.nesting = Group, Event
 
   self.permitted_attrs = [:additional_information,
-                          answers_attributes: [:id, :question_id, :answer, answer: []],
-                          application_attributes: [:id, :priority_2_id, :priority_3_id]]
+    answers_attributes: [:id, :question_id, :answer, answer: []],
+    application_attributes: [:id, :priority_2_id, :priority_3_id]]
 
   self.remember_params += [:filter]
 
-  self.sort_mappings = { last_name: 'people.last_name',
-                         first_name: 'people.first_name',
+  self.sort_mappings = {last_name: "people.last_name",
+                         first_name: "people.first_name",
                          roles: lambda do |event|
                                   Person.order_by_name_statement.unshift(
                                     Event::Participation.order_by_role_statement(event)
                                   )
                                 end,
-                         nickname: 'people.nickname',
-                         zip_code: 'people.zip_code',
-                         town: 'people.town',
-                         birthday: 'people.birthday' }
-
+                         nickname: "people.nickname",
+                         zip_code: "people.zip_code",
+                         town: "people.town",
+                         birthday: "people.birthday"}
 
   decorates :group, :event, :participation, :participations, :alternatives
 
@@ -79,14 +77,16 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
         entries
         @person_add_requests = fetch_person_add_requests
       end
-      format.pdf           { render_entries_pdf(filter_entries) }
-      format.csv           { render_tabular_in_background(:csv) }
-      format.vcf           { render_vcf(filter_entries.includes(person: :phone_numbers)
-                                                      .collect(&:person)) }
-      format.xlsx          { render_tabular_in_background(:xlsx) }
-      format.email         { render_emails(filter_entries.collect(&:person), ',') }
-      format.email_outlook { render_emails(filter_entries.collect(&:person), ';') }
-      format.json          { render_entries_json(filter_entries) }
+      format.pdf { render_entries_pdf(filter_entries) }
+      format.csv { render_tabular_in_background(:csv) }
+      format.vcf {
+        render_vcf(filter_entries.includes(person: :phone_numbers)
+                                                      .collect(&:person))
+      }
+      format.xlsx { render_tabular_in_background(:xlsx) }
+      format.email { render_emails(filter_entries.collect(&:person), ",") }
+      format.email_outlook { render_emails(filter_entries.collect(&:person), ";") }
+      format.json { render_entries_json(filter_entries) }
     end
   end
 
@@ -102,7 +102,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     pdf = Export::Pdf::Participation.render(entry)
     filename = Export::Pdf::Participation.filename(entry)
 
-    send_data pdf, type: :pdf, disposition: 'inline', filename: filename
+    send_data pdf, type: :pdf, disposition: "inline", filename: filename
   end
 
   def destroy
@@ -133,12 +133,12 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   def render_entries_json(entries)
     paged_entries = entries.page(params[:page])
     render json: [paging_properties(paged_entries),
-                  ListSerializer.new(paged_entries.decorate,
-                                     group: group,
-                                     event: event,
-                                     page: params[:page],
-                                     serializer: EventParticipationSerializer,
-                                     controller: self)].inject(&:merge)
+      ListSerializer.new(paged_entries.decorate,
+        group: group,
+        event: event,
+        page: params[:page],
+        serializer: EventParticipationSerializer,
+        controller: self)].inject(&:merge)
   end
 
   def sort_mappings_with_indifferent_access
@@ -187,9 +187,9 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   def render_tabular_in_background(format)
     with_async_download_cookie(format, :event_participation_export) do |filename|
       Export::EventParticipationsExportJob.new(format,
-                                               current_person.id,
-                                               event_participation_filter,
-                                               params.merge(filename: filename)).enqueue!
+        current_person.id,
+        event_participation_filter,
+        params.merge(filename: filename)).enqueue!
     end
   end
 
@@ -199,7 +199,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def sort_columns
-    params[:sort] == 'roles' ? sort_mappings_with_indifferent_access[:roles].call(event) : super
+    (params[:sort] == "roles") ? sort_mappings_with_indifferent_access[:roles].call(event) : super
   end
 
   def find_entry
@@ -251,8 +251,8 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
 
   def invited?
     Event::Invitation.exists?(person: current_user,
-                              event: event,
-                              participation_type: params_role_type)
+      event: event,
+      participation_type: params_role_type)
   end
 
   def params_role_type
@@ -284,10 +284,10 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   def load_priorities
     if entry.application && event.priorization && current_user
       @alternatives = event.class.application_possible
-                           .where(kind_id: event.kind_id)
-                           .in_hierarchy(current_user)
-                           .includes(:groups)
-                           .list
+        .where(kind_id: event.kind_id)
+        .in_hierarchy(current_user)
+        .includes(:groups)
+        .list
       @priority_2s = @priority_3s = (@alternatives.to_a - [event])
     end
   end
@@ -309,9 +309,9 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   # A label for the current entry, including the model name, used for flash
   def full_entry_label
     label = translate(:full_entry_label, model_label: models_label(false),
-                                         person: h(entry.person),
-                                         event: h(entry.event))
-    sanitize(label, tags: %w(i))
+      person: h(entry.person),
+      event: h(entry.event))
+    sanitize(label, tags: %w[i])
   end
 
   def send_confirmation_email
@@ -333,11 +333,11 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def set_success_notice
-    return super unless action_name.to_s == 'create'
+    return super unless action_name.to_s == "create"
 
     if entry.pending?
       warn = translate(:pending, full_entry_label: full_entry_label)
-      warn += '<br />' + translate(:instructions) if append_mailing_instructions?
+      warn += "<br />" + translate(:instructions) if append_mailing_instructions?
       flash[:warning] ||= warn
       flash[:alert] ||= translate(:waiting_list) if entry.waiting_list?
     else
@@ -375,5 +375,4 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     user_id = current_user.try(:id)
     Event::ParticipationFilter.new(event.id, user_id, params)
   end
-
 end

@@ -4,7 +4,6 @@
 #  Affero General Public License version 3 or later. See the COPYING file at the top-level directory
 #  or at https://github.com/hitobito/hitobito.
 
-
 module Sheet
   class Household < Base
     self.parent_sheet = Sheet::Person

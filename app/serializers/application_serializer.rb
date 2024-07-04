@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'oat/adapters/json_api'
+require "oat/adapters/json_api"
 
 # replace the naïve pluralization since ActiveSupport is present
 # see https://github.com/ismasan/oat/pull/79 for an upstream fix
@@ -24,7 +24,7 @@ class ApplicationSerializer < Oat::Serializer
     # define a schema extension for a given key
     def extension(key, &block)
       @extensions ||= Hash.new { |h, k| h[k] = [] }
-      @extensions[key] << block if block_given?
+      @extensions[key] << block if block
       @extensions[key]
     end
   end
@@ -67,8 +67,8 @@ class ApplicationSerializer < Oat::Serializer
 
   # alternative to store custom link templates
   def template_link(key, type, href, options = {})
-    template_links[key] = options.merge(href: href.gsub('%7B', '{').gsub('%7D', '}'),
-                                        type: type.to_s.pluralize)
+    template_links[key] = options.merge(href: href.gsub("%7B", "{").gsub("%7D", "}"),
+      type: type.to_s.pluralize)
   end
 
   def group_template_link(key)
@@ -112,7 +112,7 @@ class ApplicationSerializer < Oat::Serializer
       objects.each do |attrs|
         type = attrs.delete(:type)
         # do not add attrs consisting only of an :id
-        next if attrs.keys.collect(&:to_s) == %w(id)
+        next if attrs.keys.collect(&:to_s) == %w[id]
 
         # combine linked entries by type
         list = hash[:linked][type || link]
@@ -129,5 +129,4 @@ class ApplicationSerializer < Oat::Serializer
     hash[:links] ||= {}
     hash[:links].merge!(template_links)
   end
-
 end

@@ -17,7 +17,7 @@ module Tags
   end
 
   def collect_grouped_tags
-    tags = entry.taggings.includes(:tag).order('tags.name').each_with_object({}) do |t, memo|
+    tags = entry.taggings.includes(:tag).order("tags.name").each_with_object({}) do |t, memo|
       tag = t.tag
       tag.hitobito_tooltip = t.hitobito_tooltip
 

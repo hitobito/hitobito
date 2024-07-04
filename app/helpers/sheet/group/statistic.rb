@@ -11,7 +11,7 @@ module Sheet
       self.parent_sheet = Sheet::Group
 
       def model_name
-        'group'
+        "group"
       end
     end
   end

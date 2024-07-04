@@ -7,7 +7,6 @@
 
 # Handles a top-level invoice route (/invoice/:id)
 class Invoices::TopController < ApplicationController
-
   before_action :authorize_action
 
   def show
@@ -28,5 +27,4 @@ class Invoices::TopController < ApplicationController
   def authorize_action
     authorize!(:show, entry)
   end
-
 end

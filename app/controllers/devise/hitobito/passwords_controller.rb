@@ -6,20 +6,19 @@
 #  https://github.com/hitobito/hitobito.
 
 class Devise::Hitobito::PasswordsController < Devise::PasswordsController
-
   skip_before_action :reject_blocked_person!
 
   def successfully_sent?(resource)
     if resource.login?
       super
     else
-      flash[:alert] = I18n.translate('devise.failure.signin_not_allowed')
+      flash[:alert] = I18n.translate("devise.failure.signin_not_allowed")
     end
   end
 
   def create
     previous_locale = I18n.locale
-    resource = resource_class.find_by(email: resource_params['email'])
+    resource = resource_class.find_by(email: resource_params["email"])
     I18n.locale = resource&.language || previous_locale
 
     # The block gets executed after sending the mail and before redirecting

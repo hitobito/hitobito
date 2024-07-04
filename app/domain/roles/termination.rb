@@ -66,5 +66,4 @@ class Roles::Termination
 
     errors.add(:role, :not_terminatable) unless role.terminatable?
   end
-
 end

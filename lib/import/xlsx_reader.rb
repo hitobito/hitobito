@@ -5,14 +5,14 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'simple_xlsx_reader'
+require "simple_xlsx_reader"
 
 module Import
   class XlsxReader
     def self.read(path, sheet_name, headers = {}, &block)
       workbook = SimpleXlsxReader.open path.to_s
-      worksheet = workbook.sheets.select { |sheet| sheet.name == sheet_name }.first
-      raise "No sheet named #{sheet_name} found." unless worksheet.present?
+      worksheet = workbook.sheets.find { |sheet| sheet.name == sheet_name }
+      raise "No sheet named #{sheet_name} found." if worksheet.blank?
       if headers
         worksheet.rows.each(**headers, &block)
       else

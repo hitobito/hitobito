@@ -23,13 +23,13 @@
 Fabricator(:calendar) do
   name { Faker::Lorem.words(number: 1).first.capitalize }
   description { Faker::Lorem.sentences }
-  group { Fabricate('Group::TopLayer') }
+  group { Fabricate("Group::TopLayer") }
   token { SecureRandom.urlsafe_base64 }
   included_calendar_groups(count: 1, fabricator: :calendar_group_base)
 end
 
 Fabricator(:calendar_group_base, class_name: :calendar_group) do
-  group { Fabricate('Group::TopLayer') }
+  group { Fabricate("Group::TopLayer") }
   excluded { false }
   with_subgroups { false }
 end

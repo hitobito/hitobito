@@ -7,7 +7,6 @@
 
 module MailingLists
   class OptInCleanupJob < RecurringJob
-
     run_every 1.hour
 
     private

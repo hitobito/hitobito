@@ -6,13 +6,13 @@
 #  https://github.com/hitobito/hitobito.
 #
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Person::DuplicateLocatorJob do
   let(:person) { people(:top_leader) }
   let(:locator) { instance_double(People::DuplicateLocator) }
 
-  it 'invoces DuplicateLocator with person scope' do
+  it "invoces DuplicateLocator with person scope" do
     expect(People::DuplicateLocator).to receive(:new)
       .with(Person.where(id: person.id))
       .and_return(locator)

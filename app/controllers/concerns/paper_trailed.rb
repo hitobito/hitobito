@@ -18,7 +18,7 @@ module PaperTrailed
   def user_for_paper_trail
     return current_service_token.id if current_service_token
 
-   session[:origin_user].presence || current_ability&.user&.id
+    session[:origin_user].presence || current_ability&.user&.id
   end
 
   def whodunnit_type_for_papertrail
@@ -28,7 +28,7 @@ module PaperTrailed
   end
 
   def info_for_paper_trail
-    return {} unless whodunnit_type_for_papertrail.present?
+    return {} if whodunnit_type_for_papertrail.blank?
     {
       whodunnit_type: whodunnit_type_for_papertrail
     }

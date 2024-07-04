@@ -31,7 +31,7 @@ class Assignment < ActiveRecord::Base
   include I18nEnums
 
   belongs_to :person
-  belongs_to :creator, class_name: 'Person'
+  belongs_to :creator, class_name: "Person"
   belongs_to :attachment, polymorphic: true
 
   after_create :attachment_prepare_print

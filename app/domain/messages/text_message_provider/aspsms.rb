@@ -7,25 +7,24 @@
 
 # https://json.aspsms.com/
 
-require 'rest-client'
+require "rest-client"
 
 module Messages
   module TextMessageProvider
     class Aspsms < Base
-
-      SEND_URL = 'https://json.aspsms.com/SendSimpleTextSMS'
-      DELIVERY_REPORTS_URL = 'https://json.aspsms.com/InquireDeliveryNotifications'
+      SEND_URL = "https://json.aspsms.com/SendSimpleTextSMS"
+      DELIVERY_REPORTS_URL = "https://json.aspsms.com/InquireDeliveryNotifications"
       MAX_CHARS = 603
 
       STATUS = {
-        '0' => STATUS_OK,
-        '1' => STATUS_OK,
-        '3' => STATUS_AUTH_ERROR
+        "0" => STATUS_OK,
+        "1" => STATUS_OK,
+        "3" => STATUS_AUTH_ERROR
       }.freeze
 
       def send(text:, recipients: [])
         params = default_params
-        params[:Originator] = @config['originator']
+        params[:Originator] = @config["originator"]
         params[:MessageText] = text[0..MAX_CHARS - 1]
         params[:Recipients] = recipients[0..MAX_RECIPIENTS - 1]
         params[:AffiliateID] = affiliate_id if affiliate_id.present?
@@ -35,7 +34,7 @@ module Messages
 
       def delivery_reports(recipient_ids: [])
         params = default_params
-        params[:TransactionReferenceNumbers] = recipient_ids.join(';')
+        params[:TransactionReferenceNumbers] = recipient_ids.join(";")
         response = RestClient.post(DELIVERY_REPORTS_URL, params.to_json)
         result(response) do |r, data|
           r[:delivery_reports] = collect_delivery_notifications(data)
@@ -45,43 +44,42 @@ module Messages
       private
 
       def collect_delivery_notifications(response_data)
-        notifications = response_data['DeliveryNotifications']
+        notifications = response_data["DeliveryNotifications"]
         return if notifications.nil?
 
         notifications.each_with_object({}) do |n, h|
-          id = n['TransactionReferenceNumber']
+          id = n["TransactionReferenceNumber"]
           h[id] = {
-            status: delivery_status(n['DeliveryStatus']),
-            status_message: n['DeliveryStatusDescription']
+            status: delivery_status(n["DeliveryStatus"]),
+            status_message: n["DeliveryStatusDescription"]
           }
         end
       end
 
       def result(response)
         data = JSON.parse(response.body)
-        r = { status: status(data), message: data['StatusInfo'] }
+        r = {status: status(data), message: data["StatusInfo"]}
         yield(r, data) if block_given?
         r
       end
 
       def status(response_json)
-        status_code = response_json['StatusCode']
+        status_code = response_json["StatusCode"]
         STATUS[status_code] || STATUS_ERROR
       end
 
       def delivery_status(status_value)
-        status_value.eql?('0') ? :ok : :error
+        status_value.eql?("0") ? :ok : :error
       end
 
       def default_params
-        { UserName: @config['username'],
-          Password: @config['password'] }
+        {UserName: @config["username"],
+         Password: @config["password"]}
       end
 
       def affiliate_id
-        '259956' # Hardcoded Puzzle affiliate id. Self-hosted wagons can override this.
+        "259956" # Hardcoded Puzzle affiliate id. Self-hosted wagons can override this.
       end
-
     end
   end
 end

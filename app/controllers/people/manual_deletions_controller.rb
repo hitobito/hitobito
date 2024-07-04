@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class People::ManualDeletionsController < ApplicationController
-
   RECENT_EVENT_CUTOFF_DURATION = 10.years
 
   before_action :entry
@@ -18,22 +17,23 @@ class People::ManualDeletionsController < ApplicationController
     authorize!(:manually_delete_people, group)
   end
 
-  def show; end
+  def show
+  end
 
   def minimize
-    raise StandardError.new('can not minimize') unless minimizeable?
+    raise StandardError.new("can not minimize") unless minimizeable?
 
     People::Minimizer.new(entry).run
 
-    redirect_to group_deleted_people_path(group), notice: t('.success', full_name: entry.full_name)
+    redirect_to group_deleted_people_path(group), notice: t(".success", full_name: entry.full_name)
   end
 
   def delete
-    raise StandardError.new('can not delete') unless deleteable?
+    raise StandardError.new("can not delete") unless deleteable?
 
     People::Destroyer.new(entry).run
 
-    redirect_to group_deleted_people_path(group), notice: t('.success', full_name: entry.full_name)
+    redirect_to group_deleted_people_path(group), notice: t(".success", full_name: entry.full_name)
   end
 
   private
@@ -53,8 +53,8 @@ class People::ManualDeletionsController < ApplicationController
     errors = []
 
     if participated_in_recent_event?
-      errors << t('.errors.participated_in_recent_event',
-                  duration: RECENT_EVENT_CUTOFF_DURATION)
+      errors << t(".errors.participated_in_recent_event",
+        duration: RECENT_EVENT_CUTOFF_DURATION)
     end
 
     @deleteable_errors += errors
@@ -62,10 +62,11 @@ class People::ManualDeletionsController < ApplicationController
   end
 
   def ensure_minimizeable_rules
-    @minimizeable_errors << t('.errors.already_minimized') if entry.minimized_at.present?
+    @minimizeable_errors << t(".errors.already_minimized") if entry.minimized_at.present?
   end
 
-  def ensure_deleteable_rules; end
+  def ensure_deleteable_rules
+  end
 
   def minimizeable?
     @minimizeable_errors.none?
@@ -77,9 +78,9 @@ class People::ManualDeletionsController < ApplicationController
 
   def participated_in_recent_event?
     Event.joins(:dates, :participations)
-      .where('event_dates.start_at > :cutoff OR event_dates.finish_at > :cutoff',
-             cutoff: RECENT_EVENT_CUTOFF_DURATION.ago)
-      .where("event_participations.person_id = ?", entry.id)
+      .where("event_dates.start_at > :cutoff OR event_dates.finish_at > :cutoff",
+        cutoff: RECENT_EVENT_CUTOFF_DURATION.ago)
+      .where(event_participations: {person_id: entry.id})
       .any?
   end
 
@@ -90,5 +91,4 @@ class People::ManualDeletionsController < ApplicationController
   def group
     @group ||= Group.find(params[:group_id])
   end
-
 end

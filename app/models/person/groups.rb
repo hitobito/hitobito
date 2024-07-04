@@ -33,9 +33,9 @@ module Person::Groups
     @groups_with_permission ||= {}
     @groups_with_permission[permission] ||=
       roles_with_groups.to_a
-                       .select { |r| r.permissions.include?(permission) }
-                       .collect(&:group)
-                       .uniq
+        .select { |r| r.permissions.include?(permission) }
+        .collect(&:group)
+        .uniq
     @groups_with_permission[permission].dup
   end
 
@@ -76,27 +76,27 @@ module Person::Groups
     def visible_from_above(group = nil)
       role_types = group ? group.role_types.select(&:visible_from_above) : Role.visible_types
       # use string query to only get these roles (hash query would be merged).
-      where('roles.type IN (?)', role_types.collect(&:sti_name))
+      where(roles: {type: role_types.collect(&:sti_name)})
     end
 
     # Scope listing all people with a role in the given group.
-    def in_group(group, join = { roles: :group })
-      joins(join).where(groups: { id: group.id })
+    def in_group(group, join = {roles: :group})
+      joins(join).where(groups: {id: group.id})
     end
 
     # Scope listing all people with a role in the given layer.
     def in_layer(*groups)
-      joins(groups.extract_options![:join] || { roles: :group })
-        .where(groups: { layer_group_id: groups.collect(&:layer_group_id), deleted_at: nil })
+      joins(groups.extract_options![:join] || {roles: :group})
+        .where(groups: {layer_group_id: groups.collect(&:layer_group_id), deleted_at: nil})
         .distinct
     end
 
     # Scope listing all people with a role in or below the given group.
-    def in_or_below(group, join = { roles: :group })
+    def in_or_below(group, join = {roles: :group})
       joins(join)
-        .where(groups: { deleted_at: nil })
+        .where(groups: {deleted_at: nil})
         .where("#{Group.quoted_table_name}.lft >= :lft AND #{Group.quoted_table_name}.rgt <= :rgt",
-               lft: group.lft, rgt: group.rgt)
+          lft: group.lft, rgt: group.rgt)
         .distinct
     end
 
@@ -104,7 +104,7 @@ module Person::Groups
     def members(group = nil)
       types = group ? group.role_types : Role.all_types
       member_types = types.select(&:member?).collect(&:sti_name)
-      where(roles: { type: member_types })
+      where(roles: {type: member_types})
     end
 
     # Order people by the order role types are listed in their group types.
@@ -113,14 +113,13 @@ module Person::Groups
     end
 
     def order_by_role_statement
-      statement = ['CASE roles.type']
+      statement = ["CASE roles.type"]
       Role.all_types.each_with_index do |t, i|
         statement << "WHEN '#{t.sti_name}' THEN #{i}"
       end
-      statement << 'END'
+      statement << "END"
 
-      statement.join(' ')
+      statement.join(" ")
     end
-
   end
 end

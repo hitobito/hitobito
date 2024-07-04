@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::ApiFilter < Event::Filter
-
   def initialize(group, params, year)
     @group = group
     @type = params[:type]
@@ -16,18 +15,17 @@ class Event::ApiFilter < Event::Filter
 
     if @start_date.blank? && @end_date.blank?
       @start_date = Date.new(year, 1, 1)
-      @end_date   = Date.new(year, 12, 31)
+      @end_date = Date.new(year, 12, 31)
     end
   end
 
   def list_entries
     scope = Event.where(type: type)
-                 .includes(:groups, :translations)
-                 .with_group_id(relevant_group_ids)
-                 .order_by_date
-                 .preload_all_dates
-                 .distinct
-
+      .includes(:groups, :translations)
+      .with_group_id(relevant_group_ids)
+      .order_by_date
+      .preload_all_dates
+      .distinct
 
     end_date ? scope.between(start_date, end_date) : scope.upcoming(start_date)
   end
@@ -47,5 +45,4 @@ class Event::ApiFilter < Event::Filter
   rescue ArgumentError
     nil
   end
-
 end

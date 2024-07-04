@@ -5,10 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "people#show", type: :request do
-  it_behaves_like 'jsonapi authorized requests' do
+  it_behaves_like "jsonapi authorized requests" do
     let(:params) { {} }
     let!(:person) { people(:top_leader) }
 
@@ -16,12 +16,12 @@ RSpec.describe "people#show", type: :request do
       jsonapi_get "/api/people/#{person.id}", params: params
     end
 
-    describe 'basic fetch' do
-      it 'works' do
+    describe "basic fetch" do
+      it "works" do
         expect(PersonResource).to receive(:find).and_call_original
         make_request
         expect(response.status).to eq(200)
-        expect(d.jsonapi_type).to eq('people')
+        expect(d.jsonapi_type).to eq("people")
         expect(d.id).to eq(person.id)
       end
     end

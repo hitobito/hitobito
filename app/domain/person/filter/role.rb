@@ -6,11 +6,10 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::Filter::Role < Person::Filter::Base
-
   include ParamConverters
 
   self.permitted_args = [:role_type_ids, :role_types, :kind,
-                         :start_at, :finish_at, :include_archived]
+    :start_at, :finish_at, :include_archived]
 
   def initialize(attr, args)
     super
@@ -19,12 +18,12 @@ class Person::Filter::Role < Person::Filter::Base
 
   def apply(scope)
     scope = scope.where(type_conditions(scope))
-                 .where(duration_conditions)
+      .where(duration_conditions)
     if include_archived?
       scope
     else
-      scope.where(roles: { archived_at: nil })
-           .or(scope.where(Role.arel_table[:archived_at].gt(Time.now.utc)))
+      scope.where(roles: {archived_at: nil})
+        .or(scope.where(Role.arel_table[:archived_at].gt(Time.now.utc)))
     end
   end
 
@@ -42,8 +41,8 @@ class Person::Filter::Role < Person::Filter::Base
 
   def roles_join
     case args[:kind]
-    when 'active', 'inactive' then any_roles_join
-    when 'deleted' then deleted_roles_join
+    when "active", "inactive" then any_roles_join
+    when "deleted" then deleted_roles_join
     end
   end
 
@@ -87,17 +86,17 @@ class Person::Filter::Role < Person::Filter::Base
 
   def type_conditions(scope)
     return if args[:role_types].blank?
-    return inactive_type_conditions(scope) if args[:kind].eql?('inactive')
+    return inactive_type_conditions(scope) if args[:kind].eql?("inactive")
 
-    [[:roles, { type: args[:role_types] }]].to_h
+    [[:roles, {type: args[:role_types]}]].to_h
   end
 
   def inactive_type_conditions(scope)
     excluded_people_ids = scope.where(excluded_roles_duration_conditions)
-                               .where(roles: { type: args[:role_types] })
-                               .pluck(:id)
+      .where(roles: {type: args[:role_types]})
+      .pluck(:id)
 
-    ['people.id NOT IN (?)', excluded_people_ids] if excluded_people_ids.any?
+    ["people.id NOT IN (?)", excluded_people_ids] if excluded_people_ids.any?
   end
 
   def excluded_roles_duration_conditions
@@ -111,21 +110,21 @@ class Person::Filter::Role < Person::Filter::Base
     return unless args[:kind]
 
     case args[:kind]
-    when 'created' then [[:roles, { created_at: time_range }]].to_h
-    when 'deleted' then [[:roles, { deleted_at: time_range }]].to_h
-    when 'active', 'inactive' then [active_role_condition, min: time_range.min, max: time_range.max]
+    when "created" then [[:roles, {created_at: time_range}]].to_h
+    when "deleted" then [[:roles, {deleted_at: time_range}]].to_h
+    when "active", "inactive" then [active_role_condition, min: time_range.min, max: time_range.max]
     end
   end
 
   def active_role_condition
-    <<~SQL.split.map(&:strip).join(' ')
+    <<~SQL.split.map(&:strip).join(" ")
       roles.created_at <= :max AND
       (roles.deleted_at >= :min OR roles.deleted_at IS NULL)
     SQL
   end
 
   def deleted_roles_join
-    <<~SQL.split.map(&:strip).join(' ')
+    <<~SQL.split.map(&:strip).join(" ")
       INNER JOIN roles ON
         (roles.person_id = people.id AND roles.deleted_at IS NOT NULL)
       INNER JOIN #{Group.quoted_table_name} ON roles.group_id = #{Group.quoted_table_name}.id
@@ -133,7 +132,7 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def any_roles_join
-    <<~SQL.split.map(&:strip).join(' ')
+    <<~SQL.split.map(&:strip).join(" ")
       INNER JOIN roles ON roles.person_id = people.id
       INNER JOIN #{Group.quoted_table_name} ON roles.group_id = #{Group.quoted_table_name}.id
     SQL
@@ -142,5 +141,4 @@ class Person::Filter::Role < Person::Filter::Base
   def include_archived?
     true?(args[:include_archived])
   end
-
 end

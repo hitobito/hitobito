@@ -5,10 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require_relative Rails.root.join('app', 'domain', 'countries') # take precedence over a gem
+require_relative Rails.root.join("app", "domain", "countries") # take precedence over a gem
 
 module Contactable
-
   extend ActiveSupport::Concern
 
   # rubocop:disable Style/MutableConstant extension point
@@ -20,7 +19,7 @@ module Contactable
     }
   ]
   # rubocop:enable Style/MutableConstant
-  if FeatureGate.disabled?('structured_addresses')
+  if FeatureGate.disabled?("structured_addresses")
     ACCESSIBLE_ATTRS.delete(:address_care_of)
     ACCESSIBLE_ATTRS.delete(:street)
     ACCESSIBLE_ATTRS.delete(:housenumber)
@@ -28,11 +27,11 @@ module Contactable
 
   end
 
-  if FeatureGate.disabled?('address_migration')
+  if FeatureGate.disabled?("address_migration")
     ACCESSIBLE_ATTRS << :address
   end
 
-  if FeatureGate.enabled?('address_migration')
+  if FeatureGate.enabled?("address_migration")
     ACCESSIBLE_ATTRS.delete(:address_care_of)
     ACCESSIBLE_ATTRS.delete(:street)
     ACCESSIBLE_ATTRS.delete(:housenumber)
@@ -44,10 +43,10 @@ module Contactable
     has_many :social_accounts, as: :contactable, dependent: :destroy
     has_many :additional_emails, as: :contactable, dependent: :destroy
 
-    belongs_to :location, foreign_key: 'zip_code', primary_key: 'zip_code', inverse_of: false
+    belongs_to :location, foreign_key: "zip_code", primary_key: "zip_code", inverse_of: false
 
     accepts_nested_attributes_for :phone_numbers, :social_accounts, :additional_emails,
-                                  allow_destroy: true
+      allow_destroy: true
 
     before_validation :set_self_in_nested
 
@@ -56,20 +55,18 @@ module Contactable
   end
 
   def address
-    if FeatureGate.enabled?('structured_addresses') || FeatureGate.enabled?('address_migration')
+    if FeatureGate.enabled?("structured_addresses") || FeatureGate.enabled?("address_migration")
       parts = [street, housenumber].compact
 
       if parts.blank?
-        if FeatureGate.enabled?('address_migration')
+        if FeatureGate.enabled?("address_migration")
           return self[:address]
         else
           return nil
         end
       end
 
-
-
-      parts.join(' ')
+      parts.join(" ")
     else
       self[:address]
     end
@@ -122,5 +119,4 @@ module Contactable
       all.extending(Person::PreloadPublicAccounts)
     end
   end
-
 end

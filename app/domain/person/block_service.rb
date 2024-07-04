@@ -45,8 +45,8 @@ class Person::BlockService
 
     def inactivity_block_interval_placeholders
       {
-        'warn-after-days' => warn_after_days.to_s,
-        'block-after-days' => block_after_days.to_s,
+        "warn-after-days" => warn_after_days.to_s,
+        "block-after-days" => block_after_days.to_s
       }
     end
 
@@ -62,7 +62,7 @@ class Person::BlockService
       return Person.none unless block?
 
       Person.where(blocked_at: nil)
-            .where(Person.arel_table[:inactivity_block_warning_sent_at].lt(block_after&.ago))
+        .where(Person.arel_table[:inactivity_block_warning_sent_at].lt(block_after&.ago))
     end
 
     def block_within_scope!
@@ -77,9 +77,9 @@ class Person::BlockService
     def warn_scope
       return Person.none unless warn?
 
-      Person.
-        where(inactivity_block_warning_sent_at: nil, blocked_at: nil).
-        where(Person.arel_table[:last_sign_in_at].lt(warn_after&.ago))
+      Person
+        .where(inactivity_block_warning_sent_at: nil, blocked_at: nil)
+        .where(Person.arel_table[:last_sign_in_at].lt(warn_after&.ago))
     end
 
     def warn_within_scope!

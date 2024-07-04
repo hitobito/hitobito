@@ -5,7 +5,6 @@
 
 module Person::AddRequest::Approver
   class Base
-
     attr_reader :request, :user
 
     def initialize(request, user)
@@ -38,21 +37,21 @@ module Person::AddRequest::Approver
     end
 
     def error_message
-      entity.errors.full_messages.join(', ')
+      entity.errors.full_messages.join(", ")
     end
 
     private
 
     def send_approval
-      Person::AddRequestMailer.
-        approved(request.person, request.body, request.requester, user).
-        deliver_later
+      Person::AddRequestMailer
+        .approved(request.person, request.body, request.requester, user)
+        .deliver_later
     end
 
     def send_rejection
-      Person::AddRequestMailer.
-        rejected(request.person, request.body, request.requester, user).
-        deliver_later
+      Person::AddRequestMailer
+        .rejected(request.person, request.body, request.requester, user)
+        .deliver_later
     end
 
     def build_entity
@@ -62,6 +61,5 @@ module Person::AddRequest::Approver
     def email
       request.person.email
     end
-
   end
 end

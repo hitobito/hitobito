@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class CalendarAbility < AbilityDsl::Base
-
   on(Calendar) do
     permission(:layer_full).may(:manage).in_same_layer
     permission(:layer_and_below_full).may(:manage).in_same_layer
@@ -15,5 +14,4 @@ class CalendarAbility < AbilityDsl::Base
   def in_same_layer
     user.groups.map(&:layer_group_id).include? subject.group.layer_group.id
   end
-
 end

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module NotesHelper
-
   def note_path(note, group_id)
     case note.subject
     when Group
@@ -15,5 +14,4 @@ module NotesHelper
       group_person_note_path(group_id: group_id, person_id: note.subject_id, id: note.id)
     end
   end
-
 end

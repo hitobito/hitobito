@@ -4,7 +4,7 @@
 #  Affero General Public License version 3 or later. See the COPYING file at the top-level directory
 #  or at https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Event::Qualifier::StartAtCalculator do
   let(:person) { people(:bottom_member) }
@@ -14,16 +14,16 @@ describe Event::Qualifier::StartAtCalculator do
   let(:today) { Time.zone.today }
   let!(:course) { create_course(training_days: 1, start_at: today - 1.month) }
 
-  it 'does not fail on empty prolongation kinds' do
+  it "does not fail on empty prolongation kinds" do
     expect(described_class.new(person, course, [], role).start_at(gl)).to be_nil
   end
 
-  it 'does not fail on empty prolongation kinds without validity' do
+  it "does not fail on empty prolongation kinds without validity" do
     gl.update(validity: nil)
     expect(described_class.new(person, course, [gl], role).start_at(gl)).to be_nil
   end
 
-  def create_course(kind: slk, qualified: false, training_days: nil, start_at:)
+  def create_course(start_at:, kind: slk, qualified: false, training_days: nil)
     Fabricate.build(:course, kind: kind, training_days: training_days).tap do |course|
       course.dates.build(start_at: start_at)
     end

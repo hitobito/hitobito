@@ -6,10 +6,9 @@
 #  https://github.com/hitobito/hitobito
 
 class Households::LogEntries
-
   delegate :new_record?, :destroy?, :people,
     :new_people, :removed_people,
-    :household_label, to: '@household'
+    :household_label, to: "@household"
 
   def initialize(household)
     @household = household
@@ -17,7 +16,7 @@ class Households::LogEntries
 
   def create!
     return unless PaperTrail.enabled?
-    raise 'PaperTrail.request.whodunnit must be set' if whodunnit.nil?
+    raise "PaperTrail.request.whodunnit must be set" if whodunnit.nil?
 
     log_events.each do |log_event|
       log_people.each do |person|
@@ -35,7 +34,7 @@ class Households::LogEntries
     people -= new_people unless new_record?
     people -= removed_people if removed_people.present? && !destroy?
 
-    people.map(&:full_name).join(', ')
+    people.map(&:full_name).join(", ")
   end
 
   def log_people
@@ -44,11 +43,11 @@ class Households::LogEntries
 
   def create_log_entry(person, changed_person, log_event)
     PaperTrail::Version.create!(main: person,
-                                item: person,
-                                whodunnit: whodunnit,
-                                event: log_event,
-                                object: changed_person&.full_name,
-                                object_changes: household_log_label)
+      item: person,
+      whodunnit: whodunnit,
+      event: log_event,
+      object: changed_person&.full_name,
+      object_changes: household_log_label)
   end
 
   def whodunnit
@@ -79,5 +78,4 @@ class Households::LogEntries
       [nil]
     end
   end
-
 end

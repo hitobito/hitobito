@@ -5,16 +5,16 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Messages::TextMessageDeliveryReportJob do
-  let(:message)    { messages(:sms) }
+  let(:message) { messages(:sms) }
   let(:top_leader) { people(:top_leader) }
-  let!(:mobile) { Fabricate(:phone_number, contactable: top_leader, label: 'Mobil') }
-  let(:ok_report) { { status: :ok, status_message: '' } }
-  let(:failed_report) { { status: :failed, status_message: '' } }
+  let!(:mobile) { Fabricate(:phone_number, contactable: top_leader, label: "Mobil") }
+  let(:ok_report) { {status: :ok, status_message: ""} }
+  let(:failed_report) { {status: :failed, status_message: ""} }
   let(:ok_delivery_reports) do
-    { status: :ok, delivery_reports: { recipient.id.to_s => ok_report } }
+    {status: :ok, delivery_reports: {recipient.id.to_s => ok_report}}
   end
   let!(:recipient) do
     MessageRecipient.create!(
@@ -35,36 +35,36 @@ describe Messages::TextMessageDeliveryReportJob do
 
   subject { described_class.new(message) }
 
-  context 'on successfull delivery_reports' do
-    it 'updates recipient status as sent' do
+  context "on successfull delivery_reports" do
+    it "updates recipient status as sent" do
       expect(client_double).to receive(:delivery_reports).and_return(ok_delivery_reports)
 
       subject.perform
 
       recipient.reload
 
-      expect(recipient.state).to eq('sent')
+      expect(recipient.state).to eq("sent")
     end
   end
 
-  context 'without delivery_reports' do
+  context "without delivery_reports" do
     let(:empty_ok_delivery_report) do
-      { status: :ok, delivery_reports: {} }
+      {status: :ok, delivery_reports: {}}
     end
 
-    it 'updates recipient status as failed' do
+    it "updates recipient status as failed" do
       expect(client_double).to receive(:delivery_reports).and_return(empty_ok_delivery_report)
 
       subject.perform
 
       recipient.reload
 
-      expect(recipient.state).to eq('failed')
+      expect(recipient.state).to eq("failed")
     end
   end
 
-  context 'on a failed delivery' do
-    let(:no_credit_available_msg) { 'Not enough credits available.' }
+  context "on a failed delivery" do
+    let(:no_credit_available_msg) { "Not enough credits available." }
     let(:failed_delivery_report) do
       {
         status: :error,
@@ -75,14 +75,14 @@ describe Messages::TextMessageDeliveryReportJob do
       }
     end
 
-    it 'marks message and recipients as failed if provider error' do
+    it "marks message and recipients as failed if provider error" do
       expect(client_double).to receive(:delivery_reports).and_return(failed_delivery_report)
 
       subject.perform
 
       recipient.reload
 
-      expect(recipient.state).to eq('failed')
+      expect(recipient.state).to eq("failed")
       expect(recipient.error).to eq(no_credit_available_msg)
     end
   end

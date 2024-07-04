@@ -12,7 +12,8 @@ class Groups::SelfRegistrationController < ApplicationController
   before_action :redirect_to_group_if_necessary
   helper_method :entry, :policy_finder
 
-  def new; end
+  def new
+  end
 
   def create
     return render :new if params[:autosubmit].present?
@@ -69,7 +70,7 @@ class Groups::SelfRegistrationController < ApplicationController
 
     ::Groups::SelfRegistrationNotificationMailer
       .self_registration_notification(group.self_registration_notification_email,
-                                      entry.main_person.role).deliver_later
+        entry.main_person.role).deliver_later
   end
 
   def send_password_reset_email

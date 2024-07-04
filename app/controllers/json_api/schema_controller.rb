@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class JsonApi::SchemaController < ActionController::API
-
   # All graphiti resources must be loaded to generate the schema
   before_action :require_all_resources
 
@@ -16,9 +15,8 @@ class JsonApi::SchemaController < ActionController::API
   end
 
   def require_all_resources
-    Dir.glob("#{Rails.root}/app/resources/**/*.rb").each do |f|
+    Dir.glob(Rails.root.join("app", "resources", "**", "*.rb").to_s).each do |f|
       require f
     end
   end
-
 end

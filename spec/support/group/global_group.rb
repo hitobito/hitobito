@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Group::GlobalGroup < Group
-
   class Leader < ::Role
     self.permissions = [:group_full, :contact_data]
   end
@@ -14,5 +13,4 @@ class Group::GlobalGroup < Group
   end
 
   roles Leader, Member
-
 end

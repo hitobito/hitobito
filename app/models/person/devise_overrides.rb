@@ -17,7 +17,6 @@ module Person::DeviseOverrides
         end.reduce(:or).first
       end
     end
-
   end
 
   # from lib/devise/models/recoverable.rb

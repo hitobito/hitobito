@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class TokenAbility
-
   include CanCan::Ability
 
   attr_reader :token
@@ -77,7 +76,7 @@ class TokenAbility
       token_layer_and_below.include?(g)
     end
 
-    can :'index_event/courses', Group do |g|
+    can :"index_event/courses", Group do |g|
       token_layer_and_below.include?(g)
     end
 
@@ -109,8 +108,8 @@ class TokenAbility
       token.layer == group
     end
 
-    can [:read, :update], Invoice, { group: { layer_group_id: token.layer.id } }
-    can [:read, :update], InvoiceItem, { invoice: { group: { layer_group_id: token.layer.id } } }
+    can [:read, :update], Invoice, {group: {layer_group_id: token.layer.id}}
+    can [:read, :update], InvoiceItem, {invoice: {group: {layer_group_id: token.layer.id}}}
   end
 
   def define_mailing_list_abilities
@@ -126,5 +125,4 @@ class TokenAbility
   def token_layer_and_below
     token.layer.self_and_descendants
   end
-
 end

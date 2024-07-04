@@ -20,7 +20,6 @@
 #
 
 class Event::Application < ActiveRecord::Base
-
   self.demodulized_route_keys = true
 
   ### ASSOCIATION
@@ -29,10 +28,9 @@ class Event::Application < ActiveRecord::Base
 
   has_one :event, through: :participation
 
-  belongs_to :priority_1, class_name: 'Event' # ::Course
-  belongs_to :priority_2, class_name: 'Event' # ::Course
-  belongs_to :priority_3, class_name: 'Event' # ::Course
-
+  belongs_to :priority_1, class_name: "Event" # ::Course
+  belongs_to :priority_2, class_name: "Event" # ::Course
+  belongs_to :priority_3, class_name: "Event" # ::Course
 
   validates_by_schema
 
@@ -40,9 +38,9 @@ class Event::Application < ActiveRecord::Base
 
   class << self
     def pending
-      joins(:participation).
-        where(event_participations: { active: false },
-              rejected: false)
+      joins(:participation)
+        .where(event_participations: {active: false},
+          rejected: false)
     end
 
     def label(args = {})
@@ -59,7 +57,7 @@ class Event::Application < ActiveRecord::Base
   delegate :contact, to: :event
 
   def priority(event)
-    [1, 2, 3].detect { |i| send("priority_#{i}_id") == event.id }
+    [1, 2, 3].detect { |i| send(:"priority_#{i}_id") == event.id }
   end
 
   def toggle_approval(approved)

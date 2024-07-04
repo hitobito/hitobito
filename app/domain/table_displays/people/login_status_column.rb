@@ -5,14 +5,13 @@
 
 module TableDisplays::People
   class LoginStatusColumn < TableDisplays::Column
-
     def required_permission(attr)
       :show
     end
 
     def required_model_attrs(attr)
-      %w(people.two_factor_authentication people.email people.encrypted_password
-         people.reset_password_sent_at people.contact_data_visible)
+      %w[people.two_factor_authentication people.email people.encrypted_password
+        people.reset_password_sent_at people.contact_data_visible]
     end
 
     def render(attr)

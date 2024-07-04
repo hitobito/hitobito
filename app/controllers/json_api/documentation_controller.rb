@@ -6,10 +6,9 @@
 #  https://github.com/hitobito/hitobito.
 
 class JsonApi::DocumentationController < ApplicationController
-
   skip_before_action :authenticate_person!
   skip_authorization_check
 
-  def index; end
-
+  def index
+  end
 end

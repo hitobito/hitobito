@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class AppStatus::Truemail < AppStatus
-
   def initialize(with_private_details = false)
     super()
 
@@ -15,7 +14,7 @@ class AppStatus::Truemail < AppStatus
   end
 
   def details
-    details = { truemail_working: @truemail_working }
+    details = {truemail_working: @truemail_working}
 
     if @with_private_details
       details[:validated_email] = verification_email
@@ -37,5 +36,4 @@ class AppStatus::Truemail < AppStatus
   def verification_email
     ::Truemail.configure.verifier_email
   end
-
 end

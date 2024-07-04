@@ -14,7 +14,8 @@ class Event::ParticipationContactDatasController < ApplicationController
 
   before_action :set_entry, :group, :policy_finder
 
-  def edit; end
+  def edit
+  end
 
   def update
     if entry.valid? && privacy_policy_accepted? && entry.save
@@ -33,7 +34,7 @@ class Event::ParticipationContactDatasController < ApplicationController
     new_group_event_participation_path(
       group,
       event,
-      event_role: { type: params[:event_role][:type] }
+      event_role: {type: params[:event_role][:type]}
     )
   end
 
@@ -55,7 +56,7 @@ class Event::ParticipationContactDatasController < ApplicationController
   end
 
   def model_identifier
-    contact_data_class.to_s.underscore.gsub('/', '_')
+    contact_data_class.to_s.underscore.tr("/", "_")
   end
 
   def contact_data_class

@@ -4,9 +4,9 @@
 #  Affero General Public License version 3 or later. See the COPYING file at the top-level directory
 #  or at https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
-describe 'events/_form.html.haml' do
+describe "events/_form.html.haml" do
   let(:user) { people(:top_leader) }
   let(:event) { events(:top_event) }
   let(:group) { event.groups.first }
@@ -22,14 +22,14 @@ describe 'events/_form.html.haml' do
     assign(:group, group)
   end
 
-  context 'course' do
+  context "course" do
     let(:event) { events(:top_course) }
 
     [:hidden_contact_attrs, :required_contact_attrs].each do |attr|
       it "renders Kontaktangaben tab when #{attr} is used" do
         allow(Event::Course).to receive(:used_attributes).and_return([attr])
         render
-        expect(dom).to have_link 'Kontaktangaben'
+        expect(dom).to have_link "Kontaktangaben"
       end
     end
   end

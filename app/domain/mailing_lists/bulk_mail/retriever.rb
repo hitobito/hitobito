@@ -6,8 +6,7 @@
 # https://github.com/hitobito/hitobito.
 
 class MailingLists::BulkMail::Retriever
-
-  LOG_PREFIX = 'BulkMail Retriever: '
+  LOG_PREFIX = "BulkMail Retriever: "
 
   def perform
     return abort_imap_unavailable unless imap_server_available?
@@ -113,8 +112,8 @@ class MailingLists::BulkMail::Retriever
   end
 
   def assign_mailing_list(mail)
-    mail_name = mail.original_to.split('@', 2).first
-    MailingList.joins(:group).where(group: { archived_at: nil }).find_by(mail_name: mail_name)
+    mail_name = mail.original_to.split("@", 2).first
+    MailingList.joins(:group).where(group: {archived_at: nil}).find_by(mail_name: mail_name)
   end
 
   def create_mail_log(imap_mail)
@@ -129,15 +128,16 @@ class MailingLists::BulkMail::Retriever
   def create_bulk_mail_entry(imap_mail)
     bulk_mail_class(imap_mail).create!(
       subject: encode_subject(imap_mail),
-      state: :pending)
+      state: :pending
+    )
   end
 
   def encode_subject(imap_mail)
     return if imap_mail.subject.nil?
 
-    subject = imap_mail.subject.dup[0,256]
+    subject = imap_mail.subject.dup[0, 256]
 
-    unless subject.encoding == 'UTF-8'
+    unless subject.encoding == "UTF-8"
       subject.encode("UTF-8", invalid: :replace, undef: :replace)
     end
   end

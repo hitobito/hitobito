@@ -3,7 +3,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
 class InvoiceDecorator < ApplicationDecorator
   decorates :invoice
 
@@ -28,7 +27,7 @@ class InvoiceDecorator < ApplicationDecorator
   end
 
   def format_currency(amount)
-    ActiveSupport::NumberHelper.number_to_currency(amount, { unit: currency, format: '%n %u' })
+    ActiveSupport::NumberHelper.number_to_currency(amount, {unit: currency, format: "%n %u"})
   end
 
   def currency
@@ -36,13 +35,12 @@ class InvoiceDecorator < ApplicationDecorator
   end
 
   def as_quicksearch
-    { id: id, label: label_with_group, type: :invoice, icon: :'file-invoice' }
+    {id: id, label: label_with_group, type: :invoice, icon: :"file-invoice"}
   end
 
   def label_with_group
     label = title
     label += " (#{sequence_number})" if sequence_number
-    h.safe_join([group.to_s, label], ': ')
+    h.safe_join([group.to_s, label], ": ")
   end
-
 end

@@ -33,7 +33,7 @@ class FutureRole < Role
   self.kind = :future
   self.basic_permissions_only = true
 
-  IGNORED_ATTRS = %w(id type convert_on convert_to created_at terminated).freeze
+  IGNORED_ATTRS = %w[id type convert_on convert_to created_at terminated].freeze
 
   skip_callback :create, :after, :set_first_primary_group
   skip_callback :create, :after, :set_contact_data_visible
@@ -43,12 +43,12 @@ class FutureRole < Role
   after_commit :update_version_type
 
   validates :person, :group, presence: true
-  validates :convert_to, inclusion: { within: :group_role_types }, if: :group
+  validates :convert_to, inclusion: {within: :group_role_types}, if: :group
   validates_date :convert_on, on_or_after: -> { Time.zone.today }
   validates_date :delete_on,
-                 if: :delete_on,
-                 on_or_after: :convert_on,
-                 on_or_after_message: :must_be_later_than_created_at
+    if: :delete_on,
+    on_or_after: :convert_on,
+    on_or_after_message: :must_be_later_than_created_at
 
   validate :target_type_validations, if: :validate_target_type?
 
@@ -80,13 +80,13 @@ class FutureRole < Role
   end
 
   def formatted_start_date
-    I18n.t('global.start_on', date: I18n.l(convert_on))
+    I18n.t("global.start_on", date: I18n.l(convert_on))
   end
 
   private
 
   def update_version_type
-    versions.update_all(item_type: 'FutureRole')
+    versions.update_all(item_type: "FutureRole")
   end
 
   def target_type

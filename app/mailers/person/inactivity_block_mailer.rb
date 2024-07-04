@@ -6,8 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::InactivityBlockMailer < ApplicationMailer
-
-  CONTENT_INACTIVITY_BLOCK_WARNING = 'content_inactivity_block_warning'.freeze
+  CONTENT_INACTIVITY_BLOCK_WARNING = "content_inactivity_block_warning"
 
   def inactivity_block_warning(recipient)
     @recipient = recipient
@@ -29,5 +28,4 @@ class Person::InactivityBlockMailer < ApplicationMailer
   def placeholder_block_after_days
     Person::BlockService.block_after_days&.to_s
   end
-
 end

@@ -21,9 +21,9 @@
 #
 
 class HelpText < ActiveRecord::Base
-  COLUMN_BLACKLIST = %w(id created_at updated_at deleted_at).freeze
+  COLUMN_BLACKLIST = %w[id created_at updated_at deleted_at].freeze
 
-  validates :name, uniqueness: { scope: [:controller, :model, :kind], case_sensitive: false }
+  validates :name, uniqueness: {scope: [:controller, :model, :kind], case_sensitive: false}
   validates :body, presence: true, no_attachments: true
   before_validation :assign_combined_fields, if: :new_record?
 
@@ -36,13 +36,12 @@ class HelpText < ActiveRecord::Base
 
   attr_accessor :context, :key
 
-
   def self.list
     order(Arel.sql(HelpTexts::List.new.order_statement)).order(:kind)
   end
 
   def to_s
-    [entry.to_s, entry.translate(kind, name)].join(' - ') if persisted?
+    [entry.to_s, entry.translate(kind, name)].join(" - ") if persisted?
   end
 
   def entry
@@ -50,8 +49,8 @@ class HelpText < ActiveRecord::Base
   end
 
   def assign_combined_fields
-    assign_and_validate(:context, '--', :controller, :model)
-    assign_and_validate(:key, '.', :kind, :name)
+    assign_and_validate(:context, "--", :controller, :model)
+    assign_and_validate(:key, ".", :kind, :name)
   end
 
   private
@@ -59,9 +58,8 @@ class HelpText < ActiveRecord::Base
   def assign_and_validate(attr, separator, *fields)
     values = send(attr).to_s.split(separator)
     values.zip(fields).each do |value, field|
-      send("#{field}=", value)
+      send(:"#{field}=", value)
     end
     errors.add(attr, :invalid) if fields.any? { |field| send(field).blank? }
   end
-
 end

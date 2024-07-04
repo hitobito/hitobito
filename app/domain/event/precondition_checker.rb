@@ -6,12 +6,11 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::PreconditionChecker
-
   extend Forwardable
   include Translatable
 
-  def_delegator 'course.kind', :minimum_age, :course_minimum_age
-  def_delegator 'errors', :empty?, :valid?
+  def_delegator "course.kind", :minimum_age, :course_minimum_age
+  def_delegator "errors", :empty?, :valid?
   attr_reader :course, :person, :errors
 
   def initialize(course, person)
@@ -46,8 +45,8 @@ class Event::PreconditionChecker
 
   def validate_qualifications
     grouped_ids_and_validity = course.kind
-                                     .grouped_qualification_kind_ids_and_validity('precondition',
-                                                                                  'participant')
+      .grouped_qualification_kind_ids_and_validity("precondition",
+        "participant")
     if grouped_ids_and_validity.size == 1
       validate_simple_qualifications(grouped_ids_and_validity.first)
     elsif grouped_ids_and_validity.size > 1
@@ -79,7 +78,7 @@ class Event::PreconditionChecker
   end
 
   def course_preconditions
-    course.kind.qualification_kinds('precondition', 'participant')
+    course.kind.qualification_kinds("precondition", "participant")
   end
 
   def valid_qualification?(qualification_kind_id, validity)
@@ -108,7 +107,6 @@ class Event::PreconditionChecker
 
   def qualifications_error_text
     kinds = QualificationKind.includes(:translations).find(errors)
-    translate(:qualifications_missing, missing: kinds.collect(&:label).join(', '))
+    translate(:qualifications_missing, missing: kinds.collect(&:label).join(", "))
   end
-
 end

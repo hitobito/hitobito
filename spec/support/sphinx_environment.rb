@@ -3,7 +3,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'thinking_sphinx/test'
+require "thinking_sphinx/test"
 
 # Use this block to run a set of examples inside sphinx.
 # Call #index_sphinx once your test data is set up.
@@ -29,20 +29,20 @@ def init_sphinx_before_all(tables)
   obj = self
   before(:all) do
     obj.use_transactional_tests = false
-    DatabaseCleaner.strategy = :truncation, { only: tables }
+    DatabaseCleaner.strategy = :truncation, {only: tables}
     ThinkingSphinx::Test.init
   end
 end
 
 def run_sphinx_around_example
-  around(:each) do |example|
+  around do |example|
     ThinkingSphinx::Test.run do
       if ThinkingSphinx::Configuration.instance.controller.running?
         DatabaseCleaner.start
         example.call
         DatabaseCleaner.clean
       else
-        puts 'SPHINX NOT RUNNING!'
+        puts "SPHINX NOT RUNNING!"
       end
     end
   end
@@ -56,7 +56,6 @@ def reset_configuration_after_all(transactional)
   end
 end
 
-
 def index_finished?
-  Dir[Rails.root.join('db', 'sphinx', 'test', '*.{new,tmp}.*')].empty?
+  Dir[Rails.root.join("db", "sphinx", "test", "*.{new,tmp}.*")].empty?
 end

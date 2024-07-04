@@ -11,7 +11,7 @@ module Subscriber
 
     respond_to :js, only: [:new]
     respond_to :json, only: [:typeahead]
-    self.search_columns = ['mailing_lists.name', 'mailing_lists.mail_name']
+    self.search_columns = ["mailing_lists.name", "mailing_lists.mail_name"]
 
     skip_authorization_check
     skip_authorize_resource
@@ -29,15 +29,15 @@ module Subscriber
       end
 
       redirect_to(group_people_path(group),
-                  notice: flash_message(:success, count: new_subscriptions.count))
+        notice: flash_message(:success, count: new_subscriptions.count))
     end
 
     def typeahead
       entries = MailingList.joins(:group)
-                           .includes(:group)
-                           .where(group: group.local_hierarchy)
-                           .where(search_conditions)
-                           .select { |ml| can? :create, ml.subscriptions.new }
+        .includes(:group)
+        .where(group: group.local_hierarchy)
+        .where(search_conditions)
+        .select { |ml| can? :create, ml.subscriptions.new }
 
       respond_to do |format|
         format.json { render json: for_typeahead(entries) }
@@ -57,8 +57,8 @@ module Subscriber
     def non_subscribed_people_ids
       people.pluck(:id) -
         mailing_list.subscriptions
-                    .where(subscriber_type: Person.sti_name)
-                    .pluck(:subscriber_id)
+          .where(subscriber_type: Person.sti_name)
+          .pluck(:subscriber_id)
     end
 
     def group
@@ -75,7 +75,7 @@ module Subscriber
 
     def for_typeahead(entries)
       entries.map do |entry|
-        { id: entry.id, label: entry.name }
+        {id: entry.id, label: entry.name}
       end
     end
 

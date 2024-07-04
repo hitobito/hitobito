@@ -42,7 +42,7 @@ class SecondFactorAuthenticationController < ApplicationController
       authenticator.prevent_brute_force!
 
       redirect_to new_users_second_factor_path,
-                  alert: t('second_factor_authentication.flash.failure')
+        alert: t("second_factor_authentication.flash.failure")
     end
   end
 
@@ -54,7 +54,7 @@ class SecondFactorAuthenticationController < ApplicationController
 
   def authenticator
     @authenticator ||= {
-      'totp' => Authenticatable::TwoFactors::Totp
+      "totp" => Authenticatable::TwoFactors::Totp
     }[authentication_factor]&.new(person, session)
   end
 
@@ -68,7 +68,7 @@ class SecondFactorAuthenticationController < ApplicationController
 
   def authentication_factor
     @authentication_factor ||= session[:pending_second_factor_authentication] ||
-                                 params[:second_factor]
+      params[:second_factor]
   end
 
   def redirect_to_root
@@ -77,11 +77,11 @@ class SecondFactorAuthenticationController < ApplicationController
 
   def redirect_on_locked
     reset_session
-    redirect_to root_path, alert: t('devise.failure.locked')
+    redirect_to root_path, alert: t("devise.failure.locked")
   end
 
   def registered_flash
-    t('second_factor_authentication.flash.success.registered')
+    t("second_factor_authentication.flash.success.registered")
   end
 
   def access_locked?
@@ -99,7 +99,7 @@ class SecondFactorAuthenticationController < ApplicationController
   def second_factor_registered_and_signed_in?
     authenticator.registered? && person_signed_in?
   end
-  
+
   def allowed?
     authenticator.present? &&
       !second_factor_registered_and_signed_in? &&

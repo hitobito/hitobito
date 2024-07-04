@@ -26,16 +26,15 @@
 #
 
 class InvoiceItemSerializer < ApplicationSerializer
-
   schema do
     json_api_properties
 
     map_properties :name,
-                   :description,
-                   :vat_rate,
-                   :unit_cost,
-                   :count,
-                   :cost_center,
-                   :account
+      :description,
+      :vat_rate,
+      :unit_cost,
+      :count,
+      :cost_center,
+      :account
   end
 end

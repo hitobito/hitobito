@@ -5,12 +5,11 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'net/imap'
-require 'mail'
+require "net/imap"
+require "mail"
 
 class Imap::Mail
-
-  MESSAGE_UID_REGEX = /X-Hitobito-Message-UID: ([a-z0-9]*)/.freeze
+  MESSAGE_UID_REGEX = /X-Hitobito-Message-UID: ([a-z0-9]*)/
 
   attr_accessor :net_imap_mail
 
@@ -23,7 +22,7 @@ class Imap::Mail
   end
 
   def uid
-    @net_imap_mail.attr['UID']
+    @net_imap_mail.attr["UID"]
   end
 
   def subject
@@ -37,15 +36,15 @@ class Imap::Mail
   def sender_email
     return nil if envelope.sender.nil?
 
-    envelope.sender[0].mailbox + '@' + envelope.sender[0].host
+    envelope.sender[0].mailbox + "@" + envelope.sender[0].host
   end
 
   def email_to
-    envelope.to[0].mailbox + '@' + envelope.to[0].host
+    envelope.to[0].mailbox + "@" + envelope.to[0].host
   end
 
   def sender_name
-    envelope&.sender[0]&.name
+    envelope&.sender&.[](0)&.name
   end
 
   def name_to
@@ -71,7 +70,7 @@ class Imap::Mail
   end
 
   def original_to
-    first_header('X-Original-To')
+    first_header("X-Original-To")
   end
 
   def list_bounce?
@@ -88,27 +87,27 @@ class Imap::Mail
   end
 
   def mail
-    @mail ||= ::Mail.read_from_string(@net_imap_mail.attr['RFC822'])
+    @mail ||= ::Mail.read_from_string(@net_imap_mail.attr["RFC822"])
   end
 
   private
 
   def envelope
-    @net_imap_mail.attr['ENVELOPE']
+    @net_imap_mail.attr["ENVELOPE"]
   end
 
   def bounce_return_path?
-    return_path.eql?('') ||
-      return_path.include?('MAILER-DAEMON')
+    return_path.eql?("") ||
+      return_path.include?("MAILER-DAEMON")
   end
 
   def return_path
-    mail.header['Return-Path'].value
+    mail.header["Return-Path"].value
   end
 
   # https://www.iana.org/assignments/auto-submitted-keywords/auto-submitted-keywords.xhtml
   def auto_response_header?
-    mail.header['auto-submitted'].try(:value) == 'auto-generated'
+    mail.header["auto-submitted"].try(:value) == "auto-generated"
   end
 
   def first_header(header_name)

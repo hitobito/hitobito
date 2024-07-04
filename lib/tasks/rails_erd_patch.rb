@@ -1,4 +1,4 @@
-require 'rails_erd/domain/relationship'
+require "rails_erd/domain/relationship"
 
 module RailsERD
   class Domain

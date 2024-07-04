@@ -5,12 +5,11 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe FeatureGate do
-
-  context 'person language' do
-    it 'toggles language feature by given person attributes' do
+  context "person language" do
+    it "toggles language feature by given person attributes" do
       add_correspondence_language
 
       expect(FeatureGate.enabled?(:person_language)).to eq(false)
@@ -21,13 +20,13 @@ describe FeatureGate do
     end
   end
 
-  context 'self_registration_reason' do
-    it 'is enabled when SelfRegistrationReason exists' do
+  context "self_registration_reason" do
+    it "is enabled when SelfRegistrationReason exists" do
       expect(SelfRegistrationReason.count).to be > 0
       expect(FeatureGate.enabled?(:self_registration_reason)).to eq(true)
     end
 
-    it 'is disabled when SelfRegistrationReason does not exist' do
+    it "is disabled when SelfRegistrationReason does not exist" do
       SelfRegistrationReason.delete_all
       expect(FeatureGate.enabled?(:self_registration_reason)).to eq(false)
     end
@@ -38,12 +37,12 @@ describe FeatureGate do
   def add_correspondence_language
     return if Person.has_attribute?(:correspondence_language)
 
-    ActiveRecord::Base.connection.execute('ALTER TABLE people ADD correspondence_language varchar(255)')
+    ActiveRecord::Base.connection.execute("ALTER TABLE people ADD correspondence_language varchar(255)")
     Person.reset_column_information
   end
 
   def drop_correspondence_language
-    ActiveRecord::Base.connection.execute('ALTER TABLE people DROP COLUMN correspondence_language')
+    ActiveRecord::Base.connection.execute("ALTER TABLE people DROP COLUMN correspondence_language")
     Person.reset_column_information
   end
 end

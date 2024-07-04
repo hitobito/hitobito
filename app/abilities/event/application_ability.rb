@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::ApplicationAbility < AbilityDsl::Base
-
   include AbilityDsl::Constraints::Event
   include AbilityDsl::Constraints::Event::Participation
 
@@ -14,13 +13,12 @@ class Event::ApplicationAbility < AbilityDsl::Base
     permission(:group_full).may(:show_priorities, :show_approval).in_same_group
     permission(:group_and_below_full).may(:show_priorities, :show_approval).in_same_group_or_below
     permission(:layer_full).may(:show_priorities, :show_approval).in_same_layer_or_different_prio
-    permission(:layer_and_below_full).
-      may(:show_priorities, :show_approval).
-      in_same_layer_or_different_prio
+    permission(:layer_and_below_full)
+      .may(:show_priorities, :show_approval)
+      .in_same_layer_or_different_prio
 
-    permission(:approve_applications).
-      may(:show_priorities, :show_approval, :approve, :reject).
-      for_applicant_in_same_layer
+    permission(:approve_applications)
+      .may(:show_priorities, :show_approval, :approve, :reject)
+      .for_applicant_in_same_layer
   end
-
 end

@@ -16,4 +16,3 @@ module JsonApi
     end
   end
 end
-

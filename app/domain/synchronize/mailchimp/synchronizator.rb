@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'digest/md5'
+require "digest/md5"
 
 module Synchronize
   module Mailchimp
@@ -16,7 +16,7 @@ module Synchronize
       self.member_fields = []
 
       self.merge_fields = [
-        ['Gender', 'dropdown', { choices: %w(m w) }, ->(p) { p.gender }]
+        ["Gender", "dropdown", {choices: %w[m w]}, ->(p) { p.gender }]
       ]
 
       def initialize(mailing_list)
@@ -40,24 +40,24 @@ module Synchronize
 
       def missing_subscribers
         subscribers.reject do |subscriber|
-          members_by_email.keys.include?(subscriber.email) || subscriber.email.blank?
+          members_by_email.key?(subscriber.email) || subscriber.email.blank?
         end
       end
 
       def obsolete_emails
-        (members - cleaned_members).collect { |m| m[:email_address] } - subscribers.collect(&:email)
+        (members - cleaned_members).pluck(:email_address) - subscribers.collect(&:email)
       end
 
       def missing_segments
-        tags.keys - client.fetch_segments.collect { |s| s[:name] }
+        tags.keys - client.fetch_segments.pluck(:name)
       end
 
       def obsolete_segment_ids
-        client.fetch_segments.reject { |s| tags.key?(s[:name]) }.collect { |s| s[:id] }
+        client.fetch_segments.reject { |s| tags.key?(s[:name]) }.pluck(:id)
       end
 
       def missing_merge_fields
-        labels = client.fetch_merge_fields.collect { |field| field[:tag] }
+        labels = client.fetch_merge_fields.pluck(:tag)
         merge_fields.reject { |name, _, _| labels.include?(name.upcase) }
       end
 
@@ -114,7 +114,7 @@ module Synchronize
       end
 
       def tag_cleaned_members
-        emails = cleaned_members.collect { |m| m[:email_address] }
+        emails = cleaned_members.pluck(:email_address)
         InvalidSubscriberTagger.new(emails, list).tag!
       end
 
@@ -132,7 +132,7 @@ module Synchronize
       end
 
       def cleaned_members
-        @cleaned_members ||= members.select { |m| m[:status] == 'cleaned' }
+        @cleaned_members ||= members.select { |m| m[:status] == "cleaned" }
       end
 
       def members_by_email

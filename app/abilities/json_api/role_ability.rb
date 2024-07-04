@@ -16,8 +16,8 @@ module JsonApi
     private
 
     def full_readable_people(main_ability)
-      Person.accessible_by(PersonFullReadables.new(main_ability.user)).
-        unscope(:select)
+      Person.accessible_by(PersonFullReadables.new(main_ability.user))
+        .unscope(:select)
     end
   end
 end

@@ -4,26 +4,25 @@
 #  https://github.com/hitobito/hitobito.
 
 module CsvImportHelper
-
   def application_person_fields
     Import::Person.fields.map { |field| OpenStruct.new(field) }
   end
 
   def csv_field_documentation(field, values)
     if values.is_a?(Hash)
-      values = safe_join(values, tag(:br)) do |value, description|
+      values = safe_join(values, tag.br) do |value, description|
         content_tag(:em, value) + h(" - #{description}")
       end
     end
 
     content_tag(:dt, t("activerecord.attributes.person.#{field}")) +
-    content_tag(:dd, values)
+      content_tag(:dd, values)
   end
 
   def csv_import_attrs
-    Import::Person.person_attributes.
-      select { |f| field_mappings.values.include?(f[:key].to_s) }.
-      map { |f| f[:key] }
+    Import::Person.person_attributes
+      .select { |f| field_mappings.value?(f[:key].to_s) }
+      .pluck(:key)
   end
 
   def csv_import_contact_account_attrs(&block)
@@ -32,15 +31,15 @@ module CsvImportHelper
       Import::ContactAccountFields.new(PhoneNumber),
       Import::ContactAccountFields.new(SocialAccount)
     ].each do |caf|
-      caf.fields.select { |f| field_mappings.values.include?(f[:key].to_s) }.
-                 each(&block)
+      caf.fields.select { |f| field_mappings.value?(f[:key].to_s) }
+        .each(&block)
     end
   end
 
   def csv_import_contact_account_value(p, key)
-    parts = key.split('_')
+    parts = key.split("_")
     key = parts.last
-    assoc = parts[0..-2].join('_').pluralize
+    assoc = parts[0..-2].join("_").pluralize
     contact = p.send(assoc).find { |c| c.label.downcase == key }
     contact && contact.value
   end
@@ -48,5 +47,4 @@ module CsvImportHelper
   def csv_import_tag_values(p)
     p.tag_list.to_s
   end
-
 end

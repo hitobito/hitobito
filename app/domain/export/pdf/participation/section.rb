@@ -14,12 +14,11 @@ module Export::Pdf::Participation
     class_attribute :model_class
 
     delegate :bounds, :bounding_box, :table,
-             :text, :cursor, :font_size, :text_box,
-             :fill_and_stroke_rectangle, :fill_color,
-             :image, :group, to: :pdf
+      :text, :cursor, :font_size, :text_box,
+      :fill_and_stroke_rectangle, :fill_color,
+      :image, :group, to: :pdf
 
     delegate :event, :person, :application, to: :participation
-
 
     def initialize(pdf, participation)
       @pdf = pdf
@@ -45,12 +44,12 @@ module Export::Pdf::Participation
         width = (bounds.width / 2) - (gutter / 2)
         starting_page = pdf.page_number
         left_y, right_y = nil
-        pdf.span(width, { position: 0 }) do
+        pdf.span(width, {position: 0}) do
           left.call
           left_y = pdf.y
         end
         pdf.go_to_page(starting_page)
-        pdf.span(width, { position: width + gutter }) do
+        pdf.span(width, {position: width + gutter}) do
           right.call
           right_y = pdf.y
         end
@@ -72,7 +71,7 @@ module Export::Pdf::Participation
 
     def text(*args)
       options = args.extract_options!
-      pdf.text args.join(' '), options
+      pdf.text args.join(" "), options
     end
 
     def move_down_line(line = 10)
@@ -85,15 +84,15 @@ module Export::Pdf::Participation
 
     def labeled_attr(model, attr)
       value = model.send(attr)
-      text [model.class.human_attribute_name(attr), f(value)].join(': ') if value.present?
+      text [model.class.human_attribute_name(attr), f(value)].join(": ") if value.present?
     end
 
     def f(value)
       case value
-      when Date   then I18n.l(value)
-      when Time   then I18n.l(value, format: :time)
-      when true   then I18n.t(:"global.yes")
-      when false  then I18n.t(:"global.no")
+      when Date then I18n.l(value)
+      when Time then I18n.l(value, format: :time)
+      when true then I18n.t(:"global.yes")
+      when false then I18n.t(:"global.no")
       else value.to_s
       end
     end
@@ -115,7 +114,7 @@ module Export::Pdf::Participation
     end
 
     def i18n_event_postfix
-      event.class.to_s.underscore.tr('/', '_')
+      event.class.to_s.underscore.tr("/", "_")
     end
   end
 end

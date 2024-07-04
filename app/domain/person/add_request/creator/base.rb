@@ -5,7 +5,6 @@
 
 module Person::AddRequest::Creator
   class Base
-
     attr_reader :entity, :ability
 
     def initialize(entity, ability)
@@ -47,9 +46,9 @@ module Person::AddRequest::Creator
     end
 
     def request_attrs
-      { person: person,
-        requester: requester,
-        body: body }
+      {person: person,
+       requester: requester,
+       body: body}
     end
 
     def body
@@ -62,13 +61,13 @@ module Person::AddRequest::Creator
 
     def success_message
       I18n.t("person.add_requests.creator.#{body_class_name.underscore}.success",
-             person: person.full_name)
+        person: person.full_name)
     end
 
     def error_message
       I18n.t("person.add_requests.creator.#{body_class_name.underscore}.failure",
-             person: person.full_name,
-             errors: request.errors.full_messages.join(', '))
+        person: person.full_name,
+        errors: request.errors.full_messages.join(", "))
     end
 
     def request_class
@@ -83,6 +82,5 @@ module Person::AddRequest::Creator
       last_role = person.last_non_restricted_role
       last_role && last_role&.group&.layer_group
     end
-
   end
 end

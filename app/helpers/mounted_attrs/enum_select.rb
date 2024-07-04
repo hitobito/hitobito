@@ -1,6 +1,5 @@
 module MountedAttrs
   class EnumSelect
-
     def initialize(template, mounted_attr_config, form)
       @config = mounted_attr_config
       @template = template
@@ -8,8 +7,8 @@ module MountedAttrs
     end
 
     def render(**html_options)
-      f.select(config.attr_name, options, { include_blank: config.null },
-        class: 'form-select form-select-sm', **html_options)
+      f.select(config.attr_name, options, {include_blank: config.null},
+        class: "form-select form-select-sm", **html_options)
     end
 
     private

@@ -5,7 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
 
-
 class Person::MessagesController < ListController
   include YearBasedPaging
 
@@ -13,8 +12,8 @@ class Person::MessagesController < ListController
 
   def list_entries
     Message.list.includes(:message_recipients)
-                .where(message_recipients: { person_id: person.id })
-                .page(params[:page]).per(50).where(created_at: year_filter)
+      .where(message_recipients: {person_id: person.id})
+      .page(params[:page]).per(50).where(created_at: year_filter)
   end
 
   def person
@@ -28,5 +27,4 @@ class Person::MessagesController < ListController
   def authorize_class
     authorize!(:show_details, person)
   end
-
 end

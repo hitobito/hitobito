@@ -6,8 +6,8 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class StepsComponent < ApplicationComponent
-  renders_many :headers, 'HeaderComponent'
-  renders_many :steps, 'StepComponent'
+  renders_many :headers, "HeaderComponent"
+  renders_many :steps, "StepComponent"
 
   attr_accessor :step, :partials
 
@@ -24,7 +24,7 @@ class StepsComponent < ApplicationComponent
   class IteratingComponent < ApplicationComponent
     attr_reader :current_step
 
-    delegate :index, :first?, :last?, to: '@iterator'
+    delegate :index, :first?, :last?, to: "@iterator"
 
     def initialize(step:, iterator:)
       @step = step
@@ -34,7 +34,7 @@ class StepsComponent < ApplicationComponent
     private
 
     def active_class
-      'active' if active?
+      "active" if active?
     end
 
     def active?
@@ -42,7 +42,7 @@ class StepsComponent < ApplicationComponent
     end
 
     def stimulus_controller
-      StepsComponent.name.underscore.gsub('/', '--').tr('_', '-')
+      StepsComponent.name.underscore.gsub("/", "--").tr("_", "-")
     end
   end
 
@@ -54,8 +54,8 @@ class StepsComponent < ApplicationComponent
 
     def call
       content_tag(:li, markup,
-                  class: active_class,
-                  data: stimulus_target('stepHeader'))
+        class: active_class,
+        data: stimulus_target("stepHeader"))
     end
 
     def render?
@@ -86,31 +86,31 @@ class StepsComponent < ApplicationComponent
 
     def call
       content_tag(:div, markup,
-                  class: %W[step-content #{@partial.dasherize} #{active_class}],
-                  data: stimulus_target('stepContent'))
+        class: %W[step-content #{@partial.dasherize} #{active_class}],
+        data: stimulus_target("stepContent"))
     end
 
     def next_button(title = nil, options = {})
-      type = 'submit'
-      title ||= I18n.t("#{@partial.gsub('/', '.')}.next_button", default: nil)
+      type = "submit"
+      title ||= I18n.t("#{@partial.tr("/", ".")}.next_button", default: nil)
       title ||= if last?
-                  t('groups.self_registration.form.submit')
-                else
-                  t('steps_component.next_link')
-                end
+        t("groups.self_registration.form.submit")
+      else
+        t("steps_component.next_link")
+      end
       submit_button(title, type, next_submit_button_options.merge(options))
     end
 
     def submit_button(label, type, options)
-      content_tag(:div, class: 'btn-group') do
-        helpers.add_css_class(options, 'btn btn-sm btn-primary mt-2')
-        @form.button(label, options.merge(type: type, data: { disable_with: label }))
+      content_tag(:div, class: "btn-group") do
+        helpers.add_css_class(options, "btn btn-sm btn-primary mt-2")
+        @form.button(label, options.merge(type: type, data: {disable_with: label}))
       end
     end
 
     def back_link
-      data = { action: stimulus_action(:back), index: index - 1 }
-      link_to(t('global.button.back'), '#', class: 'link cancel mt-2 pt-1', data: data)
+      data = {action: stimulus_action(:back), index: index - 1}
+      link_to(t("global.button.back"), "#", class: "link cancel mt-2 pt-1", data: data)
     end
 
     def render?
@@ -120,7 +120,7 @@ class StepsComponent < ApplicationComponent
     private
 
     def next_submit_button_options
-      options = past? ? { formnovalidate: true } : {}
+      options = past? ? {formnovalidate: true} : {}
       options.merge(name: :next, value: index + 1)
     end
 

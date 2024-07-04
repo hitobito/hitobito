@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::RoleAbility < AbilityDsl::Base
-
   include AbilityDsl::Constraints::Event
 
   on(::Event::Role) do
@@ -21,8 +20,8 @@ class Event::RoleAbility < AbilityDsl::Base
 
   def for_participations_full_events_except_self
     for_participations_full_events &&
-    !(subject.participation.person_id == user.id &&
-      subject.permissions.include?(:participations_full))
+      !(subject.participation.person_id == user.id &&
+        subject.permissions.include?(:participations_full))
   end
 
   private

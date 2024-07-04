@@ -6,30 +6,29 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class ApplicationComponent < ViewComponent::Base
-
   include I18nHelper
 
   private
 
   def stimulus_controller
     cls = respond_to?(:component_class) ? component_class : self.class
-    cls.name.underscore.gsub('/', '--').tr('_', '-')
+    cls.name.underscore.gsub("/", "--").tr("_", "-")
   end
 
   def stimulus_action(action, event: nil)
-    prefix = [event, stimulus_controller].compact.join('->')
-    [prefix, action].join('#')
+    prefix = [event, stimulus_controller].compact.join("->")
+    [prefix, action].join("#")
   end
 
   def stimulus_target(name)
-    { [stimulus_controller, 'target'].join('-') => name }
+    {[stimulus_controller, "target"].join("-") => name}
   end
 
   def stimulus_value(name, value)
-    { [stimulus_controller, name, 'value'].join('-') => value }
+    {[stimulus_controller, name, "value"].join("-") => value}
   end
 
   def stimulus_param(name, value)
-    { [stimulus_controller, name, 'param'].join('-') => value }
+    {[stimulus_controller, name, "param"].join("-") => value}
   end
 end

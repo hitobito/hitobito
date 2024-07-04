@@ -15,32 +15,31 @@ class EventsController < CrudController
 
   # Respective event attrs are added in corresponding instance method.
   self.permitted_attrs = [:signature, :signature_confirmation, :signature_confirmation_text,
-                          :display_booking_info, :participations_visible,
-                          :notify_contact_on_participations,
-                          {
-                            group_ids: [],
-                            dates_attributes: [
-                              :id, :label, :location, :start_at, :start_at_date,
-                              :start_at_hour, :start_at_min, :finish_at,
-                              :finish_at_date, :finish_at_hour, :finish_at_min,
-                              :_destroy
-                            ],
-                            application_questions_attributes: [
-                              :id, :question, :choices, :multiple_choices, :_destroy, :required
-                            ],
-                            admin_questions_attributes: [
-                              :id, :question, :choices, :multiple_choices, :_destroy
-                            ]
-                          }]
-
+    :display_booking_info, :participations_visible,
+    :notify_contact_on_participations,
+    {
+      group_ids: [],
+      dates_attributes: [
+        :id, :label, :location, :start_at, :start_at_date,
+        :start_at_hour, :start_at_min, :finish_at,
+        :finish_at_date, :finish_at_hour, :finish_at_min,
+        :_destroy
+      ],
+      application_questions_attributes: [
+        :id, :question, :choices, :multiple_choices, :_destroy, :required
+      ],
+      admin_questions_attributes: [
+        :id, :question, :choices, :multiple_choices, :_destroy
+      ]
+    }]
 
   self.remember_params += [:year]
 
-  self.sort_mappings = { name: 'event_translations.name', state: 'events.state',
-                         dates_full: 'event_dates.start_at',
-                         group_ids: "#{Group.quoted_table_name}.name" }
+  self.sort_mappings = {name: "event_translations.name", state: "events.state",
+                         dates_full: "event_dates.start_at",
+                         group_ids: "#{Group.quoted_table_name}.name"}
 
-  self.search_columns = ['event_translations.name']
+  self.search_columns = ["event_translations.name"]
 
   decorates :event, :events, :group
 
@@ -57,9 +56,9 @@ class EventsController < CrudController
   def index
     respond_to do |format|
       format.html { @events = entries_page(params[:page]) }
-      format.csv  { render_tabular_in_background(:csv) }
+      format.csv { render_tabular_in_background(:csv) }
       format.xlsx { render_tabular_in_background(:xlsx) }
-      format.ics  { render_ical(visible_entries) }
+      format.ics { render_ical(visible_entries) }
       format.json { render_entries_json(entries_page(params[:page])) }
     end
   end
@@ -76,7 +75,7 @@ class EventsController < CrudController
   def show
     respond_to do |format|
       format.html { entry }
-      format.ics  { render_ical([entry]) }
+      format.ics { render_ical([entry]) }
       format.json { render_entry_json }
     end
   end
@@ -158,10 +157,10 @@ class EventsController < CrudController
   def render_tabular_in_background(format, name = :events_export)
     with_async_download_cookie(format, name) do |filename|
       Export::EventsExportJob.new(format,
-                                  current_person.id,
-                                  group.id,
-                                  event_filter.to_h,
-                                  filename: filename).enqueue!
+        current_person.id,
+        group.id,
+        event_filter.to_h,
+        filename: filename).enqueue!
     end
   end
 
@@ -171,18 +170,18 @@ class EventsController < CrudController
 
   def for_typeahead(entries)
     entries.map do |entry|
-      role_types = entry.role_types.map { |type| { label: type.label, name: type.name } }
-      { id: entry.id, label: entry.name, types: role_types }
+      role_types = entry.role_types.map { |type| {label: type.label, name: type.name} }
+      {id: entry.id, label: entry.name, types: role_types}
     end
   end
 
   def render_entries_json(paged_entries)
     render json: [paging_properties(paged_entries),
-                  ListSerializer.new(paged_entries.decorate,
-                                     group: group,
-                                     page: params[:page],
-                                     serializer: EventListSerializer,
-                                     controller: self)].inject(&:merge)
+      ListSerializer.new(paged_entries.decorate,
+        group: group,
+        page: params[:page],
+        serializer: EventListSerializer,
+        controller: self)].inject(&:merge)
   end
 
   def render_entry_json
@@ -212,17 +211,17 @@ class EventsController < CrudController
       next attr unless attr.is_a?(Hash)
 
       attr.keep_if do |key, _value|
-        next true unless key.to_s =~ /_attributes$/
+        next true unless /_attributes$/.match?(key.to_s)
 
         # key is something like :dates_attributes or :wagon_course_speciality_attributes
-        possible_nested_attributes.include?(key.to_s.remove('_attributes'))
+        possible_nested_attributes.include?(key.to_s.remove("_attributes"))
       end
     end
   end
 
   def authorize_class
-    type = params[:type].presence || 'Event'
-    action = export? ? 'export' : 'index'
+    type = params[:type].presence || "Event"
+    action = export? ? "export" : "index"
     authorize!(:"#{action}_#{type.underscore.pluralize}", group)
   end
 

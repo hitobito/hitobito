@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sbv.
 
 module InvoiceItemsHelper
-
   def invoice_item_dynamic_cost_parameter_object(invoice_item)
     finalized_hash = {}
     invoice_item.dynamic_cost_parameter_definitions.each do |key, type|
@@ -15,5 +14,4 @@ module InvoiceItemsHelper
     end
     OpenStruct.new(finalized_hash.merge(invoice_item.dynamic_cost_parameters))
   end
-
 end

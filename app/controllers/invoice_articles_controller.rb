@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class InvoiceArticlesController < CrudController
-
   respond_to :json, only: [:show]
 
   self.nesting = Group
@@ -21,5 +20,4 @@ class InvoiceArticlesController < CrudController
   def authorize_class
     authorize!(:index_invoices, parent)
   end
-
 end

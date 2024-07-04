@@ -23,7 +23,6 @@
 #
 
 class Event::Question < ActiveRecord::Base
-
   include Globalized
   translates :question, :choices
 
@@ -34,8 +33,8 @@ class Event::Question < ActiveRecord::Base
 
   # validate question presence for admin/non-admin questions separately
   # so we can have different error messages
-  validates :question, presence: { message: :admin_blank }, if: :admin?
-  validates :question, presence: { message: :application_blank }, unless: :admin?
+  validates :question, presence: {message: :admin_blank}, if: :admin?
+  validates :question, presence: {message: :application_blank}, unless: :admin?
 
   after_create :add_answer_to_participations
 
@@ -52,7 +51,7 @@ class Event::Question < ActiveRecord::Base
   end
 
   def choice_items
-    choices.to_s.split(',').collect(&:strip)
+    choices.to_s.split(",").collect(&:strip)
   end
 
   def label
@@ -74,5 +73,4 @@ class Event::Question < ActiveRecord::Base
       p.answers << answers.new
     end
   end
-
 end

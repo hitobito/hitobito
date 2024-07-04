@@ -10,7 +10,6 @@
 # namespace, may define this attribute as follows:
 #   self.nesting = :admin, Country
 module Nestable
-
   # Adds the :nesting class attribute and parent helper methods
   # to the including controller.
   def self.prepended(klass)
@@ -42,7 +41,7 @@ module Nestable
 
   # Returns the direct parent ActiveRecord of the current request, if any.
   def parent
-    parents.select { |p| p.is_a?(ActiveRecord::Base) }.last
+    parents.reverse.find { |p| p.is_a?(ActiveRecord::Base) }
   end
 
   # Returns the parent entries of the current request, if any.
@@ -91,5 +90,4 @@ module Nestable
   def parent_scope
     parent.send(model_class.name.demodulize.underscore.pluralize)
   end
-
 end

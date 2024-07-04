@@ -34,7 +34,7 @@ module PrivacyPolicyAcceptable
   end
 
   def add_privacy_policy_not_accepted_error(e = person)
-    e.errors.add(:base, t('.flash.privacy_policy_not_accepted')) unless privacy_policy_accepted?
+    e.errors.add(:base, t(".flash.privacy_policy_not_accepted")) unless privacy_policy_accepted?
   end
 
   def policy_finder

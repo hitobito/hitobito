@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module Countries
-
   module_function
 
   def codes
@@ -37,11 +36,10 @@ module Countries
 
   def swiss?(country)
     normalized_country = normalize(country).strip.downcase
-    normalized_country == 'ch' || (normalized_country.blank? && default == 'ch')
+    normalized_country == "ch" || (normalized_country.blank? && default == "ch")
   end
 
   def default
     @default ||= normalize(Settings.countries.prioritized.first).strip.downcase
   end
-
 end

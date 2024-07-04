@@ -4,5 +4,5 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::RoleDecorator < ApplicationDecorator
-  decorates 'event/role'
+  decorates "event/role"
 end

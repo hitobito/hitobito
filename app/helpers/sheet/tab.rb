@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module Sheet
-
   # Contains the information for a tab in a specific sheet.
   # This includes:
   #  * label_key: The I18n String key to use for the label. If this value is a symbol,
@@ -23,7 +22,6 @@ module Sheet
   #                          and other tabs are sub paths.
   #              * :params - A hash of additional params that will be passed to the path_method.
   class Tab
-
     attr_reader :label_key, :path_method, :options
 
     def initialize(label_key, path_method, options = {})
@@ -63,8 +61,8 @@ module Sheet
 
       def render(active = false)
         content_tag(:li,
-                    link_to(label, path, data: { turbo_submits_with: label }),
-                    class: active ? 'active' : nil)
+          link_to(label, path, data: {turbo_submits_with: label}),
+          class: active ? "active" : nil)
       end
 
       def show?
@@ -101,7 +99,6 @@ module Sheet
       def path_for(method, params = {})
         view.send(method, *path_args, params)
       end
-
     end
   end
 end

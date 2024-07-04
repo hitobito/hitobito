@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 #  Copyright (c) 2022, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -14,15 +15,15 @@ class Authenticatable::TwoFactor
   end
 
   def verify?(code)
-    raise 'implement in subclass'
+    raise "implement in subclass"
   end
 
   def register!
-    raise 'implement in subclass'
+    raise "implement in subclass"
   end
 
   def prepare_registration!
-    raise 'implement in subclass'
+    raise "implement in subclass"
   end
 
   def reset!
@@ -44,6 +45,6 @@ class Authenticatable::TwoFactor
   end
 
   def registered?
-    raise 'implement in subclass'
+    raise "implement in subclass"
   end
 end

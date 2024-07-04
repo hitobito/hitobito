@@ -20,7 +20,7 @@ module Localizable
       available_locale!(cookies[:locale]) ||
       guess_locale ||
       default_locale
-    cookies[:locale] = { value: I18n.locale, expires: 1.year.from_now }
+    cookies[:locale] = {value: I18n.locale, expires: 1.year.from_now}
 
     yield
 
@@ -32,7 +32,7 @@ module Localizable
   end
 
   def default_url_options(_options = {})
-    multiple_languages? ? { locale: I18n.locale } : {}
+    multiple_languages? ? {locale: I18n.locale} : {}
   end
 
   def available_locale!(locale)
@@ -52,5 +52,4 @@ module Localizable
   def multiple_languages?
     application_languages.keys.size > 1
   end
-
 end

@@ -5,33 +5,34 @@
 # or later. See the COPYING file at the top-level directory or at
 # https://github.com/hitobito/hitobito.
 
-
-require 'spec_helper'
+require "spec_helper"
 
 describe MailingLists::BulkMail::BounceMessageForwardJob do
   include MailingLists::ImapMailsSpecHelper
 
-  let(:raw_bounce_mail) { Mail.read_from_string(File.read(Rails.root.join('spec', 'fixtures', 'email', 'list_bounce.eml'))) }
+  let(:raw_bounce_mail) { Mail.read_from_string(Rails.root.join("spec", "fixtures", "email", "list_bounce.eml").read) }
 
   let(:bulk_mail_bounce) do
     Message::BulkMailBounce.create!(
       state: :pending,
       bounce_parent: messages(:mail),
       raw_source: raw_bounce_mail,
-      subject: 'Undelivered Mail Returned to Sender')
+      subject: "Undelivered Mail Returned to Sender"
+    )
   end
 
   let!(:mail_log) do
     MailLog.create!(
-      mail_from: 'MAILER-DAEMON@example.com',
+      mail_from: "MAILER-DAEMON@example.com",
       message: bulk_mail_bounce,
-      mail_hash: 'abcd42')
+      mail_hash: "abcd42"
+    )
   end
 
   subject { described_class.new(bulk_mail_bounce) }
 
-  it 'forwards bounce message' do
-    Settings.email.list_domain = 'hitobito.example.com'
+  it "forwards bounce message" do
+    Settings.email.list_domain = "hitobito.example.com"
 
     subject.perform
 
@@ -41,8 +42,8 @@ describe MailingLists::BulkMail::BounceMessageForwardJob do
     expect(last_email.sender).to eq("noreply@hitobito.example.com")
     expect(last_email.subject).to eq("Undelivered Mail Returned to Sender")
 
-    expect(mail_log.reload.status).to eq('completed')
+    expect(mail_log.reload.status).to eq("completed")
     expect(bulk_mail_bounce.reload.raw_source).to be_nil
-    expect(bulk_mail_bounce.state).to eq('finished')
+    expect(bulk_mail_bounce.state).to eq("finished")
   end
 end

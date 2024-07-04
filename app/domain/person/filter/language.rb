@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::Filter::Language < Person::Filter::Base
-
   self.permitted_args = [:allowed_values]
 
   def apply(scope)
@@ -18,15 +17,14 @@ class Person::Filter::Language < Person::Filter::Base
   end
 
   def to_hash
-    { allowed_values: allowed_values.map(&:to_s) }
+    {allowed_values: allowed_values.map(&:to_s)}
   end
 
   def to_params
-    { allowed_values: allowed_values }
+    {allowed_values: allowed_values}
   end
 
   def allowed_values
-    @allowed_values ||= Array(args[:allowed_values]).reject(&:blank?).compact
+    @allowed_values ||= Array(args[:allowed_values]).compact_blank.compact
   end
-
 end

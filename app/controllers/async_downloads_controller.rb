@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class AsyncDownloadsController < ApplicationController
-
   skip_authorization_check
 
   def show
@@ -16,10 +15,10 @@ class AsyncDownloadsController < ApplicationController
       redirect_to rails_blob_path(
         file.generated_file,
         filename: file.filename,
-        disposition: 'attachment'
+        disposition: "attachment"
       )
     else
-      render 'errors/404', status: :not_found
+      render "errors/404", status: :not_found
     end
   end
 
@@ -27,7 +26,7 @@ class AsyncDownloadsController < ApplicationController
     status = file&.downloadable?(current_person) ? 200 : 404
 
     respond_to do |format|
-      format.json { render json: { status: status, progress: file&.progress } }
+      format.json { render json: {status: status, progress: file&.progress} }
     end
   end
 
@@ -36,5 +35,4 @@ class AsyncDownloadsController < ApplicationController
   def file
     @file ||= AsyncDownloadFile.from_filename(params[:id], params[:file_type])
   end
-
 end

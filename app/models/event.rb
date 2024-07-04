@@ -62,15 +62,14 @@
 #
 # The same event may be attached to multiple groups of the same kind.
 class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
-
   # This statement is required because these classes would not be loaded correctly otherwise.
   # The price we pay for using classes as namespace.
-  require_dependency 'event/date'
-  require_dependency 'event/role'
-  require_dependency 'event/restricted_role'
-  require_dependency 'event/application_decorator'
-  require_dependency 'event/role_decorator'
-  require_dependency 'event/role_ability'
+  require_dependency "event/date"
+  require_dependency "event/role"
+  require_dependency "event/restricted_role"
+  require_dependency "event/application_decorator"
+  require_dependency "event/role_decorator"
+  require_dependency "event/role_ability"
 
   include Event::Participatable
 
@@ -80,32 +79,32 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   ### ATTRIBUTES
 
   class_attribute :used_attributes,
-                  :role_types,
-                  :supports_applications,
-                  :possible_states,
-                  :kind_class,
-                  :supports_invitations,
-                  :uses_form_tabs
+    :role_types,
+    :supports_applications,
+    :possible_states,
+    :kind_class,
+    :supports_invitations,
+    :uses_form_tabs
 
   # All attributes actually used (and mass-assignable) by the respective STI type.
   self.used_attributes = [:name, :motto, :cost, :maximum_participants, :contact_id,
-                          :description, :location, :application_opening_at,
-                          :application_closing_at, :application_conditions,
-                          :external_applications, :applications_cancelable,
-                          :signature, :signature_confirmation, :signature_confirmation_text,
-                          :required_contact_attrs, :hidden_contact_attrs,
-                          :participations_visible, :globally_visible,
-                          :minimum_participants, :automatic_assignment]
+    :description, :location, :application_opening_at,
+    :application_closing_at, :application_conditions,
+    :external_applications, :applications_cancelable,
+    :signature, :signature_confirmation, :signature_confirmation_text,
+    :required_contact_attrs, :hidden_contact_attrs,
+    :participations_visible, :globally_visible,
+    :minimum_participants, :automatic_assignment]
 
   # All participation roles that exist for this event
   # Customize in wagons using .register_role_type / .disable_role_type
   self.role_types = [Event::Role::Leader,
-                     Event::Role::AssistantLeader,
-                     Event::Role::Cook,
-                     Event::Role::Helper,
-                     Event::Role::Treasurer,
-                     Event::Role::Speaker,
-                     Event::Role::Participant]
+    Event::Role::AssistantLeader,
+    Event::Role::Cook,
+    Event::Role::Helper,
+    Event::Role::Treasurer,
+    Event::Role::Speaker,
+    Event::Role::Participant]
 
   # Are Event::Applications possible for this event type
   self.supports_applications = false
@@ -123,14 +122,14 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   model_stamper
   stampable stamper_class_name: :person,
-            deleter: false
+    deleter: false
 
   ### ASSOCIATIONS
 
   # Autosave would change updated_at and updater on the group when creating an event.
   has_and_belongs_to_many :groups, autosave: false
 
-  belongs_to :contact, class_name: 'Person'
+  belongs_to :contact, class_name: "Person"
 
   has_many :attachments, dependent: :destroy
 
@@ -138,9 +137,9 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   has_many :questions, dependent: :destroy, validate: true
 
   has_many :application_questions, -> { where(admin: false) },
-           class_name: 'Event::Question', inverse_of: :event
+    class_name: "Event::Question", inverse_of: :event
   has_many :admin_questions, -> { where(admin: true) },
-           class_name: 'Event::Question', inverse_of: :event
+    class_name: "Event::Question", inverse_of: :event
 
   has_many :invitations, dependent: :destroy
 
@@ -150,10 +149,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   has_many :subscriptions, as: :subscriber, dependent: :destroy
 
   has_many :person_add_requests,
-           foreign_key: :body_id,
-           inverse_of: :body,
-           class_name: 'Person::AddRequest::Event',
-           dependent: :destroy
+    foreign_key: :body_id,
+    inverse_of: :body,
+    class_name: "Person::AddRequest::Event",
+    dependent: :destroy
 
   acts_as_taggable
 
@@ -162,13 +161,13 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   validates_by_schema
   # name is a translated attribute and thus needs to be validated explicitly
   validates :name, presence: true
-  validates :dates, presence: { message: :must_exist }
+  validates :dates, presence: {message: :must_exist}
   validates :contact, permission: :show_full, allow_blank: true, if: :contact_id_changed?
-  validates :group_ids, presence: { message: :must_exist }
+  validates :group_ids, presence: {message: :must_exist}
   validates :application_opening_at, :application_closing_at,
-            timeliness: { type: :date, allow_blank: true, before: ::Date.new(9999, 12, 31) }
+    timeliness: {type: :date, allow_blank: true, before: ::Date.new(9999, 12, 31)}
   validates :description, :location, :application_conditions,
-            length: { allow_nil: true, maximum: 2**16 - 1 }
+    length: {allow_nil: true, maximum: 2**16 - 1}
   validate :assert_type_is_allowed_for_groups
   validate :assert_application_closing_is_after_opening
   validate :assert_required_contact_attrs_valid
@@ -181,7 +180,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   before_validation :prefill_shared_access_token, unless: :shared_access_token?
 
   accepts_nested_attributes_for :dates, :application_questions, :admin_questions,
-                                allow_destroy: true
+    allow_destroy: true
 
   ### SERIALIZED ATTRIBUTES
   serialize :required_contact_attrs, Array
@@ -190,13 +189,12 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   ### CLASS METHODS
 
   class << self
-
     # Default scope for event lists
     def list
-      order_by_date.
-        includes(:translations).
-        preload_all_dates.
-        distinct
+      order_by_date
+        .includes(:translations)
+        .preload_all_dates
+        .distinct
     end
 
     def preload_all_dates
@@ -204,7 +202,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     end
 
     def order_by_date
-      joins(:dates).order('event_dates.start_at')
+      joins(:dates).order("event_dates.start_at")
     end
 
     # Events with at least one date in the given year
@@ -212,23 +210,23 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
       year = Time.zone.today.year if year.to_i <= 0
       start_at = Time.zone.parse "#{year}-01-01"
       finish_at = start_at + 1.year
-      joins(:dates).where(event_dates: { start_at: [start_at...finish_at] })
+      joins(:dates).where(event_dates: {start_at: [start_at...finish_at]})
     end
 
     # Event with start and end-date overlay
     def between(start_date, end_date)
-      joins(:dates).
-        where('event_dates.start_at <= :end_date AND event_dates.finish_at >= :start_date ' \
-              'OR event_dates.start_at <= :end_date AND event_dates.start_at >= :start_date',
-              start_date: start_date, end_date: end_date).distinct
+      joins(:dates)
+        .where("event_dates.start_at <= :end_date AND event_dates.finish_at >= :start_date " \
+              "OR event_dates.start_at <= :end_date AND event_dates.start_at >= :start_date",
+          start_date: start_date, end_date: end_date).distinct
     end
 
     def before_or_on(date)
-      joins(:dates).where(event_dates: { start_at: ..date.end_of_day })
+      joins(:dates).where(event_dates: {start_at: ..date.end_of_day})
     end
 
     def after_or_on(date)
-      joins(:dates).where(event_dates: { start_at: date.midnight.. })
+      joins(:dates).where(event_dates: {start_at: date.midnight..})
     end
 
     # Events from groups in the hierarchy of the given user.
@@ -238,26 +236,26 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
     # Events belonging to the given group ids
     def with_group_id(group_ids)
-      joins(:groups).where(groups: { id: group_ids })
+      joins(:groups).where(groups: {id: group_ids})
     end
 
     # Events running now or in the future.
     def upcoming(midnight = Time.zone.now.midnight)
-      joins(:dates).
-        where('event_dates.start_at >= ? OR event_dates.finish_at >= ?', midnight, midnight)
+      joins(:dates)
+        .where("event_dates.start_at >= ? OR event_dates.finish_at >= ?", midnight, midnight)
     end
 
     # Events that are open for applications.
     def application_possible
       today = Time.zone.today
-      where('events.application_opening_at IS NULL OR events.application_opening_at <= ?', today).
-        where('events.application_closing_at IS NULL OR events.application_closing_at >= ?', today).
-        where('events.maximum_participants IS NULL OR events.maximum_participants <= 0 OR ' \
-            'events.participant_count < events.maximum_participants')
+      where("events.application_opening_at IS NULL OR events.application_opening_at <= ?", today)
+        .where("events.application_closing_at IS NULL OR events.application_closing_at >= ?", today)
+        .where("events.maximum_participants IS NULL OR events.maximum_participants <= 0 OR " \
+            "events.participant_count < events.maximum_participants")
     end
 
     def places_available
-      where('(COALESCE(maximum_participants, 0) = 0) OR (participant_count < maximum_participants)')
+      where("(COALESCE(maximum_participants, 0) = 0) OR (participant_count < maximum_participants)")
     end
 
     # Is the given attribute used in the current STI class
@@ -274,7 +272,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     end
 
     def type_name
-      self == base_class ? 'simple' : name.demodulize.underscore
+      (self == base_class) ? "simple" : name.demodulize.underscore
     end
 
     def all_types
@@ -304,7 +302,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     # Used by wagons to register additional event roles
     def register_role_type(type)
       ensure_role_type!(type)
-      self.role_types << type
+      role_types << type
     end
 
     # Used by wagons to register additional event roles
@@ -336,7 +334,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   end
 
   def group_names
-    groups.join(', ')
+    groups.join(", ")
   end
 
   def supports_application_details?
@@ -416,7 +414,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   def application_period_open?
     (!application_opening_at? || application_opening_at <= Time.zone.today) &&
-    (!application_closing_at? || application_closing_at >= Time.zone.today)
+      (!application_closing_at? || application_closing_at >= Time.zone.today)
   end
 
   def assert_type_is_allowed_for_groups # rubocop:disable Metrics/CyclomaticComplexity
@@ -453,8 +451,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   def assert_required_contact_attrs_valid # rubocop:disable Metrics/CyclomaticComplexity
     required_contact_attrs.map(&:to_s).each do |a|
       unless valid_contact_attr?(a) &&
-          ParticipationContactData.contact_associations.
-             map(&:to_s).exclude?(a)
+          ParticipationContactData.contact_associations
+              .map(&:to_s).exclude?(a)
         errors.add(:base, :contact_attr_invalid, attribute: a)
       end
 

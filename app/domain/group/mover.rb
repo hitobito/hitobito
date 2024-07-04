@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Group::Mover
-
   attr_reader :group
 
   def initialize(group)
@@ -35,5 +34,4 @@ class Group::Mover
   def matching_childgroup?(candidate)
     candidate.possible_children.include?(group.class)
   end
-
 end

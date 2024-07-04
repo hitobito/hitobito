@@ -5,29 +5,29 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe FamilyMember do
   subject { Fabricate(:family_member) }
 
-  context 'has basic plumbing, it' do
-    it 'is an application record' do
+  context "has basic plumbing, it" do
+    it "is an application record" do
       is_expected.to be_an ApplicationRecord
       is_expected.to be_an ActiveRecord::Base
     end
 
-    it 'has translated kinds' do
+    it "has translated kinds" do
       is_expected.to be_a I18nEnums
 
-      expect(subject.kind).to eql 'sibling'
-      expect(subject.kind_label).to eql 'Geschwister'
+      expect(subject.kind).to eql "sibling"
+      expect(subject.kind_label).to eql "Geschwister"
 
       expect(described_class.kind_labels).to eql(
-        { sibling: 'Geschwister' }
+        {sibling: "Geschwister"}
       )
     end
 
-    it 'is schema-validated' do
+    it "is schema-validated" do
       expect(Fabricate.build(:family_member, person: nil)).to_not be_valid
       expect(Fabricate.build(:family_member, kind: nil)).to_not be_valid
       expect(Fabricate.build(:family_member, other: nil)).to_not be_valid
@@ -36,22 +36,22 @@ describe FamilyMember do
     end
   end
 
-  context 'family_key' do
+  context "family_key" do
     let(:without_key) { Fabricate.build(:family_member, family_key: nil) }
 
-    it 'has assumptions' do
+    it "has assumptions" do
       expect(without_key).to be_new_record
       expect(without_key.person).to_not be_nil
       expect(without_key.other).to_not be_nil
     end
 
-    it 'is created if no family_key is known' do
+    it "is created if no family_key is known" do
       expect do
         without_key.valid? # runs before_validation hooks
       end.to change(without_key, :family_key).from(nil).to(String)
     end
 
-    it 'is copied to both people if no family_key is known' do
+    it "is copied to both people if no family_key is known" do
       expect(without_key.person.family_key).to be_blank
       expect(without_key.other.family_key).to be_blank
 
@@ -63,7 +63,7 @@ describe FamilyMember do
       expect(without_key.other.family_key).to eql family_key
     end
 
-    it 'is taken from main person if other person has none' do
+    it "is taken from main person if other person has none" do
       family_key = SecureRandom.uuid
 
       without_key.person.update_attribute(:family_key, family_key)
@@ -79,7 +79,7 @@ describe FamilyMember do
       expect(without_key.family_key).to eql family_key
     end
 
-    it 'is taken from other person if main person has none' do
+    it "is taken from other person if main person has none" do
       family_key = SecureRandom.uuid
 
       without_key.other.update_attribute(:family_key, family_key)
@@ -95,7 +95,7 @@ describe FamilyMember do
       expect(without_key.family_key).to eql family_key
     end
 
-    it 'is taken from main person if both have the same' do
+    it "is taken from main person if both have the same" do
       family_key = SecureRandom.uuid
 
       without_key.person.update_attribute(:family_key, family_key)
@@ -112,7 +112,7 @@ describe FamilyMember do
       expect(without_key.family_key).to eql family_key
     end
 
-    it 'copying fails if two different keys are present' do
+    it "copying fails if two different keys are present" do
       without_key.person.update_attribute(:family_key, SecureRandom.uuid)
       without_key.other.update_attribute(:family_key, SecureRandom.uuid)
 
@@ -127,9 +127,9 @@ describe FamilyMember do
       end.to raise_error(FamilyMember::FamilyKeyMismatch)
     end
 
-    it 'cannot be changed after creation'
+    it "cannot be changed after creation"
 
-    it 'does not collide with other family-keys' do
+    it "does not collide with other family-keys" do
       one, two, three, other = 4.times.map { SecureRandom.uuid }
 
       [one, two, three].each do |key|
@@ -151,9 +151,9 @@ describe FamilyMember do
     end
   end
 
-  context 'additional relations:' do
-    context 'sibling is present between all siblings of a family:' do
-      it 'inverse relation is added for first person' do
+  context "additional relations:" do
+    context "sibling is present between all siblings of a family:" do
+      it "inverse relation is added for first person" do
         fm = Fabricate.build(:family_member)
 
         expect do
@@ -162,7 +162,7 @@ describe FamilyMember do
 
         inverse = described_class.find_by(
           person: fm.other,
-          kind: 'sibling',
+          kind: "sibling",
           other: fm.person,
           family_key: fm.family_key
         )
@@ -170,7 +170,7 @@ describe FamilyMember do
         expect(inverse).to be_present
       end
 
-      it 'inverse relation is removed as well' do
+      it "inverse relation is removed as well" do
         fm = Fabricate(:family_member)
 
         expect do
@@ -179,7 +179,7 @@ describe FamilyMember do
 
         inverse = described_class.find_by(
           person: fm.other,
-          kind: 'sibling',
+          kind: "sibling",
           other: fm.person,
           family_key: fm.family_key
         )
@@ -187,10 +187,10 @@ describe FamilyMember do
         expect(inverse).to be_blank
       end
 
-      it 'transitive relation is added when A is new sibling of B and C' do
-        a = Fabricate(:person, nickname: 'Alice')
-        b = Fabricate(:person, nickname: 'Bob')
-        c = Fabricate(:person, nickname: 'Carol')
+      it "transitive relation is added when A is new sibling of B and C" do
+        a = Fabricate(:person, nickname: "Alice")
+        b = Fabricate(:person, nickname: "Bob")
+        c = Fabricate(:person, nickname: "Carol")
 
         Fabricate(:family_member, person: b, other: c)
 
@@ -209,16 +209,16 @@ describe FamilyMember do
         expect(described_class.where(person: c, kind: :sibling).map(&:other)).to match_array [a, b]
       end
 
-      it 'all sibling-ties are cut if one is no longer sibling of any other sibling' do
-        a = Fabricate(:person, nickname: 'Alice')
-        b = Fabricate(:person, nickname: 'Bob')
-        c = Fabricate(:person, nickname: 'Carol')
+      it "all sibling-ties are cut if one is no longer sibling of any other sibling" do
+        a = Fabricate(:person, nickname: "Alice")
+        b = Fabricate(:person, nickname: "Bob")
+        c = Fabricate(:person, nickname: "Carol")
 
         Fabricate(:family_member, person: b, other: c, kind: :sibling)
         Fabricate(:family_member, person: a, other: b, kind: :sibling)
 
         expect do
-          described_class.where(person: a, kind: :sibling).each do |tie|
+          described_class.where(person: a, kind: :sibling).find_each do |tie|
             tie.destroy
           end
         end.to change(described_class, :count).by(-4)

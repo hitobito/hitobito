@@ -27,8 +27,8 @@ class MountedAttribute < ActiveRecord::Base
 
   def config
     @config ||= MountedAttr::ClassMethods
-                .mounted_attr_registry
-                .config_for(entry.class, key)
+      .mounted_attr_registry
+      .config_for(entry.class, key)
   end
 
   def value=(new_value)

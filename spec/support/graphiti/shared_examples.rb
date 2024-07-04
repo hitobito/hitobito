@@ -5,41 +5,41 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
 
-shared_examples 'jsonapi authorized requests' do
+shared_examples "jsonapi authorized requests" do
   let(:token) { service_tokens(:permitted_top_layer_token).token }
   let(:params) { {} }
   let(:payload) { {} }
 
   def jsonapi_headers
-    super.merge('X-TOKEN' => token)
+    super.merge("X-TOKEN" => token)
   end
 
-  context 'without authentication' do
+  context "without authentication" do
     let(:token) { nil }
-    it 'returns unauthorized' do
+
+    it "returns unauthorized" do
       make_request
       expect(response.status).to eq(401)
-      expect(json['errors']).to include(include("code" => "unauthorized"))
+      expect(json["errors"]).to include(include("code" => "unauthorized"))
     end
   end
-
 end
 
-shared_examples 'graphiti schema file is up to date' do
-  it 'graphiti schema file is up to date' do
+shared_examples "graphiti schema file is up to date" do
+  it "graphiti schema file is up to date" do
     context_root = Pathname.new(Dir.pwd)
 
     # If no resources are defined, we assume the current context has no customizations
     # of the base api. This can be the case for wagons which use the core api unchanged.
     # In this case we don't need to check the schema file as it gets already checked in
     # the core.
-    next unless context_root.glob('app/resources/**/*.rb').present?
+    next if context_root.glob("app/resources/**/*.rb").blank?
 
     # There are specific schema.json files for the core and the wagons.
     # We need to configure graphiti to use the correct schema.json file depending on the
     # context where this spec is run.
     Graphiti.configure do |config|
-      config.schema_path = context_root.join('spec', 'support', 'graphiti', 'schema.json')
+      config.schema_path = context_root.join("spec", "support", "graphiti", "schema.json")
     end
 
     expect(Graphiti.config.schema_path).to exist
@@ -53,9 +53,9 @@ shared_examples 'graphiti schema file is up to date' do
     MSG
   end
 
-  describe 'GET /api-docs', type: :request do
-    it 'openapi spec is valid' do
-      get '/api/openapi.json'
+  describe "GET /api-docs", type: :request do
+    it "openapi spec is valid" do
+      get "/api/openapi.json"
       json = JSON.parse(response.body)
       expect(OpenApi::SchemaValidator.validate!(json, 3)).to be_truthy, <<~MSG
         The generated OpenAPI specification file does not conform to the official OpenAPI 3 standard.

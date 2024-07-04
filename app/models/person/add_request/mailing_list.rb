@@ -22,8 +22,7 @@
 #
 
 class Person::AddRequest::MailingList < Person::AddRequest
-
-  belongs_to :body, class_name: '::MailingList'
+  belongs_to :body, class_name: "::MailingList"
 
   def to_s(_format = :default)
     group = body.group
@@ -31,5 +30,4 @@ class Person::AddRequest::MailingList < Person::AddRequest
     group_label = "#{group.model_name.human} #{group}"
     self.class.human_attribute_name(:label, body: list_label, group: group_label)
   end
-
 end

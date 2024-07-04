@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::TagsController < ApplicationController
-
   class_attribute :permitted_attrs
 
   before_action :load_group
@@ -23,7 +22,7 @@ class Event::TagsController < ApplicationController
     tags = []
 
     if params.key?(:q) && params[:q].size >= 3
-      tags = available_tags(params[:q]).map { |tag| { label: tag } }
+      tags = available_tags(params[:q]).map { |tag| {label: tag} }
     end
 
     render json: tags
@@ -62,12 +61,12 @@ class Event::TagsController < ApplicationController
   end
 
   def create_tag(name)
-    return unless name.present?
+    return if name.blank?
 
     ActsAsTaggableOn::Tagging.find_or_create_by!(
       taggable: @event,
       tag: ActsAsTaggableOn::Tag.find_or_create_by(name: name),
-      context: 'tags'
+      context: "tags"
     )
   end
 
@@ -77,7 +76,7 @@ class Event::TagsController < ApplicationController
 
   def available_tags(query)
     ActsAsTaggableOn::Tag
-      .where('name LIKE ?', "%#{query}%")
+      .where("name LIKE ?", "%#{query}%")
       .order(:name)
       .limit(10)
       .pluck(:name)
@@ -90,5 +89,4 @@ class Event::TagsController < ApplicationController
   def load_event
     @event = Event.find(params[:event_id])
   end
-
 end

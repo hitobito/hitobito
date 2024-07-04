@@ -5,16 +5,14 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Households::MembersQuery do
   let(:current_user) { Fabricate.build(:person, id: 1) }
 
-  describe 'initialization' do
-    it 'succeeds with person person_id is passed as nil' do
+  describe "initialization" do
+    it "succeeds with person person_id is passed as nil" do
       described_class.new(current_user, nil)
     end
   end
 end
-
-

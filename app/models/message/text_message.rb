@@ -41,21 +41,19 @@
 #  index_messages_on_sender_id        (sender_id)
 #
 
-
 class Message::TextMessage < Message
   self.icon = :sms
 
-  validates :text, length: { minimum: 1, maximum: 603 }
+  validates :text, length: {minimum: 1, maximum: 603}
 
   def subject
     text && text[0..20]
   end
 
   def update_message_status!
-    failed_count = message_recipients.where(state: 'failed').count
-    success_count = message_recipients.where(state: 'sent').count
-    state = success_count.eql?(0) && failed_count.positive? ? 'failed' : 'finished'
+    failed_count = message_recipients.where(state: "failed").count
+    success_count = message_recipients.where(state: "sent").count
+    state = (success_count.eql?(0) && failed_count.positive?) ? "failed" : "finished"
     update!(success_count: success_count, failed_count: failed_count, state: state)
   end
-
 end

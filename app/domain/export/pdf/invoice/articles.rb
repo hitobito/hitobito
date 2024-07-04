@@ -36,22 +36,22 @@ module Export::Pdf::Invoice
 
     def articles_table
       table(articles,
-            header: true,
-            column_widths: { 0 => 290, 1 => 40, 2 => 50, 3 => 50, 4 => 50 },
-            cell_style: { borders: [:bottom],
-                          border_color: 'CCCCCC',
-                          border_width: 0.5,
-                          padding: [2, 0, 2, 0],
-                          inline_format: true })
+        header: true,
+        column_widths: {0 => 290, 1 => 40, 2 => 50, 3 => 50, 4 => 50},
+        cell_style: {borders: [:bottom],
+                     border_color: "CCCCCC",
+                     border_width: 0.5,
+                     padding: [2, 0, 2, 0],
+                     inline_format: true})
     end
 
     def articles
       [
-        [I18n.t('activerecord.models.invoice_article.one'),
-         align_right(I18n.t('activerecord.attributes.invoice_item.count')),
-         align_right(I18n.t('activerecord.attributes.invoice_item.unit_cost')),
-         align_right(I18n.t('activerecord.attributes.invoice_item.cost')),
-         align_right(I18n.t('activerecord.attributes.invoice_item.vat_rate'))]
+        [I18n.t("activerecord.models.invoice_article.one"),
+          align_right(I18n.t("activerecord.attributes.invoice_item.count")),
+          align_right(I18n.t("activerecord.attributes.invoice_item.unit_cost")),
+          align_right(I18n.t("activerecord.attributes.invoice_item.cost")),
+          align_right(I18n.t("activerecord.attributes.invoice_item.vat_rate"))]
       ] + article_data
     end
 
@@ -60,8 +60,8 @@ module Export::Pdf::Invoice
         [
           "<b>#{it.name}</b>\n#{it.description}",
           align_right(it.count.to_s),
-          align_right(helper.number_to_currency(it.unit_cost, unit: '')),
-          align_right(helper.number_to_currency(it.cost, unit: '')),
+          align_right(helper.number_to_currency(it.unit_cost, unit: "")),
+          align_right(helper.number_to_currency(it.cost, unit: "")),
           align_right(helper.number_to_percentage(it.vat_rate, precision: 1))
         ]
       end
@@ -73,10 +73,10 @@ module Export::Pdf::Invoice
           data = total_data
           payments = invoice.payments
           pdf.table data, position: :right,
-                          column_widths: { 0 => 100 },
-                          cell_style: { borders: [],
-                                        border_color: 'CCCCCC',
-                                        border_width: 0.5 } do
+            column_widths: {0 => 100},
+            cell_style: {borders: [],
+                         border_color: "CCCCCC",
+                         border_width: 0.5} do
             last_row_index = data.size.pred
             rows(0..last_row_index).padding = [2, 0]
 
@@ -98,24 +98,24 @@ module Export::Pdf::Invoice
     def total_data
       decorated = invoice.decorate
       vat_row = if invoice.calculated[:vat].nonzero?
-                  [I18n.t('invoices.pdf.total_vat'), decorated.vat]
-                end
+        [I18n.t("invoices.pdf.total_vat"), decorated.vat]
+      end
       payment_data = if invoice.payments.any?
-                       payment_rows +
-                         [[I18n.t('invoices.pdf.amount_open'), decorated.amount_open]]
-                     end
+        payment_rows +
+          [[I18n.t("invoices.pdf.amount_open"), decorated.amount_open]]
+      end
 
       [
-        [I18n.t('invoices.pdf.cost'), decorated.cost],
+        [I18n.t("invoices.pdf.cost"), decorated.cost],
         vat_row,
-        [I18n.t('invoices.pdf.total'), decorated.total],
+        [I18n.t("invoices.pdf.total"), decorated.total],
         *payment_data
       ].compact
     end
 
     def payment_rows
       @payment_rows ||= invoice.payments.map do |p|
-        [I18n.t('invoices.pdf.payment'), invoice.decorate.format_currency(p.amount)]
+        [I18n.t("invoices.pdf.payment"), invoice.decorate.format_currency(p.amount)]
       end
     end
 

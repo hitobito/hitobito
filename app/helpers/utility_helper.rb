@@ -4,11 +4,10 @@
 #  https://github.com/hitobito/hitobito.
 
 module UtilityHelper
-
   # Overridden method that takes a block that is executed for each item in array
   # before appending the results.
   def safe_join(array, sep = $OUTPUT_FIELD_SEPARATOR, &block)
-    if block_given?
+    if block
       array = array.collect(&block).compact
     end
     super(array, sep)
@@ -17,8 +16,8 @@ module UtilityHelper
   # Returns the css class for the given flash level.
   def flash_class(level)
     case level
-    when :notice then 'success'
-    when :alert then 'danger'
+    when :notice then "success"
+    when :alert then "danger"
     else level.to_s
     end
   end
@@ -26,7 +25,7 @@ module UtilityHelper
   # Adds a class to the given options, even if there are already classes.
   def add_css_class(options, classes)
     if options[:class]
-      options[:class] += ' ' + classes
+      options[:class] += " " + classes
     else
       options[:class] = classes
     end
@@ -38,13 +37,13 @@ module UtilityHelper
 
   # Returns the ActiveRecord column type or nil.
   def column_type(obj, attr)
-    return obj.send("#{attr}_type") if obj.respond_to?("#{attr}_type")
+    return obj.send(:"#{attr}_type") if obj.respond_to?(:"#{attr}_type")
 
     attribute_type_enum(obj, attr) || column_property(obj, attr, :type)
   end
 
   def attribute_type_enum(obj, attr)
-    return :enum if obj.class.respond_to?(:attribute_types) &&
+    :enum if obj.class.respond_to?(:attribute_types) &&
       obj.class.attribute_types[attr.to_s].is_a?(ActiveRecord::Enum::EnumType)
   end
 
@@ -60,7 +59,7 @@ module UtilityHelper
 
   def column_for_attr(obj, attr)
     return nil unless obj.respond_to?(:column_for_attribute) && obj.has_attribute?(attr)
-    return obj.column_for_attribute(attr)
+    obj.column_for_attribute(attr)
   end
 
   # Returns the association proxy for the given attribute. The attr parameter
@@ -80,13 +79,12 @@ module UtilityHelper
   # Returns the name of the attr and it's corresponding field
   def assoc_and_id_attr(attr)
     attr = attr.to_s
-    if attr.end_with?('_id')
+    if attr.end_with?("_id")
       [attr[0..-4], attr]
-    elsif attr.end_with?('_ids')
+    elsif attr.end_with?("_ids")
       [attr[0..-5].pluralize, attr]
     else
       [attr, "#{attr}_id"]
     end
   end
-
 end

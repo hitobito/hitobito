@@ -4,31 +4,30 @@
 #  https://github.com/hitobito/hitobito_youth.
 
 class Event::ParticipationContactData
-
   attr_reader :person
 
   class_attribute :mandatory_contact_attrs,
-                  :contact_attrs,
-                  :contact_associations
+    :contact_attrs,
+    :contact_associations
 
   self.mandatory_contact_attrs = [:email, :first_name, :last_name]
 
   self.contact_attrs = [:first_name, :last_name, :nickname, :company_name, :email,
-                        :address_care_of, :street, :housenumber, :postbox,
-                        :zip_code, :town,
-                        :country, :gender, :birthday, :phone_numbers, :language]
+    :address_care_of, :street, :housenumber, :postbox,
+    :zip_code, :town,
+    :country, :gender, :birthday, :phone_numbers, :language]
 
-  if FeatureGate.disabled?('structured_addresses')
+  if FeatureGate.disabled?("structured_addresses")
     contact_attrs.delete(:address_care_of)
     contact_attrs.delete(:street)
     contact_attrs.delete(:housenumber)
     contact_attrs.delete(:postbox)
 
-    if FeatureGate.disabled?('address_migration')
+    if FeatureGate.disabled?("address_migration")
       contact_attrs << :address
     end
   end
-  if FeatureGate.enabled?('address_migration')
+  if FeatureGate.enabled?("address_migration")
     contact_attrs.delete(:address_care_of)
     contact_attrs.delete(:street)
     contact_attrs.delete(:housenumber)
@@ -43,7 +42,7 @@ class Event::ParticipationContactData
   delegate :t, to: I18n
 
   delegate :gender_label, :column_for_attribute, :timeliness_cache_attribute,
-           :has_attribute?, to: :person
+    :has_attribute?, to: :person
 
   delegate :layer_group, to: :event
 
@@ -53,7 +52,6 @@ class Event::ParticipationContactData
   validate :assert_person_attrs_valid
 
   class << self
-
     delegate :reflect_on_association, :human_attribute_name, to: Person
 
     def base_class
@@ -63,7 +61,6 @@ class Event::ParticipationContactData
     def demodulized_route_keys
       nil
     end
-
   end
 
   def initialize(event, person, model_params = {})
@@ -82,11 +79,11 @@ class Event::ParticipationContactData
   end
 
   def method_missing(method)
-    return person.send(method) if method =~ /^.*_came_from_user\?/
-    return person.send(method) if method =~ /^.*_before_type_cast/
-    return person.send(method) if method =~ /^privacy_policy.*/
+    return person.send(method) if /^.*_came_from_user\?/.match?(method)
+    return person.send(method) if /^.*_before_type_cast/.match?(method)
+    return person.send(method) if /^privacy_policy.*/.match?(method)
 
-    super(method)
+    super
   end
 
   def show_attr?(a)
@@ -106,7 +103,7 @@ class Event::ParticipationContactData
   end
 
   def respond_to?(attr, include_all = false)
-    responds = super(attr, include_all)
+    responds = super
     responds ? true : person.respond_to?(attr)
   end
 
@@ -140,22 +137,22 @@ class Event::ParticipationContactData
       next assert_phone_number_present if a.to_sym == :phone_numbers
 
       if model_params[a].blank?
-        errors.add(a, t('errors.messages.blank'))
+        errors.add(a, t("errors.messages.blank"))
       end
     end
   end
 
   def assert_phone_number_present
-    phone_changes = { add: [], sub: [] }
-    changed_attrs = model_params.to_h.fetch('phone_numbers_attributes', {})
+    phone_changes = {add: [], sub: []}
+    changed_attrs = model_params.to_h.fetch("phone_numbers_attributes", {})
 
     phone_changes = changed_attrs.each_with_object(phone_changes) do |(_key, entry), memo|
-      key = entry['_destroy'] == 'false' ? :add : :sub
-      memo[key] << entry['number']
+      key = (entry["_destroy"] == "false") ? :add : :sub
+      memo[key] << entry["number"]
     end
 
     if (phone_changes[:add] - phone_changes[:sub]).empty?
-      errors.add('phone_numbers', t('errors.messages.blank'))
+      errors.add("phone_numbers", t("errors.messages.blank"))
     end
   end
 
@@ -170,5 +167,4 @@ class Event::ParticipationContactData
       errors.add(:base, m)
     end
   end
-
 end

@@ -21,7 +21,6 @@
 #
 
 class Qualification < ActiveRecord::Base
-
   attr_writer :first_of_kind
   attr_accessor :open_training_days
 
@@ -30,7 +29,7 @@ class Qualification < ActiveRecord::Base
   belongs_to :person
   belongs_to :qualification_kind
 
-  has_paper_trail meta: { main_id: ->(q) { q.person_id }, main_type: Person.sti_name }
+  has_paper_trail meta: {main_id: ->(q) { q.person_id }, main_type: Person.sti_name}
 
   ### VALIDATIONS
 
@@ -38,58 +37,56 @@ class Qualification < ActiveRecord::Base
 
   validates_by_schema
   validates :qualification_kind_id,
-            uniqueness: { scope: [:person_id, :start_at, :finish_at],
-                          message: :exists_for_timeframe }
+    uniqueness: {scope: [:person_id, :start_at, :finish_at],
+                 message: :exists_for_timeframe}
   validates :start_at, :finish_at,
-            timeliness: { type: :date, allow_blank: true, before: Date.new(9999, 12, 31) }
-
+    timeliness: {type: :date, allow_blank: true, before: Date.new(9999, 12, 31)}
 
   delegate :cover?, :active?, to: :duration
 
   class << self
-
     def order_by_date
       order(
-        Arel.sql('CASE WHEN finish_at IS NULL THEN 0 ELSE 1 END, finish_at DESC, start_at DESC')
+        Arel.sql("CASE WHEN finish_at IS NULL THEN 0 ELSE 1 END, finish_at DESC, start_at DESC")
       )
     end
 
     def active(date = nil)
       date ||= Time.zone.today
-      where('qualifications.start_at <= ?', date).
-        where('qualifications.finish_at >= ? OR qualifications.finish_at IS NULL', date)
+      where(qualifications: {start_at: ..date})
+        .where("qualifications.finish_at >= ? OR qualifications.finish_at IS NULL", date)
     end
 
     def reactivateable(date = nil)
       date ||= Time.zone.today
-      joins(:qualification_kind).
-        where('qualifications.start_at <= ?', date).
-        where('qualifications.finish_at IS NULL OR ' \
-              '(qualification_kinds.reactivateable IS NULL AND ' \
-              ' qualifications.finish_at >= :date) OR ' \
-              'DATE_ADD(qualifications.finish_at, ' \
-              ' INTERVAL qualification_kinds.reactivateable YEAR) >= :date',
-              date: date)
+      joins(:qualification_kind)
+        .where(qualifications: {start_at: ..date})
+        .where("qualifications.finish_at IS NULL OR " \
+              "(qualification_kinds.reactivateable IS NULL AND " \
+              " qualifications.finish_at >= :date) OR " \
+              "DATE_ADD(qualifications.finish_at, " \
+              " INTERVAL qualification_kinds.reactivateable YEAR) >= :date",
+          date: date)
     end
 
     def only_reactivateable(date = nil)
       date ||= Time.zone.today
-      joins(:qualification_kind).
-        where.not(finish_at: nil).
-        where.not(qualification_kinds: { reactivateable: nil }).
-        where('qualifications.finish_at < :date AND ' \
-              'DATE_ADD(qualifications.finish_at, ' \
-              ' INTERVAL qualification_kinds.reactivateable YEAR) >= :date',
-              date: date)
+      joins(:qualification_kind)
+        .where.not(finish_at: nil)
+        .where.not(qualification_kinds: {reactivateable: nil})
+        .where("qualifications.finish_at < :date AND " \
+              "DATE_ADD(qualifications.finish_at, " \
+              " INTERVAL qualification_kinds.reactivateable YEAR) >= :date",
+          date: date)
     end
 
     def not_active(qualification_kind_ids = [], date = nil)
       date ||= Time.zone.today
-      where('NOT EXISTS (SELECT 1 FROM qualifications q2 ' \
-            'WHERE q2.person_id = qualifications.person_id ' \
+      where("NOT EXISTS (SELECT 1 FROM qualifications q2 " \
+            "WHERE q2.person_id = qualifications.person_id " \
             "AND #{subselect_kind_condition(qualification_kind_ids)} " \
-            'AND q2.start_at <= :date AND (q2.finish_at IS NULL OR q2.finish_at >= :date))',
-            qualification_kind_ids: qualification_kind_ids, date: date)
+            "AND q2.start_at <= :date AND (q2.finish_at IS NULL OR q2.finish_at >= :date))",
+        qualification_kind_ids: qualification_kind_ids, date: date)
     end
 
     def only_expired(qualification_kind_ids = [], date = nil) # rubocop:disable Metrics/MethodLength
@@ -116,9 +113,9 @@ class Qualification < ActiveRecord::Base
 
     def subselect_kind_condition(qualification_kind_ids)
       if qualification_kind_ids.present?
-        'q2.qualification_kind_id IN (:qualification_kind_ids)'
+        "q2.qualification_kind_id IN (:qualification_kind_ids)"
       else
-        'q2.qualification_kind_id = qualifications.qualification_kind_id'
+        "q2.qualification_kind_id = qualifications.qualification_kind_id"
       end
     end
   end
@@ -148,9 +145,9 @@ class Qualification < ActiveRecord::Base
 
   def to_s(format = :default)
     I18n.t("activerecord.attributes.qualification.#{to_s_key(format)}",
-           kind: qualification_kind.to_s,
-           finish_at: finish_at? ? I18n.l(finish_at) : nil,
-           origin: origin)
+      kind: qualification_kind.to_s,
+      finish_at: finish_at? ? I18n.l(finish_at) : nil,
+      origin: origin)
   end
 
   private
@@ -166,7 +163,6 @@ class Qualification < ActiveRecord::Base
     cols << :finish_at if finish_at?
     cols << :origin if format == :long && origin?
 
-    ['string', cols.join('_and_').presence].compact.join('_with_')
+    ["string", cols.join("_and_").presence].compact.join("_with_")
   end
-
 end

@@ -53,11 +53,11 @@ class SelfRegistration
   end
 
   def partials_valid?
-    seen_partials.all? { |partial| send("#{partial}_valid?") }
+    seen_partials.all? { |partial| send(:"#{partial}_valid?") }
   end
 
   def first_invalid_partial
-    seen_partials.find { |partial| !send("#{partial}_valid?") }
+    seen_partials.find { |partial| !send(:"#{partial}_valid?") }
   end
 
   def seen_partials

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module MailingLists::ImapMailsSpecHelper
-
   def build_imap_mail(plain_body: true)
     Imap::Mail.build(imap_fetch_data(plain_body: plain_body))
   end
@@ -15,26 +14,26 @@ module MailingLists::ImapMailsSpecHelper
 
   def plain_text_mail
     Mail.new do
-      from    'from@example.com'
-      to      'to@example.com'
-      subject 'Testflight from 24.4.2021'
-      body    'SpaceX rocks!'
+      from "from@example.com"
+      to "to@example.com"
+      subject "Testflight from 24.4.2021"
+      body "SpaceX rocks!"
     end
   end
 
   def multipart_mail
     Mail.new do
-      from    'from@example.com'
-      to      'to@example.com'
-      subject 'Testflight from 24.4.2021'
+      from "from@example.com"
+      to "to@example.com"
+      subject "Testflight from 24.4.2021"
 
       text_part do
-        body 'This is just plain text!'
+        body "This is just plain text!"
       end
 
       html_part do
-        content_type 'text/html; charset=UTF-8'
-        body '<h1>This is some Html</h1>'
+        content_type "text/html; charset=UTF-8"
+        body "<h1>This is some Html</h1>"
       end
     end
   end
@@ -43,22 +42,22 @@ module MailingLists::ImapMailsSpecHelper
     mail = plain_body ? plain_text_mail : multipart_mail
 
     {
-      'UID' => plain_body ? '42' : '43',
-      'RFC822' => mail.to_s,
-      'ENVELOPE' => new_envelope,
-      'BODYSTRUCTURE' => plain_body ? text_body : html_body,
-      'BODY[TEXT]' => mail.body.to_s
+      "UID" => plain_body ? "42" : "43",
+      "RFC822" => mail.to_s,
+      "ENVELOPE" => new_envelope,
+      "BODYSTRUCTURE" => plain_body ? text_body : html_body,
+      "BODY[TEXT]" => mail.body.to_s
     }
   end
 
   def new_envelope
     Net::IMAP::Envelope.new(
-      Time.now.to_s,
-      'Testflight from 24.4.2021',
-      [new_address('from')],
-      [new_address('sender')],
-      [new_address('reply_to')],
-      [new_address('to')]
+      Time.zone.now.to_s,
+      "Testflight from 24.4.2021",
+      [new_address("from")],
+      [new_address("sender")],
+      [new_address("reply_to")],
+      [new_address("to")]
     )
   end
 
@@ -66,16 +65,16 @@ module MailingLists::ImapMailsSpecHelper
     Net::IMAP::Address.new(
       name,
       nil,
-      'john',
+      "john",
       "#{name}.com"
     )
   end
 
   def text_body
-    Net::IMAP::BodyTypeText.new('TEXT')
+    Net::IMAP::BodyTypeText.new("TEXT")
   end
 
   def html_body
-    Net::IMAP::BodyTypeMultipart.new('MULTIPART')
+    Net::IMAP::BodyTypeMultipart.new("MULTIPART")
   end
 end

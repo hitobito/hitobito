@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 #  Copyright (c) 2022, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -27,7 +28,7 @@ class Authenticatable::TwoFactors::Totp < Authenticatable::TwoFactor
   def secret
     person.two_factor_authentication_registered? ?
       person.two_fa_secret :
-      session[:pending_totp_secret] 
+      session[:pending_totp_secret]
   end
 
   private

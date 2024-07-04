@@ -5,7 +5,6 @@
 
 module AbilityDsl::Constraints
   module Person
-
     def herself
       person.id == user.id
     end
@@ -55,6 +54,5 @@ module AbilityDsl::Constraints
     def non_restricted_in_same_layer_or_visible_below
       non_restricted_in_same_layer || visible_below
     end
-
   end
 end

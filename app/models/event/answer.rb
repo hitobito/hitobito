@@ -20,7 +20,6 @@
 #
 
 class Event::Answer < ActiveRecord::Base
-
   attr_writer :answer_required
 
   delegate :admin?, to: :question
@@ -28,12 +27,11 @@ class Event::Answer < ActiveRecord::Base
   belongs_to :participation
   belongs_to :question
 
-
   validates_by_schema
-  validates :question_id, uniqueness: { scope: :participation_id }
-  validates :answer, presence: { if: lambda do
+  validates :question_id, uniqueness: {scope: :participation_id}
+  validates :answer, presence: {if: lambda do
     question && question.required? && participation.enforce_required_answers
-  end }
+  end}
   validate :assert_answer_is_in_choice_items
 
   # override to handle array values submitted from checkboxes
@@ -55,9 +53,9 @@ class Event::Answer < ActiveRecord::Base
     # still allow answer to be nil because otherwise participations could not
     # be created without answering all questions (required to create roles for other people)
     if question_with_choices? &&
-       answer &&
-       !question.multiple_choices? &&
-       !question.choice_items.include?(answer)
+        answer &&
+        !question.multiple_choices? &&
+        !question.choice_items.include?(answer)
       errors.add(:answer, :inclusion)
     end
   end
@@ -77,6 +75,6 @@ class Event::Answer < ActiveRecord::Base
       end
     end.compact
 
-    indexes.present? ? indexes.join(', ') : nil
+    indexes.present? ? indexes.join(", ") : nil
   end
 end

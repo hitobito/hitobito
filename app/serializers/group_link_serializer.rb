@@ -10,5 +10,4 @@ class GroupLinkSerializer < ApplicationSerializer
     property :name, item.to_s
     property :group_type, item.class.label
   end
-
 end

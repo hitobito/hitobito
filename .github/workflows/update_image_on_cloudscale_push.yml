@@ -14,5 +14,6 @@ jobs:
       image_tag: v1.2.3
       # same as default:
       repository_username: git
+      repository_branch: cloudscale
       image_ref: rails
 

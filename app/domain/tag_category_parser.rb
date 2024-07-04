@@ -4,9 +4,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class TagCategoryParser < ActsAsTaggableOn::DefaultParser
-
   def parse
     super.map! { |str| ActsAsTaggableOn::Tag.strip(str) }
   end
-
 end

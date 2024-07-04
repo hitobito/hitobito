@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::CsvImportsController < ApplicationController
-
   attr_accessor :group
   attr_reader :importer, :parser, :entries, :can_manage_tags
 
@@ -16,7 +15,8 @@ class Person::CsvImportsController < ApplicationController
 
   decorates :group
 
-  def new; end
+  def new
+  end
 
   def define_mapping
     @role_type = params[:role_type] || group.default_role
@@ -40,7 +40,7 @@ class Person::CsvImportsController < ApplicationController
 
   def create
     valid_for_import? do
-      if params[:button] != 'back'
+      if params[:button] != "back"
         perform_import
       else
         define_mapping
@@ -70,7 +70,7 @@ class Person::CsvImportsController < ApplicationController
   def set_importer_flash_errors
     errors = importer.errors
     if errors.size > 10
-      errors = errors.take(10) + ['...']
+      errors = errors.take(10) + ["..."]
     end
     errors.each { |error| add_to_flash(:alert, error) }
   end
@@ -78,14 +78,14 @@ class Person::CsvImportsController < ApplicationController
   def add_importer_info_to_flash(flash, key, count)
     if count > 0
       add_to_flash(flash,
-                   translate([action_name, key].join('.').to_sym,
-                             count: count,
-                             role: importer.human_name(count: count)))
+        translate([action_name, key].join(".").to_sym,
+          count: count,
+          role: importer.human_name(count: count)))
     end
   end
 
   def add_to_flash(key, text)
-    flash_hash = action_name == 'preview' ? flash.now : flash
+    flash_hash = (action_name == "preview") ? flash.now : flash
     flash_hash[key] ||= []
     flash_hash[key] << text if text.present?
   end
@@ -100,13 +100,13 @@ class Person::CsvImportsController < ApplicationController
   def valid_role?
     return true if params[:role_type].present?
 
-    flash.now[:alert] = "#{Role.model_name} #{I18n.t('errors.messages.blank')}."
+    flash.now[:alert] = "#{Role.model_name} #{I18n.t("errors.messages.blank")}."
     render :define_mapping
     false
   end
 
   def custom_authorization
-    if action_name == 'create'
+    if action_name == "create"
       role = role_type.new
       role.group_id = group.id
       authorize! :create, role
@@ -130,9 +130,9 @@ class Person::CsvImportsController < ApplicationController
 
   def valid_file?(io)
     io.present? &&
-    io.respond_to?(:content_type) &&
-    # windows sends csv files as application/vnd.excel, windows 10 as application/octet-stream
-    io.content_type =~ /text\/|excel|octet-stream/
+      io.respond_to?(:content_type) &&
+      # windows sends csv files as application/vnd.excel, windows 10 as application/octet-stream
+      io.content_type =~ /text\/|excel|octet-stream/
   end
 
   def parse_or_redirect
@@ -141,7 +141,7 @@ class Person::CsvImportsController < ApplicationController
     success = parser.parse
     unless success
       filename = file_param && file_param.original_filename
-      filename ||= 'csv formular daten'
+      filename ||= "csv formular daten"
       flash[:alert] = parser.flash_alert(filename)
       redirect_to new_group_csv_imports_path(group)
     end
@@ -153,7 +153,7 @@ class Person::CsvImportsController < ApplicationController
 
     if duplicates.present?
       fields = Import::Person.fields.each_with_object({}) { |f, o| o[f[:key]] = f[:value] }
-      list = duplicates.collect { |d| fields[d.to_s] }.join(', ')
+      list = duplicates.collect { |d| fields[d.to_s] }.join(", ")
       flash.now[:alert] = translate(:duplicate_keys, count: duplicates.size, list: list)
       render :define_mapping, status: :unprocessable_entity
       false
@@ -172,12 +172,12 @@ class Person::CsvImportsController < ApplicationController
   def map_headers_and_import
     data = parser.map_data(field_mappings)
     @importer = Import::PersonImporter.new(data, group, role_type, override: override_behaviour,
-                                                                   can_manage_tags: can_manage_tags)
+      can_manage_tags: can_manage_tags)
     @importer.user_ability = current_ability
   end
 
   def redirect_params
-    { filters: { role: { role_type_ids: [role_type.id] } }, name: importer.human_role_name }
+    {filters: {role: {role_type_ids: [role_type.id]}}, name: importer.human_role_name}
   end
 
   def role_type
@@ -185,7 +185,7 @@ class Person::CsvImportsController < ApplicationController
   end
 
   def override_behaviour
-    params[:update_behaviour] == 'override'
+    params[:update_behaviour] == "override"
   end
 
   def file_param
@@ -215,5 +215,4 @@ class Person::CsvImportsController < ApplicationController
   def read_file
     File.read(file_param.tempfile.path)
   end
-
 end

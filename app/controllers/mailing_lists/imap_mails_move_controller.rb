@@ -7,17 +7,16 @@
 
 include MailingLists::ImapMails
 
-require 'net/imap'
+require "net/imap"
 
 class MailingLists::ImapMailsMoveController < ApplicationController
-
   before_action :authorize_action
 
   helper_method :mailbox
 
   def create
-    raise 'failed mails cannot be moved' if mailbox == :failed
-    raise 'mails cannot be moved to failed' if dst_mailbox == :failed
+    raise "failed mails cannot be moved" if mailbox == :failed
+    raise "mails cannot be moved to failed" if dst_mailbox == :failed
 
     perform_imap do
       list_param(:ids).each do |id|
@@ -42,4 +41,3 @@ class MailingLists::ImapMailsMoveController < ApplicationController
     list_param(:ids).count
   end
 end
-

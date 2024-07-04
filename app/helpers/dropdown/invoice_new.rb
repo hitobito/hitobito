@@ -8,7 +8,7 @@
 module Dropdown
   class InvoiceNew < Base
     def initialize(template, people: [], mailing_list: nil, filter: nil, # rubocop:disable Metrics/ParameterLists
-                   group: nil, invoice_items: nil, label: nil)
+      group: nil, invoice_items: nil, label: nil)
       super(template, label, :plus)
       @people = people
       @group = group
@@ -32,13 +32,13 @@ module Dropdown
     private
 
     def label
-      @label || I18n.t('crud.new.title', model: Invoice.model_name.human)
+      @label || I18n.t("crud.new.title", model: Invoice.model_name.human)
     end
 
     def single_button
       finance_group = finance_groups.first
       options = {}
-      options[:data] = { checkable: true } if template.action_name == 'index'
+      options[:data] = {checkable: true} if template.action_name == "index"
       options[:disabled] = invalid_config_error_msg if finance_group&.invoice_config&.invalid?
       template.action_button(label, path(finance_group), :plus, options)
     end
@@ -47,31 +47,31 @@ module Dropdown
       if @mailing_list
         template.new_group_invoice_list_path(
           finance_group,
-          invoice_list: { receiver_id: @mailing_list.id, receiver_type: @mailing_list.class },
+          invoice_list: {receiver_id: @mailing_list.id, receiver_type: @mailing_list.class},
           invoice_items: invoice_items
         )
       elsif @filter
         template.new_group_invoice_list_path(
           finance_group,
-          filter: @filter.merge(group_id: @group.id), invoice_list: { recipient_ids: '' },
+          filter: @filter.merge(group_id: @group.id), invoice_list: {recipient_ids: ""},
           invoice_items: invoice_items
         )
       elsif @group
         template.new_group_invoice_list_path(
           finance_group,
-          invoice_list: { receiver_id: @group.id, receiver_type: @group.class.base_class },
+          invoice_list: {receiver_id: @group.id, receiver_type: @group.class.base_class},
           invoice_items: invoice_items
         )
       elsif @people.one?
         template.new_group_invoice_path(
           finance_group,
-          invoice: { recipient_id: @people.first.id },
+          invoice: {recipient_id: @people.first.id},
           invoice_items: invoice_items
         )
       else
         template.new_group_invoice_list_path(
           finance_group,
-          invoice_list: { recipient_ids: @people.collect(&:id).join(',') },
+          invoice_list: {recipient_ids: @people.collect(&:id).join(",")},
           invoice_items: invoice_items
         )
       end
@@ -86,10 +86,10 @@ module Dropdown
           add_item(translate(key), path(finance_groups.first, [key]))
         end
       else
-        item = add_item(translate(:invoice), '#')
+        item = add_item(translate(:invoice), "#")
         item.sub_items += finance_groups_items
         additional_sub_links.each do |label_key|
-          item = add_item(translate(label_key), '#')
+          item = add_item(translate(label_key), "#")
           item.sub_items += finance_groups_items([label_key])
         end
       end
@@ -113,7 +113,7 @@ module Dropdown
     end
 
     def invalid_config_error_msg
-      I18n.t('activerecord.errors.models.invoice_config.not_valid')
+      I18n.t("activerecord.errors.models.invoice_config.not_valid")
     end
 
     def additional_sub_links

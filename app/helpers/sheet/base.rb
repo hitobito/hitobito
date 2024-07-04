@@ -5,7 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
 module Sheet
   class Base
     include Translatable
@@ -43,7 +42,7 @@ module Sheet
 
       def sheet_for_controller(view_context)
         sheet_class = controller_sheet_class(view_context.controller)
-        if view_context.action_name == 'index' && sheet_class.parent_sheet
+        if view_context.action_name == "index" && sheet_class.parent_sheet
           sheet_class = sheet_class.parent_sheet
         end
         sheet_class
@@ -51,9 +50,9 @@ module Sheet
 
       def controller_sheet_class(controller)
         controller.class.name
-                  .gsub(/Controller/, '')
-                  .underscore.singularize.camelize
-                  .prepend('Sheet::').constantize
+          .gsub("Controller", "")
+          .underscore.singularize.camelize
+          .prepend("Sheet::").constantize
       rescue NameError
         Sheet::Base
       end
@@ -73,14 +72,14 @@ module Sheet
     end
 
     def render_main_tabs
-      unless %w(new create).include?(view.action_name)
+      unless %w[new create].include?(view.action_name)
         render_tabs
       end
     end
 
     def render_tabs
       if tabs?
-        content_tag(:ul, class: 'nav nav-sub') do
+        content_tag(:ul, class: "nav nav-sub") do
           safe_join(visible_tabs) do |tab|
             tab.render(tab == active_tab)
           end
@@ -140,27 +139,27 @@ module Sheet
     private
 
     def render_as_current(&block)
-      content_tag(:div, class: 'container-shadow') do
-        content_tag(:div, id: 'content') do
+      content_tag(:div, class: "container-shadow") do
+        content_tag(:div, id: "content") do
           render_breadcrumbs +
-          capture(&block)
+            capture(&block)
         end
       end
     end
 
     def render_as_parent(&block)
       render_breadcrumbs +
-      render_parent_title +
-      render_tabs +
-      child.render(&block)
+        render_parent_title +
+        render_tabs +
+        child.render(&block)
     end
 
     # title in parent sheet
     def render_parent_title
       if parent_link_url
-        link_to(title, parent_link_url, class: 'level active')
+        link_to(title, parent_link_url, class: "level active")
       else
-        content_tag(:div, title, class: 'level active')
+        content_tag(:div, title, class: "level active")
       end
     end
 
@@ -175,11 +174,11 @@ module Sheet
     end
 
     def render_breadcrumbs
-      ''.html_safe # rubocop:disable Rails/OutputSafety
+      "".html_safe # rubocop:disable Rails/OutputSafety
     end
 
     def css_class
-      current? ? 'current' : 'parent'
+      current? ? "current" : "parent"
     end
 
     def current?
@@ -208,8 +207,8 @@ module Sheet
 
     def visible_tabs
       @visible_tabs ||= Array(tabs)
-                        .collect { |tab| tab.renderer(view, path_args) }
-                        .select(&:show?)
+        .collect { |tab| tab.renderer(view, path_args) }
+        .select(&:show?)
     end
   end
 end

@@ -6,8 +6,7 @@
 #  https://github.com/hitobito/hitobito_die_mitte.
 
 class Salutation
-
-  I18N_KEY_PREFIX = 'activerecord.models.salutation'
+  I18N_KEY_PREFIX = "activerecord.models.salutation"
 
   attr_reader :person
 
@@ -41,7 +40,7 @@ class Salutation
   end
 
   def value
-    gender = person.gender.presence || 'other'
+    gender = person.gender.presence || "other"
     I18n.translate("#{I18N_KEY_PREFIX}.#{salutation}.value.#{gender}", **attributes)
   end
 
@@ -50,11 +49,11 @@ class Salutation
   end
 
   def join_salutations(salutations)
-    salutations.
-        map { |salutation| salutation.sub(/^./, &:downcase) }.
-        reject(&:blank?).
-        join(', ').
-        sub(/^./, &:upcase)
+    salutations
+      .map { |salutation| salutation.sub(/^./, &:downcase) }
+      .compact_blank
+      .join(", ")
+      .sub(/^./, &:upcase)
   end
 
   def attributes
@@ -64,7 +63,7 @@ class Salutation
       greeting_name: person.greeting_name,
       company_name: person.company_name
     }.tap do |attrs|
-      next unless person.attributes.key?('title')
+      next unless person.attributes.key?("title")
 
       attrs[:title] = person.title
       attrs[:title_last_name] = "#{person.title} #{person.last_name}".strip
@@ -72,12 +71,12 @@ class Salutation
   end
 
   def salutation
-    if self.class.available.keys.include?(@salutation)
+    if self.class.available.key?(@salutation)
       "available.#{@salutation}"
-    elsif @salutation == 'personal' && @person.try(:salutation?)
+    elsif @salutation == "personal" && @person.try(:salutation?)
       "available.#{@person.salutation}"
     else
-      'default'
+      "default"
     end
   end
 end

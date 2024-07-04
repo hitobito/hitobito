@@ -5,13 +5,12 @@
 
 module Person::AddRequest::Creator
   class MailingList < Base
-
-    alias subscription entity
+    alias_method :subscription, :entity
 
     def required?
       subscription.subscriber.is_a?(Person) &&
         !subscription.excluded &&
-        super()
+        super
     end
 
     def body
@@ -21,6 +20,5 @@ module Person::AddRequest::Creator
     def person
       subscription.subscriber
     end
-
   end
 end

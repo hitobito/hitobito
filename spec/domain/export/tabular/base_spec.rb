@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Export::Tabular::Base do
   let(:tabular) do
@@ -18,16 +18,15 @@ describe Export::Tabular::Base do
 
   subject(:instance) { tabular.new(Person.where(id: people(:top_leader))) }
 
-  describe '#attribute_labels' do
-    it 'gets attribute labels from instance methods' do
-      instance.define_singleton_method(:first_name_label) { 'Taufname' }
-      expect(instance.attribute_labels).to eq(first_name: 'Taufname')
+  describe "#attribute_labels" do
+    it "gets attribute labels from instance methods" do
+      instance.define_singleton_method(:first_name_label) { "Taufname" }
+      expect(instance.attribute_labels).to eq(first_name: "Taufname")
     end
 
-    it 'falls back to human attribute name if no label method is present' do
+    it "falls back to human attribute name if no label method is present" do
       expect(instance).not_to respond_to("first_name_label")
-      expect(instance.attribute_labels).to eq(first_name: 'Vorname')
+      expect(instance.attribute_labels).to eq(first_name: "Vorname")
     end
   end
-
 end

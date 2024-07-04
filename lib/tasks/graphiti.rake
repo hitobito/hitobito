@@ -8,7 +8,9 @@
 namespace :graphiti do
   namespace :schema do
     def green(text) = "\033[32m#{text}\033[0m"
+
     def red(text) = "\033[31m#{text}\033[0m"
+
     def pretty_schema_path = Graphiti.config.schema_path.relative_path_from(Pathname.pwd.parent)
 
     task setup: :environment do
@@ -16,12 +18,12 @@ namespace :graphiti do
       # We need to configure graphiti to use the correct schema.json file.
       # Set the path to the schema.json file relative to the current working directory.
       Graphiti.configure do |config|
-        config.schema_path = Pathname.pwd.join('spec', 'support', 'graphiti', 'schema.json')
+        config.schema_path = Pathname.pwd.join("spec", "support", "graphiti", "schema.json")
       end
     end
 
-    desc 'Check if the schema file exists'
-    task file_exists: 'graphiti:schema:setup' do
+    desc "Check if the schema file exists"
+    task file_exists: "graphiti:schema:setup" do
       abort red(<<~MSG) unless File.exist?(Graphiti.config.schema_path)
         Schema file not found: #{pretty_schema_path}
 
@@ -29,11 +31,11 @@ namespace :graphiti do
 
       MSG
 
-      puts green 'Schema file exists'
+      puts green "Schema file exists"
     end
 
-    desc 'Check if the schema has incompatible changes'
-    task compatible: 'graphiti:schema:setup' do
+    desc "Check if the schema has incompatible changes"
+    task compatible: "graphiti:schema:setup" do
       message = <<~MSG
         Found backwards-incompatibilities in schema!
         If you are REALLY SURE you want to ignore the incompatiblities,
@@ -48,11 +50,11 @@ namespace :graphiti do
 
       abort red("#{message}\n#{errors.join("\n")}") unless errors.empty?
 
-      puts green 'Schema is compatible'
+      puts green "Schema is compatible"
     end
 
-    desc 'Check if the schema file exists'
-    task unchanged: 'graphiti:schema:file_exists' do
+    desc "Check if the schema file exists"
+    task unchanged: "graphiti:schema:file_exists" do
       file = Graphiti.config.schema_path
       before = Digest::MD5.hexdigest(file.read)
       Graphiti::Schema.generate!
@@ -66,36 +68,36 @@ namespace :graphiti do
         MSG
       end
 
-      puts green 'Schema file is up to date'
+      puts green "Schema file is up to date"
     end
 
-    desc 'Generate or update the schema file'
-    task generate: 'graphiti:schema:compatible' do
+    desc "Generate or update the schema file"
+    task generate: "graphiti:schema:compatible" do
       puts green <<~MSG
         Schema file has been updated: #{pretty_schema_path}
         Do not forget to commit the file to the git repository.
       MSG
     end
 
-    desc 'Overwrite the schema file'
-    task overwrite: 'graphiti:schema:setup' do
-      memo = ENV['FORCE_SCHEMA']
-      ENV['FORCE_SCHEMA'] = 'true'
+    desc "Overwrite the schema file"
+    task overwrite: "graphiti:schema:setup" do
+      memo = ENV["FORCE_SCHEMA"]
+      ENV["FORCE_SCHEMA"] = "true"
 
       Graphiti::Schema.generate!
 
-      ENV['FORCE_SCHEMA'] = memo
+      ENV["FORCE_SCHEMA"] = memo
       puts green <<~MSG
         Schema file has been overwritten: #{pretty_schema_path}
         Do not forget to commit the file to the git repository.
       MSG
     end
 
-    desc 'Generate openapi spec'
-    task generate_openapi: ['graphiti:schema:setup', :file_exists] do
+    desc "Generate openapi spec"
+    task generate_openapi: ["graphiti:schema:setup", :file_exists] do
       generator = Graphiti::OpenApi::Generator.new(
         schema: Graphiti.config.schema_path,
-        jsonapi: Rails.root.join('config', 'jsonapi.json')
+        jsonapi: Rails.root.join("config", "jsonapi.json")
       )
       schema = generator.to_openapi
       openapi_json = Rails.root.join("tmp/openapi.json")
@@ -106,5 +108,4 @@ namespace :graphiti do
       MSG
     end
   end
-
 end

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Export::PaymentsExportJob < Export::ExportBaseJob
-
   self.parameters = PARAMETERS + [:ids]
 
   def initialize(format, user_id, ids, options)
@@ -20,5 +19,4 @@ class Export::PaymentsExportJob < Export::ExportBaseJob
   def entries
     Payment.where(id: @ids)
   end
-
 end

@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class EncryptionService
-  @@cypher = 'aes-256-cbc'
+  @@cypher = "aes-256-cbc"
 
   class << self
     def encrypt(value)
@@ -17,7 +17,7 @@ class EncryptionService
       cipher.iv = iv
       encrypted_value = cipher.update(value)
       encrypted_value << cipher.final
-      { encrypted_value: base64_encode(encrypted_value), iv: base64_encode(iv) }
+      {encrypted_value: base64_encode(encrypted_value), iv: base64_encode(iv)}
     end
 
     def decrypt(encrypted_data, iv)

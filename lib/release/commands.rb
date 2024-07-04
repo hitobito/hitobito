@@ -5,25 +5,25 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require_relative './highlevel'
-require_relative './lowlevel'
-require_relative './tooling'
+require_relative "highlevel"
+require_relative "lowlevel"
+require_relative "tooling"
 
 module Release
   module Commands
     # rubocop:disable Metrics/BlockLength,Metrics/MethodLength,Metrics/AbcSize
     def update_production
-      with_env({ 'OVERCOMMIT_DISABLE' => '1' }) do
+      with_env({"OVERCOMMIT_DISABLE" => "1"}) do
         in_dir(hitobito_group_dir) do
-          notify "Releasing #{@all_wagons.join(', ')}"
+          notify "Releasing #{@all_wagons.join(", ")}"
           notify @message
 
-          in_dir('hitobito') do
+          in_dir("hitobito") do
             break if existing_version_again?
 
             update_translations
             update_changelog
-            update_version file: 'VERSION'
+            update_version file: "VERSION"
 
             release_version @version
           end
@@ -42,7 +42,7 @@ module Release
           in_dir(composition_repo_dir) do
             unless working_in_composition_dir?
               fetch_code_and_tags
-              update_submodules(branch: 'production')
+              update_submodules(branch: "production")
             end
 
             update_submodule_content(to: @version)
@@ -54,12 +54,12 @@ module Release
     end
 
     def update_integration
-      with_env({ 'OVERCOMMIT_DISABLE' => '1' }) do
+      with_env({"OVERCOMMIT_DISABLE" => "1"}) do
         in_dir(hitobito_group_dir) do
-          notify "Updating #{@all_wagons.join(', ')}"
+          notify "Updating #{@all_wagons.join(", ")}"
           notify @message
 
-          ['hitobito', *(@all_wagons.map { |wgn| "hitobito_#{wgn}" })].each do |dir|
+          ["hitobito", *(@all_wagons.map { |wgn| "hitobito_#{wgn}" })].each do |dir|
             in_dir(dir) do
               update_translations
               upload_translation_sources
@@ -70,7 +70,7 @@ module Release
           in_dir(composition_repo_dir) do
             unless working_in_composition_dir?
               fetch_code_and_tags
-              update_submodules(branch: 'devel')
+              update_submodules(branch: "devel")
             end
 
             record_submodule_state

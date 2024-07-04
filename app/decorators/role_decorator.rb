@@ -66,17 +66,17 @@ class RoleDecorator < ApplicationDecorator
     if model.outdated?
       name = safe_join(
         [helpers.icon(:exclamation_triangle, title: outdated_role_title), name],
-        FormatHelper::EMPTY_STRING)
+        FormatHelper::EMPTY_STRING
+      )
     end
     name
   end
 
   def terminated_details(name)
     if model.terminated?
-      terminated = content_tag(:span, translate('terminates_on', date: l(model.terminated_on)))
+      terminated = content_tag(:span, translate("terminates_on", date: l(model.terminated_on)))
       name = safe_join([name, terminated].compact, tag.br)
     end
     name
   end
-
 end

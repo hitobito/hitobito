@@ -26,11 +26,10 @@
 #
 
 class InvoiceArticle < ActiveRecord::Base
-
   belongs_to :group
 
-  validates :name, presence: true, uniqueness: { scope: :group_id, case_sensitive: false }
-  validates :number, presence: true, uniqueness: { scope: :group_id, case_sensitive: false }
+  validates :name, presence: true, uniqueness: {scope: :group_id, case_sensitive: false}
+  validates :number, presence: true, uniqueness: {scope: :group_id, case_sensitive: false}
   validates :unit_cost, money: true, allow_nil: true
 
   validates_by_schema
@@ -48,7 +47,6 @@ class InvoiceArticle < ActiveRecord::Base
   end
 
   def to_s
-    [number, name].compact.join(' - ')
+    [number, name].compact.join(" - ")
   end
-
 end

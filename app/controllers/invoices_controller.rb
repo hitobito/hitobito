@@ -13,28 +13,28 @@ class InvoicesController < CrudController
   self.nesting = Group
   self.optional_nesting = [InvoiceList]
 
-  self.sort_mappings = { last_payment_at: Invoice.order_by_payment_statement,
+  self.sort_mappings = {last_payment_at: Invoice.order_by_payment_statement,
                          amount_paid: Invoice.order_by_amount_paid_statement,
                          recipient: Person.order_by_name_statement,
-                         sequence_number: Invoice.order_by_sequence_number_statement }
+                         sequence_number: Invoice.order_by_sequence_number_statement}
   self.remember_params += [:year, :state, :due_since, :invoice_list_id]
 
-  self.search_columns = [:title, :sequence_number, 'people.last_name', 'people.first_name',
-                         'people.email', 'people.company_name']
+  self.search_columns = [:title, :sequence_number, "people.last_name", "people.first_name",
+    "people.email", "people.company_name"]
   self.permitted_attrs = [:title, :description, :state, :due_at, :issued_at,
-                          :recipient_id, :recipient_email, :recipient_address,
-                          :payment_information, :payment_purpose, :hide_total,
-                          invoice_items_attributes: [
-                            :id,
-                            :name,
-                            :description,
-                            :unit_cost,
-                            :vat_rate,
-                            :count,
-                            :cost_center,
-                            :account,
-                            :_destroy
-                          ]]
+    :recipient_id, :recipient_email, :recipient_address,
+    :payment_information, :payment_purpose, :hide_total,
+    invoice_items_attributes: [
+      :id,
+      :name,
+      :description,
+      :unit_cost,
+      :vat_rate,
+      :count,
+      :cost_center,
+      :account,
+      :_destroy
+    ]]
 
   before_render_index :year_from
 
@@ -48,17 +48,19 @@ class InvoicesController < CrudController
       entry.recipient_id = recipient.id
       entry.send(:set_recipient_fields)
     end
-    entry.attributes = { payment_information: entry.invoice_config.payment_information }
+    entry.attributes = {payment_information: entry.invoice_config.payment_information}
   end
 
   def index
     respond_to do |format|
       format.html { super }
-      format.pdf  { generate_pdf(list_entries.includes(:invoice_items)) }
-      format.csv  { render_invoices_csv(list_entries.includes(:invoice_items)) }
-      format.json { render_entries_json(list_entries.includes(:invoice_items,
-                                                              :payments,
-                                                              :payment_reminders)) }
+      format.pdf { generate_pdf(list_entries.includes(:invoice_items)) }
+      format.csv { render_invoices_csv(list_entries.includes(:invoice_items)) }
+      format.json {
+        render_entries_json(list_entries.includes(:invoice_items,
+          :payments,
+          :payment_reminders))
+      }
     end
   end
 
@@ -66,8 +68,8 @@ class InvoicesController < CrudController
     @invoice_items = InvoiceItemDecorator.decorate_collection(entry.invoice_items)
     respond_to do |format|
       format.html { build_payment }
-      format.pdf  { generate_pdf([entry]) }
-      format.csv  { render_invoices_csv([entry]) }
+      format.pdf { generate_pdf([entry]) }
+      format.csv { render_invoices_csv([entry]) }
       format.json { render_entry_json }
     end
   end
@@ -83,11 +85,11 @@ class InvoicesController < CrudController
   def render_entries_json(entries)
     paged_entries = entries.page(params[:page])
     render json: [paging_properties(paged_entries),
-                  ListSerializer.new(paged_entries,
-                                     group: group,
-                                     page: params[:page],
-                                     serializer: InvoiceSerializer,
-                                     controller: self)].inject(&:merge)
+      ListSerializer.new(paged_entries,
+        group: group,
+        page: params[:page],
+        serializer: InvoiceSerializer,
+        controller: self)].inject(&:merge)
   end
 
   def render_entry_json
@@ -124,16 +126,16 @@ class InvoicesController < CrudController
       format = :pdf
       with_async_download_cookie(format, filename(format, invoices)) do |filename|
         Export::InvoicesJob.new(format,
-                                current_person.id,
-                                invoices.pluck(:id),
-                                pdf_options.merge({ filename: filename })).enqueue!
+          current_person.id,
+          invoices.pluck(:id),
+          pdf_options.merge({filename: filename})).enqueue!
       end
     end
   end
 
   def filename(extension, invoices)
     if invoices.size > 1
-      "#{t('activerecord.models.invoice.other').downcase}.#{extension}"
+      "#{t("activerecord.models.invoice.other").downcase}.#{extension}"
     else
       invoices.first.filename(extension)
     end
@@ -146,9 +148,9 @@ class InvoicesController < CrudController
 
     recipients = Invoice.to_contactables(invoices)
     pdf = Export::Pdf::Labels.new(find_and_remember_label_format).generate(recipients)
-    send_data pdf, type: :pdf, disposition: 'inline'
+    send_data pdf, type: :pdf, disposition: "inline"
   rescue Prawn::Errors::CannotFit
-    redirect_back(fallback_location: group_invoices_path(group), alert: t('people.pdf.cannot_fit'))
+    redirect_back(fallback_location: group_invoices_path(group), alert: t("people.pdf.cannot_fit"))
   end
 
   def list_entries
@@ -161,13 +163,13 @@ class InvoicesController < CrudController
   end
 
   def payment_attrs
-    @payment_attrs ||= flash[:payment] || { amount: entry.amount_open }
+    @payment_attrs ||= flash[:payment] || {amount: entry.amount_open}
   end
 
   def pdf_options
     {
-      articles: params[:articles] != 'false',
-      payment_slip: params[:payment_slip] != 'false'
+      articles: params[:articles] != "false",
+      payment_slip: params[:payment_slip] != "false"
     }
   end
 
@@ -200,5 +202,4 @@ class InvoicesController < CrudController
       @year_from ||= invoice_list.created_at.year
     end
   end
-
 end

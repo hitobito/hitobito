@@ -5,7 +5,6 @@
 
 module MailRelay
   class AddressList
-
     attr_reader :people, :labels
 
     def initialize(people, labels = [])
@@ -16,7 +15,7 @@ module MailRelay
     def entries
       people.flat_map do |person|
         preferred_emails(person).presence || default_emails(person)
-      end.reject(&:blank?).uniq
+      end.compact_blank.uniq
     end
 
     private
@@ -48,9 +47,9 @@ module MailRelay
     def additional_emails(person)
       return person.additional_emails if person.new_record?
 
-      @additional_emails ||= additional_emails_scope.
-        each_with_object(hash_with_array) do |email, memo|
-          memo[email.contactable_id] << email
+      @additional_emails ||= additional_emails_scope
+        .each_with_object(hash_with_array) do |email, memo|
+        memo[email.contactable_id] << email
       end
       @additional_emails[person.id]
     end
@@ -61,8 +60,7 @@ module MailRelay
 
     def additional_emails_scope
       AdditionalEmail.where(contactable_type: Person.sti_name,
-                            contactable_id: people.collect(&:id))
+        contactable_id: people.collect(&:id))
     end
-
   end
 end

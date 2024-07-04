@@ -82,5 +82,4 @@ class EventSerializer < EventListSerializer
   def default_url_options(options = {})
     options.merge(Rails.application.routes.default_url_options)
   end
-
 end

@@ -28,7 +28,7 @@ Fabricator(:person_duplicate) do
     People::DuplicateLocator::DUPLICATION_ATTRS.each do |attr|
       p2[attr] = person_1[attr]
     end
-    p2.email = person_1.email.sub('hitobito.example.com', 'duplicates.example.com')
+    p2.email = person_1.email.sub("hitobito.example.com", "duplicates.example.com")
     p2.save!
     d.person_2 = p2
   end

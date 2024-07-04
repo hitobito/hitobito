@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Subscriber::SubscriberListsController do
   before { sign_in(person) }
@@ -13,36 +13,35 @@ describe Subscriber::SubscriberListsController do
   let(:list) { Fabricate(:mailing_list, group: group, subscribable_for: :anyone) }
   let(:group) { groups(:top_group) }
 
-  context 'POST create' do
-
-    context 'unauthorized' do
+  context "POST create" do
+    context "unauthorized" do
       let(:person) { people(:bottom_member) }
 
-      it 'is unauthorized for mailing list without create subscription permission' do
+      it "is unauthorized for mailing list without create subscription permission" do
         people = (0...10).map do
           Fabricate(:person)
         end
 
         expect do
           post :create,
-               params: { group_id: group.id, mailing_list_id: list.id,
-                         ids: people.map(&:id).join(',') }
+            params: {group_id: group.id, mailing_list_id: list.id,
+                     ids: people.map(&:id).join(",")}
         end.to raise_error(CanCan::AccessDenied)
       end
     end
 
-    context 'authorized' do
+    context "authorized" do
       let(:person) { people(:top_leader) }
 
-      it 'creates multiple person subscriptions for given ids' do
+      it "creates multiple person subscriptions for given ids" do
         people = (0...10).map do
           Fabricate(:person)
         end
 
         expect do
           post :create,
-               params: { group_id: group.id, mailing_list_id: list.id,
-                         ids: people.map(&:id).join(',') }
+            params: {group_id: group.id, mailing_list_id: list.id,
+                     ids: people.map(&:id).join(",")}
         end.to change { Subscription.count }.by(10)
 
         people.each do |person|
@@ -50,7 +49,7 @@ describe Subscriber::SubscriberListsController do
         end
       end
 
-      it 'ignores person with existing subscription' do
+      it "ignores person with existing subscription" do
         people = (0...10).map do
           Fabricate(:person)
         end
@@ -60,14 +59,14 @@ describe Subscriber::SubscriberListsController do
 
         expect do
           post :create,
-               params: { group_id: group.id, mailing_list_id: list.id,
-                         ids: people.map(&:id).join(',') }
+            params: {group_id: group.id, mailing_list_id: list.id,
+                     ids: people.map(&:id).join(",")}
         end.to change { Subscription.count }.by(8)
 
         expect(Subscription.where(subscriber: subscription_1.subscriber,
-                                  mailing_list: subscription_1.mailing_list).count).to eq(1)
+          mailing_list: subscription_1.mailing_list).count).to eq(1)
         expect(Subscription.where(subscriber: subscription_2.subscriber,
-                                  mailing_list: subscription_2.mailing_list).count).to eq(1)
+          mailing_list: subscription_2.mailing_list).count).to eq(1)
 
         people.each do |person|
           expect(list.subscribed?(person)).to eq(true)

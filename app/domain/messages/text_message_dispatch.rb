@@ -7,7 +7,7 @@
 
 module Messages
   class TextMessageDispatch
-    delegate :update, :success_count, to: '@message'
+    delegate :update, :success_count, to: "@message"
 
     def initialize(message)
       @message = message
@@ -33,11 +33,10 @@ module Messages
     end
 
     def provider_config
-      { provider: group.text_message_provider,
-        originator: group.text_message_originator || group.name,
-        username: group.text_message_username,
-        password: group.text_message_password
-      }.with_indifferent_access
+      {provider: group.text_message_provider,
+       originator: group.text_message_originator || group.name,
+       username: group.text_message_username,
+       password: group.text_message_password}.with_indifferent_access
     end
 
     def group
@@ -60,23 +59,23 @@ module Messages
     end
 
     def recipient_numbers
-      PhoneNumber.where(label: 'Mobil', # get from settings
-                        contactable_type: Person.sti_name,
-                        contactable_id: person_ids)
+      PhoneNumber.where(label: "Mobil", # get from settings
+        contactable_type: Person.sti_name,
+        contactable_id: person_ids)
     end
 
     def recipient_attrs(phone_nr, state)
-      { message_id: @message.id,
-        created_at: @now,
-        person_id: phone_nr.contactable_id,
-        phone_number: phone_nr.number,
-        state: state }
+      {message_id: @message.id,
+       created_at: @now,
+       person_id: phone_nr.contactable_id,
+       phone_number: phone_nr.number,
+       state: state}
     end
 
     def send_text_message!
-      recipients(state: 'pending')
+      recipients(state: "pending")
         .find_in_batches(batch_size: Messages::TextMessageProvider::Base::MAX_RECIPIENTS) do |rps|
-          update_recipients(rps, state: 'sending')
+          update_recipients(rps, state: "sending")
           send_status = client.send(text: @message.text, recipients: recipients_list(rps))
           if not_ok?(send_status)
             abort_dispatch(send_status, rps)
@@ -92,7 +91,7 @@ module Messages
     end
 
     def abort_dispatch(status, recipient_list)
-      update_recipients(recipient_list, state: 'failed', error: status[:message])
+      update_recipients(recipient_list, state: "failed", error: status[:message])
     end
 
     def recipients_list(recipients)

@@ -7,10 +7,10 @@
 
 module PersonDuplicates
   class IgnoreController < ApplicationController
-
     before_action :authorize_action
 
-    def new; end
+    def new
+    end
 
     def create
       entry.update!(ignore: true)
@@ -19,9 +19,9 @@ module PersonDuplicates
     end
 
     private
-    
+
     def success_message
-      I18n.t('person_duplicates.ignore.success')
+      I18n.t("person_duplicates.ignore.success")
     end
 
     def entry
@@ -36,6 +36,5 @@ module PersonDuplicates
       authorize!(:manage_person_duplicates, group) &&
         authorize!(:ignore, entry)
     end
-
   end
 end

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class MailingLists::ImapMailsController < ApplicationController
-
   include MailingLists::ImapMails
 
   helper_method :mails, :mailbox, :counts
@@ -67,5 +66,4 @@ class MailingLists::ImapMailsController < ApplicationController
   def authorize_action
     authorize!(:manage, Imap::Mail)
   end
-
 end

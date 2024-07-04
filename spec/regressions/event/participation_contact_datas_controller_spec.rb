@@ -7,10 +7,9 @@
 
 # encoding:  utf-8
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Event::ParticipationContactDatasController, type: :controller do
-
   render_views
 
   let(:group) { groups(:top_layer) }
@@ -20,108 +19,94 @@ describe Event::ParticipationContactDatasController, type: :controller do
 
   before { sign_in(person) }
 
-  describe 'GET edit' do
+  describe "GET edit" do
+    it "does not show hidden contact fields" do
+      course.update!({hidden_contact_attrs: %w[street nickname social_accounts]})
 
-    it 'does not show hidden contact fields' do
+      get :edit, params: {group_id: course.groups.first.id, event_id: course.id,
+                          event_role: {type: "Event::Course::Role::Participant"}}
 
-      course.update!({ hidden_contact_attrs: %w(street nickname social_accounts) })
+      expect(dom).to have_selector("input#event_participation_contact_data_first_name")
+      expect(dom).to have_selector("input#event_participation_contact_data_last_name")
+      expect(dom).to have_selector("input#event_participation_contact_data_email")
+      expect(dom).to have_selector("#additional_emails_fields")
+      expect(dom).to have_selector("#phone_numbers_fields")
 
-      get :edit, params: { group_id: course.groups.first.id, event_id: course.id,
-                           event_role: { type: 'Event::Course::Role::Participant' } }
-
-      expect(dom).to have_selector('input#event_participation_contact_data_first_name')
-      expect(dom).to have_selector('input#event_participation_contact_data_last_name')
-      expect(dom).to have_selector('input#event_participation_contact_data_email')
-      expect(dom).to have_selector('#additional_emails_fields')
-      expect(dom).to have_selector('#phone_numbers_fields')
-
-      expect(dom).to have_no_selector('input#event_participation_contact_data_street')
-      expect(dom).to have_no_selector('input#event_participation_contact_data_nickname')
-      expect(dom).to have_no_selector('#social_accounts_fields')
-
+      expect(dom).to have_no_selector("input#event_participation_contact_data_street")
+      expect(dom).to have_no_selector("input#event_participation_contact_data_nickname")
+      expect(dom).to have_no_selector("#social_accounts_fields")
     end
 
-    it 'shows all contact fields by default' do
-
-      get :edit, params: { group_id: course.groups.first.id, event_id: course.id,
-                           event_role: { type: 'Event::Course::Role::Participant' } }
+    it "shows all contact fields by default" do
+      get :edit, params: {group_id: course.groups.first.id, event_id: course.id,
+                          event_role: {type: "Event::Course::Role::Participant"}}
 
       contact_attrs = [:first_name, :last_name, :nickname,
-                       :company_name, :zip_code, :town,
-                       :gender_w, :gender_m, :gender_,
-                       :birthday, :email]
+        :company_name, :zip_code, :town,
+        :gender_w, :gender_m, :gender_,
+        :birthday, :email]
 
       contact_attrs.each do |a|
         expect(dom).to have_selector("input#event_participation_contact_data_#{a}")
       end
 
-      expect(dom).to have_selector('input#event_participation_contact_data_street')
-      expect(dom).to have_selector('input#event_participation_contact_data_housenumber')
+      expect(dom).to have_selector("input#event_participation_contact_data_street")
+      expect(dom).to have_selector("input#event_participation_contact_data_housenumber")
 
-      expect(dom).to have_selector('#additional_emails_fields')
-      expect(dom).to have_selector('#phone_numbers_fields')
-      expect(dom).to have_selector('#social_accounts_fields')
-
+      expect(dom).to have_selector("#additional_emails_fields")
+      expect(dom).to have_selector("#phone_numbers_fields")
+      expect(dom).to have_selector("#social_accounts_fields")
     end
 
-    it 'marks required attributes with an asterisk' do
-
-      course.update!({ required_contact_attrs: %w(street housenumber nickname) })
+    it "marks required attributes with an asterisk" do
+      course.update!({required_contact_attrs: %w[street housenumber nickname]})
 
       get :edit,
-          params: { group_id: course.groups.first.id, event_id: course.id,
-                    event_role: { type: 'Event::Course::Role::Participant' } }
-
+        params: {group_id: course.groups.first.id, event_id: course.id,
+                 event_role: {type: "Event::Course::Role::Participant"}}
     end
-
   end
 
-  context 'POST update' do
-
+  context "POST update" do
     before do
-      course.update!({ required_contact_attrs: %w(nickname street housenumber) })
+      course.update!({required_contact_attrs: %w[nickname street housenumber]})
     end
 
-    it 'validates contact attributes and person attributes' do
-
-      contact_data_params = { first_name: 'Hans', last_name: 'Gugger', email: 'invalid',
-                              nickname: '' }
+    it "validates contact attributes and person attributes" do
+      contact_data_params = {first_name: "Hans", last_name: "Gugger", email: "invalid",
+                             nickname: ""}
 
       post :update,
-           params: { group_id: group.id, event_id: course.id,
-                     event_participation_contact_data: contact_data_params,
-                     event_role: { type: 'Event::Course::Role::Participant' } }
+        params: {group_id: group.id, event_id: course.id,
+                 event_participation_contact_data: contact_data_params,
+                 event_role: {type: "Event::Course::Role::Participant"}}
 
       is_expected.to render_template(:edit)
 
-      expect(dom).to have_selector('.alert-danger li', text: 'Übername muss ausgefüllt werden')
-      expect(dom).to have_selector('.alert-danger li', text: 'Strasse muss ausgefüllt werden')
-      expect(dom).to have_selector('.alert-danger li', text: /Haupt-E-Mail ist nicht gültig/)
-
+      expect(dom).to have_selector(".alert-danger li", text: "Übername muss ausgefüllt werden")
+      expect(dom).to have_selector(".alert-danger li", text: "Strasse muss ausgefüllt werden")
+      expect(dom).to have_selector(".alert-danger li", text: /Haupt-E-Mail ist nicht gültig/)
     end
 
-    it 'updates person attributes and redirects to event questions' do
-
-      contact_data_params = { first_name: 'Hans', last_name: 'Gugger',
-                              email: 'dude@example.com', nickname: 'Jojo',
-                              street: 'Street', housenumber: '33' }
+    it "updates person attributes and redirects to event questions" do
+      contact_data_params = {first_name: "Hans", last_name: "Gugger",
+                             email: "dude@example.com", nickname: "Jojo",
+                             street: "Street", housenumber: "33"}
 
       post :update,
-           params: { group_id: group.id, event_id: course.id,
-                     event_participation_contact_data: contact_data_params,
-                     event_role: { type: 'Event::Course::Role::Participant' } }
+        params: {group_id: group.id, event_id: course.id,
+                 event_participation_contact_data: contact_data_params,
+                 event_role: {type: "Event::Course::Role::Participant"}}
 
       is_expected.to redirect_to new_group_event_participation_path(
-        group, course, event_role: { type: 'Event::Course::Role::Participant' }
+        group, course, event_role: {type: "Event::Course::Role::Participant"}
       )
 
       person.reload
-      expect(person.nickname).to eq('Jojo')
+      expect(person.nickname).to eq("Jojo")
 
       person.confirm
-      expect(person.email).to eq('dude@example.com')
-
+      expect(person.email).to eq("dude@example.com")
     end
   end
-
 end

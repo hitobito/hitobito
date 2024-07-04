@@ -5,7 +5,6 @@
 
 # A job that is run regularly after a certain interval.
 class RecurringJob < BaseJob
-
   # The interval to run this job.
   class_attribute :interval
 
@@ -14,11 +13,9 @@ class RecurringJob < BaseJob
     def run_every(seconds)
       self.interval = seconds
     end
-
   end
 
   run_every 15.minutes
-
 
   def perform
     I18n.locale = I18n.default_locale
@@ -44,7 +41,8 @@ class RecurringJob < BaseJob
 
   private
 
-  def perform_internal; end
+  def perform_internal
+  end
 
   def reschedule
     enqueue!(run_at: next_run, priority: 5) unless others_scheduled?
@@ -54,7 +52,7 @@ class RecurringJob < BaseJob
   def others_scheduled?
     # when called from a job worker, @delayed_job is set.
     @delayed_job &&
-    delayed_jobs.where('id > ?', @delayed_job.id).exists?
+      delayed_jobs.where("id > ?", @delayed_job.id).exists?
   end
 
   def next_run
@@ -65,5 +63,4 @@ class RecurringJob < BaseJob
       interval.from_now
     end
   end
-
 end

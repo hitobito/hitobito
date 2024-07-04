@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::QueryController < ApplicationController
-
   class_attribute :serializer, default: :as_typeahead
   class_attribute :limit, default: 10
 
@@ -51,11 +50,8 @@ class Person::QueryController < ApplicationController
   self.search_columns = [:first_name, :last_name, :company_name, :nickname, :town]
 
   class << self
-
     def model_class
       Person
     end
-
   end
-
 end

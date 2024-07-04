@@ -5,9 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
 
-require 'spec_helper'
+require "spec_helper"
 
-describe 'subscriber/filter/_show.html.haml' do
+describe "subscriber/filter/_show.html.haml" do
   let(:entry) { mailing_lists(:leaders) }
 
   before do
@@ -18,13 +18,13 @@ describe 'subscriber/filter/_show.html.haml' do
 
   subject { Capybara::Node::Simple.new(render) }
 
-  it 'renders edit link if user can update filter_chain attr' do
+  it "renders edit link if user can update filter_chain attr" do
     allow(view).to receive(:can?).with(:update, entry, :filter_chain).and_return(true)
 
     expect(subject).to have_link href: edit_group_mailing_list_filter_path(entry.group, entry)
   end
 
-  it 'does not render edit link if user cannot update filter_chain attr' do
+  it "does not render edit link if user cannot update filter_chain attr" do
     allow(view).to receive(:can?).with(:update, entry, :filter_chain).and_return(false)
 
     expect(subject).to have_no_link href: edit_group_mailing_list_filter_path(entry.group, entry)

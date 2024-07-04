@@ -10,7 +10,7 @@ class HouseholdsController < ApplicationController
   prepend Nestable
 
   self.nesting = [Group, Person]
-  alias person parent
+  alias_method :person, :parent
 
   before_action :entry
   before_action :authorize
@@ -58,7 +58,7 @@ class HouseholdsController < ApplicationController
 
   def people
     @people ||= Households::MembersQuery.new(current_user, person.id, Person.all)
-                                        .scope.where(id: params[:member_ids])
+      .scope.where(id: params[:member_ids])
   end
 
   def entry

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class PersonDuplicateAbility < AbilityDsl::Base
-
   on(PersonDuplicate) do
     permission(:any).may(:merge).if_processible
     permission(:any).may(:ignore).if_processible
@@ -31,5 +30,4 @@ class PersonDuplicateAbility < AbilityDsl::Base
   def person_ability_can?(action, person)
     Ability.new(user).can?(action, person)
   end
-
 end

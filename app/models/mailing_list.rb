@@ -37,8 +37,8 @@
 class MailingList < ActiveRecord::Base
   include I18nEnums
 
-  SUBSCRIBABLE_FORS = %w(nobody configured anyone).freeze
-  SUBSCRIBABLE_MODES = %w(opt_out opt_in).freeze
+  SUBSCRIBABLE_FORS = %w[nobody configured anyone].freeze
+  SUBSCRIBABLE_MODES = %w[opt_out opt_in].freeze
 
   serialize :preferred_labels, Array
   serialize :filter_chain, MailingLists::Filter::Chain
@@ -50,28 +50,27 @@ class MailingList < ActiveRecord::Base
   has_many :subscriptions, dependent: :destroy
 
   has_many :person_add_requests,
-           foreign_key: :body_id,
-           inverse_of: :body,
-           class_name: 'Person::AddRequest::MailingList',
-           dependent: :destroy
+    foreign_key: :body_id,
+    inverse_of: :body,
+    class_name: "Person::AddRequest::MailingList",
+    dependent: :destroy
 
   has_many :messages, dependent: :nullify
 
   validates_by_schema
   before_validation :set_default_subscribable_mode
 
-
-  validates :mail_name, uniqueness: { case_sensitive: false },
-                        format: /\A[a-z][a-z0-9\-\_\.]*\Z/,
-                        allow_blank: true
-  validates :description, length: { allow_nil: true, maximum: (2**16) - 1 }
+  validates :mail_name, uniqueness: {case_sensitive: false},
+    format: /\A[a-z][a-z0-9\-\_\.]*\Z/,
+    allow_blank: true
+  validates :description, length: {allow_nil: true, maximum: (2**16) - 1}
   validate :assert_mail_name_is_not_protected
   validates :additional_sender,
-      allow_blank: true,
-      format: /\A *(([a-z][a-z0-9\-\_\.]*|\*)@([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,} *(,|;|\Z) *)+\Z/
+    allow_blank: true,
+    format: /\A *(([a-z][a-z0-9\-\_\.]*|\*)@([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,} *(,|;|\Z) *)+\Z/
 
-  validates :subscribable_for, inclusion: { in: SUBSCRIBABLE_FORS }
-  validates :subscribable_mode, inclusion: { in: SUBSCRIBABLE_MODES }, if: :subscribable?
+  validates :subscribable_for, inclusion: {in: SUBSCRIBABLE_FORS}
+  validates :subscribable_mode, inclusion: {in: SUBSCRIBABLE_MODES}, if: :subscribable?
 
   after_destroy :schedule_mailchimp_destroy, if: :mailchimp?
   after_save :schedule_opt_in_cleanup, if: :opt_in?
@@ -84,10 +83,10 @@ class MailingList < ActiveRecord::Base
   scope :subscribable, -> { where(subscribable_for: [:anyone, :configured]) }
   scope :with_filter_chain, -> { where.not(filter_chain: MailingLists::Filter::Chain.new({})) }
   scope :mailchimp, -> do
-    where.not(mailchimp_api_key: ['', nil]).where.not(mailchimp_list_id: ['', nil])
+    where.not(mailchimp_api_key: ["", nil]).where.not(mailchimp_list_id: ["", nil])
   end
 
-  DEFAULT_LABEL = '_main'.freeze
+  DEFAULT_LABEL = "_main".freeze
 
   i18n_enum :subscribable_for, SUBSCRIBABLE_FORS, scopes: true
   i18n_enum :subscribable_mode, SUBSCRIBABLE_MODES, scopes: true
@@ -97,15 +96,15 @@ class MailingList < ActiveRecord::Base
   end
 
   def opt_in?
-    subscribable_mode == 'opt_in'
+    subscribable_mode == "opt_in"
   end
 
   def subscribable?
-    (SUBSCRIBABLE_FORS - %w(nobody)).include?(subscribable_for)
+    (SUBSCRIBABLE_FORS - %w[nobody]).include?(subscribable_for)
   end
 
   def subscribable_for_configured?
-    subscribable_for.to_s == 'configured'
+    subscribable_for.to_s == "configured"
   end
 
   def labels
@@ -117,7 +116,7 @@ class MailingList < ActiveRecord::Base
   end
 
   def preferred_labels=(labels)
-    self[:preferred_labels] = labels.reject(&:blank?).collect(&:strip).uniq.sort
+    self[:preferred_labels] = labels.compact_blank.collect(&:strip).uniq.sort
   end
 
   def mail_address
@@ -131,8 +130,8 @@ class MailingList < ActiveRecord::Base
   def exclude_person(person)
     subscriptions
       .where(subscriber_id: person.id,
-             subscriber_type: Person.sti_name,
-             excluded: false)
+        subscriber_type: Person.sti_name,
+        excluded: false)
       .destroy_all
 
     if subscribed?(person)
@@ -184,7 +183,7 @@ class MailingList < ActiveRecord::Base
   end
 
   def schedule_opt_in_cleanup
-    return unless subscribable_mode_previously_was == 'opt_out'
+    return unless subscribable_mode_previously_was == "opt_out"
 
     Subscriptions::OptInCleanupJob.new(id).enqueue!
   end
@@ -193,7 +192,7 @@ class MailingList < ActiveRecord::Base
 
   def set_default_subscribable_mode
     if subscribable? && subscribable_mode.blank?
-      self.subscribable_mode = 'opt_out'
+      self.subscribable_mode = "opt_out"
     elsif !subscribable?
       self.subscribable_mode = nil
     end
@@ -201,7 +200,7 @@ class MailingList < ActiveRecord::Base
 
   def assert_mail_name_is_not_protected
     if mail_name? && application_retriever_name
-      if mail_name.casecmp(application_retriever_name.split('@', 2).first).zero?
+      if mail_name.casecmp(application_retriever_name.split("@", 2).first).zero?
         errors.add(:mail_name, :not_allowed, mail_name: mail_name)
       end
     end

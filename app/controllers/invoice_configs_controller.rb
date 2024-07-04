@@ -4,18 +4,17 @@
 #  https://github.com/hitobito/hitobito.
 
 class InvoiceConfigsController < CrudController
-
   self.nesting = Group
   self.permitted_attrs = [:payment_information, :address, :iban, :payment_slip, :payee,
-                          :email, :vat_number, :currency, :due_days, :sender_name,
-                          :donation_calculation_year_amount, :donation_increase_percentage,
-                          :logo, :logo_position, :remove_logo,
-                          payment_reminder_configs_attributes: [
-                            :id, :title, :text, :level, :due_days
-                          ],
-                          payment_provider_configs_attributes: [
-                            :id, :payment_provider, :user_identifier, :partner_identifier, :password
-                          ]]
+    :email, :vat_number, :currency, :due_days, :sender_name,
+    :donation_calculation_year_amount, :donation_increase_percentage,
+    :logo, :logo_position, :remove_logo,
+    payment_reminder_configs_attributes: [
+      :id, :title, :text, :level, :due_days
+    ],
+    payment_provider_configs_attributes: [
+      :id, :payment_provider, :user_identifier, :partner_identifier, :password
+    ]]
 
   before_render_form :build_payment_reminder_configs
   before_render_form :build_payment_provider_configs
@@ -76,11 +75,11 @@ class InvoiceConfigsController < CrudController
 
         config.update!(status: :pending)
 
-        flash[:notice] = t('.flash.provider_initialization_succeeded',
-                           payment_provider: config.payment_provider_label)
+        flash[:notice] = t(".flash.provider_initialization_succeeded",
+          payment_provider: config.payment_provider_label)
       rescue Epics::Error::TechnicalError
-        flash[:alert] = t('.flash.provider_initialization_failed',
-                          payment_provider: config.payment_provider_label)
+        flash[:alert] = t(".flash.provider_initialization_failed",
+          payment_provider: config.payment_provider_label)
       end
     end
   end

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito
 
 module TerminationsHelper
-
   def termination_confirm_dialog_text(termination)
     key, *defaults = role_ancestors_i18n_keys(termination.role, :text)
     t(key, default: defaults)
@@ -23,14 +22,14 @@ module TerminationsHelper
   end
 
   def termination_main_person_text(termination)
-    t('roles/terminations.main_person_text', person: termination.main_person)
+    t("roles/terminations.main_person_text", person: termination.main_person)
   end
 
   def termination_affected_people_text(termination)
     people = termination.affected_people.map(&:full_name).sort
-    return nil unless people.present?
+    return nil if people.blank?
 
-    t('roles/terminations.affected_people_text', affected_people: people.join(', '))
+    t("roles/terminations.affected_people_text", affected_people: people.join(", "))
   end
 
   private
@@ -44,5 +43,4 @@ module TerminationsHelper
       :"roles/terminations.global.#{a.name.underscore.to_sym}.#{key}"
     end
   end
-
 end

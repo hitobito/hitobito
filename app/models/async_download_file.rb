@@ -28,7 +28,7 @@ class AsyncDownloadFile < ApplicationRecord
     end
 
     def parse_filename(filename)
-      filename.match(FILENAME_REGEX)[1..-1]
+      filename.match(FILENAME_REGEX)[1..]
     end
 
     def from_filename(filename, filetype = :txt)

@@ -42,11 +42,11 @@ class FilteredList
   # methods intended to be overridden
 
   def base_scope
-    raise 'Implement `base_scope` in your subclass.'
+    raise "Implement `base_scope` in your subclass."
   end
 
   def filter_scopes
-    raise 'Implement `filter_scopes` in your subclass'
+    raise "Implement `filter_scopes` in your subclass"
   end
 
   private

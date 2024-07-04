@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito
 
 class SelfRegistrationReasonAbility < AbilityDsl::Base
-
   on(SelfRegistrationReason) do
     FeatureGate.if(:self_registration_reason) do
       class_side(:index).if_admin
@@ -14,5 +13,4 @@ class SelfRegistrationReasonAbility < AbilityDsl::Base
       permission(:admin).may(:manage).all
     end
   end
-
 end

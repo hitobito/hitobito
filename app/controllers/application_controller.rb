@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class ApplicationController < ActionController::Base
-
   include Localizable
   include Authenticatable
   include DecoratesBeforeRendering
@@ -27,25 +26,25 @@ class ApplicationController < ActionController::Base
 
   class_attribute :skip_translate_inheritable
 
-  alias decorate __decorator_for__
+  alias_method :decorate, :__decorator_for__
 
   rescue_from CanCan::AccessDenied do |exception|
     respond_to do |format|
       format.json do
-        render json: { status: 403, error: I18n.t('devise.failure.not_permitted_to_view_page') },
-               status: 403
+        render json: {status: 403, error: I18n.t("devise.failure.not_permitted_to_view_page")},
+          status: 403
       end
       format.all do
         raise exception unless Rails.env.production?
-        redirect_to root_path, alert: I18n.t('devise.failure.not_permitted_to_view_page')
+        redirect_to root_path, alert: I18n.t("devise.failure.not_permitted_to_view_page")
       end
     end
   end
 
   if Rails.env.production?
     rescue_from ActionController::UnknownFormat,
-                ActionView::MissingTemplate,
-                with: :not_found
+      ActionView::MissingTemplate,
+      with: :not_found
   end
 
   def person_home_path(person, options = {})
@@ -64,13 +63,13 @@ class ApplicationController < ActionController::Base
   end
 
   def not_found
-    raise ActionController::RoutingError, 'Not Found'
+    raise ActionController::RoutingError, "Not Found"
   end
 
   def set_no_cache
-    response.headers['Cache-Control'] = 'no-cache, no-store, max-age=0, must-revalidate'
-    response.headers['Pragma'] = 'no-cache'
-    response.headers['Expires'] = 'Fri, 01 Jan 1990 00:00:00 GMT'
+    response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
   end
 
   def html_request?

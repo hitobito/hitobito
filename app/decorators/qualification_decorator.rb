@@ -11,29 +11,29 @@ class QualificationDecorator < ApplicationDecorator
     return if !model.open_training_days && !model.reactivateable_until
 
     infos = [icon]
-    infos.unshift(content_tag(:span, formatted_days, class: 'mr-2')) if model.open_training_days
+    infos.unshift(content_tag(:span, formatted_days, class: "mr-2")) if model.open_training_days
     helpers.content_tag(:span, safe_join(infos))
   end
 
   private
 
   def icon
-    helpers.icon(:'info-circle', title: tooltip)
+    helpers.icon(:"info-circle", title: tooltip)
   end
 
   def tooltip
     if model.active? && model.finish_at
       translate(:open_training_days_active,
-                days: formatted_days,
-                finish_at: I18n.l(model.finish_at))
+        days: formatted_days,
+        finish_at: I18n.l(model.finish_at))
     elsif model.reactivateable_until
       if model.reactivateable?
         translate(:open_training_days_reactivatable,
-                  days: formatted_days,
-                  reactivateable_until: I18n.l(model.reactivateable_until))
+          days: formatted_days,
+          reactivateable_until: I18n.l(model.reactivateable_until))
       else
         translate(:open_training_days_no_longer_reactivatable,
-                  reactivateable_until: I18n.l(model.reactivateable_until))
+          reactivateable_until: I18n.l(model.reactivateable_until))
       end
     end
   end

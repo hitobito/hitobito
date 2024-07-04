@@ -5,7 +5,6 @@
 
 module Dropdown
   class ParticipationLists < Dropdown::Base
-
     def initialize(template, group, translation)
       super(template, translation, :plus)
       @template = template
@@ -20,7 +19,7 @@ module Dropdown
         next unless authorized?(event)
 
         add_item(event.label,
-                 build_event_participation_lists_path(event),
+          build_event_participation_lists_path(event),
                  **participation_lists_options)
       end
     end
@@ -30,12 +29,12 @@ module Dropdown
     end
 
     def build_event_participation_lists_path(event)
-      type = event == ::Event ? nil : event.to_s
+      type = (event == ::Event) ? nil : event.to_s
       template.group_events_participation_lists_new_path(@group, type: type, label: event.label)
     end
 
     def participation_lists_options
-      { data: { checkable: true, method: :get }, remote: true }
+      {data: {checkable: true, method: :get}, remote: true}
     end
   end
 end

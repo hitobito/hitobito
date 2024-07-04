@@ -42,12 +42,11 @@
 #
 
 class Message::LetterWithInvoice < Message::Letter
-
   belongs_to :invoice_list
   serialize :invoice_attributes, Hash
   validate :assert_valid_invoice_items
 
-  self.icon = :'file-invoice'
+  self.icon = :"file-invoice"
 
   def invoice_list
     @invoice_list ||= InvoiceList.create!(
@@ -62,8 +61,8 @@ class Message::LetterWithInvoice < Message::Letter
     @invoice ||= Invoice.new.tap do |invoice|
       invoice.group = group.layer_group
       invoice.title = subject
-      invoice_attributes.to_h.fetch('invoice_items_attributes', {}).values.each do |v|
-        invoice.invoice_items.build(v.except('_destroy'))
+      invoice_attributes.to_h.fetch("invoice_items_attributes", {}).values.each do |v|
+        invoice.invoice_items.build(v.except("_destroy"))
       end
     end
   end
@@ -81,7 +80,7 @@ class Message::LetterWithInvoice < Message::Letter
 
   def recipients_from_invoices
     invoices = Invoice.joins(:invoice_list).where(invoice_list_id: invoice_list_id)
-    Person.where(id: invoices.select('recipient_id'))
+    Person.where(id: invoices.select("recipient_id"))
   end
 
   def recipients_from_mailing_list
@@ -90,7 +89,7 @@ class Message::LetterWithInvoice < Message::Letter
 
   def load_invoice_for(receiver)
     Invoice.find_by(invoice_list_id: invoice_list_id, recipient: receiver).tap do |invoice|
-      raise 'Didn\'t find invoice for recipient ' + receiver.inspect unless invoice
+      raise "Didn't find invoice for recipient " + receiver.inspect unless invoice
     end
   end
 
@@ -98,7 +97,7 @@ class Message::LetterWithInvoice < Message::Letter
     invoice.tap do |invoice|
       invoice.recipient = receiver
       invoice.send(:set_recipient_fields!)
-      raise 'invoice invalid' unless invoice.valid?
+      raise "invoice invalid" unless invoice.valid?
     end
   end
 
@@ -107,5 +106,4 @@ class Message::LetterWithInvoice < Message::Letter
       errors.add(:base, :invoice_items_invalid)
     end
   end
-
 end

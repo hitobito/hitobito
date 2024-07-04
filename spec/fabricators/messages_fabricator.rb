@@ -5,11 +5,11 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-Fabricator(:letter, from: 'Message::Letter') do
+Fabricator(:letter, from: "Message::Letter") do
   subject { "#{Faker::Superhero.power} #{Faker::Number.number(digits: 4)}" }
   body { Faker::Lorem.sentences }
 end
 
-Fabricator(:text_message, from: 'Message::TextMessage') do
+Fabricator(:text_message, from: "Message::TextMessage") do
   text { Faker::Lorem.sentence(word_count: 3) }
 end

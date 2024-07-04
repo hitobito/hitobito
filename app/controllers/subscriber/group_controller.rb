@@ -5,7 +5,6 @@
 
 module Subscriber
   class GroupController < BaseController
-
     skip_authorize_resource # must be in leaf class
 
     before_render_form :replace_validation_errors
@@ -44,12 +43,12 @@ module Subscriber
 
     def groups_query
       possible = Subscription.new(mailing_list: @mailing_list).possible_groups
-      possible.where(search_condition('groups.name', 'parents_groups.name')).
-               or(possible.where(id: group_ids_by_static_name(possible))).
-               includes(:parent).
-               references(:parent).
-               reorder("#{Group.quoted_table_name}.lft").
-               limit(10)
+      possible.where(search_condition("groups.name", "parents_groups.name"))
+        .or(possible.where(id: group_ids_by_static_name(possible)))
+        .includes(:parent)
+        .references(:parent)
+        .reorder("#{Group.quoted_table_name}.lft")
+        .limit(10)
     end
 
     def group_ids_by_static_name(possible)
@@ -83,7 +82,7 @@ module Subscriber
         entry.errors.delete(:subscriber)
         entry.errors.delete(:subscriber_id)
         entry.errors.delete(:subscriber_type)
-        entry.errors.add(:base, 'Gruppe muss ausgewählt werden')
+        entry.errors.add(:base, "Gruppe muss ausgewählt werden")
       end
     end
 
@@ -93,17 +92,17 @@ module Subscriber
         next if tag[:id].empty?
 
         SubscriptionTag.new(subscription: entry,
-                            tag_id: tag[:id],
-                            excluded: tag[:excluded])
+          tag_id: tag[:id],
+          excluded: tag[:excluded])
       end.compact
     end
 
     def collect_included_tags
-      model_params[:included_subscription_tags_ids]&.map { |id| { id: id, excluded: false } } || []
+      model_params[:included_subscription_tags_ids]&.map { |id| {id: id, excluded: false} } || []
     end
 
     def collect_excluded_tags
-      model_params[:excluded_subscription_tags_ids]&.map { |id| { id: id, excluded: true } } || []
+      model_params[:excluded_subscription_tags_ids]&.map { |id| {id: id, excluded: true} } || []
     end
   end
 end

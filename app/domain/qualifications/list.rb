@@ -7,7 +7,6 @@
 
 module Qualifications
   class List
-
     def initialize(person)
       @person = person
     end
@@ -30,9 +29,9 @@ module Qualifications
     def ordered_qualifications
       @ordered_qualifications ||=
         @person
-        .qualifications
-        .order_by_date
-        .includes(qualification_kind: :translations)
+          .qualifications
+          .order_by_date
+          .includes(qualification_kind: :translations)
     end
 
     def by_kind

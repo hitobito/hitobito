@@ -5,7 +5,6 @@
 #
 # Fetches people for which the user has write access via layer permissions.
 class PersonLayerWritables < GroupBasedFetchables
-
   self.same_group_permissions = []
   self.above_group_permissions = []
   self.same_layer_permissions = [:layer_and_below_full, :layer_full]
@@ -30,11 +29,11 @@ class PersonLayerWritables < GroupBasedFetchables
   def accessible_people_scope
     conditions = writable_conditions
     if conditions.present?
-      @scope.
-        joins(roles: :group).
-        where(groups: { deleted_at: nil }).
-        where(conditions.to_a).
-        distinct
+      @scope
+        .joins(roles: :group)
+        .where(groups: {deleted_at: nil})
+        .where(conditions.to_a)
+        .distinct
     else
       Person.none
     end
@@ -46,5 +45,4 @@ class PersonLayerWritables < GroupBasedFetchables
       see_invisible_from_above_condition(condition)
     end
   end
-
 end

@@ -3,70 +3,65 @@
 #  License version 3 or later. See the COPYING file at the top-level
 #  directory or at https://github.com/hitobito/hitobito.
 
-
-require 'spec_helper'
-
+require "spec_helper"
 
 describe Group::DeletedPeopleController, js: true do
-
   subject { page }
 
-  context 'inline creation of role' do
+  context "inline creation of role" do
     let(:group) { groups(:bottom_layer_one) }
-    let(:row)   { find('#content table.table').all('tr').last }
-    let(:cell)  { row.all('td')[2] }
+    let(:row) { find("#content table.table").all("tr").last }
+    let(:cell) { row.all("td")[2] }
     let(:user) { people(:top_leader) }
 
     before do
       Fabricate(Group::BottomLayer::Member.name.to_sym,
-                group: groups(:bottom_layer_one),
-                created_at: 1.year.ago,
-                deleted_at: 1.month.ago)
+        group: groups(:bottom_layer_one),
+        created_at: 1.year.ago,
+        deleted_at: 1.month.ago)
       Fabricate(Group::BottomGroup::Leader.name.to_sym,
-                group: groups(:bottom_group_one_one_one),
-                created_at: 1.year.ago,
-                deleted_at: 1.month.ago)
+        group: groups(:bottom_group_one_one_one),
+        created_at: 1.year.ago,
+        deleted_at: 1.month.ago)
 
       sign_in(user)
       visit group_deleted_people_path(group_id: group.id)
-      within(cell) { click_link 'Bearbeiten' }
+      within(cell) { click_link "Bearbeiten" }
     end
 
-
-    it 'cancel closes popover' do
+    it "cancel closes popover" do
       obsolete_node_safe do
-        click_link 'Abbrechen'
+        click_link "Abbrechen"
         sleep(2)
-        expect(page).to have_no_css('.popover')
+        expect(page).to have_no_css(".popover")
       end
     end
 
-    it 'creates role' do
+    it "creates role" do
       obsolete_node_safe do
-        find('#role_type_select #role_type').click
-        find('#role_type_select #role_type').find('option', text: 'Leader').click
+        find("#role_type_select #role_type").click
+        find("#role_type_select #role_type").find("option", text: "Leader").click
 
-        click_button 'Speichern'
-        expect(page).to have_no_css('.popover')
-        expect(cell).to have_text 'Leader'
+        click_button "Speichern"
+        expect(page).to have_no_css(".popover")
+        expect(cell).to have_text "Leader"
       end
     end
 
-    it 'informs about missing type selection' do
+    it "informs about missing type selection" do
       obsolete_node_safe do
         skip "undefined method `map' for nil:NilClass"
-        find('#role_group_id_chosen a.chosen-single').click
-        find('#role_group_id_chosen ul.chosen-results').find('li', text: 'Group 12').click
-        fill_in('role_label', with: 'dummy')
-        click_button 'Speichern'
-        expect(page).to have_selector('.popover .alert-danger', text: 'Rolle muss ausgefüllt werden')
+        find("#role_group_id_chosen a.chosen-single").click
+        find("#role_group_id_chosen ul.chosen-results").find("li", text: "Group 12").click
+        fill_in("role_label", with: "dummy")
+        click_button "Speichern"
+        expect(page).to have_selector(".popover .alert-danger", text: "Rolle muss ausgefüllt werden")
 
-        find('#role_type_select a.chosen-single').click
-        find('#role_type_select ul.chosen-results').find('li', text: 'Leader').click
-        click_button 'Speichern'
-        expect(cell).to have_text 'Group 12'
+        find("#role_type_select a.chosen-single").click
+        find("#role_type_select ul.chosen-results").find("li", text: "Leader").click
+        click_button "Speichern"
+        expect(cell).to have_text "Group 12"
       end
     end
   end
-
 end

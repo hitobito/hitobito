@@ -4,11 +4,10 @@
 #  https://github.com/hitobito/hitobito.
 
 class Duration
-
   attr_reader :start_at, :finish_at
 
   def initialize(start_at, finish_at, date_format: :default)
-    @start_at  = start_at
+    @start_at = start_at
     @finish_at = finish_at
     @date_format = date_format
   end
@@ -21,7 +20,7 @@ class Duration
     elsif finish_at
       format_datetime(finish_at)
     else
-      ''
+      ""
     end
   end
 
@@ -90,6 +89,5 @@ class Duration
   end
 
   deprecate date_only?: "Don't use this private method anymore." \
-                        'Instead use the static variant `Duration.date_only?`'
-
+                        "Instead use the static variant `Duration.date_only?`"
 end

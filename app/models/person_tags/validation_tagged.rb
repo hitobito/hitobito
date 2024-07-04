@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module PersonTags::ValidationTagged
-
   extend ActiveSupport::Concern
 
   included do

@@ -22,21 +22,21 @@ class Invoices::ByArticleController < ListController
 
   def invoice_ids
     collection = Payments::Collection.new
-                                     .in_layer(group.id)
-                                     .from(from_date)
-                                     .to(to_date)
-                                     .excluding_cancelled_invoices
+      .in_layer(group.id)
+      .from(from_date)
+      .to(to_date)
+      .excluding_cancelled_invoices
 
     collection = case params[:type]&.to_sym
-                 when :deficit
-                   collection.of_non_fully_paid_invoices
-                 when :excess
-                   collection.of_overpaid_invoices
-                 else
-                   collection.having_invoice_item(params[:name],
-                                                  params[:account],
-                                                  params[:cost_center])
-                 end
+    when :deficit
+      collection.of_non_fully_paid_invoices
+    when :excess
+      collection.of_overpaid_invoices
+    else
+      collection.having_invoice_item(params[:name],
+        params[:account],
+        params[:cost_center])
+    end
 
     collection.payments.pluck(:invoice_id)
   end

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::QueryHouseholdController < Person::QueryController
-
   self.serializer = :as_typeahead_with_address
 
   private

@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module InvoiceIndex; end 
+module InvoiceIndex; end
 
 ThinkingSphinx::Index.define_partial :invoice do
   indexes title, sortable: true

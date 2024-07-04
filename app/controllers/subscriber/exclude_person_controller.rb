@@ -5,7 +5,6 @@
 
 module Subscriber
   class ExcludePersonController < PersonController
-
     skip_authorize_resource # must be in leaf class
 
     before_create :assert_subscribed
@@ -41,6 +40,5 @@ module Subscriber
         super
       end
     end
-
   end
 end

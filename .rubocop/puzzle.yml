@@ -1,0 +1,70 @@
+# Existing rubocop config
+Style/RescueStandardError:
+  Enabled: false
+
+# we have not yet introcued ApplicationRecord as a Pattern
+Rails/ApplicationRecord:
+  Enabled: false
+
+Metrics/AbcSize:
+  Max: 20
+  Severity: error
+
+Metrics/ClassLength:
+  Max: 200
+  Severity: error
+
+Metrics/ModuleLength:
+  Max: 200
+  Severity: error
+
+Metrics/CyclomaticComplexity:
+  Max: 6
+  Severity: error
+
+Layout/LineLength:
+  Max: 100
+  Severity: warning
+  IgnoreCopDirectives: true
+
+Metrics/MethodLength:
+  Max: 10
+  Severity: error
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*
+    - lib/tasks/*.rake
+    - lib/templates/wagon/spec/**/*
+
+# Keep for now, easier with superclass definitions
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+# The ones we use must exist for the entire class hierarchy.
+Style/ClassVars:
+  Enabled: false
+
+# Well, well, well
+Style/Documentation:
+  Enabled: false
+
+# We thinks that's fine
+Rails/HasAndBelongsToMany:
+  Enabled: false
+
+# We think that's the developers choice
+Rails/Delegate:
+  Enabled: false
+
+# We think that's the developers choice
+Style/SymbolProc:
+  Enabled: false
+
+# separated arguments allow for ruby to determine the right separator, making it more portable
+Rails/FilePath:
+  EnforcedStyle: arguments
+
+Rails/SkipsModelValidations:
+  Exclude:
+    - spec/**/*

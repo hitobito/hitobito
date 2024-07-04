@@ -19,10 +19,9 @@ class EventKindSerializer < ApplicationSerializer
     json_api_properties
 
     map_properties :label,
-                   :short_name,
-                   :minimum_age,
-                   :general_information,
-                   :application_conditions
+      :short_name,
+      :minimum_age,
+      :general_information,
+      :application_conditions
   end
-
 end

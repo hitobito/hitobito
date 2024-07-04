@@ -5,7 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
 
-
 module Sheet
   class InvoiceList < Base
     def title
@@ -25,12 +24,12 @@ module Sheet
     end
 
     def render_left_nav
-      view.render('invoices/nav_left')
+      view.render("invoices/nav_left")
     end
 
     # Needs spacing because parent has no tabs
     def render_parent_title
-      content_tag(:div, super, class: 'pb-3')
+      content_tag(:div, super, class: "pb-3")
     end
 
     def link_url

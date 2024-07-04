@@ -5,11 +5,10 @@
 
 module PaperTrail
   class VersionDecorator < ApplicationDecorator
-
     def header(include_changed_object: false)
       fields = [created_at]
       if author
-        fields = fields + [translate(:by, author: author)]
+        fields += [translate(:by, author: author)]
       end
       if include_changed_object
         fields = [changed_object] + fields
@@ -22,7 +21,7 @@ module PaperTrail
     end
 
     def changed_object
-      if model.main.present? && model.main_type == 'Person'
+      if model.main.present? && model.main_type == "Person"
         h.link_to_if(can?(:show, model.main), model.main.to_s, h.person_path(model.main.id))
       end
     end
@@ -53,7 +52,7 @@ module PaperTrail
         label = author_service_token_label(token)
         h.link_to_if(can?(:show, token), label, h.group_service_token_path(layer_id, token.id))
       else
-        I18n.t('version.deleted_service_token', model_name: ServiceToken.model_name.human)
+        I18n.t("version.deleted_service_token", model_name: ServiceToken.model_name.human)
       end
     end
 
@@ -79,10 +78,10 @@ module PaperTrail
 
     def custom_event_changes
       content_tag(:div,
-                  t_event(user: whodunnit,
-                          item: item,
-                          object_name: object.object.presence,
-                          object_changes: object_changes))
+        t_event(user: whodunnit,
+          item: item,
+          object_name: object.object.presence,
+          object_changes: object_changes))
     end
 
     def changeset_lines
@@ -92,7 +91,7 @@ module PaperTrail
     end
 
     def changeset_list
-      safe_join(model.changeset, ', ') do |attr, (from, to)|
+      safe_join(model.changeset, ", ") do |attr, (from, to)|
         attribute_change(attr, from, to)
       end
     end
@@ -121,10 +120,10 @@ module PaperTrail
 
     def t_event(user: nil, item: nil, object_changes: nil, object_name: nil)
       I18n.t("version.#{event}",
-             user: user,
-             item: item,
-             object_name: object_name,
-             object_changes: object_changes)
+        user: user,
+        item: item,
+        object_name: object_name,
+        object_changes: object_changes)
     end
 
     def t_person(attr)
@@ -135,20 +134,20 @@ module PaperTrail
       key = attribute_change_key(from, to)
       if key
         I18n.t("version.attribute_change.#{key}",
-               **attribute_change_args(attr, from, to)).
-             html_safe
+               **attribute_change_args(attr, from, to))
+          .html_safe
       else
-        ''
+        ""
       end
     end
 
     def association_change
-      changeset = model.event == 'update' ? changeset_list : nil
+      changeset = (model.event == "update") ? changeset_list : nil
       item = reifyed_item
 
       text = association_change_text(changeset, item)
 
-      h.sanitize(text, tags: %w(i))
+      h.sanitize(text, tags: %w[i])
     end
 
     private
@@ -156,16 +155,16 @@ module PaperTrail
     def association_change_text(changeset, item)
       # used to overwrite in youth wagon
       I18n.t("version.association_change.#{item_class.name.underscore}.#{model.event}",
-             default: :"version.association_change.#{model.event}",
-             model: item_class.model_name.human,
-             label: item ? label_with_fallback(item) : '',
-             changeset: changeset)
+        default: :"version.association_change.#{model.event}",
+        model: item_class.model_name.human,
+        label: item ? label_with_fallback(item) : "",
+        changeset: changeset)
     end
 
     def label_with_fallback(item)
       item.to_s(:long)
     rescue
-      I18n.t('global.unknown')
+      I18n.t("global.unknown")
     end
 
     def item_class
@@ -173,7 +172,7 @@ module PaperTrail
     end
 
     def reifyed_item
-      if model.event == 'create'
+      if model.event == "create"
         version = model.next
         if version
           reify(version)
@@ -187,30 +186,30 @@ module PaperTrail
 
     def reify(version)
       item_type = version.item_type.constantize
-      return version.reify unless item_type.column_names.include?('type')
+      return version.reify unless item_type.column_names.include?("type")
 
       model_type = YAML.safe_load(
         version.object,
         permitted_classes: [Date, Time, Symbol]
-      )['type']
+      )["type"]
 
       Object.const_defined?(model_type) ? version.reify : Wrapped.new(model_type)
     end
 
     def attribute_change_key(from, to)
       if from.present? && to.present?
-        'from_to'
+        "from_to"
       elsif from.present?
-        'from'
+        "from"
       elsif to.present?
-        'to'
+        "to"
       end
     end
 
     def attribute_change_args(attr, from, to)
-      { attr: item_class.human_attribute_name(attr),
-        from: normalize(attr, from),
-        to: normalize(attr, to) }
+      {attr: item_class.human_attribute_name(attr),
+       from: normalize(attr, from),
+       to: normalize(attr, to)}
     end
 
     def normalize(attr, value)

@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Event::ParticipationCleanupJob do
   let(:participations_with_additional_information) { 3.times.map { Fabricate(:event_participation, additional_information: Faker::Food.allergen) } }
@@ -14,13 +14,13 @@ describe Event::ParticipationCleanupJob do
 
   subject { described_class.new.perform_internal }
 
-  context 'with last event date inside cutoff duration' do
+  context "with last event date inside cutoff duration" do
     before do
       expect(Settings.event.participations).to receive(:delete_additional_information_after_months).and_return(3)
       Event::Date.where(event_id: participations.map(&:event_id)).update_all(finish_at: 2.months.ago)
     end
 
-    it 'does not clean participations additional_information' do
+    it "does not clean participations additional_information" do
       subject
 
       participations_with_additional_information.each do |p|
@@ -33,13 +33,13 @@ describe Event::ParticipationCleanupJob do
     end
   end
 
-  context 'with last event date outside cutoff duration' do
+  context "with last event date outside cutoff duration" do
     before do
       expect(Settings.event.participations).to receive(:delete_additional_information_after_months).and_return(3)
       Event::Date.where(event_id: participations.map(&:event_id)).update_all(finish_at: 4.months.ago)
     end
 
-    it 'cleans participations additional_information' do
+    it "cleans participations additional_information" do
       subject
 
       participations_with_additional_information.each do |p|

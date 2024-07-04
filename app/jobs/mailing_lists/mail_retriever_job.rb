@@ -7,7 +7,6 @@
 
 module MailingLists
   class MailRetrieverJob < RecurringJob
-
     class << self
       def retrieve_interval
         return unless MailConfig.retriever_imap?
@@ -31,7 +30,5 @@ module MailingLists
     def retriever
       MailingLists::BulkMail::Retriever.new
     end
-
   end
-
 end

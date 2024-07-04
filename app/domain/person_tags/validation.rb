@@ -2,14 +2,12 @@
 
 module PersonTags
   class Validation
-
-    EMAIL_PRIMARY_INVALID = 'category_validation:email_primary_invalid'
-    EMAIL_ADDITIONAL_INVALID = 'category_validation:email_additional_invalid'
-    ADDRESS_INVALID = 'category_validation:address_invalid'
-    INVALID_ADDRESS_OVERRIDE = 'category_validation:invalid_address_override'
+    EMAIL_PRIMARY_INVALID = "category_validation:email_primary_invalid"
+    EMAIL_ADDITIONAL_INVALID = "category_validation:email_additional_invalid"
+    ADDRESS_INVALID = "category_validation:address_invalid"
+    INVALID_ADDRESS_OVERRIDE = "category_validation:invalid_address_override"
 
     class << self
-
       def tag_names
         [EMAIL_PRIMARY_INVALID, EMAIL_ADDITIONAL_INVALID, ADDRESS_INVALID, INVALID_ADDRESS_OVERRIDE]
       end
@@ -53,6 +51,5 @@ module PersonTags
         ActsAsTaggableOn::Tag
       end
     end
-
   end
 end

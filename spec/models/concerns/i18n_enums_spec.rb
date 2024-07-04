@@ -5,111 +5,111 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe I18nEnums do
+  let(:person) { Person.new(first_name: "Dummy") }
 
-  let(:person) { Person.new(first_name: 'Dummy') }
-
-  it 'returns translated labels' do
-    person.gender = 'm'
-    expect(person.gender_label).to eq 'männlich'
-    person.gender = 'w'
-    expect(person.gender_label).to eq 'weiblich'
+  it "returns translated labels" do
+    person.gender = "m"
+    expect(person.gender_label).to eq "männlich"
+    person.gender = "w"
+    expect(person.gender_label).to eq "weiblich"
     person.gender = nil
-    expect(person.gender_label).to eq 'unbekannt'
+    expect(person.gender_label).to eq "unbekannt"
   end
 
-  it 'returns translated label in french' do
+  it "returns translated label in french" do
     I18n.locale = :fr
-    person.gender = 'm'
-    expect(person.gender_label).to eq 'masculin'
-    person.gender = 'w'
-    expect(person.gender_label).to eq 'féminin'
-    person.gender = ''
-    expect(person.gender_label).to eq 'inconnu'
+    person.gender = "m"
+    expect(person.gender_label).to eq "masculin"
+    person.gender = "w"
+    expect(person.gender_label).to eq "féminin"
+    person.gender = ""
+    expect(person.gender_label).to eq "inconnu"
     I18n.locale = :de
   end
 
-  it 'accepts only possible values' do
-    person.gender = 'm'
+  it "accepts only possible values" do
+    person.gender = "m"
     expect(person).to be_valid
-    person.gender = ' '
+    person.gender = " "
     expect(person).to be_valid
     person.gender = nil
     expect(person).to be_valid
-    person.gender = 'foo'
+    person.gender = "foo"
     expect(person).not_to be_valid
   end
 
-  it 'has class side method to return all labels' do
-    expect(Person.gender_labels).to eq(m: 'männlich', w: 'weiblich')
+  it "has class side method to return all labels" do
+    expect(Person.gender_labels).to eq(m: "männlich", w: "weiblich")
   end
 
-  context 'with i18n_prefix override' do
+  context "with i18n_prefix override" do
     before do
       clazz = Class.new(Person) do
         attr_accessor :gender_identity
-        i18n_enum :gender_identity, Person::GENDERS, i18n_prefix: 'foo.bar'
+        i18n_enum :gender_identity, Person::GENDERS, i18n_prefix: "foo.bar"
       end
-      stub_const('Individual', clazz)
+      stub_const("Individual", clazz)
     end
 
-    let(:individual) { Individual.new(first_name: 'Dummy') }
+    let(:individual) { Individual.new(first_name: "Dummy") }
 
     around do |example|
       with_translations(
-        de: { foo: { bar: { m: 'maskulin', w: 'feminin', _nil: 'undefiniert' } } },
-        fr: { foo: { bar: { m: 'mâle', w: 'femelle', _nil: 'indéfini' } } }
+        de: {foo: {bar: {m: "maskulin", w: "feminin", _nil: "undefiniert"}}},
+        fr: {foo: {bar: {m: "mâle", w: "femelle", _nil: "indéfini"}}}
       ) do
         example.call
       end
     end
 
-    it 'returns translated labels' do
-      individual.gender_identity = 'm'
-      expect(individual.gender_identity_label).to eq 'maskulin'
-      individual.gender_identity = 'w'
-      expect(individual.gender_identity_label).to eq 'feminin'
+    it "returns translated labels" do
+      individual.gender_identity = "m"
+      expect(individual.gender_identity_label).to eq "maskulin"
+      individual.gender_identity = "w"
+      expect(individual.gender_identity_label).to eq "feminin"
       individual.gender_identity = nil
-      expect(individual.gender_identity_label).to eq 'undefiniert'
+      expect(individual.gender_identity_label).to eq "undefiniert"
     end
 
-    it 'returns translated label in french' do
+    it "returns translated label in french" do
       I18n.locale = :fr
-      individual.gender_identity = 'm'
-      expect(individual.gender_identity_label).to eq 'mâle'
-      individual.gender_identity = 'w'
-      expect(individual.gender_identity_label).to eq 'femelle'
-      individual.gender_identity = ''
-      expect(individual.gender_identity_label).to eq 'indéfini'
+      individual.gender_identity = "m"
+      expect(individual.gender_identity_label).to eq "mâle"
+      individual.gender_identity = "w"
+      expect(individual.gender_identity_label).to eq "femelle"
+      individual.gender_identity = ""
+      expect(individual.gender_identity_label).to eq "indéfini"
     end
 
-    it 'has class side method to return all labels' do
-      expect(Individual.gender_identity_labels).to eq(m: 'maskulin', w: 'feminin')
+    it "has class side method to return all labels" do
+      expect(Individual.gender_identity_labels).to eq(m: "maskulin", w: "feminin")
     end
   end
 
-  context 'does not return nil key when not set' do
+  context "does not return nil key when not set" do
     before do
       clazz = Class.new(Person) do
         attr_accessor :gender_identity
-        i18n_enum :gender_identity, Person::GENDERS, i18n_prefix: 'foo.bar'
+        i18n_enum :gender_identity, Person::GENDERS, i18n_prefix: "foo.bar"
       end
-      stub_const('Individual', clazz)
+      stub_const("Individual", clazz)
     end
+
     around do |example|
       with_translations(
-        de: { foo: { bar: { m: 'maskulin', w: 'feminin'} } },
-        fr: { foo: { bar: { m: 'mâle', w: 'femelle'} } }
+        de: {foo: {bar: {m: "maskulin", w: "feminin"}}},
+        fr: {foo: {bar: {m: "mâle", w: "femelle"}}}
       ) do
         example.call
       end
     end
 
-    let(:individual) { Individual.new(first_name: 'Dummy') }
+    let(:individual) { Individual.new(first_name: "Dummy") }
 
-    it 'does not return nil when not defined' do
+    it "does not return nil when not defined" do
       I18n.locale = :de
       individual.gender_identity = nil
       expect(individual.gender_identity_label).to be_blank

@@ -34,10 +34,10 @@ module Wizards
         return steps.first.step_name if step_class_or_name == :_start
 
         step_class = if step_class_or_name.is_a?(Class)
-                       step_class_or_name
-                     else
-                       find_step(step_class_or_name)
-                     end
+          step_class_or_name
+        else
+          find_step(step_class_or_name)
+        end
         return nil if step_class == steps.last # No step comes after the last step.
 
         steps[steps.find_index(step_class) + 1].step_name
@@ -81,7 +81,7 @@ module Wizards
     def save!
       # Only steps up to the current step are validated. So we must prevent saving
       # until the last step is reached.
-      raise 'do not call #save! before the last step' unless last_step?
+      raise "do not call #save! before the last step" unless last_step?
       raise(ActiveRecord::RecordInvalid, self) unless valid?
 
       true
@@ -101,9 +101,7 @@ module Wizards
       step_instances.find { |instance| instance.step_name == step_name.to_s }
     end
 
-
     private
-
 
     delegate :find_step, :step_after, to: :class, private: true
 

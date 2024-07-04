@@ -7,15 +7,15 @@
 
 class Licenser
   FORMATS = {
-    rb: '#  ',
-    rake: '#  ',
-    yml: '#  ',
-    haml: '-#  ',
-    coffee: '#  ',
-    scss: '//  '
+    rb: "#  ",
+    rake: "#  ",
+    yml: "#  ",
+    haml: "-#  ",
+    coffee: "#  ",
+    scss: "//  "
   }.freeze
 
-  EXCLUDES = %w(
+  EXCLUDES = %w[
     db/schema.rb
     config/boot.rb
     config/environment.rb
@@ -26,15 +26,14 @@ class Licenser
     config/initializers/mime_types.rb
     config/initializers/session_store.rb
     config/initializers/wrap_parameters.rb
-  ).freeze
+  ].freeze
 
   SHEBANG_COMMENT_EXTENSIONS = [:rb, :rake].freeze
-  SHEBANG_COMMENT_STRING     = '# frozen_string_literal: true'
-  SHEBANG_COMMENT_PATTERN    = Regexp.union(
+  SHEBANG_COMMENT_STRING = "# frozen_string_literal: true"
+  SHEBANG_COMMENT_PATTERN = Regexp.union(
     /#\s*encoding: utf-8\n?/i,
     /#\s*frozen_string_literal: true\n?/i
   )
-
 
   def initialize(project_name, copyright_holder, copyright_source)
     @project_name = project_name
@@ -44,7 +43,7 @@ class Licenser
 
   # rubocop:disable Rails/TimeZone
   def preamble_text
-    @preamble_text ||= <<-COPYRIGHT.strip_heredoc
+    @preamble_text ||= <<~COPYRIGHT
       Copyright (c) 2012-#{Time.now.year}, #{@copyright_holder}. This file is part of
       #{@project_name} and licensed under the Affero General Public License version 3
       or later. See the COPYING file at the top-level directory or at
@@ -81,19 +80,19 @@ class Licenser
   private
 
   def insert_preamble(content, format)
-    if format.file_with_shebang_comment? && content.strip =~ /\A#{SHEBANG_COMMENT_PATTERN}/i
-      content.gsub!(/#{SHEBANG_COMMENT_PATTERN}\s*/mi, '')
+    if format.file_with_shebang_comment? && content.strip =~ /\A#{SHEBANG_COMMENT_PATTERN}/io
+      content.gsub!(/#{SHEBANG_COMMENT_PATTERN}\s*/mio, "")
     end
     format.preamble + content
   end
 
   def remove_preamble(content, format)
-    content.gsub!(/\A#{format.copyright_pattern}.*$/, '')
+    content.gsub!(/\A#{format.copyright_pattern}.*$/, "")
     while content.start_with?("\n#{format.comment}")
-      content.gsub!(/\A\n#{format.comment}\s+.*$/, '')
+      content.gsub!(/\A\n#{format.comment}\s+.*$/, "")
     end
-    content.gsub!(/\A\s*\n/, '')
-    content.gsub!(/\A\s*\n/, '')
+    content.gsub!(/\A\s*\n/, "")
+    content.gsub!(/\A\s*\n/, "")
     if format.file_with_shebang_comment?
       content = SHEBANG_COMMENT_STRING + "\n\n" + content
     end
@@ -111,7 +110,7 @@ class Licenser
         next unless content
 
         puts file
-        File.open(file, 'w') { |f| f.print content }
+        File.open(file, "w") { |f| f.print content }
       end
     end
   end
@@ -141,29 +140,27 @@ class Licenser
     def comment
       @comment ||= prefix.strip
     end
-
   end
 end
 
-
 namespace :license do
   task :config do # rubocop:disable Rails/RakeEnvironment
-    @licenser = Licenser.new('hitobito',
-                             'Jungwacht Blauring Schweiz',
-                             'https://github.com/hitobito/hitobito')
+    @licenser = Licenser.new("hitobito",
+      "Jungwacht Blauring Schweiz",
+      "https://github.com/hitobito/hitobito")
   end
 
-  desc 'Insert the license preamble in all source files'
+  desc "Insert the license preamble in all source files"
   task insert: :config do
     @licenser.insert
   end
 
-  desc 'Update or insert the license preamble in all source files'
+  desc "Update or insert the license preamble in all source files"
   task update: :config do
     @licenser.update
   end
 
-  desc 'Remove the license preamble from all source files'
+  desc "Remove the license preamble from all source files"
   task remove: :config do
     @licenser.remove
   end

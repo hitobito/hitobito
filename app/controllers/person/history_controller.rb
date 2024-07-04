@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::HistoryController < ApplicationController
-
   before_action :authorize_action
 
   decorates :group, :person
@@ -35,9 +34,9 @@ class Person::HistoryController < ApplicationController
   end
 
   def participations_by_event_type
-    fetch_participations.
-      group_by { |p| p.event.class.label_plural }.
-      each { |_kind, entries| entries.collect! { |e| Event::ParticipationDecorator.new(e) } }
+    fetch_participations
+      .group_by { |p| p.event.class.label_plural }
+      .each { |_kind, entries| entries.collect! { |e| Event::ParticipationDecorator.new(e) } }
   end
 
   def entry
@@ -51,5 +50,4 @@ class Person::HistoryController < ApplicationController
   def authorize_action
     authorize!(:history, entry)
   end
-
 end

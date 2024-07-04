@@ -5,10 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
-describe 'Dropdown::GroupAdd' do
-
+describe "Dropdown::GroupAdd" do
   include FormatHelper
   include I18nHelper
   include LayoutHelper
@@ -23,20 +22,20 @@ describe 'Dropdown::GroupAdd' do
     true
   end
 
-  it 'renders dropdown' do
-    is_expected.to have_content 'Gruppe erstellen'
-    is_expected.to have_selector 'ul.dropdown-menu'
+  it "renders dropdown" do
+    is_expected.to have_content "Gruppe erstellen"
+    is_expected.to have_selector "ul.dropdown-menu"
 
-    is_expected.to have_selector 'a', text: 'Top Group'
-    is_expected.to have_selector 'a', text: 'Bottom Layer'
+    is_expected.to have_selector "a", text: "Top Group"
+    is_expected.to have_selector "a", text: "Bottom Layer"
   end
 
-  it 'gets child options from #addable_child_types' do
+  it "gets child options from #addable_child_types" do
     expect(group).to receive(:addable_child_types).and_return([Group::MountedAttrsGroup, Group::GlobalGroup])
 
-    is_expected.to have_no_selector 'a', text: 'Top Group'
-    is_expected.to have_no_selector 'a', text: 'Bottom Layer'
-    is_expected.to have_selector 'a', text: 'Mounted Attrs Group'
-    is_expected.to have_selector 'a', text: 'Global Group'
+    is_expected.to have_no_selector "a", text: "Top Group"
+    is_expected.to have_no_selector "a", text: "Bottom Layer"
+    is_expected.to have_selector "a", text: "Mounted Attrs Group"
+    is_expected.to have_selector "a", text: "Global Group"
   end
 end

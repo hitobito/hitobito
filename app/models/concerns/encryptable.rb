@@ -22,7 +22,7 @@ module Encryptable
 
         define_method(attribute) do
           data = send(:"encrypted_#{attribute}")
-          return '' if data.blank?
+          return "" if data.blank?
 
           encrypted_value = data[:encrypted_value]
           iv = data[:iv]

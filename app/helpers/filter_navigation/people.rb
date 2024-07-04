@@ -5,7 +5,6 @@
 
 module FilterNavigation
   class People < Base
-
     include ParamConverters
 
     attr_reader :group, :filter
@@ -36,17 +35,17 @@ module FilterNavigation
       @kind_filter_names = {}
       Role::Kinds.each do |kind|
         name = if group.archived?
-                 I18n.t('activerecord.attributes.role.class.archived',
-                        role_kind: I18n.t("activerecord.attributes.role.class.kind.#{kind}.other"))
-               else
-                 I18n.t("activerecord.attributes.role.class.kind.#{kind}.other")
-               end
+          I18n.t("activerecord.attributes.role.class.archived",
+            role_kind: I18n.t("activerecord.attributes.role.class.kind.#{kind}.other"))
+        else
+          I18n.t("activerecord.attributes.role.class.kind.#{kind}.other")
+        end
         @kind_filter_names[kind] = name
       end
     end
 
     def init_labels
-      if name.present? && @kind_filter_names.values.include?(name)
+      if name.present? && @kind_filter_names.value?(name)
         @active_label = name
       elsif group.archived? && only_archived_filter_active?
         @active_label = main_filter_name
@@ -65,7 +64,7 @@ module FilterNavigation
         next unless visible_role_types?(role_types)
 
         count = count_roles(role_types)
-        path = kind == :member ? path() : fixed_types_path(name, role_types)
+        path = (kind == :member) ? path() : fixed_types_path(name, role_types)
         item(name, path, count) unless skip_kind?(kind, count)
       end
     end
@@ -96,13 +95,13 @@ module FilterNavigation
 
     def add_entire_layer_filter_link
       name = translate(:entire_layer)
-      link = fixed_types_path(name, sub_groups_role_types, range: 'layer')
+      link = fixed_types_path(name, sub_groups_role_types, range: "layer")
       dropdown.add_item(name, link)
     end
 
     def add_entire_subgroup_filter_link
       name = translate(:entire_group)
-      link = fixed_types_path(name, sub_groups_role_types, range: 'deep')
+      link = fixed_types_path(name, sub_groups_role_types, range: "deep")
       dropdown.add_item(name, link)
     end
 
@@ -148,9 +147,9 @@ module FilterNavigation
 
     def delete_filter_item(filter)
       ::Dropdown::Item.new(
-        filter_label(:'trash-alt', :delete),
+        filter_label(:"trash-alt", :delete),
         delete_group_people_filter_path(filter),
-        data: { confirm: template.ti(:confirm_delete), method: :delete }
+        data: {confirm: template.ti(:confirm_delete), method: :delete}
       )
     end
 
@@ -170,13 +169,13 @@ module FilterNavigation
     end
 
     def filter_label(icon, desc)
-      template.safe_join([template.icon(icon), ' ', template.t("global.link.#{desc}")])
+      template.safe_join([template.icon(icon), " ", template.t("global.link.#{desc}")])
     end
 
     def fixed_types_path(name, types, options = {})
       type_ids = types.collect(&:id).join(Person::Filter::Base::ID_URL_SEPARATOR)
       path(options.merge(name: name,
-                         filters: { role: { role_type_ids: type_ids } }))
+        filters: {role: {role_type_ids: type_ids}}))
     end
 
     def path(options = {})
@@ -214,7 +213,7 @@ module FilterNavigation
     end
 
     def count_roles(role_types)
-      group.people.where(roles: { type: role_types.collect(&:sti_name) }).distinct.count
+      group.people.where(roles: {type: role_types.collect(&:sti_name)}).distinct.count
     end
   end
 end

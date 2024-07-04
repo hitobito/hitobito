@@ -6,9 +6,8 @@
 #  https://github.com/hitobito/hitobito.
 
 class DeliveryReportMailer < ApplicationMailer
-
-  CONTENT_BULK_MAIL_SUCCESS = 'bulk_mail_success'
-  CONTENT_BULK_MAIL_WITH_FAILED = 'bulk_mail_with_failed'
+  CONTENT_BULK_MAIL_SUCCESS = "bulk_mail_success"
+  CONTENT_BULK_MAIL_WITH_FAILED = "bulk_mail_with_failed"
 
   def bulk_mail(
     report_to,
@@ -16,7 +15,8 @@ class DeliveryReportMailer < ApplicationMailer
     mail_subject,
     total_recipients,
     delivered_at,
-    failed_recipients = nil)
+    failed_recipients = nil
+  )
 
     content = failed_recipients.present? ? CONTENT_BULK_MAIL_WITH_FAILED : CONTENT_BULK_MAIL_SUCCESS
     @envelope_sender = envelope_sender
@@ -25,8 +25,8 @@ class DeliveryReportMailer < ApplicationMailer
     @delivered_at = delivered_at
     @failed_recipients = failed_recipients
     custom_content_mail(report_to,
-                        content,
-                        values_for_placeholders(content))
+      content,
+      values_for_placeholders(content))
   end
 
   private
@@ -53,8 +53,7 @@ class DeliveryReportMailer < ApplicationMailer
 
   def placeholder_failed_recipients
     @failed_recipients.collect do |r|
-      r.join(' | ')
-    end.join('<br/>')
+      r.join(" | ")
+    end.join("<br/>")
   end
-
 end

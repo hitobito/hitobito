@@ -29,16 +29,16 @@ class Event::RegisterController < ApplicationController
         # send_login_and_render_index
         Event::SendRegisterLoginJob.new(user, group, event).enqueue!
         flash.now[:notice] = translate(:person_found) + "\n\n" + translate(:email_sent)
-        render 'index'
+        render "index"
       else
         # register_new_person
         @person = Person.new(email: email)
         flash.now[:notice] = translate(:form_data_missing)
-        render 'register', status: :unprocessable_entity
+        render "register", status: :unprocessable_entity
       end
     else
       flash.now[:alert] = translate(:email_invalid)
-      render 'index', status: :unprocessable_entity
+      render "index", status: :unprocessable_entity
     end
   end
 
@@ -51,7 +51,7 @@ class Event::RegisterController < ApplicationController
       redirect_to return_path || new_group_event_participation_path(group, event)
     else
       add_privacy_policy_not_accepted_error(entry)
-      render 'register', status: :unprocessable_entity
+      render "register", status: :unprocessable_entity
     end
   end
 
@@ -103,11 +103,11 @@ class Event::RegisterController < ApplicationController
   end
 
   def params_key
-    [contact_data_class.to_s.underscore.gsub('/', '_'),
-     'person'].find { |key| params.key?(key) }
+    [contact_data_class.to_s.underscore.tr("/", "_"),
+      "person"].find { |key| params.key?(key) }
   end
 
-  alias resource person # used by devise-form
+  alias_method :resource, :person # used by devise-form
 
   def event
     @event ||= group.events.find(params[:id])

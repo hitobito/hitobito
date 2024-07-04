@@ -6,9 +6,9 @@ module Messages
       class RetriesExceeded < StandardError; end
 
       INVALID_EMAIL_ERRORS = [
-        'Domain not found',
-        'Recipient address rejected',
-        'Bad sender address syntax'
+        "Domain not found",
+        "Recipient address rejected",
+        "Bad sender address syntax"
       ].freeze
 
       attr_reader :succeeded, :failed

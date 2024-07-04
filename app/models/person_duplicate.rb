@@ -22,13 +22,12 @@
 #
 
 class PersonDuplicate < ActiveRecord::Base
-
-  belongs_to :person_1, class_name: 'Person'
-  belongs_to :person_2, class_name: 'Person'
+  belongs_to :person_1, class_name: "Person"
+  belongs_to :person_2, class_name: "Person"
 
   scope :list, -> { where(ignore: false).order(:created_at) }
 
-  validates :person_1_id, uniqueness: { scope: [:person_2_id] }
+  validates :person_1_id, uniqueness: {scope: [:person_2_id]}
 
   before_save :assign_persons_sorted_by_id
   # Sorting by id to only allow a single PersonDuplicate entry per Person combination
@@ -39,6 +38,4 @@ class PersonDuplicate < ActiveRecord::Base
   def persons_valid?
     person_1.valid? && person_2.valid?
   end
-
-
 end

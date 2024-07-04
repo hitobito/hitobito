@@ -7,7 +7,6 @@
 
 # Handles a top-level person route (/person/:id)
 class Person::TopController < ApplicationController
-
   before_action :authorize_action
 
   def show
@@ -23,12 +22,11 @@ class Person::TopController < ApplicationController
   def redirect_to_home
     flash.keep if html_request?
     format = request.format.to_sym
-    format = format == :html ? nil : format
+    format = (format == :html) ? nil : format
     redirect_to person_home_path(entry, format: format)
   end
 
   def authorize_action
     authorize!(:show, entry)
   end
-
 end

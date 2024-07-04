@@ -7,18 +7,17 @@
 
 module Subscriber
   class EventController < BaseController
-
     skip_authorize_resource # must be in leaf class
 
     before_render_form :replace_validation_errors
 
-    SEARCH_COLUMNS = %w(
+    SEARCH_COLUMNS = %w[
       event_translations.name
       events.number
       groups.name
       event_kind_translations.label
       event_kind_translations.short_name
-    ).freeze
+    ].freeze
 
     # GET query queries available events via ajax
     def query
@@ -39,13 +38,13 @@ module Subscriber
 
     def matching_events
       possible = Subscription.new(mailing_list: @mailing_list).possible_events
-      possible.joins('LEFT JOIN event_kinds ON events.kind_id = event_kinds.id')
-              .joins('LEFT JOIN event_kind_translations ' \
-                     'ON event_kinds.id  = event_kind_translations.event_kind_id')
-              .left_joins(:translations) # event_translations
-              .where(search_condition(*SEARCH_COLUMNS))
-              .order_by_date
-              .distinct
+      possible.joins("LEFT JOIN event_kinds ON events.kind_id = event_kinds.id")
+        .joins("LEFT JOIN event_kind_translations " \
+                     "ON event_kinds.id  = event_kind_translations.event_kind_id")
+        .left_joins(:translations) # event_translations
+        .where(search_condition(*SEARCH_COLUMNS))
+        .order_by_date
+        .distinct
     end
 
     def model_label

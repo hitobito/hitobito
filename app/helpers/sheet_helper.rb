@@ -9,7 +9,6 @@
 # sheet should return the user to where he came from
 #
 module SheetHelper
-
   # Get or set the title of the current sheet
   def title(string = nil)
     if string
@@ -30,5 +29,4 @@ module SheetHelper
   def sheet
     @sheet ||= Sheet::Base.current(self)
   end
-
 end

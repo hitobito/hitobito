@@ -4,9 +4,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module Subscriber
-
   class BaseController < CrudController
-
     self.nesting = Group, MailingList
 
     decorates :group
@@ -21,7 +19,7 @@ module Subscriber
 
     private
 
-    alias mailing_list parent
+    alias_method :mailing_list, :parent
 
     def assign_attributes
       if subscriber_id
@@ -40,7 +38,6 @@ module Subscriber
 
     def replace_validation_errors
       default_base_errors.each do |attr, old, msg|
-
         if entry.errors[attr].first == old
           entry.errors.clear
           entry.errors.add(:base, msg)
@@ -49,10 +46,10 @@ module Subscriber
     end
 
     def default_base_errors
-      [[:subscriber_type, I18n.t('errors.messages.blank'),
-        I18n.t('subscriber/base.blank', model_label: model_label)],
-       [:subscriber_id, I18n.t('errors.messages.taken'),
-        I18n.t('subscriber/base.taken', model_label: model_label)]]
+      [[:subscriber_type, I18n.t("errors.messages.blank"),
+        I18n.t("subscriber/base.blank", model_label: model_label)],
+        [:subscriber_id, I18n.t("errors.messages.taken"),
+          I18n.t("subscriber/base.taken", model_label: model_label)]]
     end
 
     def index_path
@@ -60,7 +57,7 @@ module Subscriber
     end
 
     def authorize!
-      if ['edit', 'update'].include? action_name
+      if ["edit", "update"].include? action_name
         super(:update, entry)
       else
         super(:create, @subscription || @mailing_list.subscriptions.new)
@@ -72,6 +69,5 @@ module Subscriber
         Subscription
       end
     end
-
   end
 end

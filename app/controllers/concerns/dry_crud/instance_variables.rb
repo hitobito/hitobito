@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module DryCrud
-
   # Provide +before_render+ callbacks.
   module InstanceVariables
     # Get the instance variable named after the model_class.
@@ -21,12 +20,12 @@ module DryCrud
     # If the value is a collection, sets the plural name.
     def model_ivar_set(value)
       name = if value.is_a?(ActiveRecord::Relation)
-               ivar_name(value.klass).pluralize
-             elsif value.respond_to?(:each) # Array
-               ivar_name(value.first.class).pluralize
-             else
-               ivar_name(value.class)
-             end
+        ivar_name(value.klass).pluralize
+      elsif value.respond_to?(:each) # Array
+        ivar_name(value.first.class).pluralize
+      else
+        ivar_name(value.class)
+      end
       instance_variable_set(:"@#{name}", value)
     end
 

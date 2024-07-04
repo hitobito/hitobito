@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Group::LogController < ApplicationController
-
   before_action :authorize_action
   prepend_before_action :entry
   attr_reader :entry
@@ -15,24 +14,24 @@ class Group::LogController < ApplicationController
 
   def index
     @versions = PaperTrail::Version.where(id: people_versions)
-                                   .or(PaperTrail::Version.where(id: group_versions))
-                                   .left_joins(:role)
-                                   .includes(:item)
-                                   .reorder('created_at DESC, id DESC')
-                                   .page(params[:page])
+      .or(PaperTrail::Version.where(id: group_versions))
+      .left_joins(:role)
+      .includes(:item)
+      .reorder("created_at DESC, id DESC")
+      .page(params[:page])
   end
 
   private
 
   def group_versions
     @group_versions ||= PaperTrail::Version.distinct
-                                           .where(main_type: Group.sti_name)
-                                           .where(main_id: entry.id)
+      .where(main_type: Group.sti_name)
+      .where(main_id: entry.id)
   end
 
   def people_versions
     @people_versions ||= PaperTrail::Version.distinct
-                                            .where(version_conditions)
+      .where(version_conditions)
   end
 
   def version_conditions
@@ -50,26 +49,26 @@ class Group::LogController < ApplicationController
   end
 
   def deleted_role_conditions
-    versions[:item_type].eq(Role.sti_name).
-      and(versions[:event].eq('destroy')).
-      and(roles[:group_id].in(relevant_groups.map(&:id))).
-      and(roles[:deleted_at].lteq(Time.now))
+    versions[:item_type].eq(Role.sti_name)
+      .and(versions[:event].eq("destroy"))
+      .and(roles[:group_id].in(relevant_groups.map(&:id)))
+      .and(roles[:deleted_at].lteq(Time.zone.now))
   end
 
   def active_people
-    @active_people ||= Person.
-      accessible_by(PersonFullReadables.new(current_person)).
-      unscope(:select).
-      select(:id).
-      joins(:roles).
-      merge(Role.without_archived).
-      where(roles: { group: relevant_groups })
+    @active_people ||= Person
+      .accessible_by(PersonFullReadables.new(current_person))
+      .unscope(:select)
+      .select(:id)
+      .joins(:roles)
+      .merge(Role.without_archived)
+      .where(roles: {group: relevant_groups})
   end
 
   def relevant_groups
-    @relevant_groups ||= group.self_and_descendants.
-      where(layer_group_id: group.layer_group_id).
-      filter do |group|
+    @relevant_groups ||= group.self_and_descendants
+      .where(layer_group_id: group.layer_group_id)
+      .filter do |group|
         can?(:log, group)
       end
   end
@@ -90,5 +89,5 @@ class Group::LogController < ApplicationController
     @entry ||= @group ||= Group.find(params[:group_id])
   end
 
-  alias group entry
+  alias_method :group, :entry
 end

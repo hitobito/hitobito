@@ -43,11 +43,11 @@ module TwoFactor
   end
 
   def redirect_to_two_factor_authentication
-    redirect_to two_factor_auth_path, notice: ''
+    redirect_to two_factor_auth_path, notice: ""
   end
 
   def two_factor_auth_path
-    factor = 'totp' if pending_two_factor_person.two_factor_authentication_enforced?
+    factor = "totp" if pending_two_factor_person.two_factor_authentication_enforced?
     factor ||= pending_two_factor_person.two_factor_authentication
 
     session[:pending_second_factor_authentication] = factor

@@ -6,19 +6,18 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::Qualifier
-
   class << self
     def for(participation)
       person = participation.person
       event = participation.event
       role = qualifier_role(participation)
-      return new(person, event, role, participation)
+      new(person, event, role, participation)
     end
 
     private
 
     def qualifier_role(participation)
-      leader?(participation) ? 'leader' : 'participant'
+      leader?(participation) ? "leader" : "participant"
     end
 
     def leader?(participation)
@@ -27,7 +26,6 @@ class Event::Qualifier
   end
 
   attr_reader :created, :prolonged, :participation, :person, :event, :role
-
 
   delegate :qualification_date, to: :event
 
@@ -71,10 +69,10 @@ class Event::Qualifier
   end
 
   def qualification_kinds(kind = event.kind)
-    kind.qualification_kinds('qualification', @role)
+    kind.qualification_kinds("qualification", @role)
   end
 
   def prolongation_kinds(kind = event.kind)
-    kind.qualification_kinds('prolongation', @role)
+    kind.qualification_kinds("prolongation", @role)
   end
 end

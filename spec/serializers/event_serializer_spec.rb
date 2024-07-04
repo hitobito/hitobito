@@ -54,31 +54,28 @@
 #  index_events_on_shared_access_token  (shared_access_token)
 #
 
-require 'spec_helper'
+require "spec_helper"
 
 describe EventSerializer do
-
-  let(:event)      { events(:top_event).decorate }
-  let(:controller) { double().as_null_object }
-  let(:serializer) { EventSerializer.new(event, controller: controller)}
-  let(:hash)       { serializer.to_hash.with_indifferent_access }
+  let(:event) { events(:top_event).decorate }
+  let(:controller) { double.as_null_object }
+  let(:serializer) { EventSerializer.new(event, controller: controller) }
+  let(:hash) { serializer.to_hash.with_indifferent_access }
 
   subject { hash[:events].first }
 
-
-  context 'event properties' do
-
-    it 'includes all keys' do
+  context "event properties" do
+    it "includes all keys" do
       keys = [:name, :description, :motto, :cost, :maximum_participants, :participant_count,
-       :location, :application_opening_at, :application_closing_at, :application_conditions,
-       :state, :teamer_count, :external_application_link, :links, :attachments]
+        :location, :application_opening_at, :application_closing_at, :application_conditions,
+        :state, :teamer_count, :external_application_link, :links, :attachments]
 
       keys.each do |key|
         is_expected.to have_key(key)
       end
     end
 
-    it 'includes dates properties' do
+    it "includes dates properties" do
       keys = [:id, :label, :start_at, :finish_at, :location]
       keys.each do |key|
         expect(hash[:linked][:event_dates].first).to have_key(key)
@@ -87,9 +84,9 @@ describe EventSerializer do
       expect(subject[:links]).to have_key(:dates)
     end
 
-    it 'includes groups properties' do
+    it "includes groups properties" do
       keys = [:id, :href, :group_type, :layer, :name, :short_name, :email, :address,
-              :zip_code, :town, :country, :created_at, :updated_at]
+        :zip_code, :town, :country, :created_at, :updated_at]
 
       group = hash[:linked][:groups].first
 
@@ -103,16 +100,15 @@ describe EventSerializer do
       expect(subject[:links]).to have_key(:groups)
     end
 
-    it 'does not include kind' do
+    it "does not include kind" do
       expect(subject[:links]).not_to have_key(:kind)
     end
-
   end
 
-  context 'coures properties' do
+  context "coures properties" do
     let(:event) { events(:top_course).decorate }
 
-    it 'includes kind properties' do
+    it "includes kind properties" do
       keys = [:id, :label, :short_name, :minimum_age, :general_information, :application_conditions]
       keys.each do |key|
         expect(hash[:linked][:event_kinds].first).to have_key(key)
@@ -122,25 +118,24 @@ describe EventSerializer do
     end
   end
 
-  context 'attachments' do
+  context "attachments" do
     before do
-      file = Tempfile.new(['foo', '.png'])
+      file = Tempfile.new(["foo", ".png"])
       a = event.attachments.build
-      a.file.attach(io: file, filename: 'foo.png')
+      a.file.attach(io: file, filename: "foo.png")
       a.save!
     end
 
-    it 'includes attachments' do
+    it "includes attachments" do
       request = ActionController::TestRequest.create({})
       allow(controller).to receive(:request).and_return(request)
-      allow(request).to receive(:host_with_port).and_return('hitobito.ch')
+      allow(request).to receive(:host_with_port).and_return("hitobito.ch")
 
       is_expected.to have_key(:attachments)
       expect(subject[:attachments].count).to eq(1)
-      expect(subject[:attachments][0]['file_name']).to eq('foo.png')
-      expect(subject[:attachments][0]['url'])
+      expect(subject[:attachments][0]["file_name"]).to eq("foo.png")
+      expect(subject[:attachments][0]["url"])
         .to match(/http:\/\/hitobito.ch\/rails\/active_storage\/blobs\/redirect\/.*\/foo.png/)
     end
   end
-
 end

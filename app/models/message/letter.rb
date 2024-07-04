@@ -41,19 +41,18 @@
 #  index_messages_on_sender_id        (sender_id)
 #
 
-
 class Message::Letter < Message
   has_rich_text :body
-  self.icon = :'envelope-open-text'
+  self.icon = :"envelope-open-text"
 
-  SHIPPING_METHODS = %w(own normal priority).freeze
+  SHIPPING_METHODS = %w[own normal priority].freeze
   i18n_enum :shipping_method, SHIPPING_METHODS, scopes: true, queries: true
   validates :subject, presence: true
-  validates :shipping_method, inclusion: { in: SHIPPING_METHODS }
+  validates :shipping_method, inclusion: {in: SHIPPING_METHODS}
 
   validates :body, presence: true
 
-  duplicatable_attrs << 'body' << 'salutation' << 'pp_post' << 'shipping_method'
+  duplicatable_attrs << "body" << "salutation" << "pp_post" << "shipping_method"
 
   def recipients
     @recipients ||= mailing_list.people(Person.with_address)

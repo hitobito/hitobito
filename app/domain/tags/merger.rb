@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Tags::Merger
-
   def initialize(src_tag_ids, dst_tag_id, new_name)
     @src_tag_ids = src_tag_ids.reject do |s|
       validation_tag_ids.include?(s)
@@ -45,30 +44,29 @@ class Tags::Merger
   def taggable_person_ids
     Person
       .joins(:taggings)
-      .where.not('taggings.taggable_id': dst_tagged_person_ids)
-      .where('taggings.tag_id': @src_tag_ids)
+      .where.not("taggings.taggable_id": dst_tagged_person_ids)
+      .where("taggings.tag_id": @src_tag_ids)
       .pluck(:id)
   end
 
   def dst_tagged_person_ids
     Person
       .joins(:taggings)
-      .where('taggings.tag_id': @dst_tag_id)
+      .where("taggings.tag_id": @dst_tag_id)
       .pluck(:id)
   end
 
   def collect_taggings
     taggable_person_ids.collect do |i|
-      { taggable_id: i,
-        taggable_type: Person.name,
-        tag_id: @dst_tag_id,
-        created_at: Time.zone.now,
-        context: :tags }
+      {taggable_id: i,
+       taggable_type: Person.name,
+       tag_id: @dst_tag_id,
+       created_at: Time.zone.now,
+       context: :tags}
     end
   end
 
   def validation_tag_ids
     @validation_tag_ids ||= PersonTags::Validation.list.collect(&:id)
   end
-
 end

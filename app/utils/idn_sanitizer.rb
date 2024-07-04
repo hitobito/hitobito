@@ -21,14 +21,14 @@ module IdnSanitizer
   end
 
   def sanitize_idn(email)
-    return email unless email.strip =~ /[^\w@\.\-]/ # simple regexp, skips most unaffected addresses
+    return email unless /[^\w@\.\-]/.match?(email.strip) # simple regexp, skips most unaffected addresses
 
-    parts = email.strip.split('@')
+    parts = email.strip.split("@")
     domain = parts.last
-    suffix = ''
-    if domain.ends_with?('>')
+    suffix = ""
+    if domain.ends_with?(">")
       domain = domain[0..-2]
-      suffix = '>'
+      suffix = ">"
     end
     "#{parts.first}@#{SimpleIDN.to_ascii(domain)}#{suffix}"
   end

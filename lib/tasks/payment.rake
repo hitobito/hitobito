@@ -7,18 +7,18 @@
 
 # documented under doc/features/ebics-connection.md
 namespace :payment do
-  desc 'Exports payments without invoices'
+  desc "Exports payments without invoices"
   task :export_without_invoice, [:from, :to] => :environment do |_t, args|
     from, to = PaymentExportHelper.daterange_args(args)
 
     payments = Payments::Collection.new
-                                   .from(from)
-                                   .to(to)
-                                   .without_invoices
-                                   .payments
+      .from(from)
+      .to(to)
+      .without_invoices
+      .payments
 
     if payments.empty?
-      puts 'No payments found'
+      puts "No payments found"
       exit
     end
 
@@ -26,18 +26,18 @@ namespace :payment do
     PaymentExportHelper.export(path, payments)
   end
 
-  desc 'Exports payments imported via ebics'
+  desc "Exports payments imported via ebics"
   task :export_ebics_imported, [:from, :to] => :environment do |_t, args|
     from, to = PaymentExportHelper.daterange_args(args)
 
     payments = Payments::Collection.new
-                                   .from(from)
-                                   .to(to)
-                                   .payments
-                                   .where(status: :ebics_imported)
+      .from(from)
+      .to(to)
+      .payments
+      .where(status: :ebics_imported)
 
     if payments.empty?
-      puts 'No payments found'
+      puts "No payments found"
       exit
     end
 
@@ -55,9 +55,7 @@ namespace :payment do
       end
 
       def export(filepath, payments)
-        File.open(filepath, 'w') do |f|
-          f.write Export::Tabular::Payments::List.csv(payments)
-        end
+        File.write(filepath, Export::Tabular::Payments::List.csv(payments))
 
         puts "Saved payments to #{filepath}"
       end

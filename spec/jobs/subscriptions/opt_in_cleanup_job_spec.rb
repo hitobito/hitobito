@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Subscriptions::OptInCleanupJob do
   include Subscriptions::SpecHelper
@@ -17,13 +17,13 @@ describe Subscriptions::OptInCleanupJob do
 
   subject(:job) { described_class.new(list.id) }
 
-  it 'clears obsolete subscription' do
+  it "clears obsolete subscription" do
     create_subscription(person)
 
     expect { job.perform }.to(change { person.subscriptions.count })
   end
 
-  it 'keeps valid subscription' do
+  it "keeps valid subscription" do
     create_subscription(group, false, role.class)
     create_subscription(person)
 

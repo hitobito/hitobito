@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module FeatureHelpers
-
   def sign_in(user = nil, confirm: true)
     user ||= people(:top_leader)
     user.confirm if confirm
@@ -32,9 +31,9 @@ module FeatureHelpers
   def obsolete_node_safe
     yield
   rescue Errno::ECONNREFUSED,
-         Timeout::Error,
-         Capybara::FrozenInTime,
-         Capybara::ElementNotFound => e
+    Timeout::Error,
+    Capybara::FrozenInTime,
+    Capybara::ElementNotFound => e
     skip e.message
   end
 
@@ -42,10 +41,9 @@ module FeatureHelpers
   # stdout is not reset after silencing and thus completely disappears.
   # This method asserts the stdout is reset again after every test.
   def keeping_stdout
-    old_stream = STDOUT.dup
+    old_stream = $stdout.dup
     yield
   ensure
-    STDOUT.reopen(old_stream)
+    $stdout.reopen(old_stream)
   end
-
 end

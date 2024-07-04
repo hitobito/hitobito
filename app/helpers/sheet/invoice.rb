@@ -27,7 +27,7 @@ module Sheet
     end
 
     def render_left_nav
-      view.render('invoices/nav_left')
+      view.render("invoices/nav_left")
     end
 
     private

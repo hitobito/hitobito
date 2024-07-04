@@ -12,7 +12,7 @@ module Dropdown
     def initialize(dropdown, item_options = {})
       @dropdown = dropdown
       @households = item_options.delete(:households)
-      @item_options = item_options.reverse_merge(class: 'export-label-format')
+      @item_options = item_options.reverse_merge(class: "export-label-format")
     end
 
     def add
@@ -26,17 +26,17 @@ module Dropdown
       if user&.last_label_format_id
         export_label_format_path(user.last_label_format_id)
       else
-        '#'
+        "#"
       end
     end
 
     def add_last_used_format_item(parent)
       if last_label_format?
         last_format = user.last_label_format
-        parent.sub_items << Title.new(dropdown.template.t('dropdown.last_used'))
+        parent.sub_items << Title.new(dropdown.template.t("dropdown.last_used"))
         parent.sub_items << Item.new(last_format.to_s,
-                                     export_label_format_path(last_format.id),
-                                     class: 'export-label-format')
+          export_label_format_path(last_format.id),
+          class: "export-label-format")
         parent.sub_items << Divider.new
       end
     end
@@ -48,7 +48,7 @@ module Dropdown
     def add_label_format_items(parent)
       LabelFormat.list.for_person(user).each do |label_format|
         parent.sub_items << Item.new(label_format, export_label_format_path(label_format.id),
-                                     class: 'export-label-format')
+          class: "export-label-format")
       end
     end
 
@@ -62,37 +62,34 @@ module Dropdown
     def export_label_format_path(id)
       households = ToggleHouseholdsLabelsItem::DEFAULT_STATE if @households
       params.merge(format: :pdf, label_format_id: id,
-                   household: households)
+        household: households)
     end
-
 
     class ToggleHouseholdsLabelsItem < Dropdown::Base
       DEFAULT_STATE = true
 
       def initialize(template)
-        super(template, template.t('dropdown/people_export.household_option'), :plus)
+        super(template, template.t("dropdown/people_export.household_option"), :plus)
       end
 
       def render(template)
         template.content_tag(:li) do
-
-          template.link_to('#', id: 'toggle-household-labels') do
+          template.link_to("#", id: "toggle-household-labels") do
             render_checkbox(template)
           end
         end
       end
 
       def render_checkbox(template)
-        template.content_tag(:div, class: 'checkbox dropdown-item') do
+        template.content_tag(:div, class: "checkbox dropdown-item") do
           template.content_tag(:label, for: :household) do
             template.safe_join([
-              template.check_box_tag(:household, '1', DEFAULT_STATE, class: "me-2"),
-              template.t('dropdown/people_export.household_option')
+              template.check_box_tag(:household, "1", DEFAULT_STATE, class: "me-2"),
+              template.t("dropdown/people_export.household_option")
             ].compact)
           end
         end
       end
     end
-
   end
 end

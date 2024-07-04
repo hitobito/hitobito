@@ -8,8 +8,8 @@
 module Dropdown
   class LetterWithInvoiceNew < Base
     def initialize(template, label: nil,
-                   path: template.path_args(Message::LetterWithInvoice),
-                   disabled_msg: nil, icon: :plus)
+      path: template.path_args(Message::LetterWithInvoice),
+      disabled_msg: nil, icon: :plus)
       super(template, label, icon)
       @label = label
       @path = path
@@ -28,15 +28,15 @@ module Dropdown
     private
 
     def label
-      @label || I18n.t('crud.new.title', model: Message::LetterWithInvoice.model_name.human)
+      @label || I18n.t("crud.new.title", model: Message::LetterWithInvoice.model_name.human)
     end
 
     def single_button
       return template.action_button(label, @path, @icon, disabled: @disabled_msg) if @disabled_msg
 
       template.action_button(label,
-                             path,
-                             @icon)
+        path,
+        @icon)
     end
 
     def init_items
@@ -48,10 +48,10 @@ module Dropdown
 
     def path(invoice_item: nil)
       if invoice_item.present?
-        template.new_polymorphic_path(@path, message: { type: Message::LetterWithInvoice },
-                                      invoice_items: [invoice_item])
+        template.new_polymorphic_path(@path, message: {type: Message::LetterWithInvoice},
+          invoice_items: [invoice_item])
       else
-        template.new_polymorphic_path(@path, message: { type: Message::LetterWithInvoice })
+        template.new_polymorphic_path(@path, message: {type: Message::LetterWithInvoice})
       end
     end
 
@@ -60,4 +60,3 @@ module Dropdown
     end
   end
 end
-

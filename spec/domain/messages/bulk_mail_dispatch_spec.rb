@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Messages::BulkMailDispatch do
   let(:message) { messages(:mail) }
@@ -15,8 +15,8 @@ describe Messages::BulkMailDispatch do
 
   let(:address_list) do
     [
-      { person_id: top_leader.id, email: 'recipient1@example.com' },
-      { person_id: top_leader.id, email: 'recipient2@example.com' }
+      {person_id: top_leader.id, email: "recipient1@example.com"},
+      {person_id: top_leader.id, email: "recipient2@example.com"}
     ]
   end
 
@@ -25,9 +25,9 @@ describe Messages::BulkMailDispatch do
     Subscription.create!(mailing_list: mailing_lists(:leaders), subscriber: top_leader)
   end
 
-  context '#run' do
-    context 'without recipients' do
-      it 'creates recipient entries with state pending' do
+  context "#run" do
+    context "without recipients" do
+      it "creates recipient entries with state pending" do
         expect(Messages::BulkMail::AddressList).to receive_message_chain(:new, :entries).and_return(address_list)
 
         expect do
@@ -38,18 +38,18 @@ describe Messages::BulkMailDispatch do
         message.reload
 
         recipient1 = message.message_recipients.first
-        expect(recipient1.state).to eq('pending')
+        expect(recipient1.state).to eq("pending")
         expect(recipient1.error).to eq(nil)
         expect(recipient1.person_id).to eq(top_leader.id)
 
         recipient2 = message.message_recipients.second
-        expect(recipient2.state).to eq('pending')
+        expect(recipient2.state).to eq("pending")
         expect(recipient2.error).to eq(nil)
         expect(recipient2.person_id).to eq(top_leader.id)
       end
 
-      it 'creates recipient with state failed when email invalid' do
-        expect(Messages::BulkMail::AddressList).to receive_message_chain(:new, :entries).and_return([{ person_id: top_leader.id, email: 'invalid.com' }])
+      it "creates recipient with state failed when email invalid" do
+        expect(Messages::BulkMail::AddressList).to receive_message_chain(:new, :entries).and_return([{person_id: top_leader.id, email: "invalid.com"}])
 
         expect do
           result = dispatch.run
@@ -59,17 +59,15 @@ describe Messages::BulkMailDispatch do
         message.reload
 
         recipient1 = message.message_recipients.first
-        expect(recipient1.state).to eq('failed')
-        expect(recipient1.error).to eq('Invalid email')
+        expect(recipient1.state).to eq("failed")
+        expect(recipient1.error).to eq("Invalid email")
         expect(recipient1.person_id).to eq(top_leader.id)
       end
-
-
     end
 
-    context 'with recipients' do
-      let(:recipient1_email) { 'recipient1@example.com' }
-      let(:recipient2_email) { 'recipient2@example.com' }
+    context "with recipients" do
+      let(:recipient1_email) { "recipient1@example.com" }
+      let(:recipient2_email) { "recipient2@example.com" }
       let!(:recipient1) { Fabricate(:message_recipient, message: message, email: recipient1_email) }
       let!(:recipient2) { Fabricate(:message_recipient, message: message, email: recipient2_email) }
       let(:delivery) { double }
@@ -77,8 +75,8 @@ describe Messages::BulkMailDispatch do
       def setup_delivery
         expect(Messages::BulkMail::Delivery).to receive(:new)
           .with(mail_factory,
-                [recipient1_email, recipient2_email],
-                Messages::BulkMailDispatch::DELIVERY_RETRIES)
+            [recipient1_email, recipient2_email],
+            Messages::BulkMailDispatch::DELIVERY_RETRIES)
           .and_return(delivery)
 
         expect(delivery).to receive(:deliver)
@@ -86,11 +84,11 @@ describe Messages::BulkMailDispatch do
         expect(delivery).to receive(:failed).and_return([recipient2_email])
       end
 
-      it 'persists results' do
+      it "persists results" do
         setup_delivery
 
-        expect(message).to receive(:update!).with(state: 'processing').and_call_original
-        expect(message).to receive(:update!).with(state: 'finished', raw_source: nil).and_call_original
+        expect(message).to receive(:update!).with(state: "processing").and_call_original
+        expect(message).to receive(:update!).with(state: "finished", raw_source: nil).and_call_original
         expect(message).to receive(:update!)
           .with(failed_count: 1, success_count: 1).and_call_original
 
@@ -99,14 +97,14 @@ describe Messages::BulkMailDispatch do
         expect(result.needs_reenqueue?).to be_falsey
 
         [recipient1, recipient2].each(&:reload)
-        expect(recipient1.state).to eq('sent')
-        expect(recipient2.state).to eq('failed')
+        expect(recipient1.state).to eq("sent")
+        expect(recipient2.state).to eq("failed")
 
         expect(message.success_count).to eq(1)
         expect(message.failed_count).to eq(1)
       end
 
-      it 'does not create any more recipient entries if already present' do
+      it "does not create any more recipient entries if already present" do
         setup_delivery
 
         expect do
@@ -114,7 +112,7 @@ describe Messages::BulkMailDispatch do
         end.not_to change { MessageRecipient.count }
       end
 
-      it 'deletes mail raw source after delivery to save storage' do
+      it "deletes mail raw source after delivery to save storage" do
         setup_delivery
 
         dispatch.run
@@ -122,7 +120,7 @@ describe Messages::BulkMailDispatch do
         expect(message.reload.raw_source).to be_nil
       end
 
-      it 'should send delivery report if enabled on mailing list' do
+      it "should send delivery report if enabled on mailing list" do
         setup_delivery
         message.mailing_list.update!(delivery_report: true)
 
@@ -131,7 +129,7 @@ describe Messages::BulkMailDispatch do
         end.to change { Delayed::Job.where('handler like "%MailingLists::BulkMail::DeliveryReportMessageJob%"').count }.by(1)
       end
 
-      it 'does not send delivery report if not enabled' do
+      it "does not send delivery report if not enabled" do
         setup_delivery
 
         expect do
@@ -139,20 +137,20 @@ describe Messages::BulkMailDispatch do
         end.to change { Delayed::Job.where('handler like "%MailingLists::BulkMail::DeliveryReportMessageJob%"').count }.by(0)
       end
 
-      context 'on smtp server error' do
-
+      context "on smtp server error" do
         before do
           expect(Messages::BulkMail::Delivery).to receive(:new)
             .with(
               mail_factory,
               [recipient1_email, recipient2_email],
-              Messages::BulkMailDispatch::DELIVERY_RETRIES)
+              Messages::BulkMailDispatch::DELIVERY_RETRIES
+            )
             .and_return(delivery)
 
           expect(delivery).to receive(:deliver).and_raise(Messages::BulkMail::Delivery::RetriesExceeded)
         end
 
-        it 'marks message and recipient entries as failed' do
+        it "marks message and recipient entries as failed" do
           result = dispatch.run
           expect(result.needs_reenqueue?).to be_falsey
 
@@ -164,13 +162,13 @@ describe Messages::BulkMailDispatch do
 
           [recipient1, recipient2].each do |r|
             r.reload
-            expect(r.state).to eq('failed')
-            expect(r.error).to eq('SMTP server error')
+            expect(r.state).to eq("failed")
+            expect(r.error).to eq("SMTP server error")
           end
         end
 
-        it 'marks message and recipient entries as failed but keeps already sent' do
-          MessageRecipient.create!(message_id: message.id, person_id: top_leader.id, state: :sent, email: 'recipient3@example.com')
+        it "marks message and recipient entries as failed but keeps already sent" do
+          MessageRecipient.create!(message_id: message.id, person_id: top_leader.id, state: :sent, email: "recipient3@example.com")
 
           result = dispatch.run
           expect(result.needs_reenqueue?).to be_falsey
@@ -179,7 +177,6 @@ describe Messages::BulkMailDispatch do
           expect(message.success_count).to eq(1)
           expect(message.failed_count).to eq(2)
         end
-
       end
     end
   end

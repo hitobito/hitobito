@@ -5,8 +5,6 @@
 #
 # Fetches people for which the user has write access via layer permissions or group permission.
 class PersonWritables < PersonLayerWritables
-
   self.same_group_permissions = [:group_full]
   self.above_group_permissions = [:group_and_below_full]
-
 end

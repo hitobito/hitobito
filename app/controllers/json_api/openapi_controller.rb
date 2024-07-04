@@ -18,9 +18,8 @@ class JsonApi::OpenapiController < JsonApi::SchemaController
   def generate_openapi_spec(format)
     generator = Graphiti::OpenApi::Generator.new(
       schema: generate_schema,
-      jsonapi: Rails.root.join('config', 'jsonapi.json')
+      jsonapi: Rails.root.join("config", "jsonapi.json")
     )
     generator.to_openapi(format: format)
   end
-
 end

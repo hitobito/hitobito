@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::RolesController < CrudController
-
   self.nesting = Group, Event
 
   self.permitted_attrs = [:label]
@@ -55,8 +54,8 @@ class Event::RolesController < CrudController
     event.find_role_type!(attrs[:type])
 
     participation = event.participations
-                         .where(person_id: attrs.delete(:person_id))
-                         .first_or_initialize
+      .where(person_id: attrs.delete(:person_id))
+      .first_or_initialize
     participation.roles.build(type: attrs[:type]).tap do |role|
       role.participation = participation
     end
@@ -64,10 +63,10 @@ class Event::RolesController < CrudController
 
   def destroy_participant_roles!
     Event::Role.joins(:participation)
-               .where(participation: {
-                        person: entry.person,
-                        event: parent
-                      }).each do |role|
+      .where(participation: {
+        person: entry.person,
+        event: parent
+      }).find_each do |role|
       role.destroy! if role.class.participant?
     end
   end
@@ -87,7 +86,7 @@ class Event::RolesController < CrudController
   # A label for the current entry, including the model name, used for flash
   def full_entry_label
     translate(:full_entry_label, role: h(entry),
-                                 person: h(entry.participation.person)).html_safe
+      person: h(entry.participation.person)).html_safe
   end
 
   def after_create_url(new_participation, created)
@@ -129,5 +128,4 @@ class Event::RolesController < CrudController
       Event::Role
     end
   end
-
 end

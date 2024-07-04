@@ -29,15 +29,14 @@
 
 module PaperTrail
   class Version < ActiveRecord::Base
-
     include PaperTrail::VersionConcern
 
     belongs_to :main, polymorphic: true
 
     # Scoped association for joining roles
     belongs_to :role, -> do
-      Role.with_deleted { where("#{PaperTrail::Version.table_name}": { item_type: Role.sti_name }) }
-    end, foreign_key: 'item_id'
+      Role.with_deleted { where("#{PaperTrail::Version.table_name}": {item_type: Role.sti_name}) }
+    end, foreign_key: "item_id"
 
     def perpetrator
       return unless whodunnit.present? && whodunnit_type.present?

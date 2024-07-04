@@ -9,5 +9,4 @@ class Person::InactivityBlockWarningJob < RecurringJob
   def perform
     Person::BlockService.warn_within_scope!
   end
-
 end

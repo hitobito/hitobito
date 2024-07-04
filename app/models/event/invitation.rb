@@ -25,7 +25,6 @@
 #
 
 class Event::Invitation < ActiveRecord::Base
-
   self.demodulized_route_keys = true
 
   belongs_to :event
@@ -33,12 +32,11 @@ class Event::Invitation < ActiveRecord::Base
 
   validates_by_schema
   validates :person_id,
-    uniqueness: { scope: :event_id,
-                  message: -> (s, _) {
-                    I18n.t("event_invitations.invalid_existing_person",
-                           model_name: s.event.model_name.human)
-                  }
-    }
+    uniqueness: {scope: :event_id,
+                 message: ->(s, _) {
+                            I18n.t("event_invitations.invalid_existing_person",
+                              model_name: s.event.model_name.human)
+                          }}
 
   def status
     if related_participation.present?
@@ -55,7 +53,7 @@ class Event::Invitation < ActiveRecord::Base
   end
 
   def related_participation
-    Event::Participation.find_by(person_id: self.person_id,
-                                 event_id: self.event_id)
+    Event::Participation.find_by(person_id: person_id,
+      event_id: event_id)
   end
 end

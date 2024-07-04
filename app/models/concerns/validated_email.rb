@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module ValidatedEmail
-
   extend ActiveSupport::Concern
 
   included do
@@ -31,12 +30,11 @@ module ValidatedEmail
 
   def alert_sentry(email)
     Raven.capture_message(
-      'Truemail does not work as expected',
+      "Truemail does not work as expected",
       extra: {
         verifier_email: Truemail.configure.verifier_email,
         validated_email: email
       }
     )
   end
-
 end

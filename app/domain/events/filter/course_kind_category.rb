@@ -13,12 +13,12 @@ module Events::Filter
     end
 
     def to_scope
-      return @scope unless kind_category_id.present?
+      return @scope if kind_category_id.blank?
 
       scope = @scope.left_joins(kind: :kind_category)
-      return scope.where('event_kinds.kind_category_id IS NULL') if kind_category_id == '0'
+      return scope.where(event_kinds: {kind_category_id: nil}) if kind_category_id == "0"
 
-      scope.where('event_kind_categories.id = :category', category: kind_category_id)
+      scope.where(event_kind_categories: {id: kind_category_id})
     end
 
     private

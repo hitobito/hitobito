@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::EventQueries
-
   attr_reader :person
 
   def initialize(person)
@@ -12,26 +11,26 @@ class Person::EventQueries
   end
 
   def pending_applications
-    person.event_applications.
-      merge(Event::Participation.pending).
-      merge(Event::Participation.upcoming).
-      includes(event: [:groups]).
-      joins(event: :dates).
-      order('event_dates.start_at').
-      distinct.tap do |applications|
+    person.event_applications
+      .merge(Event::Participation.pending)
+      .merge(Event::Participation.upcoming)
+      .includes(event: [:groups])
+      .joins(event: :dates)
+      .order("event_dates.start_at")
+      .distinct.tap do |applications|
       Event::PreloadAllDates.for(applications.collect(&:event))
     end
   end
 
   def upcoming_events
-    person.events.
-      upcoming.
-      merge(Event::Participation.active).
-      merge(Event::Participation.upcoming).
-      distinct.
-      includes(:groups).
-      preload_all_dates.
-      order_by_date
+    person.events
+      .upcoming
+      .merge(Event::Participation.active)
+      .merge(Event::Participation.upcoming)
+      .distinct
+      .includes(:groups)
+      .preload_all_dates
+      .order_by_date
   end
 
   def alltime_participations
@@ -40,10 +39,9 @@ class Person::EventQueries
       .active
       .joins(event: :dates)
       .includes(:roles, event: [:translations, :dates, :groups])
-      .order('event_dates.start_at')
+      .order("event_dates.start_at")
       .distinct.tap do |applications|
         Event::PreloadAllDates.for(applications.collect(&:event))
       end
   end
-
 end

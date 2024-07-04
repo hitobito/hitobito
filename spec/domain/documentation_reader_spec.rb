@@ -5,25 +5,26 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe DocumentationReader do
   subject { described_class.html(filename) }
-  let(:filename) { 'development/05_json_api' }
 
-  it 'can generate HTML form a doc-markdown' do
-    is_expected.to include('<h2>')
+  let(:filename) { "development/05_json_api" }
+
+  it "can generate HTML form a doc-markdown" do
+    is_expected.to include("<h2>")
   end
 
-  it 'changes the class-names of tables for styling' do
+  it "changes the class-names of tables for styling" do
     is_expected.to include('<table class="table table-striped table-bordered">')
   end
 
-  it 'contains emoji' do
-    is_expected.to include('‼️ ')
+  it "contains emoji" do
+    is_expected.to include("‼️ ")
   end
 
-  it 'has a link to the document on github' do
+  it "has a link to the document on github" do
     is_expected.to match(/<a href='.*#{filename}.md' target='_blank'>Markdown source<\/a>/)
   end
 end

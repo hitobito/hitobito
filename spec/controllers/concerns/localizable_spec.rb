@@ -3,18 +3,18 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Localizable do
-
   controller(ApplicationController) do
-    def index; end
+    def index
+    end
   end
 
   before do
     @cached_locales = I18n.available_locales
     @cached_languages = Settings.application.languages
-    Settings.application.languages = { de: 'Deutsch', fr: 'Français' }
+    Settings.application.languages = {de: "Deutsch", fr: "Français"}
     I18n.available_locales = Settings.application.languages.keys
     expect_any_instance_of(ActionDispatch::Request).to receive(:controller_class).and_return(ApplicationController)
   end
@@ -25,31 +25,31 @@ describe Localizable do
     I18n.locale = I18n.default_locale
   end
 
-  it 'uses locale from params if given' do
-    cookies[:locale] = 'de'
-    get :index, params: { locale: 'fr' }
+  it "uses locale from params if given" do
+    cookies[:locale] = "de"
+    get :index, params: {locale: "fr"}
 
     expect(I18n.locale).to eq(:fr)
     expect(cookies[:locale].to_sym).to eq(:fr)
   end
 
-  it 'uses locale from cookie if param empty' do
-    cookies[:locale] = 'fr'
-    get :index, params: { locale: ' ' }
+  it "uses locale from cookie if param empty" do
+    cookies[:locale] = "fr"
+    get :index, params: {locale: " "}
 
     expect(I18n.locale).to eq(:fr)
     expect(cookies[:locale].to_sym).to eq(:fr)
   end
 
-  it 'uses locale from cookie if param invalid' do
-    cookies[:locale] = 'fr'
-    get :index, params: { locale: 'et' }
+  it "uses locale from cookie if param invalid" do
+    cookies[:locale] = "fr"
+    get :index, params: {locale: "et"}
 
     expect(I18n.locale).to eq(:fr)
     expect(cookies[:locale].to_sym).to eq(:fr)
   end
 
-  it 'uses default locale if nothing else found' do
+  it "uses default locale if nothing else found" do
     get :index
 
     expect(I18n.locale).to eq(:de)

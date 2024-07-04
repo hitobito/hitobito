@@ -3,12 +3,12 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Person::InactivityBlockMailer do
-
-  describe '#inactivity_block_warning' do
+  describe "#inactivity_block_warning" do
     let(:recipient) { people(:bottom_member) }
+
     subject(:mail) { described_class.inactivity_block_warning(recipient) }
 
     it { expect(mail.to).to contain_exactly(recipient.email) }

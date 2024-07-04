@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-require 'spec_helper'
+require "spec_helper"
 
 describe JsonApi::GroupAbility do
   let(:group) { groups(:top_group) }
@@ -14,16 +14,15 @@ describe JsonApi::GroupAbility do
 
   subject { JsonApi::GroupAbility.new(main_ability) }
 
-  context 'root user' do
+  context "root user" do
     let(:user) { people(:root) }
 
-    it 'is able to read group' do
+    it "is able to read group" do
       is_expected.to be_able_to(:read, group)
     end
 
-    it 'is able to index groups' do
+    it "is able to index groups" do
       is_expected.to be_able_to(:index, Group)
     end
   end
-
 end

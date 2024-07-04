@@ -5,7 +5,6 @@
 
 module Export::Pdf::List
   class People < Section
-
     def render
       bounding_box([bounds.left, bounds.top], width: bounds.width, height: bounds.height - 5.mm) do
         move_down_line 40; # first page has a header
@@ -17,11 +16,11 @@ module Export::Pdf::List
 
     def table_header
       [
-        I18n.t('people.print.name'),
-        I18n.t('people.print.address'),
-        I18n.t('people.print.email'),
-        I18n.t('people.print.home_phone'),
-        I18n.t('people.print.mobile_phone')
+        I18n.t("people.print.name"),
+        I18n.t("people.print.address"),
+        I18n.t("people.print.email"),
+        I18n.t("people.print.home_phone"),
+        I18n.t("people.print.mobile_phone")
       ]
     end
 
@@ -30,8 +29,8 @@ module Export::Pdf::List
         person.person_name,
         address(person),
         person.email,
-        phone_numbers(person, %w(Privat)),
-        phone_numbers(person, %w(Mobil))
+        phone_numbers(person, %w[Privat]),
+        phone_numbers(person, %w[Mobil])
       ]
     end
 

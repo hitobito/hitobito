@@ -26,15 +26,14 @@
 #  index_hitobito_log_entries_on_subject           (subject_type,subject_id)
 #
 
-
 class HitobitoLogEntry < ApplicationRecord
-  class_attribute :categories, default: %w(webhook ebics mail)
+  class_attribute :categories, default: %w[webhook ebics mail]
 
-  enum level: { 'debug' => 0, 'info' => 1, 'warn' => 2, 'error' => 3 },
-       _prefix: true
+  enum level: {"debug" => 0, "info" => 1, "warn" => 2, "error" => 3},
+    _prefix: true
 
   validates_by_schema
-  validates :category, presence: true, inclusion: { in: ->(_) { categories } }
+  validates :category, presence: true, inclusion: {in: ->(_) { categories }}
 
   belongs_to :subject, polymorphic: true
 end

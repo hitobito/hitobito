@@ -6,10 +6,9 @@
 #  https://github.com/hitobito/hitobito.
 
 class Calendars::Events
-
   delegate :included_calendar_groups, :excluded_calendar_groups,
-           :included_calendar_tags, :excluded_calendar_tags,
-           :id, to: '@calendar'
+    :included_calendar_tags, :excluded_calendar_tags,
+    :id, to: "@calendar"
 
   attr_reader :calendar
 
@@ -51,7 +50,7 @@ class Calendars::Events
 
   def groups_condition(calendar_group)
     hierarchy = hierarchy_condition(calendar_group)
-    return hierarchy unless calendar_group.event_type.present?
+    return hierarchy if calendar_group.event_type.blank?
 
     hierarchy.and(event_type_condition(calendar_group))
   end
@@ -61,25 +60,25 @@ class Calendars::Events
     return groups[:id].eq(calendar_group.group.id) unless calendar_group.with_subgroups
 
     groups[:lft].gteq(calendar_group.group.lft)
-        .and(groups[:rgt].lteq(calendar_group.group.rgt))
+      .and(groups[:rgt].lteq(calendar_group.group.rgt))
   end
 
   def event_type_condition(calendar_group)
     events = Event.arel_table
     event = Arel.sql("'Event'")
     # special case for plain Events: type is NULL in the database
-    Arel::Nodes::NamedFunction.new('IFNULL', [events[:type], event]).eq(calendar_group.event_type)
+    Arel::Nodes::NamedFunction.new("IFNULL", [events[:type], event]).eq(calendar_group.event_type)
   end
 
   def included_tags_condition
-    { taggings: { tag_id: included_calendar_tags.select(:tag_id) } }
+    {taggings: {tag_id: included_calendar_tags.select(:tag_id)}}
   end
 
   def excluded_tags_condition
     ActsAsTaggableOn::Tagging
-        .where(taggable_type: 'Event')
-        .where('taggable_id = events.id')
-        .where(tag_id: excluded_calendar_tags.select(:tag_id))
-        .arel.exists.not
+      .where(taggable_type: "Event")
+      .where("taggable_id = events.id")
+      .where(tag_id: excluded_calendar_tags.select(:tag_id))
+      .arel.exists.not
   end
 end

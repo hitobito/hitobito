@@ -5,8 +5,7 @@
 # or later. See the COPYING file at the top-level directory or at
 # https://github.com/hitobito/hitobito.
 
-
-require 'spec_helper'
+require "spec_helper"
 
 describe MailingLists::BulkMail::SenderRejectedMessageJob do
   include MailingLists::ImapMailsSpecHelper
@@ -18,9 +17,9 @@ describe MailingLists::BulkMail::SenderRejectedMessageJob do
 
   subject { described_class.new(bulk_mail) }
 
-  it 'sends sender rejected message' do
-    Settings.email.retriever.config = Config::Options.new(address: 'localhost')
-    Settings.email.list_domain = 'hitobito.example.com'
+  it "sends sender rejected message" do
+    Settings.email.retriever.config = Config::Options.new(address: "localhost")
+    Settings.email.list_domain = "hitobito.example.com"
 
     subject.perform
 

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::Filter::List
-
   attr_reader :group, :user, :chain, :range, :name
 
   def initialize(group, user, params = {})
@@ -15,7 +14,7 @@ class Person::Filter::List
     @chain = Person::Filter::Chain.new(params[:filters])
     @range = params[:range]
     @name = params[:name]
-    @ids = params[:ids].to_s.split(',')
+    @ids = params[:ids].to_s.split(",")
   end
 
   def entries
@@ -27,7 +26,7 @@ class Person::Filter::List
   end
 
   def multiple_groups
-    range == 'deep' || range == 'layer'
+    range == "deep" || range == "layer"
   end
 
   private
@@ -48,17 +47,17 @@ class Person::Filter::List
     if chain.present?
       chain.filter(list_range)
     else
-      list_range.where(roles: { archived_at: nil })
-                .or(list_range.where(Role.arel_table[:archived_at].gt(Time.now.utc)))
-                .members
+      list_range.where(roles: {archived_at: nil})
+        .or(list_range.where(Role.arel_table[:archived_at].gt(Time.now.utc)))
+        .members
     end
   end
 
   def list_range
     case range
-    when 'deep'
+    when "deep"
       Person.in_or_below(group, chain.roles_join)
-    when 'layer'
+    when "layer"
       Person.in_layer(group, join: chain.roles_join)
     else
       Person.in_group(group, chain.roles_join)
@@ -80,12 +79,11 @@ class Person::Filter::List
   end
 
   def group_range?
-    !%w(deep layer).include?(range)
+    !%w[deep layer].include?(range)
   end
 
   def default_order(entries)
-    entries = entries.order_by_role if Settings.people.default_sort == 'role'
+    entries = entries.order_by_role if Settings.people.default_sort == "role"
     entries.order_by_name
   end
-
 end

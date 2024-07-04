@@ -30,19 +30,19 @@ class HouseholdAsideComponent < ApplicationComponent
   end
 
   def edit_button
-    action_button(t('.manage'), edit_group_person_household_path(group.id, person.id), :edit,
-                  data: { turbo_frame: '_top' }, in_button_group: true)
+    action_button(t(".manage"), edit_group_person_household_path(group.id, person.id), :edit,
+      data: {turbo_frame: "_top"}, in_button_group: true)
   end
 
   def delete_button
-    action_button(t('.destroy'), group_person_household_path(group.id, person.id), :'trash-alt',
-                  data: { method: :delete,
-                          confirm: I18n.t('global.confirm_delete') }, in_button_group: true)
+    action_button(t(".destroy"), group_person_household_path(group.id, person.id), :"trash-alt",
+      data: {method: :delete,
+             confirm: I18n.t("global.confirm_delete")}, in_button_group: true)
   end
 
   def create_button
-    action_button(t('.add'), group_person_household_path(group.id, person.id), :plus,
-                  data: { turbo_frame: '_top' }, in_button_group: true)
+    action_button(t(".add"), group_person_household_path(group.id, person.id), :plus,
+      data: {turbo_frame: "_top"}, in_button_group: true)
   end
 
   def people_in_household?

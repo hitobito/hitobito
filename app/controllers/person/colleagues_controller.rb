@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::ColleaguesController < ApplicationController
-
   before_action :authorize_action
 
   decorates :group, :person, :colleagues
@@ -21,14 +20,14 @@ class Person::ColleaguesController < ApplicationController
   def list_entries
     return Person.none.page(1) unless person.company_name?
 
-    Person.
-      where(company_name: person.company_name).
-      preload_public_accounts.
-      preload_groups.
-      joins(:roles).
-      order_by_name.
-      distinct.
-      page(params[:page])
+    Person
+      .where(company_name: person.company_name)
+      .preload_public_accounts
+      .preload_groups
+      .joins(:roles)
+      .order_by_name
+      .distinct
+      .page(params[:page])
   end
 
   def person
@@ -52,5 +51,4 @@ class Person::ColleaguesController < ApplicationController
   self.sort_mappings = {
     roles: [Person.order_by_role_statement].concat(Person.order_by_name_statement)
   }
-
 end

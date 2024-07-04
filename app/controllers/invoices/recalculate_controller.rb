@@ -6,12 +6,12 @@
 #  https://github.com/hitobito/hitobito.
 
 class Invoices::RecalculateController < ApplicationController
-
   respond_to :js
   before_action :authorize_action
   helper_method :entry
 
-  def new;end
+  def new
+  end
 
   private
 
@@ -43,4 +43,3 @@ class Invoices::RecalculateController < ApplicationController
     authorize!(:index_invoices, group)
   end
 end
-

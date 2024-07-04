@@ -20,6 +20,6 @@
 
 Fabricator(:phone_number) do
   contactable { Fabricate(:person) }
-  number { Faker::Base.numerify('+41 77 ### ## ##') }
-  label { Settings.phone_number.predefined_labels.shuffle.first }
+  number { Faker::Base.numerify("+41 77 ### ## ##") }
+  label { Settings.phone_number.predefined_labels.sample }
 end

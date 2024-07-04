@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Group::PersonAddRequestIgnoredApproversController < ApplicationController
-
   before_action :authorize_action
 
   def update
@@ -19,9 +18,9 @@ class Group::PersonAddRequestIgnoredApproversController < ApplicationController
   private
 
   def ignored_approver
-    Person::AddRequest::IgnoredApprover.
-      where(group_id: params[:group_id], person_id: params[:person_id]).
-      first_or_initialize
+    Person::AddRequest::IgnoredApprover
+      .where(group_id: params[:group_id], person_id: params[:person_id])
+      .first_or_initialize
   end
 
   def group
@@ -31,5 +30,4 @@ class Group::PersonAddRequestIgnoredApproversController < ApplicationController
   def authorize_action
     authorize!(:activate_person_add_requests, group)
   end
-
 end

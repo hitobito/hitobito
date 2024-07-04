@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class InvoiceAbility < AbilityDsl::Base
-
   on(Invoice) do
     class_side(:index).any_finance_group
     permission(:finance).may(:show).in_layer
@@ -65,5 +64,4 @@ class InvoiceAbility < AbilityDsl::Base
   def in_layer_with_receiver_if_active
     in_layer_with_receiver && !subject.receiver.group.archived?
   end
-
 end

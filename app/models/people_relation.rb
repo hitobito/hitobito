@@ -23,8 +23,7 @@
 # Relates two people together. Every relation has an opposite that is created,
 # updated and deleted at the same time.
 class PeopleRelation < ActiveRecord::Base
-
-  KIND_TRANSLATION_KEY = 'activerecord.attributes.people_relation.kinds'
+  KIND_TRANSLATION_KEY = "activerecord.attributes.people_relation.kinds"
 
   class_attribute :kind_opposites
   self.kind_opposites = {}
@@ -34,13 +33,13 @@ class PeopleRelation < ActiveRecord::Base
 
   ### ASSOCIATIONS
 
-  belongs_to :head, class_name: 'Person'
-  belongs_to :tail, class_name: 'Person'
+  belongs_to :head, class_name: "Person"
+  belongs_to :tail, class_name: "Person"
 
   ### VALIDATIONS
 
   validates_by_schema
-  validates :kind, inclusion: { in: ->(_) { possible_kinds } }
+  validates :kind, inclusion: {in: ->(_) { possible_kinds }}
   validate :assert_head_and_tail_are_different
 
   ### CALLBACKS
@@ -109,13 +108,12 @@ class PeopleRelation < ActiveRecord::Base
   end
 
   def opposite_attrs
-    { head_id: tail_id, tail_id: head_id, kind: opposite_kind }
+    {head_id: tail_id, tail_id: head_id, kind: opposite_kind}
   end
 
   def old_opposite_attrs
-    { head_id: tail_id_change ? tail_id_change.first : tail_id,
-      tail_id: head_id,
-      kind: kind_change ? kind_opposites.fetch(kind_change.first) : opposite_kind }
+    {head_id: tail_id_change ? tail_id_change.first : tail_id,
+     tail_id: head_id,
+     kind: kind_change ? kind_opposites.fetch(kind_change.first) : opposite_kind}
   end
-
 end

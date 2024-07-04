@@ -22,14 +22,12 @@
 #  index_payments_on_transaction_identifier  (transaction_identifier) UNIQUE
 #
 
-
 class PaymentSerializer < ApplicationSerializer
-
   schema do
     json_api_properties
 
     map_properties :amount,
-                   :received_at,
-                   :reference
+      :received_at,
+      :reference
   end
 end

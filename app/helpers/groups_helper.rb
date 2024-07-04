@@ -6,9 +6,8 @@
 #  https://github.com/hitobito/hitobito.
 
 module GroupsHelper
-
   def tab_person_add_request_label(group)
-    label = t('activerecord.models.person/add_request.other')
+    label = t("activerecord.models.person/add_request.other")
     count = Person::AddRequest.for_layer(group).count
     label << " (#{count})" if count.positive?
     label.html_safe
@@ -23,11 +22,11 @@ module GroupsHelper
     url = group.nextcloud_organizer&.nextcloud_url
     return unless url
 
-    link_to(url, url, target: '_blank', rel: 'noopener')
+    link_to(url, url, target: "_blank", rel: "noopener")
   end
 
   def maybe_value(value)
-    value || t('global.unknown')
+    value || t("global.unknown")
   end
 
   def distribution_bar_width(count, count_max)

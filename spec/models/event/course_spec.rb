@@ -40,22 +40,21 @@
 #  updater_id                  :integer
 #
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Event::Course do
-
   subject do
     Fabricate(:course, groups: [groups(:top_group)])
   end
 
   its(:qualification_date) { should == Date.new(2012, 5, 11) }
 
-  context '#qualification_date' do
+  context "#qualification_date" do
     before do
       subject.dates.destroy_all
-      add_date('2011-01-20')
-      add_date('2011-02-15')
-      add_date('2011-01-02')
+      add_date("2011-01-20")
+      add_date("2011-02-15")
+      add_date("2011-01-02")
     end
 
     its(:qualification_date) { should == Date.new(2011, 2, 20) }
@@ -66,43 +65,43 @@ describe Event::Course do
     end
   end
 
-  context 'multiple start_at' do
+  context "multiple start_at" do
     before { subject.dates.create(start_at: Date.new(2012, 5, 14)) }
+
     its(:qualification_date) { should == Date.new(2012, 5, 14) }
   end
 
-  context 'without event_kind' do
+  context "without event_kind" do
     before { Event::Course.used_attributes -= [:kind_id] }
 
-    it 'creates course' do
+    after { Event::Course.used_attributes += [:kind_id] }
+
+    it "creates course" do
       Event::Course.create!(groups: [groups(:top_group)],
-                            name: 'test',
-                            dates_attributes: [{ start_at: Time.zone.now }])
-
+        name: "test",
+        dates_attributes: [{start_at: Time.zone.now}])
     end
 
-    it 'renders label_detail' do
+    it "renders label_detail" do
       events(:top_course).update(kind_id: nil, number: 123)
-      expect(events(:top_course).label_detail).to eq '123 Top'
+      expect(events(:top_course).label_detail).to eq "123 Top"
     end
 
-    describe 'required_attrs' do
+    describe "required_attrs" do
       subject(:required_attrs) { events(:top_course).required_attrs }
 
-      it 'is empty when kind_id is not used' do
+      it "is empty when kind_id is not used" do
         expect(required_attrs).to be_empty
       end
 
-      it 'contains kind_id if kind_id is used' do
+      it "contains kind_id if kind_id is used" do
         Event::Course.used_attributes += [:kind_id]
         expect(required_attrs).to eq [:kind_id]
       end
     end
-
-    after { Event::Course.used_attributes += [:kind_id] }
   end
 
-  it 'sets signtuare to true when signature confirmation is required' do
+  it "sets signtuare to true when signature confirmation is required" do
     course = Event::Course.new(signature_confirmation: true)
     expect(course.signature).to be_falsy
     expect(course.signature_confirmation).to be_truthy
@@ -112,74 +111,71 @@ describe Event::Course do
     expect(course.signature_confirmation).to be_truthy
   end
 
-  describe '#duplicate' do
-
+  describe "#duplicate" do
     let(:event) { events(:top_course) }
 
-    it 'resets participant counts' do
+    it "resets participant counts" do
       d = event.duplicate
       expect(d.participant_count).to eq(0)
       expect(d.teamer_count).to eq(0)
       expect(d.applicant_count).to eq(0)
     end
 
-    it 'resets state' do
+    it "resets state" do
       d = event.duplicate
       expect(d.state).to be_nil
     end
 
-    it 'keeps empty questions' do
+    it "keeps empty questions" do
       event.questions = []
       d = event.duplicate
       expect(d.application_questions.size).to eq(0)
     end
 
-    it 'copies existing questions' do
+    it "copies existing questions" do
       d = event.duplicate
       expect do
         d.dates << Fabricate.build(:event_date, event: d)
         d.save!
       end.to change { Event::Question.count }.by(3)
     end
-
   end
 
-  it 'makes participations visible to all participants by default' do
+  it "makes participations visible to all participants by default" do
     is_expected.to be_participations_visible
   end
 
-  describe '#minimum_age' do
+  describe "#minimum_age" do
     subject(:course) { described_class.new }
 
-    it 'is nil if no kind is set' do
+    it "is nil if no kind is set" do
       expect(course.minimum_age).to be_nil
     end
 
-    it 'is read from kind if kind has value set' do
+    it "is read from kind if kind has value set" do
       course.kind = Event::Kind.new(minimum_age: 2)
       expect(course.minimum_age).to eq 2
     end
   end
 
-  describe '#qualifications_visible?' do
+  describe "#qualifications_visible?" do
     subject(:course) { Fabricate.build(:course) }
 
-    it 'is true if kind is qualifiying and qualification_date is yesterday' do
+    it "is true if kind is qualifiying and qualification_date is yesterday" do
       course.dates.build(start_at: 1.day.ago)
       expect(course.qualifications_visible?).to be_truthy
     end
 
-    it 'is false if kind is not qualifiying' do
+    it "is false if kind is not qualifiying" do
       course.kind = event_kinds(:old)
       course.dates.build(start_at: 1.day.ago)
 
       expect(course.qualifications_visible?).to be_falsy
     end
 
-    it 'is false if qualification date is today' do
+    it "is false if qualification date is today" do
       course.dates.build(start_at: 0.days.ago)
       expect(course.qualifications_visible?).to be_falsy
     end
   end
-
 end

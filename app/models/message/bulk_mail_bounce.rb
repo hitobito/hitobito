@@ -42,7 +42,5 @@
 #
 
 class Message::BulkMailBounce < Message
-
-  belongs_to :bounce_parent, class_name: 'Message::BulkMail'
-
+  belongs_to :bounce_parent, class_name: "Message::BulkMail"
 end

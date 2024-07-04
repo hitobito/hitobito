@@ -5,13 +5,13 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_die_mitte.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Payments::EbicsImportJob do
   include ActiveJob::TestHelper
 
   let(:invoice_files) {
-    [read('camt.054-ESR-ASR_T_CH0209000000857876452_378159670_0_2018031411011923')]
+    [read("camt.054-ESR-ASR_T_CH0209000000857876452_378159670_0_2018031411011923")]
   }
   let(:config) { payment_provider_configs(:postfinance) }
   let(:epics_client) { double(:epics_client) }
@@ -19,14 +19,13 @@ describe Payments::EbicsImportJob do
 
   subject { Payments::EbicsImportJob.new }
 
-
-  it 'does not run if no initialized config present' do
+  it "does not run if no initialized config present" do
     expect(Payments::EbicsImport).to_not receive(:new)
 
     expect { subject.perform }.to_not change { Payment.count }
   end
 
-  it 'reschedules to tomorrow at 8am' do
+  it "reschedules to tomorrow at 8am" do
     subject.perform
 
     expect(subject.delayed_jobs.last.run_at).to eq(Time.zone.tomorrow
@@ -35,7 +34,7 @@ describe Payments::EbicsImportJob do
                                                        .in_time_zone)
   end
 
-  it 'initializes payments' do
+  it "initializes payments" do
     config.update(status: :registered)
 
     allow(PaymentProvider).to receive(:new).and_return(payment_provider)
@@ -48,34 +47,34 @@ describe Payments::EbicsImportJob do
     expect(payment_provider).to receive(:Z54).and_return(invoice_files)
 
     invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), recipient: people(:bottom_member), group: groups(:bottom_layer_one))
-    InvoiceList.create(title: 'membership fee', invoices: [invoice])
-    invoice.update!(reference: '000000000000100000000000800')
+    InvoiceList.create(title: "membership fee", invoices: [invoice])
+    invoice.update!(reference: "000000000000100000000000800")
 
     subject.perform
 
     expect(invoice.payments.size).to eq(1)
   end
 
-  it 'continues after error is raised on provider' do
+  it "continues after error is raised on provider" do
     failing_config = payment_provider_configs(:ubs)
 
     config.update(status: :registered)
-    failing_config.update( status: :registered)
+    failing_config.update(status: :registered)
 
     failing_provider = double
 
     expect(PaymentProvider).to receive(:new).with(config).exactly(:once).and_call_original
     expect(PaymentProvider).to receive(:new).with(failing_config).exactly(:once).and_return(failing_provider)
 
-    error = Epics::Error::TechnicalError.new('091010')
+    error = Epics::Error::TechnicalError.new("091010")
     expect(failing_provider).to receive(:HPB).and_raise(error)
 
     expect(Airbrake).to receive(:notify)
-                    .exactly(:once)
-                    .with(error, hash_including(parameters: { payment_provider_config: failing_config }))
+      .exactly(:once)
+      .with(error, hash_including(parameters: {payment_provider_config: failing_config}))
     expect(Raven).to receive(:capture_exception)
-                 .exactly(:once)
-                 .with(error, logger: 'delayed_job')
+      .exactly(:once)
+      .with(error, logger: "delayed_job")
 
     expect(PaymentProvider).to receive(:new).and_return(payment_provider)
     expect(payment_provider).to receive(:client).and_return(epics_client)
@@ -87,15 +86,15 @@ describe Payments::EbicsImportJob do
     expect(payment_provider).to receive(:Z54).and_return(invoice_files)
 
     invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), recipient: people(:bottom_member), group: groups(:bottom_layer_one))
-    InvoiceList.create(title: 'membership fee' ,invoices: [invoice])
-    invoice.update!(reference: '000000000000100000000000800')
+    InvoiceList.create(title: "membership fee", invoices: [invoice])
+    invoice.update!(reference: "000000000000100000000000800")
 
     subject.perform
 
     expect(invoice.payments.size).to eq(1)
   end
 
-  describe '#log_result' do
+  describe "#log_result" do
     before do
       config.update(status: :registered)
 
@@ -109,11 +108,11 @@ describe Payments::EbicsImportJob do
       allow(payment_provider).to receive(:Z54).and_return(invoice_files)
 
       invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), recipient: people(:bottom_member), group: groups(:bottom_layer_one))
-      InvoiceList.create(title: 'membership fee', invoices: [invoice])
-      invoice.update!(reference: '000000000000100000000000800')
+      InvoiceList.create(title: "membership fee", invoices: [invoice])
+      invoice.update!(reference: "000000000000100000000000800")
     end
 
-    it 'includes payments count' do
+    it "includes payments count" do
       subject.perform
 
       expect(subject.log_results).to match(
@@ -125,7 +124,7 @@ describe Payments::EbicsImportJob do
       )
     end
 
-    it 'includes validation error messages' do
+    it "includes validation error messages" do
       allow_any_instance_of(Payment).to receive(:save) do |payment|
         # let's fake a validation error
         payment.amount = nil
@@ -139,8 +138,8 @@ describe Payments::EbicsImportJob do
       expect(subject.log_results[:invalid_payments].values.first).to match(amount: ["muss ausgefüllt werden"])
     end
 
-    it 'includes errors' do
-      error = Epics::Error::TechnicalError.new('091010')
+    it "includes errors" do
+      error = Epics::Error::TechnicalError.new("091010")
       allow_any_instance_of(PaymentProvider).to receive(:HPB).and_raise(error)
 
       subject.perform

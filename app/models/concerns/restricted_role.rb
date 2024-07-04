@@ -21,7 +21,7 @@ module RestrictedRole
     @restricted_role_changes = {}
     restricted_roles.each do |attr, type|
       role = restricted_role(attr, type)
-      next if role.try(:person_id) == send("#{attr}_id").to_i
+      next if role.try(:person_id) == send(:"#{attr}_id").to_i
 
       destroy_previous_role(attr, type) if role
       id = restricted_role_id(attr, type).presence
@@ -90,16 +90,15 @@ module RestrictedRole
     end
 
     def define_restricted_person_id_getter(attr, type)
-      define_method "#{attr}_id" do
+      define_method :"#{attr}_id" do
         restricted_role_id(attr, type)
       end
     end
 
     def define_restricted_person_id_setter(attr)
-      define_method "#{attr}_id=" do |value|
+      define_method :"#{attr}_id=" do |value|
         set_restricted_role_id(attr, value)
       end
     end
   end
-
 end

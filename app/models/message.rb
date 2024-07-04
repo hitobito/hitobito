@@ -41,14 +41,13 @@
 #  index_messages_on_sender_id        (sender_id)
 #
 
-
 class Message < ActiveRecord::Base
   include I18nEnums
 
   validates_by_schema except: :text
   belongs_to :invoice_list
   belongs_to :mailing_list
-  belongs_to :sender, class_name: 'Person'
+  belongs_to :sender, class_name: "Person"
   has_many :message_recipients, dependent: :restrict_with_error
   has_one :group, through: :mailing_list
 
@@ -57,12 +56,12 @@ class Message < ActiveRecord::Base
 
   has_many :assignments, as: :attachment, dependent: :destroy
 
-  STATES = %w(draft pending processing finished failed).freeze
+  STATES = %w[draft pending processing finished failed].freeze
   i18n_enum :state, STATES, scopes: true, queries: true
-  validates :state, inclusion: { in: STATES }
+  validates :state, inclusion: {in: STATES}
 
   class_attribute :duplicatable_attrs
-  self.duplicatable_attrs = %w(subject type mailing_list_id)
+  self.duplicatable_attrs = %w[subject type mailing_list_id]
 
   scope :list, -> { order(:created_at) }
 
@@ -74,9 +73,9 @@ class Message < ActiveRecord::Base
   class << self
     def all_types
       [Message::TextMessage,
-       Message::Letter,
-       Message::LetterWithInvoice,
-       Message::BulkMail]
+        Message::Letter,
+        Message::LetterWithInvoice,
+        Message::BulkMail]
     end
 
     def find_message_type!(sti_name)
@@ -93,8 +92,8 @@ class Message < ActiveRecord::Base
 
   def dispatch!
     recipients = MailingLists::RecipientCounter.new(mailing_list,
-                                                    self.class.name,
-                                                    send_to_households?)
+      self.class.name,
+      send_to_households?)
     update!(
       recipient_count: recipients.valid,
       state: :pending
@@ -119,7 +118,7 @@ class Message < ActiveRecord::Base
   end
 
   def dispatched?
-    state != 'draft'
+    state != "draft"
   end
 
   def dispatcher_class
@@ -135,7 +134,6 @@ class Message < ActiveRecord::Base
   end
 
   def recipient_progress
-    [success_count, recipient_count].join(' / ')
+    [success_count, recipient_count].join(" / ")
   end
-
 end

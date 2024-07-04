@@ -49,20 +49,18 @@
 #  index_invoices_on_sequence_number  (sequence_number)
 #
 
-
-
 Fabricator(:invoice) do
   title { Faker::Name.name }
 end
 
 Fabricator(:invoice_article) do
-  number    { Faker::Number.hexadecimal(digits: 5).to_s.upcase }
-  name      { Faker::Commerce.product_name }
-  unit_cost { (Faker::Commerce.price / 0.05).to_i * 0.05.to_d }
+  number { Faker::Number.hexadecimal(digits: 5).to_s.upcase }
+  name { Faker::Commerce.product_name }
+  unit_cost { (Faker::Commerce.price / 0.05).to_i * BigDecimal("0.05") }
 end
 
 Fabricator(:payment_reminder) do
-  title    { Faker::Lorem.sentence }
-  text     { Faker::Lorem.sentence(word_count: 5) }
-  level    { 1 }
+  title { Faker::Lorem.sentence }
+  text { Faker::Lorem.sentence(word_count: 5) }
+  level { 1 }
 end

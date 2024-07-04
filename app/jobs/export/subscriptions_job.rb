@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Export::SubscriptionsJob < Export::ExportBaseJob
-
   self.parameters = PARAMETERS + [:mailing_list_id]
 
   def initialize(format, user_id, mailing_list_id, options)
@@ -35,5 +34,4 @@ class Export::SubscriptionsJob < Export::ExportBaseJob
 
     Export::Tabular::People::PeopleAddress
   end
-
 end

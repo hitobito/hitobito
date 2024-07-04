@@ -6,11 +6,10 @@
 #  https://github.com/hitobito/hitobito.
 
 class PersonDuplicateTableBuilder
-
-  I18N_PREFIX = 'person_duplicates'.freeze
-  I18N_PERSON = 'activerecord.attributes.person'.freeze
-  I18N_PERSON_DUPLICATE = 'activerecord.attributes.person_duplicate'.freeze
-  TABLE_CLASS = 'table person-duplicates-table'.freeze
+  I18N_PREFIX = "person_duplicates"
+  I18N_PERSON = "activerecord.attributes.person"
+  I18N_PERSON_DUPLICATE = "activerecord.attributes.person_duplicate"
+  TABLE_CLASS = "table person-duplicates-table"
 
   attr_reader :template
 
@@ -23,7 +22,7 @@ class PersonDuplicateTableBuilder
     @entries = entries
     @group = group
     @cols = [:person_name, :company_name,
-             :birth_year, :town, :roles_list, :actions]
+      :birth_year, :town, :roles_list, :actions]
   end
 
   def self.table(entries, group, template)
@@ -38,7 +37,7 @@ class PersonDuplicateTableBuilder
           person_row(e, :person_1) +
             person_row(e, :person_2) +
             divider_row(e)
-      end
+        end
     end
   end
 
@@ -50,7 +49,7 @@ class PersonDuplicateTableBuilder
       elsif c == :person_name
         content_tag(:td, label(person))
       elsif c == :company_name
-        content_tag(:td, label_company_name(person))     
+        content_tag(:td, label_company_name(person))
       else
         content_tag(:td, person.send(c))
       end
@@ -61,8 +60,8 @@ class PersonDuplicateTableBuilder
     label = person.person_name
     if can?(:show, person) && person.primary_group.present?
       link_to(label,
-              group_person_path(person.primary_group, person),
-              target: '_blank')
+        group_person_path(person.primary_group, person),
+        target: "_blank", rel: "noopener")
     else
       label
     end
@@ -72,16 +71,16 @@ class PersonDuplicateTableBuilder
     label_company_name = person.company_name
     if can?(:show, person) && person.primary_group.present? && person.company_name
       link_to(label_company_name,
-              group_person_path(person.primary_group, person),
-              target: '_blank')
+        group_person_path(person.primary_group, person),
+        target: "_blank", rel: "noopener")
     else
       label_company_name
     end
   end
 
   def action_col(entry, p_nr)
-    content_tag(:td, class: 'right vertical-middle', rowspan: 2) do
-      content = ''
+    content_tag(:td, class: "right vertical-middle", rowspan: 2) do
+      content = ""
       if can?(:merge, entry)
         content += action_button_merge(entry)
       end
@@ -93,38 +92,39 @@ class PersonDuplicateTableBuilder
   end
 
   def action_button_merge(entry)
-    action_button(t('merge.action'),
-                  new_merge_path(entry),
-                  :'user-friends',
-                  remote: true)
+    action_button(t("merge.action"),
+      new_merge_path(entry),
+      :"user-friends",
+      remote: true)
   end
 
   def action_button_ignore(entry)
-    action_button(t('ignore.action'),
-                  new_ignore_path(entry),
-                  :'user-slash',
-                  remote: true)
+    action_button(t("ignore.action"),
+      new_ignore_path(entry),
+      :"user-slash",
+      remote: true)
   end
 
   def new_merge_path(entry)
     template.new_merge_group_person_duplicate_path(
       group_id: @group.id,
-      id: entry.id)
+      id: entry.id
+    )
   end
 
   def new_ignore_path(entry)
     template.new_ignore_group_person_duplicate_path(
       group_id: @group.id,
-      id: entry.id)
+      id: entry.id
+    )
   end
 
+  def divider_row(entry)
+    return "" if @entries.last == entry
 
-  def divider_row(entry) 
-    return '' if @entries.last == entry
-
-    content_tag(:tr, class: 'divider') do
+    content_tag(:tr, class: "divider") do
       content_tag(:td, colspan: @cols.count) do
-        ''
+        ""
       end
     end
   end
@@ -139,8 +139,7 @@ class PersonDuplicateTableBuilder
     return if header == :actions
 
     I18n.t("#{I18N_PERSON}.#{header}",
-      default: I18n.t("#{I18N_PERSON_DUPLICATE}.#{header}")
-     )
+      default: I18n.t("#{I18N_PERSON_DUPLICATE}.#{header}"))
   end
 
   def t(key)

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class GroupsController < CrudController
-
   include AsyncDownload
 
   # Respective group attrs are added in corresponding instance method.
@@ -79,12 +78,13 @@ class GroupsController < CrudController
     end
   end
 
-  def person_notes; end
+  def person_notes
+  end
 
   private
 
   def update_main_self_registration_group
-    return unless FeatureGate.enabled?('groups.self_registration') &&
+    return unless FeatureGate.enabled?("groups.self_registration") &&
       entry.saved_change_to_main_self_registration_group? &&
       entry.main_self_registration_group
 
@@ -142,5 +142,4 @@ class GroupsController < CrudController
   def sub_groups_label
     @sub_groups_label ||= translate(:subgroups)
   end
-
 end

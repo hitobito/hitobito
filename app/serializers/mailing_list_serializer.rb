@@ -34,32 +34,30 @@
 #  index_mailing_lists_on_group_id  (group_id)
 #
 
-
-
 class MailingListSerializer < ApplicationSerializer
   schema do
     json_api_properties
 
     map_properties :name,
-                   :description,
-                   :publisher,
-                   :mail_name,
-                   :additional_sender,
-                   :subscribable_for,
-                   :subscribable_mode,
-                   :subscribers_may_post,
-                   :anyone_may_post,
-                   :preferred_labels,
-                   :delivery_report,
-                   :main_email
+      :description,
+      :publisher,
+      :mail_name,
+      :additional_sender,
+      :subscribable_for,
+      :subscribable_mode,
+      :subscribers_may_post,
+      :anyone_may_post,
+      :preferred_labels,
+      :delivery_report,
+      :main_email
 
     property :subscribable, item.subscribable?
 
     entity :group, item.group, GroupLinkSerializer
     entities :subscribers,
-             item.people.includes(subscribers_includes),
-             MailingListSubscriberSerializer,
-             mailing_list: item
+      item.people.includes(subscribers_includes),
+      MailingListSubscriberSerializer,
+      mailing_list: item
   end
 
   private
@@ -67,5 +65,4 @@ class MailingListSerializer < ApplicationSerializer
   def subscribers_includes
     [:primary_group]
   end
-
 end

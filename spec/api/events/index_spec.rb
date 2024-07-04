@@ -5,22 +5,22 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
 
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe 'events#index', type: :request do
-  it_behaves_like 'jsonapi authorized requests' do
+RSpec.describe "events#index", type: :request do
+  it_behaves_like "jsonapi authorized requests" do
     let(:params) { {} }
 
     subject(:make_request) do
-      jsonapi_get '/api/events', params: params
+      jsonapi_get "/api/events", params: params
     end
 
-    describe 'basic fetch' do
-      it 'works' do
+    describe "basic fetch" do
+      it "works" do
         expect(EventResource).to receive(:all).and_call_original
         make_request
         expect(response.status).to eq(200), response.body
-        expect(d.map(&:jsonapi_type).uniq).to match_array(%w(events courses))
+        expect(d.map(&:jsonapi_type).uniq).to match_array(%w[events courses])
         expect(d.map(&:id)).to match_array(Event.pluck(:id))
       end
     end

@@ -6,9 +6,8 @@
 #  https://github.com/hitobito/hitobito
 
 class GroupReadables < GroupBasedReadables
-
   def initialize(user)
-    super(user)
+    super
 
     can :index, Group, accessible_groups
   end

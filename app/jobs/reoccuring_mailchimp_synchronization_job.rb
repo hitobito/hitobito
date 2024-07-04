@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class ReoccuringMailchimpSynchronizationJob < RecurringJob
-
   run_every 24.hours
 
   def perform_internal
@@ -16,5 +15,4 @@ class ReoccuringMailchimpSynchronizationJob < RecurringJob
       MailchimpSynchronizationJob.new(list.id).enqueue!
     end
   end
-
 end

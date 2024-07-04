@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 #  Copyright (c) 2021, Katholische Landjugendbewegung Paderborn. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -78,10 +77,10 @@ class FamilyMember < ApplicationRecord
 
   include I18nEnums
 
-  i18n_enum :kind, %w(sibling).freeze # could be: parent child sibling
+  i18n_enum :kind, %w[sibling].freeze # could be: parent child sibling
 
   belongs_to :person
-  belongs_to :other, class_name: 'Person'
+  belongs_to :other, class_name: "Person"
 
   before_validation :create_or_copy_family_key, on: :create
   after_create :create_inverse_relation
@@ -128,12 +127,12 @@ class FamilyMember < ApplicationRecord
 
     # find siblings (as scope)
     siblings = self.class
-                   .where(family_key: family_key, kind: :sibling)
-                   .where.not(person_id: person_id)
+      .where(family_key: family_key, kind: :sibling)
+      .where.not(person_id: person_id)
 
     # create links between siblings (given a scope)
     siblings.pluck(:person_id).each do |sibling_id|
-      attrs = { person: person, other_id: sibling_id, kind: :sibling }
+      attrs = {person: person, other_id: sibling_id, kind: :sibling}
       self.class.create!(attrs.merge(family_key: family_key)) unless self.class.exists?(attrs)
     end
   end

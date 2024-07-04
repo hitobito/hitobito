@@ -5,7 +5,6 @@
 
 class Role
   class List
-
     attr_reader :ability, :params
     delegate :authorize!, :can?, to: :ability
 
@@ -18,7 +17,7 @@ class Role
       people.map do |person|
         role = build_role(person.id)
         authorize!(:create, role, message: access_denied_flash(person))
-        role.attributes.except('terminated')
+        role.attributes.except("terminated")
       end
     end
 
@@ -55,7 +54,7 @@ class Role
     end
 
     def access_denied_flash(person)
-      I18n.t('role_lists.access_denied', person: person.full_name)
+      I18n.t("role_lists.access_denied", person: person.full_name)
     end
 
     def permitted_params(role_type = Role)
@@ -72,12 +71,12 @@ class Role
     end
 
     def roles
-      group_ids = params[:range] == ('layer' || 'deep') ? layer_group_ids : group
+      group_ids = (params[:range] == ("layer" || "deep")) ? layer_group_ids : group
       @roles ||= Role.where(person_id: people_ids, group_id: group_ids)
     end
 
     def role_types
-      model_params && model_params[:types] ? model_params[:types] : {}
+      (model_params && model_params[:types]) ? model_params[:types] : {}
     end
 
     def people
@@ -89,12 +88,11 @@ class Role
     end
 
     def people_ids
-      params[:ids].to_s.split(',')
+      params[:ids].to_s.split(",")
     end
 
     def model_params
       params[:role]
     end
-
   end
 end

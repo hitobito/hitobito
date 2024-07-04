@@ -12,7 +12,7 @@ module RenderMessagesExports
     assert_type(letter)
     assert_recipients(letter)
 
-    options = { background: Settings.messages.pdf.preview }
+    options = {background: Settings.messages.pdf.preview}
     pdf = letter.exporter_class.new(letter, options)
     send_data pdf.render_preview, type: :pdf, disposition: :inline, filename: pdf.filename(:preview)
   end
@@ -27,7 +27,7 @@ module RenderMessagesExports
 
   def render_in_background(letter, format, name)
     with_async_download_cookie(format, name) do |filename|
-      Export::MessageJob.new(format, current_person.id, letter.id, { filename: filename }).enqueue!
+      Export::MessageJob.new(format, current_person.id, letter.id, {filename: filename}).enqueue!
     end
   end
 
@@ -39,7 +39,7 @@ module RenderMessagesExports
 
   def assert_recipients(message)
     unless message.recipients.exists?
-      redirect_to message.path_args, alert: t('.recipients_empty')
+      redirect_to message.path_args, alert: t(".recipients_empty")
     end
   end
 end

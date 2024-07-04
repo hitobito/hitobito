@@ -3,12 +3,11 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require Rails.root.join('spec/support/group/bottom_group.rb')
-require Rails.root.join('spec/support/group/mounted_attrs_group.rb')
-require Rails.root.join('spec/support/group/static_name_groups.rb')
+require Rails.root.join("spec/support/group/bottom_group.rb")
+require Rails.root.join("spec/support/group/mounted_attrs_group.rb")
+require Rails.root.join("spec/support/group/static_name_groups.rb")
 
 class Group::BottomLayer < Group
-
   self.layer = true
 
   self.event_types = [Event, Event::Course]
@@ -35,5 +34,4 @@ class Group::BottomLayer < Group
 
   roles Leader, LocalGuide, Member, BasicPermissionsOnly
   self.default_role = Leader
-
 end

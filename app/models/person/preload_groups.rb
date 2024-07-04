@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module Person::PreloadGroups
-
   def self.extended(base)
     base.do_preload_groups
   end
@@ -28,8 +27,8 @@ module Person::PreloadGroups
   private
 
   def self.preload_association(records, association, scope = nil)
-    ActiveRecord::Associations::Preloader.new.
-      preload(records, association, scope)
+    ActiveRecord::Associations::Preloader.new
+      .preload(records, association, scope)
   end
 
   def self.preload_groups_manually(records)
@@ -54,5 +53,4 @@ module Person::PreloadGroups
 
     records
   end
-
 end

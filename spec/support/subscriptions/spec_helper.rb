@@ -6,8 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module Subscriptions::SpecHelper
-
-  def create_group_subscription(subscriber: group, mailing_list: list, excluded: false, role_types: %w(Group::TopGroup::Leader), included_tags: [], excluded_tags: [])
+  def create_group_subscription(subscriber: group, mailing_list: list, excluded: false, role_types: %w[Group::TopGroup::Leader], included_tags: [], excluded_tags: [])
     create_subscription(subscriber, excluded, *role_types, mailing_list: mailing_list, included_tags: included_tags, excluded_tags: excluded_tags)
   end
 
@@ -41,6 +40,4 @@ module Subscriptions::SpecHelper
     end
     included_tags + excluded_tags
   end
-
 end
-

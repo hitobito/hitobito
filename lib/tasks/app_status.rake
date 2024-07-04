@@ -6,20 +6,17 @@
 #  https://github.com/hitobito/hitobito.
 
 namespace :app_status do
-
-  desc 'retreive app status auth token'
+  desc "retreive app status auth token"
   task auth_token: :environment do
     puts AppStatus.auth_token
   end
 
   namespace :check do
-
-    desc 'check truemail status'
+    desc "check truemail status"
     task truemail: :environment do
       if AppStatus::Truemail.new.code == :service_unavailable
         exit false
       end
     end
-
   end
 end

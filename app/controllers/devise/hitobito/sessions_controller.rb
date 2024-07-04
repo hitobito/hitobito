@@ -17,8 +17,8 @@ class Devise::Hitobito::SessionsController < Devise::SessionsController
 
   skip_before_action :reject_blocked_person!
   before_action :reset_two_factor_authentication,
-                if: :two_factor_authentication_pending?,
-                only: [:new]
+    if: :two_factor_authentication_pending?,
+    only: [:new]
 
   before_action :configure_permitted_parameters
   after_action :reset_inactivity_block_warning_sent_at, only: [:create]
@@ -54,10 +54,10 @@ class Devise::Hitobito::SessionsController < Devise::SessionsController
   end
 
   def devise_layout
-    if params['oauth'] == 'true'
-      'oauth'
+    if params["oauth"] == "true"
+      "oauth"
     else
-      'application'
+      "application"
     end
   end
 

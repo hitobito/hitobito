@@ -20,11 +20,11 @@
 #  numbers          :text(16777215)
 #
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Address do
-  it 'serializes numbers as array' do
+  it "serializes numbers as array" do
     bs_bern = addresses(:bs_bern)
-    expect(bs_bern.numbers).to eq %w(36 37 38 40 41 5a 5b 6A 6B)
+    expect(bs_bern.numbers).to eq %w[36 37 38 40 41 5a 5b 6A 6B]
   end
 end

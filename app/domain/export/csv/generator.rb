@@ -5,11 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'csv-safe'
+require "csv-safe"
 
 module Export
   module Csv
-
     UTF8_BOM = "\xEF\xBB\xBF"
 
     def self.export(exportable)
@@ -58,13 +57,12 @@ module Export
       end
 
       def default_options
-        { col_sep: Settings.csv.separator.strip }
+        {col_sep: Settings.csv.separator.strip}
       end
 
       def extract_option(key, default: nil)
         options.key?(key) ? options.delete(key) : default
       end
-
     end
   end
 end

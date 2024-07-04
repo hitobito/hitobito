@@ -17,7 +17,7 @@ class Invoice::ItemEvaluation
     rows += rows_by_invoice_article
 
     rows << deficit_row if sum_of_deficitary_payments.nonzero?
-    rows << excess_row  if excess_amount.nonzero?
+    rows << excess_row if excess_amount.nonzero?
 
     rows
   end
@@ -50,7 +50,7 @@ class Invoice::ItemEvaluation
   def payments_of_paid_invoices
     @payments_of_paid_invoices ||=
       relevant_payments.of_fully_paid_invoices
-                       .excluding_cancelled_invoices
+        .excluding_cancelled_invoices
   end
 
   def deficitary_payments
@@ -59,9 +59,9 @@ class Invoice::ItemEvaluation
 
   def relevant_payments
     Payments::Collection.new
-                        .in_layer(@group)
-                        .from(@from)
-                        .to(@to)
+      .in_layer(@group)
+      .from(@from)
+      .to(@to)
   end
 
   def sum_of_deficitary_payments
@@ -70,12 +70,12 @@ class Invoice::ItemEvaluation
 
   def deficit_row
     {
-      name: I18n.t('invoices.evaluations.show.deficit'),
-      vat: '',
+      name: I18n.t("invoices.evaluations.show.deficit"),
+      vat: "",
       count: deficitary_payments.count,
       amount_paid: sum_of_deficitary_payments,
-      account: '',
-      cost_center: '',
+      account: "",
+      cost_center: "",
       type: :deficit
     }
   end
@@ -87,12 +87,12 @@ class Invoice::ItemEvaluation
 
   def excess_row
     {
-      name: I18n.t('invoices.evaluations.show.excess'),
-      vat: '',
-      count: '',
+      name: I18n.t("invoices.evaluations.show.excess"),
+      vat: "",
+      count: "",
       amount_paid: excess_amount,
-      account: '',
-      cost_center: '',
+      account: "",
+      cost_center: "",
       type: :excess
     }
   end
@@ -103,9 +103,9 @@ class Invoice::ItemEvaluation
 
     # Search invoice items which fit the identifiers and are attached to relevant payments
     invoice_items = InvoiceItem.where(name: name,
-                                      account: account,
-                                      cost_center: cost_center,
-                                      invoice_id: relevant_invoice_ids)
+      account: account,
+      cost_center: cost_center,
+      invoice_id: relevant_invoice_ids)
 
     amount_of_invoices = invoice_items.pluck(:invoice_id).uniq.size
 
@@ -119,9 +119,9 @@ class Invoice::ItemEvaluation
 
     # Search invoice item which fits the identifiers and are attached to relevant payments
     invoice_item = InvoiceItem.find_by(name: name,
-                                       account: account,
-                                       cost_center: cost_center,
-                                       invoice_id: relevant_invoice_ids)
+      account: account,
+      cost_center: cost_center,
+      invoice_id: relevant_invoice_ids)
 
     # Invoice items with an empty vat_rate will be 0
     return 0 unless invoice_item.vat_rate&.nonzero?
@@ -134,9 +134,9 @@ class Invoice::ItemEvaluation
     relevant_invoice_ids = payments_of_paid_invoices.payments.pluck(:invoice_id)
 
     invoice_item = InvoiceItem.find_by(name: name,
-                                       account: account,
-                                       cost_center: cost_center,
-                                       invoice_id: relevant_invoice_ids)
+      account: account,
+      cost_center: cost_center,
+      invoice_id: relevant_invoice_ids)
 
     count(name, account, cost_center) * invoice_item.unit_cost
   end
@@ -146,6 +146,6 @@ class Invoice::ItemEvaluation
     # Is used to get all identifiers and then loop to calculate/fetch the values for each article
 
     payments_of_paid_invoices.grouped_by_invoice_items
-                             .pluck(*Payments::Collection.invoice_item_group_attrs)
+      .pluck(*Payments::Collection.invoice_item_group_attrs)
   end
 end

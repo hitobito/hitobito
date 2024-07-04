@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module WebpackHelper
-
   # Returns the path of a given image as provided by Webpack
   # (e.g. `/packs/images/myimage.png`). Prioritizes wagon images, if
   # available. This makes it possible for wagons to "override" core
@@ -24,7 +23,7 @@ module WebpackHelper
     if options[:srcset] && !options[:srcset].is_a?(String)
       options[:srcset] = options[:srcset].map do |src_name, size|
         "#{wagon_image_pack_path(src_name)} #{size}"
-      end.join(', ')
+      end.join(", ")
     end
 
     image_tag(wagon_image_pack_path(name), options)
@@ -61,12 +60,12 @@ module WebpackHelper
   #     # Do something...
   #   end
   def absolute_wagon_file_paths(relative_wagon_file_path, fallback_file_path = nil)
-    file_paths = \
+    file_paths =
       Wagons
-      .all
-      .collect { |wagon| File.join(wagon.paths.path.to_s, relative_wagon_file_path) }
-      .select { |file_path| File.exist?(file_path) }
-      .each { |file_path| yield(file_path) }
+        .all
+        .collect { |wagon| File.join(wagon.paths.path.to_s, relative_wagon_file_path) }
+        .select { |file_path| File.exist?(file_path) }
+        .each { |file_path| yield(file_path) }
 
     if fallback_file_path && file_paths.blank?
       yield(fallback_file_path)
@@ -76,7 +75,6 @@ module WebpackHelper
   private
 
   def wagon_media_image_path(file_name)
-    File.join('wagon-media', 'images', file_name)
+    File.join("wagon-media", "images", file_name)
   end
-
 end

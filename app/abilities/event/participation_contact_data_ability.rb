@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito_pbs.
 
 class Event::ParticipationContactDataAbility < AbilityDsl::Base
-
   on(Event::ParticipationContactData) do
     permission(:any).may(:show, :update).her_own
   end
@@ -12,5 +11,4 @@ class Event::ParticipationContactDataAbility < AbilityDsl::Base
   def her_own
     subject.person.id == user.id
   end
-
 end

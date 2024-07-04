@@ -30,7 +30,7 @@ module DecoratesBeforeRendering
 
   def render(*args)
     __decorate_ivars__
-    super(*args)
+    super
   end
 
   private
@@ -81,8 +81,8 @@ module DecoratesBeforeRendering
       raise ArgumentError, "#{ivar} does not have an associated decorator"
     end
 
-    superclass_decorator_name = (superclass == Object ? 'Object' : superclass.model_name.to_s)
-    superclass_decorator_name += 'Decorator'
+    superclass_decorator_name = ((superclass == Object) ? "Object" : superclass.model_name.to_s)
+    superclass_decorator_name += "Decorator"
     [superclass, superclass_decorator_name]
   end
 
@@ -97,5 +97,4 @@ module DecoratesBeforeRendering
       raise ArgumentError, "#{ivar.inspect} does not have an associated model"
     end
   end
-
 end

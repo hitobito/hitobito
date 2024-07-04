@@ -11,5 +11,4 @@ module Sheet
       translate(:title)
     end
   end
-
 end

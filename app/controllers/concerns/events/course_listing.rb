@@ -32,7 +32,7 @@ module Events::CourseListing
 
   def course_list_title
     @course_list_title ||= begin
-      return I18n.t('event.lists.courses.no_category') if @kind_category_id == '0'
+      return I18n.t("event.lists.courses.no_category") if @kind_category_id == "0"
 
       Event::KindCategory.find_by(id: @kind_category_id)&.label
     end
@@ -45,7 +45,7 @@ module Events::CourseListing
         course_filters.user, course_filters.params,
         course_filters.options, course_filters.to_scope
       ).default_user_course_groups.map(&:id)
-    @group_ids = params.dig(:filter, :group_ids).to_a.reject(&:blank?).map(&:to_i)
+    @group_ids = params.dig(:filter, :group_ids).to_a.compact_blank.map(&:to_i)
   end
 
   def set_date_vars
@@ -63,7 +63,7 @@ module Events::CourseListing
   end
 
   def set_course_state_vars
-    @states = params.dig(:filter, :states) || Event::Course.possible_states.without('canceled')
+    @states = params.dig(:filter, :states) || Event::Course.possible_states.without("canceled")
     @places_available = params.dig(:filter, :places_available)
   end
 
@@ -74,5 +74,4 @@ module Events::CourseListing
   def kind_used?
     Event::Course.attr_used?(:kind_id)
   end
-
 end

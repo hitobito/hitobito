@@ -9,11 +9,10 @@
 
 module Dropdown
   class GroupEdit < Base
-
     attr_reader :group
 
     def initialize(template, group)
-      super(template, template.ti('link.edit'), :edit)
+      super(template, template.ti("link.edit"), :edit)
 
       @group = group
       @main_link = (group.archived? ? nil : template.edit_group_path(group))
@@ -31,13 +30,13 @@ module Dropdown
 
       if group.archivable?
         add_item(translate(:archive), template.archive_group_path(group),
-                 data: { confirm: template.ti(:confirm_archive), method: :post })
+          data: {confirm: template.ti(:confirm_archive), method: :post})
       end
 
       if !group.protected? && template.can?(:destroy, group)
         add_divider unless group.archived?
-        add_item(template.ti('link.delete'), template.group_path(group),
-                 data: { confirm: template.ti(:confirm_delete), method: :delete })
+        add_item(template.ti("link.delete"), template.group_path(group),
+          data: {confirm: template.ti(:confirm_delete), method: :delete})
       end
     end
   end

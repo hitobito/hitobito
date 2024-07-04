@@ -9,7 +9,6 @@
 # What will be deleted is implemented per wagon
 # Keep in mind to also purge PaperTrail::Versions which also persists the data
 class People::Minimizer
-
   def initialize(person)
     @person = person
   end
@@ -24,5 +23,4 @@ class People::Minimizer
   def minimize
     # noop - override in wagon
   end
-
 end

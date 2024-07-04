@@ -5,17 +5,17 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Address::ValidationChecksMailer do
   let(:invalid_people) { [people(:top_leader), people(:bottom_member)] }
-  let(:invalid_people_names) { invalid_people.map(&:full_name).join(', ') }
-  let(:recipient_email) { 'validation_checks@example.com' }
+  let(:invalid_people_names) { invalid_people.map(&:full_name).join(", ") }
+  let(:recipient_email) { "validation_checks@example.com" }
   let(:mail) { Address::ValidationChecksMailer.validation_checks(recipient_email, invalid_people_names) }
 
-  context 'validation checks mail' do
-    it 'shows full names of the invalid people' do
-      expect(mail.subject).to eq('Address Validierungen')
+  context "validation checks mail" do
+    it "shows full names of the invalid people" do
+      expect(mail.subject).to eq("Address Validierungen")
       expect(mail.body).to include(invalid_people_names)
     end
   end

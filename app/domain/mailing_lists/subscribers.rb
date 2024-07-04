@@ -6,8 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class MailingLists::Subscribers
-
-  delegate :id, :subscriptions, :opt_in?, to: '@list'
+  delegate :id, :subscriptions, :opt_in?, to: "@list"
 
   def initialize(mailing_list, people_scope = Person.only_public_data)
     @list = mailing_list
@@ -31,16 +30,16 @@ class MailingLists::Subscribers
   def scope
     return people_as_configured.where(subscriber_conditions) unless opt_in?
 
-    allowed_to_opt_in.where(id: subscriptions.people.included.select('subscriber_id'))
+    allowed_to_opt_in.where(id: subscriptions.people.included.select("subscriber_id"))
   end
 
   def people_as_configured
-    @list.filter_chain.filter(@people_scope).
-      joins(people_joins).
-      joins(subscription_joins).
-      where(subscriptions: { mailing_list_id: id }).
-      where("people.id NOT IN (#{excluded_subscriber_ids.to_sql})").
-      where("people.id NOT IN (#{tag_excluded_person_ids.to_sql})")
+    @list.filter_chain.filter(@people_scope)
+      .joins(people_joins)
+      .joins(subscription_joins)
+      .where(subscriptions: {mailing_list_id: id})
+      .where("people.id NOT IN (#{excluded_subscriber_ids.to_sql})")
+      .where("people.id NOT IN (#{tag_excluded_person_ids.to_sql})")
   end
 
   def people_joins
@@ -66,7 +65,7 @@ class MailingLists::Subscribers
   end
 
   def subscription_joins
-    sql = ', subscriptions ' # the comma is needed because it is not a JOIN, but a second "FROM"
+    sql = ", subscriptions " # the comma is needed because it is not a JOIN, but a second "FROM"
 
     if join_groups?
       sql += <<~SQL
@@ -104,15 +103,15 @@ class MailingLists::Subscribers
   end
 
   def person_subscribers(condition)
-    condition.or('subscriptions.subscriber_type = ? AND ' \
-                 'subscriptions.excluded = ? AND ' \
-                 'subscriptions.subscriber_id = people.id',
-                 Person.sti_name,
-                 false)
+    condition.or("subscriptions.subscriber_type = ? AND " \
+                 "subscriptions.excluded = ? AND " \
+                 "subscriptions.subscriber_id = people.id",
+      Person.sti_name,
+      false)
   end
 
   def group_subscribers(condition)
-    sql = <<~SQL.split.join(' ')
+    sql = <<~SQL.split.join(" ")
       subscriptions.subscriber_type = ? AND
       #{Group.quoted_table_name}.lft >= sub_groups.lft AND
       #{Group.quoted_table_name}.rgt <= sub_groups.rgt AND
@@ -124,7 +123,7 @@ class MailingLists::Subscribers
     SQL
 
     if subscriptions.groups.any?(&:subscription_tags)
-      sql += <<~SQL.split.join(' ')
+      sql += <<~SQL.split.join(" ")
         AND (subscription_tags.tag_id IS NULL OR
         subscription_tags.tag_id = people_taggings.tag_id)
       SQL
@@ -147,33 +146,33 @@ class MailingLists::Subscribers
 
   def event_subscribers(condition)
     condition
-      .or('subscriptions.subscriber_type = ? AND ' \
-          'subscriptions.subscriber_id = event_participations.event_id AND ' \
-          'event_participations.active = ?',
-          Event.sti_name,
-          true)
+      .or("subscriptions.subscriber_type = ? AND " \
+          "subscriptions.subscriber_id = event_participations.event_id AND " \
+          "event_participations.active = ?",
+        Event.sti_name,
+        true)
   end
 
   def tag_excluded_person_ids
     ActsAsTaggableOn::Tagging
       .select(:taggable_id)
       .where(taggable_type: Person.sti_name,
-             tag_id: tag_excluded_subscription_ids)
+        tag_id: tag_excluded_subscription_ids)
   end
 
   def tag_excluded_subscription_ids
     SubscriptionTag
       .select(:tag_id)
       .joins(:subscription)
-      .where(subscription_tags: { excluded: true },
-             subscriptions: { mailing_list_id: id })
+      .where(subscription_tags: {excluded: true},
+        subscriptions: {mailing_list_id: id})
   end
 
   def excluded_subscriber_ids
     Subscription
       .select(:subscriber_id)
       .where(mailing_list_id: id,
-             excluded: true,
-             subscriber_type: Person.sti_name)
+        excluded: true,
+        subscriber_type: Person.sti_name)
   end
 end

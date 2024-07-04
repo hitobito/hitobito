@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require Rails.root.join('db', 'seeds', 'support', 'group_seeder')
+require Rails.root.join("db", "seeds", "support", "group_seeder")
 
 seeder = GroupSeeder.new
 

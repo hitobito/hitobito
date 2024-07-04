@@ -5,11 +5,9 @@
 
 module Subscriber
   class PersonController < BaseController
-
     skip_authorize_resource # must be in leaf class
 
     before_render_form :replace_validation_errors
-
 
     def create
       assign_attributes
@@ -18,7 +16,6 @@ module Subscriber
         respond_with(entry, success: created, location: index_path)
       end
     end
-
 
     private
 
@@ -39,8 +36,8 @@ module Subscriber
     def find_excluded_subscription
       if subscriber_id
         mailing_list.subscriptions.where(subscriber_id: subscriber_id,
-                                         subscriber_type: Person.sti_name,
-                                         excluded: true).first
+          subscriber_type: Person.sti_name,
+          excluded: true).first
       end
     end
 

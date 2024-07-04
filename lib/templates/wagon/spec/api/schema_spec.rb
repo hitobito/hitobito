@@ -5,8 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
 
-require 'spec_helper'
+require "spec_helper"
 
-describe 'Graphiti schema' do
-  it_behaves_like 'graphiti schema file is up to date'
+describe "Graphiti schema" do
+  it_behaves_like "graphiti schema file is up to date"
 end

@@ -5,10 +5,9 @@
 
 # encoding:  utf-8
 
-require 'spec_helper'
+require "spec_helper"
 
 describe QualificationKindsController, type: :controller do
-
   class << self
     def it_should_redirect_to_show
       it { is_expected.to redirect_to qualification_kinds_path(returning: true) }
@@ -17,15 +16,14 @@ describe QualificationKindsController, type: :controller do
 
   let(:test_entry) { qualification_kinds(:sl) }
   let(:test_entry_attrs) do
-    { label: 'Super Leader',
-      description: 'More bla',
-      validity: 3,
-      reactivateable: 3,
-      required_training_days: 5 }
+    {label: "Super Leader",
+     description: "More bla",
+     validity: 3,
+     reactivateable: 3,
+     required_training_days: 5}
   end
 
   before { sign_in(people(:top_leader)) }
 
-  include_examples 'crud controller', skip: [%w(show)]
-
+  include_examples "crud controller", skip: [%w[show]]
 end

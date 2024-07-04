@@ -7,22 +7,22 @@
 
 namespace :wagon do
   namespace :migrate do
-    desc 'Display status of migrations including the originating wagon name'
+    desc "Display status of migrations including the originating wagon name"
     task status: :environment do
       migrations_paths = wagons.each_with_object({}) do |wagon, hash|
         hash[wagon.wagon_name] = wagon.migrations_paths
       end
-      migrations_paths['core'] = Rails.application.paths['db/migrate'].to_a
+      migrations_paths["core"] = Rails.application.paths["db/migrate"].to_a
       wagon_names_width = migrations_paths.keys.map(&:length).max
 
       context = ActiveRecord::MigrationContext.new(migrations_paths.values.flatten,
-                                                   ActiveRecord::SchemaMigration)
+        ActiveRecord::SchemaMigration)
 
       context.migrations_status.each do |status, version, name|
-        migration_file = context.migrations.find {|m| m.version == version.to_i }.filename
-        wagon_name = migrations_paths.
-          find {|_, paths| paths.any? {|p| migration_file.start_with?(p) } }&.
-          first
+        migration_file = context.migrations.find { |m| m.version == version.to_i }.filename
+        wagon_name = migrations_paths
+          .find { |_, paths| paths.any? { |p| migration_file.start_with?(p) } }
+          &.first
 
         puts "#{status.center(wagon_names_width)} [#{wagon_name.center(8)}] " \
           "#{version.ljust(14)}  #{name}"

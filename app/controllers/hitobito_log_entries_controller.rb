@@ -11,30 +11,30 @@ class HitobitoLogEntriesController < ListController
   private
 
   def model_scope
-    model_class.
-      includes(:subject).
-      yield_self(&method(:filter_category)).
-      yield_self(&method(:filter_from)).
-      yield_self(&method(:filter_to)).
-      yield_self(&method(:filter_level)).
-      order(created_at: :desc).
-      page(params[:page])
+    model_class
+      .includes(:subject)
+      .yield_self(&method(:filter_category))
+      .yield_self(&method(:filter_from))
+      .yield_self(&method(:filter_to))
+      .yield_self(&method(:filter_level))
+      .order(created_at: :desc)
+      .page(params[:page])
   end
 
   %i[category level from_date from_time to_date to_time].each do |p|
-    define_method("#{p}_param") do
+    define_method(:"#{p}_param") do
       params[p].presence
     end
   end
 
   %i[date time].each do |c|
-    define_method("#{c}_param") do |type|
-      send("#{type}_#{c}_param")
+    define_method(:"#{c}_param") do |type|
+      send(:"#{type}_#{c}_param")
     end
   end
 
   def date_param(type)
-    send("#{type}_date_param")
+    send(:"#{type}_date_param")
   end
 
   def filter_category(scope)
@@ -44,13 +44,13 @@ class HitobitoLogEntriesController < ListController
   def filter_time(type)
     return unless date_param(type) || time_param(type)
 
-    date = date_param(type) || Date.today
-    time_of_day = time_param(type) || (type == :from ? '00:00' : '23:59')
+    date = date_param(type) || Time.zone.today
+    time_of_day = time_param(type) || ((type == :from) ? "00:00" : "23:59")
     Time.zone.parse("#{date} #{time_of_day}")
   end
 
   def filter_from(scope)
-    filter_time(:from) ? scope.where('created_at >= ?', filter_time(:from)) : scope
+    filter_time(:from) ? scope.where(created_at: filter_time(:from)..) : scope
   end
 
   def filter_to(scope)
@@ -61,12 +61,12 @@ class HitobitoLogEntriesController < ListController
     # after this exact minute but before the next minute which is
     # what the user expects when having minute precision.
     less_than_timestamp = filter_time(:to) + 1.minute
-    scope.where('created_at < ?', less_than_timestamp)
+    scope.where(created_at: ...less_than_timestamp)
   end
 
   def filter_level(scope)
     return scope unless level_param
 
-    scope.where('level >= ?', HitobitoLogEntry.levels[level_param])
+    scope.where(level: (HitobitoLogEntry.levels[level_param])..)
   end
 end

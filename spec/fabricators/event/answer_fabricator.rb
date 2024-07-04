@@ -17,9 +17,8 @@
 #
 #  index_event_answers_on_participation_id_and_question_id  (participation_id,question_id) UNIQUE
 
-
-Fabricator(:event_answer, class_name: 'Event::Answer') do
+Fabricator(:event_answer, class_name: "Event::Answer") do
   participation
   question
-  answer { Faker::Lorem.words.join(' ') + '?' }
+  answer { Faker::Lorem.words.join(" ") + "?" }
 end

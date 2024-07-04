@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module InvoicesHelper
-
   def format_invoice_list_amount_paid(invoice_list)
     invoice = invoice_list.invoice || invoice_list.group.invoices.build
     invoice.decorate.format_currency(invoice_list.amount_paid)
@@ -19,11 +18,11 @@ module InvoicesHelper
 
   def format_invoice_state(invoice)
     type = case invoice.state
-           when /draft|cancelled/ then 'info'
-           when /sent|issued|partial/ then 'warning'
-           when /payed|excess/ then 'success'
-           when /reminded/ then 'danger'
-           end
+    when /draft|cancelled/ then "info"
+    when /sent|issued|partial/ then "warning"
+    when /payed|excess/ then "success"
+    when /reminded/ then "danger"
+    end
     badge(invoice_state_label(invoice), type)
   end
 
@@ -91,10 +90,10 @@ module InvoicesHelper
     recipient_address_lines = invoice.recipient_address.split("\n")
     content_tag(:p) do
       safe_join([
-                  content_tag(:b) { recipient_address_lines.first },
-                  *recipient_address_lines.drop(1),
-                  mail_to(entry.recipient_email)
-                ], '<br/>'.html_safe)
+        content_tag(:b) { recipient_address_lines.first },
+        *recipient_address_lines.drop(1),
+        mail_to(entry.recipient_email)
+      ], "<br/>".html_safe)
     end
   end
 end

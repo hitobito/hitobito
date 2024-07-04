@@ -25,7 +25,7 @@
 #  index_event_participations_on_person_id               (person_id)
 #
 
-Fabricator(:event_participation, class_name: 'Event::Participation') do
+Fabricator(:event_participation, class_name: "Event::Participation") do
   person
   event
 end

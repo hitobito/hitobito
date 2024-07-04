@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Group::Merger
-
   attr_reader :group1, :group2, :new_group_name, :new_group, :errors
 
   def initialize(group1, group2, new_group_name)
@@ -14,7 +13,7 @@ class Group::Merger
   end
 
   def merge!
-    raise('Cannot merge these Groups') unless group2_valid?
+    raise("Cannot merge these Groups") unless group2_valid?
 
     ::Group.transaction do
       if create_new_group
@@ -28,7 +27,7 @@ class Group::Merger
   end
 
   def group2_valid?
-    (group1.class == group2.class && group1.parent_id == group2.parent_id)
+    group1.instance_of?(group2.class) && group1.parent_id == group2.parent_id
   end
 
   private
@@ -97,5 +96,4 @@ class Group::Merger
       group.reload.destroy
     end
   end
-
 end

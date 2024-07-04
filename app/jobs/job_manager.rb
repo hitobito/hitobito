@@ -27,7 +27,7 @@ class JobManager
 
     puts "Scheduled: #{scheduled.to_sentence}" if scheduled.any?
     puts "Missing: #{missing.to_sentence}" if missing.any?
-    puts 'All expected jobs are scheduled.' if missing.empty?
+    puts "All expected jobs are scheduled." if missing.empty?
 
     missing.empty?
   end

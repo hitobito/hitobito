@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class NoteAbility < AbilityDsl::Base
-
   on(Note) do
     permission(:layer_full).may(:show).in_same_layer
     permission(:layer_full).may(:create, :destroy).in_same_layer_if_active
@@ -51,5 +50,4 @@ class NoteAbility < AbilityDsl::Base
   def subj
     subject.subject
   end
-
 end

@@ -5,7 +5,6 @@
 #  or at https://github.com/hitobito/hitobito.
 
 class Event::Qualifier::StartAtCalculator
-
   delegate :qualification_date, to: :event, prefix: true
 
   attr_reader :event
@@ -26,7 +25,7 @@ class Event::Qualifier::StartAtCalculator
 
   def no_qualification_since?(kind, start_at)
     @person.qualifications
-      .where(qualification_kind_id: kind.id).where('start_at >= ?', start_at)
+      .where(qualification_kind_id: kind.id).where(start_at: start_at..)
       .none?
   end
 
@@ -43,7 +42,8 @@ class Event::Qualifier::StartAtCalculator
       @role,
       @prolongation_kinds.map(&:id),
       earliest_qualification_date,
-      event_qualification_date).load
+      event_qualification_date
+    ).load
   end
 
   def earliest_qualification_date

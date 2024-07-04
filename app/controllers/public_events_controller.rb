@@ -17,9 +17,9 @@ class PublicEventsController < ApplicationController
   before_action :assert_public_access, :assert_external_application_possible
 
   helper_method :entry, # behave like most hitobito-controllers
-                :resource, # enable login-form
-                :group, :event, # enable external login
-                :can? # enable permission checks
+    :resource, # enable login-form
+    :group, :event, # enable external login
+    :can? # enable permission checks
 
   decorates :entry
   delegate :can?, to: :ability
@@ -65,6 +65,6 @@ class PublicEventsController < ApplicationController
     Ability.new(current_person)
   end
 
-  alias resource person # used by devise-form
-  alias event entry # used by check-email-form
+  alias_method :resource, :person # used by devise-form
+  alias_method :event, :entry # used by check-email-form
 end

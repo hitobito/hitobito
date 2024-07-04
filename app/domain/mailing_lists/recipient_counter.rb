@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class MailingLists::RecipientCounter
-
   def initialize(mailing_list, message_type, households = false)
     @mailing_list = mailing_list
     @message_type = message_type
@@ -13,15 +12,15 @@ class MailingLists::RecipientCounter
 
   def valid
     @valid ||= case @message_type
-               when Message::Letter.name, Message::LetterWithInvoice.name
-                 @households ?
-                     @mailing_list.household_count(Person.with_address) :
-                     @mailing_list.people_count(Person.with_address)
-               when Message::TextMessage.name
-                 @mailing_list.people_count(Person.with_mobile)
-               else
-                 @mailing_list.people_count
-               end
+    when Message::Letter.name, Message::LetterWithInvoice.name
+      @households ?
+          @mailing_list.household_count(Person.with_address) :
+          @mailing_list.people_count(Person.with_address)
+    when Message::TextMessage.name
+      @mailing_list.people_count(Person.with_mobile)
+    else
+      @mailing_list.people_count
+    end
   end
 
   def invalid

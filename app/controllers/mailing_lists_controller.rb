@@ -9,11 +9,11 @@ class MailingListsController < CrudController
   self.nesting = Group
 
   self.permitted_attrs = [:name, :description, :publisher, :mail_name,
-                          :additional_sender, :subscribable, :subscribers_may_post,
-                          :subscribable_for, :subscribable_mode,
-                          :anyone_may_post, :main_email, :delivery_report,
-                          :mailchimp_list_id, :mailchimp_api_key,
-                          :mailchimp_include_additional_emails, { preferred_labels: [] }]
+    :additional_sender, :subscribable, :subscribers_may_post,
+    :subscribable_for, :subscribable_mode,
+    :anyone_may_post, :main_email, :delivery_report,
+    :mailchimp_list_id, :mailchimp_api_key,
+    :mailchimp_include_additional_emails, {preferred_labels: []}]
 
   decorates :group, :mailing_list
 
@@ -61,9 +61,9 @@ class MailingListsController < CrudController
   def render_entries_json(entries)
     paged_entries = entries.page(params[:page])
     render json: [paging_properties(paged_entries),
-                  ListSerializer.new(paged_entries, controller: self,
-                    serializer: MailingListSerializer)].inject(&:merge)
+      ListSerializer.new(paged_entries, controller: self,
+        serializer: MailingListSerializer)].inject(&:merge)
   end
 
-  alias group parent
+  alias_method :group, :parent
 end

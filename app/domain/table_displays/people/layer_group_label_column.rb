@@ -5,13 +5,12 @@
 
 module TableDisplays::People
   class LayerGroupLabelColumn < TableDisplays::Column
-
     def required_permission(attr)
       :show
     end
 
     def required_model_attrs(attr)
-      ['people.contact_data_visible']
+      ["people.contact_data_visible"]
     end
 
     def render(attr)

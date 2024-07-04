@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Person::TagsController < ApplicationController
-
   class_attribute :permitted_attrs
 
   before_action :load_group
@@ -18,7 +17,7 @@ class Person::TagsController < ApplicationController
     tags = []
 
     if params.key?(:q) && params[:q].size >= 3
-      tags = available_tags(params[:q]).map { |tag| { label: tag } }
+      tags = available_tags(params[:q]).map { |tag| {label: tag} }
     end
 
     render json: tags
@@ -57,12 +56,12 @@ class Person::TagsController < ApplicationController
   end
 
   def create_tag(name)
-    return unless name.present?
+    return if name.blank?
 
     ActsAsTaggableOn::Tagging.find_or_create_by!(
       taggable: @person,
       tag: ActsAsTaggableOn::Tag.find_or_create_by(name: name),
-      context: 'tags'
+      context: "tags"
     )
   end
 
@@ -72,7 +71,7 @@ class Person::TagsController < ApplicationController
 
   def available_tags(query)
     ActsAsTaggableOn::Tag
-      .where('name LIKE ?', "%#{query}%")
+      .where("name LIKE ?", "%#{query}%")
       .where.not(name: excluded_tags)
       .order(:name)
       .limit(10)
@@ -90,5 +89,4 @@ class Person::TagsController < ApplicationController
   def load_person
     @person = Person.find(params[:person_id])
   end
-
 end

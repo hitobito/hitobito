@@ -20,11 +20,9 @@
 #
 
 class SocialAccount < ActiveRecord::Base
-
   include ContactAccount
 
   self.value_attr = :name
-
 
   validates_by_schema
 
@@ -33,5 +31,4 @@ class SocialAccount < ActiveRecord::Base
       Settings.social_account.predefined_labels
     end
   end
-
 end

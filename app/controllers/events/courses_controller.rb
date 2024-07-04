@@ -34,7 +34,7 @@ class Events::CoursesController < ApplicationController
     courses.values.each do |entries|
       entries.sort_by! { |e| e.dates.first.try(:start_at) || Time.zone.now }
     end
-    Hash[courses.sort]
+    courses.sort.to_h
   end
 
   def render_tabular(format, courses)

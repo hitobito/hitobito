@@ -5,13 +5,13 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sww.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe InvoiceResource, type: :resource do
   let(:invoice) { invoices(:invoice) }
   let(:person) { people(:bottom_member) }
 
-  describe 'serialization' do
+  describe "serialization" do
     def serialized_attrs
       [
         :title,
@@ -28,27 +28,27 @@ describe InvoiceResource, type: :resource do
       ]
     end
 
-    it 'works' do
-      params[:filter] = { id: { eq: invoice.id } }
+    it "works" do
+      params[:filter] = {id: {eq: invoice.id}}
       render
 
       data = jsonapi_data[0]
 
       expect(data.attributes.symbolize_keys.keys).to match_array [:id,
-                                                                  :jsonapi_type] + serialized_attrs
+        :jsonapi_type] + serialized_attrs
 
       expect(data.id).to eq(invoice.id)
-      expect(data.jsonapi_type).to eq('invoices')
-      expect(data.attributes['type']).to be_blank
+      expect(data.jsonapi_type).to eq("invoices")
+      expect(data.attributes["type"]).to be_blank
     end
   end
 
-  describe 'including' do
-    it 'may include items' do
-      params[:include] = 'invoice_items'
+  describe "including" do
+    it "may include items" do
+      params[:include] = "invoice_items"
       render
       item = d[0].sideload(:invoice_items)[0]
-      expect(item.name).to eq 'pins'
+      expect(item.name).to eq "pins"
       expect(item.description).to be_blank
       expect(item.unit_cost).to eq 0.5
       expect(item.vat_rate).to be_nil
@@ -58,16 +58,16 @@ describe InvoiceResource, type: :resource do
       expect(item.cost_center).to be_nil
     end
 
-    it 'may include group' do
-      params[:include] = 'group'
+    it "may include group" do
+      params[:include] = "group"
       render
       recipient = d[0].sideload(:group)
       expect(recipient).to be_present
     end
 
-    it 'may include recipient' do
-      params[:filter] = { id: invoice.id }
-      params[:include] = 'recipient'
+    it "may include recipient" do
+      params[:filter] = {id: invoice.id}
+      params[:include] = "recipient"
       invoice.update!(recipient: person)
       render
       recipient = d[0].sideload(:recipient)
@@ -75,7 +75,7 @@ describe InvoiceResource, type: :resource do
     end
   end
 
-  describe 'filtering' do
+  describe "filtering" do
     let(:sent) { invoices(:sent) }
     let(:top_leader) { people(:top_leader) }
     let(:top_layer) { groups(:top_layer) }
@@ -88,18 +88,18 @@ describe InvoiceResource, type: :resource do
       invoice.update(recipient: bottom_member, group: bottom_group_one_one)
     end
 
-    describe 'by group_id' do
-      it 'returns only invoices matching group id' do
-        params[:filter] = { group_id: bottom_group_one_one.id }
+    describe "by group_id" do
+      it "returns only invoices matching group id" do
+        params[:filter] = {group_id: bottom_group_one_one.id}
         render
         expect(jsonapi_data).to have(1).items
         expect(jsonapi_data[0].id).to eq invoice.id
       end
     end
 
-    describe 'by recipient_id' do
-      it 'returns only invoices matching recipient_id' do
-        params[:filter] = { recipient_id: top_leader.id }
+    describe "by recipient_id" do
+      it "returns only invoices matching recipient_id" do
+        params[:filter] = {recipient_id: top_leader.id}
         render
         expect(jsonapi_data).to have(1).items
         expect(jsonapi_data[0].id).to eq sent.id

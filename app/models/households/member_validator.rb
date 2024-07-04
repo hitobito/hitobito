@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito
 
 class Households::MemberValidator < ActiveModel::Validator
-
   delegate :person, :household, to: :@member
   delegate :household_key, to: :household
 
@@ -21,8 +20,8 @@ class Households::MemberValidator < ActiveModel::Validator
   def in_other_household_present
     if person.household_key && household_key != person.household_key
       @member.errors.add(:base,
-                         :in_other_household_present,
-                         person_name: person.full_name)
+        :in_other_household_present,
+        person_name: person.full_name)
     end
   end
 
@@ -34,5 +33,4 @@ class Households::MemberValidator < ActiveModel::Validator
       end
     end
   end
-
 end

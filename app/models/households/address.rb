@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito
 
 class Households::Address
-
   delegate :reference_person, :people, to: :@household
 
   def initialize(household)
@@ -21,7 +20,7 @@ class Households::Address
     [
       build_street_and_number,
       build_zip_code_and_town
-    ].compact_blank.join(', ')
+    ].compact_blank.join(", ")
   end
 
   def dirty?
@@ -37,14 +36,14 @@ class Households::Address
   end
 
   def build_street_and_number
-    if FeatureGate.enabled?('structured_addresses')
-      [attrs[:street], attrs[:housenumber]].compact_blank.join(' ')
+    if FeatureGate.enabled?("structured_addresses")
+      [attrs[:street], attrs[:housenumber]].compact_blank.join(" ")
     else
       attrs[:address].to_s
     end
   end
 
   def build_zip_code_and_town
-    [attrs[:zip_code], attrs[:town]].compact_blank.join(' ').squish
+    [attrs[:zip_code], attrs[:town]].compact_blank.join(" ").squish
   end
 end

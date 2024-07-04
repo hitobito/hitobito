@@ -9,14 +9,14 @@ class HelpTexts::Entry
   attr_reader :key, :action_names, :controller_name, :model_class
 
   def self.key(controller_name, model_class)
-    [controller_name, model_class.to_s.underscore].compact.join('--')
+    [controller_name, model_class.to_s.underscore].compact.join("--")
   end
 
   def initialize(controller_name, model_class, existing = nil)
     @controller_name = controller_name
-    @model_class     = model_class
-    @existing        = existing || {}
-    @key             = self.class.key(controller_name, model_class)
+    @model_class = model_class
+    @existing = existing || {}
+    @key = self.class.key(controller_name, model_class)
 
     @action_names = []
   end
@@ -26,9 +26,9 @@ class HelpTexts::Entry
   end
 
   def grouped
-    %w(action field).collect do |kind|
+    %w[action field].collect do |kind|
       label = HelpText.human_attribute_name(kind.to_s, count: 2)
-      list  = labeled_list(kind)
+      list = labeled_list(kind)
       next if list.empty?
 
       OpenStruct.new(label: label, list: list)
@@ -41,8 +41,8 @@ class HelpTexts::Entry
 
   def translate(kind, name)
     format('%s "%s"', # rubocop:disable Style/FormatStringToken hard to name and little benfit
-           HelpText.human_attribute_name(kind.to_s),
-           send("translate_#{kind}", name))
+      HelpText.human_attribute_name(kind.to_s),
+      send(:"translate_#{kind}", name))
   end
 
   def fields
@@ -52,13 +52,13 @@ class HelpTexts::Entry
     ).uniq
   end
 
-  def actions(supported_actions = %w(index new edit show))
+  def actions(supported_actions = %w[index new edit show])
     (action_names & supported_actions) - existing(:action)
   end
 
   def labeled_list(kind)
     send(kind.to_s.pluralize).collect do |name, _|
-      ["#{kind}.#{name}", send("translate_#{kind}", name)]
+      ["#{kind}.#{name}", send(:"translate_#{kind}", name)]
     end.compact.sort_by(&:second)
   end
 
@@ -86,7 +86,7 @@ class HelpTexts::Entry
     end.map(&:to_s)
   end
 
-  def translate_action(action, mapping = { index: :list, new: :add })
+  def translate_action(action, mapping = {index: :list, new: :add})
     I18n.t("global.link.#{mapping.fetch(action.to_sym, action)}")
   end
 

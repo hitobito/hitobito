@@ -7,7 +7,6 @@
 
 module MailingLists::BulkMail
   class ImapMailValidator
-
     def initialize(mail)
       @mail = mail
     end
@@ -84,7 +83,7 @@ module MailingLists::BulkMail
     def additional_sender?(mailing_list)
       additional_senders = mailing_list.additional_sender.to_s
       list = additional_senders.split(/[,;]/).collect(&:strip).select(&:present?)
-      sender_domain = sender_email.sub(/^[^@]*@/, '*@')
+      sender_domain = sender_email.sub(/^[^@]*@/, "*@")
       # check if the domain is valid, if the sender is in the senders
       # list or if the domain is whitelisted
       list.include?(sender_email) ||
@@ -96,7 +95,7 @@ module MailingLists::BulkMail
     end
 
     def receiver_from_header
-      first_header('X-Original-To').presence
+      first_header("X-Original-To").presence
     end
 
     def sender_email
@@ -111,10 +110,10 @@ module MailingLists::BulkMail
 
     def possible_senders
       Person
-        .joins('LEFT JOIN additional_emails ON people.id = additional_emails.contactable_id' \
+        .joins("LEFT JOIN additional_emails ON people.id = additional_emails.contactable_id" \
                " AND additional_emails.contactable_type = 'person'")
-        .where('people.email = :email OR additional_emails.email = :email',
-               email: @mail.sender_email)
+        .where("people.email = :email OR additional_emails.email = :email",
+          email: @mail.sender_email)
         .distinct
     end
   end

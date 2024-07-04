@@ -1,6 +1,5 @@
 module MountedAttrs
   class Renderer
-
     def initialize(entry, template)
       @entry = entry
       @template = template
@@ -9,7 +8,7 @@ module MountedAttrs
     def render
       return if attrs_by_category.empty?
 
-      content = ''
+      content = ""
       attrs_by_category.each do |c, configs|
         content << content_tag(:h2, category_label(c))
         content << render_attrs(entry, *configs.map(&:attr_name))

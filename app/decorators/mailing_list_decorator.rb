@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class MailingListDecorator < ApplicationDecorator
-
   decorates :mailing_list
 
   def mail_address_link
@@ -12,42 +11,42 @@ class MailingListDecorator < ApplicationDecorator
   end
 
   def subscribable_info
-    html = ''.html_safe
+    html = "".html_safe
     html << if subscribable?
-              translate(subscribable_info_text).html_safe
-            else
-              translate(:may_not_subscribe).html_safe
-            end
+      translate(subscribable_info_text).html_safe
+    else
+      translate(:may_not_subscribe).html_safe
+    end
     html << h.tag(:br)
   end
 
   def subscribers_may_post_info
-    html = ''.html_safe
+    html = "".html_safe
     html << if subscribers_may_post
-              translate(:subscribers_may_post).html_safe
-            else
-              translate(:subscribers_may_not_post).html_safe
-            end
+      translate(:subscribers_may_post).html_safe
+    else
+      translate(:subscribers_may_not_post).html_safe
+    end
     html << h.tag(:br)
   end
 
   def anyone_may_post_info
-    html = ''.html_safe
+    html = "".html_safe
     html << if anyone_may_post
-              translate(:anyone_may_post).html_safe
-            else
-              translate(:anyone_may_not_post).html_safe
-            end
+      translate(:anyone_may_post).html_safe
+    else
+      translate(:anyone_may_not_post).html_safe
+    end
     html << h.tag(:br)
   end
 
   def delivery_report_info
-    html = ''.html_safe
+    html = "".html_safe
     html << if delivery_report
-              translate(:delivery_report).html_safe
-            else
-              translate(:no_delivery_report).html_safe
-            end
+      translate(:delivery_report).html_safe
+    else
+      translate(:no_delivery_report).html_safe
+    end
     html << h.tag(:br)
   end
 

@@ -150,7 +150,7 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
   end
 
   def copy_errors(new_role)
-    entry.attributes = new_role.attributes.except('id', 'terminated')
+    entry.attributes = new_role.attributes.except("id", "terminated")
     new_role.errors.each do |error|
       entry.errors.add(error.attribute, error.message)
     end
@@ -219,15 +219,15 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
   # A label for the current entry, including the model name, used for flash
   def full_entry_label(role = entry)
     translate(:full_entry_label, model_label: models_label(false),
-                                 role: h(role),
-                                 person: h(role.person),
-                                 group: h(role.group)).html_safe
+      role: h(role),
+      person: h(role.person),
+      group: h(role.group)).html_safe
   end
 
   def role_change_message
-    key = @group.id == @old_role.group.id ? :role_changed : :role_changed_to_group
+    key = (@group.id == @old_role.group.id) ? :role_changed : :role_changed_to_group
     translate(key, full_entry_label: full_entry_label(@old_role), new_role: h(@role),
-                   new_group: h(@group))
+      new_group: h(@group))
   end
 
   def after_create_location(new_person)
@@ -256,7 +256,7 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
     # only show warning if more than one group remains
     if @was_last_primary_group_role && entry.person.roles.select(:group_id).distinct.count > 1
       new_group = entry.person.primary_group
-      flash[:alert] = t('roles.role_primary_group_changed', new_group: new_group.to_s)
+      flash[:alert] = t("roles.role_primary_group_changed", new_group: new_group.to_s)
     end
   end
 

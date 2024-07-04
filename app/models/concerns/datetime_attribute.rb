@@ -18,13 +18,13 @@ module DatetimeAttribute
   def store_datetime_fields
     datetime_attributes.each do |attr|
       # use accessors to obtain persisted values
-      date = send("#{attr}_date")
+      date = send(:"#{attr}_date")
       if date.present?
-        hour = send("#{attr}_hour").presence || 0
-        min = send("#{attr}_min").presence || 0
+        hour = send(:"#{attr}_hour").presence || 0
+        min = send(:"#{attr}_min").presence || 0
         assign_datetime(attr, date, hour, min)
       else
-        send("#{attr}=", nil)
+        send(:"#{attr}=", nil)
       end
     end
   end
@@ -32,13 +32,13 @@ module DatetimeAttribute
   def assign_datetime(attr, date, hour, min)
     date = ActiveRecord::Type::Date.new.date_string_to_long_year(date)
     date = date.to_date
-    send("#{attr}=", Time.zone.local(date.year, date.month, date.day, hour.to_i, min.to_i))
+    send(:"#{attr}=", Time.zone.local(date.year, date.month, date.day, hour.to_i, min.to_i))
   rescue StandardError
     errors.add(attr, :invalid)
   end
 
   def datetime_to(value, field)
-    value ? send("datetime_to_#{field}", value) : nil
+    value ? send(:"datetime_to_#{field}", value) : nil
   end
 
   def datetime_to_date(value)
@@ -59,7 +59,6 @@ module DatetimeAttribute
   end
 
   module ClassMethods
-
     def datetime_attr(*attrs)
       attrs.each do |attr|
         datetime_attributes << attr
@@ -82,8 +81,8 @@ module DatetimeAttribute
 
     def define_datetime_setter(attr, field)
       accessor = datetime_accessor(attr, field)
-      define_method("#{accessor}=") do |value|
-        send("#{attr}_will_change!") unless value == send(accessor)
+      define_method(:"#{accessor}=") do |value|
+        send(:"#{attr}_will_change!") unless value == send(accessor)
         datetime_fields(attr)[field] = value
       end
     end
@@ -91,7 +90,5 @@ module DatetimeAttribute
     def datetime_accessor(attr, field)
       :"#{attr}_#{field}"
     end
-
   end
-
 end

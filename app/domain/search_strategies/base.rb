@@ -7,7 +7,6 @@
 
 module SearchStrategies
   class Base
-
     QUERY_PER_PAGE = 10
 
     attr_accessor :term
@@ -87,17 +86,17 @@ module SearchStrategies
     end
 
     def load_accessible_people_ids
-      Person.accessible_by(PersonReadables.new(@user)).
-        unscope(:select). # accessible_by selects all people attributes, even when using .pluck
-        pluck(:id)
+      Person.accessible_by(PersonReadables.new(@user))
+        .unscope(:select) # accessible_by selects all people attributes, even when using .pluck
+        .pluck(:id)
     end
 
     def load_deleted_people_ids
-      Person.where('NOT EXISTS (SELECT * FROM roles ' \
+      Person.where("NOT EXISTS (SELECT * FROM roles " \
                    "WHERE (roles.deleted_at IS NULL OR
                            roles.deleted_at > :now) AND
                           roles.person_id = people.id)", now: Time.now.utc.to_s(:db))
-            .pluck(:id)
+        .pluck(:id)
     end
 
     def load_accessible_deleted_people_ids

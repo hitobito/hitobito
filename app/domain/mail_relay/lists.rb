@@ -13,8 +13,7 @@ module MailRelay
   # When a receiving server bounces the mail, it is relayed again to the original sender,
   # based on the encoded return path address.
   class Lists < Base
-
-    SENDER_SUFFIX = '-bounces'
+    SENDER_SUFFIX = "-bounces"
 
     self.mail_domain = Settings.email.list_domain
 
@@ -23,19 +22,19 @@ module MailRelay
         return nil if sender_email.blank?
 
         # recipient format (before @) must match regexp in #reject_not_existing
-        id_suffix = "+#{sender_email.tr('@', '=')}"
+        id_suffix = "+#{sender_email.tr("@", "=")}"
         "#{list_name}#{SENDER_SUFFIX}#{id_suffix}@#{domain || mail_domain}"
       end
 
       def app_sender_name
         app_sender = Settings.email.sender
-        app_sender[/^.*<(.+)@.+\..+>$/, 1] || app_sender[/^(.+)@.+\..+$/, 1] || 'noreply'
+        app_sender[/^.*<(.+)@.+\..+>$/, 1] || app_sender[/^(.+)@.+\..+$/, 1] || "noreply"
       end
     end
 
     def initialize(message)
       strip_spam_headers(message)
-      super(message)
+      super
     end
 
     # If the email sender was not allowed to post messages, this method is called.
@@ -54,7 +53,7 @@ module MailRelay
     # If the email is sent to an address that is not a valid relay, this method is called.
     # Forwards bounce messages to the original sender
     def reject_not_existing # rubocop:disable Metrics/AbcSize
-      data = envelope_receiver_name.match(/^(.+)#{SENDER_SUFFIX}\+(.+=.+)$/)
+      data = envelope_receiver_name.match(/^(.+)#{SENDER_SUFFIX}\+(.+=.+)$/o)
       if data && valid_address?(data[1])
         prepare_bounced_message(data[1], data[2])
         logger.info("Relaying bounce from #{message.from} for list #{data[1]} to #{message.to}")
@@ -98,7 +97,7 @@ module MailRelay
     def receivers
       @mail_log.message.update(mailing_list: mailing_list)
       Person.mailing_emails_for(mailing_list.people.to_a,
-                                mailing_list.labels)
+        mailing_list.labels)
     end
 
     def mailing_list
@@ -117,13 +116,13 @@ module MailRelay
     def prepare_not_allowed_message
       sender = "#{envelope_receiver_name}#{SENDER_SUFFIX}@#{mail_domain}"
       message.reply do
-        body 'Du bist nicht berechtigt, auf diese Liste zu schreiben.'
+        body "Du bist nicht berechtigt, auf diese Liste zu schreiben."
         from sender
       end
     end
 
     def log_not_allowed_sender
-      Rails.logger.info <<~MESSAGE.split("\n").join(' ')
+      Rails.logger.info <<~MESSAGE.split("\n").join(" ")
         MailRelay: #{sender_email} is not allowed to relay to MailingList #{mailing_list.mail_name}.
 
         AnyoneMayPost: #{mailing_list.anyone_may_post}
@@ -136,7 +135,7 @@ module MailRelay
     end
 
     def prepare_bounced_message(list_address, sender_address)
-      message.to = sender_address.tr('=', '@')
+      message.to = sender_address.tr("=", "@")
 
       env_sender = "#{list_address}#{SENDER_SUFFIX}@#{mail_domain}"
       message.sender = env_sender
@@ -152,7 +151,7 @@ module MailRelay
 
       additional_senders = mailing_list.additional_sender.to_s
       list = additional_senders.split(/[,;]/).collect(&:strip).select(&:present?)
-      sender_domain = sender_email.sub(/^[^@]*@/, '*@')
+      sender_domain = sender_email.sub(/^[^@]*@/, "*@")
       # check if the domain is valid, if the sender is in the senders
       # list or if the domain is whitelisted
       list.include?(sender_email) ||
@@ -162,7 +161,7 @@ module MailRelay
     def sender_is_group_email?
       group = mailing_list.group
       group.email == sender_email ||
-      group.additional_emails.collect(&:email).include?(sender_email)
+        group.additional_emails.collect(&:email).include?(sender_email)
     end
 
     def sender_is_list_administrator?
@@ -177,8 +176,8 @@ module MailRelay
 
     def potential_senders
       Person.left_joins(:additional_emails)
-            .where('people.email = ? OR additional_emails.email = ?', sender_email, sender_email)
-            .distinct
+        .where("people.email = ? OR additional_emails.email = ?", sender_email, sender_email)
+        .distinct
     end
 
     def send_reject_message?
@@ -190,9 +189,8 @@ module MailRelay
     # (Encoding::UndefinedConversionError)
     def strip_spam_headers(message)
       message.header
-             .select { |field| field.name =~ /^X-DSPAM/i }
-             .each { |field| message.header[field.name] = nil }
+        .select { |field| field.name =~ /^X-DSPAM/i }
+        .each { |field| message.header[field.name] = nil }
     end
-
   end
 end

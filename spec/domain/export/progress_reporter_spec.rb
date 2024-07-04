@@ -5,10 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Export::ProgressReporter do
-  let(:file) { AsyncDownloadFile.from_filename('subscriptions_1234-42') }
+  let(:file) { AsyncDownloadFile.from_filename("subscriptions_1234-42") }
   let(:values) { [] }
 
   subject! do
@@ -17,10 +17,10 @@ describe Export::ProgressReporter do
     end
   end
 
-  context '1 percent steps over 1000 iterations' do
+  context "1 percent steps over 1000 iterations" do
     let(:list) { (0..1000) }
 
-    it 'has correct sequence' do
+    it "has correct sequence" do
       values << subject.file.progress
 
       list.each do |index|
@@ -32,10 +32,10 @@ describe Export::ProgressReporter do
     end
   end
 
-  context '10 percent steps over 1000 iterations' do
+  context "10 percent steps over 1000 iterations" do
     let(:list) { (1..1000) }
 
-    it 'has correct sequence' do
+    it "has correct sequence" do
       values << subject.file.progress
 
       list.step(100) do |index|
@@ -43,8 +43,7 @@ describe Export::ProgressReporter do
         values << subject.file.progress
       end
 
-      expect(values.uniq.map(&:to_s)).to eq %w(0 10 20 30 40 50 60 70 80 90)
+      expect(values.uniq.map(&:to_s)).to eq %w[0 10 20 30 40 50 60 70 80 90]
     end
-
   end
 end

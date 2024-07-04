@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Export::PeopleExportJob < Export::ExportBaseJob
-
   self.parameters = PARAMETERS + [:group_id, :list_filter_args]
 
   def initialize(format, user_id, group_id, list_filter_args, options)
@@ -28,9 +27,9 @@ class Export::PeopleExportJob < Export::ExportBaseJob
 
   def full_entries(entries)
     entries
-      .select('people.*')
+      .select("people.*")
       .preload_accounts
-      .includes(relations_to_tails: :tail, qualifications: { qualification_kind: :translations })
+      .includes(relations_to_tails: :tail, qualifications: {qualification_kind: :translations})
       .includes(:primary_group)
   end
 
@@ -55,10 +54,10 @@ class Export::PeopleExportJob < Export::ExportBaseJob
 
   def index_full_ability?
     @index_full_ability ||= if filter.multiple_groups
-                              ability.can?(:index_deep_full_people, group)
-                            else
-                              ability.can?(:index_full_people, group)
-                            end
+      ability.can?(:index_deep_full_people, group)
+    else
+      ability.can?(:index_full_people, group)
+    end
   end
 
   def filter

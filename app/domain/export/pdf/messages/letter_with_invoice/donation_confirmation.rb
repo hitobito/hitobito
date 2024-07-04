@@ -7,7 +7,6 @@
 
 class Export::Pdf::Messages::LetterWithInvoice
   class DonationConfirmation < Export::Pdf::Messages::Letter::Section
-
     def initialize(pdf, letter, recipient, options)
       super(pdf, letter, options)
       @recipient = recipient.person
@@ -44,19 +43,19 @@ class Export::Pdf::Messages::LetterWithInvoice
     end
 
     def donation_confirmation_content
-      text I18n.t('messages.export.section.donation_confirmation.acknowledgement') + break_line
+      text I18n.t("messages.export.section.donation_confirmation.acknowledgement") + break_line
     end
 
     def donation_confirmation_header
       layer_name = @letter.group.layer_group.name
-      text I18n.t('messages.export.section.donation_confirmation.header', organisation: layer_name),
-           style: :bold,
-           size: 14
+      text I18n.t("messages.export.section.donation_confirmation.header", organisation: layer_name),
+        style: :bold,
+        size: 14
     end
 
     def donation_confirmation_title
-      text I18n.t('messages.export.section.donation_confirmation.title', year: 1.year.ago.year),
-           style: :bold
+      text I18n.t("messages.export.section.donation_confirmation.title", year: 1.year.ago.year),
+        style: :bold
     end
 
     def donation_confirmation_text
@@ -69,24 +68,24 @@ class Export::Pdf::Messages::LetterWithInvoice
     end
 
     def donation_confirmation_year_info
-      text(I18n.t('messages.export.section.donation_confirmation.received_from',
-                  year: 1.year.ago.year))
+      text(I18n.t("messages.export.section.donation_confirmation.received_from",
+        year: 1.year.ago.year))
     end
 
     def donation_confirmation_received_amount_info
-      text(I18n.t('messages.export.section.donation_confirmation.received_amount'))
+      text(I18n.t("messages.export.section.donation_confirmation.received_amount"))
     end
 
     def last_year_donation_amount
       currency = letter.invoice.currency
 
-      "#{currency} #{sprintf('%.2f', donation_amount)}"
+      "#{currency} #{sprintf("%.2f", donation_amount)}"
     end
 
     def recipient_address
       ["#{@recipient.first_name}, #{@recipient.last_name}",
-       @recipient.address,
-       "#{@recipient.zip_code} #{@recipient.town}"].join("\n")
+        @recipient.address,
+        "#{@recipient.zip_code} #{@recipient.town}"].join("\n")
     end
 
     def break_line
@@ -96,10 +95,10 @@ class Export::Pdf::Messages::LetterWithInvoice
     def donation_amount
       @donation_amount ||=
         Payments::Collection.new
-                            .in_last(1.year)
-                            .in_layer(letter.group.layer_group)
-                            .of_person(@recipient)
-                            .payments_amount
+          .in_last(1.year)
+          .in_layer(letter.group.layer_group)
+          .of_person(@recipient)
+          .payments_amount
     end
   end
 end

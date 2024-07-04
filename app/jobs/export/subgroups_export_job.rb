@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Export::SubgroupsExportJob < Export::ExportBaseJob
-
   self.parameters = PARAMETERS + [:group_id]
 
   def initialize(user_id, group_id, options)
@@ -17,9 +16,9 @@ class Export::SubgroupsExportJob < Export::ExportBaseJob
 
   def entries
     group.self_and_descendants
-         .without_deleted
-         .order(:lft)
-         .includes(:contact)
+      .without_deleted
+      .order(:lft)
+      .includes(:contact)
   end
 
   def group

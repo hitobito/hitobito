@@ -5,7 +5,6 @@
 
 module Dropdown
   class LetterWithInvoice < Invoices
-
     private
 
     def pdf_links
@@ -13,8 +12,7 @@ module Dropdown
     end
 
     def item_options
-      super.merge(target: '')
+      super.merge(target: "")
     end
-
   end
 end

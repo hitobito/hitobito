@@ -7,38 +7,36 @@
 #
 
 class Group::DeletedPeople
-
   class << self
-
     def deleted_for_multiple(layer_groups)
-      Person.
-        joins('INNER JOIN roles ON roles.person_id = people.id').
-        joins("INNER JOIN #{Group.quoted_table_name} " \
-              "ON #{Group.quoted_table_name}.id = roles.group_id").
-        where(no_active_roles_exist).
-        where('roles.deleted_at = (?)', last_role_deleted_at).
-        where("#{Group.quoted_table_name}.layer_group_id IN (?)", layer_groups.map(&:id)).
-        distinct
+      Person
+        .joins("INNER JOIN roles ON roles.person_id = people.id")
+        .joins("INNER JOIN #{Group.quoted_table_name} " \
+              "ON #{Group.quoted_table_name}.id = roles.group_id")
+        .where(no_active_roles_exist)
+        .where("roles.deleted_at = (?)", last_role_deleted_at)
+        .where("#{Group.quoted_table_name}.layer_group_id IN (?)", layer_groups.map(&:id))
+        .distinct
     end
 
     def deleted_for(layer_group)
-      Person.
-        joins('INNER JOIN roles ON roles.person_id = people.id').
-        joins("INNER JOIN #{Group.quoted_table_name} " \
-              "ON #{Group.quoted_table_name}.id = roles.group_id").
-        where(no_active_roles_exist).
-        where('roles.deleted_at = (?)', last_role_deleted_at).
-        where("#{Group.quoted_table_name}.layer_group_id = ?", layer_group.id).
-        distinct
+      Person
+        .joins("INNER JOIN roles ON roles.person_id = people.id")
+        .joins("INNER JOIN #{Group.quoted_table_name} " \
+              "ON #{Group.quoted_table_name}.id = roles.group_id")
+        .where(no_active_roles_exist)
+        .where("roles.deleted_at = (?)", last_role_deleted_at)
+        .where("#{Group.quoted_table_name}.layer_group_id = ?", layer_group.id)
+        .distinct
     end
 
     def group_for_deleted(person)
-      Group.joins('INNER JOIN roles ON roles.group_id = groups.id')
-           .joins("INNER JOIN #{Person.quoted_table_name} " \
+      Group.joins("INNER JOIN roles ON roles.group_id = groups.id")
+        .joins("INNER JOIN #{Person.quoted_table_name} " \
                   "ON #{Person.quoted_table_name}.id = roles.person_id")
-           .where(no_active_roles_exist)
-           .where('roles.deleted_at = (?)', last_role_deleted_at)
-           .find_by("#{Person.quoted_table_name}.id = ?", person.id)
+        .where(no_active_roles_exist)
+        .where("roles.deleted_at = (?)", last_role_deleted_at)
+        .find_by("#{Person.quoted_table_name}.id = ?", person.id)
     end
 
     private
@@ -49,15 +47,13 @@ class Group::DeletedPeople
 
     def active_roles
       Role.without_deleted
-          .where('roles.person_id = people.id')
+        .where("roles.person_id = people.id")
     end
 
     def last_role_deleted_at
       Role.only_deleted
-          .where('roles.person_id = people.id')
-          .select('MAX(roles.deleted_at)')
+        .where("roles.person_id = people.id")
+        .select("MAX(roles.deleted_at)")
     end
-
   end
-
 end

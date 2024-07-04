@@ -143,6 +143,7 @@ group :test do
   gem "rspec-collection_matchers"
   gem "rspec-its"
   gem "selenium-devtools"
+  gem "simplecov", require: false
   gem "stackprof"
   gem "test-prof"
   gem "webmock"

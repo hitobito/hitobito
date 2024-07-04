@@ -57,8 +57,8 @@
 class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
 
-  SEARCHABLE_ATTRS = [:name, :short_name, :email, :address, :zip_code, :town, :country, 
-                     { parent: [:name, :short_name], phone_numbers: [:number], 
+  SEARCHABLE_ATTRS = [:name, :short_name, :email, :address, :zip_code, :town, :country,
+                     { parent: [:name, :short_name], phone_numbers: [:number],
                      social_accounts: [:name], additional_emails: [:email] }]
 
   include Group::NestedSet

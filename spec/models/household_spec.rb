@@ -14,6 +14,34 @@ describe Household do
   let(:other_person) { Fabricate(:person, first_name: "Ardona", last_name: "Mola") }
   let(:third_person) { Fabricate(:person, first_name: "Malou", last_name: "Thomas") }
 
+  describe "#household_key" do
+    it "is blank for new household" do
+      expect(person.household_key).to be_blank
+      expect(Household.new(person).household_key).to be_blank
+    end
+
+    it "is set for existing household" do
+      create_household
+      expect(person.household_key).to be_present
+      expect(Household.new(person).household_key).to eq(person.household_key)
+    end
+
+    it "gets set when saving household" do
+      household.add(other_person)
+      expect(household.household_key).to be_blank
+      household.save
+      expect(household.household_key).to be_present
+    end
+
+    it "does not get set on save when household is not valid" do
+      household.add(other_person)
+      expect(household.household_key).to be_blank
+      allow(household).to receive(:valid?).and_return(false)
+      household.save
+      expect(household.household_key).to be_blank
+    end
+  end
+
   describe "#people" do
     it "lists household members" do
       create_household
@@ -22,6 +50,46 @@ describe Household do
       expect(household.people).to include(person)
       expect(household.people).to include(other_person)
       expect(household.people).to include(third_person)
+    end
+  end
+
+  describe "#add" do
+    it "returns self" do
+      expect(household.add(other_person)).to eq household
+    end
+
+    it "adds person to people" do
+      expect(household.people).not_to include(other_person)
+      household.add(other_person)
+      expect(household.people).to include(other_person)
+    end
+
+    it "does not add duplicate person" do
+      expect(household.people).to include(person)
+      expect(household.people).to have(1).item
+      household.add(person)
+      expect(household.people).to have(1).item
+    end
+  end
+
+  describe "#remove" do
+    it "returns self" do
+      expect(household.remove(person)).to eq household
+    end
+
+    it "removes person from people" do
+      expect(household.people).to include(person)
+      expect(household.people).to have(1).item
+      household.remove(person)
+      expect(household.people).to be_empty
+    end
+
+    it "ignores unknown person" do
+      expect(household.people).to include(person)
+      expect(household.people).to have(1).item
+      household.remove(other_person)
+      expect(household.people).to have(1).item
+      expect(household.people).to include(person)
     end
   end
 
@@ -139,7 +207,27 @@ describe Household do
 
       expect do |b|
         household.save(&b)
-      end.to yield_with_args(contain_exactly(added_person), contain_exactly(other_person, third_person))
+      end.to yield_with_args(
+        contain_exactly(added_person),
+        contain_exactly(other_person, third_person)
+      )
+    end
+
+    it "yielded new_people and removed_people are updated" do
+      expect(person.household_key).to be_blank
+      create_household
+
+      household.remove(other_person)
+      added_person = Fabricate(:person)
+      household.add(added_person)
+
+      household.save! do |added_people, removed_people|
+        expect(added_people.first.household_key).to eq household.household_key
+        expect(added_people.first.changes).to be_empty
+
+        expect(removed_people.first.household_key).to be_blank
+        expect(removed_people.first.changes).to be_empty
+      end
     end
   end
 
@@ -200,8 +288,7 @@ describe Household do
 
       fourth_person = Fabricate(:person, street: "Loriweg", housenumber: "42")
       household.add(fourth_person)
-      household.save
-      expect(household.reload).to be_valid
+      household.save!
 
       expected_attrs = {address_care_of: nil,
                         street: "Loriweg",
@@ -280,6 +367,62 @@ describe Household do
     end
   end
 
+  describe "#reload" do
+    it "clears instance variables" do
+      household.instance_variable_set(:@dummy, "dummy")
+      expect { household.reload }
+        .to change { household.instance_variable_defined?(:@dummy) }
+        .from(true).to(false)
+    end
+
+    it "reloads the reference person" do
+      original_reference_person_name = household.reference_person.first_name
+      household.reference_person.first_name = "dummy"
+      expect { household.reload }
+        .to change { household.reference_person.first_name }
+        .from("dummy").to(original_reference_person_name)
+    end
+
+    it "reinitializes the household" do
+      original_people = household.people
+      household.remove(original_people.first)
+      expect(household.people).not_to match_array(original_people)
+
+      household.reload
+      expect(household.people).to match_array(original_people)
+    end
+  end
+
+  describe "#new_record?" do
+    it "is true for new unsaved household" do
+      household.add(other_person)
+      expect(household.new_record?).to eq true
+    end
+
+    it "is false for saved household" do
+      household.add(other_person)
+      household.save!
+      expect(household.new_record?).to eq false
+    end
+
+    it "is false for existing household" do
+      create_household
+      expect(person.household_key).to be_present
+      household = Household.new(person)
+      expect(household.new_record?).to eq false
+    end
+  end
+
+  describe "#persisted?" do
+    it "is the opposite of #new_record" do
+      allow(household).to receive(:new_record?).and_return(true)
+      expect(household.persisted?).to eq false
+
+      allow(household).to receive(:new_record?).and_return(false)
+      expect(household.persisted?).to eq true
+    end
+  end
+
   describe "logging" do
     with_versioning do
       let(:top_leader) { people(:top_leader) }
@@ -290,7 +433,7 @@ describe Household do
         household.add(other_person)
 
         expect do
-          household.save
+          household.save!
         end.to change { PaperTrail::Version.count }.by(2)
 
         [person, other_person].each do |person|
@@ -314,7 +457,7 @@ describe Household do
         PaperTrail::Version.destroy_all
 
         expect do
-          household.save
+          household.save!
         end.to change { PaperTrail::Version.count }.by(10)
 
         [person, other_person, third_person, fourth_person, fifth_person].each do |person|
@@ -335,7 +478,7 @@ describe Household do
 
         expect do
           household.remove(other_person)
-          household.save
+          household.save!
         end.to change { PaperTrail::Version.count }.by(3)
 
         [person, other_person, third_person].each do |person|
@@ -351,7 +494,7 @@ describe Household do
       it "adds log entries for both, removed and added people" do
         create_household
         household.remove(third_person)
-        household.save
+        household.save!
         fourth_person = Fabricate(:person, first_name: "Hans", last_name: "Hansen")
         PaperTrail::Version.destroy_all
 
@@ -359,7 +502,7 @@ describe Household do
         household.add(fourth_person)
 
         expect do
-          household.save
+          household.save!
         end.to change { PaperTrail::Version.count }.by(6)
 
         expect(collect_log_lines(person)).to eq([
@@ -413,7 +556,7 @@ describe Household do
         household.add(other_person)
 
         expect do
-          household.save
+          household.save!
         end.to change { PaperTrail::Version.count }.by(3)
 
         expect(person.versions.count).to eq(1)

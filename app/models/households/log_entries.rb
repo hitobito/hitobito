@@ -6,13 +6,16 @@
 #  https://github.com/hitobito/hitobito
 
 class Households::LogEntries
-  delegate :new_record?, :destroy?, :people,
+  delegate :destroy?, :people,
     :new_people, :removed_people,
     :household_label, to: "@household"
 
-  def initialize(household)
+  def initialize(household, new_record)
     @household = household
+    @new_record = new_record
   end
+
+  def new_record? = @new_record
 
   def create!
     return unless PaperTrail.enabled?
@@ -44,7 +47,7 @@ class Households::LogEntries
   def create_log_entry(person, changed_person, log_event)
     PaperTrail::Version.create!(main: person,
       item: person,
-      whodunnit: whodunnit,
+      whodunnit:,
       event: log_event,
       object: changed_person&.full_name,
       object_changes: household_log_label)

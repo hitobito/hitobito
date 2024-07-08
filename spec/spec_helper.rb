@@ -45,8 +45,22 @@ WebMock.disable_net_connect!(
   ]
 )
 
-# Maintain test schema for core and wagon specs
-ActiveRecord::Migration.maintain_test_schema!
+ActiveRecord::Migration.suppress_messages do
+  if ActiveRecord::Base.maintain_test_schema
+    ActiveRecord::Migration.load_schema_if_pending!
+    begin
+      previous_seed_quietness = SeedFu.quiet
+      SeedFu.quiet = true
+
+      Wagons.all.each do |wagon|
+        wagon.migrate
+        wagon.load_seed
+      end
+    ensure
+      SeedFu.quiet = previous_seed_quietness
+    end
+  end
+end
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.

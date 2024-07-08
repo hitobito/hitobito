@@ -7,3 +7,11 @@ Rails.application.reloader.to_prepare do
   Delayed::Worker.max_attempts = 10
   Delayed::Worker.plugins << BackgroundJobs::Logging
 end
+
+# ActiveJob will reload codes if necessary. DelayedJob consumes CPU and memory for reloading on every 5 secs.
+# TODO: https://github.com/collectiveidea/delayed_job/issues/776#issuecomment-307161178
+Delayed::Worker.instance_exec do
+  def self.reload_app?
+    false
+  end
+end

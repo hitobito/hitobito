@@ -43,7 +43,6 @@ WebMock.disable_net_connect!(
 
 ActiveRecord::Migration.suppress_messages do
   if ActiveRecord::Base.maintain_test_schema
-    ActiveRecord::Migration.load_schema_if_pending!
     begin
       previous_seed_quietness = SeedFu.quiet
       SeedFu.quiet = true
@@ -55,6 +54,8 @@ ActiveRecord::Migration.suppress_messages do
     ensure
       SeedFu.quiet = previous_seed_quietness
     end
+
+    ActiveRecord::Migration.load_schema_if_pending!
   end
 end
 

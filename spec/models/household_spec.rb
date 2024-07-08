@@ -10,13 +10,40 @@ require "spec_helper"
 describe Household do
   subject(:household) { Household.new(person.reload) }
 
-  let(:person) { Fabricate(:person, first_name: 'David', last_name: 'Hasselhoff') }
-  let(:other_person) { Fabricate(:person, first_name: 'Ardona', last_name: 'Mola') }
-  let(:third_person) { Fabricate(:person, first_name: 'Malou', last_name: 'Thomas') }
+  let(:person) { Fabricate(:person, first_name: "David", last_name: "Hasselhoff") }
+  let(:other_person) { Fabricate(:person, first_name: "Ardona", last_name: "Mola") }
+  let(:third_person) { Fabricate(:person, first_name: "Malou", last_name: "Thomas") }
+
+  describe "#household_key" do
+    it "is blank for new household" do
+      expect(person.household_key).to be_blank
+      expect(Household.new(person).household_key).to be_blank
+    end
+
+    it "is set for existing household" do
+      create_household
+      expect(person.household_key).to be_present
+      expect(Household.new(person).household_key).to eq(person.household_key)
+    end
+
+    it "gets set when saving household" do
+      household.add(other_person)
+      expect(household.household_key).to be_blank
+      household.save
+      expect(household.household_key).to be_present
+    end
+
+    it "does not get set on save when household is not valid" do
+      household.add(other_person)
+      expect(household.household_key).to be_blank
+      allow(household).to receive(:valid?).and_return(false)
+      household.save
+      expect(household.household_key).to be_blank
+    end
+  end
 
   describe "#people" do
-
-    it 'lists household members' do
+    it "lists household members" do
       create_household
 
       expect(household.members.size).to eq(3)
@@ -26,18 +53,18 @@ describe Household do
     end
   end
 
-  describe '#add' do
-    it 'returns self' do
+  describe "#add" do
+    it "returns self" do
       expect(household.add(other_person)).to eq household
     end
 
-    it 'adds person to people' do
+    it "adds person to people" do
       expect(household.people).not_to include(other_person)
       household.add(other_person)
       expect(household.people).to include(other_person)
     end
 
-    it 'does not add duplicate person' do
+    it "does not add duplicate person" do
       expect(household.people).to include(person)
       expect(household.people).to have(1).item
       household.add(person)
@@ -45,19 +72,19 @@ describe Household do
     end
   end
 
-  describe '#remove' do
-    it 'returns self' do
+  describe "#remove" do
+    it "returns self" do
       expect(household.remove(person)).to eq household
     end
 
-    it 'removes person from people' do
+    it "removes person from people" do
       expect(household.people).to include(person)
       expect(household.people).to have(1).item
       household.remove(person)
       expect(household.people).to be_empty
     end
 
-    it 'ignores unknown person' do
+    it "ignores unknown person" do
       expect(household.people).to include(person)
       expect(household.people).to have(1).item
       household.remove(other_person)
@@ -180,11 +207,13 @@ describe Household do
 
       expect do |b|
         household.save(&b)
-      end.to yield_with_args(contain_exactly(added_person),
-                             contain_exactly(other_person, third_person))
+      end.to yield_with_args(
+        contain_exactly(added_person),
+        contain_exactly(other_person, third_person)
+      )
     end
 
-    it 'yields persisted new_people and removed_people' do
+    it "yielded new_people and removed_people are updated" do
       expect(person.household_key).to be_blank
       create_household
 
@@ -194,7 +223,10 @@ describe Household do
 
       household.save! do |added_people, removed_people|
         expect(added_people.first.household_key).to eq household.household_key
+        expect(added_people.first.changes).to be_empty
+
         expect(removed_people.first.household_key).to be_blank
+        expect(removed_people.first.changes).to be_empty
       end
     end
   end
@@ -335,23 +367,23 @@ describe Household do
     end
   end
 
-  describe '#reload' do
-    it 'clears instance variables' do
-      household.instance_variable_set(:@dummy, 'dummy')
-      expect { household.reload }.
-        to change { household.instance_variable_defined?(:@dummy) }.
-        from(true).to(false)
+  describe "#reload" do
+    it "clears instance variables" do
+      household.instance_variable_set(:@dummy, "dummy")
+      expect { household.reload }
+        .to change { household.instance_variable_defined?(:@dummy) }
+        .from(true).to(false)
     end
 
-    it 'reloads the reference person' do
+    it "reloads the reference person" do
       original_reference_person_name = household.reference_person.first_name
-      household.reference_person.first_name = 'dummy'
-      expect { household.reload }.
-        to change { household.reference_person.first_name }.
-        from('dummy').to(original_reference_person_name)
+      household.reference_person.first_name = "dummy"
+      expect { household.reload }
+        .to change { household.reference_person.first_name }
+        .from("dummy").to(original_reference_person_name)
     end
 
-    it 'reinitializes the household' do
+    it "reinitializes the household" do
       original_people = household.people
       household.remove(original_people.first)
       expect(household.people).not_to match_array(original_people)
@@ -361,40 +393,28 @@ describe Household do
     end
   end
 
-  describe '#new_record?' do
-    it 'is true for new unsaved household' do
+  describe "#new_record?" do
+    it "is true for new unsaved household" do
       household.add(other_person)
       expect(household.new_record?).to eq true
     end
 
-    it 'is false for saved household' do
+    it "is false for saved household" do
       household.add(other_person)
       household.save!
       expect(household.new_record?).to eq false
     end
-  end
 
-  describe '#previously_new_record?' do
-    it 'is false for an unsaved household' do
-      expect(Household.new(person)).not_to be_previously_new_record
-    end
-
-    it 'is true for a saved new household' do
-      household = Household.new(person).add(other_person)
-      household.save!
-      expect(household).to be_previously_new_record
-    end
-
-    it 'is false for old household' do
-      household = Household.new(person).add(other_person)
-      household.save!
-      household.save!
-      expect(household).not_to be_previously_new_record
+    it "is false for existing household" do
+      create_household
+      expect(person.household_key).to be_present
+      household = Household.new(person)
+      expect(household.new_record?).to eq false
     end
   end
 
-  describe '#persisted?' do
-    it 'is the opposite of #new_record' do
+  describe "#persisted?" do
+    it "is the opposite of #new_record" do
       allow(household).to receive(:new_record?).and_return(true)
       expect(household.persisted?).to eq false
 
@@ -403,8 +423,7 @@ describe Household do
     end
   end
 
-
-  describe 'logging' do
+  describe "logging" do
     with_versioning do
       let(:top_leader) { people(:top_leader) }
       before { PaperTrail.request.whodunnit = top_leader.id }
@@ -590,5 +609,4 @@ describe Household do
     end
     expect(all_by_top_leader).to eq(true)
   end
-
 end

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito
 
 class Household
-
   include ActiveModel::Model
   include ActiveModel::Dirty
 
@@ -18,7 +17,6 @@ class Household
     @reference_person = reference_person
     @household_key = @reference_person.household_key
     @warnings = ActiveModel::Errors.new(self)
-    @previously_new_record = false
 
     if persisted?
       # for an existing household, fetch the members
@@ -115,6 +113,7 @@ class Household
   def persisted?
     !new_record?
   end
+
   alias_method :exists?, :persisted?
 
   def destroy?
@@ -144,10 +143,11 @@ class Household
 
   def save_records
     ActiveRecord::Base.transaction do
+      new_household = new_record? # remember value before persisting
       save_removed
       save_members
       yield new_people, removed_people if block_given?
-      Households::LogEntries.new(self).create!
+      Households::LogEntries.new(self, new_household).create!
     end
   end
 
@@ -156,12 +156,13 @@ class Household
   end
 
   def save_members
-    return unless members.present? # prevents generating key for empty household
+    return if members.blank? # prevents generating key for empty household
 
     # generate a fresh key if we don't have one yet
     @household_key ||= next_key
     people.each { |person| person.update!(address_attrs.merge(household_key:)) }
     # reload the reference_person as this is a different reference to the same person in `people`
+    # which does not know the updated attributes yet.
     @reference_person.reload
   end
 
@@ -181,5 +182,4 @@ class Household
       end
     end
   end
-
 end

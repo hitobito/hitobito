@@ -601,7 +601,7 @@ fr:
   full_text:
     index:
       title: "Résultats"
-      incomplete_search_request: "Prière d'entrer au moins deux caractères."
+      incomplete_search_request: "Prière d'entrer au moins trois caractères."
   group:
     archive:
       flash:

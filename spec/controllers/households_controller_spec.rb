@@ -82,7 +82,7 @@ describe HouseholdsController do
           person.update!(street: 'Superstreet', housenumber: 123, zip_code: 4567)
           bottom_member.update!(town: 'Motown')
           get :edit, params: params.merge(member_ids: [person.id, bottom_member.id])
-          expect(warning).to eq "Die Adresse 'Superstreet 123, 4567 Supertown' wird für " \
+          expect(warning).to eq "Die Adresse 'Superstreet 123, 4567 Greattown' wird für " \
                                 'alle Personen in diesem Haushalt übernommen.'
         end
 
@@ -104,13 +104,13 @@ describe HouseholdsController do
         end
 
         it 'is accepted if all address attrs are blank' do
-          top_leader.update!(town: nil)
+          top_leader.update!(housenumber: nil, street: nil, zip_code: nil, town: nil)
           get :edit, params: params.merge(member_ids: [bottom_leader.id, top_leader.id])
           expect(household.people).to match_array([bottom_leader, top_leader])
         end
 
         it 'is accepted if all address attrs are identical' do
-          bottom_leader.update!(town: 'Supertown')
+          bottom_leader.update!(street: 'Greatstreet', housenumber: 345, town: 'Greattown', zip_code: 3456)
           get :edit, params: params.merge(member_ids: [bottom_leader.id, top_leader.id])
           expect(household.people).to match_array([bottom_leader, top_leader])
         end
@@ -162,14 +162,14 @@ describe HouseholdsController do
       end
 
       it 'is accepted if all address attrs are blank' do
-        top_leader.update!(town: nil)
+        top_leader.update!(housenumber: nil, street: nil, zip_code: nil, town: nil)
         expect do
           put :update, params: params.merge(member_ids: [bottom_leader.id, top_leader.id])
         end.to change { household.reload.members.count }.by(1)
       end
 
       it 'is accepted if all address attrs are identical' do
-        bottom_leader.update!(town: 'Supertown')
+        bottom_leader.update!(street: 'Greatstreet', housenumber: 345, town: 'Greattown', zip_code: 3456)
         expect do
           put :update, params: params.merge(member_ids: [bottom_leader.id, top_leader.id])
         end.to change { household.reload.members.count }.by(1)

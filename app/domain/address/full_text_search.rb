@@ -7,24 +7,22 @@
 
 class Address::FullTextSearch
 
-  attr_reader :query, :search_strategy
+  attr_reader :query
 
   ADDRESS_WITH_NUMBER_REGEX = /^(.*)[^\d](\d+[A-Za-z]?)/
 
-  def initialize(query, search_strategy)
+  def initialize(query)
     @query = query
-
-    @search_strategy = search_strategy
   end
 
   def typeahead_results
-    addresses = with_query { search_strategy.query_addresses }
+    addresses = with_query { SearchStrategies::AddressSearch.new(nil,  query, nil).search_fulltext }
 
     typeahead_entries(addresses)
   end
 
   def results
-    addresses = with_query { search_strategy.query_addresses }
+    addresses = with_query { SearchStrategies::AddressSearch.new(nil,  query, nil).search_fulltext }
 
     addresses = addresses_with_numbers(addresses).map(&:first) if query_with_number?
 

@@ -13,6 +13,8 @@ module Events
         .joins(:dates)
         .preload(additional_course_includes)
         .joins(additional_course_includes)
+        .select("events.*", "event_dates.start_at")
+        .select(additional_course_includes.present? ? "event_kind_translations.label" : "")
         .order(course_ordering)
     end
 

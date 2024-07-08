@@ -37,7 +37,7 @@ class Event::KindCategory < ActiveRecord::Base
   ### INSTANCE METHODS
 
   ### SCOPES
-  default_scope -> { order('`order`') }
+  default_scope -> { order("event_kind_categories.order ASC NULLS FIRST") }
 
   def to_s(_format = :default)
     label

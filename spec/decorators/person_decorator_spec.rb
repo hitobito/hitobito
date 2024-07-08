@@ -13,7 +13,7 @@ describe PersonDecorator, :draper_with_helpers do
   subject { PersonDecorator.new(person) }
 
 
-  its(:full_label)   { should == 'Top Leader, Supertown' }
+  its(:full_label)   { should == 'Top Leader, Greattown' }
   its(:address_name) { should == '<strong>Top Leader</strong>' }
 
   context 'with town and birthday' do

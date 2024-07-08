@@ -10,6 +10,8 @@ Person.seed(:email,
    confirmed_at: Time.now}
 )
 
+require Rails.root.join('db', 'seeds', 'support', 'order_table_seeder')
+OrderTableSeeder.new.seed
 
 if !Rails.env.test? # don't seed in tests as it causes some tests to fail
   require Rails.root.join('db', 'seeds', 'support', 'location_seeder')

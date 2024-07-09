@@ -483,4 +483,47 @@ describe TokenAbility do
       end
     end
   end
+
+  describe :roles do
+    let(:role) { roles(:top_leader) }
+    let(:token) { service_tokens(:permitted_top_layer_token) }
+
+    context "authorized" do
+      it "may index" do
+        is_expected.to be_able_to(:index, Role)
+      end
+
+      it "may create" do
+        is_expected.to be_able_to(:create, Role.new(group: groups(:top_group), person: people(:top_leader)))
+      end
+
+      it "may update" do
+        is_expected.to be_able_to(:update, role)
+      end
+
+      it "may destroy" do
+        is_expected.to be_able_to(:destroy, role)
+      end
+    end
+
+    context "unauthorized" do
+      before { token.permission = :layern_and_below_read }
+
+      it "may not index" do
+        is_expected.not_to be_able_to(:index, Role)
+      end
+
+      it "may not create" do
+        is_expected.not_to be_able_to(:create, Role.new(group: groups(:top_group), person: people(:top_leader)))
+      end
+
+      it "may not update" do
+        is_expected.not_to be_able_to(:update, role)
+      end
+
+      it "may not destroy" do
+        is_expected.not_to be_able_to(:destroy, role)
+      end
+    end
+  end
 end

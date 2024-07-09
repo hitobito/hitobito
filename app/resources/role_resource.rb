@@ -6,19 +6,23 @@
 #  https://github.com/hitobito/hitobito.
 
 class RoleResource < ApplicationResource
-  # read-only for now
+  primary_endpoint "roles", [:index, :create, :show, :update, :destroy]
+
   with_options writable: false do
-    attribute :person_id, :integer
-    attribute :group_id, :integer
-    attribute :label, :string
-    attribute :type, :string
     attribute :created_at, :datetime
     attribute :updated_at, :datetime
     attribute :deleted_at, :datetime
   end
 
-  belongs_to :person
-  belongs_to :group
+  attribute :person_id, :integer
+  attribute :group_id, :integer
+  attribute :type, :string
+  attribute :label, :string
+
+  before_save :raise_when_changing_readonly_attr, only: [:update]
+
+  belongs_to :person, writable: false
+  belongs_to :group, writable: false
 
   has_one :layer_group, resource: GroupResource, writable: false do
     params do |hash, roles|
@@ -31,17 +35,18 @@ class RoleResource < ApplicationResource
     end
   end
 
-  def authorize_create(model)
-    # Writing roles is disabled for now
-    raise CanCan::AccessDenied
-  end
-
-  def authorize_update(model)
-    # Writing roles is disabled for now
-    raise CanCan::AccessDenied
-  end
-
   def index_ability
     JsonApi::RoleAbility.new(current_ability)
+  end
+
+  private
+
+  def raise_when_changing_readonly_attr(model)
+    errors = Graphiti::Util::SimpleErrors.new({})
+    [:group_id, :person_id, :type].each do |attr|
+      next unless model.changes.key?(attr.to_s)
+      errors.add(attr, :unwritable_attribute, message: "cannot be written")
+    end
+    raise Graphiti::Errors::InvalidRequest, errors if errors.any?
   end
 end

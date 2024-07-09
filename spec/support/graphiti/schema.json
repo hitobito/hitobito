@@ -2151,30 +2151,6 @@
           "writable": true,
           "description": null
         },
-        "person_id": {
-          "type": "integer",
-          "readable": true,
-          "writable": false,
-          "description": null
-        },
-        "group_id": {
-          "type": "integer",
-          "readable": true,
-          "writable": false,
-          "description": null
-        },
-        "label": {
-          "type": "string",
-          "readable": true,
-          "writable": false,
-          "description": null
-        },
-        "type": {
-          "type": "string",
-          "readable": true,
-          "writable": false,
-          "description": null
-        },
         "created_at": {
           "type": "datetime",
           "readable": true,
@@ -2191,6 +2167,30 @@
           "type": "datetime",
           "readable": true,
           "writable": false,
+          "description": null
+        },
+        "person_id": {
+          "type": "integer",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "group_id": {
+          "type": "integer",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "type": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "label": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
           "description": null
         }
       },
@@ -2199,19 +2199,19 @@
       "sorts": {
         "id": {
         },
-        "person_id": {
-        },
-        "group_id": {
-        },
-        "label": {
-        },
-        "type": {
-        },
         "created_at": {
         },
         "updated_at": {
         },
         "deleted_at": {
+        },
+        "person_id": {
+        },
+        "group_id": {
+        },
+        "type": {
+        },
+        "label": {
         }
       },
       "filters": {
@@ -2226,58 +2226,6 @@
             "lte"
           ]
         },
-        "person_id": {
-          "type": "integer",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
-        },
-        "group_id": {
-          "type": "integer",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
-        },
-        "label": {
-          "type": "string",
-          "operators": [
-            "eq",
-            "not_eq",
-            "eql",
-            "not_eql",
-            "prefix",
-            "not_prefix",
-            "suffix",
-            "not_suffix",
-            "match",
-            "not_match"
-          ]
-        },
-        "type": {
-          "type": "string",
-          "operators": [
-            "eq",
-            "not_eq",
-            "eql",
-            "not_eql",
-            "prefix",
-            "not_prefix",
-            "suffix",
-            "not_suffix",
-            "match",
-            "not_match"
-          ]
-        },
         "created_at": {
           "type": "datetime",
           "operators": [
@@ -2309,6 +2257,58 @@
             "gte",
             "lt",
             "lte"
+          ]
+        },
+        "person_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "group_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
           ]
         }
       },
@@ -2533,6 +2533,25 @@
         },
         "update": {
           "resource": "PersonResource"
+        }
+      }
+    },
+    "/api/roles": {
+      "actions": {
+        "index": {
+          "resource": "RoleResource"
+        },
+        "create": {
+          "resource": "RoleResource"
+        },
+        "show": {
+          "resource": "RoleResource"
+        },
+        "update": {
+          "resource": "RoleResource"
+        },
+        "destroy": {
+          "resource": "RoleResource"
         }
       }
     }

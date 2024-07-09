@@ -1,5 +1,9 @@
 .documentation-markdown {
-  h1, h2, h3, h4 {
+
+  h1,
+  h2,
+  h3,
+  h4 {
     font-weight: bold;
   }
 
@@ -17,7 +21,7 @@
   }
 
   pre {
-    background-color: $gray;
+    background-color: $gray-lighter;
     border-radius: 6px;
     padding: 10px;
   }
@@ -26,11 +30,15 @@
     padding: .2em .4em;
     margin: 0;
     font-size: 85%;
-    background-color: $gray;
+    background-color: $gray-lighter;
     border-radius: 6px;
   }
 
   a {
     color: blue;
+  }
+
+  ul {
+    margin-left: 1rem;
   }
 }

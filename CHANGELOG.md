@@ -10,6 +10,7 @@
 *  Gruppen mit `static_name` werden nun gemäss aktiver Sprache sortiert dargestellt (hitobito#2677)
 *  Wagons können die Gruppen Sortierung mittels `sorting_name` überschreiben (hitobito#2677)
 *  Mittels Attribut auf der OAuth Applikation kann gesteuert werden, ob der Consent Screen bei der Anmeldung via OAuth übersprungen wird (hitobito#2618)
+*  Eigener JSON:API Endpoint für Rollen (#2243)
 
 ## Version 2.1
 

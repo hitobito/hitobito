@@ -23,17 +23,20 @@ class Person::EventQueries
     end
   end
 
-  def upcoming_events
-    Event.select("*").from(
-      person.
+  def unordered_upcoming_events
+    person.
       events.
       upcoming.
       merge(Event::Participation.active).
       merge(Event::Participation.upcoming).
-      distinct_on(:id).
       includes(:groups).
       select("events.*", "event_dates.start_at").
       preload_all_dates
+  end
+
+  def upcoming_events
+    Event.select("*").from(
+      unordered_upcoming_events
     ).order_by_date
   end
 

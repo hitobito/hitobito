@@ -6,33 +6,35 @@
 #  https://github.com/hitobito/hitobito.
 
 class People::HouseholdList
+  BATCH_SIZE = 300
+
   include Enumerable
 
   def initialize(people_scope)
     @people_scope = people_scope
   end
 
-  def only_households_in_batches
+  def only_households_in_batches(&block)
     return unless block_given?
 
-    fetch_in_batches(only_households) { |batch| yield batch }
+    fetch_in_batches(only_households, &block)
   end
 
-  def people_without_household_in_batches
+  def people_without_household_in_batches(&block)
     return unless block_given?
 
-    fetch_in_batches(people_without_household) { |batch| yield batch }
+    fetch_in_batches(people_without_household, &block)
   end
 
-  def households_in_batches
+  def households_in_batches(&block)
     return unless block_given?
 
-    fetch_in_batches(grouped_households) { |batch| yield batch }
+    fetch_in_batches(grouped_households, &block)
   end
 
   def grouped_households
     Person.from("((#{only_households.unscope(:limit).to_sql}) " +
-                    "UNION ALL (#{people_without_household.unscope(:limit).to_sql})) "+
+                    "UNION ALL (#{people_without_household.unscope(:limit).to_sql})) " +
                     "#{people_table}").limit(@people_scope.limit_value.presence)
   end
 
@@ -46,8 +48,8 @@ class People::HouseholdList
 
   private
 
-  def fetch_in_batches(scope) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity
-    in_batches(scope, batch_size: 300) do |batch|
+  def fetch_in_batches(scope)
+    in_batches(scope, batch_size: BATCH_SIZE) do |batch|
       involved_people = fetch_involved_people(batch.map(&:key))
       grouped_people = batch.map do |household|
         involved_people.select do |person|
@@ -61,22 +63,22 @@ class People::HouseholdList
 
   def only_households
     base_scope.
-        select(:household_key).
-        select("MIN(#{people_table}.`id`) as `id`").
-        select("COUNT(#{people_table}.`household_key`) as `member_count`").
-        select("#{people_table}.`household_key` as `key`").
-        where.not(household_key: nil).
-        group(:household_key)
+      select(:household_key).
+      select("MIN(#{people_table}.`id`) as `id`").
+      select("COUNT(#{people_table}.`household_key`) as `member_count`").
+      select("#{people_table}.`household_key` as `key`").
+      where.not(household_key: nil).
+      group(:household_key)
   end
 
   def people_without_household
     base_scope.
-        select(:household_key).
-        select(:id).
-        select('1 as `member_count`').
-        select("#{people_table}.`id` as `key`").
-        where(household_key: nil).
-        order(:id)
+      select(:household_key).
+      select(:id).
+      select('1 as `member_count`').
+      select("#{people_table}.`id` as `key`").
+      where(household_key: nil).
+      order(:id)
   end
 
   def people_table
@@ -88,8 +90,8 @@ class People::HouseholdList
     # This way, we can add more conditions to the query builder while keeping the performance
     # benefits of pre-calculating the candidate id list.
     @base_scope ||= Person
-                        .where(id: @people_scope.unscope(:select, :includes, :limit).pluck(:id))
-                        .limit(@people_scope.limit_value.presence)
+                    .where(id: @people_scope.unscope(:select, :includes, :limit).pluck(:id))
+                    .limit(@people_scope.limit_value.presence)
   end
 
   def fetch_involved_people(ids_or_household_keys)
@@ -148,8 +150,9 @@ class People::HouseholdList
         end
       end
 
-      batch_relation = relation.where('`member_count` < ? OR (`member_count` = ? AND `id` > ?)',
-                                      member_count_offset, member_count_offset, id_offset)
+      batch_relation = relation
+                       .having('member_count < ? OR (member_count = ? AND id > ?)',
+                               member_count_offset, member_count_offset, id_offset)
     end
   end
 

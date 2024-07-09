@@ -9,9 +9,14 @@ class PersonResource < ApplicationResource
   primary_endpoint 'people', [:index, :show, :update]
 
   def authorize_update(model)
-    if model.changed_attribute_names_to_save & ['gender', 'birthday']
+    if model.changed_attribute_names_to_save.intersect? ['gender', 'birthday']
       # show_details ability is required additionally for updating gender, birthday
       update_ability.authorize!(:show_details, model)
+    end
+
+    changed_names = model.changed_attribute_names_to_save.each(&:to_sym)
+    if changed_names.intersect? Person.personal_readonly_attrs
+      update_ability.authorize!(:update_personal_readonly_attrs, model)
     end
 
     super

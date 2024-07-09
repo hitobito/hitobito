@@ -6,9 +6,9 @@
 
 class Event::Qualifier::Calculator
   CourseRecord = Data.define(:qualification_kind_id,
-                             :qualification_date,
-                             :training_days,
-                             :summed_training_days)
+    :qualification_date,
+    :training_days,
+    :summed_training_days)
 
   def initialize(courses, end_date, role: :participant, qualification_dates: {})
     @courses = courses
@@ -55,11 +55,11 @@ class Event::Qualifier::Calculator
 
   def prolonging_qualification_kind_ids(course)
     course.kind.event_kind_qualification_kinds
-          .select(&:prolongation?)
-          .select { |q| q.qualification_kind.required_training_days }
-          .select { |q| q.role == @role.to_s }
-          .map { |q| [q.qualification_kind_id, start_of_relevant_period(q.qualification_kind)] }
-          .uniq
+      .select(&:prolongation?)
+      .select { |q| q.qualification_kind.required_training_days }
+      .select { |q| q.role == @role.to_s }
+      .map { |q| [q.qualification_kind_id, start_of_relevant_period(q.qualification_kind)] }
+      .uniq
   end
 
   def qualification_date(qualification_kind_id, course)

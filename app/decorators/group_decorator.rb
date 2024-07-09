@@ -12,13 +12,13 @@ class GroupDecorator < ApplicationDecorator
 
   include ContactableDecorator
 
-  def primary_group_toggle_link(person, group, title: I18n.t('people.roles_aside.set_main_group'))
+  def primary_group_toggle_link(person, group, title: I18n.t("people.roles_aside.set_main_group"))
     return unless can?(:primary_group, person)
 
     icon = helpers.icon(:star, filled: person.primary_group_id == model.id)
     path = helpers.primary_group_group_person_path(group, person, primary_group_id: model.id)
-    attrs = { title: title, alt: title, class: "group-#{model.id}" }
-    helpers.link_to(icon, path, attrs.merge(data: { method: :put, remote: true }))
+    attrs = {title: title, alt: title, class: "group-#{model.id}"}
+    helpers.link_to(icon, path, attrs.merge(data: {method: :put, remote: true}))
   end
 
   def prepend_complete_address(html)
@@ -36,14 +36,14 @@ class GroupDecorator < ApplicationDecorator
     role_types.select do |type|
       # users from above cannot create non visible roles
       !type.restricted? &&
-      (type.visible_from_above? || can?(:index_local_people, model))
+        (type.visible_from_above? || can?(:index_local_people, model))
     end
   end
 
   def allowed_roles_for_self_registration
     role_types.reject do |r|
       r.restricted? ||
-      r.permissions.any? { |p| Role::Types::WRITING_PERMISSIONS.include?(p) }
+        r.permissions.any? { |p| Role::Types::WRITING_PERMISSIONS.include?(p) }
     end
   end
 
@@ -60,30 +60,30 @@ class GroupDecorator < ApplicationDecorator
   end
 
   def as_typeahead
-    { id: id, label: label_with_parent }
+    {id: id, label: label_with_parent}
   end
 
   def as_quicksearch
-    { id: id, label: label_with_parent, type: :group, icon: :users }
+    {id: id, label: label_with_parent, type: :group, icon: :users}
   end
 
   def label_with_parent
-    h.safe_join([parent.to_s.presence, to_s].compact, ' → ')
+    h.safe_join([parent.to_s.presence, to_s].compact, " → ")
   end
 
   def link_with_layer
     links = with_layer
-            .map { |g| GroupDecorator.new(g) }
-            .map { |g| h.link_to_if(can?(:show, g), g, g) }
-    h.safe_join(links, ' / ')
+      .map { |g| GroupDecorator.new(g) }
+      .map { |g| h.link_to_if(can?(:show, g), g, g) }
+    h.safe_join(links, " / ")
   end
 
   # compute layers and concat group names using a '/'
   def name_with_layer
     group_names = with_layer
-                  .map { |g| GroupDecorator.new(g) }
-                  .map { |g| g.to_s }
-    group_names.join(' / ')
+      .map { |g| GroupDecorator.new(g) }
+      .map { |g| g.to_s }
+    group_names.join(" / ")
   end
 
   def possible_events
@@ -109,15 +109,15 @@ class GroupDecorator < ApplicationDecorator
   end
 
   def subgroup_ids
-    @subgroup_ids ||= Group.where('lft >= :lft AND rgt <= :rgt',
-                                  lft: group.lft, rgt: group.rgt)
-                           .pluck(:id)
+    @subgroup_ids ||= Group.where("lft >= :lft AND rgt <= :rgt",
+      lft: group.lft, rgt: group.rgt)
+      .pluck(:id)
   end
 
   def archived_class
     return nil unless model.archived?
 
-    'is-archived'
+    "is-archived"
   end
 
   def nextcloud_organizer
@@ -130,8 +130,8 @@ class GroupDecorator < ApplicationDecorator
   private
 
   def archived_suffix
-    return '' unless model.archived?
+    return "" unless model.archived?
 
-    I18n.t('group_decorator.archived_suffix')
+    I18n.t("group_decorator.archived_suffix")
   end
 end

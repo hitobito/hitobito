@@ -6,7 +6,5 @@
 #  https://github.com/hitobito/hitobito.
 
 class Auth
-
   thread_mattr_accessor :current_person
-
 end

@@ -11,13 +11,12 @@ module Export::Tabular::Invoices
     WITH_PRECISION_ATTRS = [:vat, :amount_paid]
 
     private
-    
+
     def value_for(attr)
       value = entry.send(:[], attr)
       return number_with_precision(value) if WITH_PRECISION_ATTRS.include?(attr)
 
       value
     end
-
   end
 end

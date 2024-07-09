@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module ContactableDecorator
-
   def address
     model.address
   end
@@ -16,11 +15,11 @@ module ContactableDecorator
   end
 
   def complete_address # rubocop:disable Metrics/AbcSize
-    html = ''.html_safe
+    html = "".html_safe
 
     prepend_complete_address(html)
 
-    if FeatureGate.enabled?('structured_addresses')
+    if FeatureGate.enabled?("structured_addresses")
       html << address_care_of << br if address_care_of?
       html << model.address << br if model.address.present?
       html << postbox << br if postbox?
@@ -28,7 +27,7 @@ module ContactableDecorator
       html << safe_join(address.split("\n"), br) << br if address? # rubocop:disable Style/IfInsideElse
     end
     html << zip_code.to_s if zip_code?
-    html << ' ' << town if town?
+    html << " " << town if town?
     html << country_unless_ignored
 
     content_tag(:p, html)
@@ -36,11 +35,11 @@ module ContactableDecorator
 
   def complete_contact
     address_name +
-    complete_address +
-    primary_email +
-    all_additional_emails(true) +
-    all_phone_numbers(true) +
-    all_social_accounts(true)
+      complete_address +
+      primary_email +
+      all_additional_emails(true) +
+      all_phone_numbers(true) +
+      all_social_accounts(true)
   end
 
   def primary_email
@@ -50,7 +49,7 @@ module ContactableDecorator
   end
 
   def all_emails(only_public = true)
-    ''.html_safe <<
+    "".html_safe <<
       primary_email <<
       all_additional_emails(only_public)
   end
@@ -92,7 +91,7 @@ module ContactableDecorator
   end
 
   def country_unless_ignored
-    html = ''.html_safe
+    html = "".html_safe
     unless ignored_country?
       html << br if zip_code? || town?
       html << country_label
@@ -100,6 +99,6 @@ module ContactableDecorator
     html
   end
 
-  def prepend_complete_address(_html); end
-
+  def prepend_complete_address(_html)
+  end
 end

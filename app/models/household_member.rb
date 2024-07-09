@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito
 
 class HouseholdMember
-
   include ActiveModel::Model
 
   attr_reader :person, :household
@@ -16,7 +15,7 @@ class HouseholdMember
   def self.from(people, household)
     members = people.collect { |p| new(p, household) }
     ref_person_id = household.reference_person.id
-    members.sort_by { |m| m.person.id == ref_person_id ? 0 : 1 }
+    members.sort_by { |m| (m.person.id == ref_person_id) ? 0 : 1 }
   end
 
   def initialize(person, household)
@@ -27,5 +26,4 @@ class HouseholdMember
   def warnings
     @warnings ||= ActiveModel::Errors.new(self)
   end
-
 end

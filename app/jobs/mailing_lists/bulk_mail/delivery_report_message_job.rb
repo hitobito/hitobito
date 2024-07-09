@@ -8,8 +8,7 @@
 module MailingLists
   module BulkMail
     class DeliveryReportMessageJob < BaseMailMessageJob
-
-      delegate :message_recipients, to: '@message'
+      delegate :message_recipients, to: "@message"
 
       def perform
         delivery_report_mail
@@ -20,10 +19,10 @@ module MailingLists
       def delivery_report_mail
         DeliveryReportMailer
           .bulk_mail(report_recipient, list_address, @message.subject,
-                     success_count, @message.updated_at, failed_recipients)
+            success_count, @message.updated_at, failed_recipients)
           .deliver_now
       rescue => e
-        log_info('Delivery report for bulk mail to ' \
+        log_info("Delivery report for bulk mail to " \
                  "#{@delivery_report_to} could not be delivered: #{e.message}")
         raise e unless Rails.env.production?
       end
@@ -43,7 +42,6 @@ module MailingLists
       def report_recipient
         @message.mail_from
       end
-
     end
   end
 end

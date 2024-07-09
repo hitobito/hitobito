@@ -10,13 +10,13 @@
 #
 # Can also be used for dynamic error pages if those static files do not exist.
 class ErrorsController < ActionController::Base
-  layout 'application'
+  layout "application"
   helper_method :current_person, :current_user, :origin_user
 
   protect_from_forgery with: :exception
 
-  %w(404 500 503).each do |code|
-    define_method("show#{code}") do
+  %w[404 500 503].each do |code|
+    define_method(:"show#{code}") do
       formats = request.format.json? ? [:json] : [:html]
       render code, status: code, formats: formats
     end
@@ -35,5 +35,4 @@ class ErrorsController < ActionController::Base
   def origin_user
     false
   end
-
 end

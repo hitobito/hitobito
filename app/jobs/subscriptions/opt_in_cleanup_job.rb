@@ -7,7 +7,6 @@
 
 module Subscriptions
   class OptInCleanupJob < BaseJob
-
     self.parameters = [:mailing_list_id]
 
     def initialize(mailing_list_id)

@@ -7,7 +7,6 @@
 
 module Export::Pdf::Messages
   class Letter
-
     MARGIN = 2.5.cm
     PREVIEW_LIMIT = 4
 
@@ -72,9 +71,9 @@ module Export::Pdf::Messages
     end
 
     def filename(*parts)
-      parts += [@letter.subject.parameterize(separator: '_')]
+      parts += [@letter.subject.parameterize(separator: "_")]
       yield parts if block_given?
-      [parts.join('-'), :pdf].join('.')
+      [parts.join("-"), :pdf].join(".")
     end
 
     private
@@ -94,7 +93,7 @@ module Export::Pdf::Messages
 
     def render_options
       @options.to_h.merge(
-        page_size: 'A4',
+        page_size: "A4",
         page_layout: :portrait,
         margin: MARGIN,
         compress: true
@@ -120,12 +119,12 @@ module Export::Pdf::Messages
     end
 
     def message_recipients
-      recipients = @letter.
-                   message_recipients.
-                   where('person_id IS NOT NULL').
-                   joins(:person).
-                   order('people.last_name' => :asc).
-                   distinct
+      recipients = @letter
+        .message_recipients
+        .where.not(person_id: nil)
+        .joins(:person)
+        .order("people.last_name" => :asc)
+        .distinct
 
       if @letter.send_to_households?
         recipients = recipients.group(:address)

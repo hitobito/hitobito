@@ -4,10 +4,9 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::KindCategoriesController < SimpleCrudController
-
   self.permitted_attrs = [:label, :order, kinds: []]
 
-  self.sort_mappings = { label: 'event_kind_category_translations.label' }
+  self.sort_mappings = {label: "event_kind_category_translations.label"}
 
   before_render_form :load_assocations
 
@@ -26,5 +25,4 @@ class Event::KindCategoriesController < SimpleCrudController
       Event::KindCategory
     end
   end
-
 end

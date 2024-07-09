@@ -6,12 +6,12 @@
 #  https://github.com/hitobito/hitobito.
 #
 
-require 'spec_helper'
+require "spec_helper"
 
 describe People::DuplicateLocatorJob do
   subject(:job) { described_class.new }
 
-  it 'calls Locator run and reschedules for next day' do
+  it "calls Locator run and reschedules for next day" do
     freeze_time
     expect(People::DuplicateLocator).to receive_message_chain(:new, :run)
     expect { job.perform }.to not_change { Person.count }

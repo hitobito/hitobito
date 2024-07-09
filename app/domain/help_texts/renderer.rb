@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_pbs.
 
 class HelpTexts::Renderer
-
   attr_reader :template
 
   delegate :dom_id, :content_tag, :icon, :action_name, :params, :model_class, to: :template
@@ -51,8 +50,8 @@ class HelpTexts::Renderer
   end
 
   def render_trigger(help_text)
-    content_tag(:span, class: 'help-text-trigger', data: { key: dom_id(help_text) }) do
-      icon('info-circle')
+    content_tag(:span, class: "help-text-trigger", data: {key: dom_id(help_text)}) do
+      icon("info-circle")
     end
   end
 
@@ -66,11 +65,11 @@ class HelpTexts::Renderer
   end
 
   def controller_name
-    template.controller.class.to_s.underscore.gsub('_controller', '')
+    template.controller.class.to_s.underscore.gsub("_controller", "")
   end
 
   def derive_entry
-    if action_name == 'index'
+    if action_name == "index"
       model_class.new
     else
       entry = template.controller.send(:entry)

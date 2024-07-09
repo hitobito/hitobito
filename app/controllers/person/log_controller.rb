@@ -6,16 +6,15 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::LogController < ApplicationController
-
   before_action :authorize_action
 
   decorates :group, :person, :versions
 
   def index
     @versions = PaperTrail::Version.where(version_conditions)
-                                   .reorder('created_at DESC, id DESC')
-                                   .includes(:item)
-                                   .page(params[:page])
+      .reorder("created_at DESC, id DESC")
+      .includes(:item)
+      .page(params[:page])
   end
 
   private
@@ -38,5 +37,4 @@ class Person::LogController < ApplicationController
   def authorize_action
     authorize!(:log, entry)
   end
-
 end

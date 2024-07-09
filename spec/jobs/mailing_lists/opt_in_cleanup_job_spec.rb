@@ -1,4 +1,3 @@
-
 # frozen_string_literal: true
 
 #  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
@@ -6,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe MailingLists::OptInCleanupJob do
   include Subscriptions::SpecHelper
@@ -22,17 +21,17 @@ describe MailingLists::OptInCleanupJob do
 
   subject(:job) { described_class.new }
 
-  it 'does not enqueue if opt_in list has no people subscriptions' do
+  it "does not enqueue if opt_in list has no people subscriptions" do
     leaders.update!(subscribable_mode: :opt_in)
     expect { job.perform }.not_to change(Delayed::Job.where(condition), :count)
   end
 
-  it 'does not enqueue if list has people subscriptions but is not opt in' do
+  it "does not enqueue if list has people subscriptions but is not opt in" do
     leaders.subscriptions.create!(subscriber: person)
     expect { job.perform }.not_to change(Delayed::Job.where(condition), :count)
   end
 
-  it 'does enqueue job for each list that has people subscription and is opt in' do
+  it "does enqueue job for each list that has people subscription and is opt in" do
     leaders.update!(subscribable_mode: :opt_in)
     leaders.subscriptions.create!(subscriber: person)
 

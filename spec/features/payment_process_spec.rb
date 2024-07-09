@@ -5,10 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe :payment_process, js: true do
-
   subject { page }
 
   let(:top_layer) { groups(:top_layer) }
@@ -20,24 +19,24 @@ describe :payment_process, js: true do
     visit new_group_payment_process_path(top_layer)
   end
 
-  it 'processes payments and finds invoice' do
+  it "processes payments and finds invoice" do
     invoice = Fabricate(:invoice, group: groups(:top_layer), recipient: bottom_member)
-    invoice.update!(reference: '000000000000100000000000905')
+    invoice.update!(reference: "000000000000100000000000905")
 
-    attach_file 'payment_process[file]', file_fixture('../invoices/camt.054-ESR-ASR_T_CH0209000000857876452_378159670_0_2018031411011923.xml')
+    attach_file "payment_process[file]", file_fixture("../invoices/camt.054-ESR-ASR_T_CH0209000000857876452_378159670_0_2018031411011923.xml")
 
     expect do
-      find('button.btn', text: 'Hochladen').click
+      find("button.btn", text: "Hochladen").click
     end.to_not change { Payment.count }
 
-    expect(page).to have_content('Es wurde eine gültige Zahlung mit dazugehöriger Rechnung erkannt.')
-    expect(page).to have_content('Es wurden 4 gültige Zahlungen ohne dazugehörige Rechnungen erkannt.')
+    expect(page).to have_content("Es wurde eine gültige Zahlung mit dazugehöriger Rechnung erkannt.")
+    expect(page).to have_content("Es wurden 4 gültige Zahlungen ohne dazugehörige Rechnungen erkannt.")
 
-    payments_with_invoice = find('#payments-with-invoice')
-    expect(payments_with_invoice.find_all('tbody tr').size).to eq(1)
-    row_values = payments_with_invoice.find_all('tbody tr td').map(&:text)
+    payments_with_invoice = find("#payments-with-invoice")
+    expect(payments_with_invoice.find_all("tbody tr").size).to eq(1)
+    row_values = payments_with_invoice.find_all("tbody tr td").map(&:text)
     expect(row_values).to match_array([
-      '', # icon
+      "", # icon
       invoice.title,
       invoice.recipient.full_name,
       "Entwurf", # invoice type
@@ -47,12 +46,12 @@ describe :payment_process, js: true do
       "15.03.2018" # payment date
     ])
 
-    payments_without_invoice = find('#payments-without-invoice')
-    expect(payments_without_invoice.find_all('tbody tr').size).to eq(4)
+    payments_without_invoice = find("#payments-without-invoice")
+    expect(payments_without_invoice.find_all("tbody tr").size).to eq(4)
 
     expect do
-      find('button.btn', text: '5 Zahlungen importieren').click
-      expect(page).to have_content('Es wurden 5 Zahlungen erfasst.')
+      find("button.btn", text: "5 Zahlungen importieren").click
+      expect(page).to have_content("Es wurden 5 Zahlungen erfasst.")
     end.to change { Payment.count }.by(5)
 
     expect(invoice.payments.count).to eq(1)

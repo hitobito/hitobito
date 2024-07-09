@@ -7,7 +7,6 @@
 
 module Export::Tabular::People
   class Households < Export::Tabular::Base
-
     self.model_class = ::Person
     self.row_class = HouseholdRow
 
@@ -31,6 +30,5 @@ module Export::Tabular::People
         ::People::HouseholdList.new(people.only_public_data.includes(:primary_group))
       end
     end
-
   end
 end

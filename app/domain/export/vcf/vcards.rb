@@ -3,11 +3,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'vcard'
+require "vcard"
 
 module Export::Vcf
   class Vcards
-
     def generate(people)
       vcards = []
       people.each do |person|
@@ -15,7 +14,6 @@ module Export::Vcf
       end
       vcards.join
     end
-
 
     private
 
@@ -37,7 +35,7 @@ module Export::Vcf
 
     def address_empty?(person)
       person.address.blank? && person.town.blank? &&
-      person.zip_code.blank? && person.country.blank?
+        person.zip_code.blank? && person.country.blank?
     end
 
     def address(card, person)

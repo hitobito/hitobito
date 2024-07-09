@@ -3,9 +3,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
 class Invoice::Qrcode
-
   SWISS_CROSS_EDGE_SIDE_PX = 166
   SWISS_CROSS_EDGE_SIDE_MM = 7
 
@@ -15,7 +13,6 @@ class Invoice::Qrcode
   QR_CROSS_X = (QR_CODE_EDGE_SIDE_PX / 2) - SWISS_CROSS_EDGE_SIDE_PX / 2
   QR_CROSS_Y = (QR_CODE_EDGE_SIDE_PX / 2) - SWISS_CROSS_EDGE_SIDE_PX / 2
 
-
   def initialize(invoice)
     @invoice = invoice
   end
@@ -24,7 +21,7 @@ class Invoice::Qrcode
   def payload
     striped_values(
       metadata,
-      creditor.reverse_merge(iban: @invoice.iban.gsub(/\s+/, '')),
+      creditor.reverse_merge(iban: @invoice.iban.gsub(/\s+/, "")),
       creditor_final,
       payment,
       debitor,
@@ -35,7 +32,7 @@ class Invoice::Qrcode
   end
 
   def metadata
-    { type: 'SPC', version: '0200', coding: '1' }
+    {type: "SPC", version: "0200", coding: "1"}
   end
 
   def creditor
@@ -47,8 +44,8 @@ class Invoice::Qrcode
   end
 
   def payment
-    amount = format('%<total>.2f', total: @invoice.amount_open) if show_total?
-    { amount: amount, currency: @invoice.currency }
+    amount = format("%<total>.2f", total: @invoice.amount_open) if show_total?
+    {amount: amount, currency: @invoice.currency}
   end
 
   def debitor
@@ -56,20 +53,20 @@ class Invoice::Qrcode
   end
 
   def payment_reference
-    type = @invoice.reference.starts_with?('RF') ? 'SCOR' : 'QRR'
-    { type: type, reference: @invoice.reference }
+    type = @invoice.reference.starts_with?("RF") ? "SCOR" : "QRR"
+    {type: type, reference: @invoice.reference}
   end
 
   def additional_infos
     {
-      purpose: @invoice.payment_purpose.to_s.gsub("\n", " ").truncate(120),
-      trailer: 'EPD',
+      purpose: @invoice.payment_purpose.to_s.tr("\n", " ").truncate(120),
+      trailer: "EPD",
       infos: nil
     }
   end
 
   def alternative_payment
-    { type: nil }
+    {type: nil}
   end
 
   def scissor(kind)
@@ -77,9 +74,9 @@ class Invoice::Qrcode
   end
 
   def generate
-    Tempfile.create([@invoice.sequence_number, '.png'], binmode: true) do |file|
+    Tempfile.create([@invoice.sequence_number, ".png"], binmode: true) do |file|
       qrcode = generate_png
-      cross  = ChunkyPNG::Image.from_file(image('CH-Kreuz_7mm_small.png'))
+      cross = ChunkyPNG::Image.from_file(image("CH-Kreuz_7mm_small.png"))
       point = (qrcode.width / 2) - cross.width / 2
       qrcode.replace!(cross, point, point)
       qrcode.save(file.path, :fast_rgba)
@@ -101,16 +98,16 @@ class Invoice::Qrcode
   private
 
   def generate_png # rubocop:disable Metrics/MethodLength
-    RQRCode::QRCode.new(payload,  level: :m).as_png(
+    RQRCode::QRCode.new(payload, level: :m).as_png(
       bit_depth: 1,
       border_modules: 4,
       color_mode: ChunkyPNG::COLOR_GRAYSCALE,
-      color: 'black',
+      color: "black",
       file: nil,
-      fill: 'white',
+      fill: "white",
       module_px_size: 6,
       resize_exactly_to: false,
-      resize_gte_to: false,
+      resize_gte_to: false
     )
   end
 
@@ -126,13 +123,13 @@ class Invoice::Qrcode
       address_line1 = parts.second_to_last
     end
     {
-      address_type: 'K',
+      address_type: "K",
       full_name: parts.first,
       address_line1: address_line1,
       address_line2: address_line2,
       zip_code: nil,
       town: nil,
-      country: 'CH'
+      country: "CH"
     }
   end
 
@@ -148,4 +145,3 @@ class Invoice::Qrcode
     !@invoice.hide_total? && @invoice.total.nonzero?
   end
 end
-

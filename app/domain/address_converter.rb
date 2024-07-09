@@ -47,10 +47,10 @@ class AddressConverter
 
   def check
     same_address? ||
-    same_complete_address? ||
-    better_address? ||
-    address_with_question_marks? ||
-    only_question_marks?
+      same_complete_address? ||
+      better_address? ||
+      address_with_question_marks? ||
+      only_question_marks?
   end
 
   def save
@@ -80,8 +80,8 @@ class AddressConverter
 
   def sanitized_address_lines
     @addr.lines
-         .map { |line| line.gsub(/[[:space:]]+/, ' ').gsub(/\?+$/, '').strip.chomp }
-         .reject { |line| line.empty? }
+      .map { |line| line.gsub(/[[:space:]]+/, " ").gsub(/\?+$/, "").strip.chomp }
+      .reject { |line| line.empty? }
   end
 
   # parsing / extraction
@@ -96,7 +96,7 @@ class AddressConverter
       elsif address_in_line(lines.first)
         @contactable.postbox = lines.last.strip
       else
-        only_street_and_number(lines.join(' '))
+        only_street_and_number(lines.join(" "))
       end
     when 3
       if address_in_line(lines[1])
@@ -110,7 +110,7 @@ class AddressConverter
     only_street_and_number(line)
     return true if line == @contactable.address
 
-    @contactable.restore_attributes(%w(street housenumber))
+    @contactable.restore_attributes(%w[street housenumber])
 
     false
   end
@@ -144,10 +144,10 @@ class AddressConverter
 
   def sanitized_address
     @addr.lines
-         .map { |line| line.gsub(/[[:space:]]+/, ' ').strip }
-         .reject { |line| line.empty? }
-         .join("\n")
-         .chomp(',')
+      .map { |line| line.gsub(/[[:space:]]+/, " ").strip }
+      .reject { |line| line.empty? }
+      .join("\n")
+      .chomp(",")
   end
 
   # checks
@@ -162,11 +162,11 @@ class AddressConverter
 
   def better_address?
     sanitized_address == [@contactable.street, @contactable.housenumber].join ||
-    sanitized_address == [@contactable.street, @contactable.housenumber].join(',')
+      sanitized_address == [@contactable.street, @contactable.housenumber].join(",")
   end
 
   def address_with_question_marks?
-    sanitized_address.gsub(/\?+$/, '').strip == @contactable.address
+    sanitized_address.gsub(/\?+$/, "").strip == @contactable.address
   end
 
   def only_question_marks?

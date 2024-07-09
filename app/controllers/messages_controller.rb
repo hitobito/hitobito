@@ -12,23 +12,23 @@ class MessagesController < CrudController
 
   PERMITTED_TEXT_MESSAGE_ATTRS = [:text] # rubocop:disable Style/MutableConstant meant to be extended
   PERMITTED_LETTER_ATTRS = [:subject, :body, :salutation, :send_to_households, # rubocop:disable Style/MutableConstant meant to be extended
-                            :pp_post, :shipping_method, :date_location_text]
+    :pp_post, :shipping_method, :date_location_text]
   PERMITTED_INVOICE_LETTER_ATTRS = [:subject, :body, :salutation, :donation_confirmation, # rubocop:disable Style/MutableConstant meant to be extended
-                                    :pp_post, :shipping_method, :date_location_text,
-                                    invoice_attributes: [
-                                      :issued_at,
-                                      invoice_items_attributes: [
-                                        :name,
-                                        :description,
-                                        :cost_center,
-                                        :account,
-                                        :unit_cost,
-                                        :vat_rate,
-                                        :count,
-                                        :type,
-                                        :_destroy
-                                      ]
-                                    ]]
+    :pp_post, :shipping_method, :date_location_text,
+    invoice_attributes: [
+      :issued_at,
+      invoice_items_attributes: [
+        :name,
+        :description,
+        :cost_center,
+        :account,
+        :unit_cost,
+        :vat_rate,
+        :count,
+        :type,
+        :_destroy
+      ]
+    ]]
 
   self.nesting = [Group, MailingList]
   self.remember_params += [:year]
@@ -58,7 +58,7 @@ class MessagesController < CrudController
   def assign_attributes_from_duplication_source
     # We can't simply assign .attributes because the rich text body is not included in .attributes
     duplication_source.class.duplicatable_attrs.each do |attr|
-      entry.send("#{attr}=", duplication_source.send(attr))
+      entry.send(:"#{attr}=", duplication_source.send(attr))
     end
   end
 
@@ -105,7 +105,7 @@ class MessagesController < CrudController
     p.tap do |permitted|
       permitted.dig(:invoice_attributes, :invoice_items_attributes).each do |index, attrs|
         parameters = params.dig(:message, :invoice_attributes, :invoice_items_attributes,
-                                index, :dynamic_cost_parameters)
+          index, :dynamic_cost_parameters)
         attrs[:dynamic_cost_parameters] = parameters&.to_unsafe_hash || {}
       end
     end

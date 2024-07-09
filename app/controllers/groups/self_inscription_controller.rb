@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Groups::SelfInscriptionController < CrudController
-
   skip_authorization_check
   skip_authorize_resource
 
@@ -18,7 +17,7 @@ class Groups::SelfInscriptionController < CrudController
     @role = build_role
     @role.save
     send_notification_email
-    redirect_with_message(notice: t('.role_saved'))
+    redirect_with_message(notice: t(".role_saved"))
   end
 
   protected
@@ -37,7 +36,7 @@ class Groups::SelfInscriptionController < CrudController
 
     Groups::SelfRegistrationNotificationMailer
       .self_registration_notification(group.self_registration_notification_email,
-                                      @role).deliver_now
+        @role).deliver_now
   end
 
   def return_path
@@ -45,23 +44,23 @@ class Groups::SelfInscriptionController < CrudController
   end
 
   def redirect_with_message(message)
-    return redirect_to group_person_path(person.default_group_id, person), message
+    redirect_to group_person_path(person.default_group_id, person), message
   end
 
   def redirect_to_group_if_necessary
     if self_registration_active?
       if Role.where(
-          person: person,
-          group: group,
-          type: group.self_registration_role_type,
-          archived_at: nil,
-          deleted_at: nil
-        ).present?
+        person: person,
+        group: group,
+        type: group.self_registration_role_type,
+        archived_at: nil,
+        deleted_at: nil
+      ).present?
 
-        redirect_with_message(alert: t('.role_exists'))
+        redirect_with_message(alert: t(".role_exists"))
       end
     else
-      redirect_with_message(alert: t('.disabled'))
+      redirect_with_message(alert: t(".disabled"))
     end
   end
 

@@ -24,7 +24,7 @@
 #  index_event_invitations_on_person_id               (person_id)
 #
 
-Fabricator(:event_invitation, class_name: 'Event::Invitation') do
+Fabricator(:event_invitation, class_name: "Event::Invitation") do
   participation_type { Event::Role::Participant.name }
   event
   person

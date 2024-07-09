@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Calendars::FeedsController < ApplicationController
-
   def index
     respond_to do |format|
       format.ics do
@@ -26,5 +25,4 @@ class Calendars::FeedsController < ApplicationController
   def devise_controller?
     request.format.ics? # hence, no login required
   end
-
 end

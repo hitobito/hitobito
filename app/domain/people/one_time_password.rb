@@ -6,13 +6,12 @@
 # https ://github.com/hitobito/hitobito.
 
 class People::OneTimePassword
-
   def self.generate_secret
     ROTP::Base32.random
   end
 
   def initialize(totp_secret, person: nil)
-    raise 'totp_secret cant be blank' if totp_secret.blank?
+    raise "totp_secret cant be blank" if totp_secret.blank?
 
     @totp_secret = totp_secret
     @person = person
@@ -41,13 +40,12 @@ class People::OneTimePassword
 
   attr_accessor :totp_secret, :person
 
-
   def authenticator
     ROTP::TOTP.new(secret, issuer: issuer)
   end
 
   def issuer
-    issuer = "#{Settings.application.name}"
+    issuer = Settings.application.name.to_s
     issuer += " - #{Rails.env}" unless Rails.env.production?
     issuer
   end
@@ -59,5 +57,4 @@ class People::OneTimePassword
   def base_secret
     Hitobito::Application.config.secret_key_base
   end
-
 end

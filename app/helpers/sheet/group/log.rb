@@ -8,9 +8,7 @@
 module Sheet
   class Group < Base
     class Log < Base
-
       self.parent_sheet = Sheet::Group
-
     end
   end
 end

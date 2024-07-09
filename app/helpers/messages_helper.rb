@@ -6,27 +6,26 @@
 #  https://github.com/hitobito/hitobito.
 
 module MessagesHelper
-
   def add_message_button(type, path = path_args(model_class), disabled_msg: nil)
-    label = [type.model_name.human, ti(:"link.add").downcase].join(' ')
+    label = [type.model_name.human, ti(:"link.add").downcase].join(" ")
 
     if type == Message::LetterWithInvoice
       return Dropdown::LetterWithInvoiceNew.new(self,
-                                                label: label,
-                                                disabled_msg: disabled_msg).button_or_dropdown
+        label: label,
+        disabled_msg: disabled_msg).button_or_dropdown
     end
 
     return action_button(label, path, :plus, disabled: disabled_msg) if disabled_msg
 
     action_button(label,
-                  new_polymorphic_path(path, message: { type: type }),
-                  'plus')
+      new_polymorphic_path(path, message: {type: type}),
+      "plus")
   end
 
   def available_message_placeholders(editor_id)
-    safe_join([t('messages.form.available_placeholders'),
-               ' ',
-               safe_join(placeholder_links(editor_id), ', ')])
+    safe_join([t("messages.form.available_placeholders"),
+      " ",
+      safe_join(placeholder_links(editor_id), ", ")])
   end
 
   def format_message_type(message)
@@ -34,7 +33,7 @@ module MessagesHelper
   end
 
   def format_send_to_households(message)
-    base_key = 'messages.letter.fields.send_to_households_options.'
+    base_key = "messages.letter.fields.send_to_households_options."
     t(base_key + message.send_to_households.to_s)
   end
 
@@ -44,24 +43,24 @@ module MessagesHelper
 
   def format_message_state(message)
     type = case message.state
-           when /pending|draft/ then 'info'
-           when /processing/ then 'warning'
-           when /finished/ then 'success'
-           when /failed/ then 'important'
-           end
+    when /pending|draft/ then "info"
+    when /processing/ then "warning"
+    when /finished/ then "success"
+    when /failed/ then "important"
+    end
     badge(message.state_label, type)
   end
 
   def format_message_infos(message)
     infos = []
     if message.respond_to?(:mail_from) && message.mail_from
-      infos << t('messages.table.infos.sender', mail: message.mail_from)
+      infos << t("messages.table.infos.sender", mail: message.mail_from)
     end
     if message.failed? && message.mail_log.present?
       mail_log_error_key = message.mail_log.status.to_s
-      infos <<  t("messages.table.infos.#{mail_log_error_key}")
+      infos << t("messages.table.infos.#{mail_log_error_key}")
     end
-    infos.join(', ')
+    infos.join(", ")
   end
 
   def max_text_message_length
@@ -73,7 +72,7 @@ module MessagesHelper
   end
 
   def format_message_salutation(message)
-    Salutation.all[message.salutation] || I18n.t('global.associations.no_entry')
+    Salutation.all[message.salutation] || I18n.t("global.associations.no_entry")
   end
 
   def format_message_shipping_method(message)
@@ -87,8 +86,8 @@ module MessagesHelper
   end
 
   def message_send_to_household_options
-    [[false, t('.send_to_households_options.false')],
-     [true, t('.send_to_households_options.true')]]
+    [[false, t(".send_to_households_options.false")],
+      [true, t(".send_to_households_options.true")]]
   end
 
   private
@@ -97,9 +96,9 @@ module MessagesHelper
     placeholders = Export::Pdf::Messages::Letter::Content.placeholders
     placeholders.map do |p|
       content_tag(:a,
-                  "{#{p}}",
-                  { data: { 'clickable-placeholder': editor_id } },
-                  false).html_safe
+        "{#{p}}",
+        {data: {"clickable-placeholder": editor_id}},
+        false).html_safe
     end
   end
 end

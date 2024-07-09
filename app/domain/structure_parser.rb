@@ -5,23 +5,22 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
-require 'English'
-require 'pathname'
-require 'yaml'
-require 'active_support/inflector'
+require "English"
+require "pathname"
+require "yaml"
+require "active_support/inflector"
 
 # parses a structure as output by rake app:hitobito:roles
 class StructureParser
   attr_reader :result
 
-  def initialize(structure, common_indent: 4, shiftwidth: 2, list_marker: '*')
+  def initialize(structure, common_indent: 4, shiftwidth: 2, list_marker: "*")
     # data
     @structure = structure
 
     # config
-    @common_indent = ' ' * common_indent.to_i
-    @shiftwidth = ' ' * shiftwidth.to_i
+    @common_indent = " " * common_indent.to_i
+    @shiftwidth = " " * shiftwidth.to_i
     @list_marker = list_marker
 
     # state init
@@ -57,7 +56,7 @@ class StructureParser
       attr_reader :children
 
       def initialize(name)
-        super(name)
+        super
         @children = []
       end
 
@@ -84,14 +83,14 @@ class StructureParser
     end
 
     def to_s
-      type = @layer_group ? 'LayerGroup' : 'Group'
+      type = @layer_group ? "LayerGroup" : "Group"
       "#{type} #{@name} with #{@children.count} subgroup(s) and #{@roles.count} role(s)"
     end
 
     def class_name
       @class_name ||= @name.encode(
-        'ASCII', 'UTF-8',
-        fallback: { 'ä' => 'ae', 'ü' => 'ue', 'ö' => 'oe' }
+        "ASCII", "UTF-8",
+        fallback: {"ä" => "ae", "ü" => "ue", "ö" => "oe"}
       )
     end
 
@@ -123,7 +122,7 @@ class StructureParser
     end
 
     def permissions
-      @permissions.map(&:inspect).join(', ')
+      @permissions.map(&:inspect).join(", ")
     end
 
     def inspect
@@ -137,13 +136,13 @@ class StructureParser
     end
 
     def class_name
-      @class_name ||= @name.delete_suffix('/-in')
-                           .delete_suffix('/-r')
-                           .encode('ASCII', 'UTF-8', fallback: {
-                                     'ä' => 'ae',
-                                     'ü' => 'ue',
-                                     'ö' => 'oe'
-                                   })
+      @class_name ||= @name.delete_suffix("/-in")
+        .delete_suffix("/-r")
+        .encode("ASCII", "UTF-8", fallback: {
+          "ä" => "ae",
+          "ü" => "ue",
+          "ö" => "oe"
+        })
     end
 
     def name_for_translation
@@ -197,8 +196,8 @@ class StructureParser
         if group.name == layer.name
           new_group.layer_group = true
           layer.children
-               .reject { |child| child.name == group.name }
-               .each { |child| new_group.children << child.to_group }
+            .reject { |child| child.name == group.name }
+            .each { |child| new_group.children << child.to_group }
         else
           new_group.name = layer.name + group.name
         end
@@ -237,14 +236,14 @@ class StructureParser
   def group_template(group)
     <<~CODE
       class Group::#{group.class_name} < ::Group
-        #{'self.layer = true' if group.layer_group}
-        #{'children ' if group.children.any?}#{group.child_class_names.join(",\n")}
+        #{"self.layer = true" if group.layer_group}
+        #{"children " if group.children.any?}#{group.child_class_names.join(",\n")}
 
         ### ROLES
 
       #{group.roles.map { |role| role_template(role) }.join("\n\n")}
 
-        roles #{group.role_class_names.join(', ')}
+        roles #{group.role_class_names.join(", ")}
       end
     CODE
   end

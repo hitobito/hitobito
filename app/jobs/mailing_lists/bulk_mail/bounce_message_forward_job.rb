@@ -8,7 +8,6 @@
 module MailingLists
   module BulkMail
     class BounceMessageForwardJob < BaseMailMessageJob
-
       def perform
         send(bounce_mail)
       end
@@ -22,7 +21,7 @@ module MailingLists
 
         mail.deliver
 
-        @message.mail_log.update!(status: 'completed')
+        @message.mail_log.update!(status: "completed")
         @message.update!(raw_source: nil)
       end
 
@@ -49,7 +48,6 @@ module MailingLists
       def mailing_list
         bounce_parent.mailing_list
       end
-
     end
   end
 end

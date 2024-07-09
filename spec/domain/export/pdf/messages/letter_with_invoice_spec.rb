@@ -5,26 +5,28 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Export::Pdf::Messages::LetterWithInvoice do
-
   let(:letter) { messages(:with_invoice) }
   let(:options) { {} }
   let(:group) { groups(:top_layer) }
   let(:bottom_member) { people(:bottom_member) }
 
   let(:pdf) { described_class.new(letter, options) }
+
   subject { pdf }
 
   before { invoice_configs(:top_layer).update(payment_slip: :qr, payee: "Hans Gerber\nEine Strasse 42\n1234 Dorf") }
+
   before do
     Subscription.create!(mailing_list: letter.mailing_list,
-                         subscriber: group,
-                         role_types: [Group::BottomGroup::Member])
+      subscriber: group,
+      role_types: [Group::BottomGroup::Member])
     Fabricate(Group::BottomGroup::Member.name, group: groups(:bottom_group_one_one), person: bottom_member)
     Messages::LetterDispatch.new(letter).run
   end
+
   it "renders logo from settings and qr images" do
     expect_any_instance_of(Prawn::Document).to receive(:image).with(any_args).exactly(3).times
     subject.render
@@ -49,7 +51,7 @@ describe Export::Pdf::Messages::LetterWithInvoice do
     subject { PDF::Inspector::Text.analyze(pdf.render) }
 
     it "renders text at positions" do
-      pdf = described_class.new(letter).render
+      described_class.new(letter).render
       expect(text_with_position).to match_array [
         [71, 654, "Bottom Member"],
         [71, 644, "Greatstreet 345"],
@@ -95,31 +97,30 @@ describe Export::Pdf::Messages::LetterWithInvoice do
     end
 
     context "persisted invoice list" do
-
-      it 'renders iban from invoice config when no persisted invoice exists' do
-        group.invoice_config.update(iban: 'CH84 0221 1981 6169 5329 8')
-        pdf = described_class.new(letter).render
+      it "renders iban from invoice config when no persisted invoice exists" do
+        group.invoice_config.update(iban: "CH84 0221 1981 6169 5329 8")
+        described_class.new(letter).render
         expect(text_with_position).to include([360, 280, "CH84 0221 1981 6169 5329 8"])
       end
 
-      it 'renders iban from invoice when persisted invoice exists' do
+      it "renders iban from invoice when persisted invoice exists" do
         list = InvoiceList.create(group: group, title: "title")
-        invoice = list.invoices.create!(title: :title, recipient_id: bottom_member.id, total: 10, group: group)
+        list.invoices.create!(title: :title, recipient_id: bottom_member.id, total: 10, group: group)
         letter.invoice_list_id = list.id
 
-        group.invoice_config.update!(iban: 'CH84 0221 1981 6169 5329 8')
-        pdf = described_class.new(letter).render
+        group.invoice_config.update!(iban: "CH84 0221 1981 6169 5329 8")
+        described_class.new(letter).render
         expect(text_with_position).to include([360, 280, "CH93 0076 2011 6238 5295 7"])
       end
 
-      it 'mixes person and invoice address' do
+      it "mixes person and invoice address" do
         list = InvoiceList.create!(group: group, title: "title")
-        invoice = list.invoices.create!(title: :title, recipient_id: bottom_member.id, total: 10, group: group)
+        list.invoices.create!(title: :title, recipient_id: bottom_member.id, total: 10, group: group)
         letter.invoice_list_id = list.id
 
         letter.message_recipients.first.update!(address: "Foo Member\nGreatstreet 345\n3456 Greattown")
 
-        pdf = described_class.new(letter).render
+        described_class.new(letter).render
         expect(text_with_position).to include([71, 654, "Foo Member"])
         expect(text_with_position).to include([28, 175, "Bottom Member"])
         expect(text_with_position).to include([360, 181, "Bottom Member"])
@@ -128,13 +129,14 @@ describe Export::Pdf::Messages::LetterWithInvoice do
 
     context "dynamic" do
       before do
-        people(:top_leader).update!(street: 'Funkystreet', housenumber: '42', zip_code: '4242')
+        people(:top_leader).update!(street: "Funkystreet", housenumber: "42", zip_code: "4242")
         Fabricate(Group::BottomGroup::Member.name, group: groups(:bottom_group_one_one), person: people(:top_leader))
         Messages::LetterDispatch.new(letter).run
       end
 
-      context "stamped"do
-        let(:options) { { stamped: true } }
+      context "stamped" do
+        let(:options) { {stamped: true} }
+
         it "renders only some texts positions" do
           expect(text_with_position.count).to eq 58
           expect(text_with_position).to match_array [
@@ -199,7 +201,6 @@ describe Export::Pdf::Messages::LetterWithInvoice do
           ]
         end
       end
-
 
       it "renders all texts at positions" do
         expect(text_with_position.count).to eq 80

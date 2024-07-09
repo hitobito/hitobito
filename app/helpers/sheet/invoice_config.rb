@@ -5,10 +5,8 @@
 
 module Sheet
   class InvoiceConfig < Sheet::Invoice
-
     def title
       ::InvoiceConfig.model_name.human
     end
-
   end
 end

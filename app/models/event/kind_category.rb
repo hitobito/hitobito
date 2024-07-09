@@ -18,7 +18,6 @@
 #
 
 class Event::KindCategory < ActiveRecord::Base
-
   include Globalized
   translates :label
 
@@ -31,16 +30,15 @@ class Event::KindCategory < ActiveRecord::Base
   validates_by_schema
   # explicitly define validations for translated attributes
   validates :label, presence: true
-  validates :label, length: { allow_nil: true, maximum: 255 }
-  validates :order, numericality: { only_integer: true }, allow_nil: true
+  validates :label, length: {allow_nil: true, maximum: 255}
+  validates :order, numericality: {only_integer: true}, allow_nil: true
 
   ### INSTANCE METHODS
 
   ### SCOPES
-  default_scope -> { order('`order`') }
+  default_scope -> { order("`order`") }
 
   def to_s(_format = :default)
     label
   end
-
 end

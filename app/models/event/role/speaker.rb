@@ -20,9 +20,7 @@
 
 # Referent
 class Event::Role::Speaker < Event::Role
-
   self.permissions = [:participations_read]
 
   self.kind = :helper
-
 end

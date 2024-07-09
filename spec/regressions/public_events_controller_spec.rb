@@ -3,10 +3,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe PublicEventsController, type: :controller do
-
   render_views
 
   let(:event) { events(:top_event) }
@@ -14,13 +13,12 @@ describe PublicEventsController, type: :controller do
 
   before { event.update!(external_applications: true) }
 
-  describe 'GET #show' do
+  describe "GET #show" do
     let(:group) { groups(:top_layer) }
 
-    it 'renders public event form' do
-      get :show, params: { group_id: group.id, id: event.id }
+    it "renders public event form" do
+      get :show, params: {group_id: group.id, id: event.id}
       expect(response).to be_ok
     end
   end
-
 end

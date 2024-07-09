@@ -8,7 +8,6 @@
 module MailingLists
   module BulkMail
     class SenderRejectedMessageJob < BaseMailMessageJob
-
       def perform
         send(reply_message)
       end
@@ -32,7 +31,6 @@ module MailingLists
           from from
         end
       end
-
     end
   end
 end

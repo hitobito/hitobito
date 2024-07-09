@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module Event::PreloadAllDates
-
   def self.extended(base)
     base.do_preload_all_dates
   end
@@ -13,8 +12,8 @@ module Event::PreloadAllDates
     records = Array(records)
 
     # preload dates
-    ActiveRecord::Associations::Preloader.new.
-      preload(records, [:dates])
+    ActiveRecord::Associations::Preloader.new
+      .preload(records, [:dates])
 
     records
   end

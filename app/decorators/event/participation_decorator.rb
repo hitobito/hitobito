@@ -4,27 +4,27 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::ParticipationDecorator < ApplicationDecorator
-  decorates 'event/participation'
+  decorates "event/participation"
 
   decorates_association :person
   decorates_association :event, with: EventDecorator
   decorates_association :application
 
   delegate :to_s, :email, :primary_email, :all_emails, :all_additional_emails,
-           :all_phone_numbers, :all_social_accounts, :complete_address, :town, :layer_group_label,
-           :layer_group, to: :person
+    :all_phone_numbers, :all_social_accounts, :complete_address, :town, :layer_group_label,
+    :layer_group, to: :person
 
   def person_additional_information
     h.tag(:br) + h.muted(person.additional_name) + incomplete_label
   end
 
   def person_location_information
-    [layer_group, town_info].reject(&:blank?).join(' ')
+    [layer_group, town_info].compact_blank.join(" ")
   end
 
   def incomplete_label
     if answers.any? { |answer| answer.question.required? && answer.answer.blank? }
-      content_tag(:div, h.t('.incomplete'), class: 'text-warning')
+      content_tag(:div, h.t(".incomplete"), class: "text-warning")
     end
   end
 
@@ -40,7 +40,6 @@ class Event::ParticipationDecorator < ApplicationDecorator
   end
 
   def town_info
-    "(#{h.t('.town')}: #{person.town})" if person.town
+    "(#{h.t(".town")}: #{person.town})" if person.town
   end
-
 end

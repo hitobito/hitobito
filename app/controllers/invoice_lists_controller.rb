@@ -31,7 +31,8 @@ class InvoiceListsController < CrudController
         :type,
         :_destroy
       ]
-    ]]
+    ]
+  ]
 
   respond_to :js, only: [:new]
 
@@ -49,7 +50,7 @@ class InvoiceListsController < CrudController
     entry.title = entry.invoice.title
 
     if entry.valid?
-      result = Invoice::BatchCreate.call(entry, LIMIT_CREATE)
+      Invoice::BatchCreate.call(entry, LIMIT_CREATE)
       message = flash_message_create(count: entry.recipient_ids_count, title: entry.title)
       redirect_to return_path, notice: message
       session.delete :invoice_referer
@@ -69,7 +70,7 @@ class InvoiceListsController < CrudController
   # rubocop:disable Rails/SkipsModelValidations
   def destroy
     count = invoices.update_all(state: :cancelled, updated_at: Time.zone.now)
-    key = count > 0 ? :notice : :alert
+    key = (count > 0) ? :notice : :alert
     redirect_to(group_invoices_path(parent, returning: true), key => flash_message(count: count))
   end
 
@@ -105,7 +106,7 @@ class InvoiceListsController < CrudController
   end
 
   def sender
-    params[:mail] == 'true' && current_user
+    params[:mail] == "true" && current_user
   end
 
   def invoices
@@ -117,7 +118,7 @@ class InvoiceListsController < CrudController
   end
 
   def flash_message_create(count:, title:)
-    action_name = count < LIMIT_CREATE ? :create : :create_batch
+    action_name = (count < LIMIT_CREATE) ? :create : :create_batch
     flash_message(action: action_name, count: count, title: title)
   end
 
@@ -127,7 +128,7 @@ class InvoiceListsController < CrudController
 
   def assign_attributes # rubocop:disable Metrics/AbcSize
     if params[:ids].present?
-      entry.recipient_ids = params[:ids].is_a?(Array) ? params[:ids].join(',') : params[:ids]
+      entry.recipient_ids = params[:ids].is_a?(Array) ? params[:ids].join(",") : params[:ids]
     elsif params[:filter].present?
       entry.recipient_ids = recipient_ids_from_people_filter
     else
@@ -149,7 +150,7 @@ class InvoiceListsController < CrudController
     group = Group.find(params.dig(:filter, :group_id))
     filter_params = params[:filter].to_unsafe_h.transform_values(&:presence)
     filter = Person::Filter::List.new(group, current_user, filter_params)
-    filter.entries.pluck(:id).join(',')
+    filter.entries.pluck(:id).join(",")
   end
 
   def authorize_class
@@ -163,7 +164,7 @@ class InvoiceListsController < CrudController
 
       permitted.dig(:invoice, :invoice_items_attributes).each do |index, attrs|
         parameters = params.dig(:invoice_list, :invoice, :invoice_items_attributes,
-                                index, :dynamic_cost_parameters)
+          index, :dynamic_cost_parameters)
         attrs[:dynamic_cost_parameters] = parameters&.to_unsafe_hash || {}
       end
     end

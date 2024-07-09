@@ -4,11 +4,10 @@
 #  https://github.com/hitobito/hitobito.
 
 module TwoFactorAuthenticatable
-
   extend ActiveSupport::Concern
 
   included do
-    enum two_factor_authentication: [:totp]
+    enum two_factor_authentication: {totp: 0}
 
     serialize :encrypted_two_fa_secret
     attr_encrypted :two_fa_secret

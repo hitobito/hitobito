@@ -4,14 +4,13 @@
 #  https://github.com/hitobito/hitobito.
 
 module HouseholdHelper
-
   def household_member_ids_without(member)
     entry.people.excluding(member.person).map(&:id)
   end
 
   def household_member_row_class(member)
     unless member.valid?
-      member.errors.any? ? 'table-danger' : 'table-warning'
+      member.errors.any? ? "table-danger" : "table-warning"
     end
   end
 end

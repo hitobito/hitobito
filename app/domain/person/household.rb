@@ -70,7 +70,7 @@ class Person::Household
   end
 
   def save
-    raise 'invalid' unless valid?
+    raise "invalid" unless valid?
     return unless any_change?
 
     Person.transaction do
@@ -125,7 +125,7 @@ class Person::Household
   end
 
   def existing_people
-    people.select {|candidate| candidate.household_key == person.household_key }
+    people.select { |candidate| candidate.household_key == person.household_key }
   end
 
   def new_people
@@ -143,7 +143,7 @@ class Person::Household
 
   def update_address
     unless address_attrs(person) == address_attrs(other)
-      unless %w(plz town zip_code).all? { |attr| address_attrs(other)[attr].blank? }
+      unless %w[plz town zip_code].all? { |attr| address_attrs(other)[attr].blank? }
         person.attributes = address_attrs(other)
         @address_changed = true
       end
@@ -192,14 +192,13 @@ class Person::Household
     item = options[:item] || housemate
 
     PaperTrail::Version.create(main: housemate,
-                               item: item,
-                               whodunnit: current_user.id,
-                               event: event,
-                               object_changes: household_name(household))
+      item: item,
+      whodunnit: current_user.id,
+      event: event,
+      object_changes: household_name(household))
   end
 
   def household_name(household)
-    household.map(&:full_name).join(', ')
+    household.map(&:full_name).join(", ")
   end
-
 end

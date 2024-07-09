@@ -19,22 +19,21 @@
 #
 
 class Event::Attachment < ActiveRecord::Base
-
   MAX_FILE_SIZE = Settings.event.attachments.max_file_size.megabytes
   CONTENT_TYPES = Settings.event.attachments.content_types
 
   belongs_to :event
 
-  VISIBILITIES = ['team', 'participants', 'global'].freeze
+  VISIBILITIES = ["team", "participants", "global"].freeze
   enum visibility: VISIBILITIES.zip(VISIBILITIES).to_h
 
   # this could become a has_many_attached on Event
   has_one_attached :file
 
   validates_by_schema
-  validates :visibility, inclusion: { in: VISIBILITIES.map(&:to_s), allow_nil: true }
-  validates :file, size: { less_than_or_equal_to: MAX_FILE_SIZE },
-                   content_type: CONTENT_TYPES
+  validates :visibility, inclusion: {in: VISIBILITIES.map(&:to_s), allow_nil: true}
+  validates :file, size: {less_than_or_equal_to: MAX_FILE_SIZE},
+    content_type: CONTENT_TYPES
 
   scope :list, -> { order(:id) }
   scope :visible_for_team, -> { where(visibility: [:team, :participants, :global]) }
@@ -50,9 +49,8 @@ class Event::Attachment < ActiveRecord::Base
   end
 
   def remove_file=(deletion_param)
-    if %w(1 yes true).include?(deletion_param.to_s.downcase)
+    if %w[1 yes true].include?(deletion_param.to_s.downcase)
       file.purge_later
     end
   end
-
 end

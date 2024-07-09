@@ -39,9 +39,9 @@ class MessageRecipient < ActiveRecord::Base
   include I18nEnums
   validates_by_schema
 
-  STATES = %w(pending sending sent failed).freeze
+  STATES = %w[pending sending sent failed].freeze
   i18n_enum :state, STATES
-  validates :state, inclusion: { in: STATES }, allow_nil: true
+  validates :state, inclusion: {in: STATES}, allow_nil: true
 
   belongs_to :message
   belongs_to :person

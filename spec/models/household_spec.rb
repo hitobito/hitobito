@@ -5,18 +5,45 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Household do
-
   subject(:household) { Household.new(person.reload) }
-  let(:person) { Fabricate(:person, first_name: 'David', last_name: 'Hasselhoff') }
-  let(:other_person) { Fabricate(:person, first_name: 'Ardona', last_name: 'Mola') }
-  let(:third_person) { Fabricate(:person, first_name: 'Malou', last_name: 'Thomas') }
 
-  describe '#people' do
+  let(:person) { Fabricate(:person, first_name: "David", last_name: "Hasselhoff") }
+  let(:other_person) { Fabricate(:person, first_name: "Ardona", last_name: "Mola") }
+  let(:third_person) { Fabricate(:person, first_name: "Malou", last_name: "Thomas") }
 
-    it 'lists household members' do
+  describe "#household_key" do
+    it "is blank for new household" do
+      expect(person.household_key).to be_blank
+      expect(Household.new(person).household_key).to be_blank
+    end
+
+    it "is set for existing household" do
+      create_household
+      expect(person.household_key).to be_present
+      expect(Household.new(person).household_key).to eq(person.household_key)
+    end
+
+    it "gets set when saving household" do
+      household.add(other_person)
+      expect(household.household_key).to be_blank
+      household.save
+      expect(household.household_key).to be_present
+    end
+
+    it "does not get set on save when household is not valid" do
+      household.add(other_person)
+      expect(household.household_key).to be_blank
+      allow(household).to receive(:valid?).and_return(false)
+      household.save
+      expect(household.household_key).to be_blank
+    end
+  end
+
+  describe "#people" do
+    it "lists household members" do
       create_household
 
       expect(household.members.size).to eq(3)
@@ -26,9 +53,49 @@ describe Household do
     end
   end
 
-  describe '#save' do
-    it 'creates new household and assigns same address to all members' do
-      person.update!(street: 'Greatstreet', housenumber: '345', zip_code: '3456', town: 'Greattown', country: 'CH')
+  describe "#add" do
+    it "returns self" do
+      expect(household.add(other_person)).to eq household
+    end
+
+    it "adds person to people" do
+      expect(household.people).not_to include(other_person)
+      household.add(other_person)
+      expect(household.people).to include(other_person)
+    end
+
+    it "does not add duplicate person" do
+      expect(household.people).to include(person)
+      expect(household.people).to have(1).item
+      household.add(person)
+      expect(household.people).to have(1).item
+    end
+  end
+
+  describe "#remove" do
+    it "returns self" do
+      expect(household.remove(person)).to eq household
+    end
+
+    it "removes person from people" do
+      expect(household.people).to include(person)
+      expect(household.people).to have(1).item
+      household.remove(person)
+      expect(household.people).to be_empty
+    end
+
+    it "ignores unknown person" do
+      expect(household.people).to include(person)
+      expect(household.people).to have(1).item
+      household.remove(other_person)
+      expect(household.people).to have(1).item
+      expect(household.people).to include(person)
+    end
+  end
+
+  describe "#save" do
+    it "creates new household and assigns same address to all members" do
+      person.update!(street: "Greatstreet", housenumber: "345", zip_code: "3456", town: "Greattown", country: "CH")
       household.add(other_person)
       household.add(third_person)
       expect(household.new_people).to include(other_person)
@@ -45,14 +112,14 @@ describe Household do
 
       [person, other_person, third_person].each do |p|
         p.reload
-        expect(p.address).to eq('Greatstreet 345')
-        expect(p.zip_code).to eq('3456')
-        expect(p.town).to eq('Greattown')
-        expect(p.country).to eq('CH')
+        expect(p.address).to eq("Greatstreet 345")
+        expect(p.zip_code).to eq("3456")
+        expect(p.town).to eq("Greattown")
+        expect(p.country).to eq("CH")
       end
     end
 
-    it 'adds person to existing household and assigns address' do
+    it "adds person to existing household and assigns address" do
       create_household
 
       expect(household.members.size).to eq(3)
@@ -70,7 +137,7 @@ describe Household do
       expect(household.people).to include(fourth_person)
     end
 
-    it 'does not change anything if same person is added twice' do
+    it "does not change anything if same person is added twice" do
       create_household
 
       household.add(person)
@@ -82,7 +149,7 @@ describe Household do
       expect(household.members.size).to eq(3)
     end
 
-    it 'can not be saved if not valid' do
+    it "can not be saved if not valid" do
       create_household
       fourth_person = Fabricate(:person)
       household.add(fourth_person)
@@ -93,7 +160,7 @@ describe Household do
       expect(fourth_person.reload.household_key).to be_nil
     end
 
-    it 'removes person from existing household' do
+    it "removes person from existing household" do
       create_household
       expect(household.members.size).to eq(3)
 
@@ -106,7 +173,7 @@ describe Household do
       expect(household.reload.members.size).to eq(2)
     end
 
-    it 'can be saved if all people removed' do
+    it "can be saved if all people removed" do
       create_household
 
       household.people.each do |p|
@@ -118,7 +185,7 @@ describe Household do
       expect(Person.where(household_key: household.household_key)).not_to exist
     end
 
-    it 'destroys household if it has less than 2 members' do
+    it "destroys household if it has less than 2 members" do
       create_household
 
       household.remove(household.people.third)
@@ -130,7 +197,7 @@ describe Household do
       expect(Person.where(household_key: household.household_key)).not_to exist
     end
 
-    it 'yields new_people and removed_people' do
+    it "yields new_people and removed_people" do
       create_household
 
       household.remove(other_person)
@@ -140,33 +207,53 @@ describe Household do
 
       expect do |b|
         household.save(&b)
-      end.to yield_with_args(contain_exactly(added_person), contain_exactly(other_person, third_person))
+      end.to yield_with_args(
+        contain_exactly(added_person),
+        contain_exactly(other_person, third_person)
+      )
+    end
+
+    it "yielded new_people and removed_people are updated" do
+      expect(person.household_key).to be_blank
+      create_household
+
+      household.remove(other_person)
+      added_person = Fabricate(:person)
+      household.add(added_person)
+
+      household.save! do |added_people, removed_people|
+        expect(added_people.first.household_key).to eq household.household_key
+        expect(added_people.first.changes).to be_empty
+
+        expect(removed_people.first.household_key).to be_blank
+        expect(removed_people.first.changes).to be_empty
+      end
     end
   end
 
-  describe 'validation' do
-    it 'is not valid with person from other household' do
+  describe "validation" do
+    it "is not valid with person from other household" do
       other_household = create_other_household
       other_household_person = other_household.people.first
-      other_household_person.update!(first_name: 'Hans', last_name: 'Halt')
+      other_household_person.update!(first_name: "Hans", last_name: "Halt")
       household.add(other_household_person)
 
       expect(household).not_to be_valid
 
       expect(household.errors.count).to eq(1)
-      expect(household.errors.first.attribute).to eq(:'members[1].base')
-      expect(household.errors.first.message).to eq('Hans Halt ist bereits Mitglied eines anderen Haushalts.')
+      expect(household.errors.first.attribute).to eq(:"members[1].base")
+      expect(household.errors.first.message).to eq("Hans Halt ist bereits Mitglied eines anderen Haushalts.")
     end
 
-    it 'is valid if only one or less people in household' do
+    it "is valid if only one or less people in household" do
       expect(household).to be_valid
 
       expect(household.errors).to be_empty
     end
 
-    it 'is not valid if it contains invalid person' do
+    it "is not valid if it contains invalid person" do
       expect(household).to be_valid
-      too_long_email = (('a' * 248) + '@example.com')
+      too_long_email = (("a" * 248) + "@example.com")
       allow(other_person).to receive(:email).and_return(too_long_email)
       expect(other_person).not_to be_valid
 
@@ -175,59 +262,58 @@ describe Household do
       expect(household).not_to be_valid
 
       expect(household.errors.count).to eq(1)
-      expect(household.errors.first.attribute).to eq(:'members[1].person')
-      expect(household.errors.first.message).to eq('Ardona Mola: Haupt-E-Mail ist zu lang (mehr als 255 Zeichen)')
+      expect(household.errors.first.attribute).to eq(:"members[1].person")
+      expect(household.errors.first.message).to eq("Ardona Mola: Haupt-E-Mail ist zu lang (mehr als 255 Zeichen)")
     end
   end
 
-  describe 'address' do
-    it 'returns household attrs as hash' do
-      person.update!(street: 'Loriweg', housenumber: '42', zip_code: '6600', town: 'Locarno', country: 'CH')
+  describe "address" do
+    it "returns household attrs as hash" do
+      person.update!(street: "Loriweg", housenumber: "42", zip_code: "6600", town: "Locarno", country: "CH")
       household.add(other_person)
 
-      expected_attrs = { address_care_of: nil,
-                         street: 'Loriweg',
-                         housenumber: '42',
-                         postbox: nil,
-                         country: 'CH',
-                         town: 'Locarno',
-                         zip_code: '6600' }
+      expected_attrs = {address_care_of: nil,
+                        street: "Loriweg",
+                        housenumber: "42",
+                        postbox: nil,
+                        country: "CH",
+                        town: "Locarno",
+                        zip_code: "6600"}
 
       expect(household.address_attrs).to eq(expected_attrs)
     end
 
-    it 'applies address from person with address when added to household without address' do
+    it "applies address from person with address when added to household without address" do
       create_household
 
-      fourth_person = Fabricate(:person, street: 'Loriweg', housenumber: '42')
+      fourth_person = Fabricate(:person, street: "Loriweg", housenumber: "42")
       household.add(fourth_person)
-      household.save
-      expect(household.reload).to be_valid
+      household.save!
 
-      expected_attrs = { address_care_of: nil,
-                         street: 'Loriweg',
-                         housenumber: '42',
-                         postbox: nil,
-                         country: nil,
-                         town: nil,
-                         zip_code: nil }
+      expected_attrs = {address_care_of: nil,
+                        street: "Loriweg",
+                        housenumber: "42",
+                        postbox: nil,
+                        country: nil,
+                        town: nil,
+                        zip_code: nil}
 
       expect(household.address_attrs).to eq(expected_attrs)
     end
   end
 
-  describe 'warnings' do
-    it 'has warning if only one or less people in household' do
+  describe "warnings" do
+    it "has warning if only one or less people in household" do
       expect(household).to be_valid
 
       expect(household.errors).to be_empty
       expect(household.warnings.count).to eq(1)
       expect(household.warnings.first.attribute).to eq(:members)
-      expect(household.warnings.first.message).to include('Der Haushalt wird aufgelöst da weniger als 2 Personen vorhanden sind.')
+      expect(household.warnings.first.message).to include("Der Haushalt wird aufgelöst da weniger als 2 Personen vorhanden sind.")
     end
 
-    it 'has warnings if members have different address data' do
-      person.update!(street: 'Loriweg', housenumber: '42', zip_code: '6600', town: 'Locarno')
+    it "has warnings if members have different address data" do
+      person.update!(street: "Loriweg", housenumber: "42", zip_code: "6600", town: "Locarno")
       household.add(other_person)
 
       expect(household).to be_valid
@@ -238,9 +324,9 @@ describe Household do
       expect(household.warnings.first.message).to include("Die Adresse 'Loriweg 42, 6600 Locarno' wird für alle Personen in diesem Haushalt übernommen.")
     end
 
-    it 'has warnings if reference person does not have an address but other member' do
-      other_person.update!(street: 'Other Loriweg', housenumber: '42', zip_code: '6600',
-                           town: 'Locarno', country: 'it')
+    it "has warnings if reference person does not have an address but other member" do
+      other_person.update!(street: "Other Loriweg", housenumber: "42", zip_code: "6600",
+        town: "Locarno", country: "it")
       household.add(other_person)
 
       expect(household).to be_valid
@@ -251,8 +337,8 @@ describe Household do
       expect(household.warnings.first.message).to include("Die Adresse 'Other Loriweg 42, 6600 Locarno' wird für alle Personen in diesem Haushalt übernommen.")
     end
 
-    it 'has no warning of none of the members has address' do
-      person.update!(street: '', housenumber: nil, zip_code: nil, town: '   ')
+    it "has no warning of none of the members has address" do
+      person.update!(street: "", housenumber: nil, zip_code: nil, town: "   ")
       household.add(other_person)
 
       expect(household).to be_valid
@@ -262,8 +348,8 @@ describe Household do
     end
   end
 
-  describe '#destroy' do
-    it 'destroys whole household' do
+  describe "#destroy" do
+    it "destroys whole household" do
       create_household
 
       household.destroy
@@ -271,7 +357,7 @@ describe Household do
       expect(Person.where(household_key: household.household_key)).not_to exist
     end
 
-    it 'yields removed_people' do
+    it "yields removed_people" do
       create_household
       original_people = household.people.dup
 
@@ -281,49 +367,104 @@ describe Household do
     end
   end
 
+  describe "#reload" do
+    it "clears instance variables" do
+      household.instance_variable_set(:@dummy, "dummy")
+      expect { household.reload }
+        .to change { household.instance_variable_defined?(:@dummy) }
+        .from(true).to(false)
+    end
 
-  describe 'logging' do
+    it "reloads the reference person" do
+      original_reference_person_name = household.reference_person.first_name
+      household.reference_person.first_name = "dummy"
+      expect { household.reload }
+        .to change { household.reference_person.first_name }
+        .from("dummy").to(original_reference_person_name)
+    end
+
+    it "reinitializes the household" do
+      original_people = household.people
+      household.remove(original_people.first)
+      expect(household.people).not_to match_array(original_people)
+
+      household.reload
+      expect(household.people).to match_array(original_people)
+    end
+  end
+
+  describe "#new_record?" do
+    it "is true for new unsaved household" do
+      household.add(other_person)
+      expect(household.new_record?).to eq true
+    end
+
+    it "is false for saved household" do
+      household.add(other_person)
+      household.save!
+      expect(household.new_record?).to eq false
+    end
+
+    it "is false for existing household" do
+      create_household
+      expect(person.household_key).to be_present
+      household = Household.new(person)
+      expect(household.new_record?).to eq false
+    end
+  end
+
+  describe "#persisted?" do
+    it "is the opposite of #new_record" do
+      allow(household).to receive(:new_record?).and_return(true)
+      expect(household.persisted?).to eq false
+
+      allow(household).to receive(:new_record?).and_return(false)
+      expect(household.persisted?).to eq true
+    end
+  end
+
+  describe "logging" do
     with_versioning do
       let(:top_leader) { people(:top_leader) }
       before { PaperTrail.request.whodunnit = top_leader.id }
       after { PaperTrail.request.whodunnit = nil }
 
-      it 'adds log entry for every household member when creating new household' do
+      it "adds log entry for every household member when creating new household" do
         household.add(other_person)
 
         expect do
-          household.save
+          household.save!
         end.to change { PaperTrail::Version.count }.by(2)
 
         [person, other_person].each do |person|
           log_entry = person.versions.last
 
-          expect(log_line(log_entry)).to eq('Haushalt (David Hasselhoff, Ardona Mola) wurde neu erstellt.')
+          expect(log_line(log_entry)).to eq("Haushalt (David Hasselhoff, Ardona Mola) wurde neu erstellt.")
 
           expect(log_entry.whodunnit).to eq(top_leader.id.to_s)
           expect(log_entry.whodunnit_type).to eq(Person.sti_name)
         end
       end
 
-      it 'adds log entries for added people' do
+      it "adds log entries for added people" do
         create_household
 
-        fourth_person = Fabricate(:person, first_name: 'Hans', last_name: 'Hansen')
+        fourth_person = Fabricate(:person, first_name: "Hans", last_name: "Hansen")
         household.add(fourth_person)
-        fifth_person = Fabricate(:person, first_name: 'Jan', last_name: 'Miller')
+        fifth_person = Fabricate(:person, first_name: "Jan", last_name: "Miller")
         household.add(fifth_person)
 
         PaperTrail::Version.destroy_all
 
         expect do
-          household.save
+          household.save!
         end.to change { PaperTrail::Version.count }.by(10)
 
         [person, other_person, third_person, fourth_person, fifth_person].each do |person|
           version_entries = person.versions.last(2)
 
-          expect(log_line(version_entries.first)).to eq('Hans Hansen wurde zum Haushalt (David Hasselhoff, Ardona Mola, Malou Thomas) hinzugefügt.')
-          expect(log_line(version_entries.second)).to eq('Jan Miller wurde zum Haushalt (David Hasselhoff, Ardona Mola, Malou Thomas) hinzugefügt.')
+          expect(log_line(version_entries.first)).to eq("Hans Hansen wurde zum Haushalt (David Hasselhoff, Ardona Mola, Malou Thomas) hinzugefügt.")
+          expect(log_line(version_entries.second)).to eq("Jan Miller wurde zum Haushalt (David Hasselhoff, Ardona Mola, Malou Thomas) hinzugefügt.")
 
           version_entries.each do |log_entry|
             expect(log_entry.whodunnit).to eq(top_leader.id.to_s)
@@ -332,62 +473,65 @@ describe Household do
         end
       end
 
-      it 'adds log entries for from household removed person' do
+      it "adds log entries for from household removed person" do
         create_household
 
         expect do
           household.remove(other_person)
-          household.save
+          household.save!
         end.to change { PaperTrail::Version.count }.by(3)
 
         [person, other_person, third_person].each do |person|
           log_entry = person.versions.last
 
-          expect(log_line(log_entry)).to eq('Ardona Mola wurde vom Haushalt (David Hasselhoff, Malou Thomas) entfernt.')
+          expect(log_line(log_entry)).to eq("Ardona Mola wurde vom Haushalt (David Hasselhoff, Malou Thomas) entfernt.")
 
           expect(log_entry.whodunnit).to eq(top_leader.id.to_s)
           expect(log_entry.whodunnit_type).to eq(Person.sti_name)
         end
       end
 
-      it 'adds log entries for both, removed and added people' do
+      it "adds log entries for both, removed and added people" do
         create_household
         household.remove(third_person)
-        household.save
-        fourth_person = Fabricate(:person, first_name: 'Hans', last_name: 'Hansen')
+        household.save!
+        fourth_person = Fabricate(:person, first_name: "Hans", last_name: "Hansen")
         PaperTrail::Version.destroy_all
 
         household.remove(other_person)
         household.add(fourth_person)
 
         expect do
-          household.save
+          household.save!
         end.to change { PaperTrail::Version.count }.by(6)
 
         expect(collect_log_lines(person)).to eq([
-          'Hans Hansen wurde zum Haushalt (David Hasselhoff) hinzugefügt.',
-          'Ardona Mola wurde vom Haushalt (David Hasselhoff) entfernt.'])
+          "Hans Hansen wurde zum Haushalt (David Hasselhoff) hinzugefügt.",
+          "Ardona Mola wurde vom Haushalt (David Hasselhoff) entfernt."
+        ])
 
         expect(collect_log_lines(other_person)).to eq([
-          'Hans Hansen wurde zum Haushalt (David Hasselhoff) hinzugefügt.',
-          'Ardona Mola wurde vom Haushalt (David Hasselhoff) entfernt.'])
+          "Hans Hansen wurde zum Haushalt (David Hasselhoff) hinzugefügt.",
+          "Ardona Mola wurde vom Haushalt (David Hasselhoff) entfernt."
+        ])
 
         expect(collect_log_lines(fourth_person)).to eq([
-          'Hans Hansen wurde zum Haushalt (David Hasselhoff) hinzugefügt.',
-          'Ardona Mola wurde vom Haushalt (David Hasselhoff) entfernt.'])
+          "Hans Hansen wurde zum Haushalt (David Hasselhoff) hinzugefügt.",
+          "Ardona Mola wurde vom Haushalt (David Hasselhoff) entfernt."
+        ])
 
         expect_whodunnit_top_leader
       end
 
-      it 'raises exception if whodunnit not set' do
+      it "raises exception if whodunnit not set" do
         allow(PaperTrail.request).to receive(:whodunnit)
 
         expect do
           create_household
-        end.to raise_error(RuntimeError, 'PaperTrail.request.whodunnit must be set')
+        end.to raise_error(RuntimeError, "PaperTrail.request.whodunnit must be set")
       end
 
-      it 'add log entry to all former members for destroyed household' do
+      it "add log entry to all former members for destroyed household" do
         create_household
 
         expect do
@@ -397,22 +541,22 @@ describe Household do
         [person, other_person, third_person].each do |person|
           log_entry = person.versions.last
 
-          expect(log_line(log_entry)).to eq('Haushalt (David Hasselhoff, Ardona Mola, Malou Thomas) wurde aufgelöst.')
+          expect(log_line(log_entry)).to eq("Haushalt (David Hasselhoff, Ardona Mola, Malou Thomas) wurde aufgelöst.")
 
           expect(log_entry.whodunnit).to eq(top_leader.id.to_s)
           expect(log_entry.whodunnit_type).to eq(Person.sti_name)
         end
       end
 
-      it 'adds address changed log entry to members when creating new household' do
-        person.update!(street: 'Loriweg', housenumber: '42', zip_code: '6600', town: 'Locarno')
+      it "adds address changed log entry to members when creating new household" do
+        person.update!(street: "Loriweg", housenumber: "42", zip_code: "6600", town: "Locarno")
         other_person # create person and remove related version entry
         PaperTrail::Version.destroy_all
 
         household.add(other_person)
 
         expect do
-          household.save
+          household.save!
         end.to change { PaperTrail::Version.count }.by(3)
 
         expect(person.versions.count).to eq(1)
@@ -420,7 +564,7 @@ describe Household do
         # one version entry for created household, the other for changed address
         expect(other_person.versions.count).to eq(2)
         address_log_entry = other_person.versions.first
-        expect(log_line(address_log_entry)).to eq('PLZ wurde auf <i>6600</i> gesetzt.</div><div>Ort wurde auf <i>Locarno</i> gesetzt.</div><div>Strasse wurde auf <i>Loriweg</i> gesetzt.</div><div>Hausnummer wurde auf <i>42</i> gesetzt.')
+        expect(log_line(address_log_entry)).to eq("PLZ wurde auf <i>6600</i> gesetzt.</div><div>Ort wurde auf <i>Locarno</i> gesetzt.</div><div>Strasse wurde auf <i>Loriweg</i> gesetzt.</div><div>Hausnummer wurde auf <i>42</i> gesetzt.")
 
         expect_whodunnit_top_leader
       end
@@ -465,5 +609,4 @@ describe Household do
     end
     expect(all_by_top_leader).to eq(true)
   end
-
 end

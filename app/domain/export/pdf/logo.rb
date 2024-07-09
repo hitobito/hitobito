@@ -14,7 +14,7 @@ module Export
       VALID_POSITIONS = [:left, :right].freeze
 
       attr_reader :pdf, :attachment, :image_width, :image_height, :position, :options,
-                  :padding_top, :padding_right, :padding_bottom, :padding_left
+        :padding_top, :padding_right, :padding_bottom, :padding_left
 
       # @param [Prawn::Document] pdf
       # @param [ActiveStorage::Attachment] attachment
@@ -32,7 +32,7 @@ module Export
 
         unless VALID_POSITIONS.include?(position)
           raise ArgumentError,
-                "position is #{position.inspect} must be one of #{VALID_POSITIONS.inspect}"
+            "position is #{position.inspect} must be one of #{VALID_POSITIONS.inspect}"
         end
       end
 
@@ -56,12 +56,11 @@ module Export
         return unless attachment&.attached?
 
         # Create a bounding box at the upper left corner of the logo including the padding.
-        padded_left = position == :left ? 0 : bounds.width - width
+        padded_left = (position == :left) ? 0 : bounds.width - width
         bounding_box([padded_left, cursor], width: width, height: height) do
-
           # Create a bounding box at the upper left corner of the logo without the padding.
           bounding_box([padding_left, cursor - padding_top], width: image_width,
-                                                             height: image_height) do
+            height: image_height) do
             attachment.blob.open do |logo_file|
               image(logo_file, logo_options(image_width, image_height, position: position))
             end

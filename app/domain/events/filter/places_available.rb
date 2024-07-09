@@ -9,7 +9,7 @@ module Events::Filter
   class PlacesAvailable
     def initialize(_user, params, _options, scope)
       @params = params
-      @scope  = scope
+      @scope = scope
     end
 
     def to_scope

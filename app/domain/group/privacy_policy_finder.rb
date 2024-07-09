@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Group::PrivacyPolicyFinder
-
   def initialize(group, person)
     @group = group
     @person = person
@@ -31,6 +30,6 @@ class Group::PrivacyPolicyFinder
   def already_accepted?
     return false unless @person.is_a?(ActiveRecord::Base)
 
-    @person.privacy_policy_accepted? && @person.changes.keys.exclude?('privacy_policy_accepted_at')
+    @person.privacy_policy_accepted? && @person.changes.keys.exclude?("privacy_policy_accepted_at")
   end
 end

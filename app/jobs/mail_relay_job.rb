@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class MailRelayJob < RecurringJob
-
   run_every Settings.email.retriever.interval.minutes
 
   def perform_internal
@@ -22,7 +21,7 @@ class MailRelayJob < RecurringJob
     if exception.is_a?(MailRelay::Error)
       super(job, exception.original, mail: extract_mail_for_errbit(exception))
     else
-      super(job, exception)
+      super
     end
   end
 
@@ -42,5 +41,4 @@ class MailRelayJob < RecurringJob
     MailConfig.legacy? &&
       Settings.email.retriever.config&.address.present?
   end
-
 end

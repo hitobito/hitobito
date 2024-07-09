@@ -8,30 +8,30 @@ module RenderPeopleExports
 
   def render_pdf(people, group = nil)
     pdf = generate_pdf(people, group)
-    send_data pdf, type: :pdf, disposition: 'inline'
+    send_data pdf, type: :pdf, disposition: "inline"
   rescue Prawn::Errors::CannotFit
     redirect_back(fallback_location: group_people_path(group, returning: true),
-                  alert: t('people.pdf.cannot_fit'))
+      alert: t("people.pdf.cannot_fit"))
   end
 
-  def render_emails(people, separator = ',')
+  def render_emails(people, separator = ",")
     emails = Person.mailing_emails_for(people)
     render plain: emails.join(separator)
   end
 
   def render_vcf(people)
     vcf = generate_vcf(people)
-    send_data vcf, type: :vcf, disposition: 'inline'
+    send_data vcf, type: :vcf, disposition: "inline"
   end
 
   def render_pdf_in_background(people, group, filename)
     with_async_download_cookie(:pdf, filename) do |filename|
       Export::LabelsJob.new(:pdf,
-                            current_user.id,
-                            people.pluck(:id),
-                            group.id,
-                            params.slice(:label_format_id, :household)
-                                  .merge(filename: filename)).enqueue!
+        current_user.id,
+        people.pluck(:id),
+        group.id,
+        params.slice(:label_format_id, :household)
+              .merge(filename: filename)).enqueue!
     end
   end
 
@@ -57,5 +57,4 @@ module RenderPeopleExports
       end
     end
   end
-
 end

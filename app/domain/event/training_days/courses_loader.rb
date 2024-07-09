@@ -17,15 +17,15 @@ module Event::TrainingDays
     def load
       Event::Course
         .between(@start_date, @end_date)
-        .includes(:dates, kind: { event_kind_qualification_kinds: :qualification_kind })
-        .joins(:participations, kind: { event_kind_qualification_kinds: :qualification_kind })
-        .where(event_participations: { qualified: true, person: @person_id })
+        .includes(:dates, kind: {event_kind_qualification_kinds: :qualification_kind})
+        .joins(:participations, kind: {event_kind_qualification_kinds: :qualification_kind})
+        .where(event_participations: {qualified: true, person: @person_id})
         .where(event_kind_qualification_kinds: {
           qualification_kind_id: @qualification_kind_ids,
           category: :prolongation,
-          role: @role,
+          role: @role
         })
-        .order('event_dates.start_at DESC')
+        .order("event_dates.start_at DESC")
         .distinct
     end
   end

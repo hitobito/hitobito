@@ -69,7 +69,7 @@ class TableDisplay < ActiveRecord::Base
 
   def column_for(attr, table: nil)
     column = relevant_columns.fetch(attr, nil) ||
-        relevant_multi_columns.find { |col| col.can_display?(attr) }
+      relevant_multi_columns.find { |col| col.can_display?(attr) }
     return if column.nil?
 
     instance = column.new(ability, model_class: table_model_class.constantize, table: table)
@@ -102,7 +102,7 @@ class TableDisplay < ActiveRecord::Base
   end
 
   def known?(attr)
-    relevant_columns.keys.include?(attr.to_s) || relevant_multi_columns.any? do |column_class|
+    relevant_columns.key?(attr.to_s) || relevant_multi_columns.any? do |column_class|
       column_class.can_display? attr.to_s
     end
   end

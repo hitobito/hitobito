@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe People::Destroyer do
   let(:group) { groups(:bottom_layer_one) }
@@ -15,7 +15,7 @@ describe People::Destroyer do
 
   subject { People::Destroyer.new(person) }
 
-  it 'destroys person' do
+  it "destroys person" do
     expect do
       subject.run
     end.to change { Person.count }.by(-1)
@@ -23,7 +23,7 @@ describe People::Destroyer do
     expect(Person.exists?(person.id)).to eq(false)
   end
 
-  it 'destroys attached family member if there is only one' do
+  it "destroys attached family member if there is only one" do
     leftover_member1 = FamilyMember.create!(person: person, other: bottom_member, kind: :sibling)
     leftover_member2 = FamilyMember.create!(person: top_leader, other: person, kind: :sibling)
 
@@ -32,13 +32,13 @@ describe People::Destroyer do
     expect do
       subject.run
     end.to change { Person.count }.by(-1)
-       .and change { FamilyMember.count }.by(-4)
+      .and change { FamilyMember.count }.by(-4)
 
     expect(FamilyMember.exists?(leftover_member1.id)).to eq(false)
     expect(FamilyMember.exists?(leftover_member2.id)).to eq(false)
   end
 
-  it 'does not destroy attached family members if there is more than one' do
+  it "does not destroy attached family members if there is more than one" do
     non_leftover_member1 = FamilyMember.create!(person: person, other: bottom_member, kind: :sibling)
     non_leftover_member2 = FamilyMember.create!(person: top_leader, other: bottom_member, kind: :sibling)
 
@@ -47,14 +47,14 @@ describe People::Destroyer do
     expect do
       subject.run
     end.to change { Person.count }.by(-1)
-       .and change { FamilyMember.count }.by(-4)
+      .and change { FamilyMember.count }.by(-4)
 
     expect(FamilyMember.count).to eq(2)
     expect(FamilyMember.exists?(non_leftover_member1.id)).to eq(false)
     expect(FamilyMember.exists?(non_leftover_member2.id)).to eq(true)
   end
 
-  it 'clears attached household if there is only one other person' do
+  it "clears attached household if there is only one other person" do
     person.household_people_ids = [bottom_member.id]
     Person::Household.new(person, Ability.new(top_leader), bottom_member, person).persist!
 
@@ -73,7 +73,7 @@ describe People::Destroyer do
     expect(bottom_member.household_key).to be_nil
   end
 
-  it 'does not clear attached household if there is more than one person' do
+  it "does not clear attached household if there is more than one person" do
     person.household_people_ids = [bottom_member.id, top_leader.id]
     Person::Household.new(person, Ability.new(top_leader), bottom_member, person).persist!
     Person::Household.new(bottom_member, Ability.new(top_leader), top_leader, bottom_member).persist!
@@ -95,7 +95,7 @@ describe People::Destroyer do
     expect(bottom_member.household_key).to eq(top_leader.household_key)
   end
 
-  it 'nullifies invoices with person as recipient' do
+  it "nullifies invoices with person as recipient" do
     invoice = Fabricate(:invoice, group: group, recipient: person)
     person_address = Person::Address.new(person).for_invoice
     person_email = person.email
@@ -107,7 +107,7 @@ describe People::Destroyer do
     expect do
       subject.run
     end.to change { Person.count }.by(-1)
-       .and change { Invoice.count }.by(0)
+      .and change { Invoice.count }.by(0)
 
     invoice.reload
 
@@ -116,7 +116,7 @@ describe People::Destroyer do
     expect(invoice.recipient_email).to eq(person_email)
   end
 
-  it 'nullifies invoices with person as recipient' do
+  it "nullifies invoices with person as recipient" do
     invoice = Fabricate(:invoice, group: group, creator: person, recipient: bottom_member)
 
     expect(invoice.creator).to eq(person)
@@ -124,7 +124,7 @@ describe People::Destroyer do
     expect do
       subject.run
     end.to change { Person.count }.by(-1)
-       .and change { Invoice.count }.by(0)
+      .and change { Invoice.count }.by(0)
 
     invoice.reload
 

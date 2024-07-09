@@ -47,10 +47,9 @@ class InvoiceItem < ActiveRecord::Base
   class_attribute :dynamic_cost_parameter_definitions
   self.dynamic_cost_parameter_definitions = {}
 
-  after_destroy :recalculate_invoice!
-
   before_update :recalculate, if: :count_or_unit_cost_changed?
   after_update :recalculate_invoice!
+  after_destroy :recalculate_invoice!
 
   belongs_to :invoice
 
@@ -86,10 +85,10 @@ class InvoiceItem < ActiveRecord::Base
 
   def recalculate
     self.cost = if dynamic
-                  dynamic_cost
-                else
-                  unit_cost && count ? unit_cost * count : 0
-                end
+      dynamic_cost
+    else
+      (unit_cost && count) ? unit_cost * count : 0
+    end
 
     self
   end

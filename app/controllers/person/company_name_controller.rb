@@ -4,34 +4,33 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::CompanyNameController < ApplicationController
-
   before_action :authorize_action
 
   delegate :model_class, to: :class
 
   # GET ajax, for auto complete fields, only the company_name
   def index
-    render json: entries.map { |name| { id: name, label: name } }
+    render json: entries.map { |name| {id: name, label: name} }
   end
 
   private
 
   def entries
     if params.key?(:q) && params[:q].to_s.strip.size >= 3
-      list_entries.
-        limit(10).
-        pluck(:company_name).
-        map(&:strip)
+      list_entries
+        .limit(10)
+        .pluck(:company_name)
+        .map(&:strip)
     else
       []
     end
   end
 
   def list_entries
-    Person.
-      where.not(company_name: nil).
-      distinct.
-      order(:company_name)
+    Person
+      .where.not(company_name: nil)
+      .distinct
+      .order(:company_name)
   end
 
   def authorize_action
@@ -43,11 +42,8 @@ class Person::CompanyNameController < ApplicationController
   self.search_columns = [:company_name]
 
   class << self
-
     def model_class
       Person
     end
-
   end
-
 end

@@ -4,21 +4,20 @@
 #  https://github.com/hitobito/hitobito.
 
 class PersonDecorator < ApplicationDecorator
-
   decorates :person
 
   include ContactableDecorator
 
   def as_typeahead
-    { id: id, label: h.h(full_label) }
+    {id: id, label: h.h(full_label)}
   end
 
   def as_quicksearch
-    { id: id, label: h.h(full_label), type: :person, icon: :user }
+    {id: id, label: h.h(full_label), type: :person, icon: :user}
   end
 
   def as_typeahead_with_address
-    { id: id, label: h.h(name_with_address) }
+    {id: id, label: h.h(name_with_address)}
   end
 
   def full_label
@@ -27,8 +26,8 @@ class PersonDecorator < ApplicationDecorator
     if company?
       name = full_name
       label << " (#{name})" if name.present?
-    else
-      label << " (#{birthday.year})" if birthday
+    elsif birthday
+      label << " (#{birthday.year})"
     end
     label
   end
@@ -39,7 +38,7 @@ class PersonDecorator < ApplicationDecorator
 
   def name_with_address
     label = to_s
-    details = [zip_code, town].compact.join(' ')
+    details = [zip_code, town].compact.join(" ")
     label << " (#{details})" if details.present?
     label
   end
@@ -63,7 +62,7 @@ class PersonDecorator < ApplicationDecorator
   def picture_full_url
     pic_url = Class.new do
       include UploadDisplayHelper
-    end.new.upload_url(self, :picture, default: 'profil')
+    end.new.upload_url(self, :picture, default: "profil")
 
     if pic_url.respond_to?(:url)
       pic_url.url
@@ -110,10 +109,10 @@ class PersonDecorator < ApplicationDecorator
   end
 
   def latest_qualifications_uniq_by_kind
-    qualifications.
-      includes(:person, qualification_kind: :translations).
-      order_by_date.
-      group_by(&:qualification_kind).values.map(&:first)
+    qualifications
+      .includes(:person, qualification_kind: :translations)
+      .order_by_date
+      .group_by(&:qualification_kind).values.map(&:first)
   end
 
   def pending_applications
@@ -131,7 +130,7 @@ class PersonDecorator < ApplicationDecorator
 
   def last_role_new_link(group)
     path = h.new_group_role_path(restored_group(group), role_id: last_role.id)
-    role_popover_link(path, "role_#{last_role.id}", 'popover_toggler ps-1')
+    role_popover_link(path, "role_#{last_role.id}", "popover_toggler ps-1")
   end
 
   def last_role
@@ -169,7 +168,7 @@ class PersonDecorator < ApplicationDecorator
   end
 
   def private_address_name
-    html = ''.html_safe
+    html = "".html_safe
     if company_name.present?
       html << company_name
       html << br
@@ -179,7 +178,7 @@ class PersonDecorator < ApplicationDecorator
 
   def filtered_functions(functions, scope_method, scope = nil)
     if scope
-      functions.select { |r| r.send("#{scope_method}_id") == scope.id }
+      functions.select { |r| r.send(:"#{scope_method}_id") == scope.id }
     else
       functions
     end
@@ -193,9 +192,9 @@ class PersonDecorator < ApplicationDecorator
 
   def function_short(function, multiple_groups, edit: true)
     html = [function.to_s]
-    html << h.muted(h.safe_join(function.group.with_layer, ' / ')) if multiple_groups
+    html << h.muted(h.safe_join(function.group.with_layer, " / ")) if multiple_groups
     html << popover_edit_link(function) if edit && h.can?(:update, function)
-    h.safe_join(html, ' ')
+    h.safe_join(html, " ")
   end
 
   def popover_edit_link(function)
@@ -206,9 +205,9 @@ class PersonDecorator < ApplicationDecorator
   def role_popover_link(path, html_id = nil, html_classes = "")
     content_tag(:span, class: html_classes, id: html_id) do
       h.link_to(h.icon(:edit),
-                path,
-                title: h.t('global.link.edit'),
-                remote: true)
+        path,
+        title: h.t("global.link.edit"),
+        remote: true)
     end
   end
 end

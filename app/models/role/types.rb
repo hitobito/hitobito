@@ -12,16 +12,16 @@ module Role::Types
 
   # All possible permissions
   Permissions = [:admin,
-                 :layer_and_below_full, :layer_and_below_read, :layer_full, :layer_read,
-                 :group_and_below_full, :group_and_below_read, :group_full, :group_read,
-                 :contact_data, :approve_applications, :finance, :impersonation,
-                 :see_invisible_from_above]
+    :layer_and_below_full, :layer_and_below_read, :layer_full, :layer_read,
+    :group_and_below_full, :group_and_below_read, :group_full, :group_read,
+    :contact_data, :approve_applications, :finance, :impersonation,
+    :see_invisible_from_above]
 
   # If a role contains the first permission, the second one is automatically active as well
-  PermissionImplications = { layer_and_below_full: :layer_and_below_read,
-                             layer_full: :layer_read,
-                             group_and_below_full: :group_and_below_read,
-                             group_full: :group_read }
+  PermissionImplications = {layer_and_below_full: :layer_and_below_read,
+                            layer_full: :layer_read,
+                            group_and_below_full: :group_and_below_read,
+                            group_full: :group_read}
 
   Kinds = [:member, :passive, :external, :future]
 
@@ -58,7 +58,6 @@ module Role::Types
   end
 
   module ClassMethods
-
     # All role types defined in the application.
     def all_types
       # do a double reverse to get roles appearing more than once at the end
@@ -101,26 +100,26 @@ module Role::Types
 
     def label_long
       I18n.translate("activerecord.models.#{model_name.i18n_key}.long",
-                     default: label_with_group)
+        default: label_with_group)
     end
 
     def label_short
       I18n.translate("activerecord.models.#{model_name.i18n_key}.short",
-                     default: label)
+        default: label)
     end
 
     def label_with_group
       group_type = model_name.to_s.deconstantize.constantize
       group_key = "activerecord.models.#{group_type.model_name.i18n_key}"
       [label,
-       I18n.translate("#{group_key}.long",
-                      count: 1,
-                      default: I18n.translate(group_key.to_s))].join(' ')
+        I18n.translate("#{group_key}.long",
+          count: 1,
+          default: I18n.translate(group_key.to_s))].join(" ")
     end
 
     def description
       I18n.translate("activerecord.models.#{model_name.i18n_key}.description",
-                     default: '')
+        default: "")
     end
   end
 

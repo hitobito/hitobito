@@ -44,18 +44,18 @@ class Group::Demographic
 
   def years(layer)
     group_ids = layer.groups_in_same_layer.select(:id)
-    birthdays = Person.joins(:roles).where(roles: { group_id: group_ids }).pluck(:birthday)
+    birthdays = Person.joins(:roles).where(roles: {group_id: group_ids}).pluck(:birthday)
     birthdays.map { |date| date&.year }
   end
 
   def histogram(values)
     total = 0.0
     values.each_with_object(Hash.new(0)) { |value, memo|
-            memo[value] += 1
-            total += 1
-          }
-          .transform_values { |absolute| [absolute, absolute / total] }
-          .to_a
-          .sort_by { |value, _count| value || NIL_SORT_VALUE }
+      memo[value] += 1
+      total += 1
+    }
+      .transform_values { |absolute| [absolute, absolute / total] }
+      .to_a
+      .sort_by { |value, _count| value || NIL_SORT_VALUE }
   end
 end

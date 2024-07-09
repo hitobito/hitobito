@@ -12,5 +12,4 @@ class PersonDetailsReadables < PersonReadables
   def contact_data_visible?
     false
   end
-
 end

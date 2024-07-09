@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Group::StatisticsController < ApplicationController
-
   before_action :authorize_action
   before_action :gate_feature
   before_action :redirect_to_layer
@@ -30,7 +29,7 @@ class Group::StatisticsController < ApplicationController
   end
 
   def gate_feature
-    FeatureGate.assert!('groups.statistics')
+    FeatureGate.assert!("groups.statistics")
   end
 
   def redirect_to_layer
@@ -42,5 +41,4 @@ class Group::StatisticsController < ApplicationController
   def entry
     @entry = @group ||= Group.find(params[:group_id])
   end
-
 end

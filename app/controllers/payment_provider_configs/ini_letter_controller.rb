@@ -6,11 +6,10 @@
 #  https://github.com/hitobito/hitobito.
 
 class PaymentProviderConfigs::IniLetterController < ApplicationController
-
   def show
     authorize!(:show, entry.invoice_config)
 
-    send_data payment_provider.ini_letter, type: 'text/html', disposition: 'inline'
+    send_data payment_provider.ini_letter, type: "text/html", disposition: "inline"
   end
 
   private

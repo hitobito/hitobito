@@ -3,7 +3,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe BackgroundJobs::Logger do
   %w[job_started job_finished].each do |event_name|
@@ -13,40 +13,40 @@ describe BackgroundJobs::Logger do
     end
 
     describe "##{event_name}" do
-      it 'creates BackgroundJobEntry' do
+      it "creates BackgroundJobEntry" do
         message = OpenStruct.new(payload: {
           job_id: 42,
-          job_name: 'SomeJob',
+          job_name: "SomeJob",
           group_id: 43,
           started_at: Time.zone.at(1),
           finished_at: Time.zone.at(2),
           attempt: 44,
-          status: 'unreal',
-          payload: { some: ['random', :stuff, 45]}
+          status: "unreal",
+          payload: {some: ["random", :stuff, 45]}
         })
 
         expect { subject.public_send(event_name, message) }.to change { BackgroundJobLogEntry.count }.by(1)
 
         entry = BackgroundJobLogEntry.last
-        message.payload.except(:payload).each do |attr,value|
+        message.payload.except(:payload).each do |attr, value|
           expect(entry.public_send(attr)).to eq(value),
             "\nexpected #{attr} to eq #{value.inspect}, got #{entry.send(attr).inspect}\n"
         end
-        expect(entry.payload).to eq('some' => ['random', 'stuff', 45])
+        expect(entry.payload).to eq("some" => ["random", "stuff", 45])
       end
 
-      it 'with matching identifying attrs updates BackgroundJobEntry' do
-        entry = BackgroundJobLogEntry.create!(job_id: 42, job_name: 'SomeJob', attempt: 7)
+      it "with matching identifying attrs updates BackgroundJobEntry" do
+        entry = BackgroundJobLogEntry.create!(job_id: 42, job_name: "SomeJob", attempt: 7)
 
-        message = OpenStruct.new(payload: { job_id: 42, job_name: 'SomeJob', attempt: 8, finished_at: Time.at(42) })
+        message = OpenStruct.new(payload: {job_id: 42, job_name: "SomeJob", attempt: 8, finished_at: Time.zone.at(42)})
         expect { subject.public_send(event_name, message) }.not_to change { entry.reload.finished_at }
 
-        message = OpenStruct.new(payload: { job_id: 42, job_name: 'SomeJob', attempt: 7, finished_at: Time.at(42) })
+        message = OpenStruct.new(payload: {job_id: 42, job_name: "SomeJob", attempt: 7, finished_at: Time.zone.at(42)})
         expect { subject.public_send(event_name, message) }.to change { entry.reload.finished_at }
       end
 
-      it 'ignores unknown attrs' do
-        message = OpenStruct.new(payload: { job_id: 42, job_name: 'SomeJob', hello: :world })
+      it "ignores unknown attrs" do
+        message = OpenStruct.new(payload: {job_id: 42, job_name: "SomeJob", hello: :world})
 
         expect { subject.public_send(event_name, message) }.to change { BackgroundJobLogEntry.count }.by(1)
       end

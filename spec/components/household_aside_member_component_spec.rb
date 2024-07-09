@@ -5,11 +5,12 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe HouseholdAsideMemberComponent, type: :component do
   let(:person) { people(:bottom_member) }
   let(:leader) { people(:top_leader) }
+
   subject(:component) { described_class.new(person: person) }
 
   before do
@@ -17,7 +18,7 @@ describe HouseholdAsideMemberComponent, type: :component do
     person.update(household_key: 1)
   end
 
-  it 'renders a person in the household with link' do
+  it "renders a person in the household with link" do
     allow(component).to receive(:link_person?).and_return(true)
     rendered_component = render_inline(component).to_html.squish
     expect(
@@ -28,19 +29,19 @@ describe HouseholdAsideMemberComponent, type: :component do
 
     expect(
       rendered_component
-    ).to have_text 'Top Leader'
+    ).to have_text "Top Leader"
   end
 
-  it 'renders a person in the household without link' do
+  it "renders a person in the household without link" do
     allow(component).to receive(:link_person?).and_return(false)
     rendered_component = render_inline(component).to_html.squish
 
     expect(
       rendered_component
     ).to include(
-      '<strong>Top Leader</strong>'
+      "<strong>Top Leader</strong>"
     )
 
-    expect(rendered_component).to have_text('Top Leader')
+    expect(rendered_component).to have_text("Top Leader")
   end
 end

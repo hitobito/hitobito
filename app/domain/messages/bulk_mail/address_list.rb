@@ -7,7 +7,6 @@
 
 module Messages
   class BulkMail::AddressList
-
     attr_reader :people, :labels
 
     def initialize(people, labels = [])
@@ -58,8 +57,8 @@ module Messages
     end
 
     def additional_emails(person)
-      @additional_emails ||= additional_emails_scope.
-        each_with_object(hash_with_array) do |email, memo|
+      @additional_emails ||= additional_emails_scope
+        .each_with_object(hash_with_array) do |email, memo|
         memo[email.contactable_id] << email
       end
       @additional_emails[person.id]
@@ -71,11 +70,11 @@ module Messages
 
     def additional_emails_scope
       AdditionalEmail.where(contactable_type: Person.sti_name,
-                            contactable_id: people.collect(&:id))
+        contactable_id: people.collect(&:id))
     end
 
     def address(person_id, email)
-      { person_id: person_id, email: email }
+      {person_id: person_id, email: email}
     end
   end
 end

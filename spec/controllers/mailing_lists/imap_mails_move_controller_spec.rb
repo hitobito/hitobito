@@ -5,9 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
-require 'net/imap'
+require "net/imap"
 
 describe MailingLists::ImapMailsMoveController do
   include MailingLists::ImapMailsSpecHelper
@@ -25,19 +25,19 @@ describe MailingLists::ImapMailsMoveController do
   before do
     email = double
     retriever = double
-    config = double('config',
-                    address: 'imap.example.com',
-                    imap_port: 995,
-                    enable_ssl: true,
-                    user_name: 'catch-all@example.com',
-                    password: 'holly-secret')
+    config = double("config",
+      address: "imap.example.com",
+      imap_port: 995,
+      enable_ssl: true,
+      user_name: "catch-all@example.com",
+      password: "holly-secret")
     allow(Settings).to receive(:email).and_return(email)
     allow(email).to receive(:retriever).and_return(retriever)
     allow(retriever).to receive(:config).and_return(config)
   end
 
-  context 'PATCH #create' do
-    it 'moves mail to given mailbox' do
+  context "PATCH #create" do
+    it "moves mail to given mailbox" do
       sign_in(top_leader)
 
       # mock imap_connector
@@ -46,14 +46,14 @@ describe MailingLists::ImapMailsMoveController do
       expect(imap_connector).to receive(:move_by_uid).with(42, :spam, :inbox)
       expect(imap_connector).to receive(:move_by_uid).with(43, :spam, :inbox)
 
-      patch :create, params: { mailbox: 'spam', ids: '42,43', dst_mailbox: 'inbox' }
+      patch :create, params: {mailbox: "spam", ids: "42,43", dst_mailbox: "inbox"}
 
-      expect(flash[:notice]).to include '2 Mails erfolgreich verschoben'
+      expect(flash[:notice]).to include "2 Mails erfolgreich verschoben"
       expect(response).to have_http_status(:found)
       expect(response).to redirect_to imap_mails_path
     end
 
-    it 'returns inbox if given mailbox is invalid' do
+    it "returns inbox if given mailbox is invalid" do
       sign_in(top_leader)
 
       # mock imap_connector
@@ -61,24 +61,24 @@ describe MailingLists::ImapMailsMoveController do
 
       expect(imap_connector).to receive(:move_by_uid).with(42, :inbox, :inbox)
 
-      patch :create, params: { mailbox: 'inbox', ids: '42', dst_mailbox: 'invalid_mailbox' }
+      patch :create, params: {mailbox: "inbox", ids: "42", dst_mailbox: "invalid_mailbox"}
 
-      expect(flash[:notice]).to include 'Mail erfolgreich verschoben'
+      expect(flash[:notice]).to include "Mail erfolgreich verschoben"
       expect(response).to have_http_status(:found)
-      expect(response.location).to eq('http://test.host/mailing_lists/imap_mails/inbox')
+      expect(response.location).to eq("http://test.host/mailing_lists/imap_mails/inbox")
     end
 
-    it 'does not allow non-admins to move mails' do
+    it "does not allow non-admins to move mails" do
       sign_in(people(:bottom_member))
 
       expect(controller).to receive(:imap).never
 
       expect do
-        patch :create, params: { mailbox: 'inbox', ids: '42' }
+        patch :create, params: {mailbox: "inbox", ids: "42"}
       end.to raise_error(CanCan::AccessDenied)
     end
 
-    it 'displays flash notice if mail server not reachable' do
+    it "displays flash notice if mail server not reachable" do
       sign_in(top_leader)
 
       # mock imap_connector
@@ -89,7 +89,7 @@ describe MailingLists::ImapMailsMoveController do
         .with(42, :spam, :inbox)
         .and_raise(Net::IMAP::NoResponseError, ImapMoveErrorDataDouble)
 
-      patch :create, params: { mailbox: 'spam', ids: '42', dst_mailbox: 'inbox' }
+      patch :create, params: {mailbox: "spam", ids: "42", dst_mailbox: "inbox"}
 
       expect(response).to have_http_status(:redirect)
 
@@ -97,28 +97,27 @@ describe MailingLists::ImapMailsMoveController do
         .to eq(["Verbindung zum Mailserver nicht möglich, bitte versuche es später erneut.", "Authentication failed."])
     end
 
-    it 'cannot move mails from failed mailbox' do
+    it "cannot move mails from failed mailbox" do
       sign_in(top_leader)
 
       # mock imap_connector
       expect(controller).to receive(:imap).and_return(imap_connector).never
 
       expect do
-        patch :create, params: { mailbox: 'failed', ids: '42', dst_mailbox: 'inbox' }
-      end.to raise_error('failed mails cannot be moved')
+        patch :create, params: {mailbox: "failed", ids: "42", dst_mailbox: "inbox"}
+      end.to raise_error("failed mails cannot be moved")
     end
 
-    it 'cannot move mails to failed' do
+    it "cannot move mails to failed" do
       sign_in(top_leader)
 
       # mock imap_connector
       expect(controller).to receive(:imap).and_return(imap_connector).never
 
       expect do
-        patch :create, params: { mailbox: 'spam', ids: '42', dst_mailbox: 'failed' }
-      end.to raise_error('mails cannot be moved to failed')
+        patch :create, params: {mailbox: "spam", ids: "42", dst_mailbox: "failed"}
+      end.to raise_error("mails cannot be moved to failed")
     end
-
   end
 
   private
@@ -128,9 +127,7 @@ describe MailingLists::ImapMailsMoveController do
   module ImapMoveErrorDataDouble
     Data = Struct.new(:text)
     def self.data
-      data = Data.new('Authentication failed.')
-      data
+      Data.new("Authentication failed.")
     end
   end
-
 end

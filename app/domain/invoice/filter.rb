@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Invoice::Filter
-
   attr_reader :params
 
   def initialize(params = {})
@@ -19,7 +18,7 @@ class Invoice::Filter
     scope = filter_by_ids(scope)
     scope = filter_by_invoice_list_id(scope)
     scope = scope.draft_or_issued(from: params[:from],
-                                  to: params[:to])
+      to: params[:to])
 
     cancelled? ? scope : scope.visible
   end
@@ -33,7 +32,7 @@ class Invoice::Filter
   end
 
   def cancelled?
-    params[:state] == 'cancelled'
+    params[:state] == "cancelled"
   end
 
   def filter_by_invoice_list_id(relation)
@@ -49,7 +48,6 @@ class Invoice::Filter
   end
 
   def invoice_ids
-    @invoice_ids = params[:ids].to_s.split(',')
+    @invoice_ids = params[:ids].to_s.split(",")
   end
-
 end

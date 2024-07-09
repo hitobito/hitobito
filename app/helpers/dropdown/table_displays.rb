@@ -5,13 +5,12 @@
 
 module Dropdown
   class TableDisplays < Base
-
     delegate :form_tag, :hidden_field_tag, :label_tag, :check_box_tag, :content_tag,
-             :content_tag_nested, :table_displays_path, :parent, :current_person, :t,
-             :dom_id, to: :template
+      :content_tag_nested, :table_displays_path, :parent, :current_person, :t,
+      :dom_id, to: :template
 
     def initialize(template, list)
-      super(template, template.t('global.columns'), :bars)
+      super(template, template.t("global.columns"), :bars)
       first = list.first
       @table_model_class = first.try(:decorated?) ? first.model.class.to_s : first.class.to_s
       @list = list
@@ -30,15 +29,15 @@ module Dropdown
     private
 
     def render_table_model_class_field
-      hidden_field_tag('table_model_class', @table_model_class)
+      hidden_field_tag("table_model_class", @table_model_class)
     end
 
     def render_items
-      options = { class: 'dropdown-menu float-end', data: { turbo_permanent: true }, role: 'menu' }
+      options = {class: "dropdown-menu float-end", data: {turbo_permanent: true}, role: "menu"}
 
       content_tag(:ul, options) do
         items = table_display.available(@list).collect do |column|
-          render_item('selected[]', table_display.column_for(column), column)
+          render_item("selected[]", table_display.column_for(column), column)
         end
 
         safe_join(items)
@@ -47,7 +46,7 @@ module Dropdown
 
     def render_item(name, column, value, label = render_label(column, value))
       content_tag(:li) do
-        check_box_tag(name, value, selected?(value), id: value, data: { submit: true }) +
+        check_box_tag(name, value, selected?(value), id: value, data: {submit: true}) +
           label_tag(value, label)
       end
     end
@@ -67,10 +66,9 @@ module Dropdown
     def html_options
       {
         id: dom_id(parent),
-        class: 'table-display-dropdown',
-        data: { turbo_permanent: 1 }
+        class: "table-display-dropdown",
+        data: {turbo_permanent: 1}
       }
     end
-
   end
 end

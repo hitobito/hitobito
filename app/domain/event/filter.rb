@@ -36,17 +36,17 @@ class Event::Filter
   end
 
   def to_h
-    { year: year,
-      type: type,
-      filter: filter,
-      sort_expression: sort_expression }
+    {year: year,
+     type: type,
+     filter: filter,
+     sort_expression: sort_expression}
   end
 
   private
 
   def relevant_group_ids
     case filter
-    when 'layer' then [group.id] + descendants(layer: true).pluck(:id)
+    when "layer" then [group.id] + descendants(layer: true).pluck(:id)
     else [group.id] + descendants.pluck(:id) # handles 'all' also
     end
   end

@@ -29,7 +29,7 @@ class Payment < ActiveRecord::Base
 
   belongs_to :invoice, optional: true
 
-  validates :transaction_identifier, uniqueness: { allow_nil: true, case_sensitive: false }
+  validates :transaction_identifier, uniqueness: {allow_nil: true, case_sensitive: false}
 
   has_one :payee, inverse_of: :payment, dependent: :destroy
   accepts_nested_attributes_for :payee
@@ -37,13 +37,12 @@ class Payment < ActiveRecord::Base
   before_validation :set_received_at
   after_create :update_invoice, if: :invoice
 
-
   scope :list, -> { order(received_at: :desc) }
   scope :unassigned, -> { where(invoice_id: nil) }
 
-  STATES = %w(ebics_imported xml_imported manually_created without_invoice).freeze
+  STATES = %w[ebics_imported xml_imported manually_created without_invoice].freeze
   i18n_enum :status, STATES
-  validates :status, inclusion: { in: STATES, allow_nil: true }
+  validates :status, inclusion: {in: STATES, allow_nil: true}
 
   attr_writer :esr_number
 
@@ -83,12 +82,12 @@ class Payment < ActiveRecord::Base
 
   def update_invoice
     new_state = if settles?
-                  :payed
-                elsif undercuts?
-                  :partial
-                elsif exceeds?
-                  :excess
-                end
+      :payed
+    elsif undercuts?
+      :partial
+    elsif exceeds?
+      :excess
+    end
 
     if new_state
       invoice.update(state: new_state)
@@ -98,5 +97,4 @@ class Payment < ActiveRecord::Base
   def set_received_at
     self.received_at ||= Time.zone.today
   end
-
 end

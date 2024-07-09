@@ -26,7 +26,7 @@
 
 class CalendarTag < ActiveRecord::Base
   belongs_to :calendar
-  belongs_to :tag, class_name: 'ActsAsTaggableOn::Tag'
+  belongs_to :tag, class_name: "ActsAsTaggableOn::Tag"
 
   scope :excluded, -> { where(excluded: true) }
   scope :included, -> { where(excluded: false) }

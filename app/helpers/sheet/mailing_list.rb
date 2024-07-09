@@ -9,18 +9,17 @@ module Sheet
   class MailingList < Base
     self.parent_sheet = Sheet::Group
 
-    tab 'global.tabs.info',
-        :group_mailing_list_path,
-        alt: [:edit_group_mailing_list_path],
-        if: :show
+    tab "global.tabs.info",
+      :group_mailing_list_path,
+      alt: [:edit_group_mailing_list_path],
+      if: :show
 
-    tab 'activerecord.models.message.other',
-        :group_mailing_list_messages_path,
-        if: :update
-    tab 'activerecord.models.subscription.other',
-        :group_mailing_list_subscriptions_path,
-        if: :index_subscriptions,
-        params: { returning: true }
-
+    tab "activerecord.models.message.other",
+      :group_mailing_list_messages_path,
+      if: :update
+    tab "activerecord.models.subscription.other",
+      :group_mailing_list_subscriptions_path,
+      if: :index_subscriptions,
+      params: {returning: true}
   end
 end

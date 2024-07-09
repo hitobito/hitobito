@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::KindCategoryResource < ApplicationResource
-  self.type = 'event_kind_categories'
+  self.type = "event_kind_categories"
 
   with_options writable: false, filterable: false, sortable: false do
     attribute :label, :string

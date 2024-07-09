@@ -56,26 +56,26 @@ module UploadDisplayHelper
     if upload_exists?(model, name)
       model.send(name.to_sym).variant(variant.to_sym)
     else
-      default_variant = [default, variant].compact.map(&:to_s).join('_')
-      name_variant = [name, variant].compact.map(&:to_s).join('_')
+      default_variant = [default, variant].compact.map(&:to_s).join("_")
+      name_variant = [name, variant].compact.map(&:to_s).join("_")
 
       upload_default(model, name_variant, default_variant)
     end
   end
 
-  def upload_default(model, name, png_name = 'profil')
+  def upload_default(model, name, png_name = "profil")
     filename = if model.respond_to?(:"#{name}_default")
-                 model.send(:"#{name}_default")
-               else
-                 "#{png_name}.png"
-               end
+      model.send(:"#{name}_default")
+    else
+      "#{png_name}.png"
+    end
 
     ActionController::Base.helpers.asset_pack_path("media/images/#{filename}")
   end
 
   def extract_image_dimensions(width_x_height)
     case width_x_height
-    when /^\d+x\d+$/ then width_x_height.split('x')
+    when /^\d+x\d+$/ then width_x_height.split("x")
     end
   end
 end

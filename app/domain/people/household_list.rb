@@ -31,13 +31,13 @@ class People::HouseholdList
   end
 
   def grouped_households
-    Person.from("((#{only_households.unscope(:limit).to_sql}) " +
-                    "UNION ALL (#{people_without_household.unscope(:limit).to_sql})) "+
+    Person.from("((#{only_households.unscope(:limit).to_sql}) " \
+                    "UNION ALL (#{people_without_household.unscope(:limit).to_sql})) " \
                     "#{people_table}").limit(@people_scope.limit_value.presence)
   end
 
   def each(&block)
-    return to_enum(:each) unless block_given?
+    return to_enum(:each) unless block
 
     households_in_batches do |batch|
       batch.each(&block)
@@ -60,23 +60,23 @@ class People::HouseholdList
   end
 
   def only_households
-    base_scope.
-        select(:household_key).
-        select("MIN(#{people_table}.`id`) as `id`").
-        select("COUNT(#{people_table}.`household_key`) as `member_count`").
-        select("#{people_table}.`household_key` as `key`").
-        where.not(household_key: nil).
-        group(:household_key)
+    base_scope
+      .select(:household_key)
+      .select("MIN(#{people_table}.`id`) as `id`")
+      .select("COUNT(#{people_table}.`household_key`) as `member_count`")
+      .select("#{people_table}.`household_key` as `key`")
+      .where.not(household_key: nil)
+      .group(:household_key)
   end
 
   def people_without_household
-    base_scope.
-        select(:household_key).
-        select(:id).
-        select('1 as `member_count`').
-        select("#{people_table}.`id` as `key`").
-        where(household_key: nil).
-        order(:id)
+    base_scope
+      .select(:household_key)
+      .select(:id)
+      .select("1 as `member_count`")
+      .select("#{people_table}.`id` as `key`")
+      .where(household_key: nil)
+      .order(:id)
   end
 
   def people_table
@@ -88,8 +88,8 @@ class People::HouseholdList
     # This way, we can add more conditions to the query builder while keeping the performance
     # benefits of pre-calculating the candidate id list.
     @base_scope ||= Person
-                        .where(id: @people_scope.unscope(:select, :includes, :limit).pluck(:id))
-                        .limit(@people_scope.limit_value.presence)
+      .where(id: @people_scope.unscope(:select, :includes, :limit).pluck(:id))
+      .limit(@people_scope.limit_value.presence)
   end
 
   def fetch_involved_people(ids_or_household_keys)
@@ -98,9 +98,9 @@ class People::HouseholdList
     # Make sure to select household_key if we aren't selecting specific columns
     base_scope = base_scope.select(:household_key) if base_scope.select_values.present?
 
-    base_scope.where(household_key: ids_or_household_keys).
-      or(base_scope.where(id: ids_or_household_keys)).
-      load
+    base_scope.where(household_key: ids_or_household_keys)
+      .or(base_scope.where(id: ids_or_household_keys))
+      .load
   end
 
   # Copied and adapted from ActiveRecord::Batches#in_batches
@@ -113,11 +113,11 @@ class People::HouseholdList
 
     batch_limit = batch_size
     if base_scope.limit_value
-      remaining   = base_scope.limit_value
+      remaining = base_scope.limit_value
       batch_limit = remaining if remaining < batch_limit
     end
 
-    relation = relation.reorder('`member_count` DESC, id ASC').limit(batch_limit)
+    relation = relation.reorder("`member_count` DESC, id ASC").limit(batch_limit)
     # Retaining the results in the query cache would undermine the point of batching
     relation.skip_query_cache!
     batch_relation = relation
@@ -148,9 +148,8 @@ class People::HouseholdList
         end
       end
 
-      batch_relation = relation.where('`member_count` < ? OR (`member_count` = ? AND `id` > ?)',
-                                      member_count_offset, member_count_offset, id_offset)
+      batch_relation = relation.where("`member_count` < ? OR (`member_count` = ? AND `id` > ?)",
+        member_count_offset, member_count_offset, id_offset)
     end
   end
-
 end

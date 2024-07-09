@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'csv'
+require "csv"
 
 module Import
   class CsvParser
@@ -15,7 +15,7 @@ module Import
     def_delegators :csv, :size, :first, :to_csv, :[], :each
     attr_reader :csv, :error
 
-    POSSIBLE_SEPARATORS = [',', "\t", ':', ';'].freeze
+    POSSIBLE_SEPARATORS = [",", "\t", ":", ";"].freeze
 
     def initialize(input)
       @input = input
@@ -38,7 +38,7 @@ module Import
         header_mapping = header_mapping.to_unsafe_h
       end
       header_mapping = header_mapping.with_indifferent_access
-      header_mapping.reject! { |_key, value| value.blank? }
+      header_mapping.compact_blank!
       csv.map do |row|
         csv.headers.each_with_object({}) do |name, object|
           key = header_mapping[name]
@@ -48,23 +48,23 @@ module Import
     end
 
     def headers
-      csv.headers.reject(&:blank?)
+      csv.headers.compact_blank
     end
 
     def flash_notice
       translate(:read_success, count: size)
     end
 
-    def flash_alert(filename = 'csv formular daten')
+    def flash_alert(filename = "csv formular daten")
       translate(:read_error, filename: filename, error: error)
     end
 
     private
 
     def options
-      { converters: ->(field, _info) { field&.strip },
-        header_converters: ->(header, _info) { header.to_s.strip },
-        headers: true, skip_blanks: true }
+      {converters: ->(field, _info) { field&.strip },
+       header_converters: ->(header, _info) { header.to_s.strip },
+       headers: true, skip_blanks: true}
     end
 
     def encode_as_utf8(input)
@@ -75,8 +75,8 @@ module Import
 
       raise translate(:encoding_error) unless encoding
 
-      unless encoding == 'UTF-8'
-        input = input.force_encoding(encoding_detection[:encoding]).encode('UTF-8')
+      unless encoding == "UTF-8"
+        input = input.force_encoding(encoding_detection[:encoding]).encode("UTF-8")
       end
 
       raise translate(:contains_no_data) if input.blank?
@@ -92,9 +92,8 @@ module Import
     def find_separator(input)
       start = input[0..500]
       POSSIBLE_SEPARATORS.inject do |most_seen, char|
-        start.count(char) > start.count(most_seen) ? char : most_seen
+        (start.count(char) > start.count(most_seen)) ? char : most_seen
       end
     end
-
   end
 end

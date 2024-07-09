@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Export::Pdf::Messages::Letter::Header do
   include PdfHelpers
@@ -13,76 +13,75 @@ describe Export::Pdf::Messages::Letter::Header do
   let(:base_options) do
     {
       margin: Export::Pdf::Messages::Letter::MARGIN,
-      page_size: 'A4',
+      page_size: "A4",
       page_layout: :portrait,
       compress: true
     }
   end
   let(:options) { base_options }
-  let(:top_group)  { groups(:top_group) }
+  let(:top_group) { groups(:top_group) }
   let(:top_leader) { people(:top_leader) }
   let(:recipient) do
     MessageRecipient
       .new(message: letter, person: top_leader, address: "Top Leader\n\nSupertown")
   end
   let(:letter) do
-    Message::Letter.new(body: 'simple text', group: top_group,
-                        shipping_method: 'normal', pp_post: 'CH-3030 Bern, Belpstrasse 37')
+    Message::Letter.new(body: "simple text", group: top_group,
+      shipping_method: "normal", pp_post: "CH-3030 Bern, Belpstrasse 37")
   end
-  let(:pdf)      { Prawn::Document.new(options) }
+  let(:pdf) { Prawn::Document.new(options) }
 
   let(:shipping_info_with_position_left) do
     [
-      [71, 672, 'P.P.'],
-      [91, 672, ' '],
-      [134, 685, 'Post CH AG'],
-      [94, 672, 'CH-3030 Bern, Belpstrasse 37'],
+      [71, 672, "P.P."],
+      [91, 672, " "],
+      [134, 685, "Post CH AG"],
+      [94, 672, "CH-3030 Bern, Belpstrasse 37"]
     ]
   end
   let(:shipping_info_with_position_right) do
     [
-      [424, 685, 'Post CH AG'],
-      [361, 672, 'P.P.'],
-      [381, 672, ' '],
-      [384, 672, 'CH-3030 Bern, Belpstrasse 37']
+      [424, 685, "Post CH AG"],
+      [361, 672, "P.P."],
+      [381, 672, " "],
+      [384, 672, "CH-3030 Bern, Belpstrasse 37"]
     ]
   end
 
   subject { described_class.new(pdf, letter, options) }
 
   def expects_image(id)
-    image_options = { position: :right }
+    image_options = {position: :right}
     expect_any_instance_of(Prawn::Document)
       .to receive(:image).with(instance_of(Tempfile), image_options)
   end
 
-  describe 'logo' do
-
-    it 'has no logo' do
+  describe "logo" do
+    it "has no logo" do
       expect_any_instance_of(Prawn::Document).not_to receive(:image)
       subject.render(recipient)
     end
 
-    it 'has logo from group' do
+    it "has logo from group" do
       id = assign_image(top_group)
       expects_image(id)
       subject.render(recipient)
     end
 
-    it 'has logo from layer' do
+    it "has logo from layer" do
       id = assign_image(top_group.layer_group)
       expects_image(id)
       subject.render(recipient)
     end
 
-    it 'has logo from group if layer and group have a logo' do
+    it "has logo from group if layer and group have a logo" do
       _layer_id = assign_image(top_group.layer_group)
       group_id = assign_image(top_group)
       expects_image(group_id)
       subject.render(recipient)
     end
 
-    it 'has the correct position and size' do
+    it "has the correct position and size" do
       assign_image(top_group.layer_group)
       subject.render(recipient)
 
@@ -97,9 +96,9 @@ describe Export::Pdf::Messages::Letter::Header do
       )
     end
 
-    context 'image scaling' do
-      it 'does not scale if image smaller than logo box' do
-        assign_image(top_group, 'images/logo.png') # 230x30px
+    context "image scaling" do
+      it "does not scale if image smaller than logo box" do
+        assign_image(top_group, "images/logo.png") # 230x30px
         subject.render(recipient)
 
         expect(image_positions.first).to match(
@@ -112,8 +111,8 @@ describe Export::Pdf::Messages::Letter::Header do
         )
       end
 
-      it 'scales down image if image width exceeds logo box' do
-        assign_image(top_group, 'images/logo_1000x40.png') # 1000x40px
+      it "scales down image if image width exceeds logo box" do
+        assign_image(top_group, "images/logo_1000x40.png") # 1000x40px
         subject.render(recipient)
 
         expect(image_positions.first).to match(
@@ -126,8 +125,8 @@ describe Export::Pdf::Messages::Letter::Header do
         )
       end
 
-      it 'scales down image if image height exceeds logo box' do
-        assign_image(top_group, 'images/logo_200x100.png') # 200x100px
+      it "scales down image if image height exceeds logo box" do
+        assign_image(top_group, "images/logo_200x100.png") # 200x100px
         subject.render(recipient)
 
         expect(image_positions.first).to match(
@@ -142,64 +141,64 @@ describe Export::Pdf::Messages::Letter::Header do
     end
   end
 
-  describe 'sender address' do
+  describe "sender address" do
     before do
-      top_group.address = 'Belpstrasse 37'
-      top_group.town = 'Bern'
+      top_group.address = "Belpstrasse 37"
+      top_group.town = "Bern"
     end
 
-    it 'is present' do
+    it "is present" do
       subject.render(recipient)
       expect(text_with_position_without_shipping_info).to eq [
-        [71, 652, 'Top Leader'],
-        [71, 624, 'Supertown']
+        [71, 652, "Top Leader"],
+        [71, 624, "Supertown"]
       ]
     end
 
-    it 'same position when logo is present' do
+    it "same position when logo is present" do
       id = assign_image(top_group)
       expects_image(id)
       subject.render(recipient)
 
       expect(text_with_position_without_shipping_info).to eq [
-        [71, 652, 'Top Leader'],
-        [71, 624, 'Supertown']
+        [71, 652, "Top Leader"],
+        [71, 624, "Supertown"]
       ]
     end
 
-    context 'stamping' do
-      let(:stamps) { pdf.instance_variable_get('@stamp_dictionary_registry') }
-      let(:options) { base_options.merge({ stamped: true }) }
+    context "stamping" do
+      let(:stamps) { pdf.instance_variable_get(:@stamp_dictionary_registry) }
+      let(:options) { base_options.merge({stamped: true}) }
 
-      it 'includes only receiver address' do
+      it "includes only receiver address" do
         subject.render(recipient)
         pdf.start_new_page
         subject.render(recipient)
         expect(stamps.keys).to eq [:render_logo_right, :render_shipping_info]
         expect(text_with_position_without_shipping_info).to eq [
-          [71, 652, 'Top Leader'],
-          [71, 624, 'Supertown'],
-          [71, 655, 'Top Leader'],
-          [71, 627, 'Supertown']
+          [71, 652, "Top Leader"],
+          [71, 624, "Supertown"],
+          [71, 655, "Top Leader"],
+          [71, 627, "Supertown"]
         ]
       end
 
-      it 'same position when image is present' do
+      it "same position when image is present" do
         assign_image(top_group)
         subject.render(recipient)
         pdf.start_new_page
         subject.render(recipient)
         expect(stamps.keys).to eq [:render_logo_right, :render_shipping_info]
         expect(text_with_position_without_shipping_info).to eq [
-          [71, 652, 'Top Leader'],
-          [71, 624, 'Supertown'],
-          [71, 655, 'Top Leader'],
-          [71, 627, 'Supertown']
+          [71, 652, "Top Leader"],
+          [71, 624, "Supertown"],
+          [71, 655, "Top Leader"],
+          [71, 627, "Supertown"]
         ]
       end
 
-      it 'renders date location text above subject' do
-        letter.update!(subject: 'Then answer is 42!', date_location_text: 'Magrathea, 21.12.2042')
+      it "renders date location text above subject" do
+        letter.update!(subject: "Then answer is 42!", date_location_text: "Magrathea, 21.12.2042")
         subject.render(recipient)
         pdf.start_new_page
         subject.render(recipient)
@@ -209,43 +208,42 @@ describe Export::Pdf::Messages::Letter::Header do
     end
   end
 
-  describe 'recipient address' do
-
-    context 'rendered left' do
+  describe "recipient address" do
+    context "rendered left" do
       before do
         top_group.letter_address_position = :left
         top_group.save!
       end
 
-      it 'is present' do
+      it "is present" do
         subject.render(recipient)
 
         expect(text_with_position_without_shipping_info).to eq [
-          [71, 652, 'Top Leader'],
-          [71, 624, 'Supertown']
+          [71, 652, "Top Leader"],
+          [71, 624, "Supertown"]
         ]
       end
 
-      it 'same position when image is present' do
+      it "same position when image is present" do
         assign_image(top_group)
         subject.render(recipient)
 
         expect(text_with_position_without_shipping_info).to eq [
-          [71, 652, 'Top Leader'],
-          [71, 624, 'Supertown']
+          [71, 652, "Top Leader"],
+          [71, 624, "Supertown"]
         ]
       end
 
-      it 'does not render town if not set' do
-        recipient.address = 'Top Leader'
+      it "does not render town if not set" do
+        recipient.address = "Top Leader"
         subject.render(recipient)
 
         expect(text_with_position_without_shipping_info).to eq [
-          [71, 652, 'Top Leader']
+          [71, 652, "Top Leader"]
         ]
       end
 
-      it 'does not render anything for blank values' do
+      it "does not render anything for blank values" do
         recipient.address = nil
         subject.render(recipient)
 
@@ -253,41 +251,41 @@ describe Export::Pdf::Messages::Letter::Header do
       end
     end
 
-    context 'rendered right' do
+    context "rendered right" do
       before do
         top_group.letter_address_position = :right
         top_group.save!
       end
 
-      it 'is present' do
+      it "is present" do
         subject.render(recipient)
 
         expect(text_with_position_without_shipping_info).to eq [
-          [361, 652, 'Top Leader'],
-          [361, 624, 'Supertown']
+          [361, 652, "Top Leader"],
+          [361, 624, "Supertown"]
         ]
       end
 
-      it 'same position when image is present' do
+      it "same position when image is present" do
         assign_image(top_group)
         subject.render(recipient)
 
         expect(text_with_position_without_shipping_info).to eq [
-          [361, 652, 'Top Leader'],
-          [361, 624, 'Supertown']
+          [361, 652, "Top Leader"],
+          [361, 624, "Supertown"]
         ]
       end
 
-      it 'does not render town if not set' do
-        recipient.address = 'Top Leader'
+      it "does not render town if not set" do
+        recipient.address = "Top Leader"
         subject.render(recipient)
 
         expect(text_with_position_without_shipping_info).to eq [
-          [361, 652, 'Top Leader']
+          [361, 652, "Top Leader"]
         ]
       end
 
-      it 'does not render anything for blank values' do
+      it "does not render anything for blank values" do
         recipient.address = nil
         subject.render(recipient)
 
@@ -296,9 +294,9 @@ describe Export::Pdf::Messages::Letter::Header do
     end
   end
 
-  describe 'shipping_info' do
-    context 'rendered left' do
-      it 'is present' do
+  describe "shipping_info" do
+    context "rendered left" do
+      it "is present" do
         subject.render(recipient)
 
         shipping_info_with_position_left.each do |shipping_info|
@@ -307,13 +305,13 @@ describe Export::Pdf::Messages::Letter::Header do
       end
     end
 
-    context 'rendered right' do
+    context "rendered right" do
       before do
         top_group.letter_address_position = :right
         top_group.save!
       end
 
-      it 'is present' do
+      it "is present" do
         subject.render(recipient)
 
         shipping_info_with_position_right.each do |shipping_info|
@@ -329,11 +327,10 @@ describe Export::Pdf::Messages::Letter::Header do
     text_with_position - (shipping_info_with_position_left + shipping_info_with_position_right)
   end
 
-  def assign_image(group, image = 'images/logo.png')
+  def assign_image(group, image = "images/logo.png")
     group.letter_logo.attach(fixture_file_upload(image))
     group.save!
 
     group.id
   end
-
 end

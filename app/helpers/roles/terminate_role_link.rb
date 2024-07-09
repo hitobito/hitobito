@@ -24,17 +24,17 @@ class Roles::TerminateRoleLink
   private
 
   def render_link
-    link_to(t('roles/terminations.global.title'),
-            @view.new_group_role_termination_path(role_id: @role.id, group_id: @role.group&.id),
-            class: 'btn btn-xs float-right',
-            remote: true)
+    link_to(t("roles/terminations.global.title"),
+      @view.new_group_role_termination_path(role_id: @role.id, group_id: @role.group&.id),
+      class: "btn btn-xs float-right",
+      remote: true)
   end
 
   def render_disabled_button
-    content_tag(:div, rel: 'tooltip', title: disabled_tooltip) do
+    content_tag(:div, rel: "tooltip", title: disabled_tooltip) do
       button_tag(
-        t('roles/terminations.global.title'),
-        class: 'btn btn-xs float-right',
+        t("roles/terminations.global.title"),
+        class: "btn btn-xs float-right",
         disabled: true
       )
     end
@@ -44,5 +44,4 @@ class Roles::TerminateRoleLink
     key, *defaults = role_ancestors_i18n_keys(@role, :no_permission)
     t(key, default: defaults)
   end
-
 end

@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class OauthAbility < AbilityDsl::Base
-
   on(Oauth::Application) do
     class_side(:index).if_admin
 
@@ -26,5 +25,4 @@ class OauthAbility < AbilityDsl::Base
   def own_access_grants
     subject.resource_owner_id == user.id
   end
-
 end

@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class QualificationAbility < AbilityDsl::Base
-
   on(Qualification) do
     permission(:layer_full).may(:create, :destroy).in_course_layer
     permission(:layer_and_below_full).may(:create, :destroy).in_course_layer_or_below
@@ -23,10 +22,9 @@ class QualificationAbility < AbilityDsl::Base
   def in_course_layer_with(permission, person_layer_ids)
     layers = user.groups_with_permission(permission).collect(&:layer_group).uniq
     qualify_layer_ids = layers.select { |g| g.event_types.include?(Event::Course) }
-                              .collect(&:id)
+      .collect(&:id)
 
     qualify_layer_ids.present? &&
-    contains_any?(qualify_layer_ids, person_layer_ids)
+      contains_any?(qualify_layer_ids, person_layer_ids)
   end
-
 end

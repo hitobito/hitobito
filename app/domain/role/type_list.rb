@@ -6,7 +6,6 @@
 class Role
   # Composes a nested hash of layer types, group types and role types.
   class TypeList
-
     attr_reader :root, :role_types
 
     def initialize(root_type)
@@ -52,12 +51,10 @@ class Role
         if seen_groups.include?(child)
           # set again to move to the end of the list
           set_role_types(layer, child) unless child.layer
-        else
-          if child.layer
-            compose_role_list_by_layer(child, child, seen_groups)
-          elsif !@global_group_types.include?(child)
-            compose_role_list_by_layer(layer, child, seen_groups)
-          end
+        elsif child.layer
+          compose_role_list_by_layer(child, child, seen_groups)
+        elsif !@global_group_types.include?(child)
+          compose_role_list_by_layer(layer, child, seen_groups)
         end
       end
     end
@@ -72,11 +69,11 @@ class Role
       # global groups
       @global_group_types.each do |group|
         types = local_role_types(group)
-        @role_types['Global'][group.label] = types if types.present?
+        @role_types["Global"][group.label] = types if types.present?
       end
 
       # global roles
-      @role_types['Global']['Global'] = @global_role_types if @global_role_types.present?
+      @role_types["Global"]["Global"] = @global_role_types if @global_role_types.present?
     end
 
     # groups appearing in the possible (sub) children of more than one layer
@@ -84,7 +81,7 @@ class Role
       group_layers = {}
       find_group_layers(group, layer, group_layers)
       group_types = group_layers.select { |_, layers| layers.uniq.size > 1 }.keys
-      group_types.flat_map { |type| [type] + type.child_types  }.uniq
+      group_types.flat_map { |type| [type] + type.child_types }.uniq
     end
 
     def find_group_layers(group, layer, group_layers)
@@ -128,6 +125,5 @@ class Role
     def local_role_type?(type)
       !@global_role_types.include?(type)
     end
-
   end
 end

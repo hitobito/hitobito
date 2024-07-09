@@ -22,14 +22,14 @@ class MailingLists::RecipientCountsController < ListController
 
   private
 
-  alias mailing_list parent
+  alias_method :mailing_list, :parent
 
   def group
     mailing_list&.group
   end
 
   def households
-    params.dig(:message, :send_to_households) == 'true'
+    params.dig(:message, :send_to_households) == "true"
   end
 
   def message_type
@@ -49,11 +49,11 @@ class MailingLists::RecipientCountsController < ListController
   end
 
   def invalid_recipient_info
-    return '' if recipient_counter.invalid.zero?
+    return "" if recipient_counter.invalid.zero?
 
     info = t(".recipient_info.#{translation_key}.invalid",
-             count: recipient_counter.invalid,
-             model_class: human_message_type)
+      count: recipient_counter.invalid,
+      model_class: human_message_type)
 
     "(#{info})"
   end
@@ -66,12 +66,11 @@ class MailingLists::RecipientCountsController < ListController
 
   def recipient_counter
     @recipient_counter ||= MailingLists::RecipientCounter.new(mailing_list,
-                                                              message_type,
-                                                              households)
+      message_type,
+      households)
   end
 
   def authorize_class
     authorize!(:update, mailing_list)
   end
-
 end

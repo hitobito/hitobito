@@ -10,7 +10,6 @@
 module Sheet
   class Group
     class NavLeft
-
       attr_reader :entry, :sheet, :view
 
       delegate :content_tag, :link_to, :safe_join, :sanitize, to: :view
@@ -23,10 +22,10 @@ module Sheet
 
       def render
         render_upwards +
-        render_header +
-        content_tag(:ul, class: 'nav-left-list') do
-          render_layer_groups + render_deleted_people_link + render_sub_layers
-        end
+          render_header +
+          content_tag(:ul, class: "nav-left-list") do
+            render_layer_groups + render_deleted_people_link + render_sub_layers
+          end
       end
 
       private
@@ -66,21 +65,21 @@ module Sheet
         if layer.parent_id
           parent = layer.hierarchy[-2]
           parent.use_hierarchy_from_parent(layer.hierarchy[0..-3])
-          link_to(I18n.t('sheet/group.layer_upwards'),
-                  active_path(parent),
-                  class: 'nav-left-back')
+          link_to(I18n.t("sheet/group.layer_upwards"),
+            active_path(parent),
+            class: "nav-left-back")
         else
-          ''.html_safe
+          "".html_safe
         end
       end
 
       def render_header
         active = layer == entry && view.request.path !~ /\/deleted_people$/
-        link_to(layer, active_path(layer), class: "nav-left-title#{' is-active' if active}")
+        link_to(layer, active_path(layer), class: "nav-left-title#{" is-active" if active}")
       end
 
       def render_layer_groups
-        out = ''.html_safe
+        out = "".html_safe
         stack = []
         Array(groups[1..]).each do |group|
           render_stacked_group(group, stack, out)
@@ -118,32 +117,31 @@ module Sheet
         decorated = GroupDecorator.new(group)
 
         li = opening_li([
-          ('is-active' if group == entry),
+          ("is-active" if group == entry),
           decorated.archived_class
         ].compact)
 
-        display_name = sanitize(decorated.display_name, tags: %w(i))
-        group_name   = sanitize(decorated.to_s, tags: %w(i))
+        display_name = sanitize(decorated.display_name, tags: %w[i])
+        group_name = sanitize(decorated.to_s, tags: %w[i])
 
         li + link_to(display_name, active_path(group),
-                     title: group_name, data: { turbo_submits_with: display_name })
+          title: group_name, data: {turbo_submits_with: display_name})
       end
 
       def render_deleted_people_link
         if view.can?(:index_deleted_people, layer)
           active = view.current_page?(view.group_deleted_people_path(layer.id))
-          content_tag(:li, class: ('is-active' if active).to_s) do
-            link_to(view.t('groups.global.link.deleted_person'),
-                    view.group_deleted_people_path(layer.id))
+          content_tag(:li, class: ("is-active" if active).to_s) do
+            link_to(view.t("groups.global.link.deleted_person"),
+              view.group_deleted_people_path(layer.id))
           end
         end
       end
 
       def render_sub_layers
         layers = grouped_sub_layers.map do |type, layers|
-          content_tag(:li, content_tag(:span, type, class: 'divider')) +
-            safe_join(layers.map { |l| render_sub_layer(l.decorate)  })
-
+          content_tag(:li, content_tag(:span, type, class: "divider")) +
+            safe_join(layers.map { |l| render_sub_layer(l.decorate) })
         end
         safe_join(layers)
       end
@@ -152,21 +150,21 @@ module Sheet
         l.use_hierarchy_from_parent(layer)
         content_tag(:li, class: l.archived_class) do
           link_to(l.display_name, active_path(l),
-                  title: l.to_s, data: { turbo_submits_with: l.display_name })
+            title: l.to_s, data: {turbo_submits_with: l.display_name})
         end
       end
 
       def grouped_sub_layers
-        sub_layers.select { |g| view.can?(:show, g) }.
-          group_by { |g| g.class.label_plural }
+        sub_layers.select { |g| view.can?(:show, g) }
+          .group_by { |g| g.class.label_plural }
       end
 
       def sub_layers
         sub_layer_types = layer.possible_children.select(&:layer).map(&:sti_name)
         layer.children
-             .without_deleted
-             .where(type: sub_layer_types)
-             .order_by_type(layer)
+          .without_deleted
+          .where(type: sub_layer_types)
+          .order_by_type(layer)
       end
 
       def active_path(group)
@@ -184,14 +182,13 @@ module Sheet
 
       def opening_li(css_classes)
         li_tag = if css_classes.any?
-                   %(<li class="#{css_classes.join(' ')}">)
-                 else
-                   '<li>'.html_safe
-                 end
+          %(<li class="#{css_classes.join(" ")}">)
+        else
+          "<li>".html_safe
+        end
 
-        sanitize(li_tag, tags: %w(li), attributes: %w(class))
+        sanitize(li_tag, tags: %w[li], attributes: %w[class])
       end
-
     end
   end
 end

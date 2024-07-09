@@ -3,9 +3,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
-describe 'blocked/index.html.haml' do
-
+require "spec_helper"
+describe "blocked/index.html.haml" do
   let(:person) { people(:bottom_member) }
   let(:current_user) { person }
   let(:warn_after) { 18.months }
@@ -20,7 +19,7 @@ describe 'blocked/index.html.haml' do
     Capybara::Node::Simple.new(@rendered)
   end
 
-  it 'shows the explanation' do
+  it "shows the explanation" do
     contents = %w[blocked_person_situation_text blocked_person_solution_text]
     contents.each { assign(_1.to_sym, _1.to_s) }
     contents.each do |custom_content|

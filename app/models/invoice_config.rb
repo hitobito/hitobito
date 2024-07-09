@@ -42,17 +42,17 @@ class InvoiceConfig < ActiveRecord::Base
   IBAN_REGEX = /\A[A-Z]{2}[0-9]{2}\s?([A-Z]|[0-9]\s?){12,30}\z/
   ACCOUNT_NUMBER_REGEX = /\A[0-9]{2}-[0-9]{2,20}-[0-9]\z/
   PARTICIPANT_NUMBER_INTERNAL_REGEX = /\A[0-9]{6}\z/
-  PAYMENT_SLIPS = %w(qr no_ps).freeze
+  PAYMENT_SLIPS = %w[qr no_ps].freeze
   LOGO_MAX_DIMENSION = Settings.application.image_upload.max_dimension
 
-  class_attribute :logo_positions, default: %w(disabled left right)
+  class_attribute :logo_positions, default: %w[disabled left right]
 
   i18n_enum :payment_slip, PAYMENT_SLIPS, scopes: true, queries: true
   i18n_enum :logo_position, scopes: false, queries: false do
     logo_positions.map(&:to_s)
   end
 
-  belongs_to :group, class_name: 'Group'
+  belongs_to :group, class_name: "Group"
 
   has_one_attached :logo
   has_many :payment_reminder_configs, dependent: :destroy
@@ -66,23 +66,23 @@ class InvoiceConfig < ActiveRecord::Base
 
   # TODO: probably the if condition is not correct, verification needed
   validates :iban, presence: true, on: :update, if: :qr?
-  validates :iban, format: { with: IBAN_REGEX },
-                   on: :update, allow_blank: true
+  validates :iban, format: {with: IBAN_REGEX},
+    on: :update, allow_blank: true
 
-  validates :donation_calculation_year_amount, numericality: { only_integer: true,
-                                                               greater_than: 0,
-                                                               allow_nil: true }
-  validates :donation_increase_percentage, numericality: { greater_than: 0,
-                                                           allow_nil: true }
+  validates :donation_calculation_year_amount, numericality: {only_integer: true,
+                                                              greater_than: 0,
+                                                              allow_nil: true}
+  validates :donation_increase_percentage, numericality: {greater_than: 0,
+                                                          allow_nil: true}
 
-  validates :logo, attached: { message: :attached_unless_disabled }, if: :logo_enabled?
-  validates :logo, dimension: { max: LOGO_MAX_DIMENSION..LOGO_MAX_DIMENSION }
-  validates :logo_position, inclusion: { in: ->(_) { logo_positions } }
+  validates :logo, attached: {message: :attached_unless_disabled}, if: :logo_enabled?
+  validates :logo, dimension: {max: LOGO_MAX_DIMENSION..LOGO_MAX_DIMENSION}
+  validates :logo_position, inclusion: {in: ->(_) { logo_positions }}
 
   validate :correct_check_digit
   validate :correct_payee_qr_format, if: :qr?
 
-  validates :sender_name, format: { without: Devise.email_regexp }
+  validates :sender_name, format: {without: Devise.email_regexp}
 
   accepts_nested_attributes_for :payment_reminder_configs
   accepts_nested_attributes_for :payment_provider_configs
@@ -98,7 +98,7 @@ class InvoiceConfig < ActiveRecord::Base
   end
 
   def remove_logo=(deletion_param)
-    if %w(1 yes true).include?(deletion_param.to_s.downcase)
+    if %w[1 yes true].include?(deletion_param.to_s.downcase)
       logo.purge_later
     end
   end
@@ -114,7 +114,7 @@ class InvoiceConfig < ActiveRecord::Base
     return if account_number.blank?
 
     payment_slip = Invoice::PaymentSlip.new
-    splitted = account_number.delete('-').split('')
+    splitted = account_number.delete("-").chars
     check_digit = splitted.pop
 
     return if payment_slip.check_digit(splitted.join) == check_digit.to_i
@@ -123,7 +123,7 @@ class InvoiceConfig < ActiveRecord::Base
   end
 
   def correct_payee_qr_format
-    return if payee&.lines&.select(&:present?)&.size&.== 3
+    return if payee&.lines&.count(&:present?)&.== 3
 
     errors.add(:payee, :must_have_3_lines)
   end
@@ -134,6 +134,6 @@ class InvoiceConfig < ActiveRecord::Base
 
   def logo_enabled?
     logo_position.present? &&
-      logo_position != 'disabled'
+      logo_position != "disabled"
   end
 end

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 #  Copyright (c) 2022, Schweizer Wanderwege. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -27,7 +28,7 @@ class ApplicationResource < Graphiti::Resource
   self.base_url = Rails.application.routes.default_url_options[:host]
   # Used for link generation
 
-  self.endpoint_namespace = '/api/'
+  self.endpoint_namespace = "/api/"
 
   # Will raise an error if a resource is being accessed from a URL it is not allowlisted for
   # Helpful for link validation
@@ -73,7 +74,7 @@ class ApplicationResource < Graphiti::Resource
     # when building the base_scope for the JSON API. (We'd need to load all models
     # from the DB into memory, filter there, and send a complete list of allowed
     # IDs back to the DB.)
-    raise 'implement index_ability in the resource class'
+    raise "implement index_ability in the resource class"
   end
 
   # Meant to be extended in specific resources

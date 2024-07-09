@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module InvoiceArticlesHelper
-
   def format_invoice_article_unit_cost(invoice_article)
     currency = invoice_article.group.invoice_config.currency
     number_to_currency(invoice_article.unit_cost, unit: currency)
@@ -12,14 +11,14 @@ module InvoiceArticlesHelper
 
   def link_invoice_list_by_article(group, from, to, entry)
     link_to(group_invoices_by_article_index_path(
-              group_id: group.id,
-              from: from,
-              to: to,
-              name: entry[:name],
-              account: entry[:account],
-              cost_center: entry[:cost_center],
-              type: entry[:type]
-            )) do
+      group_id: group.id,
+      from: from,
+      to: to,
+      name: entry[:name],
+      account: entry[:account],
+      cost_center: entry[:cost_center],
+      type: entry[:type]
+    )) do
       yield if block_given?
     end
   end

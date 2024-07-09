@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_cvp.
 
 class MessageAbility < AbilityDsl::Base
-
   on(Message) do
     permission(:layer_and_below_full)
       .may(:create)
@@ -46,5 +45,4 @@ class MessageAbility < AbilityDsl::Base
   def not_bulk_mail
     !subject.is_a?(Message::BulkMail)
   end
-
 end

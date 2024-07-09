@@ -4,9 +4,12 @@
 #  https://github.com/hitobito/hitobito.
 
 module Person::AddRequest::Status
-
   def self.for(person_id, body_type, body_id)
-    type = "Person::AddRequest::Status::#{body_type}".constantize rescue nil
+    type = begin
+      "Person::AddRequest::Status::#{body_type}".constantize
+    rescue
+      nil
+    end
 
     if type.nil?
       raise ActiveRecord::RecordNotFound, "No person add request for '#{body_type}' found"
@@ -14,5 +17,4 @@ module Person::AddRequest::Status
 
     type.new(person_id, body_id)
   end
-
 end

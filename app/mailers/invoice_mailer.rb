@@ -6,11 +6,10 @@
 #  https://github.com/hitobito/hitobito.
 
 class InvoiceMailer < ApplicationMailer
-
-  CONTENT_INVOICE_NOTIFICATION = 'content_invoice_notification'.freeze
+  CONTENT_INVOICE_NOTIFICATION = "content_invoice_notification"
 
   def mail(headers = {}, &block)
-    mail = super(headers, &block)
+    mail = super
 
     if @invoice.invoice_config.sender_name.present?
       mail.from = "#{@invoice.invoice_config.sender_name} <#{mail.from[0]}>"
@@ -18,14 +17,14 @@ class InvoiceMailer < ApplicationMailer
   end
 
   def notification(invoice, sender)
-    @sender  = sender
+    @sender = sender
     @invoice = invoice
 
     attachments[invoice.filename] = generate_pdf
 
     custom_content_mail(@invoice.recipient_email, CONTENT_INVOICE_NOTIFICATION,
-                        values_for_placeholders(CONTENT_INVOICE_NOTIFICATION),
-                        mail_headers(@sender, @invoice.invoice_config.email))
+      values_for_placeholders(CONTENT_INVOICE_NOTIFICATION),
+      mail_headers(@sender, @invoice.invoice_config.email))
   end
 
   private
@@ -48,8 +47,8 @@ class InvoiceMailer < ApplicationMailer
         item.name,
         item.description,
         item.total
-      ].join('<br/>')
-    end.join('<br/>' * 2)
+      ].join("<br/>")
+    end.join("<br/>" * 2)
   end
 
   def placeholder_invoice_total
@@ -57,7 +56,7 @@ class InvoiceMailer < ApplicationMailer
       [:total, :vat].map do |key|
         content_tag :tr do
           [content_tag(:th, t("activerecord.attributes.invoice.#{key}")),
-           content_tag(:td, @invoice.decorate.send(key))].join
+            content_tag(:td, @invoice.decorate.send(key))].join
         end
       end.join
     end
@@ -65,8 +64,8 @@ class InvoiceMailer < ApplicationMailer
 
   def placeholder_group_address
     [group.name,
-     group.address,
-     [group.zip_code, group.town].compact.join(' ').presence].compact.join(', ')
+      group.address,
+      [group.zip_code, group.town].compact.join(" ").presence].compact.join(", ")
   end
 
   def placeholder_group_name
@@ -87,12 +86,11 @@ class InvoiceMailer < ApplicationMailer
   end
 
   def pdf_options
-    { articles: true, payment_slip: true }
+    {articles: true, payment_slip: true}
   end
 
   def mail_headers(person, email)
     sender = email.blank? ? person : Person.new(email: email)
     with_personal_sender(sender)
   end
-
 end

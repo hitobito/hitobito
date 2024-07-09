@@ -6,11 +6,11 @@
 #  https://github.com/hitobito/hitobito.
 
 class EventResource < ApplicationResource
-  primary_endpoint 'events', [:index, :show]
+  primary_endpoint "events", [:index, :show]
 
   self.polymorphic = [
-    'EventResource',
-    'Event::CourseResource'
+    "EventResource",
+    "Event::CourseResource"
   ]
 
   with_options writable: false, filterable: false, sortable: false do
@@ -29,7 +29,7 @@ class EventResource < ApplicationResource
     attribute :external_application_link, :string do
       next unless @object.external_applications?
 
-      params = { group_id: @object.groups.first.id, id: @object.id }
+      params = {group_id: @object.groups.first.id, id: @object.id}
       context.group_public_event_url(params)
     end
     attribute :maximum_participants, :integer
@@ -42,14 +42,14 @@ class EventResource < ApplicationResource
 
   filter :type, only: [:eq] do
     eq do |scope, types|
-      types_with_nil = types.map { |type| type == 'null' ? nil : type }
+      types_with_nil = types.map { |type| (type == "null") ? nil : type }
       scope.where(type: types_with_nil)
     end
   end
 
   filter :group_id, :integer, only: [:eq, :not_eq] do
     eq do |scope, group_ids|
-      scope.references(:groups).where(groups: { id: group_ids })
+      scope.references(:groups).where(groups: {id: group_ids})
     end
   end
 

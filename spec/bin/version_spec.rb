@@ -5,35 +5,35 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-describe 'version' do
-  context 'version' do
-    let(:cmd) { 'version' }
+describe "version" do
+  context "version" do
+    let(:cmd) { "version" }
 
-    it 'has a version itself' do
-      expect(version(cmd)).to match('2.1.0')
+    it "has a version itself" do
+      expect(version(cmd)).to match("2.1.0")
     end
 
-    it 'has a banner' do
-      expect(version(cmd)).to match('Show and Suggest version-numbers')
+    it "has a banner" do
+      expect(version(cmd)).to match("Show and Suggest version-numbers")
     end
   end
 
-  context 'suggest' do
-    let(:cmd) { 'suggest' }
+  context "suggest" do
+    let(:cmd) { "suggest" }
 
-    it 'outputs a suggested version' do
+    it "outputs a suggested version" do
       expect(version(cmd)).to match(/\d+\.\d+\.\d+/)
     end
 
-    it 'can mirror a custom version-number' do
-      expect(version("#{cmd} custom XP-NG-NT4")).to eql 'XP-NG-NT4'
+    it "can mirror a custom version-number" do
+      expect(version("#{cmd} custom XP-NG-NT4")).to eql "XP-NG-NT4"
     end
 
-    it 'suggests only new minor-versions for regular releases' do
+    it "suggests only new minor-versions for regular releases" do
       expect(version("#{cmd} regular")).to match(/\d+\.\d+\.0/)
     end
 
-    it 'can provide a preview of suggestions' do
+    it "can provide a preview of suggestions" do
       expect(version("#{cmd} preview"))
         .to match(/^patch:\s+\d+\.\d+\.\d+/)
         .and match(/^regular:\s+\d+\.\d+\.0/)
@@ -41,10 +41,10 @@ describe 'version' do
     end
   end
 
-  context 'current' do
-    let(:cmd) { 'current' }
+  context "current" do
+    let(:cmd) { "current" }
 
-    it 'outputs the current version' do
+    it "outputs the current version" do
       expect(version(cmd)).to match(/\d+\.\d+\.\d+/)
     end
   end

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module Cantons
-
   module_function
 
   SHORT_NAMES = [ # rubocop:disable Style/MutableConstant This is being extended in a wagon
@@ -33,5 +32,4 @@ module Cantons
       full_name(short)
     end
   end
-
 end

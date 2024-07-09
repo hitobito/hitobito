@@ -17,6 +17,6 @@
 #  updated_at :datetime         not null
 #
 
-Fabricator(:event_kind_category, class_name: 'Event::KindCategory') do
+Fabricator(:event_kind_category, class_name: "Event::KindCategory") do
   label { Faker::Company.bs }
 end

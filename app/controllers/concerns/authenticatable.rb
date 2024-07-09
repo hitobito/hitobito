@@ -81,7 +81,7 @@ module Authenticatable
   end
 
   def authenticate_person!(*args)
-    deprecated_user_token_sign_in || api_sign_in || super(*args)
+    deprecated_user_token_sign_in || api_sign_in || super
   end
 
   def api_sign_in
@@ -95,7 +95,7 @@ module Authenticatable
 
     # Sign in using token should not be tracked by Devise trackable
     # See https://github.com/plataformatec/devise/issues/953
-    request.env['devise.skip_trackable'] = true
+    request.env["devise.skip_trackable"] = true
 
     # Notice the store option defaults to false, so the entity
     # is not actually stored in the session and a token is needed
@@ -108,7 +108,7 @@ module Authenticatable
     service_token = token_authentication.service_token
     return unless service_token
 
-    request.env['devise.skip_trackable'] = true
+    request.env["devise.skip_trackable"] = true
     service_token.update(last_access: Time.zone.now)
     sign_in service_token, store: false
   end

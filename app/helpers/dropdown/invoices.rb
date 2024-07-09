@@ -5,7 +5,6 @@
 
 module Dropdown
   class Invoices < Base
-
     attr_reader :params, :user
 
     def initialize(template, params, type)
@@ -42,11 +41,11 @@ module Dropdown
     def csv_links
       add_item(translate(:csv), export_path(:csv), **item_options)
       add_item(translate(:payments_without_invoice_csv),
-               payment_export_path(:csv, { state: :without_invoice }))
+        payment_export_path(:csv, {state: :without_invoice}))
     end
 
     def item_options
-      { data: { checkable: true } }
+      {data: {checkable: true}}
     end
 
     def export_path(format, options = {})

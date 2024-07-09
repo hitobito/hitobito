@@ -38,10 +38,10 @@ class Payments::EbicsImportJob < RecurringJob
 
   def log_results
     {
-      imported_payments_count: payments['ebics_imported']&.size,
-      without_invoice_count: payments['without_invoice']&.size,
-      invalid_payments_count: payments['invalid']&.size,
-      invalid_payments: payments['invalid']&.each_with_object({}) do |payment, invalid_payments|
+      imported_payments_count: payments["ebics_imported"]&.size,
+      without_invoice_count: payments["without_invoice"]&.size,
+      invalid_payments_count: payments["invalid"]&.size,
+      invalid_payments: payments["invalid"]&.each_with_object({}) do |payment, invalid_payments|
         invalid_payments[payment.transaction_identifier] = payment.errors.messages
       end,
       errors: errors

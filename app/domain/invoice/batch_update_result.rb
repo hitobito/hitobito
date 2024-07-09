@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 #
 class Invoice::BatchUpdateResult
-
   def track_update(key, invoice)
     updates[key.to_sym] << invoice
   end
@@ -26,7 +25,7 @@ class Invoice::BatchUpdateResult
   end
 
   def to_options
-    present? ? { notice: notice, alert: alert } : { alert: empty_message }
+    present? ? {notice: notice, alert: alert} : {alert: empty_message}
   end
 
   def present?
@@ -52,19 +51,18 @@ class Invoice::BatchUpdateResult
   end
 
   def model_error_message(invoice)
-    I18n.t('invoice_lists.update.model_error',
-           number: invoice.sequence_number,
-           error: invoice.errors.full_messages.join(', '))
+    I18n.t("invoice_lists.update.model_error",
+      number: invoice.sequence_number,
+      error: invoice.errors.full_messages.join(", "))
   end
 
   def message(key, invoices)
     I18n.t("invoice_lists.update.#{key}",
-           count: invoices.count,
-           number: invoices.first.sequence_number)
+      count: invoices.count,
+      number: invoices.first.sequence_number)
   end
 
   def empty_message
-    I18n.t('invoice_lists.update', count: 0)
+    I18n.t("invoice_lists.update", count: 0)
   end
-
 end

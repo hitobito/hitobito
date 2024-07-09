@@ -11,7 +11,7 @@ module ResourceSpecHelper
   included do
     let(:ability) { Ability.new(person) }
     let(:person) { people(:top_leader) }
-    let(:url_options) { { host: 'example.com' } }
+    let(:url_options) { {host: "example.com"} }
 
     let(:context) do
       double(current_ability: ability, url_options: url_options).tap do |context|

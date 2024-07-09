@@ -1,5 +1,4 @@
 class TagsController < SimpleCrudController
-
   self.permitted_attrs = [:name]
 
   private
@@ -11,5 +10,4 @@ class TagsController < SimpleCrudController
   def index_path
     tags_path(returning: true)
   end
-
 end

@@ -7,7 +7,6 @@
 
 module Dropdown
   class RoleMultiselectActions < Dropdown::Base
-
     attr_reader :params
 
     def initialize(template, group, translation, params)
@@ -21,20 +20,20 @@ module Dropdown
     private
 
     def init_items
-      add_item(I18n.t('people.multiselect_actions.role_actions.add'),
-               template.new_group_role_list_path(@group),
-               data: { checkable: true, method: :get },
-               remote: true)
+      add_item(I18n.t("people.multiselect_actions.role_actions.add"),
+        template.new_group_role_list_path(@group),
+        data: {checkable: true, method: :get},
+        remote: true)
 
-      add_item(I18n.t('people.multiselect_actions.role_actions.move'),
-               template.move_group_role_list_path(@group, range: params[:range]),
-               data: { checkable: true, method: :get },
-               remote: true)
+      add_item(I18n.t("people.multiselect_actions.role_actions.move"),
+        template.move_group_role_list_path(@group, range: params[:range]),
+        data: {checkable: true, method: :get},
+        remote: true)
 
-      add_item(I18n.t('people.multiselect_actions.role_actions.remove'),
-               template.deletable_group_role_list_path(@group, range: params[:range]),
-               data: { checkable: true, method: :get },
-               remote: true)
+      add_item(I18n.t("people.multiselect_actions.role_actions.remove"),
+        template.deletable_group_role_list_path(@group, range: params[:range]),
+        data: {checkable: true, method: :get},
+        remote: true)
     end
   end
 end

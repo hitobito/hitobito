@@ -7,7 +7,6 @@
 
 module Dropdown
   class InvoiceSending < Base
-
     attr_reader :params, :path, :invoice_list_id
 
     def initialize(template, params)
@@ -31,8 +30,7 @@ module Dropdown
     def add_item(key, options = {})
       group = template.parent.is_a?(Group) ? template.parent : template.parent.group
       path = template.group_invoice_list_path(group, options)
-      super(translate(key), path, data: { method: :put, checkable: true })
+      super(translate(key), path, data: {method: :put, checkable: true})
     end
-
   end
 end

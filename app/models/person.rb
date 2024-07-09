@@ -81,13 +81,12 @@
 #
 
 class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
-
   PUBLIC_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
     :id, :first_name, :last_name, :nickname, :company_name, :company,
     :email, :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
     :gender, :birthday, :primary_group_id
   ]
-  if FeatureGate.disabled?('structured_addresses')
+  if FeatureGate.disabled?("structured_addresses")
     PUBLIC_ATTRS << :address
   end
 
@@ -113,24 +112,24 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :first_name, :last_name, :nickname, :company_name, :email, :address_care_of, :street,
     :housenumber, :postbox, :zip_code, :town, :country, :gender, [:years, :integer], :birthday
   ]
-  if FeatureGate.disabled?('structured_addresses')
+  if FeatureGate.disabled?("structured_addresses")
     FILTER_ATTRS << :address
   end
 
-  GENDERS = %w(m w).freeze
+  GENDERS = %w[m w].freeze
 
   # rubocop:disable Style/MutableConstant meant to be extended in wagons
   LANGUAGES = Settings.application
-                      .languages
-                      .to_hash
-                      .merge(Settings.application
+    .languages
+    .to_hash
+    .merge(Settings.application
                                      .additional_languages&.to_hash || {})
 
   # rubocop:disable Style/ConditionalAssignment intentional for easier deletion
-  if FeatureGate.enabled?('structured_addresses')
-    ADDRESS_ATTRS = %w(address_care_of street housenumber postbox zip_code town country)
+  if FeatureGate.enabled?("structured_addresses")
+    ADDRESS_ATTRS = %w[address_care_of street housenumber postbox zip_code town country]
   else
-    ADDRESS_ATTRS = %w(address zip_code town country)
+    ADDRESS_ATTRS = %w[address zip_code town country]
   end
   # rubocop:enable Style/ConditionalAssignment
 
@@ -141,13 +140,13 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   # define devise before other modules
   devise :database_authenticatable,
-         :lockable,
-         :recoverable,
-         :rememberable,
-         :trackable,
-         :timeoutable,
-         :validatable,
-         :confirmable
+    :lockable,
+    :recoverable,
+    :rememberable,
+    :trackable,
+    :timeoutable,
+    :validatable,
+    :confirmable
 
   include Groups
   include Contactable
@@ -170,11 +169,11 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def picture_default
-    'profile.svg'
+    "profile.svg"
   end
 
   def picture_thumb_default
-    'profile.svg'
+    "profile.svg"
   end
 
   class_attribute :used_attributes
@@ -182,10 +181,10 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   model_stamper
   stampable stamper_class_name: :person,
-            deleter: false
+    deleter: false
 
-  has_paper_trail meta: { main_id: ->(p) { p.id }, main_type: sti_name },
-                  skip: Person::INTERNAL_ATTRS
+  has_paper_trail meta: {main_id: ->(p) { p.id }, main_type: sti_name},
+    skip: Person::INTERNAL_ATTRS
 
   acts_as_taggable
 
@@ -196,67 +195,67 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   has_many :roles, inverse_of: :person
   has_many :groups, through: :roles
 
-  has_many :event_participations, class_name: 'Event::Participation',
-                                  dependent: :destroy,
-                                  inverse_of: :person
-  has_many :event_applications, class_name: 'Event::Application',
-                                through: :event_participations,
-                                source: :application
-  has_many :event_roles, class_name: 'Event::Role',
-                         through: :event_participations,
-                         source: :roles
+  has_many :event_participations, class_name: "Event::Participation",
+    dependent: :destroy,
+    inverse_of: :person
+  has_many :event_applications, class_name: "Event::Application",
+    through: :event_participations,
+    source: :application
+  has_many :event_roles, class_name: "Event::Role",
+    through: :event_participations,
+    source: :roles
   has_many :events, through: :event_participations
-  has_many :event_invitations, class_name: 'Event::Invitation', dependent: :destroy
+  has_many :event_invitations, class_name: "Event::Invitation", dependent: :destroy
 
-  has_many :event_responsibilities, class_name: 'Event',
-                                    foreign_key: :contact_id,
-                                    inverse_of: :contact,
-                                    dependent: :nullify
+  has_many :event_responsibilities, class_name: "Event",
+    foreign_key: :contact_id,
+    inverse_of: :contact,
+    dependent: :nullify
 
   has_many :qualifications, dependent: :destroy
 
   has_many :subscriptions, as: :subscriber, dependent: :destroy
 
-  has_many :relations_to_tails, class_name: 'PeopleRelation',
-                                dependent: :destroy,
-                                foreign_key: :head_id,
-                                inverse_of: :head
+  has_many :relations_to_tails, class_name: "PeopleRelation",
+    dependent: :destroy,
+    foreign_key: :head_id,
+    inverse_of: :head
 
   has_many :family_members, -> { includes(:person, :other) },
-           inverse_of: :person,
-           dependent: :destroy
+    inverse_of: :person,
+    dependent: :destroy
 
   has_many :add_requests, dependent: :destroy
 
   has_many :notes, dependent: :destroy, as: :subject
 
-  has_many :authored_notes, class_name: 'Note',
-                            foreign_key: 'author_id',
-                            inverse_of: :author,
-                            dependent: :destroy
+  has_many :authored_notes, class_name: "Note",
+    foreign_key: "author_id",
+    inverse_of: :author,
+    dependent: :destroy
 
-  belongs_to :primary_group, class_name: 'Group'
-  belongs_to :last_label_format, class_name: 'LabelFormat'
+  belongs_to :primary_group, class_name: "Group"
+  belongs_to :last_label_format, class_name: "LabelFormat"
 
   has_many :label_formats, dependent: :destroy
   has_many :table_displays, dependent: :destroy
 
   has_many :assignments, dependent: :destroy
 
-  has_many :access_grants, class_name: 'Oauth::AccessGrant',
-                           foreign_key: :resource_owner_id,
-                           inverse_of: :person,
-                           dependent: :delete_all
+  has_many :access_grants, class_name: "Oauth::AccessGrant",
+    foreign_key: :resource_owner_id,
+    inverse_of: :person,
+    dependent: :delete_all
 
-  has_many :access_tokens, class_name: 'Oauth::AccessToken',
-                           foreign_key: :resource_owner_id,
-                           inverse_of: :person,
-                           dependent: :delete_all
+  has_many :access_tokens, class_name: "Oauth::AccessToken",
+    foreign_key: :resource_owner_id,
+    inverse_of: :person,
+    dependent: :delete_all
 
   has_many :message_recipients, dependent: :nullify
 
   accepts_nested_attributes_for :relations_to_tails, allow_destroy: true
-  FeatureGate.if('people.family_members') do
+  FeatureGate.if("people.family_members") do
     accepts_nested_attributes_for :family_members, allow_destroy: true
   end
 
@@ -264,24 +263,23 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   ### VALIDATIONS
 
-  if FeatureGate.disabled?('structured_addresses')
+  if FeatureGate.disabled?("structured_addresses")
     validates_by_schema except: [:email, :address]
-    validates :address, length: { allow_nil: true, maximum: 1024 }
+    validates :address, length: {allow_nil: true, maximum: 1024}
   else
     validates_by_schema except: [:email]
   end
-  validates :email, length: { allow_nil: true, maximum: 255 } # other email validations by devise
-  validates :company_name, presence: { if: :company? }
-  validates :language, inclusion: { in: LANGUAGES.keys.map(&:to_s) }
+  validates :email, length: {allow_nil: true, maximum: 255} # other email validations by devise
+  validates :company_name, presence: {if: :company?}
+  validates :language, inclusion: {in: LANGUAGES.keys.map(&:to_s)}
   validates :birthday,
-            timeliness: { type: :date, allow_blank: true, before: Date.new(10_000, 1, 1) }
-  validates :additional_information, length: { allow_nil: true, maximum: (2**16) - 1 }
+    timeliness: {type: :date, allow_blank: true, before: Date.new(10_000, 1, 1)}
+  validates :additional_information, length: {allow_nil: true, maximum: (2**16) - 1}
   validate :assert_has_any_name
 
-  validates :picture, dimension: { width: { max: 8_000 }, height: { max: 8_000 } },
-                      content_type: ['image/jpeg', 'image/gif', 'image/png']
+  validates :picture, dimension: {width: {max: 8_000}, height: {max: 8_000}},
+    content_type: ["image/jpeg", "image/gif", "image/png"]
   # more validations defined by devise
-
 
   ### CALLBACKS
 
@@ -295,29 +293,29 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   scope :household, -> { where.not(household_key: nil) }
   scope :with_address, -> {
-    if FeatureGate.enabled?('structured_addresses')
-      where.not(street: [nil, ''])
+    if FeatureGate.enabled?("structured_addresses")
+      where.not(street: [nil, ""])
     else
-      where.not(address: [nil, ''])
-    end.
-      where.not(zip_code: [nil, '']).
-      where.not(town: [nil, '']).
-      where('(last_name IS NOT NULL AND last_name <> "") OR ' \
+      where.not(address: [nil, ""])
+    end
+      .where.not(zip_code: [nil, ""])
+      .where.not(town: [nil, ""])
+      .where('(last_name IS NOT NULL AND last_name <> "") OR ' \
             '(company_name IS NOT NULL AND company_name <> "")')
   }
-  scope :with_mobile, -> { joins(:phone_numbers).where(phone_numbers: { label: 'Mobil' }) }
+  scope :with_mobile, -> { joins(:phone_numbers).where(phone_numbers: {label: "Mobil"}) }
 
   ### CLASS METHODS
 
   class << self
     def order_by_name
-      order(Arel.sql(order_by_name_statement.join(', ')))
+      order(Arel.sql(order_by_name_statement.join(", ")))
     end
 
     def order_by_name_statement
       [company_case_column(:company_name, :last_name),
-       company_case_column(:last_name, :first_name),
-       company_case_column(:first_name, :nickname)]
+        company_case_column(:last_name, :first_name),
+        company_case_column(:first_name, :nickname)]
     end
 
     def only_public_data
@@ -339,7 +337,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     def filter_attrs
       Person::FILTER_ATTRS.collect do |key, type|
         type ||= Person.columns_hash.fetch(key.to_s).type
-        [key.to_sym, { label: Person.human_attribute_name(key), type: type }]
+        [key.to_sym, {label: Person.human_attribute_name(key), type: type}]
       end.to_h
     end
 
@@ -359,7 +357,6 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     end
   end
 
-
   ### ATTRIBUTE INSTANCE METHODS
 
   # Used to enable login with any of the attributes configured in `devise_login_id_attrs`
@@ -377,12 +374,12 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   def privacy_policy_accepted?
     privacy_policy_accepted_at.present?
   end
-  alias privacy_policy_accepted privacy_policy_accepted?
+  alias_method :privacy_policy_accepted, :privacy_policy_accepted?
 
   def privacy_policy_accepted=(value)
-    self.privacy_policy_accepted_at = if %w(1 yes true).include?(value.to_s.downcase)
-                                        Time.now.utc
-                                      end
+    self.privacy_policy_accepted_at = if %w[1 yes true].include?(value.to_s.downcase)
+      Time.now.utc
+    end
   end
 
   def to_s(format = :default)
@@ -413,12 +410,12 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def household_people
-    Person.
-      where(id: household_people_ids).or(
+    Person
+      .where(id: household_people_ids).or(
         Person.where.not(household_key: nil).where(household_key: household_key)
-      ).
-      where.not(id: id).
-      includes(:groups)
+      )
+      .where.not(id: id)
+      .includes(:groups)
   end
 
   def greeting_name
@@ -485,9 +482,9 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def finance_groups
-    groups_with_permission(:finance).
-      flat_map(&:layer_group).
-      uniq
+    groups_with_permission(:finance)
+      .flat_map(&:layer_group)
+      .uniq
   end
 
   def table_display_for(table_model_class)
@@ -508,7 +505,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def remove_picture=(deletion_param)
-    if %w(1 yes true).include?(deletion_param.to_s.downcase)
+    if %w[1 yes true].include?(deletion_param.to_s.downcase)
       picture.purge_later
     end
   end

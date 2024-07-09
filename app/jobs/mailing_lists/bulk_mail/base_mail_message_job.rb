@@ -6,9 +6,8 @@
 # https://github.com/hitobito/hitobito.
 
 class MailingLists::BulkMail::BaseMailMessageJob < BaseJob
-
-  EMAIL_LOCAL_PART_BRACKETS = /^.*<(.+)@.+\..+>$/.freeze
-  EMAIL_LOCAL_PART = /^(.+)@.+\..+$/.freeze
+  EMAIL_LOCAL_PART_BRACKETS = /^.*<(.+)@.+\..+>$/
+  EMAIL_LOCAL_PART = /^(.+)@.+\..+$/
 
   self.parameters = [:message]
 
@@ -18,7 +17,7 @@ class MailingLists::BulkMail::BaseMailMessageJob < BaseJob
   end
 
   def perform
-    raise 'implement in sub class'
+    raise "implement in sub class"
   end
 
   private
@@ -28,12 +27,12 @@ class MailingLists::BulkMail::BaseMailMessageJob < BaseJob
     sender =
       app_sender[EMAIL_LOCAL_PART_BRACKETS, 1] ||
       app_sender[EMAIL_LOCAL_PART, 1] ||
-      'noreply'
+      "noreply"
     "#{sender}@#{app_sender_domain}"
   end
 
   def app_sender_domain
-    Settings.email.list_domain || 'localhost'
+    Settings.email.list_domain || "localhost"
   end
 
   def source_mail

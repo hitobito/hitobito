@@ -35,11 +35,11 @@ module Events
     end
 
     def additional_course_includes
-      kind_used? ? { kind: :translations } : {}
+      kind_used? ? {kind: :translations} : {}
     end
 
     def course_ordering
-      kind_used? ? 'event_kind_translations.label, event_dates.start_at' : 'event_dates.start_at'
+      kind_used? ? "event_kind_translations.label, event_dates.start_at" : "event_dates.start_at"
     end
 
     def kind_used?

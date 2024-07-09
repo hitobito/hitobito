@@ -7,7 +7,6 @@
 
 module Export::Tabular::Event::Participations
   class TableDisplayRow < Export::Tabular::People::TableDisplayRow
-
     attr_reader :participation
 
     def initialize(entry, table_display, format = nil)
@@ -20,6 +19,5 @@ module Export::Tabular::Event::Participations
     def column_entry
       participation
     end
-
   end
 end

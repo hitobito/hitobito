@@ -12,7 +12,7 @@ class EventDecorator < ApplicationDecorator
 
   class_attribute :icons
   self.icons = {
-    'Event::Course' => 'book'
+    "Event::Course" => "book"
   }
 
   def label
@@ -33,14 +33,14 @@ class EventDecorator < ApplicationDecorator
     # adding #to_a avoids irregularly occuring, inexplicable
     # "undefined method `duration' for #<Proc:0x00000004d6dd38>" errors
     safe_join(dates.to_a, h.tag(:br)) do |date|
-      safe_join([date.duration, h.muted(date.label_and_location)], ' ')
+      safe_join([date.duration, h.muted(date.label_and_location)], " ")
     end
   end
 
   def booking_info
     if maximum_participants.to_i.positive?
       translate(:participants_info_with_limit, count: applicant_count,
-                                               limit: maximum_participants.to_i)
+        limit: maximum_participants.to_i)
     else
       translate(:participants_info, count: applicant_count)
     end
@@ -95,19 +95,19 @@ class EventDecorator < ApplicationDecorator
   def as_typeahead
     groups_label = groups.first.to_s
     if groups.size > 1
-      groups_label = h.truncate(groups.join(', '), count: 50, separator: ',')
+      groups_label = h.truncate(groups.join(", "), count: 50, separator: ",")
     end
-    { id: id, label: "#{model} (#{groups_label})" }
+    {id: id, label: "#{model} (#{groups_label})"}
   end
 
   def as_quicksearch
-    { id: id, label: label_with_group, type: :event, icon: icons.fetch(type, 'calendar-alt') }
+    {id: id, label: label_with_group, type: :event, icon: icons.fetch(type, "calendar-alt")}
   end
 
   def label_with_group
     label = to_s
     label += " (#{number})" if number?
-    h.safe_join([groups.first.to_s, label], ': ')
+    h.safe_join([groups.first.to_s, label], ": ")
   end
 
   def any_conditions_present?

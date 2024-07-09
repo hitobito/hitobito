@@ -5,11 +5,11 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Events::Filter::DateRange do
   let(:person) { people(:top_leader) }
-  let(:options) { { kind_used: true } }
+  let(:options) { {kind_used: true} }
 
   let(:scope) { Events::FilteredList.new(person, {}, options).base_scope }
 
@@ -22,35 +22,35 @@ describe Events::Filter::DateRange do
     Date.parse(date).advance(years: 1)
   end
 
-  context 'generally, it' do
+  context "generally, it" do
     let(:params) do
       {
         filter: {
-          since: '01.01.1970',
-          until: '19.01.2038'
+          since: "01.01.1970",
+          until: "19.01.2038"
         }
       }
     end
 
-    it 'produces a scope that checks for dates' do
-      expect(where_condition).to match('event_dates.start_at')
-      expect(where_condition).to match('event_dates.finish_at')
+    it "produces a scope that checks for dates" do
+      expect(where_condition).to match("event_dates.start_at")
+      expect(where_condition).to match("event_dates.finish_at")
 
       expect(where_condition).to match(
         /.*start_at <= .* AND .*finish_at >= .* OR .*start_at <= .* AND .*start_at >= .*/
       )
     end
 
-    context 'has assumptions' do
-      it 'mentions event_dates' do
-        expect(sql).to match('event_dates')
+    context "has assumptions" do
+      it "mentions event_dates" do
+        expect(sql).to match("event_dates")
       end
 
-      it 'there is a WHERE condition' do
+      it "there is a WHERE condition" do
         expect(where_condition).to match(/^WHERE/)
       end
 
-      it 'converts dates to YYYY-MM-DD' do
+      it "converts dates to YYYY-MM-DD" do
         expect(where_condition).to match(/1970-01-01/)
         expect(where_condition).to match(/2038-01-19/)
 
@@ -60,11 +60,11 @@ describe Events::Filter::DateRange do
     end
   end
 
-  context 'without dates, it' do
-    let(:today) { Time.zone.now.to_date.strftime('%F') }
+  context "without dates, it" do
+    let(:today) { Time.zone.now.to_date.strftime("%F") }
     let(:params) { {} }
 
-    it 'uses the default of a year from now' do
+    it "uses the default of a year from now" do
       expect(where_condition).to match(/event_dates.start_at <= '#{a_year_after today}'/)
       expect(where_condition).to match(/event_dates.finish_at >= '#{today}'/)
       expect(where_condition).to match(/event_dates.start_at <= '#{a_year_after today}'/)
@@ -72,8 +72,8 @@ describe Events::Filter::DateRange do
     end
   end
 
-  context 'with only a since date, it' do
-    let(:today) { '2021-04-14' }
+  context "with only a since date, it" do
+    let(:today) { "2021-04-14" }
     let(:params) do
       {
         filter: {
@@ -82,7 +82,7 @@ describe Events::Filter::DateRange do
       }
     end
 
-    it 'uses the default of a year from now' do
+    it "uses the default of a year from now" do
       expect(where_condition).to match(/event_dates.start_at <= '#{a_year_after today}'/)
       expect(where_condition).to match(/event_dates.finish_at >= '#{today}'/)
       expect(where_condition).to match(/event_dates.start_at <= '#{a_year_after today}'/)
@@ -90,9 +90,9 @@ describe Events::Filter::DateRange do
     end
   end
 
-  context 'with only an until date, it' do
-    let(:today) { Time.zone.now.to_date.strftime('%F') }
-    let(:limit) { '2038-01-19' }
+  context "with only an until date, it" do
+    let(:today) { Time.zone.now.to_date.strftime("%F") }
+    let(:limit) { "2038-01-19" }
     let(:params) do
       {
         filter: {
@@ -101,7 +101,7 @@ describe Events::Filter::DateRange do
       }
     end
 
-    it 'uses the default of a year from now' do
+    it "uses the default of a year from now" do
       expect(where_condition).to match(/event_dates.start_at <= '#{limit}'/)
       expect(where_condition).to match(/event_dates.finish_at >= '#{today}'/)
       expect(where_condition).to match(/event_dates.start_at <= '#{limit}'/)
@@ -109,22 +109,21 @@ describe Events::Filter::DateRange do
     end
   end
 
-  context 'with both since and until dates, it' do
+  context "with both since and until dates, it" do
     let(:params) do
       {
         filter: {
-          since: '13.04.2021',
-          until: '26.08.2021'
+          since: "13.04.2021",
+          until: "26.08.2021"
         }
       }
     end
 
-    it 'produces a scope that checks for the requested date-range' do
+    it "produces a scope that checks for the requested date-range" do
       expect(where_condition).to match(/event_dates.start_at <= '2021-08-26'/)
       expect(where_condition).to match(/event_dates.finish_at >= '2021-04-13'/)
       expect(where_condition).to match(/event_dates.start_at <= '2021-08-26'/)
       expect(where_condition).to match(/event_dates.start_at >= '2021-04-13'/)
     end
   end
-
 end

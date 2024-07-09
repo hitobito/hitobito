@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'date'
+require "date"
 
 # This is used by bin/version and integrated into it
 # with `rake bin/version`. The original lives in
@@ -32,13 +32,13 @@ class ReleaseVersion
     incrementor =
       case style.to_sym
       when :patch, :regular then method(:"next_#{style}_version")
-      when :custom then ->(_parts) { version.split('.').to_a }
+      when :custom then ->(_parts) { version.split(".").to_a }
       end
 
     current_version(:production)
-      .split('.')
+      .split(".")
       .then { |parts| incrementor[parts] }
-      .join('.')
+      .join(".")
   end
 
   def all_versions(stage = :production)
@@ -49,9 +49,9 @@ class ReleaseVersion
     cmd = [
       remote_lookup_cmd(repo),
       version_grep_cmd(stage),
-      'sort -Vr',
-      'head -n 1'
-    ].join(' | ')
+      "sort -Vr",
+      "head -n 1"
+    ].join(" | ")
 
     `#{cmd}`
   end
@@ -68,8 +68,8 @@ class ReleaseVersion
   end
 
   def next_regular_version(parts)
-    if parts[2] != '0' || days_since(parts.join('.')) > 7
-      [parts[0], parts[1].succ, '0']
+    if parts[2] != "0" || days_since(parts.join(".")) > 7
+      [parts[0], parts[1].succ, "0"]
     else
       parts
     end
@@ -94,13 +94,13 @@ class ReleaseVersion
       when :integration then [version_grep_pattern(stage), version_grep_pattern(:production)]
       end
 
-    "grep -E '(#{pattern.join('|')})'"
+    "grep -E '(#{pattern.join("|")})'"
   end
 
   def version_grep_pattern(stage)
     case stage
-    when :production  then '^[0-9][0-9.]+$' # 1.30.6
-    when :integration then '^[0-9][0-9.]+-[0-9]+.*$' # 1.30.6-26 or 1.30.6-123-33b8937
+    when :production then "^[0-9][0-9.]+$" # 1.30.6
+    when :integration then "^[0-9][0-9.]+-[0-9]+.*$" # 1.30.6-26 or 1.30.6-123-33b8937
     end
   end
 end

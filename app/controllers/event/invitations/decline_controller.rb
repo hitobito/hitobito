@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::Invitations::DeclineController < ApplicationController
-
   before_action :authorize_action
 
   def create
@@ -24,7 +23,7 @@ class Event::Invitations::DeclineController < ApplicationController
   private
 
   def declined_message
-    I18n.t('event_invitations.decline.flash.success')
+    I18n.t("event_invitations.decline.flash.success")
   end
 
   def withdraw_applications
@@ -34,7 +33,7 @@ class Event::Invitations::DeclineController < ApplicationController
   def entry
     @entry ||= event.invitations.find(params[:id])
   end
-  
+
   def event
     @event ||= group.events.find(params[:event_id])
   end

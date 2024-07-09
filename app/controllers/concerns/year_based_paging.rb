@@ -13,7 +13,7 @@ module YearBasedPaging
   private
 
   def year
-    @year ||= params[:year].to_i > 0 ? params[:year].to_i : default_year
+    @year ||= (params[:year].to_i > 0) ? params[:year].to_i : default_year
   end
 
   def year_range
@@ -21,8 +21,8 @@ module YearBasedPaging
   end
 
   def year_filter
-    date = Date.new(year, 1 , 1)
-    date.beginning_of_year..date.end_of_year
+    date = Date.new(year, 1, 1)
+    date.all_year
   end
 
   def default_year

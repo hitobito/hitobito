@@ -7,11 +7,10 @@
 
 # Common Base Class for fetching entities belonging to a group.
 class GroupBasedFetchables
-
   include CanCan::Ability
 
   class_attribute :same_group_permissions, :above_group_permissions,
-                  :same_layer_permissions, :above_layer_permissions
+    :same_layer_permissions, :above_layer_permissions
   self.same_group_permissions = []
   self.above_group_permissions = []
   self.same_layer_permissions = []
@@ -44,15 +43,15 @@ class GroupBasedFetchables
     groups_above_group.each do |group|
       condition.or("#{Group.quoted_table_name}.lft >= ? AND #{Group.quoted_table_name}.rgt <= ? " \
                    "AND #{Group.quoted_table_name}.layer_group_id = ?",
-                   group.lft, group.rgt,
-                   group.layer_group_id)
+        group.lft, group.rgt,
+        group.layer_group_id)
     end
   end
 
   def in_same_layer_condition(condition)
     if layer_groups_same_layer.present?
       condition.or("#{Group.quoted_table_name}.layer_group_id IN (?)",
-                   layer_groups_same_layer.collect(&:id))
+        layer_groups_same_layer.collect(&:id))
     end
   end
 
@@ -63,11 +62,11 @@ class GroupBasedFetchables
     collapse_groups_to_highest(layer_groups_above) do |layer_group|
       visible_from_above_groups.or("#{Group.quoted_table_name}.lft >= ? " \
                                    "AND #{Group.quoted_table_name}.rgt <= ?",
-                                   layer_group.lft, layer_group.rgt)
+        layer_group.lft, layer_group.rgt)
     end
 
     query = "(#{visible_from_above_groups.to_a.first}) AND roles.type IN (?)"
-    args = visible_from_above_groups.to_a[1..-1] + [Role.visible_types.collect(&:sti_name)]
+    args = visible_from_above_groups.to_a[1..] + [Role.visible_types.collect(&:sti_name)]
     condition.or(query, *args)
   end
 
@@ -76,9 +75,9 @@ class GroupBasedFetchables
 
     see_invisible_from_above_groups = OrCondition.new
     collapse_groups_to_highest(layer_groups_see_invisible_from_above) do |layer_group|
-      see_invisible_from_above_groups.or('groups.lft >= ? AND groups.rgt <= ?',
-                                      layer_group.left,
-                                      layer_group.rgt)
+      see_invisible_from_above_groups.or("groups.lft >= ? AND groups.rgt <= ?",
+        layer_group.left,
+        layer_group.rgt)
     end
 
     condition.or(*see_invisible_from_above_groups.to_a)
@@ -120,8 +119,7 @@ class GroupBasedFetchables
 
   def groups_with_permissions(*permissions)
     permissions.collect { |p| user.groups_with_permission(p) }
-               .flatten
-               .uniq
+      .flatten
+      .uniq
   end
-
 end

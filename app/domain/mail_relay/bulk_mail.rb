@@ -4,17 +4,15 @@
 #  https://github.com/hitobito/hitobito.
 
 module MailRelay
-
   class BulkMail
-
     attr_accessor :headers
 
     BULK_SIZE = Settings.email.bulk_mail.bulk_size
     BATCH_TIMEOUT = Settings.email.bulk_mail.batch_timeout
     RETRY_AFTER_ERROR = [5.minutes, 10.minutes].freeze
-    INVALID_EMAIL_ERRORS = ['Domain not found',
-                            'Recipient address rejected',
-                            'Bad sender address syntax'].freeze
+    INVALID_EMAIL_ERRORS = ["Domain not found",
+      "Recipient address rejected",
+      "Bad sender address syntax"].freeze
 
     def initialize(message, envelope_sender, delivery_report_to, recipients)
       @message = message
@@ -117,7 +115,7 @@ module MailRelay
     def validate(recipients)
       valid, invalid = recipients.group_by { |r| Truemail.valid?(r) }.values
       invalid&.each do |r|
-        @failed_recipients << [r, 'invalid e-mail address']
+        @failed_recipients << [r, "invalid e-mail address"]
       end
       valid
     end
@@ -155,10 +153,10 @@ module MailRelay
     def delivery_report_mail
       DeliveryReportMailer
         .bulk_mail(@delivery_report_to, @envelope_sender, @message.subject.to_s,
-                   @success_count, Time.zone.now, @failed_recipients)
+          @success_count, Time.zone.now, @failed_recipients)
         .deliver_now
     rescue => e
-      log_info('Delivery report for bulk mail to ' \
+      log_info("Delivery report for bulk mail to " \
                "#{@delivery_report_to} could not be delivered: #{e.message}")
       raise e unless Rails.env.production?
     end
@@ -180,6 +178,5 @@ module MailRelay
         @message[k] = v
       end
     end
-
   end
 end

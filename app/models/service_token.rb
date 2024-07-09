@@ -27,7 +27,7 @@
 class ServiceToken < ActiveRecord::Base
   include I18nEnums
 
-  belongs_to :layer, class_name: 'Group', foreign_key: :layer_group_id
+  belongs_to :layer, class_name: "Group", foreign_key: :layer_group_id
   has_many :cors_origins, as: :auth_method, dependent: :delete_all
   accepts_nested_attributes_for :cors_origins, allow_destroy: true
 
@@ -35,18 +35,18 @@ class ServiceToken < ActiveRecord::Base
 
   devise :timeoutable
 
-  validates :token, uniqueness: { case_sensitive: false }, presence: true
-  validates :name, uniqueness: { scope: :layer_group_id, case_sensitive: false }, presence: true
+  validates :token, uniqueness: {case_sensitive: false}, presence: true
+  validates :name, uniqueness: {scope: :layer_group_id, case_sensitive: false}, presence: true
   validates_by_schema
 
   def to_s
     name
   end
 
-  PERMISSIONS = %w(layer_read
-                   layer_and_below_read
-                   layer_full
-                   layer_and_below_full)
+  PERMISSIONS = %w[layer_read
+    layer_and_below_read
+    layer_full
+    layer_and_below_full]
 
   i18n_enum :permission, PERMISSIONS, queries: true
 
@@ -73,5 +73,4 @@ class ServiceToken < ActiveRecord::Base
       end
     end
   end
-
 end

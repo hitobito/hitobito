@@ -7,8 +7,8 @@ module Stampable
   extend ActiveSupport::Concern
 
   included do
-    before_action  :set_stamper
-    after_action   :reset_stamper
+    before_action :set_stamper
+    after_action :reset_stamper
   end
 
   private

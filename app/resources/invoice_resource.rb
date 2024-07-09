@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class InvoiceResource < ApplicationResource
-  primary_endpoint 'invoices', [:index, :show, :update]
+  primary_endpoint "invoices", [:index, :show, :update]
 
   with_options filterable: false, sortable: false do
     attribute :title, :string

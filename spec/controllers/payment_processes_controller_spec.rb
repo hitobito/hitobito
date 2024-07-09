@@ -3,53 +3,51 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
-
+require "spec_helper"
 
 describe PaymentProcessesController do
-
-  let(:invoice)        { invoices(:sent) }
-  let(:group)          { invoice.group }
+  let(:invoice) { invoices(:sent) }
+  let(:group) { invoice.group }
 
   before { sign_in(people(:bottom_member)) }
 
-  it 'GET#new renders fileupload prompt' do
-    get :new, params: { group_id: group.id }
+  it "GET#new renders fileupload prompt" do
+    get :new, params: {group_id: group.id}
     expect(response).to be_successful
   end
 
-  it 'POST#create redirects if file has wrong media_type' do
-    post :create, params: { group_id: group.id, payment_process: { file: file(media_type: 'text/plain') } }
+  it "POST#create redirects if file has wrong media_type" do
+    post :create, params: {group_id: group.id, payment_process: {file: file(media_type: "text/plain")}}
     expect(response).to redirect_to new_group_payment_process_path(group)
     expect(flash[:alert]).to be_present
   end
 
-  it 'POST#create redirects if file has bad payload' do
-    post :create, params: { group_id: group.id, payment_process: { file: file(path: xmlfile('FI_camt_053_sample')) } }
+  it "POST#create redirects if file has bad payload" do
+    post :create, params: {group_id: group.id, payment_process: {file: file(path: xmlfile("FI_camt_053_sample"))}}
     expect(response).to redirect_to new_group_payment_process_path(group)
     expect(flash[:alert]).to be_present
   end
 
-  it 'POST#create handles files with only one entry' do
-    post :create, params: { group_id: group.id, payment_process: { file: file(path: xmlfile('FI_camt_single_entry')) } }
+  it "POST#create handles files with only one entry" do
+    post :create, params: {group_id: group.id, payment_process: {file: file(path: xmlfile("FI_camt_single_entry"))}}
     expect(response).to be_successful
     expect(flash[:alert]).to be_blank
     expect(flash[:notice]).to be_blank
   end
 
-  it 'POST#create with file informs about valid and invalid payments' do
-    invoice.update_columns(reference: '000000000000100000000000905')
-    post :create, params: { group_id: group.id, payment_process: { file: file } }
+  it "POST#create with file informs about valid and invalid payments" do
+    invoice.update_columns(reference: "000000000000100000000000905")
+    post :create, params: {group_id: group.id, payment_process: {file: file}}
     expect(response).to be_successful
     expect(flash[:alert]).to_not be_present
     expect(flash[:notice]).to eq "Es wurde eine gültige Zahlung mit dazugehöriger Rechnung erkannt.\n" \
-                                 'Es wurden 4 gültige Zahlungen ohne dazugehörige Rechnungen erkannt.'
+                                 "Es wurden 4 gültige Zahlungen ohne dazugehörige Rechnungen erkannt."
   end
 
-  it 'POST#create with data persists valid payments' do
-    invoice.update_columns(reference: '000000000000100000000000905')
+  it "POST#create with data persists valid payments" do
+    invoice.update_columns(reference: "000000000000100000000000905")
     expect do
-      post :create, params: { group_id: group.id, data: xmlfile.read }
+      post :create, params: {group_id: group.id, data: xmlfile.read}
     end.to change { invoice.payments.count }.by(1)
     expect(response).to redirect_to group_invoices_path(group)
     expect(invoice.reload).to be_payed
@@ -57,12 +55,11 @@ describe PaymentProcessesController do
 
   private
 
-  def file(path: xmlfile, media_type:  'text/xml')
+  def file(path: xmlfile, media_type: "text/xml")
     Rack::Test::UploadedFile.new(path, media_type)
   end
 
-  def xmlfile(name = 'camt.054-ESR-ASR_T_CH0209000000857876452_378159670_0_2018031411011923')
+  def xmlfile(name = "camt.054-ESR-ASR_T_CH0209000000857876452_378159670_0_2018031411011923")
     Rails.root.join("spec/fixtures/invoices/#{name}.xml")
   end
-
 end

@@ -80,7 +80,7 @@ class FeatureGate
   end
 
   def enabled?(feature)
-    return send("#{feature}_enabled?") if respond_to?("#{feature}_enabled?", true)
+    return send(:"#{feature}_enabled?") if respond_to?(:"#{feature}_enabled?", true)
 
     read_config(feature, @settings)[:enabled]
   end
@@ -88,7 +88,7 @@ class FeatureGate
   private
 
   def read_config(feature, settings)
-    config = feature.split('.').reduce(settings) do |acc, property|
+    config = feature.split(".").reduce(settings) do |acc, property|
       acc.try(property)
     end
 
@@ -101,7 +101,7 @@ class FeatureGate
   def person_language_enabled?
     # some rake tasks run without db present, so make sure
     # this doesn't fail in those cases
-    ActiveRecord::Base.connection.table_exists?('people') &&
+    ActiveRecord::Base.connection.table_exists?("people") &&
       !Person.has_attribute?(:correspondence_language)
   end
 
@@ -112,6 +112,6 @@ class FeatureGate
   def structured_addresses_enabled? = true
 
   def address_migration_enabled?
-    ENV['RAILS_ADDRESS_MIGRATION'].to_s == '1'
+    ENV["RAILS_ADDRESS_MIGRATION"].to_s == "1"
   end
 end

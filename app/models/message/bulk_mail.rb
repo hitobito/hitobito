@@ -55,5 +55,4 @@ class Message::BulkMail < Message
   def generate_uid
     self.uid = SecureRandom.hex(8)
   end
-
 end

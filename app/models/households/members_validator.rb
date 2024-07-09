@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito
 
 class Households::MembersValidator < ActiveModel::Validator
-
   delegate :people, :members, to: :@household
 
   def validate(household)
@@ -32,5 +31,4 @@ class Households::MembersValidator < ActiveModel::Validator
       @household.warnings.add(:members, :household_address, address: household_address.oneline)
     end
   end
-
 end

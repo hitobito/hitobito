@@ -17,6 +17,14 @@ module Wizards
     end
     delegate :step_name, to: :class
 
+    def self.===(other)
+      if other.is_a?(Class)
+        self == other
+      else
+        step_name == other
+      end
+    end
+
     def initialize(wizard, **params)
       @wizard = wizard
       super(**params)

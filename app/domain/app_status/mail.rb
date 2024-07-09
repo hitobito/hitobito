@@ -6,22 +6,21 @@
 #  https://github.com/hitobito/hitobito.
 
 class AppStatus::Mail < AppStatus
+  CATCH_ALL_INBOX_OVERDUE = "catch-all mailbox contains overdue mails. " \
+                            "please make sure delayed job worker is running " \
+                            "and no e-mail is blocking the queue/job."
+  CATCH_ALL_INBOX_OK = "ok"
 
-  CATCH_ALL_INBOX_OVERDUE = 'catch-all mailbox contains overdue mails. ' \
-                            'please make sure delayed job worker is running ' \
-                            'and no e-mail is blocking the queue/job.'
-  CATCH_ALL_INBOX_OK = 'ok'
-
-  CATCH_ALL_INBOX_OVERDUE_TIME = ENV.fetch('RAILS_INBOX_OVERDUE_MINUTES', 42).to_i.minutes
+  CATCH_ALL_INBOX_OVERDUE_TIME = ENV.fetch("RAILS_INBOX_OVERDUE_MINUTES", 42).to_i.minutes
 
   def initialize
-    super()
+    super
 
     @catch_all_inbox = catch_all_inbox
   end
 
   def details
-    { catch_all_inbox: @catch_all_inbox }
+    {catch_all_inbox: @catch_all_inbox}
   end
 
   def code
@@ -91,7 +90,5 @@ class AppStatus::Mail < AppStatus
     def ==(other)
       mail_hash == other.mail_hash
     end
-
   end
-
 end

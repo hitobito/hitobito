@@ -5,13 +5,12 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'faker'
-require 'bcrypt'
-require 'csv-safe'
-
+require "faker"
+require "bcrypt"
+require "csv-safe"
 
 namespace :csv do
-  desc 'Generates dummy csv file'
+  desc "Generates dummy csv file"
   task :generate do # rubocop:disable Rails/RakeEnvironment
     csv_string = CSVSafe.generate do |csv|
       csv << person_attributes.keys
@@ -19,9 +18,8 @@ namespace :csv do
         csv << enhance(person_attributes).values
       end
     end
-    File.write('dummy.csv', csv_string)
+    File.write("dummy.csv", csv_string)
   end
-
 
   # rubocop:disable Rails/TimeZone
   def random_date
@@ -44,7 +42,7 @@ namespace :csv do
       housenumber: Faker::Address.building_number,
       zip_code: Faker::Address.zip_code,
       town: Faker::Address.city,
-      gender: %w(m w).sample,
+      gender: %w[m w].sample,
       birthday: random_date.to_s,
       phone_number_andere: Faker::PhoneNumber.phone_number,
       phone_number_arbeit: Faker::PhoneNumber.phone_number,
@@ -72,7 +70,7 @@ namespace :csv do
       when 0 then hash[k] = "#{v} "
       when 1 then hash[k] = " #{v}"
       when 2 then hash[k] = " #{v} "
-      when 3 then hash[k] = (v[v.size / 2] = 'ä'; v) # rubocop:disable Style/Semicolon
+      when 3 then hash[k] = (v[v.size / 2] = "ä"; v) # rubocop:disable Style/Semicolon
       when 4, 5 then hash[k] = nil
       end
       hash

@@ -8,7 +8,6 @@
 # The search functionality for the index table.
 # Extracted into an own module for convenience.
 module Searchable
-
   extend ActiveSupport::Concern
 
   included do
@@ -23,11 +22,10 @@ module Searchable
 
   # Prepended methods for searching.
   module Prepends
-
     private
 
     def search_param
-      return '' unless params.key?(search_key)
+      return "" unless params.key?(search_key)
 
       params[search_key].to_s.strip
     end
@@ -52,7 +50,6 @@ module Searchable
     def search_support?
       search_columns.present?
     end
-
   end
 
   # Included methods for searching.
@@ -64,18 +61,15 @@ module Searchable
 
   # Class methods for Searchable.
   module ClassMethods
-
     # All search columns divided in table and field names.
     def search_tables_and_fields
       @search_tables_and_fields ||= search_columns.map do |f|
-        if f.to_s.include?('.')
+        if f.to_s.include?(".")
           f
         else
           "#{model_class.table_name}.#{f}"
         end
       end
     end
-
   end
-
 end

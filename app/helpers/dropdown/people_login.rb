@@ -7,7 +7,6 @@
 
 module Dropdown
   class PeopleLogin < Base
-
     attr_reader :user
 
     def initialize(template, user, options = {})
@@ -18,7 +17,7 @@ module Dropdown
     end
 
     def to_s
-      return '' if items.blank?
+      return "" if items.blank?
 
       super
     end
@@ -37,49 +36,49 @@ module Dropdown
     def send_login
       if template.can?(:send_password_instructions, @user) &&
           @user.email && (@user.roles.any? || @user.root?)
-        add_item(translate('.send_login'),
-                 template.send_password_instructions_group_person_path(template.parent, @user),
-                 method: :post,
-                 'data-bs-toggle': 'tooltip',
-                 'data-bs-container': 'body',
-                 'data-bs-html': 'true',
-                 title: template.send_login_tooltip_text,
-                 remote: true)
+        add_item(translate(".send_login"),
+          template.send_password_instructions_group_person_path(template.parent, @user),
+          method: :post,
+          "data-bs-toggle": "tooltip",
+          "data-bs-container": "body",
+          "data-bs-html": "true",
+          title: template.send_login_tooltip_text,
+          remote: true)
       end
     end
 
     def update_password
       if @user == template.current_user && template.can?(:update_password, @user)
-        add_item(I18n.t('devise.registrations.edit.change_password'),
-                 template.edit_person_registration_path)
+        add_item(I18n.t("devise.registrations.edit.change_password"),
+          template.edit_person_registration_path)
       end
     end
 
     def activate_totp
       if @user == template.current_user && !@user.two_factor_authentication_registered?
-        add_item(translate('.activate_totp'),
-                 template.new_users_second_factor_path(second_factor: 'totp'))
+        add_item(translate(".activate_totp"),
+          template.new_users_second_factor_path(second_factor: "totp"))
       end
     end
 
     def reset_totp
       if @user.two_factor_authentication_registered? && template.can?(:totp_reset, @user)
-        add_item(translate('.reset_totp'),
-                 template.totp_reset_group_person_path, method: :post)
+        add_item(translate(".reset_totp"),
+          template.totp_reset_group_person_path, method: :post)
       end
     end
 
     def disable_totp
       if @user.two_factor_authentication_registered? && template.can?(:totp_disable, @user)
-        add_item(translate('.disable_totp'),
-                 template.totp_disable_group_person_path, method: :post)
+        add_item(translate(".disable_totp"),
+          template.totp_disable_group_person_path, method: :post)
       end
     end
 
     def unblock_person
       if @user.blocked? && template.can?(:update, @user)
-        add_item(translate('.unblock_person'),
-                 template.unblock_group_person_path(template.parent, @user), method: :post)
+        add_item(translate(".unblock_person"),
+          template.unblock_group_person_path(template.parent, @user), method: :post)
       end
     end
   end

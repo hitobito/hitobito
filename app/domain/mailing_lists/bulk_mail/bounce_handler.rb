@@ -7,7 +7,6 @@
 
 module MailingLists::BulkMail
   class BounceHandler
-
     MAX_BOUNCE_AGE = 24.hours
 
     def initialize(imap_mail, bulk_mail_bounce, mailing_list)
@@ -23,7 +22,7 @@ module MailingLists::BulkMail
       end
 
       @bulk_mail_bounce.update!(bounce_parent: source_message,
-                                raw_source: @imap_mail.raw_source)
+        raw_source: @imap_mail.raw_source)
       log_info("Forwarding bounce message for list #{@mailing_list.mail_address} " \
                "to #{source_message.mail_from}")
       MailingLists::BulkMail::BounceMessageForwardJob.new(@bulk_mail_bounce).enqueue!
@@ -60,6 +59,5 @@ module MailingLists::BulkMail
       @bulk_mail_bounce.mail_log.update!(status: :bounce_rejected)
       @bulk_mail_bounce.destroy!
     end
-
   end
 end

@@ -9,7 +9,7 @@ module Messages::Errors
   class MailProcessedBefore < StandardError
     def initialize(mail_log)
       msg = "Mail with subject '#{mail_log.message.subject}' has already been " \
-            'processed before. It has been moved to the failed folder. Please ' \
+            "processed before. It has been moved to the failed folder. Please " \
             "check why it could not be processed.\n" \
             "Mail Hash: #{mail_log.mail_hash}"
 

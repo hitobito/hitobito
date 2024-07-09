@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class People::Destroyer
-
   def initialize(person)
     @person = person
   end
@@ -31,15 +30,15 @@ class People::Destroyer
 
   def nullify_invoices!
     Invoice.where(recipient: @person).update(recipient_email: @person.email,
-                                             recipient_address: invoice_address,
-                                             recipient: nil)
+      recipient_address: invoice_address,
+      recipient: nil)
     Invoice.where(creator: @person).update(creator: nil)
   end
 
   def leftover_family_members
     FamilyMember.where(family_key: @person.family_members.pluck(:family_key))
-                .having('COUNT(*) <= 2')
-                .group(:family_key)
+      .having("COUNT(*) <= 2")
+      .group(:family_key)
   end
 
   def leftover_household_person
@@ -49,5 +48,4 @@ class People::Destroyer
   def invoice_address
     Person::Address.new(@person).for_invoice
   end
-
 end

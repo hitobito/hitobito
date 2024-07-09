@@ -5,16 +5,16 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Address::ImportJob do
   include ActiveJob::TestHelper
 
   let(:job) { Address::ImportJob.new }
 
-  context 'when configured' do
-    it 'runs importer' do
-      expect(Settings.addresses).to receive(:url).and_return('https://addresses-archive.example.com')
+  context "when configured" do
+    it "runs importer" do
+      expect(Settings.addresses).to receive(:url).and_return("https://addresses-archive.example.com")
       expect(Settings.addresses).to receive(:token).and_return(SecureRandom.urlsafe_base64)
 
       importer = double
@@ -25,19 +25,19 @@ describe Address::ImportJob do
     end
   end
 
-  context 'when url not configured' do
-    it 'does not run importer' do
-      expect(Settings.addresses).to receive(:url).and_return('')
+  context "when url not configured" do
+    it "does not run importer" do
+      expect(Settings.addresses).to receive(:url).and_return("")
 
       expect(Address::Importer).to_not receive(:new)
 
       job.perform
     end
   end
-  
-  context 'when token not configured' do
-    it 'does not run importer' do
-      expect(Settings.addresses).to receive(:token).and_return('')
+
+  context "when token not configured" do
+    it "does not run importer" do
+      expect(Settings.addresses).to receive(:token).and_return("")
 
       expect(Address::Importer).to_not receive(:new)
 

@@ -20,11 +20,11 @@ class Event::ListsController < ApplicationController
   private
 
   def upcoming_user_events
-    Event.
-      upcoming.
-      in_hierarchy(current_user).
-      includes(:dates, :groups).
-      where('events.type != ? OR events.type IS NULL', Event::Course.sti_name).
-      order('event_dates.start_at ASC')
+    Event
+      .upcoming
+      .in_hierarchy(current_user)
+      .includes(:dates, :groups)
+      .where("events.type != ? OR events.type IS NULL", Event::Course.sti_name)
+      .order("event_dates.start_at ASC")
   end
 end

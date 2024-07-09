@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class People::CleanupFinder
-
   def run
     people_to_cleanup_scope.distinct
   end
@@ -15,7 +14,7 @@ class People::CleanupFinder
 
   def people_to_cleanup_scope
     base_scope
-      .joins('LEFT JOIN roles ON roles.person_id = people.id')
+      .joins("LEFT JOIN roles ON roles.person_id = people.id")
       .then { |scope| without_any_roles_or_with_roles_outside_cutoff(scope) }
       .then { |scope| without_participating_in_future_events(scope) }
       .then { |scope| with_current_sign_in_at_outside_cutoff(scope) }
@@ -23,7 +22,7 @@ class People::CleanupFinder
 
   def base_scope
     Person.where.not(id: Person.root.id)
-          .where(minimized_at: nil)
+      .where(minimized_at: nil)
   end
 
   def no_roles_exist
@@ -31,7 +30,7 @@ class People::CleanupFinder
   end
 
   def any_roles
-    Role.with_deleted.where('roles.person_id = people.id')
+    Role.with_deleted.where("roles.person_id = people.id")
   end
 
   def without_any_roles_or_with_roles_outside_cutoff(scope)
@@ -43,8 +42,8 @@ class People::CleanupFinder
   end
 
   def with_roles_outside_cutoff(scope)
-    scope.where(id: Role.with_deleted.having('MAX(roles.deleted_at) <= ?', last_role_deleted_at)
-                        .group('person_id')
+    scope.where(id: Role.with_deleted.having("MAX(roles.deleted_at) <= ?", last_role_deleted_at)
+                        .group("person_id")
                         .pluck(:person_id)) # rubocop:disable Rails/PluckInWhere
   end
 
@@ -53,8 +52,8 @@ class People::CleanupFinder
   end
 
   def with_current_sign_in_at_outside_cutoff(scope)
-    scope.where('people.current_sign_in_at <= ? OR people.current_sign_in_at IS NULL',
-                current_sign_in_at)
+    scope.where("people.current_sign_in_at <= ? OR people.current_sign_in_at IS NULL",
+      current_sign_in_at)
   end
 
   def last_role_deleted_at
@@ -62,14 +61,14 @@ class People::CleanupFinder
   end
 
   def people_without_any_roles
-    base_scope.where.not(id: Role.with_deleted.pluck(:person_id)).distinct
+    base_scope.where.not(id: Role.with_deleted.select(:person_id)).distinct
   end
 
   def not_participating_in_future_events
     Event
       .joins(:dates, :participations)
-      .where('event_dates.start_at > :now OR event_dates.finish_at > :now', now: Time.zone.now)
-      .where('event_participations.person_id = people.id').arel.exists.not
+      .where("event_dates.start_at > :now OR event_dates.finish_at > :now", now: Time.zone.now)
+      .where("event_participations.person_id = people.id").arel.exists.not
   end
 
   def current_sign_in_at

@@ -4,16 +4,15 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::InvoicesController < ListController
-
-  self.sort_mappings = { recipient: Person.order_by_name_statement }
+  self.sort_mappings = {recipient: Person.order_by_name_statement}
   self.search_columns = [:title, :sequence_number]
 
   private
 
   def list_entries
-    scope = Invoice.includes(:group).
-      where(search_conditions).
-      joins(:recipient).where(recipient: person).list
+    scope = Invoice.includes(:group)
+      .where(search_conditions)
+      .joins(:recipient).where(recipient: person).list
 
     scope = scope.page(params[:page]).per(50)
     Invoice::Filter.new(params).apply(scope)
@@ -30,5 +29,4 @@ class Person::InvoicesController < ListController
   def authorize_class
     authorize!(:index_invoices, person)
   end
-
 end

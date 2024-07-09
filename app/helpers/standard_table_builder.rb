@@ -17,7 +17,7 @@ class StandardTableBuilder
 
   # Delegate called methods to template.
   delegate :content_tag, :format_attr, :column_type, :association, :dom_id,
-           :captionize, :add_css_class, :content_tag_nested, to: :template
+    :captionize, :add_css_class, :content_tag_nested, to: :template
 
   def initialize(entries, template, options = {})
     @entries = entries
@@ -38,7 +38,7 @@ class StandardTableBuilder
   # Define a column for the table with the given header, the html_options used for
   # each td and a block rendering the contents of a cell for the current entry.
   # The columns appear in the order they are defined.
-  def col(header = '', html_options = {}, &block)
+  def col(header = "", html_options = {}, &block)
     @cols << Col.new(header, html_options, @template, block)
   end
 
@@ -65,7 +65,7 @@ class StandardTableBuilder
   def to_html
     content_tag :table, options do
       content_tag(:thead, html_header) +
-      content_tag_nested(:tbody, entries) { |e| html_row(e) }
+        content_tag_nested(:tbody, entries) { |e| html_row(e) }
     end
   end
 
@@ -75,9 +75,9 @@ class StandardTableBuilder
     entry = entry_class.respond_to?(:new) ? entry_class.new : nil
     case column_type(entry, attr)
     when :integer, :float, :decimal
-      'right' unless association(entry, attr, :belongs_to)
+      "right" unless association(entry, attr, :belongs_to)
     when :boolean
-      'center'
+      "center"
     end
   end
 
@@ -108,12 +108,11 @@ class StandardTableBuilder
   end
 
   # Helper class to store column information.
-  Col = Struct.new(:header, :html_options, :template, :block) do #:nodoc:
-
+  Col = Struct.new(:header, :html_options, :template, :block) do # :nodoc:
     delegate :content_tag, to: :template
 
     def content(entry)
-      entry.nil? ? '' : template.capture(entry, &block)
+      entry.nil? ? "" : template.capture(entry, &block)
     end
 
     def html_header
@@ -123,7 +122,6 @@ class StandardTableBuilder
     def html_cell(entry)
       content_tag :td, content(entry), html_options
     end
-
   end
 
   # Provides headers with sort links. Expects a method :sortable?(attr)
@@ -160,9 +158,9 @@ class StandardTableBuilder
     # The sort mark, if any, for the given attribute.
     def current_mark(attr)
       if current_sort?(attr)
-        (sort_dir(attr) == 'asc' ? ' &uarr;' : ' &darr;').html_safe # rubocop:disable Rails/OutputSafety
+        ((sort_dir(attr) == "asc") ? " &uarr;" : " &darr;").html_safe # rubocop:disable Rails/OutputSafety
       else
-        ''
+        ""
       end
     end
 
@@ -173,7 +171,7 @@ class StandardTableBuilder
 
     # The sort direction to use in the sort link for the given attribute.
     def sort_dir(attr)
-      current_sort?(attr) && params[:sort_dir] == 'asc' ? 'desc' : 'asc'
+      (current_sort?(attr) && params[:sort_dir] == "asc") ? "desc" : "asc"
     end
 
     # Delegate to template.
@@ -183,5 +181,4 @@ class StandardTableBuilder
   end
 
   include Sorting
-
 end

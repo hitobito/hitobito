@@ -6,7 +6,6 @@
 # https ://github.com/hitobito/hitobito.
 
 module RenderTableDisplays
-
   def list_entries
     add_table_display_to_query(super, current_person)
   end
@@ -25,9 +24,9 @@ module RenderTableDisplays
   def table_display_joins(person)
     TableDisplay.active_columns_for(person, model_class).map do |column|
       person
-          .table_display_for(model_class)
-          .column_for(column)
-          .required_model_joins(column)
+        .table_display_for(model_class)
+        .column_for(column)
+        .required_model_joins(column)
     end
   end
 
@@ -40,11 +39,10 @@ module RenderTableDisplays
   def table_display_selects(person)
     TableDisplay.active_columns_for(person, model_class).flat_map do |column|
       person
-          .table_display_for(model_class)
-          .column_for(column)
-          .required_model_attrs(column)
-          .map(&:to_s)
+        .table_display_for(model_class)
+        .column_for(column)
+        .required_model_attrs(column)
+        .map(&:to_s)
     end
   end
-
 end

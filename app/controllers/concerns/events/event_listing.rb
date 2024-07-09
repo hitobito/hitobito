@@ -17,9 +17,9 @@ module Events::EventListing
   private
 
   def grouped(scope, grouping = DEFAULT_GROUPING)
-    EventDecorator.
-      decorate_collection(scope).
-      group_by(&grouping)
+    EventDecorator
+      .decorate_collection(scope)
+      .group_by(&grouping)
   end
 
   def nav_left

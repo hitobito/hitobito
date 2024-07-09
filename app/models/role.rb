@@ -30,10 +30,9 @@
 #
 
 class Role < ActiveRecord::Base
-
-  has_paper_trail meta: { main_id: ->(r) { r.person_id },
-                          main_type: Person.sti_name },
-                  skip: [:updated_at]
+  has_paper_trail meta: {main_id: ->(r) { r.person_id },
+                         main_type: Person.sti_name},
+    skip: [:updated_at]
 
   acts_as_paranoid
 
@@ -69,7 +68,7 @@ class Role < ActiveRecord::Base
   class_attribute :basic_permissions_only
   self.basic_permissions_only = false
 
-  FeatureGate.if('groups.nextcloud') do
+  FeatureGate.if("groups.nextcloud") do
     # Can be one of several types:
     #
     # String - Name of the nextcloud-group
@@ -92,7 +91,7 @@ class Role < ActiveRecord::Base
       end
 
       def to_h
-        { 'gid' => gid, 'displayName' => displayName }
+        {"gid" => gid, "displayName" => displayName}
       end
     end
   end
@@ -110,26 +109,25 @@ class Role < ActiveRecord::Base
   validates_by_schema
 
   validates_date :created_at,
-                 allow_blank: true,
-                 on_or_before: -> { Time.zone.today },
-                 on_or_before_message: :cannot_be_later_than_today
+    allow_blank: true,
+    on_or_before: -> { Time.zone.today },
+    on_or_before_message: :cannot_be_later_than_today
 
   validates_date :delete_on,
-                 allow_blank: true,
-                 on_or_after: ->(r) { [r.created_at&.to_date, Time.zone.today].compact.min },
-                 on_or_after_message: :must_be_later_than_created_at
+    allow_blank: true,
+    on_or_after: ->(r) { [r.created_at&.to_date, Time.zone.today].compact.min },
+    on_or_after_message: :must_be_later_than_created_at
 
   validate :assert_type_is_allowed_for_group, on: :create
 
   ### CALLBACKS
 
+  before_save :prevent_changes, if: :archived?
   after_create :set_contact_data_visible
   after_create :set_first_primary_group
+  after_create :reset_person_minimized_at
   after_destroy :reset_contact_data_visible
   after_destroy :reset_primary_group
-
-  after_create :reset_person_minimized_at
-  before_save :prevent_changes, if: :archived?
 
   ### SCOPES
 
@@ -137,8 +135,10 @@ class Role < ActiveRecord::Base
   scope :without_archived, -> { where(archived_at: nil) }
   scope :only_archived, -> { where.not(archived_at: nil).where(archived_at: ..Time.now.utc) }
   scope :future, -> { where(type: FutureRole.sti_name) }
-  scope :inactive, -> { with_deleted.where('deleted_at IS NOT NULL OR archived_at <= ?',
-                                           Time.now.utc) }
+  scope :inactive, -> {
+                     with_deleted.where("deleted_at IS NOT NULL OR archived_at <= ?",
+                       Time.now.utc)
+                   }
 
   ### CLASS METHODS
 
@@ -160,7 +160,7 @@ class Role < ActiveRecord::Base
       model_name += " (#{formatted_delete_date})" if delete_on
     end
     if format == :long
-      I18n.t('activerecord.attributes.role.string_long', role: model_name, group: group.to_s)
+      I18n.t("activerecord.attributes.role.string_long", role: model_name, group: group.to_s)
     else
       model_name
     end
@@ -192,7 +192,7 @@ class Role < ActiveRecord::Base
   # Overwritten setter to prevent direct assignment of terminated.
   # Use Roles::Termination instead.
   def terminated=(_value)
-    raise 'do not set terminated directly, use Roles::Termination instead'
+    raise "do not set terminated directly, use Roles::Termination instead"
   end
 
   def terminated_on
@@ -204,7 +204,7 @@ class Role < ActiveRecord::Base
   end
 
   def nextcloud_group
-    FeatureGate.assert!('groups.nextcloud')
+    FeatureGate.assert!("groups.nextcloud")
 
     info = nextcloud_group_details
 
@@ -212,7 +212,7 @@ class Role < ActiveRecord::Base
 
     case info
     when String then NextcloudGroup.new(info, info)
-    when Hash then NextcloudGroup.new(info['gid'], info['displayName'])
+    when Hash then NextcloudGroup.new(info["gid"], info["displayName"])
     end
   end
 
@@ -237,7 +237,7 @@ class Role < ActiveRecord::Base
   end
 
   def formatted_delete_date
-    [self.class.human_attribute_name('delete_on_in_name'), I18n.l(delete_on)].join(' ')
+    [self.class.human_attribute_name("delete_on_in_name"), I18n.l(delete_on)].join(" ")
   end
 
   private
@@ -251,13 +251,13 @@ class Role < ActiveRecord::Base
   end
 
   def nextcloud_group_details
-    return nil unless FeatureGate.enabled?('groups.nextcloud')
+    return nil unless FeatureGate.enabled?("groups.nextcloud")
 
     case (setting = self.class.nextcloud_group)
-    when String then { 'gid' => "hitobito-#{setting}", 'displayName' => setting }
-    when true   then { 'gid' => group_id.to_s,         'displayName' => group.name }
+    when String then {"gid" => "hitobito-#{setting}", "displayName" => setting}
+    when true then {"gid" => group_id.to_s, "displayName" => group.name}
     when Symbol then method(setting).call
-    when Proc   then setting.call(self)
+    when Proc then setting.call(self)
     end
   end
 
@@ -271,7 +271,7 @@ class Role < ActiveRecord::Base
   # If this role was the last one with contact_data permission, remove the flag from the person
   def reset_contact_data_visible
     if permissions.include?(:contact_data) &&
-       !person.roles.collect(&:permissions).flatten.include?(:contact_data)
+        !person.roles.collect(&:permissions).flatten.include?(:contact_data)
       person.update_column :contact_data_visible, false # rubocop:disable Rails/SkipsModelValidations intentional
     end
   end
@@ -306,10 +306,10 @@ class Role < ActiveRecord::Base
   end
 
   def prevent_changes
-    allowed = %w(archived_at updater_id)
+    allowed = %w[archived_at updater_id]
     only_archival = changes
-                    .reject { |_attr, (from, to)| from.blank? && to.blank? }
-                    .keys.all? { |key| allowed.include? key }
+      .reject { |_attr, (from, to)| from.blank? && to.blank? }
+      .keys.all? { |key| allowed.include? key }
 
     raise ActiveRecord::ReadOnlyRecord unless new_record? || only_archival
   end

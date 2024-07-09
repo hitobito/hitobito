@@ -13,7 +13,8 @@ module People::MembershipVerification
   end
 
   # token should not be set manually
-  def membership_verify_token=(_value); end
+  def membership_verify_token=(_value)
+  end
 
   private
 
@@ -25,5 +26,4 @@ module People::MembershipVerification
     update_column(:membership_verify_token, token)
     token
   end
-
 end

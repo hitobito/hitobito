@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class MailchimpSynchronizationJob < BaseJob
-
   self.parameters = [:mailing_list_id]
 
   def initialize(mailing_list_id)
@@ -19,21 +18,21 @@ class MailchimpSynchronizationJob < BaseJob
   end
 
   def perform
-    return unless FeatureGate.enabled?('mailchimp')
+    return unless FeatureGate.enabled?("mailchimp")
 
     sync.perform
   end
 
   def success(_job)
     mailing_list.update(mailchimp_syncing: false,
-                        mailchimp_result: sync.result,
-                        mailchimp_last_synced_at: Time.zone.now)
+      mailchimp_result: sync.result,
+      mailchimp_last_synced_at: Time.zone.now)
   end
 
   def error(_job, exception)
     sync.result.exception = exception
     mailing_list.update(mailchimp_syncing: false,
-                        mailchimp_result: sync.result)
+      mailchimp_result: sync.result)
     super
   end
 

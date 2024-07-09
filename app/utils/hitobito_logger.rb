@@ -14,7 +14,7 @@ class HitobitoLogger
     HitobitoLogEntry.levels.keys
   end
 
-  delegate :categories, :levels, to: 'class'
+  delegate :categories, :levels, to: "class"
 
   levels.each do |level|
     # Log methods for each level
@@ -24,7 +24,7 @@ class HitobitoLogger
 
     # Log methods for each level which replace matching log entries with a new one.
     # Matching means same level, category, message and subject, but payload can be different.
-    define_method "#{level}_replace" do |category, message, subject: nil, payload: nil|
+    define_method :"#{level}_replace" do |category, message, subject: nil, payload: nil|
       log_replace(level, category, message, subject, payload)
     end
   end

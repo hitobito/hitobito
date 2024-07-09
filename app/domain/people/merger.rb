@@ -7,7 +7,6 @@
 
 module People
   class Merger
-
     def initialize(source, target, actor)
       @source = source
       @target = target
@@ -35,7 +34,7 @@ module People
 
     def merge_contactables(assoc, key, match_label: false)
       @source.send(assoc).each do |c|
-        find_attrs = { key => c.send(key) }
+        find_attrs = {key => c.send(key)}
         find_attrs[:label] = c.label if match_label
         existing = @target.send(assoc).find_by(find_attrs)
         # do not merge invalid contactables
@@ -73,7 +72,7 @@ module People
       return if dst_value.present?
 
       src_value = @source.send(attr)
-      @target.send("#{attr}=", src_value)
+      @target.send(:"#{attr}=", src_value)
     end
 
     def attach_picture
@@ -85,10 +84,10 @@ module People
 
     def create_log_entry
       PaperTrail::Version.create!(main: @target,
-                                  item: @target,
-                                  whodunnit: @actor.id,
-                                  event: :person_merge,
-                                  object_changes: source_details)
+        item: @target,
+        whodunnit: @actor.id,
+        event: :person_merge,
+        object_changes: source_details)
     end
 
     def source_details
@@ -113,10 +112,10 @@ module People
       return {} if roles.empty?
 
       roles = roles.collect do |r|
-        "#{r} (#{r.group.with_layer.join(' / ')})"
+        "#{r} (#{r.group.with_layer.join(" / ")})"
       end
 
-      { roles: roles }
+      {roles: roles}
     end
 
     def role_attrs(src_role)

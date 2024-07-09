@@ -7,7 +7,7 @@
 
 class Person::NameResource < ApplicationResource
   self.model = ::Person
-  self.type = 'person-name'
+  self.type = "person-name"
 
   with_options writable: false, filterable: false, sortable: false do
     attribute :first_name, :string
@@ -19,9 +19,9 @@ class Person::NameResource < ApplicationResource
     eq do |scope, course_ids|
       scope
         .joins(event_participations: :roles)
-        .select('people.id, first_name, last_name, event_id AS leads_course_id')
-        .where(event_participations: { event_id: course_ids },
-               event_roles: { type: Event::Role::Leader.sti_name })
+        .select("people.id, first_name, last_name, event_id AS leads_course_id")
+        .where(event_participations: {event_id: course_ids},
+          event_roles: {type: Event::Role::Leader.sti_name})
     end
   end
 

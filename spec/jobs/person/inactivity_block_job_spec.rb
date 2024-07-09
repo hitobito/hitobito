@@ -5,13 +5,13 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Person::InactivityBlockJob do
   subject(:job) { described_class.new }
 
-  context '#perform' do
-    it 'calls Person::BlockService.block_within_scope!' do
+  context "#perform" do
+    it "calls Person::BlockService.block_within_scope!" do
       expect(Person::BlockService).to receive(:block_within_scope!)
       job.perform
     end

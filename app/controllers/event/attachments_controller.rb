@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::AttachmentsController < CrudController
-
   skip_authorize_resource
   before_action :authorize_action
 
@@ -24,7 +23,7 @@ class Event::AttachmentsController < CrudController
 
   private
 
-  alias event parent
+  alias_method :event, :parent
 
   def index_path
     group_event_path(*parents)
@@ -33,5 +32,4 @@ class Event::AttachmentsController < CrudController
   def authorize_action
     authorize!(:update, event)
   end
-
 end

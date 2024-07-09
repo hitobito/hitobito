@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Group::PersonAddRequestsController < ApplicationController
-
   before_action :authorize_action
 
   prepend_before_action :group
@@ -32,21 +31,21 @@ class Group::PersonAddRequestsController < ApplicationController
   private
 
   def load_entries
-    Person::AddRequest.
-      for_layer(group).
-      includes(:person,
-               requester: { roles: :group }).
-      merge(Person.order_by_name)
+    Person::AddRequest
+      .for_layer(group)
+      .includes(:person,
+        requester: {roles: :group})
+      .merge(Person.order_by_name)
   end
 
   def load_approvers
-    @possible_approvers = Person::AddRequest::IgnoredApprover.
-                            possible_approvers(group).
-                            includes(roles: :group).
-                            order_by_name
-    @ignored_approvers = Person::AddRequest::IgnoredApprover.
-                            where(group_id: group.id).
-                            pluck(:person_id)
+    @possible_approvers = Person::AddRequest::IgnoredApprover
+      .possible_approvers(group)
+      .includes(roles: :group)
+      .order_by_name
+    @ignored_approvers = Person::AddRequest::IgnoredApprover
+      .where(group_id: group.id)
+      .pluck(:person_id)
   end
 
   def show_status_notification?
@@ -84,5 +83,4 @@ class Group::PersonAddRequestsController < ApplicationController
   def authorize_action
     authorize!(:"#{action_name}_person_add_requests", group)
   end
-
 end

@@ -5,10 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-require 'spec_helper'
+require "spec_helper"
 
-describe 'mailing_lists/_list.html.haml' do
-
+describe "mailing_lists/_list.html.haml" do
   let(:entry) { mailing_lists(:leaders) }
 
   before do
@@ -18,15 +17,14 @@ describe 'mailing_lists/_list.html.haml' do
 
   subject { Capybara::Node::Simple.new(render) }
 
-  it 'renders name as link if current_user can update' do
+  it "renders name as link if current_user can update" do
     allow(view).to receive(:can?).with(:update, entry).and_return(true)
-    expect(subject).to have_selector 'td strong a', text: entry.name
+    expect(subject).to have_selector "td strong a", text: entry.name
   end
 
-  it 'renders name as text if current_user cannot update' do
+  it "renders name as text if current_user cannot update" do
     allow(view).to receive(:can?).with(:update, entry).and_return(false)
-    expect(subject).to have_selector 'td strong', text: entry.name
-    expect(subject).to have_no_selector 'td strong a', text: entry.name
+    expect(subject).to have_selector "td strong", text: entry.name
+    expect(subject).to have_no_selector "td strong a", text: entry.name
   end
-
 end

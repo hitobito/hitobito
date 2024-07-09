@@ -7,7 +7,7 @@
 
 module Messages
   class BulkMailDispatch
-    delegate :update, :success_count, :message_recipients, to: '@message'
+    delegate :update, :success_count, :message_recipients, to: "@message"
 
     DELIVERY_RETRIES = 2
     BULK_SIZE = Settings.email.bulk_mail.bulk_size
@@ -36,7 +36,7 @@ module Messages
 
     def check_message_state
       if @message.pending?
-        @message.update!(state: 'processing')
+        @message.update!(state: "processing")
       end
     end
 
@@ -51,7 +51,7 @@ module Messages
 
         message_recipients.where(id: succeeded).update_all(state: :sent)
         message_recipients.where(id: failed).update_all(state: :failed)
-      rescue BulkMail::Delivery::RetriesExceeded => e
+      rescue BulkMail::Delivery::RetriesExceeded
         abort_smtp_error
       end
     end
@@ -60,9 +60,9 @@ module Messages
       message_recipients
         .where
         .not(state: :sent)
-        .update_all(state: :failed, error: 'SMTP server error')
-      @message.update!(state: 'failed')
-      log 'SMTP server error, BulkMailDispatch aborted.'
+        .update_all(state: :failed, error: "SMTP server error")
+      @message.update!(state: "failed")
+      log "SMTP server error, BulkMailDispatch aborted."
     end
 
     def reschedule_unless_none_pending
@@ -78,8 +78,8 @@ module Messages
 
     def finish_dispatch
       unless @message.failed?
-        log 'All mails sent, BulkMailDispatch complete.'
-        @message.update!(state: 'finished', raw_source: nil)
+        log "All mails sent, BulkMailDispatch complete."
+        @message.update!(state: "finished", raw_source: nil)
       end
       send_delivery_report if send_delivery_report?
       DispatchResult.finished

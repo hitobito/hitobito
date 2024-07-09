@@ -21,7 +21,7 @@ module Export::Tabular::People
 
     def value_for(attr)
       column = table_display.column_for(attr)
-      unless column.present?
+      if column.blank?
         if entry.respond_to?(attr) || dynamic_attribute?(attr.to_s)
           return super
         end
@@ -40,6 +40,5 @@ module Export::Tabular::People
     def column_entry
       entry
     end
-
   end
 end

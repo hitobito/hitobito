@@ -5,11 +5,10 @@
 
 module Person::AddRequest::Creator
   class Event < Base
-
-    alias role entity
+    alias_method :role, :entity
 
     def required?
-      new_or_restricted? && super()
+      new_or_restricted? && super
     end
 
     def body
@@ -32,6 +31,5 @@ module Person::AddRequest::Creator
       roles = role.participation.roles - [role]
       roles.all? { |r| r.class.kind.nil? }
     end
-
   end
 end

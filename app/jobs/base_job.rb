@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class BaseJob
-
   # Define the instance variables defining this job instance.
   # Only these variables will be serizalized when a job is enqueued.
   # Used as airbrake information when the job fails.
@@ -39,7 +38,7 @@ class BaseJob
     logger.error(exception.message)
     logger.error(exception.backtrace.join("\n"))
     Airbrake.notify(exception, cgi_data: ENV.to_hash, parameters: payload)
-    Raven.capture_exception(exception, logger: 'delayed_job')
+    Raven.capture_exception(exception, logger: "delayed_job")
   end
 
   def delayed_jobs

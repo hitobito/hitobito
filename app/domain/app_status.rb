@@ -6,12 +6,11 @@
 #  https://github.com/hitobito/hitobito.
 
 class AppStatus
-
   class << self
     def auth_token
       @auth_token ||= begin
         token = Digest::SHA256.new.hexdigest(secret_key_base)
-        token[40..-1]
+        token[40..]
       end
     end
 
@@ -29,5 +28,4 @@ class AppStatus
   def code
     :service_unavailable
   end
-
 end

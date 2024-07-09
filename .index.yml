@@ -1,0 +1,7 @@
+# ruby-lsp configuration
+# Exclude files based on a given pattern. Often used to exclude test files or fixtures
+excluded_patterns:
+  - "**/spec/**/*.rb"
+
+excluded_gems:
+  - rubocop

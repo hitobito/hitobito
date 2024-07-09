@@ -24,9 +24,9 @@ module Paranoia
 
     module ClassMethods
       def list
-        with_translations.
-          order(:deleted_at, translated_label_column).
-          distinct
+        with_translations
+          .order(:deleted_at, translated_label_column)
+          .distinct
       end
     end
   end

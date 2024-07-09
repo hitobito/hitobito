@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe InvoiceLists::DestroysController, js: true do
   let(:layer) { groups(:top_layer) }
@@ -23,18 +23,18 @@ describe InvoiceLists::DestroysController, js: true do
   end
 
   let!(:invoice_list) do
-    InvoiceList.create(title: 'membership fee', invoices: draft_invoices, group: layer)
+    InvoiceList.create(title: "membership fee", invoices: draft_invoices, group: layer)
   end
 
   let(:user) { people(:top_leader) }
-  let(:table) { page.all('table')[0] }
-  let(:modal) { page.find('#invoice-list-destroy') }
+  let(:table) { page.all("table")[0] }
+  let(:modal) { page.find("#invoice-list-destroy") }
   let(:destroy_link) { table.find('td a[title="Löschen"]') }
 
   before { sign_in(user) }
 
-  context 'for invoice list with only draft invoices' do
-    it 'shows modal with confirm text' do
+  context "for invoice list with only draft invoices" do
+    it "shows modal with confirm text" do
       visit group_invoice_lists_path(layer)
 
       expect(table).to have_content(/membership fee/)
@@ -43,15 +43,15 @@ describe InvoiceLists::DestroysController, js: true do
 
       expect do
         modal.find('button[type="submit"]').click
-        expect(page).to have_css('#flash .alert-success', text: "Sammelrechnung membership fee wurde erfolgreich gelöscht.")
+        expect(page).to have_css("#flash .alert-success", text: "Sammelrechnung membership fee wurde erfolgreich gelöscht.")
       end.to change { InvoiceList.count }.by(-1)
     end
   end
 
-  context 'for invoice list with not only draft invoices' do
+  context "for invoice list with not only draft invoices" do
     before { draft_invoices.sample.update!(state: :sent) }
 
-    it 'shows modal with confirm text' do
+    it "shows modal with confirm text" do
       visit group_invoice_lists_path(layer)
 
       expect(table).to have_content(/membership fee/)

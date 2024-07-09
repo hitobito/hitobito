@@ -7,10 +7,10 @@
 
 module PersonDuplicates
   class MergeController < ApplicationController
-
     before_action :authorize_action
 
-    def new; end
+    def new
+    end
 
     def create
       PersonDuplicate.transaction do
@@ -32,11 +32,11 @@ module PersonDuplicates
     end
 
     def dst_person_2?
-      params[:person_duplicate][:dst_person].eql?('person_2')
+      params[:person_duplicate][:dst_person].eql?("person_2")
     end
 
     def success_message
-      I18n.t('person_duplicates.merge.success')
+      I18n.t("person_duplicates.merge.success")
     end
 
     def entry
@@ -51,6 +51,5 @@ module PersonDuplicates
     def group
       @group ||= Group.find(params[:group_id])
     end
-
   end
 end

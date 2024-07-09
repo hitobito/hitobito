@@ -15,7 +15,7 @@ module People::SelfRegistrationReasons
 
     belongs_to :self_registration_reason, optional: true
 
-    validate :assert_self_registration_reason_either_preset_or_custom, 
+    validate :assert_self_registration_reason_either_preset_or_custom,
       if: :self_registration_reason_enabled?
   end
 

@@ -33,15 +33,15 @@ module MountedAttr
   end
 
   def mounted_attr_cached?(attr_name)
-    instance_variable_defined?("@#{attr_name}")
+    instance_variable_defined?(:"@#{attr_name}")
   end
 
   def mounted_attr_cached_value(attr_name)
-    instance_variable_get("@#{attr_name}")
+    instance_variable_get(:"@#{attr_name}")
   end
 
   def mounted_attr_cache_value(attr_name, value)
-    instance_variable_set("@#{attr_name}", value)
+    instance_variable_set(:"@#{attr_name}", value)
   end
 
   def mounted_attr_value(attr_name)
@@ -58,7 +58,6 @@ module MountedAttr
   end
 
   module ClassMethods
-
     cattr_reader :mounted_attr_registry
     @@mounted_attr_registry = ::MountedAttributes::Registry.new
 
@@ -100,7 +99,7 @@ module MountedAttr
     end
 
     def define_mounted_attr_setter(config)
-      define_method("#{config.attr_name}=") do |value|
+      define_method(:"#{config.attr_name}=") do |value|
         mounted_attr_cache_value(config.attr_name, value)
       end
     end
@@ -108,7 +107,7 @@ module MountedAttr
     # This is used to determine the type of the attribute in the template.
     # See `UtilityHelper#column_type`
     def define_mounted_attr_type_lookup_method(config)
-      define_method("#{config.attr_name}_type") do
+      define_method(:"#{config.attr_name}_type") do
         config.attr_type
       end
     end
@@ -117,19 +116,19 @@ module MountedAttr
       class_eval do
         unless config.null
           if config.attr_type == :boolean
-            validates config.attr_name, inclusion: { in: [true, false], message: :blank }
+            validates config.attr_name, inclusion: {in: [true, false], message: :blank}
           else
             validates config.attr_name, presence: true
           end
         end
 
         if config.enum.present?
-          validates config.attr_name, inclusion: { in: config.enum }, allow_nil: config.null
+          validates config.attr_name, inclusion: {in: config.enum}, allow_nil: config.null
         end
 
         if config.default.present?
           before_validation do |e|
-            e.send("#{config.attr_name}=", config.default) if e.send(config.attr_name).nil?
+            e.send(:"#{config.attr_name}=", config.default) if e.send(config.attr_name).nil?
           end
         end
       end

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::ParticipationNotificationJob < BaseJob
-
   self.parameters = [:participation_id, :locale]
 
   def initialize(participation)
@@ -27,12 +26,12 @@ class Event::ParticipationNotificationJob < BaseJob
     return unless notify_contact?(participation.event)
 
     Event::ParticipationMailer.notify_contact(participation,
-                                              participation.event.contact).deliver_now
+      participation.event.contact).deliver_now
   rescue StandardError => exception
     # Log more explicitly here to help debugging NoMethodError
     Raven.capture_exception(exception,
-                            logger: 'participation_notification',
-                            extra: { event: participation.event.attributes.to_s })
+      logger: "participation_notification",
+      extra: {event: participation.event.attributes.to_s})
     raise exception
   end
 

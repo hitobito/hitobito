@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require_dependency 'cors_origin'
+require_dependency "cors_origin"
 
 class Api::CorsCheck
   attr_reader :request

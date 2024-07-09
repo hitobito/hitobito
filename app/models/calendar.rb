@@ -21,23 +21,22 @@
 #
 
 class Calendar < ActiveRecord::Base
-
   belongs_to :group
 
   has_many :calendar_tags, inverse_of: :calendar, dependent: :destroy
   has_many :included_calendar_tags, -> { where(excluded: false) },
-           inverse_of: :calendar, class_name: 'CalendarTag', dependent: :destroy
+    inverse_of: :calendar, class_name: "CalendarTag", dependent: :destroy
   has_many :excluded_calendar_tags, -> { where(excluded: true) },
-           inverse_of: :calendar, class_name: 'CalendarTag', dependent: :destroy
+    inverse_of: :calendar, class_name: "CalendarTag", dependent: :destroy
 
   has_many :included_calendar_groups, -> { where(excluded: false).includes([:group]) },
-           inverse_of: :calendar, class_name: 'CalendarGroup', dependent: :destroy
+    inverse_of: :calendar, class_name: "CalendarGroup", dependent: :destroy
   has_many :excluded_calendar_groups, -> { where(excluded: true).includes([:group]) },
-           inverse_of: :calendar, class_name: 'CalendarGroup', dependent: :destroy
+    inverse_of: :calendar, class_name: "CalendarGroup", dependent: :destroy
 
   accepts_nested_attributes_for :included_calendar_tags, :excluded_calendar_tags,
-                                :included_calendar_groups, :excluded_calendar_groups,
-                                allow_destroy: true
+    :included_calendar_groups, :excluded_calendar_groups,
+    allow_destroy: true
 
   validates_by_schema except: [:token]
   validates :included_calendar_groups, presence: true

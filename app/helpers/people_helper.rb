@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module PeopleHelper
-
   def format_person_email(person)
     mail_to(person.email)
   end
@@ -15,25 +14,25 @@ module PeopleHelper
 
   def format_login_icons(status)
     icons = {
-        no_login: 'user-slash',
-        password_email_sent: 'user-clock',
-        login: 'user-check',
-        two_factors: 'user-shield',
-        status_off: 'minus-circle',
-        blocked: 'user-lock',
-        not_blocked: 'lock-open'
+      no_login: "user-slash",
+      password_email_sent: "user-clock",
+      login: "user-check",
+      two_factors: "user-shield",
+      status_off: "minus-circle",
+      blocked: "user-lock",
+      not_blocked: "lock-open"
     }
     icon(
-        icons.fetch(status),
-        title: I18n.t("people.login_status.#{status}")
+      icons.fetch(status),
+      title: I18n.t("people.login_status.#{status}")
     )
   end
 
   def dropdown_people_export(details = false, emails = true, labels = true, households = true) # rubocop:disable Metrics/ParameterLists
     Dropdown::PeopleExport.new(self, current_user, params, details: details,
-                                                           emails: emails,
-                                                           labels: labels,
-                                                           households: households).to_s
+      emails: emails,
+      labels: labels,
+      households: households).to_s
   end
 
   def dropdown_people_login(person)
@@ -42,15 +41,15 @@ module PeopleHelper
 
   def format_birthday(person)
     if person.birthday?
-      f(person.birthday) << ' ' << t('people.years_old', years: person.years)
+      f(person.birthday) << " " << t("people.years_old", years: person.years)
     end
   end
 
   def format_tags(person)
     if person.tags.present?
-      person.tags.map(&:name).join(', ')
+      person.tags.map(&:name).join(", ")
     else
-      t('global.associations.no_entry')
+      t("global.associations.no_entry")
     end
   end
 
@@ -63,19 +62,19 @@ module PeopleHelper
       end
     end
 
-    header = list[0..-2].collect { |i| content_tag(:span, "#{i} |".html_safe, class: 'nowrap') }
+    header = list[0..-2].collect { |i| content_tag(:span, "#{i} |".html_safe, class: "nowrap") }
     header << list.last
-    t.col(safe_join(header, ' '), &block)
+    t.col(safe_join(header, " "), &block)
   end
 
   def send_login_tooltip_text
-    entry.password? && t('.send_login_tooltip.reset') ||
-      entry.reset_password_sent_at.present? && t('.send_login_tooltip.resend') ||
-      t('.send_login_tooltip.new')
+    entry.password? && t(".send_login_tooltip.reset") ||
+      entry.reset_password_sent_at.present? && t(".send_login_tooltip.resend") ||
+      t(".send_login_tooltip.new")
   end
 
   def person_link(person)
-    person ? assoc_link(person) : "(#{t('global.nobody')})"
+    person ? assoc_link(person) : "(#{t("global.nobody")})"
   end
 
   def format_person_layer_group(person)
@@ -88,7 +87,7 @@ module PeopleHelper
 
   def render_household(person)
     safe_join(person.household_people.collect do |p|
-      content_tag(:li, class: 'chip') do
+      content_tag(:li, class: "chip") do
         can?(:show, p) ? link_to(p, p) : p.to_s
       end
     end, "\n")
@@ -96,7 +95,7 @@ module PeopleHelper
 
   def render_family(person)
     safe_join(person.family_members.map do |p|
-      content_tag(:li, class: 'chip') do
+      content_tag(:li, class: "chip") do
         can?(:show, p) ? link_to(p, p) : p.to_s
       end
     end)
@@ -111,31 +110,31 @@ module PeopleHelper
 
   def link_to_address(person)
     if [person.address, person.zip_code, person.town].all?(&:present?)
-      link_to(icon('map-marker-alt', class: 'fa-2x'), person_address_url(person), target: '_blank')
+      link_to(icon("map-marker-alt", class: "fa-2x"), person_address_url(person), target: "_blank", rel: "noopener")
     end
   end
 
   def person_address_url(person)
-    query_params = { street: person.address,
-                     postalcode: person.zip_code,
-                     city: person.town,
-                     country_codes: person.country }.to_query
+    query_params = {street: person.address,
+                    postalcode: person.zip_code,
+                    city: person.town,
+                    country_codes: person.country}.to_query
 
     openstreetmap_url(query_params)
   end
 
   def openstreetmap_url(query_params)
-    URI::HTTP.build(host: 'nominatim.openstreetmap.org',
-                    path: '/ui/search.html',
-                    query: query_params).to_s
+    URI::HTTP.build(host: "nominatim.openstreetmap.org",
+      path: "/ui/search.html",
+      query: query_params).to_s
   end
 
   def upcoming_events_title
-    title = [t('.events')]
+    title = [t(".events")]
     if entry.id == current_user.id
-      title << link_to(icon(:'calendar-alt'), event_feed_path, title: t('event_feeds.integrate'))
+      title << link_to(icon(:"calendar-alt"), event_feed_path, title: t("event_feeds.integrate"))
     end
-    safe_join(title, ' ')
+    safe_join(title, " ")
   end
 
   def person_event_feed_url
@@ -145,14 +144,14 @@ module PeopleHelper
   def oneline_address(message)
     person = message.message_recipients.find_by(person_id: @person.id)
 
-    if FeatureGate.enabled?('structured_addresses')
+    if FeatureGate.enabled?("structured_addresses")
       [
         person.address_care_of,
         person.address,
         person.postbox
-      ].reject(&:blank).join(', ')
+      ].reject(&:blank).join(", ")
     else
-      person.address.to_s.split("\n").join(', ')
+      person.address.to_s.split("\n").join(", ")
     end
   end
 

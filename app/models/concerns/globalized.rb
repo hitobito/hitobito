@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module Globalized
-
   extend ActiveSupport::Concern
 
   included do
@@ -35,9 +34,9 @@ module Globalized
     end
 
     def list
-      with_translations.
-        order(translated_label_column).
-        distinct
+      with_translations
+        .order(translated_label_column)
+        .distinct
     end
 
     private
@@ -55,7 +54,7 @@ module Globalized
             has_rich_text col.to_sym
           end
 
-          default_scope { includes(*columns.map { |col| "rich_text_#{col}".to_sym }) }
+          default_scope { includes(*columns.map { |col| :"rich_text_#{col}" }) }
         end
       end
     end
@@ -66,5 +65,4 @@ module Globalized
   def remember_translated_label
     to_s # fetches the required translations and keeps them around
   end
-
 end

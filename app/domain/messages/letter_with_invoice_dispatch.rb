@@ -7,7 +7,6 @@
 
 module Messages
   class LetterWithInvoiceDispatch < LetterDispatch
-
     def initialize(*args)
       super
       @invoice_list = @message.invoice_list
@@ -27,7 +26,7 @@ module Messages
       batch_create.call
 
       update!(success_count: batch_create.results.count(true),
-              failed_count: batch_create.results.count(false))
+        failed_count: batch_create.results.count(false))
     end
 
     # disable household addresses for letter with invoice

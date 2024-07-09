@@ -6,24 +6,23 @@
 #  https://github.com/hitobito/hitobito.
 
 class RoleAbility < AbilityDsl::Base
-
   include AbilityDsl::Constraints::Group
 
   on(Role) do
     class_side(:role_types, :details).all
 
     permission(:group_full).may(:create, :update, :destroy, :terminate)
-                           .in_same_group_if_active
+      .in_same_group_if_active
 
     permission(:group_and_below_full).may(:create, :update, :destroy, :terminate)
-                                     .in_same_group_or_below_if_active
+      .in_same_group_or_below_if_active
 
     permission(:layer_full).may(:create, :create_in_subgroup, :update, :destroy, :terminate)
-                           .in_same_layer_if_active
+      .in_same_layer_if_active
 
-    permission(:layer_and_below_full).
-      may(:create, :create_in_subgroup, :update, :destroy, :terminate).
-      in_same_layer_or_visible_below
+    permission(:layer_and_below_full)
+      .may(:create, :create_in_subgroup, :update, :destroy, :terminate)
+      .in_same_layer_or_visible_below
 
     permission(:any).may(:terminate).her_own
 
@@ -73,5 +72,4 @@ class RoleAbility < AbilityDsl::Base
   def group
     subject.group
   end
-
 end

@@ -30,8 +30,8 @@ class Households::MembersQuery
 
   def same_address_query
     @writables_scope.distinct.joins(roles: :group)
-                    .where(@person.address_attrs.except(*SAME_ADDRESS_IGNORED_ATTRS))
-                    .where.not(id: @person.id)
+      .where(@person.address_attrs.except(*SAME_ADDRESS_IGNORED_ATTRS))
+      .where.not(id: @person.id)
   end
 
   def herself_query

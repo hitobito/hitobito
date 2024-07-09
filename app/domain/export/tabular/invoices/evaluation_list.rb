@@ -7,8 +7,7 @@
 
 module Export::Tabular::Invoices
   class EvaluationList < Export::Tabular::Base
-
-    ATTRS = %w(name vat count amount_paid account cost_center).freeze
+    ATTRS = %w[name vat count amount_paid account cost_center].freeze
 
     self.row_class = Export::Tabular::Invoices::EvaluationRow
 

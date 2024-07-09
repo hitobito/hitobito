@@ -19,7 +19,7 @@
 #  kind_category_id       :integer
 #
 
-Fabricator(:event_kind, class_name: 'Event::Kind') do
+Fabricator(:event_kind, class_name: "Event::Kind") do
   label { Faker::Company.bs }
   general_information { Faker::Lorem.sentence }
 end

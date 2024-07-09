@@ -36,7 +36,7 @@ class PaymentsController < CrudController
   def render_tabular_entries_in_background(format)
     return_path = group_invoices_path(params[:group_id])
     with_async_download_cookie(format, :payment_export,
-                               redirection_target: return_path) do |filename|
+      redirection_target: return_path) do |filename|
       render_tabular_in_background(format, filename)
     end
   end
@@ -44,7 +44,7 @@ class PaymentsController < CrudController
   def render_tabular_in_background(format, filename)
     Export::PaymentsExportJob.new(
       format, current_person.id, entries.map(&:id),
-      { filename: filename }
+      {filename: filename}
     ).enqueue!
   end
 
@@ -60,18 +60,16 @@ class PaymentsController < CrudController
   def list_entries
     scope = super
 
-    scope = scope.unassigned if params[:state] == 'without_invoice'
-    scope = scope.where(received_at: from_param..to_param)
-
-    scope
+    scope = scope.unassigned if params[:state] == "without_invoice"
+    scope.where(received_at: from_param..to_param)
   end
 
   def from_param
-    @from_param ||= extract_date_param(:from) || Date.today.beginning_of_year
+    @from_param ||= extract_date_param(:from) || Time.zone.today.beginning_of_year
   end
 
   def to_param
-    @to_param ||= extract_date_param(:to) || Date.today.end_of_year
+    @to_param ||= extract_date_param(:to) || Time.zone.today.end_of_year
   end
 
   def extract_date_param(param)
@@ -81,7 +79,7 @@ class PaymentsController < CrudController
   end
 
   def model_scope
-    if action_name == 'index'
+    if action_name == "index"
       Payment
     else
       super

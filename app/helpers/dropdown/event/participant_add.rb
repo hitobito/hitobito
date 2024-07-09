@@ -6,15 +6,14 @@
 module Dropdown
   module Event
     class ParticipantAdd < Dropdown::Base
-
       attr_reader :group, :event
 
       class << self
         def for_user(template, group, event, user)
           if user_participates_in?(user, event)
-            new(template, group, event, I18n.t('event_decorator.applied'), :check).disabled_button
+            new(template, group, event, I18n.t("event_decorator.applied"), :check).disabled_button
           else
-            new(template, group, event, I18n.t('event_decorator.apply'), :check).to_s
+            new(template, group, event, I18n.t("event_decorator.apply"), :check).to_s
           end
         end
 
@@ -41,7 +40,7 @@ module Dropdown
       end
 
       def disabled_button
-        simple_button('#', class: 'disabled')
+        simple_button("#", class: "disabled")
       end
 
       private
@@ -52,7 +51,7 @@ module Dropdown
 
       def init_items(url_options)
         event.participant_types.each do |type|
-          opts = url_options.merge(event_role: { type: type.sti_name })
+          opts = url_options.merge(event_role: {type: type.sti_name})
           link = participate_link(opts)
           add_item(translate(:as, role: type.label), link)
         end
@@ -65,7 +64,6 @@ module Dropdown
           template.contact_data_group_event_participations_path(group, event, opts)
         end
       end
-
     end
   end
 end

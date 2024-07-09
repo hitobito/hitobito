@@ -5,7 +5,6 @@
 
 module Export::Pdf::List
   class Section
-
     attr_reader :pdf, :contactables, :group
 
     delegate :bounds, :bounding_box, :cursor, :font_size, to: :pdf
@@ -20,12 +19,11 @@ module Export::Pdf::List
 
     def text(*args)
       options = args.extract_options!
-      pdf.text args.join(' '), options
+      pdf.text args.join(" "), options
     end
 
     def move_down_line(line = 10)
       pdf.move_down(line)
     end
-
   end
 end

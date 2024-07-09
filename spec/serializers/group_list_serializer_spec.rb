@@ -31,21 +31,19 @@
 #  description                 :text(65535)
 #
 
-
-require 'spec_helper'
+require "spec_helper"
 
 describe GroupListSerializer do
-
   let(:group) { groups(:top_group).decorate }
   let(:controller) { double.as_null_object }
   let(:serializer) do
     ListSerializer.new(Group.where(id: group.id), serializer: GroupListSerializer,
-                                                  controller: controller)
+      controller: controller)
   end
 
   subject(:hash) { serializer.to_hash[:groups].first }
 
-  it 'has different entities' do
+  it "has different entities" do
     expect(hash[:id]).to eq(group.id)
     expect(hash[:parent_id]).to eq(group.parent_id)
     expect(hash[:type]).to eq(group.type.to_s)

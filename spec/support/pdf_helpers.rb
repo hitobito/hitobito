@@ -34,8 +34,8 @@ module PdfHelpers
         if match = page.raw_content.match(pattern)
           # The transformation matrix components
           a = match[1].to_f
-          b = match[2].to_f
-          c = match[3].to_f
+          match[2].to_f
+          match[3].to_f
           d = match[4].to_f
           e = match[5].to_f
           f = match[6].to_f

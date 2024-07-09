@@ -28,7 +28,6 @@
 #
 
 class Event::Participation < ActiveRecord::Base
-
   self.demodulized_route_keys = true
 
   attr_accessor :enforce_required_answers
@@ -44,18 +43,15 @@ class Event::Participation < ActiveRecord::Base
 
   has_many :answers, dependent: :destroy, validate: true
 
-
   accepts_nested_attributes_for :answers, :application
-
 
   ### VALIDATIONS
 
   validates_by_schema
   validates :person_id,
-            uniqueness: { scope: :event_id }
+    uniqueness: {scope: :event_id}
   validates :additional_information,
-            length: { allow_nil: true, maximum: (2**16) - 1 }
-
+    length: {allow_nil: true, maximum: (2**16) - 1}
 
   ### CALLBACKS
 
@@ -76,14 +72,14 @@ class Event::Participation < ActiveRecord::Base
     end
 
     def order_by_role_statement(event_type)
-      return '' if event_type.role_types.blank?
+      return "" if event_type.role_types.blank?
 
-      statement = ['CASE event_roles.type']
+      statement = ["CASE event_roles.type"]
       event_type.role_types.each_with_index do |t, i|
         statement << "WHEN '#{t.sti_name}' THEN #{i}"
       end
-      statement << 'END'
-      statement.join(' ')
+      statement << "END"
+      statement.join(" ")
     end
 
     def active
@@ -97,9 +93,7 @@ class Event::Participation < ActiveRecord::Base
     def upcoming
       joins(:event).merge(Event.upcoming(::Time.zone.today)).distinct
     end
-
   end
-
 
   ### INSTANCE METHODS
 
@@ -122,7 +116,7 @@ class Event::Participation < ActiveRecord::Base
       appl.priority_1 = event
       if directly_to_waiting_list?(event)
         appl.waiting_list = true
-        appl.waiting_list_comment = I18n.t('event/applications.directly_to_waiting_list')
+        appl.waiting_list_comment = I18n.t("event/applications.directly_to_waiting_list")
       end
     end
   end

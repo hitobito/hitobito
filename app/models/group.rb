@@ -64,8 +64,8 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   include Encryptable
   include I18nEnums
 
-  PROVIDER_VALUES = %w(aspsms).freeze
-  ADDRESS_POSITION_VALUES = %w(left right).freeze
+  PROVIDER_VALUES = %w[aspsms].freeze
+  ADDRESS_POSITION_VALUES = %w[left right].freeze
 
   serialize :encrypted_text_message_username
   serialize :encrypted_text_message_password
@@ -75,9 +75,9 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   acts_as_paranoid
   extend Paranoia::RegularScope
-  has_paper_trail meta: { main_id: ->(g) { g.id }, main_type: sti_name },
-                  skip: [:lft, :rgt, :layer_group_id, :deleter_id, :require_person_add_requests,
-                         :updated_at, :updater_id]
+  has_paper_trail meta: {main_id: ->(g) { g.id }, main_type: sti_name},
+    skip: [:lft, :rgt, :layer_group_id, :deleter_id, :require_person_add_requests,
+      :updated_at, :updater_id]
 
   has_one_attached :logo
   has_one_attached :privacy_policy
@@ -95,11 +95,11 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :postbox, :zip_code, :town, :country, :description
   ]
 
-  if FeatureGate.disabled?('structured_addresses')
+  if FeatureGate.disabled?("structured_addresses")
     used_attributes << :address
   end
 
-  FeatureGate.if('groups.nextcloud') do
+  FeatureGate.if("groups.nextcloud") do
     used_attributes << :nextcloud_url
   end
 
@@ -130,7 +130,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   ### ASSOCIATIONS
 
-  belongs_to :contact, class_name: 'Person'
+  belongs_to :contact, class_name: "Person"
 
   has_many :roles, dependent: :destroy, inverse_of: :group
   has_many :people, through: :roles
@@ -138,7 +138,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   has_many :people_filters, dependent: :destroy
 
   has_and_belongs_to_many :events, -> { includes(:translations) },
-                          after_remove: :destroy_orphaned_event
+    after_remove: :destroy_orphaned_event
 
   has_many :mailing_lists, dependent: :destroy
   has_many :subscriptions, as: :subscriber, dependent: :destroy
@@ -149,10 +149,10 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   has_many :notes, as: :subject, dependent: :destroy
 
   has_many :person_add_requests,
-           foreign_key: :body_id,
-           inverse_of: :body,
-           class_name: 'Person::AddRequest::Group',
-           dependent: :destroy
+    foreign_key: :body_id,
+    inverse_of: :body,
+    class_name: "Person::AddRequest::Group",
+    dependent: :destroy
 
   has_one :invoice_config, dependent: :destroy
   has_many :invoices
@@ -161,35 +161,34 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   has_many :invoice_items, through: :invoices
 
   has_many :service_tokens,
-           foreign_key: :layer_group_id,
-           dependent: :destroy
+    foreign_key: :layer_group_id,
+    dependent: :destroy
 
   ### VALIDATIONS
 
   validates_by_schema except: [:logo]
-  validates :type, uniqueness: { scope: :parent_id }, if: :static_name
+  validates :type, uniqueness: {scope: :parent_id}, if: :static_name
   validates :name, presence: true, unless: :static_name
   validates :email, format: Devise.email_regexp, allow_blank: true
-  validates :description, length: { allow_nil: true, maximum: (2**16) - 1 }
+  validates :description, length: {allow_nil: true, maximum: (2**16) - 1}
   validates :contact, permission: :show_full, allow_blank: true, if: :contact_id_changed?
-  validates :contact, inclusion: { in: ->(group) { group.people.members } }, allow_nil: true
-  validates :privacy_policy_title, length: { allow_nil: true, maximum: 64 }
-  validates :self_registration_role_type, presence: { if: :main_self_registration_group? }
+  validates :contact, inclusion: {in: ->(group) { group.people.members }}, allow_nil: true
+  validates :privacy_policy_title, length: {allow_nil: true, maximum: 64}
+  validates :self_registration_role_type, presence: {if: :main_self_registration_group?}
 
-  validates :text_message_provider, inclusion: { in: PROVIDER_VALUES }, allow_nil: false
-  validates :letter_address_position, inclusion: { in: ADDRESS_POSITION_VALUES }, allow_nil: false
+  validates :text_message_provider, inclusion: {in: PROVIDER_VALUES}, allow_nil: false
+  validates :letter_address_position, inclusion: {in: ADDRESS_POSITION_VALUES}, allow_nil: false
 
   validate :assert_valid_self_registration_notification_email
 
-  validates :logo, dimension: { width: { max: 8_000 }, height: { max: 8_000 } },
-                   content_type: ['image/jpeg', 'image/gif', 'image/png']
+  validates :logo, dimension: {width: {max: 8_000}, height: {max: 8_000}},
+    content_type: ["image/jpeg", "image/gif", "image/png"]
 
   scope :without_archived, -> { where(archived_at: nil) }
 
   ### CLASS METHODS
 
   class << self
-
     # Is the given attribute used in the current STI class
     def attr_used?(attr)
       used_attributes.include?(attr)
@@ -209,10 +208,10 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
         types.each_with_index do |t, i|
           statement << "WHEN '#{t.sti_name}' THEN #{i}"
         end
-        statement << 'END,'
+        statement << "END,"
       end
 
-      "#{statement.join(' ')} lft"
+      "#{statement.join(" ")} lft"
     end
 
     private
@@ -224,9 +223,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
         all_types
       end
     end
-
   end
-
 
   ### INSTANCE METHODS
 
@@ -258,7 +255,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   # create alias to call it again
-  alias hard_destroy really_destroy!
+  alias_method :hard_destroy, :really_destroy!
   def really_destroy!
     # run nested_set callback on hard destroy
     # destroy_descendants_without_paranoia
@@ -283,8 +280,8 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     elsif layer?
       duplicates = layer_person_duplicates
     end
-    duplicates.includes(person_1: [{ roles: :group }, :groups, :primary_group],
-                        person_2: [{ roles: :group }, :groups, :primary_group])
+    duplicates.includes(person_1: [{roles: :group}, :groups, :primary_group],
+      person_2: [{roles: :group}, :groups, :primary_group])
   end
 
   # TODO: Concern?
@@ -294,7 +291,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
       Role.where(group_id: id).tap do |roles|
         roles.where(type: FutureRole.sti_name).delete_all
         roles.update_all(archived_at: archived_at)
-        roles.where('delete_on >= ?', archived_at).update_all(delete_on: nil)
+        roles.where(delete_on: archived_at..).update_all(delete_on: nil)
       end
 
       mailing_lists.destroy_all
@@ -315,10 +312,10 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   def addable_child_types
     static_name_children = possible_children.select(&:static_name).map(&:sti_name)
-    existing_static_name_children = Group.
-                                    without_deleted.
-                                    where(parent_id: id, type: static_name_children).
-                                    pluck(:type).uniq
+    existing_static_name_children = Group
+      .without_deleted
+      .where(parent_id: id, type: static_name_children)
+      .pluck(:type).uniq
 
     possible_children.select do |child_class|
       existing_static_name_children.exclude?(child_class.sti_name)
@@ -329,7 +326,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     Settings.groups&.self_registration&.enabled &&
       self_registration_role_type.present? &&
       decorate.allowed_roles_for_self_registration
-              .include?(self_registration_role_type.constantize)
+        .include?(self_registration_role_type.constantize)
   end
 
   def path_args
@@ -350,7 +347,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def remove_privacy_policy=(deletion_param)
-    if %w(1 yes true).include?(deletion_param.to_s.downcase)
+    if %w[1 yes true].include?(deletion_param.to_s.downcase)
       privacy_policy.purge_later
     end
   end
@@ -360,7 +357,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def remove_logo=(deletion_param)
-    if %w(1 yes true).include?(deletion_param.to_s.downcase)
+    if %w[1 yes true].include?(deletion_param.to_s.downcase)
       logo.purge_later
     end
   end
@@ -370,7 +367,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def remove_letter_logo=(deletion_param)
-    if %w(1 yes true).include?(deletion_param.to_s.downcase)
+    if %w[1 yes true].include?(deletion_param.to_s.downcase)
       letter_logo.purge_later
     end
   end
@@ -403,8 +400,8 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     duplicates = PersonDuplicate.joins(person_1: :roles).joins(person_2: :roles)
     group_ids = children.map(&:id) + [id]
     duplicates
-      .where('roles.group_id IN (:group_ids) OR roles_people.group_id IN (:group_ids)',
-             group_ids: group_ids)
+      .where("roles.group_id IN (:group_ids) OR roles_people.group_id IN (:group_ids)",
+        group_ids: group_ids)
   end
 
   def top?
@@ -419,7 +416,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   def reset_contact_info
     if contact
-      clear_contacts = { address: nil, town: nil, zip_code: nil, country: nil }
+      clear_contacts = {address: nil, town: nil, zip_code: nil, country: nil}
       assign_attributes(clear_contacts)
     end
   end
@@ -442,10 +439,10 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def prevent_changes
-    allowed = %w(archived_at updater_id)
+    allowed = %w[archived_at updater_id]
     only_archival = changes
-                    .reject { |_attr, (from, to)| from.blank? && to.blank? }
-                    .keys.all? { |key| allowed.include? key }
+      .reject { |_attr, (from, to)| from.blank? && to.blank? }
+      .keys.all? { |key| allowed.include? key }
 
     raise ActiveRecord::ReadOnlyRecord unless new_record? || only_archival
   end

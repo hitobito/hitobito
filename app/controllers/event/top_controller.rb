@@ -7,7 +7,6 @@
 
 # Handles a top-level event route (/event/:id)
 class Event::TopController < ApplicationController
-
   before_action :authorize_action
 
   def show
@@ -28,5 +27,4 @@ class Event::TopController < ApplicationController
   def authorize_action
     authorize!(:show, entry)
   end
-
 end

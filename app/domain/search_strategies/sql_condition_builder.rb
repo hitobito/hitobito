@@ -7,7 +7,6 @@ module SearchStrategies
   class SqlConditionBuilder
     class_attribute :matchers, default: {}
 
-
     def initialize(search_string, search_tables_and_fields)
       @search_string = search_string
       @search_tables_and_fields = search_tables_and_fields

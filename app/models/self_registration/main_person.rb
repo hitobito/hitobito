@@ -5,12 +5,11 @@
 #  or at https://github.com/hitobito/hitobito.
 
 class SelfRegistration::MainPerson < SelfRegistration::Person
-
   self.attrs = [
     :first_name, :last_name, :nickname, :company_name, :company, :email,
     :adult_consent,
     :privacy_policy_accepted,
-    :primary_group,
+    :primary_group
   ]
 
   self.required_attrs = [
@@ -31,7 +30,7 @@ class SelfRegistration::MainPerson < SelfRegistration::Person
 
   def assert_privacy_policy
     if privacy_policy_accepted&.to_i&.zero?
-      message = I18n.t('groups.self_registration.create.flash.privacy_policy_not_accepted')
+      message = I18n.t("groups.self_registration.create.flash.privacy_policy_not_accepted")
       errors.add(:base, message)
     end
   end

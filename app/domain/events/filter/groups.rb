@@ -35,26 +35,26 @@ module Events::Filter
     end
 
     def group_ids
-      @params.dig(:filter, :group_ids).to_a.reject(&:blank?)
+      @params.dig(:filter, :group_ids).to_a.compact_blank
     end
 
     def course_groups_from_primary_layer
-      Group.
-        course_offerers.
-        where(id: @user.primary_group.try(:layer_group_id)).
-        first.
-        try(:hierarchy).
-        try(:course_offerers)
+      Group
+        .course_offerers
+        .where(id: @user.primary_group.try(:layer_group_id))
+        .first
+        .try(:hierarchy)
+        .try(:course_offerers)
     end
 
     def course_groups_from_hierarchy
-      Group.
-        course_offerers.
-        where(id: @user.groups_hierarchy_ids).
-        where('groups.id <> ?', Group.root.id).
-        first.
-        try(:hierarchy).
-        try(:course_offerers)
+      Group
+        .course_offerers
+        .where(id: @user.groups_hierarchy_ids)
+        .where.not(groups: {id: Group.root.id})
+        .first
+        .try(:hierarchy)
+        .try(:course_offerers)
     end
   end
 end

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::Subscriptions
-
   attr_reader :scope
 
   def initialize(person, scope = MailingList)
@@ -26,9 +25,9 @@ class Person::Subscriptions
 
   def subscribed
     scope
-      .where(id: direct_inclusions.select('mailing_list_id'))
+      .where(id: direct_inclusions.select("mailing_list_id"))
       .or(scope.anyone.or(scope.configured.opt_out).merge(from_group_or_events))
-      .where.not(id: direct_exclusions.select('mailing_list_id'))
+      .where.not(id: direct_exclusions.select("mailing_list_id"))
       .where.not(id: lists_excluding_person_via_filter.collect(&:id))
       .distinct
   end
@@ -37,9 +36,9 @@ class Person::Subscriptions
     scope.anyone
       .or(
         scope.configured.merge(from_group_or_events)
-             .where(id: direct_exclusions.or(scope.opt_in).select('mailing_list_id'))
+             .where(id: direct_exclusions.or(scope.opt_in).select("mailing_list_id"))
       )
-      .where.not(id: subscribed.select('id'))
+      .where.not(id: subscribed.select("id"))
       .where.not(id: lists_excluding_person_via_filter.collect(&:id))
       .distinct
   end
@@ -62,10 +61,10 @@ class Person::Subscriptions
 
   def from_events
     Subscription.events
-                .where(subscriber_id: @person.event_participations.active.select('event_id'))
-                .left_joins(:subscription_tags)
-                .where(subscription_tags_condition, @person.tag_ids)
-                .where.not(id: tag_excluded_subscription_ids)
+      .where(subscriber_id: @person.event_participations.active.select("event_id"))
+      .left_joins(:subscription_tags)
+      .where(subscription_tags_condition, @person.tag_ids)
+      .where.not(id: tag_excluded_subscription_ids)
   end
 
   def from_groups
@@ -94,8 +93,8 @@ class Person::Subscriptions
   end
 
   def subscription_tags_condition
-    'subscription_tags.tag_id IS NULL OR ' \
-      '(subscription_tags.excluded <> true AND subscription_tags.tag_id IN (?))'
+    "subscription_tags.tag_id IS NULL OR " \
+      "(subscription_tags.excluded <> true AND subscription_tags.tag_id IN (?))"
   end
 
   def tag_excluded_subscription_ids
@@ -104,7 +103,7 @@ class Person::Subscriptions
 
   def from_group_or_events
     scope
-      .where(id: from_events.select('mailing_list_id'))
-      .or(scope.where(id: from_groups.select('mailing_list_id')))
+      .where(id: from_events.select("mailing_list_id"))
+      .or(scope.where(id: from_groups.select("mailing_list_id")))
   end
 end

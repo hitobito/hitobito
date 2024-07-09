@@ -25,6 +25,6 @@
 
 Fabricator(:family_member) do
   person { Fabricate(:person) }
-  kind   { 'sibling' }
-  other  { Fabricate(:person) }
+  kind { "sibling" }
+  other { Fabricate(:person) }
 end

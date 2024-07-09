@@ -5,7 +5,6 @@
 
 module AbilityDsl::Constraints::Event
   module Invitation
-
     include AbilityDsl::Constraints::Event
 
     def own_invitation

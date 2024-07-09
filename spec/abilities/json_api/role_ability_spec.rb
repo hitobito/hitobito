@@ -5,10 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe JsonApi::RoleAbility do
-
   let(:group) { groups(:top_group) }
   let(:person) { Fabricate(:person) }
   let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: group, person: person) }
@@ -18,7 +17,7 @@ describe JsonApi::RoleAbility do
 
   subject { JsonApi::RoleAbility.new(main_ability) }
 
-  context 'when having `show_full` permission on person' do
+  context "when having `show_full` permission on person" do
     let!(:user_role) { Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: group, person: user) }
 
     it do
@@ -26,7 +25,7 @@ describe JsonApi::RoleAbility do
     end
   end
 
-  context 'when missing `show_full` permission on person' do
+  context "when missing `show_full` permission on person" do
     let!(:user_role) { Fabricate(Group::TopGroup::Member.name.to_sym, group: group, person: user) }
 
     it { is_expected.not_to be_able_to(:read, role) }

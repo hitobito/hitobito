@@ -4,7 +4,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::ApplicationDecorator < ::ApplicationDecorator
-  decorates 'event/application'
+  decorates "event/application"
 
   decorates_association :event, with: EventDecorator
   decorates_association :priority_1, with: EventDecorator
@@ -16,7 +16,7 @@ class Event::ApplicationDecorator < ::ApplicationDecorator
   def labeled_link(group = nil)
     group ||= event.groups.first
     event.labeled_link(h.group_event_participation_path(group, event, participation),
-                       can?(:show, participation))
+      can?(:show, participation))
   end
 
   def contact
@@ -31,17 +31,17 @@ class Event::ApplicationDecorator < ::ApplicationDecorator
   def priority(event)
     prio = model.priority(event)
     prio = if prio
-             "Prio #{prio}"
-           else
-             waiting_list? ? 'Warteliste' : nil
-           end
-    content_tag(:span, prio, class: 'badge bg-info') if prio
+      "Prio #{prio}"
+    else
+      waiting_list? ? "Warteliste" : nil
+    end
+    content_tag(:span, prio, class: "badge bg-info") if prio
   end
 
   def precondition_warnings(event)
     if event.supports_applications && event.course_kind?
       checker = Event::PreconditionChecker.new(event, participation.person)
-      h.badge('!', 'warning', checker.errors_text.flatten.join('<br>')) unless checker.valid?
+      h.badge("!", "warning", checker.errors_text.flatten.join("<br>")) unless checker.valid?
     end
   end
 
@@ -51,17 +51,16 @@ class Event::ApplicationDecorator < ::ApplicationDecorator
 
   def approval_label
     label, type, desc = approval_fields(approved?, rejected?)
-    h.badge(label, type) + ' '.html_safe + desc
+    h.badge(label, type) + " ".html_safe + desc
   end
 
   def approval_fields(approved, rejected)
     if approved
-      ['&#x2713;'.html_safe, 'success', translate('approval.approved')]
+      ["&#x2713;".html_safe, "success", translate("approval.approved")]
     elsif rejected
-      ['&#x00D7;'.html_safe, 'danger', translate('approval.rejected')]
+      ["&#x00D7;".html_safe, "danger", translate("approval.rejected")]
     else
-      ['?', 'warning', translate('approval.missing')]
+      ["?", "warning", translate("approval.missing")]
     end
   end
-
 end

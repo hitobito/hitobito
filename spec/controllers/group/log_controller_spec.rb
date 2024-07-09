@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Group::LogController do
   let(:top_leader) { people(:top_leader) }
@@ -14,22 +14,22 @@ describe Group::LogController do
   let(:layer_two_member) { Fabricate(Group::BottomLayer::Member.to_s, group: groups(:bottom_layer_two), created_at: 30.days.ago).person }
   let(:group) { groups(:bottom_layer_one) }
 
-  describe 'GET index', versioning: true do
+  describe "GET index", versioning: true do
     before do
       sign_in(user)
 
       [layer_one_member1, layer_one_member2, layer_two_member].each do |p|
         Fabricate(:social_account, contactable: p)
-        p.update!(town: 'Bern', zip_code: '3007')
+        p.update!(town: "Bern", zip_code: "3007")
         Fabricate(:phone_number, contactable: p)
       end
     end
 
-    context 'as leader' do
+    context "as leader" do
       let(:user) { top_leader }
 
-      it 'fetches papertrail versions of group' do
-        get :index, params: { group_id: group.id }
+      it "fetches papertrail versions of group" do
+        get :index, params: {group_id: group.id}
 
         expect(response).to have_http_status(200)
 
@@ -40,8 +40,8 @@ describe Group::LogController do
         expect(versions.map(&:main_id).uniq).to match_array([layer_one_member1.id, layer_one_member2.id])
       end
 
-      it 'does not fetch papertrail versions of different group members' do
-        get :index, params: { group_id: groups(:bottom_layer_two).id }
+      it "does not fetch papertrail versions of different group members" do
+        get :index, params: {group_id: groups(:bottom_layer_two).id}
 
         expect(response).to have_http_status(200)
 
@@ -55,10 +55,10 @@ describe Group::LogController do
         expect(main_ids).to include(layer_two_member.id)
       end
 
-      it 'fetches role destroy version' do
+      it "fetches role destroy version" do
         layer_two_member.roles.first.destroy
 
-        get :index, params: { group_id: groups(:bottom_layer_two).id }
+        get :index, params: {group_id: groups(:bottom_layer_two).id}
 
         expect(response).to have_http_status(200)
 
@@ -66,18 +66,18 @@ describe Group::LogController do
 
         # shows only role destroy
         expect(versions.size).to eq(1)
-        role_destroy_version = versions.select { |v| v.item_type == Role.sti_name && v.event == 'destroy' }.first
+        role_destroy_version = versions.find { |v| v.item_type == Role.sti_name && v.event == "destroy" }
         expect(role_destroy_version).to be_present
         expect(role_destroy_version.main).to eq(layer_two_member)
       end
     end
 
-    context 'as bottom_member' do
+    context "as bottom_member" do
       let(:user) { layer_one_member1 }
 
-      it 'is not allowed' do
+      it "is not allowed" do
         expect do
-          get :index, params: { group_id: group.id }
+          get :index, params: {group_id: group.id}
         end.to raise_error(CanCan::AccessDenied)
       end
     end

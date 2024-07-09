@@ -5,7 +5,6 @@
 
 module TableDisplays
   class PublicColumn < Column
-
     def required_permission(_attr)
       :show
     end
@@ -14,7 +13,7 @@ module TableDisplays
       [
         resolve_database_column(attr),
         # The can(:show) check requires the contact_data_visible column to be fetched from the db
-        'people.contact_data_visible',
+        "people.contact_data_visible"
       ]
     end
 

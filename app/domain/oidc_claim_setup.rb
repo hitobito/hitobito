@@ -5,8 +5,8 @@
 #  or at https://github.com/hitobito/hitobito.
 
 class OidcClaimSetup
-  NAME_ATTRS = %w(first_name last_name nickname) +
-               %w(address address_care_of street housenumber postbox zip_code town country)
+  NAME_ATTRS = %w[first_name last_name nickname] +
+    %w[address address_care_of street housenumber postbox zip_code town country]
   NAME_ATTRS.freeze
 
   def run
@@ -30,7 +30,7 @@ class OidcClaimSetup
   end
 
   def add_nextcloud_scope_claims
-    FeatureGate.if('groups.nextcloud') do
+    FeatureGate.if("groups.nextcloud") do
       responses = [:user_info, :id_token]
       add_claim(:name, scope: :nextcloud, responses: responses) { |owner| owner.to_s }
 
@@ -46,15 +46,15 @@ class OidcClaimSetup
         name: name,
         scope: scope,
         response: responses,
-        generator: Proc.new { |owner| block_given? ? yield(owner) : resolve(name, owner) }
+        generator: proc { |owner| block_given? ? yield(owner) : resolve(name, owner) }
       )
       Doorkeeper::OpenidConnect.configuration.claims[build_key(name.to_sym, scope)] = claim
     end
   end
 
   def build_key(name, scope)
-    @keys ||=[]
-    key = @keys.exclude?(name) ? name : [scope, name].join('_')
+    @keys ||= []
+    key = @keys.exclude?(name) ? name : [scope, name].join("_")
     key.tap { @keys << key }
   end
 

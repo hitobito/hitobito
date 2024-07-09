@@ -7,7 +7,6 @@
 
 class Export::Pdf::Messages::Letter
   class Content < Section
-
     def render(recipient, font_size: 9)
       offset_cursor_from_top 117.5.mm
       pdf.font_size font_size do
@@ -26,6 +25,5 @@ class Export::Pdf::Messages::Letter
       pdf.text recipient.salutation if recipient.salutation.present?
       pdf.move_down pdf.font_size * 2
     end
-
   end
 end

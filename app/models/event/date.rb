@@ -21,7 +21,6 @@
 #
 
 class Event::Date < ActiveRecord::Base
-
   include DatetimeAttribute
   datetime_attr :start_at, :finish_at
 
@@ -30,7 +29,6 @@ class Event::Date < ActiveRecord::Base
   validates_by_schema
   validates :start_at, presence: true
   validate :assert_meaningful
-
 
   def duration
     @duration ||= Duration.new(start_at, finish_at, date_format: :with_day)
@@ -41,7 +39,7 @@ class Event::Date < ActiveRecord::Base
   end
 
   def label_and_location
-    [label, location].compact.reject(&:empty?).join(', ')
+    [label, location].compact.reject(&:empty?).join(", ")
   end
 
   private

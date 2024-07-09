@@ -5,11 +5,11 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require_relative './tooling'
-require_relative './highlevel'
-require_relative './lowlevel'
-require_relative './world_monad'
-require_relative './commands'
+require_relative "tooling"
+require_relative "highlevel"
+require_relative "lowlevel"
+require_relative "world_monad"
+require_relative "commands"
 
 # Wrapper around some shell-commands needed to release a new version of
 # hitobito to production
@@ -65,7 +65,7 @@ class Release::Main
     @standard_answer = nil
     @stage = :production
 
-    notify 'Running in dry-run mode' if dry_run?
+    notify "Running in dry-run mode" if dry_run?
   end
 
   def usable?
@@ -84,7 +84,7 @@ class Release::Main
 
   def all_wagons=(all_wagons)
     @all_wagons = all_wagons
-    ENV['WAGONS'] ||= @all_wagons.to_a.join(' ') # make sure it is present
+    ENV["WAGONS"] ||= @all_wagons.to_a.join(" ") # make sure it is present
 
     @wagon = @all_wagons.first
 
@@ -102,7 +102,7 @@ class Release::Main
   end
 
   def hitobito_group_dir
-    @hitobito_group_dir ||= File.expand_path('../../../..', __dir__)
+    @hitobito_group_dir ||= File.expand_path("../../../..", __dir__)
   end
 
   private
@@ -134,7 +134,7 @@ class Release::Main
   end
 
   def wagons_present?
-    @all_wagons.is_a?(Array) && ENV['WAGONS'].split(' ').any?
+    @all_wagons.is_a?(Array) && ENV["WAGONS"].split(" ").any?
   end
 
   def composition_known?
@@ -142,8 +142,8 @@ class Release::Main
   end
 
   def helpers_present?
-    %w(git sed tx)
+    %w[git sed tx]
       .map { |cmd| `command -v #{cmd} > /dev/null && echo 'found'`.chomp }
-      .reduce(true) { |memo, result| memo && result == 'found' }
+      .reduce(true) { |memo, result| memo && result == "found" }
   end
 end

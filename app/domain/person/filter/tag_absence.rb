@@ -1,7 +1,6 @@
 class Person::Filter::TagAbsence < Person::Filter::Tag
-
   def apply(scope)
-    scope.where.not(people: { id: tagged_people_ids }).distinct
+    scope.where.not(people: {id: tagged_people_ids}).distinct
   end
 
   private
@@ -11,7 +10,6 @@ class Person::Filter::TagAbsence < Person::Filter::Tag
       .joins(:tag)
       .where(taggable_type: Person.to_s)
       .where(tags_condition)
-      .select('DISTINCT taggable_id')
+      .select("DISTINCT taggable_id")
   end
-
 end

@@ -23,7 +23,7 @@ module JsonApi
       # Person ContactAccounts
       # allow reading public contacts of people on which the user has :show permission
       can :read, CONTACT_ACCOUNT_MODELS,
-          public: true, contactable: readable_people
+        public: true, contactable: readable_people
       # allow reading all contacts of people on which the user has :show_details permissions
       can :read, CONTACT_ACCOUNT_MODELS, contactable: details_readable_people
 
@@ -42,19 +42,19 @@ module JsonApi
     private
 
     def readable_people
-      Person.accessible_by(PersonReadables.new(main_ability.user)).
-        unscope(:select)
+      Person.accessible_by(PersonReadables.new(main_ability.user))
+        .unscope(:select)
     end
 
     def details_readable_people
-      Person.accessible_by(PersonDetailsReadables.new(main_ability.user)).
-        unscope(:select)
+      Person.accessible_by(PersonDetailsReadables.new(main_ability.user))
+        .unscope(:select)
     end
 
     def details_writable_people
-      details_readable_people.
-        accessible_by(PersonWritables.new(main_ability.user)).
-        unscope(:select)
+      details_readable_people
+        .accessible_by(PersonWritables.new(main_ability.user))
+        .unscope(:select)
     end
 
     def readable_groups

@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class ContactAccountSerializer < ApplicationSerializer
-
   def contact_properties
     json_api_properties
 

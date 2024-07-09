@@ -4,33 +4,45 @@
 #  Affero General Public License version 3 or later. See the COPYING file at the top-level directory
 #  or at https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Wizards::Step do
   before do
-    stub_const('One', Class.new(Wizards::Step))
-    stub_const('Wizard', Class.new(Wizards::Base))
+    stub_const("One", Class.new(Wizards::Step))
+    stub_const("Wizard", Class.new(Wizards::Base))
   end
 
   let(:wizard) { Wizard.new(current_step: 0) }
+
   subject(:step) { One.new(wizard) }
 
-  describe '#partial' do
+  describe "#partial" do
     subject(:partial) { step.partial }
 
-    it 'is derived from class name' do
-      expect(partial).to eq 'one'
+    it "is derived from class name" do
+      expect(partial).to eq "one"
     end
 
-    it 'is read from class variable' do
+    it "is read from class variable" do
       step.class.partial = :class_var
       expect(partial).to eq :class_var
     end
 
-    it 'is read from instance method' do
+    it "is read from instance method" do
       step.class.partial = :class_var
       expect(step).to receive(:partial).and_return(:method)
       expect(partial).to eq :method
     end
   end
+
+  # rubocop:disable Style/CaseEquality, Lint/BinaryOperatorWithIdenticalOperands
+  describe "#===" do
+    it "compares to a string" do
+      expect(One === "one").to be true
+    end
+    it "compares to a class" do
+      expect(One === One).to be true
+    end
+  end
+  # rubocop:enable Style/CaseEquality, Lint/BinaryOperatorWithIdenticalOperands
 end

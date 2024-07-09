@@ -34,7 +34,7 @@ class Person::Address
   end
 
   def combine_household_names(members)
-    members.map(&:full_name).compact.join(', ')
+    members.map(&:full_name).compact.join(", ")
   end
 
   def full_address
@@ -42,7 +42,7 @@ class Person::Address
       @person.address_care_of.to_s.strip.presence,
       @person.address.to_s.strip,
       @person.postbox.to_s.strip.presence,
-      [@person.zip_code, @person.town].compact.join(' ').squish,
+      [@person.zip_code, @person.town].compact.join(" ").squish,
       country
     ].compact
   end
@@ -50,7 +50,7 @@ class Person::Address
   def short_address
     [
       @person.address.to_s.strip,
-      [@person.zip_code, @person.town].compact.join(' ').squish,
+      [@person.zip_code, @person.town].compact.join(" ").squish,
       country
     ].compact
   end

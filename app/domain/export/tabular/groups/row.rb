@@ -16,11 +16,11 @@ module Export::Tabular::Groups
     end
 
     def phone_numbers
-      entry.phone_numbers.map(&:to_s).join(', ')
+      entry.phone_numbers.map(&:to_s).join(", ")
     end
 
     def social_accounts
-      entry.social_accounts.map(&:to_s).join(', ')
+      entry.social_accounts.map(&:to_s).join(", ")
     end
 
     def member_count

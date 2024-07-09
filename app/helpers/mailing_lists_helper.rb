@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module MailingListsHelper
-
   def format_mailing_list_name(mailing_list)
     content_tag(:strong) do
       if can?(:update, mailing_list)
@@ -23,11 +22,11 @@ module MailingListsHelper
     content << "#{mailing_list.group.name} >" unless mailing_list.group.layer?
     content << format_mailing_list_name(mailing_list)
 
-    content_tag(:div, safe_join(content.compact, ' '))
+    content_tag(:div, safe_join(content.compact, " "))
   end
 
   def format_mailing_list_preferred_labels(mailing_list)
-    safe_join mailing_list.preferred_labels.sort, ', '
+    safe_join mailing_list.preferred_labels.sort, ", "
   end
 
   def button_toggle_subscription
@@ -47,24 +46,23 @@ module MailingListsHelper
       content = []
       content << content_tag(:span, I18n.l(last_synced_at, format: :short)) if last_synced_at
       content << content_tag(:span, badge(text, badge_class), title: exception)
-      content_tag(:div, safe_join(content.compact, ' '))
+      content_tag(:div, safe_join(content.compact, " "))
     end
   end
 
   private
 
   def button_subscribe
-    action_button(t('mailing_list_decorator.unsubscribe'),
-                  group_mailing_list_user_path(@group, entry),
-                  :minus,
-                  method: 'delete')
+    action_button(t("mailing_list_decorator.unsubscribe"),
+      group_mailing_list_user_path(@group, entry),
+      :minus,
+      method: "delete")
   end
 
   def button_unsubscribe
-    action_button(t('mailing_list_decorator.subscribe'),
-                  group_mailing_list_user_path(@group, entry),
-                  :plus,
-                  method: 'post')
+    action_button(t("mailing_list_decorator.subscribe"),
+      group_mailing_list_user_path(@group, entry),
+      :plus,
+      method: "post")
   end
-
 end

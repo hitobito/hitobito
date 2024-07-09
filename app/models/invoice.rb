@@ -55,23 +55,22 @@ class Invoice < ActiveRecord::Base
   include I18nEnums
   include PaymentSlips
 
-  ROUND_TO = BigDecimal('0.05')
+  ROUND_TO = BigDecimal("0.05")
 
-  SEQUENCE_NR_SEPARATOR = '-'
+  SEQUENCE_NR_SEPARATOR = "-"
 
   # rubocop:disable Style/MutableConstant meant to be extended in wagons
-  STATES = %w(draft issued sent partial payed excess reminded cancelled)
-  STATES_REMINDABLE = %w(issued sent partial reminded)
-  STATES_PAYABLE = %w(issued sent partial reminded)
+  STATES = %w[draft issued sent partial payed excess reminded cancelled]
+  STATES_REMINDABLE = %w[issued sent partial reminded]
+  STATES_PAYABLE = %w[issued sent partial reminded]
 
-  DUE_SINCE = %w(one_day one_week one_month)
+  DUE_SINCE = %w[one_day one_week one_month]
   # rubocop:enable Style/MutableConstant meant to be extended in wagons
 
   belongs_to :group
-  belongs_to :recipient, class_name: 'Person'
-  belongs_to :creator, class_name: 'Person'
+  belongs_to :recipient, class_name: "Person"
+  belongs_to :creator, class_name: "Person"
   belongs_to :invoice_list, optional: true
-
 
   has_many :invoice_items, dependent: :destroy
   has_many :payments, dependent: :destroy
@@ -85,14 +84,13 @@ class Invoice < ActiveRecord::Base
   before_validation :set_self_in_nested
   before_validation :recalculate
 
-  validates :state, inclusion: { in: STATES }
-  validates :due_at, timeliness: { after: :sent_at }, presence: true, if: :sent?
+  validates :state, inclusion: {in: STATES}
+  validates :due_at, timeliness: {after: :sent_at}, presence: true, if: :sent?
   validates :invoice_items, presence: true, if: -> { (issued? || sent?) && !invoice_list }
   validate :assert_sendable?, unless: :recipient_id?
 
   before_create :set_recipient_fields, if: :recipient
   after_create :increment_sequence_number
-
 
   accepts_nested_attributes_for :invoice_items, allow_destroy: true
 
@@ -100,17 +98,17 @@ class Invoice < ActiveRecord::Base
 
   validates_by_schema
 
-  scope :list,           -> { order_by_sequence_number }
-  scope :one_day,        -> { where('invoices.due_at < ?', 1.day.ago.to_date) }
-  scope :one_week,       -> { where('invoices.due_at < ?', 1.week.ago.to_date) }
-  scope :one_month,      -> { where('invoices.due_at < ?', 1.month.ago.to_date) }
-  scope :visible,        -> { where.not(state: :cancelled) }
-  scope :remindable,     -> { where(state: STATES_REMINDABLE) }
-  scope :standalone,     -> { where(invoice_list_id: nil) }
+  scope :list, -> { order_by_sequence_number }
+  scope :one_day, -> { where(invoices: {due_at: ...1.day.ago.to_date}) }
+  scope :one_week, -> { where(invoices: {due_at: ...1.week.ago.to_date}) }
+  scope :one_month, -> { where(invoices: {due_at: ...1.month.ago.to_date}) }
+  scope :visible, -> { where.not(state: :cancelled) }
+  scope :remindable, -> { where(state: STATES_REMINDABLE) }
+  scope :standalone, -> { where(invoice_list_id: nil) }
 
   class << self
     def draft_or_issued_in(year)
-      return all unless year.to_s =~ /\A\d+\z/
+      return all unless /\A\d+\z/.match?(year.to_s)
 
       draft_or_issued(from: Date.new(year, 1, 1), to: Date.new(year, 12, 31))
     end
@@ -120,10 +118,10 @@ class Invoice < ActiveRecord::Base
       to = Date.parse(to.to_s) rescue Time.zone.today.end_of_year # rubocop:disable Style/RescueModifier
 
       condition = OrCondition.new
-      condition.or('issued_at >= :from AND issued_at <= :to', from: from, to: to)
-      condition.or('issued_at IS NULL AND ' \
-                   'invoices.created_at >= :from AND invoices.created_at <= :to',
-                   from: from, to: to)
+      condition.or("issued_at >= :from AND issued_at <= :to", from: from, to: to)
+      condition.or("issued_at IS NULL AND " \
+                   "invoices.created_at >= :from AND invoices.created_at <= :to",
+        from: from, to: to)
       where(condition.to_a)
     end
 
@@ -137,22 +135,22 @@ class Invoice < ActiveRecord::Base
     end
 
     def order_by_sequence_number
-      order(Arel.sql(order_by_sequence_number_statement.join(', ')))
+      order(Arel.sql(order_by_sequence_number_statement.join(", ")))
     end
 
     # Orders by first integer, second integer
     def order_by_sequence_number_statement
-      %w(sequence_number).product(%w(1 -1)).map do |field, index|
+      %w[sequence_number].product(%w[1 -1]).map do |field, index|
         "CAST(SUBSTRING_INDEX(#{field}, '-', #{index}) AS UNSIGNED)"
       end
     end
 
     def order_by_payment_statement
-      'last_payments.received_at'
+      "last_payments.received_at"
     end
 
     def order_by_amount_paid_statement
-      'last_payments.amount_paid'
+      "last_payments.amount_paid"
     end
 
     def last_payments_information
@@ -208,11 +206,11 @@ class Invoice < ActiveRecord::Base
     recipient.try(:greeting_name) || recipient_name_from_recipient_address
   end
 
-  def filename(extension = 'pdf')
-    format('%<type>s-%<number>s.%<ext>s',
-           type: self.class.model_name.human,
-           number: sequence_number,
-           ext: extension)
+  def filename(extension = "pdf")
+    format("%<type>s-%<number>s.%<ext>s",
+      type: self.class.model_name.human,
+      number: sequence_number,
+      ext: extension)
   end
 
   def invoice_config
@@ -259,8 +257,8 @@ class Invoice < ActiveRecord::Base
 
   def set_payment_attributes
     [:address, :account_number, :iban, :payment_slip,
-     :beneficiary, :payee, :participant_number,
-     :participant_number_internal, :vat_number, :currency].each do |at|
+      :beneficiary, :payee, :participant_number,
+      :participant_number_internal, :vat_number, :currency].each do |at|
       assign_attributes(at => invoice_config.send(at))
     end
   end

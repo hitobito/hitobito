@@ -5,7 +5,6 @@
 
 module TableDisplays::Event::Participations
   class ShowDetailsOrEventLeaderColumn < TableDisplays::PublicColumn
-
     protected
 
     def allowed?(object, _attr, original_object, _original_attr)

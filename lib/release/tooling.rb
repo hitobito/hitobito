@@ -15,7 +15,7 @@ module Release
     end
 
     def with_env(env_hash)
-      previous = ENV.select { |env_key| env_hash.keys.include? env_key }
+      previous = ENV.select { |env_key| env_hash.key?(env_key) }
       env_hash.each { |key, value| ENV[key] = value.to_s }
 
       result = yield
@@ -27,7 +27,7 @@ module Release
 
     def cli
       @cli ||= begin
-        require 'highline'
+        require "highline"
         HighLine.new
       rescue LoadError
         abort(<<~MESSAGE)

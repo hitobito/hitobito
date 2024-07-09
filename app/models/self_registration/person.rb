@@ -78,7 +78,7 @@ class SelfRegistration::Person
   end
 
   def household_emails
-    Array.wrap(attributes['household_emails'])
+    Array.wrap(attributes["household_emails"])
   end
 
   private
@@ -95,14 +95,14 @@ class SelfRegistration::Person
     errors.add(:email, :invalid) unless valid_email?
 
     unless Person.where(email: email).none? && household_emails.to_a.count(email) <= 1
-      errors.add(:email, I18n.t('activerecord.errors.models.person.attributes.email.taken'))
+      errors.add(:email, I18n.t("activerecord.errors.models.person.attributes.email.taken"))
     end
   end
 
   def assert_role_valid
     unless role.valid?(validation_context)
       role.errors.attribute_names.each do |attr|
-        errors.add(attr, role.errors[attr].join(', '))
+        errors.add(attr, role.errors[attr].join(", "))
       end
     end
   end
@@ -110,7 +110,7 @@ class SelfRegistration::Person
   def assert_person_valid
     unless person.valid?(validation_context)
       (person.errors.attribute_names & attrs).each do |attr|
-        errors.add(attr, person.errors[attr].join(', ')) unless errors.key?(attr)
+        errors.add(attr, person.errors[attr].join(", ")) unless errors.key?(attr)
       end
     end
   end

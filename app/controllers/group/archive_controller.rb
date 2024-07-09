@@ -6,23 +6,21 @@
 #  https://github.com/hitobito/hitobito.
 
 class Group::ArchiveController < ApplicationController
-
   before_action :authorize_action
 
   def create
     entry.archive!
 
-    redirect_to group_path(entry), notice: I18n.t('group.archive.flash.success')
+    redirect_to group_path(entry), notice: I18n.t("group.archive.flash.success")
   end
 
   private
 
   def entry
-    @entry ||= Group.find_by!(id: params[:id])
+    @entry ||= Group.find(params[:id])
   end
 
   def authorize_action
     authorize!(:destroy, entry) # not exactly the same, but close enough
   end
-
 end

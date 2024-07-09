@@ -4,11 +4,10 @@
 #  https://github.com/hitobito/hitobito.
 
 class TableDisplaysController < ApplicationController
-
   skip_authorization_check only: [:create]
 
   def create
-    return unless TableDisplay.table_display_columns.keys.include? table_model_class
+    return unless TableDisplay.table_display_columns.key?(table_model_class)
 
     model = current_person.table_display_for(table_model_class.constantize)
     model.update!(selected: model_params.fetch(:selected, []))
@@ -23,5 +22,4 @@ class TableDisplaysController < ApplicationController
   def table_model_class
     @table_model_class ||= model_params[:table_model_class]
   end
-
 end

@@ -1402,6 +1402,8 @@ de:
           rejected: "Die Zugriffsanfrage für %{person} wurde bereits abgelehnt."
 
     history:
+      events:
+        event_label: "Name / Gruppe"
       index:
         inactive_roles_title: "Inaktive Rollen"
         qualified: "Bestanden"

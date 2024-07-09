@@ -1,17 +1,25 @@
+-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
 #events.mt-2
-  = render(layout: 'shared/grouped_table',
-           locals: { grouped_lists: @participations_by_event_type,
-                     column_count: 4 }) do |participation|
-    - event = participation.event
-    %td
-      %strong= event.labeled_link
-    %td= participation.list_roles
-    %td= event.dates_full
-    %td
-      - if event.is_a?(Event::Course)
-        - if event.qualifications_visible?
-          = t("person.history.index.#{participation.qualified ? '' : 'not_'}qualified")
-          %br
-        - if event.training_days?
-          - days = participation.event.training_days
-          = t('person.history.index.training_days', count: days.to_i == days ? days.to_i : days)
+  - @participations_by_event_type.each do |kind, participations|
+    %h2.mt-2=kind
+    = table(participations, class: 'table table-striped table-fixed') do |t|
+      - t.col(t('.event_label')) do |p|
+        = p.event.labeled_link
+      - t.col(Role.model_name.human) do |p|
+        = p.list_roles
+      - t.col(Event::Date.model_name.human(count: 2)) do |p|
+        = p.event.dates_full
+      - if participations.first.event.is_a?(Event::Course)
+        - t.col(Qualification.model_name.human) do |p|
+          - if p.event.qualifications_visible?
+            = t("person.history.index.#{p.qualified ? '' : 'not_'}qualified")
+            %br
+          - if p.event.training_days?
+            - days = p.event.training_days
+            = t('person.history.index.training_days', count: days.to_i == days ? days.to_i : days)
+      - else
+        - t.col('') {}

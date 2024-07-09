@@ -3,8 +3,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
-require_dependency 'app_status/mail'
+require "spec_helper"
+require_dependency "app_status/mail"
 
 describe AppStatus::Mail do
   include MailingLists::ImapMailsSpecHelper
@@ -29,10 +29,9 @@ describe AppStatus::Mail do
   before { cache.write(:app_status, nil) }
   after { cache.write(:app_status, nil) }
 
-  context 'mail healthy' do
-
-    it 'has no overdue mails in inbox' do
-      cache.write(:app_status, { seen_mails: seen_mails})
+  context "mail healthy" do
+    it "has no overdue mails in inbox" do
+      cache.write(:app_status, {seen_mails: seen_mails})
 
       expect(imap_connector)
         .to receive(:fetch_mails)
@@ -44,8 +43,8 @@ describe AppStatus::Mail do
       expect(cache.read(:app_status)[:seen_mails]).to eq(seen_mails)
     end
 
-    it 'has no mails at all in inbox' do
-      cache.write(:app_status, { seen_mails: seen_mails})
+    it "has no mails at all in inbox" do
+      cache.write(:app_status, {seen_mails: seen_mails})
 
       expect(imap_connector)
         .to receive(:fetch_mails)
@@ -56,14 +55,12 @@ describe AppStatus::Mail do
 
       expect(cache.read(:app_status)[:seen_mails]).to be_empty
     end
-
   end
 
-  context 'mail unhealthy' do
-
-    it 'has overdue mail in inbox' do
+  context "mail unhealthy" do
+    it "has overdue mail in inbox" do
       seen_mails.last.first_seen = DateTime.now - 52.minutes
-      cache.write(:app_status, { seen_mails: seen_mails})
+      cache.write(:app_status, {seen_mails: seen_mails})
 
       expect(imap_connector)
         .to receive(:fetch_mails)
@@ -74,13 +71,12 @@ describe AppStatus::Mail do
 
       expect(cache.read(:app_status)[:seen_mails]).to eq(seen_mails)
     end
-
   end
 
   private
 
   def imap_mail(fixture)
-    mail = Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', fixture)))
+    mail = Mail.new(Rails.root.join("spec", "fixtures", "email", fixture).read)
     Imap::Mail.build(mail)
   end
 end

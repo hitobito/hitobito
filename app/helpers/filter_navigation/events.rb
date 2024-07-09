@@ -7,7 +7,6 @@
 
 module FilterNavigation
   class Events < Base
-
     def initialize(template, group)
       super(template)
       @group = group
@@ -15,14 +14,14 @@ module FilterNavigation
     end
 
     def active_label
-      label_for_filter(template.params.fetch(:filter, 'all'))
+      label_for_filter(template.params.fetch(:filter, "all"))
     end
 
     private
 
     def init_items
-      filter_item('all')
-      filter_item('layer')
+      filter_item("all")
+      filter_item("layer")
     end
 
     def filter_item(name)
@@ -36,6 +35,5 @@ module FilterNavigation
     def filter_path(name)
       template.url_for(template.params.to_unsafe_h.merge(filter: name, only_path: true))
     end
-
   end
 end

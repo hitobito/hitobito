@@ -10,19 +10,18 @@ module I18nSettable
   extend ActiveSupport::Concern
 
   module ClassMethods
-
     # Define a setter for the given attribute that accepts translated values
     # in the current language as well as the system defined values.
     # Translated values are automatically converted.
     def i18n_setter(attr, possible_values)
       i18n_prefix = "activerecord.attributes.#{name.underscore}.#{attr.to_s.pluralize}"
 
-      define_method("#{attr}=") do |value|
+      define_method(:"#{attr}=") do |value|
         super(value)
 
         normalized = value.to_s.strip.downcase
         possible_values.each do |v|
-          translated = I18n.t("#{i18n_prefix}.#{v.presence || '_nil'}")
+          translated = I18n.t("#{i18n_prefix}.#{v.presence || "_nil"}")
           super(v) if translated.downcase == normalized
         end
 
@@ -35,7 +34,7 @@ module I18nSettable
     # Translated values are automatically converted to boolean.
     def i18n_boolean_setter(*attrs)
       attrs.each do |attr|
-        define_method("#{attr}=") do |value|
+        define_method(:"#{attr}=") do |value|
           super(normalize_i18n_boolean(value))
         end
       end
@@ -46,13 +45,12 @@ module I18nSettable
 
   def normalize_i18n_boolean(value)
     normalized = value.to_s.strip.downcase
-    if I18n.t('global.yes').downcase == normalized
+    if I18n.t("global.yes").downcase == normalized
       true
-    elsif value.blank? || I18n.t('global.no').downcase == normalized
+    elsif value.blank? || I18n.t("global.no").downcase == normalized
       false
     else
       normalized
     end
   end
-
 end

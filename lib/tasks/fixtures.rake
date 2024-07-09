@@ -6,29 +6,29 @@
 #  https://github.com/hitobito/hitobito.
 
 namespace :fixtures do
-  desc 'Export groups suitable for fixtures'
+  desc "Export groups suitable for fixtures"
   task groups: [:environment] do
     data = {}
 
     fixture_id = lambda { |group|
       return nil unless group
-      return 'root' if group.id == 1 && group.parent_id.nil?
+      return "root" if group.id == 1 && group.parent_id.nil?
 
       parts = if Group.where(name: group.name).one?
-                [group.display_name.parameterize]
-              else
-                [group.display_name.parameterize, group.id]
-              end
+        [group.display_name.parameterize]
+      else
+        [group.display_name.parameterize, group.id]
+      end
 
-      parts.join('-').tr('-', '_')
+      parts.join("-").tr("-", "_")
     }
 
     fixture_data = [:lft, :rgt, :name, :short_name, :type, :email, :address, :zip_code, :town]
 
     Group.order(:lft).find_each do |group|
       entry = {
-        'parent' => fixture_id[group.parent],
-        'layer_group_id' =>
+        "parent" => fixture_id[group.parent],
+        "layer_group_id" =>
           "<%=ActiveRecord::FixtureSet.identify(:#{fixture_id[group.layer_group]})%>"
       }
 

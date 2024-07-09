@@ -5,15 +5,14 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'net/imap'
+require "net/imap"
 
 class Imap::Connector
-
-  MAILBOXES = { inbox: 'INBOX', spam: 'Junk', failed: 'Failed' }.with_indifferent_access.freeze
+  MAILBOXES = {inbox: "INBOX", spam: "Junk", failed: "Failed"}.with_indifferent_access.freeze
 
   def initialize
     @connected = false
-    raise 'no imap settings present' unless imap_config.present?
+    raise "no imap settings present" if imap_config.blank?
   end
 
   def move_by_uid(uid, from_mailbox, to_mailbox)
@@ -26,7 +25,7 @@ class Imap::Connector
   def delete_by_uid(uid, mailbox)
     perform do
       select_mailbox(mailbox)
-      @imap.uid_store(uid, '+FLAGS', [:Deleted])
+      @imap.uid_store(uid, "+FLAGS", [:Deleted])
       @imap.expunge
     end
   end
@@ -71,7 +70,7 @@ class Imap::Connector
 
   def count(mailbox)
     select_mailbox(mailbox)
-    @imap.status(MAILBOXES[mailbox], ['MESSAGES'])['MESSAGES']
+    @imap.status(MAILBOXES[mailbox], ["MESSAGES"])["MESSAGES"]
   end
 
   def fetch_mailbox_counts
@@ -114,7 +113,7 @@ class Imap::Connector
 
   def create_if_missing(mailbox, error)
     if (MAILBOXES[mailbox] == MAILBOXES[:failed]) &&
-      error.response.data.text.include?("Mailbox doesn't exist")
+        error.response.data.text.include?("Mailbox doesn't exist")
       @imap.create(MAILBOXES[:failed])
       @imap.select(MAILBOXES[:failed])
     else
@@ -141,6 +140,6 @@ class Imap::Connector
   end
 
   def attributes
-    %w(ENVELOPE UID RFC822)
+    %w[ENVELOPE UID RFC822]
   end
 end

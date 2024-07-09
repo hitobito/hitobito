@@ -20,7 +20,6 @@
 #
 
 class PhoneNumber < ActiveRecord::Base
-
   include ContactAccount
 
   self.value_attr = :number
@@ -34,7 +33,7 @@ class PhoneNumber < ActiveRecord::Base
   private
 
   def format_number
-    phone = Phonelib.parse(self.number)
+    phone = Phonelib.parse(number)
     if phone.valid?
       self.number = phone.international
     end
@@ -45,5 +44,4 @@ class PhoneNumber < ActiveRecord::Base
       Settings.phone_number.predefined_labels
     end
   end
-
 end

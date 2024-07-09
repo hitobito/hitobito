@@ -5,11 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
 
-require 'spec_helper'
-require 'csv'
+require "spec_helper"
+require "csv"
 
 describe Address::Importer do
-
   let(:csv) do
     <<~CSV
       00;20200817;13229
@@ -42,7 +41,7 @@ describe Address::Importer do
   let(:dir) { @dir }
 
   around do |example|
-    Dir.mktmpdir('post-test') do |dir|
+    Dir.mktmpdir("post-test") do |dir|
       @dir = Pathname.new(dir)
       example.run
     end
@@ -52,50 +51,50 @@ describe Address::Importer do
     allow(subject).to receive(:stale?).and_return(true)
   end
 
-  it 'raises if token is not set' do
+  it "raises if token is not set" do
     allow(Settings.addresses).to receive(:token).and_return(nil)
     expect { subject.run }.to raise_error(/expected token is blank/)
   end
 
-  it 'fetches and updates addresses' do
+  it "fetches and updates addresses" do
     Address.delete_all
-    allow(Settings.addresses).to receive(:token).and_return('foo')
+    allow(Settings.addresses).to receive(:token).and_return("foo")
     zip = create_zip(csv)
 
     headers = {
-      'Accept' => '*/*',
-      'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-      'Authorization' => 'Basic foo'
+      "Accept" => "*/*",
+      "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+      "Authorization" => "Basic foo"
     }
-    stub_request(:get, 'https://webservices.post.ch:17017/IN_ZOPAxFILES/v1/groups/1062/versions/latest/file/gateway').
-      with(headers: headers).to_return(status: 200, body: zip.string, headers: {})
+    stub_request(:get, "https://webservices.post.ch:17017/IN_ZOPAxFILES/v1/groups/1062/versions/latest/file/gateway")
+      .with(headers: headers).to_return(status: 200, body: zip.string, headers: {})
 
     expect do
       subject.run
     end.to change { Address.count }.by(4)
 
-    bs_bern = Address.find_by(street_short: 'Belpstrasse', zip_code: 3007)
-    expect(bs_bern.street_long).to eq 'Belpstrasse'
-    expect(bs_bern.town).to eq 'Bern'
+    bs_bern = Address.find_by(street_short: "Belpstrasse", zip_code: 3007)
+    expect(bs_bern.street_long).to eq "Belpstrasse"
+    expect(bs_bern.town).to eq "Bern"
     expect(bs_bern.zip_code).to eq 3007
-    expect(bs_bern.numbers).to eq %w(36 37 38 40)
+    expect(bs_bern.numbers).to eq %w[36 37 38 40]
 
-    bs_muri = Address.find_by(street_short: 'Belpstrasse', zip_code: 3074)
-    expect(bs_muri.street_long).to eq 'Belpstrasse'
-    expect(bs_muri.town).to eq 'Muri b. Bern'
+    bs_muri = Address.find_by(street_short: "Belpstrasse", zip_code: 3074)
+    expect(bs_muri.street_long).to eq "Belpstrasse"
+    expect(bs_muri.town).to eq "Muri b. Bern"
     expect(bs_muri.zip_code).to eq 3074
-    expect(bs_muri.numbers).to eq %w(3)
+    expect(bs_muri.numbers).to eq %w[3]
     expect(dir).to be_exist
 
-    luzernstrasse = Address.find_by(street_short: 'Luzernerstrasse', zip_code: 6030)
-    expect(luzernstrasse.street_long).to eq 'Luzernerstrasse'
-    expect(luzernstrasse.town).to eq 'Ebikon'
+    luzernstrasse = Address.find_by(street_short: "Luzernerstrasse", zip_code: 6030)
+    expect(luzernstrasse.street_long).to eq "Luzernerstrasse"
+    expect(luzernstrasse.town).to eq "Ebikon"
     expect(luzernstrasse.zip_code).to eq 6030
-    expect(luzernstrasse.numbers).to eq %w(25a)
+    expect(luzernstrasse.numbers).to eq %w[25a]
     expect(dir).to be_exist
   end
 
-  it 'overrides strange lausane town name' do
+  it "overrides strange lausane town name" do
     csv = <<~CSV
       00;20200817;13229
 
@@ -103,23 +102,22 @@ describe Address::Importer do
       04;30235;125;Berne, route de;Berne, route de;Route de Berne;Route de Berne;1;2;J;;
     CSV
 
-    allow(Settings.addresses).to receive(:token).and_return('foo')
+    allow(Settings.addresses).to receive(:token).and_return("foo")
     zip = create_zip(csv)
 
     headers = {
-      'Accept' => '*/*',
-      'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-      'Authorization' => 'Basic foo'
+      "Accept" => "*/*",
+      "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+      "Authorization" => "Basic foo"
     }
-    stub_request(:get, 'https://webservices.post.ch:17017/IN_ZOPAxFILES/v1/groups/1062/versions/latest/file/gateway').
-      with(headers: headers).to_return(status: 200, body: zip.string, headers: {})
+    stub_request(:get, "https://webservices.post.ch:17017/IN_ZOPAxFILES/v1/groups/1062/versions/latest/file/gateway")
+      .with(headers: headers).to_return(status: 200, body: zip.string, headers: {})
 
     subject.prepare_files
-    expect(subject.streets.to_h.values.first[:town]).to eq 'Lausanne'
+    expect(subject.streets.to_h.values.first[:town]).to eq "Lausanne"
   end
 
-
-  it 'ignores empty numbers' do
+  it "ignores empty numbers" do
     csv = <<~CSV
       00;20200817;13229
 
@@ -128,16 +126,16 @@ describe Address::Importer do
       06;7185168;57347;;;J;N;
     CSV
 
-    allow(Settings.addresses).to receive(:token).and_return('foo')
+    allow(Settings.addresses).to receive(:token).and_return("foo")
     zip = create_zip(csv)
 
     headers = {
-      'Accept' => '*/*',
-      'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-      'Authorization' => 'Basic foo'
+      "Accept" => "*/*",
+      "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+      "Authorization" => "Basic foo"
     }
-    stub_request(:get, 'https://webservices.post.ch:17017/IN_ZOPAxFILES/v1/groups/1062/versions/latest/file/gateway').
-      with(headers: headers).to_return(status: 200, body: zip.string, headers: {})
+    stub_request(:get, "https://webservices.post.ch:17017/IN_ZOPAxFILES/v1/groups/1062/versions/latest/file/gateway")
+      .with(headers: headers).to_return(status: 200, body: zip.string, headers: {})
 
     subject.prepare_files
     expect(subject.streets.to_h.values.first[:numbers]).to eq []
@@ -145,7 +143,7 @@ describe Address::Importer do
 
   def create_zip(csv)
     stringio = Zip::OutputStream.write_buffer do |out|
-      out.put_next_entry('sample.csv')
+      out.put_next_entry("sample.csv")
       out.write(csv)
     end
     stringio.rewind # reposition buffer pointer to the beginning

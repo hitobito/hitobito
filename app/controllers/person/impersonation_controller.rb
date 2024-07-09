@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::ImpersonationController < ApplicationController
-
   before_action :authorize_action
   skip_before_action :reject_blocked_person!, only: [:destroy]
 
@@ -29,9 +28,9 @@ class Person::ImpersonationController < ApplicationController
     previous_user = current_user
     sign_in(origin_user)
     PaperTrail::Version.create(main: previous_user,
-                               item: previous_user,
-                               whodunnit: origin_user,
-                               event: :impersonation_done)
+      item: previous_user,
+      whodunnit: origin_user,
+      event: :impersonation_done)
 
     session[:origin_user] = nil
     redirect_to person_home_path(previous_user)
@@ -40,7 +39,7 @@ class Person::ImpersonationController < ApplicationController
   private
 
   def authorize_action
-    if action_name == 'destroy'
+    if action_name == "destroy"
       authorize!(:show, Person)
     else
       authorize!(:impersonate_user, Person)

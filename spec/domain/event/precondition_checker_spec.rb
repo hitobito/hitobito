@@ -3,7 +3,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Event::PreconditionChecker do
   let(:course) { events(:top_course) }
@@ -12,87 +12,94 @@ describe Event::PreconditionChecker do
   let(:course_start_at) { course.start_date }
 
   def preconditions
-    course.kind.qualification_kinds('precondition', 'participant')
+    course.kind.qualification_kinds("precondition", "participant")
   end
 
   subject { Event::PreconditionChecker.new(course, person) }
 
   before do
-    course.kind.event_kind_qualification_kinds.
-      where(category: 'precondition', role: 'participant').
-      destroy_all
+    course.kind.event_kind_qualification_kinds
+      .where(category: "precondition", role: "participant")
+      .destroy_all
   end
 
-  describe 'defaults' do
+  describe "defaults" do
     its(:course_minimum_age) { should be_blank }
     its(:valid?) { should be_truthy }
   end
 
-  describe 'minimum age person' do
+  describe "minimum age person" do
     before { course.kind.minimum_age = 16 }
-    let(:too_young_error) { 'Altersgrenze von 16 Jahren ist unterschritten.' }
 
-    context 'has no birthday' do
+    let(:too_young_error) { "Altersgrenze von 16 Jahren ist unterschritten." }
+
+    context "has no birthday" do
       its(:valid?) { should be_falsey }
-      its('errors_text.last') { should eq too_young_error }
+      its("errors_text.last") { should eq too_young_error }
     end
 
-    context 'is younger than 16' do
+    context "is younger than 16" do
       before { person.birthday = (course_start_at.beginning_of_year - 15.years) }
+
       its(:valid?) { should be_falsey }
-      its('errors_text.last') { should eq too_young_error }
+      its("errors_text.last") { should eq too_young_error }
     end
 
-    context 'is 16 years during course' do
+    context "is 16 years during course" do
       before { person.birthday = course_start_at - 16.years }
+
       its(:valid?) { should be_truthy }
-      its('errors') { should be_empty }
+      its("errors") { should be_empty }
     end
 
-    context 'is 16 years end of year' do
+    context "is 16 years end of year" do
       before { person.birthday = course_start_at.end_of_year - 16.years }
+
       its(:valid?) { should be_truthy }
-      its('errors') { should be_empty }
+      its("errors") { should be_empty }
     end
   end
 
-  describe 'qualification' do
+  describe "qualification" do
     let(:sl) { qualification_kinds(:sl) }
     let(:qualifications) { person.qualifications }
 
-    describe 'with validity valid' do
+    describe "with validity valid" do
       before do
         course.kind.event_kind_qualification_kinds.create!(qualification_kind_id: sl.id,
-                                                           category: 'precondition',
-                                                           role: 'participant',
-                                                           validity: :valid)
+          category: "precondition",
+          role: "participant",
+          validity: :valid)
       end
-
 
       context "person without 'super lead'" do
         its(:valid?) { should be_falsey }
-        its('errors_text.last') { should =~ /Folgende Qualifikationen fehlen oder sind abgelaufen: Super Lead/ }
+        its("errors_text.last") { should =~ /Folgende Qualifikationen fehlen oder sind abgelaufen: Super Lead/ }
       end
 
       context "person with expired 'super lead'" do
         before { qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: expired_date) }
+
         its(:valid?) { should be_falsey }
 
         context "'super lead kind' reactivateable in range" do
           before { sl.update_attribute(:reactivateable, 2) }
           before { qualifications.first.update_attribute(:finish_at, course_start_at - sl.reactivateable.years) }
+
           its(:valid?) { should be_falsey }
         end
 
         context "'super lead kind' reactivateable outside range" do
           before { sl.update_attribute(:reactivateable, 2) }
           before { qualifications.first.update_attribute(:finish_at, course_start_at - sl.reactivateable.years - 1) }
+
           its(:valid?) { should be_falsey }
         end
       end
 
       context "person with valid 'super lead'" do
         before { qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date) }
+
         its(:valid?) { should be_truthy }
         its(:errors_text) { should == [] }
       end
@@ -102,6 +109,7 @@ describe Event::PreconditionChecker do
           qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: expired_date)
           qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date)
         end
+
         its(:valid?) { should be_truthy }
         its(:errors_text) { should == [] }
       end
@@ -115,26 +123,26 @@ describe Event::PreconditionChecker do
         its(:valid?) { should be_truthy }
       end
 
-      context 'multiple preconditions' do
+      context "multiple preconditions" do
         let(:gl) { qualification_kinds(:gl) }
 
         before do
           course.kind.event_kind_qualification_kinds.create!(qualification_kind_id: gl.id,
-                                                             category: 'precondition',
-                                                             role: 'participant',
-                                                             validity: :valid)
+            category: "precondition",
+            role: "participant",
+            validity: :valid)
         end
 
-        its('errors_text.last') { should =~ /Folgende Qualifikationen fehlen oder sind abgelaufen: Super Lead, Group Lead/ }
+        its("errors_text.last") { should =~ /Folgende Qualifikationen fehlen oder sind abgelaufen: Super Lead, Group Lead/ }
 
-        context 'missing only one' do
+        context "missing only one" do
           before { qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date) }
 
           its(:valid?) { should be_falsey }
-          its('errors_text.last') { should =~ /Folgende Qualifikationen fehlen oder sind abgelaufen: Group Lead/ }
+          its("errors_text.last") { should =~ /Folgende Qualifikationen fehlen oder sind abgelaufen: Group Lead/ }
         end
 
-        context 'with both present' do
+        context "with both present" do
           before do
             qualifications << Fabricate(:qualification, qualification_kind: gl, start_at: course_start_at - gl.validity.years)
             qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date)
@@ -143,27 +151,27 @@ describe Event::PreconditionChecker do
           its(:valid?) { should be_truthy }
         end
 
-        context 'in multiple groups' do
+        context "in multiple groups" do
           let(:ql) { qualification_kinds(:ql) }
 
           before do
             course.kind.event_kind_qualification_kinds.create!(qualification_kind_id: ql.id,
-                                                               category: 'precondition',
-                                                               role: 'participant',
-                                                               grouping: 1,
-                                                               validity: :valid)
+              category: "precondition",
+              role: "participant",
+              grouping: 1,
+              validity: :valid)
           end
 
-          its('errors_text.last') { should =~ /Erforderliche Qualifikationen fehlen/ }
+          its("errors_text.last") { should =~ /Erforderliche Qualifikationen fehlen/ }
 
-          context 'missing only one in a grouping' do
+          context "missing only one in a grouping" do
             before { qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date) }
 
             its(:valid?) { should be_falsey }
-            its('errors_text.last') { should =~ /Erforderliche Qualifikationen fehlen/ }
+            its("errors_text.last") { should =~ /Erforderliche Qualifikationen fehlen/ }
           end
 
-          context 'with both in grouping nil' do
+          context "with both in grouping nil" do
             before do
               qualifications << Fabricate(:qualification, qualification_kind: gl, start_at: course_start_at - gl.validity.years)
               qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date)
@@ -172,7 +180,7 @@ describe Event::PreconditionChecker do
             its(:valid?) { should be_truthy }
           end
 
-          context 'with the single one in grouping 1' do
+          context "with the single one in grouping 1" do
             before { qualifications << Fabricate(:qualification, qualification_kind: ql, start_at: valid_date) }
 
             its(:valid?) { should be_truthy }
@@ -181,39 +189,42 @@ describe Event::PreconditionChecker do
       end
     end
 
-    describe 'with validity valid_or_reactivatable' do
+    describe "with validity valid_or_reactivatable" do
       before do
         course.kind.event_kind_qualification_kinds.create!(qualification_kind_id: sl.id,
-                                                           category: 'precondition',
-                                                           role: 'participant',
-                                                           validity: :valid_or_reactivatable)
+          category: "precondition",
+          role: "participant",
+          validity: :valid_or_reactivatable)
       end
-
 
       context "person without 'super lead'" do
         its(:valid?) { should be_falsey }
-        its('errors_text.last') { should =~ /Folgende Qualifikationen fehlen oder sind abgelaufen: Super Lead/ }
+        its("errors_text.last") { should =~ /Folgende Qualifikationen fehlen oder sind abgelaufen: Super Lead/ }
       end
 
       context "person with expired 'super lead'" do
         before { qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: expired_date) }
+
         its(:valid?) { should be_falsey }
 
         context "'super lead kind' reactivateable in range" do
           before { sl.update_attribute(:reactivateable, 2) }
           before { qualifications.first.update_attribute(:finish_at, course_start_at - sl.reactivateable.years) }
+
           its(:valid?) { should be_truthy }
         end
 
         context "'super lead kind' reactivateable outside range" do
           before { sl.update_attribute(:reactivateable, 2) }
           before { qualifications.first.update_attribute(:finish_at, course_start_at - sl.reactivateable.years - 1) }
+
           its(:valid?) { should be_falsey }
         end
       end
 
       context "person with valid 'super lead'" do
         before { qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date) }
+
         its(:valid?) { should be_truthy }
         its(:errors_text) { should == [] }
       end
@@ -223,6 +234,7 @@ describe Event::PreconditionChecker do
           qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: expired_date)
           qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date)
         end
+
         its(:valid?) { should be_truthy }
         its(:errors_text) { should == [] }
       end
@@ -236,26 +248,26 @@ describe Event::PreconditionChecker do
         its(:valid?) { should be_truthy }
       end
 
-      context 'multiple preconditions' do
+      context "multiple preconditions" do
         let(:gl) { qualification_kinds(:gl) }
 
         before do
           course.kind.event_kind_qualification_kinds.create!(qualification_kind_id: gl.id,
-                                                             category: 'precondition',
-                                                             role: 'participant',
-                                                             validity: :valid)
+            category: "precondition",
+            role: "participant",
+            validity: :valid)
         end
 
-        its('errors_text.last') { should =~ /Folgende Qualifikationen fehlen oder sind abgelaufen: Super Lead, Group Lead/ }
+        its("errors_text.last") { should =~ /Folgende Qualifikationen fehlen oder sind abgelaufen: Super Lead, Group Lead/ }
 
-        context 'missing only one' do
+        context "missing only one" do
           before { qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date) }
 
           its(:valid?) { should be_falsey }
-          its('errors_text.last') { should =~ /Folgende Qualifikationen fehlen oder sind abgelaufen: Group Lead/ }
+          its("errors_text.last") { should =~ /Folgende Qualifikationen fehlen oder sind abgelaufen: Group Lead/ }
         end
 
-        context 'with both present' do
+        context "with both present" do
           before do
             qualifications << Fabricate(:qualification, qualification_kind: gl, start_at: course_start_at - gl.validity.years)
             qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date)
@@ -264,27 +276,27 @@ describe Event::PreconditionChecker do
           its(:valid?) { should be_truthy }
         end
 
-        context 'in multiple groups' do
+        context "in multiple groups" do
           let(:ql) { qualification_kinds(:ql) }
 
           before do
             course.kind.event_kind_qualification_kinds.create!(qualification_kind_id: ql.id,
-                                                               category: 'precondition',
-                                                               role: 'participant',
-                                                               grouping: 1,
-                                                               validity: :valid)
+              category: "precondition",
+              role: "participant",
+              grouping: 1,
+              validity: :valid)
           end
 
-          its('errors_text.last') { should =~ /Erforderliche Qualifikationen fehlen/ }
+          its("errors_text.last") { should =~ /Erforderliche Qualifikationen fehlen/ }
 
-          context 'missing only one in a grouping' do
+          context "missing only one in a grouping" do
             before { qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date) }
 
             its(:valid?) { should be_falsey }
-            its('errors_text.last') { should =~ /Erforderliche Qualifikationen fehlen/ }
+            its("errors_text.last") { should =~ /Erforderliche Qualifikationen fehlen/ }
           end
 
-          context 'with both in grouping nil' do
+          context "with both in grouping nil" do
             before do
               qualifications << Fabricate(:qualification, qualification_kind: gl, start_at: course_start_at - gl.validity.years)
               qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date)
@@ -293,7 +305,7 @@ describe Event::PreconditionChecker do
             its(:valid?) { should be_truthy }
           end
 
-          context 'with the single one in grouping 1' do
+          context "with the single one in grouping 1" do
             before { qualifications << Fabricate(:qualification, qualification_kind: ql, start_at: valid_date) }
 
             its(:valid?) { should be_truthy }
@@ -302,39 +314,42 @@ describe Event::PreconditionChecker do
       end
     end
 
-    describe 'with valid_or_expired validity' do
+    describe "with valid_or_expired validity" do
       before do
         course.kind.event_kind_qualification_kinds.create!(qualification_kind_id: sl.id,
-                                                           category: 'precondition',
-                                                           role: 'participant',
-                                                           validity: :valid_or_expired)
+          category: "precondition",
+          role: "participant",
+          validity: :valid_or_expired)
       end
-
 
       context "person without 'super lead'" do
         its(:valid?) { should be_falsey }
-        its('errors_text.last') { should =~ /Folgende Qualifikationen fehlen oder sind abgelaufen: Super Lead/ }
+        its("errors_text.last") { should =~ /Folgende Qualifikationen fehlen oder sind abgelaufen: Super Lead/ }
       end
 
       context "person with expired 'super lead'" do
         before { qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: expired_date) }
+
         its(:valid?) { should be_truthy }
 
         context "'super lead kind' reactivateable in range" do
           before { sl.update_attribute(:reactivateable, 2) }
           before { qualifications.first.update_attribute(:finish_at, course_start_at - sl.reactivateable.years) }
+
           its(:valid?) { should be_truthy }
         end
 
         context "'super lead kind' reactivateable outside range is still valid, because the course kind accepts it" do
           before { sl.update_attribute(:reactivateable, 2) }
           before { qualifications.first.update_attribute(:finish_at, course_start_at - sl.reactivateable.years - 1) }
+
           its(:valid?) { should be_truthy }
         end
       end
 
       context "person with valid 'super lead'" do
         before { qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date) }
+
         its(:valid?) { should be_truthy }
         its(:errors_text) { should == [] }
       end
@@ -344,6 +359,7 @@ describe Event::PreconditionChecker do
           qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: expired_date)
           qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date)
         end
+
         its(:valid?) { should be_truthy }
         its(:errors_text) { should == [] }
       end
@@ -357,19 +373,19 @@ describe Event::PreconditionChecker do
         its(:valid?) { should be_truthy }
       end
 
-      context 'multiple preconditions' do
+      context "multiple preconditions" do
         let(:gl) { qualification_kinds(:gl) }
 
         before do
           course.kind.event_kind_qualification_kinds.create!(qualification_kind_id: gl.id,
-                                                             category: 'precondition',
-                                                             role: 'participant',
-                                                             validity: :valid_or_expired)
+            category: "precondition",
+            role: "participant",
+            validity: :valid_or_expired)
         end
 
-        its('errors_text.last') { should =~ /Folgende Qualifikationen fehlen oder sind abgelaufen: Super Lead, Group Lead/ }
+        its("errors_text.last") { should =~ /Folgende Qualifikationen fehlen oder sind abgelaufen: Super Lead, Group Lead/ }
 
-        context 'with both present' do
+        context "with both present" do
           before do
             qualifications << Fabricate(:qualification, qualification_kind: gl, start_at: course_start_at - gl.validity.years)
             qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date)
@@ -378,7 +394,7 @@ describe Event::PreconditionChecker do
           its(:valid?) { should be_truthy }
         end
 
-        context 'with one expired' do
+        context "with one expired" do
           before do
             qualifications << Fabricate(:qualification, qualification_kind: gl, start_at: expired_date)
             qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date)
@@ -387,7 +403,7 @@ describe Event::PreconditionChecker do
           its(:valid?) { should be_truthy }
         end
 
-        context 'with both expired' do
+        context "with both expired" do
           before do
             qualifications << Fabricate(:qualification, qualification_kind: gl, start_at: expired_date)
             qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: expired_date)
@@ -396,27 +412,27 @@ describe Event::PreconditionChecker do
           its(:valid?) { should be_truthy }
         end
 
-        context 'in multiple groups' do
+        context "in multiple groups" do
           let(:ql) { qualification_kinds(:ql) }
 
           before do
             course.kind.event_kind_qualification_kinds.create!(qualification_kind_id: ql.id,
-                                                               category: 'precondition',
-                                                               role: 'participant',
-                                                               grouping: 1,
-                                                               validity: :valid_or_expired)
+              category: "precondition",
+              role: "participant",
+              grouping: 1,
+              validity: :valid_or_expired)
           end
 
-          its('errors_text.last') { should =~ /Erforderliche Qualifikationen fehlen/ }
+          its("errors_text.last") { should =~ /Erforderliche Qualifikationen fehlen/ }
 
-          context 'missing only one in a grouping' do
+          context "missing only one in a grouping" do
             before { qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date) }
 
             its(:valid?) { should be_falsey }
-            its('errors_text.last') { should =~ /Erforderliche Qualifikationen fehlen/ }
+            its("errors_text.last") { should =~ /Erforderliche Qualifikationen fehlen/ }
           end
 
-          context 'with both in grouping nil' do
+          context "with both in grouping nil" do
             before do
               qualifications << Fabricate(:qualification, qualification_kind: gl, start_at: course_start_at - gl.validity.years)
               qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date)
@@ -425,7 +441,7 @@ describe Event::PreconditionChecker do
             its(:valid?) { should be_truthy }
           end
 
-          context 'with the single one in grouping 1' do
+          context "with the single one in grouping 1" do
             before { qualifications << Fabricate(:qualification, qualification_kind: ql, start_at: valid_date) }
 
             its(:valid?) { should be_truthy }

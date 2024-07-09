@@ -20,3 +20,4 @@ Für den Entwicklungsalltag relevante Informationen sollen in zusätzlichen Orte
 
 - [004 S3 Storage](./adr/004_s3_storage.md)
 - [005 JSON API](./adr/005_json_api.md)
+- [007 Rubocop](./adr/007_rubocop.md)

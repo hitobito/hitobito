@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Export::EventParticipationsExportJob < Export::ExportBaseJob
-
   self.parameters = PARAMETERS + [:filter]
 
   def initialize(format, user_id, filter, options)

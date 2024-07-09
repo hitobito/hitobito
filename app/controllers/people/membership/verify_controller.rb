@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class People::Membership::VerifyController < ActionController::Base # rubocop:disable Rails/ApplicationController
-
   helper_method :person, :root, :member?
 
   skip_authorization_check
@@ -41,5 +40,4 @@ class People::Membership::VerifyController < ActionController::Base # rubocop:di
   def feature_enabled?
     People::Membership::Verifier.enabled?
   end
-
 end

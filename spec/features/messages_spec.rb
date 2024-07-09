@@ -5,11 +5,11 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe :messages, js: true do
-
   subject { page }
+
   let(:list) { mailing_lists(:leaders) }
 
   before do
@@ -22,7 +22,7 @@ describe :messages, js: true do
     visit group_mailing_list_messages_path(group_id: list.group.id, mailing_list_id: list.id)
   end
 
-  context 'letter' do
+  context "letter" do
     before do
       Subscription.create!(mailing_list: list, subscriber: groups(:top_group), role_types: [Group::TopGroup::Leader])
       3.times do
@@ -31,34 +31,34 @@ describe :messages, js: true do
       end
     end
 
-    it 'displays recipient info' do
-      click_link('Brief erstellen')
+    it "displays recipient info" do
+      click_link("Brief erstellen")
 
-      is_expected.to have_selector('a', text: 'Brief wird für 3 Personen erstellt.')
-      is_expected.to have_text('(Eine Person hat keine vollständige Adresse hinterlegt.)')
+      is_expected.to have_selector("a", text: "Brief wird für 3 Personen erstellt.")
+      is_expected.to have_text("(Eine Person hat keine vollständige Adresse hinterlegt.)")
     end
   end
 
-  context 'text message' do
+  context "text message" do
     before do
       Subscription.create!(mailing_list: list, subscriber: groups(:top_group), role_types: [Group::TopGroup::Leader])
       3.times do
-        person = Fabricate(:phone_number, label: 'Mobil').contactable
+        person = Fabricate(:phone_number, label: "Mobil").contactable
         Group::TopGroup::Leader.create!(group: groups(:top_group), person: person)
       end
     end
 
-    it 'displays recipient info' do
-      click_link('SMS erstellen')
+    it "displays recipient info" do
+      click_link("SMS erstellen")
 
-      is_expected.to have_selector('a', text: 'SMS wird für 3 Personen erstellt.')
-      is_expected.to have_text('(Eine Person hat keine vollständige Mobiltelefonnummer hinterlegt.)')
+      is_expected.to have_selector("a", text: "SMS wird für 3 Personen erstellt.")
+      is_expected.to have_text("(Eine Person hat keine vollständige Mobiltelefonnummer hinterlegt.)")
     end
   end
 
-  context 'letter assignments' do
+  context "letter assignments" do
     let(:printer) do
-      company = Fabricate(:company, email: 'printer@example.com')
+      company = Fabricate(:company, email: "printer@example.com")
       Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_two), person: company)
       company
     end
@@ -72,40 +72,40 @@ describe :messages, js: true do
 
     before do
       Subscription.create!(mailing_list: list,
-                           subscriber: groups(:top_group),
-                           role_types: [Group::TopGroup::Leader])
+        subscriber: groups(:top_group),
+        role_types: [Group::TopGroup::Leader])
       3.times do
         person = Fabricate(:person_with_address)
         Group::TopGroup::Leader.create!(group: groups(:top_group), person: person)
       end
     end
 
-    it 'creates new letter and assignment' do
-      click_link('Brief erstellen')
+    it "creates new letter and assignment" do
+      click_link("Brief erstellen")
 
-      is_expected.to have_selector('a', text: 'Brief wird für 3 Personen erstellt.')
-      fill_in 'Betreff', with: 'Letter with love'
-      fill_in_trix_editor 'message_body', with: Faker::Lorem.sentences.join
+      is_expected.to have_selector("a", text: "Brief wird für 3 Personen erstellt.")
+      fill_in "Betreff", with: "Letter with love"
+      fill_in_trix_editor "message_body", with: Faker::Lorem.sentences.join
       expect do
-        click_button('Speichern')
-        expect(page).to have_content 'Letter with love wurde erfolgreich erstellt.'
+        click_button("Speichern")
+        expect(page).to have_content "Letter with love wurde erfolgreich erstellt."
       end.to change { Message::Letter.count }.by(1)
 
-      is_expected.to have_selector('a', text: 'Druckauftrag erstellen')
-      click_link('Druckauftrag erstellen')
+      is_expected.to have_selector("a", text: "Druckauftrag erstellen")
+      click_link("Druckauftrag erstellen")
 
-      is_expected.to have_text('Sobald der Druckauftrag erstellt wurde, kann der Brief nicht mehr bearbeitet werden.')
-      fill_in 'Titel', with: 'Print print print!'
-      fill_in 'Beschreibung', with: 'Paper: A4, portrait, extra thick'
+      is_expected.to have_text("Sobald der Druckauftrag erstellt wurde, kann der Brief nicht mehr bearbeitet werden.")
+      fill_in "Titel", with: "Print print print!"
+      fill_in "Beschreibung", with: "Paper: A4, portrait, extra thick"
       expect do
-        all('button', text: 'Speichern').first.click
-        expect(page).to have_content 'Print print print! wurde erfolgreich erstellt.'
+        all("button", text: "Speichern").first.click
+        expect(page).to have_content "Print print print! wurde erfolgreich erstellt."
       end.to change { printer.assignments.count }.by(1)
 
-      is_expected.to have_selector('a', text: 'Anhang')
-      click_link('Anhang')
+      is_expected.to have_selector("a", text: "Anhang")
+      click_link("Anhang")
 
-      is_expected.to have_selector('a', text: 'Druckauftrag anzeigen')
+      is_expected.to have_selector("a", text: "Druckauftrag anzeigen")
     end
   end
 end

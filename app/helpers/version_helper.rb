@@ -4,13 +4,12 @@
 #  https://github.com/hitobito/hitobito.
 
 module VersionHelper
-
-  def app_version_links(url='https://github.com/hitobito/%s/commits/%s')
+  def app_version_links(url = "https://github.com/hitobito/%s/commits/%s")
     links = Hitobito::Application.versions.collect do |line|
-      commit, submodule, _ = line.split(' ')
+      commit, submodule, _ = line.split(" ")
       content_tag(:li) do
-        path = format(url % [submodule, commit.gsub(/[+|-]/, '')])
-        link = link_to(commit[0..7], path, target: :_blank)
+        path = format(url % [submodule, commit.gsub(/[+|-]/, "")])
+        link = link_to(commit[0..7], path, target: :_blank, rel: :noopener)
 
         "#{submodule} (#{link})".html_safe
       end
@@ -28,8 +27,7 @@ module VersionHelper
 
   def app_version
     app_version = Wagons.app_version.to_s
-    return unless app_version > '0.0'
-    ['Version', app_version, Hitobito::Application.build_info].compact.join(' ')
+    return unless app_version > "0.0"
+    ["Version", app_version, Hitobito::Application.build_info].compact.join(" ")
   end
-
 end

@@ -22,7 +22,6 @@
 #  index_notes_on_subject_id  (subject_id)
 #
 
-
 Fabricator(:note) do
   author { Fabricate :person }
   subject { groups(:toppers) }

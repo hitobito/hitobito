@@ -7,7 +7,7 @@
 
 module Messages
   class LetterDispatch
-    delegate :update!, :success_count, :send_to_households?, :salutation, to: '@message'
+    delegate :update!, :success_count, :send_to_households?, :salutation, to: "@message"
 
     def initialize(message, options = {})
       @message = message
@@ -32,7 +32,7 @@ module Messages
     end
 
     def reciept_attrs
-      @receipt_attrs ||= { message_id: @message.id, created_at: @now }
+      @receipt_attrs ||= {message_id: @message.id, created_at: @now}
     end
 
     def create_for_people!

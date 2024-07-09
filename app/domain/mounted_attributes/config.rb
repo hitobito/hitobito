@@ -8,10 +8,10 @@
 module MountedAttributes
   class Config
     attr_reader :target_class, :attr_name, :attr_type, :type,
-                :options, :null, :enum, :default, :category
+      :options, :null, :enum, :default, :category
 
     def initialize(target_class, attr_name, attr_type, null: true, **options)
-      raise ArgumentError, 'null must be true or false' unless [true, false].include?(null)
+      raise ArgumentError, "null must be true or false" unless [true, false].include?(null)
 
       @target_class = target_class
       @attr_name = attr_name
@@ -31,6 +31,5 @@ module MountedAttributes
       @default = type.cast(options[:default])
       @category = options[:category]
     end
-
   end
 end

@@ -5,13 +5,13 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_die_mitte.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Payments::EbicsImport do
   subject { described_class.new(config) }
 
   let(:invoice_files) {
-    [read('camt.054-ESR-ASR_T_CH0209000000857876452_378159670_0_2018031411011923')]
+    [read("camt.054-ESR-ASR_T_CH0209000000857876452_378159670_0_2018031411011923")]
   }
   let(:config) { payment_provider_configs(:postfinance) }
   let(:epics_client) { double(:epics_client) }
@@ -24,7 +24,7 @@ describe Payments::EbicsImport do
     allow(payment_provider).to receive(:client).and_return(epics_client)
   end
 
-  it 'returns empty array if payment provider config is not initialized' do
+  it "returns empty array if payment provider config is not initialized" do
     config.update(status: :draft)
 
     expect(payment_provider).to_not receive(:HPB)
@@ -37,7 +37,7 @@ describe Payments::EbicsImport do
     end.to_not change { Payment.count }
   end
 
-  it 'does not save if invoice not in payment provider config layer' do
+  it "does not save if invoice not in payment provider config layer" do
     expect(epics_client).to receive(:HPB)
 
     expect(payment_provider).to receive(:check_bank_public_keys!).and_return(true)
@@ -45,9 +45,9 @@ describe Payments::EbicsImport do
     expect(payment_provider).to receive(:Z54).with(3.days.ago.to_date, Time.zone.today).and_return(invoice_files)
 
     invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), recipient: people(:bottom_member), group: groups(:top_layer))
-    list = InvoiceList.create(title: 'membership fee', invoices: [invoice])
+    list = InvoiceList.create(title: "membership fee", invoices: [invoice])
 
-    invoice.update(reference: '000000000000100000000000800')
+    invoice.update(reference: "000000000000100000000000800")
     expect(list.amount_paid).to eq(0)
 
     subject.run
@@ -55,7 +55,7 @@ describe Payments::EbicsImport do
     expect(invoice.payments).to be_empty
   end
 
-  it 'creates payment' do
+  it "creates payment" do
     expect(epics_client).to receive(:HPB)
 
     expect(payment_provider).to receive(:check_bank_public_keys!).and_return(true)
@@ -64,39 +64,9 @@ describe Payments::EbicsImport do
 
     invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), recipient: people(:bottom_member), group: groups(:bottom_layer_one))
 
-    list = InvoiceList.create(title: 'membership fee', invoices: [invoice])
+    list = InvoiceList.create(title: "membership fee", invoices: [invoice])
 
-    invoice.update(reference: '000000000000100000000000800')
-    expect(list.amount_paid).to eq(0)
-
-    payments = subject.run
-
-    expect(invoice.payments.size).to eq(1)
-
-    payment = invoice.payments.first
-    expect(payment.invoice).to eq(invoice)
-    expect(payment.transaction_identifier).to eq('20180314001221000006915084508216000000000000100000000000800710.822018-03-15 00:00:00 +0100CH6309000000250097798')
-    expect(payment.payee.person_name).to eq('Maria Bernasconi')
-    expect(payment.payee.person_address).to eq('Place de la Gare 15, 2502 Biel/Bienne')
-    expect(list.reload.amount_paid.to_s).to eq('710.82')
-
-    expect(payments['ebics_imported']).to have(1).item
-    expect(payments['without_invoice']).to have(4).item
-  end
-
-  it 'creates payment by scor reference' do
-    expect(epics_client).to receive(:HPB)
-
-    expect(payment_provider).to receive(:check_bank_public_keys!).and_return(true)
-
-    expect(payment_provider).to receive(:Z54).with(3.days.ago.to_date, Time.zone.today).and_return(invoice_files)
-
-    invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), recipient: people(:bottom_member), group: groups(:bottom_layer_one))
-
-    list = InvoiceList.create(title: 'membership fee', invoices: [invoice])
-
-    invoice.update(reference: Invoice::ScorReference.create('000000100000000000800'),
-                   esr_number: '00 00000 00000 10000 00000 00800')
+    invoice.update(reference: "000000000000100000000000800")
     expect(list.amount_paid).to eq(0)
 
     payments = subject.run
@@ -106,15 +76,15 @@ describe Payments::EbicsImport do
     payment = invoice.payments.first
     expect(payment.invoice).to eq(invoice)
     expect(payment.transaction_identifier).to eq("20180314001221000006915084508216000000000000100000000000800710.822018-03-15 00:00:00 +0100CH6309000000250097798")
-    expect(payment.payee.person_name).to eq('Maria Bernasconi')
-    expect(payment.payee.person_address).to eq('Place de la Gare 15, 2502 Biel/Bienne')
-    expect(list.reload.amount_paid.to_s).to eq('710.82')
+    expect(payment.payee.person_name).to eq("Maria Bernasconi")
+    expect(payment.payee.person_address).to eq("Place de la Gare 15, 2502 Biel/Bienne")
+    expect(list.reload.amount_paid.to_s).to eq("710.82")
 
-    expect(payments['ebics_imported']).to have(1).item
-    expect(payments['without_invoice']).to have(4).item
+    expect(payments["ebics_imported"]).to have(1).item
+    expect(payments["without_invoice"]).to have(4).item
   end
 
-  it 'does not save if invoice not found' do
+  it "creates payment by scor reference" do
     expect(epics_client).to receive(:HPB)
 
     expect(payment_provider).to receive(:check_bank_public_keys!).and_return(true)
@@ -122,22 +92,52 @@ describe Payments::EbicsImport do
     expect(payment_provider).to receive(:Z54).with(3.days.ago.to_date, Time.zone.today).and_return(invoice_files)
 
     invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), recipient: people(:bottom_member), group: groups(:bottom_layer_one))
-    invoice.update!(reference: '404')
+
+    list = InvoiceList.create(title: "membership fee", invoices: [invoice])
+
+    invoice.update(reference: Invoice::ScorReference.create("000000100000000000800"),
+      esr_number: "00 00000 00000 10000 00000 00800")
+    expect(list.amount_paid).to eq(0)
+
+    payments = subject.run
+
+    expect(invoice.payments.size).to eq(1)
+
+    payment = invoice.payments.first
+    expect(payment.invoice).to eq(invoice)
+    expect(payment.transaction_identifier).to eq("20180314001221000006915084508216000000000000100000000000800710.822018-03-15 00:00:00 +0100CH6309000000250097798")
+    expect(payment.payee.person_name).to eq("Maria Bernasconi")
+    expect(payment.payee.person_address).to eq("Place de la Gare 15, 2502 Biel/Bienne")
+    expect(list.reload.amount_paid.to_s).to eq("710.82")
+
+    expect(payments["ebics_imported"]).to have(1).item
+    expect(payments["without_invoice"]).to have(4).item
+  end
+
+  it "does not save if invoice not found" do
+    expect(epics_client).to receive(:HPB)
+
+    expect(payment_provider).to receive(:check_bank_public_keys!).and_return(true)
+
+    expect(payment_provider).to receive(:Z54).with(3.days.ago.to_date, Time.zone.today).and_return(invoice_files)
+
+    invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), recipient: people(:bottom_member), group: groups(:bottom_layer_one))
+    invoice.update!(reference: "404")
 
     payments = subject.run
 
     expect(invoice.payments).to be_empty
 
-    expect(payments).not_to have_key('ebics_imported')
-    expect(payments['without_invoice']).to have(5).item
+    expect(payments).not_to have_key("ebics_imported")
+    expect(payments["without_invoice"]).to have(5).item
   end
 
-  it 'returns empty hash if no download data available' do
+  it "returns empty hash if no download data available" do
     expect(epics_client).to receive(:HPB)
 
     expect(payment_provider).to receive(:check_bank_public_keys!).and_return(true)
 
-    expect(payment_provider).to receive(:Z54).with(3.days.ago.to_date, Time.zone.today).and_raise(Epics::Error::BusinessError.new('090005'))
+    expect(payment_provider).to receive(:Z54).with(3.days.ago.to_date, Time.zone.today).and_raise(Epics::Error::BusinessError.new("090005"))
 
     expect(Invoice::PaymentProcessor).to_not receive(:new)
 

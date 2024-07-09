@@ -7,7 +7,6 @@
 
 module Contactable
   class AddressValidator
-
     def validate_people
       scope.includes(:tags).find_each do |person|
         next unless should_be_validated?(person)
@@ -25,8 +24,8 @@ module Contactable
     def scope
       Person
         .where(country: Settings.addresses.imported_countries)
-        .where.not(street: '')
-        .where.not(zip_code: '')
+        .where.not(street: "")
+        .where.not(zip_code: "")
     end
 
     private
@@ -36,11 +35,11 @@ module Contactable
     end
 
     def invalid?(person)
-      street, number = if FeatureGate.enabled?('structured_addresses')
-                         [person.street, person.housenumber]
-                       else
-                         parse(person.address)
-                       end
+      street, number = if FeatureGate.enabled?("structured_addresses")
+        [person.street, person.housenumber]
+      else
+        parse(person.address)
+      end
       addresses = Address.for(person.zip_code, street)
       addresses.empty? || invalid_number?(addresses, number)
     end
@@ -56,21 +55,21 @@ module Contactable
     def tag_invalid!(person, invalid_address)
       ActsAsTaggableOn::Tagging
         .find_or_create_by!(taggable: person,
-                            hitobito_tooltip: invalid_address,
-                            context: :tags,
-                            tag: invalid_tag)
+          hitobito_tooltip: invalid_address,
+          context: :tags,
+          tag: invalid_tag)
     end
 
     def remove_invalid_tagging!(person)
       ActsAsTaggableOn::Tagging
         .destroy_by(taggable: person,
-                    tag: invalid_tag)
+          tag: invalid_tag)
     end
 
     def invalid_tagging_exists?(person)
       ActsAsTaggableOn::Tagging
         .exists?(taggable: person,
-                 tag: invalid_tag)
+          tag: invalid_tag)
     end
 
     def invalid_tag

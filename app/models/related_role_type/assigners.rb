@@ -4,9 +4,8 @@
 #  https://github.com/hitobito/hitobito.
 
 module RelatedRoleType::Assigners
-
   # - has not to be encoded in URLs, ',' must be and thus generate a much longer string.
-  ID_URL_SEPARATOR = '-'
+  ID_URL_SEPARATOR = "-"
 
   def role_types
     @role_types ||= related_role_types.collect(&:role_type)

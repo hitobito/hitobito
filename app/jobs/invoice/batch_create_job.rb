@@ -12,5 +12,4 @@ class Invoice::BatchCreateJob < BaseJob
     invoice_list.invoice = Invoice.new(@invoice_attributes)
     Invoice::BatchCreate.new(invoice_list).call
   end
-
 end

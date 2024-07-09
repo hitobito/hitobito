@@ -5,9 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
-describe 'qualifications/_form.html.haml' do
+describe "qualifications/_form.html.haml" do
   let(:group) { groups(:top_group) }
   let(:person) { people(:top_leader) }
 
@@ -21,9 +21,9 @@ describe 'qualifications/_form.html.haml' do
 
   subject { Capybara::Node::Simple.new(rendered) }
 
-  it 'translates form fields' do
+  it "translates form fields" do
     render
-    is_expected.to have_content 'Qualifikation'
-    is_expected.to have_content 'Seit'
+    is_expected.to have_content "Qualifikation"
+    is_expected.to have_content "Seit"
   end
 end

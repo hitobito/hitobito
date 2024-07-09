@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 RSpec.configure do |config|
   # Specify a root folder where Swagger JSON files are generated
   # NOTE: If you're using the rswag-api to serve API descriptions, you'll need
   # to ensure that it's configured to serve Swagger from the same folder
-  config.swagger_root = Rails.root.join('swagger').to_s
+  config.swagger_root = Rails.root.join("swagger").to_s
 
   # Define one or more Swagger documents and provide global metadata for each one
   # When you run the 'rswag:specs:swaggerize' rake task, the complete Swagger will
@@ -15,11 +15,11 @@ RSpec.configure do |config|
   # document below. You can override this behavior by adding a swagger_doc tag to the
   # the root example_group in your specs, e.g. describe '...', swagger_doc: 'v2/swagger.json'
   config.swagger_docs = {
-    'swagger.yaml' => {
-      openapi: '3.0.1',
+    "swagger.yaml" => {
+      openapi: "3.0.1",
       info: {
-        title: 'JSON:API',
-        version: 'v1'
+        title: "JSON:API",
+        version: "v1"
       },
       paths: {},
       components: {
@@ -27,15 +27,17 @@ RSpec.configure do |config|
           ServiceTokenAuthHeader: {
             type: :apiKey,
             in: :header,
-            name: 'X-TOKEN' },
+            name: "X-TOKEN"
+          },
           ServiceTokenAuthParam: {
             type: :apiKey,
             in: :query,
-            name: :token },
+            name: :token
+          },
           SessionAuth: {
             type: :apiKey,
             in: :cookie,
-            name: '_session_id'
+            name: "_session_id"
           }
           # TODO: add oauth
         }
@@ -44,8 +46,8 @@ RSpec.configure do |config|
         ServiceTokenAuthHeader: [],
         ServiceTokenAuthParam: []
       ],
-      consumes: [ 'application/vnd.api+json' ],
-      produces: [ 'application/vnd.api+json' ]
+      consumes: ["application/vnd.api+json"],
+      produces: ["application/vnd.api+json"]
     }
   }
 

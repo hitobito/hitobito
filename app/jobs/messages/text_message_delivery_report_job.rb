@@ -7,7 +7,7 @@
 
 module Messages
   class TextMessageDeliveryReportJob < BaseJob
-    require_dependency 'message/text_message'
+    require_dependency "message/text_message"
     self.parameters = [:message_id]
 
     def initialize(message)
@@ -41,10 +41,10 @@ module Messages
     end
 
     def state_and_error_from_report(report)
-      return ['failed', 'unknown'] unless report # rubocop:disable Style/WordArray the structure should match the other return values
-      return ['sent', nil] if report[:status].eql?(:ok)
+      return ["failed", "unknown"] unless report # rubocop:disable Style/WordArray the structure should match the other return values
+      return ["sent", nil] if report[:status].eql?(:ok)
 
-      ['failed', report[:status_message]]
+      ["failed", report[:status_message]]
     end
 
     def update_recipient(recipient, state, error)
@@ -52,7 +52,7 @@ module Messages
     end
 
     def abort_dispatch(report, recipients)
-      recipients.update_all(state: 'failed', error: report[:message]) # rubocop:disable Rails/SkipsModelValidations Performance-Optimization
+      recipients.update_all(state: "failed", error: report[:message]) # rubocop:disable Rails/SkipsModelValidations Performance-Optimization
     end
 
     def not_ok?(status)

@@ -5,6 +5,11 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+unless ENV["NO_COVERAGE"]
+  require "simplecov"
+  SimpleCov.start "rails"
+end
+
 DB_CLEANER_STRATEGY = :truncation
 
 ENV["RAILS_ENV"] = "test"

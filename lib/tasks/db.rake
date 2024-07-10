@@ -124,10 +124,10 @@ namespace :db do
   end
 
   namespace :seed do
-    desc 'load generic seeds'
+    desc "load generic seeds"
     task no_env: [:environment] do
-      ENV['NO_ENV'] = '1'
-      Rake::Task['db:seed'].invoke
+      ENV["NO_ENV"] = "1"
+      Rake::Task["db:seed"].invoke
     end
   end
 

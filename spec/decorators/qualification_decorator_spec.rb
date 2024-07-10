@@ -17,10 +17,11 @@ describe QualificationDecorator do
   subject(:tooltip) { info[/title="(.*?)"/, 1] }
 
   let(:now) { Time.zone.local(2024, 3, 22, 15, 30) }
+
   around { |example| travel_to(now) { example.run } }
 
-  context 'without training days' do
-    it 'is nil if qualification is active' do
+  context "without training days" do
+    it "is nil if qualification is active" do
       expect(qualification).to be_active
       expect(info).to be_nil
     end

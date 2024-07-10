@@ -31,9 +31,9 @@ class People::HouseholdList
   end
 
   def grouped_households
-    Person.from("((#{only_households.unscope(:limit).to_sql}) " \
-                    "UNION ALL (#{people_without_household.unscope(:limit).to_sql})) " \
-                    "#{people_table}").limit(@people_scope.limit_value.presence)
+    Person
+      .from(grouped_households_people_sql)
+      .limit(@people_scope.limit_value.presence)
   end
 
   def each(&block)
@@ -45,6 +45,12 @@ class People::HouseholdList
   end
 
   private
+
+  def grouped_households_people_sql
+    "((#{only_households.unscope(:limit).to_sql}) " \
+      "UNION ALL (#{people_without_household.unscope(:limit).to_sql})) " \
+      "#{people_table}"
+  end
 
   def fetch_in_batches(scope) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity
     in_batches(scope, batch_size: 300) do |batch|

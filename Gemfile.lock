@@ -358,6 +358,7 @@ GEM
     launchy (3.0.1)
       addressable (~> 2.8)
       childprocess (~> 5.0)
+    lint_roller (1.1.0)
     listen (3.9.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -408,8 +409,11 @@ GEM
       net-protocol
     net-protocol (0.2.2)
       timeout
+    net-sftp (4.0.0)
+      net-ssh (>= 5.0.0, < 8.0.0)
     net-smtp (0.5.0)
       net-protocol
+    net-ssh (7.0.1)
     netrc (0.11.0)
     nio4r (2.7.3)
     nokogiri (1.16.5)
@@ -607,13 +611,16 @@ GEM
       unicode-display_width (>= 2.4.0, < 3.0)
     rubocop-ast (1.31.3)
       parser (>= 3.3.1.0)
-    rubocop-checkstyle_formatter (0.6.0)
-      rubocop (>= 1.14.0)
-    rubocop-rails (2.25.0)
+    rubocop-performance (1.21.1)
+      rubocop (>= 1.48.1, < 2.0)
+      rubocop-ast (>= 1.31.1, < 2.0)
+    rubocop-rails (2.25.1)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.33.0, < 2.0)
       rubocop-ast (>= 1.31.1, < 2.0)
+    rubocop-rspec (3.0.2)
+      rubocop (~> 1.61)
     ruby-graphviz (1.2.5)
       rexml
     ruby-prof (1.7.0)
@@ -661,6 +668,21 @@ GEM
     sqlite3 (1.7.3)
       mini_portile2 (~> 2.8.0)
     stackprof (0.2.26)
+    standard (1.39.1)
+      language_server-protocol (~> 3.17.0.2)
+      lint_roller (~> 1.0)
+      rubocop (~> 1.64.0)
+      standard-custom (~> 1.0.0)
+      standard-performance (~> 1.4)
+    standard-custom (1.0.2)
+      lint_roller (~> 1.0)
+      rubocop (~> 1.50)
+    standard-performance (1.4.0)
+      lint_roller (~> 1.1)
+      rubocop-performance (~> 1.21.0)
+    standard-rails (1.1.0)
+      lint_roller (~> 1.0)
+      rubocop-rails (~> 2.25.0)
     strip_attributes (1.13.0)
       activemodel (>= 3.0, < 8.0)
     strscan (3.1.0)
@@ -841,8 +863,7 @@ DEPENDENCIES
   rswag-api (~> 2.13)
   rswag-ui (~> 2.13)
   rubocop
-  rubocop-checkstyle_formatter
-  rubocop-rails
+  rubocop-rspec
   ruby-prof
   rubyzip
   seed-fu
@@ -855,6 +876,8 @@ DEPENDENCIES
   sprockets (~> 3.7.2)
   sqlite3 (~> 1.7.2)
   stackprof
+  standard (~> 1.28)
+  standard-rails
   strip_attributes
   test-prof
   thinking-sphinx
@@ -870,4 +893,4 @@ DEPENDENCIES
   wirble
 
 BUNDLED WITH
-   2.5.10
+   2.5.11

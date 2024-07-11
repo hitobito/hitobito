@@ -29,8 +29,10 @@ class OrderTableSeeder
   end
 
   def insert_event_role_types
-    Event::role_types.each_with_index do |role_type, index|
-      EventRoleTypeOrder.create(name: role_type, order_weight: index + 1)
+    Event.all_types.each do | event_type |
+      event_type::role_types.each_with_index do | role_type, index|
+        EventRoleTypeOrder.create(name: role_type, order_weight: index + 1)
+      end
     end
   end
 

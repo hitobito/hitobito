@@ -27,11 +27,16 @@ describe Person::HistoryController do
         r6 = FutureRole.create!(group: groups(:bottom_group_two_one),
           convert_to: Group::BottomGroup::Member.name, person: person, convert_on: 10.days.from_now)
 
+        r7 = Fabricate(Group::BottomGroup::Member.name.to_sym,
+          group: groups(:bottom_group_two_one), person: person, start_at: 10.years.ago, end_at: 9.years.ago)
+        r8 = Fabricate(Group::BottomGroup::Member.name.to_sym,
+          group: groups(:bottom_group_two_one), person: person, start_at: 10.years.from_now)
+
         get :index, params: {group_id: groups(:bottom_group_one_one).id, id: person.id}
 
         expect(assigns(:roles)).to eq([r1, r4, r3])
-        expect(assigns(:inactive_roles)).to eq([r2])
-        expect(assigns(:future_roles)).to eq([r5, r6])
+        expect(assigns(:inactive_roles)).to eq([r2, r7])
+        expect(assigns(:future_roles)).to eq([r5, r6, r8])
       end
     end
 

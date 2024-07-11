@@ -11,7 +11,7 @@
       = GroupDecorator.new(r.group).link_with_layer
     - t.col(Role.model_name.human) do |r|
       = r.decorate.for_history
-    - t.attr(:created_at, t('global.from')) { |r| r.start_on.present? ? I18n.l(r.start_on) : '' }
-    - t.attr(:deleted_at, t('global.until')) { |r| r.end_on.present? ? I18n.l(r.end_on) : '' }
+    - t.attr(:start_on, t('global.from')) { |r| r.start_on.present? ? I18n.l(r.start_on) : '' }
+    - t.attr(:end_on, t('global.until')) { |r| r.end_on.present? ? I18n.l(r.end_on) : '' }
     - render_extensions :history_columns, locals: { t: t }
     - t.col(nil, {class: 'float-right'}) { |r| terminate_role_link(r) }

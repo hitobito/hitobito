@@ -15,7 +15,9 @@
 #  convert_to  :string(255)
 #  delete_on   :date
 #  deleted_at  :datetime
+#  end_at      :datetime
 #  label       :string(255)
+#  start_at    :datetime
 #  terminated  :boolean          default(FALSE), not null
 #  type        :string(255)      not null
 #  created_at  :datetime
@@ -34,7 +36,7 @@ class Role < ActiveRecord::Base
                          main_type: Person.sti_name},
     skip: [:updated_at]
 
-  acts_as_paranoid
+  acts_as_paranoid(without_default_scope: true)
 
   include Role::Types
   include NormalizedLabels
@@ -131,14 +133,36 @@ class Role < ActiveRecord::Base
 
   ### SCOPES
 
-  scope :without_future, -> { where.not(type: FutureRole.sti_name) }
+  def self.active_scope(reference_time = Time.current)
+    where(arel_table[:start_at].lteq(reference_time).or(arel_table[:start_at].eq(nil)))
+      .where(arel_table[:end_at].gteq(reference_time).or(arel_table[:end_at].eq(nil)))
+  end
+
+  default_scope do
+    next paranoia_scope unless attribute_names.include?("start_at") # required to keep old migrations working
+
+    paranoia_scope.active_scope
+  end
+
+  scope :without_future, -> do
+    where.not(type: FutureRole.sti_name).where(start_at: nil).or(Role.where.not("start_at > ?", Time.current))
+  end
   scope :without_archived, -> { where(archived_at: nil) }
   scope :only_archived, -> { where.not(archived_at: nil).where(archived_at: ..Time.now.utc) }
-  scope :future, -> { where(type: FutureRole.sti_name) }
+  scope :future, -> {
+    where(type: FutureRole.sti_name)
+      .or(with_inactive.where("start_at > ?", Time.current))
+  }
   scope :inactive, -> {
-                     with_deleted.where("deleted_at IS NOT NULL OR archived_at <= ?",
-                       Time.now.utc)
-                   }
+    with_inactive.with_deleted.where("deleted_at IS NOT NULL OR archived_at <= ?",
+      Time.now.utc).or(only_inactive)
+  }
+  scope :active, ->(reference_time = nil) {
+    reference_time ||= Time.current
+    unscope(where: [:start_at, :end_at]).active_scope(reference_time)
+  }
+  scope :with_inactive, -> { unscope(where: [:start_at, :end_at]) }
+  scope :only_inactive, -> { with_inactive.where("start_at > ? OR end_at < ?", Time.current, Time.current) }
 
   ### CLASS METHODS
 
@@ -217,18 +241,26 @@ class Role < ActiveRecord::Base
   end
 
   def start_on
-    convert_on || created_at&.to_date || Time.zone.today
+    start_at&.to_date
   end
 
   def end_on
-    delete_on || deleted_at&.to_date
+    end_at&.to_date
   end
 
   def outdated?
     deleted_at.nil? && (conversion_pending? || deletion_pending?)
   end
 
+  def active?(reference_time = Time.current)
+    active_period.cover?(reference_time)
+  end
+
   def active_period
+    start_at..end_at
+  end
+
+  def active_dates
     start_on..end_on
   end
 

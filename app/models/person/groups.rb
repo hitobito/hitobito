@@ -111,9 +111,8 @@ module Person::Groups
     def order_by_role
       subquery = joins(:roles).
                  joins("INNER JOIN role_type_orders ON role_type_orders.name = roles.type").
-                 select(:order_weight, "people.*").
+                 select(:order_weight).
                  distinct_on(:id)
-
       Person.select("people.*").from(subquery, "people").unscope(:where).order(:order_weight)
     end
 

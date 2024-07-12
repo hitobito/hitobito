@@ -28,7 +28,6 @@ Je nach Tragweite sollen diese Entscheidungen hier dokumentiert werden. Das Vorg
 
 ## Vorschläge
 
-- [006 ViewComponents](./adr/006_view_components.md)
 - [003 DB as a Service](./adr/003_db_as_a_service.md)
 - [002 Wechsel RDBMS](./adr/002_wechsel_rdbms.md)
 - [001 Kundenprojekte als App vs. in Wagon](./adr/001_kundenprojekte_app_vs_wagon.md)
@@ -37,4 +36,5 @@ Je nach Tragweite sollen diese Entscheidungen hier dokumentiert werden. Das Vorg
 
 - [004 S3 Storage](./adr/004_s3_storage.md)
 - [005 JSON API](./adr/005_json_api.md)
+- [006 ViewComponents](./adr/006_view_components.md)
 - [007 Rubocop](./adr/007_rubocop.md)

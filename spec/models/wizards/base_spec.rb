@@ -41,6 +41,7 @@ describe Wizards::Base do
     end
 
     it "can access step via method missing" do
+      wizard.step_at(0) # trigger build_step_instances
       expect(wizard.one).to be_kind_of(One)
     end
 

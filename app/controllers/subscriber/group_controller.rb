@@ -44,7 +44,7 @@ module Subscriber
 
     def groups_query
       possible = Subscription.new(mailing_list: @mailing_list).possible_groups
-      possible.where(search_condition('groups.name', 'parents_groups.name')).
+      possible.where(search_condition('groups.name')).
                or(possible.where(id: group_ids_by_static_name(possible))).
                includes(:parent).
                references(:parent).

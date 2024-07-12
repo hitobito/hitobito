@@ -37,7 +37,7 @@ module SearchStrategies
 
     def search_column_condition(word)
       @search_tables_and_fields.map do |table_field|
-        matcher = matchers.fetch(table_field, Matcher).new(table_field, word)
+        matcher = matchers.fetch(table_field, SearchStrategies::SqlConditionBuilder::Matcher).new(table_field, word)
         matcher.match if matcher.applies?
       end.compact
     end

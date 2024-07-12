@@ -8,9 +8,15 @@ _Beschreibung_
 
 ## Kontext
 
+- Umstände
+- Probleme die gelöst werden sollen
+- ...
 
 ## Optionen
 
+- Vorteile
+- Nachteile
+- Aufwände
 
 ## Kommentare/Advice
 

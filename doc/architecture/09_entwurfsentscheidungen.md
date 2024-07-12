@@ -7,7 +7,24 @@ Neuere ADRs werden oben in der Liste eingetragen.
 
 Für den Entwicklungsalltag relevante Informationen sollen in zusätzlichen Orten dokumentiert werden.
 
-[Vorlage](./adr/template.md) für neue Entscheidungen.
+## Vorgehen
+
+Architekturrelevante Entscheidungen sollen grundsätzlich mit dem Hitobito Architektur Board abgesprochen werden.
+Als architekturrelevant sehen wir unter anderem folgende Aspekte (Liste nicht abschliessend):
+- Einführung neuer Konzepte oder grundlegende Änderungen an bestehenden Konzepten
+- Neue Gems/Dependencies zum Projekt hinzufügen
+- Anpassungen am Entwicklungs-/Buildsetup (Checks, ...)
+- ...
+
+Je nach Tragweite sollen diese Entscheidungen hier dokumentiert werden. Das Vorgehen ist wie folgt:
+- Eine neue Datei im Ordner `doc/architecture/adr/` erstellen, basierend auf der [ADR Vorlage](./adr/template.md).
+  Die nächste freie Nummer wird als Prefix verwendet. Darauf wird die Entscheidung beschrieben und hier unter "Vorschläge" verlinkt.
+- Für die Änderungen ein Merge Request erstellen.
+- Den Merge Request über den `hitobito-internal` Chat bekannt machen, um das Team zu Rückmeldungen aufzufordern.
+  Dabei wird ein zeitnaher Termin festgelegt (ein bis zwei Wochen), bis wann die Entscheidung getroffen werden soll.
+- Sobald es soweit ist, wird die neue Datei in den Status "Abgeschlossen" geändert und der Merge Request gemerged.
+- Falls der Entscheidungsprozess länger dauert (und wohl nicht so dringend ist), kann der Merge Request auch schon vorher gemerged werden.
+- Sobald der Entscheid gefällt ist, wird dieser ebenfalls über dem `hitobito-internal` Chat ans Team kommuniziert.
 
 ## Vorschläge
 

@@ -28,6 +28,7 @@ Je nach Tragweite sollen diese Entscheidungen hier dokumentiert werden. Das Vorg
 
 ## Vorschläge
 
+- [008 Foreign Keys](./adr/008_foreign_keys.md)
 - [006 ViewComponents](./adr/006_view_components.md)
 - [003 DB as a Service](./adr/003_db_as_a_service.md)
 - [002 Wechsel RDBMS](./adr/002_wechsel_rdbms.md)

@@ -1,4 +1,5 @@
-# Architecture Documentation
+# Architecture Documentation (Deutsch)
+
 
 Diese Dokumente beschreiben die wichtigsten architektonischen Aspekte von hitobito. Die Struktur folgt arc42. Eine HTML-Datei, die die gesamte Dokumentation enthält, kann mit `rake doc:arch` erzeugt werden.
 

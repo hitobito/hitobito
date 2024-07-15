@@ -1,4 +1,4 @@
-# Dokumentation über den Betrieb von hitobito
+# Dokumentation über den Betrieb von hitobito (Deutsch)
 
 - Deployment von Hitobito: [Deployment](01_deployment.md)
 - Betrieb mit OpenShift: [OpenShift](02_openshift.md)

@@ -20,6 +20,8 @@ Currently the following endpoints are provided:
 | GET    | /api/event_kinds/                                 | List all accessible events kinds                                                |
 | GET    | /api/event_kinds/:id                              | Fetch a single event kind, replace :id with the event's primary key             |
 
+Visit your hitobito's swagger UI [/api-docs](/api-docs) for detailed documentation and a sandbox for testing/developing requests.
+
 All successful responses do have HTTP Status `2xx`.
 
 To protect from CSRF attacks, requests must have set **Content-Type** header to **application/vnd.api+json**.

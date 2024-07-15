@@ -29,4 +29,4 @@ Unabhängig davon, ob foreign keys definiert sind, sollen Framework Methoden
 (`dependent: :destroy`) und nicht custom exception handling verwendet werden, um die Referentielle
 Integrität sicherzustellen.
 
-Das `protect_if` gem soll ausgebaut werden.
+Das `protective` gem soll ausgebaut werden.

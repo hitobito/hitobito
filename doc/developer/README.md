@@ -22,4 +22,4 @@ All graphics are created using [Draw.io](https://draw.io) and are stored as orig
 
 - [Code Guidelines](guidelines.md)
 - [Documentation Guidelines](documentation_guidelines.md)
-- [Architecture](architecture/README.md)
+- [Architecture](../architecture/README.md)

@@ -366,7 +366,7 @@ describe Group do
 
     it "works without possible groups" do
       parent = groups(:bottom_group_one_two)
-      expect(parent.children.order_by_type(parent)).to be_empty
+      expect(parent.children.order_by_type).to be_empty
     end
   end
 

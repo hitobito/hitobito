@@ -10,7 +10,7 @@ require "spec_helper"
 describe Messages::LetterDispatch do
   include Households::SpecHelper
 
-  let(:message)    { messages(:letter) }
+  let(:message) { messages(:letter) }
   let(:top_leader) { people(:top_leader) }
   let(:bottom_member) { people(:bottom_member) }
   let(:recipient_entries) { message.message_recipients }
@@ -69,26 +69,25 @@ describe Messages::LetterDispatch do
     end
   end
 
-  context 'household addresses' do
-
+  context "household addresses" do
     let(:housemate1) do
-      Fabricate(:person_with_address, first_name: 'Anton', last_name: 'Abraham',
-                                      country: not_default_country)
+      Fabricate(:person_with_address, first_name: "Anton", last_name: "Abraham",
+        country: not_default_country)
     end
     let(:housemate2) do
-      Fabricate(:person_with_address, first_name: 'Zora', last_name: 'Zaugg',
-                                      country: not_default_country)
+      Fabricate(:person_with_address, first_name: "Zora", last_name: "Zaugg",
+        country: not_default_country)
     end
     let(:other_housemate) do
-      Fabricate(:person_with_address, first_name: 'Altra', last_name: 'Mates',
-                                      country: not_default_country)
+      Fabricate(:person_with_address, first_name: "Altra", last_name: "Mates",
+        country: not_default_country)
     end
 
     before do
       Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one),
-                                                 person: housemate1)
+        person: housemate1)
       Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one),
-                                                 person: housemate2)
+        person: housemate2)
     end
 
     before do
@@ -184,23 +183,21 @@ describe Messages::LetterDispatch do
 
     it "adds all names from household address to address box and sorts them alphabetically" do
       message.update!(send_to_households: true)
-      housemate3 = Fabricate(:person_with_address, first_name: 'Mark', last_name: 'Hols',
-                                                   country: not_default_country)
-      housemate4 = Fabricate(:person_with_address, first_name: 'Jana', last_name: 'Nicks',
-                                                   country: not_default_country)
-      housemate5 = Fabricate(:person_with_address, first_name: 'Olivia', last_name: 'Berms',
-                                                   country: not_default_country)
+      housemate3 = Fabricate(:person_with_address, first_name: "Mark", last_name: "Hols",
+        country: not_default_country)
+      housemate4 = Fabricate(:person_with_address, first_name: "Jana", last_name: "Nicks",
+        country: not_default_country)
+      housemate5 = Fabricate(:person_with_address, first_name: "Olivia", last_name: "Berms",
+        country: not_default_country)
       Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one),
-                                                 person: housemate3)
+        person: housemate3)
       Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one),
-                                                 person: housemate4)
+        person: housemate4)
       Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one),
-                                                 person: housemate5)
-
+        person: housemate5)
 
       housemate1.household.destroy
       create_household(housemate1.reload, housemate2.reload, housemate3, housemate4, housemate5)
-
 
       subject.run
       address = recipient_entry(housemate2).address.split("\n")

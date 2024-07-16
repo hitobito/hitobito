@@ -124,7 +124,7 @@ describe PeopleSerializer do
     end
   end
 
-  context 'without details' do
+  context "without details" do
     include Households::SpecHelper
 
     before { allow(controller).to receive(:can?).and_return(false) }
@@ -150,13 +150,13 @@ describe PeopleSerializer do
       expect(household_key).to eq(nil)
     end
 
-    it 'uses same household key if same household' do
+    it "uses same household key if same household" do
       other = people(:bottom_member)
       create_household(person, other)
       serial_person = PersonSerializer.new(person.reload.decorate,
-                                           controller: controller).to_hash[:people]
+        controller: controller).to_hash[:people]
       serial_other = PersonSerializer.new(other.reload.decorate,
-                                          controller: controller).to_hash[:people]
+        controller: controller).to_hash[:people]
       expect(serial_other.first[:household_key]).not_to eq(nil)
       expect(serial_person.first[:household_key]).to eq(serial_other.first[:household_key])
     end

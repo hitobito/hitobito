@@ -970,10 +970,10 @@ describe PeopleController do
     end
   end
 
-  context 'as token user' do
-    it 'shows page when token is valid' do
-      get :show, params: { group_id: group.id, id: top_leader.id, token: 'PermittedToken' }
-      is_expected.to render_template('show')
+  context "as token user" do
+    it "shows page when token is valid" do
+      get :show, params: {group_id: group.id, id: top_leader.id, token: "PermittedToken"}
+      is_expected.to render_template("show")
     end
 
     it "does not show page for unpermitted token" do

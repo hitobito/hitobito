@@ -51,18 +51,18 @@ namespace :dev do
       BASH
     end
 
-    desc 'Show example OAuth-Authorization Screen'
+    desc "Show example OAuth-Authorization Screen"
     task :authorization, [:application_id] => [:environment] do |_, args|
       app = Oauth::Application.find(args.fetch(:application_id))
-      host_name = ENV.fetch('RAILS_HOST_NAME', nil)
+      host_name = ENV.fetch("RAILS_HOST_NAME", nil)
 
       params = {
         client_id: app.uid,
         client_secret: app.secret,
         redirect_uri: app.redirect_uri.split("\n").first,
-        response_type: 'code',
+        response_type: "code",
         scope: app.scopes
-      }.map { |key, value| "#{key}=#{value}" }.join('&')
+      }.map { |key, value| "#{key}=#{value}" }.join("&")
 
       puts "http://#{host_name}/oauth/authorize?#{params}"
     end

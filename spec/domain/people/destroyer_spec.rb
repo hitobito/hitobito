@@ -38,11 +38,11 @@ describe People::Destroyer do
     expect(FamilyMember.exists?(leftover_member2.id)).to eq(false)
   end
 
-  it 'does not destroy attached family members if there is more than one' do
+  it "does not destroy attached family members if there is more than one" do
     non_leftover_member1 = FamilyMember.create!(person: person, other: bottom_member,
-                                                kind: :sibling)
+      kind: :sibling)
     non_leftover_member2 = FamilyMember.create!(person: top_leader, other: bottom_member,
-                                                kind: :sibling)
+      kind: :sibling)
 
     person.reload
 
@@ -56,7 +56,7 @@ describe People::Destroyer do
     expect(FamilyMember.exists?(non_leftover_member2.id)).to eq(true)
   end
 
-  it 'clears attached household if there is only one other person' do
+  it "clears attached household if there is only one other person" do
     household = Household.new(person)
     household.add(bottom_member)
     expect(household.save).to eq true
@@ -76,7 +76,7 @@ describe People::Destroyer do
     expect(bottom_member.household_key).to be_nil
   end
 
-  it 'does not clear attached household if there is more than one person' do
+  it "does not clear attached household if there is more than one person" do
     household = Household.new(person)
     household.add(bottom_member)
     household.add(top_leader)

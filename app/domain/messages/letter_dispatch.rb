@@ -32,7 +32,7 @@ module Messages
     end
 
     def reciept_attrs
-      @reciept_attrs ||= { message_id: @message.id, created_at: @now }
+      @reciept_attrs ||= {message_id: @message.id, created_at: @now}
     end
 
     def create_for_people!

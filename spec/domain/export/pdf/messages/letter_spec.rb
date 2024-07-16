@@ -270,7 +270,7 @@ describe Export::Pdf::Messages::Letter do
     it "adds all household peoples names to address and sorts them alphabetically" do
       Fabricate(Group::BottomGroup::Member.name, group: group, person: other_housemate)
       create_household(people(:bottom_member), housemate1, housemate2, other_housemate,
-                       people(:top_leader))
+        people(:top_leader))
 
       letter.message_recipients.destroy_all
       Messages::LetterDispatch.new(letter).run
@@ -347,11 +347,10 @@ describe Export::Pdf::Messages::Letter do
         Fabricate(Group::BottomGroup::Member.name, group: group, person: bottom_member)
         Fabricate(Group::BottomGroup::Member.name, group: group, person: single_person)
 
-
         letter.update!(send_to_households: true, body: "Hallo", subject: "Brief")
       end
 
-      it 'creates preview with half normal half household recipients' do
+      it "creates preview with half normal half household recipients" do
         create_household(housemate1, housemate2)
         create_household(housemate3, housemate4)
         create_household(other_housemate, people(:top_leader))
@@ -382,7 +381,7 @@ describe Export::Pdf::Messages::Letter do
         ]
       end
 
-      it 'includes all housemates even when underlying people scope is limited for previewing' do
+      it "includes all housemates even when underlying people scope is limited for previewing" do
         create_household(housemate1, housemate2, housemate3, housemate4)
         create_household(people(:top_leader), other_housemate)
 

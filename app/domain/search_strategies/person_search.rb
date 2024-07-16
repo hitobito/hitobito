@@ -22,7 +22,8 @@ module SearchStrategies
                   .accessible_by(PersonReadables.new(@user))
                   .select(pg_rank_alias) # add pg_search rank to select list of base query again
 
-      entries += index_people_without_role?(search_results)
+      people_without_role = index_people_without_role?(search_results)
+      entries += people_without_role if people_without_role
 
       entries += Group::DeletedPeople.deleted_for_multiple(
         deleted_people_indexable_layers

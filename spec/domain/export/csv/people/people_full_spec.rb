@@ -81,7 +81,10 @@ describe Export::Tabular::People::PeopleFull do
         "Date de naissance",
         "Données supplémentaires",
         "Langue",
-        "Strasse", "Hausnummer", "additional address line", "Postfach", # TODO: needs translations
+        "Rue",
+        "Numéro de la maison",
+        "ligne d'adresse supplémentaire",
+        "Case postale",
         "Niveau",
         "Rôles",
         "Tags",

@@ -10,6 +10,7 @@ fr:
       default: '%d.%m.%Y'
       long: '%e %B %Y'
       short: '%e %b'
+      with_day: '%a %d.%m.%Y'
   number:
     currency:
       format:
@@ -30,9 +31,15 @@ fr:
         one: Sortie
         many: Départs
         other: Sorties
+      household:
+        one: Foyer
+        many: Foyers
+        other: Foyers
     attributes:
       roles/termination:
         terminate_on: Date de sortie
+      household:
+        members: Membres du foyer
     errors:
       models:
         roles/termination:
@@ -42,6 +49,15 @@ fr:
               too_late: "ne doit pas être postérieur à %{date} "
             role:
               not_terminatable: "n'est pas résiliable"
+        household:
+          attributes:
+            members:
+              minimum_members: Le foyer est dissous car il y a moins de 2 personnes.
+              household_address: "L'adresse '%{address}' est reprise pour toutes les personnes de ce foyer."
+        household_member:
+          attributes:
+            base:
+              in_other_household_present: "%{person_name} est déjà membre d'un autre foyer."
   activerecord:
     errors:
       messages:
@@ -490,7 +506,11 @@ fr:
         password: Mot de passe
         password_confirmation: Confirmation du mot de passe
         current_password: Ancien mot de passe
+        address_care_of: ligne d'adresse supplémentaire
         address: Adresse
+        street: Rue
+        housenumber: Numéro de la maison
+        postbox: Case postale
         zip_code: NPA
         town: Lieu
         country: Pays
@@ -543,6 +563,10 @@ fr:
         short_name: Abréviation
         email: Adresse e-mail principale
         address: Adresse
+        address_care_of: ligne d'adresse supplémentaire
+        street: Rue
+        housenumber: Numéro de la maison
+        postbox: Case postale
         zip_code: NPA
         town: Lieu
         country: Pays
@@ -564,6 +588,7 @@ fr:
         self_registration_role_type: Type de rôle
         self_registration_link: Enregistrement externe
         self_registration_notification_email: E-mail de notification
+        self_registration_require_adult_consent: Accord des tuteurs légaux
         main_self_registration_group: Affichage sur la page de connexion
         custom_self_registration_title: Titre lors de l'inscription
         nextcloud_url: Lien vers Nextcloud
@@ -594,6 +619,7 @@ fr:
         contact: 'Personne de contact '
         notify_contact_on_participations: Informer par e-mail la personne de contact lors d'une connexion
         maximum_participants: Nombre maximal de participants
+        minimum_participants: Nombre minimal de participants
         contact_id: 'Personne de contact '
         description: Description
         location: Lieu / Adresse
@@ -615,8 +641,10 @@ fr:
         applications_cancelable: Désinscription possible
         display_booking_info: Voir l'état des inscriptions
         participations_visible: Visibilité des participants
+        waiting_list: liste d'attente nationale
         requires_approval: Recommandation requise
         globally_visible: Visibilité
+        automatic_assignment: Attribution automatique
       event/contact_attrs:
         required: Obligatoire
         optional: Optionnel
@@ -632,6 +660,12 @@ fr:
         waiting_list_comment: 'Remarque'
       event/attachment:
         file: Fichier
+        visibility: Visibilité
+        visibilities:
+          _nil: Invisible
+          team: Visible uniquement par l'équipe de direction
+          participants: Visible pour l'équipe de direction et les participants
+          global: Visibilité globale
       event/course:
         kind_id: Type de cours
         state: Statut

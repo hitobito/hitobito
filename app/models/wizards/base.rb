@@ -87,15 +87,6 @@ module Wizards
       true
     end
 
-    def method_missing(name, *args, **kwargs, &block)
-      super unless step(name)
-      step(name)
-    end
-
-    def respond_to_missing?(name, include_private = false)
-      step(name) || super
-    end
-
     # Find the step instance by its name.
     def step(step_name)
       step_instances.find { |instance| instance.step_name == step_name.to_s }
@@ -111,6 +102,7 @@ module Wizards
 
       step_class = find_step(step_name)
       instances << step_class.new(self, **params[step_name] || {})
+      define_singleton_method(step_name, -> { step(step_name) })
 
       next_step = step_after(step_class) || step_after(step_name)
       build_step_instances(next_step, instances)

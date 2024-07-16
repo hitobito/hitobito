@@ -24,7 +24,7 @@ class SearchStrategies::SqlConditionBuilder
 
     def column
       table = Arel::Table.new(@table_name)
-      if @table_name.singularize.camelize.constantize.columns_hash[@field].type == :integer
+      if @table_name.singularize.split('_').map(&:capitalize).join('::').camelize.constantize.columns_hash[@field].type == :integer
         Arel::Nodes::SqlLiteral.new("#{table[@field].name}::text")
       else
         table[@field]

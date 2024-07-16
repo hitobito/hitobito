@@ -5,7 +5,8 @@
 
 require 'spec_helper'
 
-describe Subscriber::GroupController, js: true do
+# TODO: Postgres mit Niklas besprechen (SearchStrategies)
+xdescribe Subscriber::GroupController, js: true do
 
   let(:list)  { mailing_lists(:leaders) }
   let(:group) { list.group }

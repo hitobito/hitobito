@@ -410,11 +410,8 @@ GEM
       net-protocol
     net-protocol (0.2.2)
       timeout
-    net-sftp (4.0.0)
-      net-ssh (>= 5.0.0, < 8.0.0)
     net-smtp (0.5.0)
       net-protocol
-    net-ssh (7.0.1)
     netrc (0.11.0)
     nio4r (2.7.3)
     nokogiri (1.16.6)
@@ -558,8 +555,8 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
-    rexml (3.2.8)
-      strscan (>= 3.0.9)
+    rexml (3.3.2)
+      strscan
     riddle (2.4.3)
     rotp (6.3.0)
     rouge (4.2.1)
@@ -658,7 +655,6 @@ GEM
     simplecov_json_formatter (0.1.4)
     simpleidn (0.2.3)
     slop (3.6.0)
-    social_security_number (0.1.12)
     sorted_set (1.0.3)
       rbtree
       set (~> 1.0)

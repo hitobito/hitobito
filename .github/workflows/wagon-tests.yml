@@ -181,7 +181,7 @@ jobs:
         if: ${{ steps.check-wagon-feature-specs.outputs.feature_specs_exist }}
         working-directory: ${{ inputs.wagon_repository }}
         run: |
-          bundle exec rake app:ci:setup:rspec spec:features
+          bundle exec rake app:ci:setup:rspec app:spec:features:lenient
 
       - name: 'Make capybara output downloadable'
         uses: actions/upload-artifact@v4

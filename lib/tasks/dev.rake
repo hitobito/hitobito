@@ -64,7 +64,7 @@ namespace :dev do
         scope: app.scopes
       }.map { |key, value| "#{key}=#{value}" }.join("&")
 
-      puts "http://#{host_name}/oauth/authorize?#{params}"
+      sh "xdg-open 'http://#{host_name}/oauth/authorize?#{params}'"
     end
   end
 

@@ -228,13 +228,13 @@ describe Export::Pdf::Messages::Letter do
       Fabricate(Group::BottomGroup::Member.name, group: group, person: people(:bottom_member))
       Fabricate(Group::BottomGroup::Member.name, group: group, person: people(:top_leader))
 
-      create_household(housemate1, housemate2)
       letter.update!(send_to_households: true)
-
-      Messages::LetterDispatch.new(letter).run
     end
 
     it "creates only one letter per household" do
+      create_household(housemate1, housemate2)
+      Messages::LetterDispatch.new(letter).run
+
       expect(text_with_position).to match_array [
         [71, 654, "Anton Abraham, Zora Zaugg"],
         [71, 644, housemate1.address],

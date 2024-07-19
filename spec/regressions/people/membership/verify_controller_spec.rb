@@ -61,6 +61,49 @@ describe People::Membership::VerifyController, type: :controller do
         expect(dom).to have_selector("#membership-verify #details .alert-danger", text: "Ungültiger Verifikationscode")
         expect(dom).to have_selector("#membership-verify #details .alert-danger span.fa-times-circle")
       end
+
+      it "renders the website logo" do
+        @initial_logo = Settings.application.logo.dup
+
+        original_view_context = controller.view_context
+        view_context = controller.view_context
+        # In order to stub a method on the view_context we need to make sure our copy is used.
+        allow(controller).to receive(:view_context).and_return(view_context)
+
+        Settings.application.logo.image = "de_logo.png"
+        logos = Settings.application.logo.multilanguage_image = {
+          de: "de_logo.png",
+          fr: "fr_logo.png",
+          it: "it_logo.png"
+        }
+        logos[:default] = Settings.application.logo.image
+
+        # Stub wagon_image_pack_tag to return logo or use original implementation for other images
+        allow(view_context).to receive(:wagon_image_pack_tag) do |name, **options|
+          if logos.value?(name)
+            view_context.content_tag(:img, nil, src: name, **options)
+          else
+            original_view_context.wagon_image_pack_tag(name, **options)
+          end
+        end
+
+        # Go through locales, render page and check dom for logo
+        %i[de fr it en].each do |locale|
+          I18n.with_locale(locale) do
+            locale = :de if locale == :en
+            get :show, params: {verify_token: "gits-nid"}
+            dom = Capybara::Node::Simple.new(response.body)
+
+            expect(dom).to have_selector("#logo")
+            logo_img_src = dom.find("#logo img")[:src]
+            expect(logo_img_src).to eq "#{locale}_logo.png"
+            logo_img_alt = dom.find("#logo img")[:alt]
+            expect(logo_img_alt).to eq "hitobito"
+          end
+        end
+
+        Settings.application.logo = @initial_logo
+      end
     end
   end
 end

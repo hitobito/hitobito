@@ -12,52 +12,103 @@ describe LayoutHelper do
   include UploadDisplayHelper
 
   describe "#header_logo" do
-    let(:group) { groups(:bottom_group_one_one_one) }
-    let(:parent) { groups(:bottom_group_one_one) }
-    let(:grandparent) { groups(:bottom_layer_one) }
-    let(:app_logo) { "/packs(-test)?/media/images/logo-[0-9a-f]+.png" }
+    context "with group" do
+      let(:group) { groups(:bottom_group_one_one_one) }
+      let(:parent) { groups(:bottom_group_one_one) }
+      let(:grandparent) { groups(:bottom_layer_one) }
+      let(:app_logo) { "/packs(-test)?/media/images/logo-[0-9a-f]+.png" }
 
-    before { assign(:group, group) }
+      before { assign(:group, group) }
 
-    it "should find the logo directly on the visible group" do
-      group.logo.attach(
-        io: File.open("spec/fixtures/person/test_picture.jpg"),
-        filename: "test_picture.jpeg"
-      )
+      it "should find the logo directly on the visible group" do
+        group.logo.attach(
+          io: File.open("spec/fixtures/person/test_picture.jpg"),
+          filename: "test_picture.jpeg"
+        )
 
-      expect(helper.header_logo).to eql(image_tag(upload_url(group, :logo)))
+        expect(helper.header_logo).to eql(image_tag(upload_url(group, :logo)))
+      end
+
+      it "should find the logo on a parent group" do
+        parent.logo.attach(
+          io: File.open("spec/fixtures/person/test_picture2.jpg"),
+          filename: "test_picture2.jpg"
+        )
+
+        expect(helper.header_logo).to eql(image_tag(upload_url(parent, :logo)))
+      end
+
+      it "should return the correct logo, when multiple are available." do
+        grandparent.logo.attach(
+          io: File.open("spec/fixtures/person/test_picture2.jpg"),
+          filename: "test_picture2.jpg"
+        )
+        parent.logo.attach(
+          io: File.open("spec/fixtures/person/test_picture.jpg"),
+          filename: "test_picture.jpg"
+        )
+
+        expect(helper.header_logo).to eql(image_tag(upload_url(parent, :logo)))
+      end
+
+      it "should return nil when not viewing a group" do
+        assign(:group, nil)
+
+        expect(helper.header_logo).to match Regexp.new("<img alt=\"hitobito\" src=\"#{app_logo}\" />")
+      end
+
+      it "should return nil when no logo is set" do
+        expect(helper.header_logo).to match Regexp.new("<img alt=\"hitobito\" src=\"#{app_logo}\" />")
+      end
     end
 
-    it "should find the logo on a parent group" do
-      parent.logo.attach(
-        io: File.open("spec/fixtures/person/test_picture2.jpg"),
-        filename: "test_picture2.jpg"
-      )
+    context "with multilanguage logo" do
+      before do
+        @initial_logo = Settings.application.logo.dup
 
-      expect(helper.header_logo).to eql(image_tag(upload_url(parent, :logo)))
+        Settings.application.logo.multilanguage_image = {
+          de: "de_logo.png",
+          fr: "fr_logo.png",
+          it: "it_logo.png"
+        }
+      end
+
+      after { Settings.application.logo = @initial_logo }
+
+      it "should return the logo for multilanguage image" do
+        [:fr, :it, :de].each do |locale|
+          I18n.with_locale(locale) do
+            logo = "#{locale}_logo.png"
+            allow(helper).to receive(:wagon_image_pack_tag).with(logo,
+              alt: Settings.application.name).and_return logo
+
+            expect(helper.header_logo).to eql(logo)
+          end
+        end
+
+        I18n.with_locale(:en) do
+          logo = "logo.png"
+          allow(helper).to receive(:wagon_image_pack_tag).with(logo,
+            alt: Settings.application.name).and_return logo
+
+          expect(helper.header_logo).to eql(logo)
+        end
+      end
     end
 
-    it "should return the correct logo, when multiple are available." do
-      grandparent.logo.attach(
-        io: File.open("spec/fixtures/person/test_picture2.jpg"),
-        filename: "test_picture2.jpg"
-      )
-      parent.logo.attach(
-        io: File.open("spec/fixtures/person/test_picture.jpg"),
-        filename: "test_picture.jpg"
-      )
+    context "without multilanguage logo" do
+      let(:logo) { "logo.png" }
 
-      expect(helper.header_logo).to eql(image_tag(upload_url(parent, :logo)))
-    end
+      it "should return the same logo" do
+        [:fr, :it, :de].each do |locale|
+          I18n.with_locale(locale) do
+            allow(helper).to receive(:wagon_image_pack_tag).with(logo,
+              alt: Settings.application.name).and_return logo
 
-    it "should return nil when not viewing a group" do
-      assign(:group, nil)
-
-      expect(helper.header_logo).to match Regexp.new("<img alt=\"hitobito\" src=\"#{app_logo}\" />")
-    end
-
-    it "should return nil when no logo is set" do
-      expect(helper.header_logo).to match Regexp.new("<img alt=\"hitobito\" src=\"#{app_logo}\" />")
+            expect(helper.header_logo).to eql(logo)
+          end
+        end
+      end
     end
   end
 

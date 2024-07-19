@@ -110,12 +110,13 @@ module LayoutHelper
     end
   end
 
-  def header_logo
+  def header_logo(locale = I18n.locale)
     logo_group = closest_group_with_logo
-
     return image_tag(upload_url(logo_group, :logo)) if logo_group
 
-    wagon_image_pack_tag(Settings.application.logo.image, alt: Settings.application.name)
+    logo = Settings.application.logo
+    logo_path = logo&.dig(:multilanguage_image, locale) || logo&.image
+    wagon_image_pack_tag(logo_path, alt: Settings.application.name)
   end
 
   private

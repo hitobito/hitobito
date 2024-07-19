@@ -14,38 +14,6 @@
     = javascript_pack_tag 'membership_verify'
   %body
     #membership-verify
-      %header
-        %div{:id => 'logo'}
-          - logo = Settings.application.membership_verify_logo
-          - if logo
-            = wagon_image_pack_tag(logo.image, alt: Settings.application.name)
-          - else
-            = image_pack_tag('logo.png', alt: 'define logo in wagon settings (membership_verify_logo)')
-        #root-address
-          %strong
-            = root.name
-          = root.complete_address
-      #details
-        - if person
-          #member-img
-            = image_tag(upload_url(person, :picture))
-          #member-name
-            = person.full_name
-          - if member?
-            %div{:class => 'alert alert-success'}
-              %span.fas.fa-check
-              = t('verify_membership.status_valid')
-          - else
-            %div{:class => 'alert alert-danger'}
-              %span.fas.fa-times-circle
-              = t('verify_membership.status_invalid')
-
-        - else
-          %div{:class => 'alert alert-danger'}
-            %span.fas.fa-times-circle
-            = t('verify_membership.not_found')
-
-        = render_extensions(:member_details)
-      #footer
-        = render_extensions(:footer)
-        = render 'layouts/footer'
+      = render partial: 'header'
+      = render partial: 'details'
+      = render partial: 'footer'

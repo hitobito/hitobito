@@ -1280,13 +1280,6 @@ fr:
     history:
       index:
         inactive_roles_title: "Rôles inactifs"
-    households:
-      form:
-        address_updated: "Adresse actualisée"
-      fields:
-        lives_in_household_with: "Habite dans le foyer avec"
-        update_denied: "Tu ne peux pas ajouter %{other_person} au foyer. Il se peut que cette personne soit déjà dans le foyer ou que tu n'aies pas les droits d'écriture."
-        cannot_create_household: "Tu as besoin de droits d'écriture sur plusieurs personnes pour les rassembler dans un ensemble de foyer."
     family:
       fields:
         is_in_family_with: "Fait partie de la famille de"

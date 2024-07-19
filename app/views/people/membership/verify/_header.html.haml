@@ -5,11 +5,7 @@
 
 %header
     %div{:id => 'logo'}
-        - logo = Settings.application.membership_verify_logo
-        - if logo
-            = wagon_image_pack_tag(logo.image, alt: Settings.application.name)
-        - else
-            = image_pack_tag(Settings.application.logo.image, alt: Settings.application.name)
+        = membership_verify_logo
     #root-address
         %strong
             = root.name

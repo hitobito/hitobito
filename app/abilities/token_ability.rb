@@ -40,6 +40,9 @@ class TokenAbility
 
   def define_role_abilities
     can :index, Role
+    can :show, Role do |role|
+      dynamic_user_ability.can? :show_full, role.person
+    end
     can [:create, :update, :destroy], Role do |role|
       dynamic_user_ability.can?(:update, role.group) &&
         dynamic_user_ability.can?(:update, role.person)

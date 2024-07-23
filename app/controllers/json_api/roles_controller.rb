@@ -11,6 +11,11 @@ class JsonApi::RolesController < JsonApiController
     super
   end
 
+  def create
+    authorize!(:create, Role)
+    super
+  end
+
   def show
     authorize!(:show, entry)
     super

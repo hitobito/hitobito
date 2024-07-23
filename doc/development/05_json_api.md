@@ -8,17 +8,22 @@ The hitobito JSON:API implements the open standard **[json:api](https://jsonapi.
 
 Currently the following endpoints are provided:
 
-| Method | Path                                              | Function                                                                        |
-| ---    | ---                                               | ---                                                                             |
-| GET    | /api/people/                                      | List all accessible people                                                      |
-| GET    | /api/people/:id                                   | Fetch a single person entry, replace :id with the person's primary key          |
-| PATCH  | /api/people/:id                                   | Update a person entry, replace :id with the person's primary key                |
-| GET    | /api/groups/                                      | List all accessible groups                                                      |
-| GET    | /api/groups/:id                                   | Fetch a single group entry, replace :id with the groups's primary key           |
-| GET    | /api/events/                                      | List all accessible events                                                      |
-| GET    | /api/events/:id                                   | Fetch a single event entry, replace :id with the event's primary key            |
-| GET    | /api/event_kinds/                                 | List all accessible events kinds                                                |
-| GET    | /api/event_kinds/:id                              | Fetch a single event kind, replace :id with the event's primary key             |
+| Method | Path                 | Function                                                               |
+| ------ | -------------------- | ---------------------------------------------------------------------- |
+| GET    | /api/people/         | List all accessible people                                             |
+| GET    | /api/people/:id      | Fetch a single person entry, replace :id with the person's primary key |
+| PATCH  | /api/people/:id      | Update a person entry, replace :id with the person's primary key       |
+| GET    | /api/roles/          | List all accessible roles                                              |
+| POST   | /api/roles/          | Create a new role                                                      |
+| GET    | /api/roles/:id       | Fetch a single role entry, replace :id with the roles' primary key     |
+| PATCH  | /api/roles/:id       | Update a role entry, replace :id with the roles' primary key           |
+| DELETE | /api/roles/:id       | Remove a role entry, replace :id with the roles' primary key           |
+| GET    | /api/groups/         | List all accessible groups                                             |
+| GET    | /api/groups/:id      | Fetch a single group entry, replace :id with the groups's primary key  |
+| GET    | /api/events/         | List all accessible events                                             |
+| GET    | /api/events/:id      | Fetch a single event entry, replace :id with the event's primary key   |
+| GET    | /api/event_kinds/    | List all accessible events kinds                                       |
+| GET    | /api/event_kinds/:id | Fetch a single event kind, replace :id with the event's primary key    |
 
 Visit your hitobito's swagger UI [/api-docs](/api-docs) for detailed documentation and a sandbox for testing/developing requests.
 
@@ -28,7 +33,7 @@ To protect from CSRF attacks, requests must have set **Content-Type** header to 
 
 ### Errors
 
-Any error like authentication or validation errors are rendered as JSON as defined by the [json:api](https://jsonapi.org/format/#errors) standard.  Also a specific http status code is being returned for any errors.
+Any error like authentication or validation errors are rendered as JSON as defined by the [json:api](https://jsonapi.org/format/#errors) standard. Also a specific http status code is being returned for any errors.
 
 Error example: trying to access a person without propper permission:
 
@@ -37,12 +42,15 @@ GET /api/people/42
 HTTP Status 403 - Forbidden
 
 ```json
-{"errors":
-  [{"code":"forbidden",
-    "status":"403",
-    "title":"Access denied",
-    "detail":"Du bist nicht berechtigt auf diese Resource zuzugreifen.",
-    "meta":{}}
+{
+  "errors": [
+    {
+      "code": "forbidden",
+      "status": "403",
+      "title": "Access denied",
+      "detail": "Du bist nicht berechtigt auf diese Resource zuzugreifen.",
+      "meta": {}
+    }
   ]
 }
 ```
@@ -53,17 +61,17 @@ the error's field detail is translated by provided locale. all other fields are 
 
 To use the API you need a valid authentication token, this can be one of the following
 
-* Service tokens
-* Personal OAuth access tokens
-* Active user session
+- Service tokens
+- Personal OAuth access tokens
+- Active user session
 
 #### Service token
 
 Service tokens are impersonal tokens ([service accounts](07_service_accounts.md)), that are meant to represent external applications.
 
 > :bangbang: Service tokens allow you to implement user unaware applications. Note that the
-consumer application is responsible for data protection: with service tokens the application
-may be able to access data which is not intended for public access!
+> consumer application is responsible for data protection: with service tokens the application
+> may be able to access data which is not intended for public access!
 
 #### Personal OAuth access token
 
@@ -80,8 +88,8 @@ For development purposes or async requests, the API can also be accessed with th
 
 #### GET people changed after a certain date/time
 
-* filter[updated_at]: 2022-12-20+00:52:09
-* include Phone Numbers
+- filter[updated_at]: 2022-12-20+00:52:09
+- include Phone Numbers
 
 Request
 
@@ -273,14 +281,25 @@ Response **200 OK**
 }
 ```
 
+### ServiceToken Permission
+
+The following table shows required Service Token permissions per endpoint.
+
+| Endpoint | required permission |
+| -------- | ------------------- |
+| /people  | people              |
+| /groups  | groups              |
+| /roles   | groups, people      |
+| /events  | events              |
+
 ### Hitobito Developer
 
 Checklist for creating/extending JSON:API endpoints:
 
 - Add/extend resource in `app/resources/` and for endpoint changes also in `app/controllers/json_api/`
 - Add/extend tests
-  + for new resources, generate tests with `rails generate graphiti:resource_test <ResourceClass>`
-  + for new endpoints, generate tests with `rails generate graphiti:api_test <ResourceClass>`
+  - for new resources, generate tests with `rails generate graphiti:resource_test <ResourceClass>`
+  - for new endpoints, generate tests with `rails generate graphiti:api_test <ResourceClass>`
 - Add/extend ability in `app/abilities/json_api/`
 - Run `rake graphiti:schema:generate` where you did the changes (core/wagon) to update
   the schema file and add it to git

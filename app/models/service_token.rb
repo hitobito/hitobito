@@ -62,6 +62,10 @@ class ServiceToken < ActiveRecord::Base
     end
   end
 
+  def dynamic_user_ability
+    @dynamic_user_ability ||= Ability.new(dynamic_user)
+  end
+
   private
 
   def generate_token!

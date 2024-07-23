@@ -419,6 +419,7 @@ Hitobito::Application.routes.draw do
     resources :events, only: [:index, :show]
     resources :event_kinds, module: :event, controller: :kinds, only: [:index, :show]
     resources :invoices, only: [:index, :show, :update]
+    resources :roles, except: [:edit, :new]
   end
 
   # The priority is based upon order of creation:

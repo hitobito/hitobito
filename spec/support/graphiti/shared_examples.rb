@@ -5,8 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
 
-shared_examples "jsonapi authorized requests" do
-  let(:token) { service_tokens(:permitted_top_layer_token).token }
+shared_examples "jsonapi authorized requests" do |required_flags: []|
+  let(:service_token) { service_tokens(:permitted_top_layer_token) }
+  let(:token) { service_token.token }
   let(:params) { {} }
   let(:payload) { {} }
 
@@ -21,6 +22,15 @@ shared_examples "jsonapi authorized requests" do
       make_request
       expect(response.status).to eq(401)
       expect(json["errors"]).to include(include("code" => "unauthorized"))
+    end
+  end
+
+  required_flags.each do |flag|
+    it "returns unauthorized for token without #{flag}=true" do
+      service_token.update!(flag => false)
+      make_request
+      expect(response.status).to eq(403)
+      expect(json["errors"]).to include(include("code" => "forbidden"))
     end
   end
 end

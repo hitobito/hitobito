@@ -8,6 +8,8 @@ class TokenAbility
 
   attr_reader :token
 
+  delegate :dynamic_user_ability, to: :token
+
   def initialize(token)
     return if token.nil?
     @token = token
@@ -26,6 +28,7 @@ class TokenAbility
     define_person_abilities if token.people?
     define_event_abilities if token.events?
     define_group_abilities if token.groups?
+    define_role_abilities if token.people? && token.groups?
     define_invoice_abilities if token.invoices?
     define_event_participation_abilities if token.event_participations?
     define_mailing_list_abilities if token.mailing_lists?
@@ -35,6 +38,17 @@ class TokenAbility
     can :index, Group
   end
 
+  def define_role_abilities
+    can :index, Role
+    can :show, Role do |role|
+      dynamic_user_ability.can? :show_full, role.person
+    end
+    can [:create, :update, :destroy], Role do |role|
+      dynamic_user_ability.can?(:update, role.group) &&
+        dynamic_user_ability.can?(:update, role.person)
+    end
+  end
+
   def define_person_abilities # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     below_permissions =
       token.layer_and_below_read? || token.layer_and_below_full?
@@ -42,17 +56,17 @@ class TokenAbility
 
     can :show, [Person, PersonDecorator] do |p|
       Role.where(person: p, group: groups).present? &&
-        Ability.new(token.dynamic_user).can?(:show, p)
+        dynamic_user_ability.can?(:show, p)
     end
 
     can :show_full, [Person, PersonDecorator] do |p|
       Role.where(person: p, group: groups).present? &&
-        Ability.new(token.dynamic_user).can?(:show_full, p)
+        dynamic_user_ability.can?(:show_full, p)
     end
 
     can :show_details, [Person, PersonDecorator] do |p|
       Role.where(person: p, group: groups).present? &&
-        Ability.new(token.dynamic_user).can?(:show_details, p)
+        dynamic_user_ability.can?(:show_details, p)
     end
 
     can :index_people, Group do |g|
@@ -61,7 +75,7 @@ class TokenAbility
 
     can :update, [Person, PersonDecorator] do |p|
       Role.where(person: p, group: groups).present? &&
-        Ability.new(token.dynamic_user).can?(:update, p)
+        dynamic_user_ability.can?(:update, p)
     end
   end
 
@@ -124,5 +138,9 @@ class TokenAbility
 
   def token_layer_and_below
     token.layer.self_and_descendants
+  end
+
+  def write_permission?
+    token.permission =~ /_full$/
   end
 end

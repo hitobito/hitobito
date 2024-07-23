@@ -14,6 +14,9 @@ class ApplicationMailer < ActionMailer::Base
         headers[h] = IdnSanitizer.sanitize(headers[h])
       end
     end
+    if headers[:from] == Settings.email.sender
+      headers[:from] = I18n.t("settings.email.sender", mail_domain: Settings.email.list_domain)
+    end
     super
   end
 

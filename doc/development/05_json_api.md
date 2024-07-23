@@ -14,6 +14,7 @@ Currently the following endpoints are provided:
 | GET    | /api/people/:id      | Fetch a single person entry, replace :id with the person's primary key |
 | PATCH  | /api/people/:id      | Update a person entry, replace :id with the person's primary key       |
 | GET    | /api/roles/          | List all accessible roles                                              |
+| POST   | /api/roles/          | Create a new role                                                      |
 | GET    | /api/roles/:id       | Fetch a single role entry, replace :id with the roles' primary key     |
 | PATCH  | /api/roles/:id       | Update a role entry, replace :id with the roles' primary key           |
 | DELETE | /api/roles/:id       | Remove a role entry, replace :id with the roles' primary key           |
@@ -282,7 +283,7 @@ Response **200 OK**
 
 ### ServiceToken Permission
 
-The followin table shows required Service Token permissions per endpoint
+The following table shows required Service Token permissions per endpoint.
 
 | Endpoint | required permission |
 | -------- | ------------------- |

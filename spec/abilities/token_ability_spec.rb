@@ -507,7 +507,7 @@ describe TokenAbility do
     end
 
     context "unauthorized" do
-      before { token.permission = :layern_and_below_read }
+      before { token.permission = :layer_and_below_read }
 
       it "may not index" do
         is_expected.not_to be_able_to(:index, Role)

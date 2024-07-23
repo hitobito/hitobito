@@ -138,6 +138,6 @@ class TokenAbility
   end
 
   def write_permission?
-    token.permission =~ /full/
+    token.permission =~ /_full$/
   end
 end

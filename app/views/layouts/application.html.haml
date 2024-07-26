@@ -88,6 +88,6 @@
 
             = content_for?(:content) ? yield(:content) : yield
 
-  = render 'layouts/footer'
+    = render 'layouts/footer'
 
-  = javascript_tag yield(:javascripts) if content_for?(:javascripts)
+    = javascript_tag yield(:javascripts) if content_for?(:javascripts)

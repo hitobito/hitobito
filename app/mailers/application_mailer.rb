@@ -14,7 +14,7 @@ class ApplicationMailer < ActionMailer::Base
         headers[h] = IdnSanitizer.sanitize(headers[h])
       end
     end
-    super
+    localize_email_sender(super)
   end
 
   private
@@ -47,6 +47,14 @@ class ApplicationMailer < ActionMailer::Base
     else
       recipients
     end
+  end
+
+  # Overwrite the non localized sender with the localized sender
+  def localize_email_sender(message)
+    if message[:from].value == Settings.email.sender
+      message.from = Hitobito.localized_email_sender
+    end
+    message
   end
 
   def with_personal_sender(person, headers = {})

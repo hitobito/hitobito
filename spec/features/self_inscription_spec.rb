@@ -31,7 +31,6 @@ describe :self_inscription do
   end
 
   it "gives user new role after login" do
-    logout
     visit group_self_inscription_path(group_id: group)
 
     expect(page).to have_selector("h1", text: "Anmelden")

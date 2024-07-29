@@ -190,7 +190,8 @@ def check_sender(overwrite_checks = nil)
       else
         expected_sender = "#{locale} <#{locale}@%{mail_domain}>"
         expect(I18n.t("settings.email.sender")).to eq expected_sender
-        expect(mail[:from].value).to eq("#{locale} <#{locale}@localhost>")
+        domain = Settings.email.list_domain
+        expect(mail[:from].value).to eq("#{locale} <#{locale}@#{domain}>")
       end
     end
   end

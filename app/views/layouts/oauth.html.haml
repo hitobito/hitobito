@@ -38,4 +38,4 @@
 
           = content_for?(:content) ? yield(:content) : yield
 
-    = javascript_tag yield(:javascripts) if content_for?(:javascripts)
+  = javascript_tag yield(:javascripts) if content_for?(:javascripts)

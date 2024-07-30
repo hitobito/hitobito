@@ -21,7 +21,7 @@ describe :self_inscription do
 
   it "with logged-in user gives user new role" do
     sign_in(user)
-    visit group_self_inscription_path(group_id: group)
+    visit "/groups/#{group.id}/self_inscription"
 
     expect(page).to have_selector("h1", text: "Registrierung zu Bottom One")
     click_link("Einschreiben")
@@ -31,7 +31,7 @@ describe :self_inscription do
   end
 
   it "gives user new role after login" do
-    visit group_self_inscription_path(group_id: group)
+    visit "/groups/#{group.id}/self_inscription"
 
     expect(page).to have_selector("h1", text: "Anmelden")
     fill_in "Haupt-E-Mail", with: user.email

@@ -41,7 +41,6 @@ describe Wizards::Base do
     end
 
     it "can access step via method missing" do
-      wizard.step_at(0) # trigger build_step_instances
       expect(wizard.one).to be_kind_of(One)
     end
 
@@ -170,7 +169,7 @@ describe Wizards::Base do
     end
 
     it "step order can be customized by overriding #step_after" do
-      allow(wizard).to receive(:step_after) do |s|
+      allow(Wizard).to receive(:step_after) do |s|
         case s
         when :_start then :three
         when :three then :one

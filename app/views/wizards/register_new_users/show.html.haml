@@ -1,0 +1,11 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of hitobito and licensed under the
+-#  Affero General Public License version 3 or later. See the COPYING file at the top-level directory
+-#  or at https://github.com/hitobito/hitobito.
+
+- title render_self_registration_title(group)
+
+= render 'form'
+- if wizard.first_step?
+  = standard_form(wizard, {url: group_self_inscription_path, method: :get}) do |f|
+    = f.help_block(t('groups.self_registration.form.has_account'), class: 'align-with-form')
+    = submit_button(f, t('groups.self_registration.form.to_login_page'), display_as_link: true)

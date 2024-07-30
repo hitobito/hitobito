@@ -8,6 +8,9 @@ module Wizards
   class BaseController < ApplicationController
     helper_method :wizard
 
+    def show
+    end
+
     def create
       return render :show if params[:autosubmit].present?
       return save_and_redirect if wizard.valid? && wizard.last_step?

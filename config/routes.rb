@@ -74,6 +74,7 @@ Hitobito::Application.routes.draw do
 
       get 'self_registration' => 'groups/self_registration#new'
       post 'self_registration' => 'groups/self_registration#create'
+      resource :register_new_user, module: :wizards, only: [:show, :create]
 
       get 'self_inscription' => 'groups/self_inscription#new'
       post 'self_inscription' => 'groups/self_inscription#create'

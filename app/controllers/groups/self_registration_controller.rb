@@ -5,58 +5,52 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Groups::SelfRegistrationController < ApplicationController
+class Groups::SelfRegistrationController < Wizards::BaseController
   skip_authorization_check
 
-  before_action :assert_empty_honeypot, only: [:create]
+  before_action :assert_empty_honeypot
   before_action :redirect_to_group_if_necessary
-  helper_method :entry, :policy_finder
 
-  def new
-  end
-
-  def create
-    return render :new if params[:autosubmit].present?
-    return save_and_redirect if entry.valid? && entry.last_step?
-
-    entry.move_on
-    render :new
-  end
+  helper_method :group, :policy_finder
 
   private
 
-  def save_and_redirect
-    save_entry
-    redirect_to new_person_session_path, notice: success_message
-  end
-
-  def save_entry
-    Person.transaction do
-      entry.save!
+  def save_wizard
+    super.tap do
+      enqueue_duplicate_locator_job
       enqueue_notification_email
       send_password_reset_email
     end
   end
 
-  def entry
-    @entry ||= SelfRegistration.new(
-      group: group,
-      params: params.to_unsafe_h.deep_symbolize_keys
-    )
+  def enqueue_duplicate_locator_job
+    Person::DuplicateLocatorJob.new(wizard.person.id).enqueue!
+  end
+
+  def enqueue_notification_email
+    return if group.self_registration_notification_email.blank?
+
+    Groups::SelfRegistrationNotificationMailer
+      .self_registration_notification(group.self_registration_notification_email, wizard.role)
+      .deliver_later
+  end
+
+  def send_password_reset_email
+    return if wizard.person.email.blank?
+
+    Person.send_reset_password_instructions(email: wizard.person.email)
+  end
+
+  def notification_email
+    group.self_registration_notification_email
+  end
+
+  def model_class
+    Wizards::RegisterNewUserWizard
   end
 
   def authenticate?
     false
-  end
-
-  def group
-    @group ||= Group.find(params[:group_id])
-  end
-
-  def assert_empty_honeypot
-    if params.delete(:verification).present?
-      redirect_to new_person_session_path
-    end
   end
 
   def redirect_to_group_if_necessary
@@ -65,26 +59,34 @@ class Groups::SelfRegistrationController < ApplicationController
     redirect_to group_self_inscription_path(group) if signed_in?
   end
 
-  def enqueue_notification_email
-    return if group.self_registration_notification_email.blank?
-
-    ::Groups::SelfRegistrationNotificationMailer
-      .self_registration_notification(group.self_registration_notification_email,
-        entry.main_person.role).deliver_later
+  def wizard
+    @wizard ||= model_class.new(
+      group: group,
+      current_step: params[:step].to_i,
+      **model_params.to_unsafe_h
+    )
   end
 
-  def send_password_reset_email
-    return if entry.main_person.email.blank?
+  def group
+    @group ||= Group.find(params[:group_id])
+  end
 
-    Person.send_reset_password_instructions(email: entry.main_person.email)
+  def redirect_target
+    new_person_session_path
   end
 
   def success_message
-    key = entry.main_person.email.present? ? :signed_up_but_unconfirmed : :signed_up_but_no_email
+    key = wizard.person.email.present? ? :signed_up_but_unconfirmed : :signed_up_but_no_email
     I18n.t("devise.registrations.#{key}")
   end
 
+  def assert_empty_honeypot
+    if params.delete(:verification).present?
+      redirect_to new_person_session_path
+    end
+  end
+
   def policy_finder
-    @policy_finder ||= Group::PrivacyPolicyFinder.for(group: group, person: entry.main_person)
+    @policy_finder ||= Group::PrivacyPolicyFinder.for(group: group, person: wizard.person)
   end
 end

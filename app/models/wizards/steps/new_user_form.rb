@@ -21,7 +21,7 @@ class Wizards::Steps::NewUserForm < Wizards::Step
 
   delegate :requires_adult_consent?, :requires_policy_acceptance?, to: :wizard
 
-  class_attribute :support_company, default: false
+  class_attribute :support_company, default: true
 
   def self.human_attribute_name(attr, options = {})
     super(attr, default: Person.human_attribute_name(attr, options))

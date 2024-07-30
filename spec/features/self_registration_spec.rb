@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2024, Schweizer Alpen-Club. This file is part of
-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito_sac_cas.
+#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of hitobito and licensed under the
+#  Affero General Public License version 3 or later. See the COPYING file at the top-level directory
+#  or at https://github.com/hitobito/hitobito.
 
 require "spec_helper"
-
 describe :self_registration, js: true do
   let(:group) { groups(:top_group) }
 
@@ -29,6 +27,7 @@ describe :self_registration, js: true do
     it "validates required fields" do
       visit group_self_registration_path(group_id: group)
       click_on "Registrieren"
+      expect(page).to have_css("#error_explanation li", text: "Vorname muss ausgefüllt werden")
       expect(page.find_field("Vorname")[:class]).to include("is-invalid")
     end
 
@@ -36,15 +35,15 @@ describe :self_registration, js: true do
       visit group_self_registration_path(group_id: group)
       complete_main_person_form
 
-      expect { click_on "Registrieren" }
-        .to change { Person.count }.by(1)
+      expect {
+        click_on "Registrieren"
+        expect(page).to have_text(
+          "Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
+          "E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst."
+        )
+      }.to change { Person.count }.by(1)
         .and change { Role.count }.by(1)
         .and change { ActionMailer::Base.deliveries.count }.by(1)
-
-      expect(page).to have_text(
-        "Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
-        "E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst."
-      )
 
       person = Person.find_by(email: "max.muster@hitobito.example.com")
       expect(person).to be_present
@@ -79,15 +78,23 @@ describe :self_registration, js: true do
       it "cannot complete without accepting adult consent" do
         complete_main_person_form
 
-        expect { click_on "Registrieren" }.not_to(change { Person.count })
-        expect(adult_consent_field.native.attribute("validationMessage"))
-          .to match(/Please (check|tick) this box if you want to proceed./)
+        expect {
+          click_on "Registrieren"
+          expect(adult_consent_field.native.attribute("validationMessage"))
+            .to match(/Please (check|tick) this box if you want to proceed./)
+        }.not_to(change { Person.count })
       end
 
       it "can complete when accepting adult consent" do
         complete_main_person_form
         check adult_consent_text
-        expect { click_on "Registrieren" }.to change { Person.count }.by(1)
+        expect do
+          click_on "Registrieren"
+          expect(page).to have_text(
+            "Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
+            "E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst."
+          )
+        end.to change { Person.count }.by(1)
       end
     end
 
@@ -107,6 +114,10 @@ describe :self_registration, js: true do
         check "Ich erkläre mich mit den folgenden Bestimmungen einverstanden:"
         expect do
           click_on "Registrieren"
+          expect(page).to have_text(
+            "Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
+            "E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst."
+          )
         end.to change { Person.count }.by(1)
         person = Person.find_by(email: "max.muster@hitobito.example.com")
         expect(person.privacy_policy_accepted).to eq true
@@ -116,11 +127,10 @@ describe :self_registration, js: true do
         complete_main_person_form
         expect do
           click_on "Registrieren"
+          field = page.find_field("Ich erkläre mich mit den folgenden Bestimmungen einverstanden:")
+          expect(field.native.attribute("validationMessage"))
+             .to match(/Please (check|tick) this box if you want to proceed./)
         end.not_to(change { Person.count })
-
-        field = page.find_field("Ich erkläre mich mit den folgenden Bestimmungen einverstanden:")
-        expect(field.native.attribute("validationMessage"))
-          .to match(/Please (check|tick) this box if you want to proceed./)
 
         # flash not rendered because of native html require
         expect(page).not_to have_text(
@@ -133,97 +143,16 @@ describe :self_registration, js: true do
       visit group_self_registration_path(group_id: group)
       complete_main_person_form
 
-      expect { send_keys(:return) }
+      expect do
+        send_keys(:return)
+        expect(page).to have_text(
+          "Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
+          "E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst."
+        )
+      end
         .to change { Person.count }.by(1)
         .and change { Role.count }.by(1)
         .and change { ActionMailer::Base.deliveries.count }.by(1)
-
-      expect(page).to have_text(
-        "Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
-        "E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst."
-      )
-    end
-  end
-
-  describe "multi step wizard navigation" do
-    prepend_view_path Rails.root.join("spec", "support", "views")
-
-    before do
-      stub_const("SelfRegistration::MultiStep", Class.new(SelfRegistration) do
-        self.partials = [:first_step, :second_step, :third_step]
-
-        def first_step_valid? = true
-
-        def second_step_valid? = true
-
-        def third_step_valid? = main_person.valid?
-      end)
-
-      allow_any_instance_of(Groups::SelfRegistrationController).to receive(:entry) do |controller|
-        controller.instance_eval do
-          @entry ||= SelfRegistration::MultiStep.new(
-            group: group,
-            params: params.to_unsafe_h.deep_symbolize_keys
-          )
-        end
-      end
-
-      I18n.backend.store_translations :de, "groups/self_registration": {global: {
-        first_step_title: "FirstStep",
-        second_step_title: "SecondStep",
-        third_step_title: "ThirdStep"
-      }}
-
-      visit group_self_registration_path(group_id: group)
-      click_on "Weiter"
-      click_on "Weiter"
-      complete_main_person_form
-      assert_step "ThirdStep"
-    end
-
-    def assert_step(step_name)
-      expect(page).to have_css(".step-headers li.active", text: step_name),
-        "expected step '#{step_name}' to be active, but step '#{find(".step-headers li.active", wait: 0).text}' is active"
-    end
-
-    def click_on_breadcrumb(link_text)
-      within(".step-headers") { click_on link_text }
-    end
-
-    it "can go back and forth" do
-      click_on "Zurück"
-      assert_step "SecondStep"
-      click_on "Weiter"
-      assert_step "ThirdStep"
-      click_on "Zurück"
-      click_on "Zurück"
-      assert_step "FirstStep"
-      click_on "Weiter"
-      assert_step "SecondStep"
-      click_on "Zurück"
-      click_on "Weiter"
-      click_on "Weiter"
-      assert_step "ThirdStep"
-    end
-
-    context "when step is invalid" do
-      before do
-        allow_any_instance_of(SelfRegistration::MultiStep)
-          .to receive(:second_step_valid?).and_return(false)
-
-        visit group_self_registration_path(group_id: group)
-        click_on "Weiter"
-      end
-
-      it "can not continue" do
-        click_on "Weiter"
-        assert_step "SecondStep"
-      end
-
-      it "can go back" do
-        click_on "Zurück"
-        assert_step "FirstStep"
-      end
     end
   end
 end

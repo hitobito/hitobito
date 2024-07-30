@@ -17,11 +17,11 @@ describe Groups::SelfInscriptionController do
       allow(Settings.groups.self_registration).to receive(:enabled).and_return(false)
     end
 
-    describe "GET new" do
+    describe "GET show" do
       it "redirects to group if signed in" do
         sign_in(person)
 
-        get :new, params: {group_id: group.id}
+        get :show, params: {group_id: group.id}
 
         is_expected.to redirect_to(group_person_path(group.id, person))
       end
@@ -31,7 +31,7 @@ describe Groups::SelfInscriptionController do
       sign_in(person)
       group.update!(self_registration_role_type: "")
 
-      get :new, params: {group_id: group.id}
+      get :show, params: {group_id: group.id}
 
       is_expected.to redirect_to(group_person_path(person.default_group_id, person))
     end
@@ -42,7 +42,7 @@ describe Groups::SelfInscriptionController do
       allow(Settings.groups.self_registration).to receive(:enabled).and_return(true)
     end
 
-    context "GET new" do
+    context "GET show" do
       context "when registration active" do
         before do
           group.update(self_registration_role_type: Group::TopGroup::Member.sti_name)
@@ -50,7 +50,7 @@ describe Groups::SelfInscriptionController do
 
         context "when unautorized" do
           it "renders page" do
-            get :new, params: {group_id: group.id}
+            get :show, params: {group_id: group.id}
 
             is_expected.to redirect_to(new_person_session_path)
           end
@@ -60,9 +60,9 @@ describe Groups::SelfInscriptionController do
           it "redirects to self_inscription" do
             sign_in(person)
 
-            get :new, params: {group_id: group.id}
+            get :show, params: {group_id: group.id}
 
-            is_expected.to render_template("groups/self_inscription/new")
+            is_expected.to render_template("groups/self_inscription/show")
           end
         end
       end
@@ -71,7 +71,7 @@ describe Groups::SelfInscriptionController do
         it "redirects to group" do
           sign_in(person)
 
-          get :new, params: {group_id: group.id}
+          get :show, params: {group_id: group.id}
 
           is_expected.to redirect_to(group_person_path(group.id, person))
         end

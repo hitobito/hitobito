@@ -64,8 +64,6 @@ class CustomContent < ActiveRecord::Base
     replace_placeholders(body.to_s, placeholders)
   end
 
-  private
-
   def replace_placeholders(string, placeholders)
     check_placeholders_exist(placeholders)
 
@@ -76,6 +74,8 @@ class CustomContent < ActiveRecord::Base
       end
     end
   end
+
+  private
 
   def as_list(placeholders)
     placeholders.to_s.split(",").collect(&:strip)

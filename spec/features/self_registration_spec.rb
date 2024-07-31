@@ -129,7 +129,7 @@ describe :self_registration, js: true do
           click_on "Registrieren"
           field = page.find_field("Ich erkläre mich mit den folgenden Bestimmungen einverstanden:")
           expect(field.native.attribute("validationMessage"))
-             .to match(/Please (check|tick) this box if you want to proceed./)
+            .to match(/Please (check|tick) this box if you want to proceed./)
         end.not_to(change { Person.count })
 
         # flash not rendered because of native html require

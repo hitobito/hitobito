@@ -33,31 +33,31 @@ describe StepsComponent, type: :component do
     expect(component).not_to be_render
   end
 
-  it "does render header and content" do
-    stub_header_translation(:other, "Andere")
-    html = render(partials: [:main_person, :other], step: 0)
-    expect(html).to have_css("#{header_css} li.active", text: "Personendaten")
-    expect(html).to have_css(".row .step-content.main-person.active", text: "main_person")
-  end
+  describe "translations" do
+    it "does not render header if we only have a single step" do
+      html = render(partials: [:main_person], step: 0)
+      expect(html).not_to have_css("#{header_css} li")
+    end
 
-  it "does render header if we only have a single step" do
-    html = render(partials: [:main_person], step: 0)
-    expect(html).not_to have_css("#{header_css} li")
-  end
+    it "does render header and content" do
+      stub_header_translation(:other, "Andere")
+      html = render(partials: [:main_person, :other], step: 0)
+      expect(html).to have_css("#{header_css} li.active", text: "Personendaten")
+      expect(html).to have_css(".row .step-content.main-person.active", text: "main_person")
+    end
 
-  it "renders two steps with second one active" do
-    stub_header_translation(:household, "Familienmitglieder")
-    html = render(partials: [:main_person, :household], step: 1)
-    expect(html).to have_css("#{header_css} li:nth-child(1):not(.active)", text: "Personendaten")
-    expect(html).to have_css("#{header_css} li:nth-child(2).active", text: "Familienmitglieder")
-    expect(html).to have_css(".step-content.main-person:not(.active)")
-    expect(html).to have_css(".step-content.household.active")
-  end
+    it "renders two steps with second one active" do
+      stub_header_translation(:household, "Familienmitglieder")
+      html = render(partials: [:main_person, :household], step: 1)
+      expect(html).to have_css("#{header_css} li:nth-child(1):not(.active)", text: "Personendaten")
+      expect(html).to have_css("#{header_css} li:nth-child(2).active", text: "Familienmitglieder")
+      expect(html).to have_css(".step-content.main-person:not(.active)")
+      expect(html).to have_css(".step-content.household.active")
+    end
 
-  def stub_header_translation(header, value)
-    allow_any_instance_of(StepsComponent::HeaderComponent).to receive(:ti).and_call_original
-    allow_any_instance_of(StepsComponent::HeaderComponent).to receive(:ti)
-      .with("#{header}_title")
-      .and_return(value)
+    def stub_header_translation(header, value)
+      expect(I18n).to receive(:t).with("main_person_title").and_return("Personendaten")
+      expect(I18n).to receive(:t).with("#{header}_title").and_return(value)
+    end
   end
 end

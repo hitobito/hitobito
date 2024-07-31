@@ -81,7 +81,7 @@ describe :self_registration, js: true do
 
         expect { click_on "Registrieren" }.not_to(change { Person.count })
         expect(adult_consent_field.native.attribute("validationMessage"))
-          .to eq "Please check this box if you want to proceed."
+          .to match(/Please (check|tick) this box if you want to proceed./)
       end
 
       it "can complete when accepting adult consent" do
@@ -120,7 +120,7 @@ describe :self_registration, js: true do
 
         field = page.find_field("Ich erkläre mich mit den folgenden Bestimmungen einverstanden:")
         expect(field.native.attribute("validationMessage"))
-          .to eq "Please check this box if you want to proceed."
+          .to match(/Please (check|tick) this box if you want to proceed./)
 
         # flash not rendered because of native html require
         expect(page).not_to have_text(

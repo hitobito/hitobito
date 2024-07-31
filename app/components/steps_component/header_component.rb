@@ -9,6 +9,8 @@ class StepsComponent::HeaderComponent < StepsComponent::IteratingComponent
   def initialize(header:, header_iteration:, step:)
     super(iterator: header_iteration, step: step)
     @header = header
+    @parts = header.to_s.split("/").compact_blank
+    @title = @parts.pop
   end
 
   def call
@@ -24,10 +26,8 @@ class StepsComponent::HeaderComponent < StepsComponent::IteratingComponent
   private
 
   def markup
-    title
-  end
-
-  def title
-    ti("#{@header}_title")
+    @parts.size.downto(1).map do |i|
+      I18n.t("#{@title}_title", scope: @parts.take(i), default: nil)
+    end.compact_blank.first || I18n.t("#{@header}_title")
   end
 end

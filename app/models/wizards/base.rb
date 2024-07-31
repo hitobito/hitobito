@@ -21,7 +21,9 @@ module Wizards
       super(**params.with_indifferent_access.slice(*self.class.attribute_names))
       @current_step = current_step.to_i
       @current_ability = current_ability || Ability.new(Person.new)
-      @params = params
+      @params = params.with_indifferent_access
+
+      step_instances # trigger building of step_instances so accessors are defined
     end
 
     class << self

@@ -119,17 +119,25 @@ class StepsComponent < ApplicationComponent
 
     private
 
+    def markup
+      render(@partial, f: @form, c: self, required: false)
+    end
+
     def next_submit_button_options
       options = past? ? {formnovalidate: true} : {}
       options.merge(name: :next, value: index + 1)
     end
 
     def past?
-      index < @form.object.step
+      index < current_step
     end
 
-    def markup
-      render(@partial, f: @form, c: self, required: false)
+    def current_step
+      wizard? ? @form.object.current_step : @form.object.step
+    end
+
+    def wizard?
+      @form.object.is_a?(Wizards::Base)
     end
   end
 end

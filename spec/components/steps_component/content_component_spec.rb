@@ -49,38 +49,29 @@ describe StepsComponent::ContentComponent, type: :component do
   end
 
   context "real partial" do
-    let(:object) do
-      SelfRegistration.new(group: groups(:top_group), params: {})
-    end
+    let(:group) { groups(:top_group) }
+    let(:wizard) { Wizards::RegisterNewUserWizard.new(group: group) }
     let(:form) do
-      StandardFormBuilder.new(:obj, object, vc_test_controller.view_context,
-        {builder: StandardFormBuilder})
+      StandardFormBuilder.new(:wizard, wizard, vc_test_controller.view_context, {builder: StandardFormBuilder})
     end
     let(:component) do
-      described_class.new(partial: "groups/self_registration/main_person",
-        partial_iteration: iterator,
-        form: form, step: 0)
+      described_class.new(partial: wizard.new_user_form.partial, partial_iteration: iterator, form: form, step: 0)
     end
     let(:iterator) { double(:iterator, index: 0, last?: false) }
     let(:policy_finder) { double(:policy_finder, acceptance_needed?: true, groups: []) }
-    let(:entry) { double(:entry, partials: [:partial], require_adult_consent: false) }
 
     subject(:html) { render_inline(component) }
 
     before do
-      allow_any_instance_of(ActionView::Base).to receive(:entry).and_return(entry)
+      allow(wizard).to receive(:policy_finder).and_return(policy_finder)
       allow_any_instance_of(ActionView::Base).to receive(:policy_finder).and_return(policy_finder)
     end
 
-    def stub_test_person
-      stub_const("TestPerson", Class.new(SelfRegistration::Person) do # rubocop:disable Lint/ConstantDefinitionInBlock
-        yield self
-        self.attrs += [:privacy_policy_accepted]  ## needed for internal validations
-        def requires_adult_consent?
-          false
-        end
+    def stub_step(&block)
+      stub_const("DummyStep", Class.new(Wizards::Step) do # rubocop:disable Lint/ConstantDefinitionInBlock
+        instance_eval(&block)
       end)
-      expect(object).to receive(:main_person).and_return(TestPerson.new)
+      wizard.steps = [DummyStep]
     end
 
     it "does not render if partial index is above current step" do
@@ -92,37 +83,24 @@ describe StepsComponent::ContentComponent, type: :component do
       expect(html).to have_field("Haupt-E-Mail")
       expect(html).to have_field("Vorname")
       expect(html).to have_field("Nachname")
+      expect(html).to have_field("Firma")
     end
 
-    it "does not render attrs that are not listed on model" do
-      stub_test_person do |test_person|
-        test_person.attrs = [:email]
-        test_person.required_attrs = [:email]
-      end
-
+    it "hides company if flag is set" do
+      allow(Wizards::Steps::NewUserForm).to receive(:support_company).and_return(false)
       expect(html).to have_field("Haupt-E-Mail")
-      expect(html).not_to have_field("Vorname")
-      expect(html).not_to have_field("Nachname")
-    end
-
-    it "can control if field is required" do
-      stub_test_person do |test_person|
-        test_person.attrs = [:email, :first_name]
-        test_person.required_attrs = [:email]
-      end
-      expect(html).to have_css("label.required", text: "Haupt-E-Mail")
-      expect(html).to have_css("label", text: "Vorname")
-      expect(html).not_to have_css("label.required", text: "Vorname")
+      expect(html).not_to have_field("Firma")
     end
 
     it "shows check if policy_finder needs acceptance" do
       expect(policy_finder).to receive(:acceptance_needed?).and_return(true)
+      expect(html).to have_field("Haupt-E-Mail")
       expect(html).to have_field("Ich erkläre mich mit den folgenden Bestimmungen einverstanden:")
     end
 
     it "hides check if policy_finder needs acceptance but we are not on the last page" do
-      expect(entry).to receive(:partials).and_return([:one, :two])
-      expect(policy_finder).not_to receive(:acceptance_needed?)
+      expect(wizard).to receive(:steps).and_return([:one, :two])
+      expect(html).to have_field("Haupt-E-Mail")
       expect(html).not_to have_field("Ich erkläre mich mit den folgenden Bestimmungen einverstanden:")
     end
   end

@@ -1,0 +1,19 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of hitobito and licensed under the
+-#  Affero General Public License version 3 or later. See the COPYING file at the top-level directory
+-#  or at https://github.com/hitobito/hitobito.
+
+= f.fields_for(:new_user_form, f.object.new_user_form) do |ff|
+  = ff.error_messages
+  = ff.labeled_input_fields :first_name, :last_name
+  - if f.object.new_user_form.support_company?
+    = ff.labeled_input_fields :company_name
+    = ff.labeled_boolean_field :company
+  = ff.labeled_input_field :email, help_inline: t('people.email_field.used_as_login'), class: 'd-inline'
+
+  - if f.object.steps.one?
+    = render 'groups/self_registration/adult_consent_field', f: ff
+    = field_set_tag(nil, class: 'privacy-policy-fields') do
+      = render('people/privacy_policy_acceptance_field', f: ff, policy_finder: f.object.policy_finder)
+
+.btn-toolbar.bottom.align-with-form
+  = c.next_button

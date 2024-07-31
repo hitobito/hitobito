@@ -2,5 +2,4 @@
 -#  Affero General Public License version 3 or later. See the COPYING file at the top-level directory
 -#  or at https://github.com/hitobito/hitobito.
 
-= standard_form(wizard, url: group_self_registration_path, data: { controller: 'forwarder'}) do |f|
-  = render StepsComponent.new(partials: wizard.partials, step: wizard.current_step, form: f)
+= render 'form'

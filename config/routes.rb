@@ -72,7 +72,7 @@ Hitobito::Application.routes.draw do
         post 'archive' => 'group/archive#create'
       end
 
-      get 'self_registration' => 'groups/self_registration#new'
+      get 'self_registration' => 'groups/self_registration#show'
       post 'self_registration' => 'groups/self_registration#create'
 
       get 'self_inscription' => 'groups/self_inscription#new'

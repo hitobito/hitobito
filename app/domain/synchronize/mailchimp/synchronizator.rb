@@ -36,12 +36,12 @@ module Synchronize
 
         destroy_segments
         tag_cleaned_members
+
+        update_forgotten_emails
       end
 
       def missing_subscribers
-        subscribers.reject do |subscriber|
-          members_by_email.key?(subscriber.email) || subscriber.email.blank?
-        end
+        subscribers.reject { |subscriber| ignore?(subscriber.email) }
       end
 
       def obsolete_emails
@@ -113,6 +113,10 @@ module Synchronize
         result.track(:delete_segments, client.delete_segments(obsolete_segment_ids))
       end
 
+      def update_forgotten_emails
+        list.update!(mailchimp_forgotten_emails: (list.mailchimp_forgotten_emails + result.forgotten_emails).uniq)
+      end
+
       def tag_cleaned_members
         emails = cleaned_members.pluck(:email_address)
         InvalidSubscriberTagger.new(emails, list).tag!
@@ -141,6 +145,11 @@ module Synchronize
 
       def subscribers
         @subscribers ||= Subscriber.mailing_list_subscribers(list)
+      end
+
+      def ignore?(email)
+        email.blank? || members_by_email.key?(email) ||
+          list.mailchimp_forgotten_emails.include?(email)
       end
 
       def tags

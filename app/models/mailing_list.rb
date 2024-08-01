@@ -43,6 +43,7 @@ class MailingList < ActiveRecord::Base
   serialize :preferred_labels, Array
   serialize :filter_chain, MailingLists::Filter::Chain
 
+  serialize :mailchimp_forgotten_emails, Array
   attribute :mailchimp_result, Synchronize::Mailchimp::ResultType.new
 
   belongs_to :group

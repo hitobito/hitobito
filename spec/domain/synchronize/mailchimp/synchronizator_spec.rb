@@ -272,11 +272,12 @@ describe Synchronize::Mailchimp::Synchronizator do
       client.subscriber_body(person).merge(tags: tags)
     end
 
-    def batch_result(total, finished, errored)
+    def batch_result(total, finished, errored, operation_results = [])
       {
-        "total_operations" => total,
-        "finished_operations" => finished,
-        "errored_operations" => errored
+        total_operations: total,
+        finished_operations: finished,
+        errored_operations: errored,
+        operation_results: operation_results
       }
     end
 
@@ -408,6 +409,37 @@ describe Synchronize::Mailchimp::Synchronizator do
         expect(client).to receive(:unsubscribe_members).with([])
 
         sync.perform
+      end
+
+      describe "permanently deleted emails" do
+        before {
+          mailing_list.subscriptions.create!(subscriber: user)
+          allow(client).to receive(:fetch_members).and_return([])
+        }
+
+        it "updates single email" do
+          expect(client).to receive(:subscribe_members) { |subscribers|
+            expect(subscribers.map(&:person)).to eq([user])
+          }.and_return(batch_result(1, 0, 1, [detail: "#{user.email} was permanently deleted"]))
+          sync.perform
+          expect(mailing_list.reload.mailchimp_forgotten_emails).to eq [user.email]
+        end
+
+        it "appends to existing emails" do
+          mailing_list.update!(mailchimp_forgotten_emails: %w[foo@example.com bar@example.com])
+          expect(client).to receive(:subscribe_members) { |subscribers|
+            expect(subscribers.map(&:person)).to eq([user])
+          }.and_return(batch_result(1, 0, 1, [detail: "#{user.email} was permanently deleted"]))
+          sync.perform
+          expect(mailing_list.reload.mailchimp_forgotten_emails).to match_array %W[foo@example.com bar@example.com #{user.email}]
+        end
+
+        it "ignores forgotten_emails when syncing" do
+          mailing_list.update!(mailchimp_forgotten_emails: [user.email])
+          expect(client).to receive(:subscribe_members).with([])
+          sync.perform
+          expect(mailing_list.reload.mailchimp_forgotten_emails).to eq [user.email]
+        end
       end
     end
 

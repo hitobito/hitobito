@@ -14,6 +14,8 @@ module Synchronize
         fatal: :danger
       }.freeze
 
+      PERMANENTLY_DELETED_REGEX = /\A(.*?)\swas\spermanently\sdeleted/
+
       attr_reader :data
 
       def initialize(data = {})
@@ -21,7 +23,7 @@ module Synchronize
       end
 
       def track(key, response)
-        @data[key] = extract(response) if response
+        @data[key] = process(response) if response
       end
 
       def exception=(exception)
@@ -46,6 +48,12 @@ module Synchronize
         [state, STATE_BADGES[state]]
       end
 
+      def forgotten_emails
+        operation_results(:subscribe_members).map do |op|
+          op[:detail].to_s[PERMANENTLY_DELETED_REGEX, 1]
+        end.compact_blank
+      end
+
       private
 
       def exception?
@@ -53,23 +61,29 @@ module Synchronize
       end
 
       def operations
-        @data.except(:execption).values
+        @data.except(:exception).values
       end
 
       # wird nur aufgerufen, wenn operation ausgeführt wurde
-      def extract(response)
-        total = response["total_operations"]
-        failed = response["errored_operations"]
-        finished = response["finished_operations"]
-        response_body_url = response["response_body_url"]
+      def process(response)
+        total = response[:total_operations]
+        failed = response[:errored_operations]
+        finished = response[:finished_operations]
+        operation_results = response[:operation_results]
 
-        if total == failed || finished.zero?
-          {failed: [total, response_body_url]}
+        state = if total == failed || finished.zero?
+          :failed
         elsif finished < total || failed.positive?
-          {partial: [total, failed, finished, response_body_url]}
+          :partial
         elsif total == finished
-          {success: total}
+          :success
         end
+        {state => [total, finished, failed, operation_results]}
+      end
+
+      # read operation_results from structure defined by #process
+      def operation_results(key)
+        Array(data[key].to_h.values.flatten(1).last)
       end
     end
   end

@@ -8,7 +8,7 @@ require "spec_helper"
 
 describe QualificationDecorator do
   let(:kind) { Fabricate(:qualification_kind, required_training_days: 3) }
-  let(:qualification) { Fabricate.build(:qualification, qualification_kind: kind) }
+  let(:qualification) { Fabricate.build(:qualification, qualification_kind: kind, start_at: (0..24).to_a.sample.months.ago) }
 
   subject(:info) { qualification.decorate.open_training_days_info }
 

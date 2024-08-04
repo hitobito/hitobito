@@ -111,6 +111,10 @@ describe PersonAbility do
     it 'may create households' do
       is_expected.to be_able_to(:create_households, Person)
     end
+
+    it "may query people" do
+      is_expected.to be_able_to(:query, Person)
+    end
   end
 
   describe 'layer_and_below_full in bottom layer' do
@@ -272,6 +276,10 @@ describe PersonAbility do
     it 'may create households' do
       is_expected.to be_able_to(:create_households, Person)
     end
+
+    it "may query people" do
+      is_expected.to be_able_to(:query, Person)
+    end
   end
 
   context :layer_and_below_read do
@@ -351,6 +359,14 @@ describe PersonAbility do
     it 'may not show person with deleted role in layer' do
       other = Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
       is_expected.to_not be_able_to(:show, other.person.reload)
+    end
+
+    context "without any writing permission" do
+      let(:role) { Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one)) }
+
+      it "may not query people" do
+        is_expected.not_to be_able_to(:query, Person)
+      end
     end
   end
 
@@ -444,6 +460,10 @@ describe PersonAbility do
     it 'may not show person with deleted role in lower layer' do
       other = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
       is_expected.to_not be_able_to(:show, other.person.reload)
+    end
+
+    it "may query people" do
+      is_expected.to be_able_to(:query, Person)
     end
   end
 
@@ -613,6 +633,10 @@ describe PersonAbility do
     it 'may create households' do
       is_expected.to be_able_to(:create_households, Person)
     end
+
+    it "may query people" do
+      is_expected.to be_able_to(:query, Person)
+    end
   end
 
   context :layer_read do
@@ -716,6 +740,10 @@ describe PersonAbility do
     it 'may not create households' do
       is_expected.to_not be_able_to(:create_households, Person)
     end
+
+    it "may not query people" do
+      is_expected.not_to be_able_to(:query, Person)
+    end
   end
 
   context :contact_data do
@@ -804,6 +832,10 @@ describe PersonAbility do
       is_expected.to be_able_to(:index_people, groups(:bottom_group_one_one))
       is_expected.not_to be_able_to(:index_full_people, groups(:bottom_group_one_one))
       is_expected.not_to be_able_to(:index_local_people, groups(:bottom_group_one_one))
+    end
+
+    it "may not query people" do
+      is_expected.not_to be_able_to(:query, Person)
     end
   end
 
@@ -931,6 +963,10 @@ describe PersonAbility do
     it 'may create households' do
       is_expected.to be_able_to(:create_households, Person)
     end
+
+    it "may query people" do
+      is_expected.to be_able_to(:query, Person)
+    end
   end
 
   context :group_and_below_read do
@@ -1035,6 +1071,10 @@ describe PersonAbility do
 
     it 'may not create households' do
       is_expected.to_not be_able_to(:create_households, Person)
+    end
+
+    it "may not query people" do
+      is_expected.not_to be_able_to(:query, Person)
     end
   end
 
@@ -1158,6 +1198,10 @@ describe PersonAbility do
     it 'may create households' do
       is_expected.to be_able_to(:create_households, Person)
     end
+
+    it "may query people" do
+      is_expected.to be_able_to(:query, Person)
+    end
   end
 
   context :group_read do
@@ -1219,6 +1263,10 @@ describe PersonAbility do
 
     it 'may not create households' do
       is_expected.to_not be_able_to(:create_households, Person)
+    end
+
+    it "may not query people" do
+      is_expected.not_to be_able_to(:query, Person)
     end
   end
 
@@ -1303,6 +1351,10 @@ describe PersonAbility do
       is_expected.not_to be_able_to(:index_people, groups(:top_layer))
       is_expected.not_to be_able_to(:index_full_people, groups(:top_layer))
       is_expected.not_to be_able_to(:index_local_people, groups(:top_layer))
+    end
+
+    it "may not query people" do
+      is_expected.not_to be_able_to(:query, Person)
     end
   end
 
@@ -1543,6 +1595,30 @@ describe PersonAbility do
     it 'may not update_password if not already set' do
       is_expected.to_not be_able_to(:update_password, person_without_roles)
     end
+
+    it "may not query people" do
+      is_expected.not_to be_able_to(:query, Person)
+    end
+
+    context "with an event leader role" do
+      let!(:event_role) do
+        Event::Role::Leader.create(event: events(:top_event), person: person_without_roles)
+      end
+
+      it "may query people" do
+        is_expected.to be_able_to(:query, Person)
+      end
+    end
+
+    context "with an event participant role" do
+      let!(:event_role) do
+        Event::Role::Participant.create(event: events(:top_event), person: person_without_roles)
+      end
+
+      it "may not query people" do
+        is_expected.not_to be_able_to(:query, Person)
+      end
+    end
   end
 
   context 'person with only basic permissions role' do
@@ -1572,5 +1648,8 @@ describe PersonAbility do
       is_expected.to_not be_able_to(:index_invoices, role.person)
     end
 
+    it "may not query people" do
+      is_expected.not_to be_able_to(:query, Person)
+    end
   end
 end

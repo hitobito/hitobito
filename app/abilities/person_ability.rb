@@ -94,7 +94,7 @@ class PersonAbility < AbilityDsl::Base
   end
 
   def if_any_writing_permissions_or_any_leaded_events
-    if_any_writing_permissions || user_context.events_with_permission(:event_full).present?
+    if_any_writing_permissions || user_context.events_with_permission(:event_full).any?
   end
 
   def in_layer_group

@@ -2,7 +2,8 @@
 
 ## Unreleased
 
-- Von Mailchimp via Link abgemeldetet E-Mails nicht unnötig synchronisieren, #1930
+-  Von Mailchimp via Link abgemeldetet E-Mails nicht unnötig synchronisieren, #1930
+-  In der JSON:API können Gruppen neu nach layer_group_id (ID der Ebene zu der die Gruppe gehört) und nach parent_id (ID der übergeordneten Gruppe) gefiltert werden.
 
 ## Version 2.2
 

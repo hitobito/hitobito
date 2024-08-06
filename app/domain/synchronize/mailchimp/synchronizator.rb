@@ -19,9 +19,12 @@ module Synchronize
         ["Gender", "dropdown", {choices: %w[m w]}, ->(p) { p.gender }]
       ]
 
-      def initialize(mailing_list)
+      DEFAULT_TAG = "hitobito-mailing-list-%d"
+
+      def initialize(mailing_list, with_default_tag: true)
         @list = mailing_list
         @result = Result.new
+        @default_tag = format(DEFAULT_TAG, @list.id) if with_default_tag
       end
 
       def perform
@@ -84,7 +87,7 @@ module Synchronize
       end
 
       def obsolete_emails
-        (members - cleaned_members).pluck(:email_address) - subscribers.collect(&:email)
+        (managed_members - cleaned_members).pluck(:email_address) - subscribers.collect(&:email)
       end
 
       def missing_segments
@@ -104,7 +107,7 @@ module Synchronize
         segments = client.fetch_segments.index_by { |t| t[:name] }
 
         tags.collect do |tag, emails|
-          next if emails.sort == remote_tags.fetch(tag, []).sort
+          next if (emails - list.mailchimp_forgotten_emails).sort == remote_tags.fetch(tag, []).sort
           next unless segments.key?(tag)
 
           [segments.dig(tag, :id), emails]
@@ -131,8 +134,18 @@ module Synchronize
         end
       end
 
+      def segments
+        @segments ||= client.fetch_segments
+      end
+
       def members
         @members ||= client.fetch_members
+      end
+
+      def managed_members
+        return members if @default_tag.blank? || initial_default_tag_sync?
+
+        members.select { |member| member[:tags].pluck(:name).include?(@default_tag) }
       end
 
       def cleaned_members
@@ -153,9 +166,15 @@ module Synchronize
       end
 
       def tags
-        @tags ||= Subscriber.mailing_list_tags(list).except(
-          *PersonTags::Validation.tag_names
-        )
+        @tags ||= Subscriber
+          .mailing_list_tags(list)
+          .except(*PersonTags::Validation.tag_names).tap do |tags|
+            tags[@default_tag] = subscribers.map(&:email).uniq if @default_tag
+          end
+      end
+
+      def initial_default_tag_sync?
+        segments.pluck(:name).exclude?(@default_tag)
       end
     end
   end

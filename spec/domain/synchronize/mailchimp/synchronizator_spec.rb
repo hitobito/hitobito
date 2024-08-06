@@ -11,7 +11,7 @@ describe Synchronize::Mailchimp::Synchronizator do
   let(:other) { people(:bottom_member) }
   let(:mailing_list) { mailing_lists(:leaders) }
   let(:sync) { Synchronize::Mailchimp::Synchronizator.new(mailing_list) }
-  let(:client) { sync.client }
+  let(:client) { sync.send(:client) }
 
   let(:tags) { %w[foo bar] }
   let(:merge_field) {
@@ -25,110 +25,110 @@ describe Synchronize::Mailchimp::Synchronizator do
   end
 
   def member(person, tags = [], status: "subscribed")
-    sync.client.subscriber_body(person).merge(tags: tags)
+    client.subscriber_body(person).merge(tags: tags)
   end
 
   context "#missing_merge_fields" do
     before { sync.merge_fields = [] }
 
-    subject { sync.missing_merge_fields }
+    subject(:missing_merge_fields) { sync.send(:missing_merge_fields) }
 
     it "is empty when no merge_fields is empty" do
-      allow(sync.client).to receive(:fetch_merge_fields).and_return([])
-      expect(subject).to be_empty
+      allow(client).to receive(:fetch_merge_fields).and_return([])
+      expect(missing_merge_fields).to be_empty
     end
 
     it "includes local merge_field that does not exist remotely" do
       sync.merge_fields = [merge_field]
-      allow(sync.client).to receive(:fetch_merge_fields).and_return([])
-      expect(subject).to eq [merge_field]
+      allow(client).to receive(:fetch_merge_fields).and_return([])
+      expect(missing_merge_fields).to eq [merge_field]
     end
 
     it "is empty when merge_field exists locally and remotely" do
       sync.merge_fields = [merge_field]
-      allow(sync.client).to receive(:fetch_merge_fields).and_return([{tag: "GENDER"}])
-      expect(subject).to be_empty
+      allow(client).to receive(:fetch_merge_fields).and_return([{tag: "GENDER"}])
+      expect(missing_merge_fields).to be_empty
     end
   end
 
   context "#missing_segments" do
-    subject { sync.missing_segments }
+    subject(:missing_segments) { sync.send(:missing_segments) }
 
     it "is empty when subscribers have no tags" do
-      allow(sync.client).to receive(:fetch_segments).and_return([])
+      allow(client).to receive(:fetch_segments).and_return([])
       mailing_list.subscriptions.create!(subscriber: user)
-      expect(subject).to be_empty
+      expect(missing_segments).to be_empty
     end
 
     it "is empty when subscribers have only technical tags" do
       Contactable::InvalidEmailTagger.new(user, user.email, :primary).tag!
       Contactable::InvalidEmailTagger.new(user, user.email, :additional).tag!
 
-      allow(sync.client).to receive(:fetch_segments).and_return([])
+      allow(client).to receive(:fetch_segments).and_return([])
       mailing_list.subscriptions.create!(subscriber: user)
-      expect(subject).to be_empty
+      expect(missing_segments).to be_empty
     end
 
     it "is includes local tag if it does not exist remotely" do
-      allow(sync.client).to receive(:fetch_segments).and_return([])
+      allow(client).to receive(:fetch_segments).and_return([])
       mailing_list.subscriptions.create!(subscriber: user)
       user.update(tag_list: %w[foo])
-      expect(subject).to eq %w[foo]
+      expect(missing_segments).to eq %w[foo]
     end
 
     it "is includes other local tag if it does not exist remotely" do
-      allow(sync.client).to receive(:fetch_segments).and_return([])
+      allow(client).to receive(:fetch_segments).and_return([])
       mailing_list.subscriptions.create!(subscriber: user)
       user.update(tag_list: %w[foo bar])
-      allow(sync.client).to receive(:fetch_segments).and_return(segments(%w[foo]))
-      expect(subject).to eq %w[bar]
+      allow(client).to receive(:fetch_segments).and_return(segments(%w[foo]))
+      expect(missing_segments).to eq %w[bar]
     end
 
     it "is empty if both tags exists remotely" do
-      allow(sync.client).to receive(:fetch_segments).and_return(segments(%w[foo bar]))
+      allow(client).to receive(:fetch_segments).and_return(segments(%w[foo bar]))
       mailing_list.subscriptions.create!(subscriber: user)
       user.update(tag_list: %w[foo bar])
-      expect(subject).to be_empty
+      expect(missing_segments).to be_empty
     end
   end
 
   context "#obsolete_segment_ids" do
-    subject { sync.obsolete_segment_ids }
+    subject(:obsolete_segment_ids) { sync.send(:obsolete_segment_ids) }
 
     it "is empty when no remote segments exist" do
-      allow(sync.client).to receive(:fetch_segments).and_return([])
-      expect(subject).to be_empty
+      allow(client).to receive(:fetch_segments).and_return([])
+      expect(obsolete_segment_ids).to be_empty
     end
 
     it "is present if no local tag exists for remote segment" do
-      allow(sync.client).to receive(:fetch_segments).and_return(segments(%w[foo]))
-      expect(subject).to eq [0]
+      allow(client).to receive(:fetch_segments).and_return(segments(%w[foo]))
+      expect(obsolete_segment_ids).to eq [0]
     end
 
     it "is empty if local tag exists remotely" do
-      allow(sync.client).to receive(:fetch_segments).and_return(segments(%w[foo]))
+      allow(client).to receive(:fetch_segments).and_return(segments(%w[foo]))
       mailing_list.subscriptions.create!(subscriber: user)
       user.update(tag_list: %w[foo])
-      expect(subject).to be_empty
+      expect(obsolete_segment_ids).to be_empty
     end
   end
 
   context "#stale_segments" do
-    subject { sync.stale_segments }
+    subject(:stale_segments) { sync.send(:stale_segments) }
 
     it "is empty when no tags are defined" do
       mailing_list.subscriptions.create!(subscriber: user)
-      expect(sync.client).to receive(:fetch_segments).and_return([])
-      expect(subject).to eq []
+      expect(client).to receive(:fetch_segments).and_return([])
+      expect(stale_segments).to eq []
     end
 
     it "is empty when we have only local tags" do
       user.update(tag_list: tags)
       mailing_list.subscriptions.create!(subscriber: user)
 
-      expect(sync.client).to receive(:fetch_members).and_return([])
-      expect(sync.client).to receive(:fetch_segments).and_return([])
-      expect(subject).to eq []
+      expect(client).to receive(:fetch_members).and_return([])
+      expect(client).to receive(:fetch_segments).and_return([])
+      expect(stale_segments).to eq []
     end
 
     it "contains diff when remote has stale tag" do
@@ -137,12 +137,12 @@ describe Synchronize::Mailchimp::Synchronizator do
       user.update(tag_list: tags)
       other.update(tag_list: tags.take(1))
 
-      expect(sync.client).to receive(:fetch_members).and_return([
+      expect(client).to receive(:fetch_members).and_return([
         member(user, segments(tags)),
         member(other, segments(tags))
       ])
-      expect(sync.client).to receive(:fetch_segments).and_return(segments(tags))
-      expect(subject).to eq [[1, %w[top_leader@example.com]]]
+      expect(client).to receive(:fetch_segments).and_return(segments(tags))
+      expect(stale_segments).to eq [[1, %w[top_leader@example.com]]]
     end
 
     it "contains diff when local has extra tags" do
@@ -151,111 +151,111 @@ describe Synchronize::Mailchimp::Synchronizator do
       user.update(tag_list: tags)
       other.update(tag_list: tags)
 
-      expect(sync.client).to receive(:fetch_members).and_return([
+      expect(client).to receive(:fetch_members).and_return([
         member(user, segments(tags).take(1)),
         member(other, segments(tags).take(1))
       ])
-      expect(sync.client).to receive(:fetch_segments).and_return(segments(tags))
-      expect(subject).to have(1).item
-      expect(subject.first.first).to eq 1
-      expect(subject.first.second.sort).to eq %w[bottom_member@example.com top_leader@example.com]
+      expect(client).to receive(:fetch_segments).and_return(segments(tags))
+      expect(stale_segments).to have(1).item
+      expect(stale_segments.first.first).to eq 1
+      expect(stale_segments.first.second.sort).to eq %w[bottom_member@example.com top_leader@example.com]
     end
 
     it "is empty when all local tags exist remotely" do
       user.update(tag_list: tags)
       mailing_list.subscriptions.create!(subscriber: user)
 
-      expect(sync.client).to receive(:fetch_members).and_return([member(user, segments(tags))])
-      expect(sync.client).to receive(:fetch_segments).and_return(segments(tags))
-      expect(subject).to eq []
+      expect(client).to receive(:fetch_members).and_return([member(user, segments(tags))])
+      expect(client).to receive(:fetch_segments).and_return(segments(tags))
+      expect(stale_segments).to eq []
     end
   end
 
   context "#missing_subscribers" do
-    subject { sync.missing_subscribers.map(&:person) }
+    subject(:missing_people) { sync.send(:missing_subscribers).map(&:person) }
 
     it "is empty without subscriptions" do
-      expect(subject).to be_empty
+      expect(missing_people).to be_empty
     end
 
     it "includes subscribers email if it does not exist remotely" do
       mailing_list.subscriptions.create!(subscriber: user)
 
       expect(client).to receive(:fetch_members).and_return([])
-      expect(subject).to eq([user])
+      expect(missing_people).to eq([user])
     end
 
     it "is empty if email does exist remotely" do
       mailing_list.subscriptions.create!(subscriber: user)
 
       expect(client).to receive(:fetch_members).and_return([member(user)])
-      expect(subject).to be_empty
+      expect(missing_people).to be_empty
     end
   end
 
   context "#obsolete_emails" do
-    subject { sync.obsolete_emails }
+    subject(:obsolete_emails) { sync.send(:obsolete_emails) }
 
     it "is empty when remote is empty" do
-      expect(sync.client).to receive(:fetch_members).and_return([])
-      expect(subject).to be_empty
+      expect(client).to receive(:fetch_members).and_return([])
+      expect(obsolete_emails).to be_empty
     end
 
     it "includes email if remote email does not exist locally" do
-      expect(sync.client).to receive(:fetch_members).and_return([member(user)])
-      expect(subject).to eq([user.email])
+      expect(client).to receive(:fetch_members).and_return([member(user)])
+      expect(obsolete_emails).to eq([user.email])
     end
 
     it "is empty if remote email does not exist locally but is cleaned" do
-      expect(sync.client).to receive(:fetch_members).and_return([member(user), status: "cleaned"])
-      expect(subject).to eq([user.email])
+      expect(client).to receive(:fetch_members).and_return([member(user), status: "cleaned"])
+      expect(obsolete_emails).to eq([user.email])
     end
 
     it "is empty if email exists locally and remotely" do
       mailing_list.subscriptions.create!(subscriber: user)
 
-      expect(sync.client).to receive(:fetch_members).and_return([member(user)])
-      expect(subject).to be_empty
+      expect(client).to receive(:fetch_members).and_return([member(user)])
+      expect(obsolete_emails).to be_empty
     end
   end
 
   context "#changed_subscribers" do
-    subject { sync.changed_subscribers.map(&:person) }
+    subject(:changed_people) { sync.send(:changed_subscribers).map(&:person) }
 
     it "is empty when remote is empty" do
       mailing_list.subscriptions.create!(subscriber: user)
-      expect(sync.client).to receive(:fetch_members).and_return([])
-      expect(subject).to be_empty
+      expect(client).to receive(:fetch_members).and_return([])
+      expect(changed_people).to be_empty
     end
 
     it "includes person if has changed a member field" do
       mailing_list.subscriptions.create!(subscriber: user)
-      expect(sync.client).to receive(:fetch_members).and_return([member(user)])
+      expect(client).to receive(:fetch_members).and_return([member(user)])
       user.update(first_name: "Topster")
-      expect(subject).to eq [user]
+      expect(changed_people).to eq [user]
     end
 
     it "is empty if non member field changes" do
       sync.merge_fields = []
       mailing_list.subscriptions.create!(subscriber: user)
-      expect(sync.client).to receive(:fetch_members).and_return([member(user)])
+      expect(client).to receive(:fetch_members).and_return([member(user)])
       user.update(gender: "w")
-      expect(subject).to be_empty
+      expect(changed_people).to be_empty
     end
 
     it "includes person if has changed a merge field" do
       mailing_list.subscriptions.create!(subscriber: user)
-      expect(sync.client).to receive(:fetch_members).and_return([member(user)])
+      expect(client).to receive(:fetch_members).and_return([member(user)])
       user.update(gender: "w")
-      expect(subject).to eq [user]
+      expect(changed_people).to eq [user]
     end
 
     it "is empty if field is not configured as merge field" do
       sync.merge_fields = []
       mailing_list.subscriptions.create!(subscriber: user)
-      expect(sync.client).to receive(:fetch_members).and_return([member(user)])
+      expect(client).to receive(:fetch_members).and_return([member(user)])
       user.update(gender: "w")
-      expect(subject).to be_empty
+      expect(changed_people).to be_empty
     end
   end
 
@@ -282,7 +282,7 @@ describe Synchronize::Mailchimp::Synchronizator do
     end
 
     context "result" do
-      subject { sync.result }
+      subject(:result) { sync.result }
 
       it "has result for empty sync" do
         sync.perform
@@ -293,14 +293,14 @@ describe Synchronize::Mailchimp::Synchronizator do
         allow(client).to receive(:fetch_members).and_return([member(user)])
         expect(client).to receive(:unsubscribe_members).with([user.email]).and_return(batch_result(1, 1, 0))
         sync.perform
-        expect(subject.state).to eq :success
+        expect(result.state).to eq :success
       end
 
       it "has result for partial sync" do
         allow(client).to receive(:fetch_members).and_return([member(user)])
         expect(client).to receive(:unsubscribe_members).with([user.email]).and_return(batch_result(2, 1, 1))
         sync.perform
-        expect(subject.state).to eq :partial
+        expect(result.state).to eq :partial
       end
 
       it "has result for two operations sync" do
@@ -311,7 +311,7 @@ describe Synchronize::Mailchimp::Synchronizator do
         }.and_return(batch_result(1, 1, 0))
         expect(client).to receive(:unsubscribe_members).with(["other@example.com"]).and_return(batch_result(2, 1, 1))
         sync.perform
-        expect(subject.state).to eq :partial
+        expect(result.state).to eq :partial
       end
     end
 

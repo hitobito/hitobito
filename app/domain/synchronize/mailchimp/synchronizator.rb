@@ -40,6 +40,45 @@ module Synchronize
         update_forgotten_emails
       end
 
+      private
+
+      def subscribe_members
+        result.track(:subscribe_members, client.subscribe_members(missing_subscribers))
+      end
+
+      def unsubscribe_members
+        result.track(:unsubscribe_obsolete_members, client.unsubscribe_members(obsolete_emails))
+      end
+
+      def update_segments
+        result.track(:update_segments, client.update_segments(stale_segments))
+      end
+
+      def update_members
+        result.track(:update_members, client.update_members(changed_subscribers))
+      end
+
+      def create_merge_fields
+        result.track(:create_merge_fields, client.create_merge_fields(missing_merge_fields))
+      end
+
+      def create_segments
+        result.track(:create_segments, client.create_segments(missing_segments))
+      end
+
+      def destroy_segments
+        result.track(:delete_segments, client.delete_segments(obsolete_segment_ids))
+      end
+
+      def update_forgotten_emails
+        list.update!(mailchimp_forgotten_emails: (list.mailchimp_forgotten_emails + result.forgotten_emails).uniq)
+      end
+
+      def tag_cleaned_members
+        emails = cleaned_members.pluck(:email_address)
+        InvalidSubscriberTagger.new(emails, list).tag!
+      end
+
       def missing_subscribers
         subscribers.reject { |subscriber| ignore?(subscriber.email) }
       end
@@ -81,45 +120,6 @@ module Synchronize
 
       def client
         @client ||= Client.new(list, member_fields: member_fields, merge_fields: merge_fields)
-      end
-
-      private
-
-      def subscribe_members
-        result.track(:subscribe_members, client.subscribe_members(missing_subscribers))
-      end
-
-      def unsubscribe_members
-        result.track(:unsubscribe_obsolete_members, client.unsubscribe_members(obsolete_emails))
-      end
-
-      def update_segments
-        result.track(:update_segments, client.update_segments(stale_segments))
-      end
-
-      def update_members
-        result.track(:update_members, client.update_members(changed_subscribers))
-      end
-
-      def create_merge_fields
-        result.track(:create_merge_fields, client.create_merge_fields(missing_merge_fields))
-      end
-
-      def create_segments
-        result.track(:create_segments, client.create_segments(missing_segments))
-      end
-
-      def destroy_segments
-        result.track(:delete_segments, client.delete_segments(obsolete_segment_ids))
-      end
-
-      def update_forgotten_emails
-        list.update!(mailchimp_forgotten_emails: (list.mailchimp_forgotten_emails + result.forgotten_emails).uniq)
-      end
-
-      def tag_cleaned_members
-        emails = cleaned_members.pluck(:email_address)
-        InvalidSubscriberTagger.new(emails, list).tag!
       end
 
       def remote_tags

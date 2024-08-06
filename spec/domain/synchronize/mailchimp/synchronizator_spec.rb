@@ -10,13 +10,22 @@ describe Synchronize::Mailchimp::Synchronizator do
   let(:user) { people(:top_leader) }
   let(:other) { people(:bottom_member) }
   let(:mailing_list) { mailing_lists(:leaders) }
-  let(:sync) { Synchronize::Mailchimp::Synchronizator.new(mailing_list) }
+  let(:sync) { Synchronize::Mailchimp::Synchronizator.new(mailing_list, with_default_tag: false) }
   let(:client) { sync.send(:client) }
 
   let(:tags) { %w[foo bar] }
   let(:merge_field) {
     ["Gender", "dropdown", {choices: %w[m w]}, ->(p) { person.gender }]
   }
+
+  def batch_result(total, finished, errored, operation_results = [])
+    {
+      total_operations: total,
+      finished_operations: finished,
+      errored_operations: errored,
+      operation_results: operation_results
+    }
+  end
 
   def segments(names)
     names.collect.each_with_index do |name, index|
@@ -272,15 +281,6 @@ describe Synchronize::Mailchimp::Synchronizator do
       client.subscriber_body(person).merge(tags: tags)
     end
 
-    def batch_result(total, finished, errored, operation_results = [])
-      {
-        total_operations: total,
-        finished_operations: finished,
-        errored_operations: errored,
-        operation_results: operation_results
-      }
-    end
-
     context "result" do
       subject(:result) { sync.result }
 
@@ -455,6 +455,85 @@ describe Synchronize::Mailchimp::Synchronizator do
         sync.perform
         expect(user).to have(1).tag
       end
+    end
+  end
+
+  context "with default tag" do
+    let(:sync) { Synchronize::Mailchimp::Synchronizator.new(mailing_list) }
+    let(:default_tag) { "hitobito-mailing-list-#{mailing_list.id}" }
+
+    before do
+      sync.merge_fields = []
+
+      allow(client).to receive(:fetch_merge_fields).and_return([])
+    end
+
+    it "creates default segment" do
+      allow(client).to receive(:fetch_segments).and_return([])
+      allow(client).to receive(:fetch_members).and_return([])
+      expect(client).to receive(:create_segments).with([default_tag])
+      sync.perform
+    end
+
+    it "creates default segment and adds new subscriber to default segment" do
+      mailing_list.subscriptions.create!(subscriber: user)
+
+      allow(client).to receive(:fetch_segments).and_return([], segments([default_tag]))
+      allow(client).to receive(:fetch_members).and_return([])
+      expect(client).to receive(:create_segments).with([default_tag])
+      expect(client).to receive(:subscribe_members).with([kind_of(Synchronize::Mailchimp::Subscriber)])
+      expect(client).to receive(:update_segments).with([[0, %w[top_leader@example.com]]])
+      sync.perform
+    end
+
+    it "creates default segment and adds existing subscriber to default segmnet" do
+      mailing_list.subscriptions.create!(subscriber: user)
+
+      allow(client).to receive(:fetch_segments).and_return([], segments([default_tag]))
+      allow(client).to receive(:fetch_members).and_return([member(user)])
+      expect(client).to receive(:create_segments).with([default_tag])
+      expect(client).to receive(:update_segments).with([[0, %w[top_leader@example.com]]])
+      sync.perform
+    end
+
+    it "adds existing subscriber to default segment keeping other tags" do
+      mailing_list.subscriptions.create!(subscriber: user)
+      user.update(tag_list: tags)
+      allow(client).to receive(:fetch_segments).and_return(segments(tags))
+      allow(client).to receive(:fetch_members).and_return([member(user, segments(tags).drop(1))])
+      expect(client).to receive(:create_segments).with([default_tag])
+      expect(client).to receive(:update_segments).with([[0, %w[top_leader@example.com]]])
+      sync.perform
+    end
+
+    it "ignores forgotten email" do
+      mailing_list.update!(mailchimp_include_additional_emails: true, mailchimp_forgotten_emails: %w[forgotten@example.com])
+      mailing_list.subscriptions.create!(subscriber: user)
+      user.additional_emails.create!(email: "forgotten@example.com", mailings: true, label: "test")
+      allow(client).to receive(:fetch_segments).and_return(segments([default_tag]))
+      allow(client).to receive(:fetch_members).and_return([member(user, segments([default_tag]))])
+      sync.perform
+    end
+
+    it "unsubscribes email if part of default segment" do
+      allow(client).to receive(:fetch_segments).and_return(segments([default_tag]))
+      allow(client).to receive(:fetch_members).and_return([member(user, segments([default_tag]))])
+      expect(client).to receive(:unsubscribe_members).with([user.email])
+      expect(client).to receive(:update_segments).with([[0, []]])
+      sync.perform
+    end
+
+    it "ignores email not part of default segment on initial sync" do
+      allow(client).to receive(:fetch_segments).and_return(segments([]), segments([default_tag]))
+      allow(client).to receive(:fetch_members).and_return([member(user)])
+      expect(client).to receive(:create_segments).with([default_tag])
+      sync.perform
+    end
+
+    it "ignores email not part of default segment" do
+      allow(client).to receive(:fetch_segments).and_return(segments([default_tag]))
+      allow(client).to receive(:fetch_members).and_return([member(user)])
+      sync.perform
     end
   end
 end

@@ -82,6 +82,7 @@ class Event::ParticipationContactData
     return person.send(method) if /^.*_came_from_user\?/.match?(method)
     return person.send(method) if /^.*_before_type_cast/.match?(method)
     return person.send(method) if /^privacy_policy.*/.match?(method)
+    return person.send(method) if /^.*household_key/.match?(method)
 
     super
   end

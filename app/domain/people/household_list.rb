@@ -12,22 +12,22 @@ class People::HouseholdList
     @people_scope = people_scope
   end
 
-  def only_households_in_batches
+  def only_households_in_batches(&)
     return unless block_given?
 
-    fetch_in_batches(only_households) { |batch| yield batch }
+    fetch_in_batches(only_households, &)
   end
 
-  def people_without_household_in_batches
+  def people_without_household_in_batches(&)
     return unless block_given?
 
-    fetch_in_batches(people_without_household) { |batch| yield batch }
+    fetch_in_batches(people_without_household, &)
   end
 
-  def households_in_batches
+  def households_in_batches(&)
     return unless block_given?
 
-    fetch_in_batches(grouped_households) { |batch| yield batch }
+    fetch_in_batches(grouped_households, &)
   end
 
   def grouped_households

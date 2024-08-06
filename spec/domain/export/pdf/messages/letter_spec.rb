@@ -8,6 +8,8 @@
 require "spec_helper"
 
 describe Export::Pdf::Messages::Letter do
+  include Households::SpecHelper
+
   let(:letter) do
     Message::Letter.create!(mailing_list: list,
       body: messages(:letter).body,
@@ -226,15 +228,13 @@ describe Export::Pdf::Messages::Letter do
       Fabricate(Group::BottomGroup::Member.name, group: group, person: people(:bottom_member))
       Fabricate(Group::BottomGroup::Member.name, group: group, person: people(:top_leader))
 
-      create_household(housemate1, housemate2)
-      create_household(other_housemate, people(:top_leader))
-
       letter.update!(send_to_households: true)
-
-      Messages::LetterDispatch.new(letter).run
     end
 
     it "creates only one letter per household" do
+      create_household(housemate1, housemate2)
+      Messages::LetterDispatch.new(letter).run
+
       expect(text_with_position).to match_array [
         [71, 654, "Anton Abraham, Zora Zaugg"],
         [71, 644, housemate1.address],
@@ -269,8 +269,8 @@ describe Export::Pdf::Messages::Letter do
 
     it "adds all household peoples names to address and sorts them alphabetically" do
       Fabricate(Group::BottomGroup::Member.name, group: group, person: other_housemate)
-      create_household(housemate1, other_housemate)
-      create_household(housemate1, people(:bottom_member))
+      create_household(people(:bottom_member), housemate1, housemate2, other_housemate,
+        people(:top_leader))
 
       letter.message_recipients.destroy_all
       Messages::LetterDispatch.new(letter).run
@@ -347,14 +347,13 @@ describe Export::Pdf::Messages::Letter do
         Fabricate(Group::BottomGroup::Member.name, group: group, person: bottom_member)
         Fabricate(Group::BottomGroup::Member.name, group: group, person: single_person)
 
-        create_household(housemate1, housemate2)
-        create_household(housemate3, housemate4)
-        create_household(other_housemate, people(:top_leader))
-
         letter.update!(send_to_households: true, body: "Hallo", subject: "Brief")
       end
 
       it "creates preview with half normal half household recipients" do
+        create_household(housemate1, housemate2)
+        create_household(housemate3, housemate4)
+        create_household(other_housemate, people(:top_leader))
         expect(text_with_position).to match_array [
           [71, 654, "Anton Abraham, Zora Zaugg"],
           [71, 644, housemate1.address],
@@ -383,8 +382,8 @@ describe Export::Pdf::Messages::Letter do
       end
 
       it "includes all housemates even when underlying people scope is limited for previewing" do
-        create_household(housemate1, housemate3)
-        create_household(housemate1, housemate4)
+        create_household(housemate1, housemate2, housemate3, housemate4)
+        create_household(people(:top_leader), other_housemate)
 
         expect(text_with_position).to match_array [
           [71, 654, "Anton Abraham, Bettina Büttel, Carlo"],
@@ -421,12 +420,5 @@ describe Export::Pdf::Messages::Letter do
     a.positions.each_with_index.collect do |p, i|
       p.collect(&:round) + [a.show_text[i]]
     end
-  end
-
-  def create_household(person1, person2)
-    fake_ability = instance_double("aby", cannot?: false)
-    household = Person::Household.new(person1, fake_ability, person2, people(:top_leader))
-    household.assign
-    household.persist!
   end
 end

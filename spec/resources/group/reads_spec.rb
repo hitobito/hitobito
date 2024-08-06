@@ -23,6 +23,8 @@ describe GroupResource, type: :resource do
         :description,
         :type,
         :layer,
+        :layer_group_id,
+        :parent_id,
         :email,
         :address,
         :zip_code,

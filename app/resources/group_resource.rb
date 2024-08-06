@@ -14,6 +14,8 @@ class GroupResource < ApplicationResource
     attribute(:display_name, :string) { @object.display_name }
     attribute :description, :string
     attribute(:layer, :boolean) { @object.layer? }
+    attribute :parent_id, :integer
+    attribute :layer_group_id, :integer
     attribute :type, :string
     attribute :email, :string
     attribute :address, :string

@@ -22,6 +22,7 @@ class app.Datepicker
     if field.is('.icon-calendar')
       field = field.parent().siblings('.date')
     options = $.extend({ onSelect: (d, i) -> self.track(this, d, i) }, $.datepicker.regional[$('html').attr('lang')])
+    field.datepicker(({minDate: new Date(input.attributes.mindate.value) , maxDate: new Date(input.attributes.maxdate.value)  }))
     field.datepicker(options)
     field.datepicker('show')
 

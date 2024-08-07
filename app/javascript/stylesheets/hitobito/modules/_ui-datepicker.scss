@@ -300,3 +300,8 @@
   overflow: hidden;
   background-repeat: no-repeat;
 }
+
+// hide dates, after max date or before min date
+.ui-state-disabled, .ui-datepicker-unselectable {
+  display: none;
+}

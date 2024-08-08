@@ -8,9 +8,9 @@ require "spec_helper"
 describe Synchronize::Mailchimp::Result do
   def response(total:, finished:, failed:)
     {
-      "total_operations" => total,
-      "finished_operations" => finished,
-      "errored_operations" => failed
+      total_operations: total,
+      finished_operations: finished,
+      errored_operations: failed
     }
   end
 

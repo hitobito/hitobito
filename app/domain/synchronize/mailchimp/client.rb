@@ -10,6 +10,7 @@ require "digest/md5"
 module Synchronize
   module Mailchimp
     class Client
+      EXTRACTION_CMD = "tar zxO"
       attr_reader :list_id, :count, :api, :merge_fields, :member_fields
 
       def initialize(mailing_list, member_fields: [], merge_fields: [], count: 50, debug: false)
@@ -20,6 +21,10 @@ module Synchronize
         @max_attempts = Settings.mailchimp.max_attempts
 
         @api = Gibbon::Request.new(api_key: mailing_list.mailchimp_api_key, debug: debug)
+      end
+
+      def http_client
+        Gibbon::APIRequest.new(builder: @api).send(:rest_client)
       end
 
       def fetch_merge_fields
@@ -203,8 +208,13 @@ module Synchronize
           wait_for_finish(batch_id, status, attempt + 1)
         else
           attrs = %w[total_operations finished_operations errored_operations response_body_url]
-          body.slice(*attrs).tap do |updates|
-            log updates
+          body.slice(*attrs).then do |meta|
+            log meta
+            body = http_client.get(meta.delete("response_body_url")).body
+            operation_results = JSON.parse(extract_tgz(body)).map do |op|
+              JSON.parse(op["response"]).slice("title", "detail", "status")
+            end
+            meta.merge("operation_results" => operation_results).deep_symbolize_keys
           end
         end
       end
@@ -226,6 +236,14 @@ module Synchronize
 
           [field, value]
         end.compact.to_h.deep_symbolize_keys
+      end
+
+      def extract_tgz(data)
+        Open3.popen2(EXTRACTION_CMD) do |input, output|
+          IO.copy_stream(StringIO.new(data), input)
+          input.close
+          output.read
+        end
       end
 
       def log(message, logger = Rails.logger)

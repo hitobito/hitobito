@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_06_17_131402) do
+ActiveRecord::Schema.define(version: 2024_08_05_071727) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -655,6 +655,7 @@ ActiveRecord::Schema.define(version: 2024_06_17_131402) do
     t.text "filter_chain"
     t.string "subscribable_for", default: "nobody", null: false
     t.string "subscribable_mode"
+    t.text "mailchimp_forgotten_emails"
     t.index ["group_id"], name: "index_mailing_lists_on_group_id"
   end
 

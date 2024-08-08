@@ -7,7 +7,7 @@ class PersonAbility < AbilityDsl::Base
   include AbilityDsl::Constraints::Person
 
   on(Person) do
-    class_side(:index, :query).everybody
+    class_side(:index).everybody
     class_side(:index_people_without_role).if_admin
 
     permission(:admin).may(:destroy).not_self
@@ -84,12 +84,17 @@ class PersonAbility < AbilityDsl::Base
     general(:send_password_instructions).not_self
 
     class_side(:create_households).if_any_writing_permissions
+    class_side(:query).if_any_writing_permissions_or_any_leaded_events
   end
 
   def if_any_writing_permissions
     writing_permissions = [:group_full, :group_and_below_full,
       :layer_full, :layer_and_below_full]
     contains_any?(writing_permissions, user_context.all_permissions)
+  end
+
+  def if_any_writing_permissions_or_any_leaded_events
+    if_any_writing_permissions || user_context.events_with_permission(:event_full).any?
   end
 
   def in_layer_group

@@ -23,6 +23,13 @@ describe Synchronize::Mailchimp::Client do
       .to_return(status: 200, body: body.to_json, headers: {})
   end
 
+  def create_tgz(payload)
+    Dir.mktmpdir do |dir|
+      Pathname(dir).join("payload.json").write(payload.to_json)
+      Open3.pipeline_r("tar -zcf - -C #{dir} .").first.read
+    end
+  end
+
   def stub_merge_fields(*fields, total_items: nil, offset: 0)
     entries = fields.collect do |tag, name, type|
       {tag: tag, name: name, type: type}
@@ -253,16 +260,21 @@ describe Synchronize::Mailchimp::Client do
       end.to raise_error RuntimeError, "Batch 1 exeeded max_attempts, status: pending"
     end
 
-    it "succeeds if status changes to finished" do
+    it "succeeds if status changes to finished and fetches batch result tgz" do
       stub_request(:post, "https://us12.api.mailchimp.com/3.0/batches")
         .to_return(status: 200, body: {id: 1}.to_json)
 
       stub_request(:get, "https://us12.api.mailchimp.com/3.0/batches/1")
         .to_return(status: 200, body: {id: 1, status: "pending"}.to_json)
-        .to_return(status: 200, body: {id: 1, status: "finished"}.to_json)
+        .to_return(status: 200, body: {id: 1, status: "finished", response_body_url: "https://us12.api.mailchimp.com/3.0/batches/1/result"}.to_json)
 
+      stub_request(:get, "https://us12.api.mailchimp.com/3.0/batches/1/result")
+        .to_return(status: 200, body: create_tgz([response: {title: :subscriber, detail: "okay", status: 200}.to_json]))
       expect(client).to receive(:sleep).twice
-      client.create_segments(%w[a])
+      response = client.create_segments(%w[a])
+      expect(response[:operation_results][0][:title]).to eq "subscriber"
+      expect(response[:operation_results][0][:detail]).to eq "okay"
+      expect(response[:operation_results][0][:status]).to eq 200
     end
 
     it "resets counts when status changes" do
@@ -279,7 +291,10 @@ describe Synchronize::Mailchimp::Client do
         .to_return(status: 200, body: {id: 1, status: "started"}.to_json)
         .to_return(status: 200, body: {id: 1, status: "started"}.to_json)
         .to_return(status: 200, body: {id: 1, status: "started"}.to_json)
-        .to_return(status: 200, body: {id: 1, status: "finished"}.to_json)
+        .to_return(status: 200, body: {id: 1, status: "finished", response_body_url: "https://us12.api.mailchimp.com/3.0/batches/1/result"}.to_json)
+
+      stub_request(:get, "https://us12.api.mailchimp.com/3.0/batches/1/result")
+        .to_return(status: 200, body: create_tgz([]))
 
       expect(client).to receive(:sleep).exactly(10).times
       client.create_segments(%w[a])

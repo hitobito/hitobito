@@ -1009,6 +1009,8 @@ ActiveRecord::Schema.define(version: 2024_08_05_071727) do
     t.date "convert_on"
     t.string "convert_to"
     t.boolean "terminated", default: false, null: false
+    t.timestamp "start_at"
+    t.timestamp "end_at"
     t.index ["person_id", "group_id"], name: "index_roles_on_person_id_and_group_id"
     t.index ["type"], name: "index_roles_on_type"
   end

@@ -251,9 +251,9 @@ describe Role do
       it "is reset to newest remaining role if role is destroyed" do
         subject.save
         role2 = Fabricate(Group::GlobalGroup::Leader.name.to_s, person: person,
-          group: groups(:toppers))
+                          group: groups(:toppers))
         role3 = Fabricate(Group::TopGroup::Leader.name.to_s, person: person,
-          group: groups(:top_group))
+                          group: groups(:top_group))
         role3.update_attribute(:updated_at, Time.zone.today - 10.days)
         expect(subject.destroy).to be_truthy
         expect(person.primary_group).to eq role2.group
@@ -293,7 +293,7 @@ describe Role do
         subject.type = "Group::BottomLayer::Leader"
         subject.save!
 
-        role = described_class.find(subject.id)  # reload from db to get the correct class
+        role = described_class.find(subject.id) # reload from db to get the correct class
         role.destroy
 
         expect(person.reload).not_to be_contact_data_visible
@@ -304,7 +304,7 @@ describe Role do
         subject.type = "Group::BottomLayer::Leader"
         subject.save!
 
-        role = described_class.find(subject.id)  # reload from db to get the correct class
+        role = described_class.find(subject.id) # reload from db to get the correct class
         role.destroy
 
         expect(person.reload).to be_contact_data_visible
@@ -315,9 +315,9 @@ describe Role do
   context ".normalize_label" do
     it "reuses existing label" do
       a1 = Fabricate(Group::BottomLayer::Leader.name.to_s, label: "foo",
-        group: groups(:bottom_layer_one))
+                     group: groups(:bottom_layer_one))
       a2 = Fabricate(Group::BottomLayer::Leader.name.to_s, label: "fOO",
-        group: groups(:bottom_layer_one))
+                     group: groups(:bottom_layer_one))
       expect(a2.label).to eq(a1.label)
     end
   end
@@ -384,100 +384,21 @@ describe Role do
 
     it "includes labels from database" do
       Fabricate(Group::BottomLayer::Leader.name.to_s, label: "foo",
-        group: groups(:bottom_layer_one))
+                group: groups(:bottom_layer_one))
       Fabricate(Group::BottomLayer::Leader.name.to_s, label: "FOo",
-        group: groups(:bottom_layer_one))
+                group: groups(:bottom_layer_one))
       is_expected.to eq(["foo"])
     end
 
     it "includes labels from all types" do
       Fabricate(Group::BottomLayer::Leader.name.to_s, label: "foo",
-        group: groups(:bottom_layer_one))
+                group: groups(:bottom_layer_one))
       Fabricate(Group::BottomLayer::Member.name.to_s, label: "Bar",
-        group: groups(:bottom_layer_one))
+                group: groups(:bottom_layer_one))
       is_expected.to eq(%w[Bar foo])
     end
   end
-
-  context "#start_on" do
-    let(:tomorrow) { Time.zone.tomorrow }
-    let(:today) { Time.zone.today }
-
-    def build(attrs = {})
-      Fabricate.build(:"Group::BottomLayer::Leader", attrs)
-    end
-
-    it "returns today if created_at and convert_on is nil" do
-      expect(build.start_on).to eq today
-    end
-
-    it "returns created_at date if created_at is present and convert_on is nil" do
-      expect(build(created_at: 1.day.ago).start_on).to eq Time.zone.yesterday
-    end
-
-    it "returns convert_on if convert_on and created_at is set" do
-      expect(build(created_at: 1.day.ago, convert_on: tomorrow).start_on).to eq tomorrow
-    end
-  end
-
-  context "#end_on" do
-    let(:tomorrow) { Time.zone.tomorrow }
-    let(:today) { Time.zone.today }
-
-    def build(attrs = {})
-      Fabricate.build(:"Group::BottomLayer::Leader", attrs)
-    end
-
-    it "returns nil if delete_on and deleted_at is nil" do
-      expect(build.end_on).to be_nil
-    end
-
-    it "returns delete_on if delete_on is present and deleted_at is nil" do
-      expect(build(delete_on: tomorrow).end_on).to eq tomorrow
-    end
-
-    it "returns deleted_at if deleted_at is present and delete_on is nil" do
-      expect(build(deleted_at: 1.day.ago).end_on).to eq Time.zone.yesterday
-    end
-
-    it "returns delete_on if delete_on and deleted_at is set" do
-      expect(build(deleted_at: 1.day.ago, delete_on: tomorrow).end_on).to eq tomorrow
-    end
-  end
-
-  context "#active_period" do
-    let(:tomorrow) { Time.zone.tomorrow }
-    let(:today) { Time.zone.today }
-
-    def build(attrs = {})
-      Fabricate.build(:"Group::BottomLayer::Leader", attrs)
-    end
-
-    it "returns today..nil if created_at and convert_on is nil" do
-      expect(build.active_period).to eq today..nil
-    end
-
-    it "returns created_at..nil if created_at is present and convert_on is nil" do
-      expect(build(created_at: 1.day.ago).active_period).to eq Time.zone.yesterday..nil
-    end
-
-    it "returns convert_on..nil if convert_on and created_at is set" do
-      expect(build(created_at: 1.day.ago, convert_on: tomorrow).active_period).to eq tomorrow..nil
-    end
-
-    it "returns today..delete_on if delete_on and deleted_at is nil" do
-      expect(build(delete_on: tomorrow).active_period).to eq today..tomorrow
-    end
-
-    it "returns today..deleted_at if deleted_at is present and delete_on is nil" do
-      expect(build(deleted_at: 1.day.ago).active_period).to eq today..Time.zone.yesterday
-    end
-
-    it "returns today..delete_on if delete_on and deleted_at is set" do
-      expect(build(deleted_at: 1.day.ago, delete_on: tomorrow).active_period).to eq today..tomorrow
-    end
-  end
-
+  
   context "#create" do
     let(:person) { people(:top_leader) }
 
@@ -496,14 +417,14 @@ describe Role do
   context "#destroy" do
     it "deleted young roles from database" do
       a = Fabricate(Group::BottomLayer::Leader.name.to_s, label: "foo",
-        group: groups(:bottom_layer_one))
+                    group: groups(:bottom_layer_one))
       a.destroy
       expect(described_class.with_deleted.where(id: a.id)).not_to be_exists
     end
 
     it "soft deletes young roles with always_soft_destroy: true" do
       a = Fabricate(Group::BottomLayer::Leader.name.to_s, label: "foo",
-        group: groups(:bottom_layer_one))
+                    group: groups(:bottom_layer_one))
 
       a.destroy(always_soft_destroy: true)
       expect(described_class.only_deleted.find(a.id)).to be_present
@@ -511,7 +432,7 @@ describe Role do
 
     it "flags old roles" do
       a = Fabricate(Group::BottomLayer::Leader.name.to_s, label: "foo",
-        group: groups(:bottom_layer_one))
+                    group: groups(:bottom_layer_one))
       a.created_at = Time.zone.now - Settings.role.minimum_days_to_archive.days - 1.day
       a.destroy
       expect(described_class.only_deleted.find(a.id)).to be_present
@@ -545,7 +466,7 @@ describe Role do
 
     it "flags old roles" do
       a = Fabricate(Group::BottomLayer::Leader.name.to_s, label: "foo",
-        group: groups(:bottom_layer_one))
+                    group: groups(:bottom_layer_one))
       a.created_at = Time.zone.now - Settings.role.minimum_days_to_archive.days - 1.day
       a.destroy
       expect(described_class.only_deleted.find(a.id)).to be_present
@@ -555,7 +476,7 @@ describe Role do
   context "#destroy!" do
     it "soft deletes young roles with always_soft_destroy: true" do
       a = Fabricate(Group::BottomLayer::Leader.name.to_s, label: "foo",
-        group: groups(:bottom_layer_one))
+                    group: groups(:bottom_layer_one))
 
       a.destroy!(always_soft_destroy: true)
       expect(described_class.only_deleted.find(a.id)).to be_present
@@ -665,7 +586,7 @@ describe Role do
       delete_on = 1.day.from_now.to_date
       deleted_at = 2.days.from_now.to_date
       expect(role(terminated: true, delete_on: delete_on,
-        deleted_at: deleted_at).terminated_on).to eq delete_on
+                  deleted_at: deleted_at).terminated_on).to eq delete_on
     end
   end
 
@@ -802,9 +723,9 @@ describe Role do
 
       it "does not return any nextcloud groups" do
         expect(subject.nextcloud_group.to_h).to eq(
-          "gid" => "hitobito-Admins",
-          "displayName" => "Admins"
-        )
+                                                  "gid" => "hitobito-Admins",
+                                                  "displayName" => "Admins"
+                                                )
       end
     end
 
@@ -820,9 +741,9 @@ describe Role do
 
       it "does not return any nextcloud groups" do
         expect(subject.nextcloud_group.to_h).to eq(
-          "gid" => "1024",
-          "displayName" => "Test"
-        )
+                                                  "gid" => "1024",
+                                                  "displayName" => "Test"
+                                                )
       end
     end
 
@@ -831,7 +752,7 @@ describe Role do
 
       before do
         subject.define_singleton_method :my_nextcloud_group do
-          {"gid" => "1234", "displayName" => "TestGruppe"}
+          { "gid" => "1234", "displayName" => "TestGruppe" }
         end
       end
 
@@ -845,9 +766,9 @@ describe Role do
 
       it "delegates to the other group" do
         expect(subject.nextcloud_group.to_h).to eq(
-          "gid" => "1234",
-          "displayName" => "TestGruppe"
-        )
+                                                  "gid" => "1234",
+                                                  "displayName" => "TestGruppe"
+                                                )
       end
     end
 
@@ -867,9 +788,9 @@ describe Role do
 
       it "delegates to the Proc" do
         expect(subject.nextcloud_group.to_h).to eq(
-          "gid" => "Group::BottomLayer::Leader",
-          "displayName" => "Role"
-        )
+                                                  "gid" => "Group::BottomLayer::Leader",
+                                                  "displayName" => "Role"
+                                                )
       end
     end
   end

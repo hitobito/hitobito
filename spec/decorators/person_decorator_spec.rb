@@ -15,14 +15,14 @@ describe PersonDecorator, :draper_with_helpers do
   its(:full_label) { should == "Top Leader, Greattown" }
   its(:address_name) { should == "<strong>Top Leader</strong>" }
 
-  context 'with town and birthday' do
+  context "with town and birthday" do
     let(:person) do
-      Fabricate(:person, first_name: 'Fra',
-                last_name: 'Stuck',
-                nickname: 'Schu',
-                company_name: 'Coorp',
-                birthday: '3.8.76',
-                town: 'City')
+      Fabricate(:person, first_name: "Fra",
+        last_name: "Stuck",
+        nickname: "Schu",
+        company_name: "Coorp",
+        birthday: "3.8.76",
+        town: "City")
     end
 
     its(:full_label) { should == "Fra Stuck / Schu, City (1976)" }
@@ -33,12 +33,12 @@ describe PersonDecorator, :draper_with_helpers do
   context "as company" do
     let(:person) do
       Fabricate(:person, first_name: "Fra",
-                last_name: "Stuck",
-                nickname: "Schu",
-                company_name: "Coorp",
-                birthday: "3.8.76",
-                town: "City",
-                company: true)
+        last_name: "Stuck",
+        nickname: "Schu",
+        company_name: "Coorp",
+        birthday: "3.8.76",
+        town: "City",
+        company: true)
     end
 
     its(:full_label) { should == "Coorp, City (Fra Stuck)" }

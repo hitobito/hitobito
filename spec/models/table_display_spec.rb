@@ -94,7 +94,7 @@ describe TableDisplay do
       statements = subject.sort_statements(top_course.participations)
       expect(statements).to have(1).item
       expect(statements[:"event_question_#{question.id}"])
-        .to eq 'event_questions.id = 768566425 ASC, TRIM(event_answers.answer)'
+        .to eq "event_questions.id = 768566425 ASC, TRIM(event_answers.answer)"
     end
 
     it "rejects unregistered person attributes" do

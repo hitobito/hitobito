@@ -10,7 +10,7 @@ module SearchStrategies
       return no_invoices if @user.finance_groups.empty?
 
       Invoice.search(@term)
-    end   
+    end
 
     private
 

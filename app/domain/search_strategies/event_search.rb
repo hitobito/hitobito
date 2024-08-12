@@ -9,7 +9,7 @@ module SearchStrategies
       return no_events unless term_present?
 
       Event.search(@term).includes(:groups, :dates)
-    end   
+    end
 
     private
 

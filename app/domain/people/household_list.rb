@@ -94,9 +94,9 @@ class People::HouseholdList
     # This way, we can add more conditions to the query builder while keeping the performance
     # benefits of pre-calculating the candidate id list.
     @base_scope ||= Person
-                        .where(id: @people_scope.unscope(:select, :includes, :limit, :order)
+      .where(id: @people_scope.unscope(:select, :includes, :limit, :order)
                                                 .pluck(:id))
-                        .limit(@people_scope.limit_value.presence)
+      .limit(@people_scope.limit_value.presence)
   end
 
   def fetch_involved_people(ids_or_household_keys)
@@ -156,7 +156,7 @@ class People::HouseholdList
       end
 
       batch_relation = relation.where('"member_count" < ? OR ("member_count" = ? AND "id" > ?)',
-                                member_count_offset, member_count_offset, id_offset)
+        member_count_offset, member_count_offset, id_offset)
     end
   end
 end

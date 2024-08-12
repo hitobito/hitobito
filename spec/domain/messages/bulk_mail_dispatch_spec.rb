@@ -126,7 +126,7 @@ describe Messages::BulkMailDispatch do
 
         expect do
           dispatch.run
-        end.to change { Delayed::Job.where('handler ILIKE \'%MailingLists::BulkMail::DeliveryReportMessageJob%\'').count }.by(1)
+        end.to change { Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::DeliveryReportMessageJob%'").count }.by(1)
       end
 
       it "does not send delivery report if not enabled" do
@@ -134,7 +134,7 @@ describe Messages::BulkMailDispatch do
 
         expect do
           dispatch.run
-        end.to change { Delayed::Job.where('handler ILIKE \'%MailingLists::BulkMail::DeliveryReportMessageJob%\'').count }.by(0)
+        end.to change { Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::DeliveryReportMessageJob%'").count }.by(0)
       end
 
       context "on smtp server error" do

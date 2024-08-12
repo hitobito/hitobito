@@ -44,8 +44,8 @@ describe "export import person" do
     imported = Person.find_by(email: "exporter@hitobito.example.org")
     expect(imported).not_to eq(exported)
 
-    excluded = %w(id created_at updated_at primary_group_id contact_data_visible email last_name
-                  confirmed_at membership_verify_token sort_name)
+    excluded = %w[id created_at updated_at primary_group_id contact_data_visible email last_name
+      confirmed_at membership_verify_token sort_name]
     expect_attrs_equal(imported, exported, excluded)
 
     %w[phone_numbers social_accounts additional_emails].each do |assoc|

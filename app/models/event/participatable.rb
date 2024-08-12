@@ -12,14 +12,14 @@ module Event::Participatable
 
   def participations_for(*role_types)
     participations.active
-                  .joins(:roles)
-                  .where(event_roles: { type: role_types.map(&:sti_name) })
-                  .includes(:person)
-                  .references(:person)
-                  .order_by_role(self)
-                  .merge(Person.order_by_name.select("*"))
-                  .select(:id)
-                   #distinct?
+      .joins(:roles)
+      .where(event_roles: {type: role_types.map(&:sti_name)})
+      .includes(:person)
+      .references(:person)
+      .order_by_role(self)
+      .merge(Person.order_by_name.select("*"))
+      .select(:id)
+    # distinct?
   end
 
   def active_participations_without_affiliate_types
@@ -36,10 +36,10 @@ module Event::Participatable
   def participation_role_labels
     @participation_role_labels ||=
       Event::Role.joins(:participation)
-                 .where('event_participations.event_id = ?', id)
-                 .where('event_roles.label <> \'\'')
-                 .distinct.order(:label)
-                 .pluck(:label)
+        .where(event_participations: {event_id: id})
+        .where("event_roles.label <> ''")
+        .distinct.order(:label)
+        .pluck(:label)
   end
 
   # All assigned participations (no leaders/teamers)

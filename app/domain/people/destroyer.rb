@@ -36,10 +36,10 @@ class People::Destroyer
   end
 
   def leftover_family_members
-    FamilyMember.select('MAX(family_members.id)')
-                .where(family_key: @person.family_members.pluck(:family_key))
-                .having('COUNT(*) <= 2')
-                .group(:family_key)
+    FamilyMember.select("MAX(family_members.id)")
+      .where(family_key: @person.family_members.pluck(:family_key))
+      .having("COUNT(*) <= 2")
+      .group(:family_key)
   end
 
   def leftover_household_person

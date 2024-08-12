@@ -35,9 +35,9 @@ class FullTextController < ApplicationController
       result = search_class.new(current_user, query_param, params[:page]).search_fulltext
 
       if key == :invoices || key == :events
-        instance_variable_set("@#{key}", with_query { send("decorate_#{key.to_s}", result) })
+        instance_variable_set(:"@#{key}", with_query { send(:"decorate_#{key}", result) })
       else
-        instance_variable_set("@#{key}", with_query { result })
+        instance_variable_set(:"@#{key}", with_query { result })
       end
     end
     @active_tab = active_tab
@@ -46,11 +46,13 @@ class FullTextController < ApplicationController
   def query_json_results
     SEARCHABLE_MODELS.each do |key, search_class|
       instance_variable_set(
-        "@#{key}", search_class.new(current_user, query_param, params[:page])
+        :"@#{key}", search_class.new(current_user, query_param, params[:page])
                               .search_fulltext
-                              .collect { |i| "#{key.to_s.singularize.titleize}Decorator"
-                                                   .constantize.new(i)
-                                                   .as_quicksearch }
+                              .collect { |i|
+                      "#{key.to_s.singularize.titleize}Decorator"
+                                                    .constantize.new(i)
+                                                    .as_quicksearch
+                    }
       )
     end
 

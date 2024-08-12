@@ -49,7 +49,7 @@ class EventResource < ApplicationResource
 
   filter :group_id, :integer, only: [:eq, :not_eq] do
     eq do |scope, group_ids|
-      scope.select("events.*").references(:groups).where(groups: { id: group_ids })
+      scope.select("events.*").references(:groups).where(groups: {id: group_ids})
     end
   end
 

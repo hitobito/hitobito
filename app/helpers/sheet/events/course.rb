@@ -8,15 +8,13 @@
 module Sheet
   module Events
     class Course < Sheet::Base
-
       def left_nav?
         true
       end
 
       def render_left_nav
-        view.render 'nav_left'
+        view.render "nav_left"
       end
-
     end
   end
 end

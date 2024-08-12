@@ -5,7 +5,6 @@
 
 module SearchStrategies
   class PersonSearch < Base
-
     # rubocop:disable Metrics/MethodLength
     def search_fulltext
       return no_people unless term_present?
@@ -19,8 +18,8 @@ module SearchStrategies
       end
 
       entries = search_results
-                  .accessible_by(PersonReadables.new(@user))
-                  .select(pg_rank_alias) # add pg_search rank to select list of base query again
+        .accessible_by(PersonReadables.new(@user))
+        .select(pg_rank_alias) # add pg_search rank to select list of base query again
 
       people_without_role = index_people_without_role?(search_results)
       entries += people_without_role if people_without_role
@@ -37,7 +36,7 @@ module SearchStrategies
 
     def index_people_without_role?(search_results)
       if Ability.new(@user).can?(:index_people_without_role, Person)
-        search_results.where('NOT EXISTS (SELECT * FROM roles ' \
+        search_results.where("NOT EXISTS (SELECT * FROM roles " \
                     "WHERE (roles.deleted_at IS NULL OR
                             roles.deleted_at > :now) AND
                           roles.person_id = people.id)", now: Time.now.utc.to_s(:db))
@@ -61,19 +60,19 @@ module SearchStrategies
       nil
     end
 
+    # rubocop:disable Metrics/MethodLength
     def reformat_date(date_str)
       possible_formats = ["%d.%m.%Y", "%d.%m", "%d-%m-%Y", "%d-%m"]
       formatted_date = nil
 
       possible_formats.each do |format|
-        begin
-          date = Date.strptime(date_str, format)
-          formatted_date = date.strftime("%Y-%m-%d")
-          break
-        rescue ArgumentError
-          next
-        end
+        date = Date.strptime(date_str, format)
+        formatted_date = date.strftime("%Y-%m-%d")
+        break
+      rescue ArgumentError
+        next
       end
+      # rubocop:enable Metrics/MethodLength
 
       if has_year?(date_str)
         formatted_date

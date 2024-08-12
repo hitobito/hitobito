@@ -6,30 +6,29 @@
 #  https://github.com/hitobito/hitobito.
 
 module SearchStrategies
-    class Base
+  class Base
+    MIN_TERM_LENGTH = 3
 
-      MIN_TERM_LENGTH = 3
+    attr_accessor :term
 
-      attr_accessor :term
+    def initialize(user, term, page)
+      @user = user
+      @term = term
+      @page = page
+    end
 
-      def initialize(user, term, page)
-        @user = user
-        @term = term
-        @page = page
-      end
+    def search_fulltext
+      # override
+    end
 
-      def search_fulltext
-        #override
-      end
+    protected
 
-      protected
+    def term_present?
+      @term.present? && @term.length >= MIN_TERM_LENGTH
+    end
 
-      def term_present?
-        @term.present? && @term.length >= MIN_TERM_LENGTH
-      end
-
-      def accessible_layers
-        @user.groups.flat_map(&:layer_hierarchy)
-      end
+    def accessible_layers
+      @user.groups.flat_map(&:layer_hierarchy)
     end
   end
+end

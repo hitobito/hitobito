@@ -194,11 +194,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   class << self
     # Default scope for event lists
     def list
-      subquery = joins(:dates).
-                  select("events.*", "event_dates.start_at")
-                  includes(:translations).
-                  preload_all_dates
-
+      subquery = joins(:dates)
+        .select("events.*", "event_dates.start_at")
+      includes(:translations)
+        .preload_all_dates
 
       Event.select("*").from(subquery.unscope(:order).distinct_on(:id), :events).order_by_date
     end
@@ -213,14 +212,14 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
     # Events with at least one date in the given year
     def in_year(year, subquery = false)
-      #PG_TODO maybe find a cleaner solution than passing a parameter
+      # PG_TODO maybe find a cleaner solution than passing a parameter
       year = Time.zone.today.year if year.to_i <= 0
       start_at = Time.zone.parse "#{year}-01-01"
       finish_at = start_at + 1.year
       if subquery
         where(start_at: [start_at...finish_at])
       else
-        joins(:dates).where(event_dates: { start_at: [start_at...finish_at] })
+        joins(:dates).where(event_dates: {start_at: [start_at...finish_at]})
       end
     end
 
@@ -236,7 +235,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
       if subquery
         where(start_at: ..date.end_of_day)
       else
-        joins(:dates).where(event_dates: { start_at: ..date.end_of_day })
+        joins(:dates).where(event_dates: {start_at: ..date.end_of_day})
       end
     end
 
@@ -244,7 +243,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
       if subquery
         where(start_at: date.midnight..)
       else
-        joins(:dates).where(event_dates: { start_at: date.midnight.. })
+        joins(:dates).where(event_dates: {start_at: date.midnight..})
       end
     end
 

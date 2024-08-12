@@ -144,9 +144,9 @@ describe Event::Participation do
     end
   end
 
-  context '.order_by_role_statement' do
-    it 'orders by index of role_types' do
-      event_type = double('event_type', role_types: [Event::Role::Leader, Event::Role::Participant])
+  context ".order_by_role_statement" do
+    it "orders by index of role_types" do
+      event_type = double("event_type", role_types: [Event::Role::Leader, Event::Role::Participant])
       ordered_participations = Event::Participation.order_by_role(event_type)
       expect(ordered_participations.to_sql).to include "ORDER BY event_role_type_orders.order_weight ASC"
     end

@@ -46,7 +46,7 @@ class Qualification < ActiveRecord::Base
 
   class << self
     def order_by_date
-      order(Arel.sql('finish_at DESC NULLS FIRST, start_at DESC'))
+      order(Arel.sql("finish_at DESC NULLS FIRST, start_at DESC"))
     end
 
     def active(date = nil)
@@ -58,26 +58,26 @@ class Qualification < ActiveRecord::Base
     def reactivateable(date = nil)
       date ||= Time.zone.today
       joins(:qualification_kind)
-        .where('qualifications.start_at <= ?', date)
+        .where(qualifications: {start_at: ..date})
         .where(
-            'qualifications.finish_at IS NULL OR ' \
-            '(qualification_kinds.reactivateable IS NULL AND ' \
-            'qualifications.finish_at >= ?) OR ' \
-            'qualifications.finish_at + ' \
-            'qualification_kinds.reactivateable * INTERVAL \'1 year\' >= ?',
-            date, date
-          )
+          "qualifications.finish_at IS NULL OR " \
+          "(qualification_kinds.reactivateable IS NULL AND " \
+          "qualifications.finish_at >= ?) OR " \
+          "qualifications.finish_at + " \
+          "qualification_kinds.reactivateable * INTERVAL '1 year' >= ?",
+          date, date
+        )
     end
 
     def only_reactivateable(date = nil)
       date ||= Time.zone.today
       joins(:qualification_kind)
         .where.not(finish_at: nil)
-        .where.not(qualification_kinds: { reactivateable: nil })
+        .where.not(qualification_kinds: {reactivateable: nil})
         .where("qualifications.finish_at < :date AND " \
           "(qualifications.finish_at + (qualification_kinds.reactivateable || ' YEAR')::INTERVAL) >=
            :date",
-        date: date)
+          date: date)
     end
 
     def not_active(qualification_kind_ids = [], date = nil)

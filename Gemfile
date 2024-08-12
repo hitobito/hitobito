@@ -10,97 +10,97 @@ source "https://rubygems.org"
 gem "rails", "= 6.1.7.8"
 gem "wagons", "~> 0.7.0"
 
-gem 'activerecord-session_store'
-gem 'acts-as-taggable-on'
-gem 'airbrake'
-gem 'awesome_nested_set'
-gem 'aws-sdk-s3', require: false
-gem 'bcrypt'
-gem 'bleib', '~> 0.0.10'
-gem 'bootsnap', require: false
-gem 'cancancan', '< 3.2.0'
-gem 'caxlsx'
-gem 'charlock_holmes', '~> 0.7.7'
-gem 'commonmarker'
-gem 'config'
-gem 'country_select'
-gem 'csv-safe'
-gem 'daemons'
-gem 'dalli'
-gem 'delayed_job_active_record'
-gem 'delayed_job_heartbeat_plugin'
-gem 'devise'
-gem 'doorkeeper'
-gem 'doorkeeper-i18n'
-gem 'doorkeeper-openid_connect'
-gem 'draper'
-gem 'draper-cancancan'
-gem 'dry-validation'
-gem 'epics' # client for EBICS-connections to banks
-gem 'faker'
-gem 'faraday'
-gem 'gibbon', '~> 3.4'
-gem 'globalize'
-gem 'graphiti'
-gem 'graphiti-rails', '~> 0.1'
-gem 'haml'
-gem 'http_accept_language'
-gem 'icalendar'
-gem 'image_processing', '~> 1.12'
-gem 'json', '< 2.7.0' # pinned to be able to use rdbg. Somehow it has multiple versions otherwise
-gem 'lograge'
-gem 'lograge_activejob'
-gem 'lograge-sql'
-gem 'magiclabs-userstamp', require: 'userstamp'
-gem 'mail' # add mail here to have it loaded
-gem 'matrix' # required but removed from stlib since ruby 3.2
-gem 'mime-types'
-gem 'mini_magick'
-gem 'mysql2'
-gem 'pg'
-gem 'pg_search'
-gem 'active_record_distinct_on'
-gem 'nested_form'
-gem 'nokogiri'
-gem 'oat'
-gem 'paper_trail'
-gem 'paranoia'
-gem 'phonelib', '~> 0.8.4'
-gem 'prawn'
-gem 'prawn-markup'
-gem 'prawn-table'
-gem 'prometheus_exporter'
-gem 'protective'
-gem 'pry-rails'
-gem 'puma'
-gem 'rack-cors'
-gem 'rack-mini-profiler', require: false
-gem 'rails_autolink'
-gem 'rails-i18n'
-gem 'remotipart'
-gem 'rest-client'
-gem 'rexml'
-gem 'rotp'
-gem 'rqrcode'
-gem 'rswag-api', '~> 2.13'
-gem 'rswag-ui', '~> 2.13'
-gem 'rubyzip'
-gem 'seed-fu'
-gem 'sentry-raven'
-gem 'simpleidn'
-gem 'simple_xlsx_reader' # import data from xlsx files (used in some wagons)
-gem 'sorted_set'
-gem 'sprockets', '~> 3.7.2' # pinned to older version to avoid having an empty manifest.js
-gem 'sqlite3', '~> 1.7.2' # required for asset generation
-gem 'strip_attributes' # strip whitespace of attributes
-gem 'thinking-sphinx'
-gem 'truemail'
-gem 'turbo-rails'
-gem 'validates_by_schema', '~> 0.3.0' # 0.5.1 does not work well with wagons / wagon-migrations
-gem 'validates_timeliness'
-gem 'vcard'
-gem 'view_component'
-gem 'webpacker'
+gem "activerecord-session_store"
+gem "acts-as-taggable-on"
+gem "airbrake"
+gem "awesome_nested_set"
+gem "aws-sdk-s3", require: false
+gem "bcrypt"
+gem "bleib", "~> 0.0.10"
+gem "bootsnap", require: false
+gem "cancancan", "< 3.2.0"
+gem "caxlsx"
+gem "charlock_holmes", "~> 0.7.7"
+gem "commonmarker"
+gem "config"
+gem "country_select"
+gem "csv-safe"
+gem "daemons"
+gem "dalli"
+gem "delayed_job_active_record"
+gem "delayed_job_heartbeat_plugin"
+gem "devise"
+gem "doorkeeper"
+gem "doorkeeper-i18n"
+gem "doorkeeper-openid_connect"
+gem "draper"
+gem "draper-cancancan"
+gem "dry-validation"
+gem "epics" # client for EBICS-connections to banks
+gem "faker"
+gem "faraday"
+gem "gibbon", "~> 3.4"
+gem "globalize"
+gem "graphiti"
+gem "graphiti-rails", "~> 0.1"
+gem "haml"
+gem "http_accept_language"
+gem "icalendar"
+gem "image_processing", "~> 1.12"
+gem "json", "< 2.7.0" # pinned to be able to use rdbg. Somehow it has multiple versions otherwise
+gem "lograge"
+gem "lograge_activejob"
+gem "lograge-sql"
+gem "magiclabs-userstamp", require: "userstamp"
+gem "mail" # add mail here to have it loaded
+gem "matrix" # required but removed from stlib since ruby 3.2
+gem "mime-types"
+gem "mini_magick"
+gem "mysql2"
+gem "pg"
+gem "pg_search"
+gem "active_record_distinct_on"
+gem "nested_form"
+gem "nokogiri"
+gem "oat"
+gem "paper_trail"
+gem "paranoia"
+gem "phonelib", "~> 0.8.4"
+gem "prawn"
+gem "prawn-markup"
+gem "prawn-table"
+gem "prometheus_exporter"
+gem "protective"
+gem "pry-rails"
+gem "puma"
+gem "rack-cors"
+gem "rack-mini-profiler", require: false
+gem "rails_autolink"
+gem "rails-i18n"
+gem "remotipart"
+gem "rest-client"
+gem "rexml"
+gem "rotp"
+gem "rqrcode"
+gem "rswag-api", "~> 2.13"
+gem "rswag-ui", "~> 2.13"
+gem "rubyzip"
+gem "seed-fu"
+gem "sentry-raven"
+gem "simpleidn"
+gem "simple_xlsx_reader" # import data from xlsx files (used in some wagons)
+gem "sorted_set"
+gem "sprockets", "~> 3.7.2" # pinned to older version to avoid having an empty manifest.js
+gem "sqlite3", "~> 1.7.2" # required for asset generation
+gem "strip_attributes" # strip whitespace of attributes
+gem "thinking-sphinx"
+gem "truemail"
+gem "turbo-rails"
+gem "validates_by_schema", "~> 0.3.0" # 0.5.1 does not work well with wagons / wagon-migrations
+gem "validates_timeliness"
+gem "vcard"
+gem "view_component"
+gem "webpacker"
 
 # load after others because dependencies
 gem "graphiti-openapi", github: "puzzle/graphiti-openapi", tag: "standalone/0.6.3"
@@ -171,6 +171,6 @@ end
 # Include the wagon gems you want attached in Wagonfile.
 # Do not check Wagonfile into source control.
 #
-# To create a Wagonfile suitable for development, run 'rake wagon:file'
+# To create a Wagonfile suitable for development, run "rake wagon:file"
 wagonfile = File.expand_path("Wagonfile", __dir__)
 eval(File.read(wagonfile)) if File.exist?(wagonfile) # rubocop:disable Security/Eval

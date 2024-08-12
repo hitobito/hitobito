@@ -9,7 +9,7 @@ module SearchStrategies
       return no_groups unless term_present?
 
       Group.search(@term)
-    end   
+    end
 
     private
 

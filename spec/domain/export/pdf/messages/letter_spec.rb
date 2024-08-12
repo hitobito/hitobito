@@ -100,24 +100,24 @@ describe Export::Pdf::Messages::Letter do
         analyzer = PDF::Inspector::Text.analyze(described_class.new(letter, options).render)
 
         expect(text_with_position(analyzer)).to eq [
-          [71, 654, 'Top Leader'],
-          [71, 644, 'Funkystreet 42'],
-          [71, 633, '4242 Greattown'],
-          [71, 531, 'Information'],
-          [71, 502, 'Hallo'],
-          [71, 481, 'Wir laden '],
-          [111, 481, 'dich'],
-          [130, 481, ' ein! '],
-          [71, 460, 'Bis bald'],
-          [71, 654, 'Bottom Member'],
-          [71, 644, 'Greatstreet 345'],
-          [71, 633, '3456 Greattown'],
-          [71, 531, 'Information'],
-          [71, 502, 'Hallo'],
-          [71, 481, 'Wir laden '],
-          [111, 481, 'dich'],
-          [130, 481, ' ein! '],
-          [71, 460, 'Bis bald']
+          [71, 654, "Top Leader"],
+          [71, 644, "Funkystreet 42"],
+          [71, 633, "4242 Greattown"],
+          [71, 531, "Information"],
+          [71, 502, "Hallo"],
+          [71, 481, "Wir laden "],
+          [111, 481, "dich"],
+          [130, 481, " ein! "],
+          [71, 460, "Bis bald"],
+          [71, 654, "Bottom Member"],
+          [71, 644, "Greatstreet 345"],
+          [71, 633, "3456 Greattown"],
+          [71, 531, "Information"],
+          [71, 502, "Hallo"],
+          [71, 481, "Wir laden "],
+          [111, 481, "dich"],
+          [130, 481, " ein! "],
+          [71, 460, "Bis bald"]
         ]
 
         people(:bottom_member).update!(last_name: "First")
@@ -129,24 +129,24 @@ describe Export::Pdf::Messages::Letter do
         analyzer = PDF::Inspector::Text.analyze(described_class.new(letter2, options).render)
 
         expect(text_with_position(analyzer)).to eq [
-          [71, 654, 'Bottom First'],
-          [71, 644, 'Greatstreet 345'],
-          [71, 633, '3456 Greattown'],
-          [71, 531, 'Information'],
-          [71, 502, 'Hallo'],
-          [71, 481, 'Wir laden '],
-          [111, 481, 'dich'],
-          [130, 481, ' ein! '],
-          [71, 460, 'Bis bald'],
-          [71, 654, 'Top Leader'],
-          [71, 644, 'Funkystreet 42'],
-          [71, 633, '4242 Greattown'],
-          [71, 531, 'Information'],
-          [71, 502, 'Hallo'],
-          [71, 481, 'Wir laden '],
-          [111, 481, 'dich'],
-          [130, 481, ' ein! '],
-          [71, 460, 'Bis bald']
+          [71, 654, "Bottom First"],
+          [71, 644, "Greatstreet 345"],
+          [71, 633, "3456 Greattown"],
+          [71, 531, "Information"],
+          [71, 502, "Hallo"],
+          [71, 481, "Wir laden "],
+          [111, 481, "dich"],
+          [130, 481, " ein! "],
+          [71, 460, "Bis bald"],
+          [71, 654, "Top Leader"],
+          [71, 644, "Funkystreet 42"],
+          [71, 633, "4242 Greattown"],
+          [71, 531, "Information"],
+          [71, 502, "Hallo"],
+          [71, 481, "Wir laden "],
+          [111, 481, "dich"],
+          [130, 481, " ein! "],
+          [71, 460, "Bis bald"]
         ]
       end
     end
@@ -165,24 +165,24 @@ describe Export::Pdf::Messages::Letter do
 
       it "renders addresses and content" do
         expect(text_with_position).to eq [
-          [71, 654, 'Top Leader'],
-          [71, 644, 'Funkystreet 42'],
-          [71, 633, '4242 Greattown'],
-          [71, 531, 'Information'],
-          [71, 502, 'Hallo'],
-          [71, 481, 'Wir laden '],
-          [111, 481, 'dich'],
-          [130, 481, ' ein! '],
-          [71, 460, 'Bis bald'],
-          [71, 654, 'Bottom Member'],
-          [71, 644, 'Greatstreet 345'],
-          [71, 633, '3456 Greattown'],
-          [71, 531, 'Information'],
-          [71, 502, 'Hallo'],
-          [71, 481, 'Wir laden '],
-          [111, 481, 'dich'],
-          [130, 481, ' ein! '],
-          [71, 460, 'Bis bald']
+          [71, 654, "Top Leader"],
+          [71, 644, "Funkystreet 42"],
+          [71, 633, "4242 Greattown"],
+          [71, 531, "Information"],
+          [71, 502, "Hallo"],
+          [71, 481, "Wir laden "],
+          [111, 481, "dich"],
+          [130, 481, " ein! "],
+          [71, 460, "Bis bald"],
+          [71, 654, "Bottom Member"],
+          [71, 644, "Greatstreet 345"],
+          [71, 633, "3456 Greattown"],
+          [71, 531, "Information"],
+          [71, 502, "Hallo"],
+          [71, 481, "Wir laden "],
+          [111, 481, "dich"],
+          [130, 481, " ein! "],
+          [71, 460, "Bis bald"]
         ]
         expect(stamps).to be_nil
       end
@@ -190,12 +190,12 @@ describe Export::Pdf::Messages::Letter do
       it "renders only addresses has stamps" do
         options[:stamped] = true
         expect(text_with_position).to eq [
-          [71, 654, 'Top Leader'],
-          [71, 644, 'Funkystreet 42'],
-          [71, 633, '4242 Greattown'],
-          [71, 654, 'Bottom Member'],
-          [71, 644, 'Greatstreet 345'],
-          [71, 633, '3456 Greattown']
+          [71, 654, "Top Leader"],
+          [71, 644, "Funkystreet 42"],
+          [71, 633, "4242 Greattown"],
+          [71, 654, "Bottom Member"],
+          [71, 644, "Greatstreet 345"],
+          [71, 633, "3456 Greattown"]
         ]
         expect(stamps.keys).to eq [:render_logo_right, :render_shipping_info, :render_subject,
           :render_content]
@@ -240,30 +240,30 @@ describe Export::Pdf::Messages::Letter do
         [71, 644, housemate1.address],
         [71, 633, "#{housemate1.zip_code} #{housemate1.town}"],
         [71, 623, housemate1.country],
-        [71, 531, 'Information'],
-        [71, 502, 'Hallo'],
-        [71, 481, 'Wir laden '],
-        [111, 481, 'dich'],
-        [130, 481, ' ein! '],
-        [71, 460, 'Bis bald'],
-        [71, 654, 'Bottom Member'],
-        [71, 644, 'Greatstreet 345'],
-        [71, 633, '3456 Greattown'],
-        [71, 531, 'Information'],
-        [71, 502, 'Hallo'],
-        [71, 481, 'Wir laden '],
-        [111, 481, 'dich'],
-        [130, 481, ' ein! '],
-        [71, 460, 'Bis bald'],
-        [71, 654, 'Top Leader'],
-        [71, 644, 'Funkystreet 42'],
-        [71, 633, '4242 Greattown'],
-        [71, 531, 'Information'],
-        [71, 502, 'Hallo'],
-        [71, 481, 'Wir laden '],
-        [111, 481, 'dich'],
-        [130, 481, ' ein! '],
-        [71, 460, 'Bis bald']
+        [71, 531, "Information"],
+        [71, 502, "Hallo"],
+        [71, 481, "Wir laden "],
+        [111, 481, "dich"],
+        [130, 481, " ein! "],
+        [71, 460, "Bis bald"],
+        [71, 654, "Bottom Member"],
+        [71, 644, "Greatstreet 345"],
+        [71, 633, "3456 Greattown"],
+        [71, 531, "Information"],
+        [71, 502, "Hallo"],
+        [71, 481, "Wir laden "],
+        [111, 481, "dich"],
+        [130, 481, " ein! "],
+        [71, 460, "Bis bald"],
+        [71, 654, "Top Leader"],
+        [71, 644, "Funkystreet 42"],
+        [71, 633, "4242 Greattown"],
+        [71, 531, "Information"],
+        [71, 502, "Hallo"],
+        [71, 481, "Wir laden "],
+        [111, 481, "dich"],
+        [130, 481, " ein! "],
+        [71, 460, "Bis bald"]
       ]
     end
 

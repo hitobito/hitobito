@@ -91,7 +91,7 @@ describe People::DuplicateLocator do
 
   def create_duplicate(name)
     original_person = people(name)
-    duplicate = Person.new(original_person.attributes.except('id', 'sort_name'))
+    duplicate = Person.new(original_person.attributes.except("id", "sort_name"))
     duplicate.email = nil
     duplicate.save!
     duplicate

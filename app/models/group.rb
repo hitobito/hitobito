@@ -55,11 +55,9 @@
 #
 
 class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
-
-
   SEARCHABLE_ATTRS = [:name, :short_name, :email, :address, :zip_code, :town, :country,
-                     { parent: [:name, :short_name], phone_numbers: [:number],
-                     social_accounts: [:name], additional_emails: [:email] }]
+    {parent: [:name, :short_name], phone_numbers: [:number],
+     social_accounts: [:name], additional_emails: [:email]}]
 
   include Group::NestedSet
   include Group::Types
@@ -202,11 +200,11 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     end
 
     # order groups based on order in Group.all_types
-    # group.name as second order attribute, to get same output for all 
+    # group.name as second order attribute, to get same output for all
     # queries where multiple groups have the same type
     def order_by_type
       joins("INNER JOIN group_type_orders ON group_type_orders.name = groups.type")
-           .reorder("group_type_orders.order_weight ASC, groups.name ASC")
+        .reorder("group_type_orders.order_weight ASC, groups.name ASC")
     end
 
     private

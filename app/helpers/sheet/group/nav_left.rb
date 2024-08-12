@@ -162,9 +162,9 @@ module Sheet
       def sub_layers
         sub_layer_types = layer.possible_children.select(&:layer).map(&:sti_name)
         layer.children
-             .without_deleted
-             .where(type: sub_layer_types)
-             .order_by_type
+          .without_deleted
+          .where(type: sub_layer_types)
+          .order_by_type
       end
 
       def active_path(group)

@@ -24,14 +24,14 @@ class Person::EventQueries
   end
 
   def unordered_upcoming_events
-    person.
-      events.
-      upcoming.
-      merge(Event::Participation.active).
-      merge(Event::Participation.upcoming).
-      includes(:groups).
-      select("events.*", "event_dates.start_at").
-      preload_all_dates
+    person
+      .events
+      .upcoming
+      .merge(Event::Participation.active)
+      .merge(Event::Participation.upcoming)
+      .includes(:groups)
+      .select("events.*", "event_dates.start_at")
+      .preload_all_dates
   end
 
   def upcoming_events

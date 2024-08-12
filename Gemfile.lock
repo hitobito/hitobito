@@ -51,6 +51,8 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
+    active_record_distinct_on (1.6.0)
+      activerecord (>= 6.1, < 7.2)
     active_storage_validations (1.1.4)
       activejob (>= 5.2.0)
       activemodel (>= 5.2.0)
@@ -441,6 +443,10 @@ GEM
       hashery (~> 2.0)
       ruby-rc4
       ttfunk
+    pg (1.5.7)
+    pg_search (2.3.7)
+      activerecord (>= 6.1)
+      activesupport (>= 6.1)
     phonelib (0.8.8)
     prawn (2.5.0)
       matrix (~> 0.4)
@@ -758,6 +764,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  active_record_distinct_on
   active_storage_validations
   active_storage_variant
   activerecord-session_store
@@ -835,7 +842,9 @@ DEPENDENCIES
   parallel_tests
   paranoia
   pdf-inspector
-  phonelib
+  pg
+  pg_search
+  phonelib (~> 0.8.4)
   prawn
   prawn-markup
   prawn-table

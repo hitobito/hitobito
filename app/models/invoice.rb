@@ -52,9 +52,8 @@
 #
 
 class Invoice < ActiveRecord::Base
-
   SEARCHABLE_ATTRS = [:title, :reference, :sequence_number,
-                     { invoice_items: [:name, :account, :cost_center] }]
+    {invoice_items: [:name, :account, :cost_center]}]
 
   include I18nEnums
   include PaymentSlips
@@ -140,13 +139,13 @@ class Invoice < ActiveRecord::Base
     end
 
     def order_by_sequence_number
-      select("*", Arel.sql(order_by_sequence_number_statement.join(', ')))
-            .order(Arel.sql(order_by_sequence_number_statement.join(', ')))
+      select("*", Arel.sql(order_by_sequence_number_statement.join(", ")))
+        .order(Arel.sql(order_by_sequence_number_statement.join(", ")))
     end
 
     # Orders by first integer, second integer
     def order_by_sequence_number_statement
-      %w(sequence_number).product(%w(^[^-]+ [^-]+$)).map do |field, index|
+      %w[sequence_number].product(%w(^[^-]+ [^-]+$)).map do |field, index|
         "CAST(SUBSTRING(#{field} FROM '#{index}') AS INTEGER)"
       end
     end

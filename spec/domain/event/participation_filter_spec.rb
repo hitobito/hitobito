@@ -13,8 +13,8 @@ RSpec.describe Event::ParticipationFilter, type: :domain do
     Event::Role::Leader.create(participation: participation)
   end
 
-  context 'without search string' do
-    it 'lists all entries' do
+  context "without search string" do
+    it "lists all entries" do
       expect(subject.list_entries.length).to eq(2)
     end
   end

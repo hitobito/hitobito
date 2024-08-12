@@ -4,17 +4,17 @@
 #  https://github.com/hitobito/hitobito.
 
 module SearchStrategies
-    class AddressSearch < Base
-      def search_fulltext
-        return no_adresses unless term_present?
-  
-        Address.search(@term)
-      end   
-  
-      private
-  
-      def no_adresses
-        Address.none.page(1)
-      end
+  class AddressSearch < Base
+    def search_fulltext
+      return no_adresses unless term_present?
+
+      Address.search(@term)
+    end
+
+    private
+
+    def no_adresses
+      Address.none.page(1)
     end
   end
+end

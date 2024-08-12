@@ -286,7 +286,7 @@ describe Person do
       expect(person.save(validate: false)).to be_falsey
       expect(person.errors[:email]).to eq(["ist bereits vergeben. Diese Adresse muss für alle " \
                                         "Personen eindeutig sein, da sie beim Login verwendet " \
-                                        "wird. Du kannst jedoch unter "Weitere E-Mails" " \
+                                        "wird. Du kannst jedoch unter 'Weitere E-Mails' " \
                                         "Adressen eintragen, welche bei anderen Personen als " \
                                         "Haupt-E-Mail vergeben sind (Die Haupt-E-Mail kann leer " \
                                         "gelassen werden).\n"])
@@ -479,7 +479,7 @@ describe Person do
       Fabricate(:person, zip_code: "01200", country: "DE")
       Fabricate(:person, zip_code: "1200")
       Fabricate(:person, zip_code: "1200 ", country: "DE")
-      list = Person.includes(:location).where("zip_code LIKE "%1200%"").order(:zip_code).to_a
+      list = Person.includes(:location).where("zip_code LIKE " % 1200 % "").order(:zip_code).to_a
       expect(list.first.location).to be_nil
       expect(list.second.location).to eq(l)
       expect(list.third.location).to be_nil
@@ -699,7 +699,6 @@ describe Person do
   end
 
   describe "with_address scope" do
-
     let(:top_leader) { people(:top_leader) }
 
     before do

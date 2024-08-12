@@ -573,8 +573,8 @@ describe Event::ParticipationsController do
       end
 
       it "can handle wide unicode characters (esp. emoji)" do
-        post :create, params: { group_id: group.id, event_id: course.id,
-                                event_participation: { additional_information: "Vegetarier😝" } }
+        post :create, params: {group_id: group.id, event_id: course.id,
+                               event_participation: {additional_information: "Vegetarier😝"}}
 
         expect(assigns(:participation)).to be_valid
         expect(assigns(:participation).additional_information).to eq("Vegetarier😝")

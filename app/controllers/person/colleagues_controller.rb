@@ -20,12 +20,12 @@ class Person::ColleaguesController < ApplicationController
   def list_entries
     return Person.none.page(1) unless person.company_name?
 
-    Person.
-      where(company_name: person.company_name)
-          .preload_public_accounts
-          .preload_groups
-          .joins(:roles)
-          .distinct_on(:id)
+    Person
+      .where(company_name: person.company_name)
+      .preload_public_accounts
+      .preload_groups
+      .joins(:roles)
+      .distinct_on(:id)
   end
 
   def person

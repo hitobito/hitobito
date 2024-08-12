@@ -479,7 +479,8 @@ describe Person do
       Fabricate(:person, zip_code: "01200", country: "DE")
       Fabricate(:person, zip_code: "1200")
       Fabricate(:person, zip_code: "1200 ", country: "DE")
-      list = Person.includes(:location).where("zip_code LIKE " % 1200 % "").order(:zip_code).to_a
+      list = Person.includes(:location).where("zip_code LIKE '%1200%'").order(:zip_code).to_a
+
       expect(list.first.location).to be_nil
       expect(list.second.location).to eq(l)
       expect(list.third.location).to be_nil

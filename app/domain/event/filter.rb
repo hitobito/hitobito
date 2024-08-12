@@ -19,7 +19,7 @@ class Event::Filter
     if sort_expression.is_a?(String)
       sort_expression_query_value = sort_expression.split(".")[1]
     elsif sort_expression.is_a?(Hash)
-      sort_expression_query_value = 
+      sort_expression_query_value =
         "#{sort_expression.keys[0].split(".")[1]} #{sort_expression.values[0]}"
     end
 

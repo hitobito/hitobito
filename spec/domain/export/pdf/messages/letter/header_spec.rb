@@ -150,8 +150,8 @@ describe Export::Pdf::Messages::Letter::Header do
     it "is present" do
       subject.render(recipient)
       expect(text_with_position_without_shipping_info).to eq [
-        [71, 652, 'Top Leader'],
-        [71, 624, 'Greattown']
+        [71, 652, "Top Leader"],
+        [71, 624, "Greattown"]
       ]
     end
 
@@ -161,8 +161,8 @@ describe Export::Pdf::Messages::Letter::Header do
       subject.render(recipient)
 
       expect(text_with_position_without_shipping_info).to eq [
-        [71, 652, 'Top Leader'],
-        [71, 624, 'Greattown']
+        [71, 652, "Top Leader"],
+        [71, 624, "Greattown"]
       ]
     end
 
@@ -176,10 +176,10 @@ describe Export::Pdf::Messages::Letter::Header do
         subject.render(recipient)
         expect(stamps.keys).to eq [:render_logo_right, :render_shipping_info]
         expect(text_with_position_without_shipping_info).to eq [
-          [71, 652, 'Top Leader'],
-          [71, 624, 'Greattown'],
-          [71, 655, 'Top Leader'],
-          [71, 627, 'Greattown']
+          [71, 652, "Top Leader"],
+          [71, 624, "Greattown"],
+          [71, 655, "Top Leader"],
+          [71, 627, "Greattown"]
         ]
       end
 
@@ -190,10 +190,10 @@ describe Export::Pdf::Messages::Letter::Header do
         subject.render(recipient)
         expect(stamps.keys).to eq [:render_logo_right, :render_shipping_info]
         expect(text_with_position_without_shipping_info).to eq [
-          [71, 652, 'Top Leader'],
-          [71, 624, 'Greattown'],
-          [71, 655, 'Top Leader'],
-          [71, 627, 'Greattown']
+          [71, 652, "Top Leader"],
+          [71, 624, "Greattown"],
+          [71, 655, "Top Leader"],
+          [71, 627, "Greattown"]
         ]
       end
 
@@ -219,8 +219,8 @@ describe Export::Pdf::Messages::Letter::Header do
         subject.render(recipient)
 
         expect(text_with_position_without_shipping_info).to eq [
-          [71, 652, 'Top Leader'],
-          [71, 624, 'Greattown']
+          [71, 652, "Top Leader"],
+          [71, 624, "Greattown"]
         ]
       end
 
@@ -229,8 +229,8 @@ describe Export::Pdf::Messages::Letter::Header do
         subject.render(recipient)
 
         expect(text_with_position_without_shipping_info).to eq [
-          [71, 652, 'Top Leader'],
-          [71, 624, 'Greattown']
+          [71, 652, "Top Leader"],
+          [71, 624, "Greattown"]
         ]
       end
 
@@ -261,8 +261,8 @@ describe Export::Pdf::Messages::Letter::Header do
         subject.render(recipient)
 
         expect(text_with_position_without_shipping_info).to eq [
-          [361, 652, 'Top Leader'],
-          [361, 624, 'Greattown']
+          [361, 652, "Top Leader"],
+          [361, 624, "Greattown"]
         ]
       end
 
@@ -271,8 +271,8 @@ describe Export::Pdf::Messages::Letter::Header do
         subject.render(recipient)
 
         expect(text_with_position_without_shipping_info).to eq [
-          [361, 652, 'Top Leader'],
-          [361, 624, 'Greattown']
+          [361, 652, "Top Leader"],
+          [361, 624, "Greattown"]
         ]
       end
 

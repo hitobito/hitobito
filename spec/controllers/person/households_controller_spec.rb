@@ -14,7 +14,7 @@ describe Person::HouseholdsController do
 
   before { leader.update!(address: nil, zip_code: nil, town: "Supertown") }
 
-  context 'as leader' do
+  context "as leader" do
     before { sign_in(leader) }
 
     it "adds person to new household" do

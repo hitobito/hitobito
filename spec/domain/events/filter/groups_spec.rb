@@ -49,7 +49,7 @@ describe Events::Filter::Groups do
 
     let(:params) { {filter: {group_ids: person.groups.pluck(:id) + non_hierarchy_group_ids}} }
 
-    it 'produces a scope that includes globally_visible' do
+    it "produces a scope that includes globally_visible" do
       expect(where_condition).to match('"events"."globally_visible"')
 
       expect(where_condition).to include('OR "events"."globally_visible" = TRUE')
@@ -118,7 +118,7 @@ describe Events::Filter::Groups do
 
     it "checks the group-ids" do
       expect(where_condition)
-        .to match(/"groups"\."id" IN \(#{person_hierarchy.join(', ')}\)/)
+        .to match(/"groups"\."id" IN \(#{person_hierarchy.join(", ")}\)/)
     end
 
     it "shows only 1 result" do
@@ -153,7 +153,7 @@ describe Events::Filter::Groups do
 
     it "checks the group-id" do
       expect(where_condition)
-        .to match(/"groups"\."id" IN \(#{group_ids.join(', ')}\)/)
+        .to match(/"groups"\."id" IN \(#{group_ids.join(", ")}\)/)
     end
 
     it "shows only 2 result" do

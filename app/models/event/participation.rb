@@ -68,10 +68,10 @@ class Event::Participation < ActiveRecord::Base
   class << self
     # Order people by the order participation types are listed in their event types.
     def order_by_role(event_type)
-      joins(:roles).
-      select("event_participations.*", :order_weight).
-      joins("INNER JOIN event_role_type_orders ON event_roles.type = event_role_type_orders.name").
-      order("event_role_type_orders.order_weight ASC")
+      joins(:roles)
+        .select("event_participations.*", :order_weight)
+        .joins("INNER JOIN event_role_type_orders ON event_roles.type = event_role_type_orders.name")
+        .order("event_role_type_orders.order_weight ASC")
     end
 
     def active

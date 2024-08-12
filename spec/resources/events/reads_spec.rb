@@ -149,7 +149,7 @@ describe EventResource, type: :resource do
     describe "by before_or_on" do
       it "filters using Event::before_or_on" do
         event.dates.first.update(start_at: "2012-02-28")
-        params[:filter] = { before_or_on: "2012-02-28" }
+        params[:filter] = {before_or_on: "2012-02-28"}
         expect(Event).to receive(:before_or_on).with(Date.new(2012, 2, 28), true).and_call_original
         render
         expect(jsonapi_data).to have(1).item
@@ -160,7 +160,7 @@ describe EventResource, type: :resource do
     describe "by after_or_on" do
       it "filters using Event::after_or_on" do
         event.dates.first.update(start_at: "2012-03-5")
-        params[:filter] = { after_or_on: "2012-03-02" }
+        params[:filter] = {after_or_on: "2012-03-02"}
         expect(Event).to receive(:after_or_on).with(Date.new(2012, 3, 2), true).and_call_original
         render
         expect(jsonapi_data).to have(1).item

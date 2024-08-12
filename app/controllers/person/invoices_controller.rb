@@ -4,7 +4,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::InvoicesController < ListController
-  self.sort_mappings = { recipient: "people.order_name ASC" }
+  self.sort_mappings = {recipient: "people.order_name ASC"}
   self.search_columns = [:title, :sequence_number]
 
   private

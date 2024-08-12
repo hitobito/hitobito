@@ -46,7 +46,7 @@ describe EventKindsHelper do
 
       options = node.find("select").all("option")
       expect(options.size).to eq(collection.size)
-      expect(options.select { |o| o.selected? }.size).to eq(1)
+      expect(options.count { |o| o.selected? }).to eq(1)
       expect(options.one? { |o| o.value == old.id.to_s }).to eq false
     end
 
@@ -68,7 +68,7 @@ describe EventKindsHelper do
 
       options = node.find("select").all("option")
       expect(options.size).to eq(collection.size + 1)
-      expect(options.select { |o| o.selected? }.size).to eq(2)
+      expect(options.count { |o| o.selected? }).to eq(2)
       expect(options.one? { |o| o.value == old.id.to_s }).to eq true
     end
   end

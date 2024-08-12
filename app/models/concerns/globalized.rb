@@ -35,9 +35,9 @@ module Globalized
 
     def list
       self.select("*").from(
-        with_translations.select("#{self.table_name}.*", translated_label_column)
-        .distinct_on(:id).unscope(:order), self.table_name
-      ).order("#{self.table_name}.#{translated_attribute_names.first.to_s}")
+        with_translations.select("#{table_name}.*", translated_label_column)
+        .distinct_on(:id).unscope(:order), table_name
+      ).order("#{table_name}.#{translated_attribute_names.first}")
     end
 
     private

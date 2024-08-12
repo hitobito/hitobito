@@ -66,11 +66,11 @@ class Payments::Collection
 
   def of_fully_paid_invoices
     invoice_ids =
-      @payments.select('MAX(\'invoice.total\')', :invoice_id)
-               .joins('INNER JOIN invoices AS invoice ON invoice.id = payments.invoice_id')
-               .having('SUM(payments.amount) >= MAX(invoice.total)')
-               .group(:invoice_id)
-               .map(&:invoice_id)
+      @payments.select("MAX('invoice.total')", :invoice_id)
+        .joins("INNER JOIN invoices AS invoice ON invoice.id = payments.invoice_id")
+        .having("SUM(payments.amount) >= MAX(invoice.total)")
+        .group(:invoice_id)
+        .map(&:invoice_id)
     @payments = @payments.where(invoice_id: invoice_ids)
 
     self
@@ -78,11 +78,11 @@ class Payments::Collection
 
   def excluding_cancelled_invoices
     invoice_ids =
-      @payments.select('MAX(\'invoice.state\')', :invoice_id)
-               .joins('INNER JOIN invoices AS invoice ON invoice.id = payments.invoice_id')
-               .having('MAX(invoice.state) <> \'cancelled\'')
-               .group(:invoice_id)
-               .map(&:invoice_id)
+      @payments.select("MAX('invoice.state')", :invoice_id)
+        .joins("INNER JOIN invoices AS invoice ON invoice.id = payments.invoice_id")
+        .having("MAX(invoice.state) <> 'cancelled'")
+        .group(:invoice_id)
+        .map(&:invoice_id)
     @payments = @payments.where(invoice_id: invoice_ids)
 
     self
@@ -90,11 +90,11 @@ class Payments::Collection
 
   def of_non_fully_paid_invoices
     invoice_ids =
-      @payments.select('MAX(\'invoice.total\')', :invoice_id)
-               .joins('INNER JOIN invoices AS invoice ON invoice.id = payments.invoice_id')
-               .having('SUM(payments.amount) < MAX(invoice.total)')
-               .group(:invoice_id)
-               .map(&:invoice_id)
+      @payments.select("MAX('invoice.total')", :invoice_id)
+        .joins("INNER JOIN invoices AS invoice ON invoice.id = payments.invoice_id")
+        .having("SUM(payments.amount) < MAX(invoice.total)")
+        .group(:invoice_id)
+        .map(&:invoice_id)
     @payments = @payments.where(invoice_id: invoice_ids)
 
     self
@@ -102,11 +102,11 @@ class Payments::Collection
 
   def of_overpaid_invoices
     invoice_ids =
-      @payments.select('MAX(\'invoice.total\')', :invoice_id)
-               .joins('INNER JOIN invoices AS invoice ON invoice.id = payments.invoice_id')
-               .having('SUM(payments.amount) > MAX(invoice.total)')
-               .group(:invoice_id)
-               .map(&:invoice_id)
+      @payments.select("MAX('invoice.total')", :invoice_id)
+        .joins("INNER JOIN invoices AS invoice ON invoice.id = payments.invoice_id")
+        .having("SUM(payments.amount) > MAX(invoice.total)")
+        .group(:invoice_id)
+        .map(&:invoice_id)
     @payments = @payments.where(invoice_id: invoice_ids)
 
     self

@@ -45,8 +45,8 @@ describe Address::FullTextSearch do
 
     first_result = results.first
 
-    labels = results.map { |r| r[:label] }
-    numbers = results.map { |r| r[:number] }
+    labels = results.pluck(:label)
+    numbers = results.pluck(:number)
 
     expect(first_result[:id]).to eq(bs_bern.id)
     expect(first_result[:town]).to eq(bs_bern.town)
@@ -72,10 +72,10 @@ describe Address::FullTextSearch do
     expect(results.first[:id]).to eq(bs_bern.id)
 
     # we detected the right number
-    expect(results.map { |r| r[:number] }).to include("5a")
+    expect(results.pluck(:number)).to include("5a")
 
     # with the right label
-    expect(results.map { |r| r[:label] }).to include(bs_bern.label_with_number("5a"))
+    expect(results.pluck(:label)).to include(bs_bern.label_with_number("5a"))
   end
 
   it "finds typeahead results from street query with street number with a uppercase letter" do
@@ -92,10 +92,10 @@ describe Address::FullTextSearch do
     expect(results.first[:id]).to eq(bs_bern.id)
 
     # we detected the right number
-    expect(results.map { |r| r[:number] }).to include("6B")
+    expect(results.pluck(:number)).to include("6B")
 
     # with the right label
-    expect(results.map { |r| r[:label] }).to include(bs_bern.label_with_number("6B"))
+    expect(results.pluck(:label)).to include(bs_bern.label_with_number("6B"))
   end
 
   it "finds typeahead results from street query with street number and town" do
@@ -112,9 +112,9 @@ describe Address::FullTextSearch do
     expect(results.first[:id]).to eq(bs_bern.id)
 
     # we detected the right number
-    expect(results.map { |r| r[:number] }).to include("6B")
+    expect(results.pluck(:number)).to include("6B")
 
     # with the right label
-    expect(results.map { |r| r[:label] }).to eq(["Belpstrasse 6B 3007 Bern"])
+    expect(results.pluck(:label)).to eq(["Belpstrasse 6B 3007 Bern"])
   end
 end

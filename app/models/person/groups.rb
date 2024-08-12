@@ -109,10 +109,10 @@ module Person::Groups
 
     # Order people by the order role types are listed in their group types.
     def order_by_role
-      subquery = joins(:roles).
-                 joins("INNER JOIN role_type_orders ON role_type_orders.name = roles.type").
-                 reselect(:order_weight, "people.*").
-                 distinct_on(:id)
+      subquery = joins(:roles)
+        .joins("INNER JOIN role_type_orders ON role_type_orders.name = roles.type")
+        .reselect(:order_weight, "people.*")
+        .distinct_on(:id)
       Person.select("people.*").from(subquery, "people").unscope(:where).order(:order_weight)
     end
   end

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Address::FullTextSearch
-
   attr_reader :query
 
   ADDRESS_WITH_NUMBER_REGEX = /^(.*)[^\d](\d+[A-Za-z]?)/
@@ -16,13 +15,13 @@ class Address::FullTextSearch
   end
 
   def typeahead_results
-    addresses = with_query { SearchStrategies::AddressSearch.new(nil,  query, nil).search_fulltext }
+    addresses = with_query { SearchStrategies::AddressSearch.new(nil, query, nil).search_fulltext }
 
     typeahead_entries(addresses)
   end
 
   def results
-    addresses = with_query { SearchStrategies::AddressSearch.new(nil,  query, nil).search_fulltext }
+    addresses = with_query { SearchStrategies::AddressSearch.new(nil, query, nil).search_fulltext }
 
     addresses = addresses_with_numbers(addresses).map(&:first) if query_with_number?
 

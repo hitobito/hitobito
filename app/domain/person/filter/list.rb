@@ -83,7 +83,7 @@ class Person::Filter::List
   end
 
   def default_order(entries)
-    entries = entries.order_by_role if Settings.people.default_sort == 'role'
+    entries = entries.order_by_role if Settings.people.default_sort == "role"
     entries.order_by_name
   end
 end

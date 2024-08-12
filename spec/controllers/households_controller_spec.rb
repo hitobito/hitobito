@@ -83,7 +83,7 @@ describe HouseholdsController do
           bottom_member.update!(town: "Motown")
           get :edit, params: params.merge(member_ids: [person.id, bottom_member.id])
           expect(warning).to eq "Die Adresse 'Superstreet 123, 4567 Greattown' wird für " \
-                                'alle Personen in diesem Haushalt übernommen.'
+                                "alle Personen in diesem Haushalt übernommen."
         end
 
         it "shows error when person is already assigned to a different household" do
@@ -110,7 +110,7 @@ describe HouseholdsController do
         end
 
         it "is accepted if all address attrs are identical" do
-          bottom_leader.update!(street: 'Greatstreet', housenumber: 345, town: 'Greattown', zip_code: 3456)
+          bottom_leader.update!(street: "Greatstreet", housenumber: 345, town: "Greattown", zip_code: 3456)
           get :edit, params: params.merge(member_ids: [bottom_leader.id, top_leader.id])
           expect(household.people).to match_array([bottom_leader, top_leader])
         end
@@ -169,7 +169,7 @@ describe HouseholdsController do
       end
 
       it "is accepted if all address attrs are identical" do
-        bottom_leader.update!(street: 'Greatstreet', housenumber: 345, town: 'Greattown", zip_code: 3456)
+        bottom_leader.update!(street: "Greatstreet", housenumber: 345, town: "Greattown", zip_code: 3456)
         expect do
           put :update, params: params.merge(member_ids: [bottom_leader.id, top_leader.id])
         end.to change { household.reload.members.count }.by(1)

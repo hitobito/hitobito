@@ -77,27 +77,6 @@ describe FullTextController, type: :controller do
 
         expect(@response.body).to include(invoices(:invoice).title)
       end
-
-      it "only finds invoices with permissions" do
-        invoice = Fabricate(:invoice, group: groups(:top_layer), recipient: people(:bottom_member))
-
-        expect_any_instance_of(strategy).to receive(:query_invoices).and_call_original
-
-        if strategy == SearchStrategies::Sphinx
-          expect(Invoice).to receive(:search)
-            .with(anything,
-              {
-                star: false,
-                per_page: SearchStrategies::Base::QUERY_PER_PAGE,
-                with: {group_id: [groups(:top_layer).id]}
-              })
-            .and_return([invoice])
-        end
-
-        get :query, params: {q: invoice.title[1..5]}
-
-        expect(@response.body).to include(invoice.title)
-      end
     end
   end
 

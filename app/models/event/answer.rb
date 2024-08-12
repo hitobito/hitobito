@@ -32,49 +32,16 @@ class Event::Answer < ActiveRecord::Base
   validates :answer, presence: {if: lambda do
     question && question.required? && participation.enforce_required_answers
   end}
-  validate :assert_answer_is_in_choice_items
+  validate :validate_with_question
 
-  # override to handle array values submitted from checkboxes
   def answer=(text)
-    if question_with_choices? && question_with_checkboxes? && text.is_a?(Array)
-      valid_range = (0...question.choice_items.size)
-      # have submit index + 1 and handle reset via index 0
-      index_array = text.map { |i| i.to_i - 1 }
-
-      super(valid_index_based_values(index_array, valid_range) || nil)
-    else
-      super
-    end
+    super(question.serialize_answer(text))
   end
 
   private
 
-  def assert_answer_is_in_choice_items
-    # still allow answer to be nil because otherwise participations could not
-    # be created without answering all questions (required to create roles for other people)
-    if question_with_choices? &&
-        answer &&
-        !question.multiple_choices? &&
-        !question.choice_items.include?(answer)
-      errors.add(:answer, :inclusion)
-    end
+  def validate_with_question
+    question.validate_answer(self)
   end
 
-  def question_with_choices?
-    question && question.choice_items.present?
-  end
-
-  def question_with_checkboxes?
-    question.multiple_choices? || question.one_answer_available?
-  end
-
-  def valid_index_based_values(index_array, valid_range)
-    indexes = index_array.map do |index|
-      if valid_range.include?(index)
-        question.choice_items[index]
-      end
-    end.compact
-
-    indexes.present? ? indexes.join(", ") : nil
-  end
 end

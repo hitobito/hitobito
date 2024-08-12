@@ -24,10 +24,19 @@
 
 class Event::Question < ActiveRecord::Base
   include Globalized
+  include I18nEnums
+
+  # TODO: move choices
   translates :question, :choices
 
   belongs_to :event
+  belongs_to :derived_from_question, class_name: "Event::Question", inverse_of: :derived_questions
+
   has_many :answers, dependent: :destroy
+  has_many :derived_questions, class_name: "Event::Question", dependent: :destroy
+
+  DISCLOSURE_VALUES  = %w[optional required hidden].freeze
+  i18n_enum :disclosure, DISCLOSURE_VALUES #, scopes: true, queries: true
 
   validates_by_schema
 
@@ -35,6 +44,7 @@ class Event::Question < ActiveRecord::Base
   # so we can have different error messages
   validates :question, presence: {message: :admin_blank}, if: :admin?
   validates :question, presence: {message: :application_blank}, unless: :admin?
+  validates :disclosure, presence: true, inclusion: {in: DISCLOSURE_VALUES}
 
   after_create :add_answer_to_participations
 
@@ -50,8 +60,10 @@ class Event::Question < ActiveRecord::Base
     ]
   end
 
-  def choice_items
-    choices.to_s.split(",").collect(&:strip)
+  def derive
+    self.dup.tap do |derived_question|
+      derived_question.derived_from_question = self
+    end
   end
 
   def label
@@ -60,8 +72,23 @@ class Event::Question < ActiveRecord::Base
     question&.truncate(30)
   end
 
-  def one_answer_available?
-    choice_items.compact.one?
+  def serialize_answer(value)
+    value
+  end
+
+  def validate_answer
+    true
+  end
+
+  def add_to_existing_events
+    return unless event_id.blank?
+
+    existing_event_ids = Event.pluck(:id)
+    derived_question_attributes = existing_event_ids.map do |event_id|
+      standard_question.attributes.merge(id: nil, event_id: event_id)
+    end
+
+    Event::Question.insert_all(derived_question_attributes) if derived_questions.any?
   end
 
   private

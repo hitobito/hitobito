@@ -367,7 +367,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   end
 
   def init_questions
-    # do nothing by default
+    self.application_questions = Question.global.application.map(&:derive)
+    self.admin_questions = Question.global.admin.map(&:derive)
   end
 
   def course?

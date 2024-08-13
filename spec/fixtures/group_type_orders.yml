@@ -21,5 +21,3 @@ mounted_attrs_group:
 toppers:
   name: Group::GlobalGroup
   order_weight: 6
-
-

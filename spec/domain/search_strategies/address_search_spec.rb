@@ -56,5 +56,4 @@ describe SearchStrategies::AddressSearch do
   def search_class(term = nil, page = nil)
     described_class.new(user, term, page)
   end
-
 end

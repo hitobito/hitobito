@@ -35,8 +35,6 @@ class LocationSeeder
 
   def marked_as_seeded?
     ActiveRecord::InternalMetadata[SEED_MARKER].present?
-
-    true
   end
 
   def mark_as_seeded!

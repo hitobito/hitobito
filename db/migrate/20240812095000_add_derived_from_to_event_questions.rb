@@ -1,8 +1,8 @@
-class CreateStandardQuestionsForEventQuestions < ActiveRecord::Migration[6.1]
+class AddDerivedFromToEventQuestions < ActiveRecord::Migration[6.1]
   def change
-    add_reference:event_questions, :derived_from_question, null: true,
-      type: :integer, # default is :bigint, which does not match id
-      foreign_key: { to_table: :event_questions }
+    # add_reference :event_questions, :derived_from_question, null: true, foreign_key: false
+    add_reference :event_questions, :derived_from_question, null: true,
+                  foreign_key: false, type: :integer
 
     reversible do |direction|
       direction.up { create_derived_questions }
@@ -13,7 +13,7 @@ class CreateStandardQuestionsForEventQuestions < ActiveRecord::Migration[6.1]
   private
 
   def create_derived_questions
-    standard_question_ids = Event::Question.where(event: nil).find_each(&)
+    # Event::Question.where(event: nil).find_each(&:derive_for_existing_events)
   end
 
   def delete_derived_questions

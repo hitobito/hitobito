@@ -33,10 +33,13 @@ class Event::Question < ActiveRecord::Base
   belongs_to :derived_from_question, class_name: "Event::Question", inverse_of: :derived_questions
 
   has_many :answers, dependent: :destroy
-  has_many :derived_questions, class_name: "Event::Question", dependent: :destroy
+  has_many :derived_questions, class_name: "Event::Question", foreign_key: :derived_from_question_id,
+     dependent: :destroy
 
   DISCLOSURE_VALUES  = %w[optional required hidden].freeze
   i18n_enum :disclosure, DISCLOSURE_VALUES #, scopes: true, queries: true
+
+  attribute :type, default: "Event::Question::Default"
 
   validates_by_schema
 
@@ -44,7 +47,9 @@ class Event::Question < ActiveRecord::Base
   # so we can have different error messages
   validates :question, presence: {message: :admin_blank}, if: :admin?
   validates :question, presence: {message: :application_blank}, unless: :admin?
-  validates :disclosure, presence: true, inclusion: {in: DISCLOSURE_VALUES}
+  validates :disclosure, inclusion: {in: DISCLOSURE_VALUES}, allow_blank: true
+  validates :disclosure, presence: true, unless: :standard?
+  validates :derived_from_question_id, uniqueness: { scope: :event_id }, allow_blank: true, if: :event_id
 
   after_create :add_answer_to_participations
 
@@ -61,6 +66,8 @@ class Event::Question < ActiveRecord::Base
   end
 
   def derive
+    return unless event_id.blank?
+
     self.dup.tap do |derived_question|
       derived_question.derived_from_question = self
     end
@@ -72,6 +79,10 @@ class Event::Question < ActiveRecord::Base
     question&.truncate(30)
   end
 
+  def standard?
+    event_id.blank?
+  end
+
   def serialize_answer(value)
     value
   end
@@ -80,15 +91,17 @@ class Event::Question < ActiveRecord::Base
     true
   end
 
-  def add_to_existing_events
-    return unless event_id.blank?
+  def derive_for_existing_events
+    existing_event_ids = Event.where.not(id: derived_questions.pluck(:event_id)).pluck(:id)
 
-    existing_event_ids = Event.pluck(:id)
-    derived_question_attributes = existing_event_ids.map do |event_id|
-      standard_question.attributes.merge(id: nil, event_id: event_id)
+    # unfortunately, this does not work well with tranlsations
+    # Event::Question.insert_all(newly_derived_question_attributes)
+
+    Event::Question.transaction do
+      existing_event_ids.map do |event_id|
+        derive&.tap { |derived_question| derived_question.update!(event_id:) }
+      end.compact
     end
-
-    Event::Question.insert_all(derived_question_attributes) if derived_questions.any?
   end
 
   private
@@ -96,8 +109,14 @@ class Event::Question < ActiveRecord::Base
   def add_answer_to_participations
     return unless event
 
-    event.participations.find_each do |p|
-      p.answers << answers.new
+    event.participations.find_each do |participation|
+      existing_answer = participation.answers.find { _1.question_id == derived_from_question_id }
+
+      if existing_answer
+        existing_answer.update(question: self)
+      else
+        participation.answers << answers.new
+      end
     end
   end
 end

@@ -2,7 +2,7 @@ class AddTypeToEventQuestions < ActiveRecord::Migration[6.1]
   def change
     add_column(:event_questions, :type, :string, null: true, index: true)
 
-    reversible do
+    reversible do |direction|
       direction.up do
         Event::Question.update_all(type: "Event::Question::Default")
       end

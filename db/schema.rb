@@ -107,7 +107,7 @@ ActiveRecord::Schema.define(version: 2024_08_30_125755) do
     t.datetime "finished_at", precision: 6
     t.integer "attempt"
     t.string "status"
-    t.json "payload"
+    t.text "payload", size: :long, collation: "utf8mb4_bin"
     t.index ["group_id"], name: "index_background_job_log_entries_on_group_id"
     t.index ["job_id", "attempt"], name: "index_background_job_log_entries_on_job_id_and_attempt", unique: true
     t.index ["job_id"], name: "index_background_job_log_entries_on_job_id"
@@ -312,6 +312,10 @@ ActiveRecord::Schema.define(version: 2024_08_30_125755) do
     t.boolean "multiple_choices", default: false, null: false
     t.boolean "required", default: false, null: false
     t.boolean "admin", default: false, null: false
+    t.string "disclosure", null: false
+    t.string "type", null: false
+    t.integer "derived_from_question_id"
+    t.index ["derived_from_question_id"], name: "index_event_questions_on_derived_from_question_id"
     t.index ["event_id"], name: "index_event_questions_on_event_id"
   end
 

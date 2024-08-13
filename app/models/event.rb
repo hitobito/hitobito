@@ -73,11 +73,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   SEARCHABLE_ATTRS = [:number, {translations: [:name], groups: [:name]}]
 
-  SEARCHABLE_ATTRS = [:number, {translations: [:name], groups: [:name]}]
-
   include Event::Participatable
   include PgSearchable
-
   include Globalized
   translates :application_conditions, :description, :name, :signature_confirmation_text
 

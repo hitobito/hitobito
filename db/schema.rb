@@ -880,7 +880,7 @@ ActiveRecord::Schema.define(version: 2024_08_05_071727) do
     t.datetime "locked_at"
     t.string "authentication_token"
     t.boolean "show_global_label_formats", default: true, null: false
-    t.string "household_key"
+    t.integer "household_key"
     t.string "event_feed_token"
     t.string "unlock_token"
     t.string "family_key"
@@ -1084,12 +1084,6 @@ ActiveRecord::Schema.define(version: 2024_08_05_071727) do
   create_table "self_registration_reasons", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "sequences", force: :cascade do |t|
-    t.string "name", null: false
-    t.bigint "current_value", default: 0, null: false
-    t.index ["name"], name: "index_sequences_on_name", unique: true
   end
 
   create_table "service_tokens", id: :serial, force: :cascade do |t|

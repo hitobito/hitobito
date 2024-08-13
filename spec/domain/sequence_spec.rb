@@ -10,12 +10,8 @@ require "spec_helper"
 describe Sequence do
 
   setup do
-    ActiveRecord::Base.connection.execute("DROP SEQUENCE IF EXISTS test_sequence")
     ActiveRecord::Base.connection.execute("CREATE SEQUENCE test_sequence START 1")
-  end
-
-  teardown do
-    ActiveRecord::Base.connection.execute("DROP SEQUENCE IF EXISTS test_sequence")
+    Sequence.increment!('test_sequence')
   end
 
   context '::current_value' do
@@ -28,7 +24,7 @@ describe Sequence do
     it 'increments the current_value of the sequence' do
       Sequence.increment!('test_sequence')
       Sequence.increment!('test_sequence')
-      expect(Sequence.current_value('test_sequence')).to eq 2
+      expect(Sequence.current_value('test_sequence')).to eq 3
     end
   end
 end

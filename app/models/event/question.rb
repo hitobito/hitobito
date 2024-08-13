@@ -40,6 +40,7 @@ class Event::Question < ActiveRecord::Base
   i18n_enum :disclosure, DISCLOSURE_VALUES #, scopes: true, queries: true
 
   attribute :type, default: "Event::Question::Default"
+  attribute :disclosure, default: :optional
 
   validates_by_schema
 

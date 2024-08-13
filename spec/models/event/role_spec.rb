@@ -29,7 +29,7 @@ describe Event::Role do
   context "save together with participation" do
     let(:course) do
       course = Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk))
-      course.questions << Fabricate(:event_question, event: course, required: true)
+      course.questions << Fabricate(:event_question, event: course, disclosure: :required)
       course.questions << Fabricate(:event_question, event: course)
       course
     end

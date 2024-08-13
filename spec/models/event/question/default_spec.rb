@@ -25,7 +25,7 @@ describe Event::Question::Default do
 
     it "adds answer to participation after create" do
       expect do
-        event.questions.create!(question: "Test?", required: true)
+        event.questions.create!(question: "Test?", disclosure: :required)
       end.to change { Event::Answer.count }.by(1)
     end
   end

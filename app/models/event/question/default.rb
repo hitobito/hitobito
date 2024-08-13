@@ -53,13 +53,12 @@ class Event::Question::Default < Event::Question
   end
 
   # override to handle array values submitted from checkboxes
-  def serialize_answer(value)
-    return value unless with_choices? && with_checkboxes? && value.is_a?(Array)
+  def before_validate_answer(answer)
+    return unless with_choices? && with_checkboxes? && answer.answer.is_a?(Array)
 
     # have submit index + 1 and handle reset via index 0
-    index_array = value.map { |i| i.to_i - 1 }
-
-    valid_index_based_values(index_array, 0.upto(choice_items.size)) || nil
+    index_array = answer.answer.map { |i| i.to_i - 1 }
+    answer.answer= valid_index_based_values(index_array, 0...choice_items.size) || nil
   end
 
   def valid_index_based_values(index_array, valid_range)

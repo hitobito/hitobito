@@ -27,6 +27,7 @@ describe Event::Answer do
     before do
       question.update_attribute(:multiple_choices, true) # rubocop:disable Rails/SkipsModelValidations
       subject.answer = answer_param
+      subject.save
     end
 
     context "valid array values (position + 1)" do
@@ -43,7 +44,7 @@ describe Event::Answer do
     end
 
     context "resetting values" do
-      subject { question.reload.answers.build(answer: "GA, Halbtax") }
+      subject { question.reload.answers.create(answer: "GA, Halbtax") }
 
       let(:answer_param) { ["0"] }
 
@@ -73,9 +74,7 @@ describe Event::Answer do
       end
 
       def build_answer(answer_index)
-        event_answer = question.answers.build
-        event_answer.answer = [answer_index]
-        event_answer
+        question.answers.create(answer: [answer_index])
       end
     end
   end

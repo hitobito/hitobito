@@ -27,16 +27,17 @@ class Event::Answer < ActiveRecord::Base
   belongs_to :participation
   belongs_to :question
 
+  # TODO
+  attribute :answer, :json
+
+  before_validation { question&.before_validate_answer(self) }
+
   validates_by_schema
   validates :question_id, uniqueness: {scope: :participation_id}
   validates :answer, presence: {if: lambda do
     question && question.required? && participation.enforce_required_answers
   end}
   validate :validate_with_question
-
-  def answer=(text)
-    super(question.serialize_answer(text))
-  end
 
   private
 

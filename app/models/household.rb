@@ -135,10 +135,7 @@ class Household
   end
 
   def next_key
-    loop do
-      key = SecureRandom.uuid
-      break key unless Person.exists?(household_key: key)
-    end
+    Sequence.increment!('household_sequence')
   end
 
   def save_records

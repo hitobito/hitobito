@@ -42,7 +42,7 @@ describe Messages::DispatchJob do
         role_types: [Group::BottomLayer::Member])
       Fabricate(Group::BottomLayer::Member.name, group: group, person: top_leader)
       Fabricate(Group::BottomLayer::Member.name, group: group, person: bottom_member)
-      top_leader.update(household_key: SecureRandom.uuid)
+      top_leader.update(household_key: rand(100))
       bottom_member.update(household_key: top_leader.household_key)
       letter.update(send_to_households: true)
 

@@ -59,7 +59,7 @@ describe Export::Pdf::Messages::Letter::Content do
     end
 
     context "households" do
-      let(:household_key) { "household-abcd42" }
+      let(:household_key) { "42" }
       let(:housemate1) { Fabricate(:person_with_address, household_key: household_key) }
       let(:letter) { messages(:letter) }
       let!(:recipient2) do

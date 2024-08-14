@@ -165,10 +165,7 @@ class Person::Household
   end
 
   def next_key
-    loop do
-      key = SecureRandom.uuid
-      break key unless Person.where(household_key: key).exists?
-    end
+    Sequence.increment!('household_sequence')
   end
 
   def update_housemate(housemate, people, person)

@@ -135,7 +135,7 @@ class Household
   end
 
   def next_key
-    Sequence.increment!('household_sequence')
+    Sequence.increment!("household_sequence")
   end
 
   def save_records

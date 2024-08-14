@@ -310,7 +310,6 @@ ActiveRecord::Schema.define(version: 2024_08_30_125755) do
   create_table "event_questions", id: :serial, force: :cascade do |t|
     t.integer "event_id"
     t.boolean "multiple_choices", default: false, null: false
-    t.boolean "required", default: false, null: false
     t.boolean "admin", default: false, null: false
     t.string "disclosure", null: false
     t.string "type", null: false

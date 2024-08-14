@@ -26,10 +26,10 @@ class EventsController < CrudController
         :_destroy
       ],
       application_questions_attributes: [
-        :id, :question, :choices, :multiple_choices, :_destroy, :required
+        :id, :question, :choices, :multiple_choices, :disclosure, :type, :derived_from_question_id, :_destroy
       ],
       admin_questions_attributes: [
-        :id, :question, :choices, :multiple_choices, :_destroy
+        :id, :question, :choices, :multiple_choices, :disclosure, :type, :derived_from_question_id, :_destroy
       ]
     }]
 

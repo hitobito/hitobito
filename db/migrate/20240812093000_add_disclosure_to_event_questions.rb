@@ -14,5 +14,6 @@ class AddDisclosureToEventQuestions < ActiveRecord::Migration[6.1]
     end
 
     change_column_null(:event_questions, :disclosure, false)
+    remove_column(:event_questions, :required, :boolean, default: false)
   end
 end

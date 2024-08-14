@@ -37,10 +37,10 @@ class Event::Question < ActiveRecord::Base
      dependent: :destroy
 
   DISCLOSURE_VALUES  = %w[optional required hidden].freeze
-  i18n_enum :disclosure, DISCLOSURE_VALUES #, scopes: true, queries: true
+  i18n_enum :disclosure, DISCLOSURE_VALUES, queries: true
 
   attribute :type, default: "Event::Question::Default"
-  attribute :disclosure, default: :optional
+  # attribute :disclosure, default: :optional
 
   validates_by_schema
 
@@ -49,7 +49,7 @@ class Event::Question < ActiveRecord::Base
   validates :question, presence: {message: :admin_blank}, if: :admin?
   validates :question, presence: {message: :application_blank}, unless: :admin?
   validates :disclosure, inclusion: {in: DISCLOSURE_VALUES}, allow_blank: true
-  validates :disclosure, presence: true, unless: :standard?
+  validates :disclosure, presence: true, unless: :global?
   validates :derived_from_question_id, uniqueness: { scope: :event_id }, allow_blank: true, if: :event_id
 
   after_create :add_answer_to_participations
@@ -62,7 +62,7 @@ class Event::Question < ActiveRecord::Base
     [
       # needed for the required attribute mark in forms
       # as the relevant validation is conditional
-      :question
+      :question, :disclosure
     ]
   end
 
@@ -80,17 +80,20 @@ class Event::Question < ActiveRecord::Base
     question&.truncate(30)
   end
 
-  def standard?
+  def global?
     event_id.blank?
   end
 
-  def serialize_answer(value)
-    value
+  def derived?
+    derived_from_question_id.present?
   end
 
   def validate_answer
-    true
   end
+
+  def before_validate_answer(answer)
+  end
+
 
   def derive_for_existing_events
     existing_event_ids = Event.where.not(id: derived_questions.pluck(:event_id)).pluck(:id)

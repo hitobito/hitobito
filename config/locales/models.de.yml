@@ -706,7 +706,11 @@ de:
         question: Frage
         choices: Mögliche Antworten
         multiple_choices: Mehrfachauswahl
-        required: Antwort obligatorisch
+        disclosure: Angabe
+        disclosures: 
+          required: Obligatorisch
+          optional: Optional
+          hidden: Nicht angezeigt
 
       admin_questions:
         question: Frage

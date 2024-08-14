@@ -23,26 +23,8 @@
 #
 
 class Event::Question::AhvNumber < Event::Question
-
-  AHV_NUMBER_REGEX = /\A\d{3}\.\d{4}\.\d{4}\.\d{2}\z/
-
-  def validate_ahv_number
-  end
-
   def validate_answer(answer)
-    ahv_number = answer.answer
-    return if ahv_number.blank?
-
-    if !AHV_NUMBER_REGEX.match?(ahv_number)
-      answer.errors.add(:answer, :must_be_social_security_number_with_correct_format)
-      return
-    end
-    unless checksum_validate(ahv_number).valid?
-      answer.errors.add(:answer, :must_be_social_security_number_with_correct_checksum)
-    end
-  end
-
-def checksum_validate(ahv_number)
-    SocialSecurityNumber::Validator.new(number: ahv_number.to_s, country_code: "ch")
+    validator = AhvNumberValidator.new(attributes: :answer)
+    validator.validate(answer)
   end
 end

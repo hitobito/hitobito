@@ -183,8 +183,8 @@ describe PeopleController, js: true do
     end
 
     it "can add a person to a household" do
-      person.update!(household_key: "my-household")
-      housemate = create_person("Housemate", household_key: "my-household")
+      person.update!(household_key: 1234)
+      housemate = create_person("Housemate", household_key: 1234)
 
       prospective_housemate = create_person("Prospective Housemate")
 
@@ -204,9 +204,9 @@ describe PeopleController, js: true do
     end
 
     it "can leave a household" do
-      person.update!(household_key: "my-household")
-      housemate1 = create_person("Housemate1", household_key: "my-household")
-      housemate2 = create_person("Housemate2", household_key: "my-household")
+      person.update!(household_key: 1234)
+      housemate1 = create_person("Housemate1", household_key: 1234)
+      housemate2 = create_person("Housemate2", household_key: 1234)
 
       visit edit_group_person_path(group_id: person.primary_group_id, id: person.id)
       expect(page).to have_field("household", checked: true)
@@ -227,8 +227,8 @@ describe PeopleController, js: true do
     end
 
     it "can dissolve a household" do
-      person.update!(household_key: "my-household")
-      housemate = create_person("Housemate", household_key: "my-household")
+      person.update!(household_key: 1234)
+      housemate = create_person("Housemate", household_key: 1234)
 
       visit edit_group_person_path(group_id: person.primary_group_id, id: person.id)
       expect(page).to have_field("household", checked: true)
@@ -248,8 +248,8 @@ describe PeopleController, js: true do
 
     it "does not add person to household if household is invalid" do
       expect_any_instance_of(Person::Household).to receive(:valid?).and_return(false)
-      person.update!(household_key: "my-household")
-      create_person("Housemate", household_key: "my-household")
+      person.update!(household_key: 1234)
+      create_person("Housemate", household_key: 1234)
 
       prospective_housemate = create_person("Prospective Housemate")
 

@@ -70,7 +70,7 @@ class EventSeeder
   end
 
   def course_attributes(values)
-    kind = @@kinds.shuffle.first
+     kind = @@kinds.shuffle.first
      values.merge({
        name: "#{kind.try(:short_name)} #{values[:number]}".strip,
        kind_id: kind.try(:id),

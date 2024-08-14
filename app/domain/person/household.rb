@@ -165,7 +165,7 @@ class Person::Household
   end
 
   def next_key
-    Sequence.increment!('household_sequence')
+    Sequence.increment!("household_sequence")
   end
 
   def update_housemate(housemate, people, person)

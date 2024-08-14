@@ -82,7 +82,7 @@ class People::HouseholdList
       .select(:household_key)
       .select(:id)
       .select("1 AS \"member_count\"")
-      .select("CAST(#{people_table}.\"id\" AS TEXT) AS \"key\"")
+      .select("#{people_table}.\"id\" AS \"key\"")
       .where(household_key: nil)
       .order(:id)
   end

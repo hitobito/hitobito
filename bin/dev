@@ -1,8 +1,8 @@
 #!/usr/bin/env sh
 
-if ! gem list foreman -i --silent; then
-  echo "Installing foreman..."
-  gem install foreman
+if ! gem list overmind -i --silent; then
+  echo "Installing overmind..."
+  gem install overmind
 fi
 
 if ! gem list mailcatcher -i --silent; then
@@ -10,4 +10,4 @@ if ! gem list mailcatcher -i --silent; then
   gem install mailcatcher
 fi
 
-exec foreman start -f Procfile "$@"
+OVERMIND_SHOW_TIMESTAMPS=1 OVERMIND_CAN_DIE=migrate exec overmind start -f Procfile.dev "$@"

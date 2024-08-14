@@ -182,7 +182,7 @@ describe Person::Household do
       leader.household_people_ids = [member.id]
       household(leader).send(:save)
 
-      expect(leader.reload.household_key).to eq "1"
+      expect(leader.reload.household_key).to eq 1
       expect(leader.household_people).to eq [member]
     end
 
@@ -195,7 +195,7 @@ describe Person::Household do
       other.household_people_ids = [leader.id, member.id]
       household(other).send(:save)
 
-      expect(other.reload.household_key).to eq "1"
+      expect(other.reload.household_key).to eq 1
       expect(other.household_people).to match_array [leader, member]
       expect(other.town).to eq "Greattown"
       expect(member.reload.town).to eq "Greattown"
@@ -271,7 +271,7 @@ describe Person::Household do
       end.to change { PaperTrail::Version.count }.by(3)
       expect(leader.reload.household_key).to be_nil
       expect(leader.household_people).to be_empty
-      expect(member.reload.household_key).to eq "1"
+      expect(member.reload.household_key).to eq 1
     end
 
     it "creates Papertrail entries at the household deletion" do

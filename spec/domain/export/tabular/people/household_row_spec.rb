@@ -48,7 +48,7 @@ describe Export::Tabular::People::HouseholdRow do
 
   describe "for households" do
     def person(first_name, last_name)
-      Fabricate(:person, first_name: first_name, last_name: last_name, household_key: SecureRandom.uuid)
+      Fabricate(:person, first_name: first_name, last_name: last_name, household_key: 1)
     end
 
     it "treats blank last name as first present lastname" do

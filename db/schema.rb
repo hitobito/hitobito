@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_08_05_071727) do
+ActiveRecord::Schema.define(version: 2024_08_13_124433) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -880,7 +880,7 @@ ActiveRecord::Schema.define(version: 2024_08_05_071727) do
     t.datetime "locked_at"
     t.string "authentication_token"
     t.boolean "show_global_label_formats", default: true, null: false
-    t.integer "household_key"
+    t.string "household_key"
     t.string "event_feed_token"
     t.string "unlock_token"
     t.string "family_key"

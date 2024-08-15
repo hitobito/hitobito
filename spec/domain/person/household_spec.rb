@@ -45,8 +45,8 @@ describe Person::Household do
 
     it "adds all household people" do
       other = create(Group::BottomLayer::Leader, groups(:bottom_layer_one))
-      other.update(household_key: 1)
-      member.update(household_key: 1)
+      other.update(household_key: "1")
+      member.update(household_key: "1")
 
       household = assign_household(leader, member)
 
@@ -66,8 +66,8 @@ describe Person::Household do
     end
 
     it "does not add another non writeable person" do
-      leader.update(household_key: 1)
-      member.update(household_key: 1)
+      leader.update(household_key: "1")
+      member.update(household_key: "1")
 
       other = create(Group::TopGroup::Leader, groups(:top_group))
       household = assign_household(member, other)
@@ -78,8 +78,8 @@ describe Person::Household do
     end
 
     it "does add another non writable person if address identical" do
-      leader.update(household_key: 1)
-      member.update(household_key: 1)
+      leader.update(household_key: "1")
+      member.update(household_key: "1")
 
       other = create(Group::TopGroup::Leader, groups(:top_group))
       other.update(town: "Greattown", zip_code: 3456, street: "Greatstreet", housenumber: 345)
@@ -93,8 +93,8 @@ describe Person::Household do
     it "does add another writable person if address is different" do
       other = create(Group::BottomLayer::Leader, groups(:bottom_layer_one))
       other.update(town: "Greattown")
-      leader.update(household_key: 1)
-      other.update(household_key: 1)
+      leader.update(household_key: "1")
+      other.update(household_key: "1")
 
       household = assign_household(other, member)
 
@@ -178,24 +178,24 @@ describe Person::Household do
     end
 
     it "adds person to persisted household" do
-      member.update(household_key: 1)
+      member.update(household_key: "1")
       leader.household_people_ids = [member.id]
       household(leader).send(:save)
 
-      expect(leader.reload.household_key).to eq 1
+      expect(leader.reload.household_key).to eq "1"
       expect(leader.household_people).to eq [member]
     end
 
     it "combines two existing households" do
       other = create(Group::BottomLayer::Leader, groups(:bottom_layer_one))
-      member.update(household_key: 1)
-      leader.update(household_key: 2)
+      member.update(household_key: "1")
+      leader.update(household_key: "2")
 
       other.attributes = leader.attributes.slice(*Person::ADDRESS_ATTRS)
       other.household_people_ids = [leader.id, member.id]
       household(other).send(:save)
 
-      expect(other.reload.household_key).to eq 1
+      expect(other.reload.household_key).to eq "1"
       expect(other.household_people).to match_array [leader, member]
       expect(other.town).to eq "Greattown"
       expect(member.reload.town).to eq "Greattown"
@@ -252,8 +252,8 @@ describe Person::Household do
 
   context "#remove" do
     it "clears two people household" do
-      member.update(household_key: 1)
-      leader.update(household_key: 1)
+      member.update(household_key: "1")
+      leader.update(household_key: "1")
 
       household(leader).send(:remove)
       expect(leader.reload.household_key).to be_nil
@@ -262,21 +262,21 @@ describe Person::Household do
 
     it "removes person from 3 people household" do
       other = create(Group::BottomLayer::Leader, groups(:bottom_layer_one))
-      member.update(household_key: 1)
-      leader.update(household_key: 1)
-      other.update(household_key: 1)
+      member.update(household_key: "1")
+      leader.update(household_key: "1")
+      other.update(household_key: "1")
 
       expect do
         household(leader).send(:remove)
       end.to change { PaperTrail::Version.count }.by(3)
       expect(leader.reload.household_key).to be_nil
       expect(leader.household_people).to be_empty
-      expect(member.reload.household_key).to eq 1
+      expect(member.reload.household_key).to eq "1"
     end
 
     it "creates Papertrail entries at the household deletion" do
-      member.update(household_key: 1)
-      leader.update(household_key: 1)
+      member.update(household_key: "1")
+      leader.update(household_key: "1")
 
       expect do
         household(leader).send(:remove)
@@ -287,9 +287,9 @@ describe Person::Household do
 
     it "creates Papertrail entries for removal from 3 people household" do
       other = create(Group::BottomLayer::Leader, groups(:bottom_layer_one))
-      member.update(household_key: 1)
-      leader.update(household_key: 1)
-      other.update(household_key: 1)
+      member.update(household_key: "1")
+      leader.update(household_key: "1")
+      other.update(household_key: "1")
 
       expect do
         household(leader).send(:remove)

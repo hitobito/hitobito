@@ -86,6 +86,8 @@ module Hitobito
     config.active_record.belongs_to_required_by_default = false
     config.action_controller.per_form_csrf_tokens = true
 
+    # ActiveJob is only used to deliver emails in the background (`deliver_later`).
+    # Otherwise, we use Delayed Job directly with jobs inheriting from our `BaseJob`.
     config.active_job.queue_adapter = :delayed_job
 
     config.middleware.insert_before Rack::ETag, Rack::Deflater

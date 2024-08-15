@@ -180,8 +180,6 @@ RSpec.configure do |config|
     double({enqueue!: nil})
   end
 
-  config.include Job::TestHelpers, :tests_active_jobs
-
   # graphiti
   config.include GraphitiSpecHelpers::RSpec
   config.include GraphitiSpecHelpers::Sugar

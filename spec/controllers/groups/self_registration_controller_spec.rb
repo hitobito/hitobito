@@ -224,15 +224,15 @@ describe Groups::SelfRegistrationController do
           end.to raise_error(RuntimeError)
         end
 
-        it "does not send any emails when no email provided", :tests_active_jobs do
-          expect do
+        it "does not send any emails when no email provided" do
+          expect_no_enqueued_mail_jobs do
             post :create, params: {
               group_id: group.id,
               wizards_register_new_user_wizard: {
                 new_user_form: {first_name: "Bob", last_name: "Miller"}
               }
             }
-          end.not_to have_enqueued_mail
+          end
         end
 
         it "sends password reset instructions" do
@@ -246,17 +246,17 @@ describe Groups::SelfRegistrationController do
           end.to change { ActionMailer::Base.deliveries.count }.by(1)
         end
 
-        it "sends notification mail", :tests_active_jobs do
+        it "sends notification mail" do
           group.update(self_registration_notification_email: "notification@example.com")
 
-          expect do
+          expect_enqueued_mail_jobs(count: 1) do
             post :create, params: {
               group_id: group.id,
               wizards_register_new_user_wizard: {
                 new_user_form: {first_name: "Bob", last_name: "Miller"}
               }
             }
-          end.to have_enqueued_mail
+          end
         end
       end
     end

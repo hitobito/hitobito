@@ -174,6 +174,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   validate :assert_application_closing_is_after_opening
   validate :assert_required_contact_attrs_valid
   validate :assert_hidden_contact_attrs_valid
+  validates_associated :application_questions, :admin_questions
 
   ### CALLBACKS
 
@@ -368,7 +369,6 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   def init_questions
     self.application_questions = Question.global.application.map(&:derive)
-    self.admin_questions = Question.global.admin.map(&:derive)
   end
 
   def course?

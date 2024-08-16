@@ -34,13 +34,12 @@ class Event::Question < ActiveRecord::Base
 
   has_many :answers, dependent: :destroy
   has_many :derived_questions, class_name: "Event::Question", foreign_key: :derived_from_question_id,
-     dependent: :destroy
+    dependent: :destroy, inverse_of: :derived_from_question
 
-  DISCLOSURE_VALUES  = %w[optional required hidden].freeze
+  DISCLOSURE_VALUES = %w[optional required hidden].freeze
   i18n_enum :disclosure, DISCLOSURE_VALUES, queries: true
 
-  attribute :type, default: "Event::Question::Default"
-  # attribute :disclosure, default: :optional
+  attribute :type, default: -> { Event::Question::Default.sti_name }
 
   validates_by_schema
 
@@ -48,10 +47,10 @@ class Event::Question < ActiveRecord::Base
   # so we can have different error messages
   validates :question, presence: {message: :admin_blank}, if: :admin?
   validates :question, presence: {message: :application_blank}, unless: :admin?
-  validates :disclosure, inclusion: {in: DISCLOSURE_VALUES}, allow_blank: true
   validates :disclosure, presence: true, unless: :global?
-  validates :derived_from_question_id, uniqueness: { scope: :event_id }, allow_blank: true, if: :event_id
+  validates :derived_from_question_id, uniqueness: {scope: :event_id}, allow_blank: true, if: :event_id
 
+  before_create :assign_derived_attributes, if: :derived?
   after_create :add_answer_to_participations
 
   scope :global, -> { where(event_id: nil) }
@@ -69,9 +68,15 @@ class Event::Question < ActiveRecord::Base
   def derive
     return unless event_id.blank?
 
-    self.dup.tap do |derived_question|
+    dup.tap do |derived_question|
       derived_question.derived_from_question = self
     end
+  end
+
+  # most attributes of global questions must not be overriden by derived questions
+  def assign_derived_attributes
+    keep_attributes = %w[id event_id disclosure derived_from_question_id]
+    assign_attributes(derived_from_question.attributes.except(*keep_attributes))
   end
 
   def label
@@ -94,7 +99,6 @@ class Event::Question < ActiveRecord::Base
   def before_validate_answer(answer)
   end
 
-
   def derive_for_existing_events
     existing_event_ids = Event.where.not(id: derived_questions.pluck(:event_id)).pluck(:id)
 
@@ -105,6 +109,17 @@ class Event::Question < ActiveRecord::Base
       existing_event_ids.map do |event_id|
         derive&.tap { |derived_question| derived_question.update!(event_id:) }
       end.compact
+    end
+  end
+
+  def self.seed_global(question_data)
+    question_data.map do |attributes|
+      global_question = Event::Question.find_or_initialize_by(
+        event_id: attributes.delete(:event_id),
+        question: attributes.delete(:question)
+      )
+      global_question.update!(attributes)
+      global_question
     end
   end
 

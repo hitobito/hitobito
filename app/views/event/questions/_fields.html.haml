@@ -5,9 +5,17 @@
 
 = f.hidden_field(:type)
 = f.hidden_field(:derived_from_question_id)
-= f.labeled_input_field(:question)
-= f.labeled_input_field(:choices, help: t('events.form.explain_choices'))
-= f.labeled_boolean_field(:multiple_choices)
+
+- if f.object.derived?
+  = f.labeled(:question) do
+    = f.hidden_field(:question)
+    %p.py-2= f.object.question
+
+- else
+  = f.labeled_input_field(:question)
+  = f.labeled_input_field(:choices, help: t('events.form.explain_choices'))
+  = f.labeled_boolean_field(:multiple_choices)
+
 = f.labeled(:disclosure) do
   - Event::Question::DISCLOSURE_VALUES.each do |key|
     = f.inline_radio_button(:disclosure, key, f.object.disclosure_label(key))

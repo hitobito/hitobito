@@ -311,7 +311,7 @@ ActiveRecord::Schema.define(version: 2024_08_30_125755) do
     t.integer "event_id"
     t.boolean "multiple_choices", default: false, null: false
     t.boolean "admin", default: false, null: false
-    t.string "disclosure", null: false
+    t.string "disclosure"
     t.string "type", null: false
     t.integer "derived_from_question_id"
     t.index ["derived_from_question_id"], name: "index_event_questions_on_derived_from_question_id"

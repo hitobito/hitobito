@@ -11,12 +11,14 @@ Für den Entwicklungsalltag relevante Informationen sollen in zusätzlichen Orte
 
 Architekturrelevante Entscheidungen sollen grundsätzlich mit dem Hitobito Architektur Board abgesprochen werden.
 Als architekturrelevant sehen wir unter anderem folgende Aspekte (Liste nicht abschliessend):
+
 - Einführung neuer Konzepte oder grundlegende Änderungen an bestehenden Konzepten
 - Neue Gems/Dependencies zum Projekt hinzufügen
 - Anpassungen am Entwicklungs-/Buildsetup (Checks, ...)
 - ...
 
 Je nach Tragweite sollen diese Entscheidungen hier dokumentiert werden. Das Vorgehen ist wie folgt:
+
 - Eine neue Datei im Ordner `doc/architecture/adr/` erstellen, basierend auf der [ADR Vorlage](./adr/template.md).
   Die nächste freie Nummer wird als Prefix verwendet. Darauf wird die Entscheidung beschrieben und hier unter "Vorschläge" verlinkt.
 - Für die Änderungen ein Merge Request erstellen.
@@ -28,13 +30,13 @@ Je nach Tragweite sollen diese Entscheidungen hier dokumentiert werden. Das Vorg
 
 ## Vorschläge
 
-- [008 Foreign Keys](./adr/008_foreign_keys.md)
 - [003 DB as a Service](./adr/003_db_as_a_service.md)
 - [002 Wechsel RDBMS](./adr/002_wechsel_rdbms.md)
 - [001 Kundenprojekte als App vs. in Wagon](./adr/001_kundenprojekte_app_vs_wagon.md)
 
 ## Abgeschlossen
 
+- [008 Foreign Keys](./adr/008_foreign_keys.md)
 - [004 S3 Storage](./adr/004_s3_storage.md)
 - [005 JSON API](./adr/005_json_api.md)
 - [006 ViewComponents](./adr/006_view_components.md)

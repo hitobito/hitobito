@@ -32,7 +32,7 @@ class SearchStrategies::SqlConditionBuilder
 
       if converted_table_name.constantize
           .columns_hash[@field].type == :integer
-        Arel::Nodes::SqlLiteral.new("#{table[@field].name}::text")
+        Arel::Nodes::SqlLiteral.new("#{table.name}." + "#{table[@field].name}::text")
       else
         table[@field]
       end

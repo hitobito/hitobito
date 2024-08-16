@@ -44,5 +44,4 @@ class Event::Answer < ActiveRecord::Base
   def validate_with_question
     question.validate_answer(self)
   end
-
 end

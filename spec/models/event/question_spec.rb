@@ -82,22 +82,23 @@ describe Event::Question do
     end
   end
 
-  describe '#derive_for_existing_events' do
+  describe "#derive_for_existing_events" do
     subject { described_class.create(question: "Standard?", disclosure: :optional, event: nil) }
+
     let(:event) { events(:top_course) }
     let(:already_derived_question) do
       event.questions.create(question: "Already derived?", disclosure: :optional,
-                             event: event, derived_from_question: subject)
+        event: event, derived_from_question: subject)
     end
 
-    it 'creates copies of the question for existing events' do
+    it "creates copies of the question for existing events" do
       already_derived_question
       derived_questions = subject.derive_for_existing_events
       expect(derived_questions.count).to eq(1)
       expect(derived_questions.map(&:event_id)).not_to include(event.id)
     end
 
-    it 'links existing answers to the new copies of the questions' do
+    it "links existing answers to the new copies of the questions" do
       participation = Fabricate(:event_participation, event: event)
       answer = Event::Answer.create(question: subject, participation:, answer: "Existing")
       derived_questions = subject.derive_for_existing_events
@@ -107,11 +108,12 @@ describe Event::Question do
     end
   end
 
-  describe '#derive' do
+  describe "#derive" do
     subject { described_class.create(question: "Standard?", disclosure: :optional, event: nil) }
+
     let(:event) { events(:top_course) }
 
-    it 'creates a copy of the question' do
+    it "creates a copy of the question" do
       derived_question = subject.derive
       expect(derived_question.derived_from_question).to eq(subject)
       derived_question.event = event

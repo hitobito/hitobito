@@ -32,8 +32,8 @@ class StepsComponent::ContentComponent < StepsComponent::IteratingComponent
 
   def fields_for(buttons: true, &)
     partial_name = @partial.split("/").last
-    content = @form.fields_for(partial_name, model) do |form|
-      form.error_messages
+    content = @form.fields_for(partial_name, model) do |fields|
+      @form.error_messages + fields.error_messages
     end
     content += @form.fields_for(partial_name, model, &)
     content += bottom_toolbar if buttons

@@ -67,13 +67,6 @@ describe StepsComponent::ContentComponent, type: :component do
       allow_any_instance_of(ActionView::Base).to receive(:policy_finder).and_return(policy_finder)
     end
 
-    def stub_step(&block)
-      stub_const("DummyStep", Class.new(Wizards::Step) do # rubocop:disable Lint/ConstantDefinitionInBlock
-        instance_eval(&block)
-      end)
-      wizard.steps = [DummyStep]
-    end
-
     it "does not render if partial index is above current step" do
       expect(iterator).to receive(:index).and_return(1)
       expect(component).not_to be_render
@@ -90,6 +83,13 @@ describe StepsComponent::ContentComponent, type: :component do
       allow(Wizards::Steps::NewUserForm).to receive(:support_company).and_return(false)
       expect(html).to have_field("Haupt-E-Mail")
       expect(html).not_to have_field("Firma")
+    end
+
+    it "renders wizard and step errors" do
+      wizard.errors.add(:base, "wizard error")
+      wizard.step_at(0).errors.add(:base, "step error")
+      expect(html).to have_css ".alert-danger li", text: "step error"
+      expect(html).to have_css ".alert-danger li", text: "wizard error"
     end
 
     it "shows check if policy_finder needs acceptance" do

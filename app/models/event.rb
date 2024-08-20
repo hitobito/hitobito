@@ -211,7 +211,6 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
     # Events with at least one date in the given year
     def in_year(year, subquery = false)
-      # PG_TODO maybe find a cleaner solution than passing a parameter
       year = Time.zone.today.year if year.to_i <= 0
       start_at = Time.zone.parse "#{year}-01-01"
       finish_at = start_at + 1.year

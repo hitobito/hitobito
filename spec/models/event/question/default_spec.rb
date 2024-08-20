@@ -84,13 +84,13 @@ describe Event::Question::Default do
     end
 
     it "may be required" do
-      subject.required = true
+      subject.disclosure = :required
 
       is_expected.to be_valid
     end
 
     it "may be optional" do
-      subject.required = false
+      subject.disclosure = :optional
 
       is_expected.to be_valid
     end

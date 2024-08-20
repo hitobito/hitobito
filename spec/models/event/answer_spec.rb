@@ -54,7 +54,7 @@ describe Event::Answer do
 
   context "validates answers to single-answer questions correctly: " do
     describe "a non-required question" do
-      let(:question) { Fabricate(:event_question, required: false, choices: "Ja") }
+      let(:question) { Fabricate(:event_question, disclosure: :optional, choices: "Ja") }
 
       subject(:no_answer_given) { build_answer("0") } # no choice
 

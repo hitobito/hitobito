@@ -235,11 +235,6 @@ class EventsController < CrudController
     super
   end
 
-  def assign_question_attrs
-    questions_attrs = model_params.delete(:contact_attrs)
-    nil if questions_attrs.blank?
-  end
-
   def assign_contact_attrs
     contact_attrs = model_params.delete(:contact_attrs)
     return if contact_attrs.blank?

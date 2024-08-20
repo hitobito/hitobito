@@ -365,9 +365,9 @@ describe EventsController do
       end
 
       it "creates, updates and destroys questions" do
-        q1 = event.questions.create!(question: "Who?")
-        q2 = event.questions.create!(question: "What?")
-        q3 = event.questions.create!(question: "Payed?", admin: true)
+        q1 = event.questions.create!(question: "Who?", disclosure: :optional)
+        q2 = event.questions.create!(question: "What?", disclosure: :optional)
+        q3 = event.questions.create!(question: "Payed?", disclosure: :optional, admin: true)
 
         expect do
           put :update, params: {
@@ -376,13 +376,13 @@ describe EventsController do
             event: {
               name: "testevent",
               application_questions_attributes: {
-                q1.id.to_s => {id: q1.id, question: "Whoo?"},
+                q1.id.to_s => {id: q1.id, question: "Whoo?", disclosure: :optional},
                 q2.id.to_s => {id: q2.id, _destroy: true},
-                "999" => {question: "How much?", choices: "1,2,3"}
+                "999" => {question: "How much?", choices: "1,2,3", disclosure: :optional}
               },
               admin_questions_attributes: {
                 q3.id.to_s => {id: q3.id, _destroy: true},
-                "999" => {question: "Powned?", choices: "ja, nein"}
+                "999" => {question: "Powned?", choices: "ja, nein", disclosure: :optional}
               }
             }
           }

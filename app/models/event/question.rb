@@ -93,10 +93,10 @@ class Event::Question < ActiveRecord::Base
     derived_from_question_id.present?
   end
 
-  def validate_answer
+  def validate_answer(_answer)
   end
 
-  def before_validate_answer(answer)
+  def before_validate_answer(_answer)
   end
 
   def derive_for_existing_events

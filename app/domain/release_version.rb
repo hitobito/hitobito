@@ -12,7 +12,7 @@ require "date"
 # app/domain/release_version.rb.
 class ReleaseVersion
   def current_version(stage = :production)
-    `#{tag_lookup_cmd(stage)} | head -n 1`.chomp
+    run("#{tag_lookup_cmd(stage)} | head -n 1 | #{tag_normalizer_cmd(stage)}").chomp
   end
 
   def next_integration_version
@@ -42,7 +42,7 @@ class ReleaseVersion
   end
 
   def all_versions(stage = :production)
-    `#{tag_lookup_cmd(stage)}`.chomp.split
+    run(tag_lookup_cmd(stage)).chomp.split
   end
 
   def remote_version(stage, repo)
@@ -53,15 +53,20 @@ class ReleaseVersion
       "head -n 1"
     ].join(" | ")
 
-    `#{cmd}`
+    run(cmd)
   end
 
   def days_since(version)
-    tag_date = `git log #{version} -1 --format="%ct"`.chomp
+    tag_date = run(%(git log #{version} -1 --format="%ct")).chomp
     (Time.now.utc.to_date - Time.at(tag_date.to_i).to_date).to_i # rubocop:disable Rails/TimeZone
   end
 
   private
+
+  def run(cmd)
+    # puts cmd
+    `#{cmd}`
+  end
 
   def next_patch_version(parts)
     parts[0..1] + [parts[2].succ]
@@ -76,7 +81,14 @@ class ReleaseVersion
   end
 
   def current_sha
-    `git rev-parse --short HEAD`
+    run("git rev-parse --short HEAD")
+  end
+
+  def tag_normalizer_cmd(stage)
+    case stage
+    when :production then "cut -d- -f1"
+    when :integration then "cat"
+    end
   end
 
   def tag_lookup_cmd(stage)
@@ -90,7 +102,7 @@ class ReleaseVersion
   def version_grep_cmd(stage)
     pattern =
       case stage
-      when :production then [version_grep_pattern(stage)]
+      when :production then [version_grep_pattern(stage), version_grep_pattern(:integration)]
       when :integration then [version_grep_pattern(stage), version_grep_pattern(:production)]
       end
 

@@ -368,7 +368,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   end
 
   def init_questions
-    self.application_questions = Question.global.application.map(&:derive)
+    self.application_questions = Question.global.where(event_type: [self.class.sti_name, nil])
+                                         .application.map(&:derive)
+    self.admin_questions = Question.global.where(event_type: [self.class.sti_name, nil])
+                                          .admin.map(&:derive)
   end
 
   def course?

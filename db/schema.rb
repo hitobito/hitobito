@@ -314,6 +314,7 @@ ActiveRecord::Schema.define(version: 2024_08_30_125755) do
     t.string "disclosure"
     t.string "type", null: false
     t.integer "derived_from_question_id"
+    t.string "event_type"
     t.index ["derived_from_question_id"], name: "index_event_questions_on_derived_from_question_id"
     t.index ["event_id"], name: "index_event_questions_on_event_id"
   end

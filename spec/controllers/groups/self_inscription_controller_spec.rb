@@ -57,12 +57,22 @@ describe Groups::SelfInscriptionController do
         end
 
         context "when authorized" do
-          it "redirects to self_inscription" do
-            sign_in(person)
+          before { sign_in(person) }
 
+          it "redirects to self_inscription" do
             get :show, params: {group_id: group.id}
 
             is_expected.to render_template("groups/self_inscription/show")
+          end
+
+          context "when already member of the group" do
+            before { Fabricate(:role, type: Group::TopGroup::Member.sti_name, person: person, group: group) }
+
+            it "redirects to group" do
+              get :show, params: {group_id: group.id}
+
+              is_expected.to redirect_to(group_person_path(group.id, person))
+            end
           end
         end
       end

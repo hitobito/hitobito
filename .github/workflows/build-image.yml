@@ -59,7 +59,7 @@ jobs:
           username: ${{ secrets.PUZZLE_REGISTRY_USERNAME }}
           password: ${{ secrets.PUZZLE_REGISTRY_PASSWORD }}
 
-      - uses: docker/build-push-action@v4
+      - uses: docker/build-push-action@v6
         with:
           context: .
           file: hitobito/Dockerfile
@@ -76,7 +76,7 @@ jobs:
             ${{ secrets.PUZZLE_REGISTRY }}/hitobito/${{ inputs.project }}/rails:${{ inputs.stage }}
           push: ${{ inputs.push }}
 
-      - uses: docker/build-push-action@v4
+      - uses: docker/build-push-action@v6
         with:
           context: .
           file: hitobito/Dockerfile

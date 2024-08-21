@@ -264,7 +264,9 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   ### VALIDATIONS
 
   if FeatureGate.disabled?("structured_addresses")
-    # data_quality is an enum; it's excluded to prevent the error `data_quality is not a number`
+    # data_quality is used as enum in https://github.com/hitobito/hitobito_sac_cas/blob/b25bb08eaa9733f903c9c9ce220fdafea1c21865/app/models/sac_cas/person.rb#L33
+    # validates_by_schema cannot be overridden inside a wagon because of the loading order,
+    # so it must be excluded in the core instead
     validates_by_schema except: [:email, :address, :data_quality]
     validates :address, length: {allow_nil: true, maximum: 1024}
   else

@@ -1,0 +1,113 @@
+name: "Prepare Composition Repo"
+
+on:
+  workflow_call:
+    inputs:
+      composition:
+        description: "Composition repository, e.g. hitobito/ose_composition_pbs"
+        type: string
+        required: true
+      composition_branch:
+        description: "Branch of composition-Repo to work on, mostly: devel or production"
+        type: string
+        required: true
+      version:
+        description: "next version number"
+        required: true
+        type: string
+      stage:
+        description: "Stage of Release to be prepared"
+        required: true
+        type: string
+      target_branch:
+        description: "Branch of individual repos, mostly: master"
+        required: false
+        type: string
+        default: "master"
+      dry_run:
+        description: "Only show commands to prepare, do not execute them"
+        required: false
+        type: string
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  prepare_release:
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: "Checkout composition repo"
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.composition }}
+          ref: ${{ inputs.composition_branch }}
+          submodules: true
+          fetch-depth: 0 # ALL the historiez, including ALL the branches
+          token: ${{ secrets.RELEASE_PREPARATION_TOKEN }}
+
+      - name: "update submodules to release-state"
+        env:
+          TARGET_BRANCH: ${{ inputs.target_branch }}
+        run: |
+          git submodule foreach "git fetch && git fetch --tags"
+          # although requested, the branch might not be present everywhere
+          if [[ $TARGET_BRANCH != "master" ]]; then
+            git submodule foreach "git branch --all --list '*${TARGET_BRANCH}*'"
+            git submodule foreach "git switch -c ${TARGET_BRANCH} --track origin/${TARGET_BRANCH}; true"
+            git submodule foreach "git switch master; git switch ${TARGET_BRANCH}; true"
+          else
+            git submodule foreach "git switch master"
+          fi
+          git submodule foreach "git merge --ff-only" && git submodule status
+
+      - name: "Set up Ruby"
+        uses: ruby/setup-ruby@v1
+        with:
+          working-directory: hitobito
+
+      - name: "Install and configure dependencies"
+        env:
+          TRANSIFEX_VERSION: "v1.6.4"
+          TRANSIFEX_TOKEN: ${{ secrets.TRANSIFEX_TOKEN }}
+        run: |
+          # ruby things
+          gem install cmdparse pastel
+
+          # transifex / translations
+          mkdir -p $HOME/.local/bin/
+          echo "$HOME/.local/bin/" >> $GITHUB_PATH
+          curl -L https://github.com/transifex/cli/releases/download/${TRANSIFEX_VERSION}/tx-linux-amd64.tar.gz | tar xz -C $HOME/.local/bin/
+          echo -e "[https://www.transifex.com]\napi_hostname = https://api.transifex.com\nhostname = https://www.transifex.com\nusername = api\npassword = $TRANSIFEX_TOKEN\nrest_hostname = https://rest.api.transifex.com\ntoken = $TRANSIFEX_TOKEN" > $HOME/.transifexrc
+
+          # git
+          git config --global advice.detachedHead false
+
+          # add hitobito-core to path
+          echo "${PWD}/hitobito/bin" >> $GITHUB_PATH
+
+      - name: "Configure Git-User for the Release-Commits"
+        run: |
+          # we could use gitub-actor for workflow_call, and last committers of
+          # all wagons for scheduled releases. for now, this is fine.
+          git config --global user.name "$(cd hitobito && git --no-pager log --format=format:'%an' -n 1)"
+          git config --global user.email "$(cd hitobito && git --no-pager log --format=format:'%ae' -n 1)"
+
+      - name: "Prepare composition-repo for release"
+        env:
+          NEXT_VERSION: ${{ inputs.version }}
+          RELEASE_STAGE: ${{ inputs.stage }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          echo "Preparing $NEXT_VERSION for $RELEASE_STAGE $DRY_RUN"
+          echo "---"
+          release version
+          version version
+          echo "---"
+          echo "release $RELEASE_STAGE $NEXT_VERSION $DRY_RUN"
+          if [[ -n "$DRY_RUN" ]]; then
+            release "$RELEASE_STAGE" "$NEXT_VERSION" "$DRY_RUN"
+          else
+            release "$RELEASE_STAGE" "$NEXT_VERSION"
+          fi

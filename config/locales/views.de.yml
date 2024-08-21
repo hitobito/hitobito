@@ -782,6 +782,9 @@ de:
         disabled: Die Selbstregistrierung ist für diese Gruppe deaktiviert
       create:
         role_saved: Die Rolle wurde erfolgreich gespeichert
+      form:
+        inscribe: Einschreiben
+        description: Hier kannst du dich für die Gruppe einschreiben.
 
   group/deleted_people:
     list:
@@ -2129,9 +2132,3 @@ de:
     not_found: Ungültiger Verifikationscode
     status_valid: Mitgliedschaft gültig
     status_invalid: Keine gültige Mitgliedschaft
-
-  wizards:
-    steps:
-      confirm_inscription:
-        inscribe: Einschreiben
-        description: Hier kannst du dich für die Gruppe einschreiben.

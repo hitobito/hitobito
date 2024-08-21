@@ -3,11 +3,11 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-%p= t('.description')
+%p= t('groups.self_inscription.form.description')
 
 = render_extensions :details
 
-= action_button(t('.inscribe'),
+= action_button(t('groups.self_inscription.form.inscribe'),
                   group_self_inscription_path,
                   nil,
                   method: :post)

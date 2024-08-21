@@ -1,0 +1,199 @@
+name: "Prepare, Build and Release a new Version"
+
+on:
+  workflow_dispatch: # Allow triggering manually
+    inputs:
+      composition:
+        description: "Composition repository, e.g. hitobito/ose_composition_generic"
+        type: string
+        required: true
+        default: "hitobito/ose_composition_generic"
+      stage:
+        description: "Stage of Release to be prepared"
+        required: true
+        type: choice
+        default: integration
+        options:
+          - integration
+          - production
+      release_type:
+        description: "Type of Release: regular, patch or custom"
+        required: true
+        type: choice
+        default: regular
+        options:
+          - regular
+          - patch
+          - custom
+      next_version:
+        description: "next version number, if release-type is custom"
+        required: false
+        type: string
+      target_branch:
+        description: "Branch of individual repos, mostly: master"
+        required: false
+        type: string
+        default: master
+      dry_run:
+        description: "Only show commands to prepare, do not execute them"
+        required: false
+        type: boolean
+        default: false
+  workflow_call:
+    inputs:
+      composition:
+        description: "Composition repository, e.g. hitobito/ose_composition_generic"
+        type: string
+        required: true
+      release_type:
+        description: "Type of Release: regular, patch or custom"
+        required: true
+        type: string
+        default: regular
+      next_version:
+        description: "next version number, if release-type is custom"
+        required: false
+        type: string
+      stage:
+        description: "Stage of Release to be prepared"
+        required: true
+        type: string
+      target_branch:
+        description: "Branch of individual repos, mostly: master"
+        required: false
+        type: string
+        default: master
+      dry_run:
+        description: "Only show commands to prepare, do not execute them"
+        required: false
+        type: boolean
+        default: false
+
+    # secrets:
+    #   PUZZLE_REGISTRY:
+    #     description: 'FQDN of the registry'
+    #     required: true
+    #   PUZZLE_REGISTRY_USERNAME:
+    #     description: 'Username for the registry-robot-account'
+    #     required: true
+    #   PUZZLE_REGISTRY_PASSWORD:
+    #     description: 'Password for the registry-robot-account'
+    #     required: true
+
+jobs:
+  settings:
+    uses: ./.github/workflows/stage-settings.yml
+    with:
+      repository: ${{ inputs.composition }}
+      stage: ${{ inputs.stage }}
+      release_type: ${{ inputs.release_type }}
+      dry_run: ${{ inputs.dry_run }}
+
+  # extract
+  version:
+    runs-on: ubuntu-latest
+
+    needs:
+      - settings
+
+    outputs:
+      version: ${{ steps.determine.outputs.version }}
+
+    steps:
+      - name: "Checkout composition"
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.composition }}
+          ref: ${{ needs.settings.outputs.composition_branch }}
+
+      - name: "Set up Ruby"
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler: none
+          ruby-version: '3.2'
+
+      - name: "Install dependencies"
+        run: |
+          gem install cmdparse
+
+      - name: "Get all tags from repo to determine the version"
+        run: |
+          git fetch --tags
+
+      - name: 'Install helper-script'
+        env:
+          VERSION_SOURCE: "https://raw.githubusercontent.com/hitobito/hitobito/master/bin/version"
+        run: |
+          mkdir -p bin
+          curl --silent -k  "$VERSION_SOURCE" > bin/version
+          chmod a+x bin/version
+
+      - name: "Determine next version"
+        id: determine
+        env:
+          RELEASE_TYPE: ${{ needs.settings.outputs.release_type }}
+          NEXT_VERSION: ${{ inputs.next_version }}
+        run: |
+          echo "Requesting next '$RELEASE_TYPE'-version"
+          next_version=$(bin/version suggest "$RELEASE_TYPE" "$NEXT_VERSION")
+
+          echo "next version: ${next_version}"
+          echo "version=${next_version}" >> "$GITHUB_OUTPUT"
+
+  prepare:
+    uses: ./.github/workflows/prepare.yml
+    needs:
+      - version
+      - settings
+    with:
+      composition: ${{ needs.settings.outputs.repo_name }}
+      composition_branch: ${{ needs.settings.outputs.composition_branch }}
+      version: ${{ needs.version.outputs.version }}
+      stage: ${{ inputs.stage }}
+      target_branch: ${{ inputs.target_branch }}
+      dry_run: ${{ needs.settings.outputs.dry_run }}
+    secrets: inherit
+
+  build:
+    uses: ./.github/workflows/build-image.yml
+    needs:
+      - settings
+      - version
+      # for ordering
+      - prepare
+    with:
+      composition: ${{ needs.settings.outputs.repo_name }}
+      source_ref: ${{ needs.settings.outputs.composition_branch }}
+      project: ${{ needs.settings.outputs.project }}
+      version: ${{ needs.version.outputs.version }}
+      stage: ${{ inputs.stage }}
+      push: ${{ ! inputs.dry_run }}
+    secrets: inherit
+
+  # deploy:
+  #   uses: ./.github/workflows/update_image.yml
+  #   needs:
+  #     - version
+  #     # just for ordering
+  #     - build
+  #   with:
+  #     repository: gitlab.puzzle.ch/pitc_hit/deployments/hitobito.git
+  #     file: ./deployments/${{ needs.settings.outputs.namespace_name }}/kustomization.yaml
+  #     image_tag: ${{ needs.version.outputs.version }}
+  #     image_ref: rails
+  #   secrets: inherit
+
+  # deploy_sphinx:
+  #   uses: ./.github/workflows/update_image.yml
+  #   needs:
+  #     - version
+  #     # just for ordering
+  #     - build
+  #     # avoid race-conditions when updating the repo
+  #     - deploy
+  #   with:
+  #     repository: gitlab.puzzle.ch/pitc_hit/deployments/hitobito.git
+  #     file: ./deployments/${{ needs.settings.outputs.namespace_name }}/kustomization.yaml
+  #     image_tag: ${{ needs.version.outputs.version }}
+  #     image_ref: sphinx
+  #   secrets: inherit

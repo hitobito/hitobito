@@ -67,26 +67,25 @@ describe Messages::LetterDispatch do
     end
   end
 
-  context 'household addresses' do
-
+  context "household addresses" do
     let(:housemate1) do
-      Fabricate(:person_with_address, first_name: 'Anton', last_name: 'Abraham',
-                                      country: not_default_country)
+      Fabricate(:person_with_address, first_name: "Anton", last_name: "Abraham",
+        country: not_default_country)
     end
     let(:housemate2) do
-      Fabricate(:person_with_address, first_name: 'Zora', last_name: 'Zaugg',
-                                      country: not_default_country)
+      Fabricate(:person_with_address, first_name: "Zora", last_name: "Zaugg",
+        country: not_default_country)
     end
     let(:other_housemate) do
-      Fabricate(:person_with_address, first_name: 'Altra', last_name: 'Mates',
-                                      country: not_default_country)
+      Fabricate(:person_with_address, first_name: "Altra", last_name: "Mates",
+        country: not_default_country)
     end
 
     before do
       Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one),
-                                                 person: housemate1)
+        person: housemate1)
       Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one),
-                                                 person: housemate2)
+        person: housemate2)
     end
 
     before do
@@ -186,9 +185,9 @@ describe Messages::LetterDispatch do
 
     it "adds all names from household address to address box and sorts them alphabetically" do
       message.update!(send_to_households: true)
-      housemate3 = Fabricate(:person_with_address, first_name: 'Mark', last_name: 'Hols', country: not_default_country)
-      housemate4 = Fabricate(:person_with_address, first_name: 'Jana', last_name: 'Nicks', country: not_default_country)
-      housemate5 = Fabricate(:person_with_address, first_name: 'Olivia', last_name: 'Berms', country: not_default_country)
+      housemate3 = Fabricate(:person_with_address, first_name: "Mark", last_name: "Hols", country: not_default_country)
+      housemate4 = Fabricate(:person_with_address, first_name: "Jana", last_name: "Nicks", country: not_default_country)
+      housemate5 = Fabricate(:person_with_address, first_name: "Olivia", last_name: "Berms", country: not_default_country)
       Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one), person: housemate3)
       Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one), person: housemate4)
       Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one), person: housemate5)
@@ -204,7 +203,7 @@ describe Messages::LetterDispatch do
     end
   end
 
-  context 'large batches' do
+  context "large batches" do
     let(:group) { groups(:bottom_layer_one) }
     let(:batch_size) { 3 }
 
@@ -214,7 +213,7 @@ describe Messages::LetterDispatch do
     let(:mailing_list) { mailing_lists(:leaders) }
 
     before do
-      stub_const('People::HouseholdList::BATCH_SIZE', batch_size)
+      stub_const("People::HouseholdList::BATCH_SIZE", batch_size)
       Subscription.create!(
         mailing_list: mailing_lists(:leaders),
         subscriber: groups(:bottom_layer_one),
@@ -229,13 +228,13 @@ describe Messages::LetterDispatch do
       end
     end
 
-    it 'successfully exports labels with grouped households' do
+    it "successfully exports labels with grouped households" do
       # count group members
-      amount_of_members = Person.all.select do |person|
+      amount_of_members = Person.all.count do |person|
         person.roles&.first&.type == Group::BottomLayer::Member.name ||
-        person.roles&.to_a&.at(1)&.type == Group::BottomLayer::Member.name ||
-        person.roles&.to_a&.at(2)&.type == Group::BottomLayer::Member.name
-      end.count
+          person.roles&.to_a&.at(1)&.type == Group::BottomLayer::Member.name ||
+          person.roles&.to_a&.at(2)&.type == Group::BottomLayer::Member.name
+      end
 
       expect(amount_of_members).to eq((households_count * household_size) + individuals_count + 1)
 
@@ -270,7 +269,7 @@ describe Messages::LetterDispatch do
     Fabricate.times(num, fabricator, country: not_default_country).tap do |people|
       people.each do |person|
         Fabricate.build(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one),
-                                                         person: person).save(validate: false)
+          person: person).save(validate: false)
       end
     end
   end

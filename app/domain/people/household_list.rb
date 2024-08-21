@@ -14,22 +14,22 @@ class People::HouseholdList
     @people_scope = people_scope
   end
 
-  def only_households_in_batches(&block)
-    return unless block_given?
+  def only_households_in_batches(&)
+    return unless block
 
-    fetch_in_batches(only_households, &block)
+    fetch_in_batches(only_households, &)
   end
 
-  def people_without_household_in_batches(&block)
-    return unless block_given?
+  def people_without_household_in_batches(&)
+    return unless block
 
-    fetch_in_batches(people_without_household, &block)
+    fetch_in_batches(people_without_household, &)
   end
 
-  def households_in_batches(&block)
-    return unless block_given?
+  def households_in_batches(&)
+    return unless block
 
-    fetch_in_batches(grouped_households, &block)
+    fetch_in_batches(grouped_households, &)
   end
 
   def grouped_households
@@ -156,10 +156,10 @@ class People::HouseholdList
         end
       end
 
-      batch_relation = relation.having('member_count < ? OR (member_count = ? AND id > ?)',
-                                       member_count_offset,
-                                       member_count_offset,
-                                       id_offset)
+      batch_relation = relation.having("member_count < ? OR (member_count = ? AND id > ?)",
+        member_count_offset,
+        member_count_offset,
+        id_offset)
     end
   end
 end

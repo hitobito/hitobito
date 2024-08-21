@@ -80,6 +80,9 @@ on:
     #     description: 'Password for the registry-robot-account'
     #     required: true
 
+permissions:
+  contents: write
+
 jobs:
   settings:
     uses: ./.github/workflows/stage-settings.yml

@@ -186,18 +186,12 @@ describe Messages::LetterDispatch do
 
     it "adds all names from household address to address box and sorts them alphabetically" do
       message.update!(send_to_households: true)
-      housemate3 = Fabricate(:person_with_address, first_name: 'Mark', last_name: 'Hols',
-                                                   country: not_default_country)
-      housemate4 = Fabricate(:person_with_address, first_name: 'Jana', last_name: 'Nicks',
-                                                   country: not_default_country)
-      housemate5 = Fabricate(:person_with_address, first_name: 'Olivia', last_name: 'Berms',
-                                                   country: not_default_country)
-      Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one),
-                                                 person: housemate3)
-      Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one),
-                                                 person: housemate4)
-      Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one),
-                                                 person: housemate5)
+      housemate3 = Fabricate(:person_with_address, first_name: 'Mark', last_name: 'Hols', country: not_default_country)
+      housemate4 = Fabricate(:person_with_address, first_name: 'Jana', last_name: 'Nicks', country: not_default_country)
+      housemate5 = Fabricate(:person_with_address, first_name: 'Olivia', last_name: 'Berms', country: not_default_country)
+      Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one), person: housemate3)
+      Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one), person: housemate4)
+      Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one), person: housemate5)
 
       create_household(housemate1, housemate3)
       create_household(housemate1, housemate4)
@@ -230,10 +224,8 @@ describe Messages::LetterDispatch do
       fabricate_valid_households(households_count, household_size)
 
       individuals_count.times do
-        person = Fabricate(:person_with_address,
-                           country: not_default_country)
-        Fabricate(Group::BottomLayer::Member.name, group: group,
-                                                   person: person)
+        person = Fabricate(:person_with_address, country: not_default_country)
+        Fabricate(Group::BottomLayer::Member.name, group: group, person: person)
       end
     end
 
@@ -250,9 +242,12 @@ describe Messages::LetterDispatch do
       expect { subject.run }.not_to raise_error
 
       amount_of_expected_mailings = recipient_entries.collect do |recipient|
-        recipient.person.household.household_key
+        recipient.person.household.household_key || recipient.person.id
       end.uniq.count
       expect(amount_of_expected_mailings).to eq(households_count + individuals_count + 1)
+
+      recipient_count = MailingLists::RecipientCounter.new(message.mailing_list, message.class.name, true)
+      expect(recipient_count.valid).to eq(households_count + individuals_count + 1)
       expect(message.reload.success_count).to eq(households_count + individuals_count + 1)
       expect(subject.run.finished?).to be_truthy
     end
@@ -272,8 +267,7 @@ describe Messages::LetterDispatch do
   end
 
   def fabricate_recipients(fabricator, num = 1)
-    Fabricate.times(num, fabricator, country: not_default_country).
-      tap do |people|
+    Fabricate.times(num, fabricator, country: not_default_country).tap do |people|
       people.each do |person|
         Fabricate.build(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one),
                                                          person: person).save(validate: false)
@@ -291,7 +285,6 @@ describe Messages::LetterDispatch do
   def fabricate_valid_households(num = 1, num_housemates = 2)
     people = fabricate_recipients(:person_with_address, num * num_housemates)
     households = people.each_slice(num_housemates).to_a
-
     households.each { |housemates| create_household_new(housemates) }
   end
 end

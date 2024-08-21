@@ -24,11 +24,15 @@ describe EventsController, js: true do
       }
     end
 
+    def click_save
+      all("form .btn-group").first.click_button "Speichern"
+    end
+
     before do
       global_questions
       sign_in
       visit edit_group_event_path(event.group_ids.first, event.id)
-      click_link t('event.participations.application_answers')
+      click_link I18n.t('event.participations.application_answers')
     end
 
     it "includes global questions with matching event type" do
@@ -39,15 +43,19 @@ describe EventsController, js: true do
       expect(question_fields).not_to have_text(global_questions[:camp_only].question)
       expect(question_fields).to have_text(global_questions[:hidden].question)
     end
+
+    it "requires questions to have disclosure selected before saving" do
+      click_save
+      expect(page).to have_content("Anmeldeangaben ist nicht gültig")
+
+
+    end
+
   end
-  #
-  # 2. Antworten validieren
   # 3. sollte keine änderungen an der Frage erlauben
 
   #   let(:edit_path) {  }
-  #   def click_save
-  #     all("form .btn-group").first.click_button "Speichern"
-  #   end
+  #
 
   #   it "may set and remove contact from event" do
   #     obsolete_node_safe do

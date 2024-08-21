@@ -446,17 +446,13 @@ describe Event do
     end
   end
 
-  context "#init_questions" do
-    it "adds 3 default questions for courses" do
-      e = Event::Course.new
-      e.init_questions
-      expect(e.application_questions.size).to eq(3)
-    end
-
-    it "does nothing for regular events" do
+  describe "#init_questions" do
+    it "adds 3 default questions" do
       e = Event.new
       e.init_questions
-      expect(e.application_questions).to be_blank
+      global_questions = Event::Question.global
+      expect(global_questions.size).to eq(3)
+      expect(e.application_questions.size).to eq(global_questions.size)
     end
   end
 

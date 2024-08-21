@@ -36,6 +36,7 @@
 
   - if can?(:show_full, entry)
     %aside.col-lg-5.offset-lg-1
+      = render_extensions :data_quality
       = render 'tags'
       = render 'roles'
       = render 'add_requests'

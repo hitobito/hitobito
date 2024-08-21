@@ -39,7 +39,7 @@ on:
 
     secrets:
       repository_token:
-        description: 'Token for repository login'
+        description: 'Token for repository login, e.g. gitlab-token as Dev with R/W rights on content'
         required: true
 
 jobs:
@@ -52,7 +52,7 @@ jobs:
           REPO_URL: ${{ inputs.repository }}
           REPO_USER: ${{ inputs.repository_username }}
           REPO_BRANCH: ${{ inputs.repository_branch }}
-          REPO_TOKEN: ${{ secrets.REPOSITORY_TOKEN }}
+          REPO_TOKEN: ${{ secrets.repository_token }}
         run: |
           git clone https://${REPO_USER}:${REPO_TOKEN}@${REPO_URL} ./management_repo
           cd ./management_repo

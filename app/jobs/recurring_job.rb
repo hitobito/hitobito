@@ -4,6 +4,9 @@
 #  https://github.com/hitobito/hitobito.
 
 # A job that is run regularly after a certain interval.
+# To initially schedule a recurring job, make sure to include it into the
+# JobManager configuration. For core jobs most probably in `#standard_jobs`,
+# for wagon jobs in `.wagon_jobs`.
 class RecurringJob < BaseJob
   # The interval to run this job.
   class_attribute :interval

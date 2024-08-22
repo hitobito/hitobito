@@ -47,15 +47,12 @@ module People
     end
 
     def merge_roles
-      @source.roles.with_deleted.each do |src_role|
+      @source.roles.with_inactive.each do |src_role|
         dst_role = Role.find_or_initialize_by(
           role_attrs(src_role).merge(person: @target)
         )
 
         next unless dst_role.new_record?
-
-        dst_role.created_at = src_role.created_at
-        dst_role.deleted_at = src_role.deleted_at
         dst_role.save!
       end
     end
@@ -127,9 +124,8 @@ module People
 
     def role_attr_keys(src_role)
       attributes = src_role.used_attributes +
-        [:type, :group] -
-        src_role.merge_excluded_attributes -
-        [:created_at]
+        [:type, :group, :start_on, :end_on] -
+        src_role.merge_excluded_attributes
       attributes.uniq
     end
   end

@@ -425,7 +425,7 @@ describe Group do
         _role = Fabricate(Group::BottomGroup::Member.name.to_s, group: bottom_group)
         _deleted_ids = bottom_group.roles.collect(&:id)
         # role is deleted permanantly as it is less than Settings.role.minimum_days_to_archive old
-        expect { bottom_group.destroy }.to change { Role.with_deleted.count }.by(-1)
+        expect { bottom_group.destroy }.to change { Role.with_inactive.count }.by(-1)
       end
     end
 
@@ -614,30 +614,14 @@ describe Group do
           expect(group.archived_at).to be_within(1.second).of(role.archived_at)
         end
 
-        it "future delete_on values are set to nil" do
-          role.update!(delete_on: 3.days.from_now)
-          group.archive!
-
-          expect(group).to be_archived
-          expect(role.reload.delete_on).to be_nil
-        end
-
-        it "past delete_on values are kept" do
-          role.update!(created_at: 5.days.ago, delete_on: 3.days.ago)
-          group.archive!
-
-          expect(group).to be_archived
-          expect(role.reload.delete_on).to be_present
-        end
-
         it "future roles are hard deleted" do
-          Fabricate(:future_role,
+          Fabricate(group.role_types.first.sti_name.to_sym,
             person: role.person,
             group: group,
-            convert_to: group.role_types.first)
+            start_on: 1.day.from_now)
           expect do
             group.archive!
-          end.to change { group.roles.with_deleted.future.count }.by(-1)
+          end.to change { group.roles.with_inactive.future.count }.by(-1)
 
           expect(group).to be_archived
         end

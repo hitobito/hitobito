@@ -136,12 +136,12 @@ describe Person do
       expect(person.groups_with_permission(:layer_and_below_full)).to eq([groups(:top_group)])
     end
 
-    it "found deleted last role" do
-      deletion_date = DateTime.current
+    it "found ended last role" do
+      end_date = Date.current.yesterday
       expect(person.roles.count).to eq 1
-      role.update(deleted_at: deletion_date)
+      role.update(end_on: end_date)
       expect(person.roles.count).to eq 0
-      expect(person.decorate.last_role.deleted_at.to_time.to_i).to eq(deletion_date.to_time.to_i)
+      expect(person.decorate.last_role.end_on).to eq(end_date)
     end
   end
 
@@ -274,7 +274,7 @@ describe Person do
     it "destroys all roles" do
       person = people(:top_leader)
       person.roles.first.update_attribute(:created_at, 2.years.ago)
-      expect { person.destroy }.to change { Role.with_deleted.count }.by(-1)
+      expect { person.destroy }.to change { Role.with_inactive.count }.by(-1)
     end
   end
 

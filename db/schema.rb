@@ -1026,12 +1026,10 @@ ActiveRecord::Schema.define(version: 2024_09_03_131542) do
     t.string "label"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "deleted_at"
     t.datetime "archived_at"
-    t.date "delete_on"
-    t.date "convert_on"
-    t.string "convert_to"
     t.boolean "terminated", default: false, null: false
+    t.date "start_on"
+    t.date "end_on"
     t.index ["person_id", "group_id"], name: "index_roles_on_person_id_and_group_id"
     t.index ["type"], name: "index_roles_on_type"
   end

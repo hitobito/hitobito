@@ -54,22 +54,6 @@ describe Group::LogController do
         expect(main_ids).to_not include(layer_one_member2.id)
         expect(main_ids).to include(layer_two_member.id)
       end
-
-      it "fetches role destroy version" do
-        layer_two_member.roles.first.destroy
-
-        get :index, params: {group_id: groups(:bottom_layer_two).id}
-
-        expect(response).to have_http_status(200)
-
-        versions = assigns(:versions)
-
-        # shows only role destroy
-        expect(versions.size).to eq(1)
-        role_destroy_version = versions.find { |v| v.item_type == Role.sti_name && v.event == "destroy" }
-        expect(role_destroy_version).to be_present
-        expect(role_destroy_version.main).to eq(layer_two_member)
-      end
     end
 
     context "as bottom_member" do

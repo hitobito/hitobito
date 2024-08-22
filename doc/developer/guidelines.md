@@ -81,10 +81,8 @@ Ein beispielhafte Anleitung, wie in einem Wagon Attribute hinzugef√ºgt werden k√
 #### Rollen umbenennen / entfernen
 
 * Migration aller betroffenen `Role` Instanzen (`with_deleted`!).
-* Migration aller betroffenen `FutureRole` Instanzen.
 * Migration aller betroffenen `RelatedRoleType` Instanzen.
 * Migration aller Papertrail Versionen (`#object` und `#object_changes`).
-
 
 ### Mehrsprachigkeit / I18n
 

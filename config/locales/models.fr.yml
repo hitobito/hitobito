@@ -180,8 +180,8 @@ fr:
               must_have_3_lines: 'doit contenir exactement 3 lignes'
         role:
           attributes:
-            delete_on:
-              must_be_later_than_created_at: ne peut pas être avant "de"
+            end_on:
+              must_be_later_than_start_on: ne peut pas être avant "de"
     models:
       acts_as_taggable_on/tag:
         one: Tag
@@ -809,10 +809,9 @@ fr:
         person_id: Personne
         string_long: '%{role} dans %{group}'
         dates: Dates
-        created_at: De
-        deleted_t: à
-        delete_on: à
-        delete_on_in_name: à
+        start_on: De
+        end_on: à
+        end_on_in_name: à
         class:
           archived: '%{role_kind} (archivé)'
           permission:

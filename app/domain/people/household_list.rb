@@ -6,28 +6,30 @@
 #  https://github.com/hitobito/hitobito.
 
 class People::HouseholdList
+  BATCH_SIZE = 300
+
   include Enumerable
 
   def initialize(people_scope)
     @people_scope = people_scope
   end
 
-  def only_households_in_batches
-    return unless block_given?
+  def only_households_in_batches(&block)
+    return unless block
 
-    fetch_in_batches(only_households) { |batch| yield batch }
+    fetch_in_batches(only_households, &block)
   end
 
-  def people_without_household_in_batches
-    return unless block_given?
+  def people_without_household_in_batches(&block)
+    return unless block
 
-    fetch_in_batches(people_without_household) { |batch| yield batch }
+    fetch_in_batches(people_without_household, &block)
   end
 
-  def households_in_batches
-    return unless block_given?
+  def households_in_batches(&block)
+    return unless block
 
-    fetch_in_batches(grouped_households) { |batch| yield batch }
+    fetch_in_batches(grouped_households, &block)
   end
 
   def grouped_households
@@ -52,8 +54,8 @@ class People::HouseholdList
       "#{people_table}"
   end
 
-  def fetch_in_batches(scope) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity
-    in_batches(scope, batch_size: 300) do |batch|
+  def fetch_in_batches(scope)
+    in_batches(scope, batch_size: BATCH_SIZE) do |batch|
       involved_people = fetch_involved_people(batch.map(&:key))
       grouped_people = batch.map do |household|
         involved_people.select do |person|
@@ -154,8 +156,10 @@ class People::HouseholdList
         end
       end
 
-      batch_relation = relation.where("`member_count` < ? OR (`member_count` = ? AND `id` > ?)",
-        member_count_offset, member_count_offset, id_offset)
+      batch_relation = relation.having("member_count < ? OR (member_count = ? AND id > ?)",
+        member_count_offset,
+        member_count_offset,
+        id_offset)
     end
   end
 end

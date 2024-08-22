@@ -68,13 +68,24 @@ describe Messages::LetterDispatch do
   end
 
   context "household addresses" do
-    let(:housemate1) { Fabricate(:person_with_address, first_name: "Anton", last_name: "Abraham", country: not_default_country) }
-    let(:housemate2) { Fabricate(:person_with_address, first_name: "Zora", last_name: "Zaugg", country: not_default_country) }
-    let(:other_housemate) { Fabricate(:person_with_address, first_name: "Altra", last_name: "Mates", country: not_default_country) }
+    let(:housemate1) do
+      Fabricate(:person_with_address, first_name: "Anton", last_name: "Abraham",
+        country: not_default_country)
+    end
+    let(:housemate2) do
+      Fabricate(:person_with_address, first_name: "Zora", last_name: "Zaugg",
+        country: not_default_country)
+    end
+    let(:other_housemate) do
+      Fabricate(:person_with_address, first_name: "Altra", last_name: "Mates",
+        country: not_default_country)
+    end
 
     before do
-      Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one), person: housemate1)
-      Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one), person: housemate2)
+      Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one),
+        person: housemate1)
+      Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one),
+        person: housemate2)
     end
 
     before do
@@ -192,6 +203,55 @@ describe Messages::LetterDispatch do
     end
   end
 
+  context "large batches" do
+    let(:group) { groups(:bottom_layer_one) }
+    let(:batch_size) { 3 }
+
+    let(:household_size) { 2 }
+    let(:households_count) { ((batch_size * household_size) * 2) + 1 }
+    let(:individuals_count) { (batch_size * 2) + 1 }
+    let(:mailing_list) { mailing_lists(:leaders) }
+
+    before do
+      stub_const("People::HouseholdList::BATCH_SIZE", batch_size)
+      Subscription.create!(
+        mailing_list: mailing_lists(:leaders),
+        subscriber: groups(:bottom_layer_one),
+        role_types: [Group::BottomLayer::Member]
+      )
+      message.update!(send_to_households: true)
+      fabricate_valid_households(households_count, household_size)
+
+      individuals_count.times do
+        person = Fabricate(:person_with_address, country: not_default_country)
+        Fabricate(Group::BottomLayer::Member.name, group: group, person: person)
+      end
+    end
+
+    it "successfully exports labels with grouped households" do
+      # count group members
+      amount_of_members = Person.all.count do |person|
+        person.roles&.first&.type == Group::BottomLayer::Member.name ||
+          person.roles&.to_a&.at(1)&.type == Group::BottomLayer::Member.name ||
+          person.roles&.to_a&.at(2)&.type == Group::BottomLayer::Member.name
+      end
+
+      expect(amount_of_members).to eq((households_count * household_size) + individuals_count + 1)
+
+      expect { subject.run }.not_to raise_error
+
+      amount_of_expected_mailings = recipient_entries.collect do |recipient|
+        recipient.person.household.household_key || recipient.person.id
+      end.uniq.count
+      expect(amount_of_expected_mailings).to eq(households_count + individuals_count + 1)
+
+      recipient_count = MailingLists::RecipientCounter.new(message.mailing_list, message.class.name, true)
+      expect(recipient_count.valid).to eq(households_count + individuals_count + 1)
+      expect(message.reload.success_count).to eq(households_count + individuals_count + 1)
+      expect(subject.run.finished?).to be_truthy
+    end
+  end
+
   private
 
   def create_household(person1, person2)
@@ -203,5 +263,27 @@ describe Messages::LetterDispatch do
 
   def recipient_entry(person)
     recipient_entries.find { |e| e.person_id == person.id }
+  end
+
+  def fabricate_recipients(fabricator, num = 1)
+    Fabricate.times(num, fabricator, country: not_default_country).tap do |people|
+      people.each do |person|
+        Fabricate.build(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one),
+          person: person).save(validate: false)
+      end
+    end
+  end
+
+  def create_household_new(people)
+    household = Household.new(people.first)
+    people.each { |member| household.add(member) }
+    household.save
+    household.reload
+  end
+
+  def fabricate_valid_households(num = 1, num_housemates = 2)
+    people = fabricate_recipients(:person_with_address, num * num_housemates)
+    households = people.each_slice(num_housemates).to_a
+    households.each { |housemates| create_household_new(housemates) }
   end
 end

@@ -20,6 +20,8 @@
 require "spec_helper"
 
 describe Event::Question do
+  let(:global_question) { described_class.create(question: "Global?", disclosure: :optional, event: nil) }
+
   context "with an event assigned" do
     let(:event) { events(:top_course) }
 
@@ -83,7 +85,7 @@ describe Event::Question do
   end
 
   describe "#derive_for_existing_events" do
-    subject { described_class.create(question: "Standard?", disclosure: :optional, event: nil) }
+    subject { global_question }
 
     let(:event) { events(:top_course) }
     let(:already_derived_question) do
@@ -109,15 +111,28 @@ describe Event::Question do
   end
 
   describe "#derive" do
-    subject { described_class.create(question: "Standard?", disclosure: :optional, event: nil) }
-
     let(:event) { events(:top_course) }
 
     it "creates a copy of the question" do
-      derived_question = subject.derive
-      expect(derived_question.derived_from_question).to eq(subject)
+      derived_question = global_question.derive
+      expect(derived_question.derived_from_question).to eq(global_question)
       derived_question.event = event
       expect(derived_question).to be_valid
+    end
+  end
+
+  describe "#assign_derived_attributes" do
+    let(:event) { events(:top_course) }
+
+    subject(:derived_question) { global_question.derive }
+
+    it "applies only changable attributes for derived questions" do
+      derived_question.update(event: event, question: "No override!", choices: "No,override", multiple_choices: true)
+      derived_question.reload
+      expect(derived_question.question).to eq(global_question.question)
+      expect(derived_question.choices).to eq(global_question.choices)
+      expect(derived_question.multiple_choices).to eq(global_question.multiple_choices)
+      expect(derived_question.event).to eq(event)
     end
   end
 end

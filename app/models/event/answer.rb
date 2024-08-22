@@ -20,14 +20,9 @@
 #
 
 class Event::Answer < ActiveRecord::Base
-  attr_writer :answer_required
-
-  delegate :admin?, to: :question
-
   belongs_to :participation
   belongs_to :question
 
-  # TODO
   attribute :answer, :json
 
   before_validation { question&.before_validate_answer(self) }

@@ -259,9 +259,13 @@ describe EventsController do
         expect(event.state).to be_nil
         expect(event.name).to eq(source.name)
         expect(event.kind_id).to eq(source.kind_id)
-        expect(event.application_questions.map(&:question)).to match_array(
-          source.application_questions.map(&:question)
-        )
+
+        existing_application_questions = source.application_questions.map(&:question)
+        expect(event.application_questions.map(&:question)).to include(*existing_application_questions)
+
+        global_questions = Event::Question.global.application.where(type: event.type.to_s).map(&:question)
+        expect(event.application_questions.map(&:question)).to include(*global_questions)
+
         expect(event.application_questions.map(&:id).uniq).to eq([nil])
       end
 

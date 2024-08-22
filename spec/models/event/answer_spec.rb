@@ -19,63 +19,32 @@ require "spec_helper"
 
 describe Event::Answer do
   let(:question) { event_questions(:top_ov) }
-  let(:choices) { question.choices.split(",") }
+  let(:participation) { question.event.participations.build(enforce_required_answers: true) }
 
-  context "answer= for array values (checkboxes)" do
-    subject { question.reload.answers.build }
+  subject(:answer) { question.reload.answers.build(participation: participation) }
 
-    before do
-      question.update_attribute(:multiple_choices, true) # rubocop:disable Rails/SkipsModelValidations
-      subject.answer = answer_param
-      subject.save
-    end
+  context "with required question" do
+    before { question.update!(disclosure: :required) }
 
-    context "valid array values (position + 1)" do
-      let(:answer_param) { %w[1 2] }
-
-      its(:answer) { should eq "GA, Halbtax" }
-      it { is_expected.to have(0).errors_on(:answer) }
-    end
-
-    context "values outside of array size" do
-      let(:answer_param) { %w[4 5] }
-
-      its(:answer) { should be_nil }
-    end
-
-    context "resetting values" do
-      subject { question.reload.answers.create(answer: "GA, Halbtax") }
-
-      let(:answer_param) { ["0"] }
-
-      its(:answer) { should be_nil }
+    it "validates required answer" do
+      expect(answer).not_to be_valid
+      expect(answer.errors[:answer]).to include("muss ausgefüllt werden")
     end
   end
 
-  context "validates answers to single-answer questions correctly: " do
-    describe "a non-required question" do
-      let(:question) { Fabricate(:event_question, disclosure: :optional, choices: "Ja") }
+  context "with custom validation on question" do
+    it "calls the questions custom validation implementation" do
+      expect(question).to receive(:validate_answer)
+      expect(answer).to be_valid
+    end
+  end
 
-      subject(:no_answer_given) { build_answer("0") } # no choice
-
-      subject(:yes_answer) { build_answer("1") }
-      subject(:depends_answer) { build_answer("2") } # not a valid choice
-
-      it "may be left unanswered" do
-        expect(no_answer_given).to have(0).errors_on(:answer)
-      end
-
-      it "may be answered with the one option" do
-        expect(yes_answer).to have(0).errors_on(:answer)
-      end
-
-      it "may not be answered with something else" do
-        expect(depends_answer.answer).to be_nil
-      end
-
-      def build_answer(answer_index)
-        question.answers.create(answer: [answer_index])
-      end
+  context "with question specific values" do
+    it "calls the questions custom before_validation implementation" do
+      expect(question).to receive(:before_validate_answer).and_return(true)
+      special_answer = ["Maybe", "Array"]
+      answer.update!(answer: special_answer)
+      expect(answer.answer).to eq(special_answer)
     end
   end
 end

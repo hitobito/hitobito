@@ -12,7 +12,12 @@ describe Person::HistoryController, type: :controller do
   let(:top_group) { groups(:top_group) }
   let(:bottom_group) { groups(:bottom_group_one_one) }
   let(:test_entry) { top_leader }
-  let(:other) { Fabricate(Group::TopGroup::Member.name.to_sym, group: top_group).person }
+  let(:other) do
+    Fabricate(Group::TopGroup::Member.name.to_sym,
+              group: top_group,
+              start_on: Date.current
+    ).person
+  end
   let(:dom) { Capybara::Node::Simple.new(response.body) }
 
   before { sign_in(top_leader) }
@@ -31,9 +36,12 @@ describe Person::HistoryController, type: :controller do
     end
 
     it "lists past roles" do
-      role = Fabricate(Group::BottomGroup::Member.name.to_sym, group: bottom_group, person: other)
-      role.created_at = 2.years.ago
-      role.destroy
+      role = Fabricate(Group::BottomGroup::Member.name.to_sym,
+                       group: bottom_group,
+                       person: other,
+                       start_on: 2.years.ago,
+                       end_on: 1.day.ago)
+
       get :index, params: params
       expect(dom.all("table tbody tr").size).to eq 2
       role_row = dom.find("div.table-responsive:nth-of-type(2) table tbody tr")
@@ -53,9 +61,12 @@ describe Person::HistoryController, type: :controller do
     end
 
     it "lists past roles in other groups" do
-      role = Fabricate(Group::TopGroup::Member.name.to_sym, group: top_group, person: other)
-      role.created_at = 2.years.ago
-      role.destroy
+      role = Fabricate(Group::TopGroup::Member.name.to_sym,
+                       group: top_group,
+                       person: other,
+                       start_on: 2.years.ago,
+                       end_on: 1.day.ago)
+
       get :index, params: params
       expect(dom.all("table tbody tr").size).to eq 2
       role_row = dom.find("div.table-responsive:nth-of-type(2) table tbody tr")

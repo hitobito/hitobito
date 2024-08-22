@@ -75,8 +75,6 @@ class JobManager
       Payments::EbicsImportJob,
       People::DuplicateLocatorJob,
       People::CleanupJob,
-      People::CreateRolesJob,
-      People::DestroyRolesJob,
       ReoccuringMailchimpSynchronizationJob,
       SessionsCleanerJob,
       WorkerHeartbeatCheckJob

@@ -18,9 +18,9 @@
 = render 'roles/label', f: f
 
 = field_set_tag Role.human_attribute_name(:dates) do
-  = f.labeled(:created_at) do
-    = f.date_field(:created_at, class: 'date col-6', value: f(@role.start_on))
-  = f.labeled(:delete_on) do
-    = f.date_field(:delete_on, disabled: !can?(:destroy, @role), class: 'date col-6', value: f(@role.delete_on))
+  = f.labeled(:start_on) do
+    = f.date_field(:start_on, class: 'date col-6', value: f(@role.start_on))
+  = f.labeled(:end_on) do
+    = f.date_field(:end_on, disabled: !can?(:destroy, @role), class: 'date col-6', value: f(@role.end_on))
 
 = render_extensions :fields, locals: { f: f }

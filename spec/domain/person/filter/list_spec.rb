@@ -28,20 +28,12 @@ describe Person::Filter::List do
 
     context "with future role" do
       before do
-        Fabricate(:future_role, person: top_leader, group: bottom_group, convert_to: bottom_group.role_types.first)
+        Fabricate(bottom_group.role_types.first.sti_name.to_sym, person: top_leader, group: bottom_group, start_on: 1.day.from_now)
       end
 
       it "does not include future role" do
         list = filter_list(group: bottom_group)
         expect(list.all_count).to eq 0
-        expect(list.entries.to_a).to be_empty
-      end
-
-      it "includes future role when explicitly specified via role_type_ids" do
-        params = {filters: {role: {role_type_ids: FutureRole.id}}}
-        list = filter_list(group: bottom_group, filter: params)
-        expect(list.chain).to be_present
-        expect(list.all_count).to eq 1
         expect(list.entries.to_a).to be_empty
       end
     end

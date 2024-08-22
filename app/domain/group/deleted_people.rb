@@ -14,7 +14,7 @@ class Group::DeletedPeople
         .joins("INNER JOIN #{Group.quoted_table_name} " \
               "ON #{Group.quoted_table_name}.id = roles.group_id")
         .where(no_active_roles_exist)
-        .where("roles.deleted_at = (?)", last_role_deleted_at)
+        .where("roles.end_on = (?)", lastest_role_ended_on)
         .where("#{Group.quoted_table_name}.layer_group_id IN (?)", layer_groups.map(&:id))
         .distinct
     end
@@ -25,7 +25,7 @@ class Group::DeletedPeople
         .joins("INNER JOIN #{Group.quoted_table_name} " \
               "ON #{Group.quoted_table_name}.id = roles.group_id")
         .where(no_active_roles_exist)
-        .where("roles.deleted_at = (?)", last_role_deleted_at)
+        .where("roles.end_on = (?)", lastest_role_ended_on)
         .where("#{Group.quoted_table_name}.layer_group_id = ?", layer_group.id)
         .distinct
     end
@@ -35,7 +35,7 @@ class Group::DeletedPeople
         .joins("INNER JOIN #{Person.quoted_table_name} " \
                   "ON #{Person.quoted_table_name}.id = roles.person_id")
         .where(no_active_roles_exist)
-        .where("roles.deleted_at = (?)", last_role_deleted_at)
+        .where("roles.end_on = (?)", lastest_role_ended_on)
         .find_by("#{Person.quoted_table_name}.id = ?", person.id)
     end
 
@@ -46,14 +46,14 @@ class Group::DeletedPeople
     end
 
     def active_roles
-      Role.without_deleted
+      Role.active
         .where("roles.person_id = people.id")
     end
 
-    def last_role_deleted_at
-      Role.only_deleted
+    def lastest_role_ended_on
+      Role.ended
         .where("roles.person_id = people.id")
-        .select("MAX(roles.deleted_at)")
+        .select("MAX(roles.end_on)")
     end
   end
 end

@@ -52,6 +52,8 @@ de:
         members: Haushaltsmitglieder
 
     errors:
+      messages:
+        record_invalid: 'Gültigkeitsprüfung ist fehlgeschlagen: %{errors}'
       models:
         roles/termination:
           attributes:
@@ -193,8 +195,8 @@ de:
               must_have_3_lines: 'muss genau 3 Zeilen enthalten'
         role:
           attributes:
-            delete_on:
-              must_be_later_than_created_at: kann nicht vor Von sein
+            end_on:
+              must_be_later_than_start_on: kann nicht vor Von sein
 
 
     models:
@@ -267,9 +269,6 @@ de:
       event/date:
         one: Datum
         other: Daten
-      future_role:
-        one: Zukünftige Rolle
-        other: Zukünftige Rollen
       family_member:
         one: Familienmitglied
         other: Familienmitglieder
@@ -709,7 +708,7 @@ de:
         choices: Mögliche Antworten
         multiple_choices: Mehrfachauswahl
         disclosure: Antwortangabe
-        disclosures: 
+        disclosures:
           required: Obligatorisch
           optional: Optional
           hidden: Nicht angezeigt
@@ -817,10 +816,10 @@ de:
         person_id: Person
         string_long: '%{role} in %{group}'
         dates: Daten
-        created_at: Von
-        deleted_t: Bis
-        delete_on: Bis
-        delete_on_in_name: bis
+        created_at: Erstellt um
+        start_on: Von
+        end_on: Bis
+        end_on_in_name: bis
         class:
           archived: '%{role_kind} (archiviert)'
           permission:

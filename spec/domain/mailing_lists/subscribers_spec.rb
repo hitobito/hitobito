@@ -141,8 +141,8 @@ describe MailingLists::Subscribers do
         group: groups(:bottom_group_one_one)).person
       Fabricate(role, group: groups(:bottom_group_two_one), person: p3)
       # deleted role in the same hierarchy
-      p4 = Fabricate(role, group: groups(:bottom_group_one_one), created_at: 2.years.ago,
-        deleted_at: 1.year.ago).person
+      p4 = Fabricate(role, group: groups(:bottom_group_one_one), start_on: 2.years.ago,
+        end_on: 1.year.ago).person
 
       is_expected.to include(p1)
       is_expected.to include(p2)
@@ -537,12 +537,24 @@ describe MailingLists::Subscribers do
         expect(list.subscribed?(p)).to be_truthy
       end
 
-      it "is true with role with future deleted_at" do
+      it "is true with role with future end_on" do
         create_subscription(groups(:bottom_layer_one), false,
           Group::BottomGroup::Leader.sti_name)
-        p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one), created_at: Time.now.utc, deleted_at: Time.now.utc + 2.hours).person
+        p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one), start_on: 1.day.ago, end_on: 1.day.from_now).person
 
         expect(list.subscribed?(p)).to be_truthy
+      end
+
+      it "respects specified time when matching roles" do
+        create_subscription(groups(:bottom_layer_one), false,
+          Group::BottomGroup::Leader.sti_name)
+        p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one), start_on: Date.current, end_on: Date.current).person
+
+        expect(described_class.new(list).subscribed?(p)).to be_truthy
+        expect(described_class.new(list, time: Date.current).subscribed?(p)).to be_truthy
+
+        expect(described_class.new(list, time: Date.current - 1.day).subscribed?(p)).to be_falsey
+        expect(described_class.new(list, time: Date.current + 1.day).subscribed?(p)).to be_falsey
       end
 
       it "is false if different role in group" do

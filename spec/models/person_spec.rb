@@ -92,6 +92,50 @@ describe Person do
 
   subject { person }
 
+  context "scopes" do
+    describe "preload_roles_unscoped" do
+      it "preloads roles on #find" do
+        person = Person.preload_roles_unscoped.find(people(:top_leader).id)
+        expect(person.roles).to be_loaded
+        expect(person.roles).to have(1).item
+      end
+
+      it "preloads roles unscoped" do
+        people(:top_leader).roles.update_all(end_on: Date.current.yesterday)
+
+        # default roles scope does not include ended roles
+        expect(people(:top_leader).roles).to be_empty
+
+        person = Person.preload_roles_unscoped.find(people(:top_leader).id)
+        expect(person.roles).to be_loaded
+        expect(person.roles).to have(1).item
+      end
+
+      it "preloading works when chained with other scopes" do
+        person = Person.preload_roles_unscoped
+          .where.not(id: nil)
+          .where(id: people(:top_leader).id).first
+        expect(person.roles).to be_loaded
+        expect(person.roles).to have(1).item
+      end
+    end
+
+    describe "preoload_roles" do
+      it "preloads roles with custom scope" do
+        Fabricate(Group::TopGroup::Secretary.sti_name,
+          group: groups(:top_group),
+          person: people(:top_leader))
+
+        expect(people(:top_leader).roles).to have(2).items
+
+        person = Person.preload_roles(Role.where(type: Group::TopGroup::Secretary.sti_name))
+          .find(people(:top_leader).id)
+        expect(person.roles).to be_loaded
+        expect(person.roles).to have(1).item
+      end
+    end
+  end
+
   it "is not valid without any names" do
     expect(Person.new).to have(1).errors_on(:base)
   end
@@ -176,12 +220,12 @@ describe Person do
       expect(person.groups_with_permission(:layer_and_below_full)).to eq([groups(:top_group)])
     end
 
-    it "found deleted last role" do
-      deletion_date = DateTime.current
+    it "found ended last role" do
+      end_date = Date.current.yesterday
       expect(person.roles.count).to eq 1
-      role.update(deleted_at: deletion_date)
+      role.update(end_on: end_date)
       expect(person.roles.count).to eq 0
-      expect(person.decorate.last_role.deleted_at.to_time.to_i).to eq(deletion_date.to_time.to_i)
+      expect(person.decorate.last_role.end_on).to eq(end_date)
     end
   end
 
@@ -314,7 +358,7 @@ describe Person do
     it "destroys all roles" do
       person = people(:top_leader)
       person.roles.first.update_attribute(:created_at, 2.years.ago)
-      expect { person.destroy }.to change { Role.with_deleted.count }.by(-1)
+      expect { person.destroy }.to change { Role.with_inactive.count }.by(-1)
     end
   end
 

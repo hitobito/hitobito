@@ -45,8 +45,7 @@ class Groups::SelfInscriptionController < Wizards::BaseController
         person: person,
         group: group,
         type: group.self_registration_role_type,
-        archived_at: nil,
-        deleted_at: nil
+        archived_at: nil
       ).present?
 
         redirect_with_message(alert: t(".role_exists"))

@@ -206,6 +206,9 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   ### ASSOCIATIONS
 
   has_many :roles, inverse_of: :person
+  has_many :roles_unscoped, -> { with_inactive },
+    class_name: "Role", foreign_key: "person_id", inverse_of: :person
+
   has_many :groups, through: :roles
 
   has_many :event_participations, class_name: "Event::Participation",
@@ -320,6 +323,9 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
             "(company_name IS NOT NULL AND company_name <> '')")
   }
   scope :with_mobile, -> { joins(:phone_numbers).where(phone_numbers: {label: "Mobil"}) }
+
+  scope :preload_roles_unscoped, -> { extending(PreloadRolesUnscoped) }
+  scope :preload_roles, ->(roles_scope) { preload_roles_unscoped.roles_scope(roles_scope) }
 
   ### CLASS METHODS
 
@@ -568,7 +574,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   # Destroy all related roles before destroying this person.
   # dependent: :destroy does not work here, because roles are paranoid.
   def destroy_roles
-    roles.with_deleted.delete_all
+    roles.with_inactive.delete_all
   end
 
   def destroy_person_duplicates

@@ -35,7 +35,7 @@ module PaperTrail
 
     # Scoped association for joining roles
     belongs_to :role, -> do
-      Role.with_deleted { where("#{PaperTrail::Version.table_name}": {item_type: Role.sti_name}) }
+      Role.with_inactive { where("#{PaperTrail::Version.table_name}": {item_type: Role.sti_name}) }
     end, foreign_key: "item_id"
 
     def perpetrator

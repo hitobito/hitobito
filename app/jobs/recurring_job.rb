@@ -42,6 +42,10 @@ class RecurringJob < BaseJob
     1
   end
 
+  def last_run
+    delayed_jobs.maximum(:updated_at)
+  end
+
   private
 
   def perform_internal

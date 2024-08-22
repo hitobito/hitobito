@@ -122,6 +122,22 @@ describe RolesController do
       expect(role).to be_kind_of(Group::GlobalGroup::Member)
     end
 
+    it "with start_at in the future creates a future role" do
+      g = groups(:toppers)
+      expect do
+        post :create, params: {
+          group_id: group.id,
+          role: {
+            group_id: g.id,
+            start_on: Time.zone.tomorrow,
+            person_id: person.id,
+            type: Group::GlobalGroup::Member.sti_name
+          }
+        }
+      end.to change { person.roles.future.count }.by(1)
+      is_expected.to redirect_to(group_people_path(g))
+    end
+
     it "without name renders form again" do
       post :create, params: {
         group_id: group.id,
@@ -269,35 +285,6 @@ describe RolesController do
     end
   end
 
-  describe "GET edit" do
-    before { role } # create it
-
-    let(:page) { Capybara::Node::Simple.new(response.body) }
-    let(:today) { Time.zone.today }
-    let(:today_localized) { I18n.l(today) }
-
-    render_views
-
-    it "renders no flash message if role is not outdated" do
-      get :edit, params: {group_id: group.id, id: role.id}
-      expect(page).to have_css "#flash", text: ""
-    end
-
-    it "renders flash message for outedated deleted role" do
-      role.update_columns(delete_on: Time.zone.today)
-      get :edit, params: {group_id: group.id, id: role.id}
-      expect(page).to have_css("#flash .alert.alert-danger", text: "Die Rolle konnte nicht " \
-                               "wie geplant am #{today_localized} terminiert werden")
-    end
-
-    it "renders flash message for outedated future role" do
-      Role.where(id: role.id).update_all(type: FutureRole.sti_name, convert_to: role.type, convert_on: today)
-      get :edit, params: {group_id: group.id, id: role.id}
-      expect(page).to have_css("#flash .alert.alert-danger", text: "Die Rolle konnte nicht wie " \
-                               "geplant per #{today_localized} aktiviert werden")
-    end
-  end
-
   describe "PUT update" do
     before { role } # create it
 
@@ -311,7 +298,19 @@ describe RolesController do
     it "redirects to person after update" do
       expect do
         put :update, params: {group_id: group.id, id: role.id, role: {label: "bla", type: role.type, group_id: role.group_id}}
-      end.not_to change { Role.with_deleted.count }
+      end.not_to change { Role.with_inactive.count }
+
+      expect(flash[:notice]).to eq "Rolle <i>Member (bla)</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich aktualisiert."
+      expect(role.reload.label).to eq "bla"
+      expect(role.type).to eq Group::TopGroup::Member.model_name
+      is_expected.to redirect_to(group_person_path(group, person))
+    end
+
+    it "updates future role" do
+      role.update!(start_on: Time.zone.tomorrow)
+      expect do
+        put :update, params: {group_id: group.id, id: role.id, role: {label: "bla", type: role.type, group_id: role.group_id}}
+      end.not_to change { Role.with_inactive.count }
 
       expect(flash[:notice]).to eq "Rolle <i>Member (bla)</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich aktualisiert."
       expect(role.reload.label).to eq "bla"
@@ -322,9 +321,9 @@ describe RolesController do
     it "terminates and creates new role if type changes" do
       expect do
         put :update, params: {group_id: group.id, id: role.id, role: {type: Group::TopGroup::Leader.sti_name}}
-      end.not_to change { Role.with_deleted.count }
+      end.not_to change { Role.with_inactive.count }
       is_expected.to redirect_to(group_person_path(group, person))
-      expect(Role.with_deleted.where(id: role.id)).not_to be_exists
+      expect(Role.with_inactive.where(id: role.id)).not_to be_exists
       expect(flash[:notice]).to eq "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> zu <i>Leader</i> geändert."
     end
 
@@ -332,64 +331,48 @@ describe RolesController do
       group2 = groups(:toppers)
       expect do
         put :update, params: {group_id: group.id, id: role.id, role: {type: Group::GlobalGroup::Leader.sti_name, group_id: group2.id}}
-      end.not_to change { Role.with_deleted.count }
+      end.not_to change { Role.with_inactive.count }
 
       person.update_attribute(:primary_group_id, group.id)
 
       is_expected.to redirect_to(group_person_path(group2, person))
-      expect(Role.with_deleted.where(id: role.id)).not_to be_exists
+      expect(Role.with_inactive.where(id: role.id)).not_to be_exists
       expect(flash[:notice]).to eq "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> zu <i>Leader</i> in <i>Toppers</i> geändert."
 
       # new role's group also assigned to person's primary group
       expect(person.reload.primary_group).to eq group2
     end
 
-    context "delete_on in the past" do
-      let(:yesterday) { Time.zone.yesterday }
+    context "end_on in the past" do
+      let(:yesterday) { Date.current.yesterday }
 
-      it "destroys role" do
-        role.update!(created_at: yesterday - 3.hours)
+      it "ends role" do
+        role.update!(start_on: yesterday)
         expect do
-          put :update, params: {group_id: group.id, id: role.id, role: {delete_on: yesterday}}
+          put :update, params: {group_id: group.id, id: role.id, role: {end_on: yesterday}}
         end.to change { Role.count }.by(-1)
         expect(response).to redirect_to(person_path(person, format: :html))
-        expect(flash[:notice]).to eq "Rolle <i>Member (bis #{yesterday.strftime("%d.%m.%Y")})</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich gelöscht."
+        expect(flash[:notice]).to eq "Rolle <i>Member (bis #{yesterday.strftime("%d.%m.%Y")})</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich aktualisiert."
       end
 
-      it "renders validation message if delete_in is before create_on invalid" do
+      it "renders validation message if end_on is before start_on invalid" do
         expect do
           put :update,
             params: {group_id: group.id, id: role.id,
-                     role: {delete_on: yesterday, create_on: Time.zone.today}}
+                     role: {end_on: yesterday, start_on: Date.current}}
         end.not_to(change { Role.count })
         expect(response).to render_template("edit") # with error message in form
-      end
-
-      it "renders edit and error messages if destroy does not succeed" do
-        allow_any_instance_of(Role).to receive(:valid?).and_return(true)
-        allow_any_instance_of(Role).to receive(:destroy).and_return(false)
-        expect do
-          put :update, params: {group_id: group.id, id: role.id, role: {delete_on: yesterday}}
-        end.not_to(change { Role.count })
-        expect(response).to render_template("edit")
-        expect(flash.now[:alert]).to eq "Rolle <i>Member (bis #{yesterday.strftime("%d.%m.%Y")})</i> für <i>#{person}</i> in <i>TopGroup</i> konnte nicht gelöscht werden."
       end
     end
 
     context "his own role" do
-      let(:tomorrow) { Time.zone.tomorrow }
+      let(:tomorrow) { Date.current.tomorrow }
       let(:role) { roles(:top_leader) }
 
-      it "cannot set deleted_at on his own role" do
+      it "cannot set end_on on his own role" do
         expect do
-          put :update, params: {group_id: group.id, id: role.id, role: {deleted_at: tomorrow}}
-        end.not_to change { role.reload.deleted_at }
-      end
-
-      it "cannot set delete_on on his own role" do
-        expect do
-          put :update, params: {group_id: group.id, id: role.id, role: {delete_on: tomorrow}}
-        end.not_to change { role.reload.delete_on }
+          put :update, params: {group_id: group.id, id: role.id, role: {end_on: tomorrow}}
+        end.not_to change { role.reload.end_on }
       end
     end
 
@@ -403,9 +386,9 @@ describe RolesController do
         person.update_attribute(:primary_group_id, group3.id)
         expect do
           put :update, params: {group_id: group.id, id: role.id, role: {type: Group::BottomGroup::Leader.sti_name, group_id: group2.id}}
-        end.not_to change { Role.with_deleted.count }
+        end.not_to change { Role.with_inactive.count }
         is_expected.to redirect_to(group_person_path(group2, person))
-        expect(Role.with_deleted.where(id: role.id)).not_to be_exists
+        expect(Role.with_inactive.where(id: role.id)).not_to be_exists
         expect(flash[:notice]).to eq "Rolle <i>Leader</i> für <i>#{person}</i> in <i>Group 11</i> zu <i>Leader</i> in <i>Group 12</i> geändert."
 
         # keeps person's primary group
@@ -417,9 +400,9 @@ describe RolesController do
         person.update_attribute(:primary_group_id, group.id)
         expect do
           put :update, params: {group_id: group.id, id: role.id, role: {type: Group::GlobalGroup::Leader.sti_name, group_id: group3.id}}
-        end.not_to change { Role.with_deleted.count }
+        end.not_to change { Role.with_inactive.count }
         is_expected.to redirect_to(group_person_path(group3, person))
-        expect(Role.with_deleted.where(id: role.id)).not_to be_exists
+        expect(Role.with_inactive.where(id: role.id)).not_to be_exists
         expect(flash[:notice]).to eq "Rolle <i>Leader</i> für <i>#{person}</i> in <i>Group 11</i> zu <i>Leader</i> in <i>Toppers</i> geändert."
 
         # person's primary group is set to new group
@@ -433,9 +416,9 @@ describe RolesController do
       it "terminates and creates new role if type changes" do
         expect do
           put :update, params: {group_id: group.id, id: role.id, role: {type: Group::TopGroup::Leader.sti_name}}
-        end.not_to change { Role.with_deleted.count }
+        end.not_to change { Role.with_inactive.count }
         is_expected.to redirect_to(group_person_path(group, person))
-        expect(Role.with_deleted.where(id: role.id)).not_to be_exists
+        expect(Role.with_inactive.where(id: role.id)).not_to be_exists
         expect(flash[:notice]).to eq "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> zu <i>Leader</i> geändert."
       end
 
@@ -444,7 +427,7 @@ describe RolesController do
         expect do
           put :update, params: {group_id: group.id, id: role.id, role: {type: Group::GlobalGroup::Member.sti_name, group_id: g.id}}
         end.to raise_error(CanCan::AccessDenied)
-        expect(Role.with_deleted.where(id: role.id)).to be_exists
+        expect(Role.with_inactive.where(id: role.id)).to be_exists
       end
     end
   end
@@ -462,7 +445,14 @@ describe RolesController do
     end
 
     it "redirects to person if user can still view person" do
-      Fabricate(Group::TopGroup::Leader.name.to_sym, person: person, group: group)
+      delete :destroy, params: {group_id: group.id, id: role.id}
+
+      expect(flash[:notice]).to eq notice
+      is_expected.to redirect_to(person_path(person))
+    end
+
+    it "can destroy future role" do
+      role.update!(start_on: Time.zone.tomorrow)
       delete :destroy, params: {group_id: group.id, id: role.id}
 
       expect(flash[:notice]).to eq notice

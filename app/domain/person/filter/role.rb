@@ -40,25 +40,22 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def roles_join
-    case args[:kind]
-    when "active", "inactive" then any_roles_join
-    when "deleted" then deleted_roles_join
-    end
+    any_roles_join
   end
 
-  def time_range
-    start_day = parse_day(args[:start_at], Time.zone.at(0), :beginning_of_day)
-    finish_day = parse_day(args[:finish_at], Time.zone.now, :end_of_day)
+  def date_range
+    start_day = parse_day(args[:start_at], Time.zone.at(0).to_date)
+    finish_day = parse_day(args[:finish_at], Date.current)
 
     start_day..finish_day
   end
 
   private
 
-  def parse_day(date, default, rounding)
-    Date.parse(date.presence).send(rounding.to_sym)
+  def parse_day(date, default)
+    Date.parse(date.presence)
   rescue ArgumentError, TypeError
-    Date.parse(default.to_date.to_s).send(rounding.to_sym)
+    default.to_date
   end
 
   def merge_duration_args(hash)
@@ -101,8 +98,8 @@ class Person::Filter::Role < Person::Filter::Base
 
   def excluded_roles_duration_conditions
     [active_role_condition, {
-      min: parse_day(args[:start_at], Time.zone.now, :beginning_of_day),
-      max: parse_day(args[:finish_at], Time.zone.now, :end_of_day)
+      min: parse_day(args[:start_at], Date.current),
+      max: parse_day(args[:finish_at], Date.current)
     }]
   end
 
@@ -110,24 +107,16 @@ class Person::Filter::Role < Person::Filter::Base
     return unless args[:kind]
 
     case args[:kind]
-    when "created" then [[:roles, {created_at: time_range}]].to_h
-    when "deleted" then [[:roles, {deleted_at: time_range}]].to_h
-    when "active", "inactive" then [active_role_condition, min: time_range.min, max: time_range.max]
+    when "created" then [[:roles, {start_on: date_range}]].to_h
+    when "deleted" then [[:roles, {end_on: date_range}]].to_h
+    when "active", "inactive" then [active_role_condition, min: date_range.min, max: date_range.max]
     end
   end
 
   def active_role_condition
     <<~SQL.split.map(&:strip).join(" ")
-      roles.created_at <= :max AND
-      (roles.deleted_at >= :min OR roles.deleted_at IS NULL)
-    SQL
-  end
-
-  def deleted_roles_join
-    <<~SQL.split.map(&:strip).join(" ")
-      INNER JOIN roles ON
-        (roles.person_id = people.id AND roles.deleted_at IS NOT NULL)
-      INNER JOIN #{Group.quoted_table_name} ON roles.group_id = #{Group.quoted_table_name}.id
+      (roles.start_on <= :max OR roles.start_on IS NULL) AND
+      (roles.end_on >= :min OR roles.end_on IS NULL)
     SQL
   end
 

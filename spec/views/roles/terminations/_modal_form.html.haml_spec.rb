@@ -15,20 +15,20 @@ describe "roles/terminations/_modal_form.html.haml" do
 
   subject { Capybara::Node::Simple.new(render) }
 
-  context "for role with delete_on set" do
-    let(:delete_on) { Time.zone.tomorrow }
-    let(:role) { roles(:bottom_member).tap { |r| r.delete_on = delete_on } }
+  context "for role with end_on set" do
+    let(:end_on) { Time.zone.tomorrow }
+    let(:role) { roles(:bottom_member).tap { |r| r.end_on = end_on } }
 
-    it "shows delete_on text" do
+    it "shows end_on text" do
       expect(subject).not_to have_field("Austrittsdatum")
-      expect(subject).to have_content "Austrittsdatum: #{delete_on.strftime("%d.%m.%Y")}"
+      expect(subject).to have_content "Austrittsdatum: #{end_on.strftime("%d.%m.%Y")}"
     end
   end
 
-  context "for role with blank delete_on" do
+  context "for role with blank end_on" do
     let(:role) { roles(:bottom_member) }
 
-    it "has delete_on date field" do
+    it "has end_on date field" do
       expect(subject).not_to have_content "Austrittsdatum:"
       expect(subject).to have_field("Austrittsdatum")
     end

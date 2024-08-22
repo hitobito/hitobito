@@ -53,7 +53,7 @@ describe Group::Merger do
       expect(group2.events.count).to eq 1
 
       # the recent role should have been soft-deleted
-      expect(@person.reload.roles.only_deleted.count).to eq 1
+      expect(@person.reload.roles.ended.count).to eq 1
 
       # last but not least, check nested set integrity
       expect(Group).to be_valid

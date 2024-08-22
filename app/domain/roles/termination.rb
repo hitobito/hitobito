@@ -25,7 +25,7 @@ class Roles::Termination
   def call
     return false unless valid?
 
-    role.delete_on = terminate_on
+    role.end_on = terminate_on
     role.write_attribute(:terminated, true)
     role.save!
 

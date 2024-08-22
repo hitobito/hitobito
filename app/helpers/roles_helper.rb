@@ -74,9 +74,5 @@ module RolesHelper
     group.default_role ? group.default_role.sti_name : nil
   end
 
-  def existing_role(role)
-    return role.convert_to if role.is_a?(FutureRole)
-
-    role ? role.type : nil
-  end
+  def existing_role(role) = role&.type
 end

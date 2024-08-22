@@ -58,7 +58,7 @@ module Person::Groups
     return nil if roles.exists?
 
     restricted = Role.all_types.select(&:restricted?).collect(&:sti_name)
-    roles.with_deleted.where.not(type: restricted).order(deleted_at: :desc).first
+    roles.with_inactive.where.not(type: restricted).order(end_on: :desc).first
   end
 
   private

@@ -140,11 +140,11 @@ de:
           attributes:
             email:
               taken: >
-                        ist bereits vergeben. Diese Adresse muss für alle Personen
-                        eindeutig sein, da sie beim Login verwendet wird. Du kannst jedoch unter
-                        'Weitere E-Mails' Adressen eintragen, welche bei anderen Personen
-                        als Haupt-E-Mail vergeben sind (Die Haupt-E-Mail
-                        kann leer gelassen werden).
+                ist bereits vergeben. Diese Adresse muss für alle Personen
+                eindeutig sein, da sie beim Login verwendet wird. Du kannst jedoch unter
+                'Weitere E-Mails' Adressen eintragen, welche bei anderen Personen
+                als Haupt-E-Mail vergeben sind (Die Haupt-E-Mail
+                kann leer gelassen werden).
             self_registration_reason_custom_text:
               either_preset_or_custom: kann nicht gesetzt werden, wenn ein vordefinierter Eintrittsgrund ausgewählt wurde.
         person/add_request:
@@ -193,8 +193,8 @@ de:
               must_have_3_lines: 'muss genau 3 Zeilen enthalten'
         role:
           attributes:
-            delete_on:
-              must_be_later_than_created_at: kann nicht vor Von sein
+            end_on:
+              must_be_later_than_start_on: kann nicht vor Von sein
 
 
     models:
@@ -709,7 +709,7 @@ de:
         choices: Mögliche Antworten
         multiple_choices: Mehrfachauswahl
         disclosure: Angabe
-        disclosures: 
+        disclosures:
           required: Obligatorisch
           optional: Optional
           hidden: Nicht angezeigt
@@ -815,10 +815,10 @@ de:
         person_id: Person
         string_long: '%{role} in %{group}'
         dates: Daten
-        created_at: Von
-        deleted_t: Bis
-        delete_on: Bis
-        delete_on_in_name: bis
+        created_at: Erstellt um
+        start_on: Von
+        end_on: Bis
+        end_on_in_name: bis
         class:
           archived: '%{role_kind} (archiviert)'
           permission:

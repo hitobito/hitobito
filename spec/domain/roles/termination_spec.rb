@@ -65,7 +65,7 @@ describe Roles::Termination do
         expect(subject.call).to eq true
       end
         .to change { role.reload.terminated? }.from(false).to(true)
-        .and change { role.reload.delete_on }.from(nil).to(terminate_on)
+        .and change { role.reload.end_on }.from(nil).to(terminate_on)
     end
 
     it "when invalid does not terminate role and returns false" do
@@ -75,7 +75,7 @@ describe Roles::Termination do
         expect(subject.call).to eq false
       end
         .to not_change { role.reload.terminated? }.from(false)
-        .and not_change { role.reload.delete_on }.from(nil)
+        .and not_change { role.reload.end_on }.from(nil)
     end
   end
 

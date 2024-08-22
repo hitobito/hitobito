@@ -11,11 +11,9 @@
 #
 #  id          :integer          not null, primary key
 #  archived_at :datetime
-#  convert_on  :date
-#  convert_to  :string(255)
-#  delete_on   :date
-#  deleted_at  :datetime
+#  end_on      :date
 #  label       :string(255)
+#  start_on    :date
 #  terminated  :boolean          default(FALSE), not null
 #  type        :string(255)      not null
 #  created_at  :datetime
@@ -32,9 +30,8 @@
 class Role < ActiveRecord::Base
   has_paper_trail meta: {main_id: ->(r) { r.person_id },
                          main_type: Person.sti_name},
-    skip: [:updated_at]
-
-  acts_as_paranoid
+    skip: [:updated_at],
+    on: [:create, :touch, :update]
 
   include Role::Types
   include NormalizedLabels
@@ -44,7 +41,7 @@ class Role < ActiveRecord::Base
 
   # All attributes actually used (and mass-assignable) by the respective STI type.
   class_attribute :used_attributes
-  self.used_attributes = [:label, :created_at, :deleted_at, :delete_on]
+  self.used_attributes = [:label, :start_on, :end_on]
 
   # Attributes that may only be modified by people from superior layers.
   class_attribute :superior_attributes
@@ -108,15 +105,11 @@ class Role < ActiveRecord::Base
 
   validates_by_schema
 
-  validates_date :created_at,
+  validates_date :end_on,
     allow_blank: true,
-    on_or_before: -> { Time.zone.today },
-    on_or_before_message: :cannot_be_later_than_today
-
-  validates_date :delete_on,
-    allow_blank: true,
-    on_or_after: ->(r) { [r.created_at&.to_date, Time.zone.today].compact.min },
-    on_or_after_message: :must_be_later_than_created_at
+    on_or_after: :start_on,
+    on_or_after_message: :must_be_later_than_start_on,
+    if: -> { start_on.present? }
 
   validate :assert_type_is_allowed_for_group, on: :create
 
@@ -131,14 +124,29 @@ class Role < ActiveRecord::Base
 
   ### SCOPES
 
-  scope :without_future, -> { where.not(type: FutureRole.sti_name) }
-  scope :without_archived, -> { where(archived_at: nil) }
-  scope :only_archived, -> { where.not(archived_at: nil).where(archived_at: ..Time.now.utc) }
-  scope :future, -> { where(type: FutureRole.sti_name) }
+  def self.active_scope(reference_date = Date.current)
+    # we must use arel_table instead of custom sql,
+    # otherwise `unscope` with a column name does not work
+    where(arel_table[:start_on].lteq(reference_date.to_date).or(arel_table[:start_on].eq(nil)))
+      .where(arel_table[:end_on].gteq(reference_date.to_date).or(arel_table[:end_on].eq(nil)))
+  end
+
+  default_scope { active_scope }
+  scope :with_inactive, -> { unscope(where: [:start_on, :end_on]) }
+  scope :active, ->(reference_date = Date.current) { with_inactive.active_scope(reference_date) }
   scope :inactive, -> {
-                     with_deleted.where("deleted_at IS NOT NULL OR archived_at <= ?",
-                       Time.now.utc)
-                   }
+    with_inactive.where(
+      "archived_at <= :now OR end_on < :today",
+      now: Time.current.utc,
+      today: Date.current
+    )
+  }
+
+  scope :without_archived, -> { where(archived_at: nil) }
+  scope :only_archived, -> { where(archived_at: ..Time.current.utc) }
+
+  scope :future, -> { with_inactive.where("start_on > :today", today: Date.current) }
+  scope :ended, -> { with_inactive.where("end_on < :today", today: Date.current) }
 
   ### CLASS METHODS
 
@@ -157,7 +165,7 @@ class Role < ActiveRecord::Base
     model_name = self.class.label
     unless format == :short
       model_name = label? ? "#{model_name} (#{label})" : model_name
-      model_name += " (#{formatted_delete_date})" if delete_on
+      model_name += " (#{formatted_delete_date})" if end_on
     end
     if format == :long
       I18n.t("activerecord.attributes.role.string_long", role: model_name, group: group.to_s)
@@ -166,13 +174,18 @@ class Role < ActiveRecord::Base
     end
   end
 
-  # Soft destroy if older than certain amount of days, hard if younger.
-  # Set always_soft_destroy to true if you want to soft destroy even if the role is not old enough.
-  def destroy(always_soft_destroy: false)
-    if always_soft_destroy || old_enough_to_archive?
-      super()
-    else
-      really_destroy!
+  # Keep an alias of the original destroy method for when we need to call it
+  # without the customizations.
+  alias_method :vanilla_destroy, :destroy
+
+  # If the role is younger than the minimum days to archive, it gets destroyed.
+  # If it has "archival age", we update the end_on attribute to yesterday instead of destroying it.
+  # If `always_soft_destroy` is set to true, the role is always ended instead of destroyed.
+  def destroy(always_soft_destroy: false) # rubocop:disable Rails/ActiveRecordOverride
+    return super() unless always_soft_destroy || old_enough_to_archive?
+
+    run_callbacks :destroy do
+      end_on&.past? ? true : update(end_on: Date.current.yesterday)
     end
   end
 
@@ -186,7 +199,7 @@ class Role < ActiveRecord::Base
     self.class.terminatable && # class is marked as terminatable
       !terminated? && # role is not already terminated
       !archived? && # role is not archived
-      !deleted? # role is not deleted
+      !ended? # role has ended
   end
 
   # Overwritten setter to prevent direct assignment of terminated.
@@ -196,7 +209,7 @@ class Role < ActiveRecord::Base
   end
 
   def terminated_on
-    delete_on || deleted_at&.to_date if terminated?
+    end_on if terminated?
   end
 
   def archived?
@@ -216,16 +229,12 @@ class Role < ActiveRecord::Base
     end
   end
 
-  def start_on
-    convert_on || created_at&.to_date || Time.zone.today
+  def ended?
+    end_on? && end_on < Date.current
   end
 
-  def end_on
-    delete_on || deleted_at&.to_date
-  end
-
-  def outdated?
-    deleted_at.nil? && (conversion_pending? || deletion_pending?)
+  def active?(reference_time = Time.current)
+    active_period.cover?(reference_time)
   end
 
   def active_period
@@ -237,18 +246,10 @@ class Role < ActiveRecord::Base
   end
 
   def formatted_delete_date
-    [self.class.human_attribute_name("delete_on_in_name"), I18n.l(delete_on)].join(" ")
+    [self.class.human_attribute_name("end_on_in_name"), I18n.l(end_on)].join(" ")
   end
 
   private
-
-  def conversion_pending?
-    convert_on.present? && convert_on <= Time.zone.today
-  end
-
-  def deletion_pending?
-    delete_on.present? && delete_on <= Time.zone.today
-  end
 
   def nextcloud_group_details
     return nil unless FeatureGate.enabled?("groups.nextcloud")
@@ -277,7 +278,7 @@ class Role < ActiveRecord::Base
   end
 
   def set_first_primary_group
-    if (deleted_at.nil? || deleted_at.future?) && person.roles.count <= 1
+    if active_period.cover?(Date.current) && person.roles.count <= 1
       person.update_column :primary_group_id, group_id # rubocop:disable Rails/SkipsModelValidations intentional
     end
   end
@@ -294,8 +295,6 @@ class Role < ActiveRecord::Base
   end
 
   def assert_type_is_allowed_for_group
-    return if type == FutureRole.sti_name
-
     if type && group && !group.role_types.collect(&:sti_name).include?(type)
       errors.add(:type, :type_not_allowed)
     end
@@ -316,9 +315,5 @@ class Role < ActiveRecord::Base
 
   def reset_person_minimized_at
     person&.update_attribute(:minimized_at, nil) # rubocop:disable Rails/SkipsModelValidations
-  end
-
-  def paranoia_destroy_attributes
-    delete_on&.past? ? super.merge(deleted_at: delete_on.midnight) : super
   end
 end

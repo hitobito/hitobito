@@ -65,7 +65,7 @@ describe People::Merger do
 
       person.reload
 
-      person_roles = person.roles.with_deleted
+      person_roles = person.roles.with_inactive
       expect(person_roles.count).to eq(2)
       group_ids = person_roles.map(&:group_id)
       expect(group_ids).to include(groups(:bottom_group_one_one).id)
@@ -85,7 +85,7 @@ describe People::Merger do
         merger.merge!
       end.to change(Person, :count).by(-1)
 
-      person_roles = person.roles.with_deleted
+      person_roles = person.roles.with_inactive
       expect(person_roles.count).to eq(1)
       group_ids = person_roles.map(&:group_id)
       expect(group_ids).to include(groups(:bottom_group_one_one).id)
@@ -100,28 +100,21 @@ describe People::Merger do
       Group::BottomGroup::Member.create!(group: groups(:bottom_group_one_one),
         person: person)
 
-      duplicate_two_one_role =
+      _duplicate_two_one_role =
         Group::BottomGroup::Member.create!(group: groups(:bottom_group_two_one),
-          person: duplicate)
-
-      duplicate_two_one_role.delete
-      # check soft delete
-      expect(Role.with_deleted.where(id: duplicate_two_one_role.id)).to exist
+          person: duplicate, end_on: 1.day.ago)
 
       # should not merge this deleted role since person has it already
-      duplicate_one_one_role =
+      _duplicate_one_one_role =
         Group::BottomGroup::Member.create!(group: groups(:bottom_group_one_one),
-          person: duplicate)
-      duplicate_one_one_role.delete
-      # check soft delete
-      expect(Role.with_deleted.where(id: duplicate_one_one_role.id)).to exist
+          person: duplicate, end_on: 1.day.ago)
 
       expect do
         merger.merge!
       end.to change(Person, :count).by(-1)
-        .and change { person.roles.with_deleted.count }.by(2) # rubocop:disable Layout/MultilineMethodCallIndentation
+        .and change { person.roles.with_inactive.count }.by(2) # rubocop:disable Layout/MultilineMethodCallIndentation
 
-      group_ids = person.roles.with_deleted.map(&:group_id)
+      group_ids = person.roles.with_inactive.map(&:group_id)
       expect(group_ids).to include(groups(:bottom_group_one_one).id)
       expect(group_ids).to include(groups(:bottom_group_two_one).id)
 

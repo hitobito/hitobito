@@ -94,17 +94,17 @@ describe PersonAbility do
     end
 
     it "may show person with deleted role in layer" do
-      other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
+      other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), start_on: 2.weeks.ago, end_on: 1.week.ago)
       is_expected.to be_able_to(:show, other.person.reload)
     end
 
     it "may show person with deleted role in lower layer" do
-      other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
+      other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one), start_on: 2.weeks.ago, end_on: 1.week.ago)
       is_expected.to be_able_to(:show, other.person.reload)
     end
 
     it "may not show person with deleted role in different layer" do
-      other = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: Group::TopLayer.create(name: "foo"), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
+      other = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: Group::TopLayer.create(name: "foo"), start_on: 2.weeks.ago, end_on: 1.week.ago)
       is_expected.to_not be_able_to(:show, other.person.reload)
     end
 
@@ -269,7 +269,7 @@ describe PersonAbility do
     end
 
     it "may show person with deleted role in upper layer" do
-      other = Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
+      other = Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group), start_on: 2.weeks.ago, end_on: 1.week.ago)
       is_expected.to_not be_able_to(:show, other.person.reload)
     end
 
@@ -357,7 +357,7 @@ describe PersonAbility do
     end
 
     it "may not show person with deleted role in layer" do
-      other = Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
+      other = Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group), start_on: 2.weeks.ago, end_on: 1.week.ago)
       is_expected.to_not be_able_to(:show, other.person.reload)
     end
 
@@ -453,12 +453,12 @@ describe PersonAbility do
     end
 
     it "may show person with deleted role in layer" do
-      other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
+      other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), start_on: 2.weeks.ago, end_on: 1.week.ago)
       is_expected.to be_able_to(:show, other.person.reload)
     end
 
     it "may not show person with deleted role in lower layer" do
-      other = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
+      other = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one), start_on: 2.weeks.ago, end_on: 1.week.ago)
       is_expected.to_not be_able_to(:show, other.person.reload)
     end
 
@@ -626,7 +626,7 @@ describe PersonAbility do
     end
 
     it "may not show person with deleted role in layer" do
-      other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
+      other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), start_on: 2.weeks.ago, end_on: 1.week.ago)
       is_expected.to_not be_able_to(:show, other.person.reload)
     end
 
@@ -733,7 +733,7 @@ describe PersonAbility do
     end
 
     it "may not show person with deleted role in layer" do
-      other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
+      other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one), start_on: 2.weeks.ago, end_on: 1.week.ago)
       is_expected.to_not be_able_to(:show, other.person.reload)
     end
 

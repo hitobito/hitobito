@@ -35,33 +35,18 @@ class Group::LogController < ApplicationController
   end
 
   def version_conditions
-    base_conditions.and(
-      active_person_conditions.or(deleted_role_conditions)
+    versions[:main_type].eq(Person.sti_name).and(
+      versions[:main_id].in(Arel::Nodes::SqlLiteral.new(people_scope.to_sql))
     )
   end
 
-  def base_conditions
-    versions[:main_type].eq(Person.sti_name)
-  end
-
-  def active_person_conditions
-    versions[:main_id].in(Arel::Nodes::SqlLiteral.new(active_people.to_sql))
-  end
-
-  def deleted_role_conditions
-    versions[:item_type].eq(Role.sti_name)
-      .and(versions[:event].eq("destroy"))
-      .and(roles[:group_id].in(relevant_groups.map(&:id)))
-      .and(roles[:deleted_at].lteq(Time.zone.now))
-  end
-
-  def active_people
+  def people_scope
     @active_people ||= Person
       .accessible_by(PersonFullReadables.new(current_person))
       .unscope(:select)
       .select(:id)
       .joins(:roles)
-      .merge(Role.without_archived)
+      .merge(Role.with_inactive.without_archived)
       .where(roles: {group: relevant_groups})
   end
 

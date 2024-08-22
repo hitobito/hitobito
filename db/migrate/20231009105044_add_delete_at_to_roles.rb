@@ -13,7 +13,7 @@ class AddDeleteAtToRoles < ActiveRecord::Migration[6.1]
     reversible do |dir|
       dir.up do
         # required to make this work on github actions deployment build
-        return true if Role.none?
+        return true if Role.unscoped.none?
 
         execute "UPDATE roles SET delete_on = DATE(deleted_at), deleted_at = NULL WHERE deleted_at >= NOW()"
       end

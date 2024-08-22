@@ -546,7 +546,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   # Destroy all related roles before destroying this person.
   # dependent: :destroy does not work here, because roles are paranoid.
   def destroy_roles
-    roles.with_deleted.delete_all
+    roles.with_inactive.delete_all
   end
 
   def destroy_person_duplicates

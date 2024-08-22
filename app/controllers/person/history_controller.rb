@@ -9,7 +9,7 @@ class Person::HistoryController < ApplicationController
   decorates :group, :person
 
   def index
-    @roles = fetch_roles(:without_deleted, :without_future)
+    @roles = fetch_roles(:active)
     @future_roles = fetch_roles(:future)
     @inactive_roles = fetch_roles(:inactive)
     @qualifications = Qualifications::List.new(entry).qualifications

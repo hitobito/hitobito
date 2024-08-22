@@ -11,7 +11,7 @@ describe Group::DeletedPeople do
     let(:person) { role.person.reload }
     let(:role) do
       Fabricate(Group::TopLayer::TopAdmin.name, group: group,
-        created_at: 1.year.ago)
+        start_on: 1.year.ago)
     end
 
     let(:child_group) { groups(:bottom_layer_one) }
@@ -19,13 +19,13 @@ describe Group::DeletedPeople do
     let(:child_person) { child_role.person.reload }
     let(:child_role) do
       Fabricate(Group::BottomGroup::Leader.name, group: child_group_one,
-        created_at: 1.year.ago)
+        start_on: 1.year.ago)
     end
 
     context "for single group" do
       context "when group has people without role" do
         before do
-          role.destroy
+          role.update_column(:end_on, 1.day.ago)
         end
 
         it "finds those people" do
@@ -39,7 +39,7 @@ describe Group::DeletedPeople do
         end
 
         it "finds people from other group in same layer" do
-          child_role.destroy
+          child_role.update_column(:end_on, 1.day.ago)
           expect(Group::DeletedPeople.deleted_for(child_group)).to include child_person
         end
       end
@@ -55,13 +55,13 @@ describe Group::DeletedPeople do
       let(:sibling_group) { Fabricate(Group::TopLayer.sti_name.to_sym) }
       let(:sibling_role) do
         Fabricate(Group::TopLayer::TopAdmin.name, group: sibling_group,
-          created_at: 1.year.ago)
+          start_on: 1.year.ago)
       end
       let(:all_groups) { [group, sibling_group] }
 
       context "when group has people without role" do
         before do
-          role.destroy
+          role.update_column(:end_on, 1.day.ago)
         end
 
         it "finds those people" do
@@ -76,7 +76,7 @@ describe Group::DeletedPeople do
         end
 
         it "finds people from other group in same layer" do
-          child_role.destroy
+          child_role.update_column(:end_on, 1.day.ago)
           expect(Group::DeletedPeople.deleted_for_multiple([child_group, sibling_group])).to include child_person
         end
       end
@@ -95,11 +95,11 @@ describe Group::DeletedPeople do
     let(:person) { role_top.person }
     let(:role_top) do
       Fabricate(Group::TopLayer::TopAdmin.name, group: group,
-        created_at: 1.year.ago)
+        start_on: 1.year.ago)
     end
     let(:role_bottom) do
       Fabricate(Group::BottomLayer::Leader.name, group: bottom_group, person: person,
-        created_at: 1.year.ago)
+        start_on: 1.year.ago)
     end
 
     before do
@@ -107,43 +107,38 @@ describe Group::DeletedPeople do
     end
 
     it "doesnt find when last role deleted in bottom group" do
-      role_top.destroy
-      role_top.update_column(:deleted_at, 1.hour.ago)
-      role_bottom.destroy
+      role_top.update_column(:end_on, 2.days.ago)
+      role_bottom.update_column(:end_on, 1.day.ago)
       expect(Group::DeletedPeople.deleted_for(group).count).to eq 0
     end
 
     it "find if last deleted role in top group" do
-      role_bottom.destroy
-      role_bottom.update_column(:deleted_at, 1.hour.ago)
-      role_top.destroy
+      role_top.update_column(:end_on, 1.day.ago)
+      role_bottom.update_column(:end_on, 2.days.ago)
       expect(Group::DeletedPeople.deleted_for(group)).to include person
     end
 
     it "finds people in child group" do
-      role_top.destroy
-      role_top.update_column(:deleted_at, 1.hour.ago)
-      role_bottom.destroy
+      role_top.update_column(:end_on, 2.days.ago)
+      role_bottom.update_column(:end_on, 1.day.ago)
       expect(Group::DeletedPeople.deleted_for(bottom_group)).to include person
     end
 
     it "doesnt find when not visible from above" do
       Fabricate(Role::External.name.to_sym, group: bottom_group, person: person,
-        created_at: DateTime.current - 30.day)
+        start_on: 30.day.ago)
       role_top.destroy
       expect(Group::DeletedPeople.deleted_for(group).count).to eq 0
     end
 
     it "finds multiple people" do
-      del = 1.months.ago
-      role_top.destroy
-      role_top.update!(deleted_at: del)
+      end_on = 1.months.ago
+      role_top.update_column(:end_on, end_on)
       top2 = Fabricate(Group::TopLayer::TopAdmin.name, group: group,
-        created_at: 1.year.ago)
+        start_on: 1.year.ago)
       Fabricate(Group::BottomLayer::Leader.name, group: bottom_group, person: top2.person,
-        created_at: 9.months.ago)
-      top2.destroy
-      top2.update!(deleted_at: del)
+        start_on: 9.months.ago)
+      top2.update_column(:end_on, end_on)
 
       expect(Group::DeletedPeople.deleted_for(group)).to match_array([person])
     end

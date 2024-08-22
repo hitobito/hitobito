@@ -49,7 +49,6 @@ Wenn an den Core Stylesheets Anpassungen vorgenommen werden, müssen diese bei a
 insbesondere denjenigen mit customized Styles (z.B. Jubla) überprüft werden, damit die auch dort
 funktionieren.
 
-
 ### Checkliste für neue Attribute
 
 Folgende Punkte sind zu berücksichtigen, wenn neue Attribute zu Hitobito Modellen hinzugefügt
@@ -70,7 +69,8 @@ sowie im JSON API die selben Regeln. Ist also z.B. ein Attribut öffentlich, wir
 und in der JSON Personen Liste angezeigt, wenn nicht, nur im Full CSV und im Einzelperson JSON,
 falls die Berechtigung dafür vorhanden ist.
 
-Ein beispielhafte Anleitung, wie in einem Wagon Attribute hinzugefügt werden können, findest du im Kapitel [Wagons](04_wagons.md#attribute-hinzuf-gen).
+Ein beispielhafte Anleitung, wie in einem Wagon Attribute hinzugefügt werden können, findest du im
+Kapitel [Wagons](04_wagons.md#attribute-hinzuf-gen).
 
 #### Personenattribute
 
@@ -81,10 +81,8 @@ Ein beispielhafte Anleitung, wie in einem Wagon Attribute hinzugefügt werden k�
 #### Rollen umbenennen / entfernen
 
 * Migration aller betroffenen `Role` Instanzen (`with_deleted`!).
-* Migration aller betroffenen `FutureRole` Instanzen.
 * Migration aller betroffenen `RelatedRoleType` Instanzen.
 * Migration aller Papertrail Versionen (`#object` und `#object_changes`).
-
 
 ### Mehrsprachigkeit / I18n
 

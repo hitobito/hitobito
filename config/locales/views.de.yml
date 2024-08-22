@@ -1831,12 +1831,6 @@ de:
       foreign_key_error: Es gibt Personen, die diesen Eintrittsgrund verwenden, löschen ist daher nicht möglich.
 
   role_decorator:
-    outdated_future_role:
-      Die Rolle konnte nicht wie geplant per %{date} aktiviert werden. Falls
-      das Speichern der Rolle diese nicht aktiviert, wende dich bitte an den Support.
-    outdated_deleted_role:
-      Die Rolle konnte nicht wie geplant am %{date} terminiert werden. Falls
-      das Speichern der Rolle diese nicht terminiert, wende dich bitte an den Support.
     terminates_on: Austritt per %{date}
 
   roles:

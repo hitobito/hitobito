@@ -693,7 +693,7 @@ it:
         flash:
           privacy_policy_not_accepted: Per concludere la registrazione deve venir accettata la dichiarazione di protezione dei dati.
     self_inscription:
-      new:
+      show:
         role_exists: Avete già questo ruolo in questo gruppo.
         disabled: La registrazione esterna è disattivata per questo gruppo
       create:

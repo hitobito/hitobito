@@ -75,7 +75,7 @@ Hitobito::Application.routes.draw do
       get 'self_registration' => 'groups/self_registration#show'
       post 'self_registration' => 'groups/self_registration#create'
 
-      get 'self_inscription' => 'groups/self_inscription#new'
+      get 'self_inscription' => 'groups/self_inscription#show'
       post 'self_inscription' => 'groups/self_inscription#create'
 
       FeatureGate.if('groups.statistics') do

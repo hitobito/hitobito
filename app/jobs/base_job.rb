@@ -15,6 +15,13 @@ class BaseJob
   # Note: you can also override `#log_results` to include job specific data in the log.
   class_attribute :use_background_job_logging
 
+  # Define a maximum run time of this job.
+  # NOTE: this can ONLY be used to set a max_run_time that is lower than Delayed::Worker.max_run_time
+  # (see `config/initializers/delayed_job_config.rb`).
+  # Otherwise the lock on the job would expire and another worker would start the working on the in progress job.
+  class_attribute :max_run_time
+  self.max_run_time = 4.hours
+
   def initialize
     store_locale
   end

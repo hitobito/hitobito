@@ -5,6 +5,10 @@
 
 Rails.application.reloader.to_prepare do
   Delayed::Worker.max_attempts = 10
+  # Maximum run time of a job. This can only be configured lower for specific jobs, but not higher.
+  # Therefore we use a high value here to allow for exceptionally long running jobs.
+  # By default, BaseJobs have a shorter max_run_time configured.
+  Delayed::Worker.max_run_time = 24.hours
   Delayed::Worker.plugins << BackgroundJobs::Logging
 end
 

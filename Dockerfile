@@ -9,8 +9,8 @@ ARG NODEJS_VERSION="16"
 ARG YARN_VERSION="1.22.19"
 
 # Packages
-ARG BUILD_PACKAGES="nodejs git sqlite3 libsqlite3-dev imagemagick build-essential default-libmysqlclient-dev"
-ARG RUN_PACKAGES="imagemagick shared-mime-info pkg-config libmagickcore-dev libmagickwand-dev default-libmysqlclient-dev libjemalloc-dev libjemalloc2"
+ARG BUILD_PACKAGES="nodejs git sqlite3 libsqlite3-dev imagemagick build-essential libpq-dev"
+ARG RUN_PACKAGES="imagemagick shared-mime-info pkg-config libmagickcore-dev libmagickwand-dev libpq-dev libjemalloc-dev libjemalloc2"
 
 # Scripts
 ARG PRE_INSTALL_SCRIPT="\
@@ -36,12 +36,7 @@ ARG PRE_BUILD_SCRIPT="\
 "
 ARG BUILD_SCRIPT="bundle exec rake assets:precompile"
 
-ARG POST_BUILD_SCRIPT="\
-     RAILS_DB_USERNAME='dummy' \
-     RAILS_SPHINX_HOST='' \
-        bundle exec rake db:migrate wagon:migrate ts:configure \
-     && sed -i 's/\"/\`/g; s/\(  sql_\)\(host\|user\|pass\|db\)\( = \).*/\1\2\3UNSET/' config/production.sphinx.conf \
-     && sed -i 's!/app-src/log/production.!/opt/sphinx/log/!g; s!/app-src/tmp/binlog/production!/opt/sphinx/log!g; s!/app-src/db/sphinx/production/!/opt/sphinx/index/!g' config/production.sphinx.conf; \
+ARG POST_BUILD_SCRIPT=" \
      echo \"(built at: $(date '+%Y-%m-%d %H:%M:%S'))\" > /app-src/BUILD_INFO; \
      bundle exec bootsnap precompile app/ lib/; \
 "
@@ -182,7 +177,7 @@ ENV PS1="${PS1}" \
     TZ="${TZ}" \
     RAILS_HOME="${HOME}"
 
-COPY --from=build $RAILS_HOME/config/production.sphinx.conf /opt/sphinx/conf/sphinx.conf
+# COPY --from=build $RAILS_HOME/config/production.sphinx.conf /opt/sphinx/conf/sphinx.conf
 COPY --from=build $RAILS_HOME/bin/run-sphinx /usr/local/bin/run-sphinx
 
 RUN chmod -R ug+w /opt/sphinx/conf/ \

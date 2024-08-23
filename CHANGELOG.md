@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## Unreleased
+## Version 2.2
 
 - Ausserhalb von Hitobito angelegte Mailchimp E-Mails werden nicht mehr gelöscht, #2752
 -  Von Mailchimp via Link abgemeldetet E-Mails nicht unnötig synchronisieren, #1930

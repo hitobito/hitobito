@@ -580,7 +580,7 @@ en:
   full_text:
     index:
       title: "results"
-      incomplete_search_request: "Please enter at least three characters."
+      incomplete_search_request: "Please enter at least two characters."
   group:
     merge:
       select:

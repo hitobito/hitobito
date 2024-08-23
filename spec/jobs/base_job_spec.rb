@@ -1,5 +1,12 @@
 require "spec_helper"
 
+class MaxRunTimeJob < BaseJob
+  self.max_run_time = 1.second
+  def perform
+    sleep 3
+  end
+end
+
 describe BaseJob do
   def run_job(payload_object)
     payload_object.enqueue!.tap do |job_instance|
@@ -84,6 +91,13 @@ describe BaseJob do
       subscribe { run_job(BaseJob.new) }
 
       expect(notifications.dig("job_finished.background_job", 0).payload[:payload]).to eq expected_payload
+    end
+  end
+
+  context "max_run_time" do
+    it "aborts jobs running longer than max_run_time" do
+      job = run_job(MaxRunTimeJob.new)
+      expect(job.last_error).to match("execution expired")
     end
   end
 end

@@ -162,30 +162,15 @@ jobs:
       push: ${{ ! inputs.dry_run }}
     secrets: inherit
 
-  # deploy:
-  #   uses: ./.github/workflows/update_image.yml
-  #   needs:
-  #     - version
-  #     # just for ordering
-  #     - build
-  #   with:
-  #     repository: gitlab.puzzle.ch/pitc_hit/deployments/hitobito.git
-  #     file: ./deployments/${{ needs.settings.outputs.namespace_name }}/kustomization.yaml
-  #     image_tag: ${{ needs.version.outputs.version }}
-  #     image_ref: rails
-  #   secrets: inherit
-
-  # deploy_sphinx:
-  #   uses: ./.github/workflows/update_image.yml
-  #   needs:
-  #     - version
-  #     # just for ordering
-  #     - build
-  #     # avoid race-conditions when updating the repo
-  #     - deploy
-  #   with:
-  #     repository: gitlab.puzzle.ch/pitc_hit/deployments/hitobito.git
-  #     file: ./deployments/${{ needs.settings.outputs.namespace_name }}/kustomization.yaml
-  #     image_tag: ${{ needs.version.outputs.version }}
-  #     image_ref: sphinx
-  #   secrets: inherit
+  deploy:
+    uses: ./.github/workflows/update_image.yml
+    needs:
+      - version
+      # just for ordering
+      - build
+    with:
+      repository: gitlab.puzzle.ch/pitc_hit/deployments/hitobito.git
+      file: ./deployments/${{ needs.settings.outputs.namespace_name }}/kustomization.yaml
+      image_tag: ${{ needs.version.outputs.version }}
+      image_ref: rails
+    secrets: inherit

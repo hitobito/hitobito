@@ -178,6 +178,7 @@ ENV PS1="${PS1}" \
     RAILS_HOME="${HOME}"
 
 # COPY --from=build $RAILS_HOME/config/production.sphinx.conf /opt/sphinx/conf/sphinx.conf
+RUN mkdir -p /opt/sphinx/conf/ && touch /opt/sphinx/conf/sphinx.conf
 COPY --from=build $RAILS_HOME/bin/run-sphinx /usr/local/bin/run-sphinx
 
 RUN chmod -R ug+w /opt/sphinx/conf/ \

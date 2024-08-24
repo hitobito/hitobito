@@ -69,17 +69,6 @@ on:
         type: boolean
         default: false
 
-    # secrets:
-    #   PUZZLE_REGISTRY:
-    #     description: 'FQDN of the registry'
-    #     required: true
-    #   PUZZLE_REGISTRY_USERNAME:
-    #     description: 'Username for the registry-robot-account'
-    #     required: true
-    #   PUZZLE_REGISTRY_PASSWORD:
-    #     description: 'Password for the registry-robot-account'
-    #     required: true
-
 permissions:
   contents: write
 
@@ -106,7 +95,7 @@ jobs:
       - name: "Checkout composition"
         uses: actions/checkout@v4
         with:
-          repository: ${{ inputs.composition }}
+          repository: ${{ needs.settings.outputs.repo_name }}
           ref: ${{ needs.settings.outputs.composition_branch }}
 
       - name: "Set up Ruby"
@@ -152,7 +141,7 @@ jobs:
       composition: ${{ needs.settings.outputs.repo_name }}
       composition_branch: ${{ needs.settings.outputs.composition_branch }}
       version: ${{ needs.version.outputs.version }}
-      stage: ${{ inputs.stage }}
+      stage: ${{ needs.settings.outputs.release_stage }}
       target_branch: ${{ inputs.target_branch }}
       dry_run: ${{ needs.settings.outputs.dry_run }}
     secrets: inherit
@@ -169,7 +158,7 @@ jobs:
       source_ref: ${{ needs.settings.outputs.composition_branch }}
       project: ${{ needs.settings.outputs.project }}
       version: ${{ needs.version.outputs.version }}
-      stage: ${{ inputs.stage }}
+      stage: ${{ needs.settings.outputs.release_stage }}
       push: ${{ ! inputs.dry_run }}
     secrets: inherit
 

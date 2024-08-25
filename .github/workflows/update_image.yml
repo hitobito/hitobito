@@ -38,7 +38,7 @@ on:
         default: rails
 
     secrets:
-      repository_token:
+      REPOSITORY_TOKEN:
         description: 'Token for repository login, e.g. gitlab-token as Dev with R/W rights on content'
         required: true
 
@@ -51,7 +51,7 @@ jobs:
           REPO_URL: ${{ inputs.repository }}
           REPO_USER: ${{ inputs.repository_username }}
           REPO_BRANCH: ${{ inputs.repository_branch }}
-          REPO_TOKEN: ${{ secrets.repository_token }}
+          REPO_TOKEN: ${{ secrets.REPOSITORY_TOKEN }}
         run: |
           git clone https://${REPO_USER}:${REPO_TOKEN}@${REPO_URL} ./management_repo
           cd ./management_repo

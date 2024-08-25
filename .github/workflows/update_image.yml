@@ -44,7 +44,6 @@ on:
 
 jobs:
   write_tag:
-    environment: deploy
     runs-on: 'ubuntu-latest'
     steps:
       - name: Pull from repository

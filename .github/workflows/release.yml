@@ -1,44 +1,44 @@
 name: "Prepare, Build and Release a new Version"
 
 on:
-  workflow_dispatch: # Allow triggering manually
-    inputs:
-      composition:
-        description: "Composition repository, e.g. hitobito/ose_composition_generic"
-        type: string
-        required: true
-        default: "hitobito/ose_composition_generic"
-      stage:
-        description: "Stage of Release to be prepared"
-        required: true
-        type: choice
-        default: integration
-        options:
-          - integration
-          - production
-      release_type:
-        description: "Type of Release: regular, patch or custom"
-        required: true
-        type: choice
-        default: regular
-        options:
-          - regular
-          - patch
-          - custom
-      next_version:
-        description: "next version number, if release-type is custom"
-        required: false
-        type: string
-      target_branch:
-        description: "Branch of individual repos, mostly: master"
-        required: false
-        type: string
-        default: master
-      dry_run:
-        description: "Only show commands to prepare, do not execute them"
-        required: false
-        type: boolean
-        default: false
+  # workflow_dispatch: # Allow triggering manually
+  #   inputs:
+  #     composition:
+  #       description: "Composition repository, e.g. hitobito/ose_composition_generic"
+  #       type: string
+  #       required: true
+  #       default: "hitobito/ose_composition_generic"
+  #     stage:
+  #       description: "Stage of Release to be prepared"
+  #       required: true
+  #       type: choice
+  #       default: integration
+  #       options:
+  #         - integration
+  #         - production
+  #     release_type:
+  #       description: "Type of Release: regular, patch or custom"
+  #       required: false
+  #       type: choice
+  #       default: regular
+  #       options:
+  #         - regular
+  #         - patch
+  #         - custom
+  #     next_version:
+  #       description: "next version number, if release-type is custom"
+  #       required: false
+  #       type: string
+  #     target_branch:
+  #       description: "Branch of individual repos, mostly: master"
+  #       required: false
+  #       type: string
+  #       default: master
+  #     dry_run:
+  #       description: "Only show commands to prepare, do not execute them"
+  #       required: false
+  #       type: boolean
+  #       default: false
   workflow_call:
     inputs:
       composition:
@@ -47,7 +47,7 @@ on:
         required: true
       release_type:
         description: "Type of Release: regular, patch or custom"
-        required: true
+        required: false
         type: string
         default: regular
       next_version:

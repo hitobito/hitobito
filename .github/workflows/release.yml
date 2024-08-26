@@ -174,4 +174,5 @@ jobs:
       file: ./deployments/${{ needs.settings.outputs.namespace_name }}/kustomization.yaml
       image_tag: ${{ needs.version.outputs.version }}
       image_ref: rails
+      identifier: ${{ needs.settings.outputs.namespace_name }}
     secrets: inherit

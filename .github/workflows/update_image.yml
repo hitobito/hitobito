@@ -36,6 +36,11 @@ on:
         type: string
         required: false
         default: rails
+      identifier:
+        description: 'Identifier for commit-message, could be a namespace or project-name'
+        type: string
+        required: false
+        default: 'deployment'
 
     secrets:
       REPOSITORY_TOKEN:
@@ -88,10 +93,11 @@ jobs:
           IMAGE_REF: ${{ inputs.image_ref }}
           OLD_TAG: ${{ steps.get_old_image_tag.outputs.result }}
           NEW_TAG: ${{ inputs.image_tag }}
+          PARENT: ${{ inputs.identifier }}
         run: |
           cd ./management_repo
           echo git diff
           git add .
-          git commit -m "Setting image reference of '${IMAGE_REF} from '${OLD_TAG}' to '${NEW_TAG}'"
+          git commit -m "Update ${PARENT}/${IMAGE_REF} from '${OLD_TAG}' to '${NEW_TAG}'"
           git push origin "${REPO_BRANCH}"
 

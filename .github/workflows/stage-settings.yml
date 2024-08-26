@@ -81,12 +81,12 @@ jobs:
             production)
               echo "branch=production" >> "$GITHUB_OUTPUT"
               echo "release_type=${RELEASE_TYPE}" >> "$GITHUB_OUTPUT"
-              echo "namespace_name=hit-${project//_/-}-prod"
+              echo "namespace_name=hit-${project//_/-}-prod" >> "$GITHUB_OUTPUT"
             ;;
 
             integration)
               echo "branch=devel" >> "$GITHUB_OUTPUT"
               echo "release_type=integration" >> "$GITHUB_OUTPUT"
-              echo "namespace_name=hit-${project//_/-}-int"
+              echo "namespace_name=hit-${project//_/-}-int" >> "$GITHUB_OUTPUT"
             ;;
           esac;

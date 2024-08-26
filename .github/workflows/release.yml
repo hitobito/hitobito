@@ -165,6 +165,7 @@ jobs:
   deploy:
     uses: ./.github/workflows/update_image.yml
     needs:
+      - settings
       - version
       # just for ordering
       - build

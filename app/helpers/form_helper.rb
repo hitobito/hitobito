@@ -92,11 +92,11 @@ module FormHelper
 
   def submit_button(form, label, options = {})
     if options[:display_as_link]
-      form.button(label, options.merge(class: "btn btn-sm btn-link",
+      form.button(label, options.deep_merge(class: "btn btn-sm btn-link",
         data: {turbo_submits_with: label}))
     else
       content_tag(:div, class: "btn-group") do
-        form.button(label, options.merge(class: "btn btn-sm btn-primary mt-2",
+        form.button(label, options.deep_merge(class: "btn btn-sm btn-primary mt-2",
           data: {turbo_submits_with: label}))
       end
     end

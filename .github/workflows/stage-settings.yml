@@ -35,6 +35,8 @@ on:
         value: ${{ jobs.settings.outputs.release_stage }}
       release_type:
         value: ${{ jobs.settings.outputs.release_type }}
+      namespace_name:
+        value: ${{ jobs.settings.outputs.namespace_name }}
       dry_run:
         value: ${{ jobs.settings.outputs.dry_run }}
 
@@ -49,8 +51,8 @@ jobs:
       composition_branch: ${{ steps.determine.outputs.branch }}
       release_stage: ${{ steps.determine.outputs.stage }}
       release_type: ${{ steps.determine.outputs.release_type }}
+      namespace_name: ${{ steps.determine.outputs.namespace_name }}
       dry_run: ${{ steps.determine.outputs.dry_run }}
-
 
     steps:
       - name: Infer project-name and stage-settings
@@ -65,7 +67,9 @@ jobs:
           echo "repo_name=${REPO}" >> "$GITHUB_OUTPUT"
 
           echo "repo_url=https://github.com/${REPO}.git" >> "$GITHUB_OUTPUT"
-          echo "project=${REPO##hitobito/ose_composition_}" >> "$GITHUB_OUTPUT"
+
+          project="${REPO##hitobito/ose_composition_}"
+          echo "project=${project}" >> "$GITHUB_OUTPUT"
 
           if [[ "${DRY_RUN}" = 'true' ]]; then
             echo 'dry_run=-n' >> "$GITHUB_OUTPUT"
@@ -77,10 +81,12 @@ jobs:
             production)
               echo "branch=production" >> "$GITHUB_OUTPUT"
               echo "release_type=${RELEASE_TYPE}" >> "$GITHUB_OUTPUT"
+              echo "namespace_name=hit-${project//_/-}-prod"
             ;;
 
             integration)
               echo "branch=devel" >> "$GITHUB_OUTPUT"
               echo "release_type=integration" >> "$GITHUB_OUTPUT"
+              echo "namespace_name=hit-${project//_/-}-int"
             ;;
           esac;

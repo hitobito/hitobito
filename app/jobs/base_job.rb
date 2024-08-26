@@ -82,4 +82,27 @@ class BaseJob
   def log_results
     {}
   end
+
+  def handle_termination_signals
+    handle_termination_signal('INT') do
+      handle_termination_signal('TERM') do
+        yield
+      end
+    end
+  end
+
+  def handle_termination_signal(signal)
+    @terminate = false
+    old_handler = trap(signal) do # dont know if the return value here is actually what we assume
+      @terminate = true
+      # old_term_handler.call what is old_term_handler
+    end
+    yield
+  ensure
+    trap(signal, old_handler) # are these even the correct parameters https://devdocs.io/ruby~3.2/kernel#method-i-trap
+  end
+
+  def check_terminated
+    raise SignalException if @terminate
+  end
 end

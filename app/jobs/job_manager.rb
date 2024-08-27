@@ -74,6 +74,7 @@ class JobManager
       Event::ParticipationCleanupAnswersJob,
       Payments::EbicsImportJob,
       People::DuplicateLocatorJob,
+      People::UpdateAfterRoleChangeJob,
       People::CleanupJob,
       ReoccuringMailchimpSynchronizationJob,
       SessionsCleanerJob,

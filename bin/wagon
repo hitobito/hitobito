@@ -85,7 +85,7 @@ SQL
 
 function setup_dbs() {
   setup_development_db
-  setup_test_db
+  reload_test_db
 }
 
 function setup_development_db() {

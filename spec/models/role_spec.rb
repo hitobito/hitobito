@@ -337,11 +337,11 @@ describe Role do
         expect(person.primary_group_id).to eq(group.id)
       end
 
-      it "is not reset if role is destroyed and primary group is another group" do
+      it "is reset if role is destroyed and primary group does not exist" do
         subject.save
         person.update_column :primary_group_id, 42
         expect(subject.destroy).to be_truthy
-        expect(person.primary_group_id).to eq(42)
+        expect(person.primary_group_id).to be_nil
       end
     end
 
@@ -472,8 +472,7 @@ describe Role do
       end
 
       it "triggers destroy callback" do
-        # :reset_contact_data_visible is configured as an after_destroy callback
-        expect(role).to receive(:reset_contact_data_visible)
+        expect(role).to receive(:set_contact_data_visible)
         role.destroy
       end
     end
@@ -502,9 +501,9 @@ describe Role do
         expect { role.destroy }.to change { role.reload.end_on }.to(Date.current.yesterday)
       end
 
-      it "triggers destroy callback" do
+      it "does triggers destroy callback" do
         # :reset_contact_data_visible is configured as an after_destroy callback
-        expect(role).to receive(:reset_contact_data_visible)
+        expect(role).not_to receive(:set_contact_data_visible)
         role.destroy
       end
     end

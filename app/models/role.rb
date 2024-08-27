@@ -116,11 +116,9 @@ class Role < ActiveRecord::Base
   ### CALLBACKS
 
   before_save :prevent_changes, if: :archived?
-  after_create :set_contact_data_visible
-  after_create :set_first_primary_group
   after_create :reset_person_minimized_at
-  after_destroy :reset_contact_data_visible
-  after_destroy :reset_primary_group
+  after_commit :set_contact_data_visible, if: :active?
+  after_commit :set_first_primary_group, if: :active?
 
   ### SCOPES
 
@@ -266,38 +264,6 @@ class Role < ActiveRecord::Base
     end
   end
 
-  # If this role has contact_data permissions, set the flag on the person
-  def set_contact_data_visible
-    if becomes(type.constantize).permissions.include?(:contact_data)
-      person.update_column :contact_data_visible, true # rubocop:disable Rails/SkipsModelValidations intentional
-    end
-  end
-
-  # If this role was the last one with contact_data permission, remove the flag from the person
-  def reset_contact_data_visible
-    if permissions.include?(:contact_data) &&
-        !person.roles.collect(&:permissions).flatten.include?(:contact_data)
-      person.update_column :contact_data_visible, false # rubocop:disable Rails/SkipsModelValidations intentional
-    end
-  end
-
-  def set_first_primary_group
-    if active_period.cover?(Date.current) && person.roles.count <= 1
-      person.update_column :primary_group_id, group_id # rubocop:disable Rails/SkipsModelValidations intentional
-    end
-  end
-
-  def reset_primary_group
-    if person.primary_group_id == group_id &&
-        person.roles.where(group_id: group_id).count.zero?
-      person.update_column :primary_group_id, alternative_primary_group.try(:id) # rubocop:disable Rails/SkipsModelValidations intentional
-    end
-  end
-
-  def alternative_primary_group
-    person.roles.order(updated_at: :desc).first.try(:group)
-  end
-
   def assert_type_is_allowed_for_group
     if type && group && !group.role_types.collect(&:sti_name).include?(type)
       errors.add(:type, :type_not_allowed)
@@ -319,5 +285,13 @@ class Role < ActiveRecord::Base
 
   def reset_person_minimized_at
     person&.update_attribute(:minimized_at, nil) # rubocop:disable Rails/SkipsModelValidations
+  end
+
+  def set_contact_data_visible
+    People::UpdateAfterRoleChange.new(person.reload).set_contact_data_visible
+  end
+
+  def set_first_primary_group
+    People::UpdateAfterRoleChange.new(person.reload).set_first_primary_group
   end
 end

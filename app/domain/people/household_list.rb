@@ -157,10 +157,12 @@ class People::HouseholdList
         end
       end
 
-      batch_relation = relation.having('"member_count" < ? OR ("member_count" = ? AND "id" > ?)',
+      batch_relation =
+        Person.select("*").from(relation.unscope(:limit))
+              .where('"member_count" < ? OR ("member_count" = ? AND "id" > ?)',
         member_count_offset,
         member_count_offset,
-        id_offset)
+        id_offset).limit(relation.limit_value)
     end
   end
 end

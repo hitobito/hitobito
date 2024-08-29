@@ -43,7 +43,7 @@ class BaseJob
   # hook called from DelayedJob
   def error(_job, exception, payload = parameters)
     logger.error(exception.message)
-    logger.error(exception.backtrace.join("\n"))
+    logger.error(exception.backtrace.join("\n")) if exception.backtrace
     Airbrake.notify(exception, cgi_data: ENV.to_hash, parameters: payload)
     Raven.capture_exception(exception, logger: "delayed_job")
   end

@@ -237,7 +237,7 @@ describe Messages::LetterDispatch do
           person.roles&.to_a&.at(2)&.type == Group::BottomLayer::Member.name
       end
 
-      expect(amount_of_members).to eq((households_count * household_size) + individuals_count + 1)
+      expect(amount_of_members).to eq((households_count * household_size) + individuals_count + 2)
 
       expect { subject.run }.not_to raise_error
 

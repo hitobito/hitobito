@@ -47,7 +47,7 @@ class BaseJob
   # hook called from DelayedJob
   def error(_job, exception, payload = parameters)
     logger.error(exception.message)
-    logger.error(exception.backtrace.join("\n"))
+    logger.error(exception.backtrace.join("\n")) if exception.backtrace
     Airbrake.notify(exception, cgi_data: ENV.to_hash, parameters: payload)
     # Sentry notification is done directly by sentry-delayed-job gem, no need to call it here
     # Sentry.capture_exception(exception, logger: "delayed_job")

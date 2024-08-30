@@ -502,8 +502,7 @@ describe Role do
       end
 
       it "does triggers destroy callback" do
-        # :reset_contact_data_visible is configured as an after_destroy callback
-        expect(role).not_to receive(:set_contact_data_visible)
+        expect(role).to receive(:set_contact_data_visible)
         role.destroy
       end
     end

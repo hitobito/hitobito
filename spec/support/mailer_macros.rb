@@ -25,6 +25,6 @@ module MailerMacros
   end
 
   def enqueued_mail_jobs_count
-    Delayed::Job.where('handler like "%ActionMailer::MailDeliveryJob%"').count
+    Delayed::Job.where("handler ILIKE ?", "%ActionMailer::MailDeliveryJob%").count
   end
 end

@@ -109,8 +109,10 @@ class PeopleController < CrudController
   # dont use class level accessor as expression is evaluated whenever constant is
   # loaded which might be before wagon that defines groups / roles has been loaded
   def self.sort_mappings_with_indifferent_access
-    {roles: [Person.order_by_role_statement]
-      .concat(Person.order_by_name_statement)}.with_indifferent_access
+    {roles: {
+      joins: [:roles, "INNER JOIN role_type_orders ON roles.type = role_type_orders.name"],
+      order: ["role_type_orders.order_weight", "people.sort_name"]
+    }}.with_indifferent_access
   end
 
   private
@@ -133,7 +135,9 @@ class PeopleController < CrudController
 
   def load_people_add_requests
     if params[:range].blank? && can?(:create, @group.roles.new)
-      @person_add_requests = @group.person_add_requests.list.includes(person: :primary_group)
+      @person_add_requests = @group.person_add_requests.list
+        .includes(person: :primary_group)
+        .select("person_add_requests.*")
     end
   end
 
@@ -162,7 +166,15 @@ class PeopleController < CrudController
 
   def filter_entries
     entries = add_table_display_to_query(person_filter.entries, current_person)
-    entries = entries.reorder(Arel.sql(sort_expression)) if sorting?
+    # PG_TODO: This method is solved weird, please improve
+    if sorting?
+      entries = Person.select("*").from(
+        entries.joins(join_tables).select(sort_expression_attrs)
+               .unscope(:order).distinct_on(:id), "people"
+      )
+        .reorder(Arel.sql(sort_expression.include?(".") ?
+                        sort_expression.split(".")[1] : sort_expression))
+    end
     entries
   end
 

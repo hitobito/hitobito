@@ -105,13 +105,21 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :blocked_at,
     :membership_verify_token,
     :inactivity_block_warning_sent_at,
-    :minimized_at
+    :minimized_at,
+    :sort_name
   ]
 
   FILTER_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
     :first_name, :last_name, :nickname, :company_name, :email, :address_care_of, :street,
     :housenumber, :postbox, :zip_code, :town, :country, :gender, [:years, :integer], :birthday
   ]
+
+  SEARCHABLE_ATTRS = [
+    :first_name, :last_name, :company_name, :nickname, :email, :address, :zip_code, :town,
+    :country, :birthday, :additional_information, {phone_numbers: [:number],
+                                                   social_accounts: [:name], additional_emails: [:email]}
+  ]
+
   if FeatureGate.disabled?("structured_addresses")
     FILTER_ATTRS << :address
   end
@@ -159,6 +167,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   include PersonTags::ValidationTagged
   include People::SelfRegistrationReasons
   include People::MembershipVerification
+  include PgSearchable
 
   i18n_enum :gender, GENDERS
   i18n_setter :gender, (GENDERS + [nil])
@@ -303,8 +312,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     end
       .where.not(zip_code: [nil, ""])
       .where.not(town: [nil, ""])
-      .where('(last_name IS NOT NULL AND last_name <> "") OR ' \
-            '(company_name IS NOT NULL AND company_name <> "")')
+      .where("(last_name IS NOT NULL AND last_name <> '') OR " \
+            "(company_name IS NOT NULL AND company_name <> '')")
   }
   scope :with_mobile, -> { joins(:phone_numbers).where(phone_numbers: {label: "Mobil"}) }
 
@@ -312,13 +321,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   class << self
     def order_by_name
-      order(Arel.sql(order_by_name_statement.join(", ")))
-    end
-
-    def order_by_name_statement
-      [company_case_column(:company_name, :last_name),
-        company_case_column(:last_name, :first_name),
-        company_case_column(:first_name, :nickname)]
+      select(:sort_name).order(:sort_name)
     end
 
     def only_public_data

@@ -116,7 +116,7 @@ module Group::Types
     def course_offerers
       where(type: course_types.map(&:sti_name))
         .without_deleted
-        .order(:parent_id, :name)
+        .order("parent_id NULLS FIRST", :name)
     end
 
     # Return the group type with the given sti_name or raise an exception if not found

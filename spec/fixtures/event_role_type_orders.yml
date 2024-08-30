@@ -1,0 +1,31 @@
+event_role_leader:
+  name: Event::Role::Leader
+  order_weight: 1
+
+event_role_assistant_leader:
+  name: Event::Role::AssistantLeader
+  order_weight: 2
+
+event_role_cook:
+  name: Event::Role::Cook
+  order_weight: 3
+
+event_role_helper:
+  name: Event::Role::Helper
+  order_weight: 4
+
+event_role_treasurer:
+  name: Event::Role::Treasurer
+  order_weight: 5
+
+event_role_speaker:
+  name: Event::Role::Speaker
+  order_weight: 6
+
+event_role_participant:
+  name: Event::Role::Participant
+  order_weight: 7
+
+event_course_role_participant:
+  name: Event::Course::Role::Participant
+  order_weight: 8

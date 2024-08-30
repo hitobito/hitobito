@@ -37,7 +37,7 @@ class Payment < ActiveRecord::Base
   before_validation :set_received_at
   after_create :update_invoice, if: :invoice
 
-  scope :list, -> { order(received_at: :desc) }
+  scope :list, -> { order(Arel.sql("(SELECT MAX(received_at) FROM payments) DESC")) }
   scope :unassigned, -> { where(invoice_id: nil) }
 
   STATES = %w[ebics_imported xml_imported manually_created without_invoice].freeze

@@ -24,8 +24,9 @@ module Paranoia
 
     module ClassMethods
       def list
-        with_translations
-          .order(:deleted_at, translated_label_column)
+        with_translations.unscope(:select).select("#{table_name}.*", translated_label_column)
+          .order("#{table_name}.deleted_at ASC NULLS FIRST",
+            translated_label_column)
           .distinct
       end
     end

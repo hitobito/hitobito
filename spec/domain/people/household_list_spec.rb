@@ -11,9 +11,9 @@ describe People::HouseholdList do
   let(:subject) { described_class.new(scope) }
   let(:person1) { Fabricate(:person) }
   let(:person2) { Fabricate(:person) }
-  let(:person3) { Fabricate(:person, household_key: "1234-1234-1234-1234") }
-  let(:person4) { Fabricate(:person, household_key: "1234-1234-1234-1234") }
-  let(:person5) { Fabricate(:person, household_key: "abcd-abcd-abcd-abcd") }
+  let(:person3) { Fabricate(:person, household_key: "1234") }
+  let(:person4) { Fabricate(:person, household_key: "1234") }
+  let(:person5) { Fabricate(:person, household_key: 1111) }
 
   context "#people_without_households" do
     let(:scope) { Person.where(id: [person1, person2, person3, person4, person5]) }
@@ -84,9 +84,9 @@ describe People::HouseholdList do
       let(:scope) do
         Person.where(id: [person1, person2, person3, person4, person5, person6, person7]).limit(2)
       end
-      let(:person6) { Fabricate(:person, household_key: "1234-1234-1234-1234") }
-      let(:person7) { Fabricate(:person, household_key: "1234-1234-1234-1234") }
-      let!(:person_not_in_scope) { Fabricate(:person, household_key: "1234-1234-1234-1234") }
+      let(:person6) { Fabricate(:person, household_key: "1234") }
+      let(:person7) { Fabricate(:person, household_key: "1234") }
+      let!(:person_not_in_scope) { Fabricate(:person, household_key: "1234") }
 
       it "respects limit, but still groups all housemates from scope" do
         yielded_batch = []
@@ -104,9 +104,9 @@ describe People::HouseholdList do
         Person.where(id: [person1, person2, person3, person4, person5, person6,
           person7]).only_public_data
       end
-      let(:person6) { Fabricate(:person, household_key: "1234-1234-1234-1234") }
-      let(:person7) { Fabricate(:person, household_key: "1234-1234-1234-1234") }
-      let!(:person_not_in_scope) { Fabricate(:person, household_key: "1234-1234-1234-1234") }
+      let(:person6) { Fabricate(:person, household_key: "1234") }
+      let(:person7) { Fabricate(:person, household_key: "1234") }
+      let!(:person_not_in_scope) { Fabricate(:person, household_key: 1111) }
 
       it "works" do
         yielded_batch = []

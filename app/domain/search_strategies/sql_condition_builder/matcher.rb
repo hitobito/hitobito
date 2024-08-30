@@ -23,7 +23,19 @@ class SearchStrategies::SqlConditionBuilder
     private
 
     def column
-      Arel::Table.new(@table_name)[@field]
+      table = Arel::Table.new(@table_name)
+
+      converted_table_name = @table_name.singularize.camelize
+      unless Object.const_defined?(converted_table_name)
+        converted_table_name.gsub!(/(?<=[a-z])([A-Z])/, '::\1')
+      end
+
+      if converted_table_name.constantize
+          .columns_hash[@field].type == :integer
+        Arel::Nodes::SqlLiteral.new("#{table.name}." + "#{table[@field].name}::text")
+      else
+        table[@field]
+      end
     end
 
     def quoted_word

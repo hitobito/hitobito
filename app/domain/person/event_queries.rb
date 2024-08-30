@@ -16,32 +16,41 @@ class Person::EventQueries
       .merge(Event::Participation.upcoming)
       .includes(event: [:groups])
       .joins(event: :dates)
+      .select("event_applications.*", "event_dates.start_at")
       .order("event_dates.start_at")
       .distinct.tap do |applications|
       Event::PreloadAllDates.for(applications.collect(&:event))
     end
   end
 
-  def upcoming_events
-    person.events
+  def unordered_upcoming_events
+    person
+      .events
       .upcoming
       .merge(Event::Participation.active)
       .merge(Event::Participation.upcoming)
-      .distinct
       .includes(:groups)
+      .select("events.*", "event_dates.start_at")
       .preload_all_dates
-      .order_by_date
+  end
+
+  def upcoming_events
+    Event.select("*").from(
+      unordered_upcoming_events
+    ).order_by_date
   end
 
   def alltime_participations
-    person
-      .event_participations
-      .active
-      .joins(event: :dates)
-      .includes(:roles, event: [:translations, :dates, :groups])
-      .order("event_dates.start_at")
-      .distinct.tap do |applications|
-        Event::PreloadAllDates.for(applications.collect(&:event))
-      end
+    Event::Participation.select("*").from(
+      person
+        .event_participations
+        .active
+        .joins(event: :dates)
+        .select("event_participations.*", "event_dates.start_at")
+        .distinct_on(:id)
+        .includes(:roles, event: [:translations, :dates, :groups])
+    ).order(:start_at).tap do |applications|
+      Event::PreloadAllDates.for(applications.collect(&:event))
+    end
   end
 end

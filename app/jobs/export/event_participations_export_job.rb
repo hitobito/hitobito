@@ -38,7 +38,7 @@ class Export::EventParticipationsExportJob < Export::ExportBaseJob
 
   def full_export?
     # This condition has to be in the job because it loads all entries
-    @options[:details] && ability.can?(:show_details, entries.first)
+    @options[:details] && ability.can?(:show_details, entries.to_a.first)
   end
 
   def household?

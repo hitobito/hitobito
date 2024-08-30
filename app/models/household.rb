@@ -137,7 +137,7 @@ class Household
   def next_key
     loop do
       key = SecureRandom.uuid
-      break key unless Person.exists?(household_key: key)
+      break key unless Person.where(household_key: key).exists?
     end
   end
 

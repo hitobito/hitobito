@@ -30,17 +30,16 @@ jobs:
       RAILS_TEST_DB_NAME: hitobito_test
 
     services:
-      mysql:
-        image: 'mysql:5.7'
+      postgres:
+        image: 'postgres:16'
         env:
-          MYSQL_USER: 'hitobito'
-          MYSQL_PASSWORD: 'hitobito'
-          MYSQL_DATABASE: 'hitobito_test'
-          MYSQL_ROOT_PASSWORD: 'root'
+          POSTGRES_USER: hitobito
+          POSTGRES_PASSWORD: hitobito
+          POSTGRES_DB: hitobito_test
         ports:
-          - '33066:3306'
+          - '5432:5432'
         options: >-
-          --health-cmd "mysqladmin ping"
+          --health-cmd "pg_isready -U hitobito"
           --health-interval 10s
           --health-timeout 10s
           --health-retries 10

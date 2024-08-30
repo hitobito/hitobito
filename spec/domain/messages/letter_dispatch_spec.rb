@@ -26,6 +26,7 @@ describe Messages::LetterDispatch do
       subscriber: groups(:bottom_layer_one),
       role_types: [Group::BottomLayer::Member])
     Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one), person: top_leader)
+    top_leader.update!(address: nil, zip_code: nil, town: "Supertown")
   end
 
   it "updates success count" do
@@ -233,12 +234,12 @@ describe Messages::LetterDispatch do
     it "successfully exports labels with grouped households" do
       # count group members
       amount_of_members = Person.all.count do |person|
-        person.roles&.first&.type == Group::BottomLayer::Member.name ||
-          person.roles&.to_a&.at(1)&.type == Group::BottomLayer::Member.name ||
-          person.roles&.to_a&.at(2)&.type == Group::BottomLayer::Member.name
+        person.roles.any? do |role|
+          role.type == Group::BottomLayer::Member.name
+        end
       end
 
-      expect(amount_of_members).to eq((households_count * household_size) + individuals_count + 1)
+      expect(amount_of_members).to eq((households_count * household_size) + individuals_count + 2)
 
       expect { subject.run }.not_to raise_error
 

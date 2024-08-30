@@ -71,8 +71,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   require_dependency "event/role_decorator"
   require_dependency "event/role_ability"
 
-  include Event::Participatable
+  SEARCHABLE_ATTRS = [:number, {translations: [:name], groups: [:name]}]
 
+  include Event::Participatable
+  include PgSearchable
   include Globalized
   translates :application_conditions, :description, :name, :signature_confirmation_text
 
@@ -191,10 +193,12 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   class << self
     # Default scope for event lists
     def list
-      order_by_date
-        .includes(:translations)
+      subquery = joins(:dates)
+        .select("events.*", "event_dates.start_at")
+      includes(:translations)
         .preload_all_dates
-        .distinct
+
+      Event.select("*").from(subquery.unscope(:order).distinct_on(:id), :events).order_by_date
     end
 
     def preload_all_dates
@@ -202,15 +206,19 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     end
 
     def order_by_date
-      joins(:dates).order("event_dates.start_at")
+      select(:start_at).order(:start_at)
     end
 
     # Events with at least one date in the given year
-    def in_year(year)
+    def in_year(year, subquery = false)
       year = Time.zone.today.year if year.to_i <= 0
       start_at = Time.zone.parse "#{year}-01-01"
       finish_at = start_at + 1.year
-      joins(:dates).where(event_dates: {start_at: [start_at...finish_at]})
+      if subquery
+        where(start_at: [start_at...finish_at])
+      else
+        joins(:dates).where(event_dates: {start_at: [start_at...finish_at]})
+      end
     end
 
     # Event with start and end-date overlay
@@ -221,12 +229,20 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
           start_date: start_date, end_date: end_date).distinct
     end
 
-    def before_or_on(date)
-      joins(:dates).where(event_dates: {start_at: ..date.end_of_day})
+    def before_or_on(date, subquery = false)
+      if subquery
+        where(start_at: ..date.end_of_day)
+      else
+        joins(:dates).where(event_dates: {start_at: ..date.end_of_day})
+      end
     end
 
-    def after_or_on(date)
-      joins(:dates).where(event_dates: {start_at: date.midnight..})
+    def after_or_on(date, subquery = false)
+      if subquery
+        where(start_at: date.midnight..)
+      else
+        joins(:dates).where(event_dates: {start_at: date.midnight..})
+      end
     end
 
     # Events from groups in the hierarchy of the given user.

@@ -114,7 +114,10 @@ class SubscriptionsController < CrudController
 
   def fetch_person_add_requests
     if can?(:create, mailing_list.subscriptions.new)
-      @mailing_list.person_add_requests.list.includes(person: :primary_group)
+      @mailing_list.person_add_requests
+        .list
+        .includes(person: :primary_group)
+        .select("person_add_requests.*")
     end
   end
 end

@@ -57,12 +57,15 @@ gem "matrix" # required but removed from stlib since ruby 3.2
 gem "mime-types"
 gem "mini_magick"
 gem "mysql2"
+gem "pg"
+gem "pg_search"
+gem "active_record_distinct_on"
 gem "nested_form"
 gem "nokogiri"
 gem "oat"
 gem "paper_trail"
 gem "paranoia"
-gem "phonelib"
+gem "phonelib", "~> 0.8.4"
 gem "prawn"
 gem "prawn-markup"
 gem "prawn-table"
@@ -168,6 +171,6 @@ end
 # Include the wagon gems you want attached in Wagonfile.
 # Do not check Wagonfile into source control.
 #
-# To create a Wagonfile suitable for development, run 'rake wagon:file'
+# To create a Wagonfile suitable for development, run "rake wagon:file"
 wagonfile = File.expand_path("Wagonfile", __dir__)
 eval(File.read(wagonfile)) if File.exist?(wagonfile) # rubocop:disable Security/Eval

@@ -109,17 +109,11 @@ module Person::Groups
 
     # Order people by the order role types are listed in their group types.
     def order_by_role
-      order(Arel.sql(order_by_role_statement))
-    end
-
-    def order_by_role_statement
-      statement = ["CASE roles.type"]
-      Role.all_types.each_with_index do |t, i|
-        statement << "WHEN '#{t.sti_name}' THEN #{i}"
-      end
-      statement << "END"
-
-      statement.join(" ")
+      subquery = joins(:roles)
+        .joins("INNER JOIN role_type_orders ON role_type_orders.name = roles.type")
+        .reselect(:order_weight, "people.*")
+        .distinct_on(:id)
+      Person.select("people.*").from(subquery, "people").unscope(:where).order(:order_weight)
     end
   end
 end

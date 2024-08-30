@@ -51,7 +51,7 @@ describe Events::Filter::State do
     end
 
     it "passes the value verbatim" do
-      expect(where_condition).to match("`state` = 'confirmed'")
+      expect(where_condition).to match("\"state\" = 'confirmed'")
     end
   end
 

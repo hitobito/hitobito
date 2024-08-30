@@ -103,6 +103,8 @@ class FeatureGate
     # this doesn't fail in those cases
     ActiveRecord::Base.connection.table_exists?("people") &&
       !Person.has_attribute?(:correspondence_language)
+  rescue ActiveRecord::NoDatabaseError
+    false
   end
 
   def self_registration_reason_enabled?

@@ -19,9 +19,4 @@
            postal: true,
            only_public: only_public
 
-  - if person.household_people.present?
-    = render_extensions 'household_attrs'
-    %div
-      %small= t('.lives_in_household_with')
-      %br
-      = render_household(person)
+  = render "people/household_attrs", person: person

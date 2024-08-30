@@ -970,44 +970,6 @@ describe PeopleController do
     end
   end
 
-  context "households" do
-    let(:member) { people(:bottom_member) }
-
-    before { sign_in(top_leader) }
-
-    it "POST#update creates household" do
-      put :update, params: {group_id: group.id, id: top_leader.id, person: {household_people_ids: [member.id]}}
-
-      expect(top_leader.reload.household_key).to be_present
-      expect(top_leader.household_people).to eq [member]
-    end
-
-    it "POST#update clears household" do
-      top_leader.update(household_key: 1)
-      put :update, params: {group_id: group.id, id: top_leader.id, person: {town: top_leader.town}}
-
-      expect(top_leader.reload.household_key).to be_nil
-    end
-
-    it "POST#update rerenders edit formal when not permitted to update addresse" do
-      sign_in(member)
-      put :update, params: {group_id: member.primary_group_id, id: member.id, person: {household_people_ids: [top_leader.id]}}
-      expect(assigns(:person)).to have(5).errors
-      expect(response).to render_template("edit")
-    end
-
-    it "POST#update does not accept invalid file type" do
-      file = Tempfile.new(["foo", ".exe"])
-      picture = Rack::Test::UploadedFile.new(file, "application/exe")
-      put :update, params: {group_id: member.primary_group_id, id: member.id, person: {picture: picture}}
-      expect(assigns(:person)).to have(2).error_on(:picture)
-      expect(assigns(:person).errors.group_by_attribute[:picture].map(&:type)).to match_array [
-        :image_metadata_missing,
-        :content_type_invalid
-      ]
-    end
-  end
-
   context "as token user" do
     it "shows page when token is valid" do
       get :show, params: {group_id: group.id, id: top_leader.id, token: "PermittedToken"}

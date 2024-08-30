@@ -4,8 +4,8 @@
 -#  https://github.com/hitobito/hitobito.
 
 .address-input-fields
-  %div.alert.alert-warning.updates-household-address.d-none
-    = t('.updates_household_address')
+  - if f.object.respond_to?(:household_key) && f.object.household_key.present?
+    %div.alert.alert-warning.updates-household-address= t('.updates_household_address')
 
   - if FeatureGate.disabled?('address_migration')
     - if FeatureGate.enabled?('structured_addresses')

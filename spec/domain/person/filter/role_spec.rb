@@ -71,8 +71,24 @@ describe Person::Filter::Role do
         expect(entries.collect(&:id)).to match_array([user, @tg_member].collect(&:id))
       end
 
+      it "loads all members of a group" do
+        expect(entries.collect(&:id)).to match_array([user, @tg_member].collect(&:id))
+      end
+
       it "contains all existing members" do
         expect(entries.size).to eq(list_filter.all_count)
+      end
+
+      context "expired roles" do
+        it "includes member with active and expired role" do
+          @tg_member.roles.first.update(end_on: 1.day.ago)
+          expect(entries).to include(@tg_member)
+        end
+
+        it "includes member with only expired roles" do
+          @tg_member.roles.update_all(end_on: 1.day.ago)
+          expect(entries).not_to include(@tg_member)
+        end
       end
 
       context "with external types" do
@@ -304,9 +320,9 @@ describe Person::Filter::Role do
         let(:user) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person }
 
         context :deleted do
-          it "finds single ended role but cannot show it on group" do
+          it "finds single ended role and can show it on group" do
             role.update!(end_on: today)
-            expect(filter(start_at: today).entries).to be_empty
+            expect(filter(start_at: today).entries).to have(1).item
             expect(filter(start_at: today).all_count).to eq 1
           end
 
@@ -416,14 +432,19 @@ describe Person::Filter::Role do
             expect(filter(kind: "inactive", start_at: today).entries).to be_empty
           end
 
-          it "does not find person with other role ended within range" do
+          it "finds person with other role ending on last day of timeframe" do
             other_role.update!(end_on: today)
-            expect(filter(kind: "inactive", start_at: today, finish_at: today).entries).to be_empty
+            expect(filter(kind: "inactive", start_at: today, finish_at: today).entries).to have(1).item
           end
 
           it "finds person with other role started within range" do
             other_role.update!(start_on: today)
             expect(filter(kind: "inactive", start_at: today, finish_at: today).entries).to have(1).item
+          end
+
+          it "does not find person with other role starting after timeframe" do
+            other_role.update!(start_on: 1.day.from_now)
+            expect(filter(kind: "inactive", end_on: today).entries).to be_empty
           end
         end
       end

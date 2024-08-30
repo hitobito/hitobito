@@ -36,13 +36,36 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
-      "fingerprint": "64e5a99d16c09a728727fa367b1bf78226fc636ce622393da9a0e2b8e13d176c",
+      "fingerprint": "5d76bbd1498118a5b88bd5e9512c380ca3a5b8dc5c506f23c699023fbc5a79c4",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/domain/sequence.rb",
+      "line": 16,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "ActiveRecord::Base.connection.select_value(\"SELECT nextval('#{sequence_name}')\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Sequence",
+        "method": "s(:self).increment!"
+      },
+      "user_input": "sequence_name",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": "Only called internally"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "746ac78c11b93a2b9b1c373c17f7bf79935c31dea8607a84170efea45b040b48",
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/qualification.rb",
       "line": 105,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "where(\"qualifications.finish_at <= :date AND NOT EXISTS (#{\"SELECT 1 FROM qualifications q2\\nINNER JOIN qualification_kinds qk ON qk.id = q2.qualification_kind_id\\nWHERE q2.person_id = qualifications.person_id\\nAND #{subselect_kind_condition(qualification_kind_ids)}\\nAND (\\n  (q2.start_at <= :date AND (q2.finish_at IS NULL OR q2.finish_at >= :date)) OR\\n  (q2.finish_at < :date AND DATE_ADD(q2.finish_at, INTERVAL qk.reactivateable YEAR) >= :date)\\n)\\n\"})\", :date => Time.zone.today, :qualification_kind_ids => qualification_kind_ids)",
+      "code": "where(\"qualifications.finish_at <= :date AND NOT EXISTS (#{\"SELECT 1 FROM qualifications q2\\nINNER JOIN qualification_kinds qk ON qk.id = q2.qualification_kind_id\\nWHERE q2.person_id = qualifications.person_id\\nAND #{subselect_kind_condition(qualification_kind_ids)}\\nAND (\\n  (q2.start_at <= :date AND (q2.finish_at IS NULL OR q2.finish_at >= :date)) OR\\n  (q2.finish_at < :date AND q2.finish_at + INTERVAL '1 YEAR' * qk.reactivateable >= :date)\\n)\\n\"})\", :date => Time.zone.today, :qualification_kind_ids => qualification_kind_ids)",
       "render_path": null,
       "location": {
         "type": "method",
@@ -54,7 +77,7 @@
       "cwe_id": [
         89
       ],
-      "note": "The parameter is a return value from a method and will always be one of two fixed strings"
+      "note": "Inputs is under control"
     },
     {
       "warning_type": "SQL Injection",
@@ -78,6 +101,29 @@
         89
       ],
       "note": "The parameter is a return value from a method and will always be one of two fixed strings"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "adc51a1f0d9f52a97e2516230d68c50bec9ac35318e8fba51c59d90f3b8e3237",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/domain/sequence.rb",
+      "line": 11,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "ActiveRecord::Base.connection.select_value(\"SELECT currval('#{sequence_name}')\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Sequence",
+        "method": "s(:self).current_value"
+      },
+      "user_input": "sequence_name",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": "Only called internally"
     },
     {
       "warning_type": "SQL Injection",
@@ -149,6 +195,6 @@
       "note": "The command can only be executed in an authenticated context or locally, some parameters are checked against a whitelist"
     }
   ],
-  "updated": "2024-08-21 11:05:30 +0200",
-  "brakeman_version": "6.1.2"
+  "updated": "2024-08-30 13:56:07 +0200",
+  "brakeman_version": "6.2.1"
 }

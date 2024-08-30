@@ -125,7 +125,7 @@ class PersonDecorator < ApplicationDecorator
   end
 
   def relations
-    @relations ||= relations_to_tails.list.includes(tail: [:groups, :roles])
+    @relations ||= relations_to_tails.includes(tail: [:groups, :roles])
   end
 
   def last_role_new_link(group)

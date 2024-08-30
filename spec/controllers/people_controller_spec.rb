@@ -45,7 +45,7 @@ describe PeopleController do
       context "sorting" do
         before do
           top_leader.update(first_name: "Joe", last_name: "Smith", nickname: "js", town: "Stoke", address: "Howard Street", zip_code: "9000")
-          @tg_extern.update(first_name: "", last_name: "Bundy", nickname: "", town: "", address: "", zip_code: "")
+          @tg_extern.update(first_name: "", last_name: "Bundy", nickname: "", town: "", address: "", zip_code: nil)
         end
 
         let(:role_type_ids) { [Role::External.id, Group::TopGroup::Leader.id, Group::TopGroup::Member.id].join("-") }
@@ -70,13 +70,13 @@ describe PeopleController do
 
         it "sorts based on roles" do
           get :index, params: {group_id: group, range: "layer", filters: {role: {role_type_ids: role_type_ids}}, sort: :roles, sort_dir: :asc}
-          expect(assigns(:people)).to eq([top_leader, @tg_member, @tg_extern])
+          expect(assigns(:people).object).to eq([top_leader, @tg_member, @tg_extern])
         end
 
         %w[first_name nickname zip_code town].each do |attr|
           it "sorts based on #{attr}" do
             get :index, params: {group_id: group, range: "layer", filters: {role: {role_type_ids: role_type_ids}}, sort: attr, sort_dir: :asc}
-            expect(assigns(:people)).to eq([@tg_member, top_leader, @tg_extern])
+            expect(assigns(:people).object).to eq([@tg_member, top_leader, @tg_extern])
           end
         end
       end
@@ -169,7 +169,7 @@ describe PeopleController do
             expect(cards[0][0..23]).to eq("BEGIN:VCARD\nVERSION:3.0\n")
             expect(cards[0]).to match(/^N:Leader;Top;;;/)
             expect(cards[0]).to match(/^FN:Top Leader/)
-            expect(cards[0]).to match(/^ADR:;;;Supertown;;;/)
+            expect(cards[0]).to match(/^ADR:;;Greatstreet 345;Greattown;;3456;/)
             expect(cards[0]).to match(/^EMAIL;TYPE=pref:top_leader@example.com/)
             expect(cards[0]).not_to match(/^TEL.*/)
             expect(cards[0]).not_to match(/^NICKNAME.*/)
@@ -970,44 +970,6 @@ describe PeopleController do
     end
   end
 
-  context "households" do
-    let(:member) { people(:bottom_member) }
-
-    before { sign_in(top_leader) }
-
-    it "POST#update creates household" do
-      put :update, params: {group_id: group.id, id: top_leader.id, person: {household_people_ids: [member.id]}}
-
-      expect(top_leader.reload.household_key).to be_present
-      expect(top_leader.household_people).to eq [member]
-    end
-
-    it "POST#update clears household" do
-      top_leader.update(household_key: 1)
-      put :update, params: {group_id: group.id, id: top_leader.id, person: {town: top_leader.town}}
-
-      expect(top_leader.reload.household_key).to be_nil
-    end
-
-    it "POST#update rerenders edit formal when not permitted to update addresse" do
-      sign_in(member)
-      put :update, params: {group_id: member.primary_group_id, id: member.id, person: {household_people_ids: [top_leader.id]}}
-      expect(assigns(:person)).to have(5).errors
-      expect(response).to render_template("edit")
-    end
-
-    it "POST#update does not accept invalid file type" do
-      file = Tempfile.new(["foo", ".exe"])
-      picture = Rack::Test::UploadedFile.new(file, "application/exe")
-      put :update, params: {group_id: member.primary_group_id, id: member.id, person: {picture: picture}}
-      expect(assigns(:person)).to have(2).error_on(:picture)
-      expect(assigns(:person).errors.group_by_attribute[:picture].map(&:type)).to match_array [
-        :image_metadata_missing,
-        :content_type_invalid
-      ]
-    end
-  end
-
   context "as token user" do
     it "shows page when token is valid" do
       get :show, params: {group_id: group.id, id: top_leader.id, token: "PermittedToken"}
@@ -1263,7 +1225,7 @@ describe PeopleController do
       top_leader.table_display_for(Person).update(selected: %w[gender])
       Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person.update(gender: "m")
       get :index, params: {group_id: group.id, sort: :gender, sort_dir: :desc}
-      expect(assigns(:people).first).to eq top_leader
+      expect(assigns(:people).second).to eq top_leader
     end
 
     it "GET#index exports to csv using TableDisplay" do

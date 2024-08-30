@@ -8,129 +8,116 @@ require "spec_helper"
 describe FullTextController, type: :controller do
   before { sign_in(people(:top_leader)) }
 
-  [SearchStrategies::Sphinx, SearchStrategies::Sql].each do |strategy|
-    context strategy.name.demodulize.downcase do
-      before do
-        [[:list_people, Person.where(id: people(:bottom_member).id)],
-          [:query_people, Person.where(id: people(:bottom_member).id)],
-          [:query_groups, Group.where(id: groups(:bottom_layer_one).id)],
-          [:query_events, Event.where(id: events(:top_course).id)],
-          [:query_invoices, Invoice.where(id: invoices(:invoice).id)]].each do |stub, value|
-          allow_any_instance_of(strategy).to receive(stub).and_return(value)
-        end
+  before do
+    [[:list_people, Person.where(id: people(:bottom_member).id)],
+      [:query_people, Person.where(id: people(:bottom_member).id)],
+      [:query_groups, Group.where(id: groups(:bottom_layer_one).id)],
+      [:query_events, Event.where(id: events(:top_course).id)]]
+  end
 
-        allow(Hitobito::Application).to receive(:sphinx_present?)
-          .and_return(strategy == SearchStrategies::Sphinx)
-      end
+  describe "GET index" do
+    before do
+      sign_in(people(:top_leader))
+    end
 
-      describe "GET index" do
-        before do
-          sign_in(people(:top_leader))
-        end
+    it "finds person" do
+      get :index, params: {q: "Bottom"}
 
-        it "uses correct search strategy" do
-          get :index, params: {q: "Bottom"}
-          expect(assigns(:search_strategy).class).to eq(strategy)
-        end
+      expect(assigns(:people)).to include(people(:bottom_member))
+    end
 
-        it "finds person" do
-          get :index, params: {q: "Bottom"}
+    it "finds group" do
+      get :index, params: {q: groups(:bottom_layer_one).to_s[0..5]}
 
-          expect(assigns(:people)).to include(people(:bottom_member))
-        end
+      expect(assigns(:groups)).to include(groups(:bottom_layer_one))
+    end
 
-        context "without any params" do
-          it "returns nothing" do
-            get :index
+    it "finds event" do
+      get :index, params: {q: events(:top_course).to_s[0..5]}
 
-            expect(@response).to be_ok
-            expect(assigns(:people)).to eq([])
-          end
-        end
-      end
+      expect(assigns(:events)).to include(events(:top_course))
+    end
 
-      describe "GET query" do
-        it "uses correct search strategy" do
-          get :query, params: {q: "Bottom"}
-          expect(assigns(:search_strategy).class).to eq(strategy)
-        end
+    it "finds invoice" do
+      get :index, params: {q: invoices(:invoice).title[0..5]}
 
-        it "finds person" do
-          get :query, params: {q: "Bottom"}
+      expect(assigns(:invoices)).to include(invoices(:invoice))
+    end
 
-          expect(@response.body).to include(people(:bottom_member).full_name)
-        end
+    context "without any params" do
+      it "returns nothing" do
+        get :index
 
-        it "finds groups" do
-          get :query, params: {q: groups(:bottom_layer_one).to_s[1..5]}
-
-          expect(@response.body).to include(groups(:bottom_layer_one).to_s)
-        end
-
-        it "finds events" do
-          get :query, params: {q: events(:top_course).to_s[1..5]}
-
-          expect(@response.body).to include(events(:top_course).to_s)
-        end
-
-        it "finds invoices" do
-          get :query, params: {q: invoices(:invoice).title[1..5]}
-
-          expect(@response.body).to include(invoices(:invoice).title)
-        end
-
-        it "only finds invoices with permissions" do
-          invoice = Fabricate(:invoice, group: groups(:top_layer), recipient: people(:bottom_member))
-
-          expect_any_instance_of(strategy).to receive(:query_invoices).and_call_original
-
-          if strategy == SearchStrategies::Sphinx
-            expect(Invoice).to receive(:search)
-              .with(anything,
-                {
-                  star: false,
-                  per_page: SearchStrategies::Base::QUERY_PER_PAGE,
-                  with: {group_id: [groups(:top_layer).id]}
-                })
-              .and_return([invoice])
-          end
-
-          get :query, params: {q: invoice.title[1..5]}
-
-          expect(@response.body).to include(invoice.title)
-        end
+        expect(@response).to be_ok
+        expect(assigns(:people)).to eq([])
       end
     end
 
-    describe strategy.name.demodulize.downcase + " active tab" do
-      it "displays people tab" do
-        allow(@controller.send(:search_strategy)).to receive(:list_people).and_return(Person.where(id: people(:bottom_member).id))
-        get :index, params: {q: "query with people results"}
-        expect(assigns(:active_tab)).to eq(:people)
+    context "json" do
+      it "finds person" do
+        get :index, params: {q: "Bottom"}, format: :json
+
+        expect(@response.body).to include(people(:bottom_member).full_name)
       end
 
-      it "displays groups tab" do
-        allow(@controller.send(:search_strategy)).to receive(:query_groups).and_return(Group.where(id: groups(:bottom_layer_one).id))
-        get :index, params: {q: "query with group results"}
-        expect(assigns(:active_tab)).to eq(:groups)
+      it "finds groups" do
+        get :index, params: {q: groups(:bottom_layer_one).to_s[0..5]}, format: :json
+
+        expect(@response.body).to include(groups(:bottom_layer_one).to_s)
       end
 
-      it "displays events tab" do
-        allow(@controller.send(:search_strategy)).to receive(:query_events).and_return(Event.where(id: events(:top_course).id))
-        get :index, params: {q: "query with event results"}
-        expect(assigns(:active_tab)).to eq(:events)
+      it "finds events" do
+        get :index, params: {q: events(:top_course).to_s[0..5]}, format: :json
+
+        expect(@response.body).to include(events(:top_course).to_s)
       end
 
-      it "displays invoices tab" do
-        allow(@controller.send(:search_strategy)).to receive(:query_invoices).and_return(Invoice.where(id: invoices(:invoice).id))
-        get :index, params: {q: "query with invoice results"}
-        expect(assigns(:active_tab)).to eq(:invoices)
-      end
+      it "finds invoices" do
+        get :index, params: {q: invoices(:invoice).title[0..5]}, format: :json
 
-      it "displays people tab by default" do
-        get :index, params: {q: "query with no results"}
-        expect(assigns(:active_tab)).to eq(:people)
+        expect(@response.body).to include(invoices(:invoice).title)
       end
     end
+  end
+
+  it "displays people tab" do
+    person_search_instance = instance_double(SearchStrategies::PersonSearch)
+    allow(SearchStrategies::PersonSearch).to receive(:new).and_return(person_search_instance)
+    allow(person_search_instance).to receive(:search_fulltext).and_return(Person.where(id: people(:bottom_member).id))
+
+    get :index, params: {q: "query with people results"}
+    expect(assigns(:active_tab)).to eq(:people)
+  end
+
+  it "displays groups tab" do
+    group_search_instance = instance_double(SearchStrategies::GroupSearch)
+    allow(SearchStrategies::GroupSearch).to receive(:new).and_return(group_search_instance)
+    allow(group_search_instance).to receive(:search_fulltext).and_return(Group.where(id: groups(:bottom_layer_one).id))
+
+    get :index, params: {q: "query with group results"}
+    expect(assigns(:active_tab)).to eq(:groups)
+  end
+
+  it "displays events tab" do
+    event_search_instance = instance_double(SearchStrategies::EventSearch)
+    allow(SearchStrategies::EventSearch).to receive(:new).and_return(event_search_instance)
+    allow(event_search_instance).to receive(:search_fulltext).and_return(Event.where(id: events(:top_course).id))
+
+    get :index, params: {q: "query with event results"}
+    expect(assigns(:active_tab)).to eq(:events)
+  end
+
+  it "displays invoices tab" do
+    invoice_search_instance = instance_double(SearchStrategies::InvoiceSearch)
+    allow(SearchStrategies::InvoiceSearch).to receive(:new).and_return(invoice_search_instance)
+    allow(invoice_search_instance).to receive(:search_fulltext).and_return(Invoice.where(id: invoices(:invoice).id))
+
+    get :index, params: {q: "query with invoice results"}
+    expect(assigns(:active_tab)).to eq(:invoices)
+  end
+
+  it "displays people tab by default" do
+    get :index, params: {q: "query with no results"}
+    expect(assigns(:active_tab)).to eq(:people)
   end
 end

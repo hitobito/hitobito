@@ -23,7 +23,7 @@ describe Export::Pdf::Messages::Letter::Header do
   let(:top_leader) { people(:top_leader) }
   let(:recipient) do
     MessageRecipient
-      .new(message: letter, person: top_leader, address: "Top Leader\n\nSupertown")
+      .new(message: letter, person: top_leader, address: "Top Leader\n\nGreattown")
   end
   let(:letter) do
     Message::Letter.new(body: "simple text", group: top_group,
@@ -151,7 +151,7 @@ describe Export::Pdf::Messages::Letter::Header do
       subject.render(recipient)
       expect(text_with_position_without_shipping_info).to eq [
         [71, 652, "Top Leader"],
-        [71, 624, "Supertown"]
+        [71, 624, "Greattown"]
       ]
     end
 
@@ -162,7 +162,7 @@ describe Export::Pdf::Messages::Letter::Header do
 
       expect(text_with_position_without_shipping_info).to eq [
         [71, 652, "Top Leader"],
-        [71, 624, "Supertown"]
+        [71, 624, "Greattown"]
       ]
     end
 
@@ -177,9 +177,9 @@ describe Export::Pdf::Messages::Letter::Header do
         expect(stamps.keys).to eq [:render_logo_right, :render_shipping_info]
         expect(text_with_position_without_shipping_info).to eq [
           [71, 652, "Top Leader"],
-          [71, 624, "Supertown"],
+          [71, 624, "Greattown"],
           [71, 655, "Top Leader"],
-          [71, 627, "Supertown"]
+          [71, 627, "Greattown"]
         ]
       end
 
@@ -191,9 +191,9 @@ describe Export::Pdf::Messages::Letter::Header do
         expect(stamps.keys).to eq [:render_logo_right, :render_shipping_info]
         expect(text_with_position_without_shipping_info).to eq [
           [71, 652, "Top Leader"],
-          [71, 624, "Supertown"],
+          [71, 624, "Greattown"],
           [71, 655, "Top Leader"],
-          [71, 627, "Supertown"]
+          [71, 627, "Greattown"]
         ]
       end
 
@@ -220,7 +220,7 @@ describe Export::Pdf::Messages::Letter::Header do
 
         expect(text_with_position_without_shipping_info).to eq [
           [71, 652, "Top Leader"],
-          [71, 624, "Supertown"]
+          [71, 624, "Greattown"]
         ]
       end
 
@@ -230,7 +230,7 @@ describe Export::Pdf::Messages::Letter::Header do
 
         expect(text_with_position_without_shipping_info).to eq [
           [71, 652, "Top Leader"],
-          [71, 624, "Supertown"]
+          [71, 624, "Greattown"]
         ]
       end
 
@@ -262,7 +262,7 @@ describe Export::Pdf::Messages::Letter::Header do
 
         expect(text_with_position_without_shipping_info).to eq [
           [361, 652, "Top Leader"],
-          [361, 624, "Supertown"]
+          [361, 624, "Greattown"]
         ]
       end
 
@@ -272,7 +272,7 @@ describe Export::Pdf::Messages::Letter::Header do
 
         expect(text_with_position_without_shipping_info).to eq [
           [361, 652, "Top Leader"],
-          [361, 624, "Supertown"]
+          [361, 624, "Greattown"]
         ]
       end
 

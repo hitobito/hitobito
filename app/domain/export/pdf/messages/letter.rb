@@ -119,15 +119,23 @@ module Export::Pdf::Messages
     end
 
     def message_recipients
-      recipients = @letter
-        .message_recipients
+      recipients = @letter.message_recipients.select("message_recipients.*", "people.last_name")
         .where.not(person_id: nil)
-        .joins(:person)
-        .order("people.last_name" => :asc)
+        .joins(:person).order(last_name: :asc)
         .distinct
 
       if @letter.send_to_households?
-        recipients = recipients.group(:address)
+        recipients = recipients.unscope(:select)
+          .select("MAX(people.last_name)", "MAX(message_recipients.id)",
+            "MAX(people.last_name) AS last_name",
+            "MAX(message_recipients.message_id)",
+            "MAX(message_recipients.person_id)",
+            "MAX(message_recipients.phone_number)",
+            "MAX(message_recipients.email)", "MAX(message_recipients.created_at)",
+            "MAX(message_recipients.failed_at)", "MAX(message_recipients.error)",
+            "MAX(message_recipients.invoice_id)", "MAX(message_recipients.state)",
+            "MAX(message_recipients.salutation)", "MAX(message_recipients.error)",
+            :address).group(:address)
       end
       recipients
     end

@@ -13,7 +13,7 @@ describe Oauth::ActiveAuthorizationsController do
       redirect_uri: redirect_uri))
   end
 
-  context "GET#index", :mysql do
+  context "GET#index" do
     it "list contains app if active access_grant exists" do
       create_grant
       get :index
@@ -39,7 +39,7 @@ describe Oauth::ActiveAuthorizationsController do
     end
 
     it "list is empty with expired access_grant" do
-      create_grant.update(created_at: 15.minutes.ago)
+      create_grant.update!(created_at: 15.minutes.ago)
       get :index
       expect(assigns(:entries)).to be_empty
     end
@@ -50,7 +50,7 @@ describe Oauth::ActiveAuthorizationsController do
     end
   end
 
-  context "GET#index", :mysql do
+  context "GET#index" do
     render_views
     let(:person) { people(:bottom_member) }
 

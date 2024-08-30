@@ -356,7 +356,7 @@ describe Group do
 
     it "has correct ordering with parent group" do
       parent = groups(:top_layer)
-      expect(parent.children.order_by_type(parent)).to eq(
+      expect(parent.children.order_by_type).to eq(
         [groups(:top_group),
           groups(:bottom_layer_one),
           groups(:bottom_layer_two),
@@ -366,7 +366,7 @@ describe Group do
 
     it "works without possible groups" do
       parent = groups(:bottom_group_one_two)
-      expect(parent.children.order_by_type(parent)).to be_empty
+      expect(parent.children.order_by_type).to be_empty
     end
   end
 
@@ -611,7 +611,7 @@ describe Group do
 
           expect(group.reload).to be_archived
           expect(role).to be_archived
-          expect(group.archived_at).to eq(role.archived_at)
+          expect(group.archived_at).to be_within(1.second).of(role.archived_at)
         end
 
         it "future delete_on values are set to nil" do

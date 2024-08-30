@@ -52,8 +52,12 @@
 #
 
 class Invoice < ActiveRecord::Base
+  SEARCHABLE_ATTRS = [:title, :reference, :sequence_number,
+    {invoice_items: [:name, :account, :cost_center]}]
+
   include I18nEnums
   include PaymentSlips
+  include PgSearchable
 
   ROUND_TO = BigDecimal("0.05")
 
@@ -135,13 +139,14 @@ class Invoice < ActiveRecord::Base
     end
 
     def order_by_sequence_number
-      order(Arel.sql(order_by_sequence_number_statement.join(", ")))
+      select("*", Arel.sql(order_by_sequence_number_statement.join(", ")))
+        .order(Arel.sql(order_by_sequence_number_statement.join(", ")))
     end
 
     # Orders by first integer, second integer
     def order_by_sequence_number_statement
-      %w[sequence_number].product(%w[1 -1]).map do |field, index|
-        "CAST(SUBSTRING_INDEX(#{field}, '-', #{index}) AS UNSIGNED)"
+      %w[sequence_number].product(%w(^[^-]+ [^-]+$)).map do |field, index|
+        "CAST(SUBSTRING(#{field} FROM '#{index}') AS INTEGER)"
       end
     end
 

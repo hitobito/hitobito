@@ -70,9 +70,9 @@ class People::HouseholdList
   def only_households
     base_scope
       .select(:household_key)
-      .select("MIN(#{people_table}.`id`) as `id`")
-      .select("COUNT(#{people_table}.`household_key`) as `member_count`")
-      .select("#{people_table}.`household_key` as `key`")
+      .select("MIN(#{people_table}.\"id\") AS \"id\"")
+      .select("COUNT(#{people_table}.\"household_key\") AS \"member_count\"")
+      .select("#{people_table}.\"household_key\" AS \"key\"")
       .where.not(household_key: nil)
       .group(:household_key)
   end
@@ -81,8 +81,8 @@ class People::HouseholdList
     base_scope
       .select(:household_key)
       .select(:id)
-      .select("1 as `member_count`")
-      .select("#{people_table}.`id` as `key`")
+      .select("1 AS \"member_count\"")
+      .select("CAST(#{people_table}.\"id\" AS TEXT) AS \"key\"")
       .where(household_key: nil)
       .order(:id)
   end
@@ -96,7 +96,8 @@ class People::HouseholdList
     # This way, we can add more conditions to the query builder while keeping the performance
     # benefits of pre-calculating the candidate id list.
     @base_scope ||= Person
-      .where(id: @people_scope.unscope(:select, :includes, :limit).pluck(:id))
+      .where(id: @people_scope.unscope(:select, :includes, :limit, :order)
+                                                .pluck(:id))
       .limit(@people_scope.limit_value.presence)
   end
 
@@ -125,7 +126,7 @@ class People::HouseholdList
       batch_limit = remaining if remaining < batch_limit
     end
 
-    relation = relation.reorder("`member_count` DESC, id ASC").limit(batch_limit)
+    relation = relation.reorder('"member_count" DESC, id ASC').limit(batch_limit)
     # Retaining the results in the query cache would undermine the point of batching
     relation.skip_query_cache!
     batch_relation = relation
@@ -156,10 +157,12 @@ class People::HouseholdList
         end
       end
 
-      batch_relation = relation.having("member_count < ? OR (member_count = ? AND id > ?)",
-        member_count_offset,
-        member_count_offset,
-        id_offset)
+      batch_relation =
+        Person.select("*").from(relation.unscope(:limit))
+          .where('"member_count" < ? OR ("member_count" = ? AND "id" > ?)',
+            member_count_offset,
+            member_count_offset,
+            id_offset).limit(relation.limit_value)
     end
   end
 end

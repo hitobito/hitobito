@@ -68,18 +68,10 @@ class Event::Participation < ActiveRecord::Base
   class << self
     # Order people by the order participation types are listed in their event types.
     def order_by_role(event_type)
-      joins(:roles).order(Arel.sql(order_by_role_statement(event_type)))
-    end
-
-    def order_by_role_statement(event_type)
-      return "" if event_type.role_types.blank?
-
-      statement = ["CASE event_roles.type"]
-      event_type.role_types.each_with_index do |t, i|
-        statement << "WHEN '#{t.sti_name}' THEN #{i}"
-      end
-      statement << "END"
-      statement.join(" ")
+      joins(:roles)
+        .select("event_participations.*", :order_weight)
+        .joins("INNER JOIN event_role_type_orders ON event_roles.type = event_role_type_orders.name")
+        .order("event_role_type_orders.order_weight ASC")
     end
 
     def active

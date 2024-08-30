@@ -21,7 +21,8 @@ module BackgroundJobs
       attrs = message.payload.with_indifferent_access
         .slice(*BackgroundJobLogEntry.column_names)
         .reverse_merge(**opts)
-      BackgroundJobLogEntry.upsert(attrs)
+      BackgroundJobLogEntry.find_or_create_by(job_id: attrs[:job_id], attempt: attrs[:attempt])
+        .update(attrs)
     rescue
       # Let's not fail the job because of a logging problem, but at least report the error.
       ::Raven.capture_exception($!)

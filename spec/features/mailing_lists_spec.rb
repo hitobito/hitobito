@@ -54,7 +54,7 @@ describe MailingListsController, js: true do
     fill_in "Mailinglisten Adresse", with: "test"
     find(".chip-add").click
     fill_in id: "label", with: "Vater"
-    page.find("body").click # blur
+    page.find("label[for='mailing_list_preferred_labels']").click # blur
     expect(page).to have_content "Vater"
 
     click_button "Speichern"

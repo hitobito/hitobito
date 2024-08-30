@@ -126,8 +126,8 @@ describe Events::CoursesController, type: :controller do
 
         get :index, params: {filter: {category: 0}}
         expect(navigation.all("li ul li").size).to eq 3
-        expect(navigation.all("li ul li")[1].text.strip).to eq "Scharleiterkurs"
-        expect(navigation.all("li ul li a")[1][:href]).to eq list_courses_path(filter: {category: 0, group_ids: [top_layer.id]}, anchor: "scharleiterkurs")
+        expect(navigation.all("li ul li")[1].text.strip).to eq "Fortbildungskurs"
+        expect(navigation.all("li ul li a")[1][:href]).to eq list_courses_path(filter: {category: 0, group_ids: [top_layer.id]}, anchor: "fortbildungskurs")
       end
     end
   end

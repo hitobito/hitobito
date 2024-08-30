@@ -46,7 +46,7 @@ describe MailingLists::BulkMail::BounceHandler do
 
       expect do
         bounce_handler.process
-      end.to change { Delayed::Job.where('handler like "%MailingLists::BulkMail::BounceMessageForwardJob%"').count }.by(0)
+      end.to change { Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::BounceMessageForwardJob%'").count }.by(0)
 
       mail_log = MailLog.find_by(mail_hash: "abcd42")
       expect(mail_log.status).to eq("bounce_rejected")
@@ -62,7 +62,7 @@ describe MailingLists::BulkMail::BounceHandler do
 
       expect do
         bounce_handler.process
-      end.to change { Delayed::Job.where('handler like "%MailingLists::BulkMail::BounceMessageForwardJob%"').count }.by(0)
+      end.to change { Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::BounceMessageForwardJob%'").count }.by(0)
 
       mail_log = MailLog.find_by(mail_hash: "abcd42")
       expect(mail_log.status).to eq("bounce_rejected")
@@ -76,7 +76,7 @@ describe MailingLists::BulkMail::BounceHandler do
 
       expect do
         bounce_handler.process
-      end.to change { Delayed::Job.where('handler like "%MailingLists::BulkMail::BounceMessageForwardJob%"').count }.by(1)
+      end.to change { Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::BounceMessageForwardJob%'").count }.by(1)
 
       mail_log = MailLog.find_by(mail_hash: "abcd42")
       expect(mail_log.status).to eq("retrieved")

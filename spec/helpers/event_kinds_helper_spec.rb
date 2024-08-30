@@ -45,7 +45,7 @@ describe EventKindsHelper do
       node = Capybara::Node::Simple.new(html)
 
       options = node.find("select").all("option")
-      expect(options.size).to eq(collection.count)
+      expect(options.size).to eq(collection.size)
       expect(options.count { |o| o.selected? }).to eq(1)
       expect(options.one? { |o| o.value == old.id.to_s }).to eq false
     end
@@ -67,7 +67,7 @@ describe EventKindsHelper do
       node = Capybara::Node::Simple.new(html)
 
       options = node.find("select").all("option")
-      expect(options.size).to eq(collection.count + 1)
+      expect(options.size).to eq(collection.size + 1)
       expect(options.count { |o| o.selected? }).to eq(2)
       expect(options.one? { |o| o.value == old.id.to_s }).to eq true
     end

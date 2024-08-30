@@ -17,8 +17,9 @@ module Event::Participatable
       .includes(:person)
       .references(:person)
       .order_by_role(self)
-      .merge(Person.order_by_name)
-      .distinct
+      .merge(Person.order_by_name.select("*"))
+      .select(:id)
+    # distinct?
   end
 
   def active_participations_without_affiliate_types
@@ -36,7 +37,7 @@ module Event::Participatable
     @participation_role_labels ||=
       Event::Role.joins(:participation)
         .where(event_participations: {event_id: id})
-        .where('event_roles.label <> ""')
+        .where("event_roles.label <> ''")
         .distinct.order(:label)
         .pluck(:label)
   end

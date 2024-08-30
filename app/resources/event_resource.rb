@@ -49,16 +49,16 @@ class EventResource < ApplicationResource
 
   filter :group_id, :integer, only: [:eq, :not_eq] do
     eq do |scope, group_ids|
-      scope.references(:groups).where(groups: {id: group_ids})
+      scope.select("events.*").references(:groups).where(groups: {id: group_ids})
     end
   end
 
   filter :before_or_on, :date, single: true, only: [:eq] do
-    eq { |scope, date| scope.before_or_on(date) }
+    eq { |scope, date| scope.before_or_on(date, true) }
   end
 
   filter :after_or_on, :date, single: true, only: [:eq] do
-    eq { |scope, date| scope.after_or_on(date) }
+    eq { |scope, date| scope.after_or_on(date, true) }
   end
 
   def base_scope

@@ -16,23 +16,30 @@ class Event::Filter
   end
 
   def list_entries
-    sort_expression ? scope.distinct.reorder(sort_expression) : scope.distinct
+    if sort_expression.is_a?(String)
+      sort_expression_query_value = sort_expression.split(".")[1]
+    elsif sort_expression.is_a?(Hash)
+      sort_expression_query_value =
+        "#{sort_expression.keys[0].split(".")[1]} #{sort_expression.values[0]}"
+    end
+
+    sort_expression ? scope.reorder(sort_expression_query_value) : scope
   end
 
   def scope
     # This must run as an explicite separate query.
     # If you merge this in the following relation, activerecord+kaminari
     # will mess up the queries (pagination is run on the wrong query).
-    event_ids_for_relevant_groups = Event.with_group_id(relevant_group_ids).pluck(:id)
+    event_ids_for_relevant_groups_and_dates = Event.with_group_id(relevant_group_ids).in_year(year).pluck(:id)
 
     Event # nesting restricts to parent, we want more
-      .where(id: event_ids_for_relevant_groups)
+      .where(id: event_ids_for_relevant_groups_and_dates)
       .list
       .where(type: type)
       .includes(:groups, :translations, :events_groups)
       .left_joins(:translations)
-      .in_year(year)
       .preload_all_dates
+      .select(:id)
   end
 
   def to_h

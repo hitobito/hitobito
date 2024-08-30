@@ -19,7 +19,6 @@ class PeopleController < CrudController
     :gender, :birthday, :additional_information, :picture, :remove_picture] +
     Contactable::ACCESSIBLE_ATTRS +
     [family_members_attributes: [:id, :kind, :other_id, :_destroy]] +
-    [household_people_ids: []] +
     [relations_to_tails_attributes: [:id, :tail_id, :kind, :_destroy]]
   FeatureGate.if(:person_language) do
     permitted_attrs << :language
@@ -40,8 +39,6 @@ class PeopleController < CrudController
 
   before_action :index_archived, only: :index, if: :group_archived_and_no_filter
 
-  before_save :validate_household
-  after_save :persist_household
   after_save :show_email_change_info
 
   before_render_show :load_person_add_requests, if: -> { html_request? }
@@ -112,8 +109,10 @@ class PeopleController < CrudController
   # dont use class level accessor as expression is evaluated whenever constant is
   # loaded which might be before wagon that defines groups / roles has been loaded
   def self.sort_mappings_with_indifferent_access
-    {roles: [Person.order_by_role_statement]
-      .concat(Person.order_by_name_statement)}.with_indifferent_access
+    {roles: {
+      joins: [:roles, "INNER JOIN role_type_orders ON roles.type = role_type_orders.name"],
+      order: ["role_type_orders.order_weight", "people.sort_name"]
+    }}.with_indifferent_access
   end
 
   private
@@ -136,7 +135,9 @@ class PeopleController < CrudController
 
   def load_people_add_requests
     if params[:range].blank? && can?(:create, @group.roles.new)
-      @person_add_requests = @group.person_add_requests.list.includes(person: :primary_group)
+      @person_add_requests = @group.person_add_requests.list
+        .includes(person: :primary_group)
+        .select("person_add_requests.*")
     end
   end
 
@@ -165,7 +166,15 @@ class PeopleController < CrudController
 
   def filter_entries
     entries = add_table_display_to_query(person_filter.entries, current_person)
-    entries = entries.reorder(Arel.sql(sort_expression)) if sorting?
+    # PG_TODO: This method is solved weird, please improve
+    if sorting?
+      entries = Person.select("*").from(
+        entries.joins(join_tables).select(sort_expression_attrs)
+               .unscope(:order).distinct_on(:id), "people"
+      )
+        .reorder(Arel.sql(sort_expression.include?(".") ?
+                        sort_expression.split(".")[1] : sort_expression))
+    end
     entries
   end
 
@@ -229,20 +238,6 @@ class PeopleController < CrudController
 
   def authorize_class
     authorize!(:index_people, group)
-  end
-
-  def validate_household
-    unless household.empty?
-      household.valid? || throw(:abort)
-    end
-  end
-
-  def persist_household
-    household.persist!
-  end
-
-  def household
-    @household ||= Person::Household.new(entry, current_ability, nil, current_user)
   end
 
   def person_filter

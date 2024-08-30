@@ -8,6 +8,8 @@
 require "spec_helper"
 
 describe Messages::LetterDispatch do
+  include Households::SpecHelper
+
   let(:message) { messages(:letter) }
   let(:top_leader) { people(:top_leader) }
   let(:bottom_member) { people(:bottom_member) }
@@ -24,6 +26,7 @@ describe Messages::LetterDispatch do
       subscriber: groups(:bottom_layer_one),
       role_types: [Group::BottomLayer::Member])
     Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one), person: top_leader)
+    top_leader.update!(address: nil, zip_code: nil, town: "Supertown")
   end
 
   it "updates success count" do
@@ -93,6 +96,8 @@ describe Messages::LetterDispatch do
 
       # other housemate is not part of member list, so only bottom member should be included without household address
       create_household(people(:bottom_member), other_housemate)
+      housemate2.reload
+      other_housemate.reload
 
       top_leader.update!(street: "Fantasia", housenumber: "42", zip_code: "4242", town: "Melmac")
     end
@@ -104,31 +109,28 @@ describe Messages::LetterDispatch do
       housemate1_address =
         "#{housemate1.full_name}\n" \
         "#{housemate1.address}\n" \
-        "#{housemate1.zip_code} #{housemate1.town}\n" \
-        "#{housemate1.country}"
+        "#{housemate1.zip_code} #{housemate1.town}\n"
 
       expect(recipient_entry(housemate1).address).to eq(housemate1_address)
 
       housemate2_address =
         "#{housemate2.full_name}\n" \
         "#{housemate2.address}\n" \
-        "#{housemate2.zip_code} #{housemate2.town}\n" \
-        "#{housemate2.country}"
+        "#{housemate2.zip_code} #{housemate2.town}\n"
 
-      expect(recipient_entry(housemate2).address).to eq(housemate2_address)
+      expect(recipient_entry(housemate2.reload).address).to eq(housemate2_address)
 
       bottom_member_address =
         "#{bottom_member.full_name}\n" \
         "#{bottom_member.address}\n" \
-        "#{bottom_member.zip_code} #{bottom_member.town}\n" \
-        "#{bottom_member.country}"
+        "#{bottom_member.zip_code} #{bottom_member.town}"
+
       expect(recipient_entry(bottom_member).address).to eq(bottom_member_address)
 
       top_leader_address =
         "#{top_leader.full_name}\n" \
         "#{top_leader.address}\n" \
-        "#{top_leader.zip_code} #{top_leader.town}\n" \
-        "#{top_leader.country}"
+        "#{top_leader.zip_code} #{top_leader.town}\n"
       expect(recipient_entry(top_leader).address).to eq(top_leader_address)
     end
 
@@ -141,8 +143,7 @@ describe Messages::LetterDispatch do
       household_address =
         "#{housemate1.full_name}, #{housemate2.full_name}\n" \
         "#{housemate1.address}\n" \
-        "#{housemate1.zip_code} #{housemate1.town}\n" \
-        "#{housemate1.country}"
+        "#{housemate1.zip_code} #{housemate1.town}\n"
 
       expect(recipient_entry(housemate1).address).to eq(household_address)
       expect(recipient_entry(housemate2).address).to eq(household_address)
@@ -150,15 +151,13 @@ describe Messages::LetterDispatch do
       bottom_member_address =
         "#{bottom_member.full_name}\n" \
         "#{bottom_member.address}\n" \
-        "#{bottom_member.zip_code} #{bottom_member.town}\n" \
-        "#{bottom_member.country}"
+        "#{bottom_member.zip_code} #{bottom_member.town}"
       expect(recipient_entry(bottom_member).address).to eq(bottom_member_address)
 
       top_leader_address =
         "#{top_leader.full_name}\n" \
         "#{top_leader.address}\n" \
-        "#{top_leader.zip_code} #{top_leader.town}\n" \
-        "#{top_leader.country}"
+        "#{top_leader.zip_code} #{top_leader.town}\n"
       expect(recipient_entry(top_leader).address).to eq(top_leader_address)
     end
 
@@ -185,19 +184,23 @@ describe Messages::LetterDispatch do
 
     it "adds all names from household address to address box and sorts them alphabetically" do
       message.update!(send_to_households: true)
-      housemate3 = Fabricate(:person_with_address, first_name: "Mark", last_name: "Hols", country: not_default_country)
-      housemate4 = Fabricate(:person_with_address, first_name: "Jana", last_name: "Nicks", country: not_default_country)
-      housemate5 = Fabricate(:person_with_address, first_name: "Olivia", last_name: "Berms", country: not_default_country)
-      Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one), person: housemate3)
-      Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one), person: housemate4)
-      Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one), person: housemate5)
+      housemate3 = Fabricate(:person_with_address, first_name: "Mark", last_name: "Hols",
+        country: not_default_country)
+      housemate4 = Fabricate(:person_with_address, first_name: "Jana", last_name: "Nicks",
+        country: not_default_country)
+      housemate5 = Fabricate(:person_with_address, first_name: "Olivia", last_name: "Berms",
+        country: not_default_country)
+      Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one),
+        person: housemate3)
+      Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one),
+        person: housemate4)
+      Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one),
+        person: housemate5)
 
-      create_household(housemate1, housemate3)
-      create_household(housemate1, housemate4)
-      create_household(housemate1, housemate5)
+      housemate1.household.destroy
+      create_household(housemate1.reload, housemate2.reload, housemate3, housemate4, housemate5)
 
       subject.run
-
       address = recipient_entry(housemate2).address.split("\n")
       expect(address).to include("Anton Abraham, Olivia Berms, Mark Hols, Jana Nicks, Zora Zaugg")
     end
@@ -231,12 +234,12 @@ describe Messages::LetterDispatch do
     it "successfully exports labels with grouped households" do
       # count group members
       amount_of_members = Person.all.count do |person|
-        person.roles&.first&.type == Group::BottomLayer::Member.name ||
-          person.roles&.to_a&.at(1)&.type == Group::BottomLayer::Member.name ||
-          person.roles&.to_a&.at(2)&.type == Group::BottomLayer::Member.name
+        person.roles.any? do |role|
+          role.type == Group::BottomLayer::Member.name
+        end
       end
 
-      expect(amount_of_members).to eq((households_count * household_size) + individuals_count + 1)
+      expect(amount_of_members).to eq((households_count * household_size) + individuals_count + 2)
 
       expect { subject.run }.not_to raise_error
 
@@ -253,13 +256,6 @@ describe Messages::LetterDispatch do
   end
 
   private
-
-  def create_household(person1, person2)
-    fake_ability = instance_double("aby", cannot?: false)
-    household = Person::Household.new(person1, fake_ability, person2, top_leader)
-    household.assign
-    household.persist!
-  end
 
   def recipient_entry(person)
     recipient_entries.find { |e| e.person_id == person.id }

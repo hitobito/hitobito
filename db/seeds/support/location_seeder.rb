@@ -24,7 +24,6 @@ class LocationSeeder
 
   def seed
     return true if marked_as_seeded?
-    raise 'Currently, this only works with MySQL' unless mysql?
 
     truncate_locations
     bulk_insert
@@ -46,10 +45,6 @@ class LocationSeeder
     Location.count == csv.count
   end
 
-  def mysql?
-    Location.connection.adapter_name.downcase =~ /mysql/
-  end
-
   def truncate_locations
     Location.connection.truncate(Location.table_name, 'Truncate Location')
   end
@@ -64,7 +59,7 @@ class LocationSeeder
 
   def data
     csv.each_with_object([]) do |row, data|
-      data << "(\"#{row['canton'].to_s.downcase}\", \"#{row['zip_code']}\", \"#{row['town']}\")"
+      data << "(\'#{row['canton'].to_s.downcase}\', \'#{row['zip_code']}\', \'#{row['town'].gsub("'", "''")}\')"
     end.uniq
   end
 

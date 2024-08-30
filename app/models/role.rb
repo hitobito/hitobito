@@ -117,8 +117,8 @@ class Role < ActiveRecord::Base
 
   before_save :prevent_changes, if: :archived?
   after_create :reset_person_minimized_at
-  after_commit :set_contact_data_visible, if: :active?
-  after_commit :set_first_primary_group, if: :active?
+  after_commit :set_contact_data_visible
+  after_commit :set_first_primary_group
 
   ### SCOPES
 
@@ -180,7 +180,7 @@ class Role < ActiveRecord::Base
   # If it has "archival age", we update the end_on attribute to yesterday instead of destroying it.
   # If `always_soft_destroy` is set to true, the role is always ended instead of destroyed.
   def destroy(always_soft_destroy: false) # rubocop:disable Rails/ActiveRecordOverride
-    return super() unless always_soft_destroy || old_enough_to_archive?
+    return vanilla_destroy unless always_soft_destroy || old_enough_to_archive?
 
     run_callbacks :destroy do
       end_on&.past? ? true : update(end_on: Date.current.yesterday)

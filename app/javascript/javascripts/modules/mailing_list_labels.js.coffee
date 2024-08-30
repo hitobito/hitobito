@@ -26,12 +26,12 @@ class app.MailingListLabels
     e.preventDefault()
     form = $(this).closest("form")
     $(this).closest('.chip').remove()
-    @updateForm()
+    this.updateForm()
 
   update: (e)=>
     label = $("#{@selector} input[name=label]")
     label.attr('name', 'mailing_list[preferred_labels][]')
-    @updateForm()
+    this.updateForm()
 
   updateForm: (e) =>
     form = $("#{@selector}")

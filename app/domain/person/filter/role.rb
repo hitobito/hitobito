@@ -40,10 +40,7 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def roles_join
-    case args[:kind]
-    when "active", "inactive" then any_roles_join
-    when "deleted" then ended_roles_join
-    end
+    any_roles_join
   end
 
   def date_range
@@ -120,16 +117,6 @@ class Person::Filter::Role < Person::Filter::Base
     <<~SQL.split.map(&:strip).join(" ")
       (roles.start_on <= :max OR roles.start_on IS NULL) AND
       (roles.end_on >= :min OR roles.end_on IS NULL)
-    SQL
-  end
-
-  def ended_roles_join
-    # TODO: this query was designed to use with paranoia attr deleted_at. Does this still make sense
-    # with end_on without providing a reference date?
-    <<~SQL.split.map(&:strip).join(" ")
-      INNER JOIN roles ON
-        (roles.person_id = people.id AND roles.end_on IS NOT NULL)
-      INNER JOIN #{Group.quoted_table_name} ON roles.group_id = #{Group.quoted_table_name}.id
     SQL
   end
 

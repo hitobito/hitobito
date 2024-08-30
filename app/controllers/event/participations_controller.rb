@@ -25,7 +25,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
                          roles: {
                            joins: [:roles, "INNER JOIN event_role_type_orders ON event_roles.type
                                           = event_role_type_orders.name"],
-                           order: ["event_role_type_orders.order_weight", "people.sort_name"]
+                           order: ["event_role_type_orders.order_weight", "people.last_name", "people.first_name"]
                          },
                          nickname: "people.nickname",
                          zip_code: "people.zip_code",

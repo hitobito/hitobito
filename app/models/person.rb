@@ -105,8 +105,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :blocked_at,
     :membership_verify_token,
     :inactivity_block_warning_sent_at,
-    :minimized_at,
-    :sort_name
+    :minimized_at
   ]
 
   FILTER_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
@@ -321,7 +320,22 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   class << self
     def order_by_name
-      select(:sort_name).order(:sort_name)
+      select(order_by_name_statement).order(order_by_name_statement)
+    end
+
+    def order_by_name_statement
+      Arel.sql(
+        <<~SQL.squish
+          CASE
+            WHEN people.company THEN people.company_name
+            WHEN people.last_name IS NOT NULL AND people.first_name IS NOT NULL THEN people.last_name || ' ' || people.first_name
+            WHEN people.last_name IS NOT NULL THEN people.last_name
+            WHEN people.first_name IS NOT NULL THEN people.first_name
+            WHEN people.nickname IS NOT NULL THEN people.nickname
+            ELSE ''
+          END
+        SQL
+      )
     end
 
     def only_public_data

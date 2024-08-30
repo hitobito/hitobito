@@ -111,7 +111,7 @@ class PeopleController < CrudController
   def self.sort_mappings_with_indifferent_access
     {roles: {
       joins: [:roles, "INNER JOIN role_type_orders ON roles.type = role_type_orders.name"],
-      order: ["role_type_orders.order_weight", "people.sort_name"]
+      order: ["role_type_orders.order_weight", "people.company_name", "people.last_name", "people.first_name", "people.nickname"]
     }}.with_indifferent_access
   end
 

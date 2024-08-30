@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_08_13_124433) do
+ActiveRecord::Schema.define(version: 2024_08_30_125755) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -903,7 +903,6 @@ ActiveRecord::Schema.define(version: 2024_08_13_124433) do
     t.string "housenumber", limit: 20
     t.string "address_care_of"
     t.string "postbox"
-    t.string "sort_name", default: -> { "\nCASE\n    WHEN company THEN company_name\n    WHEN ((last_name IS NOT NULL) AND (first_name IS NOT NULL)) THEN ((((last_name)::text || ' '::text) || (first_name)::text))::character varying\n    WHEN (last_name IS NOT NULL) THEN last_name\n    WHEN (first_name IS NOT NULL) THEN first_name\n    WHEN (nickname IS NOT NULL) THEN nickname\n    ELSE ''::character varying\nEND" }
     t.index ["authentication_token"], name: "index_people_on_authentication_token"
     t.index ["confirmation_token"], name: "index_people_on_confirmation_token", unique: true
     t.index ["email"], name: "index_people_on_email", unique: true

@@ -35,7 +35,7 @@ class Group::PersonAddRequestsController < ApplicationController
       .for_layer(group)
       .includes(:person,
         requester: {roles: :group})
-      .order("people.sort_name")
+      .order(Person.order_by_name_statement)
   end
 
   def load_approvers

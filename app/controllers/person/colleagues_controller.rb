@@ -49,7 +49,7 @@ class Person::ColleaguesController < ApplicationController
   self.sort_mappings = {
     roles: {
       joins: [:roles, "INNER JOIN role_type_orders ON roles.type = role_type_orders.name"],
-      order: ["order_weight", "sort_name"]
+      order: ["order_weight", Person.order_by_name_statement]
     }
   }
 end

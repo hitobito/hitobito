@@ -13,7 +13,7 @@ module Export::Tabular::People
     end
 
     def excluded_person_attributes
-      [:picture, :primary_group_id, :sort_name, :id]
+      [:picture, :primary_group_id, :id]
         .then do |attrs|
           attrs << :address if FeatureGate.enabled?("structured_addresses")
           attrs

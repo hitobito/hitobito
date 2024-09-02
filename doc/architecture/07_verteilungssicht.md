@@ -20,7 +20,7 @@ Regel auf dem Hauptserver.
 **Dateisystem**: Hochgeladene Bilder werden im Filesystem abgelegt und von dort wieder über den 
 Webserver publiziert. Entspricht in der Regel dem Filesystem des Hauptservers.
 
-**Datenbank**: Relationale Datenbank für alle persistenten Daten. In der Regel eine MySQL Datenbank, 
+**Datenbank**: Relationale Datenbank für alle persistenten Daten. In der Regel eine Postgres Datenbank, 
 welche auf einem separaten Server läuft.
 
 **Sphinx**: Full-Text Search Engine. Wird von der Rails Applikation abgefragt. Ein Worker Job 

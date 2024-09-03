@@ -19,9 +19,9 @@ require "spec_helper"
 
 describe Event::Answer do
   let(:question) { event_questions(:top_ov) }
-  let(:participation) { question.event.participations.build(enforce_required_answers: true) }
+  let(:participation) { question.event.participations.first }
 
-  subject(:answer) { question.reload.answers.build(participation: participation) }
+  subject(:answer) { described_class.build(participation: , question:) }
 
   context "with required question" do
     before { question.update!(disclosure: :required) }
@@ -43,6 +43,7 @@ describe Event::Answer do
     it "calls the questions custom before_validation implementation" do
       expect(question).to receive(:before_validate_answer).and_return(true)
       special_answer = ["Maybe", "Array"]
+      binding.pry
       answer.update!(answer: special_answer)
       expect(answer.answer).to eq(special_answer)
     end

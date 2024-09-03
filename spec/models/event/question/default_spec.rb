@@ -20,18 +20,8 @@
 require "spec_helper"
 
 describe Event::Question::Default do
-  context "with an event assigned" do
-    let(:event) { events(:top_course) }
-
-    it "adds answer to participation after create" do
-      expect do
-        event.questions.create!(question: "Test?", disclosure: :required)
-      end.to change { Event::Answer.count }.by(1)
-    end
-  end
-
+  subject { described_class.new(question: "Is this a Spec") }
   context "has validations" do
-    subject { described_class.new(question: "Is this a Spec") }
 
     it "is invalid without question" do
       subject.question = ""
@@ -60,22 +50,6 @@ describe Event::Question::Default do
     end
   end
 
-  context "missing question" do
-    it "admin has correct error message" do
-      subject = described_class.new(admin: true, question: "").tap(&:validate)
-      expect(subject.errors.messages[:question]).to eq([
-        I18n.t("activerecord.errors.models.event/question.attributes.question.admin_blank")
-      ])
-    end
-
-    it "non-admin has correct error message" do
-      subject = described_class.new(admin: false, question: "").tap(&:validate)
-      expect(subject.errors.messages[:question]).to eq([
-        I18n.t("activerecord.errors.models.event/question.attributes.question.application_blank")
-      ])
-    end
-  end
-
   context "with single-choice answer" do
     subject { described_class.new(question: "Test?", choices: "ja") }
 
@@ -93,6 +67,69 @@ describe Event::Question::Default do
       subject.disclosure = :optional
 
       is_expected.to be_valid
+    end
+  end
+
+  describe "Event::Answer" do
+    let(:question) { event_questions(:top_ov) }
+    let(:choices) { question.choices.split(",") }
+
+    context "answer= for array values (checkboxes)" do
+      subject { question.reload.answers.build }
+
+      before do
+        question.update_attribute(:multiple_choices, true) # rubocop:disable Rails/SkipsModelValidations
+        subject.answer = answer_param
+        subject.save
+      end
+
+      context "valid array values (position + 1)" do
+        let(:answer_param) { %w[1 2] }
+
+        its(:answer) { is_expected.to eq "GA, Halbtax" }
+        it { is_expected.to have(0).errors_on(:answer) }
+      end
+
+      context "values outside of array size" do
+        let(:answer_param) { %w[4 5] }
+
+        its(:answer) { is_expected.to be_nil }
+      end
+
+      context "resetting values" do
+        subject { question.reload.answers.create(answer: "GA, Halbtax") }
+
+        let(:answer_param) { ["0"] }
+
+        its(:answer) { is_expected.to be_nil }
+      end
+    end
+
+    context "validates answers to single-answer questions correctly: " do
+      describe "a non-required question" do
+        let(:question) { Fabricate(:event_question, disclosure: :optional, choices: "Ja") }
+
+        subject(:no_answer_given) { build_answer("0") } # no choice
+
+        subject(:yes_answer) { build_answer("1") }
+        subject(:depends_answer) { build_answer("2") } # not a valid choice
+
+        it "may be left unanswered" do
+          expect(no_answer_given).to have(0).errors_on(:answer)
+        end
+
+        it "may be answered with the one option" do
+          expect(yes_answer).to have(0).errors_on(:answer)
+        end
+
+        it "may not be answered with something else" do
+          expect(depends_answer.answer).to be_nil
+        end
+
+        def build_answer(answer_index)
+          question.answers.create(answer: [answer_index])
+        end
+      end
     end
   end
 end

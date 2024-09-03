@@ -23,8 +23,6 @@
 #
 
 class Event::Question::Default < Event::Question
-  # translates :choices, class_name: Event::Question.to_s
-
   def choice_items
     choices.to_s.split(",").collect(&:strip)
   end

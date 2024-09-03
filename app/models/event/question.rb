@@ -26,7 +26,9 @@ class Event::Question < ActiveRecord::Base
   include Globalized
   include I18nEnums
 
-  # TODO: move choices
+  # ensure all translated attributes including subclasses are added here
+  # as globalize will add it to the base class' translated_attribute_names
+  # anyway and break sti subclasses
   translates :question, :choices
 
   belongs_to :event
@@ -66,11 +68,9 @@ class Event::Question < ActiveRecord::Base
   end
 
   def derive
-    return if event_id.present?
+    return if event_id.present? # prevent deriving questions that are attached to an event
 
-    dup.tap do |derived_question|
-      derived_question.derived_from_question = self
-    end
+    dup.tap { |derived_question| derived_question.derived_from_question = self }
   end
 
   # most attributes of global questions must not be overriden by derived questions
@@ -91,6 +91,11 @@ class Event::Question < ActiveRecord::Base
 
   def derived?
     derived_from_question_id.present?
+  end
+
+  def translation_class
+    # ensures globalize works with STI
+    Event::Question.globalize_translation_class
   end
 
   def validate_answer(_answer)

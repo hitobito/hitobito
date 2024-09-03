@@ -1,6 +1,5 @@
 class AddDerivedFromToEventQuestions < ActiveRecord::Migration[6.1]
   def change
-    # add_reference :event_questions, :derived_from_question, null: true, foreign_key: false
     add_reference :event_questions, :derived_from_question, null: true,
                   foreign_key: false, type: :integer
 
@@ -21,7 +20,7 @@ class AddDerivedFromToEventQuestions < ActiveRecord::Migration[6.1]
     standard_question_ids.each do |standard_question_id|
       derived_question_ids = Event::Question.where.not(derived_from_question_id: standard_question_id).pluck(:id)
       Event::Answer.where(question_id: derived_question_ids).update_all(question_id: standard_question_id)
-      Event::Question.where(id: derived_question_ids).destroy_all # or delete_all
+      Event::Question.where(id: derived_question_ids).destroy_all
     end
   end
 end

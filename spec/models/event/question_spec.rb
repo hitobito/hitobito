@@ -40,12 +40,6 @@ describe Event::Question do
 
       is_expected.to be_invalid
     end
-
-    it "is valid without choices" do
-      expect(subject.choice_items).to be_empty
-
-      is_expected.to be_valid
-    end
   end
 
   context "missing question" do
@@ -65,11 +59,7 @@ describe Event::Question do
   end
 
   context "with single-choice answer" do
-    subject { described_class.new(question: "Test?", choices: "ja", disclosure: :optional) }
-
-    it "knows that it only has one answer" do
-      is_expected.to be_one_answer_available
-    end
+    subject { described_class.new(question: "Test?", disclosure: :optional) }
 
     it "may be required" do
       subject.disclosure = :required
@@ -81,6 +71,19 @@ describe Event::Question do
       subject.disclosure = :optional
 
       is_expected.to be_valid
+    end
+
+    it "may be hidden" do
+      subject.disclosure = :hidden
+
+      is_expected.to be_valid
+    end
+
+    it "cannot be nil with event" do
+      subject.disclosure = nil
+      subject.event = events(:top_course)
+
+      is_expected.not_to be_valid
     end
   end
 

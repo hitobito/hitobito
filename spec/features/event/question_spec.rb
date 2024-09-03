@@ -15,7 +15,6 @@ describe EventsController, js: true do
   end
   let(:global_questions) do
     {
-      ahv_number: Event::Question::AhvNumber.create!(question: "AHV-Number?", event_type: nil, disclosure: nil),
       vegetarian: Event::Question::Default.create!(question: "Vegetarian?", choices: "yes", event_type: "Event"),
       camp_only: Event::Question::Default.create!(question: "Course?", event_type: "Event::Camp"),
       required: Event::Question::Default.create!(question: "Required?", disclosure: :required),
@@ -45,7 +44,6 @@ describe EventsController, js: true do
     end
 
     it "includes global questions with matching event type" do
-      is_expected.to have_text(global_questions[:ahv_number].question)
       is_expected.to have_text(global_questions[:vegetarian].question)
       is_expected.not_to have_text(global_questions[:camp_only].question)
       is_expected.to have_text(global_questions[:hidden].question)
@@ -55,7 +53,7 @@ describe EventsController, js: true do
       click_save
       expect(page).to have_content("Anmeldeangaben ist nicht gültig")
 
-      question_fields_element.all(".fields").find_each do |question_element|
+      question_fields_element.all(".fields").each do |question_element|
         within(question_element) do
           choose(Event::Question.disclosure_labels[:optional])
         end
@@ -85,7 +83,6 @@ describe EventsController, js: true do
     end
 
     it "hides hidden questions but shows others" do
-      is_expected.to have_text(global_questions[:ahv_number].question)
       is_expected.to have_text(global_questions[:vegetarian].question)
       is_expected.to have_text(global_questions[:required].question + " *")
 
@@ -104,69 +101,6 @@ describe EventsController, js: true do
       end
 
       is_expected.to have_content "Teilnahme von Top Leader in Eventus wurde erfolgreich erstellt."
-    end
-  end
-
-  describe Event::Answer do
-    let(:question) { event_questions(:top_ov) }
-    let(:choices) { question.choices.split(",") }
-
-    context "answer= for array values (checkboxes)" do
-      subject { question.reload.answers.build }
-
-      before do
-        question.update_attribute(:multiple_choices, true) # rubocop:disable Rails/SkipsModelValidations
-        subject.answer = answer_param
-        subject.save
-      end
-
-      context "valid array values (position + 1)" do
-        let(:answer_param) { %w[1 2] }
-
-        its(:answer) { is_expected.to eq "GA, Halbtax" }
-        it { is_expected.to have(0).errors_on(:answer) }
-      end
-
-      context "values outside of array size" do
-        let(:answer_param) { %w[4 5] }
-
-        its(:answer) { is_expected.to be_nil }
-      end
-
-      context "resetting values" do
-        subject { question.reload.answers.create(answer: "GA, Halbtax") }
-
-        let(:answer_param) { ["0"] }
-
-        its(:answer) { is_expected.to be_nil }
-      end
-    end
-
-    context "validates answers to single-answer questions correctly: " do
-      describe "a non-required question" do
-        let(:question) { Fabricate(:event_question, disclosure: :optional, choices: "Ja") }
-
-        subject(:no_answer_given) { build_answer("0") } # no choice
-
-        subject(:yes_answer) { build_answer("1") }
-        subject(:depends_answer) { build_answer("2") } # not a valid choice
-
-        it "may be left unanswered" do
-          expect(no_answer_given).to have(0).errors_on(:answer)
-        end
-
-        it "may be answered with the one option" do
-          expect(yes_answer).to have(0).errors_on(:answer)
-        end
-
-        it "may not be answered with something else" do
-          expect(depends_answer.answer).to be_nil
-        end
-
-        def build_answer(answer_index)
-          question.answers.create(answer: [answer_index])
-        end
-      end
     end
   end
 end

@@ -39,7 +39,7 @@ currency:
   unit: CHF
 
 email:
-  # Sender for all emails sent by the application. 
+  # Sender for all emails sent by the application.
   # Overwrite in different languages using the settings.email.sender translation key.
   sender: <%= "hitobito <noreply@#{mail_domain}>" %>
 
@@ -67,11 +67,6 @@ email:
 # This person should only be used by the operators of the application, not the customers.
 # Initially, a password reset token may be mailed from the application to this address to set a password.
 root_email: <%= ENV['RAILS_ROOT_USER_EMAIL'].presence || 'hitobito@puzzle.ch' %>
-
-sphinx:
-  index:
-    # interval to index for full-text search in minutes
-    interval: 10
 
 phone_number:
   predefined_labels:

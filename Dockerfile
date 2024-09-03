@@ -165,7 +165,6 @@ RUN bash -vxc "${POST_BUILD_SCRIPT:-"echo 'no POST_BUILD_SCRIPT provided'"}"
 
 RUN rm -rf vendor/cache/ .git spec/ node_modules/ db/production.sqlite3
 
-
 #################################
 #         Run/App Stage         #
 #################################

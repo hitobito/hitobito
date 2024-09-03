@@ -9,7 +9,6 @@ Folgende Umsysteme müssen vorgängig eingerichtet werden:
 * Phusion Passenger
 * Postgres
 * Memcached
-* Sphinx (optional)
 * Eine Catch-All E-Mail Adresse einer bestimmte Domain für die Mailinglisten (optional)
 * SSL Zertifikat (optional)
 * Sentry (optional)
@@ -34,8 +33,6 @@ gesetzt werden. Werte ohne Default müssen in der Regel definiert werden.
 | RAILS_MAIL_DOMAIN | Der Domainname für die Mailinglisten/Abos | `RAILS_HOST_NAME`        |
 | RAILS_MAIL_RETRIEVER_TYPE | `pop3` oder `imap`, alles was vom [Mail](https://github.com/mikel/mail) Gem unterstützt wird. | `pop3`                   |
 | RAILS_MAIL_RETRIEVER_CONFIG | Eine Komma-separierte `key: value` Liste mit allen erforderlichen E-Mail Empfangseinstellungen des gewählten Typs, z.B. `address: mailhost.local, port: 995, enable_ssl: true`. Siehe [Mail](https://github.com/mikel/mail#getting-emails-from-a-pop-server) für gültige Optionen. Wenn diese Variable nicht gesetzt ist, funktionieren die Mailinglisten nicht. | -                        |
-| RAILS_SPHINX_HOST | Hostname des Sphinx Servers | 127.0.0.1                |
-| RAILS_SPHINX_PORT | Eindeutiger Port des Sphinx Servers. Muss für jede laufende Instanz eindeutig sein. | 9312                     |
 | MEMCACHE_SERVERS | Komme-getrennte Liste von Memcache Servern in der Form `host:port` | localhost:11211          |
 | SENTRY_DNS | Configuration der Sentry Instanz, an welche Fehler gesendet werden sollen. Falls diese Variable nicht gesetzt ist, werden keine Fehlermeldungen verschickt. | -                        |
 
@@ -118,24 +115,3 @@ Mittels der Rolle kann die 2FA erzwungen werden. Erzwingen der 2FA erfolgt über
 ### Umsysteme
 
 Hitobito benötigt für den Betrieb einige weitere Dienste die installiert und konfiguriert werden müssen. 
-
-#### Sphinx / Searchd
-
-Damit es möglich ist über das Webfrontend nach Personen, Events und weiteren definierten Einträgen zu Suchen wird Sphinx verwendet. Über die Umgebungsvariablen RAILS_SPHINX_HOST und RAILS_SPHINX_PORT wird dabei definiert wie der Sphinx-Daemon erreichbar ist. 
-Sphinx lässt sich unter Centos/Rhel folgendermassen installieren:
-```
-yum install sphinx
-```
-Um eine entsprechende Konfiguration für Sphinx zu generieren steht ein Rake Task zur Verfügung. Vor dem Ausführen dieses Befehls innerhalb des Rails Verzeichnisses muss sichergestellt sein das die zuvor erwähnten Environment Variablen für Host und Port gesetzt sind.
-```
-cd $rails_dir
-bundle exec rake ts:configure
-```
-Über diesen Task wird nun eine entsprechende Sphinx Konfiguration unter config/production.sphinx.conf abgelegt. Diese erstellte Konfiguration linkt man nun am besten gleich nach /etc/sphinx/app-name.conf
-```
-ln -s $app_dir/config/production.sphinx.conf /etc/sphinx/$app-name.conf
-```
-Danach lässt sich der Sphinx Daemon mit der neuen Konfiguration starten:
-```
-service searchd start
-```

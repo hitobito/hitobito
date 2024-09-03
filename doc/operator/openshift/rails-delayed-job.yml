@@ -76,10 +76,6 @@ spec:
             secretKeyRef:
               key: key
               name: errbit-credentials
-        - name: RAILS_SPHINX_HOST
-          value: sphinx
-        - name: RAILS_SPHINX_PORT
-          value: "9312"
         - name: MEMCACHE_SERVERS
           value: memcached
         - name: RAILS_LOG_TO_STDOUT

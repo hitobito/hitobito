@@ -23,8 +23,7 @@ cleaned before. The locations are only seeded once, but there is an
 ## How and why reseeding is complicated but scripted
 
 Since seeding truncates the table a successful seeding is remembered in the
-database. This is needed because truncation in MySQL drops and recreates the
-table. Also, reseeding without a changed data-source does not make sense. In
+database. Reseeding without a changed data-source does not make sense. In
 order to remove the "is seeded"-marker, the above mentioned rake-take present.
 
 The "seeded"-marker is stored in the table `ar_internal_metadata`, which is

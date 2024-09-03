@@ -4,14 +4,14 @@
 
 
 
-| Container | Beschreibung | Image |
-| --- | --- | --- |
-| rails | Apache, Passenger, Rails Applikation | Projekteigenes rails Image |
-| delayed-job | Delayed Job Worker | Projekteigenes rails Image |
-| sphinx | Sphinx Daemon | Projekteigenes rails Image |
-| mysql | Mysql DB Server | centos/mysql-56-centos7, https://hub.docker.com/r/centos/mysql-56-centos7/ |
-| mysql-backup | Mysql DB Backup | appuio/mysql-simple-backup-container, https://hub.docker.com/r/appuio/mysql-simple-backup-container/ |
-| memcached | Memcached Server|  |
+| Container    | Beschreibung                         | Image |
+|--------------|--------------------------------------| --- |
+| rails        | Apache, Passenger, Rails Applikation | Projekteigenes rails Image |
+| delayed-job  | Delayed Job Worker                   | Projekteigenes rails Image |
+| sphinx       | Sphinx Daemon                        | Projekteigenes rails Image |
+| postgres     | Postgres DB Server                   | postgres:16, https://github.com/docker-library/postgres/blob/3a94d965ecbe08f4b1b255d3ed9ccae671a7a984/16/bookworm/Dockerfile |
+| mysql-backup | Mysql DB Backup                      | appuio/mysql-simple-backup-container, https://hub.docker.com/r/appuio/mysql-simple-backup-container/ |
+| memcached    | Memcached Server                     |  |
 
 
 ## Composition Repository
@@ -56,5 +56,5 @@ Als erstes wird ein neues Projekt auf Openshift angelegt:
 ---- notes
 
 * ose-rails-sphinx image docker hub
-* containers (rails, delayed-job, sphinx, memcached, mysql, mysql-backup
+* containers (rails, delayed-job, sphinx, memcached, postgres, mysql-backup
 * jenkins deployment job

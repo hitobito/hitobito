@@ -7,7 +7,7 @@ Folgende Umsysteme müssen vorgängig eingerichtet werden:
 * Ruby >= 2.5
 * Apache HTTPD
 * Phusion Passenger
-* MySql
+* Postgres
 * Memcached
 * Sphinx (optional)
 * Eine Catch-All E-Mail Adresse einer bestimmte Domain für die Mailinglisten (optional)
@@ -19,25 +19,25 @@ Folgende Umsysteme müssen vorgängig eingerichtet werden:
 Um hitobito mit den Umsystemen zu verbinden und zu konfigurieren, können folgende Umgebungsvariablen 
 gesetzt werden. Werte ohne Default müssen in der Regel definiert werden. 
 
-| Umgebungsvariable | Beschreibung | Default |
-| --- | --- | --- |
-| RAILS_HOST_NAME | Öffentlicher Hostname der Applikation. Wird für Links in E-Mails verwendet. | - |
-| RAILS_HOST_SSL | Gibt an, ob die Applikation unter HTTPS läuft (`true` or `false`) | `false` |
+| Umgebungsvariable | Beschreibung | Default                  |
+| --- | --- |--------------------------|
+| RAILS_HOST_NAME | Öffentlicher Hostname der Applikation. Wird für Links in E-Mails verwendet. | -                        |
+| RAILS_HOST_SSL | Gibt an, ob die Applikation unter HTTPS läuft (`true` or `false`) | `false`                  |
 | RAILS_DB_NAME | Name der Datenbank | `hitobito_[environment]` |
-| RAILS_DB_USERNAME | Benutzername, um auf die Datenbank zu verbinden. | - |
-| RAILS_DB_PASSWORD | Passwort, um auf die Datenbank zu verbinden. | - |
-| RAILS_DB_HOST | Hostname der Datenbank | - |
-| RAILS_DB_PORT | Port der Datenbank | - |
-| RAILS_DB_ADAPTER | Datenbank adapter | `mysql2` |
-| RAILS_MAIL_DELIVERY_METHOD | `smtp` oder `sendmail`. Siehe [ActionMailer](http://api.rubyonrails.org/classes/ActionMailer/Base.html) für Details. | `sendmail` |
-| RAILS_MAIL_DELIVERY_CONFIG | Eine Komma-separierte `key: value` Liste mit allen erforderlichen E-Mail Sendeeinstellungen der gewählten Methode, z.B. `address: smtp.local, port: 25`. Siehe [ActionMailer](http://api.rubyonrails.org/classes/ActionMailer/Base.html) für gültige Optionen. Wenn diese Variable leer ist, werden die Rails Defaultwerte verwendet. | Rails defaults |
-| RAILS_MAIL_DOMAIN | Der Domainname für die Mailinglisten/Abos | `RAILS_HOST_NAME` |
-| RAILS_MAIL_RETRIEVER_TYPE | `pop3` oder `imap`, alles was vom [Mail](https://github.com/mikel/mail) Gem unterstützt wird. | `pop3` |
-| RAILS_MAIL_RETRIEVER_CONFIG | Eine Komma-separierte `key: value` Liste mit allen erforderlichen E-Mail Empfangseinstellungen des gewählten Typs, z.B. `address: mailhost.local, port: 995, enable_ssl: true`. Siehe [Mail](https://github.com/mikel/mail#getting-emails-from-a-pop-server) für gültige Optionen. Wenn diese Variable nicht gesetzt ist, funktionieren die Mailinglisten nicht. | - |
-| RAILS_SPHINX_HOST | Hostname des Sphinx Servers | 127.0.0.1 |
-| RAILS_SPHINX_PORT | Eindeutiger Port des Sphinx Servers. Muss für jede laufende Instanz eindeutig sein. | 9312 |
-| MEMCACHE_SERVERS | Komme-getrennte Liste von Memcache Servern in der Form `host:port` | localhost:11211 |
-| SENTRY_DNS | Configuration der Sentry Instanz, an welche Fehler gesendet werden sollen. Falls diese Variable nicht gesetzt ist, werden keine Fehlermeldungen verschickt. | - |
+| RAILS_DB_USERNAME | Benutzername, um auf die Datenbank zu verbinden. | -                        |
+| RAILS_DB_PASSWORD | Passwort, um auf die Datenbank zu verbinden. | -                        |
+| RAILS_DB_HOST | Hostname der Datenbank | -                        |
+| RAILS_DB_PORT | Port der Datenbank | -                        |
+| RAILS_DB_ADAPTER | Datenbank adapter | `postgres`               |
+| RAILS_MAIL_DELIVERY_METHOD | `smtp` oder `sendmail`. Siehe [ActionMailer](http://api.rubyonrails.org/classes/ActionMailer/Base.html) für Details. | `sendmail`               |
+| RAILS_MAIL_DELIVERY_CONFIG | Eine Komma-separierte `key: value` Liste mit allen erforderlichen E-Mail Sendeeinstellungen der gewählten Methode, z.B. `address: smtp.local, port: 25`. Siehe [ActionMailer](http://api.rubyonrails.org/classes/ActionMailer/Base.html) für gültige Optionen. Wenn diese Variable leer ist, werden die Rails Defaultwerte verwendet. | Rails defaults           |
+| RAILS_MAIL_DOMAIN | Der Domainname für die Mailinglisten/Abos | `RAILS_HOST_NAME`        |
+| RAILS_MAIL_RETRIEVER_TYPE | `pop3` oder `imap`, alles was vom [Mail](https://github.com/mikel/mail) Gem unterstützt wird. | `pop3`                   |
+| RAILS_MAIL_RETRIEVER_CONFIG | Eine Komma-separierte `key: value` Liste mit allen erforderlichen E-Mail Empfangseinstellungen des gewählten Typs, z.B. `address: mailhost.local, port: 995, enable_ssl: true`. Siehe [Mail](https://github.com/mikel/mail#getting-emails-from-a-pop-server) für gültige Optionen. Wenn diese Variable nicht gesetzt ist, funktionieren die Mailinglisten nicht. | -                        |
+| RAILS_SPHINX_HOST | Hostname des Sphinx Servers | 127.0.0.1                |
+| RAILS_SPHINX_PORT | Eindeutiger Port des Sphinx Servers. Muss für jede laufende Instanz eindeutig sein. | 9312                     |
+| MEMCACHE_SERVERS | Komme-getrennte Liste von Memcache Servern in der Form `host:port` | localhost:11211          |
+| SENTRY_DNS | Configuration der Sentry Instanz, an welche Fehler gesendet werden sollen. Falls diese Variable nicht gesetzt ist, werden keine Fehlermeldungen verschickt. | -                        |
 
 
 

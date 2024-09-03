@@ -151,7 +151,7 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
   end
 
   def find_entry
-    super.tap { |role| @type = role.class }
+    model_scope.with_inactive.find(params[:id]).tap { |role| @type = role.class }
   end
 
   def build_role

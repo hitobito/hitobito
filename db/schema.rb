@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_08_30_125755) do
+ActiveRecord::Schema.define(version: 2024_09_03_131542) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -107,7 +107,7 @@ ActiveRecord::Schema.define(version: 2024_08_30_125755) do
     t.datetime "finished_at", precision: 6
     t.integer "attempt"
     t.string "status"
-    t.text "payload", size: :long, collation: "utf8mb4_bin"
+    t.json "payload"
     t.index ["group_id"], name: "index_background_job_log_entries_on_group_id"
     t.index ["job_id", "attempt"], name: "index_background_job_log_entries_on_job_id_and_attempt", unique: true
     t.index ["job_id"], name: "index_background_job_log_entries_on_job_id"

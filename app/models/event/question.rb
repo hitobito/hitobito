@@ -66,7 +66,7 @@ class Event::Question < ActiveRecord::Base
   end
 
   def derive
-    return unless event_id.blank?
+    return if event_id.present?
 
     dup.tap do |derived_question|
       derived_question.derived_from_question = self

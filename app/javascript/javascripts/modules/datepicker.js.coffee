@@ -28,7 +28,7 @@ class app.Datepicker
     options = $.extend({ onSelect: (d, i) -> self.track(this, d, i) }, minDate: minDate, 
                                                                        maxDate: maxDate, 
                                                                        changeMonth: true, 
-                                                                       changeYear: true , 
+                                                                       changeYear: true, 
                                                                        $.datepicker.regional[$('html').attr('lang')])
 
 

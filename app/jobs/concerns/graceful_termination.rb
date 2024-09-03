@@ -5,18 +5,21 @@
 #  or at https://github.com/hitobito/hitobito.
 
 module GracefulTermination
-  # use this method with a job to support graceful termination via an early
-  # return in case `@terminate` is true
+  # use the check_terminated! method in a job to support graceful termination
+  # at a defined point
   #
-  # def perform
-  #   handle_termination_signals do
-  #      many.times do
-  #         return if @terminate
+  # class Job < BaseJob
+  #   include GracefulTermination
   #
-  #         perform_work ...
-  #      end
+  #   def perform
+  #     handle_termination_signals do
+  #        many.times do
+  #           check_terminated!
+  #
+  #           perform_work ...
+  #        end
+  #     end
   #   end
-  # end
   #
 
   private
@@ -30,9 +33,9 @@ module GracefulTermination
   end
 
   def handle_termination_signal(signal)
-    @terminate = false
+    @signal = nil
     old_handler = trap(signal) do
-      @terminate = true
+      @signal = signal
       old_handler.call
     end
     yield
@@ -40,7 +43,7 @@ module GracefulTermination
     trap(signal, old_handler)
   end
 
-  def check_terminated
-    raise SignalException if @terminate
+  def check_terminated!
+    raise SignalException.new(@signal) if @signal
   end
 end

@@ -122,6 +122,22 @@ describe RolesController do
       expect(role).to be_kind_of(Group::GlobalGroup::Member)
     end
 
+    it "with start_at in the future creates a future role" do
+      g = groups(:toppers)
+      expect do
+        post :create, params: {
+          group_id: group.id,
+          role: {
+            group_id: g.id,
+            start_on: Time.zone.tomorrow,
+            person_id: person.id,
+            type: Group::GlobalGroup::Member.sti_name
+          }
+        }
+      end.to change { person.roles.future.count }.by(1)
+      is_expected.to redirect_to(group_people_path(g))
+    end
+
     it "without name renders form again" do
       post :create, params: {
         group_id: group.id,
@@ -290,6 +306,18 @@ describe RolesController do
       is_expected.to redirect_to(group_person_path(group, person))
     end
 
+    it "updates future role" do
+      role.update!(start_on: Time.zone.tomorrow)
+      expect do
+        put :update, params: {group_id: group.id, id: role.id, role: {label: "bla", type: role.type, group_id: role.group_id}}
+      end.not_to change { Role.with_inactive.count }
+
+      expect(flash[:notice]).to eq "Rolle <i>Member (bla)</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich aktualisiert."
+      expect(role.reload.label).to eq "bla"
+      expect(role.type).to eq Group::TopGroup::Member.model_name
+      is_expected.to redirect_to(group_person_path(group, person))
+    end
+
     it "terminates and creates new role if type changes" do
       expect do
         put :update, params: {group_id: group.id, id: role.id, role: {type: Group::TopGroup::Leader.sti_name}}
@@ -417,7 +445,14 @@ describe RolesController do
     end
 
     it "redirects to person if user can still view person" do
-      Fabricate(Group::TopGroup::Leader.name.to_sym, person: person, group: group)
+      delete :destroy, params: {group_id: group.id, id: role.id}
+
+      expect(flash[:notice]).to eq notice
+      is_expected.to redirect_to(person_path(person))
+    end
+
+    it "can destroy future role" do
+      role.update!(start_on: Time.zone.tomorrow)
       delete :destroy, params: {group_id: group.id, id: role.id}
 
       expect(flash[:notice]).to eq notice

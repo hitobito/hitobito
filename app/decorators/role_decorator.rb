@@ -39,7 +39,7 @@ class RoleDecorator < ApplicationDecorator
   end
 
   def future_role_details(name, show_start_on)
-    if show_start_on && model.start_on&.future?
+    if show_start_on && model.future?
       name = safe_join([name, FormatHelper::EMPTY_STRING, "(#{model.formatted_start_date})"])
     end
     name
@@ -50,6 +50,10 @@ class RoleDecorator < ApplicationDecorator
       name = safe_join([name, FormatHelper::EMPTY_STRING, "(#{model.formatted_delete_date})"])
     end
     name
+  end
+
+  def formatted_start_date
+    I18n.t("global.start_on", date: I18n.l(convert_on))
   end
 
   def terminated_details(name)

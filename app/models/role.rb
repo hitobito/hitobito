@@ -236,6 +236,10 @@ class Role < ActiveRecord::Base
     end_on? && end_on < Date.current
   end
 
+  def future?
+    start_on&.future?
+  end
+
   def active?(reference_time = Time.current)
     active_period.cover?(reference_time)
   end
@@ -250,6 +254,10 @@ class Role < ActiveRecord::Base
 
   def formatted_delete_date
     [self.class.human_attribute_name("end_on_in_name"), I18n.l(end_on)].join(" ")
+  end
+
+  def formatted_start_date
+    I18n.t("global.start_on", date: I18n.l(start_on))
   end
 
   private

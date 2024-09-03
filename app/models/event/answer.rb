@@ -23,7 +23,11 @@ class Event::Answer < ActiveRecord::Base
   belongs_to :participation
   belongs_to :question
 
+  # attribute type: :json preserves the possibility to store complex datastructures
+  # in the answer e.g. for multiple_choice of Event::Question::Default
   attribute :answer, :json
+
+  delegate :admin?, to: :question
 
   before_validation { question&.before_validate_answer(self) }
 

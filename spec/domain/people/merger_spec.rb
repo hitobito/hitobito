@@ -106,7 +106,7 @@ describe People::Merger do
         merger.merge!
       end.to change(Person, :count).by(-1)
 
-      person_roles = person.roles.with_deleted
+      person_roles = person.roles.with_inactive
       expect(person_roles.count).to eq(1)
       group_ids = person_roles.map(&:group_id)
       expect(group_ids).to include(groups(:bottom_group_one_one).id)

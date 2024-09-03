@@ -53,7 +53,7 @@ describe EventsController, js: true do
       click_save
       expect(page).to have_content("Anmeldeangaben ist nicht gültig")
 
-      question_fields_element.all(".fields").each do |question_element|
+      question_fields_element.all(".fields").each do |question_element| # rubocop:disable Rails/FindEach
         within(question_element) do
           choose(Event::Question.disclosure_labels[:optional])
         end

@@ -21,8 +21,8 @@ require "spec_helper"
 
 describe Event::Question::Default do
   subject { described_class.new(question: "Is this a Spec") }
-  context "has validations" do
 
+  context "has validations" do
     it "is invalid without question" do
       subject.question = ""
 

@@ -21,12 +21,13 @@ describe Event::Answer do
   let(:question) { event_questions(:top_ov) }
   let(:participation) { question.event.participations.first }
 
-  subject(:answer) { described_class.build(participation: , question:) }
+  subject(:answer) { described_class.new(participation:, question:) }
 
   context "with required question" do
     before { question.update!(disclosure: :required) }
 
     it "validates required answer" do
+      answer.participation.enforce_required_answers = true
       expect(answer).not_to be_valid
       expect(answer.errors[:answer]).to include("muss ausgefüllt werden")
     end
@@ -43,7 +44,6 @@ describe Event::Answer do
     it "calls the questions custom before_validation implementation" do
       expect(question).to receive(:before_validate_answer).and_return(true)
       special_answer = ["Maybe", "Array"]
-      binding.pry
       answer.update!(answer: special_answer)
       expect(answer.answer).to eq(special_answer)
     end

@@ -423,7 +423,7 @@ describe Household do
     end
   end
 
-  describe "logging" do
+  describe "logging", :draper_with_helpers do
     with_versioning do
       let(:top_leader) { people(:top_leader) }
       before { PaperTrail.request.whodunnit = top_leader.id }
@@ -439,7 +439,7 @@ describe Household do
         [person, other_person].each do |person|
           log_entry = person.versions.last
 
-          expect(log_line(log_entry)).to eq("Haushalt (David Hasselhoff, Ardona Mola) wurde neu erstellt.")
+          expect(log_line(log_entry)).to eq("Haushalt (Ardona Mola, David Hasselhoff) wurde neu erstellt.")
 
           expect(log_entry.whodunnit).to eq(top_leader.id.to_s)
           expect(log_entry.whodunnit_type).to eq(Person.sti_name)
@@ -463,8 +463,8 @@ describe Household do
         [person, other_person, third_person, fourth_person, fifth_person].each do |person|
           version_entries = person.versions.last(2)
 
-          expect(log_line(version_entries.first)).to eq("Hans Hansen wurde zum Haushalt (David Hasselhoff, Ardona Mola, Malou Thomas) hinzugefügt.")
-          expect(log_line(version_entries.second)).to eq("Jan Miller wurde zum Haushalt (David Hasselhoff, Ardona Mola, Malou Thomas) hinzugefügt.")
+          expect(log_line(version_entries.first)).to eq("Hans Hansen wurde zum Haushalt (Ardona Mola, David Hasselhoff, Malou Thomas) hinzugefügt.")
+          expect(log_line(version_entries.second)).to eq("Jan Miller wurde zum Haushalt (Ardona Mola, David Hasselhoff, Malou Thomas) hinzugefügt.")
 
           version_entries.each do |log_entry|
             expect(log_entry.whodunnit).to eq(top_leader.id.to_s)
@@ -541,7 +541,7 @@ describe Household do
         [person, other_person, third_person].each do |person|
           log_entry = person.versions.last
 
-          expect(log_line(log_entry)).to eq("Haushalt (David Hasselhoff, Ardona Mola, Malou Thomas) wurde aufgelöst.")
+          expect(log_line(log_entry)).to eq("Haushalt (Ardona Mola, David Hasselhoff, Malou Thomas) wurde aufgelöst.")
 
           expect(log_entry.whodunnit).to eq(top_leader.id.to_s)
           expect(log_entry.whodunnit_type).to eq(Person.sti_name)
@@ -564,6 +564,7 @@ describe Household do
         # one version entry for created household, the other for changed address
         expect(other_person.versions.count).to eq(2)
         address_log_entry = other_person.versions.first
+
         expect(log_line(address_log_entry)).to eq("PLZ wurde auf <i>6600</i> gesetzt.</div><div>Ort wurde auf <i>Locarno</i> gesetzt.</div><div>Strasse wurde auf <i>Loriweg</i> gesetzt.</div><div>Hausnummer wurde auf <i>42</i> gesetzt.")
 
         expect_whodunnit_top_leader

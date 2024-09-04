@@ -83,6 +83,11 @@ class StepsComponent::ContentComponent < StepsComponent::IteratingComponent
     options.merge(name: :next, value: index + 1)
   end
 
+  def render?
+    # render all steps in self registration at all times to allow back and forth movement over multiple steps
+    index <= @step || @form.object.is_a?(Wizards::Signup::SektionWizard)
+  end
+
   def build_buttons
     buttons = [next_button]
     buttons << back_link if index.positive?

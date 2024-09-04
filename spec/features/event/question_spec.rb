@@ -80,7 +80,7 @@ describe EventsController, js: true do
       event_with_questions
       sign_in(user)
       visit contact_data_group_event_participations_path(event.group_ids.first, event.id,
-                                                         event_role: {type: Event::Role::Participant})
+        event_role: {type: Event::Role::Participant})
       click_next
     end
 

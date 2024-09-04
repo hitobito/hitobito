@@ -78,9 +78,9 @@ describe Tags::Merger do
 
       merger.merge!
 
-      expect(tag1_owner.reload.tags.to_a).to eq([tag1])
-      expect(tag2_owner.reload.tags.to_a).to eq([tag2])
-      expect(all_tag_owner.reload.tags.to_a).to eq([tag1, tag2])
+      expect(tag1_owner.reload.tags.to_a).to contain_exactly(tag1)
+      expect(tag2_owner.reload.tags.to_a).to contain_exactly(tag2)
+      expect(all_tag_owner.reload.tags.to_a).to contain_exactly(tag1, tag2)
 
       expect(tag1.reload.taggings_count).to eq(2)
     end

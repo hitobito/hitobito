@@ -70,6 +70,7 @@ describe EventsController, js: true do
       event.save!
       event
     end
+    let(:user) { people(:bottom_member) }
 
     subject { page }
 
@@ -77,8 +78,9 @@ describe EventsController, js: true do
       Event::Question.delete_all
       global_questions
       event_with_questions
-      sign_in
-      visit contact_data_group_event_participations_path(event.group_ids.first, event.id, event_role: {type: Event::Role::Participant})
+      sign_in(user)
+      visit contact_data_group_event_participations_path(event.group_ids.first, event.id,
+                                                         event_role: {type: Event::Role::Participant})
       click_next
     end
 

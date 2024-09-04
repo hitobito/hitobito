@@ -839,6 +839,7 @@ DEPENDENCIES
   oat
   open_api-schema_validator
   paper_trail
+  parallel
   parallel_tests
   paranoia
   pdf-inspector

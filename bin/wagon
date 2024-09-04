@@ -12,6 +12,7 @@
 
 # strict mode
 set -euo pipefail
+#set -x
 IFS=$'\n\t'
 
 # args
@@ -223,9 +224,10 @@ grep)
   ;;
 
 spec-all)
+  shift # loose the "spec-all" argument
   for wagon in $(existing_wagon_names); do
     echo "$wagon" | red
-    wagon spec $@
+    wagon spec $wagon $@
   done
   ;;
 
@@ -244,12 +246,12 @@ spec)
 
   # setup for specs
   direnv exec ../hitobito/ $0 gemfile
-  direnv exec ../hitobito/ $0 reset-test-database
+  direnv exec ../hitobito_${wagon_name}/ $0 reset-test-database
 
-  # prepare DB
-  export RAILS_ENV=test
-  direnv exec ../hitobito/ bundle exec rake db:migrate
-  direnv exec ../hitobito/ bundle exec rake wagon:migrate
+#  # prepare DB
+#  export RAILS_ENV=test
+#  direnv exec ../hitobito/ bundle exec rake db:migrate
+#  direnv exec ../hitobito/ bundle exec rake wagon:migrate
 
   # run specs in subshell to return to current directory
   (

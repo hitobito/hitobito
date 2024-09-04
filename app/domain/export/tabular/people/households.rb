@@ -27,6 +27,7 @@ module Export::Tabular::People
         people = super
         people = Person.where(id: people) unless people.respond_to?(:only_public_data)
 
+        people = people.order(:first_name)
         ::People::HouseholdList.new(people.only_public_data.includes(:primary_group))
       end
     end

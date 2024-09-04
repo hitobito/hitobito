@@ -75,20 +75,3 @@ jobs:
             ${{ secrets.PUZZLE_REGISTRY }}/hitobito/${{ inputs.project }}/rails:${{ inputs.version }}
             ${{ secrets.PUZZLE_REGISTRY }}/hitobito/${{ inputs.project }}/rails:${{ inputs.stage }}
           push: ${{ inputs.push }}
-
-      - uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: hitobito/Dockerfile
-          build-args: |
-            BUILD_REPO=${{ inputs.composition }}
-            BUILD_REF=${{ inputs.source_ref }}
-            BUILD_COMMIT=${{ inputs.version }}
-            HITOBITO_PROJECT=${{ inputs.project }}
-            HITOBITO_STAGE=${{ inputs.stage }}
-          target: sphinx
-          tags: |
-            ${{ secrets.PUZZLE_REGISTRY }}/hitobito/${{ inputs.project }}/sphinx:latest
-            ${{ secrets.PUZZLE_REGISTRY }}/hitobito/${{ inputs.project }}/sphinx:${{ inputs.version }}
-            ${{ secrets.PUZZLE_REGISTRY }}/hitobito/${{ inputs.project }}/sphinx:${{ inputs.stage }}
-          push: ${{ inputs.push }}

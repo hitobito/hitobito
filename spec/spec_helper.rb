@@ -91,6 +91,7 @@ RSpec.configure do |config|
   config.include MailerMacros
   config.include EventMacros
   config.include I18nHelpers
+  config.include QueryHelpers
   config.include ViewHelpers
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::IntegrationHelpers, type: :request

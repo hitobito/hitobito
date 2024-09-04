@@ -47,8 +47,9 @@ describe InvoiceResource, type: :resource do
     it "may include items" do
       params[:include] = "invoice_items"
       render
-      item = d[0].sideload(:invoice_items)[0]
-      expect(item.name).to eq "pins"
+      items = d[0].sideload(:invoice_items)
+      expect(items.size).to eq(2)
+      item = items.find { |i| i.name == "pins" }
       expect(item.description).to be_blank
       expect(item.unit_cost).to eq 0.5
       expect(item.vat_rate).to be_nil

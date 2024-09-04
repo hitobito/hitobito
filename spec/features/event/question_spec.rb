@@ -30,6 +30,14 @@ describe EventsController, js: true do
     find_all(".bottom .btn-group").first.click_button "Weiter"
   end
 
+  def click_signup
+    all(".bottom .btn-group").first.click_button "Anmelden"
+  end
+
+  def find_question_field(question)
+    page.all(".fields").find { |question_element| question_element.text.start_with?(question.question) }
+  end
+
   describe "global application_questions" do
     subject(:question_fields_element) do
       click_link I18n.t("event.participations.application_answers")
@@ -47,6 +55,8 @@ describe EventsController, js: true do
       is_expected.to have_text(global_questions[:vegetarian].question)
       is_expected.not_to have_text(global_questions[:camp_only].question)
       is_expected.to have_text(global_questions[:hidden].question)
+
+      is_expected.not_to have_text("Entfernen")
     end
 
     it "requires questions to have disclosure selected before saving" do
@@ -92,17 +102,19 @@ describe EventsController, js: true do
       is_expected.not_to have_text(global_questions[:hidden].question)
     end
 
-    it "saves only valid data" do
+    it "fails with empty required questions" do
       sleep 0.5 # avoid wizard race condition
-      page.all(".bottom .btn-group").first.click_button "Anmelden"
+      click_signup
 
-      all(".fields").each do |question_element|
-        within(question_element) do
-          puts question_element.text
-        end
+      is_expected.to have_content "Antwort muss ausgefüllt werden"
+
+      within find_question_field(global_questions[:required]) do
+        answer_element = find('input[type="text"]')
+        answer_element.fill_in(with: "Something")
       end
 
-      is_expected.to have_content "Teilnahme von Top Leader in Eventus wurde erfolgreich erstellt."
+      click_signup
+      is_expected.to have_content "Teilnahme von Bottom Member in Eventus wurde erfolgreich erstellt."
     end
   end
 end

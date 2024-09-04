@@ -61,10 +61,6 @@ class StepsComponent::ContentComponent < StepsComponent::IteratingComponent
     submit_button(title, type, next_submit_button_options.merge(options))
   end
 
-  def render?
-    index <= @step
-  end
-
   def back_link
     data = {action: stimulus_action(:back), index: index - 1}
     link_to(t("global.button.back"), "#", class: "link cancel mt-2 pt-1", data: data)

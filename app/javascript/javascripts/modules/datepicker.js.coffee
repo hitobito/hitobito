@@ -25,7 +25,11 @@ class app.Datepicker
     minDate = if input.attributes.mindate? then new Date(input.attributes.mindate.value) else null
     maxDate = if input.attributes.maxdate? then new Date(input.attributes.maxdate.value) else null
 
-    options = $.extend({ onSelect: (d, i) -> self.track(this, d, i) }, minDate: minDate, maxDate: maxDate, $.datepicker.regional[$('html').attr('lang')])
+    options = $.extend({ onSelect: (d, i) -> self.track(this, d, i) }, minDate: minDate, 
+                                                                       maxDate: maxDate, 
+                                                                       changeMonth: true, 
+                                                                       changeYear: true, 
+                                                                       $.datepicker.regional[$('html').attr('lang')])
 
 
     field.datepicker(options)

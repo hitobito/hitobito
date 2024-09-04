@@ -22,7 +22,7 @@
 
 .ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next {
   position: absolute;
-  top: 2px;
+  top: 5px;
   width: 1.8em;
   height: 1.8em;
 }
@@ -259,6 +259,26 @@
   filter: none;
 }
 
+.ui-datepicker .ui-datepicker-month { 
+  background: white;
+  margin-bottom: 0px;
+  font-size: normal;
+  color: $blue;
+  border-style: none;
+  border-radius: 4px;
+  width: 42% !important;
+  margin-right: 10px !important;
+}
+
+.ui-datepicker .ui-datepicker-year { 
+  background: white;
+  margin-bottom: 0px;
+  font-size: normal;
+  color: $blue;
+  border-style: none;
+  border-radius: 4px;
+  margin-right: 3px;
+}
 
 .ui-datepicker td .ui-state-active {
   background: #BFBFBF;

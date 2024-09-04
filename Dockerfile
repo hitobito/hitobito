@@ -167,28 +167,6 @@ RUN rm -rf vendor/cache/ .git spec/ node_modules/ db/production.sqlite3
 
 
 #################################
-#           Sphinx image        #
-#################################
-
-FROM macbre/sphinxsearch:3.1.1 AS sphinx
-
-ARG HOME
-ENV PS1="${PS1}" \
-    TZ="${TZ}" \
-    RAILS_HOME="${HOME}"
-
-# COPY --from=build $RAILS_HOME/config/production.sphinx.conf /opt/sphinx/conf/sphinx.conf
-RUN mkdir -p /opt/sphinx/conf/ && touch /opt/sphinx/conf/sphinx.conf
-COPY --from=build $RAILS_HOME/bin/run-sphinx /usr/local/bin/run-sphinx
-
-RUN chmod -R ug+w /opt/sphinx/conf/ \
- && chmod -R ug+w /opt/sphinx/index/ \
- && chmod -R ug+w /opt/sphinx/log/
-
-CMD ["/usr/local/bin/run-sphinx"]
-
-
-#################################
 #         Run/App Stage         #
 #################################
 

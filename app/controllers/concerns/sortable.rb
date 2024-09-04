@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2015, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -35,12 +35,19 @@ module Sortable
       if sorting?
         # Get only the sort_expression attribute not included in
         # the attributes of current model_class, to select in query
-        model_class.from(super.select("#{model_class.table_name}.*", sort_expression_attrs)
-                   .joins(join_tables), model_class.table_name)
+        subquery = super.select("#{model_table_name}.*", sort_expression_attrs).joins(join_tables)
+
+        model_class
+          .select("#{model_table_name}.*")
+          .from(subquery, model_table_name)
           .reorder(Arel.sql(sort_expression))
       else
         super
       end
+    end
+
+    def model_table_name
+      model_class.table_name
     end
 
     def sorting?
@@ -63,7 +70,7 @@ module Sortable
     def sort_expression
       if sort_expression_attrs.empty?
         Array(sort_columns).collect { |c|
-          "#{model_class.table_name}.#{c} #{sort_dir} NULLS LAST"
+          "#{model_table_name}.#{c} #{sort_dir} NULLS LAST"
         }.join(", ")
       else
         Array(sort_columns).collect { |c| "#{c} #{sort_dir} NULLS LAST" }.join(", ")

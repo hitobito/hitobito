@@ -37,7 +37,7 @@ class Households::LogEntries
     people -= new_people unless new_record?
     people -= removed_people if removed_people.present? && !destroy?
 
-    people.map(&:full_name).join(", ")
+    people.map(&:full_name).sort.join(", ")
   end
 
   def log_people

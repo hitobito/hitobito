@@ -310,6 +310,11 @@ describe Export::Pdf::Invoice do
       pdf = described_class.render(invoice, articles: true)
       expect(PDF::Inspector::Page.analyze(pdf).pages.size).to eq 2
     end
+
+    it "has a compatible encoding" do
+      invoice.update(address: "My∙Address")
+      expect { described_class.render(invoice, articles: true) }.not_to raise_error
+    end
   end
 
   context "codeline" do

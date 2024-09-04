@@ -9,7 +9,7 @@ module Export::Pdf
   module Participation
     class Runner
       def render(participation)
-        pdf = Export::Pdf::Document.new(margin: 2.cm).pdf
+        pdf = Export::Pdf::Document.new.pdf
         pdf.font_size 9
         sections.each { |section| section.new(pdf, participation).render }
         pdf.number_pages(I18n.t("event.participations.print.page_of_pages"),

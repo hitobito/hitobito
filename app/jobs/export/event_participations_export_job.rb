@@ -14,7 +14,7 @@ class Export::EventParticipationsExportJob < Export::ExportBaseJob
   private
 
   def entries
-    @filter.list_entries.sort_by {|obj| obj.person.first_name}
+    @filter.list_entries.sort_by { |obj| obj.person.first_name }
   end
 
   def exporter

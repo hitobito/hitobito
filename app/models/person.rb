@@ -262,6 +262,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   has_many :message_recipients, dependent: :nullify
 
+  has_many :webauthn_credentials, dependent: :destroy
+
   accepts_nested_attributes_for :relations_to_tails, allow_destroy: true
   FeatureGate.if("people.family_members") do
     accepts_nested_attributes_for :family_members, allow_destroy: true
@@ -290,6 +292,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   validates :picture, dimension: {width: {max: 8_000}, height: {max: 8_000}},
     content_type: ["image/jpeg", "image/gif", "image/png"]
+
+  validates :webauthn_id, uniqueness: true
   # more validations defined by devise
 
   ### CALLBACKS

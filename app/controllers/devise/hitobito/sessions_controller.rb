@@ -23,21 +23,52 @@ class Devise::Hitobito::SessionsController < Devise::SessionsController
   before_action :configure_permitted_parameters
   after_action :reset_inactivity_block_warning_sent_at, only: [:create]
 
-  def create
-    super do |resource|
-      if second_factor_required?(resource)
-        # we pass the value of after_sign_in_path_for to init_two_factor_auth
-        # so that we can save it to the session again after sign_out is performed
-        # there
-        after_2fa_path = after_sign_in_path_for(resource)
-        return init_two_factor_auth(resource, after_2fa_path)
-      end
+  def new
+    session.delete(:webauthn_authentication)
+    super
+  end
 
-      if request.format == :json
-        resource.generate_authentication_token! unless resource.authentication_token?
-        render json: UserSerializer.new(resource, controller: self)
-        return
-      end
+  # def create
+  #   super do |resource|
+  #     if second_factor_required?(resource)
+  #       # we pass the value of after_sign_in_path_for to init_two_factor_auth
+  #       # so that we can save it to the session again after sign_out is performed
+  #       # there
+  #       after_2fa_path = after_sign_in_path_for(resource)
+  #       return init_two_factor_auth(resource, after_2fa_path)
+  #     end
+  #
+  #     if request.format == :json
+  #       resource.generate_authentication_token! unless resource.authentication_token?
+  #       render json: UserSerializer.new(resource, controller: self)
+  #       return
+  #     end
+  #   end
+  # end
+  def create
+    self.resource = warden.authenticate!(auth_options)
+
+    if resource.webauthn_credentials.any?
+      # preserve the stored location
+      stored_location = stored_location_for(resource)
+
+      # log out the user (this will also clear stored location)
+      warden.logout
+
+      # restore the stored location
+      store_location_for(resource, stored_location)
+
+      # set session data
+      session[:webauthn_authentication] = {user_id: resource.id, remember_me: params[:user][:remember_me] == "1"}
+
+      # redirect to the webauthn page
+      redirect_to webauthn_authentications_url, notice: "Use your authenticator to continue."
+    else
+      # continue without webauthn
+      set_flash_message!(:notice, :signed_in)
+      sign_in(resource_name, resource)
+      yield resource if block_given?
+      respond_with resource, location: after_sign_in_path_for(resource)
     end
   end
 

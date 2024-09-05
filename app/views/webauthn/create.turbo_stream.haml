@@ -1,0 +1,2 @@
+= turbo_stream.update("new_webauthn_credential", partial: "webauthn/credentials/form", locals: {credential: WebauthnCredential.new})
+= turbo_stream.prepend("webauthn_credentials", partial: "webauthn/credentials/credential", locals: {credential: credential})

@@ -8,10 +8,12 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.14.0",
+    "@github/webauthn-json": "^2.1.1",
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^8.0.2",
     "@popperjs/core": "^2.11.6",
     "@rails/actiontext": "^6.0.3-3",
+    "@rails/request.js": "^0.0.11",
     "@rails/webpacker": "5.4.3",
     "@tarekraafat/autocomplete.js": "^10.2.7",
     "bootstrap": "^5.2.0",

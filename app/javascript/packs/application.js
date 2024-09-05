@@ -68,7 +68,7 @@ import { Application } from "@hotwired/stimulus"
 import { Turbo } from "@hotwired/turbo-rails"
 
 const application = Application.start()
-// application.debug = true
+application.debug = true
 window.Stimulus   = application
 window.Popover = Popover
 
@@ -94,4 +94,3 @@ document.addEventListener('trix-file-accept', function(event) {
     event.preventDefault();
   }
 });
-

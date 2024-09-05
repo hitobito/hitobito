@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -15,8 +15,9 @@ describe Export::Tabular::People::PeopleAddress do
   subject { people_list }
 
   its(:attributes) do
-    should == [:first_name, :last_name, :nickname, :company_name, :company, :email, :address,
-      :zip_code, :town, :country, :layer_group, :roles]
+    should == [:first_name, :last_name, :nickname, :company_name, :company, :email,
+      :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
+      :layer_group, :roles]
   end
 
   context "standard attributes" do

@@ -40,7 +40,7 @@ describe Export::Pdf::Messages::Letter do
   context "text" do
     context "single recipient" do
       before do
-        people(:top_leader).update!(address: "Funkystreet 42", zip_code: "4242")
+        people(:top_leader).update!(street: "Funkystreet", housenumber: "42", zip_code: "4242")
         Subscription.create!(mailing_list: list,
           subscriber: group,
           role_types: [Group::BottomGroup::Member])
@@ -85,7 +85,7 @@ describe Export::Pdf::Messages::Letter do
           filename: "logo.png"
         )
         letter.update!(group: groups(:top_group))
-        layer.update!(address: "Lakeview 42", zip_code: "4242", town: "Bern")
+        layer.update!(street: "Lakeview", housenumber: "42", zip_code: "4242", town: "Bern")
         IO.binwrite("/tmp/file.pdf", subject.render)
       end
     end

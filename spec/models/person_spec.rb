@@ -453,7 +453,8 @@ describe Person do
         person.country = "CA"
         person.first_name = "SANTA"
         person.last_name = "CLAUS"
-        person.address = "NORTH POLE"
+        person.street = "NORTH POLE"
+        person.housenumber = "2512"
         person.zip_code = "H0H 0H0"
         expect(person).to be_valid
       end
@@ -714,7 +715,7 @@ describe Person do
     end
 
     it "lists no people with blank last_name or address" do
-      people(:bottom_member).update!(last_name: "", address: "")
+      people(:bottom_member).update!(last_name: "", street: "")
 
       results = Person.with_address
 
@@ -722,7 +723,7 @@ describe Person do
     end
 
     it "lists no people with spaces for last_name or address" do
-      people(:bottom_member).update!(last_name: "        ", address: "     ")
+      people(:bottom_member).update!(last_name: "        ", street: "     ")
 
       results = Person.with_address
 
@@ -739,7 +740,7 @@ describe Person do
     end
 
     it "lists no people with blank company_name or address" do
-      people(:bottom_member).update!(last_name: nil, company_name: "", address: "")
+      people(:bottom_member).update!(last_name: nil, company_name: "", street: "")
 
       results = Person.with_address
 
@@ -747,7 +748,7 @@ describe Person do
     end
 
     it "lists no people with spaces for company_name or address" do
-      people(:bottom_member).update!(last_name: nil, company_name: "        ", address: "   ")
+      people(:bottom_member).update!(last_name: nil, company_name: "        ", street: "   ")
 
       results = Person.with_address
 

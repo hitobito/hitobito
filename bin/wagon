@@ -45,42 +45,11 @@ function clone_wagon() {
 }
 
 function recreate_dbs() {
-  recreate_development_db
-  recreate_test_db
-}
-
-function recreate_development_db() {
-  recreate_db $(printenv RAILS_DB_NAME)
+  bundle exec rails db:drop db:create
 }
 
 function recreate_test_db() {
-  recreate_db $(printenv RAILS_TEST_DB_NAME)
-}
-
-function recreate_db() {
-  db_name=$1
-
-  if [[ -z ${db_name} ]]; then
-    echo "$1 must be set."
-    echo "Maybe you forgot to activate a WAGON?"
-    exit 1
-  fi
-  echo "Recreating DB (${db_name})"
-
-  cmds=$(
-    cat <<SQL
-DROP DATABASE IF EXISTS ${db_name} WITH ( FORCE );
-CREATE DATABASE ${db_name};
-SQL
-  )
-
-  echo "$cmds"
-
-  if [[ -v RAILS_DB_SOCKET ]]; then
-    echo "$cmds" | PGPASSWORD="${RAILS_DB_PASSWORD:-hitobito}" psql -U "${RAILS_DB_USERNAME:-hitobito}" -d "postgres"
-  else
-    echo "$cmds" | PGPASSWORD="${RAILS_DB_PASSWORD:-hitobito}" psql -U "${RAILS_DB_USERNAME:-hitobito}" -h "${RAILS_DB_HOST:-127.0.0.1}" -p "${RAILS_DB_PORT:-33066}" -d "postgres"
-  fi
+  RAILS_ENV="test" bundle exec rails db:drop db:create
 }
 
 function setup_dbs() {

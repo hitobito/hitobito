@@ -1,3 +1,10 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2020-2024, Puzzle ITC. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 require "spec_helper"
 
 describe MailingListsController do
@@ -84,9 +91,9 @@ describe MailingListsController do
       let(:subscriber) { Fabricate(:subscription, mailing_list: mailing_list, excluded: false).subscriber }
       let(:expected_subscriber) {
         [subscriber.slice(
-          "address", "company", "company_name", "country", "email",
-          "first_name", "last_name", "nickname", "primary_group_id",
-          "town", "zip_code"
+          "address_care_of", "company", "company_name", "country", "email", "first_name",
+          "housenumber", "last_name", "nickname", "postbox", "primary_group_id", "street", "town",
+          "zip_code"
         ), {id: subscriber.id.to_s}, list_emails: [subscriber.email]].inject(&:merge).deep_symbolize_keys
       }
 

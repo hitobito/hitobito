@@ -117,8 +117,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   ]
 
   SEARCHABLE_ATTRS = [
-    :first_name, :last_name, :company_name, :nickname, :email, :address, :zip_code, :town,
-    :birthday, :country, :additional_information, {phone_numbers: [:number],
+    :first_name, :last_name, :company_name, :nickname, :email, :street, :housenumber, :zip_code, :town,
+    :country, :birthday, :additional_information, {phone_numbers: [:number],
                                                    social_accounts: [:name], additional_emails: [:email]}
   ]
 
@@ -295,8 +295,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     where.not(street: [nil, ""])
       .where.not(zip_code: [nil, ""])
       .where.not(town: [nil, ""])
-      .where('(last_name IS NOT NULL AND last_name <> "") OR ' \
-          '(company_name IS NOT NULL AND company_name <> "")')
+      .where("(last_name IS NOT NULL AND last_name <> '') OR " \
+          "(company_name IS NOT NULL AND company_name <> '')")
   }
   scope :with_mobile, -> { joins(:phone_numbers).where(phone_numbers: {label: "Mobil"}) }
   scope :preload_picture, -> { includes(picture_attachment: :blob) }

@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+#  Copyright (c) 2020-2024, Puzzle ITC. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 require "spec_helper"
 
 describe Contactable::AddressValidator do
@@ -93,8 +98,9 @@ describe Contactable::AddressValidator do
     end.to_not(change { ActsAsTaggableOn::Tagging.count })
   end
 
-  it "does not tag person with valid address and invalid street number" do
-    person.address = "#{address.street_short} 1234"
+  it "does not tag person with valid address but invalid housenumber" do
+    person.street = address.street_short
+    person.housenumber = "1234"
     person.zip_code = address.zip_code
     person.town = address.town
     person.save!

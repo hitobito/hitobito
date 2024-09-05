@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -21,12 +21,19 @@ describe Export::Tabular::People::PeopleAddress do
   context "headers" do
     let(:simple_headers) do
       ["Vorname", "Nachname", "Übername", "Firmenname", "Firma", "Haupt-E-Mail",
-        "Adresse", "PLZ", "Ort", "Land", "Hauptebene", "Rollen"]
+        "zusätzliche Adresszeile", "Strasse", "Hausnummer", "Postfach", "PLZ", "Ort", "Land",
+        "Hauptebene", "Rollen"]
     end
 
     subject { csv }
 
-    its(:headers) { should == simple_headers }
+    it "are present and complete" do
+      headers = subject.headers
+
+      expect(headers).to match_array(simple_headers)
+      expect(headers.join("\n")).to eql(simple_headers.join("\n"))
+      expect(headers).to eql(simple_headers)
+    end
   end
 
   context "first row" do

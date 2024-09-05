@@ -69,7 +69,7 @@ function recreate_db() {
 
   cmds=$(
     cat <<SQL
-DROP DATABASE IF EXISTS ${db_name};
+DROP DATABASE IF EXISTS ${db_name} WITH ( FORCE );
 CREATE DATABASE ${db_name};
 SQL
   )
@@ -77,9 +77,9 @@ SQL
   echo "$cmds"
 
   if [[ -v RAILS_DB_SOCKET ]]; then
-    echo "$cmds" | PGPASSWORD="${RAILS_DB_PASSWORD:-hitobito}" psql -U "${RAILS_DB_USERNAME:-hitobito}" -d "${db_name}"
+    echo "$cmds" | PGPASSWORD="${RAILS_DB_PASSWORD:-hitobito}" psql -U "${RAILS_DB_USERNAME:-hitobito}" -d "postgres"
   else
-    echo "$cmds" | PGPASSWORD="${RAILS_DB_PASSWORD:-hitobito}" psql -U "${RAILS_DB_USERNAME:-hitobito}" -h "${RAILS_DB_HOST:-127.0.0.1}" -p "${RAILS_DB_PORT:-33066}" -d "${db_name}"
+    echo "$cmds" | PGPASSWORD="${RAILS_DB_PASSWORD:-hitobito}" psql -U "${RAILS_DB_USERNAME:-hitobito}" -h "${RAILS_DB_HOST:-127.0.0.1}" -p "${RAILS_DB_PORT:-33066}" -d "postgres"
   fi
 }
 

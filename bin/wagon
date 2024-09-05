@@ -20,7 +20,7 @@ wagon_name=${2-'no wagon selected'}
 
 # useful variables
 core_bin_dir="$(readlink -f "$(dirname "$0")")"        # bin-directory of hitobito (-core)
-core_dir="$(readlink -f "$(dirname "$core_bin_dir")")" # directory of hitobito (-core)
+# core_dir="$(readlink -f "$(dirname "$core_bin_dir")")" # directory of hitobito (-core)
 
 # helpers
 function require_wagon_name() {
@@ -41,7 +41,7 @@ function existing_wagon_names() {
 }
 
 function clone_wagon() {
-  (if [ ! -d "../hitobito_${wagon_name}" ]; then git clone "git@github.com:hitobito/hitobito_${wagon_name}.git" ../hitobito_${wagon_name}; fi)
+  (if [ ! -d "../hitobito_${wagon_name}" ]; then git clone "git@github.com:hitobito/hitobito_${wagon_name}.git" "../hitobito_${wagon_name}"; fi)
 }
 
 function recreate_dbs() {
@@ -78,7 +78,7 @@ function setup_test_db() {
 function reload_test_db() {
     echo "Preparing test database"
     bundle exec rails db:structure:dump_sql
-    RAILS_ENV=test rails db:structure:load_sql
+    RAILS_ENV="test" rails db:structure:load_sql
     rm -f db/structure.sql
 }
 
@@ -143,8 +143,10 @@ gemfile)
 
 configs)
   shift # loose the "configs" argument
+  # shellcheck disable=SC2124
   configs_to_copy=${@:-.rspec}
 
+  # shellcheck disable=SC2086
   echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -L1 -I% \
     cp -v $configs_to_copy "../hitobito_%/"
   ;;
@@ -212,8 +214,8 @@ spec)
   if [[ -x $(command -v direnv) ]]; then direnv allow; fi
 
   # setup for specs
-  direnv exec ../hitobito/ $0 gemfile
-  direnv exec ../hitobito/ $0 reset-test-database
+  direnv exec ../hitobito/ "$0" gemfile
+  direnv exec ../hitobito/ "$0" reset-test-database
 
   # prepare DB
   export RAILS_ENV=test
@@ -243,7 +245,7 @@ git)
   shift # loose the "git" argument
   echo "hitobito" | red
   git $@
-  for wagon in $(echo $WAGONS | tr " " "\n"); do
+  for wagon in $(echo "$WAGONS" | tr " " "\n"); do
     (cd "../hitobito_${wagon}" && (echo "$wagon" | red) && git $@)
   done
   ;;
@@ -257,12 +259,12 @@ update-copyright)
   # git diff --name-only "$git_range" |\
 
   echo "hitobito" | red
-  git diff --staged --name-only | xargs -L1 $core_bin_dir/single-file-update-copyright
+  git diff --staged --name-only | xargs -L1 "${core_bin_dir}/single-file-update-copyright"
 
-  for wagon in $(echo ${WAGONS:-''} | tr " " "\n"); do
+  for wagon in $(echo "${WAGONS:-''}" | tr " " "\n"); do
     (
       cd "../hitobito_${wagon}" && (echo "$wagon" | red) &&
-        git diff --staged --name-only | xargs -L1 $core_bin_dir/single-file-update-copyright
+        git diff --staged --name-only | xargs -L1 "${core_bin_dir}/single-file-update-copyright"
     )
   done
   ;;
@@ -281,7 +283,7 @@ build)
 
   (
     cd "../ose_composition_${wagon_name}" &&
-      docker buildx build . --file hitobito/Dockerfile --target $target -t hitobito/$wagon_name/$name:latest
+      docker buildx build . --file hitobito/Dockerfile --target "$target" -t "hitobito/$wagon_name/$name:latest"
   )
   ;;
 
@@ -292,8 +294,8 @@ create)
 
   new_wagon_dir="../hitobito_$wagon_name"
 
-  mv -nfv vendor/wagons/$wagon_name/* "$new_wagon_dir"
-  mv -nfv vendor/wagons/$wagon_name/.{ruby-version,rubocop.yml,gitignore} "$new_wagon_dir"
+  mv -nfv "vendor/wagons/$wagon_name"/* "$new_wagon_dir"
+  mv -nfv "vendor/wagons/$wagon_name"/.{ruby-version,rubocop.yml,gitignore} "$new_wagon_dir"
   rm -rf vendor/
 
   pushd "$new_wagon_dir"
@@ -319,7 +321,7 @@ create)
   $EDITOR lib/tasks/license.rake
   $EDITOR COPYING
   $EDITOR AUTHORS
-  $EDITOR hitobito_${wagon_name}.gemspec
+  $EDITOR "hitobito_${wagon_name}.gemspec"
 
   git add .
   git commit -m "Add License and Copyright Info"

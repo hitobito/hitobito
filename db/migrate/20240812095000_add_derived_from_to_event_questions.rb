@@ -20,5 +20,6 @@ class AddDerivedFromToEventQuestions < ActiveRecord::Migration[6.1]
       derived_question_ids = Event::Question.where.not(derived_from_question_id: standard_question_id).pluck(:id)
       Event::Answer.where(question_id: derived_question_ids).update_all(question_id: standard_question_id)
       Event::Question.where(id: derived_question_ids).destroy_all
-    endd
+    end
+  end
 end

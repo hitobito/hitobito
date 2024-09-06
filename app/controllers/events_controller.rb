@@ -173,6 +173,8 @@ class EventsController < CrudController
 
   def for_typeahead(entries)
     entries.map do |entry|
+      entry.reload
+      entry = entry.becomes(entry.type.constantize)
       role_types = entry.role_types.map { |type| {label: type.label, name: type.name} }
       {id: entry.id, label: entry.name, types: role_types}
     end

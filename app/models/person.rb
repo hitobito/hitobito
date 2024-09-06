@@ -297,6 +297,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   before_validation :override_blank_email
   before_validation :remove_blank_relations
   after_update :schedule_duplicate_locator
+  after_save_commit :update_household_address
   before_destroy :destroy_roles
   before_destroy :destroy_person_duplicates
 
@@ -558,6 +559,12 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     if !company? && first_name.blank? && last_name.blank? && nickname.blank?
       errors.add(:base, :name_missing)
     end
+  end
+
+  def update_household_address
+    return if (Person::ADDRESS_ATTRS & saved_changes.keys).empty?
+
+    household_people.update_all(attributes.slice(*Person::ADDRESS_ATTRS))
   end
 
   # Destroy all related roles before destroying this person.

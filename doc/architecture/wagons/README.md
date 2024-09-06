@@ -249,7 +249,7 @@ If wished, the attributes can be included in the CSV-File that is generated when
 
               included do
                 alias_method_chain :person_attributes, :title
-              end>
+              end
 
               def person_attributes_with_title
                 person_attributes_without_title + [:title, :salutation]

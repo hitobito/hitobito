@@ -93,11 +93,6 @@ class Event::Question < ActiveRecord::Base
     derived_from_question_id.present?
   end
 
-  def translation_class
-    # ensures globalize works with STI
-    Event::Question.globalize_translation_class
-  end
-
   def validate_answer(_answer)
   end
 
@@ -107,24 +102,27 @@ class Event::Question < ActiveRecord::Base
   def derive_for_existing_events
     existing_event_ids = Event.where.not(id: derived_questions.pluck(:event_id)).pluck(:id)
 
-    # unfortunately, this does not work well with tranlsations
-    # Event::Question.insert_all(newly_derived_question_attributes)
-
     Event::Question.transaction do
       existing_event_ids.map do |event_id|
-        derive&.tap { |derived_question| derived_question.update!(event_id:) }
+        derive&.tap do |derived_question|
+          derived_question.update!(event_id: event_id)
+          Event::Answer.joins(:participation).where(participation: {event_id: event_id}, question_id: id)
+            .update_all(question_id: derived_question.id)
+        end
       end.compact
     end
   end
 
-  def self.seed_global(question_data)
-    question_data.map do |attributes|
-      global_question = Event::Question.find_or_initialize_by(
-        event_id: attributes.delete(:event_id),
-        question: attributes.delete(:question)
-      )
-      global_question.update!(attributes)
-      global_question
+  def self.create_with_translations(question_attributes)
+    Event::Question.transaction do
+      Array.wrap(question_attributes).map do |attributes|
+        new(attributes.except(:translation_attributes)).tap do |question|
+          attributes[:translation_attributes]&.each do |translation_attributes|
+            question.attributes = translation_attributes.slice(:locale, *Event::Question.translated_attribute_names)
+          end
+          question.save!
+        end
+      end
     end
   end
 

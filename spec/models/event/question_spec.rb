@@ -87,6 +87,34 @@ describe Event::Question do
     end
   end
 
+  describe "::create_with_translations" do
+    subject(:questions) { described_class.create_with_translations(question_attributes) }
+
+    context "with translation attributes" do
+      let(:question_attributes) do
+        {
+          disclosure: nil, # Has to be chosen for every event
+          event_type: nil, # Is derived for every event
+          translation_attributes: [
+            {locale: "de", question: "AHV-Nummer?"},
+            {locale: "fr", question: "Numéro AVS ?"},
+            {locale: "it", question: "Numero AVS?"},
+            {locale: "en", question: "AVS number?"}
+          ]
+        }
+      end
+
+      it "creates the questions with attributes" do
+        is_expected.to all(be_persisted)
+        question_attributes[:translation_attributes].each do |ta|
+          Globalize.with_locale(ta[:locale]) do
+            expect(questions.first.question).to eq(ta[:question])
+          end
+        end
+      end
+    end
+  end
+
   describe "#derive_for_existing_events" do
     subject { global_question }
 

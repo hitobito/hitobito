@@ -29,6 +29,7 @@ class Person::EventQueries
       .upcoming
       .merge(Event::Participation.active)
       .merge(Event::Participation.upcoming)
+      .distinct_on(:id)
       .includes(:groups)
       .select("events.*", "event_dates.start_at")
       .preload_all_dates

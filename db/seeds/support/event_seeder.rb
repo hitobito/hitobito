@@ -29,7 +29,7 @@ class EventSeeder
       motto: Faker::Lorem.sentence,
       description: Faker::Lorem.paragraphs(number: rand(1..3)).join("\n"),
       application_opening_at: date,
-      application_closing_at: date + 60.days
+      application_closing_at: date + 300.days
     }
   end
 

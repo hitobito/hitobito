@@ -157,7 +157,7 @@ class Role < ActiveRecord::Base
 
   ### INSTANCE METHODS
 
-  delegate :layer_group, to: :group
+  delegate :layer_group, to: :group, allow_nil: true
 
   def to_s(format = :default)
     model_name = self.class.label
@@ -183,9 +183,8 @@ class Role < ActiveRecord::Base
     return vanilla_destroy unless always_soft_destroy || old_enough_to_archive?
 
     run_callbacks :destroy do
-      end_on&.past? ? true : update(end_on: Date.current.yesterday)
+      end_on&.past? ? true : update!(end_on: Date.current.yesterday)
     end
-    _run_commit_callbacks
   end
 
   # Soft destroy if older than certain amount of days, hard if younger.

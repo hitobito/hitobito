@@ -318,21 +318,19 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def send_confirmation_email
-    if entry.person_id == current_user.id
-      Event::ParticipationConfirmationJob.new(entry).enqueue!
-    end
+    Event::ParticipationConfirmationJob.new(entry).enqueue! if current_user_interested_in_mail?
   end
 
   def send_notification_email
-    if entry.person_id == current_user.id
-      Event::ParticipationNotificationJob.new(entry).enqueue!
-    end
+    Event::ParticipationNotificationJob.new(entry).enqueue! if current_user_interested_in_mail?
   end
 
   def send_cancel_email
-    if entry.person_id == current_user.id
-      Event::CancelApplicationJob.new(entry.event, entry.person).enqueue!
-    end
+    Event::CancelApplicationJob.new(entry.event, entry.person).enqueue! if current_user_interested_in_mail?
+  end
+
+  def current_user_interested_in_mail?
+    entry.person_id == current_user.id
   end
 
   def set_success_notice

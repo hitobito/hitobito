@@ -29,7 +29,6 @@ Rails.application.config.after_initialize do
       "em",
       "a",
       "del",
-      ActionText::Attachment::TAG_NAME,
       "figure",
       "figcaption",
       "img",

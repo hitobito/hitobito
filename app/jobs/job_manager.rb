@@ -52,12 +52,6 @@ class JobManager
     end
   end
 
-  def sphinx_jobs
-    if Hitobito::Application.sphinx_present? && Hitobito::Application.sphinx_local?
-      SphinxIndexJob
-    end
-  end
-
   def addresses_jobs
     if Settings.addresses.token
       [

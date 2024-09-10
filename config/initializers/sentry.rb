@@ -9,7 +9,7 @@ Rails.application.reloader.to_prepare do
   Raven.configure do |config|
     config.sanitize_fields = Rails.application.config.filter_parameters.map(&:to_s)
 
-    config.release = Rails.application.class.versions(Rails.root.join('VERSION')).first.chomp
+    # config.release = Rails.application.class.versions(Rails.root.join('VERSION')).first.chomp
 
     analyzer = [
       ENV['OPENSHIFT_BUILD_NAMESPACE'], # hit-jubla-int

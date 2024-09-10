@@ -164,6 +164,7 @@ jobs:
 
   deploy:
     uses: ./.github/workflows/update_image.yml
+    if: ${{ format('{0}', inputs.dry_run) != 'false' }}
     needs:
       - settings
       - version

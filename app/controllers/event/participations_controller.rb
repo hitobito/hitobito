@@ -323,7 +323,9 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def send_cancel_email
-    Event::CancelApplicationJob.new(entry.event, entry.person).enqueue! if current_user_interested_in_mail?
+    if current_user_interested_in_mail?
+      Event::CancelApplicationJob.new(entry.event, entry.person).enqueue!
+    end
   end
 
   def current_user_interested_in_mail?

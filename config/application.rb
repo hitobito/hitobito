@@ -19,6 +19,14 @@ require "rails/test_unit/railtie"
 Bundler.require(*Rails.groups)
 
 module Hitobito
+  def self.logger
+    @logger ||= HitobitoLogger.new
+  end
+
+  def self.localized_email_sender
+    I18n.t("settings.email.sender", default: Settings.email.sender, mail_domain: Settings.email.list_domain)
+  end
+
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.0

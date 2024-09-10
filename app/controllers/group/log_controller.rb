@@ -45,8 +45,8 @@ class Group::LogController < ApplicationController
       .accessible_by(PersonFullReadables.new(current_person))
       .unscope(:select)
       .select(:id)
-      .joins(:roles)
-      .merge(Role.with_inactive.without_archived)
+      .joins(:roles_unscoped)
+      .merge(Role.without_archived)
       .where(roles: {group: relevant_groups})
   end
 

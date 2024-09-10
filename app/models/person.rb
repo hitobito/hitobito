@@ -201,6 +201,9 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   ### ASSOCIATIONS
 
   has_many :roles, inverse_of: :person
+  has_many :roles_unscoped, -> { with_inactive },
+    class_name: "Role", foreign_key: "person_id", inverse_of: :person
+
   has_many :groups, through: :roles
 
   has_many :event_participations, class_name: "Event::Participation",

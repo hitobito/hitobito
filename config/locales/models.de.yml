@@ -52,6 +52,8 @@ de:
         members: Haushaltsmitglieder
 
     errors:
+      messages:
+        record_invalid: 'Gültigkeitsprüfung ist fehlgeschlagen: %{errors}'
       models:
         roles/termination:
           attributes:

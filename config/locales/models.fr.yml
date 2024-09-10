@@ -1030,6 +1030,7 @@ fr:
         due_at: Échue le
         issued_at: Établie le
         sent_at: Envoyée le
+        last_payment_at: Paiement au
         cost: Montant
         total: Montant facturé
         total_inkl_vat: Montant total

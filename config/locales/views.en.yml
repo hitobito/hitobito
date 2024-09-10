@@ -580,7 +580,6 @@ en:
   full_text:
     index:
       title: "results"
-      incomplete_search_request: "Please enter at least two characters."
   group:
     merge:
       select:
@@ -1070,13 +1069,6 @@ en:
         training_days:
           one: "%{count} Training day"
           other: "%{count} Training days"
-    households:
-      form:
-        address_updated: "Address updated"
-      fields:
-        lives_in_household_with: "Lives in household with"
-        update_denied: "You cannot add %{other_person} to the household. This person may already be in the household, or you may not have write permissions.\n "
-        cannot_create_household: "You need write permissions for multiple individuals in order to merge them into one household"
     family:
       fields:
         is_in_family_with: "Is part of the family of"

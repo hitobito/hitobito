@@ -601,7 +601,6 @@ fr:
   full_text:
     index:
       title: "Résultats"
-      incomplete_search_request: "Prière d'entrer au moins deux caractères."
   group:
     archive:
       flash:
@@ -696,7 +695,7 @@ fr:
         flash:
           privacy_policy_not_accepted: Pour terminer l'inscription, il faut accepter la déclaration de protection des données.
     self_inscription:
-      new:
+      show:
         role_exists: Tu as déjà ce rôle dans ce groupe.
         disabled: L'enregistrement externe est désactivé pour ce groupe
       create:
@@ -1281,13 +1280,6 @@ fr:
     history:
       index:
         inactive_roles_title: "Rôles inactifs"
-    households:
-      form:
-        address_updated: "Adresse actualisée"
-      fields:
-        lives_in_household_with: "Habite dans le foyer avec"
-        update_denied: "Tu ne peux pas ajouter %{other_person} au foyer. Il se peut que cette personne soit déjà dans le foyer ou que tu n'aies pas les droits d'écriture."
-        cannot_create_household: "Tu as besoin de droits d'écriture sur plusieurs personnes pour les rassembler dans un ensemble de foyer."
     family:
       fields:
         is_in_family_with: "Fait partie de la famille de"

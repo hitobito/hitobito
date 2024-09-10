@@ -19,6 +19,14 @@ require "rails/test_unit/railtie"
 Bundler.require(*Rails.groups)
 
 module Hitobito
+  def self.logger
+    @logger ||= HitobitoLogger.new
+  end
+
+  def self.localized_email_sender
+    I18n.t("settings.email.sender", default: Settings.email.sender, mail_domain: Settings.email.list_domain)
+  end
+
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.0
@@ -28,7 +36,91 @@ module Hitobito
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
-    # config.time_zone = "Central Time (US & Canada)"
+    config.time_zone = 'Bern'
     # config.eager_load_paths << Rails.root.join("extras")
+
+    Rails.application.config.active_record.belongs_to_required_by_default = false
+
+    # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
+    # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
+    # Define which locales from the rails-i18n gem should be loaded
+    config.i18n.available_locales = [:de, :fr, :it, :en] # en required for faker (seeds)
+    config.i18n.default_locale = :de
+    config.i18n.locale = :de
+    # All languages should fall back on each other to avoid empty attributes
+    # if an entry is created in a different language.
+    # This is read by globalize as well
+    config.i18n.fallbacks = [:de,
+                             {
+                               de: [:de, :fr, :it, :en],
+                               fr: [:fr, :it, :en, :de],
+                               it: [:it, :fr, :en, :de],
+                               en: [:en, :de, :fr, :it]
+                             }]
+    I18n.config.enforce_available_locales = true
+
+    # Route errors over the Rails application.
+    config.exceptions_app = self.routes
+
+    # Configure sensitive parameters which will be filtered from the log file.
+    config.filter_parameters += [:password, :user_token]
+
+    # Enable escaping HTML in JSON.
+    config.active_support.escape_html_entities_in_json = true
+
+    config.active_record.time_zone_aware_types = [:datetime, :time]
+
+    config.after_initialize do
+      config.active_record.yaml_column_permitted_classes = [
+          Symbol,
+          ActiveSupport::HashWithIndifferentAccess,
+          Time,
+          Date
+      ]
+    end
+
+    # Deviate from default here for now, revisit later
+    config.active_record.belongs_to_required_by_default = false
+    config.action_controller.per_form_csrf_tokens = true
+
+    # ActiveJob is only used to deliver emails in the background (`deliver_later`).
+    # Otherwise, we use Delayed Job directly with jobs inheriting from our `BaseJob`.
+    config.active_job.queue_adapter = :delayed_job
+
+    config.middleware.insert_before Rack::ETag, Rack::Deflater
+
+    config.cache_store = :mem_cache_store, { compress: true,
+                                             namespace: ENV['RAILS_HOST_NAME'] || 'hitobito' }
+
+    config.active_storage.variant_processor = :mini_magick
+
+    config.debug_exception_response_format = :api
+
+    if ENV["RAILS_LOG_TO_STDOUT"].present? && !Rails.env.test?
+      logger = ActiveSupport::Logger.new(STDOUT)
+      logger.formatter = config.log_formatter
+      config.logger = ActiveSupport::TaggedLogging.new(logger)
+    end
+
+    config.responders.error_status = :unprocessable_entity
+    config.responders.redirect_status = :see_other
+
+    config.generators do |g|
+      g.test_framework :rspec, fixture: true
+    end
+
+    config.to_prepare do
+      ActionMailer::Base.default from: Settings.email.sender
+    end
+
+    def self.versions(file = Rails.root.join('WAGON_VERSIONS'))
+      @versions ||= {}
+      @versions[file] ||= (file.exist? ? file.read.lines.reject(&:blank?) : nil)
+      @versions[file].to_a
+    end
+
+    def self.build_info
+      @build_info ||= File.read("#{Rails.root}/BUILD_INFO").strip rescue ''
+    end
   end
 end

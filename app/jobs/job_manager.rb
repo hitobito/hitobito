@@ -37,7 +37,6 @@ class JobManager
   def jobs
     [
       mail_jobs,
-      sphinx_jobs,
       addresses_jobs,
       standard_jobs,
       wagon_jobs

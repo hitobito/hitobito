@@ -39,7 +39,7 @@ class PeopleController < CrudController
 
   before_action :index_archived, only: :index, if: :group_archived_and_no_filter
 
-  after_save :show_email_change_info
+  after_save :show_email_change_info, :update_household_address
 
   before_render_show :load_person_add_requests, if: -> { html_request? }
   before_render_index :load_people_add_requests, if: -> { html_request? }
@@ -272,5 +272,11 @@ class PeopleController < CrudController
     super.then do |scope|
       (action_name == "show") ? scope.includes(roles: :group) : scope
     end
+  end
+
+  def update_household_address
+    return if (Person::ADDRESS_ATTRS & entry.saved_changes.keys).empty?
+
+    entry.household_people.update_all(entry.attributes.slice(*Person::ADDRESS_ATTRS))
   end
 end

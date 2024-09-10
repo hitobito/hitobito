@@ -487,19 +487,6 @@ describe Person do
     end
   end
 
-  describe "#address" do
-    let!(:person1) { Fabricate(:person, household_key: 123) }
-    let!(:person2) { Fabricate(:person, household_key: 123) }
-
-    it "updates the address of all household members" do
-      person1.update!(street: "Street", housenumber: 123)
-      expect(person2.reload.address).to eq("Street 123")
-
-      person2.update!(street: "Other Street", housenumber: 456)
-      expect(person1.reload.address).to eq("Other Street 456")
-    end
-  end
-
   describe "#finance_groups" do
     let(:person) { people(:top_leader) }
 

@@ -15,32 +15,6 @@ class Groups::SelfRegistrationController < Wizards::BaseController
 
   private
 
-  def save_wizard
-    super.tap do
-      enqueue_duplicate_locator_job
-      enqueue_notification_email
-      send_password_reset_email
-    end
-  end
-
-  def enqueue_duplicate_locator_job
-    Person::DuplicateLocatorJob.new(wizard.person.id).enqueue!
-  end
-
-  def enqueue_notification_email
-    return if group.self_registration_notification_email.blank?
-
-    Groups::SelfRegistrationNotificationMailer
-      .self_registration_notification(group.self_registration_notification_email, wizard.role)
-      .deliver_later
-  end
-
-  def send_password_reset_email
-    return if wizard.person.email.blank?
-
-    Person.send_reset_password_instructions(email: wizard.person.email)
-  end
-
   def notification_email
     group.self_registration_notification_email
   end

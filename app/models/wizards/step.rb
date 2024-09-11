@@ -37,5 +37,14 @@ module Wizards
     def attr?(name)
       attribute_names.include?(name.to_s)
     end
+
+    def contains_any_changes?
+      default_instance = self.class.new({})
+  
+      self.attributes.all? do |attr, value|
+        default_value = default_instance.send(attr)
+        value != default_value
+      end
+    end
   end
 end

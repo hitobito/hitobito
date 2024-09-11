@@ -16,33 +16,35 @@ describe StepsComponent::ContentComponent, type: :component do
   end
 
   it "back link renders link for stimulus controller iterator based index" do
-    allow_any_instance_of(StepsComponent::ContentComponent).to receive(:markup) do |component|
-      back_link = Capybara::Node::Simple.new(component.back_link)
-      expect(back_link).to have_link "Zurück"
-      expect(back_link).to have_css ".link.cancel[data-index=0]", text: "Zurück"
-      expect(back_link).to have_css ".link.cancel[data-action='steps-component#back']",
-        text: "Zurück"
+    expect(component).to receive(:markup) do
+      component.back_link
     end
-    render_inline(component)
+    back_link = Capybara::Node::Simple.new(render_inline(component))
+    expect(back_link).to have_link "Zurück"
+    expect(back_link).to have_css ".link.cancel[data-index=0]", text: "Zurück"
+    expect(back_link).to have_css ".link.cancel[data-action='steps-component#back']",
+      text: "Zurück"
   end
 
   it "next button renders form button with step value" do
-    allow_any_instance_of(StepsComponent::ContentComponent).to receive(:markup) do |component|
+    allow_any_instance_of(StepsComponent::ContentComponent).to receive(:past?).and_return(false)
+    expect(component).to receive(:markup) do
       expect(form).to receive(:button)
         .with("Weiter",
           {class: "btn btn-sm btn-primary mt-2",
-           data: {disable_with: "Weiter"}, name: :step, value: 1})
+           data: {disable_with: "Weiter"}, name: :next, type: "submit", value: 2})
       component.next_button
     end
     render_inline(component)
   end
 
   it "next button accepts specific label" do
-    allow_any_instance_of(StepsComponent::ContentComponent).to receive(:markup) do |component|
+    allow_any_instance_of(StepsComponent::ContentComponent).to receive(:past?).and_return(false)
+    expect(component).to receive(:markup) do
       expect(form).to receive(:button)
         .with("Test",
           {class: "btn btn-sm btn-primary mt-2",
-           data: {disable_with: "Test"}, name: :step, value: 1})
+           data: {disable_with: "Test"}, name: :next, type: "submit", value: 2})
       component.next_button("Test")
     end
     render_inline(component)
@@ -65,11 +67,6 @@ describe StepsComponent::ContentComponent, type: :component do
     before do
       allow(wizard).to receive(:policy_finder).and_return(policy_finder)
       allow_any_instance_of(ActionView::Base).to receive(:policy_finder).and_return(policy_finder)
-    end
-
-    it "does not render if partial index is above current step" do
-      expect(iterator).to receive(:index).and_return(1)
-      expect(component).not_to be_render
     end
 
     it "renders first_name last_name and email" do

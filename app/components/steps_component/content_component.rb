@@ -61,6 +61,10 @@ class StepsComponent::ContentComponent < StepsComponent::IteratingComponent
     submit_button(title, type, next_submit_button_options.merge(options))
   end
 
+  def render?
+    index <= @step || model.contains_any_changes?
+  end
+
   def back_link
     data = {action: stimulus_action(:back), index: index - 1}
     link_to(t("global.button.back"), "#", class: "link cancel mt-2 pt-1", data: data)
@@ -81,11 +85,6 @@ class StepsComponent::ContentComponent < StepsComponent::IteratingComponent
   def next_submit_button_options
     options = past? ? {formnovalidate: true} : {}
     options.merge(name: :next, value: index + 1)
-  end
-
-  def render?
-    # render all steps in self registration at all times to allow back and forth movement over multiple steps
-    index <= @step || @form.object.is_a?(Wizards::Signup::SektionWizard)
   end
 
   def build_buttons

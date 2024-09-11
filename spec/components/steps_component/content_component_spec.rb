@@ -15,6 +15,10 @@ describe StepsComponent::ContentComponent, type: :component do
     described_class.new(partial: :partial, partial_iteration: iterator, form: form, step: 0)
   end
 
+  before do
+    allow_any_instance_of(StepsComponent::ContentComponent).to receive(:render?).and_return(true)
+  end
+
   it "back link renders link for stimulus controller iterator based index" do
     expect(component).to receive(:markup) do
       component.back_link

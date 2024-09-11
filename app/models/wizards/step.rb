@@ -40,8 +40,8 @@ module Wizards
 
     def contains_any_changes?
       default_instance = self.class.new({})
-  
-      self.attributes.all? do |attr, value|
+
+      attributes.all? do |attr, value|
         default_value = default_instance.send(attr)
         value != default_value
       end

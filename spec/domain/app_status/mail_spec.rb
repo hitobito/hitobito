@@ -68,7 +68,6 @@ describe AppStatus::Mail do
         .and_return([imap_mail1, imap_mail2])
 
       expect(app_status.code).to eq(:service_unavailable)
-
       expect(cache.read(:app_status)[:seen_mails]).to eq(seen_mails)
     end
   end

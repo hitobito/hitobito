@@ -88,7 +88,7 @@ RSpec.configure do |config|
     c.max_formatted_output_length = 1000
   end
 
-  I18n.load_path += Dir[Rails.root.join('spec', 'support', 'locales', '**', '*.{rb,yml}')]
+  I18n.load_path += Dir[Rails.root.join("spec", "support", "locales", "**", "*.{rb,yml}")]
 
   config.include MailerMacros
   config.include EventMacros

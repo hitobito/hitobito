@@ -77,7 +77,7 @@ gem "puma"
 gem "rack-cors"
 gem "rack-mini-profiler", require: false
 gem "rails_autolink"
-gem "rails-i18n"
+gem "rails-i18n", '~> 7.0.0'
 gem "remotipart"
 gem "rest-client"
 gem "rexml"
@@ -98,7 +98,7 @@ gem "thinking-sphinx"
 gem "truemail"
 gem "turbo-rails"
 gem "validates_by_schema", "~> 0.3.0" # 0.5.1 does not work well with wagons / wagon-migrations
-gem "validates_timeliness"
+gem 'validates_timeliness', '~> 7.0.0.beta1'
 gem "vcard"
 gem "view_component"
 gem "webpacker"

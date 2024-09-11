@@ -72,7 +72,8 @@ describe FutureRole do
 
     it "validates that delete_on is not after convert_on" do
       role = build(convert_on: tomorrow + 1, delete_on: tomorrow)
-      expect(role).to have(1).error_on(:delete_on)
+      role.validate
+      expect(role.errors[:delete_on].size).to eq(1)
       expect(role.errors[:delete_on].first).to eq "kann nicht vor Von sein"
     end
 

@@ -2,10 +2,7 @@
 
 [Homepage](https://github.com/codez/dry_crud)
 
-DRY_CRUD is a gem which can be used to generate a CRUD Controller which enables the CRUD actions for
-our rails models. After this controller has been generated we can remove the gem and make full use of our
-new controller.
-
+DRY-CRUD was used to generate several classes like the CrudController to generalize CRUD actions for our models.
 
 ## Example in Hitobito
 

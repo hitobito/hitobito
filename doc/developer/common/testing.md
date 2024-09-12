@@ -22,4 +22,4 @@ Run feature tests:
 
 For performance reasons, loggin is disabled in test env. If you need logging for debugging, active it by:
 
-    RAILS_ENABLE_TEST_LOG=1 bin/rspec spec/controllers/addresses_controller_spec.rb
+    DISABLE_SPRING=1 LOG=all bin/rspec spec/controllers/addresses_controller_spec.rb

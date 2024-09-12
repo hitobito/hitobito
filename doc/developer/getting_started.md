@@ -9,7 +9,7 @@ To get started with the project following steps are required:
 for the recommended 🚢 docker development setup or use the [local setup](local_setup.md).
 
 
-- [ ] Make sure Tests 👨‍🔬 are running
+- [ ] Make sure [Tests](common/testing.md) 👨‍🔬 are running
 
 
 - [ ] Check if you can access the mailcatcher which run on [http://localhost:1080](http://localhost:1080)

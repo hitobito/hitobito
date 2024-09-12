@@ -8,7 +8,7 @@ class Export::EventParticipationsExportJob < Export::ExportBaseJob
 
   def initialize(format, user_id, filter, options)
     super(format, user_id, options)
-    @filter = filter.params.permit(:group_id, :event_id, :format).to_h
+    @filter = filter
   end
 
   private

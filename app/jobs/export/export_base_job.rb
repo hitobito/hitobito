@@ -14,7 +14,7 @@ class Export::ExportBaseJob < BaseJob
     super()
     @format = format
     @user_id = user_id
-    @options = options
+    @options = options.permit(:full, :filename, :selection).to_h
   end
 
   def perform

@@ -143,7 +143,7 @@ class Qualification < ActiveRecord::Base
     first_of_kind? && reactivateable?
   end
 
-  def to_fs(format = :default)
+  def to_s(format = :default)
     I18n.t("activerecord.attributes.qualification.#{to_s_key(format)}",
       kind: qualification_kind.to_s,
       finish_at: finish_at? ? I18n.l(finish_at) : nil,

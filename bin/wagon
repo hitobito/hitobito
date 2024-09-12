@@ -109,6 +109,7 @@ function setup_test_db() {
 function reload_test_db() {
     echo "Preparing test database"
     bundle exec rails db:structure:dump_sql
+    echo "DROP SCHEMA public" | rails db -p -e test
     RAILS_ENV=test rails db:structure:load_sql
     rm -f db/structure.sql
 }
@@ -146,6 +147,25 @@ bootstrap)
 clone)
   require_wagon_name
   clone_wagon
+  ;;
+
+direnv-allow-all)
+  for wagon in $(existing_wagon_names); do
+    echo "$wagon" | red
+    (bin/active_wagon.rb "$wagon" && cd "../hitobito_${wagon}" && direnv allow)
+  done
+  ;;
+
+each)
+  shift # loose the "each" argument
+  for wagon in jubla kljb pbs pro_natura sac_cas sbv sjas skv svse sww tenants youth; do
+  #for wagon in $(existing_wagon_names); do
+    echo "$wagon" | red
+    (
+      cd "../hitobito_${wagon}" &&
+        direnv exec "../hitobito_${wagon}" $@
+    )
+  done
   ;;
 
 reset-database)
@@ -223,9 +243,11 @@ grep)
   ;;
 
 spec-all)
+  shift # loose the "spec-all" argument
+#  for wagon in jubla kljb pbs pro_natura sac_cas sbv sjas skv svse sww tenants youth; do
   for wagon in $(existing_wagon_names); do
     echo "$wagon" | red
-    wagon spec $@
+    wagon spec $wagon $@
   done
   ;;
 
@@ -240,16 +262,20 @@ spec)
 
   # write and allow .envrc
   $0 activate "$wagon_name"
+  direnv allow
+  direnv exec ../hitobito/ bundle
+  direnv exec ../hitobito/ $0 reload-test-database
+  rm -rf public/packs*
+  direnv exec bin/webpack-test-compile
   if [[ -x $(command -v direnv) ]]; then direnv allow; fi
 
   # setup for specs
   direnv exec ../hitobito/ $0 gemfile
-  direnv exec ../hitobito/ $0 reset-test-database
 
   # prepare DB
-  export RAILS_ENV=test
-  direnv exec ../hitobito/ bundle exec rake db:migrate
-  direnv exec ../hitobito/ bundle exec rake wagon:migrate
+#  export RAILS_ENV=test
+#  direnv exec ../hitobito/ bundle exec rake db:migrate
+#  direnv exec ../hitobito/ bundle exec rake wagon:migrate
 
   # run specs in subshell to return to current directory
   (

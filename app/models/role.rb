@@ -153,7 +153,7 @@ class Role < ActiveRecord::Base
 
   delegate :layer_group, to: :group
 
-  def to_s(format = :default)
+  def to_fs(format = :default)
     model_name = self.class.label
     unless format == :short
       model_name = label? ? "#{model_name} (#{label})" : model_name

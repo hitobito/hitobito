@@ -332,7 +332,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def current_user_interested_in_mail?
-    entry.person_id == current_user.id
+    entry.person_id == current_user.id # extended in wagon
   end
 
   def set_success_notice

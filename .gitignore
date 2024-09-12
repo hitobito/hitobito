@@ -31,10 +31,10 @@ rails_best_practices_output.html
 rubocop-results.xml
 doc/models.png
 doc/app
-doc/architecture/architecture.html
-doc/architecture/assets/**/*
-doc/development/development.html
-doc/development/assets/**/*
+doc/developer/modules/common/architecture/architecture.html
+doc/developer/modules/common/architecture/assets/**/*
+doc/developer/development.html
+doc/developer/assets/**/*
 spec/reports
 stats.json
 

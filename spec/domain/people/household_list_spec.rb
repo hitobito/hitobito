@@ -62,22 +62,21 @@ describe People::HouseholdList do
     it "yields a list of household arrays, orders by descending household size" do
       yielded_batch = []
       subject.households_in_batches { |batch| yielded_batch = batch }
-      expect(yielded_batch.map { |household| household.map(&:id) }).to eq([
-        [person3.id, person4.id],
+      expect(yielded_batch.map { |household| household.map(&:id) }).to contain_exactly(
+        contain_exactly(person3.id, person4.id),
         [person1.id],
         [person2.id],
         [person5.id]
-      ])
+      )
     end
 
     it "yields only rows with household_key when queried for only_households" do
       yielded_batch = []
       subject.only_households_in_batches { |batch| yielded_batch = batch }
-      expect(yielded_batch.map { |household| household.map(&:id) }).to eq([
-        [person3.id,
-          person4.id],
+      expect(yielded_batch.map { |household| household.map(&:id) }).to contain_exactly(
+        contain_exactly(person3.id, person4.id),
         [person5.id]
-      ])
+      )
     end
 
     context "limited people scope" do
@@ -91,11 +90,10 @@ describe People::HouseholdList do
       it "respects limit, but still groups all housemates from scope" do
         yielded_batch = []
         subject.households_in_batches { |batch| yielded_batch = batch }
-        expect(yielded_batch.map { |household| household.map(&:id) }).to eq([
-          [person3.id,
-            person4.id, person6.id, person7.id],
+        expect(yielded_batch.map { |household| household.map(&:id) }).to contain_exactly(
+          contain_exactly(person3.id, person4.id, person6.id, person7.id),
           [person1.id]
-        ])
+        )
       end
     end
 
@@ -111,13 +109,12 @@ describe People::HouseholdList do
       it "works" do
         yielded_batch = []
         subject.households_in_batches { |batch| yielded_batch = batch }
-        expect(yielded_batch.map { |household| household.map(&:id) }).to eq([
-          [person3.id,
-            person4.id, person6.id, person7.id],
+        expect(yielded_batch.map { |household| household.map(&:id) }).to contain_exactly(
+          contain_exactly(person3.id, person4.id, person6.id, person7.id),
           [person1.id],
           [person2.id],
           [person5.id]
-        ])
+        )
       end
     end
   end

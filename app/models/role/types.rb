@@ -40,6 +40,7 @@ module Role::Types
 
   included do
     class_attribute :permissions, :visible_from_above, :kind
+    class_attribute :allowed_permissions_for_self_registration, default: []
 
     # All permission a person with this role has on the corresponding group.
     self.permissions = []

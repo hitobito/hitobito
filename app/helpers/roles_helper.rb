@@ -47,6 +47,15 @@ module RolesHelper
     end
   end
 
+  def format_role_type_label_with_permissions(role)
+    return role.label if role.permissions.blank?
+
+    permissions = role.permissions.map do |p|
+      t(p, scope: "activerecord.attributes.role.class.permission.description").chomp(".")
+    end
+    "#{role.label} (#{permissions.join(", ")})"
+  end
+
   def group_options_with_level(group_selection = @group_selection)
     options = []
     base_level = nil

@@ -319,6 +319,9 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   }
   scope :with_mobile, -> { joins(:phone_numbers).where(phone_numbers: {label: "Mobil"}) }
 
+  scope :preload_roles_unscoped, -> { extending(PreloadRolesUnscoped) }
+  scope :preload_roles, ->(roles_scope) { preload_roles_unscoped.roles_scope(roles_scope) }
+
   ### CLASS METHODS
 
   class << self

@@ -109,6 +109,7 @@ function setup_test_db() {
 function reload_test_db() {
     echo "Preparing test database"
     bundle exec rails db:structure:dump_sql
+    recreate_test_db
     RAILS_ENV=test rails db:structure:load_sql
     rm -f db/structure.sql
 }

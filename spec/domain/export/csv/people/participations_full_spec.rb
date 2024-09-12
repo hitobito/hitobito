@@ -32,7 +32,7 @@ describe Export::Tabular::People::ParticipationsFull do
     end
 
     it "has keys and values of admin questions" do
-      irgendwas = events(:top_course).questions.create!(question: "Irgendwas", admin: true)
+      irgendwas = events(:top_course).questions.create!(question: "Irgendwas", disclosure: :optional, admin: true)
       participation.init_answers
       expect(subject[:"question_#{irgendwas.id}"]).to eq "Irgendwas"
       expect(subject.keys.count { |key| key =~ /question/ }).to eq(4)

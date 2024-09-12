@@ -22,14 +22,26 @@
 
 top_ov:
   event: top_course
+  disclosure: optional
+  type: Event::Question::Default
 
 top_vegi:
   event: top_course
+  disclosure: optional
+  type: Event::Question::Default
 
 top_more:
   event: top_course
+  disclosure: optional
+  type: Event::Question::Default
 
 # global questions (not assigned to event)
-ga: {}
-vegi: {}
-schub: {}
+ga:
+  disclosure: optional
+  type: Event::Question::Default
+vegi:
+  disclosure: optional
+  type: Event::Question::Default
+schub:
+  disclosure: optional
+  type: Event::Question::Default

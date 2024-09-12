@@ -101,13 +101,8 @@ class EventSeeder
   end
 
   def seed_questions(event)
-    Event::Question.global.limit(rand(4)).each do |q|
-      eq = Event::Question.find_or_initialize_by(
-        event_id: event.id,
-        question: q.question,
-      )
-      eq.attributes = { choices: q.choices }
-      eq.save!
+    event.init_questions.map do |question|
+      question.update(disclosure: :optional)
     end
   end
 

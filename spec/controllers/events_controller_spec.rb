@@ -259,9 +259,13 @@ describe EventsController do
         expect(event.state).to be_nil
         expect(event.name).to eq(source.name)
         expect(event.kind_id).to eq(source.kind_id)
-        expect(event.application_questions.map(&:question)).to match_array(
-          source.application_questions.map(&:question)
-        )
+
+        existing_application_questions = source.application_questions.map(&:question)
+        expect(event.application_questions.map(&:question)).to include(*existing_application_questions)
+
+        global_questions = Event::Question.global.application.where(type: event.type.to_s).map(&:question)
+        expect(event.application_questions.map(&:question)).to include(*global_questions)
+
         expect(event.application_questions.map(&:id).uniq).to eq([nil])
       end
 
@@ -365,9 +369,9 @@ describe EventsController do
       end
 
       it "creates, updates and destroys questions" do
-        q1 = event.questions.create!(question: "Who?")
-        q2 = event.questions.create!(question: "What?")
-        q3 = event.questions.create!(question: "Payed?", admin: true)
+        q1 = event.questions.create!(question: "Who?", disclosure: :optional)
+        q2 = event.questions.create!(question: "What?", disclosure: :optional)
+        q3 = event.questions.create!(question: "Payed?", disclosure: :optional, admin: true)
 
         expect do
           put :update, params: {
@@ -376,13 +380,13 @@ describe EventsController do
             event: {
               name: "testevent",
               application_questions_attributes: {
-                q1.id.to_s => {id: q1.id, question: "Whoo?"},
+                q1.id.to_s => {id: q1.id, question: "Whoo?", disclosure: :optional},
                 q2.id.to_s => {id: q2.id, _destroy: true},
-                "999" => {question: "How much?", choices: "1,2,3"}
+                "999" => {question: "How much?", choices: "1,2,3", disclosure: :optional}
               },
               admin_questions_attributes: {
                 q3.id.to_s => {id: q3.id, _destroy: true},
-                "999" => {question: "Powned?", choices: "ja, nein"}
+                "999" => {question: "Powned?", choices: "ja, nein", disclosure: :optional}
               }
             }
           }

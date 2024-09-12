@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_08_30_125755) do
+ActiveRecord::Schema.define(version: 2024_09_03_131542) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -310,8 +310,12 @@ ActiveRecord::Schema.define(version: 2024_08_30_125755) do
   create_table "event_questions", id: :serial, force: :cascade do |t|
     t.integer "event_id"
     t.boolean "multiple_choices", default: false, null: false
-    t.boolean "required", default: false, null: false
     t.boolean "admin", default: false, null: false
+    t.string "disclosure"
+    t.string "type", null: false
+    t.integer "derived_from_question_id"
+    t.string "event_type"
+    t.index ["derived_from_question_id"], name: "index_event_questions_on_derived_from_question_id"
     t.index ["event_id"], name: "index_event_questions_on_event_id"
   end
 

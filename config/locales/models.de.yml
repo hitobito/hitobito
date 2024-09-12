@@ -608,6 +608,8 @@ de:
         requires_approval: Empfehlung nötig
         globally_visible: Sichtbarkeit
         automatic_assignment: Automatische Zuteilung
+        application_questions: Anmeldeangaben
+        admin_questions: Administrationsangaben
 
       event/contact_attrs:
         required: Obligatorisch
@@ -706,7 +708,11 @@ de:
         question: Frage
         choices: Mögliche Antworten
         multiple_choices: Mehrfachauswahl
-        required: Antwort obligatorisch
+        disclosure: Angabe
+        disclosures: 
+          required: Obligatorisch
+          optional: Optional
+          hidden: Nicht angezeigt
 
       admin_questions:
         question: Frage

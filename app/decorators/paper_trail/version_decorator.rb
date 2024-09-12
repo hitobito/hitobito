@@ -162,7 +162,7 @@ module PaperTrail
     end
 
     def label_with_fallback(item)
-      item.to_s(:long)
+      item.to_fs(:long)
     rescue
       I18n.t("global.unknown")
     end

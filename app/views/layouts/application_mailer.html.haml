@@ -1,0 +1,11 @@
+!!! 5
+%html{lang: I18n.locale}
+  %head
+    %meta{charset: 'utf-8'}
+    %meta{name: "viewport", content: "width=device-width, initial-scale=1"}
+    = render_extensions :mailer_head # e.g. inline css for server-independent styling
+
+  %body
+    = render_extensions :mailer_header
+    #content= yield
+    = render_extensions :mailer_footer

@@ -53,10 +53,12 @@ Rails.application.configure do
         YAML.load("{ #{ENV['RAILS_MAIL_DELIVERY_CONFIG']} }").symbolize_keys
   end
 
-  config.action_mailer.default_url_options = {
+  url_options = {
     host: ENV.fetch('RAILS_HOST_NAME', 'localhost:3000'),
     locale: nil,
   }
+  config.action_mailer.default_url_options = url_options
+  config.action_mailer.asset_host = "http://#{url_options[:host]}"
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log

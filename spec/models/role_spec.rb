@@ -322,7 +322,7 @@ describe Role do
     end
   end
 
-  context "#to_fs" do
+  context "#to_s" do
     let(:group) { groups(:bottom_layer_one) }
     let(:date) { Date.new(2023, 11, 15) }
 
@@ -331,19 +331,19 @@ describe Role do
     end
 
     it "includes group specific role type" do
-      expect(build_role.to_fs).to eq "Leader"
+      expect(build_role.to_s).to eq "Leader"
     end
 
     it "appends label if set" do
-      expect(build_role(label: "test").to_fs).to eq "Leader (test)"
+      expect(build_role(label: "test").to_s).to eq "Leader (test)"
     end
 
     it "appends delete_on if set" do
-      expect(build_role(delete_on: date).to_fs).to eq "Leader (bis 15.11.2023)"
+      expect(build_role(delete_on: date).to_s).to eq "Leader (bis 15.11.2023)"
     end
 
     it "combines label and delete_on if both are set" do
-      expect(build_role(label: "test", delete_on: date).to_fs).to eq "Leader (test) (bis 15.11.2023)"
+      expect(build_role(label: "test", delete_on: date).to_s).to eq "Leader (test) (bis 15.11.2023)"
     end
   end
 

@@ -93,7 +93,7 @@ class Person::AddRequestMailer < ApplicationMailer
   end
 
   def roles_as_string(roles)
-    roles.collect { |r| r.to_fs(:long) }.join(", ")
+    roles.collect { |r| r.to_s(:long) }.join(", ")
   end
 
   def layer_full_roles(person)

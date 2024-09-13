@@ -17,22 +17,7 @@ describe Payments::EbicsImportJob do
   let(:epics_client) { double(:epics_client) }
   let(:payment_provider) { PaymentProvider.new(config) }
 
-  subject { Payments::EbicsImportJob.new }
-
-  it "does not run if no initialized config present" do
-    expect(Payments::EbicsImport).to_not receive(:new)
-
-    expect { subject.perform }.to_not change { Payment.count }
-  end
-
-  it "reschedules to tomorrow at 8am" do
-    subject.perform
-
-    expect(subject.delayed_jobs.last.run_at).to eq(Time.zone.tomorrow
-                                                       .at_beginning_of_day
-                                                       .change(hour: 8)
-                                                       .in_time_zone)
-  end
+  subject { Payments::EbicsImportJob.new(config.id) }
 
   it "initializes payments" do
     config.update(status: :registered)
@@ -55,43 +40,24 @@ describe Payments::EbicsImportJob do
     expect(invoice.payments.size).to eq(1)
   end
 
-  it "continues after error is raised on provider" do
-    failing_config = payment_provider_configs(:ubs)
-
+  it "catches error raised on provider" do
     config.update(status: :registered)
-    failing_config.update(status: :registered)
 
     failing_provider = double
 
-    expect(PaymentProvider).to receive(:new).with(config).exactly(:once).and_call_original
-    expect(PaymentProvider).to receive(:new).with(failing_config).exactly(:once).and_return(failing_provider)
+    expect(PaymentProvider).to receive(:new).with(config).exactly(:once).and_return(failing_provider)
 
     error = Epics::Error::TechnicalError.new("091010")
     expect(failing_provider).to receive(:HPB).and_raise(error)
 
     expect(Airbrake).to receive(:notify)
       .exactly(:once)
-      .with(error, hash_including(parameters: {payment_provider_config: failing_config}))
+      .with(error, hash_including(parameters: {payment_provider_config: config}))
     expect(Raven).to receive(:capture_exception)
       .exactly(:once)
       .with(error, logger: "delayed_job")
 
-    expect(PaymentProvider).to receive(:new).and_return(payment_provider)
-    expect(payment_provider).to receive(:client).and_return(epics_client)
-
-    expect(epics_client).to receive(:HPB)
-
-    expect(payment_provider).to receive(:check_bank_public_keys!).and_return(true)
-
-    expect(payment_provider).to receive(:Z54).and_return(invoice_files)
-
-    invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), recipient: people(:bottom_member), group: groups(:bottom_layer_one))
-    InvoiceList.create(title: "membership fee", invoices: [invoice])
-    invoice.update!(reference: "000000000000100000000000800")
-
     subject.perform
-
-    expect(invoice.payments.size).to eq(1)
   end
 
   describe "#log_result" do

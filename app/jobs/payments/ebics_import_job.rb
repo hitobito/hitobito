@@ -5,35 +5,30 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_die_mitte.
 
-class Payments::EbicsImportJob < RecurringJob
+class Payments::EbicsImportJob < BaseJob
+  self.parameters = [:payment_provider_config_id]
   self.use_background_job_logging = true
 
   attr_reader :payments, :errors
 
-  def initialize
-    super
+  def initialize(payment_provider_config_id)
+    super()
+    @payment_provider_config_id = payment_provider_config_id
     @payments = Hash.new { |hash, key| hash[key] = [] }
     @errors = []
   end
 
-  def perform_internal
-    payment_provider_configs.find_each do |provider_config|
-      Payments::EbicsImport.new(provider_config).run.each do |status, status_payments|
-        @payments[status] += status_payments
-      end
-    rescue StandardError => e
-      @errors << e
-      error(self, e, payment_provider_config: provider_config)
+  def perform
+    Payments::EbicsImport.new(payment_provider_config).run.each do |status, status_payments|
+      @payments[status] += status_payments
     end
+  rescue StandardError => e
+    @errors << e
+    error(self, e, payment_provider_config: payment_provider_config)
   end
 
   def payment_provider_configs
     PaymentProviderConfig.initialized
-  end
-
-  def next_run
-    # Sets next run to 08:00 of next day
-    Time.zone.tomorrow.at_beginning_of_day.change(hour: 8).in_time_zone
   end
 
   def log_results
@@ -46,5 +41,9 @@ class Payments::EbicsImportJob < RecurringJob
       end,
       errors: errors
     }
+  end
+
+  def payment_provider_config
+    @payment_provider_config ||= PaymentProviderConfig.find(@payment_provider_config_id)
   end
 end

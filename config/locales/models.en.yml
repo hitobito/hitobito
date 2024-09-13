@@ -547,7 +547,6 @@ en:
         question: Question
         choices: Possible answers
         multiple_choices: Multiple choice
-        required: Reply mandatory
       admin_questions:
         question: Question
         choices: Possible answers

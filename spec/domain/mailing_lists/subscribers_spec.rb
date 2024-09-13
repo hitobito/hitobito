@@ -545,6 +545,18 @@ describe MailingLists::Subscribers do
         expect(list.subscribed?(p)).to be_truthy
       end
 
+      it "respects specified time when matching roles" do
+        create_subscription(groups(:bottom_layer_one), false,
+          Group::BottomGroup::Leader.sti_name)
+        p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one), start_on: Date.current, end_on: Date.current).person
+
+        expect(described_class.new(list).subscribed?(p)).to be_truthy
+        expect(described_class.new(list, time: Date.current).subscribed?(p)).to be_truthy
+
+        expect(described_class.new(list, time: Date.current - 1.day).subscribed?(p)).to be_falsey
+        expect(described_class.new(list, time: Date.current + 1.day).subscribed?(p)).to be_falsey
+      end
+
       it "is false if different role in group" do
         create_subscription(groups(:bottom_layer_one), false,
           Group::BottomGroup::Leader.sti_name)

@@ -143,8 +143,8 @@ class MailingList < ActiveRecord::Base
     end
   end
 
-  def subscribed?(person)
-    MailingLists::Subscribers.new(self).subscribed?(person)
+  def subscribed?(person, time: Time.zone.now)
+    MailingLists::Subscribers.new(self, time:).subscribed?(person)
   end
 
   def people(people_scope = Person.only_public_data)

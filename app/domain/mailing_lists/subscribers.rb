@@ -8,9 +8,10 @@
 class MailingLists::Subscribers
   delegate :id, :subscriptions, :opt_in?, to: "@list"
 
-  def initialize(mailing_list, people_scope = Person.only_public_data)
+  def initialize(mailing_list, people_scope = Person.only_public_data, time: Time.current)
     @list = mailing_list
     @people_scope = people_scope
+    @time = time
   end
 
   def people
@@ -116,10 +117,12 @@ class MailingLists::Subscribers
       #{Group.quoted_table_name}.lft >= sub_groups.lft AND
       #{Group.quoted_table_name}.rgt <= sub_groups.rgt AND
       roles.type = related_role_types.role_type AND
+      (roles.start_on IS NULL OR
+       roles.start_on <= '#{@time.to_date.to_s(:db)}') AND
       (roles.end_on IS NULL OR
-       roles.end_on > '#{Date.current.to_s(:db)}') AND
+       roles.end_on >= '#{@time.to_date.to_s(:db)}') AND
       (roles.archived_at IS NULL OR
-       roles.archived_at > '#{Time.now.utc.to_s(:db)}')
+       roles.archived_at > '#{@time.to_time.utc.to_s(:db)}')
     SQL
 
     if subscriptions.groups.any?(&:subscription_tags)

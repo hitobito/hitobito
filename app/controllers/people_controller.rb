@@ -275,8 +275,9 @@ class PeopleController < CrudController
   end
 
   def update_household_address
-    return if (Person::ADDRESS_ATTRS & entry.saved_changes.keys).empty?
+    return if entry.household_key.nil? || (Person::ADDRESS_ATTRS & entry.saved_changes.keys).empty?
 
-    entry.household_people.update_all(entry.attributes.slice(*Person::ADDRESS_ATTRS))
+    # do not use update context to not trigger all validations for all household members
+    entry.household.save!(context: :update_address)
   end
 end

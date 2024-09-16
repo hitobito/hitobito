@@ -16,11 +16,10 @@ class Export::InvitationsExportJob < Export::ExportBaseJob
 
   def entries
     event.invitations
-      .without_deleted
-      .order(:lft)
   end
 
-  def group
+  def event
     @event ||= Event.find(@event_id)
   end
+
 end

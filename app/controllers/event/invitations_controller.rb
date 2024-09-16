@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::InvitationsController < CrudController
-  # todo-later: include AsyncDownload
+  include AsyncDownload
 
   self.permitted_attrs = [:event_id, :person_id, :participation_type]
 
@@ -31,8 +31,7 @@ class Event::InvitationsController < CrudController
   def index
     respond_to do |format|
       format.html { super }
-      # todo-later: format.csv  { render_tabular_in_background(:csv) }
-      format.csv { render_tabular(:csv) }
+      format.csv  { render_tabular_in_background(:csv) }
     end
   end
 
@@ -63,19 +62,13 @@ class Event::InvitationsController < CrudController
     authorize!(:index_invitations, event)
   end
 
-  # todo-later: This seems not to work yet...
-  # def render_tabular_in_background(format, name = :invitation_export)
-  #  with_async_download_cookie(format, name) do |filename|
-  #    Export::InvitationsExportJob.new(format,
-  #                                current_person.id,
-  #                                group.id,
-  #                                filename: filename).enqueue!
-  #  end
-  # end
-
-  def render_tabular(format)
-    exporter = Export::Tabular::Invitations::List
-    send_data exporter.export(format, entries, ability), type: format
+  def render_tabular_in_background(format, name = :invitation_export)
+   with_async_download_cookie(format, name) do |filename|
+     Export::InvitationsExportJob.new(format,
+                                 current_person.id,
+                                 event.id,
+                                 filename: filename).enqueue!
+   end
   end
 
   def ability

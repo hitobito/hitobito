@@ -34,11 +34,11 @@ module Export::Tabular
 
     private
 
-    def can?(*args)
-      if not ability
+    def can?(*)
+      if !ability
         raise "Ability not initialized yet."
       end
-      ability.can?(*args)
+      ability.can?(*)
     end
 
     def value_for(attr)

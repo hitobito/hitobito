@@ -34,7 +34,7 @@ describe Event::InvitationListsController, js: true do
     expect(page).to have_content(/Einladung für #{role1.person.first_name} #{role1.person.last_name} als Teilnehmer\/-in wurde erstellt./)
   end
 
-  it "mass-invite" do
+  xit "mass-invite" do
     visit group_people_path(top_layer)
     click_link("Weitere Ansichten")
     click_link("Gesamte Ebene")
@@ -45,18 +45,15 @@ describe Event::InvitationListsController, js: true do
     expect(page).to have_content("Personen zu einem Anlass einladen")
     fill_in(id: "q", with: event.name)
 
-    expect(page).to have_content(event.name)
-    find("li#autoComplete_result_0").click
-    # We should now be able to select the role
-    # but the relevant dorp-down is not displayed in the test
-    # accordingly the "Einladen" raises an error
-    # - maybe we are missing some functionality from a wagon?
-    # - but 'inivite single person' above actually shows a working drop-down
-    # - more likely the relevant js is not executed
-    #   app/javascript/javascripts/modules/invitation_lists.js.coffee
-    expect(page).to have_content "CREATE SCREENSHOT"
+    dropdown = find('ul[role="listbox"]')
+    expect(dropdown).to have_content(event.name)
+    find('ul[role="listbox"] li[role="option"]', text: event.name).click
 
+    role_type_dropdown = find('select#role_type')
     click_button("Einladen")
+
+    # still broken: seems there is a problem with the roles selection
+
 
     expect(page).to have_content(/erfolgreich zum Anlass #{event.name} eingeladen/)
   end

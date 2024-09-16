@@ -13,13 +13,16 @@
             = hidden_field_tag('ids', @people_ids)
             = text_field_tag('q', nil,
               placeholder: t('.event_search'),
+              class: 'form-control form-control-sm',
               data: { provide: 'entity',
               updater: 'InvitationLists.updatePath',
               url: typeahead_group_events_path(group, format: :json, type: @event_type) })
 
-            = select(:role, :type, [], {}, style: 'display: none')
+            = select(:role, :type, [], {}, style: 'display: none', class: 'form-select form-select-sm mt-3')
         .modal-footer
           = submit_button(f, t('.submit'), disabled: true)
           = link_to(ti('button.cancel'), '#',
             class: 'link cancel',
             onclick: "event.preventDefault(); $('#invitation-lists-new').modal('hide')")
+
+

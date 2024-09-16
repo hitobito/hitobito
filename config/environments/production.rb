@@ -85,11 +85,14 @@ Rails.application.configure do
   # Send deprecation notices to registered listeners.
   config.active_support.deprecation = :notify
 
-  config.action_mailer.default_url_options = {
-      host: (ENV['RAILS_HOST_NAME'] || raise("No environment variable RAILS_HOST_NAME set!")),
-      protocol: (ssl ? 'https' : 'http'),
-      locale: nil
-    }
+  url_options = {
+    host: (ENV['RAILS_HOST_NAME'] || raise("No environment variable RAILS_HOST_NAME set!")),
+    protocol: (ssl ? 'https' : 'http'),
+    locale: nil
+  }
+  config.action_mailer.default_url_options = url_options
+  config.action_mailer.asset_host = "#{url_options[:protocol]}://#{url_options[:host]}"
+
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
 

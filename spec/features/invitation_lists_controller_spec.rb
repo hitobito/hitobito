@@ -49,11 +49,10 @@ describe Event::InvitationListsController, js: true do
     expect(dropdown).to have_content(event.name)
     find('ul[role="listbox"] li[role="option"]', text: event.name).click
 
-    role_type_dropdown = find('select#role_type')
+    find("select#role_type")
     click_button("Einladen")
 
     # still broken: seems there is a problem with the roles selection
-
 
     expect(page).to have_content(/erfolgreich zum Anlass #{event.name} eingeladen/)
   end

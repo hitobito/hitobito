@@ -61,7 +61,7 @@ class CustomContent < ActiveRecord::Base
   end
 
   def body_with_values(placeholders = {})
-    replace_placeholders(body.to_s, placeholders)
+    replace_placeholders(body.to_s, placeholders).html_safe
   end
 
   def replace_placeholders(string, placeholders)

@@ -40,5 +40,17 @@ describe Event::InvitationsController do
         expect(flash[:notice]).to eq("Einladung für Bottom Member als Teilnehmer/-in wurde erstellt.")
       end
     end
+
+    context "background job" do
+      let(:group) { groups(symbol) }
+
+      it "exports csv" do
+        expect do
+          get :index, params: {group_id: group.id, event_id: course.id}, format: :csv
+          expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
+          expect(response).to redirect_to(returning: true)
+        end.to change(Delayed::Job, :count).by(1)
+      end
+    end
   end
 end

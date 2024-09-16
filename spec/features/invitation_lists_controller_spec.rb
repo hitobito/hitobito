@@ -49,15 +49,17 @@ describe Event::InvitationListsController, js: true do
     expect(dropdown).to have_content(event.name)
     find('ul[role="listbox"] li[role="option"]', text: event.name).click
 
-    find("select#role_type")
-    click_button("Einladen")
+    find("select#role_type option")
+    # still broken: select never gets populated in tests,
+    # but works for manual tests
 
-    # still broken: seems there is a problem with the roles selection
+    click_button("Einladen")
 
     expect(page).to have_content(/erfolgreich zum Anlass #{event.name} eingeladen/)
   end
 
   xit "download invitation list" do
+    # Might be nice to add, but
     # there seems to be no feature specs with a download
     # so I have no idea where to start
   end

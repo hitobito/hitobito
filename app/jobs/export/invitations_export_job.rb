@@ -21,5 +21,4 @@ class Export::InvitationsExportJob < Export::ExportBaseJob
   def event
     @event ||= Event.find(@event_id)
   end
-
 end

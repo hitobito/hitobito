@@ -31,7 +31,7 @@ class Event::InvitationsController < CrudController
   def index
     respond_to do |format|
       format.html { super }
-      format.csv  { render_tabular_in_background(:csv) }
+      format.csv { render_tabular_in_background(:csv) }
     end
   end
 
@@ -63,12 +63,12 @@ class Event::InvitationsController < CrudController
   end
 
   def render_tabular_in_background(format, name = :invitation_export)
-   with_async_download_cookie(format, name) do |filename|
-     Export::InvitationsExportJob.new(format,
-                                 current_person.id,
-                                 event.id,
-                                 filename: filename).enqueue!
-   end
+    with_async_download_cookie(format, name) do |filename|
+      Export::InvitationsExportJob.new(format,
+        current_person.id,
+        event.id,
+        filename: filename).enqueue!
+    end
   end
 
   def ability

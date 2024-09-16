@@ -1,12 +1,9 @@
-# encoding: utf-8
-
 #  Copyright (c) 2023, Carbon. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class Event::InvitationListsController < SimpleCrudController
-
   skip_authorization_check
   skip_authorize_resource
 
@@ -21,14 +18,14 @@ class Event::InvitationListsController < SimpleCrudController
     end
 
     redirect_to(group_people_path(group),
-                notice: flash_message(:success, count: new_invitations.count))
+      notice: flash_message(:success, count: new_invitations.count))
   end
 
   def new
     @people_ids = params[:ids]
     @event_type = params[:type]
     @event_label = params[:label]
-    render 'new'
+    render "new"
   end
 
   def self.model_class
@@ -50,7 +47,7 @@ class Event::InvitationListsController < SimpleCrudController
     attrs[:event] = event.name
     attrs[:event_type] = event.class.label
     I18n.t("event.invitation_lists.#{action_name}.#{type}", **attrs) +
-        I18n.t("event.invitation_lists.#{action_name}.hint", **attrs)
+      I18n.t("event.invitation_lists.#{action_name}.hint", **attrs)
   end
 
   def role_type
@@ -73,4 +70,3 @@ class Event::InvitationListsController < SimpleCrudController
     list_param(:ids)
   end
 end
-

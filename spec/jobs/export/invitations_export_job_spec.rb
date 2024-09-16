@@ -40,5 +40,4 @@ describe Export::InvitationsExportJob do
       expect(lines.size).to eq(3)
     end
   end
-
 end

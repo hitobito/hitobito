@@ -39,7 +39,7 @@ class Export::ExportBaseJob < BaseJob
   end
 
   def data
-    exporter.export(@format, entries)
+    exporter.export(@format, entries, ability)
   end
 
   def filename

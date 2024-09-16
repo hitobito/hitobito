@@ -22,8 +22,8 @@ module Dropdown
           build_event_participation_lists_path(event),
                  **participation_lists_options)
         if event.supports_invitations
-          add_item(event.label+" ("+I18n.t("activerecord.models.event/invitation.one")+")",
-                   build_event_invite_path(event),
+          add_item(event.label + " (" + I18n.t("activerecord.models.event/invitation.one") + ")",
+            build_event_invite_path(event),
                    **participation_lists_options)
         end
       end
@@ -39,7 +39,7 @@ module Dropdown
     end
 
     def build_event_invite_path(event)
-      type = event == ::Event ? nil : event.to_s
+      type = (event == ::Event) ? nil : event.to_s
       template.group_events_invitation_lists_new_path(@group, type: type, label: event.label)
     end
 

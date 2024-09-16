@@ -7,7 +7,6 @@
 
 module Export::Tabular::Invitations
   class Row < Export::Tabular::Row
-
     def person
       entry.person
     end
@@ -31,7 +30,5 @@ module Export::Tabular::Invitations
     def created_at
       entry.created_at
     end
-
   end
 end
-

@@ -98,7 +98,7 @@ module Export::Tabular
       # see comment in Export::Tabular::Row for explanation
       # why this is not included in `new()`
       row.ability = ability
-      return row
+      row
     end
   end
 end

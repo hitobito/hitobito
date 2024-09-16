@@ -9,21 +9,24 @@ class Payments::EbicsImportJob < BaseJob
   self.parameters = [:payment_provider_config_id]
   self.use_background_job_logging = true
 
-  attr_reader :payments, :errors
-
   def initialize(payment_provider_config_id)
     super()
     @payment_provider_config_id = payment_provider_config_id
-    @payments = Hash.new { |hash, key| hash[key] = [] }
-    @errors = []
   end
 
   def perform
+    create_start_log
     Payments::EbicsImport.new(payment_provider_config).run.each do |status, status_payments|
-      @payments[status] += status_payments
+      payments[status] += status_payments
     end
+    create_success_log
+  rescue Invoice::PaymentProcessor::ProcessError => process_error
+    errors << process_error
+    create_error_log(process_error.error, process_error.xml)
+    error(self, process_error, payment_provider_config: payment_provider_config)
   rescue StandardError => e
-    @errors << e
+    errors << e
+    create_error_log(e)
     error(self, e, payment_provider_config: payment_provider_config)
   end
 
@@ -43,7 +46,49 @@ class Payments::EbicsImportJob < BaseJob
     }
   end
 
+  def create_start_log
+    # Hitobito.logger.log()
+    HitobitoLogEntry.create!(
+      level: "info",
+      subject: payment_provider_config,
+      category: "ebics",
+      message: "Starting Ebics payment import"
+    )
+  end
+
+  def create_success_log
+    HitobitoLogEntry.create!(
+      level: "info",
+      subject: payment_provider_config,
+      category: "ebics",
+      message: "Successfully imported #{payments.size} payments",
+      payload: log_results
+    )
+  end
+
+  def create_error_log(error, xml = nil)
+    log_entry = HitobitoLogEntry.create!(
+      level: "error",
+      subject: payment_provider_config,
+      category: "ebics",
+      message: "Could not import payment from Ebics",
+      payload: { error: error }
+    )
+
+    if xml.present?
+      log_entry.attachment.attach(xml)
+    end
+  end
+
   def payment_provider_config
     @payment_provider_config ||= PaymentProviderConfig.find(@payment_provider_config_id)
+  end
+
+  def payments
+    @payments ||= Hash.new { |hash, key| hash[key] = [] }
+  end
+
+  def errors
+    @errors ||= []
   end
 end

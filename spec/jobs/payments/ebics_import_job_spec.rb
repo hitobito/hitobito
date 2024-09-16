@@ -57,7 +57,65 @@ describe Payments::EbicsImportJob do
       .exactly(:once)
       .with(error, logger: "delayed_job")
 
-    subject.perform
+    expect do
+      subject.perform
+    end.to change { HitobitoLogEntry.count }.by(2)
+
+    start_log, error_log = HitobitoLogEntry.last(2)
+    expect(start_log.category).to eq("ebics")
+    expect(start_log.level).to eq("info")
+    expect(start_log.message).to eq("Starting Ebics payment import")
+    expect(start_log.subject).to eq(config)
+    expect(start_log.payload).to be_nil
+
+    expect(error_log.category).to eq("ebics")
+    expect(error_log.level).to eq("error")
+    expect(error_log.message).to eq("Could not import payment from Ebics")
+    expect(error_log.subject).to eq(config)
+    expect(error_log.payload).to eq({ "error" => error.to_s })
+  end
+
+  it "catches error raised on payment xml process" do
+    config.update(status: :registered)
+
+    xml = invoice_files.first
+
+    allow(PaymentProvider).to receive(:new).and_return(payment_provider)
+    allow(payment_provider).to receive(:client).and_return(epics_client)
+
+    expect(epics_client).to receive(:HPB)
+
+    expect(payment_provider).to receive(:check_bank_public_keys!).and_return(true)
+
+    expect(payment_provider).to receive(:Z54).and_return(['invalid'])
+
+#     error = REXML::ParseException.new('Malformed XML: Content at the start of the document')
+
+#     expect(Invoice::PaymentProcessor).to receive(:new).with(xml).exactly(:once).and_raise(error)
+
+#     expect(Airbrake).to receive(:notify)
+#       .exactly(:once)
+#       .with(error, hash_including(parameters: {payment_provider_config: config}))
+#     expect(Raven).to receive(:capture_exception)
+#       .exactly(:once)
+#       .with(error, logger: "delayed_job")
+
+    expect do
+      subject.perform
+    end.to change { HitobitoLogEntry.count }.by(2)
+
+    start_log, error_log = HitobitoLogEntry.last(2)
+    expect(start_log.category).to eq("ebics")
+    expect(start_log.level).to eq("info")
+    expect(start_log.message).to eq("Starting Ebics payment import")
+    expect(start_log.subject).to eq(config)
+    expect(start_log.payload).to be_nil
+
+    expect(error_log.category).to eq("ebics")
+    expect(error_log.level).to eq("error")
+    expect(error_log.message).to eq("Could not import payment from Ebics")
+    expect(error_log.subject).to eq(config)
+    expect(error_log.payload).to eq({ "error" => error.to_s })
   end
 
   describe "#log_result" do

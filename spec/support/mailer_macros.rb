@@ -13,11 +13,11 @@ module MailerMacros
   end
 
   def expect_no_enqueued_mail_jobs
-    expect { yield }.not_to have_enqueued_job(ActionMailer::MailDeliveryJob)
+    expect { yield }.not_to change { enqueued_mail_jobs_count }
   end
 
   def expect_enqueued_mail_jobs(count:)
-    expect { yield }.to have_enqueued_job(ActionMailer::MailDeliveryJob).exactly(count).times
+    expect { yield }.to change { enqueued_mail_jobs_count }.by(count)
   end
 
   def enqueued_mail_jobs_count

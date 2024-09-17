@@ -31,7 +31,7 @@
 #   - has same parents as other siblings (once they have parents)
 #   - are not modeled to cover halfsiblings
 #   - is sibling to all siblings of the same family
-#   - can leave family if all siblings are removed (to correct wrong assingment)
+#   - can leave family if all siblings are removed (to correct wrong assignment)
 
 class FamilyMember < ApplicationRecord
   # TODO: extract exception to its own file

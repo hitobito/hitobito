@@ -38,13 +38,6 @@ module Wizards
       attribute_names.include?(name.to_s)
     end
 
-    def contains_any_changes?
-      default_instance = self.class.new({})
-
-      attributes.present? && attributes.all? do |attr, value|
-        default_value = default_instance.send(attr)
-        value != default_value
-      end
-    end
+    def contains_any_changes? = attributes.compact_blank != self.class._default_attributes.to_h.compact_blank
   end
 end

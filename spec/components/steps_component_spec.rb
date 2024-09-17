@@ -14,6 +14,7 @@ describe StepsComponent, type: :component do
   subject(:component) { described_class.new(partials: [], form: form, step: :step) }
 
   before do
+    allow_any_instance_of(StepsComponent::ContentComponent).to receive(:render?).and_return(true)
     allow_any_instance_of(StepsComponent::ContentComponent).to receive(:markup) do |component|
       component.instance_variable_get(:@partial)
     end

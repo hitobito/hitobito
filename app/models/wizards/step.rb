@@ -37,5 +37,7 @@ module Wizards
     def attr?(name)
       attribute_names.include?(name.to_s)
     end
+
+    def contains_any_changes? = attributes.compact_blank != self.class._default_attributes.to_h.compact_blank
   end
 end

@@ -62,7 +62,7 @@ class StepsComponent::ContentComponent < StepsComponent::IteratingComponent
   end
 
   def render?
-    index <= @step
+    index <= @step || model.contains_any_changes?
   end
 
   def back_link

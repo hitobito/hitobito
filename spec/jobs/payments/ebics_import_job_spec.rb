@@ -13,6 +13,10 @@ describe Payments::EbicsImportJob do
   let(:invoice_files) {
     [read("camt.054-ESR-ASR_T_CH0209000000857876452_378159670_0_2018031411011923")]
   }
+
+  let(:invalid_invoice_files) {
+    [read("camt.054-invalid")]
+  }
   let(:config) { payment_provider_configs(:postfinance) }
   let(:epics_client) { double(:epics_client) }
   let(:payment_provider) { PaymentProvider.new(config) }
@@ -72,13 +76,11 @@ describe Payments::EbicsImportJob do
     expect(error_log.level).to eq("error")
     expect(error_log.message).to eq("Could not import payment from Ebics")
     expect(error_log.subject).to eq(config)
-    expect(error_log.payload).to eq({ "error" => error.to_s })
+    expect(error_log.payload).to eq({ "error" => error.detailed_message })
   end
 
   it "catches error raised on payment xml process" do
     config.update(status: :registered)
-
-    xml = invoice_files.first
 
     allow(PaymentProvider).to receive(:new).and_return(payment_provider)
     allow(payment_provider).to receive(:client).and_return(epics_client)
@@ -87,18 +89,14 @@ describe Payments::EbicsImportJob do
 
     expect(payment_provider).to receive(:check_bank_public_keys!).and_return(true)
 
-    expect(payment_provider).to receive(:Z54).and_return(['invalid'])
+    expect(payment_provider).to receive(:Z54).and_return(invalid_invoice_files)
 
-#     error = REXML::ParseException.new('Malformed XML: Content at the start of the document')
-
-#     expect(Invoice::PaymentProcessor).to receive(:new).with(xml).exactly(:once).and_raise(error)
-
-#     expect(Airbrake).to receive(:notify)
-#       .exactly(:once)
-#       .with(error, hash_including(parameters: {payment_provider_config: config}))
-#     expect(Raven).to receive(:capture_exception)
-#       .exactly(:once)
-#       .with(error, logger: "delayed_job")
+    expect(Airbrake).to receive(:notify)
+      .exactly(:once)
+      .with(kind_of(REXML::ParseException), hash_including(parameters: {payment_provider_config: config}))
+    expect(Raven).to receive(:capture_exception)
+      .exactly(:once)
+      .with(kind_of(REXML::ParseException), logger: "delayed_job")
 
     expect do
       subject.perform
@@ -115,7 +113,8 @@ describe Payments::EbicsImportJob do
     expect(error_log.level).to eq("error")
     expect(error_log.message).to eq("Could not import payment from Ebics")
     expect(error_log.subject).to eq(config)
-    expect(error_log.payload).to eq({ "error" => error.to_s })
+    expect(error_log.payload["error"]).to include("REXML::ParseException")
+    expect(error_log.attachment).to be_attached
   end
 
   describe "#log_result" do

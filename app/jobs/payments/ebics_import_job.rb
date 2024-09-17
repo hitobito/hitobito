@@ -21,13 +21,13 @@ class Payments::EbicsImportJob < BaseJob
     end
     create_success_log
   rescue Invoice::PaymentProcessor::ProcessError => process_error
-    errors << process_error
+    errors << process_error.error
     create_error_log(process_error.error, process_error.xml)
-    error(self, process_error, payment_provider_config: payment_provider_config)
-  rescue StandardError => e
-    errors << e
-    create_error_log(e)
-    error(self, e, payment_provider_config: payment_provider_config)
+    error(self, process_error.error, payment_provider_config: payment_provider_config)
+  rescue StandardError => error
+    errors << error
+    create_error_log(error)
+    error(self, error, payment_provider_config: payment_provider_config)
   end
 
   def payment_provider_configs
@@ -72,11 +72,11 @@ class Payments::EbicsImportJob < BaseJob
       subject: payment_provider_config,
       category: "ebics",
       message: "Could not import payment from Ebics",
-      payload: { error: error }
+      payload: { error: error.detailed_message }
     )
 
     if xml.present?
-      log_entry.attachment.attach(xml)
+      log_entry.attachment.attach({ io: StringIO.new(xml), content_type: 'application/xml', filename: "log_attachment_#{log_entry.id}" })
     end
   end
 

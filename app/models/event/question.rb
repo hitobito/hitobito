@@ -93,6 +93,18 @@ class Event::Question < ActiveRecord::Base
     derived_from_question_id.present?
   end
 
+  def required?
+    disclosure&.to_sym == :required
+  end
+
+  def optional?
+    disclosure&.to_sym == :optional
+  end
+
+  def hidden?
+    disclosure&.to_sym == :hidden
+  end
+
   def validate_answer(_answer)
   end
 
@@ -113,15 +125,16 @@ class Event::Question < ActiveRecord::Base
     end
   end
 
-  def self.create_with_translations(question_attributes)
+  def self.seed_global(attributes)
+    questions = [attributes[:question], attributes[:translation_attributes]&.pluck(:question)].flatten.compact_blank
+    return if includes(:translations).where(event_id: nil, question: questions).exists?
+
     Event::Question.transaction do
-      Array.wrap(question_attributes).map do |attributes|
-        new(attributes.except(:translation_attributes)).tap do |question|
-          attributes[:translation_attributes]&.each do |translation_attributes|
-            question.attributes = translation_attributes.slice(:locale, *Event::Question.translated_attribute_names)
-          end
-          question.save!
+      new(attributes.except(:translation_attributes)).tap do |question|
+        attributes[:translation_attributes]&.each do |translation_attributes|
+          question.attributes = translation_attributes.slice(:locale, *Event::Question.translated_attribute_names)
         end
+        question.save!
       end
     end
   end

@@ -75,6 +75,8 @@ class Event::Question < ActiveRecord::Base
 
   # most attributes of global questions must not be overriden by derived questions
   def assign_derived_attributes
+    return if derived_from_question.blank? || derived_from_question.customize_derived
+
     keep_attributes = %w[id event_id disclosure derived_from_question_id]
     assign_attributes(derived_from_question.attributes.except(*keep_attributes))
   end

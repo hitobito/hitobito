@@ -40,6 +40,8 @@ class PaymentProviderConfig < ActiveRecord::Base
 
   scope :initialized, -> { where(status: [:pending, :registered]) }
 
+  after_destroy :clear_scheduled_ebics_import_jobs
+
   attr_encrypted :keys, :password
 
   def empty?
@@ -55,5 +57,9 @@ class PaymentProviderConfig < ActiveRecord::Base
       user_identifier.present? &&
       partner_identifier.present? &&
       password.present?
+  end
+
+  def clear_scheduled_ebics_import_jobs
+    Delayed::Job.where("handler LIKE '%Payments::EbicsImportJob%payment_provider_config_id: ?%'", id).delete_all
   end
 end

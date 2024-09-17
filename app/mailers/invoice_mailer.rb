@@ -47,8 +47,8 @@ class InvoiceMailer < ApplicationMailer
         item.name,
         item.description,
         item.total
-      ].join("<br/>")
-    end.join("<br/>" * 2)
+      ].join(tag.br)
+    end.join(tag.br * 2)
   end
 
   def placeholder_invoice_total
@@ -78,7 +78,7 @@ class InvoiceMailer < ApplicationMailer
 
   def content_tag(name, content = nil)
     content = yield if block_given?
-    "<#{name}>#{content}</#{name}>"
+    super
   end
 
   def group

@@ -179,4 +179,11 @@ describe Event::ParticipationMailer do
 
     it { is_expected.to match(/Hallo Top/) }
   end
+
+  describe "#xss" do
+    it "does not allow xss injection" do
+      event.update(name: "<script>alert('xss');</script>")
+      is_expected.not_to include("<script>alert('xss');</script>")
+    end
+  end
 end

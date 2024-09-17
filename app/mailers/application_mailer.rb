@@ -6,6 +6,10 @@
 #  https://github.com/hitobito/hitobito.
 
 class ApplicationMailer < ActionMailer::Base
+  include AbstractController::Rendering
+  include ActionView::Helpers::TagHelper
+  # is there a way to only include the methods we need? tag, content_tag
+
   HEADERS_TO_SANITIZE = [:to, :cc, :bcc, :from, :sender, :return_path, :reply_to].freeze
 
   helper :webpack
@@ -38,8 +42,21 @@ class ApplicationMailer < ActionMailer::Base
   def values_for_placeholders(content_key)
     content = CustomContent.get(content_key)
     content.placeholders_list.index_with do |token|
-      send(:"placeholder_#{token.underscore}")
+      value = send(:"placeholder_#{token.underscore}")
+      (value.is_a?(String) && !value.html_safe?) ? ERB::Util.html_escape(value) : value
     end
+  end
+
+  # Define output_buffer method
+  def output_buffer
+    @output_buffer ||= ActionView::OutputBuffer.new
+  end
+
+  # Define output_buffer= method
+  attr_writer :output_buffer
+
+  def escape_html(html)
+    ERB::Util.html_escape(html)
   end
 
   def use_mailing_emails(recipients)
@@ -72,6 +89,8 @@ class ApplicationMailer < ActionMailer::Base
   end
 
   def link_to(label, url = nil)
-    "<a href=\"#{url || label}\">#{label}</a>"
+    url = ERB::Util.html_escape(url || label)
+    label = ERB::Util.html_escape(label)
+    "<a href=\"#{url}\">#{label}</a>".html_safe
   end
 end

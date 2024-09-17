@@ -23,7 +23,9 @@ class Event::Answer < ActiveRecord::Base
   belongs_to :participation
   belongs_to :question
 
-  attr_reader :raw_answer
+  # attribute type: :json preserves the possibility to store complex datastructures
+  # in the answer e.g. for multiple_choice of Event::Question::Default
+  attribute :answer, :json
 
   delegate :admin?, to: :question
 
@@ -35,11 +37,6 @@ class Event::Answer < ActiveRecord::Base
     question && question.required? && participation.enforce_required_answers
   end}
   validate :validate_with_question
-
-  def answer=(value)
-    @raw_answer = value
-    super
-  end
 
   private
 

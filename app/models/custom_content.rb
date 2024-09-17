@@ -70,7 +70,7 @@ class CustomContent < ActiveRecord::Base
     placeholders_list.each_with_object(string) do |placeholder, output|
       token = placeholder_token(placeholder)
       if output.include?(token)
-        output.gsub!(token, placeholders.fetch(placeholder))
+        output.gsub!(token, placeholders.fetch(placeholder).to_s)
       end
     end
   end

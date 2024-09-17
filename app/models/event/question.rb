@@ -36,7 +36,7 @@ class Event::Question < ActiveRecord::Base
 
   has_many :answers, dependent: :destroy
   has_many :derived_questions, class_name: "Event::Question", foreign_key: :derived_from_question_id,
-    dependent: :destroy, inverse_of: :derived_from_question
+    dependent: :nullify, inverse_of: :derived_from_question
 
   DISCLOSURE_VALUES = %w[optional required hidden].freeze
   i18n_enum :disclosure, DISCLOSURE_VALUES, queries: true

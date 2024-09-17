@@ -48,23 +48,23 @@ class Payments::EbicsImportJob < BaseJob
 
   def create_start_log
     create_log_entry(level: "info",
-                     message: "Starting Ebics payment import")
+      message: "Starting Ebics payment import")
   end
 
   def create_success_log
     create_log_entry(level: "info",
-                     message: "Successfully imported #{payments.values.flatten.size} payments",
-                     payload: log_results)
+      message: "Successfully imported #{payments.values.flatten.size} payments",
+      payload: log_results)
   end
 
   def create_error_log(error, xml = nil)
     create_log_entry(level: "error",
-                     message: "Could not import payment from Ebics",
-                     payload: { error: error.detailed_message },
-                     xml: xml)
+      message: "Could not import payment from Ebics",
+      payload: {error: error.detailed_message},
+      xml: xml)
   end
 
-  def create_log_entry(level: '', message: '', payload: nil, xml: nil)
+  def create_log_entry(level: "", message: "", payload: nil, xml: nil)
     log = HitobitoLogEntry.create!(
       level: level,
       subject: payment_provider_config,
@@ -74,9 +74,9 @@ class Payments::EbicsImportJob < BaseJob
     )
 
     if xml.present?
-      log.attachment.attach({ io: StringIO.new(xml),
-                              content_type: 'application/xml',
-                              filename: "log_attachment_#{log.id}" })
+      log.attachment.attach({io: StringIO.new(xml),
+                              content_type: "application/xml",
+                              filename: "log_attachment_#{log.id}"})
     end
 
     log

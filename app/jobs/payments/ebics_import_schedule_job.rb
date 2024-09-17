@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Payments::EbicsImportScheduleJob < RecurringJob
-
   def perform_internal
     payment_provider_configs.find_each do |provider_config|
       Payments::EbicsImportJob.new(provider_config.id).enqueue!
@@ -23,5 +22,4 @@ class Payments::EbicsImportScheduleJob < RecurringJob
   def payment_provider_configs
     PaymentProviderConfig.initialized
   end
-
 end

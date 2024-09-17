@@ -56,11 +56,11 @@ describe Payments::EbicsImportJob do
     expect(error_log.level).to eq("info")
     expect(error_log.message).to eq("Successfully imported 5 payments")
     expect(error_log.subject).to eq(config)
-    expect(error_log.payload).to include({ "imported_payments_count" => 1,
+    expect(error_log.payload).to include({"imported_payments_count" => 1,
                                            "without_invoice_count" => 4,
                                            "invalid_payments_count" => 0,
                                            "invalid_payments" => {},
-                                           "errors" => [] })
+                                           "errors" => []})
   end
 
   it "catches error raised on provider" do
@@ -95,7 +95,7 @@ describe Payments::EbicsImportJob do
     expect(error_log.level).to eq("error")
     expect(error_log.message).to eq("Could not import payment from Ebics")
     expect(error_log.subject).to eq(config)
-    expect(error_log.payload).to eq({ "error" => error.detailed_message })
+    expect(error_log.payload).to eq({"error" => error.detailed_message})
   end
 
   it "catches error raised on payment xml process" do

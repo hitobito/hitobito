@@ -40,7 +40,7 @@ describe PaymentProviderConfig do
     expect(payment_provider_config.status).to eq("draft")
   end
 
-  context 'after_delete' do
+  context "after_delete" do
     it "deletes all associated ebics import jobs" do
       Payments::EbicsImportJob.new(postfinance_config.id).enqueue!(run_at: 10.seconds.from_now)
       Payments::EbicsImportJob.new(ubs_config.id).enqueue!(run_at: 10.seconds.from_now)

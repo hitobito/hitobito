@@ -6,9 +6,10 @@
 require "spec_helper"
 
 describe Person::AddRequest::Approver::Group do
+  include ActiveJob::TestHelper
+
   let(:person) { Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_two)).person }
   let(:requester) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person }
-
   let(:user) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_two)).person }
 
   subject { Person::AddRequest::Approver.for(request, user) }
@@ -52,7 +53,7 @@ describe Person::AddRequest::Approver::Group do
     it "schedules email" do
       expect do
         subject.approve
-      end.to change { Delayed::Job.count }.by(1)
+      end.to have_enqueued_mail(Person::AddRequestMailer).exactly(:once)
     end
 
     it "creates person log entry for role and for request", versioning: true do
@@ -95,7 +96,7 @@ describe Person::AddRequest::Approver::Group do
     it "schedules email" do
       expect do
         subject.reject
-      end.to change { Delayed::Job.count }.by(1)
+      end.to have_enqueued_mail(Person::AddRequestMailer).exactly(:once)
     end
 
     it "creates person log entry for request", versioning: true do

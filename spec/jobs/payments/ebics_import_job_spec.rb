@@ -23,7 +23,7 @@ describe Payments::EbicsImportJob do
 
   subject { Payments::EbicsImportJob.new(config.id) }
 
-  it "initializes payments" do
+  it "initializes payments and logs" do
     config.update(status: :registered)
 
     allow(PaymentProvider).to receive(:new).and_return(payment_provider)
@@ -39,9 +39,28 @@ describe Payments::EbicsImportJob do
     InvoiceList.create(title: "membership fee", invoices: [invoice])
     invoice.update!(reference: "000000000000100000000000800")
 
-    subject.perform
+    expect do
+      subject.perform
+    end.to change { HitobitoLogEntry.count }.by(2)
 
     expect(invoice.payments.size).to eq(1)
+
+    start_log, error_log = HitobitoLogEntry.last(2)
+    expect(start_log.category).to eq("ebics")
+    expect(start_log.level).to eq("info")
+    expect(start_log.message).to eq("Starting Ebics payment import")
+    expect(start_log.subject).to eq(config)
+    expect(start_log.payload).to be_nil
+
+    expect(error_log.category).to eq("ebics")
+    expect(error_log.level).to eq("info")
+    expect(error_log.message).to eq("Successfully imported 5 payments")
+    expect(error_log.subject).to eq(config)
+    expect(error_log.payload).to include({ "imported_payments_count" => 1,
+                                           "without_invoice_count" => 4,
+                                           "invalid_payments_count" => 0,
+                                           "invalid_payments" => {},
+                                           "errors" => [] })
   end
 
   it "catches error raised on provider" do

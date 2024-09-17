@@ -47,37 +47,39 @@ class Payments::EbicsImportJob < BaseJob
   end
 
   def create_start_log
-    # Hitobito.logger.log()
-    HitobitoLogEntry.create!(
-      level: "info",
-      subject: payment_provider_config,
-      category: "ebics",
-      message: "Starting Ebics payment import"
-    )
+    create_log_entry(level: "info",
+                     message: "Starting Ebics payment import")
   end
 
   def create_success_log
-    HitobitoLogEntry.create!(
-      level: "info",
-      subject: payment_provider_config,
-      category: "ebics",
-      message: "Successfully imported #{payments.size} payments",
-      payload: log_results
-    )
+    create_log_entry(level: "info",
+                     message: "Successfully imported #{payments.values.flatten.size} payments",
+                     payload: log_results)
   end
 
   def create_error_log(error, xml = nil)
-    log_entry = HitobitoLogEntry.create!(
-      level: "error",
+    create_log_entry(level: "error",
+                     message: "Could not import payment from Ebics",
+                     payload: { error: error.detailed_message },
+                     xml: xml)
+  end
+
+  def create_log_entry(level: '', message: '', payload: nil, xml: nil)
+    log = HitobitoLogEntry.create!(
+      level: level,
       subject: payment_provider_config,
       category: "ebics",
-      message: "Could not import payment from Ebics",
-      payload: { error: error.detailed_message }
+      message: message,
+      payload: payload
     )
 
     if xml.present?
-      log_entry.attachment.attach({ io: StringIO.new(xml), content_type: 'application/xml', filename: "log_attachment_#{log_entry.id}" })
+      log.attachment.attach({ io: StringIO.new(xml),
+                              content_type: 'application/xml',
+                              filename: "log_attachment_#{log.id}" })
     end
+
+    log
   end
 
   def payment_provider_config

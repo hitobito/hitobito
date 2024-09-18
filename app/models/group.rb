@@ -137,7 +137,9 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   belongs_to :contact, class_name: "Person"
 
-  has_many :roles, dependent: :destroy, inverse_of: :group
+  # use scope active_and_future for backward compatibility as with with the former
+  # implementation of future roles those were included in the default scope
+  has_many :roles, -> { active_and_future }, dependent: :destroy, inverse_of: :group
   has_many :people, through: :roles
 
   has_many :people_filters, dependent: :destroy

@@ -42,6 +42,31 @@ describe Group do
     expect(Group).to be_valid
   end
 
+  context "#roles" do
+    let(:group) { groups(:top_group) }
+
+    it "includes open ended roles" do
+      role = Fabricate(Group::TopGroup::Leader.name.to_sym, group: group)
+      expect(group.roles).to include(role)
+    end
+
+    it "includes active roles with start_on and end_on set" do
+      role = Fabricate(Group::TopGroup::Leader.name.to_sym, group: group,
+        start_on: 1.day.ago, end_on: 1.day.from_now)
+      expect(group.roles).to include(role)
+    end
+
+    it "includes future roles" do
+      role = Fabricate(Group::TopGroup::Leader.name.to_sym, group: group, start_on: 1.day.from_now)
+      expect(group.roles).to include(role)
+    end
+
+    it "excludes past roles" do
+      role = Fabricate(Group::TopGroup::Leader.name.to_sym, group: group, end_on: 1.day.ago)
+      expect(group.roles).not_to include(role)
+    end
+  end
+
   context "alphabetic order" do
     context "on insert" do
       it "at the beginning" do

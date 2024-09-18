@@ -145,6 +145,9 @@ class Role < ActiveRecord::Base
 
   scope :future, -> { with_inactive.where("start_on > :today", today: Date.current) }
   scope :ended, -> { with_inactive.where("end_on < :today", today: Date.current) }
+  scope :active_and_future, -> {
+    with_inactive.where("end_on >= :today OR end_on IS NULL", today: Date.current)
+  }
 
   ### CLASS METHODS
 

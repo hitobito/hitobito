@@ -5,11 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class UnscheduleEbicsImportJob < ActiveRecord::Migration[6.1]
+class ClearScheduledLegacyEbicsImportJob < ActiveRecord::Migration[6.1]
   def up
     Delayed::Job.where("handler LIKE '%Payments::EbicsImportJob%'").delete_all
-  end
-
-  def down
   end
 end

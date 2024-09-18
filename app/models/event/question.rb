@@ -95,18 +95,6 @@ class Event::Question < ActiveRecord::Base
     derived_from_question_id.present?
   end
 
-  def required?
-    disclosure&.to_sym == :required
-  end
-
-  def optional?
-    disclosure&.to_sym == :optional
-  end
-
-  def hidden?
-    disclosure&.to_sym == :hidden
-  end
-
   def validate_answer(_answer)
   end
 
@@ -127,6 +115,15 @@ class Event::Question < ActiveRecord::Base
     end
   end
 
+  # Seed global questions and make sure the same question does not get seeded twice.
+  # In case a global question needs to be changed, make sure to create a migration
+  # accordingly and change the seed at the same time.
+  # Useful options for global questions are:
+  # - `translation_attributes`: seed all translations at creation. `[{ locale: :de, question: "...", choices: "..." }]`
+  # - `type`: STI-name of question type
+  # - `event_type`: STI-name of Event, on which the global question should be applied. `nil` will apply to all events.
+  # - `disclosure`: specifies if question is required, optional or hidden. `nil` will force choice at event creation.
+  # - `customize_derived`: `true` will allow the customization on event creation. Default is `false`.
   def self.seed_global(attributes)
     questions = [attributes[:question], attributes[:translation_attributes]&.pluck(:question)].flatten.compact_blank
     return if includes(:translations).where(event_id: nil, question: questions).exists?

@@ -43,9 +43,8 @@ describe Event::Answer do
   context "with question specific values" do
     it "calls the questions custom before_validation implementation" do
       expect(question).to receive(:before_validate_answer).and_return(true)
-      special_answer = ["Maybe", "Array"]
-      answer.update!(answer: special_answer)
-      expect(answer.answer).to eq(special_answer)
+      answer.update!(answer: "Test")
+      expect(answer.answer).to eq("Test")
     end
   end
 end

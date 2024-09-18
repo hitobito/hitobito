@@ -93,18 +93,6 @@ class Event::Question < ActiveRecord::Base
     derived_from_question_id.present?
   end
 
-  def required?
-    disclosure&.to_sym == :required
-  end
-
-  def optional?
-    disclosure&.to_sym == :optional
-  end
-
-  def hidden?
-    disclosure&.to_sym == :hidden
-  end
-
   def validate_answer(_answer)
   end
 

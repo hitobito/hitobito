@@ -69,7 +69,7 @@ class Person::AddRequestMailer < ApplicationMailer
   end
 
   def placeholder_recipient_names
-    @recipients.collect(&:greeting_name).join(", ")
+    safe_join(@recipients.collect(&:greeting_name), ", ")
   end
 
   def placeholder_person_name
@@ -93,7 +93,7 @@ class Person::AddRequestMailer < ApplicationMailer
   end
 
   def roles_as_string(roles)
-    roles.collect { |r| r.to_s(:long) }.join(", ")
+    safe_join(roles.collect { |r| r.to_s(:long) }, ", ")
   end
 
   def layer_full_roles(person)

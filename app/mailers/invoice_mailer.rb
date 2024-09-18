@@ -42,30 +42,30 @@ class InvoiceMailer < ApplicationMailer
   end
 
   def placeholder_invoice_items
-    InvoiceItemDecorator.decorate_collection(@invoice.invoice_items).map do |item|
-      [
+    safe_join(InvoiceItemDecorator.decorate_collection(@invoice.invoice_items).map do |item|
+      safe_join([
         item.name,
         item.description,
         item.total
-      ].join(tag.br)
-    end.join(tag.br * 2)
+      ], tag.br)
+    end, tag.br * 2)
   end
 
   def placeholder_invoice_total
     content_tag :table do
-      [:total, :vat].map do |key|
+      safe_join([:total, :vat].map do |key|
         content_tag :tr do
-          [content_tag(:th, t("activerecord.attributes.invoice.#{key}")),
-            content_tag(:td, @invoice.decorate.send(key))].join
+          safe_join([content_tag(:th, t("activerecord.attributes.invoice.#{key}")),
+            content_tag(:td, @invoice.decorate.send(key))], tag.br)
         end
-      end.join
+      end, tag.br)
     end
   end
 
   def placeholder_group_address
-    [group.name,
+    safe_join([group.name,
       group.address,
-      [group.zip_code, group.town].compact.join(" ").presence].compact.join(", ")
+      safe_join([group.zip_code, group.town].compact, " ").presence], tag.br)
   end
 
   def placeholder_group_name

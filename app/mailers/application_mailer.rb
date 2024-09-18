@@ -8,6 +8,7 @@
 class ApplicationMailer < ActionMailer::Base
   include AbstractController::Rendering
   include ActionView::Helpers::TagHelper
+  include ActionView::Helpers::TextHelper
   # is there a way to only include the methods we need? tag, content_tag
 
   HEADERS_TO_SANITIZE = [:to, :cc, :bcc, :from, :sender, :return_path, :reply_to].freeze
@@ -43,7 +44,7 @@ class ApplicationMailer < ActionMailer::Base
     content = CustomContent.get(content_key)
     content.placeholders_list.index_with do |token|
       value = send(:"placeholder_#{token.underscore}")
-      (value.is_a?(String) && !value.html_safe?) ? ERB::Util.html_escape(value) : value
+      ERB::Util.html_escape(value)
     end
   end
 
@@ -92,5 +93,10 @@ class ApplicationMailer < ActionMailer::Base
     url = ERB::Util.html_escape(url || label)
     label = ERB::Util.html_escape(label)
     "<a href=\"#{url}\">#{label}</a>".html_safe
+  end
+
+  # Converts newlines to <br> tags and escapes the value
+  def convert_newlines_to_breaks(text)
+    ERB::Util.html_escape(text).gsub("\n", tag.br).html_safe
   end
 end

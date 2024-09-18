@@ -39,29 +39,29 @@ describe Event::ParticipationMailer do
     it "renders set attributes only" do
       is_expected.to match(/Eventus/)
       is_expected.to match(/Daten/)
-      is_expected.not_to match(/Kontaktperson:<br\/>Top Leader/)
+      is_expected.not_to match(/Kontaktperson:<br \/>Top Leader/)
     end
 
     it "renders location if set" do
       event.location = "Eigerplatz 4\nPostfach 321\n3006 Bern"
-      is_expected.to match(/Ort \/ Adresse:<br\/>Eigerplatz 4<br\/>Postfach 321<br\/>3006 Bern/)
+      is_expected.to match(/Ort \/ Adresse:<br>Eigerplatz 4<br>Postfach 321<br>3006 Bern/)
     end
 
     it "renders dates if set" do
       event.dates.clear
       event.dates.build(label: "Vorweekend", start_at: Date.parse("2012-10-18"), finish_at: Date.parse("2012-10-21"))
-      is_expected.to match(/Daten:<br\/>Vorweekend: Do 18.10.2012 - So 21.10.2012/)
+      is_expected.to match(/Daten:<br>Vorweekend: Do 18.10.2012 - So 21.10.2012/)
     end
 
     it "renders multiple dates below each other" do
       event.dates.clear
       event.dates.build(label: "Vorweekend", start_at: Date.parse("2012-10-18"), finish_at: Date.parse("2012-10-21"))
       event.dates.build(label: "Kurs", start_at: Date.parse("2012-10-21"))
-      is_expected.to match(/Daten:<br\/>Vorweekend: Do 18.10.2012 - So 21.10.2012<br\/>Kurs: So 21.10.2012/)
+      is_expected.to match(/Daten:<br>Vorweekend: Do 18.10.2012 - So 21.10.2012<br>Kurs: So 21.10.2012/)
     end
 
     it "renders participant info" do
-      is_expected.to match(%r{Teilnehmer/-in:<br/>})
+      is_expected.to match(%r{Teilnehmer/-in:<br>})
       is_expected.to match(%r{<strong>Top Leader</strong><p>Greatstreet 345<br />3456 Greattown</p><p><a href="mailto:top_leader@example.com">top_leader@example.com</a>})
     end
 
@@ -161,14 +161,14 @@ describe Event::ParticipationMailer do
     it "renders dates if set" do
       event.dates.clear
       event.dates.build(label: "Vorweekend", start_at: Date.parse("2012-10-18"), finish_at: Date.parse("2012-10-21"))
-      is_expected.to match(/Daten:<br\/>Vorweekend: Do 18.10.2012 - So 21.10.2012/)
+      is_expected.to match(/Daten:<br>Vorweekend: Do 18.10.2012 - So 21.10.2012/)
     end
 
     it "renders multiple dates below each other" do
       event.dates.clear
       event.dates.build(label: "Vorweekend", start_at: Date.parse("2012-10-18"), finish_at: Date.parse("2012-10-21"))
       event.dates.build(label: "Anlass", start_at: Date.parse("2012-10-21"))
-      is_expected.to match(/Daten:<br\/>Vorweekend: Do 18.10.2012 - So 21.10.2012<br\/>Anlass: So 21.10.2012/)
+      is_expected.to match(/Daten:<br>Vorweekend: Do 18.10.2012 - So 21.10.2012<br>Anlass: So 21.10.2012/)
     end
 
     it "renders the headers" do

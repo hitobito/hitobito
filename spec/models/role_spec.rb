@@ -235,6 +235,54 @@ describe Role do
         expect(Role.ended).to include role
       end
     end
+
+    describe ":active_and_future" do
+      it "includes roles without start_on and end_on" do
+        expect(role.start_on).to be_nil
+        expect(role.end_on).to be_nil
+        expect(Role.active_and_future).to include role
+      end
+
+      it "includes roles with start_on is in the past" do
+        role.update!(start_on: Date.current.yesterday)
+        expect(Role.active_and_future).to include role
+      end
+
+      it "includes roles with start_on is today" do
+        role.update!(start_on: Date.current)
+        expect(Role.active_and_future).to include role
+      end
+
+      it "includes roles with start_on is in the future" do
+        role.update!(start_on: Date.current.tomorrow)
+        expect(Role.active_and_future).to include role
+      end
+
+      it "excludes roles with end_on is in the past" do
+        role.update!(end_on: Date.current.yesterday)
+        expect(Role.active_and_future).not_to include role
+      end
+
+      it "includes roles with end_on is today" do
+        role.update!(end_on: Date.current)
+        expect(Role.active_and_future).to include role
+      end
+
+      it "includes roles with end_on is in the future" do
+        role.update!(end_on: Date.current.tomorrow)
+        expect(Role.active_and_future).to include role
+      end
+
+      it "excludes roles with start_on and end_on in the past" do
+        role.update!(start_on: Date.current.yesterday, end_on: Date.current.yesterday)
+        expect(Role.active_and_future).not_to include role
+      end
+
+      it "includes roles with start_on and end_on in the future" do
+        role.update!(start_on: Date.current.tomorrow, end_on: Date.current.tomorrow)
+        expect(Role.active_and_future).to include role
+      end
+    end
   end
 
   context "class" do

@@ -143,8 +143,11 @@ class Role < ActiveRecord::Base
   scope :without_archived, -> { where(archived_at: nil) }
   scope :only_archived, -> { where(archived_at: ..Time.current.utc) }
 
-  scope :future, -> { with_inactive.where("start_on > :today", today: Date.current) }
-  scope :ended, -> { with_inactive.where("end_on < :today", today: Date.current) }
+  scope :future, -> { with_inactive.where("roles.start_on > :today", today: Date.current) }
+  scope :ended, -> { with_inactive.where("roles.end_on < :today", today: Date.current) }
+  scope :active_and_future, -> {
+    with_inactive.where("roles.end_on >= :today OR roles.end_on IS NULL", today: Date.current)
+  }
 
   ### CLASS METHODS
 

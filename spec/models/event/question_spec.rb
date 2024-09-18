@@ -64,18 +64,21 @@ describe Event::Question do
     it "may be required" do
       subject.disclosure = :required
 
+      is_expected.to be_required
       is_expected.to be_valid
     end
 
     it "may be optional" do
       subject.disclosure = :optional
 
+      is_expected.to be_optional
       is_expected.to be_valid
     end
 
     it "may be hidden" do
       subject.disclosure = :hidden
 
+      is_expected.to be_hidden
       is_expected.to be_valid
     end
 

@@ -5,7 +5,7 @@ import { Controller } from "@hotwired/stimulus";
 // Therefore we place wagon stimulus controllers in core until webpacker is replaced.
 
 export default class extends Controller {
-  static targets = ["requiredLabel", "optionalLabel"];
+  static targets = ["requiredLabel", "optionalLabel", "emailInfo"];
 
   static values = {
     adultFrom: {
@@ -44,25 +44,40 @@ export default class extends Controller {
 
   validateEmail(e) {
     const srcElement = e.srcElement;
-    const formData = new FormData();
-    formData.append("email", e.srcElement.value);
-    formData.append("id", e.srcElement.id);
-    fetch(this.emailValidationPathValue, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "X-CSRF-Token": this.getCsrfToken(),
-      },
-      body: formData,
-    })
-      .then((r) => r.text())
-      .then((text) => JSON.parse(text))
-      .then(function (json) {
-        srcElement.classList.remove("is-invalid");
-        if (json.exists) {
-          srcElement.classList.add("is-invalid");
-        }
-      });
+    const emailInfoTarget = this.emailInfoTarget;
+
+    srcElement.classList.remove("is-invalid");
+    emailInfoTarget.classList.add("d-none");
+
+    if (this.isEmailValid(srcElement.value)) {
+      const formData = new FormData();
+      formData.append("email", e.srcElement.value);
+      formData.append("id", e.srcElement.id);
+      fetch(this.emailValidationPathValue, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "X-CSRF-Token": this.getCsrfToken(),
+        },
+        body: formData,
+      })
+        .then((r) => r.text())
+        .then((text) => JSON.parse(text))
+        .then(function (json) {
+          if (json.exists) {
+            srcElement.classList.add("is-invalid");
+            emailInfoTarget.classList.remove("d-none");
+          }
+        });
+    }
+  }
+
+  isEmailValid(email) {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      );
   }
 
   // This is not set for test-env

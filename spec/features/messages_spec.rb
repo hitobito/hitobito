@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Die Mitte. This file is part of
+#  Copyright (c) 2012-2024, Die Mitte. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -32,7 +32,7 @@ describe :messages, js: true do
     end
 
     it "displays recipient info" do
-      people(:top_leader).update!(address: nil, zip_code: nil, town: "Supertown")
+      people(:top_leader).update!(street: nil, housenumber: nil, zip_code: nil, town: "Supertown")
 
       click_link("Brief erstellen")
 
@@ -83,7 +83,7 @@ describe :messages, js: true do
     end
 
     it "creates new letter and assignment" do
-      people(:top_leader).update!(address: nil, zip_code: nil, town: "Supertown")
+      people(:top_leader).update!(street: nil, housenumber: nil, zip_code: nil, town: "Supertown")
 
       click_link("Brief erstellen")
 

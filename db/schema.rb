@@ -432,7 +432,6 @@ ActiveRecord::Schema.define(version: 2024_09_17_094438) do
     t.string "short_name", limit: 31
     t.string "type", null: false
     t.string "email"
-    t.string "address", limit: 1024
     t.integer "zip_code"
     t.string "town"
     t.string "country"
@@ -858,7 +857,6 @@ ActiveRecord::Schema.define(version: 2024_09_17_094438) do
     t.string "nickname"
     t.boolean "company", default: false, null: false
     t.string "email"
-    t.string "address", limit: 1024
     t.string "zip_code"
     t.string "town"
     t.string "country"

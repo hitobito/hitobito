@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -55,7 +55,7 @@
 #
 
 class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
-  SEARCHABLE_ATTRS = [:name, :short_name, :email, :address, :zip_code, :town, :country,
+  SEARCHABLE_ATTRS = [:name, :short_name, :email, :street, :zip_code, :town, :country,
     {parent: [:name, :short_name], phone_numbers: [:number],
      social_accounts: [:name], additional_emails: [:email]}]
 
@@ -99,10 +99,6 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :letter_address_position, :address_care_of, :street, :housenumber,
     :postbox, :zip_code, :town, :country, :description
   ]
-
-  if FeatureGate.disabled?("structured_addresses")
-    used_attributes << :address
-  end
 
   FeatureGate.if("groups.nextcloud") do
     used_attributes << :nextcloud_url
@@ -409,7 +405,15 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   def reset_contact_info
     if contact
-      clear_contacts = {address: nil, town: nil, zip_code: nil, country: nil}
+      clear_contacts = {
+        address_care_of: nil,
+        street: nil,
+        housenumber: nil,
+        postbox: nil,
+        town: nil,
+        zip_code: nil,
+        country: nil
+      }
       assign_attributes(clear_contacts)
     end
   end

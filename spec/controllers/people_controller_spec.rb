@@ -44,8 +44,8 @@ describe PeopleController do
 
       context "sorting" do
         before do
-          top_leader.update(first_name: "Joe", last_name: "Smith", nickname: "js", town: "Stoke", address: "Howard Street", zip_code: "9000")
-          @tg_extern.update(first_name: "", last_name: "Bundy", nickname: "", town: "", address: "", zip_code: nil)
+          top_leader.update(first_name: "Joe", last_name: "Smith", nickname: "js", town: "Stoke", street: "Howard Street", zip_code: "9000")
+          @tg_extern.update(first_name: "", last_name: "Bundy", nickname: "", town: "", street: "", zip_code: nil)
         end
 
         let(:role_type_ids) { [Role::External.id, Group::TopGroup::Leader.id, Group::TopGroup::Member.id].join("-") }

@@ -6,6 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 require "spec_helper"
+
 describe Import::Person do
   context "keys" do
     subject { Import::Person.fields.pluck(:key) }
@@ -307,7 +308,7 @@ describe Import::Person do
       public_attributes = person.attributes.reject do |key, _value|
         Person::INTERNAL_ATTRS.include?(key.to_sym)
       end
-      expect(public_attributes.size).to eq 20 # lists tag_list
+      expect(public_attributes.size).to eq 19 # lists tag_list
       expect do
         Import::Person.new(person, public_attributes).populate
       end.not_to raise_error

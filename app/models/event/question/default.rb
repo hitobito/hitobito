@@ -41,7 +41,7 @@ class Event::Question::Default < Event::Question
 
   def translation_class
     # ensures globalize works with STI
-    Event::Question.globalize_translation_class
+    Event::Question::Translation
   end
 
   def validate_answer(answer)

@@ -54,6 +54,21 @@ When the bank changes their public keys, the HPB request will fail and throw a `
 
 At this point, check the `encryption_hash` and `authentication_hash` values in the Settings and whether they're still up to date.
 
+## Importing payments
+
+### Jobs
+
+The Import is done via two Jobs
+- `Payments::EbicsImportScheduleJob`: RecurringJob running every morning at 08:00. Schedules the `Payments::EbicsImportJob` per initialized `PaymentProviderConfig`
+- `Payments::EbicsImportJob`: Runs the import of all payments for its provided `PaymentProviderConfig`
+
+### Logging
+
+The `Payments::EbicsImportJob` takes care of logging the payment import events. All errors are being logged to Sentry and in addition there are certain events that will be logged to `HitobitoLogEntry`:
+1. The start of the payment import process
+2. The successful import of payments
+3. Errors and exceptions. If possible, it will attach the payment camt.54 XML to the `HitobitoLogEntry#attachment`.
+
 ## Exporting payments
 
 ### Rake Tasks

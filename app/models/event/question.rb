@@ -36,7 +36,7 @@ class Event::Question < ActiveRecord::Base
 
   has_many :answers, dependent: :destroy
   has_many :derived_questions, class_name: "Event::Question", foreign_key: :derived_from_question_id,
-    dependent: :destroy, inverse_of: :derived_from_question
+    dependent: :nullify, inverse_of: :derived_from_question
 
   DISCLOSURE_VALUES = %w[optional required hidden].freeze
   i18n_enum :disclosure, DISCLOSURE_VALUES, queries: true
@@ -113,15 +113,16 @@ class Event::Question < ActiveRecord::Base
     end
   end
 
-  def self.create_with_translations(question_attributes)
+  def self.seed_global(attributes)
+    questions = [attributes[:question], attributes[:translation_attributes]&.pluck(:question)].flatten.compact_blank
+    return if includes(:translations).where(event_id: nil, question: questions).exists?
+
     Event::Question.transaction do
-      Array.wrap(question_attributes).map do |attributes|
-        new(attributes.except(:translation_attributes)).tap do |question|
-          attributes[:translation_attributes]&.each do |translation_attributes|
-            question.attributes = translation_attributes.slice(:locale, *Event::Question.translated_attribute_names)
-          end
-          question.save!
+      new(attributes.except(:translation_attributes)).tap do |question|
+        attributes[:translation_attributes]&.each do |translation_attributes|
+          question.attributes = translation_attributes.slice(:locale, *Event::Question.translated_attribute_names)
         end
+        question.save!
       end
     end
   end

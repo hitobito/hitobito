@@ -6,6 +6,15 @@
 #  https://github.com/hitobito/hitobito.
 
 class Invoice::PaymentProcessor
+  class ProcessError < StandardError
+    attr_reader :error, :xml
+
+    def initialize(error, xml)
+      @error = error
+      @xml = xml
+    end
+  end
+
   attr_reader :xml
 
   ESR_FIELD = "AcctSvcrRef"
@@ -13,6 +22,8 @@ class Invoice::PaymentProcessor
   def initialize(xml)
     @xml = xml
     @data = parse(xml)
+  rescue StandardError => e
+    raise ProcessError.new(e, xml)
   end
 
   def process
@@ -21,6 +32,8 @@ class Invoice::PaymentProcessor
       invoice_lists.each(&:update_paid)
       valid_payments.count
     end
+  rescue StandardError => e
+    raise ProcessError.new(e, xml)
   end
 
   def payments

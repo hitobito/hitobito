@@ -26,7 +26,7 @@ describe Event::RegisterMailer do
   end
 
   context "body" do
-    subject { mail.body }
+    subject { mail.body.raw_source }
 
     it "renders placeholders" do
       is_expected.to match(/Top Event/)

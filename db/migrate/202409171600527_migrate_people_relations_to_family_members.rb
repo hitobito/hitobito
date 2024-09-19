@@ -40,17 +40,17 @@ class MigratePeopleRelationsToFamilyMembers < ActiveRecord::Migration[6.1]
 
       if family_member.new_record?
         family_member.save! && people_relation.destroy!
-        return family_member
+        next family_member
       else
         people_relation.destroy!
-        return nil
+        next nil
       end
     rescue FamilyKeyMismatch => e
       nil
     end
   end
 
-  def build_family_member_from_person_relation(people_relation) do
+  def build_family_member_from_person_relation(people_relation)
     FamilyMember.find_or_initialize_by(person_id: people_relation.head_id,
                                        other_id: people_relation.tail_id).tap do |family_member|
       family_member.kind = people_relation.kind
@@ -58,17 +58,17 @@ class MigratePeopleRelationsToFamilyMembers < ActiveRecord::Migration[6.1]
   end
 
   def report
-    Rails.logger.info(
-      "Before: #{@existing_people_relation_count} PeopleRelation/#{@existing_family_member_count} FamilyMember" \
+    info = [
+      "Before: #{@existing_people_relation_count} PeopleRelation/#{@existing_family_member_count} FamilyMember",
       "After: #{PeopleRelation.count} PeopleRelation/#{FamilyMember.count} FamilyMember"
-    )
+    ]
+
     suspicously_large_families = FamilyMember.group(:family_key).count.filter { _2 > 110 }.keys
     suspicously_large_families.each do |family_key|
-      members = FamilyMember.where(family_key: family_key).flat_map { [_1.person, _1.other] }.uniq
-      Rails.logger.info(
-        "Family #{family_key} has #{members.count} members: " \
-        "#{members.map(&:to_s).join(', ')}"
-      )
+      members = FamilyMember.where(family_key: family_key).flat_map { [_1.person_id, _1.other_id] }.uniq
+      info << "Family #{family_key} has #{members.count} members: #{members.map { Person.find(_1)&.to_s }.join(', ')}"
     end
+
+    info.each { Rails.logger.info(_1) }
   end
 end

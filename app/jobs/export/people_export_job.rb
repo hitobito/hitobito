@@ -11,7 +11,9 @@ class Export::PeopleExportJob < Export::ExportBaseJob
   def initialize(format, user_id, group_id, list_filter_args, options)
     super(format, user_id, options)
     @group_id = group_id
-    @list_filter_args = list_filter_args
+    @list_filter_args = list_filter_args.is_a?(ActionController::Parameters) ?
+                          list_filter_args.permit(:selection, :group_id, :format, :controller, :action)
+                          : list_filter_args
   end
 
   private

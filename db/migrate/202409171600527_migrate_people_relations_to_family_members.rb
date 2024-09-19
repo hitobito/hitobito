@@ -7,30 +7,68 @@
 
 class MigratePeopleRelationsToFamilyMembers < ActiveRecord::Migration[6.1]
   def up
-    return unless defined?(PeopleRelation)
+    return unless defined?(PeopleRelation) && PeopleRelation.any?
 
-    PeopleRelation.transaction do
-      unwind_people_relations
+    @existing_people_relation_count = PeopleRelation.count
+    @existing_family_member_count = FamilyMember.count
+
+    say_with_time('migrating PeopleRelation to FamilyMember') do
+      PeopleRelation.transaction do
+        unwind_all_people_relations
+      end
+      report
     end
   end
 
-  # prevent FamilyKeyMismatch by following the
-  def unwind_people_relations
+  # Prevent FamilyKeyMismatch by following the siblings in order.
+  # Still, this algorithm can lead to overly large families,
+  # as each new sibling is added to the existing family, even
+  # when it's only supposed to be a half-sibling (which are not supported
+  # by `FamilyMember``).
+  def unwind_all_people_relations
     stack = []
 
     while (person_id = stack.shift || PeopleRelation.first&.head_id).present?
-      stack += unwind_person_relations(person_id).map(&:other_id)
+      stack += unwind_people_relations_of_person(person_id).compact.map(&:other_id)
     end
   end
 
-  def unwind_person_relations(person_id)
+  def unwind_people_relations_of_person(person_id)
     # one direction should also cover the opposite
-    PeopleRelation.where(head_id: person_id).map do |person_relation|
-      family_member = FamilyMember.create!(person_id: person_relation.head_id,
-                                           other_id: person_relation.tail_id,
-                                           kind: person_relation.kind)
-      person_relation.destroy!
-      family_member
+    PeopleRelation.where(head_id: person_id).map do |people_relation|
+      family_member = build_family_member_from_person_relation(people_relation)
+
+      if family_member.new_record?
+        family_member.save! && people_relation.destroy!
+        return family_member
+      else
+        people_relation.destroy!
+        return nil
+      end
+    rescue FamilyKeyMismatch => e
+      nil
+    end
+  end
+
+  def build_family_member_from_person_relation(people_relation) do
+    FamilyMember.find_or_initialize_by(person_id: people_relation.head_id,
+                                       other_id: people_relation.tail_id).tap do |family_member|
+      family_member.kind = people_relation.kind
+    end
+  end
+
+  def report
+    Rails.logger.info(
+      "Before: #{@existing_people_relation_count} PeopleRelation/#{@existing_family_member_count} FamilyMember" \
+      "After: #{PeopleRelation.count} PeopleRelation/#{FamilyMember.count} FamilyMember"
+    )
+    suspicously_large_families = FamilyMember.group(:family_key).count.filter { _2 > 110 }.keys
+    suspicously_large_families.each do |family_key|
+      members = FamilyMember.where(family_key: family_key).flat_map { [_1.person, _1.other] }.uniq
+      Rails.logger.info(
+        "Family #{family_key} has #{members.count} members: " \
+        "#{members.map(&:to_s).join(', ')}"
+      )
     end
   end
 end

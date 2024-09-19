@@ -64,18 +64,21 @@ describe Event::Question do
     it "may be required" do
       subject.disclosure = :required
 
+      is_expected.to be_required
       is_expected.to be_valid
     end
 
     it "may be optional" do
       subject.disclosure = :optional
 
+      is_expected.to be_optional
       is_expected.to be_valid
     end
 
     it "may be hidden" do
       subject.disclosure = :hidden
 
+      is_expected.to be_hidden
       is_expected.to be_valid
     end
 
@@ -87,8 +90,8 @@ describe Event::Question do
     end
   end
 
-  describe "::create_with_translations" do
-    subject(:questions) { described_class.create_with_translations(question_attributes) }
+  describe "::seed_global" do
+    subject(:question) { described_class.seed_global(question_attributes) }
 
     context "with translation attributes" do
       let(:question_attributes) do
@@ -104,13 +107,22 @@ describe Event::Question do
         }
       end
 
-      it "creates the questions with attributes" do
-        is_expected.to all(be_persisted)
+      it "creates the question with given attributes" do
+        is_expected.to be_persisted
+        expect(question).to be_global
         question_attributes[:translation_attributes].each do |ta|
           Globalize.with_locale(ta[:locale]) do
-            expect(questions.first.question).to eq(ta[:question])
+            expect(question.question).to eq(ta[:question])
           end
         end
+      end
+
+      it "does not seed the same question twice" do
+        first_run = described_class.seed_global(question_attributes)
+        expect(first_run).to be_truthy
+
+        second_run = described_class.seed_global(question_attributes)
+        expect(second_run).to be_falsy
       end
     end
   end

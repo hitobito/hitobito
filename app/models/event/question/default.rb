@@ -41,7 +41,7 @@ class Event::Question::Default < Event::Question
 
   def translation_class
     # ensures globalize works with STI
-    Event::Question.globalize_translation_class
+    Event::Question::Translation
   end
 
   def validate_answer(answer)
@@ -57,10 +57,11 @@ class Event::Question::Default < Event::Question
 
   # override to handle array values submitted from checkboxes
   def before_validate_answer(answer)
-    return unless with_choices? && with_checkboxes? && answer.answer.is_a?(Array)
+    raw_answer = answer.raw_answer.presence || answer.answer
+    return unless with_choices? && with_checkboxes? && raw_answer.is_a?(Array)
 
     # have submit index + 1 and handle reset via index 0
-    index_array = answer.answer.map { |i| i.to_i - 1 }
+    index_array = raw_answer.map { |i| i.to_i - 1 }
     answer.answer = valid_index_based_values(index_array, 0...choice_items.size) || nil
   end
 

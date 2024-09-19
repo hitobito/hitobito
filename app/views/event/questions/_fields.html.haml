@@ -6,7 +6,7 @@
 = f.hidden_field(:type)
 = f.hidden_field(:derived_from_question_id)
 
-- if f.object.derived?
+- if f.object.derived? && !f.object.derived_from_question.customize_derived
   = f.labeled(:question) do
     = f.hidden_field(:question)
     %p.py-2= f.object.question

@@ -39,10 +39,6 @@ de:
       person_duplicate:
         company_name: Firmenname
         town: Stadt
-      people_relation:
-        kinds:
-          parent: Elternteil
-          child: Kind
       group/top_layer:
         shirt_sizes:
           s: S

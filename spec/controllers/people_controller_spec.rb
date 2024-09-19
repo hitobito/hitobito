@@ -8,15 +8,6 @@
 require "spec_helper"
 
 describe PeopleController do
-  before do
-    PeopleRelation.kind_opposites["parent"] = "child"
-    PeopleRelation.kind_opposites["child"] = "parent"
-  end
-
-  after do
-    PeopleRelation.kind_opposites.clear
-  end
-
   let(:top_leader) { people(:top_leader) }
   let(:group) { groups(:top_group) }
 
@@ -607,43 +598,6 @@ describe PeopleController do
           expect(tw.label).to eq "Mutter"
           expect(tw.email).to eq "John@example.com"
           expect(tw.public).to be_falsey
-        end
-
-        it "create, update and destroys people relations" do
-          p1 = Fabricate(:person)
-          p2 = Fabricate(:person)
-          p3 = Fabricate(:person)
-          r1 = person.relations_to_tails.create!(tail_id: people(:top_leader).id, kind: "child")
-          r2 = person.relations_to_tails.create!(tail_id: p1.id, kind: "parent")
-          expect do
-            put :update, params: {
-              group_id: group.id,
-              id: person.id,
-              person: {town: "testtown",
-                       relations_to_tails_attributes: {
-                         r1.id.to_s => {id: r1.id,
-                                        tail_id: p2.id,
-                                        kind: "parent"},
-                         r2.id.to_s => {id: r2.id, _destroy: true},
-                         "998" => {tail_id: " ",
-                                   kind: "child"},
-                         "999" => {tail_id: p3.id,
-                                   kind: "child"}
-                       }}
-            }
-            expect(assigns(:person)).to be_valid
-          end.not_to change { PeopleRelation.count }
-
-          relations = person.reload.relations_to_tails.order(:tail_id)
-          expect(relations.size).to eq(2)
-          a = relations.first
-          expect(a.tail_id).to eq p2.id
-          expect(a.kind).to eq "parent"
-          expect(a.opposite.kind).to eq "child"
-          b = relations.second
-          expect(b.tail_id).to eq p3.id
-          expect(b.kind).to eq "child"
-          expect(b.opposite.tail_id).to eq person.id
         end
       end
     end

@@ -89,10 +89,6 @@ en:
           attributes:
             person_id:
               taken: was already confirmed
-        people_relation:
-          attributes:
-            tail_id:
-              must_not_be_equal_to_head: to yourself is not allowed.
         qualification:
           attributes:
             qualification_kind_id:
@@ -275,9 +271,6 @@ en:
       people_filter:
         one: Filter
         other: Filters
-      people_relation:
-        one: Relation
-        other: Relations
       phone_number:
         one: Phone number
         other: Phone numbers
@@ -387,7 +380,6 @@ en:
         years: Age
         additional_information: Further information
         remember_me: Remember me
-        relations_to_tails: Relations
         phone_numbers: Phone numbers
         social_accounts: Social Media
         additional_emails: Further e-mails
@@ -575,10 +567,6 @@ en:
       oauth/application:
         cors_origins: Hosts with API access
         redirect_uri: Redirect URIs
-      people_relation:
-        head_id: Person
-        tail_id: Other person
-        kind: Type
       phone_number:
         number: Number
         label: Type
@@ -600,9 +588,6 @@ en:
         updated_at: Changed
         deleted_at: Deleted
         reactivateable: Reactivateable
-      relations_to_tails:
-        tail_id: Relation
-        kind: Type
       phone_numbers:
         number: Phone number
         label: Phone number type

@@ -219,11 +219,6 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   has_many :subscriptions, as: :subscriber, dependent: :destroy
 
-  has_many :relations_to_tails, class_name: "PeopleRelation",
-    dependent: :destroy,
-    foreign_key: :head_id,
-    inverse_of: :head
-
   has_many :family_members, -> { includes(:person, :other) },
     inverse_of: :person,
     dependent: :destroy
@@ -257,7 +252,6 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   has_many :message_recipients, dependent: :nullify
 
-  accepts_nested_attributes_for :relations_to_tails, allow_destroy: true
   FeatureGate.if("people.family_members") do
     accepts_nested_attributes_for :family_members, allow_destroy: true
   end
@@ -282,7 +276,6 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   ### CALLBACKS
 
   before_validation :override_blank_email
-  before_validation :remove_blank_relations
   after_update :schedule_duplicate_locator
   before_destroy :destroy_roles
   before_destroy :destroy_person_duplicates
@@ -525,20 +518,6 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   def override_blank_email
     self.email = nil if email.blank?
-  end
-
-  def remove_blank_relations
-    relations_to_tails.each do |e|
-      if !e.frozen? && e.tail_id.blank?
-        e.mark_for_destruction
-      end
-    end
-
-    family_members.each do |family_member|
-      if !family_member.frozen? && family_member.other_id.blank?
-        family_member.mark_for_destruction
-      end
-    end
   end
 
   def assert_has_any_name

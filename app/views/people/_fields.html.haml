@@ -8,8 +8,6 @@
 -#         Make sure not to use relative partial paths here or in any extensions
 -#         unless these partials also exist in all folders referencing this file here.
 
-- has_relations ||= PeopleRelation.any?
-
 = field_set_tag do
   = f.labeled_input_fields(*entry.decorate.used_attributes(:first_name, :last_name, :nickname))
   - entry.decorate.used?(:company_name) do
@@ -43,12 +41,6 @@
 
 
 = render_extensions :fields, locals: { f: f }
-
-- if has_relations && PeopleRelation.possible_kinds.present?
-  = field_set_tag do
-    = f.labeled_inline_fields_for :relations_to_tails,
-                                  'people_relation_fields',
-                                  entry.relations_to_tails.includes(:tail)
 
 = field_set_tag do
   = f.labeled_input_field(:additional_information, help: t('.no_sensitive_information'))

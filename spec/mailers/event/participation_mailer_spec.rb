@@ -39,7 +39,7 @@ describe Event::ParticipationMailer do
     it "renders set attributes only" do
       is_expected.to match(/Eventus/)
       is_expected.to match(/Daten/)
-      is_expected.not_to match(/Kontaktperson:<br \/>Top Leader/)
+      is_expected.not_to match(/Kontaktperson:<br>Top Leader/)
     end
 
     it "renders location if set" do

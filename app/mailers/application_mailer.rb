@@ -9,7 +9,6 @@ class ApplicationMailer < ActionMailer::Base
   include AbstractController::Rendering
   include ActionView::Helpers::TagHelper
   include ActionView::Helpers::TextHelper
-  # is there a way to only include the methods we need? tag, content_tag
 
   HEADERS_TO_SANITIZE = [:to, :cc, :bcc, :from, :sender, :return_path, :reply_to].freeze
 

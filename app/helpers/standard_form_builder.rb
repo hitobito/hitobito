@@ -218,7 +218,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
     radio_button(attr, value, html_options) +
       label(id_from_value(attr, value),
-        class: "radio#{ inline ? " inline " : " w-90 " } mt-2 form-check-label" + invalid) do
+        class: "radio#{inline ? " inline " : " w-90 "} mt-2 form-check-label" + invalid) do
         caption
       end
   end

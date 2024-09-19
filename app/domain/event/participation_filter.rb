@@ -20,7 +20,9 @@ class Event::ParticipationFilter
   def initialize(event_id, user_id, params = {})
     @event_id = event_id
     @user_id = user_id
-    @params = params
+
+    @params = params.is_a?(ActionController::Parameters) ?
+                params.permit(:filter, :selection, :group_id, :format, :controller, :action) : params
   end
 
   def list_entries

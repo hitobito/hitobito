@@ -8,9 +8,7 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static targets = ["checkbox"]
 
-  handleCheckbox() {
-    console.log("WORKS");
-    
+  handleCheckbox() {    
     const dependentCheckboxes = this.element.querySelectorAll('[data-dependent-checkbox="true"]');
 
     const isAnyChecked = Array.from(dependentCheckboxes).some(checkbox => checkbox.checked);

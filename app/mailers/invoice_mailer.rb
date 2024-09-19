@@ -65,7 +65,7 @@ class InvoiceMailer < ApplicationMailer
   def placeholder_group_address
     safe_join([group.name,
       group.address,
-      safe_join([group.zip_code, group.town].compact, " ").presence], tag.br)
+      safe_join([group.zip_code, group.town].compact, " ").presence].compact, ", ")
   end
 
   def placeholder_group_name

@@ -90,9 +90,13 @@ class ApplicationMailer < ActionMailer::Base
   end
 
   def link_to(label, url = nil)
-    url = ERB::Util.html_escape(url || label)
-    label = ERB::Util.html_escape(label)
-    "<a href=\"#{url}\">#{label}</a>".html_safe
+    # Escape the label to prevent XSS attacks in the link text.
+    safe_label = ERB::Util.html_escape(label)
+
+    # Only escape invalid URLs (like mailto links or JavaScript).
+    url ||= label
+    safe_url = url.match?(/\Ahttps?:\/\/[\S]+\z/) ? url : ERB::Util.html_escape(url)
+    "<a href=\"#{safe_url}\">#{safe_label}</a>".html_safe
   end
 
   # Converts newlines to <br> tags and escapes the value

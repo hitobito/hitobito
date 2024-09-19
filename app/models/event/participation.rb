@@ -92,6 +92,7 @@ class Event::Participation < ActiveRecord::Base
   def init_answers
     answers.tap do |list|
       event.questions.each do |q|
+        next if q.hidden?
         next if list.find { |a| a.question_id == q.id }
 
         a = q.answers.new

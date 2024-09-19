@@ -687,7 +687,6 @@ it:
         question: Domanda
         choices: Possibili risposte
         multiple_choices: Scelta multipla
-        required: Risposta obbligatoria
       admin_questions:
         question: Domanda
         choices: Possibili risposte

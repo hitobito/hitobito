@@ -24,10 +24,24 @@
 
 class Event::Question < ActiveRecord::Base
   include Globalized
+  include I18nEnums
+
+  # ensure all translated attributes including subclasses are added here
+  # as globalize will add it to the base class' translated_attribute_names
+  # anyway and break sti subclasses
   translates :question, :choices
 
   belongs_to :event
+  belongs_to :derived_from_question, class_name: "Event::Question", inverse_of: :derived_questions
+
   has_many :answers, dependent: :destroy
+  has_many :derived_questions, class_name: "Event::Question", foreign_key: :derived_from_question_id,
+    dependent: :nullify, inverse_of: :derived_from_question
+
+  DISCLOSURE_VALUES = %w[optional required hidden].freeze
+  i18n_enum :disclosure, DISCLOSURE_VALUES, queries: true
+
+  attribute :type, default: -> { Event::Question::Default.sti_name }
 
   validates_by_schema
 
@@ -35,7 +49,10 @@ class Event::Question < ActiveRecord::Base
   # so we can have different error messages
   validates :question, presence: {message: :admin_blank}, if: :admin?
   validates :question, presence: {message: :application_blank}, unless: :admin?
+  validates :disclosure, presence: true, unless: :global?
+  validates :derived_from_question_id, uniqueness: {scope: :event_id}, allow_blank: true, if: :event_id
 
+  before_create :assign_derived_attributes, if: :derived?
   after_create :add_answer_to_participations
 
   scope :global, -> { where(event_id: nil) }
@@ -46,12 +63,22 @@ class Event::Question < ActiveRecord::Base
     [
       # needed for the required attribute mark in forms
       # as the relevant validation is conditional
-      :question
+      :question, :disclosure
     ]
   end
 
-  def choice_items
-    choices.to_s.split(",").collect(&:strip)
+  def derive
+    return if event_id.present? # prevent deriving questions that are attached to an event
+
+    dup.tap { |derived_question| derived_question.derived_from_question = self }
+  end
+
+  # most attributes of global questions must not be overriden by derived questions
+  def assign_derived_attributes
+    return if derived_from_question.blank? || derived_from_question.customize_derived
+
+    keep_attributes = %w[id event_id disclosure derived_from_question_id]
+    assign_attributes(derived_from_question.attributes.except(*keep_attributes))
   end
 
   def label
@@ -60,8 +87,55 @@ class Event::Question < ActiveRecord::Base
     question&.truncate(30)
   end
 
-  def one_answer_available?
-    choice_items.compact.one?
+  def global?
+    event_id.blank?
+  end
+
+  def derived?
+    derived_from_question_id.present?
+  end
+
+  def validate_answer(_answer)
+  end
+
+  def before_validate_answer(_answer)
+  end
+
+  def derive_for_existing_events
+    existing_event_ids = Event.where.not(id: derived_questions.pluck(:event_id)).pluck(:id)
+
+    Event::Question.transaction do
+      existing_event_ids.map do |event_id|
+        derive&.tap do |derived_question|
+          derived_question.update!(event_id: event_id)
+          Event::Answer.joins(:participation).where(participation: {event_id: event_id}, question_id: id)
+            .update_all(question_id: derived_question.id)
+        end
+      end.compact
+    end
+  end
+
+  # Seed global questions and make sure the same question does not get seeded twice.
+  # In case a global question needs to be changed, make sure to create a migration
+  # accordingly and change the seed at the same time.
+  # Useful options for global questions are:
+  # - `translation_attributes`: seed all translations at creation. `[{ locale: :de, question: "...", choices: "..." }]`
+  # - `type`: STI-name of question type
+  # - `event_type`: STI-name of Event, on which the global question should be applied. `nil` will apply to all events.
+  # - `disclosure`: specifies if question is required, optional or hidden. `nil` will force choice at event creation.
+  # - `customize_derived`: `true` will allow the customization on event creation. Default is `false`.
+  def self.seed_global(attributes)
+    questions = [attributes[:question], attributes[:translation_attributes]&.pluck(:question)].flatten.compact_blank
+    return if includes(:translations).where(event_id: nil, question: questions).exists?
+
+    Event::Question.transaction do
+      new(attributes.except(:translation_attributes)).tap do |question|
+        attributes[:translation_attributes]&.each do |translation_attributes|
+          question.attributes = translation_attributes.slice(:locale, *Event::Question.translated_attribute_names)
+        end
+        question.save!
+      end
+    end
   end
 
   private
@@ -69,8 +143,14 @@ class Event::Question < ActiveRecord::Base
   def add_answer_to_participations
     return unless event
 
-    event.participations.find_each do |p|
-      p.answers << answers.new
+    event.participations.find_each do |participation|
+      existing_answer = participation.answers.find { _1.question_id == derived_from_question_id }
+
+      if existing_answer
+        existing_answer.update(question: self)
+      else
+        participation.answers << answers.new
+      end
     end
   end
 end

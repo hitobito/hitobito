@@ -29,7 +29,7 @@ class EventSeeder
       motto: Faker::Lorem.sentence,
       description: Faker::Lorem.paragraphs(number: rand(1..3)).join("\n"),
       application_opening_at: date,
-      application_closing_at: date + 60.days
+      application_closing_at: date + 300.days
     }
   end
 
@@ -46,7 +46,7 @@ class EventSeeder
     event.save(validate: false)
 
     seed_dates(event, date + 90.days)
-    seed_questions(event) if true?
+    seed_questions(event)
     seed_leaders(event)
     3.times do
       event.participant_types.each do |type|
@@ -101,13 +101,8 @@ class EventSeeder
   end
 
   def seed_questions(event)
-    Event::Question.global.limit(rand(4)).each do |q|
-      eq = Event::Question.find_or_initialize_by(
-        event_id: event.id,
-        question: q.question,
-      )
-      eq.attributes = { choices: q.choices }
-      eq.save!
+    event.init_questions.map do |question|
+      question.update(disclosure: :optional)
     end
   end
 

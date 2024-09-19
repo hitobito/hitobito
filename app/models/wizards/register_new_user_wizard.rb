@@ -22,6 +22,9 @@ class Wizards::RegisterNewUserWizard < Wizards::Base
 
   def save!
     person.save!
+    enqueue_duplicate_locator_job
+    enqueue_notification_email
+    send_password_reset_email
   end
 
   def requires_adult_consent? = group.self_registration_require_adult_consent
@@ -42,6 +45,24 @@ class Wizards::RegisterNewUserWizard < Wizards::Base
 
   def person_attributes
     new_user_form.attributes.except("adult_consent")
+  end
+
+  def enqueue_duplicate_locator_job
+    Person::DuplicateLocatorJob.new(person.id).enqueue!
+  end
+
+  def enqueue_notification_email
+    return if group.self_registration_notification_email.blank?
+
+    Groups::SelfRegistrationNotificationMailer
+      .self_registration_notification(group.self_registration_notification_email, role)
+      .deliver_later
+  end
+
+  def send_password_reset_email
+    return if person.email.blank?
+
+    Person.send_reset_password_instructions(email: person.email)
   end
 
   attr_reader :group

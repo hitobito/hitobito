@@ -5,35 +5,33 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_die_mitte.
 
-class Payments::EbicsImportJob < RecurringJob
+class Payments::EbicsImportJob < BaseJob
+  self.parameters = [:payment_provider_config_id]
   self.use_background_job_logging = true
 
-  attr_reader :payments, :errors
-
-  def initialize
-    super
-    @payments = Hash.new { |hash, key| hash[key] = [] }
-    @errors = []
+  def initialize(payment_provider_config_id)
+    super()
+    @payment_provider_config_id = payment_provider_config_id
   end
 
-  def perform_internal
-    payment_provider_configs.find_each do |provider_config|
-      Payments::EbicsImport.new(provider_config).run.each do |status, status_payments|
-        @payments[status] += status_payments
-      end
-    rescue StandardError => e
-      @errors << e
-      error(self, e, payment_provider_config: provider_config)
+  def perform
+    create_start_log
+    Payments::EbicsImport.new(payment_provider_config).run.each do |status, status_payments|
+      payments[status] += status_payments
     end
+    create_success_log
+  rescue Invoice::PaymentProcessor::ProcessError => process_error
+    errors << process_error.error
+    create_error_log(process_error.error, process_error.xml)
+    error(self, process_error.error, payment_provider_config: payment_provider_config)
+  rescue StandardError => error
+    errors << error
+    create_error_log(error)
+    error(self, error, payment_provider_config: payment_provider_config)
   end
 
   def payment_provider_configs
     PaymentProviderConfig.initialized
-  end
-
-  def next_run
-    # Sets next run to 08:00 of next day
-    Time.zone.tomorrow.at_beginning_of_day.change(hour: 8).in_time_zone
   end
 
   def log_results
@@ -46,5 +44,53 @@ class Payments::EbicsImportJob < RecurringJob
       end,
       errors: errors
     }
+  end
+
+  def create_start_log
+    create_log_entry(level: "info",
+      message: "Starting Ebics payment import")
+  end
+
+  def create_success_log
+    create_log_entry(level: "info",
+      message: "Successfully imported #{payments.values.flatten.size} payments",
+      payload: log_results)
+  end
+
+  def create_error_log(error, xml = nil)
+    create_log_entry(level: "error",
+      message: "Could not import payment from Ebics",
+      payload: {error: error.detailed_message},
+      xml: xml)
+  end
+
+  def create_log_entry(level: "", message: "", payload: nil, xml: nil)
+    log = HitobitoLogEntry.create!(
+      level: level,
+      subject: payment_provider_config,
+      category: "ebics",
+      message: message,
+      payload: payload
+    )
+
+    if xml.present?
+      log.attachment.attach({io: StringIO.new(xml),
+                              content_type: "application/xml",
+                              filename: "log_attachment_#{log.id}"})
+    end
+
+    log
+  end
+
+  def payment_provider_config
+    @payment_provider_config ||= PaymentProviderConfig.find(@payment_provider_config_id)
+  end
+
+  def payments
+    @payments ||= Hash.new { |hash, key| hash[key] = [] }
+  end
+
+  def errors
+    @errors ||= []
   end
 end

@@ -10,6 +10,7 @@ require "spec_helper"
 
 describe PaymentProviderConfig do
   let(:postfinance_config) { payment_provider_configs(:postfinance) }
+  let(:ubs_config) { payment_provider_configs(:ubs) }
 
   it "encrypts keys" do
     postfinance_config.keys = "bla,bli,blup"
@@ -37,5 +38,20 @@ describe PaymentProviderConfig do
     payment_provider_config = described_class.new
 
     expect(payment_provider_config.status).to eq("draft")
+  end
+
+  context "after_delete" do
+    it "deletes all associated ebics import jobs" do
+      Payments::EbicsImportJob.new(postfinance_config.id).enqueue!(run_at: 10.seconds.from_now)
+      Payments::EbicsImportJob.new(ubs_config.id).enqueue!(run_at: 10.seconds.from_now)
+
+      expect do
+        postfinance_config.destroy!
+      end.to change { Delayed::Job.count }.by(-1)
+
+      query = "handler LIKE '%Payments::EbicsImportJob%payment_provider_config_id: ?%'"
+      expect(Delayed::Job.where(query, postfinance_config.id)).to be_empty
+      expect(Delayed::Job.where(query, ubs_config.id)).to be_present
+    end
   end
 end

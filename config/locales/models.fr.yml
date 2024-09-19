@@ -728,7 +728,6 @@ fr:
         question: Question
         choices: Réponses possibles
         multiple_choices: Sélection multiple
-        required: Réponse obligatoire
       admin_questions:
         question: Question
         choices: Réponses possibles

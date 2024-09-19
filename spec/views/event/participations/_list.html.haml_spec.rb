@@ -37,7 +37,7 @@ describe "event/participations/_list.html.haml" do
   it "marks participations where required questions are unanswered" do
     login_as(people(:top_leader))
 
-    event.questions.create!(question: "dummy", required: true)
+    event.questions.create!(question: "dummy", disclosure: :required)
     participation.reload
     expect(dom).to have_text "Pflichtangaben fehlen"
   end

@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class DocumentationReader
-  GITHUB_DEV_DOC_BASE_URL = "https://github.com/hitobito/hitobito/tree/master/doc/development"
+  GITHUB_DEV_DOC_BASE_URL = "https://github.com/hitobito/hitobito/tree/master/doc/developer"
   DOCUMENTATION_ROOT = Rails.root.join("doc").to_s
 
   class << self

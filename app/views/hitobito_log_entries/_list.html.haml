@@ -17,6 +17,9 @@
 
   = list_table do |t|
     - t.attrs *hitobito_log_entry_table_attrs
+    - t.attr(:attachment) do |e|
+      - if e.attachment.attached?
+        = link_to(upload_name(e, :attachment), upload_url(e, :attachment), target: :blank)
 
 
   = paginate entries

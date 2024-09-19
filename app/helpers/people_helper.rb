@@ -9,23 +9,11 @@ module PeopleHelper
   end
 
   def format_person_login_status(person)
-    format_login_icons(person.login_status)
+    person.login_status_icon
   end
 
-  def format_login_icons(status)
-    icons = {
-      no_login: "user-slash",
-      password_email_sent: "user-clock",
-      login: "user-check",
-      two_factors: "user-shield",
-      status_off: "minus-circle",
-      blocked: "user-lock",
-      not_blocked: "lock-open"
-    }
-    icon(
-      icons.fetch(status),
-      title: I18n.t("people.login_status.#{status}")
-    )
+  def format_login_icons(login_status)
+    person.login_status_icon(login_status)
   end
 
   def dropdown_people_export(details = false, emails = true, labels = true, households = true) # rubocop:disable Metrics/ParameterLists

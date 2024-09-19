@@ -109,14 +109,6 @@ class Event::Course < Event
     @start_date ||= dates.first.start_at.to_date
   end
 
-  def init_questions
-    if application_questions.blank?
-      Event::Question.application.global.each do |q|
-        application_questions << q.dup
-      end
-    end
-  end
-
   def minimum_age
     kind&.minimum_age
   end

@@ -8,6 +8,8 @@
 class ApplicationMailer < ActionMailer::Base
   HEADERS_TO_SANITIZE = [:to, :cc, :bcc, :from, :sender, :return_path, :reply_to].freeze
 
+  helper :webpack
+
   def mail(headers = {}, &block)
     HEADERS_TO_SANITIZE.each do |h|
       if headers.key?(h) && headers[h].present?
@@ -24,13 +26,12 @@ class ApplicationMailer < ActionMailer::Base
     custom_content_mail(recipients, content_key, values) if recipients.present?
   end
 
-  # TODO: deprecate/remove values-parameter and call values_for_placeholders instead
   def custom_content_mail(recipients, content_key, values, headers = {})
     content = CustomContent.get(content_key)
     headers[:to] = use_mailing_emails(recipients)
     headers[:subject] ||= content.subject_with_values(values)
     mail(headers) do |format|
-      format.html { render plain: content.body_with_values(values) }
+      format.html { render html: content.body_with_values(values), layout: true }
     end
   end
 

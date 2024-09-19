@@ -16,7 +16,7 @@ gem "airbrake"
 gem "awesome_nested_set"
 gem "aws-sdk-s3", require: false
 gem "bcrypt"
-gem "bleib", "~> 0.0.10"
+gem "bleib", "~> 0.0.14"
 gem "bootsnap", require: false
 gem "cancancan", "< 3.2.0"
 gem "caxlsx"

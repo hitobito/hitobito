@@ -32,6 +32,8 @@ class HitobitoLogEntry < ApplicationRecord
   enum level: {"debug" => 0, "info" => 1, "warn" => 2, "error" => 3},
     _prefix: true
 
+  has_one_attached :attachment
+
   validates_by_schema
   validates :category, presence: true, inclusion: {in: ->(_) { categories }}
 

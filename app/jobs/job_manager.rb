@@ -72,7 +72,7 @@ class JobManager
       DownloadCleanerJob,
       Event::ParticipationCleanupJob,
       Event::ParticipationCleanupAnswersJob,
-      Payments::EbicsImportJob,
+      Payments::EbicsImportScheduleJob,
       People::DuplicateLocatorJob,
       People::CleanupJob,
       People::CreateRolesJob,

@@ -70,6 +70,12 @@ class StepsComponent::ContentComponent < StepsComponent::IteratingComponent
     link_to(t("global.button.back"), "#", class: "link cancel mt-2 pt-1", data: data)
   end
 
+  def cancel_link_back_to_person
+    if @form.object.try(:person).try(:persisted?)
+      link_to(t("global.button.cancel"), person_path(@form.object.person), class: "link cancel mt-2 pt-1")
+    end
+  end
+
   private
 
   def markup
@@ -92,12 +98,6 @@ class StepsComponent::ContentComponent < StepsComponent::IteratingComponent
     content_tag(:div, class: "btn-group") do
       helpers.add_css_class(options, "btn btn-sm btn-primary mt-2")
       @form.button(label, options.merge(type: type, data: {disable_with: label}))
-    end
-  end
-
-  def cancel_link_back_to_person
-    if @form.object.try(:person).try(:persisted?)
-      link_to(t("global.button.cancel"), person_path(@form.object.person), class: "link cancel mt-2 pt-1")
     end
   end
 

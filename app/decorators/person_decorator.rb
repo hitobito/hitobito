@@ -6,6 +6,16 @@
 class PersonDecorator < ApplicationDecorator
   decorates :person
 
+  class_attribute :login_status_icons, default: {
+    no_login: "user-slash",
+    password_email_sent: "user-clock",
+    login: "user-check",
+    two_factors: "user-shield",
+    status_off: "minus-circle",
+    blocked: "user-lock",
+    not_blocked: "lock-open"
+  }
+
   include ContactableDecorator
 
   def as_typeahead
@@ -152,7 +162,18 @@ class PersonDecorator < ApplicationDecorator
     object.roles.includes(:group).collect(&:decorate).collect(&:for_oauth)
   end
 
+  def login_status_icon(login_status = object.login_status)
+    h.icon(
+      login_status_icons.fetch(login_status),
+      login_status_icon_options(login_status)
+    )
+  end
+
   private
+
+  def login_status_icon_options(login_status)
+    {title: I18n.t("people.login_status.#{login_status}")}
+  end
 
   def event_queries
     Person::EventQueries.new(object)

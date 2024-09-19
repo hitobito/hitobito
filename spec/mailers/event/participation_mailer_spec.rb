@@ -68,7 +68,7 @@ describe Event::ParticipationMailer do
     it "renders application questions if present" do
       question = event_questions(:top_ov)
       event.questions << event_questions(:top_ov)
-      question2 = event.questions.create!(question: "foo", admin: true)
+      question2 = event.questions.create!(question: "foo", disclosure: :optional, admin: true)
       participation.answers.detect { |a| a.question_id == question.id }.update!(answer: "GA")
       participation.answers.detect { |a| a.question_id == question2.id }.update!(answer: "Bar")
 

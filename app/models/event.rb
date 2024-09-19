@@ -174,6 +174,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   validate :assert_application_closing_is_after_opening
   validate :assert_required_contact_attrs_valid
   validate :assert_hidden_contact_attrs_valid
+  validates_associated :application_questions, :admin_questions
 
   ### CALLBACKS
 
@@ -367,7 +368,15 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   end
 
   def init_questions
-    # do nothing by default
+    application_questions << Question.global
+      .where(event_type: [self.class.sti_name, nil])
+      .where.not(id: application_questions.map(&:derived_from_question_id))
+      .application.map(&:derive)
+
+    admin_questions << Question.global
+      .where(event_type: [self.class.sti_name, nil])
+      .where.not(id: admin_questions.map(&:derived_from_question_id))
+      .admin.map(&:derive)
   end
 
   def course?

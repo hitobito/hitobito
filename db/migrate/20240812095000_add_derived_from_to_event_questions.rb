@@ -1,5 +1,6 @@
 class AddDerivedFromToEventQuestions < ActiveRecord::Migration[6.1]
   def change
+    Event::Question.reset_column_information
     add_reference :event_questions, :derived_from_question, null: true,
                   foreign_key: false, type: :integer
     reversible do |direction|

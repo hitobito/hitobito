@@ -23,8 +23,6 @@
         - FeatureGate.if(:self_registration_reason) do
           = render_present_attrs(entry, :self_registration_reason_text)
 
-        = render 'people_relations'
-
       - if entry.additional_information?
         %h2= Person.human_attribute_name(:additional_information)
         %p.multiline= safe_auto_link(entry.additional_information)

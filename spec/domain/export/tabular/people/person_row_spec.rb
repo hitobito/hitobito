@@ -6,15 +6,6 @@
 require "spec_helper"
 
 describe Export::Tabular::People::PersonRow do
-  before do
-    PeopleRelation.kind_opposites["parent"] = "child"
-    PeopleRelation.kind_opposites["child"] = "parent"
-  end
-
-  after do
-    PeopleRelation.kind_opposites.clear
-  end
-
   let(:person) { people(:top_leader) }
   let(:row) { Export::Tabular::People::PersonRow.new(person) }
 
@@ -35,12 +26,6 @@ describe Export::Tabular::People::PersonRow do
     before { person.social_accounts << SocialAccount.new(label: "foo oder bar!", name: "asdf") }
 
     it { expect(row.fetch(:"social_account_foo oder bar!")).to eq "asdf" }
-  end
-
-  context "people relations" do
-    before { person.relations_to_tails << PeopleRelation.new(tail_id: people(:bottom_member).id, kind: "parent") }
-
-    it { expect(row.fetch(:people_relation_parent)).to eq "Bottom Member" }
   end
 
   context "country" do

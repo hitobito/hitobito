@@ -21,15 +21,12 @@ describe Export::Tabular::People::PeopleFull do
     person.phone_numbers << PhoneNumber.new(label: "vater", number: 123, public: false)
     person.additional_emails << AdditionalEmail.new(label: "vater", email: "vater@example.com",
       public: false)
-    person.relations_to_tails << PeopleRelation.new(tail_id: people(:bottom_member).id,
-      kind: "parent")
     person.save
     I18n.locale = lang
   end
 
   after do
     I18n.locale = I18n.default_locale
-    PeopleRelation.kind_opposites.clear
   end
 
   context "german" do
@@ -42,8 +39,7 @@ describe Export::Tabular::People::PeopleFull do
         "Geschlecht", "Geburtstag", "Zusätzliche Angaben", "Sprache",
         "Strasse", "Hausnummer", "zusätzliche Adresszeile", "Postfach",
         "Hauptebene", "Rollen",
-        "Tags", "Weitere E-Mail Vater", "Telefonnummer Vater", "Social Media Adresse Skype",
-        "Elternteil"
+        "Tags", "Weitere E-Mail Vater", "Telefonnummer Vater", "Social Media Adresse Skype"
       ]
 
       expect(csv.headers).to match_array expected
@@ -57,7 +53,6 @@ describe Export::Tabular::People::PeopleFull do
       its(["Telefonnummer Vater"]) { should eq "123" }
       its(["Weitere E-Mail Vater"]) { should eq "vater@example.com" }
       its(["Social Media Adresse Skype"]) { should eq "foobar" }
-      its(["Elternteil"]) { should eq "Bottom Member" }
       its(["Geschlecht"]) { should eq "männlich" }
       its(["Hauptebene"]) { should eq "Top" }
     end
@@ -90,8 +85,7 @@ describe Export::Tabular::People::PeopleFull do
         "Tags",
         "Adresse e-mail supplémentaire Père",
         "Numéro de téléphone Père",
-        "Adresse d'un média social Skype",
-        "Parent"
+        "Adresse d'un média social Skype"
       ]
       expect(csv.headers).to match_array headers
       expect(csv.headers).to eq headers
@@ -104,7 +98,6 @@ describe Export::Tabular::People::PeopleFull do
       its(["Numéro de téléphone Père"]) { should eq "123" }
       its(["Adresse e-mail supplémentaire Père"]) { should eq "vater@example.com" }
       its(["Adresse d'un média social Skype"]) { should eq "foobar" }
-      its(["Parent"]) { should eq "Bottom Member" }
       its(["Sexe"]) { should eq "masculin" }
     end
   end

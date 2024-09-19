@@ -5,7 +5,7 @@ class RemoveRedundantGlobalQuestionsInStaging < ActiveRecord::Migration[6.1]
     redundant_global_questions.each do |redunant_question, original_question|
       # Any derived questions are duplicates aswell, so let's destroy them
       Event::Question.where(derived_from_question_id: redunant_question.id)
-                     .destroy_all!
+                     .destroy_all
 
       redunant_question.destroy!
     end

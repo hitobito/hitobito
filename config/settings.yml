@@ -39,7 +39,7 @@ currency:
   unit: CHF
 
 email:
-  # Sender for all emails sent by the application. 
+  # Sender for all emails sent by the application.
   # Overwrite in different languages using the settings.email.sender translation key.
   sender: <%= "hitobito <noreply@#{mail_domain}>" %>
 
@@ -231,6 +231,7 @@ worker_heartbeats:
 oidc:
   issuer: <%= protocol + "://" + hostname %>
   signing_key: <%= ENV['JWT_SIGNING_KEY'].to_s.lines %>
+  use_refresh_token: false
 
 table_displays: true
 

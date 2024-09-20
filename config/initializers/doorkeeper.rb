@@ -66,7 +66,7 @@ Doorkeeper.configure do
   # Defaults to ActionController::Base.
   # See https://github.com/doorkeeper-gem/doorkeeper#custom-base-controller
   #
-  base_controller 'ApplicationController'
+  base_controller "ApplicationController"
 
   # Reuse access token for the same resource owner within an application (disabled by default).
   #
@@ -86,7 +86,7 @@ Doorkeeper.configure do
   # `grant_type` - the grant type of the request (see Doorkeeper::OAuth)
   # `scopes` - the requested scopes (see Doorkeeper::OAuth::Scopes)
   #
-  # use_refresh_token
+  use_refresh_token if Settings.oidc.use_refresh_token
 
   # Forbids creating/updating applications with arbitrary scopes that are
   # not in configuration, i.e. `default_scopes` or `optional_scopes`.
@@ -94,7 +94,7 @@ Doorkeeper.configure do
   #
   default_scopes :email
   optional_scopes :name, :with_roles, :openid, :api,
-                  :events, :groups, :people, :invoices, :mailing_lists
+    :events, :groups, :people, :invoices, :mailing_lists
 
   enforce_configured_scopes
 
@@ -148,9 +148,9 @@ Doorkeeper.configure do
   #
   # force_ssl_in_redirect_uri { |uri| uri.host != 'localhost' }
   force_ssl_in_redirect_uri do |uri|
-    development_env        = Rails.env.development?
-    integration_stage      = (ENV.fetch('RAILS_STAGE', 'production') == 'integration')
-    request_from_localhost = (uri.host == 'localhost')
+    development_env = Rails.env.development?
+    integration_stage = (ENV.fetch("RAILS_STAGE", "production") == "integration")
+    request_from_localhost = (uri.host == "localhost")
 
     if (development_env or integration_stage) and request_from_localhost
       false # do not force SSL in redirect_uri
@@ -197,7 +197,7 @@ Doorkeeper.configure do
   #   http://tools.ietf.org/html/rfc6819#section-4.4.3
   #
   # grant_flows %w[authorization_code client_credentials]
-  grant_flows %w(authorization_code implicit_oidc)
+  grant_flows %w[authorization_code implicit_oidc]
 
   # Hook into the strategies' request & response life-cycle in case your
   # application needs advanced customization or logging:
@@ -235,16 +235,15 @@ Doorkeeper.configure do
   # WWW-Authenticate Realm (default "Doorkeeper").
   #
   # realm "Doorkeeper"
-
 end
 
 Rails.application.config.to_prepare do
   if Doorkeeper::AuthorizationsController.respond_to? :layout
     # Only Authorization endpoint
-    Doorkeeper::AuthorizationsController.layout 'oauth'
+    Doorkeeper::AuthorizationsController.layout "oauth"
   end
 
-  FeatureGate.if('groups.nextcloud') do
+  FeatureGate.if("groups.nextcloud") do
     Doorkeeper.configuration.scopes.add(:nextcloud)
     Doorkeeper.configuration.optional_scopes.add(:nextcloud)
   end
@@ -252,11 +251,11 @@ end
 
 # https://github.com/rails/rails/commit/9def05385f1cfa41924bb93daa187615e88c95b9
 [[Doorkeeper::Application, :uid],
- [Doorkeeper::AccessToken, :token],
- [Doorkeeper::AccessGrant, :token]].each do |clazz, attribute|
-   clazz._validators[attribute].each do |v|
-     next unless v.is_a?(ActiveRecord::Validations::UniquenessValidator)
+  [Doorkeeper::AccessToken, :token],
+  [Doorkeeper::AccessGrant, :token]].each do |clazz, attribute|
+  clazz._validators[attribute].each do |v|
+    next unless v.is_a?(ActiveRecord::Validations::UniquenessValidator)
 
-     v.instance_variable_set('@options', v.options.merge(case_sensitive: false).freeze)
-   end
- end
+    v.instance_variable_set(:@options, v.options.merge(case_sensitive: false).freeze)
+  end
+end

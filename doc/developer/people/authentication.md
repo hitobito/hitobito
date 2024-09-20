@@ -19,3 +19,7 @@ module SacCas::Person
   end
 end
 ```
+
+## Disabling of second factor (2fa) check for development
+
+For local development the 2fa check can be disabled by setting `auth.skip_2fa = true` in `config/settings.local.yml`.

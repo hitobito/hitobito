@@ -50,7 +50,7 @@ class Devise::Hitobito::SessionsController < Devise::SessionsController
   private
 
   def second_factor_required?(resource)
-    resource.is_a?(Person) && resource.second_factor_required?
+    !Settings.auth.skip_2fa && resource.is_a?(Person) && resource.second_factor_required?
   end
 
   def devise_layout

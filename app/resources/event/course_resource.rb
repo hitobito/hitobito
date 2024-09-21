@@ -23,10 +23,4 @@ class Event::CourseResource < EventResource
   def base_scope
     Event::Course.all.accessible_by(index_ability).includes(:groups, :translations).list
   end
-
-  def resolve(scope)
-    scope.to_a.tap do |events|
-      events.each { |event| event.singleton_class.attr_accessor :leaders }
-    end
-  end
 end

@@ -68,4 +68,10 @@ class EventResource < ApplicationResource
   def index_ability
     JsonApi::EventAbility.new(current_ability)
   end
+
+  def resolve(scope)
+    scope.to_a.tap do |events|
+      events.select { |event| event.type == Event::Course.sti_name }.each { |event| event.singleton_class.attr_accessor :leaders }
+    end
+  end
 end

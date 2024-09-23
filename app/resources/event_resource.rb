@@ -39,6 +39,7 @@ class EventResource < ApplicationResource
 
   belongs_to :contact, resource: PersonResource, writable: false
   has_many :dates, resource: Event::DateResource, writable: false
+  has_many :participations, resource: Event::ParticipationResource, writable: false
 
   filter :type, only: [:eq] do
     eq do |scope, types|

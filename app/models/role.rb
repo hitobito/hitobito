@@ -132,7 +132,7 @@ class Role < ActiveRecord::Base
   default_scope { active_scope }
   scope :with_inactive, -> { unscope(where: [:start_on, :end_on]) }
   scope :active, ->(reference_date = Date.current) { with_inactive.active_scope(reference_date) }
-  scope :inactive, -> {
+  scope :ended_or_archived, -> {
     with_inactive.where(
       "archived_at <= :now OR end_on < :today",
       now: Time.current.utc,

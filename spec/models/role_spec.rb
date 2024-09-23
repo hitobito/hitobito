@@ -129,32 +129,32 @@ describe Role do
       it "excludes roles without end_on and archived_at" do
         expect(role.end_on).to be_nil
         expect(role.archived_at).to be_nil
-        expect(Role.inactive).not_to include role
+        expect(Role.ended_or_archived).not_to include role
       end
 
       it "excludes roles with end_on is in the future" do
         role.update!(end_on: Date.current.tomorrow)
-        expect(Role.inactive).not_to include role
+        expect(Role.ended_or_archived).not_to include role
       end
 
       it "excludes roles with end_on is today" do
         role.update!(end_on: Date.current)
-        expect(Role.inactive).not_to include role
+        expect(Role.ended_or_archived).not_to include role
       end
 
       it "excludes roles with archived_at is in the future" do
         role.update!(archived_at: 10.minutes.from_now)
-        expect(Role.inactive).not_to include role
+        expect(Role.ended_or_archived).not_to include role
       end
 
       it "includes roles with end_on is in the past" do
         role.update!(end_on: Date.current.yesterday)
-        expect(Role.inactive).to include role
+        expect(Role.ended_or_archived).to include role
       end
 
       it "includes roles with archived_at is in the past" do
         role.update!(archived_at: 10.minutes.ago)
-        expect(Role.inactive).to include role
+        expect(Role.ended_or_archived).to include role
       end
     end
 

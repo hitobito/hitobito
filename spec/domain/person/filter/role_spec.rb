@@ -85,8 +85,20 @@ describe Person::Filter::Role do
           expect(entries).to include(@tg_member)
         end
 
-        it "includes member with only expired roles" do
+        it "excludes member with only expired roles" do
           @tg_member.roles.update_all(end_on: 1.day.ago)
+          expect(entries).not_to include(@tg_member)
+        end
+      end
+
+      context "future roles" do
+        it "includes member with active and future role" do
+          @tg_member.roles.first.update(start_on: 1.day.from_now)
+          expect(entries).to include(@tg_member)
+        end
+
+        it "excludes member with only future roles" do
+          @tg_member.roles.update_all(start_on: 1.day.from_now)
           expect(entries).not_to include(@tg_member)
         end
       end

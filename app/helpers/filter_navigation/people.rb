@@ -60,14 +60,19 @@ module FilterNavigation
 
     def init_kind_items
       @kind_filter_names.each do |kind, name|
-        types = group.role_types.select { |t| t.kind == kind }
-        next unless visible_role_types?(types)
+        role_types = filter_role_types(kind)
+        next unless visible_role_types?(role_types)
 
-        count = group.people.where(roles: {type: types.collect(&:sti_name)}).distinct.count
-        path = (kind == :member) ? path() : fixed_types_path(name, types)
-
-        item(name, path, count)
+        count = count_roles(role_types, future: kind == :future)
+        path = kind_path(kind, name, role_types)
+        item(name, path, count) unless skip_kind?(kind, count)
       end
+    end
+
+    def filter_role_types(kind)
+      return group.role_types if kind == :future
+
+      group.role_types.select { |t| t.kind == kind }
     end
 
     def visible_role_types?(role_types)
@@ -175,6 +180,19 @@ module FilterNavigation
         filters: {role: {role_type_ids: type_ids}}))
     end
 
+    def kind_path(kind, name, role_types)
+      case kind
+      when :member
+        path
+      when :future
+        start_at = Date.current.tomorrow
+        finish_at = "9999-12-31"
+        path(name:, filters: {role: {start_at:, finish_at:, kind: :created}})
+      else
+        fixed_types_path(name, role_types)
+      end
+    end
+
     def path(options = {})
       template.group_people_path(group, options)
     end
@@ -203,6 +221,17 @@ module FilterNavigation
         filter.chain.filters.first.args[:role_type_ids].empty? &&
         filter.chain.filters.first.args[:role_types].empty? &&
         true?(filter.chain.filters.first.args[:include_archived])
+    end
+
+    def skip_kind?(kind, count)
+      true if kind == :future && count.zero?
+    end
+
+    def count_roles(role_types, kind)
+      roles_scope = Role.where(group_id: group.id, type: role_types.collect(&:sti_name))
+      roles_scope = roles_scope.future if kind == :future
+      people_scope = Person.joins("INNER JOIN roles ON people.id = roles.person_id")
+      people_scope.merge(roles_scope).distinct.count
     end
   end
 end

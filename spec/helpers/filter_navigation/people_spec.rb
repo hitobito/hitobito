@@ -46,6 +46,11 @@ describe "FilterNavigation::People" do
         expect(subject.main_items.last).to match(/Externe \(0\)/)
       end
 
+      it "contains future item with count if future roles exist" do
+        Fabricate(group.role_types.first.sti_name, person: people(:top_leader), group: group, start_on: Date.tomorrow)
+        expect(subject.main_items.last).to match(/Zukünftige \(1\)/)
+      end
+
       it "entire layer contains only layer role types" do
         subject.dropdown.items.first.url =~ /#{[Role::External,
           Group::GlobalGroup::Leader,

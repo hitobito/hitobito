@@ -65,8 +65,10 @@ class MigratePeopleRelationsToFamilyMembers < ActiveRecord::Migration[6.1]
 
     suspicously_large_families = FamilyMember.group(:family_key).count.filter { _2 > 110 }.keys
     suspicously_large_families.each do |family_key|
-      members = FamilyMember.where(family_key: family_key).flat_map { [_1.person_id, _1.other_id] }.uniq
-      info << "Family #{family_key} has #{members.count} members: #{members.map { Person.find(_1)&.to_s }.join(', ')}"
+      members = FamilyMember.where(family_key: family_key).flat_map { [_1.person_id, _1.other_id] }
+                                                          .uniq.map { Person.find(_1) }
+      member_list = members.map { |person| "##{person.id} #{person.to_s}" }
+      info << "Family #{family_key} has #{members.count} members: #{member_list.join(', ')}"
     end
 
     info.each { Rails.logger.info(_1) }

@@ -88,7 +88,7 @@ class Event::Question < ActiveRecord::Base
   end
 
   def global?
-    event_id.blank?
+    event.blank?
   end
 
   def derived?

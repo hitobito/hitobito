@@ -17,6 +17,11 @@ class Roles::Termination
   validate :validate_terminate_on
   validate :terminatable
 
+  def initialize(validate_terminate_on: true, **attrs)
+    @validate_terminate_on = validate_terminate_on
+    super(**attrs)
+  end
+
   def call
     return false unless valid?
 
@@ -42,7 +47,7 @@ class Roles::Termination
   private
 
   def validate_terminate_on
-    return if terminate_on.nil?
+    return unless @validate_terminate_on && terminate_on.present?
 
     if terminate_on < minimum_termination_date
       errors.add(:terminate_on, :too_early, date: I18n.l(minimum_termination_date))

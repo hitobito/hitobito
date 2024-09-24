@@ -31,7 +31,7 @@ class ApplicationMailer < ActionMailer::Base
   def custom_content_mail(recipients, content_key, values, headers = {})
     content = CustomContent.get(content_key)
     headers[:to] = use_mailing_emails(recipients)
-    headers[:subject] ||= CGI.unescapeHTML(content.subject_with_values(values))
+    headers[:subject] ||= unescape_html(content.subject_with_values(values))
     mail(headers) do |format|
       format.html { render html: content.body_with_values(values), layout: true }
     end
@@ -96,7 +96,7 @@ class ApplicationMailer < ActionMailer::Base
     safe_join(lines, separator)
   end
 
-  def escape_html(html)
-    ERB::Util.html_escape(html)
-  end
+  def escape_html(html) = ERB::Util.html_escape(html)
+
+  def unescape_html(html) = CGI.unescapeHTML(html)
 end

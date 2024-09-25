@@ -56,7 +56,6 @@ gem "mail" # add mail here to have it loaded
 gem "matrix" # required but removed from stlib since ruby 3.2
 gem "mime-types"
 gem "mini_magick"
-gem "mysql2"
 gem "pg"
 gem "pg_search"
 gem "active_record_distinct_on"
@@ -94,7 +93,6 @@ gem "sorted_set"
 gem "sprockets", "~> 3.7.2" # pinned to older version to avoid having an empty manifest.js
 gem "sqlite3", "~> 1.7.2" # required for asset generation
 gem "strip_attributes" # strip whitespace of attributes
-gem "thinking-sphinx"
 gem "truemail"
 gem "turbo-rails"
 gem "validates_by_schema", "~> 0.3.0" # 0.5.1 does not work well with wagons / wagon-migrations

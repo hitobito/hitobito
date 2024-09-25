@@ -25,7 +25,6 @@ ADD ./root /
 
 RUN \
     yum localinstall -y \
-      "https://github.com/sphinxsearch/sphinx/releases/download/2.2.11-release/sphinx-2.2.11-1.rhel7.x86_64.rpm" && \
     scl enable rh-ruby27 /opt/bin/install-nodejs && \
     curl -L https://github.com/transifex/cli/releases/download/v1.6.4/tx-linux-amd64.tar.gz | tar xz -C /usr/bin && \
     wget https://kojipkgs.fedoraproject.org//packages/sqlite/3.8.11/1.fc21/x86_64/sqlite-devel-3.8.11-1.fc21.x86_64.rpm &&  \

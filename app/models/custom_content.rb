@@ -57,22 +57,29 @@ class CustomContent < ActiveRecord::Base
   end
 
   def subject_with_values(placeholders = {})
-    replace_placeholders(subject.dup, placeholders)
+    replace_placeholders(subject.dup.to_s.html_safe, placeholders)
   end
 
   def body_with_values(placeholders = {})
-    replace_placeholders(body.to_s, placeholders).html_safe
+    # Consider the custom content as html safe before replacing the placeholders
+    replace_placeholders(body.to_s.html_safe, placeholders)
   end
 
   def replace_placeholders(string, placeholders)
     check_placeholders_exist(placeholders)
+    # Make sure the string is safe
+    string = ERB::Util.html_escape(string)
 
     placeholders_list.each_with_object(string) do |placeholder, output|
       token = placeholder_token(placeholder)
       if output.include?(token)
-        output.gsub!(token, placeholders.fetch(placeholder).to_s)
+        # We will escape the values from the placeholder unless the placeholder is html safe
+        placeholder_value = ERB::Util.html_escape(placeholders.fetch(placeholder).to_s)
+        output.gsub!(token, placeholder_value)
       end
     end
+    # Gsub! turns the output into an unsafe string, so we need to mark it safe again
+    string.html_safe
   end
 
   private

@@ -271,6 +271,9 @@ of the corresponding model:
                                                    social_accounts: [:name], additional_emails: [:email]}
 ]
 
+Dont forget to include de PgSearchable module too:
+``include PgSearchable``
+
 ### Output attributes in the API
 
 In order to provide the additional attributes in the API (the JSON-file of the object), the serializer for the people must be extended in `app/serializers/<wagon_namespace>/person_serializer.rb`:

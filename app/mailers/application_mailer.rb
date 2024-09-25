@@ -83,18 +83,11 @@ class ApplicationMailer < ActionMailer::Base
     "<a href=\"#{safe_url}\">#{safe_label}</a>".html_safe
   end
 
-  def br_tag
-    "<br/>".html_safe
-  end
+  def br_tag = "<br/>".html_safe
 
-  # Converts newlines to <br> tags and escapes the value
-  def convert_newlines_to_breaks(text)
-    join_lines(text.split("\n"))
-  end
+  def join_lines(lines, separator = br_tag) = safe_join(lines, separator)
 
-  def join_lines(lines, separator = br_tag)
-    safe_join(lines, separator)
-  end
+  def convert_newlines_to_breaks(text) = join_lines(text.split("\n"))
 
   def escape_html(html) = ERB::Util.html_escape(html)
 

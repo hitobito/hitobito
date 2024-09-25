@@ -68,7 +68,7 @@ class Event::Question < ActiveRecord::Base
   end
 
   def derive
-    return if event_id.present? # prevent deriving questions that are attached to an event
+    return unless global? # prevent deriving questions that are attached to an event
 
     dup.tap { |derived_question| derived_question.derived_from_question = self }
   end

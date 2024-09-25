@@ -30,6 +30,15 @@ describe Event::Question do
         event.questions.create!(question: "Test?", disclosure: :required)
       end.to change { Event::Answer.count }.by(1)
     end
+
+    describe "#global?" do
+      it "returns false if question belongs to an event, even if event is not yet persisted (event_id = nil)" do
+        expect(global_question.global?).to be_truthy
+        event_question = global_question.derive
+        event_question.event = event.dup
+        expect(event_question.global?).not_to be_truthy
+      end
+    end
   end
 
   context "has validations" do

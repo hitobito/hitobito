@@ -103,7 +103,7 @@ describe EventsController, js: true do
     end
 
     it "fails with empty required questions" do
-      sleep 0.5 # avoid wizard race condition
+      sleep 1 # avoid wizard race condition
       click_signup
 
       is_expected.to have_content "Antwort muss ausgefüllt werden"

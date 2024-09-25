@@ -179,4 +179,50 @@ describe Event::ParticipationMailer do
 
     it { is_expected.to match(/Hallo Top/) }
   end
+
+  describe "#event_details" do
+    let(:event) { Fabricate(:event, name: "Test Event", description: "Event Description", location: "Event Location") }
+
+    subject { mail.parts.first.body }
+
+    it "includes the event name" do
+      expect(subject).to include("Test Event")
+    end
+
+    it "includes the event description" do
+      expect(subject).to include("Event Description")
+    end
+
+    it "includes the event location" do
+      expect(subject).to include("Event Location")
+    end
+
+    it "does not allow xss injection in event name" do
+      event.update(name: "Name:<script>alert('xss');</script>")
+      expect(subject).to include("Name:&lt;script&gt;alert(&#39;xss&#39;);&lt;/script&gt;")
+    end
+
+    it "does not allow xss injection in event description" do
+      event.update(description: "Description:<script>alert('xss');</script>")
+      expect(subject).to include("Description:&lt;script&gt;alert(&#39;xss&#39;);&lt;/script&gt;")
+    end
+
+    it "does not allow xss injection in event location" do
+      event.update(location: "Location:<script>alert('xss');</script>")
+      expect(subject).to include("Location:&lt;script&gt;alert(&#39;xss&#39;);&lt;/script&gt;")
+    end
+
+    it "does not allow xss injection in additional information" do
+      participation.update!(additional_information: "Additional Information:<script>alert('xss');</script>")
+      mail = Event::ParticipationMailer.confirmation(participation)
+      subject = mail.parts.first.body
+      expect(subject).to include("Bemerkungen:<br/>")
+      expect(subject).to include("Additional Information:&lt;script&gt;alert(&#39;xss&#39;);&lt;/script&gt;")
+    end
+
+    it "does not allow xss injection in participant name" do
+      person.update(first_name: "First Name:<script>alert('xss');</script>")
+      expect(subject).to include("First Name:&lt;script&gt;alert(&#39;xss&#39;);&lt;/script&gt;")
+    end
+  end
 end

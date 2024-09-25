@@ -16,7 +16,6 @@ task :ci do
     "ci:setup:env",
     "ci:setup:rspec",
     "spec",
-    "spec:sphinx",
     "spec:features:lenient"].delete_if { |task| tasks_to_skip.include?(task) }
 
   tasks.each { |task| Rake::Task[task].invoke }

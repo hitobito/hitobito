@@ -33,8 +33,7 @@ The key `addresses` contains a hash that has the following keys:
 ## Completion
 
 In the person#edit view, the address is auto-completed from all entries in the
-addresses-table. If Sphinx is present, sphinx indexes that table and answers
-queries. Otherwise, the table is queried by the database.
+addresses-table.
 
 The search-strategy is determined the same way as for the
 people/group/event-full-text search. (See `app/controllers/concerns/full_text_search_strategy.rb`)

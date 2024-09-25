@@ -75,8 +75,8 @@ class Event::ParticipationMailer < ApplicationMailer
   end
 
   def placeholder_participation_details
-    ["#{Event::Role::Participant.model_name.human}:",
-      person.decorate.complete_contact].join("<br/>")
+    join_lines(["#{Event::Role::Participant.model_name.human}:",
+      person.decorate.complete_contact])
   end
 
   def placeholder_application_url
@@ -112,23 +112,23 @@ class Event::ParticipationMailer < ApplicationMailer
   def event_details # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     infos = []
     infos << event.name
-    infos << labeled(:dates) { event.dates.map(&:to_s).join("<br/>") }
+    infos << labeled(:dates) { join_lines(event.dates.map(&:to_s)) }
     infos << labeled(:motto)
     infos << labeled(:cost)
-    infos << labeled(:description) { event.description.gsub("\n", "<br/>") }
-    infos << labeled(:location) { event.location.gsub("\n", "<br/>") }
-    infos << labeled(:contact) { "#{event.contact}<br/>#{event.contact.email}" }
+    infos << labeled(:description) { convert_newlines_to_breaks(event.description) }
+    infos << labeled(:location) { convert_newlines_to_breaks(event.location) }
+    infos << labeled(:contact) { escape_html(event.contact) + br_tag + event.contact.email }
     infos << answers_details
     infos << additional_information_details
     infos << placeholder_participation_details
-    infos.compact.join("<br/><br/>")
+    join_lines(infos.compact, br_tag * 2)
   end
 
   def event_without_participation
     infos = []
     infos << event.name
-    infos << labeled(:dates) { event.dates.map(&:to_s).join("<br/>") }
-    infos.compact.join("<br/><br/>")
+    infos << labeled(:dates) { join_lines(event.dates.map(&:to_s)) }
+    join_lines(infos.compact, br_tag * 2)
   end
 
   def labeled(key)
@@ -136,7 +136,7 @@ class Event::ParticipationMailer < ApplicationMailer
     if value
       label = event.class.human_attribute_name(key)
       formatted = block_given? ? yield : value
-      "#{label}:<br/>#{formatted}"
+      label.html_safe + ":" + br_tag + formatted
     end
   end
 
@@ -147,7 +147,7 @@ class Event::ParticipationMailer < ApplicationMailer
       answers.each do |a|
         text << "#{a.question.question}: #{a.answer}"
       end
-      text.join("<br/>")
+      join_lines(text)
     end
   end
 
@@ -160,9 +160,8 @@ class Event::ParticipationMailer < ApplicationMailer
 
   def additional_information_details
     if participation.additional_information?
-      t("activerecord.attributes.event/participation.additional_information") +
-        ":<br/>" +
-        participation.additional_information.gsub("\n", "<br/>")
+      escape_html(t("activerecord.attributes.event/participation.additional_information") + ":") +
+        br_tag + convert_newlines_to_breaks(participation.additional_information)
     end
   end
 

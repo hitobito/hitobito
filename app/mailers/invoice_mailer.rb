@@ -42,23 +42,23 @@ class InvoiceMailer < ApplicationMailer
   end
 
   def placeholder_invoice_items
-    InvoiceItemDecorator.decorate_collection(@invoice.invoice_items).map do |item|
-      [
+    join_lines(InvoiceItemDecorator.decorate_collection(@invoice.invoice_items).map do |item|
+      join_lines([
         item.name,
         item.description,
         item.total
-      ].join("<br/>")
-    end.join("<br/>" * 2)
+      ])
+    end, "<br/>".html_safe * 2)
   end
 
   def placeholder_invoice_total
     content_tag :table do
-      [:total, :vat].map do |key|
+      join_lines([:total, :vat].map do |key|
         content_tag :tr do
-          [content_tag(:th, t("activerecord.attributes.invoice.#{key}")),
-            content_tag(:td, @invoice.decorate.send(key))].join
+          join_lines([content_tag(:th, t("activerecord.attributes.invoice.#{key}")),
+            content_tag(:td, @invoice.decorate.send(key))])
         end
-      end.join
+      end)
     end
   end
 
@@ -78,7 +78,7 @@ class InvoiceMailer < ApplicationMailer
 
   def content_tag(name, content = nil)
     content = yield if block_given?
-    "<#{name}>#{content}</#{name}>"
+    "<#{name}>".html_safe + content + "</#{name}>".html_safe
   end
 
   def group

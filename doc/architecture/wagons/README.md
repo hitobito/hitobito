@@ -262,11 +262,17 @@ If wished, the attributes can be included in the CSV-File that is generated when
 
 ### Make attributes searchable
 
-The new attributes must be indexed in `app/indices/person_index.rb` where all indexes for Sphinx (the search tool that is used by hitobito) are defined.
+To make new attributes searchable you have to include them in the searchable attributes
+of the corresponding model:
 
-    ThinkingSphinx::Index.define_partial :person do
-      indexes title
-    end
+    SEARCHABLE_ATTRS = [
+    :first_name, :last_name, :company_name, :nickname, :email, :address, :zip_code, :town,
+    :country, :birthday, :additional_information, {phone_numbers: [:number],
+                                                   social_accounts: [:name], additional_emails: [:email]}
+]
+
+Don't forget to include the PgSearchable module:
+``include PgSearchable``
 
 ### Output attributes in the API
 

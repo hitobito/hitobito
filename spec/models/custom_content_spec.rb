@@ -91,6 +91,12 @@ describe CustomContent do
       output = subject.body_with_values("recipient-name" => "Fred", "login-url" => "example.com/login")
       expect(output).to match("Hello You, here is your site to login: example.com/login")
     end
+
+    it "escapes html entities" do
+      subject.body = "Hello {recipient-name}"
+      output = subject.body_with_values("recipient-name" => "<a>World</a>")
+      expect(output).to match("Hello &lt;a&gt;World&lt;/a&gt;")
+    end
   end
 
   context "#subject_with_values" do
@@ -120,6 +126,12 @@ describe CustomContent do
       subject.subject = "Your new Login at {login-url}"
       output = subject.subject_with_values("recipient-name" => "Fred", "login-url" => "example.com/login")
       expect(output).to eq("Your new Login at example.com/login")
+    end
+
+    it "escapes html entities" do
+      subject.subject = "Hello {recipient-name}"
+      output = subject.subject_with_values("recipient-name" => "<a>World</a>")
+      expect(output).to eq("Hello &lt;a&gt;World&lt;/a&gt;")
     end
   end
 end

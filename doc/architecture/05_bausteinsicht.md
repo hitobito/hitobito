@@ -30,7 +30,7 @@ Export als CSV und PDF ist ebenfalls hier umgesetzt.
 
 **Model**: Stellt die Zugriffmöglichkeiten auf die Datenbank zur Verfügung. Eine Model Klasse 
 verwaltet eine Datenbanktabelle gemäss dem Active Record Pattern. Alles was darüber hinausgeht, 
-wird in Domain abgebildet. Spricht ebenfalls den Sphinx Service an.
+wird in Domain abgebildet.
 
 **Job**: Übernimmt langlaufende Operationen in einem Hintergrundprozess. Wird normalerweise von 
 einem Controller initiiert, kann jedoch in bestimmten Fällen auch von Domain Objekten gestartet 
@@ -46,9 +46,6 @@ aufgerufen, können in bestimmten Fällen jedoch auch direkt von einem Controlle
 Objekt angesprochen werden.
 
 **Datenbank**: Persistiert alle Daten der Applikation.
-
-**Sphinx**: Enthält die Indizes für die Volltextsuche und beantwortet ensprechende Anfragen. Die 
-Indizes werden periodisch aufgrund der Datenbank aktualisiert.
 
 **Pop3 Server**: Empfängt die E-Mails für die Mailing Listen. Dies erfolgt über eine Catch-All 
 Adresse einer definierten Domain.

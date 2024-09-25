@@ -322,11 +322,11 @@ module CrudTestHelper
     (index + 64).chr * 5
   end
 
-  # hack to avoid ddl in transaction issues with mysql.
+  # hack to avoid ddl in transaction issues with postgres.
   def without_transaction
     c = ActiveRecord::Base.connection
     start_transaction = false
-    if c.adapter_name.downcase.include?("mysql") && c.open_transactions > 0
+    if c.adapter_name.downcase.include?("postgres") && c.open_transactions > 0
       # in transactional tests, we may simply rollback
       c.execute("ROLLBACK")
       start_transaction = true

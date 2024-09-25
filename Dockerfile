@@ -9,8 +9,8 @@ ARG NODEJS_VERSION="16"
 ARG YARN_VERSION="1.22.19"
 
 # Packages
-ARG BUILD_PACKAGES="nodejs git sqlite3 libsqlite3-dev imagemagick build-essential default-libmysqlclient-dev libpq-dev"
-ARG RUN_PACKAGES="imagemagick shared-mime-info pkg-config libmagickcore-dev libmagickwand-dev default-libmysqlclient-dev libpq-dev libjemalloc-dev libjemalloc2"
+ARG BUILD_PACKAGES="nodejs git sqlite3 libsqlite3-dev imagemagick build-essential default-lib libpq-dev"
+ARG RUN_PACKAGES="imagemagick shared-mime-info pkg-config libmagickcore-dev libmagickwand-dev default-lib libpq-dev libjemalloc-dev libjemalloc2"
 
 # Scripts
 ARG PRE_INSTALL_SCRIPT="\
@@ -164,7 +164,6 @@ RUN bash -vxc "${POST_BUILD_SCRIPT:-"echo 'no POST_BUILD_SCRIPT provided'"}"
 # TODO: Save artifacts
 
 RUN rm -rf vendor/cache/ .git spec/ node_modules/ db/production.sqlite3
-
 
 #################################
 #         Run/App Stage         #

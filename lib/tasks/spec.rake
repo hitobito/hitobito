@@ -14,11 +14,6 @@ if Rake::Task.task_defined?("spec:features") # only if current environment knows
       t.rspec_opts = "--tag ~type:feature --format Fivemat"
     end
 
-    RSpec::Core::RakeTask.new(:sphinx) do |t|
-      t.pattern = "./spec/**/*_spec.rb"
-      t.rspec_opts = "--tag sphinx --format Fivemat"
-    end
-
     RSpec::Core::RakeTask.new(:features) do |t|
       t.pattern = "./spec/features/**/*_spec.rb"
       t.rspec_opts = "--tag type:feature --format Fivemat"

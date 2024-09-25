@@ -5,13 +5,14 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-desc "Load the mysql database configuration for the following tasks"
-task :mysql do # rubocop:disable Rails/RakeEnvironment
-  ENV["RAILS_DB_ADAPTER"] = "mysql2"
+desc "Load the postgres database configuration for the following tasks"
+
+task :postgres do # rubocop:disable Rails/RakeEnvironment
+  ENV["RAILS_DB_ADAPTER"] = "postgres"
   ENV["RAILS_DB_NAME"] = "hitobito_development"
   ENV["RAILS_TEST_DB_NAME"] = "hitobito_test"
-  ENV["RAILS_DB_PASSWORD"] = "root"
-  ENV["RAILS_DB_SOCKET"] = "/var/run/mysqld/mysqld.sock"
+  ENV["RAILS_DB_PASSWORD"] = "hitobito"
+  ENV["RAILS_DB_SOCKET"] = "/var/run/postgresql/.s.PGSQL.5432"
 end
 
 namespace :db do
@@ -93,25 +94,6 @@ namespace :db do
     ENV["NO_ENV"] = "1"
     Rake::Task["db:seed"].invoke
     Rake::Task["wagon:seed"].invoke
-  end
-
-  desc 'Export database similar to a backup, can be imported with "rake db:import"'
-  task export: [:environment] do
-    command = <<~SH.squish
-      mysqldump
-        -u$RAILS_DB_USERNAME
-        -p$RAILS_DB_PASSWORD
-        -h$RAILS_DB_HOST
-        -P$RAILS_DB_PORT
-        --skip-lock-tables
-        --quick
-        --add-drop-database
-        --routines
-        $RAILS_DB_NAME
-      | gzip > tmp/exported-database.sql.gz
-    SH
-
-    sh(command)
   end
 
   desc 'Remove "seeded"-markers'

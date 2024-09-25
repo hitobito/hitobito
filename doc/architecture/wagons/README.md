@@ -271,7 +271,7 @@ of the corresponding model:
                                                    social_accounts: [:name], additional_emails: [:email]}
 ]
 
-Dont forget to include de PgSearchable module too:
+Don't forget to include the PgSearchable module:
 ``include PgSearchable``
 
 ### Output attributes in the API

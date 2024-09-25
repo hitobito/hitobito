@@ -27,18 +27,7 @@ module Export::Tabular::People
         account_labels(people.map(&:social_accounts).flatten, SocialAccount)
       ).merge(
         qualification_kind_labels
-      ).merge(
-        relation_kind_labels
       )
-    end
-
-    def relation_kind_labels
-      different_kinds = people.map(&:relations_to_tails).flatten.collect(&:kind).uniq
-      different_kinds.each_with_object({}) do |kind, obj|
-        if kind.present?
-          obj[:"people_relation_#{kind}"] = PeopleRelation.new(kind: kind).translated_kind
-        end
-      end
     end
 
     def qualification_kind_labels

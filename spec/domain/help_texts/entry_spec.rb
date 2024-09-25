@@ -24,7 +24,7 @@ describe HelpTexts::Entry do
 
     it "#fields is derived from used_attributes" do
       blacklist = Settings.help_text_blacklist.to_h.fetch(:person)
-      expect(blacklist).to have_at_least(3).items
+      expect(blacklist).to have_at_least(2).items
       expect(subject.fields).to have_at_least(Person.used_attributes.size - blacklist.size).items
     end
 

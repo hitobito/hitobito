@@ -134,10 +134,6 @@ class PersonDecorator < ApplicationDecorator
     @upcoming_events ||= EventDecorator.decorate_collection(event_queries.upcoming_events)
   end
 
-  def relations
-    @relations ||= relations_to_tails.includes(tail: [:groups, :roles])
-  end
-
   def last_role_new_link(group)
     path = h.new_group_role_path(restored_group(group), role_id: last_role.id)
     role_popover_link(path, "role_#{last_role.id}", "popover_toggler ps-1")

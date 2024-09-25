@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_09_17_094438) do
+ActiveRecord::Schema.define(version: 202409171600527) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -929,14 +929,6 @@ ActiveRecord::Schema.define(version: 2024_09_17_094438) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["group_id", "group_type"], name: "index_people_filters_on_group_id_and_group_type"
-  end
-
-  create_table "people_relations", id: :serial, force: :cascade do |t|
-    t.integer "head_id", null: false
-    t.integer "tail_id", null: false
-    t.string "kind", null: false
-    t.index ["head_id"], name: "index_people_relations_on_head_id"
-    t.index ["tail_id"], name: "index_people_relations_on_tail_id"
   end
 
   create_table "person_add_request_ignored_approvers", id: :serial, force: :cascade do |t|

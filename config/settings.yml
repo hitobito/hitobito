@@ -214,7 +214,6 @@ help_text_blacklist:
     - redirect_uri
     - scopes
   person:
-    - relations_to_tails_attributes
     - phone_numbers_attributes
     - family_members_attributes
 

@@ -36,10 +36,6 @@ de:
       role/external: External
 
     attributes:
-      people_relation:
-        kinds:
-          parent: Elternteil
-          child: Kind
       group/top_layer:
         shirt_sizes:
           s: S

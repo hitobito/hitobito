@@ -160,8 +160,8 @@ class Event::ParticipationMailer < ApplicationMailer
 
   def additional_information_details
     if participation.additional_information?
-      convert_newlines_to_breaks(t("activerecord.attributes.event/participation.additional_information") +
-        ":" + br_tag + participation.additional_information)
+      escape_html(t("activerecord.attributes.event/participation.additional_information") + ":") +
+        br_tag + convert_newlines_to_breaks(participation.additional_information)
     end
   end
 

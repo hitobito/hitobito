@@ -104,20 +104,6 @@ class Event::Question < ActiveRecord::Base
   def before_validate_answer(_answer)
   end
 
-  def derive_for_existing_events
-    existing_event_ids = Event.where.not(id: derived_questions.pluck(:event_id)).pluck(:id)
-
-    Event::Question.transaction do
-      existing_event_ids.map do |event_id|
-        derive&.tap do |derived_question|
-          derived_question.update!(event_id: event_id)
-          Event::Answer.joins(:participation).where(participation: {event_id: event_id}, question_id: id)
-            .update_all(question_id: derived_question.id)
-        end
-      end.compact
-    end
-  end
-
   # Seed global questions and make sure the same question does not get seeded twice.
   # In case a global question needs to be changed, make sure to create a migration
   # accordingly and change the seed at the same time.

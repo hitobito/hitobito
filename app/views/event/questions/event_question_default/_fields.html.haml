@@ -1,12 +1,13 @@
 - question = f.object
-- if question.derived? && !question.derived_from_question.customize_derived
+- if question.derived?
   = f.labeled(:question) do
     = f.hidden_field(:question)
     %p.py-2= question.question
-  = f.labeled(:choices, simple_list(question.choice_items, class: 'ps-3 my-2')) if question.choice_items.any?
-  = f.labeled(:multiple_choices) do 
-    %p.py-2
-      = question.multiple_choices ? icon(:check) : icon(:times)
+  - if question.choice_items.any?
+    = f.labeled(:choices, simple_list(question.choice_items, class: 'ps-3 my-2')) 
+    = f.labeled(:multiple_choices) do 
+      %p.py-2
+        = question.multiple_choices ? icon(:check) : icon(:times)
 
 - else
   = f.labeled_input_field(:question)

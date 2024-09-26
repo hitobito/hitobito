@@ -75,7 +75,7 @@ class Event::Question < ActiveRecord::Base
 
   # most attributes of global questions must not be overriden by derived questions
   def assign_derived_attributes
-    return if derived_from_question.blank? || derived_from_question.customize_derived
+    return if derived_from_question.blank?
 
     keep_attributes = %w[id event_id disclosure derived_from_question_id]
     assign_attributes(derived_from_question.attributes.except(*keep_attributes))
@@ -123,7 +123,6 @@ class Event::Question < ActiveRecord::Base
   # - `type`: STI-name of question type
   # - `event_type`: STI-name of Event, on which the global question should be applied. `nil` will apply to all events.
   # - `disclosure`: specifies if question is required, optional or hidden. `nil` will force choice at event creation.
-  # - `customize_derived`: `true` will allow the customization on event creation. Default is `false`.
   def self.seed_global(attributes)
     questions = [attributes[:question], attributes[:translation_attributes]&.pluck(:question)].flatten.compact_blank
     return if includes(:translations).where(event_id: nil, question: questions).exists?

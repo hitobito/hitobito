@@ -52,7 +52,7 @@ class Event::Question < ActiveRecord::Base
   validates :disclosure, presence: true, unless: :global?
   validates :derived_from_question_id, uniqueness: {scope: :event_id}, allow_blank: true, if: :event_id
 
-  before_create :assign_derived_attributes, if: :derived?
+  before_validation :assign_derived_attributes, on: :create, if: :derived?
   after_create :add_answer_to_participations
 
   scope :global, -> { where(event_id: nil) }

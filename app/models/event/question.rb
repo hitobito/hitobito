@@ -67,10 +67,13 @@ class Event::Question < ActiveRecord::Base
     ]
   end
 
-  def derive
+  def derive(disclosure: nil)
     return unless global? # prevent deriving questions that are attached to an event
 
-    dup.tap { |derived_question| derived_question.derived_from_question = self }
+    dup.tap do |derived_question|
+      derived_question.derived_from_question = self
+      derived_question.disclosure ||= disclosure
+    end
   end
 
   # most attributes of global questions must not be overriden by derived questions

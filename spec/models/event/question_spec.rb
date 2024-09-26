@@ -143,7 +143,16 @@ describe Event::Question do
       derived_question = global_question.derive
       expect(derived_question.derived_from_question).to eq(global_question)
       derived_question.event = event
+      expect(derived_question.disclosure).to eq(global_question.disclosure)
       expect(derived_question).to be_valid
+    end
+
+    it "overrides the disclosure value unless present" do
+      global_question.update(disclosure: nil)
+      derived_question = global_question.derive
+      expect(derived_question.disclosure).to be_nil
+      derived_question = global_question.derive(disclosure: :hidden)
+      expect(derived_question).to be_hidden
     end
   end
 

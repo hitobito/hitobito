@@ -52,7 +52,6 @@ class EventsController < CrudController
   before_render_show :load_my_invitation
   before_render_form :load_sister_groups
   before_render_form :load_kinds
-  before_render_form :init_questions
 
   def index
     respond_to do |format|
@@ -84,7 +83,12 @@ class EventsController < CrudController
   def new
     assign_attributes if model_params
     entry.dates.build if entry.dates.empty? # allow wagons to use derived dates
+    entry.init_questions
     respond_with(entry)
+  end
+
+  def edit
+    entry.init_questions(disclosure: :hidden)
   end
 
   private

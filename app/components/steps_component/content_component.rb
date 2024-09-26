@@ -40,9 +40,9 @@ class StepsComponent::ContentComponent < StepsComponent::IteratingComponent
     content
   end
 
-  def nested_fields_for(assoc, object, &)
+  def nested_fields_for(assoc, object, title = nil, &)
     fields_for(buttons: false) do |f|
-      f.nested_fields_for(assoc, nil, nil, model_object: object, &)
+      f.nested_fields_for(assoc, nil, nil, model_object: object, link_to_add_title: title, &)
     end
   end
 

@@ -348,7 +348,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end +
       content_tag(:div, class: "controls") do
         options = options.to_h.merge(class: "text w-100 align-with-form")
-        content_tag(:p, link_to_add(I18n.t("global.associations.add"), assoc, options))
+        link_title = options.delete(:link_to_add_title) || I18n.t("global.associations.add")
+        content_tag(:p, link_to_add(link_title, assoc, options))
       end
   end
 

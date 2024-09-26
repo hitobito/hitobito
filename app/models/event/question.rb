@@ -42,6 +42,7 @@ class Event::Question < ActiveRecord::Base
   i18n_enum :disclosure, DISCLOSURE_VALUES, queries: true
 
   attribute :type, default: -> { Event::Question::Default.sti_name }
+  attr_accessor :skip_add_answer_to_participations
 
   validates_by_schema
 
@@ -72,7 +73,7 @@ class Event::Question < ActiveRecord::Base
 
     dup.tap do |derived_question|
       derived_question.derived_from_question = self
-      derived_question.disclosure ||= disclosure
+      derived_question.disclosure = disclosure if disclosure.present?
     end
   end
 
@@ -129,7 +130,7 @@ class Event::Question < ActiveRecord::Base
   private
 
   def add_answer_to_participations
-    return unless event
+    return if event.blank? || skip_add_answer_to_participations
 
     event.participations.find_each do |participation|
       existing_answer = participation.answers.find { _1.question_id == derived_from_question_id }

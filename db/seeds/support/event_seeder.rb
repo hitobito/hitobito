@@ -101,7 +101,8 @@ class EventSeeder
   end
 
   def seed_questions(event)
-    event.init_questions.map do |question|
+    event.init_questions
+    event.application_questions.map do |question|
       question.update(disclosure: :optional)
     end
   end

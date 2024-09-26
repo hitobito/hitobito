@@ -26,6 +26,7 @@ describe PersonAbility do
       is_expected.to be_able_to(:update, other.person.reload)
       is_expected.to be_able_to(:update_email, other.person)
       is_expected.to be_able_to(:update, other)
+      is_expected.to be_able_to(:security, other.person)
     end
 
     it "may not update root email if in same group" do
@@ -45,6 +46,10 @@ describe PersonAbility do
 
     it "may not destroy its role" do
       is_expected.not_to be_able_to(:destroy, role)
+    end
+
+    it "may modify its security" do
+      is_expected.to be_able_to(:security, role.person)
     end
 
     it "may modify externals in the same layer" do
@@ -79,18 +84,20 @@ describe PersonAbility do
       is_expected.to be_able_to(:index_local_people, groups(:top_layer))
     end
 
-    it "may show notes and tags in same layer" do
+    it "may show notes, tags and security in same layer" do
       other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group))
       is_expected.to be_able_to(:index_notes, other.person.reload)
       is_expected.to be_able_to(:index_tags, other.person.reload)
       is_expected.to be_able_to(:manage_tags, other.person.reload)
+      is_expected.to be_able_to(:security, other.person.reload)
     end
 
-    it "may show notes and tags in lower layer" do
+    it "may show notes, tags and security in lower layer" do
       other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one))
       is_expected.to be_able_to(:index_notes, other.person.reload)
       is_expected.to be_able_to(:index_tags, other.person.reload)
       is_expected.to be_able_to(:manage_tags, other.person.reload)
+      is_expected.to be_able_to(:security, other.person.reload)
     end
 
     it "may show person with deleted role in layer" do
@@ -141,12 +148,14 @@ describe PersonAbility do
       is_expected.to be_able_to(:update, other)
       is_expected.to be_able_to(:create, other)
       is_expected.to be_able_to(:destroy, other)
+      # is_expected.to be_able_to(:security, other)
     end
 
     it "may not view any public role in upper layer" do
       other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group))
       is_expected.not_to be_able_to(:show_full, other.person.reload)
       is_expected.not_to be_able_to(:update, other)
+      is_expected.not_to be_able_to(:security, other)
     end
 
     it "may not update email for person with role in upper layer" do
@@ -228,6 +237,7 @@ describe PersonAbility do
       is_expected.to be_able_to(:update, other)
       is_expected.to be_able_to(:create, other)
       is_expected.to be_able_to(:destroy, other)
+      is_expected.to be_able_to(:security, other.person)
     end
 
     it "may not view any externals in upper layers" do
@@ -491,6 +501,7 @@ describe PersonAbility do
       is_expected.to be_able_to(:update, other)
       is_expected.to be_able_to(:create, other)
       is_expected.to be_able_to(:destroy, other)
+      is_expected.to be_able_to(:security, other.person)
     end
 
     it "may not view any public role in upper layer" do
@@ -590,6 +601,7 @@ describe PersonAbility do
       other = Fabricate(Role::External.name.to_sym, group: groups(:top_group))
       is_expected.not_to be_able_to(:show_full, other.person.reload)
       is_expected.not_to be_able_to(:update, other)
+      is_expected.not_to be_able_to(:security, other.person)
     end
 
     it "may index groups in upper layer" do
@@ -1653,6 +1665,10 @@ describe PersonAbility do
 
     it "may not query people" do
       is_expected.not_to be_able_to(:query, Person)
+    end
+
+    it "may modify its security" do
+      is_expected.to be_able_to(:security, role.person)
     end
   end
 end

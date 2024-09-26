@@ -6,6 +6,9 @@
 = f.hidden_field(:type)
 = f.hidden_field(:derived_from_question_id)
 
+- # lookup if a partial for the question type and render it if it exists. 
+- # `lookup_context.find_all` needs the partial including the leading underscore,
+- # while `render` requires you to pass the partial name without it.
 - partial_path = "event/questions/#{f.object.model_name.singular}"
 - if lookup_context.find_all(File.join(partial_path, '_fields')).any?
   = render partial: File.join(partial_path, 'fields'), locals: { f: f }

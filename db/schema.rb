@@ -315,7 +315,6 @@ ActiveRecord::Schema.define(version: 2024_09_17_094438) do
     t.string "type", null: false
     t.integer "derived_from_question_id"
     t.string "event_type"
-    t.boolean "customize_derived", default: false
     t.index ["derived_from_question_id"], name: "index_event_questions_on_derived_from_question_id"
     t.index ["event_id"], name: "index_event_questions_on_event_id"
   end

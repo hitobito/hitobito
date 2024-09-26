@@ -13,7 +13,7 @@ Während einiger Deployments gab es Probleme mit den Migrationen. Auf der MT-Ins
 ### Wechsel zu PostgreSQL
 
 - ➕ Transaktionen umfassen auch strukturelle Anpassungen, Migrationen sind damit self-contained und können atomar angewandet werden.
-- ➕ mehr Datentypen ermöglichen bessere Speicherung von Daten (Boolean, Array-Datentypen)
+- ➕ Mehr Datentypen ermöglichen bessere Speicherung von Daten (Boolean, Array-Datentypen)
 - ➕ Möglichkeit, FTS ohne Sphinx umzusetzen
 - ➖ Applikation muss teilweise angepasst werden
 - ➖ Backup muss angepasst werden
@@ -23,16 +23,16 @@ Während einiger Deployments gab es Probleme mit den Migrationen. Auf der MT-Ins
 Wir können Features von PostgreSQL verwenden:
 
 - Strukturtransaktionen, die im Fehlerfall komplett zurückgerollt werden können
-- alle Datentypen als Array (Anwendungsbeispiel: eine Person in mehreren Familien) und auf DB-Ebene auswerten
-- echte Booleans (Detail, aber schön)
+- Alle Datentypen als Array (Anwendungsbeispiel: eine Person in mehreren Familien) und auf DB-Ebene auswerten
+- Echte Booleans (Detail, aber schön)
 - JSON-Datentypen, Struktur kann auf DB-Ebene ausgewertet werden
-- partial indices (kann zu kleineren und damit schnelleren Indizes führen)
+- Partial indices (kann zu kleineren und damit schnelleren Indizes führen)
 - Volltextsuche (nicht so mächtig wie Sphinx, aber näher an den Daten)
 
 Wir müssen eventuell Wissen über PostgreSQL aufbauen:
 
 - Betrieb (Erfahrung aus anderen Projekten ist vorhanden)
-- leicht anderer SQL-Dialekt, näher am Standard, aber eben anders als MySQL
+- Leicht anderer SQL-Dialekt, näher am Standard, aber eben anders als MySQL
 
 Wir müssen die Anwendung entweder DB-agnostisch machen oder die MySQL-Anpassungen zu PostgreSQL-Anpassungen umschreiben.
 

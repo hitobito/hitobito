@@ -94,7 +94,6 @@ runs:
     - name: 'Setup OS'
       run: |
         sudo apt-get -qq update
-        sudo apt-get install sphinxsearch
         echo "ruby version: $(ruby -v)"
         echo "node version: $(node -v)"
         echo "yarn version: $(yarn -v)"

@@ -112,30 +112,8 @@ module Hitobito
       g.test_framework :rspec, fixture: true
     end
 
-    initializer :define_sphinx_indizes, before: :add_to_prepare_blocks do |app|
-      # only add here to be the last one
-      app.config.to_prepare do
-        ThinkingSphinx::Index.define_partial_indizes!
-      end
-    end
-
     config.to_prepare do
       ActionMailer::Base.default from: Settings.email.sender
-    end
-
-    def self.sphinx_version
-      @sphinx_version ||= ThinkingSphinx::Configuration.instance.controller.sphinx_version.presence ||
-        ENV['RAILS_SPHINX_VERSION']
-    end
-
-    def self.sphinx_present?
-      port = ENV['RAILS_SPHINX_PORT']
-      port.present? || ThinkingSphinx::Configuration.instance.controller.running?
-    end
-
-    def self.sphinx_local?
-      host = ENV['RAILS_SPHINX_HOST']
-      host.blank? || host == '127.0.0.1' || host == 'localhost'
     end
 
     def self.versions(file = Rails.root.join('WAGON_VERSIONS'))

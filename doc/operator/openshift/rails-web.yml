@@ -54,7 +54,7 @@ spec:
         - name: RAILS_DB_NAME
           value: database
         - name: RAILS_DB_HOST
-          value: mysql
+          value: postgres
         - name: RAILS_DB_USERNAME
           valueFrom:
             secretKeyRef:
@@ -66,7 +66,7 @@ spec:
               key: password
               name: database-credentials
         - name: RAILS_DB_ADAPTER
-          value: mysql2
+          value: postgresql
         - name: RAILS_HOST_NAME
           value: your-public-hostname.example.com
         - name: RAILS_AIRBRAKE_HOST
@@ -76,10 +76,6 @@ spec:
             secretKeyRef:
               key: key
               name: errbit-credentials
-        - name: RAILS_SPHINX_HOST
-          value: sphinx
-        - name: RAILS_SPHINX_PORT
-          value: "9312"
         - name: MEMCACHE_SERVERS
           value: memcached
         - name: PASSENGER_START_TIMEOUT

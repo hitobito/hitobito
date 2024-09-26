@@ -63,7 +63,6 @@ bestimmte Anforderungen vergessen.
 * CSV Export?
 * JSON API Index
 * JSON API Show
-* Sphinx Index
 
 Grundsätzlich bestehen für die Sichtbarkeit der Attribute in Anzeige im GUI, in den CSV Exports
 sowie im JSON API die selben Regeln. Ist also z.B. ein Attribut öffentlich, wird es im Adress-CSV

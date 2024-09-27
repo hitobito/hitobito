@@ -728,6 +728,11 @@ fr:
         question: Question
         choices: Réponses possibles
         multiple_choices: Sélection multiple
+        disclosure: Indication de la réponse
+        disclosures:
+          required: Obligatoire
+          optional: Optionnel
+          hidden: Non affiché
       admin_questions:
         question: Question
         choices: Réponses possibles

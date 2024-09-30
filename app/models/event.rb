@@ -160,7 +160,9 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   ### VALIDATIONS
 
-  validates_by_schema
+  # canceled_reason is used as enum in hitobito_sac_cas. validates_by_schema cannot be overridden inside a wagon
+  # because of the loading order, so it must be excluded in the core instead
+  validates_by_schema except: [:canceled_reason]
   # name is a translated attribute and thus needs to be validated explicitly
   validates :name, presence: true
   validates :dates, presence: {message: :must_exist}

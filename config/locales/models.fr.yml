@@ -728,7 +728,6 @@ fr:
         question: Question
         choices: Réponses possibles
         multiple_choices: Sélection multiple
-        disclosure: Indication de la réponse
         disclosures:
           required: Obligatoire
           optional: Optionnel

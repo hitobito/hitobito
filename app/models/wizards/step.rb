@@ -16,6 +16,7 @@ module Wizards
       model_name.element
     end
     delegate :step_name, to: :class
+    delegate :current_user, to: :wizard
 
     def self.===(other)
       if other.is_a?(Class)

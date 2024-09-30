@@ -80,7 +80,8 @@ class PersonSeeder
       town: Faker::Address.city,
       gender: %w(m w).shuffle.first,
       birthday: random_date,
-      encrypted_password: encrypted_password
+      encrypted_password: encrypted_password,
+      country: "CH"
     }.then do |attrs|
       attrs[:address_care_of] = Faker::Address.secondary_address if (1..10).to_a.shuffle == 1
       attrs[:postbox] = Faker::Address.mail_box if (1..10).to_a.shuffle == 1
@@ -141,7 +142,7 @@ class PersonSeeder
   def seed_phone_number(person, shuffle = false)
     seed_account(person,
                  PhoneNumber,
-                 { number: Faker::PhoneNumber.phone_number },
+                 { number: Faker::PhoneNumber.phone_number_with_country_code },
                  Settings.phone_number.predefined_labels,
                  shuffle)
   end

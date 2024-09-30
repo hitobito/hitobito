@@ -146,6 +146,6 @@ describe Import::PersonDuplicateFinder do
       @first = finder.find(attrs)
     end
 
-    it { is_expected.to be @first }
+    it { is_expected.to eq @first }
   end
 end

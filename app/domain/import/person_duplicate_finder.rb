@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #  Copyright (c) 2012-2020, CVP Schweiz. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -8,7 +10,7 @@ module Import
     include Translatable
 
     # if multiple rows match the same existing person, always return the same object
-    attr_reader :duplicate_entries
+    attr_reader :unique_entries
 
     DUPLICATE_ATTRIBUTES = [
       :first_name,
@@ -19,28 +21,39 @@ module Import
     ]
 
     def initialize
-      @duplicate_entries = {}
+      @unique_entries = []
     end
 
+    # returns the first duplicate with errors if there are multiple
     def find(attrs)
-      people = duplicates(attrs)
-      if people.present?
-        person = people.first
-        if people.size == 1
-          duplicate_entries[person.id] ||= person
+      people_ids = duplicate_ids(attrs)
+      if people_ids.present?
+        person = ::Person.find(people_ids.first)
+        if people_ids.size == 1
+          unique_entries << person.id unless unique_entries.include?(person.id)
         else
-          person.errors.add(:base, translate(:duplicates, count: people.size))
-          person
+          person.errors.add(:base, translate(:duplicates, count: people_ids.size))
         end
+        person
       end
     end
 
-    def duplicate_count
-      duplicate_entries.size
+    def unique_count
+      unique_entries.size
     end
 
     private
 
+    def duplicate_ids(attrs)
+      conditions = duplicate_conditions(attrs)
+      if conditions.first.present?
+        ::Person.where(conditions).pluck(:id)
+      else
+        []
+      end
+    end
+
+    #  leave this here for now to keep the API compatible
     def duplicates(attrs)
       conditions = duplicate_conditions(attrs)
       if conditions.first.present?
@@ -58,13 +71,15 @@ module Import
     end
 
     def append_duplicate_conditions(attrs, conditions)
-      exisiting_duplicate_attrs(attrs).each do |key, value|
-        conditions.first << " AND " if conditions.first.present?
-        conditions.first << if %w[first_name last_name company_name].include?(key.to_s)
+      existing_duplicate_attrs(attrs).each do |key, value|
+        condition = conditions.first
+        connector = condition.present? ? " AND " : ""
+        comparison = if %w[first_name last_name company_name].include?(key.to_s)
           "#{key} = ?"
         else
           "(#{key} = ? OR #{key} IS NULL)"
         end
+        conditions[0] = "#{condition}#{connector}#{comparison}"
         value = parse_date(value) if key.to_sym == :birthday
         conditions << value
       end
@@ -72,15 +87,17 @@ module Import
 
     def append_email_condition(attrs, conditions)
       if attrs[:email].present?
-        if conditions.first.present?
-          conditions[0] = "(#{conditions[0]}) OR "
+        condition = conditions.first
+        conditions[0] = if condition.present?
+          "(#{condition}) OR email = ?"
+        else
+          "email = ?"
         end
-        conditions.first << "email = ?"
         conditions << attrs[:email]
       end
     end
 
-    def exisiting_duplicate_attrs(attrs)
+    def existing_duplicate_attrs(attrs)
       existing = attrs.select do |key, value|
         value.present? && DUPLICATE_ATTRIBUTES.include?(key.to_sym)
       end

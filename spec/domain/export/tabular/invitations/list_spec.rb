@@ -9,7 +9,6 @@ require "spec_helper"
 require "csv"
 
 describe Export::Tabular::Invitations::List do
-
   let(:group) { groups(:top_group) }
   let!(:person1) { Fabricate(Group::TopGroup::Member.name.to_sym, group: group).person }
   let!(:person2) { Fabricate(Group::TopGroup::Member.name.to_sym, group: group).person }
@@ -45,8 +44,8 @@ describe Export::Tabular::Invitations::List do
       "Erstellungsdatum"
     ]
 
-    should match_array expected
-    should eq expected
+    is_expected.to match_array expected
+    is_expected.to eq expected
   end
 
   it "has 2 items" do
@@ -58,12 +57,12 @@ describe Export::Tabular::Invitations::List do
 
     subject { csv[0] }
 
-    its(["Person"]) { should == contact.to_s }
-    its(["Mail"]) { should == contact.email }
-    its(["Teilnahmerolle"]) { should == Event::Role::Leader.model_name.human }
-    its(["Status"]) { should == "Eingeladen" }
-    its(["Ablehnungsdatum"]) { should == nil }
-    its(["Erstellungsdatum"]) { should == Time.zone.now.strftime("%d.%m.%Y %k:%M") }
+    its(["Person"]) { is_expected.to == contact.to_s }
+    its(["Mail"]) { is_expected.to == contact.email }
+    its(["Teilnahmerolle"]) { is_expected.to == Event::Role::Leader.model_name.human }
+    its(["Status"]) { is_expected.to == "Eingeladen" }
+    its(["Ablehnungsdatum"]) { is_expected.to.nil? }
+    its(["Erstellungsdatum"]) { is_expected.to == Time.zone.now.strftime("%d.%m.%Y %k:%M") }
   end
 
   context "second row as participant" do
@@ -71,11 +70,11 @@ describe Export::Tabular::Invitations::List do
 
     subject { csv[1] }
 
-    its(["Person"]) { should == contact.to_s }
-    its(["Mail"]) { should == contact.email }
-    its(["Teilnahmerolle"]) { should == Event::Role::Participant.model_name.human }
-    its(["Status"]) { should == "Eingeladen" }
-    its(["Ablehnungsdatum"]) { should == nil }
-    its(["Erstellungsdatum"]) { should == Time.zone.now.strftime("%d.%m.%Y %k:%M") }
+    its(["Person"]) { is_expected.to == contact.to_s }
+    its(["Mail"]) { is_expected.to == contact.email }
+    its(["Teilnahmerolle"]) { is_expected.to == Event::Role::Participant.model_name.human }
+    its(["Status"]) { is_expected.to == "Eingeladen" }
+    its(["Ablehnungsdatum"]) { is_expected.to.nil? }
+    its(["Erstellungsdatum"]) { is_expected.to == Time.zone.now.strftime("%d.%m.%Y %k:%M") }
   end
 end

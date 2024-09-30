@@ -57,12 +57,12 @@ describe Export::Tabular::Invitations::List do
 
     subject { csv[0] }
 
-    its(["Person"]) { is_expected.to == contact.to_s }
-    its(["Mail"]) { is_expected.to == contact.email }
-    its(["Teilnahmerolle"]) { is_expected.to == Event::Role::Leader.model_name.human }
-    its(["Status"]) { is_expected.to == "Eingeladen" }
-    its(["Ablehnungsdatum"]) { is_expected.to.nil? }
-    its(["Erstellungsdatum"]) { is_expected.to == Time.zone.now.strftime("%d.%m.%Y %k:%M") }
+    its(["Person"]) { is_expected.to eq contact.to_s }
+    its(["Mail"]) { is_expected.to eq contact.email }
+    its(["Teilnahmerolle"]) { is_expected.to eq Event::Role::Leader.model_name.human }
+    its(["Status"]) { is_expected.to eq "Eingeladen" }
+    its(["Ablehnungsdatum"]) { is_expected.to be_nil }
+    its(["Erstellungsdatum"]) { is_expected.to eq Time.zone.now.strftime("%d.%m.%Y %H:%M") }
   end
 
   context "second row as participant" do
@@ -70,11 +70,11 @@ describe Export::Tabular::Invitations::List do
 
     subject { csv[1] }
 
-    its(["Person"]) { is_expected.to == contact.to_s }
-    its(["Mail"]) { is_expected.to == contact.email }
-    its(["Teilnahmerolle"]) { is_expected.to == Event::Role::Participant.model_name.human }
-    its(["Status"]) { is_expected.to == "Eingeladen" }
-    its(["Ablehnungsdatum"]) { is_expected.to.nil? }
-    its(["Erstellungsdatum"]) { is_expected.to == Time.zone.now.strftime("%d.%m.%Y %k:%M") }
+    its(["Person"]) { is_expected.to eq contact.to_s }
+    its(["Mail"]) { is_expected.to eq contact.email }
+    its(["Teilnahmerolle"]) { is_expected.to eq Event::Role::Participant.model_name.human }
+    its(["Status"]) { is_expected.to eq "Eingeladen" }
+    its(["Ablehnungsdatum"]) { is_expected.to be_nil }
+    its(["Erstellungsdatum"]) { is_expected.to eq Time.zone.now.strftime("%d.%m.%Y %H:%M") }
   end
 end

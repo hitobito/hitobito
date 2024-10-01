@@ -1,0 +1,15 @@
+- question = f.object
+- if question.derived?
+  = f.labeled(:question) do
+    = f.hidden_field(:question)
+    %p.py-2= question.question
+  - if question.choice_items.any?
+    = f.labeled(:choices, simple_list(question.choice_items, class: 'ps-3 my-2')) 
+    = f.labeled(:multiple_choices) do 
+      %p.py-2
+        = question.multiple_choices ? icon(:check) : icon(:times)
+
+- else
+  = f.labeled_input_field(:question)
+  = f.labeled_input_field(:choices, help: t('events.form.explain_choices'))
+  = f.labeled_boolean_field(:multiple_choices)

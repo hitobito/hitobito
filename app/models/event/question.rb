@@ -42,6 +42,7 @@ class Event::Question < ActiveRecord::Base
   i18n_enum :disclosure, DISCLOSURE_VALUES, queries: true
 
   attribute :type, default: -> { Event::Question::Default.sti_name }
+  attr_accessor :skip_add_answer_to_participations
 
   validates_by_schema
 
@@ -52,7 +53,7 @@ class Event::Question < ActiveRecord::Base
   validates :disclosure, presence: true, unless: :global?
   validates :derived_from_question_id, uniqueness: {scope: :event_id}, allow_blank: true, if: :event_id
 
-  before_create :assign_derived_attributes, if: :derived?
+  before_validation :assign_derived_attributes, on: :create, if: :derived?
   after_create :add_answer_to_participations
 
   scope :global, -> { where(event_id: nil) }
@@ -67,15 +68,18 @@ class Event::Question < ActiveRecord::Base
     ]
   end
 
-  def derive
-    return if event_id.present? # prevent deriving questions that are attached to an event
+  def derive(disclosure: nil)
+    return unless global? # prevent deriving questions that are attached to an event
 
-    dup.tap { |derived_question| derived_question.derived_from_question = self }
+    dup.tap do |derived_question|
+      derived_question.derived_from_question = self
+      derived_question.disclosure = disclosure if disclosure.present?
+    end
   end
 
   # most attributes of global questions must not be overriden by derived questions
   def assign_derived_attributes
-    return if derived_from_question.blank? || derived_from_question.try(:customize_derived)
+    return if derived_from_question.blank?
 
     keep_attributes = %w[id event_id disclosure derived_from_question_id]
     assign_attributes(derived_from_question.attributes.except(*keep_attributes))
@@ -88,7 +92,7 @@ class Event::Question < ActiveRecord::Base
   end
 
   def global?
-    event_id.blank?
+    event.blank?
   end
 
   def derived?
@@ -101,20 +105,6 @@ class Event::Question < ActiveRecord::Base
   def before_validate_answer(_answer)
   end
 
-  def derive_for_existing_events
-    existing_event_ids = Event.where.not(id: derived_questions.pluck(:event_id)).pluck(:id)
-
-    Event::Question.transaction do
-      existing_event_ids.map do |event_id|
-        derive&.tap do |derived_question|
-          derived_question.update!(event_id: event_id)
-          Event::Answer.joins(:participation).where(participation: {event_id: event_id}, question_id: id)
-            .update_all(question_id: derived_question.id)
-        end
-      end.compact
-    end
-  end
-
   # Seed global questions and make sure the same question does not get seeded twice.
   # In case a global question needs to be changed, make sure to create a migration
   # accordingly and change the seed at the same time.
@@ -123,7 +113,6 @@ class Event::Question < ActiveRecord::Base
   # - `type`: STI-name of question type
   # - `event_type`: STI-name of Event, on which the global question should be applied. `nil` will apply to all events.
   # - `disclosure`: specifies if question is required, optional or hidden. `nil` will force choice at event creation.
-  # - `customize_derived`: `true` will allow the customization on event creation. Default is `false`.
   def self.seed_global(attributes)
     questions = [attributes[:question], attributes[:translation_attributes]&.pluck(:question)].flatten.compact_blank
     return if includes(:translations).where(event_id: nil, question: questions).exists?
@@ -141,7 +130,7 @@ class Event::Question < ActiveRecord::Base
   private
 
   def add_answer_to_participations
-    return unless event
+    return if event.blank? || skip_add_answer_to_participations
 
     event.participations.find_each do |participation|
       existing_answer = participation.answers.find { _1.question_id == derived_from_question_id }

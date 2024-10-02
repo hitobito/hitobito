@@ -112,7 +112,6 @@ jobs:
           wagon_dependency_ref: ${{ inputs.wagon_dependency_ref }}
 
       - name: Run ${{ inputs.wagon_repository }} seeds
-        working-directory: ${{ inputs.wagon_repository }}
         run: |
           bundle exec rake db:seed wagon:seed
 

@@ -393,9 +393,30 @@ describe PeopleController do
       let(:person) { people(:bottom_member).tap { |p| p.update_columns(encrypted_password: nil) } }
       let(:group) { person.groups.first }
 
-      it "as admin updates email with password" do
+      it "as admin updates email without password" do
         put :update, params: {group_id: group.id, id: person.id, person: {last_name: "Foo", email: "foo@example.com"}}
         expect(assigns(:person).email).to eq("foo@example.com")
+      end
+
+      it "as admin updates email with password" do
+        person.update_column(:encrypted_password, "asdf")
+        put :update, params: {group_id: group.id, id: person.id, person: {last_name: "Foo", email: "foo@example.com"}}
+        expect(assigns(:person).email).to eq("bottom_member@example.com")
+      end
+
+      context "as bottom_member" do
+        before { sign_in(person) }
+
+        it "does not update email with password" do
+          person.update_column(:encrypted_password, "asdf")
+          put :update, params: {group_id: group.id, id: person.id, person: {last_name: "Foo", email: "foo@example.com"}}
+          expect(assigns(:person).email).to eq("bottom_member@example.com")
+        end
+
+        it "does update email without password" do
+          put :update, params: {group_id: group.id, id: person.id, person: {last_name: "Foo", email: "foo@example.com"}}
+          expect(assigns(:person).email).to eq("foo@example.com")
+        end
       end
 
       context "as bottom leader" do

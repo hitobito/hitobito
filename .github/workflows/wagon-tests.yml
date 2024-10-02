@@ -106,6 +106,7 @@ jobs:
       - name: 'Prepare'
         uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup
         with:
+          assets: false
           wagon_repository: ${{ inputs.wagon_repository }}
           wagon_dependency_repository: ${{ inputs.wagon_dependency_repository }}
           core_ref: ${{ inputs.core_ref }}

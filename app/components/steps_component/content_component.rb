@@ -47,7 +47,7 @@ class StepsComponent::ContentComponent < StepsComponent::IteratingComponent
   end
 
   def bottom_toolbar
-    content_tag(:div, build_buttons, class: "btn-toolbar allign-with-form")
+    content_tag(:div, build_buttons, class: "btn-toolbar align-with-form")
   end
 
   def next_button(title = nil, options = {})

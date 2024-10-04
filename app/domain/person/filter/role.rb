@@ -44,7 +44,7 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def date_range
-    start_day = parse_day(args[:start_at], Time.at(0).to_date)
+    start_day = parse_day(args[:start_at], Time.zone.at(0).to_date)
     finish_day = parse_day(args[:finish_at], Date.current)
 
     start_day..finish_day

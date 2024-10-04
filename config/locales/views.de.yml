@@ -1403,6 +1403,7 @@ de:
       events:
         event_label: "Name / Gruppe"
       index:
+        future_roles_title: "Zukünftige Rollen"
         inactive_roles_title: "Inaktive Rollen"
         qualified: "Bestanden"
         not_qualified: "Nicht bestanden"

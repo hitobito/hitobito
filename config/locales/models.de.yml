@@ -269,9 +269,6 @@ de:
       event/date:
         one: Datum
         other: Daten
-      future_role:
-        one: Zukünftige Rolle
-        other: Zukünftige Rollen
       family_member:
         one: Familienmitglied
         other: Familienmitglieder

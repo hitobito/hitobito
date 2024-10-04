@@ -275,10 +275,6 @@ fr:
         one: date
         many: Dates
         other: Dates
-      future_role:
-        one: Rôle futur
-        many: Rôles futurs
-        other: Rôles futurs
       family_member:
         one: Membre de la famille
         many: Membres de la famille

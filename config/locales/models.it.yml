@@ -256,10 +256,6 @@ it:
         one: data
         many: Date
         other: Date
-      future_role:
-        one: Ruolo futuro
-        many: Ruoli futuri
-        other: Ruoli futuri
       family_member:
         one: Membri della famiglia
         many: Membri della famiglia

@@ -227,9 +227,9 @@ module FilterNavigation
       true if kind == :future && count.zero?
     end
 
-    def count_roles(role_types, kind)
+    def count_roles(role_types, future:)
       roles_scope = Role.where(group_id: group.id, type: role_types.collect(&:sti_name))
-      roles_scope = roles_scope.future if kind == :future
+      roles_scope = roles_scope.future if future
       people_scope = Person.joins("INNER JOIN roles ON people.id = roles.person_id")
       people_scope.merge(roles_scope).distinct.count
     end

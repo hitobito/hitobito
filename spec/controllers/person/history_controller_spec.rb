@@ -37,7 +37,7 @@ describe Person::HistoryController do
         get :index, params: {group_id: groups(:bottom_group_one_one).id, id: person.id}
 
         expect(assigns(:roles)).to eq([r1, r4, r3])
-        expect(assigns(:inactive_roles)).to eq([r2, r7])
+        expect(assigns(:ended_or_archived_roles)).to eq([r2, r7])
         expect(assigns(:future_roles)).to eq([r5, r6, r8])
       end
     end

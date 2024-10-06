@@ -8,7 +8,7 @@
 require "spec_helper"
 
 describe StepsComponent, type: :component do
-  let(:header_css) { ".row .step-headers.offset-md-1" }
+  let(:header_css) { ".row .step-headers.col-md-9" }
   let(:form) { double(:form_builder, object: double(:group)) }
 
   subject(:component) { described_class.new(partials: [], form: form, step: :step) }

@@ -5,8 +5,8 @@
 
 module Export::Tabular::People
   class ParticipationsHouseholds < Households
-    def initialize(list)
-      super(people(list))
+    def initialize(list, abilitiy = nil)
+      super(people(list), ability)
     end
 
     def people(list)

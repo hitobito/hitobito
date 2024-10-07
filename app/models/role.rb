@@ -235,7 +235,7 @@ class Role < ActiveRecord::Base
   end
 
   def ended?
-    end_on? && end_on < Date.current
+    end_on&.past?
   end
 
   def future?

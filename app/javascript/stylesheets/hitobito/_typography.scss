@@ -83,8 +83,7 @@ dl {
   }
 
   @include responsive(mediaTablet) {
-    dt { width: 180px; }
-    dd { margin-left: 200px; margin-bottom: 0; }
+    dd { margin-bottom: 0; }
   }
 
   &:last-child {
@@ -93,9 +92,18 @@ dl {
   }
 
   dt {
+    text-align: right;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  .labeled-grid {
+    margin-bottom: 0.5rem;
+    grid-template-columns: 1fr 2fr;
+    grid-column-gap: 15px;
+
+    &:last-child { margin-bottom: 0; }
   }
 }
 .dl-borderless, .dl-borderless:last-child {
@@ -127,6 +135,24 @@ dl {
     margin-left: 16px;
   }
 }
+
+.labeled-grid {
+  margin-bottom: 0.25rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 5px;
+
+  dd {
+    margin-bottom: 0;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .dl-horizontal {
+    grid-template-columns: 1fr;
+  }
+}
+
 
 // Table
 table.table {

@@ -14,8 +14,8 @@ describe People::ManualDeletionsController do
   let!(:person_with_expired_roles) {
     Fabricate(Group::BottomGroup::Member.name.to_sym,
       group: groups(:bottom_group_one_one),
-      created_at: 11.months.ago,
-      deleted_at: 10.months.ago).person
+      start_on: 11.months.ago,
+      end_on: 10.months.ago).person
   }
 
   before { sign_in(user) }

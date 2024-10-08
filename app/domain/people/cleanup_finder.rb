@@ -30,7 +30,7 @@ class People::CleanupFinder
   end
 
   def any_roles
-    Role.with_deleted.where("roles.person_id = people.id")
+    Role.with_inactive.where("roles.person_id = people.id")
   end
 
   def without_any_roles_or_with_roles_outside_cutoff(scope)
@@ -42,7 +42,7 @@ class People::CleanupFinder
   end
 
   def with_roles_outside_cutoff(scope)
-    scope.where(id: Role.with_deleted.having("MAX(roles.deleted_at) <= ?", last_role_deleted_at)
+    scope.where(id: Role.with_inactive.having("MAX(roles.end_on) <= ?", last_role_ended_on)
                         .group("person_id")
                         .pluck(:person_id)) # rubocop:disable Rails/PluckInWhere
   end
@@ -56,12 +56,12 @@ class People::CleanupFinder
       current_sign_in_at)
   end
 
-  def last_role_deleted_at
-    Settings.people.cleanup_cutoff_duration.regarding_roles.months.ago
+  def last_role_ended_on
+    Settings.people.cleanup_cutoff_duration.regarding_roles.months.ago.to_date
   end
 
   def people_without_any_roles
-    base_scope.where.not(id: Role.with_deleted.select(:person_id)).distinct
+    base_scope.where.not(id: Role.with_inactive.select(:person_id)).distinct
   end
 
   def not_participating_in_future_events

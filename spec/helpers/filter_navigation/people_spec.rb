@@ -47,7 +47,7 @@ describe "FilterNavigation::People" do
       end
 
       it "contains future item with count if future roles exist" do
-        Fabricate(:future_role, person: people(:top_leader), group: group, convert_to: group.role_types.first)
+        Fabricate(group.role_types.first.sti_name, person: people(:top_leader), group: group, start_on: Date.tomorrow)
         expect(subject.main_items.last).to match(/Zukünftige \(1\)/)
       end
 

@@ -43,7 +43,7 @@ describe Person::AddRequestAbility do
     end
 
     it "allowed with person deleted in below layer" do
-      other = Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one), created_at: 1.year.ago, deleted_at: 1.month.ago).person
+      other = Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one), start_on: 1.year.ago, end_on: 1.month.ago).person
       request = create_request(other)
 
       is_expected.to be_able_to(:approve, request)
@@ -67,7 +67,7 @@ describe Person::AddRequestAbility do
 
       it "allowed with person deleted in same layer" do
         other = Fabricate(Group::BottomGroup::Member.name, group: groups(:bottom_group_one_one)).person
-        other.roles.first.update!(created_at: 1.year.ago, deleted_at: 1.month.ago)
+        other.roles.first.update!(start_on: 1.year.ago, end_on: 1.month.ago)
         request = create_request(other)
 
         is_expected.to be_able_to(:approve, request)
@@ -90,8 +90,8 @@ describe Person::AddRequestAbility do
         Fabricate(Group::BottomGroup::Member.name,
           group: groups(:bottom_group_one_one),
           person: other,
-          created_at: 1.year.ago,
-          deleted_at: 1.month.ago)
+          start_on: 1.year.ago,
+          end_on: 1.month.ago)
         request = create_request(other)
 
         is_expected.not_to be_able_to(:approve, request)
@@ -122,7 +122,7 @@ describe Person::AddRequestAbility do
 
       it "not allowed with deleted person in neighbour layer where user has a simple role" do
         Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_two), person: role.person)
-        other = Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_two), created_at: 1.year.ago).person
+        other = Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_two), start_on: 1.year.ago).person
         other.roles.first.destroy!
 
         request = create_request(other)
@@ -158,7 +158,7 @@ describe Person::AddRequestAbility do
     end
 
     it "allowed with person deleted in same layer" do
-      other = Fabricate(Group::TopLayer::TopAdmin.name, group: groups(:top_layer), created_at: 1.year.ago, deleted_at: 1.month.ago).person
+      other = Fabricate(Group::TopLayer::TopAdmin.name, group: groups(:top_layer), start_on: 1.year.ago, end_on: 1.month.ago).person
       request = create_request(other)
 
       is_expected.to be_able_to(:approve, request)
@@ -183,7 +183,7 @@ describe Person::AddRequestAbility do
       end
 
       it "allowed with person deleted in same group" do
-        other = Fabricate(Group::TopGroup::Member.name, group: groups(:top_group), created_at: 1.year.ago, deleted_at: 1.month.ago).person
+        other = Fabricate(Group::TopGroup::Member.name, group: groups(:top_group), start_on: 1.year.ago, end_on: 1.month.ago).person
         request = create_request(other)
 
         is_expected.to be_able_to(:approve, request)

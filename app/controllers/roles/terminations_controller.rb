@@ -32,7 +32,7 @@ class Roles::TerminationsController < ApplicationController
   end
 
   def terminate_on
-    role.delete_on.presence ||
+    role.end_on.presence ||
       params.dig(:roles_termination, :terminate_on).presence ||
       Time.zone.today.end_of_year
   end

@@ -13,7 +13,7 @@ describe People::CleanupFinder do
   let(:cutoff_durations) { Settings.people.cleanup_cutoff_duration }
 
   let(:sign_in_cutoff_time) { cutoff_durations.regarding_current_sign_in_at.months.ago }
-  let(:role_cutoff_time) { cutoff_durations.regarding_roles.months.ago }
+  let(:role_cutoff_date) { cutoff_durations.regarding_roles.months.ago.to_date }
   let(:participation_cutoff_time) { cutoff_durations.regarding_participations.months.ago }
 
   let(:future_event) do
@@ -23,13 +23,13 @@ describe People::CleanupFinder do
     Fabricate(:event, dates: [Event::Date.new(start_at: 10.days.ago, finish_at: 5.days.ago)])
   end
 
-  def create_role(person, deleted_at:, created_at: 101.years.ago)
+  def create_role(person, end_on:, start_on: 101.years.ago)
     Fabricate(
       Group::BottomGroup::Member.name.to_sym,
       person: person,
       group: groups(:bottom_group_one_one),
-      created_at: created_at,
-      deleted_at: deleted_at
+      start_on: start_on,
+      end_on: end_on
     )
   end
 
@@ -39,29 +39,29 @@ describe People::CleanupFinder do
     end
 
     it "finds people without roles" do
-      expect(entries.first.roles.with_deleted).to be_empty
+      expect(entries.first.roles.with_inactive).to be_empty
       expect(subject.run).to include(entries.first)
     end
 
-    it "finds people with deleted roles older or equal than the cutoff time" do
-      create_role(entries.first, deleted_at: role_cutoff_time - 100)
-      create_role(entries.second, deleted_at: role_cutoff_time)
+    it "finds people with ended roles older or equal than the cutoff time" do
+      create_role(entries.first, end_on: role_cutoff_date - 1)
+      create_role(entries.second, end_on: role_cutoff_date)
       expect(subject.run).to include(entries.first, entries.second)
     end
 
-    it "does not find people with deleted roles younger than the cutoff time" do
-      create_role(entries.first, deleted_at: role_cutoff_time + 100)
+    it "does not find people with ended roles younger than the cutoff time" do
+      create_role(entries.first, end_on: role_cutoff_date + 1)
       expect(subject.run).not_to include(entries.first)
     end
 
     it "does not find people with deleted roles older and younger than the cutoff time" do
-      create_role(entries.first, deleted_at: role_cutoff_time - 100)
-      create_role(entries.first, deleted_at: role_cutoff_time + 100)
+      create_role(entries.first, end_on: role_cutoff_date - 1)
+      create_role(entries.first, end_on: role_cutoff_date + 1)
       expect(subject.run).not_to include(entries.first)
     end
 
     it "does not find people with active roles" do
-      create_role(entries.first, deleted_at: nil)
+      create_role(entries.first, end_on: nil)
       expect(subject.run).not_to include(entries.first)
     end
 
@@ -82,12 +82,12 @@ describe People::CleanupFinder do
     end
 
     it "finds people with current_sign_in_at older than the cutoff time" do
-      entries.first.update!(current_sign_in_at: sign_in_cutoff_time - 100)
+      entries.first.update!(current_sign_in_at: sign_in_cutoff_time - 1)
       expect(subject.run).to include(entries.first)
     end
 
     it "does not find people with current_sign_in_at younger than the cutoff time" do
-      entries.first.update!(current_sign_in_at: sign_in_cutoff_time + 100)
+      entries.first.update!(current_sign_in_at: sign_in_cutoff_time + 1)
       expect(subject.run).not_to include(entries.first)
     end
   end

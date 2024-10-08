@@ -35,25 +35,14 @@ describe RolesController, js: true do
       choose_role "Member"
     end
 
-    it "soft deletes role if bis in the past" do
+    it "creates role if bis in the past" do
       fill_in "Von", with: yesterday - 3.months
       fill_in "Bis", with: yesterday
       expect do
         first(:button, "Speichern").click
         expect(page).to have_content "Rolle Member (bis #{I18n.l(yesterday)}) für Bottom Member in " \
-          "Bottom One wurde erfolgreich gelöscht."
-      end.to change { bottom_member.roles.with_deleted.count }.by(1)
-    end
-
-    it "hard deletes role if bis in the past and not valid for archive" do
-      fill_in "Von", with: yesterday - 1.day
-      fill_in "Bis", with: yesterday
-      expect do
-        first(:button, "Speichern").click
-      end.to not_change { bottom_member.roles.with_deleted.count }
-        .and(not_change { bottom_member.roles.count })
-      expect(page).to have_content "Rolle Member (bis #{I18n.l(yesterday)}) für Bottom Member in " \
-        "Bottom One wurde erfolgreich gelöscht."
+          "Bottom One wurde erfolgreich erstellt."
+      end.to change { bottom_member.roles.with_inactive.count }.by(1)
     end
 
     it "displays validation message if bis is before von" do
@@ -62,39 +51,31 @@ describe RolesController, js: true do
 
       expect do
         first(:button, "Speichern").click
-      end.to(not_change { bottom_member.roles.with_deleted.count })
+      end.to(not_change { bottom_member.roles.with_inactive.count })
       expect(page).to have_content "Bis kann nicht vor Von sein"
-      expect(page).to have_css("#role_delete_on.is-invalid")
+      expect(page).to have_css("#role_end_on.is-invalid")
     end
   end
 
-  describe "updating delete_on", js: false do
+  describe "updating end_on", js: false do
     let(:role) { roles(:bottom_member) }
     let(:tomorrow) { Time.zone.tomorrow }
 
     before { sign_in }
 
-    it "sets delete_on and rerenders" do
+    it "sets end_on and rerenders" do
       visit edit_group_role_path(group_id: role.group_id, id: role.id)
       fill_in "Bis", with: tomorrow
       all("form .bottom .btn-group").first.click_button "Speichern"
       expect(page).to have_content "Rolle Member (bis #{tomorrow.strftime("%d.%m.%Y")}) für " \
         "Bottom Member in Bottom One wurde erfolgreich aktualisiert"
-      expect(role.reload.delete_on).to eq tomorrow
+      expect(role.reload.end_on).to eq tomorrow
     end
 
-    it "shows delete_on date" do
-      role.update(delete_on: tomorrow)
+    it "shows end_on date" do
+      role.update(end_on: tomorrow)
       visit edit_group_role_path(group_id: role.group_id, id: role.id)
       expect(page).to have_field "Bis", with: tomorrow.strftime("%d.%m.%Y")
-    end
-
-    it "saving outdated role deletes role" do
-      role.update_columns(created_at: 3.days.ago, delete_on: 1.day.ago.to_date)
-      visit edit_group_role_path(group_id: role.group_id, id: role.id)
-      expect do
-        all("form .bottom .btn-group").first.click_button "Speichern"
-      end.to change { people(:bottom_member).roles.count }.by(-1)
     end
   end
 

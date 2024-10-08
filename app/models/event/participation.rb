@@ -47,7 +47,9 @@ class Event::Participation < ActiveRecord::Base
 
   ### VALIDATIONS
 
-  validates_by_schema
+  # price_category is used as enum in hitobito_sac_cas. validates_by_schema cannot be overridden
+  # inside a wagon because of the loading order, so it must be excluded in the core instead
+  validates_by_schema except: [:price_category]
   validates :person_id,
     uniqueness: {scope: :event_id}
   validates :additional_information,

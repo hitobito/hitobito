@@ -8,8 +8,20 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static targets = ["checkbox"]
 
-  handleCheckbox() {    
-    const dependentCheckboxes = this.element.querySelectorAll('[data-dependent-checkbox="true"]');
+  // unselects all dependent checkboxes when unchecking master checkbox
+  handleMasterCheckbox() {
+    const dependentCheckboxes = this.element.querySelectorAll('[data-action="form-field-check-dependent#handleDependentCheckbox"]');
+
+    if(!event.target.checked) {
+      dependentCheckboxes.forEach((checkbox) => {
+        checkbox.checked = false;
+      });
+    }
+  }
+
+  // selects master checkbox if any dependent checkbox is checked
+  handleDependentCheckbox() {    
+    const dependentCheckboxes = this.element.querySelectorAll('[data-action="form-field-check-dependent#handleDependentCheckbox"]');
 
     const isAnyChecked = Array.from(dependentCheckboxes).some(checkbox => checkbox.checked);
 

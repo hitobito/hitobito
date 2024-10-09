@@ -19,40 +19,22 @@ module NormalizedLabels
   def normalize_label
     return if label.blank?
 
-    fresh = self.class.used_labels.none? do |l|
+    self.class.used_labels.find do |l|
       equal = l.casecmp(label) == 0
       self.label = l if equal
       equal
     end
-    self.class.sweep_used_labels if fresh
   end
 
   module ClassMethods
     def available_labels = predefined_labels
 
-    def used_labels
-      Rails.cache.fetch(labels_cache_key) do
-        load_used_labels
-      end
-    end
-
-    def sweep_used_labels
-      Rails.cache.delete(labels_cache_key)
-    end
+    def used_labels = predefined_labels | labels_from_db
 
     private
 
-    def load_used_labels
-      available_labels |
-        base_class.order(:label).distinct.pluck(:label).compact
-    end
+    def predefined_labels = []
 
-    def predefined_labels
-      []
-    end
-
-    def labels_cache_key
-      "#{base_class.name}.Labels"
-    end
+    def labels_from_db = base_class.order(:label).distinct.pluck(:label).compact
   end
 end

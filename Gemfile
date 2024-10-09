@@ -48,6 +48,7 @@ gem "http_accept_language"
 gem "icalendar"
 gem "image_processing", "~> 1.12"
 gem "json", "< 2.7.0" # pinned to be able to use rdbg. Somehow it has multiple versions otherwise
+gem "kramdown"
 gem "lograge"
 gem "lograge_activejob"
 gem "lograge-sql"

@@ -62,7 +62,9 @@ class CustomContent < ActiveRecord::Base
 
   def body_with_values(placeholders = {})
     # Consider the custom content as html safe before replacing the placeholders
-    replace_placeholders(body.to_s.html_safe, placeholders)
+    body.to_s.html_safe
+      .then { replace_markdown_tables(_1) }
+      .then { replace_placeholders(_1, placeholders) }
   end
 
   def replace_placeholders(string, placeholders)
@@ -82,7 +84,13 @@ class CustomContent < ActiveRecord::Base
     string.html_safe
   end
 
+  def replace_markdown_tables(string)
+    string.gsub(markdown_table_pattern) { Kramdown::Document.new(_1).to_html }.html_safe
+  end
+
   private
+
+  def markdown_table_pattern = %r{((?:(?:\|[^|\r\n]*)+\|(?:\r?\n|\r)?)+)}
 
   def as_list(placeholders)
     placeholders.to_s.split(",").collect(&:strip)

@@ -354,6 +354,8 @@ GEM
       activerecord
       kaminari-core (= 1.2.2)
     kaminari-core (1.2.2)
+    kramdown (2.4.0)
+      rexml
     language_server-protocol (3.17.0.3)
     launchy (3.0.1)
       addressable (~> 2.8)
@@ -710,7 +712,7 @@ GEM
     unaccent (0.4.0)
     unicode-display_width (2.5.0)
     uniform_notifier (1.16.0)
-    uri (0.13.0)
+    uri (0.13.1)
     validates_by_schema (0.3.1)
       activerecord (>= 3.1.0)
     validates_timeliness (6.0.1)
@@ -810,6 +812,7 @@ DEPENDENCIES
   image_processing (~> 1.12)
   json (< 2.7.0)
   kaminari
+  kramdown
   launchy
   listen
   lograge
@@ -893,4 +896,4 @@ DEPENDENCIES
   wirble
 
 BUNDLED WITH
-   2.5.11
+   2.5.6

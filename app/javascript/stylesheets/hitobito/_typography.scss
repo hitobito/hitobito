@@ -72,8 +72,15 @@ h1 .btn, h2 .btn, h3 .btn, h4 .btn {
 dl {
   margin-top: 0;
 }
+
+dd {
+  overflow-wrap: anywhere;
+}
+
 .dl-horizontal {
   dd {
+    white-space: wrap !important;
+
     &:last-child { margin-bottom: 0; }
 
     // display empty multiline fields correctly with whitespace
@@ -144,6 +151,9 @@ dl {
 
   dd {
     margin-bottom: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 

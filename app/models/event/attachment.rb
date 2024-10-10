@@ -10,8 +10,8 @@
 # Table name: event_attachments
 #
 #  id         :integer          not null, primary key
+#  visibility :string
 #  event_id   :integer          not null
-#  visibility :string(255)
 #
 # Indexes
 #

@@ -8,8 +8,8 @@
 #
 #  id        :integer          not null, primary key
 #  finish_at :datetime
-#  label     :string(255)
-#  location  :string(255)
+#  label     :string
+#  location  :string
 #  start_at  :datetime
 #  event_id  :integer          not null
 #

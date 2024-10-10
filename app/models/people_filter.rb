@@ -8,10 +8,10 @@
 # Table name: people_filters
 #
 #  id           :integer          not null, primary key
-#  filter_chain :text(65535)
-#  group_type   :string(255)
-#  name         :string(255)      not null
-#  range        :string(255)      default("deep")
+#  filter_chain :text
+#  group_type   :string
+#  name         :string           not null
+#  range        :string           default("deep")
 #  created_at   :datetime
 #  updated_at   :datetime
 #  group_id     :integer

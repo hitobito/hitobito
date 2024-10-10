@@ -9,18 +9,17 @@
 #
 #  id                     :integer          not null, primary key
 #  expires_in             :integer
-#  previous_refresh_token :string(255)      default(""), not null
-#  refresh_token          :string(255)
+#  previous_refresh_token :string           default(""), not null
+#  refresh_token          :string
 #  revoked_at             :datetime
-#  scopes                 :string(255)
-#  token                  :string(255)      not null
+#  scopes                 :string
+#  token                  :string           not null
 #  created_at             :datetime         not null
 #  application_id         :integer
 #  resource_owner_id      :integer
 #
 # Indexes
 #
-#  fk_rails_732cb83ab7                             (application_id)
 #  index_oauth_access_tokens_on_refresh_token      (refresh_token) UNIQUE
 #  index_oauth_access_tokens_on_resource_owner_id  (resource_owner_id)
 #  index_oauth_access_tokens_on_token              (token) UNIQUE

@@ -9,15 +9,16 @@
 #
 # Table name: oauth_applications
 #
-#  id           :integer          not null, primary key
-#  confidential :boolean          default(TRUE), not null
-#  name         :string(255)      not null
-#  redirect_uri :text(65535)      not null
-#  scopes       :string(255)      default(""), not null
-#  secret       :string(255)      not null
-#  uid          :string(255)      not null
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
+#  id                  :integer          not null, primary key
+#  confidential        :boolean          default(TRUE), not null
+#  name                :string           not null
+#  redirect_uri        :text             not null
+#  scopes              :string           default(""), not null
+#  secret              :string           not null
+#  skip_consent_screen :boolean          default(FALSE)
+#  uid                 :string           not null
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
 #
 # Indexes
 #

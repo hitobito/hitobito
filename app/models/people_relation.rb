@@ -10,7 +10,7 @@
 # Table name: people_relations
 #
 #  id      :integer          not null, primary key
-#  kind    :string(255)      not null
+#  kind    :string           not null
 #  head_id :integer          not null
 #  tail_id :integer          not null
 #

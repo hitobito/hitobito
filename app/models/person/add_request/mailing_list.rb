@@ -8,8 +8,8 @@
 # Table name: person_add_requests
 #
 #  id           :integer          not null, primary key
-#  role_type    :string(255)
-#  type         :string(255)      not null
+#  role_type    :string
+#  type         :string           not null
 #  created_at   :datetime         not null
 #  body_id      :integer          not null
 #  person_id    :integer          not null

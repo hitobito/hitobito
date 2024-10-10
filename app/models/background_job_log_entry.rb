@@ -12,11 +12,10 @@
 #  id          :bigint           not null, primary key
 #  attempt     :integer
 #  finished_at :datetime
-#  job_name    :string(255)      not null
+#  job_name    :string           not null
 #  payload     :json
-#  runtime     :integer
 #  started_at  :datetime
-#  status      :string(255)
+#  status      :string
 #  group_id    :bigint
 #  job_id      :bigint           not null
 #

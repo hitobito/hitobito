@@ -10,8 +10,8 @@
 # Table name: cors_origins
 #
 #  id               :bigint           not null, primary key
-#  auth_method_type :string(255)
-#  origin           :string(255)      not null
+#  auth_method_type :string
+#  origin           :string           not null
 #  auth_method_id   :bigint
 #
 # Indexes

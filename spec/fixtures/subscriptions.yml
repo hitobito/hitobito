@@ -8,7 +8,7 @@
 #
 #  id              :integer          not null, primary key
 #  excluded        :boolean          default(FALSE), not null
-#  subscriber_type :string(255)      not null
+#  subscriber_type :string           not null
 #  mailing_list_id :integer          not null
 #  subscriber_id   :integer          not null
 #

@@ -10,9 +10,9 @@
 # Table name: mail_logs
 #
 #  id                :integer          not null, primary key
-#  mail_from         :string(255)
-#  mail_hash         :string(255)
-#  mailing_list_name :string(255)
+#  mail_from         :string
+#  mail_hash         :string
+#  mailing_list_name :string
 #  status            :integer          default("retrieved")
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null

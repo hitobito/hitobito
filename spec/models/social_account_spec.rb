@@ -8,11 +8,15 @@
 # Table name: social_accounts
 #
 #  id               :integer          not null, primary key
-#  contactable_id   :integer          not null
 #  contactable_type :string           not null
-#  name             :string           not null
 #  label            :string
+#  name             :string           not null
 #  public           :boolean          default(TRUE), not null
+#  contactable_id   :integer          not null
+#
+# Indexes
+#
+#  index_social_accounts_on_contactable_id_and_contactable_type  (contactable_id,contactable_type)
 #
 
 require "spec_helper"

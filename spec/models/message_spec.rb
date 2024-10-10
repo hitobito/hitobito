@@ -2,22 +2,30 @@
 #
 # Table name: messages
 #
-#  id                 :bigint           not null, primary key
-#  failed_count       :integer          default(0)
-#  invoice_attributes :text(65535)
-#  recipient_count    :integer          default(0)
-#  salutation         :string(255)      default("none"), not null
-#  sent_at            :datetime
-#  state              :string(255)      default("draft")
-#  subject            :string(256)
-#  success_count      :integer          default(0)
-#  text               :text(65535)
-#  type               :string(255)      not null
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
-#  invoice_list_id    :bigint
-#  mailing_list_id    :bigint
-#  sender_id          :bigint
+#  id                    :bigint           not null, primary key
+#  date_location_text    :string
+#  donation_confirmation :boolean          default(FALSE), not null
+#  failed_count          :integer          default(0)
+#  invoice_attributes    :text
+#  pp_post               :string
+#  raw_source            :text
+#  recipient_count       :integer          default(0)
+#  salutation            :string
+#  send_to_households    :boolean          default(FALSE), not null
+#  sent_at               :datetime
+#  shipping_method       :string           default("own")
+#  state                 :string           default("draft")
+#  subject               :string(998)
+#  success_count         :integer          default(0)
+#  text                  :text
+#  type                  :string           not null
+#  uid                   :string
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#  bounce_parent_id      :integer
+#  invoice_list_id       :bigint
+#  mailing_list_id       :bigint
+#  sender_id             :bigint
 #
 # Indexes
 #

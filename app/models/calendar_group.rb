@@ -10,7 +10,7 @@
 # Table name: calendar_groups
 #
 #  id             :bigint           not null, primary key
-#  event_type     :string(255)
+#  event_type     :string
 #  excluded       :boolean          default(FALSE)
 #  with_subgroups :boolean          default(FALSE)
 #  calendar_id    :bigint           not null

@@ -9,8 +9,8 @@
 #
 #  id       :integer          not null, primary key
 #  canton   :string(2)        not null
-#  name     :string(255)      not null
-#  zip_code :string(255)      not null
+#  name     :string           not null
+#  zip_code :string           not null
 #
 # Indexes
 #

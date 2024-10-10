@@ -12,13 +12,13 @@
 # Table name: message_recipients
 #
 #  id           :bigint           not null, primary key
-#  address      :text(65535)
-#  email        :string(255)
-#  error        :text(65535)
+#  address      :text
+#  email        :string
+#  error        :text
 #  failed_at    :datetime
-#  phone_number :string(255)
-#  salutation   :string(255)      default("")
-#  state        :string(255)
+#  phone_number :string
+#  salutation   :string           default("")
+#  state        :string
 #  created_at   :datetime
 #  invoice_id   :bigint
 #  message_id   :bigint           not null

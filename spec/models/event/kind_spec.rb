@@ -2,11 +2,16 @@
 #
 # Table name: event_kinds
 #
-#  id          :integer          not null, primary key
-#  created_at  :datetime
-#  updated_at  :datetime
-#  deleted_at  :datetime
-#  minimum_age :integer
+#  id                     :integer          not null, primary key
+#  application_conditions :text
+#  deleted_at             :datetime
+#  general_information    :text
+#  label                  :string           not null
+#  minimum_age            :integer
+#  short_name             :string
+#  created_at             :datetime
+#  updated_at             :datetime
+#  kind_category_id       :integer
 #
 
 #  Copyright (c) 2012-2014, Pfadibewegung Schweiz. This file is part of

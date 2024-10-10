@@ -13,7 +13,7 @@
 #  approved             :boolean          default(FALSE), not null
 #  rejected             :boolean          default(FALSE), not null
 #  waiting_list         :boolean          default(FALSE), not null
-#  waiting_list_comment :text(65535)
+#  waiting_list_comment :text
 #  priority_1_id        :integer          not null
 #  priority_2_id        :integer
 #  priority_3_id        :integer

@@ -7,9 +7,9 @@
 # Table name: social_accounts
 #
 #  id               :integer          not null, primary key
-#  contactable_type :string(255)      not null
-#  label            :string(255)
-#  name             :string(255)      not null
+#  contactable_type :string           not null
+#  label            :string
+#  name             :string           not null
 #  public           :boolean          default(TRUE), not null
 #  contactable_id   :integer          not null
 #

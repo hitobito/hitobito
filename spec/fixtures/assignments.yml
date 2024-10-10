@@ -8,10 +8,10 @@
 # Table name: assignments
 #
 #  id              :bigint           not null, primary key
-#  attachment_type :string(255)
-#  description     :text(65535)      not null
+#  attachment_type :string
+#  description     :text             not null
 #  read_at         :date
-#  title           :string(255)      not null
+#  title           :string           not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  attachment_id   :integer

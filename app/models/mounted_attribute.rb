@@ -10,9 +10,9 @@
 # Table name: mounted_attributes
 #
 #  id         :bigint           not null, primary key
-#  entry_type :string(255)      not null
-#  key        :string(255)      not null
-#  value      :text(65535)
+#  entry_type :string           not null
+#  key        :string           not null
+#  value      :text
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  entry_id   :integer          not null

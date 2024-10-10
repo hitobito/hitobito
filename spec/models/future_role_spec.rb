@@ -4,30 +4,25 @@
 #
 # Table name: roles
 #
-#  id                :integer          not null, primary key
-#  archived_at       :datetime
-#  beitragskategorie :string(255)
-#  convert_on        :date
-#  convert_to        :string(255)
-#  delete_on         :date
-#  deleted_at        :datetime
-#  label             :string(255)
-#  type              :string(255)      not null
-#  created_at        :datetime
-#  updated_at        :datetime
-#  group_id          :integer          not null
-#  person_id         :integer          not null
+#  id          :integer          not null, primary key
+#  archived_at :datetime
+#  convert_on  :date
+#  convert_to  :string
+#  delete_on   :date
+#  deleted_at  :datetime
+#  label       :string
+#  terminated  :boolean          default(FALSE), not null
+#  type        :string           not null
+#  created_at  :datetime
+#  updated_at  :datetime
+#  group_id    :integer          not null
+#  person_id   :integer          not null
 #
 # Indexes
 #
 #  index_roles_on_person_id_and_group_id  (person_id,group_id)
 #  index_roles_on_type                    (type)
 #
-#
-# Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
-# hitobito_sac_cas and licensed under the Affero General Public License version 3
-# or later. See the COPYING file at the top-level directory or at
-# https://github.com/hitobito/hitobito
 
 require "spec_helper"
 

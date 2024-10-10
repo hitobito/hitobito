@@ -8,9 +8,9 @@
 # Table name: phone_numbers
 #
 #  id               :integer          not null, primary key
-#  contactable_type :string(255)      not null
-#  label            :string(255)
-#  number           :string(255)      not null
+#  contactable_type :string           not null
+#  label            :string
+#  number           :string           not null
 #  public           :boolean          default(TRUE), not null
 #  contactable_id   :integer          not null
 #

@@ -10,8 +10,12 @@
 # Table name: event_attachments
 #
 #  id         :integer          not null, primary key
+#  visibility :string
 #  event_id   :integer          not null
-#  visibility :string(255)
+#
+# Indexes
+#
+#  index_event_attachments_on_event_id  (event_id)
 #
 
 require "spec_helper"

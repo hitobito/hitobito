@@ -458,6 +458,9 @@ de:
         success:
           one: "Eine Person wurde erfolgreich zum %{event_type} '%{event}' hinzugefügt"
           other: "%{count} Personen wurden erfolgreich zum %{event_type} '%{event}' hinzugefügt"
+        failure:
+          one: "Eine Person konnte nicht zum %{event_type} '%{event}' hinzugefügt werden"
+          other: "%{count} Personen konnten nicht zum %{event_type} '%{event}' hinzugefügt werden"
       new:
         title: Personen einem %{event_label} zuweisen
         event_search: Anlass Suchen...

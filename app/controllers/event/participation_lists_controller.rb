@@ -13,12 +13,17 @@ class Event::ParticipationListsController < SimpleCrudController
 
   def create
     new_participations = build_new_participations
-    ActiveRecord::Base.transaction do
-      new_participations.map(&:save).all?(&:present?)
+    success = ActiveRecord::Base.transaction do
+      new_participations.map(&:save!).all?
     end
 
-    redirect_to(group_people_path(group),
-      notice: flash_message(:success, count: new_participations.count))
+    if success
+      redirect_to(group_people_path(group),
+        notice: flash_message(:success, count: new_participations.count))
+    else
+      redirect_to(group_people_path(group),
+        alert: flash_message(:failure, count: new_participations.count))
+    end
   end
 
   def new

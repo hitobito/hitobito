@@ -58,9 +58,9 @@ describe PhoneNumber do
 
     it { is_expected.to include(Settings.phone_number.predefined_labels.first) }
 
-    it "includes labels from database" do
+    it "excludes labels from database" do
       Fabricate(:phone_number, label: "Foo", number: "+41 44 123 45 67")
-      is_expected.to include("Foo")
+      is_expected.not_to include("Foo")
     end
 
     it "includes labels from database and predefined only once" do

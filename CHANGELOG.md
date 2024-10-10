@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## unreleased
+
+- Unterstützung vom login=prompt Parameter im OIDC Authorization flow (hitobito_sac_cas#1075)
+
 ## Version 2.2
 
 - Ausserhalb von Hitobito angelegte Mailchimp E-Mails werden nicht mehr gelöscht, #2752

@@ -31,10 +31,11 @@ Doorkeeper::OpenidConnect.configure do
   end
 
   reauthenticate_resource_owner do |resource_owner, return_to|
-    # Example implementation:
-    # store_location_for resource_owner, return_to
-    # sign_out resource_owner
-    # redirect_to new_user_session_url
+    next unless resource_owner.is_a?(Person) # skip if we have no authenticated resource owner
+
+    store_location_for resource_owner, return_to
+    sign_out resource_owner
+    redirect_to new_person_session_url(auth: true)
   end
 
   subject do |resource_owner, application|
@@ -94,6 +95,6 @@ class Doorkeeper::OpenidConnect::UserInfo
   # Patch the claims JSON encode method for the userinfo endpoint, to disable filtering out
   # empty and nil values.
   def as_json(*_)
-    claims #.reject { |_, value| value.nil? || value == '' }
+    claims # .reject { |_, value| value.nil? || value == '' }
   end
 end

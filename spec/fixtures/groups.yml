@@ -8,32 +8,36 @@
 # Table name: groups
 #
 #  id                                      :integer          not null, primary key
-#  address                                 :text(65535)
+#  address                                 :string(1024)
+#  address_care_of                         :string
 #  archived_at                             :datetime
-#  country                                 :string(255)
-#  custom_self_registration_title          :string(255)
+#  country                                 :string
+#  custom_self_registration_title          :string
 #  deleted_at                              :datetime
-#  description                             :text(65535)
-#  email                                   :string(255)
-#  encrypted_text_message_password         :string(255)
-#  encrypted_text_message_username         :string(255)
-#  letter_address_position                 :string(255)      default("left"), not null
+#  description                             :text
+#  email                                   :string
+#  encrypted_text_message_password         :string
+#  encrypted_text_message_username         :string
+#  housenumber                             :string(20)
+#  letter_address_position                 :string           default("left"), not null
 #  lft                                     :integer
 #  main_self_registration_group            :boolean          default(FALSE), not null
-#  name                                    :string(255)
-#  nextcloud_url                           :string(255)
-#  privacy_policy                          :string(255)
-#  privacy_policy_title                    :string(255)
+#  name                                    :string
+#  nextcloud_url                           :string
+#  postbox                                 :string
+#  privacy_policy                          :string
+#  privacy_policy_title                    :string
 #  require_person_add_requests             :boolean          default(FALSE), not null
 #  rgt                                     :integer
-#  self_registration_notification_email    :string(255)
+#  self_registration_notification_email    :string
 #  self_registration_require_adult_consent :boolean          default(FALSE), not null
-#  self_registration_role_type             :string(255)
+#  self_registration_role_type             :string
 #  short_name                              :string(31)
-#  text_message_originator                 :string(255)
-#  text_message_provider                   :string(255)      default("aspsms"), not null
-#  town                                    :string(255)
-#  type                                    :string(255)      not null
+#  street                                  :string
+#  text_message_originator                 :string
+#  text_message_provider                   :string           default("aspsms"), not null
+#  town                                    :string
+#  type                                    :string           not null
 #  zip_code                                :integer
 #  created_at                              :datetime
 #  updated_at                              :datetime

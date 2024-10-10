@@ -7,11 +7,17 @@
 # Table name: qualifications
 #
 #  id                    :integer          not null, primary key
-#  person_id             :integer          not null
-#  qualification_kind_id :integer          not null
-#  start_at              :date             not null
 #  finish_at             :date
 #  origin                :string
+#  qualified_at          :date
+#  start_at              :date             not null
+#  person_id             :integer          not null
+#  qualification_kind_id :integer          not null
+#
+# Indexes
+#
+#  index_qualifications_on_person_id              (person_id)
+#  index_qualifications_on_qualification_kind_id  (qualification_kind_id)
 #
 
 require "spec_helper"

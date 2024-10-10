@@ -8,17 +8,17 @@
 # Table name: service_tokens
 #
 #  id                   :integer          not null, primary key
-#  description          :text(65535)
+#  description          :text
 #  event_participations :boolean          default(FALSE), not null
 #  events               :boolean          default(FALSE)
 #  groups               :boolean          default(FALSE)
 #  invoices             :boolean          default(FALSE), not null
 #  last_access          :datetime
 #  mailing_lists        :boolean          default(FALSE), not null
-#  name                 :string(255)      not null
+#  name                 :string           not null
 #  people               :boolean          default(FALSE)
-#  permission           :string(255)      default("layer_read"), not null
-#  token                :string(255)      not null
+#  permission           :string           default("layer_read"), not null
+#  token                :string           not null
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  layer_group_id       :integer          not null

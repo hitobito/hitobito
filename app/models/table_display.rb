@@ -10,8 +10,8 @@
 # Table name: table_displays
 #
 #  id                :integer          not null, primary key
-#  selected          :text(65535)
-#  table_model_class :string(255)      not null
+#  selected          :text
+#  table_model_class :string           not null
 #  person_id         :integer          not null
 #
 # Indexes

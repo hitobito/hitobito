@@ -10,33 +10,36 @@
 #  id                               :integer          not null, primary key
 #  applicant_count                  :integer          default(0)
 #  application_closing_at           :date
-#  application_conditions           :text(65535)
+#  application_conditions           :text
 #  application_opening_at           :date
 #  applications_cancelable          :boolean          default(FALSE), not null
-#  cost                             :string(255)
-#  description                      :text(65535)
+#  automatic_assignment             :boolean          default(FALSE), not null
+#  cost                             :string
+#  description                      :text
 #  display_booking_info             :boolean          default(TRUE), not null
 #  external_applications            :boolean          default(FALSE)
 #  globally_visible                 :boolean
-#  hidden_contact_attrs             :text(65535)
-#  location                         :text(65535)
+#  hidden_contact_attrs             :text
+#  location                         :text
 #  maximum_participants             :integer
-#  motto                            :string(255)
-#  name                             :string(255)
+#  minimum_participants             :integer
+#  motto                            :string
+#  name                             :string
 #  notify_contact_on_participations :boolean          default(FALSE), not null
-#  number                           :string(255)
+#  number                           :string
 #  participant_count                :integer          default(0)
 #  participations_visible           :boolean          default(FALSE), not null
 #  priorization                     :boolean          default(FALSE), not null
-#  required_contact_attrs           :text(65535)
+#  required_contact_attrs           :text
 #  requires_approval                :boolean          default(FALSE), not null
-#  shared_access_token              :string(255)
+#  shared_access_token              :string
 #  signature                        :boolean
 #  signature_confirmation           :boolean
-#  signature_confirmation_text      :string(255)
+#  signature_confirmation_text      :string
 #  state                            :string(60)
 #  teamer_count                     :integer          default(0)
-#  type                             :string(255)
+#  training_days                    :decimal(5, 2)
+#  type                             :string
 #  waiting_list                     :boolean          default(TRUE), not null
 #  created_at                       :datetime
 #  updated_at                       :datetime

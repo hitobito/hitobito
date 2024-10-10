@@ -1,3 +1,24 @@
+# == Schema Information
+#
+# Table name: invoice_items
+#
+#  id                      :integer          not null, primary key
+#  account                 :string
+#  cost                    :decimal(12, 2)
+#  cost_center             :string
+#  count                   :integer          default(1), not null
+#  description             :text
+#  dynamic_cost_parameters :text
+#  name                    :string           not null
+#  type                    :string           default("InvoiceItem"), not null
+#  unit_cost               :decimal(12, 2)   not null
+#  vat_rate                :decimal(5, 2)
+#  invoice_id              :integer          not null
+#
+# Indexes
+#
+#  index_invoice_items_on_invoice_id  (invoice_id)
+#
 require "spec_helper"
 
 describe InvoiceItem do

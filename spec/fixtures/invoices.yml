@@ -8,31 +8,31 @@
 # Table name: invoices
 #
 #  id                          :integer          not null, primary key
-#  account_number              :string(255)
-#  address                     :text(65535)
-#  beneficiary                 :text(65535)
-#  currency                    :string(255)      default("CHF"), not null
-#  description                 :text(65535)
+#  account_number              :string
+#  address                     :text
+#  beneficiary                 :text
+#  currency                    :string           default("CHF"), not null
+#  description                 :text
 #  due_at                      :date
-#  esr_number                  :string(255)      not null
+#  esr_number                  :string           not null
 #  hide_total                  :boolean          default(FALSE), not null
-#  iban                        :string(255)
+#  iban                        :string
 #  issued_at                   :date
-#  participant_number          :string(255)
-#  participant_number_internal :string(255)
-#  payee                       :text(65535)
-#  payment_information         :text(65535)
-#  payment_purpose             :text(65535)
-#  payment_slip                :string(255)      default("ch_es"), not null
-#  recipient_address           :text(65535)
-#  recipient_email             :string(255)
-#  reference                   :string(255)      not null
+#  participant_number          :string
+#  participant_number_internal :string
+#  payee                       :text
+#  payment_information         :text
+#  payment_purpose             :text
+#  payment_slip                :string           default("ch_es"), not null
+#  recipient_address           :text
+#  recipient_email             :string
+#  reference                   :string           not null
 #  sent_at                     :date
-#  sequence_number             :string(255)      not null
-#  state                       :string(255)      default("draft"), not null
-#  title                       :string(255)      not null
+#  sequence_number             :string           not null
+#  state                       :string           default("draft"), not null
+#  title                       :string           not null
 #  total                       :decimal(12, 2)
-#  vat_number                  :string(255)
+#  vat_number                  :string
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
 #  creator_id                  :integer

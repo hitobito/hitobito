@@ -7,14 +7,15 @@
 #
 # Table name: qualification_kinds
 #
-#  id             :integer          not null, primary key
-#  deleted_at     :datetime
-#  description    :text(65535)
-#  label          :string(255)      not null
-#  reactivateable :integer
-#  validity       :integer
-#  created_at     :datetime
-#  updated_at     :datetime
+#  id                     :integer          not null, primary key
+#  deleted_at             :datetime
+#  description            :string(1023)
+#  label                  :string           not null
+#  reactivateable         :integer
+#  required_training_days :decimal(5, 2)
+#  validity               :integer
+#  created_at             :datetime
+#  updated_at             :datetime
 #
 
 class QualificationKind < ActiveRecord::Base

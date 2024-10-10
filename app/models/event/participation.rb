@@ -11,7 +11,7 @@
 #
 #  id                     :integer          not null, primary key
 #  active                 :boolean          default(FALSE), not null
-#  additional_information :text(65535)
+#  additional_information :text
 #  qualified              :boolean
 #  created_at             :datetime
 #  updated_at             :datetime

@@ -10,12 +10,12 @@
 #  id          :integer          not null, primary key
 #  archived_at :datetime
 #  convert_on  :date
-#  convert_to  :string(255)
+#  convert_to  :string
 #  delete_on   :date
 #  deleted_at  :datetime
-#  label       :string(255)
+#  label       :string
 #  terminated  :boolean          default(FALSE), not null
-#  type        :string(255)      not null
+#  type        :string           not null
 #  created_at  :datetime
 #  updated_at  :datetime
 #  group_id    :integer          not null

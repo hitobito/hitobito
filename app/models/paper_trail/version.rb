@@ -10,13 +10,13 @@
 # Table name: versions
 #
 #  id             :integer          not null, primary key
-#  event          :string(255)      not null
-#  item_type      :string(255)      not null
-#  main_type      :string(255)
-#  object         :text(65535)
-#  object_changes :text(65535)
-#  whodunnit      :string(255)
-#  whodunnit_type :string(255)      default("Person"), not null
+#  event          :string           not null
+#  item_type      :string           not null
+#  main_type      :string
+#  object         :text
+#  object_changes :text
+#  whodunnit      :string
+#  whodunnit_type :string           default("Person"), not null
 #  created_at     :datetime
 #  item_id        :integer          not null
 #  main_id        :integer

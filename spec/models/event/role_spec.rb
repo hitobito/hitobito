@@ -3,9 +3,14 @@
 # Table name: event_roles
 #
 #  id               :integer          not null, primary key
+#  label            :string
 #  type             :string           not null
 #  participation_id :integer          not null
-#  label            :string
+#
+# Indexes
+#
+#  index_event_roles_on_participation_id  (participation_id)
+#  index_event_roles_on_type              (type)
 #
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of

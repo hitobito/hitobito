@@ -11,7 +11,7 @@
 #
 #  id                 :bigint           not null, primary key
 #  declined_at        :datetime
-#  participation_type :string(255)      not null
+#  participation_type :string           not null
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  event_id           :bigint           not null

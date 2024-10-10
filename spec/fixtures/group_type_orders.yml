@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: group_type_orders
+#
+#  id           :bigint           not null, primary key
+#  name         :string
+#  order_weight :integer
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#
 top_layer:
   name: Group::TopLayer
   order_weight: 1

@@ -10,7 +10,7 @@
 # Table name: addresses
 #
 #  id               :bigint           not null, primary key
-#  numbers          :text(65535)
+#  numbers          :text
 #  state            :string(128)      not null
 #  street_long      :string(128)      not null
 #  street_long_old  :string(128)      not null

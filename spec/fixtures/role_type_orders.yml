@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: role_type_orders
+#
+#  id           :bigint           not null, primary key
+#  name         :string
+#  order_weight :integer
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#
 group_top_layer_top_admin:
   name: Group::TopLayer::TopAdmin
   order_weight: 1

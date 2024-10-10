@@ -7,26 +7,27 @@
 # Table name: mailing_lists
 #
 #  id                                  :integer          not null, primary key
-#  additional_sender                   :string(255)
+#  additional_sender                   :string
 #  anyone_may_post                     :boolean          default(FALSE), not null
 #  delivery_report                     :boolean          default(FALSE), not null
-#  description                         :text(65535)
-#  filter_chain                        :text(65535)
-#  mail_name                           :string(255)
-#  mailchimp_api_key                   :string(255)
+#  description                         :text
+#  filter_chain                        :text
+#  mail_name                           :string
+#  mailchimp_api_key                   :string
+#  mailchimp_forgotten_emails          :text
 #  mailchimp_include_additional_emails :boolean          default(FALSE)
 #  mailchimp_last_synced_at            :datetime
-#  mailchimp_result                    :text(65535)
+#  mailchimp_result                    :text
 #  mailchimp_syncing                   :boolean          default(FALSE)
 #  main_email                          :boolean          default(FALSE)
-#  name                                :string(255)      not null
-#  preferred_labels                    :string(255)
-#  publisher                           :string(255)
-#  subscribable_for                    :string(255)      default("nobody"), not null
-#  subscribable_mode                   :string(255)
+#  name                                :string           not null
+#  preferred_labels                    :string
+#  publisher                           :string
+#  subscribable_for                    :string           default("nobody"), not null
+#  subscribable_mode                   :string
 #  subscribers_may_post                :boolean          default(FALSE), not null
 #  group_id                            :integer          not null
-#  mailchimp_list_id                   :string(255)
+#  mailchimp_list_id                   :string
 #
 # Indexes
 #

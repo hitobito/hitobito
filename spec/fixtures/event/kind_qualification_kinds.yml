@@ -8,10 +8,10 @@
 # Table name: event_kind_qualification_kinds
 #
 #  id                    :integer          not null, primary key
-#  category              :string(255)      not null
+#  category              :string           not null
 #  grouping              :integer
-#  role                  :string(255)      not null
-#  validity              :string(255)      default("valid_or_expired"), not null
+#  role                  :string           not null
+#  validity              :string           default("valid_or_expired"), not null
 #  event_kind_id         :integer          not null
 #  qualification_kind_id :integer          not null
 #

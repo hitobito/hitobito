@@ -10,50 +10,55 @@
 # Table name: people
 #
 #  id                                   :integer          not null, primary key
-#  additional_information               :text(65535)
-#  address                              :text(65535)
-#  authentication_token                 :string(255)
+#  additional_information               :text
+#  address                              :string(1024)
+#  address_care_of                      :string
+#  authentication_token                 :string
 #  birthday                             :date
 #  blocked_at                           :datetime
 #  company                              :boolean          default(FALSE), not null
-#  company_name                         :string(255)
+#  company_name                         :string
 #  confirmation_sent_at                 :datetime
-#  confirmation_token                   :string(255)
+#  confirmation_token                   :string
 #  confirmed_at                         :datetime
 #  contact_data_visible                 :boolean          default(FALSE), not null
-#  country                              :string(255)
+#  country                              :string
 #  current_sign_in_at                   :datetime
-#  current_sign_in_ip                   :string(255)
-#  email                                :string(255)
-#  encrypted_password                   :string(255)
-#  encrypted_two_fa_secret              :text(65535)
-#  event_feed_token                     :string(255)
+#  current_sign_in_ip                   :string
+#  email                                :string
+#  encrypted_password                   :string
+#  encrypted_two_fa_secret              :text
+#  event_feed_token                     :string
 #  failed_attempts                      :integer          default(0)
-#  family_key                           :string(255)
-#  first_name                           :string(255)
+#  family_key                           :string
+#  first_name                           :string
 #  gender                               :string(1)
-#  household_key                        :string(255)
+#  household_key                        :string
+#  housenumber                          :string(20)
 #  inactivity_block_warning_sent_at     :datetime
-#  language                             :string(255)      default("de"), not null
-#  last_name                            :string(255)
+#  language                             :string           default("de"), not null
+#  last_name                            :string
 #  last_sign_in_at                      :datetime
-#  last_sign_in_ip                      :string(255)
+#  last_sign_in_ip                      :string
 #  locked_at                            :datetime
+#  membership_verify_token              :string
 #  minimized_at                         :datetime
-#  nickname                             :string(255)
+#  nickname                             :string
+#  postbox                              :string
 #  privacy_policy_accepted_at           :datetime
 #  remember_created_at                  :datetime
 #  reset_password_sent_at               :datetime
-#  reset_password_sent_to               :string(255)
-#  reset_password_token                 :string(255)
+#  reset_password_sent_to               :string
+#  reset_password_token                 :string
 #  self_registration_reason_custom_text :string(100)
 #  show_global_label_formats            :boolean          default(TRUE), not null
 #  sign_in_count                        :integer          default(0)
-#  town                                 :string(255)
+#  street                               :string
+#  town                                 :string
 #  two_factor_authentication            :integer
-#  unconfirmed_email                    :string(255)
-#  unlock_token                         :string(255)
-#  zip_code                             :string(255)
+#  unconfirmed_email                    :string
+#  unlock_token                         :string
+#  zip_code                             :string
 #  created_at                           :datetime
 #  updated_at                           :datetime
 #  creator_id                           :integer

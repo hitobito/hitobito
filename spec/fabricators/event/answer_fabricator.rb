@@ -9,13 +9,14 @@
 # Table name: event_answers
 #
 #  id               :integer          not null, primary key
-#  answer           :string(255)
+#  answer           :string
 #  participation_id :integer          not null
 #  question_id      :integer          not null
 #
 # Indexes
 #
 #  index_event_answers_on_participation_id_and_question_id  (participation_id,question_id) UNIQUE
+#
 
 Fabricator(:event_answer, class_name: "Event::Answer") do
   participation

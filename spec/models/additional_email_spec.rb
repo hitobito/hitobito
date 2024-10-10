@@ -7,12 +7,16 @@
 # Table name: additional_emails
 #
 #  id               :integer          not null, primary key
-#  contactable_id   :integer          not null
 #  contactable_type :string           not null
 #  email            :string           not null
 #  label            :string
-#  public           :boolean          default(TRUE), not null
 #  mailings         :boolean          default(TRUE), not null
+#  public           :boolean          default(TRUE), not null
+#  contactable_id   :integer          not null
+#
+# Indexes
+#
+#  index_additional_emails_on_contactable_id_and_contactable_type  (contactable_id,contactable_type)
 #
 
 require "spec_helper"

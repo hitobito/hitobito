@@ -13,7 +13,10 @@ class Event::ParticipationListsController < SimpleCrudController
 
   def create
     new_participations = build_new_participations
-    success = ActiveRecord::Base.transaction { new_participations.map(&:save).all? }
+    success = ActiveRecord::Base.transaction do
+      raise ActiveRecord::Rollback unless new_participations.all?(&:save)
+      true
+    end
 
     if success
       redirect_to(group_people_path(group),

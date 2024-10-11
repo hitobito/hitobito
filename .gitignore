@@ -12,9 +12,6 @@ vendor/bundle
 *.sqlite3
 *.sqlite3-journal
 
-# Ignore sphinx artifacts
-db/sphinx
-
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /log/*.pid

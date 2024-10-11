@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -91,7 +91,7 @@ namespace :hitobito do
     file = Pathname.new(args[:filename]).expand_path
     puts "-------- Parsing #{file}"
 
-    parser = StructureParser.new(file.read, common_indent: 0, shiftwidth: 4, list_marker: "-")
+    parser = StructureParser.new(file.read, common_indent: 4, shiftwidth: 2, list_marker: "*")
     puts parser.inspect
     parser.parse
 

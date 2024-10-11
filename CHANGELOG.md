@@ -3,11 +3,8 @@
 ## Version 2.2
 
 - Ausserhalb von Hitobito angelegte Mailchimp E-Mails werden nicht mehr gelöscht, #2752
--  Von Mailchimp via Link abgemeldetet E-Mails nicht unnötig synchronisieren, #1930
--  In der JSON:API können Gruppen neu nach layer_group_id (ID der Ebene zu der die Gruppe gehört) und nach parent_id (ID der übergeordneten Gruppe) gefiltert werden.
-
-## Version 2.2
-
+- Von Mailchimp via Link abgemeldetet E-Mails nicht unnötig synchronisieren, #1930
+- In der JSON:API können Gruppen neu nach layer_group_id (ID der Ebene zu der die Gruppe gehört) und nach parent_id (ID der übergeordneten Gruppe) gefiltert werden.
 - Für jeden Anhang bei Anlässen, Kursen etc. kann neu individuell ausgewählt werden, ob der Anhang global sichtbar ist (wie bisher) oder ob nur Teilnehmende oder nur das Leitungsteam den Anhang sehen darf (hitobito_sac_cas#486)
 - Einführung Mitgliedschaftskonzept (People::Membership) sowie Membership Verification Endpoint (Verschieben vom SKV Wagon in den Core) (hitobito#2511)
 - Die Rollentypen werden nun alphabetisch sortiert im Auswahlmenü (hitobito_sac_cas#552)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_09_17_094438) do
+ActiveRecord::Schema.define(version: 2024_09_26_174052) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -315,7 +315,6 @@ ActiveRecord::Schema.define(version: 2024_09_17_094438) do
     t.string "type", null: false
     t.integer "derived_from_question_id"
     t.string "event_type"
-    t.boolean "customize_derived", default: false
     t.index ["derived_from_question_id"], name: "index_event_questions_on_derived_from_question_id"
     t.index ["event_id"], name: "index_event_questions_on_event_id"
   end

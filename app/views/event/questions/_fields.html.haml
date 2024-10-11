@@ -6,15 +6,12 @@
 = f.hidden_field(:type)
 = f.hidden_field(:derived_from_question_id)
 
-- if f.object.derived? && !f.object.derived_from_question.customize_derived
-  = f.labeled(:question) do
-    = f.hidden_field(:question)
-    %p.py-2= f.object.question
-
-- else
-  = f.labeled_input_field(:question)
-  = f.labeled_input_field(:choices, help: t('events.form.explain_choices'))
-  = f.labeled_boolean_field(:multiple_choices)
+- # lookup if a partial for the question type and render it if it exists. 
+- # `lookup_context.find_all` needs the partial including the leading underscore,
+- # while `render` requires you to pass the partial name without it.
+- partial_path = "event/questions/#{f.object.model_name.singular}"
+- if lookup_context.find_all(File.join(partial_path, '_fields')).any?
+  = render partial: File.join(partial_path, 'fields'), locals: { f: f }
 
 = f.labeled(:disclosure) do
   - Event::Question::DISCLOSURE_VALUES.each do |key|

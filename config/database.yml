@@ -16,6 +16,9 @@ base: &generic
 development:
   <<: *generic
   database: <%= ENV['RAILS_DB_NAME'] || "#{Rails.root}/db/development.sqlite3" %>
+<% if ENV.fetch('RAILS_DB_ADAPTER', 'sqlite3') =~ /postgresql/ %>
+  schema_search_path: <%= ENV['RAILS_DB_SCHEMA'] || "public" %>
+<% end %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".

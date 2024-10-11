@@ -13,6 +13,25 @@ RSpec.describe ApplicationMailer, type: :mailer do
     SeedFu.seed [Rails.root.join("db", "seeds")]
   end
 
+  describe "subject" do
+    it "unescapes html entities" do
+      content = Fabricate(:custom_content,
+        key: "test-content",
+        placeholders_optional: "test-placeholder",
+        subject: "Hello {test-placeholder}")
+      expect(content.subject_with_values("test-placeholder" => "<a>World</a>"))
+        .to eq("Hello &lt;a&gt;World&lt;/a&gt;")
+
+      mailer = Class.new(described_class) do
+        def test_mail = compose(["test@example.com"], "test-content")
+
+        def placeholder_test_placeholder = "<a>World</a>"
+      end
+
+      expect(mailer.test_mail.subject).to eq("Hello <a>World</a>")
+    end
+  end
+
   context "translated sender" do
     around do |example|
       with_translations(

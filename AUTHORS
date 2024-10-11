@@ -23,7 +23,6 @@ With help from many libraries and frameworks including:
   Devise
   CanCan
   Delayed Job
-  Thinking Sphinx
   RSpec
   Dry Crud
   ...and many others

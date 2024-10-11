@@ -2,9 +2,13 @@ name: Security scanners
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - master
+      - sac-master
   pull_request:
-    branches: [ master ]
+    branches:
+      - master
+      - sac-master
 jobs:
   run-scanners:
     runs-on: ubuntu-latest

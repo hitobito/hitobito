@@ -708,7 +708,7 @@ de:
         question: Frage
         choices: Mögliche Antworten
         multiple_choices: Mehrfachauswahl
-        disclosure: Angabe
+        disclosure: Antwortangabe
         disclosures: 
           required: Obligatorisch
           optional: Optional
@@ -719,13 +719,15 @@ de:
         choices: Mögliche Antworten
         multiple_choices: Mehrfachauswahl
         required: Antwort obligatorisch
-
+        disclosure: Antwortangabe
+        
       application_questions:
         question: Frage
         choices: Mögliche Antworten
         multiple_choices: Mehrfachauswahl
         required: Antwort obligatorisch
-
+        disclosure: Antwortangabe 
+        
       event/role:
         label: Bezeichnung
         person: Person

@@ -6,6 +6,8 @@
 #  https://github.com/hitobito/hitobito.
 
 class ApplicationMailer < ActionMailer::Base
+  include ActionView::Helpers::OutputSafetyHelper
+
   HEADERS_TO_SANITIZE = [:to, :cc, :bcc, :from, :sender, :return_path, :reply_to].freeze
 
   helper :webpack
@@ -29,7 +31,7 @@ class ApplicationMailer < ActionMailer::Base
   def custom_content_mail(recipients, content_key, values, headers = {})
     content = CustomContent.get(content_key)
     headers[:to] = use_mailing_emails(recipients)
-    headers[:subject] ||= content.subject_with_values(values)
+    headers[:subject] ||= unescape_html(content.subject_with_values(values))
     mail(headers) do |format|
       format.html { render html: content.body_with_values(values), layout: true }
     end
@@ -72,6 +74,22 @@ class ApplicationMailer < ActionMailer::Base
   end
 
   def link_to(label, url = nil)
-    "<a href=\"#{url || label}\">#{label}</a>"
+    # Escape the label to prevent XSS attacks in the link text.
+    safe_label = escape_html(label)
+
+    # Only escape invalid URLs (like mailto links or JavaScript).
+    url ||= label
+    safe_url = url.match?(/\Ahttps?:\/\/[\S]+\z/) ? url : escape_html(url)
+    "<a href=\"#{safe_url}\">#{safe_label}</a>".html_safe
   end
+
+  def br_tag = "<br/>".html_safe
+
+  def join_lines(lines, separator = br_tag) = safe_join(lines, separator)
+
+  def convert_newlines_to_breaks(text) = join_lines(text.split("\n"))
+
+  def escape_html(html) = ERB::Util.html_escape(html)
+
+  def unescape_html(html) = CGI.unescapeHTML(html)
 end

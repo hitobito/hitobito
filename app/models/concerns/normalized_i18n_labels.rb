@@ -39,12 +39,6 @@ module NormalizedI18nLabels
   end
 
   module ClassMethods
-    def sweep_available_labels
-      Settings.application.languages.to_hash.keys.each do |lang|
-        Rails.cache.delete(labels_cache_key(lang))
-      end
-    end
-
     def translate_label(label)
       return label if label.blank?
 
@@ -52,15 +46,10 @@ module NormalizedI18nLabels
         default: label)
     end
 
-    private
+    # Translate the labels, if translation is available
+    def available_labels = super.collect { |l| translate_label(l) }
 
-    def load_available_labels
-      # Translate the labels, if translation is available
-      super.collect { |l| translate_label(l) }
-    end
-
-    def labels_cache_key(lang = I18n.locale)
-      "#{super()}.#{lang}"
-    end
+    # Translate the labels, if translation is available
+    def used_labels = super.collect { |l| translate_label(l) }
   end
 end

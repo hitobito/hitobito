@@ -19,7 +19,7 @@ describe EventsController do
       let(:date) do
         {label: "foo", start_at_date: Time.zone.today, finish_at_date: Time.zone.today}
       end
-      let(:question) { {question: "foo?", choices: "1,2,3,4"} }
+      let(:question) { {question: "foo?", choices: "1,2,3,4", disclosure: :optional} }
 
       it "creates new event course with dates" do
         sign_in(people(:top_leader))
@@ -282,7 +282,7 @@ describe EventsController do
       let(:date) do
         {label: "foo", start_at_date: Time.zone.today, finish_at_date: Time.zone.today}
       end
-      let(:question) { {question: "foo?", choices: "1,2,3,4"} }
+      let(:question) { {question: "foo?", choices: "1,2,3,4", disclosure: :optional} }
 
       it "creates new event course with dates" do
         sign_in(people(:top_leader))

@@ -52,8 +52,9 @@ class DeliveryReportMailer < ApplicationMailer
   end
 
   def placeholder_failed_recipients
-    @failed_recipients.collect do |r|
+    separated_failed_recipients = @failed_recipients.collect do |r|
       r.join(" | ")
-    end.join("<br/>")
+    end
+    join_lines(separated_failed_recipients)
   end
 end

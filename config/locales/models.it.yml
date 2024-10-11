@@ -687,6 +687,10 @@ it:
         question: Domanda
         choices: Possibili risposte
         multiple_choices: Scelta multipla
+        disclosures:
+          required: Obbligatorio
+          optional: Opzionale
+          hidden: Non visualizzato
       admin_questions:
         question: Domanda
         choices: Possibili risposte

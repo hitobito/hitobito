@@ -48,10 +48,10 @@ describe EventsController, js: true do
       Event::Question.delete_all
       global_questions
       sign_in
-      visit edit_group_event_path(event.group_ids.first, event.id)
     end
 
     it "includes global questions with matching event type" do
+      visit edit_group_event_path(event.group_ids.first, event.id)
       is_expected.to have_text(global_questions[:vegetarian].question)
       is_expected.not_to have_text(global_questions[:camp_only].question)
       is_expected.to have_text(global_questions[:hidden].question)
@@ -59,7 +59,17 @@ describe EventsController, js: true do
       is_expected.not_to have_text("Entfernen")
     end
 
+    it "includes global questions with matching event type" do
+      visit edit_group_event_path(event.group_ids.first, event.id)
+      click_save
+      expect(page).to have_content "Anlass Eventus wurde erfolgreich aktualisiert."
+    end
+
     it "requires questions to have disclosure selected before saving" do
+      visit new_group_event_path(groups(:top_group))
+      fill_in(:event_name, with: "Eventus2")
+      click_on("Daten")
+      fill_in(:event_dates_attributes_0_start_at_date, with: "01.01.2025")
       click_save
       expect(page).to have_content("Anmeldeangaben ist nicht gültig")
 
@@ -69,7 +79,7 @@ describe EventsController, js: true do
         end
       end
       click_save
-      expect(page).to have_content "Anlass Eventus wurde erfolgreich aktualisiert."
+      expect(page).to have_content "Anlass Eventus2 wurde erfolgreich erstellt."
     end
   end
 
@@ -103,7 +113,7 @@ describe EventsController, js: true do
     end
 
     it "fails with empty required questions" do
-      sleep 0.5 # avoid wizard race condition
+      sleep 1 # avoid wizard race condition
       click_signup
 
       is_expected.to have_content "Antwort muss ausgefüllt werden"

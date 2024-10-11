@@ -37,7 +37,6 @@ class JobManager
   def jobs
     [
       mail_jobs,
-      sphinx_jobs,
       addresses_jobs,
       standard_jobs,
       wagon_jobs
@@ -49,12 +48,6 @@ class JobManager
       MailRelayJob
     else
       MailingLists::MailRetrieverJob
-    end
-  end
-
-  def sphinx_jobs
-    if Hitobito::Application.sphinx_present? && Hitobito::Application.sphinx_local?
-      SphinxIndexJob
     end
   end
 

@@ -35,7 +35,6 @@ Rails.application.reloader.to_prepare do
       'Net::OpenTimeout',
       'Net::ReadTimeout',
       'SignalException',
-      'ThinkingSphinx::ConnectionError',
       'Timeout::Error',
     ]
 

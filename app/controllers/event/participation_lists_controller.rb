@@ -13,9 +13,7 @@ class Event::ParticipationListsController < SimpleCrudController
 
   def create
     new_participations = build_new_participations
-    success = ActiveRecord::Base.transaction do
-      new_participations.map(&:save!).all?
-    end
+    success = ActiveRecord::Base.transaction { new_participations.map(&:save).all? }
 
     if success
       redirect_to(group_people_path(group),
@@ -41,10 +39,12 @@ class Event::ParticipationListsController < SimpleCrudController
 
   def build_new_participations
     people.map do |person|
-      participation = event.participations.new
-      participation.person_id = person.id
-      role = role_type.new(participation: participation)
-      authorize!(:create, role)
+      Event::Participation.find_or_initialize_by(event: event, person_id: person.id).tap do |participation|
+        role = role_type.new(participation: participation)
+        next nil if cannot?(:create, role)
+
+        participation.roles << role unless participation.roles.map(&:type).include?(role_type.sti_name)
+      end
     end
   end
 

@@ -19,7 +19,13 @@ namespace :wagon do
         ActiveRecord::SchemaMigration)
 
       context.migrations_status.each do |status, version, name|
-        migration_file = context.migrations.find { |m| m.version == version.to_i }.filename
+        migration_file = context.migrations.find { |m| m.version == version.to_i }&.filename
+
+        if migration_file.nil?
+          puts "#{status.center(wagon_names_width)} [#{"???".center(8)}] #{version.ljust(14)}  #{name}"
+          next
+        end
+
         wagon_name = migrations_paths
           .find { |_, paths| paths.any? { |p| migration_file.start_with?(p) } }
           &.first

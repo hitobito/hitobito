@@ -379,24 +379,22 @@ describe Role do
   end
 
   context "#available_labels" do
-    before { described_class.sweep_available_labels }
-
     subject { Group::BottomLayer::Leader.available_labels }
 
-    it "includes labels from database" do
+    it "excludes labels from database" do
       Fabricate(Group::BottomLayer::Leader.name.to_s, label: "foo",
         group: groups(:bottom_layer_one))
       Fabricate(Group::BottomLayer::Leader.name.to_s, label: "FOo",
         group: groups(:bottom_layer_one))
-      is_expected.to eq(["foo"])
+      is_expected.not_to eq(["foo"])
     end
 
-    it "includes labels from all types" do
+    it "excludes labels from all types" do
       Fabricate(Group::BottomLayer::Leader.name.to_s, label: "foo",
         group: groups(:bottom_layer_one))
       Fabricate(Group::BottomLayer::Member.name.to_s, label: "Bar",
         group: groups(:bottom_layer_one))
-      is_expected.to eq(%w[Bar foo])
+      is_expected.not_to eq(%w[Bar foo])
     end
   end
 

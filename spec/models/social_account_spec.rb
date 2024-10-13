@@ -35,9 +35,9 @@ describe SocialAccount do
 
     it { is_expected.to include(Settings.social_account.predefined_labels.first) }
 
-    it "includes labels from database" do
+    it "excludes labels from database" do
       Fabricate(:social_account, label: "Foo")
-      is_expected.to include("Foo")
+      is_expected.not_to include("Foo")
     end
 
     it "includes labels from database and predefined only once" do

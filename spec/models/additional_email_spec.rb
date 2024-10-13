@@ -123,42 +123,39 @@ describe AdditionalEmail do
 
     it { is_expected.to include(Settings.additional_email.predefined_labels.first) }
 
-    it "includes labels from database" do
+    it "excludes labels from database" do
       Fabricate(:additional_email, label: "Foo")
-      is_expected.to include("Foo")
+      is_expected.not_to include("Foo")
     end
 
-    it "includes labels from database and predefined only once" do
-      predef = Settings.additional_email.predefined_labels.first
-      Fabricate(:additional_email, label: predef)
-      expect(subject.count(predef)).to eq(1)
-    end
+    it "translates labels where available" do
+      I18n.locale = :de
+      expect(AdditionalEmail.available_labels).not_to include("Privé")
 
-    it "includes translated labels where available" do
       I18n.locale = :fr
-
-      Fabricate(:additional_email, label: "Foo")
-      Fabricate(:additional_email, label: "Privat")
-
-      is_expected.to include("Foo", "Privé")
+      expect(AdditionalEmail.available_labels).to include("Privé")
     end
+  end
+
+  context "#used_labels" do
+    subject { AdditionalEmail.used_labels }
 
     it "is sweeped for all languages if new label is added" do
       Rails.cache.clear
 
       expect(I18n.locale).to eq :de
-      labels_de = AdditionalEmail.available_labels
+      labels_de = AdditionalEmail.used_labels
 
       I18n.locale = :fr
-      labels_fr = AdditionalEmail.available_labels
+      labels_fr = AdditionalEmail.used_labels
 
       expect(labels_de).not_to eq labels_fr
 
       Fabricate(:additional_email, label: "A new label")
-      expect(AdditionalEmail.available_labels).to eq labels_fr + ["A new label"]
+      expect(AdditionalEmail.used_labels).to eq labels_fr + ["A new label"]
 
       I18n.locale = :de
-      expect(AdditionalEmail.available_labels).to eq labels_de + ["A new label"]
+      expect(AdditionalEmail.used_labels).to eq labels_de + ["A new label"]
     end
   end
 

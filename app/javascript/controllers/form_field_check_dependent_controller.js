@@ -6,29 +6,19 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["checkbox"]
+  static targets = ["main", "dependent"]
 
   // unselects all dependent checkboxes when unchecking master checkbox
-  handleMasterCheckbox() {
-    const dependentCheckboxes = this.element.querySelectorAll('[data-action="form-field-check-dependent#handleDependentCheckbox"]');
-
+  toggleMainCheckbox() {
     if(!event.target.checked) {
-      dependentCheckboxes.forEach((checkbox) => {
+      this.dependentTargets.forEach((checkbox) => {
         checkbox.checked = false;
       });
     }
   }
 
   // selects master checkbox if any dependent checkbox is checked
-  handleDependentCheckbox() {    
-    const dependentCheckboxes = this.element.querySelectorAll('[data-action="form-field-check-dependent#handleDependentCheckbox"]');
-
-    const isAnyChecked = Array.from(dependentCheckboxes).some(checkbox => checkbox.checked);
-
-    if (isAnyChecked) {
-      this.checkboxTarget.checked = true;
-    } else {
-      this.checkboxTarget.checked = false;
-    }
+  toggleDependentCheckbox() {    
+    this.mainTarget.checked = true;
   }
 }

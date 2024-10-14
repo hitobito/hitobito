@@ -44,4 +44,9 @@ module EventParticipationsHelper
       participation.application.priorities? &&
       can?(:show_priorities, participation.application)
   end
+
+  def event_participation_table_options(t, event)
+    # override this method in wagon to display further attributes inside the crud table
+    nil
+  end
 end

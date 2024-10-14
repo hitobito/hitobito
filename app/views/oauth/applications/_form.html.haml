@@ -5,6 +5,8 @@
     help: raw(t('.help_native_redirect_uris', native_redirect_uri: Doorkeeper.configuration.native_redirect_uri)),
     class: 'col-6 form-control form-control-sm'
 
+  = f.labeled_text_area :additional_audiences, rows: 5, help: t('.help_additional_audiences').html_safe
+
   = f.labeled :scopes, class: 'mt-2' do
     - Doorkeeper.configuration.scopes.each do |scope|
       = f.label("scope_#{scope}", class: 'checkbox') do

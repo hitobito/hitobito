@@ -7,6 +7,9 @@
 
   %td
     %strong= role.to_s
+
+    / sepcify folder to find correct partial in shared/section_table yield
+    = render_extensions :roles, folder: "event/participations", locals: { role: role }
   %td
     - if can?(:edit, role)
       = link_action_edit(edit_group_event_role_path(@group, @event, role))

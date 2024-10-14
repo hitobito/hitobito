@@ -748,6 +748,7 @@ de:
         uid: Client ID
         secret: Client secret
         redirect_uri: Redirect URIs
+        additional_audiences: Weitere Audiences
         skip_consent_screen: Einwilligung überspringen
 
       people_relation:

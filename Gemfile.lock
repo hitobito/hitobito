@@ -222,6 +222,8 @@ GEM
       railties (>= 5)
     doorkeeper-i18n (5.2.7)
       doorkeeper (>= 5.2)
+    doorkeeper-jwt (0.4.2)
+      jwt (>= 2.1)
     doorkeeper-openid_connect (1.8.9)
       doorkeeper (>= 5.5, < 5.8)
       jwt (>= 2.5)
@@ -787,6 +789,7 @@ DEPENDENCIES
   devise
   doorkeeper
   doorkeeper-i18n
+  doorkeeper-jwt
   doorkeeper-openid_connect
   draper
   draper-cancancan

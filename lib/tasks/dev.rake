@@ -11,10 +11,10 @@ namespace :dev do
     task :token, [:application_id, :redirect_uri, :code] => [:environment] do |_, args|
       app = Oauth::Application.find(args.fetch(:application_id))
       sh <<~BASH
-        curl -v -H 'Accept: application/json' -X POST -d 'grant_type=authorization_code'  \
-        -d 'client_id=#{app.uid}' -d 'client_secret=#{app.secret}' \
-        -d 'redirect_uri=#{args.fetch(:redirect_uri)}' -d 'code=#{args.fetch(:code)}' \
-        http://localhost:3000/oauth/token
+          curl -s -H 'Accept: application/json' -X POST -d 'grant_type=authorization_code'  \
+          -d 'client_id=#{app.uid}' -d 'client_secret=#{app.secret}' \
+          -d 'redirect_uri=#{args.fetch(:redirect_uri)}' -d 'code=#{args.fetch(:code)}' \
+        http://localhost:3000/oauth/token | jq .
       BASH
     end
 
@@ -23,10 +23,10 @@ namespace :dev do
       access_token = args.fetch(:access_token)
       token = args.fetch(:token, access_token)
       sh <<~BASH
-        curl -v -H 'Accept: application/json' \
+        curl -s -H 'Accept: application/json' \
         -H 'Authorization: Bearer #{access_token}' \
         -d 'token=#{token}' \
-        http://localhost:3000/oauth/introspect
+        http://localhost:3000/oauth/introspect | jq .
       BASH
     end
 
@@ -34,10 +34,10 @@ namespace :dev do
     task :profile, [:access_token, :scope] do |_, args| # rubocop:disable Rails/RakeEnvironment
       access_token = args.fetch(:access_token)
       sh <<~BASH
-        curl -v -H 'Accept: application/json' \
+        curl -s -H 'Accept: application/json' \
         -H 'Authorization: Bearer #{access_token}' \
         -H 'X-Scope: #{args[:scope]}' \
-        http://localhost:3000/oauth/profile
+        http://localhost:3000/oauth/profile | jq .
       BASH
     end
 
@@ -52,17 +52,18 @@ namespace :dev do
     end
 
     desc "Show example OAuth-Authorization Screen"
-    task :authorization, [:application_id] => [:environment] do |_, args|
+    task :authorization, [:application_id, :prompt, :redirect_uri] => [:environment] do |_, args|
       app = Oauth::Application.find(args.fetch(:application_id))
       host_name = ENV.fetch("RAILS_HOST_NAME", nil)
 
       params = {
         client_id: app.uid,
         client_secret: app.secret,
-        redirect_uri: app.redirect_uri.split("\n").first,
+        redirect_uri: args.fetch(:redirect_uri, app.redirect_uri.split("\n").first),
         response_type: "code",
+        prompt: args[:prompt],
         scope: app.scopes
-      }.map { |key, value| "#{key}=#{value}" }.join("&")
+      }.compact.map { |key, value| "#{key}=#{value}" }.join("&")
 
       sh "xdg-open 'http://#{host_name}/oauth/authorize?#{params}'"
     end

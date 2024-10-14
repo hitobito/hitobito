@@ -9,16 +9,17 @@
 #
 # Table name: oauth_applications
 #
-#  id                  :integer          not null, primary key
-#  confidential        :boolean          default(TRUE), not null
-#  name                :string           not null
-#  redirect_uri        :text             not null
-#  scopes              :string           default(""), not null
-#  secret              :string           not null
-#  skip_consent_screen :boolean          default(FALSE)
-#  uid                 :string           not null
-#  created_at          :datetime         not null
-#  updated_at          :datetime         not null
+#  id                   :integer          not null, primary key
+#  additional_audiences :string
+#  confidential         :boolean          default(TRUE), not null
+#  name                 :string           not null
+#  redirect_uri         :text             not null
+#  scopes               :string           default(""), not null
+#  secret               :string           not null
+#  skip_consent_screen  :boolean          default(FALSE)
+#  uid                  :string           not null
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
 #
 # Indexes
 #
@@ -46,6 +47,10 @@ module Oauth
 
     def to_s
       name
+    end
+
+    def jwt_audiences
+      additional_audiences.to_s.lines.map(&:strip).prepend(uid)
     end
 
     def path_params(uri)

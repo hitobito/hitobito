@@ -44,7 +44,7 @@ Doorkeeper.configure do
   # Access token expiration time (default 2 hours).
   # If you want to disable expiration, set this to nil.
   #
-  # access_token_expires_in 2.hours
+  access_token_expires_in Settings.oidc.access_token_expires_in
 
   # Assign custom TTL for access tokens. Will be used instead of access_token_expires_in
   # option if defined. `context` has the following properties available
@@ -60,7 +60,7 @@ Doorkeeper.configure do
   # Use a custom class for generating the access token.
   # See https://github.com/doorkeeper-gem/doorkeeper#custom-access-token-generator
   #
-  # access_token_generator '::Doorkeeper::JWT'
+  access_token_generator "::Doorkeeper::JWT" if Settings.oidc.use_jwt_access_token
 
   # The controller Doorkeeper::ApplicationController inherits from.
   # Defaults to ActionController::Base.
@@ -152,7 +152,7 @@ Doorkeeper.configure do
     integration_stage = (ENV.fetch("RAILS_STAGE", "production") == "integration")
     request_from_localhost = (uri.host == "localhost")
 
-    if (development_env or integration_stage) and request_from_localhost
+    if (development_env || integration_stage) && request_from_localhost
       false # do not force SSL in redirect_uri
     else
       true

@@ -9,11 +9,9 @@
 #
 #  id          :integer          not null, primary key
 #  archived_at :datetime
-#  convert_on  :date
-#  convert_to  :string
-#  delete_on   :date
-#  deleted_at  :datetime
+#  end_on      :date
 #  label       :string
+#  start_on    :date
 #  terminated  :boolean          default(FALSE), not null
 #  type        :string           not null
 #  created_at  :datetime
@@ -34,6 +32,6 @@ end
 Role.all_types.collect { |r| r.name.to_sym }.each do |t|
   Fabricator(t, from: :role, class_name: t)
 end
-Fabricator(:future_role, from: :role, class_name: FutureRole) do
-  convert_on { Time.zone.tomorrow }
+Fabricator(:future_role, from: :role) do
+  start_on { Date.current.tomorrow }
 end

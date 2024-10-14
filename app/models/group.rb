@@ -141,7 +141,9 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   belongs_to :contact, class_name: "Person"
 
-  has_many :roles, dependent: :destroy, inverse_of: :group
+  # use scope active_and_future for backward compatibility as with with the former
+  # implementation of future roles those were included in the default scope
+  has_many :roles, -> { active_and_future }, dependent: :destroy, inverse_of: :group
   has_many :people, through: :roles
 
   has_many :people_filters, dependent: :destroy
@@ -251,8 +253,6 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     end
   end
 
-  # create alias to call it again
-  alias_method :hard_destroy, :really_destroy!
   def really_destroy!
     # run nested_set callback on hard destroy
     # destroy_descendants_without_paranoia
@@ -261,7 +261,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     event_list = events.to_a
     invoice_list = invoices.to_a
 
-    hard_destroy
+    super
 
     event_list.each { |e| destroy_orphaned_event(e) }
     invoice_list.each(&:destroy)
@@ -286,9 +286,8 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     ActiveRecord::Base.transaction do
       self.archived_at = Time.zone.now
       Role.where(group_id: id).tap do |roles|
-        roles.where(type: FutureRole.sti_name).delete_all
+        roles.future.delete_all
         roles.update_all(archived_at: archived_at)
-        roles.where(delete_on: archived_at..).update_all(delete_on: nil)
       end
 
       mailing_lists.destroy_all

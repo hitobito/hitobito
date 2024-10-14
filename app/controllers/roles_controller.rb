@@ -26,7 +26,6 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
 
   before_action :set_person_id, only: [:new]
   before_action :remember_primary_group, only: [:destroy, :update]
-  before_action :set_outdated_flash_message, only: [:edit]
   after_action :last_primary_group_role_deleted, only: [:destroy, :update]
 
   def create
@@ -35,7 +34,6 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
       new_person = entry.person.new_record?
       created = create_entry_and_person
       add_privacy_policy_not_accepted_error if new_person
-      return destroy_and_redirect if destroy_on_create?
 
       respond_with(entry, success: created, location: after_create_location(new_person))
     end
@@ -47,8 +45,6 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
       change_type
     else
       assign_attributes
-      return destroy_and_redirect if entry.valid? && entry.delete_on&.past?
-
       super(location: after_update_location)
     end
   end
@@ -76,23 +72,9 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
 
   private
 
-  def destroy_and_redirect
-    destroyed = run_callbacks(:destroy) { entry.destroy }
-    if destroyed
-      redirect_to(after_update_location, notice: flash_message(:success, :destroy))
-    else
-      flash.now[:alert] = error_messages.presence || flash_message(:failure, :destroy)
-      render :edit, status: :unprocessable_entity
-    end
-  end
-
-  def destroy_on_create?
-    entry.persisted? && entry.delete_on&.past?
-  end
-
-  def with_person_add_request(&block)
+  def with_person_add_request(&)
     creator = Person::AddRequest::Creator::Group.new(entry, current_ability)
-    msg = creator.handle(&block)
+    msg = creator.handle(&)
     redirect_to group_people_path(entry.group_id), alert: msg if msg
   end
 
@@ -169,21 +151,19 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
   end
 
   def find_entry
-    super.tap { |role| @type = role.class }
+    model_scope.with_inactive.find(params[:id]).tap { |role| @type = role.class }
   end
 
   def build_role
     type = extract_model_attr(:type)
-    start_at = extract_start_at
-    return Role.new(convert_on: start_at) if type.blank?
+    start_on = extract_date(:start_on)
+    end_on = extract_date(:end_on)
+
+    return Role.new(start_on:, end_on:) if type.blank?
 
     @type = @group.class.find_role_type!(type)
 
-    if start_at&.future?
-      FutureRole.new(convert_to: @type, convert_on: start_at, created_at: Time.zone.now)
-    else
-      @type.new(created_at: start_at)
-    end
+    @type.new(start_on:, end_on:)
   end
 
   def build_person(role)
@@ -201,8 +181,8 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
   def permitted_params(role_type = entry.class)
     @permitted_params ||=
       begin
-        permitted_attrs = role_type.used_attributes + [:convert_on]
-        permitted_attrs -= [:deleted_at, :delete_on] unless can?(:destroy, @role)
+        permitted_attrs = role_type.used_attributes + [:start_on, :end_on]
+        permitted_attrs -= [:end_on] unless can?(:destroy, @role)
         model_params.permit(permitted_attrs)
       end
   end
@@ -240,7 +220,7 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
   end
 
   def after_update_location
-    return group_person_path(entry.group_id, entry.person_id) unless entry.deleted?
+    return group_person_path(entry.group_id, entry.person_id) unless entry.ended?
 
     # NOTE - as people#show responds to explicit result turbo_stream format
     can?(:show, entry.person) ? person_path(entry.person_id, format: :html) : group_path(parent)
@@ -278,7 +258,7 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
   end
 
   def set_person_id
-    @person_id = Role.with_deleted.find(params[:role_id]).person_id if params[:role_id]
+    @person_id = Role.with_inactive.find(params[:role_id]).person_id if params[:role_id]
   end
 
   def privacy_policy_param
@@ -293,17 +273,13 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
     entry.group
   end
 
-  def extract_start_at
-    Date.parse(delete_model_param(:created_at) || delete_model_param(:convert_on))
+  def extract_date(key)
+    Date.parse(delete_model_param(key))
   rescue TypeError, Date::Error
     nil
   end
 
   def delete_model_param(key)
     model_params&.delete(key).presence
-  end
-
-  def set_outdated_flash_message
-    flash.now[:alert] = entry.decorate.outdated_role_title if entry.outdated?
   end
 end

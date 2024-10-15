@@ -9,7 +9,7 @@ Doorkeeper::JWT.configure do
       iss: app.name,
       aud: app.additional_audiences.to_s.lines.map(&:strip).prepend(app.uid),
       iat: Time.current.utc.to_i,
-      exp: Settings.oidc.access_token_expires_in,
+      exp: Time.current.utc.to_i + Settings.oidc.access_token_expires_in,
 
       # @see JWT reserved claims - https://tools.ietf.org/html/draft-jones-json-web-token-07#page-7
       jti: SecureRandom.uuid,

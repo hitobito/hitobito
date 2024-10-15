@@ -161,8 +161,8 @@ it:
               must_have_3_lines: 'deve contenere esattamente 3 righe'
         role:
           attributes:
-            end_on:
-              must_be_later_than_start_on: non può essere prima di "de"
+            delete_on:
+              must_be_later_than_created_at: non può essere prima di "de"
     models:
       acts_as_taggable_on/tag:
         one: Tag
@@ -256,6 +256,10 @@ it:
         one: data
         many: Date
         other: Date
+      future_role:
+        one: Ruolo futuro
+        many: Ruoli futuri
+        other: Ruoli futuri
       family_member:
         one: Membri della famiglia
         many: Membri della famiglia
@@ -768,9 +772,10 @@ it:
         person_id: Persona
         string_long: '%{role} in %{group}'
         dates: Date
-        start_on: Da
-        end_on: A
-        end_on_in_name: A
+        created_at: Da
+        deleted_t: A
+        delete_on: A
+        delete_on_in_name: A
         class:
           archived: '%{role_kind} (archiviato)'
           permission:

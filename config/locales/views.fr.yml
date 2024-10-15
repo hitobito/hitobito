@@ -1279,7 +1279,6 @@ fr:
           rejected: "La demande d'accès pour %{person} a déjà été refusée. "
     history:
       index:
-        future_roles_title: "Rôles futurs"
         inactive_roles_title: "Rôles inactifs"
     family:
       fields:

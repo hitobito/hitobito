@@ -180,8 +180,8 @@ fr:
               must_have_3_lines: 'doit contenir exactement 3 lignes'
         role:
           attributes:
-            end_on:
-              must_be_later_than_start_on: ne peut pas être avant "de"
+            delete_on:
+              must_be_later_than_created_at: ne peut pas être avant "de"
     models:
       acts_as_taggable_on/tag:
         one: Tag
@@ -275,6 +275,10 @@ fr:
         one: date
         many: Dates
         other: Dates
+      future_role:
+        one: Rôle futur
+        many: Rôles futurs
+        other: Rôles futurs
       family_member:
         one: Membre de la famille
         many: Membres de la famille
@@ -809,9 +813,10 @@ fr:
         person_id: Personne
         string_long: '%{role} dans %{group}'
         dates: Dates
-        start_on: De
-        end_on: à
-        end_on_in_name: à
+        created_at: De
+        deleted_t: à
+        delete_on: à
+        delete_on_in_name: à
         class:
           archived: '%{role_kind} (archivé)'
           permission:

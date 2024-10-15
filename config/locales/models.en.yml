@@ -625,7 +625,6 @@ en:
         person_id: Person
         string_long: '%{role} in %{group}'
         dates: Dates
-        created_at: From
         class:
           permission:
             description:

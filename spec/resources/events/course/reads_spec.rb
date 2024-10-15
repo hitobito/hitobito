@@ -56,26 +56,30 @@ describe Event::CourseResource, type: :resource do
       expect(data.attributes["type"]).to eq "Event::Course"
     end
 
-    xdescribe "leaders" do
+    describe "leaders" do
       def create_role(type, **attrs)
         person = Fabricate(:person, attrs)
+        Fabricate(:role, type: Group::TopGroup::Leader, group: groups(:top_group), person: person)
         participation = Fabricate(:event_participation, person: person, event: course, active: true)
-        "Event::Role::#{type.to_s.classify}".constantize.create(participation: participation)
+        "Event::Role::#{type.to_s.classify}".constantize.create!(participation: participation)
       end
 
       it "is empty when no leaders are present" do
         event_roles(:top_leader).destroy!
+        params[:include] = "leaders"
         render
-        expect(jsonapi_data[0].attributes["leaders"]).to be_empty
+        expect(jsonapi_data[0].sideload(:leaders)).to be_nil
       end
 
       it "contains only leader roles" do
+        create_role(:leader, first_name: "course", last_name: "lead")
         create_role(:assistant_leader, first_name: "assi", last_name: nil)
         create_role(:cook)
+        params[:include] = "leaders"
         render
-        expect(jsonapi_data[0].attributes["leaders"]).to match_array [
+        expect(jsonapi_data[0].sideload(:leaders).map { |leader| "#{leader.first_name} #{leader.last_name}" }).to match_array [
           "Bottom Member",
-          "assi"
+          "course lead"
         ]
       end
     end
@@ -104,7 +108,7 @@ describe Event::CourseResource, type: :resource do
     it "may include leaders" do
       params[:include] = "leaders"
       render
-      leaders = d[0].sideload(:leaders)
+      leaders = jsonapi_data[0].sideload(:leaders)
       expect(leaders[0].id).to eq people(:bottom_member).id
       expect(leaders[0].first_name).to eq "Bottom"
       expect(leaders[0].last_name).to eq "Member"

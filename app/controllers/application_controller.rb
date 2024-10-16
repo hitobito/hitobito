@@ -83,7 +83,10 @@ class ApplicationController < ActionController::Base
     Auth.current_person = nil
   end
 
+  # Cater for oidc redirect_uri, see also Devise::Controllers::StoreLocation
   def after_sign_in_path_for(resource)
-    stored_location_for(resource) || root_path
+    path = stored_location_for(resource)
+
+    CGI.parse(path.to_s)["redirect_uri"].first || path || root_path
   end
 end

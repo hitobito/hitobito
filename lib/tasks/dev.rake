@@ -54,7 +54,7 @@ namespace :dev do
     desc "Show example OAuth-Authorization Screen"
     task :authorization, [:application_id, :prompt, :redirect_uri] => [:environment] do |_, args|
       app = Oauth::Application.find(args.fetch(:application_id))
-      host_name = ENV.fetch("RAILS_HOST_NAME", nil)
+      host_name = ENV.fetch("RAILS_HOST_NAME", "localhost:3000")
 
       params = {
         client_id: app.uid,

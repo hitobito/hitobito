@@ -15,7 +15,7 @@ class PersonDuplicateSeeder
 
   def seed_duplicates
     candidates.each do |p|
-      group = Group.order('RAND()').first
+      group = Group.order('RANDOM()').first
       role_type = group.role_types.reject(&:restricted?).sample
       return unless role_type.present?
 
@@ -42,6 +42,6 @@ class PersonDuplicateSeeder
   private
 
   def candidates
-    Person.order('RAND()').limit(10)
+    Person.order('RANDOM()').limit(10)
   end
 end

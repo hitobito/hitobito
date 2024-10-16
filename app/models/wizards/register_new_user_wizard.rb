@@ -7,8 +7,8 @@
 class Wizards::RegisterNewUserWizard < Wizards::Base
   self.steps = [Wizards::Steps::NewUserForm]
 
-  def initialize(group:, current_step: 0, **params)
-    super(current_step: current_step, **params)
+  def initialize(group:, current_ability: nil, current_step: 0, **params)
+    super(current_step:, current_ability:, **params)
     @group = group
   end
 

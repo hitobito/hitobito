@@ -166,6 +166,18 @@ describe Event::ParticipationsController do
       expect(response).to redirect_to group_event_participations_path(group, course, returning: true)
     end
 
+    it "shows the correct timestamps on the participation instances" do
+      created_at = 2.days.ago.change(usec: 0)
+      updated_at = 1.day.ago.change(usec: 0)
+      Event::Participation.update_all(created_at:, updated_at:)
+
+      get :index, params: {group_id: group.id, event_id: course.id}
+
+      expect(assigns(:participations)).to eq [@participant, @leader]
+      expect(assigns(:participations).map(&:created_at)).to eq [created_at, created_at]
+      expect(assigns(:participations).map(&:updated_at)).to eq [updated_at, updated_at]
+    end
+
     context "sorting" do
       %w[first_name last_name nickname zip_code town birthday].each do |attr|
         it "sorts based on #{attr}" do

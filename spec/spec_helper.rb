@@ -149,6 +149,12 @@ RSpec.configure do |config|
     end
   end
 
+  config.around(:each, :time_frozen) do |example|
+    freeze_time do
+      example.run
+    end
+  end
+
   config.around(:each, profile: true) do |example|
     require "ruby-prof"
 

@@ -5,7 +5,7 @@ describe "OauthWorkflow" do
   let(:redirect_uri) { "urn:ietf:wg:oauth:2.0:oob" }
 
   describe "obtaining token" do
-    it "creates access_token for the user" do
+    it "creates access_token for the user", :time_frozen do
       app = Oauth::Application.create!(name: "MyApp", redirect_uri: redirect_uri)
       grant = app.access_grants.create!(resource_owner_id: user.id, expires_in: 10, redirect_uri: redirect_uri)
       expect do
@@ -17,7 +17,7 @@ describe "OauthWorkflow" do
       expect(json["expires_in"]).to eq 2.hours.to_i
     end
 
-    it "can configure token expiry" do
+    it "can configure token expiry", :time_frozen do
       app = Oauth::Application.create!(name: "MyApp", redirect_uri: redirect_uri)
       grant = app.access_grants.create!(resource_owner_id: user.id, expires_in: 10, redirect_uri: redirect_uri)
       allow(Doorkeeper.config).to receive(:access_token_expires_in).and_return(1.hour)

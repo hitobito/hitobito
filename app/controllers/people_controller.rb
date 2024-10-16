@@ -119,10 +119,10 @@ class PeopleController < CrudController
 
   alias_method :group, :parent
 
-  # every person may be displayed underneath the root group,
+  # every person may be displayed underneath the next layer group,
   # even if it does not directly belong to it.
   def find_entry
-    group&.root? ? Person.find(params[:id]) : super
+    group&.layer_group? ? Person.find(params[:id]) : super
   end
 
   def assign_attributes

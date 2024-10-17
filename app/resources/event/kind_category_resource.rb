@@ -6,6 +6,8 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::KindCategoryResource < ApplicationResource
+  primary_endpoint "event_kind_categories", [:index, :show]
+
   self.type = "event_kind_categories"
 
   with_options writable: false, filterable: false, sortable: false do

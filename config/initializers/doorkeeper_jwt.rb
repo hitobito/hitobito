@@ -6,7 +6,7 @@ Doorkeeper::JWT.configure do
     app = opts[:application]
     person = Person.find(opts[:resource_owner_id])
     {
-      iss: app.name,
+      iss: Settings.oidc.issuer,
       aud: app.additional_audiences.to_s.lines.map(&:strip).prepend(app.uid),
       iat: Time.current.utc.to_i,
       exp: Time.current.utc.to_i + Settings.oidc.access_token_expires_in,

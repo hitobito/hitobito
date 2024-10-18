@@ -6,6 +6,8 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::KindCategoryResource < ApplicationResource
+  primary_endpoint "event_kind_categories", [:index, :show]
+
   self.type = "event_kind_categories"
 
   with_options writable: false, filterable: false, sortable: false do
@@ -13,6 +15,10 @@ class Event::KindCategoryResource < ApplicationResource
   end
 
   def base_scope
-    Event::KindCategory.where(deleted_at: nil).list
+    Event::KindCategory.accessible_by(index_ability).where(deleted_at: nil).list
+  end
+
+  def index_ability
+    JsonApi::EventAbility.new(current_ability)
   end
 end

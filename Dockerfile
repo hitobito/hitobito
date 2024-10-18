@@ -34,7 +34,7 @@ ARG PRE_BUILD_SCRIPT="\
      cp -v Wagonfile.production Wagonfile; \
      bundle lock; \
 "
-ARG BUILD_SCRIPT="bundle exec rake assets:precompile"
+ARG BUILD_SCRIPT="RAILS_DB_ADAPTER=nulldb bundle exec rake assets:precompile"
 
 ARG POST_BUILD_SCRIPT=" \
      echo \"(built at: $(date '+%Y-%m-%d %H:%M:%S'))\" > /app-src/BUILD_INFO; \

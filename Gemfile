@@ -10,6 +10,7 @@ source "https://rubygems.org"
 gem "rails", "= 6.1.7.8"
 gem "wagons", "~> 0.7.0"
 
+gem "activerecord-nulldb-adapter"
 gem "activerecord-session_store"
 gem "acts-as-taggable-on"
 gem "airbrake"
@@ -91,7 +92,6 @@ gem "simpleidn"
 gem "simple_xlsx_reader" # import data from xlsx files (used in some wagons)
 gem "sorted_set"
 gem "sprockets", "~> 3.7.2" # pinned to older version to avoid having an empty manifest.js
-gem "sqlite3", "~> 1.7.2" # required for asset generation
 gem "strip_attributes" # strip whitespace of attributes
 gem "truemail"
 gem "turbo-rails"

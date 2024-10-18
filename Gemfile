@@ -10,6 +10,7 @@ source "https://rubygems.org"
 gem "rails", "= 6.1.7.8"
 gem "wagons", "~> 0.7.0"
 
+gem "activerecord-nulldb-adapter"
 gem "activerecord-session_store"
 gem "acts-as-taggable-on"
 gem "airbrake"

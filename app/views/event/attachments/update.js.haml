@@ -4,6 +4,6 @@
 -#  https://github.com/hitobito/hitobito.
 
 - if !@attachment.changed?
-  $('ul#attachments li##{dom_id(@attachment)}').replaceWith('#{j(render(@attachment))}')
+  document.getElementById('#{dom_id(@attachment)}').outerHTML = '#{j(render(@attachment))}'
 - else
   alert('#{t('.failure', errors: @attachment.errors.full_messages.join(', '))}');

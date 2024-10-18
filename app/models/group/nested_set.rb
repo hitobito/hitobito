@@ -10,6 +10,7 @@ module Group::NestedSet
 
   included do
     acts_as_nested_set dependent: :destroy
+    belongs_to :layer_group, class_name: "Group"
 
     before_save :store_new_display_name
     after_save :move_to_alphabetic_position
@@ -18,11 +19,6 @@ module Group::NestedSet
   # The hierarchy from top to bottom of and including this group.
   def hierarchy
     @hierarchy ||= self_and_ancestors
-  end
-
-  # The layer of this group.
-  def layer_group
-    layer ? self : layer_hierarchy.last
   end
 
   # The layer hierarchy from top to bottom of this group.

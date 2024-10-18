@@ -669,8 +669,6 @@ GEM
       actionpack (>= 6.1)
       activesupport (>= 6.1)
       sprockets (>= 3.0.0)
-    sqlite3 (1.7.3)
-      mini_portile2 (~> 2.8.0)
     stackprof (0.2.26)
     standard (1.39.1)
       language_server-protocol (~> 3.17.0.2)
@@ -875,7 +873,6 @@ DEPENDENCIES
   sorted_set
   spring-commands-rspec
   sprockets (~> 3.7.2)
-  sqlite3 (~> 1.7.2)
   stackprof
   standard (~> 1.28)
   standard-rails

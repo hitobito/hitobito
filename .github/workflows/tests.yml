@@ -24,6 +24,7 @@ jobs:
         uses: ./.github/actions/core-ci-setup
         with:
           migrations: false
+          assets: false
 
       - name: 'Rubocop'
         run: |

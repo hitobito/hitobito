@@ -13,9 +13,11 @@ class Group::LogController < ApplicationController
   decorates :group, :versions
 
   def index
-    @versions = PaperTrail::Version.where(id: people_versions)
-      .or(PaperTrail::Version.where(id: group_versions))
-      .left_joins(:role)
+    binding.pry
+
+    @versions = PaperTrail::Version
+      .from(versions.create_table_alias(versions_union_query, "versions"))
+      .distinct
       .includes(:item)
       .reorder("created_at DESC, id DESC")
       .page(params[:page])
@@ -23,47 +25,53 @@ class Group::LogController < ApplicationController
 
   private
 
-  def group_versions
-    @group_versions ||= PaperTrail::Version.distinct
-      .where(main_type: Group.sti_name)
-      .where(main_id: entry.id)
+  def versions_union_query
+    group_versions_cte
+      .union(active_people_versions_cte)
+      .union(deleted_roles_versions_cte)
   end
 
-  def people_versions
-    @people_versions ||= PaperTrail::Version.distinct
-      .where(version_conditions)
+  def group_versions_cte_table = Arel::Table.new(:group_versions)
+
+  def group_versions_cte_definition
+    versions
+      .project(versions[:id])
+      .where(versions[:main_type].eq(Group.sti_name))
+      .where(versions[:main_id].eq(entry.id))
   end
 
-  def version_conditions
-    base_conditions.and(
-      active_person_conditions.or(deleted_role_conditions)
-    )
+  def group_versions_cte = Arel::Nodes::As.new(group_versions_cte_definition, group_versions_cte_table)
+
+  def active_people_versions_cte_table = Arel::Table.new(:active_people_versions)
+
+  def active_people_versions_cte_definition
+    versions
+      .project(versions[:id])
+      .where(versions[:main_type].eq(Person.sti_name))
+      .join("INNER JOIN (#{active_people_relation.to_sql})").on("versions.main_id = people.id")
   end
 
-  def base_conditions
-    versions[:main_type].eq(Person.sti_name)
-  end
+  def active_people_versions_cte = Arel::Nodes::As.new(active_people_versions_cte_definition, active_people_versions_cte_table)
 
-  def active_person_conditions
-    versions[:main_id].in(Arel::Nodes::SqlLiteral.new(active_people.to_sql))
-  end
-
-  def deleted_role_conditions
-    versions[:item_type].eq(Role.sti_name)
-      .and(versions[:event].eq("destroy"))
-      .and(roles[:group_id].in(relevant_groups.map(&:id)))
-      .and(roles[:deleted_at].lteq(Time.zone.now))
-  end
-
-  def active_people
-    @active_people ||= Person
+  def active_people_relation
+    Person
       .accessible_by(PersonFullReadables.new(current_person))
-      .unscope(:select)
-      .select(:id)
       .joins(:roles)
       .merge(Role.without_archived)
       .where(roles: {group: relevant_groups})
   end
+
+  def deleted_roles_versions_cte_table = Arel::Table.new(:deleted_roles_versions)
+
+  def deleted_roles_versions_cte_definition
+    versions
+      .project(versions[:id])
+      .where(versions[:main_type].eq(Role.sti_name))
+      .where(versions[:event].eq("destroy"))
+      .join("INNER JOIN (#{deleted_roles_relation.to_sql})").on("versions.item_id = roles.id")
+  end
+
+  def deleted_roles_versions_cte = Arel::Nodes::As.new(deleted_roles_versions_cte_definition, deleted_roles_versions_cte_table)
 
   def relevant_groups
     @relevant_groups ||= group.self_and_descendants

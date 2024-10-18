@@ -6,8 +6,8 @@
 base: &generic
   adapter: postgresql
   pool: 20
-  timeout: 5000
-  encoding: 'utf8'
+  checkout_timeout: 5 # seconds
+  encoding: "utf8"
 <% %w(host port username password socket).each do |option| %>
   <% value = ENV["RAILS_DB_#{option.upcase}"] %>
   <%= "#{option}: #{value}" if value.present? %>

@@ -138,7 +138,7 @@ GEM
     bleib (0.0.14)
     bootsnap (1.18.3)
       msgpack (~> 1.2)
-    brakeman (6.2.1)
+    brakeman (6.2.2)
       racc
     builder (3.3.0)
     bullet (7.1.6)

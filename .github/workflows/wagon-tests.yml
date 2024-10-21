@@ -39,6 +39,8 @@ jobs:
   wagon_rubocop:
     name: rubocop
     runs-on: 'ubuntu-20.04'
+    env:
+      RAILS_DB_ADAPTER: nulldb
 
     steps:
       - name: Check out core with shared setup action

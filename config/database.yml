@@ -4,32 +4,34 @@
 #  https://github.com/hitobito/hitobito.
 
 base: &generic
-  adapter: <%= ENV['RAILS_DB_ADAPTER'] || 'sqlite3' %>
+  adapter: <%= ENV['RAILS_DB_ADAPTER'] || 'postgresql' %>
   pool: 20
-  timeout: 5000
-  encoding: 'utf8'
+  checkout_timeout: 5 # seconds
+  encoding: "utf8"
 <% %w(host port username password socket).each do |option| %>
   <% value = ENV["RAILS_DB_#{option.upcase}"] %>
   <%= "#{option}: #{value}" if value.present? %>
 <% end %>
+<% variables = %w(lock_timeout statement_timeout).map { [_1, ENV["RAILS_DB_#{_1.upcase}"]] }.to_h.compact %>
+<% if variables.any? %>
+  variables:<% variables.each do |option, value| %>
+    <%= "#{option}: #{value}" %>
+<% end %>
+<% end %>
 
 development:
   <<: *generic
-  database: <%= ENV['RAILS_DB_NAME'] || "#{Rails.root}/db/development.sqlite3" %>
-<% if ENV.fetch('RAILS_DB_ADAPTER', 'sqlite3') =~ /postgresql/ %>
-  schema_search_path: <%= ENV['RAILS_DB_SCHEMA'] || "public" %>
-<% end %>
+  database: <%= ENV["RAILS_DB_NAME"] || "hitobito_development" %>
+  schema_search_path: <%= ENV["RAILS_DB_SCHEMA"] || "public" %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *generic
-  database: <%= ENV['RAILS_TEST_DB_NAME'] || ENV['RAILS_DB_NAME'] || "#{Rails.root}/db/test.sqlite3" %>
+  database: <%= ENV["RAILS_TEST_DB_NAME"] || ENV["RAILS_DB_NAME"] || "hitobito_test" %>
 
 production:
   <<: *generic
-  database: <%= ENV['RAILS_DB_NAME'] || "#{Rails.root}/db/production.sqlite3" %>
-<% if ENV.fetch('RAILS_DB_ADAPTER', 'sqlite3') =~ /postgresql/ %>
-  schema_search_path: <%= ENV['RAILS_DB_SCHEMA'] || "public" %>
-<% end %>
+  database: <%= ENV["RAILS_DB_NAME"] || "hitobito_production" %>
+  schema_search_path: <%= ENV["RAILS_DB_SCHEMA"] || "public" %>

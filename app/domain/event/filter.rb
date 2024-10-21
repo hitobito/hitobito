@@ -34,10 +34,10 @@ class Event::Filter
 
     Event # nesting restricts to parent, we want more
       .where(id: event_ids_for_relevant_groups_and_dates)
+      .list
       .where(type: type)
       .includes(:groups, :translations, :events_groups)
       .preload_all_dates
-      .list
       .select(:id)
   end
 

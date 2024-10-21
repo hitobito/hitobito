@@ -194,9 +194,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   class << self
     # Default scope for event lists
     def list
-      subquery = joins(:dates)
-        .select("events.*", "event_dates.start_at")
-      includes(:translations)
+      subquery = joins(:dates, :translations)
+        .select("events.*", "event_dates.start_at", "event_translations.name", 
+                "event_translations.description", "event_translations.application_conditions", 
+                "event_translations.signature_confirmation_text")
         .preload_all_dates
 
       Event.select("*").from(subquery.unscope(:order).distinct_on(:id), :events).order_by_date

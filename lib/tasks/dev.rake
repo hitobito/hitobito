@@ -160,6 +160,15 @@ namespace :dev do
 
       puts "Done."
     end
+
+    if Rails.env.development?
+      desc "Reset root user pw to known dev value"
+      task reset_root_pw: :environment do
+        root = Person.root
+        root.password = "hito42bito"
+        root.save!(validate: false)
+      end
+    end
   end
 
   namespace :help_texts do

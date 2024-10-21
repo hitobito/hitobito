@@ -21,9 +21,9 @@ class Event::ParticipationDecorator < ApplicationDecorator
   end
 
   def labeled_link
-    group ||= event.groups.first
-    event.labeled_link(h.group_event_participation_path(group, event, self),
-      can?(:show, self))
+    url = h.group_event_participation_path(event.groups.first, event, model)
+    label = model.model_name.human
+    h.link_to_if(can?(:show, model), label, url)
   end
 
   def person_location_information

@@ -4,6 +4,14 @@
 -#  https://github.com/hitobito/hitobito.
 
 = section_table(title, collection) do |item|
-  %td
-    %strong= item.labeled_link
-  %td= item.dates_full
+  - case item 
+  - when EventDecorator
+    %td
+      %strong= item.labeled_link
+    %td= item.dates_full
+  - when Event::ParticipationDecorator, ApplicationDecorator
+    %td
+      %strong= item.event.labeled_link
+      %br
+      = item.labeled_link
+    %td= item.event.dates_full

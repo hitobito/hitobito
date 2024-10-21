@@ -72,6 +72,8 @@ GEM
     activerecord (6.1.7.8)
       activemodel (= 6.1.7.8)
       activesupport (= 6.1.7.8)
+    activerecord-nulldb-adapter (1.0.1)
+      activerecord (>= 5.2.0, < 7.2)
     activerecord-session_store (2.1.0)
       actionpack (>= 6.1)
       activerecord (>= 6.1)
@@ -136,7 +138,7 @@ GEM
     bleib (0.0.14)
     bootsnap (1.18.3)
       msgpack (~> 1.2)
-    brakeman (6.2.1)
+    brakeman (6.2.2)
       racc
     builder (3.3.0)
     bullet (7.1.6)
@@ -671,8 +673,6 @@ GEM
       actionpack (>= 6.1)
       activesupport (>= 6.1)
       sprockets (>= 3.0.0)
-    sqlite3 (1.7.3)
-      mini_portile2 (~> 2.8.0)
     stackprof (0.2.26)
     standard (1.39.1)
       language_server-protocol (~> 3.17.0.2)
@@ -756,6 +756,7 @@ DEPENDENCIES
   active_record_distinct_on
   active_storage_validations
   active_storage_variant
+  activerecord-nulldb-adapter
   activerecord-session_store
   acts-as-taggable-on
   airbrake
@@ -878,7 +879,6 @@ DEPENDENCIES
   sorted_set
   spring-commands-rspec
   sprockets (~> 3.7.2)
-  sqlite3 (~> 1.7.2)
   stackprof
   standard (~> 1.28)
   standard-rails

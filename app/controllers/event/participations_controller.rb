@@ -165,7 +165,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     records = filter.list_entries
       .includes(person: :picture_attachment)
       .references(:people)
-      .select("event_participations.*")
+      .select(Event::Participation.column_names)
       .page(params[:page])
     @counts = filter.counts
     @pagination_options = {

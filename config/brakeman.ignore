@@ -172,6 +172,25 @@
       "note": "All input values are ensured to be integer and thus not dangerous"
     },
     {
+      "warning_type": "Unmaintained Dependency",
+      "warning_code": 120,
+      "fingerprint": "d84924377155b41e094acae7404ec2e521629d86f97b0ff628e3d1b263f8101c",
+      "check_name": "EOLRails",
+      "message": "Support for Rails 6.1.7.8 ended on 2024-10-01",
+      "file": "Gemfile.lock",
+      "line": 492,
+      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        1104
+      ],
+      "note": "An upgrade is on the way"
+    },
+    {
       "warning_type": "Command Injection",
       "warning_code": 14,
       "fingerprint": "f90d2e106bfa368dc7c0cf2a99ad0c1597b1cce0ddd9301c4c46259e0e60edec",
@@ -195,6 +214,6 @@
       "note": "The command can only be executed in an authenticated context or locally, some parameters are checked against a whitelist"
     }
   ],
-  "updated": "2024-08-30 13:56:07 +0200",
-  "brakeman_version": "6.2.1"
+  "updated": "2024-10-21 15:29:08 +0200",
+  "brakeman_version": "6.2.2"
 }

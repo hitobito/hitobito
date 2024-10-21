@@ -6,8 +6,4 @@
 = section_table(title, collection) do |item|
   %td
     %strong= item.labeled_link
-    %div.mt-1
-      - participation = entry.event_participations.find { |p| p.event_id == item.id  }
-      - if can?(:show, participation)
-        = action_button(Event::Participation.model_name.human,group_event_participation_path(item.groups.first, item, participation))
   %td= item.dates_full

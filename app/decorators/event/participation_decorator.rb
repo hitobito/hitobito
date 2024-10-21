@@ -14,8 +14,16 @@ class Event::ParticipationDecorator < ApplicationDecorator
     :all_phone_numbers, :all_social_accounts, :complete_address, :town, :layer_group_label,
     :layer_group, to: :person
 
+  delegate :dates_full, to: :event
+
   def person_additional_information
     h.tag(:br) + h.muted(person.additional_name) + incomplete_label
+  end
+
+  def labeled_link
+    group ||= event.groups.first
+    event.labeled_link(h.group_event_participation_path(group, event, self),
+      can?(:show, self))
   end
 
   def person_location_information

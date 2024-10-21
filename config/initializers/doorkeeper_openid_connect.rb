@@ -35,7 +35,7 @@ Doorkeeper::OpenidConnect.configure do
 
     store_location_for resource_owner, return_to
     sign_out resource_owner
-    redirect_to new_person_session_url(oauth: true)
+    redirect_to new_person_session_url(auth: true)
   end
 
   subject do |resource_owner, application|

@@ -59,6 +59,8 @@
 # A course is a specialised Event that has by default applications,
 # preconditions and may give a qualification after attending it.
 class Event::Course < Event
+  LEADER_ROLES = [Event::Role::Leader].map(&:sti_name)
+
   # This statement is required because this class would not be loaded otherwise.
   require_dependency "event/course/role/participant"
 

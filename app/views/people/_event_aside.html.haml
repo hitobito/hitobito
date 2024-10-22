@@ -5,13 +5,15 @@
 
 = section_table(title, collection) do |item|
   - case item 
-  - when EventDecorator
-    %td
-      %strong= item.labeled_link
-    %td= item.dates_full
-  - when Event::ParticipationDecorator, ApplicationDecorator
+  - when Event::ParticipationDecorator
     %td
       %strong= item.event.labeled_link
       %br
       = item.labeled_link
     %td= item.event.dates_full
+  - else # preserve previous behaviour for EventDecorator, ApplicationDecorator
+    %td
+      = item.inspect
+      %strong= item.labeled_link
+    %td= item.dates_full
+

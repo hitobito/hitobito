@@ -5,7 +5,7 @@
 
 = section_table(title, collection) do |item|
   %td
-    = item.inspect
-    %strong= item.labeled_link
-  %td= item.dates_full
-
+    %strong= item.event.labeled_link
+    %br
+    = item.labeled_link
+  %td= item.event.dates_full

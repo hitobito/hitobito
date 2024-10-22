@@ -46,20 +46,12 @@ module Import
 
     def handle_duplicate(person, people_ids)
       if people_ids.size == 1
-        handle_single_duplicate(person)
+        # set new unique entry or use and return existing entry
+        unique_entries[person.id] ||= person
       else
-        handle_multiple_duplicates(person, people_ids.size)
+        person.errors.add(:base, translate(:duplicates, count: people_ids.size))
+        person
       end
-    end
-
-    def handle_single_duplicate(person)
-      # set new unique entry or use and return existing entry
-      unique_entries[person.id] ||= person
-    end
-
-    def handle_multiple_duplicates(person, duplicate_count)
-      person.errors.add(:base, translate(:duplicates, count: duplicate_count))
-      person
     end
 
     def duplicate_ids_with_first_person(attrs)
@@ -82,7 +74,7 @@ module Import
     def append_duplicate_conditions(attrs, conditions)
       existing_duplicate_attrs(attrs).each do |key, value|
         condition = conditions.first
-        connector = condition.present? ? " AND " : ""
+        connector = condition.present? ? " AND " : nil
         comparison = if %w[first_name last_name company_name].include?(key.to_s)
           "#{key} = ?"
         else

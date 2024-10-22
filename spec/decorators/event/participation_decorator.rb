@@ -14,7 +14,7 @@ describe Event::ParticipationDecorator, :draper_with_helpers do
 
   subject(:decorator) { described_class.new(participation) }
 
-  describe '#labeled_link' do
+  describe "#labeled_link" do
     subject(:labeled_link) { decorator.labeled_link }
 
     it "returns event name as link to particpation" do

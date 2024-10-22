@@ -133,7 +133,7 @@ describe PersonDecorator, :draper_with_helpers do
       expect(subject.upcoming_events).to be_empty
     end
 
-    describe '#upcoming_participations' do
+    describe "#upcoming_participations" do
       subject(:upcoming_participations) { decorator.upcoming_participations }
 
       it "returns participations that are active" do

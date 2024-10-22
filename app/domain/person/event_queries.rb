@@ -51,8 +51,8 @@ class Person::EventQueries
         .select("event_participations.*", "event_dates.start_at")
         .distinct_on(:id)
         .includes(:roles, event: [:translations, :dates, :groups])
-    ).order(:start_at).tap do |applications|
-      Event::PreloadAllDates.for(applications.collect(&:event))
+    ).order(:start_at).tap do |participations|
+      Event::PreloadAllDates.for(participations.collect(&:event))
     end
   end
 

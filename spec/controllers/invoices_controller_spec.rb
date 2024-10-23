@@ -225,6 +225,17 @@ describe InvoicesController do
       expect(json[:links][:"invoices.creator"][:href]).to eq "http://test.host/people/{invoices.creator}.json"
       expect(json[:links][:"invoices.recipient"][:href]).to eq "http://test.host/people/{invoices.recipient}.json"
     end
+
+    context "rendering view" do
+      render_views
+      let(:dom) { Capybara::Node::Simple.new(response.body) }
+
+      it "renders invoice with title" do
+        invoice.update(title: "Testrechnung")
+        get :index, params: {group_id: group.id}
+        expect(dom).to have_link "Testrechnung", href: group_invoice_path(group_id: group.id, id: invoice.id)
+      end
+    end
   end
 
   context "show" do

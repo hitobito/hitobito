@@ -13,7 +13,7 @@ describe GroupResource, type: :resource do
   describe "serialization" do
     let!(:group) { groups(:bottom_group_two_one) }
 
-    before { group.update!(self_registration_role_type: Group::BottomGroup::Member.sti_name) }
+    before { group.update!(self_registration_role_type: Role::External.sti_name) }
 
     def serialized_attrs
       [

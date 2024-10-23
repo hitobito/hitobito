@@ -432,7 +432,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def prevent_changes
-    allowed = %w[archived_at updater_id lft rgt parent_id]
+    allowed = %w[archived_at updater_id lft rgt parent_id deleter_id]
     only_archival = changes
       .reject { |_attr, (from, to)| from.blank? && to.blank? }
       .keys.all? { |key| allowed.include? key }

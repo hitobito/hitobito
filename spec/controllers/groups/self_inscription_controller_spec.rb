@@ -13,7 +13,7 @@ describe Groups::SelfInscriptionController do
 
   context "with feature disabled" do
     before do
-      group.update!(self_registration_role_type: Group::TopGroup::Member.sti_name)
+      group.update!(self_registration_role_type: Role::External.sti_name)
       allow(Settings.groups.self_registration).to receive(:enabled).and_return(false)
     end
 
@@ -45,7 +45,7 @@ describe Groups::SelfInscriptionController do
     context "GET show" do
       context "when registration active" do
         before do
-          group.update(self_registration_role_type: Group::TopGroup::Member.sti_name)
+          group.update(self_registration_role_type: Role::External.sti_name)
         end
 
         context "when unautorized" do
@@ -66,7 +66,7 @@ describe Groups::SelfInscriptionController do
           end
 
           context "when already member of the group" do
-            before { Fabricate(:role, type: Group::TopGroup::Member.sti_name, person: person, group: group) }
+            before { Fabricate(:role, type: Role::External.sti_name, person: person, group: group) }
 
             it "redirects to group" do
               get :show, params: {group_id: group.id}

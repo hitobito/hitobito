@@ -67,17 +67,15 @@ describe GroupDecorator, :draper_with_helpers do
 
   describe "allowed_roles_for_self_registration" do
     its(:allowed_roles_for_self_registration) do
-      should eq [Role::External,
-        Group::TopGroup::LocalSecretary,
-        Group::TopGroup::Member]
+      should eq [Role::External]
     end
 
     describe "allowed_roles_for_self_registration in a bottom group" do
       let(:model) { groups(:bottom_group_one_one) }
 
-      it "should include roles which are not visible_from_above" do
+      it "should include roles which have no permissions" do
         expect(subject.allowed_roles_for_self_registration).to eq [
-          Role::External, Group::BottomGroup::Member
+          Role::External,
         ]
       end
     end

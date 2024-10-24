@@ -4,6 +4,6 @@
 -#  https://github.com/hitobito/hitobito.
 
 - if @attachment.persisted?
-  $('ul#attachments li.form').before('#{j(render(@attachment))}')
+  document.getElementById("attachments").firstElementChild.innerHTML += '#{j(render(@attachment))}'
 - else
   alert('#{t('.failure', errors: @attachment.errors.full_messages.join(', '))}');

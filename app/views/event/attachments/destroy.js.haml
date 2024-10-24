@@ -4,6 +4,6 @@
 -#  https://github.com/hitobito/hitobito.
 
 - if @attachment.destroyed?
-  $('ul#attachments li##{dom_id(@attachment)}').remove()
+  document.getElementById('#{dom_id(@attachment)}').remove()
 - else
   alert('#{t('.failure', errors: @attachment.errors.full_messages.join(', '))}');

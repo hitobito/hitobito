@@ -18,7 +18,7 @@ describe Event::AttachmentsController do
     file = Tempfile.new(["foo", ".pdf"])
     attach_file "event_attachment_file", file.path, visible: false
 
-    expect(page).to have_selector("#attachments li", text: File.basename(file.path))
+    expect(page).to have_selector("#attachments tr", text: File.basename(file.path))
   end
 
   it "cannot upload unaccepted file", js: true do

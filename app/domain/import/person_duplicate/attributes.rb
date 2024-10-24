@@ -57,12 +57,8 @@ module Import::PersonDuplicate::Attributes
   end
 
   def parse_date(date_string)
-    if date_string.present?
-      begin
-        ActiveRecord::Type::Date.new.cast(date_string)
-      rescue ArgumentError
-        nil
-      end
-    end
+    ActiveRecord::Type::Date.new.cast(date_string.to_s)
+  rescue ArgumentError
+    nil
   end
 end

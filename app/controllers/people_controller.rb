@@ -122,7 +122,7 @@ class PeopleController < CrudController
   # even if it does not directly belong to it.
   def find_entry
     return Person.find(params[:id]) if params[:action] == "destroy" || group&.root?
-    
+
     super
   end
 

@@ -28,7 +28,7 @@ class Wizards::InscribeInGroupWizard < Wizards::Base
   private
 
   def build_role
-    @group.self_registration_role_type.constantize.new(group: @group, person: @person)
+    @group.self_registration_role_type.constantize.new(group: @group, person: @person, start_on: Time.zone.now)
   end
 
   def send_notification_email

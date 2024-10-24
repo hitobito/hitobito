@@ -26,9 +26,7 @@ class People::DuplicateLocator
   private
 
   def find_duplicate_id(person)
-    conditions =
-      Import::PersonDuplicate::Attributes.new(person.attributes)
-        .duplicate_conditions
+    conditions = People::DuplicateConditions.new(person.attributes).build
     duplicate_ids = find_people_ids(conditions)
 
     duplicate_ids.first unless person.id == duplicate_ids.first

@@ -48,7 +48,7 @@ class PeopleController < CrudController
 
   def index # rubocop:disable Metrics/AbcSize we support a lot of formats, hence many code-branches
     list_params = session[:list_params]
-    if !list_params.empty? && list_params.first.second[:filters] != nil
+    if !list_params.empty? && !list_params.first.second[:filters].nil?
       filter_params = session[:list_params].first.second[:filters].permit!.to_hash
       session[:list_params].first.second[:filters] = filter_params
     end

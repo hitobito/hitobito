@@ -637,6 +637,7 @@ fr:
         requires_approval: Recommandation requise
         globally_visible: Visibilité
         automatic_assignment: Attribution automatique
+        application_questions: Données pour l'inscription
       event/contact_attrs:
         required: Obligatoire
         optional: Optionnel
@@ -720,6 +721,7 @@ fr:
         question: Question
         choices: Réponses possibles
         multiple_choices: Sélection multiple
+        disclosure: Paramétrage
         disclosures:
           required: Obligatoire
           optional: Optionnel
@@ -729,11 +731,13 @@ fr:
         choices: Réponses possibles
         multiple_choices: Sélection multiple
         required: Réponse obligatoire
+        disclosure: Paramétrage
       application_questions:
         question: Question
         choices: Réponses possibles
         multiple_choices: Sélection multiple
         required: Réponse obligatoire
+        disclosure: Paramétrage
       event/role:
         label: Désignation
         person: Personne

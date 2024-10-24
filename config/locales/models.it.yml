@@ -602,6 +602,7 @@ it:
         participations_visible: Visibilità dei partecipanti
         requires_approval: Raccomandazione necessaria
         globally_visible: Visibilità
+        application_questions: Dati per l'iscrizione
       event/contact_attrs:
         required: Obbligatorio
         optional: Facoltativo
@@ -679,6 +680,7 @@ it:
         question: Domanda
         choices: Possibili risposte
         multiple_choices: Scelta multipla
+        disclosure: Impostazione
         disclosures:
           required: Obbligatorio
           optional: Opzionale
@@ -688,11 +690,13 @@ it:
         choices: Possibili risposte
         multiple_choices: Scelta multipla
         required: Risposta obbligatoria
+        disclosure: Impostazione
       application_questions:
         question: Domanda
         choices: Possibili risposte
         multiple_choices: Scelta multipla
         required: Risposta obbligatoria
+        disclosure: Impostazione
       event/role:
         label: Descrizione
         person: Persona

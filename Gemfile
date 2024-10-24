@@ -7,10 +7,9 @@
 
 source "https://rubygems.org"
 
-gem "rails", "= 6.1.7.8"
+gem "rails", "= 7.0.1"
 gem "wagons", "~> 0.7.0"
 
-gem "activerecord-nulldb-adapter"
 gem "activerecord-session_store"
 gem "acts-as-taggable-on"
 gem "airbrake"
@@ -77,7 +76,7 @@ gem "puma"
 gem "rack-cors"
 gem "rack-mini-profiler", require: false
 gem "rails_autolink"
-gem "rails-i18n"
+gem "rails-i18n", "~> 7.0.0"
 gem "remotipart"
 gem "rest-client"
 gem "rexml"
@@ -91,22 +90,20 @@ gem "sentry-raven"
 gem "simpleidn"
 gem "simple_xlsx_reader" # import data from xlsx files (used in some wagons)
 gem "sorted_set"
-gem "sprockets", "~> 3.7.2" # pinned to older version to avoid having an empty manifest.js
+gem "sprockets-rails"
 gem "strip_attributes" # strip whitespace of attributes
 gem "truemail"
 gem "turbo-rails"
 gem "validates_by_schema", "~> 0.3.0" # 0.5.1 does not work well with wagons / wagon-migrations
-gem "validates_timeliness"
+gem "validates_timeliness", "~> 7.0.0.beta1"
 gem "vcard"
 gem "view_component"
 gem "webpacker"
 
 # load after others because dependencies
-gem "graphiti-openapi", github: "puzzle/graphiti-openapi", tag: "standalone/0.6.3"
 gem "kaminari"
 
 gem "active_storage_validations" # validate filesize, dimensions and content-type of uploads
-gem "active_storage_variant" # variants for Rails < 7
 
 group :development, :test do
   gem "graphiti_spec_helpers"

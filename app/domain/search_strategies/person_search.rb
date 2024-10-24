@@ -39,7 +39,7 @@ module SearchStrategies
         search_results.where("NOT EXISTS (SELECT * FROM roles " \
                     "WHERE (roles.deleted_at IS NULL OR
                             roles.deleted_at > :now) AND
-                          roles.person_id = people.id)", now: Time.now.utc.to_s(:db))
+                          roles.person_id = people.id)", now: Time.now.utc.to_fs(:db))
       end
     end
 

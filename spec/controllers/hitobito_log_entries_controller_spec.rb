@@ -34,7 +34,7 @@ describe HitobitoLogEntriesController do
 
       it "filters by from_time" do
         travel_to(2.days.ago.midday) do
-          # from_date_param = 2.days.ago.to_date.to_s(:db)
+          # from_date_param = 2.days.ago.to_date.to_formatted_s(:db)
           get :index, params: {from_time: "07:00"}
           expect(assigns(:hitobito_log_entries))
             .to match_array(hitobito_log_entries(:error_webhook, :error_ebics, :entry_with_payload))
@@ -43,7 +43,7 @@ describe HitobitoLogEntriesController do
 
       it "filters by from_date" do
         travel_to(Time.zone.now.midday) do
-          from_date_param = 2.days.ago.to_date.to_s(:db)
+          from_date_param = 2.days.ago.to_date.to_fs(:db)
           get :index, params: {from_date: from_date_param}
           expect(assigns(:hitobito_log_entries))
             .to match_array(hitobito_log_entries(:error_webhook, :error_ebics, :entry_with_payload))
@@ -52,7 +52,7 @@ describe HitobitoLogEntriesController do
 
       it "filters by from_date and from_time" do
         travel_to(Time.zone.now.midday) do
-          from_date_param = 2.days.ago.to_date.to_s(:db)
+          from_date_param = 2.days.ago.to_date.to_fs(:db)
           get :index, params: {from_date: from_date_param, from_time: "18:00"}
           expect(assigns(:hitobito_log_entries))
             .to match_array(hitobito_log_entries(:error_ebics, :entry_with_payload))
@@ -61,7 +61,7 @@ describe HitobitoLogEntriesController do
 
       it "filters by to_time" do
         travel_to(2.days.ago.midday) do
-          # from_date_param = 2.days.ago.to_date.to_s(:db)
+          # from_date_param = 2.days.ago.to_date.to_formatted_s(:db)
           get :index, params: {to_time: "07:00"}
           expect(assigns(:hitobito_log_entries)).to match_array(hitobito_log_entries(:debug_webhook, :info_webhook, :info_mail))
         end
@@ -69,7 +69,7 @@ describe HitobitoLogEntriesController do
 
       it "filters by to_date" do
         travel_to(Time.zone.now.midday) do
-          to_date_param = 3.days.ago.to_date.to_s(:db)
+          to_date_param = 3.days.ago.to_date.to_fs(:db)
           get :index, params: {to_date: to_date_param}
           expect(assigns(:hitobito_log_entries)).to match_array(hitobito_log_entries(:debug_webhook, :info_webhook, :info_mail))
         end
@@ -77,7 +77,7 @@ describe HitobitoLogEntriesController do
 
       it "filters by to_date and to_time" do
         travel_to(Time.zone.now.midday) do
-          to_date_param = 3.days.ago.to_date.to_s(:db)
+          to_date_param = 3.days.ago.to_date.to_fs(:db)
           get :index, params: {to_date: to_date_param, to_time: "07:00"}
           expect(assigns(:hitobito_log_entries)).to match_array(hitobito_log_entries(:debug_webhook, :info_webhook))
         end
@@ -85,8 +85,8 @@ describe HitobitoLogEntriesController do
 
       it "filters by from and to date/time" do
         travel_to(Time.zone.now.midday) do
-          from_date_param = 3.days.ago.to_date.to_s(:db)
-          to_date_param = 1.days.ago.to_date.to_s(:db)
+          from_date_param = 3.days.ago.to_date.to_fs(:db)
+          to_date_param = 1.days.ago.to_date.to_fs(:db)
           get :index, params: {from_date: from_date_param, from_time: "10:00", to_date: to_date_param, to_time: "07:00"}
           expect(assigns(:hitobito_log_entries)).to match_array(hitobito_log_entries(:error_webhook, :info_mail))
         end

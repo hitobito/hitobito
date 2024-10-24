@@ -27,8 +27,7 @@ module Person::PreloadGroups
   private
 
   def self.preload_association(records, association, scope = nil)
-    ActiveRecord::Associations::Preloader.new
-      .preload(records, association, scope)
+    ActiveRecord::Associations::Preloader.new(records: records, associations: association, scope: scope).call
   end
 
   def self.preload_groups_manually(records)

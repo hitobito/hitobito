@@ -14,7 +14,8 @@ class Export::ExportBaseJob < BaseJob
     super()
     @format = format
     @user_id = user_id
-    @options = options
+    @options = options.is_a?(ActionController::Parameters) ?
+                 options.permit(:selection, :group_id, :format, :controller, :action) : options
   end
 
   def perform

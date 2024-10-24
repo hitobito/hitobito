@@ -6,13 +6,9 @@
 #  https://github.com/hitobito/hitobito_cvp.
 
 class People::DuplicateLocator
-  DUPLICATION_ATTRS = [
-    :first_name,
-    :last_name,
-    :company_name,
-    :zip_code,
-    :birthday
-  ].freeze
+  include Import::PersonDuplicate::Attributes
+
+  DUPLICATION_ATTRS = Import::PersonDuplicate::Attributes::DUPLICATE_ATTRIBUTES
 
   def initialize(scope = Person.all)
     @scope = scope
@@ -35,12 +31,18 @@ class People::DuplicateLocator
 
   def find_duplicate_id(person)
     criterion = DUPLICATION_ATTRS.index_with { |attr| person[attr] }
-    duplicate_ids = person_duplicate_detector.find_people_ids(criterion)
+    duplicate_ids = find_people_ids(criterion)
 
     duplicate_ids.first unless person.id == duplicate_ids.first
   end
 
-  def person_duplicate_detector
-    @person_duplicate_detector ||= Import::PersonDuplicateDetector.new
+  # returns the first duplicate with errors if there are multiple
+  def find_people_ids(attrs)
+    conditions = duplicate_conditions(attrs)
+    if conditions.first.present?
+      ::Person.where(conditions).pluck(:id)
+    else
+      []
+    end
   end
 end

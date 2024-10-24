@@ -118,11 +118,12 @@ class PeopleController < CrudController
   private
 
   alias_method :group, :parent
-
   # every person may be displayed underneath the root group,
   # even if it does not directly belong to it.
   def find_entry
-    group&.root? ? Person.find(params[:id]) : super
+    return Person.find(params[:id]) if params[:action] == "destroy" || group&.root?
+
+    super
   end
 
   def assign_attributes

@@ -47,6 +47,10 @@ class PeopleController < CrudController
   helper_method :list_filter_args
 
   def index # rubocop:disable Metrics/AbcSize we support a lot of formats, hence many code-branches
+    if !session[:list_params].empty?
+      filter_params = session[:list_params].first.second[:filters].permit!.to_hash
+      session[:list_params].first.second[:filters] = filter_params
+    end
     respond_to do |format|
       format.html { @people = prepare_entries(filter_entries).page(params[:page]) }
       format.pdf { render_pdf_in_background(filter_entries, group, "people_#{group.id}") }

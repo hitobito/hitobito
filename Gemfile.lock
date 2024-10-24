@@ -1,3 +1,8 @@
+PATH
+  remote: ../hitobito_generic
+  specs:
+    hitobito_generic (2.2.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -66,8 +71,6 @@ GEM
     activerecord (7.0.1)
       activemodel (= 7.0.1)
       activesupport (= 7.0.1)
-    activerecord-nulldb-adapter (1.0.1)
-          activerecord (>= 5.2.0, < 7.2)
     activerecord-session_store (2.1.0)
       actionpack (>= 6.1)
       activerecord (>= 6.1)
@@ -738,7 +741,6 @@ PLATFORMS
 DEPENDENCIES
   active_record_distinct_on
   active_storage_validations
-  activerecord-nulldb-adapter
   activerecord-session_store
   acts-as-taggable-on
   airbrake
@@ -789,6 +791,7 @@ DEPENDENCIES
   haml
   headless
   hirb
+  hitobito_generic!
   http_accept_language
   icalendar
   image_processing (~> 1.12)

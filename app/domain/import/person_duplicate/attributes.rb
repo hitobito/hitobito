@@ -21,6 +21,8 @@ module Import::PersonDuplicate::Attributes
     end
   end
 
+  private
+
   def append_duplicate_conditions(attrs, conditions)
     existing_duplicate_attrs(attrs).each do |key, value|
       condition = conditions.first

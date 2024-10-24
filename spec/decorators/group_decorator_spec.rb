@@ -67,6 +67,7 @@ describe GroupDecorator, :draper_with_helpers do
 
   describe "allowed_roles_for_self_registration" do
     let(:group) { model }
+
     subject { decorator.allowed_roles_for_self_registration }
 
     it { is_expected.to eq [Role::External] }

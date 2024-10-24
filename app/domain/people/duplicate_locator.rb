@@ -6,41 +6,38 @@
 #  https://github.com/hitobito/hitobito_cvp.
 
 class People::DuplicateLocator
-  DUPLICATION_ATTRS = [
-    :first_name,
-    :last_name,
-    :company_name,
-    :zip_code,
-    :birthday
-  ].freeze
-
   def initialize(scope = Person.all)
     @scope = scope
   end
 
   def run
     @scope.find_each do |person|
-      duplicate = find_duplicate(person)
+      duplicate_id = find_duplicate_id(person)
 
-      next unless duplicate
+      next unless duplicate_id
 
       # Sorting by id to only allow a single PersonDuplicate entry per Person combination
-      person_1, person_2 = [person, duplicate].sort_by(&:id)
+      person_1, person_2 = [person.id, duplicate_id].sort
 
-      PersonDuplicate.find_or_create_by!(person_1: person_1, person_2: person_2)
+      PersonDuplicate.find_or_create_by!(person_1_id: person_1, person_2_id: person_2)
     end
   end
 
   private
 
-  def find_duplicate(person)
-    criterion = DUPLICATION_ATTRS.index_with { |attr| person[attr] }
-    duplicate = person_duplicate_finder.find(criterion)
+  def find_duplicate_id(person)
+    conditions = People::DuplicateConditions.new(person.attributes).build
+    duplicate_ids = find_people_ids(conditions)
 
-    duplicate unless person == duplicate
+    duplicate_ids.first unless person.id == duplicate_ids.first
   end
 
-  def person_duplicate_finder
-    @person_duplicate_finder ||= Import::PersonDuplicateFinder.new
+  # returns the first duplicate with errors if there are multiple
+  def find_people_ids(conditions)
+    if conditions.first.present?
+      ::Person.where(conditions).pluck(:id)
+    else
+      []
+    end
   end
 end

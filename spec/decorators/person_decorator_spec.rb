@@ -10,7 +10,7 @@ describe PersonDecorator, :draper_with_helpers do
 
   let(:person) { people(:top_leader) }
 
-  subject { PersonDecorator.new(person) }
+  subject(:decorator) { PersonDecorator.new(person) }
 
   its(:full_label) { should == "Top Leader, Greattown" }
   its(:address_name) { should == "<strong>Top Leader</strong>" }
@@ -47,7 +47,7 @@ describe PersonDecorator, :draper_with_helpers do
   end
 
   context "roles grouped" do
-    let(:roles_grouped) { PersonDecorator.new(person).roles_grouped }
+    let(:roles_grouped) { decorator.roles_grouped }
 
     before do
       Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group), person: person)
@@ -68,7 +68,7 @@ describe PersonDecorator, :draper_with_helpers do
     end
 
     it "displays only roles of the group without group name" do
-      roles_short = PersonDecorator.new(person).roles_short(groups(:top_layer))
+      roles_short = decorator.roles_short(groups(:top_layer))
       expect(roles_short).to include("Admin")
       expect(roles_short).not_to include('<span class="muted">Top</span>')
       expect(roles_short).not_to include("Leader")
@@ -78,7 +78,7 @@ describe PersonDecorator, :draper_with_helpers do
     end
 
     it "displays roles of the group and its subgroups including the group name" do
-      roles_short = PersonDecorator.new(person).roles_short(groups(:top_layer).decorate, true)
+      roles_short = decorator.roles_short(groups(:top_layer).decorate, true)
       expect(roles_short).to include("Admin")
       expect(roles_short).to include('<span class="muted">Top</span>')
       expect(roles_short).to include("Leader")
@@ -88,7 +88,7 @@ describe PersonDecorator, :draper_with_helpers do
     end
 
     it "does not display roles in groups which are not subgroups" do
-      roles_short = PersonDecorator.new(person).roles_short(groups(:bottom_layer_one).decorate, true)
+      roles_short = decorator.roles_short(groups(:bottom_layer_one).decorate, true)
       expect(roles_short).not_to include("Admin")
       expect(roles_short).not_to include('<span class="muted">Top</span>')
       expect(roles_short).not_to include("Leader")
@@ -132,10 +132,30 @@ describe PersonDecorator, :draper_with_helpers do
 
       expect(subject.upcoming_events).to be_empty
     end
+
+    describe "#upcoming_participations" do
+      subject(:upcoming_participations) { decorator.upcoming_participations }
+
+      it "returns participations that are active" do
+        dates = [Fabricate(:event_date, start_at: 2.days.from_now, finish_at: 5.days.from_now)]
+        event = Fabricate(:event, groups: [groups(:top_layer)], dates: dates)
+        participation = Fabricate(:event_participation, event: event, person: person, active: true)
+
+        is_expected.to eq [participation]
+      end
+
+      it "does not return past events" do
+        dates = [Fabricate(:event_date, start_at: 10.days.ago, finish_at: 8.days.ago)]
+        event = Fabricate(:event, groups: [groups(:top_layer)], dates: dates)
+        Fabricate(:event_participation, event: event, person: person, active: true)
+
+        is_expected.to be_empty
+      end
+    end
   end
 
   context "layer group" do
-    let(:label) { PersonDecorator.new(person).layer_group_label }
+    let(:label) { decorator.layer_group_label }
 
     it "creates link for group layer" do
       expect(label).to match(/Top/)

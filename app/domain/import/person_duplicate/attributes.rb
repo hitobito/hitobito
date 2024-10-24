@@ -4,63 +4,62 @@
 #  Affero General Public License version 3 or later. See the COPYING file at the top-level directory
 #  or at https://github.com/hitobito/hitobito.
 
-module Import::PersonDuplicate::Attributes
-  extend ActiveSupport::Concern
+class Import::PersonDuplicate::Attributes
   DUPLICATE_ATTRIBUTES = [
     :first_name,
     :last_name,
     :company_name,
     :zip_code,
-    :birthday
+    :birthday,
+    :email
   ]
 
-  def duplicate_conditions(attrs)
-    [""].tap do |conditions|
-      append_duplicate_conditions(attrs, conditions)
-      append_email_condition(attrs, conditions)
+  def initialize(attrs)
+    @attrs = attrs.symbolize_keys.slice(*DUPLICATE_ATTRIBUTES)
+    @attrs[:birthday] = parse_birthday
+    @attrs.compact_blank!
+  end
+
+  def duplicate_conditions
+    [""].tap do |args|
+      append_common_and_conditions(args)
+      append_email_or_condition(args) if attrs[:email].present?
     end
   end
 
   private
 
-  def append_duplicate_conditions(attrs, conditions)
-    existing_duplicate_attrs(attrs).each do |key, value|
-      condition = conditions.first
-      connector = condition.present? ? " AND " : nil
-      comparison = if %w[first_name last_name company_name].include?(key.to_s)
-        "#{key} = ?"
-      else
+  attr_reader :attrs
+
+  def append_common_and_conditions(args)
+    attrs.except(:email).each do |key, value|
+      condition = args[0].present? ? " AND " : ""
+      condition += if nullable?(key)
         "(#{key} = ? OR #{key} IS NULL)"
-      end
-      conditions[0] = "#{condition}#{connector}#{comparison}"
-      value = parse_date(value) if key.to_sym == :birthday
-      conditions << value
-    end
-  end
-
-  def append_email_condition(attrs, conditions)
-    if attrs[:email].present?
-      condition = conditions.first
-      conditions[0] = if condition.present?
-        "(#{condition}) OR email = ?"
       else
-        "email = ?"
+        "#{key} = ?"
       end
-      conditions << attrs[:email]
+      args[0] += condition
+      args << value
     end
   end
 
-  def existing_duplicate_attrs(attrs)
-    existing = attrs.select do |key, value|
-      value.present? && DUPLICATE_ATTRIBUTES.include?(key.to_sym)
+  def append_email_or_condition(args)
+    args[0] = if args[0].present?
+      "(#{args[0]}) OR email = ?"
+    else
+      "email = ?"
     end
-    existing.delete(:birthday) unless parse_date(existing[:birthday])
-    existing
+    args << attrs[:email]
   end
 
-  def parse_date(date_string)
-    ActiveRecord::Type::Date.new.cast(date_string.to_s)
+  def parse_birthday
+    ActiveRecord::Type::Date.new.cast(@attrs[:birthday].to_s)
   rescue ArgumentError
     nil
+  end
+
+  def nullable?(key)
+    %i[first_name last_name company_name].exclude?(key)
   end
 end

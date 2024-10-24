@@ -7,7 +7,6 @@
 
 module Import
   class PersonDuplicateFinder
-    include Import::PersonDuplicate::Attributes
     include Translatable
 
     # if multiple rows match the same existing person, always return the same object
@@ -48,7 +47,7 @@ module Import
     end
 
     def duplicate_ids_with_first_person(attrs)
-      conditions = duplicate_conditions(attrs)
+      conditions = Import::PersonDuplicate::Attributes.new(attrs).duplicate_conditions
       if conditions.first.present?
         people_ids = ::Person.where(conditions).pluck(:id)
         {people_ids:, first_person: find_first_person(people_ids)}

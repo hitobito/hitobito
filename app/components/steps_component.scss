@@ -13,10 +13,9 @@ ol.step-headers {
   li:before {
     content: counter(steps) " ";
     text-align: center;
+    margin: 0 auto;
     height: 1.5rem;
     width: 1.5rem;
-    margin-right: 0.5em;
-    margin-left: 0;
     border-radius: 50%;
     color: black;
     border: 1px solid black;
@@ -27,7 +26,10 @@ ol.step-headers {
 
   li {
     counter-increment: steps;
-    margin-left: 1em;
+    text-align: center;
+    display: grid;
+    grid-gap: 8px;
+    flex-basis: 20%;
 
     &.active {
       &:before {
@@ -45,3 +47,16 @@ ol.step-headers {
     display: block;
   }
 }
+
+@media only screen and (max-width: 600px) {
+  ol.step-headers {
+    li {
+      &:not(.active) {
+        p {
+          display: none;
+        }
+      }
+    }
+  }
+}
+

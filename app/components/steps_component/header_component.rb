@@ -14,7 +14,7 @@ class StepsComponent::HeaderComponent < StepsComponent::IteratingComponent
   end
 
   def call
-    content_tag(:li, markup,
+    content_tag(:li, content_tag(:p, markup),
       class: active_class,
       data: stimulus_target("stepHeader"))
   end

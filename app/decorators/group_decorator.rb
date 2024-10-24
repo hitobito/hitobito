@@ -43,7 +43,7 @@ class GroupDecorator < ApplicationDecorator
   def allowed_roles_for_self_registration
     role_types.reject do |type|
       type.restricted? ||
-        (type.permissions - type.allowed_permissions_for_self_registration).any?
+        (type.permissions - Role::Types::AllowedPermissionsForSelfRegistration).any?
     end
   end
 

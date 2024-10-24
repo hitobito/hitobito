@@ -4,8 +4,8 @@
 #  Affero General Public License version 3 or later. See the COPYING file at the top-level directory
 #  or at https://github.com/hitobito/hitobito.
 
-class Import::PersonDuplicate::Attributes
-  DUPLICATE_ATTRIBUTES = [
+class People::DuplicateConditions
+  ATTRIBUTES = [
     :first_name,
     :last_name,
     :company_name,
@@ -15,12 +15,12 @@ class Import::PersonDuplicate::Attributes
   ]
 
   def initialize(attrs)
-    @attrs = attrs.symbolize_keys.slice(*DUPLICATE_ATTRIBUTES)
+    @attrs = attrs.symbolize_keys.slice(*ATTRIBUTES)
     @attrs[:birthday] = parse_birthday
     @attrs.compact_blank!
   end
 
-  def duplicate_conditions
+  def build
     [""].tap do |args|
       append_common_and_conditions(args)
       append_email_or_condition(args) if attrs[:email].present?

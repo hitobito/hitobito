@@ -47,7 +47,7 @@ module Import
     end
 
     def duplicate_ids_with_first_person(attrs)
-      conditions = Import::PersonDuplicate::Attributes.new(attrs).duplicate_conditions
+      conditions = People::DuplicateConditions.new(attrs).build
       if conditions.first.present?
         people_ids = ::Person.where(conditions).pluck(:id)
         {people_ids:, first_person: find_first_person(people_ids)}

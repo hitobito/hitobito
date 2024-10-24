@@ -583,7 +583,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   def schedule_duplicate_locator
     changed_attrs = previous_changes.keys
-    duplicate_attrs = Import::PersonDuplicate::Attributes::DUPLICATE_ATTRIBUTES.map(&:to_s)
+    duplicate_attrs = People::DuplicateConditions::ATTRIBUTES.map(&:to_s)
 
     return unless changed_attrs.any? { |a| duplicate_attrs.include?(a) }
 

@@ -23,12 +23,12 @@ Rails.application.config.action_view.apply_stylesheet_media_default = false
 #
 # See upgrading guide for more information on how to build a rotator.
 # https://guides.rubyonrails.org/v7.0/upgrading_ruby_on_rails.html
-# Rails.application.config.active_support.key_generator_hash_digest_class = OpenSSL::Digest::SHA256
+Rails.application.config.active_support.key_generator_hash_digest_class = OpenSSL::Digest::SHA256
 
 # Change the digest class for ActiveSupport::Digest.
 # Changing this default means that for example Etags change and
 # various cache keys leading to cache invalidation.
-# Rails.application.config.active_support.hash_digest_class = OpenSSL::Digest::SHA256
+Rails.application.config.active_support.hash_digest_class = OpenSSL::Digest::SHA256
 
 # Don't override ActiveSupport::TimeWithZone.name and use the default Ruby
 # implementation.
@@ -39,7 +39,7 @@ Rails.application.config.active_support.remove_deprecated_time_with_zone_name = 
 # will have a different format that is not supported by Rails 6.1 applications.
 # Only change this value after your application is fully deployed to Rails 7.0
 # and you have no plans to rollback.
-# Rails.application.config.active_support.cache_format_version = 7.0
+Rails.application.config.active_support.cache_format_version = 7.0
 
 # Calls `Rails.application.executor.wrap` around test cases.
 # This makes test cases behave closer to an actual request or job.

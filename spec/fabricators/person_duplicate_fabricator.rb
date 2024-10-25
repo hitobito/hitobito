@@ -25,7 +25,7 @@ Fabricator(:person_duplicate) do
   person_1 { Fabricate(:person) }
   before_create do |d, _t|
     p2 = person_1.class.new
-    People::DuplicateLocator::DUPLICATION_ATTRS.each do |attr|
+    People::DuplicateConditions::ATTRIBUTES.each do |attr|
       p2[attr] = person_1[attr]
     end
     p2.email = person_1.email.sub("hitobito.example.com", "duplicates.example.com")

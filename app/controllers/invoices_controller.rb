@@ -9,7 +9,7 @@ class InvoicesController < CrudController
   include AsyncDownload
 
   decorates :invoice
-  layout false
+  # layout false
 
   self.nesting = Group
   self.optional_nesting = [InvoiceList]

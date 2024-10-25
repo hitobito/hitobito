@@ -25,7 +25,7 @@ class Person::ColleaguesController < ApplicationController
       .preload_public_accounts
       .preload_groups
       .joins(:roles)
-      .distinct_on(:id)
+      .distinct
   end
 
   def person

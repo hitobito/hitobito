@@ -48,7 +48,7 @@ gem "graphiti-rails", "~> 0.1"
 gem "haml"
 gem "http_accept_language"
 gem "icalendar"
-gem "image_processing", "~> 1.12"
+gem "image_processing", "~> 1.2"
 gem "json", "< 2.7.0" # pinned to be able to use rdbg. Somehow it has multiple versions otherwise
 gem "lograge"
 gem "lograge-sql"

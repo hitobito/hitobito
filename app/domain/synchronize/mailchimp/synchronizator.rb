@@ -169,7 +169,7 @@ module Synchronize
         @tags ||= Subscriber
           .mailing_list_tags(list)
           .except(*PersonTags::Validation.tag_names).tap do |tags|
-            tags[@default_tag] = subscribers.map(&:email).uniq if @default_tag
+            tags[@default_tag] = subscribers.map(&:email).uniq.compact if @default_tag
           end
       end
 

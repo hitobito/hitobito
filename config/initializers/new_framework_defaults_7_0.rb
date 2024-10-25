@@ -92,7 +92,7 @@ Rails.application.config.active_storage.variant_processor = :vips
 # If you have configured the serializer elsewhere, you can remove this.
 #
 # See https://guides.rubyonrails.org/action_controller_overview.html#cookies for more information.
-Rails.application.config.action_dispatch.cookies_serializer = :hybrid
+Rails.application.config.action_dispatch.cookies_serializer = :json
 
 # Enable parameter wrapping for JSON.
 # Previously this was set in an initializer. It's fine to keep using that initializer if you've customized it.

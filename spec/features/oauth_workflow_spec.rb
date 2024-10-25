@@ -43,7 +43,7 @@ describe "OauthWorkflow" do
       visit oauth_application_path(app)
       click_link "Autorisierungen"
       expect(page).not_to have_content code
-    end  
+    end
   end
 
   it "creates access_grant and skips consent" do

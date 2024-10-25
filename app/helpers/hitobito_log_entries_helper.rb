@@ -10,7 +10,7 @@ module HitobitoLogEntriesHelper
     simple_format(entry.message.truncate(1000))
   end
 
-  def format_created_at(entry)
+  def format_hitobito_log_entry_created_at(entry)
     l(entry.created_at, format: :date_time_millis)
   end
 

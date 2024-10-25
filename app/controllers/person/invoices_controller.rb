@@ -10,11 +10,12 @@ class Person::InvoicesController < ListController
   private
 
   def list_entries
-    scope = Invoice.includes(:group)
+    scope = super.list
+      .includes(:group)
       .where(search_conditions)
-      .joins(:recipient).where(recipient: person).list
+      .joins(:recipient).where(recipient: person)
+      .page(params[:page]).per(50)
 
-    scope = scope.page(params[:page]).per(50)
     Invoice::Filter.new(params).apply(scope)
   end
 

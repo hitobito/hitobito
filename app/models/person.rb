@@ -414,7 +414,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def to_s(format = :default)
-    if company?
+    if company? && company_name.present?
       company_name
     else
       person_name(format)

@@ -76,9 +76,8 @@ jobs:
       RAILS_DB_PORT: 5432
       RAILS_DB_USERNAME: hitobito
       RAILS_DB_PASSWORD: hitobito
-      RAILS_DB_NAME: hitobito_test
-      RAILS_TEST_DB_NAME: hitobito_test
-      RAILS_ENV: test
+      RAILS_DB_NAME: hitobito_development
+      RAILS_ENV: development
 
     services:
       postgres:
@@ -86,7 +85,7 @@ jobs:
         env:
           POSTGRES_USER: hitobito
           POSTGRES_PASSWORD: hitobito
-          POSTGRES_DB: hitobito_test
+          POSTGRES_DB: hitobito_development
         ports:
           - '5432:5432'
         options: >-

@@ -393,10 +393,6 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     super
   end
 
-  def layer_group?
-    layer_group == self
-  end
-
   private
 
   def duplicates_in_groups(*group_ids)

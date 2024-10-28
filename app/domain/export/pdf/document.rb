@@ -16,13 +16,13 @@ class Export::Pdf::Document
   private
 
   def set_font
-    @pdf.font_families.update("Roboto" => {
-      normal: font_path("roboto-regular.ttf"),
-      bold: font_path("roboto-bold.ttf"),
-      italic: font_path("roboto-italic.ttf"),
-      bold_italic: font_path("roboto-bold-italic.ttf")
+    @pdf.font_families.update("NotoSans" => {
+      normal: font_path("NotoSans-Regular.ttf"),
+      bold: font_path("NotoSans-Bold.ttf"),
+      italic: font_path("NotoSans-Italic.ttf"),
+      bold_italic: font_path("NotoSans-BoldItalic.ttf")
     })
-    @pdf.font "Roboto"
+    @pdf.font "NotoSans"
     @pdf.font_size Settings.pdf.font_size
   end
 

@@ -626,6 +626,14 @@ describe Group do
           archived_group.update!(name: "Followers of Blørbaël")
         end.to raise_error(ActiveRecord::ReadOnlyRecord)
       end
+
+      it "still possible to delete" do
+        expect(archived_group).to be_archived
+
+        expect do
+          archived_group.destroy
+        end.to change { Group.without_deleted.count }.by(-1)
+      end
     end
 
     context "archivable? is" do

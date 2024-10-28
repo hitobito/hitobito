@@ -41,6 +41,21 @@ class Person::EventQueries
     ).order_by_date
   end
 
+  def upcoming_participations
+    Event::Participation.select("*").from(
+      person
+        .event_participations
+        .merge(Event::Participation.upcoming)
+        .active
+        .joins(event: :dates)
+        .select("event_participations.*", "event_dates.start_at")
+        .distinct_on(:id)
+        .includes(:roles, event: [:translations, :dates, :groups])
+    ).order(:start_at).tap do |participations|
+      Event::PreloadAllDates.for(participations.collect(&:event))
+    end
+  end
+
   def alltime_participations
     Event::Participation.select("*").from(
       person

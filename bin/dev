@@ -10,4 +10,4 @@ if ! gem list mailcatcher -i --silent; then
   gem install mailcatcher
 fi
 
-OVERMIND_SHOW_TIMESTAMPS=1 OVERMIND_CAN_DIE=migrate exec overmind start -f Procfile.dev "$@"
+DISABLE_SPRING=1 OVERMIND_SHOW_TIMESTAMPS=1 OVERMIND_CAN_DIE=migrate exec overmind start -f Procfile.dev "$@"

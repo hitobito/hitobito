@@ -134,6 +134,11 @@ class PersonDecorator < ApplicationDecorator
     @upcoming_events ||= EventDecorator.decorate_collection(event_queries.upcoming_events)
   end
 
+  def upcoming_participations
+    @upcoming_participations ||=
+      Event::ParticipationDecorator.decorate_collection(event_queries.upcoming_participations)
+  end
+
   def relations
     @relations ||= relations_to_tails.includes(tail: [:groups, :roles])
   end

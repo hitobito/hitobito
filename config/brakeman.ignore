@@ -36,6 +36,29 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
+      "fingerprint": "51a0fc73f01eff155e5bad80f1bfab2f2977136561cf012e97d72a7a622362f8",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/domain/mailing_lists/bulk_mail/imap_mail_validator.rb",
+      "line": 114,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Person.joins(\"LEFT JOIN additional_emails ON people.id = additional_emails.contactable_id AND additional_emails.contactable_type = '#{Person.sti_name}'\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "MailingLists::BulkMail::ImapMailValidator",
+        "method": "possible_senders"
+      },
+      "user_input": "Person.sti_name",
+      "confidence": "High",
+      "cwe_id": [
+        89
+      ],
+      "note": "String concatination using .sti_name"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
       "fingerprint": "5d76bbd1498118a5b88bd5e9512c380ca3a5b8dc5c506f23c699023fbc5a79c4",
       "check_name": "SQL",
       "message": "Possible SQL injection",
@@ -178,7 +201,7 @@
       "check_name": "EOLRails",
       "message": "Support for Rails 6.1.7.8 ended on 2024-10-01",
       "file": "Gemfile.lock",
-      "line": 492,
+      "line": 500,
       "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
       "code": null,
       "render_path": null,
@@ -214,6 +237,6 @@
       "note": "The command can only be executed in an authenticated context or locally, some parameters are checked against a whitelist"
     }
   ],
-  "updated": "2024-10-21 15:29:08 +0200",
+  "updated": "2024-10-24 08:58:48 +0200",
   "brakeman_version": "6.2.2"
 }

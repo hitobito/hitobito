@@ -162,8 +162,8 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
           email: "top_leader@example.com",
           name: "Tom Tester",
           groups: [
-            {displayName: "Admins", gid: "hitobito-Admins"},
-            {displayName: "Test", gid: "1024"}
+            {displayName: "Test", gid: "1024"},
+            {displayName: "Admins", gid: "hitobito-Admins"}
           ]
         }.deep_stringify_keys)
       end

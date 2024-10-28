@@ -35,7 +35,7 @@ class OidcClaimSetup
       add_claim(:name, scope: :nextcloud, responses: responses) { |owner| owner.to_s }
 
       add_claim(:groups, scope: :nextcloud, responses: responses) do |owner|
-        owner.roles.map(&:nextcloud_group).uniq.compact.map(&:to_h)
+        owner.roles.map(&:nextcloud_group).uniq.compact.sort.map(&:to_h)
       end
     end
   end

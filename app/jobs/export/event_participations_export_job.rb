@@ -14,7 +14,7 @@ class Export::EventParticipationsExportJob < Export::ExportBaseJob
   private
 
   def entries
-    @filter.list_entries
+    @filter.list_entries.select(Event::Participation.column_names)
   end
 
   def exporter

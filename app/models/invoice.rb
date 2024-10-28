@@ -139,8 +139,7 @@ class Invoice < ActiveRecord::Base
     end
 
     def order_by_sequence_number
-      select("*", Arel.sql(order_by_sequence_number_statement.join(", ")))
-        .order(Arel.sql(order_by_sequence_number_statement.join(", ")))
+      order(Arel.sql(order_by_sequence_number_statement.join(", ")))
     end
 
     # Orders by first integer, second integer

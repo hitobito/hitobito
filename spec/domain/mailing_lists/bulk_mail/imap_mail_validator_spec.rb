@@ -101,10 +101,23 @@ describe MailingLists::BulkMail::ImapMailValidator do
       expect(validator.sender_allowed?(mailing_list)).to eq(true)
     end
 
-    it "validates that sender is allowed when subscribers may post and sender is list member" do
+    it "validates that sender is allowed when subscribers may post and sender is list member via email" do
       bottom_member = people(:bottom_member)
 
       imap_mail.net_imap_mail.attr["ENVELOPE"].sender[0].mailbox = "bottom_member"
+      imap_mail.net_imap_mail.attr["ENVELOPE"].sender[0].host = "example.com"
+
+      mailing_list.subscribers_may_post = true
+      mailing_list.subscriptions.create(subscriber: bottom_member)
+
+      expect(validator.sender_allowed?(mailing_list)).to eq(true)
+    end
+
+    it "validates that sender is allowed when subscribers may post and sender is list member via additional email" do
+      bottom_member = people(:bottom_member)
+      Fabricate(:additional_email, contactable: bottom_member, email: "additional_bottom_member@example.com")
+
+      imap_mail.net_imap_mail.attr["ENVELOPE"].sender[0].mailbox = "additional_bottom_member"
       imap_mail.net_imap_mail.attr["ENVELOPE"].sender[0].host = "example.com"
 
       mailing_list.subscribers_may_post = true

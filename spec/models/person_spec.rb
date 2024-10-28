@@ -633,6 +633,36 @@ describe Person do
     end
   end
 
+  describe "#to_s" do
+    let(:company) { false }
+    let(:company_name) { nil }
+    let(:person) { Fabricate.build(:person, first_name: "John", last_name: "Doe", nickname: "Jonny", company: company, company_name: company_name) }
+
+    context "without company" do
+      it "returns full name" do
+        expect(person.to_s).to eq("John Doe / Jonny")
+      end
+    end
+
+    context "with company" do
+      let(:company) { true }
+
+      context "without company name" do
+        it "returns full name" do
+          expect(person.to_s).to eq("John Doe / Jonny")
+        end
+      end
+
+      context "with company name" do
+        let(:company_name) { "FooCorp" }
+
+        it "returns company name" do
+          expect(person.to_s).to eq("FooCorp")
+        end
+      end
+    end
+  end
+
   describe "e-mail validation" do
     let(:person) { people(:top_leader) }
 

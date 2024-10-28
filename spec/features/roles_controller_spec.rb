@@ -97,7 +97,7 @@ describe RolesController, js: true do
     end
   end
 
-  it "uses exisiting person when given" do
+  it "uses existing person when given" do
     obsolete_node_safe do
       sign_in
       visit new_group_role_path(group_id: group.id)
@@ -121,7 +121,7 @@ describe RolesController, js: true do
     end
   end
 
-  it "creates new person when fields filled" do
+  def create_new_person(company: false)
     obsolete_node_safe do
       sign_in
       visit new_group_role_path(group_id: group.id)
@@ -137,12 +137,22 @@ describe RolesController, js: true do
       # now define new person
       click_link("Neue Person erfassen")
       fill_in("Vorname", with: "Tester")
+      check("Firma") if company
 
       all("form .btn-group").first.click_button "Speichern"
 
       expect(current_path).not_to eq(group_people_path(group))
-      is_expected.to have_content "Rolle Leader für Tester in TopGroup wurde erfolgreich erstellt."
     end
+  end
+
+  it "creates new person when fields filled" do
+    create_new_person
+    is_expected.to have_content "Rolle Leader für Tester in TopGroup wurde erfolgreich erstellt."
+  end
+
+  it "does not create new person when company name is missing" do
+    create_new_person(company: true)
+    is_expected.to have_content "Firmenname muss ausgefüllt werden"
   end
 
   it "updates info when type changes" do

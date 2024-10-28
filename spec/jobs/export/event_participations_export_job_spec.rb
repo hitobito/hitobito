@@ -57,6 +57,21 @@ describe Export::EventParticipationsExportJob do
       expect(lines[0]).to match(/;Bemerkungen.*/)
       expect(lines[0].split(";").count).to match(25)
     end
+
+    it "shows the correct timestamps on the participation instances" do
+      created_at = 2.days.ago.change(usec: 0)
+      updated_at = 1.day.ago.change(usec: 0)
+      Event::Participation.update_all(created_at:, updated_at:)
+
+      subject.perform
+
+      lines = file.read.lines
+
+      created_at_index = 24
+      expect(lines[0].split(";")[created_at_index].strip).to eq("Anmeldedatum")
+      csv_created_ats = lines[1..2].map { _1.split(";")[created_at_index].strip }
+      expect(csv_created_ats).to all(eq(created_at.strftime("%d.%m.%Y")))
+    end
   end
 
   context "creates a household export" do

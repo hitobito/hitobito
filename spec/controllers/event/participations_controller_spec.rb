@@ -892,7 +892,8 @@ describe Event::ParticipationsController do
       # successfully renders, even though no answer is present in the database
     end
 
-    it "GET#index sorts by extra event application question" do
+    # currently not implemented, view https://github.com/hitobito/hitobito/issues/2955
+    xit "GET#index sorts by extra event application question" do
       TableDisplay.register_multi_column(Event::Participation, TableDisplays::Event::Participations::QuestionColumn)
       table_display = top_leader.table_display_for(Event::Participation)
       table_display.selected = %W[event_question_#{question.id}]

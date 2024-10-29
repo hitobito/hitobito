@@ -8,11 +8,10 @@
 require "spec_helper"
 
 describe IbanValidator do
-
-  class DummyModel
+  class DummyModel # rubocop:disable Lint/ConstantDefinitionInBlock
     include ActiveModel::Model
     attr_accessor :iban
-  
+
     validates :iban, iban: true
   end
 

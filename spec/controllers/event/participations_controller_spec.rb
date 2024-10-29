@@ -59,6 +59,14 @@ describe Event::ParticipationsController do
       get :index, params: {group_id: group.id, event_id: course.id}
       expect(assigns(:participations)).to eq [@participant, @leader]
       expect(assigns(:person_add_requests)).to eq([])
+      expect(assigns(:pagination_options)).to eq(total_pages: 1, current_page: 1, per_page: 50)
+    end
+
+    it "pages correctly" do
+      expect(Kaminari.config).to receive(:default_per_page).and_return(1)
+      get :index, params: {group_id: group.id, event_id: course.id}
+      expect(assigns(:participations)).to have(1).item
+      expect(assigns(:pagination_options)).to eq(total_pages: 2, current_page: 1, per_page: 1)
     end
 
     it "lists particpant and leader group by default order by role if specific in settings" do

@@ -34,7 +34,7 @@
       const anchor = document.querySelector(toggler.dataset["anchor"]);
       if (anchor) {
         if (!anchor.querySelector(".popover-anchor")) {
-          anchor.insertAdjacentHTML("afterbegin", "<div class='popover-anchor' style='width: 100%; height: 0;'></div>");
+          anchor.insertAdjacentHTML("beforeend", "<div class='popover-anchor' style='position: absolute; bottom: 0; top: 0; left: 0; right: 0;'></div>");
         }
       }
       const el = anchor.querySelector(".popover-anchor") || toggler;
@@ -48,8 +48,15 @@
         container: "body",
         sanitize: false,
         html: true,
+        placement: toggler.dataset.bsPlacement,
         content: toggler.dataset.bsContent
       }).show();
+
+      // remove the element to avoid misfires on dropdowns
+      $(el).on('hidden.bs.popover', function (e) {
+          $(e.target).popover("dispose");
+        });
     });
+
   });
 }).call(this);

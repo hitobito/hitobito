@@ -36,6 +36,7 @@ class Event::Attachment < ActiveRecord::Base
     content_type: CONTENT_TYPES
 
   scope :list, -> { order(:id) }
+  scope :attached, -> { joins(:file_blob) }
   scope :visible_for_team, -> { where(visibility: [:team, :participants, :global]) }
   scope :visible_for_participants, -> { where(visibility: [:participants, :global]) }
   scope :visible_globally, -> { where(visibility: :global) }

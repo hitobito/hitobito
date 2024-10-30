@@ -33,9 +33,11 @@
       const toggler = $(e.target).closest('[data-bs-toggle="popover"]')[0];
       const anchor = document.querySelector(toggler.dataset["anchor"]);
       if (anchor) {
-        Object.assign(anchor.dataset, toggler.dataset);
+        if (!anchor.querySelector(".popover-anchor")) {
+          anchor.insertAdjacentHTML("afterbegin", "<div class='popover-anchor' style='width: 100%; height: 0;'></div>");
+        }
       }
-      const el = anchor || toggler;
+      const el = anchor.querySelector(".popover-anchor") || toggler;
 
       const instance = Popover.getInstance(el);
       if (instance) {
@@ -46,6 +48,7 @@
         container: "body",
         sanitize: false,
         html: true,
+        content: toggler.dataset.bsContent
       }).show();
     });
   });

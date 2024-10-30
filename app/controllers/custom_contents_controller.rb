@@ -8,15 +8,18 @@
 class CustomContentsController < SimpleCrudController
   self.permitted_attrs = [:label, :body, :subject]
 
-  self.sort_mappings = {label: "custom_content_translations.label",
-                         subject: "custom_content_translations.subject",
-                         body: "custom_content_translations.body"}
+  self.sort_mappings = {label: {
+                          joins: [:translations],
+                          order: ["custom_content_translations.label"]
+                        },
+                         subject: {
+                          joins: [:translations],
+                          order: ["custom_content_translations.subject"]
+                        },
+                         body: {
+                          joins: [:translations],
+                          order: ["custom_content_translations.label"]
+                        }}
 
   decorates :custom_content
-
-  private
-
-  def list_entries
-    super.list
-  end
 end

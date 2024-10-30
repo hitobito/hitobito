@@ -165,16 +165,7 @@ class PeopleController < CrudController
 
   def filter_entries
     entries = add_table_display_to_query(person_filter.entries, current_person)
-    # PG_TODO: This method is solved weird, please improve
-    if sorting?
-      entries = Person.select("*").from(
-        entries.joins(join_tables).select(sort_expression_attrs)
-               .unscope(:order).distinct_on(:id), "people"
-      )
-        .reorder(Arel.sql(sort_expression.include?(".") ?
-                        sort_expression.split(".")[1] : sort_expression))
-    end
-    entries
+    sort_by_sort_expression(entries)
   end
 
   def list_filter_args

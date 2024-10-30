@@ -49,7 +49,9 @@ class Event::ParticipationFilter
 
   def apply_default_sort(records)
     records = records.order_by_role(event) if Settings.people.default_sort == "role"
-    records.merge(Person.order_by_name.select("*")).select(:id)
+    records.select(Person.order_by_name_statement)
+      .select("event_participations.*")
+      .order(Person.order_by_name_statement)
   end
 
   def populate_counts(records)

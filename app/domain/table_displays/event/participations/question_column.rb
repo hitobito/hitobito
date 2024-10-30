@@ -36,8 +36,9 @@ module TableDisplays::Event::Participations
     end
 
     def sort_by(attr)
-      id = question_id(attr)
-      "event_questions.id = #{id} ASC, TRIM(event_answers.answer)" if id
+      # disable sorting for event question answers for now, may be fixed with https://github.com/hitobito/hitobito/issues/2955
+      # id = question_id(attr)
+      # "event_questions.id = #{id} ASC, TRIM(event_answers.answer)" if id
     end
 
     protected

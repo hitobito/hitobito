@@ -9,6 +9,7 @@ class InvoicesController < CrudController
   include AsyncDownload
 
   decorates :invoice
+  # layout false
 
   self.nesting = Group
   self.optional_nesting = [InvoiceList]
@@ -17,6 +18,7 @@ class InvoicesController < CrudController
                          amount_paid: Invoice.order_by_amount_paid_statement,
                          recipient: Person.order_by_name_statement,
                          sequence_number: Invoice.order_by_sequence_number_statement}
+
   self.remember_params += [:year, :state, :due_since, :invoice_list_id]
 
   self.search_columns = [:title, :sequence_number, "people.last_name", "people.first_name",
@@ -154,9 +156,8 @@ class InvoicesController < CrudController
   end
 
   def list_entries
-    scope = super.list
+    scope = super.list.with_aggregated_payments
     scope = scope.includes(:recipient).references(:recipient)
-    scope = scope.joins(Invoice.last_payments_information)
     scope = scope.standalone unless parents.any?(InvoiceList)
     scope = scope.page(params[:page]).per(50) unless params[:ids]
     Invoice::Filter.new(params).apply(scope)

@@ -35,7 +35,7 @@ module InvoicesHelper
   end
 
   def format_invoice_last_payment_at(invoice)
-    f(invoice.payments.last&.received_at)
+    f(invoice.last_payment_at)
   end
 
   def invoice_state_label(invoice)

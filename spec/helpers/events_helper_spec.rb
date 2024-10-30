@@ -18,4 +18,23 @@ describe EventsHelper, type: :helper do
       expect(helper.export_events_ical_button).to eq(button_label)
     end
   end
+
+  describe "#readable_attachments" do
+    let(:event) { events(:top_event) }
+    let(:person) { people(:top_leader) }
+
+    it "ignores attachment if file is not attached" do
+      expect(helper).to receive_messages(can?: true)
+      event.attachments.create!
+      attachments = helper.readable_attachments(event, person)
+      expect(attachments).to be_empty
+    end
+
+    it "ignores attachment if file is attached" do
+      expect(helper).to receive_messages(can?: true)
+      event.attachments.create!.tap { |a| a.file.attach(io: StringIO.new("test"), filename: "test.txt") }
+      attachments = helper.readable_attachments(event, person)
+      expect(attachments).to have(1).item
+    end
+  end
 end

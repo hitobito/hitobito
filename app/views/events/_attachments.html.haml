@@ -6,10 +6,12 @@
 - if can?(:update, entry) || readable_attachments(entry, current_person).exists?
   %dl.dl-horizontal
     = labeled(Event::Attachment.model_name.human(count: 2)) do
-      %ul.list-unstyled#attachments
-        - readable_attachments(entry, current_person).list.each do |a|
-          = render a
+      %table#attachments
+        %tbody
+          - readable_attachments(entry, current_person).list.each do |a|
+            = render a
 
+      %ul.list-unstyled
         - if can?(:update, entry)
           - if entry.external_applications?
             %li.muted

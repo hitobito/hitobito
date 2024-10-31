@@ -9,9 +9,9 @@ class HelpTextsController < SimpleCrudController
   self.permitted_attrs = [:context, :key, :body]
 
   self.sort_mappings = {label: {
-                          joins: [:translations],
-                          order: ["help_text_translations.body"]
-                        }}
+    joins: [:translations],
+    order: ["help_text_translations.body"]
+  }}
 
   self.skip_translate_inheritable = true
 

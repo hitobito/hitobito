@@ -13,13 +13,13 @@ class CustomContentsController < SimpleCrudController
                           order: ["custom_content_translations.label"]
                         },
                          subject: {
-                          joins: [:translations],
-                          order: ["custom_content_translations.subject"]
-                        },
+                           joins: [:translations],
+                           order: ["custom_content_translations.subject"]
+                         },
                          body: {
-                          joins: [:translations],
-                          order: ["custom_content_translations.label"]
-                        }}
+                           joins: [:translations],
+                           order: ["custom_content_translations.label"]
+                         }}
 
   decorates :custom_content
 end

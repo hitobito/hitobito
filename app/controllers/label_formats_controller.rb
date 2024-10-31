@@ -9,8 +9,8 @@ class LabelFormatsController < SimpleCrudController
     :nickname, :pp_post]
 
   self.sort_mappings = {name: {
-                         joins: [:translations],
-                         order: ["label_format_translations.name"]
+                          joins: [:translations],
+                          order: ["label_format_translations.name"]
                         },
                          dimensions: %w[count_horizontal count_vertical]}
 
@@ -34,7 +34,7 @@ class LabelFormatsController < SimpleCrudController
 
   def global_entries
     @global_entries = LabelFormat.where(person_id: nil)
-    
+
     sort_by_sort_expression(@global_entries)
   end
 end

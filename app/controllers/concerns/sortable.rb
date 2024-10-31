@@ -60,7 +60,7 @@ module Sortable
       elsif entries.to_sql.match?(GROUPED_QUERY) # already selecting from a grouped query (e.g. sbv/song_counts_controller.rb)
         entries.reorder(sort_expression)
       else
-        subquery = entries.unscope(:select, :order).select(sort_expression_attrs, model_class.column_names).joins(join_tables).unscope(:order).distinct_on(:id)
+        subquery = entries.unscope(:select, :order).select(sort_expression_attrs, model_class.column_names).joins(join_tables).distinct_on(:id)
         model_class.select("*").from(subquery, :subquery)
           .reorder(Arel.sql(sort_expression.gsub(TABLE_WITH_COLUMN, '\1')))
       end

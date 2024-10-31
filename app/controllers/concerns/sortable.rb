@@ -9,6 +9,7 @@ module Sortable
   extend ActiveSupport::Concern
 
   SUBQUERY = /\bFROM\s+\(\s*SELECT\b/i
+  GROUPED_QUERY = /\bGROUP\s+BY\b/i
   TABLE_WITH_COLUMN = /\b\w+\.(\w+)/
 
   # Adds a :sort_mappings class attribute.
@@ -52,6 +53,8 @@ module Sortable
         entries.reorder(sort_expression)
       elsif entries.to_sql.match?(SUBQUERY) # already selecting from a subquery (e.g. people_controller)
         entries.reorder(sort_expression.gsub(TABLE_WITH_COLUMN, '\1'))
+      elsif entries.to_sql.match?(GROUPED_QUERY) # already selecting from a grouped query (e.g. sbv/song_counts_controller.rb)
+        entries.reorder(sort_expression)
       else
         subquery = entries.select(sort_expression_attrs).joins(join_tables).unscope(:order).distinct_on(:id)
         model_class.select("*").from(subquery, :subquery)

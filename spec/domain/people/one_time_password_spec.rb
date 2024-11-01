@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Copyright (c) 2021, hitobito AG. This file is part of
+# Copyright (c) 2021-2024, hitobito AG. This file is part of
 # hitobito and licensed under the Affero General Public License version 3
 # or later. See the COPYING file at the top-level directory or at
 # https ://github.com/hitobito/hitobito.
@@ -42,6 +42,14 @@ describe People::OneTimePassword do
       @secret = generate_token
 
       expect(subject.verify(totp_authenticator.now)).to_not be_nil
+    end
+
+    it "returns timestamp if input token is correct but with spaces" do
+      @secret = generate_token
+
+      token = totp_authenticator.now.unpack("A3A3").join(" ")
+
+      expect(subject.verify(token)).to_not be_nil
     end
 
     it "returns timestamp if input token is not expired" do

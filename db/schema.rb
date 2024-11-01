@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_09_26_174052) do
+ActiveRecord::Schema.define(version: 2024_10_31_081851) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -696,6 +696,15 @@ ActiveRecord::Schema.define(version: 2024_09_26_174052) do
     t.index ["person_id", "message_id", "email"], name: "index_message_recipients_on_person_message_email", unique: true
     t.index ["person_id", "message_id", "phone_number"], name: "index_message_recipients_on_person_message_phone_number", unique: true
     t.index ["person_id"], name: "index_message_recipients_on_person_id"
+  end
+
+  create_table "message_templates", force: :cascade do |t|
+    t.bigint "templated_id"
+    t.string "title", null: false
+    t.text "body"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["templated_id"], name: "index_message_templates_on_templated_id"
   end
 
   create_table "messages", force: :cascade do |t|

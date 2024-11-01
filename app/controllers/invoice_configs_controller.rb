@@ -9,12 +9,14 @@ class InvoiceConfigsController < CrudController
     :email, :vat_number, :currency, :due_days, :sender_name,
     :donation_calculation_year_amount, :donation_increase_percentage,
     :logo, :logo_position, :remove_logo,
+    message_templates_attributes: [:id, :title, :body],
     payment_reminder_configs_attributes: [
       :id, :title, :text, :level, :due_days
     ],
     payment_provider_configs_attributes: [
       :id, :payment_provider, :user_identifier, :partner_identifier, :password
-    ]]
+    ]
+  ]
 
   before_render_form :build_payment_reminder_configs
   before_render_form :build_payment_provider_configs

@@ -315,6 +315,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
             "(company_name IS NOT NULL AND company_name <> '')")
   }
   scope :with_mobile, -> { joins(:phone_numbers).where(phone_numbers: {label: "Mobil"}) }
+  scope :preload_picture, -> { includes(picture_attachment: :blob) }
 
   ### CLASS METHODS
 

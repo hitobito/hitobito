@@ -37,7 +37,7 @@ module Globalized
       self.select("*").from(
         with_translations.select("#{table_name}.*", translated_label_column)
         .distinct_on(:id).unscope(:order), table_name
-      ).order("#{table_name}.#{translated_attribute_names.first}")
+      ).with_translations.order("#{table_name}.#{translated_attribute_names.first}")
     end
 
     private

@@ -699,12 +699,13 @@ ActiveRecord::Schema.define(version: 2024_10_31_081851) do
   end
 
   create_table "message_templates", force: :cascade do |t|
+    t.string "templated_type"
     t.bigint "templated_id"
     t.string "title", null: false
     t.text "body"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["templated_id"], name: "index_message_templates_on_templated_id"
+    t.index ["templated_type", "templated_id"], name: "index_message_templates_on_templated"
   end
 
   create_table "messages", force: :cascade do |t|

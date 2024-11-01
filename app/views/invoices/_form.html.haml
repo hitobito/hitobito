@@ -7,7 +7,9 @@
   = f.hidden_field :recipient_id
 
   = field_set_tag do
-    = f.labeled_input_fields :title, :description, rows: 3
+    = render "message_template", f: f, group: parent
+
+  = field_set_tag do
     = f.labeled_input_field :due_at
     = f.labeled_input_field :issued_at
     = f.labeled_boolean_field :hide_total

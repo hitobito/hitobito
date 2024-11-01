@@ -15,8 +15,7 @@ class InvoiceConfigsController < CrudController
     ],
     payment_provider_configs_attributes: [
       :id, :payment_provider, :user_identifier, :partner_identifier, :password
-    ]
-  ]
+    ]]
 
   before_render_form :build_payment_reminder_configs
   before_render_form :build_payment_provider_configs

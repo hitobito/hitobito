@@ -43,6 +43,7 @@ class Events::CoursesController < ApplicationController
 
   def courses_scope
     course_filters.to_scope
+      .includes(:groups, :dates, :application_contact, :translations, kind: :translations)
   end
 
   def course_grouping

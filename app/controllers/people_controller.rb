@@ -46,7 +46,6 @@ class PeopleController < CrudController
 
   helper_method :list_filter_args
 
-
   def deep_transform_parameters_to_hash(object)
     case object
     when ActionController::Parameters

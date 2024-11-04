@@ -27,16 +27,20 @@ module FullTextSearchable
       search_conditions = ([base_query] + associated_queries).join(" OR ")
       search_ranks = ([base_rank] + associated_ranks).join(", ")
 
-      join_tables = associated_models.map do |model|
-        if model.to_s.end_with?("_translations")
-          :translations
+      join_tables = associated_models.map do |associated_model|
+        if associated_model.to_s.end_with?("_translations")
+          if model.table_name.to_sym == associated_model.to_s.split("_").first.pluralize.to_sym
+            :translations
+          else
+            [associated_model.to_s.split("_").first.pluralize.to_sym, associated_model.to_s.split("_").first.pluralize.to_sym => :translations]
+          end
         else
-          model
+          associated_model
         end
       end
 
       select(model.column_names, "GREATEST(#{search_ranks}) AS rank")
-        .left_joins(join_tables)
+        .left_joins(join_tables.flatten)
         .where(search_conditions, term: "#{term}:*")
         .order("rank DESC")
         .distinct

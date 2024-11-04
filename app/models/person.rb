@@ -115,7 +115,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   SEARCHABLE_ATTRS = [
     :first_name, :last_name, :company_name, :nickname, :email, :address, :zip_code, :town,
-    :country, :birthday, :additional_information, {phone_numbers: [:number],
+    :country, :additional_information, {phone_numbers: [:number],
                                                    social_accounts: [:name], additional_emails: [:email]}
   ]
 
@@ -166,7 +166,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   include PersonTags::ValidationTagged
   include People::SelfRegistrationReasons
   include People::MembershipVerification
-  include PgSearchable
+  include FullTextSearchable
 
   i18n_enum :gender, GENDERS
   i18n_setter :gender, (GENDERS + [nil])

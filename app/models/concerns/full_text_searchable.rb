@@ -14,7 +14,7 @@ module FullTextSearchable
       base_rank = "COALESCE(ts_rank(#{model.table_name}.search_column, to_tsquery('simple', '#{sanitized_term}')), 0)"
 
       associated_models = model::SEARCHABLE_ATTRS.select { |attr| attr.is_a?(Hash) }.map(&:keys).flatten
-  
+
       # Build queries and ranks for each associated model
       associated_queries = associated_models.map do |assoc_model|
         "#{assoc_model}.search_column @@ to_tsquery('simple', '#{sanitized_term}')"
@@ -24,14 +24,22 @@ module FullTextSearchable
       end
 
       # Combine main model ans associated model for query
-      search_conditions = ([base_query] + associated_queries).join(' OR ')
-      search_ranks = ([base_rank] + associated_ranks).join(', ')
-  
+      search_conditions = ([base_query] + associated_queries).join(" OR ")
+      search_ranks = ([base_rank] + associated_ranks).join(", ")
+
+      join_tables = associated_models.map do |model|
+        if model.to_s.end_with?("_translations")
+          :translations
+        else
+          model
+        end
+      end
+
       select(model.column_names, "GREATEST(#{search_ranks}) AS rank")
-        .left_joins(associated_models)
+        .left_joins(join_tables)
         .where(search_conditions, term: "#{term}:*")
         .order("rank DESC")
         .distinct
     end
-  end  
+  end
 end

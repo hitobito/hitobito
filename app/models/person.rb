@@ -116,7 +116,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   SEARCHABLE_ATTRS = [
     :first_name, :last_name, :company_name, :nickname, :email, :address, :zip_code, :town,
     :country, :additional_information, {phone_numbers: [:number],
-                                                   social_accounts: [:name], additional_emails: [:email]}
+                                        social_accounts: [:name], additional_emails: [:email]}
   ]
 
   if FeatureGate.disabled?("structured_addresses")

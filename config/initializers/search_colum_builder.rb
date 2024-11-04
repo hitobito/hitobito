@@ -29,8 +29,10 @@ Rails.application.config.after_initialize do
 end
 
 def create_searchable_column(model, searchable_attrs)
+  table_name = ActiveRecord::Base.connection.quote_table_name(model)
+  
   alter_table_sql = <<-SQL
-    ALTER TABLE #{model}
+    ALTER TABLE #{table_name}
     ADD COLUMN search_column tsvector GENERATED ALWAYS AS (
       to_tsvector(
         'simple', 

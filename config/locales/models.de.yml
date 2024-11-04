@@ -9,24 +9,24 @@ de:
       time: "%H:%M"
       date_time: "%d.%m.%Y %H:%M"
       date_time_millis: "%d.%m.%Y %H:%M:%S.%L"
-      month_year: "%B %Y"
+      month_year: '%B %Y'
 
   date:
     formats:
-      default: ! "%d.%m.%Y"
-      long: ! "%e %B %Y"
-      short: ! "%e %b"
-      with_day: ! "%a %d.%m.%Y"
+      default: ! '%d.%m.%Y'
+      long: ! '%e %B %Y'
+      short: ! '%e %b'
+      with_day: ! '%a %d.%m.%Y'
 
   number:
     currency:
       format:
-        delimiter: ! "'"
-        format: ! "%u %n"
+        delimiter: ! ''''
+        format: ! '%u %n'
         separator: .
         precision: 2
     format:
-      delimiter: ! "'"
+      delimiter: ! ''''
       precision: 2
       separator: .
 
@@ -92,7 +92,7 @@ de:
         custom_content:
           attributes:
             body:
-              placeholder_missing: "muss den Platzhalter %{placeholder} enthalten"
+              placeholder_missing: 'muss den Platzhalter %{placeholder} enthalten'
         event:
           attributes:
             base:
@@ -102,12 +102,12 @@ de:
         event/date:
           attributes:
             finish_at:
-              not_after_start: "muss nach Von liegen"
+              not_after_start: 'muss nach Von liegen'
         event/question:
           attributes:
             choices:
-              requires_more_than_one_choice: "muss mindestens zwei Anworten enthalten"
-              requires_exactly_one_choice: "muss genau eine Antwort enthalten"
+              requires_more_than_one_choice: 'muss mindestens zwei Anworten enthalten'
+              requires_exactly_one_choice: 'muss genau eine Antwort enthalten'
             question:
               application_blank: für Anmeldeangabe muss ausgefüllt werden
               admin_blank: für Administationsangabe muss ausgefüllt werden
@@ -135,16 +135,16 @@ de:
             scopes:
               not_match_configured: "stimmen nicht mit den auf dem Server hinterlegten überein."
         person:
-          name_missing: "Bitte geben Sie einen Namen ein"
+          name_missing: 'Bitte geben Sie einen Namen ein'
           readonly: ": Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne %{name} aus dem Haushalt, um die Adresse anzupassen."
           attributes:
             email:
               taken: >
-                ist bereits vergeben. Diese Adresse muss für alle Personen
-                eindeutig sein, da sie beim Login verwendet wird. Du kannst jedoch unter
-                'Weitere E-Mails' Adressen eintragen, welche bei anderen Personen
-                als Haupt-E-Mail vergeben sind (Die Haupt-E-Mail
-                kann leer gelassen werden).
+                        ist bereits vergeben. Diese Adresse muss für alle Personen
+                        eindeutig sein, da sie beim Login verwendet wird. Du kannst jedoch unter
+                        'Weitere E-Mails' Adressen eintragen, welche bei anderen Personen
+                        als Haupt-E-Mail vergeben sind (Die Haupt-E-Mail
+                        kann leer gelassen werden).
             self_registration_reason_custom_text:
               either_preset_or_custom: kann nicht gesetzt werden, wenn ein vordefinierter Eintrittsgrund ausgewählt wurde.
         person/add_request:
@@ -158,43 +158,44 @@ de:
         qualification:
           attributes:
             qualification_kind_id:
-              exists_for_timeframe: "existiert in dieser Zeitspanne bereits"
+              exists_for_timeframe: 'existiert in dieser Zeitspanne bereits'
         qualification_kind:
           attributes:
             validity:
-              not_a_valid_number: "muss grösser oder gleich Null sein um %{model} reaktivierbar zu machen"
+              not_a_valid_number: 'muss grösser oder gleich Null sein um %{model} reaktivierbar zu machen'
         subscription:
           attributes:
             subscriber_id:
-              group_not_allowed: "Diese Gruppe kann hier nicht hinzugefügt werden"
-              event_not_allowed: "Dieser Anlass kann hier nicht hinzugefügt werden"
+              group_not_allowed: 'Diese Gruppe kann hier nicht hinzugefügt werden'
+              event_not_allowed: 'Dieser Anlass kann hier nicht hinzugefügt werden'
         tag:
           attributes:
             name:
-              must_be_unique: "existiert bereits"
+              must_be_unique: 'existiert bereits'
 
         invoice:
-          recipient_address_or_email_required: "Empfänger Adresse oder E-Mail muss ausgefüllt werden"
+          recipient_address_or_email_required: 'Empfänger Adresse oder E-Mail muss ausgefüllt werden'
           attributes:
             invoice_config:
-              invalid: "ist nicht gültig; passen Sie die Einstellungen an, bevor sie eine Rechnung erstellen"
+              invalid: 'ist nicht gültig; passen Sie die Einstellungen an, bevor sie eine Rechnung erstellen'
         invoice_config:
-          not_valid: "Rechnungseinstellungen sind ungültig. Passen Sie die Einstellungen an, bevor sie eine Rechnung erstellen"
+          not_valid: 'Rechnungseinstellungen sind ungültig. Passen Sie die Einstellungen an, bevor sie eine Rechnung erstellen'
           attributes:
             iban:
-              required: "muss ausgefüllt werden"
+              required: 'muss ausgefüllt werden'
             account_number:
-              required: "muss ausgefüllt werden"
-              invalid_check_digit: "ist nicht gültig; Inkorrekte Prüfziffer"
+              required: 'muss ausgefüllt werden'
+              invalid_check_digit: 'ist nicht gültig; Inkorrekte Prüfziffer'
             logo:
-              attached_unless_disabled: "muss angegeben werden, wenn eine Logoposition gewählt ist"
+              attached_unless_disabled: 'muss angegeben werden, wenn eine Logoposition gewählt ist'
             payee:
-              to_long: "darf höchstens 2 Zeilen enthalten"
-              must_have_3_lines: "muss genau 3 Zeilen enthalten"
+              to_long: 'darf höchstens 2 Zeilen enthalten'
+              must_have_3_lines: 'muss genau 3 Zeilen enthalten'
         role:
           attributes:
             delete_on:
               must_be_later_than_created_at: kann nicht vor Von sein
+
 
     models:
       acts_as_taggable_on/tag:
@@ -229,7 +230,7 @@ de:
         other: Anmeldungen
       event/attachment:
         one: Anhang
-        other: "Anhänge"
+        other: 'Anhänge'
       event/kind:
         one: Kursart
         other: Kursarten
@@ -628,7 +629,7 @@ de:
         priority_1_id: "Kurs"
         priority_2_id: "1. Ausweichkurs"
         priority_3_id: "2. Ausweichkurs"
-        waiting_list_comment: "Bemerkung"
+        waiting_list_comment: 'Bemerkung'
 
       event/attachment:
         file: Datei
@@ -711,7 +712,7 @@ de:
         choices: Mögliche Antworten
         multiple_choices: Mehrfachauswahl
         disclosure: Antwortangabe
-        disclosures:
+        disclosures: 
           required: Obligatorisch
           optional: Optional
           hidden: Nicht angezeigt
@@ -722,20 +723,21 @@ de:
         multiple_choices: Mehrfachauswahl
         required: Antwort obligatorisch
         disclosure: Antwortangabe
-
+        
       application_questions:
         question: Frage
         choices: Mögliche Antworten
         multiple_choices: Mehrfachauswahl
         required: Antwort obligatorisch
-        disclosure: Antwortangabe
-
+        disclosure: Antwortangabe 
+        
       event/role:
         label: Bezeichnung
         person: Person
         type: Rolle
         participation: Person
         remove_participant_role: Allfällige Teilnehmer*Innen-Rolle entfernen
+
 
       family_member:
         kind: Verwandschaftsverhältnis
@@ -769,10 +771,10 @@ de:
         origin: Ursprung
         finish_at: Bis
         reactivateable_until: Reaktivierbar bis
-        string: "%{kind}"
-        string_with_origin: "%{kind} (von %{origin})"
-        string_with_finish_at: "%{kind} (bis %{finish_at})"
-        string_with_finish_at_and_origin: "%{kind} (bis %{finish_at}, von %{origin})"
+        string: '%{kind}'
+        string_with_origin: '%{kind} (von %{origin})'
+        string_with_finish_at: '%{kind} (bis %{finish_at})'
+        string_with_finish_at_and_origin: '%{kind} (bis %{finish_at}, von %{origin})'
         open_training_days: Offene Ausbildungstage
 
       qualification_kind:
@@ -816,14 +818,14 @@ de:
         group_id: Gruppe
         person: Person
         person_id: Person
-        string_long: "%{role} in %{group}"
+        string_long: '%{role} in %{group}'
         dates: Daten
         created_at: Von
         deleted_t: Bis
         delete_on: Bis
         delete_on_in_name: bis
         class:
-          archived: "%{role_kind} (archiviert)"
+          archived: '%{role_kind} (archiviert)'
           permission:
             description:
               admin: Administration von applikationsweiten Einstellungen wie Kursarten oder Etikettenformate.
@@ -912,16 +914,16 @@ de:
         additional_sender: Zusätzlicher Absender
         preferred_labels: Bevorzugte E-Mail-Labels
         main_email: Versand an Haupt E-Mail
-        mailchimp_api_key: "MailChimp API-Schlüssel"
-        mailchimp_list_id: "MailChimp Listen-ID"
-        mailchimp_sync: "MailChimp Sync"
-        mailchimp_state: "Mailchimp Status"
+        mailchimp_api_key: 'MailChimp API-Schlüssel'
+        mailchimp_list_id: 'MailChimp Listen-ID'
+        mailchimp_sync: 'MailChimp Sync'
+        mailchimp_state: 'Mailchimp Status'
         mailchimp_states:
           unchanged: Unverändert
           success: Aktualisiert
           partial: Teilweise
           failed: Fehlgeschlagen
-        mailchimp_include_additional_emails: "Alle Versandadressen synchronisieren"
+        mailchimp_include_additional_emails: 'Alle Versandadressen synchronisieren'
 
       mail_log:
         updated_at: Bearbeitet am
@@ -975,7 +977,7 @@ de:
 
       subscription:
         related_role_types: Rollen
-        subscriber_id: "" # not used, error messages require different labels
+        subscriber_id: '' # not used, error messages require different labels
       people_filter:
         name: Name
 
@@ -1123,6 +1125,7 @@ de:
         cost_center: Kostenstelle
         account: Konto
 
+
       invoice_list:
         title: Titel
         receiver: Empfänger
@@ -1144,7 +1147,8 @@ de:
 
       message_template:
         title: Titel
-        body: Text
+        body: Text   
+
       payment:
         invoice: Rechnung
         amount: Betrag
@@ -1277,5 +1281,5 @@ de:
   validates_timeliness:
     error_value_formats:
       date: "%d.%m.%Y"
-      time: "%H:%M"
+      time: '%H:%M'
       datetime: "%d.%m.%Y %H:%M"

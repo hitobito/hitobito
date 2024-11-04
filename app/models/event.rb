@@ -71,10 +71,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   require_dependency "event/role_decorator"
   require_dependency "event/role_ability"
 
-  SEARCHABLE_ATTRS = [:number, {translations: [:name], groups: [:name]}]
+  SEARCHABLE_ATTRS = [:number, {event_translations: [:name], groups: [:name]}]
 
   include Event::Participatable
-  include PgSearchable
+  include FullTextSearchable
   include Globalized
   translates :application_conditions, :description, :name, :signature_confirmation_text
 

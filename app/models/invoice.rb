@@ -57,7 +57,7 @@ class Invoice < ActiveRecord::Base
 
   include I18nEnums
   include PaymentSlips
-  include PgSearchable
+  include FullTextSearchable
 
   ROUND_TO = BigDecimal("0.05")
 

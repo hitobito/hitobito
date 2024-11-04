@@ -132,6 +132,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   has_and_belongs_to_many :groups, autosave: false
 
   belongs_to :contact, class_name: "Person"
+  belongs_to :application_contact, class_name: "Person"
 
   has_many :attachments, dependent: :destroy
 

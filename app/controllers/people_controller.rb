@@ -184,7 +184,7 @@ class PeopleController < CrudController
       entries.preload_public_accounts
     end
 
-    entries.includes(:picture_attachment)
+    entries.preload_picture
   end
 
   def render_tabular_entries_in_background(format)

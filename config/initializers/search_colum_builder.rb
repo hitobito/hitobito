@@ -20,7 +20,7 @@ Rails.application.config.after_initialize do
 
     # Create searchable column on main table
     searchable_attrs = model::SEARCHABLE_ATTRS.select { |attr| attr.is_a?(Symbol) }
-    create_searchable_column_and_index(model.table_name, searchable_attrs)
+    create_searchable_column_and_index(model.table_name, searchable_attrs, model_instance: model)
 
     # Create searchable column on associated tables
     model::SEARCHABLE_ATTRS.select { |attr| attr.is_a?(Hash) }.each do |assoc|
@@ -32,7 +32,7 @@ Rails.application.config.after_initialize do
 end
 
 # Adds or replaces a tsvector column and associated GIN index on specified columns
-def create_searchable_column_and_index(table_name, searchable_attrs)
+def create_searchable_column_and_index(table_name, searchable_attrs, model_instance: nil)
   quoted_table_name = ActiveRecord::Base.connection.quote_table_name(table_name)
 
   if ActiveRecord::Base.connection.table_exists?(quoted_table_name)
@@ -53,8 +53,8 @@ def create_searchable_column_and_index(table_name, searchable_attrs)
   begin
     ActiveRecord::Base.connection.execute(search_column_statement)
     puts "Successfully added search_column to the #{table_name} table."
-    if table_name == "people"
-      Person::INTERNAL_ATTRS << :search_column unless Person::INTERNAL_ATTRS.include?(:search_column)
+    unless model_instance.nil?
+      model_instance.ignored_columns = [:search_column]
     end
 
     # Re-add the GIN index for the search column

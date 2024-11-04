@@ -1145,7 +1145,6 @@ de:
       message_template:
         title: Titel
         body: Text
-
       payment:
         invoice: Rechnung
         amount: Betrag

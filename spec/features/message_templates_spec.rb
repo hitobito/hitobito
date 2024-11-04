@@ -7,29 +7,32 @@
 
 require "spec_helper"
 
-describe MessageTemplate do
+describe MessageTemplate, js: true do
   include ActionDispatch::TestProcess::FixtureFile
 
   subject { page }
 
   let(:user) { people(:top_leader) }
   let(:group) { groups(:top_layer) }
+  let(:invoice_config) { group.invoice_config }
 
   before { sign_in(user) }
 
-  let(:edit_path) { edit_group_invoice_config_path(group) }
-
-  def click_save
-    click_button "Rechnungseinstellungen aktualisieren"
-  end
-
-  describe "configure through InvoiceConfig" do
+  describe "configure in InvoiceConfig" do
+    let(:edit_path) { edit_group_invoice_config_path(group) }
     let(:title) { "Neue Vorlage" }
     let(:body) { "Neuer Text" }
 
-    it "is possible to add new templates" do
+    def click_save
+      click_button "Rechnungseinstellungen aktualisieren"
+    end
+
+    before do
       visit edit_path
       click_link described_class.model_name.human(count: 2)
+    end
+
+    it "allows to add new templates" do
       click_link "Eintrag hinzufügen"
 
       within "#message_templates_fields .fields:last-child" do
@@ -39,33 +42,50 @@ describe MessageTemplate do
       click_save
       expect(page).to have_content("Rechnungseinstellungen wurden erfolgreich aktualisiert")
 
-      message_template = group.reload.invoice_config.message_templates.last
+      message_template = invoice_config.reload.message_templates.last
       expect(message_template.title).to eq(title)
       expect(message_template.body).to eq(body)
     end
 
-    it "is possible to remove" do
-      visit edit_path
-      click_link described_class.model_name.human(count: 2)
-      find_all("a.remove_nested_fields").each(&:click)
-      click_save
-
-      expect(page).to have_content("Rechnungseinstellungen wurden erfolgreich aktualisiert")
-      expect(group.invoice_config.reload.message_templates).to be_none
+    it "allows to remove templates" do
+      expect do
+        find("#message_templates_fields .fields:last-child a.remove_nested_fields").click
+        click_save
+        expect(page).to have_content("Rechnungseinstellungen wurden erfolgreich aktualisiert")
+      end.to change { invoice_config.reload.message_templates.count }.from(2).to(1)
     end
   end
 
-  describe "use through Invoice" do
+  describe "use in Invoice" do
     let(:recipient) { people(:bottom_member) }
     let(:new_invoice_path) { new_group_invoice_path(group_id: group, invoice: {recipient_id: recipient.id}) }
+    let(:message_templates) { group.invoice_config.message_templates }
 
-    context "with templates" do
+    context "with some templates" do
       it "allows template selection" do
+        visit new_invoice_path
+        expect(invoice_config.message_templates.count).to be(2)
+        expect(page).to have_content(described_class.model_name.human)
+        expect(page).to have_field(:invoice_title, with: "")
+        expect(page).to have_field(:invoice_description, with: "")
+
+        message_templates.each do |message_template|
+          select(message_template.title, from: :invoice_message_template_id)
+          expect(page).to have_field(:invoice_title, with: message_template.title)
+          expect(page).to have_field(:invoice_description, with: message_template.body)
+        end
+
+        select("", from: :invoice_message_template_id)
+        expect(page).to have_field(:invoice_title, with: "")
+        expect(page).to have_field(:invoice_description, with: "")
       end
     end
 
     context "with no templates" do
       it "does not show the template selection" do
+        invoice_config.message_templates.delete_all
+        visit new_invoice_path
+        expect(page).not_to have_content(described_class.model_name.human)
       end
     end
   end

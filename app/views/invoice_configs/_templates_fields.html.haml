@@ -1,8 +1,0 @@
-= field_set_tag "#{MessageTemplate.model_name.human}" do
-  = f.nested_fields_for :message_templates do |tf|
-    = tf.labeled_input_field :title
-    = tf.labeled_input_field :body, rows: 4 #, help: t('.body_help')
-    .controls.align-with-form= tf.link_to_remove(ta(:remove))
-
-    .controls.fields-separation
-      %hr

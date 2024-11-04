@@ -1,5 +1,5 @@
 - if group.invoice_config.message_templates.any?
-  = f.labeled(:message_template) do
+  = f.labeled(MessageTemplate.model_name.human) do
     = select_tag('invoice[message_template_id]', options_for_select(group.invoice_config.message_templates.map(&:option_for_select)), include_blank: true, class: "form-select form-select-sm") 
 
 = f.labeled_input_fields :title, :description, rows: 3

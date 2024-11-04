@@ -14,7 +14,7 @@ Rails.application.config.after_initialize do
   end
 
   models_with_module.select do |model|
-    model.base_class == model
+    model.base_class == model # only parent sti classes
   end.each do |model|
     if ActiveRecord::Base.connection.table_exists? model.table_name
       searchable_attrs = model::SEARCHABLE_ATTRS.select { |element| element.is_a?(Symbol) }
@@ -29,17 +29,13 @@ Rails.application.config.after_initialize do
 end
 
 def create_searchable_column(model, searchable_attrs)
-  tsvector_string = <<-SQL
-    to_tsvector(
-        'simple', 
-        #{searchable_attrs.map { |attr| "COALESCE(#{attr}::text, '')" }.join(" || ' ' || ")}
-    )
-  SQL
-
   alter_table_sql = <<-SQL
     ALTER TABLE #{model}
     ADD COLUMN search_column tsvector GENERATED ALWAYS AS (
-        #{tsvector_string}
+      to_tsvector(
+        'simple', 
+        #{searchable_attrs.map { |attr| "COALESCE(#{attr}::text, '')" }.join(" || ' ' || ")}
+      ) 
     ) STORED;
   SQL
 

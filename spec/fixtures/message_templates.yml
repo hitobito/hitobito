@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+top_layer_one:
+  templated: top_layer (InvoiceConfig)
+  title: Some invoice template
+  body: Some invoice template Text
+
+top_layer_two:
+  templated: top_layer (InvoiceConfig)
+  title: Another invoice template
+  body: Another invoice template text

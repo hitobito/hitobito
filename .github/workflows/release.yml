@@ -81,56 +81,15 @@ jobs:
       release_type: ${{ inputs.release_type }}
       dry_run: ${{ inputs.dry_run }}
 
-  # extract
   version:
-    runs-on: ubuntu-latest
-
+    uses: ./.github/workflows/next-version.yml
     needs:
       - settings
-
-    outputs:
-      version: ${{ steps.determine.outputs.version }}
-
-    steps:
-      - name: "Checkout composition"
-        uses: actions/checkout@v4
-        with:
-          repository: ${{ needs.settings.outputs.repo_name }}
-          ref: ${{ needs.settings.outputs.composition_branch }}
-
-      - name: "Set up Ruby"
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler: none
-          ruby-version: '3.2'
-
-      - name: "Install dependencies"
-        run: |
-          gem install cmdparse
-
-      - name: "Get all tags from repo to determine the version"
-        run: |
-          git fetch --tags
-
-      - name: 'Install helper-script'
-        env:
-          VERSION_SOURCE: "https://raw.githubusercontent.com/hitobito/hitobito/master/bin/version"
-        run: |
-          mkdir -p bin
-          curl --silent -k  "$VERSION_SOURCE" > bin/version
-          chmod a+x bin/version
-
-      - name: "Determine next version"
-        id: determine
-        env:
-          RELEASE_TYPE: ${{ needs.settings.outputs.release_type }}
-          NEXT_VERSION: ${{ inputs.next_version }}
-        run: |
-          echo "Requesting next '$RELEASE_TYPE'-version"
-          next_version=$(bin/version suggest "$RELEASE_TYPE" "$NEXT_VERSION")
-
-          echo "next version: ${next_version}"
-          echo "version=${next_version}" >> "$GITHUB_OUTPUT"
+    with:
+      composition_repo: ${{ needs.settings.outputs.repo_name }}
+      composition_ref: ${{ needs.settings.outputs.composition_branch }}
+      release_type: ${{ needs.settings.outputs.release_type }}
+      next_version: ${{ inputs.next_version }}
 
   prepare:
     uses: ./.github/workflows/prepare.yml

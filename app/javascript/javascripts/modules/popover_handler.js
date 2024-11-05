@@ -31,15 +31,9 @@
     $(document).on("click", '[data-bs-toggle="popover"]', function (e) {
       $(".popover").hide();
       const toggler = $(e.target).closest('[data-bs-toggle="popover"]')[0];
-      const anchor = document.querySelector(toggler.dataset["anchor"]);
-      if (anchor) {
-        if (!anchor.querySelector(".popover-anchor")) {
-          anchor.insertAdjacentHTML("beforeend", "<div class='popover-anchor' style='position: absolute; bottom: 0; top: 0; left: 0; right: 0;'></div>");
-        }
-      }
-      const el = anchor.querySelector(".popover-anchor") || toggler;
-
+      const el = document.querySelector(toggler.dataset["anchor"]) || toggler;
       const instance = Popover.getInstance(el);
+
       if (instance) {
         instance.dispose();
       }
@@ -49,14 +43,13 @@
         sanitize: false,
         html: true,
         placement: toggler.dataset.bsPlacement,
-        content: toggler.dataset.bsContent
+        content: toggler.dataset.bsContent,
       }).show();
 
       // remove the element to avoid misfires on dropdowns
-      $(el).on('hidden.bs.popover', function (e) {
-          $(e.target).popover("dispose");
-        });
+      $(el).on("hidden.bs.popover", function (e) {
+        $(e.target).popover("dispose");
+      });
     });
-
   });
 }).call(this);

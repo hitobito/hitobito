@@ -7,68 +7,96 @@
 # enabling full-text search functionality. Also adds a GIN index for faster querying.
 
 class SearchColumnBuilder
-  # Select models with FullTextSearchable module included (exlcuding STI subclasses)
-  #
-  #
-  def run
-    searchable_models = ActiveRecord::Base.descendants.select do |model|
-      model.included_modules.include?(FullTextSearchable) && model.base_class == model
-    end
+  class_attribute :searchable_models, default: [
+    Person, Group, Event, Invoice, Address
+  ]
 
+  class_attribute :association_mappings, default: {
+    event_translations: Event::Translation
+  }
+
+  SEARCH_COLUMN = :search_column
+
+  def initialize(drop_columns: true)
+    @drop_columns = drop_columns
+  end
+
+  # Select models with FullTextSearchable module included (exlcuding STI subclasses)
+  def run
     # Process each searchable model to add a tsvector column and a GIN index
     searchable_models.each do |model|
-      next unless ActiveRecord::Base.connection.table_exists?(model.table_name)
+      next unless connection.table_exists?(model.table_name)
 
-      # Create searchable column on main table
-      searchable_attrs = model::SEARCHABLE_ATTRS.select { |attr| attr.is_a?(Symbol) }
-      create_searchable_column_and_index(model.table_name, searchable_attrs, model_instance: model)
+      with_resetting_model(model) do
+        create_columns_for_attrs(model, model::SEARCHABLE_ATTRS)
+      end
+    end
+  end
 
-      # Create searchable column on associated tables
-      model::SEARCHABLE_ATTRS.select { |attr| attr.is_a?(Hash) }.each do |assoc|
-        assoc.each do |table, columns|
-          create_searchable_column_and_index(table.to_s, columns.flatten)
-        end
+  private
+
+  def with_resetting_model(model)
+    model.ignored_columns += [:search_column]
+    yield
+    model.reset_column_information
+  end
+
+  # Create searchable columns for main table and associations
+  def create_columns_for_attrs(model, attrs)
+    create_searchable_column_and_index(model, model.table_name, attrs.select { |attr| attr.is_a?(Symbol) })
+
+    attrs.select { |attr| attr.is_a?(Hash) }.each do |associated_columns|
+      create_columns_for_association(associated_columns)
+    end
+  end
+
+  # Create searchable column on associated tables
+  def create_columns_for_association(associated_columns)
+    associated_columns.each do |table, columns|
+      model_class = table.to_s.classify.safe_constantize || association_mappings.fetch(table.to_sym)
+      with_resetting_model(model_class) do
+        create_searchable_column_and_index(model_class, model_class.table_name, columns)
       end
     end
   end
 
   # Adds or replaces a tsvector column and associated GIN index on specified columns
-  def create_searchable_column_and_index(table_name, searchable_attrs, model_instance: nil)
-    return if ActiveRecord::Base.connection.column_exists?(table_name, "search_column")
+  def create_searchable_column_and_index(model, table_name, attrs)
+    return if connection.column_exists?(table_name, SEARCH_COLUMN) && !drop_columns?
 
-    quoted_table_name = ActiveRecord::Base.connection.quote_table_name(table_name)
+    quoted_table_name = connection.quote_table_name(table_name)
 
-    if ActiveRecord::Base.connection.table_exists?(quoted_table_name)
-      ActiveRecord::Migration.remove_column(quoted_table_name, "search_column") if ActiveRecord::Base.connection.column_exists?(quoted_table_name, "search_column")
-      ActiveRecord::Migration.remove_index(quoted_table_name, name: "#{table_name}_search_column_gin_idx") if ActiveRecord::Base.connection.index_exists?(quoted_table_name, :search_column, using: :gin)
-    end
+    migration.remove_column(quoted_table_name, SEARCH_COLUMN) if connection.column_exists?(quoted_table_name, SEARCH_COLUMN)
+    migration.remove_index(quoted_table_name, name: "#{table_name}_search_column_gin_idx") if connection.index_exists?(quoted_table_name, :search_column, using: :gin)
 
-    search_column_statement = <<~SQL
+    create_search_column(table_name, quoted_table_name, attrs)
+    create_search_index(table_name, quoted_table_name)
+    # rescue => e
+    #   puts "An error occurred while creating search_column and index on #{table_name}: #{e.message}"
+  end
+
+  def create_search_column(table_name, quoted_table_name, attrs)
+    statement = <<~SQL
       ALTER TABLE #{quoted_table_name}
-      ADD COLUMN search_column tsvector GENERATED ALWAYS AS (
+      ADD COLUMN #{SEARCH_COLUMN} tsvector GENERATED ALWAYS AS (
         to_tsvector(
           'simple',
-          #{searchable_attrs.map { |attr| "COALESCE(#{ActiveRecord::Base.connection.quote_column_name(attr)}::text, '')" }.join(" || ' ' || ")}
+          #{attrs.map { |attr| "COALESCE(#{connection.quote_column_name(attr)}::text, '')" }.join(" || ' ' || ")}
         )
       ) STORED;
     SQL
-
-    begin
-      ActiveRecord::Base.connection.execute(search_column_statement)
-      puts "Successfully added search_column to the #{table_name} table."
-      unless model_instance.nil?
-        model_instance.ignored_columns = [:search_column]
-      end
-
-      # Re-add the GIN index for the search column
-      index_name = "#{table_name}_search_column_gin_idx"
-      ActiveRecord::Base.connection.execute <<~SQL
-        CREATE INDEX #{index_name}
-        ON #{quoted_table_name}
-        USING GIN (search_column);
-      SQL
-    rescue => e
-      puts "An error occurred while creating search_column and index on #{table_name}: #{e.message}"
-    end
+    connection.execute(statement)
   end
+
+  def create_search_index(table_name, quoted_table_name)
+    connection.execute <<~SQL
+      CREATE INDEX "#{table_name}_search_column_gin_idx" ON #{quoted_table_name} USING GIN (#{SEARCH_COLUMN});
+    SQL
+  end
+
+  def drop_columns? = @drop_columns
+
+  def connection = ActiveRecord::Base.connection
+
+  def migration = ActiveRecord::Migration
 end

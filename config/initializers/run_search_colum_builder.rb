@@ -7,6 +7,5 @@
 # enabling full-text search functionality. Also adds a GIN index for faster querying.
 
 Rails.application.config.after_initialize do
-  Rails.application.eager_load!
-  SearchColumnBuilder.new.run
+  SearchColumnBuilder.new(drop_columns: false).run
 end

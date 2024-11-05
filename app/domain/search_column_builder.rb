@@ -76,27 +76,10 @@ class SearchColumnBuilder
   end
 
   def create_search_column(table_name, quoted_table_name, attrs)
-    vector_attrs = attrs.map { |attr|
-      if attr == :birthday # or any other date field
-        "CASE
-            WHEN #{connection.quote_column_name(attr)} IS NOT NULL THEN
-                EXTRACT(YEAR FROM #{connection.quote_column_name(attr)})::TEXT || '-' ||
-                LPAD(EXTRACT(MONTH FROM #{connection.quote_column_name(attr)})::TEXT, 2, '0') || '-' ||
-                LPAD(EXTRACT(DAY FROM #{connection.quote_column_name(attr)})::TEXT, 2, '0')
-            ELSE ''
-        END"
-      else
-        "COALESCE(#{connection.quote_column_name(attr)}::text, '')"
-      end
-    }.join(" || ' ' || ")
-
     statement = <<~SQL
       ALTER TABLE #{quoted_table_name}
       ADD COLUMN #{SEARCH_COLUMN} tsvector GENERATED ALWAYS AS (
-        to_tsvector(
-          'simple',
-          #{vector_attrs}
-        )
+        #{ts_vector_statement(attrs)}
       ) STORED;
     SQL
     connection.execute(statement)
@@ -106,6 +89,29 @@ class SearchColumnBuilder
     connection.execute <<~SQL
       CREATE INDEX "#{table_name}_search_column_gin_idx" ON #{quoted_table_name} USING GIN (#{SEARCH_COLUMN});
     SQL
+  end
+
+  def ts_vector_statement(attrs)
+    "to_tsvector(
+      'simple',
+      #{attrs.map { |attr|
+        if attr == :birthday # or any other date field, when another date field, other than birthday will become searchable, please add method to check for type here
+          convert_date_field_to_text(connection.quote_column_name(attr))
+        else
+          "COALESCE(#{connection.quote_column_name(attr)}::text, '')"
+        end
+      }.join(" || ' ' || ")}
+    )"
+  end
+
+  def convert_date_field_to_text(quoted_column_name)
+    "CASE
+      WHEN #{quoted_column_name} IS NOT NULL THEN
+        EXTRACT(YEAR FROM #{quoted_column_name})::TEXT || '-' ||
+        LPAD(EXTRACT(MONTH FROM #{quoted_column_name})::TEXT, 2, '0') || '-' ||
+        LPAD(EXTRACT(DAY FROM #{quoted_column_name})::TEXT, 2, '0')
+      ELSE ''
+    END"
   end
 
   def drop_columns? = @drop_columns

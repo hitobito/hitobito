@@ -33,6 +33,8 @@ end
 
 # Adds or replaces a tsvector column and associated GIN index on specified columns
 def create_searchable_column_and_index(table_name, searchable_attrs, model_instance: nil)
+  return if ActiveRecord::Base.connection.column_exists?(table_name, "search_column")
+
   quoted_table_name = ActiveRecord::Base.connection.quote_table_name(table_name)
 
   if ActiveRecord::Base.connection.table_exists?(quoted_table_name)

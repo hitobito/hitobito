@@ -1,6 +1,29 @@
 {
   "ignored_warnings": [
     {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "19dd892793ccfaa6b0e76a53a4fb7638dffcf90a7baa99fb022c35adf0c7cd95",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/domain/search_column_builder.rb",
+      "line": 85,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "connection.execute(\"ALTER TABLE #{quoted_table_name}\\nADD COLUMN #{:search_column} tsvector GENERATED ALWAYS AS (\\n  #{ts_vector_statement(attrs)}\\n) STORED;\\n\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "SearchColumnBuilder",
+        "method": "create_search_column"
+      },
+      "user_input": "quoted_table_name",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 2,
       "fingerprint": "4000ff73f6b8ea02cc258bc13979b5f086367affcae15ec82e7fd38d32825bac",
@@ -195,13 +218,36 @@
       "note": "All input values are ensured to be integer and thus not dangerous"
     },
     {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "d2a6cb0b56ac7bc4a53612cb689873a2df3ba97f101a6cb4dde3e6b5d222a7df",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/domain/search_column_builder.rb",
+      "line": 90,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "connection.execute(\"CREATE INDEX \\\"#{table_name}_search_column_gin_idx\\\" ON #{quoted_table_name} USING GIN (#{:search_column});\\n\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "SearchColumnBuilder",
+        "method": "create_search_index"
+      },
+      "user_input": "table_name",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "Unmaintained Dependency",
       "warning_code": 120,
       "fingerprint": "d84924377155b41e094acae7404ec2e521629d86f97b0ff628e3d1b263f8101c",
       "check_name": "EOLRails",
       "message": "Support for Rails 6.1.7.8 ended on 2024-10-01",
       "file": "Gemfile.lock",
-      "line": 500,
+      "line": 501,
       "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
       "code": null,
       "render_path": null,
@@ -237,6 +283,6 @@
       "note": "The command can only be executed in an authenticated context or locally, some parameters are checked against a whitelist"
     }
   ],
-  "updated": "2024-10-24 08:58:48 +0200",
+  "updated": "2024-11-05 15:54:04 +0100",
   "brakeman_version": "6.2.2"
 }

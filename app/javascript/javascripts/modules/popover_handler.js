@@ -42,7 +42,7 @@
         container: "body",
         sanitize: false,
         html: true,
-        placement: toggler.dataset.bsPlacement,
+        placement: toggler.dataset.bsPlacement || "auto",
         content: toggler.dataset.bsContent,
       }).show();
 

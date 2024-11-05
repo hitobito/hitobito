@@ -441,9 +441,6 @@ GEM
       ruby-rc4
       ttfunk
     pg (1.5.7)
-    pg_search (2.3.7)
-      activerecord (>= 6.1)
-      activesupport (>= 6.1)
     phonelib (0.8.8)
     prawn (2.5.0)
       matrix (~> 0.4)
@@ -657,6 +654,7 @@ GEM
     simplecov_json_formatter (0.1.4)
     simpleidn (0.2.3)
     slop (3.6.0)
+    social_security_number (0.1.12)
     sorted_set (1.0.3)
       rbtree
       set (~> 1.0)
@@ -831,7 +829,6 @@ DEPENDENCIES
   paranoia
   pdf-inspector
   pg
-  pg_search
   phonelib (~> 0.8.4)
   prawn
   prawn-markup

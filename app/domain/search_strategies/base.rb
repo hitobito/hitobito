@@ -11,10 +11,11 @@ module SearchStrategies
 
     attr_accessor :term
 
-    def initialize(user, term, page)
+    def initialize(user, term, page, limit: nil)
       @user = user
       @term = term
       @page = page
+      @limit = limit
     end
 
     def search_fulltext

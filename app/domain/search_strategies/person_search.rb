@@ -12,9 +12,9 @@ module SearchStrategies
       pg_rank_alias = extract_pg_ranking(Person.search(@term).to_sql)
 
       search_results = if date_query?(@term)
-        Person.search(reformat_date(@term))
+        Person.search(reformat_date(@term)).limit(@limit)
       else
-        Person.search(@term)
+        Person.search(@term).limit(@limit)
       end
 
       entries = search_results

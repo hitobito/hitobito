@@ -9,7 +9,7 @@ module SearchStrategies
       return no_invoices unless term_present?
       return no_invoices if @user.finance_groups.empty?
 
-      Invoice.search(@term)
+      Invoice.search(@term).limit(@limit)
     end
 
     private

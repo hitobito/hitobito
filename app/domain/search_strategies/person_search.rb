@@ -19,7 +19,7 @@ module SearchStrategies
 
       entries = search_results
         .accessible_by(PersonReadables.new(@user))
-        .select(pg_rank_alias) # add pg_search rank to select list of base query again
+        .select(pg_rank_alias) # add fulltext search rank to select list of base query again
 
       people_without_role = index_people_without_role?(search_results)
       entries += people_without_role if people_without_role

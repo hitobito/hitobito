@@ -76,12 +76,26 @@ class SearchColumnBuilder
   end
 
   def create_search_column(table_name, quoted_table_name, attrs)
+    vector_attrs = attrs.map { |attr|
+      if attr == :birthday # or any other date field
+        "CASE
+            WHEN #{connection.quote_column_name(attr)} IS NOT NULL THEN
+                EXTRACT(YEAR FROM #{connection.quote_column_name(attr)})::TEXT || '-' ||
+                LPAD(EXTRACT(MONTH FROM #{connection.quote_column_name(attr)})::TEXT, 2, '0') || '-' ||
+                LPAD(EXTRACT(DAY FROM #{connection.quote_column_name(attr)})::TEXT, 2, '0')
+            ELSE ''
+        END"
+      else
+        "COALESCE(#{connection.quote_column_name(attr)}::text, '')"
+      end
+    }.join(" || ' ' || ")
+
     statement = <<~SQL
       ALTER TABLE #{quoted_table_name}
       ADD COLUMN #{SEARCH_COLUMN} tsvector GENERATED ALWAYS AS (
         to_tsvector(
           'simple',
-          #{attrs.map { |attr| "COALESCE(#{connection.quote_column_name(attr)}::text, '')" }.join(" || ' ' || ")}
+          #{vector_attrs}
         )
       ) STORED;
     SQL

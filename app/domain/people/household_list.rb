@@ -34,7 +34,8 @@ class People::HouseholdList
 
   def grouped_households
     Person
-      .from(grouped_households_people_sql)
+      .select("people.*")
+      .from(grouped_households_people_sql, :people)
       .limit(@people_scope.limit_value.presence)
   end
 

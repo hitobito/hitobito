@@ -21,7 +21,7 @@
       "cwe_id": [
         89
       ],
-      "note": ""
+      "note": "No SQL Injection possible here"
     },
     {
       "warning_type": "Cross-Site Scripting",
@@ -238,7 +238,7 @@
       "cwe_id": [
         89
       ],
-      "note": ""
+      "note": "No SQL Injection possible here"
     },
     {
       "warning_type": "Unmaintained Dependency",

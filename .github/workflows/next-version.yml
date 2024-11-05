@@ -27,9 +27,6 @@ jobs:
   version:
     runs-on: ubuntu-latest
 
-    needs:
-      - settings
-
     outputs:
       version: ${{ steps.determine.outputs.version }}
 

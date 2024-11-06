@@ -7,12 +7,19 @@ import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   static targets = ["main", "dependent"];
+  static values = {
+    selectDependentCheckboxes: { type: Boolean, default: false },
+  }
 
   // unselects all dependent checkboxes when unchecking master checkbox
   toggleMain() {
     if (!event.target.checked) {
       this.dependentTargets.forEach((checkbox) => {
         checkbox.checked = false;
+      });
+    } else if (this.selectDependentCheckboxesValue) {
+      this.dependentTargets.forEach((checkbox) => {
+        checkbox.checked = true;
       });
     }
   }

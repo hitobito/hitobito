@@ -25,7 +25,7 @@ class SearchColumnBuilder
   def run
     # do not run if there are still migrations needed (to prevent running this before wagon migrations)
     return if ActiveRecord::Base.connection.migration_context.needs_migration?
-    
+
     # Process each searchable model to add a tsvector column and a GIN index
     searchable_models.each do |model|
       next unless connection.table_exists?(model.table_name)
@@ -65,6 +65,8 @@ class SearchColumnBuilder
 
   # Adds or replaces a tsvector column and associated GIN index on specified columns
   def create_searchable_column_and_index(model, table_name, attrs)
+    # check if every attribute exists on the table (after_initilize is also called before the wagon migrations so the wagon attributes still don't exist)
+    return unless attrs.all? { |attr| connection.column_exists?(table_name, attr.to_s) }
     # return if the search_column is already generated on this table, unless drop_columns is true
     return if connection.column_exists?(table_name, SEARCH_COLUMN) && !drop_columns?
 

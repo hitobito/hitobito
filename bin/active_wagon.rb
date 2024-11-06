@@ -26,10 +26,12 @@ class Setup
 
     write('Wagonfile', gemfile)
     write('.envrc', environment)
+    symlink_gemfile
 
     wagons.each do |wagon|
       write("../hitobito_#{wagon}/.envrc", environment(core: false))
       FileUtils.touch("../hitobito_#{wagon}/config/environment.rb") # needed for rails-vim
+      symlink_gemfile(directory: "../hitobito_#{wagon}")
     end
 
     FileUtils.rm_rf(root.join('tmp'))
@@ -37,6 +39,13 @@ class Setup
 
   def write(name, content)
     File.write(root.join(name), strip_heredoc(content))
+  end
+
+  def symlink_gemfile(directory: Dir.pwd, gemfile_dev: ENV["BUNDLE_GEMFILE"])
+    return unless gemfile_dev
+
+    FileUtils.ln_s("#{directory}/Gemfile", "#{directory}/#{gemfile_dev}", force: true)
+    FileUtils.ln_s("#{directory}/Gemfile.lock", "#{directory}/#{gemfile_dev}.lock", force: true)
   end
 
   def write_and_copy(name, content)

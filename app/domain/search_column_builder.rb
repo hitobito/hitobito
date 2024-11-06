@@ -62,6 +62,10 @@ class SearchColumnBuilder
 
   # Adds or replaces a tsvector column and associated GIN index on specified columns
   def create_searchable_column_and_index(model, table_name, attrs)
+    # check if every attribute exists on the table (after_initilize is also called before the wagon migrations so the wagon attributes still don't exist)
+    attrs.each do |attr|
+      return unless connection.column_exists?(table_name, attr.to_s)
+    end
     return if connection.column_exists?(table_name, SEARCH_COLUMN) && !drop_columns?
 
     quoted_table_name = connection.quote_table_name(table_name)
@@ -71,8 +75,6 @@ class SearchColumnBuilder
 
     create_search_column(table_name, quoted_table_name, attrs)
     create_search_index(table_name, quoted_table_name)
-    # rescue => e
-    #   puts "An error occurred while creating search_column and index on #{table_name}: #{e.message}"
   end
 
   def create_search_column(table_name, quoted_table_name, attrs)

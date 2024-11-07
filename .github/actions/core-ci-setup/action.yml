@@ -78,5 +78,5 @@ runs:
     - name: 'Run db migrations'
       if: inputs.migrations == 'true'
       run: |
-        bundle exec rake db:migrate
+        bundle exec rake db:migrate search_column:build
       shell: bash

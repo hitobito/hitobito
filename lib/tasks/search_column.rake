@@ -13,5 +13,5 @@ namespace :search_column do
 end
 
 Rake::Task["wagon:migrate"].enhance do
-  Rake::Task["search_column:build"].invoke
+  SearchColumnBuilder.new.run
 end

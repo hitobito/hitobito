@@ -22,6 +22,8 @@
 class PhoneNumber < ActiveRecord::Base
   include ContactAccount
 
+  self.ignored_columns += [FullTextSearchable::SEARCH_COLUMN]
+
   self.value_attr = :number
 
   before_validation :format_number

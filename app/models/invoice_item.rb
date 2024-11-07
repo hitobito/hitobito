@@ -31,6 +31,8 @@ class InvoiceItem < ActiveRecord::Base
   # used to map declassified type string to class constant
   class_attribute :type_mappings
 
+  self.ignored_columns += [FullTextSearchable::SEARCH_COLUMN]
+
   self.type_mappings = {}
 
   # Used to mark as dynamically calculated.

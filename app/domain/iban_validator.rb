@@ -9,7 +9,7 @@ class IbanValidator < ActiveModel::EachValidator
   IBAN_REGEX = /\A[A-Z]{2}[0-9]{2}\s?([A-Z]|[0-9]\s?){12,30}\z/
 
   def validate_each(record, attribute, value)
-    unless valid_iban?(value)
+    if value.present? && !valid_iban?(value)
       record.errors.add(attribute, I18n.t("errors.messages.invalid_iban"))
     end
   end

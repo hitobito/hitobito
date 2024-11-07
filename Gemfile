@@ -106,7 +106,7 @@ gem "webpacker"
 
 # load after others because dependencies
 gem "kaminari"
-gem "graphiti-openapi", github: "puzzle/graphiti-openapi", tag: "standalone/0.6.3"
+gem "graphiti-openapi", github: "puzzle/graphiti-openapi", branch: "feature/standalone"
 
 gem "active_storage_validations" # validate filesize, dimensions and content-type of uploads
 

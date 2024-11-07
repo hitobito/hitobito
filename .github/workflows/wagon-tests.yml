@@ -52,7 +52,7 @@ jobs:
           fetch-depth: 1
 
       - name: 'Prepare'
-        uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup
+        uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup@feature-2936-quicksearch-indexing
         with:
           migrations: false
           assets: false
@@ -108,7 +108,7 @@ jobs:
           fetch-depth: 1
 
       - name: 'Prepare'
-        uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup
+        uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup@feature-2936-quicksearch-indexing
         with:
           wagon_repository: ${{ inputs.wagon_repository }}
           wagon_dependency_repository: ${{ inputs.wagon_dependency_repository }}
@@ -162,7 +162,7 @@ jobs:
           fetch-depth: 1
 
       - name: 'Prepare'
-        uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup
+        uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup@feature-2936-quicksearch-indexing
         with:
           wagon_repository: ${{ inputs.wagon_repository }}
           wagon_dependency_repository: ${{ inputs.wagon_dependency_repository }}

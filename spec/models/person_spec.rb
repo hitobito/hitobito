@@ -708,7 +708,7 @@ describe Person do
       allow(Truemail).to receive(:valid?).and_return(false)
       person.email = "dude@domainungueltig42.ch"
 
-      expect(Raven).to receive(:capture_message)
+      expect(Sentry).to receive(:capture_message)
         .exactly(:once)
         .with(
           "Truemail does not work as expected",

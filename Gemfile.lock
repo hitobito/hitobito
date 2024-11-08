@@ -654,7 +654,6 @@ GEM
     simplecov_json_formatter (0.1.4)
     simpleidn (0.2.3)
     slop (3.6.0)
-    social_security_number (0.1.12)
     sorted_set (1.0.3)
       rbtree
       set (~> 1.0)

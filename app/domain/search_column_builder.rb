@@ -59,6 +59,7 @@ class SearchColumnBuilder
   def create_columns_for_association(associated_columns)
     associated_columns.each do |table, columns|
       create_searchable_column_and_index(table.to_s, columns, replace: false)
+      record_column_creation(table.to_s, columns)
     end
   end
 

@@ -26,7 +26,7 @@ describe Event::RegisterMailer do
   end
 
   context "body" do
-    subject { mail.body }
+    subject { mail.body.raw_source }
 
     it "renders placeholders" do
       is_expected.to match(/Top Event/)
@@ -34,7 +34,7 @@ describe Event::RegisterMailer do
     end
 
     it "renders link" do
-      is_expected.to match(/<a href="http:\/\/test.host\/groups\/#{group.id}\/events\/#{event.id}\?onetime_token=abcdef">/)
+      is_expected.to match(/<a href="http:\/\/localhost:3000\/groups\/#{group.id}\/events\/#{event.id}\?onetime_token=abcdef">/)
     end
   end
 

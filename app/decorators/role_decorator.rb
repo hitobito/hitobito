@@ -30,7 +30,7 @@ class RoleDecorator < ApplicationDecorator
   private
 
   def formatted_name(strong: false, show_end_on: false, show_start_on: false)
-    role_name = model.to_fs(:short) # rubocop:disable Rails/ToSWithArgument
+    role_name = model.to_s(:short) # rubocop:disable Rails/ToSWithArgument
     name = strong ? content_tag(:strong, role_name) : role_name
     name = safe_join([name, FormatHelper::EMPTY_STRING, "(#{model.label})"]) if model.label?
     name = future_role_details(name, show_start_on)

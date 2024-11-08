@@ -441,9 +441,6 @@ GEM
       ruby-rc4
       ttfunk
     pg (1.5.7)
-    pg_search (2.3.7)
-      activerecord (>= 6.1)
-      activesupport (>= 6.1)
     phonelib (0.8.8)
     prawn (2.5.0)
       matrix (~> 0.4)
@@ -831,7 +828,6 @@ DEPENDENCIES
   paranoia
   pdf-inspector
   pg
-  pg_search
   phonelib (~> 0.8.4)
   prawn
   prawn-markup

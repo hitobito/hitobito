@@ -58,7 +58,6 @@ gem "matrix" # required but removed from stlib since ruby 3.2
 gem "mime-types"
 gem "mini_magick"
 gem "pg"
-gem "pg_search"
 gem "active_record_distinct_on"
 gem "nested_form"
 gem "nokogiri"

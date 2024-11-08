@@ -12,14 +12,14 @@ module SearchStrategies
       pg_rank_alias = extract_pg_ranking(Person.search(@term).to_sql)
 
       search_results = if date_query?(@term)
-        Person.search(reformat_date(@term))
+        Person.search(reformat_date(@term)).limit(@limit)
       else
-        Person.search(@term)
+        Person.search(@term).limit(@limit)
       end
 
       entries = search_results
         .accessible_by(PersonReadables.new(@user))
-        .select(pg_rank_alias) # add pg_search rank to select list of base query again
+        .select(pg_rank_alias) # add fulltext search rank to select list of base query again
 
       people_without_role = index_people_without_role?(search_results)
       entries += people_without_role if people_without_role

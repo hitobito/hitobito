@@ -8,7 +8,7 @@ module SearchStrategies
     def search_fulltext
       return no_adresses unless term_present?
 
-      Address.search(@term)
+      Address.search(@term).limit(@limit)
     end
 
     private

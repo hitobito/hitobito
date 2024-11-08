@@ -93,13 +93,8 @@ class EventsController < CrudController
 
   private
 
-  # list scope preload :groups, :kinds which we dont need
   def list_entries
-    event_filter.list_entries
-  end
-
-  def model_scope
-    super.includes([:translations])
+    event_filter.list_entries.includes(:translations, :groups)
   end
 
   def build_entry

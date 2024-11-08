@@ -11,7 +11,6 @@ gem "rails", "= 7.0.1"
 gem "wagons", "~> 0.7.0"
 
 gem "active_record_distinct_on"
-gem "activerecord-nulldb-adapter"
 gem "activerecord-session_store"
 gem "acts-as-taggable-on"
 gem "airbrake"

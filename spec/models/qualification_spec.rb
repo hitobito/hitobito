@@ -67,26 +67,26 @@ describe Qualification do
         quali = Fabricate(:qualification, qualification_kind: qualification_kinds(:sl),
           start_at: Date.parse("2011-3-3").to_date,
           origin: "SLK 11")
-        expect(quali.to_s(:long)).to eq "Super Lead (bis 31.12.2013, von SLK 11)"
+        expect(quali.to_fs(:long)).to eq "Super Lead (bis 31.12.2013, von SLK 11)"
       end
 
       it "includes origin and no finish_at" do
         quali = Fabricate(:qualification, qualification_kind: Fabricate(:qualification_kind, validity: nil, label: "Super Lead"),
           start_at: Date.parse("2011-3-3").to_date,
           origin: "SLK 11")
-        expect(quali.to_s(:long)).to eq "Super Lead (von SLK 11)"
+        expect(quali.to_fs(:long)).to eq "Super Lead (von SLK 11)"
       end
 
       it "includes only finish_at" do
         quali = Fabricate(:qualification, qualification_kind: qualification_kinds(:sl),
           start_at: Date.parse("2011-3-3").to_date)
-        expect(quali.to_s(:long)).to eq "Super Lead (bis 31.12.2013)"
+        expect(quali.to_fs(:long)).to eq "Super Lead (bis 31.12.2013)"
       end
 
       it "includes only kind" do
         quali = Fabricate(:qualification, qualification_kind: Fabricate(:qualification_kind, validity: nil, label: "Super Lead"),
           start_at: Date.parse("2011-3-3").to_date)
-        expect(quali.to_s(:long)).to eq "Super Lead"
+        expect(quali.to_fs(:long)).to eq "Super Lead"
       end
     end
   end

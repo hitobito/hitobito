@@ -7,6 +7,7 @@
 
 module RenderTableDisplays
   def list_entries
+    return super if sorting?
     add_table_display_to_query(super, current_person)
   end
 

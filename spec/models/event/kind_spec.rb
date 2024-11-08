@@ -31,4 +31,15 @@ describe Event::Kind do
   it "does destroy translations on hard destroy" do
     expect { slk.really_destroy! }.to change { Event::Kind::Translation.count }.by(-1)
   end
+
+  context "#list" do
+    it "orders by short_name, deleted last" do
+      expect(Event::Kind.list).to match_array([
+        event_kinds(:fk),
+        event_kinds(:glk),
+        event_kinds(:slk),
+        event_kinds(:old)
+      ])
+    end
+  end
 end

@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- if @attachment.persisted?
+- if @attachment.persisted? && @attachment.file.attached?
   document.getElementById("attachments").firstElementChild.innerHTML += '#{j(render(@attachment))}'
 - else
   alert('#{t('.failure', errors: @attachment.errors.full_messages.join(', '))}');

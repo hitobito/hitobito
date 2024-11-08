@@ -1,0 +1,72 @@
+name: 'Composition Repo - Suggest next version'
+
+on:
+  workflow_call:
+    inputs:
+      composition_repo:
+        description: "Composition repository, e.g. hitobito/ose_composition_generic"
+        type: string
+        required: true
+      composition_ref:
+        description: "Branch in Composition-Repo, e.g. production"
+        type: string
+        required: true
+      release_type:
+        description: "Type of Release: regular, patch or custom"
+        required: true
+        type: string
+      next_version:
+        description: "next version number, if release-type is custom"
+        required: false
+        type: string
+    outputs:
+      version:
+        value: ${{ jobs.version.outputs.version }}
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+
+    outputs:
+      version: ${{ steps.determine.outputs.version }}
+
+    steps:
+      - name: "Checkout composition"
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.composition_repo }}
+          ref: ${{ inputs.composition_ref }}
+
+      - name: "Set up Ruby"
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler: none
+          ruby-version: '3.2'
+
+      - name: "Install dependencies"
+        run: |
+          gem install cmdparse
+
+      - name: "Get all tags from repo to determine the version"
+        run: |
+          git fetch --tags
+
+      - name: 'Install helper-script'
+        env:
+          VERSION_SOURCE: "https://raw.githubusercontent.com/hitobito/hitobito/master/bin/version"
+        run: |
+          mkdir -p bin
+          curl --silent -k  "$VERSION_SOURCE" > bin/version
+          chmod a+x bin/version
+
+      - name: "Determine next version"
+        id: determine
+        env:
+          RELEASE_TYPE: ${{ inputs.release_type }}
+          NEXT_VERSION: ${{ inputs.next_version }}
+        run: |
+          echo "Requesting next '$RELEASE_TYPE'-version"
+          next_version=$(bin/version suggest "$RELEASE_TYPE" "$NEXT_VERSION")
+
+          echo "next version: ${next_version}"
+          echo "version=${next_version}" >> "$GITHUB_OUTPUT"

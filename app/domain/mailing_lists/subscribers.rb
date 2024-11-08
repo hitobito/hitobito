@@ -112,17 +112,17 @@ class MailingLists::Subscribers
   end
 
   def group_subscribers(condition)
-    sql = <<~SQL.split.join(" ")
+    sql = <<~SQL.split.join(" ") # rubocop:disable Rails/ToSWithArgument
       subscriptions.subscriber_type = ? AND
       #{Group.quoted_table_name}.lft >= sub_groups.lft AND
       #{Group.quoted_table_name}.rgt <= sub_groups.rgt AND
       roles.type = related_role_types.role_type AND
       (roles.start_on IS NULL OR
-       roles.start_on <= '#{@time.to_date.to_s(:db)}') AND
+       roles.start_on <= '#{@time.to_date.to_fs(:db)}') AND
       (roles.end_on IS NULL OR
-       roles.end_on >= '#{@time.to_date.to_s(:db)}') AND
+       roles.end_on >= '#{@time.to_date.to_fs(:db)}') AND
       (roles.archived_at IS NULL OR
-       roles.archived_at > '#{@time.to_time.utc.to_s(:db)}')
+       roles.archived_at > '#{@time.to_time.utc.to_fs(:db)}')
     SQL
 
     if subscriptions.groups.any?(&:subscription_tags)

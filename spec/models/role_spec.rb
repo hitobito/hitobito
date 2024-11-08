@@ -349,7 +349,7 @@ describe Role do
       end
 
       it "is not set on subsequent roles" do
-        Fabricate(Group::TopGroup::Member.name.to_s, person: person, group: groups(:top_group))
+        Fabricate(Group::TopGroup::Member.name, person: person, group: groups(:top_group))
         subject.save
         expect(person.primary_group_id).not_to eq(group.id)
       end
@@ -362,16 +362,16 @@ describe Role do
 
       it "is reset to remaining role if role is destroyed" do
         subject.save
-        Fabricate(Group::TopGroup::Member.name.to_s, person: person, group: groups(:top_group))
+        Fabricate(Group::TopGroup::Member.name, person: person, group: groups(:top_group))
         expect(subject.destroy).to be_truthy
         expect(person.primary_group).to eq groups(:top_group)
       end
 
       it "is reset to newest remaining role if role is destroyed" do
         subject.save
-        role2 = Fabricate(Group::GlobalGroup::Leader.name.to_s, person: person,
+        role2 = Fabricate(Group::GlobalGroup::Leader.name, person: person,
           group: groups(:toppers))
-        role3 = Fabricate(Group::TopGroup::Leader.name.to_s, person: person,
+        role3 = Fabricate(Group::TopGroup::Leader.name, person: person,
           group: groups(:top_group))
         role3.update_attribute(:updated_at, Time.zone.today - 10.days)
         expect(subject.destroy).to be_truthy
@@ -379,7 +379,7 @@ describe Role do
       end
 
       it "is not reset if role is destroyed and other roles in the same group exist" do
-        Fabricate(Group::BottomLayer::Member.name.to_s, person: person, group: group)
+        Fabricate(Group::BottomLayer::Member.name, person: person, group: group)
         subject.save
         expect(subject.destroy).to be_truthy
         expect(person.primary_group_id).to eq(group.id)
@@ -419,7 +419,7 @@ describe Role do
       end
 
       it "does not remove contact data flag on person when other roles exist" do
-        Fabricate(Group::TopGroup::Member.name.to_s, group: groups(:top_group), person: person)
+        Fabricate(Group::TopGroup::Member.name, group: groups(:top_group), person: person)
         subject.type = "Group::BottomLayer::Leader"
         subject.save!
 
@@ -433,9 +433,9 @@ describe Role do
 
   context ".normalize_label" do
     it "reuses existing label" do
-      a1 = Fabricate(Group::BottomLayer::Leader.name.to_s, label: "foo",
+      a1 = Fabricate(Group::BottomLayer::Leader.name, label: "foo",
         group: groups(:bottom_layer_one))
-      a2 = Fabricate(Group::BottomLayer::Leader.name.to_s, label: "fOO",
+      a2 = Fabricate(Group::BottomLayer::Leader.name, label: "fOO",
         group: groups(:bottom_layer_one))
       expect(a2.label).to eq(a1.label)
     end
@@ -458,7 +458,7 @@ describe Role do
     end
 
     it "appends end_on if set" do
-      expect(build_role(end_on: date).to_s).to eq "Leader (bis 15.11.2023)"
+      expect(build_role(end_on: date).to_fs).to eq "Leader (bis 15.11.2023)"
     end
 
     it "combines label and end_on if both are set" do
@@ -472,7 +472,7 @@ describe Role do
     it "excludes labels from database" do
       Fabricate(Group::BottomLayer::Leader.name.to_s, label: "foo",
         group: groups(:bottom_layer_one))
-      Fabricate(Group::BottomLayer::Leader.name.to_s, label: "FOo",
+      Fabricate(Group::BottomLayer::Leader.name, label: "FOo",
         group: groups(:bottom_layer_one))
       is_expected.not_to eq(["foo"])
     end
@@ -480,7 +480,7 @@ describe Role do
     it "excludes labels from all types" do
       Fabricate(Group::BottomLayer::Leader.name.to_s, label: "foo",
         group: groups(:bottom_layer_one))
-      Fabricate(Group::BottomLayer::Member.name.to_s, label: "Bar",
+      Fabricate(Group::BottomLayer::Member.name, label: "Bar",
         group: groups(:bottom_layer_one))
       is_expected.not_to eq(%w[Bar foo])
     end
@@ -556,7 +556,7 @@ describe Role do
 
   context "#destroy!" do
     it "soft deletes young roles with always_soft_destroy: true" do
-      a = Fabricate(Group::BottomLayer::Leader.name.to_s, label: "foo",
+      a = Fabricate(Group::BottomLayer::Leader.name, label: "foo",
         group: groups(:bottom_layer_one))
 
       expect { a.destroy!(always_soft_destroy: true) }

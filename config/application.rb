@@ -1,21 +1,18 @@
-#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
+require_relative "boot"
 
-require_relative 'boot'
-
-railties = %w[
-  active_record/railtie
-  active_storage/engine
-  action_controller/railtie
-  action_view/railtie
-  action_mailer/railtie
-  active_job/railtie
-  action_text/engine
-  rails/test_unit/railtie
-  sprockets/railtie
-].each { |railtie| require railtie }
+require "rails"
+# Pick the frameworks you want:
+require "active_model/railtie"
+require "active_job/railtie"
+require "active_record/railtie"
+require "active_storage/engine"
+require "action_controller/railtie"
+require "action_mailer/railtie"
+require "action_mailbox/engine"
+require "action_text/engine"
+require "action_view/railtie"
+# require "action_cable/engine"
+require "rails/test_unit/railtie"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -32,7 +29,10 @@ module Hitobito
 
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.0
+    config.load_defaults 7.0
+
+    # TODO: Remove this config. It is just until we find an alternative to the globalized gem
+    config.active_record.legacy_connection_handling = true
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
@@ -79,8 +79,6 @@ module Hitobito
     config.active_support.escape_html_entities_in_json = true
 
     config.active_record.time_zone_aware_types = [:datetime, :time]
-
-    config.active_record.yaml_column_permitted_classes = [Symbol, ActiveSupport::HashWithIndifferentAccess, Time, Date]
 
     # Deviate from default here for now, revisit later
     config.active_record.belongs_to_required_by_default = false

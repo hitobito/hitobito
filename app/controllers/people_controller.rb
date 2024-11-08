@@ -46,7 +46,19 @@ class PeopleController < CrudController
 
   helper_method :list_filter_args
 
+  def deep_transform_parameters_to_hash(object)
+    case object
+    when ActionController::Parameters
+      object.to_unsafe_h # Convert ActionController::Parameters to a hash
+    when Hash
+      object.transform_values { |value| deep_transform_parameters_to_hash(value) }
+    when Array
+      object.map { |element| deep_transform_parameters_to_hash(element) }
+    end
+  end
+
   def index # rubocop:disable Metrics/AbcSize we support a lot of formats, hence many code-branches
+    session[:list_params] = deep_transform_parameters_to_hash(session[:list_params])
     respond_to do |format|
       format.html { @people = prepare_entries(filter_entries).page(params[:page]) }
       format.pdf { render_pdf_in_background(filter_entries, group, "people_#{group.id}") }
@@ -183,7 +195,7 @@ class PeopleController < CrudController
       entries.preload_public_accounts
     end
 
-    entries.includes(:picture_attachment)
+    entries.preload_picture
   end
 
   def render_tabular_entries_in_background(format)

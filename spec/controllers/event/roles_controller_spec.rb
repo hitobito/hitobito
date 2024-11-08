@@ -111,6 +111,7 @@ describe Event::RolesController do
           post :create, params: {group_id: group.id, event_id: course.id, event_role: {type: Event::Role::Leader.sti_name, person_id: user.id}, remove_participant_role: 1}
         end.to change { Event::Role.count }.by(0)
 
+        participation.reload
         expect(participation.roles.count).to eq(1)
         expect(participation.roles).to_not include(participant_role)
         participation.roles.each do |role|

@@ -14,6 +14,7 @@ class SearchColumnBuilder
 
   def initialize(drop_columns: true)
     @drop_columns = drop_columns
+    @created_columns = {}
   end
 
   def run
@@ -30,9 +31,24 @@ class SearchColumnBuilder
 
   private
 
+  def record_column_creation(table_name, attrs)
+    @created_columns[table_name] = @created_columns[table_name].to_a | attrs.to_a
+  end
+
+  def search_column_already_sufficiently_created?(table_name, attrs)
+    return false if !connection.column_exists?(table_name, SEARCH_COLUMN)
+
+    existing = Set.new(@created_columns[table_name])
+    wanted = Set.new(attrs)
+
+    wanted <= existing # wanted.subset?(existing)
+  end
+
   # Create searchable columns for main table and associations
   def create_columns_for_attrs(table_name, attrs)
-    create_searchable_column_and_index(table_name, attrs.select { |attr| attr.is_a?(Symbol) })
+    main_search_attrs = attrs.select { |attr| attr.is_a?(Symbol) }
+    create_searchable_column_and_index(table_name, main_search_attrs, replace: true)
+    record_column_creation(table_name, main_search_attrs)
 
     attrs.select { |attr| attr.is_a?(Hash) }.each do |associated_columns|
       create_columns_for_association(associated_columns)
@@ -42,16 +58,17 @@ class SearchColumnBuilder
   # Create searchable column on associated tables
   def create_columns_for_association(associated_columns)
     associated_columns.each do |table, columns|
-      create_searchable_column_and_index(table, columns)
+      create_searchable_column_and_index(table.to_s, columns, replace: false)
     end
   end
 
   # Adds or replaces a tsvector column and associated GIN index on specified columns
-  def create_searchable_column_and_index(table_name, attrs)
-    # check if every attribute exists on the table (after_initilize is also called before the wagon migrations so the wagon attributes still don't exist)
+  def create_searchable_column_and_index(table_name, attrs, replace: false)
+    # check if every attribute exists on the table
     return unless attrs.all? { |attr| connection.column_exists?(table_name, attr.to_s) }
-    # return if the search_column is already generated on this table, unless drop_columns is true
-    return if connection.column_exists?(table_name, SEARCH_COLUMN) && !drop_columns?
+
+    # return if the search_column is already generated on this table
+    return if search_column_already_sufficiently_created?(table_name, attrs) && !replace_column?(replace)
 
     quoted_table_name = connection.quote_table_name(table_name)
 
@@ -69,13 +86,14 @@ class SearchColumnBuilder
         #{ts_vector_statement(attrs)}
       ) STORED;
     SQL
-    migration.say_with_time "Creating Search Column #{table_name}" do
+
+    migration.say_with_time "Creating Search Column #{table_name}.#{SEARCH_COLUMN} with #{attrs.to_sentence}" do
       connection.execute(statement)
     end
   end
 
   def create_search_index(table_name, quoted_table_name)
-    migration.say_with_time "Creating Search Index #{table_name}" do
+    migration.say_with_time "Creating Search Index for #{table_name}" do
       connection.execute <<~SQL
         CREATE INDEX "#{table_name}_search_column_gin_idx" ON #{quoted_table_name} USING GIN (#{SEARCH_COLUMN});
       SQL
@@ -106,7 +124,7 @@ class SearchColumnBuilder
     END"
   end
 
-  def drop_columns? = @drop_columns
+  def replace_column?(replace_wanted) = replace_wanted && @drop_columns
 
   def connection = ActiveRecord::Base.connection
 

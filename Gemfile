@@ -7,7 +7,7 @@
 
 source "https://rubygems.org"
 
-gem "rails", "= 6.1.7.8"
+gem "rails", "= 7.0.1"
 gem "wagons", "~> 0.7.0"
 
 gem "active_record_distinct_on"
@@ -93,7 +93,7 @@ gem "sentry-raven"
 gem "simple_xlsx_reader" # import data from xlsx files (used in some wagons)
 gem "simpleidn"
 gem "sorted_set"
-gem "sprockets", "~> 3.7.2" # pinned to older version to avoid having an empty manifest.js
+gem "sprockets-rails"
 gem "strip_attributes" # strip whitespace of attributes
 gem "truemail"
 gem "turbo-rails"
@@ -104,11 +104,9 @@ gem "view_component"
 gem "webpacker"
 
 # load after others because dependencies
-gem "graphiti-openapi", github: "puzzle/graphiti-openapi", tag: "standalone/0.6.3"
 gem "kaminari"
 
 gem "active_storage_validations" # validate filesize, dimensions and content-type of uploads
-gem "active_storage_variant" # variants for Rails < 7
 
 group :development, :test do
   gem "graphiti_spec_helpers"

@@ -25,7 +25,7 @@ module BackgroundJobs
         .update(attrs)
     rescue
       # Let's not fail the job because of a logging problem, but at least report the error.
-      ::Sentry.capture_exception($!)
+      ::Raven.capture_exception($!)
     end
   end
 end

@@ -29,7 +29,7 @@ module ValidatedEmail
   end
 
   def alert_sentry(email)
-    Sentry.capture_message(
+    Raven.capture_message(
       "Truemail does not work as expected",
       extra: {
         verifier_email: Truemail.configure.verifier_email,

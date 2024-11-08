@@ -12,10 +12,10 @@ module Sentry
   end
 
   def set_sentry_request_context
-    Sentry.extra_context(params: params.dup.to_unsafe_h, url: request.url)
+    Raven.extra_context(params: params.dup.to_unsafe_h, url: request.url)
   end
 
   def set_sentry_user_context
-    Sentry.user_context(id: current_user.try(:id), name: current_user.try(:email))
+    Raven.user_context(id: current_user.try(:id), name: current_user.try(:email))
   end
 end

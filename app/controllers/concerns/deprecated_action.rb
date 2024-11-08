@@ -13,6 +13,6 @@ module DeprecatedAction
   private
 
   def send_deprecation(err)
-    Sentry.capture_exception(ActiveSupport::DeprecationException.new(err), logger: "deprecation")
+    Raven.capture_exception(ActiveSupport::DeprecationException.new(err), logger: "deprecation")
   end
 end

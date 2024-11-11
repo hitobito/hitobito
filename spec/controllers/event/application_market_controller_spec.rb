@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -92,6 +92,11 @@ describe Event::ApplicationMarketController do
   before { sign_in(people(:top_leader)) }
 
   describe "GET index" do
+    let(:updated_at) { 1.day.ago.change(usec: 0) }
+    let(:created_at) { 2.days.ago.change(usec: 0) }
+
+    before { Event::Participation.update_all(created_at:, updated_at:) }
+
     context "with standard filter" do
       before { get :index, params: {group_id: group.id, event_id: event.id} }
 
@@ -104,6 +109,11 @@ describe Event::ApplicationMarketController do
 
         it "contains participant" do
           is_expected.to include(appl_participant)
+        end
+
+        it "shows the correct timestamps on the application instances" do
+          expect(subject.first.model.created_at).to eq created_at
+          expect(subject.first.model.updated_at).to eq updated_at
         end
 
         it "does not contain unassigned applications" do
@@ -130,6 +140,11 @@ describe Event::ApplicationMarketController do
         it { is_expected.not_to include(appl_participant) }
         it { is_expected.not_to include(appl_other) }
         it { is_expected.not_to include(appl_other_assigned) }
+
+        it "shows the correct timestamps on the application instances" do
+          expect(subject.first.model.created_at).to eq created_at
+          expect(subject.first.model.updated_at).to eq updated_at
+        end
       end
     end
 
@@ -146,6 +161,11 @@ describe Event::ApplicationMarketController do
       it { is_expected.not_to include(appl_prio_2) }
       it { is_expected.to include(appl_prio_3) }
       it { is_expected.not_to include(appl_waiting) }
+
+      it "shows the correct timestamps on the application instances" do
+        expect(subject.map { _1.model.created_at }).to eq [created_at, created_at]
+        expect(subject.map { _1.model.updated_at }).to eq [updated_at, updated_at]
+      end
     end
 
     context "with prio and waiting list filter" do
@@ -161,6 +181,11 @@ describe Event::ApplicationMarketController do
       it { is_expected.to include(appl_prio_2) }
       it { is_expected.not_to include(appl_prio_3) }
       it { is_expected.to include(appl_waiting) }
+
+      it "shows the correct timestamps on the application instances" do
+        expect(subject.map { _1.model.created_at }).to eq [created_at, created_at]
+        expect(subject.map { _1.model.updated_at }).to eq [updated_at, updated_at]
+      end
     end
 
     context "with waiting list filter" do
@@ -176,6 +201,11 @@ describe Event::ApplicationMarketController do
       it { is_expected.not_to include(appl_prio_2) }
       it { is_expected.not_to include(appl_prio_3) }
       it { is_expected.to include(appl_waiting) }
+
+      it "shows the correct timestamps on the application instances" do
+        expect(subject.map { _1.model.created_at }).to eq [created_at]
+        expect(subject.map { _1.model.updated_at }).to eq [updated_at]
+      end
     end
 
     context "for regular event" do

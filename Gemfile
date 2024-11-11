@@ -52,8 +52,8 @@ gem "icalendar"
 gem "image_processing", "~> 1.12"
 gem "json", "< 2.7.0" # pinned to be able to use rdbg. Somehow it has multiple versions otherwise
 gem "lograge"
-gem "lograge-sql"
 gem "lograge_activejob"
+gem "lograge-sql"
 gem "magiclabs-userstamp", require: "userstamp"
 gem "mail" # add mail here to have it loaded
 gem "matrix" # required but removed from stlib since ruby 3.2
@@ -66,7 +66,6 @@ gem "paper_trail"
 gem "parallel"
 gem "paranoia"
 gem "pg"
-gem "pg_search"
 gem "phonelib", "~> 0.8.4"
 gem "prawn"
 gem "prawn-markup"

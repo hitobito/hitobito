@@ -169,7 +169,7 @@ reset-test-database)
 gemfile)
   bundle check || bundle
   echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -L1 -I% \
-    cp -v Gemfile.lock "../hitobito_%/"
+    cp -v "${BUNDLE_GEMFILE:-'Gemfile'}.lock" "../hitobito_%/"
   ;;
 
 configs)

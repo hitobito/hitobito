@@ -23,6 +23,8 @@ class AdditionalEmail < ActiveRecord::Base
   include ContactAccount
   include ValidatedEmail
 
+  self.ignored_columns += [FullTextSearchable::SEARCH_COLUMN]
+
   self.value_attr = :email
 
   validates_by_schema

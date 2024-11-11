@@ -120,7 +120,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   SEARCHABLE_ATTRS = [
     :first_name, :last_name, :company_name, :nickname, :email, :address, :zip_code, :town,
-    :country, :birthday, :additional_information, {phone_numbers: [:number],
+    :birthday, :country, :additional_information, {phone_numbers: [:number],
                                                    social_accounts: [:name], additional_emails: [:email]}
   ]
 
@@ -171,7 +171,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   include PersonTags::ValidationTagged
   include People::SelfRegistrationReasons
   include People::MembershipVerification
-  include PgSearchable
+  include FullTextSearchable
 
   i18n_enum :gender, GENDERS
   i18n_setter :gender, (GENDERS + [nil])
@@ -323,6 +323,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
             "(company_name IS NOT NULL AND company_name <> '')")
   }
   scope :with_mobile, -> { joins(:phone_numbers).where(phone_numbers: {label: "Mobil"}) }
+  scope :preload_picture, -> { includes(picture_attachment: :blob) }
 
   scope :preload_roles_unscoped, -> { extending(PreloadRolesUnscoped) }
   scope :preload_roles, ->(roles_scope) { preload_roles_unscoped.roles_scope(roles_scope) }

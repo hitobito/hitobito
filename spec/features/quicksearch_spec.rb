@@ -6,7 +6,7 @@
 require "spec_helper"
 
 describe "Quicksearch" do
-  context "with pg_search" do
+  context "with fulltext search" do
     it "finds people and groups", js: true do
       obsolete_node_safe do
         sign_in

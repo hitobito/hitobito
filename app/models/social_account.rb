@@ -22,6 +22,8 @@
 class SocialAccount < ActiveRecord::Base
   include ContactAccount
 
+  self.ignored_columns += [FullTextSearchable::SEARCH_COLUMN]
+
   self.value_attr = :name
 
   validates_by_schema

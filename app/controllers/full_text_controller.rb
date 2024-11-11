@@ -46,7 +46,7 @@ class FullTextController < ApplicationController
   def query_json_results
     SEARCHABLE_MODELS.each do |key, search_class|
       instance_variable_set(
-        :"@#{key}", search_class.new(current_user, query_param, params[:page])
+        :"@#{key}", search_class.new(current_user, query_param, params[:page], limit: 5)
                               .search_fulltext
                               .collect { |i|
                       "#{key.to_s.singularize.titleize}Decorator"

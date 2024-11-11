@@ -19,6 +19,7 @@ class Group::LogController < ApplicationController
       .includes(:item)
       .reorder("created_at DESC, id DESC")
       .page(params[:page])
+      .without_count
   end
 
   private

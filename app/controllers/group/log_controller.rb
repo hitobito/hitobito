@@ -18,7 +18,6 @@ class Group::LogController < ApplicationController
       .left_joins(:role)
       .includes(:item)
       .reorder("created_at DESC, id DESC")
-      .limit(Settings.groups.log.limit)
       .page(params[:page])
       .without_count
   end

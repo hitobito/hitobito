@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -126,7 +126,7 @@ module MailRelay
     end
 
     def sender_email
-      @sender_email ||= message.from && Array(message.from).first
+      @sender_email ||= message.from && Array(message.from).first.downcase
     end
 
     # Heuristic method to find actual receiver of the message.

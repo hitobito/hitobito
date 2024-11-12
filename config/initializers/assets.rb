@@ -1,8 +1,5 @@
 # Be sure to restart your server when you modify this file.
 
-# Disable the assets pipeline (Sprockets) since we are using webpacker
-Rails.application.config.assets.enabled = false
-
 # Version of your assets, change this if you want to expire all your assets.
 Rails.application.config.assets.version = "1.0"
 

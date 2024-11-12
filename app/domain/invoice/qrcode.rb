@@ -56,12 +56,12 @@ class Invoice::Qrcode
     # If the reference is blank, we use the type "NON".
     # Currently only occuring in SAC wagon.
     type = if @invoice.reference.blank?
-             "NON"
-           elsif @invoice.reference.starts_with?("RF")
-             "SCOR"
-           else
-             "QRR"
-           end
+      "NON"
+    elsif @invoice.reference.starts_with?("RF")
+      "SCOR"
+    else
+      "QRR"
+    end
     {type: type, reference: @invoice.reference}
   end
 

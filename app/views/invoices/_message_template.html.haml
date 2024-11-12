@@ -1,3 +1,10 @@
+-#  frozen_string_literal: true
+-
+-#  Copyright (c) 2024, Schweizer Wanderwege. This file is part of
+-#  hitobito_sww and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sww.class MessageTemplate < ApplicationRecord
+
 - if group.invoice_config.message_templates.any?
   = f.labeled(MessageTemplate.model_name.human) do
     = select_tag('invoice[message_template_id]', options_for_select(group.invoice_config.message_templates.map(&:option_for_select)), include_blank: true, class: "form-select form-select-sm") 

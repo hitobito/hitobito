@@ -58,7 +58,7 @@ class PeopleController < CrudController
   end
 
   def index # rubocop:disable Metrics/AbcSize we support a lot of formats, hence many code-branches
-    session[:list_params] = deep_transform_parameters_to_hash(session[:list_params])
+    session[:list_params].permit!
     respond_to do |format|
       format.html { @people = prepare_entries(filter_entries).page(params[:page]) }
       format.pdf { render_pdf_in_background(filter_entries, group, "people_#{group.id}") }

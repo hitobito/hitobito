@@ -88,6 +88,13 @@ module Hitobito
     # Otherwise, we use Delayed Job directly with jobs inheriting from our `BaseJob`.
     config.active_job.queue_adapter = :delayed_job
 
+    config.active_record.yaml_column_permitted_classes = [
+      Time,
+      Symbol,
+      ActiveSupport::HashWithIndifferentAccess,
+      ActionController::Parameters
+    ]
+
     config.middleware.insert_before Rack::ETag, Rack::Deflater
 
     config.cache_store = :mem_cache_store, { compress: true,

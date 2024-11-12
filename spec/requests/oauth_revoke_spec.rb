@@ -26,7 +26,7 @@ RSpec.describe "GET oauth/revoke", type: :request do
       before { application.update!(confidential: true) }
 
       it "fails with HTTP 403 (forbidden) for public if incomplete" do
-        post "/oauth/revoke", headers: {Authorization: "Bearer " + token.token + "X"}, params: {token: token.token, client_id: application.uid}
+        post "/oauth/revoke", headers: {Authorization: "Bearer " + token.token}, params: {token: token.token, client_id: application.uid}
 
         expect(response).to have_http_status(:forbidden)
 
@@ -34,8 +34,8 @@ RSpec.describe "GET oauth/revoke", type: :request do
         expect(response).to have_http_status(:ok)
       end
 
-      it "succeeds with HTTP 200 when sending client_secret and client_secret" do
-        post "/oauth/revoke", headers: {Authorization: "Bearer " + token.token + "X"}, params: {token: token.token, client_id: application.uid, client_secret: application.secret}
+      it "succeeds with HTTP 200 when sending client_id" do
+        post "/oauth/revoke", headers: {Authorization: "Bearer " + token.token}, params: {token: token.token, client_id: application.uid, client_secret: application.secret}
 
         expect(response).to have_http_status(:ok)
 
@@ -48,7 +48,7 @@ RSpec.describe "GET oauth/revoke", type: :request do
       before { application.update!(confidential: false) }
 
       it "fails with HTTP 403 (forbidden) for public if incomplete" do
-        post "/oauth/revoke", headers: {Authorization: "Bearer " + token.token + "X"}, params: {token: token.token}
+        post "/oauth/revoke", headers: {Authorization: "Bearer " + token.token}, params: {token: token.token}
 
         expect(response).to have_http_status(:forbidden)
 
@@ -56,8 +56,8 @@ RSpec.describe "GET oauth/revoke", type: :request do
         expect(response).to have_http_status(:ok)
       end
 
-      it "succeeds with HTTP 200 when sending client_secret and client_secret" do
-        post "/oauth/revoke", headers: {Authorization: "Bearer " + token.token + "X"}, params: {token: token.token, client_id: application.uid}
+      it "succeeds with HTTP 200 when sending client_id and client_secret" do
+        post "/oauth/revoke", headers: {Authorization: "Bearer " + token.token}, params: {token: token.token, client_id: application.uid}
 
         expect(response).to have_http_status(:ok)
 

@@ -21,7 +21,6 @@
     = fi.labeled_input_field :payment_information
     = fi.labeled_input_field :payment_purpose
     = fi.labeled_date_field :issued_at
-    = fi.labeled_input_field :hide_total
 
     = render_extensions :form_invoice_fields, locals: { f: fi }
 
@@ -30,5 +29,8 @@
 
     = field_set_tag do
       = fi.labeled_inline_fields_for :invoice_items, 'invoice_items'
+
+    = field_set_tag do
+      = fi.labeled_input_field :hide_total
 
     = render "invoices/recalculate/calculated", invoice: fi.object.decorate

@@ -22,7 +22,7 @@ describe MessageTemplate, type: :model do
   describe "#option_for_select" do
     it "returns usable array" do
       expect(message_template.option_for_select).to eq([message_template.title, message_template.id,
-        data: {title: message_template.title, description: message_template.body}])
+        data: {title: message_template.title, body: message_template.body}])
     end
   end
 end

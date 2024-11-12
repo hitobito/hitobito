@@ -70,12 +70,12 @@ describe MessageTemplate, js: true do
         expect(page).to have_field(:invoice_description, with: "")
 
         message_templates.each do |message_template|
-          select(message_template.title, from: :invoice_message_template_id)
+          select(message_template.title, from: :message_template_id)
           expect(page).to have_field(:invoice_title, with: message_template.title)
           expect(page).to have_field(:invoice_description, with: message_template.body)
         end
 
-        select("", from: :invoice_message_template_id)
+        select("", from: :message_template_id)
         expect(page).to have_field(:invoice_title, with: "")
         expect(page).to have_field(:invoice_description, with: "")
       end

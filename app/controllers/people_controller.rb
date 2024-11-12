@@ -46,10 +46,11 @@ class PeopleController < CrudController
 
   helper_method :list_filter_args
 
+  # Convert ActionController::Parameters to hash otherwise we can't serialize them later
   def deep_transform_parameters_to_hash(object)
     case object
     when ActionController::Parameters
-      object.permit!
+      object.to_unsafe_h # Convert ActionController::Parameters to a hash
     when Hash
       object.transform_values { |value| deep_transform_parameters_to_hash(value) }
     when Array

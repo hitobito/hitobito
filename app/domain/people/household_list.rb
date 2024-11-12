@@ -10,8 +10,9 @@ class People::HouseholdList
 
   include Enumerable
 
-  def initialize(people_scope)
+  def initialize(people_scope, order: :default)
     @people_scope = people_scope
+    @order = order
   end
 
   def only_households_in_batches(&block)
@@ -37,6 +38,20 @@ class People::HouseholdList
       .select("people.*")
       .from(grouped_households_people_sql, :people)
       .limit(@people_scope.limit_value.presence)
+      .order(order_statement)
+  end
+
+  def order_statement
+    case @order
+    when :retain
+      quoted_ids = @people_scope.pluck(:id).map { |id| Arel::Nodes.build_quoted(id).to_sql }
+      array_literal = Arel.sql("ARRAY[#{quoted_ids.join(",")}]")
+      Arel::Nodes::NamedFunction.new("array_position", [array_literal, Person.arel_table[:id]])
+    when :default
+      '"member_count" DESC, id ASC'
+    else
+      @order
+    end
   end
 
   def each(&block)
@@ -127,7 +142,7 @@ class People::HouseholdList
       batch_limit = remaining if remaining < batch_limit
     end
 
-    relation = relation.reorder('"member_count" DESC, id ASC').limit(batch_limit)
+    relation = relation.reorder(order_statement).limit(batch_limit)
     # Retaining the results in the query cache would undermine the point of batching
     relation.skip_query_cache!
     batch_relation = relation

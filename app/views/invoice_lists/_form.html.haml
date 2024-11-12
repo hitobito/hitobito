@@ -15,9 +15,9 @@
     = f.hidden_field :recipient_ids
 
   = f.fields_for :invoice, entry.invoice do |fi|
-    = fi.labeled_input_field :title, help: t('.recipient_info', count: entry.recipient_ids_count)
-
-    = fi.labeled_input_field :description
+    = render "invoices/message_template", f: fi, group: entry
+    = fi.labeled_input_field :title, help: t('.recipient_info', count: entry.recipient_ids_count), data: { message_template_target: :title }
+    = fi.labeled_input_field :description, rows: 3, data: { message_template_target: :body }
     = fi.labeled_input_field :payment_information
     = fi.labeled_input_field :payment_purpose
     = fi.labeled_date_field :issued_at

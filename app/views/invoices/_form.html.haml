@@ -8,6 +8,8 @@
 
   = field_set_tag do
     = render "message_template", f: f, group: parent
+    = f.labeled_input_field :title, data: { message_template_target: :title }
+    = f.labeled_input_field :description, rows: 3, data: { message_template_target: :body }
 
   = field_set_tag do
     = f.labeled_input_field :due_at

@@ -10,7 +10,7 @@ class MessageTemplate < ApplicationRecord
 
   validates :title, presence: true
 
-  def option_for_select(data_map: {title: :title, body: :description})
-    [title, id, data: {data_map[:title] => title, data_map[:body] => body}]
+  def option_for_select
+    [title, id, data: {title: title, body: body}]
   end
 end

@@ -16,7 +16,7 @@ class Export::LabelsJob < Export::ExportBaseJob
   end
 
   def people
-    @people ||= Person.where(id: @people_ids).order(order_clause)
+    @people ||= Person.where(id: @people_ids).order(order_statement)
   end
 
   def group
@@ -24,10 +24,13 @@ class Export::LabelsJob < Export::ExportBaseJob
   end
 
   # retain order of @people_ids but allow override in wagons
-  def order_clause
-    Person.arel_table[:last_name].asc
-  end
+  def order_statement
+    quoted_ids = @people_ids.map { |id| Arel::Nodes.build_quoted(id).to_sql }
 
+    # unfortunately arel does not support the postgres ARRAY-literal, so DIY it is
+    array_literal = Arel.sql("ARRAY[#{quoted_ids.join(",")}]")
+    Arel::Nodes::NamedFunction.new("array_position", [array_literal, Person.arel_table[:id]])
+  end
 
   def data
     case @format

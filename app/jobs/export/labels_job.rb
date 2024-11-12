@@ -16,12 +16,18 @@ class Export::LabelsJob < Export::ExportBaseJob
   end
 
   def people
-    @people ||= Person.where(id: @people_ids)
+    @people ||= Person.where(id: @people_ids).order(order_clause)
   end
 
   def group
     @group ||= Group.find(@group_id)
   end
+
+  # retain order of @people_ids but allow override in wagons
+  def order_clause
+    Person.arel_table[:last_name].asc
+  end
+
 
   def data
     case @format

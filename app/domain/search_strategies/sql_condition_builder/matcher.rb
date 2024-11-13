@@ -29,10 +29,12 @@ class SearchStrategies::SqlConditionBuilder
       unless Object.const_defined?(converted_table_name)
         converted_table_name.gsub!(/(?<=[a-z])([A-Z])/, '::\1')
       end
+      arel_column = converted_table_name.constantize.columns_hash[@field]
 
-      if converted_table_name.constantize
-          .columns_hash[@field].type == :integer
+      if arel_column.type == :integer
         Arel::Nodes::SqlLiteral.new("#{table.name}." + "#{table[@field].name}::text")
+      elsif arel_column.collation == "case_insensitive_emails"
+        Arel::Nodes::SqlLiteral.new(%(#{table.name}.#{table[@field].name} COLLATE "unicode"))
       else
         table[@field]
       end

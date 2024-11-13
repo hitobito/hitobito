@@ -10,7 +10,8 @@ describe Synchronize::Mailchimp::Synchronizator do
   let(:user) { people(:top_leader) }
   let(:other) { people(:bottom_member) }
   let(:mailing_list) { mailing_lists(:leaders) }
-  let(:sync) { Synchronize::Mailchimp::Synchronizator.new(mailing_list, with_default_tag: false) }
+  let(:with_default_tag) { false }
+  let(:sync) { Synchronize::Mailchimp::Synchronizator.new(mailing_list, with_default_tag: with_default_tag) }
   let(:client) { sync.send(:client) }
 
   let(:tags) { %w[foo bar] }
@@ -177,6 +178,30 @@ describe Synchronize::Mailchimp::Synchronizator do
       expect(client).to receive(:fetch_members).and_return([member(user, segments(tags))])
       expect(client).to receive(:fetch_segments).and_return(segments(tags))
       expect(stale_segments).to eq []
+    end
+
+    it "is empty when all local tags exist remotely" do
+      user.update(tag_list: tags)
+      mailing_list.subscriptions.create!(subscriber: user)
+
+      expect(client).to receive(:fetch_members).and_return([])
+      expect(client).to receive(:fetch_segments).and_return([])
+
+      expect(stale_segments).to eq []
+    end
+
+    context "with_default_tag" do
+      let(:with_default_tag) { true }
+
+      it "does not fail on nil email" do
+        user.update(email: nil)
+        mailing_list.subscriptions.create!(subscriber: user)
+        mailing_list.subscriptions.create!(subscriber: Fabricate(:person))
+
+        expect(client).to receive(:fetch_members).and_return([])
+        expect(client).to receive(:fetch_segments).and_return([])
+        expect(stale_segments).to eq []
+      end
     end
   end
 

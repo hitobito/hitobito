@@ -57,7 +57,7 @@ class Invoice < ActiveRecord::Base
 
   include I18nEnums
   include PaymentSlips
-  include PgSearchable
+  include FullTextSearchable
 
   ROUND_TO = BigDecimal("0.05")
 
@@ -111,6 +111,11 @@ class Invoice < ActiveRecord::Base
   scope :standalone, -> { where(invoice_list_id: nil) }
 
   class << self
+    def with_aggregated_payments
+      select("invoices.*, last_payment_at, COALESCE(amount_paid, 0) AS amount_paid, true as joined_payments")
+        .joins(Invoice.last_payments_information)
+    end
+
     def draft_or_issued_in(year)
       return all unless /\A\d+\z/.match?(year.to_s)
 
@@ -139,8 +144,7 @@ class Invoice < ActiveRecord::Base
     end
 
     def order_by_sequence_number
-      select("*", Arel.sql(order_by_sequence_number_statement.join(", ")))
-        .order(Arel.sql(order_by_sequence_number_statement.join(", ")))
+      order(Arel.sql(order_by_sequence_number_statement.join(", ")))
     end
 
     # Orders by first integer, second integer
@@ -151,7 +155,7 @@ class Invoice < ActiveRecord::Base
     end
 
     def order_by_payment_statement
-      "last_payments.received_at"
+      "last_payments.last_payment_at"
     end
 
     def order_by_amount_paid_statement
@@ -162,7 +166,7 @@ class Invoice < ActiveRecord::Base
       <<~SQL.squish
         LEFT OUTER JOIN (
           SELECT invoice_id,
-                 MAX(received_at) AS received_at,
+                 MAX(received_at) AS last_payment_at,
                  SUM(amount) AS amount_paid
           FROM payments
           GROUP BY invoice_id
@@ -231,7 +235,11 @@ class Invoice < ActiveRecord::Base
   end
 
   def amount_paid
-    payments.sum(:amount)
+    joined_payments? ? read_attribute(:amount_paid) : payments.sum(:amount)
+  end
+
+  def last_payment_at
+    joined_payments? ? read_attribute(:last_payment_at) : payments.last&.received_at
   end
 
   def overdue?
@@ -243,6 +251,11 @@ class Invoice < ActiveRecord::Base
   end
 
   private
+
+  # on index we join aggregated payments
+  def joined_payments?
+    self[:joined_payments]
+  end
 
   def set_self_in_nested
     invoice_items.each { |item| item.invoice = self }

@@ -8,7 +8,7 @@ module SearchStrategies
     def search_fulltext
       return no_events unless term_present?
 
-      Event.search(@term).includes(:groups, :dates)
+      Event.search(@term).includes(:groups, :dates).limit(@limit)
     end
 
     private

@@ -72,6 +72,8 @@ GEM
     activerecord (6.1.7.8)
       activemodel (= 6.1.7.8)
       activesupport (= 6.1.7.8)
+    activerecord-nulldb-adapter (1.0.1)
+      activerecord (>= 5.2.0, < 7.2)
     activerecord-session_store (2.1.0)
       actionpack (>= 6.1)
       activerecord (>= 6.1)
@@ -136,7 +138,7 @@ GEM
     bleib (0.0.14)
     bootsnap (1.18.3)
       msgpack (~> 1.2)
-    brakeman (6.2.1)
+    brakeman (6.2.2)
       racc
     builder (3.3.0)
     bullet (7.1.6)
@@ -429,7 +431,7 @@ GEM
     parser (3.3.1.0)
       ast (~> 2.4.1)
       racc
-    pdf-core (0.10.0)
+    pdf-core (0.9.0)
     pdf-inspector (1.3.0)
       pdf-reader (>= 1.0, < 3.0.a)
     pdf-reader (2.12.0)
@@ -439,14 +441,10 @@ GEM
       ruby-rc4
       ttfunk
     pg (1.5.7)
-    pg_search (2.3.7)
-      activerecord (>= 6.1)
-      activesupport (>= 6.1)
     phonelib (0.8.8)
-    prawn (2.5.0)
-      matrix (~> 0.4)
-      pdf-core (~> 0.10.0)
-      ttfunk (~> 1.8)
+    prawn (2.4.0)
+      pdf-core (~> 0.9.0)
+      ttfunk (~> 1.7)
     prawn-markup (1.0.0)
       nokogiri
       prawn
@@ -669,8 +667,6 @@ GEM
       actionpack (>= 6.1)
       activesupport (>= 6.1)
       sprockets (>= 3.0.0)
-    sqlite3 (1.7.3)
-      mini_portile2 (~> 2.8.0)
     stackprof (0.2.26)
     standard (1.39.1)
       language_server-protocol (~> 3.17.0.2)
@@ -699,8 +695,7 @@ GEM
     transproc (1.1.1)
     truemail (3.3.1)
       simpleidn (~> 0.2.1)
-    ttfunk (1.8.0)
-      bigdecimal (~> 3.1)
+    ttfunk (1.7.0)
     turbo-rails (2.0.5)
       actionpack (>= 6.0.0)
       activejob (>= 6.0.0)
@@ -754,6 +749,7 @@ DEPENDENCIES
   active_record_distinct_on
   active_storage_validations
   active_storage_variant
+  activerecord-nulldb-adapter
   activerecord-session_store
   acts-as-taggable-on
   airbrake
@@ -830,7 +826,6 @@ DEPENDENCIES
   paranoia
   pdf-inspector
   pg
-  pg_search
   phonelib (~> 0.8.4)
   prawn
   prawn-markup
@@ -875,13 +870,13 @@ DEPENDENCIES
   sorted_set
   spring-commands-rspec
   sprockets (~> 3.7.2)
-  sqlite3 (~> 1.7.2)
   stackprof
   standard (~> 1.28)
   standard-rails
   strip_attributes
   test-prof
   truemail
+  ttfunk (< 1.8.0)
   turbo-rails
   validates_by_schema (~> 0.3.0)
   validates_timeliness
@@ -893,4 +888,4 @@ DEPENDENCIES
   wirble
 
 BUNDLED WITH
-   2.5.11
+   2.5.22

@@ -33,4 +33,9 @@ describe LabelFormatsController, type: :controller do
   before { sign_in(people(:top_leader)) }
 
   include_examples "crud controller", skip: [%w[show]]
+
+  it "can sort by name" do
+    get :index, params: {sort: "name"}
+    expect(response).to be_successful
+  end
 end

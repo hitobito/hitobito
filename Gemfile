@@ -10,6 +10,7 @@ source "https://rubygems.org"
 gem "rails", "= 6.1.7.8"
 gem "wagons", "~> 0.7.0"
 
+gem "activerecord-nulldb-adapter"
 gem "activerecord-session_store"
 gem "acts-as-taggable-on"
 gem "airbrake"
@@ -57,7 +58,6 @@ gem "matrix" # required but removed from stlib since ruby 3.2
 gem "mime-types"
 gem "mini_magick"
 gem "pg"
-gem "pg_search"
 gem "active_record_distinct_on"
 gem "nested_form"
 gem "nokogiri"
@@ -91,9 +91,9 @@ gem "simpleidn"
 gem "simple_xlsx_reader" # import data from xlsx files (used in some wagons)
 gem "sorted_set"
 gem "sprockets", "~> 3.7.2" # pinned to older version to avoid having an empty manifest.js
-gem "sqlite3", "~> 1.7.2" # required for asset generation
 gem "strip_attributes" # strip whitespace of attributes
 gem "truemail"
+gem "ttfunk", "< 1.8.0"
 gem "turbo-rails"
 gem "validates_by_schema", "~> 0.3.0" # 0.5.1 does not work well with wagons / wagon-migrations
 gem "validates_timeliness"

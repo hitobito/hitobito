@@ -111,7 +111,7 @@ class PeopleController < CrudController
   def self.sort_mappings_with_indifferent_access
     {roles: {
       joins: [:roles, "INNER JOIN role_type_orders ON roles.type = role_type_orders.name"],
-      order: ["role_type_orders.order_weight", "people.company_name", "people.last_name", "people.first_name", "people.nickname"]
+      order: ["role_type_orders.order_weight", "company_name", "last_name", "first_name", "nickname"]
     }}.with_indifferent_access
   end
 
@@ -166,16 +166,7 @@ class PeopleController < CrudController
 
   def filter_entries
     entries = add_table_display_to_query(person_filter.entries, current_person)
-    # PG_TODO: This method is solved weird, please improve
-    if sorting?
-      entries = Person.select("*").from(
-        entries.joins(join_tables).select(sort_expression_attrs)
-               .unscope(:order).distinct_on(:id), "people"
-      )
-        .reorder(Arel.sql(sort_expression.include?(".") ?
-                        sort_expression.split(".")[1] : sort_expression))
-    end
-    entries
+    sort_by_sort_expression(entries)
   end
 
   def list_filter_args
@@ -193,7 +184,7 @@ class PeopleController < CrudController
       entries.preload_public_accounts
     end
 
-    entries.includes(:picture_attachment)
+    entries.preload_picture
   end
 
   def render_tabular_entries_in_background(format)

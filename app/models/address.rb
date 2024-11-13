@@ -27,7 +27,7 @@
 class Address < ActiveRecord::Base
   SEARCHABLE_ATTRS = :street_short, :town, :zip_code, :numbers
 
-  include PgSearchable
+  include FullTextSearchable
 
   serialize :numbers, Array
 

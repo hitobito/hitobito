@@ -169,7 +169,7 @@ reset-test-database)
 gemfile)
   bundle check || bundle
   echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -L1 -I% \
-    cp -v Gemfile.lock "../hitobito_%/"
+    cp -v "${BUNDLE_GEMFILE:-'Gemfile'}.lock" "../hitobito_%/"
   ;;
 
 configs)
@@ -202,27 +202,25 @@ test-prepare)
   ;;
 
 grep)
-  if [[ $# -ne 2 ]]; then
-    echo "You must provide a String to grep"
-    exit 1
-  fi
+  shift # loose the "grep" argument
   set +e
 
   # grep in core
   echo ">> grepping in hitobito <<" | highlight_phrases
-  git grep "${@:2}"
+  git grep $@
 
   # grep in installed wagons
   for wagon in $(existing_wagon_names); do
     echo ">> grepping in ../hitobito_$wagon/ <<" | highlight_phrases
     (
       cd "../hitobito_$wagon/"
-      git grep --color=always "${@:2}"
+      git grep --color=always $@
     )
   done
   ;;
 
 spec-all)
+  shift # loose the "spec-all" argument
   for wagon in $(existing_wagon_names); do
     echo "$wagon" | red
     wagon spec $@
@@ -232,7 +230,7 @@ spec-all)
 spec)
   require_wagon_name
   shift # loose the "spec" argument
-  shift # loose the wagon-name argument
+  shift # loose the wagon-name argument, which is present as $wagon_name
 
   previous_wagon=$(grep PRIMARY_WAGON .envrc | sed 's/.*=//')
 

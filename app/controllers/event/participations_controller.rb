@@ -154,32 +154,27 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     end
   end
 
-  def with_person_add_request(&block)
+  def with_person_add_request(&)
     creator = Person::AddRequest::Creator::Event.new(entry.roles.first, current_ability)
-    msg = creator.handle(&block)
+    msg = creator.handle(&)
     redirect_to return_path || group_event_participations_path(group, event), alert: msg if msg
   end
 
   def list_entries
     filter = event_participation_filter
     records = filter.list_entries
-      .includes(person: :picture_attachment)
-      .select("event_participations.*")
-      .page(params[:page])
+      .select(Event::Participation.column_names)
     @counts = filter.counts
+    records = sort_by_sort_expression(records)
+      .merge(Person.preload_picture)
+      .page(params[:page])
+
+    Person::PreloadPublicAccounts.for(records.collect(&:person))
     @pagination_options = {
       total_pages: records.total_pages,
       current_page: records.current_page,
       per_page: records.limit_value
     }
-    sort_param = params[:sort]
-
-    if sort_param && sortable?(sort_param)
-      records = records.joins(join_tables)
-        .select(sort_expression_attrs)
-        .reorder(Arel.sql(sort_expression))
-    end
-    Person::PreloadPublicAccounts.for(records.collect(&:person))
     records
   end
 

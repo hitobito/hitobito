@@ -246,6 +246,32 @@ describe Invoice do
     expect(Invoice.order_by_sequence_number).to eq [i4, i5, i2, i3, i6, i1]
   end
 
+  context ".with_aggregated_payments" do
+    let(:invoice) { invoices(:invoice) }
+
+    subject(:invoice_with_aggregated_payments) { Invoice.with_aggregated_payments.find_by(id: invoice.id) }
+
+    it "amount_paid is 0 when no payments exists" do
+      expect(invoice_with_aggregated_payments.amount_paid).to eq 0
+    end
+
+    it "amount_paid contains summed payments" do
+      invoice.payments.create!(amount: 10)
+      invoice.payments.create!(amount: 3)
+      expect(invoice_with_aggregated_payments.amount_paid).to eq 13
+    end
+
+    it "last_payment_at is nil when no payments exists" do
+      expect(invoice_with_aggregated_payments.last_payment_at).to be_nil
+    end
+
+    it "last_payment_at returns received at of latest payment" do
+      invoice.payments.create!(amount: 10, received_at: 1.week.ago)
+      invoice.payments.create!(amount: 3, received_at: Time.zone.today)
+      expect(invoice_with_aggregated_payments.last_payment_at).to eq Time.zone.today
+    end
+  end
+
   context ".draft_or_issued_in" do
     let(:today) { Time.zone.parse("2019-12-16 10:00:00") }
     let(:invoice) { invoices(:invoice) }
@@ -352,12 +378,12 @@ describe Invoice do
         .to match(/\( SELECT .* FROM payments GROUP BY invoice_id \)/)
 
       expect(described_class.last_payments_information)
-        .to match(/invoice_id, MAX\(received_at\) AS received_at, SUM\(amount\) AS amount_paid/)
+        .to match(/invoice_id, MAX\(received_at\) AS last_payment_at, SUM\(amount\) AS amount_paid/)
     end
 
     it "supports sorting by last payment-date" do
       expect(described_class.order_by_payment_statement)
-        .to eql "last_payments.received_at"
+        .to eql "last_payments.last_payment_at"
     end
 
     it "supports sorting by totally paid amount" do

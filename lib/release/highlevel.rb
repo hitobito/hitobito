@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2020-2023, Puzzle ITC. This file is part of
+#  Copyright (c) 2020-2024, Puzzle ITC. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -82,7 +82,7 @@ module Release
       when /^VERSION$/
         execute "echo #{to} > #{file}"
       when /version.rb$/
-        execute %(sed -i "s/VERSION\s*=\s*'[0-9.]*'/VERSION = '#{to}'/" #{file})
+        execute %(sed -i 's/VERSION\s*=\s*"[0-9.]*"/VERSION = "#{to}"/' #{file})
       end
       add file
       commit "Bump Version for Release" if changes_to_be_committed?

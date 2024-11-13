@@ -20,7 +20,7 @@ module Dropdown
         private
 
         def user_participates_in?(user, event)
-          event.participations.where(person_id: user.id).exists?
+          user.event_participations.map(&:event_id).include?(event.id)
         end
       end
 

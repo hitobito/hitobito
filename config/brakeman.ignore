@@ -36,6 +36,29 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
+      "fingerprint": "51a0fc73f01eff155e5bad80f1bfab2f2977136561cf012e97d72a7a622362f8",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/domain/mailing_lists/bulk_mail/imap_mail_validator.rb",
+      "line": 114,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Person.joins(\"LEFT JOIN additional_emails ON people.id = additional_emails.contactable_id AND additional_emails.contactable_type = '#{Person.sti_name}'\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "MailingLists::BulkMail::ImapMailValidator",
+        "method": "possible_senders"
+      },
+      "user_input": "Person.sti_name",
+      "confidence": "High",
+      "cwe_id": [
+        89
+      ],
+      "note": "String concatination using .sti_name"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
       "fingerprint": "5d76bbd1498118a5b88bd5e9512c380ca3a5b8dc5c506f23c699023fbc5a79c4",
       "check_name": "SQL",
       "message": "Possible SQL injection",
@@ -55,6 +78,29 @@
         89
       ],
       "note": "Only called internally"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "617f264e23ccd1dcca4445d6358184e8144be5d0f4b3dbccf5bc9402b7674ac4",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/domain/search_column_builder.rb",
+      "line": 80,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "connection.execute(\"CREATE INDEX \\\"#{table_name}_search_column_gin_idx\\\" ON #{quoted_table_name} USING GIN (#{SEARCH_COLUMN});\\n\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "SearchColumnBuilder",
+        "method": "create_search_index"
+      },
+      "user_input": "table_name",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": "No SQL Injection possible here, because no user data is handled"
     },
     {
       "warning_type": "SQL Injection",
@@ -172,6 +218,48 @@
       "note": "All input values are ensured to be integer and thus not dangerous"
     },
     {
+      "warning_type": "Unmaintained Dependency",
+      "warning_code": 120,
+      "fingerprint": "d84924377155b41e094acae7404ec2e521629d86f97b0ff628e3d1b263f8101c",
+      "check_name": "EOLRails",
+      "message": "Support for Rails 6.1.7.8 ended on 2024-10-01",
+      "file": "Gemfile.lock",
+      "line": 494,
+      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        1104
+      ],
+      "note": "An upgrade is on the way"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "f01681cc519400d5ecf1a9daa5fff0deceb0d7540d558c889452271597a7436f",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/domain/search_column_builder.rb",
+      "line": 73,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "connection.execute(\"ALTER TABLE #{quoted_table_name}\\nADD COLUMN #{SEARCH_COLUMN} tsvector GENERATED ALWAYS AS (\\n  #{ts_vector_statement(attrs)}\\n) STORED;\\n\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "SearchColumnBuilder",
+        "method": "create_search_column"
+      },
+      "user_input": "quoted_table_name",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": "No SQL Injection possible here, because no user data is handled"
+    },
+    {
       "warning_type": "Command Injection",
       "warning_code": 14,
       "fingerprint": "f90d2e106bfa368dc7c0cf2a99ad0c1597b1cce0ddd9301c4c46259e0e60edec",
@@ -195,6 +283,6 @@
       "note": "The command can only be executed in an authenticated context or locally, some parameters are checked against a whitelist"
     }
   ],
-  "updated": "2024-08-30 13:56:07 +0200",
-  "brakeman_version": "6.2.1"
+  "updated": "2024-11-07 14:33:57 +0100",
+  "brakeman_version": "6.2.2"
 }

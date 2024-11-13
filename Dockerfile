@@ -4,12 +4,12 @@
 
 # Versioning
 ARG RUBY_VERSION="3.2"
-ARG BUNDLER_VERSION="2.5.10"
+ARG BUNDLER_VERSION="2.5.22"
 ARG NODEJS_VERSION="16"
 ARG YARN_VERSION="1.22.19"
 
 # Packages
-ARG BUILD_PACKAGES="nodejs git sqlite3 libsqlite3-dev imagemagick build-essential libpq-dev"
+ARG BUILD_PACKAGES="nodejs git imagemagick build-essential libpq-dev"
 ARG RUN_PACKAGES="imagemagick shared-mime-info pkg-config libmagickcore-dev libmagickwand-dev libpq-dev libjemalloc-dev libjemalloc2"
 
 # Scripts
@@ -34,7 +34,7 @@ ARG PRE_BUILD_SCRIPT="\
      cp -v Wagonfile.production Wagonfile; \
      bundle lock; \
 "
-ARG BUILD_SCRIPT="bundle exec rake assets:precompile"
+ARG BUILD_SCRIPT="RAILS_DB_ADAPTER=nulldb bundle exec rake assets:precompile"
 
 ARG POST_BUILD_SCRIPT=" \
      echo \"(built at: $(date '+%Y-%m-%d %H:%M:%S'))\" > /app-src/BUILD_INFO; \
@@ -163,7 +163,7 @@ RUN bash -vxc "${POST_BUILD_SCRIPT:-"echo 'no POST_BUILD_SCRIPT provided'"}"
 
 # TODO: Save artifacts
 
-RUN rm -rf vendor/cache/ .git spec/ node_modules/ db/production.sqlite3
+RUN rm -rf vendor/cache/ .git spec/ node_modules/
 
 #################################
 #         Run/App Stage         #

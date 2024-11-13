@@ -1608,8 +1608,6 @@ it:
     destroy:
       foreign_key_error: Ci sono persone che utilizzano questa voce per questo motivo, quindi non è possibile annullarla.
   role_decorator:
-    outdated_future_role: 'Non è stato possibile attivare il ruolo il %{date} come previsto. Se il salvataggio del ruolo non lo attiva, contatta l''assistenza. '
-    outdated_deleted_role: Non è stato possibile terminare il ruolo il %{date} come previsto. Se il salvataggio del ruolo non lo termina, contatta l'assistenza.
     terminates_on: Uscita per %{date}
   roles:
     full_entry_label: "%{model_label} <i>%{role}</i> per <i>%{person}</i> in <i>%{group}</i>"

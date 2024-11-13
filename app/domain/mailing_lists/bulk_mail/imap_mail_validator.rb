@@ -111,7 +111,7 @@ module MailingLists::BulkMail
     def possible_senders
       Person
         .joins("LEFT JOIN additional_emails ON people.id = additional_emails.contactable_id" \
-               " AND additional_emails.contactable_type = 'person'")
+               " AND additional_emails.contactable_type = '#{Person.sti_name}'")
         .where("people.email = :email OR additional_emails.email = :email",
           email: @mail.sender_email)
         .distinct

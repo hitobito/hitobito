@@ -185,7 +185,7 @@ describe PeopleController, type: :controller do
     let(:header) { section.find("h2").text.strip }
     let(:dates) { section.find("tr:eq(1) td:eq(2)").text.strip }
     let(:label) { section.find("tr:eq(1) td:eq(1)") }
-    let(:label_link) { label.find("a") }
+    let(:label_link) { label.all("a")[0] }
     let(:course) { Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk)) }
 
     context "pending applications" do
@@ -215,6 +215,7 @@ describe PeopleController, type: :controller do
     context "upcoming events" do
       let(:section) { dom.all("aside section")[2] }
       let(:date) { 2.days.from_now }
+      let(:participation_link) { label.all("a")[1] }
       let(:pretty_date) do
         "#{I18n.l(date,
           format: "%a %d.%m.%Y %H:%M")} - #{I18n.l(date + 5.days,
@@ -240,6 +241,14 @@ describe PeopleController, type: :controller do
         expect(label_link.text).to eq "Eventus"
         expect(label.text).to match(/Top/)
         expect(dates).to eq pretty_date
+      end
+
+      it "lists participation link" do
+        participation = create_participation(date, active_participation: true)
+        get :show, params: params
+        expect(participation_link[:href]).to eq group_event_participation_path(course.groups.first,
+          course, participation)
+        expect(participation_link.text).to eq "Teilnahme"
       end
     end
 

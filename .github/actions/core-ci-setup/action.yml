@@ -5,6 +5,9 @@ inputs:
   migrations:
     description: Unless set to false, migrations will be run as part of the setup.
     default: 'true'
+  assets:
+    description: Unless set to false, assets will be precompiled as part of the setup.
+    default: 'true'
 
 runs:
   using: composite
@@ -53,6 +56,7 @@ runs:
       shell: bash
 
     - uses: actions/cache@v4
+      if: inputs.assets == 'true'
       with:
         path: node_modules
         key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
@@ -60,11 +64,13 @@ runs:
           ${{ runner.os }}-node_modules-
 
     - name: 'Yarn install'
+      if: inputs.assets == 'true'
       run: |
         yarn install --frozen-lockfile
       shell: bash
 
     - name: 'Run Webpacker'
+      if: inputs.assets == 'true'
       run: |
         bundle exec rake webpacker:compile
       shell: bash
@@ -72,5 +78,5 @@ runs:
     - name: 'Run db migrations'
       if: inputs.migrations == 'true'
       run: |
-        bundle exec rake db:migrate
+        bundle exec rake db:migrate search_column:build
       shell: bash

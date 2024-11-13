@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -150,7 +150,7 @@ module MailRelay
       return false if sender_email.blank?
 
       additional_senders = mailing_list.additional_sender.to_s
-      list = additional_senders.split(/[,;]/).collect(&:strip).select(&:present?)
+      list = additional_senders.split(/[,;]/).map(&:strip).select(&:present?).map(&:downcase)
       sender_domain = sender_email.sub(/^[^@]*@/, "*@")
       # check if the domain is valid, if the sender is in the senders
       # list or if the domain is whitelisted

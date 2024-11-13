@@ -271,8 +271,10 @@ of the corresponding model:
                                                    social_accounts: [:name], additional_emails: [:email]}
 ]
 
-Don't forget to include the PgSearchable module:
-``include PgSearchable``
+Don't forget to include the FullTextSearchable module for the search method:
+``include FullTextSearchable``
+
+With those configurations you should be able to use something like `Model.search("any term")`
 
 ### Output attributes in the API
 

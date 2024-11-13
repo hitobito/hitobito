@@ -12,10 +12,8 @@ module Export::Pdf
     end
 
     def generate(contactables, household = false)
-      pdf = Prawn::Document.new(page_size: format.page_size,
-        page_layout: format.page_layout,
-        margin: 0.mm)
-      pdf.font Settings.pdf.labels.font_name, size: format.font_size
+      pdf = Export::Pdf::Document.new(page_size: format.page_size, page_layout: format.page_layout, margin: 0.cm).pdf
+      pdf.font_size = format.font_size
 
       rows = household ? to_households(contactables) : contactables
 
@@ -24,9 +22,7 @@ module Export::Pdf
 
         address = household ? household_address(contactable, name) : address(contactable, name)
 
-        print_address_in_bounding_box(pdf,
-          address,
-          position(pdf, i))
+        print_address_in_bounding_box(pdf, address, position(pdf, i))
       end
 
       pdf.render

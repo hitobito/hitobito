@@ -116,7 +116,7 @@ describe Tags::Merger do
     end
 
     it "ignores non existent tag ids" do
-      @src_tag_ids = [tag2.id, 42]
+      @src_tag_ids = [tag2.id, -1]
 
       merger.merge!
 

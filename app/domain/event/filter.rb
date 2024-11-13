@@ -36,8 +36,7 @@ class Event::Filter
       .where(id: event_ids_for_relevant_groups_and_dates)
       .list
       .where(type: type)
-      .includes(:groups, :translations, :events_groups)
-      .left_joins(:translations)
+      .includes(:groups, :events_groups)
       .preload_all_dates
       .select(:id)
   end

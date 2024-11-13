@@ -1620,8 +1620,6 @@ fr:
     destroy:
       foreign_key_error: Certaines personnes utilisent ce motif d'entrée, la suppression n'est donc pas possible.
   role_decorator:
-    outdated_future_role: 'Le rôle n''a pas pu être activé par %{date} comme souhaité. Si l''enregistrement du rôle ne l''active pas, contacte le support. '
-    outdated_deleted_role: Le rôle n'a pas pu être arrêté le %{date} comme souhaité. Si l'enregistrement du rôle n’y met pas fin, contacte le support.
     terminates_on: Sortie au %{date}
   roles:
     full_entry_label: "%{model_label} <i>%{role}</i> pour <i>%{person}</i> dans <i>%{group}</i>"

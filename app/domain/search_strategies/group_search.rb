@@ -8,7 +8,7 @@ module SearchStrategies
     def search_fulltext
       return no_groups unless term_present?
 
-      Group.search(@term)
+      Group.search(@term).limit(@limit)
     end
 
     private

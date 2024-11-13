@@ -178,7 +178,7 @@ describe GroupsController do
       end
 
       it "allows enabling #main_self_registration_group" do
-        group.update!(self_registration_role_type: "Group::TopGroup::Member")
+        group.update!(self_registration_role_type: Role::External.sti_name)
         expect do
           put :update, params: {id: group, group: {main_self_registration_group: "1"}}
         end.to change { group.reload.main_self_registration_group }.to true
@@ -192,7 +192,7 @@ describe GroupsController do
       end
 
       it "clears other groups #main_self_registration_group" do
-        group.update!(self_registration_role_type: "Group::TopGroup::Member")
+        group.update!(self_registration_role_type: Role::External.sti_name)
         groups(:bottom_group_one_two).update_column(:main_self_registration_group, true)
 
         expect do

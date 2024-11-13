@@ -7,7 +7,7 @@
 require "spec_helper"
 
 describe Wizards::InscribeInGroupWizard do
-  let(:role_type) { Group::TopGroup::Member }
+  let(:role_type) { Role::External }
   let(:group) { groups(:top_group) }
   let(:person) { people(:bottom_member) }
 

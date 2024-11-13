@@ -253,7 +253,7 @@ describe "Email verification", js: true do
 
     before do
       allow(Settings.groups.self_registration).to receive(:enabled).and_return(true)
-      group.update!(self_registration_role_type: Group::BottomGroup::Member.sti_name)
+      group.update!(self_registration_role_type: Role::External.sti_name)
     end
 
     it "should not auto-confirm email" do

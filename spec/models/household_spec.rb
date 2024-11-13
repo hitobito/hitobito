@@ -300,6 +300,17 @@ describe Household do
 
       expect(household.address_attrs).to eq(expected_attrs)
     end
+
+    it "applies address for all members with invalid state when updating one person" do
+      person.update!(street: "Langweilige Gasse")
+      other_person.update!(street: "Lange Strasse")
+      third_person.update!(street: "Breiter Weg")
+      Person.validates :street, presence: true # add street presence validation, because some wagons have this
+      create_household
+
+      person.update_columns(street: nil)
+      expect { household.save!(context: :update_address) }.not_to raise_error
+    end
   end
 
   describe "warnings" do

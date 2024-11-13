@@ -30,6 +30,6 @@ class QualificationsController < CrudController
   end
 
   def load_qualification_kinds
-    @qualification_kinds = QualificationKind.without_deleted.list
+    @qualification_kinds = QualificationKind.without_deleted.list.distinct_on(:id).unscope(:order)
   end
 end

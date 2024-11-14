@@ -305,11 +305,21 @@ describe Household do
       person.update!(street: "Langweilige Gasse")
       other_person.update!(street: "Lange Strasse")
       third_person.update!(street: "Breiter Weg")
-      Person.validates :street, presence: true # add street presence validation, because some wagons have this
+      # we add street validation in the spec, because some wagons validate the street/address for presence true
+      # the core itself doesn't, but the issue itself is core related
+      Person.validates :street, presence: true
       create_household
 
       person.update_columns(street: nil)
       expect { household.save!(context: :update_address) }.not_to raise_error
+
+      # remove presence validator from street again
+      Person._validate_callbacks.each do |callback|
+        if callback.raw_filter.is_a?(ActiveModel::Validations::PresenceValidator) &&
+            callback.raw_filter.attributes.include?(:street)
+          Person._validate_callbacks.delete(callback)
+        end
+      end
     end
   end
 

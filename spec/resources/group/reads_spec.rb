@@ -141,6 +141,7 @@ describe GroupResource, type: :resource do
 
       it "when true it includes archived groups" do
         params[:filter] = {type: "Group::TopGroup", with_archived: true}
+        require "pry"; binding.pry
         render
         expect(d).to have(1).item
       end

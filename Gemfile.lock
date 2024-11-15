@@ -693,7 +693,8 @@ GEM
     uri (0.13.0)
     validates_by_schema (0.3.1)
       activerecord (>= 3.1.0)
-    validates_timeliness (5.0.1)
+    validates_timeliness (7.0.0.beta2)
+      activemodel (>= 7.0.0, < 8)
       timeliness (>= 0.3.10, < 1)
     vcard (0.3.0)
     view_component (3.12.1)
@@ -826,7 +827,7 @@ DEPENDENCIES
   rails (= 7.0.1)
   rails-controller-testing
   rails-erd
-  rails-i18n
+  rails-i18n (~> 7.0.0)
   rails_autolink
   redcarpet
   remotipart
@@ -862,7 +863,7 @@ DEPENDENCIES
   ttfunk (< 1.8.0)
   turbo-rails
   validates_by_schema (~> 0.3.0)
-  validates_timeliness
+  validates_timeliness (~> 7.0.0.beta1)
   vcard
   view_component
   wagons (~> 0.7.0)

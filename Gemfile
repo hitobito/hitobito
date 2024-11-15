@@ -98,7 +98,7 @@ gem "truemail"
 gem "ttfunk", "< 1.8.0"
 gem "turbo-rails"
 gem "validates_by_schema", "~> 0.3.0" # 0.5.1 does not work well with wagons / wagon-migrations
-gem "validates_timeliness"
+gem 'validates_timeliness', '~> 7.0.0.beta1'
 gem "vcard"
 gem "view_component"
 gem "webpacker"

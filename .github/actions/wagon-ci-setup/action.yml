@@ -2,9 +2,6 @@ name: 'Setup steps for wagon CI'
 description: 'DRY yaml setup setup steps which are used multiple times in the wagon CI workflow'
 
 inputs:
-  migrations:
-    description: Unless set to false, migrations will be run as part of the setup.
-    default: 'true'
   assets:
     description: Unless set to false, the assets compilation will be run as part of the setup.
     default: 'true'
@@ -191,29 +188,8 @@ runs:
       working-directory: hitobito
       shell: bash
 
-    - name: 'Create DB'
-      if: inputs.migrations == 'true'
-      run: |
-        bundle exec rake db:create
-      working-directory: hitobito
-      shell: bash
-
     - name: 'Clear logs'
       run: |
         bundle exec rake log:clear
-      working-directory: hitobito
-      shell: bash
-
-    - name: 'Run core migrations'
-      if: inputs.migrations == 'true'
-      run: |
-        bundle exec rake db:migrate
-      working-directory: hitobito
-      shell: bash
-
-    - name: 'Run wagon migrations'
-      if: inputs.migrations == 'true'
-      run: |
-        bundle exec rake wagon:migrate
       working-directory: hitobito
       shell: bash

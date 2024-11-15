@@ -54,7 +54,6 @@ jobs:
       - name: 'Prepare'
         uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup
         with:
-          migrations: false
           assets: false
           wagon_repository: ${{ inputs.wagon_repository }}
           wagon_dependency_repository: ${{ inputs.wagon_dependency_repository }}
@@ -111,6 +110,10 @@ jobs:
           wagon_dependency_repository: ${{ inputs.wagon_dependency_repository }}
           core_ref: ${{ inputs.core_ref }}
           wagon_dependency_ref: ${{ inputs.wagon_dependency_ref }}
+
+      - name: Prepare the databsae for the seeds
+        run: |
+          bundle exec rake db:create db:migrate wagon:migrate
 
       - name: Run ${{ inputs.wagon_repository }} seeds
         run: |

@@ -625,8 +625,9 @@ GEM
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
     semantic_range (3.0.0)
-    sentry-raven (3.1.2)
-      faraday (>= 1.0)
+    sentry-ruby (5.21.0)
+      bigdecimal
+      concurrent-ruby (~> 1.0, >= 1.0.2)
     set (1.1.0)
     simple_xlsx_reader (5.0.0)
       nokogiri
@@ -844,7 +845,7 @@ DEPENDENCIES
   rubyzip
   seed-fu
   selenium-devtools
-  sentry-raven
+  sentry-ruby
   simple_xlsx_reader
   simplecov
   simpleidn

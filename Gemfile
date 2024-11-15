@@ -89,6 +89,7 @@ gem "rswag-ui", "~> 2.13"
 gem "rubyzip"
 gem "seed-fu"
 gem "sentry-raven"
+gem "simpleidn"
 gem "simple_xlsx_reader" # import data from xlsx files (used in some wagons)
 gem "simpleidn"
 gem "sorted_set"

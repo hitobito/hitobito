@@ -31,6 +31,9 @@ module Hitobito
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
 
+    # TODO: Remove this config. It is just until we find an alternative to the globalized gem
+    config.active_record.legacy_connection_handling = true
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.

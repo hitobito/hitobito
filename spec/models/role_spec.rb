@@ -441,7 +441,7 @@ describe Role do
     end
   end
 
-  context "#to_fs" do
+  context "#to_s" do
     let(:group) { groups(:bottom_layer_one) }
     let(:date) { Date.new(2023, 11, 15) }
 
@@ -450,11 +450,11 @@ describe Role do
     end
 
     it "includes group specific role type" do
-      expect(build_role.to_fs).to eq "Leader"
+      expect(build_role.to_s).to eq "Leader"
     end
 
     it "appends label if set" do
-      expect(build_role(label: "test").to_fs).to eq "Leader (test)"
+      expect(build_role(label: "test").to_s).to eq "Leader (test)"
     end
 
     it "appends end_on if set" do

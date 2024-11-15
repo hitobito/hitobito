@@ -272,6 +272,8 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
       duplicates = PersonDuplicate.all
     elsif layer?
       duplicates = layer_person_duplicates
+    else
+      duplicates = group_person_duplicates
     end
     duplicates.includes(person_1: [{roles: :group}, :groups, :primary_group],
       person_2: [{roles: :group}, :groups, :primary_group])
@@ -395,6 +397,13 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     duplicates
       .where("roles.group_id IN (:group_ids) OR roles_people.group_id IN (:group_ids)",
         group_ids: group_ids)
+  end
+
+  def group_person_duplicates
+    duplicates = PersonDuplicate.joins(person_1: :roles).joins(person_2: :roles)
+    duplicates
+      .where("roles.group_id = :group_id OR roles_people.group_id = :group_id",
+             group_id: self.id)
   end
 
   def top?

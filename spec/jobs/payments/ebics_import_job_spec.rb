@@ -76,7 +76,7 @@ describe Payments::EbicsImportJob do
     expect(Airbrake).to receive(:notify)
       .exactly(:once)
       .with(error, hash_including(parameters: {payment_provider_config: config}))
-    expect(Sentry).to receive(:capture_exception)
+    expect(Raven).to receive(:capture_exception)
       .exactly(:once)
       .with(error, logger: "delayed_job")
 
@@ -113,7 +113,7 @@ describe Payments::EbicsImportJob do
     expect(Airbrake).to receive(:notify)
       .exactly(:once)
       .with(kind_of(REXML::ParseException), hash_including(parameters: {payment_provider_config: config}))
-    expect(Sentry).to receive(:capture_exception)
+    expect(Raven).to receive(:capture_exception)
       .exactly(:once)
       .with(kind_of(REXML::ParseException), logger: "delayed_job")
 

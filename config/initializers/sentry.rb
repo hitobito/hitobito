@@ -6,9 +6,10 @@
 #  https://github.com/hitobito/hitobito.
 
 Rails.application.reloader.to_prepare do
-  Sentry.init do |config|
-    @chomp = Rails.application.class.versions(Rails.root.join('VERSION')).first.chomp
-    config.release = @chomp
+  Raven.configure do |config|
+    config.sanitize_fields = Rails.application.config.filter_parameters.map(&:to_s)
+
+    config.release = Rails.application.class.versions(Rails.root.join('VERSION')).first.chomp
 
     analyzer = [
       ENV['OPENSHIFT_BUILD_NAMESPACE'], # hit-jubla-int
@@ -19,7 +20,8 @@ Rails.application.reloader.to_prepare do
       ProjectAnalyzer.new(name)
     end
 
-    config.environment = analyzer.stage if ENV['SENTRY_CURRENT_ENV'].blank?
+    config.tags[:project]      = analyzer.project
+    config.current_environment = analyzer.stage if ENV['SENTRY_CURRENT_ENV'].blank?
 
     setup_and_connection_errors = [
       'ActiveRecord::ConnectionNotEstablished',

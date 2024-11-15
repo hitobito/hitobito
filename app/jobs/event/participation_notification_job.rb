@@ -29,7 +29,7 @@ class Event::ParticipationNotificationJob < BaseJob
       participation.event.contact).deliver_now
   rescue StandardError => exception
     # Log more explicitly here to help debugging NoMethodError
-    Sentry.capture_exception(exception,
+    Raven.capture_exception(exception,
       logger: "participation_notification",
       extra: {event: participation.event.attributes.to_s})
     raise exception

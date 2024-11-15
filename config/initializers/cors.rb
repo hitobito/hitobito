@@ -1,16 +1,20 @@
-# Be sure to restart your server when you modify this file.
+# Copyright (c) 2021, Pfadibewegung Schweiz. This file is part of
+# hitobito and licensed under the Affero General Public License version 3
+# or later. See the COPYING file at the top-level directory or at
+# https://github.com/hitobito/hitobito.
 
-# Avoid CORS issues when API is called from the frontend app.
-# Handle Cross-Origin Resource Sharing (CORS) in order to accept cross-origin AJAX requests.
-
-# Read more: https://github.com/cyu/rack-cors
-
-# Rails.application.config.middleware.insert_before 0, Rack::Cors do
-#   allow do
-#     origins "example.com"
-#
-#     resource "*",
-#       headers: :any,
-#       methods: [:get, :post, :put, :patch, :delete, :options, :head]
-#   end
-# end
+Rails.application.config.middleware.insert_before 0, Rack::Cors do
+  require_dependency 'api/cors_check'
+  allow do
+    origins do |origin, env|
+      Api::CorsCheck.new(ActionDispatch::Request.new(env)).allowed?(origin)
+    end
+    resource '*',
+             headers: :any,
+             methods: [:get],
+             # Allow requests with credentials (specifically the Authorization header)
+             credentials: true,
+             # Declare to the client that the CORS response may vary depending on these headers
+             vary: ['Origin', 'Authorization']
+  end
+end

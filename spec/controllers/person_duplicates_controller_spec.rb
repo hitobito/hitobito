@@ -32,7 +32,7 @@ describe PersonDuplicatesController do
 
       expect(response.status).to eq 200
 
-      expect(entries.count).to eq(4)
+      expect(entries.count).to eq(5)
     end
 
     it "lists all duplicates on and below given layer" do

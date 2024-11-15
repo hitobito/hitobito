@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(version: 2024_11_12_142323) do
     t.string "name", null: false
     t.text "body"
     t.string "record_type", null: false
-    t.bigint "record_id", null: false
+    t.integer "record_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
@@ -52,7 +52,7 @@ ActiveRecord::Schema.define(version: 2024_11_12_142323) do
   end
 
   create_table "active_storage_variant_records", force: :cascade do |t|
-    t.bigint "blob_id", null: false
+    t.integer "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
@@ -80,8 +80,8 @@ ActiveRecord::Schema.define(version: 2024_11_12_142323) do
   end
 
   create_table "assignments", force: :cascade do |t|
-    t.bigint "person_id", null: false
-    t.bigint "creator_id", null: false
+    t.integer "person_id", null: false
+    t.integer "creator_id", null: false
     t.string "title", null: false
     t.text "description", null: false
     t.string "attachment_type"
@@ -145,7 +145,7 @@ ActiveRecord::Schema.define(version: 2024_11_12_142323) do
 
   create_table "cors_origins", force: :cascade do |t|
     t.string "auth_method_type"
-    t.bigint "auth_method_id"
+    t.integer "auth_method_id"
     t.string "origin", null: false
     t.index ["auth_method_type", "auth_method_id"], name: "index_cors_origins_on_auth_method_type_and_auth_method_id"
     t.index ["origin"], name: "index_cors_origins_on_origin"
@@ -229,8 +229,8 @@ ActiveRecord::Schema.define(version: 2024_11_12_142323) do
     t.datetime "declined_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "event_id", null: false
-    t.bigint "person_id", null: false
+    t.integer "event_id", null: false
+    t.integer "person_id", null: false
     t.index ["event_id", "person_id"], name: "index_event_invitations_on_event_id_and_person_id", unique: true
     t.index ["event_id"], name: "index_event_invitations_on_event_id"
     t.index ["person_id"], name: "index_event_invitations_on_person_id"
@@ -399,9 +399,9 @@ ActiveRecord::Schema.define(version: 2024_11_12_142323) do
   end
 
   create_table "family_members", force: :cascade do |t|
-    t.bigint "person_id", null: false
+    t.integer "person_id", null: false
     t.string "kind", null: false
-    t.bigint "other_id", null: false
+    t.integer "other_id", null: false
     t.string "family_key", null: false
     t.index ["family_key"], name: "index_family_members_on_family_key"
     t.index ["other_id"], name: "index_family_members_on_other_id"
@@ -557,9 +557,9 @@ ActiveRecord::Schema.define(version: 2024_11_12_142323) do
 
   create_table "invoice_lists", force: :cascade do |t|
     t.string "receiver_type"
-    t.bigint "receiver_id"
-    t.bigint "group_id"
-    t.bigint "creator_id"
+    t.integer "receiver_id"
+    t.integer "group_id"
+    t.integer "creator_id"
     t.string "title", null: false
     t.decimal "amount_total", precision: 15, scale: 2, default: "0.0", null: false
     t.decimal "amount_paid", precision: 15, scale: 2, default: "0.0", null: false
@@ -603,7 +603,7 @@ ActiveRecord::Schema.define(version: 2024_11_12_142323) do
     t.string "participant_number_internal"
     t.string "vat_number"
     t.string "currency", default: "CHF", null: false
-    t.bigint "invoice_list_id"
+    t.integer "invoice_list_id"
     t.string "reference", null: false
     t.boolean "hide_total", default: false, null: false
     t.index ["esr_number"], name: "index_invoices_on_esr_number"
@@ -652,7 +652,7 @@ ActiveRecord::Schema.define(version: 2024_11_12_142323) do
     t.string "mailing_list_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "message_id"
+    t.integer "message_id"
     t.index ["mail_hash"], name: "index_mail_logs_on_mail_hash"
     t.index ["message_id"], name: "index_mail_logs_on_message_id"
   end
@@ -683,15 +683,15 @@ ActiveRecord::Schema.define(version: 2024_11_12_142323) do
   end
 
   create_table "message_recipients", force: :cascade do |t|
-    t.bigint "message_id", null: false
-    t.bigint "person_id"
+    t.integer "message_id", null: false
+    t.integer "person_id"
     t.string "phone_number"
     t.string "email", collation: "case_insensitive_emails"
     t.text "address"
     t.datetime "created_at"
     t.datetime "failed_at"
     t.text "error"
-    t.bigint "invoice_id"
+    t.integer "invoice_id"
     t.string "state"
     t.string "salutation", default: ""
     t.index ["invoice_id"], name: "index_message_recipients_on_invoice_id"
@@ -703,8 +703,8 @@ ActiveRecord::Schema.define(version: 2024_11_12_142323) do
   end
 
   create_table "messages", force: :cascade do |t|
-    t.bigint "mailing_list_id"
-    t.bigint "sender_id"
+    t.integer "mailing_list_id"
+    t.integer "sender_id"
     t.string "type", null: false
     t.string "subject", limit: 998
     t.string "state", default: "draft"
@@ -715,7 +715,7 @@ ActiveRecord::Schema.define(version: 2024_11_12_142323) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.text "invoice_attributes"
-    t.bigint "invoice_list_id"
+    t.integer "invoice_list_id"
     t.text "text"
     t.string "salutation"
     t.string "pp_post"
@@ -811,7 +811,7 @@ ActiveRecord::Schema.define(version: 2024_11_12_142323) do
 
   create_table "payment_provider_configs", force: :cascade do |t|
     t.string "payment_provider"
-    t.bigint "invoice_config_id"
+    t.integer "invoice_config_id"
     t.integer "status", default: 0, null: false
     t.string "partner_identifier"
     t.string "user_identifier"

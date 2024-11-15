@@ -4,10 +4,10 @@ on:
   workflow_dispatch: # Allow triggering manually
     inputs:
       composition:
-        description: "Composition repository, e.g. hitobito/ose_composition_generic"
+        description: "Composition repository, e.g. hitobito/ose_composition_demo"
         type: string
         required: true
-        default: "hitobito/ose_composition_generic"
+        default: "hitobito/ose_composition_demo"
       stage:
         description: "Stage of Release to be prepared"
         required: true
@@ -34,8 +34,18 @@ on:
         required: false
         type: string
         default: master
-      dry_run:
+      prevent_prepare:
         description: "Only show commands to prepare, do not execute them"
+        required: false
+        type: boolean
+        default: false
+      prevent_push:
+        description: "Only build the image, do not push it"
+        required: false
+        type: boolean
+        default: false
+      prevent_deployment:
+        description: "Do not update the deployment-repo"
         required: false
         type: boolean
         default: false
@@ -63,8 +73,18 @@ on:
         required: false
         type: string
         default: master
-      dry_run:
+      prevent_prepare:
         description: "Only show commands to prepare, do not execute them"
+        required: false
+        type: boolean
+        default: false
+      prevent_push:
+        description: "Only build the image, do not push it"
+        required: false
+        type: boolean
+        default: false
+      prevent_deployment:
+        description: "Do not update the deployment-repo"
         required: false
         type: boolean
         default: false
@@ -79,7 +99,9 @@ jobs:
       repository: ${{ inputs.composition }}
       stage: ${{ inputs.stage }}
       release_type: ${{ inputs.release_type }}
-      dry_run: ${{ inputs.dry_run }}
+      prevent_prepare: ${{ inputs.prevent_prepare }}
+      prevent_push: ${{ inputs.prevent_push }}
+      prevent_deployment: ${{ inputs.prevent_deployment }}
 
   version:
     uses: ./.github/workflows/next-version.yml
@@ -118,11 +140,12 @@ jobs:
       project: ${{ needs.settings.outputs.project }}
       version: ${{ needs.version.outputs.version }}
       stage: ${{ needs.settings.outputs.release_stage }}
-      push: ${{ ! inputs.dry_run }}
+      push: ${{ needs.settings.outputs.push_image }}
     secrets: inherit
 
   deploy:
     uses: ./.github/workflows/update_image.yml
+    if: ${{ inputs.settings.outputs.update_deployments }}
     needs:
       - settings
       - version

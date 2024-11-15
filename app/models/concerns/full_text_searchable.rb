@@ -6,12 +6,16 @@
 module FullTextSearchable
   SEARCH_COLUMN = :search_column
 
+  TS_QUERY_CHARS = ["(", ")", ":", "&", "|", "!", "'", "?", "%", "<"]
+
   def self.included(model)
     model.ignored_columns += [SEARCH_COLUMN]
 
     model.define_singleton_method(:search) do |term|
       # Use & to make sure every word in term has to match the result
-      sanitized_term = term.split.map { |t| ActiveRecord::Base.sanitize_sql_like(t) + ":*" }.join(" & ")
+      sanitized_term = term.split.map do |t|
+        ActiveRecord::Base.sanitize_sql_like(t).delete(*TS_QUERY_CHARS.join) + ":*"
+      end.join(" & ")
 
       # Generate base search query and rank for main model
       base_query = "#{model.table_name}.#{SEARCH_COLUMN} @@ to_tsquery('simple', '#{sanitized_term}')"

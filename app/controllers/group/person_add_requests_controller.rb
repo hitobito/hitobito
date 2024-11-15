@@ -43,6 +43,7 @@ class Group::PersonAddRequestsController < ApplicationController
       .possible_approvers(group)
       .includes(roles: :group)
       .order_by_name
+      .select(Person.column_names)
     @ignored_approvers = Person::AddRequest::IgnoredApprover
       .where(group_id: group.id)
       .pluck(:person_id)

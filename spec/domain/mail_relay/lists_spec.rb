@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -194,13 +194,13 @@ describe MailRelay::Lists do
   end
 
   context "additional sender" do
-    let(:from) { "news@example.com" }
+    let(:from) { "News@example.com" }
 
     before { create_individual_subscribers }
-    before { list.update_column(:additional_sender, from) }
+    before { list.update_column(:additional_sender, from.downcase) }
 
     it { is_expected.to be_sender_allowed }
-    its(:sender_email) { is_expected.to eq from }
+    its(:sender_email) { is_expected.to eq from.downcase }
     its(:potential_senders) { is_expected.to be_blank }
     its(:receivers) { is_expected.to match_array subscribers.collect(&:email) }
 
@@ -212,13 +212,13 @@ describe MailRelay::Lists do
   end
 
   context "additional wildcard sender" do
-    let(:from) { "news@example.com" }
+    let(:from) { "News@example.com" }
 
     before { create_individual_subscribers }
     before { list.update_column(:additional_sender, "*@example.com") }
 
     it { is_expected.to be_sender_allowed }
-    its(:sender_email) { is_expected.to eq from }
+    its(:sender_email) { is_expected.to eq from.downcase }
     its(:potential_senders) { is_expected.to be_blank }
     its(:receivers) { is_expected.to match_array subscribers.collect(&:email) }
 
@@ -387,7 +387,7 @@ describe MailRelay::Lists do
         it { is_expected.not_to be_sender_valid }
         it { is_expected.to be_sender_allowed }
 
-        its(:sender_email) { is_expected.to eq("John Nonsense <>") }
+        its(:sender_email) { is_expected.to eq("john nonsense <>") }
         its(:potential_senders) { is_expected.to be_blank }
         its(:receivers) { is_expected.to match_array subscribers.collect(&:email) }
 

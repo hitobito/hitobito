@@ -317,22 +317,24 @@ describe Export::Pdf::Messages::Letter do
 
     context "household addresses" do
       let(:housemate1) do
-        Fabricate(:person_with_address, first_name: "Anton", last_name: "Abraham")
+        Fabricate(:person_with_address, first_name: "Anton", last_name: "Abraham", country: "HM")
       end
-      let(:housemate2) { Fabricate(:person_with_address, first_name: "Zora", last_name: "Zaugg") }
+      let(:housemate2) do
+        Fabricate(:person_with_address, first_name: "Zora", last_name: "Zaugg", country: "HM")
+      end
       let(:housemate3) do
-        Fabricate(:person_with_address, first_name: "Bettina", last_name: "Büttel")
+        Fabricate(:person_with_address, first_name: "Bettina", last_name: "Büttel", country: "HM")
       end
       let(:housemate4) do
-        Fabricate(:person_with_address, first_name: "Carlo", last_name: "Colorado")
+        Fabricate(:person_with_address, first_name: "Carlo", last_name: "Colorado", country: "HM")
       end
       let(:other_housemate) do
-        Fabricate(:person_with_address, first_name: "Altra", last_name: "Mates")
+        Fabricate(:person_with_address, first_name: "Altra", last_name: "Mates", country: "HM")
       end
       let(:top_leader) { people(:top_leader) }
       let(:bottom_member) { people(:bottom_member) }
       let(:single_person) do
-        Fabricate(:person_with_address, first_name: "Dominik", last_name: "Dachs")
+        Fabricate(:person_with_address, first_name: "Dominik", last_name: "Dachs", country: "IO")
       end
 
       before do

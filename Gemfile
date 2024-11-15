@@ -95,6 +95,7 @@ gem "sorted_set"
 gem "sprockets", "~> 3.7.2" # pinned to older version to avoid having an empty manifest.js
 gem "strip_attributes" # strip whitespace of attributes
 gem "truemail"
+gem "ttfunk", "< 1.8.0"
 gem "turbo-rails"
 gem "validates_by_schema", "~> 0.3.0" # 0.5.1 does not work well with wagons / wagon-migrations
 gem "validates_timeliness"

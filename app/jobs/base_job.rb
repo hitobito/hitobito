@@ -45,7 +45,7 @@ class BaseJob
     logger.error(exception.message)
     logger.error(exception.backtrace.join("\n"))
     Airbrake.notify(exception, cgi_data: ENV.to_hash, parameters: payload)
-    Raven.capture_exception(exception, logger: "delayed_job")
+    Sentry.capture_exception(exception, logger: "delayed_job")
   end
 
   def delayed_jobs

@@ -51,7 +51,7 @@ bottom_layer_one:
   beneficiary: "Hitobito AG"
   payee: "Hitobito AG\nFritz von Gunten\nSwitzerland"
   address: "bottom layer one address"
-  iban: "CH93 0076 2011 6238 5295 8"
+  iban: "CH66 0076 2011 6238 5295 8"
   account_number: "01-162-5"
 
 bottom_layer_two:
@@ -60,5 +60,5 @@ bottom_layer_two:
   beneficiary: "Hitobito AG"
   payee: "Hitobito AG\nAnna Streit\nSwitzerland"
   address: "bottom layer two address"
-  iban: "CH84 0221 1981 6169 5329 8"
+  iban: "CH10 0221 1981 6169 5329 8"
   account_number: "03-162-4"

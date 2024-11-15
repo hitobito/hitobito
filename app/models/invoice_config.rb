@@ -39,7 +39,6 @@ class InvoiceConfig < ActiveRecord::Base
   include I18nEnums
   include ValidatedEmail
 
-  IBAN_REGEX = /\A[A-Z]{2}[0-9]{2}\s?([A-Z]|[0-9]\s?){12,30}\z/
   ACCOUNT_NUMBER_REGEX = /\A[0-9]{2}-[0-9]{2,20}-[0-9]\z/
   PARTICIPANT_NUMBER_INTERNAL_REGEX = /\A[0-9]{6}\z/
   PAYMENT_SLIPS = %w[qr no_ps].freeze
@@ -66,8 +65,7 @@ class InvoiceConfig < ActiveRecord::Base
 
   # TODO: probably the if condition is not correct, verification needed
   validates :iban, presence: true, on: :update, if: :qr?
-  validates :iban, format: {with: IBAN_REGEX},
-    on: :update, allow_blank: true
+  validates :iban, iban: true, on: :update, allow_blank: true
 
   validates :donation_calculation_year_amount, numericality: {only_integer: true,
                                                               greater_than: 0,

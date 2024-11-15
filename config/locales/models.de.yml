@@ -1232,6 +1232,7 @@ de:
     messages:
       attachments_not_allowed: "darf keine Anhänge enthalten"
       invalid_money: "muss auf 5 Rappen gerundet werden"
+      invalid_iban: "ist nicht gültig"
       no_permission: "Zugriff verweigert"
       # timeliness
       invalid_date: "ist kein gültiges Datum"

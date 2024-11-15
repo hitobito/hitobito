@@ -4,11 +4,16 @@
 #  https://github.com/hitobito/hitobito.
 
 module AsyncDownload
-  def with_async_download_cookie(format, name, redirection_target: {returning: true})
+  def with_async_download_cookie(format, name, redirection_target: {returning: true}, render_command: nil)
     filename ||= AsyncDownloadFile.create_name(name, current_person.id)
     Cookies::AsyncDownload.new(cookies).set(name: filename, type: format)
     yield filename
     flash[:notice] = translate(:export_enqueued)
-    redirect_to redirection_target
+
+    if render_command
+      render_command.call
+    else
+      redirect_to redirection_target
+    end
   end
 end

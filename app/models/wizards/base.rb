@@ -94,6 +94,10 @@ module Wizards
       step_instances.find { |instance| instance.step_name == step_name.to_s }
     end
 
+    def current_user
+      current_ability.user if current_ability.user.persisted?
+    end
+
     private
 
     delegate :find_step, :step_after, to: :class, private: true
@@ -122,10 +126,6 @@ module Wizards
 
     def next_step
       [@current_step + 1, steps.size - 1].min
-    end
-
-    def current_user
-      current_ability.user
     end
   end
 end

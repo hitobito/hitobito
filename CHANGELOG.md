@@ -1,5 +1,10 @@
 # Hitobito Changelog
 
+## unreleased
+
+- JWT kann als OIDC Access Token konfiguriert werden (hitobito_sac_cas#1110)
+- Unterstützung vom login=prompt Parameter im OIDC Authorization flow (hitobito_sac_cas#1075)
+
 ## Version 2.3
 
 - Ausserhalb von Hitobito angelegte Mailchimp E-Mails werden nicht mehr gelöscht, #2752

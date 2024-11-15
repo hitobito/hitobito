@@ -11,13 +11,11 @@
 #
 #  id          :integer          not null, primary key
 #  archived_at :datetime
-#  convert_on  :date
-#  convert_to  :string(255)
-#  delete_on   :date
-#  deleted_at  :datetime
-#  label       :string(255)
+#  end_on      :date
+#  label       :string
+#  start_on    :date
 #  terminated  :boolean          default(FALSE), not null
-#  type        :string(255)      not null
+#  type        :string           not null
 #  created_at  :datetime
 #  updated_at  :datetime
 #  group_id    :integer          not null
@@ -38,7 +36,7 @@ class RoleSerializer < ApplicationSerializer
 
     property :role_type, item.class.label
     property :role_class, item.class.name
-    map_properties :label, :created_at, :updated_at, :deleted_at
+    map_properties :label, :created_at, :updated_at, :start_on, :end_on
 
     entity :group, item.group, GroupLinkSerializer
     entity :layer_group, item.group.layer_group, GroupLinkSerializer

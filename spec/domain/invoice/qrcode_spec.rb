@@ -172,4 +172,24 @@ describe Invoice::Qrcode do
       expect(subject[:country]).to eq "CH"
     end
   end
+
+  describe :payment_reference do
+    it "type NONE if reference blank" do
+      invoice.reference = nil
+      expect(invoice.qrcode.payment_reference[:type]).to eq("NON")
+      expect(invoice.qrcode.payment_reference[:reference]).to eq(nil)
+    end
+
+    it "SCOR if reference starts with RF" do
+      invoice.reference = "RFctt"
+      expect(invoice.qrcode.payment_reference[:type]).to eq("SCOR")
+      expect(invoice.qrcode.payment_reference[:reference]).to eq("RFctt")
+    end
+
+    it "QRR if reference does not start with RF but is present" do
+      invoice.reference = "GTRBS"
+      expect(invoice.qrcode.payment_reference[:type]).to eq("QRR")
+      expect(invoice.qrcode.payment_reference[:reference]).to eq("GTRBS")
+    end
+  end
 end

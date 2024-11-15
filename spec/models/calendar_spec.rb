@@ -1,7 +1,17 @@
-#  Copyright (c) 2022, Pfadibewegung Schweiz. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
+# == Schema Information
+#
+# Table name: calendars
+#
+#  id          :bigint           not null, primary key
+#  description :text
+#  name        :string           not null
+#  token       :string           not null
+#  group_id    :bigint           not null
+#
+# Indexes
+#
+#  index_calendars_on_group_id  (group_id)
+#
 
 require "spec_helper"
 

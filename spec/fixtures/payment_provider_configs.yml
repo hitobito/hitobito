@@ -10,13 +10,13 @@
 # Table name: payment_provider_configs
 #
 #  id                 :bigint           not null, primary key
-#  encrypted_keys     :text(16777215)
-#  encrypted_password :string(255)
-#  partner_identifier :string(255)
-#  payment_provider   :string(255)
+#  encrypted_keys     :text
+#  encrypted_password :string
+#  partner_identifier :string
+#  payment_provider   :string
 #  status             :integer          default("draft"), not null
 #  synced_at          :datetime
-#  user_identifier    :string(255)
+#  user_identifier    :string
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  invoice_config_id  :bigint

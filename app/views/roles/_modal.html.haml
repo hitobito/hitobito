@@ -36,6 +36,6 @@
   - if @person_id
     = f.hidden_field :person_id, value: @person_id
 
-  = f.hidden_field :convert_on, value: entry.convert_on
-  = f.hidden_field :delete_on, value: entry.delete_on
+  = f.hidden_field :start_on, value: entry.start_on
+  = f.hidden_field :end_on, value: entry.end_on
   = form_buttons(f, submit_label: ti(:"button.save"), cancel_url: '#')

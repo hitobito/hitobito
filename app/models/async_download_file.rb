@@ -10,10 +10,10 @@
 # Table name: async_download_files
 #
 #  id         :bigint           not null, primary key
-#  filetype   :string(255)
-#  name       :string(255)      not null
+#  filetype   :string
+#  name       :string           not null
 #  progress   :integer
-#  timestamp  :string(255)      not null
+#  timestamp  :string           not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  person_id  :integer          not null

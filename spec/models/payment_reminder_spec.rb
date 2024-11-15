@@ -7,11 +7,17 @@
 # Table name: payment_reminders
 #
 #  id         :integer          not null, primary key
-#  invoice_id :integer          not null
-#  message    :text(65535)
 #  due_at     :date             not null
+#  level      :integer
+#  text       :string
+#  title      :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  invoice_id :integer          not null
+#
+# Indexes
+#
+#  index_payment_reminders_on_invoice_id  (invoice_id)
 #
 
 require "spec_helper"

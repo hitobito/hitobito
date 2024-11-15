@@ -26,6 +26,7 @@ describe PersonAbility do
       is_expected.to be_able_to(:update, other.person.reload)
       is_expected.to be_able_to(:update_email, other.person)
       is_expected.to be_able_to(:update, other)
+      is_expected.to be_able_to(:security, other.person)
     end
 
     it "may not update root email if in same group" do
@@ -45,6 +46,10 @@ describe PersonAbility do
 
     it "may not destroy its role" do
       is_expected.not_to be_able_to(:destroy, role)
+    end
+
+    it "may modify its security" do
+      is_expected.to be_able_to(:security, role.person)
     end
 
     it "may modify externals in the same layer" do
@@ -79,32 +84,34 @@ describe PersonAbility do
       is_expected.to be_able_to(:index_local_people, groups(:top_layer))
     end
 
-    it "may show notes and tags in same layer" do
+    it "may show notes, tags and security in same layer" do
       other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group))
       is_expected.to be_able_to(:index_notes, other.person.reload)
-      is_expected.to be_able_to(:index_tags, other.person.reload)
-      is_expected.to be_able_to(:manage_tags, other.person.reload)
+      is_expected.to be_able_to(:index_tags, other.person)
+      is_expected.to be_able_to(:manage_tags, other.person)
+      is_expected.to be_able_to(:security, other.person)
     end
 
-    it "may show notes and tags in lower layer" do
+    it "may show notes, tags and security in lower layer" do
       other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one))
       is_expected.to be_able_to(:index_notes, other.person.reload)
-      is_expected.to be_able_to(:index_tags, other.person.reload)
-      is_expected.to be_able_to(:manage_tags, other.person.reload)
+      is_expected.to be_able_to(:index_tags, other.person)
+      is_expected.to be_able_to(:manage_tags, other.person)
+      is_expected.to be_able_to(:security, other.person)
     end
 
-    it "may show person with deleted role in layer" do
-      other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
+    it "may show person with ended role in layer" do
+      other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), start_on: 2.weeks.ago, end_on: 1.week.ago)
       is_expected.to be_able_to(:show, other.person.reload)
     end
 
-    it "may show person with deleted role in lower layer" do
-      other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
+    it "may show person with ended role in lower layer" do
+      other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one), start_on: 2.weeks.ago, end_on: 1.week.ago)
       is_expected.to be_able_to(:show, other.person.reload)
     end
 
-    it "may not show person with deleted role in different layer" do
-      other = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: Group::TopLayer.create(name: "foo"), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
+    it "may not show person with ended role in different layer" do
+      other = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: Group::TopLayer.create(name: "foo"), start_on: 2.weeks.ago, end_on: 1.week.ago)
       is_expected.to_not be_able_to(:show, other.person.reload)
     end
 
@@ -141,12 +148,14 @@ describe PersonAbility do
       is_expected.to be_able_to(:update, other)
       is_expected.to be_able_to(:create, other)
       is_expected.to be_able_to(:destroy, other)
+      # is_expected.to be_able_to(:security, other)
     end
 
     it "may not view any public role in upper layer" do
       other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group))
       is_expected.not_to be_able_to(:show_full, other.person.reload)
       is_expected.not_to be_able_to(:update, other)
+      is_expected.not_to be_able_to(:security, other)
     end
 
     it "may not update email for person with role in upper layer" do
@@ -228,6 +237,7 @@ describe PersonAbility do
       is_expected.to be_able_to(:update, other)
       is_expected.to be_able_to(:create, other)
       is_expected.to be_able_to(:destroy, other)
+      is_expected.to be_able_to(:security, other.person)
     end
 
     it "may not view any externals in upper layers" do
@@ -251,25 +261,25 @@ describe PersonAbility do
     it "may show notes and tags in same layer" do
       other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one))
       is_expected.to be_able_to(:index_notes, other.person.reload)
-      is_expected.to be_able_to(:index_tags, other.person.reload)
-      is_expected.to be_able_to(:manage_tags, other.person.reload)
+      is_expected.to be_able_to(:index_tags, other.person)
+      is_expected.to be_able_to(:manage_tags, other.person)
     end
 
     it "may show notes and tags in lower group" do
       other = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one))
       is_expected.to be_able_to(:index_notes, other.person.reload)
-      is_expected.to be_able_to(:index_tags, other.person.reload)
-      is_expected.to be_able_to(:manage_tags, other.person.reload)
+      is_expected.to be_able_to(:index_tags, other.person)
+      is_expected.to be_able_to(:manage_tags, other.person)
     end
 
     it "may not show notes and tags in upper layer" do
       other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group))
       is_expected.not_to be_able_to(:index_tags, other.person.reload)
-      is_expected.not_to be_able_to(:manage_tags, other.person.reload)
+      is_expected.not_to be_able_to(:manage_tags, other.person)
     end
 
-    it "may show person with deleted role in upper layer" do
-      other = Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
+    it "may show person with ended role in upper layer" do
+      other = Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group), start_on: 2.weeks.ago, end_on: 1.week.ago)
       is_expected.to_not be_able_to(:show, other.person.reload)
     end
 
@@ -356,8 +366,8 @@ describe PersonAbility do
       is_expected.to be_able_to(:index_local_people, groups(:toppers))
     end
 
-    it "may not show person with deleted role in layer" do
-      other = Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
+    it "may not show person with ended role in layer" do
+      other = Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group), start_on: 2.weeks.ago, end_on: 1.week.ago)
       is_expected.to_not be_able_to(:show, other.person.reload)
     end
 
@@ -441,24 +451,24 @@ describe PersonAbility do
     it "may show notes and tags in same layer" do
       other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group))
       is_expected.to be_able_to(:index_notes, other.person.reload)
-      is_expected.to be_able_to(:index_tags, other.person.reload)
-      is_expected.to be_able_to(:manage_tags, other.person.reload)
+      is_expected.to be_able_to(:index_tags, other.person)
+      is_expected.to be_able_to(:manage_tags, other.person)
     end
 
     it "may not show notes and tags in lower layer" do
       other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one))
       is_expected.not_to be_able_to(:index_notes, other.person.reload)
-      is_expected.not_to be_able_to(:index_tags, other.person.reload)
-      is_expected.not_to be_able_to(:manage_tags, other.person.reload)
+      is_expected.not_to be_able_to(:index_tags, other.person)
+      is_expected.not_to be_able_to(:manage_tags, other.person)
     end
 
-    it "may show person with deleted role in layer" do
-      other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
+    it "may show person with ended role in layer" do
+      other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), start_on: 2.weeks.ago, end_on: 1.week.ago)
       is_expected.to be_able_to(:show, other.person.reload)
     end
 
-    it "may not show person with deleted role in lower layer" do
-      other = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
+    it "may not show person with ended role in lower layer" do
+      other = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one), start_on: 2.weeks.ago, end_on: 1.week.ago)
       is_expected.to_not be_able_to(:show, other.person.reload)
     end
 
@@ -491,6 +501,7 @@ describe PersonAbility do
       is_expected.to be_able_to(:update, other)
       is_expected.to be_able_to(:create, other)
       is_expected.to be_able_to(:destroy, other)
+      is_expected.to be_able_to(:security, other.person)
     end
 
     it "may not view any public role in upper layer" do
@@ -590,6 +601,7 @@ describe PersonAbility do
       other = Fabricate(Role::External.name.to_sym, group: groups(:top_group))
       is_expected.not_to be_able_to(:show_full, other.person.reload)
       is_expected.not_to be_able_to(:update, other)
+      is_expected.not_to be_able_to(:security, other.person)
     end
 
     it "may index groups in upper layer" do
@@ -607,26 +619,26 @@ describe PersonAbility do
     it "may show notes and tags in same layer" do
       other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one))
       is_expected.to be_able_to(:index_notes, other.person.reload)
-      is_expected.to be_able_to(:index_tags, other.person.reload)
-      is_expected.to be_able_to(:manage_tags, other.person.reload)
+      is_expected.to be_able_to(:index_tags, other.person)
+      is_expected.to be_able_to(:manage_tags, other.person)
     end
 
     it "may show notes and tags in lower group" do
       other = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one))
       is_expected.to be_able_to(:index_notes, other.person.reload)
-      is_expected.to be_able_to(:index_tags, other.person.reload)
-      is_expected.to be_able_to(:manage_tags, other.person.reload)
+      is_expected.to be_able_to(:index_tags, other.person)
+      is_expected.to be_able_to(:manage_tags, other.person)
     end
 
     it "may not show notes and tags in upper layer" do
       other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group))
       is_expected.not_to be_able_to(:index_notes, other.person.reload)
-      is_expected.not_to be_able_to(:index_tags, other.person.reload)
-      is_expected.not_to be_able_to(:manage_tags, other.person.reload)
+      is_expected.not_to be_able_to(:index_tags, other.person)
+      is_expected.not_to be_able_to(:manage_tags, other.person)
     end
 
-    it "may not show person with deleted role in layer" do
-      other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
+    it "may not show person with ended role in layer" do
+      other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), start_on: 2.weeks.ago, end_on: 1.week.ago)
       is_expected.to_not be_able_to(:show, other.person.reload)
     end
 
@@ -721,19 +733,19 @@ describe PersonAbility do
     it "may not show notes and tags in same layer" do
       other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group))
       is_expected.not_to be_able_to(:index_notes, other.person.reload)
-      is_expected.not_to be_able_to(:index_tags, other.person.reload)
-      is_expected.not_to be_able_to(:manage_tags, other.person.reload)
+      is_expected.not_to be_able_to(:index_tags, other.person)
+      is_expected.not_to be_able_to(:manage_tags, other.person)
     end
 
     it "may not show notes and tags in lower layer" do
       other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one))
       is_expected.not_to be_able_to(:index_notes, other.person.reload)
-      is_expected.not_to be_able_to(:index_tags, other.person.reload)
-      is_expected.not_to be_able_to(:manage_tags, other.person.reload)
+      is_expected.not_to be_able_to(:index_tags, other.person)
+      is_expected.not_to be_able_to(:manage_tags, other.person)
     end
 
-    it "may not show person with deleted role in layer" do
-      other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
+    it "may not show person with ended role in layer" do
+      other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one), start_on: 2.weeks.ago, end_on: 1.week.ago)
       is_expected.to_not be_able_to(:show, other.person.reload)
     end
 
@@ -945,19 +957,19 @@ describe PersonAbility do
     it "may index and manage tags in same group" do
       other = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: groups(:top_layer))
       is_expected.to be_able_to(:index_tags, other.person.reload)
-      is_expected.to be_able_to(:manage_tags, other.person.reload)
+      is_expected.to be_able_to(:manage_tags, other.person)
     end
 
     it "may index and manage tags in below group" do
       other = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group))
       is_expected.to be_able_to(:index_tags, other.person.reload)
-      is_expected.to be_able_to(:manage_tags, other.person.reload)
+      is_expected.to be_able_to(:manage_tags, other.person)
     end
 
     it "may not index or manage tags in below layer" do
       other = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one))
       is_expected.not_to be_able_to(:index_tags, other.person.reload)
-      is_expected.not_to be_able_to(:manage_tags, other.person.reload)
+      is_expected.not_to be_able_to(:manage_tags, other.person)
     end
 
     it "may create households" do
@@ -1060,13 +1072,13 @@ describe PersonAbility do
     it "may not index and manage tags in same group" do
       other = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: groups(:top_layer))
       is_expected.not_to be_able_to(:index_tags, other.person.reload)
-      is_expected.not_to be_able_to(:manage_tags, other.person.reload)
+      is_expected.not_to be_able_to(:manage_tags, other.person)
     end
 
     it "may not index and manage tags in below group" do
       other = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group))
       is_expected.not_to be_able_to(:index_tags, other.person.reload)
-      is_expected.not_to be_able_to(:manage_tags, other.person.reload)
+      is_expected.not_to be_able_to(:manage_tags, other.person)
     end
 
     it "may not create households" do
@@ -1192,7 +1204,7 @@ describe PersonAbility do
     it "may index and manage tags in same group" do
       other = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one))
       is_expected.to be_able_to(:index_tags, other.person.reload)
-      is_expected.to be_able_to(:manage_tags, other.person.reload)
+      is_expected.to be_able_to(:manage_tags, other.person)
     end
 
     it "may create households" do
@@ -1653,6 +1665,10 @@ describe PersonAbility do
 
     it "may not query people" do
       is_expected.not_to be_able_to(:query, Person)
+    end
+
+    it "may modify its security" do
+      is_expected.to be_able_to(:security, role.person)
     end
   end
 end

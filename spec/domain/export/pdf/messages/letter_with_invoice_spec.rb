@@ -98,9 +98,9 @@ describe Export::Pdf::Messages::LetterWithInvoice do
 
     context "persisted invoice list" do
       it "renders iban from invoice config when no persisted invoice exists" do
-        group.invoice_config.update(iban: "CH84 0221 1981 6169 5329 8")
+        group.invoice_config.update(iban: "CH10 0221 1981 6169 5329 8")
         described_class.new(letter).render
-        expect(text_with_position).to include([360, 280, "CH84 0221 1981 6169 5329 8"])
+        expect(text_with_position).to include([360, 280, "CH10 0221 1981 6169 5329 8"])
       end
 
       it "renders iban from invoice when persisted invoice exists" do
@@ -108,7 +108,7 @@ describe Export::Pdf::Messages::LetterWithInvoice do
         list.invoices.create!(title: :title, recipient_id: bottom_member.id, total: 10, group: group)
         letter.invoice_list_id = list.id
 
-        group.invoice_config.update!(iban: "CH84 0221 1981 6169 5329 8")
+        group.invoice_config.update!(iban: "CH10 0221 1981 6169 5329 8")
         described_class.new(letter).render
         expect(text_with_position).to include([360, 280, "CH93 0076 2011 6238 5295 7"])
       end

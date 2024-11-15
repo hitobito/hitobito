@@ -8,10 +8,10 @@
 # Table name: sessions
 #
 #  id         :integer          not null, primary key
-#  data       :text(65535)
+#  data       :text
 #  created_at :datetime
 #  updated_at :datetime
-#  session_id :string(255)      not null
+#  session_id :string           not null
 #
 # Indexes
 #

@@ -7,17 +7,21 @@
 #
 # Table name: event_questions
 #
-#  id               :integer          not null, primary key
-#  admin            :boolean          default(FALSE), not null
-#  choices          :string(255)
-#  multiple_choices :boolean          default(FALSE), not null
-#  question         :text(65535)
-#  required         :boolean          default(FALSE), not null
-#  event_id         :integer
+#  id                       :integer          not null, primary key
+#  admin                    :boolean          default(FALSE), not null
+#  choices                  :string
+#  disclosure               :string
+#  event_type               :string
+#  multiple_choices         :boolean          default(FALSE), not null
+#  question                 :text
+#  type                     :string           not null
+#  derived_from_question_id :integer
+#  event_id                 :integer
 #
 # Indexes
 #
-#  index_event_questions_on_event_id  (event_id)
+#  index_event_questions_on_derived_from_question_id  (derived_from_question_id)
+#  index_event_questions_on_event_id                  (event_id)
 #
 
 Fabricator(:event_question, class_name: "Event::Question") do

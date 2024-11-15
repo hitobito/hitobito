@@ -67,9 +67,8 @@ class JobManager
       Event::ParticipationCleanupAnswersJob,
       Payments::EbicsImportScheduleJob,
       People::DuplicateLocatorJob,
+      People::UpdateAfterRoleChangeJob,
       People::CleanupJob,
-      People::CreateRolesJob,
-      People::DestroyRolesJob,
       ReoccuringMailchimpSynchronizationJob,
       SessionsCleanerJob,
       WorkerHeartbeatCheckJob

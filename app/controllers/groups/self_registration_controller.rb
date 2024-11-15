@@ -37,6 +37,7 @@ class Groups::SelfRegistrationController < Wizards::BaseController
     @wizard ||= model_class.new(
       group: group,
       current_step: params[:step].to_i,
+      current_ability: current_ability,
       **model_params.to_unsafe_h
     )
   end

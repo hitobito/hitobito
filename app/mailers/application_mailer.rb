@@ -74,12 +74,13 @@ class ApplicationMailer < ActionMailer::Base
   end
 
   def link_to(label, url = nil)
-    # Escape the label to prevent XSS attacks in the link text.
+    # Escape the label and URL to prevent XSS attacks in the link text.
     safe_label = escape_html(label)
+    safe_url = url.nil? ? safe_label : escape_html(url)
 
-    # Only escape invalid URLs (like mailto links or JavaScript).
-    url ||= label
-    safe_url = url.match?(/\Ahttps?:\/\/[\S]+\z/) ? url : escape_html(url)
+    # Only escape ampersand in invalid URLs (like mailto links or JavaScript).
+    safe_url.gsub!("&amp;", "&") if safe_url.match?(/\Ahttps?:\/\/[\S]+\z/)
+
     "<a href=\"#{safe_url}\">#{safe_label}</a>".html_safe
   end
 

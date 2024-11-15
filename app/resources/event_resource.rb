@@ -38,6 +38,7 @@ class EventResource < ApplicationResource
   end
 
   belongs_to :contact, resource: PersonResource, writable: false
+  belongs_to :kind, resource: Event::KindResource, writable: false
   has_many :dates, resource: Event::DateResource, writable: false
 
   filter :type, only: [:eq] do
@@ -59,6 +60,12 @@ class EventResource < ApplicationResource
 
   filter :after_or_on, :date, single: true, only: [:eq] do
     eq { |scope, date| scope.after_or_on(date, true) }
+  end
+
+  filter :kind_category_id, :integer, only: [:eq] do
+    eq do |scope, kind_category_ids|
+      scope.select("events.*").joins(kind: :kind_category).where(kind: {kind_category_id: kind_category_ids})
+    end
   end
 
   def base_scope

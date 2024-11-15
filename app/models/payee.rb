@@ -10,8 +10,8 @@
 # Table name: payees
 #
 #  id             :bigint           not null, primary key
-#  person_address :text(65535)
-#  person_name    :string(255)
+#  person_address :text
+#  person_name    :string
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #  payment_id     :bigint           not null

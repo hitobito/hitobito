@@ -16,7 +16,6 @@
 #
 # Indexes
 #
-#  fk_rails_b4e7ba0100                 (tag_id)
 #  index_calendar_tags_on_calendar_id  (calendar_id)
 #
 # Foreign Keys

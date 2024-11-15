@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: payment_reminder_configs
+#
+#  id                :integer          not null, primary key
+#  due_days          :integer          not null
+#  level             :integer          not null
+#  text              :string           not null
+#  title             :string           not null
+#  invoice_config_id :integer          not null
+#
+# Indexes
+#
+#  index_payment_reminder_configs_on_invoice_config_id  (invoice_config_id)
+#
 require "spec_helper"
 
 describe PaymentReminderConfig do

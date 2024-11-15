@@ -93,7 +93,7 @@ class PersonDecorator < ApplicationDecorator
   end
 
   def current_roles_grouped
-    @current_roles_grouped ||= roles_grouped(scope: person.roles.without_future)
+    @current_roles_grouped ||= roles_grouped(scope: person.roles)
   end
 
   def future_roles_grouped

@@ -2,12 +2,15 @@
 #
 # Table name: qualification_kinds
 #
-#  id             :integer          not null, primary key
-#  validity       :integer
-#  created_at     :datetime
-#  updated_at     :datetime
-#  deleted_at     :datetime
-#  reactivateable :integer
+#  id                     :integer          not null, primary key
+#  deleted_at             :datetime
+#  description            :string(1023)
+#  label                  :string           not null
+#  reactivateable         :integer
+#  required_training_days :decimal(5, 2)
+#  validity               :integer
+#  created_at             :datetime
+#  updated_at             :datetime
 #
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of

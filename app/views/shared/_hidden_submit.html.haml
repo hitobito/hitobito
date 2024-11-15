@@ -7,4 +7,5 @@
   = button_tag(label, formmethod: :get, formaction: formaction, hidden: true)
 - data = { forwarder_target: :click }
 - data[:turbo_frame] = turbo_frame if local_assigns.has_key?(:turbo_frame)
+- data[:turbo_stream] = turbo_stream if local_assigns.has_key?(:turbo_stream)
 = button_tag(label, formmethod: :get, formaction: formaction, data: data, hidden: true)

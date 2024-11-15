@@ -3,8 +3,9 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- if local_assigns[:tooltip].present?
-  %dt.muted.float-start.text-end{title: tooltip}= label.presence || raw(FormatHelper::EMPTY_STRING)
-- else
-  %dt.muted.float-start.text-end= label.presence || raw(FormatHelper::EMPTY_STRING)
-%dd.mb-2= content.presence || raw(FormatHelper::EMPTY_STRING)
+.labeled-grid
+  - if local_assigns[:tooltip].present?
+    %dt.muted{title: tooltip}= label.presence || raw(FormatHelper::EMPTY_STRING)
+  - else
+    %dt.muted= label.presence || raw(FormatHelper::EMPTY_STRING)
+  %dd= content.presence || raw(FormatHelper::EMPTY_STRING)

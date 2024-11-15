@@ -106,8 +106,10 @@ module Export::Pdf::Invoice
     def payment_extra_infos
       @padded_percent = 0
       width = bounds.width - 60.mm
+      # render_esr_number is only true if invoice.esr_number is present
+      # condition currently only applies in SAC wagon
       padded_bounding_box(0.85, x: 60.mm, width: width, pad_right: false) do
-        info_box(render_esr_number: true)
+        info_box(render_esr_number: invoice.esr_number.present?)
       end
     end
 

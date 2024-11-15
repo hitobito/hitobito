@@ -10,11 +10,11 @@
 # Table name: custom_contents
 #
 #  id                    :integer          not null, primary key
-#  key                   :string(255)      not null
-#  label                 :string(255)      not null
-#  placeholders_optional :string(255)
-#  placeholders_required :string(255)
-#  subject               :string(255)
+#  key                   :string           not null
+#  label                 :string           not null
+#  placeholders_optional :string
+#  placeholders_required :string
+#  subject               :string
 #
 
 class CustomContent < ActiveRecord::Base
@@ -74,7 +74,7 @@ class CustomContent < ActiveRecord::Base
       token = placeholder_token(placeholder)
       if output.include?(token)
         # We will escape the values from the placeholder unless the placeholder is html safe
-        placeholder_value = ERB::Util.html_escape(placeholders.fetch(placeholder))
+        placeholder_value = ERB::Util.html_escape(placeholders.fetch(placeholder).to_s)
         output.gsub!(token, placeholder_value)
       end
     end

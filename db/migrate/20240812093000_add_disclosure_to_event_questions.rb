@@ -4,12 +4,16 @@ class AddDisclosureToEventQuestions < ActiveRecord::Migration[6.1]
 
     reversible do |direction|
       direction.up do
-        Event::Question.where(disclosure: nil).update_all(disclosure: :optional)
-        Event::Question.where(required: true).update_all(disclosure:  :required)
+        connection.execute <<~SQL
+          UPDATE event_questions SET disclosure = 'optional' WHERE disclosure IS NULL;
+          UPDATE event_questions SET disclosure = 'required' WHERE required = TRUE;
+        SQL
       end
       direction.down do
-        Event::Question.where(disclosure: :optional).update_all(required: false)
-        Event::Question.where(disclosure: :required).update_all(required: true)
+        connection.execute <<~SQL
+          UPDATE event_questions SET required = FALSE WHERE disclosure = 'optional';
+          UPDATE event_questions SET required = TRUE WHERE disclosure = 'required';
+        SQL
       end
     end
 

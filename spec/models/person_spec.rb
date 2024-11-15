@@ -9,40 +9,81 @@
 #
 # Table name: people
 #
-#  id                     :integer          not null, primary key
-#  first_name             :string
-#  last_name              :string
-#  company_name           :string
-#  nickname               :string
-#  company                :boolean          default(FALSE), not null
-#  email                  :string
-#  address                :string(1024)
-#  zip_code               :string
-#  town                   :string
-#  country                :string
-#  gender                 :string(1)
-#  birthday               :date
-#  additional_information :text
-#  contact_data_visible   :boolean          default(FALSE), not null
-#  created_at             :datetime
-#  updated_at             :datetime
-#  encrypted_password     :string
-#  reset_password_token   :string
-#  reset_password_sent_at :datetime
-#  remember_created_at    :datetime
-#  sign_in_count          :integer          default(0)
-#  current_sign_in_at     :datetime
-#  last_sign_in_at        :datetime
-#  current_sign_in_ip     :string
-#  last_sign_in_ip        :string
-#  picture                :string
-#  last_label_format_id   :integer
-#  creator_id             :integer
-#  updater_id             :integer
-#  primary_group_id       :integer
-#  failed_attempts        :integer          default(0)
-#  locked_at              :datetime
-#  authentication_token   :string
+#  id                                   :integer          not null, primary key
+#  additional_information               :text
+#  address                              :string(1024)
+#  address_care_of                      :string
+#  authentication_token                 :string
+#  birthday                             :date
+#  blocked_at                           :datetime
+#  company                              :boolean          default(FALSE), not null
+#  company_name                         :string
+#  confirmation_sent_at                 :datetime
+#  confirmation_token                   :string
+#  confirmed_at                         :datetime
+#  contact_data_visible                 :boolean          default(FALSE), not null
+#  country                              :string
+#  current_sign_in_at                   :datetime
+#  current_sign_in_ip                   :string
+#  email                                :string
+#  encrypted_password                   :string
+#  encrypted_two_fa_secret              :text
+#  event_feed_token                     :string
+#  failed_attempts                      :integer          default(0)
+#  family_key                           :string
+#  first_name                           :string
+#  gender                               :string(1)
+#  household_key                        :string
+#  housenumber                          :string(20)
+#  inactivity_block_warning_sent_at     :datetime
+#  language                             :string           default("de"), not null
+#  last_name                            :string
+#  last_sign_in_at                      :datetime
+#  last_sign_in_ip                      :string
+#  locked_at                            :datetime
+#  membership_verify_token              :string
+#  minimized_at                         :datetime
+#  nickname                             :string
+#  postbox                              :string
+#  privacy_policy_accepted_at           :datetime
+#  remember_created_at                  :datetime
+#  reset_password_sent_at               :datetime
+#  reset_password_sent_to               :string
+#  reset_password_token                 :string
+#  self_registration_reason_custom_text :string(100)
+#  show_global_label_formats            :boolean          default(TRUE), not null
+#  sign_in_count                        :integer          default(0)
+#  street                               :string
+#  town                                 :string
+#  two_factor_authentication            :integer
+#  unconfirmed_email                    :string
+#  unlock_token                         :string
+#  zip_code                             :string
+#  created_at                           :datetime
+#  updated_at                           :datetime
+#  creator_id                           :integer
+#  last_label_format_id                 :integer
+#  primary_group_id                     :integer
+#  self_registration_reason_id          :bigint
+#  updater_id                           :integer
+#
+# Indexes
+#
+#  index_people_on_authentication_token         (authentication_token)
+#  index_people_on_confirmation_token           (confirmation_token) UNIQUE
+#  index_people_on_email                        (email) UNIQUE
+#  index_people_on_event_feed_token             (event_feed_token) UNIQUE
+#  index_people_on_first_name                   (first_name)
+#  index_people_on_household_key                (household_key)
+#  index_people_on_last_name                    (last_name)
+#  index_people_on_reset_password_token         (reset_password_token) UNIQUE
+#  index_people_on_self_registration_reason_id  (self_registration_reason_id)
+#  index_people_on_unlock_token                 (unlock_token) UNIQUE
+#  people_search_column_gin_idx                 (search_column) USING gin
+#
+# Foreign Keys
+#
+#  fk_rails_...  (self_registration_reason_id => self_registration_reasons.id)
 #
 
 require "spec_helper"
@@ -51,6 +92,50 @@ describe Person do
   let(:person) { role.person.reload }
 
   subject { person }
+
+  context "scopes" do
+    describe "preload_roles_unscoped" do
+      it "preloads roles on #find" do
+        person = Person.preload_roles_unscoped.find(people(:top_leader).id)
+        expect(person.roles).to be_loaded
+        expect(person.roles).to have(1).item
+      end
+
+      it "preloads roles unscoped" do
+        people(:top_leader).roles.update_all(end_on: Date.current.yesterday)
+
+        # default roles scope does not include ended roles
+        expect(people(:top_leader).roles).to be_empty
+
+        person = Person.preload_roles_unscoped.find(people(:top_leader).id)
+        expect(person.roles).to be_loaded
+        expect(person.roles).to have(1).item
+      end
+
+      it "preloading works when chained with other scopes" do
+        person = Person.preload_roles_unscoped
+          .where.not(id: nil)
+          .where(id: people(:top_leader).id).first
+        expect(person.roles).to be_loaded
+        expect(person.roles).to have(1).item
+      end
+    end
+
+    describe "preoload_roles" do
+      it "preloads roles with custom scope" do
+        Fabricate(Group::TopGroup::Secretary.sti_name,
+          group: groups(:top_group),
+          person: people(:top_leader))
+
+        expect(people(:top_leader).roles).to have(2).items
+
+        person = Person.preload_roles(Role.where(type: Group::TopGroup::Secretary.sti_name))
+          .find(people(:top_leader).id)
+        expect(person.roles).to be_loaded
+        expect(person.roles).to have(1).item
+      end
+    end
+  end
 
   it "is not valid without any names" do
     expect(Person.new).to have(1).errors_on(:base)
@@ -136,12 +221,12 @@ describe Person do
       expect(person.groups_with_permission(:layer_and_below_full)).to eq([groups(:top_group)])
     end
 
-    it "found deleted last role" do
-      deletion_date = DateTime.current
+    it "found ended last role" do
+      end_date = Date.current.yesterday
       expect(person.roles.count).to eq 1
-      role.update(deleted_at: deletion_date)
+      role.update(end_on: end_date)
       expect(person.roles.count).to eq 0
-      expect(person.decorate.last_role.deleted_at.to_time.to_i).to eq(deletion_date.to_time.to_i)
+      expect(person.decorate.last_role.end_on).to eq(end_date)
     end
   end
 
@@ -274,7 +359,7 @@ describe Person do
     it "destroys all roles" do
       person = people(:top_leader)
       person.roles.first.update_attribute(:created_at, 2.years.ago)
-      expect { person.destroy }.to change { Role.with_deleted.count }.by(-1)
+      expect { person.destroy }.to change { Role.with_inactive.count }.by(-1)
     end
   end
 
@@ -545,6 +630,36 @@ describe Person do
     describe "#thumb" do
       it "scales down an image to be no wider than 512 pixels" do
         expect(person.picture).to have_dimensions(512, 512)
+      end
+    end
+  end
+
+  describe "#to_s" do
+    let(:company) { false }
+    let(:company_name) { nil }
+    let(:person) { Fabricate.build(:person, first_name: "John", last_name: "Doe", nickname: "Jonny", company: company, company_name: company_name) }
+
+    context "without company" do
+      it "returns full name" do
+        expect(person.to_s).to eq("John Doe / Jonny")
+      end
+    end
+
+    context "with company" do
+      let(:company) { true }
+
+      context "without company name" do
+        it "returns full name" do
+          expect(person.to_s).to eq("John Doe / Jonny")
+        end
+      end
+
+      context "with company name" do
+        let(:company_name) { "FooCorp" }
+
+        it "returns company name" do
+          expect(person.to_s).to eq("FooCorp")
+        end
       end
     end
   end

@@ -37,9 +37,9 @@ module SearchStrategies
     def index_people_without_role?(search_results)
       if Ability.new(@user).can?(:index_people_without_role, Person)
         search_results.where("NOT EXISTS (SELECT * FROM roles " \
-                    "WHERE (roles.deleted_at IS NULL OR
-                            roles.deleted_at > :now) AND
-                          roles.person_id = people.id)", now: Time.now.utc.to_s(:db))
+          "WHERE (roles.end_on IS NULL OR
+          roles.end_on >= :today) AND
+          roles.person_id = people.id)", today: Date.current.to_s(:db))
       end
     end
 

@@ -10,8 +10,8 @@
 #  id                :integer          not null, primary key
 #  due_days          :integer          not null
 #  level             :integer          not null
-#  text              :string(255)      not null
-#  title             :string(255)      not null
+#  text              :string           not null
+#  title             :string           not null
 #  invoice_config_id :integer          not null
 #
 # Indexes

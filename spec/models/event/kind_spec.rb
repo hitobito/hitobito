@@ -2,11 +2,16 @@
 #
 # Table name: event_kinds
 #
-#  id          :integer          not null, primary key
-#  created_at  :datetime
-#  updated_at  :datetime
-#  deleted_at  :datetime
-#  minimum_age :integer
+#  id                     :integer          not null, primary key
+#  application_conditions :text
+#  deleted_at             :datetime
+#  general_information    :text
+#  label                  :string           not null
+#  minimum_age            :integer
+#  short_name             :string
+#  created_at             :datetime
+#  updated_at             :datetime
+#  kind_category_id       :integer
 #
 
 #  Copyright (c) 2012-2014, Pfadibewegung Schweiz. This file is part of
@@ -25,5 +30,16 @@ describe Event::Kind do
 
   it "does destroy translations on hard destroy" do
     expect { slk.really_destroy! }.to change { Event::Kind::Translation.count }.by(-1)
+  end
+
+  context "#list" do
+    it "orders by short_name, deleted last" do
+      expect(Event::Kind.list).to match_array([
+        event_kinds(:fk),
+        event_kinds(:glk),
+        event_kinds(:slk),
+        event_kinds(:old)
+      ])
+    end
   end
 end

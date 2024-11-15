@@ -14,7 +14,7 @@ RSpec.describe ApplicationMailer, type: :mailer do
   end
 
   describe "subject" do
-    it "unescapes html entities" do
+    it "unescapes html entities in subject" do
       content = Fabricate(:custom_content,
         key: "test-content",
         placeholders_optional: "test-placeholder",
@@ -29,6 +29,42 @@ RSpec.describe ApplicationMailer, type: :mailer do
       end
 
       expect(mailer.test_mail.subject).to eq("Hello <a>World</a>")
+    end
+  end
+
+  describe "body" do
+    it "does not unescape html tags" do
+      Fabricate(:custom_content, key: "test-content", body: "Hello <a>World</a>")
+      mailer = Class.new(described_class) do
+        def test_mail = compose(["test@example.com"], "test-content")
+      end
+      expect(mailer.test_mail.body).to include("Hello <a>World</a>")
+    end
+
+    it "does escape tag when used as link_to label" do
+      Fabricate(:custom_content, key: "test-content", body: "Hello {test-link}", placeholders_optional: "test-link")
+      mailer = Class.new(described_class) do
+        def test_mail(label)
+          @label = label
+          compose(["test@example.com"], "test-content")
+        end
+
+        def placeholder_test_link = link_to(@label, "#")
+      end
+      expect(mailer.test_mail("<a>World</a>").body.to_s).to include('Hello <a href="#">&lt;a&gt;World&lt;/a&gt;</a>')
+    end
+
+    it "does escape tag when used as link_to target" do
+      Fabricate(:custom_content, key: "test-content", body: "Hello {test-link}", placeholders_optional: "test-link")
+      mailer = Class.new(described_class) do
+        def test_mail(target)
+          @target = target
+          compose(["test@example.com"], "test-content")
+        end
+
+        def placeholder_test_link = link_to("Label", @target)
+      end
+      expect(mailer.test_mail("<a>World</a>").body.to_s).to include('Hello <a href="&lt;a&gt;World&lt;/a&gt;">Label</a>')
     end
   end
 

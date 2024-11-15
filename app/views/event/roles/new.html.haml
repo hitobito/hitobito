@@ -17,3 +17,5 @@
   - unless entry.class.participant?
     = f.labeled :remove_participant_role, for: :remove_participant_role do
       = check_box_tag(:remove_participant_role)
+
+  = render_extensions :fields, locals: { f: f }

@@ -11,7 +11,7 @@
 #
 #  id         :bigint           not null, primary key
 #  deleted_at :datetime
-#  label      :string(255)
+#  label      :string
 #  order      :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null

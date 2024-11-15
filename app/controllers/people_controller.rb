@@ -126,9 +126,8 @@ class PeopleController < CrudController
   end
 
   def assign_attributes
-    if model_params.present?
-      email = model_params.delete(:email)
-      entry.email = email if can?(:update_email, entry)
+    if model_params.present? && !can?(:update_email, entry)
+      model_params.delete(:email)
     end
     super
   end

@@ -17,12 +17,12 @@ describe Group::DeletedPeopleController, js: true do
     before do
       Fabricate(Group::BottomLayer::Member.name.to_sym,
         group: groups(:bottom_layer_one),
-        created_at: 1.year.ago,
-        deleted_at: 1.month.ago)
+        start_on: 1.year.ago,
+        end_on: 1.month.ago)
       Fabricate(Group::BottomGroup::Leader.name.to_sym,
         group: groups(:bottom_group_one_one_one),
-        created_at: 1.year.ago,
-        deleted_at: 1.month.ago)
+        start_on: 1.year.ago,
+        end_on: 1.month.ago)
 
       sign_in(user)
       visit group_deleted_people_path(group_id: group.id)

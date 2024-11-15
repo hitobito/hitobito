@@ -8,12 +8,17 @@
 # Table name: person_add_requests
 #
 #  id           :integer          not null, primary key
+#  role_type    :string
+#  type         :string           not null
+#  created_at   :datetime         not null
+#  body_id      :integer          not null
 #  person_id    :integer          not null
 #  requester_id :integer          not null
-#  type         :string           not null
-#  body_id      :integer          not null
-#  role_type    :string
-#  created_at   :datetime         not null
+#
+# Indexes
+#
+#  index_person_add_requests_on_person_id         (person_id)
+#  index_person_add_requests_on_type_and_body_id  (type,body_id)
 #
 
 require "spec_helper"

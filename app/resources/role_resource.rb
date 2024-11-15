@@ -11,7 +11,8 @@ class RoleResource < ApplicationResource
   with_options writable: false do
     attribute :created_at, :datetime
     attribute :updated_at, :datetime
-    attribute :deleted_at, :datetime
+    attribute :start_on, :date
+    attribute :end_on, :date
   end
 
   attribute :person_id, :integer

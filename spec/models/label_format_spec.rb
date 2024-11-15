@@ -3,15 +3,19 @@
 # Table name: label_formats
 #
 #  id               :integer          not null, primary key
-#  page_size        :string           default("A4"), not null
-#  landscape        :boolean          default(FALSE), not null
-#  font_size        :float            default(11.0), not null
-#  width            :float            not null
-#  height           :float            not null
 #  count_horizontal :integer          not null
 #  count_vertical   :integer          not null
-#  padding_top      :float            not null
+#  font_size        :float            default(11.0), not null
+#  height           :float            not null
+#  landscape        :boolean          default(FALSE), not null
+#  name             :string           not null
+#  nickname         :boolean          default(FALSE), not null
 #  padding_left     :float            not null
+#  padding_top      :float            not null
+#  page_size        :string           default("A4"), not null
+#  pp_post          :string(23)
+#  width            :float            not null
+#  person_id        :integer
 #
 
 #  Copyright (c) 2015, Jungwacht Blauring Schweiz. This file is part of

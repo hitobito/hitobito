@@ -94,6 +94,7 @@ class SubscriptionsController < CrudController
     mailing_list
       .subscriptions
       .where(subscriber_type: klass.sti_name)
+      .includes(:subscriber)
       .joins("INNER JOIN #{klass.quoted_table_name} " \
              "ON #{klass.quoted_table_name}.id = subscriptions.subscriber_id")
   end

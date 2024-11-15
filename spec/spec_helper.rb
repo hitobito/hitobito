@@ -61,6 +61,7 @@ end
 Faker::Config.locale = I18n.locale
 
 RSpec::Matchers.define_negated_matcher :not_change, :change
+RSpec::Matchers.define_negated_matcher :not_have_enqueued_mail, :have_enqueued_mail
 
 RSpec.configure do |config|
   config.fixture_path = Rails.root / "spec" / "fixtures"
@@ -144,6 +145,12 @@ RSpec.configure do |config|
 
   config.around(:each, js: true) do |example|
     keeping_stdout do
+      example.run
+    end
+  end
+
+  config.around(:each, :time_frozen) do |example|
+    freeze_time do
       example.run
     end
   end

@@ -789,6 +789,7 @@ ActiveRecord::Schema.define(version: 2024_11_12_142323) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "skip_consent_screen", default: false
+    t.string "additional_audiences"
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
@@ -1030,12 +1031,10 @@ ActiveRecord::Schema.define(version: 2024_11_12_142323) do
     t.string "label"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "deleted_at"
     t.datetime "archived_at"
-    t.date "delete_on"
-    t.date "convert_on"
-    t.string "convert_to"
     t.boolean "terminated", default: false, null: false
+    t.date "start_on"
+    t.date "end_on"
     t.index ["person_id", "group_id"], name: "index_roles_on_person_id_and_group_id"
     t.index ["type"], name: "index_roles_on_type"
   end

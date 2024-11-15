@@ -47,13 +47,13 @@ describe Roles::TerminationsController do
         post :create, params: params, format: :js
       end
 
-      it "ignores terminate_on if role has delete_on set" do
-        delete_on = 1.month.from_now.to_date
-        role.update!(delete_on: delete_on)
+      it "ignores terminate_on if role has end_on set" do
+        end_on = 1.month.from_now.to_date
+        role.update!(end_on: end_on)
 
         expect(Roles::Termination)
           .to receive(:new).with(role: role,
-            terminate_on: delete_on).and_return(termination)
+            terminate_on: end_on).and_return(termination)
 
         post :create, params: params, format: :js
       end

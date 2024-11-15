@@ -10,8 +10,8 @@
 # Table name: notes
 #
 #  id           :integer          not null, primary key
-#  subject_type :string(255)
-#  text         :text(65535)
+#  subject_type :string
+#  text         :text
 #  created_at   :datetime
 #  updated_at   :datetime
 #  author_id    :integer          not null

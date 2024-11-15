@@ -4,10 +4,10 @@ on:
   workflow_dispatch: # Allow triggering manually
     inputs:
       composition:
-        description: "Composition repository, e.g. hitobito/ose_composition_generic"
+        description: "Composition repository, e.g. hitobito/ose_composition_demo"
         type: string
         required: true
-        default: "hitobito/ose_composition_generic"
+        default: "hitobito/ose_composition_demo"
       stage:
         description: "Stage of Release to be prepared"
         required: true

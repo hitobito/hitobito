@@ -74,7 +74,7 @@ jobs:
         with:
           cmd: |
             yq '.images.[] | select(.name == env(IMAGE_REF)).newTag' "${FILE}"
-      - name: Update image tag if it is newer
+      - name: Update image tag to ${{ inputs.image_tag }} if it is newer
         if: inputs.image_tag != steps.get_old_image_tag.outputs.result
         id: set_image_tag
         uses: mikefarah/yq@master

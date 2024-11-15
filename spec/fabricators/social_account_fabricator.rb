@@ -16,6 +16,7 @@
 # Indexes
 #
 #  index_social_accounts_on_contactable_id_and_contactable_type  (contactable_id,contactable_type)
+#  social_accounts_search_column_gin_idx                         (search_column) USING gin
 #
 
 Fabricator(:social_account) do

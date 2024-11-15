@@ -22,7 +22,8 @@
 #
 # Indexes
 #
-#  index_invoice_items_on_invoice_id  (invoice_id)
+#  index_invoice_items_on_invoice_id    (invoice_id)
+#  invoice_items_search_column_gin_idx  (search_column) USING gin
 #
 
 class InvoiceItemSerializer < ApplicationSerializer

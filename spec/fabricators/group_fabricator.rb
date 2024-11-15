@@ -50,6 +50,7 @@
 #
 # Indexes
 #
+#  groups_search_column_gin_idx    (search_column) USING gin
 #  index_groups_on_layer_group_id  (layer_group_id)
 #  index_groups_on_lft_and_rgt     (lft,rgt)
 #  index_groups_on_parent_id       (parent_id)

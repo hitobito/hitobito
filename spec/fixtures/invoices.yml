@@ -47,6 +47,7 @@
 #  index_invoices_on_invoice_list_id  (invoice_list_id)
 #  index_invoices_on_recipient_id     (recipient_id)
 #  index_invoices_on_sequence_number  (sequence_number)
+#  invoices_search_column_gin_idx     (search_column) USING gin
 #
 
 invoice:

@@ -32,6 +32,7 @@
 #  priorization                     :boolean          default(FALSE), not null
 #  required_contact_attrs           :text
 #  requires_approval                :boolean          default(FALSE), not null
+#  search_column                    :tsvector
 #  shared_access_token              :string
 #  signature                        :boolean
 #  signature_confirmation           :boolean
@@ -51,6 +52,7 @@
 #
 # Indexes
 #
+#  events_search_column_gin_idx         (search_column) USING gin
 #  index_events_on_kind_id              (kind_id)
 #  index_events_on_shared_access_token  (shared_access_token)
 #

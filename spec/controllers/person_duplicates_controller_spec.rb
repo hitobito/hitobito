@@ -57,7 +57,7 @@ describe PersonDuplicatesController do
     it "lists duplicates for subgroups too" do
       sign_in(people(:root))
 
-      get :index, params: { group_id: top_group.id }
+      get :index, params: {group_id: top_group.id}
 
       expect(response.status).to eq 200
 

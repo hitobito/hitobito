@@ -34,3 +34,6 @@ AllCops:
     - tmp/**/*
     - app/assets/config.rb
     - node_modules/**/*
+
+Rails/ToSWithArgument:
+  Enabled: false

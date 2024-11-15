@@ -34,7 +34,7 @@ describe HitobitoLogEntriesController do
 
       it "filters by from_time" do
         travel_to(2.days.ago.midday) do
-          # from_date_param = 2.days.ago.to_date.to_formatted_s(:db)
+          # from_date_param = 2.days.ago.to_date.to_fs(:db)
           get :index, params: {from_time: "07:00"}
           expect(assigns(:hitobito_log_entries))
             .to match_array(hitobito_log_entries(:error_webhook, :error_ebics, :entry_with_payload))

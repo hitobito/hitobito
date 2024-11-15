@@ -112,7 +112,7 @@ class MailingLists::Subscribers
   end
 
   def group_subscribers(condition)
-    sql = <<~SQL.split.join(" ") # rubocop:disable Rails/ToSWithArgument
+    sql = <<~SQL.split.join(" ")
       subscriptions.subscriber_type = ? AND
       #{Group.quoted_table_name}.lft >= sub_groups.lft AND
       #{Group.quoted_table_name}.rgt <= sub_groups.rgt AND

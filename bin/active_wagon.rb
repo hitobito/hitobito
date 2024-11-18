@@ -91,7 +91,6 @@ class Setup
       export RAILS_TEST_DB_NAME=hit_#{core ? "core" : wagon}_test
       export SPRING_APPLICATION_ID=hit_#{core ? "core" : wagon}
       export PRIMARY_WAGON=#{wagon}
-      export DISABLE_TEST_SCHEMA_MAINTENANCE=1
       #{'export WAGONS="' + wagons.join(' ') + '"' if wagons.any?}
       log_status "hitobito now uses: #{wagons.any? ? wagons.join(', ') : 'just the core'}"
       source_up

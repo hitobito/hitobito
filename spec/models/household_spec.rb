@@ -301,7 +301,7 @@ describe Household do
       expect(household.address_attrs).to eq(expected_attrs)
     end
 
-    xit "applies address for all members with invalid state when updating one person" do
+    it "applies address for all members with invalid state when updating one person" do
       person.update!(street: "Langweilige Gasse")
       other_person.update!(street: "Lange Strasse")
       third_person.update!(street: "Breiter Weg")

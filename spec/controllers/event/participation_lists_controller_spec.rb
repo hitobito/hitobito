@@ -23,11 +23,10 @@ describe Event::ParticipationListsController do
       sign_in(people(:bottom_member))
     end
 
-    it "POST create" do
+    it "POST create to not create role if not allowed" do
       expect do
         post :create, params: {group_id: group, event_id: course, ids: person1.id, role: {type: Event::Role::Leader}}
-      end.to raise_error(CanCan::AccessDenied)
-        .and change(Event::Role::Leader, :count).by(0)
+      end.to change(Event::Role::Leader, :count).by(0)
         .and change(Event::Participation, :count).by(0)
     end
   end

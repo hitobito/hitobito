@@ -47,7 +47,7 @@ jobs:
           fetch-depth: 0 # ALL the historiez, including ALL the branches
           token: ${{ secrets.RELEASE_PREPARATION_TOKEN }}
 
-      - name: "update submodules to release-state"
+      - name: "update submodules to release-state (${{ inputs.target_branch }})"
         env:
           TARGET_BRANCH: ${{ inputs.target_branch }}
         run: |
@@ -94,7 +94,7 @@ jobs:
           git config --global user.name "$(cd hitobito && git --no-pager log --format=format:'%an' -n 1)"
           git config --global user.email "$(cd hitobito && git --no-pager log --format=format:'%ae' -n 1)"
 
-      - name: "Prepare composition-repo for release"
+      - name: "Prepare composition-repo for release of ${{ inputs.stage }} version ${{ inputs.version }}"
         env:
           NEXT_VERSION: ${{ inputs.version }}
           RELEASE_STAGE: ${{ inputs.stage }}

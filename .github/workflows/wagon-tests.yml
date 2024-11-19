@@ -54,7 +54,6 @@ jobs:
       - name: 'Prepare'
         uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup
         with:
-          migrations: false
           assets: false
           wagon_repository: ${{ inputs.wagon_repository }}
           wagon_dependency_repository: ${{ inputs.wagon_dependency_repository }}
@@ -111,6 +110,10 @@ jobs:
           wagon_dependency_repository: ${{ inputs.wagon_dependency_repository }}
           core_ref: ${{ inputs.core_ref }}
           wagon_dependency_ref: ${{ inputs.wagon_dependency_ref }}
+
+      - name: Prepare the databsae for the seeds
+        run: |
+          bundle exec rake db:create db:migrate wagon:migrate
 
       - name: Run ${{ inputs.wagon_repository }} seeds
         run: |
@@ -243,7 +246,7 @@ jobs:
 
   notify_statuscope:
     uses: ./.github/workflows/notify-statuscope.yml
-    needs: [ wagon_rubocop, wagon_specs, wagon_feature_specs ]
+    needs: [ wagon_rubocop, wagon_specs, wagon_feature_specs, wagon_seeds ]
     if: ( success() || failure() ) && ( github.ref_name == 'master' ) && ( (inputs.core_ref || inputs.main_branch) == inputs.main_branch ) && ( (inputs.wagon_dependency_ref || inputs.main_branch) == inputs.main_branch )
     with:
       repository: ${{ inputs.wagon_repository }}

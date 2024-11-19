@@ -9,6 +9,18 @@ GIT
       graphiti (~> 1.3.9)
       transproc
 
+PATH
+  remote: ../hitobito_jemk
+  specs:
+    hitobito_jemk (2.3.6)
+      hitobito_youth
+
+PATH
+  remote: ../hitobito_youth
+  specs:
+    hitobito_youth (2.3.6)
+      social_security_number (~> 0.1.12)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -77,6 +89,8 @@ GEM
     activerecord (7.0.8)
       activemodel (= 7.0.8)
       activesupport (= 7.0.8)
+    activerecord-nulldb-adapter (1.1.1)
+      activerecord (>= 6.0, < 8.1)
     activerecord-session_store (2.1.0)
       actionpack (>= 6.1)
       activerecord (>= 6.1)
@@ -413,11 +427,8 @@ GEM
       net-protocol
     net-protocol (0.2.2)
       timeout
-    net-sftp (4.0.0)
-      net-ssh (>= 5.0.0, < 8.0.0)
     net-smtp (0.5.0)
       net-protocol
-    net-ssh (7.0.1)
     netrc (0.11.0)
     nio4r (2.7.3)
     nokogiri (1.16.7)
@@ -753,6 +764,7 @@ PLATFORMS
 DEPENDENCIES
   active_record_distinct_on
   active_storage_validations
+  activerecord-nulldb-adapter
   activerecord-session_store
   acts-as-taggable-on
   airbrake
@@ -805,6 +817,8 @@ DEPENDENCIES
   haml
   headless
   hirb
+  hitobito_jemk!
+  hitobito_youth!
   http_accept_language
   icalendar
   image_processing (~> 1.2)
@@ -847,7 +861,7 @@ DEPENDENCIES
   rails (= 7.0.8)
   rails-controller-testing
   rails-erd
-  rails-i18n (~> 7.0.0)
+  rails-i18n
   rails_autolink
   redcarpet
   remotipart

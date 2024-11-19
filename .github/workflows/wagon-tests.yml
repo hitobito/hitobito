@@ -130,6 +130,7 @@ jobs:
       RAILS_DB_NAME: hitobito_test
       RAILS_TEST_DB_NAME: hitobito_test
       RAILS_ENV: test
+      DISABLE_TEST_SCHEMA_MAINTENANCE: true
 
     services:
       postgres:

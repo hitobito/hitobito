@@ -14,7 +14,7 @@ class Event::ParticipationListsController < SimpleCrudController
   def create
     new_participations = build_new_participations
     success = ActiveRecord::Base.transaction do
-      raise ActiveRecord::Rollback unless new_participations.all?(&:save)
+      raise ActiveRecord::Rollback unless new_participations.select(&:present?).all?(&:save)
       true
     end
 
@@ -44,7 +44,7 @@ class Event::ParticipationListsController < SimpleCrudController
     people.map do |person|
       Event::Participation.find_or_initialize_by(event: event, person_id: person.id).tap do |participation|
         role = role_type.new(participation: participation)
-        next nil if cannot?(:create, role)
+        break nil if cannot?(:create, role)
 
         participation.roles << role unless participation.roles.map(&:type).include?(role_type.sti_name)
       end

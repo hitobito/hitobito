@@ -64,7 +64,6 @@ jobs:
       - name: ${{ inputs.wagon_repository }} rubocop
         working-directory: ${{ inputs.wagon_repository }}
         run: |
-          echo "Hi there"
           bundle exec rake app:rubocop
 
   wagon_seeds:

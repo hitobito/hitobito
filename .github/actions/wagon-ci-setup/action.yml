@@ -191,7 +191,7 @@ runs:
       working-directory: hitobito
       shell: bash
 
-    - name: "Create DB"
+    - name: "Prepare DB"
       if: inputs.migrations == 'true'
       run: |
         bundle exec rake db:create

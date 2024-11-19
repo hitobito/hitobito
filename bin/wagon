@@ -300,18 +300,10 @@ build)
   require_wagon_name
   shift # loose the "build" argument
   shift # loose the wagon-name argument
-  target=${1:-app}
-  shift # loose the target
-
-  if [[ $target == 'app' ]]; then
-    name='rails'
-  else
-    name=$target
-  fi
 
   (
     cd "../ose_composition_${wagon_name}" &&
-      docker buildx build . --file hitobito/Dockerfile --target $target -t hitobito/$wagon_name/$name:latest $@
+      docker buildx build . --file hitobito/Dockerfile --target app -t hitobito/$wagon_name/rails:latest $@
   )
   ;;
 

@@ -160,7 +160,7 @@ jobs:
           fetch-depth: 1
 
       - name: "Prepare"
-        uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup@master
+        uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup
         with:
           wagon_repository: ${{ inputs.wagon_repository }}
           wagon_dependency_repository: ${{ inputs.wagon_dependency_repository }}

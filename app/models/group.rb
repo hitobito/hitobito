@@ -398,7 +398,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   def duplicates_in_groups(*group_ids)
     PersonDuplicate.joins(person_1: :roles).joins(person_2: :roles)
       .where("roles.group_id IN (:group_ids) OR roles_people.group_id IN (:group_ids)",
-             group_ids:)
+        group_ids:)
   end
 
   def group_person_duplicates = duplicates_in_groups(id)

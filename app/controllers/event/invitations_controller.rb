@@ -6,6 +6,8 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::InvitationsController < CrudController
+  include AsyncDownload
+
   self.permitted_attrs = [:event_id, :person_id, :participation_type]
 
   self.nesting = [Group, Event]
@@ -17,8 +19,20 @@ class Event::InvitationsController < CrudController
 
   prepend_before_action :parent, :group
 
+  ## def index: respond_to
+  ## see hitobito/app/controllers/events_controller.rb
+  ## + job
+  ## + ..
+
   def create
     super(location: group_event_invitations_path(@group, @event))
+  end
+
+  def index
+    respond_to do |format|
+      format.html { super }
+      format.csv { render_tabular_in_background(:csv) }
+    end
   end
 
   private
@@ -46,6 +60,19 @@ class Event::InvitationsController < CrudController
 
   def authorize_class
     authorize!(:index_invitations, event)
+  end
+
+  def render_tabular_in_background(format, name = :invitation_export)
+    with_async_download_cookie(format, name) do |filename|
+      Export::InvitationsExportJob.new(format,
+        current_person.id,
+        event.id,
+        filename: filename).enqueue!
+    end
+  end
+
+  def ability
+    @ability ||= Ability.new(Person.find(current_user.id))
   end
 
   class << self

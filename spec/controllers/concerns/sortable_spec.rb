@@ -23,7 +23,7 @@ describe Sortable, type: :controller do
     include Sortable
   end
 
-  after(:each) do
+  after do
     expect_no_duplicated_entries # check that no entry duplicates after sorting
   end
 
@@ -71,7 +71,7 @@ describe Sortable, type: :controller do
 
       controller.singleton_class.class_eval do
         define_method(:list_entries) do
-          sort_by_sort_expression(Person.group(:id)) #group query before passing it into sort_by_sort_expression
+          sort_by_sort_expression(Person.group(:id)) # group query before passing it into sort_by_sort_expression
         end
       end
     end
@@ -118,6 +118,6 @@ describe Sortable, type: :controller do
   def expect_no_duplicated_entries
     ids = assigns(:entries).map(&:id)
     duplicates = ids.select { |id| ids.count(id) > 1 }.uniq
-    expect(duplicates).to be_empty, "Duplicated entries in response: #{duplicates.join(', ')}"
+    expect(duplicates).to be_empty, "Duplicated entries in response: #{duplicates.join(", ")}"
   end
 end

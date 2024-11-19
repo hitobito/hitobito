@@ -159,7 +159,7 @@ jobs:
           fetch-depth: 1
 
       - name: "Prepare"
-        uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup@tasks/debug-ci
+        uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup@master
         with:
           wagon_repository: ${{ inputs.wagon_repository }}
           wagon_dependency_repository: ${{ inputs.wagon_dependency_repository }}
@@ -169,6 +169,8 @@ jobs:
       - name: Run ${{ inputs.wagon_repository }} specs
         working-directory: ${{ inputs.wagon_repository }}
         run: |
+          bundle exec rake db:migrate
+          bundle exec rake wagon:migrate
           bundle exec rake app:ci:setup:rspec spec:without_features
 
   wagon_feature_specs:

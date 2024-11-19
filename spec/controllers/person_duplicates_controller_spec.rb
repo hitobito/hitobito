@@ -17,6 +17,9 @@ describe PersonDuplicatesController do
   let!(:duplicate2) { Fabricate(:person_duplicate) }
   let!(:duplicate3) { Fabricate(:person_duplicate) }
   let!(:duplicate4) { Fabricate(:person_duplicate) }
+  let!(:duplicate5) { Fabricate(:person_duplicate) }
+  let(:top_group) { groups(:top_group) }
+  let(:top_group_leader) { Fabricate("Group::TopGroup::Leader", group: top_group).person }
   let(:entries) { assigns(:person_duplicates) }
 
   before { assign_people }
@@ -29,7 +32,7 @@ describe PersonDuplicatesController do
 
       expect(response.status).to eq 200
 
-      expect(entries.count).to eq(4)
+      expect(entries.count).to eq(5)
     end
 
     it "lists all duplicates on and below given layer" do
@@ -49,6 +52,17 @@ describe PersonDuplicatesController do
       sign_in(people(:bottom_member))
 
       expect { get :index, params: {group_id: top_layer.id} }.to raise_error(CanCan::AccessDenied)
+    end
+
+    it "lists duplicates for subgroups too" do
+      sign_in(people(:root))
+
+      get :index, params: {group_id: top_group.id}
+
+      expect(response.status).to eq 200
+
+      expect(entries.count).to eq(1)
+      expect(entries).to include(duplicate5)
     end
   end
 
@@ -70,5 +84,9 @@ describe PersonDuplicatesController do
     # duplicate4
     Fabricate("Group::TopLayer::TopAdmin", group: top_layer, person: duplicate4.person_1)
     Fabricate("Group::BottomLayer::Member", group: layer_one, person: duplicate4.person_2)
+
+    # duplicate5
+    Fabricate("Group::TopGroup::Member", group: top_group, person: duplicate5.person_1)
+    Fabricate("Group::TopGroup::Member", group: top_group, person: duplicate5.person_2)
   end
 end

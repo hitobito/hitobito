@@ -70,9 +70,11 @@ class PersonDecorator < ApplicationDecorator
   end
 
   def picture_full_url
-    pic_url = Class.new do
-      include UploadDisplayHelper
-    end.new.upload_url(self, :picture, default: "profil")
+    pic_url = if picture.attached?
+      h.url_for(picture)
+    else
+      h.upload_default(self, :picture, default: "profile")
+    end
 
     if pic_url.respond_to?(:url)
       pic_url.url

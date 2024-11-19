@@ -2,8 +2,8 @@ name: 'Setup steps for core CI'
 description: 'DRY yaml setup setup steps which are used multiple times in the core CI workflow'
 
 inputs:
-  migrations:
-    description: Unless set to false, migrations will be run as part of the setup.
+  database:
+    description: Unless set to false, prepare the database for the tests
     default: 'true'
   assets:
     description: Unless set to false, assets will be precompiled as part of the setup.
@@ -76,8 +76,8 @@ runs:
         bundle exec rake webpacker:compile
       shell: bash
 
-    - name: 'Run db migrations'
-      if: inputs.migrations == 'true'
+    - name: 'Prepare the Database'
+      if: inputs.database == 'true'
       run: |
-        bundle exec rake db:migrate search_column:build
+        bundle exec rake db:test:prepare
       shell: bash

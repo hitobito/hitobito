@@ -25,7 +25,7 @@ jobs:
       - name: 'Prepare'
         uses: ./.github/actions/core-ci-setup
         with:
-          database: false
+          migrations: false
           assets: false
 
       - name: 'Rubocop'
@@ -116,8 +116,6 @@ jobs:
 
       - name: 'Prepare'
         uses: ./.github/actions/core-ci-setup
-        with:
-          database: false
 
       - name: 'Features'
         run: |

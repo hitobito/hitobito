@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Copyright (c) 2021, hitobito AG. This file is part of
+# Copyright (c) 2021-2024, hitobito AG. This file is part of
 # hitobito and licensed under the Affero General Public License version 3
 # or later. See the COPYING file at the top-level directory or at
 # https ://github.com/hitobito/hitobito.
@@ -27,6 +27,8 @@ class People::OneTimePassword
 
   def verify(token)
     drift = Settings.people.totp_drift
+    token = token.delete(" ")
+
     authenticator.verify(token, drift_ahead: drift, drift_behind: drift)
   end
 

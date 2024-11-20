@@ -140,12 +140,12 @@ jobs:
       project: ${{ needs.settings.outputs.project }}
       version: ${{ needs.version.outputs.version }}
       stage: ${{ needs.settings.outputs.release_stage }}
-      push: ${{ needs.settings.outputs.push_image }}
+      push: ${{ needs.settings.outputs.push_image == 'true' }}
     secrets: inherit
 
   deploy:
     uses: ./.github/workflows/update_image.yml
-    if: ${{ inputs.settings.outputs.update_deployments }}
+    if: ${{ inputs.settings.outputs.update_deployments == 'true' }}
     needs:
       - settings
       - version

@@ -501,8 +501,6 @@ fr:
       participants: "Participants"
     export_enqueued: "l'exportation débute en arrière-plan et est téléchargée quand elle est terminée"
     add_tag: Rajouter tag
-    invitations:
-      description: "Les personnes invitées peuvent s'inscrire ou se désinscrire via le site %{model_name}. Elles ne recevront pas de mail automatique."
   event/applications:
     approved: "L'inscription a été autorisée."
     rejected: "L'inscription a été refusée."

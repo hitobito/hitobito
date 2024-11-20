@@ -33,5 +33,5 @@ class Group::BottomLayer < Group
   end
 
   roles Leader, LocalGuide, Member, BasicPermissionsOnly
-  self.default_role = Leader
+  self.standard_role = Leader
 end

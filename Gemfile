@@ -7,7 +7,7 @@
 
 source "https://rubygems.org"
 
-gem "rails", "= 7.0.8"
+gem "rails", "= 7.1.0"
 gem "wagons", "~> 0.7.0"
 
 gem "active_record_distinct_on"
@@ -97,7 +97,7 @@ gem "strip_attributes" # strip whitespace of attributes
 gem "truemail"
 gem "ttfunk", "< 1.8.0"
 gem "turbo-rails"
-gem "validates_by_schema", "~> 0.3.0" # 0.5.1 does not work well with wagons / wagon-migrations
+gem "validates_by_schema"
 gem "validates_timeliness", "~> 7.0.0.beta2"
 gem "vcard"
 gem "view_component"

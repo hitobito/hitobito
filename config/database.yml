@@ -8,16 +8,16 @@ base: &generic
   pool: 20
   checkout_timeout: 5 # seconds
   encoding: "utf8"
-<% %w(host port username password socket).each do |option| %>
+  <% %w(host port username password socket).each do |option| %>
   <% value = ENV["RAILS_DB_#{option.upcase}"] %>
-  <%= "#{option}: #{value}" if value.present? %>
-<% end %>
-<% variables = %w(lock_timeout statement_timeout).map { [_1, ENV["RAILS_DB_#{_1.upcase}"]] }.to_h.compact %>
-<% if variables.any? %>
+  <%= "#{option}: '#{value}'" if value.present? %>
+  <% end %>
+  <% variables = %w(lock_timeout statement_timeout).map { [_1, ENV["RAILS_DB_#{_1.upcase}"]] }.to_h.compact %>
+  <% if variables.any? %>
   variables:<% variables.each do |option, value| %>
-    <%= "#{option}: #{value}" %>
-<% end %>
-<% end %>
+  <%= "#{option}: #{value}" %>
+  <% end %>
+  <% end %>
 
 development:
   <<: *generic

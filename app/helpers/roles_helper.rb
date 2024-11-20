@@ -60,7 +60,7 @@ module RolesHelper
 
   def roles_type_select_options(group, role)
     options = {include_blank: ""}
-    selected = existing_role(role) || default_role(group)
+    selected = existing_role(role) || standard_role(group)
     options.merge(selected: selected)
   end
 
@@ -70,8 +70,8 @@ module RolesHelper
 
   private
 
-  def default_role(group)
-    group.default_role ? group.default_role.sti_name : nil
+  def standard_role(group)
+    group.standard_role ? group.standard_role.sti_name : nil
   end
 
   def existing_role(role) = role&.type

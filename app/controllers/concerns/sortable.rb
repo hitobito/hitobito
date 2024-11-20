@@ -58,7 +58,9 @@ module Sortable
       elsif entries.to_sql.match?(SUBQUERY) # already selecting from a subquery (e.g. people_controller)
         entries.reorder(sort_expression.gsub(TABLE_WITH_COLUMN, '\1'))
       elsif entries.to_sql.match?(GROUPED_QUERY) # already selecting from a grouped query (e.g. sbv/song_counts_controller.rb)
-        entries.reorder(sort_expression)
+        entries.select(model_class.column_names, "MAX(#{sort_expression_attrs}) AS #{sort_expression_attrs.gsub(TABLE_WITH_COLUMN, '\1')}")
+          .joins(join_tables)
+          .reorder(Arel.sql(sort_expression.gsub(TABLE_WITH_COLUMN, '\1')))
       else
         subquery = entries.unscope(:select, :order).select(sort_expression_attrs, model_class.column_names).joins(join_tables).distinct_on(:id)
         model_class.select("*").from(subquery, :subquery)

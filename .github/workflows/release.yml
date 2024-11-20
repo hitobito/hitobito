@@ -145,7 +145,7 @@ jobs:
 
   deploy:
     uses: ./.github/workflows/update_image.yml
-    if: ${{ inputs.settings.outputs.update_deployments == 'true' }}
+    if: ${{ inputs.settings.outputs.update_deployment == 'true' }}
     needs:
       - settings
       - version

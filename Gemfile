@@ -7,7 +7,7 @@
 
 source "https://rubygems.org"
 
-gem "rails", "= 7.1.0"
+gem "rails", "= 7.1"
 gem "wagons", "~> 0.7.0"
 
 gem "active_record_distinct_on"

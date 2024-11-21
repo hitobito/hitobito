@@ -11,9 +11,11 @@ class app.AjaxUpload
   submit: (event, input) ->
     $.rails.stopEverything(event)
     form = $(input).closest('form')
+    # errors are handled by backend response
+    $(form).on('ajax:error', (event) -> event.stopPropagation())
     new app.Spinner().show(form)
     form.submit()
-    $(input).closest('form').reset()
+    form[0].reset()
 
   bind: ->
     self = this

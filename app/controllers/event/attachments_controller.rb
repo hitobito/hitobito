@@ -9,7 +9,7 @@ class Event::AttachmentsController < CrudController
 
   self.nesting = Group, Event
 
-  self.permitted_attrs = [:file, :visibility]
+  self.permitted_attrs = [:visibility]
 
   respond_to :js
 
@@ -17,13 +17,21 @@ class Event::AttachmentsController < CrudController
     Event::Attachment
   end
 
-  def set_success_notice
-    # Skip this, this controller only serves JS
+  def create
+    @attachments = model_params[:files].map do |file|
+      model_scope.create(file: file)
+    end
+
+    render "create"
   end
 
   private
 
   alias_method :event, :parent
+
+  def set_success_notice
+    # Skip this, this controller only serves JS
+  end
 
   def index_path
     group_event_path(*parents)

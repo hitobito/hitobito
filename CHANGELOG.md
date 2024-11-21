@@ -3,7 +3,8 @@
 ## unreleased
 
 - JWT kann als OIDC Access Token konfiguriert werden (hitobito_sac_cas#1110)
-- Unterstützung vom login=prompt Parameter im OIDC Authorization flow (hitobito_sac_cas#1075)
+- Unterstützung vom login=prompt Parameter im OIDC Authorization Flow (hitobito_sac_cas#1075)
+- Bei Anlässen können mehrere Anhänge gleichzeitig hochgeladen werden (hitobito#3017)
 
 ## Version 2.3
 

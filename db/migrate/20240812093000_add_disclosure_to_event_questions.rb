@@ -12,7 +12,7 @@ class AddDisclosureToEventQuestions < ActiveRecord::Migration[6.1]
         # otherwise the seeds will fail when run in the same process as the migration.
         Event::Question._validators.delete(:required)
         Event::Question._validate_callbacks.each do |callback|
-          if callback.raw_filter.try(:attributes)&.include?("required")
+          if callback.filter.try(:attributes)&.include?("required")
             Event::Question._validate_callbacks.delete(callback)
           end
         end

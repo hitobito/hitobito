@@ -37,7 +37,7 @@ describe Export::Tabular::Invoices::List do
     its(["Status"]) { should == "Entwurf" }
     its(["Referenz Nummer"]) { should == invoices(:invoice).esr_number }
     its(["Betrag"]) { should == "5.00" }
-    its(["MwSt."]) { should == "0.35" }
+    its(["MwSt."]) { should == "0.36" }
     its(["Rechnungsbetrag"]) { should == "5.35" }
     its(["Bezahlt"]) { should == "0.00" }
     its(["Empfänger E-Mail"]) { should == "top_leader@example.com" }

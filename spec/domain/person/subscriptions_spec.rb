@@ -27,56 +27,6 @@ describe Person::Subscriptions do
       it "excludes list when no subscription exists" do
         expect(subscribable).to be_empty
       end
-    end
-
-    describe "#subscribed" do
-      before { MailingList.where.not(id: list.id).destroy_all }
-
-      it "is empty without subscription" do
-        expect(subscribed).to be_empty
-      end
-
-      it "includes list when direct subscription exists" do
-        create_person_subscription
-        expect(subscribed).to eq [list]
-      end
-    end
-  end
-
-  context "subscribable_for anyone" do
-    before { list.update!(subscribable_for: :anyone) }
-
-    describe "#subscribable" do
-      before { MailingList.where.not(id: list.id).destroy_all }
-
-      it "includes list when no subscription exists" do
-        expect(subscribable).to eq [list]
-      end
-    end
-
-    describe "#subscribed" do
-      before { MailingList.where.not(id: list.id).destroy_all }
-
-      it "is empty without subscription" do
-        expect(subscribed).to be_empty
-      end
-
-      it "includes list when direct subscription exists" do
-        create_person_subscription
-        expect(subscribed).to eq [list]
-      end
-    end
-  end
-
-  context "subscribable_for nobody" do
-    before { list.update(subscribable_for: :nobody) }
-
-    describe "#subscribable" do
-      before { MailingList.where.not(id: list.id).destroy_all }
-
-      it "excludes list when no subscription exists" do
-        expect(subscribable).to be_empty
-      end
 
       it "excludes list when direct subscription exists" do
         create_person_subscription
@@ -98,12 +48,10 @@ describe Person::Subscriptions do
         expect(subscribable).to be_empty
       end
     end
-  end
-
-  context "subscribable_for anyone" do
-    before { list.update(subscribable_for: :anyone) }
 
     describe "#subscribed" do
+      before { MailingList.where.not(id: list.id).destroy_all }
+
       it "is empty without subscription" do
         expect(subscribed).to be_empty
       end
@@ -112,117 +60,11 @@ describe Person::Subscriptions do
         create_person_subscription
         expect(subscribed).to eq [list]
       end
-
-      it "includes list when group subscription exists" do
-        create_group_subscription
-        expect(subscribed).to eq [list]
-      end
-
-      it "includes list when event subscription exists" do
-        create_event_subscription
-        expect(subscribed).to eq [list]
-      end
-
-      it "excludes list when group subscription exists but excluded" do
-        create_group_subscription
-        create_person_subscription(excluded: true)
-        expect(subscribed).to be_empty
-      end
-
-      it "excludes list when event subscription exists but excluded" do
-        create_event_subscription
-        create_person_subscription(excluded: true)
-        expect(subscribed).to be_empty
-      end
-
-      it "excludes list when group subscription exists but missing required tag" do
-        create_group_subscription(included_tags: %w[vip])
-        expect(subscribed).to be_empty
-      end
-
-      it "excludes list when event subscription exists but missing required tag" do
-        create_event_subscription(included_tags: %w[vip])
-        expect(subscribed).to be_empty
-      end
-
-      it "excludes list when group subscription exists but excluded by tags" do
-        create_group_subscription(excluded_tags: %w[bar foo:baz])
-        person.tag_list = "foo:baz"
-        person.save!
-        expect(subscribed).to be_empty
-      end
-
-      it "includes list when not all group subscriptions are excluded by tags" do
-        create_group_subscription(excluded_tags: %w[bar foo:baz])
-        create_group_subscription
-        person.tag_list = "foo:baz"
-        person.save!
-        expect(subscribed).to eq [list]
-      end
-
-      it "excludes list when group subscription has included and excluded tags" do
-        create_group_subscription(excluded_tags: %w[bar foo], included_tags: %w[vip])
-        person.tag_list = %w[foo vip]
-        person.save!
-        expect(subscribed).to be_empty
-      end
-
-      it "excludes list when event subscription exists but excluded by tags" do
-        create_event_subscription(excluded_tags: %w[bar foo:baz])
-        person.tag_list = "foo:baz"
-        person.save!
-        expect(subscribed).to be_empty
-      end
-
-      it "includes list when not all event subscriptions are excluded by tags" do
-        create_event_subscription(excluded_tags: %w[bar foo:baz])
-        create_event_subscription
-        person.tag_list = "foo:baz"
-        person.save!
-        expect(subscribed).to eq [list]
-      end
-
-      it "excludes list when event subscription has included and excluded tags" do
-        create_event_subscription(excluded_tags: %w[bar foo], included_tags: %w[vip])
-        person.tag_list = %w[foo vip]
-        person.save!
-        expect(subscribed).to be_empty
-      end
-
-      it "excludes list when excluded by global filter" do
-        list.update(filter_chain: {language: {allowed_values: :fr}})
-        expect(subscribed).to be_empty
-      end
-
-      it "excludes list when not excluded by global filter" do
-        list.update(filter_chain: {language: {allowed_values: :fr}})
-        expect(subscribed).to be_empty
-      end
-
-      it "excludes list when group subscription exists but excluded by global filter" do
-        create_group_subscription
-        list.update(filter_chain: {language: {allowed_values: :fr}})
-        expect(subscribed).to be_empty
-      end
-
-      it "excludes list when event subscription exists but excluded by global filter" do
-        create_event_subscription
-        list.update(filter_chain: {language: {allowed_values: :fr}})
-        expect(subscribed).to be_empty
-      end
-
-      it "includes list when group subscription exists and not excluded by global filter" do
-        create_group_subscription
-        list.update(filter_chain: {language: {allowed_values: :de}})
-        expect(subscribed).to eq [list]
-      end
-
-      it "includes list when event subscription exists and not excluded by global filter" do
-        create_event_subscription
-        list.update(filter_chain: {language: {allowed_values: :de}})
-        expect(subscribed).to eq [list]
-      end
     end
+  end
+
+  context "subscribable_for anyone" do
+    before { list.update!(subscribable_for: :anyone) }
 
     describe "#subscribable" do
       before { MailingList.where.not(id: list.id).destroy_all }
@@ -344,6 +186,129 @@ describe Person::Subscriptions do
         create_event_subscription
         list.update(filter_chain: {language: {allowed_values: :de}})
         expect(subscribable).to be_empty
+      end
+    end
+
+    describe "#subscribed" do
+      before { MailingList.where.not(id: list.id).destroy_all }
+
+      it "is empty without subscription" do
+        expect(subscribed).to be_empty
+      end
+
+      it "includes list when direct subscription exists" do
+        create_person_subscription
+        expect(subscribed).to eq [list]
+      end
+
+      it "includes list when group subscription exists" do
+        create_group_subscription
+        expect(subscribed).to eq [list]
+      end
+
+      it "includes list when event subscription exists" do
+        create_event_subscription
+        expect(subscribed).to eq [list]
+      end
+
+      it "excludes list when group subscription exists but excluded" do
+        create_group_subscription
+        create_person_subscription(excluded: true)
+        expect(subscribed).to be_empty
+      end
+
+      it "excludes list when event subscription exists but excluded" do
+        create_event_subscription
+        create_person_subscription(excluded: true)
+        expect(subscribed).to be_empty
+      end
+
+      it "excludes list when group subscription exists but missing required tag" do
+        create_group_subscription(included_tags: %w[vip])
+        expect(subscribed).to be_empty
+      end
+
+      it "excludes list when event subscription exists but missing required tag" do
+        create_event_subscription(included_tags: %w[vip])
+        expect(subscribed).to be_empty
+      end
+
+      it "excludes list when group subscription exists but excluded by tags" do
+        create_group_subscription(excluded_tags: %w[bar foo:baz])
+        person.tag_list = "foo:baz"
+        person.save!
+        expect(subscribed).to be_empty
+      end
+
+      it "includes list when not all group subscriptions are excluded by tags" do
+        create_group_subscription(excluded_tags: %w[bar foo:baz])
+        create_group_subscription
+        person.tag_list = "foo:baz"
+        person.save!
+        expect(subscribed).to eq [list]
+      end
+
+      it "excludes list when group subscription has included and excluded tags" do
+        create_group_subscription(excluded_tags: %w[bar foo], included_tags: %w[vip])
+        person.tag_list = %w[foo vip]
+        person.save!
+        expect(subscribed).to be_empty
+      end
+
+      it "excludes list when event subscription exists but excluded by tags" do
+        create_event_subscription(excluded_tags: %w[bar foo:baz])
+        person.tag_list = "foo:baz"
+        person.save!
+        expect(subscribed).to be_empty
+      end
+
+      it "includes list when not all event subscriptions are excluded by tags" do
+        create_event_subscription(excluded_tags: %w[bar foo:baz])
+        create_event_subscription
+        person.tag_list = "foo:baz"
+        person.save!
+        expect(subscribed).to eq [list]
+      end
+
+      it "excludes list when event subscription has included and excluded tags" do
+        create_event_subscription(excluded_tags: %w[bar foo], included_tags: %w[vip])
+        person.tag_list = %w[foo vip]
+        person.save!
+        expect(subscribed).to be_empty
+      end
+
+      it "excludes list when excluded by global filter" do
+        list.update(filter_chain: {language: {allowed_values: :fr}})
+        expect(subscribed).to be_empty
+      end
+
+      it "excludes list when not excluded by global filter" do
+        list.update(filter_chain: {language: {allowed_values: :fr}})
+        expect(subscribed).to be_empty
+      end
+
+      it "excludes list when group subscription exists but excluded by global filter" do
+        create_group_subscription
+        list.update(filter_chain: {language: {allowed_values: :fr}})
+        expect(subscribed).to be_empty
+      end
+
+      it "excludes list when event subscription exists but excluded by global filter" do
+        create_event_subscription
+        list.update(filter_chain: {language: {allowed_values: :fr}})
+        expect(subscribed).to be_empty
+      end
+
+      it "includes list when group subscription exists and not excluded by global filter" do
+        create_group_subscription
+        list.update(filter_chain: {language: {allowed_values: :de}})
+        expect(subscribed).to eq [list]
+      end
+
+      it "includes list when event subscription exists and not excluded by global filter" do
+        create_event_subscription
+        list.update(filter_chain: {language: {allowed_values: :de}})
+        expect(subscribed).to eq [list]
       end
     end
   end
@@ -1021,6 +986,70 @@ describe Person::Subscriptions do
         role_types: ["Group::BottomLayer::Member"])
       person.roles.destroy_all
       expect(subject).to be_empty
+    end
+  end
+
+  describe "#create" do
+    subject(:subscription) { described_class.new(person) }
+
+    it "subscribes person to list" do
+      expect(list.subscribed?(person)).to be_falsey
+
+      expect { subscription.create(list) }
+        .to change { subscription.subscribed }.from([]).to([list])
+        .and change { list.subscriptions.count }.by(1)
+    end
+
+    it "subscribes person previously unsubscribed from list" do
+      create_group_subscription
+      expect(list.subscribed?(person)).to be_truthy
+
+      list.subscriptions.create!(subscriber: person, excluded: true)
+      expect(list.subscribed?(person)).to be_falsey
+
+      expect { subscription.create(list) }
+        .to change { subscription.subscribed }.from([]).to([list])
+        .and change { list.subscriptions.count }.by(-1)
+    end
+
+    it "does nothing if person is already personally subscribed" do
+      expect(list.subscribed?(person)).to be_falsey
+      list.subscriptions.create!(subscriber: person)
+      expect(list.subscribed?(person)).to be_truthy
+
+      expect { subscription.create(list) }
+        .to not_change { subscription.subscribed.to_a }.from([list])
+        .and not_change { list.subscriptions.count }
+    end
+
+    it "does nothing if person is already subscribed by group" do
+      expect(list.subscribed?(person)).to be_falsey
+      create_group_subscription
+      expect(list.subscribed?(person)).to be_truthy
+
+      expect { subscription.create(list) }
+        .to not_change { subscription.subscribed.to_a }.from([list])
+        .and not_change(list.subscriptions, :count)
+    end
+  end
+
+  describe "#destroy" do
+    before { list.update(subscribable_for: :configured, subscribable_mode: :opt_out) }
+
+    subject(:subscription) { described_class.new(person) }
+
+    it "unsubscribes person from list" do
+      list.subscriptions.create!(subscriber: person)
+      expect(list.subscribed?(person)).to be_truthy
+
+      expect { subscription.destroy(list) }.to change { subscription.subscribed }.from([list]).to([])
+    end
+
+    it "does nothing if person is not subscribed" do
+      expect(list.subscribed?(person)).to be_falsey
+      expect { subscription.destroy(list) }
+        .to not_change { subscription.subscribed.to_a }.from([])
+        .and not_change { list.subscriptions.count }
     end
   end
 end

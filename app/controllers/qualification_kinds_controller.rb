@@ -10,10 +10,4 @@ class QualificationKindsController < SimpleCrudController
     label: "qualification_kind_translations.label",
     description: "qualification_kind_translations.description"
   }
-
-  private
-
-  def list_entries
-    super.list
-  end
 end

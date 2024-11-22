@@ -13,10 +13,4 @@ class CustomContentsController < SimpleCrudController
                          body: "custom_content_translations.body"}
 
   decorates :custom_content
-
-  private
-
-  def list_entries
-    super.list
-  end
 end

@@ -25,7 +25,24 @@ describe Event::KindsController, type: :controller do
 
   include_examples "crud controller", skip: [%w[show], %w[destroy]]
 
+  # must be after include_examples
+  let(:sort_column) { "label" } # rubocop:disable RSpec/LetBeforeExamples
+
   it "soft deletes" do
     expect { post :destroy, params: {id: test_entry.id} }.to change { Event::Kind.without_deleted.count }.by(-1)
+  end
+
+  describe_action :get, :index do
+    context ".html", format: :html do
+      it "should contain all entries" do
+        expect(entries.size).to eq(Event::Kind.count)
+      end
+
+      it "should contain all entries in french", perform_request: false do
+        I18n.locale = :fr
+        perform_request
+        expect(entries.size).to eq(Event::Kind.count)
+      end
+    end
   end
 end

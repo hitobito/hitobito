@@ -65,7 +65,7 @@ describe Sortable, type: :controller do
       controller.class.sort_mappings = {
         roles: {
           joins: [:roles, "INNER JOIN role_type_orders ON roles.type = role_type_orders.name"],
-          order: ["order_weight"]
+          order: ["role_type_orders.order_weight"]
         }
       }
 

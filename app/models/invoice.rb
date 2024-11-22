@@ -180,7 +180,7 @@ class Invoice < ActiveRecord::Base
 
   def calculated
     [:total, :cost, :vat].index_with do |field|
-      round(invoice_items.reject(&:frozen?).sum(&field))
+      invoice_items.reject { |invoice| invoice.send(field).nil? || invoice.frozen? }.sum(&field)
     end
   end
 

@@ -18,3 +18,5 @@
     - FeatureGate.if('person_language') do
       = render(layout: 'people_filters/filter', locals: { type: :language }) do
         = render 'people_filters/language', f: f, entry: @mailing_list
+
+    = render_extensions('filter_form', locals: { entry: entry })

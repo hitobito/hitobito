@@ -1,5 +1,5 @@
 - id = type.to_s.pluralize
-- caption = t("people_filters.#{type}.title")
+- caption ||= t("people_filters.#{type}.title")
 - open_class = "show" if entry.filter_chain[type.to_sym].present?
 
 .accordion-item

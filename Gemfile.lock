@@ -9,55 +9,70 @@ GIT
       graphiti (~> 1.3.9)
       transproc
 
+PATH
+  remote: ../hitobito_jemk
+  specs:
+    hitobito_jemk (2.3.6)
+      hitobito_youth
+
+PATH
+  remote: ../hitobito_youth
+  specs:
+    hitobito_youth (2.3.6)
+      social_security_number (~> 0.1.12)
+
 GEM
   remote: https://rubygems.org/
   specs:
     Ascii85 (1.1.1)
-    actioncable (7.0.8)
-      actionpack (= 7.0.8)
-      activesupport (= 7.0.8)
+    actioncable (7.1.0)
+      actionpack (= 7.1.0)
+      activesupport (= 7.1.0)
       nio4r (~> 2.0)
       websocket-driver (>= 0.6.1)
-    actionmailbox (7.0.8)
-      actionpack (= 7.0.8)
-      activejob (= 7.0.8)
-      activerecord (= 7.0.8)
-      activestorage (= 7.0.8)
-      activesupport (= 7.0.8)
+      zeitwerk (~> 2.6)
+    actionmailbox (7.1.0)
+      actionpack (= 7.1.0)
+      activejob (= 7.1.0)
+      activerecord (= 7.1.0)
+      activestorage (= 7.1.0)
+      activesupport (= 7.1.0)
       mail (>= 2.7.1)
       net-imap
       net-pop
       net-smtp
-    actionmailer (7.0.8)
-      actionpack (= 7.0.8)
-      actionview (= 7.0.8)
-      activejob (= 7.0.8)
-      activesupport (= 7.0.8)
+    actionmailer (7.1.0)
+      actionpack (= 7.1.0)
+      actionview (= 7.1.0)
+      activejob (= 7.1.0)
+      activesupport (= 7.1.0)
       mail (~> 2.5, >= 2.5.4)
       net-imap
       net-pop
       net-smtp
-      rails-dom-testing (~> 2.0)
-    actionpack (7.0.8)
-      actionview (= 7.0.8)
-      activesupport (= 7.0.8)
-      rack (~> 2.0, >= 2.2.4)
+      rails-dom-testing (~> 2.2)
+    actionpack (7.1.0)
+      actionview (= 7.1.0)
+      activesupport (= 7.1.0)
+      nokogiri (>= 1.8.5)
+      rack (>= 2.2.4)
+      rack-session (>= 1.0.1)
       rack-test (>= 0.6.3)
-      rails-dom-testing (~> 2.0)
-      rails-html-sanitizer (~> 1.0, >= 1.2.0)
-    actiontext (7.0.8)
-      actionpack (= 7.0.8)
-      activerecord (= 7.0.8)
-      activestorage (= 7.0.8)
-      activesupport (= 7.0.8)
+      rails-dom-testing (~> 2.2)
+      rails-html-sanitizer (~> 1.6)
+    actiontext (7.1.0)
+      actionpack (= 7.1.0)
+      activerecord (= 7.1.0)
+      activestorage (= 7.1.0)
+      activesupport (= 7.1.0)
       globalid (>= 0.6.0)
       nokogiri (>= 1.8.5)
-    actionview (7.0.8)
-      activesupport (= 7.0.8)
+    actionview (7.1.0)
+      activesupport (= 7.1.0)
       builder (~> 3.1)
-      erubi (~> 1.4)
-      rails-dom-testing (~> 2.0)
-      rails-html-sanitizer (~> 1.1, >= 1.2.0)
+      erubi (~> 1.11)
+      rails-dom-testing (~> 2.2)
+      rails-html-sanitizer (~> 1.6)
     active_record_distinct_on (1.6.0)
       activerecord (>= 6.1, < 7.2)
     active_storage_validations (1.1.4)
@@ -65,18 +80,19 @@ GEM
       activemodel (>= 5.2.0)
       activestorage (>= 5.2.0)
       activesupport (>= 5.2.0)
-    activejob (7.0.8)
-      activesupport (= 7.0.8)
+    activejob (7.1.0)
+      activesupport (= 7.1.0)
       globalid (>= 0.3.6)
-    activemodel (7.0.8)
-      activesupport (= 7.0.8)
+    activemodel (7.1.0)
+      activesupport (= 7.1.0)
     activemodel-serializers-xml (1.0.2)
       activemodel (> 5.x)
       activesupport (> 5.x)
       builder (~> 3.1)
-    activerecord (7.0.8)
-      activemodel (= 7.0.8)
-      activesupport (= 7.0.8)
+    activerecord (7.1.0)
+      activemodel (= 7.1.0)
+      activesupport (= 7.1.0)
+      timeout (>= 0.4.0)
     activerecord-nulldb-adapter (1.1.1)
       activerecord (>= 6.0, < 8.1)
     activerecord-session_store (2.1.0)
@@ -86,17 +102,21 @@ GEM
       multi_json (~> 1.11, >= 1.11.2)
       rack (>= 2.0.8, < 4)
       railties (>= 6.1)
-    activestorage (7.0.8)
-      actionpack (= 7.0.8)
-      activejob (= 7.0.8)
-      activerecord (= 7.0.8)
-      activesupport (= 7.0.8)
+    activestorage (7.1.0)
+      actionpack (= 7.1.0)
+      activejob (= 7.1.0)
+      activerecord (= 7.1.0)
+      activesupport (= 7.1.0)
       marcel (~> 1.0)
-      mini_mime (>= 1.1.0)
-    activesupport (7.0.8)
+    activesupport (7.1.0)
+      base64
+      bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
+      connection_pool (>= 2.2.5)
+      drb
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
+      mutex_m
       tzinfo (~> 2.0)
     acts-as-taggable-on (10.0.0)
       activerecord (>= 6.1, < 7.2)
@@ -185,6 +205,7 @@ GEM
     concurrent-ruby (1.3.4)
     config (5.5.0)
       deep_merge (~> 1.2, >= 1.2.1)
+    connection_pool (2.4.1)
     countries (6.0.1)
       unaccent (~> 0.3)
     country_select (9.0.0)
@@ -241,6 +262,7 @@ GEM
       request_store (>= 1.0)
       ruby2_keywords
     draper-cancancan (1.1.1)
+    drb (2.2.1)
     dry-configurable (1.1.0)
       dry-core (~> 1.0, < 2)
       zeitwerk (~> 2.6)
@@ -341,6 +363,10 @@ GEM
     image_processing (1.12.2)
       mini_magick (>= 4.9.5, < 5)
       ruby-vips (>= 2.0.17, < 3)
+    io-console (0.7.2)
+    irb (1.14.1)
+      rdoc (>= 4.0.0)
+      reline (>= 0.4.2)
     jmespath (1.6.2)
     json (2.6.3)
     json-schema (4.3.0)
@@ -405,6 +431,7 @@ GEM
     minitest (5.25.1)
     msgpack (1.7.2)
     multi_json (1.15.0)
+    mutex_m (0.3.0)
     nested_form (0.3.2)
     net-http (0.4.1)
       uri
@@ -478,6 +505,8 @@ GEM
     pry-stack_explorer (0.6.1)
       binding_of_caller (~> 1.0)
       pry (~> 0.13)
+    psych (5.2.0)
+      stringio
     public_suffix (5.0.5)
     puma (6.4.3)
       nio4r (~> 2.0)
@@ -489,22 +518,27 @@ GEM
       rack (>= 1.2.0)
     rack-proxy (0.7.7)
       rack
+    rack-session (1.0.2)
+      rack (< 3)
     rack-test (2.1.0)
       rack (>= 1.3)
-    rails (7.0.8)
-      actioncable (= 7.0.8)
-      actionmailbox (= 7.0.8)
-      actionmailer (= 7.0.8)
-      actionpack (= 7.0.8)
-      actiontext (= 7.0.8)
-      actionview (= 7.0.8)
-      activejob (= 7.0.8)
-      activemodel (= 7.0.8)
-      activerecord (= 7.0.8)
-      activestorage (= 7.0.8)
-      activesupport (= 7.0.8)
+    rackup (1.0.1)
+      rack (< 3)
+      webrick
+    rails (7.1.0)
+      actioncable (= 7.1.0)
+      actionmailbox (= 7.1.0)
+      actionmailer (= 7.1.0)
+      actionpack (= 7.1.0)
+      actiontext (= 7.1.0)
+      actionview (= 7.1.0)
+      activejob (= 7.1.0)
+      activemodel (= 7.1.0)
+      activerecord (= 7.1.0)
+      activestorage (= 7.1.0)
+      activesupport (= 7.1.0)
       bundler (>= 1.15.0)
-      railties (= 7.0.8)
+      railties (= 7.1.0)
     rails-controller-testing (1.0.5)
       actionpack (>= 5.0.1.rc1)
       actionview (>= 5.0.1.rc1)
@@ -528,13 +562,14 @@ GEM
       actionview (> 3.1)
       activesupport (> 3.1)
       railties (> 3.1)
-    railties (7.0.8)
-      actionpack (= 7.0.8)
-      activesupport (= 7.0.8)
-      method_source
+    railties (7.1.0)
+      actionpack (= 7.1.0)
+      activesupport (= 7.1.0)
+      irb
+      rackup (>= 1.0.0)
       rake (>= 12.2)
-      thor (~> 1.0)
-      zeitwerk (~> 2.5)
+      thor (~> 1.0, >= 1.2.2)
+      zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.2.1)
     rb-fsevent (0.11.2)
@@ -543,8 +578,12 @@ GEM
     rb_sys (0.9.97)
     rbtree (0.4.6)
     rbtree3 (0.7.1)
+    rdoc (6.8.1)
+      psych (>= 4.0.0)
     redcarpet (3.6.0)
     regexp_parser (2.9.2)
+    reline (0.5.11)
+      io-console (~> 0.5)
     remotipart (1.4.4)
     request_profiler (0.0.4)
       ruby-prof
@@ -688,6 +727,7 @@ GEM
     standard-rails (1.1.0)
       lint_roller (~> 1.0)
       rubocop-rails (~> 2.25.0)
+    stringio (3.1.2)
     strip_attributes (1.13.0)
       activemodel (>= 3.0, < 8.0)
     temple (0.10.3)
@@ -720,9 +760,9 @@ GEM
       activesupport (>= 5.2.0, < 8.0)
       concurrent-ruby (~> 1.0)
       method_source (~> 1.0)
-    wagons (0.7.0)
-      bundler (>= 1.1)
-      rails (>= 5.2)
+    wagons (0.8.0)
+      bundler (>= 2.0)
+      rails (>= 6.1)
       seed-fu-ndo (>= 0.0.3)
     warden (1.2.9)
       rack (>= 2.0.9)
@@ -805,6 +845,8 @@ DEPENDENCIES
   haml
   headless
   hirb
+  hitobito_jemk!
+  hitobito_youth!
   http_accept_language
   icalendar
   image_processing (~> 1.2)
@@ -844,7 +886,7 @@ DEPENDENCIES
   puma
   rack-cors
   rack-mini-profiler
-  rails (= 7.0.8)
+  rails (= 7.1)
   rails-controller-testing
   rails-erd
   rails-i18n
@@ -882,11 +924,11 @@ DEPENDENCIES
   truemail
   ttfunk (< 1.8.0)
   turbo-rails
-  validates_by_schema (~> 0.3.0)
+  validates_by_schema
   validates_timeliness (~> 7.0.0.beta2)
   vcard
   view_component
-  wagons (~> 0.7.0)
+  wagons (~> 0.8.0)
   webmock
   webpacker
   wirble

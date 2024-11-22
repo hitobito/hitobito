@@ -1,8 +1,11 @@
 ## JSON:API
 
-This documentation is about the new JSON API introduced in 2023. Check the [legacy Api documentation](rest_api.md) for the old Api.
 
-The hitobito JSON:API implements the open standard **[json:api](https://jsonapi.org) v1.1** with media type **[application/vnd.api+json](http://www.iana.org/assignments/media-types/application/vnd.api+json)**
+The hitobito JSON:API implements the open standard [json:api](https://jsonapi.org) v1.1 with media type [application/vnd.api+json](http://www.iana.org/assignments/media-types/application/vnd.api+json).
+
+Visit your hitobito's [Swagger UI](/api-docs) for detailed documentation and a sandbox for testing/developing requests. (Reload if you get a blank page on the first visit).
+
+This documentation is about the new JSON API introduced in 2023. Check the [legacy Api documentation](rest_api.md) for the old Api.
 
 ### Endpoints
 
@@ -27,8 +30,6 @@ Currently the following endpoints are provided:
 | GET    | /api/event_kind_categories/    | List all accessible events kind categories                                   |
 | GET    | /api/event_kind_categories/:id | Fetch a single event kind category, replace :id with the event's primary key |
 
-
-Visit your hitobito's swagger UI [/api-docs](/api-docs) for detailed documentation and a sandbox for testing/developing requests.
 
 All successful responses do have HTTP Status `2xx`.
 

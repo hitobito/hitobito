@@ -52,4 +52,12 @@ describe LabelFormatsController, type: :controller do
       end
     end
   end
+
+  describe_action :get, :index do
+    context ".html", format: :html do
+      it "should mark nav link as active" do
+        expect(response.body).to have_selector(".nav-left-list li.is-active", text: "Etikettenformate")
+      end
+    end
+  end
 end

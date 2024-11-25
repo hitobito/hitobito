@@ -82,6 +82,12 @@ describe Subscription do
       expect(subscription.to_s).to eq("Bottom One / Group 11")
     end
 
+    it "renders person as full label" do
+      list = Fabricate(:mailing_list, group: groups(:bottom_layer_one))
+      subscription = Subscription.new(mailing_list: list, subscriber: people(:top_leader))
+      expect(subscription.to_s).to eq("Top Leader, Greattown")
+    end
+
     it "renders event label" do
       event = Fabricate(:event,
         groups: [groups(:bottom_group_one_one)],

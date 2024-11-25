@@ -44,9 +44,8 @@ class People::HouseholdList
   def order_statement
     case @order
     when :retain
-      quoted_ids = @people_scope.pluck(:id).map { |id| Arel::Nodes.build_quoted(id).to_sql }
-      array_literal = Arel.sql("ARRAY[#{quoted_ids.join(",")}]")
-      Arel::Nodes::NamedFunction.new("array_position", [array_literal, Person.arel_table[:id]])
+      ids_in_order = ArelArrayLiteral.new(@people_scope.pluck(:id))
+      Arel::Nodes::NamedFunction.new("array_position", [ids_in_order, Person.arel_table[:id]])
     when :default
       '"member_count" DESC, id ASC'
     else

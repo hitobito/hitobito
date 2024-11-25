@@ -22,9 +22,9 @@
                               data: { remote: true, spin: true } }) do |f|
             %span.custom-file
               = link_to(icon(:plus) + ' ' + t('.add'), '#')
-              = f.hidden_field(:visibility, value: :global)
-              = f.file_field(:file,
+              = f.file_field(:files,
                               accept: Settings.event.attachments.content_types.join(','),
+                              multiple: true,
                               data: { submit: true })
 
         - if entry.external_applications?

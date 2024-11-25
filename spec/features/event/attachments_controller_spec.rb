@@ -16,9 +16,25 @@ describe Event::AttachmentsController, js: true do
     visit group_event_path(group.id, event.id)
 
     file = Tempfile.new(["foo", ".pdf"])
-    attach_file "event_attachment_file", file.path, visible: false
+    attach_file "event_attachment_files", file.path, visible: false
 
     expect(page).to have_selector("#attachments tr", text: File.basename(file.path))
+  end
+
+  it "uploads multiple files" do
+    sign_in
+    visit group_event_path(group.id, event.id)
+
+    file1 = Tempfile.new(["foo", ".pdf"])
+    file2 = Tempfile.new(["foo", ".exe"])
+    file3 = Tempfile.new(["foo", ".jpg"])
+
+    accept_alert(/fehlgeschlagen/) do
+      attach_file "event_attachment_files", [file1, file2, file3].map(&:path), visible: false
+    end
+
+    expect(page).to have_selector("#attachments tr", text: File.basename(file1.path))
+    expect(page).to have_selector("#attachments tr", text: File.basename(file3.path))
   end
 
   it "cannot upload unaccepted file" do
@@ -27,7 +43,7 @@ describe Event::AttachmentsController, js: true do
 
     file = Tempfile.new(["foo", ".exe"])
     accept_alert(/fehlgeschlagen/) do
-      attach_file "event_attachment_file", file.path, visible: false
+      attach_file "event_attachment_files", file.path, visible: false
     end
 
     expect(page).to have_no_selector("#attachments li", text: File.basename(file.path))
@@ -55,7 +71,7 @@ describe Event::AttachmentsController, js: true do
   end
 
   it "destroys existing file" do
-    Event::Attachment.delete_all
+    event.attachments.delete_all
     file = Tempfile.new(["foo", ".png"])
     a = event.attachments.build
     a.file.attach(io: file, filename: "foo.png")

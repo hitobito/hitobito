@@ -92,10 +92,13 @@ class Setup
       export RAILS_DB_USERNAME=hitobito
       export RAILS_DB_PASSWORD=hitobito
       export RAILS_DB_NAME=hit_#{primary_wagon || wagon}_dev
-      export RAILS_TEST_DB_NAME=hit_#{wagon ? wagon : "core"}_test
+      export RAILS_TEST_DB_NAME=hit_#{primary_wagon}_test
+      export RAILS_TMPDIR=#{root.join("../", primary_wagon ? "hitobito_#{primary_wagon}" : "", "tmp")}
+      export RAILS_TMPDIR=#{root.join("../hitobito_#{wagon}/tmp")}
       export RAILS_TMPDIR=#{root.join("../", wagon ? "hitobito_#{wagon}" : "", "tmp")}
-      export SPRING_APPLICATION_ID=hit_#{wagon ? wagon : "core"}
+      export SPRING_APPLICATION_ID=hit_#{primary_wagon ? primary_wagon : "core"}
       export PRIMARY_WAGON=#{primary_wagon}
+      export DISABLE_TEST_SCHEMA_MAINTENANCE=1
       #{'export WAGONS="' + wagons.join(" ") + '"' if wagons.any?}
       log_status "hitobito now uses: #{wagons.any? ? wagons.join(", ") : "just the core"}"
       source_up

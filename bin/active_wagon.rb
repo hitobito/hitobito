@@ -29,12 +29,11 @@ class Setup
     handle_gemfile
 
     wagons.each do |wagon|
+      FileUtils.mkdir("../hitobito_#{wagon}/tmp") unless Dir.exist?("../hitobito_#{wagon}/tmp")
       write("../hitobito_#{wagon}/.envrc", environment(core: false))
       FileUtils.touch("../hitobito_#{wagon}/config/environment.rb") # needed for rails-vim
       handle_gemfile(directory: "../hitobito_#{wagon}")
     end
-
-    FileUtils.rm_rf(root.join('tmp'))
   end
 
   def write(name, content)
@@ -88,7 +87,8 @@ class Setup
       export RAILS_DB_USERNAME=hitobito
       export RAILS_DB_PASSWORD=hitobito
       export RAILS_DB_NAME=hit_#{wagon}_dev
-      export RAILS_TEST_DB_NAME=hit_#{core ? "core" : wagon}_test
+      export RAILS_TEST_DB_NAME=hit_#{wagon}_test
+      export RAILS_TMPDIR=#{root.join("../hitobito_#{wagon}/tmp")}
       export SPRING_APPLICATION_ID=hit_#{core ? "core" : wagon}
       export PRIMARY_WAGON=#{wagon}
       export DISABLE_TEST_SCHEMA_MAINTENANCE=1

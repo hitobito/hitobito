@@ -90,6 +90,7 @@ function setup_dbs() {
 
 function setup_development_db() {
   echo "Migrating and seeding development database"
+  bundle exec rails db:schema:load
   bundle exec rails db:migrate
   bundle exec rails wagon:migrate
   bundle exec rails db:seed
@@ -109,6 +110,7 @@ function setup_test_db() {
 function reload_test_db() {
     echo "Preparing test database"
     bundle exec rails db:structure:dump_sql
+    echo "DROP SCHEMA public CASCADE" | rails db -p -e test
     RAILS_ENV=test rails db:structure:load_sql
     rm -f db/structure.sql
 }
@@ -146,6 +148,25 @@ bootstrap)
 clone)
   require_wagon_name
   clone_wagon
+  ;;
+
+direnv-allow-all)
+  for wagon in $(existing_wagon_names); do
+    echo "$wagon" | red
+    (bin/active_wagon.rb "$wagon" && cd "../hitobito_${wagon}" && direnv allow)
+  done
+  ;;
+
+each)
+  shift # loose the "each" argument
+  for wagon in jubla kljb pbs pro_natura sac_cas sbv sjas skv svse sww tenants youth; do
+  #for wagon in $(existing_wagon_names); do
+    echo "$wagon" | red
+    (
+      cd "../hitobito_${wagon}" &&
+        direnv exec "../hitobito_${wagon}" $@
+    )
+  done
   ;;
 
 reset-database)
@@ -202,28 +223,32 @@ test-prepare)
   ;;
 
 grep)
-  shift # loose the "grep" argument
+  if [[ $# -ne 2 ]]; then
+    echo "You must provide a String to grep"
+    exit 1
+  fi
   set +e
 
   # grep in core
   echo ">> grepping in hitobito <<" | highlight_phrases
-  git grep $@
+  git grep "${@:2}"
 
   # grep in installed wagons
   for wagon in $(existing_wagon_names); do
     echo ">> grepping in ../hitobito_$wagon/ <<" | highlight_phrases
     (
       cd "../hitobito_$wagon/"
-      git grep --color=always $@
+      git grep --color=always "${@:2}"
     )
   done
   ;;
 
 spec-all)
   shift # loose the "spec-all" argument
+#  for wagon in jubla kljb pbs pro_natura sac_cas sbv sjas skv svse sww tenants youth; do
   for wagon in $(existing_wagon_names); do
     echo "$wagon" | red
-    wagon spec $@
+    wagon spec $wagon $@
   done
   ;;
 
@@ -238,16 +263,21 @@ spec)
 
   # write and allow .envrc
   $0 activate "$wagon_name"
+  direnv allow
+  direnv exec ../hitobito/ bundle
+  direnv exec ../hitobito/ $0 reload-test-database
+  rm -rf public/packs*
+  direnv exec bin/webpack-test-compile
   if [[ -x $(command -v direnv) ]]; then direnv allow; fi
 
   # setup for specs
   direnv exec ../hitobito/ $0 gemfile
-  direnv exec ../hitobito/ $0 reset-test-database
+  direnv exec ../hitobito/ $0 reload-test-database
 
   # prepare DB
-  export RAILS_ENV=test
-  direnv exec ../hitobito/ bundle exec rake db:migrate
-  direnv exec ../hitobito/ bundle exec rake wagon:migrate
+#  export RAILS_ENV=test
+#  direnv exec ../hitobito/ bundle exec rake db:migrate
+#  direnv exec ../hitobito/ bundle exec rake wagon:migrate
 
   # run specs in subshell to return to current directory
   (
@@ -300,10 +330,18 @@ build)
   require_wagon_name
   shift # loose the "build" argument
   shift # loose the wagon-name argument
+  target=${1:-app}
+  shift # loose the target
+
+  if [[ $target == 'app' ]]; then
+    name='rails'
+  else
+    name=$target
+  fi
 
   (
     cd "../ose_composition_${wagon_name}" &&
-      docker buildx build . --file hitobito/Dockerfile --target app -t hitobito/$wagon_name/rails:latest $@
+      docker buildx build . --file hitobito/Dockerfile --target $target -t hitobito/$wagon_name/$name:latest $@
   )
   ;;
 

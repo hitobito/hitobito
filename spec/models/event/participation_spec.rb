@@ -10,14 +10,21 @@
 # Table name: event_participations
 #
 #  id                     :integer          not null, primary key
-#  event_id               :integer          not null
-#  person_id              :integer          not null
+#  active                 :boolean          default(FALSE), not null
 #  additional_information :text
+#  qualified              :boolean
 #  created_at             :datetime
 #  updated_at             :datetime
-#  active                 :boolean          default(FALSE), not null
 #  application_id         :integer
-#  qualified              :boolean
+#  event_id               :integer          not null
+#  person_id              :integer          not null
+#
+# Indexes
+#
+#  index_event_participations_on_application_id          (application_id)
+#  index_event_participations_on_event_id                (event_id)
+#  index_event_participations_on_event_id_and_person_id  (event_id,person_id) UNIQUE
+#  index_event_participations_on_person_id               (person_id)
 #
 
 require "spec_helper"

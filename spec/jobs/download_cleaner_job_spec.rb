@@ -13,12 +13,12 @@ describe DownloadCleanerJob do
     expect(subject.delayed_jobs).to be_exists
   end
 
-  it "removes files older then one day" do
-    download_file("file", Time.now.to_i)
-    download_file("file", 23.hours.ago.to_i)
+  it "removes files older than one day" do
+    download_file("file", Time.zone.now.to_i)
+    download_file("file", (1.day.ago + 1.hour).to_i)
 
-    download_file("file", 25.hours.ago.to_i)
-    download_file("file", 36.hours.ago.to_i)
+    download_file("file", (1.day.ago - 1.hour).to_i)
+    download_file("file", (1.day.ago - 14.hours).to_i)
 
     expect do
       subject.perform_internal

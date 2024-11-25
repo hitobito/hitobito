@@ -7,21 +7,13 @@ module Export::Pdf
   module List
     class Runner
       def render(contactables, group)
-        pdf = setup_pdf
-
-        pdf.font_size Settings.pdf.font_size
+        pdf = Export::Pdf::Document.new(margin: 1.cm).pdf
         sections.each { |section| section.new(pdf, contactables, group).render }
         footer(pdf)
         pdf.render
       end
 
       private
-
-      def setup_pdf
-        Prawn::Document.new(page_size: "A4",
-          page_layout: :portrait,
-          margin: 1.cm)
-      end
 
       def sections
         [Header, People]

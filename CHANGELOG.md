@@ -1,7 +1,10 @@
 # Hitobito Changelog
 
-## Unreleased
+## unreleased
 
+- JWT kann als OIDC Access Token konfiguriert werden (hitobito_sac_cas#1110)
+- Unterstützung vom login=prompt Parameter im OIDC Authorization Flow (hitobito_sac_cas#1075)
+- Bei Anlässen können mehrere Anhänge gleichzeitig hochgeladen werden (hitobito#3017)
 - Die Rechnungseinstellungen bieten neu die Möglichkeit, Vorlagen für Rechnungstitel und -text zu definieren. Diese können dann beim erstellen der Rechnung ausgewählt werden.
 
 ## Version 2.3

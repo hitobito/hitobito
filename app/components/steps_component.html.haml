@@ -6,8 +6,8 @@
 %div{data: { controller: stimulus_controller} }
   = hidden_field_tag(:step, @step, data: stimulus_target('step'))
   = hidden_field_tag :autosubmit, ''
-  .row
-    %ol.step-headers.offset-md-1
+  .row.justify-content-center
+    %ol.step-headers.col-md-9
       = render(HeaderComponent.with_collection(@partials, step: @step))
   .row
     - if aside?

@@ -10,32 +10,36 @@
 # Table name: groups
 #
 #  id                                      :integer          not null, primary key
-#  address                                 :text(65535)
+#  address                                 :string(1024)
+#  address_care_of                         :string
 #  archived_at                             :datetime
-#  country                                 :string(255)
-#  custom_self_registration_title          :string(255)
+#  country                                 :string
+#  custom_self_registration_title          :string
 #  deleted_at                              :datetime
-#  description                             :text(65535)
-#  email                                   :string(255)
-#  encrypted_text_message_password         :string(255)
-#  encrypted_text_message_username         :string(255)
-#  letter_address_position                 :string(255)      default("left"), not null
+#  description                             :text
+#  email                                   :string
+#  encrypted_text_message_password         :string
+#  encrypted_text_message_username         :string
+#  housenumber                             :string(20)
+#  letter_address_position                 :string           default("left"), not null
 #  lft                                     :integer
 #  main_self_registration_group            :boolean          default(FALSE), not null
-#  name                                    :string(255)
-#  nextcloud_url                           :string(255)
-#  privacy_policy                          :string(255)
-#  privacy_policy_title                    :string(255)
+#  name                                    :string
+#  nextcloud_url                           :string
+#  postbox                                 :string
+#  privacy_policy                          :string
+#  privacy_policy_title                    :string
 #  require_person_add_requests             :boolean          default(FALSE), not null
 #  rgt                                     :integer
-#  self_registration_notification_email    :string(255)
+#  self_registration_notification_email    :string
 #  self_registration_require_adult_consent :boolean          default(FALSE), not null
-#  self_registration_role_type             :string(255)
+#  self_registration_role_type             :string
 #  short_name                              :string(31)
-#  text_message_originator                 :string(255)
-#  text_message_provider                   :string(255)      default("aspsms"), not null
-#  town                                    :string(255)
-#  type                                    :string(255)      not null
+#  street                                  :string
+#  text_message_originator                 :string
+#  text_message_provider                   :string           default("aspsms"), not null
+#  town                                    :string
+#  type                                    :string           not null
 #  zip_code                                :integer
 #  created_at                              :datetime
 #  updated_at                              :datetime
@@ -48,6 +52,7 @@
 #
 # Indexes
 #
+#  groups_search_column_gin_idx    (search_column) USING gin
 #  index_groups_on_layer_group_id  (layer_group_id)
 #  index_groups_on_lft_and_rgt     (lft,rgt)
 #  index_groups_on_parent_id       (parent_id)
@@ -137,7 +142,9 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   belongs_to :contact, class_name: "Person"
 
-  has_many :roles, dependent: :destroy, inverse_of: :group
+  # use scope active_and_future for backward compatibility as with with the former
+  # implementation of future roles those were included in the default scope
+  has_many :roles, -> { active_and_future }, dependent: :destroy, inverse_of: :group
   has_many :people, through: :roles
 
   has_many :people_filters, dependent: :destroy
@@ -247,8 +254,6 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     end
   end
 
-  # create alias to call it again
-  alias_method :hard_destroy, :really_destroy!
   def really_destroy!
     # run nested_set callback on hard destroy
     # destroy_descendants_without_paranoia
@@ -257,7 +262,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     event_list = events.to_a
     invoice_list = invoices.to_a
 
-    hard_destroy
+    super
 
     event_list.each { |e| destroy_orphaned_event(e) }
     invoice_list.each(&:destroy)
@@ -268,10 +273,12 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def person_duplicates
-    if top?
-      duplicates = PersonDuplicate.all
+    duplicates = if top?
+      PersonDuplicate.all
     elsif layer?
-      duplicates = layer_person_duplicates
+      layer_person_duplicates
+    else
+      group_person_duplicates
     end
     duplicates.includes(person_1: [{roles: :group}, :groups, :primary_group],
       person_2: [{roles: :group}, :groups, :primary_group])
@@ -282,9 +289,8 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     ActiveRecord::Base.transaction do
       self.archived_at = Time.zone.now
       Role.where(group_id: id).tap do |roles|
-        roles.where(type: FutureRole.sti_name).delete_all
+        roles.future.delete_all
         roles.update_all(archived_at: archived_at)
-        roles.where(delete_on: archived_at..).update_all(delete_on: nil)
       end
 
       mailing_lists.destroy_all
@@ -389,12 +395,17 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   private
 
-  def layer_person_duplicates
-    duplicates = PersonDuplicate.joins(person_1: :roles).joins(person_2: :roles)
-    group_ids = children.map(&:id) + [id]
-    duplicates
+  def duplicates_in_groups(*group_ids)
+    PersonDuplicate.joins(person_1: :roles).joins(person_2: :roles)
       .where("roles.group_id IN (:group_ids) OR roles_people.group_id IN (:group_ids)",
-        group_ids: group_ids)
+        group_ids:)
+  end
+
+  def group_person_duplicates = duplicates_in_groups(id)
+
+  def layer_person_duplicates
+    children_ids = children.map(&:id)
+    duplicates_in_groups(*children_ids, id)
   end
 
   def top?

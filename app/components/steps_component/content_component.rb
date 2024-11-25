@@ -40,14 +40,14 @@ class StepsComponent::ContentComponent < StepsComponent::IteratingComponent
     content
   end
 
-  def nested_fields_for(assoc, object, &)
+  def nested_fields_for(assoc, object, title = nil, &)
     fields_for(buttons: false) do |f|
-      f.nested_fields_for(assoc, nil, nil, model_object: object, &)
+      f.nested_fields_for(assoc, nil, nil, model_object: object, link_to_add_title: title, &)
     end
   end
 
   def bottom_toolbar
-    content_tag(:div, build_buttons, class: "btn-toolbar allign-with-form")
+    content_tag(:div, build_buttons, class: "btn-toolbar align-with-form")
   end
 
   def next_button(title = nil, options = {})
@@ -62,7 +62,7 @@ class StepsComponent::ContentComponent < StepsComponent::IteratingComponent
   end
 
   def render?
-    index <= @step
+    index <= @step || model.contains_any_changes?
   end
 
   def back_link

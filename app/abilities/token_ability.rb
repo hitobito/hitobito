@@ -95,6 +95,7 @@ class TokenAbility
     end
 
     can :read, Event::Kind
+    can :read, Event::KindCategory
   end
 
   def define_event_participation_abilities

@@ -12,35 +12,37 @@
 #  id                               :integer          not null, primary key
 #  applicant_count                  :integer          default(0)
 #  application_closing_at           :date
-#  application_conditions           :text(65535)
+#  application_conditions           :text
 #  application_opening_at           :date
 #  applications_cancelable          :boolean          default(FALSE), not null
-#  cost                             :string(255)
-#  description                      :text(65535)
+#  automatic_assignment             :boolean          default(FALSE), not null
+#  cost                             :string
+#  description                      :text
 #  display_booking_info             :boolean          default(TRUE), not null
 #  external_applications            :boolean          default(FALSE)
 #  globally_visible                 :boolean
-#  hidden_contact_attrs             :text(65535)
-#  location                         :text(65535)
+#  hidden_contact_attrs             :text
+#  location                         :text
 #  maximum_participants             :integer
 #  minimum_participants             :integer
-#  motto                            :string(255)
-#  name                             :string(255)
+#  motto                            :string
+#  name                             :string
 #  notify_contact_on_participations :boolean          default(FALSE), not null
-#  number                           :string(255)
+#  number                           :string
 #  participant_count                :integer          default(0)
 #  participations_visible           :boolean          default(FALSE), not null
 #  priorization                     :boolean          default(FALSE), not null
-#  required_contact_attrs           :text(65535)
+#  required_contact_attrs           :text
 #  requires_approval                :boolean          default(FALSE), not null
-#  shared_access_token              :string(255)
+#  search_column                    :tsvector
+#  shared_access_token              :string
 #  signature                        :boolean
 #  signature_confirmation           :boolean
-#  signature_confirmation_text      :string(255)
+#  signature_confirmation_text      :string
 #  state                            :string(60)
 #  teamer_count                     :integer          default(0)
 #  training_days                    :decimal(5, 2)
-#  type                             :string(255)
+#  type                             :string
 #  waiting_list                     :boolean          default(TRUE), not null
 #  created_at                       :datetime
 #  updated_at                       :datetime
@@ -52,6 +54,7 @@
 #
 # Indexes
 #
+#  events_search_column_gin_idx         (search_column) USING gin
 #  index_events_on_kind_id              (kind_id)
 #  index_events_on_shared_access_token  (shared_access_token)
 #
@@ -131,6 +134,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   # Autosave would change updated_at and updater on the group when creating an event.
   has_and_belongs_to_many :groups, autosave: false
 
+  belongs_to :kind
   belongs_to :contact, class_name: "Person"
 
   has_many :attachments, dependent: :destroy
@@ -160,7 +164,9 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   ### VALIDATIONS
 
-  validates_by_schema
+  # canceled_reason is used as enum in hitobito_sac_cas. validates_by_schema cannot be overridden inside a wagon
+  # because of the loading order, so it must be excluded in the core instead
+  validates_by_schema except: [:canceled_reason]
   # name is a translated attribute and thus needs to be validated explicitly
   validates :name, presence: true
   validates :dates, presence: {message: :must_exist}

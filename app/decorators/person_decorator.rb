@@ -70,9 +70,11 @@ class PersonDecorator < ApplicationDecorator
   end
 
   def picture_full_url
-    pic_url = Class.new do
-      include UploadDisplayHelper
-    end.new.upload_url(self, :picture, default: "profil")
+    pic_url = if picture.attached?
+      h.url_for(picture)
+    else
+      h.asset_pack_path("media/images/#{picture_default}")
+    end
 
     if pic_url.respond_to?(:url)
       pic_url.url
@@ -93,7 +95,7 @@ class PersonDecorator < ApplicationDecorator
   end
 
   def current_roles_grouped
-    @current_roles_grouped ||= roles_grouped(scope: person.roles.without_future)
+    @current_roles_grouped ||= roles_grouped(scope: person.roles)
   end
 
   def future_roles_grouped

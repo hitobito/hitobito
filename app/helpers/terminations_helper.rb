@@ -11,13 +11,13 @@ module TerminationsHelper
     t(key, default: defaults)
   end
 
-  # If the role has a delete_on set, then we render the date as text.
+  # If the role has a end_on set, then we render the date as text.
   # Otherwise we render a date field.
-  def terminate_on_field_or_text(form, termination, **opts)
-    if termination.role.delete_on?
-      "#{Roles::Termination.human_attribute_name(:terminate_on)}: #{f(termination.role.delete_on)}"
+  def terminate_on_field_or_text(form, termination, **)
+    if termination.role.end_on?
+      "#{Roles::Termination.human_attribute_name(:terminate_on)}: #{f(termination.role.end_on)}"
     else
-      form.labeled_date_field :terminate_on, **opts
+      form.labeled_date_field(:terminate_on, **)
     end
   end
 

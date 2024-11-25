@@ -7,5 +7,6 @@ Everything that does not fit in the other documentation modules is found in here
 * [API](api/README.md)
 * [Frontend](frontend/README.md)
 * [CI/CD](ci_cd.md)
-* [Wagons](../../architecture/wagons/README.md)
+* [Wagons](wagons.md)
+* [Wagons Architecture](../../architecture/wagons/README.md)
 * [Testing](testing.md)

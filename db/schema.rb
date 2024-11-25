@@ -10,10 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_10_31_081851) do
+ActiveRecord::Schema.define(version: 2024_11_12_142323) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  # Please do not delete this, the SQL schema does not know about this
+  # but the application and this schema needs it
+  execute "CREATE COLLATION IF NOT EXISTS case_insensitive_emails (provider = icu, deterministic = false, locale = 'und-u-ka-noignore-ks-level2');"
 
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
@@ -56,7 +60,7 @@ ActiveRecord::Schema.define(version: 2024_10_31_081851) do
   create_table "additional_emails", id: :serial, force: :cascade do |t|
     t.string "contactable_type", null: false
     t.integer "contactable_id", null: false
-    t.string "email", null: false
+    t.string "email", null: false, collation: "case_insensitive_emails"
     t.string "label"
     t.boolean "public", default: true, null: false
     t.boolean "mailings", default: true, null: false
@@ -430,7 +434,7 @@ ActiveRecord::Schema.define(version: 2024_10_31_081851) do
     t.string "name"
     t.string "short_name", limit: 31
     t.string "type", null: false
-    t.string "email"
+    t.string "email", collation: "case_insensitive_emails"
     t.string "address", limit: 1024
     t.integer "zip_code"
     t.string "town"
@@ -447,7 +451,7 @@ ActiveRecord::Schema.define(version: 2024_10_31_081851) do
     t.text "description"
     t.datetime "archived_at"
     t.string "self_registration_role_type"
-    t.string "self_registration_notification_email"
+    t.string "self_registration_notification_email", collation: "case_insensitive_emails"
     t.string "privacy_policy"
     t.string "nextcloud_url"
     t.boolean "main_self_registration_group", default: false, null: false
@@ -525,7 +529,7 @@ ActiveRecord::Schema.define(version: 2024_10_31_081851) do
     t.text "beneficiary"
     t.text "payee"
     t.string "participant_number"
-    t.string "email"
+    t.string "email", collation: "case_insensitive_emails"
     t.string "participant_number_internal"
     t.string "vat_number"
     t.string "currency", default: "CHF", null: false
@@ -576,7 +580,7 @@ ActiveRecord::Schema.define(version: 2024_10_31_081851) do
     t.string "state", default: "draft", null: false
     t.string "esr_number", null: false
     t.text "description"
-    t.string "recipient_email"
+    t.string "recipient_email", collation: "case_insensitive_emails"
     t.text "recipient_address"
     t.date "sent_at"
     t.date "due_at"
@@ -642,7 +646,7 @@ ActiveRecord::Schema.define(version: 2024_10_31_081851) do
   end
 
   create_table "mail_logs", id: :serial, force: :cascade do |t|
-    t.string "mail_from"
+    t.string "mail_from", collation: "case_insensitive_emails"
     t.string "mail_hash"
     t.integer "status", default: 0
     t.string "mailing_list_name"
@@ -659,7 +663,7 @@ ActiveRecord::Schema.define(version: 2024_10_31_081851) do
     t.text "description"
     t.string "publisher"
     t.string "mail_name"
-    t.string "additional_sender"
+    t.string "additional_sender", collation: "case_insensitive_emails"
     t.boolean "subscribers_may_post", default: false, null: false
     t.boolean "anyone_may_post", default: false, null: false
     t.string "preferred_labels"
@@ -682,7 +686,7 @@ ActiveRecord::Schema.define(version: 2024_10_31_081851) do
     t.bigint "message_id", null: false
     t.bigint "person_id"
     t.string "phone_number"
-    t.string "email"
+    t.string "email", collation: "case_insensitive_emails"
     t.text "address"
     t.datetime "created_at"
     t.datetime "failed_at"
@@ -795,6 +799,7 @@ ActiveRecord::Schema.define(version: 2024_10_31_081851) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "skip_consent_screen", default: false
+    t.string "additional_audiences"
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
@@ -866,7 +871,7 @@ ActiveRecord::Schema.define(version: 2024_10_31_081851) do
     t.string "company_name"
     t.string "nickname"
     t.boolean "company", default: false, null: false
-    t.string "email"
+    t.string "email", collation: "case_insensitive_emails"
     t.string "address", limit: 1024
     t.string "zip_code"
     t.string "town"
@@ -901,7 +906,7 @@ ActiveRecord::Schema.define(version: 2024_10_31_081851) do
     t.string "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
-    t.string "unconfirmed_email"
+    t.string "unconfirmed_email", collation: "case_insensitive_emails"
     t.string "reset_password_sent_to"
     t.integer "two_factor_authentication"
     t.text "encrypted_two_fa_secret"
@@ -1036,12 +1041,10 @@ ActiveRecord::Schema.define(version: 2024_10_31_081851) do
     t.string "label"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "deleted_at"
     t.datetime "archived_at"
-    t.date "delete_on"
-    t.date "convert_on"
-    t.string "convert_to"
     t.boolean "terminated", default: false, null: false
+    t.date "start_on"
+    t.date "end_on"
     t.index ["person_id", "group_id"], name: "index_roles_on_person_id_and_group_id"
     t.index ["type"], name: "index_roles_on_type"
   end

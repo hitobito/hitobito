@@ -17,11 +17,11 @@ describe RoleResource, type: :resource do
 
   describe "serialization" do
     def serialized_attrs
-      [:person_id, :group_id, :label, :type, :created_at, :updated_at, :deleted_at]
+      [:person_id, :group_id, :label, :type, :created_at, :updated_at, :start_on, :end_on]
     end
 
     def date_time_attrs
-      [:created_at, :updated_at, :deleted_at]
+      [:created_at, :updated_at]
     end
 
     before { params[:filter] = {id: {eq: role.id}} }

@@ -9,7 +9,8 @@
 #
 #  id                    :integer          not null, primary key
 #  finish_at             :date
-#  origin                :string(255)
+#  origin                :string
+#  qualified_at          :date
 #  start_at              :date             not null
 #  person_id             :integer          not null
 #  qualification_kind_id :integer          not null

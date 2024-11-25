@@ -106,7 +106,7 @@ class Person::SecurityToolsController < ApplicationController
   end
 
   def authorize_action
-    authorize!(:update, person)
+    authorize!(:security, person)
   end
 
   # rubocop:disable Layout/LineLength

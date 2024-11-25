@@ -10,11 +10,11 @@
 # Table name: hitobito_log_entries
 #
 #  id           :bigint           not null, primary key
-#  category     :string(255)      not null
+#  category     :string           not null
 #  level        :integer          not null
-#  message      :text(65535)      not null
+#  message      :text             not null
 #  payload      :json
-#  subject_type :string(255)
+#  subject_type :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  subject_id   :bigint

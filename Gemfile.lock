@@ -224,6 +224,8 @@ GEM
       railties (>= 5)
     doorkeeper-i18n (5.2.7)
       doorkeeper (>= 5.2)
+    doorkeeper-jwt (0.4.2)
+      jwt (>= 2.1)
     doorkeeper-openid_connect (1.8.9)
       doorkeeper (>= 5.5, < 5.8)
       jwt (>= 2.5)
@@ -412,6 +414,7 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     netrc (0.11.0)
+    niceql (0.6.1)
     nio4r (2.7.3)
     nokogiri (1.16.6)
       mini_portile2 (~> 2.8.2)
@@ -431,7 +434,7 @@ GEM
     parser (3.3.1.0)
       ast (~> 2.4.1)
       racc
-    pdf-core (0.10.0)
+    pdf-core (0.9.0)
     pdf-inspector (1.3.0)
       pdf-reader (>= 1.0, < 3.0.a)
     pdf-reader (2.12.0)
@@ -442,10 +445,9 @@ GEM
       ttfunk
     pg (1.5.7)
     phonelib (0.8.8)
-    prawn (2.5.0)
-      matrix (~> 0.4)
-      pdf-core (~> 0.10.0)
-      ttfunk (~> 1.8)
+    prawn (2.4.0)
+      pdf-core (~> 0.9.0)
+      ttfunk (~> 1.7)
     prawn-markup (1.0.0)
       nokogiri
       prawn
@@ -474,7 +476,7 @@ GEM
       binding_of_caller (~> 1.0)
       pry (~> 0.13)
     public_suffix (5.0.5)
-    puma (6.4.2)
+    puma (6.4.3)
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (2.2.9)
@@ -524,6 +526,9 @@ GEM
       actionview (> 3.1)
       activesupport (> 3.1)
       railties (> 3.1)
+    rails_sql_prettifier (6.1.5)
+      activerecord (>= 6.1, < 7)
+      niceql (~> 0.6)
     railties (6.1.7.8)
       actionpack (= 6.1.7.8)
       activesupport (= 6.1.7.8)
@@ -555,8 +560,7 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
-    rexml (3.3.6)
-      strscan
+    rexml (3.3.9)
     rotp (6.3.0)
     rouge (4.2.1)
     rqrcode (2.2.0)
@@ -686,7 +690,6 @@ GEM
       rubocop-rails (~> 2.25.0)
     strip_attributes (1.13.0)
       activemodel (>= 3.0, < 8.0)
-    strscan (3.1.0)
     temple (0.10.3)
     test-prof (1.3.3)
     thor (1.3.1)
@@ -696,8 +699,7 @@ GEM
     transproc (1.1.1)
     truemail (3.3.1)
       simpleidn (~> 0.2.1)
-    ttfunk (1.8.0)
-      bigdecimal (~> 3.1)
+    ttfunk (1.7.0)
     turbo-rails (2.0.5)
       actionpack (>= 6.0.0)
       activejob (>= 6.0.0)
@@ -785,6 +787,7 @@ DEPENDENCIES
   devise
   doorkeeper
   doorkeeper-i18n
+  doorkeeper-jwt
   doorkeeper-openid_connect
   draper
   draper-cancancan
@@ -847,6 +850,7 @@ DEPENDENCIES
   rails-erd
   rails-i18n
   rails_autolink
+  rails_sql_prettifier
   redcarpet
   remotipart
   request_profiler
@@ -878,6 +882,7 @@ DEPENDENCIES
   strip_attributes
   test-prof
   truemail
+  ttfunk (< 1.8.0)
   turbo-rails
   validates_by_schema (~> 0.3.0)
   validates_timeliness

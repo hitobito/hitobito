@@ -105,3 +105,6 @@ config/mail.yml
 # (not used anymore, swagger is now generated on the fly with graphiti)
 /swagger
 .yardoc/
+
+# use BUNDLE_GEMFILE=Gemfile-dev for less Gemfile.lock noise in development
+Gemfile-dev.lock

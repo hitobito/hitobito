@@ -3,41 +3,53 @@
 // or later. See the COPYING file at the top-level directory or at
 // https://github.com/hitobito/hitobito.
 
-(function() {
+(function () {
   // this popover handling is confusing but seems to work when disposing and recreating
   // see https://getbootstrap.com/docs/5.0/components/popovers/
-  $(document).on('turbo:load', function() {
+  $(document).on("turbo:load", function () {
     // remote form used in app/views/event/application_market/_popover_waiting_list.html.haml
     // does not trigger form#submit event
-    $(document).on('click', '.popover form[data-remote] button:submit', function(e) {
-      $(e.target).closest('.popover').hide();
-    });
+    $(document).on(
+      "click",
+      ".popover form[data-remote] button:submit",
+      function (e) {
+        $(e.target).closest(".popover").hide();
+      },
+    );
 
     // normal forms e.g. sac/event/participations/_popover_cancel_sac do trigger form submit
     // only if form validation pass (allows us to use client side validations)
-    $(document).on('click', '.popover form:submit', function(e) {
-      $(e.target).closest('.popover').hide();
+    $(document).on("click", ".popover form:submit", function (e) {
+      $(e.target).closest(".popover").hide();
     });
 
-    $(document).on('click', '.popover a.cancel', function(e) {
+    $(document).on("click", ".popover a.cancel", function (e) {
       e.preventDefault();
-      $(e.target).closest('.popover').hide();
-    })
+      $(e.target).closest(".popover").hide();
+    });
 
-    $(document).on('click', '[data-bs-toggle="popover"]', function(e) {
-      $('.popover').hide();
-      const el = $(e.target).closest('[data-bs-toggle="popover"]');
+    $(document).on("click", '[data-bs-toggle="popover"]', function (e) {
+      $(".popover").hide();
+      const toggler = $(e.target).closest('[data-bs-toggle="popover"]')[0];
+      const el = document.querySelector(toggler.dataset["anchor"]) || toggler;
       const instance = Popover.getInstance(el);
-      if(instance) {
+
+      if (instance) {
         instance.dispose();
       }
-      Popover.getOrCreateInstance(el,
-        {
-          container: 'body',
-          sanitize: false,
-          html: true
-        }
-      ).show();
-    })
+
+      Popover.getOrCreateInstance(el, {
+        container: "body",
+        sanitize: false,
+        html: true,
+        placement: toggler.dataset.bsPlacement || "auto",
+        content: toggler.dataset.bsContent,
+      }).show();
+
+      // remove the element to avoid misfires on dropdowns
+      $(el).on("hidden.bs.popover", function (e) {
+        $(e.target).popover("dispose");
+      });
+    });
   });
 }).call(this);

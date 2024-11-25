@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -6,7 +6,6 @@
 module Export::Pdf
   module Invoice
     MARGIN = 2.cm
-
     LOGO_WIDTH = 150.mm
     LOGO_HEIGHT = 16.mm
 
@@ -17,9 +16,7 @@ module Export::Pdf
       end
 
       def render(options)
-        pdf = Prawn::Document.new(page_size: "A4",
-          page_layout: :portrait,
-          margin: MARGIN)
+        pdf = Export::Pdf::Document.new(margin: MARGIN).pdf
         customize(pdf)
         @invoices.each_with_index do |invoice, position|
           reporter&.report(position)
@@ -84,18 +81,15 @@ module Export::Pdf
       end
 
       def customize(pdf)
-        pdf.font_size 10
-        pdf.font "Helvetica"
-        pdf.font_families.update("ocrb" => {normal: ocrb_path})
+        pdf.font_size 9
+        pdf.font_families.update("ocrb" => {
+          normal: Rails.root.join("app", "javascript", "fonts", "OCRB.ttf")
+        })
         pdf
       end
 
       def sections
         [Header, InvoiceInformation, ReceiverAddress, Articles]
-      end
-
-      def ocrb_path
-        Rails.root.join("app", "javascript", "fonts", "OCRB.ttf")
       end
     end
 

@@ -33,8 +33,6 @@ class LabelFormatsController < SimpleCrudController
   end
 
   def global_entries
-    @global_entries = LabelFormat.where(person_id: nil)
-
-    sort_by_sort_expression(@global_entries)
+    @global_entries = sort_by_sort_expression(LabelFormat.where(person_id: nil))
   end
 end

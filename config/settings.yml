@@ -226,6 +226,9 @@ worker_heartbeats:
 oidc:
   issuer: <%= protocol + "://" + hostname %>
   signing_key: <%= ENV['JWT_SIGNING_KEY'].to_s.lines %>
+  use_refresh_token: false
+  use_jwt_access_token: false
+  access_token_expires_in: <%= 2.hours %>
 
 table_displays: true
 

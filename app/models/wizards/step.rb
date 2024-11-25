@@ -16,6 +16,7 @@ module Wizards
       model_name.element
     end
     delegate :step_name, to: :class
+    delegate :current_user, to: :wizard
 
     def self.===(other)
       if other.is_a?(Class)
@@ -37,5 +38,7 @@ module Wizards
     def attr?(name)
       attribute_names.include?(name.to_s)
     end
+
+    def contains_any_changes? = attributes.compact_blank != self.class._default_attributes.to_h.compact_blank
   end
 end

@@ -10,6 +10,7 @@ source "https://rubygems.org"
 gem "rails", "= 6.1.7.8"
 gem "wagons", "~> 0.7.0"
 
+gem "active_record_distinct_on"
 gem "activerecord-nulldb-adapter"
 gem "activerecord-session_store"
 gem "acts-as-taggable-on"
@@ -33,6 +34,7 @@ gem "delayed_job_heartbeat_plugin"
 gem "devise"
 gem "doorkeeper"
 gem "doorkeeper-i18n"
+gem "doorkeeper-jwt"
 gem "doorkeeper-openid_connect"
 gem "draper"
 gem "draper-cancancan"
@@ -57,14 +59,13 @@ gem "mail" # add mail here to have it loaded
 gem "matrix" # required but removed from stlib since ruby 3.2
 gem "mime-types"
 gem "mini_magick"
-gem "pg"
-gem "active_record_distinct_on"
 gem "nested_form"
 gem "nokogiri"
 gem "oat"
 gem "paper_trail"
 gem "parallel"
 gem "paranoia"
+gem "pg"
 gem "phonelib", "~> 0.8.4"
 gem "prawn"
 gem "prawn-markup"
@@ -75,8 +76,9 @@ gem "pry-rails"
 gem "puma"
 gem "rack-cors"
 gem "rack-mini-profiler", require: false
-gem "rails_autolink"
 gem "rails-i18n"
+gem "rails_autolink"
+gem "redcarpet"
 gem "remotipart"
 gem "rest-client"
 gem "rexml"
@@ -87,12 +89,13 @@ gem "rswag-ui", "~> 2.13"
 gem "rubyzip"
 gem "seed-fu"
 gem "sentry-raven"
-gem "simpleidn"
 gem "simple_xlsx_reader" # import data from xlsx files (used in some wagons)
+gem "simpleidn"
 gem "sorted_set"
 gem "sprockets", "~> 3.7.2" # pinned to older version to avoid having an empty manifest.js
 gem "strip_attributes" # strip whitespace of attributes
 gem "truemail"
+gem "ttfunk", "< 1.8.0"
 gem "turbo-rails"
 gem "validates_by_schema", "~> 0.3.0" # 0.5.1 does not work well with wagons / wagon-migrations
 gem "validates_timeliness"
@@ -109,6 +112,7 @@ gem "active_storage_variant" # variants for Rails < 7
 
 group :development, :test do
   gem "graphiti_spec_helpers"
+  gem "rails_sql_prettifier"
   gem "parallel_tests"
   gem "pry-byebug"
   gem "pry-doc" # provides show-source/$ in the pry-console
@@ -120,7 +124,6 @@ group :development do
   gem "binding_of_caller"
   gem "bullet"
   gem "listen"
-  gem "redcarpet"
   gem "request_profiler"
   gem "rubocop", require: false
   gem "rubocop-rspec", require: false

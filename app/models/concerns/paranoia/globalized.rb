@@ -24,10 +24,10 @@ module Paranoia
 
     module ClassMethods
       def list
-        with_translations.unscope(:select).select("#{table_name}.*", translated_label_column)
-          .order("#{table_name}.deleted_at ASC NULLS FIRST",
-            translated_label_column)
-          .distinct
+        select(column_names + ["#{table_name}.#{translated_attribute_names.first}"]).from(
+          with_translations.select("#{table_name}.*", translated_label_column)
+          .distinct_on(:id).unscope(:order), table_name
+        ).with_translations.order("#{table_name}.#{translated_attribute_names.first}")
       end
     end
   end

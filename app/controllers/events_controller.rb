@@ -68,7 +68,7 @@ class EventsController < CrudController
     params[:start_date] = Time.zone.today
 
     respond_to do |format|
-      format.json { render json: for_typeahead(entries.where(search_conditions)) }
+      format.json { render json: for_typeahead(entries.where(search_conditions).select(:id, :type)) }
     end
   end
 
@@ -173,7 +173,7 @@ class EventsController < CrudController
 
   def for_typeahead(entries)
     entries.map do |entry|
-      role_types = entry.role_types.map { |type| {label: type.label, name: type.name} }
+      role_types = entry.role_types.sort { |type| type.participant? ? 0 : 1 }.map { |type| {label: type.label, name: type.name} }
       {id: entry.id, label: entry.name, types: role_types}
     end
   end

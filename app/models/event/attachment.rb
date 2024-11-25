@@ -10,8 +10,8 @@
 # Table name: event_attachments
 #
 #  id         :integer          not null, primary key
+#  visibility :string
 #  event_id   :integer          not null
-#  visibility :string(255)
 #
 # Indexes
 #
@@ -35,7 +35,7 @@ class Event::Attachment < ActiveRecord::Base
   validates :file, size: {less_than_or_equal_to: MAX_FILE_SIZE},
     content_type: CONTENT_TYPES
 
-  scope :list, -> { order(:id) }
+  scope :list, -> { attached.order("active_storage_blobs.filename") }
   scope :attached, -> { joins(:file_blob) }
   scope :visible_for_team, -> { where(visibility: [:team, :participants, :global]) }
   scope :visible_for_participants, -> { where(visibility: [:participants, :global]) }

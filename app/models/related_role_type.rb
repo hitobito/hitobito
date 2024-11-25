@@ -8,8 +8,8 @@
 # Table name: related_role_types
 #
 #  id            :integer          not null, primary key
-#  relation_type :string(255)
-#  role_type     :string(255)      not null
+#  relation_type :string
+#  role_type     :string           not null
 #  relation_id   :integer
 #
 # Indexes

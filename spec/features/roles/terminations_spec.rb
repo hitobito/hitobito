@@ -84,7 +84,7 @@ describe :roles_terminations, js: true do
     end
 
     expect { role.reload }
-      .to change { role.delete_on }.to(terminate_on)
+      .to change { role.end_on }.to(terminate_on)
       .and change { role.terminated }.to(true)
   end
 
@@ -113,12 +113,12 @@ describe :roles_terminations, js: true do
     end
   end
 
-  it "for role with delete_on set has no input field" do
-    delete_on = Time.zone.tomorrow
-    role.update!(delete_on: delete_on)
+  it "for role with end_on set has no input field" do
+    end_on = Time.zone.tomorrow
+    role.update!(end_on: end_on)
     visit_dialog
 
     expect(page).not_to have_field("Austrittsdatum")
-    expect(page).to have_content("Austrittsdatum: #{delete_on.strftime("%d.%m.%Y")}")
+    expect(page).to have_content("Austrittsdatum: #{end_on.strftime("%d.%m.%Y")}")
   end
 end

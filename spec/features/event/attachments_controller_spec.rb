@@ -7,35 +7,49 @@
 
 require "spec_helper"
 
-describe Event::AttachmentsController do
+describe Event::AttachmentsController, js: true do
   let(:group) { groups(:top_layer) }
   let(:event) { events(:top_event) }
 
-  it "uploads file", js: true do
+  it "uploads file" do
     sign_in
     visit group_event_path(group.id, event.id)
 
     file = Tempfile.new(["foo", ".pdf"])
-    attach_file "event_attachment_file", file.path, visible: false
+    attach_file "event_attachment_files", file.path, visible: false
 
-    expect(page).to have_selector("#attachments li", text: File.basename(file.path))
+    expect(page).to have_selector("#attachments tr", text: File.basename(file.path))
   end
 
-  it "cannot upload unaccepted file", js: true do
-    skip "Unable to find modal dialog"
+  it "uploads multiple files" do
+    sign_in
+    visit group_event_path(group.id, event.id)
 
+    file1 = Tempfile.new(["foo", ".pdf"])
+    file2 = Tempfile.new(["foo", ".exe"])
+    file3 = Tempfile.new(["foo", ".jpg"])
+
+    accept_alert(/fehlgeschlagen/) do
+      attach_file "event_attachment_files", [file1, file2, file3].map(&:path), visible: false
+    end
+
+    expect(page).to have_selector("#attachments tr", text: File.basename(file1.path))
+    expect(page).to have_selector("#attachments tr", text: File.basename(file3.path))
+  end
+
+  it "cannot upload unaccepted file" do
     sign_in
     visit group_event_path(group.id, event.id)
 
     file = Tempfile.new(["foo", ".exe"])
     accept_alert(/fehlgeschlagen/) do
-      attach_file "event_attachment_file", file.path, visible: false
+      attach_file "event_attachment_files", file.path, visible: false
     end
 
     expect(page).to have_no_selector("#attachments li", text: File.basename(file.path))
   end
 
-  it "updates visibility", js: true do
+  it "updates visibility" do
     file = Tempfile.new(["foo", ".png"])
     a = event.attachments.build
     a.file.attach(io: file, filename: "foo.png")
@@ -44,20 +58,20 @@ describe Event::AttachmentsController do
     sign_in
     visit group_event_path(group.id, event.id)
 
-    selector = "#event_attachment_#{a.id} a.action .fa-globe:not(.muted)"
+    selector = "#event_attachment_#{a.id} a.action .fa-globe:not(.icon-inactive)"
     find(selector).click
 
     expect(page).not_to have_selector(selector)
     expect(a.reload.visibility).to be_nil
 
-    find("#event_attachment_#{a.id} a.action .fa-globe.muted").click
+    find("#event_attachment_#{a.id} a.action .fa-globe.icon-inactive").click
 
     expect(page).to have_selector(selector)
     expect(a.reload.visibility).to be("global")
   end
 
-  it "destroys existing file", js: true do
-    Event::Attachment.delete_all
+  it "destroys existing file" do
+    event.attachments.delete_all
     file = Tempfile.new(["foo", ".png"])
     a = event.attachments.build
     a.file.attach(io: file, filename: "foo.png")

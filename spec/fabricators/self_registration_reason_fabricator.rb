@@ -10,7 +10,7 @@
 # Table name: self_registration_reasons
 #
 #  id         :bigint           not null, primary key
-#  text       :text(65535)      not null
+#  text       :text             not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #

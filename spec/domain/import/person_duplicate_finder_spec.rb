@@ -9,14 +9,12 @@ require "spec_helper"
 
 describe Import::PersonDuplicateFinder do
   let(:finder) { Import::PersonDuplicateFinder.new }
-  subject { finder.find(attrs) }
 
-  let(:conditions) { finder.send(:duplicate_conditions, attrs) }
+  subject { finder.find(attrs) }
 
   context "empty attrs" do
     let(:attrs) { {} }
 
-    it { expect(conditions).to eq [""] }
     it { is_expected.to be_nil }
   end
 
@@ -25,7 +23,6 @@ describe Import::PersonDuplicateFinder do
 
     let(:attrs) { {first_name: "foo"} }
 
-    it { expect(conditions).to eq ["first_name = ?", "foo"] }
     it { is_expected.to be_present }
     it "has no error" do
       expect(subject.errors.size).to eq(0)
@@ -37,7 +34,6 @@ describe Import::PersonDuplicateFinder do
 
     let(:attrs) { {email: "foo@bar.com"} }
 
-    it { expect(conditions).to eq ["email = ?", "foo@bar.com"] }
     it { is_expected.to be_present }
     it "has no error" do
       expect(subject.errors.size).to eq(0)
@@ -61,7 +57,6 @@ describe Import::PersonDuplicateFinder do
 
     let(:attrs) { {email: "foo@bar.com", first_name: "bla"} }
 
-    it { expect(conditions).to eq ["(first_name = ?) OR email = ?", "bla", "foo@bar.com"] }
     it { is_expected.to be_present }
     it "has no error" do
       expect(subject.errors.size).to eq(0)
@@ -74,13 +69,6 @@ describe Import::PersonDuplicateFinder do
 
       let(:attrs) { {last_name: "bar", first_name: "foo", zip_code: "8000", birthday: "1991-05-06"} }
 
-      it do
-        expect(conditions).to eq([
-          "last_name = ? AND first_name = ? AND (zip_code = ? OR zip_code IS NULL) " \
-          "AND (birthday = ? OR birthday IS NULL)",
-          "bar", "foo", "8000", Time.zone.parse("1991-05-06").to_date
-        ])
-      end
       it { is_expected.to be_present }
       it "has no error" do
         expect(subject.errors.size).to eq(0)
@@ -92,12 +80,6 @@ describe Import::PersonDuplicateFinder do
 
       let(:attrs) { {last_name: "bar", first_name: "foo", zip_code: "8000", birthday: "33.33.33"} }
 
-      it do
-        expect(conditions).to eq([
-          "last_name = ? AND first_name = ? AND (zip_code = ? OR zip_code IS NULL)",
-          "bar", "foo", "8000"
-        ])
-      end
       it { is_expected.to be_present }
       it "has no error" do
         expect(subject.errors.size).to eq(0)
@@ -109,13 +91,6 @@ describe Import::PersonDuplicateFinder do
 
       let(:attrs) { {last_name: "bar", first_name: "foo", zip_code: "8000", birthday: "1.1.00"} }
 
-      it do
-        expect(conditions).to eq([
-          "last_name = ? AND first_name = ? AND (zip_code = ? OR zip_code IS NULL) " \
-           "AND (birthday = ? OR birthday IS NULL)",
-          "bar", "foo", "8000", Time.zone.parse("2000-01-01").to_date
-        ])
-      end
       it { is_expected.to be_present }
       it "has no error" do
         expect(subject.errors.size).to eq(0)
@@ -146,6 +121,6 @@ describe Import::PersonDuplicateFinder do
       @first = finder.find(attrs)
     end
 
-    it { is_expected.to be @first }
+    it { is_expected.to eq @first }
   end
 end

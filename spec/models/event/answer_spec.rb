@@ -10,9 +10,13 @@
 # Table name: event_answers
 #
 #  id               :integer          not null, primary key
+#  answer           :string
 #  participation_id :integer          not null
 #  question_id      :integer          not null
-#  answer           :string
+#
+# Indexes
+#
+#  index_event_answers_on_participation_id_and_question_id  (participation_id,question_id) UNIQUE
 #
 
 require "spec_helper"

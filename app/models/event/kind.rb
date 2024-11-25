@@ -10,12 +10,12 @@
 # Table name: event_kinds
 #
 #  id                     :integer          not null, primary key
-#  application_conditions :text(65535)
+#  application_conditions :text
 #  deleted_at             :datetime
-#  general_information    :text(65535)
-#  label                  :string(255)      not null
+#  general_information    :text
+#  label                  :string           not null
 #  minimum_age            :integer
-#  short_name             :string(255)
+#  short_name             :string
 #  created_at             :datetime
 #  updated_at             :datetime
 #  kind_category_id       :integer
@@ -24,6 +24,13 @@
 class Event::Kind < ActiveRecord::Base
   include Paranoia::Globalized
   translates :label, :short_name, :general_information, :application_conditions
+
+  def self.list
+    with_translations.unscope(:select).select(Event::Kind.column_names, "LOWER(event_kind_translations.short_name)")
+      .order("event_kinds.deleted_at ASC NULLS FIRST",
+        "LOWER(event_kind_translations.short_name)")
+      .distinct
+  end
 
   ### ASSOCIATIONS
 

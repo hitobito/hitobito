@@ -202,6 +202,7 @@ Hitobito::Application.routes.draw do
 
       get 'public_events/:id' => 'public_events#show', as: :public_event
       get 'events/participation_lists/new' => 'event/participation_lists#new'
+      get 'events/invitation_lists/new' => 'event/invitation_lists#new'
 
       resources :events do
         collection do
@@ -227,6 +228,7 @@ Hitobito::Application.routes.draw do
             end
           end
 
+          resource :invitation_lists, only: :create
           resources :invitations, only: [:index, :new, :create, :edit, :destroy] do
             member do
               post 'decline' => 'invitations/decline#create'
@@ -416,6 +418,7 @@ Hitobito::Application.routes.draw do
     resources :groups, only: [:index, :show]
     resources :events, only: [:index, :show]
     resources :event_kinds, module: :event, controller: :kinds, only: [:index, :show]
+    resources :event_kind_categories, module: :event, controller: :kind_categories, only: [:index, :show]
     resources :invoices, only: [:index, :show, :update]
     resources :roles, except: [:edit, :new]
   end

@@ -35,6 +35,41 @@ describe Wizards::Step do
     end
   end
 
+  describe "contains_any_changes?" do
+    let(:step) { Step.new({}) }
+
+    before do
+      stub_const("Step", Class.new(Wizards::Step) do
+        attribute :name, type: :string
+        attribute :kind, type: :string, default: "test"
+      end)
+    end
+
+    it "contains no changes if no value is set" do
+      expect(step.contains_any_changes?).to eq false
+    end
+
+    it "contains changes if non default value is set" do
+      step.name = "test"
+      expect(step.contains_any_changes?).to eq true
+    end
+
+    it "contains changes if default value is modified" do
+      step.kind = "no-test"
+      expect(step.contains_any_changes?).to eq true
+    end
+
+    it "contains changes if default value is modified" do
+      step.kind = "no-test"
+      expect(step.contains_any_changes?).to eq true
+    end
+
+    it "contains no changes if default value is set to default" do
+      step.kind = "test"
+      expect(step.contains_any_changes?).to eq false
+    end
+  end
+
   # rubocop:disable Style/CaseEquality, Lint/BinaryOperatorWithIdenticalOperands
   describe "#===" do
     it "compares to a string" do

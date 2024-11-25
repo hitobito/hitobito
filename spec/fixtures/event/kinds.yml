@@ -8,12 +8,12 @@
 # Table name: event_kinds
 #
 #  id                     :integer          not null, primary key
-#  application_conditions :text(65535)
+#  application_conditions :text
 #  deleted_at             :datetime
-#  general_information    :text(65535)
-#  label                  :string(255)      not null
+#  general_information    :text
+#  label                  :string           not null
 #  minimum_age            :integer
-#  short_name             :string(255)
+#  short_name             :string
 #  created_at             :datetime
 #  updated_at             :datetime
 #  kind_category_id       :integer

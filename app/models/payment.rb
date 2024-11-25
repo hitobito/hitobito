@@ -12,10 +12,10 @@
 #  id                     :integer          not null, primary key
 #  amount                 :decimal(12, 2)   not null
 #  received_at            :date             not null
-#  reference              :string(255)
-#  status                 :string(255)
-#  transaction_identifier :string(255)
-#  transaction_xml        :text(16777215)
+#  reference              :string
+#  status                 :string
+#  transaction_identifier :string
+#  transaction_xml        :text
 #  invoice_id             :integer
 #
 # Indexes

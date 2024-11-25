@@ -10,8 +10,8 @@
 #  id         :integer          not null, primary key
 #  due_at     :date             not null
 #  level      :integer
-#  text       :string(255)
-#  title      :string(255)
+#  text       :string
+#  title      :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  invoice_id :integer          not null

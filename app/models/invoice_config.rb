@@ -10,24 +10,24 @@
 # Table name: invoice_configs
 #
 #  id                               :integer          not null, primary key
-#  account_number                   :string(255)
-#  address                          :text(65535)
-#  beneficiary                      :text(65535)
-#  currency                         :string(255)      default("CHF"), not null
+#  account_number                   :string
+#  address                          :text
+#  beneficiary                      :text
+#  currency                         :string           default("CHF"), not null
 #  donation_calculation_year_amount :integer
 #  donation_increase_percentage     :integer
 #  due_days                         :integer          default(30), not null
-#  email                            :string(255)
-#  iban                             :string(255)
-#  logo_position                    :string(255)      default("disabled"), not null
-#  participant_number               :string(255)
-#  participant_number_internal      :string(255)
-#  payee                            :text(65535)
-#  payment_information              :text(65535)
-#  payment_slip                     :string(255)      default("qr"), not null
-#  sender_name                      :string(255)
+#  email                            :string
+#  iban                             :string
+#  logo_position                    :string           default("disabled"), not null
+#  participant_number               :string
+#  participant_number_internal      :string
+#  payee                            :text
+#  payment_information              :text
+#  payment_slip                     :string           default("qr"), not null
+#  sender_name                      :string
 #  sequence_number                  :integer          default(1), not null
-#  vat_number                       :string(255)
+#  vat_number                       :string
 #  group_id                         :integer          not null
 #
 # Indexes
@@ -39,7 +39,6 @@ class InvoiceConfig < ActiveRecord::Base
   include I18nEnums
   include ValidatedEmail
 
-  IBAN_REGEX = /\A[A-Z]{2}[0-9]{2}\s?([A-Z]|[0-9]\s?){12,30}\z/
   ACCOUNT_NUMBER_REGEX = /\A[0-9]{2}-[0-9]{2,20}-[0-9]\z/
   PARTICIPANT_NUMBER_INTERNAL_REGEX = /\A[0-9]{6}\z/
   PAYMENT_SLIPS = %w[qr no_ps].freeze
@@ -67,8 +66,7 @@ class InvoiceConfig < ActiveRecord::Base
 
   # TODO: probably the if condition is not correct, verification needed
   validates :iban, presence: true, on: :update, if: :qr?
-  validates :iban, format: {with: IBAN_REGEX},
-    on: :update, allow_blank: true
+  validates :iban, iban: true, on: :update, allow_blank: true
 
   validates :donation_calculation_year_amount, numericality: {only_integer: true,
                                                               greater_than: 0,

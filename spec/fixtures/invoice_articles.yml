@@ -8,12 +8,12 @@
 # Table name: invoice_articles
 #
 #  id          :integer          not null, primary key
-#  account     :string(255)
-#  category    :string(255)
-#  cost_center :string(255)
-#  description :text(65535)
-#  name        :string(255)      not null
-#  number      :string(255)
+#  account     :string
+#  category    :string
+#  cost_center :string
+#  description :text
+#  name        :string           not null
+#  number      :string
 #  unit_cost   :decimal(12, 2)
 #  vat_rate    :decimal(5, 2)
 #  created_at  :datetime         not null

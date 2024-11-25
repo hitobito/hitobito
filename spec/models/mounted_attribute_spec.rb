@@ -1,9 +1,17 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito_sac_cas
+# == Schema Information
+#
+# Table name: mounted_attributes
+#
+#  id         :bigint           not null, primary key
+#  entry_type :string           not null
+#  key        :string           not null
+#  value      :text
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  entry_id   :integer          not null
+#
 
 require "spec_helper"
 

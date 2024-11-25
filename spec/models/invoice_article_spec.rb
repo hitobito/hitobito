@@ -1,7 +1,24 @@
-#  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
+# == Schema Information
+#
+# Table name: invoice_articles
+#
+#  id          :integer          not null, primary key
+#  account     :string
+#  category    :string
+#  cost_center :string
+#  description :text
+#  name        :string           not null
+#  number      :string
+#  unit_cost   :decimal(12, 2)
+#  vat_rate    :decimal(5, 2)
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  group_id    :integer          not null
+#
+# Indexes
+#
+#  index_invoice_articles_on_number_and_group_id  (number,group_id) UNIQUE
+#
 
 require "spec_helper"
 

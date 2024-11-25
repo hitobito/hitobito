@@ -16,8 +16,18 @@ on:
         required: false
         type: string
         default: "regular"
-      dry_run:
-        description: "Do not execute the commands"
+      prevent_prepare:
+        description: "Only show commands to prepare, do not execute them"
+        required: false
+        type: boolean
+        default: false
+      prevent_push:
+        description: "Only build the image, do not push it"
+        required: false
+        type: boolean
+        default: false
+      prevent_deployment:
+        description: "Do not update the deployment-repo"
         required: false
         type: boolean
         default: false
@@ -39,6 +49,10 @@ on:
         value: ${{ jobs.settings.outputs.namespace_name }}
       dry_run:
         value: ${{ jobs.settings.outputs.dry_run }}
+      push_image:
+        value: ${{ jobs.settings.outputs.push_image }}
+      update_deployment:
+        value: ${{ jobs.settings.outputs.update_deployment }}
 
 jobs:
   settings:
@@ -53,6 +67,8 @@ jobs:
       release_type: ${{ steps.determine.outputs.release_type }}
       namespace_name: ${{ steps.determine.outputs.namespace_name }}
       dry_run: ${{ steps.determine.outputs.dry_run }}
+      push_image: ${{ steps.determine.outputs.push_image }}
+      update_deployment: ${{ steps.determine.outputs.update_deployment }}
 
     steps:
       - name: Infer project-name and stage-settings
@@ -61,7 +77,9 @@ jobs:
           STAGE: ${{ inputs.stage }}
           REPO: ${{ inputs.repository }}
           RELEASE_TYPE: ${{ inputs.release_type }}
-          DRY_RUN: ${{ inputs.dry_run }}
+          DRY_RUN: ${{ inputs.prevent_prepare }}
+          DRY_PUSH: ${{ inputs.prevent_push }}
+          DRY_DEPLOY: ${{ inputs.prevent_deployment }}
         run: |
           echo "stage=${STAGE}" >> "$GITHUB_OUTPUT"
           echo "repo_name=${REPO}" >> "$GITHUB_OUTPUT"
@@ -75,6 +93,16 @@ jobs:
             echo 'dry_run=-n' >> "$GITHUB_OUTPUT"
           else
             echo 'dry_run=' >> "$GITHUB_OUTPUT"
+          fi
+          if [[ "${DRY_PUSH}" = 'true' ]]; then
+            echo 'push_image=false' >> "$GITHUB_OUTPUT"
+          else
+            echo 'push_image=true' >> "$GITHUB_OUTPUT"
+          fi
+          if [[ "${DRY_DEPLOY}" = 'true' ]]; then
+            echo 'update_deployment=false' >> "$GITHUB_OUTPUT"
+          else
+            echo 'update_deployment=true' >> "$GITHUB_OUTPUT"
           fi
 
           case $STAGE in

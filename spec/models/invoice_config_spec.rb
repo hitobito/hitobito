@@ -1,9 +1,34 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
+# == Schema Information
+#
+# Table name: invoice_configs
+#
+#  id                               :integer          not null, primary key
+#  account_number                   :string
+#  address                          :text
+#  beneficiary                      :text
+#  currency                         :string           default("CHF"), not null
+#  donation_calculation_year_amount :integer
+#  donation_increase_percentage     :integer
+#  due_days                         :integer          default(30), not null
+#  email                            :string
+#  iban                             :string
+#  logo_position                    :string           default("disabled"), not null
+#  participant_number               :string
+#  participant_number_internal      :string
+#  payee                            :text
+#  payment_information              :text
+#  payment_slip                     :string           default("qr"), not null
+#  sender_name                      :string
+#  sequence_number                  :integer          default(1), not null
+#  vat_number                       :string
+#  group_id                         :integer          not null
+#
+# Indexes
+#
+#  index_invoice_configs_on_group_id  (group_id)
+#
 
 require "spec_helper"
 

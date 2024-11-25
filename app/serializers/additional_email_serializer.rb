@@ -3,15 +3,16 @@
 # Table name: additional_emails
 #
 #  id               :integer          not null, primary key
-#  contactable_type :string(255)      not null
-#  email            :string(255)      not null
-#  label            :string(255)
+#  contactable_type :string           not null
+#  email            :string           not null
+#  label            :string
 #  mailings         :boolean          default(TRUE), not null
 #  public           :boolean          default(TRUE), not null
 #  contactable_id   :integer          not null
 #
 # Indexes
 #
+#  additional_emails_search_column_gin_idx                         (search_column) USING gin
 #  index_additional_emails_on_contactable_id_and_contactable_type  (contactable_id,contactable_type)
 #
 

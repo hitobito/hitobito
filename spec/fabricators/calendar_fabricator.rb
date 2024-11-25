@@ -10,9 +10,9 @@
 # Table name: calendars
 #
 #  id          :bigint           not null, primary key
-#  description :text(65535)
-#  name        :string(255)      not null
-#  token       :string(255)      not null
+#  description :text
+#  name        :string           not null
+#  token       :string           not null
 #  group_id    :bigint           not null
 #
 # Indexes

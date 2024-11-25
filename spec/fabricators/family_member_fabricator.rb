@@ -10,8 +10,8 @@
 # Table name: family_members
 #
 #  id         :bigint           not null, primary key
-#  family_key :string(255)      not null
-#  kind       :string(255)      not null
+#  family_key :string           not null
+#  kind       :string           not null
 #  other_id   :bigint           not null
 #  person_id  :bigint           not null
 #

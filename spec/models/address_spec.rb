@@ -10,14 +10,19 @@
 # Table name: addresses
 #
 #  id               :bigint           not null, primary key
-#  street_short     :string(128)      not null
-#  street_short_old :string(128)      not null
+#  numbers          :text
+#  state            :string(128)      not null
 #  street_long      :string(128)      not null
 #  street_long_old  :string(128)      not null
+#  street_short     :string(128)      not null
+#  street_short_old :string(128)      not null
 #  town             :string(128)      not null
 #  zip_code         :integer          not null
-#  state            :string(128)      not null
-#  numbers          :text(16777215)
+#
+# Indexes
+#
+#  addresses_search_column_gin_idx               (search_column) USING gin
+#  index_addresses_on_zip_code_and_street_short  (zip_code,street_short)
 #
 
 require "spec_helper"

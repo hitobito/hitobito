@@ -9,7 +9,7 @@
 #
 #  id              :integer          not null, primary key
 #  excluded        :boolean          default(FALSE), not null
-#  subscriber_type :string(255)      not null
+#  subscriber_type :string           not null
 #  mailing_list_id :integer          not null
 #  subscriber_id   :integer          not null
 #
@@ -58,6 +58,8 @@ class Subscription < ActiveRecord::Base
   def to_s(format = :default)
     if subscriber.is_a?(Group)
       subscriber.with_layer.join(" / ")
+    elsif subscriber.is_a?(Person)
+      PersonDecorator.new(subscriber).full_label
     else
       subscriber.to_s(format).dup
     end

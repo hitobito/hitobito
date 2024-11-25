@@ -12,12 +12,12 @@
 #  id                    :bigint           not null, primary key
 #  amount_paid           :decimal(15, 2)   default(0.0), not null
 #  amount_total          :decimal(15, 2)   default(0.0), not null
-#  invalid_recipient_ids :text(65535)
-#  receiver_type         :string(255)
+#  invalid_recipient_ids :text
+#  receiver_type         :string
 #  recipients_paid       :integer          default(0), not null
 #  recipients_processed  :integer          default(0), not null
 #  recipients_total      :integer          default(0), not null
-#  title                 :string(255)      not null
+#  title                 :string           not null
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
 #  creator_id            :bigint

@@ -11,7 +11,7 @@
 #
 #  id                     :integer          not null, primary key
 #  active                 :boolean          default(FALSE), not null
-#  additional_information :text(65535)
+#  additional_information :text
 #  qualified              :boolean
 #  created_at             :datetime
 #  updated_at             :datetime
@@ -47,7 +47,9 @@ class Event::Participation < ActiveRecord::Base
 
   ### VALIDATIONS
 
-  validates_by_schema
+  # price_category is used as enum in hitobito_sac_cas. validates_by_schema cannot be overridden
+  # inside a wagon because of the loading order, so it must be excluded in the core instead
+  validates_by_schema except: [:price_category]
   validates :person_id,
     uniqueness: {scope: :event_id}
   validates :additional_information,
@@ -91,13 +93,11 @@ class Event::Participation < ActiveRecord::Base
 
   def init_answers
     answers.tap do |list|
-      event.questions.each do |q|
-        next if q.hidden?
-        next if list.find { |a| a.question_id == q.id }
+      event.questions.each do |question|
+        next if question.hidden?
+        next if list.find { |answer| answer.question_id == question.id }
 
-        a = q.answers.new
-        a.question = q # without this, only the id is set
-        list << a
+        list << question.answers.new(question: question) # without this, only the id is set
       end
     end
   end

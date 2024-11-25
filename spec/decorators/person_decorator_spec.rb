@@ -167,4 +167,17 @@ describe PersonDecorator, :draper_with_helpers do
       expect(label).to be nil
     end
   end
+
+  describe "picture_full_url" do
+    let(:logo) { Rails.root.join("spec", "fixtures", "files", "images", "logo.png") }
+
+    it "has fallback picture" do
+      expect(decorator.picture_full_url).to eq "http://test.host/packs-test/media/images/profile-c150952c7e2ec2cf298980d55b2bcde3.svg"
+    end
+
+    it "has redirect url to store image" do
+      expect(person.picture.attach(Rack::Test::UploadedFile.new(logo))).to eq true
+      expect(decorator.picture_full_url).to start_with "http://test.host/rails/active_storage/blobs/redirect"
+    end
+  end
 end

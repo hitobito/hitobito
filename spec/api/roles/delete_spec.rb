@@ -33,7 +33,7 @@ describe "roles#delete", type: :request do
           expect(response.status).to eq(200), response.body
         }.to change { Role.count }.by(-1)
           .and change { role.versions.count }.by(1)
-          .and not_change { Role.with_deleted.count }
+          .and not_change { Role.with_inactive.count }
       end
     end
   end

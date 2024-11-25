@@ -3,10 +3,15 @@
 # Table name: subscriptions
 #
 #  id              :integer          not null, primary key
+#  excluded        :boolean          default(FALSE), not null
+#  subscriber_type :string           not null
 #  mailing_list_id :integer          not null
 #  subscriber_id   :integer          not null
-#  subscriber_type :string           not null
-#  excluded        :boolean          default(FALSE), not null
+#
+# Indexes
+#
+#  index_subscriptions_on_mailing_list_id                    (mailing_list_id)
+#  index_subscriptions_on_subscriber_id_and_subscriber_type  (subscriber_id,subscriber_type)
 #
 
 #  Copyright (c) 2015, Pfadibewegung Schweiz. This file is part of
@@ -75,6 +80,12 @@ describe Subscription do
       subscription = Subscription.new(mailing_list: list, subscriber: groups(:bottom_group_one_one))
       subscription.role_types = [Group::BottomGroup::Leader, Group::BottomGroup::Member]
       expect(subscription.to_s).to eq("Bottom One / Group 11")
+    end
+
+    it "renders person as full label" do
+      list = Fabricate(:mailing_list, group: groups(:bottom_layer_one))
+      subscription = Subscription.new(mailing_list: list, subscriber: people(:top_leader))
+      expect(subscription.to_s).to eq("Top Leader, Greattown")
     end
 
     it "renders event label" do

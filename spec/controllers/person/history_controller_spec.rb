@@ -17,21 +17,28 @@ describe Person::HistoryController do
         r1 = Fabricate(Group::BottomGroup::Member.name.to_sym,
           group: groups(:bottom_group_one_one), person: person)
         r2 = Fabricate(Group::BottomGroup::Member.name.to_sym,
-          group: groups(:bottom_group_two_one), person: person, created_at: Time.zone.today - 3.years, deleted_at: Time.zone.today - 2.years)
+          group: groups(:bottom_group_two_one), person: person, start_on: 3.years.ago, end_on: 2.years.ago)
         r3 = Fabricate(Group::BottomGroup::Leader.name.to_sym,
           group: groups(:bottom_group_two_one), person: person)
         r4 = Fabricate(Group::BottomGroup::Member.name.to_sym,
           group: groups(:bottom_group_one_one_one), person: person)
-        r5 = FutureRole.create!(group: groups(:bottom_group_two_one),
-          convert_to: Group::BottomGroup::Member.name, person: person, created_at: Time.zone.now, convert_on: 10.days.from_now, delete_on: 20.days.from_now)
-        r6 = FutureRole.create!(group: groups(:bottom_group_two_one),
-          convert_to: Group::BottomGroup::Member.name, person: person, convert_on: 10.days.from_now)
+        r5 = Fabricate(Group::BottomGroup::Member.name.to_sym,
+          group: groups(:bottom_group_two_one), person: person,
+          start_on: 10.days.from_now, end_on: 20.days.from_now)
+        r6 = Fabricate(Group::BottomGroup::Member.name.to_sym,
+          group: groups(:bottom_group_two_one), person: person,
+          start_on: 10.days.from_now)
+
+        r7 = Fabricate(Group::BottomGroup::Member.name.to_sym,
+          group: groups(:bottom_group_two_one), person: person, start_on: 10.years.ago, end_on: 9.years.ago)
+        r8 = Fabricate(Group::BottomGroup::Member.name.to_sym,
+          group: groups(:bottom_group_two_one), person: person, start_on: 10.years.from_now)
 
         get :index, params: {group_id: groups(:bottom_group_one_one).id, id: person.id}
 
         expect(assigns(:roles)).to eq([r1, r4, r3])
-        expect(assigns(:inactive_roles)).to eq([r2])
-        expect(assigns(:future_roles)).to eq([r5, r6])
+        expect(assigns(:ended_or_archived_roles)).to eq([r2, r7])
+        expect(assigns(:future_roles)).to eq([r5, r6, r8])
       end
     end
 

@@ -20,3 +20,4 @@
       - languages = @mailing_list.filter_chain[:language].allowed_values.map { Person::LANGUAGES.fetch(_1.to_sym, _1) }
       - language_sentence = languages.to_sentence(last_word_connector: t('people_filters.language.word_connector'), two_words_connector: t('people_filters.language.word_connector'))
       = t('people_filters.language.one_of', languages: language_sentence)
+  = render_extensions(:filter_show, mailing_list: @mailing_list)

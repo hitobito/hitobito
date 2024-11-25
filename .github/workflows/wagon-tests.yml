@@ -1,4 +1,4 @@
-name: 'Wagon - Rails Lint and Test'
+name: "Wagon - Rails Lint and Test"
 
 on:
   workflow_call:
@@ -9,26 +9,26 @@ on:
       wagon_dependency_repository:
         description: A wagon this wagon depends on, e.g. hitobito_youth
         required: false
-        default: ''
+        default: ""
         type: string
       core_ref:
         description: Use a specific version of the core for the workflow run. Defaults to master.
         type: string
-        default: ''
+        default: ""
       wagon_dependency_ref:
         description: Use a specific version of the wagon dependency for the workflow run. Defaults to master.
         type: string
-        default: ''
+        default: ""
       main_branch:
         description: Speficy which branch should be regarded as the main branch of core and dependency wagon. Statuscope will only be notified if the core and dependency refs match this branch.
         type: string
         default: master
     secrets:
       HEARTBEAT_URL:
-        description: 'URL to the heartbeat-application'
+        description: "URL to the heartbeat-application"
         required: true
       HEARTBEAT_TOKEN:
-        description: 'Token to interact with the heartbeat-application'
+        description: "Token to interact with the heartbeat-application"
         required: true
 
 defaults:
@@ -38,7 +38,7 @@ defaults:
 jobs:
   wagon_rubocop:
     name: rubocop
-    runs-on: 'ubuntu-20.04'
+    runs-on: "ubuntu-20.04"
     env:
       RAILS_DB_ADAPTER: nulldb
 
@@ -51,7 +51,7 @@ jobs:
           path: .hitobito_core_repo
           fetch-depth: 1
 
-      - name: 'Prepare'
+      - name: "Prepare"
         uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup
         with:
           migrations: false
@@ -66,9 +66,61 @@ jobs:
         run: |
           bundle exec rake app:rubocop
 
+  wagon_seeds:
+    name: seeds
+    runs-on: "ubuntu-20.04"
+    env:
+      HEADLESS: true
+      RAILS_DB_ADAPTER: postgresql
+      RAILS_DB_HOST: 127.0.0.1
+      RAILS_DB_PORT: 5432
+      RAILS_DB_USERNAME: hitobito
+      RAILS_DB_PASSWORD: hitobito
+      RAILS_DB_NAME: hitobito_development
+      RAILS_ENV: development
+      DISABLE_TEST_SCHEMA_MAINTENANCE: true
+
+    # only run seeds on master
+    if: ${{ github.ref_name == 'master' }}
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: hitobito
+          POSTGRES_PASSWORD: hitobito
+          POSTGRES_DB: hitobito_development
+        ports:
+          - "5432:5432"
+        options: >-
+          --health-cmd "pg_isready -U hitobito"
+          --health-interval 10s
+          --health-timeout 10s
+          --health-retries 10
+    steps:
+      - name: Check out the core, which contains the shared setup action
+        uses: actions/checkout@v4
+        with:
+          repository: hitobito/hitobito
+          ref: ${{ inputs.core_ref }}
+          path: .hitobito_core_repo
+          fetch-depth: 1
+
+      - name: "Prepare"
+        uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup
+        with:
+          assets: false
+          wagon_repository: ${{ inputs.wagon_repository }}
+          wagon_dependency_repository: ${{ inputs.wagon_dependency_repository }}
+          core_ref: ${{ inputs.core_ref }}
+          wagon_dependency_ref: ${{ inputs.wagon_dependency_ref }}
+
+      - name: Run ${{ inputs.wagon_repository }} seeds
+        run: |
+          bundle exec rake db:seed wagon:seed
+
   wagon_specs:
     name: specs
-    runs-on: 'ubuntu-20.04'
+    runs-on: "ubuntu-20.04"
     env:
       HEADLESS: true
       RAILS_DB_ADAPTER: postgresql
@@ -79,6 +131,7 @@ jobs:
       RAILS_DB_NAME: hitobito_test
       RAILS_TEST_DB_NAME: hitobito_test
       RAILS_ENV: test
+      DISABLE_TEST_SCHEMA_MAINTENANCE: true
 
     services:
       postgres:
@@ -88,15 +141,15 @@ jobs:
           POSTGRES_PASSWORD: hitobito
           POSTGRES_DB: hitobito_test
         ports:
-          - '5432:5432'
+          - "5432:5432"
         options: >-
           --health-cmd "pg_isready -U hitobito"
           --health-interval 10s
           --health-timeout 10s
           --health-retries 10
       memcached:
-        image: 'memcached'
-        ports: [ '11211:11211' ]
+        image: "memcached"
+        ports: ["11211:11211"]
 
     steps:
       - name: Check out the core, which contains the shared setup action
@@ -107,7 +160,7 @@ jobs:
           path: .hitobito_core_repo
           fetch-depth: 1
 
-      - name: 'Prepare'
+      - name: "Prepare"
         uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup
         with:
           wagon_repository: ${{ inputs.wagon_repository }}
@@ -122,7 +175,7 @@ jobs:
 
   wagon_feature_specs:
     name: feature specs
-    runs-on: 'ubuntu-20.04'
+    runs-on: "ubuntu-20.04"
     env:
       HEADLESS: true
       RAILS_DB_ADAPTER: postgresql
@@ -133,6 +186,7 @@ jobs:
       RAILS_DB_NAME: hitobito_test
       RAILS_TEST_DB_NAME: hitobito_test
       RAILS_ENV: test
+      DISABLE_TEST_SCHEMA_MAINTENANCE: true
 
     services:
       postgres:
@@ -142,15 +196,15 @@ jobs:
           POSTGRES_PASSWORD: hitobito
           POSTGRES_DB: hitobito_test
         ports:
-          - '5432:5432'
+          - "5432:5432"
         options: >-
           --health-cmd "pg_isready -U hitobito"
           --health-interval 10s
           --health-timeout 10s
           --health-retries 10
       memcached:
-        image: 'memcached'
-        ports: [ '11211:11211' ]
+        image: "memcached"
+        ports: ["11211:11211"]
 
     steps:
       - name: Check out core with shared setup action
@@ -161,7 +215,7 @@ jobs:
           path: .hitobito_core_repo
           fetch-depth: 1
 
-      - name: 'Prepare'
+      - name: "Prepare"
         uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup
         with:
           wagon_repository: ${{ inputs.wagon_repository }}
@@ -183,7 +237,7 @@ jobs:
         run: |
           bundle exec rake app:ci:setup:rspec app:spec:features:lenient
 
-      - name: 'Make capybara output downloadable'
+      - name: "Make capybara output downloadable"
         uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -193,7 +247,7 @@ jobs:
 
   notify_statuscope:
     uses: ./.github/workflows/notify-statuscope.yml
-    needs: [ wagon_rubocop, wagon_specs, wagon_feature_specs ]
+    needs: [wagon_rubocop, wagon_specs, wagon_feature_specs, wagon_seeds]
     if: ( success() || failure() ) && ( github.ref_name == 'master' ) && ( (inputs.core_ref || inputs.main_branch) == inputs.main_branch ) && ( (inputs.wagon_dependency_ref || inputs.main_branch) == inputs.main_branch )
     with:
       repository: ${{ inputs.wagon_repository }}

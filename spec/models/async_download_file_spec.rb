@@ -1,9 +1,18 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2022, Puzzle ITC. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
+# == Schema Information
+#
+# Table name: async_download_files
+#
+#  id         :bigint           not null, primary key
+#  filetype   :string
+#  name       :string           not null
+#  progress   :integer
+#  timestamp  :string           not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  person_id  :integer          not null
+#
 
 require "spec_helper"
 

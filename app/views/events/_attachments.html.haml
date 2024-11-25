@@ -3,27 +3,29 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- if can?(:update, entry) || readable_attachments(entry, current_person).exists?
+- list = readable_attachments(entry, current_person).list.to_a
+- if can?(:update, entry) || list.present?
   %dl.dl-horizontal
     = labeled(Event::Attachment.model_name.human(count: 2)) do
-      %ul.list-unstyled#attachments
-        - readable_attachments(entry, current_person).list.each do |a|
-          = render a
+      %table#attachments
+        %tbody
+          - list.each do |a|
+            = render a
 
-        - if can?(:update, entry)
-          - if entry.external_applications?
-            %li.muted
-              = t('.public_attachments_hint')
-          %li.form
-            = spinner
-            = form_for(entry.attachments.new,
-                       url: group_event_attachments_path(@group, entry),
-                       html: { multipart: true,
-                               class: 'mb-0',
-                               data: { remote: true, spin: true } }) do |f|
-              %span.custom-file
-                = link_to(icon(:plus) + ' ' + t('.add'), '#', class: 'green')
-                = f.hidden_field(:visibility, value: :global)
-                = f.file_field(:file,
-                               accept: Settings.event.attachments.content_types.join(','),
-                               data: { submit: true })
+      - if can?(:update, entry)
+        .form
+          = spinner
+          = form_for(entry.attachments.new,
+                      url: group_event_attachments_path(@group, entry),
+                      html: { multipart: true,
+                              class: 'mb-0',
+                              data: { remote: true, spin: true } }) do |f|
+            %span.custom-file
+              = link_to(icon(:plus) + ' ' + t('.add'), '#')
+              = f.file_field(:files,
+                              accept: Settings.event.attachments.content_types.join(','),
+                              multiple: true,
+                              data: { submit: true })
+
+        - if entry.external_applications?
+          .muted= t('.public_attachments_hint')

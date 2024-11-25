@@ -10,7 +10,7 @@
 # Table name: event_answers
 #
 #  id               :integer          not null, primary key
-#  answer           :string(255)
+#  answer           :string
 #  participation_id :integer          not null
 #  question_id      :integer          not null
 #

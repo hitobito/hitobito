@@ -8,15 +8,16 @@
 # Table name: social_accounts
 #
 #  id               :integer          not null, primary key
-#  contactable_type :string(255)      not null
-#  label            :string(255)
-#  name             :string(255)      not null
+#  contactable_type :string           not null
+#  label            :string
+#  name             :string           not null
 #  public           :boolean          default(TRUE), not null
 #  contactable_id   :integer          not null
 #
 # Indexes
 #
 #  index_social_accounts_on_contactable_id_and_contactable_type  (contactable_id,contactable_type)
+#  social_accounts_search_column_gin_idx                         (search_column) USING gin
 #
 
 class SocialAccount < ActiveRecord::Base

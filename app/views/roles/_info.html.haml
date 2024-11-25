@@ -11,7 +11,7 @@
     - if @type.permissions.present?
       = t('.role_has_permissions', role: @type.label, group: @group)
       %br/
-      %ul
+      %ul.ms-3
         - @type.permissions.each do |perm|
           %li= t("activerecord.attributes.role.class.permission.description.#{perm}")
     - else

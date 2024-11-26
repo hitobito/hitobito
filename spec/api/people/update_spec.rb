@@ -10,25 +10,23 @@ require "rails_helper"
 RSpec.describe "people#update", type: :request do
   it_behaves_like "jsonapi authorized requests" do
     let(:person) { people(:top_leader) }
-    let(:payload) { {} }
+    let(:payload) do
+      {
+        data: {
+          id: person.id.to_s,
+          type: "people",
+          attributes: {
+            first_name: "Bobby"
+          }
+        }
+      }
+    end
 
     subject(:make_request) do
       jsonapi_put "/api/people/#{person.id}", payload
     end
 
     describe "basic update" do
-      let(:payload) do
-        {
-          data: {
-            id: person.id.to_s,
-            type: "people",
-            attributes: {
-              first_name: "Bobby"
-            }
-          }
-        }
-      end
-
       it "updates the resource" do
         expect(PersonResource).to receive(:find).and_call_original
         expect {

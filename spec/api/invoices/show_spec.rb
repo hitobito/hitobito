@@ -8,7 +8,7 @@
 require "rails_helper"
 
 RSpec.describe "invoices#show", type: :request do
-  it_behaves_like "jsonapi authorized requests" do
+  it_behaves_like "jsonapi authorized requests", person: nil do
     let(:token) { service_tokens(:permitted_bottom_layer_token).token }
     let(:params) { {} }
     let(:invoice) { invoices(:invoice) }

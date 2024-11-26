@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
 
-shared_examples "jsonapi authorized requests" do |required_flags: []|
+shared_examples "jsonapi authorized requests" do |person: :top_leader, required_flags: []|
   let(:service_token) { service_tokens(:permitted_top_layer_token) }
   let(:token) { service_token.token }
   let(:params) { {} }
@@ -22,6 +22,20 @@ shared_examples "jsonapi authorized requests" do |required_flags: []|
       make_request
       expect(response.status).to eq(401)
       expect(json["errors"]).to include(include("code" => "unauthorized"))
+    end
+  end
+
+  context "with role based authentication" do
+    let(:current_user) do
+      person_id = ActiveRecord::FixtureSet.identify(person)
+      Person.find_by(id: person_id)
+    end
+
+    it "returns 200 for person with correct role" do
+      skip("no person specified or allowed") unless current_user
+      sign_in(current_user)
+      make_request
+      expect(response.status).to eq(200)
     end
   end
 

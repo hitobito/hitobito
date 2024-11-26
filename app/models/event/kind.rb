@@ -23,14 +23,8 @@
 
 class Event::Kind < ActiveRecord::Base
   include Paranoia::Globalized
-  translates :label, :short_name, :general_information, :application_conditions
 
-  def self.list
-    with_translations.unscope(:select).select(Event::Kind.column_names, "LOWER(event_kind_translations.short_name)")
-      .order("event_kinds.deleted_at ASC NULLS FIRST",
-        "LOWER(event_kind_translations.short_name)")
-      .distinct
-  end
+  translates :short_name, :label, :general_information, :application_conditions
 
   ### ASSOCIATIONS
 

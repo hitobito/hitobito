@@ -20,18 +20,9 @@ class Event::KindsController < SimpleCrudController
     }]
 
   self.sort_mappings = {
-    label: {
-      joins: [:translations],
-      order: ["event_kind_translations.label"]
-    },
-    short_name: {
-      joins: [:translations],
-      order: ["event_kind_translations.short_name"]
-    },
-    kind_category: {
-      joins: [:translations, :kind_category, kind_category: :translations],
-      order: ["event_kind_category_translations.label"]
-    }
+    label: "event_kind_translations.label",
+    short_name: "event_kind_translations.short_name",
+    kind_category: "event_kind_category_translations.label"
   }
 
   before_render_form :load_assocations
@@ -39,7 +30,7 @@ class Event::KindsController < SimpleCrudController
   private
 
   def list_entries
-    super
+    super.includes(kind_category: :translations).list
   end
 
   def load_assocations

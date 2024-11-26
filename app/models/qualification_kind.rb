@@ -20,6 +20,7 @@
 
 class QualificationKind < ActiveRecord::Base
   include Paranoia::Globalized
+
   translates :label, :description
 
   ### ASSOCIATIONS

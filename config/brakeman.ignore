@@ -1,6 +1,29 @@
 {
   "ignored_warnings": [
     {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "3a5aaf326511e7b8e7dba84588da0d878fbf09889c61c354cb4f21fe10e042a8",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/concerns/globalized.rb",
+      "line": 47,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "joins(\"          LEFT JOIN #{translations_table_name} ON\\n          #{translations_table_name}.#{reflect_on_association(:translations).foreign_key} = #{table_name}.id\\n          AND #{translations_table_name}.locale = #{connection.quote(I18n.locale)}\\n\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Globalized::ClassMethods",
+        "method": "left_join_translation"
+      },
+      "user_input": "translations_table_name",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": "No SQL Injection possible here, because no user data is handled"
+    },
+    {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 2,
       "fingerprint": "4000ff73f6b8ea02cc258bc13979b5f086367affcae15ec82e7fd38d32825bac",
@@ -86,7 +109,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/domain/search_column_builder.rb",
-      "line": 80,
+      "line": 99,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "connection.execute(\"CREATE INDEX \\\"#{table_name}_search_column_gin_idx\\\" ON #{quoted_table_name} USING GIN (#{SEARCH_COLUMN});\\n\")",
       "render_path": null,
@@ -109,7 +132,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/qualification.rb",
-      "line": 105,
+      "line": 106,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "where(\"qualifications.finish_at <= :date AND NOT EXISTS (#{\"SELECT 1 FROM qualifications q2\\nINNER JOIN qualification_kinds qk ON qk.id = q2.qualification_kind_id\\nWHERE q2.person_id = qualifications.person_id\\nAND #{subselect_kind_condition(qualification_kind_ids)}\\nAND (\\n  (q2.start_at <= :date AND (q2.finish_at IS NULL OR q2.finish_at >= :date)) OR\\n  (q2.finish_at < :date AND q2.finish_at + INTERVAL '1 YEAR' * qk.reactivateable >= :date)\\n)\\n\"})\", :date => Time.zone.today, :qualification_kind_ids => qualification_kind_ids)",
       "render_path": null,
@@ -132,7 +155,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/qualification.rb",
-      "line": 87,
+      "line": 88,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "where(\"NOT EXISTS (SELECT 1 FROM qualifications q2 WHERE q2.person_id = qualifications.person_id AND #{subselect_kind_condition(qualification_kind_ids)} AND q2.start_at <= :date AND (q2.finish_at IS NULL OR q2.finish_at >= :date))\", :qualification_kind_ids => qualification_kind_ids, :date => Time.zone.today)",
       "render_path": null,
@@ -224,7 +247,7 @@
       "check_name": "EOLRails",
       "message": "Support for Rails 6.1.7.8 ended on 2024-10-01",
       "file": "Gemfile.lock",
-      "line": 494,
+      "line": 507,
       "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
       "code": null,
       "render_path": null,
@@ -243,7 +266,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/domain/search_column_builder.rb",
-      "line": 73,
+      "line": 92,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "connection.execute(\"ALTER TABLE #{quoted_table_name}\\nADD COLUMN #{SEARCH_COLUMN} tsvector GENERATED ALWAYS AS (\\n  #{ts_vector_statement(attrs)}\\n) STORED;\\n\")",
       "render_path": null,
@@ -283,6 +306,6 @@
       "note": "The command can only be executed in an authenticated context or locally, some parameters are checked against a whitelist"
     }
   ],
-  "updated": "2024-11-07 14:33:57 +0100",
+  "updated": "2024-11-22 10:28:31 +0100",
   "brakeman_version": "6.2.2"
 }

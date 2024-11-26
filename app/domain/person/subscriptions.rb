@@ -49,10 +49,16 @@ class Person::Subscriptions
     # first clean out existing contradictory subscriptions
     mailing_list.subscriptions.where(subscriber: @person, excluded: !excluded).destroy_all
 
-    # then create new subscription if not implicitly subscribed already
-    if !excluded ^ mailing_list.subscribed?(@person)
+    # then create new subscription if not matching the exclude value
+    if subscription_needs_change?(mailing_list, excluded)
       mailing_list.subscriptions.create!(subscriber: @person, excluded:)
     end
+  end
+
+  # is true if current `subscribed?` state does not match value of `excluded`
+  # (person is subscribed but should be excluded or vice versa)
+  def subscription_needs_change?(mailing_list, excluded)
+    mailing_list.subscribed?(@person) == excluded
   end
 
   def lists_excluding_person_via_filter

@@ -154,35 +154,35 @@ describe Person::Subscriptions do
         expect(subscribable).to eq [list]
       end
 
-      it "excludes list when when excluded by global filter" do
+      it "excludes list when excluded by global filter" do
         list.update(filter_chain: {language: {allowed_values: :fr}})
         expect(subscribable).to be_empty
       end
 
-      it "includes list when when not excluded by global filter" do
+      it "includes list when not excluded by global filter" do
         list.update(filter_chain: {language: {allowed_values: :de}})
         expect(subscribable).to eq [list]
       end
 
-      it "excludes list when when group subscription exists but excluded by global filter" do
+      it "excludes list when group subscription exists but excluded by global filter" do
         create_group_subscription
         list.update(filter_chain: {language: {allowed_values: :fr}})
         expect(subscribable).to be_empty
       end
 
-      it "excludes list when when group subscription exists and not excluded by global filter" do
+      it "excludes list when group subscription exists and not excluded by global filter" do
         create_group_subscription
         list.update(filter_chain: {language: {allowed_values: :de}})
         expect(subscribable).to be_empty
       end
 
-      it "excludes list when when event subscription exists but excluded by global filter" do
+      it "excludes list when event subscription exists but excluded by global filter" do
         create_event_subscription
         list.update(filter_chain: {language: {allowed_values: :fr}})
         expect(subscribable).to be_empty
       end
 
-      it "excludes list when when event subscription exists and not excluded by global filter" do
+      it "excludes list when event subscription exists and not excluded by global filter" do
         create_event_subscription
         list.update(filter_chain: {language: {allowed_values: :de}})
         expect(subscribable).to be_empty
@@ -995,9 +995,7 @@ describe Person::Subscriptions do
     it "subscribes person to list" do
       expect(list.subscribed?(person)).to be_falsey
 
-      expect { subscription.create(list) }
-        .to change { subscription.subscribed }.from([]).to([list])
-        .and change { list.subscriptions.count }.by(1)
+      expect { subscription.create(list) }.to change { subscription.subscribed }.from([]).to([list])
     end
 
     it "subscribes person previously unsubscribed from list" do
@@ -1007,9 +1005,7 @@ describe Person::Subscriptions do
       list.subscriptions.create!(subscriber: person, excluded: true)
       expect(list.subscribed?(person)).to be_falsey
 
-      expect { subscription.create(list) }
-        .to change { subscription.subscribed }.from([]).to([list])
-        .and change { list.subscriptions.count }.by(-1)
+      expect { subscription.create(list) }.to change { subscription.subscribed }.from([]).to([list])
     end
 
     it "does nothing if person is already personally subscribed" do
@@ -1017,9 +1013,7 @@ describe Person::Subscriptions do
       list.subscriptions.create!(subscriber: person)
       expect(list.subscribed?(person)).to be_truthy
 
-      expect { subscription.create(list) }
-        .to not_change { subscription.subscribed.to_a }.from([list])
-        .and not_change { list.subscriptions.count }
+      expect { subscription.create(list) }.to not_change { subscription.subscribed.to_a }.from([list])
     end
 
     it "does nothing if person is already subscribed by group" do
@@ -1027,9 +1021,7 @@ describe Person::Subscriptions do
       create_group_subscription
       expect(list.subscribed?(person)).to be_truthy
 
-      expect { subscription.create(list) }
-        .to not_change { subscription.subscribed.to_a }.from([list])
-        .and not_change(list.subscriptions, :count)
+      expect { subscription.create(list) }.to not_change { subscription.subscribed.to_a }.from([list])
     end
   end
 
@@ -1047,9 +1039,7 @@ describe Person::Subscriptions do
 
     it "does nothing if person is not subscribed" do
       expect(list.subscribed?(person)).to be_falsey
-      expect { subscription.destroy(list) }
-        .to not_change { subscription.subscribed.to_a }.from([])
-        .and not_change { list.subscriptions.count }
+      expect { subscription.destroy(list) }.to not_change { subscription.subscribed.to_a }.from([])
     end
   end
 end

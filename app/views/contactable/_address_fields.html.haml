@@ -3,9 +3,9 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- country_data = { placeholder: ' ',
-                                 chosen_no_results: t('global.chosen_no_results'),
-                                 typeahead_supported_countries: Settings.addresses.imported_countries }.merge(country_data)
+- country_data = (country_data || {}).merge(placeholder: ' ', 
+                                            chosen_no_results: t('global.chosen_no_results'), 
+                                            typeahead_supported_countries: Settings.addresses.imported_countries)
 
 .address-input-fields
   - if f.object.respond_to?(:household_key) && f.object.household_key.present?

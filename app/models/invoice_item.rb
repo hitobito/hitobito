@@ -88,9 +88,9 @@ class InvoiceItem < ActiveRecord::Base
 
   def recalculate
     if dynamic
-      write_attribute(:cost, dynamic_cost) unless destroyed?
+      self[:cost] = dynamic_cost unless destroyed?
     else
-      write_attribute(:cost, (unit_cost && count) ? unit_cost * count : 0) unless destroyed?
+      self[:cost] = (unit_cost && count) ? unit_cost * count : 0 unless destroyed?
     end
 
     self

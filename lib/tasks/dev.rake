@@ -8,12 +8,13 @@
 namespace :dev do
   namespace :oauth do
     desc "Obtain oauth access token"
-    task :token, [:application_id, :redirect_uri, :code] => [:environment] do |_, args|
+    task :token, [:application_id, :code, :redirect_uri] => [:environment] do |_, args|
       app = Oauth::Application.find(args.fetch(:application_id))
+      redirect_uri = args.fetch(:redirect_uri, app.redirect_uri.split("\n").first)
       sh <<~BASH
           curl -s -H 'Accept: application/json' -X POST -d 'grant_type=authorization_code'  \
           -d 'client_id=#{app.uid}' -d 'client_secret=#{app.secret}' \
-          -d 'redirect_uri=#{args.fetch(:redirect_uri)}' -d 'code=#{args.fetch(:code)}' \
+          -d "redirect_uri=#{redirect_uri}" -d 'code=#{args.fetch(:code)}' \
         http://localhost:3000/oauth/token | jq .
       BASH
     end

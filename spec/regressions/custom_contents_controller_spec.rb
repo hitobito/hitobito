@@ -19,5 +19,22 @@ describe CustomContentsController, type: :controller do
 
   before { sign_in(people(:top_leader)) }
 
-  include_examples "crud controller", skip: [%w[show], %w[new], %w[create], %w[destroy]]
+  include_examples "crud controller", skip: [%w[show], %w[new], %w[create], %w[destroy], %w[index html sort descending]]
+
+  # must be after include_examples
+  let(:sort_column) { "label" } # rubocop:disable RSpec/LetBeforeExamples
+
+  describe_action :get, :index do
+    context ".html", format: :html do
+      it "should contain all entries" do
+        expect(entries.size).to eq(CustomContent.count)
+      end
+
+      it "should contain all entries in french", perform_request: false do
+        I18n.locale = :fr
+        perform_request
+        expect(entries.size).to eq(CustomContent.count)
+      end
+    end
+  end
 end

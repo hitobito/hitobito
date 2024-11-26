@@ -51,6 +51,7 @@ class LabelFormat < ActiveRecord::Base
   validates :padding_left, numericality: {less_than: :width, if: :width}
 
   scope :for_user, ->(user) { where("user_id = ? OR user_id IS null", user.id) }
+  scope :global, -> { where(person_id: nil) }
 
   def self.for_person(person)
     return none unless person

@@ -50,6 +50,16 @@ module UploadDisplayHelper
     model.send(name.to_sym).attached?
   end
 
+  def upload_default(model, name, png_name = "profil")
+    filename = if model.respond_to?(:"#{name}_default")
+      model.send(:"#{name}_default")
+    else
+      "#{png_name}.png"
+    end
+
+    ActionController::Base.helpers.asset_pack_path("media/images/#{filename}")
+  end
+
   private
 
   def upload_variant(model, name, variant, default: model.class.name.underscore)
@@ -61,16 +71,6 @@ module UploadDisplayHelper
 
       upload_default(model, name_variant, default_variant)
     end
-  end
-
-  def upload_default(model, name, png_name = "profil")
-    filename = if model.respond_to?(:"#{name}_default")
-      model.send(:"#{name}_default")
-    else
-      "#{png_name}.png"
-    end
-
-    ActionController::Base.helpers.asset_pack_path("media/images/#{filename}")
   end
 
   def extract_image_dimensions(width_x_height)

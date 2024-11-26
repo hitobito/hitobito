@@ -34,8 +34,30 @@ describe LabelFormatsController, type: :controller do
 
   include_examples "crud controller", skip: [%w[show]]
 
-  it "can sort by name" do
-    get :index, params: {sort: "name"}
-    expect(response).to be_successful
+  # must be after include_examples
+  let(:sort_column) { "name" } # rubocop:disable RSpec/LetBeforeExamples
+
+  describe_action :get, :index do
+    context ".html", format: :html do
+      it "should contain all entries" do
+        expect(entries.size).to eq(LabelFormat.where(person_id: user.id).count)
+        expect(assigns(:global_entries).size).to eq(LabelFormat.global.count)
+      end
+
+      it "should contain all entries in french", perform_request: false do
+        I18n.locale = :fr
+        perform_request
+        expect(entries.size).to eq(LabelFormat.where(person_id: user.id).count)
+        expect(assigns(:global_entries).size).to eq(LabelFormat.global.count)
+      end
+    end
+  end
+
+  describe_action :get, :index do
+    context ".html", format: :html do
+      it "should mark nav link as active" do
+        expect(response.body).to have_selector(".nav-left-list li.is-active", text: "Etikettenformate")
+      end
+    end
   end
 end

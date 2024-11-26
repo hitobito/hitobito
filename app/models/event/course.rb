@@ -81,6 +81,9 @@ class Event::Course < Event
 
   self.kind_class = Event::Kind
 
+  # Used for Event::CourseResource
+  attr_accessor :leaders
+
   belongs_to :kind
 
   validates :kind_id, presence: true, if: -> { used_attributes.include?(:kind_id) }

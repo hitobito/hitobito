@@ -8,11 +8,8 @@ class LabelFormatsController < SimpleCrudController
     :padding_top, :padding_left, :count_horizontal, :count_vertical,
     :nickname, :pp_post]
 
-  self.sort_mappings = {name: {
-                          joins: [:translations],
-                          order: ["label_format_translations.name"]
-                        },
-                         dimensions: %w[count_horizontal count_vertical]}
+  self.sort_mappings = {name: "label_format_translations.name",
+                        dimensions: %w[count_horizontal count_vertical]}
 
   before_render_index :global_entries
 
@@ -29,12 +26,13 @@ class LabelFormatsController < SimpleCrudController
   end
 
   def list_entries
-    super.where("person_id = #{current_user.id}")
+    super.list.where(person_id: current_user.id)
   end
 
   def global_entries
-    @global_entries = LabelFormat.where(person_id: nil)
-
-    sort_by_sort_expression(@global_entries)
+    @global_entries = LabelFormat.global.list
+    if sorting?
+      @global_entries = @global_entries.reorder(Arel.sql(sort_expression))
+    end
   end
 end

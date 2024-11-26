@@ -498,8 +498,6 @@ it:
       participants: "partecipanti"
     export_enqueued: "L'esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento"
     add_tag: Aggiungere tag
-    invitations:
-      description: "Le persone invitate possono registrarsi o cancellarsi dalla pagina %{model_name}. Non riceveranno una mail automatica."
   event/applications:
     approved: "L'iscrizione è stata accettata"
     rejected: "L'iscrizione è stata rifiutata"

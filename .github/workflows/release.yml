@@ -44,11 +44,11 @@ on:
         required: false
         type: boolean
         default: false
-      prevent_deployment:
-        description: "Do not update the deployment-repo"
-        required: false
-        type: boolean
-        default: false
+      #prevent_deployment:
+      #  description: "Do not update the deployment-repo"
+      #  required: false
+      #  type: boolean
+      #  default: false
   workflow_call:
     inputs:
       composition:
@@ -83,11 +83,11 @@ on:
         required: false
         type: boolean
         default: false
-      prevent_deployment:
-        description: "Do not update the deployment-repo"
-        required: false
-        type: boolean
-        default: false
+      #prevent_deployment:
+      #  description: "Do not update the deployment-repo"
+      #  required: false
+      #  type: boolean
+      #  default: false
 
 permissions:
   contents: write
@@ -101,7 +101,7 @@ jobs:
       release_type: ${{ inputs.release_type }}
       prevent_prepare: ${{ inputs.prevent_prepare }}
       prevent_push: ${{ inputs.prevent_push }}
-      prevent_deployment: ${{ inputs.prevent_deployment }}
+      prevent_deployment: false # ${{ inputs.prevent_deployment }}
 
   version:
     uses: ./.github/workflows/next-version.yml
@@ -140,12 +140,12 @@ jobs:
       project: ${{ needs.settings.outputs.project }}
       version: ${{ needs.version.outputs.version }}
       stage: ${{ needs.settings.outputs.release_stage }}
-      push: ${{ needs.settings.outputs.push_image }}
+      push: ${{ needs.settings.outputs.push_image == 'true' }}
     secrets: inherit
 
   deploy:
     uses: ./.github/workflows/update_image.yml
-    if: ${{ inputs.settings.outputs.update_deployments }}
+    # if: ${{ needs.settings.outputs.update_deployment == 'true' }}
     needs:
       - settings
       - version

@@ -1,0 +1,18 @@
+#  frozen_string_literal: true
+
+#  Copyright (c) 2024, Schweizer Wanderwege. This file is part of
+#  hitobito_sww and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito_sww.class MessageTemplate < ApplicationRecord
+
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+top_layer_one:
+  templated: top_layer (InvoiceConfig)
+  title: Some invoice template
+  body: Some invoice template Text
+
+top_layer_two:
+  templated: top_layer (InvoiceConfig)
+  title: Another invoice template
+  body: Another invoice template text

@@ -30,10 +30,7 @@
         = radio_button_tag('filters[qualification][match]', 'one', true)
         = t('people_filters.simple_radio.match.one')
       = label_tag('filters_qualification_match_all', class: 'radio inline') do
-        = radio_button_tag 'filters[qualification][match]',
-                           'all',
-                           filter_args[:match] == 'all',
-                          { disabled: :disabled } if %w(not_active none only_expired).include?(filter_args[:validity])
+        = radio_button_tag('filters[qualification][match]', 'all', filter_args[:match] == 'all', %w(not_active none only_expired).include?(filter_args[:validity]) ? { disabled: true } : {})
         = t('people_filters.simple_radio.match.all')
 
   = field_set_tag(t('.prompt_validity')) do

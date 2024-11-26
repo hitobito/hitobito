@@ -4,8 +4,6 @@
 -#  https://github.com/hitobito/hitobito.
 
 %ul.nav-left-list
-  - if can?(:index, SelfRegistrationReason)
-    = nav SelfRegistrationReason.model_name.human(count: 2), self_registration_reasons_path, %w(self_registration_reasons)
   - if can?(:index, LabelFormat)
     = nav LabelFormat.model_name.human(count: 2), label_formats_path, %w(label_formats)
   - if can?(:update, current_user)
@@ -14,6 +12,8 @@
     = nav CustomContent.model_name.human(count: 2), custom_contents_path, %w(custom_contents)
   - if can?(:index, HelpText)
     = nav HelpText.model_name.human(count: 2), help_texts_path, %w(help_texts)
+  - if can?(:index, SelfRegistrationReason)
+    = nav SelfRegistrationReason.model_name.human(count: 2), self_registration_reasons_path, %w(self_registration_reasons)
 
   = render_extensions(:admin_nav_main)
 
@@ -23,6 +23,9 @@
     = nav Event::KindCategory.model_name.human(count: 2), event_kind_categories_path, %w(event_kind_categories)
   - if can?(:index, QualificationKind)
     = nav QualificationKind.model_name.human(count: 2), qualification_kinds_path, %w(qualification_kinds)
+
+  = render_extensions(:admin_nav_event)
+
   - if can?(:index, Oauth::Application)
     = nav Oauth::Application.model_name.human(count: 2), oauth_applications_path, %w(oauth_applications)
   - if current_user.oauth_applications.exists?
@@ -35,4 +38,5 @@
     = nav t('hitobito_log_entries.index.title'), hitobito_log_entries_path
 
   = render_extensions(:admin_nav_kinds)
+
   = nav t('json_api'), api_path

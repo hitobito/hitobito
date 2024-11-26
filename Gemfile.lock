@@ -433,6 +433,7 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     netrc (0.11.0)
+    niceql (0.6.1)
     nio4r (2.7.3)
     nokogiri (1.16.7)
       mini_portile2 (~> 2.8.2)
@@ -555,6 +556,9 @@ GEM
       activesupport (= 7.1.0)
       irb
       rackup (>= 1.0.0)
+    rails_sql_prettifier (6.1.5)
+      activerecord (>= 6.1, < 7)
+      niceql (~> 0.6)
       rake (>= 12.2)
       thor (~> 1.0, >= 1.2.2)
       zeitwerk (~> 2.6)
@@ -877,6 +881,7 @@ DEPENDENCIES
   rails-erd
   rails-i18n
   rails_autolink
+  rails_sql_prettifier
   redcarpet
   remotipart
   request_profiler

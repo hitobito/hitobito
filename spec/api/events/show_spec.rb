@@ -24,5 +24,24 @@ RSpec.describe "events#show", type: :request do
         expect(d.id).to eq(event.id)
       end
     end
+
+    describe "course" do
+      let(:event) { events(:top_course) }
+      let(:params) { {include: "leaders"} }
+
+      it "works" do
+        expect(EventResource).to receive(:find).and_call_original
+        make_request
+
+        expect(response.status).to eq(200)
+        data = json["data"]
+        expect(data["type"]).to eq("courses")
+        expect(data["id"]).to eq(event.id.to_s)
+        expect(data["relationships"]["leaders"]["data"].size).to eq(1)
+        leader = json["included"].first
+        expect(leader["type"]).to eq("person-name")
+        expect(leader["id"]).to eq(people(:bottom_member).id.to_s)
+      end
+    end
   end
 end

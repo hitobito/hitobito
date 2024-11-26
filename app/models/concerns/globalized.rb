@@ -34,16 +34,27 @@ module Globalized
     end
 
     def list
-      select(column_names + ["#{table_name}.#{translated_attribute_names.first}"]).from(
-        with_translations.select("#{table_name}.*", translated_label_column)
-        .distinct_on(:id).unscope(:order), table_name
-      ).with_translations.order("#{table_name}.#{translated_attribute_names.first}")
+      left_join_translation
+        .includes(:translations)
+        .select("#{table_name}.*", translated_label_column)
+        .order("#{translated_label_column} NULLS LAST")
+        .distinct
+    end
+
+    def left_join_translation
+      joins(
+        <<-SQL
+          LEFT JOIN #{translations_table_name} ON
+          #{translations_table_name}.#{reflect_on_association(:translations).foreign_key} = #{table_name}.id
+          AND #{translations_table_name}.locale = #{connection.quote(I18n.locale)}
+        SQL
+      )
     end
 
     private
 
     def translated_label_column
-      "#{reflect_on_association(:translations).table_name}.#{translated_attribute_names.first}"
+      "#{translations_table_name}.#{translated_attribute_names.first}"
     end
 
     def globalized_translation(columns)

@@ -43,7 +43,7 @@ class ListController < ApplicationController
   # The base relation used to filter the entries.
   # This method may be adapted as long it returns an ActiveRecord::Relation.
   def list_entries
-    model_scope
+    model_class.respond_to?(:list) ? model_scope.list : model_scope
   end
 
   # The scope where model entries will be listed and created.

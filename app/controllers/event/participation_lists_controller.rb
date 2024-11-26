@@ -13,12 +13,18 @@ class Event::ParticipationListsController < SimpleCrudController
 
   def create
     new_participations = build_new_participations
-    ActiveRecord::Base.transaction do
-      new_participations.map(&:save).all?(&:present?)
+    success = ActiveRecord::Base.transaction do
+      raise ActiveRecord::Rollback unless new_participations.select(&:present?).all?(&:save)
+      true
     end
 
-    redirect_to(group_people_path(group),
-      notice: flash_message(:success, count: new_participations.count))
+    if success
+      redirect_to(group_people_path(group),
+        notice: flash_message(:success, count: new_participations.count))
+    else
+      redirect_to(group_people_path(group),
+        alert: flash_message(:failure, count: new_participations.count))
+    end
   end
 
   def new
@@ -36,10 +42,12 @@ class Event::ParticipationListsController < SimpleCrudController
 
   def build_new_participations
     people.map do |person|
-      participation = event.participations.new
-      participation.person_id = person.id
-      role = role_type.new(participation: participation)
-      authorize!(:create, role)
+      Event::Participation.find_or_initialize_by(event: event, person_id: person.id).tap do |participation|
+        role = role_type.new(participation: participation)
+        break nil if cannot?(:create, role)
+
+        participation.roles << role unless participation.roles.map(&:type).include?(role_type.sti_name)
+      end
     end
   end
 

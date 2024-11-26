@@ -77,7 +77,7 @@ shared_examples "crud controller" do |options|
 
           it_should_respond
           it "should have sorted entries" do
-            sorted = entries.sort_by(&sort_column.to_sym).collect(&:id)
+            sorted = entries.sort_by { |e| e.send(sort_column) || 255.chr }.collect(&:id)
             expect(entries.collect(&:id)).to eq(sorted)
           end
         end
@@ -87,7 +87,7 @@ shared_examples "crud controller" do |options|
 
           it_should_respond
           it "should have sorted entries" do
-            sorted = entries.sort_by(&sort_column.to_sym)
+            sorted = entries.sort_by { |e| e.send(sort_column) || "" }
             expect(entries.to_a).to eq(sorted.reverse)
           end
         end

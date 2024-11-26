@@ -157,7 +157,7 @@ module EventsHelper
 
   def attachment_visibility_icon(visibility, active)
     icons = {team: :"user-graduate", participants: :users, global: :globe}
-    icon(icons[visibility.to_sym], class: active ? "" : "muted")
+    icon(icons[visibility.to_sym], class: active ? "" : "icon-inactive")
   end
 
   def event_team?(event, person)

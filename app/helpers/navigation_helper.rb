@@ -66,31 +66,20 @@ module NavigationHelper
   end
 
   def main_nav_section(options)
-    url = send(options[:url]) if options[:url].is_a?(Symbol)
+    url = send(options[:url])
     active = section_active?(url, options[:active_for], options[:inactive_for])
-    nav(I18n.t("navigation.#{options[:label]}"), url, options[:icon_name], active,
-      class: "nav-left-section", active_class: "active") do
-      concat(sheet.render_left_nav) if sheet.left_nav?
-    end
-  end
-
-  def first_group_invoices_or_root_path
-    return root_path if current_user.finance_groups.blank?
-
-    group_invoices_path(current_user.finance_groups.first)
-  end
-
-  def nav(label, url, icon_name = false, active = false, options = {})
-    classes = options[:class] || ""
-    active_class = options[:active_class] || "is-active"
-    if active
-      classes += " #{active_class}"
-    end
+    classes = "nav-left-section"
+    classes += " active" if active
     content_tag(:li, class: classes) do
-      navigation_text = icon(icon_name) + label
-      concat(link_to(navigation_text, url, data: {turbo_submits_with: navigation_text}))
-      yield if block_given? && active
+      concat(link_to(icon(options[:icon_name]) + I18n.t("navigation.#{options[:label]}"), url))
+      concat(sheet.render_left_nav) if active && sheet.left_nav?
     end
+  end
+
+  def nav(label, url, active_for = [], inactive_for = [])
+    options = {}
+    options[:class] = "is-active" if section_active?(url, active_for, inactive_for)
+    content_tag(:li, link_to(label, url), options)
   end
 
   private
@@ -103,5 +92,11 @@ module NavigationHelper
     current_page?(url) ||
       (Array(active_for).any? { |p| request.path =~ %r{/?#{p}/?} } &&
       Array(inactive_for).none? { |p| request.path =~ %r{/?#{p}/?} })
+  end
+
+  def first_group_invoices_or_root_path
+    return root_path if current_user.finance_groups.blank?
+
+    group_invoices_path(current_user.finance_groups.first)
   end
 end

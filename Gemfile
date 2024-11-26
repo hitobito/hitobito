@@ -111,6 +111,7 @@ gem "active_storage_validations" # validate filesize, dimensions and content-typ
 
 group :development, :test do
   gem "graphiti_spec_helpers"
+  gem "rails_sql_prettifier"
   gem "parallel_tests"
   gem "pry-byebug"
   gem "pry-doc" # provides show-source/$ in the pry-console

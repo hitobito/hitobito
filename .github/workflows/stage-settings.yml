@@ -51,8 +51,8 @@ on:
         value: ${{ jobs.settings.outputs.dry_run }}
       push_image:
         value: ${{ jobs.settings.outputs.push_image }}
-      update_deployments:
-        value: ${{ jobs.settings.outputs.update_deployments }}
+      update_deployment:
+        value: ${{ jobs.settings.outputs.update_deployment }}
 
 jobs:
   settings:

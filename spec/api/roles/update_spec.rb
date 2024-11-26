@@ -8,7 +8,7 @@
 require "rails_helper"
 
 describe "roles#update", type: :request do
-  it_behaves_like "jsonapi authorized requests" do
+  it_behaves_like "jsonapi authorized requests", person: nil do
     let(:role) { roles(:top_leader) }
     let(:payload) { {} }
 

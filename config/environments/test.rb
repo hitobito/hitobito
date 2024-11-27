@@ -23,7 +23,9 @@ Rails.application.configure do
   # Show full error reports and disable caching.
   config.consider_all_requests_local = true
   config.action_controller.perform_caching = false
-  config.cache_store = :memory_store
+
+  # Set to false for faster wagon tests once db is setup
+  config.active_record.maintain_test_schema = %w[1 true].exclude?(ENV["DISABLE_TEST_SCHEMA_MAINTENANCE"])
 
   # Raise exceptions instead of rendering exception templates.
   config.action_dispatch.show_exceptions = false
@@ -53,9 +55,18 @@ Rails.application.configure do
   config.active_support.disallowed_deprecation_warnings = []
 
   # Raises error for missing translations.
-  # config.i18n.raise_on_missing_translations = true
+  config.i18n.raise_on_missing_translations = true
+
+  locales_path = Dir[Rails.root.join("spec", "support", "locales", "**", "*.{rb,yml}")]
+  config.i18n.load_path += locales_path
 
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
   routes.default_url_options[:host] = "test.host"
+
+  unless ENV["RAILS_ENABLE_TEST_LOG"]
+    logger = ActiveSupport::Logger.new(nil)
+    config.logger = ActiveSupport::TaggedLogging.new(logger)
+    config.log_level = :fatal
+  end
 end

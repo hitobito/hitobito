@@ -49,6 +49,12 @@ Set the environment variable `BUNDLE_GEMFILE=Gemfile.local` to use the alternate
 When adding or updating gems, remember to adjust the original `Gemfile` and make sure that
 no local wagon configuration leaks into the updated `Gemfile.lock` when committing.
 
+The `./bin/active_wagon.rb` script automates that process for you if the environment variable
+`BUNDLE_GEMFILE` is defined.
+
+To ignore the `Gemfile.local` and `Gemfile.local.lock` files in all wagons you can add them to
+your global gitgnore `~/.gitignore`.
+
 ### Adjusting git blame ignores
 
 Add the following to `.git/config`

@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Doorkeeper::Hitobito::OidcSessionsController < ActionController::Base
+class Doorkeeper::Hitobito::OidcSessionsController < ActionController::Base # rubocop:disable Rails/ApplicationController
   def destroy
     if id_token
       reset_session
@@ -24,11 +24,11 @@ class Doorkeeper::Hitobito::OidcSessionsController < ActionController::Base
 
   def access_tokens
     Oauth::AccessToken.active.joins(:application)
-      .where(resource_owner_id: id_token[:sub], application: { uid: id_token[:aud] })
+      .where(resource_owner_id: id_token[:sub], application: {uid: id_token[:aud]})
   end
 
   def decode_id_token
-    return unless params[:id_token_hint].present?
+    return if params[:id_token_hint].blank?
 
     config = Doorkeeper::OpenidConnect.configuration
     public_key = OpenSSL::PKey.read(config.signing_key).public_key

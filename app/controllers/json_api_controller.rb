@@ -11,7 +11,11 @@ class JsonApiController < ActionController::API
   include GraphitiErrors
 
   rescue_from Exception do |e|
+    # rescues and therefor skips error handling middleware
     handle_exception(e)
+
+    # therefor notify sentry by hand
+    Airbrake.notify(e) if Rails.env.production?
   end
 
   include ActionController::Cookies

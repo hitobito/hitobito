@@ -7,10 +7,13 @@
   = f.hidden_field :recipient_id
 
   = field_set_tag do
-    = f.labeled_input_fields :title, :description, rows: 3
+    = render "message_template", f: f, group: parent
+    = f.labeled_input_field :title, data: { message_template_target: :title }
+    = f.labeled_input_field :description, rows: 3, data: { message_template_target: :body }
+
+  = field_set_tag do
     = f.labeled_input_field :due_at
     = f.labeled_input_field :issued_at
-    = f.labeled_boolean_field :hide_total
 
   = field_set_tag do
     = f.labeled_input_field :recipient_email
@@ -27,5 +30,8 @@
 
   = field_set_tag do
     = f.labeled_inline_fields_for :invoice_items, 'invoice_lists/invoice_items', class: 'd-flex'
+
+  = field_set_tag do
+    = f.labeled_boolean_field :hide_total
 
   = render "invoices/recalculate/calculated", invoice: entry.decorate

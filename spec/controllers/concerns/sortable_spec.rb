@@ -65,13 +65,13 @@ describe Sortable, type: :controller do
       controller.class.sort_mappings = {
         roles: {
           joins: [:roles, "INNER JOIN role_type_orders ON roles.type = role_type_orders.name"],
-          order: ["order_weight"]
+          order: ["role_type_orders.order_weight"]
         }
       }
 
       controller.singleton_class.class_eval do
         define_method(:list_entries) do
-          sort_by_sort_expression(Person.group(:id)) # group query before passing it into sort_by_sort_expression
+          sort_by_sort_expression(Person.select("MAX(people.id) AS id").group(:id)) # group query before passing it into sort_by_sort_expression
         end
       end
     end

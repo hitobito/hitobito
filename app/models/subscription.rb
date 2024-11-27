@@ -58,6 +58,8 @@ class Subscription < ActiveRecord::Base
   def to_s(format = :default)
     if subscriber.is_a?(Group)
       subscriber.with_layer.join(" / ")
+    elsif subscriber.is_a?(Person)
+      PersonDecorator.new(subscriber).full_label
     else
       subscriber.to_s(format).dup
     end

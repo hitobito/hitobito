@@ -178,7 +178,11 @@ RSpec.configure do |config|
     config.use_transactional_fixtures = true
   end
 
-  config.before { allow(Truemail).to receive(:valid?).and_return(true) }
+  config.before do |ex|
+    next if ex.metadata[:with_truemail_validation]
+    allow(Truemail).to receive(:valid?).and_return(true)
+  end
+
   config.before do
     # this job is usually enqueued when a person is created. So it makes sense to
     # prevent this in test env when using for example Fabricate

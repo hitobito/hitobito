@@ -27,7 +27,7 @@ module Subscriber
 
     def save_entry
       if subscriber_id
-        @mailing_list.exclude_person(subscriber)
+        Person::Subscriptions.new(subscriber).destroy(@mailing_list)
       else
         super
       end

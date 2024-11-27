@@ -317,6 +317,9 @@ de:
       message/text_message:
         one: SMS
         other: SMS
+      message_template:
+        one: Rechnungsvorlage
+        other: Rechnungsvorlagen
       mail_log:
         one: Verlauf
         other: Verlauf
@@ -1141,6 +1144,10 @@ de:
         cost: Betrag
         cost_center: Kostenstelle
         account: Konto
+
+      message_template:
+        title: Titel
+        body: Text   
 
       payment:
         invoice: Rechnung

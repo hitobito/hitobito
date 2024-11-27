@@ -47,6 +47,10 @@ Doorkeeper::OpenidConnect.configure do
     # Digest::SHA256.hexdigest("#{resource_owner.id}#{URI.parse(application.redirect_uri).host}#{'your_secret_salt'}")
   end
 
+  end_session_endpoint do
+    oidc_logout_url
+  end
+
   # Protocol to use when generating URIs for the discovery endpoint,
   # for example if you also use HTTPS in development
   # protocol do

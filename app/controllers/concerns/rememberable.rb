@@ -37,7 +37,10 @@ module Rememberable
 
   def store_current_params(remembered)
     remember_params.each do |p|
-      remembered[p] = params[p].presence
+      remembered[p] = case params[p]
+      when ActionController::Parameters then params[p].to_unsafe_h
+      else params[p].presence
+      end
       remembered.delete(p) if remembered[p].nil?
     end
   end

@@ -7,7 +7,7 @@
 
 source "https://rubygems.org"
 
-gem "rails", "= 6.1.7.8"
+gem "rails", "= 7.0.8"
 gem "wagons", "~> 0.7.0"
 
 gem "active_record_distinct_on"
@@ -49,7 +49,7 @@ gem "graphiti-rails", "~> 0.1"
 gem "haml"
 gem "http_accept_language"
 gem "icalendar"
-gem "image_processing", "~> 1.12"
+gem "image_processing", "~> 1.2"
 gem "json", "< 2.7.0" # pinned to be able to use rdbg. Somehow it has multiple versions otherwise
 gem "lograge"
 gem "lograge_activejob"
@@ -89,26 +89,25 @@ gem "rswag-ui", "~> 2.13"
 gem "rubyzip"
 gem "seed-fu"
 gem "sentry-raven"
-gem "simple_xlsx_reader" # import data from xlsx files (used in some wagons)
 gem "simpleidn"
+gem "simple_xlsx_reader" # import data from xlsx files (used in some wagons)
 gem "sorted_set"
-gem "sprockets", "~> 3.7.2" # pinned to older version to avoid having an empty manifest.js
+gem "sprockets-rails"
 gem "strip_attributes" # strip whitespace of attributes
 gem "truemail"
 gem "ttfunk", "< 1.8.0"
 gem "turbo-rails"
 gem "validates_by_schema", "~> 0.3.0" # 0.5.1 does not work well with wagons / wagon-migrations
-gem "validates_timeliness"
+gem "validates_timeliness", "~> 7.0.0.beta2"
 gem "vcard"
 gem "view_component"
 gem "webpacker"
 
 # load after others because dependencies
-gem "graphiti-openapi", github: "puzzle/graphiti-openapi", tag: "standalone/0.6.3"
 gem "kaminari"
+gem "graphiti-openapi", github: "puzzle/graphiti-openapi", tag: "standalone/0.6.5"
 
 gem "active_storage_validations" # validate filesize, dimensions and content-type of uploads
-gem "active_storage_variant" # variants for Rails < 7
 
 group :development, :test do
   gem "graphiti_spec_helpers"

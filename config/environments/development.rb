@@ -1,15 +1,8 @@
-# frozen_string_literal: true
-
-#  Copyright (c) 2012-2022, Puzzle ITC. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
-
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  # In the development environment your application's code is reloaded on
-  # every request. This slows down response time but is perfect for development
+  # In the development environment your application's code is reloaded any time
+  # it changes. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
 
@@ -19,19 +12,22 @@ Rails.application.configure do
   # Show full error reports.
   config.consider_all_requests_local = true
 
-  if ENV["IS_DOCKER_DEV_ENV"] == "1"
-    BetterErrors::Middleware.allow_ip!("172.0.0.0/8")
-  end
+    if ENV["IS_DOCKER_DEV_ENV"] == "1"
+      BetterErrors::Middleware.allow_ip!("172.0.0.0/8")
+    end
+
+  # Enable server timing
+  config.server_timing = true
 
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
-  if Rails.root.join('tmp', 'caching-dev.txt').exist?
+  if Rails.root.join("tmp/caching-dev.txt").exist?
     config.action_controller.perform_caching = true
     config.action_controller.enable_fragment_cache_logging = true
 
     config.cache_store = :memory_store
     config.public_file_server.headers = {
-      'Cache-Control' => "public, max-age=#{2.days.to_i}"
+      "Cache-Control" => "public, max-age=#{2.days.to_i}"
     }
   else
     config.action_controller.perform_caching = false
@@ -63,6 +59,12 @@ Rails.application.configure do
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
+  # Raise exceptions for disallowed deprecations.
+  config.active_support.disallowed_deprecation = :raise
+
+  # Tell Active Support which deprecation messages to disallow.
+  config.active_support.disallowed_deprecation_warnings = []
+
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load
 
@@ -78,6 +80,7 @@ Rails.application.configure do
   config.assets.quiet = true
 
   # Raises error for missing translations.
+  config.file_watcher = ActiveSupport::EventedFileUpdateChecker
   config.i18n.raise_on_missing_translations = true
 
   # Use an evented file watcher to asynchronously detect changes in source code,
@@ -90,4 +93,7 @@ Rails.application.configure do
     ActiveRecord::Base.logger = nil if ENV["RAILS_SILENCE_ACTIVE_RECORD"] == "1"
   end
 
+  # config.action_cable.disable_request_forgery_protection = true
+
+  routes.default_url_options[:host] = 'localhost:3000'
 end

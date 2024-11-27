@@ -13,6 +13,6 @@ class Doorkeeper::Hitobito::OidcSessionsController < ::Doorkeeper::ApplicationMe
     reset_session
     redirect_target = params[:post_logout_redirect_uri].presence || new_person_session_url(oauth: true)
 
-    redirect_to URI.parse(redirect_target).to_s, notice: I18n.t("devise.sessions.signed_out")
+    redirect_to URI.parse(redirect_target).to_s, allow_other_host: true, notice: I18n.t("devise.sessions.signed_out")
   end
 end

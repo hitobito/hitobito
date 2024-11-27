@@ -9,8 +9,8 @@ ARG NODEJS_VERSION="16"
 ARG YARN_VERSION="1.22.19"
 
 # Packages
-ARG BUILD_PACKAGES="nodejs git imagemagick build-essential libpq-dev"
-ARG RUN_PACKAGES="imagemagick shared-mime-info pkg-config libmagickcore-dev libmagickwand-dev libpq-dev libjemalloc-dev libjemalloc2"
+ARG BUILD_PACKAGES="nodejs git build-essential libpq-dev libvips42"
+ARG RUN_PACKAGES="shared-mime-info pkg-config libpq-dev libjemalloc-dev libjemalloc2 libvips42"
 
 # Scripts
 ARG PRE_INSTALL_SCRIPT="\

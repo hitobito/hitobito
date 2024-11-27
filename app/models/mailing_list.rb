@@ -129,6 +129,10 @@ class MailingList < ActiveRecord::Base
     Settings.email.list_domain
   end
 
+  def exclude_person(person)
+    Person::Subscriptions.new(person).unsubscribe(self)
+  end
+
   def subscribed?(person, time: Time.zone.now)
     MailingLists::Subscribers.new(self, time:).subscribed?(person)
   end

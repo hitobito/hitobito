@@ -120,6 +120,7 @@ module Hitobito
     config.to_prepare do
       ActionMailer::Base.default from: Settings.email.sender
     end
+    config.action_mailer.deliver_later_queue_name = 'mailers'
 
     def self.versions(file = Rails.root.join('WAGON_VERSIONS'))
       @versions ||= {}

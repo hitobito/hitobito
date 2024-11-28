@@ -106,5 +106,6 @@ config/mail.yml
 /swagger
 .yardoc/
 
-# use BUNDLE_GEMFILE=Gemfile-dev for less Gemfile.lock noise in development
-Gemfile-dev.lock
+# use BUNDLE_GEMFILE=Gemfile.local for less Gemfile.lock noise in development
+Gemfile.local
+Gemfile.local.lock

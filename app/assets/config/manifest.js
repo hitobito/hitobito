@@ -1,3 +1,1 @@
-//= link_tree ../images
-//= link_directory ../javascripts .js
-//= link_directory ../stylesheets .css
+// NOTE: Introduced by rails 7, required by sprockets, but do we use sprockets at all?

@@ -55,7 +55,6 @@ Rails.application.configure do
   }
   config.action_mailer.default_url_options = url_options
   config.action_mailer.asset_host = "http://#{url_options[:host]}"
-  config.action_mailer.deliver_later_queue_name = 'mailers'
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log

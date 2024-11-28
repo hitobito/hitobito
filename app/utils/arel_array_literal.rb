@@ -20,6 +20,6 @@ class ArelArrayLiteral
   end
 
   def eql?(other)
-    self.class == other.class && self.items == other.items
+    self.class == other.class && items == other.items
   end
 end

@@ -19,7 +19,7 @@ class Export::Pdf::Messages::Letter
       stamped :render_logo_right
 
       offset_cursor_from_top 60.mm
-      bounding_box(address_position(group), width: ADDRESS_BOX.first) do
+      bounding_box(address_position(group.letter_address_position), width: ADDRESS_BOX.first) do
         stamped :render_shipping_info
 
         pdf.move_down 4.mm # 3mm + 1mm from text baseline, according to post factsheet

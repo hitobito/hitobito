@@ -304,8 +304,6 @@ Hitobito::Application.routes.draw do
             end
             get 'event' => 'subscriber/event#new' # route required for language switch
 
-            resource :user, only: [:create, :destroy], controller: 'subscriber/user'
-
             resource :filter, only: [:edit, :update], controller: 'subscriber/filter'
 
           end

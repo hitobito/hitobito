@@ -55,4 +55,18 @@ module PdfHelpers
       end
     end
   end
+
+  def lookatit
+    return if ENV["CI"]
+
+    rendered_pdf = pdf.try(:render) || pdf
+    f = Tempfile.new(%w[spec- .pdf], Rails.root.join("tmp"), binmode: true)
+    f.write(rendered_pdf)
+    f.close
+    cmd = RUBY_PLATFORM.include?("darwin") ? "open" : "xdg-open"
+    `#{cmd} #{f.path}`
+    sleep 1
+  ensure
+    f&.unlink
+  end
 end

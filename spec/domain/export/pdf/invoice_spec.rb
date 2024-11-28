@@ -105,8 +105,8 @@ describe Export::Pdf::Invoice do
         [346, 144, "8000 Alt Tylerland"]
       ]
 
-      text_with_position.each_with_index do |l, i|
-        expect(l).to eq(invoice_text[i])
+      invoice_text.each_with_index do |text, i|
+        expect(text_with_position[i]).to eq(text)
       end
     end
 
@@ -127,13 +127,12 @@ describe Export::Pdf::Invoice do
         [57, 674, "Musterweg 2"],
         [57, 662, "8000 Alt Tylerland"],
         [57, 537, "Rechnungsartikel"],
-        [362, 537, "Anzahl"],
-        [419, 537, "Preis"],
-        [462, 537, "Betrag"],
-        [515, 537, "MwSt."],
+        [412, 537, "Anzahl"],
+        [469, 537, "Preis"],
+        [512, 537, "Betrag"],
         [57, 522, "pens"],
-        [383, 522, "2"],
-        [417, 522, "10.00"],
+        [433, 522, "2"],
+        [467, 522, "10.00"],
         [389, 507, "Zwischenbetrag"],
         [502, 507, "20.00 CHF"],
         [389, 489, "Gesamtbetrag"],
@@ -171,8 +170,8 @@ describe Export::Pdf::Invoice do
         [346, 144, "8000 Alt Tylerland"]
       ]
 
-      text_with_position.each_with_index do |l, i|
-        expect(l).to eq(invoice_text[i])
+      invoice_text.each_with_index do |text, i|
+        expect(text_with_position[i]).to eq(text)
       end
     end
 
@@ -197,14 +196,13 @@ describe Export::Pdf::Invoice do
         [57, 674, "Musterweg 2"],
         [57, 662, "8000 Alt Tylerland"],
         [57, 537, "Rechnungsartikel"],
-        [362, 537, "Anzahl"],
-        [419, 537, "Preis"],
-        [462, 537, "Betrag"],
-        [515, 537, "MwSt."],
+        [412, 537, "Anzahl"],
+        [469, 537, "Preis"],
+        [512, 537, "Betrag"],
         [57, 522, "pens"],
-        [383, 522, "2"],
-        [417, 522, "10.00"],
-        [467, 522, "20.00"],
+        [433, 522, "2"],
+        [467, 522, "10.00"],
+        [517, 522, "20.00"],
         [400, 507, "Zwischenbetrag"],
         [502, 507, "20.00 CHF"],
         [400, 492, "Gesamtbetrag"],
@@ -248,8 +246,151 @@ describe Export::Pdf::Invoice do
         [346, 144, "8000 Alt Tylerland"]
       ]
 
-      text_with_position.each_with_index do |l, i|
-        expect(l).to eq(invoice_text[i])
+      invoice_text.each_with_index do |text, i|
+        expect(text_with_position[i]).to eq(text)
+      end
+    end
+
+    it "renders full invoice without vat" do
+      invoice.invoice_items.build(name: "pens", unit_cost: 10, count: 2)
+
+      invoice_text = [
+        [347, 685, "Rechnungsnummer:"],
+        [453, 685, "1-10"],
+        [347, 672, "Rechnungsdatum:"],
+        [453, 672, "26.09.2022"],
+        [347, 659, "Fällig bis:"],
+        [453, 659, "26.10.2022"],
+        [347, 646, "Rechnungssteller:"],
+        [453, 646, "Top Leader"],
+        [347, 632, "MwSt. Nummer:"],
+        [453, 632, "CH 1234"],
+        [57, 686, "Max Mustermann"],
+        [57, 674, "Musterweg 2"],
+        [57, 662, "8000 Alt Tylerland"],
+        [57, 537, "Rechnungsartikel"],
+        [412, 537, "Anzahl"],
+        [469, 537, "Preis"],
+        [512, 537, "Betrag"],
+        [57, 522, "pens"],
+        [433, 522, "2"],
+        [467, 522, "10.00"],
+        [389, 507, "Zwischenbetrag"],
+        [502, 507, "20.00 CHF"],
+        [389, 489, "Gesamtbetrag"],
+        [490, 489, "1'500.00 CHF"],
+        [14, 276, "Empfangsschein"],
+        [14, 251, "Konto / Zahlbar an"],
+        [14, 239, "CH93 0076 2011 6238 5295 7"],
+        [14, 228, "Acme Corp"],
+        [14, 216, "Hallesche Str. 37"],
+        [14, 205, "3007 Hinterdupfing"],
+        [14, 173, "Zahlbar durch"],
+        [14, 161, "Max Mustermann"],
+        [14, 150, "Musterweg 2"],
+        [14, 138, "8000 Alt Tylerland"],
+        [14, 89, "Währung"],
+        [71, 89, "Betrag"],
+        [14, 78, "CHF"],
+        [71, 78, "1 500.00"],
+        [105, 39, "Annahmestelle"],
+        [190, 276, "Zahlteil"],
+        [190, 89, "Währung"],
+        [247, 89, "Betrag"],
+        [190, 78, "CHF"],
+        [247, 78, "1 500.00"],
+        [346, 278, "Konto / Zahlbar an"],
+        [346, 266, "CH93 0076 2011 6238 5295 7"],
+        [346, 255, "Acme Corp"],
+        [346, 243, "Hallesche Str. 37"],
+        [346, 232, "3007 Hinterdupfing"],
+        [346, 211, "Referenznummer"],
+        [346, 200, "00 00834 96356 70000 00000 00019"],
+        [346, 178, "Zahlbar durch"],
+        [346, 167, "Max Mustermann"],
+        [346, 155, "Musterweg 2"],
+        [346, 144, "8000 Alt Tylerland"]
+      ]
+
+      invoice_text.each_with_index do |text, i|
+        expect(text_with_position[i]).to eq(text)
+      end
+    end
+
+    it "renders invoice without group" do
+      invoice.group = nil
+      invoice.address = "Hitobito Inc.\nBelpstrasse 37\n3007 Bern"
+      invoice.letter_address_position = :right
+      invoice.invoice_config = InvoiceConfig.new
+      invoice.invoice_items.build(name: "pens", unit_cost: 10, count: 2, vat_rate: 10)
+
+      invoice_text = [
+        [57, 806, "Hitobito Inc."],
+        [57, 793, "Belpstrasse 37"],
+        [57, 781, "3007 Bern"],
+        [57, 685, "Rechnungsnummer:"],
+        [163, 685, "1-10"],
+        [57, 672, "Rechnungsdatum:"],
+        [163, 672, "26.09.2022"],
+        [57, 659, "Fällig bis:"],
+        [163, 659, "26.10.2022"],
+        [57, 646, "Rechnungssteller:"],
+        [163, 646, "Top Leader"],
+        [57, 632, "MwSt. Nummer:"],
+        [163, 632, "CH 1234"],
+        [347, 686, "Max Mustermann"],
+        [347, 674, "Musterweg 2"],
+        [347, 662, "8000 Alt Tylerland"],
+        [57, 537, "Rechnungsartikel"],
+        [362, 537, "Anzahl"],
+        [419, 537, "Preis"],
+        [462, 537, "Betrag"],
+        [515, 537, "MwSt."],
+        [57, 522, "pens"],
+        [383, 522, "2"],
+        [417, 522, "10.00"],
+        [513, 522, "10.0 %"],
+        [389, 507, "Zwischenbetrag"],
+        [502, 507, "20.00 CHF"],
+        [389, 492, "MwSt."],
+        [506, 492, "2.00 CHF"],
+        [389, 474, "Gesamtbetrag"],
+        [490, 474, "1'500.00 CHF"],
+        [14, 276, "Empfangsschein"],
+        [14, 251, "Konto / Zahlbar an"],
+        [14, 239, "CH93 0076 2011 6238 5295 7"],
+        [14, 228, "Acme Corp"],
+        [14, 216, "Hallesche Str. 37"],
+        [14, 205, "3007 Hinterdupfing"],
+        [14, 173, "Zahlbar durch"],
+        [14, 161, "Max Mustermann"],
+        [14, 150, "Musterweg 2"],
+        [14, 138, "8000 Alt Tylerland"],
+        [14, 89, "Währung"],
+        [71, 89, "Betrag"],
+        [14, 78, "CHF"],
+        [71, 78, "1 500.00"],
+        [105, 39, "Annahmestelle"],
+        [190, 276, "Zahlteil"],
+        [190, 89, "Währung"],
+        [247, 89, "Betrag"],
+        [190, 78, "CHF"],
+        [247, 78, "1 500.00"],
+        [346, 278, "Konto / Zahlbar an"],
+        [346, 266, "CH93 0076 2011 6238 5295 7"],
+        [346, 255, "Acme Corp"],
+        [346, 243, "Hallesche Str. 37"],
+        [346, 232, "3007 Hinterdupfing"],
+        [346, 211, "Referenznummer"],
+        [346, 200, "00 00834 96356 70000 00000 00019"],
+        [346, 178, "Zahlbar durch"],
+        [346, 167, "Max Mustermann"],
+        [346, 155, "Musterweg 2"],
+        [346, 144, "8000 Alt Tylerland"]
+      ]
+
+      invoice_text.each_with_index do |text, i|
+        expect(text_with_position[i]).to eq(text)
       end
     end
   end
@@ -419,8 +560,8 @@ describe Export::Pdf::Invoice do
         [346, 144, "8000 Alt Tylerland"]
       ]
 
-      text_with_position.each_with_index do |l, i|
-        expect(l).to eq(invoice_text[i])
+      invoice_text.each_with_index do |text, i|
+        expect(text_with_position[i]).to eq(text)
       end
     end
 
@@ -458,8 +599,8 @@ describe Export::Pdf::Invoice do
         [346, 144, "8000 Alt Tylerland"]
       ]
 
-      text_with_position.each_with_index do |l, i|
-        expect(l).to eq(invoice_text[i])
+      invoice_text.each_with_index do |text, i|
+        expect(text_with_position[i]).to eq(text)
       end
     end
 
@@ -497,8 +638,8 @@ describe Export::Pdf::Invoice do
         [346, 144, "8000 Alt Tylerland"]
       ]
 
-      text_with_position.each_with_index do |l, i|
-        expect(l).to eq(invoice_text[i])
+      invoice_text.each_with_index do |text, i|
+        expect(text_with_position[i]).to eq(text)
       end
     end
   end

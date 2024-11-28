@@ -5,6 +5,8 @@
 
 module Export::Pdf::Invoice
   class Articles < Section
+    ARTICLE_COLUMN_WIDTHS = {0 => 290, 1 => 40, 2 => 50, 3 => 50, 4 => 50}
+
     attr_reader :reminder
 
     def render # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
@@ -35,9 +37,15 @@ module Export::Pdf::Invoice
     end
 
     def articles_table
-      table(articles,
+      data = articles
+      column_widths = ARTICLE_COLUMN_WIDTHS.dup
+      unless show_vat?
+        data.map! { |line| line[0..3] }
+        column_widths[0] += column_widths[4]
+      end
+      table(data,
         header: true,
-        column_widths: {0 => 290, 1 => 40, 2 => 50, 3 => 50, 4 => 50},
+        column_widths: column_widths,
         cell_style: {borders: [:bottom],
                      border_color: "CCCCCC",
                      border_width: 0.5,
@@ -97,7 +105,7 @@ module Export::Pdf::Invoice
 
     def total_data
       decorated = invoice.decorate
-      vat_row = if invoice.calculated[:vat].nonzero?
+      vat_row = if show_vat?
         [I18n.t("invoices.pdf.total_vat"), decorated.vat]
       end
       payment_data = if invoice.payments.any?
@@ -121,6 +129,12 @@ module Export::Pdf::Invoice
 
     def align_right(content)
       pdf.make_cell(content: content, align: :right)
+    end
+
+    def show_vat?
+      return @show_vat if defined?(@show_vat)
+
+      @show_vat = invoice.invoice_items.any?(&:vat_rate)
     end
   end
 end

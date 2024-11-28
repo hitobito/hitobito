@@ -12,172 +12,138 @@ class People::HouseholdList
 
   def initialize(people_scope, order: :default)
     @people_scope = people_scope
-    @order = order
   end
 
   def only_households_in_batches(&block)
-    return unless block
-
-    fetch_in_batches(only_households, &block)
+    in_batches(@people_scope.where.not(household_key: nil), &block)
   end
 
   def people_without_household_in_batches(&block)
-    return unless block
-
-    fetch_in_batches(people_without_household, &block)
+    in_batches(@people_scope.where(household_key: nil), &block)
   end
 
   def households_in_batches(&block)
-    return unless block
-
-    fetch_in_batches(grouped_households, &block)
+    in_batches(@people_scope, &block)
   end
 
-  def grouped_households
-    Person
-      .select("people.*")
-      .from(grouped_households_people_sql, :people)
-      .limit(@people_scope.limit_value.presence)
-      .order(order_statement)
-  end
-
-  def order_statement
-    case @order
-    when :retain
-      ids_in_order = ArelArrayLiteral.new(@people_scope.pluck(:id))
-      Arel::Nodes::NamedFunction.new("array_position", [ids_in_order, Person.arel_table[:id]])
-    when :default
-      '"member_count" DESC, id ASC'
-    else
-      @order
-    end
-  end
-
-  def each(&block)
-    return to_enum(:each) unless block
-
-    households_in_batches do |batch|
-      batch.each(&block)
-    end
-  end
+  delegate :each, :map, :to_a, to: :households_in_batches
 
   private
 
-  def grouped_households_people_sql
-    "((#{only_households.unscope(:limit).to_sql}) " \
-      "UNION ALL (#{people_without_household.unscope(:limit).to_sql})) " \
-      "#{people_table}"
-  end
+  def in_batches(people_scope, batch_size: BATCH_SIZE)
+    return to_enum(:in_batches, people_scope, batch_size: batch_size) unless block_given?
 
-  def fetch_in_batches(scope)
-    in_batches(scope, batch_size: BATCH_SIZE) do |batch|
-      involved_people = fetch_involved_people(batch.map(&:key))
-      grouped_people = batch.map do |household|
-        involved_people.select do |person|
-          # the 'key' is either a household key or a single person id
-          person.household_key == household.key || person.id.to_s == household.key.to_s
-        end
+    # load complete list of ids to retain order
+    person_ids = person_ids_grouped_by_household_query(people_scope).map(&:person_ids)
+    person_ids.each_slice(batch_size) do |batch|
+      involved_people = Person.where(id: batch.flatten).index_by(&:id)
+      batch.map do |household|
+        yield household.map { |person_id| involved_people[person_id] }
       end
-      yield grouped_people
     end
   end
 
-  def only_households
-    base_scope
-      .select(:household_key)
-      .select("MIN(#{people_table}.\"id\") AS \"id\"")
-      .select("COUNT(#{people_table}.\"household_key\") AS \"member_count\"")
-      .select("#{people_table}.\"household_key\" AS \"key\"")
-      .where.not(household_key: nil)
-      .group(:household_key)
+  def computed_ordinal_column(people_scope)
+    ids_in_order = ArelArrayLiteral.new(people_scope.unscope(:limit, :select).pluck(:id))
+    computed_ordinal_column = Arel::Nodes::NamedFunction.new("ARRAY_POSITION", [ids_in_order.to_sql, Person.arel_table[:id]])
   end
 
-  def people_without_household
-    base_scope
-      .select(:household_key)
-      .select(:id)
-      .select("1 AS \"member_count\"")
-      .select("CAST(#{people_table}.\"id\" AS TEXT) AS \"key\"")
-      .where(household_key: nil)
-      .order(:id)
+  def computed_household_key_column
+    Arel::Nodes::NamedFunction.new("COALESCE", [
+      Person.arel_table[:household_key],
+      Arel::Nodes::NamedFunction.new("FORMAT", [Arel::Nodes.build_quoted("_%s"), Person.arel_table[:id]])
+      # compare performance
+      # [Person.arel_table[:id].cast(:text)])
+    ])
   end
 
-  def people_table
-    Person.quoted_table_name
+  def ordered_computed_household_key_query(people_scope)
+    ordinal_column = computed_ordinal_column(people_scope)
+    household_key_column = computed_household_key_column
+
+    Person.arel_table
+      .where(Person.arel_table[:id].in(people_scope.unscope(:select, :includes, :limit, :order).pluck(:id)))
+      .project(Person.arel_table[:id].as('person_id'))
+      .project(household_key_column.as('household_key'))
+      .project(ordinal_column.as('ordinal'))
+      .order(ordinal_column.alias)
+      # apply limit to people, not to households
+      # .take(people_scope.limit_value.presence)
   end
 
-  def base_scope
-    # Remove preview limit for fetching all candidate ids, and re-apply it afterwards.
-    # This way, we can add more conditions to the query builder while keeping the performance
-    # benefits of pre-calculating the candidate id list.
-    @base_scope ||= Person
-      .where(id: @people_scope.unscope(:select, :includes, :limit, :order)
-                                                .pluck(:id))
-      .limit(@people_scope.limit_value.presence)
-  end
+  def person_ids_grouped_by_household_query(people_scope)
+    ordered_keys = Arel::Nodes::TableAlias.new(ordered_computed_household_key_query(people_scope), 'ordered_keys')
 
-  def fetch_involved_people(ids_or_household_keys)
-    # Search for any number of housemates, regardless of preview limit
-    base_scope = @people_scope.unscope(:limit)
-    # Make sure to select household_key if we aren't selecting specific columns
-    base_scope = base_scope.select(:household_key) if base_scope.select_values.present?
-
-    base_scope.where(household_key: ids_or_household_keys)
-      .or(base_scope.where(id: ids_or_household_keys))
-      .load
-  end
-
-  # Copied and adapted from ActiveRecord::Batches#in_batches
-  # We need to order and "offset" the batches by two separate columns, which
-  # activerecord doesn't support natively. Activerecord only supports ordering by the
-  # primary key column and doesn't use SQL OFFSET internally, for performance reasons:
-  # https://github.com/rails/rails/pull/20933
-  def in_batches(base_scope, batch_size: 1000) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/AbcSize,Metrics/PerceivedComplexity this is a close copy of a rails method
-    relation = base_scope
-
-    batch_limit = batch_size
-    if base_scope.limit_value
-      remaining = base_scope.limit_value
-      batch_limit = remaining if remaining < batch_limit
-    end
-
-    relation = relation.reorder(order_statement).limit(batch_limit)
-    # Retaining the results in the query cache would undermine the point of batching
-    relation.skip_query_cache!
-    batch_relation = relation
-
-    loop do
-      records = batch_relation.records
-      ids = records.map(&:id)
-      yielded_relation = base_scope.where(id: ids)
-      yielded_relation.send(:load_records, records)
-
-      break if ids.empty?
-
-      member_count_offset = records.last.member_count
-      id_offset = ids.last
-
-      yield yielded_relation
-
-      break if ids.length < batch_limit
-
-      if base_scope.limit_value
-        remaining -= ids.length
-
-        if remaining.zero?
-          # Saves a useless iteration when the limit is a multiple of the batch size.
-          break
-        elsif remaining < batch_limit
-          relation = relation.limit(remaining)
-        end
-      end
-
-      batch_relation =
-        Person.select("*").from(relation.unscope(:limit))
-          .where('"member_count" < ? OR ("member_count" = ? AND "id" > ?)',
-            member_count_offset,
-            member_count_offset,
-            id_offset).limit(relation.limit_value)
-    end
+    Person
+      .from(ordered_keys)
+      .select(Arel.star.count.as('member_count'))
+      .select(Arel::Nodes::NamedFunction.new("ARRAY_AGG", [ordered_keys[:person_id]]).as('person_ids'))
+      .group(ordered_keys[:household_key])
+      .order(ordered_keys[:ordinal].minimum)
+       # apply limit to households?
+      .limit(people_scope.limit_value.presence)
   end
 end
+
+  # def key_scope
+  #   key = Arel::Nodes::NamedFunction.new("COALESCE", [
+  #           Person.arel_table[:household_key],
+  #           Arel::Nodes::NamedFunction.new("CAST", [Person.arel_table[:id].as(Arel::Nodes::SqlLiteral.new('TEXT'))])
+  #         ]).as('key')
+
+  #   Person
+  #     .select(key)
+  #     .select("(array_agg(#{people_table}.\"id\"))[1] AS \"id\"")
+  #     .select("(array_agg(#{people_table}.\"household_key\"))[1] AS \"household_key\"")
+  #     .select(Arel::Nodes::NamedFunction.new("COUNT", [:key]))
+  #     .where(id: @people_scope.unscope(:select, :includes, :limit, :order).pluck(:id))
+  #     .group(:key)
+  # end
+
+  # def base_scope_with_working_arrays
+  #   query = Person
+  #     .from(table_alias)
+  #     .select(table_alias[:household_key])
+  #     .select(Arel.star.count.as('member_count'))
+  #     .select(Arel::Nodes::NamedFunction.new("ARRAY_AGG", [table_alias[:person_id]]).as('person_ids'))
+  #     .group(table_alias[:household_key])
+  # end
+
+  # def base_scope_with_select_manager
+  #   table_alias = Arel::Nodes::TableAlias.new(ordered_key_list(@people_scope), 'ordered_key_list')
+  #   query = Arel::SelectManager.new
+  #     .from(table_alias)
+  #     .project(table_alias[:household_key])
+  #     .project(Arel.star.count.as('member_count'))
+  #     .project(Arel::Nodes::NamedFunction.new("ARRAY_AGG", [table_alias[:person_id]]).as('person_ids'))
+  #     .group(table_alias[:household_key])
+
+  #   binding.pry
+  #   @base_scope
+  # end
+
+  # def only_households
+  #   base_scope
+  #     # .select(:household_key)
+  #     # # .select("MIN(#{people_table}.\"id\") AS \"id\"")
+  #     # .select("(array_agg(#{people_table}.\"id\"))[1] AS \"id\"")
+  #     # .select("COUNT(#{people_table}.\"household_key\") AS \"member_count\"")
+  #     # .select("#{people_table}.\"household_key\" AS \"key\"")
+  #     .where.not(household_key: nil)
+  #     # .group(:household_key)
+  # end
+
+  # def people_without_household
+  #   base_scope
+  #   # .select(:household_key)
+  #   # .select(:id)
+  #   #   .select("1 AS \"member_count\"")
+  #   #   .select("CAST(#{people_table}.\"id\" AS TEXT) AS \"key\"")
+  #     .where(household_key: nil)
+  # end
+
+
+  # def order_statement(people_scope)
+  #   ids_in_order = ArelArrayLiteral.new(people_scope.unscope(:limit, :select).pluck(:id))
+  #   Arel::Nodes::NamedFunction.new("ARRAY_POSITION", [ids_in_order.to_sql, Person.arel_table[:id]])
+  # end

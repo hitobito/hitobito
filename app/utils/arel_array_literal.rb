@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 # Builder for postgres array literals
-class ArelArrayLiteral < Arel::Nodes::Node
+class ArelArrayLiteral
   attr_reader :items
 
   def initialize(items)
@@ -14,9 +14,9 @@ class ArelArrayLiteral < Arel::Nodes::Node
   end
 
   def to_sql
-    quoted_items = items.map { |item| Arel::Nodes.build_quoted(item).to_sql }
     # unfortunately arel does not support the postgres ARRAY-literal
-    Arel.sql("ARRAY[#{quoted_items.join(",")}]")
+    quoted_items = items.map { |item| Arel::Nodes.build_quoted(item).to_sql }
+    Arel::Nodes::SqlLiteral.new("ARRAY[#{quoted_items.join(",")}]")
   end
 
   def eql?(other)

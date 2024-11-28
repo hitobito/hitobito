@@ -9,6 +9,7 @@ require "spec_helper"
 
 describe People::HouseholdList do
   subject(:household_list) { described_class.new(scope) }
+
   let(:person1) { Fabricate(:person) }
   let(:person2) { Fabricate(:person) }
   let(:person3) { Fabricate(:person, household_key: "1234") }
@@ -40,9 +41,9 @@ describe People::HouseholdList do
     end
   end
 
-
   describe "#households_in_batches" do
     let(:scope) { Person.where(id: [person1, person2, person3, person4, person5]) }
+
     subject(:list) { household_list.households_in_batches.map(&:itself) }
 
     it "returns grouped households" do
@@ -67,6 +68,7 @@ describe People::HouseholdList do
 
       context "with last_name DESC" do
         let(:order) { {last_name: :DESC} }
+
         it "keeps order" do
           last_names = list.map { |household| household.first.last_name }
           expect(last_names).to eq(last_names.sort.reverse)
@@ -75,6 +77,7 @@ describe People::HouseholdList do
 
       context "with first_name ASC" do
         let(:order) { {first_name: :ASC} }
+
         it "keeps order" do
           first_names = list.map { |household| household.first.first_name }
           expect(first_names).to eq(first_names.sort)

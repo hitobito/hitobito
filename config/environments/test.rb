@@ -44,6 +44,7 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :test
   config.action_mailer.default_url_options = {host: "test.host", locale: nil}
   config.action_mailer.asset_host = "http://test.host"
+  config.action_mailer.deliver_later_queue_name = 'mailers'
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr

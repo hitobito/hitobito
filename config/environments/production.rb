@@ -69,6 +69,7 @@ Rails.application.configure do
 
   # Mail sender
   config.action_mailer.delivery_method = (ENV['RAILS_MAIL_DELIVERY_METHOD'].presence || :smtp).to_sym
+  config.action_mailer.deliver_later_queue_name = 'mailers'
 
   if ENV['RAILS_MAIL_DELIVERY_CONFIG'].present?
     case config.action_mailer.delivery_method

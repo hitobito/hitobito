@@ -5,4 +5,5 @@
 
 = button_action_edit if can?(:edit, entry)
 = button_action_destroy if can?(:destroy, entry)
-= button_toggle_subscription
+- if MailingList.subscribable.include?(entry)
+    = button_toggle_subscription

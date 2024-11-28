@@ -61,7 +61,7 @@ module MailingListsHelper
 
   def button_subscribe
     action_button(t("mailing_list_decorator.subscribe"),
-      group_mailing_list_person_index_path(@group, entry, subscription: { subscriber_id: current_user.id }),
+      group_mailing_list_person_index_path(@group, entry, subscription: {subscriber_id: current_user.id}),
       :plus,
       method: "post")
   end

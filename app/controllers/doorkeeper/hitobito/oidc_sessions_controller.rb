@@ -41,6 +41,9 @@ class Doorkeeper::Hitobito::OidcSessionsController < ActionController::Base # ru
   end
 
   def redirect_target
-    params[:post_logout_redirect_uri].presence || new_person_session_url(oauth: true)
+    URI.parse(params[:post_logout_redirect_uri].presence || new_person_session_url(oauth: true)).tap do |uri|
+      query = CGI.parse(uri.query.to_s).symbolize_keys.merge(params.to_unsafe_h.slice(:state))
+      uri.query = URI.encode_www_form(query) if query.present?
+    end
   end
 end

@@ -64,5 +64,19 @@ RSpec.describe "GET /oidc/logout", type: :request do
       expect { token.reload }.to raise_error(ActiveRecord::RecordNotFound)
       expect(response).to redirect_to "http://example.com"
     end
+
+    describe "state param" do
+      it "includes state param in redirection request" do
+        get "/oidc/logout", params: {id_token_hint: id_token.as_jws_token, post_logout_redirect_uri: "http://example.com", state: :foo}
+        expect { token.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        expect(response).to redirect_to "http://example.com?state=foo"
+      end
+
+      it "adds state param in redirection request" do
+        get "/oidc/logout", params: {id_token_hint: id_token.as_jws_token, post_logout_redirect_uri: "http://example.com?foo=bar", state: :foo}
+        expect { token.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        expect(response).to redirect_to "http://example.com?foo=bar&state=foo"
+      end
+    end
   end
 end

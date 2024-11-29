@@ -54,7 +54,7 @@ module MailingListsHelper
 
   def button_unsubscribe
     action_button(t("mailing_list_decorator.unsubscribe"),
-      group_mailing_list_subscription_path(@group, entry, entry.subscriptions.where(subscriber_id: current_user.id).where(subscriber_type: Person.to_s).first.id),
+      group_mailing_list_subscription_path(@group, entry, entry.subscriptions.where(subscriber_id: current_user.id, subscriber_type: Person.sti_name).first.id),
       :minus,
       method: "delete")
   end

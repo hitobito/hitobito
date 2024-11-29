@@ -89,10 +89,13 @@ module Hitobito
     config.active_job.queue_adapter = :delayed_job
 
     config.active_record.yaml_column_permitted_classes = [
-      Time,
       Symbol,
+      Date,
+      Time,
       ActiveSupport::HashWithIndifferentAccess,
-      ActionController::Parameters
+      ActiveSupport::TimeWithZone,
+      ActiveSupport::TimeZone,
+      ActionController::Parameters,
     ]
 
     config.middleware.insert_before Rack::ETag, Rack::Deflater

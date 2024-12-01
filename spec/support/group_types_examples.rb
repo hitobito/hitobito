@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -45,7 +45,11 @@ shared_examples "group types" do |options|
       end
 
       it "has an own label" do
-        expect(group.label).not_to eq(Group.label)
+        if options.fetch(:group_group_label, "").include?(group.name)
+          expect(group.label).to eq(Group.label)
+        else
+          expect(group.label).not_to eq(Group.label)
+        end
       end
 
       unless group.layer?

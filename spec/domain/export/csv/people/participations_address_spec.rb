@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -22,7 +22,8 @@ describe Export::Tabular::People::ParticipationsAddress do
   context "integration" do
     let(:simple_headers) do
       ["Vorname", "Nachname", "Übername", "Firmenname", "Firma", "Haupt-E-Mail",
-        "Adresse", "PLZ", "Ort", "Land", "Hauptebene", "Rollen"]
+        "zusätzliche Adresszeile", "Strasse", "Hausnummer", "Postfach", "PLZ", "Ort", "Land",
+        "Hauptebene", "Rollen"]
     end
 
     let(:data) { Export::Tabular::People::ParticipationsAddress.export(:csv, list) }
@@ -31,7 +32,12 @@ describe Export::Tabular::People::ParticipationsAddress do
 
     subject { csv }
 
-    its(:headers) { should == simple_headers }
+    it "has headers" do
+      headers = subject.headers
+
+      expect(headers).to match_array(simple_headers)
+      expect(headers.join("\n")).to eql(simple_headers.join("\n"))
+    end
 
     context "first row" do
       subject { csv[0] }

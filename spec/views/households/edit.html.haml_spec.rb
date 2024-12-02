@@ -10,7 +10,7 @@ require "spec_helper"
 describe "households/edit.html.haml" do
   let(:group) { Group.new(id: 1) }
   let(:person) do
-    Person.new(id: 2, first_name: "Max", last_name: "Muster", address: "Musterplatz",
+    Person.new(id: 2, first_name: "Max", last_name: "Muster",
       street: "Musterstreet", housenumber: "10", zip_code: 1235, town: "Mustertown")
   end
 

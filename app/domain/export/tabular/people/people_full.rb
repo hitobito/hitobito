@@ -14,10 +14,6 @@ module Export::Tabular::People
 
     def excluded_person_attributes
       [:picture, :primary_group_id, :id]
-        .then do |attrs|
-          attrs << :address if FeatureGate.enabled?("structured_addresses")
-          attrs
-        end
     end
 
     def association_attributes

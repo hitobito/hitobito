@@ -34,8 +34,9 @@ describe Export::Tabular::People::TableDisplays do
     subject { people_list }
 
     its(:attributes) do
-      should == [:first_name, :last_name, :nickname, :company_name, :company, :email, :address,
-        :zip_code, :town, :country, :layer_group, :roles]
+      should == [:first_name, :last_name, :nickname, :company_name, :company, :email,
+        :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
+        :layer_group, :roles]
     end
 
     it "does not allow accessing unregistered columns" do
@@ -121,8 +122,9 @@ describe Export::Tabular::People::TableDisplays do
     end
 
     its(:attributes) do
-      should == [:first_name, :last_name, :nickname, :company_name, :company, :email, :address,
-        :zip_code, :town, :country, :layer_group, :roles]
+      should == [:first_name, :last_name, :nickname, :company_name, :company, :email,
+        :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
+        :layer_group, :roles]
     end
 
     it "includes additional person attributes if configured" do

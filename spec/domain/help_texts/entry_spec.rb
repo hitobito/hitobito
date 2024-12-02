@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2019-2023, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2019-2024, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_pbs.
@@ -41,19 +41,19 @@ describe HelpTexts::Entry do
 
     it "#fields with label holds namespaced field name and translation" do
       field, label = subject.labeled_list(:field).first
-      expect(field).to eq "field.address"
-      expect(label).to eq "Adresse"
+      expect(field).to eq "field.remove_picture"
+      expect(label).to eq "Aktuelles Foto entfernen"
     end
 
     it "#fields with label holds namespaced field name and translation" do
       field, label = subject.labeled_list(:field).first
-      expect(field).to eq "field.address"
-      expect(label).to eq "Adresse"
+      expect(field).to eq "field.remove_picture"
+      expect(label).to eq "Aktuelles Foto entfernen"
     end
 
     it "#fields with label filters based on existing fields" do
       field_count = subject.labeled_list(:field).size
-      subject = HelpTexts::Entry.new(controller, model_class, {action: [], field: %w[address]})
+      subject = HelpTexts::Entry.new(controller, model_class, {action: [], field: %w[street]})
       expect(subject.labeled_list(:field)).to have(field_count - 1).items
     end
 
@@ -97,8 +97,8 @@ describe HelpTexts::Entry do
 
         expect(fields.label).to eq "Felder"
         expect(fields.list).to have_at_least(10).items
-        expect(fields.list.first[0]).to eq "field.address"
-        expect(fields.list.first[1]).to eq "Adresse"
+        expect(fields.list.first[0]).to eq "field.remove_picture"
+        expect(fields.list.first[1]).to eq "Aktuelles Foto entfernen"
       end
     end
 

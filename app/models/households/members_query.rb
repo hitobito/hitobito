@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class Households::MembersQuery
-  SAME_ADDRESS_IGNORED_ATTRS = [:country, :address_care_off].freeze
+  SAME_ADDRESS_IGNORED_ATTRS = [:country, :address_care_of].freeze
 
   def initialize(current_user, person_id, writables_scope = nil)
     @current_user = current_user

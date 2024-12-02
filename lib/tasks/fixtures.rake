@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2018, Schweizer Blasmusikverband. This file is part of
+#  Copyright (c) 2018-2024, Schweizer Blasmusikverband. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -28,8 +28,7 @@ namespace :fixtures do
     Group.order(:lft).find_each do |group|
       entry = {
         "parent" => fixture_id[group.parent],
-        "layer_group_id" =>
-          "<%=ActiveRecord::FixtureSet.identify(:#{fixture_id[group.layer_group]})%>"
+        "layer_group" => fixture_id[group.layer_group]
       }
 
       fixture_data.each do |field|

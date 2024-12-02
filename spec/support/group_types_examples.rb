@@ -45,7 +45,7 @@ shared_examples "group types" do |options|
       end
 
       it "has an own label" do
-        if options.fetch(:group_group_label, "").include?(group.name)
+        if options.present? && options.fetch(:group_group_label, "").include?(group.name)
           expect(group.label).to eq(Group.label)
         else
           expect(group.label).not_to eq(Group.label)

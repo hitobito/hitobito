@@ -103,7 +103,7 @@ module Hitobito
     config.cache_store = :mem_cache_store, { compress: true,
                                              namespace: ENV['RAILS_HOST_NAME'] || 'hitobito' }
 
-    config.active_storage.variant_processor = :mini_magick
+    config.active_storage.variant_processor = :vips
 
     config.debug_exception_response_format = :api
 

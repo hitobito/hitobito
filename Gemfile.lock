@@ -436,7 +436,7 @@ GEM
     netrc (0.11.0)
     niceql (0.6.1)
     nio4r (2.7.3)
-    nokogiri (1.16.7)
+    nokogiri (1.16.8)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     oat (0.6.1)
@@ -541,9 +541,9 @@ GEM
       activesupport (>= 4.2)
       choice (~> 0.2.0)
       ruby-graphviz (~> 1.2)
-    rails-html-sanitizer (1.6.0)
+    rails-html-sanitizer (1.6.1)
       loofah (~> 2.21)
-      nokogiri (~> 1.14)
+      nokogiri (>= 1.15.7, != 1.16.7, != 1.16.6, != 1.16.5, != 1.16.4, != 1.16.3, != 1.16.2, != 1.16.1, != 1.16.0.rc1, != 1.16.0)
     rails-i18n (7.0.9)
       i18n (>= 0.7, < 2)
       railties (>= 6.0.0, < 8)
@@ -915,7 +915,7 @@ DEPENDENCIES
   truemail
   ttfunk (< 1.8.0)
   turbo-rails
-  validates_by_schema
+  validates_by_schema (~> 0.3.0)
   validates_timeliness (~> 7.0.0.beta2)
   vcard
   view_component

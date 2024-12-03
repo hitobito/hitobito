@@ -5,6 +5,7 @@ used versions.
 
 Install Postgres locally or use the one from the [docker setup](https://github.com/hitobito/development/)
 (`docker-compose up -d db`).
+If you use a local database, create a user called "hitobito" with password "hitobito" and `createdb` and `superuser` privileges.
 
 Clone all desired hitobito repositories (core and wagons) into a common base folder. To activate a specific wagon use
 `./bin/wagon activate`, See the [Wagons documentation](04_wagons.md).
@@ -36,7 +37,25 @@ In the core you can start with overmind
 
     ./bin/dev
 
-## Adjusting git blame ignores
+## Git Configuration
+
+### Avoid changes in Gemfile.lock due to local wagon configuration
+
+Copy `Gemfile` and `Gemfile.lock` to `Gemfile.local` and `Gemfile.local.lock` in order to avoid
+changes in `Gemfile.lock` when wagons are configured in the local `Wagonfile`.
+
+Set the environment variable `BUNDLE_GEMFILE=Gemfile.local` to use the alternate gemfile.
+
+When adding or updating gems, remember to adjust the original `Gemfile` and make sure that
+no local wagon configuration leaks into the updated `Gemfile.lock` when committing.
+
+The `./bin/active_wagon.rb` script automates that process for you if the environment variable
+`BUNDLE_GEMFILE` is defined.
+
+To ignore the `Gemfile.local` and `Gemfile.local.lock` files in all wagons you can add them to
+your global gitgnore `~/.gitignore`.
+
+### Adjusting git blame ignores
 
 Add the following to `.git/config`
 

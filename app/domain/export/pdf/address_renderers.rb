@@ -13,11 +13,11 @@ module Export::Pdf::AddressRenderers
     class_attribute :right_address_x, default: 290
   end
 
-  def address_position(group)
+  def address_position(position)
     x_coords = {
       left: left_address_x,
       right: right_address_x
-    }[group.letter_address_position&.to_sym]
+    }[position&.to_sym]
     x_coords ||= 0
     [x_coords, cursor]
   end

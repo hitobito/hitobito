@@ -11,7 +11,7 @@ describe "roles#create", type: :request do
   let(:group) { groups(:top_group) }
   let(:person) { people(:top_leader) }
 
-  it_behaves_like "jsonapi authorized requests" do
+  it_behaves_like "jsonapi authorized requests", person: :asdf do
     let(:payload) { {} }
 
     subject(:make_request) do

@@ -11,6 +11,32 @@ describe TagsController do
 
   before { sign_in(top_leader) }
 
+  describe "GET #index" do
+    it "paginates tags" do
+      expect(Kaminari.config).to receive(:default_per_page).and_return(2)
+      get :index, params: {zie: 2}
+      expect(assigns(:tags)).to have(2).items
+    end
+
+    describe "sorting" do
+      before { ActsAsTaggableOn::Tag.destroy_all }
+
+      it "can sort by name" do
+        %w[b c a].each { |name| ActsAsTaggableOn::Tag.create(name: name) }
+        get :index, params: {sort: :name, sort_dir: :desc}
+        expect(assigns(:tags).map(&:name)).to eq %w[c b a]
+      end
+
+      it "can sort by category" do
+        [%w[category_validation b], %w[other c], %w[category_validation a]].each do |category, name|
+          ActsAsTaggableOn::Tag.create(name: "#{category}:#{name}")
+        end
+        get :index, params: {sort: :name, sort_dir: :desc}
+        expect(assigns(:tags).map(&:category)).to eq [:category_validation, :category_validation, :other]
+      end
+    end
+  end
+
   describe "POST #create" do
     let(:tag) { ActsAsTaggableOn::Tag.find_by(name: "supertag42") }
 

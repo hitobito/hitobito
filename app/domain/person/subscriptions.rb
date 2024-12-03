@@ -14,14 +14,14 @@ class Person::Subscriptions
   end
 
   def create(mailing_list)
-    mailing_list.subscriptions.find_by(subscriber: @person, excluded: true)&.destroy ||
-      mailing_list.subscriptions.create(subscriber: @person)
+    change_subscription(mailing_list, false)
   end
+  alias_method :subscribe, :create
 
   def destroy(mailing_list)
-    mailing_list.subscriptions.find_by(subscriber: @person)&.destroy ||
-      mailing_list.subscriptions.create(subscriber: @person, excluded: true)
+    change_subscription(mailing_list, true)
   end
+  alias_method :unsubscribe, :destroy
 
   def subscribed
     scope
@@ -44,6 +44,22 @@ class Person::Subscriptions
   end
 
   private
+
+  def change_subscription(mailing_list, excluded)
+    # first clean out existing contradictory subscriptions
+    mailing_list.subscriptions.where(subscriber: @person, excluded: !excluded).destroy_all
+
+    # then create new subscription if not matching the exclude value
+    if subscription_needs_change?(mailing_list, excluded)
+      mailing_list.subscriptions.create!(subscriber: @person, excluded:)
+    end
+  end
+
+  # is true if current `subscribed?` state does not match value of `excluded`
+  # (person is subscribed but should be excluded or vice versa)
+  def subscription_needs_change?(mailing_list, excluded)
+    mailing_list.subscribed?(@person) == excluded
+  end
 
   def lists_excluding_person_via_filter
     MailingList.subscribable.with_filter_chain.select do |list|

@@ -18,7 +18,7 @@ module Event::Participatable
       .references(:person)
       .order_by_role(self)
       .merge(Person.order_by_name.select("*"))
-      .select(:id)
+      .select(Event::Participation.column_names)
     # distinct?
   end
 

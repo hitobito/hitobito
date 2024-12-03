@@ -154,7 +154,7 @@ class Qualification < ActiveRecord::Base
   private
 
   def set_finish_at
-    if start_at? && qualification_kind && qualification_kind.validity
+    if start_at? && qualification_kind&.validity
       self.finish_at = (start_at + qualification_kind.validity.years).end_of_year
     end
   end

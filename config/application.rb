@@ -11,7 +11,7 @@ require "action_mailer/railtie"
 # require "action_mailbox/engine"
 require "action_text/engine"
 require "action_view/railtie"
-require "action_cable/engine"
+# require "action_cable/engine"
 # require "rails/test_unit/railtie"
 
 # Require the gems listed in Gemfile, including any gems
@@ -86,10 +86,13 @@ module Hitobito
     config.active_job.queue_adapter = :delayed_job
 
     config.active_record.yaml_column_permitted_classes = [
-      Time,
       Symbol,
+      Date,
+      Time,
       ActiveSupport::HashWithIndifferentAccess,
-      ActionController::Parameters
+      ActiveSupport::TimeWithZone,
+      ActiveSupport::TimeZone,
+      ActionController::Parameters,
     ]
 
     config.middleware.insert_before Rack::ETag, Rack::Deflater
@@ -97,7 +100,7 @@ module Hitobito
     config.cache_store = :mem_cache_store, { compress: true,
                                              namespace: ENV['RAILS_HOST_NAME'] || 'hitobito' }
 
-    config.active_storage.variant_processor = :mini_magick
+    config.active_storage.variant_processor = :vips
 
     config.debug_exception_response_format = :api
 
@@ -117,6 +120,7 @@ module Hitobito
     config.to_prepare do
       ActionMailer::Base.default from: Settings.email.sender
     end
+    config.action_mailer.deliver_later_queue_name = 'mailers'
 
     def self.versions(file = Rails.root.join('WAGON_VERSIONS'))
       @versions ||= {}

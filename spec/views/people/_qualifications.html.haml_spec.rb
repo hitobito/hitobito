@@ -53,6 +53,7 @@ describe "people/_qualifications.html.haml" do
 
   def create_qualification(opts = {})
     opts = {kind: sl, finish_at: 1.year.from_now}.merge(opts)
-    Fabricate(:qualification, person: top_leader, qualification_kind: opts[:kind], finish_at: opts[:finish_at].to_date)
+    opts[:start_at] = opts[:finish_at] - 1.year # qualification sets finish_at in relation to start at
+    Fabricate(:qualification, person: top_leader, qualification_kind: opts[:kind], **opts.slice(:start_at, :finish_at))
   end
 end

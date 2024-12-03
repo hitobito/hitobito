@@ -26,7 +26,7 @@ class ChangeEmailToCaseInsensitveCollation < ActiveRecord::Migration[6.1]
     mr_datasource = "message_recipients WHERE email IS NOT NULL GROUP BY (message_id, person_id, LOWER(email)) HAVING count(*) > 1"
     list << [
       'message_recipients',
-      "SELECT max(count) - 1 FROM (SELECT count(*) AS count FROM #{mr_datasource})",
+      "SELECT max(count) - 1 FROM (SELECT count(*) AS count FROM #{mr_datasource}) AS counts",
       "DELETE FROM message_recipients WHERE id IN (SELECT min(id) FROM #{mr_datasource})"
     ]
   end

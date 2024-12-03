@@ -99,6 +99,10 @@ class Invoice < ActiveRecord::Base
 
   accepts_nested_attributes_for :invoice_items, allow_destroy: true
 
+  # To generate invoice pdfs with custom data, allow setting these attributes manually.
+  # Used by sac_cas wagon.
+  attr_writer :invoice_config, :letter_address_position
+
   i18n_enum :state, STATES, scopes: true, queries: true
 
   validates_by_schema
@@ -224,7 +228,11 @@ class Invoice < ActiveRecord::Base
   end
 
   def invoice_config
-    group.layer_group.invoice_config
+    @invoice_config ||= group.layer_group.invoice_config
+  end
+
+  def letter_address_position
+    @letter_address_position || group.letter_address_position
   end
 
   def state

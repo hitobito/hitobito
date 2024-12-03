@@ -1,10 +1,17 @@
+-#  Copyright (c) 2022, Pfadibewegung Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+= paginate entries
 = crud_table(data: { checkable: true }) do |t|
   - t.col('', width: '50px') do |i|
     - if can?(:edit, i)
       - check_box_tag('ids[]', i.id, false, data: { multiselect: true })
-  - t.col(t('activerecord.attributes.acts_as_taggable_on/tag.category')) do |i|
+  - t.sortable_attr(:category, t('activerecord.attributes.acts_as_taggable_on/tag.category')) do |i|
     = format_tag_category(i.category)
-  - t.attrs(:name, :taggings_count)
+  - t.sortable_attrs(:name, :taggings_count)
   - add_table_actions(t)
 
+= paginate entries
 = render 'multiselect_actions'

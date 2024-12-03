@@ -22,7 +22,7 @@ Rails.application.configure do
   }
 
   # Show full error reports and disable caching.
-  config.consider_all_requests_local       = true
+  config.consider_all_requests_local = true
   config.action_controller.perform_caching = false
   config.cache_store = :memory_store
 
@@ -41,7 +41,7 @@ Rails.application.configure do
   # The :test delivery method accumulates sent emails in the
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
-  config.action_mailer.default_url_options = { host: "test.host", locale: nil }
+  config.action_mailer.default_url_options = {host: "test.host", locale: nil}
   config.action_mailer.asset_host = "http://test.host"
 
   # Print deprecation notices to the stderr.
@@ -54,9 +54,18 @@ Rails.application.configure do
   config.active_support.disallowed_deprecation_warnings = []
 
   # Raises error for missing translations.
-  # config.i18n.raise_on_missing_translations = true
+  config.i18n.raise_on_missing_translations = true
+
+  locales_path = Dir[Rails.root.join("spec", "support", "locales", "**", "*.{rb,yml}")]
+  config.i18n.load_path += locales_path
 
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
-  routes.default_url_options[:host] = 'test.host'
+  routes.default_url_options[:host] = "test.host"
+
+  unless ENV["RAILS_ENABLE_TEST_LOG"]
+    logger = ActiveSupport::Logger.new(nil)
+    config.logger = ActiveSupport::TaggedLogging.new(logger)
+    config.log_level = :fatal
+  end
 end

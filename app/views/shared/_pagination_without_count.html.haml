@@ -1,0 +1,13 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- if path_to_prev_page(models)
+  %ul.pagination.pagination-sm.float-end
+    %li.page-item= link_to_previous_page models, t('global.button.back'), class: 'page-link'
+    %li.page-item= link_to_next_page models, t('global.button.next'), class: 'page-link'
+- else
+  %ul.pagination.pagination-sm.float-end
+    %li.page-item= link_to_next_page models, t('global.button.next'), class: 'page-link'
+

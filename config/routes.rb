@@ -16,6 +16,12 @@ Hitobito::Application.routes.draw do
   get '/healthz/truemail', to: 'healthz#show'
 
   use_doorkeeper_openid_connect
+
+  # custom oidc RP logout
+  # https://openid.net/specs/openid-connect-rpinitiated-1_0.html#RPLogout
+  get '/oidc/logout', to: 'doorkeeper/hitobito/oidc_sessions#destroy'
+  post '/oidc/logout', to: 'doorkeeper/hitobito/oidc_sessions#destroy'
+
   use_doorkeeper do # we only use tokens and authorizations
     skip_controllers :applications, :token_info, :authorized_applications
   end
@@ -297,8 +303,6 @@ Hitobito::Application.routes.draw do
               end
             end
             get 'event' => 'subscriber/event#new' # route required for language switch
-
-            resource :user, only: [:create, :destroy], controller: 'subscriber/user'
 
             resource :filter, only: [:edit, :update], controller: 'subscriber/filter'
 

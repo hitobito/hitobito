@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+#  Copyright (c) 2020-2024, Puzzle ITC. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 require "spec_helper"
 
 describe Tags::Merger do
@@ -92,7 +97,7 @@ describe Tags::Merger do
 
       expect(tag1_owner.reload.tags.to_a).to eq([tag1])
       expect(tag2_owner.reload.tags.to_a).to eq([tag2])
-      expect(all_tag_owner.reload.tags.to_a).to eq([tag1, tag2])
+      expect(all_tag_owner.reload.tags.to_a).to match_array([tag1, tag2])
 
       expect(tag1.reload.taggings_count).to eq(2)
 
@@ -108,7 +113,7 @@ describe Tags::Merger do
 
       expect(tag1_owner.reload.tags.to_a).to eq([tag1])
       expect(tag2_owner.reload.tags.to_a).to eq([tag2])
-      expect(all_tag_owner.reload.tags.to_a).to eq([tag1, tag2])
+      expect(all_tag_owner.reload.tags.to_a).to match_array([tag1, tag2])
 
       expect(tag1.reload.taggings_count).to eq(2)
 

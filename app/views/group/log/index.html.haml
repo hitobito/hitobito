@@ -5,15 +5,7 @@
 
 - if @versions.present?
 
-  - if path_to_prev_page(@versions)
-    %ul.pagination.pagination-sm.float-end
-      %li.page-item= link_to_next_page @versions, t('global.button.next'), class: 'page-link'
-      %li.page-item= link_to_previous_page @versions, t('global.button.back'), class: 'page-link'
-  - else
-    %ul.pagination.pagination-sm.float-end
-      %li.page-item= link_to_next_page @versions, t('global.button.next'), class: 'page-link'
-
-
+  = render "shared/pagination_without_count", models: @versions
   - @versions.group_by(&:created_at).each do |created_at, versions|
     .row.log-item
       .col-4
@@ -22,16 +14,7 @@
       .log-infos.col-8
         - versions.each do |v|
           = v.changes
-
-
-  - if path_to_prev_page(@versions)
-    %ul.pagination.pagination-sm.float-end
-      %li.page-item= link_to_next_page @versions, t('global.button.next'), class: 'page-link'
-      %li.page-item= link_to_previous_page @versions, t('global.button.back'), class: 'page-link'
-  - else
-    %ul.pagination.pagination-sm.float-end
-      %li.page-item= link_to_next_page @versions, t('global.button.next'), class: 'page-link'
-
+  = render "shared/pagination_without_count", models: @versions
 
 - else
   %div= t('people.log.no_changes')

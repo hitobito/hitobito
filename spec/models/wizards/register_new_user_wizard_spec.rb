@@ -65,6 +65,13 @@ describe Wizards::RegisterNewUserWizard do
         expect(person.privacy_policy_accepted).to be_blank
       end
 
+      it "sets language to current locale" do
+        allow(I18n).to receive(:locale).and_return(:fr)
+        params[:new_user_form] = {first_name: "test"}
+        expect { wizard.save! }.to change { Person.count }.by(1)
+        expect(person.language).to eq "fr"
+      end
+
       it "updates all person fields" do
         params[:new_user_form] = {
           first_name: "test",

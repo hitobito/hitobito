@@ -37,6 +37,7 @@ class Wizards::RegisterNewUserWizard < Wizards::Base
 
   def build_person
     Person.new(person_attributes).tap do |person|
+      person.language = I18n.locale
       person.primary_group = group
       role = person.roles.build(group: group, type: group.self_registration_role_type)
       yield person, role if block_given?

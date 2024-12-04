@@ -14,7 +14,7 @@ namespace :hitobito do
         puts "      * #{group}"
         roles.each do |r|
           twofa_tag = "2FA " if r.two_factor_authentication_enforced
-          puts "        * #{r.label}: #{twofa_tag}#{r.permissions.inspect}"
+          puts "        * #{r.label}: #{twofa_tag}#{r.permissions.inspect}  --  (#{r})"
         end
       end
     end

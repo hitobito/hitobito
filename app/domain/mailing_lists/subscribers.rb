@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class MailingLists::Subscribers
-  delegate :id, :subscriptions, :opt_in?, to: "@list"
+  delegate :id, :subscriptions, :subscribable_for_configured?, :opt_in?, to: "@list"
 
   def initialize(mailing_list, people_scope = Person.only_public_data, time: Time.current)
     @list = mailing_list
@@ -19,6 +19,8 @@ class MailingLists::Subscribers
   end
 
   def allowed_to_opt_in
+    return people_as_configured unless subscribable_for_configured?
+
     people_as_configured.where(group_or_event_subscriber_conditions)
   end
 

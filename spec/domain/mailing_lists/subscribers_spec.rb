@@ -20,43 +20,87 @@ describe MailingLists::Subscribers do
 
     before do
       Subscription.destroy_all
-      list.update!(subscribable_for: :configured, subscribable_mode: :opt_in)
+      list.update!(subscribable_mode: :opt_in, subscribable_for:)
     end
 
-    it "excludes person if only group subscription exists" do
-      create_subscription(group, false, role.type)
-      expect(subject).to be_empty
+    context "only configured may subscribed" do
+      let(:subscribable_for) { :configured }
+
+      it "excludes person if only group subscription exists" do
+        create_subscription(group, false, role.type)
+        expect(subject).to be_empty
+      end
+
+      it "excludes person if only direct subscription exists" do
+        create_subscription(person)
+        expect(subject).to be_empty
+      end
+
+      it "includes person if group and direct subscription exists" do
+        create_subscription(group, false, role.type)
+        create_subscription(person)
+        expect(subject).to eq [person]
+      end
+
+      it "includes person if event and direct subscription exists" do
+        create_event_subscription
+        create_subscription(person)
+        expect(subject).to eq [person]
+      end
+
+      it "excludes person via global filter" do
+        create_subscription(group, false, role.type)
+        create_subscription(person)
+        list.update(filter_chain: {language: {allowed_values: :fr}})
+        expect(subject).to be_empty
+      end
+
+      it "includes person included in global filter" do
+        create_subscription(group, false, role.type)
+        create_subscription(person)
+        list.update(filter_chain: {language: {allowed_values: :de}})
+        expect(subject).to eq [person]
+      end
     end
 
-    it "excludes person if only direct subscription exists" do
-      create_subscription(person)
-      expect(subject).to be_empty
-    end
+    context "anyone" do
+      let(:subscribable_for) { :anyone }
 
-    it "includes person if group and direct subscription exists" do
-      create_subscription(group, false, role.type)
-      create_subscription(person)
-      expect(subject).to eq [person]
-    end
+      it "excludes person if only group subscription exists" do
+        create_subscription(group, false, role.type)
+        expect(subject).to be_empty
+      end
 
-    it "includes person if event and direct subscription exists" do
-      create_event_subscription
-      create_subscription(person)
-      expect(subject).to eq [person]
-    end
+      it "includes person if direct subscription exists" do
+        create_subscription(person)
+        expect(subject).to eq [person]
+      end
 
-    it "excludes person via global filter" do
-      create_subscription(group, false, role.type)
-      create_subscription(person)
-      list.update(filter_chain: {language: {allowed_values: :fr}})
-      expect(subject).to be_empty
-    end
+      it "includes person if group and direct subscription exists" do
+        create_subscription(group, false, role.type)
+        create_subscription(person)
+        expect(subject).to eq [person]
+      end
 
-    it "includes person included in global filter" do
-      create_subscription(group, false, role.type)
-      create_subscription(person)
-      list.update(filter_chain: {language: {allowed_values: :de}})
-      expect(subject).to eq [person]
+      it "includes person if event and direct subscription exists" do
+        create_event_subscription
+        create_subscription(person)
+        expect(subject).to eq [person]
+      end
+
+      it "excludes person via global filter" do
+        create_subscription(group, false, role.type)
+        create_subscription(person)
+        list.update(filter_chain: {language: {allowed_values: :fr}})
+        expect(subject).to be_empty
+      end
+
+      it "includes person included in global filter" do
+        create_subscription(group, false, role.type)
+        create_subscription(person)
+        list.update(filter_chain: {language: {allowed_values: :de}})
+        expect(subject).to eq [person]
+      end
     end
   end
 

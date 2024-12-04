@@ -10,9 +10,10 @@ class People::HouseholdList
 
   include Enumerable
 
-  def initialize(people_scope, order: :member_count)
+  def initialize(people_scope, retain_order: false, include_housemates: false)
     @people_scope = people_scope
-    @order = order
+    @retain_order = retain_order
+    @include_housemates = include_housemates
   end
 
   def only_households_in_batches(&)
@@ -28,32 +29,44 @@ class People::HouseholdList
   end
 
   def count
-    person_ids_grouped_by_household_query(@people_scope).count
+    return [] if @people_scope.none?
+
+    person_ids_grouped_by_household_query(@people_scope).to_a.size
   end
 
-  delegate :each, :each_with_index, :map, :to_a, to: :households_in_batches
+  delegate :each, :each_with_index, :map, :to_a, to: :find_each
+
+  def find_each(batch_size: BATCH_SIZE, &)
+    return to_enum(:find_each, batch_size: batch_size) unless block_given?
+
+    in_batches(@people_scope, batch_size: batch_size) do |batch|
+      batch.each do |household|
+        yield household
+      end
+    end
+  end
 
   private
 
   def in_batches(people_scope, batch_size: BATCH_SIZE)
     return to_enum(:in_batches, people_scope, batch_size: batch_size) unless block_given?
+    return if people_scope.none?
 
     # load complete list of ids to retain order
     person_ids = person_ids_grouped_by_household_query(people_scope).map(&:person_ids)
     person_ids.each_slice(batch_size) do |batch|
       # index involved_people for quicker access
       involved_people = Person.where(id: batch.flatten).index_by(&:id)
-      batch.map do |household|
-        yield household.map { |person_id| involved_people[person_id] }
-      end
+      batch_with_households = batch.map { |household| household.map { |person_id| involved_people[person_id] } }
+      yield batch_with_households
     end
   end
 
   # create a virtual column with the array position in the underlying @people_scope
   # to be able to sort by this column
   def computed_ordinal_column(scope)
-    ids = scope.unscope(:limit).pluck(:id)
-    ArelArrayLiteral.new(ids).array_position(Person.arel_table[:id]) if ids.present?
+    person_ids = scope.unscope(*[:limit, (:order unless @retain_order)].compact).pluck(:id)
+    ArelArrayLiteral.new(person_ids).array_position(Person.arel_table[:id]) if person_ids.present?
   end
 
   # create a virtual column with household_key OR _person_id to be able
@@ -72,7 +85,9 @@ class People::HouseholdList
   def ordered_computed_household_key_query(scope)
     ordinal_column = computed_ordinal_column(scope)
     household_key_column = computed_household_key_column
-    ids, household_keys = scope.unscope(:select, :includes, :limit, :order).pluck(:id, :household_key).transpose
+    unscoped = scope.unscope(:select, :includes, :limit, :order)
+    ids = unscoped.pluck(:id)
+    household_keys =  @include_housemates ? unscoped.pluck(:household_key) : []
 
     Person.arel_table
       .where(Person.arel_table[:id].in(ids).or(Person.arel_table[:household_key].in(household_keys.uniq.compact)))
@@ -83,21 +98,16 @@ class People::HouseholdList
   end
 
   def person_ids_grouped_by_household_query(scope)
-    return Person.none if scope.none?
-
     ordered_households_table = Arel::Nodes::TableAlias.new(ordered_computed_household_key_query(scope), "ordered_keys")
-    order_statement = (@order == :retain) ? ordered_households_table[:ordinal].minimum : "member_count DESC"
     aggregated_person_ids_column = Arel::Nodes::NamedFunction.new("ARRAY_AGG", [ordered_households_table[:person_id]])
+    order_statement = @retain_order ? ordered_households_table[:ordinal].minimum : "member_count DESC"
 
-    x = Person
+    Person
       .from(ordered_households_table)
       .select(Arel.star.count.as("member_count"))
       .select(aggregated_person_ids_column.as("person_ids"))
       .group(ordered_households_table[:household_key])
       .order(order_statement)
-      # existing behaviour: apply limit to households, not to people
-      .limit(scope.limit_value.presence)
-    Rails.logger.info x.to_sql
-    x
+      .limit(scope.limit_value.presence) # existing behaviour: apply limit to households, not to people
   end
 end

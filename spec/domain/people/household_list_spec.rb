@@ -18,7 +18,7 @@ describe People::HouseholdList do
   let(:scope) { Person.where(id: [person1, person2, person3, person4, person5]) }
 
   describe "#people_without_household_in_batches" do
-    subject(:list) { household_list.people_without_household_in_batches.map(&:itself) }
+    subject(:list) { household_list.people_without_household_in_batches.to_a.flatten }
 
     it "returns only people with nil household_key" do
       expect(list).to contain_exactly([person1], [person2])
@@ -34,7 +34,7 @@ describe People::HouseholdList do
   end
 
   describe "#only_households_in_batches" do
-    subject(:list) { household_list.only_households_in_batches.map(&:itself) }
+    subject(:list) { household_list.only_households_in_batches.to_a.flatten }
 
     it "returns only people with nil household_key" do
       expect(list).to contain_exactly(contain_exactly(person3, person4), [person5])
@@ -44,7 +44,7 @@ describe People::HouseholdList do
   describe "#households_in_batches" do
     let(:scope) { Person.where(id: [person1, person2, person3, person4, person5]) }
 
-    subject(:list) { household_list.households_in_batches.map(&:itself) }
+    subject(:list) { household_list.households_in_batches.to_a.flatten }
 
     it "returns grouped households" do
       expect(list).to contain_exactly(

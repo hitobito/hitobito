@@ -25,7 +25,7 @@ module Export::Pdf
     private
 
     def generate_with_households(contactables, pdf)
-      households = Export::Tabular::People::Households.new(contactables)
+      households = Export::Tabular::People::Households.new(contactables, retain_order: true)
       households.list.each_with_index do |household, i|
         name = to_name(household)
         address = household_address(household, name)

@@ -25,8 +25,7 @@ class Export::LabelsJob < Export::ExportBaseJob
 
   def order_statement
     # retain order of @people_ids but allow override in wagons
-    ids_in_order = ArelArrayLiteral.new(@people_ids)
-    Arel::Nodes::NamedFunction.new("array_position", [ids_in_order, Person.arel_table[:id]])
+    ArelArrayLiteral.new(@people_ids).array_position(Person.arel_table[:id])
   end
 
   def data

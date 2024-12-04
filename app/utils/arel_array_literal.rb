@@ -22,4 +22,8 @@ class ArelArrayLiteral
   def eql?(other)
     self.class == other.class && items == other.items
   end
+
+  def array_position(column)
+    Arel::Nodes::NamedFunction.new("ARRAY_POSITION", [to_sql, column])
+  end
 end

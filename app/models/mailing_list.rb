@@ -150,7 +150,7 @@ class MailingList < ActiveRecord::Base
     households = People::HouseholdList.new(subscribers_scope)
 
     # count total rows after grouping, instead of adding a count to each grouped row
-    Person.from(households.grouped_households).count
+    households.count
   end
 
   def sync

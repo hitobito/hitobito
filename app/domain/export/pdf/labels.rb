@@ -15,25 +15,25 @@ module Export::Pdf
       pdf = Export::Pdf::Document.new(page_size: format.page_size, page_layout: format.page_layout, margin: 0.cm).pdf
       pdf.font_size = format.font_size
       if household
-        generate_with_households(contactables)
+        generate_with_households(contactables, pdf)
       else
-        generate_without_households(contactables)
+        generate_without_households(contactables, pdf)
       end
       pdf.render
     end
 
     private
 
-    def generate_with_households(contactables)
+    def generate_with_households(contactables, pdf)
       households = Export::Tabular::People::Households.new(contactables)
-      households.each_with_index do |household, i|
-        name = to_name(contactable)
-        address = household_address(contactable, name)
+      households.list.each_with_index do |household, i|
+        name = to_name(household)
+        address = household_address(household, name)
         print_address_in_bounding_box(pdf, address, position(pdf, i))
       end
     end
 
-    def generate_without_households(contactables)
+    def generate_without_households(contactables, pdf)
       contactables.each_with_index do |contactable, i|
         name = to_name(contactable)
         address = address(contactable, name)

@@ -712,7 +712,7 @@ GEM
     unaccent (0.4.0)
     unicode-display_width (2.5.0)
     uniform_notifier (1.16.0)
-    uri (0.13.0)
+    uri (1.0.2)
     validates_by_schema (0.3.1)
       activerecord (>= 3.1.0)
     validates_timeliness (7.0.0.beta2)

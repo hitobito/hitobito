@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module Sheet
-  class Group
+  class Group < Base
     class Statistic < Base
       self.parent_sheet = Sheet::Group
 

@@ -9,23 +9,23 @@ class Group::StatisticsController < ApplicationController
   before_action :authorize_action
   before_action :gate_feature
   before_action :redirect_to_layer
-  prepend_before_action :entry
+  prepend_before_action :group
 
   decorates :group
 
-  def show
-    statistic = Group::Demographic.new(entry)
+  def index
+    statistic = Group::Demographic.new(group)
 
     @age_groups = statistic.age_groups
     @total_count = statistic.total_count
     @max_relative_count = statistic.max_relative_count
-    @group_names = entry.groups_in_same_layer.map(&:to_s)
+    @group_names = group.groups_in_same_layer.map(&:to_s)
   end
 
   private
 
   def authorize_action
-    authorize!(:"#{action_name}_statistics", entry)
+    authorize!(:show_statistics, group)
   end
 
   def gate_feature
@@ -33,12 +33,12 @@ class Group::StatisticsController < ApplicationController
   end
 
   def redirect_to_layer
-    unless entry.layer?
-      redirect_to group_statistics_path(entry.layer_group_id)
+    unless group.layer?
+      redirect_to group_statistics_path(group.layer_group_id)
     end
   end
 
-  def entry
-    @entry = @group ||= Group.find(params[:group_id])
+  def group
+    @group ||= Group.find(params[:group_id])
   end
 end

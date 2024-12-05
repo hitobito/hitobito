@@ -66,7 +66,7 @@ describe RolesController, type: :controller do
       end
 
       it "chooses default role" do
-        expect(response.body).to have_select("role_type", selected: group.default_role.label)
+        expect(response.body).to have_select("role_type", selected: group.standard_role.label)
       end
 
       context "with invalid type" do

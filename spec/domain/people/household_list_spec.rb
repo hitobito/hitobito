@@ -8,7 +8,7 @@
 require "spec_helper"
 
 describe People::HouseholdList do
-  subject(:household_list) { described_class.new(scope) }
+  subject(:household_list) { described_class.new(scope, retain_order: true) }
 
   let(:person1) { Fabricate(:person) }
   let(:person2) { Fabricate(:person) }
@@ -18,7 +18,7 @@ describe People::HouseholdList do
   let(:scope) { Person.where(id: [person1, person2, person3, person4, person5]) }
 
   describe "#people_without_household_in_batches" do
-    subject(:list) { household_list.people_without_household_in_batches.to_a.flatten }
+    subject(:list) { household_list.people_without_household_in_batches.to_a.flatten(1) }
 
     it "returns only people with nil household_key" do
       expect(list).to contain_exactly([person1], [person2])
@@ -34,7 +34,7 @@ describe People::HouseholdList do
   end
 
   describe "#only_households_in_batches" do
-    subject(:list) { household_list.only_households_in_batches.to_a.flatten }
+    subject(:list) { household_list.only_households_in_batches.to_a.flatten(1) }
 
     it "returns only people with nil household_key" do
       expect(list).to contain_exactly(contain_exactly(person3, person4), [person5])
@@ -44,7 +44,7 @@ describe People::HouseholdList do
   describe "#households_in_batches" do
     let(:scope) { Person.where(id: [person1, person2, person3, person4, person5]) }
 
-    subject(:list) { household_list.households_in_batches.to_a.flatten }
+    subject(:list) { household_list.households_in_batches.to_a.flatten(1) }
 
     it "returns grouped households" do
       expect(list).to contain_exactly(
@@ -63,7 +63,7 @@ describe People::HouseholdList do
       end
     end
 
-    context "with given order" do
+    context "with retain_order: true" do
       let(:scope) { Person.where(id: [person1, person2, person3, person4, person5]).order(order) }
 
       context "with last_name DESC" do
@@ -85,19 +85,29 @@ describe People::HouseholdList do
       end
     end
 
-    context "limited people scope" do
-      let(:scope) do
-        Person.where(id: [person1, person2, person3, person4, person5, person6, person7]).limit(3)
+    context "with retain_order: true" do
+      subject(:household_list) { described_class.new(scope, retain_order: false) }
+
+      let(:scope) { Person.where(id: [person1, person2, person3, person4, person5, person6, person7]) }
+      let(:person6) { Fabricate(:person, household_key: 1111) }
+      let(:person7) { Fabricate(:person, household_key: "1234") }
+
+      it "sorts my member_count" do
+        expect(list.map(&:size)).to match_array([3, 2, 1, 1])
       end
+    end
+
+    context "limited people scope" do
+      let(:scope) { Person.where(id: [person1, person2, person3, person4, person5, person6, person7]).limit(3) }
       let(:person6) { Fabricate(:person, household_key: "1234") }
       let(:person7) { Fabricate(:person, household_key: "1234") }
       let!(:person_not_in_scope) { Fabricate(:person, household_key: "1234") }
 
       it "respects limit, but still groups all housemates from scope" do
         expect(list).to contain_exactly(
+          contain_exactly(person3, person4, person6, person7),
           [person1],
-          [person2],
-          contain_exactly(person3, person4, person6, person7)
+          [person2]
         )
       end
     end

@@ -87,7 +87,7 @@ class People::HouseholdList
     household_key_column = computed_household_key_column
     unscoped = scope.unscope(:select, :includes, :limit, :order)
     ids = unscoped.pluck(:id)
-    household_keys =  @include_housemates ? unscoped.pluck(:household_key) : []
+    household_keys = @include_housemates ? unscoped.pluck(:household_key) : []
 
     Person.arel_table
       .where(Person.arel_table[:id].in(ids).or(Person.arel_table[:household_key].in(household_keys.uniq.compact)))

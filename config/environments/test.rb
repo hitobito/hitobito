@@ -26,6 +26,9 @@ Rails.application.configure do
   config.action_controller.perform_caching = false
   config.cache_store = :memory_store
 
+  config.active_record.maintain_test_schema = %w[1 true].exclude?
+  (ENV["DISABLE_TEST_SCHEMA_MAINTENANCE"])
+
   # Raise exceptions instead of rendering exception templates.
   config.action_dispatch.show_exceptions = false
 

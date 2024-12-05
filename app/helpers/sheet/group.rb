@@ -54,7 +54,10 @@ module Sheet
     FeatureGate.if("groups.statistics") do
       tab "groups.tabs.statistics",
         :group_statistics_path,
-        if: :show_statistics
+        if: (lambda do |view, group|
+          group.layer &&
+          view.can?(:show_statistics, group)
+        end)
     end
 
     tab "groups.tabs.logs",

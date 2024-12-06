@@ -16,17 +16,15 @@ module Export::Tabular::People
     end
 
     def association_attributes
-      public_account_labels(:additional_emails, AdditionalEmail).merge(
-        public_account_labels(:phone_numbers, PhoneNumber)
+      account_labels(AdditionalEmail.where(public: true)).merge(
+        account_labels(PhoneNumber.where(public: true))
       )
     end
 
-    def public_account_labels(accounts, klass)
-      account_labels(people.map(&accounts).flatten.select(&:public?), klass)
-    end
-
-    def account_labels(collection, model)
-      collection.map(&:translated_label).uniq.each_with_object({}) do |label, obj|
+    def account_labels(collection)
+      scope = collection.distinct_on(:label)
+      model = scope.model
+      scope.map(&:translated_label).uniq.each_with_object({}) do |label, obj|
         if label.present?
           obj[ContactAccounts.key(model, label)] = ContactAccounts.human(model, label)
         end
@@ -41,10 +39,6 @@ module Export::Tabular::People
       person_attributes.each_with_object({}) do |attr, hash|
         hash[attr] = attribute_label(attr)
       end
-    end
-
-    def people
-      list
     end
   end
 end

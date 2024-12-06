@@ -29,7 +29,7 @@ module Export::Tabular::People
 
     def list
       @household_list ||= begin # rubocop:disable Naming/MemoizedInstanceVariableName @list is already used in the base-class, which shadows this extension
-        people = super
+        people = @list
         people = Person.where(id: people) unless people.respond_to?(:only_public_data)
         ::People::HouseholdList.new(people.only_public_data.includes(:primary_group), retain_order: @retain_order)
       end

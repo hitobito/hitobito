@@ -8,8 +8,8 @@ require "csv"
 
 describe Export::Tabular::Events::List do
   let(:course) { Fabricate(:course, groups: [groups(:top_group)], location: "somewhere", state: "somestate") }
-  let(:courses) { [course] }
-  let(:list) { Export::Tabular::Events::List.new(courses) }
+  let(:scope) { Event::Course.where(id: course.id) }
+  let(:list) { Export::Tabular::Events::List.new(scope) }
   let(:csv) { Export::Csv::Generator.new(list).call.split("\n") }
 
   context "headers" do
@@ -39,8 +39,6 @@ describe Export::Tabular::Events::List do
         let(:course) do
           Fabricate(:course, groups: [groups(:top_group)], location: "somewhere")
         end
-        let(:list) { Export::Tabular::Events::List.new([course]) }
-        let(:csv) { Export::Csv::Generator.new(list).call.split("\n") }
 
         subject { csv.second.split(";") }
 
@@ -51,9 +49,11 @@ describe Export::Tabular::Events::List do
     context "dates" do
       let(:start_at) { Date.parse "Sun, 09 Jun 2013" }
       let(:finish_at) { Date.parse "Wed, 12 Jun 2013" }
-      let(:date) { Fabricate(:event_date, event: course, start_at: start_at, finish_at: finish_at, location: "somewhere") }
 
-      before { allow(course).to receive(:dates).and_return([date]) }
+      before do
+        course.dates.destroy_all
+        Fabricate(:event_date, event: course, start_at: start_at, finish_at: finish_at, location: "somewhere")
+      end
 
       its([7]) { is_expected.to eq "Hauptanlass" }
       its([8]) { is_expected.to eq "somewhere" }
@@ -64,7 +64,7 @@ describe Export::Tabular::Events::List do
     context "contact" do
       let(:person) { Fabricate(:person_with_address_and_phone) }
 
-      before { course.contact = person }
+      before { course.update!(contact: person) }
 
       its([16]) { is_expected.to eq person.to_s }
       its([21]) { is_expected.to eq "'#{person.phone_numbers.first}" }
@@ -81,7 +81,7 @@ describe Export::Tabular::Events::List do
   end
 
   context "additional course labels" do
-    let(:courses) { [course1, course2] }
+    let(:scope) { Event::Course.where(id: [course1.id, course2.id]) }
     let(:course1) do
       Fabricate(:course, groups: [groups(:top_group)], motto: "All for one", cost: 1000,
         application_opening_at: "01.01.2000", application_closing_at: "01.02.2000",
@@ -126,17 +126,6 @@ describe Export::Tabular::Events::List do
       it "should contain the additional course fields" do
         expect(row[28..]).to eq ["", "", "", "", "", "nein", "ja", "0", "0", "0"]
       end
-    end
-  end
-
-  context "multiple courses" do
-    let(:course) { Fabricate(:course) }
-    let(:courses) { [course, course, course, course] }
-
-    subject { Export::Csv::Generator.new(list).call.split("\n") }
-
-    it "has 5 rows" do
-      expect(subject.size).to eq(5)
     end
   end
 end

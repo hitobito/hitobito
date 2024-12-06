@@ -10,11 +10,11 @@ require "csv"
 
 describe Export::Tabular::People::PeopleAddress do
   let(:person) { people(:top_leader) }
-  let(:list) { [person] }
-  let(:people_list) { Export::Tabular::People::PeopleAddress.new(list) }
+  let(:scope) { Person.where(id: person.id) }
+  let(:people_list) { Export::Tabular::People::PeopleAddress.new(scope) }
   subject { people_list }
 
-  let(:data) { Export::Tabular::People::PeopleAddress.export(:csv, list) }
+  let(:data) { Export::Tabular::People::PeopleAddress.export(:csv, scope) }
   let(:data_without_bom) { data.gsub(Regexp.new("^#{Export::Csv::UTF8_BOM}"), "") }
   let(:csv) { CSV.parse(data_without_bom, headers: true, col_sep: Settings.csv.separator) }
 

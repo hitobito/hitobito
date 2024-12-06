@@ -6,7 +6,7 @@
 require "spec_helper"
 
 describe Export::Tabular::Events::List do
-  let(:courses) { [course1] }
+  let(:scope) { Event::Course.where(id: course1.id) }
   let(:course1) { events(:top_course) }
 
   it "exports events list as xlsx" do
@@ -14,6 +14,6 @@ describe Export::Tabular::Events::List do
       .to receive(:add_row)
       .twice.and_call_original
 
-    Export::Tabular::Events::List.xlsx(courses)
+    Export::Tabular::Events::List.xlsx(scope)
   end
 end

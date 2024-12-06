@@ -8,91 +8,106 @@
 require "spec_helper"
 
 describe People::HouseholdList do
-  let(:subject) { described_class.new(scope) }
+  subject(:household_list) { described_class.new(scope, retain_order: true) }
+
   let(:person1) { Fabricate(:person) }
   let(:person2) { Fabricate(:person) }
   let(:person3) { Fabricate(:person, household_key: "1234") }
   let(:person4) { Fabricate(:person, household_key: "1234") }
   let(:person5) { Fabricate(:person, household_key: 1111) }
+  let(:scope) { Person.where(id: [person1, person2, person3, person4, person5]) }
 
-  context "#people_without_households" do
-    let(:scope) { Person.where(id: [person1, person2, person3, person4, person5]) }
+  describe "#people_without_household_in_batches" do
+    subject(:list) { household_list.people_without_household_in_batches.to_a.flatten(1) }
 
     it "returns only people with nil household_key" do
-      list = []
-      subject.people_without_household_in_batches { |batch| list.concat(batch) }
-      expect(list).to eq([[person1], [person2]])
+      expect(list).to contain_exactly([person1], [person2])
     end
 
-    context "limited people scope" do
+    context "with limited people scope" do
       let(:scope) { Person.where(id: [person1, person2, person3, person4, person5]).limit(1) }
 
       it "respects limit" do
-        list = []
-        subject.people_without_household_in_batches { |batch| list.concat(batch) }
-        expect(list).to eq([[person1]])
+        expect(list).to contain_exactly([scope.first])
       end
     end
   end
 
-  context "#grouped_households" do
+  describe "#only_households_in_batches" do
+    subject(:list) { household_list.only_households_in_batches.to_a.flatten(1) }
+
+    it "returns only people with nil household_key" do
+      expect(list).to contain_exactly(contain_exactly(person3, person4), [person5])
+    end
+  end
+
+  describe "#households_in_batches" do
     let(:scope) { Person.where(id: [person1, person2, person3, person4, person5]) }
 
+    subject(:list) { household_list.households_in_batches.to_a.flatten(1) }
+
     it "returns grouped households" do
-      expect(subject.grouped_households.map(&:key)).to match_array([
-        person1.id.to_s,
-        person2.id.to_s,
-        person3.household_key,
-        person5.household_key
-      ])
+      expect(list).to contain_exactly(
+        [person1],
+        [person2],
+        [person3, person4],
+        [person5]
+      )
     end
 
-    context "limited people scope" do
+    context "with limited people scope" do
       let(:scope) { Person.where(id: [person1, person2, person3, person4, person5]).limit(2) }
 
       it "respects limit" do
-        expect(subject.grouped_households.to_a.size).to eq(2)
+        expect(list.size).to eq(2)
       end
     end
-  end
 
-  context "#households_in_batches" do
-    let(:scope) { Person.where(id: [person1, person2, person3, person4, person5]) }
+    context "with retain_order: true" do
+      let(:scope) { Person.where(id: [person1, person2, person3, person4, person5]).order(order) }
 
-    it "yields a list of household arrays, orders by descending household size" do
-      yielded_batch = []
-      subject.households_in_batches { |batch| yielded_batch = batch }
-      expect(yielded_batch.map { |household| household.map(&:id) }).to contain_exactly(
-        contain_exactly(person3.id, person4.id),
-        [person1.id],
-        [person2.id],
-        [person5.id]
-      )
+      context "with last_name DESC" do
+        let(:order) { {last_name: :DESC} }
+
+        it "keeps order" do
+          last_names = list.map { |household| household.first.last_name }
+          expect(last_names).to eq(last_names.sort.reverse)
+        end
+      end
+
+      context "with first_name ASC" do
+        let(:order) { {first_name: :ASC} }
+
+        it "keeps order" do
+          first_names = list.map { |household| household.first.first_name }
+          expect(first_names).to eq(first_names.sort)
+        end
+      end
     end
 
-    it "yields only rows with household_key when queried for only_households" do
-      yielded_batch = []
-      subject.only_households_in_batches { |batch| yielded_batch = batch }
-      expect(yielded_batch.map { |household| household.map(&:id) }).to contain_exactly(
-        contain_exactly(person3.id, person4.id),
-        [person5.id]
-      )
+    context "with retain_order: true" do
+      subject(:household_list) { described_class.new(scope, retain_order: false) }
+
+      let(:scope) { Person.where(id: [person1, person2, person3, person4, person5, person6, person7]) }
+      let(:person6) { Fabricate(:person, household_key: 1111) }
+      let(:person7) { Fabricate(:person, household_key: "1234") }
+
+      it "sorts my member_count" do
+        expect(list.map(&:size)).to match_array([3, 2, 1, 1])
+      end
     end
 
     context "limited people scope" do
-      let(:scope) do
-        Person.where(id: [person1, person2, person3, person4, person5, person6, person7]).limit(2)
-      end
+      let(:scope) { Person.where(id: [person1, person2, person3, person4, person5, person6, person7]).limit(3) }
       let(:person6) { Fabricate(:person, household_key: "1234") }
       let(:person7) { Fabricate(:person, household_key: "1234") }
       let!(:person_not_in_scope) { Fabricate(:person, household_key: "1234") }
 
       it "respects limit, but still groups all housemates from scope" do
-        yielded_batch = []
-        subject.households_in_batches { |batch| yielded_batch = batch }
-        expect(yielded_batch.map { |household| household.map(&:id) }).to contain_exactly(
-          contain_exactly(person3.id, person4.id, person6.id, person7.id),
-          [person1.id]
+        expect(list).to contain_exactly(
+          contain_exactly(person3, person4, person6, person7),
+          [person1],
+          [person2]
         )
       end
     end
@@ -107,24 +122,22 @@ describe People::HouseholdList do
       let!(:person_not_in_scope) { Fabricate(:person, household_key: 1111) }
 
       it "works" do
-        yielded_batch = []
-        subject.households_in_batches { |batch| yielded_batch = batch }
-        expect(yielded_batch.map { |household| household.map(&:id) }).to contain_exactly(
-          contain_exactly(person3.id, person4.id, person6.id, person7.id),
-          [person1.id],
-          [person2.id],
-          [person5.id]
+        expect(list).to contain_exactly(
+          contain_exactly(person3, person4, person6, person7),
+          [person1],
+          [person2],
+          [person5]
         )
       end
     end
   end
 
-  context "enumerable" do
+  describe "enumerable" do
     let(:scope) { Person.all }
 
     it "is enumerable" do
       expect(subject).to be_an Enumerable
-      expect(subject.each).to be_an Enumerator
+      expect(household_list.each).to be_an Enumerator
     end
   end
 end

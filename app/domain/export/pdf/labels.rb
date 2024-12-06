@@ -14,24 +14,31 @@ module Export::Pdf
     def generate(contactables, household = false)
       pdf = Export::Pdf::Document.new(page_size: format.page_size, page_layout: format.page_layout, margin: 0.cm).pdf
       pdf.font_size = format.font_size
-
-      rows = household ? to_households(contactables) : contactables
-
-      rows.each_with_index do |contactable, i|
-        name = to_name(contactable)
-
-        address = household ? household_address(contactable, name) : address(contactable, name)
-
-        print_address_in_bounding_box(pdf, address, position(pdf, i))
+      if household
+        generate_with_households(contactables, pdf)
+      else
+        generate_without_households(contactables, pdf)
       end
-
       pdf.render
     end
 
     private
 
-    def to_households(contactables)
-      Export::Tabular::People::Households.new(contactables).list
+    def generate_with_households(contactables, pdf)
+      households = Export::Tabular::People::Households.new(contactables, retain_order: true)
+      households.list.each_with_index do |household, i|
+        name = to_name(household)
+        address = household_address(household, name)
+        print_address_in_bounding_box(pdf, address, position(pdf, i))
+      end
+    end
+
+    def generate_without_households(contactables, pdf)
+      contactables.each_with_index do |contactable, i|
+        name = to_name(contactable)
+        address = address(contactable, name)
+        print_address_in_bounding_box(pdf, address, position(pdf, i))
+      end
     end
 
     def to_name(contactable)

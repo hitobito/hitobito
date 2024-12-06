@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2015, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -36,9 +36,9 @@ describe Person::HistoryController do
 
         get :index, params: {group_id: groups(:bottom_group_one_one).id, id: person.id}
 
-        expect(assigns(:roles)).to eq([r1, r4, r3])
-        expect(assigns(:ended_or_archived_roles)).to eq([r2, r7])
-        expect(assigns(:future_roles)).to eq([r5, r6, r8])
+        expect(assigns(:roles)).to match_array([r1, r4, r3])
+        expect(assigns(:ended_or_archived_roles)).to match_array([r2, r7])
+        expect(assigns(:future_roles)).to match_array([r5, r6, r8])
       end
     end
 

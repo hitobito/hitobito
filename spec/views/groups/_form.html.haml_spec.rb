@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -35,6 +35,13 @@ describe "groups/_form.html.haml" do
     partials.each do |partial|
       expect(view).to render_template(partial: partial)
     end
+  end
+
+  it "disables autocomplete for name and short_name fields" do
+    @rendered = render partial: "groups/form"
+
+    expect(dom.find("input#group_name")["autocomplete"]).to eq "off"
+    expect(dom.find("input#group_short_name")["autocomplete"]).to eq "off"
   end
 
   it "disables name and short_name fields" do

@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -15,12 +15,7 @@ module Export::Pdf::Invoice
       move_cursor_to 510
       font_size(12) { text title(reminder) }
       pdf.move_down 8
-      text invoice.description
-
-      if reminder
-        pdf.move_down 8
-        font_size(10) { text reminder.text }
-      end
+      render_description(reminder)
 
       pdf.move_down 10
       pdf.font_size(8) { articles_table }
@@ -34,6 +29,15 @@ module Export::Pdf::Invoice
 
     def title(reminder)
       reminder ? "#{reminder.title} - #{invoice.title}" : invoice.title
+    end
+
+    def render_description(reminder)
+      text invoice.description if reminder&.show_invoice_description?
+
+      if reminder
+        pdf.move_down 8 if reminder.show_invoice_description?
+        font_size(10) { text reminder.text }
+      end
     end
 
     def articles_table

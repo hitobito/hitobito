@@ -30,6 +30,7 @@ class PaymentReminderSerializer < ApplicationSerializer
       :updated_at,
       :title,
       :text,
-      :level
+      :level,
+      :show_invoice_description
   end
 end

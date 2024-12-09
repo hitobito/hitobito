@@ -75,6 +75,26 @@ describe Event::ParticipantAssigner do
         end
       end
 
+      context "with non default question" do
+        class Event::Question::NonDefaultQuestion < ::Event::Question; end
+
+        let(:event) do
+          quest = course.questions.first
+          other = Fabricate(:course, groups: [groups(:top_layer)])
+          other.questions << Event::Question::NonDefaultQuestion.create!(event: other,
+            disclosure: :optional,
+            question: participation.answers.first.question.question)
+          other.questions << Fabricate(:event_question, event: other, question: quest.question, choices: quest.choices, multiple_choices: quest.multiple_choices)
+          other
+        end
+
+        it "updates participation" do
+          subject.add_participant
+
+          expect(participation.event_id).to eq(event.id)
+        end
+      end
+
       context "on existing participation" do
         it "raises error" do
           Fabricate(:event_participation, event: event, person: participation.person, application: Fabricate(:event_application))

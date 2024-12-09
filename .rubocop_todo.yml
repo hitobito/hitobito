@@ -35,6 +35,7 @@ Lint/ConstantDefinitionInBlock:
     - 'spec/controllers/mailing_lists/imap_mails_controller_spec.rb'
     - 'spec/controllers/mailing_lists/imap_mails_move_controller_spec.rb'
     - 'spec/domain/address/parser_spec.rb'
+    - 'spec/domain/event/participant_assigner_spec.rb'
     - 'spec/features/event/events_controller_spec.rb'
     - 'spec/helpers/mailing_lists/imap_mails_helper_spec.rb'
     - 'spec/jobs/event/participation_confirmation_job_spec.rb'

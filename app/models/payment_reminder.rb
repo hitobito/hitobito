@@ -48,6 +48,10 @@ class PaymentReminder < ActiveRecord::Base
     invoice.group
   end
 
+  def hide_invoice_description?
+    !show_invoice_description
+  end
+
   private
 
   def update_invoice

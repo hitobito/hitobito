@@ -15,12 +15,7 @@ module Export::Pdf::Invoice
       move_cursor_to 510
       font_size(12) { text title(reminder) }
       pdf.move_down 8
-      text invoice.description
-
-      if reminder
-        pdf.move_down 8
-        font_size(10) { text reminder.text }
-      end
+      render_description(reminder)
 
       pdf.move_down 10
       pdf.font_size(8) { articles_table }
@@ -34,6 +29,15 @@ module Export::Pdf::Invoice
 
     def title(reminder)
       reminder ? "#{reminder.title} - #{invoice.title}" : invoice.title
+    end
+
+    def render_description(reminder)
+      text invoice.description unless reminder&.hide_invoice_description?
+
+      if reminder
+        pdf.move_down 8 unless reminder.hide_invoice_description?
+        font_size(10) { text reminder.text }
+      end
     end
 
     def articles_table

@@ -48,7 +48,7 @@ module FormatHelper
   # formats the value as follows:
   # If the value is an associated model, renders the label of this object.
   # Otherwise, calls format_type.
-  def format_attr(obj, attr) # rubocop:disable Metrics/MethodLength
+  def format_attr(obj, attr, display_link: true) # rubocop:disable Metrics/MethodLength
     format_type_attr_method = format_type_attr_method(obj, attr)
     format_attr_method = :"format_#{attr}"
     if respond_to?(format_type_attr_method)
@@ -60,7 +60,7 @@ module FormatHelper
     elsif (assoc = association(obj, attr, :belongs_to))
       format_assoc(obj, assoc)
     elsif (assoc = association(obj, attr, :has_many, :has_and_belongs_to_many))
-      format_many_assoc(obj, assoc)
+      format_many_assoc(obj, assoc, display_link: display_link)
     else
       format_type(obj, attr)
     end
@@ -96,11 +96,11 @@ module FormatHelper
 
   # Renders a list of attributes with label and value for a given object.
   # If the optional block returns false for a given attribute, it will not be rendered.
-  def render_attrs(obj, *attrs)
+  def render_attrs(obj, *attrs, display_link: true)
     return if attrs.blank?
 
     content = safe_join(attrs) do |a|
-      labeled_attr(obj, a) if !block_given? || yield(a)
+      labeled_attr(obj, a, display_link: display_link) if !block_given? || yield(a)
     end
     content_tag(:dl, content, class: "dl-horizontal m-0 p-2 border-top") if content.present?
   end
@@ -113,8 +113,8 @@ module FormatHelper
   end
 
   # Renders the formatted content of the given attribute with a label.
-  def labeled_attr(obj, attr)
-    labeled(captionize(attr, object_class(obj)), format_attr(obj, attr))
+  def labeled_attr(obj, attr, display_link: true)
+    labeled(captionize(attr, object_class(obj)), format_attr(obj, attr, display_link: display_link))
   end
 
   def labeled_attrs(obj, *attrs)
@@ -207,12 +207,12 @@ module FormatHelper
 
   # Formats an active record has_and_belongs_to_many or
   # has_many association.
-  def format_many_assoc(obj, assoc)
+  def format_many_assoc(obj, assoc, display_link: true)
     values = obj.send(assoc.name)
     if values.size == 1
-      assoc_link(values.first)
+      display_link ? assoc_link(values.first) : values.first
     elsif values.present?
-      simple_list(values) { |val| assoc_link(val) }
+      simple_list(values) { |val| display_link ? assoc_link(val) : val }
     else
       ta(:no_entry, assoc)
     end

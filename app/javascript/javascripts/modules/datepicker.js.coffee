@@ -30,12 +30,14 @@ class app.Datepicker
     maxDate = if input.attributes.maxdate? then new Date(input.attributes.maxdate.value) else null
 
     options = $.extend({ onSelect: (d, i) -> self.track(this, d, i) },
+      $.datepicker.regional[$('html').attr('lang')],
       minDate: minDate,
       maxDate: maxDate,
       changeMonth: true,
       changeYear: true,
       yearRange: yearRange,
-      $.datepicker.regional[$('html').attr('lang')])
+      dateFormat: "dd.mm.yy"
+    )
 
     field.datepicker(options)
     field.datepicker('show')

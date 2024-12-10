@@ -70,7 +70,8 @@ class Invoice::BatchUpdate
   def payment_reminder_attrs(reminders, config)
     next_level = [3, reminders.size + 1].min
     config = config.payment_reminder_configs.find_by(level: next_level)
-    config.slice("title", "text", "level").merge(due_at: Time.zone.today + config.due_days)
+    config.slice("title", "text", "level", "show_invoice_description")
+      .merge(due_at: Time.zone.today + config.due_days)
   end
 
   def changed_from_issued_to_sent?(invoice)

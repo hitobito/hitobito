@@ -54,10 +54,10 @@ module Contactable
 
     def tag_invalid!(person, invalid_address)
       ActsAsTaggableOn::Tagging
-        .find_or_create_by!(taggable: person,
-          hitobito_tooltip: invalid_address,
-          context: :tags,
-          tag: invalid_tag)
+        .find_or_create_by!(taggable: person, context: :tags, tag: invalid_tag)
+        .tap do |t|
+          t.update!(hitobito_tooltip: invalid_address)
+        end
     end
 
     def remove_invalid_tagging!(person)

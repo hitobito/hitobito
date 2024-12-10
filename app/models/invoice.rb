@@ -184,7 +184,7 @@ class Invoice < ActiveRecord::Base
 
   def calculated
     [:total, :cost, :vat].index_with do |field|
-      invoice_items.reject { |invoice| invoice.send(field).nil? || invoice.frozen? }.sum(&field)
+      round(invoice_items.reject(&:frozen?).map(&field).compact.sum(BigDecimal("0.00")))
     end
   end
 

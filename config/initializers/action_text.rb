@@ -17,7 +17,7 @@ Rails.application.config.after_initialize do
   # List based on the following files in Trix:
   # https://github.com/basecamp/trix/blob/master/src/trix/config/block_attributes.coffee
   # https://github.com/basecamp/trix/blob/master/src/trix/config/text_attributes.coffee
-  ActionText::ContentHelper.allowed_tags.clear.merge [
+  ActionText::ContentHelper.allowed_tags = Set.new([
       "div",
       "blockquote",
       "h1",
@@ -34,6 +34,5 @@ Rails.application.config.after_initialize do
       "figcaption",
       "img",
       "br"
-  ]
-
+  ]).freeze
 end

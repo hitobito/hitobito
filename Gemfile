@@ -7,9 +7,8 @@
 
 source "https://rubygems.org"
 
-gem "rails", "= 7.0.8.6"
-gem "wagons", "~> 0.7.0"
-
+gem "rails", "= 7.1.2"
+gem "wagons", "~> 0.8.0"
 gem "active_record_distinct_on"
 gem "activerecord-nulldb-adapter"
 gem "activerecord-session_store"

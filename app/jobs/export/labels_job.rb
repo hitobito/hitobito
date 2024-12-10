@@ -16,11 +16,16 @@ class Export::LabelsJob < Export::ExportBaseJob
   end
 
   def people
-    @people ||= Person.where(id: @people_ids)
+    @people ||= Person.where(id: @people_ids).order(order_statement)
   end
 
   def group
     @group ||= Group.find(@group_id)
+  end
+
+  # retain order of @people_ids but allow override in wagons
+  def order_statement
+    ArelArrayLiteral.new(@people_ids).array_position(Person.arel_table[:id])
   end
 
   def data

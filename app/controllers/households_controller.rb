@@ -31,7 +31,7 @@ class HouseholdsController < ApplicationController
       action = entry.members.empty? ? :destroy : action_name
       redirect_to parents, notice: success_message(action: action)
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_CON
     end
   end
 

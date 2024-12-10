@@ -17,7 +17,7 @@ describe "households/edit.html.haml" do
   let(:household) { Household.new(person) }
   let(:dom) do
     render
-    Capybara::Node::Simple.new(rendered)
+    Capybara.string(raw(rendered))
   end
 
   before do

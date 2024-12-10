@@ -109,7 +109,7 @@ describe RolesController, type: :controller do
         role: {group_id: group.id, person_id: person.id}
       }
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
       is_expected.to render_template("create")
       expect(response.body).to include("alert")
     end

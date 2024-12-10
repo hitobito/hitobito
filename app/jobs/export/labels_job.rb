@@ -23,8 +23,8 @@ class Export::LabelsJob < Export::ExportBaseJob
     @group ||= Group.find(@group_id)
   end
 
+  # retain order of @people_ids but allow override in wagons
   def order_statement
-    # retain order of @people_ids but allow override in wagons
     ArelArrayLiteral.new(@people_ids).array_position(Person.arel_table[:id])
   end
 

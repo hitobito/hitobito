@@ -75,8 +75,6 @@ class People::HouseholdList
     Arel::Nodes::NamedFunction.new("COALESCE", [
       Person.arel_table[:household_key],
       Arel::Nodes::NamedFunction.new("FORMAT", [Arel::Nodes.build_quoted("_%s"), Person.arel_table[:id]])
-      # compare performance
-      # [Person.arel_table[:id].cast(:text)])
     ])
   end
 

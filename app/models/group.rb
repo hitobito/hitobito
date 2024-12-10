@@ -191,6 +191,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   validates :text_message_provider, inclusion: {in: PROVIDER_VALUES}, allow_nil: false
   validates :letter_address_position, inclusion: {in: ADDRESS_POSITION_VALUES}, allow_nil: false
 
+  validate :validate_self_registration_role_type
   validate :assert_valid_self_registration_notification_email
 
   validates :logo, dimension: {width: {max: 8_000}, height: {max: 8_000}},
@@ -339,6 +340,13 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     unless valid_email?(self_registration_notification_email)
       errors.add(:self_registration_notification_email, :invalid)
     end
+  end
+
+  def validate_self_registration_role_type
+    return if self_registration_role_type.blank? ||
+      decorate.allowed_roles_for_self_registration.map(&:sti_name).include?(self_registration_role_type)
+
+    errors.add(:self_registration_role_type, :inclusion)
   end
 
   def remove_privacy_policy

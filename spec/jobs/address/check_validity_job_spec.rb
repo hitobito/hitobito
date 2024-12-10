@@ -59,6 +59,16 @@ describe Address::CheckValidityJob do
       expect(ActsAsTaggableOn::Tagging.count).to eq(1)
     end
 
+    it "does not throw error if person already has address invalid tag" do
+      ActsAsTaggableOn::Tagging.create!(taggable: person, tag: PersonTags::Validation.address_invalid(create: true), context: :tags)
+
+      expect do
+        perform_enqueued_jobs do
+          job.perform
+        end
+      end.not_to raise_error
+    end
+
     it "sends no emails if no invalid people are found" do
       allow(Settings.addresses)
         .to receive(:validity_job_notification_emails)

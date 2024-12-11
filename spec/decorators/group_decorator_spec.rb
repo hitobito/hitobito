@@ -35,6 +35,8 @@ describe GroupDecorator, :draper_with_helpers do
 
     it "sorts the list alphabetically by label" do
       common_arguments = {count: 1, scope: [:activerecord, :models]}
+      # Key is written into defaults hash by default per rails 7.1
+      MISSING_TRANSLATION = -1152921504606846976
 
       [[:"group/top_group/leader", "Leader", "X"],
         [:"group/top_group/local_guide", "Local guide", "F"],
@@ -45,8 +47,7 @@ describe GroupDecorator, :draper_with_helpers do
         [:"group/top_group/invisible_people_manager", "Invisible people manager", "G"],
         [:"role/external", "External", "H"]].each do |class_path, class_name, sort_key|
         expect(I18n).to receive(:translate).with(class_path,
-          {default: [:role,
-            class_name]}.merge(common_arguments))
+          {default: [:role, MISSING_TRANSLATION]}.merge(common_arguments))
           .twice.and_return(sort_key)
       end
 

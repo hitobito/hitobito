@@ -36,7 +36,7 @@ describe "mounted_attributes/_form_tabs.html.haml" do
     allow(view.controller).to receive(:current_ability).and_return(ability)
   end
 
-  subject { Capybara::Node::Simple.new(rendered) }
+  subject { Capybara::Node::Simple.new(raw(rendered)) }
 
   context "with update permission on attribute" do
     before do

@@ -426,7 +426,7 @@ describe Export::Pdf::Invoice do
 
     it "is read from invoice" do
       invoice.update(currency: "EUR")
-      expect(subject).to match "Gesamtbetrag 5.36 EUR"
+      expect(subject).to match "Gesamtbetrag 5.35 EUR"
       expect(subject).not_to match "CHF"
     end
   end

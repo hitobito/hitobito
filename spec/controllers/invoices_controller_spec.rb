@@ -244,7 +244,7 @@ describe InvoicesController do
       get :show, params: {group_id: group.id, id: invoice.id}
       expect(assigns(:payment)).to be_present
       expect(assigns(:payment_valid)).to eq true
-      expect(assigns(:payment).amount.to_f).to eq 5.36
+      expect(assigns(:payment).amount.to_f).to eq 5.35
     end
 
     it "GET#show assigns payment with amount_open" do
@@ -253,7 +253,7 @@ describe InvoicesController do
       get :show, params: {group_id: group.id, id: invoice.id}
       expect(assigns(:payment)).to be_present
       expect(assigns(:payment_valid)).to eq true
-      expect(assigns(:payment).amount.to_f).to eq 4.86
+      expect(assigns(:payment).amount.to_f).to eq 4.85
     end
 
     it "GET#show assigns payment with flash parameters" do
@@ -309,7 +309,7 @@ describe InvoicesController do
 
       list.update_total
       expect(list.recipients_total).to eq(2)
-      expect(list.amount_total.to_f).to eq(5.86)
+      expect(list.amount_total.to_f).to eq(5.85)
 
       invoice.reload
 

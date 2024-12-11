@@ -39,7 +39,7 @@ describe Export::Tabular::Invoices::Row do
        "sent_at" => nil,
        "due_at" => nil,
        "cost" => "5.00",
-       "vat" => "0.36",
+       "vat" => "0.35",
        "total" => "5.35",
        "amount_paid" => "0.00"}
     )

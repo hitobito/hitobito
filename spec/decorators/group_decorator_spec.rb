@@ -7,6 +7,8 @@
 
 require "spec_helper"
 
+MISSING_TRANSLATION = -1152921504606846976
+
 describe GroupDecorator, :draper_with_helpers do
   include Rails.application.routes.url_helpers
 
@@ -36,7 +38,6 @@ describe GroupDecorator, :draper_with_helpers do
     it "sorts the list alphabetically by label" do
       common_arguments = {count: 1, scope: [:activerecord, :models]}
       # Key is written into defaults hash by default per rails 7.1
-      MISSING_TRANSLATION = -1152921504606846976
 
       [[:"group/top_group/leader", "Leader", "X"],
         [:"group/top_group/local_guide", "Local guide", "F"],

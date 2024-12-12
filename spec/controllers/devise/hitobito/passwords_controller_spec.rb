@@ -30,13 +30,25 @@ describe Devise::Hitobito::PasswordsController do
       end
 
       it "#create sends localized email" do
+        @cached_locales = I18n.available_locales
+        @cached_languages = Settings.application.languages
+        Settings.application.languages = {de: "Deutsch", fr: "Français"}
+        I18n.available_locales = Settings.application.languages.keys
+
         person.update!(language: "fr")
         expect(I18n.locale).to eq(:de)
+        expect(I18n).to receive(:"locale=").with(:de).ordered
         expect(I18n).to receive(:"locale=").with("fr").ordered
         expect(Devise.mailer).to receive(:reset_password_instructions).and_call_original.ordered
         expect(I18n).to receive(:"locale=").with(:de).ordered
+        expect(I18n).to receive(:"locale=").with(:de).ordered
+        expect(I18n).to receive(:"locale=").with(:de).ordered
         post :create, params: {person: {email: person.email}}
         expect(flash[:notice]).to eq "Du erhältst in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Dein Passwort zurücksetzen kannst."
+
+        I18n.available_locales = @cached_locales
+        Settings.application.languages = @cached_languages
+        I18n.locale = I18n.default_locale
       end
 
       # person language can be a language, that does not exist as a locale, for better description

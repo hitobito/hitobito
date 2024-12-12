@@ -19,7 +19,7 @@ class Devise::Hitobito::PasswordsController < Devise::PasswordsController
   def create
     previous_locale = I18n.locale
     resource = resource_class.find_by(email: resource_params["email"])
-    I18n.locale = if Settings.application.languages.to_h.key?(resource&.language&.to_sym)
+    I18n.locale = if Settings.application.languages.key?(resource&.language&.to_sym)
       resource&.language
     else
       previous_locale

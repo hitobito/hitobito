@@ -2,7 +2,7 @@
 
 > Niemand will Backup, alle wollen Restore!
 
-Damit ein Restore möglich ist, sollte man ein Backup der Datenbank haben. Erfahrungsgemäß reicht ein tägliches Backup aus, um die meisten Datenrettungen erfolgreich (genug) durchzuführen.
+Damit ein Restore möglich ist, sollte man ein Backup der Datenbank haben. Erfahrungsgemäss reicht ein tägliches Backup aus, um die meisten Datenrettungen erfolgreich (genug) durchzuführen.
 
 ## Backup holen und als DB vorbereiten
 

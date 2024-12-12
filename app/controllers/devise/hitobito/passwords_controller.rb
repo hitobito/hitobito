@@ -19,8 +19,12 @@ class Devise::Hitobito::PasswordsController < Devise::PasswordsController
   def create
     previous_locale = I18n.locale
     resource = resource_class.find_by(email: resource_params["email"])
-    I18n.locale = resource&.language || previous_locale
-
+    I18n.locale = if Settings.application.languages.to_h.keys.include?(resource&.language.to_sym)
+      resource&.language
+    else
+      previous_locale
+    end
+    
     # The block gets executed after sending the mail and before redirecting
     super do
       I18n.locale = previous_locale

@@ -29,14 +29,16 @@ class app.Datepicker
     minDate = if input.attributes.mindate? then new Date(input.attributes.mindate.value) else null
     maxDate = if input.attributes.maxdate? then new Date(input.attributes.maxdate.value) else null
 
+    # Try to find the better matching fr-CH and it-CH
+    lang = $('html').attr('lang')
+    lang_ch = lang + '-CH'
     options = $.extend({ onSelect: (d, i) -> self.track(this, d, i) },
-      $.datepicker.regional[$('html').attr('lang')],
+      $.datepicker.regional[lang_ch] || $.datepicker.regional[lang],
       minDate: minDate,
       maxDate: maxDate,
       changeMonth: true,
       changeYear: true,
       yearRange: yearRange,
-      dateFormat: "dd.mm.yy"
     )
 
     field.datepicker(options)

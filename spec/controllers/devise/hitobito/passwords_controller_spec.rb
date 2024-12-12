@@ -39,7 +39,7 @@ describe Devise::Hitobito::PasswordsController do
         expect(flash[:notice]).to eq "Du erhältst in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Dein Passwort zurücksetzen kannst."
       end
 
-      # person language can be a language, that does not exist as a locale, for better description 
+      # person language can be a language, that does not exist as a locale, for better description
       # of the issue: https://github.com/hitobito/hitobito_sac_cas/issues/1392
       it "should use previous_locale if person language is not a registered language in application" do
         person.update!(language: "en")

@@ -35,8 +35,8 @@ class PaymentProviderConfig < ActiveRecord::Base
 
   belongs_to :invoice_config
 
-  serialize :encrypted_keys
-  serialize :encrypted_password
+  serialize :encrypted_keys, coder: YAML
+  serialize :encrypted_password, coder: YAML
 
   scope :initialized, -> { where(status: [:pending, :registered]) }
 

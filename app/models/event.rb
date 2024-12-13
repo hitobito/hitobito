@@ -192,8 +192,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     allow_destroy: true
 
   ### SERIALIZED ATTRIBUTES
-  serialize :required_contact_attrs, Array
-  serialize :hidden_contact_attrs, Array
+  serialize :required_contact_attrs, type: Array, coder: YAML
+  serialize :hidden_contact_attrs, type: Array, coder: YAML
 
   ### CLASS METHODS
 

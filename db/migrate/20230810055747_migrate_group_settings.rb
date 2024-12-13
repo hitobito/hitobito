@@ -55,7 +55,7 @@ class MigrateGroupSettings < ActiveRecord::Migration[6.1]
     has_one_attached :picture
     belongs_to :target, polymorphic: true
 
-    serialize :value, Hash
+    serialize :value, type: Hash, coder: YAML
   end
 
   private

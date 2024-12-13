@@ -24,7 +24,7 @@
 class PeopleFilter < ActiveRecord::Base
   RANGES = %w[deep layer group].freeze
 
-  serialize :filter_chain, Person::Filter::Chain
+  serialize :filter_chain, type: Person::Filter::Chain, coder: YAML
 
   belongs_to :group
 

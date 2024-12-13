@@ -24,7 +24,7 @@ class TableDisplay < ActiveRecord::Base
 
   belongs_to :person
 
-  serialize :selected, Array
+  serialize :selected, type: Array, coder: YAML
   before_save :allow_only_known_attributes!
 
   cattr_accessor :table_display_columns, :multi_columns

@@ -29,7 +29,14 @@ module Hitobito
 
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.0
+    config.load_defaults 7.1
+
+    # Changing this default means that all new cache entries added to the cache
+    # will have a different format that is not supported by Rails 7.0
+    # applications.
+    config.active_support.cache_format_version = 7.1
+
+    config.active_record.raise_on_assign_to_attr_readonly = false
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers

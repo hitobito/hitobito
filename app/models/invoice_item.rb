@@ -64,7 +64,7 @@ class InvoiceItem < ActiveRecord::Base
   validates :unit_cost, presence: true, unless: :dynamic
   validates :count, presence: true, unless: :dynamic
 
-  serialize :dynamic_cost_parameters, Hash
+  serialize :dynamic_cost_parameters, type: Hash, coder: YAML
 
   class << self
     def all_types

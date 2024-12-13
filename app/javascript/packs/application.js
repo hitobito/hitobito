@@ -28,9 +28,7 @@ import 'moment'; // used by events/date_period_validator.js.coffee
 // jQuery UI
 import 'jquery-ui/ui/widgets/datepicker';
 import 'jquery-ui/ui/i18n/datepicker-de';
-import 'jquery-ui/ui/i18n/datepicker-fr';
 import 'jquery-ui/ui/i18n/datepicker-fr-CH';
-import 'jquery-ui/ui/i18n/datepicker-it';
 import 'jquery-ui/ui/i18n/datepicker-it-CH';
 import 'jquery-ui/ui/effects/effect-highlight';
 

@@ -7,6 +7,7 @@
 - Bei Anlässen können mehrere Anhänge gleichzeitig hochgeladen werden (hitobito#3017)
 - Die Rechnungseinstellungen bieten neu die Möglichkeit, Vorlagen für Rechnungstitel und -text zu definieren. Diese können dann beim erstellen der Rechnung ausgewählt werden.
 - Etikettendruck und Briefexport verwenden nun die gleiche Reihenfolge (#2199)
+- Aufwendige Exports (Personen, Abos) werden sequenziell ausgeführt (hitobito_sac_cas#1354)
 
 ## Version 2.3
 

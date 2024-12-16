@@ -25,9 +25,9 @@ Um die Daten vom Event mit der ID 1234 zu extrahieren, reicht dies:
 > RAILS_DB_SCHEMA=database rake restore:export:event[1234] > event.sql
 ```
 
-Hier wird davon ausgegangen, dass der Restore in ein Schema names "database" stattgefunden hat. Dies hängt natürlich vom konkreten Setup ab und soll nur zeigen, wie man die Connection anpassen kann.
+Hier wird davon ausgegangen, dass der Restore in ein Schema namens "database" stattgefunden hat. Dies hängt natürlich vom konkreten Setup ab und soll nur zeigen, wie man die Connection anpassen kann.
 
-Das erstellte event.sql-Script kann auf der DB angewendet werden, von der die Daten gelöscht wurden. Es enthält alle Daten, die beim Löschen eines Events mitgelöscht wurden und in der DB sind. Es enthält keine Attachments. Die Relationen "subscriptions" und "person_add_requests" sind noch nicht enthalten, da diese bisher nicht wiederhergestellt werden mussten.
+Das erstellte `event.sql`-Script kann auf der DB angewendet werden, von der die Daten gelöscht wurden. Es enthält alle Daten, die beim Löschen eines Events mitgelöscht wurden und in der DB sind. Es enthält keine Attachments. Die Relationen `subscriptions` und `person_add_requests` sind noch nicht enthalten, da diese bisher nicht wiederhergestellt werden mussten.
 
 ## Daten prüfen und importieren
 

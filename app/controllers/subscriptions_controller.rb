@@ -11,6 +11,9 @@ class SubscriptionsController < CrudController
 
   self.nesting = Group, MailingList
 
+  INCLUDED_PAGING_PARAM = :included_people_page
+  EXCLUDED_PAGING_PARAM = :excluded_people_page
+
   decorates :group
 
   prepend_before_action :parent
@@ -79,9 +82,11 @@ class SubscriptionsController < CrudController
   end
 
   def person_subscriptions(excluded = false)
+    paging_param_name = excluded ? EXCLUDED_PAGING_PARAM : INCLUDED_PAGING_PARAM
     subscriptions_for_type(Person)
       .where(excluded: excluded)
       .order("people.last_name", "people.first_name")
+      .page(params[paging_param_name])
   end
 
   def event_subscriptions

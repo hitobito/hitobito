@@ -62,7 +62,7 @@ namespace :restore do
 
       event.participations.each do |participation|
         sql_result << dumper[participation]
-        sql_result << dumper[participation.application]
+        sql_result << dumper[participation.application] if participation.application.present?
         participation.roles.each { sql_result << dumper[_1] }
       end
 

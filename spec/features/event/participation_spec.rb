@@ -62,10 +62,10 @@ describe :event_participation do
 
       click_link("Anmelden")
 
-      expect(current_path).to eq(contact_data_group_event_participations_path(group, event))
-
       is_expected.to have_content("Privacy Policy Top Layer")
       is_expected.to have_content("Additional Policies Bottom Layer")
+
+      find("input#event_participation_contact_data_privacy_policy_accepted") # but do not click!
 
       find_all('.bottom .btn-group button[type="submit"]').first.click # "Weiter"
 

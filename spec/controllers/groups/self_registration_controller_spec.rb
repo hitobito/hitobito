@@ -13,7 +13,7 @@ describe Groups::SelfRegistrationController do
 
   context "with feature disabled" do
     before do
-      group.update!(self_registration_role_type: Group::TopGroup::Member.sti_name)
+      group.update!(self_registration_role_type: Role::External.sti_name)
       allow(Settings.groups.self_registration).to receive(:enabled).and_return(false)
     end
 
@@ -62,7 +62,7 @@ describe Groups::SelfRegistrationController do
     context "GET#show" do
       context "when registration active" do
         before do
-          group.update(self_registration_role_type: Group::TopGroup::Member.sti_name)
+          group.update(self_registration_role_type: Role::External.sti_name)
         end
 
         context "when unautorized" do
@@ -106,7 +106,7 @@ describe Groups::SelfRegistrationController do
     context "POST#create" do
       context "when registration active" do
         before do
-          group.update!(self_registration_role_type: Group::TopGroup::Member.sti_name)
+          group.update!(self_registration_role_type: Role::External.sti_name)
         end
 
         context "with privacy policies in hierarchy" do
@@ -136,7 +136,7 @@ describe Groups::SelfRegistrationController do
             expect(person.primary_group).to eq(group)
             expect(person.privacy_policy_accepted).to be_present
             expect(person.full_name).to eq("Bob Miller")
-            expect(role.type).to eq(Group::TopGroup::Member.sti_name)
+            expect(role.type).to eq(Role::External.sti_name)
             expect(role.group).to eq(group)
 
             expect(response).to redirect_to(new_person_session_path)
@@ -206,7 +206,7 @@ describe Groups::SelfRegistrationController do
 
           expect(person.primary_group).to eq(group)
           expect(person.full_name).to eq("Bob Miller")
-          expect(role.type).to eq(Group::TopGroup::Member.sti_name)
+          expect(role.type).to eq(Role::External.sti_name)
           expect(role.group).to eq(group)
 
           expect(response).to redirect_to(new_person_session_path)

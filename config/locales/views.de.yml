@@ -754,7 +754,7 @@ de:
       help_contact: "Adresse und öffentliche Telefonnummern dieser Person verwenden."
       help_self_registration_require_adult_consent: Bei der Registrierung abfragen, ob die Person schon 18 Jahre ist bzw. das Einverständnis der Erziehungsberechtigten hat.
       help_main_self_registration_group: "Den Registrierungslink dieser Gruppe auf der Hauptloginseite anzeigen."
-      hint_external_registration: "Es sind keine Rollen mit Schreibrechten auswählbar"
+      hint_external_registration: "Es sind keine Rollen mit Rechten auswählbar"
     form_tabs:
       general: "Allgemein"
       messages: "Nachrichten"

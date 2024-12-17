@@ -11,7 +11,6 @@ it:
     no_list_entries: Nessun risultato.
     confirm_delete: Vuoi veramente cancellare questa voce?
     do_not_fill: Per favore lasciare libero questo campo
-    chosen_no_results: Nessun risultato con
     selected: Selezionato
     columns: Colonna
     start_on: da %{date}
@@ -498,8 +497,6 @@ it:
       participants: "partecipanti"
     export_enqueued: "L'esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento"
     add_tag: Aggiungere tag
-    invitations:
-      description: "Le persone invitate possono registrarsi o cancellarsi dalla pagina %{model_name}. Non riceveranno una mail automatica."
   event/applications:
     approved: "L'iscrizione è stata accettata"
     rejected: "L'iscrizione è stata rifiutata"

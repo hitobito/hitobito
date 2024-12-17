@@ -16,9 +16,7 @@ describe Event::KindCategoryResource, type: :resource do
 
   describe "serialization" do
     let(:serialized_attrs) do
-      [
-        :label
-      ]
+      [:label, :order]
     end
 
     it "works" do

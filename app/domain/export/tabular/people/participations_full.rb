@@ -20,11 +20,11 @@ module Export::Tabular::People
 
     def questions
       Event::Question.joins(answers: :participation)
-        .where(event_participations: {id: list.unscope(:select).unscope(:order).pluck("event_participations.id")})
+        .where(event_participations: {id: pluck_ids_from_list("event_participations.id")})
     end
 
     def people_ids
-      @people_ids ||= @list.unscope(:order).unscope(:select).pluck("person_id")
+      @people_ids ||= pluck_ids_from_list(:person_id)
     end
   end
 end

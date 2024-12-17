@@ -92,15 +92,20 @@ module Hitobito
     # Otherwise, we use Delayed Job directly with jobs inheriting from our `BaseJob`.
     config.active_job.queue_adapter = :delayed_job
 
-    config.active_record.yaml_column_permitted_classes = [
-      Symbol,
-      Date,
-      Time,
-      ActiveSupport::HashWithIndifferentAccess,
-      ActiveSupport::TimeWithZone,
-      ActiveSupport::TimeZone,
-      ActionController::Parameters,
-    ]
+    config.after_initialize do
+      ActiveRecord.yaml_column_permitted_classes += [
+        Array,
+        Symbol,
+        Date,
+        Time,
+        ActiveSupport::HashWithIndifferentAccess,
+        ActiveSupport::TimeWithZone,
+        ActiveSupport::TimeZone,
+        ActionController::Parameters,
+        Person::Filter::Chain,
+        Person::Filter::Role,
+      ]
+    end
 
     config.middleware.insert_before Rack::ETag, Rack::Deflater
 

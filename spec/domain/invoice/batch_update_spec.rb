@@ -90,6 +90,7 @@ describe Invoice::BatchUpdate do
       end.to change { Delayed::Job.count }.by(1)
       expect(results.notice).to have(2).items
       expect(sent.payment_reminders.first.level).to eq 1
+      expect(sent.payment_reminders.first.show_invoice_description).to be_truthy
     end
 
     it "does not create 2nd reminder invoice is not yet due" do
@@ -137,6 +138,17 @@ describe Invoice::BatchUpdate do
       expect(sent.payment_reminders).to have(4).items
       expect(sent.payment_reminders.last.level).to eq 3
       expect(results.notice).to have(1).item
+    end
+
+    it "applies payment_reminder_config" do
+      config = sent.group.invoice_config.payment_reminder_configs.find_or_create_by(level: 1)
+      config_changes = {title: "Changed Title", text: "Changed Text", show_invoice_description: false}
+      config.update(config_changes)
+      sent.update_columns(due_at: 31.days.ago)
+      update([sent], person)
+
+      expect(results.notice).to have(2).items
+      expect(sent.payment_reminders.first.slice(*config_changes.keys).symbolize_keys).to eq(config_changes)
     end
   end
 end

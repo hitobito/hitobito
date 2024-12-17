@@ -431,12 +431,37 @@ describe Export::Pdf::Invoice do
     end
   end
 
-  it "includes payment reminder title and text" do
-    reminder = Fabricate(:payment_reminder, invoice: sent, due_at: sent.due_at + 10.days)
-    pdf = described_class.render(sent, articles: true)
-    text = PDF::Inspector::Text.analyze(pdf).show_text
-    expect(text).to include "#{reminder.title} - #{sent.title}"
-    expect(text).to include reminder.text
+  describe "payment_reminder" do
+    let(:due_at) { sent.due_at + 10.days }
+    let(:pdf) { described_class.render(sent, articles: true) }
+    let(:reminder) { Fabricate(:payment_reminder, invoice: sent, due_at: due_at, show_invoice_description: show) }
+
+    subject { PDF::Inspector::Text.analyze(pdf).show_text }
+
+    before do
+      sent.update(description: "Existing text")
+      reminder
+    end
+
+    context "with default show_invoice_description: true" do
+      let(:show) { true }
+
+      it "includes payment reminder title and text" do
+        is_expected.to include("#{reminder.title} - #{sent.title}")
+        is_expected.to include(sent.description)
+        is_expected.to include(reminder.text)
+      end
+    end
+
+    context "with default show_invoice_description: true" do
+      let(:show) { false }
+
+      it "only shows payment reminder title and text" do
+        is_expected.to include("#{reminder.title} - #{sent.title}")
+        is_expected.not_to include(sent.description)
+        is_expected.to(include reminder.text)
+      end
+    end
   end
 
   context "address" do

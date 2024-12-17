@@ -21,6 +21,10 @@ class TokenAbility
     token.dynamic_user
   end
 
+  def identifier
+    "token-#{token.id}"
+  end
+
   private
 
   def define_token_abilities

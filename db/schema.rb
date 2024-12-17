@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_11_12_142323) do
-
+ActiveRecord::Schema.define(version: 2024_12_09_093414) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -839,6 +838,7 @@ ActiveRecord::Schema.define(version: 2024_11_12_142323) do
     t.string "text", null: false
     t.integer "due_days", null: false
     t.integer "level", null: false
+    t.boolean "show_invoice_description", default: true, null: false
     t.index ["invoice_config_id"], name: "index_payment_reminder_configs_on_invoice_config_id"
   end
 
@@ -850,6 +850,7 @@ ActiveRecord::Schema.define(version: 2024_11_12_142323) do
     t.string "title"
     t.string "text"
     t.integer "level"
+    t.boolean "show_invoice_description", default: true, null: false
     t.index ["invoice_id"], name: "index_payment_reminders_on_invoice_id"
   end
 

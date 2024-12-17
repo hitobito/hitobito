@@ -5,6 +5,9 @@
 
 %h2= title
 
+- if local_assigns.key?(:paging_param)
+  = render "shared/pagination_without_count", models: subs, options: { param_name: paging_param }
+
 = table(subs, class: 'table table-striped') do |t|
   - t.col('') { |e| render 'subscription', subscription: e }
   - t.col('', class: 'text-end pe-2') do |e|

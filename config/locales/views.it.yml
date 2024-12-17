@@ -11,7 +11,6 @@ it:
     no_list_entries: Nessun risultato.
     confirm_delete: Vuoi veramente cancellare questa voce?
     do_not_fill: Per favore lasciare libero questo campo
-    chosen_no_results: Nessun risultato con
     selected: Selezionato
     columns: Colonna
     start_on: da %{date}

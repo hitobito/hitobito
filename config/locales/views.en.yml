@@ -11,7 +11,6 @@ en:
     no_list_entries: No entries found.
     confirm_delete: Do you really want to delete this entry?
     do_not_fill: Please do not fill in this field
-    chosen_no_results: No entries found with
     selected: selected
     columns: Columns
     start_on: from%{date}

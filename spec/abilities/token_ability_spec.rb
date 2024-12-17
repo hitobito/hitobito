@@ -12,6 +12,14 @@ describe TokenAbility do
 
   let(:ability) { TokenAbility.new(token) }
 
+  describe :identifier do
+    let(:token) { service_tokens(:rejected_top_layer_token) }
+
+    it "has unique identifier" do
+      expect(ability.identifier).to eq "token-#{token.id}"
+    end
+  end
+
   describe :people do
     let(:token) { service_tokens(:rejected_top_layer_token) }
 

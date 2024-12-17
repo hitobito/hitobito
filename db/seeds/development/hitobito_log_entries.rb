@@ -7,6 +7,6 @@
 
 require Rails.root / 'db/seeds/support/hitobito_log_entry_seeder'
 
-1000.times do
+100.times do
   HitobitoLogEntrySeeder.new.seed_log_entry
 end

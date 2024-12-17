@@ -167,17 +167,13 @@ class MailingLists::Subscribers
 
   def tag_excluded_subscription_ids
     SubscriptionTag
-      .select(:tag_id)
-      .joins(:subscription)
-      .where(subscription_tags: {excluded: true},
-             subscriptions: {mailing_list_id: id})
+      .select(:tag_id).joins(:subscription)
+      .where(subscription_tags: {excluded: true}, subscriptions: {mailing_list_id: id})
   end
 
   def excluded_subscriber_ids
     Subscription
       .select(:subscriber_id)
-      .where(mailing_list_id: id,
-             excluded: true,
-             subscriber_type: Person.sti_name)
+      .where(mailing_list_id: id, excluded: true, subscriber_type: Person.sti_name)
   end
 end

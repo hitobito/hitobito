@@ -18,5 +18,5 @@ class ModelAggregator
         "#{aggregate_function}(#{@model_class.table_name}.#{column.name}) AS #{column.name}"
       end
     end.join(", ")
-  end  
+  end
 end

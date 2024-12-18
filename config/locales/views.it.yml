@@ -652,7 +652,6 @@ it:
     form:
       help_contact: "Utilizzare l'indirizzo e il numero di telefono pubblico di questa persona"
       help_main_self_registration_group: "Mostra il link di registrazione di questo gruppo nella pagina principale di login."
-      hint_external_registration: "Non è possibile selezionare ruoli con diritti di scrittura"
     form_tabs:
       general: "Generale"
       messages: "Notizie"

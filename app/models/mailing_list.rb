@@ -42,7 +42,7 @@ class MailingList < ActiveRecord::Base
   SUBSCRIBABLE_MODES = %w[opt_out opt_in].freeze
 
   serialize :preferred_labels, type: Array, coder: NilArrayCoder
-  serialize :filter_chain, type: MailingLists::Filter::Chain, coder: Person::Filter::Chain
+  serialize :filter_chain, type: MailingLists::Filter::Chain, coder: MailingLists::Filter::Chain
 
   serialize :mailchimp_forgotten_emails, type: Array, coder: NilArrayCoder
   attribute :mailchimp_result, Synchronize::Mailchimp::ResultType.new

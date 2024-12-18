@@ -16,8 +16,8 @@ describe Export::Tabular::People::PeopleFull do
   end
 
   let(:person) { people(:top_leader) }
-  let(:list) { [person] }
-  let(:people_list) { Export::Tabular::People::PeopleFull.new(list) }
+  let(:scope) { Person.where(id: person.id) }
+  let(:people_list) { Export::Tabular::People::PeopleFull.new(scope) }
 
   subject { people_list }
 

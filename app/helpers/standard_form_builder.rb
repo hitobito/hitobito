@@ -287,7 +287,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     ].compact.join(" ")
     html_options[:class] += " is-invalid" if errors_on?(attr)
 
-    add_css_class(html_options, "multiselect")
+    add_css_class(html_options, "multiselect tom-select")
     belongs_to_field(attr, html_options)
   end
 

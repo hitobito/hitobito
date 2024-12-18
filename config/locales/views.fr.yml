@@ -11,7 +11,6 @@ fr:
     no_list_entries: Aucun résultat.
     confirm_delete: Souhaitez-vous vraiment effacer cet enregistrement?
     do_not_fill: Ne pas remplir cette case SVP.
-    chosen_no_results: Aucun résultat avec
     selected: Sélectionné
     columns: Colonnes
     start_on: à partir de %{date}
@@ -656,7 +655,6 @@ fr:
     form:
       help_contact: "Utiliser l'adresse et le numéro de téléphone public de cette personne"
       help_main_self_registration_group: "Afficher le lien d'inscription de ce groupe sur la page de connexion principale."
-      hint_external_registration: "Aucun rôle avec droit d'écriture ne peut être choisi"
     form_tabs:
       general: "Généralités"
       messages: "Messages"

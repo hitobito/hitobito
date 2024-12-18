@@ -56,6 +56,10 @@ class Ability
     end
   end
 
+  def identifier
+    "user-#{user.id}"
+  end
+
   private
 
   def define_root_abilities

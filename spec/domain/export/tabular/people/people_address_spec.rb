@@ -37,7 +37,7 @@ describe Export::Tabular::People::PeopleAddress do
   end
 
   context "phone_numbers" do
-    before { person.phone_numbers << PhoneNumber.new(label: "Privat", number: 321) }
+    before { PhoneNumber.create!(contactable: person, label: "Privat", number: "0791234567") }
 
     subject { people_list.attribute_labels }
 
@@ -49,8 +49,8 @@ describe Export::Tabular::People::PeopleAddress do
       let(:list) { [person, other] }
 
       before do
-        other.phone_numbers << PhoneNumber.new(label: "Foobar", number: 321)
-        person.phone_numbers << PhoneNumber.new(label: "Privat", number: 321)
+        PhoneNumber.create!(contactable: other, label: "Foobar", number: "0791234567")
+        PhoneNumber.create!(contactable: person, label: "Privat", number: "0791234567")
       end
 
       its([:phone_number_privat]) { should eq "Telefonnummer Privat" }
@@ -58,7 +58,10 @@ describe Export::Tabular::People::PeopleAddress do
     end
 
     context "blank label is not exported" do
-      before { person.phone_numbers << PhoneNumber.new(label: "", number: 321) }
+      before do
+        number = PhoneNumber.create!(contactable: person, label: "label", number: "0791234567")
+        PhoneNumber.where(id: number.id).update_all(label: "")
+      end
 
       its(:keys) { should_not include :phone_number_ }
     end

@@ -75,7 +75,7 @@ module UploadDisplayHelper
 
   def extract_image_dimensions(width_x_height)
     case width_x_height
-    when /^\d+x\d+$/ then width_x_height.split("x")
+    when /^\d+x\d+$/ then width_x_height.split("x").map(&:to_i)
     end
   end
 end

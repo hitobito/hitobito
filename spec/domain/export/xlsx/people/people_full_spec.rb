@@ -16,13 +16,13 @@ describe Export::Tabular::People::PeopleFull do
   end
 
   let(:person) { people(:top_leader) }
-  let(:list) { [person] }
+  let(:scope) { Person.where(id: person.id) }
 
-  it "exports people list full as xlsx" do
+  it "exports people scope full as xlsx" do
     expect_any_instance_of(Axlsx::Worksheet)
       .to receive(:add_row)
       .twice.and_call_original
 
-    Export::Tabular::People::PeopleFull.xlsx(list)
+    Export::Tabular::People::PeopleFull.xlsx(scope)
   end
 end

@@ -48,6 +48,7 @@ describe "export import person" do
       confirmed_at membership_verify_token]
     expect_attrs_equal(imported, exported, excluded)
 
+    exported.reload
     %w[phone_numbers social_accounts additional_emails].each do |assoc|
       expect(imported.send(assoc).size).to eq(exported.send(assoc).to_a.size)
       exported.send(assoc).each_with_index do |e, i|
@@ -57,7 +58,7 @@ describe "export import person" do
   end
 
   def export(person)
-    Export::Tabular::People::PeopleFull.csv([person])
+    Export::Tabular::People::PeopleFull.csv(Person.where(id: person.id))
   end
 
   def import(csv) # rubocop:disable Metrics/AbcSize

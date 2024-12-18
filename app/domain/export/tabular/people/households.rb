@@ -10,6 +10,11 @@ module Export::Tabular::People
     self.model_class = ::Person
     self.row_class = HouseholdRow
 
+    def initialize(*, retain_order: false)
+      super(*)
+      @retain_order = retain_order
+    end
+
     def person_attributes
       [:salutation, :name, :address, :zip_code, :town, :country, :layer_group]
     end
@@ -24,9 +29,9 @@ module Export::Tabular::People
 
     def list
       @household_list ||= begin # rubocop:disable Naming/MemoizedInstanceVariableName @list is already used in the base-class, which shadows this extension
-        people = super
+        people = @list
         people = Person.where(id: people) unless people.respond_to?(:only_public_data)
-        ::People::HouseholdList.new(people.order(:first_name).only_public_data.includes(:primary_group))
+        ::People::HouseholdList.new(people.only_public_data.includes(:primary_group), retain_order: @retain_order)
       end
     end
   end

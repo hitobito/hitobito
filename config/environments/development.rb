@@ -92,6 +92,4 @@ Rails.application.configure do
   end
 
   # config.action_cable.disable_request_forgery_protection = true
-
-  routes.default_url_options[:host] = 'localhost:3000'
 end

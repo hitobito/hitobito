@@ -8,7 +8,7 @@ require "spec_helper"
 
 describe Wizards::RegisterNewUserWizard do
   let(:params) { {} }
-  let(:role_type) { Group::TopGroup::Member }
+  let(:role_type) { Role::External }
   let(:group) { groups(:top_group) }
 
   subject(:wizard) do

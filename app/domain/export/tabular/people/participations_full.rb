@@ -18,12 +18,13 @@ module Export::Tabular::People
 
     private
 
-    def people
-      list.map(&:person)
+    def questions
+      Event::Question.joins(answers: :participation)
+        .where(event_participations: {id: pluck_ids_from_list("event_participations.id")})
     end
 
-    def questions
-      list.map(&:answers).flatten.map(&:question).uniq
+    def people_ids
+      @people_ids ||= pluck_ids_from_list(:person_id)
     end
   end
 end

@@ -7,23 +7,24 @@
 module Export::Tabular
   # Base class for csv/xlsx export
   class Base
-    class_attribute :model_class, :row_class, :auto_filter
+    class_attribute :model_class, :row_class, :auto_filter, :iterator
     self.row_class = Export::Tabular::Row
     self.auto_filter = true
+    self.iterator = :find_each
 
-    attr_reader :list, :ability
+    attr_reader :ability
 
     class << self
-      def export(format, *args)
-        generator(format).new(new(*args)).call
+      def export(format, *)
+        generator(format).new(new(*)).call
       end
 
-      def xlsx(*args)
-        export(:xlsx, *args)
+      def xlsx(*)
+        export(:xlsx, *)
       end
 
-      def csv(*args)
-        export(:csv, *args)
+      def csv(*)
+        export(:csv, *)
       end
 
       private
@@ -66,12 +67,15 @@ module Export::Tabular
     def data_rows(format = nil)
       return enum_for(:data_rows) unless block_given?
 
-      list.each do |entry|
+      iterating_method = list.is_a?(Array) ? :each : iterator
+      list.send(iterating_method).with_index do |entry, index|
         yield values(entry, format)
       end
     end
 
     private
+
+    attr_reader :list
 
     def build_attribute_labels
       attributes.each_with_object({}) do |attr, labels|

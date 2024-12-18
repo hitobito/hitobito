@@ -78,8 +78,9 @@ describe Export::Tabular::Groups::List do
   context "second row" do
     let(:second_group) { groups(:bottom_group_one_one) }
 
-    subject { csv[1] }
+    subject { csv.find { |row| row["Id"] == second_group.id.to_s } }
 
+    its(["Id"]) { should == second_group.id.to_s }
     its(["Elterngruppe"]) { should == group.id.to_s }
     its(["Ebene"]) { should == group.id.to_s }
     its(["Haupt-E-Mail"]) { should == second_group.email }

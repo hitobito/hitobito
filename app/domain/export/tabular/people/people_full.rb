@@ -21,34 +21,41 @@ module Export::Tabular::People
     end
 
     def association_attributes
-      account_labels(people.map(&:additional_emails).flatten, AdditionalEmail).merge(
-        account_labels(people.map(&:phone_numbers).flatten, PhoneNumber)
-      ).merge(
-        account_labels(people.map(&:social_accounts).flatten, SocialAccount)
-      ).merge(
-        qualification_kind_labels
-      ).merge(
-        relation_kind_labels
-      )
+      account_labels(AdditionalEmail)
+        .merge(account_labels(PhoneNumber))
+        .merge(account_labels(SocialAccount))
+        .merge(qualification_kinds)
+        .merge(relation_kind_labels)
+    end
+
+    def qualification_kinds
+      model = QualificationKind
+      labels = QualificationKind
+        .joins(qualifications: :person).where(people: {id: people_ids})
+        .joins(:translations).distinct.pluck(:label)
+      labels.each_with_object({}) do |label, obj|
+        obj[ContactAccounts.key(model, label)] = ContactAccounts.human(model, label)
+      end
     end
 
     def relation_kind_labels
-      different_kinds = people.map(&:relations_to_tails).flatten.collect(&:kind).uniq
-      different_kinds.each_with_object({}) do |kind, obj|
+      kinds = PeopleRelation.where(head_id: people_ids).distinct.pluck(:kind)
+
+      kinds.each_with_object({}) do |kind, obj|
         if kind.present?
           obj[:"people_relation_#{kind}"] = PeopleRelation.new(kind: kind).translated_kind
         end
       end
     end
 
-    def qualification_kind_labels
-      qualification_kinds = people.flat_map do |p|
-        p.qualifications.map { |q| q.qualification_kind.label }
-      end
-      qualification_kinds.uniq.sort.each_with_object({}) do |label, obj|
-        if label.present?
-          obj[ContactAccounts.key(QualificationKind, label)] = label
-        end
+    def people_ids
+      @people_ids ||= pluck_ids_from_list("people.id")
+    end
+
+    def pluck_ids_from_list(id_with_optional_table)
+      case @list
+      when Array then @list.pluck(id_with_optional_table.to_s.split(".").last)
+      when ActiveRecord::Relation then @list.unscope(:order).unscope(:select).pluck(id_with_optional_table)
       end
     end
   end

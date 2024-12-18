@@ -11,7 +11,7 @@ class InvoiceConfigsController < CrudController
     :logo, :logo_position, :remove_logo,
     message_templates_attributes: [:id, :title, :body, :_destroy],
     payment_reminder_configs_attributes: [
-      :id, :title, :text, :level, :due_days
+      :id, :title, :text, :level, :due_days, :show_invoice_description
     ],
     payment_provider_configs_attributes: [
       :id, :payment_provider, :user_identifier, :partner_identifier, :password

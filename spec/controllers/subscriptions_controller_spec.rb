@@ -105,6 +105,32 @@ describe SubscriptionsController do
 
       expect(assigns(:person_add_requests)).to eq([r1])
     end
+
+    describe "paging of people subscriptions" do
+      it "pages people subscriptions" do
+        expect(Kaminari.config).to receive(:default_per_page).and_return(2).at_least(:once)
+        3.times { create_person_subscription(mailing_list) }
+
+        get :index, params: {group_id: group.id, mailing_list_id: mailing_list.id}
+        expect(assigns(:person_subs).count).to eq 2
+      end
+
+      it "pages via custom paging param" do
+        expect(Kaminari.config).to receive(:default_per_page).and_return(2).at_least(:once)
+        3.times { create_person_subscription(mailing_list) }
+
+        get :index, params: {group_id: group.id, mailing_list_id: mailing_list.id, included_people_page: 3}
+        expect(assigns(:person_subs).count).to eq 0
+      end
+
+      it "pages excluding people subscriptions" do
+        expect(Kaminari.config).to receive(:default_per_page).and_return(2).at_least(:once)
+        3.times { create_person_subscription(mailing_list, true) }
+
+        get :index, params: {group_id: group.id, mailing_list_id: mailing_list.id}
+        expect(assigns(:excluded_person_subs).count).to eq 2
+      end
+    end
   end
 
   context "json API" do

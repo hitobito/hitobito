@@ -12,6 +12,7 @@ class Event::KindCategoryResource < ApplicationResource
 
   with_options writable: false, filterable: false, sortable: false do
     attribute :label, :string
+    attribute :order, :integer
   end
 
   def base_scope

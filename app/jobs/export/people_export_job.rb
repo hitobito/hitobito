@@ -18,6 +18,7 @@ class Export::PeopleExportJob < Export::ExportBaseJob
 
   def entries
     entries = filter.entries
+    entries = Person.none unless entries.exists?
     if full?
       full_entries(entries)
     else

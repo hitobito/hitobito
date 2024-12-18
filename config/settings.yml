@@ -218,6 +218,14 @@ help_text_blacklist:
     - phone_numbers_attributes
     - family_members_attributes
 
+delayed_jobs:
+  concurrency:
+    reschedule_in: <%= 15.seconds %>
+    limit: 1
+    jobs:
+      - Export::PeopleExportJob
+      - Export::SubscriptionsJob
+
 worker_heartbeats:
   check_job:
     # Interval in seconds between detection and unlocking of hanging jobs

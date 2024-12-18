@@ -15,7 +15,7 @@ describe GroupDecorator, :draper_with_helpers do
   let(:context) { double("context") }
   let(:model) { groups(:top_group) }
 
-  subject { GroupDecorator.new(model) }
+  subject(:decorator) { GroupDecorator.new(model) }
 
   describe "possible roles" do
     its(:possible_roles) do
@@ -68,19 +68,22 @@ describe GroupDecorator, :draper_with_helpers do
   end
 
   describe "allowed_roles_for_self_registration" do
-    its(:allowed_roles_for_self_registration) do
-      should eq [Role::External,
-        Group::TopGroup::LocalSecretary,
-        Group::TopGroup::Member]
-    end
+    let(:group) { model }
 
-    describe "allowed_roles_for_self_registration in a bottom group" do
-      let(:model) { groups(:bottom_group_one_one) }
+    subject { decorator.allowed_roles_for_self_registration }
 
-      it "should include roles which are not visible_from_above" do
-        expect(subject.allowed_roles_for_self_registration).to eq [
-          Role::External, Group::BottomGroup::Member
-        ]
+    it { is_expected.to eq [Role::External] }
+
+    describe "allowed_roles_for_self_registration with override in wagon" do
+      let(:group) { groups(:bottom_group_one_one) }
+
+      before do
+        stub_const("Role::Types::AllowedPermissionsForSelfRegistration", [:group_read])
+      end
+
+      it "should include roles which have no permissions" do
+        expect(Role::Types::AllowedPermissionsForSelfRegistration).to contain_exactly(:group_read)
+        is_expected.to contain_exactly(Role::External)
       end
     end
   end

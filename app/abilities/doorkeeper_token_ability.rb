@@ -8,6 +8,8 @@ class DoorkeeperTokenAbility
 
   attr_reader :token, :user_ability
 
+  delegate :identifier, to: :user_ability
+
   def user
     user_ability.user
   end

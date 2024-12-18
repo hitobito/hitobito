@@ -8,8 +8,8 @@ require "spec_helper"
 describe Export::Tabular::People::ParticipationsAddress do
   let(:person) { people(:top_leader) }
   let(:participation) { Fabricate(:event_participation, person: person, event: events(:top_course)) }
-  let(:list) { [participation] }
-  let(:people_list) { Export::Tabular::People::ParticipationsAddress.new(list) }
+  let(:scope) { Event::Participation.where(id: participation.id) }
+  let(:people_list) { Export::Tabular::People::ParticipationsAddress.new(scope) }
 
   subject { people_list.attribute_labels }
 

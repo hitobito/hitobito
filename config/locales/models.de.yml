@@ -1168,6 +1168,7 @@ de:
         title: Titel
         text: Text
         due_days: Tage bis Fällig
+        show_invoice_description: Ursprünglichen Rechnungstext vor Mahnungstext anzeigen
 
       payment_reminder_configs:
         title: Titel der Mahnung

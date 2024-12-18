@@ -23,7 +23,6 @@ module Export::Tabular::Groups
 
     self.model_class = Group
     self.row_class = Export::Tabular::Groups::Row
-    self.iterator = :each # find_each would only allow to order by primary key
 
     def attributes
       attrs = model_class.column_names + [:phone_numbers, :member_count, :social_accounts]

@@ -20,6 +20,10 @@ class Wizards::RegisterNewUserWizard < Wizards::Base
     person.roles.first
   end
 
+  def email
+    current_user&.email || step(:main_email_field)&.email
+  end
+
   def save!
     person.save!
     enqueue_duplicate_locator_job
@@ -36,11 +40,17 @@ class Wizards::RegisterNewUserWizard < Wizards::Base
   private
 
   def build_person
-    Person.new(person_attributes).tap do |person|
-      person.language = I18n.locale
-      person.primary_group = group
-      role = person.roles.build(group: group, type: group.self_registration_role_type)
-      yield person, role if block_given?
+    if current_user
+      current_user.attributes = person_attributes
+      current_user.roles.build(group: group, type: group.self_registration_role_type)
+      current_user
+    else
+      Person.new(person_attributes).tap do |person|
+        person.language = I18n.locale
+        person.primary_group = group
+        role = person.roles.build(group: group, type: group.self_registration_role_type)
+        yield person, role if block_given?
+      end
     end
   end
 

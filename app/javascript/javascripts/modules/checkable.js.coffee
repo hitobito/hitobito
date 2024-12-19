@@ -3,7 +3,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-$(document).on('click', 'table[data-checkable] thead :checkbox', (e) ->
+$(document).on('click', 'table[data-checkable] thead th:first-child input[type=checkbox]', (e) ->
   checked = e.target.checked
   table = $(e.target).closest('table[data-checkable]')
   table.find('tbody :checkbox').prop('checked', checked)

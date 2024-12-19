@@ -26,7 +26,7 @@ class Roles::TerminateRoleLink
   def render_link
     link_to(t("roles/terminations.global.title"),
       @view.new_group_role_termination_path(role_id: @role.id, group_id: @role.group&.id),
-      class: "btn btn-xs float-right",
+      class: "btn btn-sm btn-outline-primary",
       remote: true)
   end
 
@@ -34,7 +34,7 @@ class Roles::TerminateRoleLink
     content_tag(:div, rel: "tooltip", title: disabled_tooltip) do
       button_tag(
         t("roles/terminations.global.title"),
-        class: "btn btn-xs float-right",
+        class: "btn btn-sm btn-outline-primary",
         disabled: true
       )
     end

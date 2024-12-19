@@ -5,48 +5,61 @@
 
 /* Typo */
 // -------------------------
-h1, h2 {
+h1,
+h2 {
   font-family: $heading-font-family;
   margin-top: 0;
 }
 
-h1, .h1 {
+h1,
+.h1 {
   font-size: 1.5em;
   font-weight: 700;
   line-height: 1.25em;
 }
 
-h2, .h2 {
+h2,
+.h2 {
   font-size: 1.4em;
   font-weight: 300;
 }
 
-h3, .h3 {
+h3,
+.h3 {
   font-size: 1.25em;
 }
 
-h4, .h4 {
+h4,
+.h4 {
   font-size: 1.2em;
 }
 
-h5, .h5 {
+h5,
+.h5 {
   font-size: 1.1em;
   margin: 10px 0 0 0;
 }
 
 .content-header {
   margin-bottom: 24px;
-  @include responsive(mediaTablet){
-  margin-bottom: $v-space;
+  @include responsive(mediaTablet) {
+    margin-bottom: $v-space;
   }
-  h1 { margin-bottom: 0px; }
+  h1 {
+    margin-bottom: 0px;
+  }
 }
 
-p:last-child { margin-bottom: 0; }
+p:last-child {
+  margin-bottom: 0;
+}
 
-.muted { color: $gray; }
+.muted {
+  color: $gray;
+}
 
-td p, address {
+td p,
+address {
   margin: 0;
 }
 
@@ -54,7 +67,8 @@ td p, address {
   margin: 0 0 0 25px;
 }
 
-.btn-toolbar .dropdown, .btn-toolbar .link {
+.btn-toolbar .dropdown,
+.btn-toolbar .link {
   font-size: 14px;
   vertical-align: middle;
 }
@@ -63,7 +77,10 @@ td p, address {
   margin-left: $v-space;
 }
 
-h1 .btn, h2 .btn, h3 .btn, h4 .btn {
+h1 .btn,
+h2 .btn,
+h3 .btn,
+h4 .btn {
   font-weight: normal;
   font-family: $font-family-base;
 }
@@ -81,7 +98,9 @@ dd {
   dd {
     white-space: wrap !important;
 
-    &:last-child { margin-bottom: 0; }
+    &:last-child {
+      margin-bottom: 0;
+    }
 
     // display empty multiline fields correctly with whitespace
     .multiline::after {
@@ -90,7 +109,9 @@ dd {
   }
 
   @include responsive(mediaTablet) {
-    dd { margin-bottom: 0; }
+    dd {
+      margin-bottom: 0;
+    }
   }
 
   &:last-child {
@@ -110,10 +131,13 @@ dd {
     grid-template-columns: 1fr 2fr;
     grid-column-gap: 15px;
 
-    &:last-child { margin-bottom: 0; }
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 }
-.dl-borderless, .dl-borderless:last-child {
+.dl-borderless,
+.dl-borderless:last-child {
   border: 0;
 }
 
@@ -161,61 +185,6 @@ dd {
   .dl-horizontal {
     grid-template-columns: 1fr;
   }
-}
-
-
-// Table
-table.table {
-  border-bottom: 1px solid $border-color;
-}
-
-div.table {
-  margin-top: 30px;
-}
-
-.table, .table-basic {
-  td, th {
-    padding: 4px;
-    padding-left: 0;
-    border-color: $border-color; // new
-    &:last-child { padding-right: 0; }
-  }
-}
-
-.table-striped {
-  td:first-child {
-    padding-left: 8px;
-  }
-}
-
-.table-hover tbody tr:hover > td,
-.table-hover tbody tr:hover > th {
-  background-color: $table-color-hover;
-}
-
-.table-grouped {
-  thead:first-child th {
-    padding-top: 0px;
-  }
-
-  th {
-    padding-top: 30px;
-
-    h2 {
-      margin-left: -8px;
-      color: $black;
-    }
-  }
-}
-
-td.center, th.center {
-  text-align: center;
-}
-
-td.right, th.right {
-  text-align: right;
-  padding-right: 20px;
-  &:last-child { padding-right: 0; }
 }
 
 select[class*="span"] {

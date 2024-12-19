@@ -187,7 +187,7 @@ module Sheet
           "<li>".html_safe
         end
 
-        sanitize(li_tag, tags: %w[li], attributes: %w[class])
+        li_tag.html_safe
       end
     end
   end

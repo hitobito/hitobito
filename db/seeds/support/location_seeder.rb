@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -20,30 +20,12 @@ class LocationSeeder
   SEPARATOR = ';'
   ENCODING = 'UTF-8'
 
-  SEED_MARKER = 'locations seeded'
-
   def seed
-    return true if marked_as_seeded?
-
     truncate_locations
     bulk_insert
-
-    mark_as_seeded! if seeded?
   end
 
   private
-
-  def marked_as_seeded?
-    ActiveRecord::InternalMetadata[SEED_MARKER].present?
-  end
-
-  def mark_as_seeded!
-    ActiveRecord::InternalMetadata[SEED_MARKER] = Location.count
-  end
-
-  def seeded?
-    Location.count == csv.count
-  end
 
   def truncate_locations
     Location.connection.truncate(Location.table_name, 'Truncate Location')

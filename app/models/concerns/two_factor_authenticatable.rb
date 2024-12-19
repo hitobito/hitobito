@@ -9,7 +9,7 @@ module TwoFactorAuthenticatable
   included do
     enum two_factor_authentication: {totp: 0}
 
-    serialize :encrypted_two_fa_secret
+    serialize :encrypted_two_fa_secret, coder: YAML
     attr_encrypted :two_fa_secret
   end
 

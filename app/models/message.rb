@@ -42,9 +42,20 @@
 #
 
 class Message < ActiveRecord::Base
+  STATES = %w[draft pending processing finished failed].freeze
+
   include I18nEnums
 
-  validates_by_schema except: :text
+  class_attribute :duplicatable_attrs
+  self.duplicatable_attrs = %w[subject type mailing_list_id]
+
+  class_attribute :icon
+  self.icon = :envelope
+
+  attr_readonly :type
+
+  i18n_enum :state, STATES, scopes: true, queries: true
+
   belongs_to :invoice_list
   belongs_to :mailing_list
   belongs_to :sender, class_name: "Person"
@@ -56,19 +67,10 @@ class Message < ActiveRecord::Base
 
   has_many :assignments, as: :attachment, dependent: :destroy
 
-  STATES = %w[draft pending processing finished failed].freeze
-  i18n_enum :state, STATES, scopes: true, queries: true
+  validates_by_schema except: :text
   validates :state, inclusion: {in: STATES}
 
-  class_attribute :duplicatable_attrs
-  self.duplicatable_attrs = %w[subject type mailing_list_id]
-
   scope :list, -> { order(:created_at) }
-
-  attr_readonly :type
-
-  class_attribute :icon
-  self.icon = :envelope
 
   class << self
     def all_types

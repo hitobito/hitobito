@@ -24,6 +24,10 @@ class Wizards::RegisterNewUserWizard < Wizards::Base
     current_user&.email || step(:main_email_field)&.email
   end
 
+  def valid?
+    super && person_valid?
+  end
+
   def save!
     person.save!
     enqueue_duplicate_locator_job
@@ -74,6 +78,16 @@ class Wizards::RegisterNewUserWizard < Wizards::Base
     return if person.email.blank?
 
     Person.send_reset_password_instructions(email: person.email)
+  end
+
+  def person_valid?
+    return true unless last_step?
+
+    person.valid?.tap do
+      person.errors.full_messages.each do |msg|
+        errors.add(:base, msg)
+      end
+    end
   end
 
   attr_reader :group

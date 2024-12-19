@@ -50,7 +50,14 @@ describe Wizards::RegisterNewUserWizard do
 
       it "is valid if required attributes are present" do
         params[:new_user_form] = {first_name: "test", last_name: "test"}
-        expect(new_user_form).to be_valid
+        expect(wizard).to be_valid
+      end
+
+      it "is invalid if person has validation errors" do
+        params[:new_user_form] = {first_name: "test", last_name: "test", email: "top_leader@example.com"}
+        expect(wizard).not_to be_valid
+        expect(wizard.errors).to have(1).item
+        expect(wizard.errors[:base][0]).to eq("Haupt-E-Mail ist bereits vergeben. Diese Adresse muss für alle Personen eindeutig sein, da sie beim Login verwendet wird. Du kannst jedoch unter 'Weitere E-Mails' Adressen eintragen, welche bei anderen Personen als Haupt-E-Mail vergeben sind (Die Haupt-E-Mail kann leer gelassen werden).\n")
       end
     end
 
@@ -90,7 +97,7 @@ describe Wizards::RegisterNewUserWizard do
       end
 
       it "raises if save! fails" do
-        params[:new_user_form] = {email: "top.leader@example.com"}
+        params[:new_user_form] = {email: "top_leader@example.com"}
         expect { wizard.save! }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end

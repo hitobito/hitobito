@@ -26,19 +26,10 @@ describe JsonApiController do
       expect(errors.first[:code]).to eq "internal_server_error"
     end
 
-    context "local environment" do
-      it "does not trigger Airbrake" do
-        expect(Airbrake).not_to receive(:notify)
-        get :index
-      end
-    end
-
-    context "production" do
-      it "does trigger Airbrake" do
-        expect(Rails.env).to receive(:production?).and_return(true)
-        expect(Airbrake).to receive(:notify).with(kind_of(RuntimeError))
-        get :index
-      end
+    it "does triggers error trackers" do
+      expect(Airbrake).to receive(:notify).with(kind_of(RuntimeError))
+      expect(Raven).to receive(:capture_exception).with(kind_of(RuntimeError))
+      get :index
     end
   end
 end

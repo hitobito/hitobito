@@ -36,16 +36,18 @@
 
 # rubocop:enable Layout/LineLength
 class MessageRecipient < ActiveRecord::Base
-  include I18nEnums
-  validates_by_schema
-
   STATES = %w[pending sending sent failed].freeze
+
+  include I18nEnums
+
   i18n_enum :state, STATES
-  validates :state, inclusion: {in: STATES}, allow_nil: true
 
   belongs_to :message
   belongs_to :person
   has_one :mailing_list, through: :message, dependent: :restrict_with_error
+
+  validates_by_schema
+  validates :state, inclusion: {in: STATES}, allow_nil: true
 
   scope :list, -> { order(:dispatched_at) }
 end

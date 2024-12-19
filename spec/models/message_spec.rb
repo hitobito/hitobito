@@ -53,15 +53,12 @@ describe Message do
   end
 
   context "#destroy" do
-    subject { messages(:simple) }
-
     it "might be destroy when no dispatch exists" do
-      expect(subject.destroy).to be_truthy
+      expect(messages(:letter).destroy).to be_truthy
     end
 
     it "existing recipient prevents destruction" do
-      subject.message_recipients.create!(person: people(:top_leader))
-      expect(subject.reload.destroy).to eq false
+      expect(messages(:simple).destroy).to eq false
     end
   end
 end

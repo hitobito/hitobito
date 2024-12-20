@@ -23,6 +23,8 @@ Rails.application.reloader.to_prepare do
     config.tags[:project]      = analyzer.project
     config.current_environment = analyzer.stage if ENV['SENTRY_CURRENT_ENV'].blank?
 
+    config.app_dirs_pattern = /(app|config|lib|db|bin|spec|vendor\/wagons)/
+
     setup_and_connection_errors = [
       'ActiveRecord::ConnectionNotEstablished',
       'Aws::S3::Errors::Http503Error',

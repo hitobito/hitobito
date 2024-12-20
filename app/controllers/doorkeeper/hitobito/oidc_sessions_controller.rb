@@ -33,13 +33,9 @@ class Doorkeeper::Hitobito::OidcSessionsController < ActionController::Base # ru
     config = Doorkeeper::OpenidConnect.configuration
     public_key = OpenSSL::PKey.read(config.signing_key).public_key
     algorithm = config.signing_algorithm.upcase.to_s
-    JWT.decode(params[:id_token_hint], public_key, false, {algorithm: algorithm})[0]
-  rescue JWT::ExpiredSignature => e
-    # FIXME: calling id_token results in an infinite loop
-    # JWT.decode(id_token, nil, false)[0].tap do |token|
-    #   Airbrake.notify(e, token[0])
-    #   Raven.capture_exception(e, extra: {token: token[0]})
-    # end
+    validate_signature = false
+    # FIXME - start validating and handling signatures errors
+    JWT.decode(params[:id_token_hint], public_key, validate_signature, {algorithm: algorithm})[0]
   end
 
   def redirect_target

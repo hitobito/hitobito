@@ -1227,8 +1227,12 @@ describe EventAbility do
       is_expected.to_not be_able_to(:show, events(:top_event))
     end
 
-    it "may not list_available" do
+    it "may not list_available events" do
       is_expected.to_not be_able_to(:list_available, Event)
+    end
+
+    it "may list_available courses" do
+      is_expected.to be_able_to(:list_available, Event::Course)
     end
   end
 end

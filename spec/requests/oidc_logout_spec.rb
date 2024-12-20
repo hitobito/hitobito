@@ -16,7 +16,7 @@ RSpec.describe "GET /oidc/logout", type: :request do
   context "without id token" do
     it "fails with HTTP 422 (unprocessable_entity)" do
       get "/oidc/logout"
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
       expect(response.body).to eq "failed to process token"
     end
   end

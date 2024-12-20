@@ -1,7 +1,9 @@
-.d-none
-  .multiselect
-    .count
-    = ti('selected')
+
+%template#multiselectActions
+  %th.multiselect(colspan="6")
+    %span
+      .count
+      = ti('selected')
     .actions
       = Dropdown::RoleMultiselectActions.new(self, @group, translate('.role_actions.button'), params)
 

@@ -19,7 +19,7 @@ describe Event::InvitationListsController, js: true do
   end
 
   it "invite single person" do
-    visit simple_group_events_path(group_id: top_layer, id: event)
+    visit simple_group_events_path(group_id: top_layer, year: event.dates.first.start_at.year)
     click_link("Eventus")
     click_link("Einladungen")
     click_link("Person einladen")

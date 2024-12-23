@@ -8,7 +8,8 @@
     = link_to(icon('arrow-left'),
               participant_group_event_application_market_path(@group, @event, p),
               remote: true,
-              method: :put)
+              method: :put,
+              data: { confirm: t('.add_participant_confirm') })
 
   = render 'participation', p: p
 

@@ -1,7 +1,8 @@
-.d-none
-  .multiselect
-    .count
-    = ti('selected')
+%template#multiselectActions
+  %th.multiselect(colspan="6")
+    %span
+      .count
+      = ti('selected')
     .actions
       = action_button(translate('.merge_tags'),
         merge_tags_path,

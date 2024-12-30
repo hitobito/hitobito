@@ -41,10 +41,10 @@ class MailingList < ActiveRecord::Base
   SUBSCRIBABLE_FORS = %w[nobody configured anyone].freeze
   SUBSCRIBABLE_MODES = %w[opt_out opt_in].freeze
 
-  serialize :preferred_labels, Array
-  serialize :filter_chain, MailingLists::Filter::Chain
+  serialize :preferred_labels, type: Array, coder: NilArrayCoder
+  serialize :filter_chain, type: MailingLists::Filter::Chain, coder: MailingLists::Filter::Chain
 
-  serialize :mailchimp_forgotten_emails, Array
+  serialize :mailchimp_forgotten_emails, type: Array, coder: NilArrayCoder
   attribute :mailchimp_result, Synchronize::Mailchimp::ResultType.new
 
   belongs_to :group

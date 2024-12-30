@@ -19,7 +19,7 @@ describe "qualifications/_form.html.haml" do
     allow(view).to receive_messages(parents: [group, person], entry: qualification, path_args: path_args)
   end
 
-  subject { Capybara::Node::Simple.new(rendered) }
+  subject { Capybara::Node::Simple.new(raw(rendered)) }
 
   it "translates form fields" do
     render

@@ -47,34 +47,32 @@ describe Cookie do
 
     def write(timestamp)
       travel_to(timestamp) do
-        {}.tap do |hash|
-          yield
-          cookie_jar.write(hash)
-        end["Set-Cookie"].split("; ")
+        subject.set(name: "cookie", expires: now)
       end
     end
 
     it "sets values as cookie" do
-      cookie, _, _ = write(now) { subject.set(name: "cookie") }
-      value = JSON.parse(CGI.unescape(cookie.match(%{cookie=(.*)})[1]))
-      expect(value).to eq(["name" => "cookie"])
+      cookie = write(now)
+      value = JSON.parse(cookie[:value]).first["name"]
+      expect(value).to eq("cookie")
     end
 
     it "sets path" do
-      _, path, _ = write(now) { subject.set(name: "cookie") }
-      expect(path).to eq "path=/"
+      cookie = write(now)
+      path = cookie[:path]
+      expect(path).to eq "/"
     end
 
     it "sets expires" do
-      _, _, expires = write(now) { subject.set(name: "cookie") }
-      expires_at = Time.zone.parse(expires.match(%{expires=(.*)})[1])
+      cookie = write(now)
+      expires_at = cookie[:expires]
       expect(expires_at).to eq now + 1.day
     end
 
     it "updates expires when new entry is added" do
-      write(now) { subject.set(name: "cookie") }
-      _, _, expires = write(now + 1.day) { subject.set(name: "cookie") }
-      expires_at = Time.zone.parse(expires.match(%{expires=(.*)})[1])
+      write(now)
+      expires = write(now + 1.day)
+      expires_at = expires[:expires]
       expect(expires_at).to eq now + 2.day
     end
   end

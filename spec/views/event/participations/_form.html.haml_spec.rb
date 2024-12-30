@@ -12,7 +12,7 @@ describe "event/participations/_form.html.haml" do
   let(:event) { events(:top_event) }
   let(:group) { event.groups.first }
   let(:question) { event_questions(:top_ov) }
-  let(:dom) { Capybara::Node::Simple.new(rendered) }
+  let(:dom) { Capybara::Node::Simple.new(raw(rendered)) }
   let(:answer_text) { nil }
 
   before do

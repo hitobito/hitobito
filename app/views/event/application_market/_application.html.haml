@@ -5,11 +5,7 @@
 
 %tr{id: dom_id(p)}
   %td
-    = link_to(icon('arrow-left'),
-              participant_group_event_application_market_path(@group, @event, p),
-              remote: true,
-              method: :put,
-              data: { confirm: t('.add_participant_confirm') })
+    = application_market_application_link(p)
 
   = render 'participation', p: p
 

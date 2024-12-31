@@ -5,10 +5,17 @@
 #  or at https://github.com/hitobito/hitobito.
 
 module ApplicationMarketHelper
-  def application_market_application_link(p)
+  def application_market_application_link(group, event, participation)
     link_to(icon("arrow-left"),
-      participant_group_event_application_market_path(@group, @event, p),
+      participant_group_event_application_market_path(group, event, participation),
       remote: true,
       method: :put)
+  end
+
+  def application_market_participant_link(group, event, participation)
+    link_to(icon("arrow-right"),
+      participant_group_event_application_market_path(group, event, participation),
+      remote: true,
+      method: :delete)
   end
 end

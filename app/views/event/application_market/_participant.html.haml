@@ -6,4 +6,4 @@
 %tr{id: dom_id(p)}
   = render 'participation', p: p
   %td
-    = application_market_participant_link(p)
+    = application_market_participant_link(@group, @event, p)

@@ -57,6 +57,11 @@ describe :event_participation do
       expect(participation).to be_present
     end
 
+    it "can render form without passing role type" do
+      visit contact_data_group_event_participations_path(group, event)
+      expect(page).to be_present
+    end
+
     it "does not create an event participation if privacy policy is not accepted" do
       visit group_event_path(group_id: group, id: event)
 

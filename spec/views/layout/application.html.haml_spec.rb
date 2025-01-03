@@ -40,5 +40,27 @@ describe "layouts/application.html.haml" do
       render
       expect(subject).to have_css("nav.nav-left")
     end
+
+    it "missing menu button when user having no nav-left" do
+      person.roles.destroy_all
+      render
+      expect(subject).not_to have_css("a.toggle-nav.visible-phone.d-md-none", text: "Menü")
+    end
+  end
+
+  context "logout" do
+    let(:person) { people(:top_leader) }
+
+    it "present logout button in nav-left" do
+      render
+      within("nav.nav-left") do
+        expect(subject).to have_css("a.d-none.d-md-block", text: "Abmelden")
+      end
+    end
+
+    it "present logout button when user not having left-nav" do
+      render
+      expect(subject).to have_css("a", text: "Abmelden")
+    end
   end
 end

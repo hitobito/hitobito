@@ -23,44 +23,106 @@ describe "layouts/application.html.haml" do
   context "nav-left" do
     let(:person) { people(:top_leader) }
 
-    it "missing when user has no roles" do
-      person.roles.destroy_all
-      render
-      expect(subject).not_to have_css("nav.nav-left")
-    end
+    context "with roles" do
+      it "shows nav-left" do
+        render
+        expect(subject).to have_css("nav.nav-left")
+      end
 
-    it "present when user has no roles but is root user" do
-      person.roles.destroy_all
-      allow(person).to receive(:root?).and_return(true)
-      render
-      expect(subject).to have_css("nav.nav-left")
-    end
+      it "shows nav-left menu toggle button" do
+        render
+        expect(subject).to have_css("a.toggle-nav.visible-phone.d-md-none", text: "Menü")
+      end
 
-    it "present when user has role" do
-      render
-      expect(subject).to have_css("nav.nav-left")
-    end
+      it "shows logout button in nav menu" do
+        render
+        within("nav.nav-left") do
+          expect(subject).to have_css("a.d-none.d-md-block", text: "Abmelden")
+        end
+      end
 
-    it "missing menu button when user having no nav-left" do
-      person.roles.destroy_all
-      render
-      expect(subject).not_to have_css("a.toggle-nav.visible-phone.d-md-none", text: "Menü")
-    end
-  end
-
-  context "logout" do
-    let(:person) { people(:top_leader) }
-
-    it "present logout button in nav-left" do
-      render
-      within("nav.nav-left") do
-        expect(subject).to have_css("a.d-none.d-md-block", text: "Abmelden")
+      # check for bootstrap md screensize class
+      it "does not show general logout button on smaller screens" do
+        render
+        expect(subject).to have_css("a.d-md-block", text: "Abmelden")
       end
     end
 
-    it "present logout button when user not having left-nav" do
-      render
-      expect(subject).to have_css("a", text: "Abmelden")
+    context "root user" do
+      before do
+        person.roles.destroy_all
+        allow(person).to receive(:root?).and_return(true)
+        render
+      end
+
+      it "shows nav-left" do
+        expect(subject).to have_css("nav.nav-left")
+      end
+
+      it "shows nav-left menu toggle button" do
+        expect(subject).to have_css("a.toggle-nav.visible-phone.d-md-none", text: "Menü")
+      end
+
+      it "shows logout button in nav menu" do
+        within("nav.nav-left") do
+          expect(subject).to have_css("a.d-none.d-md-block", text: "Abmelden")
+        end
+      end
+
+      # check for bootstrap md screensize class
+      it "does not show general logout button on smaller screens" do
+        expect(subject).to have_css("a.d-md-block", text: "Abmelden")
+      end
+    end
+
+    context "with basic_permission_only" do
+      before do
+        allow(person).to receive(:basic_permissions_only?).and_return(true)
+        render
+      end
+
+      it "does not show nav-left" do
+        expect(subject).not_to have_css("nav.nav-left")
+      end
+
+      it "does not show nav-left menu toggle button" do
+        expect(subject).not_to have_css("a.toggle-nav.visible-phone.d-md-none", text: "Menü")
+      end
+
+      it "does not show logout button in nav menu" do
+        within("nav.nav-left") do
+          expect(subject).not_to have_css("a.d-none.d-md-block", text: "Abmelden")
+        end
+      end
+
+      it "shows general logout button on smaller screens" do
+        expect(subject).to have_css("a:not(.d-md-block)", text: "Abmelden")
+      end
+    end
+
+    context "without roles" do
+      before do
+        person.roles.destroy_all
+        render
+      end
+
+      it "does not show nav-left" do
+        expect(subject).not_to have_css("nav.nav-left")
+      end
+
+      it "does not show nav-left menu toggle button" do
+        expect(subject).not_to have_css("a.toggle-nav.visible-phone.d-md-none", text: "Menü")
+      end
+
+      it "does not show logout button in nav menu" do
+        within("nav.nav-left") do
+          expect(subject).not_to have_css("a.d-none.d-md-block", text: "Abmelden")
+        end
+      end
+
+      it "shows general logout button on smaller screens" do
+        expect(subject).to have_css("a:not(.d-md-block)", text: "Abmelden")
+      end
     end
   end
 end

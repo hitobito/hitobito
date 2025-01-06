@@ -26,7 +26,7 @@ module CancancanMonkeypatch
           "CanCan::Ability#alternative_subjects. Please investigate."
       end
 
-      # do not patch and warn if cancancan version >= 3.2
+      # do not patch and warn if the used cancancan version does not match the expected version
       unless cancancan_version_ok?
         puts "WARNING: It looks like cancancan has been upgraded since " \
           "CanCan::Ability#alternative_subjects in " \

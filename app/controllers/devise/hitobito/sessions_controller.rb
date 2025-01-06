@@ -39,6 +39,8 @@ class Devise::Hitobito::SessionsController < Devise::SessionsController
         return
       end
     end
+
+    resource
   end
 
   protected

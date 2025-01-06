@@ -1,12 +1,16 @@
 # Hitobito Changelog
 
+## unreleased
+
+- In der Rechnungsübersicht können neu alle Rechnungen gleichzeitig ausgewählt werden, auch wenn es mehr als die 50 angezeigten gibt (hitobito_sww#172)
+
 ## Version 2.4
 
 - Verbesserte Mailchimp Tag Synchronisierung (hitobito_sac_cas#1487)
 - Personefilter unterstützt das Filtern nach leeren Attributen (#3148)
 - PLZ's ausserhalb der Schweiz werden neu anhand des gewählten Landes validiert (hitobito_sac_cas#1488)
 
-## Version 2.4
+## Version 2.3
 
 - JWT kann als OIDC Access Token konfiguriert werden (hitobito_sac_cas#1110)
 - Unterstützung vom login=prompt Parameter im OIDC Authorization Flow (hitobito_sac_cas#1075)

@@ -21,7 +21,7 @@ Check out our [development kit](https://github.com/hitobito/development/)
 
 More detailed development documentation can be found in [doc/development](doc/developer).
 
-This is where you also find some [Deployment Instructions](doc/operator/01_deployment).
+This is where you also find some [Deployment Instructions](doc/operator/01_deployment.md).
 
 More information about [interfaces, api, oauth and oidc](doc/developer/README.md#interfaces) is also avaible.
 

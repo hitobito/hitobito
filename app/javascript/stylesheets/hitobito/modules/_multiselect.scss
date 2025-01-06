@@ -12,12 +12,3 @@ table.actions-enabled thead th.multiselect,
 table.actions-enabled thead th:first-child {
   display: table-cell;
 }
-
-
-table.actions-enabled th.multiselect label.extended_all {
-  display: none;
-}
-
-table.actions-enabled thead:has(th:first-child input:checked) th.multiselect label.extended_all {
-  display: inline;
-}

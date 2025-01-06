@@ -96,7 +96,8 @@ function toggleActions(table) {
   // toggle extended select all checkbox
   const extendedAllElement = table.querySelector("thead input[name=extended_all]");
   if (extendedAllElement?.checked && !allElement?.checked) extendedAllElement.checked = false;
-  extendedAllElement?.parentElement?.classList?.toggle("d-none", extendedAllElement.checked);
+  const showExtendedAllElement = !extendedAllElement.checked && +extendedAllElement.value > counts.checked
+  extendedAllElement?.parentElement?.classList?.toggle("d-none", !showExtendedAllElement);
 
   // display count of selected elements
   const showCount = extendedAllElement?.checked ? extendedAllElement.value : counts.checked;

@@ -9,44 +9,45 @@ Rails.application.reloader.to_prepare do
   Raven.configure do |config|
     config.sanitize_fields = Rails.application.config.filter_parameters.map(&:to_s)
 
-    config.release = Rails.application.class.versions(Rails.root.join('VERSION')).first.chomp
+    config.release = Rails.application.class.versions(Rails.root.join("VERSION")).first.chomp
 
     analyzer = [
-      ENV['OPENSHIFT_BUILD_NAMESPACE'], # hit-jubla-int
-      "hitobito-#{ENV['HITOBITO_PROJECT']}-#{ENV['HITOBITO_STAGE']}", # hitobito-jubla-production
-      (ENV['RAILS_DB_NAME'] != 'database' ? ENV['RAILS_DB_NAME'] : nil), # hit_jubla_development
+      ENV["OPENSHIFT_BUILD_NAMESPACE"], # hit-jubla-int
+      "hitobito-#{ENV["HITOBITO_PROJECT"]}-#{ENV["HITOBITO_STAGE"]}", # hitobito-jubla-production
+      ((ENV["RAILS_DB_NAME"] != "database") ? ENV["RAILS_DB_NAME"] : nil), # hit_jubla_development
       "hitobito-#{Rails.env}"           # hitobito-development
     ].compact.first.yield_self do |name|
       ProjectAnalyzer.new(name)
     end
 
-    config.tags[:project]      = analyzer.project
-    config.current_environment = analyzer.stage if ENV['SENTRY_CURRENT_ENV'].blank?
+    config.tags[:project] = analyzer.project
+    config.current_environment = analyzer.stage if ENV["SENTRY_CURRENT_ENV"].blank?
 
     config.app_dirs_pattern = /(app|config|lib|db|bin|spec|vendor\/wagons)/
 
     setup_and_connection_errors = [
-      'ActiveRecord::ConnectionNotEstablished',
-      'Aws::S3::Errors::Http503Error',
-      'Errno::ECONNREFUSED',
-      'Errno::ECONNRESET',
-      'Errno::EFAULT',
-      'Errno::ENETUNREACH',
-      'Errno::ENOMEM',
-      'PG::ConnectionBad',
-      'Net::OpenTimeout',
-      'Net::ReadTimeout',
-      'SignalException',
-      'Timeout::Error',
+      "ActiveRecord::ConnectionNotEstablished",
+      "Aws::S3::Errors::Http503Error",
+      "Errno::ECONNREFUSED",
+      "Errno::ECONNRESET",
+      "Errno::EFAULT",
+      "Errno::ENETUNREACH",
+      "Errno::ENOMEM",
+      "JsonApiController::JsonApiUnauthorized",
+      "PG::ConnectionBad",
+      "Net::OpenTimeout",
+      "Net::ReadTimeout",
+      "SignalException",
+      "Timeout::Error"
     ]
 
     misbehaving_client_errors = [
-      'ActionDispatch::Http::MimeNegotiation::InvalidType',
+      "ActionDispatch::Http::MimeNegotiation::InvalidType"
     ]
 
     config.excluded_exceptions += [
       *setup_and_connection_errors,
-      *misbehaving_client_errors,
+      *misbehaving_client_errors
     ]
   end
 end

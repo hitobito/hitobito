@@ -7,7 +7,7 @@ Folgende Umsysteme müssen vorgängig eingerichtet werden:
 * Ruby >= 2.5
 * Apache HTTPD
 * Phusion Passenger
-* Postgres
+* Postgres >= 16
 * Memcached
 * Eine Catch-All E-Mail Adresse einer bestimmte Domain für die Mailinglisten (optional)
 * SSL Zertifikat (optional)

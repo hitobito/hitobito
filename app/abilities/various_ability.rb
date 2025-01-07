@@ -42,6 +42,10 @@ class VariousAbility < AbilityDsl::Base
     permission(:admin).may(:manage).if_course_types_present
   end
 
+  on(ChangelogEntry) do
+    class_side(:index).all
+  end
+
   def own_unless_only_basic_permissions_roles
     return false if user.roles.all?(&:basic_permissions_only)
 

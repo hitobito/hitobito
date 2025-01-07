@@ -6,22 +6,22 @@
 #  https://github.com/hitobito/hitobito.
 
 module ChangelogHelper
-  SOURCE_CODE_URL = 'https://github.com/hitobito'
-  LICENSE_URL = 'http://www.gnu.org/licenses/agpl-3.0.html'
-  LICENSE_NAME = 'GNU Affero General Public License'
-  DEVELOPER_URL = 'http://hitobito.ch'
-  DEVELOPER_NAME = 'Hitobito'
+  SOURCE_CODE_URL = "https://github.com/hitobito"
+  LICENSE_URL = "http://www.gnu.org/licenses/agpl-3.0.html"
+  LICENSE_NAME = "GNU Affero General Public License"
+  DEVELOPER_URL = "http://hitobito.ch"
+  DEVELOPER_NAME = "Hitobito"
 
   def render_changelog_link
     safe_join([collapse_toggle_link, version_label, detail_info_div])
   end
-  
+
   def collapse_toggle_link
-    content_tag(:a, content_tag(:i, '', class: 'fas fa-chevron-right'), data: { bs_toggle: 'collapse' }, href: '#detail-info')
+    content_tag(:a, content_tag(:i, "", class: "fas fa-chevron-right"), data: {bs_toggle: "collapse"}, href: "#detail-info")
   end
-  
+
   def version_label(display_as_link: true)
-    if Wagons.app_version.to_s > '0.0'
+    if Wagons.app_version.to_s > "0.0"
       if display_as_link
         link_to("Version #{Wagons.app_version}", changelog_path)
       else
@@ -29,22 +29,22 @@ module ChangelogHelper
       end
     end
   end
-  
+
   def detail_info_div
-    content_tag(:div, class: 'collapse', id: 'detail-info') do
-      safe_join(detail_info_content, ' ')
+    content_tag(:div, class: "collapse", id: "detail-info") do
+      safe_join(detail_info_content, " ")
     end
   end
-  
+
   def detail_info_content
     [
       app_version_links,
-      link_to(t('.source_code'), SOURCE_CODE_URL, target: '_blank'),
-      t('.available_under_license'),
-      link_to(LICENSE_NAME, LICENSE_URL, target: '_blank'),
-      tag(:br),
-      t('.developed_by'),
-      link_to(DEVELOPER_NAME, DEVELOPER_URL, target: '_blank'),
+      link_to(t(".source_code"), SOURCE_CODE_URL, target: "_blank", rel: "noopener"),
+      t(".available_under_license"),
+      link_to(LICENSE_NAME, LICENSE_URL, target: "_blank", rel: "noopener"),
+      tag.br,
+      t(".developed_by"),
+      link_to(DEVELOPER_NAME, DEVELOPER_URL, target: "_blank", rel: "noopener"),
       " 2012 - #{Time.zone.now.year}".html_safe
     ]
   end

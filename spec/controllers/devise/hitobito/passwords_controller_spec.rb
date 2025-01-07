@@ -25,7 +25,7 @@ describe Devise::Hitobito::PasswordsController do
 
       it "#create shows invalid password" do
         post :create, params: {person: {email: person.email}}
-        expect(flash[:notice]).to eq "Du erhältst in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Dein Passwort zurücksetzen kannst."
+        expect(flash[:notice]).to eq "Wenn uns die angegebene E-Mail-Adresse bekannt ist, erhältst du in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Dein Passwort zurücksetzen kannst."
         expect(last_email).to be_present
       end
 
@@ -44,7 +44,7 @@ describe Devise::Hitobito::PasswordsController do
         expect(I18n).to receive(:"locale=").with(:de).ordered
         expect(I18n).to receive(:"locale=").with(:de).ordered
         post :create, params: {person: {email: person.email}}
-        expect(flash[:notice]).to eq "Du erhältst in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Dein Passwort zurücksetzen kannst."
+        expect(flash[:notice]).to eq "Wenn uns die angegebene E-Mail-Adresse bekannt ist, erhältst du in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Dein Passwort zurücksetzen kannst."
 
         I18n.available_locales = @cached_locales
         Settings.application.languages = @cached_languages
@@ -62,10 +62,10 @@ describe Devise::Hitobito::PasswordsController do
     end
 
     context "without login permission" do
-      it "#create shows invalid password" do
+      it "#create shows flash messagge" do
         post :create, params: {person: {email: "not-existing@example.com"}}
         expect(last_email).not_to be_present
-        expect(flash[:alert]).to eq "Du bist nicht berechtigt, Dich hier anzumelden."
+        expect(flash[:notice]).to eq "Wenn uns die angegebene E-Mail-Adresse bekannt ist, erhältst du in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Dein Passwort zurücksetzen kannst."
       end
     end
 

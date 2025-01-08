@@ -15,7 +15,7 @@ module FullTextSearchable
       # Use & to make sure every word in term has to match the result
       sanitized_term = term.split.map do |t|
         sanitized_t = ActiveRecord::Base.sanitize_sql_like(t).delete(*TS_QUERY_CHARS.join)
-        
+
         sanitized_t.present? ? "#{sanitized_t}:*" : nil
       end.compact.join(" & ")
 

@@ -22,6 +22,10 @@ describe FullTextSearchable do
       it "ignores special character #{char}" do
         expect(Person.search("T#{char}op")).to eq [top_leader]
       end
+
+      it "ignores special character #{char} as single charcter as well" do
+        expect(Person.search("Top #{char}")).to eq [top_leader]
+      end
     end
 
     [",", "*", " ", "-", ">", "`", "#", "@", "$", "="].each do |char|

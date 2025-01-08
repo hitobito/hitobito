@@ -10,6 +10,8 @@ class AddressesController < ApplicationController
   skip_authorization_check
 
   def query
+    raise ActionController::BadRequest if query_param.nil?
+
     render json: Address::FullTextSearch.new(query_param).typeahead_results
   end
 

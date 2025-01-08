@@ -14,8 +14,10 @@ module FullTextSearchable
     model.define_singleton_method(:search) do |term|
       # Use & to make sure every word in term has to match the result
       sanitized_term = term.split.map do |t|
-        ActiveRecord::Base.sanitize_sql_like(t).delete(*TS_QUERY_CHARS.join) + ":*"
-      end.join(" & ")
+        sanitized_t = ActiveRecord::Base.sanitize_sql_like(t).delete(*TS_QUERY_CHARS.join)
+
+        sanitized_t.present? ? "#{sanitized_t}:*" : nil
+      end.compact.join(" & ")
 
       # Generate base search query and rank for main model
       base_query = "#{model.table_name}.#{SEARCH_COLUMN} @@ to_tsquery('simple', '#{sanitized_term}')"

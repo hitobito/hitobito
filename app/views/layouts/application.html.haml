@@ -43,13 +43,14 @@
       .container-fluid
         #page-header
           - if current_user
-            = link_to(icon('bars') + t('navigation.menu'), '#', class: 'toggle-nav visible-phone d-md-none')
+            - if render_nav?
+              = link_to(icon('bars') + t('navigation.menu'), '#', class: 'toggle-nav visible-phone d-md-none')
             - if (current_person&.roles.present? && !current_person&.basic_permissions_only?) || current_person&.root?
               = render 'layouts/quicksearch'
             - else
               = render 'layouts/languages'
-            = link_to current_user, person_home_path(current_user), class: 'd-none d-md-block'
-            = link_to t('layouts.nav.sign_out'), sign_out_path, 'data-method': :delete, class: 'd-none d-md-block'
+            = link_to current_user, person_home_path(current_user), class: (render_nav? ? 'd-none d-md-block' : nil)
+            = link_to t('layouts.nav.sign_out'), sign_out_path, 'data-method': :delete, class: (render_nav? ? 'd-none d-md-block' : nil)
           - elsif current_user.nil? # nil without login, false on error
             = render 'layouts/unauthorized'
 

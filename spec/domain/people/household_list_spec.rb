@@ -25,7 +25,7 @@ describe People::HouseholdList do
     end
 
     context "with limited people scope" do
-      let(:scope) { Person.where(id: [person1, person2, person3, person4, person5]).limit(1) }
+      let(:scope) { Person.where(id: [person1, person2, person3, person4, person5]).order(:id).limit(1) }
 
       it "respects limit" do
         expect(list).to contain_exactly([scope.first])

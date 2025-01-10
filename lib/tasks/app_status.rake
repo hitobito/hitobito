@@ -15,6 +15,7 @@ namespace :app_status do
     desc "check truemail status"
     task truemail: :environment do
       if AppStatus::Truemail.new.code == :service_unavailable
+        puts "Truemail service unavailable"
         exit false
       end
     end

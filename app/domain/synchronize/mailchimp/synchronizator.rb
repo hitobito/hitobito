@@ -104,14 +104,15 @@ module Synchronize
       end
 
       def stale_segments
-        segments = client.fetch_segments.index_by { |t| t[:name] }
+        segments_by_tag_name = client.fetch_segments.index_by { |t| t[:name] }
 
         tags.collect do |tag, emails|
-          next if (emails - list.mailchimp_forgotten_emails).sort == remote_tags.fetch(tag, []).sort
-          next unless segments.key?(tag)
+          tag_id = segments_by_tag_name.dig(tag, :id)
+          remote_emails = remote_tags.fetch(tag, []).sort
+          local_emails = (emails - list.mailchimp_forgotten_emails).sort
 
-          [segments.dig(tag, :id), emails]
-        end.compact
+          SegmentUpdate.new(tag_id, local_emails, remote_emails, obsolete_emails).prepare
+        end.compact.flatten(1)
       end
 
       def changed_subscribers

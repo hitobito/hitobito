@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2025, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -453,7 +453,7 @@ describe Export::Pdf::Invoice do
       end
     end
 
-    context "with default show_invoice_description: true" do
+    context "with show_invoice_description: false" do
       let(:show) { false }
 
       it "only shows payment reminder title and text" do
@@ -461,6 +461,20 @@ describe Export::Pdf::Invoice do
         is_expected.not_to include(sent.description)
         is_expected.to(include reminder.text)
       end
+    end
+  end
+
+  describe "normal invoice" do
+    before { invoice.update(description: "We want your moneyz") }
+
+    subject { PDF::Inspector::Text.analyze(pdf).show_text }
+
+    it "includes title" do
+      is_expected.to include(invoice.title)
+    end
+
+    it "includes text" do
+      is_expected.to include(invoice.description)
     end
   end
 

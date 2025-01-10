@@ -34,6 +34,7 @@ module Hitobito
     # Changing this default means that all new cache entries added to the cache
     # will have a different format that is not supported by Rails 7.0
     # applications.
+    # INFO: New version means we have to restart `memcached` after deployment
     config.active_support.cache_format_version = 7.1
 
     config.active_record.raise_on_assign_to_attr_readonly = false

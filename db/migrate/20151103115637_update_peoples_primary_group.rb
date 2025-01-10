@@ -4,20 +4,30 @@
 #  https://github.com/hitobito/hitobito.
 
 class UpdatePeoplesPrimaryGroup < ActiveRecord::Migration[4.2]
-  unless column_exists?(:people, :two_factor_authentication)
-    class ::Person < ActiveRecord::Base
-      attribute :two_factor_authentication, :integer
-    end
-  end
-
   def up
-    ::Person.reset_column_information
+    execute <<-SQL
+      WITH single_group_people AS (
+        SELECT
+          people.id AS person_id,
+          MIN(roles.group_id) AS group_id
+        FROM
+          people
+        INNER JOIN
+          roles AS roles
+        ON
+          people.id = roles.person_id
+        WHERE
+          people.primary_group_id IS NULL
+        GROUP BY
+          people.id
+        HAVING
+          COUNT(DISTINCT roles.group_id) = 1
+      )
+      UPDATE people
+      SET primary_group_id = single_group_people.group_id
+      FROM single_group_people
+      WHERE people.id = single_group_people.person_id;
+    SQL
 
-    # people with no primary group and only one active role
-    people = ::Person.joins(:roles_unscoped).where(primary_group_id: nil).group("people.id").having("count(distinct roles.group_id) = 1")
-    people.find_each do |p|
-      group_id = p.roles.first.group_id
-      p.update_column(:primary_group_id, group_id)
-    end
   end
 end

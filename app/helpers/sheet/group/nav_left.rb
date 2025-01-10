@@ -185,9 +185,8 @@ module Sheet
           %(<li class="#{css_classes.join(" ")}">)
         else
           "<li>".html_safe
-        end
-
-        li_tag.html_safe
+                 end
+        sanitize(li_tag, tags: %w[li], attributes: %w[class]).gsub("</li>", "").html_safe
       end
     end
   end

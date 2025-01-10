@@ -81,7 +81,7 @@ describe Export::Tabular::Events::List do
   end
 
   context "additional course labels" do
-    let(:scope) { Event::Course.where(id: [course1.id, course2.id]) }
+    let(:scope) { [course1, course2] }
     let(:course1) do
       Fabricate(:course, groups: [groups(:top_group)], motto: "All for one", cost: 1000,
         application_opening_at: "01.01.2000", application_closing_at: "01.02.2000",

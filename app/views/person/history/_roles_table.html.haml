@@ -14,4 +14,4 @@
     - t.attr(:start_on, t('global.from')) { |r| f(r.start_on) }
     - t.attr(:end_on, t('global.until')) { |r| f(r.end_on) }
     - render_extensions :history_columns, locals: { t: t }
-    - t.col(nil, {class: 'float-right'}) { |r| terminate_role_link(r) }
+    - t.col(nil, {class: 'right'}) { |r| terminate_role_link(r) }

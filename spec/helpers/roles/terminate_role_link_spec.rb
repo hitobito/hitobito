@@ -22,7 +22,7 @@ describe Roles::TerminateRoleLink do
       expect(view).to receive(:can?).with(:terminate, role).and_return(true)
 
       expect(described_class.new(role, view).render)
-        .to eq "<a class=\"btn btn-xs float-right\" data-remote=\"true\" href=\"/groups/#{role.group.id}/roles/#{role.id}/terminations/new\">Austritt</a>"
+        .to eq "<a class=\"btn btn-sm btn-outline-primary\" data-remote=\"true\" href=\"/groups/#{role.group.id}/roles/#{role.id}/terminations/new\">Austritt</a>"
     end
 
     it "returns disabled button if role is terminatable and user has no permission" do
@@ -31,7 +31,7 @@ describe Roles::TerminateRoleLink do
       expect(view).to receive(:can?).with(:terminate, role).and_return(false)
 
       expect(described_class.new(role, view).render)
-        .to eq '<div rel="tooltip" title=""><button name="button" type="submit" class="btn btn-xs float-right" disabled="disabled">Austritt</button></div>'
+        .to eq '<div rel="tooltip" title=""><button name="button" type="submit" class="btn btn-sm btn-outline-primary" disabled="disabled">Austritt</button></div>'
     end
 
     it "returns disabled button with translated tooltip" do

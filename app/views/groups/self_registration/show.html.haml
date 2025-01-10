@@ -5,7 +5,7 @@
 - title render_self_registration_title(group)
 
 = render 'form'
-- if wizard.first_step?
+- if wizard.first_step? && !current_user
   = standard_form(wizard, {url: group_self_inscription_path, method: :get}) do |f|
     %span= t('groups.self_registration.form.has_account')
     = submit_button(f, t('groups.self_registration.form.to_login_page'), display_as_link: true)

@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2018, Schweizer Blasmusikverband. This file is part of
+#  Copyright (c) 2012-2024, Schweizer Blasmusikverband. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -80,6 +80,64 @@ describe Person::Filter::Attributes do
 
           context do
             let(:value) { "test1" }
+
+            it "returns people with exact attribute" do
+              expect(entries.size).to eq(1)
+              expect(entries.first).to eq(@tg_member1)
+            end
+          end
+
+          context do
+            let(:value) { "test" }
+
+            it "returns nobody if no exact attribute" do
+              expect(entries.size).to be_zero
+            end
+          end
+        end
+
+        context "match" do
+          let(:constraint) { "match" }
+          let(:value) { "test" }
+
+          it "returns people with matching attribute" do
+            expect(entries.size).to eq(3)
+            expect(entries).to include(@tg_member1)
+            expect(entries).to include(@tg_member2)
+            expect(entries).to include(@tg_member3)
+          end
+        end
+
+        context "not_match" do
+          let(:key) { "last_name" }
+          let(:constraint) { "not_match" }
+          let(:value) { "sam" }
+
+          it "returns people with not matching attribute" do
+            expect(entries).not_to include(@tg_member1)
+            expect(entries).not_to include(@tg_member2)
+            expect(entries).to include(@tg_member3)
+          end
+        end
+      end
+
+      context "email attributes" do
+        let(:key) { "email" }
+
+        context "equal" do
+          let(:constraint) { "equal" }
+
+          context "lowercase" do
+            let(:value) { @tg_member1.email.to_s.downcase }
+
+            it "returns people with exact attribute" do
+              expect(entries.size).to eq(1)
+              expect(entries.first).to eq(@tg_member1)
+            end
+          end
+
+          context "uppercase" do
+            let(:value) { @tg_member1.email.to_s.upcase }
 
             it "returns people with exact attribute" do
               expect(entries.size).to eq(1)

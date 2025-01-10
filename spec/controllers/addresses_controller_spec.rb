@@ -8,6 +8,12 @@ describe AddressesController do
   let(:person) { people(:bottom_member) }
 
   context "GET query" do
+    it "returns bad request when missing query param" do
+      expect do
+        get :query
+      end.to raise_error(ActionController::BadRequest)
+    end
+
     it "finds addresses street without number" do
       address = addresses(:bs_bern)
       get :query, params: {q: address.to_s[0..5]}

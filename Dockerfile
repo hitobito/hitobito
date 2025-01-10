@@ -258,4 +258,4 @@ ENV BUILD_REPO="${BUILD_REPO}" \
 # Set runtime user (although OpenShift uses a custom user per project instead)
 USER 1001
 
-CMD ["bundle", "exec", "puma", "-t", "8"]
+CMD ["bundle", "exec", "puma"]

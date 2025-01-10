@@ -654,6 +654,7 @@ fr:
       no_deleted_sub_groups: "Pas de groupes effacés."
     form:
       help_contact: "Utiliser l'adresse et le numéro de téléphone public de cette personne"
+      help_self_registration_require_adult_consent: Lors de votre inscription, demandez si la personne a déjà 18 ans ou si elle a le consentement de son tuteur légal
       help_main_self_registration_group: "Afficher le lien d'inscription de ce groupe sur la page de connexion principale."
     form_tabs:
       general: "Généralités"
@@ -728,6 +729,10 @@ fr:
     choose_group: "Sélectionne un groupe, s'il-te-plaît."
   group_decorator:
     archived_suffix: "(archivé)"
+  households:
+    edit:
+      title: gérer le ménage
+      shared_address_info: Toutes les personnes partagent la même adresse.
   hitobito_log_entries:
     tabs:
       all: Tous
@@ -1727,6 +1732,10 @@ fr:
   steps_component:
     next_link: Continuer
     prev_link: Retour
+  household_aside_component:
+    add: Créer
+    manage: Gérer
+    destroy: Dissoudre
   subscriber:
     group:
       edit:

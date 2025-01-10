@@ -5,7 +5,7 @@
 
 base: &generic
   adapter: <%= ENV['RAILS_DB_ADAPTER'] || 'postgresql' %>
-  pool: <%= ENV['RAILS_DB_POOL'] || 20 %> # connections
+  pool: <%= ENV['RAILS_DB_POOL'] || ENV['RAILS_MAX_THREADS'] || 5 %> # connections
   idle_timeout: <%= ENV['RAILS_DB_IDLE_TIMEOUT'] || 300 %> # seconds
   checkout_timeout: <%= ENV['RAILS_DB_CHECKOUT_TIMEOUT'] || 5 %> # seconds
   encoding: "utf8"

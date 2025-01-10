@@ -7,12 +7,12 @@
 module Export::Tabular
   # Base class for csv/xlsx export
   class Base
-    class_attribute :model_class, :row_class, :auto_filter, :iterator
+    class_attribute :model_class, :row_class, :auto_filter, :batch_size
     self.row_class = Export::Tabular::Row
     self.auto_filter = true
-    self.iterator = :find_each
+    self.batch_size = 1000
 
-    attr_reader :ability
+    attr_reader :ability, :list
 
     class << self
       def export(format, *)
@@ -44,7 +44,7 @@ module Export::Tabular
     end
 
     # The list of all attributes exported to the csv/xlsx.
-    # overridde either this or #attribute_labels
+    # override either this or #attribute_labels
     def attributes
       attribute_labels.keys
     end
@@ -67,15 +67,12 @@ module Export::Tabular
     def data_rows(format = nil)
       return enum_for(:data_rows) unless block_given?
 
-      iterating_method = list.is_a?(Array) ? :each : iterator
-      list.send(iterating_method).with_index do |entry, index|
+      Iterator.new(list, batch_size).each do |entry|
         yield values(entry, format)
       end
     end
 
     private
-
-    attr_reader :list
 
     def build_attribute_labels
       attributes.each_with_object({}) do |attr, labels|

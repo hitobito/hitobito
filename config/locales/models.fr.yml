@@ -335,6 +335,10 @@ fr:
         one: SMS
         many: SMS
         other: SMS
+      message_template:
+        one: Modèle de facture
+        many: Modèles de factures
+        other: Modèles de factures
       mail_log:
         one: Historique
         many: Historique
@@ -1107,6 +1111,9 @@ fr:
         cost: Montant
         cost_center: Poste
         account: Compte
+      message_template:
+        title: Titre
+        body: Texte
       payment:
         invoice: Facture
         amount: Montant
@@ -1122,6 +1129,7 @@ fr:
         title: Titre
         text: Texte
         due_days: Payable à (jours)
+        show_invoice_description: Afficher le texte original de la facture avant le texte de rappel
       payment_reminder_configs:
         title: Titre du rappel
         text: Texte du rappel

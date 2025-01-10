@@ -31,7 +31,7 @@ module MailingListsHelper
 
   def button_toggle_subscription
     if entry.subscribed?(current_user)
-      button_unsubscribe
+      button_unsubscribe if entry.subscriptions.where(subscriber_id: current_user.id, subscriber_type: Person.sti_name).exists?
     else
       button_subscribe
     end
@@ -52,17 +52,25 @@ module MailingListsHelper
 
   private
 
+  # FIXME - appears redundant, subscriptions are also managed via Person::SubscriptionsController
+  # subscribed? returns true (ie. subscribed via role) but without specific person subscription
+  # Additionally, creating person subscription via list enforces abilities on list wheres creating via person enforces abilities on person
   def button_unsubscribe
-    action_button(t("mailing_list_decorator.unsubscribe"),
-      group_mailing_list_subscription_path(@group, entry, entry.subscriptions.where(subscriber_id: current_user.id, subscriber_type: Person.sti_name).first.id),
-      :minus,
-      method: "delete")
+    subscription = entry.subscriptions.where(subscriber_id: current_user.id, subscriber_type: Person.sti_name).first
+    if subscription && can?(:destroy, subscription)
+      action_button(t("mailing_list_decorator.unsubscribe"),
+        group_mailing_list_subscription_path(@group, entry, subscription.id),
+        :minus,
+        method: "delete")
+    end
   end
 
   def button_subscribe
-    action_button(t("mailing_list_decorator.subscribe"),
-      group_mailing_list_person_index_path(@group, entry, subscription: {subscriber_id: current_user.id}),
-      :plus,
-      method: "post")
+    if can?(:create, Subscription.new(mailing_list: entry, subscriber: current_user))
+      action_button(t("mailing_list_decorator.subscribe"),
+        group_mailing_list_person_index_path(@group, entry, subscription: {subscriber_id: current_user.id}),
+        :plus,
+        method: "post")
+    end
   end
 end

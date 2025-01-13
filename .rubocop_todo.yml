@@ -206,6 +206,7 @@ Rails/HasManyOrHasOneDependent:
 Rails/HelperInstanceVariable:
   Exclude:
     - 'app/helpers/contact_attrs/control_builder.rb'
+    - 'app/helpers/changelogs/footer_link_builder.rb'
     - 'app/helpers/dropdown/base.rb'
     - 'app/helpers/dropdown/event/events_export.rb'
     - 'app/helpers/dropdown/event/participant_add.rb'

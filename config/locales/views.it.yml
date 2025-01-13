@@ -190,7 +190,6 @@ it:
       timeout: "questa sessione è scaduto, per favore registrati nuovamente."
       inactive: "il tuo account non è attivo"
       not_found_in_database: "dati di registrazione non validi."
-      signin_not_allowed: "non sei autorizzato ad iscriverti qui."
       not_permitted_to_view_page: "Non è autorizzato a visitare questa pagina"
     sessions:
       signed_out: "Ora sei registrato."
@@ -203,7 +202,6 @@ it:
         sign_in: "Entrato come %{name}"
         info: "Fai il login per arrivare a %{oauth_app}."
     passwords:
-      send_instructions: "riceverai nei prossimi minuti un'e-mail con le istruzioni su come reimpostare la tua password."
       updated: "la tua passwort è stata cambiata. Sei ora registrato."
       updated_not_active: "la tua passwort è stata cambiata."
       send_paranoid_instructions: "se il tuo indirizzo e-mail esiste nella nostra banca dati riceverai tra pochi minuti u'e-mail con le istruzioni su come reimpostare la tua password."

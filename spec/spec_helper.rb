@@ -57,6 +57,8 @@ Dir[Rails.root.join("spec", "support", "**", "*.rb")].sort.each do |f|
   require f
 end
 
+require_relative "domain/table_displays/shared_examples"
+
 # Add test locales
 Faker::Config.locale = I18n.locale
 

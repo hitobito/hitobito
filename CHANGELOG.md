@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## Version 2.3
+## Version 2.4
 
 - JWT kann als OIDC Access Token konfiguriert werden (hitobito_sac_cas#1110)
 - Unterstützung vom login=prompt Parameter im OIDC Authorization Flow (hitobito_sac_cas#1075)

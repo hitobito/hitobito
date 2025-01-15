@@ -17,7 +17,8 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def apply(scope)
-    scope = scope.where(type_conditions(scope))
+    scope = scope
+      .where(type_conditions(scope))
       .where(duration_conditions)
     if include_archived?
       scope
@@ -104,12 +105,11 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def duration_conditions
-    return unless args[:kind]
-
     case args[:kind]
     when "created" then [[:roles, {start_on: date_range}]].to_h
     when "deleted" then [[:roles, {end_on: date_range}]].to_h
     when "active", "inactive" then [active_role_condition, min: date_range.min, max: date_range.max]
+    else [active_role_condition, min: Time.zone.today, max: Time.zone.today]
     end
   end
 

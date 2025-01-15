@@ -36,34 +36,108 @@ describe Export::Tabular::People::PeopleAddress do
     end
   end
 
-  context "phone_numbers" do
-    before { PhoneNumber.create!(contactable: person, label: "Privat", number: "0791234567") }
+  describe "account labels" do
+    def row(index) = people_list.data_rows.to_a[index]
 
-    subject { people_list.attribute_labels }
+    let(:attributes) { people_list.attributes }
+    let(:attribute_labels) { people_list.attribute_labels }
 
-    its([:phone_number_privat]) { should eq "Telefonnummer Privat" }
-    its([:phone_number_mobil]) { should be_nil }
+    describe "Phone Numbers" do
+      before { PhoneNumber.create!(contactable: person, label: "Privat", number: "0791234567") }
 
-    context "different labels" do
-      let(:other) { people(:bottom_member) }
-      let(:list) { [person, other] }
-
-      before do
-        PhoneNumber.create!(contactable: other, label: "Foobar", number: "0791234567")
-        PhoneNumber.create!(contactable: person, label: "Privat", number: "0791234567")
+      it "includes phone number" do
+        expect(attribute_labels.keys).to have(13).items
+        expect(attribute_labels).to have_key(:phone_number_privat)
+        expect(attribute_labels[:phone_number_privat]).to eq "Telefonnummer Privat"
+        expect(row(0)[attributes.index(:phone_number_privat)]).to eq "+41 79 123 45 67"
       end
 
-      its([:phone_number_privat]) { should eq "Telefonnummer Privat" }
-      its([:phone_number_foobar]) { should eq "Telefonnummer Foobar" }
+      it "includes multiple phone numbers" do
+        PhoneNumber.create!(contactable: person, label: "Foobar", number: "0791234568")
+        expect(attribute_labels.keys).to have(14).items
+        expect(attribute_labels[:phone_number_foobar]).to eq "Telefonnummer Foobar"
+        expect(row(0)[attributes.index(:phone_number_privat)]).to eq "+41 79 123 45 67"
+        expect(row(0)[attributes.index(:phone_number_foobar)]).to eq "+41 79 123 45 68"
+      end
+
+      it "does not include phone number with blank label" do
+        number = PhoneNumber.create!(contactable: person, label: "Foobar", number: "0791234568")
+        number.update_columns(label: "")
+        expect(attribute_labels.keys).to have(13).items
+        expect(attribute_labels).not_to have_key(:phone_number_)
+      end
+
+      context "with multiple people" do
+        let(:bottom_member) { people(:bottom_member) }
+        let(:other) { Fabricate(:person) }
+        let(:list) { [person, bottom_member] }
+
+        before do
+          PhoneNumber.create!(contactable: person, label: "Foobar", number: "0791234568")
+          PhoneNumber.create!(contactable: bottom_member, label: "Foobar", number: "0791234569")
+          PhoneNumber.create!(contactable: other, label: "Other", number: "0791234560")
+        end
+
+        it "includes phone number of all in list" do
+          expect(row(0)[attributes.index(:phone_number_privat)]).to eq "+41 79 123 45 67"
+          expect(row(0)[attributes.index(:phone_number_foobar)]).to eq "+41 79 123 45 68"
+          expect(row(1)[attributes.index(:phone_number_privat)]).to be_nil
+          expect(row(1)[attributes.index(:phone_number_foobar)]).to eq "+41 79 123 45 69"
+        end
+
+        it "does not include phone number of person not in list" do
+          expect(subject.attribute_labels).not_to have_key(:phone_number_other)
+        end
+      end
     end
 
-    context "blank label is not exported" do
-      before do
-        number = PhoneNumber.create!(contactable: person, label: "label", number: "0791234567")
-        PhoneNumber.where(id: number.id).update_all(label: "")
+    describe "Additional Emails" do
+      before { AdditionalEmail.create!(contactable: person, label: "Privat", email: "privat@example.com") }
+
+      it "includes additional email" do
+        expect(attribute_labels.keys).to have(13).items
+        expect(attribute_labels).to have_key(:additional_email_privat)
+        expect(attribute_labels[:additional_email_privat]).to eq "Weitere E-Mail Privat"
+        expect(row(0)[attributes.index(:additional_email_privat)]).to eq "privat@example.com"
       end
 
-      its(:keys) { should_not include :phone_number_ }
+      it "includes multiple additional emails" do
+        AdditionalEmail.create!(contactable: person, label: "Foobar", email: "foobar@example.com")
+        expect(attribute_labels.keys).to have(14).items
+        expect(attribute_labels[:additional_email_foobar]).to eq "Weitere E-Mail Foobar"
+        expect(row(0)[attributes.index(:additional_email_privat)]).to eq "privat@example.com"
+        expect(row(0)[attributes.index(:additional_email_foobar)]).to eq "foobar@example.com"
+      end
+
+      it "does not include additional email with blank label" do
+        email = AdditionalEmail.create!(contactable: person, label: "Foobar", email: "foobar@example.com")
+        email.update_columns(label: "")
+        expect(attribute_labels.keys).to have(13).items
+        expect(attribute_labels).not_to have_key(:additional_email_)
+      end
+
+      context "with multiple people" do
+        let(:bottom_member) { people(:bottom_member) }
+        let(:other) { Fabricate(:person) }
+        let(:list) { [person, bottom_member] }
+
+        before do
+          AdditionalEmail.create!(contactable: person, label: "Foobar", email: "foobar@example.com")
+          AdditionalEmail.create!(contactable: bottom_member, label: "Foobar", email: "foobar2@example.com")
+          AdditionalEmail.create!(contactable: other, label: "Other", email: "other@example.com")
+        end
+
+        it "includes additional email of all in list" do
+          expect(row(0)[attributes.index(:additional_email_privat)]).to eq "privat@example.com"
+          expect(row(0)[attributes.index(:additional_email_foobar)]).to eq "foobar@example.com"
+          expect(row(1)[attributes.index(:additional_email_privat)]).to be_nil
+          expect(row(1)[attributes.index(:additional_email_foobar)]).to eq "foobar2@example.com"
+        end
+
+        it "does not include additional email of person not in list" do
+          expect(subject.attribute_labels).not_to have_key(:additional_email_other)
+        end
+      end
     end
   end
 end

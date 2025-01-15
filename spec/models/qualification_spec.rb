@@ -155,7 +155,7 @@ describe Qualification do
   end
 
   context "#active" do
-    subject { qualification }
+    subject { qualification.reload }
 
     it { is_expected.to be_active }
   end

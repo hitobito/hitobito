@@ -125,6 +125,22 @@ describe Person::Filter::Role do
         it "contains all existing people" do
           expect(entries.size).to eq(list_filter.all_count)
         end
+
+        it "includes member if single relevant role is active" do
+          @tg_member.roles.first.update!(end_on: 1.day.ago)
+          expect(entries).to include(@tg_member)
+        end
+
+        it "excludes member if no relevant active exists" do
+          @tg_member.roles.update_all(end_on: 1.day.ago)
+          expect(entries).not_to include(@tg_member)
+        end
+
+        it "excludes member if no relevant active but irrelevant role in group exists" do
+          @tg_member.roles.update_all(end_on: 1.day.ago)
+          Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group), person: @tg_member)
+          expect(entries).not_to include(@tg_member)
+        end
       end
     end
 

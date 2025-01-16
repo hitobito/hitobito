@@ -6,5 +6,9 @@
 module Export::Tabular::People
   class ParticipationsAddress < PeopleAddress
     self.row_class = ParticipationRow
+
+    def people_ids
+      @people_ids ||= pluck_ids_from_list("event_participations.person_id")
+    end
   end
 end

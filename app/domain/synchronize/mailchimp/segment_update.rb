@@ -17,6 +17,16 @@ module Synchronize
         @emails_to_remove = remote_emails - local_emails - obsolete_emails
       end
 
+      # Prepares the data for updating Mailchimp segments by grouping emails to add and remove.
+      # Returns an array of tuples, each containing the tag_id and a hash with members to add and remove.
+      # Emails are grouped in slices of SLICE_SIZE.
+      #
+      # Example return value:
+      #   [
+      #     [123, {members_to_add: ["add1@example.com", "add2@example.com"], members_to_remove: ["del1@example.com"]}],
+      #     [123, {members_to_add: ["add3@example.com"], members_to_remove: []}]
+      #   ]
+      #
       def prepare
         return if stale?
 

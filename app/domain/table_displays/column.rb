@@ -53,13 +53,13 @@ module TableDisplays
 
     # Can be overwritten, if for some conditions, this column should not be displayed,
     # for example only for certain group types
-    def exclude_attr?(template)
+    def exclude_attr?(group)
       false
     end
 
     def render(attr)
       raise "implement in subclass, using `super do ... end`" unless block_given?
-      return if exclude_attr?(template)
+      return if exclude_attr?(template&.parent)
 
       table.col(header(attr), data: {attribute_name: attr}) do |object|
         value_for(object, attr) do |target, target_attr|

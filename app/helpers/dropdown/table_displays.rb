@@ -45,7 +45,7 @@ module Dropdown
     end
 
     def render_item(name, column, value, label = render_label(column, value))
-      return if column.exclude_attr?(template)
+      return if column.exclude_attr?(template&.parent)
 
       content_tag(:li) do
         check_box_tag(name, value, selected?(value), id: value, data: {submit: true}) +

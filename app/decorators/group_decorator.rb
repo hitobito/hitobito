@@ -36,7 +36,8 @@ class GroupDecorator < ApplicationDecorator
     role_types.select do |type|
       # users from above cannot create non visible roles
       !type.restricted? &&
-        (type.visible_from_above? || can?(:index_local_people, model))
+        (type.visible_from_above? || can?(:index_local_people, model)) &&
+        (can?(:update, type.new(group:)) || can?(:create, type.new(group:)))
     end
   end
 

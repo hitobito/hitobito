@@ -125,6 +125,7 @@ describe Synchronize::Mailchimp::Synchronizator do
 
   context "#stale_segments" do
     subject(:stale_segments) { sync.send(:stale_segments) }
+
     let(:root) { people(:root) }
 
     it "is empty when no tags are defined" do

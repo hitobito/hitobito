@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::InactivityBlockWarningJob < RecurringJob
-  def perform
+  def perform_internal
     Person::BlockService.warn_within_scope!
   end
 end

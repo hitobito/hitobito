@@ -6,7 +6,7 @@
 class Address::ImportJob < RecurringJob
   run_every 6.months
 
-  def perform
+  def perform_internal
     return unless configured?
 
     Address::Importer.new.run

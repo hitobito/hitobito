@@ -40,6 +40,8 @@ module TableDisplays
     end
 
     def label(attr)
+      return I18n.t("table_displays.#{model_class.to_s.downcase}.#{attr}") if I18n.exists?("table_displays.#{model_class.to_s.downcase}.#{attr}")
+
       model_class.human_attribute_name(attr)
     end
 
@@ -49,8 +51,15 @@ module TableDisplays
       nil
     end
 
+    # Can be overwritten, if for some conditions, this column should not be displayed,
+    # for example only for certain group types
+    def exclude_attr?(template)
+      false
+    end
+
     def render(attr)
       raise "implement in subclass, using `super do ... end`" unless block_given?
+      return if exclude_attr?(template)
 
       table.col(header(attr), data: {attribute_name: attr}) do |object|
         value_for(object, attr) do |target, target_attr|

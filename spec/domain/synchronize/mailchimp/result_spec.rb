@@ -6,11 +6,12 @@
 require "spec_helper"
 
 describe Synchronize::Mailchimp::Result do
-  def response(total:, finished:, failed:)
+  def response(total:, finished:, failed:, results: [])
     {
       total_operations: total,
       finished_operations: finished,
-      errored_operations: failed
+      errored_operations: failed,
+      operation_results: results
     }
   end
 
@@ -78,6 +79,18 @@ describe Synchronize::Mailchimp::Result do
       subject.track(:subscribed, response(total: 1, finished: 1, failed: 0))
       subject.track(:deleted, response(total: 2, finished: 1, failed: 0))
       expect(subject.state).to eq :partial
+    end
+  end
+
+  describe "forgotten emails" do
+    it "does track operation results" do
+      results = [
+        {title: "Deleted", detail: "test1@example.com was permanently deleted", status: 400},
+        {title: "Deleted", detail: "test2@example.com was permanently deleted", status: 400}
+      ]
+      subject.track(:subscribe_members, response(total: 2, finished: 0, failed: 2, results:))
+      expect(subject.state).to eq :failed
+      expect(subject.forgotten_emails).to eq %w[test1@example.com test2@example.com]
     end
   end
 end

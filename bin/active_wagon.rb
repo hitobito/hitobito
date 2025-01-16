@@ -12,7 +12,7 @@ require 'pathname'
 # Allows switching wagons quickly (depends on https://direnv.net/)
 class Setup
 
-  USED_RUBY_VERSION = '3.2.6'
+  USED_RUBY_VERSION = '3.2.3'
   USED_NODE_VERSION = '16.15.0'
   USED_YARN_VERSION = '1.22.19'
 
@@ -29,12 +29,11 @@ class Setup
     handle_gemfile
 
     wagons.each do |wagon|
+      FileUtils.mkdir("../hitobito_#{wagon}/tmp") unless Dir.exist?("../hitobito_#{wagon}/tmp")
       write("../hitobito_#{wagon}/.envrc", environment(core: false))
       FileUtils.touch("../hitobito_#{wagon}/config/environment.rb") # needed for rails-vim
       handle_gemfile(directory: "../hitobito_#{wagon}")
     end
-
-    FileUtils.rm_rf(root.join('tmp'))
   end
 
   def write(name, content)
@@ -45,10 +44,7 @@ class Setup
     return unless gemfile_dev
 
     FileUtils.ln_s("#{directory}/Gemfile", "#{directory}/#{gemfile_dev}", force: true)
-
-    if File.exist?("#{directory}/Gemfile.lock")
-      FileUtils.cp("#{directory}/Gemfile.lock", "#{directory}/#{gemfile_dev}.lock")
-    end
+    FileUtils.cp("#{directory}/Gemfile.lock", "#{directory}/#{gemfile_dev}.lock")
   end
 
   def write_and_copy(name, content)
@@ -91,7 +87,8 @@ class Setup
       export RAILS_DB_USERNAME=hitobito
       export RAILS_DB_PASSWORD=hitobito
       export RAILS_DB_NAME=hit_#{wagon}_dev
-      export RAILS_TEST_DB_NAME=hit_#{core ? "core" : wagon}_test
+      export RAILS_TEST_DB_NAME=hit_#{wagon}_test
+      export RAILS_TMPDIR=#{root.join("../hitobito_#{wagon}/tmp")}
       export SPRING_APPLICATION_ID=hit_#{core ? "core" : wagon}
       export PRIMARY_WAGON=#{wagon}
       export DISABLE_TEST_SCHEMA_MAINTENANCE=1

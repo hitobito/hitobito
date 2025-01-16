@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## Unreleased
+
+- Verbesserte Mailchimp Tag Synchronisierung (hitobito_sac_cas#1487)
+
 ## Version 2.4
 
 - JWT kann als OIDC Access Token konfiguriert werden (hitobito_sac_cas#1110)

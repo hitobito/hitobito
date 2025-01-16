@@ -61,8 +61,8 @@ module Synchronize
       end
 
       def update_segments(list)
-        execute_batch(list) do |segment_id, emails|
-          update_segment_operation(segment_id, emails)
+        execute_batch(list) do |segment_id, payload|
+          update_segment_operation(segment_id, payload)
         end
       end
 
@@ -117,11 +117,11 @@ module Synchronize
         }
       end
 
-      def update_segment_operation(segment_id, emails)
+      def update_segment_operation(segment_id, body)
         {
           method: "POST",
           path: "lists/#{list_id}/segments/#{segment_id}",
-          body: {members_to_add: emails}.to_json
+          body: body.to_json
         }
       end
 

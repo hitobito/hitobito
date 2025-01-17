@@ -125,13 +125,18 @@ class MailingLists::Subscribers
 
   def including_person_subscriptions_cte = subscriptions_cte(excluded: false)
 
-  def use_people_subscriptions? = !(opt_in? && subscribable_for_configured?)
+  def use_people_subscriptions? = memoize(:use_people_subscriptions) { !(opt_in? && subscribable_for_configured?) }
 
-  def including_people_subscriptions? = use_people_subscriptions? && subscriptions.people.included.exists?
+  def including_people_subscriptions? = memoize(:including_people_subscriptions) { use_people_subscriptions? && subscriptions.people.included.exists? }
 
-  def excluding_people_subscriptions? = use_people_subscriptions? && subscriptions.people.excluded.exists?
+  def excluding_people_subscriptions? = memoize(:excluding_people_subscriptions) { use_people_subscriptions? && subscriptions.people.excluded.exists? }
 
-  def event_subscriptions? = subscriptions.events.included.exists?
+  def event_subscriptions? = memoize(:event_subscriptions) { subscriptions.events.included.exists? }
 
-  def group_subscription_tags? = subscriptions.groups.included.joins(:subscription_tags).exists?
+  def group_subscription_tags? = memoize(:group_subscription_tag) { subscriptions.groups.included.joins(:subscription_tags).exists? }
+
+  def memoize(name, &block)
+    ivar = "@#{name}"
+    instance_variable_defined?(ivar) ? instance_variable_get(ivar) : instance_variable_set(ivar, block.call)
+  end
 end

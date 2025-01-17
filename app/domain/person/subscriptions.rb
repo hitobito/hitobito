@@ -28,8 +28,7 @@ class Person::Subscriptions
       .where(id: direct_inclusions.select("mailing_list_id"))
       .or(scope.anyone.or(scope.configured.opt_out).merge(from_group_or_events))
       .where.not(id: direct_exclusions.select("mailing_list_id"))
-      .where.not(id: lists_excluding_person_via_filter.collect(&:id))
-      .distinct
+      .where.not(id: globally_excluding_mailing_list_ids)
   end
 
   def subscribable
@@ -38,12 +37,17 @@ class Person::Subscriptions
         scope.configured.merge(from_group_or_events)
              .where(id: direct_exclusions.or(scope.opt_in).select("mailing_list_id"))
       )
-      .where.not(id: subscribed.select("id"))
-      .where.not(id: lists_excluding_person_via_filter.collect(&:id))
+      .where.not(id: subscribed.map(&:id))
+      .where.not(id: globally_excluding_mailing_list_ids)
       .distinct
   end
 
   private
+
+  def globally_excluding_mailing_list_ids
+    @globally_excluding_mailing_list_ids ||= Person::Subscriptions::GlobalExclusions.new(@person.id)
+      .excluding_mailing_list_ids.select(:id)
+  end
 
   def change_subscription(mailing_list, excluded)
     # first clean out existing contradictory subscriptions
@@ -59,20 +63,6 @@ class Person::Subscriptions
   # (person is subscribed but should be excluded or vice versa)
   def subscription_needs_change?(mailing_list, excluded)
     mailing_list.subscribed?(@person) == excluded
-  end
-
-  def lists_excluding_person_via_filter
-    MailingList.subscribable.with_filter_chain.select do |list|
-      list.filter_chain.filter(Person.where(id: @person.id)).none?
-    end
-  end
-
-  def direct_inclusions
-    @direct_inclusions ||= @person.subscriptions.where(excluded: false)
-  end
-
-  def direct_exclusions
-    @direct_exclusions ||= @person.subscriptions.where(excluded: true)
   end
 
   def from_events
@@ -108,6 +98,12 @@ class Person::Subscriptions
       .where.not(id: tag_excluded_subscription_ids)
   end
 
+  def from_group_or_events
+    scope
+      .where(id: from_events.select("mailing_list_id"))
+      .or(scope.where(id: from_groups.select("mailing_list_id")))
+  end
+
   def subscription_tags_condition
     "subscription_tags.tag_id IS NULL OR " \
       "(subscription_tags.excluded <> true AND subscription_tags.tag_id IN (?))"
@@ -117,9 +113,11 @@ class Person::Subscriptions
     SubscriptionTag.excluded.where(tag_id: @person.tag_ids).select(:subscription_id)
   end
 
-  def from_group_or_events
-    scope
-      .where(id: from_events.select("mailing_list_id"))
-      .or(scope.where(id: from_groups.select("mailing_list_id")))
+  def direct_inclusions
+    @direct_inclusions ||= @person.subscriptions.where(excluded: false)
+  end
+
+  def direct_exclusions
+    @direct_exclusions ||= @person.subscriptions.where(excluded: true)
   end
 end

@@ -53,16 +53,20 @@ module MailingListsHelper
   private
 
   def button_unsubscribe
-    action_button(t("mailing_list_decorator.unsubscribe"),
-      group_mailing_list_subscription_path(@group, entry, entry.subscriptions.where(subscriber_id: current_user.id, subscriber_type: Person.sti_name).first.id),
-      :minus,
-      method: "delete")
+    if can?(:destroy, Subscription.new(mailing_list: entry, subscriber: current_user))
+      action_button(t("mailing_list_decorator.unsubscribe"),
+        group_person_subscription_path(entry.group, current_user, id: entry.id),
+        :minus,
+        method: "delete")
+    end
   end
 
   def button_subscribe
-    action_button(t("mailing_list_decorator.subscribe"),
-      group_mailing_list_person_index_path(@group, entry, subscription: {subscriber_id: current_user.id}),
-      :plus,
-      method: "post")
+    if can?(:create, Subscription.new(mailing_list: entry, subscriber: current_user))
+      action_button(t("mailing_list_decorator.subscribe"),
+        group_person_subscriptions_path(entry.group, current_user, id: entry.id),
+        :plus,
+        method: "post")
+    end
   end
 end

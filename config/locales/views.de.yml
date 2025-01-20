@@ -237,6 +237,7 @@ de:
       oauth_info:
         sign_in: "Anmelden mit %{name}"
         info: "Bitte melde dich an, um weiter zu %{oauth_app} zu gelangen."
+        no_oauth_app_info: "Bitte melde dich an, um weiter zu gelangen."
     passwords:
       send_instructions: "Wenn uns die angegebene E-Mail-Adresse bekannt ist, erhältst du in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Dein Passwort zurücksetzen kannst."
       updated: "Dein Passwort wurde geändert. Du bist jetzt angemeldet."

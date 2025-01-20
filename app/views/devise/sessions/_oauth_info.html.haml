@@ -15,5 +15,8 @@
       = image_tag(upload_url(oauth_app, :logo, variant: :thumb, default: 'oauth_app'), size: '64x64')
 
   %p
-    = t('.info', oauth_app: oauth_app&.name)
+    - if oauth_app.present?
+      = t('.info', oauth_app: oauth_app&.name)
+    - else
+      = t('.no_oauth_app_info')
   %hr

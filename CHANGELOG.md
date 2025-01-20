@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## Unreleased
+## Version 2.4
 
 - Verbesserte Mailchimp Tag Synchronisierung (hitobito_sac_cas#1487)
 

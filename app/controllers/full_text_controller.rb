@@ -40,7 +40,12 @@ class FullTextController < ApplicationController
         instance_variable_set(:"@#{key}", with_query { result })
       end
     end
-    @active_tab = active_tab
+
+    if only_result.present?
+      redirect_to polymorphic_path(only_result)
+    else
+      @active_tab = active_tab
+    end
   end
 
   def query_json_results
@@ -63,6 +68,12 @@ class FullTextController < ApplicationController
     sets.select(&:present?).inject do |memo, set|
       memo + [{label: "—" * 20}] + set
     end
+  end
+
+  # return the only result if the search term only matches a single result for all searchable models
+  def only_result
+    all_results = [@people, @invoices, @events, @groups].compact.flatten
+    all_results.first if all_results.size == 1
   end
 
   def entries

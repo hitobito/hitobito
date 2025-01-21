@@ -32,7 +32,7 @@ app.MultiselectAddChips = {
 
 $(document).on('click', 'button[data-add-to]', app.MultiselectAddChips.selectValue)
 $(document).on('click', 'button[data-clear-values]', app.MultiselectAddChips.clearValues)
-$(document).on('change', '.form-select', app.MultiselectAddChips.showUnselected)
+$(document).on('change', '#course-filter .form-select', app.MultiselectAddChips.showUnselected)
 $(document).on('ready', ->
   select = $("#group-filter-select")[0]
   if select

@@ -45,12 +45,12 @@ describe Events::Filter::PlacesAvailable do
 
     it "checks the maximum_participants" do
       expect(where_condition)
-        .to match(/COALESCE\(maximum_participants, 0\) = 0/)
+        .to match(/COALESCE\(events.maximum_participants, 0\) = 0/)
     end
 
     it "compares the participant_count to the maximum_participants" do
       expect(where_condition)
-        .to match("participant_count < maximum_participants")
+        .to match("participant_count < events.maximum_participants")
     end
 
     it "does not include the filled_course in the results" do

@@ -10,7 +10,7 @@ Rails.application.config.to_prepare do
   public_person_attrs = (
     Person::PUBLIC_ATTRS -
     [:first_name, :last_name, :nickname, :picture] -
-    [:zip_code, :town, :address, :street, :housenumber, :address_care_of, :postbox] -
+    [:zip_code, :town, :address, :street, :housenumber, :address_care_of, :postbox, :primary_group_id] -
     show_details_person_attrs -
     Person::INTERNAL_ATTRS
   ) & Person.used_attributes
@@ -21,6 +21,9 @@ Rails.application.config.to_prepare do
   TableDisplay.register_column(Person,
                                TableDisplays::ShowDetailsColumn,
                                show_details_person_attrs)
+  TableDisplay.register_column(Person,
+                               TableDisplays::People::PrimaryGroupColumn,
+                               :primary_group_id)
   TableDisplay.register_column(Person,
                                TableDisplays::People::LayerGroupLabelColumn,
                                :layer_group_label)

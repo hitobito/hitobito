@@ -1282,6 +1282,16 @@ describe PeopleController do
         expect(dom.find("table tbody tr")).not_to have_content "03.03.2003"
       end
     end
+
+    it "GET#index does not render column when exclude attr is true even tho it is selected" do
+      allow_any_instance_of(TableDisplays::PublicColumn).to receive(:exclude_attr?).and_return(true)
+      TableDisplay.register_column(Person, TableDisplays::PublicColumn, :gender)
+      top_leader.table_display_for(Person).update!(selected: %w[gender])
+
+      get :index, params: {group_id: group.id}
+      expect(dom).not_to have_checked_field "Geschlecht"
+      expect(dom.find("table tbody tr")).not_to have_content "unbekannt"
+    end
   end
 
   context "table_displays as configured in the core" do

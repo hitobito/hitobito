@@ -165,7 +165,7 @@ class PeopleController < CrudController
   end
 
   def filter_entries
-    entries = add_table_display_to_query(person_filter.entries, current_person)
+    entries = add_table_display_to_query(person_filter.entries, current_person, group)
     sort_by_sort_expression(entries)
   end
 

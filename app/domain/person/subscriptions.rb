@@ -46,7 +46,7 @@ class Person::Subscriptions
 
   def globally_excluding_mailing_list_ids
     @globally_excluding_mailing_list_ids ||= Person::Subscriptions::GlobalExclusions.new(@person.id)
-      .excluding_mailing_list_ids.select(:id)
+      .excluding_mailing_list_ids
   end
 
   def change_subscription(mailing_list, excluded)

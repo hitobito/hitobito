@@ -33,7 +33,7 @@ module RenderTableDisplays
   def add_table_display_selects(scope, person, selected_group)
     # preserve previously selected columns
     previous = scope.select_values.presence || [scope.model.arel_table[Arel.star]]
-    scope.select((previous + table_display_selects(person, selected_group)).uniq)
+    scope.select((previous + table_display_selects(person, selected_group)).uniq).includes(table_display_includes(person, selected_group))
   end
 
   def table_display_selects(person, selected_group)
@@ -41,6 +41,14 @@ module RenderTableDisplays
       column_class = person.table_display_for(model_class).column_for(column)
 
       column_class.required_model_attrs(column).map(&:to_s) unless column_class.exclude_attr?(selected_group)
+    end
+  end
+
+  def table_display_includes(person, selected_group)
+    TableDisplay.active_columns_for(person, model_class).map do |column|
+      column_class = person.table_display_for(model_class).column_for(column)
+
+      column_class.required_model_includes(column) unless column_class.exclude_attr?(selected_group)
     end
   end
 end

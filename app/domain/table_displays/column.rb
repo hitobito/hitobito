@@ -22,6 +22,11 @@ module TableDisplays
       resolve_database_joins(attr)
     end
 
+    # Allows custom columns to override and load additional tables into query to prevent n+1 queries
+    def required_model_includes(attr)
+      []
+    end
+
     # Allows a column class to specify which database columns need to be fetched for calculating the
     # value
     def required_model_attrs(_attr)

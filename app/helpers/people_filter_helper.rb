@@ -37,6 +37,8 @@ module PeopleFilterHelper
       filters += [[t(".smaller"), :smaller], [t(".greater"), :greater]]
     end
 
+    filters += [[t(".blank"), :blank]]
+
     content_tag(:div,
       class: 'people_filter_attribute_form d-flex align-items-center
                         justify-content-between mb-2 controls controls-row') do
@@ -64,7 +66,8 @@ module PeopleFilterHelper
       end
 
       attribute_value_class = "form-control form-control-sm ms-3
-                               attribute_value_input#{(type == :date) ? " date" : ""}"
+                               #{(constraint == "blank") ? " invisible" : ""}
+                               attribute_value_input #{(type == :date) ? " date" : ""}"
       content << content_tag(:div, class: "flex-none") do
         text_field_tag("filters[attributes][#{time}][value]",
           value,

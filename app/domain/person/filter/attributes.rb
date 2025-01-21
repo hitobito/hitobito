@@ -16,7 +16,11 @@ class Person::Filter::Attributes < Person::Filter::Base
   private
 
   def constraints
-    @args.values.select { |tuple| tuple[:key].present? && tuple[:value].present? }
+    @constraints ||= @args.values.select { |tuple| applicable?(tuple) }
+  end
+
+  def applicable?(tuple)
+    tuple[:key].present? && (tuple[:value].present? || tuple[:constraint] == "blank")
   end
 
   def years_constraint
@@ -79,10 +83,10 @@ class Person::Filter::Attributes < Person::Filter::Base
   end
 
   def persisted_attribute_condition_sql(key, value, constraint)
-    sql_string = if constraint == "match" || constraint == "not_match"
-      match_search_sql(key, value, constraint)
-    else
-      "people.#{key} #{sql_comparator(constraint)} ?"
+    sql_string = case constraint
+    when /match/ then match_search_sql(key, value, constraint)
+    when /blank/ then "COALESCE(TRIM(people.#{key}), '') #{sql_comparator(constraint)} ?"
+    else "people.#{key} #{sql_comparator(constraint)} ?"
     end
 
     ActiveRecord::Base.sanitize_sql_array([sql_string, sql_value(value, constraint)])
@@ -104,7 +108,7 @@ class Person::Filter::Attributes < Person::Filter::Base
     when "not_match" then "NOT LIKE"
     when "greater" then ">"
     when "smaller" then "<"
-    when "equal" then "="
+    when "equal", "blank" then "="
     else raise("unexpected constraint: #{constraint.inspect}")
     end
   end
@@ -113,6 +117,7 @@ class Person::Filter::Attributes < Person::Filter::Base
     case constraint.to_s
     when "match", "not_match"
       "%#{ActiveRecord::Base.send(:sanitize_sql_like, value.to_s.strip)}%"
+    when "blank" then ""
     when "equal", "greater", "smaller" then value
     else raise("unexpected constraint: #{constraint.inspect}")
     end
@@ -136,6 +141,7 @@ class Person::Filter::Attributes < Person::Filter::Base
     when "not_match" then attribute.to_s !~ /#{value}/
     when "greater" then attribute && attribute.to_i > value.to_i
     when "smaller" then attribute && attribute.to_i < value.to_i
+    when "blank" then attribute.blank?
     else attribute.to_s == value
     end
   end

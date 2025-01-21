@@ -50,8 +50,15 @@ app.PeopleFilterAttribute = {
     form.find('.attribute_value_input').removeAttr('disabled')
     form.find('.attribute_value_input').addClass('date') if type == 'date'
 
+  toggleValueVisibility: (e) ->
+    input = $(e.target).closest(".people_filter_attribute_form").find(".attribute_value_input")
 
+    if (e.target.value == "blank")
+      input.addClass("invisible")
+    else
+      input.removeClass("invisible")
 }
 
 $(document).on('change', '#attribute_filter', app.PeopleFilterAttribute.add)
 $(document).on('click', '.remove_filter_attribute', app.PeopleFilterAttribute.remove)
+$(document).on('click', '.attribute_constraint_dropdown', app.PeopleFilterAttribute.toggleValueVisibility)

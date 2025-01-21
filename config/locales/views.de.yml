@@ -1774,6 +1774,7 @@ de:
       equal: ist genau
       greater: grösser als
       smaller: kleiner als
+      blank: ist leer
 
     language:
       title: Sprache

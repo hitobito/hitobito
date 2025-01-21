@@ -24,7 +24,7 @@ Fabricator(:person_with_address, from: :person) do
   postbox { Faker::Address.mail_box if (1..10).to_a.shuffle == 1 }
   town { Faker::Address.city }
   zip_code { Faker::Address.zip_code[0..3] }
-  country { Faker::Address.country_code }
+  country { "CH" }
 end
 
 Fabricator(:person_with_address_and_phone, from: :person_with_address) do

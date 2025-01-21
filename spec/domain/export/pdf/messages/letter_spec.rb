@@ -213,10 +213,10 @@ describe Export::Pdf::Messages::Letter do
   end
 
   context "household addresses" do
-    let(:housemate1) { Fabricate(:person_with_address, first_name: "Anton", last_name: "Abraham") }
-    let(:housemate2) { Fabricate(:person_with_address, first_name: "Zora", last_name: "Zaugg") }
+    let(:housemate1) { Fabricate(:person_with_address, first_name: "Anton", last_name: "Abraham", country: "DE", zip_code: "12345") }
+    let(:housemate2) { Fabricate(:person_with_address, first_name: "Zora", last_name: "Zaugg", country: "DE", zip_code: "12345") }
     let(:other_housemate) do
-      Fabricate(:person_with_address, first_name: "Altra", last_name: "Mates")
+      Fabricate(:person_with_address, first_name: "Altra", last_name: "Mates", country: "DE", zip_code: "12345")
     end
 
     before do
@@ -317,24 +317,24 @@ describe Export::Pdf::Messages::Letter do
 
     context "household addresses" do
       let(:housemate1) do
-        Fabricate(:person_with_address, first_name: "Anton", last_name: "Abraham", country: "HM")
+        Fabricate(:person_with_address, first_name: "Anton", last_name: "Abraham", country: "HM", zip_code: "7151")
       end
       let(:housemate2) do
-        Fabricate(:person_with_address, first_name: "Zora", last_name: "Zaugg", country: "HM")
+        Fabricate(:person_with_address, first_name: "Zora", last_name: "Zaugg", country: "HM", zip_code: "7151")
       end
       let(:housemate3) do
-        Fabricate(:person_with_address, first_name: "Bettina", last_name: "Büttel", country: "HM")
+        Fabricate(:person_with_address, first_name: "Bettina", last_name: "Büttel", country: "HM", zip_code: "7151")
       end
       let(:housemate4) do
-        Fabricate(:person_with_address, first_name: "Carlo", last_name: "Colorado", country: "HM")
+        Fabricate(:person_with_address, first_name: "Carlo", last_name: "Colorado", country: "HM", zip_code: "7151")
       end
       let(:other_housemate) do
-        Fabricate(:person_with_address, first_name: "Altra", last_name: "Mates", country: "HM")
+        Fabricate(:person_with_address, first_name: "Altra", last_name: "Mates", country: "HM", zip_code: "7151")
       end
       let(:top_leader) { people(:top_leader) }
       let(:bottom_member) { people(:bottom_member) }
       let(:single_person) do
-        Fabricate(:person_with_address, first_name: "Dominik", last_name: "Dachs", country: "IO")
+        Fabricate(:person_with_address, first_name: "Dominik", last_name: "Dachs", country: "DE", zip_code: "67253")
       end
 
       before do

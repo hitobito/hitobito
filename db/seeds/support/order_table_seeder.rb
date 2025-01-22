@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class OrderTableSeeder
-
   def seed
     return true if seeded?
 
@@ -23,14 +22,14 @@ class OrderTableSeeder
   end
 
   def truncate_all
-    GroupTypeOrder.connection.truncate(GroupTypeOrder.table_name, 'Truncate GroupTypeOrder')
-    EventRoleTypeOrder.connection.truncate(EventRoleTypeOrder.table_name, 'Truncate EventRoleTypeOrder')
-    RoleTypeOrder.connection.truncate(RoleTypeOrder.table_name, 'Truncate RoleTypeOrder')
+    GroupTypeOrder.connection.truncate(GroupTypeOrder.table_name, "Truncate GroupTypeOrder")
+    EventRoleTypeOrder.connection.truncate(EventRoleTypeOrder.table_name, "Truncate EventRoleTypeOrder")
+    RoleTypeOrder.connection.truncate(RoleTypeOrder.table_name, "Truncate RoleTypeOrder")
   end
 
   def insert_event_role_types
-    Event.all_types.each do | event_type |
-      event_type::role_types.each_with_index do | role_type, index|
+    Event.all_types.each do |event_type|
+      event_type.role_types.each_with_index do |role_type, index|
         EventRoleTypeOrder.create(name: role_type, order_weight: index + 1)
       end
     end

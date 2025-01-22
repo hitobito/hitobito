@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'csv'
+require "csv"
 
 # Imports a CSV with the columns zip_code, town and canton.
 #
@@ -16,11 +16,11 @@ require 'csv'
 # * Add a header for zip_code, town and canton
 # * Save with separator ; encoded as UTF-8 (Libre Office: Save as > Edit Filter Settings)
 class LocationSeeder
-  FILE = Rails.root.join('db', 'seeds', 'support', 'locations.csv')
-  SEPARATOR = ';'
-  ENCODING = 'UTF-8'
+  FILE = Rails.root.join("db", "seeds", "support", "locations.csv")
+  SEPARATOR = ";"
+  ENCODING = "UTF-8"
 
-  SEED_MARKER = 'locations seeded'
+  SEED_MARKER = "locations seeded"
 
   def seed
     return true if marked_as_seeded?
@@ -46,20 +46,20 @@ class LocationSeeder
   end
 
   def truncate_locations
-    Location.connection.truncate(Location.table_name, 'Truncate Location')
+    Location.connection.truncate(Location.table_name, "Truncate Location")
   end
 
   def bulk_insert
     data.each_slice(500).each_with_index do |values, slice|
       puts " - Location: inserting slice #{slice}"
-      insert = "INSERT INTO locations (canton, zip_code, name) VALUES #{values.join(',')}"
+      insert = "INSERT INTO locations (canton, zip_code, name) VALUES #{values.join(",")}"
       Location.connection.execute(insert)
     end
   end
 
   def data
     csv.each_with_object([]) do |row, data|
-      data << "(\'#{row['canton'].to_s.downcase}\', \'#{row['zip_code']}\', \'#{row['town'].gsub("'", "''")}\')"
+      data << "('#{row["canton"].to_s.downcase}', '#{row["zip_code"]}', '#{row["town"].gsub("'", "''")}')"
     end.uniq
   end
 

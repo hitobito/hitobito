@@ -148,6 +148,24 @@ describe PeopleController, js: true do
     end
   end
 
+  context "attributes" do
+    before do
+      sign_in
+      visit group_people_path(group, range: "group")
+
+      click_link "Weitere Ansichten"
+      click_link "Neuer Filter..."
+      expect(page).to have_content "Personen filtern"
+      click_link "Felder"
+    end
+
+    it "it removes value field when selecting blank constraint" do
+      find("#attribute_filter option", text: "Nachname").click
+      find(".attribute_constraint_dropdown option", text: "ist leer").click
+      expect(page).not_to have_css ".attribute_value_input"
+    end
+  end
+
   def sign_in_and_create_filter
     sign_in
     visit group_people_path(group)

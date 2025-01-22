@@ -114,7 +114,7 @@ class Setup
     })
   end
 
-  def available(excluded = %w[jubla_ci site])
+  def available(excluded = %w[])
     @available ||= root.parent.entries
       .collect { |x| x.to_s[/hitobito_(.*)/, 1] }
       .compact.reject(&:empty?) - excluded + core_aliases

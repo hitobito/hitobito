@@ -3,6 +3,7 @@
 ## Version 2.4
 
 - Verbesserte Mailchimp Tag Synchronisierung (hitobito_sac_cas#1487)
+- Personefilter unterstützt das Filtern nach leeren Attributen (#3148)
 
 ## Version 2.4
 

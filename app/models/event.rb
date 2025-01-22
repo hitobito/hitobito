@@ -283,7 +283,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     end
 
     def places_available
-      where("(COALESCE(maximum_participants, 0) = 0) OR (participant_count < maximum_participants)")
+      where("(COALESCE(events.maximum_participants, 0) = 0) OR (participant_count < events.maximum_participants)")
     end
 
     # Is the given attribute used in the current STI class

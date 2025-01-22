@@ -189,7 +189,7 @@ reset-test-database)
 
 gemfile)
   bundle check || bundle
-  echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -L1 -I% \
+  echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -I% \
     cp -v "${BUNDLE_GEMFILE:-'Gemfile'}.lock" "../hitobito_%/"
   ;;
 
@@ -197,12 +197,12 @@ configs)
   shift # loose the "configs" argument
   configs_to_copy=${@:-.rspec}
 
-  echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -L1 -I% \
+  echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -I% \
     cp -v $configs_to_copy "../hitobito_%/"
   ;;
 
 binstubs)
-  echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -L1 -I% \
+  echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -I% \
     cp -vf bin/binstubs/* "../hitobito_%/bin/"
   ;;
 
@@ -394,7 +394,7 @@ create)
 
 overwritten-in-wagon)
   git diff master.. --name-only app/views/ |
-    xargs -L1 -I% find ../ -path "*/%" -a \! -regex ".*\(ose_composition\|hitobito-development\).*"
+    xargs -I% find ../ -path "*/%" -a \! -regex ".*\(ose_composition\|hitobito-development\).*"
   ;;
 
 completion)

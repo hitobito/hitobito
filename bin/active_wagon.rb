@@ -43,7 +43,10 @@ class Setup
     return unless gemfile_dev
 
     FileUtils.ln_s("#{directory}/Gemfile", "#{directory}/#{gemfile_dev}", force: true)
-    FileUtils.cp("#{directory}/Gemfile.lock", "#{directory}/#{gemfile_dev}.lock")
+
+    if File.exist?("#{directory}/Gemfile.lock")
+      FileUtils.cp("#{directory}/Gemfile.lock", "#{directory}/#{gemfile_dev}.lock")
+    end
   end
 
   def write_and_copy(name, content)

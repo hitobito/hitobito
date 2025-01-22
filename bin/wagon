@@ -159,8 +159,7 @@ direnv-allow-all)
 
 each)
   shift # loose the "each" argument
-  for wagon in jubla kljb pbs pro_natura sac_cas sbv sjas skv svse sww tenants youth; do
-  #for wagon in $(existing_wagon_names); do
+  for wagon in $(existing_wagon_names); do
     echo "$wagon" | red
     (
       cd "../hitobito_${wagon}" &&
@@ -245,7 +244,6 @@ grep)
 
 spec-all)
   shift # loose the "spec-all" argument
-#  for wagon in jubla kljb pbs pro_natura sac_cas sbv sjas skv svse sww tenants youth; do
   for wagon in $(existing_wagon_names); do
     echo "$wagon" | red
     wagon spec $wagon $@
@@ -409,6 +407,8 @@ function __wagon_commands() {
     configs
     create
     create-database
+    direnv-allow-all
+    each
     gemfile
     git
     git-all
@@ -460,11 +460,11 @@ COMPLETION
 help | *)
   echo "USAGE: $0 [activate] <WAGON>|core"
   echo "       $0 [clone|bootstrap] <WAGON>"
-  echo "       $0 [create-datbase|reset-database|test-prepare|update-copyright]"
+  echo "       $0 [create-datbase|reset-database|test-prepare|update-copyright|direnv-allow-all]"
   echo "       $0 [spec|build] <WAGON>"
   echo "       $0 [spec-all|reset-test-database|overwritten-in-wagon]"
   echo "       $0 [grep] <TERM>"
-  echo "       $0 [git|git-all] <ARGS>"
+  echo "       $0 [git|git-all|each] <ARGS>"
   echo "       $0 [gemfile|configs|binstubs|list]"
   echo
   echo "Enable bash-completion with \"source <($0 completion)\""

@@ -675,13 +675,22 @@ describe MailingLists::Subscribers do
         expect(list.subscribed?(p)).to be_truthy
       end
 
-      it "is false if in group but requires opt_in" do
+      it "is false if in group but requires opt_in and only configured may subscribe" do
         create_subscription(groups(:bottom_layer_one), false,
           Group::BottomGroup::Leader.sti_name)
         p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
 
         list.update!(subscribable_for: :configured, subscribable_mode: :opt_in)
         expect(list.subscribed?(p)).to be_falsey
+      end
+
+      it "is true if in group and requires opt_in and anyone may subscribe" do
+        create_subscription(groups(:bottom_layer_one), false,
+          Group::BottomGroup::Leader.sti_name)
+        p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
+
+        list.update!(subscribable_for: :anyone, subscribable_mode: :opt_in)
+        expect(list.subscribed?(p)).to be_truthy
       end
 
       it "is true with role with future end_on" do

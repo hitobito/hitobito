@@ -21,9 +21,11 @@ class MailingLists::Subscribers
   end
 
   def subscribed?(person)
-    filter_chain.filter(Person.where(id: person.id)).exists? &&
-      Person.connection.select_values(people_cte.where(Arel::Table.new(:people)[:id].eq(person.id)).to_sql).present? &&
-      (!opt_in? || subscriptions.people.where(id: person.id).exists?)
+    subscribed = filter_chain.filter(Person.where(id: person.id)).exists? &&
+      Person.connection.select_values(people_cte.where(Arel::Table.new(:people)[:id].eq(person.id)).to_sql).present?
+    return subscribed unless opt_in? && subscribable_for_configured?
+
+    subscribed && subscriptions.people.where(id: person.id).exists?
   end
 
   def people_as_configured

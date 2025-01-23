@@ -16,10 +16,11 @@ module Export
     end
 
     class Generator
-      attr_reader :encoding, :exportable, :options, :utf8_bom
+      attr_reader :encoding, :exportable, :csv_handler_class, :options, :utf8_bom
 
-      def initialize(exportable, **options)
+      def initialize(exportable, csv_handler_class: CSVSafe, **options)
         @exportable = exportable
+        @csv_handler_class = csv_handler_class
         @options = options
         @encoding = extract_option(:encoding, default: Settings.csv.encoding)
         @utf8_bom = extract_option(:utf8_bom, default: Settings.csv.utf8_bom)
@@ -35,7 +36,7 @@ module Export
       private
 
       def generate
-        CSVSafe.generate(**default_options.merge(options)) do |generator|
+        csv_handler_class.generate(**default_options.merge(options)) do |generator|
           generator << exportable.labels if exportable.labels.present?
           exportable.data_rows(:csv) do |row|
             generator << row

@@ -41,13 +41,11 @@ class Person::SubscriptionsController < ApplicationController
   end
 
   def subscribed
-    @subscribed ||= grouped_by_layer(subscriptions.subscribed.list)
+    @subscribed ||= grouped_by_layer(subscriptions.subscribed)
   end
 
   def subscribable
-    @subscribable ||= grouped_by_layer(
-      subscriptions.subscribable.where.not(id: subscriptions.subscribed).list
-    )
+    @subscribable ||= grouped_by_layer(subscriptions.subscribable - subscriptions.subscribed)
   end
 
   def subscriptions
@@ -55,6 +53,10 @@ class Person::SubscriptionsController < ApplicationController
   end
 
   def grouped_by_layer(mailing_lists)
-    mailing_lists.includes(:group).group_by { _1.group.layer_group }
+    MailingList
+      .includes(group: :layer_group)
+      .list
+      .where(id: mailing_lists.map(&:id))
+      .group_by { _1.group.layer_group }
   end
 end

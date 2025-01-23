@@ -193,7 +193,6 @@ en:
       timeout: "Your session has expired, please log in again."
       inactive: "Your account is not active."
       not_found_in_database: "Invalid login credentials."
-      signin_not_allowed: "You are not authorized you to sign here."
       not_permitted_to_view_page: "You are not authorized to view this page"
     sessions:
       signed_out: "You are now logged out."
@@ -206,7 +205,6 @@ en:
         sign_in: "Log in with %{name}"
         info: "Please sign in to proceed to %{oauth_app}"
     passwords:
-      send_instructions: "In a few minutes, you'll receive an e-mail with instructions how to reset your password."
       updated: "Your password has been changed. You're now logged in."
       updated_not_active: "Your password has been changed."
       send_paranoid_instructions: "If your e-mail address exist in our database, you will receive in a few minutes an e-mail with instructions on how to reset your password."

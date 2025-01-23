@@ -15,6 +15,10 @@ describe FullTextController, type: :controller do
   describe "GET #index" do
     let(:group) { groups(:top_layer) }
 
+    before do
+      allow_any_instance_of(FullTextController).to receive(:only_result).and_return(nil)
+    end
+
     context "with finance permissions" do
       before { sign_in(people(:top_leader)) }
 

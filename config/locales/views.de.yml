@@ -224,7 +224,7 @@ de:
       timeout: "Deine Sitzung ist abgelaufen, bitte melde Dich erneut an."
       inactive: "Dein Account ist nicht aktiv."
       not_found_in_database: "Ungültige Anmeldedaten."
-      signin_not_allowed: "Du bist nicht berechtigt, Dich hier anzumelden."
+      signin_not_allowed: "Wenn uns die angegebene E-Mail-Adresse bekannt ist, erhältst du in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Dein Passwort zurücksetzen kannst."
       not_permitted_to_view_page: "Sie sind nicht berechtigt, diese Seite anzuzeigen"
     sessions:
       signed_in: ""
@@ -237,8 +237,9 @@ de:
       oauth_info:
         sign_in: "Anmelden mit %{name}"
         info: "Bitte melde dich an, um weiter zu %{oauth_app} zu gelangen."
+        no_oauth_app_info: "Bitte melde dich an, um weiter zu gelangen."
     passwords:
-      send_instructions: "Du erhältst in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Dein Passwort zurücksetzen kannst."
+      send_instructions: "Wenn uns die angegebene E-Mail-Adresse bekannt ist, erhältst du in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Dein Passwort zurücksetzen kannst."
       updated: "Dein Passwort wurde geändert. Du bist jetzt angemeldet."
       updated_not_active: "Dein Passwort wurde geändert."
       send_paranoid_instructions: "Falls Deine E-Mail-Adresse in unserer Datenbank existiert erhältst Du in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Dein Passwort zurücksetzen können."
@@ -1773,6 +1774,7 @@ de:
       equal: ist genau
       greater: grösser als
       smaller: kleiner als
+      blank: ist leer
 
     language:
       title: Sprache

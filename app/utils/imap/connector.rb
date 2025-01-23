@@ -95,7 +95,9 @@ class Imap::Connector
     return if @connected
 
     @imap = Net::IMAP.new(
-      config(:address), config(:imap_port) || 993, config(:enable_ssl) || true
+      config(:address),
+      port: config(:imap_port) || 993,
+      ssl: config(:enable_ssl) || true
     )
     @imap.login(config(:user_name), config(:password))
     @connected = true

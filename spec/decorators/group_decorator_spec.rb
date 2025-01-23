@@ -19,17 +19,41 @@ describe GroupDecorator, :draper_with_helpers do
   subject(:decorator) { GroupDecorator.new(model) }
 
   describe "possible roles" do
-    its(:possible_roles) do
-      should eq [
-        Role::External,
+    let(:role_types) {
+      [Role::External,
         Group::TopGroup::GroupManager,
         Group::TopGroup::InvisiblePeopleManager,
         Group::TopGroup::Leader,
         Group::TopGroup::LocalGuide,
         Group::TopGroup::LocalSecretary,
         Group::TopGroup::Member,
-        Group::TopGroup::Secretary
-      ]
+        Group::TopGroup::Secretary]
+    }
+
+    its(:possible_roles) { should eq role_types }
+
+    describe "role specific permissions" do
+      let(:view_context) { Draper::ViewContext.current }
+
+      def build_role(type) = model.roles.build(type: type)
+
+      it "includes only role for which user has update permission" do
+        expect(view_context).to receive(:can?).with(:index_local_people, model).and_return(true)
+        allow(view_context).to receive(:can?) do |action, subject|
+          next true if action == :index_local_people || subject.type == "Group::TopGroup::Member"
+          false
+        end
+        expect(decorator.possible_roles).to eq [Group::TopGroup::Member]
+      end
+
+      it "also includes role for if user has only create permission" do
+        expect(view_context).to receive(:can?).with(:index_local_people, model).and_return(true)
+        allow(view_context).to receive(:can?) do |action, subject|
+          next true if action == :index_local_people || (action == :create && subject.type == "Group::TopGroup::Member")
+          false
+        end
+        expect(decorator.possible_roles).to eq [Group::TopGroup::Member]
+      end
     end
   end
 

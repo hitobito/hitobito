@@ -10,11 +10,12 @@ module Export::Tabular::People
     self.model_class = ::Person
     self.row_class = TableDisplayRow
 
-    attr_reader :table_display
+    attr_reader :table_display, :selected_group
 
-    def initialize(list, table_display)
-      super(add_table_display_to_query(list, table_display.person))
+    def initialize(list, table_display, selected_group)
+      super(add_table_display_to_query(list, table_display.person, selected_group))
       @table_display = table_display
+      @selected_group = selected_group
     end
 
     def build_attribute_labels
@@ -23,7 +24,7 @@ module Export::Tabular::People
 
     def selected_labels
       table_display.active_columns(list).each_with_object({}) do |attr, hash|
-        hash[attr] = attribute_label(attr)
+        hash[attr] = attribute_label(attr) unless table_display.column_for(attr).exclude_attr?(selected_group)
       end
     end
 

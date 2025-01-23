@@ -101,6 +101,10 @@ class MailingList < ActiveRecord::Base
     subscribable_mode == "opt_in"
   end
 
+  def opt_out?
+    !opt_in?
+  end
+
   def subscribable?
     (SUBSCRIBABLE_FORS - %w[nobody]).include?(subscribable_for)
   end
@@ -133,8 +137,8 @@ class MailingList < ActiveRecord::Base
     Person::Subscriptions.new(person).unsubscribe(self)
   end
 
-  def subscribed?(person, time: Time.zone.now)
-    MailingLists::Subscribers.new(self, time:).subscribed?(person)
+  def subscribed?(person)
+    MailingLists::Subscribers.new(self).subscribed?(person)
   end
 
   def people(people_scope = Person.only_public_data)

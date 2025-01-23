@@ -7,6 +7,7 @@ require "spec_helper"
 
 describe Export::Tabular::People::TableDisplays do
   let(:person) { people(:top_leader) }
+  let(:group) { groups(:top_group) }
   let!(:registered_columns) { TableDisplay.table_display_columns.clone }
   let!(:registered_multi_columns) { TableDisplay.multi_columns.clone }
 
@@ -21,7 +22,7 @@ describe Export::Tabular::People::TableDisplays do
   end
 
   context "people" do
-    let(:people_list) { Export::Tabular::People::TableDisplays.new(list, table_display) }
+    let(:people_list) { Export::Tabular::People::TableDisplays.new(list, table_display, group) }
     let(:table_display) { TableDisplay.new(person: person, table_model_class: "Person") }
     let(:list) do
       Person.where(id: person.id)
@@ -77,6 +78,12 @@ describe Export::Tabular::People::TableDisplays do
       expect(people_list.data_rows.first.last).to eq "+41 79 000 00 00"
     end
 
+    it "does exclude attribute if exclude_attr of certain column is true" do
+      table_display.selected = [:additional_information]
+      allow_any_instance_of(TestUpdateableColumn).to receive(:exclude_attr?).and_return(true)
+      expect(people_list.labels).not_to include("Zusätzliche Angaben")
+    end
+
     context :with_limited_select do
       let(:list) do
         Person.where(id: person.id)
@@ -95,7 +102,7 @@ describe Export::Tabular::People::TableDisplays do
 
   context "participations" do
     let(:people_list) do
-      Export::Tabular::Event::Participations::TableDisplays.new(list, table_display)
+      Export::Tabular::Event::Participations::TableDisplays.new(list, table_display, group)
     end
     let(:table_display) do
       TableDisplay.new(person: person, table_model_class: "Event::Participation")
@@ -157,6 +164,12 @@ describe Export::Tabular::People::TableDisplays do
       person.phone_numbers.create!(label: "foo.bar", number: "0790000000")
       expect(people_list.labels.last).to eq "Telefonnummer foo.bar"
       expect(people_list.data_rows.first.last).to eq "+41 79 000 00 00"
+    end
+
+    it "does exclude attribute if exclude_attr of certain column is true" do
+      table_display.selected = [:event_question_1]
+      allow_any_instance_of(TableDisplays::Event::Participations::QuestionColumn).to receive(:exclude_attr?).and_return(true)
+      expect(people_list.labels).not_to include("GA oder Halbtax?")
     end
 
     context :with_permission_check do

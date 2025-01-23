@@ -21,6 +21,23 @@ describe Export::Csv::Generator do
   let(:data_without_bom) { data.gsub(bom_matcher, "") }
   let(:csv) { CSV.parse(data_without_bom, col_sep: Settings.csv.separator) }
 
+  describe "csv_handler_class" do
+    it "defaults to CSVSafe" do
+      expect(described_class.new(exportable).csv_handler_class).to eq CSVSafe
+      expect(CSVSafe).to receive(:generate).and_call_original
+      described_class.new(exportable).call
+    end
+
+    it "can be overridden with parameter" do
+      custom_csv_handler = double("Custom CSV handler", generate: "custom;csv;output")
+      generator = described_class.new(exportable, csv_handler_class: custom_csv_handler)
+      expect(CSVSafe).not_to receive(:generate)
+
+      expect(generator.csv_handler_class).to eq custom_csv_handler
+      expect(generator.call).to eq "custom;csv;output"
+    end
+  end
+
   describe "encoding" do
     before do
       allow(exportable).to receive(:data_rows).and_yield(["hello", "😊"])

@@ -6,7 +6,7 @@
 module FullTextSearchable
   SEARCH_COLUMN = :search_column
 
-  TS_QUERY_CHARS = ["(", ")", ":", "&", "|", "!", "'", "?", "%", "<"]
+  TS_QUERY_CHARS = ["(", ")", ":", "&", "|", "!", "'", "?", "%", "<", " "]
 
   def self.included(model)
     model.ignored_columns += [SEARCH_COLUMN]

@@ -19,7 +19,7 @@ A generic [user guide in German](https://hitobito.readthedocs.io/de/latest/) is 
 
 Check out our [development kit](https://github.com/hitobito/development/)
 
-More detailed development documentation can be found in [doc/development](doc/developer).
+More detailed development documentation can be found in [doc/developer](doc/developer).
 
 This is where you also find some [Deployment Instructions](doc/operator/01_deployment.md).
 

@@ -22,6 +22,11 @@ module TableDisplays
       resolve_database_joins(attr)
     end
 
+    # Allows custom columns to override and load additional tables into query to prevent n+1 queries
+    def required_model_includes(attr)
+      []
+    end
+
     # Allows a column class to specify which database columns need to be fetched for calculating the
     # value
     def required_model_attrs(_attr)
@@ -40,6 +45,8 @@ module TableDisplays
     end
 
     def label(attr)
+      return I18n.t("table_displays.#{model_class.to_s.downcase}.#{attr}") if I18n.exists?("table_displays.#{model_class.to_s.downcase}.#{attr}")
+
       model_class.human_attribute_name(attr)
     end
 
@@ -49,8 +56,15 @@ module TableDisplays
       nil
     end
 
+    # Can be overwritten, if for some conditions, this column should not be displayed,
+    # for example only for certain group types
+    def exclude_attr?(group)
+      false
+    end
+
     def render(attr)
       raise "implement in subclass, using `super do ... end`" unless block_given?
+      return if exclude_attr?(template&.parent)
 
       table.col(header(attr), data: {attribute_name: attr}) do |object|
         value_for(object, attr) do |target, target_attr|

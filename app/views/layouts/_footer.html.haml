@@ -18,18 +18,4 @@
             = link_to label, url, target: '_blank'
             %br/
         %p
-          %a{'data-bs-toggle': 'collapse', href: '#detail-info'}
-            %i.fas.fa-chevron-right
-          - if Wagons.app_version.to_s > '0.0'
-            = link_to "Version #{Wagons.app_version}", changelog_path
-          #detail-info.collapse
-            = app_version_links
-
-            = link_to t('.source_code'), 'https://github.com/hitobito', target: '_blank'
-            = t('.available_under_license')
-            = link_to 'GNU Affero General Public License', 'http://www.gnu.org/licenses/agpl-3.0.html', target: '_blank'
-            %br/
-            = t('.developed_by')
-            = link_to 'Hitobito', 'http://hitobito.ch', target: '_blank'
-            2012 -
-            = Time.zone.now.year
+          = render_changelog_link

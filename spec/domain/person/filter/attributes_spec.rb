@@ -119,6 +119,20 @@ describe Person::Filter::Attributes do
             expect(entries).to include(@tg_member3)
           end
         end
+
+        context "blank" do
+          let(:key) { "last_name" }
+          let(:constraint) { "blank" }
+          let(:value) { nil }
+
+          it "returns people with blank attribute" do
+            @tg_member1.update!(last_name: "")
+            @tg_member2.update!(last_name: nil)
+            expect(entries).to include(@tg_member1)
+            expect(entries).to include(@tg_member2)
+            expect(entries).not_to include(@tg_member3)
+          end
+        end
       end
 
       context "email attributes" do
@@ -390,6 +404,24 @@ describe Person::Filter::Attributes do
         it "returns people with matching attribute" do
           expect(entries.size).to eq(1)
           expect(entries).to include(@tg_member3)
+        end
+      end
+
+      context "blank" do
+        let(:constraint) { "blank" }
+
+        it "returns people with matching attribute" do
+          allow_any_instance_of(Person).to receive(:coolness_factor) do |person|
+            case person.first_name
+            when user.first_name then ""
+            when "test1" then nil
+            else 27
+            end
+          end
+          expect(entries.size).to eq(2)
+          expect(entries).to include(user)
+          expect(entries).to include(@tg_member1)
+          expect(entries).not_to include(@tg_member2)
         end
       end
     end

@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class EventSeeder
-
   @@kinds = Event::Kind.list
   @@people_count = Person.count
 
@@ -24,7 +23,7 @@ class EventSeeder
     {
       group_ids: [group_id],
       number: number,
-      maximum_participants: rand(30) + 10,
+      maximum_participants: rand(10..39),
       location: event_location,
       motto: Faker::Lorem.sentence,
       description: Faker::Lorem.paragraphs(number: rand(1..3)).join("\n"),
@@ -35,8 +34,8 @@ class EventSeeder
 
   def event_location
     [Faker::Address.street_address,
-     Faker::Address.zip,
-     Faker::Address.city].join("\n")
+      Faker::Address.zip,
+      Faker::Address.city].join("\n")
   end
 
   def seed_base_event(values)
@@ -70,21 +69,21 @@ class EventSeeder
   end
 
   def course_attributes(values)
-     kind = @@kinds.shuffle.first
-     values.merge({
-       name: "#{kind.try(:short_name)} #{values[:number]}".strip,
-       kind_id: kind.try(:id),
-       state: Event::Course.possible_states.shuffle.first,
-       priorization: Event::Course.used_attributes.include?(:priorization),
-       requires_approval: Event::Course.used_attributes.include?(:requires_approval),
-       signature: Event::Course.used_attributes.include?(:signature),
-       external_applications: Event::Course.used_attributes.include?(:external_applications)
-     })
+    kind = @@kinds.sample
+    values.merge({
+      name: "#{kind.try(:short_name)} #{values[:number]}".strip,
+      kind_id: kind.try(:id),
+      state: Event::Course.possible_states.sample,
+      priorization: Event::Course.used_attributes.include?(:priorization),
+      requires_approval: Event::Course.used_attributes.include?(:requires_approval),
+      signature: Event::Course.used_attributes.include?(:signature),
+      external_applications: Event::Course.used_attributes.include?(:external_applications)
+    })
   end
 
   def seed_dates(event, date)
     rand(3).times do
-      date = seed_date(event, 'Vorweekend', date, 10, 3)
+      date = seed_date(event, "Vorweekend", date, 10, 3)
     end
     seed_date(event, event.class.label, date, 20, 14)
   end
@@ -94,7 +93,7 @@ class EventSeeder
       event_id: event.id,
       label: label,
       start_at: date += rand(20).days,
-      finish_at: date += (7 + rand(5)).days
+      finish_at: date += rand(7..11).days
     })
 
     date
@@ -143,10 +142,10 @@ class EventSeeder
   end
 
   def alternative_course_id(participation, rand_course)
-     Event::Course.where(kind_id: participation.event.kind_id)
-                  .offset((Event::Course.count * rand_course).to_i)
-                  .limit(2)
-                  .pluck(:id)
+    Event::Course.where(kind_id: participation.event.kind_id)
+      .offset((Event::Course.count * rand_course).to_i)
+      .limit(2)
+      .pluck(:id)
   end
 
   def seed_event_role(event, role_type)
@@ -171,7 +170,7 @@ class EventSeeder
       Event::Answer.seed_once(:participation_id, :question_id, {
         participation_id: participation.id,
         question_id: q.id,
-        answer: q.choices? ? q.choice_items.shuffle.first : Faker::Lorem.sentence
+        answer: q.choices? ? q.choice_items.sample : Faker::Lorem.sentence
       })
     end
   end
@@ -183,5 +182,4 @@ class EventSeeder
   def true?
     [true, false].sample
   end
-
 end

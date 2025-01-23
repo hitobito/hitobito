@@ -302,16 +302,17 @@ describe Synchronize::Mailchimp::Client do
   end
 
   context "#update_segment_operation" do
-    subject { client.update_segment_operation(1, %w[leader@example.com member@example.com]) }
+    subject { client.update_segment_operation(1, {members_to_add: %w[leader@example.com member@example.com], members_to_remove: []}) }
 
     it "POSTs to segments list resource" do
       expect(subject[:method]).to eq "POST"
       expect(subject[:path]).to eq "lists/2/segments/1"
     end
 
-    it "body includes name and static_segment fields" do
+    it "passes body as json" do
       body = JSON.parse(subject[:body])
       expect(body["members_to_add"]).to eq %w[leader@example.com member@example.com]
+      expect(body["members_to_remove"]).to eq []
     end
   end
 

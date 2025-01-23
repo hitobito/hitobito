@@ -6,17 +6,16 @@
 # https://github.com/hitobito/hitobito.
 
 class HitobitoLogEntrySeeder
-
   def seed_log_entry
     created_at = Faker::Time.between(from: DateTime.now - 3.days, to: DateTime.now)
     entry = HitobitoLogEntry.seed(
-      { message: Faker::Hacker.say_something_smart,
-        created_at: created_at,
-        updated_at: created_at,
-        category: random_category,
-        level: random_level,
-        payload: {hello: Faker::Name.first_name}
-      })
+      {message: Faker::Hacker.say_something_smart,
+       created_at: created_at,
+       updated_at: created_at,
+       category: random_category,
+       level: random_level,
+       payload: {hello: Faker::Name.first_name}}
+    )
 
     randomize_attachment(entry.first)
 
@@ -35,7 +34,7 @@ class HitobitoLogEntrySeeder
 
   def randomize_attachment(entry)
     if (1..10).to_a.sample == 1 # 10% chance
-      entry.attachment.attach({ io: StringIO.new(random_attachment), filename: "log_attachment_#{entry.id}" })
+      entry.attachment.attach({io: StringIO.new(random_attachment), filename: "log_attachment_#{entry.id}"})
     end
   end
 
@@ -44,10 +43,8 @@ class HitobitoLogEntrySeeder
   end
 
   def all_attachments
-    @all_attachments ||= begin
-                           Dir.glob(Rails.root.join("spec", "fixtures", "invoices", "*.xml").to_s).map do
-                             Rails.root.join(_1).read
-                           end
-                         end
+    @all_attachments ||= Dir.glob(Rails.root.join("spec", "fixtures", "invoices", "*.xml").to_s).map do
+      Rails.root.join(_1).read
+    end
   end
 end

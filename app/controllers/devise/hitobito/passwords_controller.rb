@@ -12,7 +12,7 @@ class Devise::Hitobito::PasswordsController < Devise::PasswordsController
     if resource.login?
       super
     else
-      flash[:alert] = I18n.translate("devise.failure.signin_not_allowed")
+      flash[:notice] = I18n.translate("devise.failure.signin_not_allowed")
     end
   end
 

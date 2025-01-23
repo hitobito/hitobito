@@ -4,6 +4,8 @@
 - #  https://github.com/hitobito/hitobito.
 
 %h2=t('.my_subscriptions')
+= content_tag(:div, ti(:no_list_entries)) if subscribed.none?
+
 - subscribed.each do |layer, mailing_lists|
   %strong= layer.name
   = table(mailing_lists, class: 'table table-striped table-hover') do |t|
@@ -19,7 +21,9 @@
       = link_to t('mailing_list_decorator.unsubscribe'), group_person_subscription_path(@group, @person, list), method: :delete, class: 'btn btn-sm btn-outline-primary'
 
 
-%h2=t('.available_subscriptions')
+%h2.mt-4=t('.available_subscriptions')
+= content_tag(:div, ti(:no_list_entries)) if subscribable.none?
+
 - subscribable.each do |layer, mailing_lists|
   %strong= layer.name
   = table(mailing_lists, class: 'table table-striped table-hover') do |t|

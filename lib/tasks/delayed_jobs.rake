@@ -15,7 +15,9 @@ namespace :delayed_job do
 
   desc "Clear all scheduled Background-Jobs"
   task clear: [:environment, :"db:abort_if_pending_migrations"] do
+    warn "Clearing scheduled Background-Jobs"
     JobManager.new.clear
+    warn "Done."
   end
 
   desc "Check if all expected jobs are scheduled"

@@ -22,7 +22,9 @@ module Export::Tabular::People
     end
 
     def account_labels(collection)
-      scope = collection.distinct_on(:label)
+      scope = collection
+        .where(contactable_id: people_ids, contactable_type: Person.sti_name)
+        .distinct_on(:label)
       model = scope.model
       scope.map(&:translated_label).uniq.each_with_object({}) do |label, obj|
         if label.present?
@@ -38,6 +40,17 @@ module Export::Tabular::People
     def person_attribute_labels
       person_attributes.each_with_object({}) do |attr, hash|
         hash[attr] = attribute_label(attr)
+      end
+    end
+
+    def people_ids
+      @people_ids ||= pluck_ids_from_list("people.id")
+    end
+
+    def pluck_ids_from_list(id_with_optional_table)
+      case @list
+      when Array then @list.pluck(id_with_optional_table.to_s.split(".").last)
+      when ActiveRecord::Relation then @list.unscope(:order).unscope(:select).pluck(id_with_optional_table)
       end
     end
   end

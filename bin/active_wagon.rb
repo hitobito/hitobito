@@ -6,35 +6,33 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'fileutils'
-require 'pathname'
+require "fileutils"
+require "pathname"
 
 # Allows switching wagons quickly (depends on https://direnv.net/)
 class Setup
-
-  USED_RUBY_VERSION = '3.2.6'
-  USED_NODE_VERSION = '16.15.0'
-  USED_YARN_VERSION = '1.22.19'
+  USED_RUBY_VERSION = "3.2.6"
+  USED_NODE_VERSION = "16.15.0"
+  USED_YARN_VERSION = "1.22.19"
 
   def run
-    write_and_copy('.tool-versions', <<~TOOL_VERSION)
+    write_and_copy(".tool-versions", <<~TOOL_VERSION)
       ruby #{USED_RUBY_VERSION}
       nodejs #{USED_NODE_VERSION}
       yarn #{USED_YARN_VERSION}
     TOOL_VERSION
-    write_and_copy('.ruby-version', USED_RUBY_VERSION)
+    write_and_copy(".ruby-version", USED_RUBY_VERSION)
 
-    write('Wagonfile', gemfile)
-    write('.envrc', environment)
+    write("Wagonfile", gemfile)
+    write(".envrc", environment)
     handle_gemfile
 
     wagons.each do |wagon|
+      FileUtils.mkdir("../hitobito_#{wagon}/tmp") unless Dir.exist?("../hitobito_#{wagon}/tmp")
       write("../hitobito_#{wagon}/.envrc", environment(core: false))
       FileUtils.touch("../hitobito_#{wagon}/config/environment.rb") # needed for rails-vim
       handle_gemfile(directory: "../hitobito_#{wagon}")
     end
-
-    FileUtils.rm_rf(root.join('tmp'))
   end
 
   def write(name, content)
@@ -60,7 +58,7 @@ class Setup
 
   def wagon(name = ARGV.first)
     if !available.include?(name)
-      puts "Specify one of the following: #{available.join('|')}"
+      puts "Specify one of the following: #{available.join("|")}"
       exit
     end
     name
@@ -83,7 +81,7 @@ class Setup
 
   def environment(core: true)
     <<~DIRENV
-      #{ "PATH_add ../hitobito/bin" unless core }
+      #{"PATH_add ../hitobito/bin" unless core}
       PATH_add bin
       export RAILS_DB_ADAPTER=postgresql
       export RAILS_DB_HOST=127.0.0.1
@@ -91,18 +89,19 @@ class Setup
       export RAILS_DB_USERNAME=hitobito
       export RAILS_DB_PASSWORD=hitobito
       export RAILS_DB_NAME=hit_#{wagon}_dev
-      export RAILS_TEST_DB_NAME=hit_#{core ? "core" : wagon}_test
+      export RAILS_TEST_DB_NAME=hit_#{wagon}_test
+      export RAILS_TMPDIR=#{root.join("../hitobito_#{wagon}/tmp")}
       export SPRING_APPLICATION_ID=hit_#{core ? "core" : wagon}
       export PRIMARY_WAGON=#{wagon}
       export DISABLE_TEST_SCHEMA_MAINTENANCE=1
-      #{'export WAGONS="' + wagons.join(' ') + '"' if wagons.any?}
-      log_status "hitobito now uses: #{wagons.any? ? wagons.join(', ') : 'just the core'}"
+      #{'export WAGONS="' + wagons.join(" ") + '"' if wagons.any?}
+      log_status "hitobito now uses: #{wagons.any? ? wagons.join(", ") : "just the core"}"
       source_up
     DIRENV
   end
 
   def root
-    @root ||= Pathname.new(File.expand_path('../../', __FILE__))
+    @root ||= Pathname.new(File.expand_path("../../", __FILE__))
   end
 
   def wagons
@@ -110,27 +109,26 @@ class Setup
   end
 
   def dependencies
-    %w(pbs cevi pro_natura jubla sjas jemk sac_cas).product([%w(youth)]).to_h.merge({
-      'tenants' => %w(generic),
+    %w[pbs cevi pro_natura jubla sjas jemk sac_cas].product([%w[youth]]).to_h.merge({
+      "tenants" => %w[generic]
     })
   end
 
-  def available(excluded = %w(jubla_ci site))
+  def available(excluded = %w[])
     @available ||= root.parent.entries
-      .collect { |x| x.to_s[/hitobito_(.*)/, 1]  }
+      .collect { |x| x.to_s[/hitobito_(.*)/, 1] }
       .compact.reject(&:empty?) - excluded + core_aliases
   end
 
   def core_aliases
-    %w(core hitobito)
+    %w[core hitobito]
   end
 
   def strip_heredoc(string)
     val = string.scan(/^[ \t]*(?=\S)/).min
     indent = val ? val.size : 0
-    string.gsub(/^[ \t]{#{indent}}/, '')
+    string.gsub(/^[ \t]{#{indent}}/, "")
   end
-
 end
 
 Setup.new.run

@@ -718,6 +718,8 @@ GEM
     validates_timeliness (7.0.0.beta2)
       activemodel (>= 7.0.0, < 8)
       timeliness (>= 0.3.10, < 1)
+    validates_zipcode (0.5.3)
+      activemodel (>= 4.2.0)
     vcard (0.3.0)
     view_component (3.12.1)
       activesupport (>= 5.2.0, < 8.0)
@@ -888,6 +890,7 @@ DEPENDENCIES
   turbo-rails
   validates_by_schema (~> 0.3.0)
   validates_timeliness (~> 7.0.0.beta2)
+  validates_zipcode
   vcard
   view_component
   wagons (~> 0.7.0)

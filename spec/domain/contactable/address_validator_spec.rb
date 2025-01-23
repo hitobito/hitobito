@@ -105,7 +105,7 @@ describe Contactable::AddressValidator do
   end
 
   it "does not tag people from non imported countries" do
-    person.update!(country: "DE")
+    person.update!(country: "DE", zip_code: "12345")
 
     expect do
       validator.validate_people

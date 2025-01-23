@@ -95,14 +95,13 @@ class MailingLists::Subscribers
   def tag_excluded_subscription_ids
     SubscriptionTag
       .select(:tag_id).joins(:subscription)
-      .where(subscription_tags: { excluded: true }, subscriptions: { mailing_list_id: id })
+      .where(subscription_tags: {excluded: true}, subscriptions: {mailing_list_id: id})
   end
 
   def excluded_subscriber_ids
     Subscription
       .select(:subscriber_id)
       .where(mailing_list_id: id, excluded: true, subscriber_type: Person.sti_name)
-
   end
 
   private
@@ -148,13 +147,13 @@ class MailingLists::Subscribers
       .arel
       .join(taggings, OuterJoin).on(taggings[:taggable_id].eq(people[:id]).and(taggings[:taggable_type].eq(Person.sti_name)))
       .join(group_subscriptions, Arel::Nodes::OuterJoin).on(
-      groups[:lft].gteq(group_subscriptions[:lft])
-                  .and(groups[:rgt].lteq(group_subscriptions[:rgt]))
-                  .and(roles[:type].eq(group_subscriptions[:role_type]))
-                  .and(roles[:start_on].eq(nil).or(roles[:start_on].lteq(now.to_date)))
-                  .and(roles[:end_on].eq(nil).or(roles[:end_on].gteq(now.to_date)))
-                  .and(roles[:archived_at]).eq(nil).or(roles[:archived_at].gteq(now))
-    )
+        groups[:lft].gteq(group_subscriptions[:lft])
+                    .and(groups[:rgt].lteq(group_subscriptions[:rgt]))
+                    .and(roles[:type].eq(group_subscriptions[:role_type]))
+                    .and(roles[:start_on].eq(nil).or(roles[:start_on].lteq(now.to_date)))
+                    .and(roles[:end_on].eq(nil).or(roles[:end_on].gteq(now.to_date)))
+                    .and(roles[:archived_at]).eq(nil).or(roles[:archived_at].gteq(now))
+      )
       .then { |scope| event_subscriptions? ? scope.join(event_subscriptions, OuterJoin).on(event_subscriptions[:person_id].eq(people[:id])) : scope }
       .then { |scope| including_people_subscriptions? ? scope.join(including_person_subscriptions, OuterJoin).on(including_person_subscriptions[:subscriber_id].eq(people[:id])) : scope }
       .then { |scope| excluding_people_subscriptions? ? scope.join(excluding_person_subscriptions, OuterJoin).on(excluding_person_subscriptions[:subscriber_id].eq(people[:id])) : scope }

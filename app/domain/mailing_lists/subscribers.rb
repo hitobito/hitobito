@@ -34,10 +34,10 @@ class MailingLists::Subscribers
 
   def person_subscribers(condition)
     condition.or("subscriptions.subscriber_type = ? AND " \
-                 "subscriptions.excluded = ? AND " \
-                 "subscriptions.subscriber_id = people.id",
-      Person.sti_name,
-      false)
+                   "subscriptions.excluded = ? AND " \
+                   "subscriptions.subscriber_id = people.id",
+                 Person.sti_name,
+                 false)
   end
 
   def group_subscribers(condition)
@@ -79,29 +79,32 @@ class MailingLists::Subscribers
   def event_subscribers(condition)
     condition
       .or("subscriptions.subscriber_type = ? AND " \
-          "subscriptions.subscriber_id = event_participations.event_id AND " \
-          "event_participations.active = ?",
-        Event.sti_name,
-        true)
+            "subscriptions.subscriber_id = event_participations.event_id AND " \
+            "event_participations.active = ?",
+          Event.sti_name,
+          true)
   end
 
   def tag_excluded_person_ids
     ActsAsTaggableOn::Tagging
       .select(:taggable_id)
       .where(taggable_type: Person.sti_name,
-        tag_id: tag_excluded_subscription_ids)
+             tag_id: tag_excluded_subscription_ids)
   end
 
   def tag_excluded_subscription_ids
     SubscriptionTag
       .select(:tag_id).joins(:subscription)
-      .where(subscription_tags: {excluded: true}, subscriptions: {mailing_list_id: id})
+      .where(subscription_tags: { excluded: true }, subscriptions: { mailing_list_id: id })
   end
 
   def excluded_subscriber_ids
     Subscription
       .select(:subscriber_id)
       .where(mailing_list_id: id, excluded: true, subscriber_type: Person.sti_name)
+
+  end
+
   private
 
   def scope
@@ -129,15 +132,15 @@ class MailingLists::Subscribers
     ctes += [Arel::Nodes::As.new(:excluding_person_subscriptions, excluding_person_subscriptions_cte)] if excluding_people_subscriptions?
 
     conditions = group_subscriptions[:role_type].not_eq(nil)
-      .then { |scope| event_subscriptions? ? scope.or(event_subscriptions[:person_id].not_eq(nil)) : scope }
-      .then { |scope| including_people_subscriptions? ? scope.or(including_person_subscriptions[:subscriber_id].not_eq(nil)) : scope }
-      .then { |scope| excluding_people_subscriptions? ? scope.and(excluding_person_subscriptions[:subscriber_id].eq(nil)) : scope }
-      .then do |scope|
-        next scope unless group_subscription_tags?
-        scope.and(group_subscriptions[:tag_id].eq(nil)
-            .or(group_subscriptions[:tag_excludes].eq(false).and(group_subscriptions[:tag_id].eq(taggings[:tag_id])))
-            .or(group_subscriptions[:tag_excludes].eq(true).and(taggings[:tag_id].eq(nil).or(taggings[:tag_id].not_eq(group_subscriptions[:tag_id])))))
-      end
+                                                .then { |scope| event_subscriptions? ? scope.or(event_subscriptions[:person_id].not_eq(nil)) : scope }
+                                                .then { |scope| including_people_subscriptions? ? scope.or(including_person_subscriptions[:subscriber_id].not_eq(nil)) : scope }
+                                                .then { |scope| excluding_people_subscriptions? ? scope.and(excluding_person_subscriptions[:subscriber_id].eq(nil)) : scope }
+                                                .then do |scope|
+      next scope unless group_subscription_tags?
+      scope.and(group_subscriptions[:tag_id].eq(nil)
+                                            .or(group_subscriptions[:tag_excludes].eq(false).and(group_subscriptions[:tag_id].eq(taggings[:tag_id])))
+                                            .or(group_subscriptions[:tag_excludes].eq(true).and(taggings[:tag_id].eq(nil).or(taggings[:tag_id].not_eq(group_subscriptions[:tag_id])))))
+    end
 
     Person
       .select(*columns)
@@ -145,13 +148,13 @@ class MailingLists::Subscribers
       .arel
       .join(taggings, OuterJoin).on(taggings[:taggable_id].eq(people[:id]).and(taggings[:taggable_type].eq(Person.sti_name)))
       .join(group_subscriptions, Arel::Nodes::OuterJoin).on(
-        groups[:lft].gteq(group_subscriptions[:lft])
-          .and(groups[:rgt].lteq(group_subscriptions[:rgt]))
-          .and(roles[:type].eq(group_subscriptions[:role_type]))
-          .and(roles[:start_on].eq(nil).or(roles[:start_on].lteq(now.to_date)))
-          .and(roles[:end_on].eq(nil).or(roles[:end_on].gteq(now.to_date)))
-          .and(roles[:archived_at]).eq(nil).or(roles[:archived_at].gteq(now))
-      )
+      groups[:lft].gteq(group_subscriptions[:lft])
+                  .and(groups[:rgt].lteq(group_subscriptions[:rgt]))
+                  .and(roles[:type].eq(group_subscriptions[:role_type]))
+                  .and(roles[:start_on].eq(nil).or(roles[:start_on].lteq(now.to_date)))
+                  .and(roles[:end_on].eq(nil).or(roles[:end_on].gteq(now.to_date)))
+                  .and(roles[:archived_at]).eq(nil).or(roles[:archived_at].gteq(now))
+    )
       .then { |scope| event_subscriptions? ? scope.join(event_subscriptions, OuterJoin).on(event_subscriptions[:person_id].eq(people[:id])) : scope }
       .then { |scope| including_people_subscriptions? ? scope.join(including_person_subscriptions, OuterJoin).on(including_person_subscriptions[:subscriber_id].eq(people[:id])) : scope }
       .then { |scope| excluding_people_subscriptions? ? scope.join(excluding_person_subscriptions, OuterJoin).on(excluding_person_subscriptions[:subscriber_id].eq(people[:id])) : scope }

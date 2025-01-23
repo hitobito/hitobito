@@ -24,6 +24,7 @@ describe TableDisplays::People::LoginStatusColumn, type: :helper do
     column: :login_status,
     header: "Login",
     value: "login_status_icon",
+    export_value: "login",
     permission: :show
   }
 end

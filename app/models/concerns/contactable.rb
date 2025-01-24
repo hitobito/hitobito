@@ -51,7 +51,10 @@ module Contactable
     before_validation :set_self_in_nested
 
     validates :country, inclusion: Countries.codes, allow_blank: true
-    validates :zip_code, zipcode: {country_code_attribute: :zip_country}, allow_blank: true
+
+    # Configure if zip code should be validated, true by default, can be disabled in wagons
+    class_attribute :validate_zip_code, default: true
+    validates :zip_code, zipcode: {country_code_attribute: :zip_country}, allow_blank: true, if: :validate_zip_code
   end
 
   def address

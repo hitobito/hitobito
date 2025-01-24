@@ -441,6 +441,23 @@ describe Person do
   context "zip code" do
     let(:person) { Person.new(last_name: "Foo") }
 
+    context "validation can be disabled" do
+      # restore default configuration
+      after { Person.validate_zip_code = true }
+
+      it "on instance" do
+        person.validate_zip_code = false
+        person.zip_code = "hello world"
+        expect(person).to be_valid
+      end
+
+      it "on class" do
+        Person.validate_zip_code = false
+        person.zip_code = "hello world"
+        expect(person).to be_valid
+      end
+    end
+
     context "no country" do
       before do
         person.country = nil

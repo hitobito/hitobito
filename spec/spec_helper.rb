@@ -153,6 +153,10 @@ RSpec.configure do |config|
     end
   end
 
+  config.define_derived_metadata(file_path: %r{\bspec/features/}) do |metadata|
+    metadata[:js] = true
+  end
+
   config.around(:each, :time_frozen) do |example|
     freeze_time do
       example.run

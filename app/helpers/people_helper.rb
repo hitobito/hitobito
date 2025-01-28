@@ -66,7 +66,7 @@ module PeopleHelper
   end
 
   def format_person_layer_group(person)
-    person.layer_group_label
+    person.decorate.layer_group_label
   end
 
   def format_person_language(person)

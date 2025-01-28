@@ -9,9 +9,13 @@ module WagonHelper
   def render_core_partial(partial_name, locals = {})
     core_view_path = Rails.root.join("app", "views")
 
+    prefixes = partial_name.include?("/") ? [] : lookup_context.prefixes
+    template = nil
     with_view_path(core_view_path) do
-      render(partial_name, locals)
+      template = lookup_context.find_template(partial_name, prefixes, true, locals.keys, [])
     end
+
+    render(template: template, locals: locals)
   end
 
   private

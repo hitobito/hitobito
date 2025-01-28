@@ -12,25 +12,32 @@ shared_examples "table display" do |column:, header:, permission:, value: "", ex
 
   before do
     allow(controller).to receive(:current_user).at_most(:once).and_return(person)
-    allow(table).to receive(:template).at_least(:once).and_return(view)
   end
 
-  it "requires #{permission} as permission" do
-    expect(display.required_permission(column)).to eq permission
+  context "in view" do
+    before do
+      allow(table).to receive(:template).at_least(:once).and_return(view)
+    end
+
+    it "requires #{permission} as permission" do
+      expect(display.required_permission(column)).to eq permission
+    end
+
+    it "renders #{header} as header" do
+      display.render(column)
+      expect(node).to have_css "th", text: header
+    end
+
+    it "renders #{value} as value" do
+      display.render(column)
+      expect(node).to have_css "td", text: value
+    end
   end
 
-  it "renders #{header} as header" do
-    display.render(column)
-    expect(node).to have_css "th", text: header
-  end
-
-  it "renders #{value} as value" do
-    display.render(column)
-    expect(node).to have_css "td", text: value
-  end
-
-  it "uses #{value} in export" do
-    expect(resolve_export_value(column).to_s).to eq(export_value || value)
+  context "in export" do
+    it "uses #{value}" do
+      expect(resolve_export_value(column).to_s).to eq(export_value || value)
+    end
   end
 
   # helper method to imitate resolving of attr usually done in TableDisplayRow

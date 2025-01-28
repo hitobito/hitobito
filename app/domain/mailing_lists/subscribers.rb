@@ -33,11 +33,8 @@ class MailingLists::Subscribers
   end
 
   def person_subscribers(condition)
-    condition.or("subscriptions.subscriber_type = ? AND " \
-                   "subscriptions.excluded = ? AND " \
-                   "subscriptions.subscriber_id = people.id",
-                 Person.sti_name,
-                 false)
+    condition.or("subscriptions.subscriber_type = ? AND subscriptions.excluded = ? " \
+      "AND subscriptions.subscriber_id = people.id ", Person.sti_name, false)
   end
 
   def group_subscribers(condition)
@@ -80,16 +77,13 @@ class MailingLists::Subscribers
     condition
       .or("subscriptions.subscriber_type = ? AND " \
             "subscriptions.subscriber_id = event_participations.event_id AND " \
-            "event_participations.active = ?",
-          Event.sti_name,
-          true)
+            "event_participations.active = ?", Event.sti_name, true)
   end
 
   def tag_excluded_person_ids
     ActsAsTaggableOn::Tagging
       .select(:taggable_id)
-      .where(taggable_type: Person.sti_name,
-             tag_id: tag_excluded_subscription_ids)
+      .where(taggable_type: Person.sti_name, tag_id: tag_excluded_subscription_ids)
   end
 
   def tag_excluded_subscription_ids

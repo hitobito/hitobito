@@ -441,106 +441,163 @@ describe Person do
   context "zip code" do
     let(:person) { Person.new(last_name: "Foo") }
 
+    context "validation can be disabled" do
+      # restore default configuration
+      after { Person.validate_zip_code = true }
+
+      it "on instance" do
+        person.validate_zip_code = false
+        person.zip_code = "hello world"
+        expect(person).to be_valid
+      end
+
+      it "on class" do
+        Person.validate_zip_code = false
+        person.zip_code = "hello world"
+        expect(person).to be_valid
+      end
+    end
+
+    context "no country" do
+      before do
+        person.country = nil
+      end
+
+      it "it is valid with swiss zip_code" do
+        person.zip_code = "1234"
+        expect(person).to be_valid
+      end
+
+      it "it is invalid with german zip_code" do
+        person.zip_code = "12345"
+        expect(person).not_to be_valid
+      end
+    end
+
     context "switzerland" do
-      def should_be_valid_swiss_post_code
-        [nil, "Schweiz"].each do |c|
-          person.country = c
+      before do
+        person.country = :ch
+      end
+
+      ["1000", "1234", "3007", "9000"].each do |zip_code|
+        it "should be valid with #{zip_code}" do
+          person.zip_code = zip_code
           expect(person).to be_valid
         end
       end
 
-      def should_not_be_valid_swiss_post_code
-        [nil, "CH"].each do |c|
-          person.country = c
+      it "should allow empty plz" do
+        person.zip_code = nil
+        expect(person).to be_valid
+      end
+
+      ["10115", "01200", "3000 ", "99577-0727", "2597 GV 75", "C1420", "SW1W 0NY"].each do |zip_code|
+        it "should not be valid with #{zip_code}" do
+          person.zip_code = zip_code
           expect(person).not_to be_valid
         end
-      end
-
-      it "should allow numerical post codes" do
-        should_be_valid_swiss_post_code
-
-        person.zip_code = "1000"
-        should_be_valid_swiss_post_code
-
-        person.zip_code = "1234"
-        should_be_valid_swiss_post_code
-
-        person.zip_code = "3007"
-        should_be_valid_swiss_post_code
-
-        person.zip_code = "9000"
-        should_be_valid_swiss_post_code
-      end
-
-      it "should not allow alphanumerical post codes" do
-        person.zip_code = "10115"
-        should_not_be_valid_swiss_post_code
-
-        person.zip_code = "01200"
-        should_not_be_valid_swiss_post_code
-
-        person.zip_code = "3000 "
-        should_not_be_valid_swiss_post_code
-
-        person.zip_code = "99577-0727"
-        should_not_be_valid_swiss_post_code
-
-        person.zip_code = "2597 GV 75"
-        should_not_be_valid_swiss_post_code
-
-        person.zip_code = "C1420"
-        should_not_be_valid_swiss_post_code
-
-        person.zip_code = "SW1W 0NY"
-        should_not_be_valid_swiss_post_code
       end
     end
 
     context "foreign country" do
-      it "can be empty" do
-        person.country = "ES"
-        expect(person).to be_valid
+      context "germany" do
+        before do
+          person.country = :de
+        end
+
+        ["10000", "12345", "30077", "90000"].each do |zip_code|
+          it "should be valid with #{zip_code}" do
+            person.zip_code = zip_code
+            expect(person).to be_valid
+          end
+        end
+
+        it "should allow empty plz" do
+          person.zip_code = nil
+          expect(person).to be_valid
+        end
+
+        ["1011", "01200 ", "99577-0727", "2597 GV 75", "C1420", "SW1W 0NY"].each do |zip_code|
+          it "should not be valid with #{zip_code}" do
+            person.zip_code = zip_code
+            expect(person).not_to be_valid
+          end
+        end
       end
 
-      it "should allow 5-digit numbers" do
-        person.country = "DE"
-        person.zip_code = "10115"
-        expect(person).to be_valid
+      context "italy" do
+        before do
+          person.country = :de
+        end
+
+        ["10000", "12345", "30077", "90000"].each do |zip_code|
+          it "should be valid with #{zip_code}" do
+            person.zip_code = zip_code
+            expect(person).to be_valid
+          end
+        end
+
+        it "should allow empty plz" do
+          person.zip_code = nil
+          expect(person).to be_valid
+        end
+
+        ["1011", "01200 ", "99577-0727", "2597 GV 75", "C1420", "SW1W 0NY"].each do |zip_code|
+          it "should not be valid with #{zip_code}" do
+            person.zip_code = zip_code
+            expect(person).not_to be_valid
+          end
+        end
       end
 
-      it "should allow leading zeros" do
-        person.country = "FR"
-        person.zip_code = "01210"
-        expect(person).to be_valid
+      context "netherlands" do
+        before do
+          person.country = :nl
+        end
 
-        person.country = "FR"
-        person.zip_code = "00120"
-        expect(person).to be_valid
+        ["1000 AP", "1204DT", "9271 JS", "1403BT", "2817 DG", "1028DH"].each do |zip_code|
+          it "should be valid with #{zip_code}" do
+            person.zip_code = zip_code
+            expect(person).to be_valid
+          end
+        end
+
+        it "should allow empty plz" do
+          person.zip_code = nil
+          expect(person).to be_valid
+        end
+
+        ["1011", "01200 ", "99577-0727", "2597 GV 75", "C1420", "SW1W 0NY"].each do |zip_code|
+          it "should not be valid with #{zip_code}" do
+            person.zip_code = zip_code
+            expect(person).not_to be_valid
+          end
+        end
       end
 
-      it "should allow non-numeric characters" do
-        person.country = "US"
-        person.zip_code = "99577-0727"
-        expect(person).to be_valid
+      context "great britain" do
+        before do
+          person.country = :gb
+        end
 
-        person.country = "NL"
-        person.zip_code = "2597 GV 75"
-        expect(person).to be_valid
+        ["SL6 2BL", "TS2 1DE", "DT9 6AL", "EN6 3HN", "TW19 6BX", "SW19 3RQ"].each do |zip_code|
+          it "should be valid with #{zip_code}" do
+            person.zip_code = zip_code
+            expect(person).to be_valid
+          end
+        end
 
-        person.country = "AR"
-        person.zip_code = "C1420"
-        expect(person).to be_valid
+        it "should allow empty plz" do
+          person.zip_code = nil
+          expect(person).to be_valid
+        end
 
-        person.country = "PL"
-        person.zip_code = "SW1W 0NY"
-        expect(person).to be_valid
-
-        person.country = "CA"
-        person.first_name = "SANTA"
-        person.last_name = "CLAUS"
-        person.address = "NORTH POLE"
-        person.zip_code = "H0H 0H0"
-        expect(person).to be_valid
+        ["1011", "01200 ", "99577-0727", "2597 GV 75", "C1420"].each do |zip_code|
+          it "should not be valid with #{zip_code}" do
+            person.zip_code = zip_code
+            expect(person).not_to be_valid
+          end
+        end
       end
     end
   end
@@ -563,7 +620,7 @@ describe Person do
       l = Location.create!(zip_code: 1200, name: "Lausanne", canton: "be")
       Fabricate(:person, zip_code: "01200", country: "DE")
       Fabricate(:person, zip_code: "1200")
-      Fabricate(:person, zip_code: "1200 ", country: "DE")
+      Fabricate(:person, zip_code: "12000", country: "DE")
       list = Person.includes(:location).where("zip_code LIKE '%1200%'").order(:zip_code).to_a
 
       expect(list.first.location).to be_nil

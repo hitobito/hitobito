@@ -38,9 +38,9 @@ module Export::Tabular
       end
     end
 
-    def initialize(list, abilitiy = nil)
+    def initialize(list, ability = nil)
       @list = list
-      @ability = abilitiy
+      @ability = ability
     end
 
     # The list of all attributes exported to the csv/xlsx.

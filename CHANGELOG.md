@@ -4,6 +4,7 @@
 
 - Verbesserte Mailchimp Tag Synchronisierung (hitobito_sac_cas#1487)
 - Personefilter unterstützt das Filtern nach leeren Attributen (#3148)
+- PLZ's ausserhalb der Schweiz werden neu anhand des gewählten Landes validiert (hitobito_sac_cas#1488)
 
 ## Version 2.4
 

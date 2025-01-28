@@ -349,7 +349,7 @@ describe Household do
 
     it "has warnings if reference person does not have an address but other member" do
       other_person.update!(street: "Other Loriweg", housenumber: "42", zip_code: "6600",
-        town: "Locarno", country: "it")
+        town: "Locarno", country: "ch")
       household.add(other_person)
 
       expect(household).to be_valid

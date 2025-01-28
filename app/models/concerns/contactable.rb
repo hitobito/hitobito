@@ -51,7 +51,10 @@ module Contactable
     before_validation :set_self_in_nested
 
     validates :country, inclusion: Countries.codes, allow_blank: true
-    validate :assert_is_valid_swiss_post_code
+
+    # Configure if zip code should be validated, true by default, can be disabled in wagons
+    class_attribute :validate_zip_code, default: true
+    validates :zip_code, zipcode: {country_code_attribute: :zip_country}, allow_blank: true, if: :validate_zip_code
   end
 
   def address
@@ -94,6 +97,12 @@ module Contactable
 
   private
 
+  # to validate zip codes to swiss zip code format when country is nil, we return :ch format as the default
+  # option when country is nil
+  def zip_country
+    self[:country] || :ch
+  end
+
   def set_self_in_nested
     # don't try to set self in frozen nested attributes (-> marked for destroy)
     (phone_numbers + social_accounts + additional_emails).each do |e|
@@ -101,12 +110,6 @@ module Contactable
         e.contactable = self
         e.mark_for_destruction if e.value.blank?
       end
-    end
-  end
-
-  def assert_is_valid_swiss_post_code
-    if zip_code.present? && swiss? && !zip_code.to_s.match(/\A\d{4}\z/)
-      errors.add(:zip_code)
     end
   end
 

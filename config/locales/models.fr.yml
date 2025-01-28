@@ -813,6 +813,9 @@ fr:
         person_id: Personne
         string_long: '%{role} dans %{group}'
         dates: Dates
+        start_on: De
+        end_on: à
+        end_on_in_name: à
         class:
           archived: '%{role_kind} (archivé)'
           permission:

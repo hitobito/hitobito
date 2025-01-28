@@ -23,6 +23,7 @@ class People::CleanupFinder
   def base_scope
     Person.where.not(id: Person.root.id)
       .where(minimized_at: nil)
+      .order(:id)
   end
 
   def no_roles_exist

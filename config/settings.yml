@@ -151,7 +151,7 @@ people:
   cleanup_cutoff_duration:
     regarding_current_sign_in_at: 1000 # months
     regarding_roles: 1000 # months
-    regarding_event_participations: 100 # years
+    regarding_event_participations: 100 # months
   inactivity_block:
     # durations must be specified in ISO_8601 format.
     # see https://en.wikipedia.org/wiki/ISO_8601#Durations

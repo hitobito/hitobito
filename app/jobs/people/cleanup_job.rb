@@ -8,6 +8,8 @@
 class People::CleanupJob < RecurringJob
   run_every 1.day
 
+  private
+
   def perform_internal
     return unless FeatureGate.enabled?("people.cleanup_job")
 
@@ -33,11 +35,15 @@ class People::CleanupJob < RecurringJob
       .any?
   end
 
-  def minimize_person!(person)
-    People::Minimizer.new(person).run
-  end
-
   def destroy_person!(person)
     People::Destroyer.new(person).run
+  rescue => e
+    error(self, e, person_id: person.id)
+  end
+
+  def minimize_person!(person)
+    People::Minimizer.new(person).run
+  rescue => e
+    error(self, e, person_id: person.id)
   end
 end

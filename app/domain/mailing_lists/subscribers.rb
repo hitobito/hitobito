@@ -124,11 +124,7 @@ class MailingLists::Subscribers
     ctes += [Arel::Nodes::As.new(:including_person_subscriptions, including_person_subscriptions_cte)] if including_people_subscriptions?
     ctes += [Arel::Nodes::As.new(:excluding_person_subscriptions, excluding_person_subscriptions_cte)] if excluding_people_subscriptions?
 
-    conditions = group_subscriptions[:role_type].not_eq(nil)
-                                                .then { |scope| event_subscriptions? ? scope.or(event_subscriptions[:person_id].not_eq(nil)) : scope }
-                                                .then { |scope| including_people_subscriptions? ? scope.or(including_person_subscriptions[:subscriber_id].not_eq(nil)) : scope }
-                                                .then { |scope| excluding_people_subscriptions? ? scope.and(excluding_person_subscriptions[:subscriber_id].eq(nil)) : scope }
-                                                .then do |scope|
+    conditions = group_subscriptions[:role_type].not_eq(nil).then { |scope| event_subscriptions? ? scope.or(event_subscriptions[:person_id].not_eq(nil)) : scope }.then { |scope| including_people_subscriptions? ? scope.or(including_person_subscriptions[:subscriber_id].not_eq(nil)) : scope }.then { |scope| excluding_people_subscriptions? ? scope.and(excluding_person_subscriptions[:subscriber_id].eq(nil)) : scope }.then do |scope|
       next scope unless group_subscription_tags?
       scope.and(group_subscriptions[:tag_id].eq(nil)
                                             .or(group_subscriptions[:tag_excludes].eq(false).and(group_subscriptions[:tag_id].eq(taggings[:tag_id])))

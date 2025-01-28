@@ -57,6 +57,17 @@ describe "Quicksearch" do
       expect(dropdown).to have_content("Top Leader, Greattown")
       expect(dropdown).to have_content("Bottom Member, Greattown")
     end
+
+    it "finds results when special characters in search term when confiriming with enter" do
+      allow_any_instance_of(FullTextController).to receive(:only_result).and_return(nil)
+      Fabricate(:phone_number, contactable: people(:top_leader), number: "+41 79 123 45 67")
+      sign_in
+      visit root_path
+      fill_in "quicksearch", with: "+41 79"
+      send_keys(:enter)
+      expect(page).to have_current_path("/full?q=%2B41%2079")
+      expect(page).to have_content("Top Leader")
+    end
   end
 
   it "renders clickable tables when submitting form via click", js: true do

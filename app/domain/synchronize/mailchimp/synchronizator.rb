@@ -31,8 +31,8 @@ module Synchronize
         create_segments
         create_merge_fields
 
-        subscribe_members
-        unsubscribe_members
+        add_members
+        remove_members
 
         update_segments
         update_members
@@ -45,12 +45,12 @@ module Synchronize
 
       private
 
-      def subscribe_members
-        result.track(:subscribe_members, client.subscribe_members(missing_subscribers))
+      def add_members
+        result.track(:add_members, client.subscribe_members(missing_subscribers))
       end
 
-      def unsubscribe_members
-        result.track(:unsubscribe_obsolete_members, client.unsubscribe_members(obsolete_emails))
+      def remove_members
+        result.track(:remove_members, client.unsubscribe_members(obsolete_emails))
       end
 
       def update_segments
@@ -109,7 +109,7 @@ module Synchronize
         tags.collect do |tag, emails|
           tag_id = segments_by_tag_name.dig(tag, :id)
           remote_emails = remote_tags.fetch(tag, []).sort
-          local_emails = (emails - list.mailchimp_forgotten_emails).sort
+          local_emails = (emails - unsubscribed_members.pluck(:email_address) - list.mailchimp_forgotten_emails).sort
 
           SegmentUpdate.new(tag_id, local_emails, remote_emails, obsolete_emails).prepare
         end.compact.flatten(1)
@@ -147,6 +147,10 @@ module Synchronize
         return members if @default_tag.blank? || initial_default_tag_sync?
 
         members.select { |member| member[:tags].pluck(:name).include?(@default_tag) }
+      end
+
+      def unsubscribed_members
+        @unsubscribed_members ||= members.select { |m| m[:status] == "unsubscribed" }
       end
 
       def cleaned_members

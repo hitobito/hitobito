@@ -88,7 +88,7 @@ describe Synchronize::Mailchimp::Result do
         {title: "Deleted", detail: "test1@example.com was permanently deleted", status: 400},
         {title: "Deleted", detail: "test2@example.com was permanently deleted", status: 400}
       ]
-      subject.track(:subscribe_members, response(total: 2, finished: 0, failed: 2, results:))
+      subject.track(:add_members, response(total: 2, finished: 0, failed: 2, results:))
       expect(subject.state).to eq :failed
       expect(subject.forgotten_emails).to eq %w[test1@example.com test2@example.com]
     end

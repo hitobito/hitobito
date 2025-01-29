@@ -49,7 +49,7 @@ module Synchronize
       end
 
       def forgotten_emails
-        operation_results(:subscribe_members).map do |op|
+        operation_results(:add_members).map do |op|
           op[:detail].to_s[PERMANENTLY_DELETED_REGEX, 1]
         end.compact_blank
       end

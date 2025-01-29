@@ -78,6 +78,7 @@ class Person::BlockService
       return Person.none unless warn?
 
       Person
+        .where.not(email: nil)
         .where(inactivity_block_warning_sent_at: nil, blocked_at: nil)
         .where(Person.arel_table[:last_sign_in_at].lt(warn_after&.ago))
     end

@@ -67,7 +67,7 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
   def role_types
     authorize!(:role_types, Role)
     @group = Group.find(params.fetch(:role, {})[:group_id])
-    @type ||= @group.default_role # rubocop:disable Naming/MemoizedInstanceVariableName
+    @type ||= @group.standard_role # rubocop:disable Naming/MemoizedInstanceVariableName
   end
 
   private

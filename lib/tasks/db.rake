@@ -96,15 +96,6 @@ namespace :db do
     Rake::Task["wagon:seed"].invoke
   end
 
-  desc 'Remove "seeded"-markers'
-  task remove_seed_markers: [:environment] do
-    puts 'Remove "locations seeded"-marker'
-    require Rails.root.join("db", "seeds", "support", "location_seeder")
-    ActiveRecord::InternalMetadata[LocationSeeder::SEED_MARKER] = nil
-
-    puts "Done."
-  end
-
   namespace :seed do
     desc "load generic seeds"
     task no_env: [:environment] do
@@ -117,14 +108,14 @@ namespace :db do
     desc "Dumps the structure.sql without having to change \
           schema_format in config/application.rb. Used by bin/wagon."
     task dump_sql: :environment do
-      ActiveRecord::Base.schema_format = :sql
+      ActiveRecord.schema_format = :sql
       Rake::Task["db:schema:dump"].invoke
     end
 
     desc "Loads the structure.sql without having to change \
           schema_format in config/application.rb. Used by bin/wagon."
     task load_sql: :environment do
-      ActiveRecord::Base.schema_format = :sql
+      ActiveRecord.schema_format = :sql
       Rake::Task["db:schema:load"].invoke
     end
   end

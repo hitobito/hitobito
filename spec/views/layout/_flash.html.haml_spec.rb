@@ -5,7 +5,7 @@
 
 require "spec_helper"
 describe "layouts/_flash.html.haml" do
-  let(:dom) { Capybara::Node::Simple.new(rendered) }
+  let(:dom) { Capybara::Node::Simple.new(raw(rendered)) }
 
   subject { dom.find("p") }
 

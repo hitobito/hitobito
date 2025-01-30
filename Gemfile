@@ -7,9 +7,8 @@
 
 source "https://rubygems.org"
 
-gem "rails", "= 7.0.8.6"
-gem "wagons", "~> 0.7.0"
-
+gem "rails", "= 7.1.5.1"
+gem "wagons", "~> 0.9.1"
 gem "active_record_distinct_on"
 gem "activerecord-nulldb-adapter"
 gem "activerecord-session_store"
@@ -43,7 +42,7 @@ gem "epics" # client for EBICS-connections to banks
 gem "faker"
 gem "faraday"
 gem "gibbon", "~> 3.4"
-gem "globalize"
+gem "globalize", "~> 7.0"
 gem "graphiti"
 gem "graphiti-rails", "~> 0.1"
 gem "haml"

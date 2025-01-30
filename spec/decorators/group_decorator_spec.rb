@@ -7,6 +7,9 @@
 
 require "spec_helper"
 
+# Missing translation number by rails default
+MISSING_TRANSLATION = -1152921504606846976
+
 describe GroupDecorator, :draper_with_helpers do
   include Rails.application.routes.url_helpers
 
@@ -68,9 +71,9 @@ describe GroupDecorator, :draper_with_helpers do
         [:"group/top_group/member", "Member", "M"],
         [:"group/top_group/invisible_people_manager", "Invisible people manager", "G"],
         [:"role/external", "External", "H"]].each do |class_path, class_name, sort_key|
+        # Key is written into defaults hash by default per rails 7.1
         expect(I18n).to receive(:translate).with(class_path,
-          {default: [:role,
-            class_name]}.merge(common_arguments))
+          {default: [:role, MISSING_TRANSLATION]}.merge(common_arguments))
           .twice.and_return(sort_key)
       end
 

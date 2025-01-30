@@ -9,6 +9,15 @@ class AddSupportsApplicationsToEvents < ActiveRecord::Migration[6.1]
   def change
     add_column :events, :supports_applications, :boolean, null: false, default: true
 
-    Event::Course.update_all(supports_applications: true)
+    connection = ActiveRecord::Base.connection
+    sql = <<-SQL
+        UPDATE events
+        SET supports_applications = true
+        WHERE id IN
+        (
+          SELECT id FROM events WHERE type = 'Event::Course'
+        )
+    SQL
+    connection.execute(sql)
   end
 end

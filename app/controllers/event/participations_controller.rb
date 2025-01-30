@@ -64,7 +64,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
           # a confirmation email gets sent automatically when assigning a
           # place. in the other case, send one explicitely
           directly_assign_place? ? directly_assign_place : send_confirmation_email
-          send_notification_email
+          send_notification_email if send_email?
         end
       end
       respond_with(entry, success: created, location: return_path)
@@ -376,5 +376,9 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   def event_participation_filter
     user_id = current_user.try(:id)
     Event::ParticipationFilter.new(event.id, user_id, params)
+  end
+
+  def send_email?
+    ActiveModel::Type::Boolean.new.cast(params[:send_email])
   end
 end

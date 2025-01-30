@@ -75,4 +75,48 @@ describe :invoices, js: true do
       end
     end
   end
+
+  describe 'invoice_lists' do
+    let(:group) { groups(:bottom_layer_one) }
+    let(:user) { people(:bottom_member) }
+
+    let(:letter) { messages(:with_invoice) }
+    let!(:sent) { invoices(:sent) }
+    let!(:invoice_list) { letter.create_invoice_list(title: "test", group_id: group.id) }
+
+    describe "GET #index" do
+      before do
+        update_issued_at_to_current_year
+        sent.update(invoice_list: invoice_list)
+      end
+
+      it "shows separate export options when viewing invoice list invoices" do
+        visit group_invoice_list_invoices_path(group_id: group.id, invoice_list_id: invoice_list.id)
+        find("#all").click
+        print = page.find_link("Drucken")
+        print.click
+        options = print.all(:xpath, "..//..//ul//li")
+        expect(options.count).to eq 3
+        expect(options.first.text).to eq "Rechnung inkl. Einzahlungsschein"
+      end
+
+      it "shows single letter_with_invoice export option when viewing invoices from letter with invoice" do
+        invoice_list.update(message: letter)
+        visit group_invoice_list_invoices_path(group_id: group.id, invoice_list_id: invoice_list.id)
+        find("#all").click
+        print = page.find_link("Drucken")
+        print.click
+        options = print.all(:xpath, "..//..//ul//li")
+        expect(options.count).to eq 1
+        expect(options.first.text).to eq "Rechnungsbriefe"
+      end
+    end
+
+    def update_issued_at_to_current_year
+      sent = invoices(:sent)
+      if sent.issued_at.year != Time.zone.today.year
+        sent.update(issued_at: Time.zone.today.beginning_of_year)
+      end
+    end
+  end
 end

@@ -76,7 +76,7 @@ describe :invoices, js: true do
     end
   end
 
-  describe 'invoice_lists' do
+  describe "invoice_lists" do
     let(:group) { groups(:bottom_layer_one) }
     let(:user) { people(:bottom_member) }
 

@@ -143,6 +143,15 @@ describe Event::ApplicationMarketController do
           appl_text = appl_prio_1.decorate.to_s(:list)
 
           all("#applications ##{appl_id} td").first.find("a").click
+
+          expect do
+            expect(page).to have_text "Bestätigen ohne E-Mail"
+            click_on "Bestätigen ohne E-Mail"
+            sleep(0.5)
+            click_on "Abbrechen"
+            expect(page).not_to have_text "Bestätigen ohne E-Mail"
+          end.not_to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }
+
           expect(page).to have_no_selector("#applications ##{appl_id}")
 
           # first do find().should have_content to make capybara wait for animation, then all().last
@@ -153,6 +162,14 @@ describe Event::ApplicationMarketController do
           expect(page).to have_css("#participants", text: appl_text)
 
           all("#participants ##{appl_id} td").last.find("a").click
+
+          expect do
+            expect(page).to have_text "Bestätigen und E-Mail senden"
+            click_on "Bestätigen und E-Mail senden"
+            sleep(0.5)
+            click_on "Abbrechen"
+            expect(page).not_to have_text "Bestätigen und E-Mail senden"
+          end.to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }.by(1)
 
           expect(page).to have_css("#applications", text: appl_text)
           expect(page).to have_no_selector("#participants ##{appl_id}")
@@ -184,12 +201,29 @@ describe Event::ApplicationMarketController do
 
           all("#applications ##{appl_id} td").first.find("a").click
 
+          expect do
+            expect(page).to have_text "Bestätigen ohne E-Mail"
+            click_on "Bestätigen ohne E-Mail"
+            sleep(0.5)
+            click_on "Abbrechen"
+            expect(page).not_to have_text "Bestätigen ohne E-Mail"
+          end.not_to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }
+
           # first do find().should have_content to make capybara wait for animation, then all().last
           expect(find("#participants")).to have_content(appl_waiting.person.to_s(:list))
           expect(all("#participants tr").last).to have_content(appl_waiting.person.to_s(:list))
           expect(page).to have_no_selector("#applications ##{appl_id}")
 
           all("#participants ##{appl_id} td").last.find("a").click
+
+          expect do
+            expect(page).to have_text "Bestätigen und E-Mail senden"
+            click_on "Bestätigen und E-Mail senden"
+            sleep(0.5)
+            click_on "Abbrechen"
+            expect(page).not_to have_text "Bestätigen und E-Mail senden"
+          end.to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }.by(1)
+
           expect(page).to have_no_selector("#participants ##{appl_id}")
 
           # first do find().should have_content to make capybara wait for animation, then all().last
@@ -218,12 +252,29 @@ describe Event::ApplicationMarketController do
           appl_id = "event_participation_#{appl_participant.id}"
 
           all("#participants ##{appl_id} td").last.find("a").click
+
+          expect do
+            expect(page).to have_text "Bestätigen und E-Mail senden"
+            click_on "Bestätigen und E-Mail senden"
+            sleep(0.5)
+            click_on "Abbrechen"
+            expect(page).not_to have_text "Bestätigen und E-Mail senden"
+          end.to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }.by(1)
+
           expect(page).to have_no_selector("#participants ##{appl_id}")
 
           # first do find().should have_content to make capybara wait for animation, then all().last
           expect(find("#applications")).to have_content(appl_participant.person.to_s(:list))
           expect(all("#applications tr").last).to have_content(appl_participant.person.to_s(:list))
           all("#applications ##{appl_id} td").first.find("a").click
+
+          expect do
+            expect(page).to have_text "Bestätigen ohne E-Mail"
+            click_on "Bestätigen ohne E-Mail"
+            sleep(0.5)
+            click_on "Abbrechen"
+            expect(page).not_to have_text "Bestätigen ohne E-Mail"
+          end.not_to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }
 
           # first do find().should have_content to make capybara wait for animation, then all().last
           expect(find("#participants tr")).to have_content(appl_participant.person.to_s(:list))

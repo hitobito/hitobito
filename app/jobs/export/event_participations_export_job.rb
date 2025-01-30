@@ -4,10 +4,11 @@
 #  https://github.com/hitobito/hitobito.
 
 class Export::EventParticipationsExportJob < Export::ExportBaseJob
-  self.parameters = PARAMETERS + [:filter]
+  self.parameters = PARAMETERS + [:filter, :group_id]
 
-  def initialize(format, user_id, filter, options)
+  def initialize(format, user_id, filter, group_id, options)
     super(format, user_id, options)
+    @group_id = group_id
     @filter = filter
   end
 
@@ -33,7 +34,7 @@ class Export::EventParticipationsExportJob < Export::ExportBaseJob
     return super unless table_display?
 
     table_display = TableDisplay.for(@user_id, Event::Participation)
-    exporter.export(@format, entries, table_display)
+    exporter.export(@format, entries, table_display, group)
   end
 
   def full_export?
@@ -47,5 +48,9 @@ class Export::EventParticipationsExportJob < Export::ExportBaseJob
 
   def table_display?
     @options[:selection]
+  end
+
+  def group
+    @group ||= Group.find(@group_id)
   end
 end

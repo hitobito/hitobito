@@ -28,49 +28,26 @@ module Synchronize
       end
 
       def perform
-        create_segments
-        create_merge_fields
+        execute(:create_segments, missing_segments)
+        execute(:create_merge_fields, missing_merge_fields)
 
-        add_members
-        remove_members
+        execute(:subscribe_members, missing_subscribers)
+        execute(:unsubscribe_members, obsolete_emails)
 
-        update_segments
-        update_members
+        execute(:update_segments, stale_segments)
+        execute(:update_members, changed_subscribers)
 
-        destroy_segments
+        execute(:delete_segments, obsolete_segment_ids)
+
         tag_cleaned_members
-
         update_forgotten_emails
       end
 
       private
 
-      def add_members
-        result.track(:add_members, client.subscribe_members(missing_subscribers))
-      end
-
-      def remove_members
-        result.track(:remove_members, client.unsubscribe_members(obsolete_emails))
-      end
-
-      def update_segments
-        result.track(:update_segments, client.update_segments(stale_segments))
-      end
-
-      def update_members
-        result.track(:update_members, client.update_members(changed_subscribers))
-      end
-
-      def create_merge_fields
-        result.track(:create_merge_fields, client.create_merge_fields(missing_merge_fields))
-      end
-
-      def create_segments
-        result.track(:create_segments, client.create_segments(missing_segments))
-      end
-
-      def destroy_segments
-        result.track(:delete_segments, client.delete_segments(obsolete_segment_ids))
+      def execute(operation, data)
+        payload, response = client.send(operation, data)
+        result.track(operation, payload, response) if payload
       end
 
       def update_forgotten_emails

@@ -191,7 +191,8 @@ module Synchronize
 
         if operations.present?
           batch_id = api.batches.create(body: {operations: operations}).body.fetch("id")
-          wait_for_finish(batch_id)
+          result = wait_for_finish(batch_id)
+          [operations, result]
         end
       end
 

@@ -271,10 +271,14 @@ describe Synchronize::Mailchimp::Client do
       stub_request(:get, "https://us12.api.mailchimp.com/3.0/batches/1/result")
         .to_return(status: 200, body: create_tgz([response: {title: :subscriber, detail: "okay", status: 200}.to_json]))
       expect(client).to receive(:sleep).twice
-      response = client.create_segments(%w[a])
+      payload, response = client.create_segments(%w[a])
       expect(response[:operation_results][0][:title]).to eq "subscriber"
       expect(response[:operation_results][0][:detail]).to eq "okay"
       expect(response[:operation_results][0][:status]).to eq 200
+
+      expect(payload[0][:method]).to eq "POST"
+      expect(payload[0][:path]).to eq "lists/2/segments"
+      expect(payload[0][:body]).to eq ({name: "a", static_segment: []}).to_json
     end
 
     it "resets counts when status changes" do

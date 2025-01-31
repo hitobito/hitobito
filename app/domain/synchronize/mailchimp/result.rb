@@ -22,8 +22,8 @@ module Synchronize
         @data = data.deep_symbolize_keys
       end
 
-      def track(key, response)
-        @data[key] = process(response) if response
+      def track(key, payload, response)
+        @data[key] = process(payload, response)
       end
 
       def exception=(exception)
@@ -49,7 +49,7 @@ module Synchronize
       end
 
       def forgotten_emails
-        operation_results(:add_members).map do |op|
+        operation_results(:subscribe_members).map do |op|
           op[:detail].to_s[PERMANENTLY_DELETED_REGEX, 1]
         end.compact_blank
       end
@@ -65,7 +65,7 @@ module Synchronize
       end
 
       # wird nur aufgerufen, wenn operation ausgeführt wurde
-      def process(response)
+      def process(payload, response)
         total = response[:total_operations]
         failed = response[:errored_operations]
         finished = response[:finished_operations]
@@ -78,6 +78,11 @@ module Synchronize
         elsif total == finished
           :success
         end
+
+        operation_results.each_with_index do |res, index|
+          res[:operation] = payload[index] if res.key?(:errors)
+        end
+
         {state => [total, finished, failed, operation_results]}
       end
 

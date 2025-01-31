@@ -79,10 +79,17 @@ function getSelectedIds(table) {
 }
 
 function buildLinkWithIds(templateHref, table) {
-  const ids = getSelectedIds(table);
   const separator = templateHref.indexOf("?") !== -1 ? "&" : "?";
   const match = window.location.href.match(/.+?\/(\d+)$/);
-  return (templateHref + separator + (match ? `ids=${[match[1]]}&singular=true` : `ids=${ids}`));
+
+  var queryParams;
+  if (match) {
+    queryParams = `ids=${[match[1]]}&singular=true`
+  } else {
+    const ids = getSelectedIds(table);
+    queryParams = `ids=${ids}`
+  }
+  return (templateHref + separator + queryParams);
 }
 
 function toggleActions(table) {

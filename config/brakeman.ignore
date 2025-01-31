@@ -17,7 +17,7 @@
       "cwe_id": [
         1104
       ],
-      "note": ""
+      "note": "The upgrade to Rails 7.1 is planned and work-in-progress"
     },
     {
       "warning_type": "SQL Injection",

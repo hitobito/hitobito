@@ -85,10 +85,9 @@ class Imap::Connector
 
   def perform
     connect
-    result = yield
+    yield
   ensure
     disconnect
-    result
   end
 
   def connect

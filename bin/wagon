@@ -108,11 +108,11 @@ function setup_test_db() {
 }
 
 function reload_test_db() {
-    echo "Preparing test database"
-    bundle exec rails db:structure:dump_sql
-    echo "DROP SCHEMA public CASCADE" | rails db -p -e test
-    RAILS_ENV=test rails db:structure:load_sql
-    rm -f db/structure.sql
+  echo "Preparing test database"
+  bundle exec rails db:structure:dump_sql
+  echo "DROP SCHEMA public CASCADE" | rails db -p -e test
+  RAILS_ENV=test rails db:structure:load_sql
+  rm -f db/structure.sql
 }
 
 function indent2 {
@@ -273,9 +273,9 @@ spec)
   direnv exec ../hitobito/ $0 reload-test-database
 
   # prepare DB
-#  export RAILS_ENV=test
-#  direnv exec ../hitobito/ bundle exec rake db:migrate
-#  direnv exec ../hitobito/ bundle exec rake wagon:migrate
+  #  export RAILS_ENV=test
+  #  direnv exec ../hitobito/ bundle exec rake db:migrate
+  #  direnv exec ../hitobito/ bundle exec rake wagon:migrate
 
   # run specs in subshell to return to current directory
   (
@@ -350,8 +350,8 @@ create)
 
   new_wagon_dir="../hitobito_$wagon_name"
 
-  mv -nfv vendor/wagons/$wagon_name/* "$new_wagon_dir"
-  mv -nfv vendor/wagons/$wagon_name/.{ruby-version,rubocop.yml,gitignore} "$new_wagon_dir"
+  mv -nfv "vendor/wagons/$wagon_name/"* "$new_wagon_dir"
+  mv -nfv "vendor/wagons/$wagon_name/".{ruby-version,rubocop.yml,gitignore} "$new_wagon_dir"
   rm -rf vendor/
 
   pushd "$new_wagon_dir"

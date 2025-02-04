@@ -38,7 +38,7 @@ class MailingLists::Subscribers
   end
 
   def group_subscribers(condition)
-    sql = <<~SQL.split.join(" ")
+    sql = <<~SQL.squish
       subscriptions.subscriber_type = ? AND
       #{Group.quoted_table_name}.lft >= sub_groups.lft AND
       #{Group.quoted_table_name}.rgt <= sub_groups.rgt AND
@@ -52,7 +52,7 @@ class MailingLists::Subscribers
     SQL
 
     if subscriptions.groups.any?(&:subscription_tags)
-      sql += <<~SQL.split.join(" ")
+      sql += <<~SQL.squish
         AND (subscription_tags.tag_id IS NULL OR
         subscription_tags.tag_id = people_taggings.tag_id)
       SQL
@@ -131,6 +131,7 @@ class MailingLists::Subscribers
                                                 .then { |scope| excluding_people_subscriptions? ? scope.and(excluding_person_subscriptions[:subscriber_id].eq(nil)) : scope }
                                                 .then do |scope|
                    next scope unless group_subscription_tags?
+
                    scope.and(group_subscriptions[:tag_id].eq(nil)
                                                          .or(group_subscriptions[:tag_excludes].eq(false).and(group_subscriptions[:tag_id].eq(taggings[:tag_id])))
                                                          .or(group_subscriptions[:tag_excludes].eq(true).and(taggings[:tag_id].eq(nil).or(taggings[:tag_id].not_eq(group_subscriptions[:tag_id])))))

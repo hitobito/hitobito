@@ -20,6 +20,7 @@ de:
     do_not_fill: Bitte dieses Feld nicht ausfüllen
     chosen_no_results: Keine Einträge gefunden
     selected: Ausgewählt
+    extended_select_all: Alle %{count} auswählen
     columns: Spalten
     start_on: ab %{date}
     not_allowed: "fehlende Berechtigung"

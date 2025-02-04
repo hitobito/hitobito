@@ -105,6 +105,7 @@ module Hitobito
         ActionController::Parameters,
         Person::Filter::Chain,
         Person::Filter::Role,
+        BigDecimal
       ]
     end
 

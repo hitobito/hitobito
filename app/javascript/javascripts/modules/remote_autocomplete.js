@@ -17,7 +17,7 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
     if(input) {
       input.addEventListener('keydown', function(event) {
         if (event.key === 'Enter' && (event.target.getAttribute('aria-activedescendant') == null || event.target.wrapper.getAttribute('aria-expanded') == false)) {
-          window.location = `/full?q=${event.target.value}`;
+          window.location = `/full?q=${encodeURIComponent(event.target.value)}`;
         }
       });
       return setupRemoteTypeahead(input);

@@ -190,6 +190,12 @@ describe Person::BlockService do
 
       expect(described_class.warn_scope).not_to include person
     end
+
+    it "excludes person without email" do
+      person.update!(last_sign_in_at: 11.days.ago, email: nil)
+
+      expect(described_class.warn_scope).not_to include person
+    end
   end
 
   describe "::block_within_scope" do

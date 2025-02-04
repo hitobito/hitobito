@@ -15,12 +15,24 @@ module TableDisplays::People
 
     def render(attr)
       super do |target, target_attr|
-        template.format_attr(target, target_attr) if target.respond_to?(target_attr)
+        layer_group(target, target_attr)
       end
+    end
+
+    def allowed_value_for(target, target_attr, &block)
+      layer_group(target, target_attr)
     end
 
     def sort_by(attr)
       nil
+    end
+
+    def layer_group(target, target_attr)
+      if template
+        template.format_attr(target, target_attr) if target.respond_to?(target_attr)
+      else
+        target.layer_group.name
+      end
     end
   end
 end

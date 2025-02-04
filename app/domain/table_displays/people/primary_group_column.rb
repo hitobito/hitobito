@@ -17,12 +17,22 @@ module TableDisplays::People
 
     def render(attr)
       super do |person|
-        person.primary_group.name
+        primary_group(person)
       end
     end
 
     def required_permission(attr)
       :show
+    end
+
+    private
+
+    def allowed_value_for(target, target_attr, &block)
+      primary_group(target)
+    end
+
+    def primary_group(person)
+      person.primary_group.name
     end
   end
 end

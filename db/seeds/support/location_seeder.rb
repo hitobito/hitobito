@@ -19,7 +19,6 @@ class LocationSeeder
   FILE = Rails.root.join("db", "seeds", "support", "locations.csv")
   SEPARATOR = ";"
   ENCODING = "UTF-8"
-  SEED_MARKER = "locations seeded"
   
   def seed
     truncate_locations

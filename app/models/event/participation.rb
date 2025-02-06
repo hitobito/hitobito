@@ -28,6 +28,11 @@
 #
 
 class Event::Participation < ActiveRecord::Base
+  # These mails can be manually sent to participants in the participation show page via a dropdown
+  MANUALLY_SENDABLE_PARTICIPANT_MAILS = [
+    Event::ParticipationMailer::CONTENT_CONFIRMATION
+  ]
+
   self.demodulized_route_keys = true
 
   attr_accessor :enforce_required_answers

@@ -14,6 +14,7 @@
 - Aufwendige Exports (Personen, Abos) werden sequenziell ausgeführt (hitobito_sac_cas#1354)
 - Die Rechnungseinstellungen bieten neu die Möglichkeit, den ursprünglichen Rechnungstext bei Mahnungen zu verstecken (hitobito_sww#174)
 - Der API Endpoint event_kind_categories enthält neu auch das Attribut `order` / Sortierschlüssel.
+- Email's können via Dropdown erneut an Teilnehmer versendet werden (hitobito_sac_cas#1571)
 
 ## Version 2.3
 

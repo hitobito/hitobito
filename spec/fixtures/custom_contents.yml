@@ -127,3 +127,7 @@ content_inactivity_block_warning:
   key: content_inactivity_block_warning
   placeholders_required: recipient-name
   placeholders_optional: warn-after-days, block-after-days
+
+hitobito_log_error:
+  key: "hitobito_log_error"
+  placeholders_required: hitobito-log-url, error-count, time-period, error-log-table

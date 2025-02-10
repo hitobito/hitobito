@@ -72,7 +72,8 @@ class JobManager
       Oauth::AccessTokenCleanupJob,
       ReoccuringMailchimpSynchronizationJob,
       SessionsCleanerJob,
-      WorkerHeartbeatCheckJob
+      WorkerHeartbeatCheckJob,
+      HitobitoErrorLogJob
     ]
   end
 end

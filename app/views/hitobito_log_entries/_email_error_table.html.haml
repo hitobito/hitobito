@@ -1,0 +1,23 @@
+-# Copyright (c) 2012-2025, Hitobito AG. This file is part of
+-# hitobito and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito.
+
+%table{ style: "width: 100%; border-collapse: collapse; font-size: 14px;" }
+  %thead
+    %tr{ style: "background-color: #f4f4f4; text-align: left;" }
+      %th{ style: "padding: 10px;" }= t(".created_at")
+      %th{ style: "padding: 10px;" }= t(".category")
+      %th{ style: "padding: 10px;" }= t(".subject")
+      %th{ style: "padding: 10px;" }= t(".message")
+      %th{ style: "padding: 10px;" }= t(".payload")
+  %tbody
+    - error_log_entries.each do |entry|
+      %tr
+        %td{ style: "padding: 10px;" }= I18n.l(entry.created_at)
+        %td{ style: "padding: 10px;" }= entry.category
+        %td{ style: "padding: 10px;" }= link_to entry.subject&.to_s, polymorphic_path(entry.subject) if entry.subject
+        %td{ style: "padding: 10px;" }= entry.message
+        %td{ style: "padding: 10px; white-space: pre-wrap; word-break: break-word;" }= entry.payload.to_json
+
+

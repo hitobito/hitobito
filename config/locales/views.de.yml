@@ -872,6 +872,12 @@ de:
     list:
       from: Von
       to: Bis
+    email_error_table:
+      created_at: Erstellt am
+      category: Kategorie
+      subject: Subjekt
+      message: Meldung
+      payload: Payload
 
   import/csv_parser:
     read_error: "Fehler beim Lesen von %{filename}: %{error}"

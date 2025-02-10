@@ -18,6 +18,7 @@ class Wizards::Steps::NewUserForm < Wizards::Step
   validates :adult_consent, acceptance: true, if: :requires_adult_consent?
   validates :company_name, presence: true, if: :company
   validate :assert_privacy_policy, if: :requires_policy_acceptance?
+  validate :ensure_email_available
 
   delegate :requires_adult_consent?, :requires_policy_acceptance?, to: :wizard
 
@@ -37,6 +38,12 @@ class Wizards::Steps::NewUserForm < Wizards::Step
     unless privacy_policy_accepted
       message = I18n.t("groups.self_registration.create.flash.privacy_policy_not_accepted")
       errors.add(:base, message)
+    end
+  end
+
+  def ensure_email_available
+    if Person.exists?(email: email)
+      errors.add(:email, I18n.t("activerecord.errors.models.person.attributes.email.taken"))
     end
   end
 end

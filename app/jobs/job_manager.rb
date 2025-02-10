@@ -71,7 +71,8 @@ class JobManager
       People::CleanupJob,
       ReoccuringMailchimpSynchronizationJob,
       SessionsCleanerJob,
-      WorkerHeartbeatCheckJob
+      WorkerHeartbeatCheckJob,
+      HitobitoErrorLogJob
     ]
   end
 end

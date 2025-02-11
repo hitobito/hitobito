@@ -291,7 +291,7 @@ class StructureParser
     <<~CODE
       class Group::#{group.class_name} < ::Group
         #{"self.layer = true" if group.layer_group}
-        #{"children " if group.children.any?}#{group.child_class_names.join(",\n")}
+        #{"children " if group.children.any?}#{group.child_class_names.join(",\n    ")}
 
         ### ROLES
 
@@ -305,7 +305,7 @@ class StructureParser
   def role_template(role)
     <<-CODE
   class #{role.class_name} < ::Role
-    self.permissions = [#{role.permissions}]
+    #{"self.permissions = [#{role.permissions}]" if role.permissions?}
   end
     CODE
   end

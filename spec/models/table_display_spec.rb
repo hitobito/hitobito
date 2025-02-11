@@ -81,6 +81,23 @@ describe TableDisplay do
         expect { |b| subject.column_for("attr").value_for(leader, "attr", &b) }.not_to yield_control
       end
     end
+
+    describe "table on column" do
+      let(:table) { OpenStruct.new(template: OpenStruct.new(parent: group)) }
+
+      it "is nil when no selected group is set" do
+        expect(subject.column_for("attr").table).to be_nil
+      end
+
+      it "is returned as passed in" do
+        expect(subject.column_for("attr", table: table).table).to eq table
+      end
+
+      it "is built dynamically according to UI usage when selected_group is set" do
+        subject.selected_group = group
+        expect(subject.column_for("attr", table: table).table).to eq table
+      end
+    end
   end
 
   context "participations" do

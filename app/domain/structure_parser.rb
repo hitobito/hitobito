@@ -123,9 +123,13 @@ class StructureParser
   class Role
     attr_accessor :group, :name
 
-    def initialize(name, permissions)
+    def initialize(name, permissions, class_name)
       @name = name
       @permissions = parse_permissions(permissions)
+
+      if class_name.present?
+        @class_name = ActiveSupport::Inflector.demodulize(class_name)
+      end
     end
 
     def parse_permissions(permissions)
@@ -210,9 +214,9 @@ class StructureParser
         @current_layer.children << group
         @current_group = group
         @result[@current_layer][group] ||= []
-      when /^#{@shiftwidth * 2}#{Regexp.escape(@list_marker)} (.*):\s+(\[.*\])$/
+      when /^#{@shiftwidth * 2}#{Regexp.escape(@list_marker)} (.*):\s+(\[.*\])(\s+--\s+\((.*)\))?$/ # role
         match = Regexp.last_match
-        role = Role.new(match[1], match[2])
+        role = Role.new(match[1], match[2], match[4])
 
         @current_group.roles << role
         @result[@current_layer][@current_group] << role

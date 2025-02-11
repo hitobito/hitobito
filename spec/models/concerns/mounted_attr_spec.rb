@@ -293,6 +293,12 @@ describe MountedAttr do
       validates_presence(value, attrs, nullable: false)
     end
 
+    def validates_precision_and_scale(value, attr)
+      entry.send(:"#{attr}=", value)
+      entry.validate
+      entry.errors[:"#{attr}"]
+    end
+
     context "string attribute" do
       it "allows null for nullable attributes" do
         validates_presence(nil, [
@@ -376,6 +382,19 @@ describe MountedAttr do
         ignores_absence(nil, [
           :boolean_non_nullable
         ])
+      end
+    end
+
+    context "decimal attribute" do
+      it "it allows validating percision and scale" do
+        expect(validates_precision_and_scale(2.234, :decimal_with_precision_10_and_scale_2)).to eq ["ist nicht gültig, maximal 10 Zeichen erlaubt mit 2 Nachkommastellen"]
+        expect(validates_precision_and_scale(12345678912, :decimal_with_precision_10_and_scale_2)).to eq ["ist nicht gültig, maximal 10 Zeichen erlaubt mit 2 Nachkommastellen"]
+        expect(validates_precision_and_scale(2, :decimal_with_precision_10_and_scale_2)).to be_empty
+        expect(validates_precision_and_scale(2.22, :decimal_with_precision_10_and_scale_2)).to be_empty
+        expect(validates_precision_and_scale(2.22, :decimal_with_precision_6_and_scale_1)).to eq ["ist nicht gültig, maximal 6 Zeichen erlaubt mit 1 Nachkommastellen"]
+        expect(validates_precision_and_scale(1234567, :decimal_with_precision_6_and_scale_1)).to eq ["ist nicht gültig, maximal 6 Zeichen erlaubt mit 1 Nachkommastellen"]
+        expect(validates_precision_and_scale(2, :decimal_with_precision_6_and_scale_1)).to be_empty
+        expect(validates_precision_and_scale(2.2, :decimal_with_precision_6_and_scale_1)).to be_empty
       end
     end
   end

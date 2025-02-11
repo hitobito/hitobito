@@ -36,7 +36,8 @@ module Dropdown
       options = {class: "dropdown-menu float-end", data: {turbo_permanent: true}, role: "menu"}
 
       content_tag(:ul, options) do
-        items = table_display.available(@list).collect do |column|
+        sorted = table_display.available(@list).sort_by { |c| table_display.column_for(c).label(c) }
+        items = sorted.collect do |column|
           render_item("selected[]", table_display.column_for(column), column)
         end
 

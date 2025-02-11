@@ -31,10 +31,11 @@ class StructureParser
 
   module Structure
     class Group
-      attr_reader :name, :roles
+      attr_reader :name, :layer, :roles
 
-      def initialize(name)
+      def initialize(name, layer = nil)
         @name = name
+        @layer = layer
 
         @roles = []
       end
@@ -48,7 +49,7 @@ class StructureParser
       end
 
       def to_group
-        StructureParser::Group.new(@name)
+        StructureParser::Group.new(@name, @layer)
       end
     end
 
@@ -70,8 +71,9 @@ class StructureParser
     attr_reader :children, :roles
     attr_accessor :layer_group, :layer_name, :name
 
-    def initialize(name)
+    def initialize(name, layer = nil)
       @name = name
+      @layer = layer
 
       @layer_group = false
       @children = []
@@ -95,9 +97,11 @@ class StructureParser
     end
 
     def child_class_names
-      @children.map do |child|
-        class_name + child.class_name
-      end
+      @children.map(&:full_class_name)
+    end
+
+    def full_class_name
+      [@layer&.name, class_name].compact.join
     end
 
     def role_class_names
@@ -162,16 +166,18 @@ class StructureParser
   def first_pass # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/AbcSize
     @structure.lines.each do |line|
       case line.delete_prefix(@common_indent).chomp
-      when /^#{Regexp.escape(@list_marker)} (.*)$/
+      when /^#{Regexp.escape(@list_marker)} (.*?)(\s+<\s+(.*))?$/ # layer
         name = Regexp.last_match(1)
+        super_layer = find_layer_by_name(Regexp.last_match(3))
         layer = Structure::Layer.new(name)
 
+        super_layer.children << layer unless super_layer.nil?
         @current_layer = layer
         @current_group = layer
         @result[layer] ||= {}
-      when /^#{@shiftwidth}#{Regexp.escape(@list_marker)} (.*)$/
+      when /^#{@shiftwidth}#{Regexp.escape(@list_marker)} (.*)$/ # group
         name = Regexp.last_match(1)
-        group = Structure::Group.new(name)
+        group = Structure::Group.new(name, @current_layer)
 
         @current_layer.children << group
         @current_group = group
@@ -232,6 +238,12 @@ class StructureParser
   end
 
   private
+
+  def find_layer_by_name(name)
+    return nil if name.nil?
+
+    @result.keys.find { |layer| layer.name == name }
+  end
 
   def group_template(group)
     <<~CODE

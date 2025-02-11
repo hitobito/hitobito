@@ -94,10 +94,13 @@ class StructureParser
     end
 
     def class_name
-      @class_name ||= @name.encode(
-        "ASCII", "UTF-8",
-        fallback: {"ä" => "ae", "ü" => "ue", "ö" => "oe"}
-      )
+      @class_name ||= @name
+        .gsub(/\/.*$/, "")
+        .encode("ASCII", "UTF-8", fallback: {
+          "ä" => "ae",
+          "ü" => "ue",
+          "ö" => "oe"
+        })
     end
 
     def child_class_names
@@ -148,8 +151,11 @@ class StructureParser
     end
 
     def class_name
-      @class_name ||= @name.delete_suffix("/-in")
+      @class_name ||= @name
+        .delete_suffix("/-in")
         .delete_suffix("/-r")
+        .delete_suffix(":in")
+        .gsub(/[-\s&]/, "")
         .encode("ASCII", "UTF-8", fallback: {
           "ä" => "ae",
           "ü" => "ue",

@@ -16,8 +16,14 @@ function setupMultiselect() {
 
 function setupMultiselectTargets(table) {
   // swap href form data-checkable links
-  document.querySelectorAll("a[data-checkable]:not(data-method)")
-    .forEach((link) => link.addEventListener("click", () => link.href = buildLinkWithIds(link.href, table)));
+  document
+    .querySelectorAll("a[data-checkable]:not(data-method)")
+    .forEach((link) =>
+      link.addEventListener(
+        "click",
+        () => (link.href = buildLinkWithIds(link.href, table)),
+      ),
+    );
 
   // swap href form data-checkable links with method
   document.querySelectorAll("form[data-checkable]").forEach((form) =>
@@ -38,44 +44,65 @@ function setupMultiselectTargets(table) {
 
 function setupMultiselectCheckboxes(table) {
   const checkboxElements = table.querySelectorAll("tbody input[type=checkbox]");
-  const allCheckboxElement = table.querySelector("thead th:first-child input[type=checkbox]");
+  const allCheckboxElement = table.querySelector(
+    "thead th:first-child input[type=checkbox]",
+  );
 
   // toggle all checkboxes when the «all» checkbox is changed
   allCheckboxElement?.addEventListener("click", () => {
-    checkboxElements.forEach((checkboxElement) => checkboxElement.checked = allCheckboxElement.checked);
+    checkboxElements.forEach(
+      (checkboxElement) =>
+        (checkboxElement.checked = allCheckboxElement.checked),
+    );
     toggleActions(table);
   });
 
   // hook into change of any checkbox
-  checkboxElements.forEach((checkbox) => checkbox.addEventListener("change", () => toggleActions(table)));
+  checkboxElements.forEach((checkbox) =>
+    checkbox.addEventListener("change", () => toggleActions(table)),
+  );
 }
 
 function setupMultiselectActions(table) {
   // inject multiselect actions element into table
-  const actionsElement = document.querySelector("template#multiselectActions")?.content?.cloneNode(true);
+  const actionsElement = document
+    .querySelector("template#multiselectActions")
+    ?.content?.cloneNode(true);
   if (!actionsElement) return;
 
   table.querySelector("thead tr").appendChild(actionsElement);
-  table.querySelector("thead input[name=extended_all]")?.addEventListener("change", () => toggleActions(table));
+  table
+    .querySelector("thead input[name=extended_all]")
+    ?.addEventListener("change", () => toggleActions(table));
 }
 
 function checkedCounts(table) {
-  const checkboxElements = table.querySelectorAll("td:first-child input[type=checkbox]");
+  const checkboxElements = table.querySelectorAll(
+    "td:first-child input[type=checkbox]",
+  );
 
   return Array.from(checkboxElements).reduce(
     (counts, checkboxElement) => {
       counts[checkboxElement.checked ? "checked" : "unchecked"] += 1;
       return counts;
-    }, { checked: 0, unchecked: 0 }
+    },
+    { checked: 0, unchecked: 0 },
   );
 }
 
 function getSelectedIds(table) {
-  const extendedAllElement = document.querySelector("thead input[name=extended_all]");
-  if (extendedAllElement?.checked) return JSON.parse(extendedAllElement.dataset.ids);
+  const extendedAllElement = document.querySelector(
+    "thead input[name=extended_all]",
+  );
+  if (extendedAllElement?.checked)
+    return JSON.parse(extendedAllElement.dataset.ids);
 
-  const checkboxElements = table.querySelectorAll("tbody input[type=checkbox]:checked");
-  return Array.from(checkboxElements).map((checkboxElement) => checkboxElement.value);
+  const checkboxElements = table.querySelectorAll(
+    "tbody input[type=checkbox]:checked",
+  );
+  return Array.from(checkboxElements).map(
+    (checkboxElement) => checkboxElement.value,
+  );
 }
 
 function buildLinkWithIds(templateHref, table) {
@@ -84,12 +111,12 @@ function buildLinkWithIds(templateHref, table) {
 
   var queryParams;
   if (match) {
-    queryParams = `ids=${[match[1]]}&singular=true`
+    queryParams = `ids=${[match[1]]}&singular=true`;
   } else {
     const ids = getSelectedIds(table);
-    queryParams = `ids=${ids}`
+    queryParams = `ids=${ids}`;
   }
-  return (templateHref + separator + queryParams);
+  return templateHref + separator + queryParams;
 }
 
 function toggleActions(table) {
@@ -98,16 +125,26 @@ function toggleActions(table) {
 
   // toggle actions and select all checkbox
   table.classList.toggle("actions-enabled", counts.checked > 0);
-  if(allElement) allElement.checked = counts.checked > 0 && counts.unchecked === 0;
+  if (allElement)
+    allElement.checked = counts.checked > 0 && counts.unchecked === 0;
 
   // toggle extended select all checkbox
-  const extendedAllElement = table.querySelector("thead input[name=extended_all]");
-  if (extendedAllElement?.checked && !allElement?.checked) extendedAllElement.checked = false;
-  const showExtendedAllElement = !extendedAllElement.checked && +extendedAllElement.value > counts.checked
-  extendedAllElement?.parentElement?.classList?.toggle("d-none", !showExtendedAllElement);
+  const extendedAllElement = table.querySelector(
+    "thead input[name=extended_all]",
+  );
+  if (extendedAllElement && extendedAllElement.checked && !allElement?.checked)
+    extendedAllElement.checked = false;
+  const showExtendedAllElement =
+    !extendedAllElement?.checked && +extendedAllElement?.value > counts.checked;
+  extendedAllElement?.parentElement?.classList?.toggle(
+    "d-none",
+    !showExtendedAllElement,
+  );
 
   // display count of selected elements
-  const showCount = extendedAllElement?.checked ? extendedAllElement.value : counts.checked;
+  const showCount = extendedAllElement?.checked
+    ? extendedAllElement.value
+    : counts.checked;
   table.querySelector(".multiselect .count").innerText = showCount;
 }
 

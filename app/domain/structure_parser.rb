@@ -118,6 +118,12 @@ class StructureParser
     def yaml_key
       @yaml_key ||= ActiveSupport::Inflector.underscore(class_name)
     end
+
+    def filename
+      @filename ||= ActiveSupport::Inflector.underscore(
+        ActiveSupport::Inflector.demodulize(class_name)
+      ) + ".rb"
+    end
   end
 
   class Role
@@ -255,7 +261,7 @@ class StructureParser
   end
 
   def output_groups
-    @result.map { |group| group_template(group) }
+    @result.map { |group| [group.filename, group_template(group)] }.to_h
   end
 
   def output_translations

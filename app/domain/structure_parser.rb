@@ -9,12 +9,13 @@ require "English"
 require "pathname"
 require "yaml"
 require "active_support/inflector"
+require "set"
 
 # parses a structure as output by rake app:hitobito:roles
 class StructureParser
-  attr_reader :result
+  attr_reader :result, :errors
 
-  def initialize(structure, common_indent: 4, shiftwidth: 2, list_marker: "*")
+  def initialize(structure, common_indent: 4, shiftwidth: 2, list_marker: "*", allowed_permissions: [])
     # data
     @structure = structure
 
@@ -27,6 +28,9 @@ class StructureParser
     @current_layer = nil
     @current_group = nil
     @result = {}
+    @permissions = Set.new
+    @allowed_permissions = Set.new(allowed_permissions)
+    @errors = []
   end
 
   module Structure
@@ -129,6 +133,10 @@ class StructureParser
       @permissions.map(&:inspect).join(", ")
     end
 
+    def permissions?
+      @permissions.any?
+    end
+
     def inspect
       to_s.inspect
     end
@@ -156,6 +164,20 @@ class StructureParser
     def yaml_key
       "#{group.yaml_key}/#{ActiveSupport::Inflector.underscore(class_name)}"
     end
+  end
+
+  def valid?
+    if @result.empty?
+      @errors << "Nothing has been detected. Empty or malformed input file?"
+    end
+    if @permissions.empty?
+      @errors << "No permissions have been granted. This is impractical."
+    end
+    unless @permissions.subset?(@allowed_permissions)
+      @errors << "Unknown permissions detected. Typos?"
+    end
+
+    @errors.empty?
   end
 
   def parse
@@ -211,6 +233,10 @@ class StructureParser
         roles.each do |role|
           role.group = new_group
           new_group.roles << role
+
+          @permissions.merge(
+            role.permissions.split(",").map { _1.strip.delete_prefix(":").to_sym }
+          )
         end
 
         @result << new_group

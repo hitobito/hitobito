@@ -191,5 +191,22 @@ namespace :hitobito do
     end
 
     puts "-------- Done."
+    unless dry_run
+      puts <<~MSG
+
+        Next steps:
+        -----------
+
+        Update the root-groups in your wagon, so that
+
+          rake app:hitobito:roles:update_readme
+
+        works as intended. Take a lookt at
+
+          #{file.dirname.glob("app/models/*/group.rb").first}
+
+        Have fun.
+      MSG
+    end
   end
 end

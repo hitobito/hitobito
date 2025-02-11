@@ -33,6 +33,19 @@ class StructureParser
     @errors = []
   end
 
+  def inspect
+    <<~MSG
+      <StructureParser
+       common_indent: #{@common_indent.inspect} (#{@common_indent.size} Spaces)
+       shiftwidth: #{@shiftwidth.inspect} (#{@shiftwidth.size} Spaces)
+       list_marker: #{@list_marker.inspect}
+       allowed_permissions: #{@allowed_permissions}
+       structure:
+      #{@structure}
+      >
+    MSG
+  end
+
   module Structure
     class Group
       attr_reader :name, :layer, :roles
@@ -222,12 +235,14 @@ class StructureParser
         @current_layer.children << group
         @current_group = group
         @result[@current_layer][group] ||= []
-      when /^#{@shiftwidth * 2}#{Regexp.escape(@list_marker)} (.*):\s+(\[.*\])(\s+--\s+\((.*)\))?$/ # role
+      when /^#{@shiftwidth * 2}#{Regexp.escape(@list_marker)} (.*):\s+(\[.*\])(\s+--\s+\(?(.*)\)?)?$/ # role
         match = Regexp.last_match
         role = Role.new(match[1], match[2], match[4])
 
         @current_group.roles << role
         @result[@current_layer][@current_group] << role
+      else
+        @errors << "Unparseable: #{line}"
       end
     end
   end

@@ -206,6 +206,8 @@ class StructureParser
       case line.delete_prefix(@common_indent).chomp
       when /^#{Regexp.escape(@list_marker)} (.*?)(\s+<\s+(.*))?$/ # layer
         name = Regexp.last_match(1)
+        # TODO: Currently, this only support ONE super-layer.
+        #       If there are more (comma-separated), this needs to be extended in this clause
         super_layer = find_layer_by_name(Regexp.last_match(3))
         layer = Structure::Layer.new(name)
 

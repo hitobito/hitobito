@@ -7,14 +7,19 @@
 
 namespace :hitobito do
   desc "Print all groups, roles and permissions"
-  task roles: :environment do
+  task :roles, [:with_classes] => [:environment] do |_t, args|
+    args.with_defaults({with_classes: false})
+    with_classes = args[:with_classes].to_s == "true"
+
     Role::TypeList.new(Group.root_types.first).each do |layer, groups|
       puts "    * #{layer}"
       groups.each do |group, roles|
         puts "      * #{group}"
         roles.each do |r|
           twofa_tag = "2FA " if r.two_factor_authentication_enforced
-          puts "        * #{r.label}: #{twofa_tag}#{r.permissions.inspect}  --  (#{r})"
+          role_class_info = "  --  (#{r})" if with_classes
+
+          puts "        * #{r.label}: #{twofa_tag}#{r.permissions.inspect}#{role_class_info}"
         end
       end
     end

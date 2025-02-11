@@ -9,7 +9,7 @@ require "English"
 require "pathname"
 require "yaml"
 require "active_support/inflector"
-require "set"
+require "set" # rubocop:disable Lint/RedundantRequireStatement
 
 # parses a structure as output by rake app:hitobito:roles
 class StructureParser

@@ -256,6 +256,7 @@ Hitobito::Application.routes.draw do
               get 'contact_data', controller: 'participation_contact_datas', action: 'edit'
               post 'contact_data', controller: 'participation_contact_datas', action: 'update'
             end
+            resource :mail_dispatch, only: [:create], module: :participations
             member do
               get 'print'
             end

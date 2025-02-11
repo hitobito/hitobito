@@ -18,6 +18,7 @@ it can be done in wagon.rb.
 ### Simple columns
 
 An example of registering three columns at once:
+
 ```
 TableDisplay.register_column(Person,
                              TableDisplays::ShowFullColumn,
@@ -30,13 +31,14 @@ The third line contains a list of attributes which should be newly selectable.
 The second line specifies the column class which should be used for these new
 selectable columns.
 The column class is responsible for...
+
 - providing a label for the column
 - permission checking. In this case, `:show_full` on the person is required in
-order to display the AHV number of the person. The permission is evaluated
-separately for each person in the displayed list.
+  order to display the AHV number of the person. The permission is evaluated
+  separately for each person in the displayed list.
 - formatting the value displayed in the table
 - augmenting the database query with any additional selects or joins which are
-needed for calculating the displayed value
+  needed for calculating the displayed value
 
 For simple public columns which require no permission check, there is an even
 more basic column class `PublicColumn`.
@@ -46,6 +48,7 @@ more basic column class `PublicColumn`.
 For more complicated or calculated columns, there are also specific column
 classes, such as `LoginStatusColumn`.
 This type of column would typically only be registered with a single attribute:
+
 ```
 TableDisplay.register_column(Person,
                              TableDisplays::People::LoginStatusColumn,
@@ -61,6 +64,7 @@ set of questions, and the event participation list should offer to select only
 the relevant questions from its event.
 
 To register such a dynamic multi-column, the DSL looks like this:
+
 ```
 TableDisplay.register_multi_column(Event::Participation,
                                    TableDisplays::Event::Participations::QuestionColumn)
@@ -71,7 +75,7 @@ can produce multiple actual columns.
 
 ## ColumnTypes
 
-(as found in core, in app/domain/table_displays/*)
+(as found in core, in app/domain/table_displays)
 
 - SimpleColumns
   - PublicColumn
@@ -88,4 +92,9 @@ can produce multiple actual columns.
 - MultiColumns
   - Event::Participations::QuestionColumn
     - uses `:update` Permission on the Event or `:show_full` Permission on the Person
-    - renders questions and answers of an event
+
+## Implementation Advice / TODO
+
+Table display columns are also exportable but without template context. We should refrain
+from using template in the column implementation and refactor towards an abstraction
+that works for both scenarios (view, background job)

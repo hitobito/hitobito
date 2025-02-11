@@ -84,6 +84,13 @@ describe Export::Tabular::People::TableDisplays do
       expect(people_list.labels).not_to include("Zusätzliche Angaben")
     end
 
+    it "does set table on table_display columns" do
+      table_display.selected = [:"person.additional_information"]
+      expect { people_list }.to change { table_display.selected_group }.from(nil).to(group)
+      column = table_display.column_for(:additional_information)
+      expect(column.table).to eq OpenStruct.new(template: OpenStruct.new(parent: group))
+    end
+
     context :with_limited_select do
       let(:list) do
         Person.where(id: person.id)

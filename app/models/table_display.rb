@@ -29,6 +29,9 @@ class TableDisplay < ActiveRecord::Base
 
   cattr_accessor :table_display_columns, :multi_columns
 
+  # Used in export, when no template/table is present to allow columns to know which group we are on
+  attr_accessor :selected_group
+
   def self.register_column(model_class, column_class, attrs = nil)
     if attrs.is_a? Array
       return attrs.each { |attr| register_column(model_class, column_class, attr) }
@@ -71,6 +74,8 @@ class TableDisplay < ActiveRecord::Base
     column = relevant_columns.fetch(attr, nil) ||
       relevant_multi_columns.find { |col| col.can_display?(attr) }
     return if column.nil?
+
+    table ||= OpenStruct.new(template: OpenStruct.new(parent: selected_group)) if selected_group
 
     instance = column.new(ability, model_class: table_model_class.constantize, table: table)
     block_given? ? (yield instance) : instance

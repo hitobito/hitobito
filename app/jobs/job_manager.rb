@@ -69,6 +69,7 @@ class JobManager
       People::DuplicateLocatorJob,
       People::UpdateAfterRoleChangeJob,
       People::CleanupJob,
+      Oauth::AccessTokenCleanupJob,
       ReoccuringMailchimpSynchronizationJob,
       SessionsCleanerJob,
       WorkerHeartbeatCheckJob

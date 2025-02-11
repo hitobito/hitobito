@@ -7,12 +7,17 @@
 
 namespace :hitobito do
   desc "Print all groups, roles and permissions"
-  task :roles, [:with_classes] => [:environment] do |_t, args|
+  task :roles, [:with_classes] => [:environment] do |_t, args| # rubocop:disable Rails/RakeEnvironment
     args.with_defaults({with_classes: false})
     with_classes = args[:with_classes].to_s == "true"
 
+    group_tree = Group.subclasses.index_by(&:label).map { |label, klass| [label, klass.children.map(&:label)] }.to_h
+
     Role::TypeList.new(Group.root_types.first).each do |layer, groups|
-      puts "    * #{layer}"
+      super_layers = group_tree.select { |_key, list| list.include?(layer) }.keys
+      super_layer_tag = " < #{super_layers.join(", ")}" if super_layers.any?
+
+      puts "    * #{layer}#{super_layer_tag}"
       groups.each do |group, roles|
         puts "      * #{group}"
         roles.each do |r|

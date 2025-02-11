@@ -147,6 +147,7 @@ namespace :hitobito do
     })
 
     file = Pathname.new(args[:filename]).expand_path
+    dry_run = ENV["DRY_RUN"] == "true"
 
     puts "-------- Parsing #{file}"
     parser = StructureParser.new(
@@ -156,6 +157,7 @@ namespace :hitobito do
       list_marker: "*",
       allowed_permissions: Role::Permissions + [AbilityDsl::Recorder::General::PERMISSION]
     )
+    puts parser.inspect if dry_run
     parser.parse
     if parser.valid?
       puts "Structure and Permissions seem valid."
@@ -169,15 +171,24 @@ namespace :hitobito do
     group_path = file.dirname.join("app", "models", "group")
     puts "writing classes to #{group_path}"
     parser.output_groups.each do |fn, content|
-      group_path.join(fn).write(content)
-      print "."
+      if dry_run
+        puts fn, content
+      else
+        group_path.join(fn).write(content)
+        print "."
+      end
     end
     puts ""
 
     puts "-------- Translations for those -----------"
     locale_path = file.dirname.join("config", "locales").children.first
-    locale_path.write(parser.output_translations)
-    puts "written to #{locale_path}"
+    if dry_run
+      puts locale_path
+      puts parser.output_translations
+    else
+      locale_path.write(parser.output_translations)
+      puts "written to #{locale_path}"
+    end
 
     puts "-------- Done."
   end

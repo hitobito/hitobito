@@ -140,23 +140,45 @@ namespace :hitobito do
   end
 
   desc "Parse Structure and output classes and translations"
-  task :parse_structure, [:filename] do |_t, args| # rubocop:disable Rails/RakeEnvironment
+  task :parse_structure, [:filename] => [:environment] do |_t, args|
     require_relative "../../app/domain/structure_parser"
     args.with_defaults({
       filename: "./structure.txt"
     })
 
     file = Pathname.new(args[:filename]).expand_path
-    puts "-------- Parsing #{file}"
 
-    parser = StructureParser.new(file.read, common_indent: 4, shiftwidth: 2, list_marker: "*")
-    puts parser.inspect
+    puts "-------- Parsing #{file}"
+    parser = StructureParser.new(
+      file.read,
+      common_indent: 4,
+      shiftwidth: 2,
+      list_marker: "*",
+      allowed_permissions: Role::Permissions + [AbilityDsl::Recorder::General::PERMISSION]
+    )
     parser.parse
+    if parser.valid?
+      puts "Structure and Permissions seem valid."
+    else
+      puts(*parser.errors)
+      puts
+      raise "Inputfile seems invalid."
+    end
 
     puts "-------- Groups and Roles as classes ------"
-    puts parser.output_groups
+    group_path = file.dirname.join("app", "models", "group")
+    puts "writing classes to #{group_path}"
+    parser.output_groups.each do |fn, content|
+      group_path.join(fn).write(content)
+      print "."
+    end
+    puts ""
+
     puts "-------- Translations for those -----------"
-    puts parser.output_translations
+    locale_path = file.dirname.join("config", "locales").children.first
+    locale_path.write(parser.output_translations)
+    puts "written to #{locale_path}"
+
     puts "-------- Done."
   end
 end

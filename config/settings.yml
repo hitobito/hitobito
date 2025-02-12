@@ -7,7 +7,7 @@
 # See https://github.com/rubyconfig/config
 
 application:
-  name: hitobito  # set same name in email.sender and email.mass_recipient
+  name: Vibha VMS  # set same name in email.sender and email.mass_recipient
   logo:
     image: logo.png # put under app/assets/images
     height: 30 # pixel, has to bet set as the logo is a background image,
@@ -27,6 +27,7 @@ application:
   # The languages available in the menu
   languages:
     # first entry is considered the default language
+    en: English
     de: Deutsch
 
 <% mail_domain = ENV['RAILS_MAIL_DOMAIN'].presence ||

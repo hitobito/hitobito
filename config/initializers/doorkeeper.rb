@@ -248,14 +248,3 @@ Rails.application.config.to_prepare do
     Doorkeeper.configuration.optional_scopes.add(:nextcloud)
   end
 end
-
-# https://github.com/rails/rails/commit/9def05385f1cfa41924bb93daa187615e88c95b9
-[[Doorkeeper::Application, :uid],
-  [Doorkeeper::AccessToken, :token],
-  [Doorkeeper::AccessGrant, :token]].each do |clazz, attribute|
-  clazz._validators[attribute].each do |v|
-    next unless v.is_a?(ActiveRecord::Validations::UniquenessValidator)
-
-    v.instance_variable_set(:@options, v.options.merge(case_sensitive: false).freeze)
-  end
-end

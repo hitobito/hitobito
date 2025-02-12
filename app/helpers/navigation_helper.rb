@@ -25,17 +25,17 @@ module NavigationHelper
      active_for: %w[list_courses],
      if: ->(_) { Group.course_types.present? && can?(:list_available, Event::Course) }},
 
-    {label: :invoices,
-     url: :first_group_invoices_or_root_path,
-     icon_name: "money-bill-alt",
-     if: ->(_) { current_user.finance_groups.any? },
-     active_for: %w[/invoices
-       invoices/evaluations
-       invoices/by_article
-       invoice_articles
-       invoice_config
-       payment_process
-       invoice_lists?]},
+#    {label: :invoices,
+#     url: :first_group_invoices_or_root_path,
+#     icon_name: "money-bill-alt",
+#     if: ->(_) { current_user.finance_groups.any? },
+#     active_for: %w[/invoices
+#       invoices/evaluations
+#       invoices/by_article
+#       invoice_articles
+#       invoice_config
+#       payment_process
+#       invoice_lists?]},
 
     {label: :admin,
      url: :label_formats_path,

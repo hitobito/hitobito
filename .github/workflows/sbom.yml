@@ -18,7 +18,7 @@ on:
 
 jobs:
   generate-and-push-sbom:
-    runs-on: 'ubuntu-20.04'
+    runs-on: 'ubuntu-22.04'
     env:
       HEADLESS: true
       RAILS_DB_ADAPTER: postgresql

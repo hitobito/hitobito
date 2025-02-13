@@ -18,7 +18,7 @@ describe "contactable/_fields.html.haml" do
     view.extend FormatHelper
     allow(view).to receive_messages(entry: GroupDecorator.decorate(group), f: form_builder)
 
-    # mock render call to emai_field partial
+    # mock render call to email_field partial
     render_method = view.method(:render)
     expect(view).to receive(:render) { |*args|
       if args == ["email_field", f: form_builder]
@@ -26,7 +26,7 @@ describe "contactable/_fields.html.haml" do
       else
         render_method.call(*args)
       end
-    }.exactly(3).times
+    }.exactly(4).times
   end
 
   context "standard" do

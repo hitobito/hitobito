@@ -14,8 +14,6 @@ runs:
   steps:
     - name: 'Set up Ruby'
       uses: ruby/setup-ruby@v1
-      env:
-        ImageOS: ubuntu20
 
     - name: Read .tool-versions
       uses: marocchino/tool-versions-action@v1

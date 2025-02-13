@@ -55,8 +55,6 @@ jobs:
         run: git submodule update --init --recursive
 
       - name: 'Set up Ruby'
-        env:
-          ImageOS: ubuntu20
         uses: ruby/setup-ruby@v1
         with:
           working-directory: hitobito

@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## unreleased
+
+- Rollen und Teilnahmen auf Mitgliedschaften / Verlauf sind nun (zusätzlich) nach absteigendem Datum sortiert (hitobito_sac_cas#1638).
+
 ## Version 2.4
 
 - In der Rechnungsübersicht können neu alle Rechnungen gleichzeitig ausgewählt werden, auch wenn es mehr als die 50 angezeigten gibt (hitobito_sww#172)

@@ -20,7 +20,7 @@ describe :self_registration, js: true do
   def complete_main_person_form
     fill_in "Vorname", with: "Max"
     fill_in "Nachname", with: "Muster"
-    fill_in "Haupt-E-Mail", with: Settings.root_email
+    fill_in "Haupt-E-Mail", with: "max.muster@hitobito.example.com"
   end
 
   def complete_with_already_assigned_email

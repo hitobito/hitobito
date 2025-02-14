@@ -25,9 +25,7 @@ class Wizards::RegisterNewUserWizard < Wizards::Base
   end
 
   def valid?
-    top_is_valid = super
-    person_is_valid = person_valid?
-    top_is_valid && person_is_valid
+    super & person_valid?
   end
 
   def save!

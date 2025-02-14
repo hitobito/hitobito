@@ -20,7 +20,13 @@ describe :self_registration, js: true do
   def complete_main_person_form
     fill_in "Vorname", with: "Max"
     fill_in "Nachname", with: "Muster"
-    fill_in "Haupt-E-Mail", with: "max.muster@hitobito.example.com"
+    fill_in "Haupt-E-Mail", with: Settings.root_email
+  end
+
+  def complete_with_already_assigned_email
+    fill_in "Vorname", with: "Assigned"
+    fill_in "Nachname", with: "Email"
+    fill_in "Haupt-E-Mail", with: Settings.root_email
   end
 
   describe "main_person" do
@@ -61,6 +67,20 @@ describe :self_registration, js: true do
 
       expect(person.roles.map(&:type)).to eq([self_registration_role.to_s])
       expect(current_path).to eq("#{group_person_path(group_id: group, id: person)}.html")
+    end
+
+    it "self registers with assigned email displays error message" do
+      visit group_self_registration_path(group_id: group)
+      complete_with_already_assigned_email
+      expect do
+        click_on "Registrieren"
+        expect(page).to have_text(
+          "E-Mail ist bereits vergeben. Diese Adresse muss für alle Personen eindeutig sein, " \
+          "da sie beim Login verwendet wird. Du kannst jedoch unter 'Weitere E-Mails' Adressen " \
+          "eintragen, welche bei anderen Personen als Haupt-E-Mail vergeben sind (Die Haupt-E-Mail " \
+          "kann leer gelassen werden)."
+        )
+      end.to change { Person.count }.by(0)
     end
 
     describe "with adult consent" do

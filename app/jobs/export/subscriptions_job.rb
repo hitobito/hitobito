@@ -6,6 +6,14 @@
 class Export::SubscriptionsJob < Export::ExportBaseJob
   self.parameters = PARAMETERS + [:mailing_list_id]
 
+  # avoid long-running exports if only one is allowed at the same time.
+  #
+  # this could block exports for a long time. If a higher concurrency is allowed,
+  # then the problem is known and can be mitigated with a higher concurrency.
+  if Settings.delayed_jobs.concurrency.limit > 1
+    self.max_run_time = 24.hours
+  end
+
   def initialize(format, user_id, mailing_list_id, options)
     super(format, user_id, options)
     @mailing_list_id = mailing_list_id

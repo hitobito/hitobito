@@ -81,6 +81,11 @@ describe Event do
     its(:participant_count) { should == 2 }
   end
 
+  it "to_s returns default string name when no translation exists" do
+    Event::Translation.where(event_id: event.id).destroy_all
+    expect(event.reload.to_s).to eq "[Kein Name]"
+  end
+
   context "#application_possible?" do
     context "without opening and closing dates" do
       it "is open without maximum participant" do

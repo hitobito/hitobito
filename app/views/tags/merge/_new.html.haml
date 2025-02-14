@@ -18,7 +18,7 @@
               .controls
                 = f.text_field(:name, value: @name, placeholder: @name, class: 'form-control form-control-sm')
             = f.hidden_field(:dst_tag_id, value: @dst_tag.id)
-            = f.hidden_field(:src_tag_ids, value: @src_tag_ids)
+            = f.hidden_field(:src_tag_ids, value: @src_tag_ids.join(","))
         .modal-footer
           = submit_button(f, t('tags_merge.submit'))
           = link_to(ti('button.cancel'), '#',

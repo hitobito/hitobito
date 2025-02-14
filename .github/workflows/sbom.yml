@@ -18,7 +18,7 @@ on:
 
 jobs:
   generate-and-push-sbom:
-    runs-on: 'ubuntu-20.04'
+    runs-on: 'ubuntu-22.04'
     env:
       HEADLESS: true
       RAILS_DB_ADAPTER: postgresql
@@ -55,8 +55,6 @@ jobs:
         run: git submodule update --init --recursive
 
       - name: 'Set up Ruby'
-        env:
-          ImageOS: ubuntu20
         uses: ruby/setup-ruby@v1
         with:
           working-directory: hitobito

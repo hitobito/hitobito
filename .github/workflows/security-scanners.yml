@@ -18,8 +18,6 @@ jobs:
 
       - name: Setup Ruby and install gems
         uses: ruby/setup-ruby@v1
-        env:
-          ImageOS: ubuntu20
         with:
           bundler-cache: true
 

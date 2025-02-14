@@ -53,7 +53,7 @@ describe "Quicksearch", js: true do
     expect(dropdown).to have_content("Bottom Member, Greattown")
   end
 
-  it "finds results when special characters in search term when confiriming with enter" do
+  it "finds results when special characters in search term when confirming with enter" do
     allow_any_instance_of(FullTextController).to receive(:only_result).and_return(nil)
     Fabricate(:phone_number, contactable: people(:top_leader), number: "+41 79 123 45 67")
     sign_in

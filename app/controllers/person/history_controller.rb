@@ -25,12 +25,11 @@ class Person::HistoryController < ApplicationController
   def fetch_roles(*scopes)
     scopes
       .inject(roles_scope) { |current, additional| current.send(additional) }
-      .sort_by { |r| GroupDecorator.new(r.group).name_with_layer }
+      .sort_by { |r| [GroupDecorator.new(r.group).name_with_layer, -(r.end_on&.jd || 999999999)] }
   end
 
   def fetch_participations
-    Person::EventQueries.new(entry)
-      .alltime_participations
+    Person::EventQueries.new(entry).alltime_participations
   end
 
   def participations_by_event_type

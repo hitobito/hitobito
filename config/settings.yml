@@ -264,3 +264,6 @@ groups:
     enabled: true
   nextcloud:
     enabled: false
+
+hitobito_log:
+  recipient_emails:

@@ -7,10 +7,10 @@ The message model defines the different message types of Hitobito (Single Table 
 
 | STI Model | Description |
 |------------------------|-------------------|
-| `Message::TextMessage` | Text Message (SMS) |         
-| `Message::Letter` | Letter |         
-| `Message::LetterWithInvoice` | Invoice letter |         
-| `Message::BulkMail` | Mail |         
+| `Message::TextMessage` | Text Message (SMS) |
+| `Message::Letter` | Letter |
+| `Message::LetterWithInvoice` | Invoice letter |
+| `Message::BulkMail` | Mail |
 | `Message::BulkMailBounce` | Bounce mail of a previously sent BulkMail |
 
 ## `Message::TextMessage`

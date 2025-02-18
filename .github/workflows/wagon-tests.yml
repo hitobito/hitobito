@@ -38,7 +38,7 @@ defaults:
 jobs:
   wagon_rubocop:
     name: rubocop
-    runs-on: "ubuntu-20.04"
+    runs-on: "ubuntu-22.04"
     env:
       RAILS_DB_ADAPTER: nulldb
 
@@ -68,7 +68,7 @@ jobs:
 
   wagon_seeds:
     name: seeds
-    runs-on: "ubuntu-20.04"
+    runs-on: "ubuntu-22.04"
     env:
       HEADLESS: true
       RAILS_DB_ADAPTER: postgresql
@@ -120,7 +120,7 @@ jobs:
 
   wagon_specs:
     name: specs
-    runs-on: "ubuntu-20.04"
+    runs-on: "ubuntu-22.04"
     env:
       HEADLESS: true
       RAILS_DB_ADAPTER: postgresql
@@ -175,7 +175,7 @@ jobs:
 
   wagon_feature_specs:
     name: feature specs
-    runs-on: "ubuntu-20.04"
+    runs-on: "ubuntu-22.04"
     env:
       HEADLESS: true
       RAILS_DB_ADAPTER: postgresql

@@ -597,6 +597,10 @@ describe PersonReadables do
             other = Fabricate(Role::External.name.to_sym, group: group)
             is_expected.to include(other.person)
           end
+
+          it "does join roles so table displays based of roles work" do
+            expect { subject.where(roles: {type: ""}) }.not_to raise_error
+          end
         end
 
         if action == :global

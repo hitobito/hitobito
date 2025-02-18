@@ -39,7 +39,9 @@ class PersonReadables < GroupBasedReadables
 
   def accessible_people
     if user.root?
-      Person.only_public_data
+      Person.only_public_data.then do |scope|
+        group ? scope.joins(@roles_join).distinct : scope
+      end
     else
       scope = Person.only_public_data.where(accessible_conditions.to_a).distinct
       if has_group_based_conditions?

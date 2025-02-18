@@ -13,6 +13,8 @@ describe "event/participations/_actions_show.html.haml" do
   let(:group) { event.groups.first }
 
   before do
+    CustomContent.create!(key: "event_application_confirmation", label: "Custom Content Label 1", body: "")
+    CustomContent.create!(key: "event_application_approval", label: "Custom Content Label 2", body: "")
     allow(view).to receive_messages(path_args: [group, event])
     allow(view).to receive_messages(entry: participation)
     allow(controller).to receive_messages(current_user: user)

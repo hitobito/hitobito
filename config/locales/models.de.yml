@@ -612,6 +612,7 @@ de:
         automatic_assignment: Automatische Zuteilung
         application_questions: Anmeldeangaben
         admin_questions: Administrationsangaben
+        no_name: "[Kein Name]"
 
       event/contact_attrs:
         required: Obligatorisch
@@ -722,14 +723,14 @@ de:
         multiple_choices: Mehrfachauswahl
         required: Antwort obligatorisch
         disclosure: Antwortangabe
-        
+
       application_questions:
         question: Frage
         choices: Mögliche Antworten
         multiple_choices: Mehrfachauswahl
         required: Antwort obligatorisch
-        disclosure: Antwortangabe 
-        
+        disclosure: Antwortangabe
+
       event/role:
         label: Bezeichnung
         person: Person
@@ -1242,6 +1243,7 @@ de:
       attachments_not_allowed: "darf keine Anhänge enthalten"
       invalid_money: "muss auf 5 Rappen gerundet werden"
       invalid_iban: "ist nicht gültig"
+      invalid_decimal_format: "ist nicht gültig, maximal %{precision} Zeichen erlaubt mit %{scale} Nachkommastellen"
       no_permission: "Zugriff verweigert"
       # timeliness
       invalid_date: "ist kein gültiges Datum"

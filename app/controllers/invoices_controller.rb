@@ -158,7 +158,7 @@ class InvoicesController < CrudController
     scope = super.list.with_aggregated_payments
     scope = scope.includes(:recipient).references(:recipient)
     scope = scope.standalone unless parents.any?(InvoiceList)
-    scope = scope.page(params[:page]).per(50) unless params[:ids]
+    scope = scope.page(params[:page]) unless params[:ids]
     Invoice::Filter.new(params).apply(scope)
   end
 

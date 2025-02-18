@@ -53,4 +53,7 @@ class Group::MountedAttrsGroup < Group
   mounted_attr :boolean_with_default_null, :boolean, default: nil
   mounted_attr :boolean_with_default_null_nullable, :boolean, default: nil, null: true
   mounted_attr :boolean_with_default_null_non_nullable, :boolean, default: nil, null: false
+
+  mounted_attr :decimal_with_precision_10_and_scale_2, :decimal, precision: 10, scale: 2
+  mounted_attr :decimal_with_precision_6_and_scale_1, :decimal, precision: 6, scale: 1
 end

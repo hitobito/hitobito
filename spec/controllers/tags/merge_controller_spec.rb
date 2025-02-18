@@ -74,7 +74,7 @@ describe Tags::MergeController do
 
       expect(tag1_owner.reload.tags.to_a).to eq([tag1])
       expect(tag2_owner.reload.tags.to_a).to eq([tag2])
-      expect(all_tag_owner.reload.tags.to_a).to eq([tag1, tag2])
+      expect(all_tag_owner.reload.tags.to_a).to match_array([tag1, tag2])
     end
   end
 

@@ -6,13 +6,14 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::ParticipantAssigner
-  attr_reader :event, :participation, :user
+  attr_reader :event, :participation, :send_email, :user
 
   delegate :application, to: :participation
 
-  def initialize(event, participation, user = nil)
+  def initialize(event, participation, send_email = true, user = nil)
     @event = event
     @participation = participation
+    @send_email = send_email
     @user = user
   end
 
@@ -32,7 +33,7 @@ class Event::ParticipantAssigner
       remove_from_waiting_list if application&.waiting_list?
       create_participant_role
       event.refresh_participant_counts!
-      send_confirmation
+      send_confirmation if send_email
     end
     event.reload
   end
@@ -45,7 +46,7 @@ class Event::ParticipantAssigner
       original_event = participation.application.priority_1 || participation.event
       update_participation_event(original_event)
       original_event.refresh_participant_counts!
-      send_confirmation
+      send_confirmation if send_email
     end
     event.reload
   end

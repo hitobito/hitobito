@@ -12,7 +12,7 @@ class ErrorPagesGenerator < Rails::Generators::Base
   def generate_page
     ERROR_PAGES.each do |error|
       run "rm -f public/#{error}.html"
-      request = Rack::MockRequest.env_for "/#{error}"
+      request = Rackup::MockRequest.env_for "/#{error}"
       request["action_dispatch.exception"] = StandardError.new "generator"
       _, _, body = *Hitobito::Application.call(request)
       create_file "public/#{error}.html", body.join, force: true

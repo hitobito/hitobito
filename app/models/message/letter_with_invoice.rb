@@ -43,7 +43,7 @@
 
 class Message::LetterWithInvoice < Message::Letter
   belongs_to :invoice_list
-  serialize :invoice_attributes, Hash
+  serialize :invoice_attributes, type: Hash, coder: YAML
   validate :assert_valid_invoice_items
 
   self.icon = :"file-invoice"

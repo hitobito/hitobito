@@ -14,7 +14,7 @@ module Group::Types
       :possible_children,
       :default_children,
       :event_types,
-      :default_role
+      :standard_role
 
     # Whether this group type builds a layer or is a regular group.
     # Layers influence some permissions.

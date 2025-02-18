@@ -33,7 +33,7 @@ class Person::Filter::Chain
 
   attr_reader :filters
 
-  def initialize(params)
+  def initialize(params = nil)
     @filters = parse(params)
   end
 

@@ -77,8 +77,8 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   PROVIDER_VALUES = %w[aspsms].freeze
   ADDRESS_POSITION_VALUES = %w[left right].freeze
 
-  serialize :encrypted_text_message_username
-  serialize :encrypted_text_message_password
+  serialize :encrypted_text_message_username, coder: YAML
+  serialize :encrypted_text_message_password, coder: YAML
 
   i18n_enum :letter_address_position, ADDRESS_POSITION_VALUES, scopes: false, queries: false
   attr_encrypted :text_message_username, :text_message_password

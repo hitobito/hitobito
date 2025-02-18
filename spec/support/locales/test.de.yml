@@ -36,6 +36,9 @@ de:
       role/external: External
 
     attributes:
+      person_duplicate:
+        company_name: Firmenname
+        town: Stadt
       people_relation:
         kinds:
           parent: Elternteil

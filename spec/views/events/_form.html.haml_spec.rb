@@ -10,7 +10,7 @@ describe "events/_form.html.haml" do
   let(:user) { people(:top_leader) }
   let(:event) { events(:top_event) }
   let(:group) { event.groups.first }
-  let(:dom) { Capybara::Node::Simple.new(rendered) }
+  let(:dom) { Capybara::Node::Simple.new(raw(rendered)) }
 
   before do
     allow(view).to receive_messages(path_args: [group, event])

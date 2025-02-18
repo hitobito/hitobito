@@ -16,6 +16,7 @@ module Export::Tabular::People
       super(add_table_display_to_query(list, table_display.person, selected_group))
       @table_display = table_display
       @selected_group = selected_group
+      @table_display.selected_group = selected_group
     end
 
     def build_attribute_labels

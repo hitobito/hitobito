@@ -14,7 +14,7 @@ module TableDisplays
         resolve_database_column(attr),
         # The can(:show) check requires the contact_data_visible column to be fetched from the db
         "people.contact_data_visible"
-      ]
+      ].compact_blank
     end
 
     def render(attr)

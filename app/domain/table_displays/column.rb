@@ -9,6 +9,28 @@ module TableDisplays
   class Column
     attr_reader :template, :table, :model_class, :ability
 
+    class << self
+      def valid?(model_class, attr)
+        return true if migrations_pending?
+
+        attrs = new(:ability, model_class:).required_model_attrs(attr)
+        attrs.empty? || attrs.all? do |fqn|
+          column, table = fqn.to_s.split(".").reverse
+          column_names = ((table && table != model_class.table_name) ? table.classify.constantize : model_class).column_names
+          column_names.include?(column)
+        end
+      end
+
+      def migrations_pending?
+        @migrations_pending ||= begin
+          ActiveRecord::Migration.check_all_pending!
+          false
+        rescue ActiveRecord::PendingMigrationError
+          true
+        end
+      end
+    end
+
     def initialize(ability, model_class:, table: nil)
       @ability = ability
       @model_class = model_class
@@ -27,10 +49,10 @@ module TableDisplays
       []
     end
 
-    # Allows a column class to specify which database columns need to be fetched for calculating the
-    # value
+    # Override only if scope of model class does not include the required column in the query
+    # do not override for joined tables, see PublicColumn for a legimatite use case
     def required_model_attrs(_attr)
-      raise "implement in subclass"
+      []
     end
 
     def value_for(object, attr, &block)

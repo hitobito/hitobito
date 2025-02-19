@@ -8,29 +8,42 @@
 require "spec_helper"
 
 describe TableDisplays::Column do
-  describe "::valid?" do
-    it "is true when required_model_attrs is empty" do
-      expect(described_class.valid?(Person, :first_name)).to eq true
+  let(:ability) { double(:ability) }
+
+  before do
+    stub_const("TestColum", Class.new(TableDisplays::Column))
+  end
+
+  subject(:column) { TestColum.new(ability, model_class: Person) }
+
+  describe "#safe_required_model_attrs" do
+    it "is empty when nothing is specified" do
+      expect(column.safe_required_model_attrs(:column)).to be_empty
     end
 
-    it "is true when required_model_attrs return array with column on that table" do
-      allow_any_instance_of(described_class).to receive(:required_model_attrs).and_return(%w[first_name])
-      expect(described_class.valid?(Person, :first_name)).to eq true
+    it "returns column if defined on model" do
+      allow(column).to receive(:required_model_attrs).and_return(%w[first_name])
+      expect(column.safe_required_model_attrs(:column)).to eq %w[first_name]
     end
 
-    it "is true when required_model_attrs return array with fqn of column on that table" do
-      allow_any_instance_of(described_class).to receive(:required_model_attrs).and_return(%w[people.first_name])
-      expect(described_class.valid?(Person, :first_name)).to eq true
+    it "returns multiple columns if all defined on model" do
+      allow(column).to receive(:required_model_attrs).and_return(%w[first_name last_name])
+      expect(column.safe_required_model_attrs(:column)).to eq %w[first_name last_name]
     end
 
-    it "is true when required_model_attrs return array with column not on that table" do
-      allow_any_instance_of(described_class).to receive(:required_model_attrs).and_return(%w[foobar])
-      expect(described_class.valid?(Person, :first_name)).to eq false
+    it "returns fq column if defined on model" do
+      allow(column).to receive(:required_model_attrs).and_return(%w[people.first_name])
+      expect(column.safe_required_model_attrs(:column)).to eq %w[people.first_name]
     end
 
-    it "is true when required_model_attrs return array with fqn of column not on that table" do
-      allow_any_instance_of(described_class).to receive(:required_model_attrs).and_return(%w[people.foobar])
-      expect(described_class.valid?(Person, :first_name)).to eq false
+    it "strips out column not defined on model" do
+      allow(column).to receive(:required_model_attrs).and_return(%w[first_name foobar])
+      expect(column.safe_required_model_attrs(:column)).to eq %w[first_name]
+    end
+
+    it "strips out fq column not defined on model" do
+      allow(column).to receive(:required_model_attrs).and_return(%w[first_name roles.id])
+      expect(column.safe_required_model_attrs(:column)).to eq %w[first_name]
     end
   end
 end

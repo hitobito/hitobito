@@ -1232,6 +1232,16 @@ describe PeopleController do
       expect(dom.find("table tbody tr i.fas.fa-user-check")["title"]).to eq "Login ist aktiv"
     end
 
+    it "GET#index does not duplicate person if we select from another table" do
+      Fabricate(Group::TopGroup::Member.sti_name, group: groups(:top_group), person: top_leader)
+      TableDisplay.register_column(Person, TableDisplays::People::PrimaryGroupColumn, :primary_group)
+      top_leader.table_display_for(Person).update(selected: %w[primary_group])
+      allow_any_instance_of(TableDisplays::People::PrimaryGroupColumn).to receive(:required_model_attrs).and_return(%w[roles.id])
+
+      get :index, params: {group_id: group.id}
+      expect(assigns(:people)).to have(1).item
+    end
+
     it "GET#index lists extra column without content if permission check fails" do
       TableDisplay.register_column(Person, TestImpossibleColumn, :gender)
       top_leader.table_display_for(Person).update(selected: %w[gender])

@@ -9,28 +9,6 @@ module TableDisplays
   class Column
     attr_reader :template, :table, :model_class, :ability
 
-    class << self
-      def valid?(model_class, attr)
-        return true if migrations_pending?
-
-        attrs = new(:ability, model_class:).required_model_attrs(attr)
-        attrs.empty? || attrs.all? do |fqn|
-          column, table = fqn.to_s.split(".").reverse
-          column_names = ((table && table != model_class.table_name) ? table.classify.constantize : model_class).column_names
-          column_names.include?(column)
-        end
-      end
-
-      def migrations_pending?
-        @migrations_pending ||= begin
-          ActiveRecord::Migration.check_all_pending!
-          false
-        rescue ActiveRecord::PendingMigrationError
-          true
-        end
-      end
-    end
-
     def initialize(ability, model_class:, table: nil)
       @ability = ability
       @model_class = model_class
@@ -50,9 +28,19 @@ module TableDisplays
     end
 
     # Override only if scope of model class does not include the required column in the query
-    # do not override for joined tables, see PublicColumn for a legimatite use case
+    # do not override for joined tables, see PublicColumn for a legitimate use case
     def required_model_attrs(_attr)
       []
+    end
+
+    # Used to add additional columns of the model to SELECT
+    def safe_required_model_attrs(column)
+      required_model_attrs(column).select { |attr| column_defined_on_model?(attr) }
+    end
+
+    def column_defined_on_model?(attr)
+      column, table = attr.to_s.split(".").reverse
+      model_class.column_names.include?(column) && (table.nil? || table == model_class.table_name)
     end
 
     def value_for(object, attr, &block)

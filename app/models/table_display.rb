@@ -36,7 +36,6 @@ class TableDisplay < ActiveRecord::Base
     if attrs.is_a? Array
       return attrs.each { |attr| register_column(model_class, column_class, attr) }
     end
-    fail "#{column_class} not valid for #{model_class} #{attrs}" unless column_class.valid?(model_class, attrs)
 
     self.table_display_columns ||= {}
     self.table_display_columns[model_class.to_s] ||= {}
@@ -44,8 +43,6 @@ class TableDisplay < ActiveRecord::Base
   end
 
   def self.register_multi_column(model_class, multi_column_class)
-    fail "#{column_class} not valid for #{model_class}" unless multi_column_class.valid?(model_class, attr)
-
     self.multi_columns ||= {}
     self.multi_columns[model_class.to_s] ||= []
     self.multi_columns[model_class.to_s] << multi_column_class

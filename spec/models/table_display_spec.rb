@@ -144,4 +144,8 @@ class TestUpdateableColumn < TableDisplays::PublicColumn
   def required_permission(_attr)
     :update
   end
+
+  def self.valid?(model_class, attrs)
+    attrs.present? && model_class == Person
+  end
 end

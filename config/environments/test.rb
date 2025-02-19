@@ -30,7 +30,7 @@ Rails.application.configure do
   config.active_record.maintain_test_schema = %w[1 true].exclude?(ENV["DISABLE_TEST_SCHEMA_MAINTENANCE"])
 
   # Raise exceptions instead of rendering exception templates.
-  config.action_dispatch.show_exceptions = false
+  config.action_dispatch.show_exceptions = :none
 
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false

@@ -92,7 +92,7 @@ module Contactable
   end
 
   def canton
-    (swiss? && location && location.canton) || nil
+    (swiss? && location&.canton) || nil
   end
 
   private

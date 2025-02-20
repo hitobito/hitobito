@@ -129,6 +129,6 @@ class Event::ApplicationMarketController < ApplicationController
   end
 
   def send_email?
-    ActiveModel::Type::Boolean.new.cast(params[:send_email])
+    true?(params[:send_email])
   end
 end

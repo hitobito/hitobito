@@ -351,11 +351,15 @@ de:
         explanation: "Hier werden Anlässe von Gruppen, bei denen du Mitglied bist, sowie deren Übergruppen angezeigt. Andere Anlässe findest du bei der organisierenden Gruppe."
       apply_until: "bis %{date}"
     application_market:
-      already_assigned: "Diese Person ist bereits anderweitig zugeteilt oder bei diesem Anlass angemeldet."
-      modal_form:
+      application:
         modal_title: Wollen Sie diese Anmeldung wirklich bestätigen?
         confirm_and_send_mail: Bestätigen und E-Mail senden
         confirm_and_send_no_mail: Bestätigen ohne E-Mail
+      participant:
+        modal_title: Wollen Sie diese Anmeldung wirklich bestätigen?
+        confirm_and_send_mail: Bestätigen und E-Mail senden
+        confirm_and_send_no_mail: Bestätigen ohne E-Mail
+      already_assigned: "Diese Person ist bereits anderweitig zugeteilt oder bei diesem Anlass angemeldet."
       participation:
         registered_at: "Anmeldung am %{datetime}"
         town: Wohnort

@@ -98,18 +98,20 @@ describe :event_participation, js: true do
     end
 
     it "does send email to participant when send email checkbox is checked" do
+      allow_any_instance_of(Event::ParticipationsController).to receive(:current_user_interested_in_mail?).and_return(false)
       expect do
         click_on "Anmelden"
         expect(page).to have_content "Teilnahme von Top Leader in Eventus wurde erfolgreich erstellt."
-      end.to change { Delayed::Job.where("handler LIKE '%Event::ParticipationNotificationJob%'").count }.by(1)
+      end.to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }.by(1)
     end
 
     it "does not send email to participant when send email checkbox is not checked" do
+      allow_any_instance_of(Event::ParticipationsController).to receive(:current_user_interested_in_mail?).and_return(false)
       uncheck "E-Mail an Teilnehmer/in senden"
       expect do
         click_on "Anmelden"
         expect(page).to have_content "Teilnahme von Top Leader in Eventus wurde erfolgreich erstellt."
-      end.not_to change { Delayed::Job.where("handler LIKE '%Event::ParticipationNotificationJob%'").count }
+      end.not_to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }
     end
   end
 end

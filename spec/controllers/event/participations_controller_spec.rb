@@ -453,9 +453,17 @@ describe Event::ParticipationsController do
       end
 
       it "does not create pending confirmation job for course when send_email is not checked" do
+        allow(controller).to receive(:current_user_interested_in_mail?).and_return(false)
         expect do
           post :create, params: {group_id: group.id, event_id: course.id, event_participation: {}}
-        end.not_to change { Delayed::Job.where("handler LIKE '%Event::ParticipationNotificationJob%'").count }
+        end.not_to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }
+      end
+
+      it "does create pending confirmation job if send_email is checked but user not interested in email" do
+        allow(controller).to receive(:current_user_interested_in_mail?).and_return(false)
+        expect do
+          post :create, params: {group_id: group.id, event_id: course.id, event_participation: {}, send_email: true}
+        end.to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }.by(1)
       end
 
       it "creates non-active participant role for course events" do

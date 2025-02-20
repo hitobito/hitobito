@@ -64,7 +64,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
           # a confirmation email gets sent automatically when assigning a
           # place. in the other case, send one explicitely
           directly_assign_place? ? directly_assign_place : send_confirmation_email
-          send_notification_email if send_email?
+          send_notification_email
         end
       end
       respond_with(entry, success: created, location: return_path)
@@ -314,7 +314,9 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def send_confirmation_email
-    Event::ParticipationConfirmationJob.new(entry).enqueue! if current_user_interested_in_mail?
+    # if send_email gets checked when someone else is adding a participant, this emai lshoudl always be sent
+    # current_user_interested_in_mail? does not matter in this the case of send_email? true
+    Event::ParticipationConfirmationJob.new(entry).enqueue! if send_email? || current_user_interested_in_mail?
   end
 
   def send_notification_email
@@ -379,6 +381,6 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def send_email?
-    ActiveModel::Type::Boolean.new.cast(params[:send_email])
+    true?(params[:send_email])
   end
 end

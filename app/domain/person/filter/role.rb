@@ -21,7 +21,7 @@ class Person::Filter::Role < Person::Filter::Base
   def apply(scope)
     scope = scope
       .where(type_conditions(scope))
-      .where(duration_conditions)
+      .where(duration_conditions(scope))
     if include_archived?
       scope
     else
@@ -43,7 +43,10 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def roles_join
-    any_roles_join
+    <<~SQL.split.map(&:strip).join(" ")
+      INNER JOIN roles ON roles.person_id = people.id
+      INNER JOIN #{Group.quoted_table_name} ON roles.group_id = #{Group.quoted_table_name}.id
+    SQL
   end
 
   def date_range
@@ -86,32 +89,17 @@ class Person::Filter::Role < Person::Filter::Base
 
   def type_conditions(scope)
     return if args[:role_types].blank?
-    return inactive_type_conditions(scope) if args[:kind].eql?("inactive")
 
-    [[:roles, {type: args[:role_types]}]].to_h
+    ["roles.type IN (?)", args[:role_types]]
   end
 
-  def inactive_type_conditions(scope)
-    excluded_people_ids = scope.where(excluded_roles_duration_conditions)
-      .where(roles: {type: args[:role_types]})
-      .pluck(:id)
-
-    ["people.id NOT IN (?)", excluded_people_ids] if excluded_people_ids.any?
-  end
-
-  def excluded_roles_duration_conditions
-    [active_role_condition, {
-      min: parse_day(args[:start_at], Date.current),
-      max: parse_day(args[:finish_at], Date.current)
-    }]
-  end
-
-  def duration_conditions
+  def duration_conditions(scope)
     case args[:kind]
     when "created" then [[:roles, {start_on: date_range}]].to_h
     when "deleted" then [[:roles, {end_on: date_range}]].to_h
-    when "active", "inactive" then [active_role_condition, min: date_range.min, max: date_range.max]
-    else [active_role_condition, min: Time.zone.today, max: Time.zone.today]
+    when "active" then [active_role_condition, min: date_range.min, max: date_range.max]
+    when "inactive" then no_active_role_conditions(scope)
+    else [active_role_condition, min: today, max: today]
     end
   end
 
@@ -122,14 +110,21 @@ class Person::Filter::Role < Person::Filter::Base
     SQL
   end
 
-  def any_roles_join
-    <<~SQL.split.map(&:strip).join(" ")
-      INNER JOIN roles ON roles.person_id = people.id
-      INNER JOIN #{Group.quoted_table_name} ON roles.group_id = #{Group.quoted_table_name}.id
-    SQL
+  def no_active_role_conditions(scope)
+    min_date = parse_day(args[:start_at], today)
+    max_date = parse_day(args[:finish_at], today)
+    excluded_people_ids = scope.where(active_role_condition, min: min_date, max: max_date)
+      .where(roles: {type: args[:role_types]})
+      .pluck(:id)
+
+    ["people.id NOT IN (?)", excluded_people_ids] if excluded_people_ids.present?
   end
 
   def include_archived?
     true?(args[:include_archived])
+  end
+
+  def today
+    @today ||= Date.current
   end
 end

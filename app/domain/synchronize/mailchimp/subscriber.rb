@@ -58,9 +58,10 @@ module Synchronize
       end
 
       attr_reader :person, :email
+
       def initialize(person, email)
         @person = person
-        @email = email
+        @email = email&.downcase
       end
 
       def primary?

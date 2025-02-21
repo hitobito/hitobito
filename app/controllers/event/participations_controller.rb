@@ -314,7 +314,9 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def send_confirmation_email
-    Event::ParticipationConfirmationJob.new(entry).enqueue! if current_user_interested_in_mail?
+    # send_email? is used when adding someone_else and checking the checkmark to send the confirmation mail
+    # while current_user_interested_in_mail? makes sure to send the confirmation if you're registering yourself for the event.
+    Event::ParticipationConfirmationJob.new(entry).enqueue! if send_email? || current_user_interested_in_mail?
   end
 
   def send_notification_email
@@ -376,5 +378,9 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   def event_participation_filter
     user_id = current_user.try(:id)
     Event::ParticipationFilter.new(event.id, user_id, params)
+  end
+
+  def send_email?
+    true?(params[:send_email])
   end
 end

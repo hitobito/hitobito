@@ -104,7 +104,7 @@ class Event::ApplicationMarketController < ApplicationController
   end
 
   def assigner
-    @assigner ||= Event::ParticipantAssigner.new(event, participation, current_user)
+    @assigner ||= Event::ParticipantAssigner.new(event, participation, send_email?, current_user)
   end
 
   def event
@@ -126,5 +126,9 @@ class Event::ApplicationMarketController < ApplicationController
   def authorize
     not_found unless event.supports_applications?
     authorize!(:application_market, event)
+  end
+
+  def send_email?
+    true?(params[:send_email])
   end
 end

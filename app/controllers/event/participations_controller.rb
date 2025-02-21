@@ -314,8 +314,8 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def send_confirmation_email
-    # if send_email gets checked when someone else is adding a participant, this emai lshoudl always be sent
-    # current_user_interested_in_mail? does not matter in this the case of send_email? true
+    # send_email? is used when adding someone_else and checking the checkmark to send the confirmation mail
+    # while current_user_interested_in_mail? makes sure to send the confirmation if you're registering yourself for the event.
     Event::ParticipationConfirmationJob.new(entry).enqueue! if send_email? || current_user_interested_in_mail?
   end
 

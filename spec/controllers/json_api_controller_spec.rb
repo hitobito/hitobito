@@ -8,15 +8,11 @@
 require "spec_helper"
 
 describe JsonApiController do
-  controller(JsonApiController) do
-    def index
-      fail "ouch"
-    end
-  end
+  before { sign_in(people(:root)) }
 
-  context "with logged in user" do
-    before do
-      sign_in(people(:root))
+  context "with unhandled exception" do
+    controller(JsonApiController) do
+      def index = fail "ouch"
     end
 
     after do
@@ -29,6 +25,25 @@ describe JsonApiController do
     it "does triggers error trackers" do
       expect(Airbrake).to receive(:notify).with(kind_of(RuntimeError))
       expect(Raven).to receive(:capture_exception).with(kind_of(RuntimeError))
+      get :index
+    end
+  end
+
+  context "with handled exception" do
+    controller(JsonApiController) do
+      def index = raise ActionController::BadRequest.new
+    end
+
+    after do
+      expect(response.status).to eq 400
+      errors = JSON.parse(response.body).deep_symbolize_keys[:errors]
+      expect(errors).to have(1).item
+      expect(errors.first[:code]).to eq "bad_request"
+    end
+
+    it "does not triggers error trackers" do
+      expect(Airbrake).not_to receive(:notify).with(kind_of(RuntimeError))
+      expect(Raven).not_to receive(:capture_exception).with(kind_of(RuntimeError))
       get :index
     end
   end

@@ -25,7 +25,7 @@ class Wizards::RegisterNewUserWizard < Wizards::Base
   end
 
   def valid?
-    super && person_valid?
+    super & person_valid?
   end
 
   def save!

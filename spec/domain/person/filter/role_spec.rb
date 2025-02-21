@@ -375,13 +375,12 @@ describe Person::Filter::Role do
           expect(entries).to be_empty
         end
 
-        # because time range applies for active and inactive conditions
-        it "does not find active role when searching with earlier range" do
+        it "does find active role when searching with earlier range" do
           start_on = role.start_on
-          expect(entries(start_at: start_on - 1.year, finish_at: start_on - 1.day)).to be_empty
+          expect(entries(start_at: start_on - 1.year, finish_at: start_on - 1.day)).to have(1).item
         end
 
-        # filter in general requires an active role per person
+        # filter in general still requires any active role per person
         it "does not find only ended role" do
           role.update!(end_on: 10.days.ago)
           expect(entries(start_at: 1.day.ago)).to be_empty
@@ -415,9 +414,9 @@ describe Person::Filter::Role do
             expect(entries).to have(1).item
           end
 
-          it "does find person with empty range if role never existed" do
+          it "does not find person with empty range if role never existed" do
             Role.where(id: role.id).delete_all
-            expect(entries).to have(1).item
+            expect(entries).to be_empty
           end
         end
 

@@ -1779,10 +1779,11 @@ de:
         none: Keine jemals erteilte Qualifikation
         only_expired: Abgelaufene, aber nicht gültige oder reaktivierbare Qualifikationen
       filters_role_kind:
-        active: war die Rolle aktiv.
-        created: wurde die Rolle erstellt.
-        deleted: wurde die Rolle gelöscht.
-        inactive: war die Rolle inaktiv.
+        active_today: Aktuell aktive Rollen
+        active: aktive Rollen
+        created: erstellte Rollen
+        deleted: gelöschte Rollen
+        inactive: inaktive Rollen
 
     attributes:
       title: Felder
@@ -1816,9 +1817,10 @@ de:
     role:
       title: Rollen
       prompt_role_selection: Welche Rollen sollen angezeigt werden?
-      prompt_role_duration: Im Zeitraum (optional)
-      prompt_role_duration_selection: Welche Zeitraum sollen berücksichtigt werden?
+      prompt_role_duration_from: oder im Zeitraum von
+      prompt_role_duration_selection: Welcher Zeitraum soll berücksichtigt werden?
       prompt_role_duration_until: bis
+      or_duration: oder
       include_archived: Archivierte Rollen miteinbeziehen
 
     qualification:

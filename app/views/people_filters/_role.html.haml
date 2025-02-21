@@ -23,24 +23,29 @@
                                   id: id)
                   = role_type.label
 
-  = field_set_tag '' do
-    = label_tag(:duration) do
-      %label=t('.prompt_role_duration')
-      %div.d-flex
-        %div.input-group
+  = field_set_tag(t('.prompt_role_duration_selection')) do
+    .row.control-group.mt-3
+      = render 'simple_radio',
+               attr: "filters[role][kind]",
+               value: 'active_today',
+               checked: !filter || !Person::Filter::Role::KINDS.include?(filter.args[:kind])
+    .row.control-group.mt-2
+      .d-flex.col-xl-6
+        %label.mt-1.nowrap.w-50=t('.prompt_role_duration_from')
+        .input-group.w-50
           %span.input-group-text= icon(:'calendar-alt')
           = text_field_tag("filters[role][start_at]", filter && filter.args[:start_at], class: 'date col-2 form-control form-control-sm')
-        %label.mx-2.mt-1=t('.prompt_role_duration_until')
-        %div.input-group
+        %label.mx-2.mt-1.w-50=t('.prompt_role_duration_until')
+        .input-group.w-50
           %span.input-group-text= icon(:'calendar-alt')
           = text_field_tag("filters[role][finish_at]", filter && filter.args[:finish_at], class: 'date col-2 form-control form-control-sm')
-    %div.row.mt-3
-      - %w(active created deleted inactive).each do |key|
+    .row.control-group.mt-2
+      - Person::Filter::Role::KINDS.each do |key|
         = render 'simple_radio',
             attr: "filters[role][kind]",
             value: key,
             checked: filter && filter.args[:kind] == key
-
+    .row.control-group.mt-3
       = label_tag(nil, 'filters_role_include_archived', class: 'checkbox inline mt-2') do
         = check_box_tag('filters[role][include_archived]', true, filter && true?(filter.args[:include_archived]))
         = t('.include_archived')

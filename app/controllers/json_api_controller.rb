@@ -14,9 +14,11 @@ class JsonApiController < ActionController::API
     # rescues and therefore skips error handling middleware
     handle_exception(e)
 
-    # therefore notify error trackers by hand
-    Airbrake.notify(e)
-    Raven.capture_exception(e)
+    # still notify of errors we have not handled explicitly
+    unless registered_exception?(e)
+      Airbrake.notify(e)
+      Raven.capture_exception(e)
+    end
   end
 
   include ActionController::Cookies

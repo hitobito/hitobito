@@ -5,7 +5,7 @@
 //  or later. See the COPYING file at the top-level directory or at
 //  https://github.com/hitobito/hitobito_sac_cas.
 
-import { Controller } from "controllers";
+import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   static targets = ["step", "stepContent", "stepHeader"];

@@ -10,7 +10,9 @@ group :development do
   #
   # and `log/test.log` saying
   #
-  #   You specified that hitobito_pbs (>= 0) should come from source at `.` and source at `/usr/src/app/hitobito_pbs`  
+  #   You specified that hitobito_pbs (>= 0) should come from source at `.` and source at `/usr/src/app/hitobito_pbs`
+  #
+  # TODO: Is this still relevant, do the tests still fail post Webpacker?
   next if ENV["RAILS_ENV"] == 'test'
 
   ENV["WAGONS"]

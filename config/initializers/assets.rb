@@ -9,4 +9,21 @@ Rails.application.config.assets.version = "1.0"
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in the app/assets
 # folder are already added.
-# Rails.application.config.assets.precompile += %w( admin.js admin.css )
+# Rails.application.config.assets.precompile += %w(print.css ie.css ie7.css wysiwyg.css wysiwyg.js *.png *.gif *.jpg favicon.ico)
+
+# Favicon
+Rails.application.config.assets.precompile << "favicon.ico"
+
+# CSS entry files
+Rails.application.config.assets.precompile += %w(print.css oauth.css membership_verify.js)
+
+# Fonts
+Rails.application.config.assets.precompile += %w(*.woff2 *.woff *.ttf *.svg *.eot)
+
+# Wagons assets
+wagons_paths = Wagons.all.collect { |wagon| wagon.paths.path.to_s }
+wagon_images = wagons_paths.collect { |wagon_path| File.join(wagon_path, 'app', 'assets', 'images') }
+wagon_fonts = wagons_paths.collect { |wagon_path| File.join(wagon_path, 'app', 'assets', 'fonts') }
+
+Rails.application.config.assets.precompile += wagon_images
+Rails.application.config.assets.precompile += wagon_fonts

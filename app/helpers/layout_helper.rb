@@ -120,7 +120,7 @@ module LayoutHelper
 
     logo = Settings.application.logo
     logo_path = logo&.dig(:multilanguage_image, locale) || logo&.image
-    wagon_image_pack_tag(logo_path, alt: Settings.application.name)
+    image_tag(logo_path, alt: Settings.application.name)
   end
 
   private

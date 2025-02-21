@@ -183,10 +183,14 @@ runs:
       working-directory: hitobito
       shell: bash
 
+<<<<<<< HEAD
     - name: "Run Webpacker"
+=======
+    - name: 'Precompile assets'
+>>>>>>> 23e0a2274 (WIP: Adjust GitHub Actions to not use Webpacker anymore)
       if: inputs.assets == 'true'
       run: |
-        bundle exec rake webpacker:compile
+        bundle exec rake assets:precompile
       working-directory: hitobito
       shell: bash
 

@@ -83,11 +83,4 @@ class Duration
   def format_date(value)
     I18n.l(value.to_date, format: @date_format)
   end
-
-  def date_only?(value)
-    self.class.date_only?(value)
-  end
-
-  deprecate date_only?: "Don't use this private method anymore." \
-                        "Instead use the static variant `Duration.date_only?`"
 end

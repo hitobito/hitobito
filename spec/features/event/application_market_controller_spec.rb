@@ -149,7 +149,7 @@ describe Event::ApplicationMarketController do
             click_on "Bestätigen ohne E-Mail"
             sleep(0.5)
             click_on "Abbrechen"
-            expect(page).not_to have_text "Bestätigen ohne E-Mail"
+            expect(page).to have_no_text "Bestätigen ohne E-Mail"
           end.not_to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }
 
           expect(page).to have_no_selector("#applications ##{appl_id}")
@@ -168,7 +168,7 @@ describe Event::ApplicationMarketController do
             click_on "Bestätigen und E-Mail senden"
             sleep(0.5)
             click_on "Abbrechen"
-            expect(page).not_to have_text "Bestätigen und E-Mail senden"
+            expect(page).to have_no_text "Bestätigen und E-Mail senden"
           end.to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }.by(1)
 
           expect(page).to have_css("#applications", text: appl_text)
@@ -206,7 +206,7 @@ describe Event::ApplicationMarketController do
             click_on "Bestätigen ohne E-Mail"
             sleep(0.5)
             click_on "Abbrechen"
-            expect(page).not_to have_text "Bestätigen ohne E-Mail"
+            expect(page).to have_no_text "Bestätigen ohne E-Mail"
           end.not_to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }
 
           # first do find().should have_content to make capybara wait for animation, then all().last
@@ -221,7 +221,7 @@ describe Event::ApplicationMarketController do
             click_on "Bestätigen und E-Mail senden"
             sleep(0.5)
             click_on "Abbrechen"
-            expect(page).not_to have_text "Bestätigen und E-Mail senden"
+            expect(page).to have_no_text "Bestätigen und E-Mail senden"
           end.to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }.by(1)
 
           expect(page).to have_no_selector("#participants ##{appl_id}")
@@ -258,7 +258,7 @@ describe Event::ApplicationMarketController do
             click_on "Bestätigen und E-Mail senden"
             sleep(0.5)
             click_on "Abbrechen"
-            expect(page).not_to have_text "Bestätigen und E-Mail senden"
+            expect(page).to have_no_text "Bestätigen und E-Mail senden"
           end.to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }.by(1)
 
           expect(page).to have_no_selector("#participants ##{appl_id}")
@@ -273,7 +273,7 @@ describe Event::ApplicationMarketController do
             click_on "Bestätigen ohne E-Mail"
             sleep(0.5)
             click_on "Abbrechen"
-            expect(page).not_to have_text "Bestätigen ohne E-Mail"
+            expect(page).to have_no_text "Bestätigen ohne E-Mail"
           end.not_to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }
 
           # first do find().should have_content to make capybara wait for animation, then all().last

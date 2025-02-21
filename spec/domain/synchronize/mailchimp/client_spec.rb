@@ -181,6 +181,11 @@ describe Synchronize::Mailchimp::Client do
       expect(second[:status]).to eq "unsubscribed"
     end
 
+    it "returns members with downcased emails" do
+      stub_members(%w[A@EXAMPLE.COM subscribed])
+      expect(subject.first[:email_address]).to eq "a@example.com"
+    end
+
     it "returns members with tags" do
       stub_members(["a@example.com", nil, [{id: 1, name: "test:ab"}, {id: 2, name: "test"}]])
       expect(subject.first[:tags]).to eq [{id: 1, name: "test:ab"}, {id: 2, name: "test"}]

@@ -45,7 +45,7 @@ module Synchronize
 
         paged("members", fields) do
           api.lists(list_id).members
-        end
+        end.map { |member| downcase_email(member) }
       end
 
       def create_segments(names)
@@ -237,6 +237,12 @@ module Synchronize
 
           [field, value]
         end.compact.to_h.deep_symbolize_keys
+      end
+
+      def downcase_email(member)
+        member.tap do
+          member[:email_address] = member[:email_address].downcase
+        end
       end
 
       def extract_tgz(data)

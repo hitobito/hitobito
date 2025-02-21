@@ -19,6 +19,11 @@ describe Synchronize::Mailchimp::Subscriber do
     it "returns given email address instead of person's" do
       expect(subscriber.email).to eq("test@example.com")
     end
+
+    it "downcases email" do
+      subscriber = described_class.new(person, "TEST@EXAMPLE.COM")
+      expect(subscriber.email).to eq("test@example.com")
+    end
   end
 
   context "#mailing_list_subscribers (synchronization strategies)" do

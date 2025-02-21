@@ -6,6 +6,8 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::Filter::Role < Person::Filter::Base
+  KINDS = %w[active created deleted inactive]
+
   include ParamConverters
 
   self.permitted_args = [:role_type_ids, :role_types, :kind,

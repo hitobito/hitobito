@@ -31,9 +31,6 @@ describe People::CleanupJob do
       expect(Airbrake).to receive(:notify)
         .exactly(:once)
         .with(kind_of(RuntimeError), hash_including(parameters: {person_id: person.id}))
-      expect(Raven).to receive(:capture_exception)
-        .exactly(:once)
-        .with(kind_of(RuntimeError), logger: "delayed_job")
 
       allow_any_instance_of(runner).to receive(:run) do |obj|
         next yield obj.instance_variable_get(:@person) if @seen

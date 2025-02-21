@@ -21,3 +21,8 @@ spec/coverage
 spec/reports
 brakeman-output.tabs
 rubocop-results.xml
+coverage
+
+.tool-versions
+.pry_history
+.envrc

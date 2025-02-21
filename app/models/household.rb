@@ -163,6 +163,7 @@ class Household
     people.each { |person| person.update!(address_attrs.merge(household_key:)) }
     # reload the reference_person as this is a different reference to the same person in `people`
     # which does not know the updated attributes yet.
+    
     @reference_person.reload
   end
 

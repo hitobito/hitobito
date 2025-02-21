@@ -28,9 +28,10 @@ module PaperTrailed
   end
 
   def info_for_paper_trail
-    return {} if whodunnit_type_for_papertrail.blank?
     {
-      whodunnit_type: whodunnit_type_for_papertrail
-    }
+      mutation_id: "request-#{request.request_id}"
+    }.tap do |info|
+      info[:whodunnit_type] = whodunnit_type_for_papertrail if whodunnit_type_for_papertrail.present?
+    end
   end
 end

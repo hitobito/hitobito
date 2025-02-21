@@ -90,7 +90,6 @@ function setup_dbs() {
 
 function setup_development_db() {
   echo "Migrating and seeding development database"
-  bundle exec rails db:schema:load
   bundle exec rails db:migrate
   bundle exec rails wagon:migrate
   bundle exec rails db:seed
@@ -159,7 +158,8 @@ direnv-allow-all)
 
 each)
   shift # loose the "each" argument
-  for wagon in $(existing_wagon_names); do
+  for wagon in jubla kljb pbs pro_natura sac_cas sbv sjas skv svse sww tenants youth; do
+  #for wagon in $(existing_wagon_names); do
     echo "$wagon" | red
     (
       cd "../hitobito_${wagon}" &&
@@ -188,20 +188,20 @@ reset-test-database)
 
 gemfile)
   bundle check || bundle
-  echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -I% \
-    cp -v "${BUNDLE_GEMFILE:-'Gemfile'}.lock" "../hitobito_%/"
+  echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -L1 -I% \
+    cp -v Gemfile.lock "../hitobito_%/"
   ;;
 
 configs)
   shift # loose the "configs" argument
   configs_to_copy=${@:-.rspec}
 
-  echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -I% \
+  echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -L1 -I% \
     cp -v $configs_to_copy "../hitobito_%/"
   ;;
 
 binstubs)
-  echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -I% \
+  echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -L1 -I% \
     cp -vf bin/binstubs/* "../hitobito_%/bin/"
   ;;
 
@@ -244,6 +244,7 @@ grep)
 
 spec-all)
   shift # loose the "spec-all" argument
+#  for wagon in jubla kljb pbs pro_natura sac_cas sbv sjas skv svse sww tenants youth; do
   for wagon in $(existing_wagon_names); do
     echo "$wagon" | red
     wagon spec $wagon $@
@@ -253,7 +254,7 @@ spec-all)
 spec)
   require_wagon_name
   shift # loose the "spec" argument
-  shift # loose the wagon-name argument, which is present as $wagon_name
+  shift # loose the wagon-name argument
 
   previous_wagon=$(grep PRIMARY_WAGON .envrc | sed 's/.*=//')
 
@@ -270,7 +271,6 @@ spec)
 
   # setup for specs
   direnv exec ../hitobito/ $0 gemfile
-  direnv exec ../hitobito/ $0 reload-test-database
 
   # prepare DB
 #  export RAILS_ENV=test
@@ -392,7 +392,7 @@ create)
 
 overwritten-in-wagon)
   git diff master.. --name-only app/views/ |
-    xargs -I% find ../ -path "*/%" -a \! -regex ".*\(ose_composition\|hitobito-development\).*"
+    xargs -L1 -I% find ../ -path "*/%" -a \! -regex ".*\(ose_composition\|hitobito-development\).*"
   ;;
 
 completion)
@@ -407,8 +407,6 @@ function __wagon_commands() {
     configs
     create
     create-database
-    direnv-allow-all
-    each
     gemfile
     git
     git-all
@@ -460,11 +458,11 @@ COMPLETION
 help | *)
   echo "USAGE: $0 [activate] <WAGON>|core"
   echo "       $0 [clone|bootstrap] <WAGON>"
-  echo "       $0 [create-datbase|reset-database|test-prepare|update-copyright|direnv-allow-all]"
+  echo "       $0 [create-datbase|reset-database|test-prepare|update-copyright]"
   echo "       $0 [spec|build] <WAGON>"
   echo "       $0 [spec-all|reset-test-database|overwritten-in-wagon]"
   echo "       $0 [grep] <TERM>"
-  echo "       $0 [git|git-all|each] <ARGS>"
+  echo "       $0 [git|git-all] <ARGS>"
   echo "       $0 [gemfile|configs|binstubs|list]"
   echo
   echo "Enable bash-completion with \"source <($0 completion)\""

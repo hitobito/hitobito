@@ -74,6 +74,8 @@ module RolesHelper
   end
 
   def terminate_role_link(role)
+    return "Ausgetreten" if role.terminated?
+
     Roles::TerminateRoleLink.new(role, self).render
   end
 

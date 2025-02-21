@@ -18,11 +18,11 @@ class People::Membership::VerificationQrCode
 
   def verify_url
     host = ENV.fetch("RAILS_HOST_NAME", "localhost:3000")
-    Rails
-      .application
-      .routes
-      .url_helpers
-      .verify_membership_url(host: host, verify_token: membership_verify_token)
+    # Rails
+    #   .application
+    #   .routes
+    #   .url_helpers
+    #   .verify_membership_url(host: host, verify_token: membership_verify_token)
   end
 
   private

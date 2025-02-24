@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## unreleased
+## Version 2.4
 
 - Rollen und Teilnahmen auf Mitgliedschaften / Verlauf sind nun (zusätzlich) nach absteigendem Datum sortiert (hitobito_sac_cas#1638).
 

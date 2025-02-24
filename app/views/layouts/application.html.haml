@@ -14,13 +14,13 @@
     %meta{name: 'turbo-prefetch', content: 'false'}
 
     = csrf_meta_tag
-    = wagon_favicon_pack_tag 'favicon.ico'
+    = favicon_link_tag 'favicon.ico'
 
-    = stylesheet_pack_tag 'application', media: 'screen', 'data-turbo-track': true
-    = stylesheet_pack_tag 'print', media: 'print'
+    = stylesheet_link_tag 'application', media: 'screen', 'data-turbo-track': "reload"
+    = stylesheet_link_tag 'print', media: 'print'
     - if Rails.env.test?
-      = stylesheet_pack_tag 'disable_animations'
-    = javascript_pack_tag 'application', 'data-turbo-track': true
+      = stylesheet_link_tag 'disable_animations'
+    = javascript_include_tag "application", "data-turbo-track": "reload", type: "module"
 
     = yield(:head)
 

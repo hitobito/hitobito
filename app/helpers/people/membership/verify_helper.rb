@@ -9,7 +9,7 @@ module People::Membership::VerifyHelper
   def membership_verify_logo
     logo = Settings.application.membership_verify_logo
     if logo
-      wagon_image_pack_tag(logo.image, alt: Settings.application.name)
+      image_tag(logo.image, alt: Settings.application.name)
     else
       header_logo
     end

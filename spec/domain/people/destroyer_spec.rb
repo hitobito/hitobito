@@ -76,6 +76,28 @@ describe People::Destroyer do
     expect(bottom_member.household_key).to be_nil
   end
 
+  it "does not fail if trying to clear household if other person is invalid" do
+    household = Household.new(person)
+    household.add(bottom_member)
+    expect(household.save).to eq true
+
+    person.reload
+    bottom_member.reload
+    bottom_member.update_columns(first_name: nil, last_name: nil)
+    expect(bottom_member.reload).not_to be_valid
+
+    expect(person.household_key).to be_present
+    expect(bottom_member.household_key).to eq(person.household_key)
+
+    expect do
+      subject.run
+    end.to change { Person.count }.by(-1)
+
+    bottom_member.reload
+
+    expect(bottom_member.household_key).to be_nil
+  end
+
   it "does not clear attached household if there is more than one person" do
     household = Household.new(person)
     household.add(bottom_member)

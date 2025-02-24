@@ -354,7 +354,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def remove_privacy_policy=(deletion_param)
-    if %w[1 yes true].include?(deletion_param.to_s.downcase)
+    if %w[1 yes true].include?(deletion_param.to_s.downcase) && privacy_policy.persisted?
       privacy_policy.purge_later
     end
   end
@@ -364,7 +364,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def remove_logo=(deletion_param)
-    if %w[1 yes true].include?(deletion_param.to_s.downcase)
+    if %w[1 yes true].include?(deletion_param.to_s.downcase) && logo.persisted?
       logo.purge_later
     end
   end
@@ -374,7 +374,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def remove_letter_logo=(deletion_param)
-    if %w[1 yes true].include?(deletion_param.to_s.downcase)
+    if %w[1 yes true].include?(deletion_param.to_s.downcase) && letter_logo.persisted?
       letter_logo.purge_later
     end
   end

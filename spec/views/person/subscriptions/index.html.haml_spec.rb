@@ -17,6 +17,7 @@ describe "person/subscriptions/index.html.haml" do
     allow(view).to receive(:subscribed).and_return([])
     allow(view).to receive(:subscribable).and_return({group => [entry]})
     allow(view).to receive(:group_person_subscriptions_path).and_return(group_person_subscriptions_path(group, person, entry))
+    allow_any_instance_of(MailingListsHelper).to receive(:current_user).and_return(person)
   end
 
   subject { Capybara::Node::Simple.new(render) }

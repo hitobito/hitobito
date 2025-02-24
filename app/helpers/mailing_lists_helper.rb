@@ -50,23 +50,21 @@ module MailingListsHelper
     end
   end
 
-  private
-
-  def button_unsubscribe(list)
+  def button_unsubscribe(list, icons: true)
     label = t("mailing_list_decorator.unsubscribe")
     action_button(label,
       group_person_subscription_path(list.group, current_user, id: list.id),
-      :minus,
+      icons ? :minus : nil,
       method: "delete",
-      data: {disable_with: "#{icon(:minus)} #{label}"})
+      data: {disable_with: icons ? "#{icon(:minus)} #{label}" : label})
   end
 
-  def button_subscribe(list)
+  def button_subscribe(list, icons: true)
     label = t("mailing_list_decorator.subscribe")
     action_button(label,
       group_person_subscriptions_path(list.group, current_user, id: list.id),
-      :plus,
+      icons ? :plus : nil,
       method: "post",
-      data: {disable_with: "#{icon(:plus)} #{label}"})
+      data: {disable_with: icons ? "#{icon(:plus)} #{label}" : label})
   end
 end

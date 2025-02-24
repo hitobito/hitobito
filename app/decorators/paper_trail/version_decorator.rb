@@ -98,7 +98,7 @@ module PaperTrail
 
     def person_merge_list
       content = content_tag(:div, t_event).html_safe
-      content += safe_join(YAML.load(model.object_changes)) do |line|
+      content += safe_join(YAML.load(model.object_changes, permitted_classes: [Date, Time, Symbol])) do |line|
         person_merge_value(line)
       end
       content

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_12_09_093414) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_24_130206) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -1163,8 +1163,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_09_093414) do
     t.integer "main_id"
     t.datetime "created_at", precision: nil
     t.string "whodunnit_type", default: "Person", null: false
+    t.string "mutation_id"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
     t.index ["main_id", "main_type"], name: "index_versions_on_main_id_and_main_type"
+    t.index ["mutation_id"], name: "index_versions_on_mutation_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

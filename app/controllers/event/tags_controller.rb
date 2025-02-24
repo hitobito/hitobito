@@ -65,7 +65,7 @@ class Event::TagsController < ApplicationController
 
     ActsAsTaggableOn::Tagging.find_or_create_by!(
       taggable: @event,
-      tag: ActsAsTaggableOn::Tag.find_or_create_by(name: name),
+      tag: ActsAsTaggableOn::Tag.find_or_create_by(name: name.rstrip),
       context: "tags"
     )
   end

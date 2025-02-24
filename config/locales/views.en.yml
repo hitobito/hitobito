@@ -1275,10 +1275,6 @@ en:
         reactivateable: Valid and reactivated qualifications
         not_active: No valid qualifications
         all: All qualifications
-      filters_role_kind:
-        active: role was active
-        created: role was made.
-        deleted: role has been deleted.
     attributes:
       title: Fields
       match: contains
@@ -1302,8 +1298,6 @@ en:
     role:
       title: Roles
       prompt_role_selection: Which roles should be displayed?
-      prompt_role_duration: Period (optional)
-      prompt_role_duration_selection: Which period should be considered?
       prompt_role_duration_until: until
     qualification:
       title: Qualifications

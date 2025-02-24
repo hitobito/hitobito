@@ -1560,10 +1560,6 @@ fr:
         active: Uniquement les qualifications valides
         reactivateable: Les qualifications valides et renouvelables
         all: Montrer toutes les qualifications non distribuées
-      filters_role_kind:
-        active: le rôle était actif.
-        created: le rôle a été établi.
-        deleted: le rôle a été effacé.
     attributes:
       title: Champ
       match: contient
@@ -1589,8 +1585,6 @@ fr:
     role:
       title: Rôles
       prompt_role_selection: Quels rôles doivent être affichés?
-      prompt_role_duration: Sur la période (optionnel)
-      prompt_role_duration_selection: Quelle période doit être prise en compte?
       prompt_role_duration_until: à
       include_archived: Inclure les rôles archivés
     qualification:

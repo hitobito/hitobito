@@ -28,10 +28,9 @@ module PaperTrailed
   end
 
   def info_for_paper_trail
-    return {} if whodunnit_type_for_papertrail.blank?
     {
       mutation_id: "request-#{request.request_id}",
-      whodunnit_type: whodunnit_type_for_papertrail
-    }
+      whodunnit_type: whodunnit_type_for_papertrail.presence
+    }.compact
   end
 end

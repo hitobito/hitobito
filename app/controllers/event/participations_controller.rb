@@ -22,10 +22,16 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
 
   self.sort_mappings = {last_name: "people.last_name",
                          first_name: "people.first_name",
+                         # for sorting roles we dont want to explicitly add a join_table statement when default_sort is configured to role
+                         # In case of default_sort being role, order_by_role is already called in the participation_filter (so the joined table is in the query already)
                          roles: {
-                           joins: [:roles, "INNER JOIN event_role_type_orders ON event_roles.type
-                                          = event_role_type_orders.name"],
-                           order: ["event_role_type_orders.order_weight", "people.last_name", "people.first_name"]
+                          joins: [:roles].tap do |joins|
+                            joins << "INNER JOIN event_role_type_orders ON event_roles.type = event_role_type_orders.name" unless Settings.people.default_sort == "role"
+                          end,
+                          order: [].tap do |order|
+                            order << "event_role_type_orders.order_weight" unless Settings.people.default_sort == "role"
+                            order.concat(["people.last_name", "people.first_name"])
+                          end
                          },
                          nickname: "people.nickname",
                          zip_code: "people.zip_code",

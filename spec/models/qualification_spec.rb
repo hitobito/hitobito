@@ -155,9 +155,9 @@ describe Qualification do
   end
 
   context "#active" do
-    subject { qualification.reload }
+    subject { qualification }
 
-    it { is_expected.to be_active }
+    it { expect(subject.reload.active?).to be_truthy }
   end
 
   context ".active" do

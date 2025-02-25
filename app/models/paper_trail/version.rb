@@ -20,11 +20,13 @@
 #  created_at     :datetime
 #  item_id        :integer          not null
 #  main_id        :integer
+#  mutation_id    :string
 #
 # Indexes
 #
 #  index_versions_on_item_type_and_item_id  (item_type,item_id)
 #  index_versions_on_main_id_and_main_type  (main_id,main_type)
+#  index_versions_on_mutation_id            (mutation_id)
 #
 
 module PaperTrail

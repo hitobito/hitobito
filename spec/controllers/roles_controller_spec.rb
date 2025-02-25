@@ -264,23 +264,33 @@ describe RolesController do
       end
     end
 
-    context "with impersonation" do
+    context "with impersonation", versioning: true do
       let(:origin_user_id) { people(:bottom_member).id }
+      let(:version) { PaperTrail::Version.last }
 
-      with_versioning do
-        it "new role for existing person redirects to people list" do
-          allow(controller).to receive(:session).and_return(origin_user: origin_user_id)
-          post :create, params: {
-            group_id: group.id,
-            role: {group_id: group.id,
-                   person_id: person.id,
-                   type: Group::TopGroup::Member.sti_name}
-          }
+      before { allow(controller).to receive(:session).and_return(origin_user: origin_user_id) }
 
-          expect(flash[:notice]).to eq("Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich erstellt.")
+      it "new role for existing person redirects to people list" do
+        post :create, params: {
+          group_id: group.id,
+          role: {group_id: group.id,
+                 person_id: person.id,
+                 type: Group::TopGroup::Member.sti_name}
+        }
 
-          expect(PaperTrail::Version.last.whodunnit).to eq origin_user_id.to_s
-        end
+        expect(flash[:notice]).to eq("Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich erstellt.")
+        expect(version.whodunnit).to eq origin_user_id.to_s
+      end
+
+      it "does track request id" do
+        allow_any_instance_of(ActionController::TestRequest).to receive(:request_id).and_return("123")
+        post :create, params: {
+          group_id: group.id,
+          role: {group_id: group.id,
+                 person_id: person.id,
+                 type: Group::TopGroup::Member.sti_name}
+        }
+        expect(version.mutation_id).to eq "request-123"
       end
     end
   end

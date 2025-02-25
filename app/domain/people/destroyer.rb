@@ -8,25 +8,33 @@
 class People::Destroyer
   def initialize(person)
     @person = person
+    @household = person.household
   end
 
   def run
-    destroy_leftover_family_member_entries!
-    remove_from_household! unless @person.household.empty?
-    nullify_invoices!
+    Person.transaction do
+      destroy_leftover_family_member_entries!
+      remove_from_household! unless @household.empty?
+      nullify_invoices!
 
-    @person.destroy!
+      @person.destroy!
+    end
   end
 
   private
 
-  def destroy_leftover_family_member_entries!
-    leftover_family_members.destroy_all
+  def remove_from_household!
+    if @household.valid? && @household.people.all?(&:valid?)
+      @household.remove(@person)
+      @household.save!
+    elsif @household.people.size == 2
+      Person.where(id: @household.people.map(&:id))
+        .update_all(household_key: nil)
+    end
   end
 
-  def remove_from_household!
-    @person.household.remove(@person)
-    @person.household.save!
+  def destroy_leftover_family_member_entries!
+    FamilyMember.where(id: leftover_family_members).destroy_all
   end
 
   def nullify_invoices!

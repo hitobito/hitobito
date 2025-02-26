@@ -17,13 +17,13 @@ class Event::Filter
 
   def list_entries
     if sort_expression.is_a?(String)
-      sort_expression_query_value = sort_expression.split(".")[1]
+      sort_expression_query_value = sort_expression.gsub(/\b\w+\./, "")
     elsif sort_expression.is_a?(Hash)
       sort_expression_query_value =
-        "#{sort_expression.keys[0].split(".")[1]} #{sort_expression.values[0]}"
+        "#{sort_expression.keys[0].gsub(/\b\w+\./, "")} #{sort_expression.values[0]}"
     end
 
-    sort_expression ? scope.reorder(sort_expression_query_value) : scope
+    sort_expression ? scope.reorder(Arel.sql(sort_expression_query_value)) : scope
   end
 
   def scope

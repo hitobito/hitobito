@@ -15,6 +15,8 @@ class Setup
   USED_NODE_VERSION = "16.15.0"
   USED_YARN_VERSION = "1.22.19"
 
+  YOUTH_DEPENDENT_WAGONS = %w[pbs cevi pro_natura jubla sjas jemk sac_cas].freeze
+
   def run
     write_and_copy(".tool-versions", <<~TOOL_VERSION)
       ruby #{USED_RUBY_VERSION}
@@ -29,7 +31,7 @@ class Setup
 
     wagons.each do |wagon|
       FileUtils.mkdir("../hitobito_#{wagon}/tmp") unless Dir.exist?("../hitobito_#{wagon}/tmp")
-      write("../hitobito_#{wagon}/.envrc", environment(core: false))
+      write("../hitobito_#{wagon}/.envrc", environment(wagon))
       FileUtils.touch("../hitobito_#{wagon}/config/environment.rb") # needed for rails-vim
       handle_gemfile(directory: "../hitobito_#{wagon}")
     end
@@ -56,7 +58,7 @@ class Setup
     end
   end
 
-  def wagon(name = ARGV.first)
+  def primary_wagon(name = ARGV.first)
     if !available.include?(name)
       puts "Specify one of the following: #{available.join("|")}"
       exit
@@ -79,21 +81,21 @@ class Setup
     GEMFILE
   end
 
-  def environment(core: true)
+  def environment(wagon = nil)
     <<~DIRENV
-      #{"PATH_add ../hitobito/bin" unless core}
+      #{"PATH_add ../hitobito/bin" if wagon}
       PATH_add bin
+      export DISABLE_TEST_SCHEMA_MAINTENANCE=1
       export RAILS_DB_ADAPTER=postgresql
       export RAILS_DB_HOST=127.0.0.1
       export RAILS_DB_PORT=5432
       export RAILS_DB_USERNAME=hitobito
       export RAILS_DB_PASSWORD=hitobito
-      export RAILS_DB_NAME=hit_#{wagon}_dev
-      export RAILS_TEST_DB_NAME=hit_#{wagon}_test
-      export RAILS_TMPDIR=#{root.join("../hitobito_#{wagon}/tmp")}
-      export SPRING_APPLICATION_ID=hit_#{core ? "core" : wagon}
-      export PRIMARY_WAGON=#{wagon}
-      export DISABLE_TEST_SCHEMA_MAINTENANCE=1
+      export RAILS_DB_NAME=hit_#{primary_wagon || wagon}_dev
+      export RAILS_TEST_DB_NAME=hit_#{wagon ? wagon : "core"}_test
+      export RAILS_TMPDIR=#{root.join("../", wagon ? "hitobito_#{wagon}" : "", "tmp")}
+      export SPRING_APPLICATION_ID=hit_#{wagon ? wagon : "core"}
+      export PRIMARY_WAGON=#{primary_wagon}
       #{'export WAGONS="' + wagons.join(" ") + '"' if wagons.any?}
       log_status "hitobito now uses: #{wagons.any? ? wagons.join(", ") : "just the core"}"
       source_up
@@ -105,11 +107,11 @@ class Setup
   end
 
   def wagons
-    [wagon] + dependencies.fetch(wagon, []) - core_aliases
+    [primary_wagon] + dependencies.fetch(primary_wagon, []) - core_aliases
   end
 
   def dependencies
-    %w[pbs cevi pro_natura jubla sjas jemk sac_cas].product([%w[youth]]).to_h.merge({
+    YOUTH_DEPENDENT_WAGONS.product([%w[youth]]).to_h.merge({
       "tenants" => %w[generic]
     })
   end

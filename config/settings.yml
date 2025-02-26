@@ -243,6 +243,7 @@ table_displays: true
 
 mailchimp:
   max_attempts: 25
+  batch_size: 250
   enabled: true
 
 addresses:

@@ -97,7 +97,7 @@ class InvoiceConfig < ActiveRecord::Base
   end
 
   def remove_logo=(deletion_param)
-    if %w[1 yes true].include?(deletion_param.to_s.downcase)
+    if %w[1 yes true].include?(deletion_param.to_s.downcase) && logo.persisted?
       logo.purge_later
     end
   end

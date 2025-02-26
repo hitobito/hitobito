@@ -13,12 +13,13 @@ module Synchronize
       EXTRACTION_CMD = "tar zxO"
       attr_reader :list_id, :count, :api, :merge_fields, :member_fields
 
-      def initialize(mailing_list, member_fields: [], merge_fields: [], count: 50, debug: false)
+      def initialize(mailing_list, member_fields: [], merge_fields: [], count: Settings.mailchimp.batch_size, debug: false)
         @list_id = mailing_list.mailchimp_list_id
         @count = count
         @merge_fields = merge_fields
         @member_fields = member_fields
         @max_attempts = Settings.mailchimp.max_attempts
+        @count = count
 
         @api = Gibbon::Request.new(api_key: mailing_list.mailchimp_api_key, debug: debug)
       end

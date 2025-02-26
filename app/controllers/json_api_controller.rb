@@ -38,6 +38,11 @@ class JsonApiController < ActionController::API
     status: 400,
     title: "Bad request"
 
+  register_exception Graphiti::Errors::UnknownAttribute,
+    status: 400,
+    title: "Unsupported attribute parameter",
+    message: ->(error) { "The attribute parameter is not supported." }
+
   register_exception Graphiti::Errors::InvalidInclude,
     status: 400,
     title: "Unsupported include parameter",

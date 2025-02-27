@@ -22,17 +22,19 @@ class Invoices::RecalculateController < ApplicationController
   def build_entry
     invoice = Invoice.new
 
-    invoice.attributes = permittes_params
+    invoice.attributes = permitted_params
 
     invoice.group = group
     invoice
   end
 
-  def permittes_params
-    invoice_params = params.key?(:invoice_list) ?
-      params.require(:invoice_list).require(:invoice) :
-      params.require(:invoice)
-    invoice_params.permit(InvoicesController.permitted_attrs)
+  def permitted_params
+    invoice_params = params.dig(:invoice_list, :invoice) || params[:invoice]
+    permitted_params = invoice_params ? invoice_params.permit(InvoicesController.permitted_attrs) : {}
+
+    permitted_params[:invoice_items_attributes]&.each_value { |item| item.delete("id") }
+
+    permitted_params
   end
 
   def group

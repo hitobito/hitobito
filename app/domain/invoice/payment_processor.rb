@@ -169,7 +169,7 @@ class Invoice::PaymentProcessor
 
   def credit_statements(net_entry = fetch("Ntfctn", "Ntry"))
     transaction_details(net_entry)
-      .select { |s| fetch("CdtDbtInd", s) == "CRDT" }
+      .select { |s| fetch("CdtDbtInd", s) == "CRDT" || fetch("CdtDbtInd", s) == "DBIT" }
       .reject { |s| fetch("RmtInf", s)["AddtlRmtInf"] =~ /REJECT/i }
   end
 

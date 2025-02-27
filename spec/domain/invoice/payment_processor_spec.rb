@@ -19,6 +19,10 @@ describe Invoice::PaymentProcessor do
     expect(parser.payments).to have(5).items
   end
 
+  it "builds payments for DBIT statements as well" do
+    expect(parser("camt.054-DBIT-statements").payments).to have(5).items
+  end
+
   it "first payment is assigned to an invoice" do
     invoice.update_columns(reference: "000000000000100000000000905")
     payment = parser.payments.first

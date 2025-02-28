@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::Filter::Role < Person::Filter::Base
-  KINDS = %w[active created deleted inactive]
+  KINDS = %w[active created deleted inactive inactive_but_existing]
 
   include ParamConverters
 
@@ -43,17 +43,20 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def roles_join
-    <<~SQL.split.map(&:strip).join(" ")
+    <<~SQL.squish
       INNER JOIN roles ON roles.person_id = people.id
       INNER JOIN #{Group.quoted_table_name} ON roles.group_id = #{Group.quoted_table_name}.id
     SQL
   end
 
   def date_range
-    start_day = parse_day(args[:start_at], Time.zone.at(0).to_date)
-    finish_day = parse_day(args[:finish_at], Date.current)
+    @date_range ||= begin
+      default_start = default_range_today? ? today : Date.new(1900)
+      start_day = parse_day(args[:start_at], default_start)
+      finish_day = parse_day(args[:finish_at], today)
 
-    start_day..finish_day
+      start_day..finish_day
+    end
   end
 
   private
@@ -61,7 +64,7 @@ class Person::Filter::Role < Person::Filter::Base
   def parse_day(date, default)
     Date.parse(date.presence)
   rescue ArgumentError, TypeError
-    default.to_date
+    default
   end
 
   def merge_duration_args(hash)
@@ -88,32 +91,31 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def type_conditions(scope)
-    return if args[:role_types].blank?
+    return if args[:role_types].blank? || args[:kind] == "inactive"
 
     ["roles.type IN (?)", args[:role_types]]
   end
 
   def duration_conditions(scope)
     case args[:kind]
-    when "created" then [[:roles, {start_on: date_range}]].to_h
-    when "deleted" then [[:roles, {end_on: date_range}]].to_h
-    when "active" then [active_role_condition, min: date_range.min, max: date_range.max]
-    when "inactive" then no_active_role_conditions(scope)
-    else [active_role_condition, min: today, max: today]
+    when "created" then {roles: {start_on: date_range}}.to_h
+    when "deleted" then {roles: {end_on: date_range}}.to_h
+    when "inactive", "inactive_but_existing" then inactive_role_conditions(scope)
+    else active_role_condition
     end
   end
 
   def active_role_condition
-    <<~SQL.split.map(&:strip).join(" ")
-      (roles.start_on <= :max OR roles.start_on IS NULL) AND
-      (roles.end_on >= :min OR roles.end_on IS NULL)
-    SQL
+    [
+      "(roles.start_on <= :max OR roles.start_on IS NULL) AND " \
+      "(roles.end_on >= :min OR roles.end_on IS NULL)",
+      min: date_range.min,
+      max: date_range.max
+    ]
   end
 
-  def no_active_role_conditions(scope)
-    min_date = parse_day(args[:start_at], today)
-    max_date = parse_day(args[:finish_at], today)
-    excluded_people_ids = scope.where(active_role_condition, min: min_date, max: max_date)
+  def inactive_role_conditions(scope)
+    excluded_people_ids = scope.where(active_role_condition)
       .where(roles: {type: args[:role_types]})
       .pluck(:id)
 
@@ -122,6 +124,10 @@ class Person::Filter::Role < Person::Filter::Base
 
   def include_archived?
     true?(args[:include_archived])
+  end
+
+  def default_range_today?
+    !%w[active created deleted].include?(args[:kind])
   end
 
   def today

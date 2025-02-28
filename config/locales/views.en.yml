@@ -99,6 +99,9 @@ en:
   blocked:
     index:
       title: Login blocked
+  changelog:
+    index:
+      meta_description: Hitobito Changelog page
   contactable:
     address_or_email: "%{address} or %{email}"
     fields:
@@ -198,6 +201,7 @@ en:
       signed_out: "You are now logged out."
       new:
         sign_in: Sign in
+        meta_description: Login page for Hitobito
       form:
         login_identity: Main email
         sign_in: Sign in
@@ -211,6 +215,7 @@ en:
       no_token: "You can only access this page by clicking the link provided in a password reset email. If you have copied the link from a password reset email, please make sure you copied the entire URL provided."
       new:
         reset_password_button: "Reset password"
+        meta_description: Hitobito password reset page
     confirmations:
       new:
         resend_confirmation_instructions: "Confirm email address"
@@ -237,6 +242,7 @@ en:
         old_password: "Old password"
         new_password: "New password"
         new_password_confirmation: "Confirm new password"
+        meta_description: Hitobito password change page
       person:
         updated: "Your password has been updated."
     mailer:
@@ -645,6 +651,8 @@ en:
       count: Number
       distribution: Distribution
     self_registration:
+      show:
+        meta_description: Self-registration page for Hitobito
       form:
         privacy_policy_caption: "I agree to the following provisions:"
         submit: Register
@@ -988,6 +996,9 @@ en:
     new:
       upload_button: "Upload"
       xml_file: "XML file"
+  public_events:
+    show:
+      meta_description: Public course registration page for Hitobito
   qualifications:
     in_years: "%{years} years"
     valid_until: "to %{date}"

@@ -3,6 +3,7 @@
 -#  or at https://github.com/hitobito/hitobito.
 
 - title render_self_registration_title(group)
+%meta{name: "description", content: t(".meta_description")}
 
 = render 'form'
 - if wizard.first_step? && !current_user

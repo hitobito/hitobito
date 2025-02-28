@@ -4,6 +4,7 @@
 -#  https://github.com/hitobito/hitobito.
 
 -title t('.sign_in')
+%meta{name: "description", content: t(".meta_description")}
 
 - if params[:oauth] == 'true'
   = render 'oauth_info'

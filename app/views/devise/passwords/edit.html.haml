@@ -4,6 +4,7 @@
 -#  https://github.com/hitobito/hitobito.
 - prefix = 'devise.registrations.edit'
 -title t("#{prefix}.change_password")
+%meta{name: "description", content: t("#{prefix}.meta_description")}
 
 = standard_form(resource, {url: password_path(resource_name), method: :put}) do |f|
   = f.hidden_field :reset_password_token

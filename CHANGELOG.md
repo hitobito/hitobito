@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## Version 2.4
+## Version 2.5
 
 - Altes Adress-Feld wurde von Personen und Gruppen entfernt, neu gelten die strukturierten Adressfelder (#2226)
 - QR-Referenz kann in Rechnungeinstellungen erfasst werden, dieser gilt als Prefix für die Referenznummer auf dem Einzahlungsschein (#3032)
@@ -8,6 +8,7 @@
 ## Version 2.4
 
 - Rollen und Teilnahmen auf Mitgliedschaften / Verlauf sind nun (zusätzlich) nach absteigendem Datum sortiert (hitobito_sac_cas#1638).
+- Unterscheidung der Filtermöglichkeiten bei inaktiven Rollen nach nie oder zu einer anderen Zeit vorhandenen Rollen (hitobito_sac_cas#1655).
 
 ## Version 2.4
 

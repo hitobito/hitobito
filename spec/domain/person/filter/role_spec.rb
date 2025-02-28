@@ -209,33 +209,35 @@ describe Person::Filter::Role do
 
     context :date_range do
       def date_range(attrs = {})
-        Person::Filter::Role.new(:role, transform(attrs)).date_range
+        Person::Filter::Role.new(:role, attrs).date_range
       end
 
-      it "sets min to beginning_of_time if missing" do
-        expect(date_range.min).to eq Time.zone.at(0).to_date
+      it "sets min to today if missing without kind" do
+        expect(date_range.min).to eq today
       end
 
-      it "sets max to Date.today#end_of_day if missing" do
+      it "sets min to beginning_of_time if missing with kind active" do
+        expect(date_range(kind: "active").min).to eq Date.new(1900)
+      end
+
+      it "sets max to today if missing" do
         expect(date_range.max).to eq today
       end
 
-      it "sets min to start_at#beginning_of_day" do
-        expect(date_range(start_at: today).min).to eq today
-      end
-
-      it "sets max to finish_at#end_of_day" do
-        expect(date_range(finish_at: today).max).to eq today
+      it "sets min and max to given inputs" do
+        range = date_range(start_at: '2020-01-01', finish_at: '2020-12-31')
+        expect(range.min).to eq Date.new(2020, 1, 1)
+        expect(range.max).to eq Date.new(2020, 12, 31)
       end
 
       it "accepts start_at and finish_at on same day" do
-        range = date_range(start_at: today, finish_at: today)
+        range = date_range(start_at: today.to_s, finish_at: today.to_s)
         expect(range.min).to eq today
         expect(range.max).to eq today
       end
 
       it "min and max are nil if range is invalid" do
-        range = date_range(start_at: today, finish_at: today.yesterday)
+        range = date_range(start_at: today.to_s, finish_at: today.yesterday.to_s)
         expect(range.min).to be_nil
         expect(range.max).to be_nil
       end
@@ -243,7 +245,6 @@ describe Person::Filter::Role do
 
     context :filter do
       def filter(attrs)
-        kind = attrs[:kind] || described_class.to_s
         include_archived = attrs[:include_archived]
         role_type_ids = Array(role_type).collect(&:id)
         filters = {role: transform(attrs).merge(role_type_ids: role_type_ids, kind: kind, include_archived: include_archived)}
@@ -251,6 +252,7 @@ describe Person::Filter::Role do
       end
 
       context :created do
+        let(:kind) { "created" }
         let(:role) { roles(:top_leader) }
         let(:role_type) { Group::TopGroup::Leader }
 
@@ -278,9 +280,42 @@ describe Person::Filter::Role do
           role.update_columns(start_on: today, end_on: today)
           expect(filter(start_at: today, finish_at: 1.day.ago).entries).to be_empty
         end
+
+        context "excluding archived" do
+          context "outside time range" do
+            it "does not find archived role with past archived_at" do
+              role.update!(start_on: 2.days.ago)
+              role.update_attribute(:archived_at, 1.day.ago)
+              expect(filter(start_at: today, include_archived: false).entries).to be_empty
+            end
+
+            it "does not find archived role outside with future archived_at" do
+              role.update!(start_on: 2.days.ago)
+              role.update_attribute(:archived_at, 1.day.from_now)
+              expect(filter(start_at: today, include_archived: false).entries).to be_empty
+            end
+          end
+        end
+
+        context "including archived" do
+          context "outside time range" do
+            it "does not find role archived with past archived_at" do
+              role.update!(start_on: 2.days.ago)
+              role.update_attribute(:archived_at, 1.day.ago)
+              expect(filter(start_at: today, include_archived: true).entries).to be_empty
+            end
+
+            it "does not find archived role with future archived_at" do
+              role.update!(start_on: 2.days.ago)
+              role.update_attribute(:archived_at, 1.day.from_now)
+              expect(filter(start_at: today, include_archived: true).entries).to be_empty
+            end
+          end
+        end
       end
 
       context :deleted do
+        let(:kind) { "deleted" }
         let(:role_type) { Group::TopGroup::Member }
         let(:role) { person.roles.create!(type: role_type.sti_name, group: group) }
 
@@ -289,9 +324,45 @@ describe Person::Filter::Role do
           expect(filter(start_at: today).entries).to have(1).item
         end
 
+        it "finds ended role without range" do
+          role.update!(end_on: 1.week.ago)
+          expect(filter({}).entries).to have(1).item
+        end
+
+        it "does not find role if no other role is active" do
+          person.roles.select { |r| r.id != role.id }.each(&:destroy!)
+          role.update!(end_on: 1.week.ago)
+          expect(filter({}).entries).to be_empty
+        end
+
         it "finds role ended within range" do
           role.update!(end_on: today)
           expect(filter(start_at: today, finish_at: today).entries).to have(1).item
+        end
+
+        it "finds role ended within past range" do
+          role.update!(end_on: 1.month.ago)
+          expect(filter(start_at: 1.year.ago, finish_at: 1.day.ago).entries).to have(1).item
+        end
+
+        it "does not find role ending after past range" do
+          role.update!(end_on: 1.day.ago)
+          expect(filter(start_at: 2.months.ago, finish_at: 1.month.ago).entries).to be_empty
+        end
+
+        it "does not find role ending before past range" do
+          role.update!(end_on: 3.months.ago)
+          expect(filter(start_at: 2.months.ago, finish_at: 1.month.ago).entries).to be_empty
+        end
+
+        it "finds role ending within future range" do
+          role.update!(end_on: 1.month.from_now)
+          expect(filter(start_at: today, finish_at: 3.months.from_now).entries).to have(1).item
+        end
+
+        it "does not find role ending before future range" do
+          role.update!(end_on: today)
+          expect(filter(start_at: 1.month.from_now, finish_at: 3.months.from_now).entries).to be_empty
         end
 
         it "does not find role ended before start_on" do
@@ -320,13 +391,11 @@ describe Person::Filter::Role do
           other_role.update!(end_on: today)
           expect(filter(start_at: today).entries).to be_empty
         end
-      end
 
-      context :without_role_type do
-        let(:role_type) { nil }
-        let(:role) { person.roles.create!(type: Group::TopGroup::Member.sti_name, group: group) }
+        context :without_role_type do
+          let(:role_type) { nil }
+          let(:role) { person.roles.create!(type: Group::TopGroup::Member.sti_name, group: group) }
 
-        context :deleted do
           it "applies filter and does not find role ended outside of timeframe" do
             role.update!(end_on: 3.days.ago)
             expect(filter(start_at: today).entries).to be_empty
@@ -339,15 +408,13 @@ describe Person::Filter::Role do
             expect(filter(start_at: today).all_count).to eq 1
           end
         end
-      end
 
-      context :bottom_group_one_one do
-        let(:group) { groups(:bottom_group_one_one) }
-        let(:role_type) { Group::BottomGroup::Member }
-        let(:role) { Fabricate(role_type.name.to_sym, group: group) }
-        let(:user) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person }
+        context :bottom_group_one_one do
+          let(:group) { groups(:bottom_group_one_one) }
+          let(:role_type) { Group::BottomGroup::Member }
+          let(:role) { Fabricate(role_type.name.to_sym, group: group) }
+          let(:user) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person }
 
-        context :deleted do
           it "finds single ended role and can show it on group" do
             role.update!(end_on: today)
             expect(filter(start_at: today).entries).to have(1).item
@@ -362,121 +429,8 @@ describe Person::Filter::Role do
         end
       end
 
-      context :inactive do
-        let!(:role) { roles(:top_leader).tap { |r| r.update!(start_on: 15.days.ago) } }
-        let(:role_type) { Group::TopGroup::Leader }
-        let(:other_role_type) { Group::TopGroup::Member }
-
-        def entries(attrs = {})
-          filter(attrs.merge(kind: "inactive")).entries
-        end
-
-        it "does not find active role" do
-          expect(entries).to be_empty
-        end
-
-        it "does find active role when searching with earlier range" do
-          start_on = role.start_on
-          expect(entries(start_at: start_on - 1.year, finish_at: start_on - 1.day)).to have(1).item
-        end
-
-        # filter in general still requires any active role per person
-        it "does not find only ended role" do
-          role.update!(end_on: 10.days.ago)
-          expect(entries(start_at: 1.day.ago)).to be_empty
-        end
-
-        it "does not find inactive role even when include_archived" do
-          role.update!(end_on: 2.days.ago)
-          expect(entries(start_at: 1.day.ago, finish_at: today, include_archived: true)).to be_empty
-        end
-
-        context "with other active role in group" do
-          before { person.roles.create!(type: other_role_type.sti_name, group: group) }
-
-          it "does find person ended before range" do
-            role.update!(end_on: 2.days.ago)
-            expect(entries(start_at: 1.day.ago, finish_at: today)).to have(1).item
-          end
-
-          it "does not find person ended within range" do
-            role.update!(end_on: today)
-            expect(entries(start_at: 1.day.ago, finish_at: 1.day.from_now)).to be_empty
-          end
-
-          it "does not find person ended after range" do
-            role.update!(end_on: 2.days.from_now)
-            expect(entries(start_at: 1.day.ago, finish_at: today)).to be_empty
-          end
-
-          it "does find person with empty range" do
-            role.update!(end_on: 2.days.ago)
-            expect(entries).to have(1).item
-          end
-
-          it "does not find person with empty range if role never existed" do
-            Role.where(id: role.id).delete_all
-            expect(entries).to be_empty
-          end
-        end
-
-        context "with inactive and other role" do
-          let!(:other_role) { person.roles.create!(type: other_role_type.sti_name, group: group) }
-
-          it "finds person with inactive role ended before timeframe" do
-            role.update!(start_on: 2.days.ago, end_on: 1.day.ago)
-            expect(filter(kind: "inactive", start_at: today).entries).to have(1).item
-          end
-
-          it "does not find person with inactive role ended within range" do
-            role.update!(end_on: today)
-            expect(filter(kind: "inactive", start_at: today, finish_at: today).entries).to be_empty
-          end
-
-          it "does not find person with other role ended before timeframe" do
-            other_role.update!(start_on: 2.days.ago, end_on: 1.day.ago)
-            expect(filter(kind: "inactive", start_at: today).entries).to be_empty
-          end
-
-          it "does not find person with other role ended within range" do
-            other_role.update!(end_on: today)
-            expect(filter(kind: "inactive", start_at: today, finish_at: today).entries).to be_empty
-          end
-
-          it "does not find person with other role started within range" do
-            other_role.update!(start_on: today)
-            expect(filter(kind: "inactive", start_at: today, finish_at: today).entries).to be_empty
-          end
-        end
-
-        context "with only other role" do
-          before { role.update!(end_on: 10.days.ago) }
-
-          let!(:other_role) { person.roles.create!(type: other_role_type.sti_name, group: group) }
-
-          it "does not find person with other role ended before timeframe" do
-            other_role.update!(end_on: 1.day.ago)
-            expect(filter(kind: "inactive", start_at: today).entries).to be_empty
-          end
-
-          it "finds person with other role ending on last day of timeframe" do
-            other_role.update!(end_on: today)
-            expect(filter(kind: "inactive", start_at: today, finish_at: today).entries).to have(1).item
-          end
-
-          it "finds person with other role started within range" do
-            other_role.update!(start_on: today)
-            expect(filter(kind: "inactive", start_at: today, finish_at: today).entries).to have(1).item
-          end
-
-          it "does not find person with other role starting after timeframe" do
-            other_role.update!(start_on: 1.day.from_now)
-            expect(filter(kind: "inactive", end_on: today).entries).to be_empty
-          end
-        end
-      end
-
       context :active do
+        let(:kind) { :active }
         let(:role_type) { Group::TopGroup::Member }
         let(:role) { person.roles.create!(type: role_type.sti_name, group: group) }
 
@@ -507,20 +461,6 @@ describe Person::Filter::Role do
               expect(filter(start_at: today, finish_at: today, include_archived: false).entries).to have(1).item
             end
           end
-
-          context "outside time range" do
-            it "does not find archived role with past archived_at" do
-              role.update!(start_on: 2.days.ago)
-              role.update_attribute(:archived_at, 1.day.ago)
-              expect(filter(start_at: today, kind: "created", include_archived: false).entries).to be_empty
-            end
-
-            it "does not find archived role outside with future archived_at" do
-              role.update!(start_on: 2.days.ago)
-              role.update_attribute(:archived_at, 1.day.from_now)
-              expect(filter(start_at: today, kind: "created", include_archived: false).entries).to be_empty
-            end
-          end
         end
 
         context "including archived" do
@@ -535,19 +475,173 @@ describe Person::Filter::Role do
               expect(filter(start_at: today, finish_at: today, include_archived: true).entries).to have(1).item
             end
           end
+        end
+      end
 
-          context "outside time range" do
-            it "does not find role archived with past archived_at" do
-              role.update!(start_on: 2.days.ago)
-              role.update_attribute(:archived_at, 1.day.ago)
-              expect(filter(start_at: today, kind: "created", include_archived: true).entries).to be_empty
-            end
+      context :inactive do
+        let(:kind) { "inactive" }
+        let!(:role) { roles(:top_leader).tap { |r| r.update!(start_on: 15.days.ago) } }
+        let(:role_type) { Group::TopGroup::Leader }
+        let(:other_role_type) { Group::TopGroup::Member }
 
-            it "does not find archived role with future archived_at" do
-              role.update!(start_on: 2.days.ago)
-              role.update_attribute(:archived_at, 1.day.from_now)
-              expect(filter(start_at: today, kind: "created", include_archived: true).entries).to be_empty
-            end
+        def entries(attrs = {})
+          filter(attrs).entries
+        end
+
+        it "does not find active role" do
+          expect(entries).to be_empty
+        end
+
+        it "does find active role when searching with earlier range" do
+          start_on = role.start_on
+          expect(entries(start_at: start_on - 1.year, finish_at: start_on - 1.day)).to have(1).item
+        end
+
+        # filter in general still requires any active role per person
+        it "does not find only ended role" do
+          role.update!(end_on: 10.days.ago)
+          expect(entries(start_at: 1.day.ago)).to be_empty
+        end
+
+        it "does not find inactive role even when include_archived" do
+          role.update!(end_on: 2.days.ago)
+          expect(entries(start_at: 1.day.ago, finish_at: today, include_archived: true)).to be_empty
+        end
+
+        context "with other active role in group" do
+          let!(:other_role) { person.roles.create!(type: other_role_type.sti_name, group: group) }
+
+          it "does find person ended before range" do
+            role.update!(end_on: 2.days.ago)
+            expect(entries(start_at: 1.day.ago, finish_at: today)).to have(1).item
+          end
+
+          it "does not find person ended within range" do
+            role.update!(end_on: today)
+            expect(entries(start_at: 1.day.ago, finish_at: 1.day.from_now)).to be_empty
+          end
+
+          it "does not find person ended after range" do
+            role.update!(end_on: 2.days.from_now)
+            expect(entries(start_at: 1.day.ago, finish_at: today)).to be_empty
+          end
+
+          it "does find person with empty range (=today)" do
+            role.update!(end_on: 2.days.ago)
+            expect(entries).to have(1).item
+          end
+
+          it "does find person with empty range if role never existed" do
+            Role.where(id: role.id).delete_all
+            expect(entries).to have(1).item
+          end
+
+          it "does not find person with other role ended before range" do
+            role.update!(end_on: 2.days.ago)
+            other_role.update!(start_on: 2.days.ago, end_on: 1.day.ago)
+            expect(filter(start_at: today).entries).to be_empty
+          end
+
+          it "does find person with other role ended within range" do
+            role.update!(end_on: 2.days.ago)
+            other_role.update!(end_on: today)
+            expect(filter(start_at: today, finish_at: today).entries).to have(1).item
+          end
+
+          it "does find person with other role started within range" do
+            role.update!(end_on: 2.days.ago)
+            other_role.update!(start_on: today)
+            expect(filter(start_at: today, finish_at: today).entries).to have(1).item
+          end
+
+          it "does not find person with other role starting after range" do
+            role.update!(end_on: 2.days.ago)
+            other_role.update!(start_on: 1.day.from_now)
+            expect(filter(end_on: today).entries).to be_empty
+          end
+        end
+      end
+
+      context :inactive_but_existing do
+        let(:kind) { "inactive_but_existing" }
+        let!(:role) { roles(:top_leader).tap { |r| r.update!(start_on: 15.days.ago) } }
+        let(:role_type) { Group::TopGroup::Leader }
+        let(:other_role_type) { Group::TopGroup::Member }
+
+        def entries(attrs = {})
+          filter(attrs).entries
+        end
+
+        it "does not find active role" do
+          expect(entries).to be_empty
+        end
+
+        it "does find active role when searching with earlier range" do
+          start_on = role.start_on
+          expect(entries(start_at: start_on - 1.year, finish_at: start_on - 1.day)).to have(1).item
+        end
+
+        # filter in general still requires any active role per person
+        it "does not find only ended role" do
+          role.update!(end_on: 10.days.ago)
+          expect(entries(start_at: 1.day.ago)).to be_empty
+        end
+
+        it "does not find inactive role even when include_archived" do
+          role.update!(end_on: 2.days.ago)
+          expect(entries(start_at: 1.day.ago, finish_at: today, include_archived: true)).to be_empty
+        end
+
+        context "with other active role in group" do
+          let!(:other_role) { person.roles.create!(type: other_role_type.sti_name, group: group) }
+
+          it "does find person ended before range" do
+            role.update!(end_on: 2.days.ago)
+            expect(entries(start_at: 1.day.ago, finish_at: today)).to have(1).item
+          end
+
+          it "does not find person ended within range" do
+            role.update!(end_on: today)
+            expect(entries(start_at: 1.day.ago, finish_at: 1.day.from_now)).to be_empty
+          end
+
+          it "does not find person ended after range" do
+            role.update!(end_on: 2.days.from_now)
+            expect(entries(start_at: 1.day.ago, finish_at: today)).to be_empty
+          end
+
+          it "does find person with empty range (=today)" do
+            role.update!(end_on: 2.days.ago)
+            expect(entries).to have(1).item
+          end
+
+          it "does not find person with empty range if role never existed" do
+            Role.where(id: role.id).delete_all
+            expect(entries).to be_empty
+          end
+
+          it "does not find person with other role ended before range" do
+            role.update!(end_on: 2.days.ago)
+            other_role.update!(start_on: 2.days.ago, end_on: 1.day.ago)
+            expect(filter(start_at: today).entries).to be_empty
+          end
+
+          it "does find person with other role ended within range" do
+            role.update!(end_on: 2.days.ago)
+            other_role.update!(end_on: today)
+            expect(filter(start_at: today, finish_at: today).entries).to have(1).item
+          end
+
+          it "does find person with other role started within range" do
+            role.update!(end_on: 2.days.ago)
+            other_role.update!(start_on: today)
+            expect(filter(start_at: today, finish_at: today).entries).to have(1).item
+          end
+
+          it "does not find person with other role starting after range" do
+            role.update!(end_on: 2.days.ago)
+            other_role.update!(start_on: 1.day.from_now)
+            expect(filter(end_on: today).entries).to be_empty
           end
         end
       end

@@ -1789,7 +1789,8 @@ de:
         active: aktive Rollen
         created: erstellte Rollen
         deleted: gelöschte Rollen
-        inactive: inaktive Rollen
+        inactive: inaktive oder nie vorhandene Rollen
+        inactive_but_existing: inaktive aber zu einer anderen Zeit vorhandene Rollen
 
     attributes:
       title: Felder

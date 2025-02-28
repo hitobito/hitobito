@@ -35,5 +35,8 @@ AllCops:
     - app/assets/config.rb
     - node_modules/**/*
 
+Lint/UselessAssignment:
+  AutoCorrect: false
+
 Rails/ToSWithArgument:
   Enabled: false

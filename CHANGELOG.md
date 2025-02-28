@@ -10,6 +10,7 @@
 ## Version 2.4
 
 - Rollen und Teilnahmen auf Mitgliedschaften / Verlauf sind nun (zusätzlich) nach absteigendem Datum sortiert (hitobito_sac_cas#1638).
+- Unterscheidung der Filtermöglichkeiten bei inaktiven Rollen nach nie oder zu einer anderen Zeit vorhandenen Rollen (hitobito_sac_cas#1655).
 
 ## Version 2.4
 

@@ -28,7 +28,7 @@ Install all ruby and node dependencies (in the core folder):
 
 In the core directory:
 
-    ./bin/active_wagon.rb generic
+    ./bin/active_wagon generic
     rails db:create db:migrate wagon:migrate db:seed wagon:seed dev:local:admin
 
 ## Start the application
@@ -39,7 +39,7 @@ In the core you can start with overmind:
 
 ## Running tests
 
-Working with `./bin/active_wagon.rb` and the environment variables specified in
+Working with `./bin/active_wagon` and the environment variables specified in
 `.envrc` disables test_schema_maintainance. We do this in order to support
 parallel testing of wagon and core (via distinct database). In addition we
 speed up wagon test runs by removing migration overhead. As a drawback, we have
@@ -61,7 +61,7 @@ Set the environment variable `BUNDLE_GEMFILE=Gemfile.local` to use the alternate
 When adding or updating gems, remember to adjust the original `Gemfile` and make sure that
 no local wagon configuration leaks into the updated `Gemfile.lock` when committing.
 
-The `./bin/active_wagon.rb` script automates that process for you if the environment variable
+The `./bin/active_wagon` script automates that process for you if the environment variable
 `BUNDLE_GEMFILE` is defined.
 
 To ignore the `Gemfile.local` and `Gemfile.local.lock` files in all wagons you can add them to

@@ -26,7 +26,7 @@ core_dir="$(readlink -f "$(dirname "$core_bin_dir")")" # directory of hitobito (
 function require_wagon_name() {
   if [[ $wagon_name = 'No wagon selected' ]]; then
     echo "You must select a wagon to manage"
-    bin/active_wagon.rb nonexisting
+    bin/active_wagon nonexisting
     exit 1
   fi
 }
@@ -134,13 +134,13 @@ function highlight_phrases {
 case $cmd in
 activate)
   require_wagon_name
-  exec bin/active_wagon.rb "$wagon_name"
+  exec bin/active_wagon "$wagon_name"
   ;;
 
 bootstrap)
   require_wagon_name
   clone_wagon
-  bin/active_wagon.rb "$wagon_name"
+  bin/active_wagon "$wagon_name"
   recreate_dbs
   setup_dbs
   ;;
@@ -153,7 +153,7 @@ clone)
 direnv-allow-all)
   for wagon in $(existing_wagon_names); do
     echo "$wagon" | red
-    (bin/active_wagon.rb "$wagon" && cd "../hitobito_${wagon}" && direnv allow)
+    (bin/active_wagon "$wagon" && cd "../hitobito_${wagon}" && direnv allow)
   done
   ;;
 

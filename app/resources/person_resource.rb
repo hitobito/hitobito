@@ -23,6 +23,7 @@ class PersonResource < ApplicationResource
   attribute :company_name, :string
   attribute :company, :boolean
   attribute :email, :string
+  attribute :address, :string, writable: false
   attribute :address_care_of, :string
   attribute :street, :string
   attribute :housenumber, :string

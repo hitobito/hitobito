@@ -25,6 +25,7 @@ describe PersonResource, type: :resource do
         :company_name,
         :company,
         :email,
+        :address,
         :address_care_of,
         :street,
         :housenumber,

@@ -1718,6 +1718,12 @@
           "writable": true,
           "description": null
         },
+        "address": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
         "address_care_of": {
           "type": "string",
           "readable": true,
@@ -1801,6 +1807,8 @@
         "company": {
         },
         "email": {
+        },
+        "address": {
         },
         "address_care_of": {
         },
@@ -1905,6 +1913,21 @@
           "single": true
         },
         "email": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "address": {
           "type": "string",
           "operators": [
             "eq",

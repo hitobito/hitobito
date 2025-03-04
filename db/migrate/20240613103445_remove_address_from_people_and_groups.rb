@@ -7,14 +7,18 @@
 class RemoveAddressFromPeopleAndGroups < ActiveRecord::Migration[6.1]
   def change
     if unmigrated(Person).any? || unmigrated(Group).any?
-      raise 'Not all addresses have been migrated into structured form or handled.'
+      raise "Not all addresses have been migrated into structured form or handled."
     end
 
+    remove_column :people, :search_column, if_exists: true
+    remove_column :groups, :search_column, if_exists: true
     remove_column :people, :address, :text, limit: 1024
     remove_column :groups, :address, :text, limit: 1024
+    Group.reset_column_information
+    Person.reset_column_information
   end
 
   private
 
-  def unmigrated(model) = model.where.not(address: nil).where.not(address: '')
+  def unmigrated(model) = model.where.not(address: nil).where.not(address: "")
 end

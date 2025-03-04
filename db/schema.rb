@@ -434,7 +434,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_24_130206) do
     t.string "short_name", limit: 31
     t.string "type", null: false
     t.string "email", collation: "case_insensitive_emails"
-    t.string "address", limit: 1024
     t.integer "zip_code"
     t.string "town"
     t.string "country"
@@ -873,7 +872,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_24_130206) do
     t.string "nickname"
     t.boolean "company", default: false, null: false
     t.string "email", collation: "case_insensitive_emails"
-    t.string "address", limit: 1024
     t.string "zip_code"
     t.string "town"
     t.string "country"

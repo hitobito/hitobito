@@ -132,6 +132,10 @@ class Event::Participation < ActiveRecord::Base
     !active
   end
 
+  def to_s
+    person.full_name
+  end
+
   private
 
   def set_self_in_nested

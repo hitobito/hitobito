@@ -203,10 +203,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
       subquery = joins(:dates, :translations)
         .select("events.*", "event_dates.start_at")
         .select(Event::Translation.column_names
-                                  .reject { |col|
-                  ["id", "event_id", "created_at", "updated_at"]
-                                  .include?(col)
-                }
+                                  .reject { |col| ["id", "event_id", "created_at", "updated_at"].include?(col) }
                                   .map { |col| "event_translations.#{col}" })
         .preload_all_dates
 

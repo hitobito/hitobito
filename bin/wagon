@@ -390,8 +390,11 @@ create)
   echo "Next Steps would be to add the structure, adapt the design and such..."
   ;;
 
+# TODO: needs to work from a wagon
+# TODO: needs to filter the current wagon name (sed 's/_youth//')
 overwritten-in-wagon)
   git diff master.. --name-only app/views/ |
+    sed 's!app/views/!!' |
     xargs -I% find ../ -path "*/%" -a \! -regex ".*\(ose_composition\|hitobito-development\).*"
   ;;
 

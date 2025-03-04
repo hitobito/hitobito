@@ -91,7 +91,7 @@ describe MailingListsController do
       let(:subscriber) { Fabricate(:subscription, mailing_list: mailing_list, excluded: false).subscriber }
       let(:expected_subscriber) {
         [subscriber.slice(
-          "address_care_of", "company", "company_name", "country", "email", "first_name",
+          "address", "address_care_of", "company", "company_name", "country", "email", "first_name",
           "housenumber", "last_name", "nickname", "postbox", "primary_group_id", "street", "town",
           "zip_code"
         ), {id: subscriber.id.to_s}, list_emails: [subscriber.email]].inject(&:merge).deep_symbolize_keys

@@ -13,6 +13,7 @@ class ContactSerializer < ApplicationSerializer
       :company_name,
       :company,
       :email,
+      :address,
       :address_care_of,
       :street,
       :housenumber,

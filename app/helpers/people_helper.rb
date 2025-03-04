@@ -130,8 +130,10 @@ module PeopleHelper
   end
 
   def oneline_address(message)
-    recipient = message.message_recipients.find { |r| r.person_id == @person.id }
-    recipient.address.to_s.split("\n").join(", ") if recipient
+    message
+      .message_recipients
+      .find { |r| r.person_id == @person.id }
+      .address.to_s.split("\n").join(", ")
   end
 
   def person_otp_qr_code(otp)

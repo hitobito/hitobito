@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -10,7 +10,6 @@
 # Table name: groups
 #
 #  id                                      :integer          not null, primary key
-#  address                                 :string(1024)
 #  address_care_of                         :string
 #  archived_at                             :datetime
 #  country                                 :string
@@ -60,9 +59,8 @@
 #
 
 class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
-  SEARCHABLE_ATTRS = [:name, :short_name, :email, :address, :zip_code, :town, :country,
-    {phone_numbers: [:number],
-     social_accounts: [:name], additional_emails: [:email]}]
+  SEARCHABLE_ATTRS = [:name, :short_name, :email, :street, :housenumber, :zip_code, :town,
+    :country, {phone_numbers: [:number], social_accounts: [:name], additional_emails: [:email]}]
 
   include Group::NestedSet
   include Group::Types
@@ -104,10 +102,6 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :letter_address_position, :address_care_of, :street, :housenumber,
     :postbox, :zip_code, :town, :country, :description
   ]
-
-  if FeatureGate.disabled?("structured_addresses")
-    used_attributes << :address
-  end
 
   FeatureGate.if("groups.nextcloud") do
     used_attributes << :nextcloud_url
@@ -428,7 +422,15 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   def reset_contact_info
     if contact
-      clear_contacts = {address: nil, town: nil, zip_code: nil, country: nil}
+      clear_contacts = {
+        address_care_of: nil,
+        street: nil,
+        housenumber: nil,
+        postbox: nil,
+        town: nil,
+        zip_code: nil,
+        country: nil
+      }
       assign_attributes(clear_contacts)
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -48,10 +48,10 @@ describe Event::ParticipationsController do
       @leader, @participant = *create(Event::Role::Leader, course.participant_types.first)
 
       update_person(@participant, first_name: "Al", last_name: "Barns", nickname: "al",
-        town: "Eye", address: "Spring Road", zip_code: "3000",
+        town: "Eye", street: "Spring Road", zip_code: "3000",
         birthday: "21.10.1978")
       update_person(@leader, first_name: "Joe", last_name: "Smith", nickname: "js",
-        town: "Stoke", address: "Howard Street", zip_code: "8000",
+        town: "Stoke", street: "Howard Street", zip_code: "8000",
         birthday: "1.3.1992")
     end
 

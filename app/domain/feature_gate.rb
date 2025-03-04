@@ -110,9 +110,4 @@ class FeatureGate
   def self_registration_reason_enabled?
     SelfRegistrationReason.exists?
   end
-
-  # TODO: Remove these once every wagon has those removed as well
-  def structured_addresses_enabled? = true
-
-  def address_migration_enabled? = false
 end

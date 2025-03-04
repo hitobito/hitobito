@@ -27,7 +27,7 @@ describe Export::Tabular::People::ParticipationsAddress do
     before { PhoneNumber.create!(contactable: person, label: "Privat", number: "0791234567") }
 
     it "includes phone number" do
-      expect(attribute_labels.keys).to have(13).items
+      expect(attribute_labels.keys).to have(16).items
       expect(attribute_labels).to have_key(:phone_number_privat)
       expect(attribute_labels[:phone_number_privat]).to eq "Telefonnummer Privat"
       expect(row(0)[attributes.index(:phone_number_privat)]).to eq "+41 79 123 45 67"

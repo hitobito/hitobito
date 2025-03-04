@@ -48,18 +48,16 @@ module PeopleFilterHelper
         class: "attribute_key_hidden_field")
 
       content << content_tag(:div, class: "flex-none") do
-        select(:filters, "attributes[#{time}][key]",
-          people_filter_attributes_for_select,
-          {selected: key},
+        select_tag("filters[attributes][#{time}][key]",
+          options_from_collection_for_select(people_filter_attributes_for_select, :last, :first, key),
           html_options.merge(disabled: true,
             class: 'attribute_key_dropdown form-select
                                                   form-select-sm'))
       end
 
       content << content_tag(:div, class: "flex-none") do
-        select(:filters, "attributes[#{time}][constraint]",
-          filters,
-          {selected: constraint},
+        select_tag("filters[attributes][#{time}][constraint]",
+          options_from_collection_for_select(filters, :last, :first, constraint),
           html_options.merge(class:
                              'attribute_constraint_dropdown
                                          ms-3 form-select form-select-sm'))

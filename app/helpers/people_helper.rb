@@ -131,7 +131,8 @@ module PeopleHelper
 
   def oneline_address(message)
     message
-      .message_recipients.find_by(person_id: @person.id)
+      .message_recipients
+      .find { |r| r.person_id == @person.id }
       .address.to_s.split("\n").join(", ")
   end
 

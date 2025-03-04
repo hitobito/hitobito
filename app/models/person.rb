@@ -11,7 +11,6 @@
 #
 #  id                                   :integer          not null, primary key
 #  additional_information               :text
-#  address                              :string(1024)
 #  address_care_of                      :string
 #  authentication_token                 :string
 #  birthday                             :date

@@ -10,7 +10,6 @@
 # Table name: groups
 #
 #  id                                      :integer          not null, primary key
-#  address                                 :string(1024)
 #  address_care_of                         :string
 #  archived_at                             :datetime
 #  country                                 :string

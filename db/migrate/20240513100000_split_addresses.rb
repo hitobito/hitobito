@@ -273,7 +273,7 @@ class Splitter
     warn "Deleting left-over Addresses of #{count} #{name}"
     scope.each do |contactable|
       contactable.address = nil
-      contactable.save!
+      contactable.save(validate: false)
       $stderr.print(".")
     end
     $stderr.print("\n")

@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 class RemoveAddressFromPeopleAndGroups < ActiveRecord::Migration[6.1]
   def change
-    if unmigrated(Person).any? || unmigrated(Group).any?
+    if Group.any? && (unmigrated(Person).any? || unmigrated(Group).any?)
       raise "Not all addresses have been migrated into structured form or handled."
     end
 

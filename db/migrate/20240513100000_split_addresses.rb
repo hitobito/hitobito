@@ -323,6 +323,8 @@ end
 
 class SplitAddresses < ActiveRecord::Migration[6.1]
   def up
+    return if Group.none? # early return when migrating on empty database
+
     splitter = Splitter.new(String.new.dup)
     if splitter.obsolete?
       say "no addresses to split found, skipping."

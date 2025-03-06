@@ -107,6 +107,9 @@ de:
     index:
       title: Login gesperrt
 
+  changelog:
+    index:
+      meta_description: Hitobito Changelog Seite
   contactable:
     address_or_email: "%{address} oder %{email}"
     fields:
@@ -231,6 +234,7 @@ de:
       signed_out: "Du bist jetzt abgemeldet."
       new:
         sign_in: Anmelden
+        meta_description: Anmeldeseite für Hitobito
       form:
         login_identity: Haupt-E-Mail
         sign_in: Anmelden
@@ -245,6 +249,7 @@ de:
       no_token: "Du kannst diese Seite nicht aufrufen, wenn Du nicht von einem Passwort Zurücksetzen E-Mail kommst. Falls Du von einem solchen E-Mail kommst, bitte überprüfe, dass Du die vollständige URL verwendest."
       new:
         reset_password_button: "Passwort zurücksetzen"
+        meta_description: Hitobito Passwort zurücksetzen Seite
     confirmations:
       new:
         resend_confirmation_instructions: "E-Mail-Adresse bestätigen"
@@ -274,6 +279,7 @@ de:
         old_password: "Altes Passwort"
         new_password: "Neues Passwort"
         new_password_confirmation: "Neues Passwort bestätigen"
+        meta_description: "Hitobito Passwort ändern Seite"
       person:
         updated: "Dein Passwort wurde aktualisiert."
 
@@ -779,6 +785,8 @@ de:
       count: Anzahl
       distribution: Verteilung
     self_registration:
+      show:
+        meta_description: Selbstregistrierungsseite für Hitobito
       form:
         privacy_policy_caption: "Ich erkläre mich mit den folgenden Bestimmungen einverstanden:"
         submit: Registrieren
@@ -1332,6 +1340,9 @@ de:
     new:
       upload_button: "Hochladen"
       xml_file: "XML Datei"
+  public_events:
+    show:
+      meta_description: Öffentliche Kursanmeldeseite für Hitobito
 
   qualifications:
     in_years: "%{years} Jahre"

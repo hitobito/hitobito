@@ -18,7 +18,7 @@
     - t.col(MailingList.human_attribute_name(:mail_address), class: 'col-3') do |list|
       = mail_to list.mail_address
     - t.col('', class: 'col-1 right') do |list|
-      = button_unsubscribe(list, icons: false)
+      = button_unsubscribe(list, person:, icons: false) if can?(:update, person)
 
 
 %h2.mt-4=t('.available_subscriptions')
@@ -36,5 +36,4 @@
     - t.col(MailingList.human_attribute_name(:mail_address), class: 'col-3') do |list|
       = mail_to list.mail_address
     - t.col('', class: 'col-1 right') do |list|
-      = button_subscribe(list, icons: false)
-
+      = button_subscribe(list, person:, icons: false) if can?(:update, person)

@@ -8,28 +8,38 @@
 require "spec_helper"
 
 describe "person/subscriptions/index.html.haml" do
+  let(:current_user) { people(:top_leader) }
   let(:group) { groups(:top_layer) }
   let(:person) { people(:top_leader) }
-  let(:entry) { mailing_lists(:leaders) }
+  let(:list) { mailing_lists(:leaders) }
 
   before do
     allow(view).to receive(:can?)
     allow(view).to receive(:subscribed).and_return([])
-    allow(view).to receive(:subscribable).and_return({group => [entry]})
-    allow(view).to receive(:group_person_subscriptions_path).and_return(group_person_subscriptions_path(group, person, entry))
+    allow(view).to receive(:person).and_return(person)
+    allow(view).to receive(:subscribable).and_return({group => [list]})
     allow_any_instance_of(MailingListsHelper).to receive(:current_user).and_return(person)
   end
 
   subject { Capybara::Node::Simple.new(render) }
 
-  it "renders name as link if current_user can update" do
-    allow(view).to receive(:can?).with(:update, entry).and_return(true)
-    expect(subject).to have_selector "td strong a", text: entry.name
+  it "renders subscribe button if permitted" do
+    allow(view).to receive(:can?).with(:update, person).and_return(true)
+    expect(subject).to have_link "Anmelden", href: group_person_subscriptions_path(list.group, person, id: list.id)
   end
 
-  it "renders name as text if current_user cannot update" do
-    allow(view).to receive(:can?).with(:update, entry).and_return(false)
-    expect(subject).to have_selector "td strong", text: entry.name
-    expect(subject).to have_no_selector "td strong a", text: entry.name
+  it "does not render subscribe button if not permitted" do
+    allow(view).to receive(:can?).with(:update, person).and_return(false)
+    expect(subject).to have_selector "td strong", text: list.name
+    expect(subject).not_to have_link "Anmelden"
+  end
+
+  context "viewing someone else" do
+    let(:person) { people(:bottom_member) }
+
+    it "renders subscribe button if permitted" do
+      allow(view).to receive(:can?).with(:update, person).and_return(true)
+      expect(subject).to have_link "Anmelden", href: group_person_subscriptions_path(list.group, person, id: list.id)
+    end
   end
 end

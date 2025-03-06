@@ -5,7 +5,7 @@
 
 class Person::SubscriptionsController < ApplicationController
   skip_authorization_check
-  helper_method :subscribed, :subscribable
+  helper_method :subscribed, :subscribable, :person
 
   def index
     authorize!(:show_details, person)

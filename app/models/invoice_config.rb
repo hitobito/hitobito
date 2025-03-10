@@ -83,6 +83,8 @@ class InvoiceConfig < ActiveRecord::Base
 
   validates :sender_name, format: {without: Devise.email_regexp}
 
+  validates :reference_prefix, numericality: {allow_nil: true, less_than_or_equal_to: 9999999}
+
   accepts_nested_attributes_for :payment_reminder_configs, :payment_provider_configs
   accepts_nested_attributes_for :message_templates, allow_destroy: true
 

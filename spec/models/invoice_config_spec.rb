@@ -108,6 +108,18 @@ describe InvoiceConfig do
     expect(invoice_config).to be_valid
   end
 
+  it "validates reference_prefix to be a number" do
+    invoice_config.update(reference_prefix: "some string")
+
+    expect(invoice_config).not_to be_valid
+  end
+
+  it "validates reference_prefix to not be longer than 7 characters" do
+    invoice_config.update(reference_prefix: 12345678)
+
+    expect(invoice_config).not_to be_valid
+  end
+
   describe "e-mail validation" do
     before { allow(Truemail).to receive(:valid?).and_call_original }
 

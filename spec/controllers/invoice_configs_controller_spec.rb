@@ -125,5 +125,12 @@ describe InvoiceConfigsController do
       end.to change { entry.reload.payment_provider_configs.size }.by(1)
       expect(flash[:alert]).to match(/Einrichten der Zahlungsschnittstelle Postfinance ist fehlgeschlagen/)
     end
+
+    it "updates reference_prefix" do
+      patch :update, params: {group_id: group.id, invoice_config: {
+        reference_prefix: 1234
+      }}
+      expect(group.invoice_config.reload.reference_prefix).to eq 1234
+    end
   end
 end

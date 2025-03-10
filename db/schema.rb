@@ -10,13 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_02_26_121722) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_10_140729) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   # Please do not delete this, the SQL schema does not know about this
   # but the application and this schema needs it
   execute "CREATE COLLATION IF NOT EXISTS case_insensitive_emails (provider = icu, deterministic = false, locale = 'und-u-ka-noignore-ks-level2');"
+
 
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
@@ -528,13 +529,13 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_26_121722) do
     t.text "payee"
     t.string "participant_number"
     t.string "email", collation: "case_insensitive_emails"
-    t.string "participant_number_internal"
     t.string "vat_number"
     t.string "currency", default: "CHF", null: false
     t.integer "donation_calculation_year_amount"
     t.integer "donation_increase_percentage"
     t.string "sender_name"
     t.string "logo_position", default: "disabled", null: false
+    t.integer "reference_prefix"
     t.index ["group_id"], name: "index_invoice_configs_on_group_id"
   end
 
@@ -598,7 +599,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_26_121722) do
     t.text "payee"
     t.string "participant_number"
     t.integer "creator_id"
-    t.string "participant_number_internal"
     t.string "vat_number"
     t.string "currency", default: "CHF", null: false
     t.bigint "invoice_list_id"

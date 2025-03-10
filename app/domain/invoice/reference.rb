@@ -28,14 +28,14 @@ class Invoice::Reference
   def formatted_reference_number
     esr_number_cleaned = @invoice.esr_number.delete(" ")
 
-    unless @invoice.invoice_config&.reference_prefix.present?
+    if @invoice.invoice_config&.reference_prefix.blank?
       return esr_number_cleaned
     end
 
     prefix = @invoice.invoice_config.reference_prefix.to_s.ljust(7, "0")
     esr_suffix = esr_number_cleaned[7..]
 
-    if esr_number_cleaned[0..6].split("").all?("0")
+    if esr_number_cleaned[0..6].chars.all?("0")
       "#{prefix}#{esr_suffix}"
     else
       raise "HighlyUnlikelyError: Prefixing the reference number is not possible for this invoice, sequence number (group_id, invoice count) is too long. This error will only occur for invoices created in groups with an id higher than 999'999"

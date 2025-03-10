@@ -1109,7 +1109,6 @@ de:
           no_ps: Keiner
         reference_prefix: QR-Referenz
         participant_number: Teilnehmernummer
-        participant_number_internal: Teilnehmernummer intern
         payment_reminder_configs: Mahnungen
         remove_logo: Aktuelles Logo entfernen
         vat_number: MwSt. Nummer

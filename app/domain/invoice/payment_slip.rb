@@ -35,11 +35,7 @@ class Invoice::PaymentSlip
   end
 
   def padded_number
-    if invoice.participant_number_internal
-      [zero_padded(invoice.participant_number_internal, 6), zero_padded(group_id, 7)].join
-    else
-      zero_padded(group_id, 13)
-    end
+    zero_padded(group_id, 13)
   end
 
   private

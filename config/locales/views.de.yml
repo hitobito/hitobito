@@ -983,7 +983,6 @@ de:
       payee_help: "Erscheint auf dem Einzahlungsschein"
       beneficiary_help: "Erscheint auf dem Einzahlungsschein"
       account_number_example: "Beispiel: 01-162-5"
-      participant_number_internal_example: "Beispiel: 999999"
       iban_example: "Beispiel: CH93 0076 2011 6238 5295 7"
       variable_donation_appeal: "Variabler Spendenaufruf"
       donation_calculation_year_amount_explanation: Anzahl verganenen Jahre, die für die Spendenberechnung beachtet werden.

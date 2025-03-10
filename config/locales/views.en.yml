@@ -765,7 +765,6 @@ en:
       payee_help: "for the payment slip"
       beneficiary_help: "for the payment slip"
       account_number_example: "Example 01-162-5"
-      participant_number_internal_example: "Example: 999999"
       iban_example: "Example: CH93 0076 2011 6238 5295 7"
       variable_donation_appeal: "Variable donation call"
       donation_calculation_year_amount_explanation: Number of past years taken into account for the calculation of donations.

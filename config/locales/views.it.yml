@@ -823,7 +823,6 @@ it:
       payee_help: "Compare sulla polizza di versamento"
       beneficiary_help: "Compare sulla polizza di versamento"
       account_number_example: "Esempio: 01-162-5"
-      participant_number_internal_example: "Esempio: 999999"
       iban_example: "Esempio: CH93 0076 2011 6238 5295 7"
       variable_donation_appeal: "Appello per donazioni variabili"
       donation_calculation_year_amount_explanation: Numero di anni trascorsi che vengono considerati per il calcolo delle donazioni.

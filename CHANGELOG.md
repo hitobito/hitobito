@@ -4,6 +4,7 @@
 
 - Altes Adress-Feld wurde von Personen und Gruppen entfernt, neu gelten die strukturierten Adressfelder (#2226)
 - QR-Referenz kann in Rechnungeinstellungen erfasst werden, dieser gilt als Prefix für die Referenznummer auf dem Einzahlungsschein (#3032)
+- Mahnungen können nun in den Rechnungseinstellungen übersetzt werden. Sie werden automatisch in der Sprache der jeweiligen Person für jede Rechnung generiert. (hitobito_sww#198)
 
 ## Version 2.4
 

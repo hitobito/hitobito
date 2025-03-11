@@ -20,6 +20,9 @@
 #
 
 class PaymentReminderConfig < ActiveRecord::Base
+  include Globalized
+  translates :title, :text
+
   belongs_to :invoice_config
 
   validates_by_schema

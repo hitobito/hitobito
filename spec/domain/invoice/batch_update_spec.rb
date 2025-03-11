@@ -150,5 +150,31 @@ describe Invoice::BatchUpdate do
       expect(results.notice).to have(2).items
       expect(sent.payment_reminders.first.slice(*config_changes.keys).symbolize_keys).to eq(config_changes)
     end
+
+    it "uses language of invoice recipient when applying payment_reminder_config" do
+      person.update!(language: :fr)
+      sent.update_columns(due_at: 31.days.ago)
+      update([sent], person)
+
+      expect(sent.payment_reminders.first.title).to eq "title french"
+      expect(sent.payment_reminders.first.text).to eq "paye maintenant!"
+    end
+
+    it "uses fallback language when language of invoice recipient does not have translated values" do
+      person.update!(language: :it)
+      sent.update_columns(due_at: 31.days.ago)
+      update([sent], person)
+
+      expect(sent.payment_reminders.first.title).to eq "title french"
+      expect(sent.payment_reminders.first.text).to eq "paye maintenant!"
+    end
+
+    it "uses current locale when invoice recipient is external" do
+      sent.update_columns(due_at: 31.days.ago, recipient_id: nil)
+      update([sent], person)
+
+      expect(sent.payment_reminders.first.title).to eq "title"
+      expect(sent.payment_reminders.first.text).to eq "text"
+    end
   end
 end

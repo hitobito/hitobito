@@ -35,7 +35,13 @@ class Invoice::PaymentSlip
   end
 
   def padded_number
-    zero_padded(group_id, 13)
+    return zero_padded(invoice.group_id.to_s, 13) if invoice.invoice_config.reference_prefix.nil? || invoice.qr_without_qr_iban?
+
+    if invoice.group_id <= 999999
+      "#{invoice.invoice_config.reference_prefix.to_s.ljust(7, "0")}#{zero_padded(invoice.group_id.to_s, 6)}"
+    else
+      raise "HighlyUnlikelyError: Prefixing the reference number is not possible for this invoice, sequence number (group_id, invoice count) is too long. This error will only occur for invoices created in groups with an id higher than 999'999"
+    end
   end
 
   private
@@ -63,10 +69,6 @@ class Invoice::PaymentSlip
 
   def number_string_with_check
     number_string + check_digit(number_string).to_s
-  end
-
-  def group_id
-    invoice.sequence_number.split("-")[0]
   end
 
   def index

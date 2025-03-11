@@ -243,7 +243,7 @@ fr:
         old_password: "Ancien mot de passe"
         new_password: "Nouveau mot de passe"
         new_password_confirmation: "Confirmer le nouveau mot de passe"
-        meta_description: Page de changement de mot de passe Hitobito
+        meta_description: "Page de changement de mot de passe Hitobito"
       person:
         updated: "Ton mot de passe a été actualisé."
     mailer:
@@ -412,6 +412,9 @@ fr:
       email_check:
         next: Continuer
         enter_email: S'il te plaît, indique ton adresse e-mail pour t'inscrire à cet événement.
+    invitation_lists:
+      new:
+        event_search: Chercher un événement
     participation_lists:
       create:
         success:
@@ -463,6 +466,7 @@ fr:
       caption_signature_confirmation: L'inscription doit être confirmée par une deuxième signature.
       signature_confirmation_text_default: Autorité parentale (pour les mineurs)
     attachments:
+      public_attachments_hint: Les pièces jointes visibles globalement sont publiques, car l'événement permet des inscriptions externes.
       add: "ajouter"
     banner_open_invitation:
       explanation: Tu as été invité à cet évènement.
@@ -483,6 +487,8 @@ fr:
       explain_contact_attrs: Tu peux choisir les coordonnées requises pour l'inscription.
       caption_applications_cancelable: Les participants peuvent se désinscrire eux-mêmes.
       caption_display_booking_info: Le nombre d'inscrits et de places libres est visible pour tous sur la liste de cours.
+      caption_automatic_assignment: Les inscriptions sont automatiquement effectuées s'il reste des places disponibles.
+      caption_waiting_list: S'il n'y a plus de places disponibles, les nouvelles inscriptions sont automatiquement placées sur la liste d'attente nationale.
       caption_globally_visible: "%{model_name} est visible dans toute la base de données"
       label_notify_contact_on_participations: Notification
     form_tabs:
@@ -1594,7 +1600,6 @@ fr:
     role:
       title: Rôles
       prompt_role_selection: Quels rôles doivent être affichés?
-      prompt_role_duration: Sur la période (optionnel)
       prompt_role_duration_selection: Quelle période doit être prise en compte?
       prompt_role_duration_until: à
       include_archived: Inclure les rôles archivés

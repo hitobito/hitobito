@@ -242,7 +242,7 @@ en:
         old_password: "Old password"
         new_password: "New password"
         new_password_confirmation: "Confirm new password"
-        meta_description: Hitobito password change page
+        meta_description: "Hitobito password change page"
       person:
         updated: "Your password has been updated."
     mailer:
@@ -1313,7 +1313,6 @@ en:
     role:
       title: Roles
       prompt_role_selection: Which roles should be displayed?
-      prompt_role_duration: Period (optional)
       prompt_role_duration_selection: Which period should be considered?
       prompt_role_duration_until: until
     qualification:

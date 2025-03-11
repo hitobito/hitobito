@@ -1566,7 +1566,6 @@ it:
     role:
       title: Ruoli
       prompt_role_selection: Quali ruoli devono essere visualizzati?
-      prompt_role_duration: Nel periodo (opzionale)
       prompt_role_duration_selection: Quali periodi devono venir presi in considerazione?
       prompt_role_duration_until: A
       include_archived: Includi i ruoli archiviati

@@ -2,10 +2,13 @@
 
 class PeopleFiltersController < CrudController
   self.nesting = Group
+  attr_accessor :filter_criterion
 
   decorates :group
 
   skip_authorize_resource only: [:create]
+
+  before_action :set_filter_criteria, except: [:destroy]
 
   # load group before authorization
   prepend_before_action :parent
@@ -34,9 +37,24 @@ class PeopleFiltersController < CrudController
     super(location: people_list_path)
   end
 
+  def filter_criterion
+    compose_role_lists
+    possible_tags
+    @filter_criterion = params[:filter_criterion]
+    if @filter_criteria.include?(@filter_criterion.to_sym)
+      respond_to do |format|
+        format.turbo_stream { render 'create', status: :ok }
+      end
+    end
+  end
+
   private
 
   alias_method :group, :parent
+
+  def set_filter_criteria
+    @filter_criteria = [:tag, :role, :qualification, :attributes]
+  end
 
   def build_entry
     filter = super

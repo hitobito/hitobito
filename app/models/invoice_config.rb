@@ -21,7 +21,6 @@
 #  iban                             :string
 #  logo_position                    :string           default("disabled"), not null
 #  participant_number               :string
-#  participant_number_internal      :string
 #  payee                            :text
 #  payment_information              :text
 #  payment_slip                     :string           default("qr"), not null
@@ -40,7 +39,6 @@ class InvoiceConfig < ActiveRecord::Base
   include ValidatedEmail
 
   ACCOUNT_NUMBER_REGEX = /\A[0-9]{2}-[0-9]{2,20}-[0-9]\z/
-  PARTICIPANT_NUMBER_INTERNAL_REGEX = /\A[0-9]{6}\z/
   PAYMENT_SLIPS = %w[qr no_ps].freeze
   LOGO_MAX_DIMENSION = Settings.application.image_upload.max_dimension
 
@@ -57,8 +55,6 @@ class InvoiceConfig < ActiveRecord::Base
   has_many :payment_reminder_configs, dependent: :destroy
   has_many :payment_provider_configs, dependent: :destroy
   has_many :message_templates, dependent: :destroy, as: :templated
-
-  before_validation :nullify_participant_number_internal
 
   validates :group_id, uniqueness: true
   validates :payee, presence: true, on: :update
@@ -82,6 +78,8 @@ class InvoiceConfig < ActiveRecord::Base
   validate :correct_payee_qr_format, if: :qr?
 
   validates :sender_name, format: {without: Devise.email_regexp}
+
+  validates :reference_prefix, length: {minimum: 5, maximum: 7, allow_blank: true}
 
   accepts_nested_attributes_for :payment_reminder_configs, :payment_provider_configs
   accepts_nested_attributes_for :message_templates, allow_destroy: true
@@ -125,10 +123,6 @@ class InvoiceConfig < ActiveRecord::Base
     return if payee&.lines&.count(&:present?)&.== 3
 
     errors.add(:payee, :must_have_3_lines)
-  end
-
-  def nullify_participant_number_internal
-    self.participant_number_internal = nil
   end
 
   def logo_enabled?

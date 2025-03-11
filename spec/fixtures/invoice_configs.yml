@@ -19,7 +19,6 @@
 #  iban                             :string
 #  logo_position                    :string           default("disabled"), not null
 #  participant_number               :string
-#  participant_number_internal      :string
 #  payee                            :text
 #  payment_information              :text
 #  payment_slip                     :string           default("qr"), not null

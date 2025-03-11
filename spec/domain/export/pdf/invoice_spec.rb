@@ -518,19 +518,19 @@ describe Export::Pdf::Invoice do
     it "with ch_esr" do
       invoice.payment_slip = "ch_esr"
       expect(subject.positions).to eq [[323.58191, 44.53291]]
-      expect(subject.show_text.first).to eq "042>000000000000100000000000023+ 1>"
+      expect(subject.show_text.first).to eq "042>000083496356700000000000027+ 1>"
     end
 
     it "with ch_besr" do
       invoice.payment_slip = "ch_besr"
       expect(subject.positions).to eq [[323.58191, 44.53291]]
-      expect(subject.show_text.first).to eq "042>000000000000100000000000023+ 1>"
+      expect(subject.show_text.first).to eq "042>000083496356700000000000027+ 1>"
     end
 
     it "with ch_besr" do
       invoice.payment_slip = "ch_besr"
       expect(subject.positions).to eq [[323.58191, 44.53291]]
-      expect(subject.show_text.first).to eq "042>000000000000100000000000023+ 1>"
+      expect(subject.show_text.first).to eq "042>000083496356700000000000027+ 1>"
     end
 
     context "fixutre" do

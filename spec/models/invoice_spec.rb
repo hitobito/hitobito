@@ -16,7 +16,6 @@
 #  iban                        :string
 #  issued_at                   :date
 #  participant_number          :string
-#  participant_number_internal :string
 #  payee                       :text
 #  payment_information         :text
 #  payment_purpose             :text

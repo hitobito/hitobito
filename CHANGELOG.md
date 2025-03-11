@@ -3,6 +3,7 @@
 ## Version 2.4
 
 - Altes Adress-Feld wurde von Personen und Gruppen entfernt, neu gelten die strukturierten Adressfelder (#2226)
+- QR-Referenz kann in Rechnungeinstellungen erfasst werden, dieser gilt als Prefix für die Referenznummer auf dem Einzahlungsschein (#3032)
 
 ## Version 2.4
 

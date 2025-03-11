@@ -16,7 +16,6 @@
 #  iban                             :string
 #  logo_position                    :string           default("disabled"), not null
 #  participant_number               :string
-#  participant_number_internal      :string
 #  payee                            :text
 #  payment_information              :text
 #  payment_slip                     :string           default("qr"), not null
@@ -106,6 +105,18 @@ describe InvoiceConfig do
     invoice_config.update(account_number: "12-123-9")
 
     expect(invoice_config).to be_valid
+  end
+
+  it "validates reference_prefix to be a number" do
+    invoice_config.update(reference_prefix: "some string")
+
+    expect(invoice_config).not_to be_valid
+  end
+
+  it "validates reference_prefix to not be longer than 7 characters" do
+    invoice_config.update(reference_prefix: 12345678)
+
+    expect(invoice_config).not_to be_valid
   end
 
   describe "e-mail validation" do

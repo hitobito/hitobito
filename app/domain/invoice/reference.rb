@@ -20,18 +20,14 @@ class Invoice::Reference
   def create
     if qr_without_qr_iban?
       scor_reference
+    elsif @invoice.invoice_config&.reference_prefix.blank?
+      esr_number_cleaned
     else
-      formatted_reference_number
+      reference_with_config_prefix
     end
   end
 
-  def formatted_reference_number
-    esr_number_cleaned = @invoice.esr_number.delete(" ")
-
-    if @invoice.invoice_config&.reference_prefix.blank?
-      return esr_number_cleaned
-    end
-
+  def reference_with_config_prefix
     prefix = @invoice.invoice_config.reference_prefix.to_s.ljust(7, "0")
     esr_suffix = esr_number_cleaned[7..]
 
@@ -53,5 +49,9 @@ class Invoice::Reference
 
   def qr_id
     @invoice.iban.delete(" ")[4..8].to_i
+  end
+
+  def esr_number_cleaned
+    @esr_number_cleaned ||= @invoice.esr_number.delete(" ")
   end
 end

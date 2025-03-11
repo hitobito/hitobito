@@ -12,25 +12,32 @@
 
   = render 'range', f: f
 
-  .accordion.mb-3
-    = render(layout: 'filter', locals: { type: :role }) do
-      = render 'role', f: f
+  - if action_name == 'edit'
+    .accordion.mb-3
+      = render(layout: 'filter', locals: { type: :role }) do
+        = render 'role', f: f
 
-    - if @qualification_kinds.present?
-      = render(layout: 'filter', locals: { type: :qualification }) do
-        = render 'qualification', f: f
+      - if @qualification_kinds.present?
+        = render(layout: 'filter', locals: { type: :qualification }) do
+          = render 'qualification', f: f
 
-    = render(layout: 'filter', locals: { type: :attributes }) do
-      = render 'attributes', f: f
+      = render(layout: 'filter', locals: { type: :attributes }) do
+        = render 'attributes', f: f
 
-    - FeatureGate.if('person_language') do
-      = render(layout: 'filter', locals: { type: :language }) do
-        = render 'language', f: f
+      - FeatureGate.if('person_language') do
+        = render(layout: 'filter', locals: { type: :language }) do
+          = render 'language', f: f
 
-    = render(layout: 'filter', locals: { type: :tag }) do
-      .label-columns
-        = render 'tag', f: f
-        = render 'tag_absence', f: f
+      = render(layout: 'filter', locals: { type: :tag }) do
+        .label-columns
+          = render 'tag', f: f
+          = render 'tag_absence', f: f
+
+  - if action_name == 'new'
+    %br
+    %h3.ml-3 Um eine Filterkriterium auszuwählen, bitte klicke auf den Hinzufüge-Button
+    %br
+    %div#overview
 
   - if can?(:create, entry)
     %label.required=PeopleFilter.human_attribute_name(:name)

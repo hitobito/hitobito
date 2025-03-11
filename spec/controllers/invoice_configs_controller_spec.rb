@@ -128,9 +128,9 @@ describe InvoiceConfigsController do
 
     it "updates reference_prefix" do
       patch :update, params: {group_id: group.id, invoice_config: {
-        reference_prefix: 1234
+        reference_prefix: 123456
       }}
-      expect(group.invoice_config.reload.reference_prefix).to eq 1234
+      expect(group.invoice_config.reload.reference_prefix).to eq 123456
     end
   end
 end

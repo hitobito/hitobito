@@ -34,10 +34,16 @@
           = render 'tag_absence', f: f
 
   - if action_name == 'new'
-    %br
-    %h3.ml-3 Um eine Filterkriterium auszuwählen, bitte klicke auf den Hinzufüge-Button
-    %br
-    %div#overview
+    %div.mt-3.mb-3.ml-3#overview
+      %h3 Um eine Filterkriterium auszuwählen, bitte klicke auf den Hinzufüge-Button
+      %div.dropdown
+        %button.btn.dropdown-toggle{ type: 'button',  "data-bs-toggle": "dropdown", "aria-expanded": "false"}
+          %i.fa.fa-plus
+        %ul.dropdown-menu
+          = require 'pry'; binding.pry
+          = @filter_criteria.each do |filter_criterion|
+            %li.dropdown-item
+              = t("people_filters.#{filter_criterion}.title")
 
   - if can?(:create, entry)
     %label.required=PeopleFilter.human_attribute_name(:name)

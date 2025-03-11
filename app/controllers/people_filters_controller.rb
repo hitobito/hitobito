@@ -7,6 +7,8 @@ class PeopleFiltersController < CrudController
 
   skip_authorize_resource only: [:create]
 
+  before_action :set_filter_criteria, except: [:destroy]
+
   # load group before authorization
   prepend_before_action :parent
 
@@ -37,6 +39,10 @@ class PeopleFiltersController < CrudController
   private
 
   alias_method :group, :parent
+
+  def set_filter_criteria
+    @filter_criteria = [:tag, :role, :qualification, :attributes]
+  end
 
   def build_entry
     filter = super

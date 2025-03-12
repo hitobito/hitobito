@@ -36,6 +36,15 @@ class PeopleFiltersController < CrudController
     super(location: people_list_path)
   end
 
+  def filter_criterion
+    compose_role_lists
+    possible_tags
+    filter_criterion = params[:filter_criterion]
+    if @filter_criteria.include?(filter_criterion.to_sym)
+      render partial: "#{filter_criterion}"
+    end
+  end
+
   private
 
   alias_method :group, :parent

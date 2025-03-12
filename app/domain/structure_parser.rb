@@ -9,12 +9,13 @@ require "English"
 require "pathname"
 require "yaml"
 require "active_support/inflector"
+require "set" # rubocop:disable Lint/RedundantRequireStatement
 
 # parses a structure as output by rake app:hitobito:roles
 class StructureParser
-  attr_reader :result
+  attr_reader :result, :errors
 
-  def initialize(structure, common_indent: 4, shiftwidth: 2, list_marker: "*")
+  def initialize(structure, common_indent: 4, shiftwidth: 2, list_marker: "*", allowed_permissions: [])
     # data
     @structure = structure
 
@@ -27,14 +28,31 @@ class StructureParser
     @current_layer = nil
     @current_group = nil
     @result = {}
+    @permissions = Set.new
+    @allowed_permissions = Set.new(allowed_permissions)
+    @errors = []
+  end
+
+  def inspect
+    <<~MSG
+      <StructureParser
+       common_indent: #{@common_indent.inspect} (#{@common_indent.size} Spaces)
+       shiftwidth: #{@shiftwidth.inspect} (#{@shiftwidth.size} Spaces)
+       list_marker: #{@list_marker.inspect}
+       allowed_permissions: #{@allowed_permissions}
+       structure:
+      #{@structure}
+      >
+    MSG
   end
 
   module Structure
     class Group
-      attr_reader :name, :roles
+      attr_reader :name, :layer, :roles
 
-      def initialize(name)
+      def initialize(name, layer = nil)
         @name = name
+        @layer = layer
 
         @roles = []
       end
@@ -48,7 +66,7 @@ class StructureParser
       end
 
       def to_group
-        StructureParser::Group.new(@name)
+        StructureParser::Group.new(@name, @layer)
       end
     end
 
@@ -70,8 +88,9 @@ class StructureParser
     attr_reader :children, :roles
     attr_accessor :layer_group, :layer_name, :name
 
-    def initialize(name)
+    def initialize(name, layer = nil)
       @name = name
+      @layer = layer
 
       @layer_group = false
       @children = []
@@ -88,16 +107,21 @@ class StructureParser
     end
 
     def class_name
-      @class_name ||= @name.encode(
-        "ASCII", "UTF-8",
-        fallback: {"ä" => "ae", "ü" => "ue", "ö" => "oe"}
-      )
+      @class_name ||= @name
+        .gsub(/\/.*$/, "")
+        .encode("ASCII", "UTF-8", fallback: {
+          "ä" => "ae",
+          "ü" => "ue",
+          "ö" => "oe"
+        })
     end
 
     def child_class_names
-      @children.map do |child|
-        class_name + child.class_name
-      end
+      @children.map(&:full_class_name)
+    end
+
+    def full_class_name
+      [@layer&.name, class_name].compact.join
     end
 
     def role_class_names
@@ -107,14 +131,24 @@ class StructureParser
     def yaml_key
       @yaml_key ||= ActiveSupport::Inflector.underscore(class_name)
     end
+
+    def filename
+      @filename ||= ActiveSupport::Inflector.underscore(
+        ActiveSupport::Inflector.demodulize(class_name)
+      ) + ".rb"
+    end
   end
 
   class Role
     attr_accessor :group, :name
 
-    def initialize(name, permissions)
+    def initialize(name, permissions, class_name)
       @name = name
       @permissions = parse_permissions(permissions)
+
+      if class_name.present?
+        @class_name = ActiveSupport::Inflector.demodulize(class_name)
+      end
     end
 
     def parse_permissions(permissions)
@@ -123,6 +157,10 @@ class StructureParser
 
     def permissions
       @permissions.map(&:inspect).join(", ")
+    end
+
+    def permissions?
+      @permissions.any?
     end
 
     def inspect
@@ -136,8 +174,11 @@ class StructureParser
     end
 
     def class_name
-      @class_name ||= @name.delete_suffix("/-in")
+      @class_name ||= @name
+        .delete_suffix("/-in")
         .delete_suffix("/-r")
+        .delete_suffix(":in")
+        .gsub(/[-\s&]/, "")
         .encode("ASCII", "UTF-8", fallback: {
           "ä" => "ae",
           "ü" => "ue",
@@ -154,6 +195,20 @@ class StructureParser
     end
   end
 
+  def valid?
+    if @result.empty?
+      @errors << "Nothing has been detected. Empty or malformed input file?"
+    end
+    if @permissions.empty?
+      @errors << "No permissions have been granted. This is impractical."
+    end
+    unless @permissions.subset?(@allowed_permissions)
+      @errors << "Unknown permissions detected. Typos?"
+    end
+
+    @errors.empty?
+  end
+
   def parse
     first_pass
     second_pass
@@ -162,26 +217,32 @@ class StructureParser
   def first_pass # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/AbcSize
     @structure.lines.each do |line|
       case line.delete_prefix(@common_indent).chomp
-      when /^#{Regexp.escape(@list_marker)} (.*)$/
+      when /^#{Regexp.escape(@list_marker)} (.*?)(\s+<\s+(.*))?$/ # layer
         name = Regexp.last_match(1)
+        # TODO: Currently, this only support ONE super-layer.
+        #       If there are more (comma-separated), this needs to be extended in this clause
+        super_layer = find_layer_by_name(Regexp.last_match(3))
         layer = Structure::Layer.new(name)
 
+        super_layer.children << layer unless super_layer.nil?
         @current_layer = layer
         @current_group = layer
         @result[layer] ||= {}
-      when /^#{@shiftwidth}#{Regexp.escape(@list_marker)} (.*)$/
+      when /^#{@shiftwidth}#{Regexp.escape(@list_marker)} (.*)$/ # group
         name = Regexp.last_match(1)
-        group = Structure::Group.new(name)
+        group = Structure::Group.new(name, @current_layer)
 
         @current_layer.children << group
         @current_group = group
         @result[@current_layer][group] ||= []
-      when /^#{@shiftwidth * 2}#{Regexp.escape(@list_marker)} (.*):\s+(\[.*\])$/
+      when /^#{@shiftwidth * 2}#{Regexp.escape(@list_marker)} (.*):\s+(\[.*\])(\s+--\s+\(?(.*)\)?)?$/ # role
         match = Regexp.last_match
-        role = Role.new(match[1], match[2])
+        role = Role.new(match[1], match[2], match[4])
 
         @current_group.roles << role
         @result[@current_layer][@current_group] << role
+      else
+        @errors << "Unparseable: #{line}"
       end
     end
   end
@@ -205,6 +266,10 @@ class StructureParser
         roles.each do |role|
           role.group = new_group
           new_group.roles << role
+
+          @permissions.merge(
+            role.permissions.split(",").map { _1.strip.delete_prefix(":").to_sym }
+          )
         end
 
         @result << new_group
@@ -213,7 +278,7 @@ class StructureParser
   end
 
   def output_groups
-    @result.map { |group| group_template(group) }
+    @result.map { |group| [group.filename, group_template(group)] }.to_h
   end
 
   def output_translations
@@ -233,11 +298,17 @@ class StructureParser
 
   private
 
+  def find_layer_by_name(name)
+    return nil if name.nil?
+
+    @result.keys.find { |layer| layer.name == name }
+  end
+
   def group_template(group)
     <<~CODE
       class Group::#{group.class_name} < ::Group
         #{"self.layer = true" if group.layer_group}
-        #{"children " if group.children.any?}#{group.child_class_names.join(",\n")}
+        #{"children " if group.children.any?}#{group.child_class_names.join(",\n    ")}
 
         ### ROLES
 
@@ -251,7 +322,7 @@ class StructureParser
   def role_template(role)
     <<-CODE
   class #{role.class_name} < ::Role
-    self.permissions = [#{role.permissions}]
+    #{"self.permissions = [#{role.permissions}]" if role.permissions?}
   end
     CODE
   end

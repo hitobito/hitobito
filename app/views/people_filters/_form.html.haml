@@ -40,9 +40,8 @@
         %button.btn.dropdown-toggle{ type: 'button',  "data-bs-toggle": "dropdown", "aria-expanded": "false"}
           %i.fa.fa-plus
         %ul.dropdown-menu
-          = require 'pry'; binding.pry
-          = @filter_criteria.each do |filter_criterion|
-            %li.dropdown-item
+          - @filter_criteria.each do |filter_criterion|
+            %li.dropdown-item{id: "dropdown_option_#{filter_criterion}"}
               = t("people_filters.#{filter_criterion}.title")
 
   - if can?(:create, entry)

@@ -823,6 +823,7 @@ it:
       payee_help: "Compare sulla polizza di versamento"
       beneficiary_help: "Compare sulla polizza di versamento"
       account_number_example: "Esempio: 01-162-5"
+      participant_number_internal_example: "Esempio: 999999"
       iban_example: "Esempio: CH93 0076 2011 6238 5295 7"
       variable_donation_appeal: "Appello per donazioni variabili"
       donation_calculation_year_amount_explanation: Numero di anni trascorsi che vengono considerati per il calcolo delle donazioni.
@@ -1536,6 +1537,10 @@ it:
         active: Solo le qualifiche attuali e valide
         reactivateable: Qualifiche valide e riattivabili
         all: Tutte le qualifiche mai assegnate
+      filters_role_kind:
+        active: il ruolo era attivo.
+        created: il ruolo è stato creato.
+        deleted: il ruolo è stato cancellato.
     attributes:
       title: Campi
       match: contiene
@@ -1561,6 +1566,7 @@ it:
     role:
       title: Ruoli
       prompt_role_selection: Quali ruoli devono essere visualizzati?
+      prompt_role_duration_selection: Quali periodi devono venir presi in considerazione?
       prompt_role_duration_until: A
       include_archived: Includi i ruoli archiviati
     qualification:

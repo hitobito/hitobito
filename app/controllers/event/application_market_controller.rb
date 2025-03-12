@@ -18,6 +18,8 @@ class Event::ApplicationMarketController < ApplicationController
   end
 
   def add_participant
+    return render "maximum_participations_reached_error" if event.maximum_participants_reached?
+
     if assigner.createable?
       assigner_add_participant
     else

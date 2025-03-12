@@ -79,6 +79,25 @@ describe Event do
     end
 
     its(:participant_count) { should == 2 }
+
+    it "#maximum_participants_reached? is true when more participants than allowed" do
+      subject.update!(maximum_participants: 2)
+      expect(subject.maximum_participants_reached?).to be_truthy
+    end
+
+    it "#maximum_participants_reached? is true when exactly enough participants" do
+      subject.update!(maximum_participants: 4)
+      expect(subject.maximum_participants_reached?).to be_truthy
+    end
+
+    it "#maximum_participants_reached? is false when not enough participants" do
+      subject.update!(maximum_participants: 10)
+      expect(subject.maximum_participants_reached?).to be_falsey
+    end
+
+    it "#maximum_participants_reached? is false when maximum_participants is not defined" do
+      expect(subject.maximum_participants_reached?).to be_falsey
+    end
   end
 
   it "to_s returns default string name when no translation exists" do

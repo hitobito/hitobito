@@ -846,7 +846,6 @@ en:
           qr: QR invoice
           no_ps: None
         participant_number: Participant Nr
-        participant_number_internal: Participant Nr internal
         payment_reminder_configs: Reminder
         vat_number: VAT Nr
         donation_increase_percentage: Increase in %

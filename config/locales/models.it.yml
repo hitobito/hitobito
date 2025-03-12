@@ -1034,7 +1034,6 @@ it:
           qr: Fattura QR
           no_ps: Nessuno
         participant_number: Numero di partecipante
-        participant_number_internal: Numero interno del partecipante
         payment_reminder_configs: Solleciti
         remove_logo: Rimuovere il logo attuale
         vat_number: Numero IVA

@@ -14,21 +14,21 @@
 
   - if action_name == 'edit'
     .accordion.mb-3
-      = render(layout: 'filter', locals: { type: :role }) do
+      = render(layout: 'layouts/filter', locals: { type: :role }) do
         = render 'role', f: f
 
       - if @qualification_kinds.present?
-        = render(layout: 'filter', locals: { type: :qualification }) do
+        = render(layout: 'layouts/filter', locals: { type: :qualification }) do
           = render 'qualification', f: f
 
-      = render(layout: 'filter', locals: { type: :attributes }) do
+      = render(layout: 'layouts/filter', locals: { type: :attributes }) do
         = render 'attributes', f: f
 
       - FeatureGate.if('person_language') do
-        = render(layout: 'filter', locals: { type: :language }) do
+        = render(layout: 'layouts/filter', locals: { type: :language }) do
           = render 'language', f: f
 
-      = render(layout: 'filter', locals: { type: :tag }) do
+      = render(layout: 'layouts/filter', locals: { type: :tag }) do
         .label-columns
           = render 'tag', f: f
           = render 'tag_absence', f: f

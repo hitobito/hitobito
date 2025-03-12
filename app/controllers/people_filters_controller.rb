@@ -41,7 +41,7 @@ class PeopleFiltersController < CrudController
     possible_tags
     filter_criterion = params[:filter_criterion]
     if @filter_criteria.include?(filter_criterion.to_sym)
-      render partial: "#{filter_criterion}"
+      render layout: "filter", partial: "#{filter_criterion}", locals: {type: filter_criterion.to_sym}
     end
   end
 

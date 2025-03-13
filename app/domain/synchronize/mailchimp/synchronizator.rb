@@ -28,49 +28,26 @@ module Synchronize
       end
 
       def perform
-        create_segments
-        create_merge_fields
+        execute(:create_segments, missing_segments)
+        execute(:create_merge_fields, missing_merge_fields)
 
-        subscribe_members
-        unsubscribe_members
+        execute(:subscribe_members, missing_subscribers)
+        execute(:unsubscribe_members, obsolete_emails)
 
-        update_segments
-        update_members
+        execute(:update_segments, stale_segments)
+        execute(:update_members, changed_subscribers)
 
-        destroy_segments
+        execute(:delete_segments, obsolete_segment_ids)
+
         tag_cleaned_members
-
         update_forgotten_emails
       end
 
       private
 
-      def subscribe_members
-        result.track(:subscribe_members, client.subscribe_members(missing_subscribers))
-      end
-
-      def unsubscribe_members
-        result.track(:unsubscribe_obsolete_members, client.unsubscribe_members(obsolete_emails))
-      end
-
-      def update_segments
-        result.track(:update_segments, client.update_segments(stale_segments))
-      end
-
-      def update_members
-        result.track(:update_members, client.update_members(changed_subscribers))
-      end
-
-      def create_merge_fields
-        result.track(:create_merge_fields, client.create_merge_fields(missing_merge_fields))
-      end
-
-      def create_segments
-        result.track(:create_segments, client.create_segments(missing_segments))
-      end
-
-      def destroy_segments
-        result.track(:delete_segments, client.delete_segments(obsolete_segment_ids))
+      def execute(operation, data)
+        payload, response = client.send(operation, data)
+        result.track(operation, payload, response) if payload
       end
 
       def update_forgotten_emails
@@ -109,7 +86,7 @@ module Synchronize
         tags.collect do |tag, emails|
           tag_id = segments_by_tag_name.dig(tag, :id)
           remote_emails = remote_tags.fetch(tag, []).sort
-          local_emails = (emails - list.mailchimp_forgotten_emails).sort
+          local_emails = (emails - unsubscribed_members.pluck(:email_address) - list.mailchimp_forgotten_emails).sort
 
           SegmentUpdate.new(tag_id, local_emails, remote_emails, obsolete_emails).prepare
         end.compact.flatten(1)
@@ -147,6 +124,10 @@ module Synchronize
         return members if @default_tag.blank? || initial_default_tag_sync?
 
         members.select { |member| member[:tags].pluck(:name).include?(@default_tag) }
+      end
+
+      def unsubscribed_members
+        @unsubscribed_members ||= members.select { |m| m[:status] == "unsubscribed" }
       end
 
       def cleaned_members

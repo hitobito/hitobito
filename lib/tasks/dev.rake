@@ -19,6 +19,18 @@ namespace :dev do
       BASH
     end
 
+    desc "Obtain refresh token, wrap as follows to read into env: read access refresh id < <(echo $(rake .. | jq -r '.access_token, .refresh_token, .id_token'))"
+    task :refresh, [:application_id, :refresh_token, :populate_env] => [:environment] do |_, args|
+      app = Oauth::Application.find(args.fetch(:application_id))
+      sh <<~BASH
+          curl -s -H 'Accept: application/json' -X POST -d 'grant_type=authorization_code'  \
+          -d 'client_id=#{app.uid}' -d 'client_secret=#{app.secret}' \
+          -d 'scope=#{app.scopes}' \
+          -d "grant_type=refresh_token" -d 'refresh_token=#{args.fetch(:refresh_token)}' \
+        http://localhost:3000/oauth/token | jq .
+      BASH
+    end
+
     desc "Introspect oauth token"
     task :introspect, [:access_token, :token] do |_, args| # rubocop:disable Rails/RakeEnvironment
       access_token = args.fetch(:access_token)

@@ -34,7 +34,9 @@ class app.Datepicker
     lang_ch = lang + '-CH'
     options = $.extend({ onSelect: (d, i) -> self.track(this, d, i) },
 #      $.datepicker.regional[lang_ch] || $.datepicker.regional[lang],
+
       $.datepicker.regional[lang_ch] || $.datepicker.regional['de'],      
+
       minDate: minDate,
       maxDate: maxDate,
       changeMonth: true,

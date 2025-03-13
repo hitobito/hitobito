@@ -20,12 +20,15 @@ describe Synchronize::Mailchimp::Synchronizator do
   }
 
   def batch_result(total, finished, errored, operation_results = [])
-    {
-      total_operations: total,
-      finished_operations: finished,
-      errored_operations: errored,
-      operation_results: operation_results
-    }
+    [
+      {},
+      {
+        total_operations: total,
+        finished_operations: finished,
+        errored_operations: errored,
+        operation_results: operation_results
+      }
+    ]
   end
 
   def segments(names)

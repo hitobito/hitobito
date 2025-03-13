@@ -2,12 +2,10 @@
 
 ## Version 2.4
 
+- In der Rechnungsübersicht können neu alle Rechnungen gleichzeitig ausgewählt werden, auch wenn es mehr als die 50 angezeigten gibt (hitobito_sww#172)
 - Verbesserte Mailchimp Tag Synchronisierung (hitobito_sac_cas#1487)
 - Personefilter unterstützt das Filtern nach leeren Attributen (#3148)
 - PLZ's ausserhalb der Schweiz werden neu anhand des gewählten Landes validiert (hitobito_sac_cas#1488)
-
-## Version 2.4
-
 - JWT kann als OIDC Access Token konfiguriert werden (hitobito_sac_cas#1110)
 - Unterstützung vom login=prompt Parameter im OIDC Authorization Flow (hitobito_sac_cas#1075)
 - Bei Anlässen können mehrere Anhänge gleichzeitig hochgeladen werden (hitobito#3017)
@@ -16,6 +14,7 @@
 - Aufwendige Exports (Personen, Abos) werden sequenziell ausgeführt (hitobito_sac_cas#1354)
 - Die Rechnungseinstellungen bieten neu die Möglichkeit, den ursprünglichen Rechnungstext bei Mahnungen zu verstecken (hitobito_sww#174)
 - Der API Endpoint event_kind_categories enthält neu auch das Attribut `order` / Sortierschlüssel.
+- Email's können via Dropdown erneut an Teilnehmer versendet werden (hitobito_sac_cas#1571)
 
 ## Version 2.3
 

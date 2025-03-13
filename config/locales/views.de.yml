@@ -20,6 +20,7 @@ de:
     do_not_fill: Bitte dieses Feld nicht ausfüllen
     chosen_no_results: Keine Einträge gefunden
     selected: Ausgewählt
+    extended_select_all: Alle %{count} auswählen
     columns: Spalten
     start_on: ab %{date}
     not_allowed: "fehlende Berechtigung"
@@ -152,6 +153,10 @@ de:
 
   dropdown/event/participant_add:
     as: "als %{role}"
+
+  dropdown/event/participation/mail_dispatch:
+    title: E-Mail senden
+    confirmation: Bist du sicher, dass du diese Mails versenden willst?
 
   dropdown/group_edit:
     move: "Verschieben"
@@ -396,6 +401,9 @@ de:
         title: Anmeldung
       approvals:
         title: Freigabe
+      mail_dispatches:
+        create:
+          success: Es wurde eine E-Mail verschickt.
       specific_information: "Spezifische Angaben"
       application_answers: Anmeldeangaben
       admin_answers: Administrationsangaben

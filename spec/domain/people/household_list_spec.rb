@@ -10,11 +10,11 @@ require "spec_helper"
 describe People::HouseholdList do
   subject(:household_list) { described_class.new(scope, retain_order: true) }
 
-  let(:person1) { Fabricate(:person) }
-  let(:person2) { Fabricate(:person) }
-  let(:person3) { Fabricate(:person, household_key: "1234") }
-  let(:person4) { Fabricate(:person, household_key: "1234") }
-  let(:person5) { Fabricate(:person, household_key: 1111) }
+  let(:person1) { Fabricate(:person, first_name: "Maria", last_name: "Zoxy") }
+  let(:person2) { Fabricate(:person, first_name: "Larissa", last_name: "Roxy") }
+  let(:person3) { Fabricate(:person, first_name: "Tim", last_name: "Floxy", household_key: "1234") }
+  let(:person4) { Fabricate(:person, first_name: "Ash", last_name: "Toxy", household_key: "1234") }
+  let(:person5) { Fabricate(:person, first_name: "Max", last_name: "Noxy", household_key: 1111) }
   let(:scope) { Person.where(id: [person1, person2, person3, person4, person5]) }
 
   describe "#people_without_household_in_batches" do

@@ -96,6 +96,7 @@ module Hitobito
       ActiveSupport::TimeWithZone,
       ActiveSupport::TimeZone,
       ActionController::Parameters,
+      BigDecimal
     ]
 
     config.middleware.insert_before Rack::ETag, Rack::Deflater

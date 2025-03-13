@@ -1,7 +1,14 @@
-.d-none
-  .multiselect
-    .count
-    = ti('selected')
+-#  Copyright (c) 2025, Schweizer Wanderwege. This file is part of
+-#  hitobito_sww and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito
+
+%template#multiselectActions
+  %th.multiselect(colspan="6")
+    %span
+      .count
+      = ti('selected')
+    = extended_all_checkbox(@mails)
     .actions
       = imap_mail_move_button :inbox
       = imap_mail_move_button :spam

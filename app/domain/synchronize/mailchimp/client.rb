@@ -191,7 +191,8 @@ module Synchronize
 
         if operations.present?
           batch_id = api.batches.create(body: {operations: operations}).body.fetch("id")
-          wait_for_finish(batch_id)
+          result = wait_for_finish(batch_id)
+          [operations, result]
         end
       end
 
@@ -212,7 +213,7 @@ module Synchronize
             log meta
             body = http_client.get(meta.delete("response_body_url")).body
             operation_results = JSON.parse(extract_tgz(body)).map do |op|
-              JSON.parse(op["response"]).slice("title", "detail", "status")
+              JSON.parse(op["response"]).slice("title", "detail", "status", "errors")
             end
             meta.merge("operation_results" => operation_results).deep_symbolize_keys
           end

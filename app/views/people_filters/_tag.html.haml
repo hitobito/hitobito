@@ -7,11 +7,12 @@
 - selected = filter ? filter.to_hash[:names] : []
 - options = options_from_collection_for_select(@possible_tags, :second, :first, selected)
 
-%p= t('.prompt_tag_selection')
-
-.shown
-  = select_tag('filters[tag][names][]',
-                options,
-                class: 'form-control tom-select',
-                multiple: true,
-                data: { chosen_no_results: t('global.chosen_no_results'), placeholder: t('.prompt_tag_placeholder') } )
+.d-flex.align-items-center.flex-row
+  .w-15.mr-5
+    %label= t('.prompt_tag_selection')
+  .shown.w-90
+    = select_tag('filters[tag][names][]',
+                  options,
+                  class: 'form-control tom-select w-100',
+                  multiple: true,
+                  data: { chosen_no_results: t('global.chosen_no_results'), placeholder: t('.prompt_tag_placeholder') } )

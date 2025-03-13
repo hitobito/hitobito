@@ -1573,7 +1573,7 @@ fr:
       one_of: La langue est %{languages}
     tag:
       title: Tags
-      prompt_tag_selection: Inclure les personnes qui contiennent au moins une des tags ci-dessous
+      prompt_tag_selection: Inclure
       prompt_tag_placeholder: Entrez les noms de tags souhaités
     tag_absence:
       prompt_tag_absence_selection: 'Exclure les personnes qui contiennent au moins une des tags ci-dessous '

@@ -13,25 +13,24 @@
   = render 'range', f: form
 
   - if action_name == 'edit'
-    .accordion.mb-3
-      = render(layout: 'layouts/filter', locals: { type: :role }) do
-        = render 'role', f: form
+    = render(layout: 'layouts/filter', locals: { type: :role }) do
+      = render 'role', f: form
 
-      - if @qualification_kinds.present?
-        = render(layout: 'layouts/filter', locals: { type: :qualification }) do
-          = render 'qualification', f: form
+    - if @qualification_kinds.present?
+      = render(layout: 'layouts/filter', locals: { type: :qualification }) do
+        = render 'qualification', f: form
 
-      = render(layout: 'layouts/filter', locals: { type: :attributes }) do
-        = render 'attributes', f: form
+    = render(layout: 'layouts/filter', locals: { type: :attributes }) do
+      = render 'attributes', f: form
 
-      - FeatureGate.if('person_language') do
-        = render(layout: 'layouts/filter', locals: { type: :language }) do
-          = render 'language', f: form
+    - FeatureGate.if('person_language') do
+      = render(layout: 'layouts/filter', locals: { type: :language }) do
+        = render 'language', f: form
 
-      = render(layout: 'layouts/filter', locals: { type: :tag }) do
-        .label-columns
-          = render 'tag', f: form
-          = render 'tag_absence', f: form
+    = render(layout: 'layouts/filter', locals: { type: :tag }) do
+      .label-columns
+        = render 'tag'
+        = render 'tag_absence'
 
   - if action_name == 'new'
     %div.mt-3.mb-3.ml-3#overview

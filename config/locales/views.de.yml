@@ -1836,7 +1836,7 @@ de:
 
     tag:
       title: Tags
-      prompt_tag_selection: Personen einbeziehen, die mindestens einen der untenstehenden Tags enthalten
+      prompt_tag_selection: Einschliessen
       prompt_tag_placeholder: Gewünschte Tag-Namen eingeben
 
     tag_absence:

@@ -1809,10 +1809,7 @@ de:
       title: Tags
       prompt_tag_selection: Einschliessen
       prompt_tag_placeholder: Gewünschte Tag-Namen eingeben
-
-    tag_absence:
-      prompt_tag_absence_selection: Personen ausschliessen, die mindestens einen der untenstehenden Tags enthalten
-      prompt_tag_absence_placeholder: Gewünschte Tag-Namen eingeben
+      prompt_tag_absence_selection: Ausschliessen
 
     new:
       title: Personen filtern

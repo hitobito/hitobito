@@ -1552,9 +1552,7 @@ it:
       title: Tags
       prompt_tag_selection: Includere
       prompt_tag_placeholder: Inserire i nomi dei tag desiderati
-    tag_absence:
-      prompt_tag_absence_selection: Escludere le persone che contengono almeno uno dei tag qui sotto
-      prompt_tag_absence_placeholder: Inserire i nomi dei tag desiderati
+      prompt_tag_absence_selection: Escludere
     new:
       title: Filtro per le persone
     range:

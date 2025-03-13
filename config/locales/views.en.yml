@@ -1288,9 +1288,7 @@ en:
       title: Tags
       prompt_tag_selection: Include
       prompt_tag_placeholder: Tag name
-    tag_absence:
-      prompt_tag_absence_selection: Exclude persons with at least one of these tags
-      prompt_tag_absence_placeholder: Tag name
+      prompt_tag_absence_selection: Exclude
     new:
       title: Filter persons
     range:

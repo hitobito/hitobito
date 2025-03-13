@@ -37,7 +37,7 @@ Sobald die Epics definiert sind, wird mit dem Kunden ein Termin vereinbart, in w
 
 Zuweilen kommt es vor, dass bei einem Issue eine grössere Diskussion entsteht über die beste Umsetzung, Fragen geklärt werden etc. Bei diesen Issues ist es jeweils sehr Aufwändig, die Entscheidungen nachzuvollziehen. In solchen Fällen sollen ein "Folge-Issue" erstellt werden, welches die Entscheidungen zusammenfasst und übersichtlich aufbereitet.
 
-Beim Refinement kann festgelegt werden, ob nach dem merge ein Review auf der Integration durchgeführt werden soll bevor das Issue dem Kunden übergeben wird. Dies soll in der ToDo Liste aufgeführt werden.
+Beim Refinement kann festgelegt werden, ob nach dem Merge ein Review auf der Integration durchgeführt werden soll bevor das Issue dem Kunden übergeben wird. Dies soll in der ToDo Liste aufgeführt werden.
 
 - [Definition of Ready](./definition_of_ready.md)
 - [Issue Template](https://github.com/hitobito/.github/blob/main/.github/ISSUE_TEMPLATE/feature.md)

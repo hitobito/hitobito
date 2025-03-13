@@ -41,8 +41,8 @@
           %i.fa.fa-plus
         %ul.dropdown-menu
           - @filter_criteria.each do |filter_criterion|
-            %li.dropdown-item{id: "dropdown_option_#{filter_criterion}"}
-              = t("people_filters.#{filter_criterion}.title")
+            = link_to t("people_filters.#{filter_criterion}.title"), "/groups/#{@group.id}/people_filters/#{filter_criterion}",
+            class: "dropdown-item", id: "dropdown_option_#{filter_criterion}"
 
   - if can?(:create, entry)
     %label.required=PeopleFilter.human_attribute_name(:name)

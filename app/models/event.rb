@@ -443,6 +443,12 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     Devise.secure_compare(token, shared_access_token)
   end
 
+  def maximum_participants_reached?
+    return false if maximum_participants.blank?
+
+    participant_count >= maximum_participants
+  end
+
   private
 
   def application_period_open?

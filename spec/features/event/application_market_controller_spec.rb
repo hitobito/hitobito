@@ -287,6 +287,22 @@ describe Event::ApplicationMarketController do
           expect(find("#applications").text).to eq(applications)
         end
       end
+
+      it "displays custom error alert when person from national waiting list did not accept J&S data sharing" do
+        event.update!(maximum_participants: 1)
+        sign_in
+        visit group_event_application_market_index_path(group_id: group.id, event_id: event.id)
+        click_button("Aktualisieren")
+        expect(page).to have_text(appl_prio_1.person.first_name)
+        find(".fa-arrow-left").click
+        expect(page).to have_text "Bestätigen ohne E-Mail"
+        click_on "Bestätigen ohne E-Mail"
+        sleep(3)
+        alert_text = page.driver.browser.switch_to.alert.text
+        expect(alert_text).to include(
+          "Die maximal erlaubte Teilnehmerzahl ist erreicht. Um weitere Anmeldungen zu bestätigen, muss die maximale Teilnehmerzahl erhöht werden."
+        )
+      end
     end
   end
 

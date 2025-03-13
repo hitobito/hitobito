@@ -70,15 +70,43 @@ describe Event do
     subject do
       Fabricate(Event::Role::Leader.name.to_sym,
         participation: Fabricate(:event_participation, event: event))
-      Fabricate(Event::Role::Participant.name.to_sym,
-        participation: Fabricate(:event_participation, event: event))
-      p = Fabricate(:event_participation, event: event)
-      Fabricate(Event::Role::Participant.name.to_sym, participation: p)
-      Fabricate(Event::Role::Participant.name.to_sym, participation: p, label: "Irgendwas")
+      3.times do
+        Fabricate(Event::Role::Participant.name.to_sym,
+          participation: Fabricate(:event_participation, event: event))
+      end
       event.reload
     end
 
-    its(:participant_count) { should == 2 }
+    its(:participant_count) { should == 3 }
+
+    it "#maximum_participants_reached? is true when more participants than allowed" do
+      subject.update!(maximum_participants: 2)
+      expect(subject.maximum_participants_reached?).to be_truthy
+    end
+
+    it "#maximum_participants_reached? is true when exactly enough participants" do
+      subject.update!(maximum_participants: 3)
+      expect(subject.maximum_participants_reached?).to be_truthy
+    end
+
+    it "#maximum_participants_reached? only checks for participant event roles" do
+      subject.update!(maximum_participants: 4)
+      expect(subject.maximum_participants_reached?).to be_falsey
+
+      Fabricate(Event::Role::Leader.name.to_sym,
+        participation: Fabricate(:event_participation, event: event))
+      event.reload
+      expect(subject.maximum_participants_reached?).to be_falsey
+    end
+
+    it "#maximum_participants_reached? is false when not enough participants" do
+      subject.update!(maximum_participants: 10)
+      expect(subject.maximum_participants_reached?).to be_falsey
+    end
+
+    it "#maximum_participants_reached? is false when maximum_participants is not defined" do
+      expect(subject.maximum_participants_reached?).to be_falsey
+    end
   end
 
   it "to_s returns default string name when no translation exists" do

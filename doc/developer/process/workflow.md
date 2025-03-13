@@ -37,6 +37,8 @@ Sobald die Epics definiert sind, wird mit dem Kunden ein Termin vereinbart, in w
 
 Zuweilen kommt es vor, dass bei einem Issue eine grössere Diskussion entsteht über die beste Umsetzung, Fragen geklärt werden etc. Bei diesen Issues ist es jeweils sehr Aufwändig, die Entscheidungen nachzuvollziehen. In solchen Fällen sollen ein "Folge-Issue" erstellt werden, welches die Entscheidungen zusammenfasst und übersichtlich aufbereitet.
 
+Beim Refinement kann festgelegt werden, ob nach dem Merge ein Review auf der Integration durchgeführt werden soll bevor das Issue dem Kunden übergeben wird. Dies soll in der ToDo Liste aufgeführt werden.
+
 - [Definition of Ready](./definition_of_ready.md)
 - [Issue Template](https://github.com/hitobito/.github/blob/main/.github/ISSUE_TEMPLATE/feature.md)
 - Lead: **Dev** mit Kundenkontakt, für Rückfragen: PO
@@ -56,9 +58,12 @@ Sobald das Feature vollständig umgesetzt ist, wird ein Pull Request erstellt, d
 - Outcome: **Pull Requests**
 - Spalte: **In Progress**
 
-## Review
+## Code-Review
 
-Implementierte Tickets werden von einem zweiten Dev reviewt. Wenn alles ok ist, merged diese:r das Ticket in den `master` und verschiebt es nach `Closed`. Falls noch Anpassungen nötig sind, wird das Ticket wieder dem ursprünglichen Dev zugewiesen und in den Status `In Progress` gesetzt.
+Implementierte Tickets werden von einem zweiten Dev reviewt. 
+
+- Falls noch Anpassungen nötig sind, wird das Ticket wieder dem ursprünglichen Dev zugewiesen und in den Status `In Progress` gesetzt.
+- Wenn alles ok ist, merged diese:r die dazugehörigen PR. Das Ticket wird vom Github Workflow automatisch in den Status `Review Integration` gesetzt. Sofern in der Ticket ToDo Liste nichts erwähnt ist, liegt es im Ermessen der mergenden Person, ob ein Review auf Integration angebracht ist. Andernfalls kann das Ticket direkt ins `Closed` verschoben werden.
 
 Falls der Pull Request nur einen Commit enthält, kann dieser über Rebase in den Master gemerged werden. Bei mehreren Commits wird ein Merge Commit bevorzugt. Falls die einzelnen Commits keine Ticket Referenz haben, muss diese zwingend im Merge Commit enthalten sein.
 
@@ -66,7 +71,13 @@ Falls der Pull Request nur einen Commit enthält, kann dieser über Rebase in de
 - Outcome: **Review**
 - Spalte: **Implemented**
 
-## Closing
+## Review Integration
+
+Für Tickets im Status `Review Integration` wurde beim Refinement oder beim Merge des PR entschieden, dass der Change auf der Integrationsumgebung getestet werden soll, before das Ticket dem Kunden übergeben wird.
+
+Es sollen alle Use Cases aus dem Ticket mit angemessenen Rollen getestet werden. Wenn das Review zufriedenstellend ausfällt, wird das Ticket in den Status `Closed` gesetzt, andernfalls wird das Ticket wieder geöffnet, dem ursprünglichen Dev zugewiesen und in den Status `In Progress` gesetzt. 
+
+## Closed
 
 Diese Tickets sind bereit für die Abnahme durch den Kunden. Der Abnahmeprozess ist je nach Kunde unterschiedlich.
 
@@ -74,7 +85,7 @@ Diese Tickets sind bereit für die Abnahme durch den Kunden. Der Abnahmeprozess 
 - Outcome: **Geschlossenes Issues**
 - Spalte: **Closed**
 
-## Release
+## Released
 
 Der produktive Release erfolgt in Absprache mit dem Kunden. Dies geschieht über den entsprechenden PO.
 

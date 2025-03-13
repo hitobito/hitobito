@@ -18,6 +18,8 @@ class Event::ApplicationMarketController < ApplicationController
   end
 
   def add_participant
+    return render "maximum_participations_reached_error" if event.maximum_participants_reached?
+
     if assigner.createable?
       assigner_add_participant
     else
@@ -104,7 +106,7 @@ class Event::ApplicationMarketController < ApplicationController
   end
 
   def assigner
-    @assigner ||= Event::ParticipantAssigner.new(event, participation, current_user)
+    @assigner ||= Event::ParticipantAssigner.new(event, participation, send_email?, current_user)
   end
 
   def event
@@ -126,5 +128,9 @@ class Event::ApplicationMarketController < ApplicationController
   def authorize
     not_found unless event.supports_applications?
     authorize!(:application_market, event)
+  end
+
+  def send_email?
+    true?(params[:send_email])
   end
 end

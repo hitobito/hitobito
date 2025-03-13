@@ -32,7 +32,7 @@
 #
 
 class InvoiceList < ActiveRecord::Base
-  serialize :invalid_recipient_ids, Array
+  serialize :invalid_recipient_ids, type: Array, coder: YAML
   belongs_to :group
   belongs_to :receiver, polymorphic: true
   belongs_to :creator, class_name: "Person"

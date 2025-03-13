@@ -60,10 +60,10 @@ describe PeopleController, js: true do
         sign_in_and_create_filter
 
         find("h4.filter-toggle", text: "Top Layer").click
-        expect(page).to have_css("#roles input:checked", count: 8)
+        expect(page).to have_css("#roles input[name='filters[role][role_type_ids][]']:checked", count: 8)
 
         find("h4.filter-toggle", text: "Top Layer").click
-        expect(page).to have_css("#roles input:checked", count: 0)
+        expect(page).to have_css("#roles input[name='filters[role][role_type_ids][]']:checked", count: 0)
       end
     end
 
@@ -72,10 +72,10 @@ describe PeopleController, js: true do
         sign_in_and_create_filter
 
         find("h5.filter-toggle", text: "Top Group").click
-        expect(page).to have_css("#roles input:checked", count: 7)
+        expect(page).to have_css("#roles input[name='filters[role][role_type_ids][]']:checked", count: 7)
 
         find("h5.filter-toggle", text: "Top Group").click
-        expect(page).to have_css("#roles input:checked", count: 0)
+        expect(page).to have_css("#roles input[name='filters[role][role_type_ids][]']:checked", count: 0)
       end
     end
 
@@ -151,7 +151,7 @@ describe PeopleController, js: true do
   context "attributes" do
     before do
       sign_in
-      visit group_people_path(group, range: "group")
+      visit group_people_path(group, range: "layer")
 
       click_link "Weitere Ansichten"
       click_link "Neuer Filter..."
@@ -159,7 +159,24 @@ describe PeopleController, js: true do
       click_link "Felder"
     end
 
-    it "it removes value field when selecting blank constraint" do
+    it "supports filtering by specific attribute on person" do
+      choose "In der aktuellen Ebene und allen darunter liegenden Ebenen und Gruppen"
+      first(:button, "Suchen").click
+      expect(page).to have_css "td", text: "Leader Top"
+      expect(page).to have_css "td", text: "Member Bottom"
+      click_link "Eigener Filter"
+      click_link "Neuer Filter..."
+      click_link "Felder"
+      select "Nachname"
+      option = select "ist genau"
+      value_id = option.send(:parent)["id"].gsub("constraint", "value")
+      fill_in(value_id, with: "Leader")
+      first(:button, "Suchen").click
+      expect(page).to have_css "td", text: "Leader Top"
+      expect(page).not_to have_css "td", text: "Member Bottom"
+    end
+
+    it "removes value field when selecting blank constraint" do
       find("#attribute_filter option", text: "Nachname").click
       find(".attribute_constraint_dropdown option", text: "ist leer").click
       expect(page).not_to have_css ".attribute_value_input"

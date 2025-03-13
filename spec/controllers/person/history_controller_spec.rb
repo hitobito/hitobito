@@ -27,8 +27,7 @@ describe Person::HistoryController do
           start_on: 10.days.from_now, end_on: 20.days.from_now)
         r6 = Fabricate(Group::BottomGroup::Member.name.to_sym,
           group: groups(:bottom_group_two_one), person: person,
-          start_on: 10.days.from_now)
-
+          start_on: 10.days.from_now, end_on: 15.days.from_now)
         r7 = Fabricate(Group::BottomGroup::Member.name.to_sym,
           group: groups(:bottom_group_two_one), person: person, start_on: 10.years.ago, end_on: 9.years.ago)
         r8 = Fabricate(Group::BottomGroup::Member.name.to_sym,
@@ -36,9 +35,9 @@ describe Person::HistoryController do
 
         get :index, params: {group_id: groups(:bottom_group_one_one).id, id: person.id}
 
-        expect(assigns(:roles)).to match_array([r1, r4, r3])
-        expect(assigns(:ended_or_archived_roles)).to match_array([r2, r7])
-        expect(assigns(:future_roles)).to match_array([r5, r6, r8])
+        expect(assigns(:roles)).to eq([r1, r4, r3])
+        expect(assigns(:ended_or_archived_roles)).to eq([r2, r7])
+        expect(assigns(:future_roles)).to eq([r8, r5, r6])
       end
     end
 

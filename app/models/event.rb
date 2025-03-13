@@ -195,8 +195,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     allow_destroy: true
 
   ### SERIALIZED ATTRIBUTES
-  serialize :required_contact_attrs, Array
-  serialize :hidden_contact_attrs, Array
+  serialize :required_contact_attrs, type: Array, coder: NilArrayCoder
+  serialize :hidden_contact_attrs, type: Array, coder: NilArrayCoder
 
   ### CLASS METHODS
 
@@ -206,10 +206,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
       subquery = joins(:dates, :translations)
         .select("events.*", "event_dates.start_at")
         .select(Event::Translation.column_names
-                                  .reject { |col|
-                  ["id", "event_id", "created_at", "updated_at"]
-                                  .include?(col)
-                }
+                                  .reject { |col| ["id", "event_id", "created_at", "updated_at"].include?(col) }
                                   .map { |col| "event_translations.#{col}" })
         .preload_all_dates
 
@@ -357,7 +354,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   delegate :participant_types, :find_role_type!, to: :singleton_class
 
   def to_s(_format = :default)
-    name
+    name || I18n.t("activerecord.attributes.event.no_name")
   end
 
   def label_detail
@@ -447,6 +444,12 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     return false if shared_access_token.nil? || token.nil?
 
     Devise.secure_compare(token, shared_access_token)
+  end
+
+  def maximum_participants_reached?
+    return false if maximum_participants.blank?
+
+    participant_count >= maximum_participants
   end
 
   private

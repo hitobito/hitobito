@@ -28,7 +28,7 @@ describe "event/participations/_actions_show.html.haml" do
   end
 
   context "last button" do
-    subject { Capybara::Node::Simple.new(rendered).all("a").last }
+    subject { Capybara::Node::Simple.new(raw(rendered)).all("a").last }
 
     context "last button per default is the change contact data button" do
       before { render }

@@ -21,7 +21,6 @@
 #  iban                        :string
 #  issued_at                   :date
 #  participant_number          :string
-#  participant_number_internal :string
 #  payee                       :text
 #  payment_information         :text
 #  payment_purpose             :text
@@ -72,6 +71,8 @@ class Invoice < ActiveRecord::Base
   DUE_SINCE = %w[one_day one_week one_month]
   # rubocop:enable Style/MutableConstant meant to be extended in wagons
 
+  QR_ID_RANGE = (30_000..31_999)
+
   belongs_to :group
   belongs_to :recipient, class_name: "Person"
   belongs_to :creator, class_name: "Person"
@@ -82,8 +83,8 @@ class Invoice < ActiveRecord::Base
   has_many :payment_reminders, dependent: :destroy
 
   before_validation :set_sequence_number, on: :create, if: :group
-  before_validation :set_esr_number, on: :create, if: :group
   before_validation :set_payment_attributes, on: :create, if: :group
+  before_validation :set_esr_number, on: :create, if: :group
   before_validation :set_reference_number, on: :create, if: :group
   before_validation :set_dates, on: :update
   before_validation :set_self_in_nested
@@ -259,6 +260,10 @@ class Invoice < ActiveRecord::Base
     @qrcode ||= Invoice::Qrcode.new(self)
   end
 
+  def qr_without_qr_iban?
+    iban && qr? && !QR_ID_RANGE.include?(qr_id)
+  end
+
   private
 
   # on index we join aggregated payments
@@ -285,7 +290,7 @@ class Invoice < ActiveRecord::Base
   def set_payment_attributes
     [:address, :account_number, :iban, :payment_slip,
       :beneficiary, :payee, :participant_number,
-      :participant_number_internal, :vat_number, :currency].each do |at|
+      :vat_number, :currency].each do |at|
       assign_attributes(at => invoice_config.send(at))
     end
   end
@@ -328,5 +333,9 @@ class Invoice < ActiveRecord::Base
 
   def round(decimal)
     (decimal / ROUND_TO).round * ROUND_TO
+  end
+
+  def qr_id
+    iban.delete(" ")[4..8].to_i
   end
 end

@@ -17,7 +17,6 @@ class DeliveryReportMailer < ApplicationMailer
     delivered_at,
     failed_recipients = nil
   )
-
     content = failed_recipients.present? ? CONTENT_BULK_MAIL_WITH_FAILED : CONTENT_BULK_MAIL_SUCCESS
     @envelope_sender = envelope_sender
     @mail_subject = mail_subject

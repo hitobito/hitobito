@@ -154,7 +154,7 @@ people:
   cleanup_cutoff_duration:
     regarding_current_sign_in_at: 1000 # months
     regarding_roles: 1000 # months
-    regarding_event_participations: 100 # months
+    regarding_event_participations: 120 # months
   inactivity_block:
     # durations must be specified in ISO_8601 format.
     # see https://en.wikipedia.org/wiki/ISO_8601#Durations
@@ -246,6 +246,7 @@ table_displays: true
 
 mailchimp:
   max_attempts: 25
+  batch_size: 250
   enabled: true
 
 addresses:
@@ -267,3 +268,6 @@ groups:
     enabled: true
   nextcloud:
     enabled: false
+
+hitobito_log:
+  recipient_emails:

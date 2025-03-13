@@ -14,8 +14,6 @@ DB_CLEANER_STRATEGY = :truncation
 
 ENV["RAILS_ENV"] = "test"
 ENV["RAILS_GROUPS"] = "assets"
-ENV["RAILS_STRUCTURED_ADDRESSES"] = "1"
-ENV["RAILS_ADDRESS_MIGRATION"] = "0"
 require File.expand_path("../config/environment", __dir__)
 require "rspec/rails"
 require "cancan/matchers"
@@ -66,7 +64,7 @@ RSpec::Matchers.define_negated_matcher :not_change, :change
 RSpec::Matchers.define_negated_matcher :not_have_enqueued_mail, :have_enqueued_mail
 
 RSpec.configure do |config|
-  config.fixture_path = Rails.root / "spec" / "fixtures"
+  config.fixture_paths = [Rails.root / "spec" / "fixtures"]
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false

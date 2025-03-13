@@ -33,7 +33,11 @@ class People::OneTimePassword
   end
 
   def secret
-    base = "#{base_secret}-#{totp_secret}"
+    # We previously built this secret using Hitobito::Application.config.secret_key_base.
+    # However before Rails 7.1 this method always returned nil which was not what we expected but what we used to generate all the secrets with.
+    # With Rails 7.1 the method correctly returned the secret_key_base which invalidated all secrets.
+    # So as a correction we remove the secret_key_base from the secret building process because the secrets have already been delivered to the TOTP apps of the user.
+    base = "-#{totp_secret}"
     sha = Digest::SHA512.hexdigest(base)
     base32_encode(sha)
   end
@@ -54,9 +58,5 @@ class People::OneTimePassword
 
   def base32_encode(str)
     ROTP::Base32.encode(str)
-  end
-
-  def base_secret
-    Hitobito::Application.config.secret_key_base
   end
 end

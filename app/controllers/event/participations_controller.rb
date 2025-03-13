@@ -22,10 +22,16 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
 
   self.sort_mappings = {last_name: "people.last_name",
                          first_name: "people.first_name",
+                         # for sorting roles we dont want to explicitly add a join_table statement when default_sort is configured to role
+                         # In case of default_sort being role, order_by_role is already called in the participation_filter (so the joined table is in the query already)
                          roles: {
-                           joins: [:roles, "INNER JOIN event_role_type_orders ON event_roles.type
-                                          = event_role_type_orders.name"],
-                           order: ["event_role_type_orders.order_weight", "people.last_name", "people.first_name"]
+                           joins: [:roles].tap do |joins|
+                             joins << "INNER JOIN event_role_type_orders ON event_roles.type = event_role_type_orders.name" unless Settings.people.default_sort == "role"
+                           end,
+                           order: [].tap do |order|
+                             order << "event_role_type_orders.order_weight" unless Settings.people.default_sort == "role"
+                             order.concat(["people.last_name", "people.first_name"])
+                           end
                          },
                          nickname: "people.nickname",
                          zip_code: "people.zip_code",
@@ -314,7 +320,9 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def send_confirmation_email
-    Event::ParticipationConfirmationJob.new(entry).enqueue! if current_user_interested_in_mail?
+    # send_email? is used when adding someone_else and checking the checkmark to send the confirmation mail
+    # while current_user_interested_in_mail? makes sure to send the confirmation if you're registering yourself for the event.
+    Event::ParticipationConfirmationJob.new(entry).enqueue! if send_email? || current_user_interested_in_mail?
   end
 
   def send_notification_email
@@ -376,5 +384,9 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   def event_participation_filter
     user_id = current_user.try(:id)
     Event::ParticipationFilter.new(event.id, user_id, params)
+  end
+
+  def send_email?
+    true?(params[:send_email])
   end
 end

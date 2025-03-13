@@ -97,6 +97,9 @@ fr:
   blocked:
     index:
       title: Login bloqué
+  changelog:
+    index:
+      meta_description: Page du journal des modifications de Hitobito
   contactable:
     address_or_email: "%{address} ou %{email}"
     fields:
@@ -196,6 +199,7 @@ fr:
       signed_out: "Tu es maintenant déconnecté(e)."
       new:
         sign_in: Inscription
+        meta_description: Page de connexion pour Hitobito
       form:
         login_identity: Adresse e-mail principale
         sign_in: Inscription
@@ -209,6 +213,7 @@ fr:
       no_token: "Vous ne pouvez accéder à cette page qu'en cliquant sur le lien indiqué dans un courriel de récupération de mot de passe. Si vous avez copié le lien dans un courriel de récupération de mot de passe, veuillez vous assurer que vous avez copié l'URL en entier."
       new:
         reset_password_button: "Réinitialiser le mot de passe"
+        meta_description: Page de réinitialisation du mot de passe Hitobito
     confirmations:
       new:
         resend_confirmation_instructions: "Confirmer l'adresse e-mail"
@@ -238,6 +243,7 @@ fr:
         old_password: "Ancien mot de passe"
         new_password: "Nouveau mot de passe"
         new_password_confirmation: "Confirmer le nouveau mot de passe"
+        meta_description: "Page de changement de mot de passe Hitobito"
       person:
         updated: "Ton mot de passe a été actualisé."
     mailer:
@@ -684,6 +690,8 @@ fr:
       count: Nombre
       distribution: Répartition
     self_registration:
+      show:
+        meta_description: Page d'auto-inscription pour Hitobito
       form:
         privacy_policy_caption: "J'accepte les conditions suivantes:"
         submit: Créer un compte
@@ -837,7 +845,6 @@ fr:
       payee_help: "apparaît sur le bulletin de versement"
       beneficiary_help: "apparaît sur le bulletin de versement"
       account_number_example: "exemple : 01-162-5"
-      participant_number_internal_example: "Exemple: 999999"
       iban_example: "exemple : CH93 2011 0076 6238 5295 7"
       variable_donation_appeal: "demande de dons variable"
       donation_calculation_year_amount_explanation: Nombre d'années précédentes prises en compte pour le calcul des dons.
@@ -1137,7 +1144,7 @@ fr:
   navigation:
     menu: "Menu"
     groups: "Groupes"
-    events: "Événements"
+    events: "Activités"
     courses: "Cours"
     admin: "Paramètres"
     admin/event_feed: "Intégrer le calendrier"
@@ -1211,6 +1218,9 @@ fr:
     new:
       upload_button: "télécharger"
       xml_file: "Fichier XML"
+  public_events:
+    show:
+      meta_description: Page d'inscription aux cours publics pour Hitobito
   qualifications:
     in_years: "%{years} ans"
     valid_until: "à %{date}"
@@ -1589,7 +1599,6 @@ fr:
     role:
       title: Rôles
       prompt_role_selection: Quels rôles doivent être affichés?
-      prompt_role_duration: Sur la période (optionnel)
       prompt_role_duration_selection: Quelle période doit être prise en compte?
       prompt_role_duration_until: à
       include_archived: Inclure les rôles archivés

@@ -64,7 +64,7 @@ class InvoiceItem < ActiveRecord::Base
   validates :unit_cost, presence: true, unless: :dynamic
   validates :count, presence: true, unless: :dynamic
 
-  serialize :dynamic_cost_parameters, Hash
+  serialize :dynamic_cost_parameters, type: Hash, coder: YAML
 
   class << self
     def all_types
@@ -87,10 +87,10 @@ class InvoiceItem < ActiveRecord::Base
   end
 
   def recalculate
-    self.cost = if dynamic
-      dynamic_cost
+    if dynamic
+      self[:cost] = dynamic_cost unless destroyed?
     else
-      (unit_cost && count) ? unit_cost * count : 0
+      self[:cost] = (unit_cost && count) ? unit_cost * count : 0 unless destroyed?
     end
 
     self

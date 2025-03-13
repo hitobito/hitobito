@@ -10,8 +10,8 @@ base: &generic
   checkout_timeout: <%= ENV['RAILS_DB_CHECKOUT_TIMEOUT'] || 5 %> # seconds
   encoding: "utf8"
 <% %w(host port username password socket).each do |option| %>
-  <% value = ENV["RAILS_DB_#{option.upcase}"] %>
-  <%= "#{option}: #{value}" if value.present? %>
+<% value = ENV["RAILS_DB_#{option.upcase}"] %>
+  <%= "#{option}: '#{value}'" if value.present? %>
 <% end %>
 <% variables = %w(lock_timeout statement_timeout).map { [_1, ENV["RAILS_DB_#{_1.upcase}"]] }.to_h.compact %>
 <% if variables.any? %>

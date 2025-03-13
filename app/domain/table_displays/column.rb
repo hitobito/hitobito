@@ -27,10 +27,20 @@ module TableDisplays
       []
     end
 
-    # Allows a column class to specify which database columns need to be fetched for calculating the
-    # value
+    # Override only if scope of model class does not include the required column in the query
+    # do not override for joined tables, see PublicColumn for a legitimate use case
     def required_model_attrs(_attr)
-      raise "implement in subclass"
+      []
+    end
+
+    # Used to add additional columns of the model to SELECT
+    def safe_required_model_attrs(column)
+      required_model_attrs(column).select { |attr| column_defined_on_model?(attr) }
+    end
+
+    def column_defined_on_model?(attr)
+      column, table = attr.to_s.split(".").reverse
+      model_class.column_names.include?(column) && (table.nil? || table == model_class.table_name)
     end
 
     def value_for(object, attr, &block)

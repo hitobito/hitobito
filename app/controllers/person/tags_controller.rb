@@ -60,7 +60,7 @@ class Person::TagsController < ApplicationController
 
     ActsAsTaggableOn::Tagging.find_or_create_by!(
       taggable: @person,
-      tag: ActsAsTaggableOn::Tag.find_or_create_by(name: name),
+      tag: ActsAsTaggableOn::Tag.find_or_create_by(name: name.rstrip.gsub(/\s*:\s*/, ":")),
       context: "tags"
     )
   end

@@ -21,7 +21,7 @@
 class MountedAttribute < ActiveRecord::Base
   belongs_to :entry, polymorphic: true
 
-  serialize :value
+  serialize :value, coder: YAML
 
   validates_by_schema
 

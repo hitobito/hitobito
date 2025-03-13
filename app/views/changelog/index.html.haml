@@ -3,7 +3,10 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
+- content_for(:head) do
+  %meta{name: "description", content: t(".meta_description")}
+
 - title 'Changelog'
 
 %div.changelog
-    != Commonmarker.to_html(ChangelogReader.changelog_markdown)
+  != Commonmarker.to_html(ChangelogReader.changelog_markdown)

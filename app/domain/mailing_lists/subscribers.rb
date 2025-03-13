@@ -32,6 +32,72 @@ class MailingLists::Subscribers
     filter_chain.filter(@people_scope.where(id: Person.find_by_sql(people_cte.to_sql)))
   end
 
+  def person_subscribers(condition)
+    condition.or("subscriptions.subscriber_type = ? AND subscriptions.excluded = ? " \
+      "AND subscriptions.subscriber_id = people.id ", Person.sti_name, false)
+  end
+
+  def group_subscribers(condition)
+    sql = <<~SQL.squish
+      subscriptions.subscriber_type = ? AND
+      #{Group.quoted_table_name}.lft >= sub_groups.lft AND
+      #{Group.quoted_table_name}.rgt <= sub_groups.rgt AND
+      roles.type = related_role_types.role_type AND
+      (roles.start_on IS NULL OR
+       roles.start_on <= '#{@time.to_date.to_fs(:db)}') AND
+      (roles.end_on IS NULL OR
+       roles.end_on >= '#{@time.to_date.to_fs(:db)}') AND
+      (roles.archived_at IS NULL OR
+       roles.archived_at > '#{@time.to_time.utc.to_fs(:db)}')
+    SQL
+
+    if subscriptions.groups.any?(&:subscription_tags)
+      sql += <<~SQL.squish
+        AND (subscription_tags.tag_id IS NULL OR
+        subscription_tags.tag_id = people_taggings.tag_id)
+      SQL
+    end
+
+    condition.or(sql, Group.sti_name)
+  end
+
+  def join_events?
+    opt_in? || subscriptions.events.exists?
+  end
+
+  def join_tags?
+    subscriptions.groups.any?(&:subscription_tags)
+  end
+
+  def join_groups?
+    opt_in? || subscriptions.groups.exists?
+  end
+
+  def event_subscribers(condition)
+    condition
+      .or("subscriptions.subscriber_type = ? AND " \
+            "subscriptions.subscriber_id = event_participations.event_id AND " \
+            "event_participations.active = ?", Event.sti_name, true)
+  end
+
+  def tag_excluded_person_ids
+    ActsAsTaggableOn::Tagging
+      .select(:taggable_id)
+      .where(taggable_type: Person.sti_name, tag_id: tag_excluded_subscription_ids)
+  end
+
+  def tag_excluded_subscription_ids
+    SubscriptionTag
+      .select(:tag_id).joins(:subscription)
+      .where(subscription_tags: {excluded: true}, subscriptions: {mailing_list_id: id})
+  end
+
+  def excluded_subscriber_ids
+    Subscription
+      .select(:subscriber_id)
+      .where(mailing_list_id: id, excluded: true, subscriber_type: Person.sti_name)
+  end
+
   private
 
   def scope
@@ -58,16 +124,19 @@ class MailingLists::Subscribers
     ctes += [Arel::Nodes::As.new(:including_person_subscriptions, including_person_subscriptions_cte)] if including_people_subscriptions?
     ctes += [Arel::Nodes::As.new(:excluding_person_subscriptions, excluding_person_subscriptions_cte)] if excluding_people_subscriptions?
 
+    # rubocop:disable Layout/MultilineMethodCallIndentation, Layout/IndentationWidth
     conditions = group_subscriptions[:role_type].not_eq(nil)
-      .then { |scope| event_subscriptions? ? scope.or(event_subscriptions[:person_id].not_eq(nil)) : scope }
-      .then { |scope| including_people_subscriptions? ? scope.or(including_person_subscriptions[:subscriber_id].not_eq(nil)) : scope }
-      .then { |scope| excluding_people_subscriptions? ? scope.and(excluding_person_subscriptions[:subscriber_id].eq(nil)) : scope }
-      .then do |scope|
-        next scope unless group_subscription_tags?
-        scope.and(group_subscriptions[:tag_id].eq(nil)
-            .or(group_subscriptions[:tag_excludes].eq(false).and(group_subscriptions[:tag_id].eq(taggings[:tag_id])))
-            .or(group_subscriptions[:tag_excludes].eq(true).and(taggings[:tag_id].eq(nil).or(taggings[:tag_id].not_eq(group_subscriptions[:tag_id])))))
-      end
+                                                .then { |scope| event_subscriptions? ? scope.or(event_subscriptions[:person_id].not_eq(nil)) : scope }
+                                                .then { |scope| including_people_subscriptions? ? scope.or(including_person_subscriptions[:subscriber_id].not_eq(nil)) : scope }
+                                                .then { |scope| excluding_people_subscriptions? ? scope.and(excluding_person_subscriptions[:subscriber_id].eq(nil)) : scope }
+                                                .then do |scope|
+                   next scope unless group_subscription_tags?
+
+                   scope.and(group_subscriptions[:tag_id].eq(nil)
+                                                         .or(group_subscriptions[:tag_excludes].eq(false).and(group_subscriptions[:tag_id].eq(taggings[:tag_id])))
+                                                         .or(group_subscriptions[:tag_excludes].eq(true).and(taggings[:tag_id].eq(nil).or(taggings[:tag_id].not_eq(group_subscriptions[:tag_id])))))
+    end
+    # rubocop:enable Layout/MultilineMethodCallIndentation, Layout/IndentationWidth
 
     Person
       .select(*columns)
@@ -76,11 +145,11 @@ class MailingLists::Subscribers
       .join(taggings, OuterJoin).on(taggings[:taggable_id].eq(people[:id]).and(taggings[:taggable_type].eq(Person.sti_name)))
       .join(group_subscriptions, Arel::Nodes::OuterJoin).on(
         groups[:lft].gteq(group_subscriptions[:lft])
-          .and(groups[:rgt].lteq(group_subscriptions[:rgt]))
-          .and(roles[:type].eq(group_subscriptions[:role_type]))
-          .and(roles[:start_on].eq(nil).or(roles[:start_on].lteq(now.to_date)))
-          .and(roles[:end_on].eq(nil).or(roles[:end_on].gteq(now.to_date)))
-          .and(roles[:archived_at]).eq(nil).or(roles[:archived_at].gteq(now))
+                    .and(groups[:rgt].lteq(group_subscriptions[:rgt]))
+                    .and(roles[:type].eq(group_subscriptions[:role_type]))
+                    .and(roles[:start_on].eq(nil).or(roles[:start_on].lteq(now.to_date)))
+                    .and(roles[:end_on].eq(nil).or(roles[:end_on].gteq(now.to_date)))
+                    .and(roles[:archived_at]).eq(nil).or(roles[:archived_at].gteq(now))
       )
       .then { |scope| event_subscriptions? ? scope.join(event_subscriptions, OuterJoin).on(event_subscriptions[:person_id].eq(people[:id])) : scope }
       .then { |scope| including_people_subscriptions? ? scope.join(including_person_subscriptions, OuterJoin).on(including_person_subscriptions[:subscriber_id].eq(people[:id])) : scope }

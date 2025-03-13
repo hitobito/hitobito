@@ -30,7 +30,7 @@ class Address < ActiveRecord::Base
 
   include FullTextSearchable
 
-  serialize :numbers, Array
+  serialize :numbers, type: Array, coder: YAML
 
   validates_by_schema
 

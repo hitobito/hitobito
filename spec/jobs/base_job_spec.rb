@@ -1,3 +1,10 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2012-2025, Jungwacht Blauring Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 require "spec_helper"
 
 class MaxRunTimeJob < BaseJob
@@ -19,6 +26,20 @@ describe BaseJob do
     expect(Airbrake).to receive(:notify).and_call_original
 
     run_job(BaseJob.new)
+  end
+
+  describe "paper_trailed" do
+    let(:person) { people(:top_leader) }
+    let(:job) { BaseJob.new }
+    let(:version) { person.versions.last }
+
+    it "logs mutation id and whodunit to version", versioning: true do
+      expect(job).to receive(:perform) { person.update!(first_name: "mutated") }
+      expect { run_job(job) }.to change { person.versions.count }.by(1)
+      expect(version.mutation_id).to match(/job-\d+/)
+      expect(version.whodunnit).to eq "base_job"
+      expect(version.whodunnit_type).to eq "BaseJob"
+    end
   end
 
   context "background_job_logging" do

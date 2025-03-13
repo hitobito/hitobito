@@ -35,8 +35,9 @@ describe Export::Tabular::People::TableDisplays do
     subject { people_list }
 
     its(:attributes) do
-      should == [:first_name, :last_name, :nickname, :company_name, :company, :email, :address,
-        :zip_code, :town, :country, :layer_group, :roles]
+      should == [:first_name, :last_name, :nickname, :company_name, :company, :email,
+        :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
+        :layer_group, :roles]
     end
 
     it "does not allow accessing unregistered columns" do
@@ -84,6 +85,13 @@ describe Export::Tabular::People::TableDisplays do
       expect(people_list.labels).not_to include("Zusätzliche Angaben")
     end
 
+    it "does set table on table_display columns" do
+      table_display.selected = [:"person.additional_information"]
+      expect { people_list }.to change { table_display.selected_group }.from(nil).to(group)
+      column = table_display.column_for(:additional_information)
+      expect(column.table).to eq OpenStruct.new(template: OpenStruct.new(parent: group))
+    end
+
     context :with_limited_select do
       let(:list) do
         Person.where(id: person.id)
@@ -128,8 +136,9 @@ describe Export::Tabular::People::TableDisplays do
     end
 
     its(:attributes) do
-      should == [:first_name, :last_name, :nickname, :company_name, :company, :email, :address,
-        :zip_code, :town, :country, :layer_group, :roles]
+      should == [:first_name, :last_name, :nickname, :company_name, :company, :email,
+        :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
+        :layer_group, :roles]
     end
 
     it "includes additional person attributes if configured" do

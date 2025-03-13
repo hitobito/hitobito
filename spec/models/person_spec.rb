@@ -11,7 +11,6 @@
 #
 #  id                                   :integer          not null, primary key
 #  additional_information               :text
-#  address                              :string(1024)
 #  address_care_of                      :string
 #  authentication_token                 :string
 #  birthday                             :date
@@ -79,7 +78,6 @@
 #  index_people_on_reset_password_token         (reset_password_token) UNIQUE
 #  index_people_on_self_registration_reason_id  (self_registration_reason_id)
 #  index_people_on_unlock_token                 (unlock_token) UNIQUE
-#  people_search_column_gin_idx                 (search_column) USING gin
 #
 # Foreign Keys
 #
@@ -885,23 +883,23 @@ describe Person do
       expect(results).to include(people(:bottom_member))
     end
 
-    it "lists no people with blank last_name or address" do
-      people(:bottom_member).update!(last_name: "", address: "")
+    it "lists no people with blank last_name or street" do
+      people(:bottom_member).update!(last_name: "", street: "")
 
       results = Person.with_address
 
       expect(results.count).to eq(0)
     end
 
-    it "lists no people with spaces for last_name or address" do
-      people(:bottom_member).update!(last_name: "        ", address: "     ")
+    it "lists no people with spaces for last_name or street" do
+      people(:bottom_member).update!(last_name: "        ", street: "     ")
 
       results = Person.with_address
 
       expect(results.count).to eq(0)
     end
 
-    it "lists people with company_name, address, zip_code and town" do
+    it "lists people with company_name, street, zip_code and town" do
       people(:bottom_member).update!(last_name: nil, company_name: "Puzzle ITC")
 
       results = Person.with_address
@@ -910,16 +908,16 @@ describe Person do
       expect(results).to include(people(:bottom_member))
     end
 
-    it "lists no people with blank company_name or address" do
-      people(:bottom_member).update!(last_name: nil, company_name: "", address: "")
+    it "lists no people with blank company_name or street" do
+      people(:bottom_member).update!(last_name: nil, company_name: "", street: "")
 
       results = Person.with_address
 
       expect(results.count).to eq(0)
     end
 
-    it "lists no people with spaces for company_name or address" do
-      people(:bottom_member).update!(last_name: nil, company_name: "        ", address: "   ")
+    it "lists no people with spaces for company_name or street" do
+      people(:bottom_member).update!(last_name: nil, company_name: "        ", street: "   ")
 
       results = Person.with_address
 

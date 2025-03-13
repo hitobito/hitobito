@@ -7,7 +7,7 @@
 
 require "spec_helper"
 describe "layouts/application.html.haml" do
-  subject { Capybara::Node::Simple.new(rendered) }
+  subject { Capybara::Node::Simple.new(raw(rendered)) }
 
   before do
     allow(controller).to receive(:current_person).and_return(person)

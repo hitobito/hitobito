@@ -16,7 +16,7 @@ describe "events/_attrs.html.haml" do
     allow(controller).to receive_messages(current_person: top_leader)
   end
 
-  let(:dom) { Capybara::Node::Simple.new(rendered) }
+  let(:dom) { Capybara::Node::Simple.new(raw(rendered)) }
 
   subject { dom }
 

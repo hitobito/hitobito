@@ -18,7 +18,7 @@ class Invoice::Reference
   end
 
   def create
-    if qr_without_qr_iban?
+    if @invoice.qr_without_qr_iban?
       scor_reference
     else
       @invoice.esr_number.delete(" ")
@@ -28,13 +28,5 @@ class Invoice::Reference
   def scor_reference
     value = @invoice.sequence_number.tr(Invoice::SEQUENCE_NR_SEPARATOR, SEPARATOR_SUBSTITUTE)
     Invoice::ScorReference.create(value)
-  end
-
-  def qr_without_qr_iban?
-    @invoice.iban && @invoice.qr? && !QR_ID_RANGE.include?(qr_id)
-  end
-
-  def qr_id
-    @invoice.iban.delete(" ")[4..8].to_i
   end
 end

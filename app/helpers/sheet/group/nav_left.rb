@@ -186,8 +186,7 @@ module Sheet
         else
           "<li>".html_safe
         end
-
-        sanitize(li_tag, tags: %w[li], attributes: %w[class])
+        sanitize(li_tag, tags: %w[li], attributes: %w[class]).gsub("</li>", "").html_safe
       end
     end
   end

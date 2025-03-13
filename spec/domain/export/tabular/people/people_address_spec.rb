@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -15,8 +15,9 @@ describe Export::Tabular::People::PeopleAddress do
   subject { people_list }
 
   its(:attributes) do
-    should == [:first_name, :last_name, :nickname, :company_name, :company, :email, :address,
-      :zip_code, :town, :country, :layer_group, :roles]
+    should == [:first_name, :last_name, :nickname, :company_name, :company, :email,
+      :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
+      :layer_group, :roles]
   end
 
   context "standard attributes" do
@@ -46,7 +47,7 @@ describe Export::Tabular::People::PeopleAddress do
       before { PhoneNumber.create!(contactable: person, label: "Privat", number: "0791234567") }
 
       it "includes phone number" do
-        expect(attribute_labels.keys).to have(13).items
+        expect(attribute_labels.keys).to have(16).items
         expect(attribute_labels).to have_key(:phone_number_privat)
         expect(attribute_labels[:phone_number_privat]).to eq "Telefonnummer Privat"
         expect(row(0)[attributes.index(:phone_number_privat)]).to eq "+41 79 123 45 67"
@@ -54,7 +55,7 @@ describe Export::Tabular::People::PeopleAddress do
 
       it "includes multiple phone numbers" do
         PhoneNumber.create!(contactable: person, label: "Foobar", number: "0791234568")
-        expect(attribute_labels.keys).to have(14).items
+        expect(attribute_labels.keys).to have(17).items
         expect(attribute_labels[:phone_number_foobar]).to eq "Telefonnummer Foobar"
         expect(row(0)[attributes.index(:phone_number_privat)]).to eq "+41 79 123 45 67"
         expect(row(0)[attributes.index(:phone_number_foobar)]).to eq "+41 79 123 45 68"
@@ -63,7 +64,7 @@ describe Export::Tabular::People::PeopleAddress do
       it "does not include phone number with blank label" do
         number = PhoneNumber.create!(contactable: person, label: "Foobar", number: "0791234568")
         number.update_columns(label: "")
-        expect(attribute_labels.keys).to have(13).items
+        expect(attribute_labels.keys).to have(16).items
         expect(attribute_labels).not_to have_key(:phone_number_)
       end
 
@@ -95,7 +96,7 @@ describe Export::Tabular::People::PeopleAddress do
       before { AdditionalEmail.create!(contactable: person, label: "Privat", email: "privat@example.com") }
 
       it "includes additional email" do
-        expect(attribute_labels.keys).to have(13).items
+        expect(attribute_labels.keys).to have(16).items
         expect(attribute_labels).to have_key(:additional_email_privat)
         expect(attribute_labels[:additional_email_privat]).to eq "Weitere E-Mail Privat"
         expect(row(0)[attributes.index(:additional_email_privat)]).to eq "privat@example.com"
@@ -103,7 +104,7 @@ describe Export::Tabular::People::PeopleAddress do
 
       it "includes multiple additional emails" do
         AdditionalEmail.create!(contactable: person, label: "Foobar", email: "foobar@example.com")
-        expect(attribute_labels.keys).to have(14).items
+        expect(attribute_labels.keys).to have(17).items
         expect(attribute_labels[:additional_email_foobar]).to eq "Weitere E-Mail Foobar"
         expect(row(0)[attributes.index(:additional_email_privat)]).to eq "privat@example.com"
         expect(row(0)[attributes.index(:additional_email_foobar)]).to eq "foobar@example.com"
@@ -112,7 +113,7 @@ describe Export::Tabular::People::PeopleAddress do
       it "does not include additional email with blank label" do
         email = AdditionalEmail.create!(contactable: person, label: "Foobar", email: "foobar@example.com")
         email.update_columns(label: "")
-        expect(attribute_labels.keys).to have(13).items
+        expect(attribute_labels.keys).to have(16).items
         expect(attribute_labels).not_to have_key(:additional_email_)
       end
 

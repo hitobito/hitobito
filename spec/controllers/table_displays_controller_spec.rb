@@ -14,7 +14,7 @@ describe TableDisplaysController do
   before do
     TableDisplay.table_display_columns = {}
     TableDisplay.multi_columns = {}
-    TableDisplay.register_column(Person, TableDisplays::PublicColumn, "names")
+    TableDisplay.register_column(Person, TableDisplays::PublicColumn, "first_name")
     sign_in(person)
   end
 
@@ -24,8 +24,8 @@ describe TableDisplaysController do
   end
 
   it "POST#create persists selected columns to table_display" do
-    post :create, params: {table_model_class: Person, selected: ["names"]}, format: :js
-    expect(person.table_display_for(Person).selected).to eq %w[names]
+    post :create, params: {table_model_class: Person, selected: ["first_name"]}, format: :js
+    expect(person.table_display_for(Person).selected).to eq %w[first_name]
   end
 
   it "POST#create supports persisting empty selection" do

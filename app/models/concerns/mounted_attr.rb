@@ -122,6 +122,15 @@ module MountedAttr
           end
         end
 
+        if config.attr_type == :decimal
+          validates config.attr_name, format:
+            {with: /\A\d{1,#{config.options[:precision] - config.options[:scale]}}(\.\d{1,#{config.options[:scale]}})?\z/,
+             message: I18n.t("errors.messages.invalid_decimal_format",
+               scale: config.options[:scale],
+               precision: config.options[:precision])},
+            allow_blank: true
+        end
+
         if config.enum.present?
           validates config.attr_name, inclusion: {in: config.enum}, allow_nil: config.null
         end

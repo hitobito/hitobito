@@ -9,9 +9,6 @@
 ENV["RAILS_ENV"] = "test"
 require File.expand_path("../../config/environment", __dir__)
 
-# load system under test
-require "structure_parser"
-
 describe StructureParser do
   let(:structure) do
     <<~TEXT

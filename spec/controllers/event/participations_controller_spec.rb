@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -48,10 +48,10 @@ describe Event::ParticipationsController do
       @leader, @participant = *create(Event::Role::Leader, course.participant_types.first)
 
       update_person(@participant, first_name: "Al", last_name: "Barns", nickname: "al",
-        town: "Eye", address: "Spring Road", zip_code: "3000",
+        town: "Eye", street: "Spring Road", zip_code: "3000",
         birthday: "21.10.1978")
       update_person(@leader, first_name: "Joe", last_name: "Smith", nickname: "js",
-        town: "Stoke", address: "Howard Street", zip_code: "8000",
+        town: "Stoke", street: "Howard Street", zip_code: "8000",
         birthday: "1.3.1992")
     end
 
@@ -407,7 +407,7 @@ describe Event::ParticipationsController do
 
       it "creates pending confirmation and notification job for course" do
         expect do
-          post :create, params: {group_id: group.id, event_id: course.id, event_participation: {}}
+          post :create, params: {group_id: group.id, event_id: course.id, event_participation: {}, send_email: true}
           expect(assigns(:participation)).to be_valid
         end.to change { Delayed::Job.count }.by(2)
 
@@ -423,7 +423,7 @@ describe Event::ParticipationsController do
         course.update!(waiting_list: true, maximum_participants: 1, participant_count: 1)
 
         expect do
-          post :create, params: {group_id: group.id, event_id: course.id, event_participation: {}}
+          post :create, params: {group_id: group.id, event_id: course.id, event_participation: {}, send_email: true}
           expect(assigns(:participation)).to be_valid
         end.to change { Delayed::Job.count }.by(2)
 
@@ -440,7 +440,7 @@ describe Event::ParticipationsController do
         course.update!(waiting_list: false, maximum_participants: 2, participant_count: 1, automatic_assignment: true)
 
         expect do
-          post :create, params: {group_id: group.id, event_id: course.id, event_participation: {}}
+          post :create, params: {group_id: group.id, event_id: course.id, event_participation: {}, send_email: true}
           expect(assigns(:participation)).to be_valid
         end.to change { Delayed::Job.count } # .by(2)
 
@@ -450,6 +450,20 @@ describe Event::ParticipationsController do
         expect(flash[:notice])
           .to include "Teilnahme von <i>#{user}</i> in <i>Eventus</i> wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an."
         expect(flash[:warning]).to be_nil
+      end
+
+      it "does not create pending confirmation job for course when send_email is not checked" do
+        allow(controller).to receive(:current_user_interested_in_mail?).and_return(false)
+        expect do
+          post :create, params: {group_id: group.id, event_id: course.id, event_participation: {}}
+        end.not_to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }
+      end
+
+      it "does create pending confirmation job if send_email is checked but user not interested in email" do
+        allow(controller).to receive(:current_user_interested_in_mail?).and_return(false)
+        expect do
+          post :create, params: {group_id: group.id, event_id: course.id, event_participation: {}, send_email: true}
+        end.to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }.by(1)
       end
 
       it "creates non-active participant role for course events" do

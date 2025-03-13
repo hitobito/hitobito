@@ -40,7 +40,7 @@ module RenderTableDisplays
     TableDisplay.active_columns_for(person, model_class).flat_map do |column|
       column_class = person.table_display_for(model_class).column_for(column)
 
-      column_class.required_model_attrs(column).map(&:to_s) unless column_class.exclude_attr?(selected_group)
+      column_class.safe_required_model_attrs(column).map(&:to_s) unless column_class.exclude_attr?(selected_group)
     end
   end
 

@@ -16,7 +16,7 @@
                   { target: 'new'})
 
 - if can?(:create, @event)
-  = Dropdown::Event::Participation::MailDispatch.new(self, @group, @event, entry)
+  = Dropdown::Event::Participation::MailDispatch.new(self, @event, @group, entry)
 
 - if can?(:edit, entry.person)
   = action_button(t('.change_contact_data_button'),

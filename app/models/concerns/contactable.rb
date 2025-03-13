@@ -19,24 +19,6 @@ module Contactable
     }
   ]
   # rubocop:enable Style/MutableConstant
-  if FeatureGate.disabled?("structured_addresses")
-    ACCESSIBLE_ATTRS.delete(:address_care_of)
-    ACCESSIBLE_ATTRS.delete(:street)
-    ACCESSIBLE_ATTRS.delete(:housenumber)
-    ACCESSIBLE_ATTRS.delete(:postbox)
-
-  end
-
-  if FeatureGate.disabled?("address_migration")
-    ACCESSIBLE_ATTRS << :address
-  end
-
-  if FeatureGate.enabled?("address_migration")
-    ACCESSIBLE_ATTRS.delete(:address_care_of)
-    ACCESSIBLE_ATTRS.delete(:street)
-    ACCESSIBLE_ATTRS.delete(:housenumber)
-    ACCESSIBLE_ATTRS.delete(:postbox)
-  end
 
   included do
     has_many :phone_numbers, as: :contactable, dependent: :destroy
@@ -58,21 +40,10 @@ module Contactable
   end
 
   def address
-    if FeatureGate.enabled?("structured_addresses") || FeatureGate.enabled?("address_migration")
-      parts = [street, housenumber].compact
+    parts = [street, housenumber].compact
+    return nil if parts.blank?
 
-      if parts.blank?
-        if FeatureGate.enabled?("address_migration")
-          return self[:address]
-        else
-          return nil
-        end
-      end
-
-      parts.join(" ")
-    else
-      self[:address]
-    end
+    parts.join(" ")
   end
 
   def country_label
@@ -92,7 +63,7 @@ module Contactable
   end
 
   def canton
-    (swiss? && location && location.canton) || nil
+    (swiss? && location&.canton) || nil
   end
 
   private

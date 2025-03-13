@@ -147,4 +147,21 @@ describe PeopleController, js: true do
       end
     end
   end
+
+  context "picture upload" do
+    let(:logo) { Rails.root.join("spec", "fixtures", "files", "images", "logo.png") }
+    let(:person) { people(:top_leader) }
+
+    it "does not throw error when uploading picute and selecting remove_picture at the same time" do
+      person.picture.attach(Rack::Test::UploadedFile.new(logo))
+      sign_in(person)
+      visit edit_group_person_path(group_id: groups(:top_group), id: person.id)
+
+      expect do
+        check "Aktuelles Foto entfernen"
+        all("button", text: "Speichern").first.click
+        attach_file("person_picture", Rails.root.join("spec", "fixtures", "files", "images", "logo.png"))
+      end.not_to raise_error
+    end
+  end
 end

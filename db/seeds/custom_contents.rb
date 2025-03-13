@@ -106,6 +106,9 @@ CustomContent.seed_once(
     placeholders_optional: nil },
   { key: FailureMailer::CONTENT_BULK_MAIL_TOO_BIG_NOTIFICATION,
     placeholders_required: 'subject',
+    placeholders_optional: nil },
+  { key: HitobitoLogMailer::ERROR,
+    placeholders_required: 'hitobito-log-url, error-count, time-period, error-log-table',
     placeholders_optional: nil }
 )
 
@@ -140,6 +143,7 @@ inactivity_block_warning_id = CustomContent.get(Person::InactivityBlockMailer::C
 bulk_mail_success_id = CustomContent.get(DeliveryReportMailer::CONTENT_BULK_MAIL_SUCCESS).id
 bulk_mail_with_failed_id = CustomContent.get(DeliveryReportMailer::CONTENT_BULK_MAIL_WITH_FAILED).id
 bulk_mail_failure_notification_id = CustomContent.get(FailureMailer::CONTENT_BULK_MAIL_TOO_BIG_NOTIFICATION).id
+hitobito_log_mail_error_id = CustomContent.get(HitobitoLogMailer::ERROR).id
 address_validation_checks_id = CustomContent.get(Address::ValidationChecksMailer::CONTENT_ADDRESS_VALIDATION_CHECKS).id
 assignment_assignee_notification_id = CustomContent.get(Assignment::AssigneeNotificationMailer::CONTENT_ASSIGNMENT_ASSIGNEE_NOTIFICATION).id
 self_registration_notification_id = CustomContent.get(Groups::SelfRegistrationNotificationMailer::CONTENT_SELF_REGISTRATION_NOTIFICATION).id
@@ -832,4 +836,15 @@ hoch und hinterlegen Sie die Datei als Link." },
     subject: 'La posta massiva è troppo grande',
     body: "L'e-mail '{subject}' supera la dimensione di 10 MB. Si prega di caricare il file su un cloud e salvare
 il file come link." },
+  {custom_content_id: hitobito_log_mail_error_id,
+    locale: 'de',
+    label: 'Hitobito Log: Täglicher Fehlerbericht',
+    subject: '[Hitobito] Täglicher Fehlerbericht',
+    body: "Guten Tag, <br><br>" \
+      "Dies ist die automatische Benachrichtigung über Fehler im <a href='{hitobito-log-url}'>Hitobito Log</a>." \
+      "Nachfolgend finden Sie die wichtigsten Informationen und eine Übersicht der ersten Fehler-Einträge der letzten 24 Stunden. <br>" \
+      "<strong>Anzahl Fehler</strong>: {error-count} <br>" \
+      "<strong>Zeitraum</strong>: {time-period} <br><br>" \
+      "<strong>Details zu den ersten 10 Fehler:</strong><br><br>" \
+      "{error-log-table}"}
    )

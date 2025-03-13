@@ -1082,7 +1082,6 @@ fr:
           qr: Facture QR
           no_ps: Aucun
         participant_number: Numéro du participant
-        participant_number_internal: Numéro du participant interne
         payment_reminder_configs: Rappels
         remove_logo: Supprimer le logo actuel
         vat_number: N° TVA

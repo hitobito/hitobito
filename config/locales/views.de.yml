@@ -108,6 +108,9 @@ de:
     index:
       title: Login gesperrt
 
+  changelog:
+    index:
+      meta_description: Hitobito Changelog Seite
   contactable:
     address_or_email: "%{address} oder %{email}"
     fields:
@@ -236,6 +239,7 @@ de:
       signed_out: "Du bist jetzt abgemeldet."
       new:
         sign_in: Anmelden
+        meta_description: Anmeldeseite für Hitobito
       form:
         login_identity: Haupt-E-Mail
         sign_in: Anmelden
@@ -251,6 +255,7 @@ de:
       no_token: "Du kannst diese Seite nicht aufrufen, wenn Du nicht von einem Passwort Zurücksetzen E-Mail kommst. Falls Du von einem solchen E-Mail kommst, bitte überprüfe, dass Du die vollständige URL verwendest."
       new:
         reset_password_button: "Passwort zurücksetzen"
+        meta_description: Hitobito Passwort zurücksetzen Seite
     confirmations:
       new:
         resend_confirmation_instructions: "E-Mail-Adresse bestätigen"
@@ -280,6 +285,7 @@ de:
         old_password: "Altes Passwort"
         new_password: "Neues Passwort"
         new_password_confirmation: "Neues Passwort bestätigen"
+        meta_description: "Hitobito Passwort ändern Seite"
       person:
         updated: "Dein Passwort wurde aktualisiert."
 
@@ -351,7 +357,16 @@ de:
         explanation: "Hier werden Anlässe von Gruppen, bei denen du Mitglied bist, sowie deren Übergruppen angezeigt. Andere Anlässe findest du bei der organisierenden Gruppe."
       apply_until: "bis %{date}"
     application_market:
+      application:
+        modal_title: Wollen Sie diese Anmeldung wirklich bestätigen?
+        confirm_and_send_mail: Bestätigen und E-Mail senden
+        confirm_and_send_no_mail: Bestätigen ohne E-Mail
+      participant:
+        modal_title: Wollen Sie diese Anmeldung wirklich bestätigen?
+        confirm_and_send_mail: Bestätigen und E-Mail senden
+        confirm_and_send_no_mail: Bestätigen ohne E-Mail
       already_assigned: "Diese Person ist bereits anderweitig zugeteilt oder bei diesem Anlass angemeldet."
+      maximum_participations_reached: Die maximal erlaubte Teilnehmerzahl ist erreicht. Um weitere Anmeldungen zu bestätigen, muss die maximale Teilnehmerzahl erhöht werden.
       participation:
         registered_at: "Anmeldung am %{datetime}"
         town: Wohnort
@@ -418,6 +433,7 @@ de:
         title_edit: "Anmeldung von %{person} bearbeiten"
         apply: "Anmelden"
         explain_required_checkmark: "* = Antwort obligatorisch"
+        send_email: E-Mail an Teilnehmer/in senden
       application_fields:
         alternative_dates_info: "Bitte gib weitere Kurse an, welche dir gehen würden."
         course_information: "Informationen zu den Kursen"
@@ -788,6 +804,8 @@ de:
       count: Anzahl
       distribution: Verteilung
     self_registration:
+      show:
+        meta_description: Selbstregistrierungsseite für Hitobito
       form:
         privacy_policy_caption: "Ich erkläre mich mit den folgenden Bestimmungen einverstanden:"
         submit: Registrieren
@@ -863,6 +881,12 @@ de:
     list:
       from: Von
       to: Bis
+    email_error_table:
+      created_at: Erstellt am
+      category: Kategorie
+      subject: Subjekt
+      message: Meldung
+      payload: Payload
 
   import/csv_parser:
     read_error: "Fehler beim Lesen von %{filename}: %{error}"
@@ -960,7 +984,6 @@ de:
       payee_help: "Erscheint auf dem Einzahlungsschein"
       beneficiary_help: "Erscheint auf dem Einzahlungsschein"
       account_number_example: "Beispiel: 01-162-5"
-      participant_number_internal_example: "Beispiel: 999999"
       iban_example: "Beispiel: CH93 0076 2011 6238 5295 7"
       variable_donation_appeal: "Variabler Spendenaufruf"
       donation_calculation_year_amount_explanation: Anzahl verganenen Jahre, die für die Spendenberechnung beachtet werden.
@@ -1341,6 +1364,9 @@ de:
     new:
       upload_button: "Hochladen"
       xml_file: "XML Datei"
+  public_events:
+    show:
+      meta_description: Öffentliche Kursanmeldeseite für Hitobito
 
   qualifications:
     in_years: "%{years} Jahre"
@@ -1770,10 +1796,11 @@ de:
         none: Keine jemals erteilte Qualifikation
         only_expired: Abgelaufene, aber nicht gültige oder reaktivierbare Qualifikationen
       filters_role_kind:
-        active: war die Rolle aktiv.
-        created: wurde die Rolle erstellt.
-        deleted: wurde die Rolle gelöscht.
-        inactive: war die Rolle inaktiv.
+        active_today: Aktuell aktive Rollen
+        active: aktive Rollen
+        created: erstellte Rollen
+        deleted: gelöschte Rollen
+        inactive: inaktive Rollen
 
     attributes:
       title: Felder
@@ -1807,9 +1834,10 @@ de:
     role:
       title: Rollen
       prompt_role_selection: Welche Rollen sollen angezeigt werden?
-      prompt_role_duration: Im Zeitraum (optional)
-      prompt_role_duration_selection: Welche Zeitraum sollen berücksichtigt werden?
+      prompt_role_duration_from: oder im Zeitraum von
+      prompt_role_duration_selection: Welcher Zeitraum soll berücksichtigt werden?
       prompt_role_duration_until: bis
+      or_duration: oder
       include_archived: Archivierte Rollen miteinbeziehen
 
     qualification:

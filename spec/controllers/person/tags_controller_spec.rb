@@ -76,6 +76,49 @@ describe Person::TagsController do
       expect(bottom_member.tags.count).to eq(0)
       is_expected.to redirect_to group_person_path(bottom_member.groups.first, bottom_member)
     end
+
+    it "trims whitespace characters at end of word to find matching tag" do
+      ActsAsTaggableOn::Tag.create!(name: "lorem")
+
+      post :create, params: {
+        group_id: bottom_member.groups.first.id,
+        person_id: bottom_member.id,
+        acts_as_taggable_on_tag: {name: "lorem "}
+      }
+
+      expect(bottom_member.tags.count).to eq(1)
+      expect(assigns(:tags).first.second.first.name).to eq("lorem")
+    end
+
+    it "tag with space in between is not the same as tag without spaces" do
+      ActsAsTaggableOn::Tagging.create!(
+        taggable: bottom_member,
+        tag: ActsAsTaggableOn::Tag.create!(name: "lorem"),
+        context: "tags"
+      )
+
+      post :create, params: {
+        group_id: bottom_member.groups.first.id,
+        person_id: bottom_member.id,
+        acts_as_taggable_on_tag: {name: "lor em"}
+      }
+
+      expect(bottom_member.tags.count).to eq(2)
+      expect(assigns(:tags).last.second.first.name).to eq("lor em")
+    end
+
+    it "trims whitespace around : to prevent error for nested tags" do
+      ActsAsTaggableOn::Tag.create!(name: "lorem:ipsum")
+
+      post :create, params: {
+        group_id: bottom_member.groups.first.id,
+        person_id: bottom_member.id,
+        acts_as_taggable_on_tag: {name: "lorem: ipsum"}
+      }
+
+      expect(bottom_member.tags.count).to eq(1)
+      expect(assigns(:tags).first.second.first.name).to eq("lorem:ipsum")
+    end
   end
 
   describe "DELETE #destroy" do

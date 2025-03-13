@@ -71,7 +71,7 @@ An example of a group type definition:
         self.kind = :external
       end
 
-      self.default_role = Member
+      self.standard_role = Member
       roles Leader, Member
     end
 
@@ -118,7 +118,7 @@ even if they have the general permission to see people from layer below them.
 
 A Roletype can additional be of a specific kind `self.kind = :external` which is used in certain views to differentiate between different kinds of role. The core defines the following kinds: `[:member, :passive, :external]`. But this has no influence on permissions.
 
-      self.default_role = Member
+      self.standard_role = Member
 
 After the declaration of the Roles, you can select one to be automatically selecte when you try assign a role to someone in this kind of group. Useful for groups, where you usually add contacts of the same kind (such as active members, or contacts.)
 

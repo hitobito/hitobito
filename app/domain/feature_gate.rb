@@ -101,19 +101,13 @@ class FeatureGate
   def person_language_enabled?
     # some rake tasks run without db present, so make sure
     # this doesn't fail in those cases
-    ActiveRecord::Base.connection.table_exists?("people") &&
-      !Person.has_attribute?(:correspondence_language)
+    connection = ActiveRecord::Base.connection
+    connection.table_exists?("people") && !connection.column_exists?(:people, :correspondence_language)
   rescue ActiveRecord::NoDatabaseError
     false
   end
 
   def self_registration_reason_enabled?
     SelfRegistrationReason.exists?
-  end
-
-  def structured_addresses_enabled? = true
-
-  def address_migration_enabled?
-    ENV["RAILS_ADDRESS_MIGRATION"].to_s == "1"
   end
 end

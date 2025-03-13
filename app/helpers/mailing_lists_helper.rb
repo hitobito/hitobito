@@ -31,9 +31,9 @@ module MailingListsHelper
 
   def button_toggle_subscription
     if entry.subscribed?(current_user)
-      button_unsubscribe
-    else
-      button_subscribe
+      button_unsubscribe(entry) if can?(:destroy, Subscription.new(mailing_list: entry, subscriber: current_user))
+    elsif can?(:create, Subscription.new(mailing_list: entry, subscriber: current_user))
+      button_subscribe(entry)
     end
   end
 
@@ -50,23 +50,21 @@ module MailingListsHelper
     end
   end
 
-  private
-
-  def button_unsubscribe
-    if can?(:destroy, Subscription.new(mailing_list: entry, subscriber: current_user))
-      action_button(t("mailing_list_decorator.unsubscribe"),
-        group_person_subscription_path(entry.group, current_user, id: entry.id),
-        :minus,
-        method: "delete")
-    end
+  def button_unsubscribe(list, person: current_user, icons: true)
+    label = t("mailing_list_decorator.unsubscribe")
+    action_button(label,
+      group_person_subscription_path(list.group, person, id: list.id),
+      icons ? :minus : nil,
+      method: "delete",
+      data: {disable_with: icons ? "#{icon(:minus)} #{label}" : label})
   end
 
-  def button_subscribe
-    if can?(:create, Subscription.new(mailing_list: entry, subscriber: current_user))
-      action_button(t("mailing_list_decorator.subscribe"),
-        group_person_subscriptions_path(entry.group, current_user, id: entry.id),
-        :plus,
-        method: "post")
-    end
+  def button_subscribe(list, person: current_user, icons: true)
+    label = t("mailing_list_decorator.subscribe")
+    action_button(label,
+      group_person_subscriptions_path(list.group, person, id: list.id),
+      icons ? :plus : nil,
+      method: "post",
+      data: {disable_with: icons ? "#{icon(:plus)} #{label}" : label})
   end
 end

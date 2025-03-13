@@ -18,6 +18,22 @@ describe Invoices::RecalculateController do
         get :new, xhr: true, params: {group_id: group.id}
         expect(response).to be_successful
       end
+
+      it "may recalculate when position is an invoice item" do
+        controller = described_class.new
+        controller.params = {group_id: invoices(:invoice).group.id,
+          _method: :patch,
+          invoice: {
+            invoice_items_attributes: {
+              "0" => {
+                name: "Mitgliederbeitrag",
+                id: invoice_items(:pens).id
+              }
+            }
+          }}
+
+        expect { controller.send(:entry) }.not_to raise_error
+      end
     end
 
     context "as person without finance role" do

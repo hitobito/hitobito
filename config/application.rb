@@ -8,10 +8,10 @@ require "active_record/railtie"
 require "active_storage/engine"
 require "action_controller/railtie"
 require "action_mailer/railtie"
-# require "action_mailbox/engine"
 require "action_text/engine"
 require "action_view/railtie"
-# require "action_cable/engine"
+require "action_cable/engine"
+# require "action_mailbox/engine"
 # require "rails/test_unit/railtie"
 
 # Require the gems listed in Gemfile, including any gems
@@ -29,10 +29,15 @@ module Hitobito
 
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.0
+    config.load_defaults 7.1
 
-    # TODO: Remove this config. It is just until we find an alternative to the globalized gem
-    config.active_record.legacy_connection_handling = true
+    # Changing this default means that all new cache entries added to the cache
+    # will have a different format that is not supported by Rails 7.0
+    # applications.
+    # INFO: New version means we have to restart `memcached` after deployment
+    config.active_support.cache_format_version = 7.1
+
+    config.active_record.raise_on_assign_to_attr_readonly = false
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
@@ -88,16 +93,21 @@ module Hitobito
     # Otherwise, we use Delayed Job directly with jobs inheriting from our `BaseJob`.
     config.active_job.queue_adapter = :delayed_job
 
-    config.active_record.yaml_column_permitted_classes = [
-      Symbol,
-      Date,
-      Time,
-      ActiveSupport::HashWithIndifferentAccess,
-      ActiveSupport::TimeWithZone,
-      ActiveSupport::TimeZone,
-      ActionController::Parameters,
-      BigDecimal
-    ]
+    config.after_initialize do
+      ActiveRecord.yaml_column_permitted_classes += [
+        Array,
+        Symbol,
+        Date,
+        Time,
+        ActiveSupport::HashWithIndifferentAccess,
+        ActiveSupport::TimeWithZone,
+        ActiveSupport::TimeZone,
+        ActionController::Parameters,
+        Person::Filter::Chain,
+        Person::Filter::Role,
+        BigDecimal
+      ]
+    end
 
     config.middleware.insert_before Rack::ETag, Rack::Deflater
 

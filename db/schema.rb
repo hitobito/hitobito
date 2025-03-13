@@ -10,7 +10,6 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
 ActiveRecord::Schema[7.0].define(version: 2025_02_21_165129) do
 
   # These are extensions that must be enabled in order to support this database
@@ -440,7 +439,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_21_165129) do
     t.string "short_name", limit: 31
     t.string "type", null: false
     t.string "email", collation: "case_insensitive_emails"
-    t.string "address", limit: 1024
     t.integer "zip_code"
     t.string "town"
     t.string "country"
@@ -537,13 +535,13 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_21_165129) do
     t.text "payee"
     t.string "participant_number"
     t.string "email", collation: "case_insensitive_emails"
-    t.string "participant_number_internal"
     t.string "vat_number"
     t.string "currency", default: "CHF", null: false
     t.integer "donation_calculation_year_amount"
     t.integer "donation_increase_percentage"
     t.string "sender_name"
     t.string "logo_position", default: "disabled", null: false
+    t.integer "reference_prefix"
     t.index ["group_id"], name: "index_invoice_configs_on_group_id"
   end
 
@@ -609,7 +607,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_21_165129) do
     t.text "payee"
     t.string "participant_number"
     t.integer "creator_id"
-    t.string "participant_number_internal"
     t.string "vat_number"
     t.string "currency", default: "CHF", null: false
     t.bigint "invoice_list_id"
@@ -885,7 +882,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_21_165129) do
     t.string "nickname"
     t.boolean "company", default: false, null: false
     t.string "email", collation: "case_insensitive_emails"
-    t.string "address", limit: 1024
     t.string "zip_code"
     t.string "town"
     t.string "country"
@@ -1185,8 +1181,10 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_21_165129) do
     t.integer "main_id"
     t.datetime "created_at", precision: nil
     t.string "whodunnit_type", default: "Person", null: false
+    t.string "mutation_id"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
     t.index ["main_id", "main_type"], name: "index_versions_on_main_id_and_main_type"
+    t.index ["mutation_id"], name: "index_versions_on_mutation_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

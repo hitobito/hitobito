@@ -22,8 +22,11 @@ export default class extends Controller {
   }
 
   checkIfEmpty() {
+    console.log("Verify")
     if (this.menuTarget.children.length === 0) {
-      this.element.remove();
+      this.element.style.visibility = "hidden";
+    } else {
+      this.element.style.visibility = "visible";
     }
   }
 }

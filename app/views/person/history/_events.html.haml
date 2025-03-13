@@ -23,3 +23,6 @@
             = t('person.history.index.training_days', count: days.to_i == days ? days.to_i : days)
       - else
         - t.col('') {}
+      - t.col(t('activerecord.attributes.event.hour')) do |p|
+        = p.event.event_hours
+      -# - t.col(t('Approved')) do |p|

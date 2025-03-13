@@ -14,7 +14,7 @@ describe HealthzController do
 
     context "when true mail can verify valid e-mail address" do
       it "has HTTP status 200" do
-        expect(Truemail).to receive(:valid?).with("hitobito@puzzle.ch").and_return(true)
+        expect(Truemail).to receive(:valid?).with("pushkar@vibha.org").and_return(true)
 
         get :show, params: {token: token}
 
@@ -23,13 +23,13 @@ describe HealthzController do
         expect(json).to eq("app_status" =>
                            {"code" => "ok",
                             "details" => {"truemail_working" => true,
-                                          "validated_email" => "hitobito@puzzle.ch"}})
+                                          "validated_email" => "pushkar@vibha.org"}})
       end
     end
 
     context "when true mail cannot verify valid e-mail address" do
       it "has HTTP status 503" do
-        expect(Truemail).to receive(:valid?).with("hitobito@puzzle.ch").and_return(false)
+        expect(Truemail).to receive(:valid?).with("pushkar@vibha.org").and_return(false)
 
         get :show, params: {token: token}
 
@@ -38,7 +38,7 @@ describe HealthzController do
         expect(json).to eq("app_status" =>
                            {"code" => "service_unavailable",
                             "details" => {"truemail_working" => false,
-                                          "validated_email" => "hitobito@puzzle.ch"}})
+                                          "validated_email" => "pushkar@vibha.org"}})
       end
     end
   end
@@ -48,7 +48,7 @@ describe HealthzController do
 
     context "when true mail can verify valid e-mail address" do
       it "has HTTP status 200" do
-        expect(Truemail).to receive(:valid?).with("hitobito@puzzle.ch").and_return(true)
+        expect(Truemail).to receive(:valid?).with("pushkar@vibha.org").and_return(true)
 
         get :show
 
@@ -62,7 +62,7 @@ describe HealthzController do
 
     context "when true mail cannot verify valid e-mail address" do
       it "has HTTP status 503" do
-        expect(Truemail).to receive(:valid?).with("hitobito@puzzle.ch").and_return(false)
+        expect(Truemail).to receive(:valid?).with("pushkar@vibha.org").and_return(false)
 
         get :show
 

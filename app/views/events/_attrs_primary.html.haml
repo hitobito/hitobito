@@ -10,6 +10,8 @@
       = labeled_attr(entry, :motto)
     - entry.used?(:cost) do
       = labeled_attr(entry, :cost)
+    - entry.used?(:event_hours) do
+      = labeled_attr(entry, :event_hours)
 
   %dl.dl-horizontal
     - entry.used?(:kind_id) do

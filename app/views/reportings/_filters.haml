@@ -1,0 +1,29 @@
+= form_with url: request.path, method: :get, local: true do |f|
+  .d-flex.gap-3
+    .form-group.flex-grow-1
+      %label Select Year:
+      = f.select :year, options_for_select(@years.map { |year| [year, year] }, params[:year]),
+        { include_blank: "All Years", class: "form-control", id: "year" }
+
+    .form-group.flex-grow-1
+      %label Action Center:
+      = f.select :role, options_for_select(@roles.map { |role| [role, role] }, params[:role]),
+        { include_blank: "All Action Centers", class: "form-control", id: "role" }
+
+    .form-group.flex-grow-1
+      %label Select User:
+      = f.select :user, options_for_select(@unique_user_names.map { |user| [user, user] }, params[:user]),
+        { include_blank: "All Users", class: "form-control", id: "user" }
+
+  = javascript_tag do
+    :plain
+      document.addEventListener("DOMContentLoaded", function() {
+        ['year', 'role', 'user'].forEach(function(id) {
+          document.getElementById(id).addEventListener("change", function() {
+            if (this.value === "") {
+              this.value = "all";
+            }
+            this.form.submit();
+          });
+        });
+      });

@@ -1,0 +1,41 @@
+%h1 YTD approved volunteer hours: #{@total_volunteer_hours}
+
+= form_with url: bulk_submit_for_event_hours_path, method: :post, remote: true, id: "bulk_submit_form" do |f|
+  = table(@combined_array, class: 'table table-striped table-fixed') do |t|
+    - t.col('Event/Custom', class: 'text-center align-middle') do |p|
+      = p[:name]
+    - t.col('Date', class: 'text-center align-middle') do |p|
+      = p[:formatted_date_range]
+    - t.col('Role', class: 'text-center align-middle') do |p|
+      = p[:group_names]
+    - t.col('Hours', class: 'text-center align-middle') do |p|
+      - if p[:submitted_status]                   
+        = p[:hours]
+      - else
+        = number_field_tag "hours[#{p[:hours_id]}]", p[:hours], step: 1, min: 0, max: 200, class: 'form-control'
+    - t.col('Submit', class: 'text-center align-middle') do |p|
+      - if !p[:submitted_status]
+        = check_box_tag "insert_selected[]", p[:hours_id], false, class: "insert-checkbox"
+    - t.col('Delete', class: 'text-center align-middle') do |p|
+      - if p[:submitted_status]
+        = check_box_tag "delete_selected[]", p[:hours_id], false, class: "delete-checkbox"
+    - t.col('Submitted', class: 'text-center align-middle') do |p|
+      - if p[:submitted_status]
+        = "Yes"
+      - else
+        = "No"
+    - t.col('Approved?', class: 'text-center align-middle') do |p|
+      - if p[:approved_status]
+        = "Yes"
+      - else
+        = "No"
+  
+  .d-flex.justify-content-between.mt-3
+    = link_to "Add Row", new_submission_hours_path, class: "btn btn-success"
+    = button_tag 'Submit', class: 'btn btn-primary'
+
+:css
+  th {
+    font-weight: bold;
+    font-size: 18px;
+  }

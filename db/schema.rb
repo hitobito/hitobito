@@ -10,13 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_12_09_093414) do
+ActiveRecord::Schema[7.0].define(version: 2025_02_21_165129) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  # Please do not delete this, the SQL schema does not know about this
-  # but the application and this schema needs it
-  execute "CREATE COLLATION IF NOT EXISTS case_insensitive_emails (provider = icu, deterministic = false, locale = 'und-u-ka-noignore-ks-level2');"
 
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
@@ -63,7 +59,9 @@ ActiveRecord::Schema.define(version: 2024_12_09_093414) do
     t.string "label"
     t.boolean "public", default: true, null: false
     t.boolean "mailings", default: true, null: false
+    t.virtual "search_column", type: :tsvector, as: "to_tsvector('simple'::regconfig, COALESCE((email)::text, ''::text))", stored: true
     t.index ["contactable_id", "contactable_type"], name: "index_additional_emails_on_contactable_id_and_contactable_type"
+    t.index ["search_column"], name: "additional_emails_search_column_gin_idx", using: :gin
   end
 
   create_table "addresses", force: :cascade do |t|
@@ -75,6 +73,8 @@ ActiveRecord::Schema.define(version: 2024_12_09_093414) do
     t.integer "zip_code", null: false
     t.string "state", limit: 128, null: false
     t.text "numbers"
+    t.virtual "search_column", type: :tsvector, as: "to_tsvector('simple'::regconfig, ((((((COALESCE((street_short)::text, ''::text) || ' '::text) || COALESCE((town)::text, ''::text)) || ' '::text) || COALESCE((zip_code)::text, ''::text)) || ' '::text) || COALESCE(numbers, ''::text)))", stored: true
+    t.index ["search_column"], name: "addresses_search_column_gin_idx", using: :gin
     t.index ["zip_code", "street_short"], name: "index_addresses_on_zip_code_and_street_short"
   end
 
@@ -346,8 +346,10 @@ ActiveRecord::Schema.define(version: 2024_12_09_093414) do
     t.text "description"
     t.text "application_conditions"
     t.string "signature_confirmation_text"
+    t.virtual "search_column", type: :tsvector, as: "to_tsvector('simple'::regconfig, COALESCE((name)::text, ''::text))", stored: true
     t.index ["event_id"], name: "index_event_translations_on_event_id"
     t.index ["locale"], name: "index_event_translations_on_locale"
+    t.index ["search_column"], name: "event_translations_search_column_gin_idx", using: :gin
   end
 
   create_table "events", id: :serial, force: :cascade do |t|
@@ -387,7 +389,9 @@ ActiveRecord::Schema.define(version: 2024_12_09_093414) do
     t.decimal "training_days", precision: 5, scale: 2
     t.integer "minimum_participants"
     t.boolean "automatic_assignment", default: false, null: false
+    t.virtual "search_column", type: :tsvector, as: "to_tsvector('simple'::regconfig, COALESCE((number)::text, ''::text))", stored: true
     t.index ["kind_id"], name: "index_events_on_kind_id"
+    t.index ["search_column"], name: "events_search_column_gin_idx", using: :gin
     t.index ["shared_access_token"], name: "index_events_on_shared_access_token"
   end
 
@@ -464,9 +468,11 @@ ActiveRecord::Schema.define(version: 2024_12_09_093414) do
     t.string "housenumber", limit: 20
     t.string "address_care_of"
     t.string "postbox"
+    t.virtual "search_column", type: :tsvector, as: "to_tsvector('simple'::regconfig, ((((((((((((COALESCE((name)::text, ''::text) || ' '::text) || COALESCE((short_name)::text, ''::text)) || ' '::text) || COALESCE((email)::text, ''::text)) || ' '::text) || COALESCE((address)::text, ''::text)) || ' '::text) || COALESCE((zip_code)::text, ''::text)) || ' '::text) || COALESCE((town)::text, ''::text)) || ' '::text) || COALESCE((country)::text, ''::text)))", stored: true
     t.index ["layer_group_id"], name: "index_groups_on_layer_group_id"
     t.index ["lft", "rgt"], name: "index_groups_on_lft_and_rgt"
     t.index ["parent_id"], name: "index_groups_on_parent_id"
+    t.index ["search_column"], name: "groups_search_column_gin_idx", using: :gin
     t.index ["type"], name: "index_groups_on_type"
   end
 
@@ -551,7 +557,9 @@ ActiveRecord::Schema.define(version: 2024_12_09_093414) do
     t.string "type", default: "InvoiceItem", null: false
     t.decimal "cost", precision: 12, scale: 2
     t.text "dynamic_cost_parameters"
+    t.virtual "search_column", type: :tsvector, as: "to_tsvector('simple'::regconfig, ((((COALESCE((name)::text, ''::text) || ' '::text) || COALESCE((account)::text, ''::text)) || ' '::text) || COALESCE((cost_center)::text, ''::text)))", stored: true
     t.index ["invoice_id"], name: "index_invoice_items_on_invoice_id"
+    t.index ["search_column"], name: "invoice_items_search_column_gin_idx", using: :gin
   end
 
   create_table "invoice_lists", force: :cascade do |t|
@@ -605,10 +613,12 @@ ActiveRecord::Schema.define(version: 2024_12_09_093414) do
     t.bigint "invoice_list_id"
     t.string "reference", null: false
     t.boolean "hide_total", default: false, null: false
+    t.virtual "search_column", type: :tsvector, as: "to_tsvector('simple'::regconfig, ((((COALESCE((title)::text, ''::text) || ' '::text) || COALESCE((reference)::text, ''::text)) || ' '::text) || COALESCE((sequence_number)::text, ''::text)))", stored: true
     t.index ["esr_number"], name: "index_invoices_on_esr_number"
     t.index ["group_id"], name: "index_invoices_on_group_id"
     t.index ["invoice_list_id"], name: "index_invoices_on_invoice_list_id"
     t.index ["recipient_id"], name: "index_invoices_on_recipient_id"
+    t.index ["search_column"], name: "invoices_search_column_gin_idx", using: :gin
     t.index ["sequence_number"], name: "index_invoices_on_sequence_number"
   end
 
@@ -706,8 +716,8 @@ ActiveRecord::Schema.define(version: 2024_12_09_093414) do
     t.bigint "templated_id"
     t.string "title", null: false
     t.text "body"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["templated_type", "templated_id"], name: "index_message_templates_on_templated"
   end
 
@@ -905,8 +915,8 @@ ActiveRecord::Schema.define(version: 2024_12_09_093414) do
     t.string "unlock_token"
     t.string "family_key"
     t.string "confirmation_token"
-    t.datetime "confirmed_at"
-    t.datetime "confirmation_sent_at"
+    t.datetime "confirmed_at", precision: nil
+    t.datetime "confirmation_sent_at", precision: nil
     t.string "unconfirmed_email", collation: "case_insensitive_emails"
     t.string "reset_password_sent_to"
     t.integer "two_factor_authentication"
@@ -923,6 +933,11 @@ ActiveRecord::Schema.define(version: 2024_12_09_093414) do
     t.string "housenumber", limit: 20
     t.string "address_care_of"
     t.string "postbox"
+    t.string "title"
+    t.string "nationality"
+    t.string "additional_languages"
+    t.string "advertising"
+    t.virtual "search_column", type: :tsvector, as: "to_tsvector('simple'::regconfig, ((((((((((((((((((((COALESCE((first_name)::text, ''::text) || ' '::text) || COALESCE((last_name)::text, ''::text)) || ' '::text) || COALESCE((company_name)::text, ''::text)) || ' '::text) || COALESCE((nickname)::text, ''::text)) || ' '::text) || COALESCE((email)::text, ''::text)) || ' '::text) || COALESCE((address)::text, ''::text)) || ' '::text) || COALESCE((zip_code)::text, ''::text)) || ' '::text) || COALESCE((town)::text, ''::text)) || ' '::text) ||\nCASE\n    WHEN (birthday IS NOT NULL) THEN (((((EXTRACT(year FROM birthday))::text || '-'::text) || lpad((EXTRACT(month FROM birthday))::text, 2, '0'::text)) || '-'::text) || lpad((EXTRACT(day FROM birthday))::text, 2, '0'::text))\n    ELSE ''::text\nEND) || ' '::text) || COALESCE((country)::text, ''::text)) || ' '::text) || COALESCE(additional_information, ''::text)))", stored: true
     t.index ["authentication_token"], name: "index_people_on_authentication_token"
     t.index ["confirmation_token"], name: "index_people_on_confirmation_token", unique: true
     t.index ["email"], name: "index_people_on_email", unique: true
@@ -931,6 +946,7 @@ ActiveRecord::Schema.define(version: 2024_12_09_093414) do
     t.index ["household_key"], name: "index_people_on_household_key"
     t.index ["last_name"], name: "index_people_on_last_name"
     t.index ["reset_password_token"], name: "index_people_on_reset_password_token", unique: true
+    t.index ["search_column"], name: "people_search_column_gin_idx", using: :gin
     t.index ["self_registration_reason_id"], name: "index_people_on_self_registration_reason_id"
     t.index ["unlock_token"], name: "index_people_on_unlock_token", unique: true
   end
@@ -986,7 +1002,9 @@ ActiveRecord::Schema.define(version: 2024_12_09_093414) do
     t.string "number", null: false
     t.string "label"
     t.boolean "public", default: true, null: false
+    t.virtual "search_column", type: :tsvector, as: "to_tsvector('simple'::regconfig, COALESCE((number)::text, ''::text))", stored: true
     t.index ["contactable_id", "contactable_type"], name: "index_phone_numbers_on_contactable_id_and_contactable_type"
+    t.index ["search_column"], name: "phone_numbers_search_column_gin_idx", using: :gin
   end
 
   create_table "qualification_kind_translations", force: :cascade do |t|
@@ -1040,9 +1058,9 @@ ActiveRecord::Schema.define(version: 2024_12_09_093414) do
     t.integer "group_id", null: false
     t.string "type", null: false
     t.string "label"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.datetime "archived_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
+    t.datetime "archived_at", precision: nil
     t.boolean "terminated", default: false, null: false
     t.date "start_on"
     t.date "end_on"
@@ -1097,7 +1115,9 @@ ActiveRecord::Schema.define(version: 2024_12_09_093414) do
     t.string "name", null: false
     t.string "label"
     t.boolean "public", default: true, null: false
+    t.virtual "search_column", type: :tsvector, as: "to_tsvector('simple'::regconfig, COALESCE((name)::text, ''::text))", stored: true
     t.index ["contactable_id", "contactable_type"], name: "index_social_accounts_on_contactable_id_and_contactable_type"
+    t.index ["search_column"], name: "social_accounts_search_column_gin_idx", using: :gin
   end
 
   create_table "subscription_tags", force: :cascade do |t|

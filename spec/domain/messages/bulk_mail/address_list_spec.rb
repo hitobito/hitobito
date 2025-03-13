@@ -19,7 +19,7 @@ describe Messages::BulkMail::AddressList do
     expect(entries).to match_array(
       [
         address(bottom_member.id, "bottom_member@example.com"),
-        address(root.id, "hitobito@puzzle.ch"),
+        address(root.id, "pushkar@vibha.org"),
         address(top_leader.id, "top_leader@example.com"),
         address(top_leader.id, e1.email)
       ]
@@ -32,7 +32,7 @@ describe Messages::BulkMail::AddressList do
     btm.save!
     expect(entries).to match_array(
       [
-        address(root.id, "hitobito@puzzle.ch"),
+        address(root.id, "pushkar@vibha.org"),
         address(top_leader.id, "top_leader@example.com")
       ]
     )

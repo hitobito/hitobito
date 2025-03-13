@@ -13,6 +13,18 @@ module NavigationHelper
      active_for: %w[groups people],
      inactive_for: %w[/invoices invoice_articles invoice_config payment_process invoice_lists?]},
 
+    {label: :reportings,
+     url: :hours_approval_reportings_path,
+     icon_name: "list",
+     active_for: %w[reportings hours_approval],
+     if: ->(_) { can?(:index, Oauth:: Application) || current_user.roles.any? { |role| role.type.include?('Administrator')} }},
+
+    {label: :hours,
+     url: :approve_hours_path,
+     icon_name: "clock",
+     active_for: %w[hours approve],
+     inactive_for: %w[/reportings?]},
+
     {label: :events,
      url: :list_events_path,
      icon_name: "calendar-alt",
@@ -24,18 +36,23 @@ module NavigationHelper
      icon_name: "book",
      active_for: %w[list_courses],
      if: ->(_) { Group.course_types.present? && can?(:list_available, Event::Course) }},
+    
+    {label: :notifications,
+     url: :event_notifications_path,
+     icon_name: "comments",
+     if: ->(_) { can?(:index, Oauth:: Application) || current_user.roles.any? { |role| role.type.include?('Administrator')} }},
 
-    {label: :invoices,
-     url: :first_group_invoices_or_root_path,
-     icon_name: "money-bill-alt",
-     if: ->(_) { current_user.finance_groups.any? },
-     active_for: %w[/invoices
-       invoices/evaluations
-       invoices/by_article
-       invoice_articles
-       invoice_config
-       payment_process
-       invoice_lists?]},
+#    {label: :invoices,
+#     url: :first_group_invoices_or_root_path,
+#     icon_name: "money-bill-alt",
+#     if: ->(_) { current_user.finance_groups.any? },
+#     active_for: %w[/invoices
+#       invoices/evaluations
+#       invoices/by_article
+#       invoice_articles
+#       invoice_config
+#       payment_process
+#       invoice_lists?]},
 
     {label: :admin,
      url: :label_formats_path,

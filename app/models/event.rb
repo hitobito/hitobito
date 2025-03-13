@@ -17,6 +17,7 @@
 #  applications_cancelable          :boolean          default(FALSE), not null
 #  automatic_assignment             :boolean          default(FALSE), not null
 #  cost                             :string
+#  event_hours                      :interger         default(0), not null
 #  description                      :text
 #  display_booking_info             :boolean          default(TRUE), not null
 #  external_applications            :boolean          default(FALSE)
@@ -92,7 +93,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     :uses_form_tabs
 
   # All attributes actually used (and mass-assignable) by the respective STI type.
-  self.used_attributes = [:name, :motto, :cost, :maximum_participants, :contact_id,
+  self.used_attributes = [:name, :motto, :cost, :event_hours, :maximum_participants, :contact_id,
     :description, :location, :application_opening_at,
     :application_closing_at, :application_conditions,
     :external_applications, :applications_cancelable,
@@ -159,6 +160,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     inverse_of: :body,
     class_name: "Person::AddRequest::Event",
     dependent: :destroy
+
+  has_many :hours, class_name: 'Hour', dependent: :destroy
 
   acts_as_taggable
 

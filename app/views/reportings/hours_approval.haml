@@ -1,0 +1,8 @@
+= render 'filters'
+
+= form_with url: update_hours_approval_reportings_path, method: :post, remote: true do |f|
+  #hours_table
+    = render 'hours_table', hour_data: @hour_data
+  
+  .d-flex.justify-content-end.mb-3
+    = f.submit 'Save', class: 'btn btn-primary mb-3'

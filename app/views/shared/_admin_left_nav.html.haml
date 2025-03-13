@@ -4,10 +4,10 @@
 -#  https://github.com/hitobito/hitobito.
 
 %ul.nav-left-list
-  - if can?(:index, LabelFormat)
-    = nav LabelFormat.model_name.human(count: 2), label_formats_path, %w(label_formats)
-  - if can?(:update, current_user)
-    = nav t('navigation.admin/event_feed'), event_feed_path, %w(event_feed)
+-#  - if can?(:index, LabelFormat)
+-#    = nav LabelFormat.model_name.human(count: 2), label_formats_path, %w(label_formats)
+-#  - if can?(:update, current_user)
+-#    = nav t('navigation.admin/event_feed'), event_feed_path, %w(event_feed)
   - if can?(:index, CustomContent)
     = nav CustomContent.model_name.human(count: 2), custom_contents_path, %w(custom_contents)
   - if can?(:index, HelpText)
@@ -39,4 +39,4 @@
 
   = render_extensions(:admin_nav_kinds)
 
-  = nav t('json_api'), api_path
+-#  = nav t('json_api'), api_path

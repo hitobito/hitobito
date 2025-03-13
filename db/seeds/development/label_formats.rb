@@ -44,5 +44,5 @@ LabelFormat::Translation.seed(:label_format_id, :locale,
 
   {label_format_id: formats[2].id,
    locale: 'de',
-   name: 'Couvert' }
+   name: 'Envelope' }
 )

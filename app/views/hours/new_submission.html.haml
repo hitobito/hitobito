@@ -1,0 +1,88 @@
+%h1 Submit Additional Volunteer Hours
+
+- if flash.now[:alert]
+  .alert.alert-danger
+    = flash.now[:alert]
+
+- if flash[:notice]
+  .alert.alert-success
+    = flash[:notice]
+
+= standard_form @hourModel, url: submit_additional_event_hours_path, method: :post, remote: true, html: { id: "volunteerHoursForm" } do |f|
+  .form-group.row.mb-3
+    .col-sm-3
+      = f.label :volunteer_hours, "Additional Volunteer Hours:"
+      %span.text-danger= "*"
+    .col-sm-4
+      = number_field_tag :volunteer_hours, 0, step: 1, min: 0, max: 200, class: "form-control"
+      
+  .form-group.row.mb-3
+    .col-sm-3
+      = f.label :custom_item, "Description:"
+      %span.text-danger= "*"
+    .col-sm-4
+      = f.text_field :custom_item, class: "form-control", placeholder: "Enter a description"
+      - if @errors && @errors[:custom_item]
+        %div.text-danger= @errors[:custom_item]
+
+  .form-group.row.mb-3
+    .col-sm-3
+      = f.label :start_date, "Start Date:"
+      %span.text-danger= "*"
+    .col-sm-4
+      = f.date_field :start_date, class: "form-control"
+
+  .form-group.row.mb-3
+    .col-sm-3
+      = f.label :end_date, "End Date:"
+    .col-sm-4
+      = f.date_field :end_date, class: "form-control"
+
+  .form-group
+    = f.submit "Submit Additional Hours", class: "btn btn-success"
+
+:javascript
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("volunteerHoursForm");
+
+    form.addEventListener("submit", function (event) {
+      let errors = {};
+      const description = document.querySelector("[name='hour[custom_item]']").value.trim();
+      const startDate = document.querySelector("[name='hour[start_date]']").value;
+      const endDate = document.querySelector("[name='hour[end_date]']").value;
+
+      // Validate description
+      if (description === "") {
+        errors["custom_item"] = "Description cannot be empty.";
+      }
+
+      // Validate start and end dates
+      if (!startDate) {
+        errors["start_date"] = "Start date is required.";
+      }
+      if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
+        errors["start_date"] = "Start date cannot be later than end date.";
+      }
+
+      // Clear existing errors
+      document.querySelectorAll(".col-md-4 .text-danger").forEach(el => el.innerText = "");
+
+      // Show errors if any
+      if (Object.keys(errors).length > 0) {
+        event.preventDefault(); // Stop form submission
+
+        Object.entries(errors).forEach(([key, message]) => {
+          const field = document.querySelector(`[name='hour[${key}]']`);
+          if (field) {
+            let errorElement = field.closest(".col-sm-4").querySelector(".text-danger");
+            if (!errorElement) {
+              errorElement = document.createElement("div");
+              errorElement.classList.add("text-danger");
+              field.closest(".col-sm-4").appendChild(errorElement);
+            }
+            errorElement.innerText = message;
+          }
+        });
+      }
+    });
+  });

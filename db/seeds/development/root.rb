@@ -5,7 +5,7 @@
 
 p = Person.first
 p.assign_attributes(
-    password: 'hito42bito',
+    password: '1JuiZVwBO3Ms0thI',
     first_name: 'Puzzle',
     last_name: 'ITC',
     birthday: '1999-09-09'

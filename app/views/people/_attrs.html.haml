@@ -11,6 +11,11 @@
       %div
         = render_attrs(entry, :birthday, :gender)
 
+        %dl.dl-horizontal.m-0.p-2.border-top
+          .labeled-grid
+            %dt.muted Approved Hours
+            %dd #{@total_volunteer_hours}
+
         = render_extensions :details, locals: { show_full: can?(:show_full, entry) }
 
         - if can?(:update, entry)

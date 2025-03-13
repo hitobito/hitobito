@@ -7,4 +7,4 @@
   = f.labeled(:adult_consent, '&nbsp'.html_safe) do
     = f.label(:adult_consent, class: 'd-block mt-2') do
       = f.check_box :adult_consent, required: true
-      = t('.caption')
+      = t('.caption', terms_link: link_to(t('.terms'), 'https://vibha.org/privacy-policy-2/', target: '_blank', rel: 'noopener noreferrer')).html_safe

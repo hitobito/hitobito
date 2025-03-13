@@ -60,6 +60,8 @@ class PeopleController < CrudController
   end
 
   def show
+    @total_volunteer_hours = Hour.where(person_id: current_user.id).sum(:volunteer_hours)
+    
     respond_to do |format|
       format.html
       format.pdf { render_pdf([entry], group) }

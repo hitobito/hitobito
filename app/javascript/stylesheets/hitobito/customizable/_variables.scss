@@ -36,7 +36,8 @@ $purple-dark:           #6A396F;
 $text-color:            $black !default;
 $border-color:          $gray-light !default;
 
-$page-background:       lighten($green, 5%);
+//$page-background:       lighten($green, 5%);
+$page-background:       #ddd;
 $content-background:    $gray-light;
 $footer-background:     $blue;
 $body-background:       $blue;

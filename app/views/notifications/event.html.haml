@@ -1,0 +1,52 @@
+- if flash[:success]
+    .alert.alert-success
+        = flash[:success]
+
+- if flash[:error]
+    .alert.alert-danger
+        = flash[:error]
+
+= form_with url: notify_notifications_path, local: true, class: "container" do |f|
+
+    .row
+        .col-md-8
+            .row
+                .col-md-6
+                    .form-group
+                        = f.label :event_id, "Event:"
+                        %span.text-danger= "*"
+                        = f.select :event_id, options_from_collection_for_select(@events || [], :id, :name, params[:event_id]), { include_blank: "Select an event" }, class: "form-control", style: "height: 38px;"
+            .row.mt-3
+                .col-md-6
+                    .form-group
+                    = f.label :event_subject, "Subject:"
+                    %span.text-danger= "*"
+                    = f.text_field :event_subject, class: "form-control", required: true
+
+                .col-md-6
+                    .form-group
+                    = f.label :event_email_cc, "Email CC (optional):"
+                    = f.text_field :event_email_cc, class: "form-control", placeholder: "example1@email.com, example2@email.com"
+
+            .row.mt-3
+                .col-12
+                    .form-group
+                    = f.label :event_body, "Body:"
+                    %span.text-danger= "*"
+                    = f.text_area :event_body, class: "form-control", rows: 3, required: true
+
+            .row.mt-3
+                .col-12
+                    .form-group
+                    = f.label :recipient_type, "Recipient:"
+                    .form-check.form-check-inline
+                        = f.radio_button :recipient_type, "all_registered", id: "event_all_registered", class: "form-check-input", checked: true
+                        = f.label :event_all_registered, "All Registered Participants", for: "event_all_registered", class: "form-check-label"
+
+                    .form-check.form-check-inline
+                        = f.radio_button :recipient_type, "approved_participants", id: "event_approved", class: "form-check-input"
+                        = f.label "Approved Participants", for: "event_approved", class: "form-check-label"
+
+            .row.mt-4
+                .col-12.text-center
+                    = f.submit "Send Notification", class: "btn btn-primary px-4"

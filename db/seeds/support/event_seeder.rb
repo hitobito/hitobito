@@ -47,7 +47,7 @@ class EventSeeder
     seed_dates(event, date + 90.days)
     seed_questions(event)
     seed_leaders(event)
-    3.times do
+    1.times do
       event.participant_types.each do |type|
         seed_event_role(event, type)
       end

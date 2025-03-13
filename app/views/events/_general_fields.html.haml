@@ -27,6 +27,11 @@
 
   = f.labeled_input_fields(*entry.used_attributes(:motto, :cost))
 
+  .row.mb-2
+    %label.col-md-3.col-xl-2.pb-1.col-form-label.text-md-end{ for: "event_hour" } Hours
+    .labeled.col-md-9.col-lg-8.col-xl-8.mw-63ch
+      = number_field_tag "event[event_hours]", 0, min: 0, max: 200, class: "form-control form-control-sm mw-100 mw-md-60ch", id: "event_hour"
+
   - entry.used?(:contact_id) do
     = f.labeled_person_field :contact
     .display-wrapper{style: element_visible(entry.contact.present?)}

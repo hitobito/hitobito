@@ -4,7 +4,6 @@
 
 - Altes Adress-Feld wurde von Personen und Gruppen entfernt, neu gelten die strukturierten Adressfelder (#2226)
 - QR-Referenz kann in Rechnungeinstellungen erfasst werden, dieser gilt als Prefix für die Referenznummer auf dem Einzahlungsschein (#3032)
-- Filtern nach vergangenen Rollen zeigt nur Personen, welche für den User aktuell sichtbar sind (hitobito_sac_cas#1655)
 
 ## Version 2.4
 

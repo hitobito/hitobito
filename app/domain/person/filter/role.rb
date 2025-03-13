@@ -43,11 +43,9 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def roles_join
-    # { roles: :group } would include the default scopes and thus only active roles.
-    # join all roles ignoring their date ranges here.
-    <<~SQL.squish
+    <<~SQL.split.map(&:strip).join(" ")
       INNER JOIN roles ON roles.person_id = people.id
-      INNER JOIN groups ON roles.group_id = groups.id
+      INNER JOIN #{Group.quoted_table_name} ON roles.group_id = #{Group.quoted_table_name}.id
     SQL
   end
 

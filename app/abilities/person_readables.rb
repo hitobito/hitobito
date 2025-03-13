@@ -7,9 +7,10 @@
 class PersonReadables < GroupBasedReadables
   attr_reader :group
 
-  def initialize(user, group = nil)
+  def initialize(user, group = nil, roles_join = nil)
     super(user)
 
+    @roles_join = roles_join || {roles: :group}
     @group = group
 
     if @group.nil?
@@ -39,14 +40,14 @@ class PersonReadables < GroupBasedReadables
   def accessible_people
     if user.root?
       Person.only_public_data.then do |scope|
-        group ? scope.joins(roles: :group).distinct : scope
+        group ? scope.joins(@roles_join).distinct : scope
       end
     else
       scope = Person.only_public_data.where(accessible_conditions.to_a).distinct
       if has_group_based_conditions?
         # Only add these joins when really necessary, because they are extremely expensive to
         # compute when there are a lot of people and roles
-        scope = scope.joins(roles: :group).where(groups: {deleted_at: nil})
+        scope = scope.joins(@roles_join).where(groups: {deleted_at: nil})
       end
       scope
     end

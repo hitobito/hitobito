@@ -43,7 +43,12 @@ class PeopleFiltersController < CrudController
     @filter_criterion = params[:filter_criterion]
     if @filter_criteria.include?(@filter_criterion.to_sym)
       respond_to do |format|
-        format.turbo_stream { render 'create', status: :ok }
+        if request.method == "GET"
+          format.turbo_stream { render 'create', status: :ok }
+        end
+        if request.method == "POST"
+          format.turbo_stream { render 'delete' }
+        end
       end
     end
   end

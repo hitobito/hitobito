@@ -42,7 +42,7 @@
       %ul.dropdown-menu{"data-filter-dropdown-target": "menu"}
         - @filter_criteria.each do |filter_criterion|
           = link_to t("people_filters.#{filter_criterion}.title"), "/groups/#{@group.id}/people_filters/#{filter_criterion}",
-          class: "dropdown-item", id: "dropdown_option_#{filter_criterion}", data: {turbo_stream: true}
+          class: "dropdown-item", id: "dropdown-option-#{filter_criterion}", data: {turbo_stream: true}
 
   - if can?(:create, entry)
     %label.required=PeopleFilter.human_attribute_name(:name)

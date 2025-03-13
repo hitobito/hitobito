@@ -34,7 +34,23 @@ module PeopleFilterHelper
     people_filter_attribute_control(nil, 0, disabled: :disabled)
   end
 
-  private
+      content << content_tag(:div, class: "flex-none") do
+        select(:filters, "attributes[#{time}][constraint]",
+               filters,
+               {selected: constraint},
+               html_options.merge(class:
+                                    'attribute_constraint_dropdown
+                                         ms-3 form-select form-select-sm', name: "filters[attributes][#{time}][constraint]"))
+      end
+
+      attribute_value_class = "form-control form-control-sm ms-3
+                               #{(constraint == "blank") ? " invisible" : ""}
+                               attribute_value_input #{(type == :date) ? " date" : ""}"
+      content << content_tag(:div, class: "flex-none") do
+        text_field_tag("filters[attributes][#{time}][value]",
+          value,
+          html_options.merge(class: attribute_value_class))
+      end
 
   def people_filter_attribute_control(attr, count, html_options = {})
     Person::Filter::AttributeControl.new(self, attr, count, html_options).to_s

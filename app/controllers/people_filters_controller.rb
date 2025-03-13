@@ -43,7 +43,12 @@ class PeopleFiltersController < CrudController
     @filter_criterion = params[:filter_criterion]
     if @filter_criteria.include?(@filter_criterion.to_sym)
       respond_to do |format|
-        format.turbo_stream { render 'create', status: :ok }
+        if request.method == "GET"
+          format.turbo_stream { render 'create', status: :ok }
+        end
+        if request.method == "POST"
+          format.turbo_stream { render 'delete' }
+        end
       end
     end
   end
@@ -81,6 +86,25 @@ class PeopleFiltersController < CrudController
   def compose_role_lists
     @role_types = Role::TypeList.new(group.class)
     @qualification_kinds = QualificationKind.list.without_deleted
+                                            .map { |qualification|
+                                              [qualification.label, qualification.id, qualification.id]
+                                            }
+    @roles = Role.all.map {  |role| [role.type, role.id, role.id] }
+    @kinds = Person::Filter::Role::KINDS.each_with_index
+                                        .map {   |kind, index|
+                                          [t("people_filters.form.filters_role_kind.#{kind}"),
+                                           t("people_filters.form.filters_role_kind.#{kind}"),
+                                           index+1]
+                                        }
+    @validities = [
+      [t("people_filters.qualification.validity_label.active"), "active", 1],
+      [t("people_filters.qualification.validity_label.reactivateable"), "reactivateable", 2],
+      [t("people_filters.qualification.validity_label.not_active_but_reactivateable"), "not_active_but_reactivateable", 3],
+      [t("people_filters.qualification.validity_label.not_active"), "not_active", 4],
+      [t("people_filters.qualification.validity_label.all"), "all", 5],
+      [t("people_filters.qualification.validity_label.none"), "none", 6],
+      [t("people_filters.qualification.validity_label.only_expired"), "only_expired", 7]
+    ]
   end
 
   def assign_attributes

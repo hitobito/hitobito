@@ -1836,12 +1836,9 @@ de:
 
     tag:
       title: Tags
-      prompt_tag_selection: Personen einbeziehen, die mindestens einen der untenstehenden Tags enthalten
+      prompt_tag_selection: Einschliessen
       prompt_tag_placeholder: Gewünschte Tag-Namen eingeben
-
-    tag_absence:
-      prompt_tag_absence_selection: Personen ausschliessen, die mindestens einen der untenstehenden Tags enthalten
-      prompt_tag_absence_placeholder: Gewünschte Tag-Namen eingeben
+      prompt_tag_absence_selection: Ausschliessen
 
     new:
       title: Personen filtern
@@ -1855,11 +1852,27 @@ de:
       prompt_role_duration_from: oder im Zeitraum von
       prompt_role_duration_selection: Welcher Zeitraum soll berücksichtigt werden?
       prompt_role_duration_until: bis
+      role_kind_title: Gültigkeit
+      prompt_role_placeholder: Gewünschter Rollenname eingeben
+      prompt_role_kind_placeholder: Gewünschte Gültigkeit eingeben
+      duration_title: Stichdatum
       or_duration: oder
       include_archived: Archivierte Rollen miteinbeziehen
 
     qualification:
       title: Qualifikationen
+      criterion: Kriterium
+      validity: Gültigkeit
+      validity_label:
+        active: Aktiv
+        reactivateable: Reaktivierbar
+        not_active_but_reactivateable: Nicht aktiv aber reaktivierbar
+        not_active: Nicht aktiv
+        all: Alle
+        none: Keine
+        only_expired: Nur abgelaufene
+      prompt_qualification_placeholder: Gewünschter Qualifikationsname eingeben
+      prompt_qualification_validity_placeholder: Gewünschte Gültigkeit eingeben
       prompt_qualification_selection: Welche Qualifikationen sollen angezeigt werden?
       prompt_constraint: Welche Logik soll angewendet werden?
       prompt_validity: Welche Gültigkeit sollen die angezeigten Qualifikationen haben?

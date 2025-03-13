@@ -1599,9 +1599,11 @@ fr:
         reactivateable: Les qualifications valides et renouvelables
         all: Montrer toutes les qualifications non distribuées
       filters_role_kind:
-        active: le rôle était actif.
-        created: le rôle a été établi.
-        deleted: le rôle a été effacé.
+        active_today: Actuellement actif
+        active: Actif
+        created: Crée
+        deleted: Supprimé
+        inactive: Inactif
     attributes:
       title: Champ
       match: contient
@@ -1615,23 +1617,37 @@ fr:
       one_of: La langue est %{languages}
     tag:
       title: Tags
-      prompt_tag_selection: Inclure les personnes qui contiennent au moins une des tags ci-dessous
+      prompt_tag_selection: Inclure
       prompt_tag_placeholder: Entrez les noms de tags souhaités
-    tag_absence:
-      prompt_tag_absence_selection: 'Exclure les personnes qui contiennent au moins une des tags ci-dessous '
-      prompt_tag_absence_placeholder: Entrez les noms de tags souhaités
+      prompt_tag_absence_selection: Exclure
     new:
       title: Filtrer les personnes
     range:
       prompt_range: Dans quel secteur faut-il chercher ?
     role:
       title: Rôles
+      role_kind_title: Validité
       prompt_role_selection: Quels rôles doivent être affichés?
       prompt_role_duration_selection: Quelle période doit être prise en compte?
       prompt_role_duration_until: à
       include_archived: Inclure les rôles archivés
+      prompt_role_placeholder: Saisir le nom du rôle souhaité
+      prompt_role_kind_placeholder: Saisir la validité souhaitée
+      duration_title: Date de référence
     qualification:
       title: Qualifications
+      criterion: Critère
+      validity: Validité
+      validity_label:
+        active: Actif
+        reactivateable: Réactivable
+        not_active_but_reactivateable: Inactif mais réactivable
+        not_active: Non actif
+        all: Tous
+        none: Personne
+        only_expired: Uniquement les produits expirés
+      prompt_qualification_placeholder: Saisir le nom de qualification souhaité
+      prompt_qualification_validity_placeholder: Saisir la validité souhaitée
       prompt_qualification_selection: Quelles qualifications doivent apparaître?
       prompt_validity: Quelles validités doivent avoir les qualifications montrées?
       prompt_year: Restreindre l'année de qualification

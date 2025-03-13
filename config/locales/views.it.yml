@@ -1537,9 +1537,11 @@ it:
         reactivateable: Qualifiche valide e riattivabili
         all: Tutte le qualifiche mai assegnate
       filters_role_kind:
-        active: il ruolo era attivo.
-        created: il ruolo è stato creato.
-        deleted: il ruolo è stato cancellato.
+        active_today: Attualmente attivo
+        active: Attivo
+        created: Creato
+        deleted: Annullato
+        inactive: Inattivo
     attributes:
       title: Campi
       match: contiene
@@ -1553,23 +1555,37 @@ it:
       one_of: La lingua è %{languages}
     tag:
       title: Tags
-      prompt_tag_selection: Includere le persone che contengono almeno uno dei tag qui sotto
+      prompt_tag_selection: Includere
       prompt_tag_placeholder: Inserire i nomi dei tag desiderati
-    tag_absence:
-      prompt_tag_absence_selection: Escludere le persone che contengono almeno uno dei tag qui sotto
-      prompt_tag_absence_placeholder: Inserire i nomi dei tag desiderati
+      prompt_tag_absence_selection: Escludere
     new:
       title: Filtro per le persone
     range:
       prompt_range: In quale ambito deve essere ricercato?
     role:
       title: Ruoli
+      role_kind_title: Validità
       prompt_role_selection: Quali ruoli devono essere visualizzati?
       prompt_role_duration_selection: Quali periodi devono venir presi in considerazione?
       prompt_role_duration_until: A
       include_archived: Includi i ruoli archiviati
+      prompt_role_placeholder: Inserire il nome del ruolo desiderato
+      prompt_role_kind_placeholder: Inserire la validità desiderata
+      duration_title: Data chiave
     qualification:
       title: Qualifiche
+      criterion: Criterio
+      validity: Validità
+      validity_label:
+        active: Attivo
+        reactivateable: Riattivabile
+        not_active_but_reactivateable: Non è attivo ma può essere riattivato
+        not_active: Non attivo
+        all: Tutti
+        none: Nessuno
+        only_expired: Solo scaduto
+      prompt_qualification_placeholder: Inserire il nome della qualifica desiderata
+      prompt_qualification_validity_placeholder: Inserire la validità desiderata
       prompt_qualification_selection: Quali qualifiche devono essere visualizzate?
       prompt_validity: Che validità devono avere le qualifiche mostrate?
       prompt_year: Limitare l'anno delle qualifiche

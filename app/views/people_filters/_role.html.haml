@@ -3,49 +3,44 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- filter = entry.filter_chain[:role]
+- filter_roles = entry.filter_chain[:role]
+- present_selected_roles = filter_roles.present? ? filter_roles.to_hash[:role_type_ids] : []
+- role_options = options_from_collection_for_select(@roles, :second, :first, present_selected_roles)
 
-.label-columns
-  = field_set_tag(t('.prompt_role_selection')) do
-    - @role_types.each do |layer, groups|
-      .layer{ class: [@group.klass.label, @group.layer_group.class.label].include?(layer) && 'same-layer' }
-        %h4.filter-toggle= layer
-        - groups.each do |group, role_types|
-          .group.control-group{ class: group == @group.klass.label && 'same-group' }
-            %h5.filter-toggle= group
-            .controls
-              - role_types.each do |role_type|
-                - id = "filters_role_role_type_ids_#{role_type.id}"
-                = label_tag(nil, id, class: 'checkbox inline') do
-                  = check_box_tag("filters[role][role_type_ids][]",
-                                  role_type.id,
-                                  filter && filter.to_hash[:role_types].include?(role_type.to_s),
-                                  id: id)
-                  = role_type.label
+- present_selected_kinds = filter_roles.present? ? filter_roles.to_hash[:kind] : []
+- kind_options = options_from_collection_for_select(@kinds, :second, :first, present_selected_kinds)
 
-  = field_set_tag(t('.prompt_role_duration_selection')) do
-    .row.control-group.mt-3
-      = render 'simple_radio',
-               attr: "filters[role][kind]",
-               value: 'active_today',
-               checked: !filter || !Person::Filter::Role::KINDS.include?(filter.args[:kind])
-    .row.control-group.mt-2
-      .d-flex.col-xl-6
-        %label.mt-1.nowrap.w-50=t('.prompt_role_duration_from')
-        .input-group.w-50
-          %span.input-group-text= icon(:'calendar-alt')
-          = text_field_tag("filters[role][start_at]", filter && filter.args[:start_at], class: 'date col-2 form-control form-control-sm')
-        %label.mx-2.mt-1.w-50=t('.prompt_role_duration_until')
-        .input-group.w-50
-          %span.input-group-text= icon(:'calendar-alt')
-          = text_field_tag("filters[role][finish_at]", filter && filter.args[:finish_at], class: 'date col-2 form-control form-control-sm')
-    .row.control-group.mt-2
-      - Person::Filter::Role::KINDS.each do |key|
-        = render 'simple_radio',
-            attr: "filters[role][kind]",
-            value: key,
-            checked: filter && filter.args[:kind] == key
-    .row.control-group.mt-3
-      = label_tag(nil, 'filters_role_include_archived', class: 'checkbox inline mt-2') do
-        = check_box_tag('filters[role][include_archived]', true, filter && true?(filter.args[:include_archived]))
-        = t('.include_archived')
+.label-columns.mr-5
+  .d-flex.flex-row.align-items-center.mb-2
+    .w-5
+      %label= t("people_filters.role.title")
+    .w-95
+      = select_tag('filters[role][role_type_ids][]',
+                        role_options,
+                        class: 'form-control tom-select w-100',
+                        "data-controller": "form-select",
+                        id: 'role-select',
+                        multiple: true,
+                        data: { chosen_no_results: t('global.chosen_no_results'), placeholder: t('.prompt_role_placeholder') } )
+  .d-flex.flex-row.align-items-center.control-group.mb-2
+    .w-5
+      %label= t("people_filters.role.duration_title")
+    .w-95.d-flex.flex-row.align-items-center
+      .input-group.w-50
+        %span.input-group-text= icon(:'calendar-alt')
+        = text_field_tag("filters[role][start_at]", filter_roles && filter_roles.args[:start_at], class: 'date form-control')
+        %label.mx-2.mt-1=t('.prompt_role_duration_until')
+      .input-group.w-50
+        %span.input-group-text= icon(:'calendar-alt')
+        = text_field_tag("filters[role][finish_at]", filter_roles && filter_roles.args[:finish_at], class: 'date form-control')
+  .d-flex.flex-row.align-items-center
+    .w-5
+      %label= t("people_filters.role.role_kind_title")
+    .w-95{"data-controller": "form-select"}
+      = select_tag('filters[role][kind][]',
+                        kind_options,
+                        class: 'form-control tom-select w-100',
+                        "data-controller": "form-select",
+                        id: 'role-kind-select',
+                        multiple: true,
+                        data: { chosen_no_results: t('global.chosen_no_results'), placeholder: t('.prompt_role_kind_placeholder') } )

@@ -197,6 +197,7 @@ Hitobito::Application.routes.draw do
 
       # Turbo Routes
       get 'people_filters/:filter_criterion' => 'people_filters#filter_criterion'
+      delete 'people_filters/turbo/:filter_criterion' => 'people_filters#filter_criterion'
 
       get 'deleted_people' => 'group/deleted_people#index'
 

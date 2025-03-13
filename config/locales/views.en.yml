@@ -1286,9 +1286,11 @@ en:
         not_active: No valid qualifications
         all: All qualifications
       filters_role_kind:
-        active: role was active
-        created: role was made.
-        deleted: role has been deleted.
+        active_today: Currently active
+        active: Active
+        created: Created
+        deleted: Deleted
+        inactive: Inactive
     attributes:
       title: Fields
       match: contains
@@ -1300,22 +1302,36 @@ en:
       word_connector: "or"
     tag:
       title: Tags
-      prompt_tag_selection: Include persons with at least one of these tags
+      prompt_tag_selection: Include
       prompt_tag_placeholder: Tag name
-    tag_absence:
-      prompt_tag_absence_selection: Exclude persons with at least one of these tags
-      prompt_tag_absence_placeholder: Tag name
+      prompt_tag_absence_selection: Exclude
     new:
       title: Filter persons
     range:
       prompt_range: In which range should be searched?
     role:
       title: Roles
+      role_kind_title: Validity
       prompt_role_selection: Which roles should be displayed?
       prompt_role_duration_selection: Which period should be considered?
       prompt_role_duration_until: until
+      prompt_role_placeholder: Enter the desired role name
+      prompt_role_kind_placeholder: Enter the desired validity
+      duration_title: Key date
     qualification:
       title: Qualifications
+      criterion: Criterion
+      validity: Validity
+      validity_label:
+        active: Active
+        reactivateable: Reactivateable
+        not_active_but_reactivateable: Not active but reactivateable
+        not_active: Not active
+        all: All
+        none: None
+        only_expired: Only expired
+      prompt_qualification_placeholder: Enter desired qualification name
+      prompt_qualification_validity_placeholder: Enter the desired validity
       prompt_qualification_selection: Which qualifications should be displayed?
       prompt_validity: Which validity should the shown qualifications have?
       prompt_year: Restrict qualification year

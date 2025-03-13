@@ -2,6 +2,7 @@
 
 class PeopleFiltersController < CrudController
   self.nesting = Group
+  attr_accessor :filter_criterion
 
   decorates :group
 
@@ -39,9 +40,11 @@ class PeopleFiltersController < CrudController
   def filter_criterion
     compose_role_lists
     possible_tags
-    filter_criterion = params[:filter_criterion]
-    if @filter_criteria.include?(filter_criterion.to_sym)
-      render layout: "filter", partial: "#{filter_criterion}", locals: {type: filter_criterion.to_sym}
+    @filter_criterion = params[:filter_criterion]
+    if @filter_criteria.include?(@filter_criterion.to_sym)
+      respond_to do |format|
+        format.turbo_stream { render 'create', status: :ok }
+      end
     end
   end
 

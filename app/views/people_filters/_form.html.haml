@@ -3,35 +3,35 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= standard_form(path_args(entry), noindent: true, stacked: true) do |f|
+= standard_form(path_args(entry), noindent: true, stacked: true) do |form|
 
-  = render 'search_or_save_buttons', f: f
+  = render 'search_or_save_buttons', f: form
 
-  = render_extensions :form, locals: { f: f }
-  = f.error_messages
+  = render_extensions :form, locals: { f: form }
+  = form.error_messages
 
-  = render 'range', f: f
+  = render 'range', f: form
 
   - if action_name == 'edit'
     .accordion.mb-3
       = render(layout: 'layouts/filter', locals: { type: :role }) do
-        = render 'role', f: f
+        = render 'role', f: form
 
       - if @qualification_kinds.present?
         = render(layout: 'layouts/filter', locals: { type: :qualification }) do
-          = render 'qualification', f: f
+          = render 'qualification', f: form
 
       = render(layout: 'layouts/filter', locals: { type: :attributes }) do
-        = render 'attributes', f: f
+        = render 'attributes', f: form
 
       - FeatureGate.if('person_language') do
         = render(layout: 'layouts/filter', locals: { type: :language }) do
-          = render 'language', f: f
+          = render 'language', f: form
 
       = render(layout: 'layouts/filter', locals: { type: :tag }) do
         .label-columns
-          = render 'tag', f: f
-          = render 'tag_absence', f: f
+          = render 'tag', f: form
+          = render 'tag_absence', f: form
 
   - if action_name == 'new'
     %div.mt-3.mb-3.ml-3#overview
@@ -42,10 +42,10 @@
         %ul.dropdown-menu
           - @filter_criteria.each do |filter_criterion|
             = link_to t("people_filters.#{filter_criterion}.title"), "/groups/#{@group.id}/people_filters/#{filter_criterion}",
-            class: "dropdown-item", id: "dropdown_option_#{filter_criterion}"
+            class: "dropdown-item", id: "dropdown_option_#{filter_criterion}", data: {turbo_stream: true}
 
   - if can?(:create, entry)
     %label.required=PeopleFilter.human_attribute_name(:name)
-    = f.input_field :name, placeholder: t('.save_filter_placeholder'), class: 'mb-3 ', required: false
+    = form.input_field :name, placeholder: t('.save_filter_placeholder'), class: 'mb-3 ', required: false
 
-  = render 'search_or_save_buttons', f: f
+  = render 'search_or_save_buttons', f: form

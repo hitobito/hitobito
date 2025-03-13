@@ -39,7 +39,7 @@
     %div.dropdown.ml-3{"data-controller": "filter-dropdown"}
       %button.btn.dropdown-toggle{ type: 'button',  "data-bs-toggle": "dropdown", "aria-expanded": "false"}
         %i.fa.fa-plus
-      %ul.dropdown-menu{"data-filter-dropdown-target": "menu"}
+      %ul.dropdown-menu#filter-criteria-dropdown{"data-filter-dropdown-target": "menu"}
         - @filter_criteria.each do |filter_criterion|
           = link_to t("people_filters.#{filter_criterion}.title"), "/groups/#{@group.id}/people_filters/#{filter_criterion}",
           class: "dropdown-item", id: "dropdown-option-#{filter_criterion}", data: {turbo_stream: true}

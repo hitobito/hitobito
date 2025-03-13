@@ -1,1 +1,5 @@
 = turbo_stream.remove "#{@filter_criterion}-configuration"
+
+= turbo_stream.append "filter-criteria-dropdown" do
+  = link_to t("people_filters.#{@filter_criterion}.title"), "/groups/#{@group.id}/people_filters/#{@filter_criterion}",
+          class: "dropdown-item", id: "dropdown-option-#{@filter_criterion}", data: {turbo_stream: true}

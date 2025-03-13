@@ -63,7 +63,7 @@ Sobald das Feature vollständig umgesetzt ist, wird ein Pull Request erstellt, d
 Implementierte Tickets werden von einem zweiten Dev reviewt. 
 
 - Falls noch Anpassungen nötig sind, wird das Ticket wieder dem ursprünglichen Dev zugewiesen und in den Status `In Progress` gesetzt.
-- Wenn alles ok ist, merged diese:r die dazugehörigen PR. Das Ticket wird vom Github workflow automatisch in den Status `Review Integration` gesetzt. Sofern in der Ticket ToDo Liste nichts erwähnt ist, liegt es im Ermessen der mergenden Person, ob ein Review auf Integration angebracht ist. Andernfalls kann das Ticket direkt ins `Closed` verschoben werden.
+- Wenn alles ok ist, merged diese:r die dazugehörigen PR. Das Ticket wird vom Github Workflow automatisch in den Status `Review Integration` gesetzt. Sofern in der Ticket ToDo Liste nichts erwähnt ist, liegt es im Ermessen der mergenden Person, ob ein Review auf Integration angebracht ist. Andernfalls kann das Ticket direkt ins `Closed` verschoben werden.
 
 Falls der Pull Request nur einen Commit enthält, kann dieser über Rebase in den Master gemerged werden. Bei mehreren Commits wird ein Merge Commit bevorzugt. Falls die einzelnen Commits keine Ticket Referenz haben, muss diese zwingend im Merge Commit enthalten sein.
 

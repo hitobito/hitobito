@@ -195,7 +195,8 @@ describe Person::CsvImportsController do
         let(:mapping) { {Vorname: "first_name", Nachname: "last_name", Geburtsdatum: "birthday", Email: "email", Ort: "town"} }
 
         let(:user) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person }
-        let(:person) { Fabricate(Group::TopGroup::LocalSecretary.name, group: groups(:top_group)).person }
+        # use custom last_name to avoid duplicates, causing flaky specs
+        let(:person) { Fabricate(Group::TopGroup::LocalSecretary.name, group: groups(:top_group), person: Fabricate(:person, last_name: "Zumimportieren")).person }
         let(:group) { groups(:bottom_group_one_one) }
 
         let(:data) { generate_csv(%w[Nachname Email Ort], [person.last_name, person.email, "Wabern"]) }

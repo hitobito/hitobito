@@ -65,7 +65,7 @@ class Person::Filter::List
   end
 
   def accessibles
-    ability = accessibles_class.new(user, group_range? ? @group : nil, chain.roles_join)
+    ability = accessibles_class.new(user, group_range? ? @group : nil)
     Person.accessible_by(ability).select(:contact_data_visible)
   end
 

@@ -444,9 +444,9 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   end
 
   def maximum_participants_reached?
-    return false unless maximum_participants
+    return false if maximum_participants.blank?
 
-    active_participations_without_affiliate_types.count >= maximum_participants
+    participant_count >= maximum_participants
   end
 
   private

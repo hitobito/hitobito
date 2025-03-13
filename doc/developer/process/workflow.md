@@ -75,7 +75,7 @@ Falls der Pull Request nur einen Commit enthält, kann dieser über Rebase in de
 
 Für Tickets im Status `Review Integration` wurde beim Refinement oder beim Merge des PR entschieden, dass der Change auf der Integrationsumgebung getestet werden soll, before das Ticket dem Kunden übergeben wird.
 
-Es sollen alle use cases aus dem ticket mit angemessenen Rollen getestet werden. Wenn das Review zufriedenstellend ausfällt, wird das ticket in den Status `Closed` gesetzt, andernfalls wird das ticket wieder geöffnet, dem ursprünglichen Dev zugewiesen und in den Status `In Progress` gesetzt. 
+Es sollen alle Use Cases aus dem Ticket mit angemessenen Rollen getestet werden. Wenn das Review zufriedenstellend ausfällt, wird das Ticket in den Status `Closed` gesetzt, andernfalls wird das Ticket wieder geöffnet, dem ursprünglichen Dev zugewiesen und in den Status `In Progress` gesetzt. 
 
 ## Closed
 

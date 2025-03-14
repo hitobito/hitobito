@@ -11,7 +11,7 @@
 - absent_selected = absent_filter ? filter.to_hash[:names] : []
 - absent_options = options_from_collection_for_select(@possible_tags, :second, :first, absent_selected)
 
-.d-flex.flex-column{"data-controller": "form-select"}
+.d-flex.flex-column
   .d-flex.flex-row.align-items-center.mb-2
     .w-5.mr-5
       %label= t('.prompt_tag_selection')
@@ -19,6 +19,8 @@
       = select_tag('filters[tag][names][]',
                     present_options,
                     class: 'form-control tom-select w-100',
+                    "data-controller": "form-select",
+                    id: 'present-tag-select',
                     multiple: true,
                     data: { chosen_no_results: t('global.chosen_no_results'), placeholder: t('.prompt_tag_placeholder') } )
   .d-flex.flex-row.align-items-center
@@ -28,5 +30,7 @@
       = select_tag('filters[tag_absence][names][]',
                     absent_options,
                     class: 'form-control tom-select w-100',
+                    id: 'absent-tag-select',
+                    "data-controller": "form-select",
                     multiple: true,
                     data: { chosen_no_results: t('global.chosen_no_results'), placeholder: t('.prompt_tag_placeholder') } )

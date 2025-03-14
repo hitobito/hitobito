@@ -23,6 +23,8 @@
       = select_tag('filters[qualification][qualification_kind_ids][]',
                       qualification_options,
                       class: 'form-control tom-select w-100',
+                      id: 'qualification-select',
+                      "data-controller": "form-select",
                       multiple: true,
                       data: { chosen_no_results: t('global.chosen_no_results'),
                       placeholder: t("people_filters.qualification.prompt_qualification_placeholder") } )
@@ -46,6 +48,8 @@
       = select_tag('filters[qualification][validity]',
                       validity_options,
                       class: 'form-control tom-select w-100',
+                      "data-controller": "form-select",
+                      id: 'qualification-validity-select',
                       multiple: false,
                       data: { chosen_no_results: t('global.chosen_no_results'),
                       placeholder: t("people_filters.qualification.prompt_qualification_validity_placeholder") } )

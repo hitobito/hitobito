@@ -19,8 +19,16 @@
 #  index_sessions_on_updated_at  (updated_at)
 #
 
-class Session < ActiveRecord::Base
+class Session < ActiveRecord::SessionStore::Session
+  before_save :set_person_id
+
   def self.outdated
     where(updated_at: ...1.month.ago)
+  end
+
+  private
+
+  def set_person_id
+    self.person_id ||= data.dig("warden.user.person.key", 0, 0) if data.is_a?(Hash)
   end
 end

@@ -43,6 +43,15 @@ namespace :dev do
       BASH
     end
 
+    desc "Destroy oauth session"
+    task :destroy, [:id_token] do |_, args| # rubocop:disable Rails/RakeEnvironment
+      id_token = args.fetch(:id_token)
+      sh <<~BASH
+        curl -s -H 'Accept: application/json' \
+        http://localhost:3000/oidc/logout?id_token_hint=#{id_token}
+      BASH
+    end
+
     desc "Obtain profile information"
     task :profile, [:access_token, :scope] do |_, args| # rubocop:disable Rails/RakeEnvironment
       access_token = args.fetch(:access_token)

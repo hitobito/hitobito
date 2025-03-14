@@ -1729,7 +1729,7 @@ de:
       tag_lists: Tags
       remove_tags: Tags entfernen
       add_tags: Tags hinzufügen
-      add_to_mailing_list: Zu Abo hinzufügen
+      add_to_mailing_list: Add To Mailing List
 
     totp_reset:
       flashes:
@@ -2168,7 +2168,7 @@ de:
       first: Erste
       last: Letzte
       truncate: "..."
-  json_api: JSON:API
+  json_api:
 
   verify_membership:
     title: Verifizierung Mitgliedschaft

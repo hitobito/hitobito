@@ -332,6 +332,32 @@ Hitobito::Application.routes.draw do
 
     end # resources :group
 
+    resources :hours do
+      collection do
+        get :approve
+        get :hours_summary
+        get :new_submission
+        post :submit_additional_event, action: :submit_additional_event
+        post :bulk_submit_for_event
+      end
+    end
+
+    resources :reportings do
+      collection do
+        get :hours_approval
+        get :hours_summary
+        post :update_hours_approval
+        get :download_hours, defaults: { format: :csv }
+      end
+    end
+
+    resources :notifications do
+      collection do
+        get :event
+        post :notify
+      end
+    end
+
     get 'list_courses' => 'events/courses#index', as: :list_courses
     get 'list_events' => 'event/lists#events', as: :list_events
 

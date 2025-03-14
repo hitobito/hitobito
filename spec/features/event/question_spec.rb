@@ -71,7 +71,7 @@ describe EventsController, js: true do
       click_on("Daten")
       fill_in(:event_dates_attributes_0_start_at_date, with: "01.01.2025")
       click_save
-      expect(page).to have_content("Anmeldeangaben ist nicht gültig")
+      expect(page).to have_content("Registration information is not valid")
 
       question_fields_element.all(".fields").each do |question_element| # rubocop:disable Rails/FindEach
         within(question_element) do

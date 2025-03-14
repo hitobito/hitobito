@@ -9,6 +9,11 @@ GIT
       graphiti (~> 1.3.9)
       transproc
 
+PATH
+  remote: ../hitobito_generic
+  specs:
+    hitobito_generic (2.4.5)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -846,6 +851,7 @@ DEPENDENCIES
   haml
   headless
   hirb
+  hitobito_generic!
   http_accept_language
   icalendar
   image_processing (~> 1.2)

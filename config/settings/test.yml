@@ -6,8 +6,8 @@
 application:
   additional_languages:
     en: Englisch
-    fr: Französisch
-    it: Italienisch
+#    fr: Französisch
+#    it: Italienisch
 
 csv:
   encoding: UTF-8

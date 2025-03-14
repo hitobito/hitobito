@@ -810,7 +810,7 @@ describe Person do
       expect(taggings.count).to eq(2)
 
       person.email = "info@hitobito.ch"
-      person.additional_emails.first.email = "hitobito@puzzle.ch"
+      person.additional_emails.first.email = "pushkar@vibha.org"
       person.save!
 
       expect(taggings.reload.count).to eq(0)

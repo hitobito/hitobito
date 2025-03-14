@@ -19,11 +19,11 @@ module Sheet
         if: :show_details
     end
 
-    tab "people.tabs.invoices",
-      :personal_invoices_group_person_path,
-      if: (lambda do |view, group, person|
-        view.can?(:index_invoices, group) || view.can?(:index_invoices, person)
-      end)
+#    tab "people.tabs.invoices",
+#      :personal_invoices_group_person_path,
+#      if: (lambda do |view, group, person|
+#        view.can?(:index_invoices, group) || view.can?(:index_invoices, person)
+#      end)
 
     tab "activerecord.models.message.other",
       :messages_group_person_path,

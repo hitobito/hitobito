@@ -394,7 +394,7 @@ de:
               other: Liebe*r %{first_name}
       self_registration_reason:
         one: Vordefinierter Eintrittsgrund
-        other: Vordefinierte Eintrittsgründe
+        other: Predefined reasons for entry
       service_token:
         one: API-Key
         other: API-Keys

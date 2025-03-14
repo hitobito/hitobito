@@ -14,7 +14,7 @@ class MailingListSeeder
   private
 
   def seed_bulk_mail_messages(mailing_list)
-    rand(10).times do
+    rand(1).times do
       seed_mail_log(mailing_list)
     end
   end

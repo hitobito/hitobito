@@ -1,0 +1,19 @@
+= table(hour_data.to_a, class: 'table table-striped table-fixed mt-3') do |t|
+  - t.col('User ') do |p|
+    = p[:user_name]
+  - t.col('Event/Custom') do |p|
+    = p[:name]
+  - t.col('Date') do |p|
+    = p[:date]
+  - t.col('Role') do |p|
+    = p[:role]
+  - t.col('Hours') do |p|
+    = p[:hours]
+  - t.col('Approved?') do |p|
+    = check_box_tag "approved_status[#{p[:hour_id]}]", true, p[:approved_status], class: 'approved-checkbox'
+
+:css
+  th {
+    font-weight: bold;
+    font-size: 18px;
+  }

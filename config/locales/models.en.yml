@@ -1,3 +1,8 @@
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 en:
   time:
     formats:
@@ -24,6 +29,19 @@ en:
     deleted_info: Deleted
     archived_info: Archived
   activemodel:
+    models:
+      roles/termination:
+        one: Exit
+        other: Exits
+      household:
+        one: Household
+        other: Households
+
+    attributes:
+      roles/termination:
+        terminate_on: Exit Date
+      household:
+        members: Household Members
     errors:
       models:
         roles/termination:
@@ -31,6 +49,18 @@ en:
             terminate_on:
               too_early: "has to be in the future"
               too_late: "must not be after %{date}"
+            role:
+              not_terminatable: "is it not a bad habit"
+        household:
+          attributes:
+            members:
+              minimum_members: The household is dissolved because there are fewer than 2 people.
+              household_address: "The address '%{address}' will be used for all persons in this household."
+
+        household_member:
+          attributes:
+            base:
+              in_other_household_present: "%{person_name} is already a member of another household."
   activerecord:
     errors:
       messages:
@@ -41,6 +71,8 @@ en:
         greater_than_or_equal_to: 'must be bigger or equal to '
         must_exist: must exist
         readonly: can't be changed
+        cannot_be_later_than_today: can't be later than today
+
       models:
         cors_origin:
           attributes:
@@ -48,6 +80,7 @@ en:
               invalid_host: contains an invalid host
               missing_hostname: has to contain hostname
               missing_scheme: has to contain a protocol-scheme (http:// or https://)
+              suffix_present: must not have a path and no slash at the end
         custom_content:
           attributes:
             body:
@@ -67,14 +100,33 @@ en:
             choices:
               requires_more_than_one_choice: 'needs at least two picks'
               requires_exactly_one_choice: 'must contain exactly one answer'
+            question:
+              application_blank: information required for registration
+              admin_blank: information required for administration
+
         event/participation:
           attributes:
             person_id:
               taken: is already registered
+        group:
+          attributes:
+            self_registration_role_type:
+              blank: 'must be filled in if "Display on login page" is selected'
         mailing_list:
           attributes:
+            mail_name:
+              not_allowed: "'%{mail_name}' cannot be used"
+            mail_name_not_allowed:
             additional_sender:
               invalid: "must contain mail addresses of the format abcd@ee.ch or *@ee.ch. Multiple addresses must be separated with ',' or ';'."
+        message/letter_with_invoice:
+          attributes:
+            base:
+              invoice_items_invalid: At least one invoice item is invalid.
+        oauth/application:
+          attributes:
+            scopes:
+              not_match_configured: "do not match those stored on the server."
         person:
           name_missing: 'Please enter a name'
           readonly: "You do not have write access to all persons in the household. Remove %{name} from the household to adjust the address."
@@ -85,6 +137,8 @@ en:
                   because it is used when logging in. Under 'Further e-mail' you may
                   specify addresses, which are assigned to other people as main e-mail
                   (the main e-mail can be left blank).
+            self_registration_reason_custom_text:
+              either_preset_or_custom: cannot be set if a predefined entry reason has been selected.
         person/add_request:
           attributes:
             person_id:
@@ -144,8 +198,8 @@ en:
         one: Event
         other: Events
       event/course:
-        one: Course
-        other: Courses
+        one: Initiative
+        other: Initiatives
       event/participation:
         one: Participation
         other: Participations
@@ -308,6 +362,9 @@ en:
               m: Dear %{first_name}
               w: Dear %{first_name}
               other: Dear %{first_name}
+      self_registration_reason:
+        one: Predefined reason for entry
+        other: Predefined reasons for entry
       service_token:
         one: API-Key
         other: API-Keys
@@ -375,6 +432,9 @@ en:
         current_password: Old password
         address_care_of: additional address line
         address: Address
+        street: Street
+        housenumber: House Number
+        postbox: Post Box Number                     
         zip_code: Postal Code
         town: Place
         country: Country
@@ -405,6 +465,9 @@ en:
         language: Language
         primary_group_id: Main group
         layer_group_label: Main layer
+        self_registration_reason: reason for entry
+        self_registration_reason_text: reason for entry
+        self_registration_reason_custom_text: Custom Entry Reason
       person_duplicate:
         birth_year: Year
         roles_list: Roles
@@ -425,6 +488,9 @@ en:
         email: Main e-mail
         address: Address
         address_care_of: additional address line
+        street: Street
+        housenumber: House Number
+        postbox: Post Box Number        
         zip_code: Postal Code
         town: Place
         country: Country
@@ -441,12 +507,27 @@ en:
         type_name: Group type
         description: Description
         updated_at: Changed
-        self_registration_role_type: role type
+        self_registration: External Registration
+        self_registration_role_type: Roll Type
+        self_registration_link: External Registration
+        self_registration_notification_email: Notification E-Mail
+        self_registration_require_adult_consent: Parental Consent
+        main_self_registration_group: Display on Login page
+        custom_self_registration_title: Registration Title        
         nextcloud_url: NextCloud-URL
         remove_logo: remove current group-logo
+        privacy_policy_title: Privacy Policy Name
+        privacy_policy: Attach Privacy Policy Document
+
         letter_address_positions:
           left: Left
           right: Right
+        text_message_provider: SMS Provider
+        text_message_providers:
+          aspsms: Aspsms
+        text_message_username: SMS User Name
+        text_message_password: SMS Password
+        text_message_originator: SMS Sender
       event:
         group_ids: Groups
         groups: Groups
@@ -455,8 +536,11 @@ en:
         number: Number
         motto: Motto
         cost: Costs
+        hour: Hours
         contact: Contact Person
+        notify_contact_on_participations: Notify contact person about new registration by email
         maximum_participants: Maximum number of participants
+        minimum_participants: Minimum number of participants        
         contact_id: Contact Person
         description: Description
         location: Place/Address
@@ -481,6 +565,9 @@ en:
         waiting_list: national waiting list
         requires_approval: Approval required
         globally_visible: Visibility
+        automatic_assignment: Automatic registration
+        application_questions: Registration details
+        admin_questions: Administrative tasks
       event/contact_attrs:
         required: Mandatory
         optional: Optional
@@ -491,15 +578,15 @@ en:
         answer: Reply
       event/application:
         priority_1_id: "Course"
-        priority_2_id: "1. Alternative course"
-        priority_3_id: "2. Alternative course"
+        priority_2_id: "1. Alternative Initiative"
+        priority_3_id: "2. Alternative Initiative"
         waiting_list_comment: 'Remarks'
       event/attachment:
         file: File
       event/course:
-        kind_id: Course type
+        kind_id: Initiative type
         state: State
-        number: Course number
+        number: Initiative number
         state_translated: State
         priorization: Priorization
         requires_approval: Approval
@@ -532,9 +619,16 @@ en:
         created_at: Created
         updated_at: Changed
         deleted_at: Deleted
+      event/kind_qualification_kinds:
+        validities:
+          valid: Must be valid 
+          valid_or_expired: Must be valid or Expired
+          valid_or_reactivatable: Must be valid or reactivable
       event/invitation:
         status: Status
         statuses:
+          open: Invited
+          accepted: Accepted
           declined: Declined
       event/participation:
         person_id: Person
@@ -547,6 +641,7 @@ en:
         question: Question
         choices: Possible answers
         multiple_choices: Multiple choice
+        disclosure: Disclosure        
         disclosures:
           required: Required
           optional: Optional
@@ -566,6 +661,7 @@ en:
         person: Person
         type: Role
         participation: Person
+        remove_participant_role: Remove any participant role
       family_member:
         kind: Relationship
         kinds:
@@ -600,6 +696,7 @@ en:
         updated_at: Changed
         deleted_at: Deleted
         reactivateable: Reactivateable
+        required_training_days: Required training days
       relations_to_tails:
         tail_id: Relation
         kind: Type
@@ -617,6 +714,10 @@ en:
         provider: Provider
         originator: Sender
         picture: Logo
+        address_position: Position of Address
+        address_positions:
+          left: Left
+          right: Right
       role:
         label: Description
         type: Role
@@ -625,10 +726,15 @@ en:
         person_id: Person
         string_long: '%{role} in %{group}'
         dates: Dates
+        created_at: Created at
+        start_on: Von
+        end_on: Start
+        end_on_in_name: End
         class:
+          archived: '%{role_kind} (archiviert)'
           permission:
             description:
-              admin: Administration of application-wide settings such as types of courses or label formats.
+              admin: Administration of application-wide settings such as types of Initiative or label formats.
               layer_and_below_full: All reading and writing at this level and all lower levels. Creating events and subscriptions at this level.
               layer_and_below_read: 'All reading at this level and all lower levels. '
               layer_full: All reading and writing at this level. Creating events and subscriptions at this level.
@@ -639,9 +745,10 @@ en:
               group_read: Reading at this group.
               contact_data: Read the contact details of all other people with contact data authorization.
               qualify: Creating qualifications for people at this level and all lower levels.
-              approve_applications: Confirmation of course registrations for people at this level.
+              approve_applications: Confirmation of Initiative registrations for people at this level.
               finance: Create and manage invoices
               impersonation: Use Hitobito as another person
+              see_invisible_from_above: Additionally see people who are otherwise not allowed to be seen by higher levels.
           kind:
             member:
               one: Member
@@ -652,6 +759,9 @@ en:
             external:
               one: External
               other: Externals
+            future:
+              one: Future
+              other: Futures
       contact_account:
         predefined_labels:
           privat: Private
@@ -685,6 +795,16 @@ en:
         name: Name
         description: Description
         publisher: Publisher
+        subscribable: Sign in/out
+        subscribable_mode: People (by default)
+        subscribable_modes:
+          opt_out: Angemeldet (opt-out)
+          opt_in: Abgemeldet (opt-in)
+        subscribable_for: Sign in/out
+        subscribable_fors:
+          anyone: All
+          configured: Only configured subscribers
+          nobody: Nobody
         mail_name: Mailing list address
         mail_address: Mailing list
         mail_address_link: Mailing list
@@ -738,6 +858,7 @@ en:
         country: Country
         town: Place
         zip_code: Postal Code
+        postbox: PostBox
       subscription:
         related_role_types: Roles
       people_filter:
@@ -955,3 +1076,7 @@ en:
       date: "%Y-%m-%d"
       time: '%H:%M:%S'
       datetime: "%Y-%m-%d %H:%M:%S"
+  navigation:
+    reportings: "Reporting"
+    hours: "Hours"
+    notifications: "Notifications"

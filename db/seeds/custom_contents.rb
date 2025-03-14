@@ -158,7 +158,9 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: self_registration_notification_id,
    locale: 'en',
-   label: 'Self Registration Notification' },
+   label: 'Self Registration Notification',
+   subject: 'Self Registration Notification',
+   body: "The person {person-name} has registered on the group {group-name} via self-registration:<br/><br/>{person-url}" },
 
   {custom_content_id: assignment_assignee_notification_id,
    locale: 'de',
@@ -168,11 +170,23 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: address_validation_checks_id,
    locale: 'de',
-   label: 'Addressen Validations Checks',
+   label: 'Address Validierungen Checks',
    subject: 'Address Validierungen',
    body: "Die Personen: {invalid-people} haben Addressen, welche nicht im Archiv gefunden wurden." },
 
+   {custom_content_id: assignment_assignee_notification_id,
+   locale: 'en',
+   label: 'Assignment Received',
+   subject: 'Print Assignment Received',
+   body: "You have received a new print assignment: {assignment-title}. Please log in to view it." },
+
   {custom_content_id: address_validation_checks_id,
+   locale: 'en',
+   label: 'Addressen Validations Checks',
+   subject: 'Address Validations',
+   body: "The people: {invalid-people} have addresses that were not found in the archive." },
+
+   {custom_content_id: address_validation_checks_id,
    locale: 'fr',
    label: 'Addressen Validations Checks',
    subject: 'Validation des adresses',
@@ -197,7 +211,13 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: send_login_id,
    locale: 'en',
-   label: 'Send login'},
+   label: 'Send login'
+   subject: "Welcome to #{Settings.application.name}",
+   body: "hello {recipient-name}<br/><br/>" \
+         "Welcome to #{Settings.application.name}! Under the following link you can " \
+         "set your login password:<br/><br/>{login-url}<br/><br/>" \
+         "See you soon!<br/><br/>{sender-name}" },
+
 
   {custom_content_id: send_login_id,
    locale: 'it',
@@ -219,7 +239,9 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: password_compromised_situation_id,
    locale: 'en',
-   label: 'Password not secure'},
+   label: 'Password not secure'
+   subject: 'Security Overview: Account taken over?',
+   body: "Do you suspect that someone has taken over {person-name}'s account? Or is the password no longer secure?"},
 
   {custom_content_id: password_compromised_solution_id,
    locale: 'de',
@@ -237,7 +259,10 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: password_compromised_solution_id,
    locale: 'en',
-   label: 'Secure the password'},
+   label: 'Secure the password'
+   subject: 'Security overview: Request to reset the password',
+   body: "Please overwrite the password using the following button. {person-name} can have a new password sent to them using the \"Reset password\" function." },
+
 
   {custom_content_id: email_compromised_situation_id,
    locale: 'de',
@@ -710,7 +735,13 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
 
   {custom_content_id: user_impersonation_id,
    locale: 'en',
-   label: 'Benutzer impersonierung' },
+   label: 'User Impersonation',
+   subject: "Your account on [#{Settings.application.name}] was from {taker-name} taken over",
+   body: "<p>Hello {recipient-name}</p>" \
+   "<p>{taker-name} has on [#{Settings.application.name}] your account has been taken over.</p>" \
+   "<p>If you believe that this access is from {taker-name} is a mistake, "\
+   "contact your administrator at admin@vibha.org."}, 
+
 
   {custom_content_id: user_impersonation_id,
    locale: 'fr',

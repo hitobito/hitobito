@@ -14,7 +14,7 @@ describe MailRelay::AddressList do
     Fabricate(:additional_email, contactable: bottom_member, mailings: false)
     expect(entries).to match_array([
       "bottom_member@example.com",
-      "hitobito@puzzle.ch",
+      "pushkar@vibha.org",
       "top_leader@example.com",
       e1.email
     ])
@@ -25,7 +25,7 @@ describe MailRelay::AddressList do
     btm.email = " "
     btm.save!
     expect(entries).to match_array([
-      "hitobito@puzzle.ch",
+      "pushkar@vibha.org",
       "top_leader@example.com"
     ])
   end

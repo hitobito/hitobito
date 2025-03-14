@@ -1,0 +1,28 @@
+= render 'filters'
+
+%div.d-flex.justify-content-end.mt-2.pb-2
+  = link_to 'Export CSV', download_hours_reportings_path(format: :csv), class: 'btn btn-primary mr-2'
+  = link_to 'Export PDF', download_hours_reportings_path(format: :pdf), class: 'btn btn-success'
+
+- indexed_data = @hour_data.each_with_index.to_a
+= table(indexed_data, class: 'table table-striped table-fixed') do |t|
+  - t.col('Number') do |(p, index)|
+    = index + 1
+  - t.col('⁠Action Center') do |(p)|
+    = p[:role]
+  - t.col('Event Name') do |(p)|
+    = p[:name]
+  - t.col('Event Year') do |(p)|
+    = p[:date]
+  - t.col('Volunteer Name') do |(p)|
+    = p[:user_name]
+  - t.col('Volunteer Hours') do |(p)|
+    = p[:hours]
+
+%h1 Total Approved Hours: #{@total_volunteer_hours || 0}
+
+:css
+  th {
+    font-weight: bold;
+    font-size: 18px;
+  }

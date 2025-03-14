@@ -252,20 +252,23 @@ en:
           greeting: "Hello %{name}!"
           information_html: "You can confirm your email address using the following link:"
           link_text: "confirm %{email}"
-          footer: "This email was sent by Hitobito"
+          footer: "This email was sent by %{application_name}"
       reset_password_instructions:
         subject: "Instructions for setting your password"
         body:
           greeting: "%{name}Hello !"
           reset_instructions:
             with_password: "You can reset your %{application_name} password using the following link."
+            without_password_html: "Welcome to %{application_name}! You have been newly registered and have received a login.<br>Please set a password using the following link."
+          ignore_information_html: "If you do not want to change your password, you can ignore this email.<br><br>Your password will not change unless you go to the link above and set a new password there."
+
       unlock_instructions:
         subject: "Instruction for unlocking your account."
         body:
           greeting: "Hello %{name}!"
           information_html: "Your account has been locked due to too many failed login attempts.<br>Click on the following link to unlock your account:</br>"
           link_text: "Unlock my account"
-          footer: "This email was sent by Hitobito"
+          footer: "This email was sent by %{application_name}"
   errors:
     link_to_main: "Main page"
     '401':
@@ -297,9 +300,9 @@ en:
     priorities: "Application priorities"
     lists:
       courses:
-        title: "Available courses"
-        no_category: Other courses
-        explanation: "Courses of your group and their top groups are shown here. Other courses you'll find in the organizing group."
+        title: "Available Initiatives"
+        no_category: Other Initiatives
+        explanation: "Initiatives of your group and their top groups are shown here. Other courses you'll find in the organizing group."
         csv_export_button: "CSV export"
         ical_export_button: "calendar export"
       events:
@@ -440,6 +443,7 @@ en:
       filter:
         places_available:
           all: All
+          only_with_places_available: Only with available seats          
         select_states: Filter by status
         time_period: Period (optional)
         until: To
@@ -447,11 +451,14 @@ en:
         all_layers: All groups
         filter_by_layer: Organizer
         select_layers: Search groups...
+    actions_show:
+      copy_share_link: Copy direct link
     application_fields:
       caption_signature: Participants must sign the application
       caption_signature_confirmation: Application must be confirmed with a second signature
       signature_confirmation_text_default: Legal guardian (for minors)
     attachments:
+      public_attachments_hint: Globally visible attachments are public because the event allows external registrations
       add: "add"
     banner_open_invitation:
       explanation: You've been invited to this event.
@@ -466,11 +473,22 @@ en:
       times_are_optional: Times are optional
       explain_application_questions: Here you can request further information for the application.
       explain_choices: Leave blank for free text answer, one or more answer choices (comma separated) for selection.
+      explain_admin_questions:
+        Here you can define additional information per participant,
+        which will only be used for event management.
+
       explain_contact_attrs: Here you can choose which contact details should be requested during registration.
       caption_applications_cancelable: Participants can cancel their registration.
       caption_display_booking_info: The number of registrations/places is visible on the course list for all
       caption_globally_visible: "%{model_name} is visible for the whole database"
+      caption_automatic_assignment:
+        Volunteers will be automatically registered if
+        there are still spots available.
+      caption_waiting_list:
+        If all spots are filled, new registrations
+        will be placed on a waiting list
       label_notify_contact_on_participations: Notification
+
     form_tabs:
       general: General
       application_questions: Registration details
@@ -511,6 +529,7 @@ en:
     instructions: "For the definite registration you have to print the confirmation of participation by<i>printing</i>, sign it and send it by mail to the corresponding address."
     export_enqueued: "Export is started in the background and downloaded after completion."
     waiting_list: "All places are currently taken, registration is on the waiting list."
+    pending: "A pre-registration for %{full_entry_label} has been created. Participation is not yet final and must be confirmed by the event management."
     show:
       link:
         delete: "Delete application"
@@ -620,6 +639,9 @@ en:
     actions_show:
       export_subgroups: "CSV subgroups"
       reactivate: "Reactivate"
+      confirm_archive: >
+        Do you really want to archive this group? It will no longer be
+        editable and all roles will also be archived.
     attrs:
       contact_details: "Contact data"
       additional_information: "More information"
@@ -627,6 +649,9 @@ en:
       no_deleted_sub_groups: "No deleted groups found."
     form:
       help_contact: "Use public address and telephone number of this person."
+      help_self_registration_require_adult_consent: When registering, check whether the person is already 18 years old or has the consent of their legal guardian.
+      help_main_self_registration_group: "Display this group's registration link on the main login page."
+      hint_external_registration: "No roles with rights can be selected"
     form_tabs:
       general: "General"
       messages: "Messages"
@@ -637,7 +662,7 @@ en:
     new:
       title: "Create %{model}"
     reactivated: "Group <i>%{group}</ i> has been successfully reactivated."
-    subgroups: "Subgroups"
+    subgroups: "Member Roles"
     tabs:
       deleted: "Deleted"
       statistics: "Statistics"
@@ -657,18 +682,33 @@ en:
         privacy_policy_caption: "I agree to the following provisions:"
         submit: Register
         has_account: Do you already have a login?
-        to_login_page: Sign up and register
+        to_login_page: Click here to log in
       main_person:
         notes: Remarks
       adult_consent_field:
-        caption: I confirm that I am at least 18 years old or have the consent of my legal guardian.
+        caption: "I accept these %{terms_link}. I also confirm that I am at least 18 years old or have the consent of my legal guardian."
+        terms: "terms and conditions"
       create:
         email_taken: Email is already in use. Log in or register with a different email address.
         flash:
           privacy_policy_not_accepted: To complete the registration, you must agree to the data protection declaration.
     self_inscription:
+      show:
+        role_exists: You already have this role in this group.
+        disabled: Self-registration is disabled for this group
+      create:
+        role_saved: The role was saved successfully
       form:
         inscribe: Register
+        description: You can register for your groups here.
+
+  group/deleted_people:
+    list:
+      confirm_delete: "All data on %{person} will be permanently deleted, including participations and qualifications. Only delete this person if no one needs this data anymore."
+  groups/self_registration:
+    new:
+      title: "Registration for %{group_name}"
+
   group/person_add_requests:
     deactivated: Manual approval deactivated
     activated: Manual approval activated
@@ -693,6 +733,8 @@ en:
     archived_suffix: "(archived)"
   households:
     edit:
+      title: Manage household
+      shared_address_info: All people share the same address.
       placeholder_search_person: Search for and add person...
     members_table_row:
       unconfirmed_email_info: The email address must be confirmed before the person can be removed from the family.
@@ -706,6 +748,7 @@ en:
       to: Until
   import/csv_parser:
     read_error: "Error while reading from "
+    encoding_error: "Unfortunately the encoding could not be recognized. Is it a binary file?"
     contains_no_data: "Contains no data"
     read_success:
       one: "%{count} record read succesfully."
@@ -941,7 +984,7 @@ en:
     menu: "Menu"
     groups: "Groups"
     events: "Events"
-    courses: "Courses"
+    courses: "Initiatives"
     admin: "Settings"
     admin/event_feed: "Integrate calendar"
     admin/oauth_authorizations: "OAuth authentifications"
@@ -1009,6 +1052,11 @@ en:
     form:
       help_validity_in_years: "Years from the date of qualification; by the end of the relevant year"
       help_reactivateable_in_years: "Years from the expiration date"
+      help_required_training_days: |
+        At least this number of training days must be completed during the validity period in order to extend existing qualifications.
+        These can also be split over several initiatives.
+        Leave blank to ignore training days and extend qualifications immediately upon attending each relevant initiative.
+
     new:
       title: Create qualification kind
   paper_trail/version_decorator:
@@ -1018,7 +1066,7 @@ en:
       new:
         title: Merge person
         select_person: Which data should be kept?
-        merge_hint: When merging, the roles, phone no., additional emails as well as the social media entries are taken over. All other data of this person like notes, course registrations etc. will be deleted.
+        merge_hint: When merging, the roles, phone no., additional emails as well as the social media entries are taken over. All other data of this person like notes, initiative registrations etc. will be deleted.
         merge_hint_invalid: This person has invalid data.
         irreversible: This process cannot be undone.
         invalid_persons: The entries can only be merged when both are valid.
@@ -1146,11 +1194,33 @@ en:
         no_last_sign_in: "No login recorded so far"
         person_has_2FA: This person has activated two-factor authentication.
         person_no_2FA: This person has not activated two-factor authentication.
+        person_has_login: This person's email address is already registered with the system
+        person_no_login: This person's email address is not registered with the system
         security_and_privacy: Security and privacy
         override_password: "Overwrite password"
         confirm_reset: "Attention: This will overwrite the password. Do you really want that?"
         groups_and_roles_that_see_me: Roles that have access to me
         load_roles_that_see_me_hint: "This may take a few seconds"
+        block_person: Block Person from logging in to the system
+        confirm_block_person: "Warning: This will prevent this person from logging in. Are you sure you want to do this?"
+        unblock_person: Unlock email for this person
+        confirm_unblock_person: "Attention: This means the person is no longer blocked. Are you sure you want to do this?"
+        person_blocked: Login / Person is blocked from signing on to the system
+        person_not_blocked: Login is no longer blocked on the system. The person can sign in. 
+      password_override:
+        flashes:
+          success: The password has been overwritten. The person has been informed and can request a new password at any time using the "Forgot password" function.
+
+      block_person:
+        flashes:
+          success: Login was successfully blocked.
+          error: You cannot block your own login.
+
+      unblock_person:
+        flashes:
+          success: Login was successfully unlocked / unblocked.
+          error: You cannot unlock your own login.        
+
   person/csv_imports:
     invalid_file: Please select a valid CSV file.
     duplicate_keys:
@@ -1186,6 +1256,7 @@ en:
     send_password_instructions: Login information has been sent.
     send_password_instructions_invalid_email: Login has not been sent because email is invalid.
     years_old: (%{years} years old)
+    update_email_must_be_confirmed: The changed email address must be confirmed before it becomes active. A confirmation link has been sent to %{new_mail}.    
     tabs:
       history: History
       log: log
@@ -1515,6 +1586,24 @@ en:
     submit: Merge
     category: Category
   calendars:
+    actions_show:
+      copy_url: Copy Calendar Feed URL
+    attrs:
+      included_groups: Included Groups
+      excluded_groups: Excluded groups
+      tags: Included and excluded tags
+    tags:
+      or: " or "
+      explanation_included:
+        zero: ""
+        one: "Only %{events} with tag %{tags} are included."
+        other: "Only %{events} with any of the tags %{tags} are included."
+      explanation_excluded:
+        zero: ""
+        one: "%{events} with tag %{tags} are excluded."
+        other: "%{events} with one of the tags %{tags} are excluded."
+  
+
     form:
       all_event_types: All
     tags:
@@ -1526,4 +1615,4 @@ en:
       first: first
       last: last
       truncate: "..."
-  json_api: JSON:API
+  json_api:

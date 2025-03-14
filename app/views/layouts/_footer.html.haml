@@ -17,5 +17,9 @@
           - footer.links.to_hash.fetch(I18n.locale, footer.links.to_hash).each do |label, url|
             = link_to label, url, target: '_blank'
             %br/
+-#        %p
+-#          = render_changelog_link
         %p
-          = render_changelog_link
+          = link_to "vibha.org", footer.vibha_url, target: '_blank'
+        %p
+          = image_tag 'Vibha_MainLogo.png', class: 'footer-image'

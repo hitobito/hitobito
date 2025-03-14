@@ -177,7 +177,7 @@ describe Synchronize::Mailchimp::Synchronizator do
       ])
       expect(client).to receive(:fetch_segments).and_return(segments(tags))
       expect(stale_segments).to eq([
-        [0, {members_to_add: ["bottom_member@example.com", "hitobito@puzzle.ch"], members_to_remove: []}],
+        [0, {members_to_add: ["bottom_member@example.com", "pushkar@vibha.org"], members_to_remove: []}],
         [0, {members_to_add: ["top_leader@example.com"], members_to_remove: []}],
         [1, {members_to_add: ["top_leader@example.com"], members_to_remove: []}]
       ])

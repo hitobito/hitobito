@@ -7,7 +7,8 @@
 # See https://github.com/rubyconfig/config
 
 application:
-  name: hitobito  # set same name in email.sender and email.mass_recipient
+  name: Vibha Volunteer System  # set same name in email.sender and email.mass_recipient
+
   logo:
     image: logo.png # put under app/assets/images
     height: 30 # pixel, has to bet set as the logo is a background image,
@@ -21,12 +22,14 @@ application:
       - image/png
   footer:
     #logo_image: logo_hitobito.png
-    logo_url: http://puzzle.ch
-    links: {}
+    logo_url: http://vibha.org
+    vibha_url: http://vibha.org
+    links: {Vibha}
 
   # The languages available in the menu
   languages:
     # first entry is considered the default language
+    en: English
     de: Deutsch
 
 <% mail_domain = ENV['RAILS_MAIL_DOMAIN'].presence ||
@@ -36,7 +39,7 @@ application:
    protocol    = %w(true yes 1).include?(ENV['RAILS_HOST_SSL']) ? 'https' : 'http'
 %>
 currency:
-  unit: CHF
+  unit: USD
 
 email:
   # Sender for all emails sent by the application.
@@ -66,7 +69,7 @@ email:
 # The person with this email has root access to everything
 # This person should only be used by the operators of the application, not the customers.
 # Initially, a password reset token may be mailed from the application to this address to set a password.
-root_email: <%= ENV['RAILS_ROOT_USER_EMAIL'].presence || 'hitobito@puzzle.ch' %>
+root_email: <%= ENV['RAILS_ROOT_USER_EMAIL'].presence || 'pushkar@vibha.org' %>
 
 phone_number:
   predefined_labels:

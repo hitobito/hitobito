@@ -4,11 +4,11 @@
 -#  https://github.com/hitobito/hitobito.
 
 - present_filter_tags = entry.filter_chain[:tag]
-- present_selected = present_filter_tags ? filter.to_hash[:names] : []
+- present_selected = present_filter_tags ? present_filter_tags.to_hash[:names] : []
 - present_options = options_from_collection_for_select(@possible_tags, :second, :first, present_selected)
 
 - absent_filter = entry.filter_chain[:tag_absence]
-- absent_selected = absent_filter ? filter.to_hash[:names] : []
+- absent_selected = absent_filter ? absent_filter.to_hash[:names] : []
 - absent_options = options_from_collection_for_select(@possible_tags, :second, :first, absent_selected)
 
 .d-flex.flex-column

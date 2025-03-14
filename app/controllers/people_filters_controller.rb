@@ -86,6 +86,7 @@ class PeopleFiltersController < CrudController
   def compose_role_lists
     @role_types = Role::TypeList.new(group.class)
     @qualification_kinds = QualificationKind.list.without_deleted
+    @roles = Role.all.map {  |role| [role.type, role.type, role.id] }
   end
 
   def assign_attributes

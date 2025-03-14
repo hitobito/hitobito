@@ -35,4 +35,21 @@ namespace :wagon do
       end
     end
   end
+
+  desc "Dump schema and schema diff for loaded wagons"
+  task schema_dump: :environment do
+    wagon = Wagons.find(ENV["WAGON"]) || Wagons.all.first
+    next unless wagon
+    schema = wagon.root.join("db/schema.rb")
+    puts "Dumping #{wagon.wagon_name} schema to #{schema}"
+    ENV["SCHEMA"] = schema.to_s
+    diff = wagon.root.join("db/schema.rb.diff")
+    Rake::Task["db:schema:dump"].invoke
+    system("diff -W 300 -y #{Rails.root.join("db", "schema.rb")} #{schema} > #{diff}")
+  end
+end
+
+Rake::Task["wagon:migrate"].enhance do
+  Rake::Task["wagon:schema_dump"].execute unless Rails.env.production?
+  SearchColumnBuilder.new.run
 end

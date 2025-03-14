@@ -30,10 +30,9 @@
     = render(layout: 'layouts/filter', locals: { type: :tag }) do
       .label-columns
         = render 'tag'
-        = render 'tag_absence'
 
   - if action_name == 'new'
-    %div.mt-3.mb-3.ml-3#overview
+    .mt-3.mb-3.ml-3#overview
       %h3#filter-advice Um eine Filterkriterium auszuwählen, bitte klicke auf den Hinzufüge-Button
     %div.dropdown.ml-3{"data-controller": "filter-dropdown"}
       %button.btn.dropdown-toggle{ type: 'button',  "data-bs-toggle": "dropdown", "aria-expanded": "false"}

@@ -15,7 +15,7 @@
   .d-flex.flex-row.align-items-center.mb-2
     .w-10.mr-5
       %label= t('.prompt_tag_selection')
-    .w-90.shown
+    .w-90.shown{"data-controller": "tag-select"}
       = select_tag('filters[tag][names][]',
                     present_options,
                     class: 'form-control tom-select w-100',

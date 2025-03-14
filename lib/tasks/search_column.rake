@@ -11,7 +11,3 @@ namespace :search_column do
     SearchColumnBuilder.new.run
   end
 end
-
-Rake::Task["wagon:migrate"].enhance do
-  SearchColumnBuilder.new.run
-end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_10_140729) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_11_163106) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -831,10 +831,19 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_10_140729) do
     t.index ["invoice_config_id"], name: "index_payment_provider_configs_on_invoice_config_id"
   end
 
+  create_table "payment_reminder_config_translations", force: :cascade do |t|
+    t.integer "payment_reminder_config_id", null: false
+    t.string "locale", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "title"
+    t.string "text"
+    t.index ["locale"], name: "index_payment_reminder_config_translations_on_locale"
+    t.index ["payment_reminder_config_id"], name: "index_1502ce89689ed6b058f113a54ae6292c8ecef22d"
+  end
+
   create_table "payment_reminder_configs", id: :serial, force: :cascade do |t|
     t.integer "invoice_config_id", null: false
-    t.string "title", null: false
-    t.string "text", null: false
     t.integer "due_days", null: false
     t.integer "level", null: false
     t.boolean "show_invoice_description", default: true, null: false

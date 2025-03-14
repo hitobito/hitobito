@@ -53,7 +53,7 @@ class Invoice::BatchUpdate
   end
 
   def create_reminder(invoice)
-    attributes = payment_reminder_attrs(invoice.payment_reminders, invoice.invoice_config)
+    attributes = payment_reminder_attrs(invoice.payment_reminders, invoice.invoice_config, invoice.recipient)
     invoice.payment_reminders.create!(attributes)
   end
 
@@ -67,11 +67,13 @@ class Invoice::BatchUpdate
     end
   end
 
-  def payment_reminder_attrs(reminders, config)
+  def payment_reminder_attrs(reminders, config, recipient)
     next_level = [3, reminders.size + 1].min
-    config = config.payment_reminder_configs.find_by(level: next_level)
-    config.slice("title", "text", "level", "show_invoice_description")
-      .merge(due_at: Time.zone.today + config.due_days)
+    Globalize.with_locale(recipient&.language || I18n.locale) do
+      config = config.payment_reminder_configs.find_by(level: next_level)
+      config.slice("title", "text", "level", "show_invoice_description")
+        .merge(due_at: Time.zone.today + config.due_days)
+    end
   end
 
   def changed_from_issued_to_sent?(invoice)

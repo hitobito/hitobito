@@ -86,13 +86,21 @@ class PeopleFiltersController < CrudController
   def compose_role_lists
     @role_types = Role::TypeList.new(group.class)
     @qualification_kinds = QualificationKind.list.without_deleted
-    @roles = Role.all.map {  |role| [role.type, role.type, role.id] }
+                                            .map { |qualification|
+                                              [qualification.label, qualification.id, qualification.id]
+                                            }
+    @roles = Role.all.map {  |role| [role.type, role.id, role.id] }
     @kinds = Person::Filter::Role::KINDS.each_with_index
                                         .map {   |kind, index|
                                           [t("people_filters.form.filters_role_kind.#{kind}"),
                                            t("people_filters.form.filters_role_kind.#{kind}"),
                                            index+1]
                                         }
+    @validities = [
+      ["active", "active", 1], ["reactivateable", "reactivateable", 2],
+      ["not_active_but_reactivateable", "not_active_but_reactivateable", 3], ["not_active", "not_active", 4],
+      ["all", "all", 5], ["none", "none", 6], ["only_expired", "only_expired", 7]
+    ]
   end
 
   def assign_attributes

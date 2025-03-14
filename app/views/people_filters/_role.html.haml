@@ -18,6 +18,8 @@
       = select_tag('filters[role][role_type_ids][]',
                         role_options,
                         class: 'form-control tom-select w-100',
+                        "data-controller": "form-select",
+                        id: 'role-select',
                         multiple: true,
                         data: { chosen_no_results: t('global.chosen_no_results'), placeholder: t('.prompt_role_placeholder') } )
   .d-flex.flex-row.align-items-center.control-group.mb-2
@@ -38,5 +40,7 @@
       = select_tag('filters[role][kind][]',
                         kind_options,
                         class: 'form-control tom-select w-100',
+                        "data-controller": "form-select",
+                        id: 'role-kind-select',
                         multiple: true,
                         data: { chosen_no_results: t('global.chosen_no_results'), placeholder: t('.prompt_role_kind_placeholder') } )

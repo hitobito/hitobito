@@ -35,7 +35,7 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def to_hash
-    merge_duration_args(role_types: args[:role_types])
+    merge_duration_args(role_types: args[:role_types], role_type_ids: args[:role_type_ids], kind: args[:kind])
   end
 
   def to_params

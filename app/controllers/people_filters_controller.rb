@@ -87,7 +87,12 @@ class PeopleFiltersController < CrudController
     @role_types = Role::TypeList.new(group.class)
     @qualification_kinds = QualificationKind.list.without_deleted
     @roles = Role.all.map {  |role| [role.type, role.type, role.id] }
-    @kinds = Person::Filter::Role::KINDS.each_with_index.map {   |kind, index| [kind, kind, index+1] }
+    @kinds = Person::Filter::Role::KINDS.each_with_index
+                                        .map {   |kind, index|
+                                          [t("people_filters.form.filters_role_kind.#{kind}"),
+                                           t("people_filters.form.filters_role_kind.#{kind}"),
+                                           index+1]
+                                        }
   end
 
   def assign_attributes

@@ -1286,9 +1286,11 @@ en:
         not_active: No valid qualifications
         all: All qualifications
       filters_role_kind:
-        active: role was active
-        created: role was made.
-        deleted: role has been deleted.
+        active_today: Currently active
+        active: Active
+        created: Created
+        deleted: Deleted
+        inactive: Inactive
     attributes:
       title: Fields
       match: contains
@@ -1309,9 +1311,13 @@ en:
       prompt_range: In which range should be searched?
     role:
       title: Roles
+      role_kind_title: Validity
       prompt_role_selection: Which roles should be displayed?
       prompt_role_duration_selection: Which period should be considered?
       prompt_role_duration_until: until
+      prompt_role_placeholder: Enter the desired role name
+      prompt_role_kind_placeholder: Enter the desired validity
+      duration_title: Key date
     qualification:
       title: Qualifications
       prompt_qualification_selection: Which qualifications should be displayed?

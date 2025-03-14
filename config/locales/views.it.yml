@@ -1537,9 +1537,11 @@ it:
         reactivateable: Qualifiche valide e riattivabili
         all: Tutte le qualifiche mai assegnate
       filters_role_kind:
-        active: il ruolo era attivo.
-        created: il ruolo è stato creato.
-        deleted: il ruolo è stato cancellato.
+        active_today: Attualmente attivo
+        active: Attivo
+        created: Creato
+        deleted: Annullato
+        inactive: Inattivo
     attributes:
       title: Campi
       match: contiene
@@ -1562,10 +1564,14 @@ it:
       prompt_range: In quale ambito deve essere ricercato?
     role:
       title: Ruoli
+      role_kind_title: Validità
       prompt_role_selection: Quali ruoli devono essere visualizzati?
       prompt_role_duration_selection: Quali periodi devono venir presi in considerazione?
       prompt_role_duration_until: A
       include_archived: Includi i ruoli archiviati
+      prompt_role_placeholder: Inserire il nome del ruolo desiderato
+      prompt_role_kind_placeholder: Inserire la validità desiderata
+      duration_title: Data chiave
     qualification:
       title: Qualifiche
       prompt_qualification_selection: Quali qualifiche devono essere visualizzate?

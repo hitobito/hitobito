@@ -1560,6 +1560,12 @@ fr:
         active: Uniquement les qualifications valides
         reactivateable: Les qualifications valides et renouvelables
         all: Montrer toutes les qualifications non distribuées
+      filters_role_kind:
+        active_today: Actuellement actif
+        active: Actif
+        created: Crée
+        deleted: Supprimé
+        inactive: Inactif
     attributes:
       title: Champ
       match: contient
@@ -1582,9 +1588,13 @@ fr:
       prompt_range: Dans quel secteur faut-il chercher ?
     role:
       title: Rôles
+      role_kind_title: Validité
       prompt_role_selection: Quels rôles doivent être affichés?
       prompt_role_duration_until: à
       include_archived: Inclure les rôles archivés
+      prompt_role_placeholder: Saisir le nom du rôle souhaité
+      prompt_role_kind_placeholder: Saisir la validité souhaitée
+      duration_title: Date de référence
     qualification:
       title: Qualifications
       prompt_qualification_selection: Quelles qualifications doivent apparaître?

@@ -5,21 +5,22 @@
 
 - filter_roles = entry.filter_chain[:role]
 - present_selected_roles = filter_roles.present? ? filter_roles.to_hash[:role_type_ids] : []
-- present_options_roles = options_from_collection_for_select(@roles, :second, :first, present_selected_roles)
+- role_options = options_from_collection_for_select(@roles, :second, :first, present_selected_roles)
 
+- present_selected_kinds = filter_roles.present? ? filter_roles.to_hash[:kind] : []
+- kind_options = options_from_collection_for_select(@kinds, :second, :first, present_selected_kinds)
 
 .label-columns.mr-5
   .d-flex.flex-row.align-items-center.mb-2
     .w-5
       %label Roles
-    .w-95{"data-controller": "form-select"}
+    .w-95
       = select_tag('filters[role][role_type_ids][]',
-                        present_options_roles,
+                        role_options,
                         class: 'form-control tom-select w-100',
                         multiple: true,
                         data: {  } )
-
-  .d-flex.flex-row.align-items-center.control-group
+  .d-flex.flex-row.align-items-center.control-group.mb-2
     .w-5
       %label Stichdatum
     .w-95.d-flex.flex-row.align-items-center
@@ -30,14 +31,12 @@
       .input-group.w-50
         %span.input-group-text= icon(:'calendar-alt')
         = text_field_tag("filters[role][finish_at]", filter_roles && filter_roles.args[:finish_at], class: 'date form-control')
-
-    -# .row.control-group.mt-2
-    -#   - Person::Filter::Role::KINDS.each do |key|
-    -#     = render 'simple_radio',
-    -#         attr: "filters[role][kind]",
-    -#         value: key,
-    -#         checked: filter && filter.args[:kind] == key
-  -#   .row.control-group.mt-3
-  -#     = label_tag(nil, 'filters_role_include_archived', class: 'checkbox inline mt-2') do
-  -#       = check_box_tag('filters[role][include_archived]', true, filter && true?(filter.args[:include_archived]))
-  -#       = t('.include_archived')
+  .d-flex.flex-row.align-items-center
+    .w-5
+      %label Gültigkeit
+    .w-95{"data-controller": "form-select"}
+      = select_tag('filters[role][kind][]',
+                        kind_options,
+                        class: 'form-control tom-select w-100',
+                        multiple: true,
+                        data: {  } )

@@ -1309,6 +1309,18 @@ en:
       duration_title: Key date
     qualification:
       title: Qualifications
+      criterion: Criterion
+      validity: Validity
+      validity_label:
+        active: Active
+        reactivateable: Reactivateable
+        not_active_but_reactivateable: Not active but reactivateable
+        not_active: Not active
+        all: All
+        none: None
+        only_expired: Only expired
+      prompt_qualification_placeholder: Enter desired qualification name
+      prompt_qualification_validity_placeholder: Enter the desired validity
       prompt_qualification_selection: Which qualifications should be displayed?
       prompt_validity: Which validity should the shown qualifications have?
       prompt_year: Restrict qualification year

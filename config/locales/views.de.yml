@@ -1832,6 +1832,18 @@ de:
 
     qualification:
       title: Qualifikationen
+      criterion: Kriterium
+      validity: Gültigkeit
+      validity_label:
+        active: Aktiv
+        reactivateable: Reaktivierbar
+        not_active_but_reactivateable: Nicht aktiv aber reaktivierbar
+        not_active: Nicht aktiv
+        all: Alle
+        none: Keine
+        only_expired: Nur abgelaufene
+      prompt_qualification_placeholder: Gewünschter Qualifikationsname eingeben
+      prompt_qualification_validity_placeholder: Gewünschte Gültigkeit eingeben
       prompt_qualification_selection: Welche Qualifikationen sollen angezeigt werden?
       prompt_validity: Welche Gültigkeit sollen die angezeigten Qualifikationen haben?
       prompt_year: Qualifikationsjahr einschränken

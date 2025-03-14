@@ -18,16 +18,17 @@
 
   .d-flex.flex-row.align-items-center.mb-2
     .w-5.mr-5
-      %label Rudi Völler
+      %label= t("people_filters.qualification.title")
     .w-95.shown{"data-controller": "form-select"}
       = select_tag('filters[qualification][qualification_kind_ids][]',
                       qualification_options,
                       class: 'form-control tom-select w-100',
                       multiple: true,
-                      data: { chosen_no_results: t('global.chosen_no_results'), placeholder: "Rudi Völler" } )
+                      data: { chosen_no_results: t('global.chosen_no_results'),
+                      placeholder: t("people_filters.qualification.prompt_qualification_placeholder") } )
   .d-flex.flex-row.align-items-center.mb-2
     .w-5.mr-5
-      %label Rudi Völler
+      %label= t("people_filters.qualification.criterion")
     .w-95.shown.d-flex.flex-column
       .d-flex.flex-row
         = label_tag('filters_qualification_match_one', class: 'radio inline') do
@@ -40,13 +41,14 @@
 
   .d-flex.flex-row.align-items-center.mb-2
     .w-5.mr-5
-      %label Rudi Völler
+      %label= t("people_filters.qualification.validity")
     .w-95.shown.d-flex.flex-column{"data-controller": "form-select"}
       = select_tag('filters[qualification][validity]',
                       validity_options,
                       class: 'form-control tom-select w-100',
                       multiple: false,
-                      data: { chosen_no_results: t('global.chosen_no_results'), placeholder: "Rudi Völler" } )
+                      data: { chosen_no_results: t('global.chosen_no_results'),
+                      placeholder: t("people_filters.qualification.prompt_qualification_validity_placeholder") } )
   .d-flex.flex-row.align-items-center.mb-2
     .w-5.mr-5
       %label= t('.prompt_date')

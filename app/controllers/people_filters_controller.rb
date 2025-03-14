@@ -97,9 +97,13 @@ class PeopleFiltersController < CrudController
                                            index+1]
                                         }
     @validities = [
-      ["active", "active", 1], ["reactivateable", "reactivateable", 2],
-      ["not_active_but_reactivateable", "not_active_but_reactivateable", 3], ["not_active", "not_active", 4],
-      ["all", "all", 5], ["none", "none", 6], ["only_expired", "only_expired", 7]
+      [t("people_filters.qualification.validity_label.active"), "active", 1],
+      [t("people_filters.qualification.validity_label.reactivateable"), "reactivateable", 2],
+      [t("people_filters.qualification.validity_label.not_active_but_reactivateable"), "not_active_but_reactivateable", 3],
+      [t("people_filters.qualification.validity_label.not_active"), "not_active", 4],
+      [t("people_filters.qualification.validity_label.all"), "all", 5],
+      [t("people_filters.qualification.validity_label.none"), "none", 6],
+      [t("people_filters.qualification.validity_label.only_expired"), "only_expired", 7]
     ]
   end
 

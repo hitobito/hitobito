@@ -1574,6 +1574,18 @@ it:
       duration_title: Data chiave
     qualification:
       title: Qualifiche
+      criterion: Criterio
+      validity: Validità
+      validity_label:
+        active: Attivo
+        reactivateable: Riattivabile
+        not_active_but_reactivateable: Non è attivo ma può essere riattivato
+        not_active: Non attivo
+        all: Tutti
+        none: Nessuno
+        only_expired: Solo scaduto
+      prompt_qualification_placeholder: Inserire il nome della qualifica desiderata
+      prompt_qualification_validity_placeholder: Inserire la validità desiderata
       prompt_qualification_selection: Quali qualifiche devono essere visualizzate?
       prompt_validity: Che validità devono avere le qualifiche mostrate?
       prompt_year: Limitare l'anno delle qualifiche

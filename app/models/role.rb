@@ -119,6 +119,7 @@ class Role < ActiveRecord::Base
 
   ### CALLBACKS
 
+  after_initialize :set_start_on_to_today
   before_save :prevent_changes, if: :archived?
   after_create :reset_person_minimized_at
   after_destroy :set_contact_data_visible
@@ -308,6 +309,10 @@ class Role < ActiveRecord::Base
 
   def reset_person_minimized_at
     person&.update_attribute(:minimized_at, nil) # rubocop:disable Rails/SkipsModelValidations
+  end
+
+  def set_start_on_to_today
+    self.start_on ||= Date.current
   end
 
   def set_contact_data_visible

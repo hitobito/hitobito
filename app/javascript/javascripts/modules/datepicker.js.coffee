@@ -16,6 +16,8 @@ class app.Datepicker
     if d isnt i.lastVal
       $(input).change()
 
+    @onChange(input, d)
+
   show: (input) ->
     self = this
     field = $(input)
@@ -51,5 +53,9 @@ class app.Datepicker
   bind: ->
     self = this
     $(document).on('click', 'input.date, .control-group .icon-calendar', (e) -> self.show(this))
+
+  onChange: (input, date) ->
+    # Manually trigger change event
+    $(input).context.dispatchEvent(new Event("change"))
 
 new app.Datepicker().bind()

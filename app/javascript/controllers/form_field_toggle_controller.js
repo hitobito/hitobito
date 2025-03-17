@@ -9,17 +9,16 @@ export default class extends Controller {
   static targets = ["toggle"];
 
   toggle(event) {
-    switch(event.target.tagName) {
-      case "SELECT":
-        const selected = event.target.options[event.target.options.selectedIndex];
+    if(event.target.tagName === "SELECT") {
+      const selected = event.target.options[event.target.options.selectedIndex];
 
-        if (selected.dataset.visibility === "true") {
-          this.toggleTarget.classList.remove("hidden");
-        } else {
-          this.toggleTarget.classList.add("hidden");
-        }
-      case "INPUT":
+      if (selected.dataset.visibility === "true") {
         this.toggleTarget.classList.remove("hidden");
+      } else {
+        this.toggleTarget.classList.add("hidden");
+      }
+    } else {
+      this.toggleTarget.classList.remove("hidden");
     }
   }
 

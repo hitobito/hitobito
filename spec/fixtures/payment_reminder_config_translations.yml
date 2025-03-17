@@ -1,0 +1,54 @@
+#  Copyright (c) 2025, Hitobito AG. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
+
+bottom_layer_one_first_de:
+  locale: de
+  payment_reminder_config_id: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one_first) %>
+  title: title
+  text: text
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+bottom_layer_one_second_de:
+  locale: de
+  payment_reminder_config_id: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one_second) %>
+  title: title
+  text: text
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+bottom_layer_one_third_de:
+  locale: de
+  payment_reminder_config_id: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one_third) %>
+  title: title
+  text: text
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+bottom_layer_one_first_fr:
+  locale: fr
+  payment_reminder_config_id: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one_first) %>
+  title: title french
+  text: paye maintenant!
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+bottom_layer_one_second_fr:
+  locale: fr
+  payment_reminder_config_id: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one_second) %>
+  title: title french
+  text: paye maintenant!
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+bottom_layer_one_third_fr:
+  locale: fr
+  payment_reminder_config_id: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one_third) %>
+  title: title french
+  text: paye maintenant!
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+

@@ -9,9 +9,10 @@ import { Controller } from "@hotwired/stimulus"
 // Example for usage event/courses/invoices/new.html.haml in sac wagon
 
 export default class extends Controller {
-  static targets = ["field_to_update"]
+  static targets = ["field"]
 
-  dependantFieldChanged(event) {
+  sourceChanged(event) {
+    console.log("ALARM");
     const fieldName = event.target.name;
     const fieldValue = event.target.value;
     const url = this.element.dataset.url;
@@ -23,8 +24,8 @@ export default class extends Controller {
     })
     .then(response => response.json())
     .then(data => {
-      if (this.hasField_to_updateTarget && data.updatedValue) {
-        this.field_to_updateTarget.value = data.updatedValue;
+      if (this.hasFieldTarget && data.value) {
+        this.fieldTarget.value = data.value;
       }
     })
     .catch(error => console.error("Error:", error));

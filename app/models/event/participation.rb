@@ -133,7 +133,7 @@ class Event::Participation < ActiveRecord::Base
   end
 
   def to_s
-    person.full_name
+    person.to_s
   end
 
   private

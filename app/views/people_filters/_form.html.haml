@@ -14,22 +14,26 @@
 
   .mt-3.mb-3.ml-3#overview
     - if action_name == 'edit'
-      - if entry.filter_chain[:role]
-        = render(layout: 'layouts/filter', locals: { type: :role }) do
-          = render 'role', f: form
+      %div{id: "role-configuration"}
+        - if entry.filter_chain[:role]
+          = render(layout: 'layouts/filter', locals: { type: :role }) do
+            = render 'role', f: form
 
       - if @qualification_kinds.present?
-        = render(layout: 'layouts/filter', locals: { type: :qualification }) do
-          = render 'qualification', f: form
+        - if entry.filter_chain[:qualification]
+          %div{id: "qualification-configuration"}
+            = render(layout: 'layouts/filter', locals: { type: :qualification }) do
+              = render 'qualification', f: form
 
       - if entry.filter_chain[:attributes]
-        = render(layout: 'layouts/filter', locals: { type: :attributes }) do
-          = render 'attributes', f: form
-
+        %div{id: "attributes-configuration"}
+          = render(layout: 'layouts/filter', locals: { type: :attributes }) do
+            = render 'attributes', f: form
       - if entry.filter_chain[:tag]
-        = render(layout: 'layouts/filter', locals: { type: :tag }) do
-          .label-columns
-            = render 'tag'
+        %div{id: "tag-configuration"}
+          = render(layout: 'layouts/filter', locals: { type: :tag }) do
+            .label-columns
+              = render 'tag'
 
     - if action_name == 'new'
       %h3#filter-advice Um eine Filterkriterium auszuwählen, bitte klicke auf den Hinzufüge-Button

@@ -27,10 +27,13 @@
 
 Fabricator(:role) do
   person
+  start_on { 1.year.ago }
 end
 
 Role.all_types.collect { |r| r.name.to_sym }.each do |t|
-  Fabricator(t, from: :role, class_name: t)
+  Fabricator(t, from: :role, class_name: t) do
+    start_on { 1.year.ago }
+  end
 end
 Fabricator(:future_role, from: :role) do
   start_on { Date.current.tomorrow }

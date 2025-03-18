@@ -295,7 +295,7 @@ describe Person::Filter::Role do
         end
 
         it "does not find role ended before start_on" do
-          role.update!(end_on: 1.day.ago)
+          role.update!(start_on: nil, end_on: 1.day.ago)
           expect(filter(start_at: today).entries).to be_empty
         end
 
@@ -328,7 +328,7 @@ describe Person::Filter::Role do
 
         context :deleted do
           it "applies filter and does not find role ended outside of timeframe" do
-            role.update!(end_on: 3.days.ago)
+            role.update!(start_on: nil, end_on: 3.days.ago)
             expect(filter(start_at: today).entries).to be_empty
             expect(filter(start_at: today).all_count).to eq 0
           end
@@ -527,7 +527,7 @@ describe Person::Filter::Role do
           let!(:other_role) { person.roles.create!(type: other_role_type.sti_name, group: group) }
 
           it "does not find person with other role ended before timeframe" do
-            other_role.update!(end_on: 1.day.ago)
+            other_role.update!(start_on: nil, end_on: 1.day.ago)
             expect(filter(kind: "inactive", start_at: today).entries).to be_empty
           end
 

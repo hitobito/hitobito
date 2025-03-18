@@ -10,6 +10,7 @@ require "spec_helper"
 describe "Global Conditions", js: true do
   let(:lang) { :de }
   let(:top_leader) { people(:top_leader) }
+  let(:alice) { people(:bottom_member) }
 
   context "modify" do
     let(:path) { edit_group_mailing_list_filter_path(group_id: MailingList.first.group_id,
@@ -36,16 +37,16 @@ describe "Global Conditions", js: true do
       end
     end
 
-    # context "member access" do
-    #   let(:path) { group_people_path(group_id: Group.first.id) }
-    #   before {
-    #     sign_in(alice)
-    #     visit path
-    #   }
-    #
-    #
-    # end
+    context "member access" do
+      before {
+        Rails.env.stub(:production? => true)
+        sign_in(alice)
+      }
 
-
+      it "can't access global conditions" do
+        visit path
+        expect(page).to have_selector("div.alert-danger", text: "Sie sind nicht berechtigt, diese Seite anzuzeigen")
+      end
+    end
   end
 end

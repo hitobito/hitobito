@@ -169,13 +169,16 @@ describe "PeopleFilter", js: true do
     end
   end
 
-  # context "member access" do
-  #   let(:path) { group_people_path(group_id: Group.first.id) }
-  #   before {
-  #     sign_in(alice)
-  #     visit path
-  #   }
-  #
-  #
-  # end
+  context "member access" do
+    let(:path) { new_group_people_filter_path(group_id: Group.find_by(name: "Top").id) }
+    before {
+      Rails.env.stub(:production? => true)
+      sign_in(alice)
+    }
+
+    it "can't access people filtering" do
+      visit path
+      expect(page).to have_selector("div.alert-danger", text: "Sie sind nicht berechtigt, diese Seite anzuzeigen")
+    end
+  end
 end

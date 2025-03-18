@@ -1,9 +1,9 @@
 - caption ||= t("people_filters.#{type}.title")
 %div.well
   %div.d-flex.flex-row
-    %div.w-50
-      = caption
-    %div.w-50.d-flex.justify-content-end
-      = link_to "/groups/#{@group.id}/people_filters/turbo/#{type.to_s}", class: "button btn", data: {turbo_method: :delete} do
-        %i.fa.fa-trash
+    %h3.w-50.mb-3= caption
+    - if delete
+      %div.w-50.d-flex.justify-content-end
+        = link_to "/groups/#{@group.id}/people_filters/turbo/#{type.to_s}", class: "button btn", data: {turbo_method: :delete} do
+          %i.fa.fa-trash
   = yield

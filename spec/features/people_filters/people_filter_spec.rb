@@ -16,16 +16,15 @@ describe "PeopleFilter", js: true do
     let(:path) { new_group_people_filter_path(group_id: Group.first.id) }
     before {
       sign_in(top_leader)
-      alice.tag_list.add("lorem")
-      alice.tag_list.add("ipsum")
-      alice.save!
-
       visit path
       find(".btn.dropdown-toggle").click
     }
 
     context "tags" do
       before {
+        alice.tag_list.add("lorem")
+        alice.tag_list.add("ipsum")
+        alice.save!
         find("#dropdown-option-tag").click
       }
 
@@ -144,6 +143,28 @@ describe "PeopleFilter", js: true do
         expect {
           page.driver.browser.switch_to.alert
         }.to raise_error(Selenium::WebDriver::Error::NoSuchAlertError)
+      end
+    end
+
+    context "saving" do
+      let(:path) { new_group_people_filter_path(group_id: Group.first.id) }
+      before {
+        sign_in(top_leader)
+        visit path
+        find(".btn.dropdown-toggle").click
+      }
+
+      it "can save filter" do
+        find("#dropdown-option-role").click
+
+        find("#role-select-ts-control").click
+        find("#role-select-opt-1").click
+
+        filter_name = "Filtername"
+        fill_in "people_filter_name", with: filter_name
+        first(".btn.btn-primary", text: "Suche speichern").click
+
+        expect(page).to have_selector("div.alert-success", text: "Filter #{filter_name} wurde erfolgreich erstellt.")
       end
     end
   end

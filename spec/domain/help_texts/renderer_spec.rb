@@ -23,6 +23,11 @@ describe HelpTexts::Renderer do
       expect(subject.action_text).to be_nil
     end
 
+    it "returns nil when body inside action text rich text is nil" do
+      help_texts(:people_action_index).body.update_column(:body, nil)
+      expect(subject.safe_html(help_texts(:people_action_index).body)).to be_nil
+    end
+
     it "action trigger and text are present if help_text is present" do
       text = help_texts(:people_action_index)
       dom_id = template.dom_id(text)

@@ -163,7 +163,10 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
 
     @type = @group.class.find_role_type!(type)
 
-    @type.new(start_on:, end_on:)
+    @type.new.tap do |role|
+      role.start_on = start_on
+      role.end_on = end_on
+    end
   end
 
   def build_person(role)

@@ -4,6 +4,6 @@
     %div.w-50
       = caption
     %div.w-50.d-flex.justify-content-end
-      = link_to "/groups/#{@group.id}/people_filters/turbo/#{@filter_criterion}", class: "button btn", data: {turbo_method: :delete} do
+      = link_to "/groups/#{@group.id}/people_filters/turbo/#{type.to_s}", class: "button btn", data: {turbo_method: :delete} do
         %i.fa.fa-trash
   = yield

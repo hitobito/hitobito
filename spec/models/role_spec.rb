@@ -38,7 +38,7 @@ describe Role do
 
     subject(:error_messages) { role.errors.full_messages }
 
-    subject(:role) { Fabricate.build(:"Group::BottomLayer::Leader", group: group, start_on: 1.year.ago) }
+    subject(:role) { Fabricate.build(:"Group::BottomLayer::Leader", group: group) }
 
     it "is valid when start_on and end_on are blank" do
       role.attributes = {start_on: nil, end_on: nil}

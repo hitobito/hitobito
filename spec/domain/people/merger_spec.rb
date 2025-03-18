@@ -123,12 +123,12 @@ describe People::Merger do
 
       _duplicate_two_one_role =
         Group::BottomGroup::Member.create!(group: groups(:bottom_group_two_one),
-          person: duplicate, end_on: 1.day.ago)
+          person: duplicate, start_on: 1.year.ago, end_on: 1.day.ago)
 
       # should not merge this deleted role since person has it already
       _duplicate_one_one_role =
         Group::BottomGroup::Member.create!(group: groups(:bottom_group_one_one),
-          person: duplicate, end_on: 1.day.ago)
+          person: duplicate, start_on: 1.year.ago, end_on: 1.day.ago)
 
       expect do
         merger.merge!

@@ -10,13 +10,6 @@
              stacked: true,
              buttons_bottom: false,
              cancel_url: group_mailing_list_subscriptions_path(@group, @mailing_list)) do |f|
-
-  .accordion
-    = render(layout: 'people_filters/filter', locals: { entry: @mailing_list, type: :attributes }) do
-      = render 'people_filters/attributes', f: f, entry: @mailing_list
-
-    - FeatureGate.if('person_language') do
-      = render(layout: 'people_filters/filter', locals: { type: :language }) do
-        = render 'people_filters/language', f: f, entry: @mailing_list
-
-    = render_extensions('filter_form', locals: { entry: entry })
+  = render(layout: 'layouts/filter', locals: { entry: @mailing_list, type: :attributes, delete: false}) do
+    = render 'people_filters/attributes', f: f, entry: @mailing_list
+  = render_extensions('filter_form', locals: { entry: entry })

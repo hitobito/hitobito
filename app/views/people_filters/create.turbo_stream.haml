@@ -1,6 +1,6 @@
 = turbo_stream.prepend "overview" do
   %div{id: "#{@filter_criterion}-configuration"}
-    = render(layout: 'layouts/filter', locals: { type: @filter_criterion.to_sym }) do
+    = render(layout: 'layouts/filter', locals: { type: @filter_criterion.to_sym, delete: true}) do
       = render @filter_criterion
 
 = turbo_stream.remove "dropdown-option-#{@filter_criterion}"

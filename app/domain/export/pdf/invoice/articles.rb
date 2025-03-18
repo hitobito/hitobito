@@ -10,13 +10,10 @@ module Export::Pdf::Invoice
     attr_reader :reminder
 
     def render # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-      reminder = invoice.payment_reminders.last
-
       move_cursor_to 510
+      reminder = invoice.payment_reminders.last
       font_size(12) { text title(reminder) }
-      pdf.move_down 8
-      render_description(reminder)
-
+      render_reminder_text(reminder) if @options[:reminders]
       pdf.move_down 10
       pdf.font_size(8) { articles_table }
 
@@ -27,8 +24,15 @@ module Export::Pdf::Invoice
 
     private
 
+    def render_reminder_text(reminder)
+      pdf.move_down 8
+      render_description(reminder)
+    end
+
     def title(reminder)
-      reminder ? "#{reminder.title} - #{invoice.title}" : invoice.title
+      return invoice.title unless @options[:reminders] && reminder
+
+      "#{reminder.title} - #{invoice.title}"
     end
 
     def render_description(reminder)

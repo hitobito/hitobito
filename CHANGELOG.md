@@ -1,5 +1,8 @@
 # Hitobito Changelog
 
+## unreleased
+- Eine Rechnung kann im Originalzustand gedruckt werden, bzw. ohne Mahnungen (hitobito_sww#173)
+
 ## Version 2.5
 
 - Altes Adress-Feld wurde von Personen und Gruppen entfernt, neu gelten die strukturierten Adressfelder (#2226)

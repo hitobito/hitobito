@@ -38,6 +38,6 @@ class Event::AttachmentsController < CrudController
   end
 
   def authorize_action
-    authorize!(:update, event)
+    authorize!(:manage_attachments, event)
   end
 end

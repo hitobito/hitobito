@@ -140,7 +140,7 @@ module EventsHelper
 
   def readable_attachments(event, person)
     attachments = event.attachments.attached
-    return attachments if can?(:update, event)
+    return attachments if can?(:manage_attachments, event)
     return attachments.visible_for_team if event_team?(event, person)
     return attachments.visible_for_participants if event_participant?(event, person)
 

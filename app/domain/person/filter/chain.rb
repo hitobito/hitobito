@@ -51,6 +51,10 @@ class Person::Filter::Chain
     filters.blank?
   end
 
+  def include_ended_roles?
+    filters.any?(&:include_ended_roles?)
+  end
+
   def roles_join
     first_custom_roles_join || {roles: :group}
   end

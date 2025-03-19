@@ -195,8 +195,12 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   has_many :roles, inverse_of: :person
   has_many :roles_unscoped, -> { with_inactive },
     class_name: "Role", foreign_key: "person_id", inverse_of: :person
+  has_many :roles_with_ended_readable, -> { with_ended_readable },
+    class_name: "Role", foreign_key: "person_id", inverse_of: :person
 
   has_many :groups, through: :roles
+  has_many :groups_with_roles_ended_readable, through: :roles_with_ended_readable,
+    source: :group
 
   has_many :event_participations, class_name: "Event::Participation",
     dependent: :destroy,

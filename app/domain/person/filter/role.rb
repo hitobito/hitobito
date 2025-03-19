@@ -61,6 +61,10 @@ class Person::Filter::Role < Person::Filter::Base
     end
   end
 
+  def include_ended_roles?
+    args[:kind].present?
+  end
+
   private
 
   def parse_day(date, default)

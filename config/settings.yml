@@ -144,6 +144,7 @@ people:
   default_sort: name
   abos: true
   totp_drift: 15
+  ended_roles_readable_for: <%= 0.days %>
   manual_deletion:
     enabled: false
   cleanup_job:

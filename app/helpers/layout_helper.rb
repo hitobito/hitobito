@@ -142,11 +142,12 @@ module LayoutHelper
   end
 
   def button(label, url, icon_name = nil, options = {})
+    add_css_class options, "btn btn-sm"
+    add_css_class options, "btn-outline-primary" unless /(^|\s)btn-(?!sm\b)/.match?((options[:class]))
+
     disabled_msg = options.delete(:disabled)
     return disabled_button(label, disabled_msg, icon_name, options) if disabled_msg
 
-    add_css_class options, "btn btn-sm"
-    add_css_class options, "btn-outline-primary" unless /(^|\s)btn-(?!sm\b)/.match?((options[:class]))
     url = url.is_a?(ActionController::Parameters) ? url.to_unsafe_h.merge(only_path: true) : url
 
     if url.present?
@@ -159,8 +160,10 @@ module LayoutHelper
   end
 
   def disabled_button(label, disabled_msg, icon_name = nil, options = {})
+    add_css_class(options, "disabled")
+
     content_tag(:div, title: disabled_msg) do
-      content_tag(:a, class: "btn btn-sm disabled", **options) do
+      content_tag(:a, **options) do
         button_content(label, icon_name)
       end
     end

@@ -10,6 +10,7 @@ class PeopleController < CrudController
   include AsyncDownload
   include Tags
   prepend RenderTableDisplays
+  include FilteredPeople # provide person_filter and list_filter_args
 
   self.nesting = Group
 
@@ -43,8 +44,6 @@ class PeopleController < CrudController
 
   before_render_show :load_person_add_requests, if: -> { html_request? }
   before_render_index :load_people_add_requests, if: -> { html_request? }
-
-  helper_method :list_filter_args
 
   def index # rubocop:disable Metrics/AbcSize we support a lot of formats, hence many code-branches
     respond_to do |format|
@@ -169,14 +168,6 @@ class PeopleController < CrudController
     sort_by_sort_expression(entries)
   end
 
-  def list_filter_args
-    if params[:filter_id]
-      PeopleFilter.for_group(group).find(params[:filter_id]).to_params
-    else
-      params
-    end
-  end
-
   def prepare_entries(entries)
     entries = if index_full_ability?
       entries.includes(:additional_emails, :phone_numbers)
@@ -218,7 +209,7 @@ class PeopleController < CrudController
   def render_entries_json(entries)
     render json: ListSerializer.new(prepare_entries(entries).includes(:social_accounts).decorate,
       group: @group,
-      multiple_groups: @person_filter.multiple_groups,
+      multiple_groups: person_filter.multiple_groups,
       serializer: PeopleSerializer,
       controller: self)
   end
@@ -229,10 +220,6 @@ class PeopleController < CrudController
 
   def authorize_class
     authorize!(:index_people, group)
-  end
-
-  def person_filter
-    @person_filter ||= Person::Filter::List.new(@group, current_user, list_filter_args)
   end
 
   def send_login_job(entry, current_user)

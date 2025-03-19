@@ -1979,12 +1979,12 @@ de:
       success:
         zero: Es wurden keine Tags entfernt
         one: Ein Tag wurde entfernt
-        other: "%{count} Tags wurden entfernt"
+        other: "Tags auf %{count} Personen werden im Hintergrund entfernt"
     create:
       success:
         zero: Es wurden keine Tags erstellt
         one: Ein Tag wurde erstellt
-        other: "%{count} Tags wurden erstellt"
+        other: "Tags auf %{count} Personen werden im Hintergrund erstellt"
     deletable:
       title: Welche Tags sollen gelöscht werden?
       no_entries: Von keiner der ausgewählten Personen können Tags entfernt werden

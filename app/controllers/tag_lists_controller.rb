@@ -1,4 +1,6 @@
 class TagListsController < ListController
+  include FilteredPeople
+
   self.nesting = Group
 
   skip_authorization_check
@@ -9,17 +11,19 @@ class TagListsController < ListController
   respond_to :js, only: [:new, :deletable]
 
   def create
-    count = tag_list.add
+    Bulk::TagAddJob.new(manageable_people.map(&:ids), tag_names).enqueue
+
     redirect_to(group_people_path(group), notice: flash_message(:success, count: count))
   end
 
   def destroy
-    count = tag_list.remove
+    Bulk::TagRemoveJob.new(manageable_people.map(&:ids), tag_names.enqueue)
+
     redirect_to(group_people_path(group), notice: flash_message(:success, count: count))
   end
 
   def new
-    @people_count = manageable_people.count
+    @people_count = Person.from(manageable_people).count
   end
 
   def deletable
@@ -39,16 +43,20 @@ class TagListsController < ListController
     @group ||= Group.find(params[:group_id])
   end
 
+  def manageable_people_ids
+    @managed_people_ids ||= @managed_people.map(&:id)
+  end
+
   def manageable_people
-    @manageable_people ||= people.select { |person| current_ability.can?(:manage_tags, person) }
-  end
+    @manageable_people ||= if params[:ids] == "all"
+      params.delete(:ids)
+      @manageable_people_ids = %w(all)
 
-  def people
-    @people ||= Person.includes(:tags).where(id: people_ids).distinct
-  end
-
-  def people_ids
-    list_param(:ids)
+      person_filter(PersonFullReadables).entries.includes(:tags).distinct
+    else
+      Person.where(id: list_param(:ids)).includes(:tags).distinct
+        .select { |person| current_ability.can?(needed_permission, person) }
+    end
   end
 
   def tags

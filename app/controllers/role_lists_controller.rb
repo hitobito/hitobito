@@ -1,4 +1,6 @@
 class RoleListsController < CrudController
+  include FilteredPeople # provides all_filtered_or_listed_people, person_filter and list_filter_args
+
   self.nesting = Group
 
   self.permitted_attrs = [:type, :group_id] + Role.used_attributes
@@ -36,7 +38,7 @@ class RoleListsController < CrudController
 
   def new
     @group_selection = group.groups_in_same_layer.to_a
-    @people_ids = params[:ids]
+    @people_ids ||= params[:ids]
     @people_count = people.count
   end
 
@@ -44,18 +46,18 @@ class RoleListsController < CrudController
     entry # initialize entry so form extensions work without modifications
 
     @group_selection = group.groups_in_same_layer.to_a
-    @people_ids = params[:ids]
+    @people_ids ||= params[:ids]
   end
 
   def movable
     assign_attributes
     @role_types = role_list.collect_available_role_types
-    @people_ids = params[:ids]
+    @people_ids ||= params[:ids]
   end
 
   def deletable
     @role_types = role_list.collect_available_role_types
-    @people_ids = params[:ids]
+    @people_ids ||= params[:ids]
   end
 
   def self.model_class
@@ -91,15 +93,7 @@ class RoleListsController < CrudController
   end
 
   def people
-    @people ||= Person.where(id: people_ids).uniq
-  end
-
-  def people_ids
-    list_param(:ids)
-  end
-
-  def person_filter
-    @person_filter ||= Person::Filter::List.new(@group, current_user, list_filter_args)
+    @people ||= all_filtered_or_listed_people
   end
 
   def role_list

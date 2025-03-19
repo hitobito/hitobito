@@ -10,7 +10,7 @@ class PeopleController < CrudController
   include AsyncDownload
   include Tags
   prepend RenderTableDisplays
-  include FilteredPeople # provide person_filter and list_filter_args
+  include FilteredPeople # provides all_filtered_or_listed_people, person_filter and list_filter_args
 
   self.nesting = Group
 

@@ -6,6 +6,10 @@
 #  https://github.com/hitobito/hitobito_sww.
 
 # collect everything needed to filter people in a group with People::Filter::List
+#
+# the most common approach is wrapped in all_filtered_or_listed_people. if that
+# does not fit, implement the same ideas directly in your controller
+#
 # depends on methods to determine the current user and group
 module FilteredPeople
   extend ActiveSupport::Concern
@@ -15,6 +19,17 @@ module FilteredPeople
   end
 
   private
+
+  def all_filtered_or_listed_people
+    if params[:ids] == "all"
+      params.delete(:ids)
+
+      @people_ids = %w[all]
+      person_filter.entries
+    else
+      Person.where(id: list_params(:ids)).distinct
+    end
+  end
 
   def person_filter(accessibles_class = nil)
     @person_filter ||= Person::Filter::List.new(group, current_user, list_filter_args, accessibles_class)

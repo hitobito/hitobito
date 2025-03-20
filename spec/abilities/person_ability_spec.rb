@@ -105,7 +105,7 @@ describe PersonAbility do
       is_expected.to be_able_to(:show, other.person.reload)
     end
 
-    it "may show person with ended role in layer even if outside configured period" do
+    it "may show person with ended role in layer even if outside configured period because it may show deleted people" do
       allow(Settings.people).to receive(:ended_roles_readable_for).and_return(1.month)
       other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), start_on: 3.months.ago, end_on: 2.months.ago)
       is_expected.to be_able_to(:show, other.person.reload)

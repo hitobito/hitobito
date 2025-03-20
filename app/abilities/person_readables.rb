@@ -14,7 +14,7 @@ class PersonReadables < GroupBasedReadables
     @roles_join = include_ended_roles ? [roles_with_ended_readable: :group] : [roles: :group]
 
     if @group.nil?
-      can :index, Person, accessible_people { |_| true }
+      can :index, Person, accessible_people
     else # optimized queries for a given group
       group_accessible_people
     end
@@ -25,36 +25,24 @@ class PersonReadables < GroupBasedReadables
   attr_reader :roles_join
 
   def accessible_people
-    return people_roles_scope if user.root?
+    return Person.only_public_data if user.root?
 
-    people_roles_scope.then do |scope|
-      scope = scope.where(accessible_conditions.to_a).distinct
-      has_group_based_conditions? ? scope.where(groups: {deleted_at: nil}) : scope
-    end
+    scope = Person.only_public_data.where(accessible_conditions.to_a).distinct
+    scope = scope.joins(roles_join).where(groups: {deleted_at: nil}) if has_group_based_conditions?
+    scope
   end
 
   def group_accessible_people
-    group_people = people_roles_scope.where(groups: {id: group.id})
+    group_people = Person.only_public_data.joins(roles_join).where(groups: {id: group.id})
 
     if read_permission_for_this_group?
-      can :index, Person,
-        group_people.only_public_data { |_| true }
+      can :index, Person, group_people
 
     elsif layer_and_below_read_in_above_layer?
-      can :index, Person,
-        group_people.only_public_data.visible_from_above(group) { |_| true }
+      can :index, Person, group_people.visible_from_above(group)
 
     elsif contact_data_visible?
-      can :index, Person,
-        group_people.only_public_data.contact_data_visible { |_| true }
-    end
-  end
-
-  def people_roles_scope
-    Person.only_public_data.then do |scope|
-      next scope if user.root? && group.nil?
-
-      (group || has_group_based_conditions?) ? scope.joins(roles_join) : scope
+      can :index, Person, group_people.contact_data_visible
     end
   end
 

@@ -125,6 +125,25 @@ describe Role do
       end
     end
 
+    describe ":with_ended_readable" do
+      it "excludes ended roles" do
+        role.update!(end_on: Date.current.yesterday)
+        expect(Role.with_ended_readable).not_to include(role)
+      end
+
+      it "includes ended roles if inside configured period" do
+        allow(Settings.people).to receive(:ended_roles_readable_for).and_return(1.month)
+        role.update!(end_on: 1.days.ago)
+        expect(Role.with_ended_readable).to include(role)
+      end
+
+      it "includes ended roles if from anytime if setting is set to nil" do
+        allow(Settings.people).to receive(:ended_roles_readable_for).and_return(nil)
+        role.update!(end_on: 100.years.ago)
+        expect(Role.with_ended_readable).to include(role)
+      end
+    end
+
     describe ":inactive" do
       it "excludes roles without end_on and archived_at" do
         expect(role.end_on).to be_nil

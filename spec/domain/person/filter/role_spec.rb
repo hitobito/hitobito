@@ -417,14 +417,39 @@ describe Person::Filter::Role do
 
           it "finds single ended role and can show it on group" do
             role.update!(end_on: today)
-            expect(filter(start_at: today).entries).to have(1).item
-            expect(filter(start_at: today).all_count).to eq 1
+            filter_list = filter(start_at: today)
+            expect(filter_list.entries).to have(1).item
+            expect(filter_list.all_count).to eq 1
           end
 
           it "finds single ended role and can show it with deep filter" do
             role.update!(end_on: today)
-            expect(filter(range: "deep", group: group, start_at: today).entries).to have(1).item
-            expect(filter(start_at: today).all_count).to eq 1
+            filter_list = filter(range: "deep", group: group, start_at: today)
+            expect(filter_list.entries).to have(1).item
+            expect(filter_list.all_count).to eq 1
+          end
+
+          it "does not find role ended in the past because only active roles are accessible" do
+            role.update!(end_on: 1.month.ago)
+            filter_list = filter(range: "deep", group: group, start_at: 2.months.ago)
+            expect(filter_list.entries).to be_empty
+            expect(filter_list.all_count).to eq 1
+          end
+
+          it "does find role ended in the past if inside ended_roles_readable_for period" do
+            allow(Settings.people).to receive(:ended_roles_readable_for).and_return(3.months)
+            role.update!(end_on: 1.month.ago)
+            filter_list = filter(range: "deep", group: group, start_at: 2.months.ago)
+            expect(filter_list.entries).to have(1).item
+            expect(filter_list.all_count).to eq 1
+          end
+
+          it "does not find role ended in the past if outside ended_roles_readable_for period" do
+            allow(Settings.people).to receive(:ended_roles_readable_for).and_return(1.month)
+            role.update!(end_on: 2.month.ago)
+            filter_list = filter(range: "deep", group: group, start_at: 3.months.ago)
+            expect(filter_list.entries).to have(0).item
+            expect(filter_list.all_count).to eq 1
           end
         end
       end

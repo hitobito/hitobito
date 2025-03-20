@@ -27,7 +27,7 @@ module FilteredPeople
       @people_ids = %w[all]
       person_filter.entries
     else
-      Person.where(id: list_params(:ids)).distinct
+      Person.where(id: list_param(:ids)).distinct
     end
   end
 

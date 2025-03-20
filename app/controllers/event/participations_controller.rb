@@ -298,7 +298,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def load_answers
-    @answers = entry.answers.includes(:question)
+    @answers = entry.answers.includes(:question).sort_by { |a| a.question.question.to_s.strip.downcase }
     if entry.application
       @application = Event::ApplicationDecorator.decorate(entry.application)
     end

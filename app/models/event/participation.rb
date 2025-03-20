@@ -98,7 +98,7 @@ class Event::Participation < ActiveRecord::Base
 
   def init_answers
     answers.tap do |list|
-      event.questions.each do |question|
+      event.questions.sort_by(&:question).each do |question|
         next if question.hidden?
         next if list.find { |answer| answer.question_id == question.id }
 

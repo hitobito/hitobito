@@ -57,7 +57,7 @@ class TagListsController < ListController
       person_filter(PersonFullReadables).entries.includes(:tags).distinct
     else
       Person.where(id: list_param(:ids)).includes(:tags).distinct
-        .select { |person| current_ability.can?(needed_permission, person) }
+        .select { |person| current_ability.can?(:manage_tags, person) }
     end
   end
 

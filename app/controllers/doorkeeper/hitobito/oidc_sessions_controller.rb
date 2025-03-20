@@ -9,7 +9,7 @@ class Doorkeeper::Hitobito::OidcSessionsController < ActionController::Base # ru
   def destroy
     if id_token
       reset_session
-      sessions.destroy_all
+      person&.forget_me!
       access_tokens.destroy_all
       redirect_to redirect_target, allow_other_host: true, notice: I18n.t("devise.sessions.signed_out")
     else
@@ -19,11 +19,13 @@ class Doorkeeper::Hitobito::OidcSessionsController < ActionController::Base # ru
 
   private
 
+  def person
+    Person.find_by(id: id_token[:sub])
+  end
+
   def id_token
     @id_token ||= decode_id_token&.symbolize_keys
   end
-
-  def sessions = Session.where(person_id: id_token[:sub])
 
   def access_tokens
     Oauth::AccessToken.active.joins(:application)

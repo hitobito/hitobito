@@ -129,7 +129,7 @@ class InvoiceRunsController < CrudController
   end
 
   def invoices
-    parent.issued_invoices.where(id: list_param(:ids))
+  Invoice::Filter.new(params).apply(parent.issued_invoices)
   end
 
   def flash_message(action: action_name, count: nil, title: nil)

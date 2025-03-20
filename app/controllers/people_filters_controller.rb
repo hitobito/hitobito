@@ -2,7 +2,6 @@
 
 class PeopleFiltersController < CrudController
   self.nesting = Group
-  attr_accessor :filter_criterion
 
   decorates :group
 
@@ -44,10 +43,10 @@ class PeopleFiltersController < CrudController
     if @filter_criteria.include?(@filter_criterion.to_sym)
       respond_to do |format|
         if request.method == "GET"
-          format.turbo_stream { render 'create', status: :ok }
+          format.turbo_stream { render "create", status: :ok }
         end
         if request.method == "POST"
-          format.turbo_stream { render 'delete' }
+          format.turbo_stream { render "delete" }
         end
       end
     end
@@ -83,19 +82,29 @@ class PeopleFiltersController < CrudController
     people_list_path(search_params)
   end
 
+  def role_types
+    Role::TypeList.new(group.class).role_types.each_with_object([]) do |(key, subhash), result|
+      subhash.each do |subkey, role_list|
+        role_list.each do |role_type|
+          label = (subkey == key) ? "#{key} -> #{role_type.label}" : "#{key} -> #{subkey} -> #{role_type.label}"
+          result << [label, role_type.id, role_type.id]
+        end
+      end
+    end
+  end
+
   def compose_role_lists
-    @role_types = Role::TypeList.new(group.class)
     @qualification_kinds = QualificationKind.list.without_deleted
-                                            .map { |qualification|
-                                              [qualification.label, qualification.id, qualification.id]
-                                            }
-    @roles = Role.all.map {  |role| [role.type, role.id, role.id] }
+      .map { |qualification|
+      [qualification.label, qualification.id, qualification.id]
+    }
+    @roles = role_types
     @kinds = Person::Filter::Role::KINDS.each_with_index
-                                        .map {   |kind, index|
-                                          [t("people_filters.form.filters_role_kind.#{kind}"),
-                                           t("people_filters.form.filters_role_kind.#{kind}"),
-                                           index+1]
-                                        }
+      .map { |kind, index|
+      [t("people_filters.form.filters_role_kind.#{kind}"),
+        t("people_filters.form.filters_role_kind.#{kind}"),
+        index + 1]
+    }
     @validities = [
       [t("people_filters.qualification.validity_label.active"), "active", 1],
       [t("people_filters.qualification.validity_label.reactivateable"), "reactivateable", 2],

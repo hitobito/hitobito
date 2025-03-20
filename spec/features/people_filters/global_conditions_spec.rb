@@ -13,8 +13,11 @@ describe "Global Conditions", js: true do
   let(:alice) { people(:bottom_member) }
 
   context "modify" do
-    let(:path) { edit_group_mailing_list_filter_path(group_id: MailingList.first.group_id,
-                                                     mailing_list_id: MailingList.first.id)}
+    let(:path) {
+      edit_group_mailing_list_filter_path(group_id: MailingList.first.group_id,
+        mailing_list_id: MailingList.first.id)
+    }
+
     before {
       sign_in(top_leader)
       visit path
@@ -27,8 +30,8 @@ describe "Global Conditions", js: true do
 
       select "Alter", from: "attribute_filter"
       all(".attribute_constraint_dropdown")[1].find("option[value='equal']").select_option
-      all("input.form-control[type='text']")[1].set(56)
 
+      all("input.form-control[type='number']")[0].set(56)
       first(".btn.btn-primary", text: "Speichern").click
 
       within("div#main") do
@@ -39,7 +42,7 @@ describe "Global Conditions", js: true do
 
     context "member access" do
       before {
-        Rails.env.stub(:production? => true)
+        Rails.env.stub(production?: true)
         sign_in(alice)
       }
 

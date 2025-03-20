@@ -120,6 +120,7 @@ describe PeopleController, js: true do
       click_link "Weitere Ansichten"
       click_link "Neuer Filter..."
       expect(page).to have_content "Personen filtern"
+      find(".btn.dropdown-toggle").click
       click_link "Qualifikationen"
     end
 
@@ -156,6 +157,8 @@ describe PeopleController, js: true do
       click_link "Weitere Ansichten"
       click_link "Neuer Filter..."
       expect(page).to have_content "Personen filtern"
+
+      find(".btn.dropdown-toggle").click
       click_link "Felder"
     end
 

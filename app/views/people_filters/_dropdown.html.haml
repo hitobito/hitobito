@@ -1,0 +1,5 @@
+%ul.dropdown-menu#filter-criteria-dropdown{"data-filter-dropdown-target": "menu"}
+  - @filter_criteria.each do |filter_criterion|
+    - if entry.filter_chain[filter_criterion.to_sym].nil?
+      = link_to t("people_filters.#{filter_criterion}.title"), "/groups/1/people_filters/#{filter_criterion}",
+          class: "dropdown-item", id: "dropdown-option-#{filter_criterion}", data: {turbo_stream: true}

@@ -17,7 +17,7 @@
     .alert.alert-warning= t('.not_enough_permissions')
 
   .d-flex.flex-row.align-items-center.mb-2
-    .w-10.mr-5
+    .w-10
       %label= t("people_filters.qualification.title")
     .w-90.shown{"data-controller": "form-select"}
       = select_tag('filters[qualification][qualification_kind_ids][]',
@@ -29,7 +29,7 @@
                       data: { chosen_no_results: t('global.chosen_no_results'),
                       placeholder: t("people_filters.qualification.prompt_qualification_placeholder") } )
   .d-flex.flex-row.align-items-center.mb-2
-    .w-10.mr-5
+    .w-10
       %label= t("people_filters.qualification.criterion")
     .w-90.shown.d-flex.flex-column
       .d-flex.flex-row
@@ -42,7 +42,7 @@
           = t('people_filters.simple_radio.match.all')
 
   .d-flex.flex-row.align-items-center.mb-2
-    .w-10.mr-5
+    .w-10
       %label= t("people_filters.qualification.validity")
     .w-90.shown.d-flex.flex-column{"data-controller": "form-select"}
       = select_tag('filters[qualification][validity]',
@@ -54,7 +54,7 @@
                       data: { chosen_no_results: t('global.chosen_no_results'),
                       placeholder: t("people_filters.qualification.prompt_qualification_validity_placeholder") } )
   .d-flex.flex-row.align-items-center.mb-2
-    .w-10.mr-5
+    .w-10
       %label= t('.prompt_date')
     .w-90.shown.d-flex.flex-row{"data-controller": "form-select"}
       .input-group.w-75.mr-3

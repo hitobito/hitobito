@@ -36,10 +36,10 @@ module PeopleFilterHelper
 
       content << content_tag(:div, class: "flex-none") do
         select(:filters, "attributes[#{time}][constraint]",
-               filters,
-               {selected: constraint},
-               html_options.merge(class:
-                                    'attribute_constraint_dropdown
+          filters,
+          {selected: constraint},
+          html_options.merge(class:
+                               'attribute_constraint_dropdown
                                          ms-3 form-select form-select-sm', name: "filters[attributes][#{time}][constraint]"))
       end
 

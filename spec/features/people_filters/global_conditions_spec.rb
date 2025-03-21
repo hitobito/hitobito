@@ -13,8 +13,11 @@ describe "Global Conditions", js: true do
   let(:alice) { people(:bottom_member) }
 
   context "modify" do
-    let(:path) { edit_group_mailing_list_filter_path(group_id: MailingList.first.group_id,
-                                                     mailing_list_id: MailingList.first.id)}
+    let(:path) {
+      edit_group_mailing_list_filter_path(group_id: MailingList.first.group_id,
+        mailing_list_id: MailingList.first.id)
+    }
+
     before {
       sign_in(top_leader)
       visit path
@@ -39,7 +42,7 @@ describe "Global Conditions", js: true do
 
     context "member access" do
       before {
-        Rails.env.stub(:production? => true)
+        Rails.env.stub(production?: true)
         sign_in(alice)
       }
 

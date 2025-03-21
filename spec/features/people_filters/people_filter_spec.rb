@@ -14,6 +14,7 @@ describe "PeopleFilter", js: true do
 
   context "filtering" do
     let(:path) { new_group_people_filter_path(group_id: Group.first.id) }
+
     before {
       sign_in(top_leader)
       visit path
@@ -148,6 +149,7 @@ describe "PeopleFilter", js: true do
 
     context "saving" do
       let(:path) { new_group_people_filter_path(group_id: Group.first.id) }
+
       before {
         sign_in(top_leader)
         visit path
@@ -171,8 +173,9 @@ describe "PeopleFilter", js: true do
 
   context "member access" do
     let(:path) { new_group_people_filter_path(group_id: Group.find_by(name: "Top").id) }
+
     before {
-      Rails.env.stub(:production? => true)
+      Rails.env.stub(production?: true)
       sign_in(alice)
     }
 

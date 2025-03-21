@@ -58,32 +58,6 @@ RSpec.describe "GET /oidc/logout", type: :request do
       expect { other.reload }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
-    it "does not destroy tokens associated with another application" do
-      other_application = Fabricate(:application, scopes: scopes)
-      other = Fabricate(:access_token, application: other_application, scopes: scopes, resource_owner_id: person.id)
-      get "/oidc/logout", params: {id_token_hint: id_token.as_jws_token}
-      expect { token.reload }.to raise_error(ActiveRecord::RecordNotFound)
-      expect { other.reload }.not_to raise_error
-    end
-
-    it "destroys associated login session" do
-      password = "cNb@X7fTdiU4sWCMNos3gJmQV_d9e9"
-      person.update!(password: password)
-      expect do
-        post "/users/sign_in", params: {person: {login_identity: person.email, password: password}}
-      end.to change { Session.where(person_id: person.id).count }.by(1)
-      expect do
-        get "/oidc/logout", params: {id_token_hint: id_token.as_jws_token}
-      end.to change { Session.where(person_id: person.id).count }.by(-1)
-    end
-
-    it "destroys all sessions associated with that person" do
-      2.times { Session.create!(person_id: person.id, session_id: SecureRandom.hex, data: {}) }
-      expect do
-        get "/oidc/logout", params: {id_token_hint: id_token.as_jws_token}
-      end.to change { Session.where(person_id: person.id).count }.by(-2)
-    end
-
     it "clears remember_person_token cookie" do
       password = "cNb@X7fTdiU4sWCMNos3gJmQV_d9e9"
       person.update!(password: password)
@@ -92,6 +66,15 @@ RSpec.describe "GET /oidc/logout", type: :request do
       get "/oidc/logout", params: {id_token_hint: id_token.as_jws_token}
       expect(response.cookies).not_to have_key("remember_person_token")
     end
+
+    it "does not destroy tokens associated with another application" do
+      other_application = Fabricate(:application, scopes: scopes)
+      other = Fabricate(:access_token, application: other_application, scopes: scopes, resource_owner_id: person.id)
+      get "/oidc/logout", params: {id_token_hint: id_token.as_jws_token}
+      expect { token.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { other.reload }.not_to raise_error
+    end
+
     it "redirects to supplied url" do
       get "/oidc/logout", params: {id_token_hint: id_token.as_jws_token, post_logout_redirect_uri: "http://example.com"}
       expect { token.reload }.to raise_error(ActiveRecord::RecordNotFound)

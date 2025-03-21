@@ -379,12 +379,16 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     application_questions << Question.global
       .where(event_type: [self.class.sti_name, nil])
       .where.not(id: application_questions.map(&:derived_from_question_id))
-      .application.map { |question| question.derive(disclosure: disclosure) }
+      .application
+      .sort_by(&:question)
+      .map { |question| question.derive(disclosure: disclosure) }
 
     admin_questions << Question.global
       .where(event_type: [self.class.sti_name, nil])
       .where.not(id: admin_questions.map(&:derived_from_question_id))
-      .admin.map { |question| question.derive(disclosure: disclosure) }
+      .admin
+      .sort_by(&:question)
+      .map { |question| question.derive(disclosure: disclosure) }
   end
 
   def course?

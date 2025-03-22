@@ -51,7 +51,7 @@ class Person::Subscriptions
 
     subscribable
       .joins(:group)
-      .where(groups: { id: ancestor_group_ids })
+      .where(groups: {id: ancestor_group_ids})
       .distinct
   end
 

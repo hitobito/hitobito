@@ -11,7 +11,7 @@ class Bulk::TagAddJob < BaseJob
   def initialize(ids, tag_names)
     @ids = ids
     @tag_names = tag_names
-    super
+    super()
   end
 
   def perform

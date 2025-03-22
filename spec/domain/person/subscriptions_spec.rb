@@ -60,6 +60,11 @@ describe Person::Subscriptions do
         create_person_subscription
         expect(subscribed).to eq [list]
       end
+
+      it "includes list when group subscription exists" do
+        create_group_subscription
+        expect(subscribed).to eq [list]
+      end
     end
   end
 

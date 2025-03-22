@@ -8,57 +8,58 @@ require "spec_helper"
 describe TagListsController do
   before { sign_in(people(:top_leader)) }
 
-  let(:tag_list_double) { instance_double("tag_list") }
   let(:group) { groups(:top_group) }
   let(:leader) { people(:top_leader) }
   let(:bottom_member) { people(:bottom_member) }
   let(:root) { people(:root) }
 
   context "authorization" do
-    before do
-      sign_in(people(:bottom_member))
-      allow(tag_list_double).to receive(:add).and_return 0
-      allow(tag_list_double).to receive(:remove).and_return 0
+    it "filters out people whose tags we cannot manage from create request" do
+      post :create, params: {group_id: group.id, ids: [root.id, bottom_member.id].join(","), tags: "Tagname"}
+
+      expect(assigns(:manageable_people)).to contain_exactly bottom_member
     end
 
-    it "filters out people whose tags we cannot manage from create request" do
-      allow_any_instance_of(TagList).to receive(:new) do |people, _|
-        expect(people).to contain_exactly bottom_member
-        tag_list_double
-      end
+    it "leaves people whose tags we can manage from create request" do
       post :create, params: {group_id: group.id, ids: [leader.id, bottom_member.id].join(","), tags: "Tagname"}
+
+      expect(assigns(:manageable_people)).to contain_exactly leader, bottom_member
     end
 
     it "filters out people whose tags we cannot manage from destroy request" do
-      allow_any_instance_of(TagList).to receive(:new) do |people, _|
-        expect(people).to contain_exactly bottom_member
-        tag_list_double
-      end
-      post :destroy, params: {group_id: group.id, ids: [leader.id, bottom_member.id].join(","), tags: "Tagname"}
+      post :destroy, params: {group_id: group.id, ids: [root.id, bottom_member.id].join(","), tags: "Tagname"}
+
+      expect(assigns(:manageable_people)).to contain_exactly bottom_member
     end
   end
 
   context "GET modal for bulk creating tags" do
-    it "shows modal" do
+    it "shows modal for select people" do
       get :new, xhr: true, params: {group_id: group.id, ids: [leader.id, bottom_member.id].join(",")}, format: :js
       expect(response).to have_http_status(:ok)
       expect(response).to render_template("tag_lists/new")
       expect(assigns(:manageable_people)).to contain_exactly leader, bottom_member
     end
+
+    it "shows modal for all people" do
+      get :new, xhr: true, params: {group_id: group.id, ids: "all", filter: { range: 'deep'}}, format: :js
+      expect(response).to have_http_status(:ok)
+      expect(response).to render_template("tag_lists/new")
+      expect(assigns(:manageable_people)).to contain_exactly leader
+    end
   end
 
   context "POST create" do
-    before { allow(controller).to receive(:tag_list).and_return tag_list_double }
-
     it "creates a tag and displays flash message" do
-      expect(tag_list_double).to receive(:add).and_return(1)
-      post :create, params: {group_id: group.id, ids: leader.id, tags: "new tag"}
-      expect(flash[:notice]).to include "Ein Tag wurde erstellt"
+      expect do
+        post :create, params: {group_id: group.id, ids: [bottom_member.id], tags: "new tag"}
+        expect(flash[:notice]).to include "Ein Tag wurde erstellt"
+      end.to change(Delayed::Job, :count).by(1)
     end
 
     it "creates zero tags and displays flash message" do
       expect(tag_list_double).to receive(:add).and_return(0)
-      post :create, params: {group_id: group.id, ids: leader.id, tags: "new tag"}
+      post :create, params: {group_id: group.id, ids: [], tags: "new tag"}
       expect(flash[:notice]).to include "Es wurden keine Tags erstellt"
     end
 
@@ -66,6 +67,10 @@ describe TagListsController do
       expect(tag_list_double).to receive(:add).and_return(17)
       post :create, params: {group_id: group.id, ids: leader.id, tags: "new tag"}
       expect(flash[:notice]).to include "17 Tags wurden erstellt"
+    end
+
+    it "creates many tags on 'all' and displays flash message" do
+      flunk
     end
   end
 

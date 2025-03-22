@@ -11,13 +11,19 @@ class TagListsController < ListController
   respond_to :js, only: [:new, :deletable]
 
   def create
-    Bulk::TagAddJob.new(manageable_people.map(&:ids), tag_names).enqueue
+    manageable_people_ids = manageable_people.map(&:id)
+
+    Bulk::TagAddJob.new(manageable_people_ids, tag_names).enqueue!
+    count = manageable_people_ids.size
 
     redirect_to(group_people_path(group), notice: flash_message(:success, count: count))
   end
 
   def destroy
-    Bulk::TagRemoveJob.new(manageable_people.map(&:ids), tag_names.enqueue)
+    manageable_people_ids = manageable_people.map(&:id)
+
+    Bulk::TagRemoveJob.new(manageable_people_ids, tag_names).enqueue!
+    count = manageable_people_ids.size
 
     redirect_to(group_people_path(group), notice: flash_message(:success, count: count))
   end

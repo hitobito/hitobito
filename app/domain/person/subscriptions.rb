@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::Subscriptions
-  attr_reader :scope
+  attr_reader :scope, :person
 
   def initialize(person, scope = MailingList)
     @person = person
@@ -39,6 +39,19 @@ class Person::Subscriptions
       )
       .where.not(id: subscribed.map(&:id))
       .where.not(id: globally_excluding_mailing_list_ids)
+      .distinct
+  end
+
+  # return all mailing lists that are from higher groups or layers and not yet subscribed
+  def subscribable_ancestors_only(group)
+    relevant_groups = person.roles.without_archived.map(&:group)
+    ancestor_group_ids = relevant_groups.flat_map do |role_group|
+      role_group.self_and_ancestors.pluck(:id)
+    end.uniq
+
+    subscribable
+      .joins(:group)
+      .where(groups: { id: ancestor_group_ids })
       .distinct
   end
 

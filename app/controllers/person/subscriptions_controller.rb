@@ -5,7 +5,7 @@
 
 class Person::SubscriptionsController < ApplicationController
   skip_authorization_check
-  helper_method :subscribed, :subscribable, :person
+  helper_method :subscribed, :subscribable, :subscribable_ancestors_only, :person
 
   def index
     authorize!(:show_details, person)
@@ -48,15 +48,21 @@ class Person::SubscriptionsController < ApplicationController
     @subscribable ||= grouped_by_layer(subscriptions.subscribable - subscriptions.subscribed)
   end
 
+  def subscribable_ancestors_only
+    @subscribable_ancestors_only ||= grouped_by_layer(subscriptions.subscribable_ancestors_only(@group) - subscriptions.subscribed)
+  end
+
   def subscriptions
     @subscriptions ||= Person::Subscriptions.new(person)
   end
 
   def grouped_by_layer(mailing_lists)
+    layer_order = Group.all_types.select(&:layer).map(&:name)
     MailingList
       .includes(group: :layer_group)
       .list
       .where(id: mailing_lists.map(&:id))
       .group_by { _1.group.layer_group }
+      .sort_by { |layer, _lists| [layer_order.index(layer.class.name) || Float::INFINITY, layer.lft] }
   end
 end

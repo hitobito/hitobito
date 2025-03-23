@@ -69,6 +69,44 @@ To use the API you need a valid authentication token, this can be one of the fol
 - Personal OAuth access tokens
 - Active user session
 
+#### i18n / globalization
+
+To retrieve localized responses for fields that are translated with [globalize](https://github.com/globalize/globalize) you can set the `locale`query parameter to the desired locale.
+
+```curl
+curl \
+  'http://hitobito.example.com/api/event_kinds/1?locale=fr' \
+  -H 'accept: */*' \
+  -H 'X-TOKEN: u-j3QQoPoSg8pwwgqe3W9CMVPVPFCFykFK2A2VCSq1BzznDuUA' \
+  -H 'Content-Type: application/vnd.api+json'
+```
+
+```json
+{
+  "data": {
+    "id": "1",
+    "type": "event_kinds",
+    "attributes": {
+      "label": "Cours de coach",
+      "short_name": "",
+      "general_information": null,
+      "application_conditions": null,
+      "minimum_age": 18,
+      "created_at": "2025-03-21T22:13:02+01:00",
+      "updated_at": "2025-03-23T12:30:16+01:00"
+    },
+    "relationships": {
+      "kind_category": {
+        "meta": {
+          "included": false
+        }
+      }
+    }
+  },
+  "meta": {}
+}
+```
+
 #### Service token
 
 Service tokens are impersonal tokens ([service accounts](/doc/developer/common/api/service_accounts.md)), that are meant to represent external applications.

@@ -12,7 +12,7 @@ describe DocumentationReader do
 
   let(:filename) { "developer/common/api/json_api" }
 
-  it "can generate HTML form a doc-markdown" do
+  it "can generate HTML from a doc-markdown" do
     is_expected.to include("<h2>")
   end
 

@@ -5,7 +5,7 @@ The hitobito JSON:API implements the open standard [json:api](https://jsonapi.or
 
 Visit your hitobito's [Swagger UI](/api-docs) for detailed documentation and a sandbox for testing/developing requests. (Reload if you get a blank page on the first visit).
 
-This documentation is about the new JSON API introduced in 2023. Check the [legacy Api documentation](rest_api.md) for the old Api.
+This documentation is about the new JSON API introduced in 2023. Check the [legacy Api documentation](/doc/developer/common/api/rest_api.md) for the old Api.
 
 ### Endpoints
 
@@ -71,7 +71,7 @@ To use the API you need a valid authentication token, this can be one of the fol
 
 #### Service token
 
-Service tokens are impersonal tokens ([service accounts](service_accounts.md)), that are meant to represent external applications.
+Service tokens are impersonal tokens ([service accounts](/doc/developer/common/api/service_accounts.md)), that are meant to represent external applications.
 
 > :bangbang: Service tokens allow you to implement user unaware applications. Note that the
 > consumer application is responsible for data protection: with service tokens the application
@@ -82,7 +82,7 @@ Service tokens are impersonal tokens ([service accounts](service_accounts.md)), 
 Personal OAuth access tokens have the same permissions as the corresponding user, this allows you
 to implement an application where users log in using Hitobito as an OAuth authentication provider.
 
-To use the API, the provided access token is required to have the `api` scope, see [OAuth](../../people/oauth.md) for more information.
+To use the API, the provided access token is required to have the `api` scope, see [OAuth](/doc/developer/people/oauth.md) for more information.
 
 #### Active user session
 

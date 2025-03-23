@@ -71,7 +71,7 @@ To use the API you need a valid authentication token, this can be one of the fol
 
 #### i18n / globalization
 
-To retrieve localized responses for fields that are translated with [globalize](https://github.com/globalize/globalize) you can set the `locale`query parameter to the desired locale.
+To retrieve localized responses for fields that are translated with [globalize](https://github.com/globalize/globalize) you can set the `locale` query parameter to the desired locale.
 
 ```curl
 curl \

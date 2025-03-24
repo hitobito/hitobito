@@ -38,7 +38,7 @@ class HelpTexts::Renderer
   end
 
   def safe_html(rich_text)
-    template.sanitize_action_text_content(rich_text.body)
+    template.sanitize_action_text_content(rich_text.body) if rich_text.body
   end
 
   private

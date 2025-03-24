@@ -12,8 +12,8 @@ class Raven::CopyException
   end
 
   def call(env)
-    @app.call(env).tap do
-      env["rack.exception"] = env["action_dispatch.exception"]
-    end
+    @app.call(env)
+  ensure
+    env["rack.exception"] = env["action_dispatch.exception"]
   end
 end

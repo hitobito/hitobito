@@ -112,7 +112,7 @@ module Hitobito
     config.middleware.insert_before Rack::ETag, Rack::Deflater
 
     require_relative "../lib/raven/copy_exception"
-    config.middleware.insert_after ActionDispatch::ShowExceptions, Raven::CopyException
+    config.middleware.insert_before ActionDispatch::ShowExceptions, Raven::CopyException
 
     config.cache_store = :mem_cache_store, { compress: true,
                                              namespace: ENV['RAILS_HOST_NAME'] || 'hitobito' }

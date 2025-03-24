@@ -291,6 +291,16 @@ describe Person::Filter::Attributes do
           expect(entries).to include(@tg_member3)
         end
       end
+
+      context "blank" do
+        let(:constraint) { "blank" }
+
+        it "returns people with matching attribute" do
+          expect(entries.size).to eq(1)
+          # top leaders birthday is nil
+          expect(entries).to include(people(:top_leader))
+        end
+      end
     end
 
     context "birthday date attribute" do

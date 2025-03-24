@@ -281,6 +281,15 @@ describe Person::Filter::Attributes do
           expect(entries).to include(@tg_member3)
         end
       end
+
+      context "blank" do
+        let(:constraint) { "blank" }
+
+        it "returns people with matching attribute" do
+          expect(entries.size).to eq(1)
+          expect(entries).to include(user)
+        end
+      end
     end
 
     context "birthday date attribute" do
@@ -325,6 +334,15 @@ describe Person::Filter::Attributes do
           expect(entries.size).to eq(2)
           expect(entries).to include(@tg_member1)
           expect(entries).to include(@tg_member2)
+        end
+      end
+
+      context "greater" do
+        let(:constraint) { "blank" }
+
+        it "returns people with matching attribute" do
+          expect(entries.size).to eq(1)
+          expect(entries).to include(user)
         end
       end
     end

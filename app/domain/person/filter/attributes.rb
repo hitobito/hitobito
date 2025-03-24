@@ -40,6 +40,7 @@ class Person::Filter::Attributes < Person::Filter::Base
     when "greater" then years_greater_scope(value)
     when "smaller" then years_smaller_scope(value)
     when "equal" then years_equal_scope(value)
+    when "blank" then Person.where(birthday: nil)
     else raise("unexpected constraint: #{constraint.inspect}")
     end
   end
@@ -85,7 +86,7 @@ class Person::Filter::Attributes < Person::Filter::Base
   def persisted_attribute_condition_sql(key, value, constraint)
     sql_string = case constraint
     when /match/ then match_search_sql(key, value, constraint)
-    when /blank/ then "COALESCE(TRIM(people.#{key}), '') #{sql_comparator(constraint)} ?"
+    when /blank/ then "COALESCE(TRIM(CAST(people.#{key} AS Text)), '') #{sql_comparator(constraint)} ?"
     else "people.#{key} #{sql_comparator(constraint)} ?"
     end
 

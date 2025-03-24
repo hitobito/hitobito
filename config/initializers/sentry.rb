@@ -4,10 +4,16 @@
 #  is part of hitobito and licensed under the Affero General Public License
 #  version 3 or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+#
+#
 
 Rails.application.reloader.to_prepare do
   Raven.configure do |config|
     config.sanitize_fields = Rails.application.config.filter_parameters.map(&:to_s)
+
+
+    # This patches rails and no longer works with current rails version
+    config.rails_report_rescued_exceptions = false
 
     config.release = Rails.application.class.versions(Rails.root.join("VERSION")).first.chomp
 

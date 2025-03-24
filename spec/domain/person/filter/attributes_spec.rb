@@ -123,7 +123,7 @@ describe Person::Filter::Attributes do
         context "blank" do
           let(:key) { "last_name" }
           let(:constraint) { "blank" }
-          let(:value) { nil }
+          let(:value) { "" }
 
           it "returns people with blank attribute" do
             @tg_member1.update!(last_name: "")
@@ -131,6 +131,16 @@ describe Person::Filter::Attributes do
             expect(entries).to include(@tg_member1)
             expect(entries).to include(@tg_member2)
             expect(entries).not_to include(@tg_member3)
+          end
+
+          context "date fields" do
+            let(:key) { "birthday" }
+
+            it "returns people with matching attribute" do
+              expect(entries.size).to eq(1)
+              # top leaders birthday is nil
+              expect(entries).to include(people(:top_leader))
+            end
           end
         end
       end

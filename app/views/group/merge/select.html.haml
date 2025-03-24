@@ -19,6 +19,7 @@
   = field_set_tag do
     = label(:merger, :merge_group_id, t('.merge_group_with', group: @group))
     - @candidates.each do |group|
-      = f.inline_radio_button(:merge_group_id, group.id, group.to_s, false)
+      %div
+        = f.inline_radio_button(:merge_group_id, group.id, group.to_s, false)
 
   = form_buttons(f, submit_label: t('.merge_button'), cancel_url: group_path(@group))

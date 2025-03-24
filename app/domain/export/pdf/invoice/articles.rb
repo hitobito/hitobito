@@ -11,9 +11,12 @@ module Export::Pdf::Invoice
 
     def render # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       move_cursor_to 510
-      reminder = invoice.payment_reminders.last
-      font_size(12) { text title(reminder) }
-      render_reminder_text(reminder) if @options[:reminders]
+      font_size(12) { text title }
+      pdf.move_down 8
+
+      render_description if render_description?
+      render_reminder if render_reminder?
+
       pdf.move_down 10
       pdf.font_size(8) { articles_table }
 
@@ -24,24 +27,27 @@ module Export::Pdf::Invoice
 
     private
 
-    def render_reminder_text(reminder)
-      pdf.move_down 8
-      render_description(reminder)
+    def title
+      return invoice.title unless render_reminder?
+
+      "#{latest_reminder.title} - #{invoice.title}"
     end
 
-    def title(reminder)
-      return invoice.title unless @options[:reminders] && reminder
-
-      "#{reminder.title} - #{invoice.title}"
+    def render_description
+      text invoice.description
     end
 
-    def render_description(reminder)
-      text invoice.description if reminder.nil? || reminder.show_invoice_description?
+    def render_description?
+      latest_reminder.nil? || latest_reminder.show_invoice_description? || !@options[:reminders]
+    end
 
-      if reminder
-        pdf.move_down 8 if reminder.show_invoice_description?
-        font_size(10) { text reminder.text }
-      end
+    def render_reminder
+      pdf.move_down 8 if latest_reminder.show_invoice_description?
+      font_size(10) { text latest_reminder.text }
+    end
+
+    def render_reminder?
+      @options[:reminders] && latest_reminder.present?
     end
 
     def articles_table
@@ -144,5 +150,7 @@ module Export::Pdf::Invoice
 
       @show_vat = invoice.invoice_items.any?(&:vat_rate)
     end
+
+    def latest_reminder = @latest_reminder ||= invoice.payment_reminders.last
   end
 end

@@ -19,11 +19,12 @@ module ContactAttrs
     private
 
     delegate :t, to: I18n
+    delegate :radio_button_tag, :check_box_tag, :hidden_field_tag, to: "f.template"
 
     attr_reader :f, :event
 
     def mandatory_contact_attrs
-      Event::ParticipationContactData.mandatory_contact_attrs.collect do |a|
+      Event::ParticipationContactData.mandatory_contact_attrs.take(1).collect do |a|
         f.labeled(a, attr_label(a)) do
           radio_buttons(a, true, [:required])
         end
@@ -31,7 +32,7 @@ module ContactAttrs
     end
 
     def configurable_contact_attrs
-      non_mandatory_contact_attrs.collect do |a|
+      non_mandatory_contact_attrs.take(1).collect do |a|
         f.labeled(a, attr_label(a)) do
           radio_buttons(a)
         end
@@ -63,15 +64,15 @@ module ContactAttrs
       f.label("#{for_label(attr)}_#{option}", class: "radio inline mt-2") do
         checked ||= checked?(attr, option)
         options = {disabled: disabled, checked: checked, class: "me-2"}
-        f.radio_button(for_label(attr), option, options) +
+        radio_button_tag(for_name(attr), option, options) +
           option_label(option)
       end
     end
 
     def assoc_checkbox(assoc)
       f.label(for_label(assoc), class: "checkbox inline") do
-        options = {checked: assoc_hidden?(assoc), class: "me-2 mt-2"}
-        f.check_box(for_label(assoc), options, :hidden) +
+        hidden_field_tag(for_name(assoc), 0, id: for_name(assoc) + "_hidden") +
+          check_box_tag(for_name(assoc), :hidden, assoc_hidden?(assoc), class: "me-2 mt-2") +
           option_label(:hidden)
       end
     end
@@ -89,8 +90,12 @@ module ContactAttrs
       !required && !hidden
     end
 
+    def for_name(attr)
+      "event[contact_attrs][#{attr}]"
+    end
+
     def for_label(attr)
-      "contact_attrs[#{attr}]"
+      "contact_attrs_#{attr}"
     end
 
     def option_label(option)

@@ -518,6 +518,24 @@ describe Role do
     end
   end
 
+  context "#new" do
+    it "sets start_on to current date" do
+      r = Role.new
+      expect(r.start_on).to eq(Date.current)
+    end
+
+    it "does not override given start_on" do
+      date = Date.new(2025, 3, 17)
+      r = Role.new(start_on: date)
+      expect(r.start_on).to eq(date)
+    end
+
+    it "does not override given blank start_on" do
+      r = Role.new(start_on: nil)
+      expect(r.start_on).to be_nil
+    end
+  end
+
   context "#create" do
     let(:person) { people(:top_leader) }
 

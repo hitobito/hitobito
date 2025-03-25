@@ -156,17 +156,15 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
 
   def build_role
     type = extract_model_attr(:type)
-    start_on = extract_date(:start_on)
-    end_on = extract_date(:end_on)
+    attrs = {}
+    attrs[:start_on] = extract_date(:start_on) if model_params&.key?(:start_on)
+    attrs[:end_on] = extract_date(:end_on) if model_params&.key?(:end_on)
 
-    return Role.new(start_on:, end_on:) if type.blank?
+    return Role.new(attrs) if type.blank?
 
     @type = @group.class.find_role_type!(type)
 
-    @type.new.tap do |role|
-      role.start_on = start_on
-      role.end_on = end_on
-    end
+    @type.new(attrs)
   end
 
   def build_person(role)

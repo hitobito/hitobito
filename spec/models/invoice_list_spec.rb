@@ -32,10 +32,31 @@ describe InvoiceList do
   let(:person) { people(:top_leader) }
   let(:other_person) { people(:bottom_member) }
 
-  it "accepts recipient_ids as comma-separates values" do
-    subject.attributes = {recipient_ids: "#{person.id},#{other_person.id}"}
-    expect(subject.recipient_ids_count).to eq 2
-    expect(subject.first_recipient).to eq person
+  describe "recipient_ids" do
+    it "accepts an array" do
+      subject.recipient_ids = [1, 2, 3]
+      expect(subject.recipient_ids).to eq [1, 2, 3]
+    end
+
+    it "accepts comma seperated value string array" do
+      subject.recipient_ids = "1,2,3"
+      expect(subject.recipient_ids).to eq [1, 2, 3]
+    end
+
+    it "ignores invalid ids" do
+      subject.recipient_ids = "1,asdf,3"
+      expect(subject.recipient_ids).to eq [1, 3]
+    end
+
+    it "does default to empty array" do
+      expect(subject.recipient_ids).to eq []
+    end
+
+    it "accepts recipient_ids as attributes" do
+      subject.attributes = {recipient_ids: "#{person.id},#{other_person.id}"}
+      expect(subject.recipient_ids_count).to eq 2
+      expect(subject.first_recipient).to eq person
+    end
   end
 
   it "accepts receiver as id and type" do

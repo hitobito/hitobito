@@ -40,7 +40,7 @@ class InvoiceList < ActiveRecord::Base
   has_one :message, dependent: :nullify
   has_many :invoices, dependent: :destroy
 
-  attr_accessor :recipient_ids, :invoice
+  attr_accessor :invoice
 
   validates :receiver_type, inclusion: %w[MailingList Group], allow_blank: true
 
@@ -73,30 +73,24 @@ class InvoiceList < ActiveRecord::Base
   end
 
   def recipient_ids_count
-    if receiver
-      receiver.people.unscope(:select).count
-    else
-      recipient_ids.split(",").count
-    end
+    receiver ? receiver.people.unscope(:select).count : recipient_ids.count
   end
 
   def first_recipient
-    if receiver
-      receiver.people.first
-    else
-      Person.find(recipient_ids.split(",").first)
-    end
+    receiver ? receiver.people.first : Person.find(recipient_ids.first)
   end
 
   def recipients
-    if receiver
-      receiver.people
-    else
-      Person.where(id: recipient_ids.split(","))
-    end
+    receiver ? receiver.people : Person.where(id: recipient_ids)
   end
 
   def invoice_config
     group.layer_group.invoice_config
+  end
+
+  def recipient_ids = @recipient_ids.to_a
+
+  def recipient_ids=(ids)
+    @recipient_ids = ids.is_a?(Array) ? ids : ids.to_s.split(",").map(&:to_i).select(&:positive?)
   end
 end

@@ -15,3 +15,8 @@ def gr(resource, scope: nil, params: {}, ability: nil, as: Role.first.person)
     JSON.parse(resources.to_jsonapi).deep_symbolize_keys
   end
 end
+
+def form_for(model, name: model.class.table_name.singularize, options: {})
+  ActionController::Base.helpers.extend(UtiltyHelper)
+  StandardFormBuilder.new(model.class.name, model, ActionController::Base.helpers, options)
+end

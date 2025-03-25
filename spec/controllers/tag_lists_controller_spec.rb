@@ -35,17 +35,29 @@ describe TagListsController do
 
   context "GET modal for bulk creating tags" do
     it "shows modal for select people" do
+      person_query_double = double('person_query')
+      allow(Person).to receive(:from).and_return(person_query_double)
+      allow(person_query_double).to receive(:count).and_return(2)
+
       get :new, xhr: true, params: {group_id: group.id, ids: [leader.id, bottom_member.id].join(",")}, format: :js
       expect(response).to have_http_status(:ok)
       expect(response).to render_template("tag_lists/new")
-      expect(assigns(:manageable_people)).to contain_exactly leader, bottom_member
+
+      expect(assigns(:manageable_people))
+        .to contain_exactly(leader, bottom_member)
+        .and have(person_query_double.count).items
     end
 
     it "shows modal for all people" do
-      get :new, xhr: true, params: {group_id: group.id, ids: "all", filter: { range: 'deep'}}, format: :js
+      role_type_ids = [leader, bottom_member].map do |p|
+        p.roles.map { |r| r.class.id }
+      end.flatten.uniq
+
+      get :new, xhr: true, params: {group_id: group.id, ids: "all", filters: { role: { kind: 'active_today', role_type_ids: role_type_ids } }, range: 'deep'}, format: :js
+
       expect(response).to have_http_status(:ok)
       expect(response).to render_template("tag_lists/new")
-      expect(assigns(:manageable_people)).to contain_exactly leader
+      expect(assigns(:manageable_people)).to contain_exactly leader, bottom_member
     end
   end
 

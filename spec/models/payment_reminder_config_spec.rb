@@ -18,11 +18,13 @@ require "spec_helper"
 describe PaymentReminderConfig do
   [:title, :text].each do |attr|
     it "validates presence of #{attr}" do
+      subject.with_defaults(1)
       subject.send(:"#{attr}=", nil)
       expect(subject).not_to be_valid
     end
 
     it "validates length of #{attr}" do
+      subject.with_defaults(1)
       subject.send(:"#{attr}=", "a" * 300)
       expect(subject).not_to be_valid
     end

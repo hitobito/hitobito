@@ -46,6 +46,9 @@ class InvoiceList < ActiveRecord::Base
 
   scope :list, -> { order(:created_at) }
 
+  validate :assert_recipients
+  validate :assert_invoice_items
+
   validates_by_schema except: :invalid_recipient_ids
 
   def to_s
@@ -91,6 +94,17 @@ class InvoiceList < ActiveRecord::Base
   def recipient_ids = @recipient_ids.to_a
 
   def recipient_ids=(ids)
-    @recipient_ids = ids.is_a?(Array) ? ids : ids.to_s.split(",").map(&:to_i).select(&:positive?)
+    @recipient_ids = ids.is_a?(Array) ? ids : ids.to_s.scan(/\d+/).map(&:to_i).select(&:positive?)
+  end
+
+  def assert_recipients
+    errors.add(:receiver, :empty) if recipients.none?
+  end
+
+  def assert_invoice_items
+    if invoice && invoice.invoice_items.blank?
+      message = [InvoiceItem.model_name.human, I18n.t("activerecord.errors.messages.must_exist")].join(" ")
+      errors.add(:base, message)
+    end
   end
 end

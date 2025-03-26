@@ -28,9 +28,56 @@ require "spec_helper"
 
 describe InvoiceList do
   let(:list) { mailing_lists(:leaders) }
-  let(:group) { groups(:top_layer) }
+  let(:group) { groups(:top_group) }
   let(:person) { people(:top_leader) }
   let(:other_person) { people(:bottom_member) }
+
+  describe "::validations" do
+    let(:item) { Fabricate.build(:invoice_item) }
+    let(:invoice) { Fabricate.build(:invoice, invoice_items: [item]) }
+    let(:invoice_list) { Fabricate.build(:invoice_list, receiver: group, invoice:) }
+
+    it "is valid" do
+      expect(invoice_list).to be_valid
+    end
+
+    it "is invalid if title is blank" do
+      invoice_list.title = nil
+      expect(invoice_list).not_to be_valid
+      expect(invoice_list.errors.full_messages).to eq ["Titel muss ausgefüllt werden"]
+    end
+
+    it "is invalid if invoice items are empty" do
+      invoice_list.invoice.invoice_items = []
+      expect(invoice_list).not_to be_valid
+      expect(invoice_list.errors.full_messages).to eq ["Rechnungsposten müssen vorhanden sein"]
+    end
+
+    describe "receivers" do
+      it "is invalid if no receiver is present" do
+        invoice_list.receiver = nil
+        expect(invoice_list).not_to be_valid
+        expect(invoice_list.errors.full_messages).to eq ["Empfänger muss ausgefüllt werden"]
+      end
+
+      it "accepts receiver from group" do
+        invoice_list.receiver = groups(:top_group)
+        expect(invoice_list).to be_valid
+      end
+
+      it "accepts receiver from mailing_list" do
+        invoice_list.receiver = list
+        list.subscriptions.create(subscriber: person)
+        expect(invoice_list).to be_valid
+      end
+
+      it "accepts receiver via recipient_ids" do
+        invoice_list.receiver = nil
+        invoice_list.recipient_ids = "#{person.id}, #{other_person.id}"
+        expect(invoice_list).to be_valid
+      end
+    end
+  end
 
   describe "recipient_ids" do
     it "accepts an array" do
@@ -38,8 +85,13 @@ describe InvoiceList do
       expect(subject.recipient_ids).to eq [1, 2, 3]
     end
 
-    it "accepts comma seperated value string array" do
+    it "accepts comma separated value string array" do
       subject.recipient_ids = "1,2,3"
+      expect(subject.recipient_ids).to eq [1, 2, 3]
+    end
+
+    it "accepts space separated value string array" do
+      subject.recipient_ids = "1 2 3"
       expect(subject.recipient_ids).to eq [1, 2, 3]
     end
 

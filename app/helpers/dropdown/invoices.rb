@@ -30,6 +30,7 @@ module Dropdown
       add_item(translate(:full), export_path(:pdf), **item_options)
       add_item(translate(:articles_only), export_path(:pdf, payment_slip: false), **item_options)
       add_item(translate(:esr_only), export_path(:pdf, articles: false), **item_options)
+      add_item(translate(:original_invoice), export_path(:pdf, reminders: false), **item_options)
     end
 
     def label_links

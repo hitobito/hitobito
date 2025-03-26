@@ -38,8 +38,13 @@ describe InvoiceList do
       expect(subject.recipient_ids).to eq [1, 2, 3]
     end
 
-    it "accepts comma seperated value string array" do
+    it "accepts comma separated value string array" do
       subject.recipient_ids = "1,2,3"
+      expect(subject.recipient_ids).to eq [1, 2, 3]
+    end
+
+    it "accepts space separated value string array" do
+      subject.recipient_ids = "1 2 3"
       expect(subject.recipient_ids).to eq [1, 2, 3]
     end
 
@@ -48,7 +53,8 @@ describe InvoiceList do
       expect(subject.recipient_ids).to eq [1, 3]
     end
 
-    it "does default to empty array" do
+    it "does default to empty array for nil" do
+      subject.recipient_ids = nil
       expect(subject.recipient_ids).to eq []
     end
 

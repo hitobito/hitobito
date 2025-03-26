@@ -25,6 +25,14 @@ module Patches
       @superclass_name = superclass_name
     end
 
+    def to_h
+      {
+        source: Module.const_source_location(klass_name),
+        patch: source_file,
+        name: name
+      }
+    end
+
     def to_s
       "Method: #{name}, Class: #{klass_name}, Superclass: #{superclass_name || "None"}"
     end
@@ -51,6 +59,7 @@ module Patches
 
       @klass.instance_methods(false).each do |method_name|
         source_file = get_method_source_file(method_name)
+        next if source_file.starts_with?(ENV["GEM_HOME"]) # rubocop:disable Rails/EnvironmentVariableAccess
         next unless @wagon_directories.any? { |dir| dir.contains?(source_file) }
 
         if superclass.instance_methods.include?(method_name)
@@ -89,8 +98,8 @@ module Patches
     attr_reader :added_methods, :overridden_methods, :origin_directories, :wagon_directories
 
     def initialize
-      @added_methods = {}
-      @overridden_methods = {}
+      @added_methods = []
+      @overridden_methods = []
       @origin_directories = [Rails.root.to_s]
       @wagon_directories = Wagons.all.map(&:root)
       collect_patches
@@ -102,8 +111,8 @@ module Patches
       classes_to_analyze.each do |klass|
         analyzer = ClassMethodAnalyzer.new(klass, wagon_directories)
         result = analyzer.analyze
-        added_methods.update(klass => result[:added_methods]) unless result[:added_methods].empty?
-        overridden_methods.update(klass => result[:overridden_methods]) unless result[:overridden_methods].empty?
+        @added_methods += result[:added_methods].values
+        @overridden_methods += result[:overridden_methods].values
       end
     end
 

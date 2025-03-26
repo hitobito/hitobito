@@ -82,7 +82,7 @@ describe :invoices, js: true do
 
     let(:letter) { messages(:with_invoice) }
     let!(:sent) { invoices(:sent) }
-    let!(:invoice_list) { letter.create_invoice_list(title: "test", group_id: group.id) }
+    let(:invoice_list) { letter.create_invoice_list(title: "test", group_id: group.id, recipient_ids: user.id) }
 
     describe "GET #index" do
       before do

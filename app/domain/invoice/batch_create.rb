@@ -45,7 +45,7 @@ class Invoice::BatchCreate
 
   def create_invoice(recipient)
     attrs = attributes(recipient)
-    invoice_list.group.invoices.build(attrs).save if attrs[:invoice_items_attributes].any?
+    invoice_list.group.invoices.build(attrs).save
   end
 
   private

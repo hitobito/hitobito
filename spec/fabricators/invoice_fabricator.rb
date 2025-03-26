@@ -53,6 +53,17 @@ Fabricator(:invoice) do
   title { Faker::Name.name }
 end
 
+Fabricator(:invoice_item) do
+  count { rand(3) }
+  description { Faker::Commerce.product_name }
+  unit_cost { (Faker::Commerce.price / 0.05).to_i * BigDecimal("0.05") }
+end
+
+Fabricator(:invoice_list) do
+  title { Faker::Name.name }
+  recipient_ids { [ActiveRecord::FixtureSet.identify(:top_leader)] }
+end
+
 Fabricator(:invoice_article) do
   number { Faker::Number.hexadecimal(digits: 5).to_s.upcase }
   name { Faker::Commerce.product_name }

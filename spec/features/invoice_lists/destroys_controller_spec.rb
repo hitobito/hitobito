@@ -23,7 +23,7 @@ describe InvoiceLists::DestroysController, js: true do
   end
 
   let!(:invoice_list) do
-    InvoiceList.create(title: "membership fee", invoices: draft_invoices, group: layer)
+    Fabricate(:invoice_list, title: "membership fee", invoices: draft_invoices, group: layer, receiver: groups(:top_group))
   end
 
   let(:user) { people(:top_leader) }

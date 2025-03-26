@@ -28,9 +28,78 @@ require "spec_helper"
 
 describe InvoiceList do
   let(:list) { mailing_lists(:leaders) }
-  let(:group) { groups(:top_layer) }
+  let(:group) { groups(:top_group) }
   let(:person) { people(:top_leader) }
   let(:other_person) { people(:bottom_member) }
+
+  let(:subject) { Fabricate.build(:invoice_list) }
+
+  describe "::validations" do
+    let(:item) { Fabricate.build(:invoice_item) }
+    let(:invoice) { Fabricate.build(:invoice, invoice_items: [item]) }
+    let(:invoice_list) { Fabricate.build(:invoice_list, receiver: group, invoice:) }
+
+    it "is valid" do
+      expect(invoice_list).to be_valid
+    end
+
+    it "is invalid if title is blank" do
+      invoice_list.title = nil
+      expect(invoice_list).not_to be_valid
+      expect(invoice_list.errors.full_messages).to eq ["Titel muss ausgefüllt werden"]
+    end
+
+    it "is invalid if invoice items are empty" do
+      invoice_list.invoice.invoice_items = []
+      expect(invoice_list).not_to be_valid
+      expect(invoice_list.errors.full_messages).to eq ["Rechnungsposten müssen vorhanden sein"]
+    end
+
+    describe "receivers" do
+      it "is invalid if no receiver nor recipient_ids is present" do
+        invoice_list.recipient_ids = nil
+        invoice_list.receiver = nil
+        expect(invoice_list).not_to be_valid
+        expect(invoice_list.errors.full_messages).to eq ["Empfänger muss ausgefüllt werden"]
+      end
+
+      it "accepts recievers via recipient_ids string" do
+        invoice_list.receiver = nil
+        invoice_list.recipient_ids = "#{person.id}, #{other_person.id}"
+        expect(invoice_list).to be_valid
+        expect(invoice_list.recipients).to match_array([person, other_person])
+      end
+
+      it "accepts group as receiver" do
+        invoice_list.recipient_ids = nil
+        invoice_list.receiver = groups(:top_group)
+        expect(invoice_list).to be_valid
+        expect(invoice_list.recipients).to match_array([person])
+      end
+
+      it "rejects group as receiver if empty" do
+        invoice_list.recipient_ids = nil
+        invoice_list.receiver = groups(:bottom_group_two_one)
+        expect(invoice_list).not_to be_valid
+        expect(invoice_list.errors.full_messages).to eq ["Empfänger muss ausgefüllt werden"]
+      end
+
+      it "accepts mailing_list as receiver" do
+        invoice_list.recipient_ids = nil
+        invoice_list.receiver = list
+        list.subscriptions.create(subscriber: other_person)
+        expect(invoice_list).to be_valid
+        expect(invoice_list.recipients).to match_array([other_person])
+      end
+
+      it "rejects mailing_list as receiver if without subscribers" do
+        invoice_list.recipient_ids = nil
+        invoice_list.receiver = list
+        expect(invoice_list).not_to be_valid
+        expect(invoice_list.errors.full_messages).to eq ["Empfänger muss ausgefüllt werden"]
+      end
+    end
+  end
 
   describe "recipient_ids" do
     it "accepts an array" do
@@ -38,8 +107,13 @@ describe InvoiceList do
       expect(subject.recipient_ids).to eq [1, 2, 3]
     end
 
-    it "accepts comma seperated value string array" do
+    it "accepts comma separated value string array" do
       subject.recipient_ids = "1,2,3"
+      expect(subject.recipient_ids).to eq [1, 2, 3]
+    end
+
+    it "accepts space separated value string array" do
+      subject.recipient_ids = "1 2 3"
       expect(subject.recipient_ids).to eq [1, 2, 3]
     end
 
@@ -48,38 +122,19 @@ describe InvoiceList do
       expect(subject.recipient_ids).to eq [1, 3]
     end
 
-    it "does default to empty array" do
+    it "does default to empty array for nil" do
+      subject.recipient_ids = nil
       expect(subject.recipient_ids).to eq []
     end
 
     it "accepts recipient_ids as attributes" do
       subject.attributes = {recipient_ids: "#{person.id},#{other_person.id}"}
       expect(subject.recipient_ids_count).to eq 2
-      expect(subject.first_recipient).to eq person
     end
   end
 
-  it "accepts receiver as id and type" do
-    Subscription.create!(mailing_list: list,
-      subscriber: group,
-      role_types: [Group::TopGroup::Leader])
-    subject.attributes = {receiver_type: "MailingList", receiver_id: list.id}
-    expect(subject.recipient_ids_count).to eq 1
-    expect(subject.first_recipient).to eq person
-  end
-
-  it "accepts mailing list as receiver" do
-    subject.attributes = {title: :test, receiver: list}
-    expect(subject).to be_valid
-  end
-
-  it "accepts group as receiver" do
-    subject.attributes = {title: :test, receiver: group}
-    expect(subject).to be_valid
-  end
-
   it "#update_paid updates payment informations" do
-    subject.update(group: group, title: :title)
+    subject.update!(group: group, title: :title)
 
     invoice = subject.invoices.create!(title: :title, recipient_id: person.id, total: 10, group: group)
     subject.invoices.create!(title: :title, recipient_id: other_person.id, total: 20, group: group)

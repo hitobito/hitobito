@@ -48,7 +48,7 @@ describe InvoiceListsController do
     before { sign_in(people(:top_leader)) }
 
     it "renders final Empfänger count" do
-      InvoiceList.create!(group: group, title: "title", recipients_processed: 20, recipients_total: 20)
+      Fabricate(:invoice_list, group: group, title: "title", recipients_processed: 20, recipients_total: 20)
       get :index, params: {group_id: group.id}
       expect(column).to have_text("20")
     end
@@ -257,7 +257,7 @@ describe InvoiceListsController do
     end
 
     it "PUT#update redirects to invoice_list_invoices path if invoice_list is set" do
-      list = InvoiceList.create!(title: :title, group: group)
+      list = Fabricate(:invoice_list, title: :title, group: group, receiver: groups(:top_group))
       invoice = Invoice.create!(group: group, title: "test", recipient: person,
         invoice_list: list,
         invoice_items_attributes:

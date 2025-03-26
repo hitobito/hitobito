@@ -39,21 +39,21 @@ module Patches
   end
 
   class ClassMethodAnalyzer
+    attr_reader :added_methods, :overridden_methods
     def initialize(klass, wagon_directories)
       @klass = klass
       @wagon_directories = wagon_directories.map { |dir| SourceDirectory.new(dir) }
+      @added_methods = []
+      @overridden_methods = []
     end
 
     def analyze
-      added_methods = {}
-      overridden_methods = {}
-      analyze_methods_for_class(added_methods, overridden_methods)
-      {added_methods: added_methods, overridden_methods: overridden_methods}
+      analyze_methods_for_class
     end
 
     private
 
-    def analyze_methods_for_class(added_methods, overridden_methods)
+    def analyze_methods_for_class
       superclass = @klass.superclass
       return if superclass.nil?
 
@@ -63,24 +63,24 @@ module Patches
         next unless @wagon_directories.any? { |dir| dir.contains?(source_file) }
 
         if superclass.instance_methods.include?(method_name)
-          overridden_methods[method_name] = MethodInfo.new(method_name, source_file, @klass.name, superclass.name)
+          @overridden_methods << MethodInfo.new(method_name, source_file, @klass.name, superclass.name)
         else
-          added_methods[method_name] = MethodInfo.new(method_name, source_file, @klass.name)
+          @added_methods << MethodInfo.new(method_name, source_file, @klass.name)
         end
       end
-      analyze_overridden_methods_in_ancestors(added_methods, overridden_methods)
+      analyze_overridden_methods_in_ancestors
     end
 
-    def analyze_overridden_methods_in_ancestors(added_methods, overridden_methods)
+    def analyze_overridden_methods_in_ancestors
       @klass.ancestors.each do |ancestor|
         next if ancestor == @klass || ancestor == Object || ancestor == Kernel || ancestor == BasicObject
 
         ancestor.instance_methods.each do |method_name|
-          next unless @klass.instance_methods(false).include?(method_name) && !overridden_methods.key?(method_name)
+          next unless @klass.instance_methods(false).include?(method_name) && !overridden_methods.index_by(&:name).key?(method_name)
 
           source_file = get_method_source_file(method_name)
           next unless @wagon_directories.any? { |dir| dir.contains?(source_file) }
-          overridden_methods[method_name] = MethodInfo.new(method_name, source_file, @klass.name, ancestor.name)
+          @overridden_methods << MethodInfo.new(method_name, source_file, @klass.name, ancestor.name)
         end
       end
     end
@@ -109,10 +109,9 @@ module Patches
       classes_to_analyze = find_classes_in_origin_and_wagon(origin_directories, wagon_directories)
 
       classes_to_analyze.each do |klass|
-        analyzer = ClassMethodAnalyzer.new(klass, wagon_directories)
-        result = analyzer.analyze
-        @added_methods += result[:added_methods].values
-        @overridden_methods += result[:overridden_methods].values
+        analyzer = ClassMethodAnalyzer.new(klass, wagon_directories).tap(&:analyze)
+        @added_methods += analyzer.added_methods
+        @overridden_methods += analyzer.overridden_methods
       end
     end
 

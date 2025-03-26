@@ -11,9 +11,12 @@ fr:
     no_list_entries: Aucun résultat.
     confirm_delete: Souhaitez-vous vraiment effacer cet enregistrement?
     do_not_fill: Ne pas remplir cette case SVP.
+    chosen_no_results: Aucun résultat.
     selected: Sélectionné
+    extended_select_all: Sélectionner tout %{count}
     columns: Colonnes
     start_on: à partir de %{date}
+    not_allowed: "manque d'autorisation"
     gender:
       male: Masculin
       female: féminin
@@ -29,6 +32,7 @@ fr:
       deleted_entry: Entrée supprimée %{class_name} (#%{class_id})
     button:
       save: Enregistrer
+      add: Ajouter
       add_another: Sauver et saisir d'autres
       cancel: Annuler
       close: Fermer
@@ -37,12 +41,14 @@ fr:
       refresh: Mettre à jour
       print: Imprimer
       copy: Copier
+      next: Continuer
     link:
       show: Afficher
       edit: Modifier
       add: Établir
       delete: Effacer
       list: Liste
+      override: Reprendre des valeurs
     errors:
       header:
         one: "Un erreur est apparu"
@@ -132,6 +138,9 @@ fr:
     add: "Inviter une personne"
   dropdown/event/participant_add:
     as: "en tant que %{role}"
+  dropdown/event/participation/mail_dispatch:
+    title: Envoyer un e-mail
+    confirmation: Es-tu sûr de vouloir envoyer ces e-mails?
   dropdown/group_edit:
     move: "Déplacer"
     merge: "Fusionner"
@@ -194,6 +203,7 @@ fr:
       timeout: "Ta session est arrivée à échéance, merci de d'authentifier à nouveau."
       inactive: "Ton compte n'est pas actif."
       not_found_in_database: "Données d'authentification incorrectes."
+      signin_not_allowed: "Si ton adresse électronique est enregistrée dans notre base de données, tu recevras dans quelques instants un courriel t'expliquant comment réinitialiser ton mot de passe."
       not_permitted_to_view_page: "Vous n'êtes pas autorisé à visualiser cette page."
     sessions:
       signed_out: "Tu es maintenant déconnecté(e)."
@@ -206,7 +216,9 @@ fr:
       oauth_info:
         sign_in: "Se connecter avec %{name}"
         info: "Veuillez vous connecter sur %{oauth_app}pour continuer."
+        no_oauth_app_info: "Veuillez vous connecter pour continuer."
     passwords:
+      send_instructions: "Si ton adresse électronique est enregistrée dans notre base de données, tu recevras dans quelques instants un courriel t'expliquant comment réinitialiser ton mot de passe."
       updated: "Ton mot de passe a été modifié. Tu es maintenant authentifié(e)."
       updated_not_active: "Ton mot de passe a été modifié."
       send_paranoid_instructions: "Si ton adresse électronique est enregistrée dans notre base de données, tu recevras dans quelques instants un courriel t'expliquant comment réinitialiser ton mot de passe."
@@ -311,7 +323,16 @@ fr:
         explanation: "Les événements de ton groupe ainsi que des groupes hiérarchiquement supérieurs sont indiqués ici. Tu trouveras d'autres événements auprès des groupes qui les organisent."
       apply_until: "jusqu'au %{date}"
     application_market:
+      application:
+        modal_title: Voulez-vous vraiment confirmer cette inscription?
+        confirm_and_send_mail: Confirmer et envoyer un e-mail
+        confirm_and_send_no_mail: Confirmer sans e-mail
+      participant:
+        modal_title: Voulez-vous vraiment confirmer cette inscription?
+        confirm_and_send_mail: Confirmer et envoyer un e-mail
+        confirm_and_send_no_mail: Confirmer sans e-mail
       already_assigned: "Cette personne est déjà attribuée à un autre endroit."
+      maximum_participations_reached: Le nombre maximal de participants autorisé est atteint. Pour confirmer d'autres inscriptions, le nombre maximal de participants doit être augmenté.
       participation:
         registered_at: "Inscription le %{datetime}"
         town: Domicile
@@ -323,6 +344,7 @@ fr:
       waiting_list_link:
         title_active: "Retirer de la liste d'attente"
         title_inactive: "Ajouter à la liste d'attente"
+        label: "liste d'attente nationale"
       popover_waiting_list:
         waiting_list_info: Ajouter la personne à la liste d'attente pour cette catégorie de cours %{event_kind}.
     attachments:
@@ -330,6 +352,8 @@ fr:
         failure: "Échec de l'upload: %{errors}."
       destroy:
         failure: "Échec de la suppression: %{errors}."
+      update:
+        failure: "Échec de l'actualisation: %{errors}."
     kinds:
       form:
         help_minimum_age: "ans (selon année de naissance au premier jour du cours)"
@@ -355,6 +379,9 @@ fr:
         title: Inscription
       approvals:
         title: Autorisation
+      mail_dispatches:
+        create:
+          success: Un e-mail a été envoyé.
       specific_information: "Informations spécifiques"
       application_answers: Données pour l'inscription
       admin_answers: Données administratives
@@ -369,6 +396,7 @@ fr:
         title_edit: "Modifier l'inscription de %{person}"
         apply: "Inscription"
         explain_required_checkmark: "* = réponse obligatoire"
+        send_email: Envoyer un e-mail au participant·e
       application_fields:
         alternative_dates_info: "S'il-te-plaît, indique d'autres cours qui pourraient te convenir."
         course_information: "Informations au sujet des cours"

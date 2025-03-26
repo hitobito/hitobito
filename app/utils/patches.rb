@@ -33,7 +33,7 @@ module Patches
   class ClassMethodAnalyzer
     def initialize(klass, wagon_directories)
       @klass = klass
-      @wagon_directories = wagon_directories
+      @wagon_directories = wagon_directories.map { |dir| SourceDirectory.new(dir) }
     end
 
     def analyze
@@ -86,18 +86,18 @@ module Patches
   end
 
   class Runner
-    attr_reader :added_methods, :overridden_methods, :origin_directories, :wagon_directories, :root
+    attr_reader :added_methods, :overridden_methods, :origin_directories, :wagon_directories
 
     def initialize
       @added_methods = {}
       @overridden_methods = {}
-      @origin_directories = [Rails.root.to_s].map { |d| SourceDirectory.new(d) }
-      @wagon_directories = Wagons.all.map(&:root).map { |d| SourceDirectory.new(d) }
-      @root = SourceDirectory.new(Rails.root.parent)
+      @origin_directories = [Rails.root.to_s]
+      @wagon_directories = Wagons.all.map(&:root)
+      collect_patches
     end
 
     def collect_patches
-      classes_to_analyze = find_classes_in_origin_and_wagon
+      classes_to_analyze = find_classes_in_origin_and_wagon(origin_directories, wagon_directories)
 
       classes_to_analyze.each do |klass|
         analyzer = ClassMethodAnalyzer.new(klass, wagon_directories)
@@ -107,16 +107,30 @@ module Patches
       end
     end
 
-    def find_classes_in_origin_and_wagon
+    def find_classes_in_origin_and_wagon(origin_directories, wagon_directories)
+      origin_source_dirs = origin_directories.map { |dir| SourceDirectory.new(dir) }
+      wagon_source_dirs = wagon_directories.map { |dir| SourceDirectory.new(dir) }
+
       ObjectSpace.each_object(Class).select do |klass|
         klass.instance_methods.any? do |method_name|
-          source_location, _ = klass.instance_method(method_name).source_location
-          next unless source_location
-          next if source_location.starts_with?("/home/ama/.asdf/installs/ruby/3.2.6")
-          puts [source_location, root.contains?(source_location)]
-          root.contains?(source_location)
+          method_in_origin_and_wagon?(klass, method_name, origin_source_dirs, wagon_source_dirs)
         end
       end
+    end
+
+    def method_in_origin_and_wagon?(klass, method_name, origin_source_dirs, wagon_source_dirs)
+      begin
+        method_obj = klass.instance_method(method_name)
+        source_file, _ = method_obj.source_location
+      rescue TypeError, NameError
+        return false
+      end
+
+      return false unless source_file
+
+      origin_match = origin_source_dirs.any? { |dir| dir.contains?(source_file) }
+      wagon_match = wagon_source_dirs.any? { |dir| dir.contains?(source_file) }
+      origin_match && wagon_match
     end
 
     # rubocop:disable Rails/Output

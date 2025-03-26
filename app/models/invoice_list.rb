@@ -91,6 +91,6 @@ class InvoiceList < ActiveRecord::Base
   def recipient_ids = @recipient_ids.to_a
 
   def recipient_ids=(ids)
-    @recipient_ids = ids.is_a?(Array) ? ids : ids.to_s.split(",").map(&:to_i).select(&:positive?)
+    @recipient_ids = ids.is_a?(Array) ? ids : ids.to_s.scan(/\d+/).map(&:to_i).select(&:positive?)
   end
 end

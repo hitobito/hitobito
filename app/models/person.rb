@@ -572,7 +572,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def update_household_address
-    return if household_key.nil? || (Person::ADDRESS_ATTRS & saved_changes.keys).empty?
+    return if household_key.nil? || (Person::ADDRESS_ATTRS & saved_changes.keys).empty? || saved_changes.key?("household_key")
 
     # do not use update context to not trigger all validations for all household members
     household.save!(context: :update_address)

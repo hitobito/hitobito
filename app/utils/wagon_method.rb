@@ -7,7 +7,8 @@ require "pry"
 require_relative "patches"
 
 class WagonMethod < RuboCop::Cop::Base
-  MSG = "Patched in `%<location>s`"
+  extend RuboCop::Cop::AutoCorrector
+  MSG = "Patched in `%<wagons>s`"
 
   RESTRICT_ON_SEND = [:enabled?].freeze # optimization: don't call `on_send` unless
   # the method name is in this list
@@ -18,25 +19,32 @@ class WagonMethod < RuboCop::Cop::Base
   def on_def(node)
     return if node.operator_method?
 
-    # processed_source.file_path hat pfad zum aktuellen file
-    if patches_by_method.key?(node.method_name)
-      wagons = patches_by_method[node.method_name].group_by(&:basename)[processed_source_basename].map(&:wagon).sort.uniq
-
-      register_offense(node, wagons.join(", "))
-    end
+    wagon_patches = find_patches(node.method_name).uniq
+    register_offense(node, wagon_patches) if wagon_patches.present?
   end
   alias_method :on_defs, :on_def
 
   private
 
-  def processed_source_basename
-    Pathname.new(processed_source.path).basename.to_s
+  def find_patches(method_name)
+    patches = patches_by_method.fetch(method_name, [])
+    patches.select { |patch| patch.basename == processed_source_basename }
   end
 
-  def register_offense(node, location)
-    message = format(MSG, location:)
+  def register_offense(node, patches)
+    message = format(MSG, wagons: patches.map(&:wagon).sort.join(", "))
 
-    add_offense(node, message: message, severity: :info)
+    add_offense(node, message: message, severity: :info) do |corrector|
+      info = "<<~PATCHES"
+      info += JSON.pretty_generate(patches.map(&:to_h))
+      info += "PATCHES"
+      corrector.replace(node, info)
+    end
+  end
+
+  # TODO - constants are not loaded, will that be enough
+  def processed_source_basename
+    Pathname.new(processed_source.path).basename.to_s
   end
 
   def load_patches

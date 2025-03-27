@@ -196,7 +196,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     with_async_download_cookie(format, :event_participation_export) do |filename|
       Export::EventParticipationsExportJob.new(format,
         current_person.id,
-        event_participation_filter,
+        event.id,
         group.id,
         params.merge(filename: filename)).enqueue!
     end
@@ -382,8 +382,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def event_participation_filter
-    user_id = current_user.try(:id)
-    Event::ParticipationFilter.new(event.id, user_id, params)
+    @participation_filter ||= Event::ParticipationFilter.new(event, current_user, params)
   end
 
   def send_email?

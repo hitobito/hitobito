@@ -1,15 +1,14 @@
 module Patches
   RUBY_HOME = Pathname(ENV["GEM_HOME"]).parent.parent.to_s # rubocop:disable Rails/EnvironmentVariableAccess
-  RAILS_ROOT = Rails.root
+  RAILS_ROOT = Pathname.new(File.expand_path("../../../", __FILE__))
   DEV_ROOT = RAILS_ROOT.parent
   PATCHES_DIR = RAILS_ROOT.join(".patches")
+  ALL_PATCHES = PATCHES_DIR.join("all.yml")
   CORE_APP_DIR = RAILS_ROOT.join("app")
   WAGON_REGEX = %r{/hitobito_(\w+)}
 
-  Patch = Data.define(:method, :file, :line, :wagon, :source_name, :source_file) do
-    def location = Pathname(file).relative_path_from(DEV_ROOT).to_s
-
-    def info = {method:, location:, line:, source_name:, source_file:, wagon:}
+  Patch = Data.define(:method, :constant, :wagon, :source_file, :patch_file, :patch_file_line) do
+    def basename = Pathname.new(source_file).basename.to_s
   end
 
   class Klass
@@ -29,10 +28,6 @@ module Patches
     def location = Pathname(file).relative_path_from(DEV_ROOT).to_s
 
     def wagons = patches.map(&:wagon).uniq
-
-    def info(wagon = wagons.first)
-      patches.select { |patch| patch.wagon == wagon }.map(&:info)
-    end
   end
 
   class Collector
@@ -64,8 +59,9 @@ module Patches
     def write_wagons
       wagons.each do |wagon|
         infos = patched_klasses
-          .select { |klass| klass.wagons.include?(wagon) }
-          .flat_map { |klass| klass.info(wagon) }
+          .flat_map(&:patches)
+          .select { |patch| patch.wagon == wagon }
+          .map(&:to_h)
         puts "writing patches for #{wagon}" # rubocop:disable Rails/Output
         patch_files[wagon].puts(infos.to_yaml)
         patch_files[wagon].close
@@ -77,7 +73,7 @@ module Patches
         .glob("*.yml")
         .map { |file| YAML.load(file.read) }
 
-      PATCHES_DIR.join("patches.yml").write(patches.flatten.to_yaml)
+      ALL_PATCHES.write(patches.flatten.to_yaml)
     end
 
     # Maybe good enough, maybe not ..
@@ -108,7 +104,14 @@ module Patches
       methods(constant).map do |method|
         file, line = constant.instance_method(method).source_location
         next if irrelevant_path?(file)
-        Patch.new(method, file, line, extract_wagon(file), constant.to_s, source_file)
+        Patch.new(
+          method: method,
+          constant: constant.to_s,
+          wagon: extract_wagon(file),
+          source_file: relative_path(source_file),
+          patch_file: relative_path(file),
+          patch_file_line: line
+        )
       end.compact
     end
 
@@ -126,10 +129,19 @@ module Patches
           next if methods(ancestor).exclude?(method)
           file, line = ancestor.instance_method(method).source_location
           next if irrelevant_path?(file)
-          Patch.new(method, file, line, extract_wagon(file), constant.to_s, source_file)
+          Patch.new(
+            method: method,
+            constant: constant.to_s,
+            wagon: extract_wagon(file),
+            source_file: relative_path(source_file),
+            patch_file: relative_path(file),
+            patch_file_line: line
+          )
         end
       end.compact
     end
+
+    def relative_path(file) = Pathname(file).relative_path_from(DEV_ROOT).to_s
 
     def irrelevant_ancestor?(ancestor)
       ancestor == constant || ancestor == Object || ancestor == Kernel || ancestor == BasicObject

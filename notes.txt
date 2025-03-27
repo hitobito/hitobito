@@ -1,0 +1,47 @@
+# Notizen
+
+- ich kann ruby-lsp debguggen (auch mit require 'pry. binding.pry)
+- $> ruby-lsp --doctor --debug
+
+- ich kann indexer via .index.yml konfigurieren
+
+leider kann ich das wagon gem nicht indizieren, da es zwar includiert ist aber via
+
+  spec = Gem::Specification.find_by_name(lazy_spec.name)
+
+nicht gefunden wird, und ich keine möglichtkeit habe, die konfig anzu passen,
+symlink hack scheint auch nicht zu funktionieren
+
+
+Scheint als ob das mit dem BUNDLE_GEMFILE zusammenhängt, wenn ich das weg lasse wird der wagon indexiert.
+
+letzten endes scheiter der call zu
+[15] pry(#<RubyIndexer::Configuration>):1>
+requirements = Gem::Requirement.default
+>Gem::Dependency.new("hitobito_swb", *requirements).to_spec
+
+
+# Rubocop lsp nvim setup
+
+- scheint okay unter folgenden vorraussetzungen
+- ruby-lsp und rubocop nochmals via mason installiert
+- kein versions konflikt im rubocop (siehe ❯ tail -f   ~/.local/state/nvim/lsp.log, sollte dann so aussehen
+
+[ERROR][2025-03-15 22:30:12] .../vim/lsp/rpc.lua:770    "rpc"   "/home/ama/.local/share/nvim/mason/bin/ruby-lsp"        "stderr"        "[RuboCop] Activating RuboCop LSP addon 1.70.0.\n"
+[ERROR][2025-03-15 22:30:12] .../vim/lsp/rpc.lua:770    "rpc"   "/home/ama/.local/share/nvim/mason/bin/rubocop" "stderr"        "[server] RuboCop 1.70.0 language server initialized, PID 1555012\n"
+[ERROR][2025-03-15 22:30:12] .../vim/lsp/rpc.lua:770    "rpc"   "/home/ama/.local/share/nvim/mason/bin/ruby-lsp"        "stderr"        "[RuboCop] Initialized RuboCop LSP addon 1.70.0.\n"
+[ERROR][2025-03-15 22:30:12] .../vim/lsp/rpc.lua:770    "rpc"   "/home/ama/.local/share/nvim/mason/bin/ruby-lsp"        "stderr"        "[Standard Ruby] Activating Standard Ruby LSP addon v1.44.0\n"
+[ERROR][2025-03-15 22:30:12] .../vim/lsp/rpc.lua:770    "rpc"   "/home/ama/.local/share/nvim/mason/bin/ruby-lsp"        "stderr"        "[Standard Ruby] Initialized Standard Ruby LSP addon 1.44.0\n"
+
+
+dann klappt rubocop inline cops und autoformat
+als auch lsp symbols
+
+# lsp config
+
+Scheint als ob da ganze nicht klappt, wenn index.yml lsp konfuriert.
+
+# Problem - wagon nicht in den dependencies when lsp läuft
+
+- https://shopify.github.io/ruby-lsp/composed-bundle
+- siehe .ruby_lsp/Gemfile{.lock}

@@ -3,6 +3,8 @@
 require "rubocop"
 require "active_support/core_ext/array/access"
 require "active_support/core_ext/enumerable"
+require "pry"
+require_relative "patches"
 
 class WagonMethod < RuboCop::Cop::Base
   MSG = "Patched in `%<location>s`"
@@ -13,33 +15,35 @@ class WagonMethod < RuboCop::Cop::Base
   def_node_matcher :sym_name, "(sym $_name)"
   def_node_matcher :str_name, "(str $_name)"
 
-  def wagon_hooks
-    @wagon_hooks ||= YAML.load_file("patches.yml").index_by { |k, v| v.first }
-  end
-
-  def patches
-    @patches ||= YAML.load_file(".patches/patches.yml").values
-      .flat_map { |k, v| v[:patches].merge(key: key) }
-      .group_by { |p| p[:method] }
-  end
-
   def on_def(node)
     return if node.operator_method?
 
     # processed_source.file_path hat pfad zum aktuellen file
-    if wagon_hooks.key?(node.method_name)
-      patch = wagon_hooks[node.method_name]
-      location = patch.second.second[%r{.*app/(.*)}, 1]
-      register_offense(node, location)
+    if patches_by_method.key?(node.method_name)
+      wagons = patches_by_method[node.method_name].group_by(&:basename)[processed_source_basename].map(&:wagon).sort.uniq
+
+      register_offense(node, wagons.join(", "))
     end
   end
   alias_method :on_defs, :on_def
 
   private
 
+  def processed_source_basename
+    Pathname.new(processed_source.path).basename.to_s
+  end
+
   def register_offense(node, location)
     message = format(MSG, location:)
 
     add_offense(node, message: message, severity: :info)
+  end
+
+  def load_patches
+    YAML.load_file(Patches::ALL_PATCHES).map { |h| Patches::Patch.new(**h) }
+  end
+
+  def patches_by_method
+    @patches_by_method ||= load_patches.group_by(&:method)
   end
 end

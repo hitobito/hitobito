@@ -8,6 +8,7 @@ require:
   - standard-performance
   - rubocop-performance
   - rubocop-rails
+  - ./app/utils/wagon_method.rb
 
 inherit_gem:
   standard: config/base.yml

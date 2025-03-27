@@ -9,7 +9,7 @@ module Patches
   Patch = Data.define(:method, :file, :line, :wagon) do
     def location = Pathname(file).relative_path_from(DEV_ROOT).to_s
 
-    def info = {method:, location:}
+    def info = {method:, location:, line:, wagon:}
   end
 
   Klass = Data.define(:name, :file, :patches) do

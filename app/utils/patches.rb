@@ -6,10 +6,10 @@ module Patches
   CORE_APP_DIR = RAILS_ROOT.join("app")
   WAGON_REGEX = %r{/hitobito_(\w+)}
 
-  Patch = Data.define(:method, :file, :line, :wagon) do
+  Patch = Data.define(:method, :file, :line, :wagon, :source_name, :source_file) do
     def location = Pathname(file).relative_path_from(DEV_ROOT).to_s
 
-    def info = {method:, location:, line:, wagon:}
+    def info = {method:, location:, line:, source_name:, source_file:, wagon:}
   end
 
   class Klass
@@ -21,7 +21,7 @@ module Patches
     end
 
     def analyze
-      @patches = Analyzer.new(name.constantize).patches
+      @patches = Analyzer.new(name.constantize, file).patches
     end
 
     def patched? = patches.any?
@@ -31,10 +31,8 @@ module Patches
     def wagons = patches.map(&:wagon).uniq
 
     def info(wagon = wagons.first)
-      [location, {name:, patches: patch_infos(wagon)}]
+      patches.select { |patch| patch.wagon == wagon }.map(&:info)
     end
-
-    def patch_infos(wagon) = patches.select { |patch| patch.wagon == wagon }.map(&:info)
   end
 
   class Collector
@@ -67,7 +65,7 @@ module Patches
       wagons.each do |wagon|
         infos = patched_klasses
           .select { |klass| klass.wagons.include?(wagon) }
-          .map { |klass| klass.info(wagon) }.to_h
+          .flat_map { |klass| klass.info(wagon) }
         puts "writing patches for #{wagon}" # rubocop:disable Rails/Output
         patch_files[wagon].puts(infos.to_yaml)
         patch_files[wagon].close
@@ -77,9 +75,9 @@ module Patches
     def write_main
       patches = PATCHES_DIR
         .glob("*.yml")
-        .inject({}) { |memo, file| memo.deep_merge(YAML.load(file.read)) }
+        .map { |file| YAML.load(file.read) }
 
-      PATCHES_DIR.join("patches.yml").write(patches.to_yaml)
+      PATCHES_DIR.join("patches.yml").write(patches.flatten.to_yaml)
     end
 
     # Maybe good enough, maybe not ..
@@ -94,10 +92,11 @@ module Patches
   end
 
   class Analyzer
-    attr_reader :constant
+    attr_reader :constant, :source_file
 
-    def initialize(constant)
+    def initialize(constant, source_file = nil)
       @constant = constant
+      @source_file = source_file
     end
 
     def patches
@@ -109,7 +108,7 @@ module Patches
       methods(constant).map do |method|
         file, line = constant.instance_method(method).source_location
         next if irrelevant_path?(file)
-        Patch.new(method, file, line, extract_wagon(file))
+        Patch.new(method, file, line, extract_wagon(file), constant.to_s, source_file)
       end.compact
     end
 
@@ -127,7 +126,7 @@ module Patches
           next if methods(ancestor).exclude?(method)
           file, line = ancestor.instance_method(method).source_location
           next if irrelevant_path?(file)
-          Patch.new(method, file, line, extract_wagon(file))
+          Patch.new(method, file, line, extract_wagon(file), constant.to_s, source_file)
         end
       end.compact
     end

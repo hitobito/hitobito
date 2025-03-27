@@ -17,6 +17,12 @@ class WagonMethod < RuboCop::Cop::Base
     @wagon_hooks ||= YAML.load_file("patches.yml").index_by { |k, v| v.first }
   end
 
+  def patches
+    @patches ||= YAML.load_file(".patches/patches.yml").values
+      .flat_map { |k, v| v[:patches].merge(key: key) }
+      .group_by { |p| p[:method] }
+  end
+
   def on_def(node)
     return if node.operator_method?
 

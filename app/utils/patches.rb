@@ -12,9 +12,16 @@ module Patches
     def info = {method:, location:, line:, wagon:}
   end
 
-  Klass = Data.define(:name, :file, :patches) do
+  class Klass
+    attr_reader :name, :file, :patches
+
+    def initialize(name, file)
+      @name = name
+      @file = file
+    end
+
     def analyze
-      self.patches += Analyzer.new(name.constantize).patches
+      @patches = Analyzer.new(name.constantize).patches
     end
 
     def patched? = patches.any?
@@ -39,13 +46,14 @@ module Patches
 
     def collect
       each_zeitwerk_class.map do |name, location|
-        Klass.new(name, location, []).tap(&:analyze)
+        Klass.new(name, location).tap(&:analyze)
       end.compact.sort_by(&:name)
     end
 
     def write
       FileUtils.mkdir_p(PATCHES_DIR) unless PATCHES_DIR.exist?
 
+      binding.pry
       write_wagons
       write_main
     end
@@ -66,8 +74,11 @@ module Patches
     end
 
     def write_main
-      patches = PATCHES_DIR.glob("*.yml")
+      patches = PATCHES_DIR
+        .glob("*.yml")
+        .map { |file| file.read }
         .inject({}) { |memo, file| memo.deep_merge(YAML.load(file.read)) }
+
       PATCHES_DIR.join("patches.yml").write(patches)
     end
 
@@ -90,14 +101,42 @@ module Patches
     end
 
     def patches
-      constant.instance_methods(false).map do |method|
+      patches = direct_patches
+      (patches + ancestor_patches(patches.map(&:method))).uniq # ancestors produce duplicates
+    end
+
+    def direct_patches
+      methods(constant).map do |method|
         file, line = constant.instance_method(method).source_location
-        next if irrelevant?(file)
+        next if irrelevant_path?(file)
         Patch.new(method, file, line, extract_wagon(file))
       end.compact
     end
 
-    def irrelevant?(file)
+    def ancestors
+      constant.ancestors.reject { |ancestor| irrelevant_ancestor?(ancestor) }
+    end
+
+    def methods(source = constant)
+      source.public_instance_methods(false) + source.private_instance_methods(false)
+    end
+
+    def ancestor_patches(methods)
+      methods.flat_map do |method|
+        ancestors.map do |ancestor|
+          next if methods(ancestor).exclude?(method)
+          file, line = ancestor.instance_method(method).source_location
+          next if irrelevant_path?(file)
+          Patch.new(method, file, line, extract_wagon(file))
+        end
+      end.compact
+    end
+
+    def irrelevant_ancestor?(ancestor)
+      ancestor == constant || ancestor == Object || ancestor == Kernel || ancestor == BasicObject
+    end
+
+    def irrelevant_path?(file)
       file.starts_with?(RUBY_HOME) || file.starts_with?(CORE_APP_DIR.to_s)
     end
 

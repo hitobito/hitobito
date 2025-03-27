@@ -53,7 +53,6 @@ module Patches
     def write
       FileUtils.mkdir_p(PATCHES_DIR) unless PATCHES_DIR.exist?
 
-      binding.pry
       write_wagons
       write_main
     end
@@ -76,7 +75,6 @@ module Patches
     def write_main
       patches = PATCHES_DIR
         .glob("*.yml")
-        .map { |file| file.read }
         .inject({}) { |memo, file| memo.deep_merge(YAML.load(file.read)) }
 
       PATCHES_DIR.join("patches.yml").write(patches)

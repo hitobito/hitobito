@@ -33,8 +33,13 @@
     return element.nodeName === "INPUT" || element.nodeName === "SELECT" && element.getAttribute("multiple")
   }
 
+  // enable tom-select on page load
   $(document).on('turbo:load', function() {
-    // enable tom-select
+    document.querySelectorAll(".tom-select").forEach(app.activateTomSelect);
+  });
+
+  // enable tom-select on turbo render (e.g. form submits)
+  window.addEventListener('turbo:render', function () {
     document.querySelectorAll(".tom-select").forEach(app.activateTomSelect);
   });
 

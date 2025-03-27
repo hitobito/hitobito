@@ -37,13 +37,7 @@ class Event::Answer < ActiveRecord::Base
   validate :validate_with_question
 
   scope :list, -> {
-    includes(:question, question: :translations).joins(:question,
-      <<-SQL
-        LEFT JOIN event_question_translations ON
-        event_question_translations.event_question_id = event_questions.id
-        AND event_question_translations.locale = #{ActiveRecord::Base.connection.quote(I18n.locale)}
-      SQL
-    ).order("event_question_translations.question")
+    select("event_answers.*").joins(:question).merge(Event::Question.list).includes(question: :translations)
   }
 
   def answer=(value)

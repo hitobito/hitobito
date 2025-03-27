@@ -65,7 +65,9 @@ module Patches
 
     def write_wagons
       wagons.each do |wagon|
-        infos = patched_klasses.map { |klass| klass.info(wagon) }.to_h
+        infos = patched_klasses
+          .select { |klass| klass.wagons.include?(wagon) }
+          .map { |klass| klass.info(wagon) }.to_h
         puts "writing patches for #{wagon}" # rubocop:disable Rails/Output
         patch_files[wagon].puts(infos.to_yaml)
         patch_files[wagon].close
@@ -77,7 +79,7 @@ module Patches
         .glob("*.yml")
         .inject({}) { |memo, file| memo.deep_merge(YAML.load(file.read)) }
 
-      PATCHES_DIR.join("patches.yml").write(patches)
+      PATCHES_DIR.join("patches.yml").write(patches.to_yaml)
     end
 
     # Maybe good enough, maybe not ..

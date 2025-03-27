@@ -27,11 +27,11 @@
       = labeled_attr(entry, :state_translated)
 
   %dl.dl-horizontal
-    = labeled(entry.class.human_attribute_name(:description)) do
+    = labeled(entry.object.class.human_attribute_name(:description)) do
       %p.multiline= safe_auto_link(entry.description, html: { target: '_blank' })
 
   %dl.dl-horizontal
-    = labeled(entry.class.human_attribute_name(:location)) do
+    = labeled(entry.object.class.human_attribute_name(:location)) do
       %p.multiline= safe_auto_link(entry.location, html: { target: '_blank' })
 
   = render_extensions :attrs_primary, folder: 'events'

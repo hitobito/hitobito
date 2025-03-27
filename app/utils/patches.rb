@@ -1,4 +1,64 @@
 module Patches
+  class Klasses
+    def collect
+      Rails.autoloaders.main.instance_variable_get(:@to_unload).map do |location, cref|
+        next if location.starts_with?(ENV["GEM_HOME"]) # rubocop:disable Rails/EnvironmentVariableAccess
+        next unless location.ends_with?(".rb")
+        constant = cref.mod.const_get(cref.cname.to_s)
+        next unless constant.is_a?(Class)
+        [location, "#{cref.mod}::#{cref.cname}", constant]
+      end.compact.sort_by(&:first)
+    end
+
+    def analyze(klasses = collect.map(&:last))
+      klasses.flat_map do |klass|
+        Analyzer.new(klass).tap(&:analyze).overridden_methods
+      end
+    end
+  end
+
+  class Analyzer
+    attr_reader :overridden_methods
+    def initialize(klass)
+      @klass = klass
+      @overridden_methods = []
+    end
+
+    def analyze
+      superclass = @klass.superclass
+      return if superclass.nil?
+
+      @klass.instance_methods(false).each do |method_name|
+        source_file = get_method_source_file(method_name)
+        if superclass.instance_methods.include?(method_name)
+          @overridden_methods << MethodInfo.new(method_name, source_file, @klass.name, superclass.name)
+        end
+      end
+      analyze_overridden_methods_in_ancestors
+    end
+
+    def analyze_overridden_methods_in_ancestors
+      @klass.ancestors.each do |ancestor|
+        next if ancestor == @klass || ancestor == Object || ancestor == Kernel || ancestor == BasicObject
+
+        ancestor.instance_methods.each do |method_name|
+          next unless @klass.instance_methods(false).include?(method_name) && !overridden_methods.index_by(&:name).key?(method_name)
+
+          source_file = get_method_source_file(method_name)
+          @overridden_methods << MethodInfo.new(method_name, source_file, @klass.name, ancestor.name)
+        end
+      end
+    end
+
+    def get_method_source_file(method_name)
+      method_obj = @klass.instance_method(method_name)
+      source_file, _ = method_obj.source_location
+      source_file
+    rescue TypeError, NameError
+      nil
+    end
+  end
+
   class SourceDirectory
     attr_reader :path
 

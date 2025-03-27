@@ -5,4 +5,9 @@ require "rails"
 require_relative "../config/environment"
 Rails.application.eager_load!
 
-Patches::Runner.new.write_patches
+
+if ARGV[0].present?
+  puts Patches::Analyzer.new(ARGV[0].constantize).patches
+else
+  puts "Please pass Class to analze"
+end

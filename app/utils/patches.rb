@@ -13,7 +13,9 @@ module Patches
   end
 
   Klass = Data.define(:name, :file, :patches) do
-    def analyze = Analyzer.new.analyze(self)
+    def analyze
+      self.patches += Analyzer.new(name.constantize).patches
+    end
 
     def patched? = patches.any?
 
@@ -22,7 +24,7 @@ module Patches
     def wagons = patches.map(&:wagon).uniq
 
     def info(wagon = wagons.first)
-      {location => {name:, patches: patch_infos(wagon)}}
+      [location, {name:, patches: patch_infos(wagon)}]
     end
 
     def patch_infos(wagon) = patches.select { |patch| patch.wagon == wagon }.map(&:info)
@@ -41,22 +43,33 @@ module Patches
       end.compact.sort_by(&:name)
     end
 
+    def write
+      FileUtils.mkdir_p(PATCHES_DIR) unless PATCHES_DIR.exist?
+
+      write_wagons
+      write_main
+    end
+
+    private
+
     def patched_klasses = collect.select(&:patched?)
 
     def wagons = patched_klasses.map(&:wagons).flatten.uniq
 
-    def write
-      FileUtils.mkdir_p(PATCHES_DIR) unless PATCHES_DIR.exist?
-
+    def write_wagons
       wagons.each do |wagon|
-        infos = patched_klasses.map { |klass| klass.info(wagon) }
+        infos = patched_klasses.map { |klass| klass.info(wagon) }.to_h
         puts "writing patches for #{wagon}" # rubocop:disable Rails/Output
         patch_files[wagon].puts(infos.to_yaml)
         patch_files[wagon].close
       end
     end
 
-    private
+    def write_main
+      patches = PATCHES_DIR.glob("*.yml")
+        .inject({}) { |memo, file| memo.deep_merge(YAML.load(file.read)) }
+      PATCHES_DIR.join("patches.yml").write(patches)
+    end
 
     # Maybe good enough, maybe not ..
     def each_zeitwerk_class
@@ -70,13 +83,18 @@ module Patches
   end
 
   class Analyzer
-    def analyze(klass)
-      constant = klass.name.constantize
-      constant.instance_methods(false).each do |method|
+    attr_reader :constant
+
+    def initialize(constant)
+      @constant = constant
+    end
+
+    def patches
+      constant.instance_methods(false).map do |method|
         file, line = constant.instance_method(method).source_location
         next if irrelevant?(file)
-        klass.patches << Patch.new(method, file, line, extract_wagon(file))
-      end
+        Patch.new(method, file, line, extract_wagon(file))
+      end.compact
     end
 
     def irrelevant?(file)

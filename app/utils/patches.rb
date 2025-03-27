@@ -1,224 +1,89 @@
 module Patches
-  class Klasses
+  GEM_HOME = ENV["GEM_HOME"] # rubocop:disable Rails/EnvironmentVariableAccess
+
+  RAILS_ROOT = Rails.root
+  DEV_ROOT = RAILS_ROOT.parent
+  PATCHES_DIR = RAILS_ROOT.join(".patches")
+  CORE_APP_DIR = RAILS_ROOT.join("app")
+  WAGON_REGEX = %r{/hitobito_(\w+)}
+
+  Patch = Data.define(:method, :file, :line, :wagon) do
+    def location = Pathname(file).relative_path_from(DEV_ROOT).to_s
+
+    def info = {method:, location:}
+  end
+
+  Klass = Data.define(:name, :file, :patches) do
+    def analyze = Analyzer.new.analyze(self)
+
+    def patched? = patches.any?
+
+    def location = Pathname(file).relative_path_from(DEV_ROOT).to_s
+
+    def wagons = patches.map(&:wagon).uniq
+
+    def info(wagon = wagons.first)
+      {location => {name:, patches: patch_infos(wagon)}}
+    end
+
+    def patch_infos(wagon) = patches.select { |patch| patch.wagon == wagon }.map(&:info)
+  end
+
+  class Collector
+    attr_reader :patch_files
+
+    def initialize
+      @patch_files = Hash.new { |h, k| h[k] = File.open(PATCHES_DIR.join("#{k}.yml"), "w") }
+    end
+
     def collect
-      Rails.autoloaders.main.instance_variable_get(:@to_unload).map do |location, cref|
-        next if location.starts_with?(ENV["GEM_HOME"]) # rubocop:disable Rails/EnvironmentVariableAccess
-        next unless location.ends_with?(".rb")
-        constant = cref.mod.const_get(cref.cname.to_s)
-        next unless constant.is_a?(Class)
-        [location, "#{cref.mod}::#{cref.cname}", constant]
-      end.compact.sort_by(&:first)
+      each_zeitwerk_class.map do |name, location|
+        Klass.new(name, location, []).tap(&:analyze)
+      end.compact.sort_by(&:name)
     end
 
-    def analyze(klasses = collect.map(&:last))
-      klasses.flat_map do |klass|
-        Analyzer.new(klass).tap(&:analyze).overridden_methods
+    def patched_klasses = collect.select(&:patched?)
+
+    def wagons = patched_klasses.map(&:wagons).flatten.uniq
+
+    def write
+      FileUtils.mkdir_p(PATCHES_DIR) unless PATCHES_DIR.exist?
+
+      wagons.each do |wagon|
+        infos = patched_klasses.map { |klass| klass.info(wagon) }
+        puts "writing patches for #{wagon}" # rubocop:disable Rails/Output
+        patch_files[wagon].puts(infos.to_yaml)
+        patch_files[wagon].close
       end
-    end
-  end
-
-  class Analyzer
-    attr_reader :overridden_methods
-    def initialize(klass)
-      @klass = klass
-      @overridden_methods = []
-    end
-
-    def analyze
-      superclass = @klass.superclass
-      return if superclass.nil?
-
-      @klass.instance_methods(false).each do |method_name|
-        source_file = get_method_source_file(method_name)
-        if superclass.instance_methods.include?(method_name)
-          @overridden_methods << MethodInfo.new(method_name, source_file, @klass.name, superclass.name)
-        end
-      end
-      analyze_overridden_methods_in_ancestors
-    end
-
-    def analyze_overridden_methods_in_ancestors
-      @klass.ancestors.each do |ancestor|
-        next if ancestor == @klass || ancestor == Object || ancestor == Kernel || ancestor == BasicObject
-
-        ancestor.instance_methods.each do |method_name|
-          next unless @klass.instance_methods(false).include?(method_name) && !overridden_methods.index_by(&:name).key?(method_name)
-
-          source_file = get_method_source_file(method_name)
-          @overridden_methods << MethodInfo.new(method_name, source_file, @klass.name, ancestor.name)
-        end
-      end
-    end
-
-    def get_method_source_file(method_name)
-      method_obj = @klass.instance_method(method_name)
-      source_file, _ = method_obj.source_location
-      source_file
-    rescue TypeError, NameError
-      nil
-    end
-  end
-
-  class SourceDirectory
-    attr_reader :path
-
-    def initialize(path)
-      @path = File.expand_path(path)
-    end
-
-    def contains?(file_path)
-      file_path&.start_with?(path)
-    end
-
-    def to_s
-      "SourceDirectory: #{path}"
-    end
-  end
-
-  class MethodInfo
-    attr_reader :name, :source_file, :klass_name, :superclass_name
-
-    def initialize(name, source_file, klass_name, superclass_name = nil)
-      @name = name
-      @source_file = source_file
-      @klass_name = klass_name
-      @superclass_name = superclass_name
-    end
-
-    def to_h
-      {
-        source: Module.const_source_location(klass_name),
-        patch: source_file,
-        name: name
-      }
-    end
-
-    def to_s
-      "Method: #{name}, Class: #{klass_name}, Superclass: #{superclass_name || "None"}"
-    end
-  end
-
-  class ClassMethodAnalyzer
-    attr_reader :added_methods, :overridden_methods
-    def initialize(klass, wagon_directories)
-      @klass = klass
-      @wagon_directories = wagon_directories.map { |dir| SourceDirectory.new(dir) }
-      @added_methods = []
-      @overridden_methods = []
-    end
-
-    def analyze
-      analyze_methods_for_class
     end
 
     private
 
-    def analyze_methods_for_class
-      superclass = @klass.superclass
-      return if superclass.nil?
-
-      @klass.instance_methods(false).each do |method_name|
-        source_file = get_method_source_file(method_name)
-        next if source_file.starts_with?(ENV["GEM_HOME"]) # rubocop:disable Rails/EnvironmentVariableAccess
-        next unless @wagon_directories.any? { |dir| dir.contains?(source_file) }
-
-        if superclass.instance_methods.include?(method_name)
-          @overridden_methods << MethodInfo.new(method_name, source_file, @klass.name, superclass.name)
-        else
-          @added_methods << MethodInfo.new(method_name, source_file, @klass.name)
-        end
-      end
-      analyze_overridden_methods_in_ancestors
-    end
-
-    def analyze_overridden_methods_in_ancestors
-      @klass.ancestors.each do |ancestor|
-        next if ancestor == @klass || ancestor == Object || ancestor == Kernel || ancestor == BasicObject
-
-        ancestor.instance_methods.each do |method_name|
-          next unless @klass.instance_methods(false).include?(method_name) && !overridden_methods.index_by(&:name).key?(method_name)
-
-          source_file = get_method_source_file(method_name)
-          next unless @wagon_directories.any? { |dir| dir.contains?(source_file) }
-          @overridden_methods << MethodInfo.new(method_name, source_file, @klass.name, ancestor.name)
-        end
-      end
-    end
-
-    def get_method_source_file(method_name)
-      method_obj = @klass.instance_method(method_name)
-      source_file, _ = method_obj.source_location
-      source_file
-    rescue TypeError, NameError
-      nil
+    # Maybe good enough, maybe not ..
+    def each_zeitwerk_class
+      Rails.autoloaders.main.instance_variable_get(:@to_unload).map do |location, cref|
+        next if location.starts_with?(GEM_HOME) || !location.ends_with?(".rb")
+        constant = cref.mod.const_get(cref.cname.to_s)
+        next unless constant.is_a?(Class)
+        [constant.to_s, location]
+      end.compact
     end
   end
 
-  class Runner
-    attr_reader :added_methods, :overridden_methods, :origin_directories, :wagon_directories
-
-    def initialize
-      @added_methods = []
-      @overridden_methods = []
-      @origin_directories = [Rails.root.to_s]
-      @wagon_directories = Wagons.all.map(&:root)
-      collect_patches
-    end
-
-    def collect_patches
-      classes_to_analyze = find_classes_in_origin_and_wagon(origin_directories, wagon_directories)
-
-      classes_to_analyze.each do |klass|
-        analyzer = ClassMethodAnalyzer.new(klass, wagon_directories).tap(&:analyze)
-        @added_methods += analyzer.added_methods
-        @overridden_methods += analyzer.overridden_methods
+  class Analyzer
+    def analyze(klass)
+      constant = klass.name.constantize
+      constant.instance_methods(false).each do |method|
+        file, line = constant.instance_method(method).source_location
+        next if irrelevant?(file)
+        klass.patches << Patch.new(method, file, line, extract_wagon(file))
       end
     end
 
-    def find_classes_in_origin_and_wagon(origin_directories, wagon_directories)
-      origin_source_dirs = origin_directories.map { |dir| SourceDirectory.new(dir) }
-      wagon_source_dirs = wagon_directories.map { |dir| SourceDirectory.new(dir) }
-
-      ObjectSpace.each_object(Class).select do |klass|
-        klass.instance_methods.any? do |method_name|
-          method_in_origin_and_wagon?(klass, method_name, origin_source_dirs, wagon_source_dirs)
-        end
-      end
+    def irrelevant?(file)
+      file.starts_with?(GEM_HOME) || file.starts_with?(CORE_APP_DIR.to_s)
     end
 
-    def method_in_origin_and_wagon?(klass, method_name, origin_source_dirs, wagon_source_dirs)
-      begin
-        method_obj = klass.instance_method(method_name)
-        source_file, _ = method_obj.source_location
-      rescue TypeError, NameError
-        return false
-      end
-
-      return false unless source_file
-
-      origin_match = origin_source_dirs.any? { |dir| dir.contains?(source_file) }
-      wagon_match = wagon_source_dirs.any? { |dir| dir.contains?(source_file) }
-      origin_match && wagon_match
-    end
-
-    # rubocop:disable Rails/Output
-    def write_patches
-      puts "Added Methods:"
-      added_methods.each do |klass, methods|
-        puts "  Class: #{klass.name}"
-        methods.each do |method_name, method_info|
-          puts "    #{method_info}" # Uses the to_s method in MethodInfo
-        end
-      end
-
-      puts "\nOverridden Methods:"
-      overridden_methods.each do |klass, methods|
-        puts "  Class: #{klass.name}"
-        methods.each do |method_name, method_info|
-          puts "    #{method_info}"
-        end
-      end
-      # rubocop:enable Rails/Output
-    end
+    def extract_wagon(file) = file[WAGON_REGEX, 1]
   end
 end

@@ -517,7 +517,11 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
+  # required_attrs are dynamically defined attributes, that also get checked during validation
+  # if the form label should just display the required mark, without adding a validation e.g.
+  # for nested fields with a seperate label, mark_as_required? can be defined on the model
   def dynamic_required?(attr)
+    return true if @object.respond_to?(:mark_as_required?) && @object.mark_as_required?(attr)
     return false unless @object.respond_to?(:required_attrs)
 
     @object.required_attrs.include?(attr)

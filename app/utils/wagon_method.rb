@@ -7,7 +7,6 @@ require "pry"
 require_relative "patches"
 
 class WagonMethod < RuboCop::Cop::Base
-  extend RuboCop::Cop::AutoCorrector
   MSG = "Patched in `%<wagons>s`"
 
   RESTRICT_ON_SEND = [:enabled?].freeze # optimization: don't call `on_send` unless
@@ -34,12 +33,8 @@ class WagonMethod < RuboCop::Cop::Base
   def register_offense(node, patches)
     message = format(MSG, wagons: patches.map(&:wagon).sort.join(", "))
 
-    add_offense(node, message: message, severity: :info) do |corrector|
-      info = "<<~PATCHES"
-      info += JSON.pretty_generate(patches.map(&:to_h))
-      info += "PATCHES"
-      corrector.replace(node, info)
-    end
+    # NOTE - autocorrect is not really an option
+    add_offense(node, message: message, severity: :info)
   end
 
   # TODO - constants are not loaded, will that be enough

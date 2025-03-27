@@ -1,6 +1,5 @@
 module Patches
-  GEM_HOME = ENV["GEM_HOME"] # rubocop:disable Rails/EnvironmentVariableAccess
-
+  RUBY_HOME = Pathname(ENV["GEM_HOME"]).parent.parent.to_s # rubocop:disable Rails/EnvironmentVariableAccess
   RAILS_ROOT = Rails.root
   DEV_ROOT = RAILS_ROOT.parent
   PATCHES_DIR = RAILS_ROOT.join(".patches")
@@ -62,7 +61,7 @@ module Patches
     # Maybe good enough, maybe not ..
     def each_zeitwerk_class
       Rails.autoloaders.main.instance_variable_get(:@to_unload).map do |location, cref|
-        next if location.starts_with?(GEM_HOME) || !location.ends_with?(".rb")
+        next if location.starts_with?(RUBY_HOME) || !location.ends_with?(".rb")
         constant = cref.mod.const_get(cref.cname.to_s)
         next unless constant.is_a?(Class)
         [constant.to_s, location]
@@ -81,7 +80,7 @@ module Patches
     end
 
     def irrelevant?(file)
-      file.starts_with?(GEM_HOME) || file.starts_with?(CORE_APP_DIR.to_s)
+      file.starts_with?(RUBY_HOME) || file.starts_with?(CORE_APP_DIR.to_s)
     end
 
     def extract_wagon(file) = file[WAGON_REGEX, 1]

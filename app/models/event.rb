@@ -142,9 +142,9 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   has_many :dates, -> { order(:start_at) }, dependent: :destroy, validate: true, inverse_of: :event
   has_many :questions, dependent: :destroy, validate: true
 
-  has_many :application_questions, -> { where(admin: false) },
+  has_many :application_questions, -> { where(admin: false).list },
     class_name: "Event::Question", inverse_of: :event
-  has_many :admin_questions, -> { where(admin: true) },
+  has_many :admin_questions, -> { where(admin: true).list },
     class_name: "Event::Question", inverse_of: :event
 
   has_many :invitations, dependent: :destroy
@@ -379,12 +379,16 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     application_questions << Question.global
       .where(event_type: [self.class.sti_name, nil])
       .where.not(id: application_questions.map(&:derived_from_question_id))
-      .application.map { |question| question.derive(disclosure: disclosure) }
+      .application
+      .list
+      .map { |question| question.derive(disclosure: disclosure) }
 
     admin_questions << Question.global
       .where(event_type: [self.class.sti_name, nil])
       .where.not(id: admin_questions.map(&:derived_from_question_id))
-      .admin.map { |question| question.derive(disclosure: disclosure) }
+      .admin
+      .list
+      .map { |question| question.derive(disclosure: disclosure) }
   end
 
   def course?

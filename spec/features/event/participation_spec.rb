@@ -13,6 +13,7 @@ describe :event_participation, js: true do
   let(:person) { people(:top_leader) }
   let(:event) { Fabricate(:event, application_opening_at: 5.days.ago, groups: [group]) }
   let(:group) { groups(:bottom_layer_one) }
+  let(:participation) { Event::Participation.create!(event:, person:) }
 
   before do
     sign_in(person)
@@ -21,6 +22,26 @@ describe :event_participation, js: true do
   it "does not have option to uncheck option to send confirmation email when registering for themself" do
     visit new_group_event_participation_path(group, event)
     expect(page).not_to have_content "E-Mail an Teilnehmer/in senden"
+  end
+
+  context "event questions" do
+    before do
+      # create some questions
+      Fabricate(:event_question, event: event, question: "Eine Frage?")
+      Fabricate(:event_question, event: event, question: "A question?")
+    end
+
+    it "orders event questions alphabetically on show page" do
+      visit group_event_participation_path(group, event, participation)
+      expect(find_all("section > dl > dt")[0].text).to eq "A question?"
+      expect(find_all("section > dl > dt")[1].text).to eq "Eine Frage?"
+    end
+
+    it "orders event questions alphabetically on edit page" do
+      visit edit_group_event_participation_path(group, event, participation)
+      expect(find_all("label.col-form-label")[0].text).to eq "A question?"
+      expect(find_all("label.col-form-label")[1].text).to eq "Eine Frage?"
+    end
   end
 
   context "with privacy policies in hierarchy" do

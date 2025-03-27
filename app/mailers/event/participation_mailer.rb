@@ -152,10 +152,7 @@ class Event::ParticipationMailer < ApplicationMailer
   end
 
   def load_application_answers
-    participation.answers
-      .joins(:question)
-      .includes(:question)
-      .where(event_questions: {admin: false})
+    participation.answers.list.where(event_questions: {admin: false})
   end
 
   def additional_information_details

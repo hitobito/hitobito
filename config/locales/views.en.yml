@@ -1129,6 +1129,8 @@ en:
       index:
         my_subscriptions: My Subscriptions
         available_subscriptions: Available Subscriptions
+        show_all: Show all
+        show_ancestors: Show from parent groups
       create:
         success: <i>%{person}</i>subscribed to <i>%{mailing_list}</i>.
       destroy:

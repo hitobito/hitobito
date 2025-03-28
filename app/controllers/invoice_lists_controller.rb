@@ -49,7 +49,7 @@ class InvoiceListsController < CrudController
     assign_attributes
     entry.title = entry.invoice.title
 
-    if entry.valid?
+    if entry.valid? && entry.save
       Invoice::BatchCreate.call(entry, LIMIT_CREATE)
       message = flash_message_create(count: entry.recipient_ids_count, title: entry.title)
       redirect_to return_path, notice: message

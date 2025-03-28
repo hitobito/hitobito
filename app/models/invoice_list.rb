@@ -14,6 +14,7 @@
 #  amount_total          :decimal(15, 2)   default(0.0), not null
 #  invalid_recipient_ids :text
 #  receiver_type         :string
+#  recipient_ids         :text
 #  recipients_paid       :integer          default(0), not null
 #  recipients_processed  :integer          default(0), not null
 #  recipients_total      :integer          default(0), not null
@@ -32,6 +33,7 @@
 #
 
 class InvoiceList < ActiveRecord::Base
+  serialize :recipient_ids, type: Array, coder: YAML
   serialize :invalid_recipient_ids, type: Array, coder: YAML
   belongs_to :group
   belongs_to :receiver, polymorphic: true
@@ -88,9 +90,8 @@ class InvoiceList < ActiveRecord::Base
     group.layer_group.invoice_config
   end
 
-  def recipient_ids = @recipient_ids.to_a
-
   def recipient_ids=(ids)
-    @recipient_ids = ids.is_a?(Array) ? ids : ids.to_s.scan(/\d+/).map(&:to_i).select(&:positive?)
+    value = ids.is_a?(Array) ? ids : ids.to_s.scan(/\d+/).map(&:to_i).select(&:positive?)
+    write_attribute(:recipient_ids, value)
   end
 end

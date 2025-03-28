@@ -752,21 +752,34 @@ describe Event::ParticipationsController do
   end
 
   context "required answers" do
-    let(:event) { events(:top_event) }
+    before do
+      course.participations.destroy_all
+      course.update!(requires_approval: false)
+    end
 
-    def make_request(person, answer)
-      question = event.questions.create!(question: "dummy", disclosure: :required)
+    def make_request(person, answer, other_person_id = nil)
+      question = course.questions.create!(question: "dummy", disclosure: :required)
       sign_in(person)
 
-      post :create, params: {group_id: event.groups.first.id, event_id: event.id,
-                             event_participation: {answers_attributes: {
-                               "0" => {"question_id" => question.id, "answer" => answer}
-                             }}}
+      attrs = {answers_attributes: {
+        "0" => {"question_id" => question.id, "answer" => answer}
+      }}
+      attrs[:person_id] = other_person_id if other_person_id
+
+      post :create, params: {
+        group_id: course.groups.first.id,
+        event_id: course.id,
+        event_participation: attrs
+      }
       assigns(:participation)
     end
 
-    it "top_leader can create without supplying required answer" do
-      expect(make_request(people(:top_leader), "")).to be_valid
+    it "top_leader can create other participation without supplying required answer" do
+      expect(make_request(people(:top_leader), "", people(:bottom_member).id)).to be_valid
+    end
+
+    it "top_leader cannot create own participation without supplying required answer" do
+      expect(make_request(people(:top_leader), "")).not_to be_valid
     end
 
     it "bottom_member cannot create without supplying required answer" do

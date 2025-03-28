@@ -153,7 +153,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def after_destroy_path
-    if entry.person_id == current_user.id
+    if for_current_user?
       group_event_path(group, event)
     else
       group_event_application_market_index_path(group, event)
@@ -227,14 +227,14 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def person_id
-    return current_user.try(:id) unless event.supports_applications
+    return current_user&.id unless event.supports_applications
 
     if model_params&.key?(:person_id)
       params[:for_someone_else] = true
       model_params.delete(:person)
       model_params.delete(:person_id)
     elsif params[:for_someone_else].blank?
-      current_user.try(:id)
+      current_user&.id
     end
   end
 
@@ -255,9 +255,11 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def invited?
-    Event::Invitation.exists?(person: current_user,
+    Event::Invitation.exists?(
+      person: current_user,
       event: event,
-      participation_type: params_role_type)
+      participation_type: params_role_type
+    )
   end
 
   def params_role_type
@@ -267,8 +269,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   def assign_attributes
     super
 
-    # Required questions are enforced only for users that are not allowed to add others
-    entry.enforce_required_answers = true unless can?(:update, entry)
+    entry.enforce_required_answers = for_current_user?
   end
 
   def init_answers
@@ -336,7 +337,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def current_user_interested_in_mail?
-    entry.person_id == current_user.id # extended in wagon
+    for_current_user? # extended in wagon
   end
 
   def set_success_notice
@@ -354,7 +355,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def append_mailing_instructions?
-    entry.person == current_user && event.signature?
+    for_current_user? && event.signature?
   end
 
   def event
@@ -387,5 +388,9 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
 
   def send_email?
     true?(params[:send_email])
+  end
+
+  def for_current_user?
+    entry.person_id == current_user&.id
   end
 end

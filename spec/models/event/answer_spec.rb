@@ -51,4 +51,19 @@ describe Event::Answer do
       expect(answer.answer).to eq("Test")
     end
   end
+
+  context ".list" do
+    it "orders by questions and includes translations" do
+      participation.init_answers
+      ids = participation.answers.pluck(:id)
+
+      list = []
+      expect_query_count do
+        list = participation.answers.list.to_a
+        expect(list.map { |a| a.question.question })
+          .to eq(["GA oder Halbtax?", "Ich bin Vegetarier", "Sonst noch was?"])
+        expect(list.map(&:id)).to match_array(ids)
+      end.to eq(3)
+    end
+  end
 end

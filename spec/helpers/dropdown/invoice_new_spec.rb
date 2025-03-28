@@ -20,6 +20,34 @@ describe Dropdown::InvoiceNew do
   let(:invalid_msg) { I18n.t("activerecord.errors.models.invoice_config.not_valid") }
 
   context "#initialize" do
+    describe "filter params" do
+      let(:filter) { {range: :foo, filters: :bar} }
+      let(:group) { groups(:top_group) }
+
+      def query_from_params(filter:)
+        dropdown = Dropdown::InvoiceNew.new(self, people: [recipient], group:, filter:)
+        Rack::Utils.parse_query(URI.parse(dropdown.items.first.url).query)
+      end
+
+      it "reads filter from hash" do
+        query = query_from_params(filter: filter)
+        expect(query["filter[range]"]).to eq "foo"
+        expect(query["filter[filters]"]).to eq "bar"
+      end
+
+      it "reads filter from hash from string keys" do
+        query = query_from_params(filter: filter.stringify_keys)
+        expect(query["filter[range]"]).to eq "foo"
+        expect(query["filter[filters]"]).to eq "bar"
+      end
+
+      it "reads filter from ActionController params" do
+        query = query_from_params(filter: ActionController::Parameters.new(filter))
+        expect(query["filter[range]"]).to eq "foo"
+        expect(query["filter[filters]"]).to eq "bar"
+      end
+    end
+
     it "adds items for finance_groups" do
       expect(dropdown.items).to have(1).item
       item = dropdown.items.first

@@ -7,6 +7,7 @@
 #  amount_total          :decimal(15, 2)   default(0.0), not null
 #  invalid_recipient_ids :text
 #  receiver_type         :string
+#  recipient_ids         :text
 #  recipients_paid       :integer          default(0), not null
 #  recipients_processed  :integer          default(0), not null
 #  recipients_total      :integer          default(0), not null

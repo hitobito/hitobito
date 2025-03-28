@@ -18,7 +18,7 @@ describe Invoice::BatchCreate do
       subscriber: group,
       role_types: [Group::TopGroup::Leader])
 
-    list = InvoiceList.new(receiver: mailing_list, group: group, title: :title)
+    list = InvoiceList.create!(receiver: mailing_list, group: group, title: :title)
 
     invoice = Invoice.new(title: "invoice", group: group)
     invoice.invoice_items.build(name: "pens", unit_cost: 1.5)
@@ -42,7 +42,7 @@ describe Invoice::BatchCreate do
       subscriber: group,
       role_types: [Group::TopGroup::Leader])
 
-    list = InvoiceList.new(receiver: mailing_list, group: group, title: :title)
+    list = InvoiceList.create!(receiver: mailing_list, group: group, title: :title)
 
     invoice = Invoice.new(title: "invoice", group: group)
     invoice.invoice_items.build(name: "pens", unit_cost: 1.5)

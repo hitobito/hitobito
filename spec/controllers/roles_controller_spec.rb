@@ -12,11 +12,19 @@ describe RolesController do
   let(:person) { Fabricate(:person) }
   let(:role) { Fabricate(Group::TopGroup::Member.name.to_sym, person: person, group: group) }
 
-  it "GET new sets a role of the correct type" do
-    get :new, params: {group_id: group.id, role: {group_id: group.id, type: Group::TopGroup::Member.sti_name}}
+  describe "GET new" do
+    it "sets a role of the correct type" do
+      get :new, params: {group_id: group.id, role: {group_id: group.id, type: Group::TopGroup::Member.sti_name}}
 
-    expect(assigns(:role)).to be_kind_of(Group::TopGroup::Member)
-    expect(assigns(:role).group_id).to eq(group.id)
+      expect(assigns(:role)).to be_kind_of(Group::TopGroup::Member)
+      expect(assigns(:role).group_id).to eq(group.id)
+    end
+
+    it "sets start_on to default value today" do
+      get :new, params: {group_id: group.id, role: {group_id: group.id, type: Group::TopGroup::Member.sti_name}}
+
+      expect(assigns(:role).start_on).to eq(Date.current)
+    end
   end
 
   describe "POST create" do
@@ -118,6 +126,25 @@ describe RolesController do
 
       role = person.reload.roles.first
       expect(role.group_id).to eq(g.id)
+      expect(flash[:notice]).to eq("Rolle <i>Member</i> für <i>#{person}</i> in <i>Toppers</i> wurde erfolgreich erstellt.")
+      expect(role).to be_kind_of(Group::GlobalGroup::Member)
+    end
+
+    it "sets start_on nil if explicitly stated" do
+      g = groups(:toppers)
+      post :create, params: {
+        group_id: group.id,
+        role: {group_id: g.id,
+               person_id: person.id,
+               type: Group::GlobalGroup::Member.sti_name,
+               start_on: nil}
+      }
+
+      is_expected.to redirect_to(group_people_path(g))
+
+      role = person.reload.roles.first
+      expect(role.group_id).to eq(g.id)
+      expect(role.start_on).to be_nil
       expect(flash[:notice]).to eq("Rolle <i>Member</i> für <i>#{person}</i> in <i>Toppers</i> wurde erfolgreich erstellt.")
       expect(role).to be_kind_of(Group::GlobalGroup::Member)
     end

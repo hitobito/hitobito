@@ -71,7 +71,7 @@ class Person::Filter::Attributes < Person::Filter::Base
       type = Person.filter_attrs[key.to_sym][:type]
       begin
         parsed_value = (type == :date) ? Date.parse(value) : value
-      rescue Date::Error
+      rescue TypeError, Date::Error
         parsed_value = Time.zone.now.to_date
       end
 

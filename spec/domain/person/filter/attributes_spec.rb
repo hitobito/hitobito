@@ -316,6 +316,14 @@ describe Person::Filter::Attributes do
             expect(entries.size).to eq(1)
             expect(entries.first).to eq(@tg_member1)
           end
+
+          context do
+            let(:value) { nil }
+
+            it "does not fail or filter" do
+              expect(entries.size).to eq(4)
+            end
+          end
         end
 
         context do

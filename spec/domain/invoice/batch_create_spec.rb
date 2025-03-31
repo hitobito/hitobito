@@ -36,6 +36,35 @@ describe Invoice::BatchCreate do
     expect(list.amount_paid).to eq 0
   end
 
+  it "#call creates invoices for group distinct people regardless of role count" do
+    group = groups(:bottom_layer_one)
+    group.invoices.destroy_all
+
+    Fabricate(Group::BottomLayer::Leader.sti_name.to_sym, person: other_person, group: group) # second role for other_person
+    2.times do
+      Fabricate(Group::BottomLayer::Member.sti_name.to_sym, group: group)
+    end
+    expect(group.roles.size).to eq(4)
+    expect(group.people.size).to eq(4) # people relation goes via roles and are currently not distinct
+
+    list = InvoiceList.create!(receiver: group, group: group, title: :title)
+
+    invoice = Invoice.new(title: "invoice", group: group)
+    invoice.invoice_items.build(name: "pens", unit_cost: 1.5)
+    invoice.invoice_items.build(name: "pins", unit_cost: 0.5, count: 2)
+    list.invoice = invoice
+
+    expect do
+      Invoice::BatchCreate.call(list)
+    end.to change { [group.invoices.count, group.invoice_items.count] }.by([3, 6])
+    expect(list.reload).to have(3).invoices
+    expect(list.receiver).to eq group
+    expect(list.recipients_total).to eq 3
+    expect(list.recipients_paid).to eq 0
+    expect(list.amount_total).to eq 7.5
+    expect(list.amount_paid).to eq 0
+  end
+
   it "#call offloads to job when recipients exceed limit" do
     Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group))
     Subscription.create!(mailing_list: mailing_list,

@@ -75,15 +75,19 @@ class InvoiceList < ActiveRecord::Base
   end
 
   def recipient_ids_count
-    receiver ? receiver.people.unscope(:select).count : recipient_ids.count
+    receiver ? receiver_people.unscope(:select).count : recipient_ids.count
   end
 
   def first_recipient
-    receiver ? receiver.people.first : Person.find(recipient_ids.first)
+    receiver ? receiver_people.first : Person.find(recipient_ids.first)
   end
 
   def recipients
-    receiver ? receiver.people : Person.where(id: recipient_ids)
+    receiver ? receiver_people : Person.where(id: recipient_ids)
+  end
+
+  def receiver_people
+    receiver.people.distinct
   end
 
   def invoice_config

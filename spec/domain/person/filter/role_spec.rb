@@ -317,7 +317,7 @@ describe Person::Filter::Role do
       context :deleted do
         let(:kind) { "deleted" }
         let(:role_type) { Group::TopGroup::Member }
-        let(:role) { person.roles.create!(type: role_type.sti_name, group: group) }
+        let(:role) { person.roles.create!(type: role_type.sti_name, group: group, start_on: 1.year.ago) }
 
         it "finds role ended on same day" do
           role.update!(end_on: today)
@@ -394,7 +394,7 @@ describe Person::Filter::Role do
 
         context :without_role_type do
           let(:role_type) { nil }
-          let(:role) { person.roles.create!(type: Group::TopGroup::Member.sti_name, group: group) }
+          let(:role) { person.roles.create!(type: Group::TopGroup::Member.sti_name, group: group, start_on: 1.year.ago) }
 
           it "applies filter and does not find role ended outside of timeframe" do
             role.update!(end_on: 3.days.ago)

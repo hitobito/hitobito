@@ -13,12 +13,9 @@ describe Export::Tabular::People::PeopleFull do
   subject { people_list }
 
   its(:attributes) do
-    expected = [
-      :first_name, :last_name, :company_name, :nickname, :company, :email,
-      :zip_code, :town, :country, :gender, :birthday, :additional_information, :language,
-      :street, :housenumber, :address_care_of, :postbox, :layer_group, :roles, :tags
-    ]
-
+    expected = [:first_name, :last_name, :nickname, :company_name, :company, :email,
+      :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
+      :layer_group, :roles, :gender, :birthday, :additional_information, :language, :tags]
     should match_array expected
     should eq expected
   end

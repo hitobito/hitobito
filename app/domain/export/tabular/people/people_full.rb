@@ -6,10 +6,11 @@
 module Export::Tabular::People
   class PeopleFull < PeopleAddress
     def person_attributes
-      Person.column_names.collect(&:to_sym) -
-        Person::INTERNAL_ATTRS -
-        excluded_person_attributes +
-        [:layer_group, :roles, :tags]
+      super +
+        (Person.column_names.collect(&:to_sym) -
+          Person::INTERNAL_ATTRS -
+          excluded_person_attributes +
+          [:layer_group, :roles, :tags] - super)
     end
 
     def excluded_person_attributes

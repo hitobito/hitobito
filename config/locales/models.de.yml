@@ -153,10 +153,6 @@ de:
           attributes:
             person_id:
               taken: wurde bereits angefragt
-        people_relation:
-          attributes:
-            tail_id:
-              must_not_be_equal_to_head: zu sich selbst ist nicht erlaubt
         qualification:
           attributes:
             qualification_kind_id:
@@ -359,9 +355,6 @@ de:
       people_filter:
         one: Filter
         other: Filter
-      people_relation:
-        one: Beziehung
-        other: Beziehungen
       phone_number:
         one: Telefonnummer
         other: Telefonnummern
@@ -482,7 +475,6 @@ de:
         years: Alter
         additional_information: Zusätzliche Angaben
         remember_me: Angemeldet bleiben
-        relations_to_tails: Beziehungen
         phone_numbers: Telefonnummern
         social_accounts: Social Media
         additional_emails: Weitere E-Mails
@@ -755,11 +747,6 @@ de:
         additional_audiences: Weitere Audiences
         skip_consent_screen: Einwilligung überspringen
 
-      people_relation:
-        head_id: Person
-        tail_id: Andere Person
-        kind: Art
-
       phone_number:
         number: Nummer
         label: Typ
@@ -787,10 +774,6 @@ de:
         deleted_at: Gelöscht
         reactivateable: Reaktivierbar
         required_training_days: Erforderliche Ausbildungstage
-
-      relations_to_tails:
-        tail_id: Beziehung
-        kind: Art
 
       # used for nested phone_numbers
       phone_numbers:

@@ -18,8 +18,7 @@ class PeopleController < CrudController
   self.permitted_attrs = [:first_name, :last_name, :company_name, :nickname, :company,
     :gender, :birthday, :additional_information, :picture, :remove_picture] +
     Contactable::ACCESSIBLE_ATTRS +
-    [family_members_attributes: [:id, :kind, :other_id, :_destroy]] +
-    [relations_to_tails_attributes: [:id, :tail_id, :kind, :_destroy]]
+    [family_members_attributes: [:id, :kind, :other_id, :_destroy]]
   FeatureGate.if(:person_language) do
     permitted_attrs << :language
   end

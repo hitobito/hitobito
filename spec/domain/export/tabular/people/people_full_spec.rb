@@ -6,15 +6,6 @@
 require "spec_helper"
 
 describe Export::Tabular::People::PeopleFull do
-  before do
-    PeopleRelation.kind_opposites["parent"] = "child"
-    PeopleRelation.kind_opposites["child"] = "parent"
-  end
-
-  after do
-    PeopleRelation.kind_opposites.clear
-  end
-
   let(:person) { people(:top_leader) }
   let(:scope) { Person.where(id: person.id) }
   let(:people_list) { Export::Tabular::People::PeopleFull.new(scope) }
@@ -45,15 +36,6 @@ describe Export::Tabular::People::PeopleFull do
       before { person.social_accounts << SocialAccount.new(label: "Webseite", name: "foo.bar") }
 
       its([:social_account_webseite]) { should eq "Social Media Adresse Webseite" }
-    end
-
-    context "people relations" do
-      before do
-        person.relations_to_tails << PeopleRelation.new(head_id: person.id,
-          tail_id: people(:bottom_member).id, kind: "parent")
-      end
-
-      its([:people_relation_parent]) { should eq "Elternteil" }
     end
   end
 end

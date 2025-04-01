@@ -87,67 +87,6 @@ describe PeopleController, js: true do
     end
   end
 
-  context "people relations" do
-    let(:user) { people(:top_leader) }
-
-    it "is not disabled if no kinds are set" do
-      sign_in(user)
-      visit edit_group_person_path(group_id: groups(:top_group), id: user.id)
-
-      expect(page).to have_no_content "Beziehungen"
-    end
-
-    context "with kinds and existing relations" do
-      let(:relations) { Person.find(user.id).relations_to_tails }
-
-      before do
-        PeopleRelation.kind_opposites["sibling"] = "sibling"
-        relations.create!(tail_id: people(:bottom_member).id, kind: "sibling")
-        sign_in(user)
-      end
-
-      after do
-        PeopleRelation.kind_opposites.clear
-      end
-
-      it "can define a new relation" do
-        obsolete_node_safe do
-          visit edit_group_person_path(group_id: groups(:top_group), id: user.id)
-          is_expected.to have_content "Beziehungen"
-
-          expect do
-            expect(page).to have_selector('a[data-association="relations_to_tails"]')
-            find('a[data-association="relations_to_tails"]', text: "Eintrag hinzufügen").click
-            find("#relations_to_tails_fields input[data-provide=entity]").set("Bottom")
-            find('#relations_to_tails_fields ul[role="listbox"] li[role="option"]').click
-
-            all("button", text: "Speichern").first.click
-            expect(page).to have_content("erfolgreich aktualisiert")
-          end.to change { relations.size }.by(1)
-
-          expect(relations.first.opposite.tail_id).to eq(user.id)
-        end
-      end
-
-      it "remove existing relation" do
-        obsolete_node_safe do
-          user.relations_to_tails.create!(tail_id: people(:bottom_member).id, kind: "sibling")
-
-          visit edit_group_person_path(group_id: groups(:top_group), id: user.id)
-          is_expected.to have_content "Beziehungen"
-
-          expect do
-            expect(page).to have_selector("#relations_to_tails_fields .remove_nested_fields")
-            all("#relations_to_tails_fields .remove_nested_fields").first.click
-
-            all("button", text: "Speichern").first.click
-            expect(page).to have_content("erfolgreich aktualisiert")
-          end.to change { relations.size }.by(-1)
-        end
-      end
-    end
-  end
-
   context "picture upload" do
     let(:logo) { Rails.root.join("spec", "fixtures", "files", "images", "logo.png") }
     let(:person) { people(:top_leader) }

@@ -1,0 +1,390 @@
+---
+CustomContent:
+- :body_with_values
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/models/sac_cas/custom_content.rb"
+- 23
+Event::Course:
+- :default_participation_state
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/models/sac_cas/event/course.rb"
+- 216
+- :minimum_age
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/models/sac_cas/event/course.rb"
+- 212
+Event::ParticipationBanner:
+- :action_button_cancel_participation
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/helpers/sac_cas/event/participation_banner.rb"
+- 13
+- :status_text
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/helpers/sac_cas/event/participation_banner.rb"
+- 34
+- :status_class
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/helpers/sac_cas/event/participation_banner.rb"
+- 38
+- :can_destroy?
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/helpers/sac_cas/event/participation_banner.rb"
+- 24
+Event::ParticipationContactData:
+- :initialize
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/models/sac_cas/event/participation_contact_data.rb"
+- 34
+- :assert_required_contact_attrs_valid
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/models/sac_cas/event/participation_contact_data.rb"
+- 45
+Event::Participatable:
+- :refresh_participant_counts!
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/models/sac_cas/event/participatable.rb"
+- 11
+Household:
+- :reload
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/models/sac_cas/household.rb"
+- 50
+- :save
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/models/sac_cas/household.rb"
+- 27
+- :destroy
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/models/sac_cas/household.rb"
+- 42
+- :initialize
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/models/sac_cas/household.rb"
+- 21
+- :validate_members
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/models/sac_cas/household.rb"
+- 179
+- :next_key
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/models/sac_cas/household.rb"
+- 130
+Households::MemberValidator:
+- :validate
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/models/sac_cas/households/member_validator.rb"
+- 11
+Person:
+- :login_status
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/models/sac_cas/person.rb"
+- 131
+Roles::TerminateRoleLink:
+- :render_link
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/helpers/sac_cas/roles/terminate_role_link.rb"
+- 11
+Contactable:
+- :country_label
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/models/sac_cas/contactable.rb"
+- 9
+- :ignored_country?
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/models/sac_cas/contactable.rb"
+- 15
+Ability:
+- :define_root_abilities
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/abilities/sac_cas/ability.rb"
+- 11
+- :define_user_abilities
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/abilities/sac_cas/ability.rb"
+- 16
+MailingListAbility:
+- :in_same_group_if_active
+- "/home/ama/dev/hitobito/development/app/hitobito/app/abilities/ability_dsl/constraints/group.rb"
+- 53
+- :in_same_group_or_below_if_active
+- "/home/ama/dev/hitobito/development/app/hitobito/app/abilities/ability_dsl/constraints/group.rb"
+- 61
+- :in_same_layer_if_active
+- "/home/ama/dev/hitobito/development/app/hitobito/app/abilities/ability_dsl/constraints/group.rb"
+- 57
+- :in_same_layer_or_below_if_active
+- "/home/ama/dev/hitobito/development/app/hitobito/app/abilities/ability_dsl/constraints/group.rb"
+- 65
+- :in_same_group
+- "/home/ama/dev/hitobito/development/app/hitobito/app/abilities/ability_dsl/constraints/group.rb"
+- 11
+- :in_same_group_or_below
+- "/home/ama/dev/hitobito/development/app/hitobito/app/abilities/ability_dsl/constraints/group.rb"
+- 19
+- :in_same_layer
+- "/home/ama/dev/hitobito/development/app/hitobito/app/abilities/ability_dsl/constraints/group.rb"
+- 15
+- :in_same_layer_or_below
+- "/home/ama/dev/hitobito/development/app/hitobito/app/abilities/ability_dsl/constraints/group.rb"
+- 25
+- :if_layer_group_if_active
+- "/home/ama/dev/hitobito/development/app/hitobito/app/abilities/ability_dsl/constraints/group.rb"
+- 41
+- :in_active_group
+- "/home/ama/dev/hitobito/development/app/hitobito/app/abilities/ability_dsl/constraints/group.rb"
+- 45
+- :group_not_deleted
+- "/home/ama/dev/hitobito/development/app/hitobito/app/abilities/ability_dsl/constraints/group.rb"
+- 29
+- :group_not_deleted_or_archived
+- "/home/ama/dev/hitobito/development/app/hitobito/app/abilities/ability_dsl/constraints/group.rb"
+- 33
+- :if_layer_group
+- "/home/ama/dev/hitobito/development/app/hitobito/app/abilities/ability_dsl/constraints/group.rb"
+- 37
+- :in_archived_group
+- "/home/ama/dev/hitobito/development/app/hitobito/app/abilities/ability_dsl/constraints/group.rb"
+- 49
+- :group
+- "/home/ama/dev/hitobito/development/app/hitobito/app/abilities/ability_dsl/constraints/group.rb"
+- 71
+PersonReadables:
+- :accessible_people
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/abilities/sac_cas/person_readables.rb"
+- 10
+RoleAbility:
+- :not_permission_giving
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/abilities/sac_cas/role_ability.rb"
+- 27
+TokenAbility:
+- :define_invoice_abilities
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/abilities/sac_cas/token_ability.rb"
+- 11
+GroupDecorator:
+- :role_types
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/decorators/sac_cas/group_decorator.rb"
+- 37
+- :possible_roles
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/decorators/sac_cas/group_decorator.rb"
+- 48
+RoleDecorator:
+- :for_oauth
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/decorators/sac_cas/role_decorator.rb"
+- 11
+PersonDecorator:
+- :login_status_icons
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/decorators/sac_cas/person_decorator.rb"
+- 11
+- :roles_for_oauth
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/decorators/sac_cas/person_decorator.rb"
+- 15
+- :full_label
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/decorators/sac_cas/person_decorator.rb"
+- 19
+- :login_status_icon_options
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/decorators/sac_cas/person_decorator.rb"
+- 31
+Event::ParticipationDecorator:
+- :to_s
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/decorators/sac_cas/event/participation_decorator.rb"
+- 12
+People::UpdateAfterRoleChange:
+- :set_first_primary_group
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/domain/sac_cas/people/update_after_role_change.rb"
+- 11
+- :newest_group_id
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/domain/sac_cas/people/update_after_role_change.rb"
+- 21
+OidcClaimSetup:
+- :run
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/domain/sac_cas/oidc_claim_setup.rb"
+- 43
+Event::TrainingDays::CoursesLoader:
+- :load
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/domain/sac_cas/event/training_days/courses_loader.rb"
+- 9
+SearchStrategies::PersonSearch:
+- :search_fulltext
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/domain/sac_cas/search_strategies/person_search.rb"
+- 8
+- :no_people
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/domain/sac_cas/search_strategies/person_search.rb"
+- 20
+Synchronize::Mailchimp::Subscriber:
+- :primary?
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/domain/sac_cas/synchronize/mailchimp/subscriber.rb"
+- 11
+Changelogs::FooterLinkBuilder:
+- :render
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/helpers/sac_cas/changelogs/footer_link_builder.rb"
+- 9
+EventsHelper:
+- :format_event_application_conditions
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/helpers/sac_cas/events_helper.rb"
+- 9
+EventParticipationsHelper:
+- :event_participation_table_options
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/helpers/sac_cas/event_participations_helper.rb"
+- 7
+FilterNavigation::People:
+- :add_people_filter_links
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/helpers/sac_cas/filter_navigation/people.rb"
+- 39
+- :initialize
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/helpers/sac_cas/filter_navigation/people.rb"
+- 28
+MountedAttrs::EnumSelect:
+- :option_label
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/helpers/sac_cas/mounted_attrs/enum_select.rb"
+- 12
+Dropdown::PeopleExport:
+- :is_course?
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/helpers/sac_cas/dropdown/people_export.rb"
+- 21
+- :tabular_links
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/helpers/sac_cas/dropdown/people_export.rb"
+- 9
+- :add_course_items
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/helpers/sac_cas/dropdown/people_export.rb"
+- 26
+Dropdown::GroupEdit:
+- :initialize
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/helpers/sac_cas/dropdown/group_edit.rb"
+- 9
+Dropdown::Event::Participation::MailDispatch:
+- :init_items
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/helpers/sac_cas/dropdown/event/participation/mail_dispatch.rb"
+- 9
+Event::ParticipationButtons:
+- :build_cancel_button
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/helpers/sac_cas/event/participation_buttons.rb"
+- 24
+StandardFormBuilder:
+- :required?
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/helpers/sac_cas/standard_form_builder.rb"
+- 11
+ApplicationController:
+- :fetch_person
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/controllers/sac_cas/application_controller.rb"
+- 13
+Event::ApplicationMarketController:
+- :index
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/controllers/sac_cas/event/application_market_controller.rb"
+- 13
+Event::KindsController:
+- :load_assocations
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/controllers/sac_cas/event/kinds_controller.rb"
+- 38
+Event::KindCategoriesController:
+- :load_assocations
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/controllers/sac_cas/event/kind_categories_controller.rb"
+- 24
+- :list_entries
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/controllers/sac_cas/event/kind_categories_controller.rb"
+- 30
+Event::ParticipationsController:
+- :new
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/controllers/sac_cas/event/participations_controller.rb"
+- 39
+- :cancel
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/controllers/sac_cas/event/participations_controller.rb"
+- 25
+- :permitted_attrs
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/controllers/sac_cas/event/participations_controller.rb"
+- 58
+- :build_entry
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/controllers/sac_cas/event/participations_controller.rb"
+- 179
+- :permitted_params
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/controllers/sac_cas/event/participations_controller.rb"
+- 64
+Event::RegisterController:
+- :save_entry
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/controllers/sac_cas/event/register_controller.rb"
+- 9
+Groups::SelfRegistrationController:
+- :redirect_to_group_if_necessary
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/controllers/sac_cas/groups/self_registration_controller.rb"
+- 67
+- :model_class
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/controllers/sac_cas/groups/self_registration_controller.rb"
+- 29
+- :redirect_target
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/controllers/sac_cas/groups/self_registration_controller.rb"
+- 71
+- :success_message
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/controllers/sac_cas/groups/self_registration_controller.rb"
+- 90
+Groups::SelfInscriptionController:
+- :show
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/controllers/sac_cas/groups/self_inscription_controller.rb"
+- 13
+JsonApi::EventsController:
+- :index
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/controllers/sac_cas/json_api/events_controller.rb"
+- 14
+MailingListsController:
+- :permitted_params
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/controllers/sac_cas/mailing_lists_controller.rb"
+- 12
+PeopleController:
+- :list_filter_args
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/controllers/sac_cas/people_controller.rb"
+- 19
+- :tabular_params
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/controllers/sac_cas/people_controller.rb"
+- 44
+Person::HistoryController:
+- :index
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/controllers/sac_cas/person/history_controller.rb"
+- 11
+- :roles_scope
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/controllers/sac_cas/person/history_controller.rb"
+- 20
+Person::SubscriptionsController:
+- :subscribed
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/controllers/sac_cas/person/subscriptions_controller.rb"
+- 13
+Person::QueryHouseholdController:
+- :authorize_action
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/controllers/sac_cas/person/query_household_controller.rb"
+- 16
+Subscriber::FilterController:
+- :edit
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/controllers/sac_cas/subscriber/filter_controller.rb"
+- 10
+- :update
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/controllers/sac_cas/subscriber/filter_controller.rb"
+- 16
+QualificationsController:
+- :load_qualification_kinds
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/controllers/sac_cas/qualifications_controller.rb"
+- 11
+- :permitted_attrs
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/controllers/sac_cas/qualifications_controller.rb"
+- 28
+- :save_entry
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/controllers/sac_cas/qualifications_controller.rb"
+- 19
+SubscriptionsController:
+- :tabular_params
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/controllers/sac_cas/subscriptions_controller.rb"
+- 11
+Event::ParticipationConfirmationJob:
+- :send_confirmation
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/jobs/sac_cas/event/participation_confirmation_job.rb"
+- 15
+Export::PeopleExportJob:
+- :entries
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/jobs/sac_cas/export/people_export_job.rb"
+- 11
+- :data
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/jobs/sac_cas/export/people_export_job.rb"
+- 15
+Export::SubscriptionsJob:
+- :data
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/jobs/sac_cas/export/subscriptions_job.rb"
+- 11
+- :entries
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/jobs/sac_cas/export/subscriptions_job.rb"
+- 19
+Export::EventParticipationsExportJob:
+- :exporter
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/jobs/sac_cas/export/event_participations_export_job.rb"
+- 9
+Export::Tabular::People::PeopleFull:
+- :person_attributes
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/domain/sac_cas/export/tabular/people/people_full.rb"
+- 9
+- :person_attributes
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/domain/export/tabular/people/with_sac_additions.rb"
+- 9
+Export::Tabular::People::Households:
+- :person_attributes
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/domain/export/tabular/people/with_sac_additions.rb"
+- 9
+Export::Tabular::People::PeopleAddress:
+- :person_attributes
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/domain/export/tabular/people/with_sac_additions.rb"
+- 9
+TableDisplays::People::LoginStatusColumn:
+- :required_model_attrs
+- "/home/ama/dev/hitobito/development/app/hitobito_sac_cas/app/domain/sac_cas/table_displays/people/login_status_column.rb"
+- 9

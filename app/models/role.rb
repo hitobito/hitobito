@@ -119,6 +119,7 @@ class Role < ActiveRecord::Base
 
   ### CALLBACKS
 
+  after_initialize :set_start_on_to_today, if: :new_record?
   before_save :prevent_changes, if: :archived?
   after_create :reset_person_minimized_at
   after_destroy :set_contact_data_visible
@@ -246,6 +247,14 @@ class Role < ActiveRecord::Base
     end
   end
 
+  # The after_initialize callback `set_start_on_to_today` needs to know if the `start_on` value has
+  # been assigned explicitely. This is done by setting `start_on_assigned` to true in the setter.
+  attr_accessor :start_on_assigned
+  def start_on=(date)
+    self.start_on_assigned = true
+    super
+  end
+
   def ended?
     end_on&.past?
   end
@@ -308,6 +317,15 @@ class Role < ActiveRecord::Base
 
   def reset_person_minimized_at
     person&.update_attribute(:minimized_at, nil) # rubocop:disable Rails/SkipsModelValidations
+  end
+
+  # called as after_initialize callback for new records, sets `start_on` if blank unless blanked explicitely.
+  # To be able to recognize if the value has been assigned explicitely, the setter `start_on=` sets
+  # an instance variable `@start_on_assigned` to true, which we check here.
+  def set_start_on_to_today
+    return if start_on_assigned
+
+    self.start_on ||= Date.current
   end
 
   def set_contact_data_visible

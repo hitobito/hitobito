@@ -49,7 +49,7 @@ class InvoiceListsController < CrudController
     assign_attributes
     entry.title = entry.invoice.title
 
-    if entry.valid?
+    if entry.valid? && entry.save
       Invoice::BatchCreate.call(entry, LIMIT_CREATE)
       message = flash_message_create(count: entry.recipient_ids_count, title: entry.title)
       redirect_to return_path, notice: message
@@ -128,7 +128,7 @@ class InvoiceListsController < CrudController
 
   def assign_attributes # rubocop:disable Metrics/AbcSize
     if params[:ids].present?
-      entry.recipient_ids = params[:ids].is_a?(Array) ? params[:ids].join(",") : params[:ids]
+      entry.recipient_ids = params[:ids]
     elsif params[:filter].present?
       entry.recipient_ids = recipient_ids_from_people_filter
     else
@@ -150,7 +150,7 @@ class InvoiceListsController < CrudController
     group = Group.find(params.dig(:filter, :group_id))
     filter_params = params[:filter].to_unsafe_h.transform_values(&:presence)
     filter = Person::Filter::List.new(group, current_user, filter_params)
-    filter.entries.unscope(:order).pluck(:id).join(",")
+    filter.entries.unscope(:order).pluck(:id)
   end
 
   def authorize_class

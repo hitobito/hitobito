@@ -14,6 +14,7 @@
 #  amount_total          :decimal(15, 2)   default(0.0), not null
 #  invalid_recipient_ids :text
 #  receiver_type         :string
+#  recipient_ids         :text
 #  recipients_paid       :integer          default(0), not null
 #  recipients_processed  :integer          default(0), not null
 #  recipients_total      :integer          default(0), not null
@@ -32,6 +33,7 @@
 #
 
 class InvoiceList < ActiveRecord::Base
+  serialize :recipient_ids, type: Array, coder: YAML
   serialize :invalid_recipient_ids, type: Array, coder: YAML
   belongs_to :group
   belongs_to :receiver, polymorphic: true
@@ -40,7 +42,7 @@ class InvoiceList < ActiveRecord::Base
   has_one :message, dependent: :nullify
   has_many :invoices, dependent: :destroy
 
-  attr_accessor :recipient_ids, :invoice
+  attr_accessor :invoice
 
   validates :receiver_type, inclusion: %w[MailingList Group], allow_blank: true
 
@@ -73,30 +75,27 @@ class InvoiceList < ActiveRecord::Base
   end
 
   def recipient_ids_count
-    if receiver
-      receiver.people.unscope(:select).count
-    else
-      recipient_ids.split(",").count
-    end
+    receiver ? receiver_people.unscope(:select).count : recipient_ids.count
   end
 
   def first_recipient
-    if receiver
-      receiver.people.first
-    else
-      Person.find(recipient_ids.split(",").first)
-    end
+    receiver ? receiver_people.first : Person.find(recipient_ids.first)
   end
 
   def recipients
-    if receiver
-      receiver.people
-    else
-      Person.where(id: recipient_ids.split(","))
-    end
+    receiver ? receiver_people : Person.where(id: recipient_ids)
+  end
+
+  def receiver_people
+    receiver.people.distinct
   end
 
   def invoice_config
     group.layer_group.invoice_config
+  end
+
+  def recipient_ids=(ids)
+    value = ids.is_a?(Array) ? ids : ids.to_s.scan(/\d+/).map(&:to_i).select(&:positive?)
+    write_attribute(:recipient_ids, value)
   end
 end

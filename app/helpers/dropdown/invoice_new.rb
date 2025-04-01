@@ -14,9 +14,8 @@ module Dropdown
       @group = group
       @mailing_list = mailing_list
       @label = label
-      if filter.is_a?(ActionController::Parameters)
-        @filter = filter.to_unsafe_h.slice(:range, :filters).compact.presence
-      end
+      filter = filter.to_unsafe_h if filter.is_a?(ActionController::Parameters)
+      @filter = filter.to_h.symbolize_keys.slice(:range, :filters).compact.presence
       init_items
     end
 

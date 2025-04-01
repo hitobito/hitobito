@@ -294,7 +294,7 @@ class Role < ActiveRecord::Base
   end
 
   def old_enough_to_archive?
-    (Time.zone.now - created_at) > Settings.role.minimum_days_to_archive.days
+    created_at < Settings.role.minimum_days_to_archive.days.ago
   end
 
   def prevent_changes

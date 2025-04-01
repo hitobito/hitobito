@@ -47,3 +47,8 @@ alias pt with_papertrail_metadata # rubocop:disable Style/Alias (alias_method is
 if Rails.const_defined?(:Console)
   with_papertrail_metadata
 end
+
+def form_for(model, name: model.class.table_name.singularize, options: {})
+  ActionController::Base.helpers.extend(UtiltyHelper)
+  StandardFormBuilder.new(model.class.name, model, ActionController::Base.helpers, options)
+end

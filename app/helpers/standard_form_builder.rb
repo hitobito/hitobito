@@ -151,6 +151,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a field to select a date. You might want to customize this.
   def date_field(attr, html_options = {})
     html_options[:value] ||= date_value(attr)
+    html_options[:autocomplete] ||= "off"
     html_options[:class] = [
       html_options[:class], "mw-100", "mw-md-20ch", "date", *FORM_CONTROL
     ].compact.join(" ")

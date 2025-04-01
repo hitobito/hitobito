@@ -1,22 +1,21 @@
 # Hitobito Changelog
 
-## Version 2.4
+## Version 2.5
 
 - Altes Adress-Feld wurde von Personen und Gruppen entfernt, neu gelten die strukturierten Adressfelder (#2226)
 - QR-Referenz kann in Rechnungeinstellungen erfasst werden, dieser gilt als Prefix für die Referenznummer auf dem Einzahlungsschein (#3032)
 - Filtern nach vergangenen Rollen zeigt nur Personen, welche für den User aktuell sichtbar sind (hitobito_sac_cas#1655)
 - Mahnungen können nun in den Rechnungseinstellungen übersetzt werden. Sie werden automatisch in der Sprache der jeweiligen Person für jede Rechnung generiert. (hitobito_sww#198)
-
-## Version 2.4
-
 - Rollen und Teilnahmen auf Mitgliedschaften / Verlauf sind nun (zusätzlich) nach absteigendem Datum sortiert (hitobito_sac_cas#1638).
 - Unterscheidung der Filtermöglichkeiten bei inaktiven Rollen nach nie oder zu einer anderen Zeit vorhandenen Rollen (hitobito_sac_cas#1655).
+- In der Rechnungsübersicht können neu alle Rechnungen gleichzeitig ausgewählt werden, auch wenn es mehr als die 50 angezeigten gibt (hitobito_sww#172)
+- Email's können via Dropdown erneut an Teilnehmer versendet werden (hitobito_sac_cas#1571)
+- Der API Endpoint event_kind_categories enthält neu auch das Attribut `order` / Sortierschlüssel.
+- Personefilter unterstützt das Filtern nach leeren Attributen (#3148)
 
 ## Version 2.4
 
-- In der Rechnungsübersicht können neu alle Rechnungen gleichzeitig ausgewählt werden, auch wenn es mehr als die 50 angezeigten gibt (hitobito_sww#172)
 - Verbesserte Mailchimp Tag Synchronisierung (hitobito_sac_cas#1487)
-- Personefilter unterstützt das Filtern nach leeren Attributen (#3148)
 - PLZ's ausserhalb der Schweiz werden neu anhand des gewählten Landes validiert (hitobito_sac_cas#1488)
 - JWT kann als OIDC Access Token konfiguriert werden (hitobito_sac_cas#1110)
 - Unterstützung vom login=prompt Parameter im OIDC Authorization Flow (hitobito_sac_cas#1075)
@@ -25,8 +24,6 @@
 - Etikettendruck und Briefexport verwenden nun die gleiche Reihenfolge (#2199)
 - Aufwendige Exports (Personen, Abos) werden sequenziell ausgeführt (hitobito_sac_cas#1354)
 - Die Rechnungseinstellungen bieten neu die Möglichkeit, den ursprünglichen Rechnungstext bei Mahnungen zu verstecken (hitobito_sww#174)
-- Der API Endpoint event_kind_categories enthält neu auch das Attribut `order` / Sortierschlüssel.
-- Email's können via Dropdown erneut an Teilnehmer versendet werden (hitobito_sac_cas#1571)
 
 ## Version 2.3
 

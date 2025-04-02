@@ -1846,6 +1846,7 @@ de:
     qualification:
       title: Qualifikationen
       prompt_qualification_selection: Welche Qualifikationen sollen angezeigt werden?
+      prompt_constraint: Welche Logik soll angewendet werden?
       prompt_validity: Welche Gültigkeit sollen die angezeigten Qualifikationen haben?
       prompt_year: Qualifikationsjahr einschränken
       prompt_date: Stichdatum

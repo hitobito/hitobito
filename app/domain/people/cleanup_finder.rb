@@ -27,25 +27,28 @@ class People::CleanupFinder
   end
 
   def no_roles_exist
-    any_roles.arel.exists.not
+    Role
+      .with_inactive.where("roles.person_id = people.id")
+      .arel.exists.not
   end
 
-  def any_roles
-    Role.with_inactive.where("roles.person_id = people.id")
+  def no_active_roles_exist
+    Role
+      .active.where("roles.person_id = people.id")
+      .arel.exists.not
   end
 
   def without_any_roles_or_with_roles_outside_cutoff(scope)
-    without_any_roles(scope).or(with_roles_outside_cutoff(scope))
-  end
-
-  def without_any_roles(scope)
-    scope.where(no_roles_exist)
+    scope.where(no_roles_exist).or(with_roles_outside_cutoff(scope).where(no_active_roles_exist))
   end
 
   def with_roles_outside_cutoff(scope)
-    scope.where(id: Role.with_inactive.having("MAX(roles.end_on) <= ?", last_role_ended_on)
-                        .group("person_id")
-                        .pluck(:person_id)) # rubocop:disable Rails/PluckInWhere
+    roles_outside_cutoff = Role.with_inactive
+      .having("MAX(roles.end_on) <= ?", last_role_ended_on)
+      .group("person_id")
+      .select(:person_id)
+
+    scope.where("people.id IN (#{roles_outside_cutoff.to_sql})")
   end
 
   def without_participating_in_future_events(scope)
@@ -61,15 +64,13 @@ class People::CleanupFinder
     Settings.people.cleanup_cutoff_duration.regarding_roles.months.ago.to_date
   end
 
-  def people_without_any_roles
-    base_scope.where.not(id: Role.with_inactive.select(:person_id)).distinct
-  end
-
   def not_participating_in_future_events
     Event
       .joins(:dates, :participations)
       .where("event_dates.start_at > :now OR event_dates.finish_at > :now", now: Time.zone.now)
-      .where("event_participations.person_id = people.id").arel.exists.not
+      .where("event_participations.person_id = people.id")
+      .select("*")
+      .arel.exists.not
   end
 
   def current_sign_in_at

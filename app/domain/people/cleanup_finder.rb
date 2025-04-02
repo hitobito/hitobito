@@ -43,9 +43,12 @@ class People::CleanupFinder
   end
 
   def with_roles_outside_cutoff(scope)
-    scope.where(id: Role.with_inactive.having("MAX(roles.end_on) <= ?", last_role_ended_on)
-                        .group("person_id")
-                        .pluck(:person_id)) # rubocop:disable Rails/PluckInWhere
+    roles_outside_cutoff = Role.with_inactive
+      .having("MAX(roles.end_on) <= ?", last_role_ended_on)
+      .group("person_id")
+      .select(:person_id)
+
+    scope.where("people.id IN (#{roles_outside_cutoff.to_sql})")
   end
 
   def without_participating_in_future_events(scope)
@@ -69,7 +72,9 @@ class People::CleanupFinder
     Event
       .joins(:dates, :participations)
       .where("event_dates.start_at > :now OR event_dates.finish_at > :now", now: Time.zone.now)
-      .where("event_participations.person_id = people.id").arel.exists.not
+      .where("event_participations.person_id = people.id")
+      .select("*")
+      .arel.exists.not
   end
 
   def current_sign_in_at

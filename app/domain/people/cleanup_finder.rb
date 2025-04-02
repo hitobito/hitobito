@@ -27,7 +27,9 @@ class People::CleanupFinder
   end
 
   def no_roles_exist
-    any_roles.arel.exists.not
+    Role
+      .with_inactive.where("roles.person_id = people.id")
+      .arel.exists.not
   end
 
   def any_roles
@@ -35,11 +37,7 @@ class People::CleanupFinder
   end
 
   def without_any_roles_or_with_roles_outside_cutoff(scope)
-    without_any_roles(scope).or(with_roles_outside_cutoff(scope))
-  end
-
-  def without_any_roles(scope)
-    scope.where(no_roles_exist)
+    scope.where(no_roles_exist).or(with_roles_outside_cutoff(scope))
   end
 
   def with_roles_outside_cutoff(scope)

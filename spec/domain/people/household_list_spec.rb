@@ -42,7 +42,7 @@ describe People::HouseholdList do
   end
 
   describe "#households_in_batches" do
-    let(:scope) { Person.where(id: [person1, person2, person3, person4, person5]) }
+    let(:scope) { Person.where(id: [person1, person2, person3, person4, person5]).order(:id) }
 
     subject(:list) { household_list.households_in_batches.to_a.flatten(1) }
 

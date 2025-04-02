@@ -24,7 +24,7 @@ module ContactAttrs
     attr_reader :f, :event
 
     def mandatory_contact_attrs
-      Event::ParticipationContactData.mandatory_contact_attrs.take(1).collect do |a|
+      Event::ParticipationContactData.mandatory_contact_attrs.collect do |a|
         f.labeled(a, attr_label(a)) do
           radio_buttons(a, true, [:required])
         end

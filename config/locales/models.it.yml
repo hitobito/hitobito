@@ -120,10 +120,6 @@ it:
           attributes:
             person_id:
               taken: è già stato chiesto
-        people_relation:
-          attributes:
-            tail_id:
-              must_not_be_equal_to_head: non è permesso
         qualification:
           attributes:
             qualification_kind_id:
@@ -368,10 +364,6 @@ it:
         one: filtro
         many: Filtri
         other: Filtri
-      people_relation:
-        one: relazione
-        many: Relazioni
-        other: Relazioni
       phone_number:
         one: numero di telefono
         many: Numeri di telefono
@@ -488,7 +480,6 @@ it:
         years: Età
         additional_information: Dati supplementari
         remember_me: Resta collegato
-        relations_to_tails: Relazioni
         phone_numbers: Numeri di telefono
         social_accounts: Social media
         additional_emails: Altre email
@@ -714,10 +705,6 @@ it:
         uid: Client ID
         secret: Client secret
         redirect_uri: Redirect URIs
-      people_relation:
-        head_id: Persona
-        tail_id: Altra persona
-        kind: Tipo
       phone_number:
         number: Numero
         label: Tipo
@@ -739,9 +726,6 @@ it:
         updated_at: Modificato
         deleted_at: Cancellato
         reactivateable: Riattivabile
-      relations_to_tails:
-        tail_id: Relazione
-        kind: Tipo
       phone_numbers:
         number: Numero di telefono
         label: Tipo di numero di telefono

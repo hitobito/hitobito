@@ -64,10 +64,6 @@ class People::CleanupFinder
     Settings.people.cleanup_cutoff_duration.regarding_roles.months.ago.to_date
   end
 
-  def people_without_any_roles
-    base_scope.where.not(id: Role.with_inactive.select(:person_id)).distinct
-  end
-
   def not_participating_in_future_events
     Event
       .joins(:dates, :participations)

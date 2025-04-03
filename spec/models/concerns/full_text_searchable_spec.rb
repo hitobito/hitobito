@@ -18,7 +18,7 @@ describe FullTextSearchable do
   end
 
   describe "special characters" do
-    ["(", ")", ":", "&", "|", "!", "'", "?", "%", "<", " "].each do |char|
+    ["(", ")", ":", "&", "|", "!", "'", "?", "%", "<", " ", " "].each do |char|
       it "ignores special character #{char}" do
         expect(Person.search("T#{char}op")).to eq [top_leader]
       end

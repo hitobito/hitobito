@@ -74,6 +74,10 @@ module SearchStrategies
       end
       # rubocop:enable Metrics/MethodLength
 
+      # when the date could not be formatted it is likely that the user entered an impossible date
+      # like 43.15.3912
+      return "" if formatted_date.nil?
+
       if has_year?(date_str)
         formatted_date
       else

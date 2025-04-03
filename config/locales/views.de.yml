@@ -1810,6 +1810,8 @@ de:
       equal: ist genau
       greater: grösser als
       smaller: kleiner als
+      before: vor dem
+      after: nach dem
       blank: ist leer
 
     language:

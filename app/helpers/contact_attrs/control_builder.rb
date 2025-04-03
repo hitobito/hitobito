@@ -32,7 +32,7 @@ module ContactAttrs
     end
 
     def configurable_contact_attrs
-      non_mandatory_contact_attrs.take(1).collect do |a|
+      non_mandatory_contact_attrs.collect do |a|
         f.labeled(a, attr_label(a)) do
           radio_buttons(a)
         end

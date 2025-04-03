@@ -44,36 +44,38 @@ describe "events/_form.html.haml" do
       end
     end
 
-    describe "configurable attribute" do
-      let(:nickname) { contact_attrs.find(".row:nth-of-type(4)") }
+    (Event::ParticipationContactData.contact_attrs - Event::ParticipationContactData.mandatory_contact_attrs).each_with_index do |attribute, index|
+      describe "configurable attribute" do
+        let(:attr_field) { contact_attrs.find(".row:nth-of-type(#{index + 4})") }
 
-      it "renders three radio buttons" do
-        render
-        expect(nickname).to have_css "input[type=radio]", count: 3
-        expect(nickname).to have_unchecked_field "Obligatorisch"
-        expect(nickname).to have_checked_field "Optional"
-        expect(nickname).to have_unchecked_field "Nicht anzeigen"
-      end
+        it "renders three radio buttons" do
+          render
+          expect(attr_field).to have_css "input[type=radio]", count: 3
+          expect(attr_field).to have_unchecked_field "Obligatorisch"
+          expect(attr_field).to have_checked_field "Optional"
+          expect(attr_field).to have_unchecked_field "Nicht anzeigen"
+        end
 
-      it "renders radio buttons with correct id and name attributes" do
-        render
-        expect(nickname.find_field("Optional").native.attributes["id"].value).to eq "event_contact_attrs_nickname_optional"
-        expect(nickname.find_field("Optional").native.attributes["name"].value).to eq "event[contact_attrs][nickname]"
-        expect(nickname.find_field("Obligatorisch").native.attributes["id"].value).to eq "event_contact_attrs_nickname_required"
-        expect(nickname.find_field("Obligatorisch").native.attributes["name"].value).to eq "event[contact_attrs][nickname]"
-      end
+        it "renders radio buttons with correct id and name attributes" do
+          render
+          expect(attr_field.find_field("Optional").native.attributes["id"].value).to eq "event_contact_attrs_#{attribute}_optional"
+          expect(attr_field.find_field("Optional").native.attributes["name"].value).to eq "event[contact_attrs][#{attribute}]"
+          expect(attr_field.find_field("Obligatorisch").native.attributes["id"].value).to eq "event_contact_attrs_#{attribute}_required"
+          expect(attr_field.find_field("Obligatorisch").native.attributes["name"].value).to eq "event[contact_attrs][#{attribute}]"
+        end
 
-      it "sets radio value according to value set on event" do
-        allow(event).to receive(:hidden_contact_attrs).and_return(["nickname"])
-        render
-        expect(nickname).to have_unchecked_field "Optional"
-        expect(nickname).to have_checked_field "Nicht anzeigen"
+        it "sets radio value according to value set on event" do
+          allow(event).to receive(:hidden_contact_attrs).and_return([attribute.to_s])
+          render
+          expect(attr_field).to have_unchecked_field "Optional"
+          expect(attr_field).to have_checked_field "Nicht anzeigen"
+        end
       end
     end
   end
 
   describe "checkboxes" do
-    let(:additional_emails) { dom.find("#contact_attrs .row:nth-of-type(5)") }
+    let(:additional_emails) { dom.find("#contact_attrs .row:nth-of-type(17)") }
 
     it "does use set name attribute on associations" do
       render

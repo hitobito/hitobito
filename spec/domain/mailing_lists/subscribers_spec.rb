@@ -651,7 +651,7 @@ describe MailingLists::Subscribers do
         expect(list.subscribed?(p)).to be_truthy
       end
 
-      it "is true if in group and both included and excluded tag match" do
+      it "is false if in group and both included and excluded tag match" do
         sub = create_subscription(groups(:bottom_layer_one), false,
           Group::BottomGroup::Leader.sti_name)
         sub.subscription_tags = subscription_tags(%w[bar foo:baz])
@@ -661,7 +661,7 @@ describe MailingLists::Subscribers do
         p.tag_list = "bar foo:baz"
         p.save!
 
-        expect(list.subscribed?(p)).to be_truthy
+        expect(list.subscribed?(p)).to be_falsey
       end
 
       it "is false if in group and excluded tag matches" do
@@ -766,8 +766,8 @@ describe MailingLists::Subscribers do
     sub
   end
 
-  def subscription_tags(names)
+  def subscription_tags(names, excluded: false)
     tags = names.map { |name| ActsAsTaggableOn::Tag.create_or_find_by!(name: name) }
-    tags.map { |tag| SubscriptionTag.new(tag: tag) }
+    tags.map { |tag| SubscriptionTag.new(tag: tag, excluded:) }
   end
 end

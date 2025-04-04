@@ -746,6 +746,30 @@ describe MailingLists::Subscribers do
         expect(list.subscribed?(p)).to be_falsey
       end
 
+      it "is false if in group and one of multiple excluded tags matches" do
+        sub = create_subscription(groups(:bottom_layer_one), false,
+          Group::BottomGroup::Leader.sti_name)
+        sub.subscription_tags = subscription_tags(%w[bar foo:baz], excluded: true)
+        sub.save!
+        p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
+        p.tag_list = "foo:baz"
+        p.save!
+
+        expect(list.subscribed?(p)).to be_falsey
+      end
+
+      it "is false if in group and all of multiple excluded tags matches" do
+        sub = create_subscription(groups(:bottom_layer_one), false,
+          Group::BottomGroup::Leader.sti_name)
+        sub.subscription_tags = subscription_tags(%w[bar foo:baz], excluded: true)
+        sub.save!
+        p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
+        p.tag_list = "bar, foo:baz"
+        p.save!
+
+        expect(list.subscribed?(p)).to be_falsey
+      end
+
       it "is false if in group and no tags match" do
         sub = create_subscription(groups(:bottom_layer_one), false,
           Group::BottomGroup::Leader.sti_name)

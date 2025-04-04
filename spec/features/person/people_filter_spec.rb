@@ -181,6 +181,26 @@ describe PeopleController, js: true do
       find(".attribute_constraint_dropdown option", text: "ist leer").click
       expect(page).not_to have_css ".attribute_value_input"
     end
+
+    it "has country select dropdown for country attrs" do
+      find("#attribute_filter option", text: "Land").click
+      expect(page).to have_css ".country_select_field"
+    end
+
+    it "has integer type field for number fields" do
+      find("#attribute_filter option", text: "Alter").click
+      expect(page).to have_css ".integer_field"
+    end
+
+    it "has date field for date attrs" do
+      find("#attribute_filter option", text: "Geburtstag").click
+      expect(page).to have_css ".date_field"
+    end
+
+    it "has gender field for gender attrs" do
+      find("#attribute_filter option", text: "Geschlecht").click
+      expect(page).to have_css ".gender_select_field"
+    end
   end
 
   def sign_in_and_create_filter

@@ -28,10 +28,6 @@ class MailingLists::Subscribers
     people_as_configured.where(group_or_event_subscriber_conditions)
   end
 
-  def subscribed?(person)
-    people.exists?(id: person.id)
-  end
-
   def person_subscribers(condition)
     condition.or("subscriptions.subscriber_type = ? AND subscriptions.excluded = ? " \
       "AND subscriptions.subscriber_id = people.id ", Person.sti_name, false)
@@ -173,81 +169,5 @@ class MailingLists::Subscribers
     event_subscribers(condition)
     group_subscribers(condition)
     condition.to_a
-  end
-
-  def person_subscribers(condition)
-    condition.or("subscriptions.subscriber_type = ? AND " \
-                 "subscriptions.excluded = ? AND " \
-                 "subscriptions.subscriber_id = people.id",
-      Person.sti_name,
-      false)
-  end
-
-  def group_subscribers(condition)
-    sql = <<~SQL.split.join(" ")
-      subscriptions.subscriber_type = ? AND
-      #{Group.quoted_table_name}.lft >= sub_groups.lft AND
-      #{Group.quoted_table_name}.rgt <= sub_groups.rgt AND
-      roles.type = related_role_types.role_type AND
-      (roles.start_on IS NULL OR
-       roles.start_on <= '#{@time.to_date.to_fs(:db)}') AND
-      (roles.end_on IS NULL OR
-       roles.end_on >= '#{@time.to_date.to_fs(:db)}') AND
-      (roles.archived_at IS NULL OR
-       roles.archived_at > '#{@time.to_time.utc.to_fs(:db)}')
-    SQL
-
-    if subscriptions.groups.any?(&:subscription_tags)
-      sql += <<~SQL.split.join(" ")
-        AND (subscription_tags.tag_id IS NULL OR
-        subscription_tags.tag_id = people_taggings.tag_id)
-      SQL
-    end
-
-    condition.or(sql, Group.sti_name)
-  end
-
-  def join_events?
-    opt_in? || subscriptions.events.exists?
-  end
-
-  def join_tags?
-    subscriptions.groups.any?(&:subscription_tags)
-  end
-
-  def join_groups?
-    opt_in? || subscriptions.groups.exists?
-  end
-
-  def event_subscribers(condition)
-    condition
-      .or("subscriptions.subscriber_type = ? AND " \
-          "subscriptions.subscriber_id = event_participations.event_id AND " \
-          "event_participations.active = ?",
-        Event.sti_name,
-        true)
-  end
-
-  def tag_excluded_person_ids
-    ActsAsTaggableOn::Tagging
-      .select(:taggable_id)
-      .where(taggable_type: Person.sti_name,
-        tag_id: tag_excluded_subscription_ids)
-  end
-
-  def tag_excluded_subscription_ids
-    SubscriptionTag
-      .select(:tag_id)
-      .joins(:subscription)
-      .where(subscription_tags: {excluded: true},
-        subscriptions: {mailing_list_id: id})
-  end
-
-  def excluded_subscriber_ids
-    Subscription
-      .select(:subscriber_id)
-      .where(mailing_list_id: id,
-        excluded: true,
-        subscriber_type: Person.sti_name)
   end
 end

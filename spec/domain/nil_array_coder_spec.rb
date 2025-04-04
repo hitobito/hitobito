@@ -43,7 +43,7 @@ describe NilArrayCoder do
 
     YAML
 
-    expect(subject.load(yaml_string)).to eql %w(street zip_code town)
+    expect(subject.load(yaml_string)).to eql %w[street zip_code town]
   end
 
   it "can load an Array in JSON-Format" do

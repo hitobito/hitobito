@@ -10,11 +10,10 @@ class NilArrayCoder
     object.to_json # Convert Ruby array to JSON string
   end
 
+  # Convert JSON or YAML string to array; rescue invalid data
   def self.load(data)
-    begin
-      YAML.parse(data).to_ruby.to_a # always return an array, even for nil
-    rescue
-      []
-    end # Convert JSON or YAML string to array; rescue invalid data
+    YAML.parse(data).to_ruby.to_a # always return an array, even for nil
+  rescue
+    []
   end
 end

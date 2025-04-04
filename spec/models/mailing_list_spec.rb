@@ -125,6 +125,17 @@ describe MailingList do
     expect(list.subscribed?(person)).to be_truthy
   end
 
+  it "#subscribe? instantiates MailingLists::Subscribers with specified time param" do
+    time = 1.year.ago
+    expect(MailingLists::Subscribers).to receive(:new).with(list, time: time)
+      .and_call_original
+    list.subscribed?(person, time: time)
+
+    expect(MailingLists::Subscribers).to receive(:new).with(list, time: time + 1.hour)
+      .and_call_original
+    list.subscribed?(person, time: time + 1.hour)
+  end
+
   context "mailchimp" do
     let(:leaders) { mailing_lists(:leaders) }
 

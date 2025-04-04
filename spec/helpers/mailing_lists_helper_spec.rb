@@ -30,8 +30,6 @@ describe MailingListsHelper do
 
   describe "#button_toggle_subscription" do
     it "with subscribed user shows 'Anmelden'" do
-      expect(self).to receive_messages(can?: true)
-
       sub = entry.subscriptions.new
       sub.subscriber = current_user
       sub.save!
@@ -41,7 +39,6 @@ describe MailingListsHelper do
     end
 
     it "with not subscribed user shows 'Abmelden'" do
-      expect(self).to receive_messages(can?: true)
       @group = entry.group
       expect(button_toggle_subscription).to match(/Anmelden/)
     end

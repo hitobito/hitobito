@@ -31,7 +31,6 @@ describe MailingListsHelper do
   describe "#button_toggle_subscription" do
     it "with subscribed user shows 'Anmelden'" do
       expect(self).to receive_messages(can?: true)
-
       sub = entry.subscriptions.new
       sub.subscriber = current_user
       sub.save!

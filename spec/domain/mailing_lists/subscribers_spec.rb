@@ -12,6 +12,87 @@ describe MailingLists::Subscribers do
 
   subject { described_class.new(list).people }
 
+  context "findings" do
+    let(:list) { mailing_lists(:members) }
+    let(:bottom_member) { people(:bottom_member) }
+    let(:bottom_layer_one) { groups(:bottom_layer_one) }
+
+    it "is an empty list without subscriptions" do
+      expect(list.subscriptions).to be_empty
+      expect(list.people).to be_empty
+    end
+
+    context "group subscription" do
+      it "includes person" do
+        create_subscription(bottom_layer_one, false, Group::BottomLayer::Member.sti_name)
+        expect(list.people).to eq [bottom_member]
+      end
+
+      context "roles" do
+        let(:role) { roles(:bottom_member) }
+
+        it "excludes expired role by date" do
+          create_subscription(bottom_layer_one, false, Group::BottomLayer::Member.sti_name)
+          role.update_columns(end_on: 1.day.ago)
+          expect(list.people).to be_empty
+        end
+
+        it "excludes archived role by time" do
+          create_subscription(bottom_layer_one, false, Group::BottomLayer::Member.sti_name)
+          role.update_columns(archived_at: 1.hour.ago)
+          expect(list.people).to be_empty
+        end
+
+        it "includes role set to expire tomorrow" do
+          create_subscription(bottom_layer_one, false, Group::BottomLayer::Member.sti_name)
+          role.update_columns(end_on: 1.day.from_now.to_date)
+          expect(list.people).to eq [bottom_member]
+        end
+
+        it "includes role set to archived tomorrow time" do
+          create_subscription(bottom_layer_one, false, Group::BottomLayer::Member.sti_name)
+          role.update_columns(archived_at: 1.day.from_now)
+          expect(list.people).to eq [bottom_member]
+        end
+
+        context "with tags" do
+          it "excludes person if it lacks including tags" do
+            sub = create_subscription(bottom_layer_one, false, Group::BottomLayer::Member.sti_name)
+            sub.subscription_tags = subscription_tags(%w[foo bar])
+            sub.save!
+            expect(list.people).to be_empty
+          end
+
+          it "includes person if it has one of the including tag" do
+            sub = create_subscription(bottom_layer_one, false, Group::BottomLayer::Member.sti_name)
+            sub.subscription_tags = subscription_tags(%w[foo bar])
+            sub.save!
+            bottom_member.tag_list = %w[foo]
+            bottom_member.save!
+
+            expect(list.people).to eq [bottom_member]
+          end
+
+          it "includes person member if it lacks excluding tag" do
+            sub = create_subscription(bottom_layer_one, false, Group::BottomLayer::Member.sti_name)
+            sub.subscription_tags = subscription_tags(%w[foo], excluded: true)
+            sub.save!
+            expect(list.people).to eq [bottom_member]
+          end
+
+          it "excludes person member if matches excluding tag" do
+            sub = create_subscription(bottom_layer_one, false, Group::BottomLayer::Member.sti_name)
+            sub.subscription_tags = subscription_tags(%w[foo], excluded: true)
+            sub.save!
+            bottom_member.tag_list = %w[foo]
+            bottom_member.save!
+            expect(list.people).to be_empty
+          end
+        end
+      end
+    end
+  end
+
   context "opt_in" do
     let(:list) { mailing_lists(:leaders) }
     let(:group) { groups(:top_group) }

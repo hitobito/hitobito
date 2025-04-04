@@ -13,9 +13,9 @@ class NilArrayCoder
   def self.load(data)
     return [] if data.nil? # Handle NULL values from the database
     begin
-      JSON.parse(data)
+      YAML.parse(data).to_ruby
     rescue
       []
-    end # Convert JSON string to array; rescue invalid data
+    end # Convert JSON or YAML string to array; rescue invalid data
   end
 end

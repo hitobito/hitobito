@@ -11,9 +11,8 @@ class NilArrayCoder
   end
 
   def self.load(data)
-    return [] if data.nil? # Handle NULL values from the database
     begin
-      YAML.parse(data).to_ruby
+      YAML.parse(data).to_ruby.to_a # always return an array, even for nil
     rescue
       []
     end # Convert JSON or YAML string to array; rescue invalid data

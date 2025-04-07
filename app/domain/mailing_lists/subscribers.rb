@@ -1,177 +1,99 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2020, Grünliberale Partei Schweiz. This file is part of
+#  Copyright (c) 2024, Grünliberale Partei Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class MailingLists::Subscribers
-  delegate :id, :subscriptions, :subscribable_for_configured?, :opt_in?, to: "@list"
+  attr_reader :people_scope
 
-  def initialize(mailing_list, people_scope = Person.only_public_data, time: Time.current)
+  delegate :id, :filter_chain, :subscriptions, :subscribable_for_configured?, :opt_in?, to: "@list"
+
+  def initialize(mailing_list = MailingList.first, people_scope = Person.only_public_data)
     @list = mailing_list
     @people_scope = people_scope
-    @time = time
   end
 
   def people
     scope.distinct
   end
 
-  def subscribed?(person)
-    subscribed = people_as_configured.where(subscriber_conditions).exists?(id: person.id)
+  def scope
+    return people_as_configured unless opt_in?
 
+    people_as_configured.where(id: subscriptions.people.included.select("subscriber_id"))
+  end
+
+  def subscribed?(person)
+    subscribed = people_as_configured.where(id: person.id).exists? && unfiltered_people_as_configured.present?
     return subscribed unless opt_in? && subscribable_for_configured?
 
     subscribed && subscriptions.people.where(id: person.id).exists?
   end
 
-  def allowed_to_opt_in
-    return people_as_configured unless subscribable_for_configured?
-
-    people_as_configured.where(group_or_event_subscriber_conditions)
-  end
-
-  def person_subscribers(condition)
-    condition.or("subscriptions.subscriber_type = ? AND subscriptions.excluded = ? " \
-      "AND subscriptions.subscriber_id = people.id ", Person.sti_name, false)
-  end
-
-  def group_subscribers(condition)
-    sql = <<~SQL.squish
-      subscriptions.subscriber_type = ? AND
-      #{Group.quoted_table_name}.lft >= sub_groups.lft AND
-      #{Group.quoted_table_name}.rgt <= sub_groups.rgt AND
-      roles.type = related_role_types.role_type AND
-      (roles.start_on IS NULL OR
-       roles.start_on <= '#{@time.to_date.to_fs(:db)}') AND
-      (roles.end_on IS NULL OR
-       roles.end_on >= '#{@time.to_date.to_fs(:db)}') AND
-      (roles.archived_at IS NULL OR
-       roles.archived_at > '#{@time.to_time.utc.to_fs(:db)}')
-    SQL
-
-    if subscriptions.groups.any?(&:subscription_tags)
-      sql += <<~SQL.squish
-        AND (subscription_tags.tag_id IS NULL OR
-        subscription_tags.tag_id = people_taggings.tag_id)
-      SQL
-    end
-
-    condition.or(sql, Group.sti_name)
-  end
-
-  def join_events?
-    opt_in? || subscriptions.events.exists?
-  end
-
-  def join_tags?
-    subscriptions.groups.any?(&:subscription_tags)
-  end
-
-  def join_groups?
-    opt_in? || subscriptions.groups.exists?
-  end
-
-  def event_subscribers(condition)
-    condition
-      .or("subscriptions.subscriber_type = ? AND " \
-            "subscriptions.subscriber_id = event_participations.event_id AND " \
-            "event_participations.active = ?", Event.sti_name, true)
-  end
-
-  def tag_excluded_person_ids
-    ActsAsTaggableOn::Tagging
-      .select(:taggable_id)
-      .where(taggable_type: Person.sti_name, tag_id: tag_excluded_subscription_ids)
-  end
-
-  def tag_excluded_subscription_ids
-    SubscriptionTag
-      .select(:tag_id).joins(:subscription)
-      .where(subscription_tags: {excluded: true}, subscriptions: {mailing_list_id: id})
-  end
-
-  def excluded_subscriber_ids
-    Subscription
-      .select(:subscriber_id)
-      .where(mailing_list_id: id, excluded: true, subscriber_type: Person.sti_name)
+  def people_as_configured
+    filter_chain.filter(people_scope.merge(unfiltered_people_as_configured))
   end
 
   private
 
-  def scope
-    return people_as_configured.where(subscriber_conditions) unless opt_in?
+  def unfiltered_people_as_configured
+    conditions = OrCondition.new
+    conditions.or("group_subscriptions.role_type = roles.type")
+    conditions.or("event_subscriptions.subscriber_id IS NOT NULL and event_participations.active = ?", true)
+    conditions.or("people.id = person_including_subscriptions.subscriber_id") if use_people_subscriptions?
 
-    allowed_to_opt_in.where(id: subscriptions.people.included.select("subscriber_id"))
+    people_scope
+      .with(person_tag_ids: person_tag_ids)
+      .with(group_subscriptions: group_subscriptions)
+      .with(event_subscriptions: event_subscriptions)
+      .with(person_including_subscriptions: person_including_subscriptions)
+      .with(person_excluding_subscriptions: person_excluding_subscriptions)
+      .left_joins(:taggings)
+      .left_joins(roles: :group)
+      .left_joins(:event_participations)
+      .joins("LEFT OUTER JOIN group_subscriptions ON groups.lft >= group_subscriptions.lft AND groups.rgt <= group_subscriptions.rgt")
+      .joins("LEFT OUTER JOIN event_subscriptions ON event_subscriptions.subscriber_id = event_participations.event_id ")
+      .joins("LEFT OUTER JOIN person_including_subscriptions ON people.id = person_including_subscriptions.subscriber_id")
+      .joins("LEFT OUTER JOIN person_excluding_subscriptions ON people.id = person_excluding_subscriptions.subscriber_id")
+      .joins("LEFT OUTER JOIN person_tag_ids ON people.id = person_tag_ids.person_id")
+      .where(roles: {archived_at: [[nil], Time.zone.now..]})
+      .where("array_length(including_tag_ids, 1) IS NULL OR including_tag_ids && person_tag_ids")
+      .where("array_length(excluding_tag_ids, 1) IS NULL OR array_length(person_tag_ids, 1) IS NULL OR NOT(excluding_tag_ids && person_tag_ids)")
+      .where(conditions.to_a)
+      .where(person_excluding_subscriptions: {subscriber_id: nil})
   end
 
-  def people_as_configured
-    @list.filter_chain.filter(@people_scope)
-      .joins(people_joins)
-      .joins(subscription_joins)
-      .where(subscriptions: {mailing_list_id: id})
-      .where("people.id NOT IN (#{excluded_subscriber_ids.to_sql})")
-      .where("people.id NOT IN (#{tag_excluded_person_ids.to_sql})")
+  def group_subscriptions = Subscription.groups
+    .with(including_tags: subscription_tags(excluded: false))
+    .with(excluding_tags: subscription_tags(excluded: true))
+    .joins(:related_role_types)
+    .where(mailing_list: id)
+    .joins("INNER JOIN groups ON groups.id = subscriptions.subscriber_id")
+    .joins("LEFT OUTER JOIN excluding_tags ON excluding_tags.subscription_id = subscriptions.id")
+    .joins("LEFT OUTER JOIN including_tags ON including_tags.subscription_id = subscriptions.id")
+    .select("groups.lft, groups.rgt, related_role_types.role_type, excluding_tags.tag_ids AS excluding_tag_ids, including_tags.tag_ids as including_tag_ids")
+
+  def subscription_tags(excluded:)
+    SubscriptionTag
+      .select("subscription_id, array_agg(tag_id) AS tag_ids")
+      .where(excluded:)
+      .group(:subscription_id)
   end
 
-  def people_joins
-    sql = <<~SQL
-      LEFT JOIN roles ON people.id = roles.person_id
-      LEFT JOIN #{Group.quoted_table_name} ON roles.group_id = #{Group.quoted_table_name}.id
-    SQL
-
-    if join_events?
-      sql += <<~SQL
-        LEFT JOIN event_participations ON event_participations.person_id = people.id
-      SQL
-    end
-
-    if join_tags?
-      sql += <<~SQL
-        LEFT JOIN taggings AS people_taggings ON people_taggings.taggable_type = 'Person'
-          AND people_taggings.taggable_id = people.id
-      SQL
-    end
-
-    sql
+  def person_tag_ids
+    ActsAsTaggableOn::Tagging
+      .select("taggable_id as person_id, array_agg(tag_id) as person_tag_ids")
+      .where(taggable_type: "Person")
+      .group(:taggable_id)
   end
 
-  def subscription_joins
-    sql = ", subscriptions " # the comma is needed because it is not a JOIN, but a second "FROM"
+  def event_subscriptions = Subscription.events.where(mailing_list_id: id)
 
-    if join_groups?
-      sql += <<~SQL
-        LEFT JOIN #{Group.quoted_table_name} sub_groups
-          ON subscriptions.subscriber_type = 'Group' AND subscriptions.subscriber_id = sub_groups.id
-        LEFT JOIN related_role_types
-          ON related_role_types.relation_type = 'Subscription'
-          AND related_role_types.relation_id = subscriptions.id
-      SQL
-    end
+  def person_including_subscriptions = Subscription.people.included.where(mailing_list_id: id)
 
-    if subscriptions.groups.any?(&:subscription_tags)
-      sql += <<~SQL
-        LEFT JOIN subscription_tags
-          ON subscription_tags.subscription_id = subscriptions.id AND subscription_tags.excluded = false
-      SQL
-    end
+  def person_excluding_subscriptions = Subscription.people.excluded.where(mailing_list_id: id)
 
-    sql
-  end
-
-  def subscriber_conditions
-    condition = OrCondition.new
-    person_subscribers(condition) if subscriptions.people.exists?
-    event_subscribers(condition) if subscriptions.events.exists?
-    group_subscribers(condition) if subscriptions.groups.exists?
-    condition.to_a
-  end
-
-  def group_or_event_subscriber_conditions
-    condition = OrCondition.new
-    event_subscribers(condition)
-    group_subscribers(condition)
-    condition.to_a
-  end
+  def use_people_subscriptions? = !(opt_in? && subscribable_for_configured?)
 end

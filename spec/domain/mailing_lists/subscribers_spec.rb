@@ -1,3 +1,10 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2024, Grünliberale Partei Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 require "spec_helper"
 
 describe MailingLists::Subscribers do
@@ -13,6 +20,10 @@ describe MailingLists::Subscribers do
 
   subject { described_class.new(list).people }
 
+  def subscribed?(p)
+    described_class.new(list).subscribed?(p)
+  end
+
   context "findings" do
     let(:list) { mailing_lists(:members) }
     let(:bottom_member) { people(:bottom_member) }
@@ -20,13 +31,13 @@ describe MailingLists::Subscribers do
 
     it "is an empty list without subscriptions" do
       expect(list.subscriptions).to be_empty
-      expect(list.people).to be_empty
+      expect(subject).to be_empty
     end
 
     context "group subscription" do
       it "includes person" do
         create_subscription(bottom_layer_one, false, Group::BottomLayer::Member.sti_name)
-        expect(list.people).to eq [bottom_member]
+        expect(subject).to eq [bottom_member]
       end
 
       context "roles" do
@@ -35,25 +46,25 @@ describe MailingLists::Subscribers do
         it "excludes expired role by date" do
           create_subscription(bottom_layer_one, false, Group::BottomLayer::Member.sti_name)
           role.update_columns(end_on: 1.day.ago)
-          expect(list.people).to be_empty
+          expect(subject).to be_empty
         end
 
         it "excludes archived role by time" do
           create_subscription(bottom_layer_one, false, Group::BottomLayer::Member.sti_name)
           role.update_columns(archived_at: 1.hour.ago)
-          expect(list.people).to be_empty
+          expect(subject).to be_empty
         end
 
         it "includes role set to expire tomorrow" do
           create_subscription(bottom_layer_one, false, Group::BottomLayer::Member.sti_name)
           role.update_columns(end_on: 1.day.from_now.to_date)
-          expect(list.people).to eq [bottom_member]
+          expect(subject).to eq [bottom_member]
         end
 
         it "includes role set to archived tomorrow time" do
           create_subscription(bottom_layer_one, false, Group::BottomLayer::Member.sti_name)
           role.update_columns(archived_at: 1.day.from_now)
-          expect(list.people).to eq [bottom_member]
+          expect(subject).to eq [bottom_member]
         end
 
         context "with tags" do
@@ -61,7 +72,7 @@ describe MailingLists::Subscribers do
             sub = create_subscription(bottom_layer_one, false, Group::BottomLayer::Member.sti_name)
             sub.subscription_tags = subscription_tags(%w[foo bar])
             sub.save!
-            expect(list.people).to be_empty
+            expect(subject).to be_empty
           end
 
           it "includes person if it has one of the including tag" do
@@ -71,14 +82,14 @@ describe MailingLists::Subscribers do
             bottom_member.tag_list = %w[foo]
             bottom_member.save!
 
-            expect(list.people).to eq [bottom_member]
+            expect(subject).to eq [bottom_member]
           end
 
           it "includes person member if it lacks excluding tag" do
             sub = create_subscription(bottom_layer_one, false, Group::BottomLayer::Member.sti_name)
             sub.subscription_tags = subscription_tags(%w[foo], excluded: true)
             sub.save!
-            expect(list.people).to eq [bottom_member]
+            expect(subject).to eq [bottom_member]
           end
 
           it "excludes person member if matches excluding tag" do
@@ -87,7 +98,7 @@ describe MailingLists::Subscribers do
             sub.save!
             bottom_member.tag_list = %w[foo]
             bottom_member.save!
-            expect(list.people).to be_empty
+            expect(subject).to be_empty
           end
         end
       end
@@ -410,7 +421,7 @@ describe MailingLists::Subscribers do
       is_expected.to include(pg1)
       is_expected.to include(pg2)
       is_expected.to include(pg3)
-      is_expected.not_to include(pg4)
+      is_expected.not_to include(pg4) # excluded because of missing tags
     end
 
     it "includes overlapping people from events and groups" do
@@ -507,12 +518,12 @@ describe MailingLists::Subscribers do
       is_expected.to include(pg1)
       expect(subject.size).to eq(4)
 
-      expect(list.subscribed?(people(:top_leader))).to be_truthy
-      expect(list.subscribed?(pe2)).to be_truthy
-      expect(list.subscribed?(pe3)).to be_truthy
-      expect(list.subscribed?(pg1)).to be_truthy
-      expect(list.subscribed?(pg2)).to be_falsey
-      expect(list.subscribed?(pe1)).to be_falsey
+      expect(subscribed?(people(:top_leader))).to be_truthy
+      expect(subscribed?(pe2)).to be_truthy
+      expect(subscribed?(pe3)).to be_truthy
+      expect(subscribed?(pg1)).to be_truthy
+      expect(subscribed?(pg2)).to be_falsey
+      expect(subscribed?(pe1)).to be_falsey
     end
   end
 
@@ -542,9 +553,9 @@ describe MailingLists::Subscribers do
       vegi.first_name = "Vegi"
       vegi.save!
 
-      expect(list.subscribed?(vegi)).to eq(false)
-      expect(list.subscribed?(meat)).to eq(true)
-      expect(list.people.size).to eq(2)
+      expect(subscribed?(vegi)).to eq(false)
+      expect(subscribed?(meat)).to eq(true)
+      expect(subject.size).to eq(2)
     end
 
     it "includes people with given tag" do
@@ -570,9 +581,9 @@ describe MailingLists::Subscribers do
       vegi.first_name = "Vegi"
       vegi.save!
 
-      expect(list.subscribed?(vegi)).to eq(true)
-      expect(list.subscribed?(meat)).to eq(true)
-      expect(list.people.size).to eq(2)
+      expect(subscribed?(vegi)).to eq(true)
+      expect(subscribed?(meat)).to eq(true)
+      expect(subject.size).to eq(2)
     end
   end
 
@@ -599,30 +610,30 @@ describe MailingLists::Subscribers do
       it "is true if included" do
         create_subscription(person)
 
-        expect(list.subscribed?(person)).to be_truthy
-        expect(list.subscribed?(people(:top_leader))).to be_falsey
+        expect(subscribed?(person)).to be_truthy
+        expect(subscribed?(people(:top_leader))).to be_falsey
       end
 
       it "is false if excluded" do
         create_subscription(person)
         create_subscription(person, true)
 
-        expect(list.subscribed?(person)).to be_falsey
+        expect(subscribed?(person)).to be_falsey
       end
 
       it "is false if excluded via global filter" do
         create_subscription(person)
         list.update(filter_chain: {language: {allowed_values: :fr}})
 
-        expect(list.subscribed?(person)).to be_falsey
+        expect(subscribed?(person)).to be_falsey
       end
 
       it "is true if not excluded via global filter" do
         create_subscription(person)
         list.update(filter_chain: {language: {allowed_values: :de}})
 
-        expect(list.subscribed?(person)).to be_truthy
-        expect(list.subscribed?(people(:top_leader))).to be_falsey
+        expect(subscribed?(person)).to be_truthy
+        expect(subscribed?(people(:top_leader))).to be_falsey
       end
     end
 
@@ -631,14 +642,14 @@ describe MailingLists::Subscribers do
         create_subscription(event)
         p = Fabricate(Event::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: event)).participation.person
 
-        expect(list.subscribed?(p)).to be_truthy
+        expect(subscribed?(p)).to be_truthy
       end
 
       it "is false if non active participation" do
         create_subscription(event)
         p = Fabricate(:event_participation, event: event).person
 
-        expect(list.subscribed?(p)).to be_falsey
+        expect(subscribed?(p)).to be_falsey
       end
 
       it "is false if explicitly excluded" do
@@ -646,7 +657,7 @@ describe MailingLists::Subscribers do
         p = Fabricate(Event::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: event)).participation.person
         create_subscription(p, true)
 
-        expect(list.subscribed?(p)).to be_falsey
+        expect(subscribed?(p)).to be_falsey
       end
 
       it "is false if excluded via global filter" do
@@ -654,7 +665,7 @@ describe MailingLists::Subscribers do
         p = Fabricate(Event::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: event)).participation.person
         list.update(filter_chain: {language: {allowed_values: :fr}})
 
-        expect(list.subscribed?(p)).to be_falsey
+        expect(subscribed?(p)).to be_falsey
       end
 
       it "is true if not excluded via global filter" do
@@ -662,7 +673,7 @@ describe MailingLists::Subscribers do
         p = Fabricate(Event::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: event)).participation.person
         list.update(filter_chain: {language: {allowed_values: :de}})
 
-        expect(list.subscribed?(p)).to be_truthy
+        expect(subscribed?(p)).to be_truthy
       end
     end
 
@@ -672,7 +683,7 @@ describe MailingLists::Subscribers do
           Group::BottomGroup::Leader.sti_name)
         p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
 
-        expect(list.subscribed?(p)).to be_truthy
+        expect(subscribed?(p)).to be_truthy
       end
 
       it "is false if in group but requires opt_in and only configured may subscribe" do
@@ -681,7 +692,7 @@ describe MailingLists::Subscribers do
         p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
 
         list.update!(subscribable_for: :configured, subscribable_mode: :opt_in)
-        expect(list.subscribed?(p)).to be_falsey
+        expect(subscribed?(p)).to be_falsey
       end
 
       it "is true if in group and requires opt_in and anyone may subscribe" do
@@ -690,7 +701,7 @@ describe MailingLists::Subscribers do
         p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
 
         list.update!(subscribable_for: :anyone, subscribable_mode: :opt_in)
-        expect(list.subscribed?(p)).to be_truthy
+        expect(subscribed?(p)).to be_truthy
       end
 
       it "is true with role with future end_on" do
@@ -698,7 +709,7 @@ describe MailingLists::Subscribers do
           Group::BottomGroup::Leader.sti_name)
         p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one), start_on: 1.day.ago, end_on: 1.day.from_now).person
 
-        expect(list.subscribed?(p)).to be_truthy
+        expect(subscribed?(p)).to be_truthy
       end
 
       it "is false if different role in group" do
@@ -706,7 +717,7 @@ describe MailingLists::Subscribers do
           Group::BottomGroup::Leader.sti_name)
         p = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one)).person
 
-        expect(list.subscribed?(p)).to be_falsey
+        expect(subscribed?(p)).to be_falsey
       end
 
       it "is true if in group and all tags match" do
@@ -718,7 +729,7 @@ describe MailingLists::Subscribers do
         p.tag_list = "foo:bar, geez, baz"
         p.save!
 
-        expect(list.subscribed?(p)).to be_truthy
+        expect(subscribed?(p)).to be_truthy
       end
 
       it "is true if in group and not all tags match" do
@@ -730,7 +741,7 @@ describe MailingLists::Subscribers do
         p.tag_list = "foo:baz"
         p.save!
 
-        expect(list.subscribed?(p)).to be_truthy
+        expect(subscribed?(p)).to be_truthy
       end
 
       it "is false if in group and excluded tag matches" do
@@ -743,7 +754,7 @@ describe MailingLists::Subscribers do
         p.tag_list = "foo:baz"
         p.save!
 
-        expect(list.subscribed?(p)).to be_falsey
+        expect(subscribed?(p)).to be_falsey
       end
 
       it "is false if in group and one of multiple excluded tags matches" do
@@ -755,7 +766,7 @@ describe MailingLists::Subscribers do
         p.tag_list = "foo:baz"
         p.save!
 
-        expect(list.subscribed?(p)).to be_falsey
+        expect(subscribed?(p)).to be_falsey
       end
 
       it "is false if in group and all of multiple excluded tags matches" do
@@ -767,7 +778,7 @@ describe MailingLists::Subscribers do
         p.tag_list = "bar, foo:baz"
         p.save!
 
-        expect(list.subscribed?(p)).to be_falsey
+        expect(subscribed?(p)).to be_falsey
       end
 
       it "is false if in group and no tags match" do
@@ -779,7 +790,7 @@ describe MailingLists::Subscribers do
         p.tag_list = "baz"
         p.save!
 
-        expect(list.subscribed?(p)).to be_falsey
+        expect(subscribed?(p)).to be_falsey
       end
 
       it "is false if explicitly excluded" do
@@ -788,7 +799,7 @@ describe MailingLists::Subscribers do
         p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
         create_subscription(p, true)
 
-        expect(list.subscribed?(p)).to be_falsey
+        expect(subscribed?(p)).to be_falsey
       end
 
       it "is false if excluded via global filter" do
@@ -801,7 +812,7 @@ describe MailingLists::Subscribers do
         p.save!
         list.update(filter_chain: {language: {allowed_values: :fr}})
 
-        expect(list.subscribed?(p)).to be_falsey
+        expect(subscribed?(p)).to be_falsey
       end
 
       it "is true if not excluded via global filter" do
@@ -814,7 +825,7 @@ describe MailingLists::Subscribers do
         p.save!
         list.update(filter_chain: {language: {allowed_values: :de}})
 
-        expect(list.subscribed?(p)).to be_truthy
+        expect(subscribed?(p)).to be_truthy
       end
     end
   end

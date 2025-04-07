@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2025, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -153,7 +153,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def after_destroy_path
-    if entry.person_id == current_user.id
+    if for_current_user?
       group_event_path(group, event)
     else
       group_event_application_market_index_path(group, event)
@@ -267,8 +267,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   def assign_attributes
     super
 
-    # Required questions are enforced only for users that are not allowed to add others
-    entry.enforce_required_answers = true unless can?(:update, entry)
+    entry.enforce_required_answers = for_current_user?
   end
 
   def init_answers
@@ -336,7 +335,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def current_user_interested_in_mail?
-    entry.person_id == current_user.id # extended in wagon
+    for_current_user? # extended in wagon
   end
 
   def set_success_notice
@@ -354,7 +353,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def append_mailing_instructions?
-    entry.person == current_user && event.signature?
+    for_current_user? && event.signature?
   end
 
   def event
@@ -388,5 +387,9 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
 
   def send_email?
     true?(params[:send_email])
+  end
+
+  def for_current_user?
+    entry.person_id == current_user&.id
   end
 end

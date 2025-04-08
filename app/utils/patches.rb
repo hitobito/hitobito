@@ -1,3 +1,10 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2012-2025, Swiss Badminton. This file is part of
+#  hitobito_swb and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito_swb.
+
 module Patches
   RUBY_HOME = Pathname(ENV["GEM_HOME"]).parent.parent.to_s # rubocop:disable Rails/EnvironmentVariableAccess
   RAILS_ROOT = Pathname.new(File.expand_path("../../../", __FILE__))
@@ -78,11 +85,11 @@ module Patches
 
     # Maybe good enough, maybe not ..
     def each_zeitwerk_class
-      Rails.autoloaders.main.instance_variable_get(:@to_unload).map do |location, cref|
+      Rails.autoloaders.main.instance_variable_get(:@to_unload).map do |constant, (location, cref)|
         next if location.starts_with?(RUBY_HOME) || !location.ends_with?(".rb")
-        constant = cref.mod.const_get(cref.cname.to_s)
-        next unless constant.is_a?(Class)
-        [constant.to_s, location]
+        next unless constant.constantize.is_a?(Class)
+        next if constant.constantize.superclass == Object
+        [constant, location]
       end.compact
     end
   end
@@ -100,19 +107,28 @@ module Patches
       (patches + ancestor_patches(patches.map(&:method))).uniq # ancestors produce duplicates
     end
 
+    ## TODO
+    # - generates too much if a module in ancestor change uses delegate class methods
     def direct_patches
-      methods(constant).map do |method|
+      patched_methods = methods(constant) & (ancestors.flat_map { |ancestor| methods(ancestor) })
+      patched_methods.map do |method|
         file, line = constant.instance_method(method).source_location
         next if irrelevant_path?(file)
+
         Patch.new(
           method: method,
           constant: constant.to_s,
           wagon: extract_wagon(file),
-          source_file: relative_path(source_file),
+          source_file: relative_path(method_source_file(method)),
           patch_file: relative_path(file),
           patch_file_line: line
         )
       end.compact
+    end
+
+    def method_source_file(method)
+      ancestor = ancestors.find { |a| methods(a).include?(method) }
+      ancestor ? ancestor.instance_method(method).source_location[0] : source_fil
     end
 
     def ancestors
@@ -144,11 +160,11 @@ module Patches
     def relative_path(file) = Pathname(file).relative_path_from(DEV_ROOT).to_s
 
     def irrelevant_ancestor?(ancestor)
-      ancestor == constant || ancestor == Object || ancestor == Kernel || ancestor == BasicObject
+      ancestor == constant || ancestor == Data || ancestor == Object || ancestor == Kernel || ancestor == BasicObject
     end
 
     def irrelevant_path?(file)
-      file.starts_with?(RUBY_HOME) || file.starts_with?(CORE_APP_DIR.to_s)
+      file.nil? || file.starts_with?(RUBY_HOME) || file.starts_with?(CORE_APP_DIR.to_s)
     end
 
     def extract_wagon(file) = file[WAGON_REGEX, 1]

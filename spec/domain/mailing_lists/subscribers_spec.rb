@@ -110,7 +110,7 @@ describe MailingLists::Subscribers do
             expect(subject).to be_empty
           end
 
-          it "includes person if first role is excludede by tag but second role is not" do
+          it "includes person if first role is excluded by tag but second role is not" do
             sub = create_subscription(bottom_layer_one, false, Group::BottomLayer::Member.sti_name)
             sub.subscription_tags = subscription_tags(%w[foo baz], excluded: true)
             sub.save!
@@ -743,6 +743,19 @@ describe MailingLists::Subscribers do
 
         list.update!(subscribable_for: :anyone, subscribable_mode: :opt_in)
         expect(subscribed?(p)).to be_truthy
+      end
+
+      it "is false if in group and both included and excluded tag match" do
+        sub = create_subscription(groups(:bottom_layer_one), false,
+          Group::BottomGroup::Leader.sti_name)
+        sub.subscription_tags = subscription_tags(%w[bar foo:baz])
+        sub.subscription_tags.second.update!(excluded: true)
+        sub.save!
+        p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
+        p.tag_list = "bar foo:baz"
+        p.save!
+
+        expect(list.subscribed?(p)).to be_falsey
       end
 
       it "is true with role with future end_on" do

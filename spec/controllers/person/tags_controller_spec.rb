@@ -77,13 +77,26 @@ describe Person::TagsController do
       is_expected.to redirect_to group_person_path(bottom_member.groups.first, bottom_member)
     end
 
-    it "trims whitespace characters at end of word to find matching tag" do
+    it "trims trailing whitespace characters of word to find matching tag" do
       ActsAsTaggableOn::Tag.create!(name: "lorem")
 
       post :create, params: {
         group_id: bottom_member.groups.first.id,
         person_id: bottom_member.id,
         acts_as_taggable_on_tag: {name: "lorem "}
+      }
+
+      expect(bottom_member.tags.count).to eq(1)
+      expect(assigns(:tags).first.second.first.name).to eq("lorem")
+    end
+
+    it "trims leading whitespace characters of word to find matching tag" do
+      ActsAsTaggableOn::Tag.create!(name: "lorem")
+
+      post :create, params: {
+        group_id: bottom_member.groups.first.id,
+        person_id: bottom_member.id,
+        acts_as_taggable_on_tag: {name: " lorem"}
       }
 
       expect(bottom_member.tags.count).to eq(1)

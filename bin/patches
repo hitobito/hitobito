@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+if ARGV.size == 0
+  puts "Please pass class to analyze, e.g #{$0} Person"
+  exit
+end
+
+
+puts "loading rails .."
+require_relative "../config/boot"
+require "rails"
+require_relative "../config/environment"
+puts "loading application .."
+Rails.application.eager_load!
+constant = ARGV[0].constantize
+source_file, _line = Object.const_source_location(constant.to_s)
+puts Patches::Analyzer.new(constant, source_file).patches

@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+#  Copyright (c) 2012-2025, Swiss Badminton. This file is part of
+#  hitobito_swb and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito_swb.
+
 require "rubocop"
 require "active_support/core_ext/array/access"
 require "active_support/core_ext/enumerable"
@@ -31,7 +36,7 @@ class WagonMethod < RuboCop::Cop::Base
   end
 
   def register_offense(node, patches)
-    message = format(MSG, wagons: patches.map(&:wagon).sort.join(", "))
+    message = format(MSG, wagons: patches.map(&:wagon).sort.uniq.join(", "))
 
     # NOTE - autocorrect is not really an option
     add_offense(node, message: message, severity: :info)

@@ -11,7 +11,7 @@ describe HitobitoLogger do
   subject(:logger) { described_class.new }
 
   it "::categories returns allowed values" do
-    expect(described_class.categories).to match_array %w[webhook ebics mail]
+    expect(described_class.categories).to match_array %w[cleanup webhook ebics mail]
   end
 
   it "::levels returns allowed values" do

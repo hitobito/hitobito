@@ -784,6 +784,20 @@ describe Person do
     end
   end
 
+  describe "normalization" do
+    let(:person) { people(:top_leader) }
+
+    it "downcases email" do
+      person.email = "TesTer@gMaiL.com"
+      expect(person.email).to eq "tester@gmail.com"
+    end
+
+    it "downcases email" do
+      person.unconfirmed_email = "TesTer@gMaiL.com"
+      expect(person.unconfirmed_email).to eq "tester@gmail.com"
+    end
+  end
+
   describe "invalid e-mail tags" do
     let(:person) { people(:top_leader) }
     let(:taggings) do

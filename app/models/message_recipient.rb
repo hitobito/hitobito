@@ -49,5 +49,7 @@ class MessageRecipient < ActiveRecord::Base
   validates_by_schema
   validates :state, inclusion: {in: STATES}, allow_nil: true
 
+  normalizes :email, with: ->(attribute) { attribute.downcase }
+
   scope :list, -> { order(:dispatched_at) }
 end

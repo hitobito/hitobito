@@ -592,11 +592,11 @@ describe PeopleController do
           expect(emails.size).to eq(2)
           a = emails.first
           expect(a.label).to eq "Arbeit"
-          expect(a.email).to eq "Housi1@example.com"
+          expect(a.email).to eq "housi1@example.com"
           expect(a.public).to be_truthy
           tw = emails.second
           expect(tw.label).to eq "Mutter"
-          expect(tw.email).to eq "John@example.com"
+          expect(tw.email).to eq "john@example.com"
           expect(tw.public).to be_falsey
         end
       end

@@ -44,6 +44,8 @@ class MailLog < ActiveRecord::Base
 
   validates :mail_hash, uniqueness: {case_sensitive: false}
 
+  normalizes :mail_from, with: ->(attribute) { attribute.downcase }
+
   scope :list, -> { order(updated_at: :desc) }
 
   before_update :update_message_state, if: :status_changed?

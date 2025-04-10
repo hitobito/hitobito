@@ -599,6 +599,20 @@ describe Group do
     end
   end
 
+  describe "normalization" do
+    let(:group) { groups(:top_layer) }
+
+    it "downcases email" do
+      group.email = "TesTer@gMaiL.com"
+      expect(group.email).to eq "tester@gmail.com"
+    end
+
+    it "downcases self_registration_notification_email" do
+      group.self_registration_notification_email = "TesTer@gMaiL.com"
+      expect(group.self_registration_notification_email).to eq "tester@gmail.com"
+    end
+  end
+
   context "archived: " do
     subject(:archived_group) do
       groups(:bottom_group_one_two).tap { |g| g.update(archived_at: 1.day.ago) }

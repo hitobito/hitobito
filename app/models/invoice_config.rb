@@ -81,6 +81,8 @@ class InvoiceConfig < ActiveRecord::Base
 
   validates :reference_prefix, length: {minimum: 5, maximum: 7, allow_blank: true}
 
+  normalizes :email, with: ->(attribute) { attribute.downcase }
+
   accepts_nested_attributes_for :payment_reminder_configs, :payment_provider_configs
   accepts_nested_attributes_for :message_templates, allow_destroy: true
 

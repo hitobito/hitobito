@@ -70,6 +70,15 @@ describe AdditionalEmail do
     end
   end
 
+  describe "normalization" do
+    let(:add_email) { Fabricate(:additional_email, label: "Foo") }
+
+    it "downcases email" do
+      add_email.email = "TesTer@gMaiL.com"
+      expect(add_email.email).to eq "tester@gmail.com"
+    end
+  end
+
   context "#translated_label" do
     it "should return untranslated label as-is" do
       I18n.locale = :fr

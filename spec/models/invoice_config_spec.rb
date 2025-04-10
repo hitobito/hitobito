@@ -172,6 +172,13 @@ describe InvoiceConfig do
     end
   end
 
+  describe "normalization" do
+    it "downcases email" do
+      invoice_config.email = "TesTer@gMaiL.com"
+      expect(invoice_config.email).to eq "tester@gmail.com"
+    end
+  end
+
   context "#logo_enabled?" do
     context "with logo attached" do
       before { invoice_config.logo.attach(fixture_file_upload("images/logo.png")) }

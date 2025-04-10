@@ -1,122 +1,139 @@
 .nav-left {
-	box-sizing: border-box;
-	overflow: auto;
-	-webkit-overflow-scrolling: touch;
-	border-radius: 6px;
-	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
-	background-color: $white;
+  box-sizing: border-box;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 6px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12),
+    0 3px 1px -2px rgba(0, 0, 0, 0.2);
+  background-color: $white;
 
-	$nav-left-padding: 1rem;
-	$nav-left-icon-width: 2rem;
-	$nav-left-padding-full: $nav-left-padding + $nav-left-icon-width;
+  $nav-left-padding: 1rem;
+  $nav-left-icon-width: 2rem;
+  $nav-left-padding-full: $nav-left-padding + $nav-left-icon-width;
 
-	// list resets
+  // list resets
 
-	ul {
-		margin: 0
-	}
+  ul {
+    margin: 0;
+  }
 
-	a {
-		display: block;
-		padding-left: $nav-left-padding-full;
-		line-height: 95%;
-		padding-top: 0.2rem;
-		padding-bottom: 0.2rem;
-		border-left: 3px solid transparent;
-	}
+  a {
+    display: block;
+    padding-left: $nav-left-padding-full;
+    line-height: 95%;
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+    border-left: 3px solid transparent;
+  }
 
-	a.inline {
-		display: inline;
-		padding: 0px;
-	}
+  a.inline {
+    display: inline;
+    padding: 0px;
+  }
 
-	a.is-active, li.is-active > a {
-		background-color: desaturate(lighten($link-color, 50%), 20%);
-		border-left: 3px solid $link-color;
-	}
+  a.is-active,
+  li.is-active > a {
+    background-color: desaturate(lighten($link-color, 50%), 20%);
+    border-left: 3px solid $link-color;
+  }
 
-	a.is-archived, li.is-archived > a {
-		color: desaturate(lighten($link-color, 20%), 80%);
-	}
+  a.is-archived,
+  li.is-archived > a {
+    color: desaturate(lighten($link-color, 20%), 80%);
+  }
 
-	.nav-left-section {
-		background-color: $gray-lighter;
-		border-top: 1px solid $gray-light;
-		& > a {
-			font-size: 1.2rem;
-			padding: 0.9rem;
-			padding-left: $nav-left-padding;
-			i {
-				width: $nav-left-icon-width
-			}
-		}
-		&.active {
-			background-color: $white;
-			padding-bottom: 1rem;
-		}
+  .nav-left-section {
+    background-color: $gray-lighter;
+    border-top: 1px solid $gray-light;
+    & > a {
+      font-size: 1.2rem;
+      padding: 0.9rem;
+      padding-left: $nav-left-padding;
+      i {
+        width: $nav-left-icon-width + 0.5rem;
+        margin-left: -0.5rem;
+        text-align: center;
+      }
+    }
+    &.active {
+      background-color: $white;
+      padding-bottom: 1rem;
+    }
 
-		a.nav-left-close {
-			font-size: 1rem;
-			cursor: pointer; // to react to touch events
-			i {
-				width: auto;
-			}
-		}
-	}
+    a.nav-left-close {
+      font-size: 1rem;
+      cursor: pointer; // to react to touch events
+      i {
+        width: auto;
+      }
+    }
+  }
 
-	.nav-left-section .nav-left-title {
-		font-size: 1rem;
-		padding-top: 0.4rem;
-		padding-bottom: 0.4rem;
-		padding-left: $nav-left-padding-full;
-		font-weight: bold;
-	}
+  .nav-left-section .nav-left-title {
+    font-size: 1rem;
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+    padding-left: $nav-left-padding-full;
+    font-weight: bold;
+  }
 
-	.nav-left-section .nav-left-back {
-		font-size: 0.8rem;
-	}
+  .nav-left-section .nav-left-back {
+    font-size: 0.8rem;
+  }
 
-	.divider {
-		display: block;
-		color: $gray-darker;
-		text-transform: uppercase;
-		font-size: 0.7rem;
-		padding-left: $nav-left-padding-full;
-		margin-top: 1rem;
-		border-left: 3px solid transparent;
-	}
+  .divider {
+    display: block;
+    color: $gray-darker;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    padding-left: $nav-left-padding-full;
+    margin-top: 1rem;
+    border-left: 3px solid transparent;
+  }
 
-	.nav-left-section-link ~ .divider,
-	.nav-left-list > li.divider:first-child {
-		margin-top: 0;
-	}
+  .nav-left-section-link ~ .divider,
+  .nav-left-list > li.divider:first-child {
+    margin-top: 0;
+  }
 
-	.options {
-		padding: 1rem 0;
-		.lang {
-			white-space: nowrap;
-		}
-		.lang a {
-			display: inline;
-			padding: 0rem;
-		}
-		.lang {
-			padding-left: $nav-left-padding-full;
-		}
-	  .lang .active {
-	  	color: $black;
-	    text-decoration: none;
-	  }
-	}
+  .options {
+    padding: 1rem 0;
+    .lang {
+      white-space: nowrap;
+    }
+    .lang a {
+      display: inline;
+      padding: 0rem;
+    }
+    .lang {
+      padding-left: $nav-left-padding-full;
+    }
+    .lang .active {
+      color: $black;
+      text-decoration: none;
+    }
+  }
 
-	// typgraphical hierarchy
+  // typgraphical hierarchy
 
-	$hierarchy-shift-width: 0.7rem;
+  $hierarchy-shift-width: 0.7rem;
 
-	ul ul ul a { 										padding-left: 1 * $hierarchy-shift-width + $nav-left-padding-full;}
-	ul ul ul ul a { 								padding-left: 2 * $hierarchy-shift-width + $nav-left-padding-full; }
-	ul ul ul ul ul a { 							padding-left: 3 * $hierarchy-shift-width + $nav-left-padding-full; }
-	ul ul ul ul ul ul ul a { 				padding-left: 4 * $hierarchy-shift-width + $nav-left-padding-full; }
-	ul ul ul ul ul ul ul ul a { 		padding-left: 5 * $hierarchy-shift-width + $nav-left-padding-full; }
-	ul ul ul ul ul ul ul ul ul a { 	padding-left: 6 * $hierarchy-shift-width + $nav-left-padding-full; }
+  ul ul ul a {
+    padding-left: 1 * $hierarchy-shift-width + $nav-left-padding-full;
+  }
+  ul ul ul ul a {
+    padding-left: 2 * $hierarchy-shift-width + $nav-left-padding-full;
+  }
+  ul ul ul ul ul a {
+    padding-left: 3 * $hierarchy-shift-width + $nav-left-padding-full;
+  }
+  ul ul ul ul ul ul ul a {
+    padding-left: 4 * $hierarchy-shift-width + $nav-left-padding-full;
+  }
+  ul ul ul ul ul ul ul ul a {
+    padding-left: 5 * $hierarchy-shift-width + $nav-left-padding-full;
+  }
+  ul ul ul ul ul ul ul ul ul a {
+    padding-left: 6 * $hierarchy-shift-width + $nav-left-padding-full;
+  }
 }

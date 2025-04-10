@@ -277,6 +277,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     content_type: ["image/jpeg", "image/gif", "image/png"]
   # more validations defined by devise
 
+  normalizes :email, :unconfirmed_email, with: ->(attribute) { attribute.downcase }
+
   ### CALLBACKS
 
   before_validation :override_blank_email

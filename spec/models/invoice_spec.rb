@@ -91,6 +91,14 @@ describe Invoice do
     expect(invoice.errors.full_messages).to include(/Rechnungsposten muss ausgefüllt werden/)
   end
 
+  describe "normalization" do
+    it "downcases recipient_email" do
+      invoice = create_invoice
+      invoice.recipient_email = "TesTer@gMaiL.com"
+      expect(invoice.recipient_email).to eq "tester@gmail.com"
+    end
+  end
+
   it "accepts that an invoice in state issued or sent has no items if  part of an invoice_list" do
     invoice = create_invoice
     invoice.update(invoice_list: InvoiceList.create!(group: group, title: "list"))

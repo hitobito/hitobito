@@ -118,6 +118,13 @@ describe MailingList do
     end
   end
 
+  describe "normalization" do
+    it "downcases additional_sender" do
+      list.additional_sender = "TesTer@gMaiL.com"
+      expect(list.additional_sender).to eq "tester@gmail.com"
+    end
+  end
+
   it "#subscribed? delegates to MailingLists::Subscribers" do
     create_subscription(person)
     expect_any_instance_of(MailingLists::Subscribers).to receive(:subscribed?)

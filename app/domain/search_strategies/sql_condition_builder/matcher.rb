@@ -33,8 +33,6 @@ class SearchStrategies::SqlConditionBuilder
 
       if arel_column.type == :integer
         Arel::Nodes::SqlLiteral.new("#{table.name}." + "#{table[@field].name}::text")
-      elsif arel_column.collation == "case_insensitive_emails"
-        Arel::Nodes::SqlLiteral.new(%(#{table.name}.#{table[@field].name} COLLATE "unicode"))
       else
         table[@field]
       end

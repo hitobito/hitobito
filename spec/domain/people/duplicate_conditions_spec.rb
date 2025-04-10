@@ -59,6 +59,10 @@ describe People::DuplicateConditions do
       expect(build({email: "test"})).to eq ["email = ?", "test"]
     end
 
+    it "downcases email value if present if invalid" do
+      expect(build({email: "tESt"})).to eq ["email = ?", "test"]
+    end
+
     it "is combined with OR with other conditions" do
       expect(build({first_name: "first", email: "test"})).to eq ["(first_name = ?) OR email = ?", "first", "test"]
       expect(build({first_name: "first", email: "test", birthday: "2000-1-1"})).to eq ["(first_name = ? AND (birthday = ? OR birthday IS NULL)) OR email = ?", "first", Date.new(2000), "test"]

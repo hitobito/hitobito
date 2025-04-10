@@ -34,5 +34,17 @@ RSpec.describe "people#index", type: :request do
         expect(response.body).to include("Unsupported include parameter")
       end
     end
+
+    describe "email matching" do
+      let(:params) { {filter: {email: {match: people(:top_leader).email}}} }
+
+      it "works" do
+        expect(PersonResource).to receive(:all).and_call_original
+        make_request
+        expect(response.status).to eq(200), response.body
+        expect(d.map(&:jsonapi_type).uniq).to match_array(["people"])
+        expect(d.map(&:id)).to match_array([people(:top_leader).id])
+      end
+    end
   end
 end

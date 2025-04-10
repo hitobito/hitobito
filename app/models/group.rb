@@ -191,6 +191,8 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   validates :logo, dimension: {width: {max: 8_000}, height: {max: 8_000}},
     content_type: ["image/jpeg", "image/gif", "image/png"]
 
+  normalizes :email, :self_registration_notification_email, with: ->(attribute) { attribute.downcase }
+
   scope :without_archived, -> { where(archived_at: nil) }
 
   ### CLASS METHODS

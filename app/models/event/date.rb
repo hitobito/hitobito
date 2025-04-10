@@ -26,7 +26,7 @@ class Event::Date < ActiveRecord::Base
 
   belongs_to :event, touch: true
 
-  after_save :touch_event, if: :saved_change_to_start_at? || :saved_change_to_finish_at?
+  after_save :touch_event, if: :dates_changed?
 
   validates_by_schema
   validates :start_at, presence: true
@@ -52,9 +52,13 @@ class Event::Date < ActiveRecord::Base
     end
   end
 
+  def dates_changed?
+    saved_change_to_start_at? || saved_change_to_finish_at?
+  end
+
   def touch_event
     # Does not execute the touch for some reason when removing the sleep
     sleep(1)
-    event.touch
+    event.update_column(:updated_at, Time.zone.now)
   end
 end

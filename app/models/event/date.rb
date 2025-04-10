@@ -24,7 +24,9 @@ class Event::Date < ActiveRecord::Base
   include DatetimeAttribute
   datetime_attr :start_at, :finish_at
 
-  belongs_to :event
+  belongs_to :event, touch: true
+
+  after_save :touch_event, if: :saved_change_to_start_at? || :saved_change_to_finish_at?
 
   validates_by_schema
   validates :start_at, presence: true
@@ -48,5 +50,11 @@ class Event::Date < ActiveRecord::Base
     unless duration.meaningful?
       errors.add(:finish_at, :not_after_start)
     end
+  end
+
+  def touch_event
+    # Does not execute the touch for some reason when removing the sleep
+    sleep(1)
+    event.touch
   end
 end

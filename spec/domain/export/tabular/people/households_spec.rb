@@ -54,8 +54,7 @@ describe Export::Tabular::People::Households do
   end
 
   it "aggregates household people, uses first person's address" do
-    member.update!(household_key: 1)
-    leader.update!(household_key: 1)
+    member.household.add(leader).save!
 
     data = households([leader, member]).data_rows.to_a
     expect(data).to have(1).item

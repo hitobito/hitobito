@@ -112,7 +112,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   FILTER_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
     :first_name, :last_name, :nickname, :company_name, :email, :address_care_of, :street,
-    :housenumber, :postbox, :zip_code, :town, :country, :gender, [:years, :integer], :birthday
+    :housenumber, :postbox, :zip_code, :town, [:country, :country_select], [:gender, :gender_select], [:years, :integer], :birthday
   ]
 
   SEARCHABLE_ATTRS = [

@@ -162,6 +162,19 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
+  # Render a select dropdown for countries
+  def country_field(attr, html_options = {})
+    html_options[:class] = [
+      html_options[:class], "form-select", "form-select-sm", "tom-select"
+    ].compact.join(" ")
+    html_options[:data] = {placeholder: " ", chosen_no_results: I18n.t("global.chosen_no_results")}
+    country_select(attr,
+      {priority_countries: Settings.countries.prioritized,
+       selected: @object.nationality,
+       include_blank: ""},
+      html_options)
+  end
+
   def date_value(attr)
     # Can also be serialized column
     raw = @object.timeliness_cache_attribute(attr) if @object.is_a?(ActiveRecord::Base)

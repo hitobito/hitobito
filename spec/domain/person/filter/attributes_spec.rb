@@ -336,7 +336,7 @@ describe Person::Filter::Attributes do
       end
 
       context "smaller" do
-        let(:constraint) { "smaller" }
+        let(:constraint) { "before" }
         let(:value) { 32.years.ago.to_date.to_s }
 
         it "returns people with matching attribute" do
@@ -346,7 +346,7 @@ describe Person::Filter::Attributes do
       end
 
       context "greater" do
-        let(:constraint) { "greater" }
+        let(:constraint) { "after" }
         let(:value) { 32.years.ago.to_date.to_s }
 
         it "returns people with matching attribute" do

@@ -111,8 +111,8 @@ class Person::Filter::Attributes < Person::Filter::Base
     case constraint.to_s
     when "match" then "LIKE"
     when "not_match" then "NOT LIKE"
-    when "greater" then ">"
-    when "smaller" then "<"
+    when "greater", "after" then ">"
+    when "smaller", "before" then "<"
     when "equal", "blank" then "="
     else raise("unexpected constraint: #{constraint.inspect}")
     end
@@ -123,7 +123,7 @@ class Person::Filter::Attributes < Person::Filter::Base
     when "match", "not_match"
       "%#{ActiveRecord::Base.send(:sanitize_sql_like, value.to_s.strip)}%"
     when "blank" then ""
-    when "equal", "greater", "smaller" then value
+    when "equal", "greater", "smaller", "before", "after" then value
     else raise("unexpected constraint: #{constraint.inspect}")
     end
   end

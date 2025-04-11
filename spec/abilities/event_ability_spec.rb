@@ -44,6 +44,12 @@ describe EventAbility do
         is_expected.to be_able_to(:update, event)
       end
 
+      [:manage_tags, :manage_attachments].each do |action|
+        it "may #{action} on event in his layer" do
+          is_expected.to be_able_to(action, event)
+        end
+      end
+
       it "may index people for event in his layer" do
         is_expected.to be_able_to(:index_participations, event)
       end
@@ -51,6 +57,13 @@ describe EventAbility do
       it "may update event in lower layer" do
         other = Fabricate(:event, groups: [groups(:bottom_layer_one)], globally_visible: false)
         is_expected.to be_able_to(:update, other)
+      end
+
+      [:manage_tags, :manage_attachments].each do |action|
+        it "may #{action} on event in lower layer" do
+          other = Fabricate(:event, groups: [groups(:bottom_layer_one)], globally_visible: false)
+          is_expected.to be_able_to(action, other)
+        end
       end
 
       it "may index people for event in lower layer" do
@@ -66,6 +79,13 @@ describe EventAbility do
         it "may not update event" do
           other = Fabricate(:event, groups: [groups(:bottom_layer_two)])
           is_expected.not_to be_able_to(:update, other)
+        end
+
+        [:manage_tags, :manage_attachments].each do |action|
+          it "may not #{action} event" do
+            other = Fabricate(:event, groups: [groups(:bottom_layer_two)])
+            is_expected.not_to be_able_to(action, other)
+          end
         end
 
         it "may not index people for event" do
@@ -210,6 +230,12 @@ describe EventAbility do
         is_expected.to be_able_to(:update, event)
       end
 
+      [:manage_tags, :manage_attachments].each do |action|
+        it "may #{action} on event in his layer" do
+          is_expected.to be_able_to(action, event)
+        end
+      end
+
       it "may index people for event in his layer" do
         is_expected.to be_able_to(:index_participations, event)
       end
@@ -217,6 +243,13 @@ describe EventAbility do
       it "may not update event in lower layer" do
         other = Fabricate(:event, groups: [groups(:bottom_layer_one)])
         is_expected.not_to be_able_to(:update, other)
+      end
+
+      [:manage_tags, :manage_attachments].each do |action|
+        it "may not #{action} on event in lower layer" do
+          other = Fabricate(:event, groups: [groups(:bottom_layer_one)])
+          is_expected.not_to be_able_to(action, other)
+        end
       end
 
       it "may not index people for event in lower layer" do
@@ -341,6 +374,12 @@ describe EventAbility do
           is_expected.to be_able_to(:update, event)
         end
 
+        [:manage_tags, :manage_attachments].each do |action|
+          it "may #{action} on event" do
+            is_expected.to be_able_to(action, event)
+          end
+        end
+
         it "may destroy event" do
           is_expected.to be_able_to(:destroy, event)
         end
@@ -384,6 +423,12 @@ describe EventAbility do
           is_expected.to be_able_to(:update, event)
         end
 
+        [:manage_tags, :manage_attachments].each do |action|
+          it "may #{action} on event" do
+            is_expected.to be_able_to(action, event)
+          end
+        end
+
         it "may destroy event" do
           is_expected.to be_able_to(:destroy, event)
         end
@@ -402,6 +447,12 @@ describe EventAbility do
 
         it "may not update event" do
           is_expected.not_to be_able_to(:update, event)
+        end
+
+        [:manage_tags, :manage_attachments].each do |action|
+          it "may not #{action} on event" do
+            is_expected.not_to be_able_to(action, event)
+          end
         end
 
         it "may not index people for event" do
@@ -550,6 +601,12 @@ describe EventAbility do
         is_expected.to be_able_to(:update, event)
       end
 
+      [:manage_tags, :manage_attachments].each do |action|
+        it "may #{action} on event in his group" do
+          is_expected.to be_able_to(action, event)
+        end
+      end
+
       it "may destroy event in his group" do
         is_expected.to be_able_to(:destroy, event)
       end
@@ -561,6 +618,13 @@ describe EventAbility do
       it "may not update event in other group" do
         other = Fabricate(:event, groups: [groups(:bottom_group_one_two)])
         is_expected.not_to be_able_to(:update, other)
+      end
+
+      [:manage_tags, :manage_attachments].each do |action|
+        it "may not #{action} on event in other group" do
+          other = Fabricate(:event, groups: [groups(:bottom_group_one_two)])
+          is_expected.not_to be_able_to(action, other)
+        end
       end
 
       it "may not index people for event in other group" do
@@ -752,6 +816,12 @@ describe EventAbility do
         is_expected.to be_able_to(:update, event)
       end
 
+      [:manage_tags, :manage_attachments].each do |action|
+        it "may #{action} on his event" do
+          is_expected.to be_able_to(action, event)
+        end
+      end
+
       it "may not destroy his event" do
         is_expected.not_to be_able_to(:destroy, event)
       end
@@ -765,6 +835,13 @@ describe EventAbility do
         is_expected.not_to be_able_to(:update, other)
       end
 
+      [:manage_tags, :manage_attachments].each do |action|
+        it "may not #{action} on other event" do
+          other = Fabricate(:event, groups: [group])
+          is_expected.not_to be_able_to(action, other)
+        end
+      end
+
       it "may not index people for other event" do
         other = Fabricate(:event, groups: [group])
         is_expected.not_to be_able_to(:index_participations, other)
@@ -775,6 +852,12 @@ describe EventAbility do
 
         it "may not update event" do
           is_expected.to be_able_to(:update, event)
+        end
+
+        [:manage_tags, :manage_attachments].each do |action|
+          it "may not #{action} on event" do
+            is_expected.to be_able_to(action, event)
+          end
         end
       end
     end
@@ -874,6 +957,12 @@ describe EventAbility do
         is_expected.not_to be_able_to(:update, event)
       end
 
+      [:manage_tags, :manage_attachments].each do |action|
+        it "may not #{action} on his event" do
+          is_expected.not_to be_able_to(action, event)
+        end
+      end
+
       it "may not destroy his event" do
         is_expected.not_to be_able_to(:destroy, event)
       end
@@ -890,6 +979,13 @@ describe EventAbility do
       it "may not update other event" do
         other = Fabricate(:event, groups: [groups(:bottom_layer_one)])
         is_expected.not_to be_able_to(:update, other)
+      end
+
+      [:manage_tags, :manage_attachments].each do |action|
+        it "may not #{action} on other event" do
+          other = Fabricate(:event, groups: [groups(:bottom_layer_one)])
+          is_expected.not_to be_able_to(action, other)
+        end
       end
 
       it "may not index people for other event, without visible participations" do
@@ -1007,6 +1103,12 @@ describe EventAbility do
 
       it "may not update his event" do
         is_expected.not_to be_able_to(:update, event)
+      end
+
+      [:manage_tags, :manage_attachments].each do |action|
+        it "may not #{action} on his event" do
+          is_expected.not_to be_able_to(action, event)
+        end
       end
 
       it "may not index people for his event" do

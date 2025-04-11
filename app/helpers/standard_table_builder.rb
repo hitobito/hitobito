@@ -143,8 +143,8 @@ class StandardTableBuilder
     end
 
     # Renders a sort link header, otherwise similar to :attr.
-    def sortable_attr(a, header = nil)
-      attr(a, sort_header(a, header))
+    def sortable_attr(a, header = nil, &block)
+      attr(a, sort_header(a, header), &block)
     end
 
     private

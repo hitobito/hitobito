@@ -6,7 +6,7 @@
 require "spec_helper"
 
 describe Export::EventParticipationsExportJob do
-  subject { Export::EventParticipationsExportJob.new(format, user.id, event_participation_filter, groups(:top_group), params.merge(filename: filename)) }
+  subject { Export::EventParticipationsExportJob.new(format, user.id, event.id, groups(:top_group).id, params.merge(filename: filename)) }
 
   let(:participation) { event_participations(:top) }
   let(:user) { participation.person }
@@ -15,7 +15,6 @@ describe Export::EventParticipationsExportJob do
   let(:filename) { AsyncDownloadFile.create_name("event_participation_export", user.id) }
 
   let(:params) { {filter: "all"} }
-  let(:event_participation_filter) { Event::ParticipationFilter.new(event.id, user, params) }
 
   let(:file) do
     AsyncDownloadFile

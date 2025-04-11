@@ -195,8 +195,12 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   has_many :roles, inverse_of: :person
   has_many :roles_unscoped, -> { with_inactive },
     class_name: "Role", foreign_key: "person_id", inverse_of: :person
+  has_many :roles_with_ended_readable, -> { with_ended_readable },
+    class_name: "Role", foreign_key: "person_id", inverse_of: :person
 
   has_many :groups, through: :roles
+  has_many :groups_with_roles_ended_readable, through: :roles_with_ended_readable,
+    source: :group
 
   has_many :event_participations, class_name: "Event::Participation",
     dependent: :destroy,
@@ -279,6 +283,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   after_update :schedule_duplicate_locator
   before_destroy :destroy_roles
   before_destroy :destroy_person_duplicates
+  after_save :update_household_address
 
   ### Scopes
 
@@ -543,5 +548,12 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     return unless changed_attrs.any? { |a| duplicate_attrs.include?(a) }
 
     Person::DuplicateLocatorJob.new(id).enqueue!
+  end
+
+  def update_household_address
+    return if household_key.nil? || (Person::ADDRESS_ATTRS & saved_changes.keys).empty? || saved_changes.key?("household_key")
+
+    # do not use update context to not trigger all validations for all household members
+    household.save!(context: :update_address)
   end
 end

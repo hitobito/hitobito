@@ -81,7 +81,7 @@ describe Role do
 
     describe ":active" do
       it "includes roles without start_on and end_on" do
-        expect(role.start_on).to be_nil
+        role.update!(start_on: nil)
         expect(role.end_on).to be_nil
         expect(Role.active).to include role
       end
@@ -122,6 +122,25 @@ describe Role do
       it "includes archived roles" do
         role.update!(archived_at: Time.current)
         expect(Role.with_inactive).to include role
+      end
+    end
+
+    describe ":with_ended_readable" do
+      it "excludes ended roles" do
+        role.update!(end_on: Date.current.yesterday)
+        expect(Role.with_ended_readable).not_to include(role)
+      end
+
+      it "includes ended roles if inside configured period" do
+        allow(Settings.people).to receive(:ended_roles_readable_for).and_return(1.month)
+        role.update!(end_on: 1.days.ago)
+        expect(Role.with_ended_readable).to include(role)
+      end
+
+      it "includes ended roles if from anytime if setting is set to nil" do
+        allow(Settings.people).to receive(:ended_roles_readable_for).and_return(nil)
+        role.update!(end_on: 100.years.ago)
+        expect(Role.with_ended_readable).to include(role)
       end
     end
 
@@ -194,7 +213,7 @@ describe Role do
 
     describe ":future" do
       it "excludes roles without start_on" do
-        expect(role.start_on).to be_nil
+        role.update!(start_on: nil)
         expect(Role.future).not_to include role
       end
 
@@ -238,7 +257,7 @@ describe Role do
 
     describe ":active_and_future" do
       it "includes roles without start_on and end_on" do
-        expect(role.start_on).to be_nil
+        role.update!(start_on: nil)
         expect(role.end_on).to be_nil
         expect(Role.active_and_future).to include role
       end
@@ -429,6 +448,19 @@ describe Role do
         expect(person.reload).to be_contact_data_visible
       end
     end
+
+    context "#after_initialize" do
+      it "defaults start_on to current date" do
+        r = Role.new
+        expect(r.start_on).to eq(Date.current)
+      end
+
+      it "does not override given start_on" do
+        date = Date.new(2025, 3, 17)
+        r = Role.new(start_on: date)
+        expect(r.start_on).to eq(date)
+      end
+    end
   end
 
   context ".normalize_label" do
@@ -486,6 +518,24 @@ describe Role do
     end
   end
 
+  context "#new" do
+    it "sets start_on to current date" do
+      r = Role.new
+      expect(r.start_on).to eq(Date.current)
+    end
+
+    it "does not override given start_on" do
+      date = Date.new(2025, 3, 17)
+      r = Role.new(start_on: date)
+      expect(r.start_on).to eq(date)
+    end
+
+    it "does not override given blank start_on" do
+      r = Role.new(start_on: nil)
+      expect(r.start_on).to be_nil
+    end
+  end
+
   context "#create" do
     let(:person) { people(:top_leader) }
 
@@ -504,7 +554,7 @@ describe Role do
   context "#destroy" do
     context "on young role" do
       let(:role) do
-        Fabricate(Group::BottomLayer::Leader.name.to_s, group: groups(:bottom_layer_one))
+        Fabricate(Group::BottomLayer::Leader.name.to_s, group: groups(:bottom_layer_one), start_on: 1.year.ago)
       end
 
       it "gets deleted from database" do
@@ -526,6 +576,7 @@ describe Role do
     context "on role ended in the past" do
       let(:role) do
         Fabricate(Group::BottomLayer::Leader.name.to_s,
+          start_on: 1.year.ago,
           end_on: Date.current.last_year,
           group: groups(:bottom_layer_one))
       end
@@ -540,7 +591,8 @@ describe Role do
       let(:role) do
         Fabricate(Group::BottomLayer::Leader.name.to_s,
           created_at: Time.zone.now - Settings.role.minimum_days_to_archive.days - 1.day,
-          group: groups(:bottom_layer_one))
+          group: groups(:bottom_layer_one),
+          start_on: 1.year.ago)
       end
 
       it "ends role per yesterday" do
@@ -557,7 +609,7 @@ describe Role do
   context "#destroy!" do
     it "soft deletes young roles with always_soft_destroy: true" do
       a = Fabricate(Group::BottomLayer::Leader.name, label: "foo",
-        group: groups(:bottom_layer_one))
+        group: groups(:bottom_layer_one), start_on: 1.year.ago)
 
       expect { a.destroy!(always_soft_destroy: true) }
         .to change { a.reload.end_on }.to(Date.current.yesterday)

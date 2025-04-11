@@ -8,6 +8,10 @@
 module Person::Groups
   extend ActiveSupport::Concern
 
+  def readable_group_ids
+    @readable_group_ids ||= Role.where(person_id: id)
+  end
+
   # Uniq set of all group ids in hierarchy.
   def groups_hierarchy_ids
     @groups_hierarchy_ids ||= groups.collect(&:hierarchy).flatten.collect(&:id).uniq
@@ -45,13 +49,13 @@ module Person::Groups
   end
 
   # All groups where this person has a role that is visible from above.
-  def groups_where_visible_from_above
-    roles_with_groups.select { |r| r.class.visible_from_above }.collect(&:group).uniq
+  def groups_where_visible_from_above(roles = roles_with_groups)
+    roles.select { |r| r.class.visible_from_above }.collect(&:group).uniq
   end
 
   # All above and actual groups where this person is visible from.
-  def above_groups_where_visible_from
-    groups_where_visible_from_above.collect(&:hierarchy).flatten.uniq
+  def above_groups_where_visible_from(groups = groups_where_visible_from_above)
+    groups.collect(&:hierarchy).flatten.uniq
   end
 
   def last_non_restricted_role

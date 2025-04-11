@@ -30,6 +30,10 @@ class Person::Filter::Base
     args.blank?
   end
 
+  def include_ended_roles?
+    false
+  end
+
   # Returns a serializable, persistable representation of this filter.
   def to_hash
     args

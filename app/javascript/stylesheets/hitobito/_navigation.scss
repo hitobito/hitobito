@@ -8,7 +8,6 @@
 
 /* Navigation */
 
-
 .nav-sub {
   @include clearfix;
   line-height: 2.3;
@@ -18,7 +17,7 @@
   font-size: 0.938em;
   & > li {
     float: left;
-     a {
+    a {
       transition: border-color 300ms false false;
       padding: 8px 0;
       margin-top: 2px;
@@ -57,7 +56,7 @@
     border: none;
   }
   .active a {
-    color: $gray-dark;
+    color: $gray-darker;
   }
 }
 
@@ -81,7 +80,8 @@
       display: inline-block;
       text-shadow: 0 1px 0 $white;
 
-      a {  }
+      a {
+      }
     }
     li.divider {
       padding: 0 5px;
@@ -123,7 +123,6 @@
   .table-display-dropdown {
     margin-left: auto;
   }
-
 }
 
 // Pills
@@ -153,7 +152,7 @@
 
 .nav-pills .nav-link div {
   margin-bottom: 0.25rem;
-  margin-top: 0.25rem
+  margin-top: 0.25rem;
 }
 
 .active > .dropdown > .dropdown-toggle {
@@ -208,7 +207,9 @@
   margin-right: -7px;
 }
 
-.dropdown-menu li { position: relative; }
+.dropdown-menu li {
+  position: relative;
+}
 
 .submenu {
   display: none;
@@ -217,7 +218,9 @@
   top: -7px;
 }
 
-.dropdown-menu > li:hover > .submenu { display: block; }
+.dropdown-menu > li:hover > .submenu {
+  display: block;
+}
 
 .dropdown-menu > li:hover,
 .dropdown-menu > li:focus,
@@ -230,4 +233,3 @@
 .nav-left a {
   width: 90%;
 }
-

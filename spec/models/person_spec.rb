@@ -1127,4 +1127,21 @@ describe Person do
       expect(other_person.membership_verify_token).not_to eq(token)
     end
   end
+
+  describe "household" do
+    let(:person) { people(:top_leader) }
+    let(:other_person) { people(:bottom_member) }
+
+    before do
+      household = Household.new(person)
+      household.add(other_person)
+      household.save!
+    end
+
+    it "updates address for all household members" do
+      person.update!(street: "newstreet")
+
+      expect(other_person.reload.street).to eq "newstreet"
+    end
+  end
 end

@@ -5,6 +5,7 @@
 - Altes Adress-Feld wurde von Personen und Gruppen entfernt, neu gelten die strukturierten Adressfelder (#2226)
 - QR-Referenz kann in Rechnungeinstellungen erfasst werden, dieser gilt als Prefix für die Referenznummer auf dem Einzahlungsschein (#3032)
 - Filtern nach vergangenen Rollen zeigt nur Personen, welche für den User aktuell sichtbar sind (hitobito_sac_cas#1655)
+- Neues Setting mit welchem die Sichtbarkeit von vergangenen Rollen konfiguriert werden kann (Default 0 Tage) (hitobito_sac_cas#1655)
 - Mahnungen können nun in den Rechnungseinstellungen übersetzt werden. Sie werden automatisch in der Sprache der jeweiligen Person für jede Rechnung generiert. (hitobito_sww#198)
 - Rollen und Teilnahmen auf Mitgliedschaften / Verlauf sind nun (zusätzlich) nach absteigendem Datum sortiert (hitobito_sac_cas#1638).
 - Unterscheidung der Filtermöglichkeiten bei inaktiven Rollen nach nie oder zu einer anderen Zeit vorhandenen Rollen (hitobito_sac_cas#1655).

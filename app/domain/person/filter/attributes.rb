@@ -111,10 +111,8 @@ class Person::Filter::Attributes < Person::Filter::Base
     case constraint.to_s
     when "match" then "LIKE"
     when "not_match" then "NOT LIKE"
-    when "greater" then ">"
-    when "smaller" then "<"
-    when "before" then "<"
-    when "after" then ">"
+    when "greater", "after" then ">"
+    when "smaller", "before" then "<"
     when "equal", "blank" then "="
     else raise("unexpected constraint: #{constraint.inspect}")
     end

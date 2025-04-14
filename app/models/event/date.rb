@@ -24,7 +24,7 @@ class Event::Date < ActiveRecord::Base
   include DatetimeAttribute
   datetime_attr :start_at, :finish_at
 
-  belongs_to :event
+  belongs_to :event, touch: true
 
   validates_by_schema
   validates :start_at, presence: true

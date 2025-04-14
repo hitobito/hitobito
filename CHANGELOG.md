@@ -1,5 +1,8 @@
 # Hitobito Changelog
 
+## unreleased
+- Auf der Person können mehrere Adressen erfasst werden (#3264, #3265)
+
 ## Version 2.5
 - Eine Rechnung kann im Originalzustand gedruckt werden, bzw. ohne Mahnungen (hitobito_sww#173)
 

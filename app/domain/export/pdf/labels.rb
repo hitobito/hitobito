@@ -5,10 +5,11 @@
 
 module Export::Pdf
   class Labels
-    attr_reader :format
+    attr_reader :format, :label
 
-    def initialize(format)
+    def initialize(format, label: nil)
       @format = format
+      @label = label
     end
 
     def generate(contactables, household = false)
@@ -73,27 +74,11 @@ module Export::Pdf
     end
 
     def household_address(contactable, name)
-      contactable = contactable.first
-
-      address = ""
-      address << name << "\n" if name.present?
-      address << contactable.address.to_s
-      address << "\n" unless /\n\s*$/.match?(contactable.address)
-      address << contactable.zip_code.to_s << " " << contactable.town.to_s << "\n"
-      address << contactable.country_label unless contactable.ignored_country?
-      address
+      Person::Address.new(contactable.first, label: label).for_pdf_label(name)
     end
 
     def address(contactable, name)
-      address = ""
-      address << contactable.company_name << "\n" if print_company?(contactable, name)
-      address << contactable.nickname << "\n" if print_nickname?(contactable)
-      address << name << "\n" if name.present?
-      address << contactable.address.to_s
-      address << "\n" unless /\n\s*$/.match?(contactable.address)
-      address << contactable.zip_code.to_s << " " << contactable.town.to_s << "\n"
-      address << contactable.country_label unless contactable.ignored_country?
-      address
+      Person::Address.new(contactable, label: label).for_pdf_label(name, format.nickname?)
     end
 
     def position(pdf, i)
@@ -106,14 +91,6 @@ module Export::Pdf
       y = page_index / format.count_horizontal
 
       [x * format.width.mm, pdf.margin_box.height - (y * format.height.mm)]
-    end
-
-    def print_company?(contactable, name)
-      contactable.try(:company) && contactable.company_name? && contactable.company_name != name
-    end
-
-    def print_nickname?(contactable)
-      format.nickname? && contactable.respond_to?(:nickname) && contactable.nickname.present?
     end
 
     def print_pp_post(pdf, at)

@@ -34,5 +34,15 @@ describe Export::Tabular::People::PeopleFull do
 
       its([:social_account_webseite]) { should eq "Social Media Adresse Webseite" }
     end
+
+    context "additional_addresses" do
+      before do
+        person.additional_addresses << Fabricate.build(:additional_address, label: "Rechnung")
+        person.additional_addresses << Fabricate.build(:additional_address, label: "Arbeit")
+      end
+
+      its([:additional_address_rechnung]) { should eq "Weitere Adresse Rechnung" }
+      its([:additional_address_arbeit]) { should eq "Weitere Adresse Arbeit" }
+    end
   end
 end

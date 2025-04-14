@@ -29,6 +29,15 @@ module ContactableDecorator
     content_tag(:p, html)
   end
 
+  def all_additional_addresses
+    addresses = additional_addresses.map do |address|
+      safe_join([
+        content_tag(:span, address.value), content_tag(:span, address.translated_label, class: "muted")
+      ], " ")
+    end
+    content_tag(:p, safe_join(addresses, br)) if addresses.present?
+  end
+
   def complete_contact
     address_name +
       complete_address +

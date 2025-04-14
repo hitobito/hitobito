@@ -97,4 +97,27 @@ describe ContactableDecorator do
       end
     end
   end
+
+  context "#all_additional_addresses" do
+    let(:person) { people(:top_leader) }
+    let(:attrs) {
+      {
+        address_care_of: "c/o Backoffice",
+        street: "Langestrasse",
+        housenumber: 37,
+        zip_code: 8000,
+        town: "Zürich",
+        country: "CH"
+      }
+    }
+
+    subject { person.decorate.all_additional_addresses }
+
+    it "is nil if no additional addresses are defined" do
+      person.additional_addresses.build(attrs.merge(label: "Rechnung"))
+      person.additional_addresses.build(attrs.merge(label: "Andere", address_care_of: nil, housenumber: "12a"))
+      expect(subject).to start_with '<p><span>c/o Backoffice, Langestrasse 37, 8000 - Zürich</span> <span class="muted">Rechnung</span><br /><span>'
+      expect(subject).to end_with '</span><br /><span>Langestrasse 12a, 8000 - Zürich</span> <span class="muted">Andere</span></p>'
+    end
+  end
 end

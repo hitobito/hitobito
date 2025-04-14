@@ -130,6 +130,9 @@ de:
       placeholder_type: Bezeichnung (Privat, Arbeit ..)
       tooltip_mailings: Versände von Abos, Bestätigungen per E-Mail usw. werden zusätzlich an alle hier markierten Adressen verschickt.
 
+    additional_address_fields:
+      placeholder_type: Bezeichnung (Rechnung, Arbeit ..)
+
     address_fields:
       updates_household_address: Adresse wird für den ganzen Haushalt aktualisiert
 
@@ -160,6 +163,10 @@ de:
   dropdown/event/participation/mail_dispatch:
     title: E-Mail senden
     confirmation: Bist du sicher, dass du diese Mails versenden willst?
+
+  dropdown/label_items:
+    additional_address:
+      main: Hauptadresse
 
   dropdown/group_edit:
     move: "Verschieben"

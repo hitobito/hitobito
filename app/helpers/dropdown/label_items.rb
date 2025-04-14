@@ -42,14 +42,30 @@ module Dropdown
     end
 
     def last_label_format?
-      user&.last_label_format_id? && LabelFormat.for_person(user).exists?
+      user&.last_label_format_id? && LabelFormat.for_person(user).exists? && !additional_address?
     end
 
     def add_label_format_items(parent)
-      LabelFormat.list.for_person(user).each do |label_format|
-        parent.sub_items << Item.new(label_format, export_label_format_path(label_format.id),
-          class: "export-label-format")
+      if additional_address?
+        LabelFormat.list.for_person(user).each do |label_format|
+          format_item = ::Dropdown::Item.new(label_format.to_s, "#")
+          parent.sub_items << format_item
+
+          types_with_labels = AdditionalAddress.predefined_labels.map { |l| [l, AdditionalAddress.translate_label(l)] }
+          types_with_labels.unshift([:main, I18n.t(".additional_address.main", scope: self.class.to_s.underscore)])
+          types_with_labels.each do |type, label|
+            format_item.sub_items << export_label_item(label_format.id, type, label)
+          end
+        end
+      else
+        LabelFormat.list.for_person(user).each do |label_format|
+          parent.sub_items << Item.new(label_format, export_label_format_path(label_format.id), class: "export-label-format")
+        end
       end
+    end
+
+    def export_label_item(format_id, type, label = nil)
+      ::Dropdown::Item.new(label, params.merge(format: :pdf, label_format_id: format_id, address_type: type), target: :new)
     end
 
     def add_households_labels_option_items(parent)
@@ -61,8 +77,7 @@ module Dropdown
 
     def export_label_format_path(id)
       households = ToggleHouseholdsLabelsItem::DEFAULT_STATE if @households
-      params.merge(format: :pdf, label_format_id: id,
-        household: households)
+      params.merge(format: :pdf, label_format_id: id, household: households)
     end
 
     class ToggleHouseholdsLabelsItem < Dropdown::Base
@@ -91,5 +106,7 @@ module Dropdown
         end
       end
     end
+
+    def additional_address? = FeatureGate.enabled?("additional_address")
   end
 end

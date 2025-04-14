@@ -30,7 +30,7 @@ module RenderPeopleExports
         current_user.id,
         Person.from(people.select("people.id AS person_id")).pluck(:person_id),
         group.id,
-        params.slice(:label_format_id, :household)
+        params.slice(:label_format_id, :household, :address_type)
         .merge(filename: filename)).enqueue!
     end
   end
@@ -40,7 +40,8 @@ module RenderPeopleExports
   def generate_pdf(people, group)
     if params[:label_format_id]
       household = true?(params[:household])
-      Export::Pdf::Labels.new(find_and_remember_label_format).generate(people, household)
+      label = params[:address_type]
+      Export::Pdf::Labels.new(find_and_remember_label_format, label: label).generate(people, household)
     else
       Export::Pdf::List.render(people, group)
     end

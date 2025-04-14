@@ -203,6 +203,9 @@ de:
       additional_email:
         one: Weitere E-Mail
         other: Weitere E-Mails
+      additional_address:
+        one: Weitere Adresse
+        other: Weitere Adressen
       assignment:
         one: Auftrag
         other: Aufträge
@@ -408,6 +411,26 @@ de:
         taggings_count: Anzahl
         category: Kategorie
 
+      additional_address:
+        translated_label: Adress Typ
+        street_and_number: Strasse/Nummer
+        housenumber: Hausnummer
+        postbox: Postfach
+        zip_code: PLZ
+        town: Ort
+        country: Land
+        postbox: Postfach
+        address_care_of: zusatz. Adresszeile
+
+      additional_addresses:
+        label: Adress Typ
+        street: Strasse
+        postbox: Postfach
+        zip_code: PLZ
+        town: Ort
+        country: Land
+        postbox: Postfach
+
       cantons:
         ag: Aargau
         ai: Appenzell Innerrhoden
@@ -479,6 +502,7 @@ de:
         phone_numbers: Telefonnummern
         social_accounts: Social Media
         additional_emails: Weitere E-Mails
+        additional_addresses: Weitere Adressen
         family_members: Familienmitglieder
         picture: Neues Foto hochladen
         remove_picture: Aktuelles Foto entfernen
@@ -852,6 +876,7 @@ de:
           fax: Fax
           andere: Andere
           webseite: Webseite
+          rechnung: Rechnung
 
       social_account:
         name: Name
@@ -865,13 +890,6 @@ de:
         public: Öffentlich
 
       additional_email:
-        email: E-Mail
-        name: Weitere E-Mail
-        label: Weitere E-Mail Typ
-        public: Öffentlich
-        mailings: Versand
-
-      additional_emails:
         email: E-Mail
         name: Weitere E-Mail
         label: Weitere E-Mail Typ
@@ -1132,7 +1150,7 @@ de:
 
       message_template:
         title: Titel
-        body: Text   
+        body: Text
 
       payment:
         invoice: Rechnung

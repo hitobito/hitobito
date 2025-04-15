@@ -11,7 +11,7 @@ describe Export::Pdf::Invoice do
   let(:invoice) { invoices(:invoice) }
   let(:sent) { invoices(:sent) }
 
-  let(:pdf) { described_class.render(invoice, payment_slip: true, articles: true) }
+  let(:pdf) { described_class.render(invoice, payment_slip: true, articles: true, reminders: false) }
 
   def build_invoice(attrs)
     Invoice.new(attrs.reverse_merge(group: groups(:top_layer)))
@@ -433,19 +433,18 @@ describe Export::Pdf::Invoice do
 
   describe "payment_reminder" do
     let(:due_at) { sent.due_at + 10.days }
-    let(:pdf) { described_class.render(sent, articles: true) }
-    let(:reminder) { Fabricate(:payment_reminder, invoice: sent, due_at: due_at, show_invoice_description: show) }
+    let(:reminders) { true }
+    let(:show) { true }
+    let(:pdf) { described_class.render(sent, articles: true, reminders: reminders) }
+    let!(:reminder) { Fabricate(:payment_reminder, invoice: sent, due_at: due_at, show_invoice_description: show) }
 
     subject { PDF::Inspector::Text.analyze(pdf).show_text }
 
     before do
       sent.update(description: "Existing text")
-      reminder
     end
 
     context "with default show_invoice_description: true" do
-      let(:show) { true }
-
       it "includes payment reminder title and text" do
         is_expected.to include("#{reminder.title} - #{sent.title}")
         is_expected.to include(sent.description)
@@ -460,6 +459,15 @@ describe Export::Pdf::Invoice do
         is_expected.to include("#{reminder.title} - #{sent.title}")
         is_expected.not_to include(sent.description)
         is_expected.to(include reminder.text)
+      end
+    end
+
+    context "with option reminders: false" do
+      let(:reminders) { false }
+
+      it "does not include payment reminders" do
+        is_expected.not_to include("#{reminder.title} - #{sent.title}")
+        is_expected.not_to include(reminder.text)
       end
     end
   end

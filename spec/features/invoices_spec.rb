@@ -96,8 +96,11 @@ describe :invoices, js: true do
         print = page.find_link("Drucken")
         print.click
         options = print.all(:xpath, "..//..//ul//li")
-        expect(options.count).to eq 3
-        expect(options.first.text).to eq "Rechnung inkl. Einzahlungsschein"
+        expect(options.count).to eq 4
+        expect(options[0].text).to eq "Rechnung inkl. Einzahlungsschein"
+        expect(options[1].text).to eq "Rechnung separat"
+        expect(options[2].text).to eq "Einzahlungsschein separat"
+        expect(options[3].text).to eq "Originalrechnung inkl. Einzahlungsschein"
       end
 
       it "shows single letter_with_invoice export option when viewing invoices from letter with invoice" do

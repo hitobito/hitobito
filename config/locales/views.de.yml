@@ -195,6 +195,7 @@ de:
     labels: "Etiketten"
     full: "Rechnung inkl. Einzahlungsschein"
     esr_only: "Einzahlungsschein separat"
+    original_invoice: "Originalrechnung inkl. Einzahlungsschein"
     articles_only: "Rechnung separat"
     csv: "CSV"
     pdf: "PDF"

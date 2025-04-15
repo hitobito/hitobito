@@ -4,16 +4,14 @@ class RemoveCaseInsensitveCollation < ActiveRecord::Migration[7.1]
       remove_column table, :search_column, if_exists: true
     end
 
-    say_with_time "removing the collation from tables" do
+    say_with_time "removing the collation from known tables" do
       list_of_email_columns.each do |table, column|
         execute "ALTER TABLE #{table} ALTER COLUMN #{column} SET DATA TYPE varchar;"
         execute "UPDATE #{table} SET #{column} = LOWER(#{column})"
       end
     end
 
-    say_with_time "dropping collation" do
-      execute "DROP COLLATION case_insensitive_emails;"
-    end
+    drop_collation
   end
 
   def down
@@ -30,6 +28,15 @@ class RemoveCaseInsensitveCollation < ActiveRecord::Migration[7.1]
   end
 
   private
+
+  def drop_collation
+    res = execute "select count(*) from information_schema.columns WHERE collation_name = 'case_insensitive_emails'"
+    if res[0]['count'].zero?
+      say_with_time "trying to drop the collation" do
+        execute "DROP COLLATION case_insensitive_emails;"
+      end
+    end
+  end
 
   def list_of_email_columns
     [

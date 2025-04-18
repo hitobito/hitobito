@@ -19,11 +19,11 @@ describe :hitobito_log_entries do
   end
 
   it "has expected tabs" do
-    expect(tabs).to match_array %w[Alle Webhook Ebics Mail]
+    expect(tabs).to match_array %w[Alle Cleanup Webhook Ebics Mail]
   end
 
   it "tabs filter by category" do
-    expect(page).to have_selector(".hitobito-log tbody tr", count: 6)
+    expect(page).to have_selector(".hitobito-log tbody tr", count: 7)
 
     visit hitobito_log_entries_path(category: "ebics")
     expect(page).to have_selector(".hitobito-log tbody tr", count: 1)

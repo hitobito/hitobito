@@ -65,6 +65,7 @@ class JobManager
       DownloadCleanerJob,
       Event::ParticipationCleanupJob,
       Event::ParticipationCleanupAnswersJob,
+      Groups::ContactPersonCleanerJob,
       Payments::EbicsImportScheduleJob,
       People::DuplicateLocatorJob,
       People::UpdateAfterRoleChangeJob,

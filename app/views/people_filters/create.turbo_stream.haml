@@ -1,4 +1,4 @@
-= turbo_stream.prepend "overview" do
+= turbo_stream.append "overview" do
   %div{id: "#{@filter_criterion}-configuration"}
     = render(layout: 'layouts/filter', locals: { type: @filter_criterion.to_sym, delete: true}) do
       = render @filter_criterion

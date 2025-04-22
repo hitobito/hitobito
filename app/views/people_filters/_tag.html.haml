@@ -11,7 +11,7 @@
 - absent_selected = absent_filter ? absent_filter.to_hash[:names] : []
 - absent_options = options_from_collection_for_select(@possible_tags, :second, :first, absent_selected)
 
-.d-flex.flex-column
+.label-columns.mr-5
   .d-flex.flex-row.align-items-center.mb-2
     .w-10
       %label= t('.prompt_tag_selection')

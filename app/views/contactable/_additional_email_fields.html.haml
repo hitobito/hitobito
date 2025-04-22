@@ -12,9 +12,14 @@
                     placeholder: t('.placeholder_type'),
                     data: {provide: :typeahead, source: AdditionalEmail.available_labels})
   - if entry.is_a?(Person)
-    = f.label(:mailings, class: 'col-12 col-sm-2 col-md-12 col-lg-3 col-xl-3 col-xxl-2 mt-sm-2 mt-md-0') do
+    = f.label(:mailings, class: 'checkbox me-3') do
       = f.check_box(:mailings)
       %span{'data-bs-toggle': 'tooltip', title: t('.tooltip_mailings')}
         = t(:"activerecord.attributes.additional_emails.mailings")
+        %i.fas.fa-info
+    = f.label(:invoices, class: 'checkbox me-3') do
+      = f.check_box(:invoices)
+      %span{'data-bs-toggle': 'tooltip', title: t('.tooltip_invoices')}
+        = t(:"activerecord.attributes.additional_emails.invoices")
         %i.fas.fa-info
   = render 'contactable/public_check_box', f: f

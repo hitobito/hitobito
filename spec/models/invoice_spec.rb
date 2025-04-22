@@ -4,37 +4,37 @@
 #
 # Table name: invoices
 #
-#  id                          :integer          not null, primary key
-#  account_number              :string
-#  address                     :text
-#  beneficiary                 :text
-#  currency                    :string           default("CHF"), not null
-#  description                 :text
-#  due_at                      :date
-#  esr_number                  :string           not null
-#  hide_total                  :boolean          default(FALSE), not null
-#  iban                        :string
-#  issued_at                   :date
-#  participant_number          :string
-#  payee                       :text
-#  payment_information         :text
-#  payment_purpose             :text
-#  payment_slip                :string           default("ch_es"), not null
-#  recipient_address           :text
-#  recipient_email             :string
-#  reference                   :string           not null
-#  sent_at                     :date
-#  sequence_number             :string           not null
-#  state                       :string           default("draft"), not null
-#  title                       :string           not null
-#  total                       :decimal(12, 2)
-#  vat_number                  :string
-#  created_at                  :datetime         not null
-#  updated_at                  :datetime         not null
-#  creator_id                  :integer
-#  group_id                    :integer          not null
-#  invoice_list_id             :bigint
-#  recipient_id                :integer
+#  id                  :integer          not null, primary key
+#  account_number      :string
+#  address             :text
+#  beneficiary         :text
+#  currency            :string           default("CHF"), not null
+#  description         :text
+#  due_at              :date
+#  esr_number          :string           not null
+#  hide_total          :boolean          default(FALSE), not null
+#  iban                :string
+#  issued_at           :date
+#  participant_number  :string
+#  payee               :text
+#  payment_information :text
+#  payment_purpose     :text
+#  payment_slip        :string           default("ch_es"), not null
+#  recipient_address   :text
+#  recipient_email     :string
+#  reference           :string           not null
+#  sent_at             :date
+#  sequence_number     :string           not null
+#  state               :string           default("draft"), not null
+#  title               :string           not null
+#  total               :decimal(12, 2)
+#  vat_number          :string
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  creator_id          :integer
+#  group_id            :integer          not null
+#  invoice_list_id     :bigint
+#  recipient_id        :integer
 #
 # Indexes
 #
@@ -118,6 +118,12 @@ describe Invoice do
     expect(invoice.recipient).to eq person
     expect(invoice.recipient_email).to eq person.email
     expect(invoice.recipient_address).to eq "Top Leader\nGreatstreet 345\n3003 Greattown\n"
+  end
+
+  it "#save prefers additional email with invoice flag over recipient email" do
+    person.additional_emails.create!(email: "invoices@example.com", label: "Privat", invoices: true)
+    invoice = create_invoice
+    expect(invoice.recipient_email).to eq "invoices@example.com"
   end
 
   it "#save sets esr_number but not participant_number for non esr invoice_config" do

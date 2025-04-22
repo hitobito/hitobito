@@ -132,6 +132,7 @@ de:
       placeholder_value: E-Mail
       placeholder_type: Bezeichnung (Privat, Arbeit ..)
       tooltip_mailings: Versände von Abos, Bestätigungen per E-Mail usw. werden zusätzlich an alle hier markierten Adressen verschickt.
+      tooltip_invoices: Wird anstelle der Haupt E-Mail Adresse beim verschicken von Rechnungen verwendet.
 
     additional_address_fields:
       placeholder_type: Bezeichnung (Rechnung, Arbeit ..)

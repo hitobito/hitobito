@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_04_14_122356) do
+ActiveRecord::Schema[7.1].define(version: 2025_04_22_125029) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -79,7 +79,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_14_122356) do
     t.string "label"
     t.boolean "public", default: true, null: false
     t.boolean "mailings", default: true, null: false
+    t.boolean "invoices", default: false
     t.index ["contactable_id", "contactable_type"], name: "index_additional_emails_on_contactable_id_and_contactable_type"
+    t.index ["invoices", "contactable_id", "contactable_type"], name: "idx_on_invoices_contactable_id_contactable_type_9f308c8a16", where: "(((contactable_type)::text = 'AdditionalEmail'::text) AND (invoices = true))"
   end
 
   create_table "addresses", force: :cascade do |t|

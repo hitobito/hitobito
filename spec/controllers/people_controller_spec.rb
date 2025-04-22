@@ -575,6 +575,7 @@ describe PeopleController do
                          a1.id.to_s => {id: a1.id,
                                         email: "Housi1@example.com",
                                         translated_label: "Arbeit",
+                                        invoices: 1,
                                         public: 1},
                          a2.id.to_s => {id: a2.id, _destroy: true},
                          "998" => {email: " ",
@@ -594,6 +595,7 @@ describe PeopleController do
           expect(a.label).to eq "Arbeit"
           expect(a.email).to eq "housi1@example.com"
           expect(a.public).to be_truthy
+          expect(a.invoices).to be_truthy
           tw = emails.second
           expect(tw.label).to eq "Mutter"
           expect(tw.email).to eq "john@example.com"

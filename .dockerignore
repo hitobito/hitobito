@@ -1,0 +1,104 @@
+# See https://docs.docker.com/build/concepts/context/#dockerignore-files
+#
+# Files mentioned here are not sent as the context to the builder.
+# Therefore, they are "not available in the Dockerfile".
+# Also, this file should mostly match our .gitignore
+
+# Ignore bundler config
+/.bundle
+vendor/bundle
+
+# Ignore the default SQLite database.
+*.sqlite3
+*.sqlite3-journal
+
+# Ignore all logfiles and tempfiles.
+/log/*.log
+/log/*.log.?
+/log/*.pid
+/log/sac_imports/*
+/tmp
+*.swp
+*.swo
+C\:\\*
+
+# ignore static analysis artifacts
+coverage
+brakeman-output.tabs
+rails_best_practices_output.html
+rubocop-results.xml
+doc/models.png
+doc/app
+doc/developer/modules/common/architecture/architecture.html
+doc/developer/modules/common/architecture/assets/**/*
+doc/developer/development.html
+doc/developer/assets/**/*
+spec/reports
+stats.json
+
+# precompiled assets
+.sass-cache
+app/assets/stylesheets_generated
+public/assets
+public/404.html
+public/500.html
+public/503.html
+
+# local settings
+config/settings.local.yml
+config/settings/*.local.yml
+config/environments/*.local.yml
+config/*.sphinx.conf
+Wagonfile
+config/mail.yml
+
+# uploaded pictures
+public/uploads
+
+# ruby-version for multi version builds
+.ruby-version
+.rvmrc
+
+# custom project/editor setup
+TAGS
+/.vimrc
+/todo.tasks
+/tags
+.envrc
+*.iml
+.generators
+.idea
+.pry_history
+.pry-history
+.project
+.vscode
+.nvimrc
+.byebug_history
+
+# for experiments with webpack
+/public/packs
+/public/packs-test
+/node_modules
+yarn-debug.log*
+.yarn-integrity
+
+# for those who want to reduce errors in the rails-log
+public/favicon.ico
+
+# docker dev setup
+/jwt_signing_key.pem
+/db/seeds/development/nextcloud_oauth_app_seed.rb
+config/initializers/work_around_docker_fs_bug.rb
+
+# generated rswag swagger files
+# (not used anymore, swagger is now generated on the fly with graphiti)
+/swagger
+.yardoc/
+
+# use BUNDLE_GEMFILE=Gemfile.local for less Gemfile.lock noise in development
+Gemfile.local
+Gemfile.local.lock
+
+# We do not interact with transifex or github in the built image
+.tx
+.github

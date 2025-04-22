@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## unreleased
+## Version 2.5
 - Eine Rechnung kann im Originalzustand gedruckt werden, bzw. ohne Mahnungen (hitobito_sww#173)
 
 ## Version 2.5

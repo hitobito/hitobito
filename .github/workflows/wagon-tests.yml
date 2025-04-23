@@ -35,6 +35,9 @@ defaults:
   run:
     working-directory: hitobito
 
+permissions:
+  contents: write
+
 jobs:
   wagon_patches:
     name: patches

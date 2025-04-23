@@ -27,7 +27,7 @@
 #
 
 class HitobitoLogEntry < ApplicationRecord
-  class_attribute :categories, default: %w[webhook ebics mail]
+  class_attribute :categories, default: %w[webhook ebics mail cleanup]
 
   enum level: {"debug" => 0, "info" => 1, "warn" => 2, "error" => 3},
     _prefix: true

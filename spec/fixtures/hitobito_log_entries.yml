@@ -58,6 +58,12 @@ error_ebics:
   level: "error"
   message: "error_ebics"
 
+info_cleanup:
+  created_at: <%= 4.day.ago.midday.to_fs(:db) %>
+  category: "cleanup"
+  level: "info"
+  message: "info_cleanup"
+
 entry_with_payload:
   created_at: <%= 1.minute.ago.to_fs(:db) %>
   category: "webhook"

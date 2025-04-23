@@ -195,6 +195,7 @@ de:
     labels: "Etiketten"
     full: "Rechnung inkl. Einzahlungsschein"
     esr_only: "Einzahlungsschein separat"
+    original_invoice: "Originalrechnung inkl. Einzahlungsschein"
     articles_only: "Rechnung separat"
     csv: "CSV"
     pdf: "PDF"
@@ -1810,6 +1811,8 @@ de:
       equal: ist genau
       greater: grösser als
       smaller: kleiner als
+      before: vor dem
+      after: nach dem
       blank: ist leer
 
     language:
@@ -1844,6 +1847,7 @@ de:
     qualification:
       title: Qualifikationen
       prompt_qualification_selection: Welche Qualifikationen sollen angezeigt werden?
+      prompt_constraint: Welche Logik soll angewendet werden?
       prompt_validity: Welche Gültigkeit sollen die angezeigten Qualifikationen haben?
       prompt_year: Qualifikationsjahr einschränken
       prompt_date: Stichdatum

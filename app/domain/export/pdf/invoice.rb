@@ -42,7 +42,7 @@ module Export::Pdf
       end
 
       def invoice_page(pdf, invoice, options) # rubocop:disable Metrics/MethodLength
-        section_options = options.slice(:debug, :stamped)
+        section_options = options.slice(:debug, :stamped, :reminders)
 
         # render logo if logo_position is set to left or right
         if %w[left right].include?(invoice.logo_position)

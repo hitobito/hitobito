@@ -196,7 +196,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     with_async_download_cookie(format, :event_participation_export) do |filename|
       Export::EventParticipationsExportJob.new(format,
         current_person.id,
-        event_participation_filter,
+        event.id,
         group.id,
         params.merge(filename: filename)).enqueue!
     end
@@ -227,14 +227,14 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def person_id
-    return current_user.try(:id) unless event.supports_applications
+    return current_user&.id unless event.supports_applications
 
     if model_params&.key?(:person_id)
       params[:for_someone_else] = true
       model_params.delete(:person)
       model_params.delete(:person_id)
     elsif params[:for_someone_else].blank?
-      current_user.try(:id)
+      current_user&.id
     end
   end
 
@@ -255,9 +255,11 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def invited?
-    Event::Invitation.exists?(person: current_user,
+    Event::Invitation.exists?(
+      person: current_user,
       event: event,
-      participation_type: params_role_type)
+      participation_type: params_role_type
+    )
   end
 
   def params_role_type
@@ -297,7 +299,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def load_answers
-    @answers = entry.answers.includes(:question)
+    @answers = entry.answers.list
     if entry.application
       @application = Event::ApplicationDecorator.decorate(entry.application)
     end
@@ -381,8 +383,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def event_participation_filter
-    user_id = current_user.try(:id)
-    Event::ParticipationFilter.new(event.id, user_id, params)
+    @participation_filter ||= Event::ParticipationFilter.new(event, current_user, params)
   end
 
   def send_email?

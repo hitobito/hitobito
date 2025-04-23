@@ -4,7 +4,7 @@
 -#  https://github.com/hitobito/hitobito.
 
 - list = readable_attachments(entry, current_person).list.to_a
-- if can?(:update, entry) || list.present?
+- if can?(:manage_attachments, entry) || list.present?
   %dl.dl-horizontal
     = labeled(Event::Attachment.model_name.human(count: 2)) do
       %table#attachments
@@ -12,7 +12,7 @@
           - list.each do |a|
             = render a
 
-      - if can?(:update, entry)
+      - if can?(:manage_attachments, entry)
         .form
           = spinner
           = form_for(entry.attachments.new,

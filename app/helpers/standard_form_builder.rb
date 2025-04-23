@@ -162,6 +162,19 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
+  # Render a select dropdown for countries
+  def country_field(attr, html_options = {})
+    html_options[:class] = [
+      html_options[:class], "form-select", "form-select-sm", "tom-select"
+    ].compact.join(" ")
+    html_options[:data] = {placeholder: " ", chosen_no_results: I18n.t("global.chosen_no_results")}
+    country_select(attr,
+      {priority_countries: Settings.countries.prioritized,
+       selected: @object.nationality,
+       include_blank: ""},
+      html_options)
+  end
+
   def date_value(attr)
     # Can also be serialized column
     raw = @object.timeliness_cache_attribute(attr) if @object.is_a?(ActiveRecord::Base)
@@ -517,7 +530,11 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
+  # required_attrs are dynamically defined attributes, that also get checked during validation
+  # if the form label should just display the required mark, without adding a validation e.g.
+  # for nested fields with a seperate label, mark_as_required? can be defined on the model
   def dynamic_required?(attr)
+    return true if @object.respond_to?(:mark_as_required?) && @object.mark_as_required?(attr)
     return false unless @object.respond_to?(:required_attrs)
 
     @object.required_attrs.include?(attr)

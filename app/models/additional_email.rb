@@ -33,6 +33,8 @@ class AdditionalEmail < ActiveRecord::Base
   # A dot at the end is invalid due to translation purpose
   validates :label, format: {without: /[.]$\z/}
 
+  normalizes :email, with: ->(attribute) { attribute.downcase }
+
   class << self
     def predefined_labels
       Settings.additional_email.predefined_labels

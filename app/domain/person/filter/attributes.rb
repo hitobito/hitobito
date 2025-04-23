@@ -94,14 +94,12 @@ class Person::Filter::Attributes < Person::Filter::Base
     else "people.#{key} #{sql_comparator(constraint)} ?"
     end
 
-    ActiveRecord::Base.sanitize_sql_array([sql_string, sql_value(value, constraint)])
+    ActiveRecord::Base.sanitize_sql_array([sql_string, sql_value(key, value, constraint)])
   end
 
   def match_search_sql(key, value, constraint)
     if value.is_a?(Numeric)
       "CAST(people.#{key} AS TEXT) #{sql_comparator(constraint)} ?"
-    elsif Person.columns_hash[key].collation == "case_insensitive_emails"
-      %(people.#{key} COLLATE "unicode" #{sql_comparator(constraint)} ?)
     else
       "people.#{key} #{sql_comparator(constraint)} ?"
     end
@@ -111,19 +109,19 @@ class Person::Filter::Attributes < Person::Filter::Base
     case constraint.to_s
     when "match" then "LIKE"
     when "not_match" then "NOT LIKE"
-    when "greater" then ">"
-    when "smaller" then "<"
+    when "greater", "after" then ">"
+    when "smaller", "before" then "<"
     when "equal", "blank" then "="
     else raise("unexpected constraint: #{constraint.inspect}")
     end
   end
 
-  def sql_value(value, constraint)
+  def sql_value(key, value, constraint)
     case constraint.to_s
     when "match", "not_match"
       "%#{ActiveRecord::Base.send(:sanitize_sql_like, value.to_s.strip)}%"
     when "blank" then ""
-    when "equal", "greater", "smaller" then value
+    when "equal", "greater", "smaller", "before", "after" then (key == "email") ? value.downcase : value
     else raise("unexpected constraint: #{constraint.inspect}")
     end
   end

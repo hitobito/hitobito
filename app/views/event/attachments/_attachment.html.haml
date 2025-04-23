@@ -6,7 +6,7 @@
 %tr{id: dom_id(attachment)}
   %td= link_to(upload_name(attachment, :file), upload_url(attachment, :file), target: :_blank, class: 'mr-3')
 
-  - if can?(:update, @event)
+  - if can?(:manage_attachments, @event)
     %td= attachment_visibility_button(attachment, :team)
     %td= attachment_visibility_button(attachment, :participants)
     %td= attachment_visibility_button(attachment, :global)

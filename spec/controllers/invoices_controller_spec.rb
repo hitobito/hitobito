@@ -270,6 +270,21 @@ describe InvoicesController do
       end.to change { Delayed::Job.count }.by(1)
     end
 
+    it "exports pdf without payment_slip when payment_slip: false" do
+      expect(Export::InvoicesJob).to receive(:new).with(:pdf, person.id, [invoice.id], hash_including(payment_slip: false)).and_call_original
+      get :show, params: {group_id: group.id, id: invoice.id, payment_slip: false}, format: :pdf
+    end
+
+    it "exports pdf without articles when articles: false" do
+      expect(Export::InvoicesJob).to receive(:new).with(:pdf, person.id, [invoice.id], hash_including(articles: false)).and_call_original
+      get :show, params: {group_id: group.id, id: invoice.id, articles: false}, format: :pdf
+    end
+
+    it "exports pdf without reminders when reminders: false" do
+      expect(Export::InvoicesJob).to receive(:new).with(:pdf, person.id, [invoice.id], hash_including(reminders: false)).and_call_original
+      get :show, params: {group_id: group.id, id: invoice.id, reminders: false}, format: :pdf
+    end
+
     it "exports csv" do
       get :show, params: {group_id: group.id, id: invoice.id}, format: :csv
 

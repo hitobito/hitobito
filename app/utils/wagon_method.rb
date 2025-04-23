@@ -23,35 +23,29 @@ class WagonMethod < RuboCop::Cop::Base
   def on_def(node)
     return if node.operator_method?
 
-    wagon_patches = find_patches(node.method_name).uniq
-    register_offense(node, wagon_patches) if wagon_patches.present?
+    patches = find_patches(node)
+    register_offense(node, patches) if patches.present?
   end
   alias_method :on_defs, :on_def
 
-  private
+  # tell rubocop to reuse cop instance, clear cache via on_investigation_end callback
+  def self.support_multiple_source? = true
 
-  def find_patches(method_name)
-    patches = patches_by_method.fetch(method_name, [])
-    patches.select { |patch| patch.basename == processed_source_basename }
-  end
+  private
 
   def register_offense(node, patches)
     message = format(MSG, wagons: patches.map(&:wagon).sort.uniq.join(", "))
 
-    # NOTE - autocorrect is not really an option
     add_offense(node, message: message, severity: :info)
   end
 
-  # TODO - constants are not loaded, will that be enough
-  def processed_source_basename
-    Pathname.new(processed_source.path).basename.to_s
+  def find_patches(node) = @patches_by_method.fetch(node.method_name, [])
+
+  # call whenever rubocop inspects a new file
+  def on_new_investigation
+    @basename = Pathname.new(processed_source.path).basename.to_s
+    @patches_by_method = all_patches.select { |patch| @basename == patch.basename }.group_by(&:method)
   end
 
-  def load_patches
-    YAML.load_file(Patches::ALL_PATCHES).map { |h| Patches::Patch.new(**h) }
-  end
-
-  def patches_by_method
-    @patches_by_method ||= load_patches.group_by(&:method)
-  end
+  def all_patches = @all_patches ||= YAML.load_file(Patches::ALL_PATCHES).map { |h| Patches::Patch.new(**h) }
 end

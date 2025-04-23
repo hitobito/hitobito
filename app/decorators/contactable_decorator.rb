@@ -10,7 +10,7 @@ module ContactableDecorator
     model.address
   end
 
-  def address_name
+  def contact_name
     content_tag(:strong, to_s)
   end
 
@@ -35,14 +35,16 @@ module ContactableDecorator
     end
   end
 
-  def complete_contact
-    address_name +
-      complete_address +
-      primary_email +
-      all_additional_emails(true) +
-      all_phone_numbers(true) +
-      all_additional_addresses(true) +
-      all_social_accounts(true)
+  def complete_contact(visible_contact_attributes = nil)
+    {name: contact_name,
+     address: complete_address + all_additional_addresses(true),
+     email: primary_email + all_additional_emails,
+     phone_number: all_phone_numbers,
+     social_account: all_social_accounts}.each_with_object(ActiveSupport::SafeBuffer.new) do |(key, value), buffer|
+      if visible_contact_attributes.nil? || visible_attr?(visible_contact_attributes, key)
+        buffer.concat(value)
+      end
+    end
   end
 
   def primary_email
@@ -76,6 +78,12 @@ module ContactableDecorator
   end
 
   private
+
+  def visible_attr?(visible_contact_attributes, attr)
+    return true if visible_contact_attributes.include?("all")
+
+    visible_contact_attributes.include?(attr.to_s)
+  end
 
   def nested_values(values, only_public)
     html = values.collect do |v|

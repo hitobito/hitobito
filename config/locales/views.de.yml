@@ -599,6 +599,13 @@ de:
       admin_questions: Administrationsangaben
       contact_attrs: Kontaktangaben
     general_fields:
+      visible_contact_attributes:
+        all: Alle Kontaktdaten anzeigen
+        name: Name anzeigen
+        address: Adresse anzeigen
+        phone_number: Telefonnummer anzeigen
+        email: E-Mail anzeigen
+        social_account: Social Media anzeigen
       kind_overrides_link_title: "Folgende Felder werden übernommen: Beschreibung"
     global:
       link:

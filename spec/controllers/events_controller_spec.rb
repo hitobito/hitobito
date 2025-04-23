@@ -498,6 +498,30 @@ describe EventsController do
     end
   end
 
+  context "visible contact attributes" do
+    let(:event) { events(:top_event) }
+    let(:group) { groups(:top_layer) }
+
+    before { sign_in(people(:top_leader)) }
+
+    it "assigns visible contact attributes" do
+      put :update, params: {group_id: group.id, id: event.id,
+                            event: {visible_contact_attributes: {name: "1", email: "1"}}}
+
+      expect(event.reload.visible_contact_attributes).to include("name")
+      expect(event.reload.visible_contact_attributes).to include("email")
+    end
+
+    it "removes visible contact attributes when not passed" do
+      event.update!({visible_contact_attributes: %w[name email]})
+
+      put :update, params: {group_id: group.id, id: event.id, event: {visible_contact_attributes: {email: "1"}}}
+
+      expect(event.reload.visible_contact_attributes).not_to include("name")
+      expect(event.reload.visible_contact_attributes).to include("email")
+    end
+  end
+
   describe "token authenticated" do
     let(:event) { events(:top_event) }
     let(:group) { groups(:top_layer) }

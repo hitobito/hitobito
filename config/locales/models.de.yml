@@ -634,6 +634,7 @@ de:
         application_questions: Anmeldeangaben
         admin_questions: Administrationsangaben
         no_name: "[Kein Name]"
+        visible_contact_attributes: "Anzeigeoptionen (Kontaktperson)"
 
       event/contact_attrs:
         required: Obligatorisch

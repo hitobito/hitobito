@@ -78,6 +78,31 @@ describe EventsController, js: true do
       expect(find("#event_contact").value).to eq(query)
     end
 
+    it "unchecks all other checkboxes when checking all in visible contact attributes" do
+      event.update!(visible_contact_attributes: ["name", "email"])
+      sign_in
+      visit edit_path
+      expect(find("#event_visible_contact_attributes_name")).to be_checked
+      expect(find("#event_visible_contact_attributes_email")).to be_checked
+
+      check "Alle Kontaktdaten anzeigen"
+
+      expect(find("#event_visible_contact_attributes_name")).not_to be_checked
+      expect(find("#event_visible_contact_attributes_email")).not_to be_checked
+    end
+
+    it "unchecks main checkbox when checking any other checkbox in visible contact attributes" do
+      event.update!(visible_contact_attributes: ["all"])
+      sign_in
+      visit edit_path
+      expect(find("#event_visible_contact_attributes_all")).to be_checked
+
+      check "Name anzeigen"
+      check "Adresse anzeigen"
+
+      expect(find("#event_visible_contact_attributes_all")).not_to be_checked
+    end
+
     it "toggles participation notifications" do
       event.update(contact: people(:top_leader))
 

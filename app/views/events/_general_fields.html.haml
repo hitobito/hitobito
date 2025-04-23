@@ -3,6 +3,8 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
+- stimulus_ctrl = 'form-field-check-dependent'
+
 = field_set_tag do
   = f.labeled_input_field(:name)
 
@@ -33,6 +35,17 @@
       = f.labeled_boolean_field :notify_contact_on_participations,
         label: t('events.form.label_notify_contact_on_participations'),
         caption: Event.human_attribute_name(:notify_contact_on_participations)
+
+  = f.labeled :visible_contact_attributes, data: { controller: stimulus_ctrl, "#{stimulus_ctrl}-select-dependent-checkbox-value": false, "#{stimulus_ctrl}-uncheck-dependent-on-main-toggle-value": true } do
+    .form-check
+      = label_tag do
+        = check_box_tag("event[visible_contact_attributes][all]", class: "form-check-input", checked: entry.visible_contact_attributes.include?("all"), data: { action: "#{stimulus_ctrl}#toggleMain", "#{stimulus_ctrl}-target" => "main" })
+        = t(".visible_contact_attributes.all")
+    - [:name, :address, :phone_number, :email, :social_account].each do |option|
+      .form-check
+        = label_tag do
+          = check_box_tag("event[visible_contact_attributes][#{option}]]", class: "form-check-input", checked: entry.visible_contact_attributes.include?(option.to_s), data: { action: "#{stimulus_ctrl}#toggleDependent", "#{stimulus_ctrl}-target" => "dependent" })
+          = t(".visible_contact_attributes.#{option}")
 
   = render 'location_fields', f: f
 

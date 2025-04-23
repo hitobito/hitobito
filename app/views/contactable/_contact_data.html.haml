@@ -6,7 +6,7 @@
 - contact ||= contactable
 
 %address
-  = contactable.address_name
+  = contactable.contact_name
   = contactable.complete_address if postal
   = contact.primary_email
   = contact.all_additional_emails(only_public)

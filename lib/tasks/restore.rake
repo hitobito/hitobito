@@ -106,7 +106,7 @@ class BackupRestorer
 
     @event.participations.each do |participation|
       @result << <<~RUBY
-        if Event::Participation.where(event_id: @event.id, person_id: participation.person_id).exists?
+        if Event::Participation.where(event_id: #{@event.id}, person_id: #{participation.person_id}).exists?
           puts 'Skipping existing Participation #{participation.id} for Person #{participation.person_id}'
         else
           puts 'Restoring Participation #{participation.id} for Person #{participation.person_id}'
@@ -121,9 +121,58 @@ class BackupRestorer
           "#{participation.answers.map { |answer| dump(answer, except: %w(id participation_id), overrides: { participation_id: '#{part_id}'}) }.join}"
             .split(';')
             .each { |sql| connection.execute(sql) }
-
-          part_id = nil
         end
+
+      RUBY
+    end
+  end
+
+  def script_invoices
+    switch_mode(:ruby)
+
+    @group.invoices.each do |invoice|
+      @result << <<~RUBY
+        inv_id = if Invoice.where(sequence_number: '#{invoice.sequence_number}').exists?
+                   puts 'Skipping existing Invoice #{invoice.sequence_number}'
+                   Invoice.where(sequence_number: '#{invoice.sequence_number}').first
+                 else
+                   puts 'Restoring missing Invoice #{invoice.sequence_number}'
+                   inv_id = connection.select_value("#{dump(invoice, except: %w(id search_column), sql_suffix: 'RETURNING id')}")
+                   raise if inv_id.nil?
+
+                   "#{invoice.invoice_items.map { |item| dump(item, except: %w(id invoice_id search_column), overrides: { invoice_id: '#{inv_id}'}) }.join}"
+                     .split(';')
+                     .each { |sql| connection.execute(sql) }
+
+                   "#{invoice.payment_reminders.map { |reminder| dump(reminder, except: %w(id invoice_id), overrides: { invoice_id: '#{inv_id}'}) }.join}"
+                     .split(';')
+                     .each { |sql| connection.execute(sql) }
+
+                   inv_id
+                 end
+
+      RUBY
+
+      # TODO: Support manually created payments as well, maybe
+      invoice.payments.where.not(status: 'manually_created').each do |payment|
+        @result << <<~RUBY
+          if Payment.where(transaction_identifier: "#{payment.transaction_identifier}").exists?
+            puts "Skipping existing Payment #{payment.transaction_identifier}"
+          else
+            puts "Restoring missing Payment #{payment.transaction_identifier}"
+            payment_id = connection.select_value("#{dump(payment, except: %w(id invoice_id), overrides: { invoice_id: '#{inv_id}'}, sql_suffix: 'RETURNING id')}")
+
+            payee_sql = "#{if payment.payee
+              dump(payment.payee, except: %w(id payment_id), overrides: { payment_id: '#{payment_id}'})
+            end}"
+            connection.execute(payee_sql) if payee_sql.present?
+          end
+
+        RUBY
+      end
+
+      @result << <<~RUBY
+        inv_id = nil
 
       RUBY
     end
@@ -277,6 +326,17 @@ namespace :restore do
 
       dumper.script_header
       dumper.script_participations_and_answers
+
+      dumper.result
+    end
+
+    desc "Generate a script to backfill missing invoices of a group and their associated data"
+    task :invoices, [:group_id] => [:environment] do |_task, args|
+      dumper = BackupRestorer.new(args)
+      dumper.load_group
+
+      dumper.script_header
+      dumper.script_invoices
 
       dumper.result
     end

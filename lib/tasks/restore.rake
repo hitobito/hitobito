@@ -112,16 +112,17 @@ class BackupRestorer
           puts 'Restoring Participation #{participation.id} for Person #{participation.person_id}'
 
           part_id = connection.select_value("#{dump(participation, except: %w(id), sql_suffix: 'RETURNING id')}")
+          raise if part_id.nil?
 
-          role_sqls = "#{participation.roles.map { |event_role| dump(event_role, except: %w(id participation_id), overrides: { participation_id: 'PARTICIPATION_ID'}) }.join}".split(';')
-          role_sqls.each do |role_sql|
-            connection.execute(role_sql.replace('PARTICIPATION_ID', part_id))
-          end
+          "#{participation.roles.map { |event_role| dump(event_role, except: %w(id participation_id), overrides: { participation_id: '#{part_id}'}) }.join}"
+            .split(';')
+            .each { |sql| connection.execute(sql) }
 
-          answer_sqls = "#{participation.answers.map { |answer| dump(answer, except: %w(id participation_id), overrides: { participation_id: 'PARTICIPATION_ID'}) }.join}".split(';')
-          answer_sqls.each do |answer_sql|
-            connection.execute(answer_sql.replace('PARTICIPATION_ID', part_id))
-          end
+          "#{participation.answers.map { |answer| dump(answer, except: %w(id participation_id), overrides: { participation_id: '#{part_id}'}) }.join}"
+            .split(';')
+            .each { |sql| connection.execute(sql) }
+
+          part_id = nil
         end
 
       RUBY

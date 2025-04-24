@@ -39,6 +39,8 @@ class Event::ParticipationMailer < ApplicationMailer
     @event = event
     @person = person
 
+    headers[:sender] = custom_sender_email
+
     custom_content_mail(@person, CONTENT_CANCEL, values_for_placeholders(CONTENT_CANCEL))
   end
 
@@ -97,6 +99,8 @@ class Event::ParticipationMailer < ApplicationMailer
     else
       values_for_placeholders(content_key)
     end
+
+    headers[:sender] = custom_sender_email
 
     custom_content_mail(recipients, content_key, values)
   end
@@ -160,6 +164,11 @@ class Event::ParticipationMailer < ApplicationMailer
       escape_html(t("activerecord.attributes.event/participation.additional_information") + ":") +
         br_tag + convert_newlines_to_breaks(participation.additional_information)
     end
+  end
+
+  # Can be overwritten in wagon
+  def custom_sender_email
+    nil
   end
 
   def person

@@ -22,12 +22,20 @@ class BackupRestorer
   end
 
   def load_event
-    event_id = @args.fetch(:id) { abort("You need to pass an Event-ID to restore") }
+    event_id = @args.fetch(:event_id) { abort("You need to pass an Event-ID to restore") }
     @event = Event.find(event_id)
     warn "Found Event##{event_id} '#{@event}'"
   end
 
+  def load_group
+    group_id = @args.fetch(:group_id) { abort("You need to pass a Group-ID to restore") }
+    @group = Group.find(group_id)
+    warn "Found Group##{group_id} '#{@group}'"
+  end
+
   def dump_event
+    switch_mode(:sql)
+
     @result << dump(@event)
   end
 
@@ -40,6 +48,20 @@ class BackupRestorer
       participation.roles.each { @result << dump(_1) }
     end
   end
+
+  def dump_answers
+    switch_mode(:sql)
+
+    @event.questions.each do |question|
+      question.answers.each { @result << dump(_1) }
+    end
+  end
+
+  # def dump_event_groups
+  #   @event.groups.map(&:id).each do |group_id|
+  #     @result << sql('events_groups', %w(event_id group_id), [@event.id, group_id])
+  #   end
+  # end
 
   def script_header
     switch_mode(:ruby)
@@ -82,18 +104,6 @@ class BackupRestorer
       RUBY
     end
   end
-
-  def dump_answers
-    @event.questions.each do |question|
-      question.answers.each { @result << dump(_1) }
-    end
-  end
-
-  # def dump_event_groups
-  #   @event.groups.map(&:id).each do |group_id|
-  #     @result << sql('events_groups', %w(event_id group_id), [@event.id, group_id])
-  #   end
-  # end
 
   private
 
@@ -148,7 +158,7 @@ end
 namespace :restore do
   namespace :export do
     # TODO: Extract the dumper and other helpers into a dedicated exporter-class that
-    desc "Export an Event with all associated things"
+    desc "Export an event with all associated things"
     task :event, [:id] => [:environment] do |_task, args|
       event_id = args.fetch(:id) { abort("You need to pass an Event-ID to restore") }
       event = Event.find(event_id)
@@ -213,8 +223,8 @@ namespace :restore do
       warn "#{sql_result.size} INSERTS generated."
     end
 
-    desc "Export Participations of an Event with all associated things"
-    task :participations, [:id] => [:environment] do |_task, args|
+    desc "Export participations of an event with all associated things"
+    task :participations, [:event_id] => [:environment] do |_task, args|
       dumper = BackupRestorer.new(args)
       dumper.load_event
 
@@ -226,7 +236,8 @@ namespace :restore do
   end
 
   namespace :script do
-    task :participations, [:id] => [:environment] do |_task, args|
+    desc "Generate a script to backfill missing participations of an event and their answers"
+    task :participations, [:event_id] => [:environment] do |_task, args|
       dumper = BackupRestorer.new(args)
       dumper.load_event
 

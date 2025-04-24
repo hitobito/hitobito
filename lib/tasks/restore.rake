@@ -63,6 +63,29 @@ class BackupRestorer
   #   end
   # end
 
+  def dump_invoices
+    switch_mode(:sql)
+
+    only_missing do
+      @group.invoices.each do |invoice|
+        @result << dump(invoice)
+
+        invoice.invoice_items.each do |invoice_item|
+          @result << dump(invoice_item)
+        end
+
+        invoice.payments.each do |payment|
+          @result << dump(payment)
+          @result << dump(payment.payee) if payment.payee
+        end
+
+        invoice.payment_reminders.each do |payment_reminder|
+          @result << dump(payment_reminder)
+        end
+      end
+    end
+  end
+
   def script_header
     switch_mode(:ruby)
 
@@ -230,6 +253,16 @@ namespace :restore do
 
       dumper.dump_participations
       dumper.dump_answers
+
+      dumper.result
+    end
+
+    desc "Export invoices of a group with all associated things"
+    task :invoices, [:group_id] => [:environment] do |_task, args|
+      dumper = BackupRestorer.new(args)
+      dumper.load_group
+
+      dumper.dump_invoices
 
       dumper.result
     end

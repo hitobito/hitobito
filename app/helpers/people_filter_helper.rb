@@ -34,6 +34,38 @@ module PeopleFilterHelper
     people_filter_attribute_control(nil, 0, disabled: :disabled)
   end
 
+  def people_filter_attribute_form(attr, count, html_options = {}) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    key, constraint, value = attr.to_h.symbolize_keys.slice(:key, :constraint, :value).values
+    type = Person.filter_attrs[key.to_sym][:type] if key
+    time = (Time.zone.now.to_f * 1000).to_i + count
+
+    filters = [[t(".equal"), :equal]]
+    if type != :integer && type != :date
+      filters += [[t(".match"), :match], [t(".not_match"), :not_match]]
+    end
+    if key.blank? || type == :integer || type == :date
+      filters += [[t(".smaller"), :smaller], [t(".greater"), :greater]]
+    end
+
+    filters += [[t(".blank"), :blank]]
+
+    content_tag(:div,
+      class: 'people_filter_attribute_form d-flex align-items-center
+                        justify-content-between mb-2 controls controls-row') do
+      content = hidden_field_tag("filters[attributes][#{time}][key]",
+        key,
+        disabled: attr.blank?,
+        class: "attribute_key_hidden_field")
+
+      content << content_tag(:div, class: "flex-none") do
+        select(:filters, "attributes[#{time}][key]",
+          people_filter_attributes_for_select,
+          {selected: key},
+          html_options.merge(disabled: true,
+            class: 'attribute_key_dropdown form-select
+                                                  form-select-sm'))
+      end
+
       content << content_tag(:div, class: "flex-none") do
         select(:filters, "attributes[#{time}][constraint]",
           filters,

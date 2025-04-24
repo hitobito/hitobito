@@ -86,7 +86,7 @@ class PeopleFiltersController < CrudController
     Role::TypeList.new(group.class).role_types.each_with_object([]) do |(key, subhash), result|
       subhash.each do |subkey, role_list|
         role_list.each do |role_type|
-          label = subkey == key ? "#{key} -> #{role_type.label}" : "#{key} -> #{subkey} -> #{role_type.label}"
+          label = (subkey == key) ? "#{key} -> #{role_type.label}" : "#{key} -> #{subkey} -> #{role_type.label}"
           result << [label, role_type.id, role_type.id]
         end
       end
@@ -104,7 +104,6 @@ class PeopleFiltersController < CrudController
       [t("people_filters.form.filters_role_kind.#{kind}"),
         t("people_filters.form.filters_role_kind.#{kind}"),
         index + 1]
-
     }
     @validities = [
       [t("people_filters.qualification.validity_label.active"), "active", 1],

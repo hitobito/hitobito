@@ -56,7 +56,7 @@ class BackupRestorer
     switch_mode(:ruby)
     # # the current data-restore does not touch applications, so this is left out for now
     # appl_id = if #{participation.application.present?.inspect} == 'true'
-    #             connection.select_value('#{dump(participation.application, except: %w(id)).chomp.chomp(';')} RETURNING id;')
+    #             connection.select_value("#{dump(participation.application, except: %w(id), sql_suffix: 'RETURNING id')}")
     #           end
 
     @event.participations.each do |participation|
@@ -66,7 +66,7 @@ class BackupRestorer
         else
           puts 'Restoring Participation #{participation.id} for Person #{participation.person_id}'
 
-          part_id = connection.select_value("#{dump(participation, except: %w(id)).chomp.chomp(';')} RETURNING id;")
+          part_id = connection.select_value("#{dump(participation, except: %w(id), sql_suffix: 'RETURNING id')}")
 
           role_sqls = "#{participation.roles.map { |event_role| dump(event_role, except: %w(id participation_id), overrides: { participation_id: 'PARTICIPATION_ID'}) }.join}".split(';')
           role_sqls.each do |role_sql|
@@ -97,12 +97,15 @@ class BackupRestorer
 
   private
 
-  # TODO: check exisiting mode and existence of data
   def switch_mode(mode)
+    if @result.present? && mode != @mode
+      raise "Switching the mode after setting and using it is not supported."
+    end
+
     @mode = mode
   end
 
-  def dump(object, except: %w(search_column), overrides: {})
+  def dump(object, except: %w(search_column), overrides: {}, sql_suffix: "")
     table = object.class.table_name
     db_columns = object.class.column_names
     attrs = object.attributes_before_type_cast.slice(*db_columns).except(*except)
@@ -121,15 +124,23 @@ class BackupRestorer
       values << value.to_s
     end
 
-    sql(table, columns, values)
+    sql(table, columns, values, sql_suffix)
   end
 
-  def sql(table, columns, values)
+  def only_missing(&block)
+    previous_suffix, @default_suffix = @default_suffix, 'ON CONFLICT DO NOTHING'
+    block.call
+  ensure
+    @default_suffix = previous_suffix
+  end
+
+  def sql(table, columns, values, sql_suffix = @default_suffix)
     <<~SQL.squish
       INSERT INTO #{table}
-      (#{columns.join(", ")})
+        (#{columns.join(", ")})
       VALUES
-      (#{values.join(", ")});
+        (#{values.join(", ")})
+      #{sql_suffix};
     SQL
   end
 end

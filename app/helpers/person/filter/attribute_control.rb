@@ -9,7 +9,7 @@ class Person::Filter::AttributeControl
   SELECT_CLASSES = "form-select form-select-sm"
 
   delegate :select_tag, :hidden_field_tag, :text_field_tag, :options_from_collection_for_select, :country_select,
-    :select, :safe_join, :link_to, :content_tag, :t, :icon,
+    :safe_join, :link_to, :content_tag, :t, :icon,
     :people_filter_attributes_for_select, :people_filter_types_for_data_attribute, to: :template
 
   # rubocop:disable Rails/HelperInstanceVariable
@@ -57,7 +57,8 @@ class Person::Filter::AttributeControl
       country_select_field(time, attribute_value_class, value, html_options),
       integer_field(time, attribute_value_class, value, html_options),
       date_field(time, attribute_value_class, value, html_options),
-      gender_select_field(time, attribute_value_class, value, html_options)
+      gender_select_field(time, attribute_value_class, value, html_options),
+      boolean_field(time, attribute_value_class, value, html_options)
     ])
   end
 
@@ -115,11 +116,18 @@ class Person::Filter::AttributeControl
   end
 
   def gender_select_field(time, attribute_value_class, value, html_options)
-    select("#{filter_name_prefix}[value]",
-      value,
-      (Person::GENDERS + [""]).collect { |g| [Person.new.gender_label(g), g] },
-      {},
+    gender_options = (Person::GENDERS + [""]).collect { |g| [g, Person.new.gender_label(g)] }
+    select_tag("#{filter_name_prefix}[value]",
+      options_from_collection_for_select(gender_options, :first, :last, value),
       html_options.merge(class: "#{SELECT_CLASSES} gender_select_field #{attribute_value_class}"))
+  end
+
+  def boolean_field(time, attribute_value_class, value, html_options)
+    boolean_options = [true, false].zip([I18n.t("global.yes"), I18n.t("global.no")])
+
+    select_tag("#{filter_name_prefix}[value]",
+      options_from_collection_for_select(boolean_options, :first, :last, value),
+      html_options.merge(class: "#{SELECT_CLASSES} boolean_field #{attribute_value_class}"))
   end
 
   def filter_name_prefix = "filters[attributes][#{time}]"

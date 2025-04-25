@@ -14,7 +14,7 @@
     %li
       = Person.filter_attrs.dig(attribute_arg[:key].to_sym, :label)
       = t(attribute_arg[:constraint], scope: 'people_filters.attributes')
-      = attribute_arg[:value]
+      = people_filter_attribute_value(attribute_arg[:key], attribute_arg[:value])
   - unless @mailing_list.filter_chain[:language].blank?
     %li
       - languages = @mailing_list.filter_chain[:language].allowed_values.map { Person::LANGUAGES.fetch(_1.to_sym, _1) }

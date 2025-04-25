@@ -127,8 +127,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   LANGUAGES = Settings.application
     .languages
     .to_hash
-    .merge(Settings.application
-                                     .additional_languages&.to_hash || {})
+    .merge(Settings.application.additional_languages&.to_hash || {})
 
   ADDRESS_ATTRS = %w[address_care_of street housenumber postbox zip_code town country]
 

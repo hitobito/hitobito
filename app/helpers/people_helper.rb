@@ -70,7 +70,7 @@ module PeopleHelper
   end
 
   def format_person_language(person)
-    Person::LANGUAGES[person.language.to_sym]
+    Person::LANGUAGES[person.language&.to_sym]
   end
 
   def render_household(person)

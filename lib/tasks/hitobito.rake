@@ -7,14 +7,24 @@
 
 namespace :hitobito do
   desc "Print all groups, roles and permissions"
-  task roles: :environment do
+  task :roles, [:with_classes] => [:environment] do |_t, args| # rubocop:disable Rails/RakeEnvironment
+    args.with_defaults({with_classes: false})
+    with_classes = args[:with_classes].to_s == "true"
+
+    group_tree = Group.subclasses.index_by(&:label).map { |label, klass| [label, klass.children.map(&:label)] }.to_h
+
     Role::TypeList.new(Group.root_types.first).each do |layer, groups|
-      puts "    * #{layer}"
+      super_layers = group_tree.select { |_key, list| list.include?(layer) }.keys
+      super_layer_tag = " < #{super_layers.join(", ")}" if super_layers.any?
+
+      puts "    * #{layer}#{super_layer_tag}"
       groups.each do |group, roles|
         puts "      * #{group}"
         roles.each do |r|
           twofa_tag = "2FA " if r.two_factor_authentication_enforced
-          puts "        * #{r.label}: #{twofa_tag}#{r.permissions.inspect}  --  (#{r})"
+          role_class_info = "  --  (#{r})" if with_classes
+
+          puts "        * #{r.label}: #{twofa_tag}#{r.permissions.inspect}#{role_class_info}"
         end
       end
     end
@@ -130,23 +140,73 @@ namespace :hitobito do
   end
 
   desc "Parse Structure and output classes and translations"
-  task :parse_structure, [:filename] do |_t, args| # rubocop:disable Rails/RakeEnvironment
+  task :parse_structure, [:filename] => [:environment] do |_t, args|
     require_relative "../../app/domain/structure_parser"
     args.with_defaults({
       filename: "./structure.txt"
     })
 
     file = Pathname.new(args[:filename]).expand_path
-    puts "-------- Parsing #{file}"
+    dry_run = ENV["DRY_RUN"] == "true"
 
-    parser = StructureParser.new(file.read, common_indent: 4, shiftwidth: 2, list_marker: "*")
-    puts parser.inspect
+    puts "-------- Parsing #{file}"
+    parser = StructureParser.new(
+      file.read,
+      common_indent: 4,
+      shiftwidth: 2,
+      list_marker: "*",
+      allowed_permissions: Role::Permissions + [AbilityDsl::Recorder::General::PERMISSION]
+    )
+    puts parser.inspect if dry_run
     parser.parse
+    if parser.valid?
+      puts "Structure and Permissions seem valid."
+    else
+      puts(*parser.errors)
+      puts
+      raise "Inputfile seems invalid."
+    end
 
     puts "-------- Groups and Roles as classes ------"
-    puts parser.output_groups
+    group_path = file.dirname.join("app", "models", "group")
+    puts "writing classes to #{group_path}"
+    parser.output_groups.each do |fn, content|
+      if dry_run
+        puts fn, content
+      else
+        group_path.join(fn).write(content)
+        print "."
+      end
+    end
+    puts ""
+
     puts "-------- Translations for those -----------"
-    puts parser.output_translations
+    locale_path = file.dirname.join("config", "locales").children.first
+    if dry_run
+      puts locale_path
+      puts parser.output_translations
+    else
+      locale_path.write(parser.output_translations)
+      puts "written to #{locale_path}"
+    end
+
     puts "-------- Done."
+    unless dry_run
+      puts <<~MSG
+
+        Next steps:
+        -----------
+
+        Update the root-groups in your wagon, so that
+
+          rake app:hitobito:roles:update_readme
+
+        works as intended. Take a lookt at
+
+          #{file.dirname.glob("app/models/*/group.rb").first}
+
+        Have fun.
+      MSG
+    end
   end
 end

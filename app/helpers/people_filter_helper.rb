@@ -20,6 +20,16 @@ module PeopleFilterHelper
     end.join.html_safe
   end
 
+  def people_filter_attribute_value(key, value)
+    if key == "gender"
+      Person.new(gender: value).gender_label
+    elsif %w[true false].include?(value)
+      f(ActiveModel::Type::Boolean.new.cast(value))
+    else
+      f(value)
+    end
+  end
+
   def people_filter_attribute_control_template
     people_filter_attribute_control(nil, 0, disabled: :disabled)
   end

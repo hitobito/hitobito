@@ -11,12 +11,12 @@ describe People::Merger do
   let!(:person) { Fabricate(:person) }
   let!(:duplicate) { Fabricate(:person_with_address_and_phone) }
   let(:actor) { people(:root) }
+  let(:group) { groups(:bottom_group_one_one) }
 
   let(:merger) { described_class.new(@source.reload, @target.reload, actor) }
 
   before do
-    Group::BottomGroup::Member.create!(group: groups(:bottom_group_one_one),
-      person: duplicate)
+    Group::BottomGroup::Member.create!(group: group, person: duplicate)
   end
 
   context "merge people" do
@@ -68,17 +68,37 @@ describe People::Merger do
       person_roles = person.roles.with_inactive
       expect(person_roles.count).to eq(2)
       group_ids = person_roles.map(&:group_id)
-      expect(group_ids).to include(groups(:bottom_group_one_one).id)
+      expect(group_ids).to include(group.id)
       expect(group_ids).to include(groups(:bottom_group_two_one).id)
 
       expect(Person.where(id: duplicate.id)).not_to exist
+    end
+
+    it "merges invoices" do
+      @source = duplicate
+      @target = person
+
+      target_invoice_1 = Invoice.create!(group: group, title: "test", recipient: person)
+      source_invoice_1 = Invoice.create!(group: group, title: "test", recipient: duplicate)
+      source_invoice_2 = Invoice.create!(group: group, title: "test", recipient: duplicate)
+
+      expect do
+        merger.merge!
+      end.to change(Person, :count).by(-1)
+        .and change(person.invoices, :count).by(2)
+
+      person.reload
+      expect(person.invoices.count).to eq 3
+      expect(target_invoice_1.reload.recipient).to eq person
+      expect(source_invoice_1.reload.recipient).to eq person
+      expect(source_invoice_2.reload.recipient).to eq person
     end
 
     it "does not merge role if same role already present on destination person" do
       @source = duplicate
       @target = person
 
-      Group::BottomGroup::Member.create!(group: groups(:bottom_group_one_one),
+      Group::BottomGroup::Member.create!(group: group,
         person: person)
 
       expect do
@@ -88,7 +108,7 @@ describe People::Merger do
       person_roles = person.roles.with_inactive
       expect(person_roles.count).to eq(1)
       group_ids = person_roles.map(&:group_id)
-      expect(group_ids).to include(groups(:bottom_group_one_one).id)
+      expect(group_ids).to include(group.id)
 
       expect(Person.where(id: duplicate.id)).not_to exist
     end
@@ -97,7 +117,7 @@ describe People::Merger do
       @source = duplicate
       @target = person
 
-      Group::BottomGroup::Member.create!(group: groups(:bottom_group_one_one),
+      Group::BottomGroup::Member.create!(group: group,
         person: person)
 
       @source.update(created_at: @source.roles.first.created_at + 3.days)
@@ -109,7 +129,7 @@ describe People::Merger do
       person_roles = person.roles.with_inactive
       expect(person_roles.count).to eq(1)
       group_ids = person_roles.map(&:group_id)
-      expect(group_ids).to include(groups(:bottom_group_one_one).id)
+      expect(group_ids).to include(group.id)
 
       expect(Person.where(id: duplicate.id)).not_to exist
     end
@@ -118,7 +138,7 @@ describe People::Merger do
       @source = duplicate
       @target = person
 
-      Group::BottomGroup::Member.create!(group: groups(:bottom_group_one_one),
+      Group::BottomGroup::Member.create!(group: group,
         person: person)
 
       _duplicate_two_one_role =
@@ -127,7 +147,7 @@ describe People::Merger do
 
       # should not merge this deleted role since person has it already
       _duplicate_one_one_role =
-        Group::BottomGroup::Member.create!(group: groups(:bottom_group_one_one),
+        Group::BottomGroup::Member.create!(group: group,
           person: duplicate, start_on: 1.year.ago, end_on: 1.day.ago)
 
       expect do
@@ -136,7 +156,7 @@ describe People::Merger do
         .and change { person.roles.with_inactive.count }.by(2) # rubocop:disable Layout/MultilineMethodCallIndentation
 
       group_ids = person.roles.with_inactive.map(&:group_id)
-      expect(group_ids).to include(groups(:bottom_group_one_one).id)
+      expect(group_ids).to include(group.id)
       expect(group_ids).to include(groups(:bottom_group_two_one).id)
 
       expect(Person.where(id: duplicate.id)).not_to exist

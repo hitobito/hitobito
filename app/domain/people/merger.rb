@@ -30,6 +30,7 @@ module People
       merge_contactables(:additional_emails, :email)
       merge_contactables(:phone_numbers, :number)
       merge_contactables(:social_accounts, :name, match_label: true)
+      merge_invoices
     end
 
     def merge_contactables(assoc, key, match_label: false)
@@ -55,6 +56,12 @@ module People
         next unless dst_role.new_record?
 
         dst_role.save!
+      end
+    end
+
+    def merge_invoices
+      @source.invoices.each do |invoice|
+        invoice.update!(recipient: @target)
       end
     end
 

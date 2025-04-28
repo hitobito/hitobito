@@ -255,6 +255,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   has_many :message_recipients, dependent: :nullify
 
+  has_many :invoices, foreign_key: :recipient_id, inverse_of: :person
+
   FeatureGate.if("people.family_members") do
     accepts_nested_attributes_for :family_members, allow_destroy: true
   end

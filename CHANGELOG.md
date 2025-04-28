@@ -5,6 +5,7 @@
 - Eine der weiteren E-Mail Adressen kann für den Rechnungsversand verwendet werden (#3331)
 - Sichtbarkeit von Informationen zur Kontaktperson kann auf Events definiert werden (hitobito_sww#194)
 - In den Rechnungseinstellungen kann neu pro Layer eine E-Mail Vorlage definiert werden (hitobito_sww#197)
+- Beim zusammenführen von Duplikaten werden neu auch Rechnungen übernommen (hitobito_sww#139)
 
 ## Version 2.5
 - Eine Rechnung kann im Originalzustand gedruckt werden, bzw. ohne Mahnungen (hitobito_sww#173)

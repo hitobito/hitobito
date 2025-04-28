@@ -37,12 +37,17 @@ describe Export::Tabular::People::PeopleFull do
 
     context "additional_addresses" do
       before do
-        person.additional_addresses << Fabricate.build(:additional_address, label: "Rechnung")
-        person.additional_addresses << Fabricate.build(:additional_address, label: "Arbeit")
+        person.additional_addresses << Fabricate.build(:additional_address, label: "Rechnung", street: "abc")
+        person.additional_addresses << Fabricate.build(:additional_address, label: "Arbeit", name: "Foo Bar", street: "def", uses_contactable_name: false)
       end
 
       its([:additional_address_rechnung]) { should eq "Weitere Adresse Rechnung" }
       its([:additional_address_arbeit]) { should eq "Weitere Adresse Arbeit" }
+
+      it "prefixes address values with names" do
+        expect(people_list.data_rows.to_a.first[subject.keys.index(:additional_address_rechnung)]).to start_with("Top Leader, abc")
+        expect(people_list.data_rows.to_a.first[subject.keys.index(:additional_address_arbeit)]).to start_with("Foo Bar, def")
+      end
     end
   end
 end

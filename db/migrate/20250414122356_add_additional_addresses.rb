@@ -10,6 +10,7 @@ class AddAdditionalAddresses < ActiveRecord::Migration[7.1]
   def change
     create_table(:additional_addresses) do |t|
       t.belongs_to :contactable, polymorphic: true, index: true
+      t.string :name, null: false
       t.string :label, null: false
       t.string :street, null: false
       t.string :housenumber, limit: 20
@@ -18,7 +19,11 @@ class AddAdditionalAddresses < ActiveRecord::Migration[7.1]
       t.string :country, null: false
       t.string :address_care_of
       t.string :postbox
+      t.boolean :invoices, null: false, default: false
+      t.boolean :uses_contactable_name, null: false, default: true
+      t.boolean :public, default: false, null: false
     end
+    add_index(:additional_addresses, [:contactable_id, :contactable_type, :invoices], unique: true, where: "invoices = true")
     add_index(:additional_addresses, [:contactable_id, :contactable_type, :label], unique: true)
   end
 end

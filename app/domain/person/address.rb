@@ -11,16 +11,17 @@ class Person::Address
   def initialize(person, label: nil, name: nil)
     @person = person
     @name = name
-    @addressable = find_addressable(label)
+    @label = label
+    @addressable = additional_addresses.find { |a| a.label == label } || person
   end
 
   def for_letter
     (person_and_company_name + full_address).compact.join("\n")
   end
 
-  # Intended to be overridden in wagons which have multiple addresses per person
+  # Use to populate invoices#recipient_address, might be overriden in wagons
   def for_invoice
-    @addressable = find_addressable(INVOICE_LABEL)
+    @addressable = additional_addresses.find(&:invoices?) || person
     (person_and_company_name + short_address).compact.join("\n")
   end
 
@@ -29,27 +30,33 @@ class Person::Address
   end
 
   def for_pdf_label(name, nickname = false)
-    text = ""
-    text += "#{@person.company_name}\n" if print_company?(name)
-    text += "#{@person.nickname}\n" if print_nickname?(nickname)
-    text += "#{name}\n" if name.present?
-    text += address.to_s
-    text += "\n" unless /\n\s*$/.match?(address)
-    text += "#{zip_code} #{town}\n"
-    text += country_label unless ignored_country?
-    text
+    names = if addressable.is_a?(AdditionalAddress)
+      [addressable.name]
+    else
+      [
+        (person.company_name if print_company?(name)),
+        (person.nickname if print_nickname?(nickname)),
+        name.presence
+      ]
+    end
+
+    [
+      *names,
+      short_address(country_as: :country_label)
+    ].compact.join("\n")
   end
 
   private
 
-  attr_reader :person, :name, :label, :addressable
+  attr_reader :person, :name, :addressable
 
-  delegate :address, :address_care_of, :postbox, :zip_code, :town, :country_label, :ignored_country?, to: :addressable
-
-  def find_addressable(label) = @person.additional_addresses.find { |ad| ad.label == label } || @person
+  delegate :address, :address_care_of, :postbox, :zip_code, :town, :name, :country_label, :ignored_country?, to: :addressable
+  delegate :company?, :additional_addresses, to: :person
 
   def person_and_company_name
-    if @person.company?
+    return [name, address_care_of].compact_blank if addressable.is_a?(AdditionalAddress)
+
+    if company?
       [@person.company_name.to_s.squish, @person.full_name.to_s.squish].uniq.compact_blank
     else
       [@person.full_name.to_s.squish]
@@ -65,25 +72,22 @@ class Person::Address
       address_care_of.to_s.strip.presence,
       address.to_s.strip,
       postbox.to_s.strip.presence,
-      [zip_code, town].compact.join(" ").squish,
-      country
+      zip_code_with_town,
+      country_string(:country)
     ].compact
   end
 
-  def short_address
+  def short_address(country_as: :country)
     [
       address.to_s.strip,
-      [zip_code, town].compact.join(" ").squish,
-      country
+      zip_code_with_town,
+      country_string(country_as)
     ].compact
   end
 
-  def country
-    country = addressable.country.to_s.squish
-    return if country.eql?(default_country)
+  def zip_code_with_town = [zip_code, town].compact.join(" ").squish
 
-    country
-  end
+  def country_string(country_as) = ignored_country? ? "" : addressable.send(country_as)
 
   def default_country
     Settings.countries.prioritized.first

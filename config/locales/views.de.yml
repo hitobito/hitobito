@@ -116,6 +116,9 @@ de:
     fields:
       zip_town: PLZ/Ort
 
+    contact_data:
+      invoices_tooltip_title: Wird für Rechnungen verwendet
+
     public_check_box:
       tooltip: Private Einträge sind nur für die eigene Gruppe sichtbar.
         Als öffentlich markierte Einträge sind auch für Leitungspersonen aus anderen Gruppen
@@ -132,6 +135,8 @@ de:
 
     additional_address_fields:
       placeholder_type: Bezeichnung (Rechnung, Arbeit ..)
+      caption_uses_contactable_name: Namen der Person übernehmen
+      caption_used_for_invoices: Für Rechnungen verwenden
 
     address_fields:
       updates_household_address: Adresse wird für den ganzen Haushalt aktualisiert

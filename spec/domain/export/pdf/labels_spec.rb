@@ -49,7 +49,7 @@ describe Export::Pdf::Labels do
     end
 
     it "renders additional address if present" do
-      top_leader.additional_addresses.create!(label: "Rechnung", street: "Lagistrasse", housenumber: "12a", zip_code: 1080, town: "Jamestown", country: "CH")
+      top_leader.additional_addresses.create!(label: "Rechnung", street: "Lagistrasse", housenumber: "12a", zip_code: 1080, town: "Jamestown", country: "CH", invoices: true)
       expect(subject.strings).to include("Top Leader")
       expect(subject.strings).to include("Lagistrasse 12a")
       expect(subject.strings).to include("1080 Jamestown")

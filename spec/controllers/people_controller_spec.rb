@@ -609,7 +609,7 @@ describe PeopleController do
               id: person.id,
               person: {
                 additional_addresses_attributes: {
-                  a1.id.to_s => {id: a1.id, housenumber: 3},
+                  a1.id.to_s => {id: a1.id, housenumber: 3, uses_contactable_name: false, name: "updated name"},
                   a2.id.to_s => {id: a2.id, _destroy: true},
                   "998" => {
                     translated_label: "Andere",
@@ -623,6 +623,7 @@ describe PeopleController do
               }
             }
           end.to change { a1.reload.housenumber }.from("1").to("3")
+            .and change { a1.name }.from(person.to_s).to("updated name")
             .and not_change { AdditionalAddress.count }
 
           expect(person.additional_addresses.where(label: "Andere")).to be_exist

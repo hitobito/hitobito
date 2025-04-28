@@ -3,25 +3,28 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= field_set_tag do
-  = f.labeled(:translated_label, label_class: "#{StandardFormBuilder::LABEL_CLASSES} required") do
-    - classes = "form-select form-select-sm h-100"
-    - classes += " is-invalid" if f.object.errors.key?(:label)
-    = f.collection_select(:translated_label, AdditionalAddress.available_labels, :to_s, :to_s, {prompt: true}, class: classes, disabled: f.object.persisted?)
-= field_set_tag do
-  .address-input-fields
-    = f.labeled_input_field(:address_care_of)
-    = f.labeled(:street_and_number, label_class: "#{StandardFormBuilder::LABEL_CLASSES} required", class: 'd-flex') do
-      %div.col-9
-        = f.input_field(:street, data: { provide: 'entity', updater: 'AddressTypeahead.update', url: addresses_query_url })
-      %div.col-2.offset-1
-        = f.input_field(:housenumber, placeholder: 'No')
-    = f.labeled_input_field(:postbox)
+.address-input-fields{data: { controller: 'additional-address' }}
+  = f.labeled_input_field(:translated_label,
+    placeholder: t('.placeholder_type'),
+    data: {provide: :typeahead, source: AdditionalAddress.available_labels})
+  = f.labeled_input_field(:address_care_of)
+  = f.labeled(:street_and_number, label_class: "#{StandardFormBuilder::LABEL_CLASSES} required", class: 'd-flex') do
+    %div.col-9
+      = f.input_field(:street, data: { provide: 'entity', updater: 'AddressTypeahead.update', url: addresses_query_url })
+    %div.col-2.offset-1
+      = f.input_field(:housenumber, placeholder: 'No')
+  = f.labeled_input_field(:postbox)
 
-    = f.labeled(:zip_code, t('contactable.fields.zip_town'), class: 'd-flex') do
-      %div.col-5.col-md-4.col-lg-3
-        = f.input_field(:zip_code, maxlength: 10)
-      %div.col-6.col-md-7.col-lg-8.offset-1
-        = f.input_field(:town)
-    = f.labeled(:country) do
-      = f.country_field(:country)
+  = f.labeled(:zip_code, t('contactable.fields.zip_town'), class: 'd-flex') do
+    %div.col-5.col-md-4.col-lg-3
+      = f.input_field(:zip_code, maxlength: 10)
+    %div.col-6.col-md-7.col-lg-8.offset-1
+      = f.input_field(:town)
+  = f.labeled(:country) do
+    = f.country_field(:country)
+  = f.indented do
+    = f.input_field(:public, caption: contactable_public_field_icon)
+    = f.input_field(:invoices, caption: t('.caption_used_for_invoices'))
+    = f.input_field(:uses_contactable_name, data: { action: 'additional-address#toggle'}, caption: t('.caption_uses_contactable_name'))
+  %div{data: { 'additional-address-target' => 'toggle'}, class: ("hidden" if f.object.uses_contactable_name)}
+    = f.labeled_input_field(:name)

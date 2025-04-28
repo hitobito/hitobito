@@ -13,7 +13,11 @@ describe Person::Address do
   let(:name) { nil }
   let(:address) { described_class.new(person, label:, name: nil) }
 
-  shared_examples "common address behaviour" do |country_label:, postbox:, company:, fixed_label: false|
+  def build_additional_address(attrs)
+    person.additional_addresses.build(attrs).tap(&:valid?)
+  end
+
+  shared_examples "common address behaviour" do |country_label:, postbox:, company:, uses_additional_address_name: true, label_handling: true|
     context "common" do
       it "renders name, text and town with zip code" do
         expect(text).to eq <<~TEXT
@@ -129,21 +133,11 @@ describe Person::Address do
       end
     end
 
-    context "common address behaviour" do
-      let(:label) { "Andere" }
+    if label_handling
+      context "label handling" do
+        let(:label) { "Andere" }
 
-      it "renders from person if not defined" do
-        expect(text).to eq <<~TEXT
-          Top Leader
-          Greatstreet 345
-          3456 Greattown
-        TEXT
-      end
-
-      if fixed_label
-        it "renders from person if label is fixed label does not match" do
-          person.additional_addresses.build(label:, street: "Lagistrasse", housenumber: "12a", zip_code: 1080, town: "Jamestown")
-
+        it "renders from person if not defined" do
           expect(text).to eq <<~TEXT
             Top Leader
             Greatstreet 345
@@ -152,7 +146,7 @@ describe Person::Address do
         end
 
         it "renders from additional address if label matches" do
-          person.additional_addresses.build(label: fixed_label, street: "Lagistrasse", housenumber: "12a", zip_code: 1080, town: "Jamestown")
+          build_additional_address(label:, street: "Lagistrasse", housenumber: "12a", zip_code: 1080, town: "Jamestown")
 
           expect(text).to eq <<~TEXT
             Top Leader
@@ -160,15 +154,16 @@ describe Person::Address do
             1080 Jamestown
           TEXT
         end
-      else
-        it "renders from additional address if label matches" do
-          person.additional_addresses.build(label:, street: "Lagistrasse", housenumber: "12a", zip_code: 1080, town: "Jamestown")
 
-          expect(text).to eq <<~TEXT
-            Top Leader
-            Lagistrasse 12a
-            1080 Jamestown
-          TEXT
+        if uses_additional_address_name
+          it "reads additional name if set" do
+            build_additional_address(label:, street: "Lagistrasse", housenumber: "12a", zip_code: 1080, town: "Jamestown", name: "Foo Bar", uses_contactable_name: false)
+            expect(text).to eq <<~TEXT
+              Foo Bar
+              Lagistrasse 12a
+              1080 Jamestown
+            TEXT
+          end
         end
       end
     end
@@ -197,13 +192,53 @@ describe Person::Address do
       end
     end
 
-    it_behaves_like "common address behaviour", country_label: false, postbox: true, company: :ignored
+    it_behaves_like "common address behaviour", country_label: false, postbox: true, company: :ignored, uses_additional_address_name: false
   end
 
   describe "#for_invoice" do
     subject(:text) { address.for_invoice }
 
-    it_behaves_like "common address behaviour", country_label: false, postbox: false, company: :adds, fixed_label: "Rechnung"
+    let(:attrs) { {label: nil, street: "Lagistrasse", housenumber: "12a", zip_code: 1080, town: "Jamestown", invoices: true} }
+
+    it_behaves_like "common address behaviour", country_label: false, postbox: false, company: :adds, label_handling: false
+
+    it "uses invoice address if additional address with invoice flag exists" do
+      build_additional_address(attrs)
+      expect(text).to eq <<~TEXT
+        Top Leader
+        Lagistrasse 12a
+        1080 Jamestown
+      TEXT
+    end
+
+    it "uses address_care_of from additional address" do
+      build_additional_address(attrs.merge(address_care_of: "c/o Finance"))
+      expect(text).to eq <<~TEXT
+        Top Leader
+        c/o Finance
+        Lagistrasse 12a
+        1080 Jamestown
+      TEXT
+    end
+
+    it "uses address_care_of from additional address" do
+      build_additional_address(attrs.merge(address_care_of: "c/o Finance", name: "Foo Bar", uses_contactable_name: false))
+      expect(text).to eq <<~TEXT
+        Foo Bar
+        c/o Finance
+        Lagistrasse 12a
+        1080 Jamestown
+      TEXT
+    end
+
+    it "does not print blank address_care_of line" do
+      build_additional_address(attrs.merge(address_care_of: "", name: "Foo Bar", uses_contactable_name: false))
+      expect(text).to eq <<~TEXT
+        Foo Bar
+        Lagistrasse 12a
+        1080 Jamestown
+      TEXT
+    end
   end
 
   describe "#for_pdf_label" do

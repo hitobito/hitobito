@@ -34,38 +34,44 @@ module Dropdown
       if last_label_format?
         last_format = user.last_label_format
         parent.sub_items << Title.new(dropdown.template.t("dropdown.last_used"))
-        parent.sub_items << Item.new(last_format.to_s,
-          export_label_format_path(last_format.id),
-          class: "export-label-format")
+        parent.sub_items << Item.new(last_format.to_s, export_label_format_path(last_format.id), class: "export-label-format")
         parent.sub_items << Divider.new
       end
     end
 
     def last_label_format?
-      user&.last_label_format_id? && LabelFormat.for_person(user).exists? && !additional_address?
+      user&.last_label_format_id? && LabelFormat.for_person(user).exists?
     end
 
     def add_label_format_items(parent)
       if additional_address?
-        LabelFormat.list.for_person(user).each do |label_format|
-          format_item = ::Dropdown::Item.new(label_format.to_s, "#")
-          parent.sub_items << format_item
-
-          types_with_labels = AdditionalAddress.predefined_labels.map { |l| [l, AdditionalAddress.translate_label(l)] }
-          types_with_labels.unshift([:main, I18n.t(".additional_address.main", scope: self.class.to_s.underscore)])
-          types_with_labels.each do |type, label|
-            format_item.sub_items << export_label_item(label_format.id, type, label)
-          end
-        end
+        add_label_format_items_with_additional_address(parent)
       else
-        LabelFormat.list.for_person(user).each do |label_format|
-          parent.sub_items << Item.new(label_format, export_label_format_path(label_format.id), class: "export-label-format")
+        add_label_format_items_without_additional_address(parent)
+      end
+    end
+
+    def add_label_format_items_with_additional_address(parent)
+      LabelFormat.list.for_person(user).each do |label_format|
+        format_item = Item.new(label_format.to_s, "#")
+        parent.sub_items << format_item
+
+        types_with_labels = AdditionalAddress.predefined_labels.map { |l| [l, AdditionalAddress.translate_label(l)] }
+        types_with_labels.unshift([:main, I18n.t(".additional_address.main", scope: self.class.to_s.underscore)])
+        types_with_labels.each do |address_type, label|
+          format_item.sub_items << add_label_format_item(label_format, label:, address_type:)
         end
       end
     end
 
-    def export_label_item(format_id, type, label = nil)
-      ::Dropdown::Item.new(label, params.merge(format: :pdf, label_format_id: format_id, address_type: type), target: :new)
+    def add_label_format_items_without_additional_address(parent)
+      LabelFormat.list.for_person(user).each do |label_format|
+        parent.sub_items << add_label_format_item(label_format)
+      end
+    end
+
+    def add_label_format_item(label_format, label: label_format, **params)
+      Item.new(label, export_label_format_path(label_format.id, **params), class: "export-label-format")
     end
 
     def add_households_labels_option_items(parent)
@@ -75,9 +81,9 @@ module Dropdown
       end
     end
 
-    def export_label_format_path(id)
+    def export_label_format_path(label_format_id, address_type: nil)
       households = ToggleHouseholdsLabelsItem::DEFAULT_STATE if @households
-      params.merge(format: :pdf, label_format_id: id, household: households)
+      params.merge(format: :pdf, label_format_id:, household: households, address_type:).compact_blank
     end
 
     class ToggleHouseholdsLabelsItem < Dropdown::Base

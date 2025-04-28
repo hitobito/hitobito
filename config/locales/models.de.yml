@@ -141,6 +141,9 @@ de:
           name_missing: 'Bitte geben Sie einen Namen ein'
           readonly: ": Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne %{name} aus dem Haushalt, um die Adresse anzupassen."
           attributes:
+            base:
+              max_one_additional_invoice_address: Es kann nur eine Adresse als Rechnungsadresse ausgewählt werden.
+              additional_address_labels_must_be_unique: Die Bezeichnungen der weiteren Adressen müssen eindeutig sein.
             email:
               taken: >
                         ist bereits vergeben. Diese Adresse muss für alle Personen
@@ -412,7 +415,7 @@ de:
         category: Kategorie
 
       additional_address:
-        translated_label: Adress Typ
+        translated_label: Bezeichnung
         street_and_number: Strasse/Nummer
         housenumber: Hausnummer
         postbox: Postfach
@@ -421,9 +424,10 @@ de:
         country: Land
         postbox: Postfach
         address_care_of: zusatz. Adresszeile
+        public: Öffentlich
 
       additional_addresses:
-        label: Adress Typ
+        label: Bezeichnung
         street: Strasse
         postbox: Postfach
         zip_code: PLZ

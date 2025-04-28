@@ -20,6 +20,7 @@ module Contactable
       additional_emails_attributes: [:id, :email, :translated_label, :public, :mailings, :_destroy],
       additional_addresses_attributes: [
         :id,
+        :name,
         :translated_label,
         :street,
         :housenumber,
@@ -28,6 +29,9 @@ module Contactable
         :country,
         :address_care_of,
         :postbox,
+        :uses_contactable_name,
+        :invoices,
+        :public,
         :_destroy
       ]
     }
@@ -52,6 +56,8 @@ module Contactable
     # Configure if zip code should be validated, true by default, can be disabled in wagons
     class_attribute :validate_zip_code, default: true
     validates :zip_code, zipcode: {country_code_attribute: :zip_country}, allow_blank: true, if: :validate_zip_code
+    validate :assert_max_one_additional_invoice_address
+    validate :assert_additional_address_labels_are_unique, if: -> { additional_addresses.any? }
   end
 
   private
@@ -63,6 +69,18 @@ module Contactable
         e.contactable = self
         e.mark_for_destruction if e.value.blank?
       end
+    end
+  end
+
+  def assert_max_one_additional_invoice_address
+    if additional_addresses.count(&:invoices) > 1
+      errors.add(:base, :max_one_additional_invoice_address)
+    end
+  end
+
+  def assert_additional_address_labels_are_unique
+    if additional_addresses.map(&:label).tally.values.max > 1
+      errors.add(:base, :additional_address_labels_must_be_unique)
     end
   end
 

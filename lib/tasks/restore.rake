@@ -111,14 +111,14 @@ class BackupRestorer
         else
           puts 'Restoring Participation #{participation.id} for Person #{participation.person_id}'
 
-          part_id = connection.select_value("#{dump(participation, except: %w(id), sql_suffix: 'RETURNING id')}")
+          part_id = connection.select_value("#{dump(participation, except: %w[id], sql_suffix: "RETURNING id")}")
           raise if part_id.nil?
 
-          "#{participation.roles.map { |event_role| dump(event_role, except: %w(id participation_id), overrides: { participation_id: '#{part_id}'}) }.join}"
+          "#{participation.roles.map { |event_role| dump(event_role, except: %w[id participation_id], overrides: {participation_id: '#{part_id}'}) }.join}"
             .split(';')
             .each { |sql| connection.execute(sql) }
 
-          "#{participation.answers.map { |answer| dump(answer, except: %w(id participation_id), overrides: { participation_id: '#{part_id}'}) }.join}"
+          "#{participation.answers.map { |answer| dump(answer, except: %w[id participation_id], overrides: {participation_id: '#{part_id}'}) }.join}"
             .split(';')
             .each { |sql| connection.execute(sql) }
         end
@@ -137,14 +137,14 @@ class BackupRestorer
                    Invoice.where(sequence_number: '#{invoice.sequence_number}').first
                  else
                    puts 'Restoring missing Invoice #{invoice.sequence_number}'
-                   inv_id = connection.select_value("#{dump(invoice, except: %w(id search_column), sql_suffix: 'RETURNING id')}")
+                   inv_id = connection.select_value("#{dump(invoice, except: %w[id search_column], sql_suffix: "RETURNING id")}")
                    raise if inv_id.nil?
 
-                   "#{invoice.invoice_items.map { |item| dump(item, except: %w(id invoice_id search_column), overrides: { invoice_id: '#{inv_id}'}) }.join}"
+                   "#{invoice.invoice_items.map { |item| dump(item, except: %w[id invoice_id search_column], overrides: {invoice_id: '#{inv_id}'}) }.join}"
                      .split(';')
                      .each { |sql| connection.execute(sql) }
 
-                   "#{invoice.payment_reminders.map { |reminder| dump(reminder, except: %w(id invoice_id), overrides: { invoice_id: '#{inv_id}'}) }.join}"
+                   "#{invoice.payment_reminders.map { |reminder| dump(reminder, except: %w[id invoice_id], overrides: {invoice_id: '#{inv_id}'}) }.join}"
                      .split(';')
                      .each { |sql| connection.execute(sql) }
 
@@ -154,17 +154,17 @@ class BackupRestorer
       RUBY
 
       # TODO: Support manually created payments as well, maybe
-      invoice.payments.where.not(status: 'manually_created').each do |payment|
+      invoice.payments.where.not(status: "manually_created").find_each do |payment|
         @result << <<~RUBY
           if Payment.where(transaction_identifier: "#{payment.transaction_identifier}").exists?
             puts "Skipping existing Payment #{payment.transaction_identifier}"
           else
             puts "Restoring missing Payment #{payment.transaction_identifier}"
-            payment_id = connection.select_value("#{dump(payment, except: %w(id invoice_id), overrides: { invoice_id: '#{inv_id}'}, sql_suffix: 'RETURNING id')}")
+            payment_id = connection.select_value("#{dump(payment, except: %w[id invoice_id], overrides: {invoice_id: '#{inv_id}'}, sql_suffix: "RETURNING id")}")
 
             payee_sql = "#{if payment.payee
-              dump(payment.payee, except: %w(id payment_id), overrides: { payment_id: '#{payment_id}'})
-            end}"
+                             dump(payment.payee, except: %w[id payment_id], overrides: {payment_id: '#{payment_id}'})
+                           end}"
             connection.execute(payee_sql) if payee_sql.present?
           end
 
@@ -188,7 +188,7 @@ class BackupRestorer
     @mode = mode
   end
 
-  def dump(object, except: %w(search_column), overrides: {}, sql_suffix: "")
+  def dump(object, except: %w[search_column], overrides: {}, sql_suffix: "")
     table = object.class.table_name
     db_columns = object.class.column_names
     attrs = object.attributes_before_type_cast.slice(*db_columns).except(*except)
@@ -211,7 +211,7 @@ class BackupRestorer
   end
 
   def only_missing(&block)
-    previous_suffix, @default_suffix = @default_suffix, 'ON CONFLICT DO NOTHING'
+    previous_suffix, @default_suffix = @default_suffix, "ON CONFLICT DO NOTHING"
     block.call
   ensure
     @default_suffix = previous_suffix

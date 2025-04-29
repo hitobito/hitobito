@@ -23,6 +23,12 @@
                   edit_group_person_path(entry.person.default_group_id, entry.person, return_url: url_for),
                   :edit)
 
+-# Just for the root user, to be able to easily naviagate from a participation to a person
+- if current_user.root?
+  = action_button("Personenprofil anzeigen",
+                  group_person_path(entry.person.default_group_id, entry.person),
+                  :eye)
+
 - if @application.present?
   - if can?(:destroy, entry)
     = button_action_destroy

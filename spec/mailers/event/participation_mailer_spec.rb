@@ -104,11 +104,6 @@ describe Event::ParticipationMailer do
       expect(mail.to).to eq [e1.email]
       is_expected.to match(/a href="mailto:#{e1.email}"/)
     end
-
-    it "sets custom sender email when custom_sender_email is set" do
-      allow_any_instance_of(Event::ParticipationMailer).to receive(:custom_sender_email).and_return("custom@hitobito.com")
-      expect(mail.sender).to eq "custom@hitobito.com"
-    end
   end
 
   describe "#notify_contact" do
@@ -134,11 +129,6 @@ describe Event::ParticipationMailer do
       e1 = Fabricate(:additional_email, contactable: recipient, mailings: true, public: true)
       expect(mail.to).to eq [e1.email]
     end
-
-    it "sets custom sender email when custom_sender_email is set" do
-      allow_any_instance_of(Event::ParticipationMailer).to receive(:custom_sender_email).and_return("custom@hitobito.com")
-      expect(mail.sender).to eq "custom@hitobito.com"
-    end
   end
 
   describe "#approval" do
@@ -161,11 +151,6 @@ describe Event::ParticipationMailer do
 
     it { is_expected.to match(/Hallo firsty, lasty/) }
     it { is_expected.to match(/Top Leader hat sich/) }
-
-    it "sets custom sender email when custom_sender_email is set" do
-      allow_any_instance_of(Event::ParticipationMailer).to receive(:custom_sender_email).and_return("custom@hitobito.com")
-      expect(mail.sender).to eq "custom@hitobito.com"
-    end
   end
 
   describe "#cancel" do
@@ -193,11 +178,6 @@ describe Event::ParticipationMailer do
     end
 
     it { is_expected.to match(/Hallo Top/) }
-
-    it "sets custom sender email when custom_sender_email is set" do
-      allow_any_instance_of(Event::ParticipationMailer).to receive(:custom_sender_email).and_return("custom@hitobito.com")
-      expect(mail.sender).to eq "custom@hitobito.com"
-    end
   end
 
   describe "#event_details" do

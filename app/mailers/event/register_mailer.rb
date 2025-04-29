@@ -11,8 +11,6 @@ class Event::RegisterMailer < ApplicationMailer
     @group = group
     @event = event
     @token = token
-
-    headers[:sender] = custom_sender_email
     # This email contains sensitive information and thus
     # is only sent to the main email address.
     custom_content_mail(
@@ -38,10 +36,5 @@ class Event::RegisterMailer < ApplicationMailer
 
   def event_url(group, event, token)
     group_event_url(group, event, onetime_token: token)
-  end
-
-  # Can be overwritten in wagon
-  def custom_sender_email
-    nil
   end
 end

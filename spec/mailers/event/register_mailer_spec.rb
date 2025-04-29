@@ -23,11 +23,6 @@ describe Event::RegisterMailer do
     its(:subject) { should eq "Anmeldelink für Anlass" }
     its(:to) { should eq(["fooo@example.com"]) }
     its(:from) { should eq(["noreply@localhost"]) }
-
-    it "sets custom sender email when custom_sender_email is set" do
-      allow_any_instance_of(Event::RegisterMailer).to receive(:custom_sender_email).and_return("custom@hitobito.com")
-      expect(subject.sender).to eq "custom@hitobito.com"
-    end
   end
 
   context "body" do

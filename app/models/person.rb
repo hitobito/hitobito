@@ -218,6 +218,11 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     inverse_of: :contact,
     dependent: :nullify
 
+  has_many :group_responsibilities, class_name: "Group",
+    foreign_key: :contact_id,
+    inverse_of: :contact,
+    dependent: :nullify
+
   has_many :qualifications, dependent: :destroy
 
   has_many :subscriptions, as: :subscriber, dependent: :destroy
@@ -225,6 +230,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   has_many :family_members, -> { includes(:person, :other) },
     inverse_of: :person,
     dependent: :destroy
+
+  has_many :invoices, foreign_key: :recipient_id, inverse_of: :recipient
 
   has_many :add_requests, dependent: :destroy
 
@@ -254,8 +261,6 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     dependent: :delete_all
 
   has_many :message_recipients, dependent: :nullify
-
-  has_many :invoices, foreign_key: :recipient_id, inverse_of: :person
 
   FeatureGate.if("people.family_members") do
     accepts_nested_attributes_for :family_members, allow_destroy: true

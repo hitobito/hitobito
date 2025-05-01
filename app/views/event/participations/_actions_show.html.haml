@@ -25,7 +25,7 @@
 
 -# Just for the root user, to be able to easily naviagate from a participation to a person
 - if current_user.root?
-  = action_button("Personenprofil anzeigen",
+  = action_button(t(".link_to_person"),
                   group_person_path(entry.person.default_group_id, entry.person),
                   :eye)
 

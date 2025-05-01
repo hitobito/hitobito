@@ -30,8 +30,8 @@ describe "Global Conditions", js: true do
 
       select "Alter", from: "attribute_filter"
       all(".attribute_constraint_dropdown")[1].find("option[value='equal']").select_option
-      all("input.form-control[type='text']")[1].set(56)
 
+      all("input.form-control[type='number']")[0].set(56)
       first(".btn.btn-primary", text: "Speichern").click
 
       within("div#main") do

@@ -103,10 +103,9 @@ class Person::Filter::AttributeControl
       {priority_countries: Settings.countries.prioritized, include_blank: "", selected: value&.flatten},
       html_options.merge(
         class: "form-select form-select-sm country_select_field #{attribute_value_class} w-100",
-    "data-controller": "form-select",
+        "data-controller": "form-select",
         multiple: true
-      )
-    )
+      ))
   end
 
   def integer_field(time, attribute_value_class, value, html_options)
@@ -137,16 +136,15 @@ class Person::Filter::AttributeControl
   end
 
   def language_select_field(time, attribute_value_class, value, html_options)
-    language_options = (Person::LANGUAGES).collect { |language_value, language_name| [language_name, language_value] }
+    language_options = Person::LANGUAGES.collect { |language_value, language_name| [language_name, language_value] }
     select_tag("#{filter_name_prefix}[value]",
-               options_from_collection_for_select(language_options, :second, :first, value&.flatten&.map(&:to_sym)),
-           html_options.merge(
-             class: "#{SELECT_CLASSES} language_select_field #{attribute_value_class} form-select form-select-sm w-100",
-             multiple: true,
-             id: "language-select-#{time}",
-             "data-controller": "form-select"
-           )
-    )
+      options_from_collection_for_select(language_options, :second, :first, value&.flatten&.map(&:to_sym)),
+      html_options.merge(
+        class: "#{SELECT_CLASSES} language_select_field #{attribute_value_class} form-select form-select-sm w-100",
+        multiple: true,
+        id: "language-select-#{time}",
+        "data-controller": "form-select"
+      ))
   end
 
   def filter_name_prefix = "filters[attributes][#{time}]"

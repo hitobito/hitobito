@@ -88,11 +88,14 @@ class Person::Filter::Attributes < Person::Filter::Base
   end
 
   def persisted_attribute_condition_sql(key, value, constraint)
-    sql_string = case
-    when value.is_a?(Array) then "people.#{key} IN (?)"
-    when /match/.match?(constraint) then match_search_sql(key, value, constraint)
-    when /blank/.match?(constraint) then "COALESCE(TRIM(people.#{key}::text), '') #{sql_comparator(constraint)} ?"
-    else "people.#{key} #{sql_comparator(constraint)} ?"
+    sql_string = if value.is_a?(Array)
+      "people.#{key} IN (?)"
+    elsif /match/.match?(constraint)
+      match_search_sql(key, value, constraint)
+    elsif /blank/.match?(constraint)
+      "COALESCE(TRIM(people.#{key}::text), '') #{sql_comparator(constraint)} ?"
+    else
+      "people.#{key} #{sql_comparator(constraint)} ?"
     end
 
     value = value.flatten if value.is_a?(Array)

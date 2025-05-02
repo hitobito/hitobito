@@ -99,8 +99,7 @@ additional_email:
 additional_address:
   enabled: false
   predefined_labels:
-    - Rechnung
-    - Andere
+    - Arbeit
 
 # Presets for PDF labels
 pdf:

@@ -7,6 +7,10 @@
   = f.labeled_input_field(:translated_label,
     placeholder: t('.placeholder_type'),
     data: {provide: :typeahead, source: AdditionalAddress.available_labels})
+  = f.indented do
+    = f.input_field(:uses_contactable_name, data: { action: 'additional-address#toggle'}, caption: t('.caption_uses_contactable_name'))
+  %div{data: { 'additional-address-target' => 'toggle'}, class: ("hidden" if f.object.uses_contactable_name)}
+    = f.labeled_input_field(:name)
   = f.labeled_input_field(:address_care_of)
   = f.labeled(:street_and_number, label_class: "#{StandardFormBuilder::LABEL_CLASSES} required", class: 'd-flex') do
     %div.col-9
@@ -25,6 +29,3 @@
   = f.indented do
     = f.input_field(:public, caption: contactable_public_field_icon)
     = f.input_field(:invoices, caption: t('.caption_used_for_invoices'))
-    = f.input_field(:uses_contactable_name, data: { action: 'additional-address#toggle'}, caption: t('.caption_uses_contactable_name'))
-  %div{data: { 'additional-address-target' => 'toggle'}, class: ("hidden" if f.object.uses_contactable_name)}
-    = f.labeled_input_field(:name)

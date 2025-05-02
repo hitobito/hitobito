@@ -92,7 +92,8 @@ module ContactableDecorator
   def invoice_icon(contact_account)
     return unless contact_account.try(:invoices?)
 
-    h.icon("money-bill-alt", class: "muted", title: h.t(".invoices_tooltip_title"))
+    h.icon("money-bill-alt", class: "muted",
+      title: h.t("contactable.contact_data.invoices_tooltip_title"))
   end
 
   def br

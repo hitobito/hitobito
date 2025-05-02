@@ -67,8 +67,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_22_125029) do
     t.boolean "invoices", default: false, null: false
     t.boolean "uses_contactable_name", default: true, null: false
     t.boolean "public", default: false, null: false
-    t.index ["contactable_id", "contactable_type", "invoices"], name: "idx_on_contactable_id_contactable_type_invoices_45d4363dd7", unique: true, where: "(invoices = true)"
     t.index ["contactable_id", "contactable_type", "label"], name: "idx_on_contactable_id_contactable_type_label_53043e4f10", unique: true
+    t.index ["contactable_id", "contactable_type"], name: "index_additional_addresses_on_contactable_where_invoices_true", unique: true, where: "(invoices = true)"
     t.index ["contactable_type", "contactable_id"], name: "index_additional_addresses_on_contactable"
   end
 
@@ -81,7 +81,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_22_125029) do
     t.boolean "mailings", default: true, null: false
     t.boolean "invoices", default: false
     t.index ["contactable_id", "contactable_type"], name: "index_additional_emails_on_contactable_id_and_contactable_type"
-    t.index ["invoices", "contactable_id", "contactable_type"], name: "idx_on_invoices_contactable_id_contactable_type_9f308c8a16", where: "(((contactable_type)::text = 'AdditionalEmail'::text) AND (invoices = true))"
+    t.index ["contactable_id", "contactable_type"], name: "index_additional_emails_on_contactable_where_invoices_true", unique: true, where: "(invoices = true)"
   end
 
   create_table "addresses", force: :cascade do |t|

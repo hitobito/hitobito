@@ -49,7 +49,9 @@ describe ContactableDecorator do
 
       it "contains muted translated label with invoices suffix for invoices email" do
         person.additional_emails.create!(label: "Private", email: "invoices@example.com", invoices: true)
-        expect(person.decorate.all_additional_emails).to end_with "<span class=\"muted\">Private (Rechnung)</span></p>"
+        expect(person.decorate.all_additional_emails).to end_with(
+          "<span class=\"muted\">Private <i class=\"muted fas fa-money-bill-alt\" title=\"Wird für Rechnungen verwendet\"></i></span></p>"
+        )
       end
     end
   end

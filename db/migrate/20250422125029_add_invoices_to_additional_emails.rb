@@ -8,6 +8,7 @@
 class AddInvoicesToAdditionalEmails < ActiveRecord::Migration[7.1]
   def change
     add_column(:additional_emails, :invoices, :boolean, default: false)
-    add_index(:additional_emails, [:invoices, :contactable_id, :contactable_type], where: "contactable_type = 'AdditionalEmail' AND invoices = true")
+    add_index(:additional_emails, [:contactable_id, :contactable_type], unique: true, where: "invoices = true",
+      name: "index_additional_emails_on_contactable_where_invoices_true")
   end
 end

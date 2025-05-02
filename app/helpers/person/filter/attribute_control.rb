@@ -102,7 +102,7 @@ class Person::Filter::AttributeControl
       "value",
       {priority_countries: Settings.countries.prioritized, include_blank: "", selected: value&.flatten},
       html_options.merge(
-        class: "form-select tom-select form-select-sm country_select_field #{attribute_value_class} w-100",
+        class: "form-select form-select-sm country_select_field #{attribute_value_class} w-100",
     "data-controller": "form-select",
         multiple: true
       )

@@ -12,10 +12,11 @@ app.PeopleFilterAttribute = {
 
   add: (e) ->
     return if e.target.value == ''
+    targetValue = e.target.value
     form = $('.people_filter_attribute_form_template').clone()
 
     app.PeopleFilterAttribute.duplicateAttributeForm(e, form)
-    app.PeopleFilterAttribute.setAttributeNameTimestamp(form)
+    app.PeopleFilterAttribute.setAttributeNameTimestamp(targetValue, form)
     app.PeopleFilterAttribute.enableForm(form)
 
   duplicateAttributeForm: (e, form) ->
@@ -26,16 +27,21 @@ app.PeopleFilterAttribute = {
     form.appendTo '#people_filter_attribute_forms'
     e.target.value = ''
 
-  setAttributeNameTimestamp: (form) ->
+  setAttributeNameTimestamp: (targetValue, form) ->
     time = new Date().getTime()
 
     app.PeopleFilterAttribute.renameAttributeName(form.find('.attribute_key_hidden_field'), time)
     app.PeopleFilterAttribute.renameAttributeName(form.find('.attribute_constraint_dropdown'), time)
-    app.PeopleFilterAttribute.renameAttributeName(form.find('.attribute_value_input'), time)
+    app.PeopleFilterAttribute.renameAttributeName(form.find('.attribute_value_input'), time, targetValue)
 
-  renameAttributeName: (selector, time) ->
+  renameAttributeName: (selector, time, targetValue) ->
     regex = /\[\d{13}\]/
-    selector.attr('name', selector.attr('name').replace(regex, "[#{time}]"))
+
+    if targetValue != undefined && (targetValue == 'language' || targetValue == 'country')
+      for element in selector
+          element.name = element.name.replace(regex, "[#{time}]") + "[]"
+    else
+      selector.attr('name', selector.attr('name').replace(regex, "[#{time}]"))
     # jquery datepicker needs a unique id to function properly
     selector.attr('id', selector.attr('id').replace(/_\d{13}_/, "_#{time}_"))
 

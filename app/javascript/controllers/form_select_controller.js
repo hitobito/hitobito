@@ -13,7 +13,8 @@ export default class extends Controller {
     app = window.App || (window.App = {});
     app.tomSelects = {};
 
-    if(getComputedStyle(element.parentElement.parentElement.parentElement).display !== 'none') {
+    if(getComputedStyle(element.parentElement.parentElement.parentElement).display !== 'none'
+      && element.tomselect === undefined) {
       app.tomSelects[element.id] = new TomSelect(`#${element.id}`, {
         plugins: element.multiple ? ["remove_button"] : [],
         create: false,

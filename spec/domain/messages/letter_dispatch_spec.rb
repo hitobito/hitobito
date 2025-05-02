@@ -109,14 +109,14 @@ describe Messages::LetterDispatch do
       housemate1_address =
         "#{housemate1.full_name}\n" \
         "#{housemate1.address}\n" \
-        "#{housemate1.zip_code} #{housemate1.town}\n"
+        "#{housemate1.zip_code} #{housemate1.town}"
 
       expect(recipient_entry(housemate1).address).to eq(housemate1_address)
 
       housemate2_address =
         "#{housemate2.full_name}\n" \
         "#{housemate2.address}\n" \
-        "#{housemate2.zip_code} #{housemate2.town}\n"
+        "#{housemate2.zip_code} #{housemate2.town}"
 
       expect(recipient_entry(housemate2.reload).address).to eq(housemate2_address)
 
@@ -130,7 +130,7 @@ describe Messages::LetterDispatch do
       top_leader_address =
         "#{top_leader.full_name}\n" \
         "#{top_leader.address}\n" \
-        "#{top_leader.zip_code} #{top_leader.town}\n"
+        "#{top_leader.zip_code} #{top_leader.town}"
       expect(recipient_entry(top_leader).address).to eq(top_leader_address)
     end
 
@@ -143,7 +143,7 @@ describe Messages::LetterDispatch do
       household_address =
         "#{housemate1.full_name}, #{housemate2.full_name}\n" \
         "#{housemate1.address}\n" \
-        "#{housemate1.zip_code} #{housemate1.town}\n"
+        "#{housemate1.zip_code} #{housemate1.town}"
 
       expect(recipient_entry(housemate1).address).to eq(household_address)
       expect(recipient_entry(housemate2).address).to eq(household_address)
@@ -157,7 +157,7 @@ describe Messages::LetterDispatch do
       top_leader_address =
         "#{top_leader.full_name}\n" \
         "#{top_leader.address}\n" \
-        "#{top_leader.zip_code} #{top_leader.town}\n"
+        "#{top_leader.zip_code} #{top_leader.town}"
       expect(recipient_entry(top_leader).address).to eq(top_leader_address)
     end
 

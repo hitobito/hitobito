@@ -599,6 +599,36 @@ describe PeopleController do
           expect(tw.email).to eq "john@example.com"
           expect(tw.public).to be_falsey
         end
+
+        it "create, update and destroys additional_address" do
+          a1 = Fabricate(:additional_address, contactable: person, label: "Rechnung", housenumber: 1)
+          a2 = Fabricate(:additional_address, contactable: person, label: "Arbeit")
+          expect do
+            put :update, params: {
+              group_id: group.id,
+              id: person.id,
+              person: {
+                additional_addresses_attributes: {
+                  a1.id.to_s => {id: a1.id, housenumber: 3, uses_contactable_name: false, name: "updated name"},
+                  a2.id.to_s => {id: a2.id, _destroy: true},
+                  "998" => {
+                    translated_label: "Andere",
+                    street: "Langestrasse",
+                    housenumber: 37,
+                    zip_code: 8000,
+                    town: "Zürich",
+                    country: "CH"
+                  }
+                }
+              }
+            }
+          end.to change { a1.reload.housenumber }.from("1").to("3")
+            .and change { a1.name }.from(person.to_s).to("updated name")
+            .and not_change { AdditionalAddress.count }
+
+          expect(person.additional_addresses.where(label: "Andere")).to be_exist
+          expect(person.additional_addresses.where(label: "Arbeit")).not_to be_exist
+        end
       end
     end
 

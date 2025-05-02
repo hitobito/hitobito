@@ -4,6 +4,15 @@
 #  https://github.com/hitobito/hitobito.
 
 module ContactableHelper
+  def contactable_public_field_icon
+    content_tag(:span, data: {bs_toggle: :tooltip}, title: t("contactable.public_check_box.tooltip")) do
+      safe_join([
+        t("activerecord.attributes.social_account.public"),
+        icon(:info, class: "ms-1")
+      ], " ")
+    end
+  end
+
   def info_field_set_tag(legend = nil, options = {}, &block)
     if entry.is_a?(Group)
       opts = {class: "info"}

@@ -116,6 +116,9 @@ de:
     fields:
       zip_town: PLZ/Ort
 
+    contact_data:
+      invoices_tooltip_title: Wird für Rechnungen verwendet
+
     public_check_box:
       tooltip: Private Einträge sind nur für die eigene Gruppe sichtbar.
         Als öffentlich markierte Einträge sind auch für Leitungspersonen aus anderen Gruppen
@@ -129,6 +132,11 @@ de:
       placeholder_value: E-Mail
       placeholder_type: Bezeichnung (Privat, Arbeit ..)
       tooltip_mailings: Versände von Abos, Bestätigungen per E-Mail usw. werden zusätzlich an alle hier markierten Adressen verschickt.
+
+    additional_address_fields:
+      placeholder_type: Bezeichnung (Rechnung, Arbeit ..)
+      caption_uses_contactable_name: Namen der Person übernehmen
+      caption_used_for_invoices: Für Rechnungen verwenden
 
     address_fields:
       updates_household_address: Adresse wird für den ganzen Haushalt aktualisiert
@@ -160,6 +168,10 @@ de:
   dropdown/event/participation/mail_dispatch:
     title: E-Mail senden
     confirmation: Bist du sicher, dass du diese Mails versenden willst?
+
+  dropdown/label_items:
+    additional_address:
+      main: Hauptadresse
 
   dropdown/group_edit:
     move: "Verschieben"

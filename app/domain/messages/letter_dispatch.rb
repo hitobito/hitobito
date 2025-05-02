@@ -64,7 +64,7 @@ module Messages
         collect_household(person_or_household) do |person, housemates|
           reciept_attrs.merge(
             person_id: person.id,
-            address: address_for_letter(person, housemates),
+            address: address_for_letter(person, housemates).strip,
             salutation: salutation_for_letter(person, housemates)
           )
         end

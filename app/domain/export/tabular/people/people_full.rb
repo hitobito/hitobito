@@ -21,6 +21,7 @@ module Export::Tabular::People
       account_labels(AdditionalEmail)
         .merge(account_labels(PhoneNumber))
         .merge(account_labels(SocialAccount))
+        .merge(account_labels(AdditionalAddress))
         .merge(qualification_kinds)
     end
 

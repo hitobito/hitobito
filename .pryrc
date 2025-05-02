@@ -49,6 +49,6 @@ if Rails.const_defined?(:Console)
 end
 
 def form_for(model, name: model.class.table_name.singularize, options: {})
-  ActionController::Base.helpers.extend(UtiltyHelper)
+  ActionController::Base.helpers.extend(UtilityHelper)
   StandardFormBuilder.new(model.class.name, model, ActionController::Base.helpers, options)
 end

@@ -20,6 +20,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   FORM_CONTROL = %w[form-control form-control-sm]
   FORM_CONTROL_WITH_WIDTH = %w[form-control form-control-sm] + WIDTH_CLASSES
   FORM_CONTROL_SELECT_WITH_WIDTH = %w[form-select form-select-sm] + WIDTH_CLASSES
+  LABEL_CLASSES = "col-md-3 col-xl-2 pb-1"
 
   attr_reader :template
 
@@ -167,10 +168,11 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:class] = [
       html_options[:class], "form-select", "form-select-sm", "tom-select"
     ].compact.join(" ")
+    html_options[:class] += " is-invalid" if errors_on?(attr)
     html_options[:data] = {placeholder: " ", chosen_no_results: I18n.t("global.chosen_no_results")}
     country_select(attr,
       {priority_countries: Settings.countries.prioritized,
-       selected: @object.nationality,
+       selected: @object.send(attr),
        include_blank: ""},
       html_options)
   end

@@ -15,6 +15,10 @@
 = field_set_tag do
   = f.labeled_inline_fields_for :additional_emails, 'contactable/additional_email_fields'
 
+- if entry.is_a?(Person) && FeatureGate.enabled?('additional_address')
+  = field_set_tag do
+    = f.labeled_inline_fields_for :additional_addresses, 'contactable/additional_address_fields'
+
 = field_set_tag do
   = render 'contactable/phone_numbers_fields', f: f
 

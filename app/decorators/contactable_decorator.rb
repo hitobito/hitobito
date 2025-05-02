@@ -29,12 +29,21 @@ module ContactableDecorator
     content_tag(:p, html)
   end
 
+  def all_additional_addresses(only_public = true)
+    nested_values(additional_addresses, only_public) do |address|
+      invoices_icon = h.icon("money-bill-alt", class: "muted", title: h.t(".invoices_tooltip_title")) if address.invoices?
+
+      [address.value, invoices_icon]
+    end
+  end
+
   def complete_contact
     address_name +
       complete_address +
       primary_email +
       all_additional_emails(true) +
       all_phone_numbers(true) +
+      all_additional_addresses(true) +
       all_social_accounts(true)
   end
 
@@ -52,19 +61,19 @@ module ContactableDecorator
 
   def all_additional_emails(only_public = true)
     nested_values(additional_emails, only_public) do |email|
-      h.mail_to(email)
+      h.mail_to(email.value)
     end
   end
 
   def all_phone_numbers(only_public = true)
     nested_values(phone_numbers, only_public) do |number|
-      h.link_to(number, "tel:#{number}")
+      h.link_to(number.value, "tel:#{number.value}")
     end
   end
 
   def all_social_accounts(only_public = true)
-    nested_values(social_accounts, only_public) do |name|
-      h.auto_link_value(name)
+    nested_values(social_accounts, only_public) do |social_account|
+      h.auto_link_value(social_account.value)
     end
   end
 
@@ -72,10 +81,10 @@ module ContactableDecorator
 
   def nested_values(values, only_public)
     html = values.collect do |v|
-      if !only_public || v.public?
-        val = block_given? ? yield(v.value) : v.value
-        h.value_with_muted(val, v.translated_label)
-      end
+      next unless !only_public || v.public?
+
+      val, suffix = block_given? ? yield(v) : v.value
+      h.value_with_muted(val, safe_join([v.translated_label, suffix].compact_blank, " "))
     end.compact
 
     html = h.safe_join(html, br)

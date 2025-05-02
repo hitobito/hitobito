@@ -24,3 +24,10 @@ email:
 groups:
   nextcloud:
     enabled: true
+
+additional_address:
+  enabled: true
+  predefined_labels:
+    - Rechnung
+    - Arbeit
+    - Andere

@@ -17,7 +17,6 @@
 #
 # Indexes
 #
-#  additional_emails_search_column_gin_idx                         (search_column) USING gin
 #  index_additional_emails_on_contactable_id_and_contactable_type  (contactable_id,contactable_type)
 #
 

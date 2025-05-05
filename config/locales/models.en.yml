@@ -660,12 +660,6 @@ en:
         name: Further e-mail
         public: Public
         mailings: Mailing
-      additional_emails:
-        email: E-Mail
-        name: Further e-mail
-        label: Further e-mail type
-        public: Public
-        mailings: Mailing
       mailing_list:
         name: Name
         description: Description

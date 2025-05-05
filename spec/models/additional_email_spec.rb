@@ -9,6 +9,7 @@
 #  id               :integer          not null, primary key
 #  contactable_type :string           not null
 #  email            :string           not null
+#  invoices         :boolean          default(FALSE)
 #  label            :string
 #  mailings         :boolean          default(TRUE), not null
 #  public           :boolean          default(TRUE), not null
@@ -16,7 +17,7 @@
 #
 # Indexes
 #
-#  additional_emails_search_column_gin_idx                         (search_column) USING gin
+#  idx_on_invoices_contactable_id_contactable_type_9f308c8a16      (invoices,contactable_id,contactable_type) WHERE (((contactable_type)::text = 'AdditionalEmail'::text) AND (invoices = true))
 #  index_additional_emails_on_contactable_id_and_contactable_type  (contactable_id,contactable_type)
 #
 
@@ -34,6 +35,26 @@ describe AdditionalEmail do
 
       a1.label = "Foo."
       expect(a1).not_to be_valid
+    end
+  end
+
+  context "invoices validation" do
+    it "validates uniqueness of invoices for contactable" do
+      a1 = Fabricate(:additional_email, label: "Foo", invoices: true, contactable: people(:top_leader))
+      expect(a1).to be_valid
+
+      a2 = Fabricate.build(:additional_email, label: "Bar", invoices: true, contactable: people(:top_leader))
+      expect(a2).not_to be_valid
+      expect(a2).to have(1).error_on(:invoices)
+
+      a3 = Fabricate.build(:additional_email, label: "Buz", invoices: true, contactable: people(:bottom_member))
+      expect(a3).to be_valid
+
+      a4 = Fabricate(:additional_email, label: "Buz", invoices: false, contactable: people(:top_leader))
+      expect(a4).to be_valid
+
+      a5 = Fabricate(:additional_email, label: "Buzz", invoices: false, contactable: people(:top_leader))
+      expect(a5).to be_valid
     end
   end
 

@@ -31,9 +31,7 @@ module ContactableDecorator
 
   def all_additional_addresses(only_public = true)
     nested_values(additional_addresses, only_public) do |address|
-      invoices_icon = h.icon("money-bill-alt", class: "muted", title: h.t(".invoices_tooltip_title")) if address.invoices?
-
-      [address.value, invoices_icon]
+      [address.value, invoice_icon(address)]
     end
   end
 
@@ -61,7 +59,7 @@ module ContactableDecorator
 
   def all_additional_emails(only_public = true)
     nested_values(additional_emails, only_public) do |email|
-      h.mail_to(email.value)
+      [h.mail_to(email.value), invoice_icon(email)]
     end
   end
 
@@ -89,6 +87,13 @@ module ContactableDecorator
 
     html = h.safe_join(html, br)
     content_tag(:p, html) if html.present?
+  end
+
+  def invoice_icon(contact_account)
+    return unless contact_account.try(:invoices?)
+
+    h.icon("money-bill-alt", class: "muted",
+      title: h.t("contactable.contact_data.invoices_tooltip_title"))
   end
 
   def br

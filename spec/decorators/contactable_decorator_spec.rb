@@ -38,6 +38,22 @@ describe ContactableDecorator do
     it { is_expected.to match(/foo@foobar.com/) }
     it { is_expected.to match(/additional@foobar.com.+Work/) }
     it { is_expected.not_to match(/private@foobar.com.+Mobile/) }
+
+    describe "suffix" do
+      let(:person) { people(:top_leader) }
+
+      it "contains muted translated label" do
+        person.additional_emails.create!(label: "Private", email: "invoices@example.com")
+        expect(person.decorate.all_additional_emails).to end_with "<span class=\"muted\">Private</span></p>"
+      end
+
+      it "contains muted translated label with invoices suffix for invoices email" do
+        person.additional_emails.create!(label: "Private", email: "invoices@example.com", invoices: true)
+        expect(person.decorate.all_additional_emails).to end_with(
+          "<span class=\"muted\">Private <i class=\"muted fas fa-money-bill-alt\" title=\"Wird für Rechnungen verwendet\"></i></span></p>"
+        )
+      end
+    end
   end
 
   context "#all_additional_emails" do

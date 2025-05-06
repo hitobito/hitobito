@@ -86,7 +86,6 @@ module PeopleFilterHelper
     end
   end
 
-
   def people_filter_attribute_control(attr, count, html_options = {})
     Person::Filter::AttributeControl.new(self, attr, count, html_options).to_s
   end

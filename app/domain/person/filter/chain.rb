@@ -38,7 +38,7 @@ class Person::Filter::Chain
       if attributes_filter
         attributes_filter.args[timestamp] = new_entry
       else
-        filter = Person::Filter::Attributes.new("attributes", { timestamp => new_entry })
+        filter = Person::Filter::Attributes.new("attributes", {timestamp => new_entry})
         obj.filters << filter
       end
 

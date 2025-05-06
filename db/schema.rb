@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_04_22_125029) do
+ActiveRecord::Schema[7.1].define(version: 2025_04_30_125739) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -183,6 +183,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_22_125029) do
     t.string "key", null: false
     t.string "placeholders_required"
     t.string "placeholders_optional"
+    t.string "context_type"
+    t.bigint "context_id"
+    t.index ["context_type", "context_id"], name: "index_custom_contents_on_context"
   end
 
   create_table "delayed_jobs", id: :serial, force: :cascade do |t|

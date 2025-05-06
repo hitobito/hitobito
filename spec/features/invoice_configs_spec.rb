@@ -85,4 +85,53 @@ describe :invoice_configs do
       end
     end
   end
+
+  context "custom content" do
+    before do
+      visit edit_path
+      click_link "E-Mail"
+      expect(page).to have_text "E-Mail Vorlage"
+    end
+
+    it "is possible to add and remove one custom content" do
+      custom_contents(:content_invoice_notification).update!(placeholders_required: nil)
+
+      expect(page).to have_text "Diese E-Mail Vorlage wird beim versenden von Rechnungen verwendet. Wenn keine E-Mail Vorlage hinterlegt wird, wird die globale E-Mail Voralge verwendet."
+      click_link "Eintrag hinzufügen"
+      expect(page).to have_text "Betreff"
+      expect(page).to have_text "Inhalt"
+      expect(page).to have_text "Verfügbare Platzhalter: {invoice-items}, {invoice-total}, {payment-information}, {recipient-name}, {group-name}, {group-address}, {invoice-number}"
+      click_button "Rechnungseinstellungen aktualisieren"
+      expect(page).to have_text "Rechnungseinstellungen wurden erfolgreich aktualisiert"
+
+      expect(group.invoice_config.custom_content).not_to be_nil
+
+      # remove again
+      visit edit_path
+      click_link "E-Mail"
+      click_link "E-Mail Vorlage entfernen"
+      click_button "Rechnungseinstellungen aktualisieren"
+      expect(page).to have_text "Rechnungseinstellungen wurden erfolgreich aktualisiert"
+
+      expect(group.invoice_config.reload.custom_content).to be_nil
+    end
+
+    it "is not possible to add multiple custom contents" do
+      click_link "Eintrag hinzufügen"
+      expect(page).to have_no_text "Eintrag hinzufügen"
+    end
+
+    it "link_to_add appears again when removing custom content" do
+      click_link "Eintrag hinzufügen"
+      expect(page).to have_no_text "Eintrag hinzufügen"
+      click_link "E-Mail Vorlage entfernen"
+      expect(page).to have_text "Eintrag hinzufügen"
+    end
+
+    it "shows validation when custom content is missing placeholders" do
+      click_link "Eintrag hinzufügen"
+      click_button "Rechnungseinstellungen aktualisieren"
+      expect(page).to have_text "Inhalt muss den Platzhalter {invoice-items} enthalten"
+    end
+  end
 end

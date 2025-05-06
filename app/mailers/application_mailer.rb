@@ -28,8 +28,12 @@ class ApplicationMailer < ActionMailer::Base
     custom_content_mail(recipients, content_key, values) if recipients.present?
   end
 
-  def custom_content_mail(recipients, content_key, values, headers = {})
-    content = CustomContent.get(content_key)
+  def custom_content_mail(recipients, content_key, values, headers = {}, context: nil)
+    content = if context
+      CustomContent.in_context(context).find_by(key: content_key) || CustomContent.get(content_key)
+    else
+      CustomContent.get(content_key)
+    end
     headers[:to] = use_mailing_emails(recipients)
     headers[:subject] ||= unescape_html(content.subject_with_values(values))
     mail(headers) do |format|

@@ -24,7 +24,8 @@ class InvoiceMailer < ApplicationMailer
 
     custom_content_mail(@invoice.recipient_email, CONTENT_INVOICE_NOTIFICATION,
       values_for_placeholders(CONTENT_INVOICE_NOTIFICATION),
-      mail_headers(@sender, @invoice.invoice_config.email))
+      mail_headers(@sender, @invoice.invoice_config.email),
+      context: @invoice.invoice_config)
   end
 
   private

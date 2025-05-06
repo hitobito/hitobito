@@ -30,6 +30,11 @@ class CustomContent < ActiveRecord::Base
 
   validate :assert_required_placeholders_are_used
 
+  belongs_to :context, optional: true, polymorphic: true
+
+  default_scope { where(context_id: nil, context_type: nil) }
+  scope :in_context, ->(context) { unscoped.where(context: context) }
+
   class << self
     def get(key)
       find_by!(key: key)
@@ -45,11 +50,11 @@ class CustomContent < ActiveRecord::Base
   end
 
   def placeholders_required_list
-    as_list(placeholders_required)
+    as_list(custom_content_value(:placeholders_required))
   end
 
   def placeholders_optional_list
-    as_list(placeholders_optional)
+    as_list(custom_content_value(:placeholders_optional))
   end
 
   def placeholder_token(key)
@@ -83,6 +88,14 @@ class CustomContent < ActiveRecord::Base
   end
 
   private
+
+  def custom_content_value(field)
+    if context
+      CustomContent.find_by(key: key)&.public_send(field)
+    else
+      public_send(field)
+    end
+  end
 
   def as_list(placeholders)
     placeholders.to_s.split(",").collect(&:strip)

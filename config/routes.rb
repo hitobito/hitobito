@@ -349,6 +349,8 @@ Hitobito::Application.routes.draw do
         delete ':mailbox' => 'imap_mails#destroy', as: :imap_mails_destroy
         patch ':mailbox/move' => 'imap_mails_move#create', as: :imap_mails_move
       end
+
+      resources :bounces, only: [:index]
     end
 
     resources :qualification_kinds

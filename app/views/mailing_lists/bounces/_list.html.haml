@@ -1,0 +1,9 @@
+= list_table do |t|
+  - t.col(t.sort_header(:email)) do |b|
+    - if b.person
+      %strong= link_to b.email, person_path(b.person)
+    - else
+      = b.email
+  - t.sortable_attr(:bounce_count)
+  - t.attr(:blocked_at)
+

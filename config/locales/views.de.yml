@@ -1209,6 +1209,8 @@ de:
           one: Mail erfolgreich verschoben
           other: "%{count} Mails erfolgreich verschoben"
         server_error: Verbindung zum Mailserver nicht möglich, bitte versuche es später erneut.
+    bounces:
+      manage: Rückläufer
     recipient_counts:
       index:
         recipient_info:

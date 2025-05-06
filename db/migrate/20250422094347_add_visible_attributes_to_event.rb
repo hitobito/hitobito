@@ -4,7 +4,7 @@ class AddVisibleAttributesToEvent < ActiveRecord::Migration[7.1]
 
     execute <<-SQL.squish
       UPDATE events
-      SET visible_contact_attributes = 'all'
+      SET visible_contact_attributes = '["all"]'
       WHERE visible_contact_attributes IS NULL
     SQL
   end

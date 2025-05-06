@@ -909,6 +909,13 @@ de:
         mailings: Versand
         invoices: Rechnung
 
+      additional_emails:
+        email: E-Mail
+        name: Weitere E-Mail
+        label: Weitere E-Mail Typ
+        public: Öffentlich
+        mailings: Versand
+
       mailing_list:
         name: Name
         description: Beschreibung

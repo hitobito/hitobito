@@ -871,6 +871,12 @@ fr:
         label: Autre type d'e-mail
         public: Public
         mailings: Envoi
+      additional_emails:
+        email: Adresse e-mail
+        name: Adresse e-mail supplémentaire
+        label: Type d'adresse e-mail supplémentaire
+        public: Public
+        mailings: Envoi
       mailing_list:
         name: Nom
         description: Description

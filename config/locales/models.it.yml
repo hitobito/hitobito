@@ -811,6 +811,12 @@ it:
         name: Altre email
         public: Pubblico
         mailings: Invio
+      additional_emails:
+        email: Email
+        name: Altre email
+        label: Altro tipo di email
+        public: Pubblico
+        mailings: invio
       mailing_list:
         name: Nome della lista
         description: Descrizione

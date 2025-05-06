@@ -21,9 +21,9 @@ describe Subscriber::FilterController, js: true do
 
     visit edit_group_mailing_list_filter_path(group.to_param, list.to_param)
 
-    find('a.accordion-button[href="#languages"]').click
-
-    check("filters_language_allowed_values_de")
+    select "Sprache", from: "attribute_filter"
+    all(".language_select_field")[1].click
+    find(".ts-dropdown .option", text: "Deutsch").click
 
     all("form .btn-group").first.click_button "Speichern"
 

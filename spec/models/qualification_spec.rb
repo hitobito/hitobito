@@ -25,6 +25,7 @@ require "spec_helper"
 describe Qualification do
   let(:qualification) { Fabricate(:qualification, person: person) }
   let(:person) { Fabricate(:person) }
+  let(:accountant) { qualifications(:bottom_member) }
 
   describe ".order_by_date" do
     subject(:scope) { described_class.order_by_date }
@@ -43,14 +44,14 @@ describe Qualification do
       gl = create_qualification(:gl, start_at: today) # validity 1 year
       ql = create_qualification(:ql, start_at: today) # no validity, i.e. no finished_at set
 
-      expect(described_class.order_by_date).to eq [ql, sl, gl]
+      expect(described_class.order_by_date).to eq [ql, sl, gl, accountant]
     end
 
     it "orders by start_at descending if finish_at is equal" do
       sl = create_qualification(:sl, start_at: today, finish_at: 1.year.from_now)
       gl = create_qualification(:gl, start_at: today - 1.day, finish_at: 1.year.from_now)
 
-      expect(described_class.order_by_date).to eq [sl, gl]
+      expect(described_class.order_by_date).to eq [sl, gl, accountant]
     end
   end
 
@@ -241,19 +242,19 @@ describe Qualification do
     context "not_active" do
       before { kind.update_column(:reactivateable, 2) }
 
-      it { expect(Qualification.not_active).to be_blank }
-      it { expect(Qualification.not_active([kind.id])).to be_blank }
-      it { expect(Qualification.not_active([], today + 2.years)).to match_array([q]) }
-      it { expect(Qualification.not_active([kind.id], today + 2.years)).to match_array([q]) }
+      it { expect(Qualification.not_active).to match_array([accountant]) }
+      it { expect(Qualification.not_active([kind.id])).to match_array([accountant]) }
+      it { expect(Qualification.not_active([], today + 2.years)).to match_array([q, accountant]) }
+      it { expect(Qualification.not_active([kind.id], today + 2.years)).to match_array([q, accountant]) }
     end
 
     context "only_expired" do
       let(:gl_leader) { qualification_kinds(:gl_leader) }
 
-      it { expect(Qualification.only_expired).to be_blank }
-      it { expect(Qualification.only_expired([kind.id])).to be_blank }
-      it { expect(Qualification.only_expired([], today + 2.years)).to match_array([q]) }
-      it { expect(Qualification.only_expired([kind.id], today + 2.years)).to match_array([q]) }
+      it { expect(Qualification.only_expired).to match_array([accountant]) }
+      it { expect(Qualification.only_expired([kind.id])).to match_array([accountant]) }
+      it { expect(Qualification.only_expired([], today + 2.years)).to match_array([q, accountant]) }
+      it { expect(Qualification.only_expired([kind.id], today + 2.years)).to match_array([q, accountant]) }
       it { expect(Qualification.only_expired([-1], today + 2.years)).to be_empty }
 
       context "with another reactivateable qualification" do
@@ -261,39 +262,39 @@ describe Qualification do
           Fabricate(:qualification, qualification_kind: gl_leader, start_at: 1.day.ago)
         }
 
-        it { expect(Qualification.only_expired).to be_blank }
-        it { expect(Qualification.only_expired([kind.id])).to be_blank }
-        it { expect(Qualification.only_expired([], today + 2.years)).to match_array([q]) }
-        it { expect(Qualification.only_expired([kind.id], today + 2.years)).to match_array([q]) }
-        it { expect(Qualification.only_expired([], today + 4.years)).to match_array([q, gl_leader_active]) }
-        it { expect(Qualification.only_expired([kind.id, gl_leader.id], today + 4.years)).to match_array([q, gl_leader_active]) }
+        it { expect(Qualification.only_expired).to match_array([accountant]) }
+        it { expect(Qualification.only_expired([kind.id])).to match_array([accountant]) }
+        it { expect(Qualification.only_expired([], today + 2.years)).to match_array([q, accountant]) }
+        it { expect(Qualification.only_expired([kind.id], today + 2.years)).to match_array([q, accountant]) }
+        it { expect(Qualification.only_expired([], today + 4.years)).to match_array([q, gl_leader_active, accountant]) }
+        it { expect(Qualification.only_expired([kind.id, gl_leader.id], today + 4.years)).to match_array([q, gl_leader_active, accountant]) }
       end
 
       context "when qualification never expires" do
         before { q.update_columns(finish_at: nil) }
 
-        it { expect(Qualification.only_expired).to be_blank }
-        it { expect(Qualification.only_expired([kind.id])).to be_blank }
-        it { expect(Qualification.only_expired([], today + 2.years)).to be_blank }
-        it { expect(Qualification.only_expired([kind.id], today + 2.years)).to be_blank }
+        it { expect(Qualification.only_expired).to match_array([accountant]) }
+        it { expect(Qualification.only_expired([kind.id])).to match_array([accountant]) }
+        it { expect(Qualification.only_expired([], today + 2.years)).to match_array([accountant]) }
+        it { expect(Qualification.only_expired([kind.id], today + 2.years)).to match_array([accountant]) }
       end
 
       context "when qualification is reactivateable for 2 years" do
         before { kind.update_column(:reactivateable, 2) }
 
-        it { expect(Qualification.only_expired([], today + 2.years)).to be_empty }
-        it { expect(Qualification.only_expired([kind.id], today + 2.years)).to be_empty }
-        it { expect(Qualification.only_expired([], today + 5.years)).to match_array([q]) }
-        it { expect(Qualification.only_expired([kind.id], today + 5.years)).to match_array([q]) }
+        it { expect(Qualification.only_expired([], today + 2.years)).to match_array([accountant]) }
+        it { expect(Qualification.only_expired([kind.id], today + 2.years)).to match_array([accountant]) }
+        it { expect(Qualification.only_expired([], today + 5.years)).to match_array([q, accountant]) }
+        it { expect(Qualification.only_expired([kind.id], today + 5.years)).to match_array([q, accountant]) }
       end
 
       context "when another expired qualification of same kind exists" do
         let!(:inactive) { Fabricate(:qualification, qualification_kind: kind, person: person, start_at: start_date - 10.years) }
 
-        it { expect(Qualification.only_expired).to be_blank }
-        it { expect(Qualification.only_expired([kind.id])).to be_blank }
-        it { expect(Qualification.only_expired([], today + 2.years)).to match_array([inactive, q]) }
-        it { expect(Qualification.only_expired([kind.id], today + 2.years)).to match_array([inactive, q]) }
+        it { expect(Qualification.only_expired).to match_array([accountant]) }
+        it { expect(Qualification.only_expired([kind.id])).to match_array([accountant]) }
+        it { expect(Qualification.only_expired([], today + 2.years)).to match_array([inactive, q, accountant]) }
+        it { expect(Qualification.only_expired([kind.id], today + 2.years)).to match_array([inactive, q, accountant]) }
       end
     end
 
@@ -305,7 +306,7 @@ describe Qualification do
         @expired = Fabricate(:qualification, qualification_kind: kind, person: person, start_at: today - 5.years) # expired
       end
 
-      it { expect(Qualification.only_reactivateable).to match_array([@reactivatable]) }
+      it { expect(Qualification.only_reactivateable).to match_array([@reactivatable, accountant]) }
       it { expect(Qualification.only_reactivateable(today + 2.years)).to match_array([q]) }
       it { expect(Qualification.only_reactivateable(today + 4.years)).to be_blank }
     end

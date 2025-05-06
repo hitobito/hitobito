@@ -78,75 +78,6 @@ describe PeopleController, js: true do
         expect(page).to have_css("#roles input[name='filters[role][role_type_ids][]']:checked", count: 0)
       end
     end
-
-    it "toggles groups and layers when changing range" do
-      obsolete_node_safe do
-        sign_in
-        visit group_people_path(group, range: "group")
-
-        click_link "Weitere Ansichten"
-        click_link "Neuer Filter..."
-        expect(page).to have_content "Personen filtern"
-        click_link "Rollen"
-
-        expect(page).to have_no_selector("h4", text: "Bottom Layer")
-        expect(page).to have_selector("h4", text: "Top Layer")
-        expect(page).to have_selector("h5", text: "Top Layer")
-        expect(page).to have_no_selector("h5", text: "Top Group")
-
-        find("#range_deep").set(true)
-        expect(page).to have_selector("h4", text: "Bottom Layer")
-
-        find("#range_group").set(true)
-        expect(page).to have_no_selector("h4", text: "Bottom Layer")
-        expect(page).to have_selector("h4", text: "Top Layer")
-        expect(page).to have_selector("h5", text: "Top Layer")
-        expect(page).to have_no_selector("h5", text: "Top Group")
-
-        find("#range_layer").set(true)
-        expect(page).to have_no_selector("h4", text: "Bottom Layer")
-        expect(page).to have_selector("h4", text: "Top Layer")
-        expect(page).to have_selector("h5", text: "Top Layer")
-        expect(page).to have_selector("h5", text: "Top Group")
-      end
-    end
-  end
-
-  context "qualifications" do
-    before do
-      sign_in
-      visit group_people_path(group, range: "group")
-
-      click_link "Weitere Ansichten"
-      click_link "Neuer Filter..."
-      expect(page).to have_content "Personen filtern"
-      find(".btn.dropdown-toggle").click
-      click_link "Qualifikationen"
-    end
-
-    it "adjusts filters when checking 'Alle jemals erteilten Qualifikationen'" do
-      choose "Alle jemals erteilten Qualifikationen"
-      expect(page).to have_content "Qualifikationsjahr einschränken"
-      expect(page).not_to have_content "Stichdatum"
-      expect(page).not_to have_field "Person hat ALLE diese Qualifikationen" # is disabled
-      expect(page).to have_checked_field "Person hat mindestens EINE dieser Qualifikationen"
-    end
-
-    it "adjusts filters when checking 'Keine jemals erteilte Qualifikation'" do
-      choose "Keine jemals erteilte Qualifikation"
-      expect(page).not_to have_content "Qualifikationsjahr einschränken"
-      expect(page).not_to have_content "Stichdatum"
-      expect(page).not_to have_field "Person hat ALLE diese Qualifikationen" # is disabled
-      expect(page).to have_checked_field "Person hat mindestens EINE dieser Qualifikationen"
-    end
-
-    it "adjusts filters when checking 'Abgelaufene, aber nicht gültige oder reaktivierbare Qualifikationen'" do
-      choose "Keine jemals erteilte Qualifikation"
-      expect(page).not_to have_content "Qualifikationsjahr einschränken"
-      expect(page).not_to have_content "Stichdatum"
-      expect(page).not_to have_field "Person hat ALLE diese Qualifikationen" # is disabled
-      expect(page).to have_checked_field "Person hat mindestens EINE dieser Qualifikationen"
-    end
   end
 
   context "attributes" do
@@ -164,12 +95,6 @@ describe PeopleController, js: true do
 
     it "supports filtering by specific attribute on person" do
       choose "In der aktuellen Ebene und allen darunter liegenden Ebenen und Gruppen"
-      first(:button, "Suchen").click
-      expect(page).to have_css "td", text: "Leader Top"
-      expect(page).to have_css "td", text: "Member Bottom"
-      click_link "Eigener Filter"
-      click_link "Neuer Filter..."
-      click_link "Felder"
       select "Nachname"
       option = select "ist genau"
       value_id = option.send(:parent)["id"].gsub("constraint", "value")

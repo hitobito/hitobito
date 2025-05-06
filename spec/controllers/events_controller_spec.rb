@@ -35,6 +35,9 @@ describe EventsController do
                   kind_id: event_kinds(:slk).id,
                   dates_attributes: [date],
                   application_questions_attributes: [question],
+                  visible_contact_attributes: {
+                    all: "1"
+                  },
                   wagon_course_speciality_attributes: [
                     name: "Special",
                     desc: "Course-Stuff",
@@ -292,6 +295,9 @@ describe EventsController do
                   name: "foo",
                   kind_id: event_kinds(:slk).id,
                   dates_attributes: [date],
+                  visible_contact_attributes: {
+                    all: "1"
+                  },
                   application_questions_attributes: [question],
                   contact_id: people(:top_leader).id,
                   type: "Event::Course"},
@@ -341,6 +347,9 @@ describe EventsController do
             group_id: group.id,
             id: event.id,
             event: {name: "testevent",
+                    visible_contact_attributes: {
+                      all: "1"
+                    },
                     dates_attributes: {
                       d1.id.to_s => {id: d1.id,
                                      label: "Vorweek",
@@ -379,6 +388,9 @@ describe EventsController do
             id: event.id,
             event: {
               name: "testevent",
+              visible_contact_attributes: {
+                all: "1"
+              },
               application_questions_attributes: {
                 q1.id.to_s => {id: q1.id, question: "Whoo?", disclosure: :optional},
                 q2.id.to_s => {id: q2.id, _destroy: true},
@@ -475,10 +487,12 @@ describe EventsController do
 
     it "assigns required and hidden contact attributes" do
       put :update, params: {group_id: group.id, id: event.id,
-                            event: {contact_attrs: {nickname: :required,
-                                                    street: :hidden,
-                                                    housenumber: :hidden,
-                                                    social_accounts: :hidden}}}
+                            event: {visible_contact_attributes: {
+                              all: "1"
+                            }, contact_attrs: {nickname: :required,
+                                               street: :hidden,
+                                               housenumber: :hidden,
+                                               social_accounts: :hidden}}}
 
       expect(event.reload.required_contact_attrs).to include("nickname")
       expect(event.reload.hidden_contact_attrs).to include("street")
@@ -490,7 +504,7 @@ describe EventsController do
       event.update!({hidden_contact_attrs: %w[social_accounts street nickname]})
 
       put :update, params: {group_id: group.id, id: event.id,
-                            event: {contact_attrs: {nickname: :hidden}}}
+                            event: {contact_attrs: {nickname: :hidden}, visible_contact_attributes: {all: "1"}}}
 
       expect(event.reload.hidden_contact_attrs).to include("nickname")
       expect(event.hidden_contact_attrs).not_to include("street")

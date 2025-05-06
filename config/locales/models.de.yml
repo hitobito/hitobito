@@ -915,6 +915,13 @@ de:
         public: Öffentlich
         mailings: Versand
 
+      additional_emails:
+        email: E-Mail
+        name: Weitere E-Mail
+        label: Weitere E-Mail Typ
+        public: Öffentlich
+        mailings: Versand
+
       mailing_list:
         name: Name
         description: Beschreibung

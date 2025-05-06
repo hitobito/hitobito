@@ -1179,7 +1179,7 @@ de:
       email: Mailing-Liste (E-Mail)
       mailchimp: MailChimp
     imap_mails:
-      manage: Mails
+      manage: Postfach
       mailboxes:
         inbox: Eingang
         spam: Spam
@@ -1340,7 +1340,7 @@ de:
     admin: "Einstellungen"
     admin/event_feed: "Kalender integrieren"
     admin/oauth_authorizations: "OAuth-Autorisierungen"
-    imap_mails: "Mails"
+    imap_mails: "Mails und Rückläufer"
     invoices: "Rechnungen"
     invoices/single: "Einzelrechnungen"
     invoices/evaluations: "Buchungsbeleg"

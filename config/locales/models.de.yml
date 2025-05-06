@@ -214,6 +214,8 @@ de:
       assignment:
         one: Auftrag
         other: Aufträge
+      bounce:
+        other: Rückläufer
       calendar:
         one: Kalender-Feed
         other: Kalender-Feeds
@@ -436,6 +438,13 @@ de:
         town: Ort
         country: Land
         postbox: Postfach
+
+      bounces:
+        email: E-Mail
+        bounce_count: Anzahl Rückläufer
+        blocked_count: Verhinderte Mails
+        blocked_at: Sperrzeitpunkt
+        mailing_list_ids: Abo-IDs
 
       cantons:
         ag: Aargau

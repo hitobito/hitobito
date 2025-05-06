@@ -10,9 +10,11 @@ require "net/imap"
 module MailingLists::ImapMails
   extend ActiveSupport::Concern
 
-  IMAP_SERVER_ERRORS = [Net::IMAP::ResponseError,
+  IMAP_SERVER_ERRORS = [
+    Net::IMAP::ResponseError,
     Errno::EADDRNOTAVAIL,
-    SocketError].freeze
+    SocketError
+  ].freeze
 
   private
 

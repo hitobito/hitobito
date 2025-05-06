@@ -16,7 +16,7 @@ module MailingLists::BulkMail
     end
 
     def process
-      if !source_message || outdated?
+      if source_message.blank? || source_message_outdated?
         reject_bounce
         return
       end
@@ -25,6 +25,7 @@ module MailingLists::BulkMail
         raw_source: @imap_mail.raw_source)
       log_info("Forwarding bounce message for list #{@mailing_list.mail_address} " \
                "to #{source_message.mail_from}")
+
       MailingLists::BulkMail::BounceMessageForwardJob.new(@bulk_mail_bounce).enqueue!
     end
 
@@ -40,7 +41,7 @@ module MailingLists::BulkMail
         @imap_mail.auto_response_hitobito_message_uid
     end
 
-    def outdated?
+    def source_message_outdated?
       outdated_at = DateTime.now - MAX_BOUNCE_AGE
       source_message.created_at < outdated_at
     end

@@ -14,7 +14,9 @@ class Event::CancelApplicationJob < BaseJob
   end
 
   def perform
-    Event::ParticipationMailer.cancel(event, person).deliver_now
+    LocaleSetter.with_locale(person: person) do
+      Event::ParticipationMailer.cancel(event, person).deliver_now
+    end
   end
 
   def event

@@ -59,10 +59,12 @@
 
 top_event:
   groups: top_layer
+  visible_contact_attributes: ["all"]
   type:
 
 top_course:
   groups: top_layer
+  visible_contact_attributes: ["all"]
   type: Event::Course
   number: TOP-007
   kind: slk

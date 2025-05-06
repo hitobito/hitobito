@@ -74,6 +74,15 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   require_dependency "event/role_decorator"
   require_dependency "event/role_ability"
 
+  ALLOWED_VISIBLE_CONTACT_ATTRIBUTES = %w[
+    all
+    name
+    address
+    phone_number
+    email
+    social_account
+  ].freeze
+
   SEARCHABLE_ATTRS = [:number, {event_translations: [:name], groups: [:name]}]
 
   include Event::Participatable
@@ -176,14 +185,17 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     timeliness: {type: :date, allow_blank: true, before: ::Date.new(9999, 12, 31)}
   validates :description, :location, :application_conditions,
     length: {allow_nil: true, maximum: 2**16 - 1}
+  validates :visible_contact_attributes, presence: true
   validate :assert_type_is_allowed_for_groups
   validate :assert_application_closing_is_after_opening
   validate :assert_required_contact_attrs_valid
   validate :assert_hidden_contact_attrs_valid
+  validate :validate_visible_contact_attributes
   validates_associated :application_questions, :admin_questions
 
   ### CALLBACKS
 
+  after_initialize :set_default_visible_contact_attributes, if: :new_record?
   before_validation :set_self_in_nested
   before_validation :set_signature, if: :signature_confirmation?
   before_validation :prefill_shared_access_token, unless: :shared_access_token?
@@ -192,6 +204,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     allow_destroy: true
 
   ### SERIALIZED ATTRIBUTES
+  serialize :visible_contact_attributes, type: Array, coder: NilArrayCoder
   serialize :required_contact_attrs, type: Array, coder: NilArrayCoder
   serialize :hidden_contact_attrs, type: Array, coder: NilArrayCoder
 
@@ -516,11 +529,23 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     end
   end
 
+  def validate_visible_contact_attributes
+    return if visible_contact_attributes.blank?
+
+    unless visible_contact_attributes.all? { |attr| ALLOWED_VISIBLE_CONTACT_ATTRIBUTES.include?(attr) }
+      errors.add(:visible_contact_attributes, :inclusion)
+    end
+  end
+
   def set_signature
     self.signature = true
   end
 
   def prefill_shared_access_token
     self.shared_access_token ||= Devise.friendly_token
+  end
+
+  def set_default_visible_contact_attributes
+    self.visible_contact_attributes = ["all"] if visible_contact_attributes.blank?
   end
 end

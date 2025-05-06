@@ -10,7 +10,7 @@ module ContactableDecorator
     model.address
   end
 
-  def address_name
+  def contact_name
     content_tag(:strong, to_s)
   end
 
@@ -35,14 +35,24 @@ module ContactableDecorator
     end
   end
 
-  def complete_contact
-    address_name +
-      complete_address +
-      primary_email +
-      all_additional_emails(true) +
-      all_phone_numbers(true) +
-      all_additional_addresses(true) +
-      all_social_accounts(true)
+  def complete_contact(visible_contact_attributes = nil)
+    contact_data = {
+      name: contact_name,
+      address: complete_address + all_additional_addresses(true),
+      email: primary_email.to_s + all_additional_emails,
+      phone_number: all_phone_numbers,
+      social_account: all_social_accounts
+    }
+
+    if visible_contact_attributes.nil? || visible_contact_attributes&.include?("all")
+      return contact_data.values.inject(ActiveSupport::SafeBuffer.new) { |buffer, value| buffer.concat(value) }
+    end
+
+    contact_data.each_with_object(ActiveSupport::SafeBuffer.new) do |(key, value), buffer|
+      if visible_contact_attributes.nil? || visible_contact_attributes.include?(key.to_s)
+        buffer.concat(value)
+      end
+    end
   end
 
   def primary_email

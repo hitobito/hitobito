@@ -8,6 +8,7 @@ require "spec_helper"
 describe Person::Filter::Qualification do
   let(:user) { people(:top_leader) }
   let(:group) { groups(:top_layer) }
+  let(:bottom_member) { people(:bottom_member) }
   let(:today) { Time.zone.today }
   let(:range) { nil }
   let(:validity) { "all" }
@@ -124,7 +125,7 @@ describe Person::Filter::Qualification do
         let(:qualification_kind_ids) { qualification_kinds(:sl, :gl_leader).collect(&:id) }
 
         it "loads all entries in layer and below" do
-          expect(entries).to match_array([@tg_member, @tg_extern, @bl_leader, @bg_leader])
+          expect(entries).to match_array([@tg_member, @tg_extern, @bl_leader, @bg_leader, bottom_member])
         end
 
         it "contains only visible people" do
@@ -240,7 +241,7 @@ describe Person::Filter::Qualification do
           let(:user) { bl_leader }
 
           it "loads all accessible entries" do
-            expect(entries).to match_array([@bl_leader, @bg_leader, @bg_member, @bl_extern])
+            expect(entries).to match_array([@bl_leader, @bg_leader, @bg_member, @bl_extern, bottom_member])
           end
 
           it "contains only visible people" do
@@ -518,7 +519,7 @@ describe Person::Filter::Qualification do
         before { qualification_kinds(:sl).update!(reactivateable: 2) }
 
         it "loads matched entries" do
-          expect(entries).to match_array([@bl_extern, @bl_leader])
+          expect(entries).to match_array([@bl_extern, @bl_leader, bottom_member])
         end
 
         it "contains only people without any active qualification" do
@@ -541,7 +542,7 @@ describe Person::Filter::Qualification do
           expect(sl_quali).to be_reactivateable
           gl_quali = @bl_leader.qualifications.where(qualification_kind: qualification_kinds(:gl_leader)).order(:start_at).last
           expect(gl_quali).to be_active
-          expect(entries).to match_array([@bl_extern])
+          expect(entries).to match_array([@bl_extern, bottom_member])
         end
 
         it "contains all people" do
@@ -567,7 +568,7 @@ describe Person::Filter::Qualification do
             expect(sl_quali).not_to be_reactivateable(reference_date)
             gl_quali = @bl_leader.qualifications.where(qualification_kind: qualification_kinds(:gl_leader)).order(:start_at).last
             expect(gl_quali).to be_reactivateable(reference_date)
-            expect(entries).to match_array([@bl_leader])
+            expect(entries).to match_array([@bl_leader, bottom_member])
           end
         end
 
@@ -650,7 +651,7 @@ describe Person::Filter::Qualification do
         let(:validity) { "all" }
 
         it "loads matched entries" do
-          expect(entries).to match_array([@bg_member, @bl_extern, @bg_leader, @bl_leader])
+          expect(entries).to match_array([@bg_member, @bl_extern, @bg_leader, @bl_leader, bottom_member])
         end
 
         it "contains all people" do
@@ -701,7 +702,7 @@ describe Person::Filter::Qualification do
           let(:qualification_kind_ids) { [qualification_kinds(:sl).id] }
 
           it "excludes people with qualification matching sl quali kind" do
-            expect(entries).to match_array([bottom_member, @bl_extern])
+            expect(entries).to match_array([@bl_extern])
           end
         end
 
@@ -709,7 +710,7 @@ describe Person::Filter::Qualification do
           let(:qualification_kind_ids) { [qualification_kinds(:sl).id, qualification_kinds(:gl_leader).id] }
 
           it "excludes people with qualification matching sl or gl_leader quali kind" do
-            expect(entries).to match_array([bottom_member])
+            expect(entries).to be_blank
           end
         end
       end
@@ -724,7 +725,7 @@ describe Person::Filter::Qualification do
           let(:qualification_kind_ids) { [sl.id] }
 
           it "includes bg_leader and bl_leader" do
-            expect(entries).to match_array([@bg_leader, @bl_leader])
+            expect(entries).to match_array([@bg_leader, @bl_leader, bottom_member])
           end
         end
 
@@ -733,13 +734,13 @@ describe Person::Filter::Qualification do
           let(:qualification_kind_ids) { [sl.id, gl_leader.id] }
 
           it "excludes bl_leader because his gl_leader quali is reactivateable" do
-            expect(entries).to match_array([@bg_leader])
+            expect(entries).to match_array([@bg_leader, bottom_member])
           end
 
           it "includes bl_leader because if gl_leader quali is no longer reactivateable" do
             @bl_leader.qualifications
               .find_by(qualification_kind: gl_leader).update_columns(finish_at: 3.years.ago)
-            expect(entries).to match_array([@bg_leader, @bl_leader])
+            expect(entries).to match_array([@bg_leader, @bl_leader, bottom_member])
           end
         end
       end

@@ -44,6 +44,7 @@ describe LocaleSetter do
     subject.with_locale(locale: :en) do
       expect(I18n.locale).to eq(:de)
     end
+    I18n.available_locales += [:en]
   end
 
   it "ensures to reset locale back to previous locale" do

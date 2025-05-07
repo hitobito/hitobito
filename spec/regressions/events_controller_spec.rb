@@ -19,7 +19,7 @@ describe EventsController, type: :controller do
   let(:test_entry_attrs) do
     {name: "Chief Leader Course",
      visible_contact_attributes: {
-       all: "1"
+       name: "1"
      },
      group_ids: [group.id],
      dates_attributes: [date]}

@@ -100,7 +100,7 @@ describe Event::ParticipationMailer do
       e1 = Fabricate(:additional_email, contactable: person, mailings: true, public: true)
       participation.person.reload
       expect(mail.to).to eq [e1.email]
-      is_expected.to match(/a href=&quot;mailto:#{e1.email}&quot;/)
+      is_expected.to match(/a href="mailto:#{e1.email}"/)
     end
   end
 

@@ -9,12 +9,11 @@ export default class extends Controller {
   static targets = ["main", "dependent"];
   static values = {
     selectDependentCheckboxes: { type: Boolean, default: false },
-    uncheckDependentOnMainToggle: { type: Boolean, default: false }
   }
 
-  // unselects all dependent checkboxes when checking/unchecking master checkbox
+  // unselects all dependent checkboxes when unchecking master checkbox
   toggleMain() {
-    if (!event.target.checked || (this.uncheckDependentOnMainToggleValue && event.target.checked)) {
+    if (!event.target.checked) {
       this.dependentTargets.forEach((checkbox) => {
         checkbox.checked = false;
       });
@@ -25,8 +24,8 @@ export default class extends Controller {
     }
   }
 
-  // selects or unselects master checkbox if any dependent checkbox is checked
+  // selects master checkbox if any dependent checkbox is checked
   toggleDependent() {
-    this.mainTarget.checked = !this.uncheckDependentOnMainToggleValue;
+    this.mainTarget.checked = true;
   }
 }

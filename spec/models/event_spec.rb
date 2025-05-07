@@ -482,7 +482,7 @@ describe Event do
     end
 
     it "is valid if visible_contact_attributes contains valid values" do
-      subject.visible_contact_attributes = ["all"]
+      subject.visible_contact_attributes = ["name"]
       is_expected.to be_valid
     end
 

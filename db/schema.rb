@@ -405,7 +405,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_22_125029) do
     t.decimal "training_days", precision: 5, scale: 2
     t.integer "minimum_participants"
     t.boolean "automatic_assignment", default: false, null: false
-    t.string "visible_contact_attributes"
+    t.string "visible_contact_attributes", default: "[\"name\", \"address\", \"phone_number\", \"email\", \"social_account\"]"
     t.index ["kind_id"], name: "index_events_on_kind_id"
     t.index ["shared_access_token"], name: "index_events_on_shared_access_token"
   end

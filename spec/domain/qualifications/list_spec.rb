@@ -101,13 +101,13 @@ describe Qualifications::List do
         gl.update!(reactivateable: 3)
         Fabricate(:qualification, person: person, qualification_kind: gl,
           start_at: qualifying_date - 3.years)
-        expect(qualifications[0].open_training_days).to eq 1
+        expect(qualifications[1].open_training_days).to eq 1
       end
 
       it "is present if qualification is active" do
         Fabricate(:qualification, person: person, qualification_kind: gl,
           start_at: qualifying_date - 3.months)
-        expect(qualifications[0].open_training_days).to eq 1
+        expect(qualifications[1].open_training_days).to eq 1
       end
 
       it "sums trainings after qualifying_date" do

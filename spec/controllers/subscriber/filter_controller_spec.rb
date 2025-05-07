@@ -29,7 +29,7 @@ describe Subscriber::FilterController do
     let(:filters) do
       {
         attributes: {"1699698452786" => {"constraint" => "greater", "key" => "years", "value" => "16"},
-                     "9845218032045" => {"constraint" => "equal", "key" => "language", "value" =>  %w[de fr]}}
+                     "9845218032045" => {"constraint" => "equal", "key" => "language", "value" => %w[de fr]}}
       }
     end
 

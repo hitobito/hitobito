@@ -13,7 +13,7 @@ describe Person::Filter::Role do
   context "initialize" do
     it "ignores unknown role types" do
       filter = Person::Filter::Role.new(:role, role_types: %w[Group::TopGroup::Leader Group::BottomGroup::OldRole File Group::BottomGroup::Member])
-      expect(filter.to_hash).to eq(role_types: %w[Group::TopGroup::Leader Group::BottomGroup::Member])
+      expect(filter.to_hash).to eq(role_type_ids: [Group::TopGroup::Leader.id, Group::BottomGroup::Member.id], role_types: %w[Group::TopGroup::Leader Group::BottomGroup::Member], kind: nil)
     end
 
     it "ignores unknown role ids" do

@@ -784,6 +784,7 @@ describe PeopleController do
       end
 
       it "sends password instructions" do
+        expect(LocaleSetter).to receive(:with_locale).with(person: person).and_call_original
         expect do
           post :send_password_instructions, params: {group_id: groups(:bottom_layer_one).id, id: person.id}, format: :js
         end.to change { Delayed::Job.count }.by(1)

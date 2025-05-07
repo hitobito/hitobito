@@ -46,5 +46,16 @@ RSpec.describe "people#index", type: :request do
         expect(d.map(&:id)).to match_array([people(:top_leader).id])
       end
     end
+
+    describe "layer_group" do
+      let(:params) { {include: "layer_group"} }
+
+      it "does return empty list when person does not have primary group" do
+        people(:top_leader).update!(primary_group_id: nil)
+        make_request
+        expect(response.status).to eq(200), response.body
+        expect(d.find { |person| person.id == people(:top_leader).id }.relationships[:layer_group][:data]).to be_nil
+      end
+    end
   end
 end

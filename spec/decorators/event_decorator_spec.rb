@@ -163,4 +163,26 @@ describe EventDecorator, :draper_with_helpers do
       it { is_expected.to match(/public_event/) }
     end
   end
+
+  context "#complete_contact_attributes" do
+    before { event.contact = people(:top_leader) }
+
+    subject { EventDecorator.new(event).complete_contact_attributes }
+
+    context "with every possible attribute" do
+      it { is_expected.to eq "<strong>Top Leader</strong><p>Greatstreet 345<br />3456 Greattown</p><p><a href=\"mailto:top_leader@example.com\">top_leader@example.com</a></p>" }
+    end
+
+    context "with only name" do
+      before { event.update!(visible_contact_attributes: ["name"]) }
+
+      it { is_expected.to eq "<strong>Top Leader</strong>" }
+    end
+
+    context "contact person without email" do
+      before { people(:top_leader).update_column(:email, nil) }
+
+      it { is_expected.to eq "<strong>Top Leader</strong><p>Greatstreet 345<br />3456 Greattown</p>" }
+    end
+  end
 end

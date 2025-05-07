@@ -251,8 +251,7 @@ class EventsController < CrudController
   end
 
   def assign_visible_contact_attrs
-    visible_contact_attrs = model_params.delete(:visible_contact_attributes)
-    entry.visible_contact_attributes = visible_contact_attrs&.keys || []
+    entry.visible_contact_attributes = model_params.delete(:visible_contact_attributes)&.keys
   end
 
   def reset_contact_attrs

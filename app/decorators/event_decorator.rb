@@ -115,4 +115,18 @@ class EventDecorator < ApplicationDecorator
       (object.used_attributes.include?(:application_conditions) &&
        application_conditions.present?)
   end
+
+  def complete_contact_attributes
+    contact_attributes = {}
+
+    contact_attributes[:name] = contact.contact_name
+    contact_attributes[:address] = [contact.complete_address, *contact.all_additional_addresses].compact.join(", ").html_safe
+    contact_attributes[:email] = [contact.primary_email&.to_s, *contact.all_additional_emails].compact.join(", ").html_safe
+    contact_attributes[:phone_number] = contact.all_phone_numbers
+    contact_attributes[:social_account] = contact.all_social_accounts
+
+    visible_contact_attributes.each_with_object(ActiveSupport::SafeBuffer.new) do |attribute_name, buffer|
+      buffer.concat(contact_attributes[attribute_name.to_sym])
+    end
+  end
 end

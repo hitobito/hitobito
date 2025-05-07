@@ -75,7 +75,6 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   require_dependency "event/role_ability"
 
   ALLOWED_VISIBLE_CONTACT_ATTRIBUTES = %w[
-    all
     name
     address
     phone_number
@@ -195,7 +194,6 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   ### CALLBACKS
 
-  after_initialize :set_default_visible_contact_attributes, if: :new_record?
   before_validation :set_self_in_nested
   before_validation :set_signature, if: :signature_confirmation?
   before_validation :prefill_shared_access_token, unless: :shared_access_token?
@@ -543,9 +541,5 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   def prefill_shared_access_token
     self.shared_access_token ||= Devise.friendly_token
-  end
-
-  def set_default_visible_contact_attributes
-    self.visible_contact_attributes = ["all"] if visible_contact_attributes.blank?
   end
 end

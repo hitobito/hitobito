@@ -29,16 +29,8 @@ describe ContactableDecorator do
   end
 
   describe "#complete_contact" do
-    it "returns all attributes when no parameter is passed" do
+    it "returns all attributes" do
       expect(event.contact.complete_contact).to eq "<strong>Top Leader</strong><p>Greatstreet 345<br />3456 Greattown</p><p><a href=\"mailto:top_leader@example.com\">top_leader@example.com</a></p>"
-    end
-
-    it "returns all attributes when visible_contact_attributes is all" do
-      expect(event.contact.complete_contact(["all"])).to eq "<strong>Top Leader</strong><p>Greatstreet 345<br />3456 Greattown</p><p><a href=\"mailto:top_leader@example.com\">top_leader@example.com</a></p>"
-    end
-
-    it "returns only name when visible_contact_attributes is name" do
-      expect(event.contact.complete_contact(["name"])).to eq "<strong>Top Leader</strong>"
     end
   end
 

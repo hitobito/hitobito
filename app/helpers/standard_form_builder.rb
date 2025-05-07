@@ -330,10 +330,12 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
         placeholder: I18n.t("global.search.placeholder_person"),
         class: klass,
         disabled: disabled,
-        data: {provide: "entity",
-               id_field: "#{object_name}_#{attr_id}",
-               no_results_message: I18n.t("global.no_list_entries"),
-               url: html_options&.dig(:data, :url) || @template.query_people_path})
+        data: html_options[:data].merge!(
+          provide: "entity",
+          id_field: "#{object_name}_#{attr_id}",
+          no_results_message: I18n.t("global.no_list_entries"),
+          url: html_options.dig(:data, :url) || @template.query_people_path
+        ))
   end
 
   def labeled_inline_fields_for(assoc, partial = nil, record = nil, required = false, &block) # rubocop:disable Metrics/MethodLength

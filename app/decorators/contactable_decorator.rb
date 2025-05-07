@@ -39,7 +39,7 @@ module ContactableDecorator
     contact_data = {
       name: contact_name,
       address: complete_address + all_additional_addresses(true),
-      email: primary_email.to_s + all_additional_emails,
+      email: primary_email.to_s + all_additional_emails.to_s,
       phone_number: all_phone_numbers,
       social_account: all_social_accounts
     }

@@ -7,6 +7,7 @@ require "spec_helper"
 
 describe ContactableDecorator do
   let(:event) { events(:top_event).decorate }
+  let(:person) { people(:top_leader) }
 
   before do
     Draper::ViewContext.clear!
@@ -25,7 +26,7 @@ describe ContactableDecorator do
     group.additional_emails.new(email: "private@foobar.com", label: "Mobile", public: false)
     @group = GroupDecorator.decorate(group)
 
-    event.contact = people(:top_leader)
+    event.contact = person
   end
 
   describe "#complete_contact" do
@@ -39,6 +40,11 @@ describe ContactableDecorator do
 
     it "returns only name when visible_contact_attributes is name" do
       expect(event.contact.complete_contact(["name"])).to eq "<strong>Top Leader</strong>"
+    end
+
+    it "does not raise error when contact person does not have email and any additional email" do
+      person.update_columns(email: nil)
+      expect(event.contact.complete_contact(["all"])).to eq "<strong>Top Leader</strong><p>Greatstreet 345<br />3456 Greattown</p><p><a href=\"mailto:top_leader@example.com\">top_leader@example.com</a></p>"
     end
   end
 

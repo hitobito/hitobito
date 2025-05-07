@@ -21,7 +21,7 @@
       = render 'events/attrs_contact'
 
       - if render_application_attrs?
-        = render 'events/attrs_application'
+        = render 'events/attrs_application', external_applications: false
 
       = render_extensions 'show_right'
 

@@ -265,6 +265,10 @@ class Invoice < ActiveRecord::Base
     iban && qr? && !QR_ID_RANGE.include?(qr_id)
   end
 
+  def latest_reminder
+    payment_reminders.max_by(&:created_at)
+  end
+
   private
 
   # on index we join aggregated payments

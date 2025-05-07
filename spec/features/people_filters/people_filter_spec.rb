@@ -64,8 +64,8 @@ describe "PeopleFilter", js: true do
       it "can filter by present roles" do
         expect(page).to have_selector("div#role-configuration")
         # Select role
-        find("#role-select-ts-control").set(alice.roles.first.label)
-        find("#role-select-opt-2").click
+        find("#role-select-ts-control").set(alice.roles.first.type.split(":").last)
+        find("#role-select-opt-3").click
 
         # Select date
         find("#filters_role_start_at").set("2025-03-18")

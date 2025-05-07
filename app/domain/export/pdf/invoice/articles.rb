@@ -30,7 +30,7 @@ module Export::Pdf::Invoice
     def title
       return invoice.title unless render_reminder?
 
-      "#{latest_reminder.title} - #{invoice.title}"
+      "#{invoice.latest_reminder.title} - #{invoice.title}"
     end
 
     def render_description
@@ -38,16 +38,16 @@ module Export::Pdf::Invoice
     end
 
     def render_description?
-      latest_reminder.nil? || latest_reminder.show_invoice_description? || !@options[:reminders]
+      invoice.latest_reminder.nil? || invoice.latest_reminder.show_invoice_description? || !@options[:reminders]
     end
 
     def render_reminder
-      pdf.move_down 8 if latest_reminder.show_invoice_description?
-      font_size(10) { text latest_reminder.text }
+      pdf.move_down 8 if invoice.latest_reminder.show_invoice_description?
+      font_size(10) { text invoice.latest_reminder.text }
     end
 
     def render_reminder?
-      @options[:reminders] && latest_reminder.present?
+      @options[:reminders] && invoice.latest_reminder.present?
     end
 
     def articles_table
@@ -150,7 +150,5 @@ module Export::Pdf::Invoice
 
       @show_vat = invoice.invoice_items.any?(&:vat_rate)
     end
-
-    def latest_reminder = @latest_reminder ||= invoice.payment_reminders.last
   end
 end

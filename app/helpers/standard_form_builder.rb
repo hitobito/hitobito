@@ -330,7 +330,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
         placeholder: I18n.t("global.search.placeholder_person"),
         class: klass,
         disabled: disabled,
-        data: (html_options[:data] ||= {}).merge!(
+        data: html_options[:data].to_h.merge!(
           provide: "entity",
           id_field: "#{object_name}_#{attr_id}",
           no_results_message: I18n.t("global.no_list_entries"),

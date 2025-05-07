@@ -125,8 +125,6 @@ class EventDecorator < ApplicationDecorator
     contact_attributes[:phone_number] = contact.all_phone_numbers
     contact_attributes[:social_account] = contact.all_social_accounts
 
-    visible_contact_attributes.each_with_object(ActiveSupport::SafeBuffer.new) do |attribute_name, buffer|
-      buffer.concat(contact_attributes[attribute_name.to_sym])
-    end
+    safe_join(contact_attributes.values_at(*visible_contact_attributes.map(&:to_sym)))
   end
 end

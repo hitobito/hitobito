@@ -71,6 +71,32 @@ describe CustomContent do
     end
   end
 
+  describe ".get", :focus do
+    let(:invoice_config) { invoice_configs(:top_layer) }
+    let(:key) { :content_invoice_notification }
+
+    it "raises when nothing is found for key" do
+      expect { CustomContent.get(:missing) }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it "raises when nothing is found for key and context" do
+      expect { CustomContent.get(:missing, context: invoice_config) }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it "returns global custom content" do
+      expect(CustomContent.get(key)).to eq custom_contents(:content_invoice_notification)
+    end
+
+    it "returns global custom content for context if nothing specific is defined" do
+      expect(CustomContent.get(key, context: invoice_config)).to eq custom_contents(:content_invoice_notification)
+    end
+
+    it "returns specific custom content for context if exists" do
+      specific = Fabricate(:custom_content, key: key, context: invoice_config, body: "{invoice-items}, {invoice-total}, {payment-information}")
+      expect(CustomContent.get(key, context: invoice_config)).to eq specific
+    end
+  end
+
   context "validations" do
     it "succeeds without defined placeholders" do
       cc = custom_contents(:notes)

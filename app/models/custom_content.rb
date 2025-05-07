@@ -10,11 +10,17 @@
 # Table name: custom_contents
 #
 #  id                    :integer          not null, primary key
+#  context_type          :string
 #  key                   :string           not null
 #  label                 :string           not null
 #  placeholders_optional :string
 #  placeholders_required :string
 #  subject               :string
+#  context_id            :bigint
+#
+# Indexes
+#
+#  index_custom_contents_on_context  (context_type,context_id)
 #
 
 class CustomContent < ActiveRecord::Base
@@ -36,8 +42,9 @@ class CustomContent < ActiveRecord::Base
   scope :in_context, ->(context) { unscoped.where(context: context) }
 
   class << self
-    def get(key)
-      find_by!(key: key)
+    def get(key, context: nil)
+      content = in_context(context).find_by(key: key)
+      content || CustomContent.find_by!(key: key)
     end
   end
 

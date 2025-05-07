@@ -45,13 +45,13 @@ describe LocaleSetter do
   end
 
   it "does not set locale to locale that doesnt exist in current system" do
-    original_locales = I18n.available_locales.dup
+    @original_locales = I18n.available_locales.dup
     I18n.available_locales -= [:en]
     subject.with_locale(locale: :en) do
       expect(I18n.locale).to eq(:de)
     end
   ensure
-    I18n.available_locales += original_locales
+    I18n.available_locales = @original_locales
   end
 
   it "ensures to reset locale back to previous locale" do

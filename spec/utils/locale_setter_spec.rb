@@ -10,6 +10,12 @@ require "spec_helper"
 describe LocaleSetter do
   let(:person) { people(:top_leader) }
 
+  around do |example|
+    original_locale = I18n.locale
+    example.run
+    I18n.locale = original_locale
+  end
+
   it "sets locale when locale is passed" do
     subject.with_locale(locale: :fr) do
       expect(I18n.locale).to eq(:fr)
@@ -39,12 +45,13 @@ describe LocaleSetter do
   end
 
   it "does not set locale to locale that doesnt exist in current system" do
+    original_locales = I18n.available_locales.dup
     I18n.available_locales -= [:en]
-    person.update!(language: :en)
     subject.with_locale(locale: :en) do
       expect(I18n.locale).to eq(:de)
     end
-    I18n.available_locales += [:en]
+  ensure
+    I18n.available_locales += original_locales
   end
 
   it "ensures to reset locale back to previous locale" do

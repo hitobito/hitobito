@@ -30,7 +30,7 @@
   - entry.used?(:contact_id) do
     %div{data: { controller: 'form-field-toggle' }}
       = f.labeled_person_field :contact, data: { action: 'change->form-field-toggle#toggle' }
-      .hidden{data: { 'form-field-toggle-target': 'toggle' }}
+      %div{data: { 'form-field-toggle-target': 'toggle' }, class: entry.contact_id ? "" : "hidden"}
         = f.labeled_boolean_field :notify_contact_on_participations,
           label: t('events.form.label_notify_contact_on_participations'),
           caption: Event.human_attribute_name(:notify_contact_on_participations)

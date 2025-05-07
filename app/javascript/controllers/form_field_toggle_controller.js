@@ -17,6 +17,12 @@ export default class extends Controller {
       } else {
         this.toggleTarget.classList.add("hidden");
       }
+    } else if (event.target.tagName === "INPUT") {
+      if (event.target.value != "") {
+        this.toggleTarget.classList.remove("hidden");
+      } else {
+        this.toggleTarget.classList.add("hidden");
+      }
     } else {
       this.toggleTarget.classList.remove("hidden");
     }

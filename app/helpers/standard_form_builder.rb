@@ -164,12 +164,17 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   # Render a select dropdown for countries
-  def country_field(attr, html_options = {})
+  def country_field(attr = :country, **html_options)
     html_options[:class] = [
-      html_options[:class], "form-select", "form-select-sm", "tom-select"
-    ].compact.join(" ")
+      html_options[:class], "form-select", "form-select-sm"
+    ].compact_blank.join(" ")
     html_options[:class] += " is-invalid" if errors_on?(attr)
-    html_options[:data] = {placeholder: " ", chosen_no_results: I18n.t("global.chosen_no_results")}
+    html_options[:data] = {
+      placeholder: " ",
+      chosen_no_results: I18n.t("global.chosen_no_results"),
+      controller: "tom-select"
+    }
+
     country_select(attr,
       {priority_countries: Settings.countries.prioritized,
        selected: @object.send(attr),

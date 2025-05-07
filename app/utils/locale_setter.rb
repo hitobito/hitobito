@@ -7,12 +7,10 @@ module LocaleSetter
   class << self
     def with_locale(locale: nil, person: nil)
       preferred_locale = locale || locale_from_person(person)
-      previous_locale = I18n.locale
 
-      I18n.locale = I18n.available_locales.include?(preferred_locale&.to_sym) ? preferred_locale : previous_locale
-      yield
-    ensure
-      I18n.locale = previous_locale
+      I18n.with_locale(I18n.available_locales.include?(preferred_locale&.to_sym) ? preferred_locale : nil) do
+        yield
+      end
     end
 
     private

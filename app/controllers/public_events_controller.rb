@@ -10,6 +10,7 @@ class PublicEventsController < ApplicationController
   include DryCrud::RenderCallbacks
   define_render_callbacks :show
   include Tags
+  include Events::RegistrationClosedInfo
 
   # handle authorization
   skip_authorization_check
@@ -29,6 +30,10 @@ class PublicEventsController < ApplicationController
   helper_method :render_application_attrs?
 
   self.render_application_attrs = true
+
+  def show
+    flash.now[:alert] = registration_closed_info if registration_closed?
+  end
 
   private
 

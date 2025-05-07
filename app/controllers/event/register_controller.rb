@@ -8,6 +8,7 @@
 class Event::RegisterController < ApplicationController
   include DeprecatedAction
   include PrivacyPolicyAcceptable
+  include Events::RegistrationClosedInfo
 
   helper_method :resource, :entry, :group, :event
 
@@ -72,7 +73,7 @@ class Event::RegisterController < ApplicationController
       if event.application_possible?
         redirect_to show_event_path if current_user
       else
-        flash[:alert] = translate(:application_window_closed)
+        flash[:alert] = registration_closed_info
         redirect_to event_or_login_page
       end
     else

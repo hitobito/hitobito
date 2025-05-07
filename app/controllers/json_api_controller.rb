@@ -48,6 +48,11 @@ class JsonApiController < ActionController::API
     title: "Unsupported include parameter",
     message: ->(error) { "The include parameter is not supported." }
 
+  register_exception Graphiti::Errors::InvalidAttributeAccess,
+    status: 400,
+    title: "Unsupported filter parameter",
+    message: ->(error) { "The filter parameter is not supported." }
+
   register_exception CanCan::AccessDenied,
     status: 403,
     title: I18n.t("errors.403.title"),

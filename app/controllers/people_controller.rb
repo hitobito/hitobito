@@ -236,9 +236,7 @@ class PeopleController < CrudController
 
   def send_login_job(entry, current_user)
     if Truemail.valid?(entry.email)
-      LocaleSetter.with_locale(person: entry) do
-        Person::SendLoginJob.new(entry, current_user).enqueue!
-      end
+      Person::SendLoginJob.new(entry, current_user).enqueue!
       {notice: I18n.t("#{controller_name}.#{action_name}")}
     else
       {alert: I18n.t("#{controller_name}.#{action_name}_invalid_email")}

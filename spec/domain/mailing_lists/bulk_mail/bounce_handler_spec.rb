@@ -12,7 +12,8 @@ describe MailingLists::BulkMail::BounceHandler do
 
   let(:bounce_handler) { described_class.new(bounce_imap_mail, bulk_mail_bounce, mailing_list) }
   let(:mailing_list) { mailing_lists(:leaders) }
-  let(:bounce_imap_mail) { Imap::Mail.new }
+  let(:bounce_imap_mail) { Imap::BounceMail.new(imap_mail) }
+  let(:imap_mail) { Imap::Mail.new }
   let(:bounce_mail) { Mail.read_from_string(Rails.root.join("spec", "fixtures", "email", "list_bounce.eml").read) }
 
   let(:bulk_mail_bounce) do
@@ -39,7 +40,7 @@ describe MailingLists::BulkMail::BounceHandler do
 
     it "does not process bounce if source message cannot be found" do
       body = bounce_mail.body.raw_source.gsub("X-Hitobito-Message-UID: a15816bbd204ba20", "X-Hitobito-Message-UID: unknown42")
-      expect(bounce_mail.body).to receive(:raw_source).and_return(body)
+      expect(bounce_mail.body).to receive(:raw_source).at_least(:once).and_return(body)
 
       expect(Rails.logger).to receive(:info)
         .with("BulkMail Retriever: Ignoring unkown or outdated bounce message for list leaders@#{Settings.email.list_domain}")
@@ -86,6 +87,18 @@ describe MailingLists::BulkMail::BounceHandler do
       expect(message.raw_source).to eq(bounce_imap_mail.raw_source)
       expect(message.mailing_list).to be_nil
       expect(message.bounce_parent).to eq(messages(:mail))
+    end
+
+    it "records the bounce" do
+      expect do
+        bounce_handler.process
+      end.to change(Bounce, :count).by(1)
+
+      last_bounce = Bounce.order(:updated_at).last
+
+      expect(bounce_mail.raw_source).to include('To: nothing@example2.com')
+      expect(bounce_mail.raw_source).to include("<nothing@example2.com>: Recipient address rejected: undeliverable address:")
+      expect(last_bounce.email).to eql 'nothing@example2.com'
     end
   end
 end

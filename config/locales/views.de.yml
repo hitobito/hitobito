@@ -1016,10 +1016,15 @@ de:
         Benutzers oder an die hier konfigurierte Adresse gesendet werden.
       email_validation: Darf keine E-Mail-Adresse sein.
       sender_name_help: Rechnungs-E-Mails werden unter diesem Namen versendet.
+      custom_content_help: Diese E-Mail Vorlage wird beim versenden von Rechnungen verwendet. Wenn keine E-Mail Vorlage hinterlegt wird, wird die globale E-Mail Voralge verwendet.
     reminder_fields:
       third_level: "Für alle weiteren Mahnungen, wird die dritte Mahnstufe wiederholt."
     provider_fields:
       reset_payment_provider_warning: "Sollten Daten hier geändert werden, muss der Initialisierungsprozess der Rechnungsschnittstelle neu ausgeführt werden."
+    custom_content_fields:
+      subject: Betreff
+      body: Inhalt
+      remove: E-Mail Vorlage entfernen
 
   invoice_lists:
     destroys:

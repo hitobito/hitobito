@@ -10,11 +10,17 @@
 # Table name: custom_contents
 #
 #  id                    :integer          not null, primary key
+#  context_type          :string
 #  key                   :string           not null
 #  label                 :string           not null
 #  placeholders_optional :string
 #  placeholders_required :string
 #  subject               :string
+#  context_id            :bigint
+#
+# Indexes
+#
+#  index_custom_contents_on_context  (context_type,context_id)
 #
 
 class CustomContent < ActiveRecord::Base
@@ -30,9 +36,15 @@ class CustomContent < ActiveRecord::Base
 
   validate :assert_required_placeholders_are_used
 
+  belongs_to :context, optional: true, polymorphic: true
+
+  default_scope { where(context_id: nil, context_type: nil) }
+  scope :in_context, ->(context) { unscoped.where(context: context) }
+
   class << self
-    def get(key)
-      find_by!(key: key)
+    def get(key, context: nil)
+      content = in_context(context).find_by(key: key)
+      content || CustomContent.find_by!(key: key)
     end
   end
 
@@ -45,11 +57,11 @@ class CustomContent < ActiveRecord::Base
   end
 
   def placeholders_required_list
-    as_list(placeholders_required)
+    as_list(custom_content_value(:placeholders_required))
   end
 
   def placeholders_optional_list
-    as_list(placeholders_optional)
+    as_list(custom_content_value(:placeholders_optional))
   end
 
   def placeholder_token(key)
@@ -83,6 +95,14 @@ class CustomContent < ActiveRecord::Base
   end
 
   private
+
+  def custom_content_value(field)
+    if context
+      CustomContent.find_by(key: key)&.public_send(field)
+    else
+      public_send(field)
+    end
+  end
 
   def as_list(placeholders)
     placeholders.to_s.split(",").collect(&:strip)

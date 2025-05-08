@@ -4,12 +4,14 @@ class MadeRequiredInvoiceNotificationPlaceholdersOptional < ActiveRecord::Migrat
   PLACEHOLDERS_OPTIONAL = 'recipient-name, group-name, group-address, invoice-number'
 
   def up
-    return unless invoice_notification_content
-    placeholders_optional = [PLACEHOLDERS_OPTIONAL, PLACEHOLDERS_REQUIRED].join(', ')
+    CustomContent.unscoped do
+      return unless invoice_notification_content
+      placeholders_optional = [PLACEHOLDERS_OPTIONAL, PLACEHOLDERS_REQUIRED].join(', ')
 
-    say_with_time('update placeholders to be optional') do
-      invoice_notification_content.update(placeholders_optional: placeholders_optional,
-                                          placeholders_required: '')
+      say_with_time('update placeholders to be optional') do
+        invoice_notification_content.update(placeholders_optional: placeholders_optional,
+                                            placeholders_required: '')
+      end
     end
   end
 

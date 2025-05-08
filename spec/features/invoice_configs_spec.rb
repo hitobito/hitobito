@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe :invoice_configs do
+describe :invoice_configs, js: true do
   include ActionDispatch::TestProcess::FixtureFile
 
   subject { page }

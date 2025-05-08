@@ -152,7 +152,7 @@ class FamilyMember < ApplicationRecord
     # find the reversed the relationship, choosing the right kind
     self.class.find_by(
       person: other, kind: :sibling, other: person, family_key: family_key
-    ).delete # skip callbacks to avoid looping
+    )&.delete # skip callbacks to avoid looping
   end
 
   def copy_family_key(from, *to_people)

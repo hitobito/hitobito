@@ -160,7 +160,7 @@ class Household
 
     # generate a fresh key if we don't have one yet
     @household_key ||= next_key
-    people.each { |person| person.update!(address_attrs.merge(household_key:)) }
+    people.each { |person| person.update_columns(address_attrs.merge(household_key:)) }
     # reload the reference_person as this is a different reference to the same person in `people`
     # which does not know the updated attributes yet.
     @reference_person.reload

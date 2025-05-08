@@ -150,6 +150,13 @@ describe HouseholdsController do
       expect(person.reload.household_key).to be_nil
     end
 
+    it "does not raise error when some person in household is invalid" do
+      person.update_columns(first_name: nil, last_name: nil)
+      expect do
+        put :update, params: params.merge(member_ids: [person.id, bottom_member.id])
+      end.not_to raise_error
+    end
+
     describe "non writable person" do
       let(:group) { groups(:bottom_layer_one) }
       let(:bottom_leader) { Fabricate(Group::BottomLayer::Leader.sti_name, group: group).person }

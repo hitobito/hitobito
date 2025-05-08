@@ -1,10 +1,12 @@
 # Hitobito Changelog
 
 ## unreleased
+- Beim zusammenführen von Duplikaten werden neu auch Rechnungen, Notizen, Tags, Abos, Familienmitglieder, Event Einladungen und Teilnahmen, Anfragen und Qualifikationen übernommen (hitobito_sww#139)
 - Auf der Person können mehrere Adressen erfasst werden (#3264, #3265)
 - Eine der weiteren E-Mail Adressen kann für den Rechnungsversand verwendet werden (#3331)
 - Sichtbarkeit von Informationen zur Kontaktperson kann auf Events definiert werden (hitobito_sww#194)
 - In den Rechnungseinstellungen kann neu pro Layer eine E-Mail Vorlage definiert werden (hitobito_sww#197)
+- Beim zusammenführen von Duplikaten werden neu auch Rechnungen übernommen (hitobito_sww#139)
 
 ## Version 2.5
 - Eine Rechnung kann im Originalzustand gedruckt werden, bzw. ohne Mahnungen (hitobito_sww#173)

@@ -12,7 +12,7 @@ To: leaders@hitobito.example.com
 Auto-Submitted: auto-replied
 MIME-Version: 1.0
 Content-Type: multipart/report; report-type=delivery-status;
-	boundary="811B8369.1664257738/mx01.example.com"
+	boundary="811B8369.1664257738/mx01.example2.com"
 Content-Transfer-Encoding: 8bit
 Message-Id: <20220927054858.68C01971@mx01.example.com>
 
@@ -55,7 +55,7 @@ Remote-MTA: dns; mx.example2.com
 Diagnostic-Code: smtp; 550 5.1.1 <nothing@example2.com>: Recipient address
     rejected: undeliverable address: unknown user: "nothing@example2.com"
 
---811B8369.1664257738/mx01.example.com
+--811B8369.1664257738/mx01.example2.com
 Content-Description: Undelivered Message
 Content-Type: message/rfc822
 Content-Transfer-Encoding: 8bit
@@ -84,4 +84,4 @@ X-Hitobito-Message-UID: a15816bbd204ba20
 haha
 
 
---811B8345.1664257738/mx01.hitobito.example.com--
+--811B8345.1664257738/mx01.hitobito.example2.com--

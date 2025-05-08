@@ -48,6 +48,8 @@ class Invoice::Filter
   end
 
   def invoice_ids
+    return [] if params[:ids] == "all"
+
     @invoice_ids = params[:ids].to_s.split(",")
   end
 end

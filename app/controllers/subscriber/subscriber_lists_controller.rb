@@ -7,6 +7,8 @@
 
 module Subscriber
   class SubscriberListsController < SimpleCrudController
+    include FilteredPeople # provides all_filtered_or_listed_people, person_filter and list_filter_args
+
     helper_method :group
 
     respond_to :js, only: [:new]
@@ -17,7 +19,7 @@ module Subscriber
     skip_authorize_resource
 
     def new
-      @people_ids = params[:ids]
+      @people_ids ||= params[:ids]
     end
 
     def create
@@ -47,7 +49,7 @@ module Subscriber
     private
 
     def people
-      @people ||= Person.where(id: people_ids).distinct
+      @people ||= all_filtered_or_listed_people
     end
 
     def non_subscribed_people
@@ -63,10 +65,6 @@ module Subscriber
 
     def group
       @group ||= Group.find(params[:group_id])
-    end
-
-    def people_ids
-      list_param(:ids)
     end
 
     def self.model_class

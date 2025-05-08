@@ -20,6 +20,10 @@ inputs:
   wagon_dependency_ref:
     description: Use a specific version of the wagon dependency for the workflow run. Defaults to master.
     default: ""
+secrets:
+  RELEASE_PREPARATION_TOKEN:
+    description: "Token to allow writes to repository"
+    required: true
 
 runs:
   using: composite
@@ -78,6 +82,8 @@ runs:
         repository: "hitobito/hitobito"
         ref: ${{ env.CORE_REF }}
         path: "hitobito"
+      secrets:
+        release_preparation_token: ${{ secrets.RELEASE_PREPARATION_TOKEN }}
 
     - name: "Set up Ruby"
       uses: ruby/setup-ruby@v1

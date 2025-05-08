@@ -96,9 +96,9 @@ describe MailingLists::BulkMail::BounceHandler do
 
       last_bounce = Bounce.order(:updated_at).last
 
-      expect(bounce_mail.raw_source).to include('To: nothing@example2.com')
+      expect(bounce_mail.raw_source).to include("To: nothing@example2.com")
       expect(bounce_mail.raw_source).to include("<nothing@example2.com>: Recipient address rejected: undeliverable address:")
-      expect(last_bounce.email).to eql 'nothing@example2.com'
+      expect(last_bounce.email).to eql "nothing@example2.com"
     end
   end
 end

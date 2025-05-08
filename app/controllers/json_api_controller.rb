@@ -51,7 +51,7 @@ class JsonApiController < ActionController::API
   register_exception Graphiti::Errors::InvalidAttributeAccess,
     status: 400,
     title: "Unsupported filter parameter",
-    message: ->(error) { "The filter parameter is not supported." }
+    message: ->(error) { "The filter parameter is not supported. Message: #{error.message}" }
 
   register_exception CanCan::AccessDenied,
     status: 403,

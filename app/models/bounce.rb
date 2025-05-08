@@ -15,7 +15,7 @@ class Bounce < ApplicationRecord
       bounce = find_or_create_by(email: email)
       if mailing_list_id.present?
         bounce.mailing_list_ids ||= []
-        bounce.mailing_list_ids  << mailing_list_id
+        bounce.mailing_list_ids << mailing_list_id
       end
       bounce.increment(:bounce_count)
 

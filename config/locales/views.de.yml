@@ -1154,7 +1154,7 @@ de:
       email: Mailing-Liste (E-Mail)
       mailchimp: MailChimp
     imap_mails:
-      manage: Mails
+      manage: Postfach
       mailboxes:
         inbox: Eingang
         spam: Spam
@@ -1184,6 +1184,8 @@ de:
           one: Mail erfolgreich verschoben
           other: "%{count} Mails erfolgreich verschoben"
         server_error: Verbindung zum Mailserver nicht möglich, bitte versuche es später erneut.
+    bounces:
+      manage: Rückläufer
     recipient_counts:
       index:
         recipient_info:
@@ -1313,7 +1315,7 @@ de:
     admin: "Einstellungen"
     admin/event_feed: "Kalender integrieren"
     admin/oauth_authorizations: "OAuth-Autorisierungen"
-    imap_mails: "Mails"
+    imap_mails: "Mails und Rückläufer"
     invoices: "Rechnungen"
     invoices/single: "Einzelrechnungen"
     invoices/evaluations: "Buchungsbeleg"

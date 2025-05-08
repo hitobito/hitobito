@@ -71,7 +71,7 @@ describe CustomContent do
     end
   end
 
-  describe ".get", :focus do
+  describe ".get" do
     let(:invoice_config) { invoice_configs(:top_layer) }
     let(:key) { :content_invoice_notification }
 

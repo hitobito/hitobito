@@ -224,6 +224,7 @@ describe MailingLists::BulkMail::Retriever do
           .and change { MailLog.count }.by(1)
           .and change { Delayed::Job.where("handler ILIKE '%Messages::DispatchJob%'").count }.by(0)
           .and change { Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::BounceMessageForwardJob%'").count }.by(1)
+          .and change { Bounce.count }.by(1)
       end
     end
 

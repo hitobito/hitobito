@@ -10,6 +10,7 @@ describe Export::Pdf::Invoice do
 
   let(:invoice) { invoices(:invoice) }
   let(:sent) { invoices(:sent) }
+  let(:person) { people(:top_leader) }
 
   let(:pdf) { described_class.render(invoice, payment_slip: true, articles: true, reminders: false) }
 
@@ -29,7 +30,7 @@ describe Export::Pdf::Invoice do
         recipient_address: "Max Mustermann\nMusterweg 2\n8000 Alt Tylerland",
         issued_at: Date.new(2022, 9, 26),
         due_at: Date.new(2022, 10, 26),
-        creator: people(:top_leader),
+        creator: person,
         vat_number: "CH 1234",
         sequence_number: "1-10",
         group: groups(:top_layer)
@@ -391,6 +392,149 @@ describe Export::Pdf::Invoice do
 
       invoice_text.each_with_index do |text, i|
         expect(text_with_position[i]).to eq(text)
+      end
+    end
+
+    it "renders full invoice in recipient language" do
+      person.update!(language: :fr)
+      invoice.recipient = person
+      invoice.invoice_items.build(name: "pens", unit_cost: 10, vat_rate: 10, count: 2)
+      invoice_text = [
+        [347, 685, "No. de facture:"],
+        [453, 685, "1-10"],
+        [347, 672, "Date de la facture:"],
+        [453, 672, "26.09.2022"],
+        [347, 659, "Échue le:"],
+        [453, 659, "26.10.2022"],
+        [347, 646, "Auteur de la facture:"],
+        [453, 646, "Top Leader"],
+        [347, 632, "No TVA:"],
+        [453, 632, "CH 1234"],
+        [57, 686, "Max Mustermann"],
+        [57, 674, "Musterweg 2"],
+        [57, 662, "8000 Alt Tylerland"],
+        [57, 537, "articles de factures"],
+        [355, 537, "Quantité"],
+        [423, 537, "Prix"],
+        [455, 537, "Montant"],
+        [523, 537, "TVA"],
+        [57, 522, "pens"],
+        [383, 522, "2"],
+        [417, 522, "10.00"],
+        [515, 522, "10.0%"],
+        [389, 507, "Montant"],
+        [502, 507, "20.00 CHF"],
+        [389, 492, "TVA"],
+        [506, 492, "2.00 CHF"],
+        [389, 474, "montant total"],
+        [490, 474, "1'500.00 CHF"],
+        [14, 276, "Récépissé"],
+        [14, 251, "Compte/payable à"],
+        [14, 239, "CH93 0076 2011 6238 5295 7"],
+        [14, 228, "Acme Corp"],
+        [14, 216, "Hallesche Str. 37"],
+        [14, 205, "3007 Hinterdupfing"],
+        [14, 173, "Payable par"],
+        [14, 161, "Max Mustermann"],
+        [14, 150, "Musterweg 2"],
+        [14, 138, "8000 Alt Tylerland"],
+        [14, 89, "Devise"],
+        [71, 89, "Montant"],
+        [14, 78, "CHF"],
+        [71, 78, "1 500.00"],
+        [106, 39, "Point de dépôt"],
+        [190, 276, "Section paiement"],
+        [190, 89, "Devise"],
+        [247, 89, "Montant"],
+        [190, 78, "CHF"],
+        [247, 78, "1 500.00"],
+        [346, 278, "Compte/payable à"],
+        [346, 266, "CH93 0076 2011 6238 5295 7"],
+        [346, 255, "Acme Corp"],
+        [346, 243, "Hallesche Str. 37"],
+        [346, 232, "3007 Hinterdupfing"],
+        [346, 211, "Numéro de référence"],
+        [346, 200, "00 00834 96356 70000 00000 00019"],
+        [346, 178, "Payable par"],
+        [346, 167, "Max Mustermann"],
+        [346, 155, "Musterweg 2"],
+        [346, 144, "8000 Alt Tylerland"]
+      ]
+
+      invoice_text.each_with_index do |text, i|
+        expect(text_with_position[i]).to eq(text)
+      end
+    end
+
+    it "renders invoice in current locale when invoice does not have any recipient" do
+      # Run with it instead of de, to not have standard case
+      I18n.with_locale(:it) do
+        invoice.invoice_items.build(name: "pens", unit_cost: 10, vat_rate: 10, count: 2)
+        invoice_text = [
+          [347, 685, "Numero di fattura:"],
+          [464, 685, "1-10"],
+          [347, 672, "Data della fattura:"],
+          [464, 672, "26.09.2022"],
+          [347, 659, "Scade il:"],
+          [464, 659, "26.10.2022"],
+          [347, 646, "Emittente della fattura:"],
+          [464, 646, "Top Leader"],
+          [347, 632, "Numero IVA:"],
+          [464, 632, "CH 1234"],
+          [57, 686, "Max Mustermann"],
+          [57, 674, "Musterweg 2"],
+          [57, 662, "8000 Alt Tylerland"],
+          [57, 537, "L'articolo della fattura"],
+          [357, 537, "Numero"],
+          [413, 537, "Prezzo"],
+          [457, 537, "Importo"],
+          [525, 537, "IVA"],
+          [57, 522, "pens"],
+          [383, 522, "2"],
+          [417, 522, "10.00"],
+          [515, 522, "10.0%"],
+          [389, 507, "Subtotale"],
+          [502, 507, "20.00 CHF"],
+          [389, 492, "IVA"],
+          [506, 492, "2.00 CHF"],
+          [389, 474, "Importo totale"],
+          [490, 474, "1'500.00 CHF"],
+          [14, 276, "Ricevuta"],
+          [14, 251, "Conto / Pagabile a"],
+          [14, 239, "CH93 0076 2011 6238 5295 7"],
+          [14, 228, "Acme Corp"],
+          [14, 216, "Hallesche Str. 37"],
+          [14, 205, "3007 Hinterdupfing"],
+          [14, 173, "Pagabile da"],
+          [14, 161, "Max Mustermann"],
+          [14, 150, "Musterweg 2"],
+          [14, 138, "8000 Alt Tylerland"],
+          [14, 89, "Valuta"],
+          [71, 89, "Importo"],
+          [14, 78, "CHF"],
+          [71, 78, "1 500.00"],
+          [79, 39, "Punto di accettazione"],
+          [190, 276, "Sezione pagamento"],
+          [190, 89, "Valuta"],
+          [247, 89, "Importo"],
+          [190, 78, "CHF"],
+          [247, 78, "1 500.00"],
+          [346, 278, "Conto / Pagabile a"],
+          [346, 266, "CH93 0076 2011 6238 5295 7"],
+          [346, 255, "Acme Corp"],
+          [346, 243, "Hallesche Str. 37"],
+          [346, 232, "3007 Hinterdupfing"],
+          [346, 211, "Riferimento"],
+          [346, 200, "00 00834 96356 70000 00000 00019"],
+          [346, 178, "Pagabile da"],
+          [346, 167, "Max Mustermann"],
+          [346, 155, "Musterweg 2"],
+          [346, 144, "8000 Alt Tylerland"]
+        ]
+
+        invoice_text.each_with_index do |text, i|
+          expect(text_with_position[i]).to eq(text)
+        end
       end
     end
   end

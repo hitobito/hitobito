@@ -383,7 +383,11 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   # May participants apply now?
   def application_possible?
-    application_period_open? && (places_available? || waiting_list_available?)
+    application_period_open? && places_or_waiting_list_available?
+  end
+
+  def places_or_waiting_list_available?
+    places_available? || waiting_list_available?
   end
 
   def init_questions(disclosure: nil)
@@ -464,12 +468,12 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     participant_count >= maximum_participants
   end
 
-  private
-
   def application_period_open?
     (!application_opening_at? || application_opening_at <= Time.zone.today) &&
       (!application_closing_at? || application_closing_at >= Time.zone.today)
   end
+
+  private
 
   def assert_type_is_allowed_for_groups # rubocop:disable Metrics/CyclomaticComplexity
     master = groups.try(:first)

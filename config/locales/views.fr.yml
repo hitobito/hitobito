@@ -1269,7 +1269,6 @@ fr:
       new:
         title: Merge une personne
         select_person: Quelles données sont prioritaires lors de la fusion?
-        merge_hint: Lors de la fusion, les rôles, les numéros de téléphones, les adresses mails supplémentaires ainsi que les entrées sur les réseaux sociaux seront récupérés. Toutes les autres données personnelles par ex. notes, inscriptions aux cours, seront supprimées.
         merge_hint_invalid: Cette personne a des données non-valables.
         irreversible: Cette opération est irréversible.
         invalid_persons: Les entrées ne peuvent être fusionnées que si les deux sont valables.

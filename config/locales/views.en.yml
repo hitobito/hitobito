@@ -407,7 +407,7 @@ en:
         login: Login
         no_login: Do not have a Login?
       email_check:
-        next: Continue
+        next: Further
         enter_email: Please enter your email address so you can register for the event.
     participation_lists:
       create:
@@ -1018,7 +1018,6 @@ en:
       new:
         title: Merge person
         select_person: Which data should be kept?
-        merge_hint: When merging, the roles, phone no., additional emails as well as the social media entries are taken over. All other data of this person like notes, course registrations etc. will be deleted.
         merge_hint_invalid: This person has invalid data.
         irreversible: This process cannot be undone.
         invalid_persons: The entries can only be merged when both are valid.

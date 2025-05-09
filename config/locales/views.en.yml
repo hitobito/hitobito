@@ -407,7 +407,7 @@ en:
         login: Login
         no_login: Do not have a Login?
       email_check:
-        next: Continue
+        next: Further
         enter_email: Please enter your email address so you can register for the event.
     participation_lists:
       create:

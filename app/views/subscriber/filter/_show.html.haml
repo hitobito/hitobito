@@ -11,15 +11,24 @@
 
 %ul.ms-4
   - @mailing_list.filter_chain[:attributes]&.to_hash&.values&.each do |attribute_arg|
-    - if attribute_arg[:key] != "language"
-      %li
-        = Person.filter_attrs.dig(attribute_arg[:key].to_sym, :label)
-        = t(attribute_arg[:constraint], scope: 'people_filters.attributes')
-        = people_filter_attribute_value(attribute_arg[:key], attribute_arg[:value])
-    - else
+    - case attribute_arg[:key]
+    - when "language"
       %li
         - languages = attribute_arg[:value].map { Person::LANGUAGES.fetch(_1.first.to_sym, _1) }
         - language_sentence = languages.to_sentence(last_word_connector: t('people_filters.language.word_connector'), two_words_connector: t('people_filters.language.word_connector'))
         = t('people_filters.language.one_of', languages: language_sentence)
+    - when "country"
+      %li
+        = Person.filter_attrs.dig(attribute_arg[:key].to_sym, :label)
+        = t(attribute_arg[:constraint], scope: 'people_filters.attributes')
+        - attribute_arg[:value] = attribute_arg[:value].reject { |country| country.empty? }
+        - attribute_arg[:value].map { |value| people_filter_attribute_value(attribute_arg[:key], value) }
+        = attribute_arg[:value].to_sentence(last_word_connector: t('people_filters.language.word_connector'), two_words_connector: t('people_filters.language.word_connector'))
+    - else
+      %li
+        = Person.filter_attrs.dig(attribute_arg[:key].to_sym, :label)
+        = t(attribute_arg[:constraint], scope: 'people_filters.attributes')
+        = people_filter_attribute_value(attribute_arg[:key], attribute_arg[:value])
+
 
   = render_extensions(:filter_show, mailing_list: @mailing_list)

@@ -18,7 +18,7 @@
     .w-90.shown
       = select_tag('filters[tag][names][]',
                     present_options,
-                    class: 'form-control tom-select w-100',
+                    class: 'form-control form-control-sm tom-select',
                     "data-controller": "form-select",
                     id: 'present-tag-select',
                     multiple: true,
@@ -29,7 +29,7 @@
     .w-90.shown
       = select_tag('filters[tag_absence][names][]',
                     absent_options,
-                    class: 'form-control tom-select w-100',
+                    class: 'form-control form-control-sm tom-select',
                     id: 'absent-tag-select',
                     "data-controller": "form-select",
                     multiple: true,

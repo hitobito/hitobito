@@ -11,6 +11,10 @@ class HitobitoErrorLogJob < RecurringJob
   def perform_internal
     return unless recipients_defined?
 
+    Settings.hitobito_log.recipient_emails.each do |email|
+      raise Bounce::UnexpectedBlock, email if Bounce.blocked?(email)
+    end
+
     if error_log_entry_ids.present?
       HitobitoLogMailer.error(error_log_entry_ids, time_period).deliver_later
     end

@@ -45,12 +45,13 @@ module Messages
 
       begin
         delivery.deliver
-        succeeded, failed = recipient_ids(recipients, [delivery.succeeded, delivery.failed])
+        succeeded, failed, blocked = recipient_ids(recipients, [delivery.succeeded, delivery.failed, delivery.blocked])
 
-        log "Sent mails, #{succeeded.length} OK, #{failed.length} failed."
+        log "Sent mails, #{succeeded.length} OK, #{failed.length} failed, #{blocked.length} blocked."
 
         message_recipients.where(id: succeeded).update_all(state: :sent)
         message_recipients.where(id: failed).update_all(state: :failed)
+        message_recipients.where(id: blocked).update_all(state: :blocked)
       rescue BulkMail::Delivery::RetriesExceeded
         abort_smtp_error
       end
@@ -88,7 +89,9 @@ module Messages
     def update_message_counts
       success_count = recipients_by(state: :sent).count
       failed_count = recipients_by(state: :failed).count
-      @message.update!(success_count: success_count, failed_count: failed_count)
+      blocked_count = recipients_by(state: :blocked).count
+
+      @message.update!(success_count:, failed_count:, blocked_count:)
     end
 
     def recipients_generated?

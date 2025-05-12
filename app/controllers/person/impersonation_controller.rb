@@ -16,7 +16,7 @@ class Person::ImpersonationController < ApplicationController
 
     PaperTrail::Version.create(main: person, item: person, whodunnit: taker, event: :impersonate)
 
-    if person.password? && person.email? && Settings.impersonate.notify
+    if person.password? && person.email? && Settings.impersonate.notify && !Bounce.blocked?(person.email)
       Person::UserImpersonationMailer.completed(person, taker.full_name).deliver_later
     end
 

@@ -17,6 +17,7 @@ class Address::CheckValidityJob < RecurringJob
 
     invalid_names = invalid_people.map(&:full_name).join(", ")
     Settings.addresses.validity_job_notification_emails.each do |mail_address|
+      raise Bounce::UnexpectedBlock, mail_address if Bounce.blocked?(mail_address)
       Address::ValidationChecksMailer.validation_checks(mail_address, invalid_names).deliver_later
     end
   end

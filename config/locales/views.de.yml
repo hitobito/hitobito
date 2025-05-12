@@ -675,6 +675,7 @@ de:
     form_data_missing: "Bitte fülle das folgende Formular aus, bevor du dich für den Anlass anmeldest."
     registered: "Deine persönlichen Daten wurden aufgenommen. Bitte ergänze nun noch die Angaben für die Anmeldung."
     application_window_closed: "Das Anmeldefenster für diesen Anlass ist geschlossen."
+    no_places_available: "Die maximale Teilnehmeranzahl für diesen Anlass ist bereits erreicht."
 
   event/roles:
     full_entry_label: "Rolle <i>%{role}</i> für <i>%{person}</i>"

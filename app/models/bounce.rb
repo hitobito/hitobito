@@ -54,7 +54,7 @@ class Bounce < ApplicationRecord
   # find the first person there is to find
   def person
     Person.find_by(email: email) ||
-      AdditionalEmail.find_by(email: email, contactable_type: "Person").contactable
+      AdditionalEmail.find_by(email: email, contactable_type: "Person")&.contactable
   end
 
   def people

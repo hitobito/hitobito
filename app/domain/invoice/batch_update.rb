@@ -69,7 +69,7 @@ class Invoice::BatchUpdate
 
   def payment_reminder_attrs(reminders, config, recipient)
     next_level = [3, reminders.size + 1].min
-    Globalize.with_locale(recipient&.language || I18n.locale) do
+    LocaleSetter.with_locale(person: recipient) do
       config = config.payment_reminder_configs.find_by(level: next_level)
       config.slice("title", "text", "level", "show_invoice_description")
         .merge(due_at: Time.zone.today + config.due_days)

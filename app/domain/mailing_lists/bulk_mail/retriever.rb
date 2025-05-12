@@ -94,6 +94,8 @@ class MailingLists::BulkMail::Retriever
     end
   end
 
+  # Tooling and non happy-path methods
+
   def abort_imap_unavailable
     imap_address = imap.config(:address)
     log_info("cannot connect to IMAP server #{imap_address}, terminating.")

@@ -29,6 +29,7 @@ describe Person::SendLoginJob do
   end
 
   it "sends email" do
+    expect(LocaleSetter).to receive(:with_locale).with(person: recipient).and_call_original
     subject.perform
     expect(last_email).to be_present
     expect(last_email.body).to match(/Hallo #{recipient.greeting_name}/)
@@ -36,15 +37,9 @@ describe Person::SendLoginJob do
   end
 
   context "with locale" do
-    after { I18n.locale = I18n.default_locale }
-
-    subject do
-      I18n.locale = :fr
-      Person::SendLoginJob.new(recipient, sender)
-    end
-
     it "sends localized email" do
-      I18n.locale = :de
+      expect(LocaleSetter).to receive(:with_locale).with(person: recipient).and_call_original
+      recipient.update!(language: :fr)
       subject.perform
       expect(last_email).to be_present
       expect(last_email.body).to match(/Salut #{recipient.greeting_name}/)

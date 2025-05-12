@@ -134,6 +134,7 @@ de:
 
     contact_data:
       invoices_tooltip_title: Wird für Rechnungen verwendet
+      blocked_mail_tooltip_title: E-Mail ist aufgrund von E-Mail-Rückläufern/Bounces blockiert
 
     public_check_box:
       tooltip: Private Einträge sind nur für die eigene Gruppe sichtbar.

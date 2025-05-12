@@ -11,7 +11,7 @@ module Messages
         "Bad sender address syntax"
       ].freeze
 
-      attr_reader :succeeded, :failed
+      attr_reader :succeeded, :failed, :blocked
 
       def initialize(mail_factory, emails, retries)
         @mail_factory = mail_factory
@@ -20,11 +20,17 @@ module Messages
       end
 
       def deliver
+        @blocked = blocked_emails(@emails)
+        @emails -= @blocked
         @failed = retried_delivery(@mail_factory, @emails, @retries)
         @succeeded = @emails - @failed
       end
 
       private
+
+      def blocked_emails(emails)
+        Bounce.blocked.where(email: emails).pluck(:email)
+      end
 
       def retried_delivery(mail_factory, emails, retries_left)
         raise RetriesExceeded if retries_left == 0

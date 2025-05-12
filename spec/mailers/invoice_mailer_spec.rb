@@ -44,6 +44,26 @@ describe InvoiceMailer do
     expect(mail.reply_to).to eq %w[bottom_member@example.com]
   end
 
+  context "with custom content in invoice_config" do
+    let!(:invoice_config_custom_content) do
+      custom_contents(:content_invoice_notification).update!(placeholders_required: nil)
+
+      Fabricate(:custom_content, context: invoice.invoice_config,
+        subject: "Invoice Config",
+        body: "I am not a global custom content",
+        key: custom_contents(:content_invoice_notification).key)
+    end
+
+    it "uses custom content defined in invoice config" do
+      expect(mail.subject).to eq("Invoice Config")
+    end
+
+    it "uses global custom content when custom content is in different invoice config" do
+      invoice_config_custom_content.update!(context: invoice_configs(:bottom_layer_two))
+      expect(mail.subject).to eq("Rechnung 376803389-2 von Bottom One")
+    end
+  end
+
   describe :html_body do
     it "includes group address" do
       expect(html).to match(/Absender: Bottom One, Greatstreet 345, 3456 Greattown/)

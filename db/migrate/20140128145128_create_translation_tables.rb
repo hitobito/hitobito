@@ -5,19 +5,21 @@
 
 class CreateTranslationTables < ActiveRecord::Migration[4.2]
   def up
-    CustomContent.create_translation_table!(
-      { label: :string,
-        subject: :string,
-        body: :text },
-      { migrate_data: true })
+    CustomContent.unscoped do
+      CustomContent.create_translation_table!(
+        { label: :string,
+          subject: :string,
+          body: :text },
+        { migrate_data: true })
 
-    # temporary index name too long, drop and recreate
-    CustomContent.globalize_migrator.drop_translations_index
-    change_column_null :custom_content_translations, :label, false
-    CustomContent.globalize_migrator.create_translations_index({})
-    remove_column :custom_contents, :label
-    remove_column :custom_contents, :subject
-    remove_column :custom_contents, :body
+      # temporary index name too long, drop and recreate
+      CustomContent.globalize_migrator.drop_translations_index
+      change_column_null :custom_content_translations, :label, false
+      CustomContent.globalize_migrator.create_translations_index({})
+      remove_column :custom_contents, :label
+      remove_column :custom_contents, :subject
+      remove_column :custom_contents, :body
+    end
 
     Event::Kind.create_translation_table!(
       { label: :string,

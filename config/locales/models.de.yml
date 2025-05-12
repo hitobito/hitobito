@@ -1131,6 +1131,7 @@ de:
         donation_increase_percentage: Erhöhung in %
         donation_calculation_year_amount: Anzahl Jahre
         sender_name: E-Mail Absendername
+        custom_content: E-Mail Vorlage
 
       invoice_item:
         name: Name

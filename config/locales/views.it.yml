@@ -1205,7 +1205,6 @@ it:
       new:
         title: Unire persone
         select_person: Quali dati devono avere la precedenza nell'unione?
-        merge_hint: Nell'unione vengono mantenuti i ruoli, il no di telefono, ulteriori e-mails così come l'iscrizione ai social media. Tutti gli altri dati di questa persona, come per esempio gli appunti, l'iscrizione ai corsi ecc. vengono cancellati.
         merge_hint_invalid: Questa persona ha dati non valevoli.
         irreversible: Quest'operazione non potrà venir annullata.
         invalid_persons: Le registrazioni possono venir unite solo quando entrambe sono valevoli.

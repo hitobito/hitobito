@@ -7,6 +7,7 @@
 - Login schicken E-Mail wird in der Sprache des Empfängers versendet (hitobito_sww#203)
 - Sichtbarkeit von Informationen zur Kontaktperson kann auf Events definiert werden (hitobito_sww#194)
 - In den Rechnungseinstellungen kann neu pro Layer eine E-Mail Vorlage definiert werden (hitobito_sww#197)
+- Beim zusammenführen von Duplikaten werden neu auch Rechnungen übernommen (hitobito_sww#139)
 - Bei externen Anlässen wird besser kommuniziert ob eine Anmeldung möglich ist (hitobito_sww#207)
 
 ## Version 2.5

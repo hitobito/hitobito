@@ -48,7 +48,7 @@ class Bounce < ApplicationRecord
   end
 
   def blocked?
-    self.blocked_at.present?
+    blocked_at.present?
   end
 
   # find the first person there is to find

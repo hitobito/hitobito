@@ -34,11 +34,12 @@ module Messages
       def recipient_attrs(message, people, labels)
         created_at = Time.current
         addresses(people, labels).map do |address|
-          {message_id: message.id,
-           created_at: created_at,
-           person_id: address[:person_id],
-           email: address[:email]}
-            .merge(state_attrs(address[:email]))
+          {
+            message_id: message.id,
+            created_at: created_at,
+            person_id: address[:person_id],
+            email: address[:email]
+          }.merge(state_attrs(address[:email]))
         end
       end
 

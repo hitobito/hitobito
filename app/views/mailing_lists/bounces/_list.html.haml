@@ -4,6 +4,6 @@
       %strong= link_to b.email, person_path(b.person)
     - else
       = b.email
-  - t.sortable_attr(:bounce_count)
+  - t.sortable_attr(:count)
   - t.attr(:blocked_at)
 

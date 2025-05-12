@@ -441,8 +441,7 @@ de:
 
       bounces:
         email: E-Mail
-        bounce_count: Anzahl Rückläufer
-        blocked_count: Verhinderte Mails
+        count: Anzahl Rückläufer
         blocked_at: Sperrzeitpunkt
         mailing_list_ids: Abo-IDs
 

@@ -7,12 +7,11 @@
 
 class AddBounces < ActiveRecord::Migration[7.1]
   def change
-    add_column :messages, :bounce_sender, :string
+    add_column :messages, :blocked_count, :integer, default: 0
 
     create_table :bounces do |t|
       t.string   :email, null: false, index: { unique: true }
-      t.integer  :bounce_count, null: false, default: 0
-      t.integer  :blocked_count, null: false, default: 0
+      t.integer  :count, null: false, default: 0
       t.datetime :blocked_at
       t.integer  :mailing_list_ids, array: true
 

@@ -8,6 +8,10 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static targets = ["toggle"];
 
+  static values = {
+    hideOn: { type: Array, default: [""] },
+  }
+
   toggle(event) {
     if(event.target.tagName === "SELECT") {
       const selected = event.target.options[event.target.options.selectedIndex];
@@ -18,7 +22,7 @@ export default class extends Controller {
         this.toggleTarget.classList.add("hidden");
       }
     } else if (event.target.tagName === "INPUT") {
-      if (event.target.value != "") {
+      if (!this.hideOnValue.includes(event.target.value)) {
         this.toggleTarget.classList.remove("hidden");
       } else {
         this.toggleTarget.classList.add("hidden");

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module MailingLists::ImapMailsSpecHelper
+module Mails::ImapMailsSpecHelper
   def build_imap_mail(plain_body: true)
     Imap::Mail.build(imap_fetch_data(plain_body: plain_body))
   end

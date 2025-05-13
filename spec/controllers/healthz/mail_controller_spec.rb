@@ -8,7 +8,7 @@
 require "spec_helper"
 
 describe Healthz::MailController do
-  include MailingLists::ImapMailsSpecHelper
+  include Mails::ImapMailsSpecHelper
 
   describe "GET show" do
     let(:json) { JSON.parse(response.body) }

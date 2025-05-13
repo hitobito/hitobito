@@ -6,6 +6,12 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 namespace :wagon do
+  desc "Writes patches made by loaded wagons and core"
+  task update_patches: :environment do
+    Rails.application.eager_load!
+    Patches::Collector.new.write
+  end
+
   namespace :migrate do
     desc "Display status of migrations including the originating wagon name"
     task status: :environment do

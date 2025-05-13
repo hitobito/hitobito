@@ -30,6 +30,10 @@ on:
       HEARTBEAT_TOKEN:
         description: "Token to interact with the heartbeat-application"
         required: true
+      RELEASE_PREPARATION_TOKEN:
+        description: "Token to allow pushing to the repository"
+        required: false
+
 
 defaults:
   run:
@@ -84,6 +88,8 @@ jobs:
           wagon_dependency_repository: ${{ inputs.wagon_dependency_repository }}
           core_ref: ${{ inputs.core_ref }}
           wagon_dependency_ref: ${{ inputs.wagon_dependency_ref }}
+        secrets:
+          RELEASE_PREPARATION_TOKEN: ${{ secrets.RELEASE_PREPARATION_TOKEN }}
 
       - name: ${{ inputs.wagon_repository }} patches
         run: |

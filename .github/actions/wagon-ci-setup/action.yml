@@ -23,7 +23,7 @@ inputs:
 secrets:
   RELEASE_PREPARATION_TOKEN:
     description: "Token to allow writes to repository"
-    required: true
+    required: false
 
 runs:
   using: composite
@@ -82,8 +82,7 @@ runs:
         repository: "hitobito/hitobito"
         ref: ${{ env.CORE_REF }}
         path: "hitobito"
-      secrets:
-        release_preparation_token: ${{ secrets.RELEASE_PREPARATION_TOKEN }}
+        token: ${{ secrets.RELEASE_PREPARATION_TOKEN }}
 
     - name: "Set up Ruby"
       uses: ruby/setup-ruby@v1

@@ -69,7 +69,7 @@ jobs:
 
       - name: "Install and configure dependencies"
         env:
-          TRANSIFEX_VERSION: "v1.6.4"
+          TRANSIFEX_VERSION: "v1.6.17"
           TRANSIFEX_TOKEN: ${{ secrets.TRANSIFEX_TOKEN }}
         run: |
           # ruby things

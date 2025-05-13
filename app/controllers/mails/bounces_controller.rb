@@ -5,5 +5,5 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class MailingLists::BouncesController < ListController
+class Mails::BouncesController < ListController
 end

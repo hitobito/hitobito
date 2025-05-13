@@ -5,8 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class MailingLists::ImapMailsController < ApplicationController
-  include MailingLists::ImapMails
+class Mails::ImapMailsController < ApplicationController
+  include Mails::ImapMails
 
   helper_method :mails, :mailbox, :counts
 

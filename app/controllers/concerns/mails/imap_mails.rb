@@ -7,7 +7,7 @@
 
 require "net/imap"
 
-module MailingLists::ImapMails
+module Mails::ImapMails
   extend ActiveSupport::Concern
 
   IMAP_SERVER_ERRORS = [

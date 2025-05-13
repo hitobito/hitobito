@@ -52,7 +52,7 @@ module NavigationHelper
        event_feed
        tags
        hitobito_log_entries
-       mailing_lists/imap_mails mailing_lists/bounces
+       mails/imap mails/bounces
        api],
      if: ->(_) { can?(:index, LabelFormat) }}
   ]

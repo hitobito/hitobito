@@ -17,9 +17,14 @@ module Sheet
     tab "activerecord.models.message.other",
       :group_mailing_list_messages_path,
       if: :update
+
     tab "activerecord.models.subscription.other",
       :group_mailing_list_subscriptions_path,
       if: :index_subscriptions,
       params: {returning: true}
+
+    tab "activerecord.models.bounce.other",
+      :group_mailing_list_bounces_path,
+      if: :update
   end
 end

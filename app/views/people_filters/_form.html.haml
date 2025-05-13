@@ -39,13 +39,15 @@
 
   - if action_name == 'new'
     %h3#filter-advice Um eine Filterkriterium auszuwählen, bitte klicke auf den Hinzufüge-Button
-  %div.dropdown.ml-3{"data-controller": "filter-dropdown"}
-    %button.btn.dropdown-toggle{ type: 'button',  "data-bs-toggle": "dropdown", "aria-expanded": "false"}
+  %div.dropdown{"data-controller": "filter-dropdown"}
+    %button.d-flex.align-items-center.btn.btn-outline-primary.dropdown-toggle{ type: 'button',  "data-bs-toggle": "dropdown", "aria-expanded": "false"}
+      %label.mr-2
+        = t("global.button.add")
       %i.fa.fa-plus
     %ul.dropdown-menu#filter-criteria-dropdown{"data-filter-dropdown-target": "menu"}
       - @filter_criteria.each do |filter_criterion|
         - if entry.filter_chain[filter_criterion].nil?
-          = link_to t("people_filters.#{filter_criterion}.title"), "/groups/#{@group.id}/people_filters/#{filter_criterion}",
+          = link_to t("people_filters.#{filter_criterion}.title"), group_people_filter_criterion_path(filter_criterion: filter_criterion),
               class: "dropdown-item", id: "dropdown-option-#{filter_criterion}", data: {turbo_stream: true}
   - if can?(:create, entry)
     %label.required=PeopleFilter.human_attribute_name(:name)

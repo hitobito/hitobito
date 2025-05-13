@@ -13,9 +13,9 @@
 
 .label-columns.mr-5
   .d-flex.flex-row.align-items-center.mb-2
-    .w-10
+    .col-2
       %label= t('.prompt_tag_selection')
-    .w-90.shown
+    .col-10.shown
       = select_tag('filters[tag][names][]',
                     present_options,
                     class: 'form-control form-control-sm tom-select',
@@ -24,9 +24,9 @@
                     multiple: true,
                     data: { chosen_no_results: t('global.chosen_no_results'), placeholder: t('.prompt_tag_placeholder') } )
   .d-flex.flex-row.align-items-center
-    .w-10
+    .col-2
       %label= t('.prompt_tag_absence_selection')
-    .w-90.shown
+    .col-10.shown
       = select_tag('filters[tag_absence][names][]',
                     absent_options,
                     class: 'form-control form-control-sm tom-select',

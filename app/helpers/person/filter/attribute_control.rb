@@ -43,7 +43,7 @@ class Person::Filter::AttributeControl
       end
 
       content << link_to(icon(:"trash-alt", filled: false), "#",
-        class: "remove_filter_attribute col lh-lg ms-5")
+        class: "remove_filter_attribute col-3 d-flex justify-content-end lh-lg ms-5")
     end
   end
 
@@ -68,7 +68,7 @@ class Person::Filter::AttributeControl
   end
 
   def attribute_key_field(key, time, html_options)
-    content_tag(:div, class: "col") do
+    content_tag(:div, class: "col-3") do
       select_tag("#{filter_name_prefix}[key]",
         options_from_collection_for_select(people_filter_attributes_for_select, :last, :first, key),
         html_options.merge(disabled: true, class: "attribute_key_dropdown form-select form-select-sm"))
@@ -76,7 +76,7 @@ class Person::Filter::AttributeControl
   end
 
   def attribute_constraint_field(key, constraint, type, time, html_options)
-    content_tag(:div, class: "col") do
+    content_tag(:div, class: "col-3") do
       select_tag("#{filter_name_prefix}[constraint]",
         options_from_collection_for_select(constraint_options_for(type, key), :last, :first, constraint),
         html_options.merge(class: "attribute_constraint_dropdown ms-3 form-select form-select-sm"))

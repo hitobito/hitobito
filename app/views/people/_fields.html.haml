@@ -23,9 +23,7 @@
 = render 'contactable/fields', f: f
 
 = field_set_tag do
-  = f.labeled(:gender) do
-    - (Person::GENDERS + ['']).each do |key|
-      = f.inline_radio_button(:gender, key, entry.gender_label(key))
+  = render 'gender_field', f: f
 
   = f.labeled_string_field(:birthday,
                            value: f.date_value(:birthday),

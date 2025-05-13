@@ -24,6 +24,7 @@ describe Event::SendRegisterLoginJob do
   end
 
   it "sends email" do
+    expect(LocaleSetter).to receive(:with_locale).with(person: person).and_call_original
     subject.perform
 
     expect(ActionMailer::Base.deliveries.size).to eq(1)

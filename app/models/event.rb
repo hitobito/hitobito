@@ -74,6 +74,14 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   require_dependency "event/role_decorator"
   require_dependency "event/role_ability"
 
+  ALLOWED_VISIBLE_CONTACT_ATTRIBUTES = %w[
+    name
+    address
+    phone_number
+    email
+    social_account
+  ].freeze
+
   SEARCHABLE_ATTRS = [:number, {event_translations: [:name], groups: [:name]}]
 
   include Event::Participatable
@@ -176,10 +184,12 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     timeliness: {type: :date, allow_blank: true, before: ::Date.new(9999, 12, 31)}
   validates :description, :location, :application_conditions,
     length: {allow_nil: true, maximum: 2**16 - 1}
+  validates :visible_contact_attributes, presence: true
   validate :assert_type_is_allowed_for_groups
   validate :assert_application_closing_is_after_opening
   validate :assert_required_contact_attrs_valid
   validate :assert_hidden_contact_attrs_valid
+  validate :validate_visible_contact_attributes
   validates_associated :application_questions, :admin_questions
 
   ### CALLBACKS
@@ -192,6 +202,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     allow_destroy: true
 
   ### SERIALIZED ATTRIBUTES
+  serialize :visible_contact_attributes, type: Array, coder: NilArrayCoder
   serialize :required_contact_attrs, type: Array, coder: NilArrayCoder
   serialize :hidden_contact_attrs, type: Array, coder: NilArrayCoder
 
@@ -372,7 +383,11 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   # May participants apply now?
   def application_possible?
-    application_period_open? && (places_available? || waiting_list_available?)
+    application_period_open? && places_or_waiting_list_available?
+  end
+
+  def places_or_waiting_list_available?
+    places_available? || waiting_list_available?
   end
 
   def init_questions(disclosure: nil)
@@ -453,12 +468,12 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     participant_count >= maximum_participants
   end
 
-  private
-
   def application_period_open?
     (!application_opening_at? || application_opening_at <= Time.zone.today) &&
       (!application_closing_at? || application_closing_at >= Time.zone.today)
   end
+
+  private
 
   def assert_type_is_allowed_for_groups # rubocop:disable Metrics/CyclomaticComplexity
     master = groups.try(:first)
@@ -513,6 +528,14 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
       if ParticipationContactData.mandatory_contact_attrs.include?(a)
         errors.add(:base, :contact_attr_mandatory, attribute: a)
       end
+    end
+  end
+
+  def validate_visible_contact_attributes
+    return if visible_contact_attributes.blank?
+
+    unless visible_contact_attributes.all? { |attr| ALLOWED_VISIBLE_CONTACT_ATTRIBUTES.include?(attr) }
+      errors.add(:visible_contact_attributes, :inclusion)
     end
   end
 

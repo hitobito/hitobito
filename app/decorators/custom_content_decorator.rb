@@ -7,7 +7,13 @@ class CustomContentDecorator < ApplicationDecorator
   decorates :custom_content
 
   def available_placeholders
-    if placeholders_required? || placeholders_optional?
+    context_id? ? translate_label(CustomContent.find_by(key: key)) : translate_label(self)
+  end
+
+  private
+
+  def translate_label(custom_content)
+    if custom_content.placeholders_required? || custom_content.placeholders_optional?
       list = placeholders_list.collect do |ph|
         placeholder_token(ph)
       end

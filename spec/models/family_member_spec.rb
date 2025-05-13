@@ -200,6 +200,16 @@ describe FamilyMember do
         expect(inverse).to be_blank
       end
 
+      it "does not raise when no relation found" do
+        fm = Fabricate(:family_member)
+
+        fm.update_column(:family_key, "someotherkey")
+
+        expect do
+          fm.destroy
+        end.not_to raise_error
+      end
+
       it "transitive relation is added when A is new sibling of B and C" do
         a = Fabricate(:person, nickname: "Alice")
         b = Fabricate(:person, nickname: "Bob")

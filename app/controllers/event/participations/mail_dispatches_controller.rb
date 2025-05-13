@@ -16,7 +16,11 @@ class Event::Participations::MailDispatchesController < ApplicationController
 
   private
 
-  def send_event_application_confirmation_mail = Event::ParticipationMailer.confirmation(participation).deliver_later
+  def send_event_application_confirmation_mail
+    LocaleSetter.with_locale(person: participation.person) do
+      Event::ParticipationMailer.confirmation(participation).deliver_later
+    end
+  end
 
   def group = @group ||= Group.find(params[:group_id])
 

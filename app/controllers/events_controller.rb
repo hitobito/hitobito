@@ -235,6 +235,7 @@ class EventsController < CrudController
 
   def assign_attributes
     assign_contact_attrs
+    assign_visible_contact_attrs
     super
   end
 
@@ -247,6 +248,10 @@ class EventsController < CrudController
       entry.required_contact_attrs << a if v.to_sym == :required
       entry.hidden_contact_attrs << a if v.to_sym == :hidden
     end
+  end
+
+  def assign_visible_contact_attrs
+    entry.visible_contact_attributes = model_params.delete(:visible_contact_attributes)&.keys
   end
 
   def reset_contact_attrs

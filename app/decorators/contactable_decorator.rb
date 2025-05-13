@@ -10,7 +10,7 @@ module ContactableDecorator
     model.address
   end
 
-  def address_name
+  def contact_name
     content_tag(:strong, to_s)
   end
 
@@ -36,7 +36,7 @@ module ContactableDecorator
   end
 
   def complete_contact
-    address_name +
+    contact_name +
       complete_address +
       primary_email +
       all_additional_emails(true) +

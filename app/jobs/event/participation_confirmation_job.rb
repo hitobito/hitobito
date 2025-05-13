@@ -17,9 +17,10 @@ class Event::ParticipationConfirmationJob < BaseJob
   def perform
     return unless participation # may have been deleted again
 
-    set_locale
-    send_confirmation
-    send_approval
+    LocaleSetter.with_locale(person: participation.person) do
+      send_confirmation
+      send_approval
+    end
   end
 
   private

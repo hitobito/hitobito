@@ -18,9 +18,7 @@ describe Event::ParticipationMailer do
   let(:participation) { Fabricate(:event_participation, event: event, person: person) }
   let(:mail) { Event::ParticipationMailer.confirmation(participation) }
 
-  before do
-    Fabricate(:phone_number, contactable: person, public: true)
-  end
+  before { Fabricate(:phone_number, contactable: person, public: true) }
 
   subject { mail.parts.first.body }
 

@@ -42,6 +42,7 @@ describe Event::ParticipationNotificationJob do
       let(:notify) { true }
 
       it "sends notification email" do
+        expect(LocaleSetter).to receive(:with_locale).with(person: participation.person).and_call_original
         subject.perform
 
         expect(ActionMailer::Base.deliveries.size).to eq(1)

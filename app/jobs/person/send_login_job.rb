@@ -13,9 +13,10 @@ class Person::SendLoginJob < BaseJob
   end
 
   def perform
-    set_locale
-    token = recipient.generate_reset_password_token!
-    Person::LoginMailer.login(recipient, sender, token).deliver_now
+    LocaleSetter.with_locale(person: recipient) do
+      token = recipient.generate_reset_password_token!
+      Person::LoginMailer.login(recipient, sender, token).deliver_now
+    end
   end
 
   def sender

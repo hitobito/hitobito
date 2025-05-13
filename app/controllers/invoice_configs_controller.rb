@@ -15,11 +15,15 @@ class InvoiceConfigsController < CrudController
     ],
     payment_provider_configs_attributes: [
       :id, :payment_provider, :user_identifier, :partner_identifier, :password
+    ],
+    custom_content_attributes: [
+      :id, :body, :subject, :_destroy
     ]]
 
   before_render_form :build_payment_reminder_configs
   before_render_form :build_payment_provider_configs
 
+  before_save :set_custom_content_attributes
   before_save :define_changed_payment_provider_configs
   after_save :initialize_payment_providers
 
@@ -47,6 +51,13 @@ class InvoiceConfigsController < CrudController
     missing_payment_providers.each do |provider|
       entry.payment_provider_configs.build.with_payment_provider(provider)
     end
+  end
+
+  def set_custom_content_attributes
+    return unless entry.custom_content
+
+    entry.custom_content.label = "Rechnung Template from #{entry.class} with id: #{entry.id}"
+    entry.custom_content.key = InvoiceMailer::CONTENT_INVOICE_NOTIFICATION
   end
 
   def missing_payment_reminder_levels

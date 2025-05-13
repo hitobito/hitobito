@@ -19,9 +19,16 @@ describe EventsController, js: true do
 
     let(:edit_path) { edit_group_event_path(event.group_ids.first, event.id) }
 
-    def notification_checkbox_visible(visible)
+    def hidden_contact_fields_visible(visible)
       have_checkbox = have_selector(NOTIFICATION_CHECKBOX_SELECTOR)
-      visible ? expect(page).to(have_checkbox) : expect(page).not_to(have_checkbox)
+      text = "Anzeigeoptionen (Kontaktperson)"
+      if visible
+        expect(page).to(have_checkbox)
+        expect(page).to have_text text
+      else
+        expect(page).to have_no_text text
+        expect(page).not_to(have_checkbox)
+      end
     end
 
     def notification_checkbox
@@ -37,26 +44,26 @@ describe EventsController, js: true do
         sign_in
         visit edit_path
 
-        notification_checkbox_visible(false)
+        hidden_contact_fields_visible(false)
 
         # set contact
         fill_in "Kontaktperson", with: "Top"
         expect(find('ul[role="listbox"] li[role="option"]')).to have_content "Top Leader"
         find('ul[role="listbox"] li[role="option"]').click
         find("body").send_keys(:tab) # unfocus input field
-        notification_checkbox_visible(true)
+        hidden_contact_fields_visible(true)
         click_save
 
         # show event
         expect(find("aside")).to have_content "Kontakt"
         expect(find("aside")).to have_content "Top Leader"
         click_link "Bearbeiten"
-        notification_checkbox_visible(true)
+        hidden_contact_fields_visible(true)
 
         # remove contact
         expect(find("#event_contact").value).to eq("Top Leader")
         fill_in "Kontaktperson", with: ""
-        notification_checkbox_visible(false)
+        hidden_contact_fields_visible(false)
         click_save
 
         # show event again
@@ -68,7 +75,7 @@ describe EventsController, js: true do
       sign_in
       visit edit_path
 
-      notification_checkbox_visible(false)
+      hidden_contact_fields_visible(false)
 
       query = "querythatdoesnotmatch"
       fill_in "Kontaktperson", with: query

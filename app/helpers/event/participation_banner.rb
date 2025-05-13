@@ -57,7 +57,7 @@ class Event::ParticipationBanner
     action_button(
       t("event.participations.cancel_application.caption"),
       group_event_participation_path(parent, @event, @user_participation),
-      "times-circle",
+      "user-times",
       data: {
         confirm: t("event.participations.cancel_application.confirmation"),
         method: :delete

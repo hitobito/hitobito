@@ -16,8 +16,9 @@ class Event::ParticipationNotificationJob < BaseJob
   def perform
     return unless participation # may have been deleted again
 
-    set_locale
-    send_notification
+    LocaleSetter.with_locale(person: participation.person) do
+      send_notification
+    end
   end
 
   private

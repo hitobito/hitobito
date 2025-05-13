@@ -11,6 +11,7 @@ class Event::RegisterMailer < ApplicationMailer
     @group = group
     @event = event
     @token = token
+
     # This email contains sensitive information and thus
     # is only sent to the main email address.
     custom_content_mail(

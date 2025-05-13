@@ -138,8 +138,7 @@ class PersonDuplicateTableBuilder
   def translate_header(header)
     return if header == :actions
 
-    I18n.t("#{I18N_PERSON}.#{header}",
-      default: I18n.t("#{I18N_PERSON_DUPLICATE}.#{header}"))
+    I18n.t("#{I18N_PERSON}.#{header}", default: I18n.t("#{I18N_PERSON_DUPLICATE}.#{header}"))
   end
 
   def t(key)

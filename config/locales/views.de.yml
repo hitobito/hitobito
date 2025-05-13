@@ -599,6 +599,13 @@ de:
       admin_questions: Administrationsangaben
       contact_attrs: Kontaktangaben
     general_fields:
+      visible_contact_attributes:
+        all: Alle Kontaktdaten anzeigen
+        name: Name anzeigen
+        address: Adresse anzeigen
+        phone_number: Telefonnummer anzeigen
+        email: E-Mail anzeigen
+        social_account: Social Media anzeigen
       kind_overrides_link_title: "Folgende Felder werden übernommen: Beschreibung"
     global:
       link:
@@ -1009,10 +1016,15 @@ de:
         Benutzers oder an die hier konfigurierte Adresse gesendet werden.
       email_validation: Darf keine E-Mail-Adresse sein.
       sender_name_help: Rechnungs-E-Mails werden unter diesem Namen versendet.
+      custom_content_help: Diese E-Mail Vorlage wird beim versenden von Rechnungen verwendet. Wenn keine E-Mail Vorlage hinterlegt wird, wird die globale E-Mail Voralge verwendet.
     reminder_fields:
       third_level: "Für alle weiteren Mahnungen, wird die dritte Mahnstufe wiederholt."
     provider_fields:
       reset_payment_provider_warning: "Sollten Daten hier geändert werden, muss der Initialisierungsprozess der Rechnungsschnittstelle neu ausgeführt werden."
+    custom_content_fields:
+      subject: Betreff
+      body: Inhalt
+      remove: E-Mail Vorlage entfernen
 
   invoice_lists:
     destroys:
@@ -1410,7 +1422,7 @@ de:
       new:
         title: Personen zusammenführen
         select_person: Wessen Daten sollen beim Zusammenführen den Vorrang haben?
-        merge_hint: Beim Zusammenführen werden die Rollen, Telefonnr., zusätzlichen E-Mails sowie die Social Media Einträge übernommen. Alle anderen Daten dieser Person wie z.B. Notizen, Kursanmeldungen usw. werden gelöscht.
+        merge_hint: Beim Zusammenführen werden die Rollen, Telefonnummern, zusätzlichen E-Mails, Social Media Einträge, Rechnungen, Notizen, Tags, Abos, Familienmitglieder, Event Einladungen und Teilnahmen sowie auch Qualifikationen übernommen. Alle anderen Daten dieser Person wie z.B. Log Einträge usw. werden gelöscht.
         merge_hint_invalid: Diese Person hat ungültige Daten.
         irreversible: Dieser Vorgang kann nicht rückgängig gemacht werden.
         invalid_persons: Die Einträge können erst zusammengeführt werden wenn beide gültig sind.

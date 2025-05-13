@@ -18,6 +18,9 @@ describe EventsController, type: :controller do
   let(:date) { {label: "foo", start_at_date: Time.zone.today, finish_at_date: Time.zone.today} }
   let(:test_entry_attrs) do
     {name: "Chief Leader Course",
+     visible_contact_attributes: {
+       name: "1"
+     },
      group_ids: [group.id],
      dates_attributes: [date]}
   end

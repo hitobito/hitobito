@@ -14,9 +14,10 @@ class Event::SendRegisterLoginJob < BaseJob
   end
 
   def perform
-    set_locale
-    token = recipient.generate_reset_password_token!
-    Event::RegisterMailer.register_login(recipient, group, event, token).deliver_now
+    LocaleSetter.with_locale(person: recipient) do
+      token = recipient.generate_reset_password_token!
+      Event::RegisterMailer.register_login(recipient, group, event, token).deliver_now
+    end
   end
 
   def recipient

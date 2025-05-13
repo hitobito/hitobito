@@ -40,6 +40,15 @@ describe "Global Conditions", js: true do
       end
     end
 
+    it "can remove global conditions" do
+      select "Firmenname", from: "attribute_filter"
+
+      first(".far.fa-trash-alt").click
+      first(".btn.btn-primary", text: "Speichern").click
+
+      expect(page).not_to have_text("Firmenname")
+    end
+
     context "member access" do
       before {
         Rails.env.stub(production?: true)

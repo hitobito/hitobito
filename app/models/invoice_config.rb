@@ -55,6 +55,7 @@ class InvoiceConfig < ActiveRecord::Base
   has_many :payment_reminder_configs, dependent: :destroy
   has_many :payment_provider_configs, dependent: :destroy
   has_many :message_templates, dependent: :destroy, as: :templated
+  has_one :custom_content, dependent: :destroy, as: :context
 
   validates :group_id, uniqueness: true
   validates :payee, presence: true, on: :update
@@ -85,6 +86,7 @@ class InvoiceConfig < ActiveRecord::Base
 
   accepts_nested_attributes_for :payment_reminder_configs, :payment_provider_configs
   accepts_nested_attributes_for :message_templates, allow_destroy: true
+  accepts_nested_attributes_for :custom_content, allow_destroy: true
 
   validates_by_schema
 

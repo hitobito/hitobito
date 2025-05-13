@@ -12,9 +12,9 @@
 
 .label-columns.mr-5
   .d-flex.flex-row.align-items-center.mb-2
-    .w-10
+    .col-2
       %label= t("people_filters.role.title")
-    .w-90
+    .col-10
       = select_tag('filters[role][role_type_ids][]',
                         role_options,
                         class: 'form-control form-control-sm tom-select',
@@ -23,20 +23,22 @@
                         multiple: true,
                         data: { chosen_no_results: t('global.chosen_no_results'), placeholder: t('.prompt_role_placeholder') } )
   .d-flex.flex-row.align-items-center.control-group.mb-2
-    .w-10
+    .col-2
       %label= t("people_filters.role.duration_title")
-    .w-90.d-flex.flex-row.align-items-center
-      .input-group.w-50
-        %span.input-group-text= icon(:'calendar-alt')
-        = text_field_tag("filters[role][start_at]", filter_roles && filter_roles.args[:start_at], class: 'date form-control form-control-sm')
-        %label.mx-2.mt-1.d-flex.align-items-center=t('.prompt_role_duration_until')
-      .input-group.w-50
-        %span.input-group-text= icon(:'calendar-alt')
-        = text_field_tag("filters[role][finish_at]", filter_roles && filter_roles.args[:finish_at], class: 'date form-control form-control-sm')
+    .col-10.d-flex.flex-row.align-items-center
+      .col-6
+        .input-group
+          %span.input-group-text= icon(:'calendar-alt')
+          = text_field_tag("filters[role][start_at]", filter_roles && filter_roles.args[:start_at], class: 'date form-control form-control-sm')
+          %label.mx-2.mt-1.d-flex.align-items-center=t('.prompt_role_duration_until')
+      .col-6
+        .input-group
+          %span.input-group-text= icon(:'calendar-alt')
+          = text_field_tag("filters[role][finish_at]", filter_roles && filter_roles.args[:finish_at], class: 'date form-control form-control-sm')
   .d-flex.flex-row.align-items-center
-    .w-10
+    .col-2
       %label= t("people_filters.role.role_kind_title")
-    .w-90{"data-controller": "form-select"}
+    .col-10{"data-controller": "form-select"}
       = select_tag('filters[role][kind][]',
                         kind_options,
                         class: 'form-control form-control-sm tom-select w-100',

@@ -634,6 +634,7 @@ de:
         application_questions: Anmeldeangaben
         admin_questions: Administrationsangaben
         no_name: "[Kein Name]"
+        visible_contact_attributes: "Anzeigeoptionen (Kontaktperson)"
 
       event/contact_attrs:
         required: Obligatorisch
@@ -1130,6 +1131,7 @@ de:
         donation_increase_percentage: Erhöhung in %
         donation_calculation_year_amount: Anzahl Jahre
         sender_name: E-Mail Absendername
+        custom_content: E-Mail Vorlage
 
       invoice_item:
         name: Name

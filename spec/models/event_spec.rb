@@ -480,6 +480,17 @@ describe Event do
 
       is_expected.to have(1).error_on(:group_ids)
     end
+
+    it "is valid if visible_contact_attributes contains valid values" do
+      subject.visible_contact_attributes = ["name"]
+      is_expected.to be_valid
+    end
+
+    it "is invalid if visible_contact_attributes contains invalid values" do
+      subject.visible_contact_attributes = ["invalidvalue"]
+      is_expected.not_to be_valid
+      expect(subject.errors.full_messages).to eq ["Anzeigeoptionen (Kontaktperson) ist kein gültiger Wert"]
+    end
   end
 
   describe "#init_questions" do

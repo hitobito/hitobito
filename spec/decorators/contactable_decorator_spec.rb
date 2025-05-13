@@ -6,6 +6,8 @@
 require "spec_helper"
 
 describe ContactableDecorator do
+  let(:event) { events(:top_event).decorate }
+
   before do
     Draper::ViewContext.clear!
     group = Group.new(
@@ -22,6 +24,14 @@ describe ContactableDecorator do
     group.additional_emails.new(email: "additional@foobar.com", label: "Work", public: true, mailings: true)
     group.additional_emails.new(email: "private@foobar.com", label: "Mobile", public: false)
     @group = GroupDecorator.decorate(group)
+
+    event.contact = people(:top_leader)
+  end
+
+  describe "#complete_contact" do
+    it "returns all attributes" do
+      expect(event.contact.complete_contact).to eq "<strong>Top Leader</strong><p>Greatstreet 345<br />3456 Greattown</p><p><a href=\"mailto:top_leader@example.com\">top_leader@example.com</a></p>"
+    end
   end
 
   it "#complete_address" do

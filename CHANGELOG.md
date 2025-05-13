@@ -2,11 +2,7 @@
 
 ## unreleased
 - Referenznummer von Rechnung wird neu auch auf Empfangsschein angezegit (hitobito_sww#238)
-
-## Version 2.5
 - Sortierung von Rechnungstabelle wird bei PDF Exports beachtet (hitobito_sww#237)
-
-## Version 2.5
 - Beim zusammenführen von Duplikaten werden neu auch Rechnungen, Notizen, Tags, Abos, Familienmitglieder, Event Einladungen und Teilnahmen, Anfragen und Qualifikationen übernommen (hitobito_sww#139)
 - Auf der Person können mehrere Adressen erfasst werden (#3264, #3265)
 - Eine der weiteren E-Mail Adressen kann für den Rechnungsversand verwendet werden (#3331)
@@ -18,9 +14,8 @@
 - Im Länder Dropdown werden alle Länder aufgelistet ohne dass mit der Tastatur gefiltert werden muss (#3364)
 - Es können Sammelrechnungen mit Rechnungsposten auf Basis von aktiven Rollen konfiguriert werden (hitobito_swb#18)
 - Teilnahmen haben neu einen Knopf um auf das Personenprofil zu navigieren
-
-## Version 2.5
 - Eine Rechnung kann im Originalzustand gedruckt werden, bzw. ohne Mahnungen (hitobito_sww#173)
+- E-Mail-Rückläufer ("Bounces") werden erfasst und angezeigt. Nach 5 Rückläufern wird der Mailversand gestoppt (hitobito#3053)
 
 ## Version 2.5
 

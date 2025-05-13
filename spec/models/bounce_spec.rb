@@ -10,6 +10,8 @@ require "spec_helper"
 RSpec.describe Bounce do
   subject(:bounced) { described_class.create(email: "bounced@example.org", count: 1) }
 
+  subject(:mailing_list_bounce) { described_class.create(email: "fourty-two@example.org", count: 2, mailing_list_ids: [1, 42]) }
+
   subject(:blocked) { described_class.create(email: "blocked@example.org", count: 10, blocked_at: 1.day.ago) }
 
   it "has a block-threshold" do
@@ -18,6 +20,25 @@ RSpec.describe Bounce do
 
   it "has a blocked-scope" do
     expect(described_class.blocked).to be_a ActiveRecord::Relation
+  end
+
+  context ".of_mailing_list" do
+    let(:scope) { described_class.of_mailing_list(42) }
+
+    it "returns a relation" do
+      expect(scope).to be_a ActiveRecord::Relation
+    end
+
+    it "has the needed SQL" do
+      expect(scope.to_sql).to include "mailing_list_ids && '{42}'"
+    end
+
+    it "filters the right elements" do
+      expect(mailing_list_bounce.mailing_list_ids).to include(42)
+
+      expect(scope).to have(1).item
+      expect(scope.first).to eq mailing_list_bounce
+    end
   end
 
   context ".record" do

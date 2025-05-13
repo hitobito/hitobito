@@ -32,12 +32,12 @@ Lint/ConstantDefinitionInBlock:
     - 'lib/tasks/mailchimp.rake'
     - 'lib/tasks/payment.rake'
     - 'spec/controllers/event/participations_controller_spec.rb'
-    - 'spec/controllers/mailing_lists/imap_mails_controller_spec.rb'
-    - 'spec/controllers/mailing_lists/imap_mails_move_controller_spec.rb'
+    - 'spec/controllers/mails/imap_mails_controller_spec.rb'
+    - 'spec/controllers/mails/imap_mails_move_controller_spec.rb'
     - 'spec/domain/address/parser_spec.rb'
     - 'spec/domain/event/participant_assigner_spec.rb'
     - 'spec/features/event/events_controller_spec.rb'
-    - 'spec/helpers/mailing_lists/imap_mails_helper_spec.rb'
+    - 'spec/helpers/mails/imap_mails_helper_spec.rb'
     - 'spec/jobs/event/participation_confirmation_job_spec.rb'
     - 'spec/jobs/export/export_base_job_spec.rb'
     - 'spec/models/invoice_item_spec.rb'
@@ -345,11 +345,6 @@ Style/MissingRespondToMissing:
     - 'app/abilities/ability_dsl/recorder.rb'
     - 'app/models/event/participation_contact_data.rb'
     - 'spec/support/crud_test_model.rb'
-
-# Offense count: 1
-Style/MixinUsage:
-  Exclude:
-    - 'app/controllers/mailing_lists/imap_mails_move_controller.rb'
 
 # Offense count: 12
 # This cop supports unsafe autocorrection (--autocorrect-all).

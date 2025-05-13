@@ -8,5 +8,6 @@
 class AddContextToCustomContent < ActiveRecord::Migration[7.1]
   def change
     add_reference :custom_contents, :context, polymorphic: true
+    CustomContent.reset_column_information
   end
 end

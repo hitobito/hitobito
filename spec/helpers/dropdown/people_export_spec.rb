@@ -42,6 +42,10 @@ describe "Dropdown::PeopleExport" do
     menu.all("> li > a").map(&:text)
   end
 
+  def top_menu_entries_without_submenu
+    menu.all("> li > a", visible: :all).reject { |link| link[:class].to_s.split.include?("dropdown-toggle") }
+  end
+
   def submenu_entries(name)
     menu.all("> li > a:contains('#{name}') ~ ul > li > a").map(&:text)
   end
@@ -49,6 +53,10 @@ describe "Dropdown::PeopleExport" do
   it "renders dropdown" do
     is_expected.to have_content "Export"
     is_expected.to have_selector ".btn-group > ul.dropdown-menu"
+
+    top_menu_entries_without_submenu.each do |link|
+      expect(link[:target]).to eq("new")
+    end
 
     expect(top_menu_entries).to match_array %w[CSV Excel vCard PDF Etiketten]
 

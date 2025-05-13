@@ -8,7 +8,7 @@
 require "spec_helper"
 
 describe MailingLists::BulkMail::BounceMessageForwardJob do
-  include MailingLists::ImapMailsSpecHelper
+  include Mails::ImapMailsSpecHelper
 
   let(:raw_bounce_mail) { Mail.read_from_string(Rails.root.join("spec", "fixtures", "email", "list_bounce.eml").read) }
 

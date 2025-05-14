@@ -24,8 +24,7 @@
 #
 # Indexes
 #
-#  index_invoice_items_on_invoice_id    (invoice_id)
-#  invoice_items_search_column_gin_idx  (search_column) USING gin
+#  index_invoice_items_on_invoice_id  (invoice_id)
 #
 
 class InvoiceItem < ActiveRecord::Base
@@ -77,7 +76,7 @@ class InvoiceItem < ActiveRecord::Base
   end
 
   def to_s
-    "#{name}: #{total} (#{amount} / #{vat})"
+    "#{name}: #{total} (#{cost} / #{vat})"
   end
 
   def total
@@ -109,7 +108,7 @@ class InvoiceItem < ActiveRecord::Base
   def vat
     recalculate unless cost
 
-    vat_rate ? cost&.*((vat_rate / 100)) : 0
+    vat_rate ? cost&.*(vat_rate / 100) : 0
   end
 
   def count_or_unit_cost_changed?

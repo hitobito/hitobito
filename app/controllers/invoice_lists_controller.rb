@@ -137,12 +137,8 @@ class InvoiceListsController < CrudController
     entry.creator = current_user
     entry.invoice = parent.invoices.build(model_params.present? ? permitted_params[:invoice] : {})
 
-    if params[:invoice_items].present?
-      entry.invoice.invoice_items = params[:invoice_items].map do |type|
-        item = InvoiceItem.type_mappings[type.to_sym].new
-        item.name = item.model_name.human
-        item
-      end
+    if params[:membership_fees].present?
+      entry.invoice.invoice_items = InvoiceItem::Membership.build_all
     end
   end
 

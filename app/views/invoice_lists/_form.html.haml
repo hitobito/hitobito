@@ -23,7 +23,7 @@
     = fi.labeled_date_field :issued_at
 
     = render_extensions :form_invoice_fields, locals: { f: fi }
-    - if entry.typed_items?
+    - if entry.membership?
       - entry.invoice.invoice_items.each do |item|
         - item.calculate_amount
         = [item.count, item.unit_cost.to_s, item.total.to_s]

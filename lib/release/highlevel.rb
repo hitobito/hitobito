@@ -43,7 +43,7 @@ module Release
       return unless translations_configured?
 
       notify "Pulling translation from transifex"
-      execute "tx pull -f --mode onlytranslated"
+      execute "tx pull -f"
       add "config/locales/*.yml"
 
       return unless translations_changed?

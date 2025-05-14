@@ -129,7 +129,7 @@ describe InvoiceListsController do
 
     render_views
 
-    it "renders Rechnung title for single person" do
+    it "renders Sammelrechnung title for single person" do
       get :new,
         params: {
           group_id: group.id,
@@ -137,10 +137,10 @@ describe InvoiceListsController do
           ids: ""
         }
 
-      expect(sheet_title).to have_text "Rechnung"
+      expect(sheet_title).to have_text "Sammelrechnung"
     end
 
-    it "renders Rechnung title for multiple people" do
+    it "renders Sammelrechnung title for multiple people" do
       get :new,
         params: {
           group_id: group.id,
@@ -148,7 +148,7 @@ describe InvoiceListsController do
           ids: ""
         }
 
-      expect(sheet_title).to have_text "Rechnung"
+      expect(sheet_title).to have_text "Sammelrechnung"
     end
 
     it "renders Sammelrechnung title for abo" do
@@ -185,12 +185,24 @@ describe InvoiceListsController do
       expect(assigns(:invoice_list).invoice.payment_information).to eq "Bitte schnellstmöglich einzahlen"
     end
 
+    it "GET#new prepares membership invoice" do
+      get :new, params: {group_id: group.id, membership_fees: true}
+      expect(response).to render_template("crud/new")
+
+      expect(assigns(:invoice_list).invoice.issued_at).to be_present
+      members, leaders = assigns(:invoice_list).invoice.invoice_items
+      expect(members.name).to eq "Mitgliedsbeitrag - Members"
+      expect(leaders.name).to eq "Mitgliedsbeitrag - Leaders"
+      expect(members.count).to eq 1
+      expect(leaders.count).to eq 0
+    end
+
     it "POST#create creates an invoice for single member" do
       expect do
         post :create, params: {group_id: group.id, invoice_list: {recipient_ids: person.id, invoice: invoice_attrs}}
       end.to change { group.invoices.count }.by(1)
 
-      expect(response).to redirect_to group_invoices_path(group, returning: true)
+      expect(response).to redirect_to group_invoice_list_invoices_path(group, InvoiceList.last, returning: true)
       expect(flash[:notice]).to include "Rechnung <i>Title</i> wurde erstellt."
     end
 
@@ -297,33 +309,46 @@ describe InvoiceListsController do
       expect(flash[:notice][1]).to match(/Rechnung \d+-\d+ wird im Hintergrund per E-Mail verschickt./)
     end
 
-    it "DELETE#destroy informs if no invoice has been selected" do
-      delete :destroy, params: {group_id: group.id}
-      expect(response).to redirect_to group_invoices_path(group, returning: true)
-      expect(flash[:alert]).to include "Zuerst muss eine Rechnung ausgewählt werden."
-    end
+    describe "DELETE#destroy" do
+      it "informs if no invoice has been selected" do
+        delete :destroy, params: {group_id: group.id}
+        expect(response).to redirect_to group_invoices_path(group, returning: true)
+        expect(flash[:alert]).to include "Zuerst muss eine Rechnung ausgewählt werden."
+      end
 
-    it "DELETE#destroy moves invoice to cancelled state" do
-      invoice = Invoice.create!(group: group, title: "test", recipient: person)
-      expect do
-        travel(1.day) { delete :destroy, params: {group_id: group.id, ids: invoice.id} }
-      end.to change { invoice.reload.updated_at }
-      expect(response).to redirect_to group_invoices_path(group, returning: true)
-      expect(flash[:notice]).to include "Rechnung wurde storniert."
-      expect(invoice.reload.state).to eq "cancelled"
-    end
+      it "moves invoice to cancelled state" do
+        invoice = Invoice.create!(group: group, title: "test", recipient: person)
+        expect do
+          travel(1.day) { delete :destroy, params: {group_id: group.id, ids: invoice.id} }
+        end.to change { invoice.reload.updated_at }
+        expect(response).to redirect_to group_invoices_path(group, returning: true)
+        expect(flash[:notice]).to include "Rechnung wurde storniert."
+        expect(invoice.reload.state).to eq "cancelled"
+      end
 
-    it "DELETE#destroy may move multiple invoices to cancelled state" do
-      invoice = Invoice.create!(group: group, title: "test", recipient: person)
-      other = Invoice.create!(group: group, title: "test", recipient: person)
-      expect do
-        travel 1.day do
-          delete :destroy, params: {group_id: group.id, ids: [invoice.id, other.id].join(",")}
-        end
-      end.to change { other.reload.updated_at }
-      expect(response).to redirect_to group_invoices_path(group, returning: true)
-      expect(flash[:notice]).to include "2 Rechnungen wurden storniert."
-      expect(other.reload.state).to eq "cancelled"
+      it "deletes any invoice_item_roles associated with that invoice" do
+        invoice = Invoice.create!(group: group, title: "test", recipient: person)
+        item = invoice.invoice_items.create!(name: "pens", unit_cost: 2.5)
+        InvoiceItemRole.create!(invoice_item_id: -1, role: Role.first, year: 2024, layer_group_id: groups(:top_layer).id)
+        InvoiceItemRole.create!(invoice_item: item, role: Role.first, year: 2025, layer_group_id: groups(:top_layer).id)
+        expect do
+          travel(1.day) { delete :destroy, params: {group_id: group.id, ids: invoice.id} }
+        end.to change { InvoiceItemRole.count }.by(-1)
+        expect(response).to redirect_to group_invoices_path(group, returning: true)
+      end
+
+      it "may move multiple invoices to cancelled state" do
+        invoice = Invoice.create!(group: group, title: "test", recipient: person)
+        other = Invoice.create!(group: group, title: "test", recipient: person)
+        expect do
+          travel 1.day do
+            delete :destroy, params: {group_id: group.id, ids: [invoice.id, other.id].join(",")}
+          end
+        end.to change { other.reload.updated_at }
+        expect(response).to redirect_to group_invoices_path(group, returning: true)
+        expect(flash[:notice]).to include "2 Rechnungen wurden storniert."
+        expect(other.reload.state).to eq "cancelled"
+      end
     end
   end
 

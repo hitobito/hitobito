@@ -58,7 +58,7 @@ describe InvoiceLists::DestroysController, js: true do
       destroy_link.click
 
       expect(page).to have_text(<<~TEXT.squish)
-        In der Sammelrechnung ist mindesents eine Rechnung enthalten, welche weder den Status
+        In der Sammelrechnung ist mindestens eine Rechnung enthalten, welche weder den Status
         "Entwurf" noch "Storniert" hat. Daher kann die Sammelrechnung nicht gelöscht werden.
       TEXT
 

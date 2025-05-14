@@ -8,11 +8,7 @@
 module Sheet
   class InvoiceList < Base
     def title
-      if entry && !entry.receiver
-        ::Invoice.model_name.human
-      else
-        ::InvoiceList.model_name.human(count: 2)
-      end
+      ::InvoiceList.model_name.human(count: 2)
     end
 
     def parent_sheet

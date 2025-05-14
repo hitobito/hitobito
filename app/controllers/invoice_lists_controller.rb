@@ -52,6 +52,7 @@ class InvoiceListsController < CrudController
     if entry.valid? && entry.save
       Invoice::BatchCreate.call(entry, LIMIT_CREATE)
       message = flash_message_create(count: entry.recipient_ids_count, title: entry.title)
+      params[:invoice_list_id] = entry.id  # NOTE: make return_path behave as expected
       redirect_to return_path, notice: message
       session.delete :invoice_referer
     else
@@ -70,6 +71,8 @@ class InvoiceListsController < CrudController
   # rubocop:disable Rails/SkipsModelValidations
   def destroy
     count = invoices.update_all(state: :cancelled, updated_at: Time.zone.now)
+    InvoiceItemRole.joins(invoice_item: :invoice).where(invoices: {id: invoices.map(&:id)}).delete_all
+
     key = (count > 0) ? :notice : :alert
     redirect_to(group_invoices_path(parent, returning: true), key => flash_message(count: count))
   end
@@ -131,18 +134,15 @@ class InvoiceListsController < CrudController
       entry.recipient_ids = params[:ids]
     elsif params[:filter].present?
       entry.recipient_ids = recipient_ids_from_people_filter
-    else
+    elsif model_params
       entry.attributes = permitted_params.slice(:receiver_id, :receiver_type, :recipient_ids)
     end
     entry.creator = current_user
     entry.invoice = parent.invoices.build(model_params.present? ? permitted_params[:invoice] : {})
 
-    if params[:invoice_items].present?
-      entry.invoice.invoice_items = params[:invoice_items].map do |type|
-        item = InvoiceItem.type_mappings[type.to_sym].new
-        item.name = item.model_name.human
-        item
-      end
+    if params[:membership_fees].present?
+      InvoiceLists::Membership.prepare(entry, calculate: action_name == "new")
+      flash.now[:warning] = InvoiceLists::Membership.warning
     end
   end
 

@@ -172,6 +172,7 @@ fr:
     labels: "Etiquettes"
     full: "Facture avec bulletin de versement"
     esr_only: "bulletin de versement séparé"
+    original_invoice: "Facture originale avec bulletin de versement"
     articles_only: "Facture séparée"
     csv: "CSV"
     pdf: "PDF"

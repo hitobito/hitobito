@@ -160,6 +160,7 @@ it:
     labels: "Etichette"
     full: "Fattura con polizza di versamento inclusa"
     esr_only: "Polizza di versamento a parte"
+    original_invoice: "Fattura originale con polizza di versamento"
     articles_only: "Fattura a parte"
     csv: "CSV"
     pdf: "PDF"

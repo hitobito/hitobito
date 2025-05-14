@@ -37,7 +37,7 @@ module Sheet
     end
 
     def title_from_receiver
-      invoice_list.receiver ? invoice_list.receiver_label : nil
+      invoice_list.receiver_label if invoice_list.receiver
     end
   end
 end

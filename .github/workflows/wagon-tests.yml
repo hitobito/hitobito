@@ -250,8 +250,8 @@ jobs:
     needs: [wagon_rubocop, wagon_specs, wagon_feature_specs, wagon_seeds]
     if: ( success() || failure() ) && ( github.ref_name == 'master' ) && ( (inputs.core_ref || inputs.main_branch) == inputs.main_branch ) && ( (inputs.wagon_dependency_ref || inputs.main_branch) == inputs.main_branch )
     with:
-      repository: ${{ inputs.wagon_repository }}
-      test_result: ${{ needs.wagon_rubocop.result == 'success' && needs.wagon_specs.result == 'success' && needs.wagon_feature_specs.result == 'success' && needs.wagon_seeds.result == 'success' }}
+      application: "${{ inputs.wagon_repository }}-tests"
+      result: ${{ needs.wagon_rubocop.result == 'success' && needs.wagon_specs.result == 'success' && needs.wagon_feature_specs.result == 'success' && needs.wagon_seeds.result == 'success' }}
     secrets:
       HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}
       HEARTBEAT_TOKEN: ${{ secrets.HEARTBEAT_TOKEN }}

@@ -9,7 +9,7 @@ module Sheet
   class Invoice < Base
     def title
       if invoice_list
-        invoice_list.title
+        [invoice_list.title, title_from_receiver].compact.join(" - ")
       else
         ::Invoice.model_name.human(count: 2)
       end
@@ -34,6 +34,10 @@ module Sheet
 
     def invoice_list
       @invoice_list ||= ::InvoiceList.find_by(id: view.params[:invoice_list_id])
+    end
+
+    def title_from_receiver
+      invoice_list.receiver_label if invoice_list.receiver
     end
   end
 end

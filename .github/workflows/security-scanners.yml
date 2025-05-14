@@ -30,8 +30,8 @@ jobs:
     needs: [ run-scanners ]
     if: ( success() || failure() ) && ( github.ref_name == 'master' )
     with:
-      repository: 'hitobito-security'
-      test_result: ${{ needs.run-scanners.result == 'success' }}
+      application: 'hitobito-security-tests'
+      result: ${{ needs.run-scanners.result == 'success' }}
     secrets:
       HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}
       HEARTBEAT_TOKEN: ${{ secrets.HEARTBEAT_TOKEN_SECURITY }}

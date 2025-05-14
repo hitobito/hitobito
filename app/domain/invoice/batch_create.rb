@@ -73,12 +73,8 @@ class Invoice::BatchCreate
 
   def invoice_items_attributes(recipient)
     invoice.invoice_items.collect do |item|
-      attrs = item.attributes
-      if item.dynamic
-        item.dynamic_cost_parameters[:recipient_id] = recipient.id
-        item.dynamic_cost_parameters[:group_id] = group_id
-        attrs[:cost] = item.dynamic_cost
-      end
+      item.calculate_amount(recipient) if item.is_a?(InvoiceItem::Membership)
+
       # Do not try to save invalid item since that would abort the whole invoice create transaction
       attrs if InvoiceItem.new(attrs).recalculate.valid?
     end.compact

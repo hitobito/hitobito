@@ -52,6 +52,7 @@ class InvoiceListsController < CrudController
     if entry.valid? && entry.save
       Invoice::BatchCreate.call(entry, LIMIT_CREATE)
       message = flash_message_create(count: entry.recipient_ids_count, title: entry.title)
+      params[:invoice_list_id] = entry.id  # NOTE: make return_path behave as expected
       redirect_to return_path, notice: message
       session.delete :invoice_referer
     else

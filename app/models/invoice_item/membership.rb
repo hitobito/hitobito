@@ -6,8 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 #
 class InvoiceItem::Membership < InvoiceItem
-  # We piggy back on top of existing dynamic_cost_parameters
-  #
   def self.build_all
     Settings.invoices.membership.fees.map do |config|
       new(dynamic_cost_parameters: config.to_h)
@@ -25,8 +23,8 @@ class InvoiceItem::Membership < InvoiceItem
     self[:name] = dynamic_cost_parameters.fetch(:name)
   end
 
-  def calculate_amount
-    layer_group_id = find_layer_group_id if recipient
+  def calculate_amount(recipient: nil)
+    layer_group_id = find_layer_group_id(recipient) if recipient
     self.count = roles_count(layer_group_id:).count.values.sum
   end
 

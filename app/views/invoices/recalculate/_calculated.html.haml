@@ -5,10 +5,13 @@
 
 #calculated.control-group
   .controls
-    %dl.dl-horizontal.m-0.p-2.border-top
-      %dt.muted.float-start.text-end= Invoice.human_attribute_name(:cost)
-      %dd.mb-2= invoice.cost
-      %dt.muted.float-start.text-end= Invoice.human_attribute_name(:vat)
-      %dd.mb-2= invoice.vat
-      %dt.muted.float-start.text-end= Invoice.human_attribute_name(:total)
-      %dd.mb-2= invoice.total
+    %dl
+      .row
+        %dt.col-2.muted.text-end= Invoice.human_attribute_name(:cost)
+        %dd.col-3= invoice.cost
+      .row
+        %dt.col-2.muted.text-end= Invoice.human_attribute_name(:vat)
+        %dd.col-3= invoice.vat
+      .row
+        %dt.col-2.muted.text-end= Invoice.human_attribute_name(:total)
+        %dd.col-3= invoice.total

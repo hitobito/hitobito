@@ -69,6 +69,18 @@ describe Group do
     expect(Group).to be_valid
   end
 
+  it "fixtures should have correct layer_group_id values" do
+    fixture_values = Group.order(:id).pluck(:layer_group_id)
+
+    set_layer_group_id = lambda do |group|
+      group.update(id: group.id) # triggers after_update :set_layer_group_id
+      group.children.each(&set_layer_group_id)
+    end
+    Group.where(parent_id: nil).find_each(&set_layer_group_id)
+
+    expect(fixture_values).to eq Group.order(:id).pluck(:layer_group_id)
+  end
+
   context "#roles" do
     let(:group) { groups(:top_group) }
 

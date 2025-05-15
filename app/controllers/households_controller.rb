@@ -27,7 +27,7 @@ class HouseholdsController < ApplicationController
   def update
     assign_and_validate if params.key?(:member_ids)
 
-    if entry.save
+    if entry.save(context: :update_address)
       action = entry.members.empty? ? :destroy : action_name
       redirect_to parents, notice: success_message(action: action)
     else

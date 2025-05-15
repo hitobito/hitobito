@@ -29,21 +29,20 @@ module Group::Types
     self.event_types = [Event]
 
     after_save :set_layer_group_id
-    after_save :create_default_children
+    before_validation :build_default_children, on: :create
 
     validate :assert_type_is_allowed_for_parent, on: :create
   end
 
   private
 
-  def create_default_children
-    # HACK: to have after_save ordering for this semantical after_create callback
-    return if created_at < 10.seconds.ago
-
+  def build_default_children
     default_children.each do |group_type|
-      child = group_type.new(name: group_type.label)
-      child.parent = self
-      child.save!
+      children.build(
+        type: group_type.sti_name,
+        name: group_type.label,
+        parent: self
+      )
     end
   end
 

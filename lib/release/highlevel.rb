@@ -43,7 +43,9 @@ module Release
       return unless translations_configured?
 
       notify "Pulling translation from transifex"
-      execute "tx pull -f"
+      # The mode sourceastranslation replaces missing translations
+      # with the source-string.
+      execute "tx pull -f --mode sourceastranslation"
       add "config/locales/*.yml"
 
       return unless translations_changed?

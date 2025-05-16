@@ -15,10 +15,10 @@ describe "Notes tab", js: true do
     visit help_texts_path
   end
 
-  it 'should be able to display notes page after help text was created' do
+  it "should be able to display notes page after help text was created" do
     click_link "Erstellen"
     select "Notiz", from: "help_text_context"
-    find('trix-editor').click.set('Notiz')
+    find("trix-editor").click.set("Notiz")
     click_button "Speichern"
 
     click_link "Gruppen"

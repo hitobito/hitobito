@@ -40,6 +40,10 @@ describe Export::Tabular::People::TableDisplays do
         :layer_group, :roles]
     end
 
+    it "model class is actually person" do
+      expect(people_list.class.model_class).to eq Person
+    end
+
     it "does not allow accessing unregistered columns" do
       table_display.selected = [:years]
       expect(people_list.labels.last).to eq "Rollen"
@@ -139,6 +143,10 @@ describe Export::Tabular::People::TableDisplays do
       should == [:first_name, :last_name, :nickname, :company_name, :company, :email,
         :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
         :layer_group, :roles]
+    end
+
+    it "model class is actually participation" do
+      expect(people_list.class.model_class).to eq Event::Participation
     end
 
     it "includes additional person attributes if configured" do

@@ -422,7 +422,7 @@ GEM
     mime-types-data (3.2024.0507)
     mini_magick (4.12.0)
     mini_mime (1.1.5)
-    mini_portile2 (2.8.8)
+    mini_portile2 (2.8.9)
     minitest (5.25.2)
     msgpack (1.7.2)
     multi_json (1.15.0)
@@ -474,7 +474,7 @@ GEM
     prawn (2.4.0)
       pdf-core (~> 0.9.0)
       ttfunk (~> 1.7)
-    prawn-markup (1.0.0)
+    prawn-markup (1.1.0)
       nokogiri
       prawn
       prawn-table

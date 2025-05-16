@@ -6,24 +6,19 @@
 #  https://github.com/hitobito/hitobito.
 #
 class InvoiceItem::Membership < InvoiceItem
-  attr_reader :recipient_role, :role_types
+  attr_reader :role_types
 
   def initialize(...)
     super
     @role_types = dynamic_cost_parameters[:roles]
-    @recipient_role = Settings.invoices.membership.recipient.role # NOTE should cover multiple
 
     self[:unit_cost] = dynamic_cost_parameters.fetch(:unit_cost)
     self[:name] = dynamic_cost_parameters.fetch(:name)
   end
 
   def calculate_amount(recipient: nil)
-    layer_group_id = find_layer_group_id(recipient) if recipient
+    layer_group_id = InvoiceLists::Membership.find_layer_group(recipient) if recipient
     self.count = roles_count(layer_group_id:).count.values.sum
-  end
-
-  def find_layer_group_id(recipient)
-    recipient.roles.find_by(type: recipient_role).group.layer_group_id
   end
 
   def roles_count(layer_group_id: nil)

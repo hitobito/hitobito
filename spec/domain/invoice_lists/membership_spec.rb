@@ -16,15 +16,18 @@ describe InvoiceLists::Membership do
     allow(Settings).to receive_message_chain(:invoices, :membership, :recipient, :layer).and_return(Group::BottomLayer.sti_name)
   end
 
-  xdescribe "::warning" do
+  describe "::warning" do
     subject(:warning) { InvoiceLists::Membership.warning }
 
-    it "is nil " do
-      expect(warning).to eq ""
+    it "is nil if all groups have a configured recipient" do
+      Fabricate(Group::BottomLayer::Leader.sti_name, group: groups(:bottom_layer_one))
+      Fabricate(Group::BottomGroup::Leader.sti_name, group: groups(:bottom_group_two_one))
+      expect(warning).to be_nil
     end
 
-    it "is present if there is a mismatch between group and roles" do
-      expect(warning).to eq ""
+    it "lists groups where no recipient was found" do
+      Fabricate(Group::BottomLayer::Leader.sti_name, group: groups(:bottom_layer_one))
+      expect(warning).to eq "Für folgende Gruppen konnte kein Empfänger ermittelt werden: Bottom Two"
     end
   end
 
@@ -45,22 +48,22 @@ describe InvoiceLists::Membership do
       expect(recipient_roles).to eq([role])
     end
 
-    it "finds role only once if both roles match" do
-      role = Fabricate(Group::BottomLayer::Leader.sti_name, group: groups(:bottom_layer_one))
-      Fabricate(Group::BottomGroup::Leader.sti_name, group: groups(:bottom_group_one_one), person: role.person)
-      expect(recipient_roles).to eq([role])
-    end
-
-    it "finds role twice two roles match but on distinct layers" do
-      role = Fabricate(Group::BottomLayer::Leader.sti_name, group: groups(:bottom_layer_one))
-      Fabricate(Group::BottomGroup::Leader.sti_name, group: groups(:bottom_group_two_one), person: role.person)
-      expect(recipient_roles).to eq([role, role])
-    end
-
-    it "finds prefered role role if two roles match for layer" do
+    it "finds preferred role if two roles match for different people in single layer" do
       role = Fabricate(Group::BottomLayer::Leader.sti_name, group: groups(:bottom_layer_one))
       Fabricate(Group::BottomGroup::Leader.sti_name, group: groups(:bottom_group_one_one))
       expect(recipient_roles).to eq([role])
+    end
+
+    it "finds preferred role if two roles match for single person in layer" do
+      preferred = Fabricate(Group::BottomLayer::Leader.sti_name, group: groups(:bottom_layer_one))
+      Fabricate(Group::BottomGroup::Leader.sti_name, group: groups(:bottom_group_one_one), person: preferred.person)
+      expect(recipient_roles).to eq([preferred])
+    end
+
+    it "finds two roles for single person if they are on distinct layers" do
+      one = Fabricate(Group::BottomLayer::Leader.sti_name, group: groups(:bottom_layer_one))
+      two = Fabricate(Group::BottomGroup::Leader.sti_name, group: groups(:bottom_group_two_one), person: one.person)
+      expect(recipient_roles).to match_array([one, two])
     end
   end
 end

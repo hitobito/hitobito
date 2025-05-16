@@ -141,7 +141,7 @@ class InvoiceListsController < CrudController
     if params[:membership_fees].present?
       flash.now[:notice] = InvoiceLists::Membership.warning
       entry.recipient_ids = InvoiceLists::Membership.recipient_ids
-      entry.invoice.invoice_items = InvoiceItem::Membership.build_all
+      entry.invoice.invoice_items = InvoiceLists::Membership.invoice_items
     end
   end
 

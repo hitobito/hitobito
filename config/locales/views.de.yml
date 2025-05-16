@@ -1028,8 +1028,6 @@ de:
       remove: E-Mail Vorlage entfernen
 
   invoice_lists:
-    membership:
-      recipient_role_missmatch: "Für folgende Gruppen konnte kein Empfänger ermittelt werden: %{groups}."
     destroys:
       show:
         title: Sammelrechnung löschen
@@ -1086,6 +1084,9 @@ de:
       zero: "Zuerst muss eine Rechnung ausgewählt werden."
       one: "Rechnung wurde storniert."
       other: "%{count} Rechnungen wurden storniert."
+
+  invoice_lists/membership:
+    recipient_role_group_mismatch: "Für folgende Gruppen konnte kein Empfänger ermittelt werden: %{groups}"
 
   payments:
     export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."

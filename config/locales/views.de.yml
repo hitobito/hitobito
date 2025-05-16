@@ -1028,10 +1028,12 @@ de:
       remove: E-Mail Vorlage entfernen
 
   invoice_lists:
+    membership:
+      recipient_role_missmatch: "Für folgende Gruppen konnte kein Empfänger ermittelt werden: %{groups}."
     destroys:
       show:
         title: Sammelrechnung löschen
-        non_draft_info: 'In der Sammelrechnung ist mindesents eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann die Sammelrechnung nicht gelöscht werden.'
+        non_draft_info: 'In der Sammelrechnung ist mindestens eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann die Sammelrechnung nicht gelöscht werden.'
         confirm_delete: Wollen Sie die Sammelrechnung wirklich löschen?
     form:
       invoice_articles:

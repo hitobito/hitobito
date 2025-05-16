@@ -6,31 +6,12 @@
 #  https://github.com/hitobito/hitobito.
 #
 class InvoiceItem::Membership < InvoiceItem
-  def self.recipient_ids
-    Settings.invoices.membership.recipient.role.constantize.pluck(:person_id)
-  end
-
-  def self.build_all
-    Settings.invoices.membership.fees.map do |config|
-      new(dynamic_cost_parameters: config.to_h)
-    end
-  end
-
-  def self.warning
-    layer = Settings.invoices.membership.recipient.layer.constantize
-    role = Settings.invoices.membership.recipient.role.constantize
-
-    if (layer.count != role.count) || (layer.count != role.distinct_on("group_id").count)
-      "missmatch between #{layer} and #{role}"
-    end
-  end
-
   attr_reader :recipient_role, :role_types
 
   def initialize(...)
     super
     @role_types = dynamic_cost_parameters[:roles]
-    @recipient_role = Settings.invoices.membership.recipient_role # NOTE should cover multiple
+    @recipient_role = Settings.invoices.membership.recipient.role # NOTE should cover multiple
 
     self[:unit_cost] = dynamic_cost_parameters.fetch(:unit_cost)
     self[:name] = dynamic_cost_parameters.fetch(:name)

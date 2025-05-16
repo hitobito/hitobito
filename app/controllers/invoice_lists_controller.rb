@@ -139,8 +139,8 @@ class InvoiceListsController < CrudController
     entry.invoice = parent.invoices.build(model_params.present? ? permitted_params[:invoice] : {})
 
     if params[:membership_fees].present?
-      flash.now[:notice] = InvoiceItem::Membership.warning
-      entry.recipient_ids = InvoiceItem::Membership.recipient_ids
+      flash.now[:notice] = InvoiceLists::Membership.warning
+      entry.recipient_ids = InvoiceLists::Membership.recipient_ids
       entry.invoice.invoice_items = InvoiceItem::Membership.build_all
     end
   end

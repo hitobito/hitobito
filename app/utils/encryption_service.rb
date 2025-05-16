@@ -27,7 +27,7 @@ class EncryptionService
       cipher.iv = base64_decode(iv)
       decrypted_data = cipher.update(base64_decode(encrypted_data))
       decrypted_data << cipher.final
-      decrypted_data.force_encoding('utf-8')
+      decrypted_data.force_encoding("utf-8")
     end
 
     private

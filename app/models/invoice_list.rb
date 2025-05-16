@@ -59,7 +59,7 @@ class InvoiceList < ActiveRecord::Base
   end
 
   def calculated
-    @calculated ||= Invoice::Calculation.new(invoice_items).calculated
+    @calculated ||= InvoiceItems::Calculation.new(invoice_items).calculated
   end
 
   def membership?

@@ -185,7 +185,7 @@ class Invoice < ActiveRecord::Base
   delegate :logo_position, to: :invoice_config
 
   def calculated
-    Calculation.new(invoice_items).calculated
+    InvoiceItems::Calculation.new(invoice_items).calculated
   end
 
   def recalculate

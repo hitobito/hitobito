@@ -58,6 +58,10 @@ class InvoiceList < ActiveRecord::Base
     title
   end
 
+  def calculated
+    @calculated ||= Invoice::Calculation.new(invoice_items).calculated
+  end
+
   def membership?
     invoice_items.present? && invoice_items.all? { |item| item.is_a?(InvoiceItem::Membership) }
   end

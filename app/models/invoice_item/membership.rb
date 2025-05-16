@@ -6,9 +6,22 @@
 #  https://github.com/hitobito/hitobito.
 #
 class InvoiceItem::Membership < InvoiceItem
+  def self.recipient_ids
+    Settings.invoices.membership.recipient.role.constantize.pluck(:person_id)
+  end
+
   def self.build_all
     Settings.invoices.membership.fees.map do |config|
       new(dynamic_cost_parameters: config.to_h)
+    end
+  end
+
+  def self.warning
+    layer = Settings.invoices.membership.recipient.layer.constantize
+    role = Settings.invoices.membership.recipient.role.constantize
+
+    if (layer.count != role.count) || (layer.count != role.distinct_on("group_id").count)
+      "missmatch between #{layer} and #{role}"
     end
   end
 

@@ -38,6 +38,7 @@ application:
 currency:
   unit: CHF
 
+
 email:
   # Sender for all emails sent by the application.
   # Overwrite in different languages using the settings.email.sender translation key.

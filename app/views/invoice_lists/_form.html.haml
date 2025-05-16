@@ -24,11 +24,8 @@
 
     = render_extensions :form_invoice_fields, locals: { f: fi }
     - if entry.membership?
-      = hidden_field_tag :membership_fees, true
-      = entry.invoice.invoice_items.size
-      - entry.invoice.invoice_items.each do |item|
-        - item.calculate_amount
-        = [item.count, item.unit_cost.to_s, item.total.to_s]
+      - entry.invoice_items.each(&:calculate_amount)
+      = render "membership_fee_fields", invoice_items: entry.invoice_items
 
     - else
       = field_set_tag do

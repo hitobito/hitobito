@@ -54,7 +54,7 @@ describe Export::EventParticipationsExportJob do
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;Übername;Firmenname;.*/)
       expect(lines[0]).to match(/;Bemerkungen.*/)
-      expect(lines[0].split(";").count).to match(25)
+      expect(lines[0].split(";").count).to match(26)
     end
 
     it "shows the correct timestamps on the participation instances" do
@@ -66,7 +66,7 @@ describe Export::EventParticipationsExportJob do
 
       lines = file.read.lines
 
-      created_at_index = 24
+      created_at_index = 25
       expect(lines[0].split(";")[created_at_index].strip).to eq("Anmeldedatum")
       csv_created_ats = lines[1..2].map { _1.split(";")[created_at_index].strip }
       expect(csv_created_ats).to all(eq(created_at.strftime("%d.%m.%Y")))

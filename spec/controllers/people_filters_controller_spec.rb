@@ -58,7 +58,7 @@ describe PeopleFiltersController do
         post :create, params: {group_id: group.id, filters: {role: {role_type_ids: role_type_ids}}, button: "search"}
       end.not_to change { PeopleFilter.count }
 
-      is_expected.to redirect_to(group_people_path(group, filters: {role: {role_type_ids: role_type_ids_string}}, range: "deep"))
+      is_expected.to redirect_to(group_people_path(group, filters: {role: {kind: "", role_type_ids: role_type_ids_string}}, range: "deep"))
     end
 
     it "redirects to show for empty search" do
@@ -91,7 +91,7 @@ describe PeopleFiltersController do
           post :create, params: {group_id: group.id, filters: {role: {role_type_ids: role_type_ids}}, button: "search"}
         end.not_to change { PeopleFilter.count }
 
-        is_expected.to redirect_to(group_people_path(group, filters: {role: {role_type_ids: role_type_ids_string}}, range: "deep"))
+        is_expected.to redirect_to(group_people_path(group, filters: {role: {kind: "", role_type_ids: role_type_ids_string}}, range: "deep"))
       end
 
       it "is not authorized with save" do

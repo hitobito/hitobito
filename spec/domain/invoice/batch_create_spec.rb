@@ -127,6 +127,12 @@ describe Invoice::BatchCreate do
     expect(list.invalid_recipient_ids).to have(1).item
   end
 
+  describe "membership" do
+    it "includes layer name in invoice title" do
+      expect()
+    end
+  end
+
   private
 
   def fabricate_donation(amount, received_at = 1.year.ago)

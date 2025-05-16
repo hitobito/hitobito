@@ -52,6 +52,7 @@ class InvoiceListsController < CrudController
     if entry.valid? && entry.save
       Invoice::BatchCreate.call(entry, LIMIT_CREATE)
       message = flash_message_create(count: entry.recipient_ids_count, title: entry.title)
+      params[:invoice_list_id] = entry.id  # NOTE: make return_path behave as expected
       redirect_to return_path, notice: message
       session.delete :invoice_referer
     else
@@ -137,12 +138,10 @@ class InvoiceListsController < CrudController
     entry.creator = current_user
     entry.invoice = parent.invoices.build(model_params.present? ? permitted_params[:invoice] : {})
 
-    if params[:invoice_items].present?
-      entry.invoice.invoice_items = params[:invoice_items].map do |type|
-        item = InvoiceItem.type_mappings[type.to_sym].new
-        item.name = item.model_name.human
-        item
-      end
+    if params[:membership_fees].present?
+      flash.now[:notice] = InvoiceLists::Membership.warning
+      entry.recipient_ids = InvoiceLists::Membership.recipient_ids
+      entry.invoice.invoice_items = InvoiceLists::Membership.invoice_items
     end
   end
 

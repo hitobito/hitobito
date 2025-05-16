@@ -42,11 +42,15 @@ class InvoiceList < ActiveRecord::Base
   has_one :message, dependent: :nullify
   has_many :invoices, dependent: :destroy
 
+  # NOTE transient attribute to populate invoice in the view and serve as template
+  # when persisting actual invoices
   attr_accessor :invoice
 
   validates :receiver_type, inclusion: %w[MailingList Group], allow_blank: true
 
   scope :list, -> { order(:created_at) }
+
+  delegate :invoice_items, to: :invoice
 
   validates_by_schema except: :invalid_recipient_ids
 
@@ -54,8 +58,16 @@ class InvoiceList < ActiveRecord::Base
     title
   end
 
+  def calculated
+    @calculated ||= InvoiceItems::Calculation.new(invoice_items).calculated
+  end
+
+  def membership?
+    invoice_items.present? && invoice_items.all? { |item| item.is_a?(InvoiceItem::Membership) }
+  end
+
   def invoice_parameters
-    invoice_item_attributes = invoice.invoice_items.collect { |item| item.attributes.compact }
+    invoice_item_attributes = invoice_items.collect { |item| item.attributes.compact }
     invoice.attributes.compact.merge(invoice_items_attributes: invoice_item_attributes)
   end
 

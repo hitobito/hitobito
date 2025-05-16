@@ -1,4 +1,4 @@
--#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+-#  Copyright (c) 2011-2021, Jungwacht Blauring Schweiz. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
@@ -14,5 +14,10 @@
 - if can?(:index_service_tokens, @group)
   = action_button(t('activerecord.models.service_token.other'), group_service_tokens_path(@group), :key)
   = action_button(Calendar.model_name.human(count: 2), group_calendars_path(@group), :'calendar-alt')
+
+- if can?(:index_invoices, @group) && @group.invoice_config.valid?
+  - if FeatureGate.enabled?('invoices.membership')
+    = action_button(t('.membership_invoice_button'), new_membership_fee_group_invoice_list_path(@group), 'money-bill-alt')
+
 
 = render_extensions(:actions_show)

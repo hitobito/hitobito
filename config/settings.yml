@@ -38,6 +38,7 @@ application:
 currency:
   unit: CHF
 
+
 email:
   # Sender for all emails sent by the application.
   # Overwrite in different languages using the settings.email.sender translation key.
@@ -100,6 +101,10 @@ additional_address:
   enabled: false
   predefined_labels:
     - Arbeit
+
+invoices:
+  membership:
+    enabled: false
 
 # Presets for PDF labels
 pdf:
@@ -256,6 +261,7 @@ addresses:
   token: <%= ENV['ADDRESSES_TOKEN'] %>
   imported_countries:
     - CH
+
 
 messages:
   enable_writing: false

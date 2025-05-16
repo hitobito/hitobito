@@ -37,7 +37,8 @@ class Invoice::BatchCreate
   end
 
   def create_invoice(recipient)
-    attrs = attributes(recipient)
+    attrs = invoice_attributes(recipient)
+
     invoice_list.group.invoices.build(attrs).save if attrs[:invoice_items_attributes].any?
   end
 
@@ -62,19 +63,27 @@ class Invoice::BatchCreate
     invoice_list.update(recipients_processed: results.count(true), invalid_recipient_ids: invalid)
   end
 
-  def attributes(recipient)
+  def invoice_attributes(recipient)
     invoice.attributes.merge(
       invoice_items_attributes: invoice_items_attributes(recipient),
       recipient_id: recipient.id,
       invoice_list_id: invoice_list.id,
-      creator_id: invoice_list.creator_id
+      creator_id: invoice_list.creator_id,
+      title: customize_title(invoice_list.title, recipient)
     )
+  end
+
+  def customize_title(title, recipient)
+    return title unless invoice_list.membership?
+
+    [title, InvoiceLists::Membership.find_layer_group(recipient)&.name].join(" -  ")
   end
 
   def invoice_items_attributes(recipient)
     invoice.invoice_items.collect do |item|
       item.calculate_amount(recipient) if item.is_a?(InvoiceItem::Membership)
 
+      attrs = item.attributes
       # Do not try to save invalid item since that would abort the whole invoice create transaction
       attrs if InvoiceItem.new(attrs).recalculate.valid?
     end.compact

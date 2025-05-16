@@ -33,7 +33,7 @@ module InvoiceLists
       def recipient_ids = recipient_roles.map(&:person_id)
 
       def find_layer_group(recipient)
-        recipient_roles.find_by(person_id: recipient.id).group.layer_group_id
+        recipient_roles.find_by(person_id: recipient.id).group.layer_group if recipient
       end
 
       private

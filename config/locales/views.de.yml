@@ -793,6 +793,7 @@ de:
       confirm_archive: >
         Wollen Sie diese Gruppe wirklich archivieren? Sie kann dann nicht mehr
         bearbeitet werden und sämtliche Rollen werden ebenfalls archiviert.
+      membership_invoice_button: Mitgliedschaftsrechnung
     attrs:
       contact_details: "Kontaktangaben"
       additional_information: "Weitere Angaben"

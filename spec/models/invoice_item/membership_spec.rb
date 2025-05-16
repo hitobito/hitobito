@@ -13,13 +13,19 @@ describe InvoiceItem::Membership do
       Group::BottomLayer::Leader
       Group::BottomGroup::Leader
     ])
+    # TODO how to verfiy locale is used correctly
+    allow(I18n).to receive(:t).with(:members, scope: :"invoice_item/membership", locale: nil).and_return("Mitgliedsbeitrag")
   end
 
   let(:member_fee) { {unit_cost: 10, name: :members, roles: %w[Group::BottomGroup::Member Group::BottomLayer::Member]} }
 
-  describe "#calculate_amount" do
-    subject(:item) { described_class.new(dynamic_cost_parameters: member_fee) }
+  subject(:item) { described_class.new(dynamic_cost_parameters: member_fee) }
 
+  it "translates name" do
+    expect(item.name).to eq "Mitgliedsbeitrag"
+  end
+
+  describe "#calculate_amount" do
     it "is 1 as fixtures member matches " do
       expect(item.calculate_amount).to eq 1
     end

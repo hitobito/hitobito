@@ -16,7 +16,8 @@
   = action_button(Calendar.model_name.human(count: 2), group_calendars_path(@group), :'calendar-alt')
 
 - if can?(:index_invoices, @group) && @group.invoice_config.valid?
-  = action_button("Vereinsrechnung erstellen", new_membership_fee_group_invoice_list_path(@group))
+  - if FeatureGate.enabled?('invoices.membership')
+    = action_button(t('.button_membership_invoice'), new_membership_fee_group_invoice_list_path(@group))
 
 
 = render_extensions(:actions_show)

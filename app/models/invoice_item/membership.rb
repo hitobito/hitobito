@@ -13,7 +13,7 @@ class InvoiceItem::Membership < InvoiceItem
     @role_types = dynamic_cost_parameters[:roles]
 
     self[:unit_cost] = dynamic_cost_parameters.fetch(:unit_cost)
-    self[:name] = dynamic_cost_parameters.fetch(:name)
+    self[:name] = I18n.t(dynamic_cost_parameters.fetch(:name), scope: model_name.i18n_key, locale: invoice&.recipient&.language)
   end
 
   def calculate_amount(recipient: nil)

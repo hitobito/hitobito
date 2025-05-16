@@ -8,7 +8,7 @@
 require "spec_helper"
 
 describe MailingLists::BulkMail::Retriever do
-  include MailingLists::ImapMailsSpecHelper
+  include Mails::ImapMailsSpecHelper
 
   let(:retriever) { described_class.new }
   let(:imap_connector) { instance_double(Imap::Connector) }
@@ -224,6 +224,7 @@ describe MailingLists::BulkMail::Retriever do
           .and change { MailLog.count }.by(1)
           .and change { Delayed::Job.where("handler ILIKE '%Messages::DispatchJob%'").count }.by(0)
           .and change { Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::BounceMessageForwardJob%'").count }.by(1)
+          .and change { Bounce.count }.by(1)
       end
     end
 
@@ -381,15 +382,16 @@ describe MailingLists::BulkMail::Retriever do
   private
 
   def build_imap_mail(uid, subject)
-    mail = Imap::Mail.new
-    allow(mail).to receive(:uid).and_return(uid)
-    allow(mail).to receive(:subject).and_return(subject)
-    allow(mail).to receive(:original_to).and_return("leaders@localhost")
-    allow(mail).to receive(:hash).and_return("abcd42")
-    allow(mail).to receive(:sender_email).and_return("dude@hitobito.example.com")
+    imap_mail = Imap::Mail.new
+    allow(imap_mail).to receive(:uid).and_return(uid)
+    allow(imap_mail).to receive(:subject).and_return(subject)
+    allow(imap_mail).to receive(:original_to).and_return("leaders@localhost")
+    allow(imap_mail).to receive(:hash).and_return("abcd42")
+    allow(imap_mail).to receive(:sender_email).and_return("dude@hitobito.example.com")
 
-    imap_mail = Mail.read_from_string(Rails.root.join("spec", "fixtures", "email", "list.eml").read)
-    allow(mail).to receive(:mail).and_return(imap_mail)
-    mail
+    mail = Mail.read_from_string(Rails.root.join("spec", "fixtures", "email", "list.eml").read)
+    allow(imap_mail).to receive(:mail).and_return(mail)
+
+    imap_mail
   end
 end

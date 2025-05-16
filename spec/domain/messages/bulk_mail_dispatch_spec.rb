@@ -16,7 +16,8 @@ describe Messages::BulkMailDispatch do
   let(:address_list) do
     [
       {person_id: top_leader.id, email: "recipient1@example.com"},
-      {person_id: top_leader.id, email: "recipient2@example.com"}
+      {person_id: top_leader.id, email: "recipient2@example.com"},
+      {person_id: top_leader.id, email: "recipient3@example.com"}
     ]
   end
 
@@ -33,7 +34,7 @@ describe Messages::BulkMailDispatch do
         expect do
           result = dispatch.run
           expect(result.needs_reenqueue?).to be_truthy
-        end.to change { MessageRecipient.count }.by(2)
+        end.to change { MessageRecipient.count }.by(3)
 
         message.reload
 
@@ -46,6 +47,11 @@ describe Messages::BulkMailDispatch do
         expect(recipient2.state).to eq("pending")
         expect(recipient2.error).to eq(nil)
         expect(recipient2.person_id).to eq(top_leader.id)
+
+        recipient3 = message.message_recipients.third
+        expect(recipient3.state).to eq("pending")
+        expect(recipient3.error).to eq(nil)
+        expect(recipient3.person_id).to eq(top_leader.id)
       end
 
       it "creates recipient with state failed when email invalid" do
@@ -68,20 +74,25 @@ describe Messages::BulkMailDispatch do
     context "with recipients" do
       let(:recipient1_email) { "recipient1@example.com" }
       let(:recipient2_email) { "recipient2@example.com" }
+      let(:recipient3_email) { "recipient3@example.com" }
       let!(:recipient1) { Fabricate(:message_recipient, message: message, email: recipient1_email) }
       let!(:recipient2) { Fabricate(:message_recipient, message: message, email: recipient2_email) }
+      let!(:recipient3) { Fabricate(:message_recipient, message: message, email: recipient3_email) }
       let(:delivery) { double }
 
       def setup_delivery
+        Bounce.record(recipient3_email).block!
+
         expect(Messages::BulkMail::Delivery).to receive(:new)
           .with(mail_factory,
-            [recipient1_email, recipient2_email],
+            [recipient1_email, recipient2_email, recipient3_email],
             Messages::BulkMailDispatch::DELIVERY_RETRIES)
           .and_return(delivery)
 
         expect(delivery).to receive(:deliver)
         expect(delivery).to receive(:succeeded).and_return([recipient1_email])
         expect(delivery).to receive(:failed).and_return([recipient2_email])
+        expect(delivery).to receive(:blocked).and_return([recipient3_email])
       end
 
       it "persists results" do
@@ -89,10 +100,10 @@ describe Messages::BulkMailDispatch do
 
         expect(message).to receive(:update!).with(state: "processing").and_call_original
         expect(message).to receive(:update!).with(state: "finished", raw_source: nil).and_call_original
-        expect(message).to receive(:update!)
-          .with(failed_count: 1, success_count: 1).and_call_original
+        expect(message).to receive(:update!).with(failed_count: 1, success_count: 1, blocked_count: 1).and_call_original
 
         result = dispatch.run
+
         expect(message.reload).to be_finished
         expect(result.needs_reenqueue?).to be_falsey
 
@@ -142,7 +153,7 @@ describe Messages::BulkMailDispatch do
           expect(Messages::BulkMail::Delivery).to receive(:new)
             .with(
               mail_factory,
-              [recipient1_email, recipient2_email],
+              [recipient1_email, recipient2_email, recipient3_email],
               Messages::BulkMailDispatch::DELIVERY_RETRIES
             )
             .and_return(delivery)
@@ -156,7 +167,8 @@ describe Messages::BulkMailDispatch do
 
           expect(message.reload).to be_failed
           expect(message.success_count).to eq(0)
-          expect(message.failed_count).to eq(2)
+          expect(message.failed_count).to eq(3)
+          expect(message.blocked_count).to eq(0)
           # keep mail source for analysis
           expect(message.raw_source).to be_present
 
@@ -168,14 +180,15 @@ describe Messages::BulkMailDispatch do
         end
 
         it "marks message and recipient entries as failed but keeps already sent" do
-          MessageRecipient.create!(message_id: message.id, person_id: top_leader.id, state: :sent, email: "recipient3@example.com")
+          MessageRecipient.create!(message_id: message.id, person_id: top_leader.id, state: :sent, email: "recipient4@example.com")
 
           result = dispatch.run
           expect(result.needs_reenqueue?).to be_falsey
 
           expect(message.reload).to be_failed
           expect(message.success_count).to eq(1)
-          expect(message.failed_count).to eq(2)
+          expect(message.failed_count).to eq(3)
+          expect(message.blocked_count).to eq(0)
         end
       end
     end

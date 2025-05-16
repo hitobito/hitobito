@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe MailingLists::ImapMailsHelper do
+describe Mails::ImapMailsHelper do
   FakeMail = Struct.new(:subject, keyword_init: true)
 
   it "truncates the subject" do

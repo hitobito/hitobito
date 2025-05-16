@@ -8,6 +8,8 @@
 class NotesController < ApplicationController
   decorates :group, :person
 
+  helper_method :model_class
+
   def index
     authorize!(:index_notes, group)
     @notes = entries
@@ -32,6 +34,10 @@ class NotesController < ApplicationController
       format.html { redirect_to subject_path }
       format.js # destroy.js.haml
     end
+  end
+
+  def model_class
+    @model_class ||= controller_name.classify.constantize
   end
 
   private

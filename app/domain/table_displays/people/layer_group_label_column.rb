@@ -28,8 +28,8 @@ module TableDisplays::People
     end
 
     def layer_group(target, target_attr)
-      if template
-        template.format_attr(target, target_attr) if target.respond_to?(target_attr)
+      if template && target.respond_to?(target_attr)
+        template.format_attr(target, target_attr)
       else
         target.layer_group.name
       end

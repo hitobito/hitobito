@@ -16,7 +16,9 @@ module EventKindsHelper
           options_from_collection_for_select(options, :id, :to_s,
             selected.collect(&:id)),
           multiple: true,
-          class: "form-select form-select-sm tom-select")
+          class: "form-select form-select-sm", data: { chosen_no_results: t("global.chosen_no_results"),
+                                                       placeholder: " ",
+                                                       controller: "tom-select"})
       end
     end
   end

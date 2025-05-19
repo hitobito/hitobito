@@ -307,8 +307,13 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       html_options[:class], *FORM_CONTROL_SELECT_WITH_WIDTH
     ].compact.join(" ")
     html_options[:class] += " is-invalid" if errors_on?(attr)
+    html_options[:data].to_h.merge!(
+      chosen_no_results: t("global.chosen_no_results"),
+      placeholder: " ",
+      controller: "tom-select"
+    )
 
-    add_css_class(html_options, "multiselect tom-select")
+    add_css_class(html_options, "multiselect")
     belongs_to_field(attr, html_options)
   end
 

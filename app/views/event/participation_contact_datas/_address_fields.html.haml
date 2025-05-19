@@ -15,11 +15,4 @@
 - if entry.show_attr?(:country)
   = f.labeled(:country) do
     .shown.ms-0
-      = country_select(f.object.class.model_name.param_key,
-                       'country',
-                       { priority_countries: Settings.countries.prioritized,
-                         selected: f.object.country,
-                         include_blank: "" },
-                       { class: 'form-select form-select-sm tom-select',
-                         data: { placeholder: ' ',
-                                 chosen_no_results: t('global.chosen_no_results') } })
+      = f.country_field

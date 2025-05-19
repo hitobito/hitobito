@@ -1,3 +1,8 @@
+-#  Copyright (c) 2012-2025, Jungwacht Blauring Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
 - filter = entry.filter_chain[:tag_absence]
 - selected = filter ? filter.to_hash[:names] : []
 - options = options_from_collection_for_select(@possible_tags, :second, :first, selected)
@@ -6,6 +11,8 @@
 .shown
   = select_tag('filters[tag_absence][names][]',
                 options,
-                class: 'form-control tom-select',
+                class: 'form-control',
                 multiple: true,
-                data: { chosen_no_results: t('global.chosen_no_results'), placeholder: t('.prompt_tag_absence_placeholder') } )
+                data: { chosen_no_results: t('global.chosen_no_results'),
+                        placeholder: t('.prompt_tag_absence_placeholder'),
+                        controller: "tom-select"} )

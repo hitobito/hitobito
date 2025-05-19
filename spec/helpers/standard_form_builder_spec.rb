@@ -150,6 +150,20 @@ describe "StandardFormBuilder" do
     end
   end
 
+  describe "#country_field" do
+    let(:entry) { OpenStruct.new(country: nil) }
+
+    it "uses stimulus controller to setup tom-select" do
+      html = Capybara::Node::Simple.new(
+        form.country_field(:country)
+      )
+      select = html.find("select")
+
+      expect(select[:class]).not_to include("tom-select")
+      expect(select["data-controller"]).to match(/\btom-select\b/)
+    end
+  end
+
   describe "#date_field" do
     it "sets empty date value" do
       entry.update_column(:birthdate, nil)

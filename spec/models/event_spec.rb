@@ -482,14 +482,21 @@ describe Event do
     end
 
     it "is valid if visible_contact_attributes contains valid values" do
+      subject.contact = people(:top_leader)
       subject.visible_contact_attributes = ["name"]
       is_expected.to be_valid
     end
 
     it "is invalid if visible_contact_attributes contains invalid values" do
+      subject.contact = people(:top_leader)
       subject.visible_contact_attributes = ["invalidvalue"]
       is_expected.not_to be_valid
       expect(subject.errors.full_messages).to eq ["Anzeigeoptionen (Kontaktperson) ist kein gültiger Wert"]
+    end
+
+    it "does not validate visible_contact_attributes when contact is blank" do
+      subject.visible_contact_attributes = ["invalidvalue"]
+      is_expected.to be_valid
     end
   end
 

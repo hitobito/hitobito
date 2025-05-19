@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class DocumentationReader
-  GITHUB_DEV_DOC_BASE_URL = "https://github.com/hitobito/hitobito/tree/master/doc/developer"
+  GITHUB_DEV_DOC_BASE_URL = "https://github.com/hitobito/hitobito/tree/master"
   DOCUMENTATION_ROOT = Rails.root.join("doc").to_s
 
   class << self
@@ -44,7 +44,7 @@ class DocumentationReader
     regex = /]\((.+\.md)\)/
     links = markdown.scan(regex).flatten
     links.each do |link|
-      markdown.gsub!(link, "#{GITHUB_DEV_DOC_BASE_URL}/#{link}")
+      markdown.gsub!(link, "#{GITHUB_DEV_DOC_BASE_URL}#{link}")
     end
     markdown
   end

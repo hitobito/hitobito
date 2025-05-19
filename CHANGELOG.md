@@ -11,6 +11,7 @@
 - Bei externen Anlässen wird besser kommuniziert ob eine Anmeldung möglich ist (hitobito_sww#207)
 - Im Länder Dropdown werden alle Länder aufgelistet ohne dass mit der Tastatur gefiltert werden muss (#3364)
 - Es können Sammelrechnungen mit Rechnungsposten auf Basis von aktiven Rollen konfiguriert werden (hitobito_swb#18)
+- Teilnahmen haben neu einen Knopf um auf das Personenprofil zu navigieren
 
 ## Version 2.5
 - Eine Rechnung kann im Originalzustand gedruckt werden, bzw. ohne Mahnungen (hitobito_sww#173)

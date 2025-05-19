@@ -308,7 +308,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     ].compact.join(" ")
     html_options[:class] += " is-invalid" if errors_on?(attr)
     html_options[:data].to_h.merge!(
-      chosen_no_results: t("global.chosen_no_results"),
+      chosen_no_results: I18n.t("global.chosen_no_results"),
       placeholder: " ",
       controller: "tom-select"
     )

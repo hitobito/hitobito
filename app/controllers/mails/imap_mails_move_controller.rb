@@ -5,11 +5,11 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-include MailingLists::ImapMails
-
 require "net/imap"
 
-class MailingLists::ImapMailsMoveController < ApplicationController
+class Mails::ImapMailsMoveController < ApplicationController
+  include Mails::ImapMails
+
   before_action :authorize_action
 
   helper_method :mailbox

@@ -75,6 +75,20 @@ describe Messages::BulkMail::Delivery do
         end.to raise_error(Messages::BulkMail::Delivery::RetriesExceeded)
       end
     end
+
+    context "blocked mails" do
+      it "#deliver" do
+        bounce = Bounce.record(emails.first)
+        bounce.block!
+
+        expect(mail_factory).to receive(:to).once.ordered.with(emails.drop(1)).and_return(ok_mail)
+
+        delivery.deliver
+        expect(delivery.succeeded).to eq(emails.drop(1))
+        expect(delivery.failed).to eq([])
+        expect(delivery.blocked).to eq(emails.take(1))
+      end
+    end
   end
 
   context "with errors" do

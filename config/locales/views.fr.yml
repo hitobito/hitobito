@@ -84,41 +84,25 @@ fr:
     index:
       title: "%{models}"
 
-  crud:
+  crud: &crud
     show:
-      title: "%{model}"
+      title: "%{model}""%{model}"
     new:
-      title: "Créer %{model}"
+      title: "Créer %{model}""Créer %{model}"
     edit:
-      title: "Modifier %{model}"
+      title: "Modifier %{model}""Modifier %{model}"
     create:
       flash:
-        success: "%{model} a été créé avec succès."
+        success: "%{model} a été créé avec succès.""%{model} a été créé avec succès."
     update:
       flash:
-        success: "%{model} a été mis à jour avec succès."
+        success: "%{model} a été mis à jour avec succès.""%{model} a été mis à jour avec succès."
     destroy:
       flash:
-        success: "%{model} a été effacé avec succès."
-        failure: "%{model} n'a pas pu être effacé."
+        success: "%{model} a été effacé avec succès.""%{model} a été effacé avec succès."
+        failure: "%{model} n'a pas pu être effacé.""%{model} n'a pas pu être effacé."
 
-  modal_crud:
-    show:
-      title: "%{model}"
-    new:
-      title: "Créer %{model}"
-    edit:
-      title: "Modifier %{model}"
-    create:
-      flash:
-        success: "%{model} a été créé avec succès."
-    update:
-      flash:
-        success: "%{model} a été mis à jour avec succès."
-    destroy:
-      flash:
-        success: "%{model} a été effacé avec succès."
-        failure: "%{model} n'a pas pu être effacé."
+  modal_crud: *crud
 
   blocked:
     index:

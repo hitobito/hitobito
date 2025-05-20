@@ -85,21 +85,21 @@ en:
 
   crud: &crud
     show:
-      title: "%{model}""%{model}"
+      title: "%{model}"
     new:
-      title: "New %{model}""New %{model}"
+      title: "New %{model}"
     edit:
-      title: "Edit %{model}""Edit %{model}"
+      title: "Edit %{model}"
     create:
       flash:
-        success: "%{model} was successfully created.""%{model} was successfully created."
+        success: "%{model} was successfully created."
     update:
       flash:
-        success: "%{model} was successfully updated.""%{model} was successfully updated."
+        success: "%{model} was successfully updated."
     destroy:
       flash:
-        success: "%{model} was successfully deleted.""%{model} was successfully deleted."
-        failure: "%{model} could not be deleted.""%{model} could not be deleted."
+        success: "%{model} was successfully deleted."
+        failure: "%{model} could not be deleted."
 
   modal_crud: *crud
 

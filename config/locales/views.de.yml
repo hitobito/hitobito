@@ -84,7 +84,7 @@ de:
     index:
       title: "%{models}"
 
-  crud: crud
+  crud:
     show:
       title: "%{model}"
     new:

@@ -29,7 +29,7 @@ module PersonDuplicates
 
     def rerender_form(status)
       render turbo_stream: turbo_stream.replace(
-        "edit_person_duplicate_1",
+        "edit_person_duplicate_#{entry.id}",
         partial: "person_duplicates/merge/form",
         locals: {entry: entry}
       ), status: status

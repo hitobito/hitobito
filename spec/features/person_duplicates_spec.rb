@@ -44,6 +44,18 @@ describe :person_duplicates, js: true do
     expect(Person.where(id: duplicate1.id)).not_to exist
   end
 
+  it "renders error message in modal when invalid roles" do
+    duplicate1.person_1.roles.first.update_columns(start_on: Date.new(2000, 2, 1), end_on: Date.new(2000, 1, 1))
+    d1_merge_link = new_merge_group_person_duplicate_path(top_layer, duplicate1)
+    page.find(%(#content table.table a[href="#{d1_merge_link}"])).click
+
+    modal = page.find("div.modal-dialog")
+    expect(modal.find("h5")).to have_content "Personen zusammenführen"
+
+    modal.find("button.btn", text: "Zusammenführen").click
+    expect(page).to have_text "Rolle Admin (bis 01.01.2000) von #{duplicate1.person_1} ist fürs Zusammenführen nicht gültig, da die andere Person eventuell bereits eine Rolle hat, welche diese Rolle nicht mehr erlaubt, diese muss manuell korrigiert/etnfernt werden. Info: Bis kann nicht vor Von sein"
+  end
+
   private
 
   def assign_people

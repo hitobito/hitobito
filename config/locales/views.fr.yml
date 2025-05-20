@@ -84,7 +84,7 @@ fr:
     index:
       title: "%{models}"
 
-  crud: &crud
+  crud:
     show:
       title: "%{model}"
     new:
@@ -102,7 +102,23 @@ fr:
         success: "%{model} a été effacé avec succès."
         failure: "%{model} n'a pas pu être effacé."
 
-  modal_crud: *crud
+  modal_crud:
+    show:
+      title: "%{model}"
+    new:
+      title: "Créer %{model}"
+    edit:
+      title: "Modifier %{model}"
+    create:
+      flash:
+        success: "%{model} a été créé avec succès."
+    update:
+      flash:
+        success: "%{model} a été mis à jour avec succès."
+    destroy:
+      flash:
+        success: "%{model} a été effacé avec succès."
+        failure: "%{model} n'a pas pu être effacé."
 
   blocked:
     index:

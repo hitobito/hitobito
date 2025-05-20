@@ -84,7 +84,7 @@ it:
     index:
       title: "%{models}"
 
-  crud: &crud
+  crud:
     show:
       title: "%{model}"
     new:
@@ -102,7 +102,23 @@ it:
         success: "%{model} è stato cancellato con successo."
         failure: "%{model} non può essere cancellato."
 
-  modal_crud: *crud
+  modal_crud:
+    show:
+      title: "%{model}"
+    new:
+      title: "Inserire %{model}"
+    edit:
+      title: "Modificare %{model}"
+    create:
+      flash:
+        success: "%{model} è stato salvato con successo."
+    update:
+      flash:
+        success: "%{model} è stato modificato con successo."
+    destroy:
+      flash:
+        success: "%{model} è stato cancellato con successo."
+        failure: "%{model} non può essere cancellato."
 
   blocked:
     index:

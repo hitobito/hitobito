@@ -83,7 +83,7 @@ en:
     index:
       title: "Listing %{models}"
 
-  crud: &crud
+  crud:
     show:
       title: "%{model}"
     new:
@@ -101,7 +101,23 @@ en:
         success: "%{model} was successfully deleted."
         failure: "%{model} could not be deleted."
 
-  modal_crud: *crud
+  modal_crud:
+    show:
+      title: "%{model}"
+    new:
+      title: "New %{model}"
+    edit:
+      title: "Edit %{model}"
+    create:
+      flash:
+        success: "%{model} was successfully created."
+    update:
+      flash:
+        success: "%{model} was successfully updated."
+    destroy:
+      flash:
+        success: "%{model} was successfully deleted."
+        failure: "%{model} could not be deleted."
 
   blocked:
     index:

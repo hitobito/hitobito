@@ -125,7 +125,7 @@ module People
 
     def source_attrs
       Person::MERGABLE_ATTRS.each_with_object({}) do |a, h|
-        value = @target.send(a)
+        value = @source.send(a)
         next if value.blank?
 
         h[a] = value

@@ -30,6 +30,7 @@ describe People::Merger do
       orig_first_name = person.first_name
       orig_last_name = person.last_name
       orig_email = person.email
+      duplicate_first_name = duplicate.first_name
 
       expect do
         merger.merge!
@@ -51,6 +52,8 @@ describe People::Merger do
       expect(log_hash).to include(:last_name)
       expect(log_hash).not_to include(:id)
       expect(log_hash).not_to include(:primary_group_id)
+      expect(log_hash[:first_name]).not_to eq person.first_name
+      expect(log_hash[:first_name]).to eq duplicate_first_name
       expect(log_hash[:roles].first).to eq("Member (Bottom One / Group 11)")
     end
 

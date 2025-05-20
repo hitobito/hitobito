@@ -1,9 +1,9 @@
--#  Copyright (c) 2012-2016, Dachverband Schweizer Jugendparlamente. This file is part of
+-#  Copyright (c) 2012-2025, Dachverband Schweizer Jugendparlamente. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-%p.mb-2= t('.only_add_persons_with_tags')
+%p.mb-2= t(".only_add_persons_with_tags")
 
 .shown.mb-4
   = f.collection_select(:included_subscription_tags_ids,
@@ -11,12 +11,13 @@
                         :third,
                         :first,
                         { },
-                        { class: 'form-select form-select-sm tom-select',
+                        { class: "form-select form-select-sm",
                           multiple: true,
-                          data: { chosen_no_results: t('global.chosen_no_results'),
-                                  placeholder: ' ' } })
+                          data: { chosen_no_results: t("global.chosen_no_results"),
+                                  placeholder: " ",
+                                  controller: "tom-select" } })
 
-%p.mb-2= t('.exclude_persons_with_tags')
+%p.mb-2= t(".exclude_persons_with_tags")
 
 .shown.mb-4
   = f.collection_select(:excluded_subscription_tags_ids,
@@ -24,7 +25,8 @@
                         :third,
                         :first,
                         { },
-                        { class: 'form-select form-select-sm tom-select',
+                        { class: "form-select form-select-sm",
                           multiple: true,
-                          data: { chosen_no_results: t('global.chosen_no_results'),
-                                  placeholder: ' ' } })
+                          data: { chosen_no_results: t("global.chosen_no_results"),
+                                  placeholder: " ",
+                                  controller: "tom-select" } })

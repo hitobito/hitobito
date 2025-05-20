@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Dachverband Schweizer Jugendparlamente. This file is part of
+#  Copyright (c) 2012-2025, Dachverband Schweizer Jugendparlamente. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class NotesController < ApplicationController
   decorates :group, :person
+
+  helper_method :model_class
 
   def index
     authorize!(:index_notes, group)
@@ -32,6 +34,10 @@ class NotesController < ApplicationController
       format.html { redirect_to subject_path }
       format.js # destroy.js.haml
     end
+  end
+
+  def model_class
+    @model_class ||= controller_name.classify.constantize
   end
 
   private

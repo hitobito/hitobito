@@ -39,7 +39,10 @@ namespace :tx do
   task :pull do
     # force pull because git locale file timestamps
     # will be newer than transifex files during rpm build.
-    TransifexHelper.with_tx { sh "tx pull -f" }
+    #
+    # The mode sourceastranslation replaces missing translations
+    # with the source-string
+    TransifexHelper.with_tx { sh "tx pull -f --mode sourceastranslation" }
   end
 
   # desc 'Save transifex credentials from env into .transifexrc'

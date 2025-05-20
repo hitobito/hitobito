@@ -84,7 +84,7 @@ de:
     index:
       title: "%{models}"
 
-  crud: &crud
+  crud:
     show:
       title: "%{model}"
     new:
@@ -102,7 +102,23 @@ de:
         success: "%{model} wurde erfolgreich gelöscht."
         failure: "%{model} konnte nicht gelöscht werden."
 
-  modal_crud: *crud
+  modal_crud:
+    show:
+      title: "%{model}"
+    new:
+      title: "%{model} erstellen"
+    edit:
+      title: "%{model} bearbeiten"
+    create:
+      flash:
+        success: "%{model} wurde erfolgreich erstellt."
+    update:
+      flash:
+        success: "%{model} wurde erfolgreich aktualisiert."
+    destroy:
+      flash:
+        success: "%{model} wurde erfolgreich gelöscht."
+        failure: "%{model} konnte nicht gelöscht werden."
 
   blocked:
     index:

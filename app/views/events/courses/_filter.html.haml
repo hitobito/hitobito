@@ -1,41 +1,47 @@
-= form_for(:filter, html: { class: 'form-inline-search', id: 'course-filter' }, url: list_courses_path, method: :get) do |f|
+-#  Copyright (c) 2025, Hitobito AG. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+= form_for(:filter, html: { class: "form-inline-search", id: "course-filter" }, url: list_courses_path, method: :get) do |f|
   .d-grid.align-items-center.gap-2
     .control-group.w-150-px
-      = f.label :since, t('.time_period'), class: 'control-label'
+      = f.label :since, t(".time_period"), class: "control-label"
       .input-group
-        %span.input-group-text= icon(:'calendar-alt')
-        = f.text_field(:since, value: since_date, class: 'date col-2 form-control form-control-sm mb-0')
+        %span.input-group-text= icon(:"calendar-alt")
+        = f.text_field(:since, value: since_date, class: "date col-2 form-control form-control-sm mb-0")
 
     .control-group.w-150-px
-      = f.label :until, t('.until'), class: 'control-label'
+      = f.label :until, t(".until"), class: "control-label"
       .input-group
-        %span.input-group-text= icon(:'calendar-alt')
-        = f.text_field(:until, value: until_date, class: 'date col-2 form-control form-control-sm mb-0')
+        %span.input-group-text= icon(:"calendar-alt")
+        = f.text_field(:until, value: until_date, class: "date col-2 form-control form-control-sm mb-0")
 
     - if course_states_used?
       .control-group
-        = f.label :states, Event::Course.human_attribute_name(:state), class: 'control-label'
+        = f.label :states, Event::Course.human_attribute_name(:state), class: "control-label"
         %div
           .select.shown.chosen-no-margin
             = f.select(:states,
                      options_from_collection_for_select(course_state_collection, :second, :first, @states),
                      {},
-                     { id: 'state-filter-select',
-                       class: 'form-select form-select-sm tom-select w-auto',
+                     { id: "state-filter-select",
+                       class: "form-select form-select-sm w-auto",
                        multiple: true,
-                       data: { chosen_no_results: t('global.chosen_no_results'),
-                               placeholder: t('.select_states') } })
+                       data: { chosen_no_results: t("global.chosen_no_results"),
+                               placeholder: t(".select_states"),
+                               controller: "tom-select" } })
 
   .control-group.mt-2
-    = f.label :places_available, Event::Application.model_name.human, class: 'control-label'
+    = f.label :places_available, Event::Application.model_name.human, class: "control-label"
     %div
-      = f.select(:places_available, [[t('.places_available.all'), 0], [t('.places_available.only_with_places_available'), 1]], { selected: @places_available }, class: 'mb-0 form-select form-select-sm h-100')
+      = f.select(:places_available, [[t(".places_available.all"), 0], [t(".places_available.only_with_places_available"), 1]], { selected: @places_available }, class: "mb-0 form-select form-select-sm h-100")
 
 
     - if @kind_category_id.present?
       = f.hidden_field :category, value: @kind_category_id
 
-  = render partial: 'group_filter', locals: { f: f }
+  = render partial: "group_filter", locals: { f: f }
 
   .control-group
-    = submit_button(f, safe_join([icon(:search), ' ', t('global.button.search')]), name: nil)
+    = submit_button(f, safe_join([icon(:search), " ", t("global.button.search")]), name: nil)

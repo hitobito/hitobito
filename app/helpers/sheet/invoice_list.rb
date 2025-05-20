@@ -8,11 +8,18 @@
 module Sheet
   class InvoiceList < Base
     def title
-      ::InvoiceList.model_name.human(count: 2)
+      return ::InvoiceList.model_name.human(count: 2) if child && !child.entry
+      return entry.title if child&.entry
+      super
     end
 
     def parent_sheet
       create_parent(Sheet::Group)
+    end
+
+    def parent_link_url
+      return view.group_invoice_list_invoices_path(entry.group, entry) if child&.entry
+      super
     end
 
     def left_nav?

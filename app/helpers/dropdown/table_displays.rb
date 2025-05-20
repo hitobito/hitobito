@@ -36,10 +36,11 @@ module Dropdown
       options = {class: "dropdown-menu float-end", data: {turbo_permanent: true}, role: "menu"}
 
       content_tag(:ul, options) do
-        sorted = table_display.available(@list).sort_by { |c| table_display.column_for(c).label(c) }
-        items = sorted.collect do |column|
-          render_item("selected[]", table_display.column_for(column), column)
-        end
+        items = table_display
+          .available(@list)
+          .select { |c| table_display.column_for(c).label(c) }
+          .sort_by { |c| table_display.column_for(c).label(c) }
+          .map { |column| render_item("selected[]", table_display.column_for(column), column) }
 
         safe_join(items)
       end

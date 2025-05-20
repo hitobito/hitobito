@@ -110,6 +110,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :minimized_at
   ]
 
+  MERGABLE_ATTRS = MERGABLE_ATTRS = Person::PUBLIC_ATTRS - [:id, :primary_group_id, :picture]
+
   FILTER_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
     :first_name, :last_name, :nickname, :company_name, :email, :address_care_of, :street,
     :housenumber, :postbox, :zip_code, :town, [:country, :country_select], [:gender, :gender_select], [:years, :integer], :birthday

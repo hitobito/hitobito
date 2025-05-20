@@ -9,10 +9,14 @@ module PersonDuplicates
   class MergeController < ApplicationController
     before_action :authorize_action
 
+    helper_method :entry
+
     def new
     end
 
     def create
+      return rerender_form(:unprocessable_entity) unless entry.valid?(context: :merge)
+
       PersonDuplicate.transaction do
         entry.destroy!
         People::Merger.new(source, destination, current_user).merge!
@@ -22,6 +26,14 @@ module PersonDuplicates
     end
 
     private
+
+    def rerender_form(status)
+      render turbo_stream: turbo_stream.replace(
+        "edit_person_duplicate_1",
+        partial: "person_duplicates/merge/form",
+        locals: {entry: entry}
+      ), status: status
+    end
 
     def destination
       dst_person_2? ? entry.person_2 : entry.person_1

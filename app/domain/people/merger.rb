@@ -89,7 +89,7 @@ module People
     end
 
     def merge_person_attrs
-      person_attrs.each do |a|
+      Person::MERGABLE_ATTRS.each do |a|
         assign(a)
       end
       attach_picture
@@ -123,13 +123,9 @@ module People
       source_attrs.merge(source_roles).to_yaml
     end
 
-    def person_attrs
-      Person::PUBLIC_ATTRS - [:id, :primary_group_id, :picture]
-    end
-
     def source_attrs
-      person_attrs.each_with_object({}) do |a, h|
-        value = @target.send(a)
+      Person::MERGABLE_ATTRS.each_with_object({}) do |a, h|
+        value = @source.send(a)
         next if value.blank?
 
         h[a] = value

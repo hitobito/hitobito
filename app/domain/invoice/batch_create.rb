@@ -7,7 +7,7 @@ class Invoice::BatchCreate
   attr_reader :invoice_list, :title, :results, :invalid
 
   delegate :invoice_items, :title, to: :invoice
-  delegate :membership?, :invoice, to: :invoice_list
+  delegate :fixed_fees?, :invoice, to: :invoice_list
 
   def self.call(invoice_list, limit = InvoiceListsController::LIMIT_CREATE)
     invoice_parameters = invoice_list.invoice_parameters
@@ -71,12 +71,12 @@ class Invoice::BatchCreate
       recipient_id: recipient.id,
       invoice_list_id: invoice_list.id,
       creator_id: invoice_list.creator_id,
-      title: membership? ? title_with_layer(recipient) : title
+      title: fixed_fees? ? title_with_layer(recipient) : title
     )
   end
 
   def invoice_items_attributes(recipient)
-    if membership?
+    if fixed_fees?(:memberships)
       layer_group = InvoiceLists::Membership.find_layer_group(recipient)
       invoice_items.each { |item| item.calculate_amount(layer_group.id) }
     end

@@ -4,13 +4,12 @@
 - # https://github.com/hitobito/hitobito.
 
 .invoice-articles.offset-md-1.mt-4.col-md-9.col-lg-8.col-xl-7
-  = hidden_field_tag :membership_fees, true
+  = hidden_field_tag :fixed_fees, params[:fixed_fees]
   = table(invoice_items, class: 'table table-striped') do |t|
     - t.attr(:name)
     - t.attr(:count)
     - t.attr(:vat_rate) { |i| i.decorate.vat_rate }
     - t.attr(:unit_cost) { |i| i.decorate.unit_cost }
-    - # somehow right aligning via table builder does not work here why?
     - t.attr(:cost)  { |i| i.decorate.cost }
 
   .invoice-items-total.d-flex.flex-row-reverse

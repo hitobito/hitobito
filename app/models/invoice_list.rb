@@ -60,8 +60,9 @@ class InvoiceList < ActiveRecord::Base
     @calculated ||= InvoiceItems::Calculation.new(invoice.invoice_items).calculated
   end
 
-  def membership?
-    invoice.invoice_items.present? && invoice.invoice_items.all? { |item| item.is_a?(InvoiceItem::Membership) }
+  def fixed_fees?(fee = nil)
+    item_fees = invoice.invoice_items.flat_map { |item| item[:dynamic_cost_parameters][:fixed_fees].to_s }.compact_blank.uniq
+    fee ? item_fees == [fee.to_s] : item_fees.any?
   end
 
   def invoice_parameters

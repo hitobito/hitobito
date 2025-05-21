@@ -34,11 +34,11 @@ module InvoiceLists
           .map(&:person_id)
       end
 
-      def build_invoice_items = fees.map { |fee| InvoiceItem::Membership.new(dynamic_cost_parameters: fee.to_h) }
+      def build_invoice_items = fees.map do |fee|
+        InvoiceItem::Membership.new(dynamic_cost_parameters: fee.to_h.merge(fixed_fees: :memberships))
+      end
 
       def find_layer_group(recipient) = roles.find_by(person_id: recipient.id).group.layer_group
-
-      private
 
       def roles
         Role
@@ -47,6 +47,8 @@ module InvoiceLists
           .order(:layer_group_id, Arel.sql(order_by_roles_statement))
           .select("DISTINCT ON (groups.layer_group_id) roles.*, groups.layer_group_id")
       end
+
+      private
 
       def layer_names_with_missing_receiver_role
         layers.where.not(id: roles.map { |r| r.group.layer_group_id }).map(&:name).join(", ")

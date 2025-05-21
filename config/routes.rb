@@ -108,9 +108,7 @@ Hitobito::Application.routes.draw do
         end
       end
 
-      resource :invoice_list, except: [:edit, :show] do
-        get "new_membership_fee" => "invoice_lists#new",  params: { membership_fees: true }
-      end
+      resource :invoice_list, except: [:edit, :show]
       resources :invoice_lists, only: [:index] do
         resource :destroy, only: [:show, :destroy], module: :invoice_lists,
                            as: 'invoice_lists_destroy'

@@ -186,7 +186,7 @@ describe InvoiceListsController do
     end
 
     it "GET#new prepares membership invoice" do
-      get :new, params: {group_id: group.id, membership_fees: true}
+      get :new, params: {group_id: group.id, fixed_fees: :memberships}
       expect(response).to render_template("crud/new")
 
       expect(assigns(:invoice_list).invoice.issued_at).to be_present

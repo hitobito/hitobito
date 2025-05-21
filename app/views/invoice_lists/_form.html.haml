@@ -20,9 +20,11 @@
     = fi.labeled_input_field :description, rows: 3, data: { message_template_target: :body }
     = fi.labeled_input_field :payment_information
     = fi.labeled_input_field :payment_purpose
-    - if !entry.membership?
-      = fi.labeled_date_field :issued_at unless entry.membership?
-      = render_extensions :form_invoice_fields, locals: { f: fi }
+    = fi.labeled_date_field :issued_at unless fixed_fees?
+    = render_extensions :form_invoice_fields, locals: { f: fi }
+    - if fixed_fees?
+      = render "fixed_fees", invoice_items: fi.object.invoice_items
+    - else
       = field_set_tag do
         = render "invoice_articles", f: fi, group: parent
 
@@ -33,5 +35,3 @@
         = fi.labeled_input_field :hide_total
 
       = render "invoices/recalculate/calculated", invoice: fi.object.decorate
-    - else
-      = render "membership_fee_fields", invoice_items: fi.object.invoice_items

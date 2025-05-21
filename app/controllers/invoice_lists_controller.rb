@@ -36,7 +36,7 @@ class InvoiceListsController < CrudController
 
   respond_to :js, only: [:new]
 
-  helper_method :cancel_url
+  helper_method :cancel_url, :fixed_fees?
 
   def new
     assign_attributes
@@ -79,6 +79,10 @@ class InvoiceListsController < CrudController
 
   def show
     redirect_to group_invoices_path(parent)
+  end
+
+  def fixed_fees?(fees = nil)
+    fees ? params[:fixed_fees] == fees.to_s : params.key?(:fixed_fees)
   end
 
   private
@@ -140,7 +144,7 @@ class InvoiceListsController < CrudController
     entry.creator = current_user
     entry.invoice = parent.invoices.build(model_params.present? ? permitted_params[:invoice] : {})
 
-    if params[:membership_fees].present?
+    if fixed_fees?(:memberships)
       InvoiceLists::Membership.prepare(entry, calculate: action_name == "new")
       flash.now[:warning] = InvoiceLists::Membership.warning
     end

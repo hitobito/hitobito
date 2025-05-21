@@ -96,7 +96,7 @@ describe InvoiceLists::Membership do
           type: "InvoiceItem::Membership",
           name: "Mitgliedsbeitrag - Members",
           dynamic_cost_parameters: {
-            name: :members, roles: ["Group::BottomGroup::Member", "Group::BottomLayer::Member"], unit_cost: 10
+            fixed_fees: :memberships, name: :members, roles: ["Group::BottomGroup::Member", "Group::BottomLayer::Member"], unit_cost: 10
           }
         )
         expect(invoice_items.last.attributes.compact.symbolize_keys).to eq(
@@ -105,7 +105,7 @@ describe InvoiceLists::Membership do
           type: "InvoiceItem::Membership",
           name: "Mitgliedsbeitrag - Leaders",
           dynamic_cost_parameters: {
-            name: :leaders, roles: ["Group::BottomGroup::Leader", "Group::BottomLayer::Leader"], unit_cost: 15
+            fixed_fees: :memberships, name: :leaders, roles: ["Group::BottomGroup::Leader", "Group::BottomLayer::Leader"], unit_cost: 15
           }
         )
       end

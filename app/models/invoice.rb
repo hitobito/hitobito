@@ -195,6 +195,7 @@ class Invoice < ActiveRecord::Base
 
   def recalculate!
     update_attribute(:total, calculated[:total] || 0) # rubocop:disable Rails/SkipsModelValidations
+    invoice_list&.update_total
   end
 
   def to_s

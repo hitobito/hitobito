@@ -127,6 +127,52 @@ describe Invoice::BatchCreate do
     expect(list.invalid_recipient_ids).to have(1).item
   end
 
+  describe "membership" do
+    let(:members) { {unit_cost: 10, name: :members, roles: %w[Group::BottomGroup::Member Group::BottomLayer::Member]} }
+    let(:receiver_id) { Fabricate(Group::BottomLayer::Leader.sti_name, group: groups(:bottom_layer_one)).person_id }
+    let(:member_fee_item) { group.invoices.last.invoice_items.last }
+
+    before do
+      allow(Settings).to receive_message_chain(:invoices, :membership, :recipient, :roles).and_return(%w[Group::BottomLayer::Leader])
+      allow(Settings).to receive_message_chain(:invoices, :membership, :recipient, :layer).and_return(Group::BottomLayer.sti_name)
+      allow(Settings).to receive_message_chain(:invoices, :membership, :fees).and_return([members])
+      allow(I18n).to receive(:t).with(:members, scope: :"invoice_item/membership", locale: nil).and_return("Mitgliedsbeitrag")
+    end
+
+    def build_membership_invoice
+      list = InvoiceList.create!(group: group, title: :title)
+      list.invoice = Invoice.new(title: "invoice", group: group, issued_at: Time.zone.today)
+      list.invoice.invoice_items = InvoiceLists::Membership.build_invoice_items
+      list.recipient_ids = [receiver_id]
+      expect(list).to be_membership
+      list
+    end
+
+    it "includes layer name in title" do
+      expect do
+        Invoice::BatchCreate.new(build_membership_invoice).call
+      end.to change { [group.invoices.count, group.invoice_items.count, InvoiceItemRole.count] }.by([1, 1, 1])
+      expect(group.invoices.last.title).to eq "invoice - Bottom One"
+      expect(group.invoices.last.invoice_items).to have(1).item
+      expect(member_fee_item.name).to eq "Mitgliedsbeitrag"
+      expect(member_fee_item.count).to eq 1
+      expect(member_fee_item.cost).to eq 10
+      expect(member_fee_item.dynamic_cost_parameters["role_ids"]).to match_array([roles(:bottom_member).id])
+    end
+
+    it "counts roles specific for recipient_id layer" do
+      role = Fabricate(Group::BottomGroup::Member.sti_name, group: groups(:bottom_group_one_one))
+      2.times { Fabricate(Group::BottomGroup::Member.sti_name, group: groups(:bottom_group_two_one)) }  # those are not included
+      expect do
+        Invoice::BatchCreate.new(build_membership_invoice).call
+      end.to change { [group.invoices.count, group.invoice_items.count, InvoiceItemRole.count] }.by([1, 1, 2])
+      expect(member_fee_item.name).to eq "Mitgliedsbeitrag"
+      expect(member_fee_item.count).to eq 2
+      expect(member_fee_item.cost).to eq 20
+      expect(member_fee_item.dynamic_cost_parameters["role_ids"]).to match_array([role.id, roles(:bottom_member).id])
+    end
+  end
+
   private
 
   def fabricate_donation(amount, received_at = 1.year.ago)

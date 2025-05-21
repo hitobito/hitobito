@@ -477,6 +477,28 @@ describe Invoice do
     TEXT
   end
 
+  describe "invoice_item_roles" do
+    let(:invoice) { create_invoice }
+
+    before do
+      item = invoice.invoice_items.create!(name: "pens", unit_cost: 2.5)
+      InvoiceItemRole.create!(invoice_item: item, role: roles(:top_leader), layer_group_id: groups(:top_layer).id, year: 2025)
+    end
+
+    it "changing to cancelled state deletes invoice_item_roles" do
+      expect(invoice.state).to eq "draft"
+      expect do
+        invoice.update!(state: :cancelled)
+      end.to change { InvoiceItemRole.count }.by(-1)
+    end
+
+    it "destroying invoice does not destroy invoice_item_roles" do
+      expect do
+        invoice.destroy!
+      end.not_to change { InvoiceItemRole.count }
+    end
+  end
+
   private
 
   def contactables(*args)

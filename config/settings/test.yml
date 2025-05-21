@@ -31,3 +31,22 @@ additional_address:
     - Rechnung
     - Arbeit
     - Andere
+
+invoices:
+  membership:
+    recipient:
+      layer: Group::BottomLayer
+      roles:
+        - Group::BottomLayer::Leader
+        - Group::BottomGroup::Leader
+    fees:
+      - name: :members
+        unit_cost: 10
+        roles:
+          - Group::BottomGroup::Member
+          - Group::BottomLayer::Member
+      - name: :leaders
+        unit_cost: 15
+        roles:
+          - Group::BottomGroup::Leader
+          - Group::BottomLayer::Leader

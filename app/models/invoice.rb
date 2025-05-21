@@ -98,6 +98,7 @@ class Invoice < ActiveRecord::Base
 
   before_create :set_recipient_fields, if: :recipient
   after_create :increment_sequence_number
+  after_update :delete_invoice_item_roles, if: -> { cancelled? }
 
   accepts_nested_attributes_for :invoice_items, allow_destroy: true
 
@@ -185,9 +186,7 @@ class Invoice < ActiveRecord::Base
   delegate :logo_position, to: :invoice_config
 
   def calculated
-    [:total, :cost, :vat].index_with do |field|
-      round(invoice_items.reject(&:frozen?).map(&field).compact.sum(BigDecimal("0.00")))
-    end
+    InvoiceItems::Calculation.new(invoice_items).calculated
   end
 
   def recalculate
@@ -196,6 +195,7 @@ class Invoice < ActiveRecord::Base
 
   def recalculate!
     update_attribute(:total, calculated[:total] || 0) # rubocop:disable Rails/SkipsModelValidations
+    invoice_list&.update_total
   end
 
   def to_s
@@ -336,12 +336,12 @@ class Invoice < ActiveRecord::Base
     end
   end
 
-  def round(decimal)
-    (decimal / ROUND_TO).round * ROUND_TO
-  end
-
   def qr_id
     iban.delete(" ")[4..8].to_i
+  end
+
+  def delete_invoice_item_roles
+    InvoiceItemRole.where(invoice_item_id: invoice_items.map(&:id)).delete_all
   end
 
   def invoice_email

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_04_30_125739) do
+ActiveRecord::Schema[7.1].define(version: 2025_05_19_090627) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -558,6 +558,18 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_30_125739) do
     t.string "logo_position", default: "disabled", null: false
     t.integer "reference_prefix"
     t.index ["group_id"], name: "index_invoice_configs_on_group_id"
+  end
+
+  create_table "invoice_item_roles", force: :cascade do |t|
+    t.bigint "invoice_item_id"
+    t.bigint "role_id"
+    t.integer "year", null: false
+    t.integer "layer_group_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["invoice_item_id"], name: "index_invoice_item_roles_on_invoice_item_id"
+    t.index ["role_id", "year"], name: "index_invoice_item_roles_on_role_id_and_year", unique: true
+    t.index ["role_id"], name: "index_invoice_item_roles_on_role_id"
   end
 
   create_table "invoice_items", id: :serial, force: :cascade do |t|

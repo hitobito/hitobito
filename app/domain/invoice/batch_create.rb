@@ -4,7 +4,10 @@
 #  https://github.com/hitobito/hitobito.
 
 class Invoice::BatchCreate
-  attr_reader :invoice_list, :invoice, :results, :invalid
+  attr_reader :invoice_list, :title, :results, :invalid
+
+  delegate :invoice_items, :title, to: :invoice
+  delegate :fixed_fees?, :invoice, to: :invoice_list
 
   def self.call(invoice_list, limit = InvoiceListsController::LIMIT_CREATE)
     invoice_parameters = invoice_list.invoice_parameters
@@ -25,7 +28,6 @@ class Invoice::BatchCreate
 
   def initialize(invoice_list, people = nil)
     @invoice_list = invoice_list
-    @invoice = invoice_list.invoice
     @people = people # used by Messages::LetterWithInvoiceDispatch#batch_create
     @results = []
     @invalid = []
@@ -37,7 +39,8 @@ class Invoice::BatchCreate
   end
 
   def create_invoice(recipient)
-    attrs = attributes(recipient)
+    attrs = invoice_attributes(recipient)
+
     invoice_list.group.invoices.build(attrs).save if attrs[:invoice_items_attributes].any?
   end
 
@@ -62,17 +65,23 @@ class Invoice::BatchCreate
     invoice_list.update(recipients_processed: results.count(true), invalid_recipient_ids: invalid)
   end
 
-  def attributes(recipient)
+  def invoice_attributes(recipient)
     invoice.attributes.merge(
       invoice_items_attributes: invoice_items_attributes(recipient),
       recipient_id: recipient.id,
       invoice_list_id: invoice_list.id,
-      creator_id: invoice_list.creator_id
+      creator_id: invoice_list.creator_id,
+      title: fixed_fees? ? title_with_layer(recipient) : title
     )
   end
 
   def invoice_items_attributes(recipient)
-    invoice.invoice_items.collect do |item|
+    if fixed_fees?(:memberships)
+      layer_group = InvoiceLists::Membership.find_layer_group(recipient)
+      invoice_items.each { |item| item.calculate_amount(layer_group.id) }
+    end
+
+    invoice_items.collect do |item|
       attrs = item.attributes
       if item.dynamic
         item.dynamic_cost_parameters[:recipient_id] = recipient.id
@@ -82,6 +91,10 @@ class Invoice::BatchCreate
       # Do not try to save invalid item since that would abort the whole invoice create transaction
       attrs if InvoiceItem.new(attrs).recalculate.valid?
     end.compact
+  end
+
+  def title_with_layer(recipient)
+    [title, InvoiceLists::Membership.find_layer_group(recipient).name].join(" - ")
   end
 
   def group_id

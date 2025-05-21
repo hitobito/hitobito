@@ -1,5 +1,8 @@
 # Hitobito Changelog
 
+## unreleased
+- Sortierung von Rechnungstabelle wird bei PDF Exports beachtet (hitobito_sww#237)
+
 ## Version 2.5
 - Beim zusammenführen von Duplikaten werden neu auch Rechnungen, Notizen, Tags, Abos, Familienmitglieder, Event Einladungen und Teilnahmen, Anfragen und Qualifikationen übernommen (hitobito_sww#139)
 - Auf der Person können mehrere Adressen erfasst werden (#3264, #3265)

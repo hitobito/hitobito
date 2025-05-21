@@ -119,7 +119,7 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
     authorize!(:create, @new_role)
 
     Role.transaction do
-      @new_role.save && entry.destroy
+      entry.destroy && @new_role.save
     end
   end
 

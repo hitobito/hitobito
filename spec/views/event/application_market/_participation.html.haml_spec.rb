@@ -10,6 +10,6 @@ describe "event/application_market/_participation.html.haml" do
   let(:participation) { Fabricate(:event_participation, event: event) }
 
   it "participation without application isn't causing an internal server error" do
-    expect{ render locals: {p: participation.decorate }}.not_to raise_error
+    expect { render locals: {p: participation.decorate} }.not_to raise_error
   end
 end

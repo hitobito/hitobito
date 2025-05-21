@@ -138,10 +138,33 @@ describe InvoicesController do
       expect(assigns(:invoices)).to have(2).items
     end
 
-    it "exports pdf in background" do
+    it "exports pdf in background ordered by sequence number asc" do
       update_issued_at_to_current_year
+
+      expected_ids = [invoice.id, invoices(:sent).id]
+      expect(Export::InvoicesJob).to receive(:new).with(anything, anything, expected_ids, anything).and_call_original
+
       expect do
-        get :index, params: {group_id: group.id}, format: :pdf
+        get :index, params: {
+          group_id: group.id,
+          sort: :sequence_number,
+          sort_dir: :asc
+        }, format: :pdf
+      end.to change { Delayed::Job.count }.by(1)
+    end
+
+    it "exports pdf in background ordered by sequence number desc" do
+      update_issued_at_to_current_year
+
+      expected_ids = [invoices(:sent).id, invoice.id]
+      expect(Export::InvoicesJob).to receive(:new).with(anything, anything, expected_ids, anything).and_call_original
+
+      expect do
+        get :index, params: {
+          group_id: group.id,
+          sort: :sequence_number,
+          sort_dir: :desc
+        }, format: :pdf
       end.to change { Delayed::Job.count }.by(1)
     end
 

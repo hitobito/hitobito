@@ -136,7 +136,7 @@ class InvoicesController < CrudController
       with_async_download_cookie(format, filename(format, invoices)) do |filename|
         Export::InvoicesJob.new(format,
           current_person.id,
-          invoices.pluck(:id),
+          invoices.map(&:id),
           pdf_options.merge({filename: filename})).enqueue!
       end
     end

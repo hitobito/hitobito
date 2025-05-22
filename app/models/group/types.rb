@@ -28,17 +28,25 @@ module Group::Types
     # All possible Event types that may be created for this group
     self.event_types = [Event]
 
+    # Track whether the group was newly created for the `set_layer_group_id` after_save callback.
+    # This is necessary because the regular AR dirty tracking can get reset by another callback.
+    before_save -> { self._was_new_record = new_record? }
     after_save :set_layer_group_id
     after_save :create_default_children
 
     validate :assert_type_is_allowed_for_parent, on: :create
   end
 
+  # Set to truthy to skip the creation of default children
+  attr_accessor :_skip_default_children
+
   private
 
+  # Used to track whether the group was newly created for the `create_default_children` after_save callback
+  attr_accessor :_was_new_record
+
   def create_default_children
-    # HACK: to have after_save ordering for this semantical after_create callback
-    return if created_at < 10.seconds.ago
+    return unless _was_new_record && !_skip_default_children
 
     default_children.each do |group_type|
       child = group_type.new(name: group_type.label)

@@ -29,11 +29,15 @@ module UploadDisplayHelper
 
     if upload_exists?(model, name)
       model.send(name.to_sym).then do |pic|
-        if size
-          # variant passes to mini_magick or vips, I assume mini_magick here
-          pic.variant(resize_to_limit: extract_image_dimensions(size))
-        else
-          pic
+        begin
+          if size
+            # variant passes to mini_magick or vips, I assume mini_magick here
+            pic.variant(resize_to_limit: extract_image_dimensions(size))
+          else
+            pic
+          end
+        rescue ActiveStorage::FileNotFoundError
+          upload_default(model, name, default)
         end
       end
     else

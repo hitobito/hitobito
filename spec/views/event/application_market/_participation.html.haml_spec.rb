@@ -6,10 +6,16 @@
 require "spec_helper"
 
 describe "event/application_market/_participation.html.haml" do
-  let(:event) { EventDecorator.decorate(Fabricate(:course, groups: [groups(:top_layer)])) }
+  let(:event) { Fabricate(:course, groups: [groups(:top_layer)]).decorate }
+  let(:group) { Fabricate(:group, type: "Group::TopLayer").decorate }
   let(:participation) { Fabricate(:event_participation, event: event) }
 
-  it "participation without application isn't causing an internal server error" do
+  before do
+    assign(:event, event)
+    assign(:group, group)
+  end
+
+  it "participation without application can be rendered" do
     expect { render locals: {p: participation.decorate} }.not_to raise_error
   end
 end

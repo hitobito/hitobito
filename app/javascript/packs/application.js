@@ -33,7 +33,6 @@ import 'jquery-ui/ui/i18n/datepicker-it-CH';
 import 'jquery-ui/ui/effects/effect-highlight';
 
 // Bootstrap
-import 'bootstrap/dist/js/bootstrap.bundle'
 import 'bootstrap/js/src/alert'
 import 'bootstrap/js/src/button'
 // import 'bootstrap/js/src/carousel'
@@ -72,9 +71,9 @@ const application = Application.start()
 // application.debug = true
 window.Stimulus   = application
 window.Popover = Popover
-import * as bootstrap from 'bootstrap'
-window.bootstrap = bootstrap
 
+import Tooltip from 'bootstrap/js/dist/tooltip';
+window.Tooltip = Tooltip
 
 /**
  * Images

@@ -3,12 +3,12 @@
 //  or later. See the COPYING file at the top-level directory or at
 //  https://github.com/hitobito/hitobito.
 
-import * as bootstrap from 'bootstrap'
-
 function registerTooltips() {
-  const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+  const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
   tooltipTriggerList.forEach(el => {
-    new bootstrap.Tooltip(el)
+    new Tooltip(el, {
+      placement: 'right',
+    })
   })
 }
 

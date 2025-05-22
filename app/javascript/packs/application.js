@@ -72,6 +72,8 @@ const application = Application.start()
 window.Stimulus   = application
 window.Popover = Popover
 
+import Tooltip from 'bootstrap/js/dist/tooltip';
+window.Tooltip = Tooltip
 
 /**
  * Images

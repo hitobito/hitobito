@@ -7,7 +7,7 @@ require "spec_helper"
 describe "notes/_note.html.haml" do
   let(:person) { people(:bottom_member) }
   let(:current_user) { person }
-  let(:group) {groups(:top_layer)}
+  let(:group) { groups(:top_layer) }
   let(:note) { Fabricate(:note, subject: people(:top_leader)) }
 
   before do
@@ -16,6 +16,6 @@ describe "notes/_note.html.haml" do
   end
 
   it "displays profile picture" do
-    expect(render locals: { note: note, show_subject: true}).to have_css('.note-image')
+    expect(render(locals: {note: note, show_subject: true})).to have_css(".note-image")
   end
 end

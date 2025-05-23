@@ -2,7 +2,7 @@
 
 Hier findest du eine Übersicht sowie die Dokumentation der E-Mail Features von Hitobito
 
-[Abos / Mailing Listen](abo_mails.md)
+[Abos / Mailing Listen](mailing_lists.md)
 
 ### Mailversand
 

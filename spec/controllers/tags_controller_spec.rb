@@ -115,7 +115,7 @@ describe TagsController do
     end
 
     it "deletes tag connected to supscription tag" do
-      expect { delete :destroy, params: { id: test_tag.id } }.not_to raise_error
+      expect { delete :destroy, params: {id: test_tag.id} }.not_to raise_error
     end
   end
 end

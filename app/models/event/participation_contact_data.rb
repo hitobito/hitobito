@@ -7,9 +7,9 @@ class Event::ParticipationContactData
   attr_reader :person
 
   class_attribute :mandatory_contact_attrs,
-                  :address_attrs,
-                  :contact_attrs,
-                  :contact_associations
+    :address_attrs,
+    :contact_attrs,
+    :contact_associations
 
   self.mandatory_contact_attrs = [:email, :first_name, :last_name]
 

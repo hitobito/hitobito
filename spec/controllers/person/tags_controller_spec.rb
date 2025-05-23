@@ -8,6 +8,7 @@ require "spec_helper"
 describe Person::TagsController do
   let(:top_leader) { people(:top_leader) }
   let(:bottom_member) { people(:bottom_member) }
+  let(:top_leader) { people(:top_leader) }
 
   before { sign_in(top_leader) }
 
@@ -136,7 +137,7 @@ describe Person::TagsController do
 
   describe "DELETE #destroy" do
     let!(:subscription_tag) { SubscriptionTag.create!(excluded: false, subscription_id: Subscription.first.id, tag_id: test_tag.id) }
-    let!(:test_tagging) { ActsAsTaggableOn::Tagging.create!(tag_id: test_tag.id, taggable_type: "Person", taggable_id: bottom_member.id, context: "tags") }
+    let!(:test_tagging) { ActsAsTaggableOn::Tagging.create!(tag_id: test_tag.id, taggable_type: "Person", taggable_id: top_leader.id, context: "tags") }
     let!(:test_tag) { ActsAsTaggableOn::Tag.create!(name: "Test") }
 
     it "deletes person taggging/assignment" do
@@ -174,15 +175,15 @@ describe Person::TagsController do
     it "does delete tag if no other person uses it" do
       expect do
         delete :destroy, params: {
-          group_id: bottom_member.groups.first.id,
-          person_id: bottom_member.id,
+          group_id: top_leader.groups.first.id,
+          person_id: top_leader.id,
           name: test_tag.name
         }
       end
         .not_to raise_error
 
-      expect(bottom_member.tags.count).to eq(0)
-      is_expected.to redirect_to group_person_path(bottom_member.groups.first, bottom_member)
+      expect(top_leader.tags.count).to eq(0)
+      is_expected.to redirect_to group_person_path(top_leader.groups.first, top_leader)
     end
   end
 

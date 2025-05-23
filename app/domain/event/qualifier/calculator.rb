@@ -62,12 +62,10 @@ class Event::Qualifier::Calculator
       .uniq
   end
 
-  def qualification_date(qualification_kind_id, course)
-    @qualification_dates[qualification_kind_id] || course.qualification_date
-  end
-
   def start_of_relevant_period(qualification_kind)
-    start_of_period = @end_date - qualification_kind.validity.years
+    start_of_period = (@end_date - qualification_kind.validity.years).beginning_of_year
+    # @qualification_dates are only present for open_training_days calculation,
+    # but not for start_at dates calculation.
     start_of_qualification = @qualification_dates[qualification_kind.id]
     start_of_qualification += 1.day if start_of_qualification
     [start_of_period, start_of_qualification].compact.max

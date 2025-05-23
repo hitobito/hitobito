@@ -1,4 +1,4 @@
-# Abos (mailing_lists)
+# Abos / MailingLists
 
 Hitobito stellt eine simple Implementation von Mailing Listen zur Verfügung.
 Diese können in der Applikation beliebig erstellt und verwaltet werden. Dies
@@ -15,7 +15,7 @@ E-Mails werden danach wie folgt verarbeitet:
 4. Leite das Email an den ursprünglichen Absender weiter falls es eine Bounce Mail ist.
 
 ⚡ Man kann aus diversen Gründen (BCC, Mail Aliase) den eigentlichen Empfänger
-nicht aus dem `To` Header lesen. Aus diesem Grund muss der Mailserver so konfiguriert 
+nicht aus dem `To` Header lesen. Aus diesem Grund muss der Mailserver so konfiguriert
 werden, dass dieser den `X-Original-To` Header setzt, welcher den ursprünglichen Empfänger enthält
 (z.B. `news@db.example.com`). Es wird immer nur der erste `X-Original-To` Header
 verarbeitet.
@@ -34,13 +34,13 @@ Events können Abonnenten sein.
 
 ## Konfiguration
 
-Mit Release 1.27 (Frühling 2022) wurde ein neuer Mail Stack eingeführt. Die Konfiguration für eingehende Mails erfolgt über die datei `config/mail.yml`. Als Vorlage dient `config/mail.yml.example`. Ist die `config/mail.yml` vorhanden, wird der neue Mail Stack aktiviert. 
-Der alte Mail Stack ist immer noch vorhanden und wird aktiviert wenn der Mailempfang via die Umgebungsvariable `RAILS_MAIL_RETRIEVER_CONFIG` konfiguriert ist und keine `config/mail.yml` vorhanden ist. 
+Mit Release 1.27 (Frühling 2022) wurde ein neuer Mail Stack eingeführt. Die Konfiguration für eingehende Mails erfolgt über die datei `config/mail.yml`. Als Vorlage dient `config/mail.yml.example`. Ist die `config/mail.yml` vorhanden, wird der neue Mail Stack aktiviert.
+Der alte Mail Stack ist immer noch vorhanden und wird aktiviert wenn der Mailempfang via die Umgebungsvariable `RAILS_MAIL_RETRIEVER_CONFIG` konfiguriert ist und keine `config/mail.yml` vorhanden ist.
 
 ## Mail-Versand
 
 * Wie oben erwähnt landen sämtliche E-Mails an die Domain einer Instanz (z.B. db.hitobito.com) in einem einzelnen Postfach. (catch-all)
-* Über den [Retriever](https://github.com/hitobito/hitobito/blob/master/app/domain/mailing_lists/bulk_mail/retriever.rb) wird in einem definierten Intervall (Standardmässigässig jede Minute) dies Postfach auf neue Mails gecheckt. 
+* Über den [Retriever](https://github.com/hitobito/hitobito/blob/master/app/domain/mailing_lists/bulk_mail/retriever.rb) wird in einem definierten Intervall (Standardmässigässig jede Minute) dies Postfach auf neue Mails gecheckt.
 * Kann ein E-Mail einer Mailingliste zugeordnet werden, nehmen wir dieses E-Mail wie es ist entgegen und passen vor dem Versand an die Empfänger des Abos einige [Headers](https://github.com/hitobito/hitobito/tree/master/app/domain/messages#bulkmail-dispatch) an:
 
 Die Source Mail wird für die Weiterverarbeitung in ein [Mail](https://rubygems.org/gems/mail) Objekt instanziert.

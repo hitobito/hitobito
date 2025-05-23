@@ -5,6 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+# See doc/developer/event/qualifications.md for details.
 class Event::Qualifier
   class << self
     def for(participation)

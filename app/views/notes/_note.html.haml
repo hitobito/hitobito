@@ -9,12 +9,11 @@
     - when Group
       = image_pack_tag('group.svg', class: 'note-image')
     - when Person
-      %img.note-image{src: note.subject.picture}
+      = image_tag(upload_url(note.subject, :picture, variant: :thumb), size: '32x32', class: "note-image")
 
   .note-body
     - if show_subject
       = assoc_link(note.subject)
-
     %small.muted.note-author
       = person_link(note.author)
       .note-date

@@ -166,6 +166,24 @@ describe Person::TagsController do
       expect(bottom_member.tags.count).to eq(0)
       is_expected.to redirect_to group_person_path(bottom_member.groups.first, bottom_member)
     end
+
+    let!(:test_tag) { ActsAsTaggableOn::Tag.create!(name: "Test") }
+    let!(:test_tagging) { ActsAsTaggableOn::Tagging.create!(tag_id: test_tag.id, taggable_type: "Person", taggable_id: bottom_member.id, context: "tags") }
+    let!(:subscription_tag) { SubscriptionTag.create!(excluded: false, subscription_id: Subscription.first.id, tag_id: test_tag.id) }
+
+    it "does delete tag if no other person uses it" do
+      expect do
+        delete :destroy, params: {
+          group_id: bottom_member.groups.first.id,
+          person_id: bottom_member.id,
+          name: test_tag.name
+        }
+      end
+        .not_to raise_error
+
+      expect(bottom_member.tags.count).to eq(0)
+      is_expected.to redirect_to group_person_path(bottom_member.groups.first, bottom_member)
+    end
   end
 
   private

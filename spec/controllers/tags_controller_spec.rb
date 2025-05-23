@@ -93,10 +93,6 @@ describe TagsController do
   describe "DELETE #destroy" do
     let!(:tag) { ActsAsTaggableOn::Tag.create!(name: "supertag42", taggings_count: 4200) }
 
-    let!(:test_tag) { ActsAsTaggableOn::Tag.create!(name: "Test", taggings_count: 1) }
-    let!(:test_tagging) { ActsAsTaggableOn::Tagging.create!(tag_id: test_tag.id, taggable_type: "Person", taggable_id: top_leader.id, context: "tags") }
-    let!(:subscription_tag) { SubscriptionTag.create!(excluded: false, subscription_id: Subscription.first.id, tag_id: test_tag.id) }
-
     it "deletes given tag" do
       expect do
         delete :destroy, params: {id: tag.id}
@@ -112,10 +108,6 @@ describe TagsController do
         end.to change { ActsAsTaggableOn::Tag.count }.by(0)
           .and raise_error(CanCan::AccessDenied)
       end
-    end
-
-    it "deletes tag connected to supscription tag" do
-      expect { delete :destroy, params: {id: test_tag.id} }.not_to raise_error
     end
   end
 end

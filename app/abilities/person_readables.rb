@@ -92,6 +92,8 @@ class PersonReadables < GroupBasedReadables
   end
 
   def group_read_in_this_group?
+    return false unless group
+
     permission_group_ids(:group_read).include?(group.id)
   end
 

@@ -13,10 +13,8 @@ class Event::ParticipationContactData
 
   self.mandatory_contact_attrs = [:email, :first_name, :last_name]
 
-  self.address_attrs = [:street, :housenumber, :postbox, :zip_code, :town]
-
   self.contact_attrs = [:first_name, :last_name, :nickname, :company_name, :email,
-    :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
+    :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country, 
     :gender, :birthday, :phone_numbers, :language]
 
   self.contact_associations = [:additional_emails, :social_accounts]

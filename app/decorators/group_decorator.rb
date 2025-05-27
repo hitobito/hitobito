@@ -32,12 +32,18 @@ class GroupDecorator < ApplicationDecorator
     klass.role_types.sort_by(&:label)
   end
 
-  def possible_roles
+  def possible_roles(action = nil, person = nil)
+    abilty_action = case action
+    when "new" then :create
+    when "edit" then :update
+    else action
+    end
+
     role_types.select do |type|
       # users from above cannot create non visible roles
       !type.restricted? &&
         (type.visible_from_above? || can?(:index_local_people, model)) &&
-        (can?(:update, type.new(group:)) || can?(:create, type.new(group:)))
+        (abilty_action.nil? || can?(abilty_action, type.new(group:, person:)))
     end
   end
 

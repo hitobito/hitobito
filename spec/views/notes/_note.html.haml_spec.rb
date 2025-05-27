@@ -17,5 +17,6 @@ describe "notes/_note.html.haml" do
 
   it "displays profile picture" do
     expect(render(locals: {note: note, show_subject: true})).to have_css(".note-image")
+    expect(rendered).to have_selector("img.note-image[src='/packs-test/media/images/profile-c150952c7e2ec2cf298980d55b2bcde3.svg']")
   end
 end

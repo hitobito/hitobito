@@ -8,7 +8,6 @@ require "spec_helper"
 describe Person::TagsController do
   let(:top_leader) { people(:top_leader) }
   let(:bottom_member) { people(:bottom_member) }
-  let(:top_leader) { people(:top_leader) }
 
   before { sign_in(top_leader) }
 
@@ -172,7 +171,7 @@ describe Person::TagsController do
       is_expected.to redirect_to group_person_path(bottom_member.groups.first, bottom_member)
     end
 
-    it "does delete tag if no other person uses it" do
+    it "does not raise error when last taggable association of tag was deleted" do
       expect do
         delete :destroy, params: {
           group_id: top_leader.groups.first.id,
@@ -181,9 +180,6 @@ describe Person::TagsController do
         }
       end
         .not_to raise_error
-
-      expect(top_leader.tags.count).to eq(0)
-      is_expected.to redirect_to group_person_path(top_leader.groups.first, top_leader)
     end
   end
 

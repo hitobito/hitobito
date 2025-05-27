@@ -78,10 +78,18 @@ class InvoicesController < CrudController
   def destroy
     cancelled = run_callbacks(:destroy) { entry.update(state: :cancelled) }
     set_failure_notice unless cancelled
-    respond_with(entry, success: cancelled, location: group_invoices_path(group))
+    respond_with(entry, success: cancelled, location: invoices_return_path)
   end
 
   private
+
+  def invoices_return_path
+    if invoice_list
+      group_invoice_list_invoices_path(group, invoice_list, returning: true)
+    else
+      group_invoices_path(group, returning: true)
+    end
+  end
 
   def render_entries_json(entries)
     paged_entries = entries.page(params[:page])

@@ -112,7 +112,7 @@ Hitobito::Application.routes.draw do
       resources :invoice_lists, only: [:index] do
         resource :destroy, only: [:show, :destroy], module: :invoice_lists,
                            as: 'invoice_lists_destroy'
-        resources :invoices, only: [:index]
+        resources :invoices
       end
       resource :payment_process, only: [:new, :show, :create]
 

@@ -8,15 +8,18 @@
 module Sheet
   class InvoiceList < Base
     def title
-      if entry && !entry.receiver
-        ::Invoice.model_name.human
-      else
-        ::InvoiceList.model_name.human(count: 2)
-      end
+      return ::InvoiceList.model_name.human(count: 2) if child && no_invoice_or_shared_title?
+      return entry.title if child&.entry
+      super
     end
 
     def parent_sheet
       create_parent(Sheet::Group)
+    end
+
+    def parent_link_url
+      return view.group_invoice_list_invoices_path(entry.group, entry) unless no_invoice_or_shared_title?
+      super
     end
 
     def left_nav?
@@ -34,6 +37,10 @@ module Sheet
 
     def link_url
       view.group_invoice_lists_path(view.group, returning: true)
+    end
+
+    def no_invoice_or_shared_title?
+      !child.entry || (child.title == entry.title)
     end
   end
 end

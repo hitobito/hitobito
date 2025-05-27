@@ -8,10 +8,11 @@
 module Sheet
   class Invoice < Base
     def title
-      if invoice_list
-        [invoice_list.title, title_from_receiver].compact.join(" - ")
+      return ::Invoice.model_name.human(count: 2) unless invoice_list
+      if entry
+        [entry.title, title_from_receiver].compact.join(" - ")
       else
-        ::Invoice.model_name.human(count: 2)
+        [invoice_list.title, title_from_receiver].compact.join(" - ")
       end
     end
 

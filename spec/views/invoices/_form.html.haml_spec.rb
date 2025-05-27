@@ -17,6 +17,7 @@ describe "invoices/_form.html.haml" do
     })
 
     allow(controller).to receive_messages(current_user: person)
+    allow(view).to receive(:parents).and_return([group])
   end
 
   it "only renders invoice articles of group" do

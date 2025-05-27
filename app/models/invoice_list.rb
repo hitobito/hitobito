@@ -42,6 +42,8 @@ class InvoiceList < ActiveRecord::Base
   has_one :message, dependent: :nullify
   has_many :invoices, dependent: :destroy
 
+  # NOTE transient attribute to populate invoice in the view and serve as template
+  # when persisting actual invoices
   attr_accessor :invoice
 
   validates :receiver_type, inclusion: %w[MailingList Group], allow_blank: true
@@ -52,6 +54,10 @@ class InvoiceList < ActiveRecord::Base
 
   def to_s
     title
+  end
+
+  def calculated
+    @calculated ||= InvoiceItems::Calculation.new(invoice.invoice_items).calculated
   end
 
   def invoice_parameters

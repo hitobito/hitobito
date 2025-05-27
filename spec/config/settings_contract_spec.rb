@@ -15,6 +15,14 @@ describe SettingsContract do
           warn_after: "P1Y",
           block_after: "P1Y"
         }
+      },
+      invoice_lists: {
+        fixed_fees: {
+          membership: {
+
+            enabled: false
+          }
+        }
       }
     }
   end

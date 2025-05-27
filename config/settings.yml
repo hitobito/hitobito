@@ -101,6 +101,11 @@ additional_address:
   predefined_labels:
     - Arbeit
 
+invoice_lists:
+  fixed_fees:
+    membership:
+      enabled: false
+
 # Presets for PDF labels
 pdf:
   font_size: 9

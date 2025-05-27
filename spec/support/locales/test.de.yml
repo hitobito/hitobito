@@ -49,3 +49,7 @@ de:
       group/top_layer:
         default: Top Layer Attribute
         custom_cat: Eigene Kategorie
+  fixed_fees:
+    membership:
+      members: Mitgliedsbeitrag - Members
+      leaders: Mitgliedsbeitrag - Leaders

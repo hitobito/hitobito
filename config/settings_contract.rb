@@ -18,6 +18,22 @@ class SettingsContract < Dry::Validation::Contract
         required(:block_after).maybe(:string)
       end
     end
+    required(:invoice_lists).schema do
+      required(:fixed_fees).schema do
+        required(:membership).schema do
+          required(:enabled).filled(:bool)
+          optional(:receivers).hash do
+            required(:layer).filled(:string)
+            required(:roles).filled(:array)
+          end
+          optional(:items).array(:hash) do
+            required(:key).filled(:symbol)
+            required(:unit_cost).filled(:integer)
+            required(:roles).filled(:array)
+          end
+        end
+      end
+    end
   end
 
   [

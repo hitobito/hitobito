@@ -6,6 +6,8 @@
 class Invoice::BatchCreate
   attr_reader :invoice_list, :invoice, :results, :invalid
 
+  delegate :fixed_fee, to: :invoice_list
+
   def self.call(invoice_list, limit = InvoiceListsController::LIMIT_CREATE)
     invoice_parameters = invoice_list.invoice_parameters
     if invoice_list.recipient_ids_count < limit
@@ -36,52 +38,67 @@ class Invoice::BatchCreate
     invoice_list.update_total
   end
 
-  def create_invoice(recipient)
-    attrs = attributes(recipient)
-    invoice_list.group.invoices.build(attrs).save if attrs[:invoice_items_attributes].any?
-  end
-
   private
 
   def create_invoices
-    recipients.find_in_batches do |batch|
-      batch.each do |recipient|
-        success = create_invoice(recipient)
-        invalid << recipient.id unless success
-        results << success
-      end
+    receivers.each do |receiver|
+      success = create_invoice(receiver)
+      invalid << receiver.id unless success
+      results << success
       update_invoice_list
     end
   end
 
-  def recipients
-    @people || invoice_list.recipients
+  def create_invoice(recipient)
+    invoice_attrs = invoice.attributes.merge(
+      title: fixed_fee ? title_with_layer(recipient.layer_group_id) : invoice.title,
+      creator_id: invoice_list.creator_id,
+      invoice_list_id: invoice_list.id,
+      recipient_id: recipient.id
+    )
+    invoice = invoice_list.group.invoices.build(invoice_attrs)
+
+    add_invoice_items(invoice, recipient)
+    invoice.save if invoice.invoice_items.any?
+  end
+
+  def add_invoice_items(invoice, recipient)
+    if fixed_fee
+      invoice.invoice_items = InvoiceLists::FixedFee.for(fixed_fee, recipient.layer_group_id).invoice_items
+    else
+      invoice.invoice_items_attributes = invoice_items_attributes(recipient.id)
+    end
   end
 
   def update_invoice_list
     invoice_list.update(recipients_processed: results.count(true), invalid_recipient_ids: invalid)
   end
 
-  def attributes(recipient)
-    invoice.attributes.merge(
-      invoice_items_attributes: invoice_items_attributes(recipient),
-      recipient_id: recipient.id,
-      invoice_list_id: invoice_list.id,
-      creator_id: invoice_list.creator_id
-    )
-  end
-
-  def invoice_items_attributes(recipient)
+  def invoice_items_attributes(recipient_id)
     invoice.invoice_items.collect do |item|
       attrs = item.attributes
       if item.dynamic
-        item.dynamic_cost_parameters[:recipient_id] = recipient.id
+        item.dynamic_cost_parameters[:recipient_id] = recipient_id
         item.dynamic_cost_parameters[:group_id] = group_id
         attrs[:cost] = item.dynamic_cost
       end
       # Do not try to save invalid item since that would abort the whole invoice create transaction
       attrs if InvoiceItem.new(attrs).recalculate.valid?
     end.compact
+  end
+
+  def title_with_layer(layer_group_id)
+    return invoice.title unless layer_group_id
+
+    [invoice.title, Group.find(layer_group_id).name].join(" - ")
+  end
+
+  def receivers
+    return invoice_list.receivers if invoice_list.receivers.present?
+
+    invoice_list.recipients.find_each.lazy.map do |person|
+      InvoiceLists::Receiver.new(id: person.id)
+    end
   end
 
   def group_id

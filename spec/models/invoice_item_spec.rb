@@ -17,8 +17,7 @@
 #
 # Indexes
 #
-#  index_invoice_items_on_invoice_id    (invoice_id)
-#  invoice_items_search_column_gin_idx  (search_column) USING gin
+#  index_invoice_items_on_invoice_id  (invoice_id)
 #
 require "spec_helper"
 
@@ -92,65 +91,49 @@ describe InvoiceItem do
     expect(item.vat).to eq 0
   end
 
-  it "recalculates invoice after update count" do
-    new_invoice = Fabricate(:invoice, group: invoice.group, recipient: people(:bottom_member),
-      invoice_items_attributes: {
-        "0" => {
-          name: :pens,
-          count: 1,
-          unit_cost: 10
-        }
-      })
+  describe "recalculating" do
+    let(:new_invoice) do
+      Fabricate(:invoice, group: invoice.group, recipient: people(:bottom_member),
+        invoice_items_attributes: {
+          "0" => {
+            name: :pens,
+            count: 1,
+            unit_cost: 10
+          }
+        })
+    end
+    let(:item) { new_invoice.invoice_items.first }
 
-    item = new_invoice.invoice_items.first
+    it "recalculates invoice after update count" do
+      expect {
+        item.update!(count: 2)
+        new_invoice.reload
+      }.to change { new_invoice.total }.from(10).to(20)
+    end
 
-    expect(new_invoice.total).to eq(10)
+    it "recalculates invoice after update unit_cost" do
+      expect {
+        item.update!(unit_cost: 20)
+        new_invoice.reload
+      }.to change { new_invoice.total }.from(10).to(20)
+    end
 
-    item.update(count: 2)
+    it "does not recalculate invoice after update name" do
+      expect {
+        item.update!(name: :utensils)
+        new_invoice.reload
+      }.to change { new_invoice.attributes }
+    end
 
-    new_invoice.reload
-
-    expect(new_invoice.total).to eq(20)
-  end
-
-  it "recalculates invoice after update unit_cost" do
-    new_invoice = Fabricate(:invoice, group: invoice.group, recipient: people(:bottom_member),
-      invoice_items_attributes: {
-        "0" => {
-          name: :pens,
-          count: 1,
-          unit_cost: 10
-        }
-      })
-
-    item = new_invoice.invoice_items.first
-
-    expect(new_invoice.total).to eq(10)
-
-    item.update(unit_cost: 20)
-
-    new_invoice.reload
-
-    expect(new_invoice.total).to eq(20)
-  end
-
-  it "does not recalculate invoice after update name" do
-    new_invoice = Fabricate(:invoice, group: invoice.group, recipient: people(:bottom_member),
-      invoice_items_attributes: {
-        "0" => {
-          name: :pens,
-          count: 1,
-          unit_cost: 10
-        }
-      })
-
-    item = new_invoice.invoice_items.first
-
-    expect(new_invoice.total).to eq(10)
-
-    expect do
-      item.update(name: :utensils)
-    end.to_not change { new_invoice.reload }
+    it "recalculates invoice list" do
+      invoice_list = InvoiceList.create!(group: invoice.group, title: new_invoice.title)
+      new_invoice.update!(invoice_list: invoice_list)
+      invoice_list.update_total
+      expect {
+        item.update!(unit_cost: 20)
+        invoice_list.reload
+      }.to change { invoice_list.amount_total }.from(10).to(20)
+    end
   end
 
   context "dynamic invoice item" do

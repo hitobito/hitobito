@@ -173,6 +173,8 @@ describe RolesController, js: true do
   end
 
   it "updates role types when group changes" do
+    allow_any_instance_of(GroupDecorator).to receive(:can?).and_return(true)
+
     obsolete_node_safe do
       sign_in
       visit new_group_role_path(group_id: group.id)

@@ -13,8 +13,9 @@ class Invoice::SendNotificationJob < BaseJob
   end
 
   def perform
-    set_locale
-    InvoiceMailer.notification(invoice, sender).deliver_now if invoice.recipient_email.present?
+    LocaleSetter.with_locale(person: invoice.recipient) do
+      InvoiceMailer.notification(invoice, sender).deliver_now if invoice.recipient_email.present?
+    end
   end
 
   def invoice

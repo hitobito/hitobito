@@ -37,22 +37,44 @@ describe GroupDecorator, :draper_with_helpers do
 
       def build_role(type) = model.roles.build(type: type)
 
+      it "includes all roles when no action_name is passed" do
+        expect(decorator.possible_roles(:update)).to eq role_types
+      end
+
       it "includes only role for which user has update permission" do
         expect(view_context).to receive(:can?).with(:index_local_people, model).and_return(true)
         allow(view_context).to receive(:can?) do |action, subject|
           next true if action == :index_local_people || subject.type == "Group::TopGroup::Member"
           false
         end
-        expect(decorator.possible_roles).to eq [Group::TopGroup::Member]
+        expect(decorator.possible_roles(:update)).to eq [Group::TopGroup::Member]
       end
 
-      it "also includes role for if user has only create permission" do
+      it "does not include role for update if user has only create permission" do
         expect(view_context).to receive(:can?).with(:index_local_people, model).and_return(true)
         allow(view_context).to receive(:can?) do |action, subject|
           next true if action == :index_local_people || (action == :create && subject.type == "Group::TopGroup::Member")
           false
         end
-        expect(decorator.possible_roles).to eq [Group::TopGroup::Member]
+        expect(decorator.possible_roles(:update)).to be_empty
+      end
+
+      it "also includes role for create if user has only create permission" do
+        expect(view_context).to receive(:can?).with(:index_local_people, model).and_return(true)
+        allow(view_context).to receive(:can?) do |action, subject|
+          next true if action == :index_local_people || (action == :create && subject.type == "Group::TopGroup::Member")
+          false
+        end
+        expect(decorator.possible_roles(:create)).to eq [Group::TopGroup::Member]
+      end
+
+      it "does not include role for create if user has only update permission" do
+        expect(view_context).to receive(:can?).with(:index_local_people, model).and_return(true)
+        allow(view_context).to receive(:can?) do |action, subject|
+          next true if action == :index_local_people || (action == :update && subject.type == "Group::TopGroup::Member")
+          false
+        end
+        expect(decorator.possible_roles(:create)).to be_empty
       end
     end
   end

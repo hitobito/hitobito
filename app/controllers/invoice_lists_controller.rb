@@ -52,6 +52,7 @@ class InvoiceListsController < CrudController
     if entry.valid? && entry.save
       Invoice::BatchCreate.call(entry, LIMIT_CREATE)
       message = flash_message_create(count: entry.recipient_ids_count, title: entry.title)
+      params[:invoice_list_id] = entry.id  # NOTE: make return_path behave as expected
       redirect_to return_path, notice: message
       session.delete :invoice_referer
     else
@@ -68,10 +69,17 @@ class InvoiceListsController < CrudController
   end
 
   # rubocop:disable Rails/SkipsModelValidations
+  # NOTE: quiet suprisingly this destroy cancels invoices within list, the destroy of the
+  # list itself is handled by invoice_lists/destroy controller
   def destroy
-    count = invoices.update_all(state: :cancelled, updated_at: Time.zone.now)
+    count = InvoiceList.transaction do
+      cancel_all_invoices.tap do
+        entry.update_total
+      end
+    end
+    params[:invoice_list_id] = entry.id  # NOTE: make return_path behave as expected
     key = (count > 0) ? :notice : :alert
-    redirect_to(group_invoices_path(parent, returning: true), key => flash_message(count: count))
+    redirect_to(return_path, key => flash_message(count: count))
   end
 
   def show
@@ -95,7 +103,11 @@ class InvoiceListsController < CrudController
   def return_path
     invoice_list_id = params[:invoice_list_id].presence
     if params[:singular]
-      group_invoice_path(parent, invoices.first)
+      if invoice_list_id
+        group_invoice_list_invoice_path(parent, invoice_list_id: invoice_list_id, id: invoices.first.id)
+      else
+        group_invoice_path(parent, invoices.first)
+      end
     elsif params.dig(:invoice_list, :receiver_id)
       group_invoice_lists_path(parent)
     elsif invoice_list_id
@@ -168,5 +180,9 @@ class InvoiceListsController < CrudController
         attrs[:dynamic_cost_parameters] = parameters&.to_unsafe_hash || {}
       end
     end
+  end
+
+  def cancel_all_invoices
+    invoices.update_all(state: :cancelled, updated_at: Time.zone.now)
   end
 end

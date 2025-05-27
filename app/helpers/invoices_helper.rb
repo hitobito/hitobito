@@ -44,6 +44,13 @@ module InvoicesHelper
     text
   end
 
+  def invoice_link(invoice)
+    case parent
+    when Group then group_invoice_path(invoice.group_id, invoice)
+    when InvoiceList then group_invoice_list_invoice_path(parent.group, parent, invoice)
+    end
+  end
+
   def invoice_due_since_options
     [:one_day, :one_week, :one_month].collect do |key|
       [key, I18n.t("invoices.filter.due_since_list.#{key}")]

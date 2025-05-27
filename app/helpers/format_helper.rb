@@ -218,6 +218,10 @@ module FormatHelper
     end
   end
 
+  def format_currency(amount, unit: Settings.currency.unit)
+    ActiveSupport::NumberHelper.number_to_currency(amount, {unit:, format: "%n %u"})
+  end
+
   def i18n_enum_type?(obj, attr)
     model_class = obj.respond_to?(:model) ? obj.model.class : obj.class
     obj.respond_to?(:"#{attr}_label") && model_class.respond_to?(:"#{attr}_labels")

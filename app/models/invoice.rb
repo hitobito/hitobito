@@ -185,9 +185,7 @@ class Invoice < ActiveRecord::Base
   delegate :logo_position, to: :invoice_config
 
   def calculated
-    [:total, :cost, :vat].index_with do |field|
-      round(invoice_items.reject(&:frozen?).map(&field).compact.sum(BigDecimal("0.00")))
-    end
+    InvoiceItems::Calculation.new(invoice_items).calculated
   end
 
   def recalculate
@@ -196,6 +194,7 @@ class Invoice < ActiveRecord::Base
 
   def recalculate!
     update_attribute(:total, calculated[:total] || 0) # rubocop:disable Rails/SkipsModelValidations
+    invoice_list&.update_total
   end
 
   def to_s
@@ -334,10 +333,6 @@ class Invoice < ActiveRecord::Base
     if recipient_email.blank? && recipient_address.blank?
       errors.add(:base, :recipient_address_or_email_required)
     end
-  end
-
-  def round(decimal)
-    (decimal / ROUND_TO).round * ROUND_TO
   end
 
   def qr_id

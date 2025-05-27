@@ -315,11 +315,11 @@ describe InvoicesController do
         delete :destroy, params: {group_id: group.id, id: invoice.id}
       end.not_to change { group.invoices.count }
       expect(invoice.reload.state).to eq "cancelled"
-      expect(response).to redirect_to group_invoices_path(group)
+      expect(response).to redirect_to group_invoices_path(group, returning: true)
       expect(flash[:notice]).to eq "Rechnung wurde storniert."
     end
 
-    it "updates invoice_list" do
+    it "updates and redirects to invoice_list" do
       list = InvoiceList.create(title: "List", group: group, invoices: [invoice, invoices(:sent)])
 
       list.update_total
@@ -329,8 +329,9 @@ describe InvoicesController do
       invoice.reload
 
       expect do
-        delete :destroy, params: {group_id: group.id, id: invoice.id}
+        delete :destroy, params: {group_id: group.id, invoice_list_id: list.id, id: invoice.id}
       end.not_to change { group.invoices.count }
+      expect(response).to redirect_to(group_invoice_list_invoices_path(group, list, returning: true))
       expect(invoice.reload.state).to eq "cancelled"
 
       list.reload

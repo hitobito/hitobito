@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_04_30_125739) do
+ActiveRecord::Schema[7.1].define(version: 2025_05_27_090212) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -589,7 +589,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_30_125739) do
     t.text "invalid_recipient_ids"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "recipient_ids"
+    t.text "receivers"
     t.index ["creator_id"], name: "index_invoice_lists_on_creator_id"
     t.index ["group_id"], name: "index_invoice_lists_on_group_id"
     t.index ["receiver_type", "receiver_id"], name: "index_invoice_lists_on_receiver_type_and_receiver_id"

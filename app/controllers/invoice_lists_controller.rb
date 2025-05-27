@@ -36,7 +36,7 @@ class InvoiceListsController < CrudController
 
   respond_to :js, only: [:new]
 
-  helper_method :cancel_url
+  helper_method :cancel_url, :fixed_fees?
 
   def new
     assign_attributes
@@ -84,6 +84,10 @@ class InvoiceListsController < CrudController
 
   def show
     redirect_to group_invoices_path(parent)
+  end
+
+  def fixed_fees?(fees = nil)
+    fees ? params[:fixed_fees] == fees.to_s : params.key?(:fixed_fees)
   end
 
   private
@@ -135,6 +139,7 @@ class InvoiceListsController < CrudController
   end
 
   def cancel_url
+    return group_path(parent) if fixed_fees?
     session[:invoice_referer] || group_invoices_path(parent)
   end
 
@@ -143,7 +148,7 @@ class InvoiceListsController < CrudController
       entry.recipient_ids = params[:ids]
     elsif params[:filter].present?
       entry.recipient_ids = recipient_ids_from_people_filter
-    else
+    elsif model_params
       entry.attributes = permitted_params.slice(:receiver_id, :receiver_type, :recipient_ids)
     end
     entry.creator = current_user
@@ -154,6 +159,12 @@ class InvoiceListsController < CrudController
         item = InvoiceItem.type_mappings[type.to_sym].new
         item.name = item.model_name.human
         item
+      end
+    end
+
+    if fixed_fees?
+      InvoiceLists::FixedFee.for(params[:fixed_fees]).prepare(entry) do |key, text|
+        flash.now[key] = text
       end
     end
   end

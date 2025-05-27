@@ -11,9 +11,10 @@
       = f.input_field(:street, data: { provide: 'entity', updater: 'AddressTypeahead.update', url: addresses_query_url }) if entry.show_attr?(:street)
     %div.col-2.offset-1
       = f.input_field(:housenumber) if entry.show_attr?(:housenumber)
-  = f.labeled_input_field(:postbox) if entry.show_attr?(:postbox)
-  = f.labeled_input_field(:zip_code) if entry.show_attr?(:zip_code)
-  = f.labeled_input_field(:town) if entry.show_attr?(:zip_code)
+
+= f.labeled_input_field(:postbox) if entry.show_attr?(:postbox)
+= f.labeled_input_field(:zip_code) if entry.show_attr?(:zip_code)
+= f.labeled_input_field(:town) if entry.show_attr?(:town)
 
 - if entry.show_attr?(:country)
   = f.labeled(:country) do

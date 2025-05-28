@@ -34,7 +34,7 @@ namespace :hitobito do
   task :yippi_jay_jey_schweinebacke, [:wagon] => :environment do |_t, args| # rubocop:disable Rails/RakeEnvironment
     # Get parameter
     args.with_defaults({wagon: "generic"})
-    wagon = args[:wagon].to_s == "true"
+    wagon = args[:wagon]
 
     # Drop all tables except rails internals
     connection = ActiveRecord::Base.connection
@@ -45,13 +45,16 @@ namespace :hitobito do
     end
 
     # Truncate rails internals
-    rails_internal_tables.each do | table|
+    rails_internal_tables.each do | table |
       connection.execute("TRUNCATE TABLE #{table} RESTART IDENTITY CASCADE")
     end
 
     # Run Migrations
     Rake::Task["db:migrate"].invoke
-    # Rake::Task["wagon:migrate"].invoke
+    Rake::Task["wagon:migrate"].invoke
+
+    # Execute demo seed
+    Rake::Task["db:seed_env"].invoke(wagon)
   end
 
   namespace :roles do

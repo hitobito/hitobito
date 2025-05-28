@@ -12,11 +12,16 @@ class AddPrivacyPolicyAcceptedAtToPeople < ActiveRecord::Migration[6.1]
 
     unless ActiveRecord::Base.connection.table_exists?('groups_translations')
       say_with_time('creating translation table for groups') do
-        Group.create_translation_table!(
-          {
-            privacy_policy_title: :string
-          }
-        )
+        create_table :group_translations do |t|
+          t.references :group, null: false, foreign_key: true
+          t.string :locale, null: false
+
+          t.string :privacy_policy_title
+
+          t.timestamps
+        end
+
+        add_index :group_translations, [:group_id, :locale], unique: true
       end
     end
   end
@@ -26,8 +31,8 @@ class AddPrivacyPolicyAcceptedAtToPeople < ActiveRecord::Migration[6.1]
     remove_column :people, :privacy_policy_accepted_at, :timestamp, null: true
     remove_column :groups, :privacy_policy, :string, null: true
 
-    say_with_time('dropping translation-table for groups') do
-      Group.drop_translation_table! migrate_data: false
+    say_with_time('dropping translation table for groups') do
+      drop_table :group_translations
     end
   end
 end

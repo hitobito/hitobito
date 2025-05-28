@@ -4,7 +4,7 @@
 -#  https://github.com/hitobito/hitobito_pbs.
 
 = f.labeled_input_field(:address_care_of) if entry.show_attr?(:address_care_of)
-= f.labeled(:address, class: 'd-flex') do
+= f.labeled(:street, Person.human_attribute_name(:address), class: 'd-flex') do
   %div.col-9
     = f.input_field(:street, data: { provide: 'entity', updater: 'AddressTypeahead.update', url: addresses_query_url }) if entry.show_attr?(:street)
   %div.col-2.offset-1

@@ -39,8 +39,6 @@ namespace :db do
     puts "🎉 Done seeding #{env}."
   end
 
-
-
   task :migrate do # rubocop:disable Rails/RakeEnvironment This task is only extended here and has all needed preconditions set
     Rake::Task["delayed_job:schedule"].invoke
   end

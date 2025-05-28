@@ -45,7 +45,7 @@ namespace :hitobito do
     end
 
     # Truncate rails internals
-    rails_internal_tables.each do | table |
+    rails_internal_tables.each do |table|
       connection.execute("TRUNCATE TABLE #{table} RESTART IDENTITY CASCADE")
     end
 

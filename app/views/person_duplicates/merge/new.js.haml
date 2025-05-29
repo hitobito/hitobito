@@ -5,13 +5,14 @@
 
 $('#modal-placeholder').html("#{escape_javascript(render(partial: 'person_duplicates/merge/new'))}")
 $('#person-duplicates-merge').modal('show')
-$('.person-duplicate-options input').change(function() {
+$(document).on('change', '.person-duplicate-options input', function () {
 $('.person-duplicate-options label').removeClass('selected');
 $('.person-duplicate-options #merge-hint').removeClass('d-none');
-label = $(this).parent();
-hint = $(this).parent().find('#merge-hint');
+const label = $(this).parent();
+const hint = label.find('#merge-hint');
 if (this.checked) {
 hint.addClass('d-none');
 label.addClass('selected');
 }
 });
+

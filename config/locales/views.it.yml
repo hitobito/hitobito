@@ -811,6 +811,7 @@ it:
       confirm_archive: >
           Vuole veramente archiviare questo gruppo? Dopo l'archiviazione non può più
           venire elaborato e vengono archiviati anche i relativi ruoli.
+      membership_invoice_button: Mitgliedsrechnung
     attrs:
       contact_details: "Dati di contatto"
       additional_information: "Altri dati"
@@ -1046,7 +1047,7 @@ it:
     destroys:
       show:
         title: Annullamento di fatture collettive
-        non_draft_info: 'La fattura collettiva contiene almeno una fattura che non ha lo stato "Bozza" o "Cancellato". Pertanto, la fattura collettiva non può essere annullata.'
+        non_draft_info: 'In der Sammelrechnung ist mindestens eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann die Sammelrechnung nicht gelöscht werden.'
         confirm_delete: Vuoi davvero annullare la fattura collettiva?
     form:
       invoice_articles:
@@ -1110,6 +1111,9 @@ it:
       zero: "Dapprima deve essere selezionata una fattura."
       one: "La fattura è stata annullata"
       other: "%{count} fatture sono state annullate."
+
+  invoice_lists/fixed_fee:
+    recipient_role_group_mismatch: "Für folgende Gruppen konnte kein Empfänger ermittelt werden: %{groups}"
 
   payments:
     export_enqueued: "L'esportazione viene iniziata in retroscena e verrà scaricata al termine."

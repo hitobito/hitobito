@@ -813,6 +813,7 @@ fr:
       confirm_archive: >
           Voulez-vous vraiment archiver ce groupe? Le groupe ne pourra plus être modifié
           et les rôles attribués seront aussi archivés.
+      membership_invoice_button: Mitgliedsrechnung
     attrs:
       contact_details: "Contacts"
       additional_information: "Informations supplémentaires"
@@ -1048,7 +1049,7 @@ fr:
     destroys:
       show:
         title: Supprimer une facture collective
-        non_draft_info: 'La facture collective contient au moins une facture qui n''a ni le statut "Brouillon" ni le statut "Annulé". La facture collective ne peut donc pas être supprimée.'
+        non_draft_info: 'In der Sammelrechnung ist mindestens eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann die Sammelrechnung nicht gelöscht werden.'
         confirm_delete: Voulez-vous vraiment supprimer la facture collective?
     form:
       invoice_articles:
@@ -1112,6 +1113,9 @@ fr:
       zero: "Choisir d'abord une facture"
       one: "La facture a été annulée."
       other: "%{count} factures ont été annulées."
+
+  invoice_lists/fixed_fee:
+    recipient_role_group_mismatch: "Für folgende Gruppen konnte kein Empfänger ermittelt werden: %{groups}"
 
   payments:
     export_enqueued: "L'exportation a commencé en tâche de fond et sera téléchargée une fois terminée."

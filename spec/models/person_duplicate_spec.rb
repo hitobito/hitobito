@@ -43,7 +43,7 @@ describe PersonDuplicate do
       bottom_member.roles.first.update_columns(start_on: 10.days.ago, end_on: 20.days.ago)
       expect(duplicate).to be_valid
 
-      expect(duplicate.valid?(context: :merge)).to be_falsey
+      expect(duplicate.valid?(:merge)).to be_falsey
       expect(duplicate.errors.full_messages).to eq ["Rolle Member (bis #{I18n.l(20.days.ago.to_date)}) von Bottom Member ist fürs Zusammenführen nicht gültig, da die andere Person eventuell bereits eine Rolle hat, welche diese Rolle nicht mehr erlaubt, diese muss manuell korrigiert/etnfernt werden. Info: Bis kann nicht vor Von sein"]
     end
   end

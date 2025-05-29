@@ -29,7 +29,7 @@ class PersonDuplicate < ActiveRecord::Base
 
   validates :person_1_id, uniqueness: {scope: [:person_2_id]}
 
-  validate :valid_role_operations, if: -> { validation_context == {context: :merge} }
+  validate :valid_role_operations, if: -> { validation_context == :merge }
 
   before_save :assign_persons_sorted_by_id
   # Sorting by id to only allow a single PersonDuplicate entry per Person combination

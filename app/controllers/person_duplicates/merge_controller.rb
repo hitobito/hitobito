@@ -15,7 +15,7 @@ module PersonDuplicates
     end
 
     def create
-      return rerender_form(:unprocessable_entity) unless entry.valid?(context: :merge)
+      return rerender_form(:unprocessable_entity) unless entry.valid?(:merge)
 
       PersonDuplicate.transaction do
         entry.destroy!

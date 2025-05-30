@@ -16,27 +16,27 @@ task :postgres do # rubocop:disable Rails/RakeEnvironment
 end
 
 namespace :db do
-  desc "Load seed files for a given environment. Example: rake db:seed:env[generic]"
-  task :seed_env, [:env] => :environment do |t, args|
+  desc "Load development seed files. Example: rake db:development_seed[generic]"
+  task :development_seed, [:wagon] => :environment do |t, args|
     # Get parameter
-    args.with_defaults({env: "generic"})
-    env = args[:env]
+    args.with_defaults({wagon: "generic"})
+    wagon = args[:wagon]
 
-    seed_path = Rails.root.join("..", "hitobito_#{env}", "db", "seeds").expand_path
+    seed_path = Rails.root.join("..", "hitobito_#{wagon}", "db", "seeds", "development").expand_path
 
     unless Dir.exist?(seed_path)
       puts "❌ Seed path not found: #{seed_path}"
       exit 1
     end
 
-    puts "✅ Seeding environment: #{env}"
+    puts "✅ Seeding development seeds for wagon: #{wagon}"
 
     Dir[seed_path.join("*.rb")].sort.each do |file|
       puts "→ Seeding: #{File.basename(file)}"
       load file
     end
 
-    puts "🎉 Done seeding #{env}."
+    puts "🎉 Done seeding #{wagon}."
   end
 
   task :migrate do # rubocop:disable Rails/RakeEnvironment This task is only extended here and has all needed preconditions set

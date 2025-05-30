@@ -53,8 +53,10 @@ namespace :hitobito do
     Rake::Task["db:migrate"].invoke
     Rake::Task["wagon:migrate"].invoke
 
-    # Execute demo seed
-    Rake::Task["db:seed_env"].invoke(wagon)
+    # Run Seeds
+    Rake::Task["db:seed"].invoke
+    # Execute development seed
+    Rake::Task["db:development_seed"].invoke(wagon)
   end
 
   namespace :roles do

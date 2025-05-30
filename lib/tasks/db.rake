@@ -24,11 +24,6 @@ namespace :db do
 
     seed_path = Rails.root.join("..", "hitobito_#{wagon}", "db", "seeds", "development").expand_path
 
-    unless Dir.exist?(seed_path)
-      puts "❌ Seed path not found: #{seed_path}"
-      exit 1
-    end
-
     puts "✅ Seeding development seeds for wagon: #{wagon}"
 
     Dir[seed_path.join("*.rb")].sort.each do |file|
@@ -37,6 +32,21 @@ namespace :db do
     end
 
     puts "🎉 Done seeding #{wagon}."
+  end
+
+  task :empty_db => :environment do
+    # Drop all tables except rails internals
+    connection = ActiveRecord::Base.connection
+    rails_internal_tables = ["schema_migrations", "ar_internal_metadata"]
+    tables_to_delete = connection.tables - rails_internal_tables
+    tables_to_delete.each do |table|
+      connection.execute("DROP TABLE IF EXISTS #{table} CASCADE")
+    end
+
+    # Truncate rails internals
+    rails_internal_tables.each do |table|
+      connection.execute("TRUNCATE TABLE #{table} RESTART IDENTITY CASCADE")
+    end
   end
 
   task :migrate do # rubocop:disable Rails/RakeEnvironment This task is only extended here and has all needed preconditions set

@@ -31,32 +31,18 @@ namespace :hitobito do
   end
 
   desc "Drop all tables and clear schema migrations"
-  task :yippi_jay_jey_schweinebacke, [:wagon] => :environment do |_t, args| # rubocop:disable Rails/RakeEnvironment
+  task :build_database, [:wagon] => :environment do |_t, args| # rubocop:disable Rails/RakeEnvironment
     # Get parameter
     args.with_defaults({wagon: "generic"})
     wagon = args[:wagon]
 
-    # Drop all tables except rails internals
-    connection = ActiveRecord::Base.connection
-    rails_internal_tables = ["schema_migrations", "ar_internal_metadata"]
-    tables_to_delete = connection.tables - rails_internal_tables
-    tables_to_delete.each do |table|
-      connection.execute("DROP TABLE IF EXISTS #{table} CASCADE")
-    end
-
-    # Truncate rails internals
-    rails_internal_tables.each do |table|
-      connection.execute("TRUNCATE TABLE #{table} RESTART IDENTITY CASCADE")
-    end
-
     # Run Migrations
-    Rake::Task["db:migrate"].invoke
-    Rake::Task["wagon:migrate"].invoke
+    Rake::Task["db:migrate"].execute
+    Rake::Task["wagon:migrate"].execute
 
     # Run Seeds
-    Rake::Task["db:seed"].invoke
-    # Execute development seed
-    Rake::Task["db:development_seed"].invoke(wagon)
+    Rake::Task["db:seed"].execute
+    Rake::Task["wagon:seed"].execute
   end
 
   namespace :roles do

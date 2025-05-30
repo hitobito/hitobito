@@ -332,7 +332,7 @@ end
 
 class SplitAddresses < ActiveRecord::Migration[6.1]
   def up
-    return if ActiveRecord::Base.connection.select_value("SELECT 1 FROM groups LIMIT 1").none? # early return when migrating on empty database
+    return if ActiveRecord::Base.connection.select_value("SELECT 1 FROM groups LIMIT 1").blank? # early return when migrating on empty database
 
     splitter = Splitter.new(String.new.dup)
     if splitter.obsolete?

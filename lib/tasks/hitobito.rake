@@ -31,11 +31,7 @@ namespace :hitobito do
   end
 
   desc "Drop all tables and clear schema migrations"
-  task :build_database, [:wagon] => :environment do |_t, args| # rubocop:disable Rails/RakeEnvironment
-    # Get parameter
-    args.with_defaults({wagon: "generic"})
-    wagon = args[:wagon]
-
+  task build_database: :environment do |_t, args| # rubocop:disable Rails/RakeEnvironment
     # Run Migrations
     Rake::Task["db:migrate"].execute
     Rake::Task["wagon:migrate"].execute

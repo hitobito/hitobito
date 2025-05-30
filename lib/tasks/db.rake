@@ -24,17 +24,17 @@ namespace :db do
 
     seed_path = Rails.root.join("..", "hitobito_#{wagon}", "db", "seeds", "development").expand_path
 
-    puts "✅ Seeding development seeds for wagon: #{wagon}"
+    warn "✅ Seeding development seeds for wagon: #{wagon}"
 
     Dir[seed_path.join("*.rb")].sort.each do |file|
-      puts "→ Seeding: #{File.basename(file)}"
+      warn "→ Seeding: #{File.basename(file)}"
       load file
     end
 
-    puts "🎉 Done seeding #{wagon}."
+    warn "🎉 Done seeding #{wagon}."
   end
 
-  task :empty_db => :environment do
+  task empty_db: :environment do
     # Drop all tables except rails internals
     connection = ActiveRecord::Base.connection
     rails_internal_tables = ["schema_migrations", "ar_internal_metadata"]

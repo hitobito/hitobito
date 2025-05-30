@@ -1460,12 +1460,13 @@ fr:
     merge:
       new:
         title: Merge une personne
-        select_person: Quelles données sont prioritaires lors de la fusion?
+      form:
+        select_person: Wessen Daten sollen beim Zusammenführen den Vorrang haben?
         merge_hint: Beim Zusammenführen werden die Rollen, Telefonnummern, zusätzlichen E-Mails, Social Media Einträge, Rechnungen, Notizen, Tags, Abos, Familienmitglieder, Event Einladungen und Teilnahmen sowie auch Qualifikationen übernommen. Alle anderen Daten dieser Person wie z.B. Log Einträge usw. werden gelöscht.
-        merge_hint_invalid: Cette personne a des données non-valables.
-        irreversible: Cette opération est irréversible.
-        invalid_persons: Les entrées ne peuvent être fusionnées que si les deux sont valables.
-        reload: Vérifier à nouveau
+        merge_hint_invalid: Diese Person hat ungültige Daten.
+        irreversible: Dieser Vorgang kann nicht rückgängig gemacht werden.
+        invalid_persons: Die Einträge können erst zusammengeführt werden wenn beide gültig sind.
+        reload: Erneut prüfen
       action: Merge
       success: Les données des personnes ont été fusionnées avec succès.
     ignore:

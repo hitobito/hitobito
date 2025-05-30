@@ -1423,12 +1423,13 @@ en:
     merge:
       new:
         title: Merge person
-        select_person: Which data should be kept?
+      form:
+        select_person: Wessen Daten sollen beim Zusammenführen den Vorrang haben?
         merge_hint: Beim Zusammenführen werden die Rollen, Telefonnummern, zusätzlichen E-Mails, Social Media Einträge, Rechnungen, Notizen, Tags, Abos, Familienmitglieder, Event Einladungen und Teilnahmen sowie auch Qualifikationen übernommen. Alle anderen Daten dieser Person wie z.B. Log Einträge usw. werden gelöscht.
-        merge_hint_invalid: This person has invalid data.
-        irreversible: This process cannot be undone.
-        invalid_persons: The entries can only be merged when both are valid.
-        reload: Check again
+        merge_hint_invalid: Diese Person hat ungültige Daten.
+        irreversible: Dieser Vorgang kann nicht rückgängig gemacht werden.
+        invalid_persons: Die Einträge können erst zusammengeführt werden wenn beide gültig sind.
+        reload: Erneut prüfen
       action: Merge
       success: Merge successful
     ignore:

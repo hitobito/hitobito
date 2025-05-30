@@ -1458,12 +1458,13 @@ it:
     merge:
       new:
         title: Unire persone
-        select_person: Quali dati devono avere la precedenza nell'unione?
+      form:
+        select_person: Wessen Daten sollen beim Zusammenführen den Vorrang haben?
         merge_hint: Beim Zusammenführen werden die Rollen, Telefonnummern, zusätzlichen E-Mails, Social Media Einträge, Rechnungen, Notizen, Tags, Abos, Familienmitglieder, Event Einladungen und Teilnahmen sowie auch Qualifikationen übernommen. Alle anderen Daten dieser Person wie z.B. Log Einträge usw. werden gelöscht.
-        merge_hint_invalid: Questa persona ha dati non valevoli.
-        irreversible: Quest'operazione non potrà venir annullata.
-        invalid_persons: Le registrazioni possono venir unite solo quando entrambe sono valevoli.
-        reload: Verificare nuovamente
+        merge_hint_invalid: Diese Person hat ungültige Daten.
+        irreversible: Dieser Vorgang kann nicht rückgängig gemacht werden.
+        invalid_persons: Die Einträge können erst zusammengeführt werden wenn beide gültig sind.
+        reload: Erneut prüfen
       action: Merge
       success: Le registrazioni delle persone sono state unite con successo.
     ignore:

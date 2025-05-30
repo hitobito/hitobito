@@ -14,9 +14,6 @@ class Event::ParticipationContactDatasController < ApplicationController
 
   before_action :set_entry, :group, :policy_finder
 
-  def edit
-  end
-
   def update
     if entry.valid? && privacy_policy_accepted? && entry.save
       set_privacy_policy_acceptance if privacy_policy_needed_and_accepted?

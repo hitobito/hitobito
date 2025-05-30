@@ -60,7 +60,7 @@ module Dropdown
     end
 
     def vcard_link
-      add_item(translate(:vcard), params.merge(format: :vcf), target: :new)
+      add_item(translate(:vcard), params.merge(format: :vcf), target: :_blank)
     end
 
     def mailchimp_link
@@ -71,18 +71,18 @@ module Dropdown
 
     def email_addresses_link
       if @email_addresses
-        add_item(translate(:emails), params.merge(format: :email), target: :new)
+        add_item(translate(:emails), params.merge(format: :email), target: :_blank)
       end
     end
 
     def email_addresses_link_outlook
       if @email_addresses
-        add_item(translate(:emails_outlook), params.merge(format: :email_outlook), target: :new)
+        add_item(translate(:emails_outlook), params.merge(format: :email_outlook), target: :_blank)
       end
     end
 
     def pdf_link
-      add_item(translate(:pdf), params.merge(format: :pdf), target: :new)
+      add_item(translate(:pdf), params.merge(format: :pdf), target: :_blank)
     end
 
     def label_links

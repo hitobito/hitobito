@@ -55,7 +55,7 @@ describe "Dropdown::PeopleExport" do
     is_expected.to have_selector ".btn-group > ul.dropdown-menu"
 
     top_menu_entries_without_submenu.each do |link|
-      expect(link[:target]).to eq("new")
+      expect(link[:target]).to eq("_blank")
     end
 
     expect(top_menu_entries).to match_array %w[CSV Excel vCard PDF Etiketten]

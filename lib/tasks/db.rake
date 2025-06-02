@@ -16,24 +16,6 @@ task :postgres do # rubocop:disable Rails/RakeEnvironment
 end
 
 namespace :db do
-  desc "Load development seed files. Example: rake db:development_seed[generic]"
-  task :development_seed, [:wagon] => :environment do |t, args|
-    # Get parameter
-    args.with_defaults({wagon: "generic"})
-    wagon = args[:wagon]
-
-    seed_path = Rails.root.join("..", "hitobito_#{wagon}", "db", "seeds", "development").expand_path
-
-    warn "✅ Seeding development seeds for wagon: #{wagon}"
-
-    Dir[seed_path.join("*.rb")].sort.each do |file|
-      warn "→ Seeding: #{File.basename(file)}"
-      load file
-    end
-
-    warn "🎉 Done seeding #{wagon}."
-  end
-
   task empty_db: :environment do
     # Drop all tables except rails internals
     connection = ActiveRecord::Base.connection
@@ -130,10 +112,27 @@ namespace :db do
   end
 
   namespace :seed do
-    desc "load generic seeds"
-    task no_env: [:environment] do
+    desc "load common seeds, i.e. not tied to a Rails.env"
+    task common: [:environment] do
       ENV["NO_ENV"] = "1"
       Rake::Task["db:seed"].invoke
+    end
+
+    desc "Load development seed files of a wagon. Example: rake db:seed:development[generic]"
+    task :development, [:wagon] => :environment do |t, args|
+      args.with_defaults({wagon: "generic"})
+      wagon = args[:wagon]
+
+      seed_path = Wagons.find(wagon).root.join("db", "seeds", "development").expand_path
+
+      warn "✅ Seeding development seeds for wagon: #{wagon}"
+
+      Dir[seed_path.join("*.rb")].sort.each do |file|
+        warn "→ Seeding: #{File.basename(file)}"
+        load file
+      end
+
+      warn "🎉 Done seeding #{wagon}."
     end
   end
 

@@ -30,17 +30,6 @@ namespace :hitobito do
     end
   end
 
-  desc "Drop all tables and clear schema migrations"
-  task build_database: :environment do |_t, args| # rubocop:disable Rails/RakeEnvironment
-    # Run Migrations
-    Rake::Task["db:migrate"].execute
-    Rake::Task["wagon:migrate"].execute
-
-    # Run Seeds
-    Rake::Task["db:seed"].execute
-    Rake::Task["wagon:seed"].execute
-  end
-
   namespace :roles do
     task update_readme: :environment do
       stdout, _stderr, status = Open3.capture3("rake app:hitobito:roles")

@@ -16,10 +16,6 @@ describe InvoiceLists::RoleItem do
 
   subject(:item) { described_class.new(**attrs) }
 
-  it "#name is translated key" do
-    expect(item.name).to eq "Mitgliedsbeitrag - Members"
-  end
-
   it "#to_invoice_item has translated name and key for fixed fees" do
     expect(item.to_invoice_item.name).to eq "Mitgliedsbeitrag - Members"
     expect(item.to_invoice_item.dynamic_cost_parameters[:fixed_fees]).to eq :membership

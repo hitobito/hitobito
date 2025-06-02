@@ -150,10 +150,12 @@ describe Invoice::BatchCreate do
       end.to change { group.invoice_items.count }.by(2)
       leaders, members = list.invoices.last.invoice_items.order(:name)
 
+      expect(leaders).to be_kind_of(InvoiceItem::FixedFee)
       expect(leaders.count).to eq 1
       expect(leaders.cost).to eq 15
       expect(leaders.dynamic_cost_parameters[:fixed_fees]).to eq "membership"
 
+      expect(members).to be_kind_of(InvoiceItem::FixedFee)
       expect(members.count).to eq 2
       expect(members.cost).to eq 20
       expect(members.dynamic_cost_parameters[:fixed_fees]).to eq "membership"

@@ -27,7 +27,7 @@ describe "event/participations/_actions_show.html.haml" do
     assign(:group, group)
   end
 
-  context "second to last button is by default is the change contact data button" do
+  context "second to last button is by default the change contact data button" do
     subject { Capybara::Node::Simple.new(raw(rendered)).all("a")[-2] }
 
     before { render }
@@ -36,7 +36,7 @@ describe "event/participations/_actions_show.html.haml" do
     its(:text) { should eq " Kontaktdaten ändern" } # space because of icon
   end
 
-  context "last button is by default is the change contact data button" do
+  context "last button is by default the show person profile button" do
     subject { Capybara::Node::Simple.new(raw(rendered)).all("a").last }
 
     before { render }

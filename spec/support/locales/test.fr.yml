@@ -34,3 +34,7 @@ fr:
       group/global_group/leader: Leadre
       group/global_group/member: Membre
       role/external: Externe
+  fixed_fees:
+    membership:
+      members: Cotisation - Members
+      leaders: Cotisation - Leaders

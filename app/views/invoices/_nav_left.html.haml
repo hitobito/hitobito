@@ -3,20 +3,20 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- current_user.finance_groups.each do |group|
+- current_ability.finance_layer_ids.each do |layer_id|
   - parent_group = parents.find(Group).first
 
-  - if group == parent_group
+  - if parent_group.id == layer_id
     .divider
-      = group
-      = link_to icon('link'), group, class: 'inline'
+      = parent_group
+      = link_to icon('link'), parent_group, class: 'inline'
     %ul
-      = nav t('navigation.invoices/single'), group_invoices_path(group), %w(invoices), %w(invoice_lists evaluations)
-      = nav InvoiceList.model_name.human(count: 2), group_invoice_lists_path(group), %w(invoice_lists)
-      = nav t('navigation.invoices/evaluations'), group_invoices_evaluations_path(group), %w(invoice_evaluations)
-      = nav InvoiceArticle.model_name.human(count: 2), group_invoice_articles_path(group), %w(invoice_articles)
-      = nav t('navigation.admin'), group_invoice_config_path(group), %w(invoice_config)
+      = nav t('navigation.invoices/single'), group_invoices_path(layer_id), %w(invoices), %w(invoice_lists evaluations)
+      = nav InvoiceList.model_name.human(count: 2), group_invoice_lists_path(layer_id), %w(invoice_lists)
+      = nav t('navigation.invoices/evaluations'), group_invoices_evaluations_path(layer_id), %w(invoice_evaluations)
+      = nav InvoiceArticle.model_name.human(count: 2), group_invoice_articles_path(layer_id), %w(invoice_articles)
+      = nav t('navigation.admin'), group_invoice_config_path(layer_id), %w(invoice_config)
     .divider
 
   - else
-    = nav group, group_invoices_path(group)
+    = nav Group.find(layer_id), group_invoices_path(layer_id)

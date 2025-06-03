@@ -1001,6 +1001,10 @@ de:
         filter:
           from: Von
           to: Bis
+    table:
+      number_of_invoices_shown:
+        one: "%{count} Rechnung angezeigt."
+        other: "%{count} Rechnungen angezeigt."
 
   invoices/by_article:
     index:

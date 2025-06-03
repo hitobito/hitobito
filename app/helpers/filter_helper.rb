@@ -5,18 +5,26 @@
 
 module FilterHelper
   # rubocop:disable Rails/OutputSafety
-  def direct_filter(attr, label = nil, &block)
+  def direct_filter(attr, label = nil, options = {}, &block)
     html = "".html_safe
     label ||= model_class.human_attribute_name(attr)
     html += label_tag(attr, label, class: "control-label").html_safe if label
-    html += capture(&block)
-    content_tag(:div, html, class: "control-group row ms-2").html_safe
+    html += content_tag(:div, capture(&block), class: "input-group mt-2")
+    content_tag(:div, html, class: "control-group row").html_safe
   end
+
   # rubocop:enable Rails/OutputSafety
+  def direct_filter_search
+    label = t("global.button.search")
+    direct_filter(:q, label, class: "has-feedback has-clear") do
+      search_field_tag(:q, params[:q], class: "form-control form-control-sm", placeholder: label, data: {submit: true}) +
+        content_tag(:span, icon(:times, class: "fa-xs"), class: "input-group-text fw-bold", data: {clear: true})
+    end
+  end
 
   def direct_filter_select(attr, list, label = nil, options = {})
     options.reverse_merge!(prompt: t("global.all"), value_method: :first, text_method: :second)
-    add_css_class(options, "input-group form-select form-select-sm h-100 mx-2")
+    add_css_class(options, "form-select form-select-sm")
     options[:data] ||= {}
     options[:data][:submit] = true
     select_options = options_from_collection_for_select(list,
@@ -46,5 +54,26 @@ module FilterHelper
   def set_filter(filter_params = {})
     anchor = filter_params.delete :anchor
     params.to_unsafe_h.deep_merge(filter: filter_params, anchor: anchor)
+  end
+
+  def direct_filter_date_field(attr, options = {})
+    options[:class] ||= "date form-control form-control-sm w-50"
+    options[:value] ||= params[attr]
+    options[:data] = {submit: true}
+    content_tag(:span, icon(:"calendar-alt"), class: "input-group-text") + text_field(nil, attr, options)
+  end
+
+  def direct_filter_time_field(attr, options = {})
+    options[:class] ||= "time form-control form-control-sm w-25"
+    options[:value] ||= params[attr]
+    options[:data] = {submit: true}
+    time_field(nil, attr, options)
+  end
+
+  def direct_filter_input(options = {})
+    add_css_class(options, "input-group mt-2")
+    content_tag(:div, options) do
+      yield
+    end
   end
 end

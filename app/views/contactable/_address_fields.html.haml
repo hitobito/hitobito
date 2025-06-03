@@ -8,7 +8,7 @@
     %div.alert.alert-warning.updates-household-address= t('.updates_household_address')
 
   = f.labeled_input_field(:address_care_of)
-  = f.labeled(:address, class: 'd-flex') do
+  = f.labeled(:street, Person.human_attribute_name(:address), class: 'd-flex') do
     %div.col-9
       = f.input_field(:street, data: { provide: 'entity', updater: 'AddressTypeahead.update', url: addresses_query_url })
     %div.col-2.offset-1

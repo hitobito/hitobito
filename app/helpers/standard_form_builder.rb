@@ -397,7 +397,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   #   labeled(:attr, content)
   #   labeled(:attr, 'Caption') { #content }
   #   labeled(:attr, 'Caption', content)
-  def labeled(attr, caption_or_content = nil, content = nil, **html_options, &block) # rubocop:disable Metrics/*
+  def labeled(attr, caption_or_content = nil, content = nil, mark_as_required: false, **html_options, &block) # rubocop:disable Metrics/*
     if block
       content = capture(&block)
     elsif content.nil?
@@ -408,7 +408,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
     label_classes = html_options.delete(:label_class) || "col-md-3 col-xl-2 pb-1"
     label_classes += " col-form-label text-md-end"
-    label_classes += " required" if required?(attr)
+    label_classes += " required" if mark_as_required || required?(attr)
 
     add_css_class(html_options, "labeled col-md-9 col-lg-8 col-xl-8 mw-63ch")
     css_classes = {"no-attachments": no_attachments?(attr),

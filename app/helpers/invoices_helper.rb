@@ -94,12 +94,14 @@ module InvoicesHelper
   def invoice_receiver_address(invoice)
     return unless invoice.recipient_address
 
-    recipient_address_lines = invoice.recipient_address.split("\n")
+    name, *address = invoice.recipient_address.split("\n")
+    name = link_to(invoice.recipient, invoice.recipient) if name == invoice.recipient.full_name
+
     content_tag(:p) do
       safe_join([
-        content_tag(:b) { recipient_address_lines.first },
-        *recipient_address_lines.drop(1),
-        mail_to(entry.recipient_email)
+        content_tag(:b) { name },
+        *address,
+        mail_to(invoice.recipient_email)
       ], "<br/>".html_safe)
     end
   end

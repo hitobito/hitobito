@@ -23,13 +23,9 @@ module InvoiceLists
     def total_cost = count * unit_cost
 
     def to_invoice_item
-      InvoiceItem
-        .new(name:, unit_cost:, count:, dynamic_cost_parameters: {fixed_fees: fee})
+      InvoiceItem::FixedFee
+        .new(name: key, unit_cost:, count:, dynamic_cost_parameters: {fixed_fees: fee})
         .tap(&:recalculate)
-    end
-
-    def name
-      I18n.t(key, scope: "fixed_fees.#{fee}")
     end
 
     def models

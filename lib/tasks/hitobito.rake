@@ -51,6 +51,16 @@ namespace :hitobito do
     end
   end
 
+  namespace :attachments do
+    task purge_invalids: :environment do
+      ActiveStorage::Attachment.all.each do |attachment|
+        if attachment.blob.analyzed?.nil?
+          attachment.purge
+        end
+      end
+    end
+  end
+
   desc "Print all abilities"
   task abilities: :environment do
     puts ["Permission".ljust(18), "\t",

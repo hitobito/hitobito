@@ -104,7 +104,7 @@ class GroupAbility < AbilityDsl::Base
   end
 
   def in_layer_group
-    user.finance_groups.include?(subject)
+    user_context.permission_layer_ids(:finance).include?(subject.layer_group_id)
   end
 
   def with_parent_in_same_layer

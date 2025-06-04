@@ -284,10 +284,14 @@ Möglichkeit, Personen zuzuweisen oder abzulehnen sowie an andere, ähnliche Anl
 Falls Anmeldungen unterstützt werden, kann eine Teilnahme (`Event::Participation`) aktiviert sein
 oder nicht. Sonst ist sie immer aktiv.
 
+### Qualifikationen
+
+siehe [Qualifikationen](../developer/events/qualifications.md).
+
 
 ### Mailing Listen / Abos
 
-siehe [Mailing Listen / Abos](https://github.com/hitobito/hitobito/tree/master/doc/e-mail)
+siehe [Mailing Listen / Abos](../developer/messages/e-mail).
 
 ### Single Table Inheritance
 

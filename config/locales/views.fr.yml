@@ -1049,7 +1049,7 @@ fr:
     destroys:
       show:
         title: Supprimer une facture collective
-        non_draft_info: 'In der Sammelrechnung ist mindestens eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann die Sammelrechnung nicht gelöscht werden.'
+        non_draft_info: 'La facture collective contient au moins une facture qui n''a ni le statut "Brouillon" ni le statut "Annulé". La facture collective ne peut donc pas être supprimée.'
         confirm_delete: Voulez-vous vraiment supprimer la facture collective?
     form:
       invoice_articles:

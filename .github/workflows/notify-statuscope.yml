@@ -3,12 +3,12 @@ name: "Notify statuscope of the Job-Result"
 on:
   workflow_call:
     inputs:
-      repository:
-        description: "Repository that the action is being run in"
+      application:
+        description: "Name of the application in statuscope"
         type: string
         required: true
-      test_result:
-        description: "Result of the Test-Run to report to statuscope"
+      result:
+        description: "Result to report to statuscope"
         type: boolean
         required: true
     secrets:
@@ -23,7 +23,7 @@ jobs:
     env:
       HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}
       HEARTBEAT_TOKEN: ${{ secrets.HEARTBEAT_TOKEN }}
-      HEARTBEAT_APPLICATION: "${{ inputs.repository }}-tests"
+      HEARTBEAT_APPLICATION: ${{ inputs.application }}
 
     steps:
       - name: 'Check Configuration'
@@ -40,7 +40,7 @@ jobs:
           )
 
       - name: 'Send success'
-        if: ${{ inputs.test_result == true }}
+        if: ${{ inputs.result == true }}
         run: >
           curl --silent ${{ env.HEARTBEAT_URL }}/signal \
             -d application=${{ env.HEARTBEAT_APPLICATION }} \
@@ -48,7 +48,7 @@ jobs:
             -d status=ok | jq .
 
       - name: 'Send failure'
-        if: ${{ inputs.test_result == false }}
+        if: ${{ inputs.result == false }}
         run: >
           curl --silent ${{ env.HEARTBEAT_URL }}/signal \
             -d application=${{ env.HEARTBEAT_APPLICATION }} \

@@ -414,7 +414,7 @@ describe Role do
 
     context "contact data callback" do
       it "updates updated_at on person when associated role changed" do
-        expect { subject.update_attribute :start_on, Date.today }.to change{person.updated_at}
+        expect { subject.update_attribute :start_on, Time.zone.today }.to change { person.updated_at }
       end
 
       it "sets contact data flag on person" do

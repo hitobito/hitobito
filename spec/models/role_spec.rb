@@ -413,6 +413,10 @@ describe Role do
     end
 
     context "contact data callback" do
+      it "updates updated_at on person when associated role changed" do
+        expect { subject.update_attribute :start_on, Date.today }.to change{person.updated_at}
+      end
+
       it "sets contact data flag on person" do
         subject.type = "Group::BottomLayer::Leader"
         subject.save!

@@ -126,7 +126,7 @@ class InvoiceListsController < CrudController
   end
 
   def invoices
-    parent.invoices.where(id: list_param(:ids))
+    Invoice::Filter.new(params).apply(parent.invoices)
   end
 
   def flash_message(action: action_name, count: nil, title: nil)

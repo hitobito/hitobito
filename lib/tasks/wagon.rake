@@ -6,6 +6,19 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 namespace :wagon do
+  namespace :patches do
+    desc "Consolidate patches from all wagons, call from core directory"
+    task consolidate: :environment do
+      Patches::Collector.new.write
+    end
+
+    desc "Generates patches from wagon, call from wagon directory"
+    task generate: :environment do
+      Rails.application.eager_load!
+      Patches::Generator.new.write
+    end
+  end
+
   namespace :migrate do
     desc "Display status of migrations including the originating wagon name"
     task status: :environment do

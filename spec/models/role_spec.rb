@@ -775,7 +775,7 @@ describe Role do
 
         expect do
           role.destroy!
-        end.to change { PaperTrail::Version.count }.by(1)
+        end.to change { PaperTrail::Version.count }.by(2)
 
         version = PaperTrail::Version.order(:created_at, :id).last
         expect(version.event).to eq("update")

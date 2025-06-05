@@ -85,7 +85,7 @@ describe Person::HistoryController do
         course = Fabricate.build(:course, kind: kind, training_days: training_days)
         course.dates.build(start_at: start_at)
         course.save!
-        Fabricate(:event_participation, event: course, person: top_leader, qualified: qualified)
+        Fabricate(:event_participation, event: course, participant: top_leader, qualified: qualified)
       end
     end
   end

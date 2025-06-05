@@ -28,7 +28,7 @@ module Export::Tabular::People
     end
 
     def people_ids
-      @people_ids ||= pluck_ids_from_list(:person_id)
+      @people_ids ||= pluck_ids_from_list(:participant_id)
     end
   end
 end

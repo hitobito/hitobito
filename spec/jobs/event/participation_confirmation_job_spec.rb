@@ -18,7 +18,7 @@ describe Event::ParticipationConfirmationJob do
     Fabricate(:event_participation,
       event: course,
       active: participation_active,
-      person: participant,
+      participant: participant,
       application: Fabricate(:event_application,
         priority_2: Fabricate(:course, kind: course.kind)))
   end

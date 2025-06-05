@@ -671,7 +671,7 @@ describe Event::ParticipationsController do
     end
 
     it "redirects to event show if own participation" do
-      participation.update_column(:person_id, user.id)
+      participation.update_column(:participant_id, user.id)
       delete :destroy, params: {group_id: group.id, event_id: course.id, id: participation.id}
 
       is_expected.to redirect_to group_event_path(group, course)
@@ -961,10 +961,10 @@ describe Event::ParticipationsController do
     let(:group) { Fabricate(Group::TopGroup.name, parent: groups(:top_group)) }
     let(:user) { Fabricate(:person) }
     let!(:role) { Fabricate(Group::BottomLayer::Leader.name, person: user, group: groups(:bottom_layer_one)) }
-    let!(:participation) { Fabricate(:event_participation, person: user, event: course, active: true) }
+    let!(:participation) { Fabricate(:event_participation, participant: user, event: course, active: true) }
     let(:other_person) { Fabricate(:person, birthday: Date.new(2003, 0o3, 0o3), company_name: "Puzzle ITC Test") }
     let!(:other_role) { Fabricate(Group::TopGroup::Member.name, person: other_person, group: group) }
-    let!(:other_participation) { Fabricate(:event_participation, person: other_person, event: course, active: true) }
+    let!(:other_participation) { Fabricate(:event_participation, participant: other_person, event: course, active: true) }
     let!(:other_event_role) { Fabricate(Event::Course::Role::Participant.name, participation: other_participation) }
 
     before { sign_in(user.reload) }

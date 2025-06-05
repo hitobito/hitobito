@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_05_27_090212) do
+ActiveRecord::Schema[7.1].define(version: 2025_06_03_110236) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -252,6 +252,30 @@ ActiveRecord::Schema[7.1].define(version: 2025_05_27_090212) do
     t.string "location"
     t.index ["event_id", "start_at"], name: "index_event_dates_on_event_id_and_start_at"
     t.index ["event_id"], name: "index_event_dates_on_event_id"
+  end
+
+  create_table "event_guests", force: :cascade do |t|
+    t.bigint "main_applicant_id", null: false
+    t.string "first_name"
+    t.string "last_name"
+    t.string "nickname"
+    t.string "company_name"
+    t.boolean "company"
+    t.string "email"
+    t.string "address_care_of"
+    t.string "street"
+    t.string "housenumber"
+    t.string "postbox"
+    t.string "zip_code"
+    t.string "town"
+    t.string "country"
+    t.string "gender"
+    t.date "birthday"
+    t.string "phone_number"
+    t.string "language"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["main_applicant_id"], name: "index_event_guests_on_main_applicant_id"
   end
 
   create_table "event_invitations", force: :cascade do |t|

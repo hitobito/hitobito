@@ -1001,7 +1001,11 @@ it:
         filter:
           from: Da
           to: A
-
+    table:
+      number_of_invoices_shown:
+        one: "%{count} Rechnung angezeigt."
+        many: "%{count} Rechnungen angezeigt."
+        other: "%{count} Rechnungen angezeigt."
   invoices/by_article:
     index:
       title: 'Fatture per l''articolo "%{name}"'

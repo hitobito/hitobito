@@ -18,7 +18,7 @@ module AbilityDsl::Constraints::Event
     end
 
     def her_own
-      participation.person_id == user.id
+      participation.participant_id == user.id && participation.participant_type == Person.sti_name
     end
 
     def for_applicant_in_same_layer

@@ -51,8 +51,8 @@ describe People::CleanupJob do
     it "continues and notifies if minimize fails" do
       first, second = 2.times.map { Fabricate(:person) }
       event = Fabricate(:event, dates: [Event::Date.new(start_at: 1.months.ago)])
-      Fabricate(:event_participation, event:, person: first)
-      Fabricate(:event_participation, event:, person: second)
+      Fabricate(:event_participation, event:, participant: first)
+      Fabricate(:event_participation, event:, participant: second)
 
       expect_and_stub_errors_for(first, People::Minimizer) { |person| person.update!(minimized_at: Time.zone.now) }
       expect { job.perform }.to change { Person.where(minimized_at: nil).count }.by(-1)

@@ -18,12 +18,12 @@
 - if can?(:mail_confirmation, entry)
   = Dropdown::Event::Participation::MailDispatch.new(self, @event, @group, entry)
 
-- if can?(:edit, entry.person)
+- if entry.participant_type == Person.sti_name && can?(:edit, entry.person)
   = action_button(t('.change_contact_data_button'),
                   edit_group_person_path(entry.person.default_group_id, entry.person, return_url: url_for),
                   :edit)
 
-- if can?(:show, entry.person)
+- if entry.participant_type == Person.sti_name && can?(:show, entry.person)
   = action_button(t(".link_to_person"),
                   group_person_path(entry.person.default_group_id, entry.person),
                   :eye)

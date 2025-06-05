@@ -80,7 +80,7 @@ class People::ManualDeletionsController < ApplicationController
     Event.joins(:dates, :participations)
       .where("event_dates.start_at > :cutoff OR event_dates.finish_at > :cutoff",
         cutoff: RECENT_EVENT_CUTOFF_DURATION.ago)
-      .where(event_participations: {person_id: entry.id})
+      .where(event_participations: {participant_id: entry.id, participant_type: Person.sti_name})
       .any?
   end
 

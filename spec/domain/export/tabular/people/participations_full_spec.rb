@@ -7,7 +7,7 @@ require "spec_helper"
 
 describe Export::Tabular::People::ParticipationsFull do
   let(:person) { people(:top_leader) }
-  let(:participation) { Fabricate(:event_participation, person: person, event: events(:top_course)) }
+  let(:participation) { Fabricate(:event_participation, participant: person, event: events(:top_course)) }
   let(:scope) { Event::Participation.where(id: participation.id) }
   let(:people_list) { Export::Tabular::People::ParticipationsFull.new(scope) }
 
@@ -22,7 +22,7 @@ describe Export::Tabular::People::ParticipationsFull do
   end
 
   context "questions" do
-    let(:participation) { Fabricate(:event_participation, person: person, event: events(:top_course)) }
+    let(:participation) { Fabricate(:event_participation, participant: person, event: events(:top_course)) }
     let(:question) { events(:top_course).questions.first }
 
     before { participation.init_answers }

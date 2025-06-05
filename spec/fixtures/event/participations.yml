@@ -27,5 +27,6 @@
 
 top:
   event: top_course
-  person: bottom_member
+  participant: bottom_member
+  participant_type: "Person"
   active: true

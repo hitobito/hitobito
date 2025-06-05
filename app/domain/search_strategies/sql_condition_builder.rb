@@ -29,17 +29,42 @@ module SearchStrategies
     # Create a list of Arel #matches queries for each column and the given
     # word.
     def search_word_condition(word)
-      search_column_condition(word).reduce do |query, condition|
-        query.or(condition)
-      end
+      conditions = search_column_condition(word)
+      return nil if conditions.empty?
+
+      conditions.reduce { |query, condition| query.or(condition) }
     end
 
     def search_column_condition(word)
-      @search_tables_and_fields.map do |table_field|
-        matcher = matchers.fetch(table_field, SearchStrategies::SqlConditionBuilder::Matcher)
-          .new(table_field, word)
-        matcher.match if matcher.applies?
+      @search_tables_and_fields.flat_map do |table_field|
+        case table_field
+        when String
+          klass = matchers.fetch(table_field) { self.class::Matcher }
+          matcher = klass.new(table_field, word)
+          matcher.match if matcher.applies?
+        when Hash
+          participant_field, mapping = table_field.first
+          build_polymorphic_condition(participant_field, mapping, word)
+        else
+          []
+        end
       end.compact
+    end
+
+    # Create an OR based condition to match polymorphic associations
+    def build_polymorphic_condition(participant_field, mapping, word)
+      conditions = mapping.flat_map do |participant_type, columns|
+        columns.map do |column|
+          matcher_class = matchers.fetch(column) { self.class::Matcher }
+          matcher = matcher_class.new(column, word)
+
+          Arel::Table.new(:event_participations)[participant_field.to_sym]
+            .eq(participant_type)
+            .and(matcher.match)
+        end
+      end
+
+      conditions.reduce { |a, b| a.or(b) }
     end
   end
 end

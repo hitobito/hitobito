@@ -59,7 +59,7 @@ describe Event::CourseResource, type: :resource do
     xdescribe "leaders" do
       def create_role(type, **attrs)
         person = Fabricate(:person, attrs)
-        participation = Fabricate(:event_participation, person: person, event: course, active: true)
+        participation = Fabricate(:event_participation, participant: person, event: course, active: true)
         "Event::Role::#{type.to_s.classify}".constantize.create(participation: participation)
       end
 

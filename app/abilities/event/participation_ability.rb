@@ -63,7 +63,9 @@ class Event::ParticipationAbility < AbilityDsl::Base
   end
 
   def participating?
-    event.participations.map(&:person_id).include? user.id
+    event.participations.find do |participation|
+      participation.participant_type == Person.sti_name && participation.participant_id == user.id
+    end.present?
   end
 
   def participant_can_show_event?

@@ -8,8 +8,12 @@ require "csv"
 
 describe Export::Tabular::People::ParticipationsAddress do
   let(:person) { people(:top_leader) }
-  let(:participation) { Fabricate(:event_participation, person: person, event: events(:top_course)) }
-  let(:scope) { Event::Participation.includes(:person).where(id: participation.id) }
+  let(:participation) { Fabricate(:event_participation, participant: person, event: events(:top_course)) }
+  let(:scope) do
+    participations = Event::Participation.where(id: participation.id)
+    Event::Participation::PreloadParticipations.preload(participations)
+    participations
+  end
   let(:people_list) { Export::Tabular::People::ParticipationsAddress.new(scope) }
 
   subject { people_list.attribute_labels }

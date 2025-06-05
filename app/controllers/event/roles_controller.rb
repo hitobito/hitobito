@@ -54,7 +54,7 @@ class Event::RolesController < CrudController
     event.find_role_type!(attrs[:type])
 
     participation = event.participations
-      .where(person_id: attrs.delete(:person_id))
+      .where(participant_id: attrs.delete(:person_id), participant_type: Person.sti_name)
       .first_or_initialize
     participation.roles.build(type: attrs[:type]).tap do |role|
       role.participation = participation
@@ -64,7 +64,7 @@ class Event::RolesController < CrudController
   def destroy_participant_roles!
     Event::Role.joins(:participation)
       .where(participation: {
-        person: entry.person,
+        participant: entry.person,
         event: parent
       }).find_each do |role|
       role.destroy! if role.class.participant?

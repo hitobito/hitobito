@@ -20,8 +20,12 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
 
   self.remember_params += [:filter]
 
-  self.sort_mappings = {last_name: "people.last_name",
-                         first_name: "people.first_name",
+  self.sort_mappings = {last_name: {
+                          order: "CASE event_participations.participant_type WHEN 'Person' THEN people.last_name WHEN 'Event::Guest' THEN event_guests.last_name ELSE '' END AS last_name_order_statement"
+                        },
+                         first_name: {
+                           order: "CASE event_participations.participant_type WHEN 'Person' THEN people.first_name WHEN 'Event::Guest' THEN event_guests.first_name ELSE '' END AS first_name_order_statement"
+                         },
                          # for sorting roles we dont want to explicitly add a join_table statement when default_sort is configured to role
                          # In case of default_sort being role, order_by_role is already called in the participation_filter (so the joined table is in the query already)
                          roles: {
@@ -33,10 +37,18 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
                              order.concat(["people.last_name", "people.first_name"])
                            end
                          },
-                         nickname: "people.nickname",
-                         zip_code: "people.zip_code",
-                         town: "people.town",
-                         birthday: "people.birthday"}
+                         nickname: {
+                           order: "CASE event_participations.participant_type WHEN 'Person' THEN people.nickname WHEN 'Event::Guest' THEN event_guests.nickname ELSE '' END AS nickname_order_statement"
+                         },
+                         zip_code: {
+                           order: "CASE event_participations.participant_type WHEN 'Person' THEN people.zip_code WHEN 'Event::Guest' THEN event_guests.zip_code ELSE '' END AS zip_code_order_statement"
+                         },
+                         town: {
+                           order: "CASE event_participations.participant_type WHEN 'Person' THEN people.town WHEN 'Event::Guest' THEN event_guests.town ELSE '' END AS town_order_statement"
+                         },
+                         birthday: {
+                           order: "CASE event_participations.participant_type WHEN 'Person' THEN people.birthday WHEN 'Event::Guest' THEN event_guests.birthday ELSE NULL END AS birthday_order_statement"
+                         }}
 
   decorates :group, :event, :participation, :participations, :alternatives
 
@@ -175,7 +187,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
       .merge(Person.preload_picture)
       .page(params[:page])
 
-    Person::PreloadPublicAccounts.for(records.collect(&:person))
+    Person::PreloadPublicAccounts.for(records.select { |participation| participation.participant_type == Person.sti_name }.collect(&:person))
     @pagination_options = {
       total_pages: records.total_pages,
       current_page: records.current_page,
@@ -219,7 +231,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def build_entry
-    participation = event.participations.new(person_id: person_id)
+    participation = event.participations.new(participant_id: person_id, participant_type: Person.sti_name)
     role = participation.roles.build(type: role_type)
     role.participation = participation
 
@@ -391,6 +403,6 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def for_current_user?
-    entry.person_id == current_user&.id
+    entry.participant_type == Person.sti_name && entry.participant_id == current_user&.id
   end
 end

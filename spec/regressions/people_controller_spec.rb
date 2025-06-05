@@ -271,7 +271,7 @@ describe PeopleController, type: :controller do
 
     def create_participation(date, active_participation: false)
       set_start_finish(course, date, date + 5.days)
-      Fabricate(:event_participation, person: top_leader, event: course,
+      Fabricate(:event_participation, participant: top_leader, event: course,
         active: active_participation)
     end
   end

@@ -40,7 +40,15 @@ class Event::Participation < ActiveRecord::Base
   ### ASSOCIATIONS
 
   belongs_to :event, -> { includes(:translations) }, inverse_of: :participations
-  belongs_to :person
+  belongs_to :participant, polymorphic: true
+
+  scope :with_person_participants, -> {
+    joins("LEFT JOIN people ON event_participations.participant_type = 'Person' AND event_participations.participant_id = people.id")
+  }
+
+  scope :with_guest_participants, -> {
+    joins("LEFT JOIN event_guests ON event_participations.participant_type = 'Event::Guest' AND event_participations.participant_id = event_guests.id")
+  }
 
   belongs_to :application, inverse_of: :participation, dependent: :destroy, validate: true
 
@@ -55,8 +63,7 @@ class Event::Participation < ActiveRecord::Base
   # price_category is used as enum in hitobito_sac_cas. validates_by_schema cannot be overridden
   # inside a wagon because of the loading order, so it must be excluded in the core instead
   validates_by_schema except: [:price_category]
-  validates :person_id,
-    uniqueness: {scope: :event_id}
+  validates :participant_id, uniqueness: {scope: [:participant_type, :event_id]}
   validates :additional_information,
     length: {allow_nil: true, maximum: (2**16) - 1}
 
@@ -134,6 +141,17 @@ class Event::Participation < ActiveRecord::Base
 
   def to_s
     person.to_s
+  end
+
+  def person
+    return unless participant
+    return participant if participant_type == Person.sti_name
+
+    Person.new(participant.attributes.except("id", "main_applicant_id", "phone_number"))
+  end
+
+  def person=(value)
+    self.participant = value
   end
 
   private

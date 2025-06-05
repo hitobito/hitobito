@@ -261,7 +261,7 @@ describe Event::ApplicationMarketController do
     def create_participant_role(other)
       participation = Fabricate(:event_participation,
         event: other,
-        person: appl_prio_1.person,
+        participant: appl_prio_1.person,
         application: Fabricate(:event_application),
         active: true)
       role = other.participant_types.first.new

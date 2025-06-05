@@ -16,7 +16,7 @@ describe Event::ParticipationNotificationJob do
   let(:participation) do
     Fabricate(:event_participation,
       event: course,
-      person: participant,
+      participant: participant,
       application: Fabricate(:event_application,
         priority_2: Fabricate(:course, kind: course.kind)))
   end

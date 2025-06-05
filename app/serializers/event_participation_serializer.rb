@@ -36,7 +36,7 @@ class EventParticipationSerializer < ApplicationSerializer
       }
     end)
 
-    entity :person, item.person_id, PersonIdSerializer
+    entity :person, item.participant_id, PersonIdSerializer if item.participant_type == Person.sti_name
 
     map_properties :additional_information, :active, :qualified
 

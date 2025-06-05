@@ -78,7 +78,7 @@ describe :event_participation, js: true do
         )
       end.to change { Event::Participation.count }.by(1)
 
-      participation = Event::Participation.find_by(event: event, person: person)
+      participation = Event::Participation.find_by(event: event, participant: person)
 
       expect(participation).to be_present
     end

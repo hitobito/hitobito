@@ -205,8 +205,9 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     source: :group
 
   has_many :event_participations, class_name: "Event::Participation",
+    as: :participant,
     dependent: :destroy,
-    inverse_of: :person
+    inverse_of: :participant
   has_many :event_applications, class_name: "Event::Application",
     through: :event_participations,
     source: :application

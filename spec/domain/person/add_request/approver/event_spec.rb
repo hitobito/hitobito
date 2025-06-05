@@ -114,7 +114,7 @@ describe Person::AddRequest::Approver::Event do
       it "does nothing if role already exists" do
         p = Fabricate(:event_participation,
           event: event,
-          person: person,
+          participant: person,
           active: false,
           application: Fabricate(:event_application, priority_1: event))
         Fabricate(role_type.name, participation: p)
@@ -149,7 +149,7 @@ describe Person::AddRequest::Approver::Event do
       end
 
       it "creates second role if participation already exists" do
-        p = Fabricate(:event_participation, event: event, person: person, active: true)
+        p = Fabricate(:event_participation, event: event, participant: person, active: true)
         Fabricate(Event::Role::Cook.name, participation: p)
 
         expect do
@@ -165,7 +165,7 @@ describe Person::AddRequest::Approver::Event do
       end
 
       it "does nothing if role already exists" do
-        p = Fabricate(:event_participation, event: event, person: person, active: true)
+        p = Fabricate(:event_participation, event: event, participant: person, active: true)
         Fabricate(role_type.name, participation: p)
 
         expect do

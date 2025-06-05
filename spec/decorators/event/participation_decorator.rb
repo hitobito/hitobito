@@ -10,7 +10,7 @@ describe Event::ParticipationDecorator, :draper_with_helpers do
 
   let(:person) { people(:top_leader) }
   let(:event) { events(:top_event) }
-  let(:participation) { Fabricate(:event_participation, event: event, person: person) }
+  let(:participation) { Fabricate(:event_participation, event: event, participant: person) }
 
   subject(:decorator) { described_class.new(participation) }
 

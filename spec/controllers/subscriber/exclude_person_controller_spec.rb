@@ -28,7 +28,7 @@ describe Subscriber::ExcludePersonController do
       end
 
       it "creates exclusion" do
-        event = Fabricate(:event_participation, person: person, active: true).event
+        event = Fabricate(:event_participation, participant: person, active: true).event
         event.dates << Fabricate(:event_date, event: event, start_at: Time.zone.today)
         event.groups << group
         Fabricate(:subscription, mailing_list: list, subscriber: event)
@@ -48,7 +48,7 @@ describe Subscriber::ExcludePersonController do
         person = Fabricate(Group::BottomGroup::Leader.name, group: groups(:bottom_group_two_one)).person
         groups(:bottom_layer_two).update_column(:require_person_add_requests, true)
 
-        event = Fabricate(:event_participation, person: person, active: true).event
+        event = Fabricate(:event_participation, participant: person, active: true).event
         event.dates << Fabricate(:event_date, event: event, start_at: Time.zone.today)
         event.groups << group
         Fabricate(:subscription, mailing_list: list, subscriber: event)

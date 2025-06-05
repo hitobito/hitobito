@@ -13,7 +13,7 @@ describe Person::AddRequest::Creator::Event do
   let(:event) { Fabricate(:event, groups: [groups(:bottom_layer_one)]) }
   let(:entity) do
     Fabricate.build(Event::Role::Participant.name,
-      participation: Fabricate.build(:event_participation, event: event, person: person))
+      participation: Fabricate.build(:event_participation, event: event, participant: person))
   end
 
   let(:ability) { Ability.new(requester) }

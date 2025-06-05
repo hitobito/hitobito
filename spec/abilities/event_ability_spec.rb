@@ -18,7 +18,7 @@ describe EventAbility do
   end
   let(:participation) do
     Fabricate(:event_participation,
-      person: participant,
+      participant: participant,
       event: event,
       application: Fabricate(:event_application))
   end
@@ -802,7 +802,7 @@ describe EventAbility do
     let(:role) do
       Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one))
     end
-    let(:participation) { Fabricate(:event_participation, event: event, person: user) }
+    let(:participation) { Fabricate(:event_participation, event: event, participant: user) }
     let(:event_role) { Fabricate(Event::Role::Leader.name.to_sym, participation: participation) }
 
     before { event_role }
@@ -936,7 +936,7 @@ describe EventAbility do
       Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one))
     end
     let(:event) { Fabricate(:event, groups: [groups(:bottom_layer_one)]) }
-    let(:participation) { Fabricate(:event_participation, event: event, person: user) }
+    let(:participation) { Fabricate(:event_participation, event: event, participant: user) }
     let(:event_role) { Event::Role::Cook }
 
     before { Fabricate(event_role.name.to_sym, participation: participation) }
@@ -1088,7 +1088,7 @@ describe EventAbility do
     let(:participation) do
       Fabricate(:event_participation,
         event: event,
-        person: user,
+        participant: user,
         active: false,
         application: Fabricate(:event_application))
     end
@@ -1180,12 +1180,12 @@ describe EventAbility do
     let(:role) do
       Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one))
     end
-    let(:participation) { Fabricate(:event_participation, person: user, event: event) }
+    let(:participation) { Fabricate(:event_participation, participant: user, event: event) }
 
     context Event::Participation do
       it "may create his participation" do
         p = event.participations.new
-        p.person_id = user.id
+        p.participant = user
         is_expected.to be_able_to(:create, p)
       end
 
@@ -1204,7 +1204,7 @@ describe EventAbility do
       Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_two))
     end
     let(:event) { Fabricate(:event, groups: [groups(:bottom_layer_one)]) }
-    let(:participation) { Fabricate(:event_participation, person: user, event: event) }
+    let(:participation) { Fabricate(:event_participation, participant: user, event: event) }
 
     context Event::Participation do
       it "may create his participation" do
@@ -1290,7 +1290,7 @@ describe EventAbility do
     let(:course) { Fabricate(:course, groups: [groups(:top_layer)]) }
 
     before do
-      participation = Fabricate(:event_participation, event: course, person: user)
+      participation = Fabricate(:event_participation, event: course, participant: user)
       Fabricate(:event_role, participation: participation, type: "Event::Role::Leader")
     end
 

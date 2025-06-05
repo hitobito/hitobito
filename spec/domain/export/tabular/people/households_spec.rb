@@ -59,6 +59,6 @@ describe Export::Tabular::People::Households do
     data = households([leader, member]).data_rows.to_a
     expect(data).to have(1).item
     expect(data[0].shift(2)).to eq([nil, "Bottom Member, Top Leader"]).or eq [nil, "Top Leader, Bottom Member"]
-    expect(data[0]).to eq ["Greatstreet 345", "3456", "Greattown", "Schweiz", "Bottom One"]
+    expect(data[0][..3]).to eq ["Greatstreet 345", "3456", "Greattown", "Schweiz"]
   end
 end

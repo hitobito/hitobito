@@ -18,6 +18,7 @@ module Export::Pdf::Invoice
     WIDTH_RECEIPT = 62.mm
     WIDTH = WIDTH_RECEIPT + WIDTH_PAYMENT
     MARGIN = Export::Pdf::Invoice::MARGIN
+    FONT_FAMILY = "Helvetica"
 
     HEIGHT_WITHOUT_MARGIN = HEIGHT - MARGIN
 
@@ -26,19 +27,25 @@ module Export::Pdf::Invoice
 
       stamped :separators
 
-      receipt(font_size: 8) do
-        receipt_title
-        receipt_infos
-        receipt_amount
-        receipt_receiving_office
-      end
+      font FONT_FAMILY do
+        font_size(8) do
+          receipt do
+            receipt_title
+            receipt_infos
+            receipt_amount
+            receipt_receiving_office
+          end
+        end
 
-      payment(font_size: 10) do
-        stamped :payment_title
-        payment_qrcode
-        render_payment_amount
-        payment_infos
-        payment_extra_infos
+        font_size(10) do
+          payment do
+            stamped :payment_title
+            payment_qrcode
+            render_payment_amount
+            payment_infos
+            payment_extra_infos
+          end
+        end
       end
     end
 
@@ -60,25 +67,21 @@ module Export::Pdf::Invoice
       image invoice.qrcode.scissor(kind), at: at, scale: 0.1
     end
 
-    def receipt(font_size:)
-      font "Helvetica", size: font_size do
-        bounding_box([-MARGIN, HEIGHT_WITHOUT_MARGIN], width: WIDTH_RECEIPT, height: HEIGHT) { yield }
-        @padded_percent = 0
-      end
+    def receipt
+      bounding_box([-MARGIN, HEIGHT_WITHOUT_MARGIN], width: WIDTH_RECEIPT, height: HEIGHT) { yield }
+      @padded_percent = 0
     end
 
-    def payment(font_size:)
-      font "Helvetica", size: font_size do
-        width = bounds.width - WIDTH_RECEIPT + 4.cm
-        box = [WIDTH_RECEIPT - MARGIN, HEIGHT_WITHOUT_MARGIN]
-        bounding_box(box, width: width, height: HEIGHT) { yield }
-      end
+    def payment
+      width = bounds.width - WIDTH_RECEIPT + 4.cm
+      box = [WIDTH_RECEIPT - MARGIN, HEIGHT_WITHOUT_MARGIN]
+      bounding_box(box, width: width, height: HEIGHT) { yield }
     end
 
     def payment_title
       padded_bounding_box(0.1, width: 60.mm, pad_right: false) do
-        font "Helvetica", size: 11, style: :bold do
-          text t("payment_title")
+        font_size(11) do
+          bold { text t("payment_title") }
         end
       end
     end
@@ -119,7 +122,9 @@ module Export::Pdf::Invoice
 
     def receipt_title
       padded_bounding_box(0.1, pad_right: true) do
-        heading(size: 11) { text t("receipt_title") }
+        font_size(11) do
+          bold { text t("receipt_title") }
+        end
       end
     end
 
@@ -133,7 +138,7 @@ module Export::Pdf::Invoice
 
     def receipt_receiving_office
       padded_bounding_box(0.15, pad_right: true) do
-        heading do
+        bold do
           move_down 10
           pdf.text t("receiving_office"), align: :right
         end
@@ -142,37 +147,45 @@ module Export::Pdf::Invoice
 
     def info_box
       creditor_box
+      move_down 10
+
       esr_number_box if invoice.esr_number.present?
+      move_down 10 if invoice.esr_number.present?
+
       debitor_box
+      move_down 10
     end
 
     def creditor_box
       bounding_box([0, cursor], width: bounds.width) do
-        heading { text t("creditor_heading") }
+        bold do
+          text t("creditor_heading")
+        end
         text creditor_values
-        move_down 10
       end
     end
 
     def esr_number_box
       bounding_box([0, cursor], width: bounds.width) do
-        heading { text t("esr_number_heading") }
+        bold do
+          text t("esr_number_heading")
+        end
         text invoice.esr_number
-        move_down 10
       end
     end
 
     def debitor_box
       bounding_box([0, cursor], width: bounds.width) do
-        heading { text t("debitor_heading") }
+        bold do
+          text t("debitor_heading")
+        end
         text debitor_values
-        move_down 10
       end
     end
 
     def amount_box
       bounding_box([0, cursor], width: bounds.width) do
-        heading do
+        bold do
           text_box t("currency"), at: [0, cursor]
           text_box t("amount"), at: [20.mm, cursor]
         end
@@ -212,9 +225,8 @@ module Export::Pdf::Invoice
       end
     end
 
-    # When no size is passed, heading uses the same size as the current section
-    def heading(size: nil)
-      font "Helvetica", size: size, style: :bold do
+    def bold
+      font FONT_FAMILY, style: :bold do
         yield
       end
     end

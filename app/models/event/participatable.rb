@@ -11,15 +11,15 @@ module Event::Participatable
   end
 
   def participations_for(*role_types)
-    participations.active
+    participations_for = participations.active
       .joins(:roles)
       .where(event_roles: {type: role_types.map(&:sti_name)})
-      .includes(:person, :event)
-      .references(:person)
       .order_by_role(self)
-      .merge(Person.order_by_name.select("*"))
       .select(Event::Participation.column_names)
-    # distinct?
+
+    Event::Participation::PreloadParticipations.preload(participations_for, [:participant, :event])
+
+    participations_for
   end
 
   def active_participations_without_affiliate_types

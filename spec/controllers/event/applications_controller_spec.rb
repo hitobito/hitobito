@@ -13,7 +13,7 @@ describe Event::ApplicationsController do
   let(:participation) do
     Fabricate(:event_participation,
       event: event,
-      person: participant,
+      participant: participant,
       application: Fabricate(:event_application))
   end
   let(:application) do

@@ -9,7 +9,7 @@ RSpec.describe Event::ParticipationFilter, type: :domain do
   let(:params) { {filter: "all"} }
 
   before do
-    participation = Event::Participation.create(event: event, active: true, person: person)
+    participation = Event::Participation.create(event: event, active: true, participant: person)
     Event::Role::Leader.create(participation: participation)
   end
 

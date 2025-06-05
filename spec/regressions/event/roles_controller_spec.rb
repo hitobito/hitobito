@@ -85,7 +85,7 @@ describe Event::RolesController, type: :controller do
           expect(entry).to be_kind_of(Event::Role::AssistantLeader)
           expect(entry.label).to eq(create_entry_attrs[:label])
           expect(entry.participation).to be_persisted
-          expect(entry.participation.person_id).to eq(create_entry_attrs[:person_id])
+          expect(entry.participation.participant_id).to eq(create_entry_attrs[:person_id])
         end
       end
     end

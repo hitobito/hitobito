@@ -14,7 +14,7 @@
     = hidden_field_tag('event_role[type]', params[:event_role][:type])
 
   - if params[:for_someone_else]
-    = f.labeled_person_field(:person)
+    = f.labeled_person_field(:participant, label: Person.model_name.human)
 
   - admin_answers, participant_answers = @answers.partition(&:admin?)
 

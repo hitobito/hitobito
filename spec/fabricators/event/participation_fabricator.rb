@@ -26,6 +26,6 @@
 #
 
 Fabricator(:event_participation, class_name: "Event::Participation") do
-  person
+  participant { Fabricate(:person) }
   event
 end

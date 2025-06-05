@@ -79,8 +79,8 @@ describe EventFeedsController do
       let!(:future_event_date) { Fabricate(:event_date, event: future_event, start_at: 1.year.from_now) }
       let(:past_event) { Fabricate(:event, name: "Past event") }
       let(:future_event) { Fabricate(:event, name: "Future event") }
-      let!(:past_event_participation) { Fabricate(:event_participation, event: past_event, person: person) }
-      let!(:future_event_participation) { Fabricate(:event_participation, event: future_event, person: person) }
+      let!(:past_event_participation) { Fabricate(:event_participation, event: past_event, participant: person) }
+      let!(:future_event_participation) { Fabricate(:event_participation, event: future_event, participant: person) }
 
       it "includes past event" do
         get :show, params: {token: person.event_feed_token}, format: :ics

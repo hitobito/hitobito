@@ -163,11 +163,11 @@ module EventsHelper
   def event_team?(event, person)
     return unless person
     team = event.role_types.select { |role_type| role_type.leader? || role_type.helper? }
-    event.participations_for(*team).pluck(:person_id).include?(person.id)
+    event.participations_for(*team).where(participant_type: person.class.sti_name).pluck(:participant_id).include?(person.id)
   end
 
   def event_participant?(event, person)
     return unless person
-    event.participations.pluck(:person_id).include?(person.id)
+    event.participations.where(participant_type: person.class.sti_name).pluck(:participant_id).include?(person.id)
   end
 end

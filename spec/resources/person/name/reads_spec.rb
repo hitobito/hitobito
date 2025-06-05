@@ -40,7 +40,7 @@ describe Person::NameResource, type: :resource do
       def create_role(type, **attrs)
         person = Fabricate(:person, attrs)
         Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group), person: person)
-        participation = Fabricate(:event_participation, person: person, event: course, active: true)
+        participation = Fabricate(:event_participation, participant: person, event: course, active: true)
         "Event::Role::#{type.to_s.classify}".constantize.create(participation: participation)
       end
 

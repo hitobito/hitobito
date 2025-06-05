@@ -58,7 +58,7 @@ class Event::ParticipantAssigner
       .active # only active/assigned participations are relevant
       .joins(:roles)
       .where(event_roles: {type: event.participant_types.map(&:sti_name)})
-      .where(person_id: participation.person_id)
+      .where(participant: participation.participant)
       .exists?
   end
 
@@ -66,7 +66,7 @@ class Event::ParticipantAssigner
     event.participations
       .joins(:roles)
       .where(event_roles: {type: event.participant_types.map(&:sti_name)})
-      .where(person_id: participation.person_id)
+      .where(participant: participation.participant)
       .exists?
   end
 

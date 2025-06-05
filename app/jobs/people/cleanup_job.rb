@@ -30,7 +30,7 @@ class People::CleanupJob < RecurringJob
 
   def event_participation_in_cutoff?(person)
     Event.joins(:participations, :dates)
-      .where(participations: {person_id: person.id})
+      .where(participations: {participant_id: person.id, participant_type: person.class.sti_name})
       .where("event_dates.start_at > :cutoff OR event_dates.finish_at > :cutoff", cutoff: cutoff)
       .any?
   end

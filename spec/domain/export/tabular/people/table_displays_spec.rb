@@ -122,9 +122,9 @@ describe Export::Tabular::People::TableDisplays do
     let(:participation) { event_participations(:top) }
     let(:person) { participation.person }
     let(:list) do
-      Event::Participation.where(id: participation.id)
-        .includes(person: [:phone_numbers, :additional_emails, :primary_group])
-        .references(person: [:phone_numbers, :additional_emails, :primary_group])
+      participations = Event::Participation.where(id: participation.id)
+      Event::Participation::PreloadParticipations.preload(participations)
+      participations
     end
     let(:question) { event_questions(:top_ov) }
     let(:top_course) { participation.event }

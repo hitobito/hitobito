@@ -9,7 +9,7 @@ describe Event::Qualifier do
   end
 
   let(:participation) do
-    participation = Fabricate(:event_participation, event: course, person: participant)
+    participation = Fabricate(:event_participation, event: course, participant: participant)
     Fabricate(Event::Role::Participant.name.to_sym, participation: participation)
     participation.reload
   end
@@ -157,7 +157,7 @@ describe Event::Qualifier do
       course = Fabricate.build(:course, name: "Kurs #{start_at.year}", kind: event_kind, training_days: training_days)
       course.dates.build(start_at: start_at)
       course.save!
-      Fabricate(:event_participation, event: course, person: participant, qualified: true)
+      Fabricate(:event_participation, event: course, participant: participant, qualified: true)
     end
 
     def create_event_kind_qualification_kind(event_kind, qualification_kind)

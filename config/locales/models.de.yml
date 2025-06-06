@@ -157,6 +157,8 @@ de:
           attributes:
             person_id:
               taken: wurde bereits angefragt
+        person_duplicates:
+          invalid_role: "Rolle %{role} von %{person} ist fürs Zusammenführen nicht gültig, da die andere Person eventuell bereits eine Rolle hat, welche diese Rolle nicht mehr erlaubt, diese muss manuell korrigiert/etnfernt werden. Info: %{message}"
         qualification:
           attributes:
             qualification_kind_id:
@@ -529,6 +531,8 @@ de:
         birth_year: Jahrgang
         roles_list: Rollen
         person_name: Vorname / Name / Übername
+        company_name: Firmenname
+        town: Ort
 
       person/add_request:
         person: Person

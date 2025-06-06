@@ -7,7 +7,6 @@
 - if entries.present?
   .mt-3
     = invoices_export_dropdown
-      
     - if @invoice_list.blank?
       - if parent.invoice_config.invalid?
         - disabled_msg = I18n.t('activerecord.errors.models.invoice_config.not_valid')

@@ -125,7 +125,6 @@ RSpec/ImplicitExpect:
     - 'spec/support/crud_controller_test_helper.rb'
     - 'spec/views/contactable/_fields.html.haml_spec.rb'
     - 'spec/views/event/participations/_actions_show.html.haml_spec.rb'
-    - 'spec/views/event/participations/_form.html.haml_spec.rb'
     - 'spec/views/layout/_flash.html.haml_spec.rb'
 
 # Offense count: 2

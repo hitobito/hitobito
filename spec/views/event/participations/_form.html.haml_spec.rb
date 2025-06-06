@@ -57,9 +57,9 @@ describe "event/participations/_form.html.haml" do
         before { render }
 
         it { is_expected.not_to be_checked }
-        its([:name]) { should eq "event_participation[answers_attributes][0][answer][]" }
-        its([:type]) { should eq "checkbox" }
-        its([:value]) { should eq value }
+        its([:name]) { is_expected.to eq "event_participation[answers_attributes][0][answer][]" }
+        its([:type]) { is_expected.to eq "checkbox" }
+        its([:value]) { is_expected.to eq value }
       end
 
       describe "Choice GA" do

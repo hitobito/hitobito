@@ -18,27 +18,25 @@ describe Qualifications::List do
 
   describe "#qualifications" do
     it "loads qualifications with kinds ordered by date" do
-      expect(person).to receive_message_chain(:qualifications, :order_by_date,
-        {includes: {qualification_kind: :translations}})
-        .and_return([])
+      expect(person).to receive_message_chain(
+        :qualifications,
+        :order_by_date,
+        {includes: {qualification_kind: :translations}}
+      ).and_return([])
       expect(list.qualifications).to be_empty
     end
 
     it "marks first if of kind if it is reactivateable" do
       allow(list).to receive(:ordered_qualifications).and_return(
-        [
-          Qualification.new(qualification_kind: sl_leader)
-        ]
+        [Qualification.new(qualification_kind: sl_leader)]
       )
       expect(list.qualifications[0]).to be_first_reactivateable
     end
 
     it "does not mark second of kind" do
       allow(list).to receive(:ordered_qualifications).and_return(
-        [
-          Qualification.new(qualification_kind: sl_leader),
-          Qualification.new(qualification_kind: sl_leader)
-        ]
+        [Qualification.new(qualification_kind: sl_leader),
+          Qualification.new(qualification_kind: sl_leader)]
       )
       expect(list.qualifications[0]).to be_first_reactivateable
       expect(list.qualifications[1]).not_to be_first_reactivateable
@@ -46,14 +44,8 @@ describe Qualifications::List do
 
     it "does mark first of kind qualification is active" do
       allow(list).to receive(:ordered_qualifications).and_return(
-        [
-          Qualification.new(
-            qualification_kind: sl, finish_at: 2.years.from_now.to_date
-          ),
-          Qualification.new(
-            qualification_kind: sl, finish_at: 1.year.from_now.to_date
-          )
-        ]
+        [Qualification.new(qualification_kind: sl, finish_at: 2.years.from_now.to_date),
+          Qualification.new(qualification_kind: sl, finish_at: 1.year.from_now.to_date)]
       )
       expect(list.qualifications[0]).to be_first_reactivateable
       expect(list.qualifications[1]).not_to be_first_reactivateable
@@ -61,14 +53,8 @@ describe Qualifications::List do
 
     it "does not mark first of kind if qualification is inactive and not reactivateable" do
       allow(list).to receive(:ordered_qualifications).and_return(
-        [
-          Qualification.new(
-            qualification_kind: sl, finish_at: 1.year.ago.to_date
-          ),
-          Qualification.new(
-            qualification_kind: sl, finish_at: 2.years.ago.to_date
-          )
-        ]
+        [Qualification.new(qualification_kind: sl, finish_at: 1.year.ago.to_date),
+          Qualification.new(qualification_kind: sl, finish_at: 2.years.ago.to_date)]
       )
       expect(list.qualifications[0]).not_to be_first_reactivateable
       expect(list.qualifications[1]).not_to be_first_reactivateable
@@ -111,20 +97,21 @@ describe Qualifications::List do
       end
 
       it "sums trainings after qualifying_date" do
-        Fabricate(:qualification, person: person, qualification_kind: gl, start_at: qualifying_date)
-        create_course_participation(training_days: 0.1, start_at: qualifying_date - 1.day)
-        create_course_participation(training_days: 0.5, start_at: qualifying_date)
-        create_course_participation(training_days: 0.5, start_at: qualifying_date + 1.day)
-        create_course_participation(training_days: 0.3, start_at: qualifying_date + 10.days)
+        Fabricate(:qualification, person: person, qualification_kind: gl, start_at: qualifying_date - 6.months)
+        create_course_participation(training_days: 0.1, start_at: qualifying_date - 8.months)
+        create_course_participation(training_days: 0.5, start_at: qualifying_date - 6.months)
+        create_course_participation(training_days: 0.2, start_at: qualifying_date - 2.months)
+        create_course_participation(training_days: 0.5, start_at: qualifying_date + 1.month)
+        create_course_participation(training_days: 0.3, start_at: qualifying_date + 2.months)
         expect(qualifications[0].open_training_days).to eq 0.2
       end
 
       it "only sets value on most recent qualification for kind" do
         Fabricate(:qualification, person: person, qualification_kind: gl,
           start_at: qualifying_date - 2.years)
-        Fabricate(:qualification, person: person, qualification_kind: gl, start_at: qualifying_date)
+        Fabricate(:qualification, person: person, qualification_kind: gl, start_at: qualifying_date - 3.months)
+        create_course_participation(training_days: 0.5, start_at: qualifying_date - 3.months)
         create_course_participation(training_days: 0.5, start_at: qualifying_date)
-        create_course_participation(training_days: 0.5, start_at: qualifying_date + 1.day)
         expect(qualifications[0].open_training_days).to eq 0.5
         expect(qualifications[1].open_training_days).to be_nil
       end

@@ -39,12 +39,12 @@ describe PaymentProviderConfig do
   end
 
   it "encrypts password" do
-    postfinance_config.password = "password"
+    postfinance_config.password = "passwördli13!"
 
     expect(postfinance_config.encrypted_password[:encrypted_value]).to be_present
     expect(postfinance_config.encrypted_password[:iv]).to be_present
     expect(postfinance_config.encrypted_password[:encrypted_value]).to_not eq("password")
-    expect(postfinance_config.password).to eq("password")
+    expect(postfinance_config.password).to eq("passwördli13!")
 
     expect(postfinance_config.save).to be(true)
   end

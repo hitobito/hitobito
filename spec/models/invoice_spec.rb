@@ -43,7 +43,6 @@
 #  index_invoices_on_invoice_list_id  (invoice_list_id)
 #  index_invoices_on_recipient_id     (recipient_id)
 #  index_invoices_on_sequence_number  (sequence_number)
-#  invoices_search_column_gin_idx     (search_column) USING gin
 #
 
 require "spec_helper"
@@ -444,6 +443,26 @@ describe Invoice do
     it "supports sorting by totally paid amount" do
       expect(described_class.order_by_amount_paid_statement)
         .to eql "last_payments.amount_paid"
+    end
+  end
+
+  describe "latest_reminder" do
+    let(:invoice) { create_invoice }
+
+    before do
+      invoice.update!(due_at: 10.days.ago, state: "reminded")
+    end
+
+    it "returns latest reminder" do
+      first_reminder = Fabricate(:payment_reminder, invoice: invoice, due_at: 3.day.ago, created_at: 5.days.ago)
+      expect(invoice.latest_reminder).to eq first_reminder
+
+      second_reminder = Fabricate(:payment_reminder, invoice: invoice, due_at: 1.day.ago, created_at: 2.days.ago)
+      expect(invoice.reload.latest_reminder).to eq second_reminder
+    end
+
+    it "returns nil when no reminder is present" do
+      expect(invoice.latest_reminder).to be_nil
     end
   end
 

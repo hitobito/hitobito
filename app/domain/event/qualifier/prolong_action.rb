@@ -12,12 +12,16 @@ class Event::Qualifier::ProlongAction < Event::Qualifier::QualifyAction
   end
 
   def run
-    prolongation_kinds.collect do |kind|
-      next create(kind) if kind.required_training_days.blank?
-
-      start_at = calculator.start_at(kind)
-      create(kind, start_at: start_at) if start_at
-    end.compact
+    prolongation_kinds.filter_map do |kind|
+      if kind.required_training_days.blank?
+        create(kind)
+      else
+        # See doc/developer/event/qualifications.md for details on
+        # prolongation with required training days
+        start_at = calculator.start_at(kind)
+        create(kind, start_at: start_at) if start_at
+      end
+    end
   end
 
   private

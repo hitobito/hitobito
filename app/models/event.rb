@@ -532,7 +532,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   end
 
   def validate_visible_contact_attributes
-    return if visible_contact_attributes.blank?
+    return if visible_contact_attributes.blank? || contact_id.blank?
 
     unless visible_contact_attributes.all? { |attr| ALLOWED_VISIBLE_CONTACT_ATTRIBUTES.include?(attr) }
       errors.add(:visible_contact_attributes, :inclusion)

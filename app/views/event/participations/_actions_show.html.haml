@@ -13,7 +13,7 @@
   = action_button(t('global.button.print'),
                   print_group_event_participation_path(@group, @event, entry, format: :pdf),
                   :print,
-                  { target: 'new'})
+                  { target: '_blank'})
 
 - if can?(:create, @event)
   = Dropdown::Event::Participation::MailDispatch.new(self, @event, @group, entry)
@@ -23,8 +23,7 @@
                   edit_group_person_path(entry.person.default_group_id, entry.person, return_url: url_for),
                   :edit)
 
--# Just for the root user, to be able to easily naviagate from a participation to a person
-- if current_user.root?
+- if can?(:show, entry.person)
   = action_button(t(".link_to_person"),
                   group_person_path(entry.person.default_group_id, entry.person),
                   :eye)

@@ -14,7 +14,7 @@
 #  amount_total          :decimal(15, 2)   default(0.0), not null
 #  invalid_recipient_ids :text
 #  receiver_type         :string
-#  recipient_ids         :text
+#  receivers             :text
 #  recipients_paid       :integer          default(0), not null
 #  recipients_processed  :integer          default(0), not null
 #  recipients_total      :integer          default(0), not null
@@ -33,7 +33,7 @@
 #
 
 class InvoiceList < ActiveRecord::Base
-  serialize :recipient_ids, type: Array, coder: YAML
+  serialize :receivers, type: Array, coder: InvoiceLists::Receiver
   serialize :invalid_recipient_ids, type: Array, coder: YAML
   belongs_to :group
   belongs_to :receiver, polymorphic: true
@@ -42,6 +42,8 @@ class InvoiceList < ActiveRecord::Base
   has_one :message, dependent: :nullify
   has_many :invoices, dependent: :destroy
 
+  # NOTE transient attribute to populate invoice in the view and serve as template
+  # when persisting actual invoices
   attr_accessor :invoice
 
   validates :receiver_type, inclusion: %w[MailingList Group], allow_blank: true
@@ -52,6 +54,18 @@ class InvoiceList < ActiveRecord::Base
 
   def to_s
     title
+  end
+
+  def calculated
+    @calculated ||= InvoiceItems::Calculation.new(invoice.invoice_items).calculated
+  end
+
+  def fixed_fee
+    invoice.invoice_items.flat_map { |item| item[:dynamic_cost_parameters][:fixed_fees].to_s }.compact_blank.uniq.first
+  end
+
+  def fixed_fees?(fee = nil)
+    fee ? fixed_fee == fee.to_s : fixed_fee.present?
   end
 
   def invoice_parameters
@@ -78,10 +92,6 @@ class InvoiceList < ActiveRecord::Base
     receiver ? receiver_people.unscope(:select).count : recipient_ids.count
   end
 
-  def first_recipient
-    receiver ? receiver_people.first : Person.find(recipient_ids.first)
-  end
-
   def recipients
     receiver ? receiver_people : Person.where(id: recipient_ids)
   end
@@ -94,8 +104,12 @@ class InvoiceList < ActiveRecord::Base
     group.layer_group.invoice_config
   end
 
+  def recipient_ids
+    self[:receivers].to_a.map(&:id)
+  end
+
   def recipient_ids=(ids)
     value = ids.is_a?(Array) ? ids : ids.to_s.scan(/\d+/).map(&:to_i).select(&:positive?)
-    write_attribute(:recipient_ids, value)
+    self[:receivers] = value
   end
 end

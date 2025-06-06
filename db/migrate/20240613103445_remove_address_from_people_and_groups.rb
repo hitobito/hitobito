@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 class RemoveAddressFromPeopleAndGroups < ActiveRecord::Migration[6.1]
   def change
-    if Group.any? && (unmigrated(Person).any? || unmigrated(Group).any?)
+    if table_has_data?(:groups) && (table_has_nonempty_address?(:people) || table_has_nonempty_address?(:groups))
       raise "Not all addresses have been migrated into structured form or handled."
     end
 
@@ -14,11 +14,26 @@ class RemoveAddressFromPeopleAndGroups < ActiveRecord::Migration[6.1]
     remove_column :groups, :search_column, if_exists: true
     remove_column :people, :address, :text, limit: 1024
     remove_column :groups, :address, :text, limit: 1024
-    Group.reset_column_information
-    Person.reset_column_information
   end
 
   private
 
-  def unmigrated(model) = model.where.not(address: nil).where.not(address: "")
+
+  def table_has_data?(table_name)
+    count_query = "SELECT COUNT(*) FROM #{quote_table_name(table_name)}"
+    ActiveRecord::Base.connection.select_value(count_query).to_i > 0
+  end
+
+  def table_has_nonempty_address?(table_name)
+    query = <<~SQL
+      SELECT COUNT(*)
+      FROM #{quote_table_name(table_name)}
+      WHERE address IS NOT NULL AND address != ''
+    SQL
+    ActiveRecord::Base.connection.select_value(query).to_i > 0
+  end
+
+  def quote_table_name(name)
+    ActiveRecord::Base.connection.quote_table_name(name)
+  end
 end

@@ -127,6 +127,53 @@ describe Invoice::BatchCreate do
     expect(list.invalid_recipient_ids).to have(1).item
   end
 
+  describe "fixed memberhip fee" do
+    let!(:receiver) { Fabricate(Group::BottomLayer::Leader.sti_name, group: groups(:bottom_layer_one)) }
+    let!(:list) do
+      list = InvoiceList.new(group: group, title: :title)
+      list.invoice = Invoice.new(title: "invoice", group: group, issued_at: Time.zone.today)
+      InvoiceLists::FixedFee.for(:membership).prepare(list)
+      list.tap(&:save!).reload
+    end
+
+    it "includes layer name in title" do
+      expect do
+        Invoice::BatchCreate.new(list).call
+      end.to change { group.invoices.count }.by(1)
+      expect(group.invoices.last.title).to eq "invoice - Bottom One"
+    end
+
+    it "has an invoice item for each configured membership fee item" do
+      Fabricate(Group::BottomGroup::Member.sti_name, group: groups(:bottom_group_one_one))
+      expect do
+        Invoice::BatchCreate.new(list).call
+      end.to change { group.invoice_items.count }.by(2)
+      leaders, members = list.invoices.last.invoice_items.order(:name)
+
+      expect(leaders).to be_kind_of(InvoiceItem::FixedFee)
+      expect(leaders.count).to eq 1
+      expect(leaders.cost).to eq 15
+      expect(leaders.dynamic_cost_parameters[:fixed_fees]).to eq "membership"
+
+      expect(members).to be_kind_of(InvoiceItem::FixedFee)
+      expect(members.count).to eq 2
+      expect(members.cost).to eq 20
+      expect(members.dynamic_cost_parameters[:fixed_fees]).to eq "membership"
+
+      expect(leaders.name).to eq "Mitgliedsbeitrag - Leaders"
+      expect(members.name).to eq "Mitgliedsbeitrag - Members"
+    end
+
+    it "it does not count roles outside of recipients layer" do
+      Fabricate(Group::BottomGroup::Member.sti_name, group: groups(:bottom_group_two_one))
+      expect do
+        Invoice::BatchCreate.new(list).call
+      end.to change { group.invoice_items.count }.by(2)
+      _, members = list.invoices.last.invoice_items.order(:name)
+      expect(members.count).to eq 1
+    end
+  end
+
   private
 
   def fabricate_donation(amount, received_at = 1.year.ago)

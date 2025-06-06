@@ -180,7 +180,7 @@ GEM
       marcel (~> 1.0)
       nokogiri (~> 1.10, >= 1.10.4)
       rubyzip (>= 1.3.0, < 3)
-    cgi (0.4.1)
+    cgi (0.4.2)
     charlock_holmes (0.7.9)
     childprocess (5.0.0)
     choice (0.2.0)
@@ -422,7 +422,7 @@ GEM
     mime-types-data (3.2024.0507)
     mini_magick (4.12.0)
     mini_mime (1.1.5)
-    mini_portile2 (2.8.8)
+    mini_portile2 (2.8.9)
     minitest (5.25.2)
     msgpack (1.7.2)
     multi_json (1.15.0)
@@ -430,7 +430,7 @@ GEM
     nested_form (0.3.2)
     net-http (0.4.1)
       uri
-    net-imap (0.4.19)
+    net-imap (0.4.20)
       date
       net-protocol
     net-pop (0.1.2)
@@ -442,7 +442,7 @@ GEM
     netrc (0.11.0)
     niceql (0.6.1)
     nio4r (2.7.3)
-    nokogiri (1.16.8)
+    nokogiri (1.18.8)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     oat (0.6.1)
@@ -474,7 +474,7 @@ GEM
     prawn (2.4.0)
       pdf-core (~> 0.9.0)
       ttfunk (~> 1.7)
-    prawn-markup (1.0.0)
+    prawn-markup (1.1.0)
       nokogiri
       prawn
       prawn-table
@@ -507,7 +507,7 @@ GEM
     puma (6.4.3)
       nio4r (~> 2.0)
     racc (1.8.1)
-    rack (3.1.14)
+    rack (3.1.16)
     rack-cors (2.0.2)
       rack (>= 2.0.0)
     rack-mini-profiler (3.3.1)

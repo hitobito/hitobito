@@ -164,12 +164,17 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   # Render a select dropdown for countries
-  def country_field(attr, html_options = {})
+  def country_field(attr = :country, **html_options)
     html_options[:class] = [
-      html_options[:class], "form-select", "form-select-sm", "tom-select"
-    ].compact.join(" ")
+      html_options[:class], "form-select", "form-select-sm"
+    ].compact_blank.join(" ")
     html_options[:class] += " is-invalid" if errors_on?(attr)
-    html_options[:data] = {placeholder: " ", chosen_no_results: I18n.t("global.chosen_no_results")}
+    html_options[:data] = {
+      placeholder: " ",
+      chosen_no_results: I18n.t("global.chosen_no_results"),
+      controller: "tom-select"
+    }
+
     country_select(attr,
       {priority_countries: Settings.countries.prioritized,
        selected: @object.send(attr),
@@ -302,8 +307,13 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       html_options[:class], *FORM_CONTROL_SELECT_WITH_WIDTH
     ].compact.join(" ")
     html_options[:class] += " is-invalid" if errors_on?(attr)
+    html_options[:data].to_h.merge!(
+      chosen_no_results: I18n.t("global.chosen_no_results"),
+      placeholder: " ",
+      controller: "tom-select"
+    )
 
-    add_css_class(html_options, "multiselect tom-select")
+    add_css_class(html_options, "multiselect")
     belongs_to_field(attr, html_options)
   end
 
@@ -387,7 +397,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   #   labeled(:attr, content)
   #   labeled(:attr, 'Caption') { #content }
   #   labeled(:attr, 'Caption', content)
-  def labeled(attr, caption_or_content = nil, content = nil, **html_options, &block) # rubocop:disable Metrics/*
+  def labeled(attr, caption_or_content = nil, content = nil, mark_as_required: false, **html_options, &block) # rubocop:disable Metrics/*
     if block
       content = capture(&block)
     elsif content.nil?
@@ -398,7 +408,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
     label_classes = html_options.delete(:label_class) || "col-md-3 col-xl-2 pb-1"
     label_classes += " col-form-label text-md-end"
-    label_classes += " required" if required?(attr)
+    label_classes += " required" if mark_as_required || required?(attr)
 
     add_css_class(html_options, "labeled col-md-9 col-lg-8 col-xl-8 mw-63ch")
     css_classes = {"no-attachments": no_attachments?(attr),

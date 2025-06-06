@@ -84,7 +84,7 @@ de:
     index:
       title: "%{models}"
 
-  crud: &crud
+  crud:
     show:
       title: "%{model}"
     new:
@@ -102,7 +102,23 @@ de:
         success: "%{model} wurde erfolgreich gelöscht."
         failure: "%{model} konnte nicht gelöscht werden."
 
-  modal_crud: *crud
+  modal_crud:
+    show:
+      title: "%{model}"
+    new:
+      title: "%{model} erstellen"
+    edit:
+      title: "%{model} bearbeiten"
+    create:
+      flash:
+        success: "%{model} wurde erfolgreich erstellt."
+    update:
+      flash:
+        success: "%{model} wurde erfolgreich aktualisiert."
+    destroy:
+      flash:
+        success: "%{model} wurde erfolgreich gelöscht."
+        failure: "%{model} konnte nicht gelöscht werden."
 
   blocked:
     index:
@@ -793,6 +809,7 @@ de:
       confirm_archive: >
         Wollen Sie diese Gruppe wirklich archivieren? Sie kann dann nicht mehr
         bearbeitet werden und sämtliche Rollen werden ebenfalls archiviert.
+      membership_invoice_button: Mitgliedsrechnung
     attrs:
       contact_details: "Kontaktangaben"
       additional_information: "Weitere Angaben"
@@ -984,6 +1001,10 @@ de:
         filter:
           from: Von
           to: Bis
+    table:
+      number_of_invoices_shown:
+        one: "%{count} Rechnung angezeigt."
+        other: "%{count} Rechnungen angezeigt."
 
   invoices/by_article:
     index:
@@ -1031,7 +1052,7 @@ de:
     destroys:
       show:
         title: Sammelrechnung löschen
-        non_draft_info: 'In der Sammelrechnung ist mindesents eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann die Sammelrechnung nicht gelöscht werden.'
+        non_draft_info: 'In der Sammelrechnung ist mindestens eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann die Sammelrechnung nicht gelöscht werden.'
         confirm_delete: Wollen Sie die Sammelrechnung wirklich löschen?
     form:
       invoice_articles:
@@ -1084,6 +1105,9 @@ de:
       zero: "Zuerst muss eine Rechnung ausgewählt werden."
       one: "Rechnung wurde storniert."
       other: "%{count} Rechnungen wurden storniert."
+
+  invoice_lists/fixed_fee:
+    recipient_role_group_mismatch: "Für folgende Gruppen konnte kein Empfänger ermittelt werden: %{groups}"
 
   payments:
     export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
@@ -1422,6 +1446,7 @@ de:
     merge:
       new:
         title: Personen zusammenführen
+      form:
         select_person: Wessen Daten sollen beim Zusammenführen den Vorrang haben?
         merge_hint: Beim Zusammenführen werden die Rollen, Telefonnummern, zusätzlichen E-Mails, Social Media Einträge, Rechnungen, Notizen, Tags, Abos, Familienmitglieder, Event Einladungen und Teilnahmen sowie auch Qualifikationen übernommen. Alle anderen Daten dieser Person wie z.B. Log Einträge usw. werden gelöscht.
         merge_hint_invalid: Diese Person hat ungültige Daten.
@@ -1784,10 +1809,10 @@ de:
   qualification_decorator:
     open_training_days_active:
       Damit die Qualifikation am %{finish_at} nicht abläuft, bitten wir
-      dich bis dahin %{days} Fortbildungstage zu absolvieren
+      dich bis spätestens dahin %{days} Fortbildungstage zu absolvieren.
     open_training_days_reactivatable:
       Um deine Qualifikation zu reaktivieren, bitten wir dich
-      %{days} Fortbildungstage bis spätestens %{reactivateable_until} zu absolvieren
+      %{days} Fortbildungstage bis spätestens %{reactivateable_until} zu absolvieren.
     open_training_days_no_longer_reactivatable: Diese Qualifikation ist seit dem
       %{reactivateable_until} abgelaufen. Falls du davor Aus- oder Fortbildungen besucht hast und
       du für diese eine Kursbestätigung besitzt, kannst du diese mit deinem Tourenchef teilen.

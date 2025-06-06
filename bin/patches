@@ -1,0 +1,39 @@
+#!/usr/bin/env ruby
+
+require "optparse"
+
+options = {}
+OptionParser.new do |opt|
+  opt.banner = "Usage: #{$0}"
+  opt.on("--inspect CONSTANT") { |o| options[:constant] = o }
+  opt.on("-e", "--[no-]eager-load", "Eager load application") { |o| options[:eager_load] = o }
+end.parse!
+
+
+puts "loading rails .."
+require_relative "../config/boot"
+require "rails"
+require_relative "../config/environment"
+
+if options[:eager_load]
+  puts "loading application .."
+  Rails.application.eager_load!
+end
+
+def patched_classes
+  Patches::Collector.new.collect.select(&:patched?)
+end
+
+def analyze(constant)
+  source_file, _line = Object.const_source_location(constant.to_s)
+  Patches::Analyzer.new(constant.constantize, source_file).patches
+end
+
+if options[:constant]
+  puts analyze(options[:constant])
+else
+  patched_classes.each do |klass|
+    puts klass.name
+    puts klass.patches
+  end
+end

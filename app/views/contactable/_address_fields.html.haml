@@ -3,16 +3,12 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- country_data = (country_data || {}).merge(placeholder: ' ', 
-                                            chosen_no_results: t('global.chosen_no_results'), 
-                                            typeahead_supported_countries: Settings.addresses.imported_countries)
-
 .address-input-fields
   - if f.object.respond_to?(:household_key) && f.object.household_key.present?
     %div.alert.alert-warning.updates-household-address= t('.updates_household_address')
 
   = f.labeled_input_field(:address_care_of)
-  = f.labeled(:address, class: 'd-flex') do
+  = f.labeled(:street, Person.human_attribute_name(:address), class: 'd-flex') do
     %div.col-9
       = f.input_field(:street, data: { provide: 'entity', updater: 'AddressTypeahead.update', url: addresses_query_url })
     %div.col-2.offset-1
@@ -26,9 +22,4 @@
       = f.input_field(:town)
   = f.labeled(:country) do
     .shown.ms-0
-      = f.country_select('country',
-                       { priority_countries: Settings.countries.prioritized,
-                         selected: f.object.country,
-                         include_blank: "" },
-                       { class: 'form-select form-select-sm tom-select',
-                         data: country_data })
+      = f.country_field

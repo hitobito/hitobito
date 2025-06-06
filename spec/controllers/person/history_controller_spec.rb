@@ -67,11 +67,13 @@ describe Person::HistoryController do
       end
 
       it "includes open trainings days" do
-        gl.update(required_training_days: 3)
+        travel_to(Date.new(2018, 1, 1))
+
+        gl.update(required_training_days: 3, validity: 6, reactivateable: 4)
         Fabricate(:qualification, person: top_leader, qualification_kind: gl,
-          start_at: 3.months.ago, finish_at: 6.months.from_now)
-        create_course_participation(training_days: 1.5, start_at: 2.months.ago)
-        create_course_participation(training_days: 1, start_at: 1.month.ago)
+          start_at: Date.new(2015, 1, 1), finish_at: Date.new(2018, 1, 1))
+        create_course_participation(training_days: 1.5, start_at: Date.new(2016, 1, 1))
+        create_course_participation(training_days: 1, start_at: Date.new(2016, 7, 1))
 
         get :index, params: {group_id: groups(:top_group).id, id: top_leader.id}
         expect(body).to have_css "thead th", text: "Offene Ausbildungstage"

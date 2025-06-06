@@ -24,6 +24,7 @@
 #  payee                            :text
 #  payment_information              :text
 #  payment_slip                     :string           default("qr"), not null
+#  reference_prefix                 :integer
 #  sender_name                      :string
 #  sequence_number                  :integer          default(1), not null
 #  vat_number                       :string

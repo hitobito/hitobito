@@ -7,11 +7,15 @@
 
 module Export::Tabular::Event::Participations
   class TableDisplays < Export::Tabular::People::TableDisplays
-    self.model_class = ::Person
+    self.model_class = ::Event::Participation
     self.row_class = TableDisplayRow
 
     def public_account_labels(accounts, klass)
       account_labels(list.map(&:person).map(&accounts).flatten.select(&:public?), klass)
+    end
+
+    def human_attribute(attr)
+      Person.human_attribute_name(attr)
     end
   end
 end

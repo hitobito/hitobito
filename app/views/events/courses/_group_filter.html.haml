@@ -1,22 +1,28 @@
+-#  Copyright (c) 2025, Hitobito AG. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
 .course-group-filter.mt-3
-  = f.label(:group_ids, t('.filter_by_layer'), class: 'control-label')
+  = f.label(:group_ids, t(".filter_by_layer"), class: "control-label")
   .control-group
     .controls
       .select.shown
         = f.select(:group_ids,
                  options_from_collection_for_select(course_groups, :id, :name, @group_ids),
                  {},
-                 { id: 'group-filter-select',
-                   class: 'form-select form-select-sm tom-select w-100',
+                 { id: "group-filter-select",
+                   class: "form-select form-select-sm w-100",
                    multiple: true,
-                   data: { chosen_no_results: t('global.chosen_no_results'),
-                           placeholder: t('.select_layers') } })
+                   data: { chosen_no_results: t("global.chosen_no_results"),
+                           placeholder: t(".select_layers"),
+                           controller: "tom-select" } })
 
       .group-filter-quick-add-tags
-        %button.chip.chip-add.group-filter-clear{id: "group-filter-clear", type: :button, data: {'clear-values': 'group-filter-select'} }
-          = t('.all_layers')
+        %button.chip.chip-add.group-filter-clear{id: "group-filter-clear", type: :button, data: {"clear-values": "group-filter-select"} }
+          = t(".all_layers")
           = icon(:times)
         - quick_select_course_groups.each do |group|
-          %button.chip.chip-add.group-filter-add{id: "group-filter-add-#{group.id}", type: :button, data: {'add-value': group.id, 'add-to': 'group-filter-select'} }
+          %button.chip.chip-add.group-filter-add{id: "group-filter-add-#{group.id}", type: :button, data: {"add-value": group.id, "add-to": "group-filter-select"} }
             = group.name
             = icon(:plus)

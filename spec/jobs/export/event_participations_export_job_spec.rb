@@ -73,6 +73,24 @@ describe Export::EventParticipationsExportJob do
     end
   end
 
+  context "creates a table displays export" do
+    let(:format) { :csv }
+    let(:params) { {selection: true} }
+
+    it "and saves it" do
+      TableDisplay.create!(person: user, table_model_class: "Event::Participation", selected: ["person.layer_group_label"])
+
+      subject.perform
+
+      lines = file.read.lines
+      expect(lines.size).to eq(3)
+      expect(lines[0]).to match(/Vorname;Nachname;Übername;Firmenname;.*/)
+      expect(lines[0]).to match(/Hauptebene.*/)
+      expect(lines[0].split(";").count).to match(16)
+      expect(lines[1]).to eq "Bottom;Member;;;nein;bottom_member@example.com;;Greatstreet;345;;3456;Greattown;Schweiz;Bottom One;Member Bottom One;Bottom One\n"
+    end
+  end
+
   context "creates a household export" do
     let(:format) { :csv }
     let(:params) { {household: true} }

@@ -1,11 +1,20 @@
-.pagination-bar
+-#  Copyright (c) 2025, Hitobito AG. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+.pagination-bar.justify-content-start
   = paginate @invoices
+
+  .pagination-info
+    - if @invoices.total_count > 0
+      = t('.number_of_invoices_shown', count: @invoices.total_count)
 
 = crud_table(data: { checkable: true }) do |t|
   - t.col(check_box_tag(:all, 0, false, { data: :multiselect })) do |i|
     - check_box_tag('ids[]', i.id, false, data: { multiselect: true })
   - t.col(t.sort_header(:title)) do |invoice|
-    %strong= link_to invoice.title, group_invoice_path(invoice.group_id, invoice)
+    %strong= link_to invoice.title, invoice_link(invoice)
   - t.sortable_attrs(:sequence_number, :state, :recipient, :issued_at, :sent_at, :due_at)
   - t.sortable_attr(:last_payment_at)
   - t.col(t.sort_header(:amount_paid), class: 'right') { |i| i.decorate.amount_paid }

@@ -27,14 +27,21 @@ describe "event/participations/_actions_show.html.haml" do
     assign(:group, group)
   end
 
-  context "last button" do
+  context "second to last button is by default the change contact data button" do
+    subject { Capybara::Node::Simple.new(raw(rendered)).all("a")[-2] }
+
+    before { render }
+
+    its([:href]) { should eq edit_group_person_path(user.groups.first, user, return_url: "/groups/42/events/42/participations/42") }
+    its(:text) { should eq " Kontaktdaten ändern" } # space because of icon
+  end
+
+  context "last button is by default the show person profile button" do
     subject { Capybara::Node::Simple.new(raw(rendered)).all("a").last }
 
-    context "last button per default is the change contact data button" do
-      before { render }
+    before { render }
 
-      its([:href]) { should eq edit_group_person_path(user.groups.first, user, return_url: "/groups/42/events/42/participations/42") }
-      its(:text) { should eq " Kontaktdaten ändern" } # space because of icon
-    end
+    its([:href]) { should eq group_person_path(user.groups.first, user) }
+    its(:text) { should eq " Personenprofil anzeigen" } # space because of icon
   end
 end

@@ -202,7 +202,8 @@ class Splitter
   end
 
   def obsolete?
-    [Person, Group].map { |model| with_address(model).count }.sum.zero?
+    models = [with_address(:people), with_address(:groups)]
+    models.sum(&:count).zero?
   end
 
   private
@@ -220,7 +221,15 @@ class Splitter
     end
   end
 
-  def with_address(model) = model.where.not(address: nil).where.not(address: "")
+  def with_address(model)
+    sql = <<~SQL
+      SELECT *
+      FROM #{ActiveRecord::Base.connection.quote_table_name(model)}
+      WHERE address IS NOT NULL AND address != ''
+    SQL
+
+    ActiveRecord::Base.connection.exec_query(sql)
+  end
 
   def convert_address(model)
     name = model.name.pluralize
@@ -323,7 +332,7 @@ end
 
 class SplitAddresses < ActiveRecord::Migration[6.1]
   def up
-    return if Group.none? # early return when migrating on empty database
+    return if ActiveRecord::Base.connection.select_value("SELECT 1 FROM groups LIMIT 1").blank? # early return when migrating on empty database
 
     splitter = Splitter.new(String.new.dup)
     if splitter.obsolete?

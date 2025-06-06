@@ -103,7 +103,7 @@ describe Qualifications::List do
         create_course_participation(training_days: 0.2, start_at: qualifying_date - 2.months)
         create_course_participation(training_days: 0.5, start_at: qualifying_date + 1.month)
         create_course_participation(training_days: 0.3, start_at: qualifying_date + 2.months)
-        expect(qualifications[0].open_training_days).to eq 0.2
+        expect(qualifications[1].open_training_days).to eq 0.2
       end
 
       it "only sets value on most recent qualification for kind" do
@@ -112,8 +112,8 @@ describe Qualifications::List do
         Fabricate(:qualification, person: person, qualification_kind: gl, start_at: qualifying_date - 3.months)
         create_course_participation(training_days: 0.5, start_at: qualifying_date - 3.months)
         create_course_participation(training_days: 0.5, start_at: qualifying_date)
-        expect(qualifications[0].open_training_days).to eq 0.5
-        expect(qualifications[1].open_training_days).to be_nil
+        expect(qualifications[1].open_training_days).to eq 0.5
+        expect(qualifications[2].open_training_days).to be_nil
       end
     end
 

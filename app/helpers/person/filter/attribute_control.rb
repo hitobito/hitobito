@@ -27,14 +27,13 @@ class Person::Filter::AttributeControl
     type = Person.filter_attrs[key.to_sym][:type] if key
 
     content_tag(:div,
-      class: 'people_filter_attribute_form d-flex align-items-center
-                        justify-content-between mb-2 controls controls-row') do
+      class: 'people_filter_attribute_form d-flex flex-column flex-lg-row justify-content-center justify-content-lg-between mb-2 controls controls-row') do
       content = attribute_key_hidden_field(key, time, disabled: attr.blank?)
       content << attribute_key_field(key, time, html_options)
       content << attribute_constraint_field(key, constraint, type, time, html_options)
 
       attribute_value_class = "#{(constraint == "blank") ? " invisible" : ""} attribute_value_input"
-      content << content_tag(:div, class: "col") do
+      content << content_tag(:div, class: "col-12 col-lg-3") do
         if type
           send(:"#{type}_field", time, attribute_value_class, value, html_options)
         else
@@ -43,7 +42,7 @@ class Person::Filter::AttributeControl
       end
 
       content << link_to(icon(:"trash-alt", filled: false), "#",
-        class: "remove_filter_attribute col-3 d-flex justify-content-end lh-lg ms-5")
+        class: "remove_filter_attribute d-flex justify-content-end lh-lg ms-5 ms-lg-0 d-none d-lg-block")
     end
   end
 
@@ -68,18 +67,20 @@ class Person::Filter::AttributeControl
   end
 
   def attribute_key_field(key, time, html_options)
-    content_tag(:div, class: "col-3") do
+    content_tag(:div, class: "d-flex flex-row justify-content-between col-12 col-lg-3") do
       select_tag("#{filter_name_prefix}[key]",
-        options_from_collection_for_select(people_filter_attributes_for_select, :last, :first, key),
-        html_options.merge(disabled: true, class: "attribute_key_dropdown form-select form-select-sm"))
+                 options_from_collection_for_select(people_filter_attributes_for_select, :last, :first, key),
+                 html_options.merge(disabled: true, class: "attribute_key_dropdown form-select form-select-sm")) +
+      link_to(icon(:"trash-alt", filled: false), "#",
+              class: "d-block d-lg-none d-flex justify-content-end align-items-center remove_filter_attribute col-md-3 d-flex lh-lg")
     end
   end
 
   def attribute_constraint_field(key, constraint, type, time, html_options)
-    content_tag(:div, class: "col-3") do
+    content_tag(:div, class: "col-12 col-lg-3") do
       select_tag("#{filter_name_prefix}[constraint]",
         options_from_collection_for_select(constraint_options_for(type, key), :last, :first, constraint),
-        html_options.merge(class: "attribute_constraint_dropdown ms-3 form-select form-select-sm"))
+        html_options.merge(class: "attribute_constraint_dropdown form-select form-select-sm w-100"))
     end
   end
 

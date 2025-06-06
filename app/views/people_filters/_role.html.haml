@@ -38,10 +38,11 @@
   .d-flex.flex-row.align-items-center
     .col-2
       %label= t("people_filters.role.role_kind_title")
-    .col-10{"data-controller": "form-select"}
+    .col-10
       = select_tag('filters[role][kind][]',
                         kind_options,
                         class: 'form-control form-control-sm w-100',
                         id: 'role-kind-select',
                         multiple: false,
+                        "data-controller": "form-select",
                         data: { chosen_no_results: t('global.chosen_no_results'), placeholder: t('.prompt_role_kind_placeholder') } )

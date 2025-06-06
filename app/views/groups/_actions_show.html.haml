@@ -15,8 +15,7 @@
   = action_button(t('activerecord.models.service_token.other'), group_service_tokens_path(@group), :key)
   = action_button(Calendar.model_name.human(count: 2), group_calendars_path(@group), :'calendar-alt')
 
-- if can?(:index_invoices, @group) && @group.invoice_config.valid?
-  - if FeatureGate.enabled?('invoice_lists.fixed_fees.membership')
-    = action_button(t('.membership_invoice_button'), new_group_invoice_list_path(@group, fixed_fees: :membership), 'money-bill-alt')
+- if FeatureGate.enabled?('invoice_lists.fixed_fees.membership') && can?(:index_invoices, @group) && @group.invoice_config&.valid?
+  = action_button(t('.membership_invoice_button'), new_group_invoice_list_path(@group, fixed_fees: :membership), 'money-bill-alt')
 
 = render_extensions(:actions_show)

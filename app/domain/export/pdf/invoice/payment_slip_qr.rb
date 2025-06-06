@@ -18,6 +18,7 @@ module Export::Pdf::Invoice
     WIDTH_RECEIPT = 62.mm
     WIDTH = WIDTH_RECEIPT + WIDTH_PAYMENT
     MARGIN = Export::Pdf::Invoice::MARGIN
+    FONT_FAMILY = "Helvetica"
 
     HEIGHT_WITHOUT_MARGIN = HEIGHT - MARGIN
 
@@ -26,19 +27,25 @@ module Export::Pdf::Invoice
 
       stamped :separators
 
-      receipt do
-        receipt_title
-        receipt_infos
-        receipt_amount
-        receipt_receiving_office
-      end
+      font FONT_FAMILY do
+        font_size(8) do
+          receipt do
+            receipt_title
+            receipt_infos
+            receipt_amount
+            receipt_receiving_office
+          end
+        end
 
-      payment do
-        stamped :payment_title
-        payment_qrcode
-        render_payment_amount
-        payment_infos
-        payment_extra_infos
+        font_size(10) do
+          payment do
+            stamped :payment_title
+            payment_qrcode
+            render_payment_amount
+            payment_infos
+            payment_extra_infos
+          end
+        end
       end
     end
 
@@ -73,8 +80,8 @@ module Export::Pdf::Invoice
 
     def payment_title
       padded_bounding_box(0.1, width: 60.mm, pad_right: false) do
-        font "Helvetica", size: 11, style: :bold do
-          text t("payment_title")
+        font_size(11) do
+          bold { text t("payment_title") }
         end
       end
     end
@@ -109,13 +116,15 @@ module Export::Pdf::Invoice
       # render_esr_number is only true if invoice.esr_number is present
       # condition currently only applies in SAC wagon
       padded_bounding_box(0.85, x: 60.mm, width: width, pad_right: false) do
-        info_box(render_esr_number: invoice.esr_number.present?)
+        info_box
       end
     end
 
     def receipt_title
       padded_bounding_box(0.1, pad_right: true) do
-        heading(size: 11) { text t("receipt_title") }
+        font_size(11) do
+          bold { text t("receipt_title") }
+        end
       end
     end
 
@@ -129,54 +138,64 @@ module Export::Pdf::Invoice
 
     def receipt_receiving_office
       padded_bounding_box(0.15, pad_right: true) do
-        heading do
+        bold do
           move_down 10
           pdf.text t("receiving_office"), align: :right
         end
       end
     end
 
-    def info_box(render_esr_number: false) # rubocop:disable Metrics/MethodLength
-      heading do
-        text_box t("creditor_heading"), at: [0, cursor]
-      end
-      content do
-        text_box creditor_values, at: [0, cursor]
-      end
+    def info_box
+      creditor_box
+      move_down 10
 
-      move_down(render_esr_number ? 20.mm : 24.mm)
+      esr_number_box if invoice.esr_number.present?
+      move_down 10 if invoice.esr_number.present?
 
-      if render_esr_number
-        esr_number
+      debitor_box
+      move_down 10
+    end
 
-        move_down 8.mm
-      end
-
-      heading do
-        text_box t("debitor_heading"), at: [0, cursor]
-      end
-      content do
-        text_box debitor_values, at: [0, cursor]
+    def creditor_box
+      bounding_box([0, cursor], width: bounds.width) do
+        bold do
+          text t("creditor_heading")
+        end
+        text creditor_values
       end
     end
 
-    def esr_number
-      heading do
-        text_box t("esr_number_heading"), at: [0, cursor]
+    def esr_number_box
+      bounding_box([0, cursor], width: bounds.width) do
+        bold do
+          text t("esr_number_heading")
+        end
+        text invoice.esr_number
       end
-      content do
-        text_box invoice.esr_number, at: [0, cursor]
+    end
+
+    def debitor_box
+      bounding_box([0, cursor], width: bounds.width) do
+        bold do
+          text t("debitor_heading")
+        end
+        text debitor_values
       end
     end
 
     def amount_box
-      heading do
-        text_box t("currency"), at: [0, cursor]
-        text_box t("amount"), at: [20.mm, cursor]
-      end
-      content do
+      bounding_box([0, cursor], width: bounds.width) do
+        bold do
+          text_box t("currency"), at: [0, cursor]
+          text_box t("amount"), at: [20.mm, cursor]
+        end
+
+        move_down 12
+
         text_box invoice.currency, at: [0, cursor]
+
         if invoice.total.zero? || invoice.hide_total?
+          move_down 12
           blank_amount_rectangle
         else
           amount = number_with_precision(invoice.amount_open, precision: 2, delimiter: " ")
@@ -206,17 +225,10 @@ module Export::Pdf::Invoice
       end
     end
 
-    def content
-      font "Helvetica", size: 10 do
+    def bold
+      font FONT_FAMILY, style: :bold do
         yield
       end
-    end
-
-    def heading(size: 8)
-      font "Helvetica", size: size, style: :bold do
-        yield
-      end
-      move_down size + 2
     end
 
     PAD = 5.mm

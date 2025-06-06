@@ -1,5 +1,8 @@
 # Hitobito Changelog
 
+## unreleased
+- Referenznummer von Rechnung wird neu auch auf Empfangsschein angezegit (hitobito_sww#238)
+
 ## Version 2.5
 - Sortierung von Rechnungstabelle wird bei PDF Exports beachtet (hitobito_sww#237)
 

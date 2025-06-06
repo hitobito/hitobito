@@ -40,7 +40,7 @@ describe Event::RolesController do
         expect(role).to be_kind_of(Event::Role::Leader)
         participation = role.participation
         expect(participation.event_id).to eq(course.id)
-        expect(participation.person_id).to eq(user.id)
+        expect(participation.participant_id).to eq(user.id)
         expect(participation.reload.answers.size).to eq(2)
         expect(course.reload.applicant_count).to eq 0
         expect(course.teamer_count).to eq 1
@@ -53,7 +53,7 @@ describe Event::RolesController do
         groups(:bottom_layer_two).update_column(:require_person_add_requests, true)
         user.roles.destroy_all
         Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one), person: user)
-        Fabricate(Event::Role::Leader.name, participation: Fabricate(:event_participation, event: course, person: user))
+        Fabricate(Event::Role::Leader.name, participation: Fabricate(:event_participation, event: course, participant: user))
         person = Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_two)).person
 
         post :create,
@@ -90,7 +90,7 @@ describe Event::RolesController do
 
     context "with existing participation" do
       it "creates role" do
-        participation = Fabricate(:event_participation, event: course, person: user)
+        participation = Fabricate(:event_participation, event: course, participant: user)
         Fabricate(Event::Role::Cook.name, participation: participation)
         expect do
           post :create, params: {group_id: group.id, event_id: course.id, event_role: {type: Event::Role::Leader.sti_name, person_id: user.id}}
@@ -105,7 +105,7 @@ describe Event::RolesController do
       end
 
       it "creates role and if participant removes participant" do
-        participation = Fabricate(:event_participation, event: course, person: user)
+        participation = Fabricate(:event_participation, event: course, participant: user)
         participant_role = Fabricate(Event::Role::Participant.name, participation: participation)
         expect do
           post :create, params: {group_id: group.id, event_id: course.id, event_role: {type: Event::Role::Leader.sti_name, person_id: user.id}, remove_participant_role: 1}
@@ -123,9 +123,9 @@ describe Event::RolesController do
         groups(:bottom_layer_two).update_column(:require_person_add_requests, true)
         user.roles.destroy_all
         Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one), person: user)
-        Fabricate(Event::Role::Leader.name, participation: Fabricate(:event_participation, event: course, person: user))
+        Fabricate(Event::Role::Leader.name, participation: Fabricate(:event_participation, event: course, participant: user))
         person = Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_two)).person
-        Fabricate(Event::Role::Cook.name, participation: Fabricate(:event_participation, event: course, person: person))
+        Fabricate(Event::Role::Cook.name, participation: Fabricate(:event_participation, event: course, participant: person))
 
         post :create,
           params: {

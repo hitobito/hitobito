@@ -20,7 +20,7 @@ class Event::RoleAbility < AbilityDsl::Base
 
   def for_participations_full_events_except_self
     for_participations_full_events &&
-      !(subject.participation.person_id == user.id &&
+      !(subject.participation.participant_id == user.id &&
         subject.permissions.include?(:participations_full))
   end
 

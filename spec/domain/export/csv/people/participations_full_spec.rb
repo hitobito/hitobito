@@ -8,8 +8,12 @@ require "csv"
 
 describe Export::Tabular::People::ParticipationsFull do
   let(:person) { people(:top_leader) }
-  let(:participation) { Fabricate(:event_participation, person: person, event: events(:top_course)) }
-  let(:scope) { Event::Participation.includes(:person).where(id: participation.id) }
+  let(:participation) { Fabricate(:event_participation, participant: person, event: events(:top_course)) }
+  let(:scope) do
+    participations = Event::Participation.where(id: participation.id)
+    Event::Participation::PreloadParticipations.preload(participations)
+    participations
+  end
   let(:people_list) { Export::Tabular::People::ParticipationsFull.new(scope) }
 
   subject { people_list.attribute_labels }
@@ -23,7 +27,7 @@ describe Export::Tabular::People::ParticipationsFull do
   end
 
   context "questions" do
-    let(:participation) { Fabricate(:event_participation, person: person, event: events(:top_course)) }
+    let(:participation) { Fabricate(:event_participation, participant: person, event: events(:top_course)) }
 
     it "has keys and values of application questions" do
       participation.init_answers

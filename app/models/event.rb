@@ -184,7 +184,6 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     timeliness: {type: :date, allow_blank: true, before: ::Date.new(9999, 12, 31)}
   validates :description, :location, :application_conditions,
     length: {allow_nil: true, maximum: 2**16 - 1}
-  validates :visible_contact_attributes, presence: true
   validate :assert_type_is_allowed_for_groups
   validate :assert_application_closing_is_after_opening
   validate :assert_required_contact_attrs_valid

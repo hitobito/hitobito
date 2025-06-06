@@ -1863,6 +1863,8 @@ de:
       equal: ist genau
       greater: grösser als
       smaller: kleiner als
+      younger: jünger als
+      older: älter als
       before: vor dem
       after: nach dem
       blank: ist leer

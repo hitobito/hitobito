@@ -1823,6 +1823,8 @@ en:
       equal: is equal
       greater: bigger than
       smaller: smaller than
+      younger: younger than
+      older: older than
       before: vor dem
       after: nach dem
       blank: ist leer
@@ -1841,7 +1843,7 @@ en:
     tag_absence:
       prompt_tag_absence_selection: Exclude persons with at least one of these tags
       prompt_tag_absence_placeholder: Tag name
-      
+
     new:
       title: Filter persons
 
@@ -1860,7 +1862,7 @@ en:
       duration_title: Key date
       or_duration: oder
       include_archived: Archivierte Rollen miteinbeziehen
-      
+
     qualification:
       title: Qualifications
       criterion: Criterion

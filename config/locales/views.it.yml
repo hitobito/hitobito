@@ -1867,7 +1867,7 @@ it:
         deleted: il ruolo è stato cancellato.
         inactive: inaktive oder nie vorhandene Rollen
         inactive_but_existing: inaktive aber zu einer anderen Zeit vorhandene Rollen
-        
+
     attributes:
       title: Campi
       match: contiene
@@ -1875,6 +1875,8 @@ it:
       equal: è esattamente
       greater: più grande di
       smaller: più piccolo di
+      younger: più giovane
+      older: anziano
       before: vor dem
       after: nach dem
       blank: ist leer

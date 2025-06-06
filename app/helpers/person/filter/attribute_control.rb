@@ -88,6 +88,7 @@ class Person::Filter::AttributeControl
     filters = [[t(".equal"), :equal], [t(".blank"), :blank]]
     filters += [[t(".match"), :match], [t(".not_match"), :not_match]] if type == :string || key.blank?
     filters += [[t(".smaller"), :smaller], [t(".greater"), :greater]] if type == :integer || key.blank?
+    filters += [[t(".younger"), :smaller], [t(".older"), :greater]] if type == :integer || key.blank?
     filters += [[t(".before"), :before], [t(".after"), :after]] if type == :date || key.blank?
     filters
   end

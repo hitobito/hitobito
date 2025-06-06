@@ -171,11 +171,11 @@ jobs:
 
   notify_statuscope:
     uses: ./.github/workflows/notify-statuscope.yml
-    needs: [ rubocop, main-specs, feature-specs ]
+    needs: [ rubocop, main-specs, feature-specs, patches ]
     if: ( success() || failure() ) && ( github.ref_name == 'master' )
     with:
       repository: 'hitobito'
-      test_result: ${{ needs.rubocop.result == 'success' && needs.main-specs.result == 'success' && needs.feature-specs.result == 'success' }}
+      test_result: ${{ needs.rubocop.result == 'success' && needs.main-specs.result == 'success' && needs.feature-specs.result == 'success' && needs.patches.result == 'success' }}
     secrets:
       HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}
       HEARTBEAT_TOKEN: ${{ secrets.HEARTBEAT_TOKEN }}

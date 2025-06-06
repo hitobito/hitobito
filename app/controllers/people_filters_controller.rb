@@ -7,6 +7,8 @@ class PeopleFiltersController < CrudController
 
   skip_authorize_resource only: [:create]
 
+  before_action :set_filter_criteria, except: [:destroy]
+
   # load group before authorization
   prepend_before_action :parent
 
@@ -34,9 +36,29 @@ class PeopleFiltersController < CrudController
     super(location: people_list_path)
   end
 
+  def filter_criterion
+    compose_role_lists
+    possible_tags
+    @filter_criterion = params[:filter_criterion]
+    if @filter_criteria.include?(@filter_criterion.to_sym)
+      respond_to do |format|
+        if request.method == "GET"
+          format.turbo_stream { render "create", status: :ok }
+        end
+        if request.method == "POST"
+          format.turbo_stream { render "delete" }
+        end
+      end
+    end
+  end
+
   private
 
   alias_method :group, :parent
+
+  def set_filter_criteria
+    @filter_criteria = [:tag, :role, :qualification, :attributes]
+  end
 
   def build_entry
     filter = super
@@ -60,9 +82,38 @@ class PeopleFiltersController < CrudController
     people_list_path(search_params)
   end
 
+  def role_types
+    Role::TypeList.new(group.class).role_types.each_with_object([]) do |(key, subhash), result|
+      subhash.each do |subkey, role_list|
+        role_list.each do |role_type|
+          label = (subkey == key) ? "#{key} -> #{role_type.label}" : "#{key} -> #{subkey} -> #{role_type.label}"
+          result << [label, role_type.id, role_type.id]
+        end
+      end
+    end
+  end
+
   def compose_role_lists
-    @role_types = Role::TypeList.new(group.class)
     @qualification_kinds = QualificationKind.list.without_deleted
+      .map { |qualification|
+      [qualification.label, qualification.id, qualification.id]
+    }
+    @roles = role_types
+    @kinds = Person::Filter::Role::KINDS.each_with_index
+      .map { |kind, index|
+      [t("people_filters.form.filters_role_kind.#{kind}"),
+        t("people_filters.form.filters_role_kind.#{kind}"),
+        index + 1]
+    }
+    @validities = [
+      [t("people_filters.qualification.validity_label.active"), "active", 1],
+      [t("people_filters.qualification.validity_label.reactivateable"), "reactivateable", 2],
+      [t("people_filters.qualification.validity_label.not_active_but_reactivateable"), "not_active_but_reactivateable", 3],
+      [t("people_filters.qualification.validity_label.not_active"), "not_active", 4],
+      [t("people_filters.qualification.validity_label.all"), "all", 5],
+      [t("people_filters.qualification.validity_label.none"), "none", 6],
+      [t("people_filters.qualification.validity_label.only_expired"), "only_expired", 7]
+    ]
   end
 
   def assign_attributes

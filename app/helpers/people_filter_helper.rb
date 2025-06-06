@@ -34,8 +34,6 @@ module PeopleFilterHelper
     people_filter_attribute_control(nil, 0, disabled: :disabled)
   end
 
-  private
-
   def people_filter_attribute_control(attr, count, html_options = {})
     Person::Filter::AttributeControl.new(self, attr, count, html_options).to_s
   end

@@ -43,7 +43,7 @@ class Person::Filter::AttributeControl
       end
 
       content << link_to(icon(:"trash-alt", filled: false), "#",
-        class: "remove_filter_attribute col lh-lg ms-5")
+        class: "remove_filter_attribute col-3 d-flex justify-content-end lh-lg ms-5")
     end
   end
 
@@ -58,7 +58,8 @@ class Person::Filter::AttributeControl
       integer_field(time, attribute_value_class, value, html_options),
       date_field(time, attribute_value_class, value, html_options),
       gender_select_field(time, attribute_value_class, value, html_options),
-      boolean_field(time, attribute_value_class, value, html_options)
+      boolean_field(time, attribute_value_class, value, html_options),
+      language_select_field(time, attribute_value_class, value, html_options)
     ])
   end
 
@@ -67,7 +68,7 @@ class Person::Filter::AttributeControl
   end
 
   def attribute_key_field(key, time, html_options)
-    content_tag(:div, class: "col") do
+    content_tag(:div, class: "col-3") do
       select_tag("#{filter_name_prefix}[key]",
         options_from_collection_for_select(people_filter_attributes_for_select, :last, :first, key),
         html_options.merge(disabled: true, class: "attribute_key_dropdown form-select form-select-sm"))
@@ -75,7 +76,7 @@ class Person::Filter::AttributeControl
   end
 
   def attribute_constraint_field(key, constraint, type, time, html_options)
-    content_tag(:div, class: "col") do
+    content_tag(:div, class: "col-3") do
       select_tag("#{filter_name_prefix}[constraint]",
         options_from_collection_for_select(constraint_options_for(type, key), :last, :first, constraint),
         html_options.merge(class: "attribute_constraint_dropdown ms-3 form-select form-select-sm"))
@@ -99,8 +100,12 @@ class Person::Filter::AttributeControl
   def country_select_field(time, attribute_value_class, value, html_options)
     country_select(filter_name_prefix,
       "value",
-      {priority_countries: Settings.countries.prioritized, selected: value, include_blank: ""},
-      html_options.merge(class: "form-select form-select-sm country_select_field #{attribute_value_class}"))
+      {priority_countries: Settings.countries.prioritized, include_blank: "", selected: value&.flatten},
+      html_options.merge(
+        class: "form-select form-select-sm country_select_field #{attribute_value_class} w-100",
+        "data-controller": "form-select",
+        multiple: true
+      ))
   end
 
   def integer_field(time, attribute_value_class, value, html_options)
@@ -128,6 +133,18 @@ class Person::Filter::AttributeControl
     select_tag("#{filter_name_prefix}[value]",
       options_from_collection_for_select(boolean_options, :first, :last, value),
       html_options.merge(class: "#{SELECT_CLASSES} boolean_field #{attribute_value_class}"))
+  end
+
+  def language_select_field(time, attribute_value_class, value, html_options)
+    language_options = Person::LANGUAGES.collect { |language_value, language_name| [language_name, language_value] }
+    select_tag("#{filter_name_prefix}[value]",
+      options_from_collection_for_select(language_options, :second, :first, value&.flatten&.map(&:to_sym)),
+      html_options.merge(
+        class: "#{SELECT_CLASSES} language_select_field #{attribute_value_class} form-select form-select-sm w-100",
+        multiple: true,
+        id: "language-select-#{time}",
+        "data-controller": "form-select"
+      ))
   end
 
   def filter_name_prefix = "filters[attributes][#{time}]"

@@ -195,6 +195,9 @@ Hitobito::Application.routes.draw do
       resources :people_filters, only: [:new, :create, :edit, :update, :destroy]
       get 'people_filters' => 'people_filters#new' # route required for language switch
 
+      # Turbo Routes
+      get 'people_filters/:filter_criterion', to: 'people_filters#filter_criterion', as: "people_filter_criterion"
+      delete 'people_filters/turbo/:filter_criterion', to: 'people_filters#filter_criterion', as: "turbo_people_filter"
 
       get 'deleted_people' => 'group/deleted_people#index'
 

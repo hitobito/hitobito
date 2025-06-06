@@ -36,7 +36,7 @@ describe Group::LogController do
         versions = assigns(:versions)
 
         # 6 inside before block + 1 layer_one_member2 person create + 1 layer_one_member2 role create
-        expect(versions.size).to eq(8)
+        expect(versions.size).to eq(9)
         expect(versions.map(&:main_id).uniq).to match_array([layer_one_member1.id, layer_one_member2.id])
       end
 
@@ -48,7 +48,7 @@ describe Group::LogController do
         versions = assigns(:versions)
 
         # 3 inside before block + 1 layer_two_member person create + 1 layer_two_member role create
-        expect(versions.size).to eq(5)
+        expect(versions.size).to eq(6)
         main_ids = versions.map(&:main_id).uniq
         expect(main_ids).to_not include(layer_one_member1.id)
         expect(main_ids).to_not include(layer_one_member2.id)

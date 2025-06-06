@@ -59,7 +59,7 @@ describe Person::AddRequest::Approver::Group do
     it "creates person log entry for role and for request", versioning: true do
       expect do
         subject.approve
-      end.to change { PaperTrail::Version.count }.by(2)
+      end.to change { PaperTrail::Version.count }.by(3)
     end
 
     it "creates role if another one already exists" do

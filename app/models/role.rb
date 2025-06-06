@@ -102,7 +102,7 @@ class Role < ActiveRecord::Base
 
   ### ASSOCIATIONS
 
-  belongs_to :person
+  belongs_to :person, touch: true
   belongs_to :group
 
   ### VALIDATIONS

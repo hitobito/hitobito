@@ -41,8 +41,7 @@
     .col-10{"data-controller": "form-select"}
       = select_tag('filters[role][kind][]',
                         kind_options,
-                        class: 'form-control form-control-sm tom-select w-100',
-                        "data-controller": "form-select",
+                        class: 'form-control form-control-sm w-100',
                         id: 'role-kind-select',
-                        multiple: true,
+                        multiple: false,
                         data: { chosen_no_results: t('global.chosen_no_results'), placeholder: t('.prompt_role_kind_placeholder') } )

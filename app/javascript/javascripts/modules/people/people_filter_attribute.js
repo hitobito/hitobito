@@ -57,9 +57,18 @@ app.PeopleFilterAttribute = {
     const field = form.find('.attribute_key_hidden_field').attr('value');
     const type = form.closest('[data-types]').data('types')[field];
 
-    form.find('option[value=greater], option[value=smaller]').remove();
+    if (field === 'years') {
+      options = form.find('option[value=greater], option[value=smaller]');
+      if(field === "years") {
+        options[0].remove()
+        options[1].remove()
+      }else {
+        options[2].remove()
+        options[3].remove()
+      }
+    }
     if (type !== 'integer') {
-      form.find('option[value=greater], option[value=smaller]').remove();
+      form.find('option[value=greater], option[value=smaller]').remove()
     }
     if (type !== 'date') {
       form.find('option[value=before], option[value=after]').remove();

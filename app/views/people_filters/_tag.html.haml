@@ -12,7 +12,7 @@
 - absent_options = options_from_collection_for_select(@possible_tags, :second, :first, absent_selected)
 
 .label-columns.mr-5
-  .d-flex.flex-row.align-items-center.mb-2
+  .d-flex.flex-column.flex-lg-row.align-items-start.align-items-lg-center.mb-2
     .col-2
       %label= t('.prompt_tag_selection')
     .col-10.shown
@@ -23,7 +23,7 @@
                     id: 'present-tag-select',
                     multiple: true,
                     data: { chosen_no_results: t('global.chosen_no_results'), placeholder: t('.prompt_tag_placeholder') } )
-  .d-flex.flex-row.align-items-center
+  .d-flex.flex-column.flex-lg-row.align-items-start.align-items-lg-center
     .col-2
       %label= t('.prompt_tag_absence_selection')
     .col-10.shown

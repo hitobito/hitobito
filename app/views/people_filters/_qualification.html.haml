@@ -16,7 +16,7 @@
   - unless can?(:index_full_people, @group)
     .alert.alert-warning= t('.not_enough_permissions')
 
-  .d-flex.flex-row.align-items-center.mb-2
+  .d-flex.flex-column.flex-lg-row.align-items-start.align-items-lg-center.mb-2
     .col-2
       %label= t("people_filters.qualification.title")
     .col-10.shown{"data-controller": "form-select"}
@@ -28,7 +28,7 @@
                       multiple: true,
                       data: { chosen_no_results: t('global.chosen_no_results'),
                       placeholder: t("people_filters.qualification.prompt_qualification_placeholder") } )
-  .d-flex.flex-row.align-items-center.mb-2
+  .d-flex.flex-column.flex-lg-row.align-items-start.align-items-lg-center.mb-2
     .col-2
       %label= t("people_filters.qualification.criterion")
     .col-10.shown.d-flex.flex-column
@@ -41,7 +41,7 @@
           = radio_button_tag('filters[qualification][match]', 'all', filter_args[:match] == 'all', %w(not_active none only_expired).include?(filter_args[:validity]) ? { disabled: true } : {})
           = t('people_filters.simple_radio.match.all')
 
-  .d-flex.flex-row.align-items-center.mb-2
+  .d-flex.flex-column.flex-lg-row.align-items-start.align-items-lg-center.mb-2
     .col-2
       %label= t("people_filters.qualification.validity")
     .col-10.shown.d-flex.flex-column{"data-controller": "form-select"}
@@ -52,13 +52,13 @@
                       multiple: false,
                       data: { chosen_no_results: t('global.chosen_no_results'),
                       placeholder: t("people_filters.qualification.prompt_qualification_validity_placeholder") } )
-  .d-flex.flex-row.align-items-center.mb-2
-    .col-2
+  .d-flex.flex-column.flex-lg-row.align-items-start.align-items-lg-center.mb-2
+    .col-2.d-flex.align-items-center
       %label= t('.prompt_date')
-    .col-10.shown.d-flex.flex-row{"data-controller": "form-select"}
-      .input-group.w-50.mr-3
+    .col-10.shown.d-flex.flex-column{"data-controller": "form-select"}
+      .input-group.d-flex.col-12.mr-3
         %span.input-group-text= icon(:'calendar-alt')
         = text_field_tag("filters[qualification][reference_date]", filter_args[:reference_date], class: 'date form-control form-control-sm')
-      .col-6.col-form-label
+      .d-flex.col-12.col-form-label
         = t('.reference_date_help_inline')
 

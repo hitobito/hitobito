@@ -1867,7 +1867,7 @@ fr:
         deleted: le rôle a été effacé.
         inactive: inaktive oder nie vorhandene Rollen
         inactive_but_existing: inaktive aber zu einer anderen Zeit vorhandene Rollen
-        
+
     attributes:
       title: Champ
       match: contient
@@ -1875,6 +1875,8 @@ fr:
       equal: est précis
       greater: plus grand que
       smaller: plus petit que
+      younger: puiné que
+      older:  âgé que
       before: vor dem
       after: nach dem
       blank: ist leer
@@ -1912,7 +1914,7 @@ fr:
       prompt_role_placeholder: Saisir le nom du rôle souhaité
       prompt_role_kind_placeholder: Saisir la validité souhaitée
       duration_title: Date de référence
-      
+
     qualification:
       title: Qualifications
       criterion: Critère

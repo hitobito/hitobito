@@ -11,7 +11,7 @@
 - kind_options = options_from_collection_for_select(@kinds, :second, :first, present_selected_kinds)
 
 .label-columns.mr-5
-  .d-flex.flex-row.align-items-center.mb-2
+  .d-flex.flex-column.flex-lg-row.align-items-start.align-items-lg-center.mb-2
     .col-2
       %label= t("people_filters.role.title")
     .col-10
@@ -22,10 +22,10 @@
                         id: 'role-select',
                         multiple: true,
                         data: { chosen_no_results: t('global.chosen_no_results'), placeholder: t('.prompt_role_placeholder') } )
-  .d-flex.flex-row.align-items-center.control-group.mb-2
+  .d-flex.flex-column.flex-lg-row.align-items-start.align-items-lg-center.control-group.mb-2
     .col-2
       %label= t("people_filters.role.duration_title")
-    .col-10.d-flex.flex-row.align-items-center
+    .col-10.d-flex.flex-row.align-items-start.align-items-lg-center
       .col-6
         .input-group
           %span.input-group-text= icon(:'calendar-alt')
@@ -35,14 +35,14 @@
         .input-group
           %span.input-group-text= icon(:'calendar-alt')
           = text_field_tag("filters[role][finish_at]", filter_roles && filter_roles.args[:finish_at], class: 'date form-control form-control-sm')
-  .d-flex.flex-row.align-items-center
+  .d-flex.flex-column.flex-lg-row.align-items-start.align-items-lg-center
     .col-2
       %label= t("people_filters.role.role_kind_title")
-    .col-10{"data-controller": "form-select"}
+    .col-10
       = select_tag('filters[role][kind][]',
                         kind_options,
-                        class: 'form-control form-control-sm tom-select w-100',
-                        "data-controller": "form-select",
+                        class: 'form-control form-control-sm w-100',
                         id: 'role-kind-select',
-                        multiple: true,
+                        multiple: false,
+                        "data-controller": "form-select",
                         data: { chosen_no_results: t('global.chosen_no_results'), placeholder: t('.prompt_role_kind_placeholder') } )

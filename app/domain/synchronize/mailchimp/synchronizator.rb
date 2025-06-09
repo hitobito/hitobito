@@ -86,7 +86,7 @@ module Synchronize
         tags.collect do |tag, emails|
           tag_id = segments_by_tag_name.dig(tag, :id)
           remote_emails = remote_tags.fetch(tag, []).sort
-          local_emails = (emails - unsubscribed_members.pluck(:email_address) - list.mailchimp_forgotten_emails).sort
+          local_emails = (emails - remotely_removed_members.pluck(:email_address) - list.mailchimp_forgotten_emails).sort
 
           SegmentUpdate.new(tag_id, local_emails, remote_emails, obsolete_emails).prepare
         end.compact.flatten(1)
@@ -132,6 +132,11 @@ module Synchronize
 
       def cleaned_members
         @cleaned_members ||= members.select { |m| m[:status] == "cleaned" }
+      end
+
+      # these members have been removed one way or the other in MailChimp
+      def remotely_removed_members
+        (unsubscribed_members + cleaned_members)
       end
 
       def members_by_email

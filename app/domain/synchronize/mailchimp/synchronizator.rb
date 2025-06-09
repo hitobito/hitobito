@@ -104,7 +104,7 @@ module Synchronize
       end
 
       def remote_tags
-        @remote_tags ||= members.each_with_object({}) do |member, hash|
+        @remote_tags ||= subscribed_members.each_with_object({}) do |member, hash|
           member[:tags].each do |tag|
             hash[tag[:name]] ||= []
             hash[tag[:name]] << member[:email_address]
@@ -124,6 +124,10 @@ module Synchronize
         return members if @default_tag.blank? || initial_default_tag_sync?
 
         members.select { |member| member[:tags].pluck(:name).include?(@default_tag) }
+      end
+
+      def subscribed_members
+        @subscribed_members ||= members.select { |m| m[:status] == "subscribed" }
       end
 
       def unsubscribed_members

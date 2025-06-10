@@ -12,16 +12,4 @@
 
   = render_extensions 'fields', locals: { f: f }
 
-  = field_set_tag(t('.qualifications.for_participants')) do
-    = render 'precondition_fields', f: f
-
-    = labeled_qualification_kinds_field(f, @qualification_kinds, :qualification, :participant,
-                                        Event::Kind.human_attribute_name(:qualification_kinds))
-    = labeled_qualification_kinds_field(f, @prolongations, :prolongation, :participant,
-                                        Event::Kind.human_attribute_name(:prolongations))
-
-  = field_set_tag(t('.qualifications.for_leaders')) do
-    = labeled_qualification_kinds_field(f, @qualification_kinds, :qualification, :leader,
-                                        Event::Kind.human_attribute_name(:qualification_kinds))
-    = labeled_qualification_kinds_field(f, @prolongations, :prolongation, :leader,
-                                        Event::Kind.human_attribute_name(:prolongations))
+  = render 'qualification_fields', f: f

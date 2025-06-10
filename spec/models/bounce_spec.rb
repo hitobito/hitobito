@@ -104,6 +104,12 @@ RSpec.describe Bounce do
       expect(bounce.mailing_list_ids).to include 23
       expect(bounce.mailing_list_ids).to match_array([23])
     end
+
+    it "does not change the timestamp of the original blocking" do
+      expect do
+        described_class.record(blocked.email)
+      end.to_not change { blocked.reload.blocked_at }
+    end
   end
 
   context ".blocked?" do

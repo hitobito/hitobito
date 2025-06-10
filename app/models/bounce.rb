@@ -84,7 +84,7 @@ class Bounce < ApplicationRecord
   private
 
   def evaluate_blocking
-    if count >= BLOCK_THRESHOLD
+    if blocked_at.nil? && count >= BLOCK_THRESHOLD
       self.blocked_at = DateTime.current
     end
   end

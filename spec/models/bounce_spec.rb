@@ -93,6 +93,17 @@ RSpec.describe Bounce do
       expect(bounce.mailing_list_ids).to include 42
       expect(bounce.mailing_list_ids).to match_array([23, 42])
     end
+
+    it "only lists mailing_list_ids once if adding to an existing bounce" do
+      bounce = described_class.record("foo@example.com", mailing_list_id: 23)
+
+      expect(bounce.mailing_list_ids).to include 23
+
+      bounce = described_class.record("foo@example.com", mailing_list_id: 23)
+
+      expect(bounce.mailing_list_ids).to include 23
+      expect(bounce.mailing_list_ids).to match_array([23])
+    end
   end
 
   context ".blocked?" do

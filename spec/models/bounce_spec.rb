@@ -39,6 +39,16 @@ RSpec.describe Bounce do
       expect(scope).to have(1).item
       expect(scope.first).to eq mailing_list_bounce
     end
+
+    it "does not fail without an id" do
+      expect(bounced.mailing_list_ids).to be_blank
+      expect(blocked.mailing_list_ids).to be_blank
+
+      scope = described_class.of_mailing_list(nil)
+
+      expect(scope).to have(2).items
+      expect(scope.to_a).to match_array [bounced, blocked]
+    end
   end
 
   context ".record" do

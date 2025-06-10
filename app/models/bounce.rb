@@ -16,6 +16,8 @@ class Bounce < ApplicationRecord
 
   scope :blocked, -> { where.not(blocked_at: nil) }
   scope :of_mailing_list, ->(id) {
+    return self if id.blank?
+
     # && is "set union" in postgresql, so it is true if there is an overlap
     # between the param and the stored array.
     where("mailing_list_ids && '{:mailing_list_id}'", mailing_list_id: id)

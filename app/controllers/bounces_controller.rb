@@ -20,10 +20,12 @@ class BouncesController < ListController
   end
 
   def mailing_list
+    return nil if params[:mailing_list_id].blank?
+
     @mailing_list ||= MailingList.find(params[:mailing_list_id])
   end
 
   def model_scope
-    model_class.of_mailing_list(@mailing_list.id)
+    model_class.of_mailing_list(mailing_list&.id)
   end
 end

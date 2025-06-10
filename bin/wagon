@@ -26,7 +26,7 @@ core_dir="$(readlink -f "$(dirname "$core_bin_dir")")" # directory of hitobito (
 function require_wagon_name() {
   if [[ $wagon_name = 'No wagon selected' ]]; then
     echo "You must select a wagon to manage"
-    bin/active_wagon nonexisting
+    "$core_bin_dir/active_wagon" nonexisting
     exit 1
   fi
 }
@@ -133,13 +133,14 @@ function highlight_phrases {
 case $cmd in
 activate)
   require_wagon_name
-  exec bin/active_wagon "$wagon_name"
+  "$core_bin_dir/active_wagon" "$wagon_name"
+  direnv allow
   ;;
 
 bootstrap)
   require_wagon_name
   clone_wagon
-  bin/active_wagon "$wagon_name"
+  "$core_bin_dir/active_wagon" "$wagon_name"
   recreate_dbs
   setup_dbs
   ;;
@@ -152,7 +153,7 @@ clone)
 direnv-allow-all)
   for wagon in $(existing_wagon_names); do
     echo "$wagon" | red
-    (bin/active_wagon "$wagon" && cd "../hitobito_${wagon}" && direnv allow)
+    ("$core_bin_dir/active_wagon" "$wagon" && cd "../hitobito_${wagon}" && direnv allow)
   done
   ;;
 
@@ -216,7 +217,7 @@ test-prepare)
     bundle exec rake wagon:migrate
 
     echo 'Compile Assets to match the selected wagons to ensure better spec-results'
-    bin/webpack-test-compile
+    "$core_bin_dir/webpack-test-compile"
   fi
   ;;
 

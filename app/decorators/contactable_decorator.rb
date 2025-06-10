@@ -75,6 +75,13 @@ module ContactableDecorator
     end
   end
 
+  def block_icon(email)
+    return unless Bounce.blocked?(email)
+
+    h.icon("exclamation-triangle", class: "text-danger",
+      title: h.t("contactable.contact_data.blocked_mail_tooltip_title"))
+  end
+
   private
 
   def nested_values(values, only_public)
@@ -94,13 +101,6 @@ module ContactableDecorator
 
     h.icon("money-bill-alt", class: "muted",
       title: h.t("contactable.contact_data.invoices_tooltip_title"))
-  end
-
-  def block_icon(email)
-    return unless Bounce.blocked?(email)
-
-    h.icon("exclamation-triangle", class: "text-danger",
-      title: h.t("contactable.contact_data.blocked_mail_tooltip_title"))
   end
 
   def br

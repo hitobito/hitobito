@@ -12,9 +12,15 @@ class Bounce < ApplicationRecord
     end
   end
 
-  BLOCK_THRESHOLD = 5
+  BLOCK_THRESHOLD = Settings.email.bounces.block_threshold
 
-  scope :blocked, -> { where.not(blocked_at: nil) }
+  scope :blocked, -> do
+    if FeatureGate.enabled?("email.bounces")
+      where.not(blocked_at: nil)
+    else
+      none
+    end
+  end
   scope :of_mailing_list, ->(id) {
     return self if id.blank?
 
@@ -36,6 +42,8 @@ class Bounce < ApplicationRecord
         end
       end
       bounce.increment!(:count)
+      # TODO: put Bounce-mail into log
+      # Rails.logger.info "BOUNCE RECORDED: '#{email}' (count: #{bounce.count})"
 
       bounce.save
       bounce
@@ -44,6 +52,8 @@ class Bounce < ApplicationRecord
     # TODO: maybe extract this in a extra helper that controls blocking of mail-sending,
     #       independently of bounces, but that also controls the validity/futility.
     def blocked?(email)
+      return false if FeatureGate.disabled?("email.bounces")
+
       where(email: email).blocked.exists?
     end
   end
@@ -58,6 +68,8 @@ class Bounce < ApplicationRecord
   end
 
   def blocked?
+    return false if FeatureGate.disabled?("email.bounces")
+
     blocked_at.present?
   end
 

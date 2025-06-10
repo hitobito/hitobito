@@ -14,12 +14,20 @@ RSpec.describe Bounce do
 
   subject(:blocked) { described_class.create(email: "blocked@example.org", count: 10, blocked_at: 1.day.ago) }
 
-  it "has a block-threshold" do
-    expect(described_class::BLOCK_THRESHOLD).to eq 5
+  it "has a block-threshold (can be overridden)" do
+    expect(described_class::BLOCK_THRESHOLD).to eq 3
   end
 
-  it "has a blocked-scope" do
-    expect(described_class.blocked).to be_a ActiveRecord::Relation
+  context "has a blocked-scope, which" do
+    it "is a relation" do
+      expect(described_class.blocked).to be_a ActiveRecord::Relation
+    end
+
+    it "equals none if feature is disabled" do
+      allow(FeatureGate).to receive(:enabled?).with("email.bounces").and_return(false)
+
+      expect(described_class.blocked).to eq described_class.none
+    end
   end
 
   context ".of_mailing_list" do
@@ -133,6 +141,14 @@ RSpec.describe Bounce do
     it "is false for nil" do
       expect(described_class.blocked?(nil)).to be_falsey
     end
+
+    it "is false if feature is disabled" do
+      allow(FeatureGate).to receive(:disabled?).with("email.bounces").and_return(true)
+
+      expect(described_class.blocked?("blocked@example.org")).to be_falsey
+      expect(described_class.blocked?("bounced@example.org")).to be_falsey
+      expect(described_class.blocked?("unbounced@example.com")).to be_falsey
+    end
   end
 
   context "#person" do
@@ -222,6 +238,13 @@ RSpec.describe Bounce do
     end
 
     it "knows if an email is not blocked" do
+      expect(bounced).to_not be_blocked
+    end
+
+    it "can be disabled via FeatureGate" do
+      allow(FeatureGate).to receive(:disabled?).with("email.bounces").and_return(true)
+
+      expect(blocked).to_not be_blocked
       expect(bounced).to_not be_blocked
     end
   end

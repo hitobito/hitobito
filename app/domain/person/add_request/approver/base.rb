@@ -43,16 +43,12 @@ module Person::AddRequest::Approver
     private
 
     def send_approval
-      return if Bounce.blocked?(request.requester&.email)
-
       Person::AddRequestMailer
         .approved(request.person, request.body, request.requester, user)
         .deliver_later
     end
 
     def send_rejection
-      return if Bounce.blocked?(request.requester&.email)
-
       Person::AddRequestMailer
         .rejected(request.person, request.body, request.requester, user)
         .deliver_later

@@ -33,7 +33,6 @@ class Wizards::InscribeInGroupWizard < Wizards::Base
 
   def send_notification_email
     return if group.self_registration_notification_email.blank?
-    return if Bounce.blocked?(group.self_registration_notification_email)
 
     Groups::SelfRegistrationNotificationMailer
       .self_registration_notification(group.self_registration_notification_email,

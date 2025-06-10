@@ -27,7 +27,7 @@ class Bounce < ApplicationRecord
 
   class << self
     def record(email, mailing_list_id: nil)
-      bounce = find_or_create_by(email: email)
+      bounce = find_or_initialize_by(email: email.strip.downcase)
       if mailing_list_id.present?
         bounce.mailing_list_ids ||= []
 
@@ -35,7 +35,7 @@ class Bounce < ApplicationRecord
           bounce.mailing_list_ids << mailing_list_id
         end
       end
-      bounce.increment(:count)
+      bounce.increment!(:count)
 
       bounce.save
       bounce

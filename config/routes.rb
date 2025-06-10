@@ -313,7 +313,7 @@ Hitobito::Application.routes.draw do
 
         resources :mailchimp_synchronizations, only: [:create]
         resources :recipient_counts, controller: 'mailing_lists/recipient_counts', only: [:index]
-        resources :bounces
+        resources :bounces, only: [:index]
       end
 
       resources :calendars do

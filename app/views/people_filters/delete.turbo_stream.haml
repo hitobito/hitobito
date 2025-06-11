@@ -3,6 +3,6 @@
 - # or later. See the COPYING file at the top-level directory or at
 - # https://github.com/hitobito/hitobito.
 
-= turbo_stream.remove criterion
+= turbo_stream.remove criterion_id
 = turbo_stream.update Dropdown::PeopleFilter::ID do
   = Dropdown::PeopleFilter.new(self, current_user, PeopleFiltersController::CRITERIAS - criterias + [criterion]).to_s

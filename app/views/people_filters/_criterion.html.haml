@@ -4,6 +4,6 @@
 - # https://github.com/hitobito/hitobito.
 
 - if local_assigns[:force] || entry.filter_chain[criterion]
-  %div{id: criterion}
+  %div{id: criterion_id}
     = render(layout: 'layouts/filter', locals: { type: criterion, delete: true }) do
       = render criterion.to_s

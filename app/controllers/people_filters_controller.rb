@@ -15,7 +15,7 @@ class PeopleFiltersController < CrudController
 
   before_render_form :compose_role_lists, :possible_tags
 
-  helper_method :people_list_path, :criterias, :criterion
+  helper_method :people_list_path, :criterias, :criterion, :criterion_id
 
   def new
     assign_attributes
@@ -56,6 +56,8 @@ class PeopleFiltersController < CrudController
   def criterion = params[:criterion]
 
   def criterias = flash[CRITERIAS_KEY]
+
+  def criterion_id = "#{criterion}-configuration"
 
   private
 

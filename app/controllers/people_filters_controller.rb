@@ -95,23 +95,18 @@ class PeopleFiltersController < CrudController
 
   def compose_role_lists
     @qualification_kinds = QualificationKind.list.without_deleted
-      .map { |qualification|
-      [qualification.label, qualification.id, qualification.id]
-    }
+      .map { |qualification| [qualification.label, qualification.id, qualification.id] }
     @roles = role_types
-
-    @kinds = Person::Filter::Role::KINDS.map { |kind|
-      [t("people_filters.form.filters_role_kind.#{kind}"), kind, kind]
-    }
+    @kinds = Person::Filter::Role::KINDS.map { |kind| [t("people_filters.form.filters_role_kind.#{kind}"), kind, kind] }
 
     @validities = [
-      [t("people_filters.qualification.validity_label.active"), "active", 1],
-      [t("people_filters.qualification.validity_label.reactivateable"), "reactivateable", 2],
-      [t("people_filters.qualification.validity_label.not_active_but_reactivateable"), "not_active_but_reactivateable", 3],
-      [t("people_filters.qualification.validity_label.not_active"), "not_active", 4],
-      [t("people_filters.qualification.validity_label.all"), "all", 5],
-      [t("people_filters.qualification.validity_label.none"), "none", 6],
-      [t("people_filters.qualification.validity_label.only_expired"), "only_expired", 7]
+      [t("people_filters.qualification.validity_label.active"), "active"],
+      [t("people_filters.qualification.validity_label.reactivateable"), "reactivateable"],
+      [t("people_filters.qualification.validity_label.not_active_but_reactivateable"), "not_active_but_reactivateable"],
+      [t("people_filters.qualification.validity_label.not_active"), "not_active"],
+      [t("people_filters.qualification.validity_label.all"), "all"],
+      [t("people_filters.qualification.validity_label.none"), "none"],
+      [t("people_filters.qualification.validity_label.only_expired"), "only_expired"]
     ]
   end
 

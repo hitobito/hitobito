@@ -28,26 +28,18 @@ Install all ruby and node dependencies (in the core folder):
 
 In the core directory:
 
-    ./bin/active_wagon generic
+    bin/active_wagon generic
     rails db:create db:migrate wagon:migrate db:seed wagon:seed dev:local:admin
 
 ## Start the application
 
 In the core you can start with overmind:
 
-    ./bin/dev
+    bin/dev
 
 ## Running tests
 
-Working with `./bin/active_wagon` and the environment variables specified in
-`.envrc` disables test_schema_maintainance. We do this in order to support
-parallel testing of wagon and core (via distinct database). In addition we
-speed up wagon test runs by removing migration overhead. As a drawback, we have
-to maintain the test database schema by hand, providing the wagon tests
-accordingly.
-
-    RAILS_ENV=test rails db:migrate  # for core
-    RAILS_TEST_DB_NAME=hit_generic_test RAILS_ENV=test rails db:migrate wagon:migrate
+See [Testing](./common/testing.md).
 
 ## Git Configuration
 

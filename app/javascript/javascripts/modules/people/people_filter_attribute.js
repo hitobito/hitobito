@@ -44,7 +44,7 @@ app.PeopleFilterAttribute = {
     //   Multiselects should not be renamed otherwise request will be forged wrongfully
     if (targetValue !== undefined && (targetValue === 'language' || targetValue === 'country')) {
       selector.each(function() {
-        this.name = this.name.replace(regex, `[${time}]`) + "[]";
+        this.name = this.name.replace(regex, `[${time}]`);
       });
     } else {
       selector.attr('name', selector.attr('name').replace(regex, `[${time}]`));

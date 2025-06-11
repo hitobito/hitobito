@@ -123,7 +123,7 @@ class Person::Filter::AttributeControl
   end
 
   def gender_select_field(time, attribute_value_class, value, html_options)
-    gender_options = Person::GENDERS.collect { |g| [g, Person.new.gender_label(g)] }
+    gender_options = (Person::GENDERS + [""]).collect { |g| [g, Person.new.gender_label(g)] }
     select_tag("#{filter_name_prefix}[value]",
       options_from_collection_for_select(gender_options, :first, :last, value),
       html_options.merge(
@@ -142,9 +142,9 @@ class Person::Filter::AttributeControl
   end
 
   def language_select_field(time, attribute_value_class, value, html_options)
-    language_options = Person::LANGUAGES.collect { |language_value, language_name| [language_name, language_value] }
+    language_options = Person::LANGUAGES.collect { |language_value, language_name| [language_value, language_name] }
     select_tag("#{filter_name_prefix}[value]",
-      options_from_collection_for_select(language_options, :second, :first, value&.flatten&.map(&:to_sym)),
+      options_from_collection_for_select(language_options, :first, :last, value&.flatten&.map(&:to_sym)),
       html_options.merge(
         class: "#{SELECT_CLASSES} language_select_field #{attribute_value_class} form-select form-select-sm w-100",
         multiple: true,

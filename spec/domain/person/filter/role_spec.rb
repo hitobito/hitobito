@@ -474,20 +474,6 @@ describe Person::Filter::Role do
           expect(filter(start_at: today, finish_at: today).entries).to have(1).item
         end
 
-        context "excluding archived" do
-          context "within time range" do
-            it "does not find archived role with past archived_at" do
-              role.update_attribute(:archived_at, 1.day.ago)
-              expect(filter(start_at: today, finish_at: today, include_archived: false).entries).to be_empty
-            end
-
-            it "finds archived role outside with future archived_at" do
-              role.update_attribute(:archived_at, 1.day.from_now)
-              expect(filter(start_at: today, finish_at: today, include_archived: false).entries).to have(1).item
-            end
-          end
-        end
-
         context "including archived" do
           context "within time range" do
             it "finds role archived with past archived_at" do

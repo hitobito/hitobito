@@ -1325,6 +1325,11 @@ fr:
       invoices: Lire toutes les factures auxquelles tu as accès
       mailing_lists: Lire tous les abonnements auxquels tu as accès
       nextcloud: Lire vos groupes Nextcloud et votre nom d'affichage
+
+  fixed_fees:
+    membership:
+      members: Mitglieder
+
   errors:
     messages:
       invalid_zipcode: n'est pas valable

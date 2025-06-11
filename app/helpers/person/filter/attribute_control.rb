@@ -147,7 +147,6 @@ class Person::Filter::AttributeControl
       options_from_collection_for_select(language_options, :first, :last, value&.flatten&.map(&:to_sym)),
       html_options.merge(
         class: "#{SELECT_CLASSES} language_select_field #{attribute_value_class} form-select form-select-sm w-100",
-        multiple: true,
         id: "language-select-#{time}",
         "data-controller": "form-select"
       ))

@@ -3,18 +3,19 @@
 class PeopleFiltersController < CrudController
   self.nesting = Group
 
+  CRITERIAS_KEY = :people_filter_active_criterias
+  CRITERIAS = %w[role attributes tag qualification]
+
   decorates :group
 
   skip_authorize_resource only: [:create]
-
-  before_action :set_filter_criteria, except: [:destroy]
 
   # load group before authorization
   prepend_before_action :parent
 
   before_render_form :compose_role_lists, :possible_tags
 
-  helper_method :people_list_path
+  helper_method :people_list_path, :criterias, :criterion
 
   def new
     assign_attributes
@@ -39,26 +40,30 @@ class PeopleFiltersController < CrudController
   def filter_criterion
     compose_role_lists
     possible_tags
-    @filter_criterion = params[:filter_criterion]
-    if @filter_criteria.include?(@filter_criterion.to_sym)
-      respond_to do |format|
-        if request.method == "GET"
-          format.turbo_stream { render "create", status: :ok }
-        end
-        if request.method == "POST"
-          format.turbo_stream { render "delete" }
-        end
+
+    respond_to do |format|
+      if request.method == "GET"
+        track(criterion)
+        format.turbo_stream { render "create", status: :ok }
+      end
+      if request.method == "POST"
+        clear(criterion)
+        format.turbo_stream { render "delete" }
       end
     end
   end
 
+  def criterion = params[:criterion]
+
+  def criterias = flash[CRITERIAS_KEY]
+
   private
 
-  alias_method :group, :parent
+  def track(criterion) = flash[CRITERIAS_KEY] = criterias.to_a + [criterion]
 
-  def set_filter_criteria
-    @filter_criteria = [:tag, :role, :qualification, :attributes]
-  end
+  def clear(criterion) = flash[CRITERIAS_KEY] = criterias.to_a - [criterion]
+
+  alias_method :group, :parent
 
   def build_entry
     filter = super

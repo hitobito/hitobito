@@ -3,53 +3,26 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-
-
 = standard_form(path_args(entry), noindent: true, stacked: true) do |form|
-
   = render_extensions :form, locals: { f: form }
   = form.error_messages
 
-  = render 'range', f: form
+  .ml-3
+    = render "range", f: form
 
-  .mt-3.mb-3.ml-3#overview
-    - if action_name == 'edit'
-      %div{id: "role-configuration"}
-        - if entry.filter_chain[:role]
-          = render(layout: 'layouts/filter', locals: { type: :role, delete: true }) do
-            = render 'role', f: form
+    .mt-3.mb-3#overview
+      = render "criterion", criterion: :role
+      = render "criterion", criterion: :attributes
+      = render "criterion", criterion: :qualification if @qualification_kinds.present?
+      = render "criterion", criterion: :tag
 
-      - if @qualification_kinds.present?
-        - if entry.filter_chain[:qualification]
-          %div{id: "qualification-configuration"}
-            = render(layout: 'layouts/filter', locals: { type: :qualification, delete: true }) do
-              = render 'qualification', f: form
+    - unless entry.filter_chain.present?
+      %h3#filter-advice= t(".filter_advice_heading")
 
-      - if entry.filter_chain[:attributes]
-        %div{id: "attributes-configuration"}
-          = render(layout: 'layouts/filter', locals: { type: :attributes, delete: true }) do
-            = render 'attributes', f: form
-      - if entry.filter_chain[:tag]
-        %div{id: "tag-configuration"}
-          = render(layout: 'layouts/filter', locals: { type: :tag, delete: true }) do
-            .label-columns
-              = render 'tag'
+    #filter-critera-dropdown
+      = Dropdown::PeopleFilter.new(self, current_user).to_s
 
-  - if action_name == 'new'
-    %h3#filter-advice.ml-3 Um eine Filterkriterium auszuwählen, bitte klicke auf den Hinzufüge-Button
-  %div.dropdown{"data-controller": "filter-dropdown"}
-    %button.d-flex.align-items-center.btn.btn-outline-primary.dropdown-toggle.ml-3.mt-2.mb-3.btn-sm{ type: 'button',  "data-bs-toggle": "dropdown", "aria-expanded": "false"}
-      %label.mr-2
-        = t("global.button.add")
-      %i.fa.fa-plus
-    %ul.dropdown-menu#filter-criteria-dropdown{"data-filter-dropdown-target": "menu"}
-      - @filter_criteria.each do |filter_criterion|
-        - if entry.filter_chain[filter_criterion].nil?
-          = link_to t("people_filters.#{filter_criterion}.title"), group_people_filter_criterion_path(filter_criterion: filter_criterion),
-              class: "dropdown-item", id: "dropdown-option-#{filter_criterion}", data: {turbo_stream: true}
-
-  .mt-4
-    = render 'search_button', f: form
+    .mt-4= render 'search_button', f: form
 
   - if can?(:create, entry)
     .mt-5

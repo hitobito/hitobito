@@ -3,6 +3,7 @@
 - # or later. See the COPYING file at the top-level directory or at
 - # https://github.com/hitobito/hitobito.
 
-= turbo_stream.remove criterion
-= turbo_stream.update Dropdown::PeopleFilter::ID do
-  = Dropdown::PeopleFilter.new(self, current_user, PeopleFiltersController::CRITERIAS - criterias + [criterion]).to_s
+- if local_assigns[:force] || entry.filter_chain[criterion]
+  %div{id: criterion}
+    = render(layout: 'layouts/filter', locals: { type: criterion, delete: true }) do
+      = render criterion.to_s

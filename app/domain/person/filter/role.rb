@@ -19,15 +19,9 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def apply(scope)
-    scope = scope
+    scope
       .where(type_conditions(scope))
       .where(duration_conditions(scope))
-    if include_archived?
-      scope
-    else
-      scope.where(roles: {archived_at: nil})
-        .or(scope.where(Role.arel_table[:archived_at].gt(Time.now.utc)))
-    end
   end
 
   def blank?

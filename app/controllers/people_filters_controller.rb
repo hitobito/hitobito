@@ -99,12 +99,11 @@ class PeopleFiltersController < CrudController
       [qualification.label, qualification.id, qualification.id]
     }
     @roles = role_types
-    @kinds = Person::Filter::Role::KINDS.each_with_index
-      .map { |kind, index|
-      [t("people_filters.form.filters_role_kind.#{kind}"),
-        t("people_filters.form.filters_role_kind.#{kind}"),
-        index + 1]
+
+    @kinds = Person::Filter::Role::KINDS.map { |kind|
+      [t("people_filters.form.filters_role_kind.#{kind}"), kind, kind]
     }
+
     @validities = [
       [t("people_filters.qualification.validity_label.active"), "active", 1],
       [t("people_filters.qualification.validity_label.reactivateable"), "reactivateable", 2],

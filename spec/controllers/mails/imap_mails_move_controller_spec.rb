@@ -9,8 +9,8 @@ require "spec_helper"
 
 require "net/imap"
 
-describe MailingLists::ImapMailsMoveController do
-  include MailingLists::ImapMailsSpecHelper
+describe Mails::ImapMailsMoveController do
+  include Mails::ImapMailsSpecHelper
 
   let(:top_leader) { people(:top_leader) }
 
@@ -65,7 +65,7 @@ describe MailingLists::ImapMailsMoveController do
 
       expect(flash[:notice]).to include "Mail erfolgreich verschoben"
       expect(response).to have_http_status(:found)
-      expect(response.location).to eq("http://test.host/mailing_lists/imap_mails/inbox")
+      expect(response.location).to eq("http://test.host/mails/imap/inbox")
     end
 
     it "does not allow non-admins to move mails" do

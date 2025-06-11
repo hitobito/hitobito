@@ -62,6 +62,9 @@ email:
   bulk_mail:
     bulk_size: <%= ENV['RAILS_BULK_MAIL_SIZE'].presence || 15 %>
     batch_timeout: <%= ENV['RAILS_BULK_MAIL_BATCH_TIMEOUT'].presence || 5 %>
+  bounces:
+    enabled: true
+    block_threshold: 3
 
 # The person with this email has root access to everything
 # This person should only be used by the operators of the application, not the customers.

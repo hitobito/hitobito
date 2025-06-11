@@ -36,7 +36,7 @@
 
 # rubocop:enable Layout/LineLength
 class MessageRecipient < ActiveRecord::Base
-  STATES = %w[pending sending sent failed].freeze
+  STATES = %w[pending sending sent failed blocked].freeze
 
   include I18nEnums
 

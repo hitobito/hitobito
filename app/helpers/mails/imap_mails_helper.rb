@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module MailingLists::ImapMailsHelper
+module Mails::ImapMailsHelper
   def imap_mail_table(template, *attrs)
     options = attrs.extract_options!
     template.add_css_class(options, "table table-striped table-hover")

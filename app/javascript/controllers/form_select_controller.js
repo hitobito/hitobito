@@ -23,6 +23,7 @@ export default class extends Controller {
       app.tomSelects[element.id] = new TomSelect(`#${element.id}`, {
         plugins: element.multiple ? ["remove_button"] : [],
         create: false,
+        allowEmptyOption: true,
         onItemAdd() {
           this.setTextboxValue("");
         },

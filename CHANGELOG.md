@@ -15,7 +15,7 @@
 - Es können Sammelrechnungen mit Rechnungsposten auf Basis von aktiven Rollen konfiguriert werden (hitobito_swb#18)
 - Teilnahmen haben neu einen Knopf um auf das Personenprofil zu navigieren
 - Eine Rechnung kann im Originalzustand gedruckt werden, bzw. ohne Mahnungen (hitobito_sww#173)
-- E-Mail-Rückläufer ("Bounces") werden erfasst und angezeigt. Nach 5 Rückläufern wird der Mailversand gestoppt (hitobito#3053)
+- E-Mail-Bounces werden erfasst und angezeigt. Nach 3 Bounces wird der Mailversand gestoppt. (hitobito#3053)
 
 ## Version 2.5
 

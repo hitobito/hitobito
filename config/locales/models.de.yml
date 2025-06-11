@@ -215,7 +215,8 @@ de:
         one: Auftrag
         other: Aufträge
       bounce:
-        other: Rückläufer
+        one: Bounce
+        other: Bounces
       calendar:
         one: Kalender-Feed
         other: Kalender-Feeds
@@ -441,7 +442,7 @@ de:
 
       bounces:
         email: E-Mail
-        count: Anzahl Rückläufer
+        count: Anzahl Bounces
         blocked_at: Sperrzeitpunkt
         mailing_list_ids: Abo-IDs
 

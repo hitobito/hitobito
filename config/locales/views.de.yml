@@ -134,7 +134,7 @@ de:
 
     contact_data:
       invoices_tooltip_title: Wird für Rechnungen verwendet
-      blocked_mail_tooltip_title: E-Mail ist aufgrund von E-Mail-Rückläufern/Bounces blockiert
+      blocked_mail_tooltip_title: E-Mail ist aufgrund von Bounces blockiert
 
     public_check_box:
       tooltip: Private Einträge sind nur für die eigene Gruppe sichtbar.
@@ -1211,7 +1211,7 @@ de:
           other: "%{count} Mails erfolgreich verschoben"
         server_error: Verbindung zum Mailserver nicht möglich, bitte versuche es später erneut.
     bounces:
-      manage: Rückläufer
+      manage: Bounces
     recipient_counts:
       index:
         recipient_info:
@@ -1341,7 +1341,7 @@ de:
     admin: "Einstellungen"
     admin/event_feed: "Kalender integrieren"
     admin/oauth_authorizations: "OAuth-Autorisierungen"
-    imap_mails: "Mails und Rückläufer"
+    imap_mails: "Mails und Bounces"
     invoices: "Rechnungen"
     invoices/single: "Einzelrechnungen"
     invoices/evaluations: "Buchungsbeleg"

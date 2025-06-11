@@ -17,7 +17,7 @@ end
 
 desc "Run rubocop-must.yml and fail if there are issues"
 task :rubocop do
-  sh "rubocop --except WagonMethod"
+  sh "rubocop --except Wagons/PatchedMethod"
 rescue
   abort("RuboCop failed!")
 end

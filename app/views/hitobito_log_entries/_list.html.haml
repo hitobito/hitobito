@@ -11,6 +11,8 @@
         .mb-3
           = direct_filter_select(:level, Hitobito.logger.levels, nil, value_method: :itself, text_method: :itself)
         .mb-3
+          = direct_filter_select(:category, Hitobito.logger.categories, nil, value_method: :itself, text_method: :itself)
+        .mb-3
           = direct_filter(:from_date, t('.from')) do
             = direct_filter_date_field(:from_date)
             = direct_filter_time_field(:from_time)

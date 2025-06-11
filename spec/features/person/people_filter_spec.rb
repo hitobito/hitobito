@@ -200,8 +200,7 @@ describe PeopleController, js: true do
         find("#filters_role_finish_at").set("2025-03-30")
 
         # Select role kind
-        find("#role-kind-select-ts-control").set("Aktiv")
-        find("#role-kind-select-opt-1").click
+        find("#role-kind-select").set("Aktiv")
 
         first(".btn.btn-primary", text: "Suchen").click
         expect(page).to have_text(alice.first_name)

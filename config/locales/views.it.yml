@@ -134,6 +134,7 @@ it:
 
     contact_data:
       invoices_tooltip_title: Wird für Rechnungen verwendet
+      blocked_mail_tooltip_title: E-Mail ist aufgrund von Bounces blockiert
 
     public_check_box:
       tooltip: Annotazioni private sono visibili solo al proprio gruppo. Se sei un capo nel tuo gruppo, le annotazioni marcate come pubbliche saranno visibili anche ai capi e responsabili di altri gruppi,.
@@ -1190,7 +1191,7 @@ it:
       email: Mailing list (e-mail)
       mailchimp: MailChimp
     imap_mails:
-      manage: Mails
+      manage: Postfach
       mailboxes:
         inbox: Entrata
         spam: Spam
@@ -1222,6 +1223,8 @@ it:
           many: "%{count} mails spostate con successo"
           other: "%{count} mails spostate con successo"
         server_error: Non è possibile collegarsi al server per le mails, per favore riprova più tardi.
+    bounces:
+      manage: Bounces
     recipient_counts:
       index:
         recipient_info:
@@ -1355,7 +1358,7 @@ it:
     admin: "Admin"
     admin/event_feed: "Integrare il calendario."
     admin/oauth_authorizations: "Autorizzazioni OAuth"
-    imap_mails: "Mails"
+    imap_mails: "Mails und Bounces"
     invoices: "Fatture"
     invoices/single: "Singole fatture"
     invoices/evaluations: "Ricevuta della prenotazione"

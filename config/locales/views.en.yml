@@ -133,6 +133,7 @@ en:
 
     contact_data:
       invoices_tooltip_title: Wird für Rechnungen verwendet
+      blocked_mail_tooltip_title: E-Mail ist aufgrund von Bounces blockiert
 
     public_check_box:
       tooltip: 'Private entries are visible only to your own group. If you are a group leader, entries marked as public are visible to leaders of other groups. '
@@ -1164,7 +1165,7 @@ en:
       email: Mailing-Liste (E-Mail)
       mailchimp: MailChimp
     imap_mails:
-      manage: Mails
+      manage: Postfach
       mailboxes:
         inbox: Inbox
         spam: Spam
@@ -1194,6 +1195,8 @@ en:
           one: "Mail successfully moved"
           other: "%{count} mails successfully moved"
         server_error: Unable to connect to mail server, please try again later.
+    bounces:
+      manage: Bounces
     recipient_counts:
       index:
         recipient_info:
@@ -1322,7 +1325,7 @@ en:
     admin: "Settings"
     admin/event_feed: "Integrate calendar"
     admin/oauth_authorizations: "OAuth authentifications"
-    imap_mails: "Mails"
+    imap_mails: "Mails und Bounces"
     invoices: "Invoices"
     invoices/single: "Individual invoices"
     invoices/evaluations: "Buchungsbeleg"

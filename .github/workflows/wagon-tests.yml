@@ -50,6 +50,7 @@ jobs:
     steps:
       - name: echo distinct ID ${{ inputs.distinct_id }}
         run: echo ${{ inputs.distinct_id }}
+        working-directory: .
         
       - name: Check out core with shared setup action
         uses: actions/checkout@v4

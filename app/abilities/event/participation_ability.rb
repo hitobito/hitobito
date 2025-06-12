@@ -58,7 +58,7 @@ class Event::ParticipationAbility < AbilityDsl::Base
   end
 
   def participating?
-    event.participations.map(&:person_id).include? user.id
+    event.participations.map(&:participant_id).include? user.id
   end
 
   def participant_can_show_event?

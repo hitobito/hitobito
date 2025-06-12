@@ -15,7 +15,7 @@ describe Event::ParticipationMailer do
 
   let(:person) { people(:top_leader) }
   let(:event) { Fabricate(:event) }
-  let(:participation) { Fabricate(:event_participation, event: event, person: person) }
+  let(:participation) { Fabricate(:event_participation, event: event, participant: person) }
   let(:mail) { Event::ParticipationMailer.confirmation(participation) }
 
   before { Fabricate(:phone_number, contactable: person, public: true) }

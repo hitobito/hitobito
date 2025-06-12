@@ -12,7 +12,6 @@ export default class extends Controller {
   static targets = ["field"]
 
   sourceChanged(event) {
-    console.log("ALARM");
     const fieldName = event.target.name;
     const fieldValue = event.target.value;
     const url = this.element.dataset.url;

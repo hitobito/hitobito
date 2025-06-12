@@ -31,11 +31,13 @@ app.EventKindPreconditions = {
 
     if ids.length
       grouping = $('.precondition-grouping').length
-      html = '<div class="precondition-grouping">' +
+      html = '<div class="precondition-grouping row mt-2">' +
         ids.map((id) -> obj.buildHiddenField(grouping, id)).join(' ') +
         obj.buildConjunction(grouping) +
+        '<div>' +
         obj.buildSentence() +
         obj.buildRemoveLink() +
+        '</div>' +
         obj.buildValidityFields(grouping) +
         '</div>'
       $('#add_precondition_grouping').before(html)
@@ -50,11 +52,11 @@ app.EventKindPreconditions = {
     validId = 'event_kind_precondition_qualification_kinds_' + grouping + '_valid'
     validOrExpiredId = 'event_kind_precondition_qualification_kinds_' + grouping + '_valid_or_expired'
     validOrReactivatableId = 'event_kind_precondition_qualification_kinds_' + grouping + '_valid_or_reactivatable'
-    '<div class="row">' +
-      '<label class="precondition-validity radio" for="' + validId + '"><input class="me-2" id="' + validId + '" name="event_kind[precondition_qualification_kinds][' + grouping + '][validity]" type="radio" value="valid" />' + $('#precondition_summary').data('validity-valid') + '</label>' +
-      '<label class="precondition-validity radio" for="' + validOrReactivatableId + '"><input class="me-2" id="' + validOrReactivatableId + '" name="event_kind[precondition_qualification_kinds][' + grouping + '][validity]" type="radio" value="valid_or_reactivatable" checked="checked" />' + $('#precondition_summary').data('validity-valid-or-reactivatable') + '</label>' +
-      '<label class="precondition-validity radio" for="' + validOrExpiredId + '"><input class="me-2" id="' + validOrExpiredId + '" name="event_kind[precondition_qualification_kinds][' + grouping + '][validity]" type="radio" value="valid_or_expired" checked="checked" />' + $('#precondition_summary').data('validity-valid-or-expired') + '</label>' +
-    '</div>'
+
+    '<label class="precondition-validity radio" for="' + validId + '"><input class="me-2" id="' + validId + '" name="event_kind[precondition_qualification_kinds][' + grouping + '][validity]" type="radio" value="valid" />' + $('#precondition_summary').data('validity-valid') + '</label>' +
+    '<label class="precondition-validity radio" for="' + validOrReactivatableId + '"><input class="me-2" id="' + validOrReactivatableId + '" name="event_kind[precondition_qualification_kinds][' + grouping + '][validity]" type="radio" value="valid_or_reactivatable" checked="checked" />' + $('#precondition_summary').data('validity-valid-or-reactivatable') + '</label>' +
+    '<label class="precondition-validity radio" for="' + validOrExpiredId + '"><input class="me-2" id="' + validOrExpiredId + '" name="event_kind[precondition_qualification_kinds][' + grouping + '][validity]" type="radio" value="valid_or_expired" checked="checked" />' + $('#precondition_summary').data('validity-valid-or-expired') + '</label>'
+
 
 
   buildConjunction: (grouping) ->

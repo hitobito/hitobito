@@ -12,7 +12,9 @@ class Groups::ContactPersonCleanerJob < RecurringJob
     member_types = Role.all_types.select(&:member?).collect(&:sti_name)
 
     Group.where.not(contact_id: nil).find_each do |group|
-      group.update!(contact: nil) unless Role.exists?(group_id: group.id, person_id: group.contact_id, type: member_types)
+      next if Role.exists?(group_id: group.id, person_id: group.contact_id, type: member_types)
+
+      group.update!(contact: nil)
       create_log_entry(group)
     end
   end

@@ -3,7 +3,12 @@
 - # or later. See the COPYING file at the top-level directory or at
 - # https://github.com/hitobito/hitobito.
 
-- if local_assigns[:force] || entry.filter_chain[criterion]
-  %div{id: criterion_id}
-    = render(layout: 'layouts/filter', locals: { type: criterion, delete: true }) do
-      = render criterion.to_s
+- if local_assigns[:force] || entry.filter_chain[criterion].present?
+  .well{id: "#{criterion}-configuration"}
+    .d-flex.flex-row.align-items-center
+      %h3.col-11.mb-3=t("people_filters.#{criterion}.title")
+      - unless local_assigns[:skip_delete]
+        .col.d-flex.justify-content-end.mb-3
+          = link_to group_people_filter_criterion_path(criterion:), class: "d-flex align-items-center", data: {turbo_method: :delete} do
+            %i.fas.fa-times
+    = render "people_filters/#{criterion}", filter: entry.filter_chain[criterion]

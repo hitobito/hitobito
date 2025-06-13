@@ -13,14 +13,14 @@
     .mt-3.mb-3#overview
       = render "criterion", criterion: :role
       = render "criterion", criterion: :attributes
-      = render "criterion", criterion: :qualification if @qualification_kinds.present?
-      = render "criterion", criterion: :tag
+      = render "criterion", criterion: :qualification
+      = render "criterion", criterion: :tag, force: @criterias.include?("tag_absence")
 
     - unless entry.filter_chain.present?
       %h3#filter-advice= t(".filter_advice_heading")
 
     #filter-critera-dropdown
-      = Dropdown::PeopleFilter.new(self, current_user).to_s
+      = Dropdown::PeopleFilter.new(self, current_user, @criterias).to_s
 
     .mt-4= render 'search_button', f: form
 

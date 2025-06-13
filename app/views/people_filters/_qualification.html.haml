@@ -3,15 +3,6 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- filter_qualifications = entry.filter_chain[:qualification]
-- filter_args = filter_qualifications ? filter_qualifications.args : {}
-- present_selected_qualifications = filter_qualifications.present? ? filter_qualifications.to_hash[:qualification_kind_ids] : []
-- qualification_options = options_from_collection_for_select(@qualification_kinds, :second, :first, present_selected_qualifications)
-
-- present_selected_validity = filter_qualifications.present? ? filter_qualifications.to_hash[:validity] : []
-- validity_options = options_from_collection_for_select(@validities, :second, :first, present_selected_validity)
-
-
 .label-columns.mr-5
   - unless can?(:index_full_people, @group)
     .alert.alert-warning= t('.not_enough_permissions')
@@ -21,7 +12,7 @@
       %label= t("people_filters.qualification.title")
     .col-10.shown{"data-controller": "form-select"}
       = select_tag('filters[qualification][qualification_kind_ids][]',
-                      qualification_options,
+                      people_filter_qualification_kind_options(filter),
                       class: 'form-control form-control-sm tom-select w-100',
                       id: 'qualification-select',
                       "data-controller": "form-select",
@@ -38,7 +29,7 @@
           = t('people_filters.simple_radio.match.one')
       .d-flex.flex-row
         = label_tag('filters_qualification_match_all', class: 'radio inline') do
-          = radio_button_tag('filters[qualification][match]', 'all', filter_args[:match] == 'all', %w(not_active none only_expired).include?(filter_args[:validity]) ? { disabled: true } : {})
+          = radio_button_tag('filters[qualification][match]', 'all', people_filter_value(filter, :match) == 'all', %w(not_active none only_expired).include?(people_filter_value(filter, :validity)) ? { disabled: true } : {})
           = t('people_filters.simple_radio.match.all')
 
   .d-flex.flex-column.flex-lg-row.align-items-start.align-items-lg-center.mb-2
@@ -46,7 +37,7 @@
       %label= t("people_filters.qualification.validity")
     .col-10.shown.d-flex.flex-column{"data-controller": "form-select"}
       = select_tag('filters[qualification][validity]',
-                      validity_options,
+                      people_filter_qualification_validity_options(filter),
                       class: 'form-control form-control-sm',
                       id: 'qualification-validity-select',
                       multiple: false,
@@ -58,7 +49,7 @@
     .col-10.shown.d-flex.flex-column{"data-controller": "form-select"}
       .input-group.d-flex.col-12.mr-3
         %span.input-group-text= icon(:'calendar-alt')
-        = text_field_tag("filters[qualification][reference_date]", filter_args[:reference_date], class: 'date form-control form-control-sm')
+        = text_field_tag("filters[qualification][reference_date]", people_filter_value(filter, :reference_date), class: 'date form-control form-control-sm')
       .d-flex.col-12.col-form-label
         = t('.reference_date_help_inline')
 

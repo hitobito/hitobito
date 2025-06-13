@@ -1,5 +1,14 @@
-.pagination-bar
+-#  Copyright (c) 2025, Hitobito AG. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+.pagination-bar.justify-content-start
   = paginate @invoices
+
+  .pagination-info
+    - if @invoices.total_count > 0
+      = t('.number_of_invoices_shown', count: @invoices.total_count)
 
 = crud_table(data: { checkable: true }) do |t|
   - t.col(check_box_tag(:all, 0, false, { data: :multiselect })) do |i|

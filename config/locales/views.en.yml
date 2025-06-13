@@ -133,6 +133,7 @@ en:
 
     contact_data:
       invoices_tooltip_title: Wird für Rechnungen verwendet
+      blocked_mail_tooltip_title: E-Mail ist aufgrund von Bounces blockiert
 
     public_check_box:
       tooltip: 'Private entries are visible only to your own group. If you are a group leader, entries marked as public are visible to leaders of other groups. '
@@ -989,7 +990,10 @@ en:
         filter:
           from: Von
           to: Bis
-
+    table:
+      number_of_invoices_shown:
+        one: "%{count} Rechnung angezeigt."
+        other: "%{count} Rechnungen angezeigt."
   invoices/by_article:
     index:
       title: 'Rechnungen zu Artikel "%{name}"'
@@ -1161,7 +1165,7 @@ en:
       email: Mailing-Liste (E-Mail)
       mailchimp: MailChimp
     imap_mails:
-      manage: Mails
+      manage: Postfach
       mailboxes:
         inbox: Inbox
         spam: Spam
@@ -1191,6 +1195,8 @@ en:
           one: "Mail successfully moved"
           other: "%{count} mails successfully moved"
         server_error: Unable to connect to mail server, please try again later.
+    bounces:
+      manage: Bounces
     recipient_counts:
       index:
         recipient_info:
@@ -1319,7 +1325,7 @@ en:
     admin: "Settings"
     admin/event_feed: "Integrate calendar"
     admin/oauth_authorizations: "OAuth authentifications"
-    imap_mails: "Mails"
+    imap_mails: "Mails und Bounces"
     invoices: "Invoices"
     invoices/single: "Individual invoices"
     invoices/evaluations: "Buchungsbeleg"
@@ -1771,9 +1777,9 @@ en:
 
   qualification_decorator:
     open_training_days_active:
-      Damit die Qualifikation am %{finish_at} nicht abläuft, bitten wir dich bis dahin %{days} Fortbildungstage zu absolvieren
+      Damit die Qualifikation am %{finish_at} nicht abläuft, bitten wir dich bis spätestens dahin %{days} Fortbildungstage zu absolvieren.
     open_training_days_reactivatable:
-      Um deine Qualifikation zu reaktivieren, bitten wir dich %{days} Fortbildungstage bis spätestens %{reactivateable_until} zu absolvieren
+      Um deine Qualifikation zu reaktivieren, bitten wir dich %{days} Fortbildungstage bis spätestens %{reactivateable_until} zu absolvieren.
     open_training_days_no_longer_reactivatable: Diese Qualifikation ist seit dem %{reactivateable_until} abgelaufen. Falls du davor Aus- oder Fortbildungen besucht hast und du für diese eine Kursbestätigung besitzt, kannst du diese mit deinem Tourenchef teilen. Allenfalls kann dies zu einer Reaktivierung deiner bereits abgelaufenen Qualifikation führen.
 
   event_invitations:

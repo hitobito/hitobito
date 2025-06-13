@@ -212,6 +212,9 @@ en:
       assignment:
         one: Order
         other: Orders
+      bounce:
+        one: Bounce
+        other: Bounces
       calendar:
         one: Kalender-Feed
         other: Kalender-Feeds
@@ -433,6 +436,12 @@ en:
         town: Ort
         country: Land
         postbox: Postfach
+
+      bounces:
+        email: E-Mail
+        count: Anzahl Bounces
+        blocked_at: Sperrzeitpunkt
+        mailing_list_ids: Abo-IDs
 
       cantons:
         ag: Aargau
@@ -1252,6 +1261,11 @@ en:
       invoices: Lesen aller Rechnungen, auf die du Zugriff hast
       mailing_lists: Lesen aller Abos, auf die du Zugriff hast
       nextcloud: Lesen deiner Nextcloud-Gruppen und deines Anzeigenamens
+
+  fixed_fees:
+    membership:
+      members: Mitglieder
+
   errors:
     messages:
       invalid_zipcode: ist nicht gültig

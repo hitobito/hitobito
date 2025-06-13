@@ -54,7 +54,7 @@ describe QualificationDecorator do
       expect(dom).to have_css("span", text: "1.5")
       expect(dom).to have_css "i.fas.fa-info-circle"
       expect(tooltip).to eq "Damit die Qualifikation am 23.03.2024 nicht abläuft, bitten wir " \
-                            "dich bis dahin 1.5 Fortbildungstage zu absolvieren"
+                            "dich bis spätestens dahin 1.5 Fortbildungstage zu absolvieren."
     end
 
     it "includes open training days with icon informing about how to reactivate" do
@@ -63,7 +63,7 @@ describe QualificationDecorator do
       expect(qualification).to be_reactivateable
       expect(dom).to have_css "i.fas.fa-info-circle"
       expect(tooltip).to eq "Um deine Qualifikation zu reaktivieren, bitten wir dich 1.5 " \
-                            "Fortbildungstage bis spätestens 21.03.2028 zu absolvieren"
+                            "Fortbildungstage bis spätestens 21.03.2028 zu absolvieren."
     end
   end
 end

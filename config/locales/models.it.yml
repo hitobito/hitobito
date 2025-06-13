@@ -219,6 +219,10 @@ it:
         one: Ordine
         many: Ordini
         other: Ordini
+      bounce:
+        one: Bounce
+        many: Bounces
+        other: Bounces
       calendar:
         one: Registrazione nel calendario
         many: Registrazioni nel calendario
@@ -499,6 +503,12 @@ it:
         town: Ort
         country: Land
         postbox: Postfach
+
+      bounces:
+        email: E-Mail
+        count: Anzahl Bounces
+        blocked_at: Sperrzeitpunkt
+        mailing_list_ids: Abo-IDs
 
       cantons:
         ag: Argovia
@@ -1324,6 +1334,11 @@ it:
       invoices: Leggere tutte le fatture a cui hai accesso
       mailing_lists: Leggere tutti gli abbonamenti a cui hai accesso
       nextcloud: Leggi i tuoi gruppi Nextcloud e il tuo nome visualizzato
+
+  fixed_fees:
+    membership:
+      members: Mitglieder
+
   errors:
     messages:
       invalid_zipcode: ist nicht gültig

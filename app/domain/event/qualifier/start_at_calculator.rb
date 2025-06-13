@@ -24,9 +24,9 @@ class Event::Qualifier::StartAtCalculator
   private
 
   def no_qualification_since?(kind, start_at)
-    @person.qualifications
-      .where(qualification_kind_id: kind.id).where(start_at: start_at..)
-      .none?
+    !@person.qualifications
+      .where(qualification_kind_id: kind.id, start_at: start_at..)
+      .exists?
   end
 
   def calculator

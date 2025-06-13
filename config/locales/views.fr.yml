@@ -134,6 +134,7 @@ fr:
 
     contact_data:
       invoices_tooltip_title: Wird für Rechnungen verwendet
+      blocked_mail_tooltip_title: E-Mail ist aufgrund von Bounces blockiert
 
     public_check_box:
       tooltip: Les entrées privées ne sont visibles qu'au sein du groupe auquel tu appartiens. Les responsables d'autres groupes peuvent voir les entrées identifiées en tant qu'entrées publiques si toi-même, tu fais partie d'une maîtrise.
@@ -924,7 +925,7 @@ fr:
       from: De
       to: à
     email_error_table:
-      created_at: Erstellt am
+      created_at: Établie le
       category: Kategorie
       subject: Subjekt
       message: Meldung
@@ -1003,7 +1004,11 @@ fr:
         filter:
           from: De
           to: Au
-
+    table:
+      number_of_invoices_shown:
+        one: "%{count} Rechnung angezeigt."
+        many: "%{count} Rechnungen angezeigt."
+        other: "%{count} Rechnungen angezeigt."
   invoices/by_article:
     index:
       title: 'Factures pour l''article "%{name}"'
@@ -1035,7 +1040,7 @@ fr:
         Les réponses à des e-mails concernant les factures doivent être envoyées à l'adresse de l'utilisateur.rice actuel.le ou à l'adresse configurée ici.
       email_validation: Ne doit pas être une adresse e-mail.
       sender_name_help: Les e-mails de facturation sont envoyés sous ce nom.
-      custom_content_help: Diese E-Mail Vorlage wird beim versenden von Rechnungen verwendet. Wenn keine E-Mail Vorlage hinterlegt wird, wird die globale E-Mail Voralge verwendet.
+      custom_content_help: Ce modèle d'e-mail est utilisé lors de l'envoi de factures. Si aucun modèle d'e-mail n'est défini, le modèle d'e-mail global sera utilisé.
     reminder_fields:
       third_level: "Pour tous les rappels suivants, les données du troisième rappel sont reprises."
     provider_fields:
@@ -1049,7 +1054,7 @@ fr:
     destroys:
       show:
         title: Supprimer une facture collective
-        non_draft_info: 'In der Sammelrechnung ist mindestens eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann die Sammelrechnung nicht gelöscht werden.'
+        non_draft_info: 'La facture collective contient au moins une facture qui n''a ni le statut "Brouillon" ni le statut "Annulé". La facture collective ne peut donc pas être supprimée.'
         confirm_delete: Voulez-vous vraiment supprimer la facture collective?
     form:
       invoice_articles:
@@ -1188,7 +1193,7 @@ fr:
       email: Liste de diffusion (e-mail)
       mailchimp: MailChimp
     imap_mails:
-      manage: e-mails
+      manage: Postfach
       mailboxes:
         inbox: entrée
         spam: spam
@@ -1220,6 +1225,8 @@ fr:
           many: "%{count} e-mails déplacés avec succès"
           other: "%{count} e-mails déplacés avec succès"
         server_error: La liaison avec le serveur mail est impossible pour l'instant, veuillez réessayer plus tard svp.
+    bounces:
+      manage: Bounces
     recipient_counts:
       index:
         recipient_info:
@@ -1353,7 +1360,7 @@ fr:
     admin: "Paramètres"
     admin/event_feed: "Intégrer le calendrier"
     admin/oauth_authorizations: "Autoriser OAuth"
-    imap_mails: "e-mails"
+    imap_mails: "Mails und Bounces"
     invoices: "Factures"
     invoices/single: "Factures individuelles"
     invoices/evaluations: "Pièce comptable"
@@ -1821,9 +1828,9 @@ fr:
 
   qualification_decorator:
     open_training_days_active:
-      Damit die Qualifikation am %{finish_at} nicht abläuft, bitten wir dich bis dahin %{days} Fortbildungstage zu absolvieren
+      Damit die Qualifikation am %{finish_at} nicht abläuft, bitten wir dich bis spätestens dahin %{days} Fortbildungstage zu absolvieren.
     open_training_days_reactivatable:
-      Um deine Qualifikation zu reaktivieren, bitten wir dich %{days} Fortbildungstage bis spätestens %{reactivateable_until} zu absolvieren
+      Um deine Qualifikation zu reaktivieren, bitten wir dich %{days} Fortbildungstage bis spätestens %{reactivateable_until} zu absolvieren.
     open_training_days_no_longer_reactivatable: Diese Qualifikation ist seit dem %{reactivateable_until} abgelaufen. Falls du davor Aus- oder Fortbildungen besucht hast und du für diese eine Kursbestätigung besitzt, kannst du diese mit deinem Tourenchef teilen. Allenfalls kann dies zu einer Reaktivierung deiner bereits abgelaufenen Qualifikation führen.
 
   event_invitations:

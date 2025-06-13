@@ -24,7 +24,7 @@ describe InvoiceItem::FixedFee do
       it "uses name value with dynamic_cost_parameters for i18n translation" do
         expect(item.name).to eq "Mitgliedsbeitrag - Members"
         expect(I18n.with_locale(:fr) { item.name }).to eq "Cotisation - Members"
-        expect(I18n.with_locale(:en) { item.name }).to eq "Mitgliedsbeitrag - Members"
+        expect(I18n.with_locale(:en) { item.name }).to eq "Mitglieder"
       end
     end
   end

@@ -220,6 +220,10 @@ fr:
         one: Commandes
         many: Commandes
         other: Commandes
+      bounce:
+        one: Bounce
+        many: Bounces
+        other: Bounces
       calendar:
         one: Feed du calendrier
         many: Feed du calendrier
@@ -500,6 +504,12 @@ fr:
         town: Ville
         country: Pays
         postbox: Case postale
+
+      bounces:
+        email: E-Mail
+        count: Anzahl Bounces
+        blocked_at: Sperrzeitpunkt
+        mailing_list_ids: Abo-IDs
 
       cantons:
         ag: Argovie
@@ -1325,6 +1335,11 @@ fr:
       invoices: Lire toutes les factures auxquelles tu as accès
       mailing_lists: Lire tous les abonnements auxquels tu as accès
       nextcloud: Lire vos groupes Nextcloud et votre nom d'affichage
+
+  fixed_fees:
+    membership:
+      members: Mitglieder
+
   errors:
     messages:
       invalid_zipcode: n'est pas valable

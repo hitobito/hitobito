@@ -3,19 +3,18 @@
     = hidden_field_tag :returning, true
     = hidden_field_tag :page, 1
 
-    .control-group.has-feedback.has-clear
-      = label_tag(:q, t('global.button.search'), class: 'control-label')
-      = search_field_tag :q, params[:q], class: 'form-control form-control-sm', placeholder: t('global.button.search'), data: { submit: true }
-      %span.form-control-feedback{data: { clear: true }}
-        = icon(:times)
+    .d-lg-flex.justify-content-between
+      .d-lg-inline-flex.gap-3.me-4
+        .mb-3
+          = direct_filter_search
+        .mb-3
+          = direct_filter_select(:state, Invoice.state_labels.to_a, nil)
+        .mb-3
+          = direct_filter_select(:due_since, invoice_due_since_options, t('.due_since'))
+      .d-lg-inline-flex.gap-3
+        .mb-3
+          = direct_filter_date(:from, t('.from'), value: params[:from] || "1.1.#{@year_from || Time.zone.today.year}")
+        .mb-3
+          = direct_filter_date(:to, t('.to'), value: params[:to] || "31.12.#{Time.zone.today.year}")
 
-    = direct_filter_select(:state, Invoice.state_labels.to_a, nil)
-
-    - if params[:state].blank? || params[:state] == 'reminded'
-      = direct_filter_select(:due_since, invoice_due_since_options, t('.due_since'))
-
-    %div
-      .float-end.invoices-daterange-filter.pt-5
-        = direct_filter_date(:from, t('.from'), value: params[:from] || "1.1.#{@year_from || Time.zone.today.year}", data: { submit: true })
-        = direct_filter_date(:to, t('.to'), value: params[:to] || "31.12.#{Time.zone.today.year}", data: { submit: true })
 - params[:q] = nil # Reset param so quicksearch filter does not get populated

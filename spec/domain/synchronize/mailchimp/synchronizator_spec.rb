@@ -38,7 +38,7 @@ describe Synchronize::Mailchimp::Synchronizator do
   end
 
   def member(person, tags = [], status: "subscribed")
-    client.subscriber_body(person).merge(tags: tags)
+    client.subscriber_body(person).merge(tags: tags, status: status)
   end
 
   context "#missing_merge_fields" do

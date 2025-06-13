@@ -18,7 +18,7 @@
     #role_type_select.shown.ms-0
       = collection_select(:role,
                           :type,
-                          GroupDecorator.decorate(@group).possible_roles(controller.action_name, entry.person),
+                          GroupDecorator.decorate(@group).possible_roles(person: entry.person),
                           :sti_name,
                           :label,
                           roles_type_select_options(@group, entry),

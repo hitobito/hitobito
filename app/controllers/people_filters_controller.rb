@@ -90,14 +90,7 @@ class PeopleFiltersController < CrudController
   end
 
   def role_types
-    Role::TypeList.new(group.class).role_types.each_with_object([]) do |(key, subhash), result|
-      subhash.each do |subkey, role_list|
-        role_list.each do |role_type|
-          label = (subkey == key) ? "#{key} -> #{role_type.label}" : "#{key} -> #{subkey} -> #{role_type.label}"
-          result << [label, role_type.id, role_type.id]
-        end
-      end
-    end
+    PeopleFilterDisplays::RoleWithGroupAndLayer.new(Role::TypeList.new(group.class).role_types).options
   end
 
   def compose_role_lists

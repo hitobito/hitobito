@@ -146,7 +146,7 @@ class Person::Filter::AttributeControl
       html_options.merge(
         class: "#{SELECT_CLASSES} language_select_field #{attribute_value_class} form-select form-select-sm w-100",
         multiple: true,
-        id: "language-select-#{time}",
+        id: "language-select-#{time}"
       ))
   end
 

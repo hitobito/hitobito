@@ -1,9 +1,0 @@
-- caption ||= t("people_filters.#{type}.title")
-.well
-  .d-flex.flex-row.align-items-center
-    %h3.col-11.mb-3= caption
-    - if delete
-      .col.d-flex.justify-content-end.mb-3
-        = link_to group_turbo_people_filter_path(criterion: type), class: "d-flex align-items-center", data: {turbo_method: :delete} do
-          %i.fas.fa-times
-  = yield

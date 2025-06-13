@@ -10,29 +10,5 @@
       = icon(:edit)
 
 %ul.ms-4
-  - @mailing_list.filter_chain[:attributes]&.to_hash&.values&.each do |attribute_arg|
-    - case attribute_arg[:key]
-    - when "language"
-      %li
-        - languages = attribute_arg[:value].map { Person::LANGUAGES.fetch(_1.to_sym, _1) }
-        - language_sentence = languages.to_sentence(last_word_connector: t('people_filters.language.word_connector'), two_words_connector: t('people_filters.language.word_connector'))
-        = t('people_filters.language.one_of', languages: language_sentence)
-    - when "country", "gender"
-      %li
-        = Person.filter_attrs.dig(attribute_arg[:key].to_sym, :label)
-        = t(attribute_arg[:constraint], scope: 'people_filters.attributes')
-        - if attribute_arg[:key] == "country"
-          - attribute_arg[:value] = attribute_arg[:value].reject { |country| country.empty? }
-          - countries = attribute_arg[:value].map {|country_code| ISO3166::Country[country_code].translations[I18n.locale.to_s]}
-          = countries.to_sentence(last_word_connector: t('people_filters.language.word_connector'), two_words_connector: t('people_filters.language.word_connector'))
-        - if attribute_arg[:key] == "gender"
-          - genders = attribute_arg[:value].map { |g| Person.new.gender_label(g) }
-        = genders.to_sentence(last_word_connector: t('people_filters.language.word_connector'), two_words_connector: t('people_filters.language.word_connector'))
-    - else
-      %li
-        = Person.filter_attrs.dig(attribute_arg[:key].to_sym, :label)
-        = t(attribute_arg[:constraint], scope: 'people_filters.attributes')
-        = people_filter_attribute_value(attribute_arg[:key], attribute_arg[:value])
-
-
+  = mailing_list_attributes_filter_info_items(@mailing_list)
   = render_extensions(:filter_show, mailing_list: @mailing_list)

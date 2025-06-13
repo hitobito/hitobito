@@ -3,9 +3,6 @@
 class PeopleFiltersController < CrudController
   self.nesting = Group
 
-  CRITERIAS_KEY = :people_filter_active_criterias
-  CRITERIAS = %w[role attributes tag qualification]
-
   decorates :group
 
   skip_authorize_resource only: [:create]
@@ -13,9 +10,8 @@ class PeopleFiltersController < CrudController
   # load group before authorization
   prepend_before_action :parent
 
-  before_render_form :compose_role_lists, :possible_tags
-
-  helper_method :people_list_path, :criterias, :criterion, :criterion_id
+  helper_method :people_list_path, :group
+  before_render_form :populate_criterias
 
   def new
     assign_attributes
@@ -37,33 +33,7 @@ class PeopleFiltersController < CrudController
     super(location: people_list_path)
   end
 
-  def filter_criterion
-    compose_role_lists
-    possible_tags
-
-    respond_to do |format|
-      if request.method == "GET"
-        track(criterion)
-        format.turbo_stream { render "create", status: :ok }
-      end
-      if request.method == "POST"
-        clear(criterion)
-        format.turbo_stream { render "delete" }
-      end
-    end
-  end
-
-  def criterion = params[:criterion]
-
-  def criterias = flash[CRITERIAS_KEY]
-
-  def criterion_id = "#{criterion}-configuration"
-
   private
-
-  def track(criterion) = flash[CRITERIAS_KEY] = criterias.to_a + [criterion]
-
-  def clear(criterion) = flash[CRITERIAS_KEY] = criterias.to_a - [criterion]
 
   alias_method :group, :parent
 
@@ -89,27 +59,6 @@ class PeopleFiltersController < CrudController
     people_list_path(search_params)
   end
 
-  def role_types
-    PeopleFilterDisplays::RoleWithGroupAndLayer.new(Role::TypeList.new(group.class).role_types).options
-  end
-
-  def compose_role_lists
-    @qualification_kinds = QualificationKind.list.without_deleted
-      .map { |qualification| [qualification.label, qualification.id, qualification.id] }
-    @roles = role_types
-    @kinds = Person::Filter::Role::KINDS.map { |kind| [t("people_filters.form.filters_role_kind.#{kind}"), kind, kind] }
-
-    @validities = [
-      [t("people_filters.qualification.validity_label.active"), "active"],
-      [t("people_filters.qualification.validity_label.reactivateable"), "reactivateable"],
-      [t("people_filters.qualification.validity_label.not_active_but_reactivateable"), "not_active_but_reactivateable"],
-      [t("people_filters.qualification.validity_label.not_active"), "not_active"],
-      [t("people_filters.qualification.validity_label.all"), "all"],
-      [t("people_filters.qualification.validity_label.none"), "none"],
-      [t("people_filters.qualification.validity_label.only_expired"), "only_expired"]
-    ]
-  end
-
   def assign_attributes
     entry.name = params[:name] || params.dig(:people_filter, :name)
     entry.range = params[:range]
@@ -120,7 +69,7 @@ class PeopleFiltersController < CrudController
     group_people_path(group, options)
   end
 
-  def possible_tags
-    @possible_tags ||= PersonTags::Translator.new.possible_tags
+  def populate_criterias
+    @criterias = entry.filter_chain.to_hash.keys
   end
 end

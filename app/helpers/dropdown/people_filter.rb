@@ -14,9 +14,9 @@ module Dropdown
 
     delegate :t, :group_people_filter_criterion_path, to: :template
 
-    def initialize(template, user, criterias = PeopleFiltersController::CRITERIAS)
+    def initialize(template, user, active_criterias)
       super(template, template.t("global.button.add"), :plus)
-      @criterias = criterias.uniq
+      @criterias = PeopleFilterCriterionsController::CRITERIAS - active_criterias
 
       init_items
     end
@@ -33,7 +33,7 @@ module Dropdown
           t("people_filters.#{criterion}.title"),
           group_people_filter_criterion_path(criterion:),
           id: "dropdown-option-#{criterion}",
-          data: {turbo_stream: true}
+          data: {turbo_method: :post}
         )
       end
     end

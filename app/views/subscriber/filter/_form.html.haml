@@ -10,6 +10,4 @@
              stacked: true,
              buttons_bottom: false,
              cancel_url: group_mailing_list_subscriptions_path(@group, @mailing_list)) do |f|
-  = render(layout: 'layouts/filter', locals: { entry: @mailing_list, type: :attributes, delete: false}) do
-    = render 'people_filters/attributes', f: f, entry: @mailing_list
-  = render_extensions('filter_form', locals: { entry: entry })
+  = render 'people_filters/criterion', criterion: :attributes, skip_delete: true, force: true

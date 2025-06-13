@@ -12,6 +12,7 @@ de:
     unknown: unbekannt
     nobody: niemand
     all: Alle
+    or: oder
 
     from: Von
     until: Bis
@@ -1869,11 +1870,6 @@ de:
       before: vor dem
       after: nach dem
       blank: ist leer
-
-    language:
-      title: Sprache
-      word_connector: " oder "
-      one_of: Sprache ist %{languages}
 
     tag:
       title: Tags

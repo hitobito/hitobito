@@ -3,13 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- present_filter_tags = entry.filter_chain[:tag]
-- present_selected = present_filter_tags ? present_filter_tags.to_hash[:names] : []
-- present_options = options_from_collection_for_select(@possible_tags, :second, :first, present_selected)
-
-- absent_filter = entry.filter_chain[:tag_absence]
-- absent_selected = absent_filter ? absent_filter.to_hash[:names] : []
-- absent_options = options_from_collection_for_select(@possible_tags, :second, :first, absent_selected)
+- tags_options = people_filter_tags_options(entry.filter_chain)
 
 .label-columns.mr-5
   .d-flex.flex-column.flex-lg-row.align-items-start.align-items-lg-center.mb-2
@@ -17,7 +11,7 @@
       %label= t('.prompt_tag_selection')
     .col-10.shown
       = select_tag('filters[tag][names][]',
-                    present_options,
+                    tags_options[:present],
                     class: 'form-control form-control-sm tom-select',
                     "data-controller": "tom-select",
                     id: 'present-tag-select',
@@ -28,7 +22,7 @@
       %label= t('.prompt_tag_absence_selection')
     .col-10.shown
       = select_tag('filters[tag_absence][names][]',
-                    absent_options,
+                    tags_options[:absent],
                     class: 'form-control form-control-sm tom-select',
                     id: 'absent-tag-select',
                     "data-controller": "tom-select",

@@ -4,7 +4,7 @@
 - # https://github.com/hitobito/hitobito.
 
 = turbo_stream.append "overview" do
-  = render 'criterion', criterion: criterion.to_sym, force: true
+  = render "people_filters/criterion", criterion: params[:criterion], force: true
 = turbo_stream.update Dropdown::PeopleFilter::ID do
-  = Dropdown::PeopleFilter.new(self, current_user, PeopleFiltersController::CRITERIAS - criterias).to_s
+  = Dropdown::PeopleFilter.new(self, current_user, active_criterias).to_s
 = turbo_stream.remove "filter-advice"

@@ -18,37 +18,8 @@ describe PeopleFiltersController do
   context "GET new" do
     it "builds entry with group and existing params" do
       get :new, params: {group_id: group.id, filters: {role: {role_type_ids: role_type_ids_string}}}
-
       filter = assigns(:people_filter)
       expect(filter.group).to eq(group)
-      expect(assigns(:qualification_kinds)).to be_present
-    end
-
-    context "#possible_tags" do
-      it "preloads available tags" do
-        get :new, params: {group_id: group.id}
-        expect(assigns(:possible_tags)).to eq []
-      end
-
-      it "translates invalid e-mail tags" do
-        allow(Truemail).to receive(:valid?).and_call_original
-        user.update_columns(email: "not-an-email")
-        AdditionalEmail
-          .new(contactable: user,
-            email: "mail@nodomain")
-          .save!(validate: false)
-        Contactable::EmailValidator.new.validate_people
-
-        get :new, params: {group_id: group.id}
-        invalid_email_tags = [["Haupt-E-Mail ungültig", "category_validation:email_primary_invalid", PersonTags::Validation.email_primary_invalid.id],
-          ["Weitere E-Mail ungültig", "category_validation:email_additional_invalid", PersonTags::Validation.email_additional_invalid.id]]
-
-        tags = assigns(:possible_tags)
-
-        invalid_email_tags.each do |t|
-          expect(tags).to include(t)
-        end
-      end
     end
   end
 

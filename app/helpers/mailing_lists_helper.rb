@@ -73,12 +73,15 @@ module MailingListsHelper
     or_connector = " #{t("global.or")} "
 
     items = list.filter_chain[:attributes].to_hash.values.map(&:values).map do |key, constraint, value|
-      value = value.compact_blank unless key == "gender"
+      unless key == "gender"
+        value = value.compact_blank if value.is_a?(Array)
+      end
       value_string = Array(value).map do |val|
         case key
         when /language/ then Person::LANGUAGES[val.to_sym]
         when /country/ then ISO3166::Country[val].translations[I18n.locale.to_s]
         when /gender/ then Person.new.gender_label(val)
+        else value
         end
       end.sort.to_sentence(two_words_connector: or_connector, last_word_connector: or_connector)
 

@@ -29,7 +29,7 @@ describe PeopleFilterHelper do
       expect(node).to have_select options: ["weiblich", "männlich", "unbekannt"]
       expect(node).to have_select selected: "Geschlecht", disabled: true
       expect(node).to have_select selected: "männlich"
-      expect(value[:name]).to eq "filters[attributes][#{time}][value]"
+      expect(value[:name]).to eq "filters[attributes][#{time}][value][]"
     end
 
     it "renders custom boolean control" do

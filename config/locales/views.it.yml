@@ -1878,6 +1878,8 @@ it:
       equal: è esattamente
       greater: più grande di
       smaller: più piccolo di
+      younger: più giovane
+      older: anziano
       before: vor dem
       after: nach dem
       blank: ist leer
@@ -1889,8 +1891,9 @@ it:
 
     tag:
       title: Tags
-      prompt_tag_selection: Includere le persone che contengono almeno uno dei tag qui sotto
+      prompt_tag_selection: Includere
       prompt_tag_placeholder: Inserire i nomi dei tag desiderati
+      prompt_tag_absence_selection: Escludere
 
     tag_absence:
       prompt_tag_absence_selection: Escludere le persone che contengono almeno uno dei tag qui sotto
@@ -1904,15 +1907,31 @@ it:
 
     role:
       title: Ruoli
+      role_kind_title: Validità
       prompt_role_selection: Quali ruoli devono essere visualizzati?
       prompt_role_duration_from: oder im Zeitraum von
       prompt_role_duration_selection: Quali periodi devono venir presi in considerazione?
       prompt_role_duration_until: A
       or_duration: oder
       include_archived: Includi i ruoli archiviati
+      prompt_role_placeholder: Inserire il nome del ruolo desiderato
+      prompt_role_kind_placeholder: Inserire la validità desiderata
+      duration_title: Data chiave
 
     qualification:
       title: Qualifiche
+      criterion: Criterio
+      validity: Validità
+      validity_label:
+        active: Attivo
+        reactivateable: Riattivabile
+        not_active_but_reactivateable: Non è attivo ma può essere riattivato
+        not_active: Non attivo
+        all: Tutti
+        none: Nessuno
+        only_expired: Solo scaduto
+      prompt_qualification_placeholder: Inserire il nome della qualifica desiderata
+      prompt_qualification_validity_placeholder: Inserire la validità desiderata
       prompt_qualification_selection: Quali qualifiche devono essere visualizzate?
       prompt_constraint: Welche Logik soll angewendet werden?
       prompt_validity: Che validità devono avere le qualifiche mostrate?

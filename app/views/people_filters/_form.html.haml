@@ -3,37 +3,30 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= standard_form(path_args(entry), noindent: true, stacked: true) do |f|
+= standard_form(path_args(entry), noindent: true, stacked: true) do |form|
+  = render_extensions :form, locals: { f: form }
+  = form.error_messages
 
-  = render 'search_or_save_buttons', f: f
+  .ml-3
+    = render "range", f: form
 
-  = render_extensions :form, locals: { f: f }
-  = f.error_messages
+    .mt-3.mb-3#overview
+      = render "criterion", criterion: :role
+      = render "criterion", criterion: :attributes
+      = render "criterion", criterion: :qualification
+      = render "criterion", criterion: :tag, force: @criterias.include?("tag_absence")
 
-  = render 'range', f: f
+    - unless entry.filter_chain.present?
+      %h3#filter-advice= t(".filter_advice_heading")
 
-  .accordion.mb-3
-    = render(layout: 'filter', locals: { type: :role }) do
-      = render 'role', f: f
+    #filter-critera-dropdown
+      = Dropdown::PeopleFilter.new(self, current_user, @criterias).to_s
 
-    - if @qualification_kinds.present?
-      = render(layout: 'filter', locals: { type: :qualification }) do
-        = render 'qualification', f: f
-
-    = render(layout: 'filter', locals: { type: :attributes }) do
-      = render 'attributes', f: f
-
-    - FeatureGate.if('person_language') do
-      = render(layout: 'filter', locals: { type: :language }) do
-        = render 'language', f: f
-
-    = render(layout: 'filter', locals: { type: :tag }) do
-      .label-columns
-        = render 'tag', f: f
-        = render 'tag_absence', f: f
+    .mt-4= render 'search_button', f: form
 
   - if can?(:create, entry)
-    %label.required=PeopleFilter.human_attribute_name(:name)
-    = f.input_field :name, placeholder: t('.save_filter_placeholder'), class: 'mb-3 ', required: false
+    .mt-5
+      %label.required=PeopleFilter.human_attribute_name(:name)
+      = form.input_field :name, placeholder: t('.save_filter_placeholder'), class: 'mb-3 ', required: false
 
-  = render 'search_or_save_buttons', f: f
+  = render 'save_button', f: form

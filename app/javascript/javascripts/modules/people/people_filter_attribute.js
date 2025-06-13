@@ -4,6 +4,7 @@
 //  https://github.com/hitobito/hitobito.
 
 const app = window.App || {};
+const MULTISELECT_FIELDS = ["gender", "language", "country"]
 
 app.PeopleFilterAttribute = {
   remove: function(e) {
@@ -13,11 +14,10 @@ app.PeopleFilterAttribute = {
 
   add: function(e) {
     if (e.target.value === '') return;
-    const targetValue = e.target.value;
     const form = $('.people_filter_attribute_form_template').clone();
 
     app.PeopleFilterAttribute.duplicateAttributeForm(e, form);
-    app.PeopleFilterAttribute.setAttributeNameTimestamp(targetValue, form);
+    app.PeopleFilterAttribute.setAttributeNameTimestamp(form);
     app.PeopleFilterAttribute.enableForm(form);
   },
 
@@ -30,25 +30,18 @@ app.PeopleFilterAttribute = {
     e.target.value = '';
   },
 
-  setAttributeNameTimestamp: function(targetValue, form) {
+  setAttributeNameTimestamp: function(form) {
     const time = new Date().getTime();
 
     app.PeopleFilterAttribute.renameAttributeName(form.find('.attribute_key_hidden_field'), time);
     app.PeopleFilterAttribute.renameAttributeName(form.find('.attribute_constraint_dropdown'), time);
-    app.PeopleFilterAttribute.renameAttributeName(form.find('.attribute_value_input'), time, targetValue);
+    app.PeopleFilterAttribute.renameAttributeName(form.find('.attribute_value_input'), time);
   },
 
-  renameAttributeName: function(selector, time, targetValue) {
+  renameAttributeName: function(selector, time) {
     const regex = /\[\d{13}\]/;
-
     //   Multiselects should not be renamed otherwise request will be forged wrongfully
-    if (targetValue !== undefined && (targetValue === 'language' || targetValue === 'country')) {
-      selector.each(function() {
-        this.name = this.name.replace(regex, `[${time}]`);
-      });
-    } else {
-      selector.attr('name', selector.attr('name').replace(regex, `[${time}]`));
-    }
+    selector.attr('name', selector.attr('name').replace(regex, `[${time}]`));
     // jquery datepicker needs a unique id to function properly
     selector.attr('id', selector.attr('id').replace(/_\d{13}_/, `_${time}_`));
   },
@@ -81,6 +74,11 @@ app.PeopleFilterAttribute = {
     Array.from(form.find('.attribute_value_input:not(.' + type + '_field)')).forEach(function(element) {
       element.remove();
     });
+    valueElement = form.find('.' + type + '_field')[0]
+    if(MULTISELECT_FIELDS.includes(type.replace(/_select$/, ""))) {
+      valueElement.setAttribute("data-controller", "tom-select");
+      valueElement.setAttribute("allow-empty", true);
+    }
     form.find('.' + type + '_field').removeAttr('disabled');
   },
 

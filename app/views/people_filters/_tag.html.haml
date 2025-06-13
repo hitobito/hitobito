@@ -19,7 +19,7 @@
       = select_tag('filters[tag][names][]',
                     present_options,
                     class: 'form-control form-control-sm tom-select',
-                    "data-controller": "form-select",
+                    "data-controller": "tom-select",
                     id: 'present-tag-select',
                     multiple: true,
                     data: { chosen_no_results: t('global.chosen_no_results'), placeholder: t('.prompt_tag_placeholder') } )
@@ -31,6 +31,6 @@
                     absent_options,
                     class: 'form-control form-control-sm tom-select',
                     id: 'absent-tag-select',
-                    "data-controller": "form-select",
+                    "data-controller": "tom-select",
                     multiple: true,
                     data: { chosen_no_results: t('global.chosen_no_results'), placeholder: t('.prompt_tag_placeholder') } )

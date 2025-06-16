@@ -10,8 +10,6 @@ Längerfristig wollen wir aber auf Vanilla JS (Default Javascript) setzen und Co
 
 ## Bootstrap
 
-## Bootstrap
-
 ### 5.2.0
 
 Aktuell verwenden wir einige Komponenten aus Bootstrap 5.2.0:
@@ -81,3 +79,14 @@ Für Icons wird Font-Awesome free 5.x verwendet.
 https://github.com/FortAwesome/Font-Awesome
 
 Der Katalog der verfügbaren Icons gibt's hier: https://fontawesome.com/v5/search?m=free
+
+## Fonts
+
+Hitobito verwendet den Font [Noto Sans Latin-Greek-Cyrillic](https://github.com/notofonts/latin-greek-cyrillic) für das Frontend und für die PDF-Generierung. Die font Dateien befinden sich unter `app/javascript/fonts`.
+
+Aktualisieren der Noto Sans Font-Dateien:
+
+1. Aktuelles Release herunterladen von https://github.com/notofonts/latin-greek-cyrillic/releases
+2. Zip-Datei entpacken und die alten Dateien in `app/javascript/fonts` durch die neuen ersetzen
+3. `woff2_compress NotoSans-Regular.ttf` ausführen, um die `woff2` Datei zu generieren  
+   (das `woff2_compress` Binary wird durch das `woff2` Paket bereitgestellt)

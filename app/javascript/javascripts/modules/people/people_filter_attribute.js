@@ -77,7 +77,6 @@ app.PeopleFilterAttribute = {
     valueElement = form.find('.' + type + '_field')[0]
     if(MULTISELECT_FIELDS.includes(type.replace(/_select$/, ""))) {
       valueElement.setAttribute("data-controller", "tom-select");
-      valueElement.setAttribute("allow-empty", true);
     }
     form.find('.' + type + '_field').removeAttr('disabled');
   },

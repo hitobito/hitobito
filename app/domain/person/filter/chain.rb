@@ -18,35 +18,7 @@ class Person::Filter::Chain
   # Used for `serialize` method in ActiveRecord
   class << self
     def load(yaml)
-      obj = new(YAML.safe_load(yaml || ""))
-
-      # This part is used to migrate the existing language filters to the attribute filters
-      # Find language filter
-      language_filter = find_filter_attr("language", obj)
-      return obj unless language_filter
-
-      # Prepare new entry of language values in attributes
-      timestamp = (Time.now.to_f * 1000).to_i.to_s
-      new_entry = {
-        "key" => "language",
-        "constraint" => "equal",
-        "value" => language_filter.allowed_values
-      }
-
-      # Add to attributes filter or create new one
-      attributes_filter = find_filter_attr("attributes", obj)
-      if attributes_filter
-        attributes_filter.args[timestamp] = new_entry
-      else
-        filter = Person::Filter::Attributes.new("attributes", {timestamp => new_entry})
-        obj.filters << filter
-      end
-
-      # Remove original language filter
-      obj.filters.reject! { |filter| filter.instance_variable_get(:@attr) == "language" }
-
-      YAML.dump(obj.to_hash.deep_stringify_keys)
-      obj
+      new(YAML.safe_load(yaml || ""))
     end
 
     def dump(obj)

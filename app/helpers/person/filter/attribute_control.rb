@@ -102,9 +102,10 @@ class Person::Filter::AttributeControl
   def country_select_field(time, attribute_value_class, value, html_options)
     country_select(filter_name_prefix,
       "value",
-      {priority_countries: Settings.countries.prioritized, selected: value&.flatten},
+      {priority_countries: Settings.countries.prioritized, selected: value},
       html_options.merge(
         class: "form-select form-select-sm country_select_field #{attribute_value_class} w-100",
+        "data-controller": set_data_controller,
         multiple: true
       ))
   end
@@ -127,6 +128,8 @@ class Person::Filter::AttributeControl
       options_from_collection_for_select(gender_options, :first, :last, value),
       html_options.merge(
         class: "#{SELECT_CLASSES} gender_select_field #{attribute_value_class} form-select form-select-sm w-100",
+        "data-controller": set_data_controller,
+        "allow-empty": true,
         multiple: true
       ))
   end
@@ -146,9 +149,16 @@ class Person::Filter::AttributeControl
       html_options.merge(
         class: "#{SELECT_CLASSES} language_select_field #{attribute_value_class} form-select form-select-sm w-100",
         multiple: true,
+        "data-controller": set_data_controller,
         id: "language-select-#{time}"
       ))
   end
 
   def filter_name_prefix = "filters[attributes][#{time}]"
+
+  # rubocop:disable Rails/HelperInstanceVariable
+  def set_data_controller
+    @attr ? "tom-select" : ""
+  end
+  # rubocop:enable Rails/HelperInstanceVariable
 end

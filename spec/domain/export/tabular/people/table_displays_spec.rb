@@ -132,11 +132,14 @@ describe Export::Tabular::People::TableDisplays do
     subject { people_list }
 
     before do
-      TableDisplay.register_column(Event::Participation,
-        TableDisplays::PublicColumn,
-        [:"person.additional_information"])
-      TableDisplay.register_multi_column(Event::Participation,
-        TableDisplays::Event::Participations::QuestionColumn)
+      TableDisplay.register_column(
+        Event::Participation,
+        TableDisplays::PolymorphicPublicColumn,
+        [:"participant.additional_information"]
+      )
+      TableDisplay.register_multi_column(
+        Event::Participation, TableDisplays::Event::Participations::QuestionColumn
+      )
     end
 
     its(:attributes) do
@@ -150,7 +153,7 @@ describe Export::Tabular::People::TableDisplays do
     end
 
     it "includes additional person attributes if configured" do
-      table_display.selected = [:"person.additional_information"]
+      table_display.selected = [:"participant.additional_information"]
       person.update!(additional_information: "bla bla")
       expect(people_list.labels.last).to eq "Zusätzliche Angaben"
       expect(people_list.attributes.last).to eq :"participant.additional_information"
@@ -167,7 +170,7 @@ describe Export::Tabular::People::TableDisplays do
     end
 
     it "does not include the same attribute twice" do
-      table_display.selected = [:"person.additional_information", :"person.additional_information"]
+      table_display.selected = [:"participant.additional_information", :"participant.additional_information"]
       expect(people_list.attributes.grep(/additional_information/).count).to eq 1
     end
 

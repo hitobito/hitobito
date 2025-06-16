@@ -23,10 +23,6 @@ on:
       - 'doc/**'
       - '**.md'
       - 'VERSION'
-  secrets:
-    WAGON_TESTS_GITHUB_TOKEN:
-      description: 'Token with repo and actions:read and actions:write for running the tests in all wagon repos'
-      required: true
 
 jobs:
   find-wagons:

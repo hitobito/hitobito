@@ -989,7 +989,7 @@ fr:
         label: Weitere E-Mail Typ
         public: Öffentlich
         mailings: Versand
-        invoices: Rechnung
+        invoices: Facture
 
       mailing_list:
         name: Nom

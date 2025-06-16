@@ -1,4 +1,4 @@
-name: 'Run the tests in all wagons with a specific core revision'
+name: 'Wagon tests'
 
 on:
   workflow_dispatch:
@@ -61,6 +61,7 @@ jobs:
           owner: ${{ matrix.wagon.owner }}
           ref: master
           workflow: tests.yml
+          workflow_timeout_seconds: 21600 # wait for up to 6 hours
           workflow_inputs: |
             {
               "core_ref": "${{ inputs.core_ref || github.ref || 'master' }}",

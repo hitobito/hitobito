@@ -48,6 +48,14 @@ ga_de:
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
+ga_fr:
+  event_question_id: <%= ActiveRecord::FixtureSet.identify(:ga) %>
+  locale: fr
+  question: J'ai l'abonnement de transports publics suivant
+  choices: AG, demi-tarif / moins de 16 ans, pas de réduction
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
 vegi_de:
   event_question_id: <%= ActiveRecord::FixtureSet.identify(:vegi) %>
   locale: de

@@ -236,7 +236,18 @@ class EventsController < CrudController
   def assign_attributes
     assign_contact_attrs
     assign_visible_contact_attrs
-    super
+    super.tap do |attrs|
+      assign_global_question_translations
+    end
+  end
+
+  # NOTE - as form only sends translations for current locale, we manually add other translations
+  def assign_global_question_translations
+    (entry.admin_questions + entry.application_questions).select(&:derived?).each do |q|
+      template = Event::Question.find(q.derived_from_question_id)
+      q.question_translations = template.question_translations
+      q.choices_translations = template.choices_translations
+    end
   end
 
   def assign_contact_attrs

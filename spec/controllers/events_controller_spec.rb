@@ -328,6 +328,60 @@ describe EventsController do
           }
         end.to raise_error(CanCan::AccessDenied)
       end
+
+      describe "global questions" do
+        let(:ga) { event_questions(:ga) }
+        let(:global_question_attributes) {
+          {
+            derived_from_question_id: ga.id,
+            question: ga.question,
+            choices: ga.choices,
+            disclosure: ga.disclosure
+          }
+        }
+        let(:event) { assigns(:event) }
+        let(:question) { assigns(:event).questions.first }
+        let(:params) {
+          {
+            group_id: group.id,
+            event: {
+              group_ids: [group.id, group2.id],
+              name: "foo",
+              kind_id: event_kinds(:slk).id,
+              dates_attributes: [date],
+              type: "Event::Course"
+            }
+          }
+        }
+
+        before { sign_in(people(:top_leader)) }
+
+        it "populates application question with available translations" do
+          post :create, params: params.deep_merge(event: {
+            application_questions_attributes: [global_question_attributes]
+          })
+          expect(response).to redirect_to(group_event_path(group, event))
+          expect(question.question_translations).to eq(
+            {"de" => "Ich habe folgendes ÖV Abo", "fr" => "J'ai l'abonnement de transports publics suivant"}
+          )
+          expect(question.choices_translations).to eq(
+            {"de" => "GA, Halbtax / unter 16, keine Vergünstigung", "fr" => "AG, demi-tarif / moins de 16 ans, pas de réduction"}
+          )
+        end
+
+        it "populates admin question with available translations" do
+          post :create, params: params.deep_merge(event: {
+            admin_questions_attributes: [global_question_attributes]
+          })
+          expect(response).to redirect_to(group_event_path(group, event))
+          expect(question.question_translations).to eq(
+            {"de" => "Ich habe folgendes ÖV Abo", "fr" => "J'ai l'abonnement de transports publics suivant"}
+          )
+          expect(question.choices_translations).to eq(
+            {"de" => "GA, Halbtax / unter 16, keine Vergünstigung", "fr" => "AG, demi-tarif / moins de 16 ans, pas de réduction"}
+          )
+        end
+      end
     end
 
     context "PUT update" do

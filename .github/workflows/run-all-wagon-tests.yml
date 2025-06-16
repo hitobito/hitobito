@@ -69,6 +69,7 @@ jobs:
               "core_ref": "${{ inputs.core_ref || github.ref || 'master' }}",
               "wagon_dependency_ref": "${{ inputs.wagon_dependency_ref || 'master' }}"
             }
+
       - name: Wait for ${{ matrix.wagon.name }} wagon tests result
         uses: Codex-/await-remote-run@v1.0.0
         with:
@@ -78,3 +79,9 @@ jobs:
           run_id: ${{ steps.run-wagon-tests.outputs.run_id }}
           run_timeout_seconds: 21600 # wait for up to 6 hours
           poll_interval_ms: 10000 # poll every 10 seconds
+
+      - name: Cancel ${{ matrix.wagon.name }} wagon tests
+        if: ${{ cancelled() && steps.run-wagon-tests.outputs.run_id }}
+        run: 'gh api --method POST -H "Accept: application/vnd.github+json" /repos/${{ matrix.wagon.owner }}/${{ matrix.wagon.repo }}/actions/runs/${{ steps.run-wagon-tests.outputs.run_id }}/cancel'
+        env:
+          GH_TOKEN: ${{ secrets.WAGON_TESTS_GITHUB_TOKEN }}

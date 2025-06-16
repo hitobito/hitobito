@@ -55,7 +55,8 @@ module TableDisplays
     end
 
     def label(attr)
-      return I18n.t("table_displays.#{model_class.to_s.downcase}.#{attr}") if I18n.exists?("table_displays.#{model_class.to_s.downcase}.#{attr}")
+      i18n_key = "table_displays.#{model_class.to_s.downcase}.#{attr}"
+      return I18n.t(i18n_key) if I18n.exists?(i18n_key)
 
       model_class.human_attribute_name(attr)
     end

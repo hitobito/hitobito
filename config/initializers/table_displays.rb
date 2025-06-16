@@ -15,34 +15,15 @@ Rails.application.config.to_prepare do
     Person::INTERNAL_ATTRS
   ) & Person.used_attributes
 
-  TableDisplay.register_column(Person,
-                               TableDisplays::PublicColumn,
-                               public_person_attrs)
-  TableDisplay.register_column(Person,
-                               TableDisplays::ShowDetailsColumn,
-                               show_details_person_attrs)
-  TableDisplay.register_column(Person,
-                               TableDisplays::People::PrimaryGroupColumn,
-                               :primary_group_id)
-  TableDisplay.register_column(Person,
-                               TableDisplays::People::LayerGroupLabelColumn,
-                               :layer_group_label)
-  TableDisplay.register_column(Person,
-                               TableDisplays::People::LoginStatusColumn,
-                               :login_status)
+  TableDisplay.register_column(Person, TableDisplays::PublicColumn, public_person_attrs)
+  TableDisplay.register_column(Person, TableDisplays::ShowDetailsColumn, show_details_person_attrs)
+  TableDisplay.register_column(Person, TableDisplays::People::PrimaryGroupColumn, :primary_group_id)
+  TableDisplay.register_column(Person, TableDisplays::People::LayerGroupLabelColumn, :layer_group_label)
+  TableDisplay.register_column(Person, TableDisplays::People::LoginStatusColumn, :login_status)
 
-  TableDisplay.register_column(Event::Participation,
-                               TableDisplays::PublicColumn,
-                               public_person_attrs.map { |column| "person.#{column}" })
-  TableDisplay.register_column(Event::Participation,
-                               TableDisplays::Event::Participations::ShowDetailsOrEventLeaderColumn,
-                               show_details_person_attrs.map { |column| "person.#{column}" })
-  TableDisplay.register_column(Event::Participation,
-                               TableDisplays::People::LayerGroupLabelColumn,
-                               'person.layer_group_label')
-  TableDisplay.register_multi_column(Event::Participation,
-                                     TableDisplays::Event::Participations::QuestionColumn)
-  TableDisplay.register_column(Event::Participation,
-                               TableDisplays::Event::Participations::ShowDetailsOrEventLeaderColumn,
-                               :additional_information)
+  TableDisplay.register_column(Event::Participation, TableDisplays::PolymorphicPublicColumn, public_person_attrs.map { |column| "participant.#{column}" })
+  TableDisplay.register_column(Event::Participation, TableDisplays::Event::Participations::ShowDetailsOrEventLeaderColumn, show_details_person_attrs.map { |column| "participant.#{column}" })
+  TableDisplay.register_column(Event::Participation, TableDisplays::People::PolymorphicLayerGroupLabelColumn, "participant.layer_group_label")
+  TableDisplay.register_multi_column(Event::Participation, TableDisplays::Event::Participations::QuestionColumn)
+  TableDisplay.register_column(Event::Participation, TableDisplays::Event::Participations::ShowDetailsOrEventLeaderColumn, :"participant.additional_information")
 end

@@ -107,10 +107,10 @@ describe TableDisplay do
     subject { TableDisplay.for(leader, Event::Participation) }
 
     it "translates person columns for sort statements" do
-      TableDisplay.register_column(Event::Participation, TableDisplays::PublicColumn,
-        :"person.birthday")
-      subject.selected = %w[person.birthday]
-      expect(subject.sort_statements([])).to eq("person.birthday": "people.birthday")
+      TableDisplay.register_column(Event::Participation, TableDisplays::PolymorphicPublicColumn,
+        :"participant.birthday")
+      subject.selected = %w[participant.birthday]
+      expect(subject.sort_statements([])).to eq("participant.birthday": "participant.birthday")
     end
 
     it "builds custom sort statements for questions" do

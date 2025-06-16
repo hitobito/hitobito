@@ -39,8 +39,8 @@ module SearchStrategies
       @search_tables_and_fields.flat_map do |table_field|
         case table_field
         when String
-          klass = matchers.fetch(column) { self.class::Matcher }
-          matcher = klass.new(column, word)
+          klass = matchers.fetch(table_field) { self.class::Matcher }
+          matcher = klass.new(table_field, word)
           matcher.match if matcher.applies?
         when Hash
           participant_field, mapping = table_field.first

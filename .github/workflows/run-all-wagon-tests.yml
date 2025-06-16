@@ -62,6 +62,7 @@ jobs:
           ref: master
           workflow: tests.yml
           workflow_timeout_seconds: 21600 # wait for up to 6 hours
+          workflow_job_steps_retry_seconds: 10 # default is 5, set it higher to not strain the API limit too much
           workflow_inputs: |
             {
               "core_ref": "${{ inputs.core_ref || github.ref || 'master' }}",
@@ -75,4 +76,4 @@ jobs:
           owner: ${{ matrix.wagon.owner }}
           run_id: ${{ steps.run-wagon-tests.outputs.run_id }}
           run_timeout_seconds: 21600 # wait for up to 6 hours
-          poll_interval_ms: 5000 # poll every 5 seconds
+          poll_interval_ms: 10000 # poll every 10 seconds

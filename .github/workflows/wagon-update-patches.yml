@@ -30,7 +30,10 @@ on:
 defaults:
   run:
     working-directory: hitobito
-
+    
+permissions:
+  contents: write
+  
 jobs:
   wagon_patches:
     if: github.event.pull_request.merged == true
@@ -46,8 +49,6 @@ jobs:
       RAILS_TEST_DB_NAME: hitobito_test
       RAILS_ENV: test
       DISABLE_TEST_SCHEMA_MAINTENANCE: true
-    permissions:
-      contents: write
 
     services:
       postgres:

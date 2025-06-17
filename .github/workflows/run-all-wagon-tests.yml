@@ -23,6 +23,8 @@ on:
       - 'doc/**'
       - '**.md'
       - 'VERSION'
+  pull_request_target:
+    types: [labeled]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }} # auto-cancel previous runs of this same workflow on the same branch, if any are still running
@@ -31,6 +33,7 @@ concurrency:
 jobs:
   find-wagons:
     name: 'Find all Puzzle-managed wagons'
+    if: ${{ github.event_name != 'pull_request_target' || contains(github.event.pull_request.labels.*.name, 'run-wagon-tests!') }}
     runs-on: 'ubuntu-latest'
     outputs:
       wagons: ${{ steps.list-wagon-repositories.outputs.wagons }}

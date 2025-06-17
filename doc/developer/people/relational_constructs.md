@@ -10,16 +10,6 @@
 - enabled by FeatureGate `people.family_members`
 - is only active if no PeopleRelation entries present
 
-## PeopleRelation (Beziehungen)
-
-- own model
-- relates two people together
-- one person is called :head, the other :tail
-- person model: `has_many :relations_to_tails, class_name: "PeopleRelation"`
-- active when PeopleRelation.kind_opposites present (class_attribute, set in wagon.rb)
-
-see [PeopleRelation Model Class](https://github.com/hitobito/hitobito/blob/master/app/models/people_relation.rb)
-
 ## Household
 
 - non active record model

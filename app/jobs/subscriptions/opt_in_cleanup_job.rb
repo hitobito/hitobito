@@ -15,7 +15,7 @@ module Subscriptions
     end
 
     def perform
-      allowed = MailingLists::Subscribers.new(list).people_as_configured.pluck(:id)
+      allowed = MailingLists::Subscribers.new(list).allowed_to_opt_in.pluck(:id)
       subscribed = list.subscriptions.people.pluck(:subscriber_id)
 
       list.subscriptions.people.where(subscriber_id: subscribed - allowed).destroy_all

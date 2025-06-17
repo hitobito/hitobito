@@ -8,13 +8,17 @@ module Export::Pdf::List
     def render
       bounding_box([0, cursor], width: bounds.width, height: 40) do
         font_size(20) do
-          text group.name, style: :bold, width: bounds.width - 80
+          text pdf_title, style: :bold, width: bounds.width - 80
         end
         render_image
       end
     end
 
     private
+
+    def pdf_title
+      group.name
+    end
 
     def render_image
     end

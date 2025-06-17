@@ -6,10 +6,11 @@
 module Export::Tabular::People
   class PeopleFull < PeopleAddress
     def person_attributes
-      Person.column_names.collect(&:to_sym) -
-        Person::INTERNAL_ATTRS -
-        excluded_person_attributes +
-        [:layer_group, :roles, :tags]
+      super +
+        (Person.column_names.collect(&:to_sym) -
+          Person::INTERNAL_ATTRS -
+          excluded_person_attributes +
+          [:layer_group, :roles, :tags] - super)
     end
 
     def excluded_person_attributes
@@ -20,8 +21,8 @@ module Export::Tabular::People
       account_labels(AdditionalEmail)
         .merge(account_labels(PhoneNumber))
         .merge(account_labels(SocialAccount))
+        .merge(account_labels(AdditionalAddress))
         .merge(qualification_kinds)
-        .merge(relation_kind_labels)
     end
 
     def qualification_kinds
@@ -31,16 +32,6 @@ module Export::Tabular::People
         .joins(:translations).distinct.pluck(:label)
       labels.each_with_object({}) do |label, obj|
         obj[ContactAccounts.key(model, label)] = ContactAccounts.human(model, label)
-      end
-    end
-
-    def relation_kind_labels
-      kinds = PeopleRelation.where(head_id: people_ids).distinct.pluck(:kind)
-
-      kinds.each_with_object({}) do |kind, obj|
-        if kind.present?
-          obj[:"people_relation_#{kind}"] = PeopleRelation.new(kind: kind).translated_kind
-        end
       end
     end
   end

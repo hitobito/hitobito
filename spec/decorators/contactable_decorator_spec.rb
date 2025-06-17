@@ -6,6 +6,8 @@
 require "spec_helper"
 
 describe ContactableDecorator do
+  let(:event) { events(:top_event).decorate }
+
   before do
     Draper::ViewContext.clear!
     group = Group.new(
@@ -22,6 +24,14 @@ describe ContactableDecorator do
     group.additional_emails.new(email: "additional@foobar.com", label: "Work", public: true, mailings: true)
     group.additional_emails.new(email: "private@foobar.com", label: "Mobile", public: false)
     @group = GroupDecorator.decorate(group)
+
+    event.contact = people(:top_leader)
+  end
+
+  describe "#complete_contact" do
+    it "returns all attributes" do
+      expect(event.contact.complete_contact).to eq "<strong>Top Leader</strong><p>Greatstreet 345<br />3456 Greattown</p><p><a href=\"mailto:top_leader@example.com\">top_leader@example.com</a></p>"
+    end
   end
 
   it "#complete_address" do
@@ -38,6 +48,22 @@ describe ContactableDecorator do
     it { is_expected.to match(/foo@foobar.com/) }
     it { is_expected.to match(/additional@foobar.com.+Work/) }
     it { is_expected.not_to match(/private@foobar.com.+Mobile/) }
+
+    describe "suffix" do
+      let(:person) { people(:top_leader) }
+
+      it "contains muted translated label" do
+        person.additional_emails.create!(label: "Private", email: "invoices@example.com")
+        expect(person.decorate.all_additional_emails).to end_with "<span class=\"muted\">Private</span></p>"
+      end
+
+      it "contains muted translated label with invoices suffix for invoices email" do
+        person.additional_emails.create!(label: "Private", email: "invoices@example.com", invoices: true)
+        expect(person.decorate.all_additional_emails).to end_with(
+          "<span class=\"muted\">Private <i class=\"muted fas fa-money-bill-alt\" title=\"Wird für Rechnungen verwendet\"></i></span></p>"
+        )
+      end
+    end
   end
 
   context "#all_additional_emails" do
@@ -95,6 +121,29 @@ describe ContactableDecorator do
         @group.country = "the ultimate country"
         expect(@group.complete_address).to match(/the ultimate country/)
       end
+    end
+  end
+
+  context "#all_additional_addresses" do
+    let(:person) { people(:top_leader) }
+    let(:attrs) {
+      {
+        address_care_of: "c/o Backoffice",
+        street: "Langestrasse",
+        housenumber: 37,
+        zip_code: 8000,
+        town: "Zürich",
+        country: "CH"
+      }
+    }
+
+    subject { person.decorate.all_additional_addresses(false) }
+
+    it "renders value with muted label" do
+      person.additional_addresses.build(attrs.merge(label: "Rechnung"))
+      person.additional_addresses.build(attrs.merge(label: "Andere", address_care_of: nil, housenumber: "12a"))
+      expect(subject).to start_with '<p><span>c/o Backoffice, Langestrasse 37, 8000 Zürich</span> <span class="muted">Rechnung</span><br /><span>'
+      expect(subject).to end_with '</span><br /><span>Langestrasse 12a, 8000 Zürich</span> <span class="muted">Andere</span></p>'
     end
   end
 end

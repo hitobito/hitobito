@@ -75,6 +75,7 @@ de:
   activerecord:
     errors:
       messages:
+        at_least_one_present: Mindestens eine %{model_name} muss aufgefüllt werden
         type_not_allowed: kann hier nicht erstellt werden
         must_be_after_opening: muss nach dem Anmeldebeginn sein
         must_have_same_type: müssen von denselbem Typ sein
@@ -140,6 +141,9 @@ de:
           name_missing: 'Bitte geben Sie einen Namen ein'
           readonly: ": Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne %{name} aus dem Haushalt, um die Adresse anzupassen."
           attributes:
+            base:
+              max_one_additional_invoice_address: Es kann nur eine Adresse als Rechnungsadresse ausgewählt werden.
+              additional_address_labels_must_be_unique: Die Bezeichnungen der weiteren Adressen müssen eindeutig sein.
             email:
               taken: >
                         ist bereits vergeben. Diese Adresse muss für alle Personen
@@ -153,10 +157,8 @@ de:
           attributes:
             person_id:
               taken: wurde bereits angefragt
-        people_relation:
-          attributes:
-            tail_id:
-              must_not_be_equal_to_head: zu sich selbst ist nicht erlaubt
+        person_duplicates:
+          invalid_role: "Rolle %{role} von %{person} ist fürs Zusammenführen nicht gültig, da die andere Person eventuell bereits eine Rolle hat, welche diese Rolle nicht mehr erlaubt, diese muss manuell korrigiert/etnfernt werden. Info: %{message}"
         qualification:
           attributes:
             qualification_kind_id:
@@ -206,9 +208,15 @@ de:
       additional_email:
         one: Weitere E-Mail
         other: Weitere E-Mails
+      additional_address:
+        one: Weitere Adresse
+        other: Weitere Adressen
       assignment:
         one: Auftrag
         other: Aufträge
+      bounce:
+        one: Bounce
+        other: Bounces
       calendar:
         one: Kalender-Feed
         other: Kalender-Feeds
@@ -359,9 +367,6 @@ de:
       people_filter:
         one: Filter
         other: Filter
-      people_relation:
-        one: Beziehung
-        other: Beziehungen
       phone_number:
         one: Telefonnummer
         other: Telefonnummern
@@ -413,6 +418,33 @@ de:
         name: Name
         taggings_count: Anzahl
         category: Kategorie
+
+      additional_address:
+        translated_label: Bezeichnung
+        street_and_number: Strasse/Nummer
+        housenumber: Hausnummer
+        postbox: Postfach
+        zip_code: PLZ
+        town: Ort
+        country: Land
+        postbox: Postfach
+        address_care_of: zusatz. Adresszeile
+        public: Öffentlich
+
+      additional_addresses:
+        label: Bezeichnung
+        street: Strasse
+        postbox: Postfach
+        zip_code: PLZ
+        town: Ort
+        country: Land
+        postbox: Postfach
+
+      bounces:
+        email: E-Mail
+        count: Anzahl Bounces
+        blocked_at: Sperrzeitpunkt
+        mailing_list_ids: Abo-IDs
 
       cantons:
         ag: Aargau
@@ -482,10 +514,10 @@ de:
         years: Alter
         additional_information: Zusätzliche Angaben
         remember_me: Angemeldet bleiben
-        relations_to_tails: Beziehungen
         phone_numbers: Telefonnummern
         social_accounts: Social Media
         additional_emails: Weitere E-Mails
+        additional_addresses: Weitere Adressen
         family_members: Familienmitglieder
         picture: Neues Foto hochladen
         remove_picture: Aktuelles Foto entfernen
@@ -508,6 +540,8 @@ de:
         birth_year: Jahrgang
         roles_list: Rollen
         person_name: Vorname / Name / Übername
+        company_name: Firmenname
+        town: Ort
 
       person/add_request:
         person: Person
@@ -613,6 +647,7 @@ de:
         application_questions: Anmeldeangaben
         admin_questions: Administrationsangaben
         no_name: "[Kein Name]"
+        visible_contact_attributes: "Anzeigeoptionen (Kontaktperson)"
 
       event/contact_attrs:
         required: Obligatorisch
@@ -755,11 +790,6 @@ de:
         additional_audiences: Weitere Audiences
         skip_consent_screen: Einwilligung überspringen
 
-      people_relation:
-        head_id: Person
-        tail_id: Andere Person
-        kind: Art
-
       phone_number:
         number: Nummer
         label: Typ
@@ -787,10 +817,6 @@ de:
         deleted_at: Gelöscht
         reactivateable: Reaktivierbar
         required_training_days: Erforderliche Ausbildungstage
-
-      relations_to_tails:
-        tail_id: Beziehung
-        kind: Art
 
       # used for nested phone_numbers
       phone_numbers:
@@ -868,6 +894,7 @@ de:
           fax: Fax
           andere: Andere
           webseite: Webseite
+          rechnung: Rechnung
 
       social_account:
         name: Name
@@ -886,6 +913,7 @@ de:
         label: Weitere E-Mail Typ
         public: Öffentlich
         mailings: Versand
+        invoices: Rechnung
 
       additional_emails:
         email: E-Mail
@@ -893,6 +921,7 @@ de:
         label: Weitere E-Mail Typ
         public: Öffentlich
         mailings: Versand
+        invoices: Rechnung
 
       mailing_list:
         name: Name
@@ -1115,6 +1144,7 @@ de:
         donation_increase_percentage: Erhöhung in %
         donation_calculation_year_amount: Anzahl Jahre
         sender_name: E-Mail Absendername
+        custom_content: E-Mail Vorlage
 
       invoice_item:
         name: Name
@@ -1148,7 +1178,7 @@ de:
 
       message_template:
         title: Titel
-        body: Text   
+        body: Text
 
       payment:
         invoice: Rechnung
@@ -1237,6 +1267,11 @@ de:
       invoices: Lesen aller Rechnungen, auf die du Zugriff hast
       mailing_lists: Lesen aller Abos, auf die du Zugriff hast
       nextcloud: Lesen deiner Nextcloud-Gruppen und deines Anzeigenamens
+
+  fixed_fees:
+    membership:
+      members: Mitglieder
+
   errors:
     messages:
       invalid_zipcode: ist nicht gültig

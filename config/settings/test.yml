@@ -24,3 +24,31 @@ email:
 groups:
   nextcloud:
     enabled: true
+
+additional_address:
+  enabled: true
+  predefined_labels:
+    - Rechnung
+    - Arbeit
+    - Andere
+
+invoice_lists:
+  fixed_fees:
+    membership:
+      enabled: true
+      receivers:
+        layer: Group::BottomLayer
+        roles:
+          - Group::BottomLayer::Leader
+          - Group::BottomGroup::Leader
+      items:
+        - key: :members
+          unit_cost: 10
+          roles:
+            - Group::BottomGroup::Member
+            - Group::BottomLayer::Member
+        - key: :leaders
+          unit_cost: 15
+          roles:
+            - Group::BottomGroup::Leader
+            - Group::BottomLayer::Leader

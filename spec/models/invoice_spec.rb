@@ -4,37 +4,37 @@
 #
 # Table name: invoices
 #
-#  id                          :integer          not null, primary key
-#  account_number              :string
-#  address                     :text
-#  beneficiary                 :text
-#  currency                    :string           default("CHF"), not null
-#  description                 :text
-#  due_at                      :date
-#  esr_number                  :string           not null
-#  hide_total                  :boolean          default(FALSE), not null
-#  iban                        :string
-#  issued_at                   :date
-#  participant_number          :string
-#  payee                       :text
-#  payment_information         :text
-#  payment_purpose             :text
-#  payment_slip                :string           default("ch_es"), not null
-#  recipient_address           :text
-#  recipient_email             :string
-#  reference                   :string           not null
-#  sent_at                     :date
-#  sequence_number             :string           not null
-#  state                       :string           default("draft"), not null
-#  title                       :string           not null
-#  total                       :decimal(12, 2)
-#  vat_number                  :string
-#  created_at                  :datetime         not null
-#  updated_at                  :datetime         not null
-#  creator_id                  :integer
-#  group_id                    :integer          not null
-#  invoice_list_id             :bigint
-#  recipient_id                :integer
+#  id                  :integer          not null, primary key
+#  account_number      :string
+#  address             :text
+#  beneficiary         :text
+#  currency            :string           default("CHF"), not null
+#  description         :text
+#  due_at              :date
+#  esr_number          :string           not null
+#  hide_total          :boolean          default(FALSE), not null
+#  iban                :string
+#  issued_at           :date
+#  participant_number  :string
+#  payee               :text
+#  payment_information :text
+#  payment_purpose     :text
+#  payment_slip        :string           default("ch_es"), not null
+#  recipient_address   :text
+#  recipient_email     :string
+#  reference           :string           not null
+#  sent_at             :date
+#  sequence_number     :string           not null
+#  state               :string           default("draft"), not null
+#  title               :string           not null
+#  total               :decimal(12, 2)
+#  vat_number          :string
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  creator_id          :integer
+#  group_id            :integer          not null
+#  invoice_list_id     :bigint
+#  recipient_id        :integer
 #
 # Indexes
 #
@@ -43,7 +43,6 @@
 #  index_invoices_on_invoice_list_id  (invoice_list_id)
 #  index_invoices_on_recipient_id     (recipient_id)
 #  index_invoices_on_sequence_number  (sequence_number)
-#  invoices_search_column_gin_idx     (search_column) USING gin
 #
 
 require "spec_helper"
@@ -91,6 +90,14 @@ describe Invoice do
     expect(invoice.errors.full_messages).to include(/Rechnungsposten muss ausgefüllt werden/)
   end
 
+  describe "normalization" do
+    it "downcases recipient_email" do
+      invoice = create_invoice
+      invoice.recipient_email = "TesTer@gMaiL.com"
+      expect(invoice.recipient_email).to eq "tester@gmail.com"
+    end
+  end
+
   it "accepts that an invoice in state issued or sent has no items if  part of an invoice_list" do
     invoice = create_invoice
     invoice.update(invoice_list: InvoiceList.create!(group: group, title: "list"))
@@ -110,6 +117,12 @@ describe Invoice do
     expect(invoice.recipient).to eq person
     expect(invoice.recipient_email).to eq person.email
     expect(invoice.recipient_address).to eq "Top Leader\nGreatstreet 345\n3003 Greattown\n"
+  end
+
+  it "#save prefers additional email with invoice flag over recipient email" do
+    person.additional_emails.create!(email: "invoices@example.com", label: "Privat", invoices: true)
+    invoice = create_invoice
+    expect(invoice.recipient_email).to eq "invoices@example.com"
   end
 
   it "#save sets esr_number but not participant_number for non esr invoice_config" do
@@ -431,6 +444,36 @@ describe Invoice do
       expect(described_class.order_by_amount_paid_statement)
         .to eql "last_payments.amount_paid"
     end
+  end
+
+  describe "latest_reminder" do
+    let(:invoice) { create_invoice }
+
+    before do
+      invoice.update!(due_at: 10.days.ago, state: "reminded")
+    end
+
+    it "returns latest reminder" do
+      first_reminder = Fabricate(:payment_reminder, invoice: invoice, due_at: 3.day.ago, created_at: 5.days.ago)
+      expect(invoice.latest_reminder).to eq first_reminder
+
+      second_reminder = Fabricate(:payment_reminder, invoice: invoice, due_at: 1.day.ago, created_at: 2.days.ago)
+      expect(invoice.reload.latest_reminder).to eq second_reminder
+    end
+
+    it "returns nil when no reminder is present" do
+      expect(invoice.latest_reminder).to be_nil
+    end
+  end
+
+  it "reads invoices address" do
+    person.additional_addresses.create!(label: "Arbeit", street: "Lagistrasse", housenumber: "12a", zip_code: 1080, town: "Jamestown", country: "CH", invoices: true)
+    invoice = create_invoice
+    expect(invoice.recipient_address).to eq <<~TEXT
+      Top Leader
+      Lagistrasse 12a
+      1080 Jamestown
+    TEXT
   end
 
   private

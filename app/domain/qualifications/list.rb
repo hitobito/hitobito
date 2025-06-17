@@ -64,12 +64,12 @@ module Qualifications
         @person,
         :participant,
         ordered_qualifications.pluck(:qualification_kind_id).uniq,
-        minimal_qualification_start_at_per_kind,
+        minimal_qualification_start_at,
         today
       ).load
     end
 
-    def minimal_qualification_start_at_per_kind
+    def minimal_qualification_start_at
       maximum_qualification_dates_per_kind.values.compact.min
     end
 

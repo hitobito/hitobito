@@ -69,6 +69,18 @@ describe Group do
     expect(Group).to be_valid
   end
 
+  it "fixtures should have correct layer_group_id values" do
+    fixture_values = Group.order(:id).pluck(:layer_group_id)
+
+    set_layer_group_id = lambda do |group|
+      group.update(id: group.id) # triggers after_update :set_layer_group_id
+      group.children.each(&set_layer_group_id)
+    end
+    Group.where(parent_id: nil).find_each(&set_layer_group_id)
+
+    expect(fixture_values).to eq Group.order(:id).pluck(:layer_group_id)
+  end
+
   context "#roles" do
     let(:group) { groups(:top_group) }
 
@@ -596,6 +608,20 @@ describe Group do
       group.email = "group42@puzzle.ch"
 
       expect(group).to be_valid
+    end
+  end
+
+  describe "normalization" do
+    let(:group) { groups(:top_layer) }
+
+    it "downcases email" do
+      group.email = "TesTer@gMaiL.com"
+      expect(group.email).to eq "tester@gmail.com"
+    end
+
+    it "downcases self_registration_notification_email" do
+      group.self_registration_notification_email = "TesTer@gMaiL.com"
+      expect(group.self_registration_notification_email).to eq "tester@gmail.com"
     end
   end
 

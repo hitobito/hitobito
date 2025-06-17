@@ -188,6 +188,8 @@ namespace :dev do
       task reset_root_pw: :environment do
         root = Person.root
         root.password = "hito42bito"
+        root.encrypted_two_fa_secret = nil
+        root.two_factor_authentication = nil
         root.save!(validate: false)
       end
     end

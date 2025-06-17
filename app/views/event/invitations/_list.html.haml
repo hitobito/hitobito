@@ -4,7 +4,8 @@
 -#  https://github.com/hitobito/hitobito.
 
 = crud_table do |t|
-  - t.sortable_attr(:person)
+  - t.sortable_attr(:person) do |invitation|
+    %strong= format_attr(invitation, :person)
   - t.col(Person.human_attribute_name(:email)) do |invitation|
     - mail_to invitation.person.email if can?(:show, invitation.person)
   - t.col(Event::Invitation.human_attribute_name(:participation_type)) do |invitation|

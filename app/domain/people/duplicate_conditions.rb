@@ -50,7 +50,7 @@ class People::DuplicateConditions
     else
       "email = ?"
     end
-    args << attrs[:email]
+    args << attrs[:email]&.downcase
   end
 
   def parse_birthday

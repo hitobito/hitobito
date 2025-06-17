@@ -651,8 +651,8 @@ describe Person do
     expect(attrs[:postbox]).to eq(label: "Postfach", type: :string)
     expect(attrs[:zip_code]).to eq(label: "PLZ", type: :string)
     expect(attrs[:town]).to eq(label: "Ort", type: :string)
-    expect(attrs[:country]).to eq(label: "Land", type: :string)
-    expect(attrs[:gender]).to eq(label: "Geschlecht", type: :string)
+    expect(attrs[:country]).to eq(label: "Land", type: :country_select)
+    expect(attrs[:gender]).to eq(label: "Geschlecht", type: :gender_select)
     expect(attrs[:years]).to eq(label: "Alter", type: :integer)
 
     expect(Person.filter_attrs.count).to eq(Person::FILTER_ATTRS.count)
@@ -781,6 +781,20 @@ describe Person do
       person.email = "dude@puzzle.ch"
 
       expect(person).to be_valid
+    end
+  end
+
+  describe "normalization" do
+    let(:person) { people(:top_leader) }
+
+    it "downcases email" do
+      person.email = "TesTer@gMaiL.com"
+      expect(person.email).to eq "tester@gmail.com"
+    end
+
+    it "downcases email" do
+      person.unconfirmed_email = "TesTer@gMaiL.com"
+      expect(person.unconfirmed_email).to eq "tester@gmail.com"
     end
   end
 
@@ -1125,6 +1139,23 @@ describe Person do
       other_person.update!(membership_verify_token: token)
 
       expect(other_person.membership_verify_token).not_to eq(token)
+    end
+  end
+
+  describe "household" do
+    let(:person) { people(:top_leader) }
+    let(:other_person) { people(:bottom_member) }
+
+    before do
+      household = Household.new(person)
+      household.add(other_person)
+      household.save!
+    end
+
+    it "updates address for all household members" do
+      person.update!(street: "newstreet")
+
+      expect(other_person.reload.street).to eq "newstreet"
     end
   end
 end

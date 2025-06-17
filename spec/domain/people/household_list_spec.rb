@@ -42,7 +42,7 @@ describe People::HouseholdList do
   end
 
   describe "#households_in_batches" do
-    let(:scope) { Person.where(id: [person1, person2, person3, person4, person5]) }
+    let(:scope) { Person.where(id: [person1, person2, person3, person4, person5]).order(:id) }
 
     subject(:list) { household_list.households_in_batches.to_a.flatten(1) }
 
@@ -98,7 +98,7 @@ describe People::HouseholdList do
     end
 
     context "limited people scope" do
-      let(:scope) { Person.where(id: [person1, person2, person3, person4, person5, person6, person7]).limit(3) }
+      let(:scope) { Person.where(id: [person1, person2, person3, person4, person5, person6, person7]).order(:first_name).limit(3) }
       let(:person6) { Fabricate(:person, household_key: "1234") }
       let(:person7) { Fabricate(:person, household_key: "1234") }
       let!(:person_not_in_scope) { Fabricate(:person, household_key: "1234") }

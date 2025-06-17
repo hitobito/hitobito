@@ -6,15 +6,6 @@
 require "spec_helper"
 
 describe Export::Tabular::People::PeopleFull do
-  before do
-    PeopleRelation.kind_opposites["parent"] = "child"
-    PeopleRelation.kind_opposites["child"] = "parent"
-  end
-
-  after do
-    PeopleRelation.kind_opposites.clear
-  end
-
   let(:person) { people(:top_leader) }
   let(:scope) { Person.where(id: person.id) }
   let(:people_list) { Export::Tabular::People::PeopleFull.new(scope) }
@@ -22,12 +13,9 @@ describe Export::Tabular::People::PeopleFull do
   subject { people_list }
 
   its(:attributes) do
-    expected = [
-      :first_name, :last_name, :company_name, :nickname, :company, :email,
-      :zip_code, :town, :country, :gender, :birthday, :additional_information, :language,
-      :street, :housenumber, :address_care_of, :postbox, :layer_group, :roles, :tags
-    ]
-
+    expected = [:first_name, :last_name, :nickname, :company_name, :company, :email,
+      :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
+      :layer_group, :roles, :gender, :birthday, :additional_information, :language, :tags]
     should match_array expected
     should eq expected
   end
@@ -47,13 +35,19 @@ describe Export::Tabular::People::PeopleFull do
       its([:social_account_webseite]) { should eq "Social Media Adresse Webseite" }
     end
 
-    context "people relations" do
+    context "additional_addresses" do
       before do
-        person.relations_to_tails << PeopleRelation.new(head_id: person.id,
-          tail_id: people(:bottom_member).id, kind: "parent")
+        person.additional_addresses << Fabricate.build(:additional_address, label: "Rechnung", street: "abc")
+        person.additional_addresses << Fabricate.build(:additional_address, label: "Arbeit", name: "Foo Bar", street: "def", uses_contactable_name: false)
       end
 
-      its([:people_relation_parent]) { should eq "Elternteil" }
+      its([:additional_address_rechnung]) { should eq "Weitere Adresse Rechnung" }
+      its([:additional_address_arbeit]) { should eq "Weitere Adresse Arbeit" }
+
+      it "prefixes address values with names" do
+        expect(people_list.data_rows.to_a.first[subject.keys.index(:additional_address_rechnung)]).to start_with("Top Leader, abc")
+        expect(people_list.data_rows.to_a.first[subject.keys.index(:additional_address_arbeit)]).to start_with("Foo Bar, def")
+      end
     end
   end
 end

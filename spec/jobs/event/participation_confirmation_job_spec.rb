@@ -44,6 +44,7 @@ describe Event::ParticipationConfirmationJob do
     let(:participation_active) { true }
 
     it "sends participation confirmation and approval" do
+      expect(LocaleSetter).to receive(:with_locale).with(person: participation.person).and_call_original
       subject.perform
 
       expect(ActionMailer::Base.deliveries.size).to eq(2)
@@ -52,6 +53,7 @@ describe Event::ParticipationConfirmationJob do
     end
 
     it "sends participation confirmation for participation without application entry" do
+      expect(LocaleSetter).to receive(:with_locale).with(person: participation.person).and_call_original
       participation.application.destroy!
 
       subject.perform
@@ -75,6 +77,7 @@ describe Event::ParticipationConfirmationJob do
 
     context "with event requiring approval" do
       it "sends confirmation and approvals to approvers" do
+        expect(LocaleSetter).to receive(:with_locale).with(person: participation.person).and_call_original
         course.update_column(:requires_approval, true)
         subject.perform
 
@@ -87,6 +90,7 @@ describe Event::ParticipationConfirmationJob do
       end
 
       it "sends approval for active participation" do
+        expect(LocaleSetter).to receive(:with_locale).with(person: participation.person).and_call_original
         course.update_column(:requires_approval, true)
         participation.update(active: true)
         subject.perform
@@ -98,6 +102,7 @@ describe Event::ParticipationConfirmationJob do
       end
 
       it "sends approval for passive participation" do
+        expect(LocaleSetter).to receive(:with_locale).with(person: participation.person).and_call_original
         course.update_column(:requires_approval, true)
         participation.update(active: false)
         subject.perform
@@ -132,6 +137,7 @@ describe Event::ParticipationConfirmationJob do
 
       context "with external role in different group with own approvers" do
         it "only sends to group approvers where role is non-external" do
+          expect(LocaleSetter).to receive(:with_locale).with(person: participation.person).and_call_original
           Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_two))
           Fabricate(Group::BottomGroup::Leader.name.to_sym, person: person, group: groups(:bottom_group_two_one), start_on: 2.years.ago, end_on: 1.year.ago)
           Fabricate(Role::External.name.to_sym, person: person, group: groups(:bottom_group_two_one))

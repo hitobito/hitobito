@@ -59,6 +59,8 @@ describe :self_registration, js: true do
 
       click_button "Anmelden"
 
+      expect(page).to have_text("TopGroup")
+      expect(page).to have_text("Max Muster")
       expect(person.roles.map(&:type)).to eq([self_registration_role.to_s])
       expect(current_path).to eq("#{group_person_path(group_id: group, id: person)}.html")
     end

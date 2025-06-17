@@ -9,37 +9,37 @@
 #
 # Table name: invoices
 #
-#  id                          :integer          not null, primary key
-#  account_number              :string
-#  address                     :text
-#  beneficiary                 :text
-#  currency                    :string           default("CHF"), not null
-#  description                 :text
-#  due_at                      :date
-#  esr_number                  :string           not null
-#  hide_total                  :boolean          default(FALSE), not null
-#  iban                        :string
-#  issued_at                   :date
-#  participant_number          :string
-#  payee                       :text
-#  payment_information         :text
-#  payment_purpose             :text
-#  payment_slip                :string           default("ch_es"), not null
-#  recipient_address           :text
-#  recipient_email             :string
-#  reference                   :string           not null
-#  sent_at                     :date
-#  sequence_number             :string           not null
-#  state                       :string           default("draft"), not null
-#  title                       :string           not null
-#  total                       :decimal(12, 2)
-#  vat_number                  :string
-#  created_at                  :datetime         not null
-#  updated_at                  :datetime         not null
-#  creator_id                  :integer
-#  group_id                    :integer          not null
-#  invoice_list_id             :bigint
-#  recipient_id                :integer
+#  id                  :integer          not null, primary key
+#  account_number      :string
+#  address             :text
+#  beneficiary         :text
+#  currency            :string           default("CHF"), not null
+#  description         :text
+#  due_at              :date
+#  esr_number          :string           not null
+#  hide_total          :boolean          default(FALSE), not null
+#  iban                :string
+#  issued_at           :date
+#  participant_number  :string
+#  payee               :text
+#  payment_information :text
+#  payment_purpose     :text
+#  payment_slip        :string           default("ch_es"), not null
+#  recipient_address   :text
+#  recipient_email     :string
+#  reference           :string           not null
+#  sent_at             :date
+#  sequence_number     :string           not null
+#  state               :string           default("draft"), not null
+#  title               :string           not null
+#  total               :decimal(12, 2)
+#  vat_number          :string
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  creator_id          :integer
+#  group_id            :integer          not null
+#  invoice_list_id     :bigint
+#  recipient_id        :integer
 #
 # Indexes
 #
@@ -48,7 +48,6 @@
 #  index_invoices_on_invoice_list_id  (invoice_list_id)
 #  index_invoices_on_recipient_id     (recipient_id)
 #  index_invoices_on_sequence_number  (sequence_number)
-#  invoices_search_column_gin_idx     (search_column) USING gin
 #
 
 class Invoice < ActiveRecord::Base
@@ -94,6 +93,8 @@ class Invoice < ActiveRecord::Base
   validates :due_at, timeliness: {after: :sent_at}, presence: true, if: :sent?
   validates :invoice_items, presence: true, if: -> { (issued? || sent?) && !invoice_list }
   validate :assert_sendable?, unless: :recipient_id?
+
+  normalizes :recipient_email, with: ->(attribute) { attribute.downcase }
 
   before_create :set_recipient_fields, if: :recipient
   after_create :increment_sequence_number
@@ -184,9 +185,7 @@ class Invoice < ActiveRecord::Base
   delegate :logo_position, to: :invoice_config
 
   def calculated
-    [:total, :cost, :vat].index_with do |field|
-      round(invoice_items.reject(&:frozen?).map(&field).compact.sum(BigDecimal("0.00")))
-    end
+    InvoiceItems::Calculation.new(invoice_items).calculated
   end
 
   def recalculate
@@ -195,6 +194,7 @@ class Invoice < ActiveRecord::Base
 
   def recalculate!
     update_attribute(:total, calculated[:total] || 0) # rubocop:disable Rails/SkipsModelValidations
+    invoice_list&.update_total
   end
 
   def to_s
@@ -264,6 +264,10 @@ class Invoice < ActiveRecord::Base
     iban && qr? && !QR_ID_RANGE.include?(qr_id)
   end
 
+  def latest_reminder
+    payment_reminders.max_by(&:created_at)
+  end
+
   private
 
   # on index we join aggregated payments
@@ -304,12 +308,12 @@ class Invoice < ActiveRecord::Base
   end
 
   def set_recipient_fields!
-    self.recipient_email = recipient.email
+    self.recipient_email = invoice_email
     self.recipient_address = Person::Address.new(recipient).for_invoice
   end
 
   def set_recipient_fields
-    self.recipient_email ||= recipient.email
+    self.recipient_email ||= invoice_email
     self.recipient_address ||= Person::Address.new(recipient).for_invoice
   end
 
@@ -331,11 +335,11 @@ class Invoice < ActiveRecord::Base
     end
   end
 
-  def round(decimal)
-    (decimal / ROUND_TO).round * ROUND_TO
-  end
-
   def qr_id
     iban.delete(" ")[4..8].to_i
+  end
+
+  def invoice_email
+    recipient.additional_emails.find(&:invoices?)&.email || recipient.email
   end
 end

@@ -6,7 +6,7 @@
 require "spec_helper"
 
 describe Export::EventParticipationsExportJob do
-  subject { Export::EventParticipationsExportJob.new(format, user.id, event_participation_filter, groups(:top_group), params.merge(filename: filename)) }
+  subject { Export::EventParticipationsExportJob.new(format, user.id, event.id, groups(:top_group).id, params.merge(filename: filename)) }
 
   let(:participation) { event_participations(:top) }
   let(:user) { participation.person }
@@ -15,7 +15,6 @@ describe Export::EventParticipationsExportJob do
   let(:filename) { AsyncDownloadFile.create_name("event_participation_export", user.id) }
 
   let(:params) { {filter: "all"} }
-  let(:event_participation_filter) { Event::ParticipationFilter.new(event.id, user, params) }
 
   let(:file) do
     AsyncDownloadFile
@@ -53,7 +52,7 @@ describe Export::EventParticipationsExportJob do
 
       lines = file.read.lines
       expect(lines.size).to eq(3)
-      expect(lines[0]).to match(/Vorname;Nachname;Firmenname;Übername.*/)
+      expect(lines[0]).to match(/Vorname;Nachname;Übername;Firmenname;.*/)
       expect(lines[0]).to match(/;Bemerkungen.*/)
       expect(lines[0].split(";").count).to match(25)
     end
@@ -71,6 +70,24 @@ describe Export::EventParticipationsExportJob do
       expect(lines[0].split(";")[created_at_index].strip).to eq("Anmeldedatum")
       csv_created_ats = lines[1..2].map { _1.split(";")[created_at_index].strip }
       expect(csv_created_ats).to all(eq(created_at.strftime("%d.%m.%Y")))
+    end
+  end
+
+  context "creates a table displays export" do
+    let(:format) { :csv }
+    let(:params) { {selection: true} }
+
+    it "and saves it" do
+      TableDisplay.create!(person: user, table_model_class: "Event::Participation", selected: ["person.layer_group_label"])
+
+      subject.perform
+
+      lines = file.read.lines
+      expect(lines.size).to eq(3)
+      expect(lines[0]).to match(/Vorname;Nachname;Übername;Firmenname;.*/)
+      expect(lines[0]).to match(/Hauptebene.*/)
+      expect(lines[0].split(";").count).to match(16)
+      expect(lines[1]).to eq "Bottom;Member;;;nein;bottom_member@example.com;;Greatstreet;345;;3456;Greattown;Schweiz;Bottom One;Member Bottom One;Bottom One\n"
     end
   end
 

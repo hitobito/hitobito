@@ -120,7 +120,7 @@ class Invoice::Qrcode
   end
 
   def extract_contact(contactable) # rubocop:disable Metrics/MethodLength
-    parts = contactable.strip.to_s.split(/\r*\n/)
+    parts = contactable.to_s.strip.split(/\r*\n/)
     address_line1 = nil
     address_line2 = nil
     if parts.count > 1

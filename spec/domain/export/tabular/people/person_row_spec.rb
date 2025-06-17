@@ -6,15 +6,6 @@
 require "spec_helper"
 
 describe Export::Tabular::People::PersonRow do
-  before do
-    PeopleRelation.kind_opposites["parent"] = "child"
-    PeopleRelation.kind_opposites["child"] = "parent"
-  end
-
-  after do
-    PeopleRelation.kind_opposites.clear
-  end
-
   let(:person) { people(:top_leader) }
   let(:row) { Export::Tabular::People::PersonRow.new(person) }
 
@@ -37,10 +28,17 @@ describe Export::Tabular::People::PersonRow do
     it { expect(row.fetch(:"social_account_foo oder bar!")).to eq "asdf" }
   end
 
-  context "people relations" do
-    before { person.relations_to_tails << PeopleRelation.new(tail_id: people(:bottom_member).id, kind: "parent") }
+  context "additional_addresses" do
+    let(:address_attrs) { {street: "Langestrasse", housenumber: 3, zip_code: 8000, town: "Zürich", country: "CH"} }
 
-    it { expect(row.fetch(:people_relation_parent)).to eq "Bottom Member" }
+    before do
+      person.additional_addresses << Fabricate.build(:additional_address, address_attrs.merge(label: "Rechnung"))
+      person.additional_addresses << Fabricate.build(:additional_address, address_attrs.merge(label: "Weitere", housenumber: 4, name: "test", uses_contactable_name: false))
+    end
+
+    it { expect(row.fetch(:additional_address_rechnung)).to eq "Top Leader, Langestrasse 3, 8000 Zürich" }
+
+    it { expect(row.fetch(:additional_address_weitere)).to eq "test, Langestrasse 4, 8000 Zürich" }
   end
 
   context "country" do

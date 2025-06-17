@@ -91,6 +91,10 @@ describe SearchStrategies::PersonSearch do
         expect(result).not_to include(@bg_member_with_deleted)
       end
 
+      it "does not throw error when user enters invalid date" do
+        expect { search_class("43.45.2000").search_fulltext }.not_to raise_error
+      end
+
       # flacky
       xit "finds deleted people" do
         result = search_class(@deleted_leader.last_name[0..5]).search_fulltext

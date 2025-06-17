@@ -45,6 +45,7 @@ describe Event::Participations::MailDispatchesController do
       end
 
       it "sends application confirmation email" do
+        expect(LocaleSetter).to receive(:with_locale).with(person: participation.person).and_call_original
         expect do
           post :create, params: {group_id: group, event_id: event, participation_id: participation, mail_type: :event_application_confirmation}
         end.to have_enqueued_mail(Event::ParticipationMailer, :confirmation).exactly(1).times

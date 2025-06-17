@@ -5,15 +5,16 @@
 
 # This class is only used for fetching lists based on a group association.
 class PersonReadables < GroupBasedReadables
-  attr_reader :group
+  attr_reader :group, :roles_readable_for
 
-  def initialize(user, group = nil)
+  def initialize(user, group = nil, include_ended_roles: false)
     super(user)
 
     @group = group
+    @roles_join = include_ended_roles ? [roles_with_ended_readable: :group] : [roles: :group]
 
     if @group.nil?
-      can :index, Person, accessible_people { |_| true }
+      can :index, Person, accessible_people
     else # optimized queries for a given group
       group_accessible_people
     end
@@ -21,34 +22,27 @@ class PersonReadables < GroupBasedReadables
 
   private
 
-  def group_accessible_people
-    if read_permission_for_this_group?
-      can :index, Person,
-        group.people.only_public_data { |_| true }
-
-    elsif layer_and_below_read_in_above_layer?
-      can :index, Person,
-        group.people.only_public_data.visible_from_above(group) { |_| true }
-
-    elsif contact_data_visible?
-      can :index, Person,
-        group.people.only_public_data.contact_data_visible { |_| true }
-    end
-  end
+  attr_reader :roles_join
 
   def accessible_people
-    if user.root?
-      Person.only_public_data.then do |scope|
-        group ? scope.joins(roles: :group).distinct : scope
-      end
-    else
-      scope = Person.only_public_data.where(accessible_conditions.to_a).distinct
-      if has_group_based_conditions?
-        # Only add these joins when really necessary, because they are extremely expensive to
-        # compute when there are a lot of people and roles
-        scope = scope.joins(roles: :group).where(groups: {deleted_at: nil})
-      end
-      scope
+    return Person.only_public_data if user.root?
+
+    scope = Person.only_public_data.where(accessible_conditions.to_a).distinct
+    scope = scope.joins(roles_join).where(groups: {deleted_at: nil}) if has_group_based_conditions?
+    scope
+  end
+
+  def group_accessible_people
+    group_people = Person.only_public_data.joins(roles_join).where(groups: {id: group.id})
+
+    if read_permission_for_this_group?
+      can :index, Person, group_people
+
+    elsif layer_and_below_read_in_above_layer?
+      can :index, Person, group_people.visible_from_above(group)
+
+    elsif contact_data_visible?
+      can :index, Person, group_people.contact_data_visible
     end
   end
 

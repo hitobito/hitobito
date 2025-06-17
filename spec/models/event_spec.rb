@@ -480,6 +480,24 @@ describe Event do
 
       is_expected.to have(1).error_on(:group_ids)
     end
+
+    it "is valid if visible_contact_attributes contains valid values" do
+      subject.contact = people(:top_leader)
+      subject.visible_contact_attributes = ["name"]
+      is_expected.to be_valid
+    end
+
+    it "is invalid if visible_contact_attributes contains invalid values" do
+      subject.contact = people(:top_leader)
+      subject.visible_contact_attributes = ["invalidvalue"]
+      is_expected.not_to be_valid
+      expect(subject.errors.full_messages).to eq ["Anzeigeoptionen (Kontaktperson) ist kein gültiger Wert"]
+    end
+
+    it "does not validate visible_contact_attributes when contact is blank" do
+      subject.visible_contact_attributes = ["invalidvalue"]
+      is_expected.to be_valid
+    end
   end
 
   describe "#init_questions" do
@@ -489,6 +507,21 @@ describe Event do
       global_questions = Event::Question.global
       expect(global_questions.size).to eq(3)
       expect(e.application_questions.size).to eq(global_questions.size)
+    end
+  end
+
+  describe "admin_questions" do
+    it "sorts by question asc" do
+      Event::Question.create!(question: "B", disclosure: :optional, event: event, admin: true)
+      Event::Question.create!(question: "A", disclosure: :optional, event: event, admin: true)
+      expect(event.reload.admin_questions.map(&:question)).to eq ["A", "B"]
+    end
+  end
+
+  describe "application_questions" do
+    it "sorts by question asc" do
+      Event::Question.create!(question: "A", disclosure: :optional, event: event)
+      expect(event.reload.application_questions.map(&:question)).to eq ["A", "GA oder Halbtax?", "Ich bin Vegetarier", "Sonst noch was?"]
     end
   end
 

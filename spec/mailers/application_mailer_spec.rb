@@ -198,6 +198,8 @@ RSpec.describe ApplicationMailer, type: :mailer do
       let(:invoice) { invoices(:invoice) }
       let(:sender) { people(:bottom_member) }
 
+      include FormatHelper
+
       it "has the sender per locale defined in the translation" do
         check_sender { InvoiceMailer.notification(invoice, sender) }
       end

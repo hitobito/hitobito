@@ -39,10 +39,6 @@ de:
       person_duplicate:
         company_name: Firmenname
         town: Stadt
-      people_relation:
-        kinds:
-          parent: Elternteil
-          child: Kind
       group/top_layer:
         shirt_sizes:
           s: S
@@ -53,3 +49,7 @@ de:
       group/top_layer:
         default: Top Layer Attribute
         custom_cat: Eigene Kategorie
+  fixed_fees:
+    membership:
+      members: Mitgliedsbeitrag - Members
+      leaders: Mitgliedsbeitrag - Leaders

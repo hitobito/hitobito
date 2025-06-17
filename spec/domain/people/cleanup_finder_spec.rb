@@ -65,6 +65,13 @@ describe People::CleanupFinder do
       expect(subject.run).not_to include(entries.first)
     end
 
+    it "does not find people that have both older roles AND current roles" do
+      create_role(entries.first, end_on: role_cutoff_date - 1)
+      create_role(entries.first, end_on: nil)
+
+      expect(subject.run).not_to include(entries.first)
+    end
+
     it "finds people with participations at past events" do
       Event::Participation.create!(event: past_event, person: entries.first)
       expect(subject.run).to include(entries.first)

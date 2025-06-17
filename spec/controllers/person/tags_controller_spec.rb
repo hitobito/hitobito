@@ -77,13 +77,26 @@ describe Person::TagsController do
       is_expected.to redirect_to group_person_path(bottom_member.groups.first, bottom_member)
     end
 
-    it "trims whitespace characters at end of word to find matching tag" do
+    it "trims trailing whitespace characters of word to find matching tag" do
       ActsAsTaggableOn::Tag.create!(name: "lorem")
 
       post :create, params: {
         group_id: bottom_member.groups.first.id,
         person_id: bottom_member.id,
         acts_as_taggable_on_tag: {name: "lorem "}
+      }
+
+      expect(bottom_member.tags.count).to eq(1)
+      expect(assigns(:tags).first.second.first.name).to eq("lorem")
+    end
+
+    it "trims leading whitespace characters of word to find matching tag" do
+      ActsAsTaggableOn::Tag.create!(name: "lorem")
+
+      post :create, params: {
+        group_id: bottom_member.groups.first.id,
+        person_id: bottom_member.id,
+        acts_as_taggable_on_tag: {name: " lorem"}
       }
 
       expect(bottom_member.tags.count).to eq(1)
@@ -122,6 +135,10 @@ describe Person::TagsController do
   end
 
   describe "DELETE #destroy" do
+    let!(:subscription_tag) { SubscriptionTag.create!(excluded: false, subscription_id: Subscription.first.id, tag_id: test_tag.id) }
+    let!(:test_tagging) { ActsAsTaggableOn::Tagging.create!(tag_id: test_tag.id, taggable_type: "Person", taggable_id: top_leader.id, context: "tags") }
+    let!(:test_tag) { ActsAsTaggableOn::Tag.create!(name: "Test") }
+
     it "deletes person taggging/assignment" do
       bottom_member.tag_list.add("lorem")
       bottom_member.save!
@@ -152,6 +169,17 @@ describe Person::TagsController do
 
       expect(bottom_member.tags.count).to eq(0)
       is_expected.to redirect_to group_person_path(bottom_member.groups.first, bottom_member)
+    end
+
+    it "does not raise error when last taggable association of tag was deleted" do
+      expect do
+        delete :destroy, params: {
+          group_id: top_leader.groups.first.id,
+          person_id: top_leader.id,
+          name: test_tag.name
+        }
+      end
+        .not_to raise_error
     end
   end
 

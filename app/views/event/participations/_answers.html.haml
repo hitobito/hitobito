@@ -8,4 +8,4 @@
     %dl
       - answers.each do |answer|
         %dt= sanitize(answer.question.question)
-        %dd= answer.answer || t('event.participations.no_answer_given')
+        %dd= answer.answer.blank? ? t('event.participations.no_answer_given') : answer.answer

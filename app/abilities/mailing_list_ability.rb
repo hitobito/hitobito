@@ -41,6 +41,12 @@ class MailingListAbility < AbilityDsl::Base
     permission(:admin).may(:manage).if_mail_config_present
   end
 
+  on(Bounce) do
+    class_side(:index).if_admin
+
+    permission(:admin).may(:manage).if_mail_config_present
+  end
+
   def if_mail_config_present
     Settings.email.retriever.config.present?
   end

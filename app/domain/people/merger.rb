@@ -18,7 +18,7 @@ module People
         create_log_entry
         merge_associations
         # remove src person first to avoid validation errors (e.g. uniqueness)
-        @source.destroy!
+        @source.reload.destroy!
         merge_person_attrs
       end
     end
@@ -30,6 +30,18 @@ module People
       merge_contactables(:additional_emails, :email)
       merge_contactables(:phone_numbers, :number)
       merge_contactables(:social_accounts, :name, match_label: true)
+      merge_association(:invoices, :recipient)
+      merge_association(:notes, :subject)
+      merge_association(:authored_notes, :author)
+      merge_association(:event_responsibilities, :contact)
+      merge_association(:group_responsibilities, :contact)
+      merge_association(:family_members, :person, unique_attr: :other_id)
+      merge_association(:subscriptions, :subscriber, unique_attr: :mailing_list_id)
+      merge_association(:event_invitations, :person, unique_attr: :event_id)
+      merge_association(:event_participations, :person, unique_attr: :event_id)
+      merge_association(:add_requests, :person, unique_attr: :body_id)
+      merge_association(:taggings, :taggable, unique_attr: :tag_id)
+      merge_qualifications
     end
 
     def merge_contactables(assoc, key, match_label: false)
@@ -58,8 +70,26 @@ module People
       end
     end
 
+    def merge_association(assoc, key, unique_attr: nil)
+      @source.send(assoc).each do |a|
+        next if unique_attr && @target.send(assoc).pluck(unique_attr).include?(a.send(unique_attr))
+
+        a.update!(key => @target)
+      end
+    end
+
+    def merge_qualifications
+      @source.qualifications.each do |qualification|
+        next if @target.qualifications
+          .where("start_at = :start_at OR finish_at = :finish_at", start_at: qualification.start_at, finish_at: qualification.finish_at)
+          .pluck(:qualification_kind_id).include?(qualification.qualification_kind_id)
+
+        qualification.update!(person: @target)
+      end
+    end
+
     def merge_person_attrs
-      person_attrs.each do |a|
+      Person::MERGABLE_ATTRS.each do |a|
         assign(a)
       end
       attach_picture
@@ -93,13 +123,9 @@ module People
       source_attrs.merge(source_roles).to_yaml
     end
 
-    def person_attrs
-      Person::PUBLIC_ATTRS - [:id, :primary_group_id, :picture]
-    end
-
     def source_attrs
-      person_attrs.each_with_object({}) do |a, h|
-        value = @target.send(a)
+      Person::MERGABLE_ATTRS.each_with_object({}) do |a, h|
+        value = @source.send(a)
         next if value.blank?
 
         h[a] = value

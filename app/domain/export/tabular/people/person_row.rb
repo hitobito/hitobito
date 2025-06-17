@@ -8,7 +8,7 @@ module Export::Tabular::People
     self.dynamic_attributes = {/^phone_number_/ => :phone_number_attribute,
                                 /^social_account_/ => :social_account_attribute,
                                 /^additional_email_/ => :additional_email_attribute,
-                                /^people_relation_/ => :people_relation_attribute,
+                                /^additional_address_/ => :additional_address_attribute,
                                 /^qualification_kind_/ => :qualification_kind}
 
     def country
@@ -53,11 +53,8 @@ module Export::Tabular::People
       contact_account_attribute(entry.additional_emails, attr)
     end
 
-    def people_relation_attribute(attr)
-      entry.relations_to_tails
-        .select { |r| attr == :"people_relation_#{r.kind}" }
-        .map { |r| r.tail.to_s }
-        .join(", ")
+    def additional_address_attribute(attr)
+      contact_account_attribute(entry.additional_addresses, attr)
     end
 
     def qualification_kind(attr)

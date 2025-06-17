@@ -84,7 +84,7 @@ de:
     index:
       title: "%{models}"
 
-  crud: &crud
+  crud:
     show:
       title: "%{model}"
     new:
@@ -102,7 +102,23 @@ de:
         success: "%{model} wurde erfolgreich gelöscht."
         failure: "%{model} konnte nicht gelöscht werden."
 
-  modal_crud: *crud
+  modal_crud:
+    show:
+      title: "%{model}"
+    new:
+      title: "%{model} erstellen"
+    edit:
+      title: "%{model} bearbeiten"
+    create:
+      flash:
+        success: "%{model} wurde erfolgreich erstellt."
+    update:
+      flash:
+        success: "%{model} wurde erfolgreich aktualisiert."
+    destroy:
+      flash:
+        success: "%{model} wurde erfolgreich gelöscht."
+        failure: "%{model} konnte nicht gelöscht werden."
 
   blocked:
     index:
@@ -115,6 +131,10 @@ de:
     address_or_email: "%{address} oder %{email}"
     fields:
       zip_town: PLZ/Ort
+
+    contact_data:
+      invoices_tooltip_title: Wird für Rechnungen verwendet
+      blocked_mail_tooltip_title: E-Mail ist aufgrund von Bounces blockiert
 
     public_check_box:
       tooltip: Private Einträge sind nur für die eigene Gruppe sichtbar.
@@ -129,6 +149,12 @@ de:
       placeholder_value: E-Mail
       placeholder_type: Bezeichnung (Privat, Arbeit ..)
       tooltip_mailings: Versände von Abos, Bestätigungen per E-Mail usw. werden zusätzlich an alle hier markierten Adressen verschickt.
+      tooltip_invoices: Wird anstelle der Haupt E-Mail Adresse beim verschicken von Rechnungen verwendet.
+
+    additional_address_fields:
+      placeholder_type: Bezeichnung (Rechnung, Arbeit ..)
+      caption_uses_contactable_name: Namen der Person übernehmen
+      caption_used_for_invoices: Für Rechnungen verwenden
 
     address_fields:
       updates_household_address: Adresse wird für den ganzen Haushalt aktualisiert
@@ -160,6 +186,10 @@ de:
   dropdown/event/participation/mail_dispatch:
     title: E-Mail senden
     confirmation: Bist du sicher, dass du diese Mails versenden willst?
+
+  dropdown/label_items:
+    additional_address:
+      main: Hauptadresse
 
   dropdown/group_edit:
     move: "Verschieben"
@@ -195,6 +225,7 @@ de:
     labels: "Etiketten"
     full: "Rechnung inkl. Einzahlungsschein"
     esr_only: "Einzahlungsschein separat"
+    original_invoice: "Originalrechnung inkl. Einzahlungsschein"
     articles_only: "Rechnung separat"
     csv: "CSV"
     pdf: "PDF"
@@ -425,6 +456,7 @@ de:
       no_answer_given: "(nicht beantwortet)"
       actions_show:
         change_contact_data_button: "Kontaktdaten ändern"
+        link_to_person: "Personenprofil anzeigen"
       actions_approval:
         approve_button: "Freigeben"
         reject_button: "Ablehnen"
@@ -584,6 +616,13 @@ de:
       admin_questions: Administrationsangaben
       contact_attrs: Kontaktangaben
     general_fields:
+      visible_contact_attributes:
+        all: Alle Kontaktdaten anzeigen
+        name: Name anzeigen
+        address: Adresse anzeigen
+        phone_number: Telefonnummer anzeigen
+        email: E-Mail anzeigen
+        social_account: Social Media anzeigen
       kind_overrides_link_title: "Folgende Felder werden übernommen: Beschreibung"
     global:
       link:
@@ -653,6 +692,7 @@ de:
     form_data_missing: "Bitte fülle das folgende Formular aus, bevor du dich für den Anlass anmeldest."
     registered: "Deine persönlichen Daten wurden aufgenommen. Bitte ergänze nun noch die Angaben für die Anmeldung."
     application_window_closed: "Das Anmeldefenster für diesen Anlass ist geschlossen."
+    no_places_available: "Die maximale Teilnehmeranzahl für diesen Anlass ist bereits erreicht."
 
   event/roles:
     full_entry_label: "Rolle <i>%{role}</i> für <i>%{person}</i>"
@@ -770,6 +810,7 @@ de:
       confirm_archive: >
         Wollen Sie diese Gruppe wirklich archivieren? Sie kann dann nicht mehr
         bearbeitet werden und sämtliche Rollen werden ebenfalls archiviert.
+      membership_invoice_button: Mitgliedsrechnung
     attrs:
       contact_details: "Kontaktangaben"
       additional_information: "Weitere Angaben"
@@ -961,6 +1002,10 @@ de:
         filter:
           from: Von
           to: Bis
+    table:
+      number_of_invoices_shown:
+        one: "%{count} Rechnung angezeigt."
+        other: "%{count} Rechnungen angezeigt."
 
   invoices/by_article:
     index:
@@ -994,16 +1039,21 @@ de:
         Benutzers oder an die hier konfigurierte Adresse gesendet werden.
       email_validation: Darf keine E-Mail-Adresse sein.
       sender_name_help: Rechnungs-E-Mails werden unter diesem Namen versendet.
+      custom_content_help: Diese E-Mail Vorlage wird beim versenden von Rechnungen verwendet. Wenn keine E-Mail Vorlage hinterlegt wird, wird die globale E-Mail Voralge verwendet.
     reminder_fields:
       third_level: "Für alle weiteren Mahnungen, wird die dritte Mahnstufe wiederholt."
     provider_fields:
       reset_payment_provider_warning: "Sollten Daten hier geändert werden, muss der Initialisierungsprozess der Rechnungsschnittstelle neu ausgeführt werden."
+    custom_content_fields:
+      subject: Betreff
+      body: Inhalt
+      remove: E-Mail Vorlage entfernen
 
   invoice_lists:
     destroys:
       show:
         title: Sammelrechnung löschen
-        non_draft_info: 'In der Sammelrechnung ist mindesents eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann die Sammelrechnung nicht gelöscht werden.'
+        non_draft_info: 'In der Sammelrechnung ist mindestens eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann die Sammelrechnung nicht gelöscht werden.'
         confirm_delete: Wollen Sie die Sammelrechnung wirklich löschen?
     form:
       invoice_articles:
@@ -1056,6 +1106,9 @@ de:
       zero: "Zuerst muss eine Rechnung ausgewählt werden."
       one: "Rechnung wurde storniert."
       other: "%{count} Rechnungen wurden storniert."
+
+  invoice_lists/fixed_fee:
+    recipient_role_group_mismatch: "Für folgende Gruppen konnte kein Empfänger ermittelt werden: %{groups}"
 
   payments:
     export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
@@ -1127,7 +1180,7 @@ de:
       email: Mailing-Liste (E-Mail)
       mailchimp: MailChimp
     imap_mails:
-      manage: Mails
+      manage: Postfach
       mailboxes:
         inbox: Eingang
         spam: Spam
@@ -1157,6 +1210,8 @@ de:
           one: Mail erfolgreich verschoben
           other: "%{count} Mails erfolgreich verschoben"
         server_error: Verbindung zum Mailserver nicht möglich, bitte versuche es später erneut.
+    bounces:
+      manage: Bounces
     recipient_counts:
       index:
         recipient_info:
@@ -1286,7 +1341,7 @@ de:
     admin: "Einstellungen"
     admin/event_feed: "Kalender integrieren"
     admin/oauth_authorizations: "OAuth-Autorisierungen"
-    imap_mails: "Mails"
+    imap_mails: "Mails und Bounces"
     invoices: "Rechnungen"
     invoices/single: "Einzelrechnungen"
     invoices/evaluations: "Buchungsbeleg"
@@ -1394,8 +1449,9 @@ de:
     merge:
       new:
         title: Personen zusammenführen
+      form:
         select_person: Wessen Daten sollen beim Zusammenführen den Vorrang haben?
-        merge_hint: Beim Zusammenführen werden die Rollen, Telefonnr., zusätzlichen E-Mails sowie die Social Media Einträge übernommen. Alle anderen Daten dieser Person wie z.B. Notizen, Kursanmeldungen usw. werden gelöscht.
+        merge_hint: Beim Zusammenführen werden die Rollen, Telefonnummern, zusätzlichen E-Mails, Social Media Einträge, Rechnungen, Notizen, Tags, Abos, Familienmitglieder, Event Einladungen und Teilnahmen sowie auch Qualifikationen übernommen. Alle anderen Daten dieser Person wie z.B. Log Einträge usw. werden gelöscht.
         merge_hint_invalid: Diese Person hat ungültige Daten.
         irreversible: Dieser Vorgang kann nicht rückgängig gemacht werden.
         invalid_persons: Die Einträge können erst zusammengeführt werden wenn beide gültig sind.
@@ -1758,10 +1814,10 @@ de:
   qualification_decorator:
     open_training_days_active:
       Damit die Qualifikation am %{finish_at} nicht abläuft, bitten wir
-      dich bis dahin %{days} Fortbildungstage zu absolvieren
+      dich bis spätestens dahin %{days} Fortbildungstage zu absolvieren.
     open_training_days_reactivatable:
       Um deine Qualifikation zu reaktivieren, bitten wir dich
-      %{days} Fortbildungstage bis spätestens %{reactivateable_until} zu absolvieren
+      %{days} Fortbildungstage bis spätestens %{reactivateable_until} zu absolvieren.
     open_training_days_no_longer_reactivatable: Diese Qualifikation ist seit dem
       %{reactivateable_until} abgelaufen. Falls du davor Aus- oder Fortbildungen besucht hast und
       du für diese eine Kursbestätigung besitzt, kannst du diese mit deinem Tourenchef teilen.
@@ -1812,6 +1868,8 @@ de:
       equal: ist genau
       greater: grösser als
       smaller: kleiner als
+      before: vor dem
+      after: nach dem
       blank: ist leer
 
     language:
@@ -1846,6 +1904,7 @@ de:
     qualification:
       title: Qualifikationen
       prompt_qualification_selection: Welche Qualifikationen sollen angezeigt werden?
+      prompt_constraint: Welche Logik soll angewendet werden?
       prompt_validity: Welche Gültigkeit sollen die angezeigten Qualifikationen haben?
       prompt_year: Qualifikationsjahr einschränken
       prompt_date: Stichdatum

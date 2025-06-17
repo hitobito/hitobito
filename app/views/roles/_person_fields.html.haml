@@ -14,3 +14,5 @@
       = render_extensions :additional_person_fields, locals: { fields: fields }
 
       = render('people/privacy_policy_acceptance_field', policy_finder: @policy_finder, f: fields, for_someone_else: true)
+
+    = render_extensions :person_fields, locals: { f: fields }

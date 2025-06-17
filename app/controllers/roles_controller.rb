@@ -119,7 +119,9 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
     authorize!(:create, @new_role)
 
     Role.transaction do
-      @new_role.save && entry.destroy
+      entry.destroy
+      @new_role.save || raise(ActiveRecord::Rollback)
+      true
     end
   end
 
@@ -156,14 +158,15 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
 
   def build_role
     type = extract_model_attr(:type)
-    start_on = extract_date(:start_on)
-    end_on = extract_date(:end_on)
+    attrs = {}
+    attrs[:start_on] = extract_date(:start_on) if model_params&.key?(:start_on)
+    attrs[:end_on] = extract_date(:end_on) if model_params&.key?(:end_on)
 
-    return Role.new(start_on:, end_on:) if type.blank?
+    return Role.new(attrs) if type.blank?
 
     @type = @group.class.find_role_type!(type)
 
-    @type.new(start_on:, end_on:)
+    @type.new(attrs)
   end
 
   def build_person(role)

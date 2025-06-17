@@ -8,15 +8,6 @@
 require "spec_helper"
 
 describe PeopleController do
-  before do
-    PeopleRelation.kind_opposites["parent"] = "child"
-    PeopleRelation.kind_opposites["child"] = "parent"
-  end
-
-  after do
-    PeopleRelation.kind_opposites.clear
-  end
-
   let(:top_leader) { people(:top_leader) }
   let(:group) { groups(:top_group) }
 
@@ -233,12 +224,13 @@ describe PeopleController do
             get :index, params: {group_id: group, range: "layer"}
 
             expect(assigns(:people).collect(&:id)).to match_array(
-              [people(:bottom_member),
+              [
+                people(:bottom_member),
                 @bl_leader,
                 @bg_leader,
                 @bg_member,
                 @tg_member # also has Group::BottomGroup::Leader role
-].collect(&:id)
+              ].collect(&:id)
             )
           end
 
@@ -454,7 +446,7 @@ describe PeopleController do
                          "111" =>
                            {number: "031 111 1111", translated_label: "Privat", public: 1},
                          "222" =>
-                                         {number: "", translated_label: "Arbeit", public: 1}
+                           {number: "", translated_label: "Arbeit", public: 1}
                        }}
             }
             expect(assigns(:person)).to be_valid
@@ -472,9 +464,12 @@ describe PeopleController do
             put :update, params: {
               group_id: group.id,
               id: person.id,
-              person: {town: "testtown",
-                       phone_numbers_attributes: {n.id.to_s =>
-                                       {number: "031 111 2222", translated_label: "Privat", public: 0, id: n.id}}}
+              person: {
+                town: "testtown",
+                phone_numbers_attributes: {
+                  n.id.to_s => {number: "031 111 2222", translated_label: "Privat", public: 0, id: n.id}
+                }
+              }
             }
           end.not_to change { PhoneNumber.count }
           number = person.reload.phone_numbers.first
@@ -494,9 +489,12 @@ describe PeopleController do
               group_id: group.id,
               id: person.id,
               locale: :fr,
-              person: {town: "testtown",
-                       phone_numbers_attributes: {n.id.to_s =>
-                                       {number: "031 111 2222", translated_label: "mère", public: 0, id: n.id}}}
+              person: {
+                town: "testtown",
+                phone_numbers_attributes: {
+                  n.id.to_s => {number: "031 111 2222", translated_label: "mère", public: 0, id: n.id}
+                }
+              }
             }
           end.not_to change { PhoneNumber.count }
 
@@ -516,9 +514,12 @@ describe PeopleController do
             put :update, params: {
               group_id: group.id,
               id: person.id,
-              person: {town: "testtown",
-                       phone_numbers_attributes: {n.id.to_s =>
-                                       {number: "031 111 1111", translated_label: "Privat", public: 0, id: n.id, _destroy: true}}}
+              person: {
+                town: "testtown",
+                phone_numbers_attributes: {
+                  n.id.to_s => {number: "031 111 1111", translated_label: "Privat", public: 0, id: n.id, _destroy: true}
+                }
+              }
             }
           end.to change { PhoneNumber.count }.by(-1)
           expect(person.reload.phone_numbers).to be_blank
@@ -530,9 +531,12 @@ describe PeopleController do
             put :update, params: {
               group_id: group.id,
               id: person.id,
-              person: {town: "testtown",
-                       phone_numbers_attributes: {n.id.to_s =>
-                                       {number: "   ", translated_label: "Privat", public: 0, id: n.id}}}
+              person: {
+                town: "testtown",
+                phone_numbers_attributes: {
+                  n.id.to_s => {number: "   ", translated_label: "Privat", public: 0, id: n.id}
+                }
+              }
             }
           end.to change { PhoneNumber.count }.by(-1)
           expect(person.reload.phone_numbers).to be_blank
@@ -584,6 +588,7 @@ describe PeopleController do
                          a1.id.to_s => {id: a1.id,
                                         email: "Housi1@example.com",
                                         translated_label: "Arbeit",
+                                        invoices: 1,
                                         public: 1},
                          a2.id.to_s => {id: a2.id, _destroy: true},
                          "998" => {email: " ",
@@ -601,49 +606,43 @@ describe PeopleController do
           expect(emails.size).to eq(2)
           a = emails.first
           expect(a.label).to eq "Arbeit"
-          expect(a.email).to eq "Housi1@example.com"
+          expect(a.email).to eq "housi1@example.com"
           expect(a.public).to be_truthy
+          expect(a.invoices).to be_truthy
           tw = emails.second
           expect(tw.label).to eq "Mutter"
-          expect(tw.email).to eq "John@example.com"
+          expect(tw.email).to eq "john@example.com"
           expect(tw.public).to be_falsey
         end
 
-        it "create, update and destroys people relations" do
-          p1 = Fabricate(:person)
-          p2 = Fabricate(:person)
-          p3 = Fabricate(:person)
-          r1 = person.relations_to_tails.create!(tail_id: people(:top_leader).id, kind: "child")
-          r2 = person.relations_to_tails.create!(tail_id: p1.id, kind: "parent")
+        it "create, update and destroys additional_address" do
+          a1 = Fabricate(:additional_address, contactable: person, label: "Rechnung", housenumber: 1)
+          a2 = Fabricate(:additional_address, contactable: person, label: "Arbeit")
           expect do
             put :update, params: {
               group_id: group.id,
               id: person.id,
-              person: {town: "testtown",
-                       relations_to_tails_attributes: {
-                         r1.id.to_s => {id: r1.id,
-                                        tail_id: p2.id,
-                                        kind: "parent"},
-                         r2.id.to_s => {id: r2.id, _destroy: true},
-                         "998" => {tail_id: " ",
-                                   kind: "child"},
-                         "999" => {tail_id: p3.id,
-                                   kind: "child"}
-                       }}
+              person: {
+                additional_addresses_attributes: {
+                  a1.id.to_s => {id: a1.id, housenumber: 3, uses_contactable_name: false, name: "updated name"},
+                  a2.id.to_s => {id: a2.id, _destroy: true},
+                  "998" => {
+                    translated_label: "Andere",
+                    street: "Langestrasse",
+                    housenumber: 37,
+                    zip_code: 8000,
+                    town: "Zürich",
+                    country: "CH"
+                  }
+                }
+              }
             }
-            expect(assigns(:person)).to be_valid
-          end.not_to change { PeopleRelation.count }
+          end.to change { a1.reload.housenumber }.from("1").to("3")
+            .and change { a1.name }.from(person.to_s).to("updated name")
+            .and not_change { AdditionalAddress.count }
 
-          relations = person.reload.relations_to_tails.order(:tail_id)
-          expect(relations.size).to eq(2)
-          a = relations.first
-          expect(a.tail_id).to eq p2.id
-          expect(a.kind).to eq "parent"
-          expect(a.opposite.kind).to eq "child"
-          b = relations.second
-          expect(b.tail_id).to eq p3.id
-          expect(b.kind).to eq "child"
-          expect(b.opposite.tail_id).to eq person.id
+          expect(person.additional_addresses.where(label: "Andere")).to be_exist
+          expect(person.additional_addresses.where(label: "Arbeit")).not_to be_exist
         end
       end
     end

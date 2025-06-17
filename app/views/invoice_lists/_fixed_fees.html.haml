@@ -1,0 +1,31 @@
+- # Copyright (c) 2012-2025, Swiss Badminton. This file is part of
+- # hitobito_swb and licensed under the Affero General Public License version 3
+- # or later. See the COPYING file at the top-level directory or at
+- # https://github.com/hitobito/hitobito.
+
+.invoice-articles.offset-md-1.mt-4.col-md-9.col-lg-8.col-xl-7
+  = hidden_field_tag :fixed_fees, params[:fixed_fees]
+  = table(invoice_items, class: 'table table-striped') do |t|
+    - t.attr(:name)
+    - t.attr(:count)
+    - t.attr(:vat_rate) { |i| i.decorate.vat_rate }
+    - t.attr(:unit_cost) { |i| i.decorate.unit_cost }
+    - t.attr(:cost)  { |i| i.decorate.cost }
+
+  .invoice-items-total.d-flex.flex-row-reverse
+    %table
+      %tr
+        %td.left
+          = captionize(:cost, Invoice)
+        %td.right
+          = format_currency(entry.calculated[:cost])
+      %tr
+        %td.left
+          = captionize(:vat_rate, InvoiceItem)
+        %td.right
+          = format_currency(entry.calculated[:vat])
+      %tr
+        %td.left
+          %b= captionize(:total_inkl_vat, Invoice)
+        %td.right
+          %b= format_currency(entry.calculated[:total])

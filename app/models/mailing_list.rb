@@ -74,6 +74,8 @@ class MailingList < ActiveRecord::Base
   validates :subscribable_for, inclusion: {in: SUBSCRIBABLE_FORS}
   validates :subscribable_mode, inclusion: {in: SUBSCRIBABLE_MODES}, if: :subscribable?
 
+  normalizes :additional_sender, with: ->(attribute) { attribute.downcase }
+
   after_destroy :schedule_mailchimp_destroy, if: :mailchimp?
   after_save :schedule_opt_in_cleanup, if: :opt_in?
 
@@ -99,10 +101,6 @@ class MailingList < ActiveRecord::Base
 
   def opt_in?
     subscribable_mode == "opt_in"
-  end
-
-  def opt_out?
-    !opt_in?
   end
 
   def subscribable?

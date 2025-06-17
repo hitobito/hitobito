@@ -25,4 +25,6 @@
     = tab_content(:mailing_lists) do
       = render 'mailing_lists_fields', f: f
 
+    = render_extensions :tab_content, locals: { f: f }
+
     = render 'mounted_attributes/form_tabs', f: f

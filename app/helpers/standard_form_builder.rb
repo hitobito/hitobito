@@ -20,6 +20,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   FORM_CONTROL = %w[form-control form-control-sm]
   FORM_CONTROL_WITH_WIDTH = %w[form-control form-control-sm] + WIDTH_CLASSES
   FORM_CONTROL_SELECT_WITH_WIDTH = %w[form-select form-select-sm] + WIDTH_CLASSES
+  LABEL_CLASSES = "col-md-3 col-xl-2 pb-1"
 
   attr_reader :template
 
@@ -151,6 +152,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a field to select a date. You might want to customize this.
   def date_field(attr, html_options = {})
     html_options[:value] ||= date_value(attr)
+    html_options[:autocomplete] ||= "off"
     html_options[:class] = [
       html_options[:class], "mw-100", "mw-md-20ch", "date", *FORM_CONTROL
     ].compact.join(" ")
@@ -159,6 +161,25 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       content_tag(:span, icon(:"calendar-alt"), class: "input-group-text") +
         text_field(attr, html_options)
     end
+  end
+
+  # Render a select dropdown for countries
+  def country_field(attr = :country, **html_options)
+    html_options[:class] = [
+      html_options[:class], "form-select", "form-select-sm"
+    ].compact_blank.join(" ")
+    html_options[:class] += " is-invalid" if errors_on?(attr)
+    html_options[:data] = {
+      placeholder: " ",
+      chosen_no_results: I18n.t("global.chosen_no_results"),
+      controller: "tom-select"
+    }
+
+    country_select(attr,
+      {priority_countries: Settings.countries.prioritized,
+       selected: @object.send(attr),
+       include_blank: ""},
+      html_options)
   end
 
   def date_value(attr)
@@ -286,8 +307,13 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       html_options[:class], *FORM_CONTROL_SELECT_WITH_WIDTH
     ].compact.join(" ")
     html_options[:class] += " is-invalid" if errors_on?(attr)
+    html_options[:data].to_h.merge!(
+      chosen_no_results: I18n.t("global.chosen_no_results"),
+      placeholder: " ",
+      controller: "tom-select"
+    )
 
-    add_css_class(html_options, "multiselect tom-select")
+    add_css_class(html_options, "multiselect")
     belongs_to_field(attr, html_options)
   end
 
@@ -314,10 +340,12 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
         placeholder: I18n.t("global.search.placeholder_person"),
         class: klass,
         disabled: disabled,
-        data: {provide: "entity",
-               id_field: "#{object_name}_#{attr_id}",
-               no_results_message: I18n.t("global.no_list_entries"),
-               url: html_options&.dig(:data, :url) || @template.query_people_path})
+        data: html_options[:data].to_h.merge!(
+          provide: "entity",
+          id_field: "#{object_name}_#{attr_id}",
+          no_results_message: I18n.t("global.no_list_entries"),
+          url: html_options.dig(:data, :url) || @template.query_people_path
+        ))
   end
 
   def labeled_inline_fields_for(assoc, partial = nil, record = nil, required = false, &block) # rubocop:disable Metrics/MethodLength
@@ -340,8 +368,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
-  def nested_fields_for(assoc, partial_name = nil, record_object = nil, options = nil, &block)
-    content_tag(:div, id: "#{assoc}_fields") do
+  def nested_fields_for(assoc, partial_name = nil, record_object = nil, options = nil, limit = nil, &block)
+    content_tag(:div, id: "#{assoc}_fields", data: {association: assoc, limit: limit}) do
       fields_for(assoc, record_object) do |fields|
         block ? capture(fields, &block) : render(partial_name, f: fields)
       end
@@ -369,7 +397,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   #   labeled(:attr, content)
   #   labeled(:attr, 'Caption') { #content }
   #   labeled(:attr, 'Caption', content)
-  def labeled(attr, caption_or_content = nil, content = nil, **html_options, &block) # rubocop:disable Metrics/*
+  def labeled(attr, caption_or_content = nil, content = nil, mark_as_required: false, **html_options, &block) # rubocop:disable Metrics/*
     if block
       content = capture(&block)
     elsif content.nil?
@@ -380,7 +408,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
     label_classes = html_options.delete(:label_class) || "col-md-3 col-xl-2 pb-1"
     label_classes += " col-form-label text-md-end"
-    label_classes += " required" if required?(attr)
+    label_classes += " required" if mark_as_required || required?(attr)
 
     add_css_class(html_options, "labeled col-md-9 col-lg-8 col-xl-8 mw-63ch")
     css_classes = {"no-attachments": no_attachments?(attr),
@@ -516,7 +544,11 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
+  # required_attrs are dynamically defined attributes, that also get checked during validation
+  # if the form label should just display the required mark, without adding a validation e.g.
+  # for nested fields with a seperate label, mark_as_required? can be defined on the model
   def dynamic_required?(attr)
+    return true if @object.respond_to?(:mark_as_required?) && @object.mark_as_required?(attr)
     return false unless @object.respond_to?(:required_attrs)
 
     @object.required_attrs.include?(attr)

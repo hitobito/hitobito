@@ -34,5 +34,28 @@ RSpec.describe "people#index", type: :request do
         expect(response.body).to include("Unsupported include parameter")
       end
     end
+
+    describe "email matching" do
+      let(:params) { {filter: {email: {match: people(:top_leader).email}}} }
+
+      it "works" do
+        expect(PersonResource).to receive(:all).and_call_original
+        make_request
+        expect(response.status).to eq(200), response.body
+        expect(d.map(&:jsonapi_type).uniq).to match_array(["people"])
+        expect(d.map(&:id)).to match_array([people(:top_leader).id])
+      end
+    end
+
+    describe "layer_group" do
+      let(:params) { {include: "layer_group"} }
+
+      it "does return empty list when person does not have primary group" do
+        people(:top_leader).update!(primary_group_id: nil)
+        make_request
+        expect(response.status).to eq(200), response.body
+        expect(d.find { |person| person.id == people(:top_leader).id }.relationships[:layer_group][:data]).to be_nil
+      end
+    end
   end
 end

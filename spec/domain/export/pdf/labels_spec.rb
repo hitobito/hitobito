@@ -1,3 +1,8 @@
+#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 require "spec_helper"
 
 describe Export::Pdf::Labels do
@@ -6,7 +11,8 @@ describe Export::Pdf::Labels do
   let(:contactables) { [top_leader.tap { |u| u.update(nickname: "Funny Name") }] }
   let(:label_format) { label_formats(:standard) }
   let(:household) { false }
-  let(:pdf) { Export::Pdf::Labels.new(label_format).generate(contactables, household) }
+  let(:label) { nil }
+  let(:pdf) { Export::Pdf::Labels.new(label_format, label:).generate(contactables, household) }
 
   subject { PDF::Inspector::Text.analyze(pdf) }
 
@@ -30,6 +36,23 @@ describe Export::Pdf::Labels do
     it "ignores pp_post if not given" do
       label_format.update!(pp_post: "  ")
       expect(subject.strings.join(" ")).not_to include("Post CH AG")
+    end
+  end
+
+  context "with additional address" do
+    let(:label) { "Rechnung" }
+
+    it "falls back to original address if undefined" do
+      expect(subject.strings).to include("Top Leader")
+      expect(subject.strings).to include("Greatstreet 345")
+      expect(subject.strings).to include("3456 Greattown")
+    end
+
+    it "renders additional address if present" do
+      top_leader.additional_addresses.create!(label: "Rechnung", street: "Lagistrasse", housenumber: "12a", zip_code: 1080, town: "Jamestown", country: "CH", invoices: true)
+      expect(subject.strings).to include("Top Leader")
+      expect(subject.strings).to include("Lagistrasse 12a")
+      expect(subject.strings).to include("1080 Jamestown")
     end
   end
 

@@ -15,11 +15,11 @@ class Event::ParticipationFilter
     person: [:additional_emails, :phone_numbers,
       :primary_group]]
 
-  attr_reader :params, :counts
+  attr_reader :event, :user, :params, :counts
 
-  def initialize(event_id, user_id, params = {})
-    @event_id = event_id
-    @user_id = user_id
+  def initialize(event, user, params = {})
+    @event = event
+    @user = user
     @params = params
   end
 
@@ -31,14 +31,6 @@ class Event::ParticipationFilter
 
   def predefined_filters
     PREDEFINED_FILTERS
-  end
-
-  def event
-    Event.find_by(id: @event_id)
-  end
-
-  def user
-    Person.find_by(id: @user_id)
   end
 
   private

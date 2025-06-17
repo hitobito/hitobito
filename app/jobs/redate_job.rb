@@ -46,7 +46,11 @@ class RedateJob < BaseJob
 
   def formatted(str, cap_at: 30) = str.truncate(cap_at).ljust(cap_at)
 
-  def off_by_one?(datetime, date) = (datetime.to_date - date).to_i == 1
+  def off_by_one?(datetime, date)
+    return false if datetime.nil? || date.nil?
+
+    (datetime.to_date - date).to_i == 1
+  end
 
   def roles_from_create_events
     role_scope

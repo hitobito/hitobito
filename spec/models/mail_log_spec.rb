@@ -27,6 +27,13 @@ describe MailLog do
     log
   end
 
+  describe "normalization" do
+    it "downcases mail_from" do
+      mail_log.mail_from = "TesTer@gMaiL.com"
+      expect(mail_log.mail_from).to eq "tester@gmail.com"
+    end
+  end
+
   context "mail=" do
     it "assigns bulk mail message" do
       log = MailLog.new

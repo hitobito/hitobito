@@ -40,6 +40,7 @@ class Person::Filter::Attributes < Person::Filter::Base
     when "greater" then years_greater_scope(value)
     when "smaller" then years_smaller_scope(value)
     when "equal" then years_equal_scope(value)
+    when "blank" then years_blank_scope(value)
     else raise("unexpected constraint: #{constraint.inspect}")
     end
   end
@@ -59,6 +60,10 @@ class Person::Filter::Attributes < Person::Filter::Base
     years_smaller_scope(value + 1).merge(years_greater_scope(value - 1))
   end
 
+  def years_blank_scope(value)
+    Person.where(birthday: nil)
+  end
+
   def raw_sql_condition(scope)
     generic_constraints.map do |v|
       key, constraint, value = v.to_h.symbolize_keys.slice(:key, :constraint, :value).values
@@ -66,7 +71,7 @@ class Person::Filter::Attributes < Person::Filter::Base
       type = Person.filter_attrs[key.to_sym][:type]
       begin
         parsed_value = (type == :date) ? Date.parse(value) : value
-      rescue Date::Error
+      rescue TypeError, Date::Error
         parsed_value = Time.zone.now.to_date
       end
 
@@ -85,18 +90,16 @@ class Person::Filter::Attributes < Person::Filter::Base
   def persisted_attribute_condition_sql(key, value, constraint)
     sql_string = case constraint
     when /match/ then match_search_sql(key, value, constraint)
-    when /blank/ then "COALESCE(TRIM(people.#{key}), '') #{sql_comparator(constraint)} ?"
+    when /blank/ then "COALESCE(TRIM(people.#{key}::text), '') #{sql_comparator(constraint)} ?"
     else "people.#{key} #{sql_comparator(constraint)} ?"
     end
 
-    ActiveRecord::Base.sanitize_sql_array([sql_string, sql_value(value, constraint)])
+    ActiveRecord::Base.sanitize_sql_array([sql_string, sql_value(key, value, constraint)])
   end
 
   def match_search_sql(key, value, constraint)
     if value.is_a?(Numeric)
       "CAST(people.#{key} AS TEXT) #{sql_comparator(constraint)} ?"
-    elsif Person.columns_hash[key].collation == "case_insensitive_emails"
-      %(people.#{key} COLLATE "unicode" #{sql_comparator(constraint)} ?)
     else
       "people.#{key} #{sql_comparator(constraint)} ?"
     end
@@ -106,19 +109,19 @@ class Person::Filter::Attributes < Person::Filter::Base
     case constraint.to_s
     when "match" then "LIKE"
     when "not_match" then "NOT LIKE"
-    when "greater" then ">"
-    when "smaller" then "<"
+    when "greater", "after" then ">"
+    when "smaller", "before" then "<"
     when "equal", "blank" then "="
     else raise("unexpected constraint: #{constraint.inspect}")
     end
   end
 
-  def sql_value(value, constraint)
+  def sql_value(key, value, constraint)
     case constraint.to_s
     when "match", "not_match"
       "%#{ActiveRecord::Base.send(:sanitize_sql_like, value.to_s.strip)}%"
     when "blank" then ""
-    when "equal", "greater", "smaller" then value
+    when "equal", "greater", "smaller", "before", "after" then (key == "email") ? value.downcase : value
     else raise("unexpected constraint: #{constraint.inspect}")
     end
   end

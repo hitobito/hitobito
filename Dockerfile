@@ -27,7 +27,7 @@ ARG INSTALL_SCRIPT="node -v && npm -v && npm install -g yarn && yarn set version
 ARG PRE_BUILD_SCRIPT="\
      git submodule status | tee WAGON_VERSIONS; \
      rm -rf hitobito/.git; \
-     mv hitobito/* hitobito/.tx .; \
+     mv hitobito/* hitobito/.?* .; \
      mkdir -p vendor/wagons; \
      for wagon_dir in hitobito_*; do if [[ -d \$wagon_dir ]]; then rm -r \$wagon_dir/.git && mv \$wagon_dir vendor/wagons/; fi; done; \
      rm -rf hitobito; \
@@ -163,7 +163,7 @@ RUN bash -vxc "${POST_BUILD_SCRIPT:-"echo 'no POST_BUILD_SCRIPT provided'"}"
 
 # TODO: Save artifacts
 
-RUN rm -rf vendor/cache/ .git spec/ node_modules/
+RUN rm -rf vendor/cache/ .git spec/ node_modules/ .npm/
 
 #################################
 #         Run/App Stage         #

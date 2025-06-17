@@ -14,6 +14,7 @@
 #  amount_total          :decimal(15, 2)   default(0.0), not null
 #  invalid_recipient_ids :text
 #  receiver_type         :string
+#  receivers             :text
 #  recipients_paid       :integer          default(0), not null
 #  recipients_processed  :integer          default(0), not null
 #  recipients_total      :integer          default(0), not null
@@ -32,6 +33,7 @@
 #
 
 class InvoiceList < ActiveRecord::Base
+  serialize :receivers, type: Array, coder: InvoiceLists::Receiver
   serialize :invalid_recipient_ids, type: Array, coder: YAML
   belongs_to :group
   belongs_to :receiver, polymorphic: true
@@ -40,7 +42,9 @@ class InvoiceList < ActiveRecord::Base
   has_one :message, dependent: :nullify
   has_many :invoices, dependent: :destroy
 
-  attr_accessor :recipient_ids, :invoice
+  # NOTE transient attribute to populate invoice in the view and serve as template
+  # when persisting actual invoices
+  attr_accessor :invoice
 
   validates :receiver_type, inclusion: %w[MailingList Group], allow_blank: true
 
@@ -50,6 +54,18 @@ class InvoiceList < ActiveRecord::Base
 
   def to_s
     title
+  end
+
+  def calculated
+    @calculated ||= InvoiceItems::Calculation.new(invoice.invoice_items).calculated
+  end
+
+  def fixed_fee
+    invoice.invoice_items.flat_map { |item| item[:dynamic_cost_parameters][:fixed_fees].to_s }.compact_blank.uniq.first
+  end
+
+  def fixed_fees?(fee = nil)
+    fee ? fixed_fee == fee.to_s : fixed_fee.present?
   end
 
   def invoice_parameters
@@ -73,30 +89,27 @@ class InvoiceList < ActiveRecord::Base
   end
 
   def recipient_ids_count
-    if receiver
-      receiver.people.unscope(:select).count
-    else
-      recipient_ids.split(",").count
-    end
-  end
-
-  def first_recipient
-    if receiver
-      receiver.people.first
-    else
-      Person.find(recipient_ids.split(",").first)
-    end
+    receiver ? receiver_people.unscope(:select).count : recipient_ids.count
   end
 
   def recipients
-    if receiver
-      receiver.people
-    else
-      Person.where(id: recipient_ids.split(","))
-    end
+    receiver ? receiver_people : Person.where(id: recipient_ids)
+  end
+
+  def receiver_people
+    receiver.people.distinct
   end
 
   def invoice_config
     group.layer_group.invoice_config
+  end
+
+  def recipient_ids
+    self[:receivers].to_a.map(&:id)
+  end
+
+  def recipient_ids=(ids)
+    value = ids.is_a?(Array) ? ids : ids.to_s.scan(/\d+/).map(&:to_i).select(&:positive?)
+    self[:receivers] = value
   end
 end

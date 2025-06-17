@@ -51,6 +51,7 @@ config/settings/*.local.yml
 config/environments/*.local.yml
 config/*.sphinx.conf
 Wagonfile
+config/mail.yml
 
 # uploaded pictures
 public/uploads
@@ -75,11 +76,7 @@ TAGS
 .nvimrc
 .byebug_history
 
-# git knows to ignore its directory, other tools only using this file do not
-.git/
-
 # for experiments with webpack
-
 /public/packs
 /public/packs-test
 /node_modules
@@ -89,18 +86,10 @@ yarn-debug.log*
 # for those who want to reduce errors in the rails-log
 public/favicon.ico
 
-/public/packs
-/public/packs-test
-/node_modules
-/yarn-error.log
-yarn-debug.log*
-.yarn-integrity
-config/initializers/work_around_docker_fs_bug.rb
-config/mail.yml
-
 # docker dev setup
 /jwt_signing_key.pem
 /db/seeds/development/nextcloud_oauth_app_seed.rb
+config/initializers/work_around_docker_fs_bug.rb
 
 # generated rswag swagger files
 # (not used anymore, swagger is now generated on the fly with graphiti)
@@ -110,3 +99,6 @@ config/mail.yml
 # use BUNDLE_GEMFILE=Gemfile.local for less Gemfile.lock noise in development
 Gemfile.local
 Gemfile.local.lock
+
+# git knows to ignore its directory, other tools only using this file do not
+.git/

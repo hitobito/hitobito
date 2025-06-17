@@ -24,6 +24,7 @@
 #  payee                            :text
 #  payment_information              :text
 #  payment_slip                     :string           default("qr"), not null
+#  reference_prefix                 :integer
 #  sender_name                      :string
 #  sequence_number                  :integer          default(1), not null
 #  vat_number                       :string
@@ -55,6 +56,7 @@ class InvoiceConfig < ActiveRecord::Base
   has_many :payment_reminder_configs, dependent: :destroy
   has_many :payment_provider_configs, dependent: :destroy
   has_many :message_templates, dependent: :destroy, as: :templated
+  has_one :custom_content, dependent: :destroy, as: :context
 
   validates :group_id, uniqueness: true
   validates :payee, presence: true, on: :update
@@ -81,8 +83,11 @@ class InvoiceConfig < ActiveRecord::Base
 
   validates :reference_prefix, length: {minimum: 5, maximum: 7, allow_blank: true}
 
+  normalizes :email, with: ->(attribute) { attribute.downcase }
+
   accepts_nested_attributes_for :payment_reminder_configs, :payment_provider_configs
   accepts_nested_attributes_for :message_templates, allow_destroy: true
+  accepts_nested_attributes_for :custom_content, allow_destroy: true
 
   validates_by_schema
 

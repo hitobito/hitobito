@@ -30,29 +30,71 @@ describe GroupDecorator, :draper_with_helpers do
         Group::TopGroup::Secretary]
     }
 
-    its(:possible_roles) { should eq role_types }
+    before do
+      allow(view_context).to receive(:action_name).and_return("update")
+    end
 
-    describe "role specific permissions" do
-      let(:view_context) { Draper::ViewContext.current }
+    let(:view_context) { Draper::ViewContext.current }
 
-      def build_role(type) = model.roles.build(type: type)
+    def build_role(type) = model.roles.build(type: type)
 
-      it "includes only role for which user has update permission" do
-        expect(view_context).to receive(:can?).with(:index_local_people, model).and_return(true)
-        allow(view_context).to receive(:can?) do |action, subject|
-          next true if action == :index_local_people || subject.type == "Group::TopGroup::Member"
-          false
-        end
-        expect(decorator.possible_roles).to eq [Group::TopGroup::Member]
+    it "contains all types if all checks pass" do
+      allow(view_context).to receive(:can?).and_return(true)
+      expect(decorator.possible_roles).to eq role_types
+    end
+
+    it "excludes restricted role" do
+      allow(view_context).to receive(:can?).and_return(true)
+      allow(role_types.first).to receive(:restricted?).and_return(true)
+      expect(decorator.possible_roles).to eq role_types[1..]
+    end
+
+    describe "visible from above and index_local_people" do
+      it "includes role not visible from above if user can index_local_people" do
+        allow(view_context).to receive(:can?).and_return(true)
+        expect(decorator.possible_roles).to eq role_types
       end
 
-      it "also includes role for if user has only create permission" do
-        expect(view_context).to receive(:can?).with(:index_local_people, model).and_return(true)
+      it "excludes role not visible from above if user cannot index_local_people" do
         allow(view_context).to receive(:can?) do |action, subject|
-          next true if action == :index_local_people || (action == :create && subject.type == "Group::TopGroup::Member")
-          false
+          next false if action == :index_local_people
+          true
         end
-        expect(decorator.possible_roles).to eq [Group::TopGroup::Member]
+        expect(decorator.possible_roles).to eq role_types[1..]
+      end
+    end
+
+    describe "action based permissions" do
+      it "excludes roles not permitted for action" do
+        allow(view_context).to receive(:can?) do |action, subject|
+          next false unless action == :update && subject.type == "Group::TopGroup::Leader"
+          true
+        end
+        expect(decorator.possible_roles).to eq [Group::TopGroup::Leader]
+      end
+
+      [:new, :define_mapping, :preview].each do |action|
+        it "excludes roles not permitted for inferred #{action} create like action" do
+          allow(view_context).to receive(:action_name).and_return(action.to_s)
+
+          allow(view_context).to receive(:can?) do |action, subject|
+            next false unless action == :create && subject.type == "Group::TopGroup::Leader"
+            true
+          end
+          expect(decorator.possible_roles).to eq [Group::TopGroup::Leader]
+        end
+      end
+
+      [:edit].each do |action|
+        it "excludes roles not permitted for inferred #{action} update like action" do
+          allow(view_context).to receive(:action_name).and_return(action.to_s)
+
+          allow(view_context).to receive(:can?) do |action, subject|
+            next false unless action == :update && subject.type == "Group::TopGroup::Leader"
+            true
+          end
+          expect(decorator.possible_roles).to eq [Group::TopGroup::Leader]
+        end
       end
     end
   end

@@ -18,8 +18,7 @@ class PeopleController < CrudController
   self.permitted_attrs = [:first_name, :last_name, :company_name, :nickname, :company,
     :gender, :birthday, :additional_information, :picture, :remove_picture] +
     Contactable::ACCESSIBLE_ATTRS +
-    [family_members_attributes: [:id, :kind, :other_id, :_destroy]] +
-    [relations_to_tails_attributes: [:id, :tail_id, :kind, :_destroy]]
+    [family_members_attributes: [:id, :kind, :other_id, :_destroy]]
   FeatureGate.if(:person_language) do
     permitted_attrs << :language
   end
@@ -39,7 +38,7 @@ class PeopleController < CrudController
 
   before_action :index_archived, only: :index, if: :group_archived_and_no_filter
 
-  after_save :show_email_change_info, :update_household_address
+  after_save :show_email_change_info
 
   before_render_show :load_person_add_requests, if: -> { html_request? }
   before_render_index :load_people_add_requests, if: -> { html_request? }
@@ -263,12 +262,5 @@ class PeopleController < CrudController
     super.then do |scope|
       (action_name == "show") ? scope.includes(roles: :group) : scope
     end
-  end
-
-  def update_household_address
-    return if entry.household_key.nil? || (Person::ADDRESS_ATTRS & entry.saved_changes.keys).empty?
-
-    # do not use update context to not trigger all validations for all household members
-    entry.household.save!(context: :update_address)
   end
 end

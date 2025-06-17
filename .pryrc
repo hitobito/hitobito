@@ -15,3 +15,40 @@ def gr(resource, scope: nil, params: {}, ability: nil, as: Role.first.person)
     JSON.parse(resources.to_jsonapi).deep_symbolize_keys
   end
 end
+
+# Setup PaperTrail metadata for the current pry session. If a block is given, the PaperTrail config
+# is reverted to the previous state after the block is executed.
+#
+# Example:
+#   with_papertrail_metadata do
+#     user.update!(name: 'foo')
+#   end
+#
+# or with the alias `pt`:
+#   pt { user.update!(name: 'foo') }
+def with_papertrail_metadata(whodunnit: "pry", mutation_id: "pry-#{SecureRandom.uuid}")
+  controller_info = {mutation_id:}
+  if whodunnit.is_a?(ActiveRecord::Base)
+    controller_info[:whodunnit_type] = whodunnit.class.sti_name
+    whodunnit = whodunnit.id
+  end
+
+  if block_given?
+    PaperTrail.request(whodunnit:, controller_info:) { yield }
+  else
+    PaperTrail.request.whodunnit = whodunnit
+    PaperTrail.request.controller_info = controller_info
+  end
+end
+alias pt with_papertrail_metadata # rubocop:disable Style/Alias (alias_method is not available yet)
+
+# When pry is started from the rails console. We set-up the PaperTrail metadata so that we can
+# track all changes made during the console session.
+if Rails.const_defined?(:Console)
+  with_papertrail_metadata
+end
+
+def form_for(model, name: model.class.table_name.singularize, options: {})
+  ActionController::Base.helpers.extend(UtilityHelper)
+  StandardFormBuilder.new(model.class.name, model, ActionController::Base.helpers, options)
+end

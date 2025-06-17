@@ -16,22 +16,17 @@ describe Export::Tabular::People::PeopleFull do
   let(:csv) { CSV.parse(data_without_bom, headers: true, col_sep: Settings.csv.separator) }
 
   before do
-    PeopleRelation.kind_opposites["parent"] = "child"
-    PeopleRelation.kind_opposites["child"] = "parent"
     person.update_attribute(:gender, "m")
     person.social_accounts << SocialAccount.new(label: "skype", name: "foobar")
     person.phone_numbers << PhoneNumber.new(label: "vater", number: "0791234567", public: false)
     person.additional_emails << AdditionalEmail.new(label: "vater", email: "vater@example.com",
       public: false)
-    person.relations_to_tails << PeopleRelation.new(tail_id: people(:bottom_member).id,
-      kind: "parent")
     person.save!
     I18n.locale = lang
   end
 
   after do
     I18n.locale = I18n.default_locale
-    PeopleRelation.kind_opposites.clear
   end
 
   context "german" do
@@ -39,13 +34,11 @@ describe Export::Tabular::People::PeopleFull do
 
     it "has correct headers" do
       expected = [
-        "Vorname", "Nachname", "Firmenname", "Übername", "Firma", "Haupt-E-Mail",
-        "PLZ", "Ort", "Land",
-        "Geschlecht", "Geburtstag", "Zusätzliche Angaben", "Sprache",
-        "Strasse", "Hausnummer", "zusätzliche Adresszeile", "Postfach",
+        "Vorname", "Nachname", "Übername", "Firmenname", "Firma", "Haupt-E-Mail",
+        "zusätzliche Adresszeile", "Strasse", "Hausnummer", "Postfach", "PLZ", "Ort", "Land",
         "Hauptebene", "Rollen",
-        "Tags", "Weitere E-Mail Vater", "Telefonnummer Vater", "Social Media Adresse Skype",
-        "Elternteil"
+        "Geschlecht", "Geburtstag", "Zusätzliche Angaben", "Sprache",
+        "Tags", "Weitere E-Mail Vater", "Telefonnummer Vater", "Social Media Adresse Skype"
       ]
 
       expect(csv.headers).to match_array expected
@@ -59,7 +52,6 @@ describe Export::Tabular::People::PeopleFull do
       its(["Telefonnummer Vater"]) { should eq "'+41 79 123 45 67" }
       its(["Weitere E-Mail Vater"]) { should eq "vater@example.com" }
       its(["Social Media Adresse Skype"]) { should eq "foobar" }
-      its(["Elternteil"]) { should eq "Bottom Member" }
       its(["Geschlecht"]) { should eq "männlich" }
       its(["Hauptebene"]) { should eq "Top" }
     end
@@ -72,28 +64,27 @@ describe Export::Tabular::People::PeopleFull do
       headers = [
         "Prénom",
         "Nom",
-        "Nom de l'entreprise",
         "Surnom",
+        "Nom de l'entreprise",
         "Entreprise",
         "Adresse e-mail principale",
+        "ligne d'adresse supplémentaire",
+        "Rue",
+        "Numéro de la maison",
+        "Case postale",
         "NPA",
         "Lieu",
         "Pays",
+        "Niveau",
+        "Rôles",
         "Sexe",
         "Date de naissance",
         "Données supplémentaires",
         "Langue",
-        "Rue",
-        "Numéro de la maison",
-        "ligne d'adresse supplémentaire",
-        "Case postale",
-        "Niveau",
-        "Rôles",
         "Tags",
         "Adresse e-mail supplémentaire Père",
         "Numéro de téléphone Père",
-        "Adresse d'un média social Skype",
-        "Parent"
+        "Adresse d'un média social Skype"
       ]
       expect(csv.headers).to match_array headers
       expect(csv.headers).to eq headers
@@ -106,7 +97,6 @@ describe Export::Tabular::People::PeopleFull do
       its(["Numéro de téléphone Père"]) { should eq "'+41 79 123 45 67" }
       its(["Adresse e-mail supplémentaire Père"]) { should eq "vater@example.com" }
       its(["Adresse d'un média social Skype"]) { should eq "foobar" }
-      its(["Parent"]) { should eq "Bottom Member" }
       its(["Sexe"]) { should eq "masculin" }
     end
   end

@@ -110,15 +110,18 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :minimized_at
   ]
 
+  MERGABLE_ATTRS = PUBLIC_ATTRS - [:id, :primary_group_id, :picture]
+
   FILTER_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
     :first_name, :last_name, :nickname, :company_name, :email, :address_care_of, :street,
-    :housenumber, :postbox, :zip_code, :town, :country, :gender, [:years, :integer], :birthday
+    :housenumber, :postbox, :zip_code, :town, [:country, :country_select], [:gender, :gender_select], [:years, :integer], :birthday
   ]
 
   SEARCHABLE_ATTRS = [
     :first_name, :last_name, :company_name, :nickname, :email, :street, :housenumber, :zip_code, :town,
     :country, :birthday, :additional_information, {phone_numbers: [:number],
-                                                   social_accounts: [:name], additional_emails: [:email]}
+                                                   social_accounts: [:name],
+                                                   additional_emails: [:email]}
   ]
 
   GENDERS = %w[m w].freeze
@@ -127,8 +130,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   LANGUAGES = Settings.application
     .languages
     .to_hash
-    .merge(Settings.application
-                                     .additional_languages&.to_hash || {})
+    .merge(Settings.application.additional_languages&.to_hash || {})
 
   ADDRESS_ATTRS = %w[address_care_of street housenumber postbox zip_code town country]
 
@@ -195,8 +197,12 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   has_many :roles, inverse_of: :person
   has_many :roles_unscoped, -> { with_inactive },
     class_name: "Role", foreign_key: "person_id", inverse_of: :person
+  has_many :roles_with_ended_readable, -> { with_ended_readable },
+    class_name: "Role", foreign_key: "person_id", inverse_of: :person
 
   has_many :groups, through: :roles
+  has_many :groups_with_roles_ended_readable, through: :roles_with_ended_readable,
+    source: :group
 
   has_many :event_participations, class_name: "Event::Participation",
     dependent: :destroy,
@@ -215,18 +221,20 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     inverse_of: :contact,
     dependent: :nullify
 
+  has_many :group_responsibilities, class_name: "Group",
+    foreign_key: :contact_id,
+    inverse_of: :contact,
+    dependent: :nullify
+
   has_many :qualifications, dependent: :destroy
 
   has_many :subscriptions, as: :subscriber, dependent: :destroy
 
-  has_many :relations_to_tails, class_name: "PeopleRelation",
-    dependent: :destroy,
-    foreign_key: :head_id,
-    inverse_of: :head
-
   has_many :family_members, -> { includes(:person, :other) },
     inverse_of: :person,
     dependent: :destroy
+
+  has_many :invoices, foreign_key: :recipient_id, inverse_of: :recipient
 
   has_many :add_requests, dependent: :destroy
 
@@ -257,7 +265,6 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   has_many :message_recipients, dependent: :nullify
 
-  accepts_nested_attributes_for :relations_to_tails, allow_destroy: true
   FeatureGate.if("people.family_members") do
     accepts_nested_attributes_for :family_members, allow_destroy: true
   end
@@ -279,13 +286,15 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     content_type: ["image/jpeg", "image/gif", "image/png"]
   # more validations defined by devise
 
+  normalizes :email, :unconfirmed_email, with: ->(attribute) { attribute.downcase }
+
   ### CALLBACKS
 
   before_validation :override_blank_email
-  before_validation :remove_blank_relations
   after_update :schedule_duplicate_locator
   before_destroy :destroy_roles
   before_destroy :destroy_person_duplicates
+  after_save :update_household_address
 
   ### Scopes
 
@@ -527,20 +536,6 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     self.email = nil if email.blank?
   end
 
-  def remove_blank_relations
-    relations_to_tails.each do |e|
-      if !e.frozen? && e.tail_id.blank?
-        e.mark_for_destruction
-      end
-    end
-
-    family_members.each do |family_member|
-      if !family_member.frozen? && family_member.other_id.blank?
-        family_member.mark_for_destruction
-      end
-    end
-  end
-
   def assert_has_any_name
     if !company? && first_name.blank? && last_name.blank? && nickname.blank?
       errors.add(:base, :name_missing)
@@ -564,5 +559,12 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     return unless changed_attrs.any? { |a| duplicate_attrs.include?(a) }
 
     Person::DuplicateLocatorJob.new(id).enqueue!
+  end
+
+  def update_household_address
+    return if household_key.nil? || (Person::ADDRESS_ATTRS & saved_changes.keys).empty? || saved_changes.key?("household_key")
+
+    # do not use update context to not trigger all validations for all household members
+    household.save!(context: :update_address)
   end
 end

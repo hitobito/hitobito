@@ -34,9 +34,7 @@ fr:
       group/global_group/leader: Leadre
       group/global_group/member: Membre
       role/external: Externe
-
-    attributes:
-      people_relation:
-        kinds:
-          parent: Parent
-          child: Enfant
+  fixed_fees:
+    membership:
+      members: Cotisation - Members
+      leaders: Cotisation - Leaders

@@ -8,6 +8,8 @@
 require_relative Rails.root.join("app", "domain", "countries") # take precedence over a gem
 
 module Contactable
+  include PostalAddress
+
   extend ActiveSupport::Concern
 
   # rubocop:disable Style/MutableConstant extension point
@@ -15,7 +17,23 @@ module Contactable
     :email, :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country, {
       phone_numbers_attributes: [:id, :number, :translated_label, :public, :_destroy],
       social_accounts_attributes: [:id, :name, :translated_label, :public, :_destroy],
-      additional_emails_attributes: [:id, :email, :translated_label, :public, :mailings, :_destroy]
+      additional_emails_attributes: [:id, :email, :translated_label, :public, :mailings, :invoices, :_destroy],
+      additional_addresses_attributes: [
+        :id,
+        :name,
+        :translated_label,
+        :street,
+        :housenumber,
+        :zip_code,
+        :town,
+        :country,
+        :address_care_of,
+        :postbox,
+        :uses_contactable_name,
+        :invoices,
+        :public,
+        :_destroy
+      ]
     }
   ]
   # rubocop:enable Style/MutableConstant
@@ -24,10 +42,11 @@ module Contactable
     has_many :phone_numbers, as: :contactable, dependent: :destroy
     has_many :social_accounts, as: :contactable, dependent: :destroy
     has_many :additional_emails, as: :contactable, dependent: :destroy
+    has_many :additional_addresses, as: :contactable, dependent: :destroy
 
     belongs_to :location, foreign_key: "zip_code", primary_key: "zip_code", inverse_of: false
 
-    accepts_nested_attributes_for :phone_numbers, :social_accounts, :additional_emails,
+    accepts_nested_attributes_for :phone_numbers, :social_accounts, :additional_emails, :additional_addresses,
       allow_destroy: true
 
     before_validation :set_self_in_nested
@@ -37,42 +56,11 @@ module Contactable
     # Configure if zip code should be validated, true by default, can be disabled in wagons
     class_attribute :validate_zip_code, default: true
     validates :zip_code, zipcode: {country_code_attribute: :zip_country}, allow_blank: true, if: :validate_zip_code
-  end
-
-  def address
-    parts = [street, housenumber].compact
-    return nil if parts.blank?
-
-    parts.join(" ")
-  end
-
-  def country_label
-    Countries.label(country)
-  end
-
-  def country=(value)
-    super(Countries.normalize(value))
-  end
-
-  def ignored_country?
-    swiss?
-  end
-
-  def swiss?
-    Countries.swiss?(country)
-  end
-
-  def canton
-    (swiss? && location&.canton) || nil
+    validate :assert_max_one_additional_invoice_address
+    validate :assert_additional_address_labels_are_unique, if: -> { additional_addresses.any? }
   end
 
   private
-
-  # to validate zip codes to swiss zip code format when country is nil, we return :ch format as the default
-  # option when country is nil
-  def zip_country
-    self[:country] || :ch
-  end
 
   def set_self_in_nested
     # don't try to set self in frozen nested attributes (-> marked for destroy)
@@ -81,6 +69,18 @@ module Contactable
         e.contactable = self
         e.mark_for_destruction if e.value.blank?
       end
+    end
+  end
+
+  def assert_max_one_additional_invoice_address
+    if additional_addresses.count(&:invoices) > 1
+      errors.add(:base, :max_one_additional_invoice_address)
+    end
+  end
+
+  def assert_additional_address_labels_are_unique
+    if additional_addresses.map(&:label).tally.values.max > 1
+      errors.add(:base, :additional_address_labels_must_be_unique)
     end
   end
 

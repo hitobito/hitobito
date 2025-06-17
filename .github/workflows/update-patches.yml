@@ -1,0 +1,43 @@
+name: 'Update Patches'
+
+on:
+  workflow_dispatch:
+jobs:
+  patches:
+    permissions:
+      contents: write
+    runs-on: 'ubuntu-22.04'
+    env:
+      RAILS_DB_ADAPTER: nulldb
+
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v4
+        with:
+           ref: ${{ github.head_ref }}
+
+      - name: 'Prepare'
+        uses: ./.github/actions/core-ci-setup
+        with:
+          database: false
+          assets: false
+
+      # Step 3: Configure Git
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Run patch generation
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          bundle exec rake wagon:patches:consolidate
+          git status
+          git add .patches*
+          git add .patches.yml
+          git config user.name "Github Action Patches updater"
+          git config user.email "robot@puzzle.ch"
+          git commit -m "Updating patches" || true
+          git push
+

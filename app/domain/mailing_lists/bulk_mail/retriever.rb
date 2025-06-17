@@ -74,7 +74,8 @@ class MailingLists::BulkMail::Retriever
   def process_mailing_list_mail(imap_mail, mail_log, validator, mailing_list)
     if imap_mail.list_bounce?
       bulk_mail = mail_log.message
-      bounce_handler(imap_mail, bulk_mail, mailing_list).process
+      bounce_mail = Imap::BounceMail.new(imap_mail)
+      bounce_handler(bounce_mail, bulk_mail, mailing_list).process
       return
     end
 
@@ -93,6 +94,8 @@ class MailingLists::BulkMail::Retriever
     end
   end
 
+  # Tooling and non happy-path methods
+
   def abort_imap_unavailable
     imap_address = imap.config(:address)
     log_info("cannot connect to IMAP server #{imap_address}, terminating.")
@@ -102,8 +105,8 @@ class MailingLists::BulkMail::Retriever
     MailingLists::BulkMail::ImapMailValidator.new(mail)
   end
 
-  def bounce_handler(imap_mail, bulk_mail, mailing_list)
-    MailingLists::BulkMail::BounceHandler.new(imap_mail, bulk_mail, mailing_list)
+  def bounce_handler(bounce_mail, bulk_mail, mailing_list)
+    MailingLists::BulkMail::BounceHandler.new(bounce_mail, bulk_mail, mailing_list)
   end
 
   def sender_rejected(mail, bulk_mail)

@@ -24,22 +24,27 @@
 require "spec_helper"
 
 describe PersonDuplicate do
-  context "before_save" do
-    context "assign_persons_sorted_by_id" do
-      it "assigns person with lower id to person_1" do
-        people = [people(:top_leader), people(:bottom_member)]
-        lower_id_person, higher_id_person = people.sort_by(&:id)
+  let(:top_leader) { people(:top_leader) }
+  let(:bottom_member) { people(:bottom_member) }
+  let(:duplicate) { PersonDuplicate.create!(person_1: top_leader, person_2: bottom_member) }
 
-        duplicate = PersonDuplicate.create!(person_1: higher_id_person, person_2: lower_id_person)
+  it "assigns person with lower id to person_1" do
+    expect(duplicate.person_1_id).to be < duplicate.person_2_id
+    duplicate.update!(person_1: bottom_member, person_2: top_leader)
+    expect(duplicate.person_1_id).to be < duplicate.person_2_id
+  end
 
-        expect(duplicate.person_1).to eq(lower_id_person)
-        expect(duplicate.person_2).to eq(higher_id_person)
+  context "validations" do
+    it "is valid in base context" do
+      expect(duplicate).to be_valid
+    end
 
-        duplicate.update!(person_1: higher_id_person, person_2: lower_id_person)
+    it "is invalid in merge context when there is any possible invalid role when merging" do
+      bottom_member.roles.first.update_columns(start_on: 10.days.ago, end_on: 20.days.ago)
+      expect(duplicate).to be_valid
 
-        expect(duplicate.person_1).to eq(lower_id_person)
-        expect(duplicate.person_2).to eq(higher_id_person)
-      end
+      expect(duplicate.valid?(:merge)).to be_falsey
+      expect(duplicate.errors.full_messages).to eq ["Rolle Member (bis #{I18n.l(20.days.ago.to_date)}) von Bottom Member ist fürs Zusammenführen nicht gültig, da die andere Person eventuell bereits eine Rolle hat, welche diese Rolle nicht mehr erlaubt, diese muss manuell korrigiert/etnfernt werden. Info: Bis kann nicht vor Von sein"]
     end
   end
 end

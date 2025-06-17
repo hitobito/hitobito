@@ -31,6 +31,8 @@ class HelpTextsController < SimpleCrudController
   end
 
   def save_entry
+    return false unless entry.valid?
+
     entry.save!
     entry.translation.help_text_id = entry.id
     entry.body.save!

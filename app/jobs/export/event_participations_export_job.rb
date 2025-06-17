@@ -4,18 +4,21 @@
 #  https://github.com/hitobito/hitobito.
 
 class Export::EventParticipationsExportJob < Export::ExportBaseJob
-  self.parameters = PARAMETERS + [:filter, :group_id]
+  self.parameters = PARAMETERS + [:event_id, :group_id]
 
-  def initialize(format, user_id, filter, group_id, options)
+  def initialize(format, user_id, event_id, group_id, options)
     super(format, user_id, options)
+    @event_id = event_id
     @group_id = group_id
-    @filter = filter
   end
 
   private
 
   def entries
-    @filter.list_entries.select(Event::Participation.column_names)
+    Event::ParticipationFilter
+      .new(event, user, @options)
+      .list_entries
+      .select(Event::Participation.column_names)
   end
 
   def exporter
@@ -52,5 +55,9 @@ class Export::EventParticipationsExportJob < Export::ExportBaseJob
 
   def group
     @group ||= Group.find(@group_id)
+  end
+
+  def event
+    @event ||= Event.find(@event_id)
   end
 end

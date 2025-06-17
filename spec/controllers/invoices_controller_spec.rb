@@ -138,10 +138,33 @@ describe InvoicesController do
       expect(assigns(:invoices)).to have(2).items
     end
 
-    it "exports pdf in background" do
+    it "exports pdf in background ordered by sequence number asc" do
       update_issued_at_to_current_year
+
+      expected_ids = [invoice.id, invoices(:sent).id]
+      expect(Export::InvoicesJob).to receive(:new).with(anything, anything, expected_ids, anything).and_call_original
+
       expect do
-        get :index, params: {group_id: group.id}, format: :pdf
+        get :index, params: {
+          group_id: group.id,
+          sort: :sequence_number,
+          sort_dir: :asc
+        }, format: :pdf
+      end.to change { Delayed::Job.count }.by(1)
+    end
+
+    it "exports pdf in background ordered by sequence number desc" do
+      update_issued_at_to_current_year
+
+      expected_ids = [invoices(:sent).id, invoice.id]
+      expect(Export::InvoicesJob).to receive(:new).with(anything, anything, expected_ids, anything).and_call_original
+
+      expect do
+        get :index, params: {
+          group_id: group.id,
+          sort: :sequence_number,
+          sort_dir: :desc
+        }, format: :pdf
       end.to change { Delayed::Job.count }.by(1)
     end
 
@@ -270,6 +293,21 @@ describe InvoicesController do
       end.to change { Delayed::Job.count }.by(1)
     end
 
+    it "exports pdf without payment_slip when payment_slip: false" do
+      expect(Export::InvoicesJob).to receive(:new).with(:pdf, person.id, [invoice.id], hash_including(payment_slip: false)).and_call_original
+      get :show, params: {group_id: group.id, id: invoice.id, payment_slip: false}, format: :pdf
+    end
+
+    it "exports pdf without articles when articles: false" do
+      expect(Export::InvoicesJob).to receive(:new).with(:pdf, person.id, [invoice.id], hash_including(articles: false)).and_call_original
+      get :show, params: {group_id: group.id, id: invoice.id, articles: false}, format: :pdf
+    end
+
+    it "exports pdf without reminders when reminders: false" do
+      expect(Export::InvoicesJob).to receive(:new).with(:pdf, person.id, [invoice.id], hash_including(reminders: false)).and_call_original
+      get :show, params: {group_id: group.id, id: invoice.id, reminders: false}, format: :pdf
+    end
+
     it "exports csv" do
       get :show, params: {group_id: group.id, id: invoice.id}, format: :csv
 
@@ -300,11 +338,11 @@ describe InvoicesController do
         delete :destroy, params: {group_id: group.id, id: invoice.id}
       end.not_to change { group.invoices.count }
       expect(invoice.reload.state).to eq "cancelled"
-      expect(response).to redirect_to group_invoices_path(group)
+      expect(response).to redirect_to group_invoices_path(group, returning: true)
       expect(flash[:notice]).to eq "Rechnung wurde storniert."
     end
 
-    it "updates invoice_list" do
+    it "updates and redirects to invoice_list" do
       list = InvoiceList.create(title: "List", group: group, invoices: [invoice, invoices(:sent)])
 
       list.update_total
@@ -314,8 +352,9 @@ describe InvoicesController do
       invoice.reload
 
       expect do
-        delete :destroy, params: {group_id: group.id, id: invoice.id}
+        delete :destroy, params: {group_id: group.id, invoice_list_id: list.id, id: invoice.id}
       end.not_to change { group.invoices.count }
+      expect(response).to redirect_to(group_invoice_list_invoices_path(group, list, returning: true))
       expect(invoice.reload.state).to eq "cancelled"
 
       list.reload

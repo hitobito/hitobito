@@ -10,14 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_14_073222) do
+ActiveRecord::Schema[7.1].define(version: 2025_05_27_090212) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  # Please do not delete this, the SQL schema does not know about this
-  # but the application and this schema needs it
-  execute "CREATE COLLATION IF NOT EXISTS case_insensitive_emails (provider = icu, deterministic = false, locale = 'und-u-ka-noignore-ks-level2');"
-
 
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
@@ -57,14 +52,36 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_14_073222) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "additional_addresses", force: :cascade do |t|
+    t.string "contactable_type"
+    t.bigint "contactable_id"
+    t.string "name", null: false
+    t.string "label", null: false
+    t.string "street", null: false
+    t.string "housenumber", limit: 20
+    t.string "zip_code", null: false
+    t.string "town", null: false
+    t.string "country", null: false
+    t.string "address_care_of"
+    t.string "postbox"
+    t.boolean "invoices", default: false, null: false
+    t.boolean "uses_contactable_name", default: true, null: false
+    t.boolean "public", default: false, null: false
+    t.index ["contactable_id", "contactable_type", "label"], name: "idx_on_contactable_id_contactable_type_label_53043e4f10", unique: true
+    t.index ["contactable_id", "contactable_type"], name: "index_additional_addresses_on_contactable_where_invoices_true", unique: true, where: "(invoices = true)"
+    t.index ["contactable_type", "contactable_id"], name: "index_additional_addresses_on_contactable"
+  end
+
   create_table "additional_emails", id: :serial, force: :cascade do |t|
     t.string "contactable_type", null: false
     t.integer "contactable_id", null: false
-    t.string "email", null: false, collation: "case_insensitive_emails"
+    t.string "email", null: false
     t.string "label"
     t.boolean "public", default: true, null: false
     t.boolean "mailings", default: true, null: false
+    t.boolean "invoices", default: false
     t.index ["contactable_id", "contactable_type"], name: "index_additional_emails_on_contactable_id_and_contactable_type"
+    t.index ["contactable_id", "contactable_type"], name: "index_additional_emails_on_contactable_where_invoices_true", unique: true, where: "(invoices = true)"
   end
 
   create_table "addresses", force: :cascade do |t|
@@ -118,6 +135,16 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_14_073222) do
     t.index ["job_name"], name: "index_background_job_log_entries_on_job_name"
   end
 
+  create_table "bounces", force: :cascade do |t|
+    t.string "email", null: false
+    t.integer "count", default: 0, null: false
+    t.datetime "blocked_at"
+    t.integer "mailing_list_ids", array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_bounces_on_email", unique: true
+  end
+
   create_table "calendar_groups", force: :cascade do |t|
     t.bigint "calendar_id", null: false
     t.bigint "group_id", null: false
@@ -166,6 +193,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_14_073222) do
     t.string "key", null: false
     t.string "placeholders_required"
     t.string "placeholders_optional"
+    t.string "context_type"
+    t.bigint "context_id"
+    t.index ["context_type", "context_id"], name: "index_custom_contents_on_context"
   end
 
   create_table "delayed_jobs", id: :serial, force: :cascade do |t|
@@ -388,6 +418,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_14_073222) do
     t.decimal "training_days", precision: 5, scale: 2
     t.integer "minimum_participants"
     t.boolean "automatic_assignment", default: false, null: false
+    t.string "visible_contact_attributes", default: "[\"name\", \"address\", \"phone_number\", \"email\", \"social_account\"]"
     t.index ["kind_id"], name: "index_events_on_kind_id"
     t.index ["shared_access_token"], name: "index_events_on_shared_access_token"
   end
@@ -434,7 +465,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_14_073222) do
     t.string "name"
     t.string "short_name", limit: 31
     t.string "type", null: false
-    t.string "email", collation: "case_insensitive_emails"
+    t.string "email"
     t.integer "zip_code"
     t.string "town"
     t.string "country"
@@ -450,7 +481,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_14_073222) do
     t.text "description"
     t.datetime "archived_at", precision: nil
     t.string "self_registration_role_type"
-    t.string "self_registration_notification_email", collation: "case_insensitive_emails"
+    t.string "self_registration_notification_email"
     t.string "privacy_policy"
     t.string "nextcloud_url"
     t.boolean "main_self_registration_group", default: false, null: false
@@ -528,7 +559,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_14_073222) do
     t.text "beneficiary"
     t.text "payee"
     t.string "participant_number"
-    t.string "email", collation: "case_insensitive_emails"
+    t.string "email"
     t.string "vat_number"
     t.string "currency", default: "CHF", null: false
     t.integer "donation_calculation_year_amount"
@@ -568,6 +599,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_14_073222) do
     t.text "invalid_recipient_ids"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "receivers"
     t.index ["creator_id"], name: "index_invoice_lists_on_creator_id"
     t.index ["group_id"], name: "index_invoice_lists_on_group_id"
     t.index ["receiver_type", "receiver_id"], name: "index_invoice_lists_on_receiver_type_and_receiver_id"
@@ -579,7 +611,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_14_073222) do
     t.string "state", default: "draft", null: false
     t.string "esr_number", null: false
     t.text "description"
-    t.string "recipient_email", collation: "case_insensitive_emails"
+    t.string "recipient_email"
     t.text "recipient_address"
     t.date "sent_at"
     t.date "due_at"
@@ -644,7 +676,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_14_073222) do
   end
 
   create_table "mail_logs", id: :serial, force: :cascade do |t|
-    t.string "mail_from", collation: "case_insensitive_emails"
+    t.string "mail_from"
     t.string "mail_hash"
     t.integer "status", default: 0
     t.string "mailing_list_name"
@@ -661,7 +693,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_14_073222) do
     t.text "description"
     t.string "publisher"
     t.string "mail_name"
-    t.string "additional_sender", collation: "case_insensitive_emails"
+    t.string "additional_sender"
     t.boolean "subscribers_may_post", default: false, null: false
     t.boolean "anyone_may_post", default: false, null: false
     t.string "preferred_labels"
@@ -684,7 +716,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_14_073222) do
     t.bigint "message_id", null: false
     t.bigint "person_id"
     t.string "phone_number"
-    t.string "email", collation: "case_insensitive_emails"
+    t.string "email"
     t.text "address"
     t.datetime "created_at", precision: nil
     t.datetime "failed_at", precision: nil
@@ -734,6 +766,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_14_073222) do
     t.string "date_location_text"
     t.string "uid"
     t.integer "bounce_parent_id"
+    t.integer "blocked_count", default: 0
     t.index ["invoice_list_id"], name: "index_messages_on_invoice_list_id"
     t.index ["mailing_list_id"], name: "index_messages_on_mailing_list_id"
     t.index ["sender_id"], name: "index_messages_on_sender_id"
@@ -880,7 +913,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_14_073222) do
     t.string "company_name"
     t.string "nickname"
     t.boolean "company", default: false, null: false
-    t.string "email", collation: "case_insensitive_emails"
+    t.string "email"
     t.string "zip_code"
     t.string "town"
     t.string "country"
@@ -914,7 +947,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_14_073222) do
     t.string "confirmation_token"
     t.datetime "confirmed_at", precision: nil
     t.datetime "confirmation_sent_at", precision: nil
-    t.string "unconfirmed_email", collation: "case_insensitive_emails"
+    t.string "unconfirmed_email"
     t.string "reset_password_sent_to"
     t.integer "two_factor_authentication"
     t.text "encrypted_two_fa_secret"
@@ -951,14 +984,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_14_073222) do
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.index ["group_id", "group_type"], name: "index_people_filters_on_group_id_and_group_type"
-  end
-
-  create_table "people_relations", id: :serial, force: :cascade do |t|
-    t.integer "head_id", null: false
-    t.integer "tail_id", null: false
-    t.string "kind", null: false
-    t.index ["head_id"], name: "index_people_relations_on_head_id"
-    t.index ["tail_id"], name: "index_people_relations_on_tail_id"
   end
 
   create_table "person_add_request_ignored_approvers", id: :serial, force: :cascade do |t|

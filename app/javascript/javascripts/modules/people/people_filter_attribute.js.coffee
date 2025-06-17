@@ -43,12 +43,13 @@ app.PeopleFilterAttribute = {
     field = form.find('.attribute_key_hidden_field').attr('value')
     type  = form.closest('[data-types]').data('types')[field]
 
-    form.find('option[value=greater], option[value=smaller]').remove() unless (type == 'integer' || type == 'date')
-    form.find('option[value=match], option[value=not_match]').remove() if (type == 'integer' || type == 'date')
+    form.find('option[value=greater], option[value=smaller]').remove() unless (type == 'integer')
+    form.find('option[value=before], option[value=after]').remove() unless (type == 'date')
+    form.find('option[value=match], option[value=not_match]').remove() unless (type == 'string')
     form.find('.attribute_key_hidden_field').removeAttr('disabled')
     form.find('.attribute_constraint_dropdown').removeAttr('disabled')
-    form.find('.attribute_value_input').removeAttr('disabled')
-    form.find('.attribute_value_input').addClass('date') if type == 'date'
+    Array.from(form.find('.attribute_value_input:not(.' + type + '_field)')).forEach((element) => element.remove(););
+    form.find('.' + type + '_field').removeAttr('disabled')
 
   toggleValueVisibility: (e) ->
     input = $(e.target).closest(".people_filter_attribute_form").find(".attribute_value_input")

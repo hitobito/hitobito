@@ -36,6 +36,13 @@ class Event::Answer < ActiveRecord::Base
   end}
   validate :validate_with_question
 
+  scope :list, -> {
+    joins(:question)
+      .merge(Event::Question.list)
+      .includes(question: :translations)
+      .select("event_answers.*")
+  }
+
   def answer=(value)
     @raw_answer = value
     super

@@ -20,7 +20,7 @@ module Oauth
     end
 
     def non_refreshable_access_tokens
-      refresh_token_expires_in = Settings.oidc.refresh_token_expires_in.seconds.ago
+      refresh_token_expires_in = Settings.oidc.refresh_token_expires_in.seconds.ago.midnight
       Oauth::AccessToken.where(created_at: [..refresh_token_expires_in])
     end
   end

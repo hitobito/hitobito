@@ -12,68 +12,31 @@ module PeopleFilterHelper
     Person.filter_attrs.transform_values { |v| v[:type] }.to_h.to_json
   end
 
-  def people_filter_attribute_forms(filter)
+  def people_filter_attribute_controls(filter)
     return unless filter
 
     filter.args.each_with_index.map do |(_k, attr), i|
-      people_filter_attribute_form(attr, i)
+      people_filter_attribute_control(attr, i)
     end.join.html_safe
   end
 
-  def people_filter_attribute_form_template
-    people_filter_attribute_form(nil, 0, disabled: :disabled)
+  def people_filter_attribute_value(key, value)
+    if key == "gender"
+      Person.new(gender: value).gender_label
+    elsif %w[true false].include?(value)
+      f(ActiveModel::Type::Boolean.new.cast(value))
+    else
+      f(value)
+    end
   end
 
-  def people_filter_attribute_form(attr, count, html_options = {}) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-    key, constraint, value = attr.to_h.symbolize_keys.slice(:key, :constraint, :value).values
-    type = Person.filter_attrs[key.to_sym][:type] if key
-    time = (Time.zone.now.to_f * 1000).to_i + count
+  def people_filter_attribute_control_template
+    people_filter_attribute_control(nil, 0, disabled: :disabled)
+  end
 
-    filters = [[t(".equal"), :equal]]
-    if type != :integer && type != :date
-      filters += [[t(".match"), :match], [t(".not_match"), :not_match]]
-    end
-    if key.blank? || type == :integer || type == :date
-      filters += [[t(".smaller"), :smaller], [t(".greater"), :greater]]
-    end
+  private
 
-    filters += [[t(".blank"), :blank]]
-
-    content_tag(:div,
-      class: 'people_filter_attribute_form d-flex align-items-center
-                        justify-content-between mb-2 controls controls-row') do
-      content = hidden_field_tag("filters[attributes][#{time}][key]",
-        key,
-        disabled: attr.blank?,
-        class: "attribute_key_hidden_field")
-
-      content << content_tag(:div, class: "flex-none") do
-        select_tag("filters[attributes][#{time}][key]",
-          options_from_collection_for_select(people_filter_attributes_for_select, :last, :first, key),
-          html_options.merge(disabled: true,
-            class: 'attribute_key_dropdown form-select
-                                                  form-select-sm'))
-      end
-
-      content << content_tag(:div, class: "flex-none") do
-        select_tag("filters[attributes][#{time}][constraint]",
-          options_from_collection_for_select(filters, :last, :first, constraint),
-          html_options.merge(class:
-                             'attribute_constraint_dropdown
-                                         ms-3 form-select form-select-sm'))
-      end
-
-      attribute_value_class = "form-control form-control-sm ms-3
-                               #{(constraint == "blank") ? " invisible" : ""}
-                               attribute_value_input #{(type == :date) ? " date" : ""}"
-      content << content_tag(:div, class: "flex-none") do
-        text_field_tag("filters[attributes][#{time}][value]",
-          value,
-          html_options.merge(class: attribute_value_class))
-      end
-
-      content << link_to(icon(:"trash-alt", filled: false), "#",
-        class: "remove_filter_attribute flex-auto lh-lg ms-3")
-    end
+  def people_filter_attribute_control(attr, count, html_options = {})
+    Person::Filter::AttributeControl.new(self, attr, count, html_options).to_s
   end
 end

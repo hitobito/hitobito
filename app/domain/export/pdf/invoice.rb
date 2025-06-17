@@ -19,9 +19,11 @@ module Export::Pdf
         pdf = Export::Pdf::Document.new(margin: MARGIN).pdf
         customize(pdf)
         @invoices.each_with_index do |invoice, position|
-          reporter&.report(position)
-          invoice_page(pdf, invoice, options)
-          pdf.start_new_page unless invoice == @invoices.last
+          LocaleSetter.with_locale(person: invoice.recipient) do
+            reporter&.report(position)
+            invoice_page(pdf, invoice, options)
+            pdf.start_new_page unless invoice == @invoices.last
+          end
         end
         pdf.render
       end
@@ -42,7 +44,7 @@ module Export::Pdf
       end
 
       def invoice_page(pdf, invoice, options) # rubocop:disable Metrics/MethodLength
-        section_options = options.slice(:debug, :stamped)
+        section_options = options.slice(:debug, :stamped, :reminders)
 
         # render logo if logo_position is set to left or right
         if %w[left right].include?(invoice.logo_position)

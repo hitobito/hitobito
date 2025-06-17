@@ -55,29 +55,32 @@ class Event::Qualifier::Calculator
 
   def prolonging_qualification_kind_ids(course)
     course.kind.event_kind_qualification_kinds
-      .select(&:prolongation?)
-      .select { |q| q.qualification_kind.required_training_days }
-      .select { |q| q.role == @role.to_s }
+      .select { |q| q.prolongation? && q.qualification_kind.required_training_days && q.role == @role.to_s }
       .map { |q| [q.qualification_kind_id, start_of_relevant_period(q.qualification_kind)] }
       .uniq
   end
 
-  def qualification_date(qualification_kind_id, course)
-    @qualification_dates[qualification_kind_id] || course.qualification_date
-  end
-
   def start_of_relevant_period(qualification_kind)
-    start_of_period = @end_date - qualification_kind.validity.years
+    start_of_period = (@end_date - qualification_kind.validity.years).beginning_of_year
     start_of_qualification = @qualification_dates[qualification_kind.id]
-    start_of_qualification += 1.day if start_of_qualification
-    [start_of_period, start_of_qualification].compact.max
+    if start_of_qualification
+      # @qualification_dates are only present for open_training_days calculation,
+      # but not for start_at dates calculation.
+      # Additional training days in the year of the qualification start date
+      # are irrelevant for the open_training_days, because they do not prolong
+      # the qualification any longer. Hence only training days from the beginning
+      # of the following year are relevant.
+      [start_of_period, start_of_qualification.end_of_year + 1.day].max
+    else
+      start_of_period
+    end
   end
 
   def sorted_courses_with_training_days
     @courses
-      .select { |course| course.training_days.to_f.positive? }.uniq
+      .uniq
+      .select { |course| course.training_days.to_f.positive? }
       .sort_by { |course| course.qualification_date }
       .reverse
-      .uniq
   end
 end

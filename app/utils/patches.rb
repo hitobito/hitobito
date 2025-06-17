@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module Patches
-  RUBY_HOME = Pathname(ENV["GEM_HOME"]).parent.parent.to_s # rubocop:disable Rails/EnvironmentVariableAccess
+  RUBY_HOME = Pathname(Gem::RUBYGEMS_DIR).parent.parent.to_s
   RAILS_ROOT = Pathname.new(File.expand_path("../../../", __FILE__))
   PATCHES_DIR = RAILS_ROOT.join(".patches")
   ALL_PATCHES = RAILS_ROOT.join(".patches.yml")

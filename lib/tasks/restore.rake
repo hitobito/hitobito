@@ -245,10 +245,13 @@ namespace :restore do
         attrs = object.attributes_before_type_cast.slice(*db_columns).except("search_column")
 
         columns = attrs.keys
-        values = attrs.values.map do |val|
+        values = attrs.map do |_key, val|
           case val
           when NilClass then "NULL"
-          when String, Time then "'#{val.inspect.delete_prefix('"').delete_suffix('"')}'"
+          when String, Time
+            object.class.connection.quote(
+              val.inspect.delete_prefix('"').delete_suffix('"')
+            )
           else val
           end
         end

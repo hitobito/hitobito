@@ -58,7 +58,7 @@ jobs:
       max-parallel: 5 # needed so we don't occupy all the runners with core waiting jobs and the wagon tests can never start
     steps:
       - name: Trigger ${{ matrix.wagon.name }} wagon tests
-        uses: Codex-/return-dispatch@v2
+        uses: carlobeltrame/return-dispatch@filter-workflow-runs
         id: run-wagon-tests
         with:
           token: ${{ secrets.WAGON_TESTS_GITHUB_TOKEN }}
@@ -75,7 +75,7 @@ jobs:
             }
 
       - name: Link to the triggered wagon tests run
-        run: 'echo "${{ matrix.wagon.name }} tests run: https://github.com/${{ matrix.wagon.owner }}/${{ matrix.wagon.repo }}/actions/runs/${{ steps.run-wagon-tests.outputs.run_id }}"'
+        run: 'echo "${{ matrix.wagon.name }} tests triggered: ${{ steps.run-wagon-tests.outputs.run_url }}"'
 
       - name: Wait for ${{ matrix.wagon.name }} wagon tests result
         uses: Codex-/await-remote-run@v1.0.0

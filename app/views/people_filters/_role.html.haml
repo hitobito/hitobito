@@ -10,7 +10,7 @@
     .col-10
       = select_tag('filters[role][role_type_ids][]',
                         people_filter_role_options(filter),
-                        class: 'form-control form-control-sm tom-select',
+                        class: 'form-select form-select-sm tom-select w-100',
                         "data-controller": "tom-select",
                         id: 'role-select',
                         multiple: true,
@@ -35,7 +35,7 @@
     .col-10
       = select_tag('filters[role][kind]',
                         people_filter_role_kind_options(filter),
-                        class: 'form-control form-control-sm w-100',
+                        class: 'form-select form-select-sm w-100',
                         id: 'role-kind-select',
                         multiple: false,
                         data: { chosen_no_results: t('global.chosen_no_results'), placeholder: t('.prompt_role_kind_placeholder') } )

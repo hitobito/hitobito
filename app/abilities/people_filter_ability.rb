@@ -9,14 +9,10 @@ class PeopleFilterAbility < AbilityDsl::Base
   on(::PeopleFilter) do
     permission(:contact_data).may(:new).all
     permission(:group_read).may(:new).in_same_group
-    permission(:group_read).may(:filter_criterion).in_same_group
     permission(:group_and_below_read).may(:new).in_same_group_or_below
-    permission(:group_and_below_read).may(:filter_criterion).in_same_group_or_below
     permission(:layer_read).may(:new).in_same_layer
-    permission(:layer_read).may(:filter_criterion).in_same_layer
     permission(:layer_full).may(:create, :destroy, :edit, :update).in_same_layer
     permission(:layer_and_below_read).may(:new).in_same_layer_or_below
-    permission(:layer_and_below_read).may(:filter_criterion).in_same_layer_or_below
     permission(:layer_and_below_full).may(:create, :destroy, :edit, :update).in_same_layer_or_below
   end
 end

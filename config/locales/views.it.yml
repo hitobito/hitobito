@@ -1844,6 +1844,7 @@ it:
 
   people_filters:
     form:
+      show_results: Mostra risultati
       save_search: Salvare la ricerca
       save_filter: Salvare il filtro
       save_filter_placeholder: Indicare un nome per salvare questo filtro
@@ -1869,6 +1870,7 @@ it:
         inactive_but_existing: inaktive aber zu einer anderen Zeit vorhandene Rollen
 
     attributes:
+      advice: Selezionare il campo
       title: Campi
       match: contiene
       not_match: non contiene niente
@@ -1888,9 +1890,9 @@ it:
 
     tag:
       title: Tags
-      prompt_tag_selection: Includere
+      prompt_tag_selection: Persone con tag
       prompt_tag_placeholder: Inserire i nomi dei tag desiderati
-      prompt_tag_absence_selection: Escludere
+      prompt_tag_absence_selection: Persone senza un tag
 
     tag_absence:
       prompt_tag_absence_selection: Escludere le persone che contengono almeno uno dei tag qui sotto
@@ -1913,7 +1915,7 @@ it:
       include_archived: Includi i ruoli archiviati
       prompt_role_placeholder: Inserire il nome del ruolo desiderato
       prompt_role_kind_placeholder: Inserire la validità desiderata
-      duration_title: Data chiave
+      duration_title: Periodo di
 
     qualification:
       title: Qualifiche

@@ -29,14 +29,6 @@ class Person::Filter::Chain
 
       YAML.dump(obj.to_hash.deep_stringify_keys)
     end
-
-    private
-
-    def find_filter_attr(attr, chain)
-      chain.filters.find do |filter|
-        filter.instance_variable_get(:@attr) == attr
-      end
-    end
   end
 
   attr_reader :filters

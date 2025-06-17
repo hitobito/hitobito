@@ -12,7 +12,7 @@
     .col-10.shown
       = select_tag('filters[tag][names][]',
                     tags_options[:present],
-                    class: 'form-control form-control-sm tom-select',
+                    class: 'form-select form-select-sm tom-select w-100',
                     "data-controller": "tom-select",
                     id: 'present-tag-select',
                     multiple: true,
@@ -23,7 +23,7 @@
     .col-10.shown
       = select_tag('filters[tag_absence][names][]',
                     tags_options[:absent],
-                    class: 'form-control form-control-sm tom-select',
+                    class: 'form-select form-select-sm tom-select w-100',
                     id: 'absent-tag-select',
                     "data-controller": "tom-select",
                     multiple: true,

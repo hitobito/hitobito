@@ -13,7 +13,7 @@
     .col-10.shown{"data-controller": "form-select"}
       = select_tag('filters[qualification][qualification_kind_ids][]',
                       people_filter_qualification_kind_options(filter),
-                      class: 'form-control form-control-sm tom-select w-100',
+                      class: 'form-select form-select-sm tom-select w-100',
                       id: 'qualification-select',
                       "data-controller": "tom-select",
                       multiple: true,
@@ -38,7 +38,7 @@
     .col-10.shown.d-flex.flex-column{"data-controller": "form-select"}
       = select_tag('filters[qualification][validity]',
                       people_filter_qualification_validity_options(filter),
-                      class: 'form-control form-control-sm',
+                      class: 'form-select form-select-sm w-100',
                       id: 'qualification-validity-select',
                       multiple: false,
                       data: { chosen_no_results: t('global.chosen_no_results'),

@@ -1793,6 +1793,7 @@ en:
 
   people_filters:
     form:
+      show_results: Show results
       save_search: Save search
       save_filter: Save filter
       save_filter_placeholder: Enter a name to save this filter
@@ -1817,6 +1818,7 @@ en:
         inactive: inaktive oder nie vorhandene Rollen
         inactive_but_existing: inaktive aber zu einer anderen Zeit vorhandene Rollen
     attributes:
+      advice: Choose field
       title: Fields
       match: contains
       not_match: enthält nicht
@@ -1836,8 +1838,8 @@ en:
 
     tag:
       title: Tags
-      prompt_tag_selection: Include
-      prompt_tag_placeholder: Tag name
+      prompt_tag_selection: People with tag
+      prompt_tag_placeholder: People without tag
       prompt_tag_absence_selection: Exclude
 
     tag_absence:
@@ -1859,7 +1861,7 @@ en:
       prompt_role_duration_until: until
       prompt_role_placeholder: Enter the desired role name
       prompt_role_kind_placeholder: Enter the desired validity
-      duration_title: Key date
+      duration_title: Perios of
       or_duration: oder
       include_archived: Archivierte Rollen miteinbeziehen
 

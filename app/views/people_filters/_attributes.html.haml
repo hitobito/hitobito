@@ -11,6 +11,6 @@
   #people_filter_attribute_forms
     = people_filter_attribute_controls(filter)
 
-  = select(:attribute, :filter, people_filter_attributes_for_select, { include_blank: "" }, { class: "form-select form-select-sm col-12 col-lg-3" })
+  = select(:attribute, :filter, people_filter_attributes_for_select, { include_blank: "#{t('.advice')}" }, { class: "form-select form-select-sm col-12 col-lg-3" })
 
 

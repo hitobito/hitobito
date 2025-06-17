@@ -4,5 +4,7 @@
 - # https://github.com/hitobito/hitobito.
 
 = turbo_stream.remove "#{params[:criterion]}-configuration"
+= turbo_stream.update "filter-advice" do
+  %label#filter-advice= t("people_filters.form.filter_advice_heading")
 = turbo_stream.update Dropdown::PeopleFilter::ID do
   = Dropdown::PeopleFilter.new(self, current_user, active_criterias).to_s

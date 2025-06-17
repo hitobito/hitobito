@@ -16,16 +16,16 @@
       = render "criterion", criterion: :qualification
       = render "criterion", criterion: :tag, force: @criterias.include?("tag_absence")
 
-    - unless entry.filter_chain.present?
-      %h3#filter-advice= t(".filter_advice_heading")
-
-    #filter-critera-dropdown
-      = Dropdown::PeopleFilter.new(self, current_user, @criterias).to_s
+    #filter-critera-dropdown.d-flex.flex-column
+      %label#filter-advice= t(".filter_advice_heading")
+      .div.mt-1
+        = Dropdown::PeopleFilter.new(self, current_user, @criterias).to_s
 
     .mt-4= render 'search_button', f: form
 
-  - if can?(:create, entry)
-    .mt-5
+  .mt-5
+    %h3= t('.save_filter')
+    - if can?(:create, entry)
       %label.required=PeopleFilter.human_attribute_name(:name)
       = form.input_field :name, placeholder: t('.save_filter_placeholder'), class: 'mb-3 ', required: false
 

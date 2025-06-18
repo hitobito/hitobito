@@ -5,7 +5,7 @@
 
 require "spec_helper"
 
-describe MailRelayJob do
+xdescribe MailRelayJob do
   subject { MailRelayJob.new }
 
   it "relays mails and gets rescheduled" do

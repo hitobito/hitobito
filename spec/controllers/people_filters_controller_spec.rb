@@ -23,6 +23,22 @@ describe PeopleFiltersController do
     end
   end
 
+  context "PUT edit" do
+    it "sets constant when editing existing filter" do
+      filter = PeopleFilter.create!(
+        group_id: group.id,
+        name: "NewFilter",
+        range: "deep",
+        filter_chain: {
+          role: {role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join("-")}
+        }
+      )
+      filter.save!
+      get :edit, params: {group_id: group.id, id: filter.id}
+      expect(assigns(:criterias)).to eq(['role'])
+    end
+  end
+
   context "POST create" do
     it "redirects to show for search" do
       expect do

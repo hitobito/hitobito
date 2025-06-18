@@ -122,9 +122,9 @@ describe Export::Tabular::People::TableDisplays do
     let(:participation) { event_participations(:top) }
     let(:person) { participation.person }
     let(:list) do
-      Event::Participation.where(id: participation.id)
-        .includes(person: [:phone_numbers, :additional_emails, :primary_group])
-        .references(person: [:phone_numbers, :additional_emails, :primary_group])
+      participations = Event::Participation.where(id: participation.id)
+      Event::Participation::PreloadParticipations.preload(participations)
+      participations
     end
     let(:question) { event_questions(:top_ov) }
     let(:top_course) { participation.event }
@@ -132,11 +132,14 @@ describe Export::Tabular::People::TableDisplays do
     subject { people_list }
 
     before do
-      TableDisplay.register_column(Event::Participation,
-        TableDisplays::PublicColumn,
-        [:"person.additional_information"])
-      TableDisplay.register_multi_column(Event::Participation,
-        TableDisplays::Event::Participations::QuestionColumn)
+      TableDisplay.register_column(
+        Event::Participation,
+        TableDisplays::PolymorphicPublicColumn,
+        [:"participant.additional_information"]
+      )
+      TableDisplay.register_multi_column(
+        Event::Participation, TableDisplays::Event::Participations::QuestionColumn
+      )
     end
 
     its(:attributes) do
@@ -150,10 +153,10 @@ describe Export::Tabular::People::TableDisplays do
     end
 
     it "includes additional person attributes if configured" do
-      table_display.selected = [:"person.additional_information"]
+      table_display.selected = [:"participant.additional_information"]
       person.update!(additional_information: "bla bla")
       expect(people_list.labels.last).to eq "Zusätzliche Angaben"
-      expect(people_list.attributes.last).to eq :"person.additional_information"
+      expect(people_list.attributes.last).to eq :"participant.additional_information"
       expect(people_list.data_rows.first.last).to eq "bla bla"
     end
 
@@ -167,8 +170,31 @@ describe Export::Tabular::People::TableDisplays do
     end
 
     it "does not include the same attribute twice" do
-      table_display.selected = [:"person.additional_information", :"person.additional_information"]
+      table_display.selected = [:"participant.additional_information", :"participant.additional_information"]
       expect(people_list.attributes.grep(/additional_information/).count).to eq 1
+    end
+
+    it "has assumptions" do
+      person.phone_numbers.create!(label: "foobar", number: "0790000000")
+
+      expect(subject.attributes).to include(:roles)
+      expect(subject).to respond_to(:build_attribute_labels)
+
+      expect(PhoneNumber.where(public: true).count).to be 1
+      first_number = PhoneNumber.where(public: true).first
+      expect(first_number.label).to eq "foobar"
+
+      people_ids = subject.send(:people_ids)
+      list = subject.list
+      expect(list).to be_an(Array).or be_a(ActiveRecord::Relation)
+
+      expect(people_ids).to match_array [person.id]
+
+      scope = PhoneNumber.where(public: true)
+        .where(contactable_id: people_ids, contactable_type: Person.sti_name)
+        .distinct_on(:label)
+
+      expect(scope.count).to be 1
     end
 
     it "does include dynamic attributes" do

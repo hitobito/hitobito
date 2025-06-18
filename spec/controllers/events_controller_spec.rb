@@ -205,7 +205,7 @@ describe EventsController do
       end
 
       it "sets @user_participation" do
-        p = Fabricate(:event_participation, event: events(:top_event), person: people(:top_leader))
+        p = Fabricate(:event_participation, event: events(:top_event), participant: people(:top_leader))
         sign_in(people(:top_leader))
 
         get :show, params: {group_id: groups(:top_layer).id, id: events(:top_event)}

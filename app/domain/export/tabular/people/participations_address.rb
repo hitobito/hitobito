@@ -8,7 +8,7 @@ module Export::Tabular::People
     self.row_class = ParticipationRow
 
     def people_ids
-      @people_ids ||= pluck_ids_from_list("event_participations.person_id")
+      @people_ids ||= pluck_ids_from_list("event_participations.participant_id")
     end
   end
 end

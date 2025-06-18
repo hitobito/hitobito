@@ -53,7 +53,7 @@ class Event::Invitation < ActiveRecord::Base
   end
 
   def related_participation
-    Event::Participation.find_by(person_id: person_id,
+    Event::Participation.find_by(participant_id: person_id,
       event_id: event_id)
   end
 end

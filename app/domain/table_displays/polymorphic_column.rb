@@ -22,7 +22,7 @@ module TableDisplays
       relation, column_name = path.to_s.split(".")
       association = model_class.reflect_on_association(relation)
 
-      subselects = SUBTYPE_MAPPINGS[relation].each do |type_model|
+      subselects = SUBTYPE_MAPPINGS[relation.to_sym].each do |type_model|
         [type_model.tableize.tr("/", "_"), type_model]
       end.map do |table, type|
         "SELECT #{table}.#{column_name}, '#{type}' AS type FROM #{table}"

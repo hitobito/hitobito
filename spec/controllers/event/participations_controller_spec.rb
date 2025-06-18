@@ -894,9 +894,9 @@ describe Event::ParticipationsController do
     end
 
     it "GET#index lists extra person column" do
-      TableDisplay.register_column(Event::Participation, TableDisplays::PublicColumn, "person.gender")
+      TableDisplay.register_column(Event::Participation, TableDisplays::PolymorphicPublicColumn, "participant.gender")
       table_display = top_leader.table_display_for(Event::Participation)
-      table_display.selected = %w[person.gender]
+      table_display.selected = %w[participant.gender]
       table_display.save!
 
       get :index, params: {group_id: group.id, event_id: course.id}
@@ -974,7 +974,7 @@ describe Event::ParticipationsController do
       let!(:event_role) { Fabricate(Event::Course::Role::Participant.name, participation: participation) }
 
       it "GET#index lists extra public column" do
-        user.table_display_for(Event::Participation).update!(selected: %w[person.company_name])
+        user.table_display_for(Event::Participation).update!(selected: %w[participant.company_name])
 
         get :index, params: {group_id: group.id, event_id: course.id}
         expect(dom).to have_checked_field "Firmenname"
@@ -982,7 +982,7 @@ describe Event::ParticipationsController do
       end
 
       it "GET#index lists extra show_full column" do
-        user.table_display_for(Event::Participation).update!(selected: %w[person.birthday])
+        user.table_display_for(Event::Participation).update!(selected: %w[participant.birthday])
 
         get :index, params: {group_id: group.id, event_id: course.id}
         expect(dom).to have_checked_field "Geburtstag"
@@ -994,7 +994,7 @@ describe Event::ParticipationsController do
       let!(:event_role) { Fabricate(Event::Course::Role::Participant.name, participation: participation) }
 
       it "GET#index lists extra public column" do
-        user.table_display_for(Event::Participation).update!(selected: %w[person.company_name])
+        user.table_display_for(Event::Participation).update!(selected: %w[participant.company_name])
 
         get :index, params: {group_id: group.id, event_id: course.id}
         expect(dom).to have_checked_field "Firmenname"
@@ -1002,7 +1002,7 @@ describe Event::ParticipationsController do
       end
 
       it "GET#index lists extra show_full column, but does not expose data" do
-        user.table_display_for(Event::Participation).update!(selected: %w[person.birthday])
+        user.table_display_for(Event::Participation).update!(selected: %w[participant.birthday])
 
         get :index, params: {group_id: group.id, event_id: course.id}
         expect(dom).to have_checked_field "Geburtstag"
@@ -1014,7 +1014,7 @@ describe Event::ParticipationsController do
       let!(:event_role) { Fabricate(Event::Role::Leader.name, participation: participation) }
 
       it "GET#index lists extra public column" do
-        user.table_display_for(Event::Participation).update!(selected: %w[person.company_name])
+        user.table_display_for(Event::Participation).update!(selected: %w[participant.company_name])
 
         get :index, params: {group_id: group.id, event_id: course.id}
         expect(dom).to have_checked_field "Firmenname"
@@ -1022,7 +1022,7 @@ describe Event::ParticipationsController do
       end
 
       it "GET#index lists extra show_full column" do
-        user.table_display_for(Event::Participation).update!(selected: %w[person.birthday])
+        user.table_display_for(Event::Participation).update!(selected: %w[participant.birthday])
 
         get :index, params: {group_id: group.id, event_id: course.id}
         expect(dom).to have_checked_field "Geburtstag"

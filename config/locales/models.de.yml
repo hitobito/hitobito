@@ -214,6 +214,9 @@ de:
       assignment:
         one: Auftrag
         other: Aufträge
+      bounce:
+        one: Bounce
+        other: Bounces
       calendar:
         one: Kalender-Feed
         other: Kalender-Feeds
@@ -436,6 +439,12 @@ de:
         town: Ort
         country: Land
         postbox: Postfach
+
+      bounces:
+        email: E-Mail
+        count: Anzahl Bounces
+        blocked_at: Sperrzeitpunkt
+        mailing_list_ids: Abo-IDs
 
       cantons:
         ag: Aargau

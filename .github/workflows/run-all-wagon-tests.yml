@@ -1,0 +1,97 @@
+name: 'Wagon tests'
+
+on:
+  workflow_dispatch:
+    inputs:
+      core_ref:
+        description: Use a specific version of the core for the workflow run. Defaults to master.
+        default: ""
+      wagon_dependency_ref:
+        description: Use a specific version of the wagon dependency for the workflow run. Defaults to master.
+        default: ""
+      wagon_ref:
+        description: Use a specific version of the wagon dependency for the workflow run. Defaults to master.
+        default: "master"
+  push:
+    branches: [ master ]
+    paths-ignore:
+      - 'doc/**'
+      - '**.md'
+      - 'VERSION'
+  pull_request:
+    paths-ignore:
+      - 'doc/**'
+      - '**.md'
+      - 'VERSION'
+  pull_request_target:
+    types: [labeled]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }} # auto-cancel previous runs of this same workflow on the same branch, if any are still running
+  cancel-in-progress: ${{ github.ref != 'heads/refs/master' }} # never cancel master, to allow finding the exact merge that broke a wagon
+
+jobs:
+  find-wagons:
+    name: 'Find all Puzzle-managed wagons'
+    if: ${{ github.event_name != 'pull_request_target' || contains(github.event.pull_request.labels.*.name, 'run-wagon-tests!') }}
+    runs-on: 'ubuntu-latest'
+    outputs:
+      wagons: ${{ steps.list-wagon-repositories.outputs.wagons }}
+
+    steps:
+      - name: 'List wagon repositories'
+        id: list-wagon-repositories
+        run: |
+          WAGONS=$(gh repo list hitobito -L 100 --no-archived --json owner,name | \
+            jq 'map(select(.name | test("^hitobito_"))) | map({ owner: .owner.login, repo: .name, name: .name | match("^hitobito_((?!bdp).+)$").captures[0].string })')
+          echo $WAGONS
+          echo "wagons=$WAGONS" | tr -d "\n" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.WAGON_TESTS_GITHUB_TOKEN }}
+
+  run-wagon-tests:
+    name: 'Run ${{ matrix.wagon.name }} wagon tests'
+    runs-on: 'ubuntu-latest'
+    needs:
+      - find-wagons
+    strategy:
+      fail-fast: false
+      matrix:
+        wagon: ${{ fromJSON(needs.find-wagons.outputs.wagons) }}
+      max-parallel: 5 # needed so we don't occupy all the runners with core waiting jobs and the wagon tests can never start
+    steps:
+      - name: Trigger ${{ matrix.wagon.name }} wagon tests
+        uses: carlobeltrame/return-dispatch@filter-workflow-runs
+        id: run-wagon-tests
+        with:
+          token: ${{ secrets.WAGON_TESTS_GITHUB_TOKEN }}
+          repo: ${{ matrix.wagon.repo }}
+          owner: ${{ matrix.wagon.owner }}
+          ref: master
+          workflow: tests.yml
+          workflow_timeout_seconds: 21600 # wait for up to 6 hours
+          workflow_job_steps_retry_seconds: 10 # default is 5, set it higher to not strain the API limit too much
+          workflow_inputs: |
+            {
+              "core_ref": "${{ inputs.core_ref || github.ref || 'master' }}",
+              "wagon_dependency_ref": "${{ inputs.wagon_dependency_ref || 'master' }}"
+            }
+
+      - name: Link to the triggered wagon tests run
+        run: 'echo "${{ matrix.wagon.name }} tests triggered: ${{ steps.run-wagon-tests.outputs.run_url }}"'
+
+      - name: Wait for ${{ matrix.wagon.name }} wagon tests result
+        uses: Codex-/await-remote-run@v1.0.0
+        with:
+          token: ${{ secrets.WAGON_TESTS_GITHUB_TOKEN }}
+          repo: ${{ matrix.wagon.repo }}
+          owner: ${{ matrix.wagon.owner }}
+          run_id: ${{ steps.run-wagon-tests.outputs.run_id }}
+          run_timeout_seconds: 21600 # wait for up to 6 hours
+          poll_interval_ms: 10000 # poll every 10 seconds
+
+      - name: Cancel ${{ matrix.wagon.name }} wagon tests
+        if: ${{ cancelled() && steps.run-wagon-tests.outputs.run_id }}
+        run: 'gh api --method POST -H "Accept: application/vnd.github+json" /repos/${{ matrix.wagon.owner }}/${{ matrix.wagon.repo }}/actions/runs/${{ steps.run-wagon-tests.outputs.run_id }}/cancel'
+        env:
+          GH_TOKEN: ${{ secrets.WAGON_TESTS_GITHUB_TOKEN }}

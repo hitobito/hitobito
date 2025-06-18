@@ -13,6 +13,10 @@ describe MailchimpSynchronizationJob do
 
   subject { MailchimpSynchronizationJob.new(mailing_list.id) }
 
+  before do
+    mailing_list.update!(mailchimp_api_key: "abc", mailchimp_list_id: "1")
+  end
+
   it "sets mailing_list state to syncing if jobs eunqueues" do
     expect do
       subject.enqueue!
@@ -51,6 +55,15 @@ describe MailchimpSynchronizationJob do
     expect(mailing_list.mailchimp_syncing).to be false
     expect(mailing_list.mailchimp_last_synced_at).to be_nil
     expect(mailing_list.mailchimp_result.state).to eq :failed
+  end
+
+  it "noops if not a mailchimp list" do
+    subject.enqueue!
+
+    mailing_list.update!(mailchimp_api_key: nil)
+    expect_any_instance_of(Synchronize::Mailchimp::Synchronizator).not_to receive(:perform)
+    Delayed::Worker.new.work_off
+    expect(mailing_list.mailchimp_syncing).to be false
   end
 
   describe "setting" do

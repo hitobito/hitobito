@@ -220,6 +220,10 @@ fr:
         one: Commandes
         many: Commandes
         other: Commandes
+      bounce:
+        one: Bounce
+        many: Bounces
+        other: Bounces
       calendar:
         one: Feed du calendrier
         many: Feed du calendrier
@@ -500,6 +504,12 @@ fr:
         town: Ville
         country: Pays
         postbox: Case postale
+
+      bounces:
+        email: E-Mail
+        count: Anzahl Bounces
+        blocked_at: Sperrzeitpunkt
+        mailing_list_ids: Abo-IDs
 
       cantons:
         ag: Argovie
@@ -979,7 +989,7 @@ fr:
         label: Weitere E-Mail Typ
         public: Öffentlich
         mailings: Versand
-        invoices: Rechnung
+        invoices: Facture
 
       mailing_list:
         name: Nom

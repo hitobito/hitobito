@@ -20,7 +20,7 @@ class MailchimpSynchronizationJob < BaseJob
   def perform
     return unless FeatureGate.enabled?("mailchimp")
 
-    sync.perform
+    sync.perform if mailing_list.mailchimp?
   end
 
   def success(_job)

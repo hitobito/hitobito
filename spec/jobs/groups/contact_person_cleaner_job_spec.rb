@@ -26,7 +26,10 @@ describe Groups::ContactPersonCleanerJob do
 
   it "clears contact person from group when no role exists and creates log entry" do
     person.roles.destroy_all
-    expect { subject.perform }.to change { group.reload.contact }.from(person).to(nil)
+    expect { subject.perform }
+      .to change { group.reload.contact }.from(person).to(nil)
+      .and change { HitobitoLogEntry.count }.by(1)
+
     log_entry = HitobitoLogEntry.last
     expect(log_entry.message).to eq "Contact person of Bottom One was removed, due to person not having any active member role in Bottom One"
     expect(log_entry.level).to eq "info"
@@ -35,6 +38,8 @@ describe Groups::ContactPersonCleanerJob do
   end
 
   it "does nothing when contact person does still have role" do
-    expect { subject.perform }.not_to change { group.reload.contact }
+    expect { subject.perform }
+      .to not_change { group.reload.contact }
+      .and not_change { HitobitoLogEntry.count }
   end
 end

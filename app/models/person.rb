@@ -121,7 +121,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   SEARCHABLE_ATTRS = [
     :first_name, :last_name, :company_name, :nickname, :email, :street, :housenumber, :zip_code, :town,
     :country, :birthday, :additional_information, {phone_numbers: [:number],
-                                                   social_accounts: [:name], additional_emails: [:email]}
+                                                   social_accounts: [:name],
+                                                   additional_emails: [:email]}
   ]
 
   GENDERS = %w[m w].freeze

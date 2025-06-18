@@ -7,10 +7,12 @@ on:
     paths-ignore:
       - 'doc/**'
       - '**.md'
+      - 'VERSION'
   pull_request:
     paths-ignore:
       - 'doc/**'
       - '**.md'
+      - 'VERSION'
 
 jobs:
   rubocop:

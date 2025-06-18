@@ -224,12 +224,13 @@ describe PeopleController do
             get :index, params: {group_id: group, range: "layer"}
 
             expect(assigns(:people).collect(&:id)).to match_array(
-              [people(:bottom_member),
+              [
+                people(:bottom_member),
                 @bl_leader,
                 @bg_leader,
                 @bg_member,
                 @tg_member # also has Group::BottomGroup::Leader role
-].collect(&:id)
+              ].collect(&:id)
             )
           end
 
@@ -445,7 +446,7 @@ describe PeopleController do
                          "111" =>
                            {number: "031 111 1111", translated_label: "Privat", public: 1},
                          "222" =>
-                                         {number: "", translated_label: "Arbeit", public: 1}
+                           {number: "", translated_label: "Arbeit", public: 1}
                        }}
             }
             expect(assigns(:person)).to be_valid
@@ -463,9 +464,12 @@ describe PeopleController do
             put :update, params: {
               group_id: group.id,
               id: person.id,
-              person: {town: "testtown",
-                       phone_numbers_attributes: {n.id.to_s =>
-                                       {number: "031 111 2222", translated_label: "Privat", public: 0, id: n.id}}}
+              person: {
+                town: "testtown",
+                phone_numbers_attributes: {
+                  n.id.to_s => {number: "031 111 2222", translated_label: "Privat", public: 0, id: n.id}
+                }
+              }
             }
           end.not_to change { PhoneNumber.count }
           number = person.reload.phone_numbers.first
@@ -485,9 +489,12 @@ describe PeopleController do
               group_id: group.id,
               id: person.id,
               locale: :fr,
-              person: {town: "testtown",
-                       phone_numbers_attributes: {n.id.to_s =>
-                                       {number: "031 111 2222", translated_label: "mère", public: 0, id: n.id}}}
+              person: {
+                town: "testtown",
+                phone_numbers_attributes: {
+                  n.id.to_s => {number: "031 111 2222", translated_label: "mère", public: 0, id: n.id}
+                }
+              }
             }
           end.not_to change { PhoneNumber.count }
 
@@ -507,9 +514,12 @@ describe PeopleController do
             put :update, params: {
               group_id: group.id,
               id: person.id,
-              person: {town: "testtown",
-                       phone_numbers_attributes: {n.id.to_s =>
-                                       {number: "031 111 1111", translated_label: "Privat", public: 0, id: n.id, _destroy: true}}}
+              person: {
+                town: "testtown",
+                phone_numbers_attributes: {
+                  n.id.to_s => {number: "031 111 1111", translated_label: "Privat", public: 0, id: n.id, _destroy: true}
+                }
+              }
             }
           end.to change { PhoneNumber.count }.by(-1)
           expect(person.reload.phone_numbers).to be_blank
@@ -521,9 +531,12 @@ describe PeopleController do
             put :update, params: {
               group_id: group.id,
               id: person.id,
-              person: {town: "testtown",
-                       phone_numbers_attributes: {n.id.to_s =>
-                                       {number: "   ", translated_label: "Privat", public: 0, id: n.id}}}
+              person: {
+                town: "testtown",
+                phone_numbers_attributes: {
+                  n.id.to_s => {number: "   ", translated_label: "Privat", public: 0, id: n.id}
+                }
+              }
             }
           end.to change { PhoneNumber.count }.by(-1)
           expect(person.reload.phone_numbers).to be_blank

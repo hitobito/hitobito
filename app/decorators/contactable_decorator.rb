@@ -47,7 +47,7 @@ module ContactableDecorator
 
   def primary_email
     if email.present?
-      content_tag(:p, h.mail_to(email))
+      content_tag(:p, safe_join([h.mail_to(email), block_icon(email)].compact_blank, " "))
     end
   end
 
@@ -59,7 +59,7 @@ module ContactableDecorator
 
   def all_additional_emails(only_public = true)
     nested_values(additional_emails, only_public) do |email|
-      [h.mail_to(email.value), invoice_icon(email)]
+      [h.mail_to(email.value), [block_icon(email.value), invoice_icon(email)]]
     end
   end
 
@@ -75,6 +75,13 @@ module ContactableDecorator
     end
   end
 
+  def block_icon(email)
+    return unless Bounce.blocked?(email)
+
+    h.icon("exclamation-triangle", class: "text-danger",
+      title: h.t("contactable.contact_data.blocked_mail_tooltip_title"))
+  end
+
   private
 
   def nested_values(values, only_public)
@@ -82,7 +89,7 @@ module ContactableDecorator
       next unless !only_public || v.public?
 
       val, suffix = block_given? ? yield(v) : v.value
-      h.value_with_muted(val, safe_join([v.translated_label, suffix].compact_blank, " "))
+      h.value_with_muted(val, safe_join([v.translated_label, *suffix].compact_blank, " "))
     end.compact
 
     html = h.safe_join(html, br)

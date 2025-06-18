@@ -2,8 +2,6 @@
 
 ## unreleased
 - Referenznummer von Rechnung wird neu auch auf Empfangsschein angezegit (hitobito_sww#238)
-
-## Version 2.5
 - Sortierung von Rechnungstabelle wird bei PDF Exports beachtet (hitobito_sww#237)
 
 ## Version 2.5
@@ -18,9 +16,8 @@
 - Im Länder Dropdown werden alle Länder aufgelistet ohne dass mit der Tastatur gefiltert werden muss (#3364)
 - Es können Sammelrechnungen mit Rechnungsposten auf Basis von aktiven Rollen konfiguriert werden (hitobito_swb#18)
 - Teilnahmen haben neu einen Knopf um auf das Personenprofil zu navigieren
-
-## Version 2.5
 - Eine Rechnung kann im Originalzustand gedruckt werden, bzw. ohne Mahnungen (hitobito_sww#173)
+- E-Mail-Bounces werden erfasst und angezeigt. Nach 3 Bounces wird der Mailversand gestoppt. (hitobito#3053)
 
 ## Version 2.5
 

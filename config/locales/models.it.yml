@@ -219,6 +219,10 @@ it:
         one: Ordine
         many: Ordini
         other: Ordini
+      bounce:
+        one: Bounce
+        many: Bounces
+        other: Bounces
       calendar:
         one: Registrazione nel calendario
         many: Registrazioni nel calendario
@@ -499,6 +503,12 @@ it:
         town: Ort
         country: Land
         postbox: Postfach
+
+      bounces:
+        email: E-Mail
+        count: Anzahl Bounces
+        blocked_at: Sperrzeitpunkt
+        mailing_list_ids: Abo-IDs
 
       cantons:
         ag: Argovia

@@ -134,6 +134,7 @@ fr:
 
     contact_data:
       invoices_tooltip_title: Wird für Rechnungen verwendet
+      blocked_mail_tooltip_title: E-Mail ist aufgrund von Bounces blockiert
 
     public_check_box:
       tooltip: Les entrées privées ne sont visibles qu'au sein du groupe auquel tu appartiens. Les responsables d'autres groupes peuvent voir les entrées identifiées en tant qu'entrées publiques si toi-même, tu fais partie d'une maîtrise.
@@ -1192,7 +1193,7 @@ fr:
       email: Liste de diffusion (e-mail)
       mailchimp: MailChimp
     imap_mails:
-      manage: e-mails
+      manage: Postfach
       mailboxes:
         inbox: entrée
         spam: spam
@@ -1224,6 +1225,8 @@ fr:
           many: "%{count} e-mails déplacés avec succès"
           other: "%{count} e-mails déplacés avec succès"
         server_error: La liaison avec le serveur mail est impossible pour l'instant, veuillez réessayer plus tard svp.
+    bounces:
+      manage: Bounces
     recipient_counts:
       index:
         recipient_info:
@@ -1357,7 +1360,7 @@ fr:
     admin: "Paramètres"
     admin/event_feed: "Intégrer le calendrier"
     admin/oauth_authorizations: "Autoriser OAuth"
-    imap_mails: "e-mails"
+    imap_mails: "Mails und Bounces"
     invoices: "Factures"
     invoices/single: "Factures individuelles"
     invoices/evaluations: "Pièce comptable"

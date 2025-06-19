@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class GroupResource < ApplicationResource
-  primary_endpoint 'groups', [:index, :show]
+  primary_endpoint "groups", [:index, :show]
 
   with_options writable: false do
     attribute :name, :string

@@ -18,6 +18,17 @@ module GroupsHelper
     link_to(url, url)
   end
 
+  def format_self_registration_notification_email(group)
+    email = group.self_registration_notification_email
+
+    if email.present?
+      safe_join([
+        mail_to(email),
+        group.block_icon(email)
+      ].compact_blank, " ")
+    end
+  end
+
   def format_nextcloud_url(group)
     url = group.nextcloud_organizer&.nextcloud_url
     return unless url

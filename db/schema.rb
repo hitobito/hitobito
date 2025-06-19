@@ -135,6 +135,16 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_16_085323) do
     t.index ["job_name"], name: "index_background_job_log_entries_on_job_name"
   end
 
+  create_table "bounces", force: :cascade do |t|
+    t.string "email", null: false
+    t.integer "count", default: 0, null: false
+    t.datetime "blocked_at"
+    t.integer "mailing_list_ids", array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_bounces_on_email", unique: true
+  end
+
   create_table "calendar_groups", force: :cascade do |t|
     t.bigint "calendar_id", null: false
     t.bigint "group_id", null: false
@@ -756,6 +766,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_16_085323) do
     t.string "date_location_text"
     t.string "uid"
     t.integer "bounce_parent_id"
+    t.integer "blocked_count", default: 0
     t.index ["invoice_list_id"], name: "index_messages_on_invoice_list_id"
     t.index ["mailing_list_id"], name: "index_messages_on_mailing_list_id"
     t.index ["sender_id"], name: "index_messages_on_sender_id"

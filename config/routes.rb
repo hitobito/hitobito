@@ -313,6 +313,7 @@ Hitobito::Application.routes.draw do
 
         resources :mailchimp_synchronizations, only: [:create]
         resources :recipient_counts, controller: 'mailing_lists/recipient_counts', only: [:index]
+        resources :bounces, only: [:index]
       end
 
       resources :calendars do
@@ -343,12 +344,14 @@ Hitobito::Application.routes.draw do
     get 'hitobito_log_entries(/:category)', to: 'hitobito_log_entries#index',
                                             as: :hitobito_log_entries
 
-    scope 'mailing_lists', module: :mailing_lists do
-      scope 'imap_mails' do
+    scope 'mails', module: :mails do
+      scope 'imap' do
         get ':mailbox' => 'imap_mails#index', as: :imap_mails
         delete ':mailbox' => 'imap_mails#destroy', as: :imap_mails_destroy
         patch ':mailbox/move' => 'imap_mails_move#create', as: :imap_mails_move
       end
+
+      resources :bounces, only: [:index]
     end
 
     resources :qualification_kinds

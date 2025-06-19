@@ -413,6 +413,10 @@ describe Role do
     end
 
     context "contact data callback" do
+      it "updates updated_at on person when associated role changed" do
+        expect { subject.update_attribute :start_on, Time.zone.today }.to change { person.updated_at }
+      end
+
       it "sets contact data flag on person" do
         subject.type = "Group::BottomLayer::Leader"
         subject.save!
@@ -737,9 +741,9 @@ describe Role do
         role.group = groups(:top_group)
         role.type = Group::TopGroup::Leader.sti_name
         role.save!
-      end.to change { PaperTrail::Version.count }.by(1)
+      end.to change { PaperTrail::Version.count }.by(2)
 
-      version = PaperTrail::Version.order(:created_at, :id).last
+      version = PaperTrail::Version.order(:created_at, :id).first
       expect(version.event).to eq("create")
       expect(version.main).to eq(person)
     end
@@ -748,9 +752,9 @@ describe Role do
       role = person.roles.first
       expect do
         role.update!(label: "Foo")
-      end.to change { PaperTrail::Version.count }.by(1)
+      end.to change { PaperTrail::Version.count }.by(2)
 
-      version = PaperTrail::Version.order(:created_at, :id).last
+      version = PaperTrail::Version.order(:created_at, :id).first
       expect(version.event).to eq("update")
       expect(version.main).to eq(person)
     end
@@ -758,11 +762,11 @@ describe Role do
     context "on destroy" do
       it "with role too young to archive" do
         role = person.roles.first
+        role.created_at = (Settings.role.minimum_days_to_archive - 1).days.ago
         expect(role.created_at).to be > Settings.role.minimum_days_to_archive.days.ago
-
         expect do
           role.destroy!
-        end.not_to change { PaperTrail::Version.count }
+        end.to change { PaperTrail::Version.count }.by(1)
       end
 
       it "with role old enough to archive" do
@@ -771,7 +775,7 @@ describe Role do
 
         expect do
           role.destroy!
-        end.to change { PaperTrail::Version.count }.by(1)
+        end.to change { PaperTrail::Version.count }.by(2)
 
         version = PaperTrail::Version.order(:created_at, :id).last
         expect(version.event).to eq("update")

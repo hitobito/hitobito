@@ -35,7 +35,7 @@ describe PeopleFiltersController do
       )
       filter.save!
       get :edit, params: {group_id: group.id, id: filter.id}
-      expect(assigns(:criterias)).to eq(['role'])
+      expect(assigns(:criterias)).to eq(["role"])
     end
   end
 

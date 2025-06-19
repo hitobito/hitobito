@@ -25,7 +25,7 @@ module PeopleFilterHelper
 
   def people_filter_role_kind_options(filter)
     list = Person::Filter::Role::KINDS.map { |kind| [t("people_filters.form.filters_role_kind.#{kind}"), kind] }
-    options_from_collection_for_select(list, :second, :first, people_filter_selected_values(filter, :kinds))
+    options_from_collection_for_select(list, :second, :first, people_filter_selected_values(filter, :kind))
   end
 
   def people_filter_tags_options(filter_chain)

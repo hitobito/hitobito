@@ -25,12 +25,7 @@ module AbilityDsl
     def all_permissions
       @all_permissions ||= begin
         permissions = user.roles.collect(&:permissions).flatten.uniq
-        Role::PermissionImplications.each do |given, implicated|
-          if permissions.include?(given) && !permissions.include?(implicated)
-            permissions << implicated
-          end
-        end
-        permissions
+        expand_permission_with_implications(permissions)
       end
     end
 
@@ -68,8 +63,9 @@ module AbilityDsl
 
       init_permission_groups
       init_permission_layers
-
       collect_group_ids!
+
+      init_implicit_permission_groups
     end
 
     def init_permission_groups
@@ -85,6 +81,40 @@ module AbilityDsl
       @permission_layer_ids = LAYER_PERMISSIONS.each_with_object({}) do |permission, hash|
         hash[permission] = layer_ids(@permission_group_ids[permission])
       end
+    end
+
+    def init_implicit_permission_groups
+      Role::RelatedGroupPermissionImplications.each do |trigger_permission, permission_configs|
+        next unless all_permissions.include?(trigger_permission)
+
+        # Find the layer groups associated with the user's trigger permission.
+        layer_group_ids = user.groups_with_permission(trigger_permission).map(&:layer_group_id).uniq
+        next if layer_group_ids.empty?
+
+        permission_configs.each do |related_group_permission, related_group_classes|
+          all_permissions_to_grant = expand_permission_with_implications(related_group_permission)
+          target_group_ids = Group.where(
+            type: Array(related_group_classes).map(&:sti_name),
+            layer_group_id: layer_group_ids
+          ).pluck(:id)
+
+          grant(all_permissions_to_grant, target_group_ids) unless target_group_ids.empty?
+        end
+      end
+    end
+
+    def grant_groups_permissions(permissions, group_ids)
+      permissions.each do |permission|
+        self.all_permissions |= [permission]
+        @permission_group_ids[permission] |= group_ids
+      end
+    end
+
+    # Expand a single permission to include all its implications.
+    def expand_permission_with_implications(base_permissions)
+      Role::PermissionImplications.each_with_object(Array(base_permissions)) do |(given, implicated), expanded_permissions|
+        expanded_permissions.concat(Array(implicated)) if expanded_permissions.include?(given)
+      end.uniq
     end
 
     def collect_group_ids!

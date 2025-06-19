@@ -62,4 +62,101 @@ describe PeopleFilterHelper do
       expect(people_filter_attribute_value("company", "false")).to eq "nein"
     end
   end
+
+  describe "#people_filter_filter_options" do
+    describe "qualifications" do
+      let(:filter) do
+        Person::Filter::Qualification.new("qualification", attrs)
+      end
+
+      let(:selected_kind_array) { [QualificationKind.first.id, QualificationKind.second.id] }
+
+      let(:attrs) do
+        {
+          qualification_kind_ids: selected_kind_array,
+          validity: "all",
+          match: "one"
+        }
+      end
+
+      it "returns qualification kind options with selected" do
+        html = helper.people_filter_qualification_kind_options(filter)
+        QualificationKind.list.without_deleted.each do |kind|
+          if selected_kind_array.include?(kind.id)
+            expect(html).to include("<option selected=\"selected\" value=\"#{kind.id}\">#{kind.label}</option>")
+            next
+          end
+          expect(html).to include("<option value=\"#{kind.id}\">#{kind.label}</option>")
+        end
+      end
+
+      it "returns qualification kind options without selected" do
+        html = helper.people_filter_qualification_kind_options(nil)
+        QualificationKind.list.without_deleted.each do |kind|
+          expect(html).to include("<option value=\"#{kind.id}\">#{kind.label}</option>")
+        end
+      end
+
+      it "returns qualification validity options with selected" do
+        html = helper.people_filter_qualification_validity_options(filter)
+        expect(html).to include("<option selected=\"selected\" value=\"#{attrs[:validity]}\">Alle</option>")
+      end
+    end
+
+    describe "roles" do
+      let(:filter) { Person::Filter::Role.new("roles", attrs) }
+      let(:selected_types_array) { [Group::BottomLayer::Leader.id, Group::GlobalGroup::Member.id] }
+      let(:attrs) do
+        {
+          role_type_ids: selected_types_array,
+          kind: "active"
+        }
+      end
+
+      it "returns role types options with selected" do
+        allow(view).to receive(:group).and_return(Group.first)
+        html = helper.people_filter_role_options(filter)
+        expect(html).to include("<option selected=\"selected\" value=\"#{Group::GlobalGroup::Member.id}\">Bottom Layer -&gt; Global Group -&gt; Member</option>")
+        expect(html).to include("<option selected=\"selected\" value=\"#{Group::BottomLayer::Leader.id}\">Bottom Layer -&gt; Leader</option>")
+      end
+
+      it "returns role kinds options without selected" do
+        html = helper.people_filter_role_kind_options(nil)
+        Person::Filter::Role::KINDS.each do |kind|
+          expect(html).to include("<option value=\"#{kind}\">#{t("people_filters.form.filters_role_kind.#{kind}")}</option>")
+        end
+      end
+
+      it "returns role kinds options with selected" do
+        html = helper.people_filter_role_kind_options(filter)
+        expect(html).to include("<option selected=\"selected\" value=\"active\">aktive Rollen</option>")
+      end
+    end
+
+    describe "tags" do
+      let(:present_tags) { [Fabricate(:tag), Fabricate(:tag)] }
+      let(:absent_tags) { [Fabricate(:tag), Fabricate(:tag)] }
+      let(:filter_chain) do
+        {
+          tag: Person::Filter::Tag.new("tag", {names: present_tags}),
+          tag_absence: Person::Filter::TagAbsence.new("tag", {names: absent_tags})
+        }
+      end
+
+      it "returns tag options with selected" do
+        html_hash = helper.people_filter_tags_options(filter_chain)
+        check_tag_options(present_tags, html_hash[:present], absent_tags)
+        check_tag_options(absent_tags, html_hash[:absent], present_tags)
+      end
+
+      def check_tag_options(tag_array, html, non_selected)
+        tag_array.each do |tag|
+          expect(html).to include("<option selected=\"selected\" value=\"#{tag}\">#{tag}</option>")
+        end
+        non_selected.each do |tag|
+          expect(html).to include("<option value=\"#{tag}\">#{tag}</option>")
+        end
+      end
+    end
+  end
 end

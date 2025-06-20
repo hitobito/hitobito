@@ -27,8 +27,8 @@ class ChangelogReader
 
   private
 
-  VERSION_NUMBER_PATTERN = /^## Version ((\d+\.)?(\d+|\*|x))$/i
-  UNRELEASED_PATTERN = /^## unreleased$/i
+  VERSION_NUMBER_PATTERN = /^## +Version +((\d+\.)?(\d+|\*|x)) *$/i
+  UNRELEASED_PATTERN = /^## +unreleased *$/i
 
   def collect_changelog_data
     changelog_files_content = read_changelog_files(changelog_file_paths)

@@ -31,9 +31,10 @@ defaults:
   run:
     working-directory: hitobito
 
+permissions:
+  contents: write
 jobs:
   wagon_patches:
-    if: github.event.pull_request.merged == true
     runs-on: "ubuntu-22.04"
     env:
       HEADLESS: true
@@ -46,8 +47,6 @@ jobs:
       RAILS_TEST_DB_NAME: hitobito_test
       RAILS_ENV: test
       DISABLE_TEST_SCHEMA_MAINTENANCE: true
-    permissions:
-      contents: write
 
     services:
       postgres:
@@ -85,21 +84,13 @@ jobs:
           core_ref: ${{ inputs.core_ref }}
           wagon_dependency_ref: ${{ inputs.wagon_dependency_ref }}
 
-      # Step 3: Configure Git
-      - name: Configure Git
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
       - name: Run ${{ inputs.wagon_repository }} patch generation
         working-directory: ${{ inputs.wagon_repository }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           bundle exec rake app:wagon:patches:generate
-          git add .patches.yml
-          git status
-          git config user.name "Github Action Patches updater"
-          git config user.email "robot@puzzle.ch"
-          git commit -m "Updating patches" || true
-          git push
+
+      - name: Commit patches
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          file_pattern: ".patches.yml"
+          repository: ${{ inputs.wagon_repository }}

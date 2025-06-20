@@ -9,30 +9,18 @@ class Person::ImpersonationController < ApplicationController
 
   def create
     person = Person.find(params[:person_id])
-    return redirect_back(fallback_location: root_path) if person == current_user || origin_user
-    taker = current_user
-    session[:origin_user] = taker.id
-    sign_in(person)
+    return redirect_back_with_fallback if person == current_user || origin_user
+    return redirect_back_with_fallback(alert: t(".email_must_be_confirmed")) unless person.confirmed?
 
-    PaperTrail::Version.create(main: person, item: person, whodunnit: taker, event: :impersonate)
-
-    if person.password? && person.email? && Settings.impersonate.notify
-      Person::UserImpersonationMailer.completed(person, taker.full_name).deliver_later
-    end
-
+    start_impersonation(person)
     redirect_to root_path
   end
 
   def destroy
     return redirect_back(fallback_location: root_path) unless origin_user
     previous_user = current_user
-    sign_in(origin_user)
-    PaperTrail::Version.create(main: previous_user,
-      item: previous_user,
-      whodunnit: origin_user,
-      event: :impersonation_done)
 
-    session[:origin_user] = nil
+    stop_impersonation(previous_user)
     redirect_to person_home_path(previous_user)
   end
 
@@ -44,5 +32,31 @@ class Person::ImpersonationController < ApplicationController
     else
       authorize!(:impersonate_user, Person)
     end
+  end
+
+  def start_impersonation(person)
+    taker = current_user
+    session[:origin_user] = taker.id
+    sign_in(person)
+
+    PaperTrail::Version.create(main: person, item: person, whodunnit: taker, event: :impersonate)
+
+    if person.password? && person.email? && Settings.impersonate.notify
+      Person::UserImpersonationMailer.completed(person, taker.full_name).deliver_later
+    end
+  end
+
+  def stop_impersonation(previous_user)
+    sign_in(origin_user)
+    PaperTrail::Version.create(main: previous_user,
+      item: previous_user,
+      whodunnit: origin_user,
+      event: :impersonation_done)
+
+    session[:origin_user] = nil
+  end
+
+  def redirect_back_with_fallback(options = {})
+    redirect_back(fallback_location: root_path, **options)
   end
 end

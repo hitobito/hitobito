@@ -70,7 +70,8 @@ describe ChangelogVersion do
       expect(version3 <=> version1).to eq(1)
       expect(version1 <=> version4).to eq(-1)
       expect(version4 <=> version5).to eq(-1)
-      expect(version5 <=> version5).to eq(0)
+      expect(version3 <=> version4).to eq(1)
+      expect(version5 <=> version5).to eq(0) # rubocop:disable Lint/BinaryOperatorWithIdenticalOperands
     end
   end
 end

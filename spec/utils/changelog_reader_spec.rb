@@ -64,9 +64,22 @@ describe ChangelogReader do
     end
   end
 
-  it "parses header line" do
+  it "parses version header line" do
     line = subject.send(:changelog_header_line, "## Version 1.0")
-    expect("1.0").to eq(line)
+    expect(line).to eq("1.0")
+  end
+
+  it "parses unreleased header line" do
+    line = subject.send(:changelog_header_line, "## unreleased")
+    expect(line).to eq("unreleased")
+  end
+
+  it "parses header lines with more spaces" do
+    line = subject.send(:changelog_header_line, "##    Version 1.0    ")
+    expect(line).to eq("1.0")
+
+    line = subject.send(:changelog_header_line, "##    unreleased    ")
+    expect(line).to eq("unreleased")
   end
 
   it "parses entry line" do
@@ -111,7 +124,7 @@ describe ChangelogReader do
 
     sorted = unsorted.sort.reverse
 
-    expct(sorted).to eq [v6, v4, v2, v5, v3, v1]
+    expect(sorted).to eq [v6, v4, v2, v5, v3, v1]
     expect(sorted.map(&:version)).to eq(%w[unreleased 2.15 2.3 1.X 1.11 1.1])
   end
 

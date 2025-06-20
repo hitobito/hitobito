@@ -39,12 +39,6 @@ class ChangelogVersion
     [major, minor]
   end
 
-  def parse_version_segment(segment_string)
-    return Float::INFINITY if WILDCARD_VERSION_STRINGS.include?(segment_string)
-
-    segment_string.present? ? segment_string.to_i : 0
-  end
-
   def label_markdown
     "## Version #{version}"
   end

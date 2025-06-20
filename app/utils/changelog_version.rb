@@ -8,11 +8,12 @@
 class ChangelogVersion
   attr_accessor :major_version, :minor_version, :log_entries, :version
 
-  def initialize(header_line)
-    values = header_line.split(".")
-    @version = header_line
-    @major_version = values.first.to_i
-    @minor_version = (values.second.downcase == "x") ? Float::INFINITY : values.second.to_i
+  UNRELEASED_VERSION_STRING = "unreleased"
+  WILDCARD_VERSION_STRINGS = ["*", "x"].freeze
+
+  def initialize(version_string)
+    @version = version_string.to_s
+    @major_version, @minor_version = parse_version
     @log_entries = []
   end
 
@@ -24,7 +25,19 @@ class ChangelogVersion
     [label_markdown, log_entries.map(&:to_markdown)].flatten.join("\n")
   end
 
+  def to_s = version
+
   private
+
+  def parse_version
+    return [Float::INFINITY, Float::INFINITY] if version.downcase == UNRELEASED_VERSION_STRING
+
+    segments = version.split(".")
+    major = segments.first.to_i
+    minor = WILDCARD_VERSION_STRINGS.include?(segments.second.downcase) ? Float::INFINITY : segments.second.to_i
+
+    [major, minor]
+  end
 
   def label_markdown
     "## Version #{version}"

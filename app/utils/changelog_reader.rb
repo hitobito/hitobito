@@ -27,6 +27,9 @@ class ChangelogReader
 
   private
 
+  VERSION_NUMBER_PATTERN = /^## +Version +((\d+\.)?(\d+|\*|x)) *$/i
+  UNRELEASED_PATTERN = /^## +unreleased *$/i
+
   def collect_changelog_data
     changelog_files_content = read_changelog_files(changelog_file_paths)
     parse_changelog_lines(changelog_files_content)
@@ -62,8 +65,15 @@ class ChangelogReader
   end
 
   def changelog_header_line(header)
-    header.strip!
-    header[/^## [^\s]+ ((\d+\.)?(\*|x|\d+))$/i, 1]
+    version_number(header) || unreleased_version(header)
+  end
+
+  def version_number(header)
+    header.strip[VERSION_NUMBER_PATTERN, 1]
+  end
+
+  def unreleased_version(header)
+    "unreleased" if header.strip.match?(UNRELEASED_PATTERN)
   end
 
   def changelog_entry(entry)

@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe "People Filter Form", js: true do
   let(:person) { people(:root) }
-  let(:group) { groups(:top_layer)}
+  let(:group) { groups(:top_layer) }
 
   describe "#create_filter" do
     before do
@@ -11,14 +11,14 @@ describe "People Filter Form", js: true do
     end
 
     it "can't save filter without defining name for it" do
-      click_button 'Filter speichern'
-      expect(page).to have_selector('.alert.alert-danger', text: "Name muss ausgefüllt werden")
+      click_button "Filter speichern"
+      expect(page).to have_selector(".alert.alert-danger", text: "Name muss ausgefüllt werden")
     end
 
     it "can save filter after name defined" do
-      fill_in "people_filter[name]", with: 'Alice'
-      click_button 'Filter speichern'
-      expect(page).to have_selector('.alert.alert-success', text: "Filter Alice wurde erfolgreich erstellt.")
+      fill_in "people_filter[name]", with: "Alice"
+      click_button "Filter speichern"
+      expect(page).to have_selector(".alert.alert-success", text: "Filter Alice wurde erfolgreich erstellt.")
     end
   end
 
@@ -29,20 +29,20 @@ describe "People Filter Form", js: true do
         range: "deep",
         group_id: group.id,
         filter_chain: {
-          qualification: { qualification_kind_ids: [QualificationKind.first.id, QualificationKind.second.id] },
+          qualification: {qualification_kind_ids: [QualificationKind.first.id, QualificationKind.second.id]},
           role: {role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join("-")},
           attributes: {
-            "timestamp": {
+            timestamp: {
               key: "years",
               constraint: "equal",
               value: 56
             },
-            "timestamp2": {
+            timestamp2: {
               key: "language",
               constraint: "equal",
               value: %w[de en fr]
             }
-          },
+          }
         }
       )
       filter.save!
@@ -58,7 +58,6 @@ describe "People Filter Form", js: true do
       # Checks that correct attributes are loaded
       expect(page).to have_text("Alter")
       expect(page).to have_text("Sprache")
-
     end
   end
 end

@@ -1847,6 +1847,7 @@ fr:
 
   people_filters:
     form:
+      show_results: Afficher les résultats
       save_search: Sauvegarder cette recherche
       save_filter: Sauvegarder ce filtre
       save_filter_placeholder: Saisir un nom pour sauvegarder ce filtre
@@ -1872,12 +1873,15 @@ fr:
         inactive_but_existing: rôles inactifs mais qui existent pour une autre période
 
     attributes:
+      advice: Sélectionner un champ
       title: Champ
       match: contient
       not_match: ne contient pas
       equal: est précis
       greater: plus grand que
       smaller: plus petit que
+      younger: puiné que
+      older:  âgé que
       before: vor dem
       after: nach dem
       blank: ist leer
@@ -1889,8 +1893,9 @@ fr:
 
     tag:
       title: Tags
-      prompt_tag_selection: Inclure les personnes qui contiennent au moins une des tags ci-dessous
+      prompt_tag_selection: Personnes avec tag
       prompt_tag_placeholder: Entrez les noms de tags souhaités
+      prompt_tag_absence_selection: Personnes sans tag
 
     tag_absence:
       prompt_tag_absence_selection: 'Exclure les personnes qui contiennent au moins une des tags ci-dessous '
@@ -1904,15 +1909,31 @@ fr:
 
     role:
       title: Rôles
+      role_kind_title: Validité
       prompt_role_selection: Quels rôles doivent être affichés?
       prompt_role_duration_from: ou durant la période de
       prompt_role_duration_selection: Quelle période doit être prise en compte?
       prompt_role_duration_until: à
       or_duration: oder
       include_archived: Inclure les rôles archivés
+      prompt_role_placeholder: Saisir le nom du rôle souhaité
+      prompt_role_kind_placeholder: Saisir la validité souhaitée
+      duration_title: Période de
 
     qualification:
       title: Qualifications
+      criterion: Critère
+      validity: Validité
+      validity_label:
+        active: Actif
+        reactivateable: Réactivable
+        not_active_but_reactivateable: Inactif mais réactivable
+        not_active: Non actif
+        all: Tous
+        none: Personne
+        only_expired: Uniquement les produits expirés
+      prompt_qualification_placeholder: Saisir le nom de qualification souhaité
+      prompt_qualification_validity_placeholder: Saisir la validité souhaitée
       prompt_qualification_selection: Quelles qualifications doivent apparaître?
       prompt_constraint: Welche Logik soll angewendet werden?
       prompt_validity: Quelles validités doivent avoir les qualifications montrées?

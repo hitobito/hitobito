@@ -4,9 +4,6 @@
 -# https://github.com/hitobito/hitobito.
 
 .btn-toolbar
-  - unless entry.persisted?
-    .btn-group
-      = f.button(t('global.button.search'), class: 'btn btn-sm btn-primary', value: 'search')
   - if can?(:create, entry)
     .btn-group
       = f.button(t('people_filters.form.save_search'), class: 'btn btn-sm btn-primary', value: 'save')

@@ -38,7 +38,7 @@ describe PeopleController, js: true do
       expect(page).to have_checked_field("filters_role_role_type_ids_#{Group::BottomLayer::Member.id}")
 
       find("#filters_role_role_type_ids_#{Group::BottomLayer::Member.id}").set(false)
-      all("form .btn-toolbar").first.click_button("Suchen")
+      all("form .btn-toolbar").first.click_button("Ergebnisse anzeigen")
 
       expect(page).to have_selector(".table tbody tr", count: 1)
       expect(page).to have_selector("tr#person_#{leader.id}")
@@ -101,7 +101,7 @@ describe PeopleController, js: true do
       option = select "ist genau"
       value_id = option.send(:parent)["id"].gsub("constraint", "value")
       fill_in(value_id, with: "Leader")
-      first(:button, "Suchen").click
+      first(:button, "Ergebnisse anzeigen").click
       expect(page).to have_css "td", text: "Leader Top"
       expect(page).not_to have_css "td", text: "Member Bottom"
     end
@@ -167,7 +167,7 @@ describe PeopleController, js: true do
         find("#present-tag-select-ts-control").set("lorem")
         find("#present-tag-select-opt-2").click
 
-        first(".btn.btn-primary", text: "Suchen").click
+        first(".btn.btn-primary", text: "Ergebnisse anzeigen").click
         expect(page).to have_text(alice.first_name)
       end
 
@@ -179,7 +179,7 @@ describe PeopleController, js: true do
         find("#absent-tag-select-ts-control").set("ipsum")
         find("#absent-tag-select-opt-1").click
 
-        first(".btn.btn-primary", text: "Suchen").click
+        first(".btn.btn-primary", text: "Ergebnisse anzeigen").click
         expect(page).to have_text(alice.first_name)
       end
     end
@@ -202,7 +202,7 @@ describe PeopleController, js: true do
         # Select role kind
         find("#role-kind-select").set("Aktiv")
 
-        first(".btn.btn-primary", text: "Suchen").click
+        first(".btn.btn-primary", text: "Ergebnisse anzeigen").click
         expect(page).to have_text(alice.first_name)
       end
     end
@@ -223,7 +223,7 @@ describe PeopleController, js: true do
         # Select reference date
         find("#filters_qualification_reference_date").set("2025-03-05")
 
-        first(".btn.btn-primary", text: "Suchen").click
+        first(".btn.btn-primary", text: "Ergebnisse anzeigen").click
 
         expect(page).to have_text(alice.first_name)
       end
@@ -245,7 +245,7 @@ describe PeopleController, js: true do
         all(".attribute_constraint_dropdown")[1].find("option[value='equal']").select_option
         all("input.form-control[type='text']")[1].set(alice.first_name)
 
-        first(".btn.btn-primary", text: "Suchen").click
+        first(".btn.btn-primary", text: "Ergebnisse anzeigen").click
         expect(page).to have_text(alice.first_name)
       end
 
@@ -256,7 +256,7 @@ describe PeopleController, js: true do
         first(".attribute_constraint_dropdown").find("option[value='match']").select_option
         first("input.form-control[type='text']").set("<script>alert('Hacked!');</script>")
 
-        first(".btn.btn-primary", text: "Suchen").click
+        first(".btn.btn-primary", text: "Ergebnisse anzeigen").click
         expect {
           page.driver.browser.switch_to.alert
         }.to raise_error(Selenium::WebDriver::Error::NoSuchAlertError)
@@ -280,7 +280,7 @@ describe PeopleController, js: true do
 
         filter_name = "Filtername"
         fill_in "people_filter_name", with: filter_name
-        first(".btn.btn-primary", text: "Suche speichern").click
+        first(".btn.btn-primary", text: "Filter speichern").click
 
         expect(page).to have_text("Filter #{filter_name} wurde erfolgreich erstellt.")
       end

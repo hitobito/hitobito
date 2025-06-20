@@ -27,7 +27,10 @@ on:
 defaults:
   run:
     working-directory: hitobito
-
+    
+permissions:
+  contents: write
+  
 jobs:
   wagon_patches:
     runs-on: "ubuntu-22.04"
@@ -42,8 +45,6 @@ jobs:
       RAILS_TEST_DB_NAME: hitobito_test
       RAILS_ENV: test
       DISABLE_TEST_SCHEMA_MAINTENANCE: true
-    permissions:
-      contents: write
 
     services:
       postgres:

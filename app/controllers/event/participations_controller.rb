@@ -14,7 +14,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
 
   self.nesting = Group, Event
 
-  self.permitted_attrs = [:additional_information,
+  self.permitted_attrs = [:additional_information, :participant_id, :participant_type,
     answers_attributes: [:id, :question_id, :answer, answer: []],
     application_attributes: [:id, :priority_2_id, :priority_3_id]]
 
@@ -85,6 +85,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
           send_notification_email
         end
       end
+
       respond_with(entry, success: created, location: return_path)
     end
   end

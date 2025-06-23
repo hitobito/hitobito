@@ -20,13 +20,13 @@ class Person::Filter::Role < Person::Filter::Base
 
   def apply(scope)
     scope = scope
-              .where(type_conditions(scope))
-              .where(duration_conditions(scope))
+      .where(type_conditions(scope))
+      .where(duration_conditions(scope))
     if include_archived?
       scope
     else
       scope.where(roles: {archived_at: nil})
-           .or(scope.where(Role.arel_table[:archived_at].gt(Time.now.utc)))
+        .or(scope.where(Role.arel_table[:archived_at].gt(Time.now.utc)))
     end
   end
 

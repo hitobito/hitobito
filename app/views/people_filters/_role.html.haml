@@ -39,3 +39,9 @@
                         id: 'role-kind-select',
                         multiple: false,
                         data: { chosen_no_results: t('global.chosen_no_results'), placeholder: t('.prompt_role_kind_placeholder') } )
+
+  .d-flex.flex-row.flex-lg-row.align-items-start.align-items-lg-center.mt-3
+    .col-6.col-xxl-2
+      %label= t('.include_archived')
+    .col-4.col-lg-6.col-xxl-10.d-flex.justify-content-end.justify-content-xxl-start.align-items-center
+      = check_box_tag('filters[role][include_archived]', true, people_filter_value(filter, :include_archived))

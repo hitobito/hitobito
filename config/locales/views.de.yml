@@ -1899,7 +1899,7 @@ de:
       prompt_role_kind_placeholder: Gewünschte Gültigkeit eingeben
       duration_title: Zeitraum von
       or_duration: oder
-      include_archived: Archivierte Rollen miteinbeziehen
+      include_archived: Archivierte Rollen einbeziehen
 
     qualification:
       title: Qualifikationen

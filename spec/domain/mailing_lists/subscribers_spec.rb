@@ -287,7 +287,7 @@ describe MailingLists::Subscribers do
       p3 = Fabricate(Event::Role::Leader.name.to_sym,
         participation: Fabricate(:event_participation, event: e2)).participation.person
       Fabricate(Event::Role::Participant.name.to_sym,
-        participation: Fabricate(:event_participation, event: e2, person: p1))
+        participation: Fabricate(:event_participation, event: e2, participant: p1))
 
       # only participation without role
       Fabricate(:event_participation, event: e2)
@@ -379,7 +379,7 @@ describe MailingLists::Subscribers do
       p3 = Fabricate(Event::Role::Leader.name.to_sym,
         participation: Fabricate(:event_participation, event: e2)).participation.person
       Fabricate(Event::Role::Participant.name.to_sym,
-        participation: Fabricate(:event_participation, event: e2, person: p1))
+        participation: Fabricate(:event_participation, event: e2, participant: p1))
 
       create_subscription(p1, true)
 
@@ -427,7 +427,7 @@ describe MailingLists::Subscribers do
         participation: Fabricate(:event_participation,
           event: e2)).participation.person
       Fabricate(Event::Role::Participant.name.to_sym,
-        participation: Fabricate(:event_participation, event: e2, person: pe1))
+        participation: Fabricate(:event_participation, event: e2, participant: pe1))
 
       # groups
       create_subscription(groups(:bottom_layer_one), false,
@@ -485,7 +485,7 @@ describe MailingLists::Subscribers do
         participation: Fabricate(:event_participation,
           event: e2)).participation.person
       Fabricate(Event::Role::Participant.name.to_sym,
-        participation: Fabricate(:event_participation, event: e2, person: pe1))
+        participation: Fabricate(:event_participation, event: e2, participant: pe1))
 
       # groups
       create_subscription(groups(:bottom_layer_one), false,
@@ -534,7 +534,7 @@ describe MailingLists::Subscribers do
         participation: Fabricate(:event_participation,
           event: e2)).participation.person
       Fabricate(Event::Role::Participant.name.to_sym,
-        participation: Fabricate(:event_participation, event: e2, person: pe1))
+        participation: Fabricate(:event_participation, event: e2, participant: pe1))
 
       # groups
       create_subscription(groups(:bottom_layer_one), false,

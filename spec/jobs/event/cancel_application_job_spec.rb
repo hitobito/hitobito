@@ -9,7 +9,7 @@ describe Event::CancelApplicationJob do
   let(:course) { Fabricate(:course, groups: [groups(:top_layer)], priorization: true) }
 
   let(:participation) do
-    Fabricate(:event_participation, event: course, person: Fabricate(:person, email: "anybody@example.com"))
+    Fabricate(:event_participation, event: course, participant: Fabricate(:person, email: "anybody@example.com"))
   end
 
   before do

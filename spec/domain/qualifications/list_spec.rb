@@ -121,7 +121,7 @@ describe Qualifications::List do
       course = Fabricate.build(:course, kind: kind, training_days: training_days)
       course.dates.build(start_at: start_at)
       course.save!
-      Fabricate(:event_participation, event: course, person: person, qualified: qualified)
+      Fabricate(:event_participation, event: course, participant: person, qualified: qualified)
     end
   end
 end

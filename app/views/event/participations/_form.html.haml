@@ -9,12 +9,15 @@
              buttons_top: false,
              submit_label: submit_label,
              cancel_url_new: group_event_path(@group, @event)) do |f|
+  - if params[:for_someone_else]
+    = hidden_field_tag("for_someone_else", true)
 
   - if params[:event_role]
     = hidden_field_tag('event_role[type]', params[:event_role][:type])
 
   - if params[:for_someone_else]
     = f.labeled_person_field(:participant, label: Person.model_name.human)
+    = hidden_field_tag("event_participation[participant_type]", Person.sti_name)
 
   = f.fields_for(:answers, @answers.reject(&:admin?)) do |fans|
     = render 'event/answers/fields', f: fans

@@ -4,16 +4,16 @@ on:
   workflow_dispatch:
     inputs:
       core_ref:
-        description: Use a specific version of the core for the workflow run. Defaults to master.
-        default: ""
+        description: Use a specific version of the core for the workflow run. Defaults to the main branch (master, or sac-master during a merge freeze).
+        default: "sac-master"
       wagon_dependency_ref:
-        description: Use a specific version of the wagon dependency for the workflow run. Defaults to master.
-        default: ""
+        description: Use a specific version of the wagon dependency for the workflow run. Defaults to the main branch (master, or sac-master during a merge freeze).
+        default: "sac-master"
       wagon_ref:
-        description: Use a specific version of the wagon dependency for the workflow run. Defaults to master.
+        description: Use a specific version of the wagon dependency for the workflow run. Defaults to the main branch (master).
         default: "master"
   push:
-    branches: [ master ]
+    branches: [ master, sac-master ]
     paths-ignore:
       - 'doc/**'
       - '**.md'
@@ -28,7 +28,7 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }} # auto-cancel previous runs of this same workflow on the same branch, if any are still running
-  cancel-in-progress: ${{ github.ref != 'heads/refs/master' }} # never cancel master, to allow finding the exact merge that broke a wagon
+  cancel-in-progress: ${{ github.ref != 'heads/refs/master' && github.ref != 'heads/refs/sac-master' }} # never cancel runs triggered by the main branch, to allow finding the exact merge that broke a wagon
 
 jobs:
   find-wagons:
@@ -43,7 +43,7 @@ jobs:
         id: list-wagon-repositories
         run: |
           WAGONS=$(gh repo list hitobito -L 100 --no-archived --json owner,name | \
-            jq 'map(select(.name | test("^hitobito_"))) | map({ owner: .owner.login, repo: .name, name: .name | match("^hitobito_((?!bdp).+)$").captures[0].string })')
+            jq 'map(select(.name | test("^hitobito_"))) | map({ owner: .owner.login, repo: .name, name: .name | match("^hitobito_((?!bdp)(?!dpsg).+)$").captures[0].string })')
           echo $WAGONS
           echo "wagons=$WAGONS" | tr -d "\n" >> $GITHUB_OUTPUT
         env:
@@ -67,14 +67,14 @@ jobs:
           token: ${{ secrets.WAGON_TESTS_GITHUB_TOKEN }}
           repo: ${{ matrix.wagon.repo }}
           owner: ${{ matrix.wagon.owner }}
-          ref: master
+          ref: ${{ inputs.wagon_ref || 'master' }}
           workflow: tests.yml
           workflow_timeout_seconds: 21600 # wait for up to 6 hours
           workflow_job_steps_retry_seconds: 10 # default is 5, set it higher to not strain the API limit too much
           workflow_inputs: |
             {
-              "core_ref": "${{ inputs.core_ref || github.ref || 'master' }}",
-              "wagon_dependency_ref": "${{ inputs.wagon_dependency_ref || 'master' }}"
+              "core_ref": "${{ github.ref || inputs.core_ref || 'sac-master' }}",
+              "wagon_dependency_ref": "${{ inputs.wagon_dependency_ref || 'sac-master' }}"
             }
 
       - name: Link to the triggered wagon tests run

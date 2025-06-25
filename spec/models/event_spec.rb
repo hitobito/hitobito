@@ -501,12 +501,31 @@ describe Event do
   end
 
   describe "#init_questions" do
+    let(:global_questions) { Event::Question.global }
+
     it "adds 3 default questions" do
       e = Event.new
       e.init_questions
-      global_questions = Event::Question.global
       expect(global_questions.size).to eq(3)
       expect(e.application_questions.size).to eq(global_questions.size)
+    end
+
+    it "adds default questions with available translations" do
+      e = Fabricate.build(:event, dates_attributes: [{start_at: Time.zone.today}])
+      e.init_questions
+      e.save!
+
+      q = e.questions.find_by(derived_from_question_id: event_questions(:ga).id)
+
+      expect(q.question_translations).to eq({
+        "de" => "Ich habe folgendes ÖV Abo",
+        "fr" => "J'ai l'abonnement de transports publics suivant"
+      })
+
+      expect(q.choices_translations).to eq({
+        "de" => "GA, Halbtax / unter 16, keine Vergünstigung",
+        "fr" => "AG, demi-tarif / moins de 16 ans, pas de réduction"
+      })
     end
   end
 

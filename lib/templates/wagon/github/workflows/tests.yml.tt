@@ -1,10 +1,6 @@
 name: 'Lint and test'
 
 on:
-  # The nightly obuild allows us to notice if changes to the core
-  # break the wagon.
-  schedule:
-  - cron:  '38 3 * * *'
   push:
     paths-ignore:
       - 'doc/**'
@@ -19,12 +15,21 @@ on:
         description: Use a specific version of the core for the workflow run. Defaults to master.
         type: string
         default: 'master'
+      wagon_dependency_ref:
+        description: Not used in this wagon, but accepted for consistency across all wagons.
+        type: string
+        default: 'master'
+      distinct_id:
+        description: An optional identifier which is simply output again, in order to identify the workflow run when triggered from another repo
+        type: string
+        default: ''
 jobs:
   wagon_tests:
     uses: hitobito/hitobito/.github/workflows/wagon-tests.yml@master
     with:
       wagon_repository: ${{ github.event.repository.name }}
       core_ref: ${{ inputs.core_ref }}
+      distinct_id: ${{ inputs.distinct_id }}
     secrets:
       HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}
       HEARTBEAT_TOKEN: ${{ secrets.HEARTBEAT_TOKEN }}

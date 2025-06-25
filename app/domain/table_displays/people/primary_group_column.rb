@@ -32,7 +32,7 @@ module TableDisplays::People
     end
 
     def primary_group(person)
-      person.primary_group.name
+      person.primary_group&.name
     end
   end
 end

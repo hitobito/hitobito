@@ -1865,12 +1865,12 @@ fr:
         none: Keine jemals erteilte Qualifikation
         only_expired: Abgelaufene, aber nicht gültige oder reaktivierbare Qualifikationen
       filters_role_kind:
-        active_today: Aktuell aktive Rollen
+        active_today: ' Rôle actif actuel'
         active: le rôle était actif.
         created: le rôle a été établi.
         deleted: le rôle a été effacé.
-        inactive: inaktive oder nie vorhandene Rollen
-        inactive_but_existing: inaktive aber zu einer anderen Zeit vorhandene Rollen
+        inactive: rôles inactifs ou qui n’existent pas
+        inactive_but_existing: rôles inactifs mais qui existent pour une autre période
 
     attributes:
       advice: Sélectionner un champ
@@ -1911,7 +1911,7 @@ fr:
       title: Rôles
       role_kind_title: Validité
       prompt_role_selection: Quels rôles doivent être affichés?
-      prompt_role_duration_from: oder im Zeitraum von
+      prompt_role_duration_from: ou durant la période de
       prompt_role_duration_selection: Quelle période doit être prise en compte?
       prompt_role_duration_until: à
       or_duration: oder

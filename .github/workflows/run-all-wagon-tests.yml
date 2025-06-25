@@ -43,7 +43,7 @@ jobs:
         id: list-wagon-repositories
         run: |
           WAGONS=$(gh repo list hitobito -L 100 --no-archived --json owner,name | \
-            jq 'map(select(.name | test("^hitobito_"))) | map({ owner: .owner.login, repo: .name, name: .name | match("^hitobito_((?!bdp)(?!dpsg).+)$").captures[0].string })')
+            jq 'map(select(.name | test("^hitobito_"))) | map({ owner: .owner.login, repo: .name, name: .name | match("^hitobito_((?!bdp)(?!dpsg)(?!pfadi_de).+)$").captures[0].string })')
           echo $WAGONS
           echo "wagons=$WAGONS" | tr -d "\n" >> $GITHUB_OUTPUT
         env:

@@ -506,5 +506,7 @@ describe People::Merger do
 
       expect(Person.where(id: duplicate.id)).not_to exist
     end
+
+    xit "merges pictures"
   end
 end

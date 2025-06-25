@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@webpack-cli/serve": "^1.6.1",
-    "webpack-dev-server": "~3"
+    "webpack-dev-server": "~5"
   },
   "resolutions": {
     "jquery": "~1.12.4"

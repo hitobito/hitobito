@@ -102,7 +102,7 @@ class Role < ActiveRecord::Base
 
   ### ASSOCIATIONS
 
-  belongs_to :person, touch: true
+  belongs_to :person
   belongs_to :group
 
   ### VALIDATIONS
@@ -124,7 +124,7 @@ class Role < ActiveRecord::Base
   after_create :reset_person_minimized_at
   after_destroy :set_contact_data_visible
   after_destroy :set_first_primary_group
-  after_save :set_first_primary_group
+  after_save :set_first_primary_group, :touch_person
   after_save :set_contact_data_visible
 
   ### SCOPES
@@ -313,6 +313,10 @@ class Role < ActiveRecord::Base
       .keys.all? { |key| allowed.include? key }
 
     raise ActiveRecord::ReadOnlyRecord unless new_record? || only_archival
+  end
+
+  def touch_person
+    person.touch
   end
 
   def reset_person_minimized_at

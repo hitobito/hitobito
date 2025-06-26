@@ -13,6 +13,7 @@ class HitobitoLogEntriesController < ListController
   def model_scope
     model_class
       .includes(:subject)
+      .with_attached_attachment
       .yield_self(&method(:filter_category))
       .yield_self(&method(:filter_from))
       .yield_self(&method(:filter_to))

@@ -16,36 +16,28 @@ module AbilityDsl
 
     attr_reader :user, :admin
 
+    # All permissions symbols that the user actually has defined for all her roles.
+    attr_reader :all_permissions
+
     def initialize(user)
       @user = user
-      init_groups
-    end
-
-    # All permissions symbols that the user actually has defined for all her roles.
-    def all_permissions
-      @all_permissions ||= begin
-        permissions = user.roles.collect(&:permissions).flatten.uniq
-        Role::PermissionImplications.each do |given, implicated|
-          if permissions.include?(given) && !permissions.include?(implicated)
-            permissions << implicated
-          end
-        end
-        permissions
-      end
+      @all_permissions = user.roles.collect(&:permissions).flatten.uniq
+      init_permission_lookup_tables
+      @admin = all_permissions.include?(:admin)
     end
 
     # The ids of the groups where the given permission is defined.
     # Includes implied permission, i.e. when passing :group_read, the groups
     # where the user has :group_full are also returned.
     def permission_group_ids(permission)
-      group_ids_with_permission(@permission_group_ids, permission)
+      group_ids_with_permission(@permissions_group_ids, permission)
     end
 
     # The ids of the layer groups where the given layer permission is defined.
     # Includes implied permission, i.e. when passing :layer_read, the layer groups
     # where the user has :layer_full are also returned.
     def permission_layer_ids(permission)
-      group_ids_with_permission(@permission_layer_ids, permission)
+      group_ids_with_permission(@permissions_layer_ids, permission)
     end
 
     def layer_ids(groups)
@@ -63,32 +55,66 @@ module AbilityDsl
 
     private
 
-    def init_groups
-      @admin = user.groups_with_permission(:admin).present?
+    def init_permission_lookup_tables
+      @permissions_group_ids = Hash.new { |hash, key| hash[key] = [] }
+      @permissions_layer_ids = Hash.new { |hash, key| hash[key] = [] }
 
-      init_permission_groups
-      init_permission_layers
-
-      collect_group_ids!
+      permissions_groups = init_permission_groups
+      init_permission_layers(permissions_groups)
+      init_implicit_permission_groups
     end
 
     def init_permission_groups
-      @permission_group_ids = GROUP_PERMISSIONS.each_with_object({}) do |permission, hash|
+      permissions_groups = Hash.new { |hash, key| hash[key] = [] }
+      GROUP_PERMISSIONS.each do |permission|
         groups = user.groups_with_permission(permission).to_a
         given = Role::PermissionImplications.invert[permission]
         groups += user.groups_with_permission(given).to_a if given
-        hash[permission] = groups
+
+        grant_groups_permissions(permission, groups.map(&:id))
+        permissions_groups[permission] |= groups
+      end
+      permissions_groups
+    end
+
+    def init_permission_layers(permissions_groups)
+      LAYER_PERMISSIONS.each do |permission|
+        @permissions_layer_ids[permission] = layer_ids(permissions_groups[permission])
       end
     end
 
-    def init_permission_layers
-      @permission_layer_ids = LAYER_PERMISSIONS.each_with_object({}) do |permission, hash|
-        hash[permission] = layer_ids(@permission_group_ids[permission])
+    def init_implicit_permission_groups
+      Role::PermissionImplicationsForGroups.each do |trigger_permission, permission_configs|
+        next unless all_permissions.include?(trigger_permission)
+
+        # Find the layer groups associated with the user's trigger permission.
+        layer_group_ids = user.groups_with_permission(trigger_permission).map(&:layer_group_id).uniq
+        next if layer_group_ids.empty?
+
+        permission_configs.each do |related_group_permission, related_group_classes|
+          permissions_including_implicit = expand_permissions_with_implications(related_group_permission)
+          target_group_ids = Group.where(
+            type: Array(related_group_classes).map(&:sti_name),
+            layer_group_id: layer_group_ids
+          ).pluck(:id)
+
+          grant_groups_permissions(permissions_including_implicit, target_group_ids) unless target_group_ids.empty?
+        end
       end
     end
 
-    def collect_group_ids!
-      @permission_group_ids.each_value { |groups| groups.collect!(&:id) }
+    def grant_groups_permissions(permissions, group_ids)
+      Array(permissions).each do |permission|
+        @all_permissions |= [permission] if group_ids.any?
+        @permissions_group_ids[permission] |= group_ids
+      end
+    end
+
+    def expand_permissions_with_implications(*trigger_permissions)
+      Role::PermissionImplications
+        .each_with_object(Array(trigger_permissions)) do |(given, implicated), expanded_permissions|
+        expanded_permissions.concat(Array(implicated)) if expanded_permissions.include?(given)
+      end.uniq
     end
 
     def group_ids_with_permission(source, permission)

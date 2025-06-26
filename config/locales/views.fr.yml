@@ -133,8 +133,8 @@ fr:
       zip_town: NPA, localité
 
     contact_data:
-      invoices_tooltip_title: Wird für Rechnungen verwendet
-      blocked_mail_tooltip_title: E-Mail ist aufgrund von Bounces blockiert
+      invoices_tooltip_title: Utilisé pour les factures
+      blocked_mail_tooltip_title: E-mail bloqué à cause de bounces
 
     public_check_box:
       tooltip: Les entrées privées ne sont visibles qu'au sein du groupe auquel tu appartiens. Les responsables d'autres groupes peuvent voir les entrées identifiées en tant qu'entrées publiques si toi-même, tu fais partie d'une maîtrise.
@@ -147,12 +147,12 @@ fr:
       placeholder_value: Courriel
       placeholder_type: Type (privé, professionnel, …)
       tooltip_mailings: Les diffusions d'abonnements, les confirmations par e-mail etc. sont également envoyées à toutes les adresses marquées ici.
-      tooltip_invoices: Wird anstelle der Haupt E-Mail Adresse beim verschicken von Rechnungen verwendet.
+      tooltip_invoices: Utilisée à la place de l'adresse e-mail principale lors de l'envoi de factures.
 
     additional_address_fields:
-      placeholder_type: Bezeichnung (Rechnung, Arbeit ..)
-      caption_uses_contactable_name: Namen der Person übernehmen
-      caption_used_for_invoices: Für Rechnungen verwenden
+      placeholder_type: Type (facture, travail ..)
+      caption_uses_contactable_name: Reprendre le nom de la personne
+      caption_used_for_invoices: Utilisé pour les factures
 
     address_fields:
       updates_household_address: l'adresse est actualisée pour l'ensemble du foyer
@@ -187,7 +187,7 @@ fr:
 
   dropdown/label_items:
     additional_address:
-      main: Hauptadresse
+      main: Adresse principale
 
   dropdown/group_edit:
     move: "Déplacer"
@@ -454,7 +454,7 @@ fr:
       no_answer_given: "(pas de réponse)"
       actions_show:
         change_contact_data_button: "Modifier les données de contact"
-        link_to_person: "Personenprofil anzeigen"
+        link_to_person: "Afficher le profil de la personne"
       actions_approval:
         approve_button: "Autoriser"
         reject_button: "Refuser"
@@ -512,15 +512,15 @@ fr:
 
     invitation_lists:
       create:
-        hint: "<br />Hinweis: Allfällig bestehende Einladungen wurden nicht aktualisiert."
+        hint: "<br />Remarque: les éventuelles invitations existantes n'ont pas été mises à jour."
         success:
-          one: "Eine Person wurde erfolgreich zum %{event_type} '%{event}' eingeladen"
-          many: "%{count} Personen wurden erfolgreich zum %{event_type} '%{event}' eingeladen"
-          other: "%{count} Personen wurden erfolgreich zum %{event_type} '%{event}' eingeladen"
+          one: "Une personne a été invitée avec succès au %{event_type} '%{event}' "
+          many: "%{count} personnes ont été invitées avec succès au %{event_type} '%{event}' "
+          other: "%{count} personnes ont été invitées avec succès au %{event_type} '%{event}' "
       new:
-        title: Personen zu einem %{event_label} einladen
+        title: 'Inviter des personnes à un %{event_label} '
         event_search: Chercher un événement
-        submit: Einladen
+        submit: Inviter
 
     participation_lists:
       create:
@@ -529,9 +529,9 @@ fr:
           many: "%{count} personnes ont été ajouté au %{event_type} '%{event}'"
           other: "%{count} personnes ont été ajouté au %{event_type} '%{event}'"
         failure:
-          one: "Eine Person konnte nicht zum %{event_type} '%{event}' hinzugefügt werden"
-          many: "%{count} Personen konnten nicht zum %{event_type} '%{event}' hinzugefügt werden"
-          other: "%{count} Personen konnten nicht zum %{event_type} '%{event}' hinzugefügt werden"
+          one: "Une personne n'a pas pu être ajoutée au %{event_type} '%{event}'"
+          many: "%{count} personnes n'ont pas pu être ajoutées au %{event_type} '%{event}'"
+          other: "%{count} personnes n'ont pas pu être ajoutées au %{event_type} '%{event}'"
       new:
         title: 'Attribuer des personnes à %{event_label} '
         event_search: Chercher un événement
@@ -616,13 +616,13 @@ fr:
       contact_attrs: Coordonnées
     general_fields:
       visible_contact_attributes:
-        all: Alle Kontaktdaten anzeigen
-        name: Name anzeigen
-        address: Adresse anzeigen
-        phone_number: Telefonnummer anzeigen
-        email: E-Mail anzeigen
-        social_account: Social Media anzeigen
-      kind_overrides_link_title: "Folgende Felder werden übernommen: Beschreibung"
+        all: Afficher toutes les données de contact
+        name: Afficher le nom
+        address: Afficher l'adresse
+        phone_number: Afficher le numéro de téléphone
+        email: Afficher l'e-mail
+        social_account: Afficher les médias sociaux
+      kind_overrides_link_title: "Les champs suivants sont repris: Description"
     global:
       link:
         add_event: Créer un événement
@@ -669,8 +669,8 @@ fr:
         delete: "Effacer l'inscription"
 
   event/invitations:
-    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
-    description: "Eingeladene Personen können sich via %{model_name}-Seite an- oder abmelden. Sie erhalten kein automatisches Mail."
+    export_enqueued: "L'exportation a commencé en tâche de fond et sera téléchargée une fois terminée."
+    description: "Les personnes invitées peuvent s'inscrire ou se désinscrire via la page%{model_name}. Elles ne reçoivent pas de mail automatique."
 
   event/participation_decorator:
     tooltips:
@@ -691,7 +691,7 @@ fr:
     form_data_missing: "Prière de remplir le formulaire suivant avant de t'inscrire à cet événement."
     registered: "Tes données personnelles ont été enregistrées. Prière d'apporter les indications complémentaires suivantes en vue de l'inscription."
     application_window_closed: "La fenêtre d'inscription pour cet événement est close."
-    no_places_available: "Die maximale Teilnehmeranzahl für diesen Anlass ist bereits erreicht."
+    no_places_available: "Le nombre maximal de participants pour cet événement est déjà atteint."
 
   event/roles:
     full_entry_label: "Rôle <i>%{role}</i> pour <i>%{person}</i>"
@@ -756,7 +756,7 @@ fr:
   full_text:
     index:
       title: "Résultats"
-      incomplete_search_request: "Bitte geben Sie mindestens drei Zeichen ein."
+      incomplete_search_request: "Prière d'entrer au moins trois caractères."
 
   group:
     archive:
@@ -814,7 +814,7 @@ fr:
       confirm_archive: >
           Voulez-vous vraiment archiver ce groupe? Le groupe ne pourra plus être modifié
           et les rôles attribués seront aussi archivés.
-      membership_invoice_button: Mitgliedsrechnung
+      membership_invoice_button: Facture de membre
     attrs:
       contact_details: "Contacts"
       additional_information: "Informations supplémentaires"
@@ -824,7 +824,7 @@ fr:
       help_contact: "Utiliser l'adresse et le numéro de téléphone public de cette personne"
       help_self_registration_require_adult_consent: Lors de votre inscription, demandez si la personne a déjà 18 ans ou si elle a le consentement de son tuteur légal
       help_main_self_registration_group: "Afficher le lien d'inscription de ce groupe sur la page de connexion principale."
-      hint_external_registration: "Es sind keine Rollen mit Rechten auswählbar"
+      hint_external_registration: "Aucun rôle avec droit d'écriture ne peut être choisi"
     form_tabs:
       general: "Généralités"
       messages: "Messages"
@@ -859,7 +859,7 @@ fr:
       main_person:
         notes: Commentaires
       adult_consent_field:
-        caption: Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe.
+        caption: Je confirme que j'ai au moins 18 ans ou que j'ai l'accord de mes parents ou tuteurs.
       create:
         email_taken: L'e-mail est déjà utilisé. Connecte-toi ou enregistre-toi avec une autre adresse e-mail.
         flash:
@@ -912,9 +912,9 @@ fr:
     edit:
       title: gérer le ménage
       shared_address_info: Toutes les personnes partagent la même adresse.
-      placeholder_search_person: Person suchen und hinzufügen ...
+      placeholder_search_person: Chercher et ajouter une personne ...
     members_table_row:
-      unconfirmed_email_info: Die E-Mail Adresse muss bestätigt werden, bevor die Person aus der Familie entfernt werden kann.
+      unconfirmed_email_info: L'adresse e-mail doit être confirmée avant que la personne puisse être retirée de la famille.
 
   hitobito_log_entries:
     tabs:
@@ -926,10 +926,10 @@ fr:
       to: à
     email_error_table:
       created_at: Établie le
-      category: Kategorie
-      subject: Subjekt
-      message: Meldung
-      payload: Payload
+      category: Catégorie
+      subject: Sujet
+      message: Message
+      payload: Charge utile
 
   import/csv_parser:
     read_error: "Erreur lors de la lecture de %{filename}: %{error}"
@@ -1006,9 +1006,9 @@ fr:
           to: Au
     table:
       number_of_invoices_shown:
-        one: "%{count} Rechnung angezeigt."
-        many: "%{count} Rechnungen angezeigt."
-        other: "%{count} Rechnungen angezeigt."
+        one: "%{count} facture s'affiche."
+        many: "%{count} factures affichées."
+        other: "%{count} factures affichées."
   invoices/by_article:
     index:
       title: 'Factures pour l''article "%{name}"'
@@ -1046,9 +1046,9 @@ fr:
     provider_fields:
       reset_payment_provider_warning: "En cas de modification de données ici, il est nécessaire de refaire le processus d'initialisation de l'interface de facturation."
     custom_content_fields:
-      subject: Betreff
-      body: Inhalt
-      remove: E-Mail Vorlage entfernen
+      subject: Objet
+      body: Contenu
+      remove: Supprimer le modèle d'e-mail
 
   invoice_lists:
     destroys:
@@ -1120,7 +1120,7 @@ fr:
       other: "%{count} factures ont été annulées."
 
   invoice_lists/fixed_fee:
-    recipient_role_group_mismatch: "Für folgende Gruppen konnte kein Empfänger ermittelt werden: %{groups}"
+    recipient_role_group_mismatch: "Aucun destinataire n'a pu être identifié pour les groupes suivants: %{groups}"
 
   payments:
     export_enqueued: "L'exportation a commencé en tâche de fond et sera téléchargée une fois terminée."
@@ -1193,7 +1193,7 @@ fr:
       email: Liste de diffusion (e-mail)
       mailchimp: MailChimp
     imap_mails:
-      manage: Postfach
+      manage: Case postale
       mailboxes:
         inbox: entrée
         spam: spam
@@ -1281,7 +1281,7 @@ fr:
   mailing_list_decorator:
     may_subscribe: "Les abonnés peuvent s'inscrire / se désinscrire eux-même"
     may_not_subscribe: "Les abonnés <strong>ne peuvent pas</strong> s'inscrire / se désinscrire eux-même"
-    subscribers_must_opt_in: "Abonnenten müssen sich <strong>selbst</strong> an/abmelden"
+    subscribers_must_opt_in: "Les abonnés doivent s'inscrire/se désinscrire <strong>eux-mêmes</strong>"
     subscribers_may_post: "les abonnés peuvent éditer la liste de diffusion"
     subscribers_may_not_post: "Les abonnés <strong>ne peuvent pas</strong> écrire à la liste de diffusion"
     anyone_may_post: "Tous les expéditeurs peuvent écrire à la liste de diffusion."
@@ -1360,7 +1360,7 @@ fr:
     admin: "Paramètres"
     admin/event_feed: "Intégrer le calendrier"
     admin/oauth_authorizations: "Autoriser OAuth"
-    imap_mails: "Mails und Bounces"
+    imap_mails: "Mails et bounces"
     invoices: "Factures"
     invoices/single: "Factures individuelles"
     invoices/evaluations: "Pièce comptable"
@@ -1381,7 +1381,7 @@ fr:
         help_cors_origins: En cas d'activation de la portée "api", "groups", "people", "events", "mailing_lists" ou "invoices", les sites webs sur cet hôte pourront consulter les données de l'interface JSON depuis le navigateur web (CORS).
         help_native_redirect_uris: Une entrée par ligne. Pour les tests locaux, utiliser %{native_redirect_uri}.
         help_additional_audiences: Zusätzliche Einträge für den <code class='bg-light'>aud</code> Key im JWT Access Token.
-        skip_consent_screen_explanation: Applikation ist verbandsintern und vertrauenswürdig, Consent Screen überspringen
+        skip_consent_screen_explanation: L'application est interne à l'association et digne de confiance, passer l'écran de consentement
       attrs:
         profile_endpoint_help:
           Les informations profil de l'utilisateur peuvent être prises au-delà ce Endpoint. Pour ce faire, il faut rendre le Access Token dans le Authorization Header. Le Scope souhaité peut être rendu en tant que X-Scope.
@@ -1468,12 +1468,12 @@ fr:
       new:
         title: Merge une personne
       form:
-        select_person: Wessen Daten sollen beim Zusammenführen den Vorrang haben?
-        merge_hint: Beim Zusammenführen werden die Rollen, Telefonnummern, zusätzlichen E-Mails, Social Media Einträge, Rechnungen, Notizen, Tags, Abos, Familienmitglieder, Event Einladungen und Teilnahmen sowie auch Qualifikationen übernommen. Alle anderen Daten dieser Person wie z.B. Log Einträge usw. werden gelöscht.
-        merge_hint_invalid: Diese Person hat ungültige Daten.
-        irreversible: Dieser Vorgang kann nicht rückgängig gemacht werden.
-        invalid_persons: Die Einträge können erst zusammengeführt werden wenn beide gültig sind.
-        reload: Erneut prüfen
+        select_person: Quelles données sont prioritaires lors de la fusion?
+        merge_hint: Lors de la fusion, les rôles, numéros de téléphone, e-mails supplémentaires, entrées dans les médias sociaux, factures, notes, tags, abonnements, membres de la famille, invitations à des événements et participations ainsi que les qualifications sont repris. Toutes les autres données de cette personne, comme par exemple les entrées de log, etc. sont supprimées.
+        merge_hint_invalid: Cette personne a des données non-valables.
+        irreversible: Cette opération est irréversible.
+        invalid_persons: Les entrées ne peuvent être fusionnées que si les deux sont valables.
+        reload: Vérifier à nouveau
       action: Merge
       success: Les données des personnes ont été fusionnées avec succès.
     ignore:
@@ -1528,9 +1528,9 @@ fr:
 
     history:
       events:
-        event_label: "Name / Gruppe"
+        event_label: "Nom / Groupe"
       index:
-        future_roles_title: "Zukünftige Rollen"
+        future_roles_title: "Rôles futurs"
         inactive_roles_title: "Rôles inactifs"
         qualified: "Bestanden"
         not_qualified: "Nicht bestanden"
@@ -1908,7 +1908,7 @@ fr:
       prompt_role_duration_from: ou durant la période de
       prompt_role_duration_selection: Quelle période doit être prise en compte?
       prompt_role_duration_until: à
-      or_duration: oder
+      or_duration: ou
       include_archived: Inclure les rôles archivés
 
     qualification:
@@ -1917,7 +1917,7 @@ fr:
       prompt_constraint: Welche Logik soll angewendet werden?
       prompt_validity: Quelles validités doivent avoir les qualifications montrées?
       prompt_year: Restreindre l'année de qualification
-      prompt_date: Stichdatum
+      prompt_date: Jour fixé
       prompt_kind: Dans quel secteur faut-il chercher ?
       reference_date_help_inline: Leer lassen, um das aktuelle Datum zu verwenden.
       start_at_year_label: 'Reçu entre '

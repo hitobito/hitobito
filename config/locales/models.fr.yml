@@ -76,7 +76,7 @@ fr:
   activerecord:
     errors:
       messages:
-        at_least_one_present: Mindestens eine %{model_name} muss aufgefüllt werden
+        at_least_one_present: Au moins %{model_name} doit être remplie
         type_not_allowed: ne peut pas être créé ici
         must_be_after_opening: doit être ultérieur à l'inscription
         must_have_same_type: doivent être de type identique
@@ -144,7 +144,7 @@ fr:
           attributes:
             base:
               max_one_additional_invoice_address: Une seule adresse peut être choisie comme adresse de facturation.
-              additional_address_labels_must_be_unique: Die Bezeichnungen der weiteren Adressen müssen eindeutig sein.
+              additional_address_labels_must_be_unique: Les désignations des autres adresses doivent être uniques.
             email:
               taken: >
                   a déjà été attribué. Cette adresse doit être unique pour chaque
@@ -160,7 +160,7 @@ fr:
             person_id:
               taken: a déjà été demandé
         person_duplicates:
-          invalid_role: "Rolle %{role} von %{person} ist fürs Zusammenführen nicht gültig, da die andere Person eventuell bereits eine Rolle hat, welche diese Rolle nicht mehr erlaubt, diese muss manuell korrigiert/etnfernt werden. Info: %{message}"
+          invalid_role: "Le rôle %{role} de %{person} n'est pas valable pour la fusion, car l'autre personne a peut-être déjà un rôle qui n'autorise plus ce rôle, celui-ci doit être corrigé/supprimé manuellement. Info: %{message}"
         qualification:
           attributes:
             qualification_kind_id:
@@ -213,9 +213,9 @@ fr:
         many: Adresses e-mail supplémentaires
         other: Adresses e-mail supplémentaires
       additional_address:
-        one: Weitere Adresse
-        many: Weitere Adressen
-        other: Weitere Adressen
+        one: Adresse supplémentaire
+        many: Adresses supplémentaires
+        other: Adresses supplémentaires
       assignment:
         one: Commandes
         many: Commandes
@@ -485,19 +485,19 @@ fr:
         category: Catégorie
 
       additional_address:
-        translated_label: Bezeichnung
+        translated_label: Désignation
         street_and_number: Rue/Numéro
-        housenumber: Hausnummer
+        housenumber: Numéro de la maison
         postbox: Postfach
         zip_code: CP
-        town: Ort
+        town: Lieu
         country: Pays
         postbox: Case postale
-        address_care_of: zusatz. Adresszeile
-        public: Öffentlich
+        address_care_of: ligne d'adresse supplémentaire
+        public: Public
 
       additional_addresses:
-        label: Bezeichnung
+        label: Désignation
         street: Rue
         postbox: Postfach
         zip_code: CP
@@ -506,10 +506,10 @@ fr:
         postbox: Case postale
 
       bounces:
-        email: E-Mail
-        count: Anzahl Bounces
-        blocked_at: Sperrzeitpunkt
-        mailing_list_ids: Abo-IDs
+        email: Courriel
+        count: Nombre de bounces
+        blocked_at: Moment de blocage
+        mailing_list_ids: ID d'abonnement
 
       cantons:
         ag: Argovie
@@ -582,7 +582,7 @@ fr:
         phone_numbers: Numéros de téléphone
         social_accounts: Réseaux sociaux
         additional_emails: Adresses e-mail supplémentaires
-        additional_addresses: Weitere Adressen
+        additional_addresses: Adresses supplémentaires
         family_members: Membres de la famille
         picture: Ajouter une nouvelle photo
         remove_picture: Supprimer la photo actuelle
@@ -605,8 +605,8 @@ fr:
         birth_year: Année de naissance
         roles_list: Rôles
         person_name: Prénom / Nom / Surnom
-        company_name: Firmenname
-        town: Ort
+        company_name: Nom de l'entreprise
+        town: Lieu
 
       person/add_request:
         person: Personne
@@ -712,7 +712,7 @@ fr:
         application_questions: Données pour l'inscription
         admin_questions: Données administratives
         no_name: "[Sans nom]"
-        visible_contact_attributes: "Anzeigeoptionen (Kontaktperson)"
+        visible_contact_attributes: "Options d'affichage (personne de contact)"
 
       event/contact_attrs:
         required: Obligatoire
@@ -747,7 +747,7 @@ fr:
         state_translated: Statut
         priorization: Préférence
         requires_approval: Validation
-        training_days: Ausbildungstage
+        training_days: Jours de formation
 
       event/date:
         label: Désignation
@@ -852,8 +852,8 @@ fr:
         uid: Client ID
         secret: Client secret
         redirect_uri: Rediriger les URIs
-        additional_audiences: Weitere Audiences
-        skip_consent_screen: Einwilligung überspringen
+        additional_audiences: Autres audiences
+        skip_consent_screen: Sauter le consentement
 
       phone_number:
         number: Numéro
@@ -871,7 +871,7 @@ fr:
         string_with_origin: '%{kind} (de %{origin})'
         string_with_finish_at: '%{kind} (jusque %{finish_at})'
         string_with_finish_at_and_origin: '%{kind} (jusque %{finish_at}, de %{origin})'
-        open_training_days: Offene Ausbildungstage
+        open_training_days: Journées de formation ouvertes
 
       qualification_kind:
         label: Désignation
@@ -881,7 +881,7 @@ fr:
         updated_at: Modifié
         deleted_at: Supprimé
         reactivateable: Pouvant être réactivé
-        required_training_days: Erforderliche Ausbildungstage
+        required_training_days: Journées de formation nécessaires
 
       # used for nested phone_numbers
       phone_numbers:
@@ -984,11 +984,11 @@ fr:
         invoices: Facture
 
       additional_emails:
-        email: E-Mail
-        name: Weitere E-Mail
-        label: Weitere E-Mail Typ
-        public: Öffentlich
-        mailings: Versand
+        email: Courriel
+        name: Adresse e-mail supplémentaire
+        label: Autre type d'e-mail
+        public: Public
+        mailings: Envoi
         invoices: Facture
 
       mailing_list:
@@ -1212,7 +1212,7 @@ fr:
         donation_increase_percentage: Augmentation en %
         donation_calculation_year_amount: Nombre d'années
         sender_name: E-mail Nom de l'expéditeur
-        custom_content: E-Mail Vorlage
+        custom_content: Modèle d'e-mail
 
       invoice_item:
         name: Désignation
@@ -1255,8 +1255,8 @@ fr:
         reference: Référence de paiement
         transaction_identifier: Identifiant de la transaction
         status: Statut
-        payee_person_name: Schuldner Name
-        payee_person_address: Schuldner Adresse
+        payee_person_name: Débiteur Nom
+        payee_person_address: Débiteur Adresse
 
       payment_reminder:
         invoice: Facture
@@ -1338,7 +1338,7 @@ fr:
 
   fixed_fees:
     membership:
-      members: Mitglieder
+      members: Membres
 
   errors:
     messages:

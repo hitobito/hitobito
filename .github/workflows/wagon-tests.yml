@@ -7,7 +7,7 @@ on:
         description: "Wagon repository, e.g. hitobito_pbs"
         type: string
       wagon_dependency_repository:
-        description: A wagon this wagon depends on, e.g. hitobito_youth
+        description: Deprecated parameter. The wagon dependency is now automatically detected.
         required: false
         default: ""
         type: string
@@ -41,6 +41,9 @@ defaults:
     working-directory: hitobito
 
 jobs:
+  detect_wagon_dependency:
+    # TODO
+
   wagon_rubocop:
     name: rubocop
     runs-on: "ubuntu-22.04"
@@ -51,7 +54,7 @@ jobs:
       - name: echo distinct ID ${{ inputs.distinct_id }}
         run: echo ${{ inputs.distinct_id }}
         working-directory: .
-        
+
       - name: Check out core with shared setup action
         uses: actions/checkout@v4
         with:
@@ -66,7 +69,7 @@ jobs:
           migrations: false
           assets: false
           wagon_repository: ${{ inputs.wagon_repository }}
-          wagon_dependency_repository: ${{ inputs.wagon_dependency_repository }}
+          wagon_dependency_repository: ${{ needs.detect_wagon_dependency.outputs.wagon_dependency_repository }}
           core_ref: ${{ inputs.core_ref }}
           wagon_dependency_ref: ${{ inputs.wagon_dependency_ref }}
 

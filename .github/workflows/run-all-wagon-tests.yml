@@ -59,39 +59,11 @@ jobs:
       matrix:
         wagon: ${{ fromJSON(needs.find-wagons.outputs.wagons) }}
       max-parallel: 5 # needed so we don't occupy all the runners with core waiting jobs and the wagon tests can never start
-    steps:
-      - name: Trigger ${{ matrix.wagon.name }} wagon tests
-        uses: Codex-/return-dispatch@v2.1.0
-        id: run-wagon-tests
-        with:
-          token: ${{ secrets.WAGON_TESTS_GITHUB_TOKEN }}
-          repo: ${{ matrix.wagon.repo }}
-          owner: ${{ matrix.wagon.owner }}
-          ref: ${{ inputs.wagon_ref || 'master' }}
-          workflow: tests.yml
-          workflow_timeout_seconds: 21600 # wait for up to 6 hours
-          workflow_job_steps_retry_seconds: 10 # default is 5, set it higher to not strain the API limit too much
-          workflow_inputs: |
-            {
-              "core_ref": "${{ github.ref || inputs.core_ref || 'sac-master' }}",
-              "wagon_dependency_ref": "${{ inputs.wagon_dependency_ref || 'sac-master' }}"
-            }
-
-      - name: Link to the triggered wagon tests run
-        run: 'echo "${{ matrix.wagon.name }} tests triggered: ${{ steps.run-wagon-tests.outputs.run_url }}"'
-
-      - name: Wait for ${{ matrix.wagon.name }} wagon tests result
-        uses: carlobeltrame/await-remote-run@conditional-api-requests
-        with:
-          token: ${{ secrets.WAGON_TESTS_GITHUB_TOKEN }}
-          repo: ${{ matrix.wagon.repo }}
-          owner: ${{ matrix.wagon.owner }}
-          run_id: ${{ steps.run-wagon-tests.outputs.run_id }}
-          run_timeout_seconds: 21600 # wait for up to 6 hours
-          poll_interval_ms: 10000 # poll every 10 seconds
-
-      - name: Cancel ${{ matrix.wagon.name }} wagon tests
-        if: ${{ cancelled() && steps.run-wagon-tests.outputs.run_id }}
-        run: 'gh api --method POST -H "Accept: application/vnd.github+json" /repos/${{ matrix.wagon.owner }}/${{ matrix.wagon.repo }}/actions/runs/${{ steps.run-wagon-tests.outputs.run_id }}/cancel'
-        env:
-          GH_TOKEN: ${{ secrets.WAGON_TESTS_GITHUB_TOKEN }}
+    uses: hitobito/hitobito/.github/workflows/wagon-tests.yml@master
+    with:
+      wagon_repository: ${{ github.event.repository.name }}
+      core_ref: ${{ github.ref || inputs.core_ref || 'sac-master' }}
+      wagon_dependency_ref: ${{ inputs.wagon_dependency_ref || 'sac-master' }}
+    secrets:
+      HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}
+      HEARTBEAT_TOKEN: ${{ secrets.HEARTBEAT_TOKEN }}

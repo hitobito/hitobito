@@ -26,6 +26,7 @@ class InvoiceConfigsController < CrudController
   before_save :set_custom_content_attributes
   before_save :define_changed_payment_provider_configs
   after_save :initialize_payment_providers
+  after_save :persist_custom_content_body
 
   private
 
@@ -51,6 +52,12 @@ class InvoiceConfigsController < CrudController
     missing_payment_providers.each do |provider|
       entry.payment_provider_configs.build.with_payment_provider(provider)
     end
+  end
+
+  def persist_custom_content_body
+    return if entry.custom_content.nil? || entry.custom_content.marked_for_destruction?
+
+    entry.custom_content.body.save
   end
 
   def set_custom_content_attributes

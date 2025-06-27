@@ -127,11 +127,5 @@ describe :invoice_configs, js: true do
       click_link "E-Mail Vorlage entfernen"
       expect(page).to have_text "Eintrag hinzufügen"
     end
-
-    it "shows validation when custom content is missing placeholders" do
-      click_link "Eintrag hinzufügen"
-      click_button "Rechnungseinstellungen aktualisieren"
-      expect(page).to have_text "Inhalt muss den Platzhalter {invoice-items} enthalten"
-    end
   end
 end

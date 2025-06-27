@@ -69,7 +69,9 @@ describe PeopleFilterHelper do
         Person::Filter::Qualification.new("qualification", attrs)
       end
 
-      let(:selected_kind_array) { [QualificationKind.first.id, QualificationKind.second.id] }
+      let(:selected_kind_array) { kinds.take(2).map(&:id) }
+
+      let(:kinds) { QualificationKind.list.without_deleted }
 
       let(:attrs) do
         {
@@ -81,18 +83,18 @@ describe PeopleFilterHelper do
 
       it "returns qualification kind options with selected" do
         html = helper.people_filter_qualification_kind_options(filter)
-        QualificationKind.list.without_deleted.each do |kind|
+        kinds.each do |kind|
           if selected_kind_array.include?(kind.id)
             expect(html).to include("<option selected=\"selected\" value=\"#{kind.id}\">#{kind.label}</option>")
-            next
+          else
+            expect(html).to include("<option value=\"#{kind.id}\">#{kind.label}</option>")
           end
-          expect(html).to include("<option value=\"#{kind.id}\">#{kind.label}</option>")
         end
       end
 
       it "returns qualification kind options without selected" do
         html = helper.people_filter_qualification_kind_options(nil)
-        QualificationKind.list.without_deleted.each do |kind|
+        kinds.each do |kind|
           expect(html).to include("<option value=\"#{kind.id}\">#{kind.label}</option>")
         end
       end
@@ -122,9 +124,11 @@ describe PeopleFilterHelper do
 
       it "returns role kinds options without selected" do
         html = helper.people_filter_role_kind_options(nil)
-        Person::Filter::Role::KINDS.each do |kind|
-          expect(html).to include("<option value=\"#{kind}\">#{t("people_filters.form.filters_role_kind.#{kind}")}</option>")
-        end
+        expect(html).to include("<option value=\"active\">aktive Rollen</option>")
+        expect(html).to include("<option value=\"created\">erstellte Rollen</option>")
+        expect(html).to include("<option value=\"deleted\">gelöschte Rollen</option>")
+        expect(html).to include("<option value=\"inactive\">inaktive oder nie vorhandene Rollen</option>")
+        expect(html).to include("<option value=\"inactive_but_existing\">inaktive aber zu einer anderen Zeit vorhandene Rollen</option>")
       end
 
       it "returns role kinds options with selected" do

@@ -36,7 +36,7 @@ describe Person::Filter::Chain do
       yaml = Person::Filter::Chain.dump(chain)
       roundtrip = Person::Filter::Chain.load(yaml)
       expect(roundtrip.to_params.deep_stringify_keys).to eq(
-        {role: {role_type_ids: "2-6-9"},
+        {role: {:role_type_ids => "2-6-9", "kind" => nil},
          qualification: {qualification_kind_ids: "14"}}.deep_stringify_keys
       )
     end

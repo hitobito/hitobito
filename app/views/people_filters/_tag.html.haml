@@ -3,17 +3,28 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- filter = entry.filter_chain[:tag]
-- selected = filter ? filter.to_hash[:names] : []
-- options = options_from_collection_for_select(@possible_tags, :second, :first, selected)
+- tags_options = people_filter_tags_options(entry.filter_chain)
 
-%p= t(".prompt_tag_selection")
-
-.shown
-  = select_tag("filters[tag][names][]",
-                options,
-                class: "form-control",
-                multiple: true,
-                data: { chosen_no_results: t("global.chosen_no_results"),
-                        placeholder: t(".prompt_tag_placeholder"),
-                        controller: "tom-select"} )
+.label-columns.mr-5
+  .d-flex.flex-column.flex-lg-row.align-items-start.align-items-lg-center.mb-2
+    .col-12.col-lg-2
+      %label= t('.prompt_tag_selection')
+    .col-12.col-lg-10.shown
+      = select_tag('filters[tag][names][]',
+                    tags_options[:present],
+                    class: 'form-select form-select-sm tom-select w-100',
+                    "data-controller": "tom-select",
+                    id: 'present-tag-select',
+                    multiple: true,
+                    data: { chosen_no_results: t('global.chosen_no_results'), placeholder: t('.prompt_tag_placeholder') } )
+  .d-flex.flex-column.flex-lg-row.align-items-start.align-items-lg-center
+    .col-12.col-lg-2
+      %label= t('.prompt_tag_absence_selection')
+    .col-12.col-lg-10.shown
+      = select_tag('filters[tag_absence][names][]',
+                    tags_options[:absent],
+                    class: 'form-select form-select-sm tom-select w-100',
+                    id: 'absent-tag-select',
+                    "data-controller": "tom-select",
+                    multiple: true,
+                    data: { chosen_no_results: t('global.chosen_no_results'), placeholder: t('.prompt_tag_placeholder') } )

@@ -1,6 +1,6 @@
 - key = attr.gsub(/\W+/, '_').gsub(/_+$/, '')
 - caption ||= "people_filters.form.#{key}.#{value}"
 
-= label_tag("#{key}_#{value}", class: 'radio') do
+= label_tag("#{key}_#{value}", class: 'radio', style: style) do
   = radio_button_tag(attr, value, checked)
   = t(caption)

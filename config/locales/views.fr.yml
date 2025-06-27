@@ -1860,14 +1860,20 @@ fr:
 
   people_filters:
     form:
+      add: Ajouter un critère de filtrage
+      show_results: Afficher les résultats
       save_search: Sauvegarder cette recherche
       save_filter: Sauvegarder ce filtre
       save_filter_placeholder: Saisir un nom pour sauvegarder ce filtre
+      filter_advice_heading: Aucun critère de filtrage sélectionné
+      save_filter_option: Enregistrer ce paramètre en tant que nouveau filtre ?
+      save_filter_option_value: Oui, enregistrer en tant que filtre
       range:
         deep: Dans le niveau actuel et tous les niveaux et groupes sous-jacents
         layer: Dans le niveau actuel et tous les groupes
         group: Uniquement dans le groupe actuel
         group_deep: Dans le groupe actuel et tous les groupes sous-jacents
+        one_option: La zone de recherche est le groupe actuel et tous les groupes qui se trouvent en dessous
       filters_qualification_validity:
         active: Uniquement les qualifications valides
         reactivateable: Les qualifications valides et renouvelables
@@ -1885,6 +1891,7 @@ fr:
         inactive_but_existing: rôles inactifs mais qui existent pour une autre période
 
     attributes:
+      advice: Sélectionner un champ
       title: Champ
       match: contient
       not_match: ne contient pas
@@ -1894,6 +1901,8 @@ fr:
       before: avant le
       after: après le
       blank: est vide
+      younger: puiné que
+      older:  âgé que
 
     language:
       title: Langue
@@ -1902,8 +1911,9 @@ fr:
 
     tag:
       title: Tags
-      prompt_tag_selection: Inclure les personnes qui contiennent au moins une des tags ci-dessous
+      prompt_tag_selection: Personnes avec tag
       prompt_tag_placeholder: Entrez les noms de tags souhaités
+      prompt_tag_absence_selection: Personnes sans tag
 
     tag_absence:
       prompt_tag_absence_selection: 'Exclure les personnes qui contiennent au moins une des tags ci-dessous '
@@ -1917,15 +1927,32 @@ fr:
 
     role:
       title: Rôles
+      role_kind_title: Validité
       prompt_role_selection: Quels rôles doivent être affichés?
       prompt_role_duration_from: ou durant la période de
       prompt_role_duration_selection: Quelle période doit être prise en compte?
       prompt_role_duration_until: à
       or_duration: ou
       include_archived: Inclure les rôles archivés
+      include_archived_option: Oui, inclure les rôles archivés
+      prompt_role_placeholder: Saisir le nom du rôle souhaité
+      prompt_role_kind_placeholder: Saisir la validité souhaitée
+      duration_title: Période de
 
     qualification:
       title: Qualifications
+      criterion: Critère
+      validity: Validité
+      validity_label:
+        active: Actif
+        reactivateable: Réactivable
+        not_active_but_reactivateable: Inactif mais réactivable
+        not_active: Non actif
+        all: Tous
+        none: Personne
+        only_expired: Uniquement les produits expirés
+      prompt_qualification_placeholder: Saisir le nom de qualification souhaité
+      prompt_qualification_validity_placeholder: Saisir la validité souhaitée
       prompt_qualification_selection: Quelles qualifications doivent apparaître?
       prompt_constraint: Quelle logique doit être appliquée?
       prompt_validity: Quelles validités doivent avoir les qualifications montrées?

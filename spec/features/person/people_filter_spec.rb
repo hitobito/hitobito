@@ -7,6 +7,8 @@ require "spec_helper"
 
 describe PeopleController, js: true do
   let(:group) { groups(:top_layer) }
+  let(:top_leader) { people(:top_leader) }
+  let(:alice) { people(:bottom_member) }
 
   it "may define role filter, display and edit it again" do
     member = people(:bottom_member)
@@ -78,74 +80,6 @@ describe PeopleController, js: true do
         expect(page).to have_css("#roles input[name='filters[role][role_type_ids][]']:checked", count: 0)
       end
     end
-
-    it "toggles groups and layers when changing range" do
-      obsolete_node_safe do
-        sign_in
-        visit group_people_path(group, range: "group")
-
-        click_link "Weitere Ansichten"
-        click_link "Neuer Filter..."
-        expect(page).to have_content "Personen filtern"
-        click_link "Rollen"
-
-        expect(page).to have_no_selector("h4", text: "Bottom Layer")
-        expect(page).to have_selector("h4", text: "Top Layer")
-        expect(page).to have_selector("h5", text: "Top Layer")
-        expect(page).to have_no_selector("h5", text: "Top Group")
-
-        find("#range_deep").set(true)
-        expect(page).to have_selector("h4", text: "Bottom Layer")
-
-        find("#range_group").set(true)
-        expect(page).to have_no_selector("h4", text: "Bottom Layer")
-        expect(page).to have_selector("h4", text: "Top Layer")
-        expect(page).to have_selector("h5", text: "Top Layer")
-        expect(page).to have_no_selector("h5", text: "Top Group")
-
-        find("#range_layer").set(true)
-        expect(page).to have_no_selector("h4", text: "Bottom Layer")
-        expect(page).to have_selector("h4", text: "Top Layer")
-        expect(page).to have_selector("h5", text: "Top Layer")
-        expect(page).to have_selector("h5", text: "Top Group")
-      end
-    end
-  end
-
-  context "qualifications" do
-    before do
-      sign_in
-      visit group_people_path(group, range: "group")
-
-      click_link "Weitere Ansichten"
-      click_link "Neuer Filter..."
-      expect(page).to have_content "Personen filtern"
-      click_link "Qualifikationen"
-    end
-
-    it "adjusts filters when checking 'Alle jemals erteilten Qualifikationen'" do
-      choose "Alle jemals erteilten Qualifikationen"
-      expect(page).to have_content "Qualifikationsjahr einschränken"
-      expect(page).not_to have_content "Stichdatum"
-      expect(page).not_to have_field "Person hat ALLE diese Qualifikationen" # is disabled
-      expect(page).to have_checked_field "Person hat mindestens EINE dieser Qualifikationen"
-    end
-
-    it "adjusts filters when checking 'Keine jemals erteilte Qualifikation'" do
-      choose "Keine jemals erteilte Qualifikation"
-      expect(page).not_to have_content "Qualifikationsjahr einschränken"
-      expect(page).not_to have_content "Stichdatum"
-      expect(page).not_to have_field "Person hat ALLE diese Qualifikationen" # is disabled
-      expect(page).to have_checked_field "Person hat mindestens EINE dieser Qualifikationen"
-    end
-
-    it "adjusts filters when checking 'Abgelaufene, aber nicht gültige oder reaktivierbare Qualifikationen'" do
-      choose "Keine jemals erteilte Qualifikation"
-      expect(page).not_to have_content "Qualifikationsjahr einschränken"
-      expect(page).not_to have_content "Stichdatum"
-      expect(page).not_to have_field "Person hat ALLE diese Qualifikationen" # is disabled
-      expect(page).to have_checked_field "Person hat mindestens EINE dieser Qualifikationen"
-    end
   end
 
   context "attributes" do
@@ -156,17 +90,13 @@ describe PeopleController, js: true do
       click_link "Weitere Ansichten"
       click_link "Neuer Filter..."
       expect(page).to have_content "Personen filtern"
+
+      find(".btn.dropdown-toggle").click
       click_link "Felder"
     end
 
     it "supports filtering by specific attribute on person" do
       choose "In der aktuellen Ebene und allen darunter liegenden Ebenen und Gruppen"
-      first(:button, "Suchen").click
-      expect(page).to have_css "td", text: "Leader Top"
-      expect(page).to have_css "td", text: "Member Bottom"
-      click_link "Eigener Filter"
-      click_link "Neuer Filter..."
-      click_link "Felder"
       select "Nachname"
       option = select "ist genau"
       value_id = option.send(:parent)["id"].gsub("constraint", "value")
@@ -213,5 +143,161 @@ describe PeopleController, js: true do
     find(".accordion-button", text: "Rollen").click
 
     expect(page).to have_css("#roles .label-columns input:checked", count: 0)
+  end
+
+  context "filtering" do
+    let(:path) { new_group_people_filter_path(group_id: Group.first.id) }
+
+    before {
+      sign_in(top_leader)
+      visit path
+      find(".btn.dropdown-toggle").click
+    }
+
+    context "tags" do
+      before {
+        alice.tag_list.add("lorem")
+        alice.tag_list.add("ipsum")
+        alice.save!
+        find("#dropdown-option-tag").click
+      }
+
+      it "can filter by present tags" do
+        expect(page).to have_selector("div#tag-configuration")
+        find("#present-tag-select-ts-control").set("lorem")
+        find("#present-tag-select-opt-2").click
+
+        first(".btn.btn-primary", text: "Suchen").click
+        expect(page).to have_text(alice.first_name)
+      end
+
+      it "can filter by absent tags" do
+        visit path
+        find(".btn.dropdown-toggle").click
+        find("#dropdown-option-tag").click
+        expect(page).to have_selector("div#tag-configuration")
+        find("#absent-tag-select-ts-control").set("ipsum")
+        find("#absent-tag-select-opt-1").click
+
+        first(".btn.btn-primary", text: "Suchen").click
+        expect(page).to have_text(alice.first_name)
+      end
+    end
+
+    context "roles" do
+      before {
+        find("#dropdown-option-role").click
+      }
+
+      it "can filter by present roles" do
+        expect(page).to have_selector("div#role-configuration")
+        # Select role
+        find("#role-select-ts-control").set(alice.roles.first.type.split(":").last)
+        find("#role-select-opt-3").click
+
+        # Select date
+        find("#filters_role_start_at").set("2025-03-18")
+        find("#filters_role_finish_at").set("2025-03-30")
+
+        # Select role kind
+        find("#role-kind-select").set("Aktiv")
+
+        first(".btn.btn-primary", text: "Suchen").click
+        expect(page).to have_text(alice.first_name)
+      end
+    end
+
+    context "qualification" do
+      before {
+        find("#dropdown-option-qualification").click
+      }
+
+      it "can filter by qualifications" do
+        expect(page).to have_selector("div#qualification-configuration")
+
+        # Select qualification
+        find("#qualification-select-ts-control")
+          .set(alice.qualifications.first.qualification_kind.label)
+        find("#qualification-select-opt-4").click
+
+        # Select reference date
+        find("#filters_qualification_reference_date").set("2025-03-05")
+
+        first(".btn.btn-primary", text: "Suchen").click
+
+        expect(page).to have_text(alice.first_name)
+      end
+    end
+
+    context "attributes" do
+      before {
+        find("#dropdown-option-attributes").click
+      }
+
+      it "can filter by attributes" do
+        expect(page).to have_selector("div#attributes-configuration")
+
+        select "PLZ", from: "attribute_filter"
+        first(".attribute_constraint_dropdown").find("option[value='equal']").select_option
+        first("input.form-control[type='text']").set(alice.zip_code)
+
+        select "Vorname", from: "attribute_filter"
+        all(".attribute_constraint_dropdown")[1].find("option[value='equal']").select_option
+        all("input.form-control[type='text']")[1].set(alice.first_name)
+
+        first(".btn.btn-primary", text: "Suchen").click
+        expect(page).to have_text(alice.first_name)
+      end
+
+      it "is xss-attack immune" do
+        expect(page).to have_selector("div#attributes-configuration")
+
+        select "Ort", from: "attribute_filter"
+        first(".attribute_constraint_dropdown").find("option[value='match']").select_option
+        first("input.form-control[type='text']").set("<script>alert('Hacked!');</script>")
+
+        first(".btn.btn-primary", text: "Suchen").click
+        expect {
+          page.driver.browser.switch_to.alert
+        }.to raise_error(Selenium::WebDriver::Error::NoSuchAlertError)
+      end
+    end
+
+    context "saving" do
+      let(:path) { new_group_people_filter_path(group_id: Group.first.id) }
+
+      before {
+        sign_in(top_leader)
+        visit path
+        find(".btn.dropdown-toggle").click
+      }
+
+      it "can save filter" do
+        find("#dropdown-option-role").click
+
+        find("#role-select-ts-control").click
+        find("#role-select-opt-1").click
+
+        filter_name = "Filtername"
+        fill_in "people_filter_name", with: filter_name
+        first(".btn.btn-primary", text: "Suchen").click
+        check("save-filter")
+        expect(page).to have_text(filter_name.to_s)
+      end
+    end
+  end
+
+  context "member access" do
+    let(:path) { new_group_people_filter_path(group_id: Group.find_by(name: "Top").id) }
+
+    before {
+      Rails.env.stub(production?: true)
+      sign_in(alice)
+    }
+
+    it "can't access people filtering" do
+      visit path
+      expect(page).to have_text("Sie sind nicht berechtigt, diese Seite anzuzeigen")
+    end
   end
 end

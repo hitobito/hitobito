@@ -26,24 +26,25 @@ class Person::Filter::AttributeControl
     key, constraint, value = attr.to_h.symbolize_keys.slice(:key, :constraint, :value).values
     type = Person.filter_attrs[key.to_sym][:type] if key
 
-    content_tag(:div,
-      class: 'people_filter_attribute_form d-flex align-items-center
-                        justify-content-between mb-2 controls controls-row') do
-      content = attribute_key_hidden_field(key, time, disabled: attr.blank?)
-      content << attribute_key_field(key, time, html_options)
-      content << attribute_constraint_field(key, constraint, type, time, html_options)
-
-      attribute_value_class = "#{(constraint == "blank") ? " invisible" : ""} attribute_value_input"
-      content << content_tag(:div, class: "col") do
-        if type
-          send(:"#{type}_field", time, attribute_value_class, value, html_options)
-        else
-          all_field_types(time, attribute_value_class, value, html_options)
-        end
+    content_tag(:div) do
+      content_tag(:div,
+        class: "people_filter_attribute_form d-flex flex-column flex-lg-row align-items-start align-items-lg-center control-group mb-2") do
+        attribute_key_hidden_field(key, time, disabled: attr.blank?) +
+          attribute_key_field(key, time, html_options) +
+          content_tag(:div, class: "d-flex col-12 col-lg-10 flex-column flex-lg-row justify-content-between") do
+            attribute_value_class = "#{(constraint == "blank") ? " invisible" : ""} attribute_value_input"
+            attribute_constraint_field(key, constraint, type, time, html_options) +
+              content_tag(:div, class: "col-12 col-lg-6") do
+                if type
+                  send(:"#{type}_field", time, attribute_value_class, value, html_options)
+                else
+                  all_field_types(time, attribute_value_class, value, html_options)
+                end
+              end
+          end + link_to(icon(:"trash-alt", filled: false), "#",
+            class: "remove_filter_attribute d-flex justify-content-end lh-lg ms-4 d-none d-lg-block",
+            data: {action: "click->people-filter-attributes#remove"})
       end
-
-      content << link_to(icon(:"trash-alt", filled: false), "#",
-        class: "remove_filter_attribute col lh-lg ms-5")
     end
   end
 
@@ -58,7 +59,8 @@ class Person::Filter::AttributeControl
       integer_field(time, attribute_value_class, value, html_options),
       date_field(time, attribute_value_class, value, html_options),
       gender_select_field(time, attribute_value_class, value, html_options),
-      boolean_field(time, attribute_value_class, value, html_options)
+      boolean_field(time, attribute_value_class, value, html_options),
+      language_select_field(time, attribute_value_class, value, html_options)
     ])
   end
 
@@ -67,18 +69,21 @@ class Person::Filter::AttributeControl
   end
 
   def attribute_key_field(key, time, html_options)
-    content_tag(:div, class: "col") do
+    content_tag(:div, class: "d-flex flex-row justify-content-between col-12 col-lg-2") do
       select_tag("#{filter_name_prefix}[key]",
         options_from_collection_for_select(people_filter_attributes_for_select, :last, :first, key),
-        html_options.merge(disabled: true, class: "attribute_key_dropdown form-select form-select-sm"))
+        html_options.merge(disabled: true, class: "attribute_key_dropdown form-select form-select-sm w-75")) +
+        link_to(icon(:"trash-alt", filled: false), "#",
+          class: "d-block d-lg-none d-flex justify-content-end align-items-center remove_filter_attribute col-md-3 d-flex lh-lg")
     end
   end
 
   def attribute_constraint_field(key, constraint, type, time, html_options)
-    content_tag(:div, class: "col") do
+    content_tag(:div, class: "d-flex flex-row col-12 col-lg-5") do
       select_tag("#{filter_name_prefix}[constraint]",
         options_from_collection_for_select(constraint_options_for(type, key), :last, :first, constraint),
-        html_options.merge(class: "attribute_constraint_dropdown ms-3 form-select form-select-sm"))
+        html_options.merge(class: "attribute_constraint_dropdown form-select form-select-sm w-100",
+          data: {action: "click->people-filter-attributes#toggleValueVisibility"}))
     end
   end
 
@@ -86,6 +91,7 @@ class Person::Filter::AttributeControl
     filters = [[t(".equal"), :equal], [t(".blank"), :blank]]
     filters += [[t(".match"), :match], [t(".not_match"), :not_match]] if type == :string || key.blank?
     filters += [[t(".smaller"), :smaller], [t(".greater"), :greater]] if type == :integer || key.blank?
+    filters += [[t(".younger"), :smaller], [t(".older"), :greater]] if type == :integer || key.blank?
     filters += [[t(".before"), :before], [t(".after"), :after]] if type == :date || key.blank?
     filters
   end
@@ -99,8 +105,12 @@ class Person::Filter::AttributeControl
   def country_select_field(time, attribute_value_class, value, html_options)
     country_select(filter_name_prefix,
       "value",
-      {priority_countries: Settings.countries.prioritized, selected: value, include_blank: ""},
-      html_options.merge(class: "form-select form-select-sm country_select_field #{attribute_value_class}"))
+      {priority_countries: Settings.countries.prioritized, selected: value},
+      html_options.merge(
+        class: "form-select form-select-sm country_select_field #{attribute_value_class} w-100",
+        "data-controller": set_data_controller,
+        multiple: true
+      ))
   end
 
   def integer_field(time, attribute_value_class, value, html_options)
@@ -119,7 +129,12 @@ class Person::Filter::AttributeControl
     gender_options = (Person::GENDERS + [""]).collect { |g| [g, Person.new.gender_label(g)] }
     select_tag("#{filter_name_prefix}[value]",
       options_from_collection_for_select(gender_options, :first, :last, value),
-      html_options.merge(class: "#{SELECT_CLASSES} gender_select_field #{attribute_value_class}"))
+      html_options.merge(
+        class: "#{SELECT_CLASSES} gender_select_field #{attribute_value_class} form-select form-select-sm w-100",
+        "data-controller": set_data_controller,
+        "allow-empty": true,
+        multiple: true
+      ))
   end
 
   def boolean_field(time, attribute_value_class, value, html_options)
@@ -130,5 +145,23 @@ class Person::Filter::AttributeControl
       html_options.merge(class: "#{SELECT_CLASSES} boolean_field #{attribute_value_class}"))
   end
 
+  def language_select_field(time, attribute_value_class, value, html_options)
+    language_options = Person::LANGUAGES.collect { |language_value, language_name| [language_value, language_name] }
+    select_tag("#{filter_name_prefix}[value]",
+      options_from_collection_for_select(language_options, :first, :last, value&.flatten&.map(&:to_sym)),
+      html_options.merge(
+        class: "#{SELECT_CLASSES} language_select_field #{attribute_value_class} form-select form-select-sm w-100",
+        multiple: true,
+        "data-controller": set_data_controller,
+        id: "language-select-#{time}"
+      ))
+  end
+
   def filter_name_prefix = "filters[attributes][#{time}]"
+
+  # rubocop:disable Rails/HelperInstanceVariable
+  def set_data_controller
+    @attr ? "tom-select" : ""
+  end
+  # rubocop:enable Rails/HelperInstanceVariable
 end

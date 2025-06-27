@@ -102,7 +102,7 @@ describe Export::PeopleExportJob do
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;.*/)
       expect(lines[0]).to match(/Zusätzliche Angaben;.*/)
-      expect(lines[0].split(";").count).to match(20)
+      expect(lines[0].split(";").count).to match(21)
     end
 
     context ", except if missing permissions to do so, it" do

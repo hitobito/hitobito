@@ -67,4 +67,33 @@ module MailingListsHelper
       method: "post",
       data: {disable_with: icons ? "#{icon(:plus)} #{label}" : label})
   end
+
+  def mailing_list_attributes_filter_info_items(list)
+    return unless list.filter_chain[:attributes]
+    or_connector = " #{t("global.or")} "
+
+    items = list.filter_chain[:attributes].to_hash.values.map(&:values).map do |key, constraint, value|
+      unless key == "gender"
+        value = value.compact_blank if value.is_a?(Array)
+      end
+      value_string = Array(value).map do |val|
+        case key
+        when /language/ then Person::LANGUAGES[val.to_sym]
+        when /country/ then ISO3166::Country[val].translations[I18n.locale.to_s]
+        when /gender/ then Person.new.gender_label(val)
+        else value
+        end
+      end.sort.to_sentence(two_words_connector: or_connector, last_word_connector: or_connector)
+
+      text = [
+        Person.human_attribute_name(key),
+        t("people_filters.attributes.#{constraint}"),
+        (value_string unless constraint == "blank")
+      ].compact_blank.join(" ")
+
+      content_tag(:li, text)
+    end
+
+    safe_join(items)
+  end
 end

@@ -8,9 +8,12 @@
            attr: 'range',
            value: 'deep',
            checked: true,
-           caption: "people_filters.form.range.#{@group.layer? ? 'deep' : 'group_deep'}"
+           caption: "people_filters.form.range.#{@group.layer? ? 'deep' : 'group_deep'}",
+           style: "display: #{@group.layer? ? 'block' : 'none'}"
+  - unless @group.layer?
+    %label= t('people_filters.form.range.one_option')
   - if @group.layer?
-    = render 'simple_radio', attr: 'range', value: 'layer', checked: entry.range == 'layer'
-    = render 'simple_radio', attr: 'range', value: 'group', checked: entry.range == 'group'
+    = render 'simple_radio', attr: 'range', value: 'layer', checked: entry.range == 'layer', style: ""
+    = render 'simple_radio', attr: 'range', value: 'group', checked: entry.range == 'group', style: ""
 
 %br/

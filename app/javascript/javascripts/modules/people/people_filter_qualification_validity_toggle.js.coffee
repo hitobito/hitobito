@@ -3,21 +3,22 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-$(document).on 'click', 'input[id^=filters_qualification_validity]', () ->
-  if (this.value in ['all', 'none', 'only_expired']) && $(this).is(':checked')
+$(document).on 'change', 'select#qualification-validity-select', () ->
+  value = $(this).val()
+  if value in ['all', 'none', 'only_expired']
     $('input#filters_qualification_match_one').prop('checked', true)
     $('input#filters_qualification_match_all').prop('checked', false).attr('disabled', 'disabled')
     if this.value == 'all'
-      $('fieldset#year-scope').show()
-      $('fieldset#reference-date').hide()
+      $('div#year-scope').show()
+      $('div#reference-date').hide()
     if this.value == 'none'
-      $('fieldset#year-scope').hide()
-      $('fieldset#reference-date').hide()
+      $('div#year-scope').hide()
+      $('div#reference-date').hide()
     if this.value == 'only_expired'
-      $('fieldset#year-scope').hide()
-      $('fieldset#reference-date').show()
+      $('div#year-scope').hide()
+      $('div#reference-date').show()
 
   else
-    $('fieldset#year-scope').hide()
-    $('fieldset#reference-date').show()
+    $('div#year-scope').hide()
+    $('div#reference-date').show()
     $('input#filters_qualification_match_all').prop('checked', false).removeAttr('disabled')

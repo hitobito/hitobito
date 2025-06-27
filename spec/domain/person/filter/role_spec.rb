@@ -13,7 +13,7 @@ describe Person::Filter::Role do
   context "initialize" do
     it "ignores unknown role types" do
       filter = Person::Filter::Role.new(:role, role_types: %w[Group::TopGroup::Leader Group::BottomGroup::OldRole File Group::BottomGroup::Member])
-      expect(filter.to_hash).to eq(role_types: %w[Group::TopGroup::Leader Group::BottomGroup::Member])
+      expect(filter.to_hash).to eq(role_type_ids: [Group::TopGroup::Leader.id, Group::BottomGroup::Member.id], role_types: %w[Group::TopGroup::Leader Group::BottomGroup::Member], kind: nil)
     end
 
     it "ignores unknown role ids" do
@@ -472,20 +472,6 @@ describe Person::Filter::Role do
         it "finds role started within range" do
           role.update!(start_on: today)
           expect(filter(start_at: today, finish_at: today).entries).to have(1).item
-        end
-
-        context "excluding archived" do
-          context "within time range" do
-            it "does not find archived role with past archived_at" do
-              role.update_attribute(:archived_at, 1.day.ago)
-              expect(filter(start_at: today, finish_at: today, include_archived: false).entries).to be_empty
-            end
-
-            it "finds archived role outside with future archived_at" do
-              role.update_attribute(:archived_at, 1.day.from_now)
-              expect(filter(start_at: today, finish_at: today, include_archived: false).entries).to have(1).item
-            end
-          end
         end
 
         context "including archived" do

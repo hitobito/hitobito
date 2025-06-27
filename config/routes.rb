@@ -196,7 +196,7 @@ Hitobito::Application.routes.draw do
 
       resources :people_filters, only: [:new, :create, :edit, :update, :destroy]
       get 'people_filters' => 'people_filters#new' # route required for language switch
-
+      resource :people_filter_criterion, only: [:create, :destroy]
 
       get 'deleted_people' => 'group/deleted_people#index'
 

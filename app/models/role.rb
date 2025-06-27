@@ -124,7 +124,8 @@ class Role < ActiveRecord::Base
   after_create :reset_person_minimized_at
   after_destroy :set_contact_data_visible
   after_destroy :set_first_primary_group
-  after_save :set_first_primary_group, :touch_person
+  after_save :set_first_primary_group
+  after_save :touch_person
   after_save :set_contact_data_visible
 
   ### SCOPES
@@ -315,10 +316,6 @@ class Role < ActiveRecord::Base
     raise ActiveRecord::ReadOnlyRecord unless new_record? || only_archival
   end
 
-  def touch_person
-    person.touch
-  end
-
   def reset_person_minimized_at
     person&.update_attribute(:minimized_at, nil) # rubocop:disable Rails/SkipsModelValidations
   end
@@ -338,5 +335,9 @@ class Role < ActiveRecord::Base
 
   def set_first_primary_group
     People::UpdateAfterRoleChange.new(person.reload).set_first_primary_group
+  end
+
+  def touch_person
+    person.paper_trail.save_with_version
   end
 end

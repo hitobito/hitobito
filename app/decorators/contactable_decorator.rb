@@ -11,6 +11,8 @@ module ContactableDecorator
   end
 
   def contact_name
+    return decorated_model.address_name if decorated_model.respond_to?(:address_name)
+
     content_tag(:strong, to_s)
   end
 
@@ -117,5 +119,9 @@ module ContactableDecorator
   end
 
   def prepend_complete_address(_html)
+  end
+
+  def decorated_model
+    @decorated_model ||= model.decorate
   end
 end

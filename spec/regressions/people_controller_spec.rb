@@ -30,6 +30,7 @@ describe PeopleController, type: :controller do
 
   describe "#show" do
     let(:page_content) { ["Bearbeiten", "Info", "Verlauf", "Aktive Rollen", "Passwort ändern"] }
+    let(:contactable_attrs) { [:company_name, :first_name, :last_name, :address_care_of, :postbox, :zip_code, :town] }
 
     it "cannot view person in uppper group" do
       sign_in(Fabricate(Group::BottomGroup::Leader.name.to_sym, group: bottom_group).person)
@@ -41,6 +42,16 @@ describe PeopleController, type: :controller do
     it "renders my own page" do
       get :show, params: {group_id: top_group.id, id: top_leader.id}
       page_content.each { |text| expect(response.body).to match(/#{text}/) }
+    end
+
+    it "renders full contactable list" do
+      top_leader.update!(company: true,
+        company_name: "Hitobito AG",
+        address_care_of: "Address care of",
+        postbox: "Postbox")
+
+      get :show, params: {group_id: top_group.id, id: top_leader.id}
+      contactable_attrs.each { |attr| expect(response.body).to match(/#{top_leader.send(attr)}/) }
     end
 
     it "renders page of other group member" do

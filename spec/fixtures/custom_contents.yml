@@ -36,8 +36,7 @@ bulk_mail_with_failed:
 
 content_invoice_notification:
   key: content_invoice_notification
-  placeholders_required: invoice-items, invoice-total, payment-information
-  placeholders_optional: recipient-name, group-name, group-address, invoice-number
+  placeholders_optional: invoice-items, invoice-total, payment-information, recipient-name, group-name, group-address, invoice-number
 
 person_add_request_person:
   key: person_add_request_person

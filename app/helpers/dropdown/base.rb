@@ -23,10 +23,9 @@ module Dropdown
       @items = []
     end
 
-    def to_s
-      template.content_tag(:div, class: "btn-group dropdown") do
-        render_dropdown_button +
-          render_items
+    def to_s(options = {})
+      template.content_tag(:div, options.merge(class: "btn-group dropdown")) do
+        render_dropdown_button + render_items
       end
     end
 

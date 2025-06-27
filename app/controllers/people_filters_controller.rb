@@ -10,9 +10,8 @@ class PeopleFiltersController < CrudController
   # load group before authorization
   prepend_before_action :parent
 
-  before_render_form :compose_role_lists, :possible_tags
-
-  helper_method :people_list_path
+  helper_method :people_list_path, :group
+  before_render_form :populate_criterias
 
   def new
     assign_attributes
@@ -60,11 +59,6 @@ class PeopleFiltersController < CrudController
     people_list_path(search_params)
   end
 
-  def compose_role_lists
-    @role_types = Role::TypeList.new(group.class)
-    @qualification_kinds = QualificationKind.list.without_deleted
-  end
-
   def assign_attributes
     entry.name = params[:name] || params.dig(:people_filter, :name)
     entry.range = params[:range]
@@ -75,7 +69,8 @@ class PeopleFiltersController < CrudController
     group_people_path(group, options)
   end
 
-  def possible_tags
-    @possible_tags ||= PersonTags::Translator.new.possible_tags
+  def populate_criterias
+    @criterias = entry.filter_chain.to_hash.keys
+    flash[PeopleFilterCriterionsController::CRITERIAS_KEY] = @criterias
   end
 end

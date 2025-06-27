@@ -3,37 +3,39 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= standard_form(path_args(entry), noindent: true, stacked: true) do |f|
+= standard_form(path_args(entry), noindent: true, stacked: true, html: {class: "form-striped"}, data: {"controller": "people-filter-name-requiring"} ) do |form|
+  = render_extensions :form, locals: { f: form }
+  = form.error_messages
 
-  = render 'search_or_save_buttons', f: f
+  = render "range", f: form
 
-  = render_extensions :form, locals: { f: f }
-  = f.error_messages
+  = field_set_tag do
+    .mt-3.mb-2#overview
+      = render "criterion", criterion: :role
+      = render "criterion", criterion: :attributes
+      = render "criterion", criterion: :qualification
+      = render "criterion", criterion: :tag, force: @criterias.include?("tag_absence")
 
-  = render 'range', f: f
+    #filter-critera-dropdown.d-flex.flex-column
+      #filter-advice
+        %label.col-12.col-lg-2{style: "display: #{@criterias.any? ? 'none' : 'flex'}"}= t(".filter_advice_heading")
+      .div.mt-1.d-flex.col-2
+        = Dropdown::PeopleFilter.new(self, current_user, @criterias).to_s
 
-  .accordion.mb-3
-    = render(layout: 'filter', locals: { type: :role }) do
-      = render 'role', f: f
+  = field_set_tag do
+    .d-flex.flex-column
+      - unless entry.persisted?
+        .d-flex.flex-column.flex-lg-row.col-12
+          %label= t(".save_filter_option")
+          .ms-0.ms-lg-3
+            = check_box_tag('save-filter', true, entry.persisted?, class: "me-1", data: {action: "change->people-filter-name-requiring#changeRequired"})
+            %label= t(".save_filter_option_value")
+      .mt-2
+        - if can?(:create, entry)
+          %label{class: "#{entry.persisted? ? 'required' : ''}" , "data-people-filter-name-requiring-target": "label"}=PeopleFilter.human_attribute_name(:name)
+          = form.input_field :name, placeholder: t('.save_filter_placeholder'), class: 'mb-1 ', required: false
 
-    - if @qualification_kinds.present?
-      = render(layout: 'filter', locals: { type: :qualification }) do
-        = render 'qualification', f: f
-
-    = render(layout: 'filter', locals: { type: :attributes }) do
-      = render 'attributes', f: f
-
-    - FeatureGate.if('person_language') do
-      = render(layout: 'filter', locals: { type: :language }) do
-        = render 'language', f: f
-
-    = render(layout: 'filter', locals: { type: :tag }) do
-      .label-columns
-        = render 'tag', f: f
-        = render 'tag_absence', f: f
-
-  - if can?(:create, entry)
-    %label.required=PeopleFilter.human_attribute_name(:name)
-    = f.input_field :name, placeholder: t('.save_filter_placeholder'), class: 'mb-3 ', required: false
-
-  = render 'search_or_save_buttons', f: f
+  .btn-toolbar
+    .btn-group
+      = button_tag(t('global.button.search'), class: 'btn btn-sm btn-primary', value: 'search', "data-people-filter-name-requiring-target": "filter")
+    = link_to(t('global.button.cancel'), people_list_path, class: 'ms-3 mt-1')

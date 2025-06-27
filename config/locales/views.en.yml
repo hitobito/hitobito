@@ -1796,6 +1796,7 @@ en:
 
   people_filters:
     form:
+      show_results: Show results
       save_search: Save search
       save_filter: Save filter
       save_filter_placeholder: Enter a name to save this filter
@@ -1819,14 +1820,16 @@ en:
         deleted: role has been deleted.
         inactive: inaktive oder nie vorhandene Rollen
         inactive_but_existing: inaktive aber zu einer anderen Zeit vorhandene Rollen
-
     attributes:
+      advice: Choose field
       title: Fields
       match: contains
       not_match: enthält nicht
       equal: is equal
       greater: bigger than
       smaller: smaller than
+      younger: younger than
+      older: older than
       before: vor dem
       after: nach dem
       blank: ist leer
@@ -1838,8 +1841,9 @@ en:
 
     tag:
       title: Tags
-      prompt_tag_selection: Include persons with at least one of these tags
-      prompt_tag_placeholder: Tag name
+      prompt_tag_selection: People with tag
+      prompt_tag_placeholder: People without tag
+      prompt_tag_absence_selection: Exclude
 
     tag_absence:
       prompt_tag_absence_selection: Exclude persons with at least one of these tags
@@ -1853,15 +1857,31 @@ en:
 
     role:
       title: Roles
+      role_kind_title: Validity
       prompt_role_selection: Which roles should be displayed?
       prompt_role_duration_from: oder im Zeitraum von
       prompt_role_duration_selection: Which period should be considered?
       prompt_role_duration_until: until
+      prompt_role_placeholder: Enter the desired role name
+      prompt_role_kind_placeholder: Enter the desired validity
+      duration_title: Perios of
       or_duration: oder
       include_archived: Archivierte Rollen miteinbeziehen
 
     qualification:
       title: Qualifications
+      criterion: Criterion
+      validity: Validity
+      validity_label:
+        active: Active
+        reactivateable: Reactivateable
+        not_active_but_reactivateable: Not active but reactivateable
+        not_active: Not active
+        all: All
+        none: None
+        only_expired: Only expired
+      prompt_qualification_placeholder: Enter desired qualification name
+      prompt_qualification_validity_placeholder: Enter the desired validity
       prompt_qualification_selection: Which qualifications should be displayed?
       prompt_constraint: Welche Logik soll angewendet werden?
       prompt_validity: Which validity should the shown qualifications have?

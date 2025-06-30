@@ -1040,7 +1040,7 @@ fr:
         Les réponses à des e-mails concernant les factures doivent être envoyées à l'adresse de l'utilisateur.rice actuel.le ou à l'adresse configurée ici.
       email_validation: Ne doit pas être une adresse e-mail.
       sender_name_help: Les e-mails de facturation sont envoyés sous ce nom.
-      custom_content_help: Diese E-Mail Vorlage wird beim versenden von Rechnungen verwendet. Wenn keine E-Mail Vorlage hinterlegt wird, wird die globale E-Mail Vorlage verwendet.
+      custom_content_help: Ce modèle d'e-mail est utilisé lors de l'envoi de factures. Si aucun modèle d'e-mail n'est défini, le modèle d'e-mail global sera utilisé.
     reminder_fields:
       third_level: "Pour tous les rappels suivants, les données du troisième rappel sont reprises."
     provider_fields:
@@ -1380,7 +1380,7 @@ fr:
       form:
         help_cors_origins: En cas d'activation de la portée "api", "groups", "people", "events", "mailing_lists" ou "invoices", les sites webs sur cet hôte pourront consulter les données de l'interface JSON depuis le navigateur web (CORS).
         help_native_redirect_uris: Une entrée par ligne. Pour les tests locaux, utiliser %{native_redirect_uri}.
-        help_additional_audiences: Zusätzliche Einträge für den <code class='bg-light'>aud</code> Key im JWT Access Token.
+        help_additional_audiences: Entrées supplémentaires pour la clé <code class='bg-light'>aud</code> dans le jeton d'accès JWT.
         skip_consent_screen_explanation: L'application est interne à l'association et digne de confiance, passer l'écran de consentement
       attrs:
         profile_endpoint_help:
@@ -1453,10 +1453,11 @@ fr:
     form:
       help_validity_in_years: "années à partir de la date de qualification; jusqu'à la fin de l'année concernée."
       help_reactivateable_in_years: "années après échéance de la validité"
-      help_required_training_days: |
-          Mindestens so viele Ausbildungstage sind während der Gültigkeitsdauer zu absolvieren, um bestehende Qualifikationen zu verlängern.
-          Diese können auch über mehrere Kurse aufgeteilt werden.
-          Leer lassen, um Ausbildungstage nicht zu berücksichtigen und Qualifikationen unmittelbar bei jedem entsprechenden Kursbesuch zu verlängern.
+      help_required_training_days: |+
+          Au moins autant de jours de formation doivent être suivis pendant la période de validité afin de prolonger les qualifications existantes.
+          Celles-ci peuvent également être réparties sur plusieurs cours.
+          Laisser vide pour ne pas tenir compte des jours de formation et prolonger immédiatement les qualifications à chaque fois qu'un cours correspondant est suivi.
+
     new:
       title: Créer une catégorie de qualification
 
@@ -1532,12 +1533,12 @@ fr:
       index:
         future_roles_title: "Rôles futurs"
         inactive_roles_title: "Rôles inactifs"
-        qualified: "Bestanden"
-        not_qualified: "Nicht bestanden"
+        qualified: "Réussite"
+        not_qualified: "Échec"
         training_days:
-          one: "%{count} Ausbildungstag"
-          many: "%{count} Ausbildungstage"
-          other: "%{count} Ausbildungstage"
+          one: "%{count} jour de formation"
+          many: "%{count} jours de formation"
+          other: "%{count} jours de formation"
     family:
       fields:
         is_in_family_with: "Fait partie de la famille de"
@@ -1828,10 +1829,10 @@ fr:
 
   qualification_decorator:
     open_training_days_active:
-      Damit die Qualifikation am %{finish_at} nicht abläuft, bitten wir dich bis spätestens dahin %{days} Fortbildungstage zu absolvieren.
+      Pour que la qualification n'expire pas le %{finish_at}, nous te demandons de suivre %{days} jours de formation continue au plus tard à cette date.
     open_training_days_reactivatable:
-      Um deine Qualifikation zu reaktivieren, bitten wir dich %{days} Fortbildungstage bis spätestens %{reactivateable_until} zu absolvieren.
-    open_training_days_no_longer_reactivatable: Diese Qualifikation ist seit dem %{reactivateable_until} abgelaufen. Falls du davor Aus- oder Fortbildungen besucht hast und du für diese eine Kursbestätigung besitzt, kannst du diese mit deinem Tourenchef teilen. Allenfalls kann dies zu einer Reaktivierung deiner bereits abgelaufenen Qualifikation führen.
+      Afin de réactiver ta qualification, nous te demandons de suivre %{days} ours de formation continue jusqu'à %{reactivateable_until} au plus tard.
+    open_training_days_no_longer_reactivatable: Cette qualification a expiré depuis le %{reactivateable_until}. Si tu as suivi des formations ou des formations continues auparavant et que tu possèdes une attestation de cours pour celles-ci, tu peux la partager avec ton chef de tour. Cela peut éventuellement conduire à une réactivation de ta qualification déjà expirée.
 
   event_invitations:
     create:
@@ -1858,11 +1859,11 @@ fr:
       filters_qualification_validity:
         active: Uniquement les qualifications valides
         reactivateable: Les qualifications valides et renouvelables
-        not_active_but_reactivateable: Reaktivierbare, aber nicht gültige Qualifikationen
-        not_active: Keine gültigen Qualifikationen
+        not_active_but_reactivateable: Qualifications réactivables mais non valides
+        not_active: Pas de qualifications valides
         all: Montrer toutes les qualifications non distribuées
-        none: Keine jemals erteilte Qualifikation
-        only_expired: Abgelaufene, aber nicht gültige oder reaktivierbare Qualifikationen
+        none: Aucune qualification jamais attribuée
+        only_expired: Qualifications expirées mais non valides ou pouvant être réactivées
       filters_role_kind:
         active_today: ' Rôle actif actuel'
         active: le rôle était actif.
@@ -1878,9 +1879,9 @@ fr:
       equal: est précis
       greater: plus grand que
       smaller: plus petit que
-      before: vor dem
-      after: nach dem
-      blank: ist leer
+      before: avant le
+      after: après le
+      blank: est vide
 
     language:
       title: Langue
@@ -1914,12 +1915,12 @@ fr:
     qualification:
       title: Qualifications
       prompt_qualification_selection: Quelles qualifications doivent apparaître?
-      prompt_constraint: Welche Logik soll angewendet werden?
+      prompt_constraint: Quelle logique appliquer?
       prompt_validity: Quelles validités doivent avoir les qualifications montrées?
       prompt_year: Restreindre l'année de qualification
       prompt_date: Jour fixé
       prompt_kind: Dans quel secteur faut-il chercher ?
-      reference_date_help_inline: Leer lassen, um das aktuelle Datum zu verwenden.
+      reference_date_help_inline: Laisser vide pour utiliser la date actuelle.
       start_at_year_label: 'Reçu entre '
       start_at_year_infix: et
       finish_at_year_label: Périmé entre
@@ -1933,8 +1934,8 @@ fr:
       validity:
         active: Uniquement les qualifications valides
         reactivateable: Les qualifications valides et renouvelables
-        not_active_but_reactivateable: Keine gültige, aber reaktivierbare Qualifikationen
-        not_active: Keine gültigen Qualifikationen
+        not_active_but_reactivateable: Qualifications non valides mais réactivables
+        not_active: Pas de qualifications valides
         all: Toutes les qualifications non distribuées
       kind:
         deep: Dans le niveau actuel et tous les niveaux et groupes sous-jacents
@@ -1998,8 +1999,8 @@ fr:
       #   text: Bist du sicher, dass du als Leiter/-in austreten möchtest?
       # group/bottom_layer/member:
       #   text: Bist du sicher, dass du als Mitglied austreten möchtest?
-    main_person_text: "Der Austritt erfolgt für: %{person}"
-    affected_people_text: "sowie für: %{affected_people}"
+    main_person_text: "La sortie se fait pour: %{person}"
+    affected_people_text: "ainsi que pour: %{affected_people}"
     flash:
       success: Tu es sorti avec succès par %{date}.
 
@@ -2155,11 +2156,11 @@ fr:
       excluded_people: "Personnes exclues"
       export_not_allowed: "Tu n'as pas le droit d'exporté les abonnés de cet abonnement, car ils contiennent des rôles ou des activités qui ne font pas partie de ton domaine d'autorisation."
       subscribable_mode_opt_out_info: >
-          Nur die hier konfigurierten Personen dürfen sich selbst an-/abmelden und
-          sind standardmässig an-gemeldet.
+          Seules les personnes configurées ici peuvent se connecter/déconnecter elles-mêmes
+          et sont connectées par défaut.
       subscribable_mode_opt_in_info: >
-          Nur die hier konfigurierten Personen dürfen sich selbst an-/abmelden und
-          sind standardmässig ab-gemeldet.
+          Seules les personnes configurées ici peuvent se connecter/déconnecter elles-mêmes
+          et sont déconnectées par défaut.
     subscription:
       only_persons_with: "Seulement personnes avec:"
       persons_excluded_with: "Personnes exclues avec:"
@@ -2185,13 +2186,13 @@ fr:
     impersonation_done: "Le compte n'est plus utilisé par %{user}."
     password_override: "Le mot de passe de %{user} a été effacé. La connexion est empêchée jusqu'à ce qu'un nouveau mot de passe soit défini."
 
-    household_created: "Haushalt (%{object_changes}) wurde neu erstellt."
-    household_person_appended: "%{object_name} wurde zum Haushalt (%{object_changes}) hinzugefügt."
-    household_person_removed: "%{object_name} wurde vom Haushalt (%{object_changes}) entfernt."
+    household_created: "Le foyer (%{object_changes}) a été créé."
+    household_person_appended: "%{object_name} a été ajouté au foyer (%{object_changes})."
+    household_person_removed: "%{object_name}  été supprimé du foyer (%{object_changes})."
     household_updated: "Le foyer (%{object_changes}) a été actualisé."
     remove_from_household: "%{item} a été retiré du ménage (%{object_changes})."
     append_to_household: "%{item} a été ajouté au ménage (%{object_changes})."
-    household_destroyed: "Haushalt (%{object_changes}) wurde aufgelöst."
+    household_destroyed: "Le foyer (%{object_changes}) a été résolu."
     person_merge: "Deux personnes ont été fusionnées sous cette entrée. Personne supprimée:"
     deleted_service_token: "Supprimé entre-temps %{model_name}"
 
@@ -2243,7 +2244,7 @@ fr:
   json_api: JSON:API
 
   verify_membership:
-    title: Verifizierung Mitgliedschaft
-    not_found: Ungültiger Verifikationscode
-    status_valid: Mitgliedschaft gültig
-    status_invalid: Keine gültige Mitgliedschaft
+    title: Vérification de l'adhésion
+    not_found: Code de vérification non valide
+    status_valid: Adhésion valide
+    status_invalid: Pas d'adhésion valide

@@ -1,0 +1,44 @@
+# ADR-009 Custom Contents in den tests
+
+Status: **Vorschlag**
+
+Entscheid: **Offen**
+
+## Kontext
+
+Aktuell exisitieren 2 Varianten um custom contents für die tests bereitzustellen
+
+- via fixtures (zb. core `spec/fixtures/custom_contents.yml`)
+- via explizitem laden (zb. core, `SeedFu.seed [Rails.root.join("db", "seeds")`])
+
+
+Beide Varianten in einem Projekt zu haben steht im Widerspruch und führt
+mitunter zu unterschiedlichen Daten. Schön wäre, wenn wir hier uns auf eine
+Variante festlegen und die andere loswerden.
+
+
+## Optionen
+
+### Laden via fixtures
+
++ Müssen nicht explizit geladen werden
++ Laden schnell
+- Müssen explizit gepflegt werden, geht vergessen
+- Eher aufwendiges Pflegen von Übersetzungen
+
+### Explizites Laden in der spec
+
++ Anpassungen werden nur an 1 Stelle gemacht
+- Laden weniger schnell
+- Müssen aktuell explizit geladen werden
+
+### Implizites Laden via rake task (zb. `db:test:prepare`)
+
++ Müssen nicht explizit geladen werden
+- Eventuell Anpassung an test setup (docker, pipeline) notwendig
+- Eventuell Probleme mit nicht transktionalen specs
+
+## Kommentar/Advice
+
+Ich denke die nachhaltigste Variante wäre das Laden via rake task, da der
+grossteil (alle?) unserer tests transaktional sind.

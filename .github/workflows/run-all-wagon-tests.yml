@@ -18,11 +18,11 @@ on:
       - 'doc/**'
       - '**.md'
       - 'VERSION'
-  pull_request:
-    paths-ignore:
-      - 'doc/**'
-      - '**.md'
-      - 'VERSION'
+  #pull_request: # this trigger is disabled for now, because it caused our CI runners to be occupied too often
+  #  paths-ignore:
+  #    - 'doc/**'
+  #    - '**.md'
+  #    - 'VERSION'
   pull_request_target:
     types: [labeled]
 

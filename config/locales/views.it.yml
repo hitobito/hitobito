@@ -1038,7 +1038,7 @@ it:
         Le risposte alle e-mail di fatturazione devono essere inviate all'indirizzo dell'utente corrente o all'indirizzo configurato qui.
       email_validation: Non deve essere un indirizzo e-mail.
       sender_name_help: Le e-mail di fatturazione vengono inviate con questo nome.
-      custom_content_help: Diese E-Mail Vorlage wird beim versenden von Rechnungen verwendet. Wenn keine E-Mail Vorlage hinterlegt wird, wird die globale E-Mail Voralge verwendet.
+      custom_content_help: Diese E-Mail Vorlage wird beim versenden von Rechnungen verwendet. Wenn keine E-Mail Vorlage hinterlegt wird, wird die globale E-Mail Vorlage verwendet.
     reminder_fields:
       third_level: "Per tutti i prossimi solleciti, verrà ripetuto il terzo livello di sollecito"
     provider_fields:

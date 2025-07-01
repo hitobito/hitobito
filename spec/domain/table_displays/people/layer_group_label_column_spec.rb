@@ -25,4 +25,19 @@ describe TableDisplays::People::LayerGroupLabelColumn, type: :helper do
     value: "Top",
     permission: :show
   }
+
+  context "inside job" do
+    subject(:display) { described_class.new(ability, table: nil, model_class: Person) }
+
+    let(:content) { display.value_for(person, :layer_group) }
+
+    it "holds name of primary group layer" do
+      expect(content).to eq "Top"
+    end
+
+    it "is blank when primary group is missing" do
+      person.update(primary_group: nil)
+      expect(content).to be_blank
+    end
+  end
 end

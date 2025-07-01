@@ -28,5 +28,15 @@ describe InvoicesHelper do
       expect(dom).to have_text "3456 Greattown"
       expect(dom).to have_link "top_leader@example.com", href: "mailto:top_leader@example.com"
     end
+
+    it "does not fail if recipient is nil" do
+      invoice.update_columns(recipient_address: Person::Address.new(top_leader).for_invoice, recipient_id: nil)
+      dom = Capybara::Node::Simple.new(invoice_receiver_address(invoice))
+      expect(dom).not_to have_link "Top Leader", href: person_path(top_leader)
+      expect(dom).to have_text "Top Leader"
+      expect(dom).to have_text "Greatstreet 345"
+      expect(dom).to have_text "3456 Greattown"
+      expect(dom).to have_link "top_leader@example.com", href: "mailto:top_leader@example.com"
+    end
   end
 end

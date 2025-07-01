@@ -221,10 +221,10 @@ class Splitter
     end
   end
 
-  def with_address(model)
+  def with_address(table_name)
     sql = <<~SQL
       SELECT *
-      FROM #{ActiveRecord::Base.connection.quote_table_name(model.table_name)}
+      FROM #{ActiveRecord::Base.connection.quote_table_name(table_name)}
       WHERE address IS NOT NULL AND address != ''
     SQL
 
@@ -233,7 +233,7 @@ class Splitter
 
   def convert_address(model)
     name = model.name.pluralize
-    scope = with_address(model)
+    scope = with_address(model.table_name)
 
     count = scope.count
     errors = []
@@ -276,7 +276,7 @@ class Splitter
 
   def erase_address(model)
     name = model.name.pluralize
-    scope = with_address(model)
+    scope = with_address(model.table_name)
     count = scope.count
 
     warn "Deleting left-over Addresses of #{count} #{name}"

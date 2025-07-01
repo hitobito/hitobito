@@ -224,7 +224,7 @@ class Splitter
   def with_address(model)
     sql = <<~SQL
       SELECT *
-      FROM #{ActiveRecord::Base.connection.quote_table_name(model)}
+      FROM #{ActiveRecord::Base.connection.quote_table_name(model.table_name)}
       WHERE address IS NOT NULL AND address != ''
     SQL
 

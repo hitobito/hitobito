@@ -108,7 +108,7 @@ module People
       return if @target.picture.attached?
       return unless @source.picture.attached?
 
-      @target.picture.attach(@source.picture)
+      @target.picture.attach(@source.picture.blob)
     end
 
     def create_log_entry

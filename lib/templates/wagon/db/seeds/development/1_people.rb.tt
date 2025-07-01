@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require Rails.root.join('db', 'seeds', 'support', 'person_seeder')
+require Rails.root.join("db", "seeds", "support", "person_seeder")
 
 class <%= wagon_name.camelize %>PersonSeeder < PersonSeeder
 
   def amount(role_type)
     case role_type.name.demodulize
-    when 'Member' then 5
+    when "Member" then 5
     else 1
     end
   end
@@ -14,20 +14,23 @@ class <%= wagon_name.camelize %>PersonSeeder < PersonSeeder
 end
 
 puzzlers = [
-  'Carlo Beltrame',
-  'Matthias Viehweger',
-  'Micha Lüdi',
-  'Nils Rauch',
-  'Olivier Brian',
-  'Pascal Simon',
-  'Thomas Ellenberger',
+  "Carlo Beltrame",
+  "Olivier Brian",
+  "Oliver Dietschi",
+  "Thomas Ellenberger",
+  "Daniel Illi",
+  "Niklas Jäggi",
+  "Andreas Maierhofer",
+  "Nils Rauch",
+  "Matthias Viehweger",
+  "Pascal Zumkehr",
 ]
 
 devs = {
-  'Customer Name' => 'customer@email.com'
+  "Customer Name" => "customer@email.com"
 }
 puzzlers.each do |puz|
-  devs[puz] = "#{puz.split.last.downcase.gsub('ü', 'ue')}@puzzle.ch"
+  devs[puz] = "#{puz.split.last.downcase.gsub("ü", "ue").gsub("ä", "ae")}@puzzle.ch"
 end
 
 seeder = <%= wagon_name.camelize %>PersonSeeder.new

@@ -382,7 +382,7 @@ create)
   popd
 
   pushd "$new_wagon_dir"
-  rake app:license:insert
+  bundle exec rake app:license:insert
   git add .
   git commit -m "Insert License Headers"
   popd

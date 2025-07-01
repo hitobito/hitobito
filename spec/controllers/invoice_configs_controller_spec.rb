@@ -147,6 +147,27 @@ describe InvoiceConfigsController do
       expect(group.invoice_config.reload.custom_content.subject).to eq "Custom Content Subject"
     end
 
+    it "edits custom content in invoice config context" do
+      context_custom_content = Fabricate(:custom_content, context: group.invoice_config)
+
+      patch :update, params: {group_id: group.id, invoice_config: {
+        custom_content_attributes: {
+          id: context_custom_content.id,
+          subject: "Edited subject",
+          body: "Edited body",
+          _destroy: false
+        }
+      }}
+
+      expect(response).to have_http_status(303)
+
+      context_custom_content.reload
+
+      expect(group.invoice_config.reload.custom_content).to eq(context_custom_content)
+      expect(context_custom_content.subject).to eq("Edited subject")
+      expect(context_custom_content.body.body.to_plain_text).to match("Edited body")
+    end
+
     it "destroys custom content in invoice config context" do
       context_custom_content = Fabricate(:custom_content, context: group.invoice_config)
       patch :update, params: {group_id: group.id, invoice_config: {

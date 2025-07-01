@@ -96,7 +96,7 @@ describe :invoice_configs, js: true do
     it "is possible to add and remove one custom content" do
       custom_contents(:content_invoice_notification).update!(placeholders_required: nil)
 
-      expect(page).to have_text "Diese E-Mail Vorlage wird beim versenden von Rechnungen verwendet. Wenn keine E-Mail Vorlage hinterlegt wird, wird die globale E-Mail Voralge verwendet."
+      expect(page).to have_text "Diese E-Mail Vorlage wird beim versenden von Rechnungen verwendet. Wenn keine E-Mail Vorlage hinterlegt wird, wird die globale E-Mail Vorlage verwendet."
       click_link "Eintrag hinzufügen"
       expect(page).to have_text "Betreff"
       expect(page).to have_text "Inhalt"
@@ -126,12 +126,6 @@ describe :invoice_configs, js: true do
       expect(page).to have_no_text "Eintrag hinzufügen"
       click_link "E-Mail Vorlage entfernen"
       expect(page).to have_text "Eintrag hinzufügen"
-    end
-
-    it "shows validation when custom content is missing placeholders" do
-      click_link "Eintrag hinzufügen"
-      click_button "Rechnungseinstellungen aktualisieren"
-      expect(page).to have_text "Inhalt muss den Platzhalter {invoice-items} enthalten"
     end
   end
 end

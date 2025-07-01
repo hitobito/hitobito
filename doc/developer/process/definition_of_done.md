@@ -10,3 +10,4 @@ Folgende Punkte sind zu beachten, damit ein Issue als fertig implementiert gilt:
 - [User-Dokumentation](https://hitobito.readthedocs.io/de/latest/) ist geschrieben.
 - [Entwickler-Dokumentation](https://github.com/hitobito/hitobito/tree/master/doc) ist geschrieben.
 - [Changelog](../../../CHANGELOG.md) Eintrag ist erstellt.
+- Bei Core-Änderungen werden alle Wagons vor dem Merge getestet.

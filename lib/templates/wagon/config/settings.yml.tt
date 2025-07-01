@@ -13,4 +13,4 @@ application:
 # not the customers.
 # Initially, a password reset token may be mailed from the application
 # to this address to set a password.
-root_email: <%= singular_name.gsub('_', '-') %>@puzzle.ch
+root_email: <%= singular_name.gsub("_", "-") %>@puzzle.ch

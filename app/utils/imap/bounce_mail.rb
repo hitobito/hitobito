@@ -21,7 +21,7 @@ module Imap
       @imap_mail = imap_mail
 
       if imap_mail&.net_imap_mail.present?
-        @net_imap_mail = imap_mail.new_imap_mail
+        @net_imap_mail = imap_mail.net_imap_mail
       end
     end
 

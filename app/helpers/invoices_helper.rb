@@ -95,7 +95,7 @@ module InvoicesHelper
     return unless invoice.recipient_address
 
     name, *address = invoice.recipient_address.split("\n")
-    name = link_to(invoice.recipient, invoice.recipient) if name == invoice.recipient.full_name
+    name = link_to(invoice.recipient, invoice.recipient) if name == invoice.recipient&.full_name
 
     content_tag(:p) do
       safe_join([

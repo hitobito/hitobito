@@ -28,7 +28,9 @@ module Export::Pdf::Messages
     end
 
     def pdf
-      @pdf ||= Prawn::Document.new(render_options)
+      @pdf ||= Export::Pdf::Document.new(**render_options).pdf.tap do |pdf|
+        pdf.font "Helvetica"
+      end
     end
 
     def render_preview
@@ -93,8 +95,6 @@ module Export::Pdf::Messages
 
     def render_options
       @options.to_h.merge(
-        page_size: "A4",
-        page_layout: :portrait,
         margin: MARGIN,
         compress: true
       )

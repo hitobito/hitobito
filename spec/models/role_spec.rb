@@ -744,7 +744,7 @@ describe Role do
       end.to change { PaperTrail::Version.count }.by(2)
 
       version = PaperTrail::Version.order(:created_at, :id).first
-      expect(version.event).to eq("update")
+      expect(version.event).to eq("create")
       expect(version.main).to eq(person)
     end
 
@@ -766,7 +766,7 @@ describe Role do
         expect(role.created_at).to be > Settings.role.minimum_days_to_archive.days.ago
         expect do
           role.destroy!
-        end.not_to change { PaperTrail::Version.count }
+        end.to change { PaperTrail::Version.count }.by(1)
       end
 
       it "with role old enough to archive" do

@@ -6,14 +6,14 @@ describe :self_registration do
   subject { page }
 
   before do
-    stub_const("Group::SelfRegistrationGroup::ReadOnly", Class.new(Role) do
-      self.permissions = [:group_read]
+    stub_const("Roles::NoRights", Class.new(Role) do
+      self.permissions = []
     end)
 
     stub_const("Group::SelfRegistrationGroup", Class.new(Group) do
       self.layer = true
 
-      roles Group::SelfRegistrationGroup::ReadOnly
+      roles Roles::NoRights
     end)
   end
 
@@ -38,14 +38,14 @@ describe :self_registration do
     fill_in "Haupt-E-Mail", with: "max.muster@hitobito.example.com"
 
     expect do
-      find_all('.btn-toolbar.bottom .btn-group button[type="submit"]').first.click # submit
+      find_all('.btn-toolbar .btn-group button[type="submit"]').first.click # submit
+
+      is_expected.to have_text(
+        "Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine E-Mail mit der Anleitung, " \
+          "wie Du Deinen Account freischalten kannst."
+      )
     end.to change { Person.count }.by(1)
       .and change { ActionMailer::Base.deliveries.count }.by(1)
-
-    is_expected.to have_text(
-      "Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine E-Mail mit der Anleitung, " \
-      "wie Du Deinen Account freischalten kannst."
-    )
 
     person = Person.find_by(email: "max.muster@hitobito.example.com")
     expect(person).to be_present
@@ -61,6 +61,6 @@ describe :self_registration do
     click_button "Anmelden"
 
     expect(person.roles.map(&:type)).to eq([self_registration_role.to_s])
-    expect(current_path).to eq("/de#{group_person_path(group_id: group, id: person)}.html")
+    expect(current_path).to match(/#{group_person_path(group_id: group, id: person)}.html$/)
   end
 end

@@ -202,8 +202,17 @@ class Splitter
   end
 
   def obsolete?
-    models = [with_address(:people), with_address(:groups)]
-    models.sum(&:count).zero?
+    relations = %i[people groups].map do |table_name|
+      sql = <<~SQL.squish
+        SELECT *
+        FROM #{ActiveRecord::Base.connection.quote_table_name(table_name)}
+        WHERE address IS NOT NULL AND address != ''
+      SQL
+
+      ActiveRecord::Base.connection.exec_query(sql)
+    end
+
+    relations.sum(&:count).zero?
   end
 
   private
@@ -221,19 +230,11 @@ class Splitter
     end
   end
 
-  def with_address(table_name)
-    sql = <<~SQL
-      SELECT *
-      FROM #{ActiveRecord::Base.connection.quote_table_name(table_name)}
-      WHERE address IS NOT NULL AND address != ''
-    SQL
-
-    ActiveRecord::Base.connection.exec_query(sql)
-  end
+  def with_address(model) = model.where.not(address: nil).where.not(address: "")
 
   def convert_address(model)
     name = model.name.pluralize
-    scope = with_address(model.table_name)
+    scope = with_address(model)
 
     count = scope.count
     errors = []
@@ -276,7 +277,7 @@ class Splitter
 
   def erase_address(model)
     name = model.name.pluralize
-    scope = with_address(model.table_name)
+    scope = with_address(model)
     count = scope.count
 
     warn "Deleting left-over Addresses of #{count} #{name}"
@@ -340,6 +341,10 @@ class SplitAddresses < ActiveRecord::Migration[6.1]
       return
     end
 
+    say "removing paper-trail additions"
+    previous_paper_trail_context = PaperTrail.request.controller_info
+    PaperTrail.request.controller_info = nil
+
     splitter.split
 
     say_with_time "Sending Report" do
@@ -353,12 +358,15 @@ class SplitAddresses < ActiveRecord::Migration[6.1]
     end
 
     splitter.clean
+  ensure
+    say "restoring paper-trail additions"
+    PaperTrail.request.controller_info = previous_paper_trail_context
   end
 
   def down
     # not entirely true, it would be reversible, I do not see the point
     # if you want: just join the new structured fields into the address field
-    # and save the model.
+    # and save the model. Keep in mind to handle paper-trail, if you must.
     raise ActiveRecord::IrreversibleMigration
   end
 end

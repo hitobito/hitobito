@@ -37,6 +37,21 @@ describe Groups::ContactPersonCleanerJob do
     expect(log_entry.subject).to eq group
   end
 
+  it "clears contact person from archived group when no role exists and creates log entry" do
+    group.update_column(:archived_at, 1.day.ago)
+
+    person.roles.destroy_all
+    expect { subject.perform }
+      .to change { group.reload.contact }.from(person).to(nil)
+      .and change { HitobitoLogEntry.count }.by(1)
+
+    log_entry = HitobitoLogEntry.last
+    expect(log_entry.message).to eq "Contact person of Bottom One was removed, due to person not having any active member role in Bottom One"
+    expect(log_entry.level).to eq "info"
+    expect(log_entry.category).to eq "cleanup"
+    expect(log_entry.subject).to eq group
+  end
+
   it "does nothing when contact person does still have role" do
     expect { subject.perform }
       .to not_change { group.reload.contact }

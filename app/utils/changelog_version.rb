@@ -34,7 +34,7 @@ class ChangelogVersion
 
     segments = version.split(".")
     major = segments.first.to_i
-    minor = WILDCARD_VERSION_STRINGS.include?(segments.second.downcase) ? Float::INFINITY : segments.second.to_i
+    minor = WILDCARD_VERSION_STRINGS.include?(segments.second.to_s.downcase) ? Float::INFINITY : segments.second.to_i
 
     [major, minor]
   end

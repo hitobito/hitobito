@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## unreleased
+
+- Texte und Hilfetexte verwenden nun den Inhalt einer Fallback Sprache, wenn die gewünschte Sprache leer ist
+
 ## Version 2.6
 
 - Referenznummer von Rechnung wird neu auch auf Empfangsschein angezegit (hitobito_sww#238)

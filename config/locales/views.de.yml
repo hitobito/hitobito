@@ -1507,6 +1507,11 @@ de:
           approved: "Die Zugriffsanfrage für %{person} wurde bereits freigegeben."
           rejected: "Die Zugriffsanfrage für %{person} wurde bereits abgelehnt."
 
+
+    impersonation:
+      create:
+        email_must_be_confirmed: Die Person hat ihre E-Mail Adresse noch nicht bestätigt und kann somit nicht imitiert werden.
+
     history:
       events:
         event_label: "Name / Gruppe"
@@ -1693,6 +1698,7 @@ de:
 
       impersonate_user: Imitieren
       impersonate_user_tooltip: Du kannst hitobito so bedienen, als wärst du als diese Person eingeloggt.
+      impersonate_user_tooltip_disabled: Diese Person kann erst imitiert werden, nachdem die E-Mail Adresse bestätigt wurde.
 
     actions_index:
       add_person: Person hinzufügen

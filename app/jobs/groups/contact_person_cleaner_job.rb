@@ -14,7 +14,7 @@ class Groups::ContactPersonCleanerJob < RecurringJob
     Group.where.not(contact_id: nil).find_each do |group|
       next if Role.exists?(group_id: group.id, person_id: group.contact_id, type: member_types)
 
-      group.update!(contact: nil)
+      group.update_column(:contact_id, nil) # must use update_column, to circumvent readonly archived groups
       create_log_entry(group)
     end
   end

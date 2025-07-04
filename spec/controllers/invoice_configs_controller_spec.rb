@@ -147,6 +147,21 @@ describe InvoiceConfigsController do
       expect(group.invoice_config.reload.custom_content.subject).to eq "Custom Content Subject"
     end
 
+    it "creates empty custom content in invoice config context" do
+      custom_contents(:content_invoice_notification).update!(placeholders_required: nil)
+      expect do
+        patch :update, params: {group_id: group.id, invoice_config: {
+          custom_content_attributes: {
+            subject: "",
+            body: "",
+            _destroy: false
+          }
+        }}
+      end.to change { CustomContent.in_context(group.invoice_config).count }.by(1)
+      expect(group.invoice_config.reload.custom_content.subject).to be_nil
+      expect(group.invoice_config.reload.custom_content.body).to be_nil
+    end
+
     it "edits custom content in invoice config context" do
       context_custom_content = Fabricate(:custom_content, context: group.invoice_config)
 

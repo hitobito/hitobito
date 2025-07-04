@@ -146,7 +146,7 @@ namespace :dev do
 
       sh "xdg-open 'http://#{host_name}/oauth/authorize?#{params}'"
 
-      server_thread.join if server_thread
+      server_thread&.join
     end
   end
 

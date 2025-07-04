@@ -29,7 +29,7 @@ class People::HouseholdList
   end
 
   def count
-    return [] if @people_scope.none?
+    return 0 if @people_scope.none?
 
     person_ids_grouped_by_household_query(@people_scope).to_a.size
   end

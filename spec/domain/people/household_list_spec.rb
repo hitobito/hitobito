@@ -140,4 +140,12 @@ describe People::HouseholdList do
       expect(household_list.each).to be_an Enumerator
     end
   end
+
+  describe "#count" do
+    let(:scope) { Person.none }
+
+    it "is zero when empty" do
+      expect(household_list.count).to eq 0
+    end
+  end
 end

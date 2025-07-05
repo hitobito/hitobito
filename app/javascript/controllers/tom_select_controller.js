@@ -72,6 +72,7 @@ export default class extends Controller {
       create: false,
       load: this.urlValue ? this.load : undefined,
       maxOptions: this.maxOptionsValue,
+      allowEmptyOption: this.element.getAttribute("allow-empty"),
       render: {
         no_results: this.noResults,
       },

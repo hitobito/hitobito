@@ -20,7 +20,6 @@ module Globalized
       translates(*columns)
 
       columns.each do |col|
-        delegate col, to: :translation
         delegate "#{col}=", to: :translation
       end
 
@@ -30,7 +29,7 @@ module Globalized
         end
       end
 
-      const_get(:Translation).include globalized_translation(columns)
+      const_get(:Translation).include globalized_rich_text_module(columns)
     end
 
     def list
@@ -57,7 +56,7 @@ module Globalized
       "#{translations_table_name}.#{translated_attribute_names.first}"
     end
 
-    def globalized_translation(columns)
+    def globalized_rich_text_module(columns)
       Module.new do
         extend ActiveSupport::Concern
 

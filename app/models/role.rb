@@ -126,7 +126,6 @@ class Role < ActiveRecord::Base
   after_destroy :set_first_primary_group
   after_save :set_first_primary_group
   after_save :set_contact_data_visible
-  after_commit :touch_person, on: [:create, :update]
 
   ### SCOPES
 

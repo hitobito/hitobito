@@ -10,7 +10,7 @@ require "spec_helper"
 describe Export::Pdf::Participation::Section do
   include PdfHelpers
 
-  let(:pdf) { Prawn::Document.new(page_size: "A4", page_layout: :portrait, margin: 2.cm) }
+  let(:pdf) { Export::Pdf::Document.new(page_size: "A4", page_layout: :portrait, margin: 2.cm).pdf }
 
   describe "#render_columns" do
     def render_columns
@@ -25,11 +25,11 @@ describe Export::Pdf::Participation::Section do
       it "renders correctly" do
         render_columns
         expect(text_with_position.pretty_inspect).to eq [
-          [57, 777, "high"],
+          [57, 776, "high"],
           [57, 763, "high"],
-          [57, 749, "high"],
-          [301, 777, "low"],
-          [57, 725, "~~~END~~~"]
+          [57, 751, "high"],
+          [301, 776, "low"],
+          [57, 729, "~~~END~~~"]
         ].pretty_inspect
       end
     end
@@ -41,11 +41,11 @@ describe Export::Pdf::Participation::Section do
       it "renders correctly" do
         render_columns
         expect(text_with_position.pretty_inspect).to eq [
-          [57, 777, "low"],
-          [301, 777, "high"],
+          [57, 776, "low"],
+          [301, 776, "high"],
           [301, 763, "high"],
-          [301, 749, "high"],
-          [57, 725, "~~~END~~~"]
+          [301, 751, "high"],
+          [57, 729, "~~~END~~~"]
         ].pretty_inspect
       end
     end

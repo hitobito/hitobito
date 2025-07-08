@@ -10,7 +10,7 @@ require "spec_helper"
 describe Export::Pdf::Participation::PersonAndEvent do
   include PdfHelpers
 
-  let(:pdf) { Prawn::Document.new(page_size: "A4", page_layout: :portrait, margin: 2.cm) }
+  let(:pdf) { Export::Pdf::Document.new(page_size: "A4", page_layout: :portrait, margin: 2.cm).pdf }
   let(:event_date) do
     Event::Date.new(
       start_at: 1.week.from_now,
@@ -36,20 +36,20 @@ describe Export::Pdf::Participation::PersonAndEvent do
     described_class.new(pdf, participation).render
 
     expect(text_with_position.pretty_inspect).to eq [
-      [57, 777, "Teilnehmer/-in"],
-      [301, 777, "Kurs"],
-      [57, 753, person.person_name],
-      [57, 739, person.address],
-      [57, 725, "#{person.zip_code} #{person.town}"],
-      [57, 701, person.phone_numbers.first.to_s],
-      [57, 688, person.email],
-      [301, 753, event.name],
-      [301, 729, event.number],
-      [301, 715, "SLK (Scharleiterkurs)"],
-      [301, 701, "Kosten: #{event.cost}"],
-      [301, 678, "Daten"],
-      [301, 663, event_date.label_and_location],
-      [301, 649, event_date.duration.to_s]
+      [57, 773, "Teilnehmer/-in"],
+      [301, 773, "Kurs"],
+      [57, 751, person.person_name],
+      [57, 738, person.address],
+      [57, 726, "#{person.zip_code} #{person.town}"],
+      [57, 704, person.phone_numbers.first.to_s],
+      [57, 692, person.email],
+      [301, 751, event.name],
+      [301, 728, event.number],
+      [301, 716, "SLK (Scharleiterkurs)"],
+      [301, 704, "Kosten: #{event.cost}"],
+      [301, 682, "Daten"],
+      [301, 669, event_date.label_and_location],
+      [301, 657, event_date.duration.to_s]
     ].pretty_inspect
   end
 
@@ -64,7 +64,7 @@ describe Export::Pdf::Participation::PersonAndEvent do
     it "renders correctly" do
       described_class.new(pdf, participation).render
 
-      expect(text_with_position).to include [301, 649, event_date.duration.to_s]
+      expect(text_with_position).to include [301, 657, event_date.duration.to_s]
     end
   end
 end

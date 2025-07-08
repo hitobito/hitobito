@@ -18,12 +18,12 @@ it:
     no_list_entries: Nessun risultato.
     confirm_delete: Vuoi veramente cancellare questa voce?
     do_not_fill: Per favore lasciare libero questo campo
-    chosen_no_results: Keine Einträge gefunden
+    chosen_no_results: Nessuna voce trovata
     selected: Selezionato
-    extended_select_all: Alle %{count} auswählen
+    extended_select_all: 'Selezionare tutti i siti %{count} '
     columns: Colonna
     start_on: da %{date}
-    not_allowed: "fehlende Berechtigung"
+    not_allowed: "Mancanza di autorizzazione"
 
     gender:
       male: maschile
@@ -45,7 +45,7 @@ it:
 
     button:
       save: Salvare
-      add: Hinzufügen
+      add: Aggiungi
       add_another: Salvare ed inserirne altri
       cancel: Interrompere
       close: Chiudere
@@ -54,7 +54,7 @@ it:
       refresh: Aggiornare
       print: Stampare
       copy: Copiare
-      next: Weiter
+      next: Ulteriori
 
     link:
       show: Visualizzare
@@ -62,7 +62,7 @@ it:
       add: Creare
       delete: Cancellare
       list: Lista
-      override: Werte übernehmen
+      override: Adottare i valori
 
     errors:
       header:
@@ -126,15 +126,15 @@ it:
 
   changelog:
     index:
-      meta_description: Hitobito Changelog Seite
+      meta_description: Pagina del changelog di Hitobito
   contactable:
     address_or_email: "%{address} o %{email}"
     fields:
       zip_town: NPA, località
 
     contact_data:
-      invoices_tooltip_title: Wird für Rechnungen verwendet
-      blocked_mail_tooltip_title: E-Mail ist aufgrund von Bounces blockiert
+      invoices_tooltip_title: Utilizzato per le fatture
+      blocked_mail_tooltip_title: L'e-mail è bloccata a causa dei rimbalzi
 
     public_check_box:
       tooltip: Annotazioni private sono visibili solo al proprio gruppo. Se sei un capo nel tuo gruppo, le annotazioni marcate come pubbliche saranno visibili anche ai capi e responsabili di altri gruppi,.
@@ -147,12 +147,12 @@ it:
       placeholder_value: Email
       placeholder_type: Tipo (privato, lavoro, ...)
       tooltip_mailings: Invii di abbonamenti, conferme per email, ecc. verranno inoltre spediti agli indirizzi selezionati qui di seguito.
-      tooltip_invoices: Wird anstelle der Haupt E-Mail Adresse beim verschicken von Rechnungen verwendet.
+      tooltip_invoices: Viene utilizzato al posto dell'indirizzo e-mail principale per l'invio delle fatture.
 
     additional_address_fields:
-      placeholder_type: Bezeichnung (Rechnung, Arbeit ..)
-      caption_uses_contactable_name: Namen der Person übernehmen
-      caption_used_for_invoices: Für Rechnungen verwenden
+      placeholder_type: Denominazione (fattura, lavoro ...)
+      caption_uses_contactable_name: Assumere il nome della persona
+      caption_used_for_invoices: Utilizzo per le fatture
 
     address_fields:
       updates_household_address: L'indirizzo viene attualizzato per l'intera economia domestica
@@ -182,12 +182,12 @@ it:
     as: "come %{role}"
 
   dropdown/event/participation/mail_dispatch:
-    title: E-Mail senden
-    confirmation: Bist du sicher, dass du diese Mails versenden willst?
+    title: Inviare e-mail
+    confirmation: Siete sicuri di voler inviare queste mail?
 
   dropdown/label_items:
     additional_address:
-      main: Hauptadresse
+      main: Indirizzo principale
 
   dropdown/group_edit:
     move: "spostare"
@@ -227,7 +227,7 @@ it:
     articles_only: "Fattura a parte"
     csv: "CSV"
     pdf: "PDF"
-    payments_without_invoice_csv: "Nicht zuordenbare Zahlungen"
+    payments_without_invoice_csv: "Pagamenti non assegnabili"
 
   dropdown/invoice_new:
     invoice: "Fattura normale"
@@ -261,30 +261,30 @@ it:
       timeout: "questa sessione è scaduto, per favore registrati nuovamente."
       inactive: "il tuo account non è attivo"
       not_found_in_database: "dati di registrazione non validi."
-      signin_not_allowed: "Wenn uns die angegebene E-Mail-Adresse bekannt ist, erhältst du in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Dein Passwort zurücksetzen kannst."
+      signin_not_allowed: "Se conosciamo l'indirizzo e-mail inserito, riceverete entro pochi minuti un'e-mail con le istruzioni per reimpostare la password."
       not_permitted_to_view_page: "Non è autorizzato a visitare questa pagina"
     sessions:
       signed_in: ""
       signed_out: "Ora sei registrato."
       new:
         sign_in: Login
-        meta_description: Anmeldeseite für Hitobito
+        meta_description: Pagina di registrazione per Hitobito
       form:
         login_identity: Email principale
         sign_in: Login
       oauth_info:
         sign_in: "Entrato come %{name}"
         info: "Fai il login per arrivare a %{oauth_app}."
-        no_oauth_app_info: "Bitte melde dich an, um weiter zu gelangen."
+        no_oauth_app_info: "Effettuare il login per continuare."
     passwords:
-      send_instructions: "Wenn uns die angegebene E-Mail-Adresse bekannt ist, erhältst du in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Dein Passwort zurücksetzen kannst."
+      send_instructions: "Se conosciamo l'indirizzo e-mail inserito, riceverete entro pochi minuti un'e-mail con le istruzioni per reimpostare la password."
       updated: "la tua passwort è stata cambiata. Sei ora registrato."
       updated_not_active: "la tua passwort è stata cambiata."
       send_paranoid_instructions: "se il tuo indirizzo e-mail esiste nella nostra banca dati riceverai tra pochi minuti u'e-mail con le istruzioni su come reimpostare la tua password."
       no_token: "Non puoi accedere a questa pagina se non accedendovi direttamente dall'email per reinserire la password. Se vi stai accedendo da tale email, allora controlla per favore che tu stia utilizzando l'URL completo."
       new:
         reset_password_button: "reimpostare la password"
-        meta_description: Hitobito Passwort zurücksetzen Seite
+        meta_description: Pagina di reset della password di Hitobito
     confirmations:
       new:
         resend_confirmation_instructions: "Confermare l'indirizzo e-mail"
@@ -314,7 +314,7 @@ it:
         old_password: "vecchia password"
         new_password: "Nuova password"
         new_password_confirmation: "Confermare la nuova password"
-        meta_description: "Hitobito Passwort ändern Seite"
+        meta_description: "Pagina di modifica della password di Hitobito"
       person:
         updated: "la tua password è stata attualizzata."
 
@@ -387,15 +387,15 @@ it:
       apply_until: "fino a %{date}"
     application_market:
       application:
-        modal_title: Wollen Sie diese Anmeldung wirklich bestätigen?
-        confirm_and_send_mail: Bestätigen und E-Mail senden
-        confirm_and_send_no_mail: Bestätigen ohne E-Mail
+        modal_title: Vuole davvero confermare questa registrazione?
+        confirm_and_send_mail: Confermare e inviare l'e-mail
+        confirm_and_send_no_mail: Conferma senza e-mail
       participant:
-        modal_title: Wollen Sie diese Anmeldung wirklich bestätigen?
-        confirm_and_send_mail: Bestätigen und E-Mail senden
-        confirm_and_send_no_mail: Bestätigen ohne E-Mail
+        modal_title: Vuole davvero confermare questa registrazione?
+        confirm_and_send_mail: Confermare e inviare l'e-mail
+        confirm_and_send_no_mail: Conferma senza e-mail
       already_assigned: "Questa persona è già assegnata da un'altra parte."
-      maximum_participations_reached: Die maximal erlaubte Teilnehmerzahl ist erreicht. Um weitere Anmeldungen zu bestätigen, muss die maximale Teilnehmerzahl erhöht werden.
+      maximum_participations_reached: È stato raggiunto il numero massimo di partecipanti consentito. Per confermare ulteriori iscrizioni, è necessario aumentare il numero massimo di partecipanti.
       participation:
         registered_at: "iscrizione il %{datetime}"
         town: Domicilio
@@ -407,7 +407,7 @@ it:
       waiting_list_link:
         title_active: "Eliminare dalla lista d'attesa"
         title_inactive: "Inserire nella lista d'attesa"
-        label: "nationale Warteliste"
+        label: "Lista d'attesa nazionale"
       popover_waiting_list:
         waiting_list_info: Metti questa persona in lista d'attesa per il corso del tipo %{event_kind}.
 
@@ -417,7 +417,7 @@ it:
       destroy:
         failure: "\"Cancella\" fallito: %{errors}."
       update:
-        failure: "Aktualisieren fehlgeschlagen: %{errors}."
+        failure: "Aggiornamento fallito: %{errors}."
 
     kinds:
       form:
@@ -447,14 +447,14 @@ it:
         title: Attivazione
       mail_dispatches:
         create:
-          success: Es wurde eine E-Mail verschickt.
+          success: È stata inviata un'e-mail.
       specific_information: "dati specifici"
       application_answers: Dati per l'iscrizione
       admin_answers: Dati amministrativi
       no_answer_given: "(non risponde)"
       actions_show:
         change_contact_data_button: "modificare i dati di contatto"
-        link_to_person: "Personenprofil anzeigen"
+        link_to_person: "Mostra il profilo personale"
       actions_approval:
         approve_button: "Sbloccare"
         reject_button: "Rifiutare"
@@ -463,7 +463,7 @@ it:
         title_edit: "Modificare l'iscrizone di %{person}"
         apply: "iscrivere"
         explain_required_checkmark: "* = Risposta obbligatoria"
-        send_email: E-Mail an Teilnehmer/in senden
+        send_email: Inviare un'e-mail al partecipante
       application_fields:
         alternative_dates_info: "per favore indica altri corsi che potrebbero andarti bene."
         course_information: "informazioni sui corsi"
@@ -510,15 +510,15 @@ it:
 
     invitation_lists:
       create:
-        hint: "<br />Hinweis: Allfällig bestehende Einladungen wurden nicht aktualisiert."
+        hint: "<br />Nota: gli inviti esistenti non sono stati aggiornati."
         success:
-          one: "Eine Person wurde erfolgreich zum %{event_type} '%{event}' eingeladen"
-          many: "%{count} Personen wurden erfolgreich zum %{event_type} '%{event}' eingeladen"
-          other: "%{count} Personen wurden erfolgreich zum %{event_type} '%{event}' eingeladen"
+          one: "Una persona è stata invitata con successo a %{event_type} '%{event}'"
+          many: "%{count} Le persone sono state invitate con successo a %{event_type} '%{event}'"
+          other: "%{count} Le persone sono state invitate con successo a %{event_type} '%{event}'"
       new:
-        title: Personen zu einem %{event_label} einladen
-        event_search: Anlass Suchen...
-        submit: Einladen
+        title: 'Invitare le persone a %{event_label} '
+        event_search: Occasione di ricerca...
+        submit: Invito
 
     participation_lists:
       create:
@@ -527,9 +527,9 @@ it:
           many: "1%{count} persone sono state aggiunte con successo a 2%{event}'"
           other: "1%{count} persone sono state aggiunte con successo a 2%{event}'"
         failure:
-          one: "Eine Person konnte nicht zum %{event_type} '%{event}' hinzugefügt werden"
-          many: "%{count} Personen konnten nicht zum %{event_type} '%{event}' hinzugefügt werden"
-          other: "%{count} Personen konnten nicht zum %{event_type} '%{event}' hinzugefügt werden"
+          one: "Non è stato possibile aggiungere una persona a %{event_type} '%{event}'"
+          many: "%{count} Non è stato possibile aggiungere persone a %{event_type} '%{event}'"
+          other: "%{count} Non è stato possibile aggiungere persone a %{event_type} '%{event}'"
       new:
         title: Assegnare le persone a
         event_search: Cercare evento
@@ -578,7 +578,7 @@ it:
       caption_signature_confirmation: L'iscrizione deve essere confermata da una seconda firma
       signature_confirmation_text_default: Rappresentante legale (per i minorenni)
     attachments:
-      public_attachments_hint: Global sichtbare Anhänge sind öffentlich, da der Anlass externe Anmeldungen erlaubt
+      public_attachments_hint: Gli allegati visibili a livello globale sono pubblici, poiché l'evento consente registrazioni esterne.
       add: "aggiungere"
     banner_open_invitation:
       explanation: Sei stato invitato a questo evento
@@ -602,9 +602,9 @@ it:
       caption_applications_cancelable: I partecipanti si possono disiscrivere personalmente.
       caption_display_booking_info: Il numero di iscrizioni/posti è visibile a tutti sulla lista del corso.
       caption_automatic_assignment:
-        Anmeldungen werden automatisch zugeteilt, sofern noch freie Plätze verfügbar sind.
+        Le iscrizioni saranno assegnate automaticamente se ci sono ancora posti disponibili.
       caption_waiting_list:
-        Wenn keine Plätze mehr frei sind, landen neue Anmeldungen automatisch auf der nationalen Warteliste.
+        Se non ci sono più posti disponibili, le nuove iscrizioni vengono automaticamente inserite nella lista d'attesa nazionale.
       caption_globally_visible: "%{model_name} è visibile per l'intera banca dati."
       label_notify_contact_on_participations: Notifica
     form_tabs:
@@ -614,13 +614,13 @@ it:
       contact_attrs: Dati di contatto
     general_fields:
       visible_contact_attributes:
-        all: Alle Kontaktdaten anzeigen
-        name: Name anzeigen
-        address: Adresse anzeigen
-        phone_number: Telefonnummer anzeigen
-        email: E-Mail anzeigen
-        social_account: Social Media anzeigen
-      kind_overrides_link_title: "Folgende Felder werden übernommen: Beschreibung"
+        all: Mostra tutti i dettagli di contatto
+        name: Mostra il nome
+        address: Mostra indirizzo
+        phone_number: Mostra il numero di telefono
+        email: Mostra e-mail
+        social_account: Mostra i social media
+      kind_overrides_link_title: "Vengono trasferiti i seguenti campi: Descrizione"
     global:
       link:
         add_event: Creare un evento
@@ -667,8 +667,8 @@ it:
         delete: "cancellare iscrizione"
 
   event/invitations:
-    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
-    description: "Eingeladene Personen können sich via %{model_name}-Seite an- oder abmelden. Sie erhalten kein automatisches Mail."
+    export_enqueued: "L'esportazione viene avviata in background e scaricata al termine."
+    description: "Le persone invitate possono iscriversi o cancellarsi tramite %{model_name}. Non riceveranno un'e-mail automatica."
 
   event/participation_decorator:
     tooltips:
@@ -689,7 +689,7 @@ it:
     form_data_missing: "Compila per favore il formulario seguente prima di iscriverti all'evento."
     registered: "I tuoi dati personali sono stati registrati. Completa ancora solo i dati per l'iscrizione."
     application_window_closed: "il periodo per l'iscrizione per questo evento è terminato."
-    no_places_available: "Die maximale Teilnehmeranzahl für diesen Anlass ist bereits erreicht."
+    no_places_available: "Il numero massimo di partecipanti per questo evento è già stato raggiunto."
 
   event/roles:
     full_entry_label: "ruolo<i>%{role}</i> per <i>%{person}</i>"
@@ -754,7 +754,7 @@ it:
   full_text:
     index:
       title: "Risultati"
-      incomplete_search_request: "Bitte geben Sie mindestens drei Zeichen ein."
+      incomplete_search_request: "Inserire almeno tre caratteri."
 
   group:
     archive:
@@ -812,7 +812,7 @@ it:
       confirm_archive: >
           Vuole veramente archiviare questo gruppo? Dopo l'archiviazione non può più
           venire elaborato e vengono archiviati anche i relativi ruoli.
-      membership_invoice_button: Mitgliedsrechnung
+      membership_invoice_button: Fattura associativa
     attrs:
       contact_details: "Dati di contatto"
       additional_information: "Altri dati"
@@ -820,9 +820,9 @@ it:
       no_deleted_sub_groups: "Non ci sono gruppi cancellati"
     form:
       help_contact: "Utilizzare l'indirizzo e il numero di telefono pubblico di questa persona"
-      help_self_registration_require_adult_consent: Bei der Registrierung abfragen, ob die Person schon 18 Jahre ist bzw. das Einverständnis der Erziehungsberechtigten hat.
+      help_self_registration_require_adult_consent: Al momento della registrazione, chiedere se la persona ha già 18 anni o se ha il consenso di un genitore o di un tutore.
       help_main_self_registration_group: "Mostra il link di registrazione di questo gruppo nella pagina principale di login."
-      hint_external_registration: "Es sind keine Rollen mit Rechten auswählbar"
+      hint_external_registration: "Non è possibile selezionare ruoli con diritti"
     form_tabs:
       general: "Generale"
       messages: "Notizie"
@@ -848,7 +848,7 @@ it:
       distribution: Distribuzione
     self_registration:
       show:
-        meta_description: Selbstregistrierungsseite für Hitobito
+        meta_description: Pagina di autoregistrazione per Hitobito
       form:
         privacy_policy_caption: "Dichiaro di essere d'accordo con le seguenti disposizioni:"
         submit: Crea un account
@@ -857,7 +857,7 @@ it:
       main_person:
         notes: Osservazioni
       adult_consent_field:
-        caption: Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe.
+        caption: Confermo di avere almeno 18 anni o di avere il consenso del mio tutore legale.
       create:
         email_taken: L'e-mail è già in uso. Accedere o registrarsi con un altro indirizzo e-mail.
         flash:
@@ -908,11 +908,11 @@ it:
 
   households:
     edit:
-      title: Haushalt verwalten
-      shared_address_info: Alle Personen teilen sich dieselbe Adresse.
-      placeholder_search_person: Person suchen und hinzufügen ...
+      title: Gestire il budget
+      shared_address_info: Tutte le persone condividono lo stesso indirizzo.
+      placeholder_search_person: Cercare e aggiungere persone ...
     members_table_row:
-      unconfirmed_email_info: Die E-Mail Adresse muss bestätigt werden, bevor die Person aus der Familie entfernt werden kann.
+      unconfirmed_email_info: L'indirizzo e-mail deve essere confermato prima che la persona possa essere rimossa dalla famiglia.
 
   hitobito_log_entries:
     tabs:
@@ -923,11 +923,11 @@ it:
       from: Da
       to: A
     email_error_table:
-      created_at: Erstellt am
-      category: Kategorie
-      subject: Subjekt
-      message: Meldung
-      payload: Payload
+      created_at: Creato il
+      category: Categoria
+      subject: Oggetto
+      message: Messaggio
+      payload: Carico utile
 
   import/csv_parser:
     read_error: "errore nella lettura di %{filename}: %{error}"
@@ -1004,9 +1004,9 @@ it:
           to: A
     table:
       number_of_invoices_shown:
-        one: "%{count} Rechnung angezeigt."
-        many: "%{count} Rechnungen angezeigt."
-        other: "%{count} Rechnungen angezeigt."
+        one: "%{count} Fattura visualizzata."
+        many: "%{count} Fatture visualizzate."
+        other: "%{count} Fatture visualizzate."
   invoices/by_article:
     index:
       title: 'Fatture per l''articolo "%{name}"'
@@ -1038,21 +1038,21 @@ it:
         Le risposte alle e-mail di fatturazione devono essere inviate all'indirizzo dell'utente corrente o all'indirizzo configurato qui.
       email_validation: Non deve essere un indirizzo e-mail.
       sender_name_help: Le e-mail di fatturazione vengono inviate con questo nome.
-      custom_content_help: Diese E-Mail Vorlage wird beim versenden von Rechnungen verwendet. Wenn keine E-Mail Vorlage hinterlegt wird, wird die globale E-Mail Vorlage verwendet.
+      custom_content_help: Questo modello di e-mail viene utilizzato per l'invio delle fatture. Se non è stato memorizzato alcun modello di e-mail, viene utilizzato il modello di e-mail globale.
     reminder_fields:
       third_level: "Per tutti i prossimi solleciti, verrà ripetuto il terzo livello di sollecito"
     provider_fields:
       reset_payment_provider_warning: "Se i dati dovessero venir cambiati qui il processo di inizializzazione dell'interfaccia di fatturazione dovrà venir rifatto."
     custom_content_fields:
-      subject: Betreff
-      body: Inhalt
-      remove: E-Mail Vorlage entfernen
+      subject: Oggetto
+      body: Contenuti
+      remove: Rimuovere il modello di e-mail
 
   invoice_lists:
     destroys:
       show:
         title: Annullamento di fatture collettive
-        non_draft_info: 'In der Sammelrechnung ist mindestens eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann die Sammelrechnung nicht gelöscht werden.'
+        non_draft_info: 'La fattura collettiva contiene almeno una fattura che non ha lo stato "Bozza" o "Annullato". Pertanto, la fattura collettiva non può essere cancellata.'
         confirm_delete: Vuoi davvero annullare la fattura collettiva?
     form:
       invoice_articles:
@@ -1118,7 +1118,7 @@ it:
       other: "%{count} fatture sono state annullate."
 
   invoice_lists/fixed_fee:
-    recipient_role_group_mismatch: "Für folgende Gruppen konnte kein Empfänger ermittelt werden: %{groups}"
+    recipient_role_group_mismatch: "Non è stato possibile identificare alcun destinatario per i seguenti gruppi: %{groups}"
 
   payments:
     export_enqueued: "L'esportazione viene iniziata in retroscena e verrà scaricata al termine."
@@ -1191,7 +1191,7 @@ it:
       email: Mailing list (e-mail)
       mailchimp: MailChimp
     imap_mails:
-      manage: Postfach
+      manage: Casella postale
       mailboxes:
         inbox: Entrata
         spam: Spam
@@ -1224,7 +1224,7 @@ it:
           other: "%{count} mails spostate con successo"
         server_error: Non è possibile collegarsi al server per le mails, per favore riprova più tardi.
     bounces:
-      manage: Bounces
+      manage: Rimbalzi
     recipient_counts:
       index:
         recipient_info:
@@ -1279,7 +1279,7 @@ it:
   mailing_list_decorator:
     may_subscribe: "abbonati possono iscrivere/disiscrivere sé stessi"
     may_not_subscribe: "abbonati <strong>non</strong> possono iscrivere/disiscrivere sé stessi"
-    subscribers_must_opt_in: "Abonnenten müssen sich <strong>selbst</strong> an/abmelden"
+    subscribers_must_opt_in: "Gli abbonati devono iscriversi/disiscriversi <strong>autonomamente</strong> "
     subscribers_may_post: "gli abbonati possono scrivere sulla mailing list"
     subscribers_may_not_post: "abbonati <strong>non</strong> possono scrivere alla mailing list"
     anyone_may_post: "Qualunque mittente può scrivere a questa mailing list."
@@ -1358,7 +1358,7 @@ it:
     admin: "Admin"
     admin/event_feed: "Integrare il calendario."
     admin/oauth_authorizations: "Autorizzazioni OAuth"
-    imap_mails: "Mails und Bounces"
+    imap_mails: "Mail e rimbalzi"
     invoices: "Fatture"
     invoices/single: "Singole fatture"
     invoices/evaluations: "Ricevuta della prenotazione"
@@ -1378,8 +1378,8 @@ it:
       form:
         help_cors_origins: Se uno degli scopes "api", "groups", "people", "events", "mailing_lists" o "invoices" è attivato, i siti web su questi host possono recuperare i dati dall'interfaccia JSON dal browser (CORS ).
         help_native_redirect_uris: Una registrazione per riga. Per tests locali utilizzare <code class='bg-light'>%{native_redirect_uri}</code>.
-        help_additional_audiences: Zusätzliche Einträge für den <code class='bg-light'>aud</code> Key im JWT Access Token.
-        skip_consent_screen_explanation: Applikation ist verbandsintern und vertrauenswürdig, Consent Screen überspringen
+        help_additional_audiences: Voci aggiuntive per la chiave <code class='bg-light'>aud</code> nel token di accesso JWT.
+        skip_consent_screen_explanation: L'applicazione è interna all'associazione e degna di fiducia, saltare la schermata di consenso
       attrs:
         profile_endpoint_help:
           Si può fare riferimento alle informazioni di profilo dell'utilizzatore  tramite questo endpoint. Nel far questo deve venir consegnato l'access token nell'authorization header. Lo scope desiderato può venir consegnato quale x-scope header.
@@ -1405,13 +1405,13 @@ it:
     created: Sono stati registrati %{count} pagamenti
     payments:
       valid_with_invoice:
-        one: Es wurde eine gültige Zahlung mit dazugehöriger Rechnung erkannt.
-        many: Es wurden %{count} gültige Zahlungen mit dazugehörige Rechnungen erkannt.
-        other: Es wurden %{count} gültige Zahlungen mit dazugehörige Rechnungen erkannt.
+        one: È stato riconosciuto un pagamento valido con relativa fattura.
+        many: I pagamenti validi con le relative fatture sono stati registrati su %{count}.
+        other: I pagamenti validi con le relative fatture sono stati registrati su %{count}.
       valid_without_invoice:
-        one: Es wurde eine gültige Zahlung ohne dazugehörige Rechnung erkannt.
-        many: Es wurden %{count} gültige Zahlungen ohne dazugehörige Rechnungen erkannt.
-        other: Es wurden %{count} gültige Zahlungen ohne dazugehörige Rechnungen erkannt.
+        one: Un pagamento valido è stato riconosciuto senza una fattura corrispondente.
+        many: I pagamenti validi privi di fatture corrispondenti sono stati registrati su %{count}.
+        other: I pagamenti validi privi di fatture corrispondenti sono stati registrati su %{count}.
       invalid:
         one: È stato individuato un pagamento non valido
         many: Sono stati individuati %{count} pagamenti non validi
@@ -1420,15 +1420,15 @@ it:
       valid_payments_with_invoice: Pagamenti imputabili
       valid_payments_with_invoice_and_dates: Pagamenti imputabili da %{from} a %{to}
       valid_payments_without_invoice: Non assegnabile
-      valid_payments_without_invoice_and_dates: Nicht zuordenbare Zahlungen vom %{from} bis %{to}
-      invalid_payments: Ungültige Zahlungen
+      valid_payments_without_invoice_and_dates: Pagamenti non assegnabili da %{from} a %{to}
+      invalid_payments: Pagamenti non validi
       amount_open: Aperto
       create:
         zero: Importare il pagamento
         one: Importare il pagamento
         other: "Importare %{count} pagamenti"
       icon_tooltip_invoice_missing: Non può essere assegnato a nessuna fattura
-      icon_tooltip_invoice_not_payable: Die Rechnung kann in diesem Zustand nicht beglichen werden
+      icon_tooltip_invoice_not_payable: La fattura non può essere pagata in queste condizioni
       icon_tooltip_settles: Salda la fattura aperta
       icon_tooltip_exceeds: È superiore alla fattura aperta di %{difference}
       icon_tooltip_undercuts: È inferiore alla fattura aperta di %{difference}
@@ -1437,7 +1437,7 @@ it:
       xml_file: "File XML"
   public_events:
     show:
-      meta_description: Öffentliche Kursanmeldeseite für Hitobito
+      meta_description: Pagina pubblica di registrazione dei corsi per Hitobito
 
   qualifications:
     in_years: "%{years} anni"
@@ -1452,9 +1452,9 @@ it:
       help_validity_in_years: "anni dalla data della qualifica; fino alla fine dell'anno corrispondente"
       help_reactivateable_in_years: "anni dalla fine della validità"
       help_required_training_days: |
-          Mindestens so viele Ausbildungstage sind während der Gültigkeitsdauer zu absolvieren, um bestehende Qualifikationen zu verlängern.
-          Diese können auch über mehrere Kurse aufgeteilt werden.
-          Leer lassen, um Ausbildungstage nicht zu berücksichtigen und Qualifikationen unmittelbar bei jedem entsprechenden Kursbesuch zu verlängern.
+          Per estendere le qualifiche esistenti è necessario completare almeno altrettante giornate di formazione durante il periodo di validità.
+          Questi giorni possono anche essere suddivisi in più corsi.
+          Lasciare in bianco per non tenere conto dei giorni di formazione ed estendere immediatamente le qualifiche ogni volta che si frequenta il corso in questione.
     new:
       title: Creare il tipo di qualifica
 
@@ -1466,12 +1466,12 @@ it:
       new:
         title: Unire persone
       form:
-        select_person: Wessen Daten sollen beim Zusammenführen den Vorrang haben?
-        merge_hint: Beim Zusammenführen werden die Rollen, Telefonnummern, zusätzlichen E-Mails, Social Media Einträge, Rechnungen, Notizen, Tags, Abos, Familienmitglieder, Event Einladungen und Teilnahmen sowie auch Qualifikationen übernommen. Alle anderen Daten dieser Person wie z.B. Log Einträge usw. werden gelöscht.
-        merge_hint_invalid: Diese Person hat ungültige Daten.
-        irreversible: Dieser Vorgang kann nicht rückgängig gemacht werden.
-        invalid_persons: Die Einträge können erst zusammengeführt werden wenn beide gültig sind.
-        reload: Erneut prüfen
+        select_person: Quali dati devono avere la precedenza durante la fusione?
+        merge_hint: Durante la fusione, vengono trasferiti i ruoli, i numeri di telefono, le e-mail aggiuntive, gli inserimenti nei social media, le fatture, le note, i tag, gli abbonamenti, i familiari, gli inviti e le partecipazioni a eventi e le qualifiche. Tutti gli altri dati relativi a questa persona, come le registrazioni di registro, ecc. vengono cancellati.
+        merge_hint_invalid: Questa persona ha dati non validi.
+        irreversible: Questo processo non può essere annullato.
+        invalid_persons: Le voci possono essere unite solo se entrambe sono valide.
+        reload: Controlla di nuovo
       action: Merge
       success: Le registrazioni delle persone sono state unite con successo.
     ignore:
@@ -1526,16 +1526,16 @@ it:
 
     history:
       events:
-        event_label: "Name / Gruppe"
+        event_label: "Nome / Gruppo"
       index:
-        future_roles_title: "Zukünftige Rollen"
+        future_roles_title: "Ruoli futuri"
         inactive_roles_title: "Ruoli inattivi"
-        qualified: "Bestanden"
-        not_qualified: "Nicht bestanden"
+        qualified: "Passato"
+        not_qualified: "Non superato"
         training_days:
-          one: "%{count} Ausbildungstag"
-          many: "%{count} Ausbildungstage"
-          other: "%{count} Ausbildungstage"
+          one: "%{count} Giornata di formazione"
+          many: "%{count} Giornate di formazione"
+          other: "%{count} Giornate di formazione"
     family:
       fields:
         is_in_family_with: "È parte della famiglia di"
@@ -1828,10 +1828,10 @@ it:
 
   qualification_decorator:
     open_training_days_active:
-      Damit die Qualifikation am %{finish_at} nicht abläuft, bitten wir dich bis spätestens dahin %{days} Fortbildungstage zu absolvieren.
+      Per garantire che la qualifica non scada all'indirizzo %{finish_at}, vi chiediamo di completare le giornate di formazione %{days} al più tardi entro tale data.
     open_training_days_reactivatable:
-      Um deine Qualifikation zu reaktivieren, bitten wir dich %{days} Fortbildungstage bis spätestens %{reactivateable_until} zu absolvieren.
-    open_training_days_no_longer_reactivatable: Diese Qualifikation ist seit dem %{reactivateable_until} abgelaufen. Falls du davor Aus- oder Fortbildungen besucht hast und du für diese eine Kursbestätigung besitzt, kannst du diese mit deinem Tourenchef teilen. Allenfalls kann dies zu einer Reaktivierung deiner bereits abgelaufenen Qualifikation führen.
+      Per riattivare la vostra qualifica, vi chiediamo di completare le giornate di formazione %{days} entro e non oltre %{reactivateable_until}.
+    open_training_days_no_longer_reactivatable: Questa qualifica è scaduta da %{reactivateable_until}. Se avete frequentato in precedenza corsi di formazione o di aggiornamento e siete in possesso di una conferma del corso, potete condividerla con il vostro accompagnatore. Questo potrebbe portare alla riattivazione della qualifica scaduta.
 
   event_invitations:
     create:
@@ -1858,11 +1858,11 @@ it:
       filters_qualification_validity:
         active: Solo le qualifiche attuali e valide
         reactivateable: Qualifiche valide e riattivabili
-        not_active_but_reactivateable: Reaktivierbare, aber nicht gültige Qualifikationen
-        not_active: Keine gültigen Qualifikationen
+        not_active_but_reactivateable: Qualifiche riattivabili ma non valide
+        not_active: Nessuna qualifica valida
         all: Tutte le qualifiche mai assegnate
-        none: Keine jemals erteilte Qualifikation
-        only_expired: Abgelaufene, aber nicht gültige oder reaktivierbare Qualifikationen
+        none: Nessuna qualifica mai concessa
+        only_expired: Qualifiche scadute ma non valide o riattivabili
       filters_role_kind:
         active_today: Ruoli attualmente attivi
         active: il ruolo era attivo.
@@ -1878,9 +1878,9 @@ it:
       equal: è esattamente
       greater: più grande di
       smaller: più piccolo di
-      before: vor dem
-      after: nach dem
-      blank: ist leer
+      before: prima del
+      after: dopo il
+      blank: è vuoto
 
     language:
       title: Lingua
@@ -1908,18 +1908,18 @@ it:
       prompt_role_duration_from: oppure nel periodo dal
       prompt_role_duration_selection: Quali periodi devono venir presi in considerazione?
       prompt_role_duration_until: al
-      or_duration: oder
+      or_duration: o
       include_archived: Includi i ruoli archiviati
 
     qualification:
       title: Qualifiche
       prompt_qualification_selection: Quali qualifiche devono essere visualizzate?
-      prompt_constraint: Welche Logik soll angewendet werden?
+      prompt_constraint: Quale logica applicare?
       prompt_validity: Che validità devono avere le qualifiche mostrate?
       prompt_year: Limitare l'anno delle qualifiche
-      prompt_date: Stichdatum
+      prompt_date: Data chiave
       prompt_kind: In quale ambito deve essere ricercato?
-      reference_date_help_inline: Leer lassen, um das aktuelle Datum zu verwenden.
+      reference_date_help_inline: Lasciare vuoto per utilizzare la data corrente.
       start_at_year_label: Ricevuto tra
       start_at_year_infix: e
       finish_at_year_label: Scaduto tra
@@ -1933,8 +1933,8 @@ it:
       validity:
         active: Solo qualifiche attuali e valide
         reactivateable: Qualifiche valide e riattivabili
-        not_active_but_reactivateable: Keine gültige, aber reaktivierbare Qualifikationen
-        not_active: Keine gültigen Qualifikationen
+        not_active_but_reactivateable: Nessuna qualifica valida, ma riattivabile
+        not_active: Nessuna qualifica valida
         all: Tutte le qualifiche mai assegnate
       kind:
         deep: Su questo livello e su tutti i livelli e gruppi sottostanti
@@ -1998,8 +1998,8 @@ it:
       #   text: Bist du sicher, dass du als Leiter/-in austreten möchtest?
       # group/bottom_layer/member:
       #   text: Bist du sicher, dass du als Mitglied austreten möchtest?
-    main_person_text: "Der Austritt erfolgt für: %{person}"
-    affected_people_text: "sowie für: %{affected_people}"
+    main_person_text: "Il ritiro avviene per: %{person}"
+    affected_people_text: "e per: %{affected_people}"
     flash:
       success: L'uscita è avvenuta con successo tramite %{date}.
 
@@ -2085,9 +2085,9 @@ it:
     prev_link: Indietro
 
   household_aside_component:
-    add: Erstellen
-    manage: Verwalten
-    destroy: Auflösen
+    add: Creare
+    manage: Gestire
+    destroy: Sciogliere
 
   subscriber:
     group:
@@ -2155,11 +2155,11 @@ it:
       excluded_people: "persone escluse"
       export_not_allowed: "Non è possibiie esportare gli abbonati di questo abbonamento perché contengono anche ruoli e/o eventi del tuo ambito di autorizzazioni."
       subscribable_mode_opt_out_info: >
-          Nur die hier konfigurierten Personen dürfen sich selbst an-/abmelden und
-          sind standardmässig an-gemeldet.
+          Solo le persone configurate qui possono effettuare il log-in e il log-out
+          da sole e sono loggate per impostazione predefinita.
       subscribable_mode_opt_in_info: >
-          Nur die hier konfigurierten Personen dürfen sich selbst an-/abmelden und
-          sind standardmässig ab-gemeldet.
+          Solo le persone configurate in questo punto possono effettuare il log-in
+          e il log-out e sono escluse per impostazione predefinita.
     subscription:
       only_persons_with: "Solo persone con"
       persons_excluded_with: "Escludere le persone con:"
@@ -2185,13 +2185,13 @@ it:
     impersonation_done: "L'account non è più utilizzato da %{user}"
     password_override: "La password è stata azzerata da %{user} e il login impedito fino a che verrà definita una nuova password."
 
-    household_created: "Haushalt (%{object_changes}) wurde neu erstellt."
-    household_person_appended: "%{object_name} wurde zum Haushalt (%{object_changes}) hinzugefügt."
-    household_person_removed: "%{object_name} wurde vom Haushalt (%{object_changes}) entfernt."
+    household_created: "Budget (%{object_changes}) è stato creato ex novo."
+    household_person_appended: "%{object_name} è stato aggiunto al bilancio (%{object_changes})."
+    household_person_removed: "%{object_name} è stato allontanato dalla famiglia (%{object_changes})."
     household_updated: "L'economia domestica (%{object_changes}) è stata aggiornata"
     remove_from_household: "è stato rimosso dall'economia domestica"
     append_to_household: "è stato aggiunto all'economia domestica"
-    household_destroyed: "Haushalt (%{object_changes}) wurde aufgelöst."
+    household_destroyed: "Il bilancio (%{object_changes}) è stato annullato."
     person_merge: "Unite due persone in questa registrazione. Persona cancellata:"
     deleted_service_token: "Nel frattempo eliminato %{model_name}"
 
@@ -2243,7 +2243,7 @@ it:
   json_api: JSON:API
 
   verify_membership:
-    title: Verifizierung Mitgliedschaft
-    not_found: Ungültiger Verifikationscode
-    status_valid: Mitgliedschaft gültig
-    status_invalid: Keine gültige Mitgliedschaft
+    title: Verifica dell'adesione
+    not_found: Codice di verifica non valido
+    status_valid: Iscrizione valida
+    status_invalid: Nessuna iscrizione valida

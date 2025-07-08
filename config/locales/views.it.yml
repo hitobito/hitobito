@@ -1527,7 +1527,7 @@ it:
 
     impersonation:
       create:
-        email_must_be_confirmed: La persona non ha ancora confermato il proprio indirizzo e-mail e quindi non può essere imitata.
+        email_must_be_confirmed: Die Person hat ihre E-Mail Adresse noch nicht bestätigt und kann somit nicht imitiert werden.
 
     history:
       events:
@@ -1715,7 +1715,7 @@ it:
 
       impersonate_user: Imitare
       impersonate_user_tooltip: Puoi utilizzare hitobito come se fossi la persona che ha effettuato il login
-      impersonate_user_tooltip_disabled: Questa persona può essere imitata solo dopo che l'indirizzo e-mail è stato confermato.
+      impersonate_user_tooltip_disabled: Diese Person kann erst imitiert werden, nachdem die E-Mail Adresse bestätigt wurde.
 
     actions_index:
       add_person: Aggiungere una persona

@@ -1527,6 +1527,11 @@ fr:
           approved: "La demande d'accès pour %{person} a déjà été validée. "
           rejected: "La demande d'accès pour %{person} a déjà été refusée. "
 
+
+    impersonation:
+      create:
+        email_must_be_confirmed: Die Person hat ihre E-Mail Adresse noch nicht bestätigt und kann somit nicht imitiert werden.
+
     history:
       events:
         event_label: "Nom / Groupe"
@@ -1710,6 +1715,7 @@ fr:
 
       impersonate_user: Imiter
       impersonate_user_tooltip: Tu peux utiliser utiliser hitobito comme si tu étais enregistré comme cette personne.
+      impersonate_user_tooltip_disabled: Diese Person kann erst imitiert werden, nachdem die E-Mail Adresse bestätigt wurde.
 
     actions_index:
       add_person: Ajouter une personne

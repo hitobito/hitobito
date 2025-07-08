@@ -1524,11 +1524,6 @@ it:
           approved: "La richiesta d'accesso per %{person} è già stata accettata."
           rejected: "La richiesta d'accesso per %{person} è già stata rifiutata."
 
-
-    impersonation:
-      create:
-        email_must_be_confirmed: Die Person hat ihre E-Mail Adresse noch nicht bestätigt und kann somit nicht imitiert werden.
-
     history:
       events:
         event_label: "Name / Gruppe"
@@ -1715,7 +1710,6 @@ it:
 
       impersonate_user: Imitare
       impersonate_user_tooltip: Puoi utilizzare hitobito come se fossi la persona che ha effettuato il login
-      impersonate_user_tooltip_disabled: Diese Person kann erst imitiert werden, nachdem die E-Mail Adresse bestätigt wurde.
 
     actions_index:
       add_person: Aggiungere una persona

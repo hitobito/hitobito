@@ -308,6 +308,7 @@ class Role < ActiveRecord::Base
 
   def prevent_changes
     allowed = %w[archived_at updater_id]
+    allowed.concat(%w[end_on]) if group.archived?
     only_archival = changes
       .reject { |_attr, (from, to)| from.blank? && to.blank? }
       .keys.all? { |key| allowed.include? key }

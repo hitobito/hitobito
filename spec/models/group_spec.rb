@@ -484,6 +484,22 @@ describe Group do
       expect { top_layer.destroy }.not_to(change { Group.count })
     end
 
+    describe "archived group" do
+      let(:top_group) { groups(:top_group) }
+      let(:top_leader) { roles(:top_leader) }
+
+      before { top_group.archive! }
+
+      it "soft destroys group" do
+        expect { top_group.destroy }.to change { Group.deleted.count }.by(1)
+      end
+
+      it "soft destroys role if role is old enough to archive" do
+        top_leader.update_columns(created_at: 1.year.ago, start_on: 1.year.ago)
+        expect { top_group.destroy }.to change { Role.ended.count }.by(1)
+      end
+    end
+
     context "role assignments" do
       it "terminates own roles" do
         _role = Fabricate(Group::BottomGroup::Member.name.to_s, group: bottom_group)

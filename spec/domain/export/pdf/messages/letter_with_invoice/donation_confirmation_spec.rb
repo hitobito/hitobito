@@ -18,7 +18,7 @@ describe Export::Pdf::Messages::LetterWithInvoice::DonationConfirmation do
 
   let(:options) { {} }
   let(:letter_with_invoice) { messages(:with_invoice) }
-  let(:pdf) { Prawn::Document.new }
+  let(:pdf) { Export::Pdf::Document.new.pdf }
   let(:analyzer) { PDF::Inspector::Text.analyze(pdf.render) }
 
   subject { described_class.new(pdf, letter_with_invoice, recipient, options) }
@@ -37,16 +37,18 @@ describe Export::Pdf::Messages::LetterWithInvoice::DonationConfirmation do
 
       subject.render
 
-      expect(text_with_position).to eq [[36, 746, "Spenden an Top"],
-        [36, 723, "Hallo Bottom"],
-        [36, 695, "Wir danken Ihnen für Ihr Vertrauen und Ihr geschätztes Engagement!"],
-        [36, 667, "Spendenbestätigung #{1.year.ago.year}"],
-        [36, 639, "#{1.year.ago.year} haben wir von"],
-        [36, 615, "Bottom, Member"],
-        [36, 601, "Greatstreet 345"],
-        [36, 587, "3456 Greattown"],
-        [36, 563, "Spenden erhalten in der Höhe von"],
-        [36, 540, "CHF 700.00"]]
+      expect(text_with_position.pretty_inspect).to eq [
+        [57, 770, "Spenden an Top"],
+        [57, 749, "Hallo Bottom"],
+        [57, 724, "Wir danken Ihnen für Ihr Vertrauen und Ihr geschätztes Engagement!"],
+        [57, 699, "Spendenbestätigung #{1.year.ago.year}"],
+        [57, 673, "#{1.year.ago.year} haben wir von"],
+        [57, 651, "Bottom, Member"],
+        [57, 639, "Greatstreet 345"],
+        [57, 626, "3456 Greattown"],
+        [57, 604, "Spenden erhalten in der Höhe von"],
+        [57, 582, "CHF 700.00"]
+      ].pretty_inspect
     end
 
     it "renders nothing with zero donation value" do

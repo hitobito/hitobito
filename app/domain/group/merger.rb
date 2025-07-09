@@ -81,13 +81,19 @@ class Group::Merger
     invoices = group1.invoices + group2.invoices
     invoices.each do |invoice|
       invoice.group_id = new_group.id
-      invoice.save!
+      invoice.save!(validate: false)
     end
 
     invoice_articles = group1.invoice_articles + group2.invoice_articles
     invoice_articles.each do |invoice_article|
       invoice_article.group_id = new_group.id
-      invoice_article.save!
+      invoice_article.save!(validate: false)
+    end
+
+    invoice_lists = group1.invoice_lists + group2.invoice_lists
+    invoice_lists.each do |invoice_list|
+      invoice_list.group_id = new_group.id
+      invoice_list.save!(validate: false)
     end
   end
 

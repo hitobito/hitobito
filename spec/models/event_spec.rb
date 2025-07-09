@@ -498,6 +498,23 @@ describe Event do
       subject.visible_contact_attributes = ["invalidvalue"]
       is_expected.to be_valid
     end
+
+    context "expects the guest_limit to be a positive number, specifically" do
+      it "is not a negative number" do
+        subject.guest_limit = -1
+        is_expected.not_to be_valid
+      end
+
+      it "is not a string" do
+        subject.guest_limit = "one"
+        is_expected.not_to be_valid
+      end
+
+      it "accepts a positive number" do
+        subject.guest_limit = 5
+        is_expected.to be_valid
+      end
+    end
   end
 
   describe "#init_questions" do

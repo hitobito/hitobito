@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::RegisterController < ApplicationController
-  include DeprecatedAction
   include PrivacyPolicyAcceptable
   include Events::RegistrationClosedInfo
 
@@ -16,7 +15,6 @@ class Event::RegisterController < ApplicationController
   before_action :assert_honeypot_is_empty, only: [:check, :register]
 
   def index
-    deprecated_action # should be public_events#show
 
     session[:person_return_to] = show_event_path
     flash.now[:notice] = translate(:not_logged_in, event: event)

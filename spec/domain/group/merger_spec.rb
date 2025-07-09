@@ -27,6 +27,7 @@ describe Group::Merger do
 
       Fabricate(:invoice, group: group2, recipient: @person)
       Fabricate(:invoice_article, group: group2)
+      InvoiceList.create!(title: "Sammelrechnung", group_id: group2.id)
     end
 
     it "creates a new group and merges roles, events" do
@@ -89,6 +90,17 @@ describe Group::Merger do
       expect(new_group.invoices.count).to eq 3
     end
 
+    it "moves even invalid invoices" do
+      expect(group1.invoices.count).to eq 2
+      expect(group2.invoices.count).to eq 1
+      group1.invoices[0].update_attribute(:state, "foobar")
+      expect(group1.invoices[0]).not_to be_valid
+
+      merger.merge!
+
+      expect(new_group.invoices.count).to eq 3
+    end
+
     it "moves invoice-articles" do
       expect(group1.invoice_articles.count).to eq 3
       expect(group2.invoice_articles.count).to eq 1
@@ -96,6 +108,37 @@ describe Group::Merger do
       merger.merge!
 
       expect(new_group.invoice_articles.count).to eq 4
+    end
+
+    it "moves even invalid invoice-articles" do
+      expect(group1.invoice_articles.count).to eq 3
+      expect(group2.invoice_articles.count).to eq 1
+      group1.invoice_articles[0].update_attribute(:number, nil)
+      expect(group1.invoice_articles[0]).not_to be_valid
+
+      merger.merge!
+
+      expect(new_group.invoice_articles.count).to eq 4
+    end
+
+    it "moves invoice lists" do
+      expect(group1.invoice_lists.count).to eq 0
+      expect(group2.invoice_lists.count).to eq 1
+
+      merger.merge!
+
+      expect(new_group.invoice_lists.count).to eq 1
+    end
+
+    it "moves even invalid invoice lists" do
+      expect(group1.invoice_lists.count).to eq 0
+      expect(group2.invoice_lists.count).to eq 1
+      group2.invoice_lists[0].update_attribute(:receiver_type, "foobar")
+      expect(group2.invoice_lists[0]).not_to be_valid
+
+      merger.merge!
+
+      expect(new_group.invoice_lists.count).to eq 1
     end
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_06_03_113049) do
+ActiveRecord::Schema[7.1].define(version: 2025_07_09_164311) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -446,6 +446,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_03_113049) do
     t.integer "minimum_participants"
     t.boolean "automatic_assignment", default: false, null: false
     t.string "visible_contact_attributes", default: "[\"name\", \"address\", \"phone_number\", \"email\", \"social_account\"]"
+    t.integer "guest_limit", default: 0, null: false
     t.index ["kind_id"], name: "index_events_on_kind_id"
     t.index ["shared_access_token"], name: "index_events_on_shared_access_token"
   end

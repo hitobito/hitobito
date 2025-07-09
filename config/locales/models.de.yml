@@ -649,6 +649,7 @@ de:
         admin_questions: Administrationsangaben
         no_name: "[Kein Name]"
         visible_contact_attributes: "Anzeigeoptionen (Kontaktperson)"
+        guest_limit: Maximale Anzahl Gäste
 
       event/contact_attrs:
         required: Obligatorisch

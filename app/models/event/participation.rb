@@ -72,6 +72,7 @@ class Event::Participation < ActiveRecord::Base
   before_validation :init, on: :create
   before_validation :set_self_in_nested
   before_create :reset_person_minimized_at
+  before_destroy :destroy_guest_record
 
   # There may be old participations without roles, so they must
   # update the count directly.
@@ -177,5 +178,9 @@ class Event::Participation < ActiveRecord::Base
 
   def directly_to_waiting_list?(event)
     !event.places_available? && event.waiting_list_available?
+  end
+
+  def destroy_guest_record
+    participant.destroy if participant_type == "Event::Guest"
   end
 end

@@ -15,7 +15,6 @@ class Event::RegisterController < ApplicationController
   before_action :assert_honeypot_is_empty, only: [:check, :register]
 
   def index
-
     session[:person_return_to] = show_event_path
     flash.now[:notice] = translate(:not_logged_in, event: event)
   end

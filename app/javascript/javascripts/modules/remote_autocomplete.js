@@ -123,7 +123,7 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
       threshold: 3,
       searchEngine: function(query, record) {
         // Render item with icon (if present), applying autocomplete.js' highlight function
-        return labelWithIcon(record.icon, record.label.replace(query, mark(query)))
+        return labelWithIcon(record.icon, record.label.replace(escapeHtml(query), mark(query)))
       }
     });
   }
@@ -141,6 +141,15 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
       url,
       method: 'GET'
     })
+  }
+
+  function escapeHtml(unsafe) {
+    return unsafe
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
   }
 
   app.setupStaticTypeahead = function() {

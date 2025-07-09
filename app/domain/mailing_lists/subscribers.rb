@@ -29,7 +29,7 @@ class MailingLists::Subscribers
     subscribed = people_as_configured.where(id: person.id).exists?
     return subscribed unless opt_in? && subscribable_for_configured?
 
-    subscribed && subscriptions.people.where(id: person.id).exists?
+    subscribed && subscriptions.where(subscriber: person).exists?
   end
 
   def people_as_configured

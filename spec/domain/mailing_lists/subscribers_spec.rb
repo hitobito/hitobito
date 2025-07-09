@@ -197,7 +197,7 @@ describe MailingLists::Subscribers do
       end
     end
 
-    context "anyone" do
+    context "anyone may be subscribed" do
       let(:subscribable_for) { :anyone }
 
       it "excludes person if only group subscription exists" do
@@ -675,6 +675,17 @@ describe MailingLists::Subscribers do
 
         expect(subscribed?(person)).to be_truthy
         expect(subscribed?(people(:top_leader))).to be_falsey
+      end
+
+      it "is true if included for opt-in list with subscribable_for: :configured" do
+        list.update!(subscribable_mode: :opt_in, subscribable_for: :configured)
+        Subscription.create!(mailing_list_id: list.id, subscriber: Group.root,
+          role_types: [Group::TopGroup::Leader])
+
+        expect(subscribed?(people(:top_leader))).to be_falsey
+
+        create_subscription(people(:top_leader))
+        expect(subscribed?(people(:top_leader))).to be_truthy
       end
     end
 

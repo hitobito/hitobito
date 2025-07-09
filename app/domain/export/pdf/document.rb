@@ -8,8 +8,8 @@
 class Export::Pdf::Document
   attr_accessor :pdf
 
-  def initialize(page_size: "A4", page_layout: :portrait, margin: 2.cm)
-    @pdf = Prawn::Document.new(page_size: page_size, page_layout: page_layout, margin: margin)
+  def initialize(page_size: "A4", page_layout: :portrait, margin: 2.cm, **opts)
+    @pdf = Prawn::Document.new(page_size:, page_layout:, margin:, fallback_fonts: ["NotoSans"], **opts)
     set_font
   end
 

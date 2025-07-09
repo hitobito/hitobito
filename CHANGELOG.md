@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## unreleased
+
+- Für PDF Generierung wird nun die Schriftart "Noto Sans (Latin, Cyrillic and Greek)" als Fallback Schriftart verwendet (#2372)
+
 ## Version 2.6
 
 - Referenznummer von Rechnung wird neu auch auf Empfangsschein angezegit (hitobito_sww#238)

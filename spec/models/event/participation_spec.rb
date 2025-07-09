@@ -112,10 +112,24 @@ describe Event::Participation do
   end
 
   context "#destroy" do
-    it "destroy roles as well" do
+    it "destroys roles as well" do
       expect do
         event_participations(:top).destroy
       end.to change { Event::Role.count }.by(-1)
+    end
+
+    it "destroys guest-participants as well" do
+      guest_participation = Fabricate(:event_participation, participant: Fabricate(:event_guest))
+
+      expect do
+        guest_participation.destroy
+      end.to change { Event::Guest.count }.by(-1)
+    end
+
+    it "does not destroy person participants" do
+      expect do
+        event_participations(:top).destroy
+      end.to not_change { Person.count }
     end
   end
 

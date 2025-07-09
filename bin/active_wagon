@@ -112,7 +112,8 @@ class Setup
 
   def dependencies
     YOUTH_DEPENDENT_WAGONS.product([%w[youth]]).to_h.merge({
-      "tenants" => %w[generic]
+      "tenants" => %w[generic],
+      "bdp" => %w[pfadi_de],
     })
   end
 

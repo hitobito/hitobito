@@ -19,6 +19,10 @@ class Group::MergeController < ApplicationController
     else
       respond_failure
     end
+  rescue RuntimeError => err
+    respond_error err.message
+  rescue ActiveRecord::RecordInvalid => err
+    respond_error err.record.errors.full_messages.join(", ")
   end
 
   private
@@ -31,6 +35,11 @@ class Group::MergeController < ApplicationController
 
   def respond_failure
     flash[:alert] = merger.errors ? merger.errors.to_sentence : translate(:failure)
+    redirect_to merge_group_path(group)
+  end
+
+  def respond_error(message = nil)
+    flash[:alert] = message || translate(:failure)
     redirect_to merge_group_path(group)
   end
 

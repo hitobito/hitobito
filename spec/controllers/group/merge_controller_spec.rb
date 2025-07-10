@@ -76,5 +76,63 @@ describe Group::MergeController do
       expect(flash[:alert]).to match(/Leider fehlt dir die Berechtigung um diese Gruppen zu fusionieren/)
       is_expected.to redirect_to(merge_group_path(group1))
     end
+
+    it "merges groups" do
+      group1 = groups(:bottom_layer_one)
+      group2 = groups(:bottom_layer_two)
+      parent = groups(:top_layer)
+
+      user = Fabricate(Group::BottomLayer::Leader.name.to_s, group: group1).person
+      Fabricate(Group::BottomLayer::Leader.name.to_s, group: group2, person: user)
+      Fabricate(Group::TopLayer::TopAdmin.name.to_s, group: parent, person: user)
+
+      sign_in(user)
+
+      post :perform, params: {id: group1.id, merger: {new_group_name: "foo", merge_group_id: group2.id}}
+
+      expect(flash[:alert]).to match(/Die Rechnungseinstellungen werden nicht automatisch übernommen/)
+      new_group = Group.order(:id).last
+      is_expected.to redirect_to(group_path(new_group))
+    end
+
+    it "displays exception from merger in case of unexpected error" do
+      group1 = groups(:bottom_layer_one)
+      group2 = groups(:bottom_layer_two)
+      parent = groups(:top_layer)
+
+      user = Fabricate(Group::BottomLayer::Leader.name.to_s, group: group1).person
+      Fabricate(Group::BottomLayer::Leader.name.to_s, group: group2, person: user)
+      Fabricate(Group::TopLayer::TopAdmin.name.to_s, group: parent, person: user)
+
+      sign_in(user)
+
+      group2.archive!
+
+      post :perform, params: {id: group1.id, merger: {new_group_name: "foo", merge_group_id: group2.id}}
+
+      expect(flash[:alert]).to match(/Cannot merge archived groups/)
+      is_expected.to redirect_to(merge_group_path(group1))
+    end
+
+    it "displays validation exception from merger" do
+      group1 = groups(:bottom_layer_one)
+      group2 = groups(:bottom_layer_two)
+      parent = groups(:top_layer)
+
+      invalid_record = Fabricate(:event, groups: [group1])
+      invalid_record.errors.add(:base, "invalid from test")
+      allow_any_instance_of(Event).to receive(:save!).and_raise(ActiveRecord::RecordInvalid.new(invalid_record))
+
+      user = Fabricate(Group::BottomLayer::Leader.name.to_s, group: group1).person
+      Fabricate(Group::BottomLayer::Leader.name.to_s, group: group2, person: user)
+      Fabricate(Group::TopLayer::TopAdmin.name.to_s, group: parent, person: user)
+
+      sign_in(user)
+
+      post :perform, params: {id: group1.id, merger: {new_group_name: "foo", merge_group_id: group2.id}}
+
+      expect(flash[:alert]).to match(/invalid from test/)
+      is_expected.to redirect_to(merge_group_path(group1))
+    end
   end
 end

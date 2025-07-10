@@ -197,4 +197,10 @@ describe Event::Course do
       expect(course.qualifications_visible?).to be_falsy
     end
   end
+
+  describe "differs from Event a little, it" do
+    it "has by default no guests" do
+      expect(described_class.used_attributes).to_not include :guest_limit
+    end
+  end
 end

@@ -65,12 +65,65 @@ describe Group::Merger do
       expect { merge.merge! }.to raise_error(RuntimeError)
     end
 
+    it "handles invalid merged groups" do
+      outdated_contact = people(:bottom_member)
+      outdated_contact.roles.destroy_all
+
+      group1.update_attribute(:contact_id, outdated_contact.id)
+      expect(group1).not_to be_valid
+
+      group1.children[0].update_attribute(:contact_id, outdated_contact.id)
+      expect(group1.children[0]).not_to be_valid
+
+      group1.children[0].children[0].update_attribute(:contact_id, outdated_contact.id)
+      expect(group1.children[0].children[0]).not_to be_valid
+
+      merger.merge!
+
+      expect(new_group.children.count).to eq 3
+    end
+
+    it "handles invalid roles" do
+      group1.roles[0].update_attribute(:start_on, "2200-06-11")
+      group1.roles[0].update_attribute(:end_on, "2200-06-10")
+      expect(group1.roles[0]).not_to be_valid
+
+      child_role = Fabricate(Group::BottomGroup::Leader.name.to_sym,
+        group: group2.children[0],
+        person: people(:bottom_member))
+      child_role.update_attribute(:start_on, "2200-06-11")
+      child_role.update_attribute(:end_on, "2200-06-10")
+      expect(child_role).not_to be_valid
+
+      merger.merge!
+
+      expect(new_group.roles.count).to eq 4
+    end
+
     it "add events from both groups only once" do
       e = Fabricate(:event, groups: [group1, group2])
       merger.merge!
 
       e.reload
       expect(e.group_ids).to match_array([group1, group2, new_group].collect(&:id))
+    end
+
+    it "handles invalid events" do
+      group1.events[0].update_attribute(:application_closing_at, "2025-06-10")
+      group1.events[0].update_attribute(:application_opening_at, "2025-06-11")
+      expect(group1.events[0]).not_to be_valid
+
+      invalid_serialized_column = %w[street zip_code town foobar]
+      group2.events[0].update_attribute(:required_contact_attrs, invalid_serialized_column)
+      expect(group2.events[0]).not_to be_valid
+
+      child_event = Fabricate(:event, groups: [group1])
+      child_event.update_attribute(:required_contact_attrs, invalid_serialized_column)
+      expect(child_event).not_to be_valid
+
+      merger.merge!
+
+      expect(new_group.events.count).to eq 3
     end
 
     it "updates layer_group_id for descendants" do

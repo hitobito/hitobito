@@ -43,7 +43,7 @@ class Group::MergeController < ApplicationController
   end
 
   def candidates
-    groups = group.sister_groups
+    groups = group.sister_groups.without_archived
     @candidates = groups.select { |g| can?(:update, g) }
     if @candidates.empty?
       flash[:alert] = translate(:no_candidates)

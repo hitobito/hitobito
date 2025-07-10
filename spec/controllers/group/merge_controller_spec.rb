@@ -17,6 +17,30 @@ describe Group::MergeController do
       expect(flash[:alert]).to match(/Es sind keine gleichen Gruppen zum Fusionieren vorhanden/)
       is_expected.to redirect_to(group_path(group))
     end
+
+    it "should not offer deleted sibling groups" do
+      group = groups(:bottom_layer_one)
+      groups(:bottom_layer_two).update_attribute(:deleted_at, 1.day.ago)
+
+      sign_in(people(:top_leader))
+
+      get :select, params: {id: group.id}
+
+      expect(flash[:alert]).to match(/Es sind keine gleichen Gruppen zum Fusionieren vorhanden/)
+      is_expected.to redirect_to(group_path(group))
+    end
+
+    it "should not offer archived sibling groups" do
+      group = groups(:bottom_layer_one)
+      groups(:bottom_layer_two).update_attribute(:archived_at, 1.day.ago)
+
+      sign_in(people(:top_leader))
+
+      get :select, params: {id: group.id}
+
+      expect(flash[:alert]).to match(/Es sind keine gleichen Gruppen zum Fusionieren vorhanden/)
+      is_expected.to redirect_to(group_path(group))
+    end
   end
 
   # TODO test paths inside perform action

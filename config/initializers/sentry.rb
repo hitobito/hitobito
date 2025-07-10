@@ -48,7 +48,8 @@ Rails.application.reloader.to_prepare do
     ]
 
     misbehaving_client_errors = [
-      "ActionDispatch::Http::MimeNegotiation::InvalidType"
+      "ActionDispatch::Http::MimeNegotiation::InvalidType",
+      "Rack::Multipart::EmptyContentError"
     ]
 
     config.excluded_exceptions += [

@@ -55,7 +55,7 @@ class Group::Merger
     events = (group1.events + group2.events).uniq
     events.each do |event|
       event.groups << new_group
-      event.save!
+      event.save!(validate: false)
     end
   end
 
@@ -64,7 +64,7 @@ class Group::Merger
     children.each do |child|
       child.parent_id = new_group.id
       child.parent.reload
-      child.save!
+      child.save!(validate: false)
     end
   end
 
@@ -73,7 +73,7 @@ class Group::Merger
     roles.each do |role|
       new_role = role.dup
       new_role.group_id = new_group.id
-      new_role.save!
+      new_role.save!(validate: false)
     end
   end
 

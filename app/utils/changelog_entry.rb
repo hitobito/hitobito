@@ -9,8 +9,8 @@ class ChangelogEntry
   GITHUB_BASE_URL = "https://github.com/"
   GITHUB_CORE_ISSUE_BASE_URL = GITHUB_BASE_URL + "hitobito/hitobito/issues/"
 
-  CORE_ISSUE_HASH_REGEX = /\((?:hitobito)?#(?<number>\d*)\)\S?/ # matches e.g (#42)
-  WAGON_ISSUE_HASH_REGEX = /\((?<wagon>hitobito_\w*)#(?<number>\d*)\)\S?/ # matches e.g (hitobito_generic#42) or (hitobito_sjas#1000)
+  CORE_ISSUE_HASH_REGEX = /(?<!\w)(?<!\/)(?:hitobito)?#(?<number>\d+)\b/ # matches e.g (#42) or 'hitobito#42'
+  WAGON_ISSUE_HASH_REGEX = /(?<!\w)(?<!\/)(?:hitobito\/|\b)(?<wagon>\w*_\w*)#(?<number>\d+)\b/ # matches e.g (hitobito_generic#42) or (hitobito_sjas#1000)
 
   GITHUB_USERNAME_REGEX = /@(?<gh_user>[a-zA-Z0-9-]*)/ # matches e.g @TheWalkingLeek or @kronn, used charset according to github username policies
 
@@ -20,9 +20,9 @@ class ChangelogEntry
 
   class_attribute :regex_substitutions, default: {
     # Core tickets
-    CORE_ISSUE_HASH_REGEX => markdown_link(label: '(hitobito#\k<number>)', url: GITHUB_CORE_ISSUE_BASE_URL + '\k<number>'),
+    CORE_ISSUE_HASH_REGEX => markdown_link(label: 'hitobito#\k<number>', url: GITHUB_CORE_ISSUE_BASE_URL + '\k<number>'),
     # Wagon tickets
-    WAGON_ISSUE_HASH_REGEX => markdown_link(label: '\0', url: GITHUB_BASE_URL + 'hitobito/\k<wagon>/issues/\k<number>'),
+    WAGON_ISSUE_HASH_REGEX => markdown_link(label: '\k<wagon>#\k<number>', url: GITHUB_BASE_URL + 'hitobito/\k<wagon>/issues/\k<number>'),
     # Github Usernames, matches e.g. @TheWalkingLeek or @kronn
     GITHUB_USERNAME_REGEX => markdown_link(label: '@\k<gh_user>', url: GITHUB_BASE_URL + '\k<gh_user>')
 

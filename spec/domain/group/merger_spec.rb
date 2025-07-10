@@ -100,6 +100,46 @@ describe Group::Merger do
       expect(new_group.roles.count).to eq 4
     end
 
+    it "handles archived subgroups with archived roles" do
+      Fabricate(Group::BottomGroup::Leader.name.to_sym,
+        group: group1.children[0],
+        person: people(:bottom_member))
+      group1.children[0].archive!
+      expect(group1.children[0]).to be_archived
+      expect(group1.children[0].roles[0]).to be_archived
+
+      merger.merge!
+
+      expect(new_group.children.count).to eq 3
+      expect(new_group.children[0]).to be_archived
+      expect(new_group.children[0].roles[0]).to be_archived
+    end
+
+    it "handles deleted subgroups" do
+      group1.children[0].update_attribute(:deleted_at, 1.day.ago)
+      expect(group1.children[0]).to be_deleted
+
+      merger.merge!
+
+      expect(new_group.children.count).to eq 3
+      expect(new_group.children[0]).to be_deleted
+    end
+
+    it "does not merge archived group" do
+      group2.archive!
+      expect(group2).to be_archived
+      expect(group2.roles[0]).to be_archived
+
+      expect { merger.merge! }.to raise_error(RuntimeError)
+    end
+
+    it "does not merge deleted group" do
+      group2.update_attribute(:deleted_at, 1.day.ago)
+      expect(group2).to be_deleted
+
+      expect { merger.merge! }.to raise_error(RuntimeError)
+    end
+
     it "add events from both groups only once" do
       e = Fabricate(:event, groups: [group1, group2])
       merger.merge!

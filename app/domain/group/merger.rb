@@ -13,7 +13,9 @@ class Group::Merger
   end
 
   def merge!
-    raise("Cannot merge these Groups") unless group2_valid?
+    raise "Cannot merge these groups" unless group2_valid?
+    raise "Cannot merge archived groups" if archived?
+    raise "Cannot merge deleted groups" if deleted?
 
     ::Group.transaction do
       if create_new_group
@@ -31,6 +33,14 @@ class Group::Merger
   end
 
   private
+
+  def archived?
+    group1.archived? || group2.archived?
+  end
+
+  def deleted?
+    group1.deleted? || group2.deleted?
+  end
 
   def create_new_group
     new_group = build_new_group

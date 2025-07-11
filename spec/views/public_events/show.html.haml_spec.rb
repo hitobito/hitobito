@@ -6,7 +6,6 @@
 require "spec_helper"
 
 describe "public_events/show.html.haml" do
-  let(:top_leader) { people(:top_leader) }
   let(:group) { event.groups.first }
   let(:event) { EventDecorator.decorate(events(:top_event)) }
 

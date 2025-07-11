@@ -1,0 +1,12 @@
+-#  Copyright (c) 2012-2025, Jungwacht Blauring Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+= link_to t('layouts.unauthorized.forgot_password'), new_person_password_path
+%span.hide-last
+  |
+= link_to t('layouts.unauthorized.need_confirmation_email'), new_person_confirmation_path
+%span.hide-last
+  |
+= render_self_registration_link

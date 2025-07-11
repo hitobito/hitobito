@@ -67,6 +67,7 @@ class Person::Filter::Attributes < Person::Filter::Base
   def raw_sql_condition(scope)
     generic_constraints.map do |v|
       key, constraint, value = v.to_h.symbolize_keys.slice(:key, :constraint, :value).values
+      value = value.flatten if value.is_a?(Array)
       next unless Person.filter_attrs.key?(key.to_sym)
       type = Person.filter_attrs[key.to_sym][:type]
       begin
@@ -88,12 +89,15 @@ class Person::Filter::Attributes < Person::Filter::Base
   end
 
   def persisted_attribute_condition_sql(key, value, constraint)
-    sql_string = case constraint
-    when /match/ then match_search_sql(key, value, constraint)
-    when /blank/ then "COALESCE(TRIM(people.#{key}::text), '') #{sql_comparator(constraint)} ?"
-    else "people.#{key} #{sql_comparator(constraint)} ?"
+    sql_string = if value.is_a?(Array)
+      "people.#{key} IN (?)"
+    elsif /match/.match?(constraint)
+      match_search_sql(key, value, constraint)
+    elsif /blank/.match?(constraint)
+      "COALESCE(TRIM(people.#{key}::text), '') #{sql_comparator(constraint)} ?"
+    else
+      "people.#{key} #{sql_comparator(constraint)} ?"
     end
-
     ActiveRecord::Base.sanitize_sql_array([sql_string, sql_value(key, value, constraint)])
   end
 

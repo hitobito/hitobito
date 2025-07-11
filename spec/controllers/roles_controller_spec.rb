@@ -10,7 +10,7 @@ describe RolesController do
 
   let(:group) { groups(:top_group) }
   let(:person) { Fabricate(:person) }
-  let(:role) { Fabricate(Group::TopGroup::Member.name.to_sym, person: person, group: group) }
+  let(:role) { Fabricate(Group::TopGroup::Member.name.to_sym, person: person, group: group, created_at: 1.year.ago) }
 
   describe "GET new" do
     it "sets a role of the correct type" do
@@ -358,6 +358,16 @@ describe RolesController do
     it "terminates and creates new role if type changes" do
       expect do
         put :update, params: {group_id: group.id, id: role.id, role: {type: Group::TopGroup::Leader.sti_name}}
+      end.to change { Role.with_inactive.count }.by(1)
+      is_expected.to redirect_to(group_person_path(group, person))
+      expect(Role.with_inactive.find(role.id)).not_to be_active
+      expect(flash[:notice]).to eq "Rolle <i>Member (bis #{Date.current.yesterday.strftime("%d.%m.%Y")})</i> für <i>#{person}</i> in <i>TopGroup</i> zu <i>Leader</i> geändert."
+    end
+
+    it "hard destroys and creates new role if type changes and role was created recently" do
+      role.update_attribute(:created_at, Time.zone.yesterday)
+      expect do
+        put :update, params: {group_id: group.id, id: role.id, role: {type: Group::TopGroup::Leader.sti_name}}
       end.not_to change { Role.with_inactive.count }
       is_expected.to redirect_to(group_person_path(group, person))
       expect(Role.with_inactive.where(id: role.id)).not_to be_exists
@@ -365,6 +375,23 @@ describe RolesController do
     end
 
     it "terminates and creates new role if type and group changes" do
+      group2 = groups(:toppers)
+      expect do
+        put :update, params: {group_id: group.id, id: role.id, role: {type: Group::GlobalGroup::Leader.sti_name, group_id: group2.id}}
+      end.to change { Role.with_inactive.count }.by(1)
+
+      person.update_attribute(:primary_group_id, group.id)
+
+      is_expected.to redirect_to(group_person_path(group2, person))
+      expect(Role.with_inactive.find(role.id)).not_to be_active
+      expect(flash[:notice]).to eq "Rolle <i>Member (bis #{Date.current.yesterday.strftime("%d.%m.%Y")})</i> für <i>#{person}</i> in <i>TopGroup</i> zu <i>Leader</i> in <i>Toppers</i> geändert."
+
+      # new role's group also assigned to person's primary group
+      expect(person.reload.primary_group).to eq group2
+    end
+
+    it "hard destroys and creates new role if type and group changes and role was created recently" do
+      role.update_attribute(:created_at, Time.zone.yesterday)
       group2 = groups(:toppers)
       expect do
         put :update, params: {group_id: group.id, id: role.id, role: {type: Group::GlobalGroup::Leader.sti_name, group_id: group2.id}}
@@ -453,6 +480,16 @@ describe RolesController do
       it "terminates and creates new role if type changes" do
         expect do
           put :update, params: {group_id: group.id, id: role.id, role: {type: Group::TopGroup::Leader.sti_name}}
+        end.to change { Role.with_inactive.count }.by(1)
+        is_expected.to redirect_to(group_person_path(group, person))
+        expect(Role.with_inactive.find(role.id)).not_to be_active
+        expect(flash[:notice]).to eq "Rolle <i>Member (bis #{Date.current.yesterday.strftime("%d.%m.%Y")})</i> für <i>#{person}</i> in <i>TopGroup</i> zu <i>Leader</i> geändert."
+      end
+
+      it "hard destroys and creates new role if type changes and role was created recently" do
+        role.update_attribute(:created_at, Time.zone.yesterday)
+        expect do
+          put :update, params: {group_id: group.id, id: role.id, role: {type: Group::TopGroup::Leader.sti_name}}
         end.not_to change { Role.with_inactive.count }
         is_expected.to redirect_to(group_person_path(group, person))
         expect(Role.with_inactive.where(id: role.id)).not_to be_exists
@@ -470,14 +507,16 @@ describe RolesController do
   end
 
   describe "DELETE destroy" do
-    let(:notice) { "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich gelöscht." }
+    let(:notice) { "Rolle <i>Member (bis #{Date.current.yesterday.strftime("%d.%m.%Y")})</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich gelöscht." }
+    let(:hard_destroy_notice) { "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich gelöscht." }
 
-    it "redirects to group" do
+    it "redirects to group after hard delete" do
+      role.update_attribute(:created_at, 1.day.ago)
       user = Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: group)
       sign_in(user.person)
       delete :destroy, params: {group_id: group.id, id: role.id}
 
-      expect(flash[:notice]).to eq notice
+      expect(flash[:notice]).to eq hard_destroy_notice
       is_expected.to redirect_to(group_path(group))
     end
 
@@ -488,11 +527,11 @@ describe RolesController do
       is_expected.to redirect_to(person_path(person))
     end
 
-    it "can destroy future role" do
+    it "hard destroys future role" do
       role.update!(start_on: Time.zone.tomorrow)
       delete :destroy, params: {group_id: group.id, id: role.id}
 
-      expect(flash[:notice]).to eq notice
+      expect(flash[:notice]).to eq hard_destroy_notice
       is_expected.to redirect_to(person_path(person))
     end
 

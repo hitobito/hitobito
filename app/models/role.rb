@@ -192,11 +192,12 @@ class Role < ActiveRecord::Base
   # without the customizations.
   alias_method :vanilla_destroy, :destroy
 
-  # If the role is younger than the minimum days to archive, it gets destroyed.
+  # If the role is younger than the minimum days to archive, or is a future role, it gets destroyed.
   # If it has "archival age", we update the end_on attribute to yesterday instead of destroying it.
   # If `always_soft_destroy` is set to true, the role is always ended instead of destroyed.
   def destroy(always_soft_destroy: false) # rubocop:disable Rails/ActiveRecordOverride
     return vanilla_destroy unless always_soft_destroy || old_enough_to_archive?
+    return vanilla_destroy if future?
 
     run_callbacks :destroy do
       end_on&.past? ? true : update!(end_on: Date.current.yesterday)

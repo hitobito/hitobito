@@ -267,6 +267,7 @@ describe EventsController do
         expect(event.application_questions.map(&:question)).to include(*existing_application_questions)
 
         global_questions = Event::Question.global.application.where(type: event.type.to_s).map(&:question)
+        expect(global_questions).to be_present
         expect(event.application_questions.map(&:question)).to include(*global_questions)
 
         expect(event.application_questions.map(&:id).uniq).to eq([nil])

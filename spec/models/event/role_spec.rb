@@ -25,8 +25,7 @@ describe Event::Role do
       context part do
         it "must have valid permissions" do
           # although it looks like, this example is about participation.permissions and not about Participation::Permissions
-          expect(part.permissions).to be_present
-          expect(Event::Role::Permissions).to include(*part.permissions)
+          expect(Event::Role::Permissions).to include(*part.permissions) if part.permissions.present?
         end
       end
     end

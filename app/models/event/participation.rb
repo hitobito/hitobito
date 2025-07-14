@@ -50,6 +50,16 @@ class Event::Participation < ActiveRecord::Base
     joins("LEFT JOIN event_guests ON event_participations.participant_type = 'Event::Guest' AND event_participations.participant_id = event_guests.id")
   }
 
+  scope :guests_of, ->(main_participant) {
+    joins(<<~SQL.squish)
+      INNER JOIN event_guests
+        ON event_participations.participant_type = 'Event::Guest'
+        AND event_participations.participant_id = event_guests.id
+    SQL
+      .where(participant_type: "Event::Guest")
+      .where("event_guests.main_applicant_id = ?", main_participant.id) # rubocop:disable Rails/WhereEquals
+  }
+
   belongs_to :application, inverse_of: :participation, dependent: :destroy, validate: true
 
   has_many :roles, inverse_of: :participation, dependent: :destroy

@@ -109,6 +109,9 @@ invoice_lists:
     membership:
       enabled: false
 
+custom_dashboard_page:
+  enabled: false
+
 # Presets for PDF labels
 pdf:
   font_size: 9

@@ -10,6 +10,7 @@ Hitobito::Application.routes.draw do
   extend LanguageRouteScope
 
   root to: 'dashboard#index'
+  get '/dashboard', to: 'dashboard#dashboard'
 
   get '/healthz', to: 'healthz#show'
   get '/healthz/mail', to: 'healthz/mail#show'

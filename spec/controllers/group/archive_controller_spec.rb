@@ -36,5 +36,14 @@ describe Group::ArchiveController, type: :controller do
         post :create, params: {id: group_id}
       end.to change { bottom_group.reload.archived? }.from(false).to(true)
     end
+
+    it "displays validation error" do
+      bottom_group.update_attribute(:contact_id, people(:bottom_member).id) # invalid contact_id
+
+      post :create, params: {id: group_id}
+      expect(response).to have_http_status(:redirect)
+      expect(flash[:notice]).to be_nil
+      expect(flash[:alert]).to eq("Gruppe konnte nicht archiviert werden: Kontaktperson ist kein gültiger Wert")
+    end
   end
 end

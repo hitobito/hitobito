@@ -100,5 +100,18 @@ describe MailingLists::BulkMail::BounceHandler do
       expect(bounce_mail.raw_source).to include("<nothing@example2.com>: Recipient address rejected: undeliverable address:")
       expect(last_bounce.email).to eql "nothing@example2.com"
     end
+
+    it "raises for unusual bounces" do
+      unusual_bounce = Mail.read_from_string(
+        Rails.root.join("spec", "fixtures", "email", "list_bounce.eml")
+        .read.gsub(/^.*nothing@example2.com.*$/, "")
+      )
+      allow(bounce_imap_mail).to receive(:mail).and_return(unusual_bounce)
+
+      expect do
+        bounce_handler.process
+      end.to raise_error(MailingLists::BulkMail::NoBounceRecipientDetected)
+        .with_message(/Mail seems to be a bounce, but the original recipient could not be detected./)
+    end
   end
 end

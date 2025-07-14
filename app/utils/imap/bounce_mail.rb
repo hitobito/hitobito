@@ -38,8 +38,8 @@ module Imap
     end
 
     def bounced_mail_addresses
-      original_tos = recipients_of_original_message
       mentioned_tos = mails_mentioned_in_notification
+      original_tos = recipients_of_original_message
 
       if mentioned_tos.one?
         mentioned_tos
@@ -55,9 +55,9 @@ module Imap
     def recipients_of_original_message
       undelivered_message = mail.parts.find { |part| part.content_description == "Undelivered Message" }
 
-      # return [] if undelivered_message.blank?
+      return [] if undelivered_message.blank?
 
-      ::Mail.new(undelivered_message.body).to
+      ::Mail.new(undelivered_message.body).to.to_a
     end
 
     def mails_mentioned_in_notification
@@ -66,6 +66,7 @@ module Imap
         .find { |part| part.content_description == "Notification" }
         .to_s.scan(/\w+@\w+.\w+/).uniq
         .select { |email| Truemail.valid?(email, with: :regex) }
+        .to_a
     end
   end
 end

@@ -57,7 +57,11 @@ module MailingLists::BulkMail
     end
 
     def record_bounce
-      @imap_mail.bounced_mail_addresses.each do |email|
+      bounced_mails = @imap_mail.bounced_mail_addresses
+
+      raise MailingLists::BulkMail::NoBounceRecipientDetected, @imap_mail if bounced_mails.empty?
+
+      bounced_mails.each do |email|
         ::Bounce.record(email, mailing_list_id: source_message&.mailing_list_id)
       end
     end

@@ -1,4 +1,4 @@
-// Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+// Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
 // hitobito_sac_cas and licensed under the Affero General Public License version 3
 // or later. See the COPYING file at the top-level directory or at
 // https://github.com/hitobito/hitobito
@@ -13,6 +13,7 @@ export default class extends Controller {
   }
 
   toggle(event) {
+    console.log("toggle")
     if(event.target.tagName === "SELECT") {
       const selected = event.target.options[event.target.options.selectedIndex];
 
@@ -22,10 +23,14 @@ export default class extends Controller {
         this.toggleTarget.classList.add("hidden");
       }
     } else if (event.target.tagName === "INPUT") {
-      if (!this.hideOnValue.includes(event.target.value)) {
-        this.toggleTarget.classList.remove("hidden");
+      if(this.#hideOnConfigured()) {
+        if (!this.hideOnValue.includes(event.target.value)) {
+          this.toggleTarget.classList.remove("hidden");
+        } else {
+          this.toggleTarget.classList.add("hidden");
+        }
       } else {
-        this.toggleTarget.classList.add("hidden");
+        this.toggleTarget.classList.toggle("hidden");
       }
     } else {
       this.toggleTarget.classList.remove("hidden");
@@ -34,5 +39,9 @@ export default class extends Controller {
 
   untoggle() {
     this.toggleTarget.classList.add("hidden");
+  }
+
+  #hideOnConfigured() {
+    return !(this.hideOnValue.length == 1 && this.hideOnValue.includes(""));
   }
 }

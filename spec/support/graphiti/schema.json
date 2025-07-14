@@ -2739,35 +2739,51 @@
     }
   },
   "types": {
-    "integer_id": {
-      "kind": "scalar",
-      "description": "Base Type. Query/persist as integer, render as string."
-    },
-    "uuid": {
-      "kind": "scalar",
-      "description": "Base Type. Like a normal string, but by default only eq/!eq and case-sensitive."
-    },
-    "string_enum": {
-      "kind": "scalar",
-      "description": "String enum type. Like a normal string, but only eq/!eq and case-sensitive. Limited to only the allowed values."
-    },
-    "integer_enum": {
-      "kind": "scalar",
-      "description": "Integer enum type. Like a normal integer, but only eq/!eq filters. Limited to only the allowed values."
-    },
-    "string": {
-      "kind": "scalar",
+    "array": {
+      "kind": "array",
       "description": "Base Type."
     },
-    "integer": {
-      "kind": "scalar",
+    "array_of_big_decimals": {
+      "kind": "array",
+      "description": "Base Type."
+    },
+    "array_of_dates": {
+      "kind": "array",
+      "description": "Base Type."
+    },
+    "array_of_datetimes": {
+      "kind": "array",
+      "description": "Base Type."
+    },
+    "array_of_floats": {
+      "kind": "array",
+      "description": "Base Type."
+    },
+    "array_of_integer_enums": {
+      "kind": "array",
+      "description": "Base Type."
+    },
+    "array_of_integer_ids": {
+      "kind": "array",
+      "description": "Base Type."
+    },
+    "array_of_integers": {
+      "kind": "array",
+      "description": "Base Type."
+    },
+    "array_of_string_enums": {
+      "kind": "array",
+      "description": "Base Type."
+    },
+    "array_of_strings": {
+      "kind": "array",
+      "description": "Base Type."
+    },
+    "array_of_uuids": {
+      "kind": "array",
       "description": "Base Type."
     },
     "big_decimal": {
-      "kind": "scalar",
-      "description": "Base Type."
-    },
-    "float": {
       "kind": "scalar",
       "description": "Base Type."
     },
@@ -2783,53 +2799,37 @@
       "kind": "scalar",
       "description": "Base Type."
     },
+    "float": {
+      "kind": "scalar",
+      "description": "Base Type."
+    },
     "hash": {
       "kind": "record",
       "description": "Base Type."
     },
-    "array": {
-      "kind": "array",
+    "integer": {
+      "kind": "scalar",
       "description": "Base Type."
     },
-    "array_of_integer_ids": {
-      "kind": "array",
+    "integer_enum": {
+      "kind": "scalar",
+      "description": "Integer enum type. Like a normal integer, but only eq/!eq filters. Limited to only the allowed values."
+    },
+    "integer_id": {
+      "kind": "scalar",
+      "description": "Base Type. Query/persist as integer, render as string."
+    },
+    "string": {
+      "kind": "scalar",
       "description": "Base Type."
     },
-    "array_of_uuids": {
-      "kind": "array",
-      "description": "Base Type."
+    "string_enum": {
+      "kind": "scalar",
+      "description": "String enum type. Like a normal string, but only eq/!eq and case-sensitive. Limited to only the allowed values."
     },
-    "array_of_string_enums": {
-      "kind": "array",
-      "description": "Base Type."
-    },
-    "array_of_integer_enums": {
-      "kind": "array",
-      "description": "Base Type."
-    },
-    "array_of_strings": {
-      "kind": "array",
-      "description": "Base Type."
-    },
-    "array_of_integers": {
-      "kind": "array",
-      "description": "Base Type."
-    },
-    "array_of_big_decimals": {
-      "kind": "array",
-      "description": "Base Type."
-    },
-    "array_of_floats": {
-      "kind": "array",
-      "description": "Base Type."
-    },
-    "array_of_dates": {
-      "kind": "array",
-      "description": "Base Type."
-    },
-    "array_of_datetimes": {
-      "kind": "array",
-      "description": "Base Type."
+    "uuid": {
+      "kind": "scalar",
+      "description": "Base Type. Like a normal string, but by default only eq/!eq and case-sensitive."
     }
   }
 }

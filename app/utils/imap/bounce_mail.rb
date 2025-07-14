@@ -55,6 +55,7 @@ module Imap
     def recipients_of_original_message
       undelivered_message = mail.parts.find { |part| part.content_description == "Undelivered Message" }
 
+      # this mostly happens when there is no (parseable) undelivered messages attached
       return [] if undelivered_message.blank?
 
       ::Mail.new(undelivered_message.body).to

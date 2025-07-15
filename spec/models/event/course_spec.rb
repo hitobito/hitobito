@@ -120,7 +120,7 @@ describe Event::Course do
     end
   end
 
-  it "sets signtuare to true when signature confirmation is required" do
+  it "sets signature to true when signature confirmation is required" do
     course = Event::Course.new(signature_confirmation: true)
     expect(course.signature).to be_falsy
     expect(course.signature_confirmation).to be_truthy

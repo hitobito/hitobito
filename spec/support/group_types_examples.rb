@@ -41,7 +41,7 @@ shared_examples "group types" do |options|
   Group.all_types.each do |group|
     context group do
       it "default_children must be part of possible_children" do
-        expect(group.possible_children).to include(*group.default_children)
+        expect(group.possible_children).to include(*group.default_children) if group.default_children.present?
       end
 
       it "has an own label" do
@@ -62,7 +62,7 @@ shared_examples "group types" do |options|
         context role do
           it "must have valid permissions" do
             # although it looks like, this example is about role.permissions and not about Role::Permissions
-            expect(Role::Permissions).to include(*role.permissions)
+            expect(Role::Permissions).to include(*role.permissions) if role.permissions.present?
           end
 
           it "must have valid kind" do

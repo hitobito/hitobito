@@ -1,0 +1,10 @@
+- # Copyright (c) 2012-2025, Swiss Badminton. This file is part of
+- # hitobito and licensed under the Affero General Public License version 3
+- # or later. See the COPYING file at the top-level directory or at
+- # https://github.com/hitobito/hitobito.
+
+= field_set_tag Role.human_attribute_name(:dates) do
+  = f.labeled(:start_on) do
+    = f.date_field(:start_on, class: 'date col-6', value: f(@role.start_on))
+  = f.labeled(:end_on) do
+    = f.date_field(:end_on, disabled: !can?(:destroy, @role), class: 'date col-6', value: f(@role.end_on))

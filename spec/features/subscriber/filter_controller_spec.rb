@@ -23,6 +23,8 @@ describe Subscriber::FilterController, js: true do
 
     select "Sprache", from: "attribute_filter"
     all(".language_select_field")[1].click
+    require "pry"
+    binding.pry
     find(".ts-dropdown .option", text: "Deutsch").click
 
     all("form .btn-group").first.click_button "Speichern"

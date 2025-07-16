@@ -3,7 +3,7 @@
 // or later. See the COPYING file at the top-level directory or at
 // https://github.com/hitobito/hitobito
 //
-import { Controller } from "@hotwired/stimulus";
+import {Controller} from "@hotwired/stimulus";
 
 /*
   To enable TomSelect on a select element, add this data attribute:
@@ -39,9 +39,9 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static values = {
     url: String,
-    label: { type: String, default: "label" },
-    noResults: { type: String, default: "No results found." },
-    maxOptions: { type: Number, default: null } // no limit by default (null)
+    label: {type: String, default: "label"},
+    noResults: {type: String, default: "No results found."},
+    maxOptions: {type: Number, default: null} // no limit by default (null)
   };
 
   initialize() {
@@ -75,8 +75,19 @@ export default class extends Controller {
       allowEmptyOption: this.element.getAttribute("allow-empty"),
       render: {
         no_results: this.noResults,
+        option: function (data) {
+          return data.$option
+        },
       },
     };
+  }
+
+  #customOption(data, escape) {
+    return data.$option;
+  }
+
+  #defaultOption(data, escape) {
+    return '<div>' + escape(data.text) + '</div>';
   }
 
   #load(query, callback) {

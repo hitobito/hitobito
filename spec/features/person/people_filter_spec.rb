@@ -165,7 +165,7 @@ describe PeopleController, js: true do
       it "can filter by present tags" do
         expect(page).to have_selector("div#tag-configuration")
         find("#present-tag-select-ts-control").set("lorem")
-        find("#present-tag-select-opt-2").click
+        find("#present-tag-select-ts-dropdown").click
 
         first(".btn.btn-primary", text: "Suchen").click
         expect(page).to have_text(alice.first_name)
@@ -177,8 +177,7 @@ describe PeopleController, js: true do
         find("#dropdown-option-tag").click
         expect(page).to have_selector("div#tag-configuration")
         find("#absent-tag-select-ts-control").set("ipsum")
-        find("#absent-tag-select-opt-1").click
-
+        find("#absent-tag-select-ts-dropdown").click
         first(".btn.btn-primary", text: "Suchen").click
         expect(page).to have_text(alice.first_name)
       end
@@ -193,7 +192,7 @@ describe PeopleController, js: true do
         expect(page).to have_selector("div#role-configuration")
         # Select role
         find("#role-select-ts-control").set(alice.roles.first.type.split(":").last)
-        find("#role-select-opt-3").click
+        find("#role-select-ts-dropdown").click
 
         # Select date
         find("#filters_role_start_at").set("2025-03-18")
@@ -218,7 +217,7 @@ describe PeopleController, js: true do
         # Select qualification
         find("#qualification-select-ts-control")
           .set(alice.qualifications.first.qualification_kind.label)
-        find("#qualification-select-opt-4").click
+        find("#qualification-select-ts-dropdown").click
 
         # Select reference date
         find("#filters_qualification_reference_date").set("2025-03-05")
@@ -276,7 +275,7 @@ describe PeopleController, js: true do
         find("#dropdown-option-role").click
 
         find("#role-select-ts-control").click
-        find("#role-select-opt-1").click
+        find("#role-select-ts-dropdown").click
 
         filter_name = "Filtername"
         fill_in "people_filter_name", with: filter_name

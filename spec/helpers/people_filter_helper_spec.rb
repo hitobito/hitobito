@@ -118,8 +118,8 @@ describe PeopleFilterHelper do
       it "returns role types options with selected" do
         allow(view).to receive(:group).and_return(Group.first)
         html = helper.people_filter_role_options(filter)
-        expect(html).to include("<option selected=\"selected\" value=\"#{Group::GlobalGroup::Member.id}\">Bottom Layer -&gt; Global Group -&gt; Member</option>")
-        expect(html).to include("<option selected=\"selected\" value=\"#{Group::BottomLayer::Leader.id}\">Bottom Layer -&gt; Leader</option>")
+        expect(html).to include("<option selected=\"selected\" class=\"same_layer group\" value=\"#{Group::GlobalGroup::Member.id}\">Bottom Layer -&gt; Global Group -&gt; Member</option>")
+        expect(html).to include("<option selected=\"selected\" class=\"same_layer same-group\" value=\"#{Group::BottomLayer::Leader.id}\">Bottom Layer -&gt; Leader</option>")
       end
 
       it "returns role kinds options without selected" do

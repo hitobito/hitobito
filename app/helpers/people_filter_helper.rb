@@ -22,9 +22,28 @@ module PeopleFilterHelper
 
   def people_filter_role_options(filter)
     list = Role::TypeList.new(group.class).role_types
-      .flat_map { |layer, hash| hash.flat_map { |g, roles| roles.map { |r| [r.id, [layer, g, r.model_name.human].uniq.join(" -> ")] } } }
+      .flat_map { |layer, hash|
+      hash.flat_map { |g, roles|
+        roles.map { |r|
+          [r.id, [layer, g, r.model_name.human].uniq.join(" -> "),
+            group.layer_group.class.label == layer, group.class.label == g]
+        }
+      }
+    }
 
-    options_from_collection_for_select(list, :first, :second, people_filter_selected_values(filter, :role_type_ids))
+    content = ""
+    selected = filter ? filter.args[:role_type_ids] : []
+    list.each do |role_type|
+      layer_class = role_type[2] ? "same_layer" : "layer"
+      group_class = role_type[3] ? "same-group" : "group"
+
+      unless selected.include?(role_type.first)
+        content << "<option value=\"#{role_type.first}\" class=\"#{layer_class} #{group_class}\">#{html_escape(role_type.second)}</option>\n"
+        next
+      end
+      content << "<option selected=\"selected\" class=\"#{layer_class} #{group_class}\" value=\"#{role_type.first}\">#{html_escape(role_type.second)}</option>\n"
+    end
+    ActiveSupport::SafeBuffer.new(content)
   end
 
   def people_filter_role_kind_options(filter)

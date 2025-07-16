@@ -64,7 +64,10 @@ describe "TomSelect Stimulus Controller", js: true do
 
     # Interact with TomSelect
     find(".ts-control").click
-    expect(page).to have_selector(".ts-dropdown .option", text: "Option 0")
+
+    require "pry"
+    binding.pry
+    expect(page).to have_selector(".option", text: "Option 0")
   end
 
   describe "Stimulus Values Configuration" do

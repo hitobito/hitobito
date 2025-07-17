@@ -6,45 +6,35 @@
 #  https://github.com/hitobito/hitobito.
 
 class ChangelogEntry
-  # rubocop:disable Layout/LineLength
   GITHUB_BASE_URL = "https://github.com/"
   GITHUB_CORE_ISSUE_BASE_URL = GITHUB_BASE_URL + "hitobito/hitobito/issues/"
 
-  CORE_ISSUE_HASH_REGEX = /(\(#(\d*)\))\S?/ # matches e.g (#42)
-  WAGON_ISSUE_HASH_REGEX = /(\((hitobito_\w*)#(\d*)\))\S?/ # matches e.g (hitobito_generic#42) or (hitobito_sjas#1000)
+  CORE_ISSUE_HASH_REGEX = /(?<!\w)(?<!\/)(?:hitobito)?#(?<number>\d+)\b/ # matches e.g (#42) or 'hitobito#42'
+  WAGON_ISSUE_HASH_REGEX = /(?<!\w)(?<!\/)(?:hitobito\/|\b)(?<wagon>\w*_\w*)#(?<number>\d+)\b/ # matches e.g (hitobito_generic#42) or (hitobito_sjas#1000)
 
-  GITHUB_USERNAME_REGEX = /(@([a-zA-Z0-9-]*))/ # matches e.g @TheWalkingLeek or @kronn, used charset according to github username policies
+  GITHUB_USERNAME_REGEX = /@(?<gh_user>[a-zA-Z0-9-]*)/ # matches e.g @TheWalkingLeek or @kronn, used charset according to github username policies
 
   URL_REGEX = /(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9(!@:%_\+.~#?&\/=]*))/ # matches e.g https://hitobito.com
-  # rubocop:enable Layout/LineLength
+
+  def self.markdown_link(url:, label: url) = "[#{label}](#{url})"
+
+  class_attribute :regex_substitutions, default: {
+    # Core tickets
+    CORE_ISSUE_HASH_REGEX => markdown_link(label: 'hitobito#\k<number>', url: GITHUB_CORE_ISSUE_BASE_URL + '\k<number>'),
+    # Wagon tickets
+    WAGON_ISSUE_HASH_REGEX => markdown_link(label: '\k<wagon>#\k<number>', url: GITHUB_BASE_URL + 'hitobito/\k<wagon>/issues/\k<number>'),
+    # Github Usernames, matches e.g. @TheWalkingLeek or @kronn
+    GITHUB_USERNAME_REGEX => markdown_link(label: '@\k<gh_user>', url: GITHUB_BASE_URL + '\k<gh_user>')
+
+  }
 
   def initialize(entry_line)
     @content = entry_line
   end
 
   def to_markdown
-    markdown = @content
-    markdown = formatted_urls(markdown)
-    markdown = formatted_issue_links(markdown)
-    formatted_user_links(markdown)
-  end
-
-  private
-
-  def formatted_issue_links(text)
-    # (#42) => [(#42)](https://github.com/hitobito/hitobito/issues/42)
-    # (hitobito_generic#42) => [(hitobito_generic#42)](https://github.com/hitobito/hitobito_generic/issues/42)
-    text.sub(CORE_ISSUE_HASH_REGEX, '[\1]' + "(" + GITHUB_CORE_ISSUE_BASE_URL + '\2)')
-      .sub(WAGON_ISSUE_HASH_REGEX, '[\1]' + "(" + GITHUB_BASE_URL + 'hitobito/\2/issues/\3)')
-  end
-
-  def formatted_user_links(text)
-    # @TheWalkingLeek => [@TheWalkingLeek](https://github.com/TheWalkingLeek)
-    text.sub(GITHUB_USERNAME_REGEX, '[\1]' + "(" + GITHUB_BASE_URL + '\2)')
-  end
-
-  def formatted_urls(text)
-    # https://hitobito.com => <https://hitobito.com>
-    text.sub(URL_REGEX, '<\1>')
+    regex_substitutions.reduce(@content) do |text, (regex, replacement)|
+      text.gsub(regex, replacement)
+    end
   end
 end

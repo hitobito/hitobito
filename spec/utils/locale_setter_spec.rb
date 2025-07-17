@@ -61,7 +61,7 @@ describe LocaleSetter do
         expect(I18n.locale).to eq(:de)
         raise "random error"
       end
-    }.to raise_error
+    }.to raise_error(RuntimeError)
     expect(I18n.locale).to eq(:it)
   end
 end

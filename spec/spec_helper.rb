@@ -161,7 +161,7 @@ RSpec.configure do |config|
     require "ruby-prof"
 
     # Profile the code
-    result = RubyProf.profile { example.run }
+    result = RubyProf::Profile.profile { example.run }
 
     # Print a graph profile to text
     dir = Rails.root.join("tmp", "performance")

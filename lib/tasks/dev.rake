@@ -73,21 +73,80 @@ namespace :dev do
       BASH
     end
 
-    desc "Show example OAuth-Authorization Screen"
+    desc "Show example OAuth-Authorization Screen. Call without arguments to use/create a test oauth app"
     task :authorization, [:application_id, :prompt, :redirect_uri] => [:environment] do |_, args|
-      app = Oauth::Application.find(args.fetch(:application_id))
+      def find_or_create_app(application_id)
+        return Oauth::Application.find(application_id) if application_id.present?
+
+        Oauth::Application
+          .create_with(scopes: "email", name: "localhost Test Application")
+          .find_or_create_by!(redirect_uri: "http://localhost:3001/callback")
+      end
+
+      def start_callback_server
+        require "webrick"
+        server = WEBrick::HTTPServer.new(
+          Port: 3001,
+          Host: "localhost",
+          Logger: WEBrick::Log.new(nil, WEBrick::Log::FATAL),
+          AccessLog: []
+        )
+        server.mount_proc "/callback" do |req, res|
+          puts "Received request: #{req.request_method} #{req.path}"
+
+          puts "URL parameters:"
+          req.query.each do |key, value|
+            puts "  #{key}: #{value}"
+          end
+
+          puts "Headers:"
+          req.header do |key, value|
+            puts "  #{key}: #{value.inspect}"
+          end
+
+          puts "Request Body/Payload:"
+          if req.body && !req.body.empty?
+            puts "  #{req.body}"
+          else
+            puts "  No body content"
+          end
+
+          res.status = 200
+          res["Content-Type"] = "text/plain"
+          res.body = "Request received. Check the console for details."
+
+          server.shutdown
+        end
+
+        trap "INT" do
+          server.shutdown
+        end
+
+        Thread.new do
+          puts "🚀 Starting server at http://localhost:3001/"
+          puts "   Waiting for a single request..."
+          server.start
+        end
+      end
+
+      app = find_or_create_app(args[:application_id])
       host_name = ENV.fetch("RAILS_HOST_NAME", "localhost:3000")
+      redirect_uri = args.fetch(:redirect_uri, app.redirect_uri.split("\n").first)
+
+      server_thread = start_callback_server if redirect_uri.include?("localhost:3001")
 
       params = {
         client_id: app.uid,
         client_secret: app.secret,
-        redirect_uri: args.fetch(:redirect_uri, app.redirect_uri.split("\n").first),
+        redirect_uri: redirect_uri,
         response_type: "code",
         prompt: args[:prompt],
         scope: app.scopes
       }.compact.map { |key, value| "#{key}=#{value}" }.join("&")
 
       sh "xdg-open 'http://#{host_name}/oauth/authorize?#{params}'"
+
+      server_thread&.join
     end
   end
 

@@ -55,7 +55,7 @@ class InvoiceConfigsController < CrudController
   end
 
   def persist_custom_content_body
-    return if entry.custom_content.nil? || entry.custom_content.marked_for_destruction?
+    return if entry.custom_content&.body.nil? || entry.custom_content.marked_for_destruction?
 
     entry.custom_content.body.save
   end

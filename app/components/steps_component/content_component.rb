@@ -97,7 +97,10 @@ class StepsComponent::ContentComponent < StepsComponent::IteratingComponent
   def submit_button(label, type, options)
     content_tag(:div, class: "btn-group") do
       helpers.add_css_class(options, "btn btn-sm btn-primary mt-2")
-      @form.button(label, options.merge(type: type, data: {disable_with: label}))
+      options[:data] ||= {}
+      options[:data][:disable_with] = label
+
+      @form.button(label, options.merge(type: type))
     end
   end
 

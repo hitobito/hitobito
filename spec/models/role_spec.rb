@@ -185,7 +185,7 @@ describe Role do
 
       it "excludes roles with archived_at is in the future" do
         role.update!(archived_at: 10.minutes.from_now)
-        expect(Role.without_archived).not_to include
+        expect(Role.without_archived).not_to include role
       end
 
       it "includes roles without archived_at" do

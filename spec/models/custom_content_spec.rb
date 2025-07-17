@@ -156,6 +156,13 @@ describe CustomContent do
       expect(output).to match("Hello You, here is your site to login: example.com/login")
     end
 
+    it "use fallback locale if body in request locale is empty" do
+      output = I18n.with_locale(:it) do
+        subject.body_with_values("recipient-name" => "Fred", "login-url" => "example.com/login")
+      end
+      expect(output).to match("Salut Fred, voici ta site login: example.com/login")
+    end
+
     it "escapes html entities" do
       subject.body = "Hello {recipient-name}"
       output = subject.body_with_values("recipient-name" => "<a>World</a>")

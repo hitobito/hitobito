@@ -23,6 +23,11 @@ module Role::Types
                             group_and_below_full: :group_and_below_read,
                             group_full: :group_read}
 
+  # If a role contains the trigger permission, the implicated permissions are automatically
+  # granted for all groups of the given types that share the same layer_group.
+  # { manage_members: {group_full: Group::Members} }
+  PermissionImplicationsForGroups = {}
+
   AllowedPermissionsForSelfRegistration = []
 
   Kinds = [:member, :passive, :external, :future]

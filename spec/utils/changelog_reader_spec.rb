@@ -22,7 +22,9 @@ describe ChangelogReader do
         "## Version 2.3",
         "* change",
         "## Version 1.1",
-        "* another change (hitobito_sjas#42)"
+        "* another change (hitobito_sjas#42)",
+        "## unreleased",
+        "* unreleased change"
       ].join("\n")
     end
 
@@ -36,14 +38,14 @@ describe ChangelogReader do
       subject.send(:parse_changelog_lines, changelog_lines)
 
       changelogs = subject.instance_variable_get(:@changelogs)
-      expect(changelogs.count).to eq(3)
+      expect(changelogs.count).to eq(4)
 
       version11 = changelogs[0]
       expect(version11.log_entries.count).to eq(3)
       expect(version11.version).to eq("1.1")
       expect(version11.log_entries[0].to_markdown).to eq("* change")
-      expect(version11.log_entries[1].to_markdown).to eq("* change two [(#1484)](https://github.com/hitobito/hitobito/issues/1484)")
-      expect(version11.log_entries[2].to_markdown).to eq("* another change [(hitobito_sjas#42)](https://github.com/hitobito/hitobito_sjas/issues/42)")
+      expect(version11.log_entries[1].to_markdown).to eq("* change two ([hitobito#1484](https://github.com/hitobito/hitobito/issues/1484))")
+      expect(version11.log_entries[2].to_markdown).to eq("* another change ([hitobito_sjas#42](https://github.com/hitobito/hitobito_sjas/issues/42))")
 
       version1x = changelogs[1]
       expect(version1x.log_entries.count).to eq(1)
@@ -54,12 +56,30 @@ describe ChangelogReader do
       expect(version23.log_entries.count).to eq(1)
       expect(version23.version).to eq("2.3")
       expect(version23.log_entries[0].to_markdown).to eq("* change")
+
+      unreleased = changelogs[3]
+      expect(unreleased.log_entries.count).to eq(1)
+      expect(unreleased.version).to eq("unreleased")
+      expect(unreleased.log_entries[0].to_markdown).to eq("* unreleased change")
     end
   end
 
-  it "parses header line" do
+  it "parses version header line" do
     line = subject.send(:changelog_header_line, "## Version 1.0")
-    expect("1.0").to eq(line)
+    expect(line).to eq("1.0")
+  end
+
+  it "parses unreleased header line" do
+    line = subject.send(:changelog_header_line, "## unreleased")
+    expect(line).to eq("unreleased")
+  end
+
+  it "parses header lines with more spaces" do
+    line = subject.send(:changelog_header_line, "##    Version 1.0    ")
+    expect(line).to eq("1.0")
+
+    line = subject.send(:changelog_header_line, "##    unreleased    ")
+    expect(line).to eq("unreleased")
   end
 
   it "parses entry line" do
@@ -69,12 +89,15 @@ describe ChangelogReader do
 
   it "parses entry line with core issue" do
     line = subject.send(:changelog_entry, "* change (#42)")
-    expect(line.to_markdown).to eq("* change [(#42)](https://github.com/hitobito/hitobito/issues/42)")
+    expect(line.to_markdown).to eq("* change ([hitobito#42](https://github.com/hitobito/hitobito/issues/42))")
+
+    line = subject.send(:changelog_entry, "* change (hitobito#42)")
+    expect(line.to_markdown).to eq("* change ([hitobito#42](https://github.com/hitobito/hitobito/issues/42))")
   end
 
   it "parses entry line with wagon issue" do
     line = subject.send(:changelog_entry, "* change (hitobito_sjas#42)")
-    expect(line.to_markdown).to eq("* change [(hitobito_sjas#42)](https://github.com/hitobito/hitobito_sjas/issues/42)")
+    expect(line.to_markdown).to eq("* change ([hitobito_sjas#42](https://github.com/hitobito/hitobito_sjas/issues/42))")
   end
 
   it "parses entry line with github username" do
@@ -96,17 +119,13 @@ describe ChangelogReader do
     v3 = ChangelogVersion.new("1.11")
     v4 = ChangelogVersion.new("2.15")
     v5 = ChangelogVersion.new("1.X")
-    unsorted = [v1, v2, v3, v4, v5]
+    v6 = ChangelogVersion.new("unreleased")
+    unsorted = [v1, v2, v3, v4, v5, v6]
 
     sorted = unsorted.sort.reverse
 
-    expect(sorted[0]).to eq(v4)
-    expect(sorted[1]).to eq(v2)
-    expect(sorted[2]).to eq(v5)
-    expect(sorted[3]).to eq(v3)
-    expect(sorted[4]).to eq(v1)
-
-    expect(sorted.map(&:version)).to eq(%w[2.15 2.3 1.X 1.11 1.1])
+    expect(sorted).to eq [v6, v4, v2, v5, v3, v1]
+    expect(sorted.map(&:version)).to eq(%w[unreleased 2.15 2.3 1.X 1.11 1.1])
   end
 
   it "reads existing changelog file" do

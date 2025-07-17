@@ -14,6 +14,7 @@ describe Person::ImpersonationController do
 
   let(:group) { groups(:top_layer) }
   let(:user) { people(:top_leader) }
+  let(:bottom_member) { people(:bottom_member) }
 
   include ActiveJob::TestHelper
 
@@ -21,28 +22,36 @@ describe Person::ImpersonationController do
     before { sign_in(user) }
 
     it "impersonates user and sets origin_user" do
-      post :create, params: {group_id: group.id, person_id: people(:bottom_member).id}
+      post :create, params: {group_id: group.id, person_id: bottom_member.id}
       expect(controller.send(:origin_user)).to eq(user)
-      is_expected.to redirect_to(root_path)
+      expect(response).to redirect_to(request.env["HTTP_REFERER"])
     end
 
     it "impersonates user and create Log entry" do
-      expect { post :create, params: {group_id: group.id, person_id: people(:bottom_member).id} }
+      expect { post :create, params: {group_id: group.id, person_id: bottom_member.id} }
         .to change { PaperTrail::Version.count }.by 1
     end
 
     it "impersonates user and sends mail" do
       perform_enqueued_jobs do
-        expect { post :create, params: {group_id: group.id, person_id: people(:bottom_member).id} }
+        expect { post :create, params: {group_id: group.id, person_id: bottom_member.id} }
           .to change { ActionMailer::Base.deliveries.size }.by 1
       end
+    end
+
+    it "cannot impersonate unconfirmed user" do
+      bottom_member.update!(confirmed_at: nil)
+      post :create, params: {group_id: group.id, person_id: bottom_member.id}
+      expect(controller.send(:origin_user)).to be_nil
+      expect(response).to redirect_to(request.env["HTTP_REFERER"])
+      expect(flash[:alert]).to eq "Die Person hat ihre E-Mail Adresse noch nicht bestätigt und kann somit nicht imitiert werden."
     end
 
     it "cannot impersonate user if current_user" do
       post :create, params: {group_id: group.id, person_id: user.id}
       expect(controller.send(:origin_user)).to be_nil
-
-      is_expected.to redirect_to(request.env["HTTP_REFERER"])
+      expect(response).to redirect_to(request.env["HTTP_REFERER"])
+      expect(flash).to be_empty
     end
 
     it "user without permission cannot impersonate user" do

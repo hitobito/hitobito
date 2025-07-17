@@ -5,10 +5,10 @@ on:
     inputs:
       core_ref:
         description: Use a specific version of the core for the workflow run. Defaults to the main branch (master, or sac-master during a merge freeze).
-        default: "sac-master"
+        default: "master"
       wagon_dependency_ref:
         description: Use a specific version of the wagon dependency for the workflow run. Defaults to the main branch (master, or sac-master during a merge freeze).
-        default: "sac-master"
+        default: "master"
       wagon_ref:
         description: Use a specific version of the wagon dependency for the workflow run. Defaults to the main branch (master).
         default: "master"
@@ -73,8 +73,8 @@ jobs:
           workflow_job_steps_retry_seconds: 10 # default is 5, set it higher to not strain the API limit too much
           workflow_inputs: |
             {
-              "core_ref": "${{ github.ref || inputs.core_ref || 'sac-master' }}",
-              "wagon_dependency_ref": "${{ inputs.wagon_dependency_ref || 'sac-master' }}"
+              "core_ref": "${{ github.ref || inputs.core_ref || 'master' }}",
+              "wagon_dependency_ref": "${{ inputs.wagon_dependency_ref || 'master' }}"
             }
 
       - name: Link to the triggered wagon tests run

@@ -22,10 +22,14 @@ export default class extends Controller {
         this.toggleTarget.classList.add("hidden");
       }
     } else if (event.target.tagName === "INPUT") {
-      if (!this.hideOnValue.includes(event.target.value)) {
-        this.toggleTarget.classList.remove("hidden");
+      if(this.#hideOnConfigured()) {
+        if (!this.hideOnValue.includes(event.target.value)) {
+          this.toggleTarget.classList.remove("hidden");
+        } else {
+          this.toggleTarget.classList.add("hidden");
+        }
       } else {
-        this.toggleTarget.classList.add("hidden");
+        this.toggleTarget.classList.toggle("hidden");
       }
     } else {
       this.toggleTarget.classList.remove("hidden");
@@ -34,5 +38,9 @@ export default class extends Controller {
 
   untoggle() {
     this.toggleTarget.classList.add("hidden");
+  }
+
+  #hideOnConfigured() {
+    return !(this.hideOnValue.length == 1 && this.hideOnValue.includes(""));
   }
 }

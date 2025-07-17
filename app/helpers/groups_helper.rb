@@ -6,6 +6,10 @@
 #  https://github.com/hitobito/hitobito.
 
 module GroupsHelper
+  def tab_event_participants_label(entry)
+    I18n.t "events.tabs.participants"
+  end
+
   def tab_person_add_request_label(group)
     label = t("activerecord.models.person/add_request.other")
     count = Person::AddRequest.for_layer(group).count

@@ -109,8 +109,17 @@ CustomContent.seed_once(
     placeholders_optional: nil },
   { key: HitobitoLogMailer::ERROR,
     placeholders_required: 'hitobito-log-url, error-count, time-period, error-log-table',
-    placeholders_optional: nil }
+    placeholders_optional: nil },
 )
+
+if FeatureGate.enabled? "custom_dashboard_page"
+  CustomContent.seed_once(
+    :key,
+    { key: DashboardController::CUSTOM_DASHBOARD_PAGE_CONTENT,
+      placeholders_required: '',
+      placeholders_optional: nil },
+  )
+end
 
 send_login_id = CustomContent.get(Person::LoginMailer::CONTENT_LOGIN).id
 password_compromised_situation_id = CustomContent.get(Person::SecurityToolsController::PASSWORD_COMPROMISED_SITUATION).id
@@ -817,3 +826,26 @@ il file come link." },
       "<strong>Details zu den ersten 10 Fehler:</strong><br><br>" \
       "{error-log-table}"}
    )
+
+if FeatureGate.enabled? "custom_dashboard_page"
+  dashboard_page_content_id = CustomContent.get(DashboardController::CUSTOM_DASHBOARD_PAGE_CONTENT).id
+  CustomContent::Translation.seed_once(:custom_content_id, :locale,
+    { custom_content_id: dashboard_page_content_id,
+      locale: 'de',
+      label: "Hitobito Startseite",
+      subject: "Willkommen bei #{Settings.application.name}" },
+    { custom_content_id: dashboard_page_content_id,
+      locale: 'fr',
+      label: "Page d'accueil Hitobito",
+      subject: "Bienvenue chez #{Settings.application.name}" },
+    { custom_content_id: dashboard_page_content_id,
+      locale: 'en',
+      label: "Hitobito Homepage",
+      subject: "Welcome to #{Settings.application.name}" },
+    { custom_content_id: dashboard_page_content_id,
+      locale: 'it',
+      label: "Pagina iniziale Hitobito",
+      subject: "Benvenuto su #{Settings.application.name}" }
+  )
+end
+

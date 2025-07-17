@@ -20,7 +20,7 @@ module Sheet
       if: :show,
       no_alt: true
 
-    tab "events.tabs.participants",
+    tab :tab_event_participants_label,
       :group_event_participations_path,
       if: (lambda do |view, _group, event|
         event.participant_types.present? && view.can?(:index_participations, event)

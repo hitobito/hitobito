@@ -16,7 +16,7 @@ module Patches
 
   Repo = Data.define(:name) do
     def patches_uri
-      URI.parse("https://raw.githubusercontent.com/hitobito/hitobito_#{name}/refs/heads/master/.patches.yml")
+      URI.parse("https://raw.githubusercontent.com/hitobito/hitobito_#{name}/refs/heads/task/update-patches/.patches.yml")
     end
 
     def download_patches

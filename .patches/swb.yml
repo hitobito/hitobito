@@ -28,7 +28,7 @@
   :wagon: swb
   :source_file: hitobito/app/controllers/people_controller.rb
   :patch_file: hitobito_swb/app/controllers/swb/people_controller.rb
-  :patch_file_line: 21
+  :patch_file_line: 20
 - :method: :full_label
   :constant: PersonDecorator
   :wagon: swb
@@ -41,9 +41,15 @@
   :source_file: hitobito/app/models/role.rb
   :patch_file: hitobito_swb/app/models/swb/role.rb
   :patch_file_line: 27
+- :method: :build_new_type
+  :constant: RolesController
+  :wagon: swb
+  :source_file: hitobito/app/controllers/roles_controller.rb
+  :patch_file: hitobito_swb/app/controllers/swb/roles_controller.rb
+  :patch_file_line: 23
 - :method: :create_new_role_and_destroy_old_role
   :constant: RolesController
   :wagon: swb
   :source_file: hitobito/app/controllers/roles_controller.rb
   :patch_file: hitobito_swb/app/controllers/swb/roles_controller.rb
-  :patch_file_line: 22
+  :patch_file_line: 29

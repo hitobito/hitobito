@@ -120,7 +120,10 @@ module Patches
 
     # Maybe good enough, maybe not ..
     def each_zeitwerk_class
+      p Rails.autoloaders.main.instance_variable_get(:@to_unload).size
+      p Rails.autoloaders.main.instance_variable_get(:@to_unload).class
       Rails.autoloaders.main.instance_variable_get(:@to_unload).map do |constant, (location, cref)|
+        p [constant, location, cref]
         next if location.starts_with?(RUBY_HOME) || !location.ends_with?(".rb")
         next unless constant.constantize.is_a?(Class)
         next if constant.constantize.superclass == Object

@@ -10,7 +10,7 @@ class Person::ImpersonationController < ApplicationController
   def create
     person = Person.find(params[:person_id])
     return redirect_back_with_fallback if person == current_user || origin_user
-    return redirect_back_with_fallback(alert: t(".email_must_be_confirmed")) unless person.confirmed?
+    return redirect_back_with_fallback(alert: t(".email_must_be_confirmed")) if login_unconfirmed?(person)
 
     start_impersonation(person)
     redirect_to root_path
@@ -59,4 +59,6 @@ class Person::ImpersonationController < ApplicationController
   def redirect_back_with_fallback(options = {})
     redirect_back(fallback_location: root_path, **options)
   end
+
+  def login_unconfirmed?(person) = person.login_status == :login && !person.confirmed?
 end

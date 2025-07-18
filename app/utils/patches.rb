@@ -35,7 +35,6 @@ module Patches
   end
 
   REPOS = [
-    Repo.new(:sac_cas),
     Repo.new(:swb),
     Repo.new(:sww)
   ]
@@ -128,6 +127,15 @@ module Patches
         next if constant.constantize.superclass == Object
         [constant, location]
       end.compact
+    end
+
+    def unify
+    Rails.autoloaders.main.instance_variable_get(:@to_unload).map do |key, value|
+      case value
+      when Array
+      else
+
+      end
     end
   end
 

@@ -8,6 +8,7 @@
 module Messages
   class DispatchJob < BaseJob
     self.parameters = [:message_id]
+    self.max_run_time = 24.hours
 
     INTERVAL = 10.seconds
 

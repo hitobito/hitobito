@@ -127,7 +127,6 @@ module Patches
         case value
         when Zeitwerk::Cref then [value.path.constantize.to_s, [key, value]]
         when Array then [value.last.path.constantize.to_s, [value.first, value.last]]
-          # when Array then [key, value]
         end
       end.to_h
     end
@@ -203,7 +202,8 @@ module Patches
     end
 
     def irrelevant_path?(file, source_file)
-      file.nil? || file.starts_with?(RUBY_HOME) || file.starts_with?(CORE_APP_DIR.to_s) || !source_file.starts_with?(CORE_APP_DIR.to_s)
+      file.nil? || file.starts_with?(RUBY_HOME) || file.starts_with?(CORE_APP_DIR.to_s) || !source_file.starts_with?(CORE_APP_DIR.to_s) ||
+        %r{gems}.match?(file) # this seems to occur on CI
     end
 
     def extract_wagon(file) = file[WAGON_REGEX, 1]

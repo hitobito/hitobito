@@ -15,21 +15,15 @@ module Patches
   WAGON_REGEX = %r{/hitobito_(\w+)}
 
   Repo = Data.define(:name) do
-    REGEX = %r{^hitobito_(\w+)$} # rubocop:disable Lint/ConstantDefinitionInBlock
-
-    def wagon = REGEX.match(name)[1]
-
-    def wagon? = REGEX.match(name)
-
     def patches_uri
-      URI.parse("https://raw.githubusercontent.com/hitobito/#{name}/refs/heads/task/generate-patches/.patches.yml")
+      URI.parse("https://raw.githubusercontent.com/hitobito/hitobito_#{name}/refs/heads/master/.patches.yml")
     end
 
     def download_patches
       response = Net::HTTP.get_response(patches_uri)
       return unless response.code.to_i == 200
 
-      file = RAILS_ROOT.join(".patches/#{wagon}.yml")
+      file = RAILS_ROOT.join(".patches/#{name}.yml")
       Rails.root.join(file).write(response.body)
     end
   end

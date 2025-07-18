@@ -24,7 +24,7 @@ jobs:
           database: false
           assets: false
 
-      - name: Run patch generation
+      - name: Download and consolidate patches
         run: |
           bundle exec rake wagon:patches:consolidate
           git status

@@ -15,8 +15,9 @@ class Assignment::SendNotificationJob < BaseJob
 
   def perform
     set_locale
-    Assignment::AssigneeNotificationMailer.assignee_notification(assignee_email,
-      assignment).deliver_now
+    Assignment::AssigneeNotificationMailer.assignee_notification(
+      assignee_email, assignment
+    ).deliver_now
   end
 
   def assignment

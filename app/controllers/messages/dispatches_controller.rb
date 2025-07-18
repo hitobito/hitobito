@@ -20,13 +20,10 @@ module Messages
     def redirect_path
       case message
       when Message::Letter, Message::LetterWithInvoice
-        new_assignment_path(assignment: {
-                              attachment_id: message.id,
-                              attachment_type: Message.sti_name
-                            },
-          return_url: group_mailing_list_message_path(message.group,
-            message.mailing_list,
-            message))
+        new_assignment_path(
+          assignment: {attachment_id: message.id, attachment_type: Message.sti_name},
+          return_url: group_mailing_list_message_path(message.group, message.mailing_list, message)
+        )
       else
         message.path_args
       end

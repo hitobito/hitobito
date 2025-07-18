@@ -1,4 +1,4 @@
-name: 'Update Patches'
+name: 'Core - Consolidate patches'
 
 on:
   workflow_dispatch:
@@ -31,3 +31,5 @@ jobs:
 
       - name: Commit patches
         uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          file_pattern: ".patches.yml .patches/*"

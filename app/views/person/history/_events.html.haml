@@ -15,11 +15,6 @@
         = p.event.dates_full
       - if participations.first.event.is_a?(Event::Course)
         - t.col(Qualification.model_name.human) do |p|
-          - if p.event.qualifications_visible?
-            = t("person.history.index.#{p.qualified ? '' : 'not_'}qualified")
-            %br
-          - if p.event.training_days?
-            - days = p.event.training_days
-            = t('person.history.index.training_days', count: days.to_i == days ? days.to_i : days)
+          = render 'course_qualification', p: p
       - else
         - t.col('') {}

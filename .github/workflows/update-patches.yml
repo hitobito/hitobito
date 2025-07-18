@@ -2,10 +2,12 @@ name: 'Update Patches'
 
 on:
   workflow_dispatch:
+
+permissions:
+  contents: write
+
 jobs:
   patches:
-    permissions:
-      contents: write
     runs-on: 'ubuntu-22.04'
     env:
       RAILS_DB_ADAPTER: nulldb

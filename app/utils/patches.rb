@@ -34,6 +34,12 @@ module Patches
     end
   end
 
+  REPOS = [
+    Repo.new(:sac_cas),
+    Repo.new(:swb),
+    Repo.new(:sww)
+  ]
+
   class Collector
     REPO_QUERY_LIMIT = 100 # defaults to 30 which excludes some wagons
 
@@ -47,19 +53,12 @@ module Patches
     private
 
     def download_wagon_patches
-      repos.each(&:download_patches)
+      REPOS.each(&:download_patches)
     end
 
     def consolidate
       patches = PATCHES_DIR.glob("*.yml").map { |file| YAML.load(file.read) }.flatten.compact
       ALL_PATCHES.write(patches.flatten.to_yaml)
-    end
-
-    def repos
-      shell_out("gh repo list hitobito -L #{REPO_QUERY_LIMIT} --no-archived --json name")
-        .then { |json| JSON.parse(json) }
-        .map { |attrs| Repo.new(**attrs) }
-        .select(&:wagon?)
     end
 
     def shell_out(command, dry_run: false)

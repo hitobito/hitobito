@@ -35,7 +35,6 @@ permissions:
   contents: write
 jobs:
   wagon_patches:
-    if: github.event.pull_request.merged == true
     runs-on: "ubuntu-22.04"
     env:
       HEADLESS: true

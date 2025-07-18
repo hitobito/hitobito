@@ -118,24 +118,24 @@ module Patches
 
     # Maybe good enough, maybe not ..
     def each_zeitwerk_class
-      p Rails.autoloaders.main.instance_variable_get(:@to_unload).size
-      p Rails.autoloaders.main.instance_variable_get(:@to_unload).class
-      Rails.autoloaders.main.instance_variable_get(:@to_unload).map do |constant, (location, cref)|
-        p [constant, location, cref]
+      load_and_adjust_zeitwerk_classes.map do |constant, (location, cref)|
         next if location.starts_with?(RUBY_HOME) || !location.ends_with?(".rb")
+        next if %r{/gems/}.match?(location)
         next unless constant.constantize.is_a?(Class)
         next if constant.constantize.superclass == Object
         [constant, location]
       end.compact
     end
 
-    def unify
-    Rails.autoloaders.main.instance_variable_get(:@to_unload).map do |key, value|
-      case value
-      when Array
-      else
-
-      end
+    # on CI we dont have the constant as key so we take it form the cref
+    def load_and_adjust_zeitwerk_classes
+      Rails.autoloaders.main.instance_variable_get(:@to_unload).map do |key, value|
+        case value
+        when Zeitwerk::Cref then [value.path.constantize.to_s, [key, value]]
+        when Array then [value.last.path.constantize.to_s, [value.first, value.last]]
+          # when Array then [key, value]
+        end
+      end.to_h
     end
   end
 

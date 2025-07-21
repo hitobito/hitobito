@@ -603,6 +603,21 @@ describe Role do
         expect(role).to receive(:set_contact_data_visible).at_least(:once)
         role.destroy
       end
+
+      it "can delete if role starts tomorrow" do
+        role.update!(start_on: Time.zone.tomorrow)
+        expect(role.destroy).to be_truthy
+      end
+
+      it "can delete if role starts today" do
+        role.update!(start_on: Time.zone.today)
+        expect(role.destroy).to be_truthy
+      end
+
+      it "can delete if role starts yesterday" do
+        role.update!(start_on: Time.zone.yesterday)
+        expect(role.destroy).to be_truthy
+      end
     end
   end
 

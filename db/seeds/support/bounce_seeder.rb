@@ -24,5 +24,7 @@ class BounceSeeder
       created_at:,
       updated_at:
     }).first
+  rescue ActiveRecord::RecordNotUnique # in case same email is seeded multiple times
+    retry
   end
 end

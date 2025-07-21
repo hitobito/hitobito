@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module Patches
-  RUBY_HOME = Pathname(Gem::RUBYGEMS_DIR).parent.parent.to_s
+  RUBY_HOME = Pathname(ENV["GEM_HOME"]).parent.parent.to_s # rubocop:disable Rails/EnvironmentVariableAccess
   RAILS_ROOT = Pathname.new(File.expand_path("../../../", __FILE__))
   PATCHES_DIR = RAILS_ROOT.join(".patches")
   ALL_PATCHES = RAILS_ROOT.join(".patches.yml")
@@ -15,23 +15,24 @@ module Patches
   WAGON_REGEX = %r{/hitobito_(\w+)}
 
   Repo = Data.define(:name) do
+    REGEX = %r{^hitobito_(\w+)$} # rubocop:disable Lint/ConstantDefinitionInBlock
+
+    def wagon = REGEX.match(name)[1]
+
+    def wagon? = REGEX.match(name)
+
     def patches_uri
-      URI.parse("https://raw.githubusercontent.com/hitobito/hitobito_#{name}/refs/heads/task/master/.patches.yml")
+      URI.parse("https://raw.githubusercontent.com/hitobito/#{name}/refs/heads/master/.patches.yml")
     end
 
     def download_patches
       response = Net::HTTP.get_response(patches_uri)
       return unless response.code.to_i == 200
 
-      file = RAILS_ROOT.join(".patches/#{name}.yml")
+      file = RAILS_ROOT.join(".patches/#{wagon}.yml")
       Rails.root.join(file).write(response.body)
     end
   end
-
-  REPOS = [
-    Repo.new(:swb),
-    Repo.new(:sww)
-  ]
 
   class Collector
     REPO_QUERY_LIMIT = 100 # defaults to 30 which excludes some wagons
@@ -46,12 +47,19 @@ module Patches
     private
 
     def download_wagon_patches
-      REPOS.each(&:download_patches)
+      repos.each(&:download_patches)
     end
 
     def consolidate
       patches = PATCHES_DIR.glob("*.yml").map { |file| YAML.load(file.read) }.flatten.compact
       ALL_PATCHES.write(patches.flatten.to_yaml)
+    end
+
+    def repos
+      shell_out("gh repo list hitobito -L #{REPO_QUERY_LIMIT} --no-archived --json name")
+        .then { |json| JSON.parse(json) }
+        .map { |attrs| Repo.new(**attrs) }
+        .select(&:wagon?)
     end
 
     def shell_out(command, dry_run: false)
@@ -112,23 +120,12 @@ module Patches
 
     # Maybe good enough, maybe not ..
     def each_zeitwerk_class
-      load_and_adjust_zeitwerk_classes.map do |constant, (location, cref)|
+      Rails.autoloaders.main.instance_variable_get(:@to_unload).map do |constant, (location, cref)|
         next if location.starts_with?(RUBY_HOME) || !location.ends_with?(".rb")
-        next if %r{/gems/}.match?(location)
         next unless constant.constantize.is_a?(Class)
         next if constant.constantize.superclass == Object
         [constant, location]
       end.compact
-    end
-
-    # on CI we dont have the constant as key so we take it form the cref
-    def load_and_adjust_zeitwerk_classes
-      Rails.autoloaders.main.instance_variable_get(:@to_unload).map do |key, value|
-        case value
-        when Zeitwerk::Cref then [value.path.constantize.to_s, [key, value]]
-        when Array then [value.last.path.constantize.to_s, [value.first, value.last]]
-        end
-      end.to_h
     end
   end
 
@@ -202,8 +199,7 @@ module Patches
     end
 
     def irrelevant_path?(file, source_file)
-      file.nil? || file.starts_with?(RUBY_HOME) || file.starts_with?(CORE_APP_DIR.to_s) || !source_file.starts_with?(CORE_APP_DIR.to_s) ||
-        %r{gems}.match?(file) # this seems to occur on CI
+      file.nil? || file.starts_with?(RUBY_HOME) || file.starts_with?(CORE_APP_DIR.to_s) || !source_file.starts_with?(CORE_APP_DIR.to_s)
     end
 
     def extract_wagon(file) = file[WAGON_REGEX, 1]

@@ -1,0 +1,7 @@
+---
+- :method: :person_attributes
+  :constant: Export::Tabular::People::PeopleFull
+  :wagon: svse
+  :source_file: hitobito/app/domain/export/tabular/people/people_full.rb
+  :patch_file: hitobito_svse/app/domain/svse/export/tabular/people/people_full.rb
+  :patch_file_line: 8

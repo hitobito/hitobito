@@ -1,0 +1,25 @@
+---
+- :method: :init_kind_filter_names
+  :constant: FilterNavigation::People
+  :wagon: glp
+  :source_file: hitobito/app/helpers/filter_navigation/people.rb
+  :patch_file: hitobito_glp/app/helpers/glp/filter_navigation/people.rb
+  :patch_file_line: 7
+- :method: :init_kind_items
+  :constant: FilterNavigation::People
+  :wagon: glp
+  :source_file: hitobito/app/helpers/filter_navigation/people.rb
+  :patch_file: hitobito_glp/app/helpers/glp/filter_navigation/people.rb
+  :patch_file_line: 16
+- :method: :possible_roles
+  :constant: GroupDecorator
+  :wagon: glp
+  :source_file: hitobito/app/decorators/group_decorator.rb
+  :patch_file: hitobito_glp/app/decorators/glp/group_decorator.rb
+  :patch_file_line: 8
+- :method: :fetch_roles
+  :constant: Person::HistoryController
+  :wagon: glp
+  :source_file: hitobito/app/controllers/person/history_controller.rb
+  :patch_file: hitobito_glp/app/controllers/glp/person/history_controller.rb
+  :patch_file_line: 12

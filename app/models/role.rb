@@ -196,8 +196,8 @@ class Role < ActiveRecord::Base
   # If it has "archival age", we update the end_on attribute to yesterday instead of destroying it.
   # If `always_soft_destroy` is set to true, the role is always ended instead of destroyed.
   def destroy(always_soft_destroy: false) # rubocop:disable Rails/ActiveRecordOverride
-    return vanilla_destroy unless always_soft_destroy || old_enough_to_archive?
-    return vanilla_destroy if future?
+    return vanilla_destroy unless always_soft_destroy || old_enough_to_soft_destroy?
+    return vanilla_destroy if future? || starting_today?
 
     run_callbacks :destroy do
       end_on&.past? ? true : update!(end_on: Date.current.yesterday)
@@ -264,6 +264,10 @@ class Role < ActiveRecord::Base
     start_on&.future?
   end
 
+  def starting_today?
+    start_on == Time.zone.today
+  end
+
   def active?(reference_time = Time.current)
     active_period.cover?(reference_time)
   end
@@ -303,7 +307,7 @@ class Role < ActiveRecord::Base
     end
   end
 
-  def old_enough_to_archive?
+  def old_enough_to_soft_destroy?
     created_at < Settings.role.minimum_days_to_archive.days.ago
   end
 

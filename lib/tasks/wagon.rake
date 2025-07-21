@@ -17,6 +17,12 @@ namespace :wagon do
       Rails.application.eager_load!
       Patches::Generator.new.write
     end
+
+    desc "Check patches in wagon, call from wagon directory"
+    task check: :environment do
+      Rails.application.eager_load!
+      Patches::Check.new.run
+    end
   end
 
   namespace :migrate do

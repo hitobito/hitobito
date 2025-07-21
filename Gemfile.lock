@@ -155,7 +155,7 @@ GEM
     bleib (0.0.14)
     bootsnap (1.18.3)
       msgpack (~> 1.2)
-    brakeman (7.0.2)
+    brakeman (7.1.0)
       racc
     builder (3.3.0)
     bullet (7.1.6)
@@ -441,8 +441,11 @@ GEM
       net-protocol
     net-protocol (0.2.2)
       timeout
+    net-sftp (4.0.0)
+      net-ssh (>= 5.0.0, < 8.0.0)
     net-smtp (0.5.0)
       net-protocol
+    net-ssh (7.0.1)
     netrc (0.11.0)
     niceql (0.6.1)
     nio4r (2.7.3)
@@ -705,6 +708,7 @@ GEM
     simplecov_json_formatter (0.1.4)
     simpleidn (0.2.3)
     slop (3.6.0)
+    social_security_number (0.1.12)
     sorted_set (1.0.3)
       rbtree
       set (~> 1.0)

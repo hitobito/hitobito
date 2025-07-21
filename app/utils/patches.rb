@@ -13,6 +13,7 @@ module Patches
   DEV_ROOT = RAILS_ROOT.parent
   CORE_APP_DIR = RAILS_ROOT.join("app")
   WAGON_REGEX = %r{/hitobito_(\w+)}
+  PATCH_FILE = Pathname.new(Dir.pwd).join(".patches.yml")
 
   Repo = Data.define(:name) do
     REGEX = %r{^hitobito_(\w+)$} # rubocop:disable Lint/ConstantDefinitionInBlock
@@ -32,6 +33,18 @@ module Patches
       file = RAILS_ROOT.join(".patches/#{wagon}.yml")
       Rails.root.join(file).write(response.body)
     end
+  end
+
+  class Check
+    def run
+      if existing != current
+        abort "Patches out of date. Run rake app:wagon:patches:generate"
+      end
+    end
+
+    def current = Generator.new.patches
+
+    def existing = PATCH_FILE.exist? ? YAML.load(PATCH_FILE.read) : []
   end
 
   class Collector
@@ -102,16 +115,17 @@ module Patches
   end
 
   class Generator
-    PATCH_FILE = Pathname.new(Dir.pwd).join(".patches.yml")
-
     def collect
       each_zeitwerk_class.map do |name, location|
         Klass.new(name, location).tap(&:analyze)
       end.compact.sort_by(&:name)
     end
 
+    def patches
+      collect.select(&:patched?).flat_map(&:patches).sort.map(&:to_h)
+    end
+
     def write
-      patches = collect.select(&:patched?).flat_map(&:patches).sort.map(&:to_h)
       puts "Writing to #{PATCH_FILE}" # rubocop:disable Rails/Output
       File.write(PATCH_FILE, patches.to_yaml)
     end

@@ -14,6 +14,8 @@ module Messages
     end
 
     def run
+      @message.update!(success_count: 0, failed_count: 0)
+
       if send_to_households?
         create_for_households!
       else
@@ -41,7 +43,7 @@ module Messages
     def create_for_people!
       limit(people, @options[:recipient_limit]).find_in_batches do |batch|
         count = create_recipient_entries(batch)
-        @message.update!(success_count: count)
+        @message.update!(success_count: @message.success_count + count)
       end
     end
 

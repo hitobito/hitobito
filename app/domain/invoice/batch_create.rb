@@ -3,26 +3,28 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+# Create actual invoices for a given invoice-list.
+#
+# The main worker method is #create_invoices.
+# The Invoice-List ist updated with success/failure counts
+# Failures are invoices without invoice-items or any other more specific validation error.
 class Invoice::BatchCreate
   attr_reader :invoice_list, :invoice, :results, :invalid
 
-  delegate :fixed_fee, to: :invoice_list
-
   def self.call(invoice_list, limit = InvoiceListsController::LIMIT_CREATE)
-    invoice_parameters = invoice_list.invoice_parameters
     if invoice_list.recipient_ids_count < limit
-      create(invoice_list, invoice_parameters)
+      create(invoice_list)
     else
-      create_async(invoice_list, invoice_parameters)
+      create_async(invoice_list)
     end
   end
 
-  def self.create(invoice_list, invoice_parameters)
+  def self.create(invoice_list)
     Invoice::BatchCreate.new(invoice_list).call
   end
 
-  def self.create_async(invoice_list, invoice_parameters)
-    Invoice::BatchCreateJob.new(invoice_list.id, invoice_parameters).enqueue!
+  def self.create_async(invoice_list)
+    Invoice::BatchCreateJob.new(invoice_list.id, invoice_list.invoice_parameters).enqueue!
   end
 
   def initialize(invoice_list, people = nil)
@@ -41,17 +43,20 @@ class Invoice::BatchCreate
   private
 
   def create_invoices
-    receivers.each do |receiver|
-      success = create_invoice(receiver)
-      invalid << receiver.id unless success
-      results << success
+    receivers.each_slice(1000) do |slice|
+      slice.each do |receiver|
+        success = create_invoice(receiver)
+        invalid << receiver.id unless success
+        results << success
+      end
+
       update_invoice_list
     end
   end
 
   def create_invoice(recipient)
     invoice_attrs = invoice.attributes.merge(
-      title: fixed_fee ? title_with_layer(recipient.layer_group_id) : invoice.title,
+      title: invoice_list.fixed_fee ? title_with_layer(recipient.layer_group_id) : invoice.title,
       creator_id: invoice_list.creator_id,
       invoice_list_id: invoice_list.id,
       recipient_id: recipient.id
@@ -63,8 +68,8 @@ class Invoice::BatchCreate
   end
 
   def add_invoice_items(invoice, recipient)
-    if fixed_fee
-      invoice.invoice_items = InvoiceLists::FixedFee.for(fixed_fee, recipient.layer_group_id).invoice_items
+    if invoice_list.fixed_fee
+      invoice.invoice_items = InvoiceLists::FixedFee.for(invoice_list.fixed_fee, recipient.layer_group_id).invoice_items
     else
       invoice.invoice_items_attributes = invoice_items_attributes(recipient.id)
     end

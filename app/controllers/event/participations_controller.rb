@@ -86,7 +86,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
         end
       end
 
-      respond_with(entry, success: created, location: return_path)
+      respond_with(entry, success: created, location: after_create_location(entry))
     end
   end
 
@@ -362,6 +362,18 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
       notice = translate(:success, full_entry_label: full_entry_label)
       flash[:notice] ||= notice
     end
+  end
+
+  def after_create_location(participation)
+    if participation.persisted? && params.key?(:add_another)
+      return new_group_event_guest_path(
+        params[:group_id],
+        params[:event_id],
+        participation.id
+      )
+    end
+
+    return_path
   end
 
   def append_mailing_instructions?

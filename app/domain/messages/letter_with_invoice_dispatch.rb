@@ -17,8 +17,8 @@ module Messages
       super
 
       @message.update!(invoice_list_id: @invoice_list.id)
-      batch_create
-      batch_update
+      batch_create # create invoices for all people on the invoice list
+      batch_update # update invoices by advancing their state, sending mail and create reminders if needed
       DispatchResult.finished
     end
 

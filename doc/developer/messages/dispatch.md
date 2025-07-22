@@ -10,5 +10,8 @@ When sending via SMS, all recipient numbers are first collected and stored in th
 ## `LetterDispatch`
 Generates all MessageRecipient entries with the postal address of the recipient. A corresponding PDF is then generated based on these entries.
 
+## `LetterWithInvoiceDispatch`
+First, the PDF from the LetterDispatch is generated. After that, the Invoices for a given InvoiceList are generated and sent.
+
 ## Print shop
 A print shop has its own access to Hitobito and can therefore download letters for dispatch as PDFs.

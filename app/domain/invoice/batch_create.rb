@@ -3,6 +3,11 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+# Create actual invoices for a given invoice-list.
+#
+# The main worker method is #create_invoices.
+# The Invoice-List ist updated with success/failure counts
+# Failures are invoices without invoice-items or any other more specific validation error.
 class Invoice::BatchCreate
   attr_reader :invoice_list, :invoice, :results, :invalid
 

@@ -4,11 +4,12 @@
 #  https://github.com/hitobito/hitobito.
 
 class Invoice::BatchUpdate
-  attr_reader :invoices, :sender
+  attr_reader :invoices, :sender, :result
 
   def initialize(invoices, sender = nil)
     @invoices = invoices
     @sender = sender
+    @result = Invoice::BatchUpdateResult.new
   end
 
   def call # rubocop:disable Metrics/MethodLength
@@ -86,9 +87,5 @@ class Invoice::BatchUpdate
 
   def send_email?
     sender.present?
-  end
-
-  def result
-    @result ||= Invoice::BatchUpdateResult.new
   end
 end

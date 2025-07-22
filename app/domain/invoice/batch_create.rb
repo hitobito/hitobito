@@ -7,20 +7,19 @@ class Invoice::BatchCreate
   attr_reader :invoice_list, :invoice, :results, :invalid
 
   def self.call(invoice_list, limit = InvoiceListsController::LIMIT_CREATE)
-    invoice_parameters = invoice_list.invoice_parameters
     if invoice_list.recipient_ids_count < limit
-      create(invoice_list, invoice_parameters)
+      create(invoice_list)
     else
-      create_async(invoice_list, invoice_parameters)
+      create_async(invoice_list)
     end
   end
 
-  def self.create(invoice_list, invoice_parameters)
+  def self.create(invoice_list)
     Invoice::BatchCreate.new(invoice_list).call
   end
 
-  def self.create_async(invoice_list, invoice_parameters)
-    Invoice::BatchCreateJob.new(invoice_list.id, invoice_parameters).enqueue!
+  def self.create_async(invoice_list)
+    Invoice::BatchCreateJob.new(invoice_list.id, invoice_list.invoice_parameters).enqueue!
   end
 
   def initialize(invoice_list, people = nil)

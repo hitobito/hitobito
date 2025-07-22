@@ -15,9 +15,10 @@ module Messages
 
     def run
       super
+
       @message.update!(invoice_list_id: @invoice_list.id)
       batch_create
-      Invoice::BatchUpdate.new(@invoice_list.reload.invoices).call
+      batch_update
       DispatchResult.finished
     end
 
@@ -25,8 +26,14 @@ module Messages
       batch_create = Invoice::BatchCreate.new(@invoice_list, @people)
       batch_create.call
 
-      update!(success_count: batch_create.results.count(true),
-        failed_count: batch_create.results.count(false))
+      @message.update!(
+        success_count: batch_create.results.count(true),
+        failed_count: batch_create.results.count(false)
+      )
+    end
+
+    def batch_update
+      Invoice::BatchUpdate.new(@invoice_list.reload.invoices).call
     end
 
     # disable household addresses for letter with invoice

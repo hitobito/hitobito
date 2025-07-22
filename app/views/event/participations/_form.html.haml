@@ -8,6 +8,8 @@
 = entry_form(stacked: true,
              buttons_top: false,
              submit_label: submit_label,
+             add_another: add_another,
+             add_another_label: add_another_label,
              cancel_url_new: group_event_path(@group, @event)) do |f|
   - if params[:for_someone_else]
     = hidden_field_tag("for_someone_else", true)

@@ -39,10 +39,13 @@ class Invoice::BatchCreate
   private
 
   def create_invoices
-    receivers.each do |receiver|
-      success = create_invoice(receiver)
-      invalid << receiver.id unless success
-      results << success
+    receivers.each_slice(1000) do |slice|
+      slice.each do |receiver|
+        success = create_invoice(receiver)
+        invalid << receiver.id unless success
+        results << success
+      end
+
       update_invoice_list
     end
   end

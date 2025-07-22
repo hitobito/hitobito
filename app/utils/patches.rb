@@ -12,7 +12,7 @@ module Patches
   ALL_PATCHES = RAILS_ROOT.join(".patches.yml")
   DEV_ROOT = RAILS_ROOT.parent
   CORE_APP_DIR = RAILS_ROOT.join("app")
-  WAGON_REGEX = %r{/hitobito_(\w+)}
+  WAGON_REGEX = %r{/.*hitobito_(\w+).*}
 
   Repo = Data.define(:name) do
     REGEX = %r{^hitobito_(\w+)$} # rubocop:disable Lint/ConstantDefinitionInBlock

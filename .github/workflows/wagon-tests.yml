@@ -185,6 +185,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
           file_pattern: ".patches.yml"
+          commit_message: Updating patches
           repository: ${{ inputs.wagon_repository }}
 
   wagon_specs:

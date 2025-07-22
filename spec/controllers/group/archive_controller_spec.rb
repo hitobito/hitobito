@@ -37,7 +37,7 @@ describe Group::ArchiveController, type: :controller do
       end.to change { bottom_group.reload.archived? }.from(false).to(true)
     end
 
-    it "displays validation error" do
+    it "displays validation error if archiving fails" do
       bottom_group.update_attribute(:contact_id, people(:bottom_member).id) # invalid contact_id
 
       post :create, params: {id: group_id}

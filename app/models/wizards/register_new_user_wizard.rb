@@ -17,7 +17,8 @@ class Wizards::RegisterNewUserWizard < Wizards::Base
   end
 
   def role
-    person.roles.first
+    person # assert person and role is built
+    @role
   end
 
   def email
@@ -46,16 +47,20 @@ class Wizards::RegisterNewUserWizard < Wizards::Base
   def build_person
     if current_user
       current_user.attributes = person_attributes
-      current_user.roles.build(group: group, type: group.self_registration_role_type)
+      build_role(current_user)
       current_user
     else
       Person.new(person_attributes).tap do |person|
         person.language = I18n.locale
         person.primary_group = group
-        role = person.roles.build(group: group, type: group.self_registration_role_type)
+        role = build_role(person)
         yield person, role if block_given?
       end
     end
+  end
+
+  def build_role(person)
+    @role = person.roles.build(group: group, type: group.self_registration_role_type)
   end
 
   def person_attributes

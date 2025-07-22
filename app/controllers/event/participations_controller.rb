@@ -370,6 +370,12 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     end
   end
 
+  def after_create_location(participation)
+    return new_group_event_participation_path(entry.group_id, entry.id, guest_of: participation.id) if participation.persisted? && params.key?(:add_another)
+
+    return_path
+  end
+
   def append_mailing_instructions?
     for_current_user? && event.signature?
   end

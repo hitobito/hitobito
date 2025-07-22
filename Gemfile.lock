@@ -449,7 +449,7 @@ GEM
     netrc (0.11.0)
     niceql (0.6.1)
     nio4r (2.7.3)
-    nokogiri (1.18.8)
+    nokogiri (1.18.9)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     oat (0.6.1)

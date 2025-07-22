@@ -6,8 +6,6 @@
 class Invoice::BatchCreate
   attr_reader :invoice_list, :invoice, :results, :invalid
 
-  delegate :fixed_fee, to: :invoice_list
-
   def self.call(invoice_list, limit = InvoiceListsController::LIMIT_CREATE)
     invoice_parameters = invoice_list.invoice_parameters
     if invoice_list.recipient_ids_count < limit
@@ -51,7 +49,7 @@ class Invoice::BatchCreate
 
   def create_invoice(recipient)
     invoice_attrs = invoice.attributes.merge(
-      title: fixed_fee ? title_with_layer(recipient.layer_group_id) : invoice.title,
+      title: invoice_list.fixed_fee ? title_with_layer(recipient.layer_group_id) : invoice.title,
       creator_id: invoice_list.creator_id,
       invoice_list_id: invoice_list.id,
       recipient_id: recipient.id
@@ -63,8 +61,8 @@ class Invoice::BatchCreate
   end
 
   def add_invoice_items(invoice, recipient)
-    if fixed_fee
-      invoice.invoice_items = InvoiceLists::FixedFee.for(fixed_fee, recipient.layer_group_id).invoice_items
+    if invoice_list.fixed_fee
+      invoice.invoice_items = InvoiceLists::FixedFee.for(invoice_list.fixed_fee, recipient.layer_group_id).invoice_items
     else
       invoice.invoice_items_attributes = invoice_items_attributes(recipient.id)
     end

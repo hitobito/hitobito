@@ -12,33 +12,27 @@ module Messages
 
     INTERVAL = 10.seconds
 
-    delegate :update!, :sent_at?, :state, to: :message
-
     def initialize(message)
       super()
       @message_id = message.id
     end
 
     def perform
-      # TODO what was this for? See 428080fb9b845d463e29bc05a70367ab57f39749
-      # It breaks rescheduling.
-      # return update!(state: :finished) if sent_at?
-
-      update!(sent_at: Time.current, state: :processing)
+      message.update!(sent_at: Time.current, state: :processing)
       result = message.dispatcher_class.new(message).run
-      update!(recipient_count: message.success_count)
+      message.update!(recipient_count: message.success_count)
 
-      if state == :failed
+      if message.state == :failed
         nil
       elsif result.finished?
-        update!(state: :finished)
+        message.update!(state: :finished)
       elsif result.needs_reenqueue?
         reenqueue
       end
     end
 
     def error(job, exception)
-      update!(state: :failed)
+      message.update!(state: :failed)
       super
     end
 

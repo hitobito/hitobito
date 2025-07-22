@@ -7,8 +7,6 @@
 
 module Messages
   class LetterDispatch
-    delegate :update!, :success_count, :send_to_households?, :salutation, to: "@message"
-
     def initialize(message, options = {})
       @message = message
       @options = options
@@ -27,6 +25,11 @@ module Messages
 
     private
 
+    # meant to be customized/overridden in subclasses
+    def send_to_households?
+      @message.send_to_households?
+    end
+
     def people
       @people ||= @message.mailing_list.people.with_address.select(:household_key)
     end
@@ -38,7 +41,7 @@ module Messages
     def create_for_people!
       limit(people, @options[:recipient_limit]).find_in_batches do |batch|
         count = create_recipient_entries(batch)
-        update!(success_count: count)
+        @message.update!(success_count: count)
       end
     end
 
@@ -49,13 +52,13 @@ module Messages
       # first, run a separate batch for people that are grouped in households, because that's slower
       household_list.only_households_in_batches do |batch|
         create_recipient_entries(batch)
-        update!(success_count: success_count + batch.size)
+        @message.update!(success_count: @message.success_count + batch.size)
       end
 
       # batch run for people without household
       household_list.people_without_household_in_batches do |batch|
         count = create_recipient_entries(batch)
-        update!(success_count: success_count + count)
+        @message.update!(success_count: @message.success_count + count)
       end
     end
 
@@ -96,9 +99,9 @@ module Messages
 
     def salutation_for_letter(person, housemates)
       if send_to_households? && housemates.count > 1
-        Salutation.new(person, salutation).value_for_household(housemates)
+        Salutation.new(person, @message.salutation).value_for_household(housemates)
       else
-        Salutation.new(person, salutation).value
+        Salutation.new(person, @message.salutation).value
       end
     end
   end

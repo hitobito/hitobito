@@ -16,6 +16,7 @@ module InvoiceLists
         case row
         in { id:, layer_group_id: } then new(id:, layer_group_id:)
         in Integer then new(id: row)
+        in String then new(id: Integer(row))
         end
       end
     end

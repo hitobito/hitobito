@@ -98,10 +98,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
       end
       format.pdf { render_entries_pdf(filter_entries) }
       format.csv { render_tabular_in_background(:csv) }
-      format.vcf {
-        render_vcf(filter_entries.includes(person: :phone_numbers)
-                                                      .collect(&:person))
-      }
+      format.vcf { render_vcf(filter_entries.includes(person: :phone_numbers).collect(&:person)) }
       format.xlsx { render_tabular_in_background(:xlsx) }
       format.email { render_emails(filter_entries.collect(&:person), ",") }
       format.email_outlook { render_emails(filter_entries.collect(&:person), ";") }

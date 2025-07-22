@@ -743,7 +743,7 @@ GEM
       activemodel (>= 3.0, < 8.0)
     temple (0.10.3)
     test-prof (1.3.3)
-    thor (1.3.2)
+    thor (1.4.0)
     tilt (2.3.0)
     timeliness (0.4.5)
     timeout (0.4.3)

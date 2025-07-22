@@ -461,6 +461,7 @@ de:
         approve_button: "Freigeben"
         reject_button: "Ablehnen"
       form:
+        add_guests: "Anmelden und Gast hinzufügen (max. %{limit})"
         title_new: "Anmeldung als %{role}"
         title_edit: "Anmeldung von %{person} bearbeiten"
         apply: "Anmelden"

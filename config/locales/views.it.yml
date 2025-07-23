@@ -760,7 +760,7 @@ it:
     archive:
       flash:
         success: Il gruppo è stato archiviato con successo.
-        failure: Si è verificato un errore nell'achiviazione del gruppo
+        failure: "Gruppe konnte nicht archiviert werden: %{error}"
 
     deleted_people:
       list:

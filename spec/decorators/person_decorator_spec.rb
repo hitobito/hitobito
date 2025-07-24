@@ -102,7 +102,7 @@ describe PersonDecorator, :draper_with_helpers do
     it "pending_applications returns participations that are not active" do
       dates = [Fabricate(:event_date, start_at: 10.days.from_now.to_date, finish_at: 18.days.from_now.to_date)]
       course = Fabricate(:course, groups: [groups(:top_layer)], dates: dates)
-      participation = Fabricate(:event_participation, event: course, person: person)
+      participation = Fabricate(:event_participation, event: course, participant: person)
       application = Fabricate(:event_application, priority_1: course, participation: participation)
 
       expect(subject.pending_applications).to eq [application]
@@ -111,7 +111,7 @@ describe PersonDecorator, :draper_with_helpers do
     it "pending_applications does not return past events" do
       dates = [Fabricate(:event_date, start_at: 10.days.ago, finish_at: 8.days.ago)]
       course = Fabricate(:course, groups: [groups(:top_layer)], dates: dates)
-      participation = Fabricate(:event_participation, event: course, person: person, active: true)
+      participation = Fabricate(:event_participation, event: course, participant: person, active: true)
       Fabricate(:event_application, priority_1: course, participation: participation)
 
       expect(subject.pending_applications).to be_empty
@@ -120,7 +120,7 @@ describe PersonDecorator, :draper_with_helpers do
     it "upcoming_events returns participations that are active" do
       dates = [Fabricate(:event_date, start_at: 2.days.from_now, finish_at: 5.days.from_now)]
       course = Fabricate(:course, groups: [groups(:top_layer)], dates: dates)
-      Fabricate(:event_participation, event: course, person: person, active: true)
+      Fabricate(:event_participation, event: course, participant: person, active: true)
 
       expect(subject.upcoming_events).to eq [course]
     end
@@ -128,7 +128,7 @@ describe PersonDecorator, :draper_with_helpers do
     it "upcoming_events does not return past events" do
       dates = [Fabricate(:event_date, start_at: 10.days.ago, finish_at: 8.days.ago)]
       course = Fabricate(:course, groups: [groups(:top_layer)], dates: dates)
-      Fabricate(:event_participation, event: course, person: person, active: true)
+      Fabricate(:event_participation, event: course, participant: person, active: true)
 
       expect(subject.upcoming_events).to be_empty
     end
@@ -139,7 +139,7 @@ describe PersonDecorator, :draper_with_helpers do
       it "returns participations that are active" do
         dates = [Fabricate(:event_date, start_at: 2.days.from_now, finish_at: 5.days.from_now)]
         event = Fabricate(:event, groups: [groups(:top_layer)], dates: dates)
-        participation = Fabricate(:event_participation, event: event, person: person, active: true)
+        participation = Fabricate(:event_participation, event: event, participant: person, active: true)
 
         is_expected.to eq [participation]
       end
@@ -147,7 +147,7 @@ describe PersonDecorator, :draper_with_helpers do
       it "does not return past events" do
         dates = [Fabricate(:event_date, start_at: 10.days.ago, finish_at: 8.days.ago)]
         event = Fabricate(:event, groups: [groups(:top_layer)], dates: dates)
-        Fabricate(:event_participation, event: event, person: person, active: true)
+        Fabricate(:event_participation, event: event, participant: person, active: true)
 
         is_expected.to be_empty
       end

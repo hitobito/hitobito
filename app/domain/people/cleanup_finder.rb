@@ -68,7 +68,7 @@ class People::CleanupFinder
     Event
       .joins(:dates, :participations)
       .where("event_dates.start_at > :now OR event_dates.finish_at > :now", now: Time.zone.now)
-      .where("event_participations.person_id = people.id")
+      .where("event_participations.participant_id = people.id")
       .select("*")
       .arel.exists.not
   end

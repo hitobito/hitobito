@@ -1677,7 +1677,8 @@ describe PersonAbility do
 
     context "with an event leader role" do
       let!(:event_role) do
-        Event::Role::Leader.create(event: events(:top_event), person: person_without_roles)
+        participation = Fabricate(:event_participation, event: events(:top_event), participant: person_without_roles)
+        Event::Role::Leader.create(participation:)
       end
 
       it "may query people" do
@@ -1687,7 +1688,8 @@ describe PersonAbility do
 
     context "with an event participant role" do
       let!(:event_role) do
-        Event::Role::Participant.create(event: events(:top_event), person: person_without_roles)
+        participation = Fabricate(:event_participation, event: events(:top_event), participant: person_without_roles)
+        Event::Role::Participant.create(participation:)
       end
 
       it "may not query people" do

@@ -54,7 +54,6 @@ class Event::Role < ActiveRecord::Base
   belongs_to :participation, inverse_of: :roles
 
   has_one :event, through: :participation
-  has_one :person, through: :participation
 
   after_validation :validate_new_participation
 
@@ -97,6 +96,10 @@ class Event::Role < ActiveRecord::Base
   def to_s(_format = :default)
     model_name = self.class.label
     label? ? "#{label} (#{model_name})" : model_name
+  end
+
+  def person
+    participation.person
   end
 
   def person_id

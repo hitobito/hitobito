@@ -17,14 +17,14 @@
 #  updated_at             :datetime
 #  application_id         :integer
 #  event_id               :integer          not null
-#  person_id              :integer          not null
+#  participant_id              :integer          not null
 #
 # Indexes
 #
 #  index_event_participations_on_application_id          (application_id)
 #  index_event_participations_on_event_id                (event_id)
-#  index_event_participations_on_event_id_and_person_id  (event_id,person_id) UNIQUE
-#  index_event_participations_on_person_id               (person_id)
+#  index_event_participations_on_event_id_and_participant_id  (event_id,participant_id) UNIQUE
+#  index_event_participations_on_participant_id               (participant_id)
 #
 
 require "spec_helper"
@@ -37,9 +37,9 @@ describe Event::Participation do
     course
   end
 
-  context "#init_answers" do
-    subject { course.participations.new }
+  subject { course.participations.new(event: course) }
 
+  context "#init_answers" do
     it "creates answers from event" do
       subject.init_answers
       expect(subject.answers.collect(&:question).to_set).to eq(course.questions.to_set)
@@ -61,11 +61,9 @@ describe Event::Participation do
   end
 
   context "mass assignments" do
-    subject { course.participations.new }
-
     it "assigns application and answers for new record" do
       q = course.questions
-      subject.person_id = 42
+      subject.participant_id = 42
       subject.attributes = {
         additional_information: "bla",
         application_attributes: {priority_2_id: 42},
@@ -79,7 +77,7 @@ describe Event::Participation do
 
     it "assigns participation and answers for persisted record" do
       p = Person.first
-      subject.person = p
+      subject.participant = p
       subject.save!
 
       expect(subject.answers.size).to eq(2)
@@ -92,19 +90,17 @@ describe Event::Participation do
           {question_id: q[1].id, answer: "nein", id: subject.answers.last.id}]
       }
 
-      expect(subject.person_id).to eq(p.id)
+      expect(subject.participant_id).to eq(p.id)
       expect(subject.additional_information).to eq("bla")
       expect(subject.answers.size).to eq(2)
     end
   end
 
   context "save together with role" do
-    subject { course.participations.new }
-
     it "validates answers" do
       q = course.questions
       subject.enforce_required_answers = true
-      subject.person_id = Person.first.id
+      subject.participant = Person.first
       subject.init_answers
       subject.attributes = {
         answers_attributes: [{question_id: q[1].id, answer: "ja"}]
@@ -124,8 +120,6 @@ describe Event::Participation do
   end
 
   context "waiting_list?" do
-    subject { course.participations.new }
-
     it "is true if the application is on the waiting-list" do
       subject.build_application(waiting_list: true)
 
@@ -156,6 +150,40 @@ describe Event::Participation do
       event_type = double("event_type", role_types: [Event::Role::Leader, Event::Role::Participant])
       ordered_participations = Event::Participation.order_by_role(event_type)
       expect(ordered_participations.to_sql).to include "ORDER BY event_role_type_orders.order_weight ASC"
+    end
+  end
+
+  context "validations" do
+    let!(:other_participation) { Fabricate(:event_participation, participant: people(:top_leader), event: course) }
+
+    it "validates uniqness of participant" do
+      subject.participant = people(:top_leader)
+      expect(subject).not_to be_valid
+      expect(subject.errors.full_messages).to eq ["Teilnehmer ist bereits vergeben"]
+    end
+
+    it "is valid when same id has different type" do
+      guest = Fabricate(:event_guest)
+      guest.id = people(:top_leader).id
+      guest.save(validate: false)
+      subject.participant = guest
+      expect(subject).to be_valid
+    end
+  end
+
+  context "#person" do
+    it "returns participant when participant_type is person" do
+      subject.participant = people(:top_leader)
+      expect(subject.person).to eq(people(:top_leader))
+    end
+
+    it "returns unpersisted person for built based on event_guest" do
+      subject.participant = Fabricate(:event_guest)
+      expect(subject.person).not_to be_persisted
+      expect(subject.person.first_name).to eq subject.participant.first_name
+      expect(subject.person.last_name).to eq subject.participant.last_name
+      expect(subject.person.nickname).to eq subject.participant.nickname
+      expect(subject.person.email).to eq subject.participant.email
     end
   end
 end

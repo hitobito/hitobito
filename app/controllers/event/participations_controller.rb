@@ -104,10 +104,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
       end
       format.pdf { render_entries_pdf(filter_entries) }
       format.csv { render_tabular_in_background(:csv) }
-      format.vcf {
-        render_vcf(filter_entries.includes(person: :phone_numbers)
-                                                      .collect(&:person))
-      }
+      format.vcf { render_vcf(filter_entries.includes(person: :phone_numbers).collect(&:person)) }
       format.xlsx { render_tabular_in_background(:xlsx) }
       format.email { render_emails(filter_entries.collect(&:person), ",") }
       format.email_outlook { render_emails(filter_entries.collect(&:person), ";") }
@@ -371,6 +368,12 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
       notice = translate(:success, full_entry_label: full_entry_label)
       flash[:notice] ||= notice
     end
+  end
+
+  def after_create_location(participation)
+    return new_group_event_participation_path(entry.group_id, entry.id, guest_of: participation.id) if participation.persisted? && params.key?(:add_another)
+
+    return_path
   end
 
   def append_mailing_instructions?

@@ -716,20 +716,40 @@ describe Event do
     end
   end
 
-  context "destroyed associations" do
-    let(:event) { events(:top_course) }
+  context "#destroy" do
+    it "destroys its associations as well" do
+      event = events(:top_course)
 
-    it "destroys everything with event" do
       expect do
-        expect do
-          expect do
-            expect do
-              expect { event.destroy }.to change { Event.count }.by(-1)
-            end.to change { Event::Participation.count }.by(-1)
-          end.to change { Event::Role.count }.by(-1)
-        end.to change { Event::Date.count }.by(-1)
-      end.to change { Event::Question.count }.by(-3)
+        event.destroy
+      end.to change { Event.count }.by(-1)
+        .and change { Event::Participation.count }.by(-1)
+        .and change { Event::Role.count }.by(-1)
+        .and change { Event::Date.count }.by(-1)
+        .and change { Event::Question.count }.by(-3)
     end
+
+    it "destroys guest-participants as well" do
+      event = events(:top_event)
+
+      expect do
+        main = Fabricate(:event_participation, event: event)
+
+        Fabricate(:event_participation, event: event,
+          participant: Fabricate(:event_guest, main_applicant: main))
+      end.to change { Event::Guest.count }.by(1)
+        .and change { Event::Participation.count }.by(2)
+
+      expect do
+        event.destroy
+      end.to change { Event::Participation.count }.by(-2)
+        .and change { Event::Guest.count }.by(-1)
+        .and not_change { Person.count }
+    end
+  end
+
+  context "destroyed by associations" do
+    let(:event) { events(:top_course) }
 
     it "nullifies contact on person destroy" do
       event.update(contact: people(:top_leader))

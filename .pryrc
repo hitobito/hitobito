@@ -12,7 +12,7 @@
 #   list_callbacks(PeopleController)
 #
 def list_callbacks(klass, skip_procs: true, skip_validations: true)
-  klass.__callbacks.each_with_object(Hash.new({ [] })) do |(k, callbacks), result|
+  klass.__callbacks.each_with_object(Hash.new { [] }) do |(k, callbacks), result|
     next if skip_validations && k == :validate # ignore validations
     callbacks.each do |c|
       next if skip_procs && c.filter.is_a?(Proc)

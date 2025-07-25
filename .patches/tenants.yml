@@ -1,0 +1,13 @@
+---
+- :method: :envelope_sender
+  :constant: MailRelay::Lists
+  :wagon: tenants
+  :source_file: hitobito/app/domain/mail_relay/lists.rb
+  :patch_file: hitobito_tenants/app/domain/tenants/mail_relay/lists.rb
+  :patch_file_line: 25
+- :method: :mail_domain
+  :constant: MailingList
+  :wagon: tenants
+  :source_file: hitobito/app/models/mailing_list.rb
+  :patch_file: hitobito_tenants/app/models/tenants/mailing_list.rb
+  :patch_file_line: 8

@@ -23,12 +23,6 @@
   :source_file: hitobito/app/helpers/filter_navigation/people.rb
   :patch_file: hitobito_die_mitte/app/helpers/die_mitte/filter_navigation/people.rb
   :patch_file_line: 18
-- :method: :possible_roles
-  :constant: GroupDecorator
-  :wagon: die_mitte
-  :source_file: hitobito/app/decorators/group_decorator.rb
-  :patch_file: hitobito_die_mitte/app/decorators/die_mitte/group_decorator.rb
-  :patch_file_line: 9
 - :method: :show
   :constant: MessagesController
   :wagon: die_mitte

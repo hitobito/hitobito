@@ -5,30 +5,6 @@
   :source_file: hitobito/app/helpers/dropdown/people_export.rb
   :patch_file: hitobito_youth/app/helpers/youth/dropdown/people_export.rb
   :patch_file_line: 12
-- :method: :load_applications
-  :constant: Event::ApplicationMarketController
-  :wagon: sjas
-  :source_file: hitobito/app/controllers/event/application_market_controller.rb
-  :patch_file: hitobito_sjas/app/controllers/sjas/event/application_market_controller.rb
-  :patch_file_line: 10
-- :method: :events
-  :constant: Event::ListsController
-  :wagon: sjas
-  :source_file: hitobito/app/controllers/event/lists_controller.rb
-  :patch_file: hitobito_sjas/app/controllers/sjas/event/lists_controller.rb
-  :patch_file_line: 20
-- :method: :upcoming_user_events
-  :constant: Event::ListsController
-  :wagon: sjas
-  :source_file: hitobito/app/controllers/event/lists_controller.rb
-  :patch_file: hitobito_sjas/app/controllers/sjas/event/lists_controller.rb
-  :patch_file_line: 28
-- :method: :send_confirmation
-  :constant: Event::ParticipationConfirmationJob
-  :wagon: sjas
-  :source_file: hitobito/app/jobs/event/participation_confirmation_job.rb
-  :patch_file: hitobito_sjas/app/jobs/sjas/event/participation_confirmation_job.rb
-  :patch_file_line: 9
 - :method: :after_update_success_path
   :constant: Event::ParticipationContactDatasController
   :wagon: youth
@@ -59,24 +35,18 @@
   :source_file: hitobito/app/controllers/event/participation_contact_datas_controller.rb
   :patch_file: hitobito_youth/app/controllers/youth/event/participation_contact_datas_controller.rb
   :patch_file_line: 44
-- :method: :confirmation
-  :constant: Event::ParticipationMailer
-  :wagon: sjas
-  :source_file: hitobito/app/mailers/event/participation_mailer.rb
-  :patch_file: hitobito_sjas/app/mailers/sjas/event/participation_mailer.rb
-  :patch_file_line: 12
 - :method: :filter_scopes
   :constant: Events::FilteredList
   :wagon: youth
   :source_file: hitobito/app/domain/events/filtered_list.rb
   :patch_file: hitobito_youth/app/domain/youth/events/filtered_list.rb
   :patch_file_line: 9
-- :method: :name
-  :constant: Group
-  :wagon: sjas
-  :source_file: hitobito/app/models/group.rb
-  :patch_file: hitobito_sjas/app/models/sjas/group.rb
-  :patch_file_line: 14
+- :method: :version_conditions
+  :constant: Person::LogController
+  :wagon: cevi
+  :source_file: hitobito/app/controllers/person/log_controller.rb
+  :patch_file: hitobito_cevi/app/controllers/cevi/person/log_controller.rb
+  :patch_file_line: 9
 - :method: :accessible_people
   :constant: PersonLayerWritables
   :wagon: youth
@@ -91,7 +61,25 @@
   :patch_file_line: 19
 - :method: :accessible_conditions
   :constant: PersonReadables
+  :wagon: cevi
+  :source_file: hitobito/app/abilities/person_readables.rb
+  :patch_file: hitobito_cevi/app/abilities/cevi/person_readables.rb
+  :patch_file_line: 19
+- :method: :accessible_conditions
+  :constant: PersonReadables
   :wagon: youth
   :source_file: hitobito/app/abilities/person_readables.rb
   :patch_file: hitobito_youth/app/abilities/youth/person_readables.rb
   :patch_file_line: 11
+- :method: :group_accessible_people
+  :constant: PersonReadables
+  :wagon: cevi
+  :source_file: hitobito/app/abilities/person_readables.rb
+  :patch_file: hitobito_cevi/app/abilities/cevi/person_readables.rb
+  :patch_file_line: 26
+- :method: :layer_and_below_read_in_same_layer?
+  :constant: PersonReadables
+  :wagon: cevi
+  :source_file: hitobito/app/abilities/person_readables.rb
+  :patch_file: hitobito_cevi/app/abilities/cevi/person_readables.rb
+  :patch_file_line: 70

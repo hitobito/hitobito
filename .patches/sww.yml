@@ -1,9 +1,21 @@
 ---
+- :method: :tabular_links
+  :constant: Dropdown::PeopleExport
+  :wagon: sww
+  :source_file: hitobito/app/helpers/dropdown/people_export.rb
+  :patch_file: hitobito_sww/app/helpers/sww/dropdown/people_export.rb
+  :patch_file_line: 14
 - :method: :render_entries_pdf
   :constant: Event::ParticipationsController
   :wagon: sww
   :source_file: hitobito/app/controllers/event/participations_controller.rb
   :patch_file: hitobito_sww/app/controllers/sww/event/participations_controller.rb
+  :patch_file_line: 11
+- :method: :exporter
+  :constant: Export::EventParticipationsExportJob
+  :wagon: sww
+  :source_file: hitobito/app/jobs/export/event_participations_export_job.rb
+  :patch_file: hitobito_sww/app/jobs/sww/export/event_participations_export_job.rb
   :patch_file_line: 11
 - :method: :articles
   :constant: Export::Pdf::Invoice::Articles

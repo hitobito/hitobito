@@ -5,6 +5,25 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
+# Lists callbacks
+#
+# Example:
+#   list_callbacks(Person)
+#   list_callbacks(PeopleController)
+#
+def list_callbacks(klass, skip_procs: true, skip_validations: true)
+  klass.__callbacks.each_with_object(Hash.new { [] }) do |(k, callbacks), result|
+    next if skip_validations && k == :validate # ignore validations
+    callbacks.each do |c|
+      next if skip_procs && c.filter.is_a?(Proc)
+      # remove autosaving callbacks from result
+      next if c.filter.to_s.include?("autosave")
+      next if c.filter.to_s.include?("_ensure_no_duplicate_errors")
+      result["#{c.kind}_#{c.name}"] += [c.filter]
+    end.compact_blank
+  end
+end
+
 def gr(resource, scope: nil, params: {}, ability: nil, as: Role.first.person)
   raise "#{resource} is not a resource class" unless resource <= ApplicationResource
 
@@ -40,6 +59,7 @@ def with_papertrail_metadata(whodunnit: "pry", mutation_id: "pry-#{SecureRandom.
     PaperTrail.request.controller_info = controller_info
   end
 end
+
 alias pt with_papertrail_metadata # rubocop:disable Style/Alias (alias_method is not available yet)
 
 # When pry is started from the rails console. We set-up the PaperTrail metadata so that we can

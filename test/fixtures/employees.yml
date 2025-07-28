@@ -96,6 +96,7 @@ long_time_john:
   shortname: JN
   encrypted_password: <%= Employee.encode('ptime') %>
   email: jn@bla.ch
+  ldapname: jneverends
   management: false
   committed_worktimes_at: 2015-07-31
   city: 'Eldoria'

@@ -15,7 +15,7 @@ class Setup
   USED_NODE_VERSION = "16.15.0"
   USED_YARN_VERSION = "1.22.19"
 
-  YOUTH_DEPENDENT_WAGONS = %w[pbs cevi pro_natura jubla sjas jemk sac_cas].freeze
+  YOUTH_DEPENDENT_WAGONS = %w[pbs cevi pro_natura jubla sjas jemk sac_cas dav].freeze
 
   def run
     write_and_copy(".tool-versions", <<~TOOL_VERSION)

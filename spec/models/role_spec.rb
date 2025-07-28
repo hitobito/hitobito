@@ -831,6 +831,22 @@ describe Role do
           archived_role.update!(label: "Follower of Blørbaël")
         end.to raise_error(ActiveRecord::ReadOnlyRecord)
       end
+
+      context "destroying archived role in archived group" do
+        before { archived_role.group.update_column(:archived_at, 1.day.ago) }
+
+        it "supports destroying" do
+          expect(archived_role.destroy).to eq true
+          expect(archived_role.reload.end_on).to eq Time.zone.yesterday
+        end
+
+        it "supports normalizing label" do
+          Fabricate(archived_role.type, group: archived_role.group, label: "label")
+          archived_role.update_column(:label, "LABEL")
+          expect(archived_role.destroy).to eq true
+          expect(archived_role.reload.label).to eq "label"
+        end
+      end
     end
   end
 

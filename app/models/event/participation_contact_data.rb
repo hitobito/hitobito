@@ -6,20 +6,8 @@
 class Event::ParticipationContactData
   attr_reader :person
 
-  class_attribute :mandatory_contact_attrs,
-    :contact_attrs,
-    :contact_associations
-
-  self.mandatory_contact_attrs = [:email, :first_name, :last_name]
-
-  self.contact_attrs = [:first_name, :last_name, :nickname, :company_name, :email,
-    :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
-    :gender, :birthday, :phone_numbers, :language]
-
-  self.contact_associations = [:additional_emails, :social_accounts]
-
-  delegate(*contact_attrs, to: :person)
-  delegate(*contact_associations, to: :person)
+  delegate(*Event.possible_contact_attrs, to: :person)
+  delegate(*Event.possible_contact_associations, to: :person)
 
   delegate :t, to: I18n
 
@@ -69,26 +57,6 @@ class Event::ParticipationContactData
     super
   end
 
-  def show_address
-    (attribute_keys & [:street, :housenumber]).any?
-  end
-
-  def show_attr?(a)
-    attribute_keys.include?(a)
-  end
-
-  def required_attr?(a)
-    required_attrs.include?(a)
-  end
-
-  def attribute_keys
-    self.class.contact_attrs - hidden_contact_attrs
-  end
-
-  def hidden_contact_attrs
-    event.hidden_contact_attrs.collect(&:to_sym)
-  end
-
   def respond_to?(attr, include_all = false)
     responds = super
     responds ? true : person.respond_to?(attr)
@@ -112,7 +80,11 @@ class Event::ParticipationContactData
 
   def required_attrs
     @required_attrs ||= event.required_contact_attrs.map(&:to_sym) +
-      self.class.mandatory_contact_attrs
+      event.class.mandatory_contact_attrs
+  end
+
+  def possible_contact_associations
+    Event.possible_contact_associations
   end
 
   private

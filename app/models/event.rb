@@ -85,6 +85,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   SEARCHABLE_ATTRS = [:number, {event_translations: [:name], groups: [:name]}]
 
   include Event::Participatable
+  include Event::ContactAttrs
   include FullTextSearchable
   include Globalized
   translates :application_conditions, :description, :name, :signature_confirmation_text
@@ -501,15 +502,15 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   def valid_contact_attr?(attr)
     (
-      ParticipationContactData.contact_attrs +
-      ParticipationContactData.contact_associations
+      Event.possible_contact_attrs +
+      Event.possible_contact_associations
     ).map(&:to_s).include?(attr.to_s)
   end
 
   def assert_required_contact_attrs_valid # rubocop:disable Metrics/CyclomaticComplexity
     required_contact_attrs.map(&:to_s).each do |a|
       unless valid_contact_attr?(a) &&
-          ParticipationContactData.contact_associations
+          Event.possible_contact_associations
               .map(&:to_s).exclude?(a)
         errors.add(:base, :contact_attr_invalid, attribute: a)
       end
@@ -525,7 +526,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
       unless valid_contact_attr?(a)
         errors.add(:base, :contact_attr_invalid, attribute: a)
       end
-      if ParticipationContactData.mandatory_contact_attrs.include?(a)
+      if Event.mandatory_contact_attrs.include?(a)
         errors.add(:base, :contact_attr_mandatory, attribute: a)
       end
     end

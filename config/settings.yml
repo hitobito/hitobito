@@ -99,6 +99,9 @@ additional_email:
     - Mutter
     - Andere
 
+address_sync:
+  enabled: false
+
 additional_address:
   enabled: false
   predefined_labels:

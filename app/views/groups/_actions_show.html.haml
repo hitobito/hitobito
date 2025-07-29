@@ -18,4 +18,7 @@
 - if FeatureGate.enabled?('invoice_lists.fixed_fees.membership') && can?(:index_invoices, @group) && @group.invoice_config&.valid?
   = action_button(t('.membership_invoice_button'), new_group_invoice_list_path(@group, fixed_fees: :membership), 'money-bill-alt')
 
+- if FeatureGate.enabled?("address_sync") & can?(:sync_addresses, @group)
+  = action_button(t('.sync_addresses_button'), group_addresses_sync_path(@group), 'address-book', method: :post)
+
 = render_extensions(:actions_show)

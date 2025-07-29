@@ -66,6 +66,10 @@ module AbilityDsl::Constraints
       in_same_layer_or_below && in_active_group
     end
 
+    def on_root_group
+      group.root?
+    end
+
     private
 
     def group

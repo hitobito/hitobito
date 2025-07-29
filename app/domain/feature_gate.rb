@@ -94,9 +94,10 @@ class FeatureGate
 
     raise FeatureGateError, "No configuration found for feature #{feature}" if config.nil?
     raise FeatureGateError, "No key 'enabled' found for feature #{feature}" if config.enabled.nil?
-
     config
   end
+
+  def address_sync_enabled? = Synchronize::Addresses::SwissPost::Config.exist?
 
   def person_language_enabled?
     # some rake tasks run without db present, so make sure

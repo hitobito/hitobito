@@ -6,3 +6,4 @@
 * [Membership](membership.md)
 * [Address completion](address_completion.md)
 * [Locations](locations.md)
+* [AddressSync](address_sync.md)

@@ -811,6 +811,7 @@ de:
         Wollen Sie diese Gruppe wirklich archivieren? Sie kann dann nicht mehr
         bearbeitet werden und sämtliche Rollen werden ebenfalls archiviert.
       membership_invoice_button: Mitgliedsrechnung
+      sync_addresses_button: Adressenabgleich
     attrs:
       contact_details: "Kontaktangaben"
       additional_information: "Weitere Angaben"
@@ -1676,6 +1677,11 @@ de:
         other: "%{count} %{role} haben eine Zugriffsanfrage für ihre Personendaten erhalten. Allfällige Änderungen durch diesen Import müssen nach der Bestätigung der Anfragen erneut vorgenommen werden."
 
   people:
+    addresses_sync:
+      create:
+        scheduled: Der Adressenabgleich wurde erfolgreich gestartet.
+        running: Aktuell ist noch ein Adressenabgleich in Arbeit.
+
     send_password_instructions: Login Informationen wurden verschickt.
     send_password_instructions_invalid_email: Die Login-Informationen wurden nicht verschickt da die hinterlegte E-Mail Adresse ungültig ist.
     years_old: (%{years} Jahre alt)

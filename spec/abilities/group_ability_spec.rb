@@ -679,4 +679,18 @@ describe GroupAbility do
       is_expected.not_to be_able_to(:show_details, groups(:bottom_layer_one))
     end
   end
+
+  describe :sync_addresses do
+    it "admin permission may sync on root group" do
+      expect(Ability.new(people(:top_leader))).to be_able_to(:sync_addresses, groups(:top_layer))
+    end
+
+    it "admin permission may not sync on non root group" do
+      expect(Ability.new(people(:top_leader))).not_to be_able_to(:sync_addresses, groups(:top_group))
+    end
+
+    it "layer_full permission may not sync on root group" do
+      expect(Ability.new(people(:bottom_member))).not_to be_able_to(:sync_addresses, groups(:top_layer))
+    end
+  end
 end

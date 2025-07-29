@@ -13,7 +13,9 @@ module ContactAttrs
     end
 
     def render
-      safe_join([mandatory_contact_attrs, configurable_contact_attrs, contact_associations])
+      safe_join([mandatory_contact_attrs,
+        configurable_contact_attrs,
+        possible_contact_associations])
     end
 
     private
@@ -24,7 +26,7 @@ module ContactAttrs
     attr_reader :f, :event
 
     def mandatory_contact_attrs
-      Event::ParticipationContactData.mandatory_contact_attrs.collect do |a|
+      Event.mandatory_contact_attrs.collect do |a|
         f.labeled(a, attr_label(a)) do
           radio_buttons(a, true, [:required])
         end
@@ -40,12 +42,11 @@ module ContactAttrs
     end
 
     def non_mandatory_contact_attrs
-      Event::ParticipationContactData.contact_attrs -
-        Event::ParticipationContactData.mandatory_contact_attrs
+      Event.possible_contact_attrs - Event.mandatory_contact_attrs
     end
 
-    def contact_associations
-      Event::ParticipationContactData.contact_associations.collect do |a|
+    def possible_contact_associations
+      Event.possible_contact_associations.collect do |a|
         f.labeled(a, attr_label(a)) do
           assoc_checkbox(a)
         end

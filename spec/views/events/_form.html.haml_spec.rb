@@ -44,7 +44,7 @@ describe "events/_form.html.haml" do
       end
     end
 
-    (Event::ParticipationContactData.contact_attrs - Event::ParticipationContactData.mandatory_contact_attrs).each_with_index do |attribute, index|
+    (Event.possible_contact_attrs - Event.mandatory_contact_attrs).each_with_index do |attribute, index|
       describe "configurable attribute" do
         let(:attr_field) { contact_attrs.find(".row:nth-of-type(#{index + 4})") }
 

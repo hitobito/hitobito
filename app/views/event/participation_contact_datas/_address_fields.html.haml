@@ -3,19 +3,19 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_pbs.
 
-= f.labeled_input_field(:address_care_of) if entry.show_attr?(:address_care_of)
+= f.labeled_input_field(:address_care_of) if event.show_contact_attr?(:address_care_of)
 
-- if entry.show_address
+- if event.show_contact_attr_address
   = f.labeled(:street, Person.human_attribute_name(:address), class: 'd-flex') do
     %div.col-9
-      = f.input_field(:street, data: { provide: 'entity', updater: 'AddressTypeahead.update', url: addresses_query_url }) if entry.show_attr?(:street)
+      = f.input_field(:street, data: { provide: 'entity', updater: 'AddressTypeahead.update', url: addresses_query_url }) if event.show_contact_attr?(:street)
     %div.col-2.offset-1
-      = f.input_field(:housenumber) if entry.show_attr?(:housenumber)
-= f.labeled_input_field(:postbox) if entry.show_attr?(:postbox)
-= f.labeled_input_field(:zip_code) if entry.show_attr?(:zip_code)
-= f.labeled_input_field(:town) if entry.show_attr?(:town)
+      = f.input_field(:housenumber) if event.show_contact_attr?(:housenumber)
+= f.labeled_input_field(:postbox) if event.show_contact_attr?(:postbox)
+= f.labeled_input_field(:zip_code) if event.show_contact_attr?(:zip_code)
+= f.labeled_input_field(:town) if event.show_contact_attr?(:town)
 
-- if entry.show_attr?(:country)
+- if event.show_contact_attr?(:country)
   = f.labeled(:country) do
     .shown.ms-0
       = f.country_field

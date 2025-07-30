@@ -158,7 +158,7 @@ class Event::Participation < ActiveRecord::Base
     return unless participant
     return participant if participant_type == Person.sti_name
 
-    Person.new(participant.attributes.except("id", "main_applicant_id", "phone_number"))
+    participant.to_person
   end
 
   def person=(value)

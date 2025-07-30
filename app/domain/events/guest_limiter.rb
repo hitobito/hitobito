@@ -25,8 +25,8 @@ module Events
       )
     end
 
-    def remaining
-      personally_available_places = (@limit - @used)
+    def remaining(used: @used)
+      personally_available_places = (@limit - used)
       allowed_places = [@free, personally_available_places].min
 
       if @waiting_list && allowed_places <= 0
@@ -34,6 +34,10 @@ module Events
       else
         allowed_places
       end
+    end
+
+    def preview_remaining(after_adding:)
+      remaining(used: @used + after_adding)
     end
   end
 end

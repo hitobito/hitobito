@@ -10,4 +10,5 @@
 
   - if event.attr_used?(:waiting_list)
     %td
-      = render 'waiting_list_link', p: p
+      - unless p.participant_type == Event::Guest.sti_name
+        = render 'waiting_list_link', p: p

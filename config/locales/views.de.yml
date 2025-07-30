@@ -403,6 +403,7 @@ de:
       already_assigned: "Diese Person ist bereits anderweitig zugeteilt oder bei diesem Anlass angemeldet."
       maximum_participations_reached: Die maximal erlaubte Teilnehmerzahl ist erreicht. Um weitere Anmeldungen zu bestätigen, muss die maximale Teilnehmerzahl erhöht werden.
       participation:
+        guest_of_html: "(Gast von %{main_applicant})"
         registered_at: "Anmeldung am %{datetime}"
         town: Wohnort
       prio_buttons:

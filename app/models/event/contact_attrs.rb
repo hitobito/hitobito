@@ -30,7 +30,7 @@ module Event::ContactAttrs
 
   def required_contact_attr?(a)
     required = required_contact_attrs.map(&:to_sym) + self.class.mandatory_contact_attrs
-    required.include?(a)
+    required.include?(a.to_sym)
   end
 
   def contact_attribute_keys

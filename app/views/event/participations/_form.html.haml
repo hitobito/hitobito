@@ -11,39 +11,4 @@
              add_another: add_another,
              add_another_label: add_another_label,
              cancel_url_new: group_event_path(@group, @event)) do |f|
-  - if params[:for_someone_else]
-    = hidden_field_tag("for_someone_else", true)
-
-  - if params[:event_role]
-    = hidden_field_tag('event_role[type]', params[:event_role][:type])
-
-  - if params[:for_someone_else]
-    = f.labeled_person_field(:participant, label: Person.model_name.human)
-    = hidden_field_tag("event_participation[participant_type]", Person.sti_name)
-
-  - admin_answers, participant_answers = @answers.partition(&:admin?)
-
-  - if participant_answers.present?
-    = f.labeled(t(".registration_details"), class: "mb-2 pt-2") do
-      = f.fields_for(:answers, participant_answers) do |fans|
-        = render 'event/answers/fields', f: fans
-
-  - if admin_answers.present? && (params[:for_someone_else] || entry.persisted?)
-    = f.labeled(t(".administrative_information"), class: "mb-2 pt-2") do
-      = f.fields_for(:answers, admin_answers) do |fans|
-        = render 'event/answers/fields', f: fans
-
-  = f.labeled_text_area(:additional_information)
-
-  - if entry.application && entry.new_record?
-    = render 'application_fields', f: f
-
-  = render_extensions :fields, locals: { f: f }
-
-  - if params[:for_someone_else] && @event.course?
-    .row.mb-2
-      %label.checkbox.col-md-9.offset-md-3.col-lg-8.col-xl-8.offset-xl-2.mw-63ch.mt-1
-        = check_box_tag("send_email", true, class: "form-check-input", checked: true)
-        %span.ms-1= t(".send_email")
-
-  %p= t('.explain_required_checkmark') if @event.questions.any?(&:required?)
+  = render 'fields', f: f

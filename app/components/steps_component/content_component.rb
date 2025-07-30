@@ -30,13 +30,13 @@ class StepsComponent::ContentComponent < StepsComponent::IteratingComponent
       data: stimulus_target("stepContent"))
   end
 
-  def fields_for(buttons: true, &)
+  def fields_for(buttons: true, add_another: false, add_another_label: "", &)
     partial_name = @partial.split("/").last
     content = @form.fields_for(partial_name, model) do |fields|
       @form.error_messages + fields.error_messages
     end
     content += @form.fields_for(partial_name, model, &)
-    content += bottom_toolbar if buttons
+    content += bottom_toolbar(add_another:, add_another_label:) if buttons
     content
   end
 
@@ -46,8 +46,8 @@ class StepsComponent::ContentComponent < StepsComponent::IteratingComponent
     end
   end
 
-  def bottom_toolbar
-    content_tag(:div, build_buttons, class: "btn-toolbar align-with-form")
+  def bottom_toolbar(**args)
+    content_tag(:div, build_buttons(**args), class: "btn-toolbar align-with-form")
   end
 
   def next_button(title = nil, options = {})
@@ -59,6 +59,10 @@ class StepsComponent::ContentComponent < StepsComponent::IteratingComponent
       t("steps_component.next_link")
     end
     submit_button(title, type, next_submit_button_options.merge(options))
+  end
+
+  def add_another_button(title = nil, options = {})
+    next_button(title, {name: :add_another}.merge(options))
   end
 
   def render?
@@ -87,8 +91,9 @@ class StepsComponent::ContentComponent < StepsComponent::IteratingComponent
     options.merge(name: :next, value: index + 1)
   end
 
-  def build_buttons
+  def build_buttons(add_another: false, add_another_label: "")
     buttons = [next_button]
+    buttons << add_another_button(add_another_label) if add_another
     buttons << back_link if index.positive?
     buttons << cancel_link_back_to_person if index.zero?
     safe_join(buttons)

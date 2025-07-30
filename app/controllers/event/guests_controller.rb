@@ -20,6 +20,7 @@ class Event::GuestsController < Wizards::BaseController
 
   helper_method :event
   helper_method :entry
+  helper_method :preview_guest_limit
 
   private
 
@@ -58,10 +59,15 @@ class Event::GuestsController < Wizards::BaseController
   end
 
   def enforce_guest_limit
-    if Events::GuestLimiter.for(event, guest_of).remaining < 1
+    if guest_limiter.remaining < 1
       redirect_to group_event_path(group.id, event.id),
         alert: translate(:not_allowed_due_to_guest_limit)
     end
+  end
+
+  def preview_guest_limit
+    # Subtract the guest who is being added to the event right now
+    guest_limiter.preview_remaining(after_adding: 1)
   end
 
   def init_answers
@@ -69,12 +75,24 @@ class Event::GuestsController < Wizards::BaseController
   end
 
   def redirect_target
+    if wizard.participation.persisted? && params.key?(:add_another)
+      return new_group_event_guest_path(
+        params[:group_id],
+        params[:event_id],
+        params[:id]
+      )
+    end
+
     group_event_path(group, event)
-    # TODO add capability for add_another to the step wizards and set the redirect_target according
-    #   to whether the add_another param was submitted
   end
 
   def success_message
     translate(:guest_added_successfully, guest: wizard.guest.to_s)
+  end
+
+  private
+
+  def guest_limiter
+    @guest_limiter ||= Events::GuestLimiter.for(event, guest_of)
   end
 end

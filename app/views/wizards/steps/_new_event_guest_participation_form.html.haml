@@ -2,5 +2,5 @@
 -#  Affero General Public License version 3 or later. See the COPYING file at the top-level directory
 -#  or at https://github.com/hitobito/hitobito.
 
-= c.fields_for do |ff|
+= c.fields_for(add_another: preview_guest_limit > 0, add_another_label: I18n.t('event.guests.new.add_more_guests', limit: preview_guest_limit)) do |ff|
   = render 'event/participations/fields', f: ff, entry: ff.object.participation

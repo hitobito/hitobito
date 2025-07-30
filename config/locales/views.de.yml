@@ -375,6 +375,7 @@ de:
     guests:
       new:
         title: Gast hinzufügen
+        add_more_guests: "Anmelden und weiteren Gast hinzufügen (max. %{limit})"
     run_by: "Durchgeführt von"
     applied_to: Anmeldung an
     alternative_dates: Ausweichdaten

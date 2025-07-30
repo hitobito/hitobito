@@ -10,21 +10,25 @@
 = render 'event/participation_contact_datas/address_fields', f: f
 
 - if event.show_contact_attr?(:email)
-  = f.labeled_input_field :email, help_inline: t('people.email_field.used_as_login'), class: 'd-inline '
+  = f.labeled_input_field :email, help_inline: ((entry.is_a? Event::Guest) ? '' : t('people.email_field.used_as_login')), class: 'd-inline '
 
-- Event.possible_contact_associations.each do |a|
-  = field_set_tag do
-    - unless event.hidden_contact_attrs.map(&:to_sym).include?(a)
-      = f.labeled_inline_fields_for a, "contactable/#{a.to_s.singularize}_fields"
-
-= field_set_tag do
+- if entry.is_a? Event::Guest
   - unless event.hidden_contact_attrs.map(&:to_sym).include?(:phone_numbers)
-    = f.labeled_inline_fields_for :phone_numbers, "contactable/phone_number_fields",
-                                  nil, event.required_contact_attr?(:phone_numbers)
+    = f.labeled_input_field(:phone_number, placeholder: PhoneNumber.human_attribute_name(:number))
+- else
+  - Event.possible_contact_associations.each do |a|
+    = field_set_tag do
+      - unless event.hidden_contact_attrs.map(&:to_sym).include?(a)
+        = f.labeled_inline_fields_for a, "contactable/#{a.to_s.singularize}_fields"
+
+  = field_set_tag do
+    - unless event.hidden_contact_attrs.map(&:to_sym).include?(:phone_numbers)
+      = f.labeled_inline_fields_for :phone_numbers, "contactable/phone_number_fields",
+                                    nil, event.required_contact_attr?(:phone_numbers)
 
 = field_set_tag do
   - if event.show_contact_attr?(:gender)
-    = render 'people/gender_field', f: f
+    = render 'people/gender_field', f: f, entry: entry
 
   - if event.show_contact_attr?(:birthday)
     = f.labeled_string_field(:birthday,
@@ -42,4 +46,4 @@
 
 = render_extensions :fields, locals: { f: f }
 
-= render('people/privacy_policy_acceptance_field', policy_finder: @policy_finder, f: f)
+= render('people/privacy_policy_acceptance_field', policy_finder: @policy_finder, f: f, for_someone_else: entry.is_a?(Event::Guest))

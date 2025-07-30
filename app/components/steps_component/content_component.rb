@@ -54,7 +54,7 @@ class StepsComponent::ContentComponent < StepsComponent::IteratingComponent
     type = "submit"
     title ||= I18n.t("#{@partial.tr("/", ".")}.next_button", default: nil)
     title ||= if last?
-      t("groups.self_registration.form.submit")
+      t("steps_component.submit")
     else
       t("steps_component.next_link")
     end

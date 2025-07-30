@@ -372,6 +372,9 @@ de:
     date: "Datum %{index}"
 
   event:
+    guests:
+      new:
+        title: Gast hinzufügen
     run_by: "Durchgeführt von"
     applied_to: Anmeldung an
     alternative_dates: Ausweichdaten
@@ -460,12 +463,14 @@ de:
       actions_approval:
         approve_button: "Freigeben"
         reject_button: "Ablehnen"
+      fields:
+        explain_required_checkmark: "* = Antwort obligatorisch"
       form:
         title_new: "Anmeldung als %{role}"
         title_edit: "Anmeldung von %{person} bearbeiten"
         apply: "Anmelden"
-        explain_required_checkmark: "* = Antwort obligatorisch"
         send_email: E-Mail an Teilnehmer/in senden
+      new:
         add_guests: "Anmelden und Gast hinzufügen (max. %{limit})"
       application_fields:
         alternative_dates_info: "Bitte gib weitere Kurse an, welche dir gehen würden."
@@ -669,6 +674,10 @@ de:
     show:
       link:
         delete: "Anmeldung löschen"
+
+  event/guests:
+    guest_added_successfully: "%{guest} wurde erfolgreich als Gast hinzugefügt."
+    not_allowed_due_to_guest_limit: "Du kannst in diesem Anlass keine weiteren Gäste hinzufügen."
 
   event/invitations:
     export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
@@ -2078,6 +2087,7 @@ de:
   steps_component:
     next_link: Weiter
     prev_link: Zurück
+    submit: Absenden
 
   household_aside_component:
     add: Erstellen
@@ -2242,3 +2252,8 @@ de:
     not_found: Ungültiger Verifikationscode
     status_valid: Mitgliedschaft gültig
     status_invalid: Keine gültige Mitgliedschaft
+
+  wizards:
+    steps:
+      new_event_guest_contact_data_form_title: Kontaktdaten des Gasts
+      new_event_guest_participation_form_title: Gast anmelden

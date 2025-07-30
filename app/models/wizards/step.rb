@@ -8,6 +8,7 @@ module Wizards
     include ActiveModel::Model
     include ActiveModel::Attributes
     include ActiveModel::Validations
+    include ActiveModel::Validations::Callbacks
 
     class_attribute :partial, instance_writer: false, instance_reader: false
     attr_reader :wizard

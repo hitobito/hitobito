@@ -157,9 +157,10 @@ class EventSeeder
   def seed_participation(event)
     person_id = Person.offset(rand(@@people_count)).limit(1).pluck(:id).first
 
-    Event::Participation.seed(:event_id, :person_id, {
+    Event::Participation.seed(:event_id, :participant_id, :participant_type, {
       event_id: event.id,
-      person_id: person_id
+      participant_id: person_id,
+      participant_type: Person.sti_name
     }).first.tap do |p|
       seed_answers(p)
     end

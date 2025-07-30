@@ -73,18 +73,18 @@ describe People::CleanupFinder do
     end
 
     it "finds people with participations at past events" do
-      Event::Participation.create!(event: past_event, person: entries.first)
+      Event::Participation.create!(event: past_event, participant: entries.first)
       expect(subject.run).to include(entries.first)
     end
 
     it "does not find people with participations at future events" do
-      Event::Participation.create!(event: future_event, person: entries.first)
+      Event::Participation.create!(event: future_event, participant: entries.first)
       expect(subject.run).not_to include(entries.first)
     end
 
     it "does not find people with participations at past and future events" do
-      Event::Participation.create!(event: past_event, person: entries.first)
-      Event::Participation.create!(event: future_event, person: entries.first)
+      Event::Participation.create!(event: past_event, participant: entries.first)
+      Event::Participation.create!(event: future_event, participant: entries.first)
       expect(subject.run).not_to include(entries.first)
     end
 

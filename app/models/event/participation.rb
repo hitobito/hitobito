@@ -150,8 +150,8 @@ class Event::Participation < ActiveRecord::Base
     !active
   end
 
-  def to_s
-    person.to_s
+  def to_s(*args)
+    person.to_s(*args)
   end
 
   def person

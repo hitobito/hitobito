@@ -74,8 +74,8 @@ class Event::ApplicationMarketController < ApplicationController
     # do not include nil values in arrays returned by #sort_by
     applications.to_a.sort_by! do |p|
       [p.application.priority(event) || 99,
-        p.person.last_name || "",
-        p.person.first_name || ""]
+        p.participant.last_name || "",
+        p.participant.first_name || ""]
     end
   end
 

@@ -18,7 +18,7 @@ module Events
 
     def self.for(event, participant)
       new(
-        free: event.maximum_participants - event.participant_count,
+        free: (event.maximum_participants.presence || 1000000) - (event.participant_count.presence || 0),
         limit: event.guest_limit,
         used: event.participations.guests_of(participant).distinct.count,
         waiting_list: event.waiting_list

@@ -48,7 +48,7 @@ class Event::ParticipationDecorator < ApplicationDecorator
   end
 
   def town_info
-    "(#{h.t(".town")}: #{person.town})" if person.town
+    "(#{h.t(".town")}: #{person.town})" if participant.town.present?
   end
 
   def guests_allowed?

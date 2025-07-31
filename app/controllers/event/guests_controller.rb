@@ -79,7 +79,7 @@ class Event::GuestsController < Wizards::BaseController
       return new_group_event_guest_path(
         params[:group_id],
         params[:event_id],
-        participation.id
+        params[:id]
       )
     end
 

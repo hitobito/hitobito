@@ -404,6 +404,7 @@ de:
       maximum_participations_reached: Die maximal erlaubte Teilnehmerzahl ist erreicht. Um weitere Anmeldungen zu bestätigen, muss die maximale Teilnehmerzahl erhöht werden.
       participation:
         guest_of_html: "(Gast von %{main_applicant})"
+        guest_of_deleted_participation: "(Gast von abgemeldeter Person)"
         registered_at: "Anmeldung am %{datetime}"
         town: Wohnort
       prio_buttons:

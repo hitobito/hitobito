@@ -6,7 +6,10 @@
 %td
   %strong= link_to(p.to_s(:list), group_event_participation_path(@group, @event, p.id))
   - if p.participant_type == Event::Guest.sti_name
-    = t('.guest_of_html', main_applicant: link_to(p.participant.main_applicant.to_s(:list), group_event_participation_path(@group, @event, p.participant.main_applicant_id)))
+    - if p.participant.main_applicant.present?
+      = t('.guest_of_html', main_applicant: link_to(p.participant.main_applicant.to_s(:list), group_event_participation_path(@group, @event, p.participant.main_applicant_id)))
+    - else
+      = t('.guest_of_deleted_participation')
   %br/
   = p.person_location_information
   %br/

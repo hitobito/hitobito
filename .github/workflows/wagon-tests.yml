@@ -318,7 +318,11 @@ jobs:
   notify_statuscope:
     uses: ./.github/workflows/notify-statuscope.yml
     needs: [wagon_rubocop, wagon_specs, wagon_feature_specs, wagon_seeds]
-    if: ( success() || failure() ) && ( github.ref_name == 'master' ) && ( (inputs.core_ref || inputs.main_branch) == inputs.main_branch ) && ( (inputs.wagon_dependency_ref || inputs.main_branch) == inputs.main_branch )
+    if: >-
+      ( success() || failure() ) &&
+      ( github.ref_name == 'master' ) &&
+      ( contains((inputs.core_ref || inputs.main_branch), inputs.main_branch) ) &&
+      ( contains((inputs.wagon_dependency_ref || inputs.main_branch), inputs.main_branch) )
     with:
       repository: ${{ inputs.wagon_repository }}
       test_result: ${{ needs.wagon_rubocop.result == 'success' && needs.wagon_specs.result == 'success' && needs.wagon_feature_specs.result == 'success' && needs.wagon_seeds.result == 'success' }}

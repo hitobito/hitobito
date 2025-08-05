@@ -408,7 +408,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   def person_name(format = :default)
     name = full_name(format)
-    if PUBLIC_ATTRS.include?(:nickname) && nickname? && format != :print_list
+    if PUBLIC_ATTRS.include?(:nickname) && nickname?
       name << " / #{nickname}"
     end
     name
@@ -416,7 +416,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   def full_name(format = :default)
     case format
-    when :list, :print_list then "#{last_name} #{first_name}".strip
+    when :list then "#{last_name} #{first_name}".strip
     else "#{first_name} #{last_name}".strip
     end
   end

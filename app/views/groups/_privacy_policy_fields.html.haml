@@ -5,7 +5,9 @@
 
 - if entry.layer?
   = field_set_tag do
-    = f.labeled_input_fields(:privacy_policy_title)
+    = f.fields_for :privacy_policy_title_translations do |ppf|
+      - I18n.available_locales.each do |locale|
+        = ppf.text_field locale
 
     = f.labeled :privacy_policy do
       = f.file_field :privacy_policy, type: :file, accept: '.pdf', class: 'mt-1 form-control form-control-sm'

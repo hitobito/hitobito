@@ -1835,7 +1835,7 @@ fr:
 
   qualification_decorator:
     open_training_days_active:
-      Pour que la qualification n'expire pas le %{finish_at}, nous te demandons de suivre %{days} jours de formation continue au plus tard à cette date.
+      Pour que la qualification n'expire pas le %{finish_at}, nous te prions d'effectuer %{days} jours de formation continue avant cette date.
     open_training_days_reactivatable:
       Afin de réactiver ta qualification, nous te demandons de suivre %{days} ours de formation continue jusqu'à %{reactivateable_until} au plus tard.
     open_training_days_no_longer_reactivatable: Cette qualification a expiré depuis le %{reactivateable_until}. Si tu as suivi des formations ou des formations continues auparavant et que tu possèdes une attestation de cours pour celles-ci, tu peux la partager avec ton chef de tour. Cela peut éventuellement conduire à une réactivation de ta qualification déjà expirée.
@@ -1865,10 +1865,10 @@ fr:
       filters_qualification_validity:
         active: Uniquement les qualifications valides
         reactivateable: Les qualifications valides et renouvelables
-        not_active_but_reactivateable: Qualifications réactivables mais non valides
-        not_active: Pas de qualifications valides
+        not_active_but_reactivateable: Qualifications pouvant être réactivées, mais non valides
+        not_active: Aucune qualification valide
         all: Montrer toutes les qualifications non distribuées
-        none: Aucune qualification jamais attribuée
+        none: Aucune ancienne qualification délivrée
         only_expired: Qualifications expirées mais non valides ou pouvant être réactivées
       filters_role_kind:
         active_today: ' Rôle actif actuel'
@@ -1921,7 +1921,7 @@ fr:
     qualification:
       title: Qualifications
       prompt_qualification_selection: Quelles qualifications doivent apparaître?
-      prompt_constraint: Quelle logique appliquer?
+      prompt_constraint: Quelle logique doit être appliquée?
       prompt_validity: Quelles validités doivent avoir les qualifications montrées?
       prompt_year: Restreindre l'année de qualification
       prompt_date: Jour fixé

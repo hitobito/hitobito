@@ -870,7 +870,7 @@ it:
         string_with_origin: '%{kind} (fonte: %{origin})'
         string_with_finish_at: '%{kind} (fino a %{finish_at})'
         string_with_finish_at_and_origin: '%{kind} (fino a %{finish_at}, fonte: %{origin})'
-        open_training_days: Offene Ausbildungstage
+        open_training_days: Giorni di formazione da completare
 
       qualification_kind:
         label: Definizione della qualifica

@@ -1834,7 +1834,7 @@ it:
 
   qualification_decorator:
     open_training_days_active:
-      Per garantire che la qualifica non scada all'indirizzo %{finish_at}, vi chiediamo di completare le giornate di formazione %{days} al più tardi entro tale data.
+      Per garantire che la vostra qualifica non scada il %{finish_at}, vi chiediamo di completare %{days} giorni di formazione supplementare prima di tale data.
     open_training_days_reactivatable:
       Per riattivare la vostra qualifica, vi chiediamo di completare le giornate di formazione %{days} entro e non oltre %{reactivateable_until}.
     open_training_days_no_longer_reactivatable: Questa qualifica è scaduta da %{reactivateable_until}. Se avete frequentato in precedenza corsi di formazione o di aggiornamento e siete in possesso di una conferma del corso, potete condividerla con il vostro accompagnatore. Questo potrebbe portare alla riattivazione della qualifica scaduta.

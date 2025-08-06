@@ -28,4 +28,12 @@ class BouncesController < ListController
   def model_scope
     model_class.of_mailing_list(mailing_list&.id)
   end
+
+  def authorize_class
+    if can?(:index_subscriptions, mailing_list)
+      authorize!(:index_subscriptions, mailing_list)
+    else
+      super
+    end
+  end
 end

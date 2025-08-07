@@ -32,7 +32,7 @@ export default class extends Controller {
         this.toggleTarget.classList.toggle("hidden");
       }
     } else {
-      this.toggleTarget.classList.remove("hidden");
+      this.toggleTarget.classList.toggle("hidden");
     }
   }
 

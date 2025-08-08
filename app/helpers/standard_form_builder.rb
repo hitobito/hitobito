@@ -26,7 +26,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   delegate :association, :column_type, :column_property, :captionize, :ta, :tag,
     :content_tag, :safe_join, :capture, :add_css_class, :assoc_and_id_attr,
-    :render, :f, :icon, :check_box_tag,
+    :render, :f, :icon, :check_box_tag, :action_button,
     to: :template
 
   # Render multiple input fields together with a label for the given attributes.
@@ -468,7 +468,40 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
+  def translated_input_field(attr)
+    content_tag(:div, 'data-controller': 'form-field-toggle') do
+      input_labeled_with_locale(attr, I18n.locale) +
+      content_tag(:div, {class: 'hidden', 'data-form-field-toggle-target': 'toggle'}) do
+        other_lang_inputs = I18n.available_locales.excluding(I18n.locale).map do |locale|
+          input_labeled_with_locale(attr, locale)
+        end
+        safe_join(other_lang_inputs)
+      end
+    end
+  end
+
   private
+
+  def input_labeled_with_locale(attr, locale)
+    labeled(attr, "#{@object.class.human_attribute_name(attr)} (#{locale.to_s.upcase})") do
+      if locale == I18n.locale
+        input_for_locale_with_translation_button(attr)
+      else
+        input_for_locale(attr, locale)
+      end
+    end
+  end
+
+  def input_for_locale_with_translation_button(attr)
+    content_tag(:div, class: 'd-flex') do
+      input_for_locale(attr, I18n.locale, {class: 'me-2'}) +
+      action_button(nil, nil, 'language', {'data-action': 'form-field-toggle#toggle', type: 'button', in_button_group: true})
+    end
+  end
+
+  def input_for_locale(attr, locale, args={})
+    input_field "#{attr}_#{locale}", **args
+  end
 
   # Returns true if attr is a non-polymorphic association.
   # If one or more macros are given, the association must be of this kind.

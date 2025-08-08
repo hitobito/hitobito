@@ -469,14 +469,14 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def translated_input_field(attr)
-    content_tag(:div, 'data-controller': 'form-field-toggle') do
+    content_tag(:div, "data-controller": "form-field-toggle") do
       input_labeled_with_locale(attr, I18n.locale) +
-      content_tag(:div, {class: 'hidden', 'data-form-field-toggle-target': 'toggle'}) do
-        other_lang_inputs = I18n.available_locales.excluding(I18n.locale).map do |locale|
-          input_labeled_with_locale(attr, locale)
+        content_tag(:div, {class: "hidden", "data-form-field-toggle-target": "toggle"}) do
+          other_lang_inputs = I18n.available_locales.excluding(I18n.locale).map do |locale|
+            input_labeled_with_locale(attr, locale)
+          end
+          safe_join(other_lang_inputs)
         end
-        safe_join(other_lang_inputs)
-      end
     end
   end
 
@@ -493,13 +493,13 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def input_for_locale_with_translation_button(attr)
-    content_tag(:div, class: 'd-flex') do
-      input_for_locale(attr, I18n.locale, {class: 'me-2'}) +
-      action_button(nil, nil, 'language', {'data-action': 'form-field-toggle#toggle', type: 'button', in_button_group: true})
+    content_tag(:div, class: "d-flex") do
+      input_for_locale(attr, I18n.locale, {class: "me-2"}) +
+        action_button(nil, nil, "language", {"data-action": "form-field-toggle#toggle", type: "button", in_button_group: true})
     end
   end
 
-  def input_for_locale(attr, locale, args={})
+  def input_for_locale(attr, locale, args = {})
     input_field "#{attr}_#{locale}", **args
   end
 

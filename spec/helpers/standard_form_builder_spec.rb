@@ -285,4 +285,42 @@ describe "StandardFormBuilder" do
       expect(form.send(:errors_on?, :cutoff_date)).to be_falsey
     end
   end
+
+  describe "translated fields" do
+    it "shows input field for current locale with translation button" do
+      expect(form.translated_input_field(:translated_field)).to match(/input [^>]*name="group\[privacy_policy_title_en\]".+><\/input>.*<button [^>]*data-action="form-field-toggle#toggle"/m)
+    end
+
+    it "does not show input fields for not current locales" do
+
+    end
+
+    it "only generates translation button for current locale" do
+
+    end
+
+    it "shows input fields for not current locales after clicking the translation button" do
+
+    end
+
+    it "does not show translation options if there is only one locale" do
+
+    end
+
+    it "generates correct input type" do
+
+    end
+
+    it "shows already translated languages" do
+
+    end
+
+    it "generates language fields with label" do
+
+    end
+
+    it "generates language fields without label" do
+
+    end
+  end
 end

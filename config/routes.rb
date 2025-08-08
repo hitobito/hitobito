@@ -91,6 +91,7 @@ Hitobito::Application.routes.draw do
 
       get 'log' => 'group/log#index'
 
+      resource :addresses_sync, only: :create, module: :people
       resources :payments, only: :index
       resources :invoices do
         resources :payments, only: :create

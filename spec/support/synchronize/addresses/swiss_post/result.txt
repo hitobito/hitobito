@@ -1,0 +1,3 @@
+KDNR	Firma	Vorname	Nachname	c/o	Strasse	Hausnummer	Postfach	PLZ	Ort	QSTAT	ShortReport	CorrectionType	TotalScore	ValidFrom	ValidTo	Birthdate	HouseKey	Double_DoubleGroupNo	Double_DSTAT	Company	Prename	Prename2	Name	MaidenName	AddressAddition	CoAddress	StreetName	HouseNo	HouseNoAddition	Floor	ZIPCode	ZIPAddition	TownName	Canton	CountryCode	POBoxTerm	POBoxNo	POBoxZIP	POBoxZIPAddition	POBoxTownName
+382461928	0	Bottom	Member		Greatstreet	345		3456	Greattown	1	-11111111111414411111A-A	0	100.00				100			0	Bottom		Member				Greatstreet	345			3456	0	Greattown	BE	CH
+572407901	0	Top	Leader		Greatstreet	345		2502	Greattown	1	11111111111414441444C-A	1	95.00				101			0	Top		Leader				Greatstreet	123			3456	0	Greattown	BE	CH

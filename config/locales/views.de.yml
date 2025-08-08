@@ -811,6 +811,7 @@ de:
         Wollen Sie diese Gruppe wirklich archivieren? Sie kann dann nicht mehr
         bearbeitet werden und sämtliche Rollen werden ebenfalls archiviert.
       membership_invoice_button: Mitgliedsrechnung
+      sync_addresses_button: Adressenabgleich
     attrs:
       contact_details: "Kontaktangaben"
       additional_information: "Weitere Angaben"
@@ -1838,6 +1839,12 @@ de:
     destroy:
       flash:
         success: "Einladung für %{recipient_name} wurde gelöscht."
+
+  people:
+    addresses_sync:
+      create:
+        scheduled: Der Adressenabgleich wurde erfolgreich gestartet.
+        running: Aktuell ist noch ein Adressenabgleich in Arbeit.
 
   people_filters:
     form:

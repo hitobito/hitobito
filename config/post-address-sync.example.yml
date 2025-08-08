@@ -1,0 +1,7 @@
+post-address-sync:
+  host:
+  path:
+  username:
+  password:
+  query_key:
+  batch_key:

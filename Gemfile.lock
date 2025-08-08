@@ -322,8 +322,6 @@ GEM
       activerecord (>= 7.0, < 8.1)
       activesupport (>= 7.0, < 8.1)
       request_store (~> 1.0)
-    globalize-accessors (0.3.0)
-      globalize (>= 5.0.0)
     graphiti (1.8.2)
       activesupport (>= 5.2)
       concurrent-ruby (>= 1.2, < 2.0)
@@ -851,7 +849,6 @@ DEPENDENCIES
   fivemat
   gibbon (~> 3.4)
   globalize (~> 7.0)
-  globalize-accessors
   graphiti
   graphiti-openapi!
   graphiti-rails (~> 0.1)

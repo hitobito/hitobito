@@ -120,7 +120,6 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   translates :custom_self_registration_title
   translates :privacy_policy_title
-  globalize_accessors
 
   ### CALLBACKS
 

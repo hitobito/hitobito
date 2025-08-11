@@ -111,6 +111,13 @@ describe Import::Person do
 
     subject { person }
 
+    context "default value" do
+      let(:person) { Person.new }
+      let(:data) { {language: "fr"} }
+
+      its("language") { should eq "fr" }
+    end
+
     context "keeps existing attributes" do
       let(:person) do
         Fabricate(:person, email: "foo@example.com", first_name: "Peter", last_name: "Muster")

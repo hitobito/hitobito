@@ -103,7 +103,7 @@ module Import
 
     def assign_attributes
       person.attributes =
-        if override
+        if override || person.new_record?
           attributes
         else
           attributes.select { |key, _v| person.attributes[key].blank? }

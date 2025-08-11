@@ -31,7 +31,7 @@ describe PaymentsController do
       end.to change { invoice.payments.count }.by(1)
 
       expect(flash[:notice]).to be_present
-      expect(response).to redirect_to(group_invoice_path(group, invoice))
+      expect(response).to redirect_to(group_invoice_list_invoice_path(group, list, invoice))
       expect(list.reload.recipients_paid).to eq 1
       expect(list.amount_paid).to eq invoice.total
     end

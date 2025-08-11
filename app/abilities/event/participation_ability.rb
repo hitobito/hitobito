@@ -44,6 +44,10 @@ class Event::ParticipationAbility < AbilityDsl::Base
     permission(:layer_and_below_full).may(:mail_confirmation).in_same_layer_if_active
   end
 
+  on(Event::Guest) do
+    permission(:any).may(:create).if_participating
+  end
+
   def her_own_or_for_leaded_events
     her_own || for_leaded_events
   end
@@ -60,6 +64,10 @@ class Event::ParticipationAbility < AbilityDsl::Base
     her_own &&
       event.applications_cancelable? &&
       (!event.application_closing_at? || event.application_closing_at >= Time.zone.today)
+  end
+
+  def if_participating
+    participating?
   end
 
   def participating?

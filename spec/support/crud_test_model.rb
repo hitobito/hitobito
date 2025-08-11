@@ -6,6 +6,7 @@
 # A dummy model used for general testing.
 class CrudTestModel < ActiveRecord::Base # :nodoc:
   include DatetimeAttribute
+  include Globalized
   datetime_attr :last_seen
 
   belongs_to :companion, class_name: "CrudTestModel"
@@ -17,6 +18,8 @@ class CrudTestModel < ActiveRecord::Base # :nodoc:
   validates :name, presence: true
   validates :birthdate, timeliness: {type: :date, allow_blank: true}
   validates :rating, inclusion: {in: 1..10}
+
+  translates :translated_field
 
   default_scope -> { order("name") }
 
@@ -234,6 +237,8 @@ module CrudTestHelper
 
       t.timestamps null: false
     end
+
+    CrudTestModel.create_translation_table! translated_field: :string
   end
 
   def create_other_crud_test_models_table
@@ -253,7 +258,7 @@ module CrudTestHelper
   # Removes the crud_test_models table from the database.
   def reset_db
     c = ActiveRecord::Base.connection
-    [:crud_test_models, :other_crud_test_models, :crud_test_models_other_crud_test_models].each do |table|
+    [:crud_test_models, :other_crud_test_models, :crud_test_models_other_crud_test_models, :crud_test_model_translations].each do |table|
       if c.data_source_exists?(table)
         begin
           c.drop_table(table)
@@ -309,7 +314,8 @@ module CrudTestHelper
       gets_up_at: Time.zone.local(2000, 1, 1, index, index),
       last_seen: Time.zone.local(2000 + 10 * index, index, index, 10 + index, 20 + index),
       human: index % 2 == 0,
-      remarks: "#{c} #{str(index + 1)} #{str(index + 2)}\n" * (index % 3 + 1))
+      remarks: "#{c} #{str(index + 1)} #{str(index + 2)}\n" * (index % 3 + 1),
+      translated_field: "#{c} #{str(index + 1)} #{str(index + 2)}\n" * (index % 3 + 1))
   end
 
   def create_other(index)

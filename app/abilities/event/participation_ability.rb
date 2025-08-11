@@ -39,6 +39,10 @@ class Event::ParticipationAbility < AbilityDsl::Base
     general(:create).at_least_one_group_not_deleted
   end
 
+  on(Event::Guest) do
+    permission(:any).may(:create).if_participating
+  end
+
   def her_own_or_for_leaded_events
     her_own || for_leaded_events
   end
@@ -55,6 +59,10 @@ class Event::ParticipationAbility < AbilityDsl::Base
     her_own &&
       event.applications_cancelable? &&
       (!event.application_closing_at? || event.application_closing_at >= Time.zone.today)
+  end
+
+  def if_participating
+    participating?
   end
 
   def participating?

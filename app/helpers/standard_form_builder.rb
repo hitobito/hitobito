@@ -468,12 +468,12 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
-  def translated_input_field(attr)
+  def translated_input_field(attr, *)
     content_tag(:div, "data-controller": "form-field-toggle") do
-      input_labeled_with_locale(attr, I18n.locale) +
+      input_for_locale_with_translation_button(attr) +
         content_tag(:div, {class: "hidden", "data-form-field-toggle-target": "toggle"}) do
           other_lang_inputs = I18n.available_locales.excluding(I18n.locale).map do |locale|
-            input_labeled_with_locale(attr, locale)
+            input_for_locale(attr, locale)
           end
           safe_join(other_lang_inputs)
         end
@@ -482,25 +482,18 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   private
 
-  def input_labeled_with_locale(attr, locale)
-    labeled(attr, "#{@object.class.human_attribute_name(attr)} (#{locale.to_s.upcase})") do
-      if locale == I18n.locale
-        input_for_locale_with_translation_button(attr)
-      else
-        input_for_locale(attr, locale)
-      end
-    end
-  end
-
   def input_for_locale_with_translation_button(attr)
     content_tag(:div, class: "d-flex") do
-      input_for_locale(attr, I18n.locale, {class: "me-2"}) +
+      input_for_locale(attr, I18n.locale) +
         action_button(nil, nil, "language", {"data-action": "form-field-toggle#toggle", type: "button", in_button_group: true})
     end
   end
 
   def input_for_locale(attr, locale, args = {})
-    input_field "#{attr}_#{locale}", **args
+    content_tag(:div, class: 'input-group me-2 mb-2') do
+      content_tag(:span, locale.to_s.upcase, class: 'input-group-text') +
+      input_field("#{attr}_#{locale}", **args)
+    end
   end
 
   # Returns true if attr is a non-polymorphic association.

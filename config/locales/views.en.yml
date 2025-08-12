@@ -461,7 +461,7 @@ en:
         title_new: "Register as %{role}"
         title_edit: "Edit registration from %{person}"
         apply: "Register"
-        explain_required_checkmark: "* = Reply mandatory"
+        explain_required_checkmark: "* = Antwort obligatorisch"
         send_email: E-Mail an Teilnehmer/in senden
       application_fields:
         alternative_dates_info: "Please enter more suitable courses."
@@ -752,7 +752,7 @@ en:
     archive:
       flash:
         success: Gruppe wurde erfolgreich archiviert.
-        failure: Es ist ein Fehler beim Archivieren der Gruppe aufgetreten.
+        failure: "Gruppe konnte nicht archiviert werden: %{error}"
 
     deleted_people:
       list:

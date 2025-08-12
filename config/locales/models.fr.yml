@@ -800,7 +800,7 @@ fr:
           declined: Refusé
 
       event/participation:
-        person_id: Personne
+        person_id: Person
         event_id: Événement
         additional_information: Commentaires
         answers: Questions
@@ -871,7 +871,7 @@ fr:
         string_with_origin: '%{kind} (de %{origin})'
         string_with_finish_at: '%{kind} (jusque %{finish_at})'
         string_with_finish_at_and_origin: '%{kind} (jusque %{finish_at}, de %{origin})'
-        open_training_days: Journées de formation ouvertes
+        open_training_days: Jours de formation à effectuer
 
       qualification_kind:
         label: Désignation

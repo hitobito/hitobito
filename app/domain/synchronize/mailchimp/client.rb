@@ -11,6 +11,7 @@ module Synchronize
   module Mailchimp
     class Client
       EXTRACTION_CMD = "tar zxO"
+      MAX_RETRIES = 5
       attr_reader :list_id, :count, :api, :merge_fields, :member_fields
 
       def initialize(mailing_list, member_fields: [], merge_fields: [], count: Settings.mailchimp.batch_size, debug: false)
@@ -166,6 +167,7 @@ module Synchronize
       end
 
       def paged(key, fields, list: [], offset: 0, &block) # rubocop:disable Metrics/MethodLength
+        retries ||= 0
         body = block.call(list).retrieve(params: {count: count, offset: offset}).body.to_h
 
         body[key].each do |entry|
@@ -180,6 +182,10 @@ module Synchronize
         else
           list
         end
+      rescue Gibbon::MailChimpError => e
+        fail e unless e.status_code == 400
+        retries += 1
+        (retries < MAX_RETRIES) ? retry : fail("Max retries exceeded")
       end
 
       def execute_batch(list)
@@ -212,13 +218,21 @@ module Synchronize
           attrs = %w[total_operations finished_operations errored_operations response_body_url]
           body.slice(*attrs).then do |meta|
             log meta
-            body = http_client.get(meta.delete("response_body_url")).body
-            operation_results = JSON.parse(extract_tgz(body)).map do |op|
-              JSON.parse(op["response"]).slice("title", "detail", "status", "errors")
-            end
+            operation_results = extract_operation_results(meta.delete("response_body_url"))
             meta.merge("operation_results" => operation_results).deep_symbolize_keys
           end
         end
+      end
+
+      def extract_operation_results(response_body_url)
+        retries = 0
+        body = RestClient.get(response_body_url)
+        JSON.parse(extract_tgz(body)).map do |op|
+          JSON.parse(op["response"]).slice("title", "detail", "status", "errors")
+        end
+      rescue RestClient::BadRequest
+        retries += 1
+        (retries < MAX_RETRIES) ? retry : fail("Max retries exceeded")
       end
 
       def merge_field_values(person)

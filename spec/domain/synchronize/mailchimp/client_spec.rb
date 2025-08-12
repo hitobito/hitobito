@@ -1,4 +1,4 @@
-#  Copyright (c) 2018-2022, Grünliberale Partei Schweiz. This file is part of
+#  Copyright (c) 2018-2022, Grünliberale Partei Schweiz. This file is part o
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -38,10 +38,14 @@ describe Synchronize::Mailchimp::Client do
   end
 
   def stub_members(*members, total_items: nil, offset: 0)
+    stub_collection("lists/2/members", offset, body: build_members_response_body(*members, total_items:))
+  end
+
+  def build_members_response_body(*members, total_items: nil)
     entries = members.collect do |email, status = "subscribed", tags = [], merge_fields = {}, extra_fields = {}|
       {email_address: email, status: status, tags: tags, merge_fields: merge_fields}.merge(extra_fields)
     end
-    stub_collection("lists/2/members", offset, body: {members: entries, total_items: total_items || entries.count})
+    {members: entries, total_items: total_items || entries.count}
   end
 
   def stub_segments(*segments, total_items: nil, offset: 0)
@@ -214,6 +218,46 @@ describe Synchronize::Mailchimp::Client do
         users = subject.collect { |e| e[:email_address].split("@").first }
         expect(users).to eq %w[a b c d e]
       end
+
+      it "succeeds with retries" do
+        stub_members(%w[a@example.com], %w[b@example.com], total_items: 5)
+        stub_members(%w[c@example.com], %w[d@example.com], total_items: 5, offset: 2)
+        stub_request(:get, "https://us12.api.mailchimp.com/3.0/lists/2/members?count=2&offset=4")
+          .and_return(
+            {status: 400},
+            {status: 400},
+            {status: 200, body: build_members_response_body(%w[e@example.com]).to_json}
+          )
+
+        expect(subject).to have(5).items
+
+        users = subject.collect { |e| e[:email_address].split("@").first }
+        expect(users).to eq %w[a b c d e]
+      end
+
+      it "fails if max retries are exceeded" do
+        stub_members(%w[a@example.com], %w[b@example.com], total_items: 5)
+        stub_members(%w[c@example.com], %w[d@example.com], total_items: 5, offset: 2)
+        stub_request(:get, "https://us12.api.mailchimp.com/3.0/lists/2/members?count=2&offset=4")
+          .and_return(
+            {status: 400},
+            {status: 400},
+            {status: 400},
+            {status: 400},
+            {status: 400}
+          )
+        expect { client.fetch_members }.to raise_error(RuntimeError, /Max retries exceeded/)
+      end
+
+      it "fails for other than 400 status codes" do
+        stub_members(%w[a@example.com], %w[b@example.com], total_items: 5)
+        stub_members(%w[c@example.com], %w[d@example.com], total_items: 5, offset: 2)
+        stub_request(:get, "https://us12.api.mailchimp.com/3.0/lists/2/members?count=2&offset=4")
+          .and_return(
+            {status: 401}
+          )
+        expect { client.fetch_members }.to raise_error(Gibbon::MailChimpError)
+      end
     end
   end
 
@@ -266,6 +310,27 @@ describe Synchronize::Mailchimp::Client do
     end
 
     it "succeeds if status changes to finished and fetches batch result tgz" do
+      stub_request(:post, "https://us12.api.mailchimp.com/3.0/batches")
+        .to_return(status: 200, body: {id: 1}.to_json)
+
+      stub_request(:get, "https://us12.api.mailchimp.com/3.0/batches/1")
+        .to_return(status: 200, body: {id: 1, status: "pending"}.to_json)
+        .to_return(status: 200, body: {id: 1, status: "finished", response_body_url: "https://us12.api.mailchimp.com/3.0/batches/1/result"}.to_json)
+
+      stub_request(:get, "https://us12.api.mailchimp.com/3.0/batches/1/result")
+        .to_return({status: 400}, {status: 400}, {status: 200, body: create_tgz([response: {title: :subscriber, detail: "okay", status: 200}.to_json])})
+      expect(client).to receive(:sleep).twice
+      payload, response = client.create_segments(%w[a])
+      expect(response[:operation_results][0][:title]).to eq "subscriber"
+      expect(response[:operation_results][0][:detail]).to eq "okay"
+      expect(response[:operation_results][0][:status]).to eq 200
+
+      expect(payload[0][:method]).to eq "POST"
+      expect(payload[0][:path]).to eq "lists/2/segments"
+      expect(payload[0][:body]).to eq ({name: "a", static_segment: []}).to_json
+    end
+
+    it "retries fetching of tgz if it fails" do
       stub_request(:post, "https://us12.api.mailchimp.com/3.0/batches")
         .to_return(status: 200, body: {id: 1}.to_json)
 

@@ -7,6 +7,7 @@ ARG RUBY_VERSION="3.2"
 ARG BUNDLER_VERSION="2.5.22"
 ARG NODEJS_VERSION="16"
 ARG YARN_VERSION="1.22.19"
+ARG DEBIAN_VERSION="bookworm"
 
 # Packages
 ARG BUILD_PACKAGES="nodejs git build-essential libpq-dev libvips42"
@@ -88,7 +89,7 @@ ARG TZ="Europe/Zurich"
 #          Build Stage          #
 #################################
 
-FROM ruby:${RUBY_VERSION} AS build
+FROM ruby:${RUBY_VERSION}-${DEBIAN_VERSION} AS build
 
 # arguments for steps
 ARG HOME
@@ -170,7 +171,7 @@ RUN rm -rf vendor/cache/ .git spec/ node_modules/ .npm/
 #################################
 
 # This image will be replaced by Openshift
-FROM ruby:${RUBY_VERSION}-slim AS app
+FROM ruby:${RUBY_VERSION}-slim-${DEBIAN_VERSION} AS app
 
 # arguments for steps
 ARG RUN_PACKAGES

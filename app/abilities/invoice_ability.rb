@@ -43,7 +43,7 @@ class InvoiceAbility < AbilityDsl::Base
   end
 
   def any_finance_group
-    user_context.permission_layer_ids(:finance).any?
+    finance_layer_ids.any?
   end
 
   def in_layer(group = subject.group)

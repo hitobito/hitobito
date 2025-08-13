@@ -21,10 +21,12 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   self.remember_params += [:filter]
 
   self.sort_mappings = {last_name: {
-                          order: "CASE event_participations.participant_type WHEN 'Person' THEN people.last_name WHEN 'Event::Guest' THEN event_guests.last_name ELSE '' END AS last_name_order_statement"
+                          order: "CASE event_participations.participant_type WHEN 'Person' THEN people.last_name WHEN 'Event::Guest' THEN event_guests.last_name ELSE '' END AS last_name_order_statement",
+                          order_alias: "last_name_order_statement"
                         },
                          first_name: {
-                           order: "CASE event_participations.participant_type WHEN 'Person' THEN people.first_name WHEN 'Event::Guest' THEN event_guests.first_name ELSE '' END AS first_name_order_statement"
+                           order: "CASE event_participations.participant_type WHEN 'Person' THEN people.first_name WHEN 'Event::Guest' THEN event_guests.first_name ELSE '' END AS first_name_order_statement",
+                           order_alias: "first_name_order_statement"
                          },
                          # for sorting roles we dont want to explicitly add a join_table statement when default_sort is configured to role
                          # In case of default_sort being role, order_by_role is already called in the participation_filter (so the joined table is in the query already)
@@ -38,16 +40,20 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
                            end
                          },
                          nickname: {
-                           order: "CASE event_participations.participant_type WHEN 'Person' THEN people.nickname WHEN 'Event::Guest' THEN event_guests.nickname ELSE '' END AS nickname_order_statement"
+                           order: "CASE event_participations.participant_type WHEN 'Person' THEN people.nickname WHEN 'Event::Guest' THEN event_guests.nickname ELSE '' END AS nickname_order_statement",
+                           order_alias: "nickname_order_statement"
                          },
                          zip_code: {
-                           order: "CASE event_participations.participant_type WHEN 'Person' THEN people.zip_code WHEN 'Event::Guest' THEN event_guests.zip_code ELSE '' END AS zip_code_order_statement"
+                           order: "CASE event_participations.participant_type WHEN 'Person' THEN people.zip_code WHEN 'Event::Guest' THEN event_guests.zip_code ELSE '' END AS zip_code_order_statement",
+                           order_alias: "zip_code_order_statement"
                          },
                          town: {
-                           order: "CASE event_participations.participant_type WHEN 'Person' THEN people.town WHEN 'Event::Guest' THEN event_guests.town ELSE '' END AS town_order_statement"
+                           order: "CASE event_participations.participant_type WHEN 'Person' THEN people.town WHEN 'Event::Guest' THEN event_guests.town ELSE '' END AS town_order_statement",
+                           order_alias: "town_order_statement"
                          },
                          birthday: {
-                           order: "CASE event_participations.participant_type WHEN 'Person' THEN people.birthday WHEN 'Event::Guest' THEN event_guests.birthday ELSE NULL END AS birthday_order_statement"
+                           order: "CASE event_participations.participant_type WHEN 'Person' THEN people.birthday WHEN 'Event::Guest' THEN event_guests.birthday ELSE NULL END AS birthday_order_statement",
+                           order_alias: "birthday_order_statement"
                          }}
 
   decorates :group, :event, :participation, :participations, :alternatives

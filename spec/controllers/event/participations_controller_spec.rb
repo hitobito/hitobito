@@ -365,6 +365,36 @@ describe Event::ParticipationsController do
       end
     end
 
+    context "guests" do
+      render_views
+
+      let(:event) do
+        event = Fabricate(:event, groups: [group])
+        event.dates << Fabricate(:event_date, event: event)
+        event.guest_limit = 1
+        event.save!
+        event
+      end
+
+      context "allowed" do
+        before { event.update(guest_limit: 1) }
+
+        it "displays a button to add a guest" do
+          get :new, params: {group_id: group.id, event_id: event.id}
+          expect(response.body).to have_content("Anmelden und Gast hinzufügen (max. 1)")
+        end
+      end
+
+      context "not allowed" do
+        before { event.update(guest_limit: 0) }
+
+        it "does not display button to add a guest" do
+          get :new, params: {group_id: group.id, event_id: event.id}
+          expect(response.body).not_to have_content("Gast hinzufügen")
+        end
+      end
+    end
+
     context "unauthenticated" do
       before { sign_out(user) }
 
@@ -612,6 +642,16 @@ describe Event::ParticipationsController do
 
         expect(assigns(:participation)).to be_valid
         expect(assigns(:participation).additional_information).to eq("Vegetarier😝")
+      end
+
+      context "when the add_another guest button is clicked" do
+        it "persists the participation and redirects to the guest form" do
+          post :create, params: {group_id: group.id, event_id: course.id, event_participation: {}, add_another: true}
+          participation = assigns(:participation)
+          expect(participation).to be_valid
+          expect(participation).to be_persisted
+          is_expected.to redirect_to new_group_event_guest_path(group, course, participation)
+        end
       end
     end
 

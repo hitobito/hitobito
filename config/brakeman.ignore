@@ -285,6 +285,29 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
+      "fingerprint": "ded82ee58355274099c6c8c85e7b5a33900d1c9ace0eccb8227dadc93649ff02",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/domain/event/participation_filter.rb",
+      "line": 68,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Arel.sql(\"CASE event_participations.participant_type\\n  WHEN 'Person' THEN #{Person.order_by_name_statement}\\n  WHEN 'Event::Guest' THEN #{Event::Guest.order_by_name_statement}\\n  ELSE ''\\nEND\\n\".squish)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Event::ParticipationFilter",
+        "method": "polymorphic_order_by_name_statement"
+      },
+      "user_input": "Person.order_by_name_statement",
+      "confidence": "High",
+      "cwe_id": [
+        89
+      ],
+      "note": "No SQL Injection possible here, because no user data is handled"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
       "fingerprint": "f01681cc519400d5ecf1a9daa5fff0deceb0d7540d558c889452271597a7436f",
       "check_name": "SQL",
       "message": "Possible SQL injection",

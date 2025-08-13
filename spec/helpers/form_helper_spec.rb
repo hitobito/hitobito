@@ -10,6 +10,7 @@ describe FormHelper do
   include I18nHelper
   include TableHelper
   include UtilityHelper
+  include ColumnHelper
   include LayoutHelper
   include FormatHelper
   include CrudTestHelper

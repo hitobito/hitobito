@@ -21,6 +21,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 module GlobalizeAccessors
+  include ColumnHelper
   def globalize_accessors(options = {})
     options.reverse_merge!(locales: I18n.available_locales, attributes: translated_attribute_names)
     class_attribute :globalize_locales, :globalize_attribute_names, instance_writer: false
@@ -48,6 +49,10 @@ module GlobalizeAccessors
   def define_getter(attr_name, locale)
     define_method localized_attr_name_for(attr_name, locale) do
       globalize.stash.contains?(locale, attr_name) ? globalize.send(:fetch_stash, locale, attr_name) : globalize.send(:fetch_attribute, locale, attr_name)
+    end
+    attr_column_type = column_type(self.class, attr_name)
+    define_method "#{localized_attr_name_for(attr_name, locale)}_type" do
+      attr_column_type
     end
   end
 

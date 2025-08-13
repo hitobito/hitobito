@@ -9,6 +9,7 @@ describe TableHelper do
   include LayoutHelper
   include I18nHelper
   include UtilityHelper
+  include ColumnHelper
   include ActionHelper
   include FormatHelper
   include CrudTestHelper

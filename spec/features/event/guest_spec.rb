@@ -35,7 +35,7 @@ describe :event_guest, js: true do
     expect(page).to have_content("Bemerkungen")
     expect(page).to have_content("Anmelden und weiteren Gast hinzufügen (max. 2)")
     fill_in "Bemerkungen", with: "foobar"
-    click_button("Absenden")
+    click_button("Gast anmelden")
 
     expect(page).to have_content("John Johnson wurde erfolgreich als Gast hinzugefügt.")
   end

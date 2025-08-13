@@ -13,7 +13,13 @@ export default class extends Controller {
         const id_components = translatedField.id.split('_');
         return id_components[id_components.length - 1].toUpperCase();
       }
-    }).filter(v => v !== undefined)
-    document.getElementById('translated-fields').textContent = `+ ${translatedLanguages.join(', ')}`
+    }).filter(v => v)
+
+    const translatedFieldsDisplay = document.getElementById('translated-fields');
+    if(translatedLanguages.length > 0) {
+      translatedFieldsDisplay.textContent = `+ ${translatedLanguages.join(', ')}`;
+    } else {
+      translatedFieldsDisplay.textContent = '-';
+    }
   }
 }

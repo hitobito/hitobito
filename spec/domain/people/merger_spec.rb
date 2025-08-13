@@ -333,9 +333,9 @@ describe People::Merger do
     end
 
     it "merges participations" do
-      target_participation_1 = Fabricate(:event_participation, person: person)
-      source_participation_1 = Fabricate(:event_participation, person: duplicate)
-      source_participation_2 = Fabricate(:event_participation, person: duplicate)
+      target_participation_1 = Fabricate(:event_participation, participant: person)
+      source_participation_1 = Fabricate(:event_participation, participant: duplicate)
+      source_participation_2 = Fabricate(:event_participation, participant: duplicate)
 
       expect do
         merger.merge!
@@ -350,8 +350,8 @@ describe People::Merger do
     end
 
     it "does not merge extra participation when target already has participation in certain event" do
-      Fabricate(:event_participation, event: Event.first, person: person)
-      Fabricate(:event_participation, event: Event.first, person: duplicate)
+      Fabricate(:event_participation, event: Event.first, participant: person)
+      Fabricate(:event_participation, event: Event.first, participant: duplicate)
 
       expect do
         merger.merge!

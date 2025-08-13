@@ -97,7 +97,7 @@ describe Event::ParticipantAssigner do
 
       context "on existing participation" do
         it "raises error" do
-          Fabricate(:event_participation, event: event, person: participation.person, application: Fabricate(:event_application))
+          Fabricate(:event_participation, event: event, participant: participation.person, application: Fabricate(:event_application))
 
           expect { subject.add_participant }.to raise_error(ActiveRecord::RecordNotUnique)
         end
@@ -192,8 +192,7 @@ describe Event::ParticipantAssigner do
         before do
           participation.application.update!(waiting_list: true, priority_2: nil)
 
-          p = Fabricate(:event_participation, event: event2, person: participation.person,
-            active: false)
+          p = Fabricate(:event_participation, event: event2, participant: participation.person, active: false)
           p.create_application!(priority_1: event2)
           Fabricate(course.participant_types.first.name.to_sym, participation: p)
           p.save!

@@ -48,10 +48,10 @@ module Export::Tabular::People
       @people_ids ||= pluck_ids_from_list("people.id")
     end
 
-    def pluck_ids_from_list(id_with_optional_table)
-      case @list
-      when Array then @list.pluck(id_with_optional_table.to_s.split(".").last)
-      when ActiveRecord::Relation then @list.unscope(:order).unscope(:select).pluck(id_with_optional_table)
+    def pluck_ids_from_list(id_with_optional_table, list = @list)
+      case list
+      when Array then list.pluck(id_with_optional_table.to_s.split(".").last)
+      when ActiveRecord::Relation then list.unscope(:order).unscope(:select).pluck(id_with_optional_table)
       end
     end
   end

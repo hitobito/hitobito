@@ -48,17 +48,21 @@ class Event::ApplicationMarketController < ApplicationController
 
   def load_participants
     event.participations_for(*event.participant_types)
-      .includes(:application, person: [:primary_group])
+      .includes(:application)
       .select(*Event::Participation.column_names)
   end
 
   def load_applications
-    Event::Participation
-      .includes(:application, :event, person: [:primary_group])
+    applications = Event::Participation
+      .includes(:application, :event)
       .references(:application)
       .where(filter_applications)
       .merge(Event::Participation.pending)
       .distinct
+
+    Event::Participation::PreloadParticipations.preload(applications)
+
+    applications
   end
 
   def sort_and_decorate(applications)

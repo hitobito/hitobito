@@ -466,13 +466,14 @@ de:
       actions_approval:
         approve_button: "Freigeben"
         reject_button: "Ablehnen"
+      fields:
+        send_email: E-Mail an Teilnehmer/in senden
+        registration_details: Anmeldeangaben
+        administrative_information: Administrationsangaben
       form:
         title_new: "Anmeldung als %{role}"
         title_edit: "Anmeldung von %{person} bearbeiten"
         apply: "Anmelden"
-        send_email: E-Mail an Teilnehmer/in senden
-        registration_details: Anmeldeangaben
-        administrative_information: Administrationsangaben
       new:
         add_guests: "Anmelden und Gast hinzufügen (max. %{limit})"
       application_fields:
@@ -2264,5 +2265,11 @@ de:
 
   wizards:
     steps:
+      new_user_form:
+        next_button: Registrieren
+      new_event_guest_contact_data_form:
+        next_button: Weiter
+      new_event_guest_participation_form:
+        next_button: Gast anmelden
       new_event_guest_contact_data_form_title: Kontaktdaten des Gasts
       new_event_guest_participation_form_title: Gast anmelden

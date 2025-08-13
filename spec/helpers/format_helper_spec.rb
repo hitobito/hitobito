@@ -8,6 +8,7 @@ require "spec_helper"
 describe FormatHelper do
   include I18nHelper
   include UtilityHelper
+  include ColumnHelper
   include CrudTestHelper
   include NestedForm::ViewHelper
 

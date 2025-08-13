@@ -12,6 +12,7 @@ describe "StandardFormBuilder" do
   include I18nHelper
   include FormHelper
   include UtilityHelper
+  include ColumnHelper
   include CrudTestHelper
   include LayoutHelper
   include HelpTextsHelper

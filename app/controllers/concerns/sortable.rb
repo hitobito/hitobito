@@ -59,8 +59,9 @@ module Sortable
           .reorder(Arel.sql(sort_expression.gsub(TABLE_WITH_COLUMN, '\1')))
       else
         subquery = entries.select(sort_expression_attrs).joins(join_tables).unscope(:order).distinct_on(:id)
+        order_statement = order_alias ? "#{order_alias} #{sort_dir} NULLS LAST" : Arel.sql(sort_expression.gsub(TABLE_WITH_COLUMN, '\1'))
         model_class.select("*").from(subquery, :subquery)
-          .reorder(Arel.sql(sort_expression.gsub(TABLE_WITH_COLUMN, '\1')))
+          .reorder(order_statement)
       end
     end
 
@@ -78,6 +79,10 @@ module Sortable
     def join_tables
       sort_mappings_with_indifferent_access[params[:sort]].is_a?(Hash) ?
       sort_mappings_with_indifferent_access[params[:sort]][:joins] : nil
+    end
+
+    def order_alias
+      sort_mappings_with_indifferent_access[params[:sort]][:order_alias]
     end
 
     # Return the sort expression to be used in the list query.

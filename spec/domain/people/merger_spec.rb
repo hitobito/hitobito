@@ -507,6 +507,57 @@ describe People::Merger do
       expect(Person.where(id: duplicate.id)).not_to exist
     end
 
+    context "households" do
+      context "when only source has household" do
+        it "adds target to source household" do
+          household = @source.household
+          household.add(Fabricate(:person_with_address_and_phone))
+          household.save!
+          expect(@target.household_key).to be_nil
+
+          expect do
+            merger.merge!
+          end.to change(Person, :count).by(-1)
+
+          expect(@target.household_key).to eq household.household_key
+          expect(@target.address).to eq household.reference_person.address
+        end
+      end
+
+      context "when both have households" do
+        it "removes source from its household" do
+          source_household = @source.household
+          source_household.add(Fabricate(:person_with_address_and_phone))
+          source_household.save!
+
+          target_household = @target.household
+          target_household.add(Fabricate(:person_with_address_and_phone))
+          target_household.save!
+
+          expect do
+            merger.merge!
+          end.to change(Person, :count).by(-1)
+
+          # "2 people household" was deleted, because one person was removed.
+          expect(Person.where(household_key: source_household.household_key).count).to eq 0
+        end
+      end
+
+      context "when neither has household" do
+        it "does not touches households" do
+          expect(@source.household_key).to be_nil
+          expect(@target.household_key).to be_nil
+
+          expect do
+            merger.merge!
+          end.to change(Person, :count).by(-1)
+
+          expect(@source.household_key).to be_nil
+          expect(@target.household_key).to be_nil
+        end
+      end
+    end
+
     xit "merges pictures"
   end
 end

@@ -42,6 +42,7 @@ module People
       merge_association(:add_requests, :person, unique_attr: :body_id)
       merge_association(:taggings, :taggable, unique_attr: :tag_id)
       merge_qualifications
+      merge_household
     end
 
     def merge_contactables(assoc, key, match_label: false)
@@ -85,6 +86,16 @@ module People
           .pluck(:qualification_kind_id).include?(qualification.qualification_kind_id)
 
         qualification.update!(person: @target)
+      end
+    end
+
+    def merge_household
+      return if @source.household.blank?
+
+      if @target.household.present?
+        @source.household.remove(@source).save!
+      else
+        @source.household.add(@target).save!
       end
     end
 

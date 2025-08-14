@@ -21,13 +21,10 @@ class PaymentsController < CrudController
     assign_attributes
 
     Payment.transaction do
+      invoice = parents.last
       if entry.save
-        if parent.invoice_list
-          parent.invoice_list.update_paid
-          redirect_to(group_invoice_list_invoice_path(parents.first, parent.invoice_list, parents.last), notice: flash_message)
-        else
-          redirect_to(group_invoice_path(*parents), notice: flash_message)
-        end
+        invoice.invoice_list&.update_paid
+        redirect_to(invoice.decorate.show_path, notice: flash_message)
       else
         flash[:payment] = permitted_params.to_h
         redirect_to(group_invoice_path(*parents))

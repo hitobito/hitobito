@@ -6,6 +6,16 @@
 class InvoiceDecorator < ApplicationDecorator
   decorates :invoice
 
+  delegate :group_invoice_list_invoice_path, :group_invoice_path, to: :helpers
+
+  def show_path
+    if invoice_list
+      group_invoice_list_invoice_path(group, invoice_list, model)
+    else
+      group_invoice_path(group, model)
+    end
+  end
+
   def cost
     format_currency(calculated[:cost])
   end

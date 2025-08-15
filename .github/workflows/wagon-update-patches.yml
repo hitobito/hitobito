@@ -94,3 +94,4 @@ jobs:
         with:
           file_pattern: ".patches.yml"
           repository: ${{ inputs.wagon_repository }}
+        continue-on-error: true

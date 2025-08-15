@@ -24,6 +24,14 @@ export default class extends Controller {
     }
   }
 
+  clear() {
+    const elem = this.element.querySelector("[data-action='autosubmit#save']");
+    if(elem) {
+      elem.value = "";
+      this.element.requestSubmit();
+    }
+  }
+
   save(event) {
     const submit = document.querySelector("input[name=autosubmit]");
     if (submit) {

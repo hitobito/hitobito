@@ -5,39 +5,35 @@
 
 - title @event.to_s
 = content_for(:filter) do
-  = form_tag('', { method: :get, class: 'form form-search form-inline me-2 float-start', role: 'search', remote: true, data: { spin: true } }) do
-    = search_field_tag :q, params[:q], class: 'form-control form-control-sm search-query', placeholder: t('global.search.placeholder_person'), data: { submit: true }
-    = hidden_field_tag :returning, true
-    = hidden_field_tag :page, 1
+  = render 'shared/search_form', class: 'me-2'
   = FilterNavigation::Event::Participations.new(self, @group, @event, params[:filter], params[:q]).to_s
 
-- params[:q] = nil # Reset param so quicksearch filter does not get populated
+= turbo_frame_tag :search_results do
+  .pagination-bar
+    = paginate(entries, **(@pagination_options || {}))
 
-.pagination-bar
+    .pagination-info
+
+    - if @participations.present?
+      = Dropdown::TableDisplays.new(self, @participations).to_s
+  - if @person_add_requests.present?
+    = render 'person/add_requests/body_list'
+
+  = crud_table do |t|
+    - t.col('') do |p|
+      .profil
+        = image_tag(upload_url(p.person, :picture, variant: :thumb), size: '32x32')
+    - sortable_grouped_person_attr(t, last_name: true, first_name: true, nickname: true) do |p|
+      %strong
+        -# Any person listed can be shown
+        = link_to(p.to_s(:list), group_event_participation_path(@group, @event, p))
+        = p.person_additional_information
+    - t.col(event_participations_roles_header(t))                  { |p| event_participations_roles_content(p) }
+    - t.col(Person.human_attribute_name(:emails))                  { |p| p.all_emails(cannot?(:show_details, p)) }
+    - t.col(PhoneNumber.model_name.human(count: 2))                { |p| p.all_phone_numbers(cannot?(:show_details, p)) }
+    - sortable_grouped_person_attr(t, address: false, zip_code: true, town: true) { |p| p.complete_address }
+
+    - event_participation_table_options(t, event: @event, group: @group)
+    - render_table_display_columns(Event::Participation, t)
+
   = paginate(entries, **(@pagination_options || {}))
-
-  .pagination-info
-
-  - if @participations.present?
-    = Dropdown::TableDisplays.new(self, @participations).to_s
-- if @person_add_requests.present?
-  = render 'person/add_requests/body_list'
-
-= crud_table do |t|
-  - t.col('') do |p|
-    .profil
-      = image_tag(upload_url(p.person, :picture, variant: :thumb), size: '32x32')
-  - sortable_grouped_person_attr(t, last_name: true, first_name: true, nickname: true) do |p|
-    %strong
-      -# Any person listed can be shown
-      = link_to(p.to_s(:list), group_event_participation_path(@group, @event, p))
-      = p.person_additional_information
-  - t.col(event_participations_roles_header(t))                  { |p| event_participations_roles_content(p) }
-  - t.col(Person.human_attribute_name(:emails))                  { |p| p.all_emails(cannot?(:show_details, p)) }
-  - t.col(PhoneNumber.model_name.human(count: 2))                { |p| p.all_phone_numbers(cannot?(:show_details, p)) }
-  - sortable_grouped_person_attr(t, address: false, zip_code: true, town: true) { |p| p.complete_address }
-
-  - event_participation_table_options(t, event: @event, group: @group)
-  - render_table_display_columns(Event::Participation, t)
-
-= paginate(entries, **(@pagination_options || {}))

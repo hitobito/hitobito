@@ -130,7 +130,8 @@ describe Mails::ImapMailsController do
 
       expect(mails.count).to eq(0)
       expect(flash[:alert])
-        .to eq(["Verbindung zum Mailserver nicht möglich, bitte versuche es später erneut.", "Cannot assign requested address"])
+        .to eq(["Verbindung zum Mailserver nicht möglich, bitte versuche es später erneut.",
+          "Cannot assign requested address"])
     end
 
     it "displays flash if imap server dns unresolvable" do
@@ -158,7 +159,8 @@ describe Mails::ImapMailsController do
       # mock imap_connector
       expect(controller).to receive(:imap).and_return(imap_connector)
 
-      expect(imap_connector).to receive(:fetch_mails).with(:inbox).and_raise(Net::IMAP::NoResponseError, ImapErrorDataDouble)
+      expect(imap_connector).to receive(:fetch_mails).with(:inbox).and_raise(Net::IMAP::NoResponseError,
+        ImapErrorDataDouble)
 
       get :index, params: {mailbox: "inbox"}
 

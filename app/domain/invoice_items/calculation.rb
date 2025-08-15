@@ -13,7 +13,9 @@ module InvoiceItems
 
     def calculate_total_cost_and_vat(invoice_items)
       [:total, :cost, :vat].index_with do |field|
+        # rubocop:todo Layout/LineLength
         self.class.round(invoice_items.reject(&:frozen?).map(&field).compact.sum(BigDecimal("0.00")))
+        # rubocop:enable Layout/LineLength
       end
     end
   end

@@ -213,8 +213,12 @@ describe Export::Pdf::Messages::Letter do
   end
 
   context "household addresses" do
-    let(:housemate1) { Fabricate(:person_with_address, first_name: "Anton", last_name: "Abraham", country: "DE", zip_code: "12345") }
-    let(:housemate2) { Fabricate(:person_with_address, first_name: "Zora", last_name: "Zaugg", country: "DE", zip_code: "12345") }
+    let(:housemate1) {
+      Fabricate(:person_with_address, first_name: "Anton", last_name: "Abraham", country: "DE", zip_code: "12345")
+    }
+    let(:housemate2) {
+      Fabricate(:person_with_address, first_name: "Zora", last_name: "Zaugg", country: "DE", zip_code: "12345")
+    }
     let(:other_housemate) do
       Fabricate(:person_with_address, first_name: "Altra", last_name: "Mates", country: "DE", zip_code: "12345")
     end

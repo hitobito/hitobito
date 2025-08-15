@@ -8,7 +8,7 @@
 class Address::CheckValidityJob < RecurringJob
   run_every 1.day
 
-  def perform_internal
+  def perform_internal # rubocop:todo Metrics/CyclomaticComplexity
     return unless addresses_imported?
 
     invalid_people = Contactable::AddressValidator.new.validate_people

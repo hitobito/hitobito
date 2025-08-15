@@ -274,7 +274,7 @@ describe MountedAttr do
   end
 
   context "validations" do
-    def validates_presence(value, attrs, nullable: true)
+    def validates_presence(value, attrs, nullable: true) # rubocop:todo Metrics/AbcSize
       attrs.each { |attr| entry.send(:"#{attr}=", value) }
       entry.validate
 
@@ -387,12 +387,24 @@ describe MountedAttr do
 
     context "decimal attribute" do
       it "it allows validating percision and scale" do
-        expect(validates_precision_and_scale(2.234, :decimal_with_precision_10_and_scale_2)).to eq ["ist nicht gültig, maximal 10 Zeichen erlaubt mit 2 Nachkommastellen"]
-        expect(validates_precision_and_scale(12345678912, :decimal_with_precision_10_and_scale_2)).to eq ["ist nicht gültig, maximal 10 Zeichen erlaubt mit 2 Nachkommastellen"]
+        expect(validates_precision_and_scale(2.234,
+          # rubocop:todo Layout/LineLength
+          :decimal_with_precision_10_and_scale_2)).to eq ["ist nicht gültig, maximal 10 Zeichen erlaubt mit 2 Nachkommastellen"]
+        # rubocop:enable Layout/LineLength
+        expect(validates_precision_and_scale(12345678912,
+          # rubocop:todo Layout/LineLength
+          :decimal_with_precision_10_and_scale_2)).to eq ["ist nicht gültig, maximal 10 Zeichen erlaubt mit 2 Nachkommastellen"]
+        # rubocop:enable Layout/LineLength
         expect(validates_precision_and_scale(2, :decimal_with_precision_10_and_scale_2)).to be_empty
         expect(validates_precision_and_scale(2.22, :decimal_with_precision_10_and_scale_2)).to be_empty
-        expect(validates_precision_and_scale(2.22, :decimal_with_precision_6_and_scale_1)).to eq ["ist nicht gültig, maximal 6 Zeichen erlaubt mit 1 Nachkommastellen"]
-        expect(validates_precision_and_scale(1234567, :decimal_with_precision_6_and_scale_1)).to eq ["ist nicht gültig, maximal 6 Zeichen erlaubt mit 1 Nachkommastellen"]
+        expect(validates_precision_and_scale(2.22,
+          # rubocop:todo Layout/LineLength
+          :decimal_with_precision_6_and_scale_1)).to eq ["ist nicht gültig, maximal 6 Zeichen erlaubt mit 1 Nachkommastellen"]
+        # rubocop:enable Layout/LineLength
+        expect(validates_precision_and_scale(1234567,
+          # rubocop:todo Layout/LineLength
+          :decimal_with_precision_6_and_scale_1)).to eq ["ist nicht gültig, maximal 6 Zeichen erlaubt mit 1 Nachkommastellen"]
+        # rubocop:enable Layout/LineLength
         expect(validates_precision_and_scale(2, :decimal_with_precision_6_and_scale_1)).to be_empty
         expect(validates_precision_and_scale(2.2, :decimal_with_precision_6_and_scale_1)).to be_empty
       end
@@ -400,7 +412,7 @@ describe MountedAttr do
   end
 
   context "persistance" do
-    def expect_persisted(value, attrs)
+    def expect_persisted(value, attrs) # rubocop:todo Metrics/AbcSize
       # set all attributes to some valid value so we can save the record
       string_attrs.each { |attr| entry.send(:"#{attr}=", "some-valid-string") }
       integer_attrs.each { |attr| entry.send(:"#{attr}=", 12_345) }

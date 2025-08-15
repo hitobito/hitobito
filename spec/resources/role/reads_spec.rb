@@ -46,7 +46,8 @@ describe RoleResource, type: :resource do
         render
         data = jsonapi_data[0]
 
-        expect(data.attributes.symbolize_keys.keys).to match_array [:id, :jsonapi_type] + serialized_attrs + computed_attrs.keys
+        expect(data.attributes.symbolize_keys.keys).to match_array [:id,
+          :jsonapi_type] + serialized_attrs + computed_attrs.keys
 
         expect(data.id).to eq(role.id)
         expect(data.jsonapi_type).to eq("roles")

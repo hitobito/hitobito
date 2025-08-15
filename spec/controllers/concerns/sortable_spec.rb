@@ -71,7 +71,9 @@ describe Sortable, type: :controller do
 
       controller.singleton_class.class_eval do
         define_method(:list_entries) do
+          # rubocop:todo Layout/LineLength
           sort_by_sort_expression(Person.select("MAX(people.id) AS id").group(:id)) # group query before passing it into sort_by_sort_expression
+          # rubocop:enable Layout/LineLength
         end
       end
     end

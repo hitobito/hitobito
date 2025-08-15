@@ -27,7 +27,9 @@
 #
 # Indexes
 #
+# rubocop:todo Layout/LineLength
 #  idx_on_contactable_id_contactable_type_invoices_45d4363dd7  (contactable_id,contactable_type,invoices) UNIQUE WHERE (invoices = true)
+# rubocop:enable Layout/LineLength
 #  idx_on_contactable_id_contactable_type_label_53043e4f10     (contactable_id,contactable_type,label) UNIQUE
 #  index_additional_addresses_on_contactable                   (contactable_type,contactable_id)
 #
@@ -71,7 +73,8 @@ describe AdditionalAddress do
 
     it "may not use invoices flag twice" do
       address.update!(invoices: true)
-      person.additional_addresses.build(Fabricate.build(:additional_address, label: "Foobar", invoices: true).attributes)
+      person.additional_addresses.build(Fabricate.build(:additional_address, label: "Foobar",
+        invoices: true).attributes)
       expect(person).not_to be_valid
       expect(person.errors.full_messages).to eq ["Es kann nur eine Adresse als Rechnungsadresse ausgewählt werden."]
     end
@@ -91,12 +94,14 @@ describe AdditionalAddress do
     end
 
     it "overrides existing name if true" do
-      address = Fabricate.build(:additional_address, contactable: person, name: "foo", uses_contactable_name: true).tap(&:valid?)
+      address = Fabricate.build(:additional_address, contactable: person, name: "foo",
+        uses_contactable_name: true).tap(&:valid?)
       expect(address.name).to eq "Top Leader"
     end
 
     it "uses name as given if false" do
-      address = Fabricate.build(:additional_address, contactable: person, name: "foo", uses_contactable_name: false).tap(&:valid?)
+      address = Fabricate.build(:additional_address, contactable: person, name: "foo",
+        uses_contactable_name: false).tap(&:valid?)
       expect(address.name).to eq "foo"
     end
   end

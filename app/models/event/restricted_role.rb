@@ -14,7 +14,8 @@ module Event::RestrictedRole
   private
 
   def build_restricted_role(role, id)
-    role.participation = participations.where(participant_id: id, participant_type: Person.sti_name).first_or_create
+    role.participation = participations.where(participant_id: id,
+      participant_type: Person.sti_name).first_or_create
     role.participation.init_answers
     role
   end

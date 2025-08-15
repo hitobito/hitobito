@@ -43,11 +43,15 @@ class Event::Participation < ActiveRecord::Base
   belongs_to :participant, polymorphic: true
 
   scope :with_person_participants, -> {
+    # rubocop:todo Layout/LineLength
     joins("LEFT JOIN people ON event_participations.participant_type = 'Person' AND event_participations.participant_id = people.id")
+    # rubocop:enable Layout/LineLength
   }
 
   scope :with_guest_participants, -> {
+    # rubocop:todo Layout/LineLength
     joins("LEFT JOIN event_guests ON event_participations.participant_type = 'Event::Guest' AND event_participations.participant_id = event_guests.id")
+    # rubocop:enable Layout/LineLength
   }
 
   scope :guests_of, ->(main_participant) {
@@ -95,7 +99,9 @@ class Event::Participation < ActiveRecord::Base
     def order_by_role(event_type)
       joins(:roles)
         .select("event_participations.*", :order_weight)
+        # rubocop:todo Layout/LineLength
         .joins("INNER JOIN event_role_type_orders ON event_roles.type = event_role_type_orders.name")
+        # rubocop:enable Layout/LineLength
         .order("event_role_type_orders.order_weight ASC")
     end
 

@@ -14,7 +14,7 @@ module PdfHelpers
     end
   end
 
-  def image_positions(page_no = 1)
+  def image_positions(page_no = 1) # rubocop:todo Metrics/AbcSize
     rendered_pdf = pdf.try(:render) || pdf
     io = StringIO.new(rendered_pdf)
 
@@ -29,7 +29,9 @@ module PdfHelpers
         height = obj.hash[:Height]
 
         # Pattern to match the transformation matrix followed by the image drawing
+        # rubocop:todo Layout/LineLength
         pattern = /([-+]?[0-9]*\.?[0-9]+)\s+([-+]?[0-9]*\.?[0-9]+)\s+([-+]?[0-9]*\.?[0-9]+)\s+([-+]?[0-9]*\.?[0-9]+)\s+([-+]?[0-9]*\.?[0-9]+)\s+([-+]?[0-9]*\.?[0-9]+)\s+cm\s+\/#{label}\s+Do/
+        # rubocop:enable Layout/LineLength
 
         if match = page.raw_content.match(pattern)
           # The transformation matrix components
@@ -48,7 +50,8 @@ module PdfHelpers
           displayed_width = a * width
           displayed_height = d * height
 
-          {x: x_position, y: y_position, width: width, height: height, displayed_width: displayed_width, displayed_height: displayed_height}
+          {x: x_position, y: y_position, width: width, height: height, displayed_width: displayed_width,
+           displayed_height: displayed_height}
         else
           raise "Could not determine the details of the image with label #{label}."
         end

@@ -40,7 +40,9 @@ describe Invoice::BatchCreate do
     group = groups(:bottom_layer_one)
     group.invoices.destroy_all
 
+    # rubocop:todo Layout/LineLength
     Fabricate(Group::BottomLayer::Leader.sti_name.to_sym, person: other_person, group: group) # second role for other_person
+    # rubocop:enable Layout/LineLength
     2.times do
       Fabricate(Group::BottomLayer::Member.sti_name.to_sym, group: group)
     end
@@ -177,7 +179,8 @@ describe Invoice::BatchCreate do
   private
 
   def fabricate_donation(amount, received_at = 1.year.ago)
-    invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: other_person, recipient: person, group: group, state: :payed)
+    invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: other_person, recipient: person, group: group,
+      state: :payed)
     Payment.create!(amount: amount, received_at: received_at, invoice: invoice)
   end
 end

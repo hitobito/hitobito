@@ -39,15 +39,20 @@ describe MailingLists::BulkMail::BounceHandler do
     let(:bounce_parent) { messages(:bulk_mail) }
 
     it "does not process bounce if source message cannot be found" do
-      body = bounce_mail.body.raw_source.gsub("X-Hitobito-Message-UID: a15816bbd204ba20", "X-Hitobito-Message-UID: unknown42")
+      body = bounce_mail.body.raw_source.gsub("X-Hitobito-Message-UID: a15816bbd204ba20",
+        "X-Hitobito-Message-UID: unknown42")
       expect(bounce_mail.body).to receive(:raw_source).at_least(:once).and_return(body)
 
       expect(Rails.logger).to receive(:info)
+        # rubocop:todo Layout/LineLength
         .with("BulkMail Retriever: Ignoring unkown or outdated bounce message for list leaders@#{Settings.email.list_domain}")
+      # rubocop:enable Layout/LineLength
 
       expect do
         bounce_handler.process
-      end.to change { Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::BounceMessageForwardJob%'").count }.by(0)
+      end.to change {
+               Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::BounceMessageForwardJob%'").count
+             }.by(0)
 
       mail_log = MailLog.find_by(mail_hash: "abcd42")
       expect(mail_log.status).to eq("bounce_rejected")
@@ -59,11 +64,15 @@ describe MailingLists::BulkMail::BounceHandler do
       messages(:mail).update_columns(created_at: DateTime.now - 26.hours)
 
       expect(Rails.logger).to receive(:info)
+        # rubocop:todo Layout/LineLength
         .with("BulkMail Retriever: Ignoring unkown or outdated bounce message for list leaders@#{Settings.email.list_domain}")
+      # rubocop:enable Layout/LineLength
 
       expect do
         bounce_handler.process
-      end.to change { Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::BounceMessageForwardJob%'").count }.by(0)
+      end.to change {
+               Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::BounceMessageForwardJob%'").count
+             }.by(0)
 
       mail_log = MailLog.find_by(mail_hash: "abcd42")
       expect(mail_log.status).to eq("bounce_rejected")
@@ -73,11 +82,15 @@ describe MailingLists::BulkMail::BounceHandler do
 
     it "processes bounce message" do
       expect(Rails.logger).to receive(:info)
+        # rubocop:todo Layout/LineLength
         .with("BulkMail Retriever: Forwarding bounce message for list leaders@#{Settings.email.list_domain} to sender@example.com")
+      # rubocop:enable Layout/LineLength
 
       expect do
         bounce_handler.process
-      end.to change { Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::BounceMessageForwardJob%'").count }.by(1)
+      end.to change {
+               Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::BounceMessageForwardJob%'").count
+             }.by(1)
 
       mail_log = MailLog.find_by(mail_hash: "abcd42")
       expect(mail_log.status).to eq("retrieved")
@@ -97,7 +110,9 @@ describe MailingLists::BulkMail::BounceHandler do
       last_bounce = Bounce.order(:updated_at).last
 
       expect(bounce_mail.raw_source).to include("To: nothing@example2.com")
+      # rubocop:todo Layout/LineLength
       expect(bounce_mail.raw_source).to include("<nothing@example2.com>: Recipient address rejected: undeliverable address:")
+      # rubocop:enable Layout/LineLength
       expect(last_bounce.email).to eql "nothing@example2.com"
     end
 

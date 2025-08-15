@@ -25,7 +25,7 @@ module People
 
     private
 
-    def merge_associations
+    def merge_associations # rubocop:todo Metrics/MethodLength
       merge_roles
       merge_contactables(:additional_emails, :email)
       merge_contactables(:phone_numbers, :number)
@@ -82,7 +82,9 @@ module People
     def merge_qualifications
       @source.qualifications.each do |qualification|
         next if @target.qualifications
+          # rubocop:todo Layout/LineLength
           .where("start_at = :start_at OR finish_at = :finish_at", start_at: qualification.start_at, finish_at: qualification.finish_at)
+          # rubocop:enable Layout/LineLength
           .pluck(:qualification_kind_id).include?(qualification.qualification_kind_id)
 
         qualification.update!(person: @target)

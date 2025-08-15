@@ -20,7 +20,9 @@ describe PersonResource, type: :resource do
   end
 
   describe "creating" do
-    let!(:user_role) { Fabricate(Group::BottomLayer::Leader.name, person: Fabricate(:person), group: groups(:bottom_layer_one)) }
+    let!(:user_role) {
+      Fabricate(Group::BottomLayer::Leader.name, person: Fabricate(:person), group: groups(:bottom_layer_one))
+    }
 
     let(:payload) do
       {
@@ -43,7 +45,9 @@ describe PersonResource, type: :resource do
   end
 
   describe "updating" do
-    let!(:user_role) { Fabricate(Group::BottomLayer::Leader.name, person: Fabricate(:person), group: groups(:bottom_layer_one)) }
+    let!(:user_role) {
+      Fabricate(Group::BottomLayer::Leader.name, person: Fabricate(:person), group: groups(:bottom_layer_one))
+    }
     let!(:person) { Fabricate(:person, first_name: "Franz", updated_at: 1.second.ago, gender: "m") }
     let!(:role) { Fabricate(Group::BottomLayer::Member.name, person: person, group: groups(:bottom_layer_one)) }
 
@@ -123,7 +127,9 @@ describe PersonResource, type: :resource do
 
     context "without show_details permission, it" do
       before do
+        # rubocop:todo Layout/LineLength
         skip "We currently have no roles (and indeed no permissions which we could give to roles), which grant update ability without also granting show_details ability."
+        # rubocop:enable Layout/LineLength
       end
 
       it "does not update restricted attrs" do
@@ -167,7 +173,9 @@ describe PersonResource, type: :resource do
     end
 
     context "without admin privileges" do
-      let!(:user_role) { Fabricate(Group::BottomLayer::Leader.name, person: Fabricate(:person), group: groups(:bottom_layer_one)) }
+      let!(:user_role) {
+        Fabricate(Group::BottomLayer::Leader.name, person: Fabricate(:person), group: groups(:bottom_layer_one))
+      }
 
       it "works" do
         expect {

@@ -98,7 +98,7 @@ class GroupsController < CrudController
     group
   end
 
-  def permitted_attrs
+  def permitted_attrs # rubocop:todo Metrics/AbcSize
     attrs = entry.class.used_attributes.dup
     attrs += self.class.permitted_attrs
     attrs += entry.class.mounted_attr_names

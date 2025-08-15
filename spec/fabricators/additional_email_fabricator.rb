@@ -19,7 +19,9 @@
 # Indexes
 #
 #  index_additional_emails_on_contactable_id_and_contactable_type  (contactable_id,contactable_type)
+# rubocop:todo Layout/LineLength
 #  index_additional_emails_on_contactable_where_invoices_true      (contactable_id,contactable_type) UNIQUE WHERE (invoices = true)
+# rubocop:enable Layout/LineLength
 #
 
 Fabricator(:additional_email) do

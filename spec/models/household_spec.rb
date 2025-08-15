@@ -322,7 +322,9 @@ describe Household do
       expect(household.errors).to be_empty
       expect(household.warnings.count).to eq(1)
       expect(household.warnings.first.attribute).to eq(:members)
+      # rubocop:todo Layout/LineLength
       expect(household.warnings.first.message).to include("Der Haushalt wird aufgelöst da weniger als 2 Personen vorhanden sind.")
+      # rubocop:enable Layout/LineLength
     end
 
     it "has warnings if members have different address data" do
@@ -334,7 +336,9 @@ describe Household do
       expect(household.errors).to be_empty
       expect(household.warnings.count).to eq(1)
       expect(household.warnings.first.attribute).to eq(:members)
+      # rubocop:todo Layout/LineLength
       expect(household.warnings.first.message).to include("Die Adresse 'Loriweg 42, 6600 Locarno' wird für alle Personen in diesem Haushalt übernommen.")
+      # rubocop:enable Layout/LineLength
     end
 
     it "has warnings if reference person does not have an address but other member" do
@@ -347,7 +351,9 @@ describe Household do
       expect(household.errors).to be_empty
       expect(household.warnings.count).to eq(1)
       expect(household.warnings.first.attribute).to eq(:members)
+      # rubocop:todo Layout/LineLength
       expect(household.warnings.first.message).to include("Die Adresse 'Other Loriweg 42, 6600 Locarno' wird für alle Personen in diesem Haushalt übernommen.")
+      # rubocop:enable Layout/LineLength
     end
 
     it "has no warning of none of the members has address" do
@@ -476,8 +482,12 @@ describe Household do
         [person, other_person, third_person, fourth_person, fifth_person].each do |person|
           version_entries = person.versions.last(2)
 
+          # rubocop:todo Layout/LineLength
           expect(log_line(version_entries.first)).to eq("Hans Hansen wurde zum Haushalt (Ardona Mola, David Hasselhoff, Malou Thomas) hinzugefügt.")
+          # rubocop:enable Layout/LineLength
+          # rubocop:todo Layout/LineLength
           expect(log_line(version_entries.second)).to eq("Jan Miller wurde zum Haushalt (Ardona Mola, David Hasselhoff, Malou Thomas) hinzugefügt.")
+          # rubocop:enable Layout/LineLength
 
           version_entries.each do |log_entry|
             expect(log_entry.whodunnit).to eq(top_leader.id.to_s)
@@ -578,7 +588,9 @@ describe Household do
         expect(other_person.versions.count).to eq(2)
         address_log_entry = other_person.versions.first
 
+        # rubocop:todo Layout/LineLength
         expect(log_line(address_log_entry)).to eq("PLZ wurde auf <i>6600</i> gesetzt.</div><div>Ort wurde auf <i>Locarno</i> gesetzt.</div><div>Strasse wurde auf <i>Loriweg</i> gesetzt.</div><div>Hausnummer wurde auf <i>42</i> gesetzt.")
+        # rubocop:enable Layout/LineLength
 
         expect_whodunnit_top_leader
       end

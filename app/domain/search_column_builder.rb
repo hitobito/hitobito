@@ -18,7 +18,9 @@ class SearchColumnBuilder
   end
 
   def run
+    # rubocop:todo Layout/LineLength
     # do not run if there are still migrations needed (to prevent running this before wagon migrations)
+    # rubocop:enable Layout/LineLength
     return if ActiveRecord::Base.connection.migration_context.needs_migration?
 
     # Process each searchable model to add a tsvector column and a GIN index
@@ -64,21 +66,33 @@ class SearchColumnBuilder
   end
 
   # Adds or replaces a tsvector column and associated GIN index on specified columns
+  # rubocop:todo Metrics/AbcSize
+  # rubocop:todo Metrics/CyclomaticComplexity
   def create_searchable_column_and_index(table_name, attrs, replace: false)
     # check if every attribute exists on the table
     return unless attrs.all? { |attr| connection.column_exists?(table_name, attr.to_s) }
 
     # return if the search_column is already generated on this table
-    return if search_column_already_sufficiently_created?(table_name, attrs) && !replace_column?(replace)
+    return if search_column_already_sufficiently_created?(table_name,
+      attrs) && !replace_column?(replace)
 
     quoted_table_name = connection.quote_table_name(table_name)
 
-    migration.remove_column(quoted_table_name, SEARCH_COLUMN) if connection.column_exists?(quoted_table_name, SEARCH_COLUMN)
-    migration.remove_index(quoted_table_name, name: "#{table_name}_search_column_gin_idx") if connection.index_exists?(quoted_table_name, :search_column, using: :gin)
+    migration.remove_column(quoted_table_name, SEARCH_COLUMN) if connection.column_exists?(
+      quoted_table_name, SEARCH_COLUMN
+    )
+    if connection.index_exists?(
+      quoted_table_name, :search_column, using: :gin
+    )
+      migration.remove_index(quoted_table_name,
+        name: "#{table_name}_search_column_gin_idx")
+    end
 
     create_search_column(table_name, quoted_table_name, attrs)
     create_search_index(table_name, quoted_table_name)
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/AbcSize
 
   def create_search_column(table_name, quoted_table_name, attrs)
     statement = <<~SQL
@@ -88,7 +102,9 @@ class SearchColumnBuilder
       ) STORED;
     SQL
 
+    # rubocop:todo Layout/LineLength
     migration.say_with_time "Creating Search Column #{table_name}.#{SEARCH_COLUMN} with #{attrs.to_sentence}" do
+      # rubocop:enable Layout/LineLength
       connection.execute(statement)
     end
   end
@@ -102,6 +118,7 @@ class SearchColumnBuilder
   end
 
   def ts_vector_statement(attrs)
+    # rubocop:todo Layout/LineLength
     "to_tsvector(
       'simple',
       #{attrs.map { |attr|
@@ -112,6 +129,7 @@ class SearchColumnBuilder
         end
       }.join(" || ' ' || ")}
     )"
+    # rubocop:enable Layout/LineLength
   end
 
   # directly parsing a date to text is not immutable and not possible inside a generated column

@@ -54,7 +54,9 @@ module RuboCop
 
         def load_patches
           return {} unless File.exist?(Patches::ALL_PATCHES)
-          YAML.load_file(Patches::ALL_PATCHES).map { |h| Patches::Patch.new(**h) }.group_by(&:basename)
+          YAML.load_file(Patches::ALL_PATCHES).map { |h|
+            Patches::Patch.new(**h)
+          }.group_by(&:basename)
         end
       end
     end

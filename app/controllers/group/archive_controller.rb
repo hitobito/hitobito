@@ -13,7 +13,8 @@ class Group::ArchiveController < ApplicationController
 
     redirect_to group_path(entry), notice: I18n.t("group.archive.flash.success")
   rescue ActiveRecord::RecordInvalid => e
-    redirect_to group_path(entry), alert: I18n.t("group.archive.flash.failure", error: e.record.errors.full_messages.join(", "))
+    redirect_to group_path(entry),
+      alert: I18n.t("group.archive.flash.failure", error: e.record.errors.full_messages.join(", "))
   end
 
   private

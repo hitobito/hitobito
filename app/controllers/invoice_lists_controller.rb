@@ -45,7 +45,7 @@ class InvoiceListsController < CrudController
     session[:invoice_referer] = request.referer
   end
 
-  def create
+  def create # rubocop:todo Metrics/AbcSize
     assign_attributes
     entry.title = entry.invoice.title
 
@@ -104,11 +104,12 @@ class InvoiceListsController < CrudController
     super.includes(:receiver).list.where(created_at: Date.new(year, 1, 1).all_year)
   end
 
-  def return_path
+  def return_path # rubocop:todo Metrics/AbcSize
     invoice_list_id = params[:invoice_list_id].presence
     if params[:singular]
       if invoice_list_id
-        group_invoice_list_invoice_path(parent, invoice_list_id: invoice_list_id, id: invoices.first.id)
+        group_invoice_list_invoice_path(parent, invoice_list_id: invoice_list_id,
+          id: invoices.first.id)
       else
         group_invoice_path(parent, invoices.first)
       end
@@ -143,7 +144,9 @@ class InvoiceListsController < CrudController
     session[:invoice_referer] || group_invoices_path(parent)
   end
 
-  def assign_attributes # rubocop:disable Metrics/AbcSize
+  # rubocop:todo Metrics/CyclomaticComplexity
+  # rubocop:todo Metrics/MethodLength
+  def assign_attributes # rubocop:disable Metrics/AbcSize # rubocop:todo Metrics/MethodLength
     if params[:ids].present?
       entry.recipient_ids = params[:ids]
     elsif params[:filter].present?
@@ -168,6 +171,8 @@ class InvoiceListsController < CrudController
       end
     end
   end
+  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/CyclomaticComplexity
 
   def recipient_ids_from_people_filter
     group = Group.find(params.dig(:filter, :group_id))

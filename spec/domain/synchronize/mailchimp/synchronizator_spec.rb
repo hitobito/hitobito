@@ -195,7 +195,8 @@ describe Synchronize::Mailchimp::Synchronizator do
       ])
       expect(client).to receive(:fetch_segments).and_return(segments(tags))
       expect(stale_segments).to have(1).item
-      expect(stale_segments.first).to eq([1, members_to_add: %w[bottom_member@example.com top_leader@example.com], members_to_remove: []])
+      expect(stale_segments.first).to eq([1,
+        members_to_add: %w[bottom_member@example.com top_leader@example.com], members_to_remove: []])
     end
 
     it "is empty when all local tags exist remotely" do
@@ -361,7 +362,8 @@ describe Synchronize::Mailchimp::Synchronizator do
         expect(client).to receive(:subscribe_members) { |subscribers|
           expect(subscribers.map(&:person)).to eq([top_leader])
         }.and_return(batch_result(1, 1, 0))
-        expect(client).to receive(:unsubscribe_members).with(["bottom_member@example.com"]).and_return(batch_result(2, 1, 1))
+        expect(client).to receive(:unsubscribe_members).with(["bottom_member@example.com"]).and_return(batch_result(2,
+          1, 1))
         sync.perform
         expect(result.state).to eq :partial
       end
@@ -485,7 +487,8 @@ describe Synchronize::Mailchimp::Synchronizator do
             expect(subscribers.map(&:person)).to eq([top_leader])
           }.and_return(batch_result(1, 0, 1, [detail: "#{top_leader.email} was permanently deleted"]))
           sync.perform
-          expect(mailing_list.reload.mailchimp_forgotten_emails).to match_array %W[foo@example.com bar@example.com #{top_leader.email}]
+          expect(mailing_list.reload.mailchimp_forgotten_emails).to match_array %W[foo@example.com bar@example.com
+            #{top_leader.email}]
         end
 
         it "ignores forgotten_emails when syncing" do
@@ -567,7 +570,8 @@ describe Synchronize::Mailchimp::Synchronizator do
     end
 
     it "ignores forgotten email" do
-      mailing_list.update!(mailchimp_include_additional_emails: true, mailchimp_forgotten_emails: %w[forgotten@example.com])
+      mailing_list.update!(mailchimp_include_additional_emails: true,
+        mailchimp_forgotten_emails: %w[forgotten@example.com])
       mailing_list.subscriptions.create!(subscriber: top_leader)
       top_leader.additional_emails.create!(email: "forgotten@example.com", mailings: true, label: "test")
       allow(client).to receive(:fetch_segments).and_return(segments([default_tag]))

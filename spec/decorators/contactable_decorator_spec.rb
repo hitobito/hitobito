@@ -30,7 +30,9 @@ describe ContactableDecorator do
 
   describe "#complete_contact" do
     it "returns all attributes" do
+      # rubocop:todo Layout/LineLength
       expect(event.contact.complete_contact).to eq "<strong>Top Leader</strong><p>Greatstreet 345<br />3456 Greattown</p><p><a href=\"mailto:top_leader@example.com\">top_leader@example.com</a></p>"
+      # rubocop:enable Layout/LineLength
     end
   end
 
@@ -60,7 +62,9 @@ describe ContactableDecorator do
       it "contains muted translated label with invoices suffix for invoices email" do
         person.additional_emails.create!(label: "Private", email: "invoices@example.com", invoices: true)
         expect(person.decorate.all_additional_emails).to end_with(
+          # rubocop:todo Layout/LineLength
           "<span class=\"muted\">Private <i class=\"muted fas fa-money-bill-alt\" title=\"Wird für Rechnungen verwendet\"></i></span></p>"
+          # rubocop:enable Layout/LineLength
         )
       end
     end
@@ -142,8 +146,12 @@ describe ContactableDecorator do
     it "renders value with muted label" do
       person.additional_addresses.build(attrs.merge(label: "Rechnung"))
       person.additional_addresses.build(attrs.merge(label: "Andere", address_care_of: nil, housenumber: "12a"))
+      # rubocop:todo Layout/LineLength
       expect(subject).to start_with '<p><span>c/o Backoffice, Langestrasse 37, 8000 Zürich</span> <span class="muted">Rechnung</span><br /><span>'
+      # rubocop:enable Layout/LineLength
+      # rubocop:todo Layout/LineLength
       expect(subject).to end_with '</span><br /><span>Langestrasse 12a, 8000 Zürich</span> <span class="muted">Andere</span></p>'
+      # rubocop:enable Layout/LineLength
     end
   end
 end

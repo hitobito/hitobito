@@ -123,7 +123,11 @@ describe Synchronize::Addresses::SwissPost::ResultProcessor do
         end
       end.to change { HitobitoLogEntry.count }.by(1)
         .and not_change { top_leader.reload.attributes }
-      expect(log_entry).to have_attributes(log_entry_attrs.merge(message: "Die Personendaten der Post konnten für Top Leader (572407901) nicht übernommen werden", level: "error"))
+      expect(log_entry).to have_attributes(log_entry_attrs.merge(
+        # rubocop:todo Layout/LineLength
+        message: "Die Personendaten der Post konnten für Top Leader (572407901) nicht übernommen werden", level: "error"
+        # rubocop:enable Layout/LineLength
+      ))
     end
   end
 

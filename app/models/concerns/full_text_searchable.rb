@@ -8,10 +8,12 @@ module FullTextSearchable
 
   TS_QUERY_CHARS = ["(", ")", ":", "&", "|", "!", "'", "?", "%", "<", " ", " "]
 
-  def self.included(model)
+  # rubocop:todo Metrics/MethodLength
+  # rubocop:todo Metrics/AbcSize
+  def self.included(model) # rubocop:todo Metrics/CyclomaticComplexity # rubocop:todo Metrics/AbcSize # rubocop:todo Metrics/MethodLength
     model.ignored_columns += [SEARCH_COLUMN]
 
-    model.define_singleton_method(:search) do |term|
+    model.define_singleton_method(:search) do |term| # rubocop:todo Metrics/BlockLength
       # Use & to make sure every word in term has to match the result
       sanitized_term = term.split.map do |t|
         sanitized_t = ActiveRecord::Base.sanitize_sql_like(t).delete(*TS_QUERY_CHARS.join)
@@ -20,17 +22,25 @@ module FullTextSearchable
       end.compact.join(" & ")
 
       # Generate base search query and rank for main model
+      # rubocop:todo Layout/LineLength
       base_query = "#{model.table_name}.#{SEARCH_COLUMN} @@ to_tsquery('simple', '#{sanitized_term}')"
+      # rubocop:enable Layout/LineLength
+      # rubocop:todo Layout/LineLength
       base_rank = "COALESCE(ts_rank(#{model.table_name}.#{SEARCH_COLUMN}, to_tsquery('simple', '#{sanitized_term}')), 0)"
+      # rubocop:enable Layout/LineLength
 
-      associated_tables = model::SEARCHABLE_ATTRS.select { |attr| attr.is_a?(Hash) }.map(&:keys).flatten
+      associated_tables = model::SEARCHABLE_ATTRS.select { |attr|
+        attr.is_a?(Hash)
+      }.map(&:keys).flatten
 
       # Build queries and ranks for each associated model
       associated_queries = associated_tables.map do |assoc_model|
         "#{assoc_model}.#{SEARCH_COLUMN} @@ to_tsquery('simple', '#{sanitized_term}')"
       end
       associated_ranks = associated_tables.map do |assoc_model|
+        # rubocop:todo Layout/LineLength
         "COALESCE(ts_rank(#{assoc_model}.#{SEARCH_COLUMN}, to_tsquery('simple', '#{sanitized_term}')), 0)"
+        # rubocop:enable Layout/LineLength
       end
 
       # Combine main model ans associated model for query
@@ -42,7 +52,8 @@ module FullTextSearchable
           if model.table_name.to_sym == associated_table.to_s.split("_").first.pluralize.to_sym
             :translations
           else
-            [associated_table.to_s.split("_").first.pluralize.to_sym, associated_table.to_s.split("_").first.pluralize.to_sym => :translations]
+            [associated_table.to_s.split("_").first.pluralize.to_sym,
+              associated_table.to_s.split("_").first.pluralize.to_sym => :translations]
           end
         else
           associated_table
@@ -56,4 +67,6 @@ module FullTextSearchable
         .distinct
     end
   end
+  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/MethodLength
 end

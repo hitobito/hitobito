@@ -21,7 +21,8 @@ describe Event::KindsController, js: true do
       select("Group Lead (for Leaders)", from: "event_kind_precondition_kind_ids")
       find("#precondition_fields button").click
 
-      expect(page).to have_selector(".precondition-grouping", text: "Group Lead (for Leaders), Quality Lead und Super Lead")
+      expect(page).to have_selector(".precondition-grouping",
+        text: "Group Lead (for Leaders), Quality Lead und Super Lead")
 
       find("button.btn-primary", text: "Speichern").click
 

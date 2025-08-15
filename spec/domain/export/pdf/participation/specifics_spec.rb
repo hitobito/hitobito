@@ -33,8 +33,12 @@ describe Export::Pdf::Participation::Specifics do
   let(:participation) { Event::Participation.create(event: event, person: person) }
   let!(:question1) { Event::Question.create!(question: "B", disclosure: :optional, event: event) }
   let!(:question2) { Event::Question.create!(question: "A", disclosure: :optional, event: event) }
-  let!(:answer1) { Event::Answer.find_or_create_by(question: question1, participation: participation).update(answer: "answer b") }
-  let!(:answer2) { Event::Answer.find_or_create_by(question: question2, participation: participation).update(answer: "answer a") }
+  let!(:answer1) {
+    Event::Answer.find_or_create_by(question: question1, participation: participation).update(answer: "answer b")
+  }
+  let!(:answer2) {
+    Event::Answer.find_or_create_by(question: question2, participation: participation).update(answer: "answer a")
+  }
 
   context "with questions set to sort by id (by default)" do
     it "renders correctly" do

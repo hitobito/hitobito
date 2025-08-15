@@ -85,7 +85,11 @@ describe FormHelper do
     context "for existing entry" do
       let(:entry) { crud_test_models(:AAAAA) }
 
-      it { is_expected.to have_selector("form.special.form-horizontal[action='/crud_test_models/#{entry.id}'][method=post]") }
+      it {
+        # rubocop:todo Layout/LineLength
+        is_expected.to have_selector("form.special.form-horizontal[action='/crud_test_models/#{entry.id}'][method=post]")
+        # rubocop:enable Layout/LineLength
+      }
       it { is_expected.to have_selector("input[name=_method][type=hidden][value=patch]", visible: false) }
       it { is_expected.to have_selector("input[name='crud_test_model[name]'][type=text][value=AAAAA]") }
       it { is_expected.to have_selector("input[name='crud_test_model[birthdate]'][type=text][value='01.01.1910']") }
@@ -131,7 +135,9 @@ describe FormHelper do
 
     let(:entry) { crud_test_models(:AAAAA) }
 
-    it { is_expected.to have_selector("form.form-horizontal.special[method=post][action='/crud_test_models/#{entry.id}']") }
+    it {
+      is_expected.to have_selector("form.form-horizontal.special[method=post][action='/crud_test_models/#{entry.id}']")
+    }
   end
 
   describe "#field_inheritance_values" do

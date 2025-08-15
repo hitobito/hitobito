@@ -21,7 +21,9 @@ module IdnSanitizer
   end
 
   def sanitize_idn(email)
+    # rubocop:todo Layout/LineLength
     return email unless /[^\w@\.\-]/.match?(email.strip) # simple regexp, skips most unaffected addresses
+    # rubocop:enable Layout/LineLength
 
     parts = email.strip.split("@")
     domain = parts.last

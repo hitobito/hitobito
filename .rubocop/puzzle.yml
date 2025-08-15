@@ -7,31 +7,39 @@ Rails/ApplicationRecord:
   Enabled: false
 
 Metrics/AbcSize:
+  Enabled: true
   Max: 20
   Severity: error
 
 Metrics/ClassLength:
+  Enabled: true
   Max: 200
   Severity: error
 
 Metrics/ModuleLength:
+  Enabled: true
   Max: 200
   Severity: error
 
 Metrics/CyclomaticComplexity:
+  Enabled: true
   Max: 6
   Severity: error
 
 Layout/LineLength:
+  Enabled: true
   Max: 100
   Severity: warning
   IgnoreCopDirectives: true
 
 Metrics/MethodLength:
-  Max: 10
+  Enabled: true
+  Max: 15
   Severity: error
 
 Metrics/BlockLength:
+  Enabled: true
+  Max: 30
   Exclude:
     - spec/**/*
     - lib/tasks/*.rake
@@ -65,6 +73,12 @@ Style/SymbolProc:
 Rails/FilePath:
   EnforcedStyle: arguments
 
+Rails/HelperInstanceVariable:
+  Enabled: false
+
 Rails/SkipsModelValidations:
   Exclude:
     - spec/**/*
+
+RSpec/ImplicitExpect:
+  Enabled: false

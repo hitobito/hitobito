@@ -33,7 +33,8 @@ module Export::Tabular::People
         .where(people: {id: people_ids}).distinct
       qualification_kinds.each_with_object({}) do |qualification_kind, obj|
         label = qualification_kind.label
-        obj[ContactAccounts.key(model, qualification_kind.id.to_s)] = ContactAccounts.human(model, label)
+        obj[ContactAccounts.key(model, qualification_kind.id.to_s)] =
+          ContactAccounts.human(model, label)
       end
     end
   end

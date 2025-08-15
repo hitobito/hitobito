@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class PeopleController < CrudController
+class PeopleController < CrudController # rubocop:todo Metrics/ClassLength
   include RenderPeopleExports
   include AsyncDownload
   include Tags
@@ -110,7 +110,8 @@ class PeopleController < CrudController
   def self.sort_mappings_with_indifferent_access
     {roles: {
       joins: [:roles, "INNER JOIN role_type_orders ON roles.type = role_type_orders.name"],
-      order: ["role_type_orders.order_weight", "company_name", "last_name", "first_name", "nickname"]
+      order: ["role_type_orders.order_weight", "company_name", "last_name", "first_name",
+        "nickname"]
     }}.with_indifferent_access
   end
 

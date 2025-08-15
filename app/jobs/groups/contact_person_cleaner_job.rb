@@ -14,7 +14,9 @@ class Groups::ContactPersonCleanerJob < RecurringJob
     Group.where.not(contact_id: nil).find_each do |group|
       next if Role.exists?(group_id: group.id, person_id: group.contact_id, type: member_types)
 
+      # rubocop:todo Layout/LineLength
       group.update_column(:contact_id, nil) # must use update_column, to circumvent readonly archived groups
+      # rubocop:enable Layout/LineLength
       create_log_entry(group)
     end
   end
@@ -27,7 +29,9 @@ class Groups::ContactPersonCleanerJob < RecurringJob
   def create_log_entry(group)
     HitobitoLogEntry.create!(
       level: :info,
+      # rubocop:todo Layout/LineLength
       message: "Contact person of #{group.name} was removed, due to person not having any active member role in #{group.name}",
+      # rubocop:enable Layout/LineLength
       category: :cleanup,
       subject: group
     )

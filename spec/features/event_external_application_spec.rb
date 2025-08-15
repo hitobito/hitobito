@@ -34,7 +34,9 @@ describe :event_external_application do
 
     expect do
       click_button("Anmelden")
+      # rubocop:todo Layout/LineLength
       is_expected.to have_text("Teilnahme von Max Muster in #{event.name} wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.")
+      # rubocop:enable Layout/LineLength
       is_expected.to have_text("Wichtige Bemerkungen über meine Teilnahme")
     end.to change { Event::Participation.count }.by(1)
   end

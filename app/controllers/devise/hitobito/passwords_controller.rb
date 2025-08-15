@@ -34,7 +34,7 @@ class Devise::Hitobito::PasswordsController < Devise::PasswordsController
 
   private
 
-  def should_confirm_email?(resource)
+  def should_confirm_email?(resource) # rubocop:todo Metrics/CyclomaticComplexity
     return false if resource.errors.present?
     return false if resource.confirmed? && !resource.pending_reconfirmation?
 

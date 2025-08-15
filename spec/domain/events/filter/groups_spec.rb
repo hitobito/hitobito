@@ -79,7 +79,9 @@ describe Events::Filter::Groups do
 
       other_filter = described_class.new(user, params, options, scope)
 
+      # rubocop:todo Layout/LineLength
       expect(other_filter.send(:course_groups_from_hierarchy).map(&:id)).to eq groups(:bottom_layer_one).hierarchy.map(&:id)
+      # rubocop:enable Layout/LineLength
     end
   end
 

@@ -35,7 +35,9 @@ namespace :wagon do
         migration_file = context.migrations.find { |m| m.version == version.to_i }&.filename
 
         if migration_file.nil?
+          # rubocop:todo Layout/LineLength
           puts "#{status.center(wagon_names_width)} [#{"???".center(8)}] #{version.ljust(14)}  #{name}"
+          # rubocop:enable Layout/LineLength
           next
         end
 

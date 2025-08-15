@@ -168,7 +168,9 @@ describe MailRelay::BulkMail do
 
             expect_any_instance_of(DeliveryReportMailer)
               .to receive(:bulk_mail)
+              # rubocop:todo Layout/LineLength
               .with(delivery_report_to, envelope_sender, "Re: Jubla Gruppen", 15, instance_of(ActiveSupport::TimeWithZone), [failed_entry])
+            # rubocop:enable Layout/LineLength
 
             expect(logger)
               .to receive(:info)
@@ -258,7 +260,9 @@ describe MailRelay::BulkMail do
 
         expect_any_instance_of(DeliveryReportMailer)
           .to receive(:bulk_mail)
+          # rubocop:todo Layout/LineLength
           .with(delivery_report_to, envelope_sender, "Re: Jubla Gruppen", 42, instance_of(ActiveSupport::TimeWithZone), [])
+        # rubocop:enable Layout/LineLength
 
         bulk_mail.deliver
         expect(failed_recipients.size).to eq(0)

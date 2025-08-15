@@ -9,7 +9,7 @@ class EventAbility < AbilityDsl::Base
   include AbilityDsl::Constraints::Event
   include AbilityDsl::Constraints::Event::Invitation
 
-  on(Event) do
+  on(Event) do # rubocop:todo Metrics/BlockLength
     class_side(:list_available, :typeahead).if_any_role
 
     permission(:any).may(:show).in_same_layer_or_globally_visible_or_participating

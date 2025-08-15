@@ -26,7 +26,8 @@ describe RoleListsController do
 
     it "GET#moveable initializes entry" do
       role_params = {group_id: group.id, type: "Group::BottomLayer::Member", label: "dummy"}
-      get :movable, xhr: true, params: {group_id: group.id, ids: [roles(:bottom_member).id], role: role_params}, format: :js
+      get :movable, xhr: true, params: {group_id: group.id, ids: [roles(:bottom_member).id], role: role_params},
+        format: :js
       expect(assigns(:role)).to be_present
       expect(assigns(:role).label).to eq "dummy"
     end

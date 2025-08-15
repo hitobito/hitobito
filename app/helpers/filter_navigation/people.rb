@@ -44,7 +44,8 @@ module FilterNavigation
       end
     end
 
-    def init_labels
+    # rubocop:todo Metrics/AbcSize
+    def init_labels # rubocop:todo Metrics/CyclomaticComplexity # rubocop:todo Metrics/AbcSize
       if name.present? && @kind_filter_names.value?(name)
         @active_label = name
       elsif group.archived? && only_archived_filter_active?
@@ -57,6 +58,7 @@ module FilterNavigation
         @active_label = main_filter_name
       end
     end
+    # rubocop:enable Metrics/AbcSize
 
     def init_kind_items
       @kind_filter_names.each do |kind, name|
@@ -215,7 +217,7 @@ module FilterNavigation
       all
     end
 
-    def only_archived_filter_active?
+    def only_archived_filter_active? # rubocop:todo Metrics/AbcSize
       filter.chain.filters.one? &&
         filter.chain.filters.first.is_a?(Person::Filter::Role) &&
         filter.chain.filters.first.args[:role_type_ids].empty? &&

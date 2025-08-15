@@ -104,7 +104,8 @@ describe Person::CsvImportsController do
       expect { post :create, params: required_params }.to change(Person, :count).by(1)
       expect(flash[:notice]).to eq ["1 Person (Leader) wurde erfolgreich importiert."]
       expect(flash[:alert]).not_to be_present
-      is_expected.to redirect_to group_people_path(group, filters: {role: {role_type_ids: [role_type.id]}}, name: "Leader")
+      is_expected.to redirect_to group_people_path(group, filters: {role: {role_type_ids: [role_type.id]}},
+        name: "Leader")
     end
 
     context "mapping misses attribute" do
@@ -114,7 +115,8 @@ describe Person::CsvImportsController do
       it "imports first person and displays errors for second person" do
         expect { post :create, params: required_params }.to change(Person, :count).by(0)
         expect(flash[:alert]).to eq ["1 Person (Leader) wurde nicht importiert."]
-        is_expected.to redirect_to group_people_path(group, filters: {role: {role_type_ids: [role_type.id]}}, name: "Leader")
+        is_expected.to redirect_to group_people_path(group, filters: {role: {role_type_ids: [role_type.id]}},
+          name: "Leader")
       end
     end
 
@@ -160,7 +162,8 @@ describe Person::CsvImportsController do
       it "is ignored" do
         expect { post :create, params: required_params }.to change(Person, :count).by(1)
         expect(flash[:alert]).to be_blank
-        is_expected.to redirect_to group_people_path(group, filters: {role: {role_type_ids: [role_type.id]}}, name: "Leader")
+        is_expected.to redirect_to group_people_path(group, filters: {role: {role_type_ids: [role_type.id]}},
+          name: "Leader")
       end
     end
 
@@ -192,11 +195,16 @@ describe Person::CsvImportsController do
 
       context "with add request" do
         let(:role_type) { Group::BottomGroup::Member }
-        let(:mapping) { {Vorname: "first_name", Nachname: "last_name", Geburtsdatum: "birthday", Email: "email", Ort: "town"} }
+        let(:mapping) {
+          {Vorname: "first_name", Nachname: "last_name", Geburtsdatum: "birthday", Email: "email", Ort: "town"}
+        }
 
         let(:user) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person }
         # use custom last_name to avoid duplicates, causing flaky specs
-        let(:person) { Fabricate(Group::TopGroup::LocalSecretary.name, group: groups(:top_group), person: Fabricate(:person, last_name: "Zumimportieren")).person }
+        let(:person) {
+          Fabricate(Group::TopGroup::LocalSecretary.name, group: groups(:top_group),
+            person: Fabricate(:person, last_name: "Zumimportieren")).person
+        }
         let(:group) { groups(:bottom_group_one_one) }
 
         let(:data) { generate_csv(%w[Nachname Email Ort], [person.last_name, person.email, "Wabern"]) }
@@ -207,7 +215,8 @@ describe Person::CsvImportsController do
         it "creates request" do
           person # create
           post :create, params: required_params.merge(update_behaviour: "override")
-          is_expected.to redirect_to group_people_path(group, filters: {role: {role_type_ids: [role_type.id]}}, name: "Member")
+          is_expected.to redirect_to group_people_path(group, filters: {role: {role_type_ids: [role_type.id]}},
+            name: "Member")
 
           expect(person.reload.roles.count).to eq(1)
           expect(person.town).not_to eq("Wabern")
@@ -222,7 +231,8 @@ describe Person::CsvImportsController do
           Fabricate(Group::TopGroup::Member.name, group: groups(:top_group), person: user)
 
           post :create, params: required_params.merge(update_behaviour: "override")
-          is_expected.to redirect_to group_people_path(group, filters: {role: {role_type_ids: [role_type.id]}}, name: "Member")
+          is_expected.to redirect_to group_people_path(group, filters: {role: {role_type_ids: [role_type.id]}},
+            name: "Member")
 
           expect(person.reload.roles.count).to eq(2)
           expect(person.town).to eq("Wabern")
@@ -241,7 +251,8 @@ describe Person::CsvImportsController do
 
           post :create, params: required_params
 
-          is_expected.to redirect_to group_people_path(group, filters: {role: {role_type_ids: [role_type.id]}}, name: "Member")
+          is_expected.to redirect_to group_people_path(group, filters: {role: {role_type_ids: [role_type.id]}},
+            name: "Member")
           expect(person.reload.roles.count).to eq(1)
           expect(person.add_requests.count).to eq(1)
           expect(flash[:alert].join).to match(/Zugriffsanfrage .*erhalten/)

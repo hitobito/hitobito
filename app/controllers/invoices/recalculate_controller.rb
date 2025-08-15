@@ -30,7 +30,9 @@ class Invoices::RecalculateController < ApplicationController
 
   def permitted_params
     invoice_params = params.dig(:invoice_list, :invoice) || params[:invoice]
+    # rubocop:todo Layout/LineLength
     permitted_params = invoice_params ? invoice_params.permit(InvoicesController.permitted_attrs) : {}
+    # rubocop:enable Layout/LineLength
 
     permitted_params[:invoice_items_attributes]&.each_value { |item| item.delete("id") }
 

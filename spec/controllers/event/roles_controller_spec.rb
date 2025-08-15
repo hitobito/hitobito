@@ -20,7 +20,9 @@ describe Event::RolesController do
   before { sign_in(user) }
 
   context "GET new" do
-    before { get :new, params: {group_id: group.id, event_id: course.id, event_role: {type: Event::Role::Leader.sti_name}} }
+    before {
+      get :new, params: {group_id: group.id, event_id: course.id, event_role: {type: Event::Role::Leader.sti_name}}
+    }
 
     it "builds participation without answers" do
       role = assigns(:role)
@@ -33,7 +35,9 @@ describe Event::RolesController do
   context "POST create" do
     context "without participation" do
       it "creates role and participation" do
-        post :create, params: {group_id: group.id, event_id: course.id, event_role: {type: Event::Role::Leader.sti_name, person_id: user.id}}
+        post :create,
+          params: {group_id: group.id, event_id: course.id,
+                   event_role: {type: Event::Role::Leader.sti_name, person_id: user.id}}
 
         role = assigns(:role)
         expect(role).to be_persisted
@@ -53,7 +57,8 @@ describe Event::RolesController do
         groups(:bottom_layer_two).update_column(:require_person_add_requests, true)
         user.roles.destroy_all
         Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one), person: user)
-        Fabricate(Event::Role::Leader.name, participation: Fabricate(:event_participation, event: course, participant: user))
+        Fabricate(Event::Role::Leader.name,
+          participation: Fabricate(:event_participation, event: course, participant: user))
         person = Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_two)).person
 
         post :create,
@@ -93,7 +98,9 @@ describe Event::RolesController do
         participation = Fabricate(:event_participation, event: course, participant: user)
         Fabricate(Event::Role::Cook.name, participation: participation)
         expect do
-          post :create, params: {group_id: group.id, event_id: course.id, event_role: {type: Event::Role::Leader.sti_name, person_id: user.id}}
+          post :create,
+            params: {group_id: group.id, event_id: course.id,
+                     event_role: {type: Event::Role::Leader.sti_name, person_id: user.id}}
         end.to change { Event::Participation.count }.by(0)
 
         role = assigns(:role)
@@ -108,7 +115,11 @@ describe Event::RolesController do
         participation = Fabricate(:event_participation, event: course, participant: user)
         participant_role = Fabricate(Event::Role::Participant.name, participation: participation)
         expect do
-          post :create, params: {group_id: group.id, event_id: course.id, event_role: {type: Event::Role::Leader.sti_name, person_id: user.id}, remove_participant_role: 1}
+          post :create,
+            # rubocop:todo Layout/LineLength
+            params: {group_id: group.id, event_id: course.id, event_role: {type: Event::Role::Leader.sti_name, person_id: user.id},
+                     # rubocop:enable Layout/LineLength
+                     remove_participant_role: 1}
         end.to change { Event::Role.count }.by(0)
 
         participation.reload
@@ -123,9 +134,11 @@ describe Event::RolesController do
         groups(:bottom_layer_two).update_column(:require_person_add_requests, true)
         user.roles.destroy_all
         Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one), person: user)
-        Fabricate(Event::Role::Leader.name, participation: Fabricate(:event_participation, event: course, participant: user))
+        Fabricate(Event::Role::Leader.name,
+          participation: Fabricate(:event_participation, event: course, participant: user))
         person = Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_two)).person
-        Fabricate(Event::Role::Cook.name, participation: Fabricate(:event_participation, event: course, participant: person))
+        Fabricate(Event::Role::Cook.name,
+          participation: Fabricate(:event_participation, event: course, participant: person))
 
         post :create,
           params: {

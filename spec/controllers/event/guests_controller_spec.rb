@@ -148,7 +148,9 @@ describe Event::GuestsController do
     }
 
     before do
+      # rubocop:todo Layout/LineLength
       # call this before the expectation, to make sure the participation is already persisted and does not count towards the change assertions
+      # rubocop:enable Layout/LineLength
       participation
     end
 

@@ -38,7 +38,8 @@ module Export::Pdf::Participation
       before.each { |key, value| pdf.send(:"#{key}=", value) }
     end
 
-    def render_columns(left, right)
+    # rubocop:todo Metrics/MethodLength
+    def render_columns(left, right) # rubocop:todo Metrics/AbcSize # rubocop:todo Metrics/MethodLength
       bounding_box([0, cursor], width: bounds.width) do
         gutter = 6
         width = (bounds.width / 2) - (gutter / 2)
@@ -57,6 +58,7 @@ module Export::Pdf::Participation
       end
       move_down_line
     end
+    # rubocop:enable Metrics/MethodLength
 
     def stroke_bounds
       # pdf.stroke_bounds

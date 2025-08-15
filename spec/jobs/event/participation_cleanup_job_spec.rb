@@ -8,7 +8,11 @@
 require "spec_helper"
 
 describe Event::ParticipationCleanupJob do
-  let(:participations_with_additional_information) { 3.times.map { Fabricate(:event_participation, additional_information: Faker::Food.allergen) } }
+  let(:participations_with_additional_information) {
+    3.times.map {
+   Fabricate(:event_participation, additional_information: Faker::Food.allergen) # rubocop:todo Layout/IndentationWidth
+    }
+  }
   let(:participations_without_additional_information) { 3.times.map { Fabricate(:event_participation) } }
   let(:participations) { participations_with_additional_information + participations_without_additional_information }
 

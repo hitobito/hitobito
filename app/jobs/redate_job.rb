@@ -5,7 +5,9 @@
 #  or at https://github.com/hitobito/hitobito.
 
 class RedateJob < BaseJob
+  # rubocop:todo Layout/LineLength
   SZ = "date_part('hour', created_at) >= 22 AND date_part('month', created_at) IN (3,4,5,6,7,8,9,10)"
+  # rubocop:enable Layout/LineLength
   WZ = "date_part('hour', created_at) >= 23 AND date_part('month', created_at) IN (10,11,12,1,2,3)"
 
   def perform
@@ -34,11 +36,13 @@ class RedateJob < BaseJob
       .map { |role| [role, role_destroy_events[role.id].created_at.to_date] }
   end
 
-  def update_columns(role, **attrs)
+  def update_columns(role, **attrs) # rubocop:todo Metrics/AbcSize
     key, value = attrs.first
     message = formatted(role.person.to_s + " (#{role.person.id})")
 
-    message << " -  #{formatted([role.group.layer_group.to_s, role.group.to_s, role.to_s].join(" / "), cap_at: 100)}"
+    message << " -  #{formatted(
+      [role.group.layer_group.to_s, role.group.to_s, role.to_s].join(" / "), cap_at: 100
+    )}"
     message << ": #{key} (#{role.send(key)} -> #{value})"
     role.update_columns(attrs)
     Rails.logger.info message

@@ -59,7 +59,8 @@ module Synchronize::Addresses::SwissPost
       person.postbox = row["POBoxTerm"].present? ? read_postbox(row) : nil
 
       unless person.save
-        create_log_entry(person, :error, "Die Personendaten der Post konnten für #{person} (#{person.id}) nicht übernommen werden")
+        create_log_entry(person, :error,
+          "Die Personendaten der Post konnten für #{person} (#{person.id}) nicht übernommen werden")
       end
     end
 

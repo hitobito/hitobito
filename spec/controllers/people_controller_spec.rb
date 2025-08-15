@@ -37,7 +37,8 @@ describe PeopleController do
 
       context "sorting" do
         before do
-          top_leader.update(first_name: "Joe", last_name: "Smith", nickname: "js", town: "Stoke", street: "Howard Street", zip_code: "9000")
+          top_leader.update(first_name: "Joe", last_name: "Smith", nickname: "js", town: "Stoke",
+            street: "Howard Street", zip_code: "9000")
           @tg_extern.update(first_name: "", last_name: "Bundy", nickname: "", town: "", street: "", zip_code: nil)
         end
 
@@ -57,18 +58,26 @@ describe PeopleController do
         end
 
         it "sorts based on last_name" do
-          get :index, params: {group_id: group, range: "layer", filters: {role: {role_type_ids: role_type_ids}}, sort: :last_name, sort_dir: :asc}
+          get :index,
+            # rubocop:todo Layout/LineLength
+            params: {group_id: group, range: "layer", filters: {role: {role_type_ids: role_type_ids}}, sort: :last_name,
+                     # rubocop:enable Layout/LineLength
+                     sort_dir: :asc}
           expect(assigns(:people).collect(&:id)).to eq([@tg_extern, top_leader, @tg_member].collect(&:id))
         end
 
         it "sorts based on roles" do
-          get :index, params: {group_id: group, range: "layer", filters: {role: {role_type_ids: role_type_ids}}, sort: :roles, sort_dir: :asc}
+          get :index,
+            params: {group_id: group, range: "layer", filters: {role: {role_type_ids: role_type_ids}}, sort: :roles,
+                     sort_dir: :asc}
           expect(assigns(:people).object).to eq([top_leader, @tg_member, @tg_extern])
         end
 
         %w[first_name nickname zip_code town].each do |attr|
           it "sorts based on #{attr}" do
-            get :index, params: {group_id: group, range: "layer", filters: {role: {role_type_ids: role_type_ids}}, sort: attr, sort_dir: :asc}
+            get :index,
+              params: {group_id: group, range: "layer", filters: {role: {role_type_ids: role_type_ids}}, sort: attr,
+                       sort_dir: :asc}
             expect(assigns(:people).object).to eq([@tg_member, top_leader, @tg_extern])
           end
         end
@@ -89,7 +98,9 @@ describe PeopleController do
         end
 
         it "loads selected roles of a group when types given" do
-          get :index, params: {group_id: group, filters: {role: {role_type_ids: [Role::External.id, Group::TopGroup::Member.id].join("-")}}}
+          get :index,
+            params: {group_id: group,
+                     filters: {role: {role_type_ids: [Role::External.id, Group::TopGroup::Member.id].join("-")}}}
 
           expect(assigns(:people).collect(&:id)).to match_array([@tg_member, @tg_extern].collect(&:id))
         end
@@ -114,13 +125,17 @@ describe PeopleController do
             end.to change(Delayed::Job, :count).by(1)
 
             expect(response).to redirect_to(returning: true)
+            # rubocop:todo Layout/LineLength
             expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
+            # rubocop:enable Layout/LineLength
           end
 
           it "exports csv" do
             expect do
               get :index, params: {group_id: group}, format: :csv
+              # rubocop:todo Layout/LineLength
               expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
+              # rubocop:enable Layout/LineLength
               expect(response).to redirect_to(returning: true)
             end.to change(Delayed::Job, :count).by(1)
           end
@@ -128,7 +143,9 @@ describe PeopleController do
           it "exports xlsx" do
             expect do
               get :index, params: {group_id: group}, format: :xlsx
+              # rubocop:todo Layout/LineLength
               expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
+              # rubocop:enable Layout/LineLength
               expect(response).to redirect_to(returning: true)
             end.to change(Delayed::Job, :count).by(1)
           end
@@ -266,7 +283,8 @@ describe PeopleController do
               get :index, params: {
                             group_id: group,
                             range: "layer",
-                            filters: {role: {role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join("-")}}
+                            filters: {role: {role_type_ids: [Group::BottomGroup::Leader.id,
+                              Role::External.id].join("-")}}
                           },
                 format: :json
               json = JSON.parse(@response.body)
@@ -654,14 +672,16 @@ describe PeopleController do
       let(:sl) { qualification_kinds(:sl) }
 
       it "generates pdf labels" do
-        get :show, params: {group_id: group, id: top_leader.id, label_format_id: label_formats(:standard).id}, format: :pdf
+        get :show, params: {group_id: group, id: top_leader.id, label_format_id: label_formats(:standard).id},
+          format: :pdf
 
         expect(@response.media_type).to eq("application/pdf")
         expect(people(:top_leader).reload.last_label_format).to eq(label_formats(:standard))
       end
 
       it "exports csv file" do
-        get :show, params: {group_id: group, id: top_leader.id, label_format_id: label_formats(:standard).id}, format: :csv
+        get :show, params: {group_id: group, id: top_leader.id, label_format_id: label_formats(:standard).id},
+          format: :csv
 
         expect(@response.media_type).to eq("text/csv")
         expect(@response.body).to match(Regexp.new("^#{Export::Csv::UTF8_BOM}Vorname;Nachname"))
@@ -706,7 +726,8 @@ describe PeopleController do
             body: groups(:bottom_layer_one),
             role_type: Group::BottomLayer::Member.sti_name
           )
-          get :show, params: {group_id: group.id, id: person.id, body_type: "Group", body_id: groups(:bottom_layer_one).id}
+          get :show,
+            params: {group_id: group.id, id: person.id, body_type: "Group", body_id: groups(:bottom_layer_one).id}
           expect(assigns(:add_requests)).to eq([r1])
           expect(flash[:notice]).to be_blank
         end
@@ -717,7 +738,8 @@ describe PeopleController do
         end
 
         it "shows flash status rejected" do
-          get :show, params: {group_id: group.id, id: person.id, body_type: "Group", body_id: groups(:bottom_group_one_one).id}
+          get :show,
+            params: {group_id: group.id, id: person.id, body_type: "Group", body_id: groups(:bottom_group_one_one).id}
           expect(flash[:alert]).to match(/abgelehnt/)
         end
       end
@@ -811,7 +833,9 @@ describe PeopleController do
         expect do
           post :send_password_instructions, params: {group_id: groups(:bottom_layer_one).id, id: person.id}, format: :js
         end.not_to change { Delayed::Job.count }
+        # rubocop:todo Layout/LineLength
         expect(flash[:alert]).to eq "Die Login-Informationen wurden nicht verschickt da die hinterlegte E-Mail Adresse ungültig ist."
+        # rubocop:enable Layout/LineLength
       end
     end
 
@@ -925,7 +949,8 @@ describe PeopleController do
           body: groups(:bottom_layer_one),
           role_type: Group::BottomLayer::Member.sti_name
         )
-        get :show, params: {group_id: group.id, id: person.id, body_type: "Group", body_id: groups(:bottom_layer_one).id}
+        get :show,
+          params: {group_id: group.id, id: person.id, body_type: "Group", body_id: groups(:bottom_layer_one).id}
         expect(assigns(:add_requests)).to be_nil
         expect(flash[:notice]).to be_blank
       end
@@ -948,7 +973,9 @@ describe PeopleController do
 
       it "shows page when token is valid" do
         top_leader.generate_authentication_token!
-        get :show, params: {group_id: group.id, id: top_leader.id, user_token: top_leader.authentication_token, user_email: top_leader.email}
+        get :show,
+          params: {group_id: group.id, id: top_leader.id, user_token: top_leader.authentication_token,
+                   user_email: top_leader.email}
         is_expected.to render_template("show")
       end
 
@@ -1091,8 +1118,12 @@ describe PeopleController do
       render_views
       let(:group) { groups(:bottom_layer_one) }
       let!(:bl_leader) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person }
-      let!(:bg_leader) { Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person }
-      let!(:bg_member) { Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one)).person }
+      let!(:bg_leader) {
+        Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
+      }
+      let!(:bg_member) {
+        Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one)).person
+      }
 
       it "loads visible people in layer" do
         get :index, params: {group_id: group.id, range: "layer"}, format: :json
@@ -1237,7 +1268,9 @@ describe PeopleController do
       Fabricate(Group::TopGroup::Member.sti_name, group: groups(:top_group), person: top_leader)
       TableDisplay.register_column(Person, TableDisplays::People::PrimaryGroupColumn, :primary_group)
       top_leader.table_display_for(Person).update(selected: %w[primary_group])
+      # rubocop:todo Layout/LineLength
       allow_any_instance_of(TableDisplays::People::PrimaryGroupColumn).to receive(:required_model_attrs).and_return(%w[roles.id])
+      # rubocop:enable Layout/LineLength
 
       get :index, params: {group_id: group.id}
       expect(assigns(:people)).to have(1).item

@@ -16,7 +16,7 @@ class PaymentProviders::Z54 < Epics::GenericRequest
   end
 
   def header
-    Nokogiri::XML::Builder.new do |xml|
+    Nokogiri::XML::Builder.new do |xml| # rubocop:todo Metrics/BlockLength
       xml.header(authenticate: true) {
         xml.static {
           xml.HostID host_id

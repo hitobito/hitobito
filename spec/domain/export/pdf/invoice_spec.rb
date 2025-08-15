@@ -621,7 +621,10 @@ describe Export::Pdf::Invoice do
     end
 
     context "multiple invoices" do
-      let(:pdf) { described_class.render_multiple([invoice, build_invoice(recipient: people(:bottom_member))], payment_slip: true, articles: true, reminders: false) }
+      let(:pdf) {
+        described_class.render_multiple([invoice, build_invoice(recipient: people(:bottom_member))], payment_slip: true,
+          articles: true, reminders: false)
+      }
 
       before do
         person.update!(language: :fr)

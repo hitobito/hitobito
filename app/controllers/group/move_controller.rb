@@ -14,7 +14,7 @@ class Group::MoveController < ApplicationController
     candidates
   end
 
-  def perform
+  def perform # rubocop:todo Metrics/AbcSize
     if target && mover.candidates.include?(target)
       group.parent_id = target.id
       authorize!(:create, group)

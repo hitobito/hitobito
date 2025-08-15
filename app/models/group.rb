@@ -191,7 +191,9 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   validates :logo, dimension: {width: {max: 8_000}, height: {max: 8_000}},
     content_type: ["image/jpeg", "image/gif", "image/png"]
 
-  normalizes :email, :self_registration_notification_email, with: ->(attribute) { attribute.downcase }
+  normalizes :email, :self_registration_notification_email, with: ->(attribute) {
+    attribute.downcase
+  }
 
   scope :without_archived, -> { where(archived_at: nil) }
 
@@ -340,7 +342,9 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   def validate_self_registration_role_type
     return if self_registration_role_type.blank? ||
+      # rubocop:todo Layout/LineLength
       decorate.allowed_roles_for_self_registration.map(&:sti_name).include?(self_registration_role_type)
+    # rubocop:enable Layout/LineLength
 
     errors.add(:self_registration_role_type, :inclusion)
   end

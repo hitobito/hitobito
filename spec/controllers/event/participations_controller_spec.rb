@@ -446,7 +446,9 @@ describe Event::ParticipationsController do
 
         expect(flash[:notice]).to be_nil
         expect(flash[:warning])
+          # rubocop:todo Layout/LineLength
           .to include "Es wurde eine Voranmeldung für Teilnahme von <i>#{user}</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden."
+        # rubocop:enable Layout/LineLength
       end
 
       it "creates pending confirmation with waiting list info" do
@@ -462,7 +464,9 @@ describe Event::ParticipationsController do
 
         expect(flash[:notice]).to be_nil
         expect(flash[:warning])
+          # rubocop:todo Layout/LineLength
           .to include "Es wurde eine Voranmeldung für Teilnahme von <i>#{user}</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden."
+        # rubocop:enable Layout/LineLength
         expect(flash[:alert]).to include "Es sind derzeit alle Plätze belegt, die Anmeldung ist auf der Warteliste."
       end
 
@@ -478,7 +482,9 @@ describe Event::ParticipationsController do
         expect(pending_dj_handlers).to be_one { |h| h =~ /Event::ParticipationConfirmationJob/ }
 
         expect(flash[:notice])
+          # rubocop:todo Layout/LineLength
           .to include "Teilnahme von <i>#{user}</i> in <i>Eventus</i> wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an."
+        # rubocop:enable Layout/LineLength
         expect(flash[:warning]).to be_nil
       end
 
@@ -516,7 +522,9 @@ describe Event::ParticipationsController do
 
         expect(flash[:notice]).to be_nil
         expect(flash[:warning])
+          # rubocop:todo Layout/LineLength
           .to include "Es wurde eine Voranmeldung für Teilnahme von <i>#{user}</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden."
+        # rubocop:enable Layout/LineLength
       end
 
       it "creates specific non-active participant role for course events" do
@@ -538,7 +546,9 @@ describe Event::ParticipationsController do
 
         expect(flash[:notice]).to be_nil
         expect(flash[:warning])
+          # rubocop:todo Layout/LineLength
           .to include "Es wurde eine Voranmeldung für Teilnahme von <i>#{user}</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden."
+        # rubocop:enable Layout/LineLength
       end
 
       it "creates new participation with application" do
@@ -565,7 +575,9 @@ describe Event::ParticipationsController do
 
         expect(flash[:notice]).to be_nil
         expect(flash[:warning])
+          # rubocop:todo Layout/LineLength
           .to include "Es wurde eine Voranmeldung für Teilnahme von <i>#{user}</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden."
+        # rubocop:enable Layout/LineLength
       end
 
       it "creates new participation with all answers" do
@@ -1004,7 +1016,9 @@ describe Event::ParticipationsController do
     let!(:participation) { Fabricate(:event_participation, participant: user, event: course, active: true) }
     let(:other_person) { Fabricate(:person, birthday: Date.new(2003, 0o3, 0o3), company_name: "Puzzle ITC Test") }
     let!(:other_role) { Fabricate(Group::TopGroup::Member.name, person: other_person, group: group) }
-    let!(:other_participation) { Fabricate(:event_participation, participant: other_person, event: course, active: true) }
+    let!(:other_participation) {
+      Fabricate(:event_participation, participant: other_person, event: course, active: true)
+    }
     let!(:other_event_role) { Fabricate(Event::Course::Role::Participant.name, participation: other_participation) }
 
     before { sign_in(user.reload) }

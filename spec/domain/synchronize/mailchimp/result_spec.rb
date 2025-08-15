@@ -96,7 +96,10 @@ describe Synchronize::Mailchimp::Result do
 
   it "does add operation results if failed" do
     payload = [
-      {method: "PUT", path: "lists/0190dd036d/members/be8cf7f7ec1922469a77b47826f908ae", body: "{\"email_address\":\"jamie-rosenbauer@hitobito.com\",\"merge_fields\":{\"FNAME\":\"Jamie\",\"LNAME\":\"Rosenbauer\",\"GENDER\":\"z\"},\"language\":\"fr\"}"}
+      {method: "PUT", path: "lists/0190dd036d/members/be8cf7f7ec1922469a77b47826f908ae",
+       # rubocop:todo Layout/LineLength
+       body: "{\"email_address\":\"jamie-rosenbauer@hitobito.com\",\"merge_fields\":{\"FNAME\":\"Jamie\",\"LNAME\":\"Rosenbauer\",\"GENDER\":\"z\"},\"language\":\"fr\"}"}
+      # rubocop:enable Layout/LineLength
     ]
     results = [
       {title: "Invalid Resource",

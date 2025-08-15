@@ -96,7 +96,9 @@ describe Wizards::Steps::NewUserForm do
       it "is invalid if privacy_policy_accepted is missing" do
         expect(form).not_to be_valid
         expect(form).to have(1).error_on(:base)
+        # rubocop:todo Layout/LineLength
         expect(error_message).to eq "Um die Registrierung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden."
+        # rubocop:enable Layout/LineLength
       end
 
       it "is invalid if privacy_policy_accepted is not accepted" do

@@ -41,7 +41,8 @@ module RenderPeopleExports
     if params[:label_format_id]
       household = true?(params[:household])
       label = params[:address_type]
-      Export::Pdf::Labels.new(find_and_remember_label_format, label: label).generate(people, household)
+      Export::Pdf::Labels.new(find_and_remember_label_format, label: label).generate(people,
+        household)
     else
       Export::Pdf::List.render(people, group)
     end

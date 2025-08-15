@@ -63,7 +63,8 @@ class BackupRestorer
   #   end
   # end
 
-  def dump_invoices
+  # rubocop:todo Metrics/MethodLength
+  def dump_invoices # rubocop:todo Metrics/AbcSize # rubocop:todo Metrics/MethodLength
     switch_mode(:sql)
 
     only_missing do
@@ -85,6 +86,7 @@ class BackupRestorer
       end
     end
   end
+  # rubocop:enable Metrics/MethodLength
 
   def script_header
     switch_mode(:ruby)
@@ -97,11 +99,13 @@ class BackupRestorer
     RUBY
   end
 
-  def script_participations_and_answers
+  def script_participations_and_answers # rubocop:todo Metrics/MethodLength
     switch_mode(:ruby)
     # # the current data-restore does not touch applications, so this is left out for now
     # appl_id = if #{participation.application.present?.inspect} == 'true'
+    # rubocop:todo Layout/LineLength
     #             connection.select_value("#{dump(participation.application, except: %w(id), sql_suffix: 'RETURNING id')}")
+    # rubocop:enable Layout/LineLength
     #           end
 
     @event.participations.each do |participation|
@@ -127,7 +131,8 @@ class BackupRestorer
     end
   end
 
-  def script_invoices
+  # rubocop:todo Metrics/MethodLength
+  def script_invoices # rubocop:todo Metrics/AbcSize # rubocop:todo Metrics/MethodLength
     switch_mode(:ruby)
 
     @group.invoices.each do |invoice|
@@ -177,6 +182,7 @@ class BackupRestorer
       RUBY
     end
   end
+  # rubocop:enable Metrics/MethodLength
 
   private
 
@@ -188,6 +194,8 @@ class BackupRestorer
     @mode = mode
   end
 
+  # rubocop:todo Metrics/MethodLength
+  # rubocop:todo Metrics/AbcSize
   def dump(object, except: %w[search_column], overrides: {}, sql_suffix: "")
     table = object.class.table_name
     db_columns = object.class.column_names
@@ -209,6 +217,8 @@ class BackupRestorer
 
     sql(table, columns, values, sql_suffix)
   end
+  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/MethodLength
 
   def only_missing(&block)
     previous_suffix, @default_suffix = @default_suffix, "ON CONFLICT DO NOTHING"

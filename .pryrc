@@ -11,6 +11,7 @@
 #   list_callbacks(Person)
 #   list_callbacks(PeopleController)
 #
+# rubocop:todo Metrics/CyclomaticComplexity
 def list_callbacks(klass, skip_procs: true, skip_validations: true)
   klass.__callbacks.each_with_object(Hash.new { [] }) do |(k, callbacks), result|
     next if skip_validations && k == :validate # ignore validations
@@ -23,6 +24,7 @@ def list_callbacks(klass, skip_procs: true, skip_validations: true)
     end.compact_blank
   end
 end
+# rubocop:enable Metrics/CyclomaticComplexity
 
 def gr(resource, scope: nil, params: {}, ability: nil, as: Role.first.person)
   raise "#{resource} is not a resource class" unless resource <= ApplicationResource

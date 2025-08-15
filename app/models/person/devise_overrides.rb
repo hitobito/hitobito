@@ -97,7 +97,9 @@ module Person::DeviseOverrides
   def reset_password(new_password, new_password_confirmation)
     super
 
-    errors.details.reject { |key, _| key == :password || key == :password_confirmation }.each_key do |key|
+    errors.details.reject { |key, _|
+      key == :password || key == :password_confirmation
+    }.each_key do |key|
       errors.delete(key)
     end
   end

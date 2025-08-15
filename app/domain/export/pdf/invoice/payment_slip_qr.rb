@@ -4,7 +4,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module Export::Pdf::Invoice
-  class PaymentSlipQr < Section
+  class PaymentSlipQr < Section # rubocop:todo Metrics/ClassLength
     include ActionView::Helpers::NumberHelper
     require "prawn/measurement_extensions"
 
@@ -183,7 +183,7 @@ module Export::Pdf::Invoice
       end
     end
 
-    def amount_box
+    def amount_box # rubocop:todo Metrics/AbcSize
       bounding_box([0, cursor], width: bounds.width) do
         bold do
           text_box t("currency"), at: [0, cursor]
@@ -204,7 +204,9 @@ module Export::Pdf::Invoice
       end
     end
 
-    # rubocop:disable Metrics/AbcSize
+    # rubocop:todo Lint/MissingCopEnableDirective
+    # rubocop:disable Metrics/AbcSize # rubocop:todo Lint/MissingCopEnableDirective
+    # rubocop:enable Lint/MissingCopEnableDirective
     def blank_amount_rectangle(width: 90, height: 30, length: 10)
       pdf.translate 20.mm, cursor do
         pdf.stroke do

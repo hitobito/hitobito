@@ -118,7 +118,9 @@ describe MailingLists::BulkMail::ImapMailValidator do
           expect(validator.sender_allowed?(mailing_list)).to eq(true)
         end
 
+        # rubocop:todo Layout/LineLength
         it "validates that sender is allowed when subscribers may post and sender is list member via additional email" do
+          # rubocop:enable Layout/LineLength
           bottom_member = people(:bottom_member)
           Fabricate(:additional_email, contactable: bottom_member, email: "additional_bottom_member@example.com")
 

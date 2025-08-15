@@ -67,10 +67,13 @@ describe AddressSynchronizationJob do
     it "uploads TSV file with both people" do
       stub_api_request(:post, "/uploadfile", response: {UploadFileResult: {FileToken: :in}}.to_json).with do |req|
         data = parse_upload(req)
-        expect(data.headers).to eq ["KDNR (QSTAT)", "Firma", "Vorname", "Nachname", "c/o", "Strasse", "Hausnummer", "Postfach", "PLZ", "Ort"]
+        expect(data.headers).to eq ["KDNR (QSTAT)", "Firma", "Vorname", "Nachname", "c/o", "Strasse", "Hausnummer",
+          "Postfach", "PLZ", "Ort"]
         expect(data.entries.size).to eq 2
-        expect(data.entries.first.to_h.values).to eq ["382461928", nil, "Bottom", "Member", nil, "Greatstreet", "345", nil, "3456", "Greattown"]
-        expect(data.entries.second.to_h.values).to eq ["572407901", nil, "Top", "Leader", nil, "Greatstreet", "345", nil, "3456", "Greattown"]
+        expect(data.entries.first.to_h.values).to eq ["382461928", nil, "Bottom", "Member", nil, "Greatstreet", "345",
+          nil, "3456", "Greattown"]
+        expect(data.entries.second.to_h.values).to eq ["572407901", nil, "Top", "Leader", nil, "Greatstreet", "345",
+          nil, "3456", "Greattown"]
       end
       job.perform
     end
@@ -107,7 +110,8 @@ describe AddressSynchronizationJob do
         let(:person_constraints) { {first_name: "Max", town: "Bern"} }
 
         it "only uploads person in constraint" do
-          Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group), person: Fabricate(:person, first_name: "Max", town: "Bern"))
+          Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group),
+            person: Fabricate(:person, first_name: "Max", town: "Bern"))
           stub_api_request(:post, "/uploadfile", response: {UploadFileResult: {FileToken: :in}}.to_json).with do |req|
             expect(parse_upload(req).entries.size).to eq 1
           end
@@ -130,7 +134,8 @@ describe AddressSynchronizationJob do
     [0, 2, 3].each do |state|
       it "reschedules if job is still processing state #{state}" do
         expect { job.perform }.to change { Delayed::Job.count }.by(1)
-        stub_api_request(:get, "/checkbatchstatus/batch", response: {CheckBatchStatusResult: {BatchStatus: {TokenStatus: state}}}.to_json)
+        stub_api_request(:get, "/checkbatchstatus/batch",
+          response: {CheckBatchStatusResult: {BatchStatus: {TokenStatus: state}}}.to_json)
         Delayed::Job.last.payload_object.perform
         followup_job = Delayed::Job.last.payload_object
         expect(followup_job.result_token).to eq "out"
@@ -144,7 +149,8 @@ describe AddressSynchronizationJob do
     describe "finished batch" do
       it "triggers download result processing" do
         job.perform
-        stub_api_request(:get, "/checkbatchstatus/batch", response: {CheckBatchStatusResult: {BatchStatus: {TokenStatus: 4}}}.to_json)
+        stub_api_request(:get, "/checkbatchstatus/batch",
+          response: {CheckBatchStatusResult: {BatchStatus: {TokenStatus: 4}}}.to_json)
         stub_api_request(:get, "/downloadfile/out", response: result.encode("Windows-1252"))
         expect do
           Delayed::Job.last.payload_object.perform
@@ -157,7 +163,8 @@ describe AddressSynchronizationJob do
 
       it "persists result as attachment via dj callback" do
         job.perform
-        stub_api_request(:get, "/checkbatchstatus/batch", response: {CheckBatchStatusResult: {BatchStatus: {TokenStatus: 4}}}.to_json)
+        stub_api_request(:get, "/checkbatchstatus/batch",
+          response: {CheckBatchStatusResult: {BatchStatus: {TokenStatus: 4}}}.to_json)
         stub_api_request(:get, "/downloadfile/out", response: result.encode("Windows-1252"))
         expect do
           travel_to(1.minute.from_now) do
@@ -191,7 +198,8 @@ describe AddressSynchronizationJob do
 
       it "proceeds with next batch in case current batch fails" do
         job.perform
-        stub_api_request(:get, "/checkbatchstatus/batch", response: {CheckBatchStatusResult: {BatchStatus: {TokenStatus: 1}}}.to_json)
+        stub_api_request(:get, "/checkbatchstatus/batch",
+          response: {CheckBatchStatusResult: {BatchStatus: {TokenStatus: 1}}}.to_json)
         expect do
           run_next_job
         end.to change { Delayed::Job.count }.by(1)
@@ -219,13 +227,15 @@ describe AddressSynchronizationJob do
         expect(HitobitoLogEntry.last.message).to eq "Post Adressabgleich: Fortschritt 0%"
         expect(Delayed::Job.last.payload_object.cursor).to eq people(:bottom_member).id
 
-        stub_api_request(:get, "/checkbatchstatus/batch", response: {CheckBatchStatusResult: {BatchStatus: {TokenStatus: 3}}}.to_json)
+        stub_api_request(:get, "/checkbatchstatus/batch",
+          response: {CheckBatchStatusResult: {BatchStatus: {TokenStatus: 3}}}.to_json)
         expect do
           run_next_job
         end.not_to change { HitobitoLogEntry.count }
         expect(Delayed::Job.last.payload_object.cursor).to eq people(:bottom_member).id
 
-        stub_api_request(:get, "/checkbatchstatus/batch", response: {CheckBatchStatusResult: {BatchStatus: {TokenStatus: 4}}}.to_json)
+        stub_api_request(:get, "/checkbatchstatus/batch",
+          response: {CheckBatchStatusResult: {BatchStatus: {TokenStatus: 4}}}.to_json)
         stub_api_request(:get, "/downloadfile/out", response: result.lines.take(2).join("\r\n").encode("Windows-1252"))
 
         expect do
@@ -235,14 +245,18 @@ describe AddressSynchronizationJob do
         expect(HitobitoLogEntry.last.message).to eq "Post Adressabgleich: Fortschritt 50%"
         expect(Delayed::Job.last.payload_object.cursor).to eq people(:top_leader).id
 
-        stub_api_request(:get, "/checkbatchstatus/batch", response: {CheckBatchStatusResult: {BatchStatus: {TokenStatus: 3}}}.to_json)
+        stub_api_request(:get, "/checkbatchstatus/batch",
+          response: {CheckBatchStatusResult: {BatchStatus: {TokenStatus: 3}}}.to_json)
         expect do
           run_next_job
         end.to not_change { HitobitoLogEntry.count }
           .and not_change { top_leader.reload.housenumber }
 
-        stub_api_request(:get, "/checkbatchstatus/batch", response: {CheckBatchStatusResult: {BatchStatus: {TokenStatus: 4}}}.to_json)
-        stub_api_request(:get, "/downloadfile/out", response: result.lines.tap { |l| l.delete_at(1) }.join("\r\n").encode("Windows-1252"))
+        stub_api_request(:get, "/checkbatchstatus/batch",
+          response: {CheckBatchStatusResult: {BatchStatus: {TokenStatus: 4}}}.to_json)
+        stub_api_request(:get, "/downloadfile/out", response: result.lines.tap { |l|
+          l.delete_at(1)
+        }.join("\r\n").encode("Windows-1252"))
 
         expect do
           run_next_job
@@ -254,7 +268,8 @@ describe AddressSynchronizationJob do
 
       it "runs three times before finalizing" do
         job.perform
-        stub_api_request(:get, "/checkbatchstatus/batch", response: {CheckBatchStatusResult: {BatchStatus: {TokenStatus: 3}}}.to_json)
+        stub_api_request(:get, "/checkbatchstatus/batch",
+          response: {CheckBatchStatusResult: {BatchStatus: {TokenStatus: 3}}}.to_json)
         expect do
           Delayed::Job.last.payload_object.perform
         end.to change { Delayed::Job.count }.by(1)
@@ -266,7 +281,8 @@ describe AddressSynchronizationJob do
         expect(followup_job.processed_count).to eq 0
         expect(followup_job.processing_count).to eq 1
 
-        stub_api_request(:get, "/checkbatchstatus/batch", response: {CheckBatchStatusResult: {BatchStatus: {TokenStatus: 4}}}.to_json)
+        stub_api_request(:get, "/checkbatchstatus/batch",
+          response: {CheckBatchStatusResult: {BatchStatus: {TokenStatus: 4}}}.to_json)
         stub_api_request(:get, "/downloadfile/out", response: result.encode("Windows-1252"))
         expect do
           followup_job.perform

@@ -103,7 +103,7 @@ class ApplicationSerializer < Oat::Serializer
 
   private
 
-  def unify_linked_entries(hash)
+  def unify_linked_entries(hash) # rubocop:todo Metrics/CyclomaticComplexity
     return unless hash.key?(:linked)
 
     linked_full = hash.delete(:linked)

@@ -27,7 +27,7 @@
 #  index_roles_on_type                    (type)
 #
 
-class Role < ActiveRecord::Base
+class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   has_paper_trail meta: {main_id: ->(r) { r.person_id },
                          main_type: Person.sti_name},
     skip: [:updated_at],
@@ -162,7 +162,8 @@ class Role < ActiveRecord::Base
     def with_ended_readable
       return with_inactive if Settings.people.ended_roles_readable_for.nil?
 
-      with_inactive.where(end_on: [nil, [Settings.people.ended_roles_readable_for.seconds.ago.to_date..]])
+      with_inactive.where(end_on: [nil,
+        [Settings.people.ended_roles_readable_for.seconds.ago.to_date..]])
     end
 
     # Is the given attribute used in the current STI class
@@ -195,6 +196,7 @@ class Role < ActiveRecord::Base
   # If the role is younger than the minimum days to archive, or is a future role, it gets destroyed.
   # If it has "archival age", we update the end_on attribute to yesterday instead of destroying it.
   # If `always_soft_destroy` is set to true, the role is always ended instead of destroyed.
+  # rubocop:todo Metrics/CyclomaticComplexity
   def destroy(always_soft_destroy: false) # rubocop:disable Rails/ActiveRecordOverride
     return vanilla_destroy unless always_soft_destroy || old_enough_to_soft_destroy?
     return vanilla_destroy if future? || starting_today?
@@ -203,6 +205,7 @@ class Role < ActiveRecord::Base
       end_on&.past? ? true : update!(end_on: Date.current.yesterday)
     end
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
 
   # Soft destroy if older than certain amount of days, hard if younger.
   # Set always_soft_destroy to true if you want to soft destroy even if the role is not old enough.
@@ -311,7 +314,8 @@ class Role < ActiveRecord::Base
     created_at < Settings.role.minimum_days_to_archive.days.ago
   end
 
-  def prevent_changes
+  # rubocop:todo Metrics/AbcSize
+  def prevent_changes # rubocop:todo Metrics/CyclomaticComplexity # rubocop:todo Metrics/AbcSize
     allowed = %w[archived_at updater_id]
     if group.archived?
       allowed.concat(%w[end_on])
@@ -324,12 +328,15 @@ class Role < ActiveRecord::Base
 
     raise ActiveRecord::ReadOnlyRecord unless new_record? || only_archival
   end
+  # rubocop:enable Metrics/AbcSize
 
   def reset_person_minimized_at
     person&.update_attribute(:minimized_at, nil) # rubocop:disable Rails/SkipsModelValidations
   end
 
+  # rubocop:todo Layout/LineLength
   # called as after_initialize callback for new records, sets `start_on` if blank unless blanked explicitely.
+  # rubocop:enable Layout/LineLength
   # To be able to recognize if the value has been assigned explicitely, the setter `start_on=` sets
   # an instance variable `@start_on_assigned` to true, which we check here.
   def set_start_on_to_today

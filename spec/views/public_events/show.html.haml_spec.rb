@@ -12,7 +12,8 @@ describe "public_events/show.html.haml" do
   before do
     assign(:event, event)
     assign(:group, group)
-    allow(view).to receive_messages(entry: event, event:, group:, resource: Person.new, render_application_attrs?: true, render_login_forms?: true)
+    allow(view).to receive_messages(entry: event, event:, group:, resource: Person.new,
+      render_application_attrs?: true, render_login_forms?: true)
     allow(controller).to receive_messages(entry: event, current_user: nil, current_person: nil)
   end
 

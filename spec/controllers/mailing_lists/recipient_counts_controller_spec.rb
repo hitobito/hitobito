@@ -24,7 +24,10 @@ describe MailingLists::RecipientCountsController do
       end
 
       it "returns count" do
-        get :index, params: {group_id: mailing_list.group.id, mailing_list_id: mailing_list.id, message_type: "Message::Letter", message: {send_to_households: false}, format: :js}, xhr: true
+        get :index,
+          # rubocop:todo Layout/LineLength
+          params: {group_id: mailing_list.group.id, mailing_list_id: mailing_list.id, message_type: "Message::Letter", message: {send_to_households: false}, format: :js}, xhr: true
+        # rubocop:enable Layout/LineLength
 
         expect(response.body).to match("Brief wird für 20 Personen erstellt.")
         expect(response.body).to match("10 weitere haben keine vollständige Adresse hinterlegt.")
@@ -39,7 +42,10 @@ describe MailingLists::RecipientCountsController do
       end
 
       it "returns count" do
-        get :index, params: {group_id: mailing_list.group.id, mailing_list_id: mailing_list.id, message_type: "Message::Letter", message: {send_to_households: true}, format: :js}, xhr: true
+        get :index,
+          # rubocop:todo Layout/LineLength
+          params: {group_id: mailing_list.group.id, mailing_list_id: mailing_list.id, message_type: "Message::Letter", message: {send_to_households: true}, format: :js}, xhr: true
+        # rubocop:enable Layout/LineLength
 
         expect(response.body).to match("Brief wird für 15 Haushalte erstellt.")
         expect(response.body).to match("10 weitere haben keine vollständige Adresse hinterlegt.")
@@ -53,7 +59,10 @@ describe MailingLists::RecipientCountsController do
       end
 
       it "returns count" do
-        get :index, params: {group_id: mailing_list.group.id, mailing_list_id: mailing_list.id, message_type: "Message::LetterWithInvoice", message: {send_to_households: false}, format: :js}, xhr: true
+        get :index,
+          # rubocop:todo Layout/LineLength
+          params: {group_id: mailing_list.group.id, mailing_list_id: mailing_list.id, message_type: "Message::LetterWithInvoice", message: {send_to_households: false}, format: :js}, xhr: true
+        # rubocop:enable Layout/LineLength
 
         expect(response.body).to match("Rechnungsbrief wird für 20 Personen erstellt.")
         expect(response.body).to match("10 weitere haben keine vollständige Adresse hinterlegt.")
@@ -67,7 +76,10 @@ describe MailingLists::RecipientCountsController do
       end
 
       it "returns count" do
-        get :index, params: {group_id: mailing_list.group.id, mailing_list_id: mailing_list.id, message_type: "Message::TextMessage", format: :js}, xhr: true
+        get :index,
+          # rubocop:todo Layout/LineLength
+          params: {group_id: mailing_list.group.id, mailing_list_id: mailing_list.id, message_type: "Message::TextMessage", format: :js}, xhr: true
+        # rubocop:enable Layout/LineLength
 
         expect(response.body).to match("SMS wird für 20 Personen erstellt.")
         expect(response.body).to match("10 weitere haben keine Mobiltelefonnummer hinterlegt.")

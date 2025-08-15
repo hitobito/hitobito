@@ -44,7 +44,9 @@ describe Assignment do
 
   context "attachment" do
     let(:printer) { Fabricate(:company, email: "printing_company@example.com") }
-    let(:new_assignment) { Assignment.new(person: printer, creator: top_leader, title: "Printing", description: "DIN A4") }
+    let(:new_assignment) {
+      Assignment.new(person: printer, creator: top_leader, title: "Printing", description: "DIN A4")
+    }
 
     it "prepares attachment for printing after creation" do
       new_assignment.attachment = messages(:letter)

@@ -19,7 +19,8 @@ module Event::TrainingDays
         .between(@start_date, @end_date)
         .includes(:dates, kind: {event_kind_qualification_kinds: :qualification_kind})
         .joins(:participations, kind: {event_kind_qualification_kinds: :qualification_kind})
-        .where(event_participations: {qualified: true, participant_id: @person_id, participant_type: Person.sti_name})
+        .where(event_participations: {qualified: true, participant_id: @person_id,
+                                      participant_type: Person.sti_name})
         .where(event_kind_qualification_kinds: {
           qualification_kind_id: @qualification_kind_ids,
           category: :prolongation,

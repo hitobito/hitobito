@@ -17,7 +17,8 @@ module Contactable
     :email, :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country, {
       phone_numbers_attributes: [:id, :number, :translated_label, :public, :_destroy],
       social_accounts_attributes: [:id, :name, :translated_label, :public, :_destroy],
-      additional_emails_attributes: [:id, :email, :translated_label, :public, :mailings, :invoices, :_destroy],
+      additional_emails_attributes: [:id, :email, :translated_label, :public, :mailings, :invoices,
+        :_destroy],
       additional_addresses_attributes: [
         :id,
         :name,
@@ -46,7 +47,9 @@ module Contactable
 
     belongs_to :location, foreign_key: "zip_code", primary_key: "zip_code", inverse_of: false
 
+    # rubocop:todo Layout/LineLength
     accepts_nested_attributes_for :phone_numbers, :social_accounts, :additional_emails, :additional_addresses,
+      # rubocop:enable Layout/LineLength
       allow_destroy: true
 
     before_validation :set_self_in_nested
@@ -55,7 +58,8 @@ module Contactable
 
     # Configure if zip code should be validated, true by default, can be disabled in wagons
     class_attribute :validate_zip_code, default: true
-    validates :zip_code, zipcode: {country_code_attribute: :zip_country}, allow_blank: true, if: :validate_zip_code
+    validates :zip_code, zipcode: {country_code_attribute: :zip_country}, allow_blank: true,
+      if: :validate_zip_code
     validate :assert_max_one_additional_invoice_address
     validate :assert_additional_address_labels_are_unique, if: -> { additional_addresses.any? }
   end

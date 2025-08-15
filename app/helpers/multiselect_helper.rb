@@ -8,7 +8,8 @@ module MultiselectHelper
     return unless scope.total_pages <= max_pages && scope.first.respond_to?(:id)
     ids = scope.unscope(:limit).pluck(:id)
     content_tag(:label, class: "extended_all btn btn-link d-inline d-none") do
-      check_box_tag(:extended_all, ids.count, false, data: {ids: JSON.generate(ids)}, class: "d-none") +
+      check_box_tag(:extended_all, ids.count, false, data: {ids: JSON.generate(ids)},
+        class: "d-none") +
         content_tag(:span, t("global.extended_select_all", count: ids.count))
     end
   end

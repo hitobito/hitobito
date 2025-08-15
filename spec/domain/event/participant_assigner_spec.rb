@@ -50,7 +50,8 @@ describe Event::ParticipantAssigner do
         quest = course.questions.first
         other = Fabricate(:course, groups: [groups(:top_layer)])
         other.questions << Fabricate(:event_question, event: other)
-        other.questions << Fabricate(:event_question, event: other, question: quest.question, choices: quest.choices, multiple_choices: quest.multiple_choices)
+        other.questions << Fabricate(:event_question, event: other, question: quest.question, choices: quest.choices,
+          multiple_choices: quest.multiple_choices)
         other
       end
 
@@ -84,7 +85,8 @@ describe Event::ParticipantAssigner do
           other.questions << Event::Question::NonDefaultQuestion.create!(event: other,
             disclosure: :optional,
             question: participation.answers.first.question.question)
-          other.questions << Fabricate(:event_question, event: other, question: quest.question, choices: quest.choices, multiple_choices: quest.multiple_choices)
+          other.questions << Fabricate(:event_question, event: other, question: quest.question, choices: quest.choices,
+            multiple_choices: quest.multiple_choices)
           other
         end
 
@@ -97,7 +99,8 @@ describe Event::ParticipantAssigner do
 
       context "on existing participation" do
         it "raises error" do
-          Fabricate(:event_participation, event: event, participant: participation.person, application: Fabricate(:event_application))
+          Fabricate(:event_participation, event: event, participant: participation.person,
+            application: Fabricate(:event_application))
 
           expect { subject.add_participant }.to raise_error(ActiveRecord::RecordNotUnique)
         end

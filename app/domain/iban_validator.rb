@@ -15,12 +15,14 @@ class IbanValidator < ActiveModel::EachValidator
   end
 
   # validates iban to match regex and performs checksum lookup with modulo 97 act
-  def valid_iban?(iban)
+  def valid_iban?(iban) # rubocop:todo Metrics/AbcSize
     iban = iban.delete(" ")
 
     return false unless iban.match?(IBAN_REGEX)
 
+    # rubocop:todo Layout/LineLength
     rearranged_iban = ((iban.slice(4..-1) + iban.slice(0..3)).slice(0..-3) + "00").chars.map do |char|
+      # rubocop:enable Layout/LineLength
       char.match?(/[A-Z]/) ? (char.ord - "A".ord + 10).to_s : char
     end.join
 

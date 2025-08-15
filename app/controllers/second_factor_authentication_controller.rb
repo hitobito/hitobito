@@ -20,7 +20,8 @@ class SecondFactorAuthenticationController < ApplicationController
     authenticator.prepare_registration! unless authenticator.registered?
   end
 
-  def create
+  # rubocop:todo Metrics/MethodLength
+  def create # rubocop:todo Metrics/AbcSize # rubocop:todo Metrics/MethodLength
     if authenticator.verify?(params[:second_factor_code])
       unless authenticator.registered?
         authenticator.register!
@@ -45,6 +46,7 @@ class SecondFactorAuthenticationController < ApplicationController
         alert: t("second_factor_authentication.flash.failure")
     end
   end
+  # rubocop:enable Metrics/MethodLength
 
   private
 

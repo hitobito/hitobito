@@ -25,7 +25,10 @@ module Export::Tabular::People
 
     def selected_labels
       table_display.active_columns(list).each_with_object({}) do |attr, hash|
-        hash[attr] = attribute_label(attr) unless table_display.column_for(attr).exclude_attr?(selected_group)
+        unless table_display.column_for(attr).exclude_attr?(selected_group)
+          hash[attr] =
+            attribute_label(attr)
+        end
       end
     end
 

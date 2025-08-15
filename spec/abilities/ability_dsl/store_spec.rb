@@ -26,7 +26,8 @@ describe AbilityDsl::Store do
 
   context "#general_constraints" do
     it "retrieves general constraint for all and specific action" do
-      c1 = AbilityDsl::Config.new(AbilityDsl::Recorder::General::PERMISSION, :subj, AbilityDsl::Recorder::General::ALL_ACTION, :ability1, :constraint1)
+      c1 = AbilityDsl::Config.new(AbilityDsl::Recorder::General::PERMISSION, :subj,
+        AbilityDsl::Recorder::General::ALL_ACTION, :ability1, :constraint1)
       c2 = AbilityDsl::Config.new(AbilityDsl::Recorder::General::PERMISSION, :subj, :action, :ability1, :constraint2)
       subject.add(c1)
       subject.add(c2)
@@ -34,7 +35,8 @@ describe AbilityDsl::Store do
     end
 
     it "retrieves general constraint for all action" do
-      c1 = AbilityDsl::Config.new(AbilityDsl::Recorder::General::PERMISSION, :subj, AbilityDsl::Recorder::General::ALL_ACTION, :ability1, :constraint1)
+      c1 = AbilityDsl::Config.new(AbilityDsl::Recorder::General::PERMISSION, :subj,
+        AbilityDsl::Recorder::General::ALL_ACTION, :ability1, :constraint1)
       c2 = AbilityDsl::Config.new(AbilityDsl::Recorder::General::PERMISSION, :subj, :action2, :ability1, :constraint2)
       subject.add(c1)
       subject.add(c2)

@@ -460,7 +460,8 @@ describe Invoice do
   end
 
   it "reads invoices address" do
-    person.additional_addresses.create!(label: "Arbeit", street: "Lagistrasse", housenumber: "12a", zip_code: 1080, town: "Jamestown", country: "CH", invoices: true)
+    person.additional_addresses.create!(label: "Arbeit", street: "Lagistrasse", housenumber: "12a", zip_code: 1080,
+      town: "Jamestown", country: "CH", invoices: true)
     invoice = create_invoice
     expect(invoice.recipient_address).to eq <<~TEXT
       Top Leader

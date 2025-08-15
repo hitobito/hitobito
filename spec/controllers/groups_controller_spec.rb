@@ -108,7 +108,9 @@ describe GroupsController do
         group = groups(:bottom_layer_one)
         Fabricate(:role, type: "Group::BottomLayer::Leader", person: person, group: group)
         sign_in(person)
-        post :create, params: {group: {type: "Group::BottomGroup", parent_id: group.id, contact_id: invisible_person.id, name: "foobar"}}
+        post :create,
+          params: {group: {type: "Group::BottomGroup", parent_id: group.id, contact_id: invisible_person.id,
+                           name: "foobar"}}
 
         Auth.current_person = person
         group = assigns(:group)
@@ -270,7 +272,9 @@ describe GroupsController do
       end
 
       it "leader can destroy group" do
-        expect { post :destroy, params: {id: groups(:bottom_group_one_two).id} }.to change { Group.without_deleted.count }.by(-1)
+        expect { post :destroy, params: {id: groups(:bottom_group_one_two).id} }.to change {
+          Group.without_deleted.count
+        }.by(-1)
         is_expected.to redirect_to groups(:bottom_layer_one)
       end
     end

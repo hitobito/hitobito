@@ -15,7 +15,8 @@ require "set" # rubocop:disable Lint/RedundantRequireStatement
 class StructureParser
   attr_reader :result, :errors
 
-  def initialize(structure, common_indent: 4, shiftwidth: 2, list_marker: "*", allowed_permissions: [])
+  def initialize(structure, common_indent: 4, shiftwidth: 2, list_marker: "*",
+    allowed_permissions: [])
     # data
     @structure = structure
 
@@ -235,7 +236,9 @@ class StructureParser
         @current_layer.children << group
         @current_group = group
         @result[@current_layer][group] ||= []
+      # rubocop:todo Layout/LineLength
       when /^#{@shiftwidth * 2}#{Regexp.escape(@list_marker)} (.*):\s+(\[.*\])(\s+--\s+\(?(.*)\)?)?$/ # role
+        # rubocop:enable Layout/LineLength
         match = Regexp.last_match
         role = Role.new(match[1], match[2], match[4])
 

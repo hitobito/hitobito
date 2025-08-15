@@ -6,7 +6,7 @@
 module SearchStrategies
   class PersonSearch < Base
     # rubocop:disable Metrics/MethodLength
-    def search_fulltext
+    def search_fulltext # rubocop:todo Metrics/AbcSize
       return no_people unless term_present?
 
       pg_rank_alias = extract_pg_ranking(Person.search(@term).to_sql)

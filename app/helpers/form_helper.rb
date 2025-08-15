@@ -17,7 +17,7 @@ module FormHelper
   end
 
   # Render a generic form for the current entry
-  def entry_form(*attrs, &block)
+  def entry_form(*attrs, &block) # rubocop:todo Metrics/AbcSize
     options = attrs.extract_options!
     options[:buttons_bottom] = true unless options.key?(:buttons_bottom)
     options[:buttons_top] = true unless options.key?(:buttons_top)
@@ -134,7 +134,7 @@ module FormHelper
   # 1. Use :cancel_url_new or :cancel_url_edit option, if present
   # 2. Use :cancel_url option, if present
   # 3. Use polymorphic_path(object)
-  def get_cancel_url(object, options)
+  def get_cancel_url(object, options) # rubocop:todo Metrics/CyclomaticComplexity
     if params[:return_url].present?
       url = begin
         URI.parse(params[:return_url]).path

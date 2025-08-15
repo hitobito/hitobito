@@ -33,7 +33,8 @@ module Dropdown::Event::Participation
     def add_mail_item(mail_type)
       add_item(
         CustomContent.find_by(key: mail_type)&.label,
-        template.group_event_participation_mail_dispatch_path(group, course, participation, mail_type: mail_type),
+        template.group_event_participation_mail_dispatch_path(group, course, participation,
+          mail_type: mail_type),
         method: :post,
         "data-confirm": translate(".confirmation")
       )

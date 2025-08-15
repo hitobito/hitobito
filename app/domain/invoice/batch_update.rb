@@ -54,7 +54,8 @@ class Invoice::BatchUpdate
   end
 
   def create_reminder(invoice)
-    attributes = payment_reminder_attrs(invoice.payment_reminders, invoice.invoice_config, invoice.recipient)
+    attributes = payment_reminder_attrs(invoice.payment_reminders, invoice.invoice_config,
+      invoice.recipient)
     invoice.payment_reminders.create!(attributes)
   end
 

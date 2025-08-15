@@ -30,7 +30,9 @@ class Event::Filter
     # This must run as an explicite separate query.
     # If you merge this in the following relation, activerecord+kaminari
     # will mess up the queries (pagination is run on the wrong query).
+    # rubocop:todo Layout/LineLength
     event_ids_for_relevant_groups_and_dates = Event.with_group_id(relevant_group_ids).in_year(year).pluck(:id)
+    # rubocop:enable Layout/LineLength
 
     Event # nesting restricts to parent, we want more
       .where(id: event_ids_for_relevant_groups_and_dates)

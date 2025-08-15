@@ -18,12 +18,16 @@ module Synchronize
       end
 
       # Prepares the data for updating Mailchimp segments by grouping emails to add and remove.
+      # rubocop:todo Layout/LineLength
       # Returns an array of tuples, each containing the tag_id and a hash with members to add and remove.
+      # rubocop:enable Layout/LineLength
       # Emails are grouped in slices of SLICE_SIZE.
       #
       # Example return value:
       #   [
+      # rubocop:todo Layout/LineLength
       #     [123, {members_to_add: ["add1@example.com", "add2@example.com"], members_to_remove: ["del1@example.com"]}],
+      # rubocop:enable Layout/LineLength
       #     [123, {members_to_add: ["add3@example.com"], members_to_remove: []}]
       #   ]
       #

@@ -19,7 +19,9 @@ namespace :dev do
       BASH
     end
 
+    # rubocop:todo Layout/LineLength
     desc "Obtain refresh token, wrap as follows to read into env: read access refresh id < <(echo $(rake .. | jq -r '.access_token, .refresh_token, .id_token'))"
+    # rubocop:enable Layout/LineLength
     task :refresh, [:application_id, :refresh_token, :populate_env] => [:environment] do |_, args|
       app = Oauth::Application.find(args.fetch(:application_id))
       sh <<~BASH
@@ -73,7 +75,9 @@ namespace :dev do
       BASH
     end
 
+    # rubocop:todo Layout/LineLength
     desc "Show example OAuth-Authorization Screen. Call without arguments to use/create a test oauth app"
+    # rubocop:enable Layout/LineLength
     task :authorization, [:application_id, :prompt, :redirect_uri] => [:environment] do |_, args|
       def find_or_create_app(application_id)
         return Oauth::Application.find(application_id) if application_id.present?
@@ -83,7 +87,8 @@ namespace :dev do
           .find_or_create_by!(redirect_uri: "http://localhost:3001/callback")
       end
 
-      def start_callback_server
+      # rubocop:todo Metrics/MethodLength
+      def start_callback_server # rubocop:todo Metrics/AbcSize # rubocop:todo Metrics/MethodLength
         require "webrick"
         server = WEBrick::HTTPServer.new(
           Port: 3001,
@@ -128,6 +133,7 @@ namespace :dev do
           server.start
         end
       end
+      # rubocop:enable Metrics/MethodLength
 
       app = find_or_create_app(args[:application_id])
       host_name = ENV.fetch("RAILS_HOST_NAME", "localhost:3000")

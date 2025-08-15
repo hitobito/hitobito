@@ -159,7 +159,9 @@ describe "Email verification", js: true do
     # 2. Attacker requests a password reset email, but doesn't click the link yet
     # 3. Attacker has someone else change their email to one they don't control (or use a second account for it)
     # 4. The email change is effective immediately because no previous email was ever confirmed
+    # rubocop:todo Layout/LineLength
     # 5. Attacker clicks the link from the password reset email and changes password. The new email must not be auto-confirmed.
+    # rubocop:enable Layout/LineLength
     it "should not auto-confirm email which has changed in the meantime" do
       expect do
         token = person.generate_reset_password_token!
@@ -262,7 +264,9 @@ describe "Email verification", js: true do
       fill_in "Nachname", with: "Guy"
       fill_in "Haupt-E-Mail", with: "newguy@example.com"
       first(:button, "Registrieren").click
+      # rubocop:todo Layout/LineLength
       is_expected.to have_text "Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst."
+      # rubocop:enable Layout/LineLength
       expect(Person.find_by(email: "newguy@example.com").confirmed?).to be_falsey
 
       mail = find_mail_to("newguy@example.com")

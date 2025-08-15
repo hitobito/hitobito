@@ -36,7 +36,7 @@ module Export::Ics
       group_event_url(group_id: event.groups.first.id, id: event.id, host: ENV["RAILS_HOST_NAME"])
     end
 
-    def generate_ical_from_event_date(event_date, event)
+    def generate_ical_from_event_date(event_date, event) # rubocop:todo Metrics/AbcSize
       Icalendar::Event.new.tap do |ical_event|
         ical_event.dtstart = datetime_to_ical(event_date.start_at)
         ical_event.dtend = finish_at_to_ical(event_date.finish_at)

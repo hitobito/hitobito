@@ -44,7 +44,9 @@ describe PersonDuplicate do
       expect(duplicate).to be_valid
 
       expect(duplicate.valid?(:merge)).to be_falsey
+      # rubocop:todo Layout/LineLength
       expect(duplicate.errors.full_messages).to eq ["Rolle Member (bis #{I18n.l(20.days.ago.to_date)}) von Bottom Member ist fürs Zusammenführen nicht gültig, da die andere Person eventuell bereits eine Rolle hat, welche diese Rolle nicht mehr erlaubt, diese muss manuell korrigiert/etnfernt werden. Info: Bis kann nicht vor Von sein"]
+      # rubocop:enable Layout/LineLength
     end
   end
 end

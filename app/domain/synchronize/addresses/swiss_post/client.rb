@@ -36,11 +36,13 @@ module Synchronize::Addresses::SwissPost
     end
 
     def check_batch_status(batch_token)
-      make_request("/checkbatchstatus/#{batch_token}", read_path: "CheckBatchStatusResult.BatchStatus.TokenStatus")
+      make_request("/checkbatchstatus/#{batch_token}",
+        read_path: "CheckBatchStatusResult.BatchStatus.TokenStatus")
     end
 
     def download_file(output_token)
-      make_request("/downloadfile/#{output_token}", read_path: nil).body.force_encoding(Config::ENCODING).encode("UTF-8")
+      make_request("/downloadfile/#{output_token}",
+        read_path: nil).body.force_encoding(Config::ENCODING).encode("UTF-8")
     end
 
     private

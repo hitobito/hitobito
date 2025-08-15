@@ -33,7 +33,8 @@ describe Export::Tabular::People::PersonRow do
 
     before do
       person.additional_addresses << Fabricate.build(:additional_address, address_attrs.merge(label: "Rechnung"))
-      person.additional_addresses << Fabricate.build(:additional_address, address_attrs.merge(label: "Weitere", housenumber: 4, name: "test", uses_contactable_name: false))
+      person.additional_addresses << Fabricate.build(:additional_address,
+        address_attrs.merge(label: "Weitere", housenumber: 4, name: "test", uses_contactable_name: false))
     end
 
     it { expect(row.fetch(:additional_address_rechnung)).to eq "Top Leader, Langestrasse 3, 8000 Zürich" }
@@ -55,7 +56,9 @@ describe Export::Tabular::People::PersonRow do
 
       before { Fabricate(Group::BottomGroup::Member.name.to_s, group: group, person: person) }
 
-      it { expect(row.fetch(:roles).split(", ")).to match_array ["Leader Top / TopGroup", "Member Bottom One / Group 11"] }
+      it {
+        expect(row.fetch(:roles).split(", ")).to match_array ["Leader Top / TopGroup", "Member Bottom One / Group 11"]
+      }
     end
   end
 

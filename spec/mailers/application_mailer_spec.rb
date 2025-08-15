@@ -107,7 +107,9 @@ RSpec.describe ApplicationMailer, type: :mailer do
 
         def placeholder_test_link = link_to("Label", @target)
       end
+      # rubocop:todo Layout/LineLength
       expect(mailer.test_mail("<a>World</a>").body.to_s).to include('Hello <a href="&lt;a&gt;World&lt;/a&gt;">Label</a>')
+      # rubocop:enable Layout/LineLength
     end
   end
 
@@ -165,7 +167,9 @@ RSpec.describe ApplicationMailer, type: :mailer do
       let(:notification_email) { "self_registration_notification@example.com" }
 
       it "has the sender per locale defined in the translation" do
-        check_sender { Groups::SelfRegistrationNotificationMailer.self_registration_notification(notification_email, role) }
+        check_sender {
+          Groups::SelfRegistrationNotificationMailer.self_registration_notification(notification_email, role)
+        }
       end
     end
 
@@ -232,7 +236,10 @@ RSpec.describe ApplicationMailer, type: :mailer do
         let(:failed_recipients) { nil }
 
         it "has the sender per locale defined in the translation" do
-          check_sender { DeliveryReportMailer.bulk_mail(recipient_email, envelope_sender, mail_subject, total_recipients, delivered_at) }
+          check_sender {
+            DeliveryReportMailer.bulk_mail(recipient_email, envelope_sender, mail_subject, total_recipients,
+              delivered_at)
+          }
         end
       end
     end

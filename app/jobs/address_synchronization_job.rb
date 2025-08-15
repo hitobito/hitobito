@@ -15,7 +15,8 @@ class AddressSynchronizationJob < CursorBasedPagingJob
     Delayed::Job.where("handler LIKE ?", "%#{name}%").exists?
   end
 
-  def initialize(cursor: nil, batch_token: nil, upload_token: nil, result_token: nil, processed_count: 0, processing_count: 0)
+  def initialize(cursor: nil, batch_token: nil, upload_token: nil, result_token: nil,
+    processed_count: 0, processing_count: 0)
     super(cursor:, processed_count:, processing_count:)
     @batch_token = batch_token
     @upload_token = upload_token
@@ -28,7 +29,7 @@ class AddressSynchronizationJob < CursorBasedPagingJob
 
   private
 
-  def reschedule(attrs = {batch_token:, upload_token:, result_token:, cursor:, processed_count:, processing_count:}) = super
+  def reschedule(attrs = {batch_token:, upload_token:, result_token:, cursor:, processed_count:, processing_count:}) = super # rubocop:disable Layout/LineLength
 
   def process_next_batch
     super do
@@ -96,7 +97,8 @@ class AddressSynchronizationJob < CursorBasedPagingJob
       content_type: "application/text"
     )
     attachment = ActiveStorage::Attachment.new(name: result_token, record: job, blob:)
-    attachment.define_singleton_method(:transform_variants_later, -> {}) # NOTE: remove for rails => 7.2
+    attachment.define_singleton_method(:transform_variants_later, -> {
+    }) # NOTE: remove for rails => 7.2
     attachment.save!
   end
 end

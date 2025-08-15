@@ -143,7 +143,10 @@ module LayoutHelper
 
   def button(label, url, icon_name = nil, options = {})
     add_css_class options, "btn btn-sm"
-    add_css_class options, "btn-outline-primary" unless /(^|\s)btn-(?!sm\b)/.match?((options[:class]))
+    unless /(^|\s)btn-(?!sm\b)/.match?((options[:class]))
+      add_css_class options,
+        "btn-outline-primary"
+    end
 
     disabled_msg = options.delete(:disabled)
     return disabled_button(label, disabled_msg, icon_name, options) if disabled_msg

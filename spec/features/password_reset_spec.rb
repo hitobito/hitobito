@@ -78,7 +78,8 @@ describe "password reset", js: true do
     context "person with login and 2FA" do
       let(:person) do
         person = people(:bottom_member)
-        person.update_columns(confirmed_at: 1.hour.ago, encrypted_password: "something", encrypted_two_fa_secret: "something")
+        person.update_columns(confirmed_at: 1.hour.ago, encrypted_password: "something",
+          encrypted_two_fa_secret: "something")
         person
       end
 
@@ -170,7 +171,8 @@ describe "password reset", js: true do
     context "person with login and 2FA" do
       let(:person) do
         person = people(:bottom_member)
-        person.update_columns(confirmed_at: 1.hour.ago, encrypted_password: "something", encrypted_two_fa_secret: "something")
+        person.update_columns(confirmed_at: 1.hour.ago, encrypted_password: "something",
+          encrypted_two_fa_secret: "something")
         person
       end
 

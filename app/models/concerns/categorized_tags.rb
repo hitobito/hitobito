@@ -29,7 +29,7 @@ module CategorizedTags
       order_categorized(tags)
     end
 
-    def order_categorized(tags)
+    def order_categorized(tags) # rubocop:todo Metrics/CyclomaticComplexity
       tags.to_a.sort do |a, b|
         if a[0] == :category_validation && b[0] == :other
           -1

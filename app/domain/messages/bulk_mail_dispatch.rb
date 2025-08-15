@@ -40,14 +40,17 @@ module Messages
       end
     end
 
-    def deliver_mails(mail_factory, recipients, retries)
+    def deliver_mails(mail_factory, recipients, retries) # rubocop:todo Metrics/AbcSize
       delivery = BulkMail::Delivery.new(mail_factory, recipients.map(&:email), retries)
 
       begin
         delivery.deliver
-        succeeded, failed, blocked = recipient_ids(recipients, [delivery.succeeded, delivery.failed, delivery.blocked])
+        succeeded, failed, blocked = recipient_ids(recipients,
+          [delivery.succeeded, delivery.failed, delivery.blocked])
 
+        # rubocop:todo Layout/LineLength
         log "Sent mails, #{succeeded.length} OK, #{failed.length} failed, #{blocked.length} blocked."
+        # rubocop:enable Layout/LineLength
 
         message_recipients.where(id: succeeded).update_all(state: :sent)
         message_recipients.where(id: failed).update_all(state: :failed)

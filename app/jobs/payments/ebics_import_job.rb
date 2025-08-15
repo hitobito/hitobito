@@ -14,7 +14,7 @@ class Payments::EbicsImportJob < BaseJob
     @payment_provider_config_id = payment_provider_config_id
   end
 
-  def perform
+  def perform # rubocop:todo Metrics/AbcSize
     create_start_log
     Payments::EbicsImport.new(payment_provider_config).run.each do |status, status_payments|
       payments[status] += status_payments

@@ -110,7 +110,9 @@ describe :event_participation, js: true do
     let(:event) { Fabricate(:course, application_opening_at: 5.days.ago, groups: [group]) }
 
     before do
+      # rubocop:todo Layout/LineLength
       allow_any_instance_of(Event::ParticipationsController).to receive(:current_user_interested_in_mail?).and_return(true)
+      # rubocop:enable Layout/LineLength
       visit new_group_event_participation_path(group, event, for_someone_else: true)
       expect(page).to have_content "Anmeldung als Teilnehmer/-in"
       fill_in "Person", with: "Top Leader"
@@ -120,7 +122,9 @@ describe :event_participation, js: true do
     end
 
     it "does send email to participant when send email checkbox is checked" do
+      # rubocop:todo Layout/LineLength
       allow_any_instance_of(Event::ParticipationsController).to receive(:current_user_interested_in_mail?).and_return(false)
+      # rubocop:enable Layout/LineLength
       expect do
         click_on "Anmelden"
         expect(page).to have_content "Teilnahme von Top Leader in Eventus wurde erfolgreich erstellt."
@@ -128,7 +132,9 @@ describe :event_participation, js: true do
     end
 
     it "does not send email to participant when send email checkbox is not checked" do
+      # rubocop:todo Layout/LineLength
       allow_any_instance_of(Event::ParticipationsController).to receive(:current_user_interested_in_mail?).and_return(false)
+      # rubocop:enable Layout/LineLength
       uncheck "E-Mail an Teilnehmer/in senden"
       expect do
         click_on "Anmelden"

@@ -40,6 +40,8 @@ module Wizards
       attribute_names.include?(name.to_s)
     end
 
+    # rubocop:todo Layout/LineLength
     def contains_any_changes? = attributes.compact_blank != self.class._default_attributes.to_h.compact_blank
+    # rubocop:enable Layout/LineLength
   end
 end

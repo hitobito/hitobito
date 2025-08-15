@@ -9,7 +9,7 @@ module CrudControllerTestHelper
   extend ActiveSupport::Concern
 
   # Performs a request based on the metadata of the action example under test.
-  def perform_request
+  def perform_request # rubocop:todo Metrics/AbcSize
     m = RSpec.current_example.metadata
     example_params = respond_to?(:params) ? send(:params) : {}
     params = scope_params
@@ -80,7 +80,7 @@ module CrudControllerTestHelper
     end
   end
 
-  def deep_attributes(attrs, entry)
+  def deep_attributes(attrs, entry) # rubocop:todo Metrics/AbcSize
     actual = {}
     attrs.keys.each do |key|
       if key.to_s.ends_with?("_attributes")
@@ -116,7 +116,9 @@ module CrudControllerTestHelper
       skips = Array(options[:skip])
       skips = [skips] if skips.blank? || !skips.first.is_a?(Array)
 
+      # rubocop:todo Layout/LineLength
       # puts "#{skips}, #{contexts} == #{skips.flatten.present? && skips.any? { |skip| skip == contexts.take(skip.size) }} "
+      # rubocop:enable Layout/LineLength
       skips.flatten.present? && skips.any? { |skip| skip == contexts.take(skip.size) }
     end
 

@@ -43,6 +43,7 @@ module Dropdown
       template.action_button(label, path(finance_group), :plus, options)
     end
 
+    # rubocop:todo Metrics/AbcSize
     def path(finance_group, invoice_items = []) # rubocop:disable Metrics/MethodLength
       if @mailing_list
         template.new_group_invoice_list_path(
@@ -76,8 +77,9 @@ module Dropdown
         )
       end
     end
+    # rubocop:enable Metrics/AbcSize
 
-    def init_items
+    def init_items # rubocop:todo Metrics/AbcSize
       if additional_sub_links.none?
         @items = finance_groups_items
       elsif finance_groups.one?
@@ -103,7 +105,9 @@ module Dropdown
     end
 
     def finance_groups
+      # rubocop:todo Layout/LineLength
       @finance_groups ||= Group.where(id: current_ability.user_finance_layer_ids).includes(:invoice_config)
+      # rubocop:enable Layout/LineLength
     end
 
     def invalid_config_error_msg

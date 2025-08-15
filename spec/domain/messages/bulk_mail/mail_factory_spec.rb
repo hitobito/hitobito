@@ -27,7 +27,9 @@ describe Messages::BulkMail::MailFactory do
 
   it "sets smtp envelope from and headers" do
     expect(mail["X-Hitobito-Message-UID"].value).to eq("a15816bbd204ba20")
+    # rubocop:todo Layout/LineLength
     expect(mail["from"].value).to eq("Mike Sender via leaders@#{Settings.email.list_domain} <leaders@#{Settings.email.list_domain}>")
+    # rubocop:enable Layout/LineLength
     expect(mail.smtp_envelope_from).to eq("leaders@#{Settings.email.list_domain}")
   end
 
@@ -36,7 +38,9 @@ describe Messages::BulkMail::MailFactory do
     raw_mail.gsub!("From: Mike Sender <sender@example.com>", "From: <sender@example.com>")
     bulk_mail_message.raw_source = raw_mail
 
+    # rubocop:todo Layout/LineLength
     expect(mail["from"].value).to eq("sender@example.com via leaders@#{Settings.email.list_domain} <leaders@#{Settings.email.list_domain}>")
+    # rubocop:enable Layout/LineLength
   end
 
   private

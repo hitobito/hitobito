@@ -47,13 +47,16 @@ describe Event::ParticipationContactData do
       existing_number = person.phone_numbers.create(number: "044 112 00 00", translated_label: "Privat", public: true)
       expect(person.phone_numbers.count).to be > 0
 
-      add_a_number = {"number" => "044 110 00 00", "translated_label" => "Privat", "public" => "1", "_destroy" => "false"}
-      destroy_a_number = {"number" => "044 112 00 00", "translated_label" => "Privat", "public" => "1", "_destroy" => "1", "id" => existing_number.id}
+      add_a_number = {"number" => "044 110 00 00", "translated_label" => "Privat", "public" => "1",
+                      "_destroy" => "false"}
+      destroy_a_number = {"number" => "044 112 00 00", "translated_label" => "Privat", "public" => "1",
+                          "_destroy" => "1", "id" => existing_number.id}
 
       contact_data = participation_contact_data(attributes.merge(phone_numbers_attributes: {0 => destroy_a_number}))
       expect(contact_data).not_to be_valid
 
-      contact_data = participation_contact_data(attributes.merge(phone_numbers_attributes: {0 => add_a_number, 1 => destroy_a_number}))
+      contact_data = participation_contact_data(attributes.merge(phone_numbers_attributes: {0 => add_a_number,
+                                                                                            1 => destroy_a_number}))
       expect(contact_data).to be_valid
 
       contact_data = participation_contact_data(attributes.merge(phone_numbers_attributes: {0 => add_a_number}))

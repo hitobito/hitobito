@@ -117,7 +117,9 @@ describe FullTextController, type: :controller do
     it "displays groups tab" do
       group_search_instance = instance_double(SearchStrategies::GroupSearch)
       allow(SearchStrategies::GroupSearch).to receive(:new).and_return(group_search_instance)
+      # rubocop:todo Layout/LineLength
       allow(group_search_instance).to receive(:search_fulltext).and_return(Group.where(id: groups(:bottom_layer_one).id))
+      # rubocop:enable Layout/LineLength
 
       get :index, params: {q: "query with group results"}
       expect(assigns(:active_tab)).to eq(:groups)

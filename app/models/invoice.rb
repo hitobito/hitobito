@@ -50,7 +50,7 @@
 #  index_invoices_on_sequence_number  (sequence_number)
 #
 
-class Invoice < ActiveRecord::Base
+class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   SEARCHABLE_ATTRS = [:title, :reference, :sequence_number,
     {invoice_items: [:name, :account, :cost_center]}]
 
@@ -119,7 +119,9 @@ class Invoice < ActiveRecord::Base
 
   class << self
     def with_aggregated_payments
+      # rubocop:todo Layout/LineLength
       select("invoices.*, last_payment_at, COALESCE(amount_paid, 0) AS amount_paid, true as joined_payments")
+        # rubocop:enable Layout/LineLength
         .joins(Invoice.last_payments_information)
     end
 

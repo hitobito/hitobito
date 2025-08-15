@@ -42,7 +42,9 @@ class PersonDuplicate < ActiveRecord::Base
   end
 
   # This validation checks if all roles are valid when merging, to prevent exceptions when merging.
+  # rubocop:todo Layout/LineLength
   # We check both cases for target and source, no matter which one was selected as the prefered option.
+  # rubocop:enable Layout/LineLength
   def valid_role_operations
     validate_roles(person_1, person_2_id)
     validate_roles(person_2, person_1_id)

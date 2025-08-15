@@ -65,7 +65,7 @@ module Synchronize
       end
 
       # wird nur aufgerufen, wenn operation ausgeführt wurde
-      def process(payload, response)
+      def process(payload, response) # rubocop:todo Metrics/CyclomaticComplexity
         total = response[:total_operations]
         failed = response[:errored_operations]
         finished = response[:finished_operations]

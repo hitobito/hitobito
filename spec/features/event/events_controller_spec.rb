@@ -101,7 +101,9 @@ describe EventsController, js: true do
   end
 
   context "standard course description gets updated from event kind" do
-    let(:form_path) { new_group_event_path(event.group_ids.first, event.id, event: {type: Event::Course}, format: :html) }
+    let(:form_path) {
+      new_group_event_path(event.group_ids.first, event.id, event: {type: Event::Course}, format: :html)
+    }
     let(:prefill_description) { "Test description" }
 
     before do

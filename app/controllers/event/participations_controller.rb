@@ -21,38 +21,58 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   self.remember_params += [:filter]
 
   self.sort_mappings = {last_name: {
+                          # rubocop:todo Layout/LineLength
                           order: "CASE event_participations.participant_type WHEN 'Person' THEN people.last_name WHEN 'Event::Guest' THEN event_guests.last_name ELSE '' END AS last_name_order_statement",
+                          # rubocop:enable Layout/LineLength
                           order_alias: "last_name_order_statement"
                         },
                          first_name: {
+                           # rubocop:todo Layout/LineLength
                            order: "CASE event_participations.participant_type WHEN 'Person' THEN people.first_name WHEN 'Event::Guest' THEN event_guests.first_name ELSE '' END AS first_name_order_statement",
+                           # rubocop:enable Layout/LineLength
                            order_alias: "first_name_order_statement"
                          },
+                         # rubocop:todo Layout/LineLength
                          # for sorting roles we dont want to explicitly add a join_table statement when default_sort is configured to role
+                         # rubocop:enable Layout/LineLength
+                         # rubocop:todo Layout/LineLength
                          # In case of default_sort being role, order_by_role is already called in the participation_filter (so the joined table is in the query already)
+                         # rubocop:enable Layout/LineLength
                          roles: {
                            joins: [:roles].tap do |joins|
+                             # rubocop:todo Layout/LineLength
                              joins << "INNER JOIN event_role_type_orders ON event_roles.type = event_role_type_orders.name" unless Settings.people.default_sort == "role"
+                             # rubocop:enable Layout/LineLength
                            end,
                            order: [].tap do |order|
+                             # rubocop:todo Layout/LineLength
                              order << "event_role_type_orders.order_weight" unless Settings.people.default_sort == "role"
+                             # rubocop:enable Layout/LineLength
                              order.concat(["people.last_name", "people.first_name"])
                            end
                          },
                          nickname: {
+                           # rubocop:todo Layout/LineLength
                            order: "CASE event_participations.participant_type WHEN 'Person' THEN people.nickname WHEN 'Event::Guest' THEN event_guests.nickname ELSE '' END AS nickname_order_statement",
+                           # rubocop:enable Layout/LineLength
                            order_alias: "nickname_order_statement"
                          },
                          zip_code: {
+                           # rubocop:todo Layout/LineLength
                            order: "CASE event_participations.participant_type WHEN 'Person' THEN people.zip_code WHEN 'Event::Guest' THEN event_guests.zip_code ELSE '' END AS zip_code_order_statement",
+                           # rubocop:enable Layout/LineLength
                            order_alias: "zip_code_order_statement"
                          },
                          town: {
+                           # rubocop:todo Layout/LineLength
                            order: "CASE event_participations.participant_type WHEN 'Person' THEN people.town WHEN 'Event::Guest' THEN event_guests.town ELSE '' END AS town_order_statement",
+                           # rubocop:enable Layout/LineLength
                            order_alias: "town_order_statement"
                          },
                          birthday: {
+                           # rubocop:todo Layout/LineLength
                            order: "CASE event_participations.participant_type WHEN 'Person' THEN people.birthday WHEN 'Event::Guest' THEN event_guests.birthday ELSE NULL END AS birthday_order_statement",
+                           # rubocop:enable Layout/LineLength
                            order_alias: "birthday_order_statement"
                          }}
 
@@ -187,7 +207,9 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
       .merge(Person.preload_picture)
       .page(params[:page])
 
-    Person::PreloadPublicAccounts.for(records.select { |participation| participation.participant_type == Person.sti_name }.collect(&:person))
+    Person::PreloadPublicAccounts.for(records.select { |participation|
+      participation.participant_type == Person.sti_name
+    }.collect(&:person))
     @pagination_options = {
       total_pages: records.total_pages,
       current_page: records.current_page,
@@ -241,14 +263,15 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def build_entry
-    participation = event.participations.new(participant_id: person_id, participant_type: Person.sti_name)
+    participation = event.participations.new(participant_id: person_id,
+      participant_type: Person.sti_name)
     role = participation.roles.build(type: role_type)
     role.participation = participation
 
     participation
   end
 
-  def person_id
+  def person_id # rubocop:todo Metrics/CyclomaticComplexity
     return current_user&.id unless event.supports_applications
 
     if model_params&.key?(:person_id)
@@ -343,9 +366,15 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def send_confirmation_email
+    # rubocop:todo Layout/LineLength
     # send_email? is used when adding someone_else and checking the checkmark to send the confirmation mail
+    # rubocop:enable Layout/LineLength
+    # rubocop:todo Layout/LineLength
     # while current_user_interested_in_mail? makes sure to send the confirmation if you're registering yourself for the event.
+    # rubocop:enable Layout/LineLength
+    # rubocop:todo Layout/LineLength
     Event::ParticipationConfirmationJob.new(entry).enqueue! if send_email? || current_user_interested_in_mail?
+    # rubocop:enable Layout/LineLength
   end
 
   def send_notification_email
@@ -362,7 +391,8 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     for_current_user? # extended in wagon
   end
 
-  def set_success_notice
+  # rubocop:todo Metrics/AbcSize
+  def set_success_notice # rubocop:todo Metrics/CyclomaticComplexity # rubocop:todo Metrics/AbcSize
     return super unless action_name.to_s == "create"
 
     if entry.pending?
@@ -375,6 +405,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
       flash[:notice] ||= notice
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   def after_create_location(participation)
     if participation.persisted? && params.key?(:add_another)

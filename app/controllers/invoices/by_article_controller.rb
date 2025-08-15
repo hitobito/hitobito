@@ -20,7 +20,8 @@ class Invoices::ByArticleController < ListController
 
   private
 
-  def invoice_ids
+  # rubocop:todo Metrics/MethodLength
+  def invoice_ids # rubocop:todo Metrics/AbcSize # rubocop:todo Metrics/MethodLength
     collection = Payments::Collection.new
       .in_layer(group.id)
       .from(from_date)
@@ -40,6 +41,7 @@ class Invoices::ByArticleController < ListController
 
     collection.payments.pluck(:invoice_id)
   end
+  # rubocop:enable Metrics/MethodLength
 
   def from_date
     Date.parse(params[:from])

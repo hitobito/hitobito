@@ -69,7 +69,7 @@ class PersonDecorator < ApplicationDecorator
     end
   end
 
-  def picture_full_url
+  def picture_full_url # rubocop:todo Metrics/AbcSize
     pic_url = if picture.attached?
       h.url_for(picture)
     else

@@ -6,7 +6,9 @@
 require "spec_helper"
 
 describe Synchronize::Mailchimp::Client do
-  let(:mailing_list) { MailingList.new(mailchimp_api_key: "1234567890d66d25cc5c9285ab5a5552-us12", mailchimp_list_id: 2) }
+  let(:mailing_list) {
+    MailingList.new(mailchimp_api_key: "1234567890d66d25cc5c9285ab5a5552-us12", mailchimp_list_id: 2)
+  }
   let(:top_leader) { people(:top_leader) }
   let(:client) { described_class.new(mailing_list) }
 
@@ -36,7 +38,8 @@ describe Synchronize::Mailchimp::Client do
     entries = fields.collect do |tag, name, type|
       {tag: tag, name: name, type: type}
     end
-    stub_collection("lists/2/merge-fields", offset, body: {merge_fields: entries, total_items: total_items || entries.count})
+    stub_collection("lists/2/merge-fields", offset,
+      body: {merge_fields: entries, total_items: total_items || entries.count})
   end
 
   def stub_members(*members, total_items: nil, offset: 0)
@@ -321,7 +324,8 @@ describe Synchronize::Mailchimp::Client do
         .to_return(status: 200, body: {id: 1, status: "finished", response_body_url: "https://us12.api.mailchimp.com/3.0/batches/1/result"}.to_json)
 
       stub_request(:get, "https://us12.api.mailchimp.com/3.0/batches/1/result")
-        .to_return({status: 400}, {status: 400}, {status: 200, body: create_tgz([response: {title: :subscriber, detail: "okay", status: 200}.to_json])})
+        .to_return({status: 400}, {status: 400}, {status: 200,
+body: create_tgz([response: {title: :subscriber, detail: "okay", status: 200}.to_json])})
       expect(client).to receive(:sleep).twice
       payload, response = client.create_segments(%w[a])
       expect(response[:operation_results][0][:title]).to eq "subscriber"
@@ -397,7 +401,10 @@ describe Synchronize::Mailchimp::Client do
   end
 
   context "#update_segment_operation" do
-    subject { client.update_segment_operation(1, {members_to_add: %w[leader@example.com member@example.com], members_to_remove: []}) }
+    subject {
+      client.update_segment_operation(1,
+        {members_to_add: %w[leader@example.com member@example.com], members_to_remove: []})
+    }
 
     it "POSTs to segments list resource" do
       expect(subject[:method]).to eq "POST"

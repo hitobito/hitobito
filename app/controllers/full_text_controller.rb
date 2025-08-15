@@ -30,7 +30,7 @@ class FullTextController < ApplicationController
 
   private
 
-  def query_results
+  def query_results # rubocop:todo Metrics/AbcSize
     SEARCHABLE_MODELS.each do |key, search_class|
       result = search_class.new(current_user, query_param, params[:page]).search_fulltext
 

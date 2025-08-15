@@ -34,7 +34,8 @@ module PersonDuplicates
       radio_button_with_details(person, p_nr)
     end
 
-    def radio_button_with_details(person, p_nr)
+    # rubocop:todo Metrics/MethodLength
+    def radio_button_with_details(person, p_nr) # rubocop:todo Metrics/AbcSize # rubocop:todo Metrics/MethodLength
       selected = p_nr.eql?(:person_1)
       f.label("dst_#{p_nr}", class: label_class(selected), for: label_for(p_nr)) do
         options = {}
@@ -52,6 +53,7 @@ module PersonDuplicates
             merge_hint(p_nr, person))
       end
     end
+    # rubocop:enable Metrics/MethodLength
 
     def label_class(selected)
       (selected && persons_valid?) ? "radio mb-1 selected" : "radio mb-1"

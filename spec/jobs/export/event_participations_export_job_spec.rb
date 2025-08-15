@@ -6,7 +6,10 @@
 require "spec_helper"
 
 describe Export::EventParticipationsExportJob do
-  subject { Export::EventParticipationsExportJob.new(format, user.id, event.id, groups(:top_group).id, params.merge(filename: filename)) }
+  subject {
+    Export::EventParticipationsExportJob.new(format, user.id, event.id, groups(:top_group).id,
+      params.merge(filename: filename))
+  }
 
   let(:participation) { event_participations(:top) }
   let(:user) { participation.person }
@@ -78,7 +81,8 @@ describe Export::EventParticipationsExportJob do
     let(:params) { {selection: true} }
 
     it "and saves it" do
-      TableDisplay.create!(person: user, table_model_class: "Event::Participation", selected: ["participant.layer_group_label"])
+      TableDisplay.create!(person: user, table_model_class: "Event::Participation",
+        selected: ["participant.layer_group_label"])
 
       subject.perform
 
@@ -87,7 +91,9 @@ describe Export::EventParticipationsExportJob do
       expect(lines[0]).to match(/Vorname;Nachname;Übername;Firmenname;.*/)
       expect(lines[0]).to match(/Hauptebene.*/)
       expect(lines[0].split(";").count).to match(16)
+      # rubocop:todo Layout/LineLength
       expect(lines[1]).to eq "Bottom;Member;;;nein;bottom_member@example.com;;Greatstreet;345;;3456;Greattown;Schweiz;Bottom One;Member Bottom One;Bottom One\n"
+      # rubocop:enable Layout/LineLength
     end
   end
 

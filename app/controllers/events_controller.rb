@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class EventsController < CrudController
+class EventsController < CrudController # rubocop:todo Metrics/ClassLength
   include YearBasedPaging
   include AsyncDownload
   include Api::JsonPaging
@@ -26,10 +26,14 @@ class EventsController < CrudController
         :_destroy
       ],
       application_questions_attributes: [
+        # rubocop:todo Layout/LineLength
         :id, :question, :choices, :multiple_choices, :disclosure, :type, :derived_from_question_id, :_destroy
+        # rubocop:enable Layout/LineLength
       ],
       admin_questions_attributes: [
+        # rubocop:todo Layout/LineLength
         :id, :question, :choices, :multiple_choices, :disclosure, :type, :derived_from_question_id, :_destroy
+        # rubocop:enable Layout/LineLength
       ]
     }]
 
@@ -68,7 +72,9 @@ class EventsController < CrudController
     params[:start_date] = Time.zone.today
 
     respond_to do |format|
-      format.json { render json: for_typeahead(entries.where(search_conditions).select(:id, :type)) }
+      format.json {
+        render json: for_typeahead(entries.where(search_conditions).select(:id, :type))
+      }
     end
   end
 
@@ -173,7 +179,9 @@ class EventsController < CrudController
 
   def for_typeahead(entries)
     entries.map do |entry|
-      role_types = entry.role_types.sort { |type| type.participant? ? 0 : 1 }.map { |type| {label: type.label, name: type.name} }
+      role_types = entry.role_types.sort { |type|
+        type.participant? ? 0 : 1
+      }.map { |type| {label: type.label, name: type.name} }
       {id: entry.id, label: entry.name, types: role_types}
     end
   end

@@ -31,7 +31,9 @@ describe Event::InvitationListsController, js: true do
     click_button("Speichern")
 
     expect(page).to have_content(role1.person.to_s)
+    # rubocop:todo Layout/LineLength
     expect(page).to have_content(/Einladung für #{role1.person.first_name} #{role1.person.last_name} als Teilnehmer\/-in wurde erstellt./)
+    # rubocop:enable Layout/LineLength
   end
 
   xit "mass-invite" do

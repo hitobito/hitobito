@@ -58,10 +58,18 @@ describe "events/_form.html.haml" do
 
         it "renders radio buttons with correct id and name attributes" do
           render
+          # rubocop:todo Layout/LineLength
           expect(attr_field.find_field("Optional").native.attributes["id"].value).to eq "event_contact_attrs_#{attribute}_optional"
+          # rubocop:enable Layout/LineLength
+          # rubocop:todo Layout/LineLength
           expect(attr_field.find_field("Optional").native.attributes["name"].value).to eq "event[contact_attrs][#{attribute}]"
+          # rubocop:enable Layout/LineLength
+          # rubocop:todo Layout/LineLength
           expect(attr_field.find_field("Obligatorisch").native.attributes["id"].value).to eq "event_contact_attrs_#{attribute}_required"
+          # rubocop:enable Layout/LineLength
+          # rubocop:todo Layout/LineLength
           expect(attr_field.find_field("Obligatorisch").native.attributes["name"].value).to eq "event[contact_attrs][#{attribute}]"
+          # rubocop:enable Layout/LineLength
         end
 
         it "sets radio value according to value set on event" do
@@ -86,9 +94,12 @@ describe "events/_form.html.haml" do
 
     it "does render radio buttons with correct id and name attributes" do
       render
-      expect(additional_emails.find("input[type=hidden]", visible: :all).native.attributes["name"].value).to eq "event[contact_attrs][additional_emails]"
+      expect(additional_emails.find("input[type=hidden]",
+        visible: :all).native.attributes["name"].value).to eq "event[contact_attrs][additional_emails]"
       expect(additional_emails.find("input[type=hidden]", visible: :all).native.attributes["value"].value).to eq "0"
+      # rubocop:todo Layout/LineLength
       expect(additional_emails.find_field("Nicht anzeigen").native.attributes["id"].value).to eq "event_contact_attrs_additional_emails"
+      # rubocop:enable Layout/LineLength
       expect(additional_emails).to have_unchecked_field "Nicht anzeigen"
     end
 

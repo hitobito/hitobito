@@ -211,7 +211,9 @@ describe Export::Tabular::People::TableDisplays do
 
     it "does exclude attribute if exclude_attr of certain column is true" do
       table_display.selected = [:event_question_1]
+      # rubocop:todo Layout/LineLength
       allow_any_instance_of(TableDisplays::Event::Participations::QuestionColumn).to receive(:exclude_attr?).and_return(true)
+      # rubocop:enable Layout/LineLength
       expect(people_list.labels).not_to include("GA oder Halbtax?")
     end
 

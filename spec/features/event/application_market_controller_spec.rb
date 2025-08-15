@@ -300,7 +300,9 @@ describe Event::ApplicationMarketController do
         sleep(3)
         alert_text = page.driver.browser.switch_to.alert.text
         expect(alert_text).to include(
+          # rubocop:todo Layout/LineLength
           "Die maximal erlaubte Teilnehmerzahl ist erreicht. Um weitere Anmeldungen zu bestätigen, muss die maximale Teilnehmerzahl erhöht werden."
+          # rubocop:enable Layout/LineLength
         )
       end
     end

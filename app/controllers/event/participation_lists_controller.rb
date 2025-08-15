@@ -42,11 +42,14 @@ class Event::ParticipationListsController < SimpleCrudController
 
   def build_new_participations
     people.map do |person|
-      Event::Participation.find_or_initialize_by(event: event, participant_id: person.id, participant_type: Person.sti_name).tap do |participation|
+      Event::Participation.find_or_initialize_by(event: event, participant_id: person.id,
+        participant_type: Person.sti_name).tap do |participation|
         role = role_type.new(participation: participation)
         break nil if cannot?(:create, role)
 
+        # rubocop:todo Layout/LineLength
         participation.roles << role unless participation.roles.map(&:type).include?(role_type.sti_name)
+        # rubocop:enable Layout/LineLength
       end
     end
   end

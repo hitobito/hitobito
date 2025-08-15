@@ -14,6 +14,8 @@ module I18nHelper
   #  - {parent_controller}.global.{key}
   #  - ...
   #  - global.{key}
+  # rubocop:todo Metrics/AbcSize
+  # rubocop:todo Metrics/CyclomaticComplexity
   def translate_inheritable(key, **variables) # rubocop:disable Metrics/MethodLength
     defaults = []
     unless controller.try(:skip_translate_inheritable)
@@ -40,6 +42,8 @@ module I18nHelper
     e.instance_variable_set(:@options, options)
     raise e
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/AbcSize
 
   alias_method :ti, :translate_inheritable
 

@@ -105,7 +105,9 @@ describe EventDecorator, :draper_with_helpers do
       end
 
       its(:issued_qualifications_info_for_participants) do
+        # rubocop:todo Layout/LineLength
         should == "Vergibt die Qualifikation Super Lead und verlängert existierende Qualifikationen Group Lead unmittelbar per 01.03.2012 (letztes Kursdatum)."
+        # rubocop:enable Layout/LineLength
       end
     end
 
@@ -125,11 +127,15 @@ describe EventDecorator, :draper_with_helpers do
       before { event.kind = event_kinds(:fk) }
 
       its(:issued_qualifications_info_for_leaders) do
+        # rubocop:todo Layout/LineLength
         should == "Verlängert existierende Qualifikationen Group Lead (for Leaders), Super Lead (for Leaders) unmittelbar per 01.03.2012 (letztes Kursdatum)."
+        # rubocop:enable Layout/LineLength
       end
 
       its(:issued_qualifications_info_for_participants) do
+        # rubocop:todo Layout/LineLength
         should == "Verlängert existierende Qualifikationen Group Lead, Super Lead unmittelbar per 01.03.2012 (letztes Kursdatum)."
+        # rubocop:enable Layout/LineLength
       end
     end
 
@@ -170,7 +176,11 @@ describe EventDecorator, :draper_with_helpers do
     subject { EventDecorator.new(event).complete_contact_attributes }
 
     context "with every possible attribute" do
-      it { is_expected.to eq "<strong>Top Leader</strong><p>Greatstreet 345<br />3456 Greattown</p><p><a href=\"mailto:top_leader@example.com\">top_leader@example.com</a></p>" }
+      it {
+        # rubocop:todo Layout/LineLength
+        is_expected.to eq "<strong>Top Leader</strong><p>Greatstreet 345<br />3456 Greattown</p><p><a href=\"mailto:top_leader@example.com\">top_leader@example.com</a></p>"
+      }
+      # rubocop:enable Layout/LineLength
     end
 
     context "with only name" do

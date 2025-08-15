@@ -38,7 +38,7 @@ RSpec.describe "OAuth show", type: :request do
       let(:mailing_list) { mailing_lists(:leaders) }
       let(:url) { get_url(scope) }
 
-      def get_url(scope)
+      def get_url(scope) # rubocop:todo Metrics/AbcSize
         case scope
         when "groups"
           "/groups/#{group.id}"
@@ -55,7 +55,7 @@ RSpec.describe "OAuth show", type: :request do
         end
       end
 
-      def validate_json(scope, json)
+      def validate_json(scope, json) # rubocop:todo Metrics/AbcSize
         expect(json[scope].size).to eq(1)
         case scope
         when "groups"
@@ -127,7 +127,10 @@ RSpec.describe "OAuth show", type: :request do
       end
 
       context "with expired token" do
-        let(:token) { Fabricate(:access_token, application: application, scopes: "email", resource_owner_id: user.id, expires_in: -1.minute) }
+        let(:token) {
+          Fabricate(:access_token, application: application, scopes: "email", resource_owner_id: user.id,
+            expires_in: -1.minute)
+        }
 
         it "redirects to login" do
           get url, headers: {Authorization: "Bearer " + token.token}

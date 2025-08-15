@@ -13,7 +13,10 @@ describe MailingLists::BulkMail::SenderRejectedMessageJob do
   let(:mailing_list) { mailing_lists(:leaders) }
   let(:imap_mail) { build_imap_mail(plain_body: true) }
   let(:mail_log) { MailLog.new(mail_hash: imap_mail.hash, status: :retrieved, mail_from: imap_mail.sender_email) }
-  let(:bulk_mail) { Message::BulkMail.new(subject: imap_mail.subject, state: :pending, raw_source: imap_mail.raw_source, mailing_list: mailing_list, mail_log: mail_log) }
+  let(:bulk_mail) {
+    Message::BulkMail.new(subject: imap_mail.subject, state: :pending, raw_source: imap_mail.raw_source,
+      mailing_list: mailing_list, mail_log: mail_log)
+  }
 
   subject { described_class.new(bulk_mail) }
 
@@ -26,7 +29,9 @@ describe MailingLists::BulkMail::SenderRejectedMessageJob do
     expect(last_email.to).to eq(["from@example.com"])
     expect(last_email.from).to eq(["noreply@hitobito.example.com"])
     expect(last_email.subject).to eq("Re: Testflight from 24.4.2021")
+    # rubocop:todo Layout/LineLength
     expect(last_email.body.decoded).to eq("Du bist leider nicht berechtigt auf die Liste leaders@hitobito.example.com zu schreiben.")
+    # rubocop:enable Layout/LineLength
     expect(bulk_mail.reload.raw_source).to be_nil
   end
 end

@@ -64,7 +64,9 @@ class EventResource < ApplicationResource
 
   filter :kind_category_id, :integer, only: [:eq] do
     eq do |scope, kind_category_ids|
+      # rubocop:todo Layout/LineLength
       scope.select("events.*").joins(kind: :kind_category).where(kind: {kind_category_id: kind_category_ids})
+      # rubocop:enable Layout/LineLength
     end
   end
 

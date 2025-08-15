@@ -32,7 +32,7 @@ class GroupDecorator < ApplicationDecorator
     klass.role_types.sort_by(&:label)
   end
 
-  def possible_roles(person: Person.new)
+  def possible_roles(person: Person.new) # rubocop:todo Metrics/CyclomaticComplexity
     action = case helpers.action_name
     when /new|define_mapping|preview/ then :create
     when /edit/ then :update

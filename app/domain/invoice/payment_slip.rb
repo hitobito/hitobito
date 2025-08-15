@@ -34,13 +34,19 @@ class Invoice::PaymentSlip
     "#{code_line_prefix}>#{number_string_with_check}+ #{code_line_suffix}>"
   end
 
-  def padded_number
-    return zero_padded(invoice.group_id.to_s, 13) if invoice.invoice_config.reference_prefix.nil? || invoice.qr_without_qr_iban?
+  def padded_number # rubocop:todo Metrics/AbcSize
+    if invoice.invoice_config.reference_prefix.nil? || invoice.qr_without_qr_iban?
+      return zero_padded(invoice.group_id.to_s,
+        13)
+    end
 
     if invoice.group_id <= 999999
-      "#{invoice.invoice_config.reference_prefix.to_s.ljust(7, "0")}#{zero_padded(invoice.group_id.to_s, 6)}"
+      "#{invoice.invoice_config.reference_prefix.to_s.ljust(7,
+        "0")}#{zero_padded(invoice.group_id.to_s, 6)}"
     else
+      # rubocop:todo Layout/LineLength
       raise "HighlyUnlikelyError: Prefixing the reference number is not possible for this invoice, sequence number (group_id, invoice count) is too long. This error will only occur for invoices created in groups with an id higher than 999'999"
+      # rubocop:enable Layout/LineLength
     end
   end
 

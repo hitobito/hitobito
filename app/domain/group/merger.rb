@@ -87,7 +87,7 @@ class Group::Merger
     end
   end
 
-  def move_invoices_and_articles
+  def move_invoices_and_articles # rubocop:todo Metrics/AbcSize
     invoices = group1.invoices + group2.invoices
     invoices.each do |invoice|
       invoice.group_id = new_group.id

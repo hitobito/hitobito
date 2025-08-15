@@ -236,7 +236,8 @@ describe Payments::Collection do
         fabricated_payment2 = fabricate_payment(100.0, Date.new(2.years.ago.year, 5, 20))
         fabricated_payment3 = fabricate_payment(120.0, Date.new(2.years.ago.year, 3, 10))
 
-        payments = described_class.new.from(Date.new(2.years.ago.year, 3, 12)).to(Date.new(1.year.ago.year, 3, 1)).instance_variable_get(:@payments)
+        payments = described_class.new.from(Date.new(2.years.ago.year, 3,
+          12)).to(Date.new(1.year.ago.year, 3, 1)).instance_variable_get(:@payments)
 
         expect(payments).to_not include(fabricated_payment1)
         expect(payments).to include(fabricated_payment2)
@@ -302,7 +303,9 @@ describe Payments::Collection do
         fabricate_payment(200.0, Date.new(3.years.ago.year, 1, 1))
         fabricate_payment(15000.0, Date.new(3.years.ago.year, 1, 1))
 
+        # rubocop:todo Layout/LineLength
         amount = described_class.new.in_last(3.years).in_layer(top_layer).of_person(bottom_member).median_amount(increased_by: 10)
+        # rubocop:enable Layout/LineLength
 
         # median is 100, times 10% (100 * 1.1 = 110)
         expect(amount).to eq(110.0)
@@ -315,7 +318,9 @@ describe Payments::Collection do
         fabricate_payment(0.2e3, Date.new(3.years.ago.year, 1, 1))
         fabricate_payment(0.15e4, Date.new(3.years.ago.year, 1, 1))
 
+        # rubocop:todo Layout/LineLength
         amount = described_class.new.in_last(3.years).in_layer(top_layer).of_person(bottom_member).median_amount(increased_by: 10)
+        # rubocop:enable Layout/LineLength
 
         # median is 100, times 10% (100 * 1.1 = 110)
         expect(amount).to eq(0.11e3)
@@ -329,7 +334,9 @@ describe Payments::Collection do
         fabricate_payment(15000.0, Date.new(3.years.ago.year, 1, 1))
         fabricate_payment(300.0, Date.new(3.years.ago.year, 1, 1))
 
+        # rubocop:todo Layout/LineLength
         amount = described_class.new.in_last(3.years).in_layer(top_layer).of_person(bottom_member).median_amount(increased_by: 10)
+        # rubocop:enable Layout/LineLength
 
         # median is 100 ((110 + 90) / 2), times 10% (100 * 1.1 = 110)
         expect(amount).to eq(110.0)
@@ -355,7 +362,9 @@ describe Payments::Collection do
           fabricate_payment(20.0, Date.new(1.year.ago.year, 12, 31))
           fabricate_payment(300.0, Date.new(3.years.ago.year, 1, 1))
 
+          # rubocop:todo Layout/LineLength
           amount = described_class.new.in_last(3.years).in_layer(top_layer).of_person(bottom_member).median_amount(increased_by: 10)
+          # rubocop:enable Layout/LineLength
 
           # median is 75 ((50 + 100) / 2), times 10% (75 * 1.1 = 82.5), rounded up to next 5 = 85
           expect(amount).to eq(85.0)
@@ -367,7 +376,9 @@ describe Payments::Collection do
           fabricate_payment(0.2e2, Date.new(1.year.ago.year, 12, 31))
           fabricate_payment(0.3e3, Date.new(3.years.ago.year, 1, 1))
 
+          # rubocop:todo Layout/LineLength
           amount = described_class.new.in_last(3.years).in_layer(top_layer).of_person(bottom_member).median_amount(increased_by: 10)
+          # rubocop:enable Layout/LineLength
 
           # median is 75 ((50 + 100) / 2), times 10% (75 * 1.1 = 82.5), rounded up to next 5 = 85
           expect(amount).to eq(0.85e2)
@@ -382,7 +393,9 @@ describe Payments::Collection do
           fabricate_payment(20.0, Date.new(1.year.ago.year, 12, 31))
           fabricate_payment(300.0, Date.new(3.years.ago.year, 1, 1))
 
+          # rubocop:todo Layout/LineLength
           amount = described_class.new.in_last(3.years).in_layer(top_layer).of_person(bottom_member).median_amount(increased_by: 10)
+          # rubocop:enable Layout/LineLength
 
           # median is 150, times 10% (150 * 1.1 = 165), rounded up to next 10 = 170
           expect(amount).to eq(170.0)
@@ -395,7 +408,9 @@ describe Payments::Collection do
           fabricate_payment(0.2e2, Date.new(1.year.ago.year, 12, 31))
           fabricate_payment(0.3e3, Date.new(3.years.ago.year, 1, 1))
 
+          # rubocop:todo Layout/LineLength
           amount = described_class.new.in_last(3.years).in_layer(top_layer).of_person(bottom_member).median_amount(increased_by: 10)
+          # rubocop:enable Layout/LineLength
 
           # median is 150, times 10% (150 * 1.1 = 165), rounded up to next 10 = 170
           expect(amount).to eq(0.17e3)
@@ -410,7 +425,9 @@ describe Payments::Collection do
           fabricate_payment(120.0, Date.new(1.year.ago.year, 12, 31))
           fabricate_payment(1300.0, Date.new(3.years.ago.year, 1, 1))
 
+          # rubocop:todo Layout/LineLength
           amount = described_class.new.in_last(3.years).in_layer(top_layer).of_person(bottom_member).median_amount(increased_by: 10)
+          # rubocop:enable Layout/LineLength
 
           # median is 1250, times 10% (1250 * 1.1 = 1365), rounded up to next 50 = 1400
           expect(amount).to eq(1400.0)
@@ -423,7 +440,9 @@ describe Payments::Collection do
           fabricate_payment(0.12e3, Date.new(1.year.ago.year, 12, 31))
           fabricate_payment(0.13e4, Date.new(3.years.ago.year, 1, 1))
 
+          # rubocop:todo Layout/LineLength
           amount = described_class.new.in_last(3.years).in_layer(top_layer).of_person(bottom_member).median_amount(increased_by: 10)
+          # rubocop:enable Layout/LineLength
 
           # median is 1250, times 10% (1250 * 1.1 = 1365), rounded up to next 50 = 1400
           expect(amount).to eq(0.14e4)
@@ -448,7 +467,8 @@ describe Payments::Collection do
   private
 
   def fabricate_payment(amount, received_at = 1.year.ago)
-    invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: top_leader, recipient: bottom_member, group: top_layer, state: :payed)
+    invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: top_leader, recipient: bottom_member,
+      group: top_layer, state: :payed)
     Payment.create!(amount: amount, received_at: received_at, invoice: invoice)
   end
 end

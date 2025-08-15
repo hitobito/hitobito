@@ -139,7 +139,8 @@ describe Event::ParticipationConfirmationJob do
         it "only sends to group approvers where role is non-external" do
           expect(LocaleSetter).to receive(:with_locale).with(person: participation.person).and_call_original
           Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_two))
-          Fabricate(Group::BottomGroup::Leader.name.to_sym, person: person, group: groups(:bottom_group_two_one), start_on: 2.years.ago, end_on: 1.year.ago)
+          Fabricate(Group::BottomGroup::Leader.name.to_sym, person: person, group: groups(:bottom_group_two_one),
+            start_on: 2.years.ago, end_on: 1.year.ago)
           Fabricate(Role::External.name.to_sym, person: person, group: groups(:bottom_group_two_one))
 
           course.update_column(:requires_approval, true)

@@ -57,7 +57,9 @@ describe Wizards::RegisterNewUserWizard do
         params[:new_user_form] = {first_name: "test", last_name: "test", email: "top_leader@example.com"}
         expect(wizard).not_to be_valid
         expect(wizard.errors).to have(1).item
+        # rubocop:todo Layout/LineLength
         expect(wizard.errors[:base][0]).to eq("Haupt-E-Mail ist bereits vergeben. Diese Adresse muss für alle Personen eindeutig sein, da sie beim Login verwendet wird. Du kannst jedoch unter 'Weitere E-Mails' Adressen eintragen, welche bei anderen Personen als Haupt-E-Mail vergeben sind (Die Haupt-E-Mail kann leer gelassen werden).\n")
+        # rubocop:enable Layout/LineLength
       end
     end
 

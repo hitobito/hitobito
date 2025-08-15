@@ -89,7 +89,7 @@ describe PersonDuplicatesController do
 
   private
 
-  def assign_people
+  def assign_people # rubocop:todo Metrics/AbcSize
     # duplicate1
     Fabricate("Group::TopLayer::TopAdmin", group: top_layer, person: duplicate1.person_1)
     Fabricate("Group::TopLayer::TopAdmin", group: top_layer, person: duplicate1.person_2)

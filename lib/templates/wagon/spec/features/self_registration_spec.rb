@@ -41,8 +41,10 @@ describe :self_registration do
       find_all('.btn-toolbar .btn-group button[type="submit"]').first.click # submit
 
       is_expected.to have_text(
+        # rubocop:todo Layout/LineLength
         "Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine E-Mail mit der Anleitung, " \
           "wie Du Deinen Account freischalten kannst."
+        # rubocop:enable Layout/LineLength
       )
     end.to change { Person.count }.by(1)
       .and change { ActionMailer::Base.deliveries.count }.by(1)

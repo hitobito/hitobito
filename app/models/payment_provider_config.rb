@@ -60,6 +60,7 @@ class PaymentProviderConfig < ActiveRecord::Base
   end
 
   def clear_scheduled_ebics_import_jobs
-    Delayed::Job.where("handler LIKE '%Payments::EbicsImportJob%payment_provider_config_id: ?%'", id).delete_all
+    Delayed::Job.where("handler LIKE '%Payments::EbicsImportJob%payment_provider_config_id: ?%'",
+      id).delete_all
   end
 end

@@ -13,7 +13,7 @@ module TableDisplays
 
     protected
 
-    def resolve_database_joins(path, model_class = @model_class)
+    def resolve_database_joins(path, model_class = @model_class) # rubocop:todo Metrics/AbcSize
       return {} unless path.to_s.include? "."
 
       path_parts = path.to_s.split(".")

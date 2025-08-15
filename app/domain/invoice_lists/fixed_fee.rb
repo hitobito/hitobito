@@ -34,7 +34,8 @@ class InvoiceLists::FixedFee
 
   def items
     @items ||= config.items.map(&:to_h).map do |attrs|
-      item_class_for(attrs).new(**attrs.merge(fee:, layer_group_ids: receivers.addressable_layer_group_ids))
+      item_class_for(attrs).new(**attrs.merge(fee:,
+        layer_group_ids: receivers.addressable_layer_group_ids))
     end
   end
 
@@ -45,7 +46,8 @@ class InvoiceLists::FixedFee
   private
 
   def missing_receivers_message
-    t(".recipient_role_group_mismatch", groups: receivers.layers_with_missing_receiver.map(&:name).join(", "))
+    t(".recipient_role_group_mismatch",
+      groups: receivers.layers_with_missing_receiver.map(&:name).join(", "))
   end
 
   def t(key, options = {})

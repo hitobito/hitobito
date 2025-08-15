@@ -10,7 +10,8 @@ module Export::Pdf::Invoice
     def render
       float do
         offset_cursor_from_top 5.1.cm
-        bounding_box(address_position(invoice.letter_address_position), width: bounds.width, height: 80) do
+        bounding_box(address_position(invoice.letter_address_position), width: bounds.width,
+          height: 80) do
           table(receiver_address_data, cell_style: {borders: [], padding: [0, 0, 0, 0]})
         end
       end

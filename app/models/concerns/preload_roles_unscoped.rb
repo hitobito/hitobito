@@ -13,7 +13,8 @@ module PreloadRolesUnscoped
   # scope set by an earlier call to #roles_scope.
   def do_preload_roles(entries)
     roles_scope = @roles_scope || Role.with_inactive
-    ActiveRecord::Associations::Preloader.new(records: entries, associations: [:roles], scope: roles_scope).call
+    ActiveRecord::Associations::Preloader.new(records: entries, associations: [:roles],
+      scope: roles_scope).call
   end
 
   # This method is called by activerecord to find a single record by id.

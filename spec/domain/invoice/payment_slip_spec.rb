@@ -59,7 +59,11 @@ describe Invoice::PaymentSlip do
 
     it "raises when prefix overwrites any numbers other than zero" do
       invoice.invoice_config.update!(reference_prefix: 1234567)
-      expect { subject.esr_number }.to raise_error "HighlyUnlikelyError: Prefixing the reference number is not possible for this invoice, sequence number (group_id, invoice count) is too long. This error will only occur for invoices created in groups with an id higher than 999'999"
+      expect {
+        # rubocop:todo Layout/LineLength
+        subject.esr_number
+      }.to raise_error "HighlyUnlikelyError: Prefixing the reference number is not possible for this invoice, sequence number (group_id, invoice count) is too long. This error will only occur for invoices created in groups with an id higher than 999'999"
+      # rubocop:enable Layout/LineLength
     end
   end
 

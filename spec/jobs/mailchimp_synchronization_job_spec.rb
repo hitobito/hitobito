@@ -10,6 +10,7 @@ require "spec_helper"
 describe MailchimpSynchronizationJob do
   let(:group) { groups(:top_group) }
   let(:mailing_list) { Fabricate(:mailing_list, group: group, mailchimp_api_key: "1234") }
+  let(:now) { Time.zone.now }
 
   subject { MailchimpSynchronizationJob.new(mailing_list.id) }
 
@@ -27,9 +28,8 @@ describe MailchimpSynchronizationJob do
     expect(mailing_list.mailchimp_syncing).to be true
   end
 
-  it "it sets syncing to false after success" do
-    time_now = Time.zone.now
-    allow_any_instance_of(ActiveSupport::TimeZone).to receive(:now).and_return(time_now)
+  it "sets syncing to false after success" do
+    allow_any_instance_of(ActiveSupport::TimeZone).to receive(:now).and_return(now)
     expect_any_instance_of(MailchimpSynchronizationJob).to receive(:perform)
 
     subject.enqueue!
@@ -38,19 +38,24 @@ describe MailchimpSynchronizationJob do
     mailing_list.reload
 
     expect(mailing_list.mailchimp_syncing).to be false
-    expect(mailing_list.mailchimp_last_synced_at.to_i).to eq(time_now.to_i)
+    expect(mailing_list.mailchimp_last_synced_at.to_i).to eq(now.to_i)
     expect(mailing_list.mailchimp_result.state).to eq :unchanged
   end
 
-  it "it sets syncing to false after success" do
-    time_now = Time.zone.now
-    allow_any_instance_of(ActiveSupport::TimeZone).to receive(:now).and_return(time_now)
+  it "sets syncing to false and creates log entry when job throws" do
+    allow_any_instance_of(ActiveSupport::TimeZone).to receive(:now).and_return(now)
     expect_any_instance_of(MailchimpSynchronizationJob).to receive(:perform).and_throw(Exception)
 
     subject.enqueue!
 
-    Delayed::Worker.new.work_off
+    expect do
+      Delayed::Worker.new.work_off
+    end.to change { HitobitoLogEntry.count }.by(1)
     mailing_list.reload
+    log = HitobitoLogEntry.last
+    expect(log.subject).to eq mailing_list
+    expect(log.category).to eq "mail"
+    expect(log.message).to eq "Mailchimp Abgleich war nicht erfolgreich"
 
     expect(mailing_list.mailchimp_syncing).to be false
     expect(mailing_list.mailchimp_last_synced_at).to be_nil

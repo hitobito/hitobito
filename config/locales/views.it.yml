@@ -463,7 +463,7 @@ it:
         title_edit: "Modificare l'iscrizone di %{person}"
         apply: "iscrivere"
         explain_required_checkmark: "* = Antwort obligatorisch"
-        send_email: Inviare un'e-mail al partecipante
+        send_email: E-Mail an Teilnehmer/in senden
       application_fields:
         alternative_dates_info: "per favore indica altri corsi che potrebbero andarti bene."
         course_information: "informazioni sui corsi"

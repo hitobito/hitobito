@@ -7,7 +7,7 @@ require "spec_helper"
 
 describe Export::Tabular::People::ParticipationsAddress do
   let(:person) { people(:top_leader) }
-  let(:participation) { Fabricate(:event_participation, person: person, event: events(:top_course)) }
+  let(:participation) { Fabricate(:event_participation, participant: person, event: events(:top_course)) }
   let(:scope) { Event::Participation.where(id: participation.id) }
   let(:people_list) { Export::Tabular::People::ParticipationsAddress.new(scope) }
 

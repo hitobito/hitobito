@@ -372,6 +372,10 @@ de:
     date: "Datum %{index}"
 
   event:
+    guests:
+      new:
+        title: Gast hinzufügen
+        add_more_guests: "Anmelden und weiteren Gast hinzufügen (max. %{limit})"
     run_by: "Durchgeführt von"
     applied_to: Anmeldung an
     alternative_dates: Ausweichdaten
@@ -399,6 +403,8 @@ de:
       already_assigned: "Diese Person ist bereits anderweitig zugeteilt oder bei diesem Anlass angemeldet."
       maximum_participations_reached: Die maximal erlaubte Teilnehmerzahl ist erreicht. Um weitere Anmeldungen zu bestätigen, muss die maximale Teilnehmerzahl erhöht werden.
       participation:
+        guest_of_html: "(Gast von %{main_applicant})"
+        guest_of_deleted_participation: "(Gast von abgemeldeter Person)"
         registered_at: "Anmeldung am %{datetime}"
         town: Wohnort
       prio_buttons:
@@ -460,12 +466,15 @@ de:
       actions_approval:
         approve_button: "Freigeben"
         reject_button: "Ablehnen"
+      fields:
+        explain_required_checkmark: "* = Antwort obligatorisch"
+        send_email: E-Mail an Teilnehmer/in senden
       form:
         title_new: "Anmeldung als %{role}"
         title_edit: "Anmeldung von %{person} bearbeiten"
         apply: "Anmelden"
-        explain_required_checkmark: "* = Antwort obligatorisch"
-        send_email: E-Mail an Teilnehmer/in senden
+      new:
+        add_guests: "Anmelden und Gast hinzufügen (max. %{limit})"
       application_fields:
         alternative_dates_info: "Bitte gib weitere Kurse an, welche dir gehen würden."
         course_information: "Informationen zu den Kursen"
@@ -668,6 +677,10 @@ de:
     show:
       link:
         delete: "Anmeldung löschen"
+
+  event/guests:
+    guest_added_successfully: "%{guest} wurde erfolgreich als Gast hinzugefügt."
+    not_allowed_due_to_guest_limit: "Du kannst in diesem Anlass keine weiteren Gäste hinzufügen."
 
   event/invitations:
     export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
@@ -2077,6 +2090,7 @@ de:
   steps_component:
     next_link: Weiter
     prev_link: Zurück
+    submit: Absenden
 
   household_aside_component:
     add: Erstellen
@@ -2241,3 +2255,14 @@ de:
     not_found: Ungültiger Verifikationscode
     status_valid: Mitgliedschaft gültig
     status_invalid: Keine gültige Mitgliedschaft
+
+  wizards:
+    steps:
+      new_user_form:
+        next_button: Registrieren
+      new_event_guest_contact_data_form:
+        next_button: Weiter
+      new_event_guest_participation_form:
+        next_button: Gast anmelden
+      new_event_guest_contact_data_form_title: Kontaktdaten des Gasts
+      new_event_guest_participation_form_title: Gast anmelden

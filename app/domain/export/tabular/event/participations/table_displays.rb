@@ -11,11 +11,21 @@ module Export::Tabular::Event::Participations
     self.row_class = TableDisplayRow
 
     def public_account_labels(accounts, klass)
-      account_labels(list.map(&:person).map(&accounts).flatten.select(&:public?), klass)
+      account_labels(people_list.map(&:accounts).flatten.select(&:public?), klass)
     end
 
     def human_attribute(attr)
       Person.human_attribute_name(attr)
+    end
+
+    private
+
+    def people_ids
+      @people_ids ||= people_list.pluck("id")
+    end
+
+    def people_list
+      @people_list ||= @list.map(&:person)
     end
   end
 end

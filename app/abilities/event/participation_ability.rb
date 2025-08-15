@@ -39,6 +39,10 @@ class Event::ParticipationAbility < AbilityDsl::Base
     general(:create).at_least_one_group_not_deleted
   end
 
+  on(Event::Guest) do
+    permission(:any).may(:create).if_participating
+  end
+
   def her_own_or_for_leaded_events
     her_own || for_leaded_events
   end
@@ -57,8 +61,14 @@ class Event::ParticipationAbility < AbilityDsl::Base
       (!event.application_closing_at? || event.application_closing_at >= Time.zone.today)
   end
 
+  def if_participating
+    participating?
+  end
+
   def participating?
-    event.participations.map(&:person_id).include? user.id
+    event.participations.find do |participation|
+      participation.participant_type == Person.sti_name && participation.participant_id == user.id
+    end.present?
   end
 
   def participant_can_show_event?

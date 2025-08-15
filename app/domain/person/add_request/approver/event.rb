@@ -9,7 +9,7 @@ module Person::AddRequest::Approver
 
     # set state assigned for youth wagon
     def build_entity
-      event.participations.where(person_id: request.person_id).first_or_initialize.tap do |p|
+      event.participations.where(participant: request.person).first_or_initialize.tap do |p|
         build_role(p)
         set_active(p) if p.new_record?
       end

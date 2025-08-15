@@ -8,15 +8,19 @@ module Wizards
   class BaseController < ApplicationController
     helper_method :wizard
 
+    # The controller action used to render the wizard forms
+    class_attribute :wizard_action
+    self.wizard_action = :show
+
     def show
     end
 
     def create
-      return render :show if params[:autosubmit].present?
+      return render wizard_action if params[:autosubmit].present?
       return save_and_redirect if wizard.valid? && wizard.last_step?
 
       wizard.move_on
-      render :show, status: :unprocessable_entity # required for turbo to update
+      render wizard_action, status: :unprocessable_entity # required for turbo to update
     end
 
     private

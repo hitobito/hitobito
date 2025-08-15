@@ -45,7 +45,8 @@ module Messages
 
       begin
         delivery.deliver
-        succeeded, failed, blocked = recipient_ids(recipients, [delivery.succeeded, delivery.failed, delivery.blocked])
+        succeeded, failed, blocked = recipient_ids(recipients,
+          [delivery.succeeded, delivery.failed, delivery.blocked])
 
         log "Sent mails, #{succeeded.length} OK, #{failed.length} failed, #{blocked.length} blocked."
 

@@ -42,7 +42,8 @@ describe Messages::DispatchesController do
         post :create, params: {message_id: message.id}
       end.to change { Messages::DispatchJob.new(message).delayed_jobs.count }.by(1)
       expect(message.reload.state).to eq "pending"
-      expect(response).to redirect_to group_mailing_list_message_path(group_id: list.group.id, mailing_list_id: list.id, id: message.id)
+      expect(response).to redirect_to group_mailing_list_message_path(group_id: list.group.id,
+        mailing_list_id: list.id, id: message.id)
       expect(flash[:notice]).to eq "SMS wird versendet."
     end
   end

@@ -139,7 +139,8 @@ describe PaymentProvider do
       order_id = "N031"
       ok_response = [transaction_id, order_id]
 
-      expect(epics_client).to receive(:upload).with(PaymentProviders::Xtc, "qr invoice csv").exactly(:once).and_return(ok_response)
+      expect(epics_client).to receive(:upload).with(PaymentProviders::Xtc,
+        "qr invoice csv").exactly(:once).and_return(ok_response)
 
       expect(subject.XTC("qr invoice csv")).to eq(ok_response)
     end
@@ -159,7 +160,8 @@ describe PaymentProvider do
     it "sends Z54 order" do
       response = ['<?xml version=\"1.0\" encoding=\"UTF-8\"?>']
 
-      expect(epics_client).to receive(:download_and_unzip).with(PaymentProviders::Z54, nil, nil).exactly(:once).and_return(response)
+      expect(epics_client).to receive(:download_and_unzip).with(PaymentProviders::Z54, nil,
+        nil).exactly(:once).and_return(response)
 
       expect(subject.Z54).to eq(response)
     end

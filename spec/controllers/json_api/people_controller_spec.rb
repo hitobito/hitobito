@@ -591,7 +591,8 @@ describe JsonApi::PeopleController, type: [:request] do
             expect(phone_number_json.send(attr.to_sym)).to eq(expected)
           end
 
-          jsonapi_get "/api/people/#{contactable_person.id}", params: params.merge(include: "phone_numbers,additional_emails")
+          jsonapi_get "/api/people/#{contactable_person.id}",
+            params: params.merge(include: "phone_numbers,additional_emails")
 
           # purge included instance variable since graphiti spec helper decides to memoize it
           @jsonapi_included = nil
@@ -688,7 +689,8 @@ describe JsonApi::PeopleController, type: [:request] do
             expect(phone_number_json.send(attr.to_sym)).to eq(expected)
           end
 
-          jsonapi_get "/api/people/#{contactable_person.id}", params: params.merge(include: "phone_numbers,additional_emails")
+          jsonapi_get "/api/people/#{contactable_person.id}",
+            params: params.merge(include: "phone_numbers,additional_emails")
 
           # purge included instance variable since graphiti spec helper decides to memoize it
           @jsonapi_included = nil
@@ -795,7 +797,8 @@ describe JsonApi::PeopleController, type: [:request] do
             expect(phone_number_json.send(attr.to_sym)).to eq(expected)
           end
 
-          jsonapi_get "/api/people/#{contactable_person.id}", params: params.merge(include: "phone_numbers,additional_emails")
+          jsonapi_get "/api/people/#{contactable_person.id}",
+            params: params.merge(include: "phone_numbers,additional_emails")
 
           # purge included instance variable since graphiti spec helper decides to memoize it
           @jsonapi_included = nil
@@ -1130,7 +1133,9 @@ describe JsonApi::PeopleController, type: [:request] do
 
     context "with signed in user session" do
       context "authorized" do
-        let(:bottom_layer_leader) { Fabricate(Group::BottomLayer::Leader.to_s, group: groups(:bottom_layer_one)).person }
+        let(:bottom_layer_leader) {
+          Fabricate(Group::BottomLayer::Leader.to_s, group: groups(:bottom_layer_one)).person
+        }
 
         before do
           sign_in(bottom_layer_leader)

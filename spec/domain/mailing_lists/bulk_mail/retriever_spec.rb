@@ -128,7 +128,9 @@ describe MailingLists::BulkMail::Retriever do
         end.to change { Message::BulkMail.count }.by(1)
           .and change { MailLog.count }.by(1)
           .and change { Delayed::Job.where("handler ILIKE '%Messages::DispatchJob%'").count }.by(0)
-          .and change { Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::SenderRejectedMessageJob%'").count }.by(1)
+          .and change {
+                 Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::SenderRejectedMessageJob%'").count
+               }.by(1)
 
         mail_log = MailLog.find_by(mail_hash: "abcd42")
         expect(mail_log.status).to eq("sender_rejected")
@@ -150,7 +152,9 @@ describe MailingLists::BulkMail::Retriever do
         end.to change { Message::BulkMail.count }.by(1)
           .and change { MailLog.count }.by(1)
           .and change { Delayed::Job.where("handler ILIKE '%Messages::DispatchJob%'").count }.by(1)
-          .and change { Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::SenderRejectedMessageJob%'").count }.by(0)
+          .and change {
+                 Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::SenderRejectedMessageJob%'").count
+               }.by(0)
 
         mail_log = MailLog.find_by(mail_hash: "abcd42")
         expect(mail_log.status).to eq("retrieved")
@@ -171,7 +175,9 @@ describe MailingLists::BulkMail::Retriever do
         end.to change { Message::BulkMail.count }.by(1)
           .and change { MailLog.count }.by(1)
           .and change { Delayed::Job.where("handler ILIKE '%Messages::DispatchJob%'").count }.by(1)
-          .and change { Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::SenderRejectedMessageJob%'").count }.by(0)
+          .and change {
+                 Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::SenderRejectedMessageJob%'").count
+               }.by(0)
 
         mail_log = MailLog.find_by(mail_hash: "abcd42")
         expect(mail_log.status).to eq("retrieved")
@@ -223,14 +229,18 @@ describe MailingLists::BulkMail::Retriever do
           .and change { Message::BulkMail.count }.by(0)
           .and change { MailLog.count }.by(1)
           .and change { Delayed::Job.where("handler ILIKE '%Messages::DispatchJob%'").count }.by(0)
-          .and change { Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::BounceMessageForwardJob%'").count }.by(1)
+          .and change {
+                 Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::BounceMessageForwardJob%'").count
+               }.by(1)
           .and change { Bounce.count }.by(1)
       end
     end
 
     context "auto response message" do
       let(:imap_mail) { Imap::Mail.new }
-      let(:auto_response) { Mail.read_from_string(Rails.root.join("spec", "fixtures", "email", "autoresponse.eml").read) }
+      let(:auto_response) {
+        Mail.read_from_string(Rails.root.join("spec", "fixtures", "email", "autoresponse.eml").read)
+      }
 
       before do
         allow(imap_mail).to receive(:hash).and_return("abcd42")
@@ -249,7 +259,9 @@ describe MailingLists::BulkMail::Retriever do
           .and change { Message::BulkMail.count }.by(0)
           .and change { MailLog.count }.by(1)
           .and change { Delayed::Job.where("handler ILIKE '%Messages::DispatchJob%'").count }.by(0)
-          .and change { Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::BounceMessageForwardJob%'").count }.by(0)
+          .and change {
+                 Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::BounceMessageForwardJob%'").count
+               }.by(0)
 
         mail_log = MailLog.find_by(mail_hash: "abcd42")
         expect(mail_log.status).to eq("auto_response_rejected")
@@ -270,7 +282,9 @@ describe MailingLists::BulkMail::Retriever do
         .by(1)
         .and change { MailLog.count }.by(1)
         .and change { Delayed::Job.where("handler ILIKE '%Messages::DispatchJob%'").count }.by(1)
-        .and change { Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::SenderRejectedMessageJob%'").count }.by(0)
+        .and change {
+               Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::SenderRejectedMessageJob%'").count
+             }.by(0)
 
       mail_log = MailLog.find_by(mail_hash: "abcd42")
       expect(mail_log.status).to eq("retrieved")
@@ -295,7 +309,9 @@ describe MailingLists::BulkMail::Retriever do
         .by(1)
         .and change { MailLog.count }.by(1)
         .and change { Delayed::Job.where("handler ILIKE '%Messages::DispatchJob%'").count }.by(1)
-        .and change { Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::SenderRejectedMessageJob%'").count }.by(0)
+        .and change {
+               Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::SenderRejectedMessageJob%'").count
+             }.by(0)
 
       mail_log = MailLog.find_by(mail_hash: "abcd42")
       expect(mail_log.status).to eq("retrieved")
@@ -319,7 +335,9 @@ describe MailingLists::BulkMail::Retriever do
       end.to change { Message::BulkMail.count }.by(1)
         .and change { MailLog.count }.by(1)
         .and change { Delayed::Job.where("handler ILIKE '%Messages::DispatchJob%'").count }.by(1)
-        .and change { Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::SenderRejectedMessageJob%'").count }.by(0)
+        .and change {
+               Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::SenderRejectedMessageJob%'").count
+             }.by(0)
 
       mail_log = MailLog.find_by(mail_hash: "abcd42")
       expect(mail_log.status).to eq("retrieved")
@@ -343,7 +361,9 @@ describe MailingLists::BulkMail::Retriever do
       end.to change { Message::BulkMail.count }.by(1)
         .and change { MailLog.count }.by(1)
         .and change { Delayed::Job.where("handler ILIKE '%Messages::DispatchJob%'").count }.by(1)
-        .and change { Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::SenderRejectedMessageJob%'").count }.by(0)
+        .and change {
+               Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::SenderRejectedMessageJob%'").count
+             }.by(0)
 
       mail_log = MailLog.find_by(mail_hash: "abcd42")
       expect(mail_log.status).to eq("retrieved")
@@ -367,7 +387,9 @@ describe MailingLists::BulkMail::Retriever do
       end.to change { Message::BulkMail.count }.by(1)
         .and change { MailLog.count }.by(1)
         .and change { Delayed::Job.where("handler ILIKE '%Messages::DispatchJob%'").count }.by(1)
-        .and change { Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::SenderRejectedMessageJob%'").count }.by(0)
+        .and change {
+               Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::SenderRejectedMessageJob%'").count
+             }.by(0)
 
       mail_log = MailLog.find_by(mail_hash: "abcd42")
       expect(mail_log.status).to eq("retrieved")

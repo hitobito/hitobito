@@ -35,7 +35,8 @@ describe Payments::EbicsImportJob do
 
     expect(payment_provider).to receive(:Z54).and_return(invoice_files)
 
-    invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), recipient: people(:bottom_member), group: groups(:bottom_layer_one))
+    invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader),
+      recipient: people(:bottom_member), group: groups(:bottom_layer_one))
     InvoiceList.create(title: "membership fee", invoices: [invoice])
     invoice.update!(reference: "000000000000100000000000800")
 
@@ -143,7 +144,8 @@ describe Payments::EbicsImportJob do
 
       allow(payment_provider).to receive(:Z54).and_return(invoice_files)
 
-      invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), recipient: people(:bottom_member), group: groups(:bottom_layer_one))
+      invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader),
+        recipient: people(:bottom_member), group: groups(:bottom_layer_one))
       InvoiceList.create(title: "membership fee", invoices: [invoice])
       invoice.update!(reference: "000000000000100000000000800")
     end

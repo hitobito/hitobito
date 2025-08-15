@@ -13,7 +13,8 @@ module Export::Pdf
     end
 
     def generate(contactables, household = false)
-      pdf = Export::Pdf::Document.new(page_size: format.page_size, page_layout: format.page_layout, margin: 0.cm).pdf
+      pdf = Export::Pdf::Document.new(page_size: format.page_size, page_layout: format.page_layout,
+        margin: 0.cm).pdf
       pdf.font_size = format.font_size
       if household
         generate_with_households(contactables, pdf)

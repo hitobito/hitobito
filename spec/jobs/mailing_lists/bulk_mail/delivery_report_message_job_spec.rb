@@ -12,7 +12,9 @@ describe MailingLists::BulkMail::DeliveryReportMessageJob do
 
   let(:mailing_list) { mailing_lists(:leaders) }
   let(:mail_log) { MailLog.create!(mail_from: "mr-sender@example.com") }
-  let(:bulk_mail) { Message::BulkMail.create!(subject: "Sommerlager", state: :finished, mailing_list: mailing_list, mail_log: mail_log) }
+  let(:bulk_mail) {
+    Message::BulkMail.create!(subject: "Sommerlager", state: :finished, mailing_list: mailing_list, mail_log: mail_log)
+  }
 
   subject { described_class.new(bulk_mail) }
 

@@ -28,7 +28,8 @@ module Changelogs
     private
 
     def collapse_toggle_link
-      content_tag(:a, content_tag(:i, "", class: "fas fa-chevron-right mr-2"), data: {bs_toggle: "collapse"}, href: "#detail-info")
+      content_tag(:a, content_tag(:i, "", class: "fas fa-chevron-right mr-2"),
+        data: {bs_toggle: "collapse"}, href: "#detail-info")
     end
 
     def version_label(display_as_link: true)

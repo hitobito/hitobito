@@ -55,7 +55,8 @@ describe Messages::BulkMailDispatch do
       end
 
       it "creates recipient with state failed when email invalid" do
-        expect(Messages::BulkMail::AddressList).to receive_message_chain(:new, :entries).and_return([{person_id: top_leader.id, email: "invalid.com"}])
+        expect(Messages::BulkMail::AddressList).to receive_message_chain(:new,
+          :entries).and_return([{person_id: top_leader.id, email: "invalid.com"}])
 
         expect do
           result = dispatch.run
@@ -137,7 +138,9 @@ describe Messages::BulkMailDispatch do
 
         expect do
           dispatch.run
-        end.to change { Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::DeliveryReportMessageJob%'").count }.by(1)
+        end.to change {
+                 Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::DeliveryReportMessageJob%'").count
+               }.by(1)
       end
 
       it "does not send delivery report if not enabled" do
@@ -145,7 +148,9 @@ describe Messages::BulkMailDispatch do
 
         expect do
           dispatch.run
-        end.to change { Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::DeliveryReportMessageJob%'").count }.by(0)
+        end.to change {
+                 Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::DeliveryReportMessageJob%'").count
+               }.by(0)
       end
 
       context "on smtp server error" do
@@ -180,7 +185,8 @@ describe Messages::BulkMailDispatch do
         end
 
         it "marks message and recipient entries as failed but keeps already sent" do
-          MessageRecipient.create!(message_id: message.id, person_id: top_leader.id, state: :sent, email: "recipient4@example.com")
+          MessageRecipient.create!(message_id: message.id, person_id: top_leader.id, state: :sent,
+            email: "recipient4@example.com")
 
           result = dispatch.run
           expect(result.needs_reenqueue?).to be_falsey

@@ -162,7 +162,8 @@ class Role < ActiveRecord::Base
     def with_ended_readable
       return with_inactive if Settings.people.ended_roles_readable_for.nil?
 
-      with_inactive.where(end_on: [nil, [Settings.people.ended_roles_readable_for.seconds.ago.to_date..]])
+      with_inactive.where(end_on: [nil,
+        [Settings.people.ended_roles_readable_for.seconds.ago.to_date..]])
     end
 
     # Is the given attribute used in the current STI class

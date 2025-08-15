@@ -34,7 +34,9 @@ class AdditionalEmail < ActiveRecord::Base
   # A dot at the end is invalid due to translation purpose
   validates :label, format: {without: /[.]$\z/}
 
-  validates :invoices, uniqueness: {scope: [:contactable_id, :contactable_type], conditions: -> { where(invoices: true) }}, if: :invoices
+  validates :invoices, uniqueness: {scope: [:contactable_id, :contactable_type], conditions: -> {
+    where(invoices: true)
+  }}, if: :invoices
 
   normalizes :email, with: ->(attribute) { attribute.downcase }
 

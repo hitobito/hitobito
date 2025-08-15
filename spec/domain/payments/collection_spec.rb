@@ -268,7 +268,8 @@ describe Payments::Collection do
         fabricated_payment2 = fabricate_payment(100.0, Date.new(2.years.ago.year, 5, 20))
         fabricated_payment3 = fabricate_payment(120.0, Date.new(2.years.ago.year, 3, 10))
 
-        payments = described_class.new.from(Date.new(2.years.ago.year, 3, 12)).to(Date.new(1.year.ago.year, 3, 1)).instance_variable_get(:@payments)
+        payments = described_class.new.from(Date.new(2.years.ago.year, 3,
+          12)).to(Date.new(1.year.ago.year, 3, 1)).instance_variable_get(:@payments)
 
         expect(payments).to_not include(fabricated_payment1)
         expect(payments).to include(fabricated_payment2)
@@ -480,7 +481,8 @@ describe Payments::Collection do
   private
 
   def fabricate_payment(amount, received_at = 1.year.ago)
-    invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: top_leader, recipient: bottom_member, group: top_layer, state: :payed)
+    invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: top_leader, recipient: bottom_member,
+      group: top_layer, state: :payed)
     Payment.create!(amount: amount, received_at: received_at, invoice: invoice)
   end
 end

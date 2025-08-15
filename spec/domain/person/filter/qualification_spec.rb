@@ -84,7 +84,8 @@ describe Person::Filter::Qualification do
     before do
       @tg_member = create_person(Group::TopGroup::Member, :top_group, "active", :sl)
       # duplicate qualification
-      Fabricate(:qualification, person: @tg_member, qualification_kind: qualification_kinds(:sl), start_at: today - 2.weeks)
+      Fabricate(:qualification, person: @tg_member, qualification_kind: qualification_kinds(:sl),
+        start_at: today - 2.weeks)
 
       @tg_extern = create_person(Role::External, :top_group, "active", :sl)
 

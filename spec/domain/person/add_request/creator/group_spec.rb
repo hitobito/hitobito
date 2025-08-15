@@ -7,7 +7,9 @@ require "spec_helper"
 
 describe Person::AddRequest::Creator::Group do
   let(:primary_layer) { person.primary_group.layer_group }
-  let(:person) { Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_two), created_at: 1.year.ago).person }
+  let(:person) {
+    Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_two), created_at: 1.year.ago).person
+  }
   let(:requester) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person }
 
   let(:group) { groups(:bottom_group_one_one) }
@@ -25,7 +27,8 @@ describe Person::AddRequest::Creator::Group do
     end
 
     it "is true if deleted role already exists" do
-      Fabricate(Group::BottomGroup::Member.name, group: group, person: person, start_on: 2.years.ago, end_on: 1.year.ago)
+      Fabricate(Group::BottomGroup::Member.name, group: group, person: person, start_on: 2.years.ago,
+        end_on: 1.year.ago)
       expect(subject).to be_required
     end
 
@@ -83,7 +86,8 @@ describe Person::AddRequest::Creator::Group do
     end
 
     it "creates group request if deleted role already exists" do
-      Fabricate(Group::BottomGroup::Member.name, group: group, person: person, start_on: 2.years.ago, end_on: 1.year.ago)
+      Fabricate(Group::BottomGroup::Member.name, group: group, person: person, start_on: 2.years.ago,
+        end_on: 1.year.ago)
 
       expect do
         subject.create_request

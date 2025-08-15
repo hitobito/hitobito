@@ -392,7 +392,8 @@ describe MailingListAbility do
         role = Fabricate(Group::TopGroup::Secretary.name.to_sym, group: group)
         list = Fabricate(:mailing_list, group: group)
         ability = Ability.new(role.person.reload)
-        Subscription.create!(mailing_list: list, subscriber: group, role_types: [Group::TopGroup::Member, Group::GlobalGroup::Member])
+        Subscription.create!(mailing_list: list, subscriber: group,
+          role_types: [Group::TopGroup::Member, Group::GlobalGroup::Member])
 
         expect(ability).not_to be_able_to(:export_subscriptions, list)
       end

@@ -266,7 +266,10 @@ describe Qualification do
         it { expect(Qualification.only_expired([], today + 2.years)).to match_array([q]) }
         it { expect(Qualification.only_expired([kind.id], today + 2.years)).to match_array([q]) }
         it { expect(Qualification.only_expired([], today + 4.years)).to match_array([q, gl_leader_active]) }
-        it { expect(Qualification.only_expired([kind.id, gl_leader.id], today + 4.years)).to match_array([q, gl_leader_active]) }
+        it {
+          expect(Qualification.only_expired([kind.id, gl_leader.id],
+            today + 4.years)).to match_array([q, gl_leader_active])
+        }
       end
 
       context "when qualification never expires" do
@@ -288,7 +291,9 @@ describe Qualification do
       end
 
       context "when another expired qualification of same kind exists" do
-        let!(:inactive) { Fabricate(:qualification, qualification_kind: kind, person: person, start_at: start_date - 10.years) }
+        let!(:inactive) {
+          Fabricate(:qualification, qualification_kind: kind, person: person, start_at: start_date - 10.years)
+        }
 
         it { expect(Qualification.only_expired).to be_blank }
         it { expect(Qualification.only_expired([kind.id])).to be_blank }

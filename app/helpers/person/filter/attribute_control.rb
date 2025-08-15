@@ -63,29 +63,38 @@ class Person::Filter::AttributeControl
   end
 
   def attribute_key_hidden_field(key, time, disabled: false)
-    hidden_field_tag("#{filter_name_prefix}[key]", key, disabled: disabled, class: "attribute_key_hidden_field")
+    hidden_field_tag("#{filter_name_prefix}[key]", key, disabled: disabled,
+      class: "attribute_key_hidden_field")
   end
 
   def attribute_key_field(key, time, html_options)
     content_tag(:div, class: "col") do
       select_tag("#{filter_name_prefix}[key]",
         options_from_collection_for_select(people_filter_attributes_for_select, :last, :first, key),
-        html_options.merge(disabled: true, class: "attribute_key_dropdown form-select form-select-sm"))
+        html_options.merge(disabled: true,
+          class: "attribute_key_dropdown form-select form-select-sm"))
     end
   end
 
   def attribute_constraint_field(key, constraint, type, time, html_options)
     content_tag(:div, class: "col") do
       select_tag("#{filter_name_prefix}[constraint]",
-        options_from_collection_for_select(constraint_options_for(type, key), :last, :first, constraint),
+        options_from_collection_for_select(constraint_options_for(type, key), :last, :first,
+          constraint),
         html_options.merge(class: "attribute_constraint_dropdown ms-3 form-select form-select-sm"))
     end
   end
 
   def constraint_options_for(type, key)
     filters = [[t(".equal"), :equal], [t(".blank"), :blank]]
-    filters += [[t(".match"), :match], [t(".not_match"), :not_match]] if type == :string || key.blank?
-    filters += [[t(".smaller"), :smaller], [t(".greater"), :greater]] if type == :integer || key.blank?
+    if type == :string || key.blank?
+      filters += [[t(".match"), :match],
+        [t(".not_match"), :not_match]]
+    end
+    if type == :integer || key.blank?
+      filters += [[t(".smaller"), :smaller],
+        [t(".greater"), :greater]]
+    end
     filters += [[t(".before"), :before], [t(".after"), :after]] if type == :date || key.blank?
     filters
   end
@@ -106,7 +115,8 @@ class Person::Filter::AttributeControl
   def integer_field(time, attribute_value_class, value, html_options)
     text_field_tag("#{filter_name_prefix}[value]",
       value,
-      html_options.merge(class: "#{CONTROL_CLASSES} integer_field #{attribute_value_class}", type: "number"))
+      html_options.merge(class: "#{CONTROL_CLASSES} integer_field #{attribute_value_class}",
+        type: "number"))
   end
 
   def date_field(time, attribute_value_class, value, html_options)

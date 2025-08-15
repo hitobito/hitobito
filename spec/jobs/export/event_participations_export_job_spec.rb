@@ -6,7 +6,10 @@
 require "spec_helper"
 
 describe Export::EventParticipationsExportJob do
-  subject { Export::EventParticipationsExportJob.new(format, user.id, event.id, groups(:top_group).id, params.merge(filename: filename)) }
+  subject {
+    Export::EventParticipationsExportJob.new(format, user.id, event.id, groups(:top_group).id,
+      params.merge(filename: filename))
+  }
 
   let(:participation) { event_participations(:top) }
   let(:user) { participation.person }
@@ -78,7 +81,8 @@ describe Export::EventParticipationsExportJob do
     let(:params) { {selection: true} }
 
     it "and saves it" do
-      TableDisplay.create!(person: user, table_model_class: "Event::Participation", selected: ["person.layer_group_label"])
+      TableDisplay.create!(person: user, table_model_class: "Event::Participation",
+        selected: ["person.layer_group_label"])
 
       subject.perform
 

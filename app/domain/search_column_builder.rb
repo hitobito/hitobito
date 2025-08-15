@@ -69,12 +69,20 @@ class SearchColumnBuilder
     return unless attrs.all? { |attr| connection.column_exists?(table_name, attr.to_s) }
 
     # return if the search_column is already generated on this table
-    return if search_column_already_sufficiently_created?(table_name, attrs) && !replace_column?(replace)
+    return if search_column_already_sufficiently_created?(table_name,
+      attrs) && !replace_column?(replace)
 
     quoted_table_name = connection.quote_table_name(table_name)
 
-    migration.remove_column(quoted_table_name, SEARCH_COLUMN) if connection.column_exists?(quoted_table_name, SEARCH_COLUMN)
-    migration.remove_index(quoted_table_name, name: "#{table_name}_search_column_gin_idx") if connection.index_exists?(quoted_table_name, :search_column, using: :gin)
+    migration.remove_column(quoted_table_name, SEARCH_COLUMN) if connection.column_exists?(
+      quoted_table_name, SEARCH_COLUMN
+    )
+    if connection.index_exists?(
+      quoted_table_name, :search_column, using: :gin
+    )
+      migration.remove_index(quoted_table_name,
+        name: "#{table_name}_search_column_gin_idx")
+    end
 
     create_search_column(table_name, quoted_table_name, attrs)
     create_search_index(table_name, quoted_table_name)

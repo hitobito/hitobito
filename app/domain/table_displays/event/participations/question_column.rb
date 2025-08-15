@@ -16,7 +16,9 @@ module TableDisplays::Event::Participations
 
       def available(list)
         list.map(&:event).uniq.flat_map do |event|
-          event.questions.where.not(disclosure: :hidden).pluck(:id).map { |id| "event_question_#{id}" }
+          event.questions.where.not(disclosure: :hidden).pluck(:id).map { |id|
+            "event_question_#{id}"
+          }
         end.uniq
       end
     end

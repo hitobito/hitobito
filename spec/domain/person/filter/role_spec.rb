@@ -12,7 +12,8 @@ describe Person::Filter::Role do
 
   context "initialize" do
     it "ignores unknown role types" do
-      filter = Person::Filter::Role.new(:role, role_types: %w[Group::TopGroup::Leader Group::BottomGroup::OldRole File Group::BottomGroup::Member])
+      filter = Person::Filter::Role.new(:role,
+        role_types: %w[Group::TopGroup::Leader Group::BottomGroup::OldRole File Group::BottomGroup::Member])
       expect(filter.to_hash).to eq(role_types: %w[Group::TopGroup::Leader Group::BottomGroup::Member])
     end
 
@@ -247,7 +248,8 @@ describe Person::Filter::Role do
       def filter(attrs)
         include_archived = attrs[:include_archived]
         role_type_ids = Array(role_type).collect(&:id)
-        filters = {role: transform(attrs).merge(role_type_ids: role_type_ids, kind: kind, include_archived: include_archived)}
+        filters = {role: transform(attrs).merge(role_type_ids: role_type_ids, kind: kind,
+          include_archived: include_archived)}
         Person::Filter::List.new(attrs.fetch(:group, group), user, range: attrs.fetch(:range, range), filters: filters)
       end
 
@@ -394,7 +396,9 @@ describe Person::Filter::Role do
 
         context :without_role_type do
           let(:role_type) { nil }
-          let(:role) { person.roles.create!(type: Group::TopGroup::Member.sti_name, group: group, start_on: 1.year.ago) }
+          let(:role) {
+            person.roles.create!(type: Group::TopGroup::Member.sti_name, group: group, start_on: 1.year.ago)
+          }
 
           it "applies filter and does not find role ended outside of timeframe" do
             role.update!(end_on: 3.days.ago)

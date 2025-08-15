@@ -150,7 +150,9 @@ describe Event::RegisterController do
           event.update!(required_contact_attrs: [])
 
           expect do
-            put :register, params: {group_id: group.id, id: event.id, event_participation_contact_data: {first_name: "barney", last_name: "foo", email: "not-existing@example.com", privacy_policy_accepted: "1"}}
+            put :register,
+              params: {group_id: group.id, id: event.id,
+                       event_participation_contact_data: {first_name: "barney", last_name: "foo", email: "not-existing@example.com", privacy_policy_accepted: "1"}}
           end.to change { Person.count }.by(1)
 
           person = Person.find_by(email: "not-existing@example.com")
@@ -163,7 +165,9 @@ describe Event::RegisterController do
           event.update!(required_contact_attrs: [])
 
           expect do
-            put :register, params: {group_id: group.id, id: event.id, event_participation_contact_data: {first_name: "barney", last_name: "foo", email: "not-existing@example.com", privacy_policy_accepted: "0"}}
+            put :register,
+              params: {group_id: group.id, id: event.id,
+                       event_participation_contact_data: {first_name: "barney", last_name: "foo", email: "not-existing@example.com", privacy_policy_accepted: "0"}}
           end.to_not change { Person.count }
         end
       end
@@ -172,7 +176,9 @@ describe Event::RegisterController do
         event.update!(required_contact_attrs: [])
 
         expect do
-          put :register, params: {group_id: group.id, id: event.id, event_participation_contact_data: {first_name: "barney", last_name: "foo", email: "not-existing@example.com"}}
+          put :register,
+            params: {group_id: group.id, id: event.id,
+                     event_participation_contact_data: {first_name: "barney", last_name: "foo", email: "not-existing@example.com"}}
         end.to change { Person.count }.by(1)
 
         is_expected.to redirect_to(new_group_event_participation_path(group, event))
@@ -203,7 +209,9 @@ describe Event::RegisterController do
         event.update!(required_contact_attrs: [])
 
         expect do
-          put :register, params: {group_id: group.id, id: event.id, event_participation_contact_data: {email: "not-existing@example.com"}}
+          put :register,
+            params: {group_id: group.id, id: event.id,
+                     event_participation_contact_data: {email: "not-existing@example.com"}}
         end.not_to change { Person.count }
 
         is_expected.to render_template("register")

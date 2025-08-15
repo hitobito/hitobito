@@ -10,7 +10,9 @@ require "spec_helper"
 RSpec.describe Bounce do
   subject(:bounced) { described_class.create(email: "bounced@example.org", count: 1) }
 
-  subject(:mailing_list_bounce) { described_class.create(email: "fourty-two@example.org", count: 2, mailing_list_ids: [1, 42]) }
+  subject(:mailing_list_bounce) {
+    described_class.create(email: "fourty-two@example.org", count: 2, mailing_list_ids: [1, 42])
+  }
 
   subject(:blocked) { described_class.create(email: "blocked@example.org", count: 10, blocked_at: 1.day.ago) }
 

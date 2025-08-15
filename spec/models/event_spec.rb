@@ -540,7 +540,8 @@ describe Event do
   describe "application_questions" do
     it "sorts by question asc" do
       Event::Question.create!(question: "A", disclosure: :optional, event: event)
-      expect(event.reload.application_questions.map(&:question)).to eq ["A", "GA oder Halbtax?", "Ich bin Vegetarier", "Sonst noch was?"]
+      expect(event.reload.application_questions.map(&:question)).to eq ["A", "GA oder Halbtax?", "Ich bin Vegetarier",
+        "Sonst noch was?"]
     end
   end
 

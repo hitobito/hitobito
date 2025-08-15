@@ -51,7 +51,8 @@ describe "mounted_attributes/_form_tabs.html.haml" do
     end
 
     it "renders enum select" do
-      expect(subject).to have_selector('select#group_test_enum option[value="the_only_option"]', text: "The only option")
+      expect(subject).to have_selector('select#group_test_enum option[value="the_only_option"]',
+        text: "The only option")
       expect(subject.find("select#group_test_enum")).not_to be_disabled
     end
   end
@@ -69,7 +70,8 @@ describe "mounted_attributes/_form_tabs.html.haml" do
     end
 
     it "renders disabled enum select if user has no permission on attribute" do
-      expect(subject).to have_selector('select#group_test_enum option[value="the_only_option"]', text: "The only option")
+      expect(subject).to have_selector('select#group_test_enum option[value="the_only_option"]',
+        text: "The only option")
       expect(subject.find("select#group_test_enum")).to be_disabled
     end
   end

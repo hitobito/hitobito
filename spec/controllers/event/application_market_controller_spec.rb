@@ -248,13 +248,15 @@ describe Event::ApplicationMarketController do
 
     it "sends email when send_email query param is true" do
       expect do
-        put :add_participant, params: {group_id: group.id, event_id: event.id, id: appl_prio_1.id, send_email: true}, format: :js
+        put :add_participant, params: {group_id: group.id, event_id: event.id, id: appl_prio_1.id, send_email: true},
+          format: :js
       end.to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }.by(1)
     end
 
     it "does not send email when send_email query param is false" do
       expect do
-        put :add_participant, params: {group_id: group.id, event_id: event.id, id: appl_prio_1.id, send_email: false}, format: :js
+        put :add_participant, params: {group_id: group.id, event_id: event.id, id: appl_prio_1.id, send_email: false},
+          format: :js
       end.not_to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }
     end
 
@@ -278,13 +280,15 @@ describe Event::ApplicationMarketController do
 
     it "sends email when send_email query param is true" do
       expect do
-        delete :remove_participant, params: {group_id: group.id, event_id: event.id, id: appl_participant.id, send_email: true}, format: :js
+        delete :remove_participant,
+          params: {group_id: group.id, event_id: event.id, id: appl_participant.id, send_email: true}, format: :js
       end.to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }.by(1)
     end
 
     it "does not send email when send_email query param is false" do
       expect do
-        delete :remove_participant, params: {group_id: group.id, event_id: event.id, id: appl_participant.id, send_email: false}, format: :js
+        delete :remove_participant,
+          params: {group_id: group.id, event_id: event.id, id: appl_participant.id, send_email: false}, format: :js
       end.not_to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }
     end
   end
@@ -308,7 +312,10 @@ describe Event::ApplicationMarketController do
   end
 
   describe "DELETE waiting_list" do
-    before { delete :remove_from_waiting_list, params: {group_id: group.id, event_id: event.id, id: appl_waiting.id}, format: :js }
+    before {
+      delete :remove_from_waiting_list, params: {group_id: group.id, event_id: event.id, id: appl_waiting.id},
+        format: :js
+    }
 
     it "sets waiting list flag" do
       expect(appl_waiting.reload.application).not_to be_waiting_list

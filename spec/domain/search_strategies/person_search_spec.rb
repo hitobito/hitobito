@@ -20,8 +20,10 @@ describe SearchStrategies::PersonSearch do
       group: groups(:bottom_group_one_one),
       person: Fabricate(:person, last_name: "Bindella", first_name: "Yasmine")).person
 
-    @bg_member_with_deleted = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one)).person
-    leader = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one), person: @bg_member_with_deleted)
+    @bg_member_with_deleted = Fabricate(Group::BottomGroup::Member.name.to_sym,
+      group: groups(:bottom_group_one_one)).person
+    leader = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one),
+      person: @bg_member_with_deleted)
     leader.update(created_at: 1.year.ago)
     leader.destroy!
 

@@ -84,7 +84,8 @@ describe SubscriptionsController do
       e1 = Fabricate(:additional_email, contactable: @person_subscription.subscriber, mailings: true)
       Fabricate(:additional_email, contactable: @excluded_person_subscription.subscriber, mailings: true)
       get :index, params: {group_id: group.id, mailing_list_id: mailing_list.id}, format: :email
-      expect(@response.body.split(",")).to match_array([people(:bottom_member).email, @person_subscription.subscriber.email, e1.email])
+      expect(@response.body.split(",")).to match_array([people(:bottom_member).email,
+        @person_subscription.subscriber.email, e1.email])
     end
 
     it "renders email addresses with additional_email matching preferred_labels instead of subscriber email" do
@@ -139,8 +140,14 @@ describe SubscriptionsController do
     let!(:event_subscription) { create_event_subscription(mailing_list) }
     let!(:person_subscription) { create_person_subscription(mailing_list) }
     let!(:excluded_subscription) { create_person_subscription(mailing_list, true) }
-    let!(:included_tag) { SubscriptionTag.create!(excluded: false, subscription: group_subscription, tag: ActsAsTaggableOn::Tag.create!(name: "to_include")) }
-    let!(:excluded_tag) { SubscriptionTag.create!(excluded: true, subscription: group_subscription, tag: ActsAsTaggableOn::Tag.create!(name: "to_exclude")) }
+    let!(:included_tag) {
+      SubscriptionTag.create!(excluded: false, subscription: group_subscription,
+        tag: ActsAsTaggableOn::Tag.create!(name: "to_include"))
+    }
+    let!(:excluded_tag) {
+      SubscriptionTag.create!(excluded: true, subscription: group_subscription,
+        tag: ActsAsTaggableOn::Tag.create!(name: "to_exclude"))
+    }
     let(:tag_to_include) {}
     let(:expected) {
       [

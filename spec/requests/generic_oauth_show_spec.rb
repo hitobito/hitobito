@@ -127,7 +127,10 @@ RSpec.describe "OAuth show", type: :request do
       end
 
       context "with expired token" do
-        let(:token) { Fabricate(:access_token, application: application, scopes: "email", resource_owner_id: user.id, expires_in: -1.minute) }
+        let(:token) {
+          Fabricate(:access_token, application: application, scopes: "email", resource_owner_id: user.id,
+            expires_in: -1.minute)
+        }
 
         it "redirects to login" do
           get url, headers: {Authorization: "Bearer " + token.token}

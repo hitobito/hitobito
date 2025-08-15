@@ -54,7 +54,8 @@ module Sortable
       elsif entries.to_sql.match?(SUBQUERY) # already selecting from a subquery (e.g. people_controller)
         entries.reorder(sort_expression.gsub(TABLE_WITH_COLUMN, '\1'))
       elsif entries.to_sql.match?(GROUPED_QUERY) # already selecting from a grouped query (e.g. sbv/song_counts_controller.rb)
-        entries.select(entries.select_values, "MAX(#{sort_expression_attrs}) AS #{sort_expression_attrs.gsub(TABLE_WITH_COLUMN, '\1')}")
+        entries.select(entries.select_values,
+          "MAX(#{sort_expression_attrs}) AS #{sort_expression_attrs.gsub(TABLE_WITH_COLUMN, '\1')}")
           .joins(join_tables)
           .reorder(Arel.sql(sort_expression.gsub(TABLE_WITH_COLUMN, '\1')))
       else
@@ -71,7 +72,9 @@ module Sortable
     # Return sort columns from defined mappings or as null_safe_sort from parameter.
     def sort_columns
       sort_mappings = sort_mappings_with_indifferent_access
-      sort_columns_expression = sort_mappings[params[:sort]].is_a?(Hash) ? sort_mappings.dig(params[:sort], :order) : sort_mappings[params[:sort]]
+      sort_columns_expression = sort_mappings[params[:sort]].is_a?(Hash) ? sort_mappings.dig(
+        params[:sort], :order
+      ) : sort_mappings[params[:sort]]
       sort_columns_expression || "#{model_class.table_name}.#{params[:sort]}"
     end
 

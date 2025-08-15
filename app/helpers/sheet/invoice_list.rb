@@ -18,7 +18,10 @@ module Sheet
     end
 
     def parent_link_url
-      return view.group_invoice_list_invoices_path(entry.group, entry) unless no_invoice_or_shared_title?
+      unless no_invoice_or_shared_title?
+        return view.group_invoice_list_invoices_path(entry.group,
+          entry)
+      end
       super
     end
 

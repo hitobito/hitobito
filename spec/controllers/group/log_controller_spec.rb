@@ -11,7 +11,9 @@ describe Group::LogController do
   let(:top_leader) { people(:top_leader) }
   let(:layer_one_member1) { people(:bottom_member) }
   let(:layer_one_member2) { Fabricate(Group::BottomLayer::Member.to_s, group: group).person }
-  let(:layer_two_member) { Fabricate(Group::BottomLayer::Member.to_s, group: groups(:bottom_layer_two), created_at: 30.days.ago).person }
+  let(:layer_two_member) {
+    Fabricate(Group::BottomLayer::Member.to_s, group: groups(:bottom_layer_two), created_at: 30.days.ago).person
+  }
   let(:group) { groups(:bottom_layer_one) }
 
   describe "GET index", versioning: true do

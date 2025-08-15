@@ -38,7 +38,9 @@ class RedateJob < BaseJob
     key, value = attrs.first
     message = formatted(role.person.to_s + " (#{role.person.id})")
 
-    message << " -  #{formatted([role.group.layer_group.to_s, role.group.to_s, role.to_s].join(" / "), cap_at: 100)}"
+    message << " -  #{formatted(
+      [role.group.layer_group.to_s, role.group.to_s, role.to_s].join(" / "), cap_at: 100
+    )}"
     message << ": #{key} (#{role.send(key)} -> #{value})"
     role.update_columns(attrs)
     Rails.logger.info message

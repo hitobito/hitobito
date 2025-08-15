@@ -11,7 +11,8 @@ class Doorkeeper::Hitobito::OidcSessionsController < ActionController::Base # ru
       reset_session
       person&.forget_me!
       access_tokens.destroy_all
-      redirect_to redirect_target, allow_other_host: true, notice: I18n.t("devise.sessions.signed_out")
+      redirect_to redirect_target, allow_other_host: true,
+        notice: I18n.t("devise.sessions.signed_out")
     else
       render plain: "failed to process token", status: :unprocessable_entity
     end

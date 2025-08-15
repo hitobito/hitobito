@@ -260,8 +260,10 @@ describe People::Merger do
     end
 
     it "does merge qualification when target already has qualification of certain kind but in different time" do
-      target_qualification = Fabricate(:qualification, person: person, qualification_kind: QualificationKind.first, start_at: 10.days.ago)
-      source_qualification = Fabricate(:qualification, person: duplicate, qualification_kind: QualificationKind.second, start_at: 30.days.ago)
+      target_qualification = Fabricate(:qualification, person: person, qualification_kind: QualificationKind.first,
+        start_at: 10.days.ago)
+      source_qualification = Fabricate(:qualification, person: duplicate, qualification_kind: QualificationKind.second,
+        start_at: 30.days.ago)
 
       expect do
         merger.merge!
@@ -304,9 +306,12 @@ describe People::Merger do
     end
 
     it "merges add_requests" do
-      target_add_request_1 = Person::AddRequest::Group.create!(person: person, requester: Person.root, role_type: Group.first.role_types.first.sti_name, body_id: Group.first.id)
-      source_add_request_1 = Person::AddRequest::Group.create!(person: duplicate, requester: Person.root, role_type: Group.second.role_types.first.sti_name, body_id: Group.second.id)
-      source_add_request_2 = Person::AddRequest::Group.create!(person: duplicate, requester: Person.root, role_type: Group.third.role_types.first.sti_name, body_id: Group.third.id)
+      target_add_request_1 = Person::AddRequest::Group.create!(person: person, requester: Person.root,
+        role_type: Group.first.role_types.first.sti_name, body_id: Group.first.id)
+      source_add_request_1 = Person::AddRequest::Group.create!(person: duplicate, requester: Person.root,
+        role_type: Group.second.role_types.first.sti_name, body_id: Group.second.id)
+      source_add_request_2 = Person::AddRequest::Group.create!(person: duplicate, requester: Person.root,
+        role_type: Group.third.role_types.first.sti_name, body_id: Group.third.id)
 
       expect do
         merger.merge!
@@ -321,8 +326,10 @@ describe People::Merger do
     end
 
     it "does not merge extra add_requests when target already has add_request in certain group/event" do
-      Person::AddRequest::Group.create!(person: person, requester: Person.root, role_type: Group.first.role_types.first.sti_name, body_id: Group.first.id)
-      Person::AddRequest::Group.create!(person: duplicate, requester: Person.root, role_type: Group.first.role_types.first.sti_name, body_id: Group.first.id)
+      Person::AddRequest::Group.create!(person: person, requester: Person.root,
+        role_type: Group.first.role_types.first.sti_name, body_id: Group.first.id)
+      Person::AddRequest::Group.create!(person: duplicate, requester: Person.root,
+        role_type: Group.first.role_types.first.sti_name, body_id: Group.first.id)
 
       expect do
         merger.merge!

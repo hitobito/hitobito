@@ -41,7 +41,9 @@ class MailingLists::Subscribers
   def unfiltered_people_as_configured
     conditions = OrCondition.new
     conditions.or("group_subscriptions.role_type = roles.type")
-    conditions.or("event_subscriptions.subscriber_id IS NOT NULL and event_participations.active = ?", true)
+    conditions.or(
+      "event_subscriptions.subscriber_id IS NOT NULL and event_participations.active = ?", true
+    )
     conditions.or("people.id = person_including_subscriptions.subscriber_id") if use_people_subscriptions?
 
     people_scope

@@ -36,7 +36,9 @@ RSpec.describe "OAuth index", type: :request do
       let(:top_layer) { groups(:top_layer) }
       let(:top_events) { [Fabricate(:event, groups: [group]), Fabricate(:event, groups: [group])] }
       let!(:ev_dates) { [Fabricate(:event_date, event: top_events[0]), Fabricate(:event_date, event: top_events[1])] }
-      let!(:top_invoices) { [Fabricate(:invoice, group: top_layer, recipient: user), Fabricate(:invoice, group: top_layer, recipient: user)] }
+      let!(:top_invoices) {
+        [Fabricate(:invoice, group: top_layer, recipient: user), Fabricate(:invoice, group: top_layer, recipient: user)]
+      }
       let(:url) { get_url(scope) }
 
       def get_url(scope)
@@ -118,7 +120,8 @@ RSpec.describe "OAuth index", type: :request do
       context "with an unacceptable scope in token" do
         scopes.reject { |s| s == scope }.each do |invalid_scope|
           it "fails for #{invalid_scope} scope" do
-            token = Fabricate(:access_token, application: application, scopes: invalid_scope, resource_owner_id: user.id)
+            token = Fabricate(:access_token, application: application, scopes: invalid_scope,
+              resource_owner_id: user.id)
             expect do
               get url, headers: {Authorization: "Bearer " + token.token}
             end.to raise_error(CanCan::AccessDenied)
@@ -141,7 +144,10 @@ RSpec.describe "OAuth index", type: :request do
       end
 
       context "with expired token" do
-        let(:token) { Fabricate(:access_token, application: application, scopes: "email", resource_owner_id: user.id, expires_in: -1.minute) }
+        let(:token) {
+          Fabricate(:access_token, application: application, scopes: "email", resource_owner_id: user.id,
+            expires_in: -1.minute)
+        }
 
         it "redirects to login" do
           get url, headers: {Authorization: "Bearer " + token.token}

@@ -133,7 +133,9 @@ describe Event::PreconditionChecker do
             validity: :valid)
         end
 
-        its("errors_text.last") { should =~ /Folgende Qualifikationen fehlen oder sind abgelaufen: Super Lead, Group Lead/ }
+        its("errors_text.last") {
+          should =~ /Folgende Qualifikationen fehlen oder sind abgelaufen: Super Lead, Group Lead/
+        }
 
         context "missing only one" do
           before { qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date) }
@@ -144,7 +146,8 @@ describe Event::PreconditionChecker do
 
         context "with both present" do
           before do
-            qualifications << Fabricate(:qualification, qualification_kind: gl, start_at: course_start_at - gl.validity.years)
+            qualifications << Fabricate(:qualification, qualification_kind: gl,
+              start_at: course_start_at - gl.validity.years)
             qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date)
           end
 
@@ -173,7 +176,8 @@ describe Event::PreconditionChecker do
 
           context "with both in grouping nil" do
             before do
-              qualifications << Fabricate(:qualification, qualification_kind: gl, start_at: course_start_at - gl.validity.years)
+              qualifications << Fabricate(:qualification, qualification_kind: gl,
+                start_at: course_start_at - gl.validity.years)
               qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date)
             end
 
@@ -258,7 +262,9 @@ describe Event::PreconditionChecker do
             validity: :valid)
         end
 
-        its("errors_text.last") { should =~ /Folgende Qualifikationen fehlen oder sind abgelaufen: Super Lead, Group Lead/ }
+        its("errors_text.last") {
+          should =~ /Folgende Qualifikationen fehlen oder sind abgelaufen: Super Lead, Group Lead/
+        }
 
         context "missing only one" do
           before { qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date) }
@@ -269,7 +275,8 @@ describe Event::PreconditionChecker do
 
         context "with both present" do
           before do
-            qualifications << Fabricate(:qualification, qualification_kind: gl, start_at: course_start_at - gl.validity.years)
+            qualifications << Fabricate(:qualification, qualification_kind: gl,
+              start_at: course_start_at - gl.validity.years)
             qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date)
           end
 
@@ -298,7 +305,8 @@ describe Event::PreconditionChecker do
 
           context "with both in grouping nil" do
             before do
-              qualifications << Fabricate(:qualification, qualification_kind: gl, start_at: course_start_at - gl.validity.years)
+              qualifications << Fabricate(:qualification, qualification_kind: gl,
+                start_at: course_start_at - gl.validity.years)
               qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date)
             end
 
@@ -383,11 +391,14 @@ describe Event::PreconditionChecker do
             validity: :valid_or_expired)
         end
 
-        its("errors_text.last") { should =~ /Folgende Qualifikationen fehlen oder sind abgelaufen: Super Lead, Group Lead/ }
+        its("errors_text.last") {
+          should =~ /Folgende Qualifikationen fehlen oder sind abgelaufen: Super Lead, Group Lead/
+        }
 
         context "with both present" do
           before do
-            qualifications << Fabricate(:qualification, qualification_kind: gl, start_at: course_start_at - gl.validity.years)
+            qualifications << Fabricate(:qualification, qualification_kind: gl,
+              start_at: course_start_at - gl.validity.years)
             qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date)
           end
 
@@ -434,7 +445,8 @@ describe Event::PreconditionChecker do
 
           context "with both in grouping nil" do
             before do
-              qualifications << Fabricate(:qualification, qualification_kind: gl, start_at: course_start_at - gl.validity.years)
+              qualifications << Fabricate(:qualification, qualification_kind: gl,
+                start_at: course_start_at - gl.validity.years)
               qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date)
             end
 

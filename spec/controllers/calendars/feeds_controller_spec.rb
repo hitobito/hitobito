@@ -24,7 +24,8 @@ describe Calendars::FeedsController do
     end
 
     it "GET#show.ics returns 404 for bad token" do
-      get :index, params: {group_id: group.id, calendar_id: calendar.id, calendar_token: "wrong-token-IXSvkeJEHe"}, format: :ics
+      get :index, params: {group_id: group.id, calendar_id: calendar.id, calendar_token: "wrong-token-IXSvkeJEHe"},
+        format: :ics
       expect(response.status).to eq 404
     end
   end
@@ -38,7 +39,8 @@ describe Calendars::FeedsController do
     end
 
     it "GET#show.ics returns 404 for bad token" do
-      get :index, params: {group_id: group.id, calendar_id: calendar.id, calendar_token: "wrong-token-IXSvkeJEHe"}, format: :ics
+      get :index, params: {group_id: group.id, calendar_id: calendar.id, calendar_token: "wrong-token-IXSvkeJEHe"},
+        format: :ics
       expect(response.status).to eq 404
     end
   end

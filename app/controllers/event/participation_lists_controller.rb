@@ -42,7 +42,8 @@ class Event::ParticipationListsController < SimpleCrudController
 
   def build_new_participations
     people.map do |person|
-      Event::Participation.find_or_initialize_by(event: event, person_id: person.id).tap do |participation|
+      Event::Participation.find_or_initialize_by(event: event,
+        person_id: person.id).tap do |participation|
         role = role_type.new(participation: participation)
         break nil if cannot?(:create, role)
 

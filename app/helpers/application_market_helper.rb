@@ -15,8 +15,11 @@ module ApplicationMarketHelper
                            modal_title: t(".modal_title"),
                            send_email_label: t(".confirm_and_send_mail"),
                            send_no_email_label: t(".confirm_and_send_no_mail"),
-                           send_email_route: participant_group_event_application_market_path(group, event, participation, send_email: true),
-                           send_no_email_route: participant_group_event_application_market_path(group, event, participation, send_email: false)})}');
+                           send_email_route: participant_group_event_application_market_path(group,
+                             event, participation, send_email: true),
+                           send_no_email_route: participant_group_event_application_market_path(
+                             group, event, participation, send_email: false
+                           )})}');
                 $('#email-confirmation-modal').modal('show');")
   end
 
@@ -29,8 +32,11 @@ module ApplicationMarketHelper
                            modal_title: t(".modal_title"),
                            send_email_label: t(".confirm_and_send_mail"),
                            send_no_email_label: t(".confirm_and_send_no_mail"),
-                           send_email_route: participant_group_event_application_market_path(group, event, participation, send_email: true),
-                           send_no_email_route: participant_group_event_application_market_path(group, event, participation, send_email: false)})}');
+                           send_email_route: participant_group_event_application_market_path(group,
+                             event, participation, send_email: true),
+                           send_no_email_route: participant_group_event_application_market_path(
+                             group, event, participation, send_email: false
+                           )})}');
                 $('#email-confirmation-modal').modal('show');")
   end
 end

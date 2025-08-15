@@ -26,7 +26,8 @@ describe Person::Subscriptions::GlobalExclusions do
 
   it "is empty if person is included by language and gender" do
     person.update(language: :fr, gender: :w)
-    leaders.update(filter_chain: {attributes: {"123": {key: "gender", constraint: "equal", value: "w"}}, language: {allowed_values: :fr}})
+    leaders.update(filter_chain: {attributes: {"123": {key: "gender", constraint: "equal", value: "w"}},
+                                  language: {allowed_values: :fr}})
     expect(exclusions).to be_empty
   end
 
@@ -37,7 +38,8 @@ describe Person::Subscriptions::GlobalExclusions do
 
   it "includes leaders if person is included by language but excluded by gender" do
     person.update(language: :fr, gender: :m)
-    leaders.update(filter_chain: {attributes: {"123": {key: "gender", constraint: "equal", value: "w"}}, language: {allowed_values: :fr}})
+    leaders.update(filter_chain: {attributes: {"123": {key: "gender", constraint: "equal", value: "w"}},
+                                  language: {allowed_values: :fr}})
     expect(exclusions).to eq [leaders]
   end
 

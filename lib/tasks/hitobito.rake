@@ -11,7 +11,9 @@ namespace :hitobito do
     args.with_defaults({with_classes: false})
     with_classes = args[:with_classes].to_s == "true"
 
-    group_tree = Group.subclasses.index_by(&:label).map { |label, klass| [label, klass.children.map(&:label)] }.to_h
+    group_tree = Group.subclasses.index_by(&:label).map { |label, klass|
+      [label, klass.children.map(&:label)]
+    }.to_h
 
     Role::TypeList.new(Group.root_types.first).each do |layer, groups|
       super_layers = group_tree.select { |_key, list| list.include?(layer) }.keys
@@ -123,7 +125,8 @@ namespace :hitobito do
         def offending_self_registrations
           allowed_role_types_by_group_type.flat_map do |group_type, allowed_role_types|
             Group.where(type: group_type.sti_name)
-              .where.not(self_registration_role_type: allowed_role_types.map(&:sti_name) + [nil, ""])
+              .where.not(self_registration_role_type: allowed_role_types.map(&:sti_name) + [nil,
+                ""])
           end.compact
         end
       end

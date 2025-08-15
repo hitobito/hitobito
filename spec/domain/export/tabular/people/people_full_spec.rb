@@ -38,7 +38,8 @@ describe Export::Tabular::People::PeopleFull do
     context "additional_addresses" do
       before do
         person.additional_addresses << Fabricate.build(:additional_address, label: "Rechnung", street: "abc")
-        person.additional_addresses << Fabricate.build(:additional_address, label: "Arbeit", name: "Foo Bar", street: "def", uses_contactable_name: false)
+        person.additional_addresses << Fabricate.build(:additional_address, label: "Arbeit", name: "Foo Bar",
+          street: "def", uses_contactable_name: false)
       end
 
       its([:additional_address_rechnung]) { should eq "Weitere Adresse Rechnung" }

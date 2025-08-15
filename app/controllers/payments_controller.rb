@@ -24,7 +24,10 @@ class PaymentsController < CrudController
       if entry.save
         if parent.invoice_list
           parent.invoice_list.update_paid
-          redirect_to(group_invoice_list_invoice_path(parents.first, parent.invoice_list, parents.last), notice: flash_message)
+          redirect_to(
+            group_invoice_list_invoice_path(parents.first, parent.invoice_list,
+              parents.last), notice: flash_message
+          )
         else
           redirect_to(group_invoice_path(*parents), notice: flash_message)
         end

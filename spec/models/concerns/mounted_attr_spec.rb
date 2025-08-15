@@ -387,12 +387,16 @@ describe MountedAttr do
 
     context "decimal attribute" do
       it "it allows validating percision and scale" do
-        expect(validates_precision_and_scale(2.234, :decimal_with_precision_10_and_scale_2)).to eq ["ist nicht gültig, maximal 10 Zeichen erlaubt mit 2 Nachkommastellen"]
-        expect(validates_precision_and_scale(12345678912, :decimal_with_precision_10_and_scale_2)).to eq ["ist nicht gültig, maximal 10 Zeichen erlaubt mit 2 Nachkommastellen"]
+        expect(validates_precision_and_scale(2.234,
+          :decimal_with_precision_10_and_scale_2)).to eq ["ist nicht gültig, maximal 10 Zeichen erlaubt mit 2 Nachkommastellen"]
+        expect(validates_precision_and_scale(12345678912,
+          :decimal_with_precision_10_and_scale_2)).to eq ["ist nicht gültig, maximal 10 Zeichen erlaubt mit 2 Nachkommastellen"]
         expect(validates_precision_and_scale(2, :decimal_with_precision_10_and_scale_2)).to be_empty
         expect(validates_precision_and_scale(2.22, :decimal_with_precision_10_and_scale_2)).to be_empty
-        expect(validates_precision_and_scale(2.22, :decimal_with_precision_6_and_scale_1)).to eq ["ist nicht gültig, maximal 6 Zeichen erlaubt mit 1 Nachkommastellen"]
-        expect(validates_precision_and_scale(1234567, :decimal_with_precision_6_and_scale_1)).to eq ["ist nicht gültig, maximal 6 Zeichen erlaubt mit 1 Nachkommastellen"]
+        expect(validates_precision_and_scale(2.22,
+          :decimal_with_precision_6_and_scale_1)).to eq ["ist nicht gültig, maximal 6 Zeichen erlaubt mit 1 Nachkommastellen"]
+        expect(validates_precision_and_scale(1234567,
+          :decimal_with_precision_6_and_scale_1)).to eq ["ist nicht gültig, maximal 6 Zeichen erlaubt mit 1 Nachkommastellen"]
         expect(validates_precision_and_scale(2, :decimal_with_precision_6_and_scale_1)).to be_empty
         expect(validates_precision_and_scale(2.2, :decimal_with_precision_6_and_scale_1)).to be_empty
       end

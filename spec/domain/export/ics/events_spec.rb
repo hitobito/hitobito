@@ -53,7 +53,8 @@ describe Export::Ics::Events do
       is_expected.to include(event.description)
       is_expected.to include(contact.person_name)
       is_expected.to include(contact.email)
-      url = Rails.application.routes.url_helpers.group_event_url(event.groups.first, event, host: ENV["RAILS_HOST_NAME"])
+      url = Rails.application.routes.url_helpers.group_event_url(event.groups.first, event,
+        host: ENV["RAILS_HOST_NAME"])
       is_expected.to include(url)
     end
   end
@@ -63,7 +64,8 @@ describe Export::Ics::Events do
 
     context "with only a start date" do
       let(:event_date) do
-        Event::Date.new(event: event, label: "Main part", start_at: Time.zone.local(2018, 5, 19), location: "testlocation")
+        Event::Date.new(event: event, label: "Main part", start_at: Time.zone.local(2018, 5, 19),
+          location: "testlocation")
       end
 
       it do

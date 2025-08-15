@@ -13,7 +13,8 @@ module Person::PreloadPublicAccounts
 
     # preload accounts
     ActiveRecord::Associations::Preloader.new(records: records, associations: :phone_numbers).call
-    ActiveRecord::Associations::Preloader.new(records: records, associations: :additional_emails).call
+    ActiveRecord::Associations::Preloader.new(records: records,
+      associations: :additional_emails).call
 
     records
   end

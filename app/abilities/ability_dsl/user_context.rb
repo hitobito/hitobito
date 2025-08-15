@@ -98,7 +98,10 @@ module AbilityDsl
             layer_group_id: layer_group_ids
           ).pluck(:id)
 
-          grant_groups_permissions(permissions_including_implicit, target_group_ids) unless target_group_ids.empty?
+          unless target_group_ids.empty?
+            grant_groups_permissions(permissions_including_implicit,
+              target_group_ids)
+          end
         end
       end
     end

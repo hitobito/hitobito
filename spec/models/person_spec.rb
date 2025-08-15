@@ -196,7 +196,8 @@ describe Person do
     Person.create!(company: false, nickname: "BD")
 
     # Checking order by name with hardcoded nickname prefixes
-    expect(Person.order_by_name.select("*").collect(&:to_s)).to eq(["AA", "AB", "AC", " / AD", "BA", "BB", "BC", " / BD"].collect(&:to_s))
+    expect(Person.order_by_name.select("*").collect(&:to_s)).to eq(["AA", "AB", "AC", " / AD", "BA", "BB", "BC",
+      " / BD"].collect(&:to_s))
   end
 
   it "#order_by_name orders people with same last_name by first_name" do
@@ -275,7 +276,8 @@ describe Person do
     end
 
     it "in_or_below returns person for above layer" do
-      expect(Person.in_or_below(groups(:top_layer))).to match_array([people(:bottom_member), people(:top_leader), person])
+      expect(Person.in_or_below(groups(:top_layer))).to match_array([people(:bottom_member), people(:top_leader),
+        person])
     end
   end
 
@@ -289,7 +291,8 @@ describe Person do
     its(:layer_groups) { should include(groups(:top_layer), groups(:bottom_layer_one)) }
 
     it "has contact_data permission in both groups" do
-      expect(person.groups_with_permission(:contact_data)).to match_array([groups(:top_group), groups(:bottom_layer_one)])
+      expect(person.groups_with_permission(:contact_data)).to match_array([groups(:top_group),
+        groups(:bottom_layer_one)])
     end
 
     it "both groups are visible from above" do
@@ -297,7 +300,8 @@ describe Person do
     end
 
     it "whole hierarchy may view this person" do
-      expect(person.above_groups_where_visible_from).to match_array([groups(:top_layer), groups(:top_group), groups(:bottom_layer_one)])
+      expect(person.above_groups_where_visible_from).to match_array([groups(:top_layer), groups(:top_group),
+        groups(:bottom_layer_one)])
     end
 
     it "in_layer returns person for this layer" do
@@ -305,7 +309,8 @@ describe Person do
     end
 
     it "in_or_below returns person for any layer" do
-      expect(Person.in_or_below(groups(:top_layer))).to match_array([people(:bottom_member), people(:top_leader), person])
+      expect(Person.in_or_below(groups(:top_layer))).to match_array([people(:bottom_member), people(:top_leader),
+        person])
     end
   end
 
@@ -692,7 +697,10 @@ describe Person do
   describe "#to_s" do
     let(:company) { false }
     let(:company_name) { nil }
-    let(:person) { Fabricate.build(:person, first_name: "John", last_name: "Doe", nickname: "Jonny", company: company, company_name: company_name) }
+    let(:person) {
+      Fabricate.build(:person, first_name: "John", last_name: "Doe", nickname: "Jonny", company: company,
+        company_name: company_name)
+    }
 
     context "without company" do
       it "returns full name" do
@@ -1061,7 +1069,8 @@ describe Person do
     end
 
     it "returns #self_registration_reason_custom_text if present" do
-      person = Fabricate.build(:person, self_registration_reason_custom_text: "Person.self_registration_reason_custom_text")
+      person = Fabricate.build(:person,
+        self_registration_reason_custom_text: "Person.self_registration_reason_custom_text")
       expect(person.self_registration_reason_text).to eq "Person.self_registration_reason_custom_text"
     end
 

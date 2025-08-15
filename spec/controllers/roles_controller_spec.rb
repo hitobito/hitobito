@@ -188,7 +188,8 @@ describe RolesController do
     end
 
     it "with invalid person_id displays error" do
-      post :create, params: {group_id: group.id, role: {group_id: group.id, type: Group::TopGroup::Member.sti_name, person_id: -99}}
+      post :create,
+        params: {group_id: group.id, role: {group_id: group.id, type: Group::TopGroup::Member.sti_name, person_id: -99}}
 
       is_expected.to render_template("new")
       expect(assigns(:role).person).to have(1).error_on(:base)
@@ -334,7 +335,8 @@ describe RolesController do
 
     it "redirects to person after update" do
       expect do
-        put :update, params: {group_id: group.id, id: role.id, role: {label: "bla", type: role.type, group_id: role.group_id}}
+        put :update,
+          params: {group_id: group.id, id: role.id, role: {label: "bla", type: role.type, group_id: role.group_id}}
       end.not_to change { Role.with_inactive.count }
 
       expect(flash[:notice]).to eq "Rolle <i>Member (bla)</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich aktualisiert."
@@ -346,7 +348,8 @@ describe RolesController do
     it "updates future role" do
       role.update!(start_on: Time.zone.tomorrow)
       expect do
-        put :update, params: {group_id: group.id, id: role.id, role: {label: "bla", type: role.type, group_id: role.group_id}}
+        put :update,
+          params: {group_id: group.id, id: role.id, role: {label: "bla", type: role.type, group_id: role.group_id}}
       end.not_to change { Role.with_inactive.count }
 
       expect(flash[:notice]).to eq "Rolle <i>Member (bla)</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich aktualisiert."
@@ -377,7 +380,9 @@ describe RolesController do
     it "terminates and creates new role if type and group changes" do
       group2 = groups(:toppers)
       expect do
-        put :update, params: {group_id: group.id, id: role.id, role: {type: Group::GlobalGroup::Leader.sti_name, group_id: group2.id}}
+        put :update,
+          params: {group_id: group.id, id: role.id,
+                   role: {type: Group::GlobalGroup::Leader.sti_name, group_id: group2.id}}
       end.to change { Role.with_inactive.count }.by(1)
 
       person.update_attribute(:primary_group_id, group.id)
@@ -394,7 +399,9 @@ describe RolesController do
       role.update_attribute(:created_at, Time.zone.yesterday)
       group2 = groups(:toppers)
       expect do
-        put :update, params: {group_id: group.id, id: role.id, role: {type: Group::GlobalGroup::Leader.sti_name, group_id: group2.id}}
+        put :update,
+          params: {group_id: group.id, id: role.id,
+                   role: {type: Group::GlobalGroup::Leader.sti_name, group_id: group2.id}}
       end.not_to change { Role.with_inactive.count }
 
       person.update_attribute(:primary_group_id, group.id)
@@ -449,7 +456,9 @@ describe RolesController do
         group3 = Fabricate(Group::GlobalGroup::Leader.name.to_s, person: person, group: groups(:toppers)).group
         person.update_attribute(:primary_group_id, group3.id)
         expect do
-          put :update, params: {group_id: group.id, id: role.id, role: {type: Group::BottomGroup::Leader.sti_name, group_id: group2.id}}
+          put :update,
+            params: {group_id: group.id, id: role.id,
+                     role: {type: Group::BottomGroup::Leader.sti_name, group_id: group2.id}}
         end.not_to change { Role.with_inactive.count }
         is_expected.to redirect_to(group_person_path(group2, person))
         expect(Role.with_inactive.where(id: role.id)).not_to be_exists
@@ -463,7 +472,9 @@ describe RolesController do
         group3 = Fabricate(Group::GlobalGroup::Leader.name.to_s, person: person, group: groups(:toppers)).group
         person.update_attribute(:primary_group_id, group.id)
         expect do
-          put :update, params: {group_id: group.id, id: role.id, role: {type: Group::GlobalGroup::Leader.sti_name, group_id: group3.id}}
+          put :update,
+            params: {group_id: group.id, id: role.id,
+                     role: {type: Group::GlobalGroup::Leader.sti_name, group_id: group3.id}}
         end.not_to change { Role.with_inactive.count }
         is_expected.to redirect_to(group_person_path(group3, person))
         expect(Role.with_inactive.where(id: role.id)).not_to be_exists
@@ -499,7 +510,8 @@ describe RolesController do
       it "is not allowed if group changes" do
         g = groups(:toppers)
         expect do
-          put :update, params: {group_id: group.id, id: role.id, role: {type: Group::GlobalGroup::Member.sti_name, group_id: g.id}}
+          put :update,
+            params: {group_id: group.id, id: role.id, role: {type: Group::GlobalGroup::Member.sti_name, group_id: g.id}}
         end.to raise_error(CanCan::AccessDenied)
         expect(Role.with_inactive.where(id: role.id)).to be_exists
       end
@@ -507,8 +519,12 @@ describe RolesController do
   end
 
   describe "DELETE destroy" do
-    let(:notice) { "Rolle <i>Member (bis #{Date.current.yesterday.strftime("%d.%m.%Y")})</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich gelöscht." }
-    let(:hard_destroy_notice) { "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich gelöscht." }
+    let(:notice) {
+      "Rolle <i>Member (bis #{Date.current.yesterday.strftime("%d.%m.%Y")})</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich gelöscht."
+    }
+    let(:hard_destroy_notice) {
+      "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich gelöscht."
+    }
 
     it "redirects to group after hard delete" do
       role.update_attribute(:created_at, 1.day.ago)
@@ -681,7 +697,8 @@ describe RolesController do
 
   describe "GET role_types" do
     it "renders template" do
-      get :role_types, xhr: true, params: {group_id: group.id, role: {group_id: group.id, type: Group::TopGroup::Member.sti_name}}
+      get :role_types, xhr: true,
+        params: {group_id: group.id, role: {group_id: group.id, type: Group::TopGroup::Member.sti_name}}
       is_expected.to render_template("role_types")
       expect(assigns(:group)).to eq(group)
     end

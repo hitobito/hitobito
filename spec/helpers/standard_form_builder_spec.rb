@@ -78,7 +78,10 @@ describe "StandardFormBuilder" do
     context "with label" do
       subject { form.labeled_input_field(:name, label: "Some Caption") }
 
-      it { is_expected.to include(form.label(:name, "Some Caption", class: "col-md-3 col-xl-2 pb-1 col-form-label text-md-end required")) }
+      it {
+        is_expected.to include(form.label(:name, "Some Caption",
+          class: "col-md-3 col-xl-2 pb-1 col-form-label text-md-end required"))
+      }
     end
 
     context "with addon" do
@@ -91,7 +94,10 @@ describe "StandardFormBuilder" do
     context "with label_class" do
       subject { form.labeled_input_field(:name, label: "Some Caption", label_class: "custom-class") }
 
-      it { is_expected.to include(form.label(:name, "Some Caption", class: "custom-class col-form-label text-md-end required")) }
+      it {
+        is_expected.to include(form.label(:name, "Some Caption",
+          class: "custom-class col-form-label text-md-end required"))
+      }
     end
   end
 

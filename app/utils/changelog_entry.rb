@@ -20,11 +20,14 @@ class ChangelogEntry
 
   class_attribute :regex_substitutions, default: {
     # Core tickets
-    CORE_ISSUE_HASH_REGEX => markdown_link(label: 'hitobito#\k<number>', url: GITHUB_CORE_ISSUE_BASE_URL + '\k<number>'),
+    CORE_ISSUE_HASH_REGEX => markdown_link(label: 'hitobito#\k<number>',
+      url: GITHUB_CORE_ISSUE_BASE_URL + '\k<number>'),
     # Wagon tickets
-    WAGON_ISSUE_HASH_REGEX => markdown_link(label: '\k<wagon>#\k<number>', url: GITHUB_BASE_URL + 'hitobito/\k<wagon>/issues/\k<number>'),
+    WAGON_ISSUE_HASH_REGEX => markdown_link(label: '\k<wagon>#\k<number>',
+      url: GITHUB_BASE_URL + 'hitobito/\k<wagon>/issues/\k<number>'),
     # Github Usernames, matches e.g. @TheWalkingLeek or @kronn
-    GITHUB_USERNAME_REGEX => markdown_link(label: '@\k<gh_user>', url: GITHUB_BASE_URL + '\k<gh_user>')
+    GITHUB_USERNAME_REGEX => markdown_link(label: '@\k<gh_user>',
+      url: GITHUB_BASE_URL + '\k<gh_user>')
 
   }
 

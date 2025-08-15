@@ -56,7 +56,8 @@ describe People::OneTimePassword do
       @secret = generate_token
 
       current_time = Time.zone.now
-      travel_to Time.zone.local(current_time.year, current_time.month, current_time.day, current_time.hour, current_time.min, 2)
+      travel_to Time.zone.local(current_time.year, current_time.month, current_time.day, current_time.hour,
+        current_time.min, 2)
       current_token = totp_authenticator.now
 
       travel 5.seconds
@@ -67,7 +68,8 @@ describe People::OneTimePassword do
       @secret = generate_token
 
       current_time = Time.zone.now
-      travel_to Time.zone.local(current_time.year, current_time.month, current_time.day, current_time.hour, current_time.min, 2)
+      travel_to Time.zone.local(current_time.year, current_time.month, current_time.day, current_time.hour,
+        current_time.min, 2)
       current_token = totp_authenticator.now
 
       travel 35.seconds
@@ -78,7 +80,8 @@ describe People::OneTimePassword do
       @secret = generate_token
 
       current_time = Time.zone.now
-      travel_to Time.zone.local(current_time.year, current_time.month, current_time.day, current_time.hour, current_time.min, 2)
+      travel_to Time.zone.local(current_time.year, current_time.month, current_time.day, current_time.hour,
+        current_time.min, 2)
       current_token = totp_authenticator.now
 
       travel(-5.seconds)
@@ -89,7 +92,8 @@ describe People::OneTimePassword do
       @secret = generate_token
 
       current_time = Time.zone.now
-      travel_to Time.zone.local(current_time.year, current_time.month, current_time.day, current_time.hour, current_time.min, 2)
+      travel_to Time.zone.local(current_time.year, current_time.month, current_time.day, current_time.hour,
+        current_time.min, 2)
       current_token = totp_authenticator.now
 
       travel(-50.seconds)
@@ -100,7 +104,8 @@ describe People::OneTimePassword do
       @secret = generate_token
 
       current_time = Time.zone.now
-      travel_to Time.zone.local(current_time.year, current_time.month, current_time.day, current_time.hour, current_time.min, 2)
+      travel_to Time.zone.local(current_time.year, current_time.month, current_time.day, current_time.hour,
+        current_time.min, 2)
       current_token = totp_authenticator.now
 
       travel(-25.seconds)

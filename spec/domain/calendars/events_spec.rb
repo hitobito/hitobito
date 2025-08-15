@@ -336,7 +336,9 @@ describe Calendars::Events do
             end
 
             context "filtering by a single tag" do
-              let!(:included_tag_hello) { Fabricate(:calendar_tag, excluded: false, calendar: calendar, tag: tag_hello) }
+              let!(:included_tag_hello) {
+                Fabricate(:calendar_tag, excluded: false, calendar: calendar, tag: tag_hello)
+              }
 
               it { is_expected.to include(layer_event) }
               it { is_expected.not_to include(layer_course) }
@@ -347,8 +349,12 @@ describe Calendars::Events do
             end
 
             context "filtering by multiple tags includes all events containing any of the tags" do
-              let!(:included_tag_hello) { Fabricate(:calendar_tag, excluded: false, calendar: calendar, tag: tag_hello) }
-              let!(:included_tag_world) { Fabricate(:calendar_tag, excluded: false, calendar: calendar, tag: tag_world) }
+              let!(:included_tag_hello) {
+                Fabricate(:calendar_tag, excluded: false, calendar: calendar, tag: tag_hello)
+              }
+              let!(:included_tag_world) {
+                Fabricate(:calendar_tag, excluded: false, calendar: calendar, tag: tag_world)
+              }
 
               it { is_expected.to include(layer_event) }
               it { is_expected.not_to include(layer_course) }
@@ -382,7 +388,9 @@ describe Calendars::Events do
             end
 
             context "including and excluding some tags, excluding takes precedence" do
-              let!(:included_tag_hello) { Fabricate(:calendar_tag, excluded: false, calendar: calendar, tag: tag_hello) }
+              let!(:included_tag_hello) {
+                Fabricate(:calendar_tag, excluded: false, calendar: calendar, tag: tag_hello)
+              }
               let!(:excluded_tag_world) { Fabricate(:calendar_tag, excluded: true, calendar: calendar, tag: tag_world) }
 
               it { is_expected.not_to include(layer_event) }

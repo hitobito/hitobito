@@ -24,7 +24,8 @@ describe Event::Participations::MailDispatchesController do
 
       it "unauthorized" do
         expect do
-          post :create, params: {group_id: group, event_id: event, participation_id: participation, mail_type: :leader_reminder}
+          post :create,
+            params: {group_id: group, event_id: event, participation_id: participation, mail_type: :leader_reminder}
         end.to raise_error(CanCan::AccessDenied)
       end
     end
@@ -34,7 +35,9 @@ describe Event::Participations::MailDispatchesController do
 
       it "raises if mail_type is not allowed" do
         expect do
-          post :create, params: {group_id: group, event_id: event, participation_id: participation, mail_type: :non_existing_mail_type}
+          post :create,
+            params: {group_id: group, event_id: event, participation_id: participation,
+                     mail_type: :non_existing_mail_type}
         end.to raise_error("Invalid mail type")
       end
 
@@ -47,7 +50,9 @@ describe Event::Participations::MailDispatchesController do
       it "sends application confirmation email" do
         expect(LocaleSetter).to receive(:with_locale).with(person: participation.person).and_call_original
         expect do
-          post :create, params: {group_id: group, event_id: event, participation_id: participation, mail_type: :event_application_confirmation}
+          post :create,
+            params: {group_id: group, event_id: event, participation_id: participation,
+                     mail_type: :event_application_confirmation}
         end.to have_enqueued_mail(Event::ParticipationMailer, :confirmation).exactly(1).times
         expect(flash[:notice]).to eq("Es wurde eine E-Mail verschickt.")
       end

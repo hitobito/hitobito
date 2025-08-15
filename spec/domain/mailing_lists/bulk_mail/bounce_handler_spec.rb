@@ -39,7 +39,8 @@ describe MailingLists::BulkMail::BounceHandler do
     let(:bounce_parent) { messages(:bulk_mail) }
 
     it "does not process bounce if source message cannot be found" do
-      body = bounce_mail.body.raw_source.gsub("X-Hitobito-Message-UID: a15816bbd204ba20", "X-Hitobito-Message-UID: unknown42")
+      body = bounce_mail.body.raw_source.gsub("X-Hitobito-Message-UID: a15816bbd204ba20",
+        "X-Hitobito-Message-UID: unknown42")
       expect(bounce_mail.body).to receive(:raw_source).at_least(:once).and_return(body)
 
       expect(Rails.logger).to receive(:info)
@@ -47,7 +48,9 @@ describe MailingLists::BulkMail::BounceHandler do
 
       expect do
         bounce_handler.process
-      end.to change { Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::BounceMessageForwardJob%'").count }.by(0)
+      end.to change {
+               Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::BounceMessageForwardJob%'").count
+             }.by(0)
 
       mail_log = MailLog.find_by(mail_hash: "abcd42")
       expect(mail_log.status).to eq("bounce_rejected")
@@ -63,7 +66,9 @@ describe MailingLists::BulkMail::BounceHandler do
 
       expect do
         bounce_handler.process
-      end.to change { Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::BounceMessageForwardJob%'").count }.by(0)
+      end.to change {
+               Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::BounceMessageForwardJob%'").count
+             }.by(0)
 
       mail_log = MailLog.find_by(mail_hash: "abcd42")
       expect(mail_log.status).to eq("bounce_rejected")
@@ -77,7 +82,9 @@ describe MailingLists::BulkMail::BounceHandler do
 
       expect do
         bounce_handler.process
-      end.to change { Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::BounceMessageForwardJob%'").count }.by(1)
+      end.to change {
+               Delayed::Job.where("handler ILIKE '%MailingLists::BulkMail::BounceMessageForwardJob%'").count
+             }.by(1)
 
       mail_log = MailLog.find_by(mail_hash: "abcd42")
       expect(mail_log.status).to eq("retrieved")

@@ -48,7 +48,8 @@ module PdfHelpers
           displayed_width = a * width
           displayed_height = d * height
 
-          {x: x_position, y: y_position, width: width, height: height, displayed_width: displayed_width, displayed_height: displayed_height}
+          {x: x_position, y: y_position, width: width, height: height, displayed_width: displayed_width,
+           displayed_height: displayed_height}
         else
           raise "Could not determine the details of the image with label #{label}."
         end

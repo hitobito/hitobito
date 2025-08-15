@@ -177,7 +177,8 @@ describe Invoice::BatchCreate do
   private
 
   def fabricate_donation(amount, received_at = 1.year.ago)
-    invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: other_person, recipient: person, group: group, state: :payed)
+    invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: other_person, recipient: person, group: group,
+      state: :payed)
     Payment.create!(amount: amount, received_at: received_at, invoice: invoice)
   end
 end

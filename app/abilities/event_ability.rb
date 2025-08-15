@@ -9,7 +9,7 @@ class EventAbility < AbilityDsl::Base
   include AbilityDsl::Constraints::Event
   include AbilityDsl::Constraints::Event::Invitation
 
-  on(Event) do
+  on(Event) do # rubocop:disable Metrics/BlockLength
     class_side(:list_available, :typeahead).if_any_role
 
     permission(:any).may(:show).in_same_layer_or_globally_visible_or_participating
@@ -21,13 +21,15 @@ class EventAbility < AbilityDsl::Base
 
     permission(:group_full).may(:index_participations, :show).in_same_group
     permission(:group_full).may(:index_invitations).in_same_group_and_invitations_supported
-    permission(:group_full).may(:create, :update, :destroy, :manage_tags, :manage_attachments).in_same_group_if_active
+    permission(:group_full).may(:create, :update, :destroy, :manage_tags,
+      :manage_attachments).in_same_group_if_active
 
     permission(:group_and_below_full).may(:index_participations, :show)
       .in_same_group_or_below
     permission(:group_and_below_full).may(:index_invitations)
       .in_same_group_or_below_and_invitations_supported
-    permission(:group_and_below_full).may(:create, :update, :destroy, :manage_tags, :manage_attachments)
+    permission(:group_and_below_full).may(:create, :update, :destroy, :manage_tags,
+      :manage_attachments)
       .in_same_group_or_below_if_active
 
     permission(:layer_full).may(:index_participations,
@@ -42,7 +44,8 @@ class EventAbility < AbilityDsl::Base
       .in_same_layer_or_below
     permission(:layer_and_below_full).may(:index_invitations)
       .in_same_layer_or_below_and_invitations_supported
-    permission(:layer_and_below_full).may(:update, :manage_tags, :manage_attachments).in_same_layer_or_below_if_active
+    permission(:layer_and_below_full).may(:update, :manage_tags,
+      :manage_attachments).in_same_layer_or_below_if_active
     permission(:layer_and_below_full).may(:qualifications_read).in_same_layer
     permission(:layer_and_below_full).may(:create, :destroy, :application_market, :qualify)
       .in_same_layer_if_active

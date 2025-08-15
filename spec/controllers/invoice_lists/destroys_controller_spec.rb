@@ -12,7 +12,8 @@ describe InvoiceLists::DestroysController do
 
   let(:draft_invoices) do
     [0..10].map do
-      Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), state: :draft, recipient: people(:bottom_member), group: layer)
+      Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), state: :draft,
+        recipient: people(:bottom_member), group: layer)
     end
   end
 

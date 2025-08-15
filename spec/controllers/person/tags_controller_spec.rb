@@ -135,8 +135,13 @@ describe Person::TagsController do
   end
 
   describe "DELETE #destroy" do
-    let!(:subscription_tag) { SubscriptionTag.create!(excluded: false, subscription_id: Subscription.first.id, tag_id: test_tag.id) }
-    let!(:test_tagging) { ActsAsTaggableOn::Tagging.create!(tag_id: test_tag.id, taggable_type: "Person", taggable_id: top_leader.id, context: "tags") }
+    let!(:subscription_tag) {
+      SubscriptionTag.create!(excluded: false, subscription_id: Subscription.first.id, tag_id: test_tag.id)
+    }
+    let!(:test_tagging) {
+      ActsAsTaggableOn::Tagging.create!(tag_id: test_tag.id, taggable_type: "Person", taggable_id: top_leader.id,
+        context: "tags")
+    }
     let!(:test_tag) { ActsAsTaggableOn::Tag.create!(name: "Test") }
 
     it "deletes person taggging/assignment" do

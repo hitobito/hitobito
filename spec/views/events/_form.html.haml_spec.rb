@@ -86,7 +86,8 @@ describe "events/_form.html.haml" do
 
     it "does render radio buttons with correct id and name attributes" do
       render
-      expect(additional_emails.find("input[type=hidden]", visible: :all).native.attributes["name"].value).to eq "event[contact_attrs][additional_emails]"
+      expect(additional_emails.find("input[type=hidden]",
+        visible: :all).native.attributes["name"].value).to eq "event[contact_attrs][additional_emails]"
       expect(additional_emails.find("input[type=hidden]", visible: :all).native.attributes["value"].value).to eq "0"
       expect(additional_emails.find_field("Nicht anzeigen").native.attributes["id"].value).to eq "event_contact_attrs_additional_emails"
       expect(additional_emails).to have_unchecked_field "Nicht anzeigen"

@@ -8,9 +8,13 @@
 require "spec_helper"
 
 describe SocialAccountResource, type: :resource do
-  let!(:user_role) { Fabricate(Group::BottomLayer::Leader.name.to_sym, person: Fabricate(:person), group: groups(:bottom_layer_one)) }
+  let!(:user_role) {
+    Fabricate(Group::BottomLayer::Leader.name.to_sym, person: Fabricate(:person), group: groups(:bottom_layer_one))
+  }
   let!(:user) { user_role.person }
-  let!(:role) { Fabricate(Group::BottomLayer::Leader.name.to_sym, person: Fabricate(:person), group: groups(:bottom_layer_one)) }
+  let!(:role) {
+    Fabricate(Group::BottomLayer::Leader.name.to_sym, person: Fabricate(:person), group: groups(:bottom_layer_one))
+  }
   let(:person) { role.person }
 
   around do |example|

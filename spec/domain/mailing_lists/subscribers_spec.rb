@@ -692,7 +692,8 @@ describe MailingLists::Subscribers do
     context "events" do
       it "is true if active participation" do
         create_subscription(event)
-        p = Fabricate(Event::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: event)).participation.person
+        p = Fabricate(Event::Role::Participant.name.to_sym,
+          participation: Fabricate(:event_participation, event: event)).participation.person
 
         expect(subscribed?(p)).to be_truthy
       end
@@ -706,7 +707,8 @@ describe MailingLists::Subscribers do
 
       it "is false if explicitly excluded" do
         create_subscription(event)
-        p = Fabricate(Event::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: event)).participation.person
+        p = Fabricate(Event::Role::Participant.name.to_sym,
+          participation: Fabricate(:event_participation, event: event)).participation.person
         create_subscription(p, true)
 
         expect(subscribed?(p)).to be_falsey
@@ -714,7 +716,8 @@ describe MailingLists::Subscribers do
 
       it "is false if excluded via global filter" do
         create_subscription(event)
-        p = Fabricate(Event::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: event)).participation.person
+        p = Fabricate(Event::Role::Participant.name.to_sym,
+          participation: Fabricate(:event_participation, event: event)).participation.person
         list.update(filter_chain: {language: {allowed_values: :fr}})
 
         expect(subscribed?(p)).to be_falsey
@@ -722,7 +725,8 @@ describe MailingLists::Subscribers do
 
       it "is true if not excluded via global filter" do
         create_subscription(event)
-        p = Fabricate(Event::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: event)).participation.person
+        p = Fabricate(Event::Role::Participant.name.to_sym,
+          participation: Fabricate(:event_participation, event: event)).participation.person
         list.update(filter_chain: {language: {allowed_values: :de}})
 
         expect(subscribed?(p)).to be_truthy
@@ -772,7 +776,8 @@ describe MailingLists::Subscribers do
       it "is true with role with future end_on" do
         create_subscription(groups(:bottom_layer_one), false,
           Group::BottomGroup::Leader.sti_name)
-        p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one), start_on: 1.day.ago, end_on: 1.day.from_now).person
+        p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one),
+          start_on: 1.day.ago, end_on: 1.day.from_now).person
 
         expect(subscribed?(p)).to be_truthy
       end

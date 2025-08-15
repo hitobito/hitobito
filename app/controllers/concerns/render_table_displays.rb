@@ -33,7 +33,8 @@ module RenderTableDisplays
   def add_table_display_selects(scope, person, selected_group)
     # preserve previously selected columns
     previous = scope.select_values.presence || [scope.model.arel_table[Arel.star]]
-    scope.select((previous + table_display_selects(person, selected_group)).uniq).includes(table_display_includes(person, selected_group))
+    scope.select((previous + table_display_selects(person,
+      selected_group)).uniq).includes(table_display_includes(person, selected_group))
   end
 
   def table_display_selects(person, selected_group)

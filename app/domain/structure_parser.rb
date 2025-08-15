@@ -15,7 +15,8 @@ require "set" # rubocop:disable Lint/RedundantRequireStatement
 class StructureParser
   attr_reader :result, :errors
 
-  def initialize(structure, common_indent: 4, shiftwidth: 2, list_marker: "*", allowed_permissions: [])
+  def initialize(structure, common_indent: 4, shiftwidth: 2, list_marker: "*",
+    allowed_permissions: [])
     # data
     @structure = structure
 

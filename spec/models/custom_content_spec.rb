@@ -92,7 +92,8 @@ describe CustomContent do
     end
 
     it "returns specific custom content for context if exists" do
-      specific = Fabricate(:custom_content, key: key, context: invoice_config, body: "{invoice-items}, {invoice-total}, {payment-information}")
+      specific = Fabricate(:custom_content, key: key, context: invoice_config,
+        body: "{invoice-items}, {invoice-total}, {payment-information}")
       expect(CustomContent.get(key, context: invoice_config)).to eq specific
     end
   end

@@ -69,7 +69,8 @@ class Invoice::BatchCreate
 
   def add_invoice_items(invoice, recipient)
     if invoice_list.fixed_fee
-      invoice.invoice_items = InvoiceLists::FixedFee.for(invoice_list.fixed_fee, recipient.layer_group_id).invoice_items
+      invoice.invoice_items = InvoiceLists::FixedFee.for(invoice_list.fixed_fee,
+        recipient.layer_group_id).invoice_items
     else
       invoice.invoice_items_attributes = invoice_items_attributes(recipient.id)
     end

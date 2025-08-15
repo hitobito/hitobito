@@ -14,7 +14,8 @@ module Synchronize
       MAX_RETRIES = 5
       attr_reader :list_id, :count, :api, :merge_fields, :member_fields
 
-      def initialize(mailing_list, member_fields: [], merge_fields: [], count: Settings.mailchimp.batch_size, debug: false)
+      def initialize(mailing_list, member_fields: [], merge_fields: [],
+        count: Settings.mailchimp.batch_size, debug: false)
         @list_id = mailing_list.mailchimp_list_id
         @count = count
         @merge_fields = merge_fields

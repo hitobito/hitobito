@@ -108,7 +108,8 @@ class InvoiceListsController < CrudController
     invoice_list_id = params[:invoice_list_id].presence
     if params[:singular]
       if invoice_list_id
-        group_invoice_list_invoice_path(parent, invoice_list_id: invoice_list_id, id: invoices.first.id)
+        group_invoice_list_invoice_path(parent, invoice_list_id: invoice_list_id,
+          id: invoices.first.id)
       else
         group_invoice_path(parent, invoices.first)
       end

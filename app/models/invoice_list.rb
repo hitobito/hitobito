@@ -61,7 +61,9 @@ class InvoiceList < ActiveRecord::Base
   end
 
   def fixed_fee
-    invoice.invoice_items.flat_map { |item| item[:dynamic_cost_parameters][:fixed_fees].to_s }.compact_blank.uniq.first
+    invoice.invoice_items.flat_map { |item|
+      item[:dynamic_cost_parameters][:fixed_fees].to_s
+    }.compact_blank.uniq.first
   end
 
   def fixed_fees?(fee = nil)

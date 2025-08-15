@@ -9,7 +9,8 @@ require "spec_helper"
 describe "second factor" do
   let(:person) do
     person = people(:bottom_member)
-    person.update_columns(confirmed_at: 1.hour.ago, encrypted_password: "something", encrypted_two_fa_secret: "something")
+    person.update_columns(confirmed_at: 1.hour.ago, encrypted_password: "something",
+      encrypted_two_fa_secret: "something")
     person
   end
 

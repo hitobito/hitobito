@@ -57,7 +57,11 @@ class People::HouseholdList
     person_ids.each_slice(batch_size) do |batch|
       # index involved_people for quicker access
       involved_people = Person.where(id: batch.flatten).index_by(&:id)
-      batch_with_households = batch.map { |household| household.map { |person_id| involved_people[person_id] } }
+      batch_with_households = batch.map { |household|
+        household.map { |person_id|
+          involved_people[person_id]
+        }
+      }
       yield batch_with_households
     end
   end
@@ -74,7 +78,8 @@ class People::HouseholdList
   def computed_household_key_column
     Arel::Nodes::NamedFunction.new("COALESCE", [
       Person.arel_table[:household_key],
-      Arel::Nodes::NamedFunction.new("FORMAT", [Arel::Nodes.build_quoted("_%s"), Person.arel_table[:id]])
+      Arel::Nodes::NamedFunction.new("FORMAT",
+        [Arel::Nodes.build_quoted("_%s"), Person.arel_table[:id]])
     ])
   end
 
@@ -96,8 +101,11 @@ class People::HouseholdList
   end
 
   def person_ids_grouped_by_household_query(scope)
-    ordered_households_table = Arel::Nodes::TableAlias.new(ordered_computed_household_key_query(scope), "ordered_keys")
-    aggregated_person_ids_column = Arel::Nodes::NamedFunction.new("ARRAY_AGG", [ordered_households_table[:person_id]])
+    ordered_households_table = Arel::Nodes::TableAlias.new(
+      ordered_computed_household_key_query(scope), "ordered_keys"
+    )
+    aggregated_person_ids_column = Arel::Nodes::NamedFunction.new("ARRAY_AGG",
+      [ordered_households_table[:person_id]])
     order_statement = @retain_order ? ordered_households_table[:ordinal].minimum : "member_count DESC"
 
     Person

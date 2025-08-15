@@ -9,7 +9,9 @@ class Export::InvoicesJob < Export::ExportBaseJob
   private
 
   def data
-    invoices = Invoice.where(id: @invoice_ids).order(Arel.sql("array_position(ARRAY[?]::int[], invoices.id)", @invoice_ids))
+    invoices = Invoice.where(id: @invoice_ids).order(Arel.sql(
+      "array_position(ARRAY[?]::int[], invoices.id)", @invoice_ids
+    ))
 
     Export::Pdf::Invoice.render_multiple(invoices, @options.merge({
       async_download_file: async_download_file

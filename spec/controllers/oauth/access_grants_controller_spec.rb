@@ -13,7 +13,8 @@ describe Oauth::AccessGrantsController do
 
   it "DELETE#destroy destroys grant and redirects to application" do
     application = Oauth::Application.create!(name: "MyApp", redirect_uri: redirect_uri)
-    grant = application.access_grants.create!(resource_owner_id: top_leader.id, expires_in: 10, redirect_uri: redirect_uri)
+    grant = application.access_grants.create!(resource_owner_id: top_leader.id, expires_in: 10,
+      redirect_uri: redirect_uri)
     expect do
       delete :destroy, params: {id: grant.id}
     end.to change { application.access_grants.count }.by(-1)

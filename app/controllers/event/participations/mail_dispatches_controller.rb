@@ -32,5 +32,6 @@ class Event::Participations::MailDispatchesController < ApplicationController
 
   def mail_type_valid? = Event::Participation::MANUALLY_SENDABLE_PARTICIPANT_MAILS.include?(mail_type)
 
-  def redirect_to_success = redirect_to group_event_participation_path(group, event, participation), flash: {notice: t(".success")}
+  def redirect_to_success = redirect_to group_event_participation_path(group, event, participation),
+    flash: {notice: t(".success")}
 end

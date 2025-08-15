@@ -50,7 +50,10 @@ describe PublicEventsController do
       describe "course" do
         let(:event) { events(:top_course) }
 
-        before { Fabricate(Event::Course::Role::Participant.sti_name, participation: Fabricate(:event_participation, event:, active: true)) }
+        before {
+          Fabricate(Event::Course::Role::Participant.sti_name,
+            participation: Fabricate(:event_participation, event:, active: true))
+        }
 
         it "does set flash if neither places nor waiting_list is available" do
           event.update!(maximum_participants: 1, waiting_list: false)

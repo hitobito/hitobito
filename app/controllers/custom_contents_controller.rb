@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class CustomContentsController < SimpleCrudController
-  self.permitted_attrs = [:label, :body, :subject]
+  self.permitted_attrs = [:label, :body, :subject] + CustomContent.globalize_attribute_names
 
   self.sort_mappings = {label: "custom_content_translations.label",
                          subject: "custom_content_translations.subject"}

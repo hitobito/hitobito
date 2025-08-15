@@ -56,8 +56,10 @@ module PersonDuplicates
     end
 
     def authorize_action
-      authorize!(:manage_person_duplicates, group) &&
-        authorize!(:merge, entry)
+      if [entry.person_1, entry.person_2].all? { |p| cannot?(:update, p) }
+        raise CanCan::AccessDenied.new
+      end
+      authorize!(:manage_person_duplicates, group)
     end
 
     def group

@@ -81,10 +81,9 @@ class PersonDuplicateTableBuilder
   def action_col(entry, p_nr)
     content_tag(:td, class: "right vertical-middle", rowspan: 2) do
       content = ""
-      if can?(:merge, entry)
+      people = [entry.person_1, entry.person_2]
+      if people.all? { |p| can?(:show, p) } && people.any? { |p| can?(:update, p) } && !entry.ignore?
         content += action_button_merge(entry)
-      end
-      if can?(:ignore, entry)
         content += action_button_ignore(entry)
       end
       content.html_safe

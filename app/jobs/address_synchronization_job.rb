@@ -36,16 +36,16 @@ class AddressSynchronizationJob < CursorBasedPagingJob
   def process_next_batch
     super do
       result_token = client.create_file
-      upload_token = client.upload_file(generate_data(list))
+      upload_token = client.upload_file(generate_data(batch))
       batch_token = client.run_batch(upload_token, result_token)
 
       {
         batch_token:,
         upload_token:,
         result_token:,
-        cursor: list.last.id,
+        cursor: batch.last.id,
         processed_count: processed_count + processing_count,
-        processing_count: list.count
+        processing_count: batch.count
       }
     end
   end
@@ -80,8 +80,8 @@ class AddressSynchronizationJob < CursorBasedPagingJob
     end
   end
 
-  def generate_data(list)
-    Synchronize::Addresses::SwissPost::Generator.new(list).generate
+  def generate_data(batch)
+    Synchronize::Addresses::SwissPost::Generator.new(batch).generate
   end
 
   def client

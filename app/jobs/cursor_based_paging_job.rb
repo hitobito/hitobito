@@ -44,13 +44,18 @@ class CursorBasedPagingJob < BaseJob
     end
   end
 
+  # returns state as symbol (i.e :processing, :finished or :error)
+  def check_batch
+    raise NotImplementedError
+  end
+
   def perform_initial
     process_next_batch
-    log_progress(0) if list.present?
+    log_progress(0) if batch.present?
   end
 
   def process_next_batch
-    if list.none?
+    if batch.none?
       log_progress(100) if cursor
       return
     end
@@ -66,8 +71,8 @@ class CursorBasedPagingJob < BaseJob
     log_progress(percent)
   end
 
-  def list
-    @list ||= scope.limit(batch_size).then do |scope|
+  def batch
+    @batch ||= scope.limit(batch_size).then do |scope|
       next scope unless cursor
       scope.where("#{scope.table_name}.id > ?", cursor)
     end

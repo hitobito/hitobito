@@ -19,6 +19,18 @@ class PersonDuplicatesController < ListController
   end
 
   def list_entries
-    super.list.distinct.page(params[:page]).per(20)
+    super.list.distinct.page(params[:page]).per(20).then do |scope|
+      next scope unless params[:q]
+      scope
+        .joins("INNER JOIN people ON people.id IN (person_1_id, person_2_id)")
+        .where(build_search_conditions)
+    end
+  end
+
+  def build_search_conditions
+    SearchStrategies::SqlConditionBuilder.new(
+      params[:q],
+      %w[people.first_name people.last_name]
+    ).search_conditions
   end
 end

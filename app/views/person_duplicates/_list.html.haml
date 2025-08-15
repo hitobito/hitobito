@@ -5,7 +5,6 @@
 
 - title @group.to_s
 
-
 = content_for(:filter) do
   %div.toolbar-pills.mb-3
     %ul.nav.nav-pills.group-pills.border.border-light.rounded
@@ -13,6 +12,14 @@
         = link_to('<<', group_people_path(@group), class: 'nav-link rounded-0 py-1 px-3 mr-0')
       %li.nav-item
         = link_to(t('activerecord.models.person_duplicate.other'), group_person_duplicates_path(@group), class: 'nav-link active rounded-0 py-1 px-3 mr-0')
+
+= content_for(:filter) do
+  = form_tag('', { method: :get, class: 'ms-2 d-flex float-start', role: 'search'}) do
+    = hidden_field_tag :returning, true
+    = hidden_field_tag :page, 1
+    = search_field_tag :q, params[:q], class: 'form-control form-control-sm', placeholder: t('global.search.placeholder_person')
+    = button_tag t('global.button.search'), class: 'btn btn-sm btn-primary ms-2'
+    - params[:q] = nil # reset global search param
 
 = paginate entries
 = person_duplicates_table(entries)

@@ -26,7 +26,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   delegate :association, :column_type, :column_property, :captionize, :ta, :tag,
     :content_tag, :safe_join, :capture, :add_css_class, :assoc_and_id_attr,
-    :render, :f, :icon,
+    :render, :f, :icon, :action_button,
     to: :template
 
   # Render multiple input fields together with a label for the given attributes.
@@ -509,7 +509,37 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
+  def translated_input_field(attr, args = {})
+    content_tag(:div, "data-controller": "translatable-fields") do
+      input_for_locale_with_translation_button(attr, I18n.locale, args) +
+        content_tag(:div, {class: "hidden", "data-translatable-fields-target": "toggle"}) do
+          other_lang_inputs = I18n.available_locales.excluding(I18n.locale).map do |locale|
+            input_for_locale(attr, locale, **args, data: {"translatable-fields-target": "translatedField", action: "translatable-fields#updateTranslatedFields"})
+          end
+          safe_join(other_lang_inputs)
+        end
+    end
+  end
+
   private
+
+  def input_for_locale_with_translation_button(attr, locale, args = {})
+    content_tag(:div, class: "d-flex") do
+      input_for_locale(attr, locale, args) +
+        action_button(nil, nil, "language", {class: "mb-2", "data-action": "translatable-fields#toggleFields", type: "button", in_button_group: true})
+    end
+  end
+
+  def input_for_locale(attr, locale, args = {})
+    args = args.dup
+    rich_text = args.delete(:rich_text) || false
+    content_tag(:div, class: "input-group me-2 mb-2") do
+      input_for_locale = content_tag(:span, locale.to_s.upcase, class: "input-group-text") +
+        (rich_text ? rich_text_area("#{attr}_#{locale}", **args) : input_field("#{attr}_#{locale}", **args))
+      input_for_locale += content_tag(:span, "-", class: "input-group-text", "data-translatable-fields-target": "translatedFieldsDisplay") if locale == I18n.locale
+      input_for_locale
+    end
+  end
 
   # Returns true if attr is a non-polymorphic association.
   # If one or more macros are given, the association must be of this kind.

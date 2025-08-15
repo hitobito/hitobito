@@ -12,6 +12,7 @@ describe "StandardFormBuilder" do
   include I18nHelper
   include FormHelper
   include UtilityHelper
+  include ColumnHelper
   include CrudTestHelper
   include LayoutHelper
   include HelpTextsHelper
@@ -277,6 +278,43 @@ describe "StandardFormBuilder" do
 
     it "ignores errors_on" do
       expect(form.send(:errors_on?, :cutoff_date)).to be_falsey
+    end
+  end
+
+  describe "translated fields" do
+    let(:dom) {
+      Capybara::Node::Simple.new(form.translated_input_field(:translated_field))
+    }
+
+    it "shows input field for current locale with translation button" do
+      expect(dom).to have_css("div[class='d-flex'] input[name='entry[translated_field_#{I18n.locale}]']")
+      expect(dom).to have_css("div[class='d-flex'] button[data-action='form-field-toggle#toggle'][type='button']")
+    end
+
+    it "does not show input fields for not current locales" do
+      expect(dom).not_to have_css("div[class='hidden'] input[name='entry[translated_field_#{I18n.locale}]']")
+      I18n.available_locales.excluding(I18n.locale).each do |locale|
+        expect(dom).to have_css("div[class='hidden'] input[name='entry[translated_field_#{locale}]']")
+      end
+    end
+
+    it "only generates translation button once" do
+      expect(dom).to have_css("button[data-action='form-field-toggle#toggle'][type='button']", count: 1)
+    end
+
+    it "does not show translation options if there is only one locale" do
+    end
+
+    it "generates correct input type" do
+    end
+
+    it "shows already translated languages" do
+    end
+
+    it "generates language fields with label" do
+    end
+
+    it "generates language fields without label" do
     end
   end
 end

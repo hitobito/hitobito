@@ -7,12 +7,26 @@ module Globalized
   extend ActiveSupport::Concern
 
   included do
+    # after_validation :add_errors_to_translated_attributes
+
+    Rails.autoloaders.main.on_load(class_name) do |klass|
+      klass.translated_attribute_names.each do |attr|
+        validators = klass.validators_on(attr)
+        attributes = I18n.available_locales.map { |locale| :"#{attr}_#{locale}" }
+        validators.each do |validator|
+          validates_with validator.class, validator.options.merge(attributes:)
+        end
+      end
+    end
+
     before_destroy :remember_translated_label
   end
 
   module ClassMethods
+    include GlobalizeAccessors
     def translates(*columns)
       super(*columns, fallbacks_for_empty_translations: true)
+      globalize_accessors
     end
 
     # Inspired by https://github.com/rails/actiontext/issues/32#issuecomment-450653800
@@ -25,7 +39,9 @@ module Globalized
 
       after_update do
         columns.each do |col|
-          translation.send(col).save if translation.send(col).changed?
+          translations.each do |translation|
+            translation.send(col).save if translation.send(col).changed?
+          end
         end
       end
 

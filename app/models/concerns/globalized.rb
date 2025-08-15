@@ -30,7 +30,9 @@ module Globalized
 
       after_update do
         columns.each do |col|
-          translation.send(col).save if translation.send(col).changed?
+          translations.each do |translation|
+            translation.send(col).save if translation.send(col).changed?
+          end
         end
       end
 

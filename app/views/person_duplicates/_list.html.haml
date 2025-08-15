@@ -14,12 +14,8 @@
         = link_to(t('activerecord.models.person_duplicate.other'), group_person_duplicates_path(@group), class: 'nav-link active rounded-0 py-1 px-3 mr-0')
 
 = content_for(:filter) do
-  = form_tag('', { method: :get, class: 'ms-2 d-flex float-start', role: 'search'}) do
-    = hidden_field_tag :returning, true
-    = hidden_field_tag :page, 1
-    = search_field_tag :q, params[:q], class: 'form-control form-control-sm', placeholder: t('global.search.placeholder_person')
-    = button_tag t('global.button.search'), class: 'btn btn-sm btn-primary ms-2'
-    - params[:q] = nil # reset global search param
+  = render 'shared/search_form'
 
-= paginate entries
-= person_duplicates_table(entries)
+= turbo_frame_tag :search_results do
+  = paginate entries
+  = person_duplicates_table(entries)

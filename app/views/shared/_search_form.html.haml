@@ -1,0 +1,14 @@
+-#  Copyright (c) 2012-2020, CVP Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+= form_tag('', { method: :get, class: "ms-2 d-flex float-start #{local_assigns[:class]}", role: 'search', data: { controller: :autosubmit, turbo_frame: :search_results}}) do
+  = hidden_field_tag :returning, true
+  = hidden_field_tag :page, 1
+  .has-clear.input-group
+    = search_field_tag :q, params[:q], class: 'form-control form-control-sm', placeholder: t('global.search.placeholder_person'), data: { action: "autosubmit#save"}
+    %span.input-group-text.fw-bold
+      = icon(:spinner, class: "fa-xs fa-spin d-none") # gets is displays via form[aria-busy] toggle
+      = icon(:times, class: "fa-xs", role: :button, data: { action: "click->autosubmit#clear" })
+- params[:q] = nil # Reset param so quicksearch filter does not get populated

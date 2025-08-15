@@ -38,18 +38,22 @@ describe InvoicesController do
       click_link "Eintrag hinzufügen"
       fill_in "Preis", with: 3
       fill_in "MwSt.", with: 5
-      expect(page.find("#calculated .controls dl", visible: :all)).to have_content "Betrag 3.00 CHF MwSt. 0.15 CHF Rechnungsbetrag 3.15 CHF", normalize_ws: true
+      expect(page.find("#calculated .controls dl",
+        visible: :all)).to have_content "Betrag 3.00 CHF MwSt. 0.15 CHF Rechnungsbetrag 3.15 CHF", normalize_ws: true
     end
 
     it "adding articles fills new invoice item", js: true do
       visit group_people_path(group)
       click_link "Rechnung erstellen"
       select "BEI-JU", from: "invoice_item_article"
-      expect(page.find("#calculated .controls dl", visible: :all)).to have_content "Betrag 5.00 CHF MwSt. 0.40 CHF Rechnungsbetrag 5.40 CHF", normalize_ws: true
+      expect(page.find("#calculated .controls dl",
+        visible: :all)).to have_content "Betrag 5.00 CHF MwSt. 0.40 CHF Rechnungsbetrag 5.40 CHF", normalize_ws: true
 
       # select second article
       select "ABO-NEWS", from: "invoice_item_article"
-      expect(page.find("#calculated .controls dl", visible: :all)).to have_content "Betrag 125.00 CHF MwSt. 10.00 CHF Rechnungsbetrag 135.00 CHF", normalize_ws: true
+      expect(page.find("#calculated .controls dl",
+        visible: :all)).to have_content "Betrag 125.00 CHF MwSt. 10.00 CHF Rechnungsbetrag 135.00 CHF",
+          normalize_ws: true
 
       # TODO why does this part not execute success
       # expect(page).to have_content 'ermässiger Beitrage für Kinder und Jugendliche'

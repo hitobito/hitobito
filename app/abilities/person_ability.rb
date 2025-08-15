@@ -6,7 +6,7 @@
 class PersonAbility < AbilityDsl::Base
   include AbilityDsl::Constraints::Person
 
-  on(Person) do
+  on(Person) do # rubocop:todo Metrics/BlockLength
     class_side(:index).everybody
     class_side(:index_people_without_role).if_admin
 

@@ -44,7 +44,9 @@ describe Person::ImpersonationController do
       post :create, params: {group_id: group.id, person_id: bottom_member.id}
       expect(controller.send(:origin_user)).to be_nil
       expect(response).to redirect_to(request.env["HTTP_REFERER"])
+      # rubocop:todo Layout/LineLength
       expect(flash[:alert]).to eq "Die Person hat ihre E-Mail Adresse noch nicht bestätigt und kann somit nicht imitiert werden."
+      # rubocop:enable Layout/LineLength
     end
 
     it "cannot impersonate user if current_user" do

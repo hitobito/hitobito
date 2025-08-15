@@ -60,7 +60,8 @@ describe Address::CheckValidityJob do
     end
 
     it "does not throw error if person already has address invalid tag" do
-      ActsAsTaggableOn::Tagging.create!(taggable: person, tag: PersonTags::Validation.address_invalid(create: true), context: :tags)
+      ActsAsTaggableOn::Tagging.create!(taggable: person, tag: PersonTags::Validation.address_invalid(create: true),
+        context: :tags)
 
       expect do
         perform_enqueued_jobs do

@@ -34,7 +34,8 @@ describe Event::InvitationListsController do
   context "POST create" do
     it "creates only one invitation for one person" do
       expect do
-        post :create, params: {group_id: group, event_id: course, ids: person1.id, role: {type: Event::Role::Participant}}
+        post :create,
+          params: {group_id: group, event_id: course, ids: person1.id, role: {type: Event::Role::Participant}}
       end.to change(Event::Role::Participant, :count).by(0)
         .and change(Event::Invitation, :count).by(1)
 
@@ -43,11 +44,15 @@ describe Event::InvitationListsController do
 
     it "may create multiple invitations" do
       expect do
-        post :create, params: {group_id: group, event_id: course, ids: [person2.id, person1.id].join(","), role: {type: Event::Role::Participant}}
+        post :create,
+          params: {group_id: group, event_id: course, ids: [person2.id, person1.id].join(","),
+                   role: {type: Event::Role::Participant}}
       end.to change(Event::Role::Participant, :count).by(0)
         .and change(Event::Invitation, :count).by(2)
 
+      # rubocop:todo Layout/LineLength
       expect(flash[:notice]).to include "2 Personen wurden erfolgreich zum Kurs 'Eventus' eingeladen<br />Hinweis: Allfällig bestehende Einladungen wurden nicht aktualisiert."
+      # rubocop:enable Layout/LineLength
     end
   end
 end

@@ -55,7 +55,7 @@ class HelpTexts::Renderer
     end
   end
 
-  def with_help_text(key, kind)
+  def with_help_text(key, kind) # rubocop:todo Metrics/AbcSize
     texts = help_texts.select { |ht| ht.name == key.to_s && ht.kind == kind.to_s }.index_by(&:model)
 
     if texts.present?

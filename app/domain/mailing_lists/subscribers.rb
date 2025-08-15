@@ -38,11 +38,18 @@ class MailingLists::Subscribers
 
   private
 
-  def unfiltered_people_as_configured
+  # rubocop:todo Metrics/MethodLength
+  def unfiltered_people_as_configured # rubocop:todo Metrics/AbcSize # rubocop:todo Metrics/MethodLength
     conditions = OrCondition.new
     conditions.or("group_subscriptions.role_type = roles.type")
-    conditions.or("event_subscriptions.subscriber_id IS NOT NULL and event_participations.active = ?", true)
+    conditions.or(
+      # rubocop:todo Layout/LineLength
+      "event_subscriptions.subscriber_id IS NOT NULL and event_participations.active = ?", true
+      # rubocop:enable Layout/LineLength
+    )
+    # rubocop:todo Layout/LineLength
     conditions.or("people.id = person_including_subscriptions.subscriber_id") if use_people_subscriptions?
+    # rubocop:enable Layout/LineLength
 
     people_scope
       .with(person_tag_ids: person_tag_ids)
@@ -53,17 +60,28 @@ class MailingLists::Subscribers
       .left_joins(:taggings)
       .left_joins(roles: :group)
       .left_joins(:event_participations)
+      # rubocop:todo Layout/LineLength
       .joins("LEFT OUTER JOIN group_subscriptions ON groups.lft >= group_subscriptions.lft AND groups.rgt <= group_subscriptions.rgt")
+      # rubocop:enable Layout/LineLength
+      # rubocop:todo Layout/LineLength
       .joins("LEFT OUTER JOIN event_subscriptions ON event_subscriptions.subscriber_id = event_participations.event_id ")
+      # rubocop:enable Layout/LineLength
+      # rubocop:todo Layout/LineLength
       .joins("LEFT OUTER JOIN person_including_subscriptions ON people.id = person_including_subscriptions.subscriber_id")
+      # rubocop:enable Layout/LineLength
+      # rubocop:todo Layout/LineLength
       .joins("LEFT OUTER JOIN person_excluding_subscriptions ON people.id = person_excluding_subscriptions.subscriber_id")
+      # rubocop:enable Layout/LineLength
       .joins("LEFT OUTER JOIN person_tag_ids ON people.id = person_tag_ids.person_id")
       .where(roles: {archived_at: [[nil], Time.zone.now..]})
       .where("array_length(including_tag_ids, 1) IS NULL OR including_tag_ids && person_tag_ids")
+      # rubocop:todo Layout/LineLength
       .where("array_length(excluding_tag_ids, 1) IS NULL OR array_length(person_tag_ids, 1) IS NULL OR NOT(excluding_tag_ids && person_tag_ids)")
+      # rubocop:enable Layout/LineLength
       .where(conditions.to_a)
       .where(person_excluding_subscriptions: {subscriber_id: nil})
   end
+  # rubocop:enable Metrics/MethodLength
 
   def group_subscriptions = Subscription.groups
     .with(including_tags: subscription_tags(excluded: false))
@@ -73,7 +91,9 @@ class MailingLists::Subscribers
     .joins("INNER JOIN groups ON groups.id = subscriptions.subscriber_id")
     .joins("LEFT OUTER JOIN excluding_tags ON excluding_tags.subscription_id = subscriptions.id")
     .joins("LEFT OUTER JOIN including_tags ON including_tags.subscription_id = subscriptions.id")
+    # rubocop:todo Layout/LineLength
     .select("groups.lft, groups.rgt, related_role_types.role_type, excluding_tags.tag_ids AS excluding_tag_ids, including_tags.tag_ids as including_tag_ids")
+  # rubocop:enable Layout/LineLength
 
   def subscription_tags(excluded:)
     SubscriptionTag

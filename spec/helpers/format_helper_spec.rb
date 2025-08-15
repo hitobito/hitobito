@@ -33,28 +33,41 @@ describe FormatHelper do
       subject { labeled("label") { "value" } }
 
       it { is_expected.to be_html_safe }
+      # rubocop:todo Layout/LineLength
       # its(:squish) { should == '<div class="labeled"> <label>label</label> <div class="value">value</div> </div>'.gsub('"', "'") }
-      its(:squish) { should == '<div class="labeled-grid"> <dt class="muted">label</dt> <dd>value</dd> </div>'.tr('"', "'") }
+      # rubocop:enable Layout/LineLength
+      its(:squish) {
+        should == '<div class="labeled-grid"> <dt class="muted">label</dt> <dd>value</dd> </div>'.tr('"', "'")
+      }
     end
 
     context "with empty value" do
       subject { labeled("label") { "" } }
 
       it { is_expected.to be_html_safe }
-      its(:squish) { should == '<div class="labeled-grid"> <dt class="muted">label</dt> <dd>'.tr('"', "'") + FormatHelper::EMPTY_STRING + "</dd> </div>" }
+      its(:squish) {
+        should == '<div class="labeled-grid"> <dt class="muted">label</dt> <dd>'.tr('"',
+          "'") + FormatHelper::EMPTY_STRING + "</dd> </div>"
+      }
     end
 
     context "with unsafe value" do
       subject { labeled("label") { "value <unsafe>" } }
 
       it { is_expected.to be_html_safe }
-      its(:squish) { should == '<div class="labeled-grid"> <dt class="muted">label</dt> <dd>value &lt;unsafe&gt;</dd> </div>'.tr('"', "'") }
+      its(:squish) {
+        should == '<div class="labeled-grid"> <dt class="muted">label</dt> <dd>value &lt;unsafe&gt;</dd> </div>'.tr(
+          '"', "'"
+        )
+      }
     end
 
     context "with tooltip value" do
       subject { labeled("label", tooltip: "a tool-tip") { "value" } }
 
-      its(:squish) { should == "<div class='labeled-grid'> <dt class='muted' title='a tool-tip'>label</dt> <dd>value</dd> </div>" }
+      its(:squish) {
+        should == "<div class='labeled-grid'> <dt class='muted' title='a tool-tip'>label</dt> <dd>value</dd> </div>"
+      }
     end
   end
 
@@ -62,7 +75,9 @@ describe FormatHelper do
     subject { labeled_attr("foo", :size) }
 
     it { is_expected.to be_html_safe }
-    its(:squish) { should == '<div class="labeled-grid"> <dt class="muted">Size</dt> <dd>3 chars</dd> </div>'.tr('"', "'") }
+    its(:squish) {
+      should == '<div class="labeled-grid"> <dt class="muted">Size</dt> <dd>3 chars</dd> </div>'.tr('"', "'")
+    }
   end
 
   describe "#f" do
@@ -332,7 +347,8 @@ describe FormatHelper do
 
     it "renders inline urls with given options" do
       input = "https://www.hitobito.com"
-      expect(safe_auto_link(input, html: {target: "_blank"})).to eq '<a target="_blank" href="https://www.hitobito.com">https://www.hitobito.com</a>'
+      expect(safe_auto_link(input,
+        html: {target: "_blank"})).to eq '<a target="_blank" href="https://www.hitobito.com">https://www.hitobito.com</a>'
     end
   end
 

@@ -11,7 +11,8 @@ class Event::ParticipationFilter
     {
       participant_type: {
         "Person" => ["people.nickname", "people.first_name", "people.last_name"],
-        "Event::Guest" => ["event_guests.nickname", "event_guests.first_name", "event_guests.last_name"]
+        "Event::Guest" => ["event_guests.nickname", "event_guests.first_name",
+          "event_guests.last_name"]
       }
     }
   ].freeze
@@ -34,7 +35,8 @@ class Event::ParticipationFilter
   def list_entries
     records = params[:q].present? ? load_entries.where(search_condition) : load_entries
 
-    Event::Participation::PreloadParticipations.preload(records, participant: load_participant_includes)
+    Event::Participation::PreloadParticipations.preload(records,
+      participant: load_participant_includes)
 
     @counts = populate_counts(records)
     apply_default_sort(apply_filter_scope(records))
@@ -88,6 +90,7 @@ class Event::ParticipationFilter
       .includes(load_entries_includes)
   end
 
+  # rubocop:todo Metrics/CyclomaticComplexity
   def apply_filter_scope(records, kind = params[:filter])
     case kind
     when "all"
@@ -104,4 +107,5 @@ class Event::ParticipationFilter
       end
     end
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
 end

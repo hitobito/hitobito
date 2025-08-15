@@ -47,7 +47,9 @@ describe Event::InvitationsController do
       it "exports csv" do
         expect do
           get :index, params: {group_id: group.id, event_id: course.id}, format: :csv
+          # rubocop:todo Layout/LineLength
           expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
+          # rubocop:enable Layout/LineLength
           expect(response).to redirect_to(returning: true)
         end.to change(Delayed::Job, :count).by(1)
       end

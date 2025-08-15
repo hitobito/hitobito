@@ -146,7 +146,7 @@ module MailRelay
       domain !~ /^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/
     end
 
-    def sender_is_additional_sender?
+    def sender_is_additional_sender? # rubocop:todo Metrics/CyclomaticComplexity
       return false if sender_email.blank?
 
       additional_senders = mailing_list.additional_sender.to_s

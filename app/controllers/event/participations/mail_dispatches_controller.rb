@@ -30,7 +30,12 @@ class Event::Participations::MailDispatchesController < ApplicationController
 
   def mail_type = @mail_type ||= params[:mail_type]
 
+  # rubocop:todo Layout/LineLength
   def mail_type_valid? = Event::Participation::MANUALLY_SENDABLE_PARTICIPANT_MAILS.include?(mail_type)
+  # rubocop:enable Layout/LineLength
 
-  def redirect_to_success = redirect_to group_event_participation_path(group, event, participation), flash: {notice: t(".success")}
+  # rubocop:todo Layout/LineLength
+  def redirect_to_success = redirect_to group_event_participation_path(group, event, participation),
+    # rubocop:enable Layout/LineLength
+    flash: {notice: t(".success")}
 end

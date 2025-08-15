@@ -65,7 +65,9 @@ describe Synchronize::Addresses::SwissPost::Generator do
 
     expect(HitobitoLogEntry.last.level).to eq "warn"
     expect(HitobitoLogEntry.last.category).to eq "cleanup"
+    # rubocop:todo Layout/LineLength
     expect(HitobitoLogEntry.last.message).to eq "Die Personendaten zu fist 👊 Member(382461928) konnten nicht übertragen werden"
+    # rubocop:enable Layout/LineLength
   end
 
   it "populates Firma with company name only if company flag is set" do

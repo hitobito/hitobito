@@ -116,7 +116,7 @@ module Export::Pdf::Messages
       @recipients ||= message_recipients
     end
 
-    def message_recipients
+    def message_recipients # rubocop:todo Metrics/MethodLength
       recipients = @letter.message_recipients.select("message_recipients.*", "people.last_name")
         .where.not(person_id: nil)
         .joins(:person).order(last_name: :asc)

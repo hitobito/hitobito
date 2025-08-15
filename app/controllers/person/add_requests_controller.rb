@@ -8,7 +8,7 @@ class Person::AddRequestsController < ApplicationController
 
   prepend_before_action :entry
 
-  def approve
+  def approve # rubocop:todo Metrics/AbcSize
     approver = Person::AddRequest::Approver.for(entry, current_user)
     if approver.approve
       redirect_back fallback_location: person_path(entry.person),

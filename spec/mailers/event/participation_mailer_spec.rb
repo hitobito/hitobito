@@ -60,7 +60,9 @@ describe Event::ParticipationMailer do
 
     it "renders participant info" do
       is_expected.to match(%r{Teilnehmer/-in:<br/>})
+      # rubocop:todo Layout/LineLength
       is_expected.to match(%r{<strong>Top Leader</strong><p>Greatstreet 345<br />3456 Greattown</p><p><a href="mailto:top_leader@example.com">top_leader@example.com</a>})
+      # rubocop:enable Layout/LineLength
     end
 
     it "renders application questions if present" do
@@ -92,7 +94,9 @@ describe Event::ParticipationMailer do
     it { is_expected.to match(/Hallo Top/) }
 
     it "contains participation url" do
+      # rubocop:todo Layout/LineLength
       is_expected.to match(%r{test.host/groups/#{event.groups.first.id}/events/#{event.id}/participations/#{participation.id}})
+      # rubocop:enable Layout/LineLength
     end
 
     it "sends to all email addresses of participant" do
@@ -119,7 +123,9 @@ describe Event::ParticipationMailer do
     it { is_expected.to match(/Hallo/) }
 
     it "contains participation url" do
+      # rubocop:todo Layout/LineLength
       is_expected.to match(%r{test.host/groups/#{event.groups.first.id}/events/#{event.id}/participations/#{participation.id}})
+      # rubocop:enable Layout/LineLength
     end
 
     it "sends to all email addresses of recipient" do

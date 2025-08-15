@@ -297,7 +297,7 @@ module CrudTestHelper
     end
   end
 
-  def create(index, companion)
+  def create(index, companion) # rubocop:todo Metrics/AbcSize
     c = str(index)
     CrudTestModel.create!(name: c,
       children: 10 - index,

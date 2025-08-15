@@ -35,7 +35,9 @@ class Person::Subscriptions::GlobalExclusions
     rest.inject(apply_filter(first)) { |scope, list| scope.or(apply_filter(list)) }
   end
 
+  # rubocop:todo Layout/LineLength
   def apply_filter(list) = list.filter_chain.filter(people_scope).where(mailing_lists: {id: list.id})
+  # rubocop:enable Layout/LineLength
 
   def lists_with_filter = MailingList.with_filter_chain
 

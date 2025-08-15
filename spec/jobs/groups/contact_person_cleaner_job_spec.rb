@@ -31,7 +31,9 @@ describe Groups::ContactPersonCleanerJob do
       .and change { HitobitoLogEntry.count }.by(1)
 
     log_entry = HitobitoLogEntry.last
+    # rubocop:todo Layout/LineLength
     expect(log_entry.message).to eq "Contact person of Bottom One was removed, due to person not having any active member role in Bottom One"
+    # rubocop:enable Layout/LineLength
     expect(log_entry.level).to eq "info"
     expect(log_entry.category).to eq "cleanup"
     expect(log_entry.subject).to eq group
@@ -46,7 +48,9 @@ describe Groups::ContactPersonCleanerJob do
       .and change { HitobitoLogEntry.count }.by(1)
 
     log_entry = HitobitoLogEntry.last
+    # rubocop:todo Layout/LineLength
     expect(log_entry.message).to eq "Contact person of Bottom One was removed, due to person not having any active member role in Bottom One"
+    # rubocop:enable Layout/LineLength
     expect(log_entry.level).to eq "info"
     expect(log_entry.category).to eq "cleanup"
     expect(log_entry.subject).to eq group

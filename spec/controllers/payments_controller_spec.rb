@@ -72,7 +72,8 @@ describe PaymentsController do
     it "lists payments in daterange" do
       daterange_payments = payments.sample(3).each { _1.update!(received_at: 1.year.ago) }
 
-      get :index, params: {group_id: group.id, format: :csv, from: 1.year.ago.beginning_of_year, to: 1.year.ago.end_of_year}
+      get :index,
+        params: {group_id: group.id, format: :csv, from: 1.year.ago.beginning_of_year, to: 1.year.ago.end_of_year}
 
       expect(assigns(:payments)).to match_array(daterange_payments)
     end

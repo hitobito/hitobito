@@ -57,7 +57,8 @@ describe Devise::TokensController do
 
     it "responds with unauthorized with token" do
       person.generate_authentication_token!
-      delete :destroy, params: {user_login_identity: person.email, user_token: person.authentication_token}, format: :json
+      delete :destroy, params: {user_login_identity: person.email, user_token: person.authentication_token},
+        format: :json
       expect(response.status).to be(401)
     end
 

@@ -83,7 +83,8 @@ module AbilityDsl
       end
     end
 
-    def init_implicit_permission_groups
+    # rubocop:todo Metrics/MethodLength
+    def init_implicit_permission_groups # rubocop:todo Metrics/CyclomaticComplexity
       Role::PermissionImplicationsForGroups.each do |trigger_permission, permission_configs|
         next unless all_permissions.include?(trigger_permission)
 
@@ -92,16 +93,22 @@ module AbilityDsl
         next if layer_group_ids.empty?
 
         permission_configs.each do |related_group_permission, related_group_classes|
+          # rubocop:todo Layout/LineLength
           permissions_including_implicit = expand_permissions_with_implications(related_group_permission)
+          # rubocop:enable Layout/LineLength
           target_group_ids = Group.where(
             type: Array(related_group_classes).map(&:sti_name),
             layer_group_id: layer_group_ids
           ).pluck(:id)
 
-          grant_groups_permissions(permissions_including_implicit, target_group_ids) unless target_group_ids.empty?
+          unless target_group_ids.empty?
+            grant_groups_permissions(permissions_including_implicit,
+              target_group_ids)
+          end
         end
       end
     end
+    # rubocop:enable Metrics/MethodLength
 
     def grant_groups_permissions(permissions, group_ids)
       Array(permissions).each do |permission|

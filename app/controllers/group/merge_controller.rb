@@ -60,7 +60,7 @@ class Group::MergeController < ApplicationController
     end
   end
 
-  def check_params
+  def check_params # rubocop:todo Metrics/AbcSize
     if params[:merger][:new_group_name].blank?
       flash[:alert] = translate(:group_name_missing)
       redirect_to merge_group_path(group)

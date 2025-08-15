@@ -29,7 +29,9 @@
 #
 #  idx_on_contactable_id_contactable_type_label_53043e4f10        (contactable_id,contactable_type,label) UNIQUE
 #  index_additional_addresses_on_contactable                      (contactable_type,contactable_id)
+# rubocop:todo Layout/LineLength
 #  index_additional_addresses_on_contactable_where_invoices_true  (contactable_id,contactable_type) UNIQUE WHERE (invoices = true)
+# rubocop:enable Layout/LineLength
 #
 
 Fabricator(:additional_address) do

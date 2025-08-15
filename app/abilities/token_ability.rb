@@ -27,7 +27,8 @@ class TokenAbility
 
   private
 
-  def define_token_abilities
+  # rubocop:todo Metrics/AbcSize
+  def define_token_abilities # rubocop:todo Metrics/CyclomaticComplexity # rubocop:todo Metrics/AbcSize
     define_base_abilities
     define_person_abilities if token.people?
     define_event_abilities if token.events?
@@ -37,6 +38,7 @@ class TokenAbility
     define_event_participation_abilities if token.event_participations?
     define_mailing_list_abilities if token.mailing_lists?
   end
+  # rubocop:enable Metrics/AbcSize
 
   def define_base_abilities
     can :index, Group
@@ -53,6 +55,7 @@ class TokenAbility
     end
   end
 
+  # rubocop:todo Metrics/CyclomaticComplexity
   def define_person_abilities # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     below_permissions =
       token.layer_and_below_read? || token.layer_and_below_full?
@@ -82,6 +85,7 @@ class TokenAbility
         dynamic_user_ability.can?(:update, p)
     end
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
 
   def define_event_abilities
     can :list_available, Event

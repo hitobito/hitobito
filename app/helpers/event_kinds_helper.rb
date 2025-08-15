@@ -16,7 +16,9 @@ module EventKindsHelper
           options_from_collection_for_select(options, :id, :to_s,
             selected.collect(&:id)),
           multiple: true,
+          # rubocop:todo Layout/LineLength
           class: "form-select form-select-sm", data: {chosen_no_results: t("global.chosen_no_results"),
+                                                      # rubocop:enable Layout/LineLength
                                                       placeholder: " ",
                                                       controller: "tom-select"})
       end

@@ -28,7 +28,7 @@ class People::UpdateAfterRoleChangeJob < RecurringJob
     end
   end
 
-  def update_invalid_primary_group_ids
+  def update_invalid_primary_group_ids # rubocop:todo Metrics/AbcSize
     active_primary_group_roles = <<~SQL
       LEFT JOIN roles ON (
         roles.person_id = people.id AND roles.group_id = people.primary_group_id

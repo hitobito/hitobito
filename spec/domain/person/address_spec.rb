@@ -17,7 +17,9 @@ describe Person::Address do
     person.additional_addresses.build(attrs).tap(&:valid?)
   end
 
+  # rubocop:todo Layout/LineLength
   shared_examples "common address behaviour" do |country_label:, postbox:, company:, uses_additional_address_name: true, label_handling: true|
+    # rubocop:enable Layout/LineLength
     context "common" do
       it "renders name, text and town with zip code" do
         expect(text).to eq <<~TEXT
@@ -157,7 +159,8 @@ describe Person::Address do
 
         if uses_additional_address_name
           it "reads additional name if set" do
-            build_additional_address(label:, street: "Lagistrasse", housenumber: "12a", zip_code: 1080, town: "Jamestown", name: "Foo Bar", uses_contactable_name: false)
+            build_additional_address(label:, street: "Lagistrasse", housenumber: "12a", zip_code: 1080,
+              town: "Jamestown", name: "Foo Bar", uses_contactable_name: false)
             expect(text).to eq <<~TEXT
               Foo Bar
               Lagistrasse 12a
@@ -192,15 +195,19 @@ describe Person::Address do
       end
     end
 
-    it_behaves_like "common address behaviour", country_label: false, postbox: true, company: :ignored, uses_additional_address_name: false
+    it_behaves_like "common address behaviour", country_label: false, postbox: true, company: :ignored,
+      uses_additional_address_name: false
   end
 
   describe "#for_invoice" do
     subject(:text) { address.for_invoice }
 
-    let(:attrs) { {label: nil, street: "Lagistrasse", housenumber: "12a", zip_code: 1080, town: "Jamestown", invoices: true} }
+    let(:attrs) {
+      {label: nil, street: "Lagistrasse", housenumber: "12a", zip_code: 1080, town: "Jamestown", invoices: true}
+    }
 
-    it_behaves_like "common address behaviour", country_label: false, postbox: false, company: :adds, label_handling: false
+    it_behaves_like "common address behaviour", country_label: false, postbox: false, company: :adds,
+      label_handling: false
 
     it "uses invoice address if additional address with invoice flag exists" do
       build_additional_address(attrs)
@@ -222,7 +229,8 @@ describe Person::Address do
     end
 
     it "uses address_care_of from additional address" do
-      build_additional_address(attrs.merge(address_care_of: "c/o Finance", name: "Foo Bar", uses_contactable_name: false))
+      build_additional_address(attrs.merge(address_care_of: "c/o Finance", name: "Foo Bar",
+        uses_contactable_name: false))
       expect(text).to eq <<~TEXT
         Foo Bar
         c/o Finance

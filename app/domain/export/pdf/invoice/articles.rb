@@ -38,7 +38,9 @@ module Export::Pdf::Invoice
     end
 
     def render_description?
+      # rubocop:todo Layout/LineLength
       invoice.latest_reminder.nil? || invoice.latest_reminder.show_invoice_description? || !@options[:reminders]
+      # rubocop:enable Layout/LineLength
     end
 
     def render_reminder
@@ -89,7 +91,8 @@ module Export::Pdf::Invoice
       end
     end
 
-    def total_box # rubocop:disable Metrics/MethodLength
+    # rubocop:todo Metrics/AbcSize
+    def total_box # rubocop:disable Metrics/MethodLength # rubocop:todo Metrics/AbcSize
       bounding_box([0, cursor], width: bounds.width) do
         font_size(8) do
           data = total_data
@@ -116,6 +119,7 @@ module Export::Pdf::Invoice
         end
       end
     end
+    # rubocop:enable Metrics/AbcSize
 
     def total_data
       decorated = invoice.decorate

@@ -110,7 +110,7 @@ class Payments::Collection
     @payments.sum(:amount)
   end
 
-  def median_amount(options = {})
+  def median_amount(options = {}) # rubocop:todo Metrics/AbcSize
     return 0 if @payments.empty?
 
     amounts = @payments.pluck(:amount).sort

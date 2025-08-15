@@ -121,7 +121,7 @@ describe RolesController, js: true do
     end
   end
 
-  def create_new_person(company: false)
+  def create_new_person(company: false) # rubocop:todo Metrics/AbcSize
     obsolete_node_safe do
       sign_in
       visit new_group_role_path(group_id: group.id)

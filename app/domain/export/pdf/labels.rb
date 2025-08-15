@@ -13,7 +13,8 @@ module Export::Pdf
     end
 
     def generate(contactables, household = false)
-      pdf = Export::Pdf::Document.new(page_size: format.page_size, page_layout: format.page_layout, margin: 0.cm).pdf
+      pdf = Export::Pdf::Document.new(page_size: format.page_size, page_layout: format.page_layout,
+        margin: 0.cm).pdf
       pdf.font_size = format.font_size
       if household
         generate_with_households(contactables, pdf)
@@ -47,7 +48,7 @@ module Export::Pdf
     end
 
     # print with automatic line wrap
-    def print_address_in_bounding_box(pdf, address, pos)
+    def print_address_in_bounding_box(pdf, address, pos) # rubocop:todo Metrics/AbcSize
       pdf.bounding_box(pos,
         width: format.width.mm - min_border,
         height: format.height.mm - min_border) do
@@ -81,7 +82,7 @@ module Export::Pdf
       Person::Address.new(contactable, label: label).for_pdf_label(name, format.nickname?)
     end
 
-    def position(pdf, i)
+    def position(pdf, i) # rubocop:todo Metrics/AbcSize
       page_index = i % (format.count_horizontal * format.count_vertical)
       if page_index == 0 && i > 0
         pdf.start_new_page

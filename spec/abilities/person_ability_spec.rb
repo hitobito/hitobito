@@ -101,23 +101,29 @@ describe PersonAbility do
     end
 
     it "may show person with ended role in layer" do
-      other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), start_on: 2.weeks.ago, end_on: 1.week.ago)
+      other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), start_on: 2.weeks.ago,
+        end_on: 1.week.ago)
       is_expected.to be_able_to(:show, other.person.reload)
     end
 
+    # rubocop:todo Layout/LineLength
     it "may show person with ended role in layer even if outside configured period because it may show deleted people" do
+      # rubocop:enable Layout/LineLength
       allow(Settings.people).to receive(:ended_roles_readable_for).and_return(1.month)
-      other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), start_on: 3.months.ago, end_on: 2.months.ago)
+      other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), start_on: 3.months.ago,
+        end_on: 2.months.ago)
       is_expected.to be_able_to(:show, other.person.reload)
     end
 
     it "may show person with ended role in lower layer" do
-      other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one), start_on: 2.weeks.ago, end_on: 1.week.ago)
+      other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one),
+        start_on: 2.weeks.ago, end_on: 1.week.ago)
       is_expected.to be_able_to(:show, other.person.reload)
     end
 
     it "may not show person with ended role in different layer" do
-      other = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: Group::TopLayer.create(name: "foo"), start_on: 2.weeks.ago, end_on: 1.week.ago)
+      other = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: Group::TopLayer.create(name: "foo"),
+        start_on: 2.weeks.ago, end_on: 1.week.ago)
       is_expected.to_not be_able_to(:show, other.person.reload)
     end
 
@@ -285,7 +291,8 @@ describe PersonAbility do
     end
 
     it "may show person with ended role in upper layer" do
-      other = Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group), start_on: 2.weeks.ago, end_on: 1.week.ago)
+      other = Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group), start_on: 2.weeks.ago,
+        end_on: 1.week.ago)
       is_expected.to_not be_able_to(:show, other.person.reload)
     end
 
@@ -373,25 +380,29 @@ describe PersonAbility do
     end
 
     it "may not show person with ended role in layer" do
-      other = Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group), start_on: 2.weeks.ago, end_on: 1.week.ago)
+      other = Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group), start_on: 2.weeks.ago,
+        end_on: 1.week.ago)
       is_expected.to_not be_able_to(:show, other.person.reload)
     end
 
     it "may show person with ended role in layer if configured" do
       allow(Settings.people).to receive(:ended_roles_readable_for).and_return(1.month)
-      other = Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group), start_on: 2.weeks.ago, end_on: 1.week.ago)
+      other = Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group), start_on: 2.weeks.ago,
+        end_on: 1.week.ago)
       is_expected.to be_able_to(:show, other.person.reload)
     end
 
     it "may show person with ended role in lower layer if configured" do
       allow(Settings.people).to receive(:ended_roles_readable_for).and_return(1.month)
-      other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one), start_on: 2.weeks.ago, end_on: 1.week.ago)
+      other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one),
+        start_on: 2.weeks.ago, end_on: 1.week.ago)
       is_expected.to be_able_to(:show, other.person.reload)
     end
 
     it "may not show person with ended role in layer if outside configured period" do
       allow(Settings.people).to receive(:ended_roles_readable_for).and_return(1.month)
-      other = Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group), start_on: 2.years.ago, end_on: 2.months.ago)
+      other = Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group), start_on: 2.years.ago,
+        end_on: 2.months.ago)
       is_expected.not_to be_able_to(:show, other.person.reload)
     end
 
@@ -487,12 +498,14 @@ describe PersonAbility do
     end
 
     it "may show person with ended role in layer" do
-      other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), start_on: 2.weeks.ago, end_on: 1.week.ago)
+      other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), start_on: 2.weeks.ago,
+        end_on: 1.week.ago)
       is_expected.to be_able_to(:show, other.person.reload)
     end
 
     it "may not show person with ended role in lower layer" do
-      other = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one), start_on: 2.weeks.ago, end_on: 1.week.ago)
+      other = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one),
+        start_on: 2.weeks.ago, end_on: 1.week.ago)
       is_expected.to_not be_able_to(:show, other.person.reload)
     end
 
@@ -662,7 +675,8 @@ describe PersonAbility do
     end
 
     it "may not show person with ended role in layer" do
-      other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), start_on: 2.weeks.ago, end_on: 1.week.ago)
+      other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), start_on: 2.weeks.ago,
+        end_on: 1.week.ago)
       is_expected.to_not be_able_to(:show, other.person.reload)
     end
 
@@ -769,25 +783,29 @@ describe PersonAbility do
     end
 
     it "may not show person with ended role in layer" do
-      other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one), start_on: 2.weeks.ago, end_on: 1.week.ago)
+      other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one),
+        start_on: 2.weeks.ago, end_on: 1.week.ago)
       is_expected.to_not be_able_to(:show, other.person.reload)
     end
 
     it "may show person with ended role in layer if configured" do
       allow(Settings.people).to receive(:ended_roles_readable_for).and_return(1.month)
-      other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), start_on: 2.weeks.ago, end_on: 1.week.ago)
+      other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), start_on: 2.weeks.ago,
+        end_on: 1.week.ago)
       is_expected.to be_able_to(:show, other.person.reload)
     end
 
     it "may not show person with ended role in layer if outside configured period" do
       allow(Settings.people).to receive(:ended_roles_readable_for).and_return(1.month)
-      other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), start_on: 3.months.ago, end_on: 2.months.ago)
+      other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), start_on: 3.months.ago,
+        end_on: 2.months.ago)
       is_expected.not_to be_able_to(:show, other.person.reload)
     end
 
     it "may not show person with ended role in lower layer if configured" do
       allow(Settings.people).to receive(:ended_roles_readable_for).and_return(1.month)
-      other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one), start_on: 2.weeks.ago, end_on: 1.week.ago)
+      other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one),
+        start_on: 2.weeks.ago, end_on: 1.week.ago)
       is_expected.not_to be_able_to(:show, other.person.reload)
     end
 
@@ -1284,19 +1302,22 @@ describe PersonAbility do
     end
 
     it "may show person with ended role in group" do
-      other = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one), end_on: Time.zone.yesterday)
+      other = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one),
+        end_on: Time.zone.yesterday)
       is_expected.not_to be_able_to(:show, other.person.reload)
     end
 
     it "may show person with ended role in group if configured" do
       allow(Settings.people).to receive(:ended_roles_readable_for).and_return(1.month)
-      other = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one), end_on: Time.zone.yesterday)
+      other = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one),
+        end_on: Time.zone.yesterday)
       is_expected.to be_able_to(:show, other.person.reload)
     end
 
     it "may show person with ended role in group if outside configured period" do
       allow(Settings.people).to receive(:ended_roles_readable_for).and_return(1.month)
-      other = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one), end_on: 2.months.ago)
+      other = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one),
+        end_on: 2.months.ago)
       is_expected.not_to be_able_to(:show, other.person.reload)
     end
 

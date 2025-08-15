@@ -10,11 +10,12 @@ require "rubygems/package"
 
 module Synchronize
   module Mailchimp
-    class Client
+    class Client # rubocop:todo Metrics/ClassLength
       MAX_RETRIES = 5
       attr_reader :list_id, :count, :api, :merge_fields, :member_fields
 
-      def initialize(mailing_list, member_fields: [], merge_fields: [], count: Settings.mailchimp.batch_size, debug: false)
+      def initialize(mailing_list, member_fields: [], merge_fields: [],
+        count: Settings.mailchimp.batch_size, debug: false)
         @list_id = mailing_list.mailchimp_list_id
         @count = count
         @merge_fields = merge_fields
@@ -166,6 +167,8 @@ module Synchronize
         Digest::MD5.hexdigest(email.downcase)
       end
 
+      # rubocop:todo Metrics/AbcSize
+      # rubocop:todo Metrics/CyclomaticComplexity
       def paged(key, fields, list: [], offset: 0, &block) # rubocop:disable Metrics/MethodLength
         retries ||= 0
         body = block.call(list).retrieve(params: {count: count, offset: offset}).body.to_h
@@ -187,6 +190,8 @@ module Synchronize
         retries += 1
         (retries < MAX_RETRIES) ? retry : fail("Max retries exceeded")
       end
+      # rubocop:enable Metrics/CyclomaticComplexity
+      # rubocop:enable Metrics/AbcSize
 
       def execute_batch(list)
         operations = list.collect do |item|
@@ -203,6 +208,7 @@ module Synchronize
         end
       end
 
+      # rubocop:todo Metrics/AbcSize
       def wait_for_finish(batch_id, prev_status = nil, attempt = 0) # rubocop:disable Metrics/MethodLength
         sleep attempt * attempt
         body = api.batches(batch_id).retrieve.body
@@ -223,6 +229,7 @@ module Synchronize
           end
         end
       end
+      # rubocop:enable Metrics/AbcSize
 
       def extract_operation_results(response_body_url)
         retries = 0

@@ -60,7 +60,7 @@ class Event::Question::Default < Event::Question
   end
 
   # override to handle array values submitted from checkboxes
-  def before_validate_answer(answer)
+  def before_validate_answer(answer) # rubocop:todo Metrics/CyclomaticComplexity
     raw_answer = answer.raw_answer.presence || answer.answer
     return unless with_choices? && with_checkboxes? && raw_answer.is_a?(Array)
 

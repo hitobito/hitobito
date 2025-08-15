@@ -110,7 +110,7 @@ class Person::SecurityToolsController < ApplicationController
   end
 
   # rubocop:disable Layout/LineLength
-  def load_info_texts
+  def load_info_texts # rubocop:todo Metrics/AbcSize
     @password_compromised_situation_text = get_content(Person::SecurityToolsController::PASSWORD_COMPROMISED_SITUATION)
     @password_compromised_solution_text = get_content(Person::SecurityToolsController::PASSWORD_COMPROMISED_SOLUTION)
     @email_compromised_situation_text = get_content(Person::SecurityToolsController::EMAIL_COMPROMISED_SITUATION)

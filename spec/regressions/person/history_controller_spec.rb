@@ -78,7 +78,10 @@ describe Person::HistoryController, type: :controller do
       event1 = Fabricate(:event, groups: [groups(:top_layer)])
       event2 = Fabricate(:event, groups: [groups(:top_layer)])
       [course1, event1, event2].each do |event|
-        Fabricate(:event_role, participation: Fabricate(:event_participation, participant: people(:top_leader), event: event), type: "Event::Role::Leader")
+        Fabricate(:event_role,
+          # rubocop:todo Layout/LineLength
+          participation: Fabricate(:event_participation, participant: people(:top_leader), event: event), type: "Event::Role::Leader")
+        # rubocop:enable Layout/LineLength
       end
 
       get :index, params: {group_id: top_group.id, id: top_leader.id}

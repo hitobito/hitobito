@@ -35,7 +35,9 @@ describe Export::PaymentsExportJob do
 
       lines = file.read.lines
       expect(lines.size).to eq(6)
+      # rubocop:todo Layout/LineLength
       expect(lines[0]).to match(/Id;Betrag;Eingangsdatum;Zahlungsreferenz;Transaktionsidentifikator;Status;Schuldner Name;Schuldner Adresse/)
+      # rubocop:enable Layout/LineLength
       expect(lines[0].split(";").count).to match(8)
     end
   end

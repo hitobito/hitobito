@@ -50,7 +50,7 @@
 #
 
 class InvoiceSerializer < ApplicationSerializer
-  schema do
+  schema do # rubocop:todo Metrics/BlockLength
     json_api_properties
 
     map_properties :title,

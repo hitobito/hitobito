@@ -76,7 +76,7 @@ class Subscription < ActiveRecord::Base
     mailing_list.group.self_and_descendants.without_deleted.without_archived
   end
 
-  def grouped_role_types
+  def grouped_role_types # rubocop:todo Metrics/CyclomaticComplexity
     result = {}
     role_classes = related_role_types.map(&:role_class)
     Role::TypeList.new(subscriber.class).each do |layer, groups|

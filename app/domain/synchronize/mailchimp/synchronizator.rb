@@ -51,7 +51,9 @@ module Synchronize
       end
 
       def update_forgotten_emails
+        # rubocop:todo Layout/LineLength
         list.update!(mailchimp_forgotten_emails: (list.mailchimp_forgotten_emails + result.forgotten_emails).uniq)
+        # rubocop:enable Layout/LineLength
       end
 
       def tag_cleaned_members
@@ -80,13 +82,15 @@ module Synchronize
         merge_fields.reject { |name, _, _| labels.include?(name.upcase) }
       end
 
-      def stale_segments
+      def stale_segments # rubocop:todo Metrics/AbcSize
         segments_by_tag_name = client.fetch_segments.index_by { |t| t[:name] }
 
         tags.collect do |tag, emails|
           tag_id = segments_by_tag_name.dig(tag, :id)
           remote_emails = remote_tags.fetch(tag, []).sort
+          # rubocop:todo Layout/LineLength
           local_emails = (emails - remotely_removed_members.pluck(:email_address) - list.mailchimp_forgotten_emails).sort
+          # rubocop:enable Layout/LineLength
 
           SegmentUpdate.new(tag_id, local_emails, remote_emails, obsolete_emails).prepare
         end.compact.flatten(1)

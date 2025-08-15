@@ -28,11 +28,18 @@ class Invoice::ItemEvaluation
 
   private
 
-  def article_rows
+  # rubocop:todo Metrics/MethodLength
+  # rubocop:todo Metrics/AbcSize
+  def article_rows # rubocop:todo Metrics/CyclomaticComplexity # rubocop:todo Metrics/AbcSize
     return @article_rows if @article_rows.present?
 
+    # rubocop:todo Layout/LineLength
     invoice_items_by_article = InvoiceItem.where(invoice_id: payments_of_paid_invoices.payments.pluck(:invoice_id).uniq)
-      .group_by { |invoice_item| [invoice_item.name, invoice_item.account, invoice_item.cost_center] }
+      # rubocop:enable Layout/LineLength
+      .group_by { |invoice_item|
+      [invoice_item.name, invoice_item.account,
+        invoice_item.cost_center]
+    }
 
     @article_rows = invoice_items_by_article.map do |ids, invoice_items|
       name, account, cost_center = *ids
@@ -41,13 +48,17 @@ class Invoice::ItemEvaluation
         name: name,
         vat: invoice_items.sum { |invoice_item| InvoiceItems::Calculation.round(invoice_item.vat) },
         count: invoice_items.sum(&:count),
-        amount_paid: invoice_items.sum { |invoice_item| InvoiceItems::Calculation.round(invoice_item.total) },
+        amount_paid: invoice_items.sum { |invoice_item|
+          InvoiceItems::Calculation.round(invoice_item.total)
+        },
         account: account,
         cost_center: cost_center,
         type: :by_article
       }
     end
   end
+  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/MethodLength
 
   def invoice_article_total_amount
     article_rows.sum { |article| article[:amount_paid] }

@@ -21,7 +21,7 @@ class QualificationDecorator < ApplicationDecorator
     helpers.icon(:"info-circle", title: tooltip)
   end
 
-  def tooltip
+  def tooltip # rubocop:todo Metrics/AbcSize
     if model.active? && model.finish_at
       translate(:open_training_days_active,
         days: formatted_days,

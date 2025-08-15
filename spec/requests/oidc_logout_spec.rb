@@ -29,7 +29,11 @@ RSpec.describe "GET /oidc/logout", type: :request do
     before do
       allow(Doorkeeper::OpenidConnect.configuration).to receive(:signing_key).and_return(key.to_s)
       allow(Doorkeeper::OpenidConnect.configuration).to receive(:signing_algorithm).and_return(:rs256)
-      allow(Doorkeeper::OpenidConnect.configuration).to receive(:resource_owner_from_access_token).and_return(->(_token) { person })
+      # rubocop:todo Layout/LineLength
+      allow(Doorkeeper::OpenidConnect.configuration).to receive(:resource_owner_from_access_token).and_return(->(_token) {
+        # rubocop:enable Layout/LineLength
+        person
+      })
     end
 
     it "GET#destroy destroys token and redirects to new_person_session_url" do

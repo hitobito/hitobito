@@ -119,7 +119,7 @@ module Patches
     private
 
     # Maybe good enough, maybe not ..
-    def each_zeitwerk_class
+    def each_zeitwerk_class # rubocop:todo Metrics/CyclomaticComplexity
       load_and_adjust_zeitwerk_classes.map do |constant, (location, cref)|
         next if location.starts_with?(RUBY_HOME) || !location.ends_with?(".rb")
         next if %r{/gems/}.match?(location)
@@ -155,7 +155,7 @@ module Patches
       ancestor_patches(direct_patches.map(&:method)).uniq # ancestors produce duplicates
     end
 
-    def direct_patches
+    def direct_patches # rubocop:todo Metrics/AbcSize
       patched_methods = methods(constant) & (ancestors.flat_map { |ancestor| methods(ancestor) })
       patched_methods.map do |method|
         file, line = constant.instance_method(method).source_location
@@ -206,11 +206,15 @@ module Patches
     def relative_path(file) = Pathname(file).relative_path_from(DEV_ROOT).to_s
 
     def irrelevant_ancestor?(ancestor)
+      # rubocop:todo Layout/LineLength
       ancestor == constant || ancestor == Data || ancestor == Object || ancestor == Kernel || ancestor == BasicObject
+      # rubocop:enable Layout/LineLength
     end
 
     def irrelevant_path?(file, source_file)
+      # rubocop:todo Layout/LineLength
       file.nil? || file.starts_with?(RUBY_HOME) || file.starts_with?(CORE_APP_DIR.to_s) || !source_file.starts_with?(CORE_APP_DIR.to_s) ||
+        # rubocop:enable Layout/LineLength
         %r{gems}.match?(file) # this seems to occur on CI
     end
 

@@ -34,9 +34,15 @@ class People::OneTimePassword
 
   def secret
     # We previously built this secret using Hitobito::Application.config.secret_key_base.
+    # rubocop:todo Layout/LineLength
     # However before Rails 7.1 this method always returned nil which was not what we expected but what we used to generate all the secrets with.
+    # rubocop:enable Layout/LineLength
+    # rubocop:todo Layout/LineLength
     # With Rails 7.1 the method correctly returned the secret_key_base which invalidated all secrets.
+    # rubocop:enable Layout/LineLength
+    # rubocop:todo Layout/LineLength
     # So as a correction we remove the secret_key_base from the secret building process because the secrets have already been delivered to the TOTP apps of the user.
+    # rubocop:enable Layout/LineLength
     base = "-#{totp_secret}"
     sha = Digest::SHA512.hexdigest(base)
     base32_encode(sha)

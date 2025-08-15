@@ -17,8 +17,10 @@ module FilterHelper
   def direct_filter_search
     label = t("global.button.search")
     direct_filter(:q, label, class: "has-feedback has-clear") do
-      search_field_tag(:q, params[:q], class: "form-control form-control-sm", placeholder: label, data: {submit: true}) +
-        content_tag(:span, icon(:times, class: "fa-xs"), class: "input-group-text fw-bold", data: {clear: true})
+      search_field_tag(:q, params[:q], class: "form-control form-control-sm", placeholder: label,
+        data: {submit: true}) +
+        content_tag(:span, icon(:times, class: "fa-xs"), class: "input-group-text fw-bold",
+          data: {clear: true})
     end
   end
 
@@ -60,7 +62,8 @@ module FilterHelper
     options[:class] ||= "date form-control form-control-sm w-50"
     options[:value] ||= params[attr]
     options[:data] = {submit: true}
-    content_tag(:span, icon(:"calendar-alt"), class: "input-group-text") + text_field(nil, attr, options)
+    content_tag(:span, icon(:"calendar-alt"),
+      class: "input-group-text") + text_field(nil, attr, options)
   end
 
   def direct_filter_time_field(attr, options = {})

@@ -53,7 +53,9 @@ describe :person_duplicates, js: true do
     expect(modal.find("h5")).to have_content "Personen zusammenführen"
 
     modal.find("button.btn", text: "Zusammenführen").click
+    # rubocop:todo Layout/LineLength
     expect(page).to have_text "Rolle Admin (bis 01.01.2000) von #{duplicate1.person_1} ist fürs Zusammenführen nicht gültig, da die andere Person eventuell bereits eine Rolle hat, welche diese Rolle nicht mehr erlaubt, diese muss manuell korrigiert/etnfernt werden. Info: Bis kann nicht vor Von sein"
+    # rubocop:enable Layout/LineLength
   end
 
   private

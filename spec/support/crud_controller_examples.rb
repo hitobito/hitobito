@@ -60,7 +60,8 @@ shared_examples "crud controller" do |options|
 
   describe_action :get, :index, unless: skip?(options, "index") do
     context ".html", format: :html, unless: skip?(options, %w[index html]) do
-      context "search", if: described_class.search_columns.present?, unless: skip?(options, %w[index html search]), combine: "ihse" do
+      context "search", if: described_class.search_columns.present?, unless: skip?(options, %w[index html search]),
+        combine: "ihse" do
         let(:params) { {q: search_value} }
 
         it_should_respond

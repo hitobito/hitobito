@@ -71,7 +71,9 @@ describe Qualification do
       end
 
       it "includes origin and no finish_at" do
+        # rubocop:todo Layout/LineLength
         quali = Fabricate(:qualification, qualification_kind: Fabricate(:qualification_kind, validity: nil, label: "Super Lead"),
+          # rubocop:enable Layout/LineLength
           start_at: Date.parse("2011-3-3").to_date,
           origin: "SLK 11")
         expect(quali.to_s(:long)).to eq "Super Lead (von SLK 11)"
@@ -84,7 +86,9 @@ describe Qualification do
       end
 
       it "includes only kind" do
+        # rubocop:todo Layout/LineLength
         quali = Fabricate(:qualification, qualification_kind: Fabricate(:qualification_kind, validity: nil, label: "Super Lead"),
+          # rubocop:enable Layout/LineLength
           start_at: Date.parse("2011-3-3").to_date)
         expect(quali.to_s(:long)).to eq "Super Lead"
       end
@@ -266,7 +270,10 @@ describe Qualification do
         it { expect(Qualification.only_expired([], today + 2.years)).to match_array([q]) }
         it { expect(Qualification.only_expired([kind.id], today + 2.years)).to match_array([q]) }
         it { expect(Qualification.only_expired([], today + 4.years)).to match_array([q, gl_leader_active]) }
-        it { expect(Qualification.only_expired([kind.id, gl_leader.id], today + 4.years)).to match_array([q, gl_leader_active]) }
+        it {
+          expect(Qualification.only_expired([kind.id, gl_leader.id],
+            today + 4.years)).to match_array([q, gl_leader_active])
+        }
       end
 
       context "when qualification never expires" do
@@ -288,7 +295,9 @@ describe Qualification do
       end
 
       context "when another expired qualification of same kind exists" do
-        let!(:inactive) { Fabricate(:qualification, qualification_kind: kind, person: person, start_at: start_date - 10.years) }
+        let!(:inactive) {
+          Fabricate(:qualification, qualification_kind: kind, person: person, start_at: start_date - 10.years)
+        }
 
         it { expect(Qualification.only_expired).to be_blank }
         it { expect(Qualification.only_expired([kind.id])).to be_blank }
@@ -301,8 +310,12 @@ describe Qualification do
       before { kind.update_column(:reactivateable, 2) }
 
       before do
+        # rubocop:todo Layout/LineLength
         @reactivatable = Fabricate(:qualification, qualification_kind: kind, person: person, start_at: today - 3.year) # reactivateable
+        # rubocop:enable Layout/LineLength
+        # rubocop:todo Layout/LineLength
         @expired = Fabricate(:qualification, qualification_kind: kind, person: person, start_at: today - 5.years) # expired
+        # rubocop:enable Layout/LineLength
       end
 
       it { expect(Qualification.only_reactivateable).to match_array([@reactivatable]) }

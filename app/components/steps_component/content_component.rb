@@ -77,7 +77,8 @@ class StepsComponent::ContentComponent < StepsComponent::IteratingComponent
 
   def cancel_link_back_to_person
     if @form.object.try(:person).try(:persisted?)
-      link_to(t("global.button.cancel"), person_path(@form.object.person), class: "link cancel mt-2 pt-1")
+      link_to(t("global.button.cancel"), person_path(@form.object.person),
+        class: "link cancel mt-2 pt-1")
     end
   end
 

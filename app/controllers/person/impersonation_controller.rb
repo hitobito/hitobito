@@ -10,7 +10,9 @@ class Person::ImpersonationController < ApplicationController
   def create
     person = Person.find(params[:person_id])
     return redirect_back_with_fallback if person == current_user || origin_user
+    # rubocop:todo Layout/LineLength
     return redirect_back_with_fallback(alert: t(".email_must_be_confirmed")) if login_unconfirmed?(person)
+    # rubocop:enable Layout/LineLength
 
     start_impersonation(person)
     redirect_to root_path

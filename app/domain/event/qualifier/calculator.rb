@@ -55,7 +55,9 @@ class Event::Qualifier::Calculator
 
   def prolonging_qualification_kind_ids(course)
     course.kind.event_kind_qualification_kinds
+      # rubocop:todo Layout/LineLength
       .select { |q| q.prolongation? && q.qualification_kind.required_training_days && q.role == @role.to_s }
+      # rubocop:enable Layout/LineLength
       .map { |q| [q.qualification_kind_id, start_of_relevant_period(q.qualification_kind)] }
       .uniq
   end

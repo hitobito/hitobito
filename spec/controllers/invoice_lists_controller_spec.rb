@@ -208,7 +208,9 @@ describe InvoiceListsController do
 
     it "POST#create sets creator_id to current_user" do
       expect do
-        post :create, params: {group_id: group.id, invoice_list: {recipient_ids: person.id, invoice: invoice_attrs.merge(title: "current_user")}}
+        post :create,
+          params: {group_id: group.id,
+                   invoice_list: {recipient_ids: person.id, invoice: invoice_attrs.merge(title: "current_user")}}
       end.to change { group.invoices.count }.by(1)
 
       expect(Invoice.find_by(title: "current_user").creator).to eq(person)
@@ -217,7 +219,10 @@ describe InvoiceListsController do
     it "POST#create for mailing list receiver redirects to invoice_lists page" do
       Subscription.create!(mailing_list: list, subscriber: groups(:top_group), role_types: [Group::TopGroup::Leader])
       expect do
-        post :create, params: {group_id: group.id, invoice_list: {receiver_id: list.id, receiver_type: list.class, invoice: invoice_attrs.merge(title: "test")}}
+        post :create,
+          params: {group_id: group.id,
+                   invoice_list: {receiver_id: list.id, receiver_type: list.class,
+                                  invoice: invoice_attrs.merge(title: "test")}}
       end.to change { group.invoices.count }.by(1)
       expect(assigns(:invoice_list).receiver).to eq list
       expect(response).to redirect_to group_invoice_lists_path(group)
@@ -225,7 +230,10 @@ describe InvoiceListsController do
 
     it "POST#create for group receiver redirects to invoice_lists page" do
       expect do
-        post :create, params: {group_id: group.id, invoice_list: {receiver_id: group.id, receiver_type: group.class.base_class, invoice: invoice_attrs.merge(title: "test")}}
+        post :create,
+          params: {group_id: group.id,
+                   invoice_list: {receiver_id: group.id, receiver_type: group.class.base_class,
+                                  invoice: invoice_attrs.merge(title: "test")}}
       end.to change { group.invoices.count }.by(1)
       expect(assigns(:invoice_list).receiver).to eq group
       expect(response).to redirect_to group_invoice_lists_path(group)
@@ -234,9 +242,13 @@ describe InvoiceListsController do
     it "POST#create an invoice in background" do
       stub_const("InvoiceListsController::LIMIT_CREATE", 2)
       Subscription.create!(mailing_list: list, subscriber: groups(:top_group), role_types: [Group::TopGroup::Leader])
-      Subscription.create!(mailing_list: list, subscriber: groups(:bottom_layer_one), role_types: [Group::BottomLayer::Member])
+      Subscription.create!(mailing_list: list, subscriber: groups(:bottom_layer_one),
+        role_types: [Group::BottomLayer::Member])
       expect do
-        post :create, params: {group_id: group.id, invoice_list: {receiver_id: list.id, receiver_type: list.class, invoice: invoice_attrs.merge(title: "test")}}
+        post :create,
+          params: {group_id: group.id,
+                   invoice_list: {receiver_id: list.id, receiver_type: list.class,
+                                  invoice: invoice_attrs.merge(title: "test")}}
         Delayed::Job.last.payload_object.perform
       end.to change { group.invoices.count }.by(2)
 
@@ -360,7 +372,9 @@ describe InvoiceListsController do
         invoice_list.invoices.each(&:recalculate!)
 
         expect do
-          travel(1.day) { delete :destroy, params: {group_id: group.id, invoice_list_id: invoice_list.id, ids: invoice.id} }
+          travel(1.day) {
+            delete :destroy, params: {group_id: group.id, invoice_list_id: invoice_list.id, ids: invoice.id}
+          }
         end.to change { invoice.reload.updated_at }
           .and change { invoice_list.reload.amount_total }.from(30).to(10)
         expect(response).to redirect_to group_invoice_list_invoices_path(group, invoice_list, returning: true)

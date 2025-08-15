@@ -27,7 +27,9 @@ describe People::TotpResetController do
       bottom_member.reload
 
       expect(response).to redirect_to(group_person_path(bottom_layer, bottom_member))
+      # rubocop:todo Layout/LineLength
       expect(flash[:notice]).to include("Du wirst beim nächsten Login aufgefordert, Zwei-Faktor-Authentifizierung erneut einzurichten")
+      # rubocop:enable Layout/LineLength
       expect(bottom_member.two_factor_authentication).to eq("totp")
       expect(bottom_member.two_fa_secret).to eq("")
     end

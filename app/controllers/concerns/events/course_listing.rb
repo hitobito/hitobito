@@ -38,7 +38,7 @@ module Events::CourseListing
     end
   end
 
-  def set_group_vars
+  def set_group_vars # rubocop:todo Metrics/AbcSize
     params[:filter] ||= {}
     params[:filter][:group_ids] ||=
       Events::Filter::Groups.new(

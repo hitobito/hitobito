@@ -70,7 +70,7 @@ class TableDisplay < ActiveRecord::Base
     selected.map(&:to_sym).select { |col| available.include? col }
   end
 
-  def column_for(attr, table: nil)
+  def column_for(attr, table: nil) # rubocop:todo Metrics/CyclomaticComplexity
     column = relevant_columns.fetch(attr, nil) ||
       relevant_multi_columns.find { |col| col.can_display?(attr) }
     return if column.nil?

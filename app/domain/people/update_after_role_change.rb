@@ -10,7 +10,10 @@ class People::UpdateAfterRoleChange
   end
 
   def set_contact_data_visible
-    person.update_column(:contact_data_visible, contact_data?) if person.contact_data_visible != contact_data?
+    if person.contact_data_visible != contact_data?
+      person.update_column(:contact_data_visible,
+        contact_data?)
+    end
   end
 
   def set_first_primary_group

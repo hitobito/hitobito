@@ -5,7 +5,8 @@
 
 module ContactableHelper
   def contactable_public_field_icon
-    content_tag(:span, data: {bs_toggle: :tooltip}, title: t("contactable.public_check_box.tooltip")) do
+    content_tag(:span, data: {bs_toggle: :tooltip},
+      title: t("contactable.public_check_box.tooltip")) do
       safe_join([
         t("activerecord.attributes.social_account.public"),
         icon(:info, class: "ms-1")

@@ -49,7 +49,9 @@ describe Group::Mover do
     context "bottom_group_one_one_one" do
       let(:group) { groups(:bottom_group_one_one_one) }
 
-      its(:candidates) { is_expected.to match_array groups_for(:bottom_layer_one, :bottom_layer_two, :bottom_group_one_two) }
+      its(:candidates) {
+        is_expected.to match_array groups_for(:bottom_layer_one, :bottom_layer_two, :bottom_group_one_two)
+      }
     end
 
     def groups_for(*args)

@@ -11,26 +11,34 @@ describe "OauthWorkflow" do
 
   describe "obtaining grant" do
     it "redirects to oauth login if not authenticated" do
-      get oauth_authorization_path, params: {client_id: @app.uid, client_secret: @app.secret, redirect_uri: redirect_uri, response_type: :code, scope: :openid, prompt: :login}
+      get oauth_authorization_path,
+        params: {client_id: @app.uid, client_secret: @app.secret, redirect_uri: redirect_uri, response_type: :code,
+                 scope: :openid, prompt: :login}
       expect(response).to redirect_to("http://www.example.com/users/sign_in?oauth=true")
     end
 
     it "redirects to oauth login if authenticated but login is set to prompt" do
       sign_in(user)
-      get oauth_authorization_path, params: {client_id: @app.uid, client_secret: @app.secret, redirect_uri: redirect_uri, response_type: :code, scope: :openid, prompt: "login"}
+      get oauth_authorization_path,
+        params: {client_id: @app.uid, client_secret: @app.secret, redirect_uri: redirect_uri, response_type: :code,
+                 scope: :openid, prompt: "login"}
       expect(response).to redirect_to("http://www.example.com/users/sign_in?oauth=true")
     end
 
     it "prompts for authorization if authenticated and no prompt is set" do
       sign_in(user)
-      get oauth_authorization_path, params: {client_id: @app.uid, client_secret: @app.secret, redirect_uri: redirect_uri, response_type: :code, scope: :openid}
+      get oauth_authorization_path,
+        params: {client_id: @app.uid, client_secret: @app.secret, redirect_uri: redirect_uri, response_type: :code,
+                 scope: :openid}
       expect(response).to be_successful
       expect(response.body).to include "Autorisierung erforderlich"
     end
 
     it "strips prompt param from after_sign_in path" do
       user.update!(password: password)
-      get oauth_authorization_path, params: {client_id: @app.uid, client_secret: @app.secret, redirect_uri: redirect_uri, response_type: :code, scope: :openid, prompt: :login}
+      get oauth_authorization_path,
+        params: {client_id: @app.uid, client_secret: @app.secret, redirect_uri: redirect_uri, response_type: :code,
+                 scope: :openid, prompt: :login}
       post person_session_path, params: {person: {login_identity: user.email, password: password}}
 
       query = CGI.parse(URI.parse(response.headers["Location"]).query)
@@ -43,7 +51,9 @@ describe "OauthWorkflow" do
     it "creates access_token for the user", :time_frozen do
       grant = @app.access_grants.create!(resource_owner_id: user.id, expires_in: 10, redirect_uri: redirect_uri)
       expect do
-        post oauth_token_path, params: {client_id: @app.uid, client_secret: @app.secret, redirect_uri: redirect_uri, code: grant.token, grant_type: "authorization_code"}
+        post oauth_token_path,
+          params: {client_id: @app.uid, client_secret: @app.secret, redirect_uri: redirect_uri, code: grant.token,
+                   grant_type: "authorization_code"}
       end.to change { Oauth::AccessToken.count }.by(1)
       expect(json["created_at"]).to be_present
       expect(json["access_token"]).to be_present
@@ -54,7 +64,9 @@ describe "OauthWorkflow" do
     it "can configure token expiry", :time_frozen do
       grant = @app.access_grants.create!(resource_owner_id: user.id, expires_in: 10, redirect_uri: redirect_uri)
       allow(Doorkeeper.config).to receive(:access_token_expires_in).and_return(1.hour)
-      post oauth_token_path, params: {client_id: @app.uid, client_secret: @app.secret, redirect_uri: redirect_uri, code: grant.token, grant_type: "authorization_code"}
+      post oauth_token_path,
+        params: {client_id: @app.uid, client_secret: @app.secret, redirect_uri: redirect_uri, code: grant.token,
+                 grant_type: "authorization_code"}
       expect(json["expires_in"]).to eq 1.hours.to_i
     end
 
@@ -69,7 +81,9 @@ describe "OauthWorkflow" do
 
       it "returns jwt as access_token" do
         grant = @app.access_grants.create!(resource_owner_id: user.id, expires_in: 10, redirect_uri: redirect_uri)
-        post oauth_token_path, params: {client_id: @app.uid, client_secret: @app.secret, redirect_uri: redirect_uri, code: grant.token, grant_type: "authorization_code"}
+        post oauth_token_path,
+          params: {client_id: @app.uid, client_secret: @app.secret, redirect_uri: redirect_uri, code: grant.token,
+                   grant_type: "authorization_code"}
         jwt = JWT.decode(json["access_token"], key.public_key, true, algorithms: "RS256")
         expect(jwt.first.keys.sort).to match_array %w[iss aud iat exp jti sub]
       end
@@ -79,7 +93,8 @@ describe "OauthWorkflow" do
   context "using token" do
     it "might use access token without scope" do
       token = @app.access_tokens.create!(resource_owner_id: user.id, scopes: "api")
-      get group_person_path(group_id: user.primary_group_id, id: user.id), headers: {"Authorization" => "Bearer #{token}"}
+      get group_person_path(group_id: user.primary_group_id, id: user.id),
+        headers: {"Authorization" => "Bearer #{token}"}
       expect(response.status).to eq 200
     end
 

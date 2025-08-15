@@ -24,7 +24,9 @@ describe Event::Role do
     event_type.role_types.each do |part|
       context part do
         it "must have valid permissions" do
+          # rubocop:todo Layout/LineLength
           # although it looks like, this example is about participation.permissions and not about Participation::Permissions
+          # rubocop:enable Layout/LineLength
           expect(Event::Role::Permissions).to include(*part.permissions) if part.permissions.present?
         end
       end

@@ -16,9 +16,13 @@ class BaseJob
   class_attribute :use_background_job_logging
 
   # Define a maximum run time of this job.
+  # rubocop:todo Layout/LineLength
   # NOTE: this can ONLY be used to set a max_run_time that is lower than Delayed::Worker.max_run_time
+  # rubocop:enable Layout/LineLength
   # (see `config/initializers/delayed_job_config.rb`).
+  # rubocop:todo Layout/LineLength
   # Otherwise the lock on the job would expire and another worker would start the working on the in progress job.
+  # rubocop:enable Layout/LineLength
   class_attribute :max_run_time
   self.max_run_time = 4.hours
 

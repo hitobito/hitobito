@@ -55,7 +55,9 @@ describe RolesController do
         is_expected.to redirect_to(edit_group_person_path(group, role.person))
 
         expect(role.group_id).to eq(group.id)
+        # rubocop:todo Layout/LineLength
         expect(flash[:notice]).to eq("Rolle <i>Member</i> für <i>Bob Foo</i> in <i>TopGroup</i> wurde erfolgreich erstellt.")
+        # rubocop:enable Layout/LineLength
         expect(role).to be_kind_of(Group::TopGroup::Member)
         person = role.person
         expect(person.first_name).to eq("Bob")
@@ -89,7 +91,9 @@ describe RolesController do
 
       role = person.reload.roles.first
       expect(role.group_id).to eq(group.id)
+      # rubocop:todo Layout/LineLength
       expect(flash[:notice]).to eq("Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich erstellt.")
+      # rubocop:enable Layout/LineLength
       expect(role).to be_kind_of(Group::TopGroup::Member)
     end
 
@@ -107,7 +111,9 @@ describe RolesController do
       is_expected.to redirect_to(edit_group_person_path(group, role.person))
 
       expect(role.group_id).to eq(group.id)
+      # rubocop:todo Layout/LineLength
       expect(flash[:notice]).to eq("Rolle <i>Member</i> für <i>Hans Beispiel</i> in <i>TopGroup</i> wurde erfolgreich erstellt.")
+      # rubocop:enable Layout/LineLength
       expect(role).to be_kind_of(Group::TopGroup::Member)
       person = role.person
       expect(person.first_name).to eq("Hans")
@@ -126,7 +132,9 @@ describe RolesController do
 
       role = person.reload.roles.first
       expect(role.group_id).to eq(g.id)
+      # rubocop:todo Layout/LineLength
       expect(flash[:notice]).to eq("Rolle <i>Member</i> für <i>#{person}</i> in <i>Toppers</i> wurde erfolgreich erstellt.")
+      # rubocop:enable Layout/LineLength
       expect(role).to be_kind_of(Group::GlobalGroup::Member)
     end
 
@@ -145,7 +153,9 @@ describe RolesController do
       role = person.reload.roles.first
       expect(role.group_id).to eq(g.id)
       expect(role.start_on).to be_nil
+      # rubocop:todo Layout/LineLength
       expect(flash[:notice]).to eq("Rolle <i>Member</i> für <i>#{person}</i> in <i>Toppers</i> wurde erfolgreich erstellt.")
+      # rubocop:enable Layout/LineLength
       expect(role).to be_kind_of(Group::GlobalGroup::Member)
     end
 
@@ -188,7 +198,8 @@ describe RolesController do
     end
 
     it "with invalid person_id displays error" do
-      post :create, params: {group_id: group.id, role: {group_id: group.id, type: Group::TopGroup::Member.sti_name, person_id: -99}}
+      post :create,
+        params: {group_id: group.id, role: {group_id: group.id, type: Group::TopGroup::Member.sti_name, person_id: -99}}
 
       is_expected.to render_template("new")
       expect(assigns(:role).person).to have(1).error_on(:base)
@@ -209,7 +220,9 @@ describe RolesController do
 
         role = person.reload.roles.first
         expect(role.group_id).to eq(group.id)
+        # rubocop:todo Layout/LineLength
         expect(flash[:notice]).to eq("Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich erstellt.")
+        # rubocop:enable Layout/LineLength
         expect(role).to be_kind_of(Group::TopGroup::Member)
       end
 
@@ -266,7 +279,9 @@ describe RolesController do
         expect(person.reload.roles.count).to eq(2)
         role = person.roles.last
         expect(role.group_id).to eq(group.id)
+        # rubocop:todo Layout/LineLength
         expect(flash[:notice]).to eq("Rolle <i>Member</i> für <i>#{person}</i> in <i>Group 11</i> wurde erfolgreich erstellt.")
+        # rubocop:enable Layout/LineLength
       end
 
       it "informs about existing request" do
@@ -305,7 +320,9 @@ describe RolesController do
                  type: Group::TopGroup::Member.sti_name}
         }
 
+        # rubocop:todo Layout/LineLength
         expect(flash[:notice]).to eq("Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich erstellt.")
+        # rubocop:enable Layout/LineLength
         expect(version.whodunnit).to eq origin_user_id.to_s
       end
 
@@ -334,10 +351,13 @@ describe RolesController do
 
     it "redirects to person after update" do
       expect do
-        put :update, params: {group_id: group.id, id: role.id, role: {label: "bla", type: role.type, group_id: role.group_id}}
+        put :update,
+          params: {group_id: group.id, id: role.id, role: {label: "bla", type: role.type, group_id: role.group_id}}
       end.not_to change { Role.with_inactive.count }
 
+      # rubocop:todo Layout/LineLength
       expect(flash[:notice]).to eq "Rolle <i>Member (bla)</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich aktualisiert."
+      # rubocop:enable Layout/LineLength
       expect(role.reload.label).to eq "bla"
       expect(role.type).to eq Group::TopGroup::Member.model_name
       is_expected.to redirect_to(group_person_path(group, person))
@@ -346,10 +366,13 @@ describe RolesController do
     it "updates future role" do
       role.update!(start_on: Time.zone.tomorrow)
       expect do
-        put :update, params: {group_id: group.id, id: role.id, role: {label: "bla", type: role.type, group_id: role.group_id}}
+        put :update,
+          params: {group_id: group.id, id: role.id, role: {label: "bla", type: role.type, group_id: role.group_id}}
       end.not_to change { Role.with_inactive.count }
 
+      # rubocop:todo Layout/LineLength
       expect(flash[:notice]).to eq "Rolle <i>Member (bla)</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich aktualisiert."
+      # rubocop:enable Layout/LineLength
       expect(role.reload.label).to eq "bla"
       expect(role.type).to eq Group::TopGroup::Member.model_name
       is_expected.to redirect_to(group_person_path(group, person))
@@ -361,7 +384,9 @@ describe RolesController do
       end.to change { Role.with_inactive.count }.by(1)
       is_expected.to redirect_to(group_person_path(group, person))
       expect(Role.with_inactive.find(role.id)).not_to be_active
+      # rubocop:todo Layout/LineLength
       expect(flash[:notice]).to eq "Rolle <i>Member (bis #{Date.current.yesterday.strftime("%d.%m.%Y")})</i> für <i>#{person}</i> in <i>TopGroup</i> zu <i>Leader</i> geändert."
+      # rubocop:enable Layout/LineLength
     end
 
     it "hard destroys and creates new role if type changes and role was created recently" do
@@ -371,20 +396,26 @@ describe RolesController do
       end.not_to change { Role.with_inactive.count }
       is_expected.to redirect_to(group_person_path(group, person))
       expect(Role.with_inactive.where(id: role.id)).not_to be_exists
+      # rubocop:todo Layout/LineLength
       expect(flash[:notice]).to eq "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> zu <i>Leader</i> geändert."
+      # rubocop:enable Layout/LineLength
     end
 
     it "terminates and creates new role if type and group changes" do
       group2 = groups(:toppers)
       expect do
-        put :update, params: {group_id: group.id, id: role.id, role: {type: Group::GlobalGroup::Leader.sti_name, group_id: group2.id}}
+        put :update,
+          params: {group_id: group.id, id: role.id,
+                   role: {type: Group::GlobalGroup::Leader.sti_name, group_id: group2.id}}
       end.to change { Role.with_inactive.count }.by(1)
 
       person.update_attribute(:primary_group_id, group.id)
 
       is_expected.to redirect_to(group_person_path(group2, person))
       expect(Role.with_inactive.find(role.id)).not_to be_active
+      # rubocop:todo Layout/LineLength
       expect(flash[:notice]).to eq "Rolle <i>Member (bis #{Date.current.yesterday.strftime("%d.%m.%Y")})</i> für <i>#{person}</i> in <i>TopGroup</i> zu <i>Leader</i> in <i>Toppers</i> geändert."
+      # rubocop:enable Layout/LineLength
 
       # new role's group also assigned to person's primary group
       expect(person.reload.primary_group).to eq group2
@@ -394,14 +425,18 @@ describe RolesController do
       role.update_attribute(:created_at, Time.zone.yesterday)
       group2 = groups(:toppers)
       expect do
-        put :update, params: {group_id: group.id, id: role.id, role: {type: Group::GlobalGroup::Leader.sti_name, group_id: group2.id}}
+        put :update,
+          params: {group_id: group.id, id: role.id,
+                   role: {type: Group::GlobalGroup::Leader.sti_name, group_id: group2.id}}
       end.not_to change { Role.with_inactive.count }
 
       person.update_attribute(:primary_group_id, group.id)
 
       is_expected.to redirect_to(group_person_path(group2, person))
       expect(Role.with_inactive.where(id: role.id)).not_to be_exists
+      # rubocop:todo Layout/LineLength
       expect(flash[:notice]).to eq "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> zu <i>Leader</i> in <i>Toppers</i> geändert."
+      # rubocop:enable Layout/LineLength
 
       # new role's group also assigned to person's primary group
       expect(person.reload.primary_group).to eq group2
@@ -416,7 +451,9 @@ describe RolesController do
           put :update, params: {group_id: group.id, id: role.id, role: {end_on: yesterday}}
         end.to change { Role.count }.by(-1)
         expect(response).to redirect_to(person_path(person, format: :html))
+        # rubocop:todo Layout/LineLength
         expect(flash[:notice]).to eq "Rolle <i>Member (bis #{yesterday.strftime("%d.%m.%Y")})</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich aktualisiert."
+        # rubocop:enable Layout/LineLength
       end
 
       it "renders validation message if end_on is before start_on invalid" do
@@ -449,11 +486,15 @@ describe RolesController do
         group3 = Fabricate(Group::GlobalGroup::Leader.name.to_s, person: person, group: groups(:toppers)).group
         person.update_attribute(:primary_group_id, group3.id)
         expect do
-          put :update, params: {group_id: group.id, id: role.id, role: {type: Group::BottomGroup::Leader.sti_name, group_id: group2.id}}
+          put :update,
+            params: {group_id: group.id, id: role.id,
+                     role: {type: Group::BottomGroup::Leader.sti_name, group_id: group2.id}}
         end.not_to change { Role.with_inactive.count }
         is_expected.to redirect_to(group_person_path(group2, person))
         expect(Role.with_inactive.where(id: role.id)).not_to be_exists
+        # rubocop:todo Layout/LineLength
         expect(flash[:notice]).to eq "Rolle <i>Leader</i> für <i>#{person}</i> in <i>Group 11</i> zu <i>Leader</i> in <i>Group 12</i> geändert."
+        # rubocop:enable Layout/LineLength
 
         # keeps person's primary group
         expect(person.reload.primary_group).to eq group3
@@ -463,11 +504,15 @@ describe RolesController do
         group3 = Fabricate(Group::GlobalGroup::Leader.name.to_s, person: person, group: groups(:toppers)).group
         person.update_attribute(:primary_group_id, group.id)
         expect do
-          put :update, params: {group_id: group.id, id: role.id, role: {type: Group::GlobalGroup::Leader.sti_name, group_id: group3.id}}
+          put :update,
+            params: {group_id: group.id, id: role.id,
+                     role: {type: Group::GlobalGroup::Leader.sti_name, group_id: group3.id}}
         end.not_to change { Role.with_inactive.count }
         is_expected.to redirect_to(group_person_path(group3, person))
         expect(Role.with_inactive.where(id: role.id)).not_to be_exists
+        # rubocop:todo Layout/LineLength
         expect(flash[:notice]).to eq "Rolle <i>Leader</i> für <i>#{person}</i> in <i>Group 11</i> zu <i>Leader</i> in <i>Toppers</i> geändert."
+        # rubocop:enable Layout/LineLength
 
         # person's primary group is set to new group
         expect(person.reload.primary_group).to eq group3
@@ -483,7 +528,9 @@ describe RolesController do
         end.to change { Role.with_inactive.count }.by(1)
         is_expected.to redirect_to(group_person_path(group, person))
         expect(Role.with_inactive.find(role.id)).not_to be_active
+        # rubocop:todo Layout/LineLength
         expect(flash[:notice]).to eq "Rolle <i>Member (bis #{Date.current.yesterday.strftime("%d.%m.%Y")})</i> für <i>#{person}</i> in <i>TopGroup</i> zu <i>Leader</i> geändert."
+        # rubocop:enable Layout/LineLength
       end
 
       it "hard destroys and creates new role if type changes and role was created recently" do
@@ -493,13 +540,16 @@ describe RolesController do
         end.not_to change { Role.with_inactive.count }
         is_expected.to redirect_to(group_person_path(group, person))
         expect(Role.with_inactive.where(id: role.id)).not_to be_exists
+        # rubocop:todo Layout/LineLength
         expect(flash[:notice]).to eq "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> zu <i>Leader</i> geändert."
+        # rubocop:enable Layout/LineLength
       end
 
       it "is not allowed if group changes" do
         g = groups(:toppers)
         expect do
-          put :update, params: {group_id: group.id, id: role.id, role: {type: Group::GlobalGroup::Member.sti_name, group_id: g.id}}
+          put :update,
+            params: {group_id: group.id, id: role.id, role: {type: Group::GlobalGroup::Member.sti_name, group_id: g.id}}
         end.to raise_error(CanCan::AccessDenied)
         expect(Role.with_inactive.where(id: role.id)).to be_exists
       end
@@ -507,8 +557,14 @@ describe RolesController do
   end
 
   describe "DELETE destroy" do
-    let(:notice) { "Rolle <i>Member (bis #{Date.current.yesterday.strftime("%d.%m.%Y")})</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich gelöscht." }
-    let(:hard_destroy_notice) { "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich gelöscht." }
+    let(:notice) {
+      # rubocop:todo Layout/LineLength
+      "Rolle <i>Member (bis #{Date.current.yesterday.strftime("%d.%m.%Y")})</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich gelöscht."
+    }
+    # rubocop:enable Layout/LineLength
+    let(:hard_destroy_notice) {
+      "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich gelöscht."
+    }
 
     it "redirects to group after hard delete" do
       role.update_attribute(:created_at, 1.day.ago)
@@ -681,7 +737,8 @@ describe RolesController do
 
   describe "GET role_types" do
     it "renders template" do
-      get :role_types, xhr: true, params: {group_id: group.id, role: {group_id: group.id, type: Group::TopGroup::Member.sti_name}}
+      get :role_types, xhr: true,
+        params: {group_id: group.id, role: {group_id: group.id, type: Group::TopGroup::Member.sti_name}}
       is_expected.to render_template("role_types")
       expect(assigns(:group)).to eq(group)
     end

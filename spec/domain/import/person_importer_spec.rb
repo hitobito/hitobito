@@ -62,7 +62,9 @@ describe Import::PersonImporter do
   end
 
   context "records successful and failed imports" do
-    let(:data) { [{first_name: "foobar", email: "foo@bar.net"}, {first_name: "foobar", zip_code: "asdf", country: "CH"}] }
+    let(:data) {
+      [{first_name: "foobar", email: "foo@bar.net"}, {first_name: "foobar", zip_code: "asdf", country: "CH"}]
+    }
 
     it "creates only first record" do
       expect { subject.import }.to change(Person, :count).by(1)
@@ -92,7 +94,15 @@ describe Import::PersonImporter do
 
   context "duplicate emails" do
     let(:emails) { ["foo@bar.com", "", nil, "bar@foo.com", "foo@bar.com"] }
-    let(:data) { emails.map { |email| Fabricate.build(:person, email: email).attributes.select { |attr| attr =~ /name|email/ } } }
+    let(:data) {
+      emails.map { |email|
+                   # rubocop:todo Layout/IndentationWidth
+                   Fabricate.build(:person, email: email).attributes.select { |attr|
+     # rubocop:enable Layout/IndentationWidth
+     attr =~ /name|email/ # rubocop:todo Layout/IndentationWidth
+                   }
+      }
+    }
 
     before { importer.import }
 

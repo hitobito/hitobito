@@ -65,7 +65,9 @@ describe Healthz::MailController do
         expect(response.status).to eq(503)
 
         expect(json).to eq("app_status" => {"code" => "service_unavailable",
+                                            # rubocop:todo Layout/LineLength
                                             "details" => {"catch_all_inbox" => "catch-all mailbox contains overdue mails. please make sure delayed job worker is running and no e-mail is blocking the queue/job."}})
+        # rubocop:enable Layout/LineLength
       end
     end
 

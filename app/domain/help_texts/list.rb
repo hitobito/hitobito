@@ -44,7 +44,7 @@ class HelpTexts::List
     @help_texts[key]
   end
 
-  def prepared_infos
+  def prepared_infos # rubocop:todo Metrics/CyclomaticComplexity
     Rails.application.routes.routes.collect(&:defaults).compact.collect do |info|
       controller_name = info[:controller]
       next if CONTROLLER_BLACKLIST.include?(controller_name) || controller_name.blank?

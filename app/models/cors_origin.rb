@@ -32,7 +32,8 @@ class CorsOrigin < ActiveRecord::Base
 
   private
 
-  def validate_cors_origin
+  # rubocop:todo Metrics/AbcSize
+  def validate_cors_origin # rubocop:todo Metrics/CyclomaticComplexity # rubocop:todo Metrics/AbcSize
     uri = ::URI.parse(origin)
     errors.add(:origin, :suffix_present) unless uri.fragment.nil?
     errors.add(:origin, :suffix_present) unless uri.query.nil?
@@ -42,4 +43,5 @@ class CorsOrigin < ActiveRecord::Base
   rescue URI::InvalidURIError
     errors.add(:origin, :invalid_host)
   end
+  # rubocop:enable Metrics/AbcSize
 end

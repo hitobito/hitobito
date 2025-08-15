@@ -42,7 +42,9 @@ module Group::Types
 
   private
 
+  # rubocop:todo Layout/LineLength
   # Used to track whether the group was newly created for the `create_default_children` after_save callback
+  # rubocop:enable Layout/LineLength
   attr_accessor :_was_new_record
 
   def create_default_children

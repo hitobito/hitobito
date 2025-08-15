@@ -14,7 +14,9 @@ class HouseholdMember
 
   def self.from(household)
     reference_person = household.reference_person
+    # rubocop:todo Layout/LineLength
     members = Person.where(household_key: reference_person.household_key).where.not(id: reference_person.id)
+    # rubocop:enable Layout/LineLength
     [reference_person, *members].collect { |p| new(p, household) }
   end
 

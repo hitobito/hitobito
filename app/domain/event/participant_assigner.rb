@@ -38,7 +38,7 @@ class Event::ParticipantAssigner
     event.reload
   end
 
-  def remove_participant
+  def remove_participant # rubocop:todo Metrics/AbcSize
     Event::Participation.transaction do
       set_active(false)
       # destroy all other roles when removing a participant
@@ -96,7 +96,7 @@ class Event::ParticipantAssigner
   end
 
   # update the existing set of answers so that one exists for every question of event.
-  def update_answers
+  def update_answers # rubocop:todo Metrics/AbcSize
     current_answers = participation.answers.includes(:question)
     event.questions.each do |q|
       existing = current_answers.find do |a|

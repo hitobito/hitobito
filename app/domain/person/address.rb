@@ -47,7 +47,8 @@ class Person::Address
 
   attr_reader :person, :name, :addressable
 
-  delegate :address, :address_care_of, :postbox, :zip_code, :town, :name, :country_label, :ignored_country?, to: :addressable
+  delegate :address, :address_care_of, :postbox, :zip_code, :town, :name, :country_label,
+    :ignored_country?, to: :addressable
   delegate :company?, :additional_addresses, to: :person
 
   def person_and_company_name

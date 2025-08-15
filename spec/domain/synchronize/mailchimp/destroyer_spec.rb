@@ -30,7 +30,9 @@ describe Synchronize::Mailchimp::Destroyer do
   it "prepares deleting operations." do
     mailing_list.subscriptions.create!(subscriber: user)
     expect(subject.send(:deleting_operations)).to eq [{method: "DELETE",
+                                                       # rubocop:todo Layout/LineLength
                                                        path: "lists/#{mailing_list.mailchimp_list_id}/members/#{Digest::MD5.hexdigest(mailing_list.people[0].email)}"}]
+    # rubocop:enable Layout/LineLength
   end
 
   it "prepares no operation if no subscripotion exists" do

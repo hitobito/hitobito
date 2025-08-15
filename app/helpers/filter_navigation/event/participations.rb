@@ -23,7 +23,7 @@ module FilterNavigation
 
       private
 
-      def init_labels
+      def init_labels # rubocop:todo Metrics/AbcSize
         if @query && !@query.blank?
           @active_label = @query
         elsif role_labels.include?(filter)

@@ -74,8 +74,12 @@ describe SubscriptionsController do
       expect(cards[0]).to match(/^EMAIL;TYPE=pref:bottom_member@example.com/)
 
       expect(cards[1][0..23]).to eq("BEGIN:VCARD\nVERSION:3.0\n")
+      # rubocop:todo Layout/LineLength
       expect(cards[1]).to match(/^N:#{@person_subscription.subscriber.last_name};#{@person_subscription.subscriber.first_name};;;/)
+      # rubocop:enable Layout/LineLength
+      # rubocop:todo Layout/LineLength
       expect(cards[1]).to match(/^FN:#{@person_subscription.subscriber.first_name} #{@person_subscription.subscriber.last_name}/)
+      # rubocop:enable Layout/LineLength
       expect(cards[1]).to match(/^NICKNAME:#{@person_subscription.subscriber.nickname}/)
       expect(cards[1]).to match(/^EMAIL;TYPE=pref:#{@person_subscription.subscriber.email}/)
     end
@@ -84,7 +88,8 @@ describe SubscriptionsController do
       e1 = Fabricate(:additional_email, contactable: @person_subscription.subscriber, mailings: true)
       Fabricate(:additional_email, contactable: @excluded_person_subscription.subscriber, mailings: true)
       get :index, params: {group_id: group.id, mailing_list_id: mailing_list.id}, format: :email
-      expect(@response.body.split(",")).to match_array([people(:bottom_member).email, @person_subscription.subscriber.email, e1.email])
+      expect(@response.body.split(",")).to match_array([people(:bottom_member).email,
+        @person_subscription.subscriber.email, e1.email])
     end
 
     it "renders email addresses with additional_email matching preferred_labels instead of subscriber email" do
@@ -139,8 +144,14 @@ describe SubscriptionsController do
     let!(:event_subscription) { create_event_subscription(mailing_list) }
     let!(:person_subscription) { create_person_subscription(mailing_list) }
     let!(:excluded_subscription) { create_person_subscription(mailing_list, true) }
-    let!(:included_tag) { SubscriptionTag.create!(excluded: false, subscription: group_subscription, tag: ActsAsTaggableOn::Tag.create!(name: "to_include")) }
-    let!(:excluded_tag) { SubscriptionTag.create!(excluded: true, subscription: group_subscription, tag: ActsAsTaggableOn::Tag.create!(name: "to_exclude")) }
+    let!(:included_tag) {
+      SubscriptionTag.create!(excluded: false, subscription: group_subscription,
+        tag: ActsAsTaggableOn::Tag.create!(name: "to_include"))
+    }
+    let!(:excluded_tag) {
+      SubscriptionTag.create!(excluded: true, subscription: group_subscription,
+        tag: ActsAsTaggableOn::Tag.create!(name: "to_exclude"))
+    }
     let(:tag_to_include) {}
     let(:expected) {
       [

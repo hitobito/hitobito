@@ -15,7 +15,11 @@ describe Export::Tabular::Events::List do
   context "headers" do
     subject { csv.first }
 
-    it { is_expected.to match(Regexp.new("^#{Export::Csv::UTF8_BOM}Name;Organisatoren;Kursnummer;Kursart;.*Anzahl Anmeldungen$")) }
+    it {
+      # rubocop:todo Layout/LineLength
+      is_expected.to match(Regexp.new("^#{Export::Csv::UTF8_BOM}Name;Organisatoren;Kursnummer;Kursart;.*Anzahl Anmeldungen$"))
+    }
+    # rubocop:enable Layout/LineLength
   end
 
   context "first row" do

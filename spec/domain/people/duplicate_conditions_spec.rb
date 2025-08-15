@@ -26,9 +26,15 @@ describe People::DuplicateConditions do
     expect(build({first_name: "test"})).to eq ["first_name = ?", "test"]
     expect(build({last_name: "test"})).to eq ["last_name = ?", "test"]
     expect(build({company_name: "test"})).to eq ["company_name = ?", "test"]
-    expect(build({first_name: "test", company_name: "test"})).to eq ["first_name = ? AND company_name = ?", "test", "test"]
-    expect(build({first_name: "test", last_name: "test", company_name: "test"})).to eq ["first_name = ? AND last_name = ? AND company_name = ?", "test", "test", "test"]
-    expect(build({first_name: "test", last_name: "test", company_name: "test"}.stringify_keys)).to eq ["first_name = ? AND last_name = ? AND company_name = ?", "test", "test", "test"]
+    expect(build({first_name: "test",
+company_name: "test"})).to eq ["first_name = ? AND company_name = ?", "test", "test"]
+    expect(build({first_name: "test", last_name: "test",
+company_name: "test"})).to eq ["first_name = ? AND last_name = ? AND company_name = ?", "test", "test", "test"]
+    expect(build({first_name: "test", last_name: "test",
+                  # rubocop:todo Layout/LineLength
+                  company_name: "test"}.stringify_keys)).to eq ["first_name = ? AND last_name = ? AND company_name = ?", "test", "test",
+                    # rubocop:enable Layout/LineLength
+                    "test"]
   end
 
   describe "birthday" do
@@ -50,7 +56,9 @@ describe People::DuplicateConditions do
     end
 
     it "is combined with AND with other conditions" do
-      expect(build({first_name: "test", birthday: "2000-12-31"})).to eq ["first_name = ? AND (birthday = ? OR birthday IS NULL)", "test", Date.new(2000, 12, 31)]
+      expect(build({first_name: "test",
+birthday: "2000-12-31"})).to eq ["first_name = ? AND (birthday = ? OR birthday IS NULL)", "test",
+  Date.new(2000, 12, 31)]
     end
   end
 
@@ -65,7 +73,9 @@ describe People::DuplicateConditions do
 
     it "is combined with OR with other conditions" do
       expect(build({first_name: "first", email: "test"})).to eq ["(first_name = ?) OR email = ?", "first", "test"]
-      expect(build({first_name: "first", email: "test", birthday: "2000-1-1"})).to eq ["(first_name = ? AND (birthday = ? OR birthday IS NULL)) OR email = ?", "first", Date.new(2000), "test"]
+      expect(build({first_name: "first", email: "test",
+birthday: "2000-1-1"})).to eq ["(first_name = ? AND (birthday = ? OR birthday IS NULL)) OR email = ?", "first",
+  Date.new(2000), "test"]
     end
   end
 end

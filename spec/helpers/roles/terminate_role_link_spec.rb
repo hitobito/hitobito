@@ -22,7 +22,9 @@ describe Roles::TerminateRoleLink do
       expect(view).to receive(:can?).with(:terminate, role).and_return(true)
 
       expect(described_class.new(role, view).render)
+        # rubocop:todo Layout/LineLength
         .to eq "<a class=\"btn btn-sm btn-outline-primary\" data-remote=\"true\" href=\"/groups/#{role.group.id}/roles/#{role.id}/terminations/new\">Austritt</a>"
+      # rubocop:enable Layout/LineLength
     end
 
     it "returns disabled button if role is terminatable and user has no permission" do
@@ -31,7 +33,9 @@ describe Roles::TerminateRoleLink do
       expect(view).to receive(:can?).with(:terminate, role).and_return(false)
 
       expect(described_class.new(role, view).render)
+        # rubocop:todo Layout/LineLength
         .to eq '<div rel="tooltip" title=""><button name="button" type="submit" class="btn btn-sm btn-outline-primary" disabled="disabled">Austritt</button></div>'
+      # rubocop:enable Layout/LineLength
     end
 
     it "returns disabled button with translated tooltip" do

@@ -6,7 +6,7 @@
 class Person::AddRequestAbility < AbilityDsl::Base
   include AbilityDsl::Constraints::Person
 
-  on(Person::AddRequest) do
+  on(Person::AddRequest) do # rubocop:todo Metrics/BlockLength
     permission(:any).may(:approve).herself
     permission(:any).may(:reject).herself_or_her_own
 

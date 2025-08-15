@@ -27,8 +27,12 @@
 #
 # Indexes
 #
+# rubocop:todo Layout/LineLength
 #  idx_on_contactable_id_contactable_type_invoices_45d4363dd7  (contactable_id,contactable_type,invoices) UNIQUE WHERE (invoices = true)
+# rubocop:enable Layout/LineLength
+# rubocop:todo Layout/LineLength
 #  idx_on_contactable_id_contactable_type_label_53043e4f10     (contactable_id,contactable_type,label) UNIQUE
+# rubocop:enable Layout/LineLength
 #  index_additional_addresses_on_contactable                   (contactable_type,contactable_id)
 #
 class AdditionalAddress < ApplicationRecord

@@ -62,7 +62,9 @@ describe Event::ParticipationContactDatasController do
         }
 
         expect(entry).to have(1).errors
+        # rubocop:todo Layout/LineLength
         expect(entry.errors.full_messages).to eq(["Um die Anmeldung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden."])
+        # rubocop:enable Layout/LineLength
         expect(top_leader.reload.privacy_policy_accepted).to_not be_present
       end
     end

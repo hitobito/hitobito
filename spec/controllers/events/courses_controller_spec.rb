@@ -77,7 +77,9 @@ describe Events::CoursesController do
       it "renders csv headers" do
         get :index, format: :csv
         expect(response).to be_successful
+        # rubocop:todo Layout/LineLength
         expect(rows.first).to match(Regexp.new("^#{Export::Csv::UTF8_BOM}Name;Organisatoren;Kursnummer;Kursart;.*;Anzahl Anmeldungen$"))
+        # rubocop:enable Layout/LineLength
         expect(rows.size).to eq(2)
       end
     end
@@ -88,7 +90,9 @@ describe Events::CoursesController do
       it "renders csv headers and filters out courses from other groups" do
         get :index, format: :csv
         expect(response).to be_successful
+        # rubocop:todo Layout/LineLength
         expect(rows.first).to match(Regexp.new("^#{Export::Csv::UTF8_BOM}Name;Organisatoren;Kursnummer;Kursart;.*;Anzahl Anmeldungen$"))
+        # rubocop:enable Layout/LineLength
         expect(rows.size).to eq(1)
       end
     end

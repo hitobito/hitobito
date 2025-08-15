@@ -46,24 +46,37 @@ module Sortable
       scope.select(select_values, sort_expression_attrs)
     end
 
-    def sort_by_sort_expression(entries)
+    # rubocop:todo Metrics/MethodLength
+    def sort_by_sort_expression(entries) # rubocop:todo Metrics/AbcSize
       return entries unless sorting?
 
       if sort_expression_attrs.empty? # no join needed
         entries.reorder(sort_expression)
+      # rubocop:todo Layout/LineLength
       elsif entries.to_sql.match?(SUBQUERY) # already selecting from a subquery (e.g. people_controller)
+        # rubocop:enable Layout/LineLength
         entries.reorder(sort_expression.gsub(TABLE_WITH_COLUMN, '\1'))
+      # rubocop:todo Layout/LineLength
       elsif entries.to_sql.match?(GROUPED_QUERY) # already selecting from a grouped query (e.g. sbv/song_counts_controller.rb)
-        entries.select(entries.select_values, "MAX(#{sort_expression_attrs}) AS #{sort_expression_attrs.gsub(TABLE_WITH_COLUMN, '\1')}")
+        # rubocop:enable Layout/LineLength
+        entries.select(entries.select_values,
+          "MAX(#{sort_expression_attrs}) AS #{sort_expression_attrs.gsub(TABLE_WITH_COLUMN, '\1')}")
           .joins(join_tables)
           .reorder(Arel.sql(sort_expression.gsub(TABLE_WITH_COLUMN, '\1')))
       else
+        # rubocop:todo Layout/LineLength
         subquery = entries.select(sort_expression_attrs).joins(join_tables).unscope(:order).distinct_on(:id)
-        order_statement = order_alias ? "#{order_alias} #{sort_dir} NULLS LAST" : Arel.sql(sort_expression.gsub(TABLE_WITH_COLUMN, '\1'))
+        # rubocop:enable Layout/LineLength
+        # rubocop:todo Layout/LineLength
+        order_statement = order_alias ? "#{order_alias} #{sort_dir} NULLS LAST" : Arel.sql(sort_expression.gsub(
+          # rubocop:enable Layout/LineLength
+          TABLE_WITH_COLUMN, '\1'
+        ))
         model_class.select("*").from(subquery, :subquery)
           .reorder(order_statement)
       end
     end
+    # rubocop:enable Metrics/MethodLength
 
     def sorting?
       params[:sort].present? && sortable?(params[:sort])
@@ -72,7 +85,9 @@ module Sortable
     # Return sort columns from defined mappings or as null_safe_sort from parameter.
     def sort_columns
       sort_mappings = sort_mappings_with_indifferent_access
-      sort_columns_expression = sort_mappings[params[:sort]].is_a?(Hash) ? sort_mappings.dig(params[:sort], :order) : sort_mappings[params[:sort]]
+      sort_columns_expression = sort_mappings[params[:sort]].is_a?(Hash) ? sort_mappings.dig(
+        params[:sort], :order
+      ) : sort_mappings[params[:sort]]
       sort_columns_expression || "#{model_class.table_name}.#{params[:sort]}"
     end
 

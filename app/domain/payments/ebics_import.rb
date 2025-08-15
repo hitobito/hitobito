@@ -35,7 +35,7 @@ class Payments::EbicsImport
     end
   end
 
-  def payments_from_xml(xml)
+  def payments_from_xml(xml) # rubocop:todo Metrics/CyclomaticComplexity
     Invoice::PaymentProcessor.new(xml).payments.map do |payment|
       if payment.invoice.present?
         payment.status = :ebics_imported

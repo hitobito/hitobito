@@ -163,11 +163,15 @@ module EventsHelper
   def event_team?(event, person)
     return unless person
     team = event.role_types.select { |role_type| role_type.leader? || role_type.helper? }
+    # rubocop:todo Layout/LineLength
     event.participations_for(*team).where(participant_type: person.class.sti_name).pluck(:participant_id).include?(person.id)
+    # rubocop:enable Layout/LineLength
   end
 
   def event_participant?(event, person)
     return unless person
+    # rubocop:todo Layout/LineLength
     event.participations.where(participant_type: person.class.sti_name).pluck(:participant_id).include?(person.id)
+    # rubocop:enable Layout/LineLength
   end
 end

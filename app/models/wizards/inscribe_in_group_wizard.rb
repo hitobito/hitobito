@@ -11,7 +11,9 @@ class Wizards::InscribeInGroupWizard < Wizards::Base
 
   def initialize(group:, person:, current_step: 0, **params)
     super(current_step: current_step, **params)
+    # rubocop:todo Layout/LineLength
     raise "Self-registration is not enabled for this group." if group.self_registration_role_type.nil?
+    # rubocop:enable Layout/LineLength
     @group = group
     @person = person
     @role = build_role
@@ -28,7 +30,8 @@ class Wizards::InscribeInGroupWizard < Wizards::Base
   private
 
   def build_role
-    @group.self_registration_role_type.constantize.new(group: @group, person: @person, start_on: Time.zone.now)
+    @group.self_registration_role_type.constantize.new(group: @group, person: @person,
+      start_on: Time.zone.now)
   end
 
   def send_notification_email

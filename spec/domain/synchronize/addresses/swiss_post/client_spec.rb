@@ -80,7 +80,8 @@ describe Synchronize::Addresses::SwissPost::Client do
   end
 
   it "#check_batch_status creates a file to write the output to and returns a referencing token" do
-    stub_api_request(:get, "/checkbatchstatus/token", response: {CheckBatchStatusResult: {BatchStatus: {TokenStatus: "3"}}}.to_json)
+    stub_api_request(:get, "/checkbatchstatus/token",
+      response: {CheckBatchStatusResult: {BatchStatus: {TokenStatus: "3"}}}.to_json)
     expect(client.check_batch_status("token")).to eq "3"
   end
 

@@ -96,11 +96,15 @@ describe :invoice_configs, js: true do
     it "is possible to add and remove one custom content" do
       custom_contents(:content_invoice_notification).update!(placeholders_required: nil)
 
+      # rubocop:todo Layout/LineLength
       expect(page).to have_text "Diese E-Mail Vorlage wird beim versenden von Rechnungen verwendet. Wenn keine E-Mail Vorlage hinterlegt wird, wird die globale E-Mail Vorlage verwendet."
+      # rubocop:enable Layout/LineLength
       click_link "Eintrag hinzufügen"
       expect(page).to have_text "Betreff"
       expect(page).to have_text "Inhalt"
+      # rubocop:todo Layout/LineLength
       expect(page).to have_text "Verfügbare Platzhalter: {invoice-items}, {invoice-total}, {payment-information}, {recipient-name}, {group-name}, {group-address}, {invoice-number}"
+      # rubocop:enable Layout/LineLength
       click_button "Rechnungseinstellungen aktualisieren"
       expect(page).to have_text "Rechnungseinstellungen wurden erfolgreich aktualisiert"
 

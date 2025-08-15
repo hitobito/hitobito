@@ -18,7 +18,9 @@ module Events
 
     def self.for(event, participant)
       new(
+        # rubocop:todo Layout/LineLength
         free: (event.maximum_participants.presence || 1000000) - (event.participant_count.presence || 0),
+        # rubocop:enable Layout/LineLength
         limit: event.guest_limit,
         used: event.participations.guests_of(participant).distinct.count,
         waiting_list: event.waiting_list

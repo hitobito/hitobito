@@ -150,20 +150,30 @@ describe Event::RegisterController do
           event.update!(required_contact_attrs: [])
 
           expect do
-            put :register, params: {group_id: group.id, id: event.id, event_participation_contact_data: {first_name: "barney", last_name: "foo", email: "not-existing@example.com", privacy_policy_accepted: "1"}}
+            put :register,
+              params: {group_id: group.id, id: event.id,
+                       # rubocop:todo Layout/LineLength
+                       event_participation_contact_data: {first_name: "barney", last_name: "foo", email: "not-existing@example.com", privacy_policy_accepted: "1"}}
+            # rubocop:enable Layout/LineLength
           end.to change { Person.count }.by(1)
 
           person = Person.find_by(email: "not-existing@example.com")
           expect(person.privacy_policy_accepted).to be_present
           is_expected.to redirect_to(new_group_event_participation_path(group, event))
+          # rubocop:todo Layout/LineLength
           expect(flash[:notice]).to include "Deine persönlichen Daten wurden aufgenommen. Bitte ergänze nun noch die Angaben"
+          # rubocop:enable Layout/LineLength
         end
 
         it "does not create a person if privacy policy is not accepted" do
           event.update!(required_contact_attrs: [])
 
           expect do
-            put :register, params: {group_id: group.id, id: event.id, event_participation_contact_data: {first_name: "barney", last_name: "foo", email: "not-existing@example.com", privacy_policy_accepted: "0"}}
+            put :register,
+              params: {group_id: group.id, id: event.id,
+                       # rubocop:todo Layout/LineLength
+                       event_participation_contact_data: {first_name: "barney", last_name: "foo", email: "not-existing@example.com", privacy_policy_accepted: "0"}}
+            # rubocop:enable Layout/LineLength
           end.to_not change { Person.count }
         end
       end
@@ -172,11 +182,17 @@ describe Event::RegisterController do
         event.update!(required_contact_attrs: [])
 
         expect do
-          put :register, params: {group_id: group.id, id: event.id, event_participation_contact_data: {first_name: "barney", last_name: "foo", email: "not-existing@example.com"}}
+          put :register,
+            params: {group_id: group.id, id: event.id,
+                     # rubocop:todo Layout/LineLength
+                     event_participation_contact_data: {first_name: "barney", last_name: "foo", email: "not-existing@example.com"}}
+          # rubocop:enable Layout/LineLength
         end.to change { Person.count }.by(1)
 
         is_expected.to redirect_to(new_group_event_participation_path(group, event))
+        # rubocop:todo Layout/LineLength
         expect(flash[:notice]).to include "Deine persönlichen Daten wurden aufgenommen. Bitte ergänze nun noch die Angaben"
+        # rubocop:enable Layout/LineLength
       end
     end
 
@@ -203,7 +219,9 @@ describe Event::RegisterController do
         event.update!(required_contact_attrs: [])
 
         expect do
-          put :register, params: {group_id: group.id, id: event.id, event_participation_contact_data: {email: "not-existing@example.com"}}
+          put :register,
+            params: {group_id: group.id, id: event.id,
+                     event_participation_contact_data: {email: "not-existing@example.com"}}
         end.not_to change { Person.count }
 
         is_expected.to render_template("register")

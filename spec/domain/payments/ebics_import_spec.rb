@@ -44,7 +44,8 @@ describe Payments::EbicsImport do
 
     expect(payment_provider).to receive(:Z54).with(3.days.ago.to_date, Time.zone.today).and_return(invoice_files)
 
-    invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), recipient: people(:bottom_member), group: groups(:top_layer))
+    invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader),
+      recipient: people(:bottom_member), group: groups(:top_layer))
     list = InvoiceList.create(title: "membership fee", invoices: [invoice])
 
     invoice.update(reference: "000000000000100000000000800")
@@ -62,7 +63,8 @@ describe Payments::EbicsImport do
 
     expect(payment_provider).to receive(:Z54).with(3.days.ago.to_date, Time.zone.today).and_return(invoice_files)
 
-    invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), recipient: people(:bottom_member), group: groups(:bottom_layer_one))
+    invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader),
+      recipient: people(:bottom_member), group: groups(:bottom_layer_one))
 
     list = InvoiceList.create(title: "membership fee", invoices: [invoice])
 
@@ -75,7 +77,9 @@ describe Payments::EbicsImport do
 
     payment = invoice.payments.first
     expect(payment.invoice).to eq(invoice)
+    # rubocop:todo Layout/LineLength
     expect(payment.transaction_identifier).to eq("20180314001221000006915084508216000000000000100000000000800710.822018-03-15 00:00:00 +0100CH6309000000250097798")
+    # rubocop:enable Layout/LineLength
     expect(payment.payee.person_name).to eq("Maria Bernasconi")
     expect(payment.payee.person_address).to eq("Place de la Gare 15, 2502 Biel/Bienne")
     expect(list.reload.amount_paid.to_s).to eq("710.82")
@@ -91,7 +95,8 @@ describe Payments::EbicsImport do
 
     expect(payment_provider).to receive(:Z54).with(3.days.ago.to_date, Time.zone.today).and_return(invoice_files)
 
-    invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), recipient: people(:bottom_member), group: groups(:bottom_layer_one))
+    invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader),
+      recipient: people(:bottom_member), group: groups(:bottom_layer_one))
 
     list = InvoiceList.create(title: "membership fee", invoices: [invoice])
 
@@ -105,7 +110,9 @@ describe Payments::EbicsImport do
 
     payment = invoice.payments.first
     expect(payment.invoice).to eq(invoice)
+    # rubocop:todo Layout/LineLength
     expect(payment.transaction_identifier).to eq("20180314001221000006915084508216000000000000100000000000800710.822018-03-15 00:00:00 +0100CH6309000000250097798")
+    # rubocop:enable Layout/LineLength
     expect(payment.payee.person_name).to eq("Maria Bernasconi")
     expect(payment.payee.person_address).to eq("Place de la Gare 15, 2502 Biel/Bienne")
     expect(list.reload.amount_paid.to_s).to eq("710.82")
@@ -121,7 +128,8 @@ describe Payments::EbicsImport do
 
     expect(payment_provider).to receive(:Z54).with(3.days.ago.to_date, Time.zone.today).and_return(invoice_files)
 
-    invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), recipient: people(:bottom_member), group: groups(:bottom_layer_one))
+    invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader),
+      recipient: people(:bottom_member), group: groups(:bottom_layer_one))
     invoice.update!(reference: "404")
 
     payments = subject.run
@@ -137,7 +145,8 @@ describe Payments::EbicsImport do
 
     expect(payment_provider).to receive(:check_bank_public_keys!).and_return(true)
 
-    expect(payment_provider).to receive(:Z54).with(3.days.ago.to_date, Time.zone.today).and_raise(Epics::Error::BusinessError.new("090005"))
+    expect(payment_provider).to receive(:Z54).with(3.days.ago.to_date,
+      Time.zone.today).and_raise(Epics::Error::BusinessError.new("090005"))
 
     expect(Invoice::PaymentProcessor).to_not receive(:new)
 

@@ -173,7 +173,9 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   ### VALIDATIONS
 
+  # rubocop:todo Layout/LineLength
   # canceled_reason is used as enum in hitobito_sac_cas. validates_by_schema cannot be overridden inside a wagon
+  # rubocop:enable Layout/LineLength
   # because of the loading order, so it must be excluded in the core instead
   validates_by_schema except: [:canceled_reason]
   # name is a translated attribute and thus needs to be validated explicitly
@@ -215,7 +217,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
       subquery = joins(:dates, :translations)
         .select("events.*", "event_dates.start_at")
         .select(Event::Translation.column_names
-                                  .reject { |col| ["id", "event_id", "created_at", "updated_at"].include?(col) }
+                                  .reject { |col|
+                  ["id", "event_id", "created_at",
+                    "updated_at"].include?(col)
+                }
                                   .map { |col| "event_translations.#{col}" })
         .preload_all_dates
 
@@ -292,7 +297,9 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     end
 
     def places_available
+      # rubocop:todo Layout/LineLength
       where("(COALESCE(events.maximum_participants, 0) = 0) OR (participant_count < events.maximum_participants)")
+      # rubocop:enable Layout/LineLength
     end
 
     # Is the given attribute used in the current STI class
@@ -391,7 +398,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     places_available? || waiting_list_available?
   end
 
-  def init_questions(disclosure: nil)
+  def init_questions(disclosure: nil) # rubocop:todo Metrics/AbcSize
     application_questions << Question.global
       .where(event_type: [self.class.sti_name, nil])
       .where.not(id: application_questions.map(&:derived_from_question_id))
@@ -535,7 +542,9 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   def validate_visible_contact_attributes
     return if visible_contact_attributes.blank? || contact_id.blank?
 
-    unless visible_contact_attributes.all? { |attr| ALLOWED_VISIBLE_CONTACT_ATTRIBUTES.include?(attr) }
+    unless visible_contact_attributes.all? { |attr|
+      ALLOWED_VISIBLE_CONTACT_ATTRIBUTES.include?(attr)
+    }
       errors.add(:visible_contact_attributes, :inclusion)
     end
   end

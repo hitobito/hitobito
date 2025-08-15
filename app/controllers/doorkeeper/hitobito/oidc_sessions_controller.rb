@@ -11,7 +11,8 @@ class Doorkeeper::Hitobito::OidcSessionsController < ActionController::Base # ru
       reset_session
       person&.forget_me!
       access_tokens.destroy_all
-      redirect_to redirect_target, allow_other_host: true, notice: I18n.t("devise.sessions.signed_out")
+      redirect_to redirect_target, allow_other_host: true,
+        notice: I18n.t("devise.sessions.signed_out")
     else
       render plain: "failed to process token", status: :unprocessable_entity
     end
@@ -44,7 +45,9 @@ class Doorkeeper::Hitobito::OidcSessionsController < ActionController::Base # ru
   end
 
   def redirect_target
+    # rubocop:todo Layout/LineLength
     URI.parse(params[:post_logout_redirect_uri].presence || new_person_session_url(oauth: true)).tap do |uri|
+      # rubocop:enable Layout/LineLength
       query = CGI.parse(uri.query.to_s).symbolize_keys.merge(params.to_unsafe_h.slice(:state))
       uri.query = URI.encode_www_form(query) if query.present?
     end

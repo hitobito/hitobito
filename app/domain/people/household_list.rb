@@ -48,7 +48,7 @@ class People::HouseholdList
 
   private
 
-  def in_batches(people_scope, batch_size: BATCH_SIZE)
+  def in_batches(people_scope, batch_size: BATCH_SIZE) # rubocop:todo Metrics/CyclomaticComplexity
     return to_enum(:in_batches, people_scope, batch_size: batch_size) unless block_given?
     return if people_scope.none?
 
@@ -57,7 +57,11 @@ class People::HouseholdList
     person_ids.each_slice(batch_size) do |batch|
       # index involved_people for quicker access
       involved_people = Person.where(id: batch.flatten).index_by(&:id)
-      batch_with_households = batch.map { |household| household.map { |person_id| involved_people[person_id] } }
+      batch_with_households = batch.map { |household|
+        household.map { |person_id|
+       involved_people[person_id] # rubocop:todo Layout/IndentationWidth
+        }
+      }
       yield batch_with_households
     end
   end
@@ -74,13 +78,14 @@ class People::HouseholdList
   def computed_household_key_column
     Arel::Nodes::NamedFunction.new("COALESCE", [
       Person.arel_table[:household_key],
-      Arel::Nodes::NamedFunction.new("FORMAT", [Arel::Nodes.build_quoted("_%s"), Person.arel_table[:id]])
+      Arel::Nodes::NamedFunction.new("FORMAT",
+        [Arel::Nodes.build_quoted("_%s"), Person.arel_table[:id]])
     ])
   end
 
   # create a virtual table with computed household_key and ordinal colums to be able
   # to sort and group the result
-  def ordered_computed_household_key_query(scope)
+  def ordered_computed_household_key_query(scope) # rubocop:todo Metrics/AbcSize
     ordinal_column = computed_ordinal_column(scope)
     household_key_column = computed_household_key_column
     unscoped = scope.unscope(:select, :includes, :limit, :order)
@@ -88,7 +93,9 @@ class People::HouseholdList
     household_keys = @include_housemates ? unscoped.pluck(:household_key) : []
 
     Person.arel_table
+      # rubocop:todo Layout/LineLength
       .where(Person.arel_table[:id].in(ids).or(Person.arel_table[:household_key].in(household_keys.uniq.compact)))
+      # rubocop:enable Layout/LineLength
       .project(Person.arel_table[:id].as("person_id"))
       .project(household_key_column.as("household_key"))
       .project(ordinal_column.as("ordinal"))
@@ -96,9 +103,14 @@ class People::HouseholdList
   end
 
   def person_ids_grouped_by_household_query(scope)
-    ordered_households_table = Arel::Nodes::TableAlias.new(ordered_computed_household_key_query(scope), "ordered_keys")
-    aggregated_person_ids_column = Arel::Nodes::NamedFunction.new("ARRAY_AGG", [ordered_households_table[:person_id]])
+    ordered_households_table = Arel::Nodes::TableAlias.new(
+      ordered_computed_household_key_query(scope), "ordered_keys"
+    )
+    aggregated_person_ids_column = Arel::Nodes::NamedFunction.new("ARRAY_AGG",
+      [ordered_households_table[:person_id]])
+    # rubocop:todo Layout/LineLength
     order_statement = @retain_order ? ordered_households_table[:ordinal].minimum : "member_count DESC"
+    # rubocop:enable Layout/LineLength
 
     Person
       .from(ordered_households_table)
@@ -106,6 +118,8 @@ class People::HouseholdList
       .select(aggregated_person_ids_column.as("person_ids"))
       .group(ordered_households_table[:household_key])
       .order(order_statement)
+      # rubocop:todo Layout/LineLength
       .limit(scope.limit_value.presence) # existing behaviour: apply limit to households, not to people
+    # rubocop:enable Layout/LineLength
   end
 end

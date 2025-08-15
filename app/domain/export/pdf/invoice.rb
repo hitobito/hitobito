@@ -12,7 +12,9 @@ module Export::Pdf
     class Runner
       def initialize(invoices, async_download_file)
         @invoices = invoices
+        # rubocop:todo Layout/LineLength
         @invoice_config = invoices.first.invoice_config # we assume that all invoices have the same invoice config
+        # rubocop:enable Layout/LineLength
         @async_download_file = async_download_file
         @metadata = {first_pages_of_invoices: [], pages_with_payment_slip: []}
       end
@@ -49,7 +51,7 @@ module Export::Pdf
         )
       end
 
-      def invoice_page(pdf, invoice, options) # rubocop:disable Metrics/MethodLength
+      def invoice_page(pdf, invoice, options) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
         section_options = options.slice(:debug, :stamped, :reminders)
 
         @metadata[:first_pages_of_invoices] += [pdf.page_count]

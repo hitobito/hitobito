@@ -96,14 +96,18 @@ describe EventsController, type: :controller do
       it "renders events csv" do
         expect do
           get :index, params: {group_id: group.id, year: 2012}, format: :csv
+          # rubocop:todo Layout/LineLength
           expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
+          # rubocop:enable Layout/LineLength
         end.to change(Delayed::Job, :count).by(1)
       end
 
       it "renders courses csv" do
         expect do
           get :index, params: {group_id: group.id, year: 2012, type: Event::Course.sti_name}, format: :csv
+          # rubocop:todo Layout/LineLength
           expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
+          # rubocop:enable Layout/LineLength
         end.to change(Delayed::Job, :count).by(1)
       end
 
@@ -165,7 +169,9 @@ describe EventsController, type: :controller do
 
         get :show, params: {group_id: groups(:top_layer).id, id: events(:top_event)}
 
+        # rubocop:todo Layout/LineLength
         pre_registration_note = "Du bist für diesen Anlass vorangemeldet. Die Anmeldung ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden."
+        # rubocop:enable Layout/LineLength
         expect(dom.all(".alert.alert-warning")[0].text).to include pre_registration_note
       end
 

@@ -2,3 +2,6 @@ inherit_from: ../.rubocop.yml
 
 Metrics/MethodLength:
   Max: 120
+
+Layout/LineLength:
+  Max: 120

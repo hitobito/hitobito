@@ -50,7 +50,9 @@ describe ChangelogReader do
       version1x = changelogs[1]
       expect(version1x.log_entries.count).to eq(1)
       expect(version1x.version).to eq("1.X")
+      # rubocop:todo Layout/LineLength
       expect(version1x.log_entries[0].to_markdown).to eq("* far future change (for any questions, contact [@TheWalkingLeek](https://github.com/TheWalkingLeek))")
+      # rubocop:enable Layout/LineLength
 
       version23 = changelogs[2]
       expect(version23.log_entries.count).to eq(1)

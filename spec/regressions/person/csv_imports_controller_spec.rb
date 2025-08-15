@@ -42,8 +42,12 @@ describe Person::CsvImportsController, type: :controller do
     let(:mapping) { headers_mapping(CSV.parse(data, headers: true)) }
 
     it "imports single person only" do
-      expect { post :create, params: {group_id: group.id, data: data, role_type: role_type.sti_name, field_mappings: mapping} }.to change(Person, :count).by(1)
-      is_expected.to redirect_to group_people_path(group, name: "Leader", filters: {role: {role_type_ids: [role_type.id]}})
+      expect {
+        post :create,
+          params: {group_id: group.id, data: data, role_type: role_type.sti_name, field_mappings: mapping}
+      }.to change(Person, :count).by(1)
+      is_expected.to redirect_to group_people_path(group, name: "Leader",
+        filters: {role: {role_type_ids: [role_type.id]}})
     end
   end
 
@@ -53,7 +57,10 @@ describe Person::CsvImportsController, type: :controller do
     let(:mapping) { headers_mapping(CSV.parse(data, headers: true)).merge(role: role_type) }
 
     it "imports single person only" do
-      expect { post :preview, params: {group_id: group.id, data: data, role_type: role_type, field_mappings: mapping} }.not_to change(Person, :count)
+      expect {
+        post :preview,
+          params: {group_id: group.id, data: data, role_type: role_type, field_mappings: mapping}
+      }.not_to change(Person, :count)
       is_expected.to have_css "table"
       is_expected.to have_button "Personen jetzt importieren"
       is_expected.to have_button "Zurück"

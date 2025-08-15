@@ -320,7 +320,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
-  def nested_fields_for(assoc, partial_name = nil, record_object = nil, options = nil, limit = nil, &block)
+  def nested_fields_for(assoc, partial_name = nil, record_object = nil, options = nil, limit = nil,
+    &block)
     content_tag(:div, id: "#{assoc}_fields", data: {association: assoc, limit: limit}) do
       fields_for(assoc, record_object) do |fields|
         block ? capture(fields, &block) : render(partial_name, f: fields)
@@ -349,7 +350,9 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   #   labeled(:attr, content)
   #   labeled(:attr, 'Caption') { #content }
   #   labeled(:attr, 'Caption', content)
+  # rubocop:todo Layout/LineLength
   def labeled(attr, caption_or_content = nil, content = nil, mark_as_required: false, **html_options, &block) # rubocop:disable Metrics/*
+    # rubocop:enable Layout/LineLength
     if block
       content = capture(&block)
     elsif content.nil?

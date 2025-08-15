@@ -4,8 +4,12 @@
 #  Affero General Public License version 3 or later. See the COPYING file at the top-level directory
 #  or at https://github.com/hitobito/hitobito.
 
+# rubocop:todo Layout/LineLength
 # Our error tracker (sentry-raven) is deprecated and no longer captures rails application errors reliably.
+# rubocop:enable Layout/LineLength
+# rubocop:todo Layout/LineLength
 # We piggy-back on ActionDispatch::ShowExceptions middleware and copy the exception to a key, where sentry-raven expects it.
+# rubocop:enable Layout/LineLength
 class Raven::CopyException
   def initialize(app)
     @app = app

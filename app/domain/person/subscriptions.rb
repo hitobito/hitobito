@@ -23,7 +23,7 @@ class Person::Subscriptions
   end
   alias_method :unsubscribe, :destroy
 
-  def subscribed
+  def subscribed # rubocop:todo Metrics/AbcSize
     scope
       .where(id: direct_inclusions.select("mailing_list_id"))
       .or(scope.anyone.or(scope.configured.opt_out).or(scope.nobody).merge(from_group_or_events))
@@ -31,7 +31,7 @@ class Person::Subscriptions
       .where.not(id: globally_excluding_mailing_list_ids)
   end
 
-  def subscribable
+  def subscribable # rubocop:todo Metrics/AbcSize
     scope.anyone
       .or(
         scope.configured.merge(from_group_or_events)
@@ -73,7 +73,8 @@ class Person::Subscriptions
       .where.not(id: tag_excluded_subscription_ids)
   end
 
-  def from_groups
+  # rubocop:todo Metrics/MethodLength
+  def from_groups # rubocop:todo Metrics/AbcSize # rubocop:todo Metrics/MethodLength
     return Subscription.none if @person.roles.without_archived.blank?
 
     sql = <<~SQL.squish
@@ -97,6 +98,7 @@ class Person::Subscriptions
       .where(condition.to_a)
       .where.not(id: tag_excluded_subscription_ids)
   end
+  # rubocop:enable Metrics/MethodLength
 
   def from_group_or_events
     scope

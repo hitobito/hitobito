@@ -51,7 +51,9 @@ module Export::Tabular::People
     def pluck_ids_from_list(id_with_optional_table, list = @list)
       case list
       when Array then list.pluck(id_with_optional_table.to_s.split(".").last)
+      # rubocop:todo Layout/LineLength
       when ActiveRecord::Relation then list.unscope(:order).unscope(:select).pluck(id_with_optional_table)
+        # rubocop:enable Layout/LineLength
       end
     end
   end

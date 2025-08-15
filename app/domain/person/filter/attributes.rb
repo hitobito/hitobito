@@ -64,7 +64,7 @@ class Person::Filter::Attributes < Person::Filter::Base
     Person.where(birthday: nil)
   end
 
-  def raw_sql_condition(scope)
+  def raw_sql_condition(scope) # rubocop:todo Metrics/AbcSize
     generic_constraints.map do |v|
       key, constraint, value = v.to_h.symbolize_keys.slice(:key, :constraint, :value).values
       next unless Person.filter_attrs.key?(key.to_sym)
@@ -121,7 +121,9 @@ class Person::Filter::Attributes < Person::Filter::Base
     when "match", "not_match"
       "%#{ActiveRecord::Base.send(:sanitize_sql_like, value.to_s.strip)}%"
     when "blank" then ""
+    # rubocop:todo Layout/LineLength
     when "equal", "greater", "smaller", "before", "after" then (key == "email") ? value.downcase : value
+    # rubocop:enable Layout/LineLength
     else raise("unexpected constraint: #{constraint.inspect}")
     end
   end
@@ -138,7 +140,7 @@ class Person::Filter::Attributes < Person::Filter::Base
     SQL
   end
 
-  def matching_attribute?(attribute, value, constraint)
+  def matching_attribute?(attribute, value, constraint) # rubocop:todo Metrics/CyclomaticComplexity
     case constraint
     when "match" then attribute.to_s =~ /#{value}/
     when "not_match" then attribute.to_s !~ /#{value}/

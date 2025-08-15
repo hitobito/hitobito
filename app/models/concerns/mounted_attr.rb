@@ -112,7 +112,9 @@ module MountedAttr
       end
     end
 
-    def define_mounted_attr_validations(config)
+    # rubocop:todo Metrics/MethodLength
+    # rubocop:todo Metrics/AbcSize
+    def define_mounted_attr_validations(config) # rubocop:todo Metrics/CyclomaticComplexity # rubocop:todo Metrics/AbcSize # rubocop:todo Metrics/MethodLength
       class_eval do
         unless config.null
           if config.attr_type == :boolean
@@ -124,7 +126,9 @@ module MountedAttr
 
         if config.attr_type == :decimal
           validates config.attr_name, format:
+            # rubocop:todo Layout/LineLength
             {with: /\A\d{1,#{config.options[:precision] - config.options[:scale]}}(\.\d{1,#{config.options[:scale]}})?\z/,
+             # rubocop:enable Layout/LineLength
              message: I18n.t("errors.messages.invalid_decimal_format",
                scale: config.options[:scale],
                precision: config.options[:precision])},
@@ -142,5 +146,7 @@ module MountedAttr
         end
       end
     end
+    # rubocop:enable Metrics/AbcSize
+    # rubocop:enable Metrics/MethodLength
   end
 end

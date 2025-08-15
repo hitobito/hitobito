@@ -41,7 +41,9 @@ class Event::Question < ActiveRecord::Base
   belongs_to :derived_from_question, class_name: "Event::Question", inverse_of: :derived_questions
 
   has_many :answers, dependent: :destroy
+  # rubocop:todo Layout/LineLength
   has_many :derived_questions, class_name: "Event::Question", foreign_key: :derived_from_question_id,
+    # rubocop:enable Layout/LineLength
     dependent: :nullify, inverse_of: :derived_from_question
 
   DISCLOSURE_VALUES = %w[optional required hidden].freeze
@@ -57,7 +59,8 @@ class Event::Question < ActiveRecord::Base
   validates :question, presence: {message: :admin_blank}, if: :admin?
   validates :question, presence: {message: :application_blank}, unless: :admin?
   validates :disclosure, presence: true, unless: :global?
-  validates :derived_from_question_id, uniqueness: {scope: :event_id}, allow_blank: true, if: :event_id
+  validates :derived_from_question_id, uniqueness: {scope: :event_id}, allow_blank: true,
+    if: :event_id
 
   before_validation :assign_derived_attributes, on: :create, if: :derived?
   after_create :add_answer_to_participations
@@ -115,18 +118,26 @@ class Event::Question < ActiveRecord::Base
   # In case a global question needs to be changed, make sure to create a migration
   # accordingly and change the seed at the same time.
   # Useful options for global questions are:
+  # rubocop:todo Layout/LineLength
   # - `translation_attributes`: seed all translations at creation. `[{ locale: :de, question: "...", choices: "..." }]`
+  # rubocop:enable Layout/LineLength
   # - `type`: STI-name of question type
+  # rubocop:todo Layout/LineLength
   # - `event_type`: STI-name of Event, on which the global question should be applied. `nil` will apply to all events.
+  # rubocop:enable Layout/LineLength
+  # rubocop:todo Layout/LineLength
   # - `disclosure`: specifies if question is required, optional or hidden. `nil` will force choice at event creation.
+  # rubocop:enable Layout/LineLength
   def self.seed_global(attributes)
-    questions = [attributes[:question], attributes[:translation_attributes]&.pluck(:question)].flatten.compact_blank
+    questions = [attributes[:question],
+      attributes[:translation_attributes]&.pluck(:question)].flatten.compact_blank
     return if includes(:translations).where(event_id: nil, question: questions).exists?
 
     Event::Question.transaction do
       new(attributes.except(:translation_attributes)).tap do |question|
         attributes[:translation_attributes]&.each do |translation_attributes|
-          question.attributes = translation_attributes.slice(:locale, *Event::Question.translated_attribute_names)
+          question.attributes = translation_attributes.slice(:locale,
+            *Event::Question.translated_attribute_names)
         end
         question.save!
       end

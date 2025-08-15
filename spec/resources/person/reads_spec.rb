@@ -81,7 +81,8 @@ describe PersonResource, type: :resource do
 
         data = jsonapi_data[0]
 
-        expect(data.attributes.symbolize_keys.keys).to match_array [:id, :jsonapi_type] + serialized_attrs + computed_attrs.keys
+        expect(data.attributes.symbolize_keys.keys).to match_array [:id,
+          :jsonapi_type] + serialized_attrs + computed_attrs.keys
 
         expect(data.id).to eq(person.id)
         expect(data.jsonapi_type).to eq("people")
@@ -149,8 +150,12 @@ describe PersonResource, type: :resource do
         end
       end
 
+      # rubocop:todo Layout/LineLength
       # This is currently skipped since the FeatureGate that we're trying to mock is being done when loading the constant.
+      # rubocop:enable Layout/LineLength
+      # rubocop:todo Layout/LineLength
       # As seen in the before block, we're trying to remove the language attribute from the attributes and then reload the constant
+      # rubocop:enable Layout/LineLength
       # that seemingly still does not get this spec to work though
       context "disabled", :skip do
         before do
@@ -303,7 +308,9 @@ describe PersonResource, type: :resource do
         end
       end
 
+      # rubocop:todo Layout/LineLength
       xcontext "with feature toggle on" do # graphiti somehow caches the resource, so dynamically setting the feature toggle does not work.
+        # rubocop:enable Layout/LineLength
         let!(:additional_address1) { Fabricate(:additional_address, contactable: person, label: "Arbeit") }
         let!(:additional_address2) { Fabricate(:additional_address, contactable: person, label: "Rechnung") }
 

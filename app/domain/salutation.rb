@@ -56,7 +56,7 @@ class Salutation
       .sub(/^./, &:upcase)
   end
 
-  def attributes
+  def attributes # rubocop:todo Metrics/AbcSize
     {
       first_name: person.first_name,
       last_name: person.last_name,

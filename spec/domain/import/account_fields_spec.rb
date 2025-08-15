@@ -30,7 +30,11 @@ describe Import::ContactAccountFields do
   context "AdditionalEmail" do
     let(:model) { AdditionalEmail }
 
-    its(:keys) { should eq Settings.additional_email.predefined_labels.collect { |l| "additional_email_#{l.downcase}" } }
+    its(:keys) {
+      should eq Settings.additional_email.predefined_labels.collect { |l|
+     "additional_email_#{l.downcase}" # rubocop:todo Layout/IndentationWidth
+      }
+    }
     its(:values) { should eq Settings.additional_email.predefined_labels.collect { |l| "Weitere E-Mail #{l}" } }
     its("fields.first") do
       should eq(key: "additional_email_#{Settings.additional_email.predefined_labels.first.downcase}",

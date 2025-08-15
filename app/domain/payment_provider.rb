@@ -71,7 +71,7 @@ class PaymentProvider
 
   private
 
-  def check_bank_public_keys!(bank_x, bank_e)
+  def check_bank_public_keys!(bank_x, bank_e) # rubocop:todo Metrics/CyclomaticComplexity
     authentication_key_ok = correct_public_key?(bank_x,
       payment_provider_setting.authentication_hash)
     encryption_key_ok = correct_public_key?(bank_e,

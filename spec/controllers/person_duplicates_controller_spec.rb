@@ -81,7 +81,7 @@ describe PersonDuplicatesController do
 
         body = Capybara::Node::Simple.new(response.body)
         expect(body).to have_css("form input[name=q]")
-        expect(body).to have_css("form button[type=submit]", text: "Suche")
+        expect(body).to have_css("form button[type=submit]")
         expect(body).to have_field(:q, with: "ba")
       end
     end

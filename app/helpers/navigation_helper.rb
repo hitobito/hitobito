@@ -95,8 +95,8 @@ module NavigationHelper
   end
 
   def first_group_invoices_or_root_path
-    return root_path if current_ability.finance_layer_ids.blank?
+    return root_path if current_ability.user_finance_layer_ids.blank?
 
-    group_invoices_path(current_ability.finance_layer_ids.first)
+    group_invoices_path(current_ability.user_finance_layer_ids.first)
   end
 end

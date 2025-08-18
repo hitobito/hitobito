@@ -59,10 +59,6 @@ class Ability
     "user-#{user.id}"
   end
 
-  def finance_layer_ids
-    user_context.permission_layer_ids(:finance)
-  end
-
   private
 
   def define_root_abilities

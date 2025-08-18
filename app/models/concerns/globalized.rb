@@ -13,7 +13,11 @@ module Globalized
       klass.translated_attribute_names.each do |attr|
         validators = klass.validators_on(attr)
         attributes = I18n.available_locales.map { |locale| :"#{attr}_#{locale}" }
+        attributes.filter! { |a| klass.validators_on(a).empty? }
+
         validators.each do |validator|
+          next if validator.is_a? ActiveRecord::Validations::PresenceValidator
+
           validates_with validator.class, validator.options.merge(attributes:)
         end
       end

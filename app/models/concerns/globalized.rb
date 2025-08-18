@@ -7,8 +7,6 @@ module Globalized
   extend ActiveSupport::Concern
 
   included do
-    # after_validation :add_errors_to_translated_attributes
-
     Rails.autoloaders.main.on_load(class_name) do
       translated_attribute_names.each do |attr|
         attributes = I18n.available_locales.map { |locale| :"#{attr}_#{locale}" }
@@ -16,8 +14,7 @@ module Globalized
 
         next if attributes.empty?
 
-        validators = validators_on(attr)
-        validators.each do |validator|
+        validators_on(attr).each do |validator|
           next if validator.is_a? ActiveRecord::Validations::PresenceValidator
 
           validates_with validator.class, validator.options.merge(attributes:)
@@ -27,7 +24,6 @@ module Globalized
       def self.human_attribute_name(*options)
         attribute = options.first.to_sym
         if globalize_attribute_names.include? attribute
-
           attribute, locale = attribute.match(/^(.*)_([a-z]{2})$/).captures
 
           return "#{super(attribute, *options.drop(1))} (#{locale.upcase})"

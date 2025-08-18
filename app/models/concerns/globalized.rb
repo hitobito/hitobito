@@ -9,17 +9,29 @@ module Globalized
   included do
     # after_validation :add_errors_to_translated_attributes
 
-    Rails.autoloaders.main.on_load(class_name) do |klass|
-      klass.translated_attribute_names.each do |attr|
-        validators = klass.validators_on(attr)
+    Rails.autoloaders.main.on_load(class_name) do
+      translated_attribute_names.each do |attr|
         attributes = I18n.available_locales.map { |locale| :"#{attr}_#{locale}" }
-        attributes.filter! { |a| klass.validators_on(a).empty? }
+                         .filter { |a| validators_on(a).empty? }
 
+        next if attributes.empty?
+
+        validators = validators_on(attr)
         validators.each do |validator|
           next if validator.is_a? ActiveRecord::Validations::PresenceValidator
 
           validates_with validator.class, validator.options.merge(attributes:)
         end
+      end
+
+      def self.human_attribute_name(*options)
+        attribute = options.first.to_sym
+        if globalize_attribute_names.include? attribute
+          attribute, locale = [attribute[0..-4], attribute[-2..-1]]
+
+          return "#{super(attribute, *options.drop(1))} (#{locale.upcase})"
+        end
+        super(*options)
       end
     end
 

@@ -5,6 +5,7 @@
 - Texte und Hilfetexte verwenden nun den Inhalt einer Fallback Sprache, wenn die gewünschte Sprache leer ist
 - Für PDF Generierung wird nun die Schriftart "Noto Sans (Latin, Cyrillic and Greek)" als Fallback Schriftart verwendet (#2372)
 - Personen Adressen können mit der Schweizer Post abgeglichen werden (#)
+- Beim Zusammenführen von Duplikaten wird auch der Haushalt berücksichtig (hitobito/hitobito_sww#275)
 
 ## Version 2.6
 

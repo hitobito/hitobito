@@ -803,6 +803,7 @@ en:
           Wollen Sie diese Gruppe wirklich archivieren? Sie kann dann nicht mehr bearbeitet
           werden und sämtliche Rollen werden ebenfalls archiviert.
       membership_invoice_button: Mitgliedsrechnung
+      sync_addresses_button: Adressenabgleich
     attrs:
       contact_details: "Contact data"
       additional_information: "More information"
@@ -1644,6 +1645,11 @@ en:
         one: "%{count} %{role} will receive a request for their data. Any changes from this import have to be repeated after having been granted access."
         other: "%{count} %{role} will receive a request for their data. Any changes from this import have to be repeated after having been granted access."
   people:
+    addresses_sync:
+      create:
+        scheduled: Der Adressenabgleich wurde erfolgreich gestartet.
+        running: Aktuell ist noch ein Adressenabgleich in Arbeit.
+
     send_password_instructions: Login information has been sent.
     send_password_instructions_invalid_email: Login has not been sent because email is invalid.
     years_old: (%{years} years old)

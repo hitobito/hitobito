@@ -815,6 +815,7 @@ fr:
           Voulez-vous vraiment archiver ce groupe? Le groupe ne pourra plus être modifié
           et les rôles attribués seront aussi archivés.
       membership_invoice_button: Facture de membre
+      sync_addresses_button: Adressenabgleich
     attrs:
       contact_details: "Contacts"
       additional_information: "Informations supplémentaires"
@@ -1693,6 +1694,11 @@ fr:
         many: "%{count} %{role} ont reçu une demande d'accès pour leurs données personnelles. Des changements éventuels dus à cette importation doivent être ré-effectués après cette confirmation."
         other: "%{count} %{role} ont reçu une demande d'accès pour leurs données personnelles. Des changements éventuels dus à cette importation doivent être ré-effectués après cette confirmation."
   people:
+    addresses_sync:
+      create:
+        scheduled: Der Adressenabgleich wurde erfolgreich gestartet.
+        running: Aktuell ist noch ein Adressenabgleich in Arbeit.
+
     send_password_instructions: Les données d'authentification ont été envoyées.
     send_password_instructions_invalid_email: Les informations de login n'ont pas été envoyées étant donné que l'adresse e-mail indiquée n'est pas valable.
     years_old: (%{years} ans)

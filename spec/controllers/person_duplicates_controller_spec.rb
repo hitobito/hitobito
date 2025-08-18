@@ -64,6 +64,27 @@ describe PersonDuplicatesController do
       expect(entries.count).to eq(1)
       expect(entries).to include(duplicate5)
     end
+
+    describe "search" do
+      render_views
+
+      it "filters via search param" do
+        sign_in(layer_leader)
+
+        Person.where(id: [duplicate2, duplicate3, duplicate4].flat_map { |d| [d.person_1_id, d.person_2_id] })
+        duplicate3.person_1.update!(first_name: "Bar")
+        duplicate3.person_2.update!(first_name: "Bar")
+
+        get :index, params: {group_id: layer_one.id, q: "ba"}
+        expect(entries.count).to eq(1)
+        expect(entries).to include(duplicate3)
+
+        body = Capybara::Node::Simple.new(response.body)
+        expect(body).to have_css("form input[name=q]")
+        expect(body).to have_css("form button[type=submit]")
+        expect(body).to have_field(:q, with: "ba")
+      end
+    end
   end
 
   private

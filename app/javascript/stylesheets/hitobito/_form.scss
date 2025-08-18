@@ -883,3 +883,13 @@ fieldset > div > div.labeled {
   margin-top: 12px;
   margin-right: 8px;
 }
+
+form[aria-busy=true] {
+  .fa-spinner {
+    display: block !important;
+  }
+
+  .fa-times {
+    display: none;
+  }
+}

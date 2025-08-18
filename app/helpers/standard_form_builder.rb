@@ -473,7 +473,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       input_for_locale_with_translation_button(attr, I18n.locale, args) +
         content_tag(:div, {class: "hidden", "data-translatable-fields-target": "toggle"}) do
           other_lang_inputs = I18n.available_locales.excluding(I18n.locale).map do |locale|
-            input_for_locale(attr, locale, **args, data: {"translatable-fields-target": "translatedField", action: "translatable-fields#updateTranslatedFields"})
+            input_for_locale(attr, locale, **args, data: {"translatable-fields-target": "translatedField", action: "input->translatable-fields#updateTranslatedFields trix-change->translatable-fields#updateTranslatedFields"})
           end
           safe_join(other_lang_inputs)
         end

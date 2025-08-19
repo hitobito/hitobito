@@ -16,6 +16,14 @@ module Export::Tabular::People
       super(participation.person, format)
     end
 
+    def country
+      entry.country_label
+    end
+
+    def gender
+      entry.gender_label
+    end
+
     def roles
       participation.roles.map { |role| role }.join(", ")
     end

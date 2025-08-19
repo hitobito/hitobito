@@ -25,7 +25,8 @@ module Export::Tabular::Event::Participations
     end
 
     def people_list
-      @people_list ||= @list.map(&:person)
+      @people_list ||= @list.select { |p| p.participant_type == Person.sti_name }
+        .map(&:participant)
     end
   end
 end

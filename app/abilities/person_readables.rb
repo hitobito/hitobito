@@ -5,6 +5,8 @@
 
 # This class is only used for fetching lists based on a group association.
 class PersonReadables < GroupBasedReadables
+  include VisibleFromAboveCondition
+
   attr_reader :group, :roles_readable_for
 
   def initialize(user, group = nil, include_ended_roles: false)
@@ -52,6 +54,7 @@ class PersonReadables < GroupBasedReadables
       condition.or(*contact_data_condition) if contact_data_visible?
       see_invisible_from_above_condition(condition)
       append_group_conditions(condition)
+      visible_from_above_condition(condition)
     end
   end
 

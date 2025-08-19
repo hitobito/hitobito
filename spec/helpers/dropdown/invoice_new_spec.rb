@@ -16,10 +16,13 @@ describe Dropdown::InvoiceNew do
   let(:dropdown) { Dropdown::InvoiceNew.new(self, people: [recipient]) }
   let(:current_user) { people(:top_leader) }
   let(:finance_group) { current_user.finance_groups.first }
+  let(:ability) { Ability.new(current_user) }
   let(:new_invoice_path) { new_group_invoice_path(group_id: finance_group, invoice: {recipient_id: recipient.id}) }
   let(:invalid_msg) { I18n.t("activerecord.errors.models.invoice_config.not_valid") }
 
   context "#initialize" do
+    before { allow(self).to receive(:current_ability).and_return(ability) }
+
     describe "filter params" do
       let(:filter) { {range: :foo, filters: :bar} }
       let(:group) { groups(:top_group) }
@@ -67,17 +70,21 @@ describe Dropdown::InvoiceNew do
 
   context "#button_or_dropdown" do
     context "with multiple finance_groups" do
-      it "renders equal as #to_s" do
-        Group::BottomLayer::Member.permissions << :finance
-        Fabricate(:"Group::BottomLayer::Member", person: current_user, group: groups(:bottom_layer_one))
-        expect(current_user.reload.finance_groups).to have(2).items
+      before do
+        Fabricate(Group::BottomLayer::Member.sti_name, person: current_user, group: groups(:bottom_layer_one))
+        allow(Group::BottomLayer::Member).to receive(:permissions).and_return([:finance])
+        allow(self).to receive(:current_ability).and_return(ability)
+      end
 
+      it "renders equal as #to_s" do
         expect(dropdown.button_or_dropdown).to eq dropdown.to_s
       end
     end
 
     context "with single finance_group" do
       let(:html) { Capybara::Node::Simple.new(dropdown.button_or_dropdown) }
+
+      before { allow(self).to receive(:current_ability).and_return(ability) }
 
       it "with valid invoice_config renders link" do
         expect(finance_group.invoice_config).to be_valid

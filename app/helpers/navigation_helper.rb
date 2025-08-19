@@ -28,7 +28,7 @@ module NavigationHelper
     {label: :invoices,
      url: :first_group_invoices_or_root_path,
      icon_name: "money-bill-alt",
-     if: ->(_) { current_user.finance_groups.any? },
+     if: ->(_) { can?(:index, Invoice) },
      active_for: %w[/invoices
        invoices/evaluations
        invoices/by_article
@@ -95,8 +95,8 @@ module NavigationHelper
   end
 
   def first_group_invoices_or_root_path
-    return root_path if current_user.finance_groups.blank?
+    return root_path if current_ability.user_finance_layer_ids.blank?
 
-    group_invoices_path(current_user.finance_groups.first)
+    group_invoices_path(current_ability.user_finance_layer_ids.first)
   end
 end

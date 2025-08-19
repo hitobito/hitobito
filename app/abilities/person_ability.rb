@@ -109,7 +109,7 @@ class PersonAbility < AbilityDsl::Base
   end
 
   def in_layer_group
-    contains_any?(user.finance_groups.collect(&:id), person.layer_group_ids)
+    contains_any?(user_finance_layer_ids, person.layer_group_ids)
   end
 
   def not_self

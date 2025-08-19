@@ -43,11 +43,11 @@ class InvoiceAbility < AbilityDsl::Base
   end
 
   def any_finance_group
-    user.finance_groups.present?
+    user_finance_layer_ids.any?
   end
 
   def in_layer(group = subject.group)
-    user.groups_with_permission(:finance).collect(&:layer_group).include?(group)
+    user_finance_layer_ids.include?(group.layer_group_id)
   end
 
   def in_layer_with_receiver

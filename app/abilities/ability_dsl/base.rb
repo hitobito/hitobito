@@ -154,6 +154,10 @@ module AbilityDsl
       end
     end
 
+    def user_finance_layer_ids
+      user_context.permission_layer_ids(:finance)
+    end
+
     # Are any items of the existing list present in the list of required items?
     def contains_any?(required, existing)
       (required & existing).present?

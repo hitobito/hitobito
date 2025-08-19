@@ -5,6 +5,8 @@
 #
 # Fetches people for which the user has write access via layer permissions.
 class PersonLayerWritables < GroupBasedFetchables
+  include VisibleFromAboveCondition
+
   self.same_group_permissions = []
   self.above_group_permissions = []
   self.same_layer_permissions = [:layer_and_below_full, :layer_full]
@@ -42,6 +44,7 @@ class PersonLayerWritables < GroupBasedFetchables
   def writable_conditions
     OrCondition.new.tap do |condition|
       append_group_conditions(condition)
+      visible_from_above_condition(condition)
       see_invisible_from_above_condition(condition)
     end
   end

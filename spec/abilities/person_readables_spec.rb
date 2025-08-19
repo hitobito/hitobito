@@ -54,7 +54,7 @@ describe PersonReadables do
           let(:group) { groups(:bottom_layer_one) }
 
           it "may get visible people" do
-            other = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one))
+            other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one))
             is_expected.to include(other.person)
           end
 

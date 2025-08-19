@@ -370,10 +370,6 @@ fr:
     date: "Date %{index}"
 
   event:
-    guests:
-      new:
-        title: Gast hinzufügen
-        add_more_guests: "Anmelden und weiteren Gast hinzufügen (max. %{limit})"
     run_by: "Réalisé par "
     applied_to: Inscription auprès de
     alternative_dates: Dates alternatives
@@ -401,8 +397,6 @@ fr:
       already_assigned: "Cette personne est déjà attribuée à un autre endroit."
       maximum_participations_reached: Le nombre maximal de participants autorisé est atteint. Pour confirmer d'autres inscriptions, le nombre maximal de participants doit être augmenté.
       participation:
-        guest_of_html: "(Gast von %{main_applicant})"
-        guest_of_deleted_participation: "(Gast von abgemeldeter Person)"
         registered_at: "Inscription le %{datetime}"
         town: Domicile
       prio_buttons:
@@ -464,15 +458,12 @@ fr:
       actions_approval:
         approve_button: "Autoriser"
         reject_button: "Refuser"
-      fields:
-        explain_required_checkmark: "* = Antwort obligatorisch"
-        send_email: E-Mail an Teilnehmer/in senden
       form:
         title_new: "Inscription en tant que %{role}"
         title_edit: "Modifier l'inscription de %{person}"
         apply: "Inscription"
-      new:
-        add_guests: "Anmelden und Gast hinzufügen (max. %{limit})"
+        explain_required_checkmark: "* = Antwort obligatorisch"
+        send_email: E-Mail an Teilnehmer/in senden
       application_fields:
         alternative_dates_info: "S'il-te-plaît, indique d'autres cours qui pourraient te convenir."
         course_information: "Informations au sujet des cours"
@@ -677,10 +668,6 @@ fr:
       link:
         delete: "Effacer l'inscription"
 
-  event/guests:
-    guest_added_successfully: "%{guest} wurde erfolgreich als Gast hinzugefügt."
-    not_allowed_due_to_guest_limit: "Du kannst in diesem Anlass keine weiteren Gäste hinzufügen."
-
   event/invitations:
     export_enqueued: "L'exportation a commencé en tâche de fond et sera téléchargée une fois terminée."
     description: "Les personnes invitées peuvent s'inscrire ou se désinscrire via la page%{model_name}. Elles ne reçoivent pas de mail automatique."
@@ -828,6 +815,7 @@ fr:
           Voulez-vous vraiment archiver ce groupe? Le groupe ne pourra plus être modifié
           et les rôles attribués seront aussi archivés.
       membership_invoice_button: Facture de membre
+      sync_addresses_button: Adressenabgleich
     attrs:
       contact_details: "Contacts"
       additional_information: "Informations supplémentaires"
@@ -1706,6 +1694,11 @@ fr:
         many: "%{count} %{role} ont reçu une demande d'accès pour leurs données personnelles. Des changements éventuels dus à cette importation doivent être ré-effectués après cette confirmation."
         other: "%{count} %{role} ont reçu une demande d'accès pour leurs données personnelles. Des changements éventuels dus à cette importation doivent être ré-effectués après cette confirmation."
   people:
+    addresses_sync:
+      create:
+        scheduled: Der Adressenabgleich wurde erfolgreich gestartet.
+        running: Aktuell ist noch ein Adressenabgleich in Arbeit.
+
     send_password_instructions: Les données d'authentification ont été envoyées.
     send_password_instructions_invalid_email: Les informations de login n'ont pas été envoyées étant donné que l'adresse e-mail indiquée n'est pas valable.
     years_old: (%{years} ans)
@@ -2103,7 +2096,6 @@ fr:
   steps_component:
     next_link: Continuer
     prev_link: Retour
-    submit: Absenden
 
   household_aside_component:
     add: Créer
@@ -2268,14 +2260,3 @@ fr:
     not_found: Code de vérification non valide
     status_valid: Adhésion valide
     status_invalid: Pas d'adhésion valide
-
-  wizards:
-    steps:
-      new_user_form:
-        next_button: Registrieren
-      new_event_guest_contact_data_form:
-        next_button: Weiter
-      new_event_guest_participation_form:
-        next_button: Gast anmelden
-      new_event_guest_contact_data_form_title: Kontaktdaten des Gasts
-      new_event_guest_participation_form_title: Gast anmelden

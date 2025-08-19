@@ -56,6 +56,9 @@ describe MailchimpSynchronizationJob do
     expect(log.subject).to eq mailing_list
     expect(log.category).to eq "mail"
     expect(log.message).to eq "Mailchimp Abgleich war nicht erfolgreich"
+    expect(JSON.parse(log.payload).deep_symbolize_keys).to eq({
+      data: {exception: "UncaughtThrowError - uncaught throw Exception"}
+    })
 
     expect(mailing_list.mailchimp_syncing).to be false
     expect(mailing_list.mailchimp_last_synced_at).to be_nil

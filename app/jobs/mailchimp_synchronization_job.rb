@@ -29,23 +29,24 @@ class MailchimpSynchronizationJob < BaseJob
       mailchimp_last_synced_at: Time.zone.now)
   end
 
-  def error(job, exception)
+  def error(_job, exception)
     sync.result.exception = exception
     mailing_list.update(mailchimp_syncing: false, mailchimp_result: sync.result)
-    job.payload_object.create_log_entry
+    create_log_entry
     super
   end
+
+  private
 
   def create_log_entry
     HitobitoLogEntry.create!(
       subject: mailing_list,
       level: :error,
       category: :mail,
-      message: "Mailchimp Abgleich war nicht erfolgreich"
+      message: "Mailchimp Abgleich war nicht erfolgreich",
+      payload: sync.result.to_json
     )
   end
-
-  private
 
   def mailing_list
     @mailing_list ||= MailingList.find(@mailing_list_id)

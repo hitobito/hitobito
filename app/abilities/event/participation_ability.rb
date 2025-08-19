@@ -37,6 +37,11 @@ class Event::ParticipationAbility < AbilityDsl::Base
     permission(:approve_applications).may(:show).for_applicant_in_same_layer
 
     general(:create).at_least_one_group_not_deleted
+
+    permission(:group_full).may(:mail_confirmation).in_same_group_if_active
+    permission(:group_and_below_full).may(:mail_confirmation).in_same_group_or_below_if_active
+    permission(:layer_full).may(:mail_confirmation).in_same_layer_if_active
+    permission(:layer_and_below_full).may(:mail_confirmation).in_same_layer_if_active
   end
 
   def her_own_or_for_leaded_events

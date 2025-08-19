@@ -15,7 +15,7 @@
                   :print,
                   { target: '_blank'})
 
-- if can?(:create, @event)
+- if can?(:mail_confirmation, entry)
   = Dropdown::Event::Participation::MailDispatch.new(self, @event, @group, entry)
 
 - if can?(:edit, entry.person)

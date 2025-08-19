@@ -462,8 +462,8 @@ it:
         title_new: "Iscrizione come %{role}"
         title_edit: "Modificare l'iscrizone di %{person}"
         apply: "iscrivere"
-        explain_required_checkmark: "* = Antwort obligatorisch"
-        send_email: E-Mail an Teilnehmer/in senden
+        explain_required_checkmark: "* = Risposta obbligatoria"
+        send_email: Invia e-mail al partecipante
       application_fields:
         alternative_dates_info: "per favore indica altri corsi che potrebbero andarti bene."
         course_information: "informazioni sui corsi"
@@ -760,7 +760,7 @@ it:
     archive:
       flash:
         success: Il gruppo è stato archiviato con successo.
-        failure: "Gruppe konnte nicht archiviert werden: %{error}"
+        failure: "Il gruppo non è stato archiviato: %{error}"
 
     deleted_people:
       list:
@@ -813,7 +813,7 @@ it:
           Vuole veramente archiviare questo gruppo? Dopo l'archiviazione non può più
           venire elaborato e vengono archiviati anche i relativi ruoli.
       membership_invoice_button: Fattura associativa
-      sync_addresses_button: Adressenabgleich
+      sync_addresses_button: Confronto indirizzi
     attrs:
       contact_details: "Dati di contatto"
       additional_information: "Altri dati"
@@ -1528,7 +1528,7 @@ it:
 
     impersonation:
       create:
-        email_must_be_confirmed: Die Person hat ihre E-Mail Adresse noch nicht bestätigt und kann somit nicht imitiert werden.
+        email_must_be_confirmed: La persona non ha ancora confermato il proprio indirizzo e-mail e quindi non può essere imitata.
 
     history:
       events:
@@ -1696,8 +1696,8 @@ it:
   people:
     addresses_sync:
       create:
-        scheduled: Der Adressenabgleich wurde erfolgreich gestartet.
-        running: Aktuell ist noch ein Adressenabgleich in Arbeit.
+        scheduled: Il confronto degli indirizzi è stato avviato con successo.
+        running: Attualmente è ancora in corso un confronto degli indirizzi.
 
     send_password_instructions: Le informazioni per il login sono state spedite.
     send_password_instructions_invalid_email: Le informazioni per il login non sono state mandate in quanto l'e-mail indicato non è valido
@@ -1721,7 +1721,7 @@ it:
 
       impersonate_user: Imitare
       impersonate_user_tooltip: Puoi utilizzare hitobito come se fossi la persona che ha effettuato il login
-      impersonate_user_tooltip_disabled: Diese Person kann erst imitiert werden, nachdem die E-Mail Adresse bestätigt wurde.
+      impersonate_user_tooltip_disabled: Questa persona può essere imitata solo dopo che l'indirizzo e-mail è stato confermato.
 
     actions_index:
       add_person: Aggiungere una persona

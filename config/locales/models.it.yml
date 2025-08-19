@@ -43,18 +43,18 @@ it:
         many: Dimissioni
         other: Uscite
       household:
-        one: Haushalt
-        many: Haushalte
-        other: Haushalte
+        one: nucleo famigliare
+        many: nucleo famigliare
+        other: nucleo famigliare
     attributes:
       roles/termination:
         terminate_on: Data d'uscita
       household:
-        members: Haushaltsmitglieder
+        members: Componenti del nucleo familiare
 
     errors:
       messages:
-        record_invalid: 'Gültigkeitsprüfung ist fehlgeschlagen: %{errors}'
+        record_invalid: 'Il controllo di validità è fallito: %{errors}'
       models:
         roles/termination:
           attributes:
@@ -66,17 +66,17 @@ it:
         household:
           attributes:
             members:
-              minimum_members: Der Haushalt wird aufgelöst da weniger als 2 Personen vorhanden sind.
-              household_address: "Die Adresse '%{address}' wird für alle Personen in diesem Haushalt übernommen."
+              minimum_members: Il nucleo familiare viene sciolto poiché è composto da meno di 2 persone.
+              household_address: "L'indirizzo '%{address}' viene utilizzato per tutte le persone che vivono in questo nucleo familiare."
 
         household_member:
           attributes:
             base:
-              in_other_household_present: "%{person_name} ist bereits Mitglied eines anderen Haushalts."
+              in_other_household_present: "%{person_name} è già membro di un altro nucleo familiare."
   activerecord:
     errors:
       messages:
-        at_least_one_present: Mindestens eine %{model_name} muss aufgefüllt werden
+        at_least_one_present: È necessario compilare almeno una %{model_name}
         type_not_allowed: non può essere salvato
         must_be_after_opening: deve essere dopo l'inizio dell'annuncio
         must_have_same_type: devono essere dello stesso tipo
@@ -126,7 +126,7 @@ it:
         mailing_list:
           attributes:
             mail_name:
-              not_allowed: "'%{mail_name}' darf nicht verwendet werden"
+              not_allowed: "'%{mail_name}' non può essere utilizzato"
             mail_name_not_allowed:
             additional_sender:
               invalid: "deve contenere indirizzi e-mail nel formato abcd@ee.ch o *@ee.ch. In caso di più indirizzi, questi vanno separati con ',' o ';'"
@@ -143,8 +143,8 @@ it:
           readonly: "Non hai diritto di scrittura per tutte le persone del nucleo famigliare. Elimina %{name} dal nucleo famigliare per cambiare l'indirizzo."
           attributes:
             base:
-              max_one_additional_invoice_address: Es kann nur eine Adresse als Rechnungsadresse ausgewählt werden.
-              additional_address_labels_must_be_unique: Die Bezeichnungen der weiteren Adressen müssen eindeutig sein.
+              max_one_additional_invoice_address: È possibile selezionare un solo indirizzo come indirizzo di fatturazione.
+              additional_address_labels_must_be_unique: Le denominazioni degli altri indirizzi devono essere univoche.
             email:
               taken: >
                   è già stato assegnato. Questo indirizzo deve essere univoco, visto
@@ -159,7 +159,7 @@ it:
             person_id:
               taken: è già stato chiesto
         person_duplicates:
-          invalid_role: "Rolle %{role} von %{person} ist fürs Zusammenführen nicht gültig, da die andere Person eventuell bereits eine Rolle hat, welche diese Rolle nicht mehr erlaubt, diese muss manuell korrigiert/etnfernt werden. Info: %{message}"
+          invalid_role: "Il ruolo %{role} di %{person} non è valido per l'unione, poiché l'altra persona potrebbe già avere un ruolo che non consente più questo ruolo, che deve essere corretto/rimosso manualmente. Informazioni: %{message}"
         qualification:
           attributes:
             qualification_kind_id:
@@ -199,7 +199,7 @@ it:
         role:
           attributes:
             end_on:
-              must_be_later_than_start_on: kann nicht vor Von sein
+              must_be_later_than_start_on: non può essere prima di "de"
 
 
     models:
@@ -212,9 +212,9 @@ it:
         many: Altre email
         other: Altre email
       additional_address:
-        one: Weitere Adresse
-        many: Weitere Adressen
-        other: Weitere Adressen
+        one: Altro indirizzo
+        many: Altri indirizzi
+        other: Altri indirizzi
       assignment:
         one: Ordine
         many: Ordini
@@ -368,9 +368,9 @@ it:
         many: SMS
         other: SMS
       message_template:
-        one: Rechnungsvorlage
-        many: Rechnungsvorlagen
-        other: Rechnungsvorlagen
+        one: Modello di fattura
+        many: Modelli di fattura
+        other: Modelli di fattura
       mail_log:
         one: Corso
         many: Corso
@@ -458,9 +458,9 @@ it:
               w: Cara %{first_name}
               other: Caro %{first_name}
       self_registration_reason:
-        one: Vordefinierter Eintrittsgrund
-        many: Vordefinierte Eintrittsgründe
-        other: Vordefinierte Eintrittsgründe
+        one: Motivo di ingresso predefinito
+        many: Motivi di ingresso predefiniti
+        other: Motivi di ingresso predefiniti
       service_token:
         one: Chi
         many: Chiavi API
@@ -484,31 +484,31 @@ it:
         category: Categoria
 
       additional_address:
-        translated_label: Bezeichnung
-        street_and_number: Strasse/Nummer
-        housenumber: Hausnummer
+        translated_label: Denominazione
+        street_and_number: Strada/Numero civico
+        housenumber: Numero civico
         postbox: Postfach
-        zip_code: PLZ
-        town: Ort
-        country: Land
-        postbox: Postfach
-        address_care_of: zusatz. Adresszeile
-        public: Öffentlich
+        zip_code: CAP
+        town: Luogo
+        country: Nazione
+        postbox: Casella postale
+        address_care_of: Riga dell'indirizzo aggiuntiva
+        public: Pubblico
 
       additional_addresses:
-        label: Bezeichnung
-        street: Strasse
+        label: Denominazione
+        street: Strada
         postbox: Postfach
-        zip_code: PLZ
-        town: Ort
-        country: Land
-        postbox: Postfach
+        zip_code: CAP
+        town: Luogo
+        country: Nazione
+        postbox: Casella postale
 
       bounces:
-        email: E-Mail
-        count: Anzahl Bounces
-        blocked_at: Sperrzeitpunkt
-        mailing_list_ids: Abo-IDs
+        email: E-mail
+        count: Numero di bounce
+        blocked_at: Ora di chiusura
+        mailing_list_ids: ID abbonamento
 
       cantons:
         ag: Argovia
@@ -561,11 +561,11 @@ it:
         password: Password
         password_confirmation: Confermare la password
         current_password: Vecchia password
-        address_care_of: zusätzliche Adresszeile
+        address_care_of: Riga dell'indirizzo aggiuntiva
         address: Indirizzo
-        street: Strasse
-        housenumber: Hausnummer
-        postbox: Postfach
+        street: Strada
+        housenumber: Numero civico
+        postbox: Casella postale
         zip_code: NAP
         town: Luogo
         country: Nazione
@@ -581,7 +581,7 @@ it:
         phone_numbers: Numeri di telefono
         social_accounts: Social media
         additional_emails: Altre email
-        additional_addresses: Weitere Adressen
+        additional_addresses: Altri indirizzi
         family_members: Membri della famiglia
         picture: Carica una nuova foto
         remove_picture: Elimina la foto attuale
@@ -604,8 +604,8 @@ it:
         birth_year: Anno di nascita
         roles_list: Ruoli
         person_name: Nome / Cognome / Totem
-        company_name: Firmenname
-        town: Ort
+        company_name: Nome della ditta
+        town: Luogo
 
       person/add_request:
         person: Persona
@@ -625,10 +625,10 @@ it:
         short_name: Abbreviazione
         email: Email principale
         address: Indirizzo
-        address_care_of: zusätzliche Adresszeile
-        street: Strasse
-        housenumber: Hausnummer
-        postbox: Postfach
+        address_care_of: Riga dell'indirizzo aggiuntiva
+        street: Strada
+        housenumber: Numero civico
+        postbox: Casella postale
         zip_code: NAP
         town: Luogo
         country: Nazione
@@ -650,7 +650,7 @@ it:
         self_registration_role_type: Tipo di rullo
         self_registration_link: Registrazione esterna
         self_registration_notification_email: E-mail di notifica
-        self_registration_require_adult_consent: Einverständnis von Erziehungsberechtigten
+        self_registration_require_adult_consent: Consenso dei genitori o dei tutori legali
         main_self_registration_group: Visualizzazione nella pagina di login
         custom_self_registration_title: Titolo alla registrazione
         nextcloud_url: Link a Nextcloud
@@ -682,7 +682,7 @@ it:
         contact: Persona di contatto
         notify_contact_on_participations: Avvisare della nuova registrazione via e-mail la persona di contatto
         maximum_participants: Numero massimo di partecipanti
-        minimum_participants: Minimale Teilnehmerzahl
+        minimum_participants: Numero massimo di partecipanti
         contact_id: Persona di contatto
         description: Descrizione
         location: Luogo / Indirizzo
@@ -704,14 +704,14 @@ it:
         applications_cancelable: Disiscrizione possibile
         display_booking_info: Visualizza stato iscrizioni
         participations_visible: Visibilità dei partecipanti
-        waiting_list: Nationale Warteliste
+        waiting_list: Lista d'attesa nazionale
         requires_approval: Raccomandazione necessaria
         globally_visible: Visibilità
-        automatic_assignment: Automatische Zuteilung
+        automatic_assignment: Assegnazione automatica
         application_questions: Dati per l'iscrizione
-        admin_questions: Administrationsangaben
-        no_name: "[Kein Name]"
-        visible_contact_attributes: "Anzeigeoptionen (Kontaktperson)"
+        admin_questions: Dati amministrativi
+        no_name: "[Nessun nome]"
+        visible_contact_attributes: "Opzioni di visualizzazione (persona di contatto)"
 
       event/contact_attrs:
         required: Obbligatorio
@@ -732,12 +732,12 @@ it:
 
       event/attachment:
         file: File
-        visibility: Sichtbarkeit
+        visibility: Visibilità
         visibilities:
-          _nil: Unsichtbar
-          team: Nur für Leitungsteam sichtbar
-          participants: Für Leitungsteam und Teilnehmende sichtbar
-          global: Global sichtbar
+          _nil: Invisibile
+          team: Visibile solo al team direttivo
+          participants: Visibile al team direttivo e ai partecipanti
+          global: Visibile a livello globale
 
       event/course:
         kind_id: Tipo di corso
@@ -746,7 +746,7 @@ it:
         state_translated: Stato
         priorization: Priorità
         requires_approval: Necessita autorizzazione
-        training_days: Ausbildungstage
+        training_days: Giorni di formazione
 
       event/date:
         label: Definizione
@@ -799,7 +799,7 @@ it:
           declined: rifiutato
 
       event/participation:
-        person_id: Person
+        person_id: Persona
         event_id: Evento
         additional_information: Osservazioni
         answers: Domande
@@ -851,8 +851,8 @@ it:
         uid: Client ID
         secret: Client secret
         redirect_uri: Redirect URIs
-        additional_audiences: Weitere Audiences
-        skip_consent_screen: Einwilligung überspringen
+        additional_audiences: Altri destinatari
+        skip_consent_screen: Salta il consenso
 
       phone_number:
         number: Numero
@@ -864,8 +864,8 @@ it:
         qualification_kind_id: Qualifica
         start_at: Dal
         origin: Fonte
-        finish_at: Bis
-        reactivateable_until: Reaktivierbar bis
+        finish_at: A
+        reactivateable_until: Riattivabile fino al
         string: '%{kind}'
         string_with_origin: '%{kind} (fonte: %{origin})'
         string_with_finish_at: '%{kind} (fino a %{finish_at})'
@@ -880,7 +880,7 @@ it:
         updated_at: Modificato
         deleted_at: Cancellato
         reactivateable: Riattivabile
-        required_training_days: Erforderliche Ausbildungstage
+        required_training_days: Giorni di formazione richiesti
 
       # used for nested phone_numbers
       phone_numbers:
@@ -911,10 +911,10 @@ it:
         person_id: Persona
         string_long: '%{role} in %{group}'
         dates: Date
-        created_at: Erstellt um
-        start_on: Von
-        end_on: Bis
-        end_on_in_name: bis
+        created_at: Creato intorno al
+        start_on: Da
+        end_on: A
+        end_on_in_name: al
         class:
           archived: '%{role_kind} (archiviato)'
           permission:
@@ -961,7 +961,7 @@ it:
           fax: Fax
           andere: Altro
           webseite: Sito web
-          rechnung: Rechnung
+          rechnung: Fattura
 
       social_account:
         name: Nickname
@@ -977,18 +977,18 @@ it:
       additional_email:
         email: Email
         name: Altre email
-        label: Weitere E-Mail Typ
+        label: Altro tipo di email
         public: Pubblico
         mailings: Invio
-        invoices: Rechnung
+        invoices: Fattura
 
       additional_emails:
-        email: E-Mail
-        name: Weitere E-Mail
-        label: Weitere E-Mail Typ
-        public: Öffentlich
-        mailings: Versand
-        invoices: Rechnung
+        email: E-mail
+        name: Altre email
+        label: Altro tipo di email
+        public: Pubblico
+        mailings: Invio
+        invoices: Fattura
 
       mailing_list:
         name: Nome della lista
@@ -1152,7 +1152,7 @@ it:
         due_at: Scade il
         issued_at: Emesso il
         sent_at: 'Spedito il '
-        last_payment_at: Zahlung am
+        last_payment_at: Pagamento il
         cost: Importo
         total: Importo della fattura
         total_inkl_vat: Totale IVA incl.
@@ -1203,7 +1203,7 @@ it:
         payment_slips:
           qr: Fattura QR
           no_ps: Nessuno
-        reference_prefix: QR-Referenz
+        reference_prefix: Riferimento QR
         participant_number: Numero di partecipante
         payment_reminder_configs: Solleciti
         remove_logo: Rimuovere il logo attuale
@@ -1211,7 +1211,7 @@ it:
         donation_increase_percentage: aumento in %
         donation_calculation_year_amount: numero di anni
         sender_name: Nome mittente e-mail
-        custom_content: E-Mail Vorlage
+        custom_content: Modello di e-mail
 
       invoice_item:
         name: Nome
@@ -1244,8 +1244,8 @@ it:
         account: Conto
 
       message_template:
-        title: Titel
-        body: Text
+        title: Titolo
+        body: Testo
 
       payment:
         invoice: Fattura
@@ -1254,8 +1254,8 @@ it:
         reference: Referenza di pagamento
         transaction_identifier: Identificatore di transazione
         status: Stato
-        payee_person_name: Schuldner Name
-        payee_person_address: Schuldner Adresse
+        payee_person_name: Nome del debitore
+        payee_person_address: Indirizzo del debitore
 
       payment_reminder:
         invoice: Fattura
@@ -1266,7 +1266,7 @@ it:
         title: Titolo
         text: Testo
         due_days: Giorni fino alla scadenza
-        show_invoice_description: Ursprünglichen Rechnungstext vor Mahnungstext anzeigen
+        show_invoice_description: Visualizza il testo originale della fattura prima del testo del sollecito
 
       payment_reminder_configs:
         title: Titolo del sollecito
@@ -1337,15 +1337,15 @@ it:
 
   fixed_fees:
     membership:
-      members: Mitglieder
+      members: Membri
 
   errors:
     messages:
-      invalid_zipcode: ist nicht gültig
+      invalid_zipcode: non è valido
       attachments_not_allowed: "Non può contenere allegati"
       invalid_money: "Deve essere arrotondato ai 5 centesimi"
-      invalid_iban: "ist nicht gültig"
-      invalid_decimal_format: "ist nicht gültig, maximal %{precision} Zeichen erlaubt mit %{scale} Nachkommastellen"
+      invalid_iban: "non è valido"
+      invalid_decimal_format: "non valido, massimo %{precision} caratteri consentiti con %{scale} cifre decimali"
       no_permission: "Accesso negato"
       # timeliness
       invalid_date: "non è una data valida"
@@ -1354,7 +1354,7 @@ it:
       is_at: "deve essere %{restriction}"
       before: "deve essere prima di %{restriction} "
       on_or_before: "deve essere %{restriction} oppure prima"
-      after: "muss nach %{restriction} sein"
+      after: "deve essere dopo %{restriction}"
       on_or_after: "deve essere %{restriction} oppure dopo"
       # devise
       expired: "è scaduto, per favore richiedere nuovamente"

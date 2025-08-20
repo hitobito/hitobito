@@ -473,7 +473,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       input_for_locale_with_translation_button(attr, I18n.locale, args) +
         content_tag(:div, {class: "hidden", "data-translatable-fields-target": "toggle"}) do
           other_lang_inputs = I18n.available_locales.excluding(I18n.locale).map do |locale|
-            input_for_locale(attr, locale, **args, data: {"translatable-fields-target": "translatedField", action: "input->translatable-fields#updateTranslatedFields trix-change->translatable-fields#updateTranslatedFields"})
+            input_for_locale("#{attr}_#{locale}", locale, **args, data: {
+              "translatable-fields-target": "translatedField",
+              action: "input->translatable-fields#updateTranslatedFields trix-change->translatable-fields#updateTranslatedFields"
+            })
           end
           safe_join(other_lang_inputs)
         end
@@ -494,7 +497,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     rich_text = args.delete(:rich_text) || false
     content_tag(:div, class: "input-group me-2 mb-2") do
       input_for_locale = content_tag(:span, locale.to_s.upcase, class: "input-group-text") +
-        (rich_text ? rich_text_area("#{attr}_#{locale}", **args) : input_field("#{attr}_#{locale}", **args))
+        (rich_text ? rich_text_area(attr, **args) : input_field(attr, **args))
       input_for_locale += content_tag(:span, "-", class: "input-group-text", "data-translatable-fields-target": "translatedFieldsDisplay") if locale == I18n.locale
       input_for_locale
     end

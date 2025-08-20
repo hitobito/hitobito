@@ -17,7 +17,9 @@ module Globalized
         validators_on(attr).each do |validator|
           next if validator.is_a? ActiveRecord::Validations::PresenceValidator
 
-          validates_with validator.class, validator.options.merge(attributes:)
+          attributes.each do |attribute|
+            validates_with validator.class, validator.options.merge(attributes: attribute, unless: proc { attribute.end_with? "_#{I18n.locale}" })
+          end
         end
       end
 

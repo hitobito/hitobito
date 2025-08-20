@@ -183,7 +183,7 @@ module Synchronize
           list
         end
       rescue Gibbon::MailChimpError => e
-        fail e unless e.status_code == 400
+        fail e unless [0, 400].include?(e.status_code.to_i)
         retries += 1
         (retries < MAX_RETRIES) ? retry : fail("Max retries exceeded")
       end

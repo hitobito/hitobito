@@ -223,6 +223,7 @@ describe Synchronize::Mailchimp::Client do
         stub_members(%w[a@example.com], %w[b@example.com], total_items: 5)
         stub_members(%w[c@example.com], %w[d@example.com], total_items: 5, offset: 2)
         stub_request(:get, "https://us12.api.mailchimp.com/3.0/lists/2/members?count=2&offset=4")
+          .to_timeout
           .and_return(
             {status: 400},
             {status: 400},

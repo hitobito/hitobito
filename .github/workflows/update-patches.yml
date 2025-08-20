@@ -16,9 +16,9 @@ jobs:
       - name: 'Checkout'
         uses: actions/checkout@v4
         with:
-           ref: ${{ github.head_ref }}
+          ref: ${{ github.head_ref }}
         env:
-         GH_TOKEN: ${{ secrets.RELEASE_PREPARATION_TOKEN }}
+          GH_TOKEN: ${{ secrets.RELEASE_PREPARATION_TOKEN }}
 
       - name: 'Prepare'
         uses: ./.github/actions/core-ci-setup
@@ -28,7 +28,7 @@ jobs:
 
       - name: Download and consolidate patches
         env:
-         GH_TOKEN: ${{ secrets.RELEASE_PREPARATION_TOKEN }}
+          GH_TOKEN: ${{ secrets.RELEASE_PREPARATION_TOKEN }}
         run: |
           gh --version
           bundle exec rake wagon:patches:consolidate
@@ -39,3 +39,4 @@ jobs:
         with:
           file_pattern: ".patches.yml .patches/*"
           commit_message: "[skip-ci] Consolidating patches"
+          push_options: '--force'

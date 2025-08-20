@@ -25,7 +25,10 @@ jobs:
           assets: false
 
       - name: Download and consolidate patches
+        env:
+         GH_TOKEN: ${{ github.token }}
         run: |
+          gh --version
           bundle exec rake wagon:patches:consolidate
           git status
 

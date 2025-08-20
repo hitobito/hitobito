@@ -8,7 +8,7 @@
   = render 'shared/search_form', class: 'me-2'
   = FilterNavigation::Event::Participations.new(self, @group, @event, params[:filter], params[:q]).to_s
 
-= turbo_frame_tag :search_results do
+= turbo_frame_tag :search_results, target: :_top do
   .pagination-bar
     = paginate(entries, **(@pagination_options || {}))
 

@@ -98,6 +98,7 @@ it:
               missing_scheme: deve contenere un protocollo (http:// oppure https://)
               suffix_present: alla fine non può avere ne un indirizzo ne un slash
         custom_content:
+          placeholder_missing: 'deve contenere il carattere %{placeholder}'
           attributes:
             body:
               placeholder_missing: 'deve contenere il carattere %{placeholder}'

@@ -26,6 +26,8 @@ jobs:
           assets: false
 
       - name: Download and consolidate patches
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_PREPARATION_TOKEN }}
         run: |
           gh --version
           bundle exec rake wagon:patches:consolidate

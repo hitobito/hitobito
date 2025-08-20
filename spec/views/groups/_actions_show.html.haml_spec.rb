@@ -19,14 +19,14 @@ describe "groups/_actions_show.html.haml" do
   context "address sync" do
     let(:current_user) { people(:top_leader) }
 
-    it "hides button if config file is missing" do
-      allow(Synchronize::Addresses::SwissPost::Config).to receive(:exist?).and_return(false)
+    it "hides button if setting is not enabled" do
+      allow(Settings.address_sync).to receive(:enabled).and_return(false)
       render
       expect(dom).not_to have_link "Adressensync"
     end
 
-    it "renders button if config file is present" do
-      allow(Synchronize::Addresses::SwissPost::Config).to receive(:exist?).and_return(true)
+    it "renders button if setting is enabled" do
+      allow(Settings.address_sync).to receive(:enabled).and_return(true)
       render
       expect(dom).to have_link "Adressenabgleich", href: group_addresses_sync_path(group)
       expect(dom.find_link("Adressenabgleich")["data-method"]).to eq "post"
@@ -38,8 +38,8 @@ describe "groups/_actions_show.html.haml" do
     context "as bottom member" do
       let(:current_user) { people(:bottom_member) }
 
-      it "hides button if config file exists file is missing" do
-        allow(Synchronize::Addresses::SwissPost::Config).to receive(:exist?).and_return(true)
+      it "hides button if setting is enabled" do
+        allow(Settings.address_sync).to receive(:enabled).and_return(true)
         render
         expect(dom).not_to have_link "Addressenabgleich"
       end

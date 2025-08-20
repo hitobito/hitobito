@@ -11,7 +11,7 @@ class CustomContent::CustomContentPlaceholdersValidator < ActiveModel::EachValid
     subject = record.subject
     if record.globalize_attribute_names.include? attribute
       locale = attribute.match(/^.*_([a-z]{2})$/).captures.first
-      subject = record.send("subject_#{locale}")
+      subject = record.send(:"subject_#{locale}")
     end
 
     return if value.blank? && subject.blank?

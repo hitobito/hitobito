@@ -10,7 +10,7 @@ module Globalized
     Rails.autoloaders.main.on_load(class_name) do
       translated_attribute_names.each do |attr|
         attributes = I18n.available_locales.map { |locale| :"#{attr}_#{locale}" }
-                         .filter { |a| validators_on(a).empty? }
+          .filter { |a| validators_on(a).empty? }
 
         next if attributes.empty?
 
@@ -28,7 +28,7 @@ module Globalized
 
           return "#{super(attribute, *options.drop(1))} (#{locale.upcase})"
         end
-        super(*options)
+        super
       end
     end
 

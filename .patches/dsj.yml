@@ -1,1 +1,13 @@
---- []
+---
+- :method: :upcoming_user_events
+  :constant: Event::ListsController
+  :wagon: dsj
+  :source_file: hitobito/app/controllers/event/lists_controller.rb
+  :patch_file: hitobito_dsj/app/controllers/dsj/event/lists_controller.rb
+  :patch_file_line: 27
+- :method: :predefined_filters
+  :constant: FilterNavigation::Event::Participations
+  :wagon: dsj
+  :source_file: hitobito/app/helpers/filter_navigation/event/participations.rb
+  :patch_file: hitobito_dsj/app/helpers/dsj/filter_navigation/event/participations.rb
+  :patch_file_line: 9

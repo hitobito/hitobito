@@ -16,6 +16,6 @@
 = content_for(:filter) do
   = render 'shared/search_form'
 
-= turbo_frame_tag :search_results do
+= turbo_frame_tag :search_results, target: :_top do
   = paginate entries
   = person_duplicates_table(entries)

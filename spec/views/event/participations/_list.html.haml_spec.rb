@@ -42,6 +42,11 @@ describe "event/participations/_list.html.haml" do
     expect(dom).to have_text "Pflichtangaben fehlen"
   end
 
+  it "navigates outside of frame" do
+    login_as(people(:top_leader))
+    expect(dom).to have_css("turbo-frame#search_results[target=_top]")
+  end
+
   context "created_at" do
     it "can be viewed by someone how can show participation details" do
       login_as(people(:top_leader))

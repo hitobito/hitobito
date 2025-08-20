@@ -12,6 +12,10 @@ describe People::AddressesSyncsController do
 
   let(:top_layer) { groups(:top_layer) }
 
+  before do
+    allow(Settings.address_sync).to receive(:enabled).and_return(true)
+  end
+
   context "with admin permission" do
     let(:person) { Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group)).person }
 
@@ -28,6 +32,15 @@ describe People::AddressesSyncsController do
         post :create, params: {group_id: top_layer.id}
       end.not_to change { Delayed::Job.count }
       expect(flash[:alert]).to eq "Aktuell ist noch ein Adressenabgleich in Arbeit."
+    end
+    context "without feature enabled" do
+      before { allow(Settings.address_sync).to receive(:enabled).and_return(false) }
+
+      it "raises error" do
+        expect do
+          post :create, params: {group_id: top_layer.id}
+        end.to raise_error(FeatureGate::FeatureGateError)
+      end
     end
   end
 

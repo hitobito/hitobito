@@ -104,6 +104,9 @@ additional_address:
   predefined_labels:
     - Arbeit
 
+address_sync:
+  enabled: false
+
 invoice_lists:
   fixed_fees:
     membership:

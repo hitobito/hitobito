@@ -7,6 +7,7 @@
 
 class People::AddressesSyncsController < ApplicationController
   def create
+    FeatureGate.assert!("address_sync")
     group = Group.find(params[:group_id])
     authorize!(:sync_addresses, group)
 

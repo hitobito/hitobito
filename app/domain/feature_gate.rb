@@ -97,8 +97,6 @@ class FeatureGate
     config
   end
 
-  def address_sync_enabled? = Synchronize::Addresses::SwissPost::Config.exist?
-
   def person_language_enabled?
     # some rake tasks run without db present, so make sure
     # this doesn't fail in those cases

@@ -12,6 +12,7 @@ de:
     unknown: unbekannt
     nobody: niemand
     all: Alle
+    or: oder
 
     from: Von
     until: Bis
@@ -1847,14 +1848,20 @@ de:
 
   people_filters:
     form:
-      save_search: Suche speichern
+      add: Filterkriterium hinzufügen
+      show_results: Ergebnisse anzeigen
+      save_search: Filter speichern
       save_filter: Filter speichern
       save_filter_placeholder: Geben Sie einen Namen an, um diesen Filter zu speichern
+      filter_advice_heading: Kein Filterkriterium ausgewählt
+      save_filter_option: Diese Einstellung als neuer Filter speichern?
+      save_filter_option_value: Ja, als Filter speichern
       range:
         deep: In der aktuellen Ebene und allen darunter liegenden Ebenen und Gruppen
         layer: In der aktuellen Ebene und allen ihren Gruppen
         group: Nur in der aktuellen Gruppe
         group_deep: In der aktuellen Gruppe und allen darunter liegenden Gruppen
+        one_option: Suchbereich ist die aktuelle Gruppe und alle darunterliegenden Gruppen
       filters_qualification_validity:
         active: Nur aktuell gültige Qualifikationen
         reactivateable: Gültige und reaktivierbare Qualifikationen
@@ -1872,29 +1879,24 @@ de:
         inactive_but_existing: inaktive aber zu einer anderen Zeit vorhandene Rollen
 
     attributes:
+      advice: Feld auswählen
       title: Felder
       match: enthält
       not_match: enthält nicht
       equal: ist genau
       greater: grösser als
       smaller: kleiner als
+      younger: jünger als
+      older: älter als
       before: vor dem
       after: nach dem
       blank: ist leer
 
-    language:
-      title: Sprache
-      word_connector: " oder "
-      one_of: Sprache ist %{languages}
-
     tag:
       title: Tags
-      prompt_tag_selection: Personen einbeziehen, die mindestens einen der untenstehenden Tags enthalten
+      prompt_tag_selection: Personen mit Tag
       prompt_tag_placeholder: Gewünschte Tag-Namen eingeben
-
-    tag_absence:
-      prompt_tag_absence_selection: Personen ausschliessen, die mindestens einen der untenstehenden Tags enthalten
-      prompt_tag_absence_placeholder: Gewünschte Tag-Namen eingeben
+      prompt_tag_absence_selection: Personen ohne Tag
 
     new:
       title: Personen filtern
@@ -1908,11 +1910,28 @@ de:
       prompt_role_duration_from: oder im Zeitraum von
       prompt_role_duration_selection: Welcher Zeitraum soll berücksichtigt werden?
       prompt_role_duration_until: bis
+      role_kind_title: Gültigkeit
+      prompt_role_placeholder: Gewünschter Rollenname eingeben
+      prompt_role_kind_placeholder: Gewünschte Gültigkeit eingeben
+      duration_title: Zeitraum von
       or_duration: oder
-      include_archived: Archivierte Rollen miteinbeziehen
+      include_archived: Archivierte Rollen einbeziehen
+      include_archived_option: Ja, archivierte Rollen einbeziehen
 
     qualification:
       title: Qualifikationen
+      criterion: Kriterium
+      validity: Gültigkeit
+      validity_label:
+        active: Aktiv
+        reactivateable: Reaktivierbar
+        not_active_but_reactivateable: Nicht aktiv aber reaktivierbar
+        not_active: Nicht aktiv
+        all: Alle
+        none: Keine
+        only_expired: Nur abgelaufene
+      prompt_qualification_placeholder: Gewünschter Qualifikationsname eingeben
+      prompt_qualification_validity_placeholder: Gewünschte Gültigkeit eingeben
       prompt_qualification_selection: Welche Qualifikationen sollen angezeigt werden?
       prompt_constraint: Welche Logik soll angewendet werden?
       prompt_validity: Welche Gültigkeit sollen die angezeigten Qualifikationen haben?

@@ -28,8 +28,8 @@ describe Subscriber::FilterController do
   describe "PUT update" do
     let(:filters) do
       {
-        language: {"allowed_values" => %w[de fr]},
-        attributes: {"1699698452786" => {"constraint" => "greater", "key" => "years", "value" => "16"}}
+        attributes: {"1699698452786" => {"constraint" => "greater", "key" => "years", "value" => "16"},
+                     "9845218032045" => {"constraint" => "equal", "key" => "language", "value" => %w[de fr]}}
       }
     end
 
@@ -40,9 +40,6 @@ describe Subscriber::FilterController do
         id: mailing_list.id))
 
       filter_chain = mailing_list.reload.filter_chain
-      expect(filter_chain[:language]).to be_a(Person::Filter::Language)
-      expect(filter_chain[:language].args).to eq(filters[:language].deep_stringify_keys)
-      expect(filter_chain[:language].allowed_values).to contain_exactly("de", "fr")
       expect(filter_chain[:attributes]).to be_a(Person::Filter::Attributes)
       expect(filter_chain[:attributes].args).to eq(filters[:attributes].deep_stringify_keys)
     end

@@ -3,93 +3,78 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- filter = entry.filter_chain[:qualification]
-- filter_args = filter ? filter.args : {}
+.label-columns.mr-5
+  - unless can?(:index_full_people, @group)
+    .alert.alert-warning= t('.not_enough_permissions')
 
-.label-columns
-  = field_set_tag(t('.prompt_qualification_selection')) do
-    - unless can?(:index_full_people, @group)
-      .alert.alert-warning= t('.not_enough_permissions')
-
-    .row
-      - @qualification_kinds.each do |kind|
-        - dom_id = "qualification_kind_id_#{kind.id}"
-        = label_tag(dom_id, class: 'inline col-12 col-lg-5 col-xl-4') do
-          = check_box_tag("filters[qualification][qualification_kind_ids][]",
-                          kind.id,
-                          filter && filter.args[:qualification_kind_ids].include?(kind.id),
-                          id: dom_id)
-          = kind.to_s
-
-
-    .controls
-      &nbsp;
-
-    = field_set_tag(t('.prompt_constraint')) do
-      .row
+  .d-flex.flex-column.flex-lg-row.align-items-start.align-items-lg-center.mb-2
+    .col-12.col-lg-2
+      %label= t("people_filters.qualification.title")
+    .col-12.col-lg-10.shown{"data-controller": "form-select"}
+      = select_tag('filters[qualification][qualification_kind_ids][]',
+                      people_filter_qualification_kind_options(filter),
+                      class: 'form-select form-select-sm tom-select w-100',
+                      id: 'qualification-select',
+                      "data-controller": "tom-select",
+                      multiple: true,
+                      data: { chosen_no_results: t('global.chosen_no_results'),
+                      placeholder: t("people_filters.qualification.prompt_qualification_placeholder") } )
+  .d-flex.flex-column.flex-lg-row.align-items-start.align-items-lg-center.mb-2
+    .col-12.col-lg-2
+      %label= t("people_filters.qualification.criterion")
+    .col-12.col-lg-10.shown.d-flex.flex-column
+      .d-flex.flex-row
         = label_tag('filters_qualification_match_one', class: 'radio inline') do
           = radio_button_tag('filters[qualification][match]', 'one', true)
           = t('people_filters.simple_radio.match.one')
+      .d-flex.flex-row
         = label_tag('filters_qualification_match_all', class: 'radio inline') do
-          = radio_button_tag('filters[qualification][match]', 'all', filter_args[:match] == 'all', %w(not_active none only_expired).include?(filter_args[:validity]) ? { disabled: true } : {})
+          = radio_button_tag('filters[qualification][match]', 'all', people_filter_value(filter, :match) == 'all', %w(not_active none only_expired).include?(people_filter_value(filter, :validity)) ? { disabled: true } : {})
           = t('people_filters.simple_radio.match.all')
 
-  = field_set_tag(t('.prompt_validity')) do
-    %div.row
-      = render 'simple_radio',
-                attr: "filters[qualification][validity]",
-                value: 'active',
-                checked: true # first item is checked per default
-      = render 'simple_radio',
-                attr: "filters[qualification][validity]",
-                value: 'reactivateable',
-                checked: filter_args[:validity] == 'reactivateable'
-      = render 'simple_radio',
-                attr: "filters[qualification][validity]",
-                value: 'not_active_but_reactivateable',
-                checked: filter_args[:validity] == 'not_active_but_reactivateable'
-      = render 'simple_radio',
-                attr: "filters[qualification][validity]",
-                value: 'not_active',
-                checked: filter_args[:validity] == 'not_active'
-      = render 'simple_radio',
-                attr: "filters[qualification][validity]",
-                value: 'all',
-                checked: filter_args[:validity] == 'all'
-      = render 'simple_radio',
-                attr: "filters[qualification][validity]",
-                value: 'none',
-                checked: filter_args[:validity] == 'none'
-      = render 'simple_radio',
-                attr: "filters[qualification][validity]",
-                value: 'only_expired',
-                checked: filter_args[:validity] == 'only_expired'
+  .d-flex.flex-column.flex-lg-row.align-items-start.align-items-lg-center.mb-2
+    .col-12.col-lg-2
+      %label= t("people_filters.qualification.validity")
+    .col-12.col-lg-10.shown.d-flex.flex-column{"data-controller": "form-select"}
+      = select_tag('filters[qualification][validity]',
+                      people_filter_qualification_validity_options(filter),
+                      class: 'form-select form-select-sm w-100',
+                      id: 'qualification-validity-select',
+                      multiple: false,
+                      data: { chosen_no_results: t('global.chosen_no_results'),
+                      placeholder: t("people_filters.qualification.prompt_qualification_validity_placeholder") } )
 
-= field_set_tag(t('.prompt_date'), id: 'reference-date', class: 'form-horizontal', style: "display: #{%w(all none).include?(filter_args[:validity]) ? 'none' : 'block'};") do
-  .control-group.row
-    .col-6.col-sm-4
-      .input-group
-        %span.input-group-text= icon(:'calendar-alt')
-        = text_field_tag("filters[qualification][reference_date]", filter_args[:reference_date], class: 'date form-control form-control-sm')
-    .col-form-label
-      = t('.reference_date_help_inline')
+  %div#reference-date{style: "display: #{%w(all none).include?(people_filter_value(filter, :validity)) ? 'none' : 'block'};"}
+    .d-flex.flex-column.flex-lg-row.align-items-start.mb-2
+      .col-12.col-lg-2.d-flex.align-items-start
+        %label= t('.prompt_date')
+      .col-12.col-lg-10.shown.d-flex.flex-column{"data-controller": "form-select"}
+        .input-group.d-flex.col-12.mr-3
+          %span.input-group-text= icon(:'calendar-alt')
+          = text_field_tag("filters[qualification][reference_date]", people_filter_value(filter, :reference_date), class: 'date form-control form-control-sm')
+        .d-flex.col-12.col-form-label
+          = t('.reference_date_help_inline')
 
+  %div.form-horizontal#year-scope{style: "display: #{people_filter_value(filter, :validity) == 'all' ? 'block' : 'none'};"}
+    .d-flex.flex-column.flex-lg-row.align-items-start.mb-2
+      .col-12.col-lg-2.align-items-start
+        = label_tag(:start_at_year_from, t('.start_at_year_label'), class: 'control-label col-form-label')
+      .d-flex.col-12.col-lg-10.flex-row
+        .col-5.col-lg-5
+          = number_field_tag("filters[qualification][start_at_year_from]", people_filter_value(filter, :start_at_year_from), class: 'form-control form-control-sm', placeholder: 'YYYY' )
+        .col-2.col-lg-1.col-form-label.text-center
+          = t('.start_at_year_infix')
+        .col-5.col-lg-6
+          = number_field_tag("filters[qualification][start_at_year_until]", people_filter_value(filter, :start_at_year_until), class: 'form-control form-control-sm', placeholder: 'YYYY')
 
-= field_set_tag(t('.prompt_year'), id: 'year-scope', class: 'form-horizontal', style: "display: #{filter_args[:validity] == 'all' ? 'block' : 'none'};") do
-  .control-group.row
-    = label_tag(:start_at_year_from, t('.start_at_year_label'), class: 'control-label col-form-label col-2')
-    .col-4.col-lg-2
-      = number_field_tag("filters[qualification][start_at_year_from]", filter_args[:start_at_year_from], class: 'form-control form-control-sm', placeholder: 'YYYY' )
-    .col-1.col-form-label.text-center
-      = t('.start_at_year_infix')
-    .col-4.col-lg-2
-      = number_field_tag("filters[qualification][start_at_year_until]", filter_args[:start_at_year_until], class: 'form-control form-control-sm', placeholder: 'YYYY')
-  .control-group.row
-    = label_tag(:finish_at_year_from, t('.finish_at_year_label'), class: 'control-label col-form-label col-2')
-    .col-4.col-lg-2
-      = number_field_tag("filters[qualification][finish_at_year_from]", filter_args[:finish_at_year_from], class: 'form-control form-control-sm', placeholder: 'YYYY')
-    .col-1.col-form-label.text-center
-      = t('.finish_at_year_infix')
-    .col-4.col-lg-2
-      = number_field_tag("filters[qualification][finish_at_year_until]", filter_args[:finish_at_year_until], class: 'form-control form-control-sm', placeholder: 'YYYY'  )
+    .d-flex.flex-column.flex-lg-row.align-items-start.mb-2
+      .d-flex.col-12.col-lg-2.align-items-start
+        = label_tag(:finish_at_year_from, t('.finish_at_year_label'), class: 'control-label col-form-label')
+      .d-flex.col-12.col-lg-10.flex-row
+        .col-5.col-lg-5
+          = number_field_tag("filters[qualification][finish_at_year_from]", people_filter_value(filter, :finish_at_year_from), class: 'form-control form-control-sm', placeholder: 'YYYY')
+        .col-2.col-lg-1.col-form-label.text-center
+          = t('.finish_at_year_infix')
+        .col-5.col-lg-6
+          = number_field_tag("filters[qualification][finish_at_year_until]", people_filter_value(filter, :finish_at_year_until), class: 'form-control form-control-sm', placeholder: 'YYYY'  )
 

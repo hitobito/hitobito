@@ -26,7 +26,7 @@ jobs:
 
       - name: Download and consolidate patches
         env:
-         GH_TOKEN: ${{ github.token }}
+         GH_TOKEN: ${{ secrets.WAGON_TESTS_GITHUB_TOKEN }}
         run: |
           gh --version
           bundle exec rake wagon:patches:consolidate

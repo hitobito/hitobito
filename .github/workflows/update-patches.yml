@@ -2,6 +2,8 @@ name: 'Core - Consolidate patches'
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 5 * * *'
 
 permissions:
   contents: write

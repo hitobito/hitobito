@@ -116,7 +116,18 @@ describe Message::LetterWithInvoice do
 
     it "validates invoice items" do
       letter.invoice_attributes["invoice_items_attributes"][2] = invalid_invoice_item_attrs
+
       expect(letter).not_to be_valid
+
+      expect(letter.errors.map(&:type)).to eq [:invoice_items_invalid]
+    end
+
+    it "requires at least one item" do
+      letter.invoice_attributes = {}
+
+      expect(letter).not_to be_valid
+
+      expect(letter.errors.map(&:type)).to eq [:invoice_items_required]
     end
   end
 end

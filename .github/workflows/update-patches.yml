@@ -17,8 +17,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
-        env:
-          GH_TOKEN: ${{ secrets.RELEASE_PREPARATION_TOKEN }}
+          token: ${{ secrets.RELEASE_PREPARATION_TOKEN }}
 
       - name: 'Prepare'
         uses: ./.github/actions/core-ci-setup
@@ -27,8 +26,6 @@ jobs:
           assets: false
 
       - name: Download and consolidate patches
-        env:
-          GH_TOKEN: ${{ secrets.RELEASE_PREPARATION_TOKEN }}
         run: |
           gh --version
           bundle exec rake wagon:patches:consolidate

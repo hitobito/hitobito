@@ -15,7 +15,7 @@ module Globalized
         next if attributes.empty?
 
         validators_on(attr).each do |validator|
-          next if validator.is_a? ActiveRecord::Validations::PresenceValidator
+          next if validator.is_a?(ActiveRecord::Validations::PresenceValidator) || validator.is_a?(ActiveRecord::Validations::UniquenessValidator)
 
           attributes.each do |attribute|
             validates_with validator.class, validator.options.merge(attributes: attribute, unless: proc { attribute.end_with? "_#{I18n.locale}" })

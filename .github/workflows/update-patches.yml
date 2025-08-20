@@ -26,6 +26,7 @@ jobs:
 
       - name: Download and consolidate patches
         run: |
+          gh status
           bundle exec rake wagon:patches:consolidate
           git status
 

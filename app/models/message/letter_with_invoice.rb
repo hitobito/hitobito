@@ -102,7 +102,9 @@ class Message::LetterWithInvoice < Message::Letter
   end
 
   def assert_valid_invoice_items
-    unless invoice.invoice_items.all?(&:valid?)
+    if invoice.invoice_items.empty?
+      errors.add(:base, :invoice_items_required)
+    elsif !invoice.invoice_items.all?(&:valid?)
       errors.add(:base, :invoice_items_invalid)
     end
   end

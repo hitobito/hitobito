@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 module Mails::ImapMailsSpecHelper
-  def build_imap_mail(plain_body: true)
-    Imap::Mail.build(imap_fetch_data(plain_body: plain_body))
+  def build_imap_mail(plain_body: true, mixed_case_sender: false)
+    Imap::Mail.build(imap_fetch_data(plain_body: plain_body, mixed_case_sender:))
   end
 
-  def imap_fetch_data(plain_body: true)
+  def imap_fetch_data(plain_body: true, mixed_case_sender: false)
     fetch_data_id = plain_body ? 1 : 2
-    Net::IMAP::FetchData.new(fetch_data_id, mail_attrs(plain_body))
+    Net::IMAP::FetchData.new(fetch_data_id, mail_attrs(plain_body, mixed_case_sender:))
   end
 
   private
@@ -38,35 +38,35 @@ module Mails::ImapMailsSpecHelper
     end
   end
 
-  def mail_attrs(plain_body)
+  def mail_attrs(plain_body, mixed_case_sender: false)
     mail = plain_body ? plain_text_mail : multipart_mail
 
     {
       "UID" => plain_body ? "42" : "43",
       "RFC822" => mail.to_s,
-      "ENVELOPE" => new_envelope,
+      "ENVELOPE" => new_envelope(mixed_case_sender:),
       "BODYSTRUCTURE" => plain_body ? text_body : html_body,
       "BODY[TEXT]" => mail.body.to_s
     }
   end
 
-  def new_envelope
+  def new_envelope(mixed_case_sender: false)
     Net::IMAP::Envelope.new(
       Time.zone.now.to_s,
       "Testflight from 24.4.2021",
       [new_address("from")],
-      [new_address("sender")],
+      [new_address("sender", mixed_case_sender:)],
       [new_address("reply_to")],
       [new_address("to")]
     )
   end
 
-  def new_address(name)
+  def new_address(name, mixed_case_sender: false)
     Net::IMAP::Address.new(
       name,
       nil,
-      "john",
-      "#{name}.com"
+      mixed_case_sender ? "JohN" : "john",
+      mixed_case_sender ? "#{name.capitalize}.com" : "#{name}.com"
     )
   end
 

@@ -35,7 +35,7 @@ module MailingLists::BulkMail
     end
 
     def sender_email_valid?
-      valid_email?(@mail.sender_email)
+      valid_email?(sender_email)
     end
 
     def valid_email?(email)
@@ -67,11 +67,11 @@ module MailingLists::BulkMail
     end
 
     def sender_group_email?(group)
-      group.email == @mail.sender_email
+      group.email == sender_email
     end
 
     def additional_sender_for?(group)
-      group.additional_emails.collect(&:email).include?(@mail.sender_email)
+      group.additional_emails.collect(&:email).include?(sender_email)
     end
 
     def list_administrator?(mailing_list)
@@ -99,7 +99,7 @@ module MailingLists::BulkMail
     end
 
     def sender_email
-      @mail.sender_email
+      @mail.sender_email.downcase
     end
 
     def first_header(header_name)
@@ -113,7 +113,7 @@ module MailingLists::BulkMail
         .joins("LEFT JOIN additional_emails ON people.id = additional_emails.contactable_id" \
                " AND additional_emails.contactable_type = '#{Person.sti_name}'")
         .where("people.email = :email OR additional_emails.email = :email",
-          email: @mail.sender_email)
+          email: sender_email)
         .distinct
     end
   end

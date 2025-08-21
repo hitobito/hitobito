@@ -23,7 +23,7 @@
 require "spec_helper"
 
 describe Qualification do
-  let(:qualification) { Fabricate(:qualification, person: person) }
+  let(:qualification) { Fabricate(:qualification, person: person, start_at: 1.months.ago) }
   let(:person) { Fabricate(:person) }
 
   describe ".order_by_date" do

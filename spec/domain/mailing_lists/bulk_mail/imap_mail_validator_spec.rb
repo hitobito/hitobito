@@ -11,7 +11,8 @@ describe MailingLists::BulkMail::ImapMailValidator do
   include Mails::ImapMailsSpecHelper
 
   let(:validator) { described_class.new(imap_mail) }
-  let(:imap_mail) { build_imap_mail(plain_body: false) }
+  let(:mixed_case_sender) { false }
+  let(:imap_mail) { build_imap_mail(plain_body: false, mixed_case_sender: mixed_case_sender) }
   let(:mailing_list) { mailing_lists(:leaders) }
   let(:top_leader) { people(:top_leader) }
 
@@ -65,69 +66,75 @@ describe MailingLists::BulkMail::ImapMailValidator do
   end
 
   describe "#sender_allowed?" do
-    it "validates that sender is allowed when additional sender" do
-      sender_email = imap_mail.sender_email
-      mailing_list.additional_sender = sender_email
+    [false, true].each do |mixed_case_sender|
+      describe mixed_case_sender ? "with mixed case sender" : "with lowercase sender" do
+        let(:mixed_case_sender) { mixed_case_sender }
 
-      expect(validator.sender_allowed?(mailing_list)).to eq(true)
-    end
+        it "validates that sender is allowed when additional sender" do
+          sender_email = imap_mail.sender_email
+          mailing_list.additional_sender = sender_email
 
-    it "validates that sender is allowed when sender is group email" do
-      sender_email = imap_mail.sender_email
+          expect(validator.sender_allowed?(mailing_list)).to eq(true)
+        end
 
-      mailing_list.group.additional_emails << AdditionalEmail.new(email: sender_email)
+        it "validates that sender is allowed when sender is group email" do
+          sender_email = imap_mail.sender_email
 
-      expect(validator.sender_allowed?(mailing_list)).to eq(true)
-    end
+          mailing_list.group.email = sender_email
 
-    it "validates that sender is allowed when sender is additional group sender" do
-      sender_email = imap_mail.sender_email
+          expect(validator.sender_allowed?(mailing_list)).to eq(true)
+        end
 
-      mailing_list.group.email = sender_email
+        it "validates that sender is allowed when sender is additional group email" do
+          sender_email = imap_mail.sender_email
 
-      expect(validator.sender_allowed?(mailing_list)).to eq(true)
-    end
+          mailing_list.group.additional_emails << AdditionalEmail.new(email: sender_email)
 
-    it "validates that sender is allowed if list admin" do
-      imap_mail.net_imap_mail.attr["ENVELOPE"].sender[0].mailbox = "top_leader"
-      imap_mail.net_imap_mail.attr["ENVELOPE"].sender[0].host = "example.com"
+          expect(validator.sender_allowed?(mailing_list)).to eq(true)
+        end
 
-      expect(validator.sender_allowed?(mailing_list)).to eq(true)
-    end
+        it "validates that sender is allowed if list admin" do
+          imap_mail.net_imap_mail.attr["ENVELOPE"].sender[0].mailbox = "top_leader"
+          imap_mail.net_imap_mail.attr["ENVELOPE"].sender[0].host = "example.com"
 
-    it "validates that sender is allowed when anyone may post" do
-      mailing_list.anyone_may_post = true
+          expect(validator.sender_allowed?(mailing_list)).to eq(true)
+        end
 
-      expect(validator.sender_allowed?(mailing_list)).to eq(true)
-    end
+        it "validates that sender is allowed when anyone may post" do
+          mailing_list.anyone_may_post = true
 
-    it "validates that sender is allowed when subscribers may post and sender is list member via email" do
-      bottom_member = people(:bottom_member)
+          expect(validator.sender_allowed?(mailing_list)).to eq(true)
+        end
 
-      imap_mail.net_imap_mail.attr["ENVELOPE"].sender[0].mailbox = "bottom_member"
-      imap_mail.net_imap_mail.attr["ENVELOPE"].sender[0].host = "example.com"
+        it "validates that sender is allowed when subscribers may post and sender is list member via email" do
+          bottom_member = people(:bottom_member)
 
-      mailing_list.subscribers_may_post = true
-      mailing_list.subscriptions.create(subscriber: bottom_member)
+          imap_mail.net_imap_mail.attr["ENVELOPE"].sender[0].mailbox = "bottom_member"
+          imap_mail.net_imap_mail.attr["ENVELOPE"].sender[0].host = "example.com"
 
-      expect(validator.sender_allowed?(mailing_list)).to eq(true)
-    end
+          mailing_list.subscribers_may_post = true
+          mailing_list.subscriptions.create(subscriber: bottom_member)
 
-    it "validates that sender is allowed when subscribers may post and sender is list member via additional email" do
-      bottom_member = people(:bottom_member)
-      Fabricate(:additional_email, contactable: bottom_member, email: "additional_bottom_member@example.com")
+          expect(validator.sender_allowed?(mailing_list)).to eq(true)
+        end
 
-      imap_mail.net_imap_mail.attr["ENVELOPE"].sender[0].mailbox = "additional_bottom_member"
-      imap_mail.net_imap_mail.attr["ENVELOPE"].sender[0].host = "example.com"
+        it "validates that sender is allowed when subscribers may post and sender is list member via additional email" do
+          bottom_member = people(:bottom_member)
+          Fabricate(:additional_email, contactable: bottom_member, email: "additional_bottom_member@example.com")
 
-      mailing_list.subscribers_may_post = true
-      mailing_list.subscriptions.create(subscriber: bottom_member)
+          imap_mail.net_imap_mail.attr["ENVELOPE"].sender[0].mailbox = "additional_bottom_member"
+          imap_mail.net_imap_mail.attr["ENVELOPE"].sender[0].host = "example.com"
 
-      expect(validator.sender_allowed?(mailing_list)).to eq(true)
-    end
+          mailing_list.subscribers_may_post = true
+          mailing_list.subscriptions.create(subscriber: bottom_member)
 
-    it "validates that sender not allowed" do
-      expect(validator.sender_allowed?(mailing_list)).to eq(false)
+          expect(validator.sender_allowed?(mailing_list)).to eq(true)
+        end
+
+        it "validates that sender not allowed" do
+          expect(validator.sender_allowed?(mailing_list)).to eq(false)
+        end
+      end
     end
   end
 end

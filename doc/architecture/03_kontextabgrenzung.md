@@ -16,4 +16,6 @@ schreibende Aktionen möglich.
 
 **Mailchimp**: Integration für Massenmailing. Schreibt die Abonnenten eines Abos in eine Mailchimp Mailing Liste. Nicht im Diagram abgebildet.
 
+**ASPSMS**: SMS Gateway, welcher das Versenden von SMS über Abos erlaubt. Nicht im Diagram abgebildet.
+
 **OAuth/OIDC**: Identity Provider für Drittapplikationen. Nicht im Diagram abgebildet.

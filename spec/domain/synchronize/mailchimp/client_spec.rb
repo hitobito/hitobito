@@ -23,9 +23,11 @@ describe Synchronize::Mailchimp::Client do
       .to_return(status: 200, body: body.to_json, headers: {})
   end
 
-  def create_tgz(payload)
+  def create_tgz(*payloads)
     Dir.mktmpdir do |dir|
-      Pathname(dir).join("payload.json").write(payload.to_json)
+      payloads.reverse.each_with_index do |payload, index|
+        Pathname(dir).join("payload-#{index}.json").write(payload.to_json)
+      end
       Open3.pipeline_r("tar -zcf - -C #{dir} .").first.read
     end
   end
@@ -329,6 +331,24 @@ describe Synchronize::Mailchimp::Client do
       expect(payload[0][:method]).to eq "POST"
       expect(payload[0][:path]).to eq "lists/2/segments"
       expect(payload[0][:body]).to eq ({name: "a", static_segment: []}).to_json
+    end
+
+    it "supports multiple response files in tgz" do
+      stub_request(:post, "https://us12.api.mailchimp.com/3.0/batches")
+        .to_return(status: 200, body: {id: 1}.to_json)
+
+      stub_request(:get, "https://us12.api.mailchimp.com/3.0/batches/1")
+        .to_return(status: 200, body: {id: 1, status: "finished", response_body_url: "https://us12.api.mailchimp.com/3.0/batches/1/result"}.to_json)
+
+      stub_request(:get, "https://us12.api.mailchimp.com/3.0/batches/1/result")
+        .to_return({status: 200, body: create_tgz(
+          [response: {title: :subscriber}.to_json],
+          [response: {title: :subscriber_2}.to_json]
+        )})
+      expect(client).to receive(:sleep).once
+      _payload, response = client.create_segments(%w[a])
+      expect(response[:operation_results][0][:title]).to eq "subscriber"
+      expect(response[:operation_results][1][:title]).to eq "subscriber_2"
     end
 
     it "retries fetching of tgz if it fails" do

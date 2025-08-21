@@ -14,6 +14,7 @@
 # a standard label with them.
 class StandardFormBuilder < ActionView::Helpers::FormBuilder
   include NestedForm::BuilderMixin
+  include FormBuilder::TranslatedInputFieldBuilder
 
   REQUIRED_MARK = ' <span class="required">*</span>'.html_safe
   WIDTH_CLASSES = "mw-100 mw-md-60ch"
@@ -468,40 +469,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
-  def translated_input_field(attr, args = {})
-    content_tag(:div, "data-controller": "translatable-fields") do
-      input_for_locale_with_translation_button(attr, I18n.locale, **args, value: @object.send(:"#{attr}_#{I18n.locale}")) +
-        content_tag(:div, {class: "hidden", "data-translatable-fields-target": "toggle"}) do
-          other_lang_inputs = I18n.available_locales.excluding(I18n.locale).map do |locale|
-            input_for_locale("#{attr}_#{locale}", locale, **args, data: {
-              "translatable-fields-target": "translatedField",
-              action: "input->translatable-fields#updateTranslatedFields trix-change->translatable-fields#updateTranslatedFields"
-            })
-          end
-          safe_join(other_lang_inputs)
-        end
-    end
-  end
-
   private
-
-  def input_for_locale_with_translation_button(attr, locale, args = {})
-    content_tag(:div, class: "d-flex") do
-      input_for_locale(attr, locale, args) +
-        action_button(nil, nil, "language", {class: "mb-2", "data-action": "translatable-fields#toggleFields", type: "button", in_button_group: true})
-    end
-  end
-
-  def input_for_locale(attr, locale, args = {})
-    args = args.dup
-    rich_text = args.delete(:rich_text) || false
-    content_tag(:div, class: "input-group me-2 mb-2") do
-      input_for_locale = content_tag(:span, locale.to_s.upcase, class: "input-group-text") +
-        (rich_text ? rich_text_area(attr, **args) : input_field(attr, **args))
-      input_for_locale += content_tag(:span, "-", class: "input-group-text", "data-translatable-fields-target": "translatedFieldsDisplay") if locale == I18n.locale
-      input_for_locale
-    end
-  end
 
   # Returns true if attr is a non-polymorphic association.
   # If one or more macros are given, the association must be of this kind.

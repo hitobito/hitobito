@@ -24,7 +24,7 @@ class AssignmentsController < CrudController
   end
 
   def path_args(entry)
-    (action_name.eql?("new") || entry.person_id.blank?) ? super : entry.path_args
+    entry.persisted? ? entry.path_args : super
   end
 
   def assign_attributes

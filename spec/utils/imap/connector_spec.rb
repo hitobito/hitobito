@@ -231,7 +231,7 @@ describe Imap::Connector do
       expect(net_imap).to receive(:select).with("INBOX")
 
       # fetch
-      expect(net_imap).to receive(:uid_fetch).with(42, fetch_attributes).and_return(nil)
+      expect(net_imap).to receive(:uid_fetch).with(42, fetch_attributes).and_return([])
 
       # disconnect
       expect(net_imap).to receive(:close)

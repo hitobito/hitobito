@@ -645,11 +645,60 @@ en:
         admin_questions: Administrationsangaben
         no_name: "[Kein Name]"
         visible_contact_attributes: "Anzeigeoptionen (Kontaktperson)"
+        guest_limit: Maximale Anzahl Gäste
 
       event/contact_attrs:
         required: Mandatory
         optional: Optional
         hidden: Do not display
+
+      event/guest:
+        first_name: Vorname
+        last_name: Nachname
+        nickname: Übername
+        company_name: Firmenname
+        email: Haupt-E-Mail
+        address_care_of: zusätzliche Adresszeile
+        street: Strasse
+        housenumber: Hausnummer
+        postbox: Postfach
+        zip_code: PLZ
+        town: Ort
+        country: Land
+        gender: Geschlecht
+        genders:
+          m: männlich
+          w: weiblich
+          _nil: unbekannt
+        birthday: Geburtstag
+        phone_number: Telefonnummer
+        language: Sprache
+        main_applicant: Hauptperson
+
+      participant:
+        first_name: Vorname
+        last_name: Nachname
+        nickname: Übername
+        company_name: Firmenname
+        email: Haupt-E-Mail
+        address_care_of: zusätzliche Adresszeile
+        street: Strasse
+        housenumber: Hausnummer
+        postbox: Postfach
+        zip_code: PLZ
+        town: Ort
+        country: Land
+        gender: Geschlecht
+        genders:
+          m: männlich
+          w: weiblich
+          _nil: unbekannt
+        birthday: Geburtstag
+        phone_number: Telefonnummer
+        language: Sprache
+        main_applicant: Hauptperson
+        additional_information: Zusätzliche Angaben
+        phone_numbers: Telefonnummern
 
       event/answer:
         answer: Reply
@@ -732,7 +781,7 @@ en:
           declined: Declined
 
       event/participation:
-        person_id: Person
+        participant_id: Teilnehmer
         event_id: Event
         additional_information: Comments
         answers: Questions

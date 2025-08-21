@@ -52,7 +52,7 @@ class Imap::Connector
       select_mailbox(mailbox)
 
       fetch_data = @imap.uid_fetch(uid, attributes)
-      return nil if fetch_data.nil?
+      return nil if fetch_data.blank?
 
       Imap::Mail.build(fetch_data.first)
     end

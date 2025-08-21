@@ -141,5 +141,23 @@ describe AssignmentsController do
         }
       end.to raise_error(CanCan::AccessDenied)
     end
+
+    describe "validation" do
+      render_views
+
+      it "works after validation error" do
+        post :create, params: {
+          assignment: {
+            title: "",
+            description: "test description",
+            attachment_id: messages(:letter).id,
+            person_id: bottom_member.id
+          }
+        }
+
+        expect(response).to render_template(:new)
+        expect(response.body).to include('action="/assignments"')
+      end
+    end
   end
 end

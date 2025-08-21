@@ -40,6 +40,6 @@ class MailingLists::BulkMail::BaseMailMessageJob < BaseJob
   end
 
   def list_address
-    @message.mailing_list.mail_address
+    @message.mailing_list&.mail_address
   end
 end

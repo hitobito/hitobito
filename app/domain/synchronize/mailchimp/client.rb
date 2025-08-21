@@ -6,11 +6,11 @@
 #  https://github.com/hitobito/hitobito.
 
 require "digest/md5"
+require "rubygems/package"
 
 module Synchronize
   module Mailchimp
     class Client
-      EXTRACTION_CMD = "tar zxO"
       MAX_RETRIES = 5
       attr_reader :list_id, :count, :api, :merge_fields, :member_fields
 
@@ -227,8 +227,10 @@ module Synchronize
       def extract_operation_results(response_body_url)
         retries = 0
         body = RestClient.get(response_body_url)
-        JSON.parse(extract_tgz(body)).map do |op|
-          JSON.parse(op["response"]).slice("title", "detail", "status", "errors")
+        extract_tgz(body).flat_map do |operations|
+          operations.map do |operation|
+            operation["response"].slice("title", "detail", "status", "errors")
+          end
         end
       rescue RestClient::BadRequest
         retries += 1
@@ -261,10 +263,18 @@ module Synchronize
       end
 
       def extract_tgz(data)
-        Open3.popen2(EXTRACTION_CMD) do |input, output|
-          IO.copy_stream(StringIO.new(data), input)
-          input.close
-          output.read
+        gzip_reader = Zlib::GzipReader.new(StringIO.new(data))
+        tar_reader = Gem::Package::TarReader.new(gzip_reader)
+        tar_reader
+          .map { |entry| parse_tar_entry(entry) if entry.file? }
+          .compact_blank
+      ensure
+        tar_reader.close
+      end
+
+      def parse_tar_entry(entry)
+        JSON.parse(entry.read).each do |item|
+          item["response"] = JSON.parse(item["response"])
         end
       end
 

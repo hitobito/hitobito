@@ -1,0 +1,55 @@
+# frozen_string_literal: true
+
+module FormBuilder::TranslatedInputFieldBuilder
+  def translated_input_field(attr, args = {})
+    rich_text = args.delete(:rich_text) || false
+    available_locales = Settings.application.languages.keys
+    return(rich_text ? rich_text_area(attr, **args) : input_field(attr, **args)) if available_locales.length == 1
+
+    content_tag(:div, "data-controller": "translatable-fields") do
+      current_locale_input(attr, rich_text, args) + other_locale_inputs(attr, available_locales, rich_text, args)
+    end
+  end
+
+  private
+
+  def current_locale_input(attr, rich_text, args = {})
+    with_translation_button do
+      input_for_locale(attr, I18n.locale, rich_text, **args, value: @object.send(:"#{attr}_#{I18n.locale}")) do
+        translated_fields_display
+      end
+    end
+  end
+
+  def other_locale_inputs(attr, available_locales, rich_text, args = {})
+    content_tag(:div, {class: "hidden", "data-translatable-fields-target": "toggle"}) do
+      other_locale_inputs = available_locales.excluding(I18n.locale).map do |locale|
+        input_for_locale("#{attr}_#{locale}", locale, rich_text, **args, data: {
+          "translatable-fields-target": "translatedField",
+          action: "input->translatable-fields#updateTranslatedFields trix-change->translatable-fields#updateTranslatedFields"
+        })
+      end
+      safe_join(other_locale_inputs)
+    end
+  end
+
+  def translated_fields_display
+    content_tag(:span, "-", class: "input-group-text", "data-translatable-fields-target": "translatedFieldsDisplay")
+  end
+
+  def with_translation_button
+    content_tag(:div, class: "d-flex") do
+      yield +
+        action_button(nil, nil, "language", {class: "mb-2", "data-action": "translatable-fields#toggleFields", type: "button", in_button_group: true})
+    end
+  end
+
+  def input_for_locale(attr, locale, rich_text, args = {})
+    content_tag(:div, class: "input-group me-2 mb-2") do
+      input_for_locale = content_tag(:span, locale.to_s.upcase, class: "input-group-text") +
+        (rich_text ? rich_text_area(attr, **args) : input_field(attr, **args))
+      input_for_locale += yield if block_given?
+      input_for_locale
+    end
+  end
+end

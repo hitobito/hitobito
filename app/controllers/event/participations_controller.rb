@@ -122,7 +122,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   private
 
   def render_entries_pdf(entries)
-    render_pdf(entries.collect(&:person), group)
+    render_pdf(entries.collect(&:person), group, event.to_s)
   end
 
   def render_entry_json

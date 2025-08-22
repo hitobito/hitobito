@@ -35,7 +35,7 @@ class Export::LabelsJob < Export::ExportBaseJob
         household = @options[:household] == "true"
         Export::Pdf::Labels.new(find_and_remember_label_format, label: @options[:address_type]).generate(people, household)
       else
-        Export::Pdf::List.render(people, group)
+        Export::Pdf::List.render(people, group.name)
       end
     end
   end

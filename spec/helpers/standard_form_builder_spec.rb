@@ -8,7 +8,7 @@
 require "spec_helper"
 
 describe "StandardFormBuilder" do
-  include ActionText
+  include ActionText::TagHelper
   include FormatHelper
   include I18nHelper
   include FormHelper
@@ -308,16 +308,26 @@ describe "StandardFormBuilder" do
       end
     end
 
-    it "generates textarea for column type text" do
-      attr = :translated_text_field
-      dom = Capybara::Node::Simple.new(form.translated_input_field(attr))
+    context "Stub column type as 'text'" do
+      before do
+        allow(CrudTestModel).to receive(:column_type).and_call_original
+        allow(CrudTestModel).to receive(:column_type).with(Class, :translated_text_field).and_return(:text)
+        reset_db
+        setup_db
+        create_test_data
+      end
 
-      expect(dom).to have_css("div[class='d-flex'] div[class='input-group me-2 mb-2'] textarea[name='entry[#{attr}]']")
-      expect(dom).to have_css("div[class='d-flex'] button[data-action='translatable-fields#toggleFields'][type='button']")
+      it "generates textarea for column type text" do
+        attr = :translated_text_field
+        dom = Capybara::Node::Simple.new(form.translated_input_field(attr))
 
-      expect(dom).not_to have_css("div[class='hidden'] div[class='input-group me-2 mb-2'] textarea[name='entry[#{attr}]']")
-      Settings.application.languages.keys.excluding(I18n.locale).each do |locale|
-        expect(dom).to have_css("div[class='hidden'] div[class='input-group me-2 mb-2'] textarea[name='entry[#{attr}_#{locale}]']")
+        expect(dom).to have_css("div[class='d-flex'] div[class='input-group me-2 mb-2'] textarea[name='entry[#{attr}]']")
+        expect(dom).to have_css("div[class='d-flex'] button[data-action='translatable-fields#toggleFields'][type='button']")
+
+        expect(dom).not_to have_css("div[class='hidden'] div[class='input-group me-2 mb-2'] textarea[name='entry[#{attr}]']")
+        Settings.application.languages.keys.excluding(I18n.locale).each do |locale|
+          expect(dom).to have_css("div[class='hidden'] div[class='input-group me-2 mb-2'] textarea[name='entry[#{attr}_#{locale}]']")
+        end
       end
     end
 
@@ -325,12 +335,12 @@ describe "StandardFormBuilder" do
       attr = :translated_field
       dom = Capybara::Node::Simple.new(form.translated_input_field(attr, rich_text: true))
 
-      expect(dom).to have_css("div[class='d-flex'] div[class='input-group me-2 mb-2'] trix-editor[name='entry[#{attr}]']")
+      expect(dom).to have_css("div[class='d-flex'] div[class='input-group me-2 mb-2'] trix-editor#entry_#{attr}")
       expect(dom).to have_css("div[class='d-flex'] button[data-action='translatable-fields#toggleFields'][type='button']")
 
-      expect(dom).not_to have_css("div[class='hidden'] div[class='input-group me-2 mb-2'] trix-editor[name='entry[#{attr}]']")
+      expect(dom).not_to have_css("div[class='hidden'] div[class='input-group me-2 mb-2'] trix-editor#entry_#{attr}")
       Settings.application.languages.keys.excluding(I18n.locale).each do |locale|
-        expect(dom).to have_css("div[class='hidden'] div[class='input-group me-2 mb-2'] trix-editor[name='entry[#{attr}_#{locale}]']")
+        expect(dom).to have_css("div[class='hidden'] div[class='input-group me-2 mb-2'] trix-editor#entry_#{attr}_#{locale}")
       end
     end
 

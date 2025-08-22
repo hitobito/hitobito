@@ -1174,7 +1174,7 @@
   :wagon: sac_cas
   :source_file: hitobito/app/models/event/course.rb
   :patch_file: hitobito_sac_cas/app/models/sac_cas/event/course.rb
-  :patch_file_line: 194
+  :patch_file_line: 201
 - :method: :load_assocations
   :constant: Event::KindCategoriesController
   :wagon: sac_cas

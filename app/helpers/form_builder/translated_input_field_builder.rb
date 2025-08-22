@@ -12,7 +12,8 @@ module FormBuilder::TranslatedInputFieldBuilder
     return(rich_text ? rich_text_area(attr, **args) : input_field(attr, **args)) if available_locales.length == 1
 
     content_tag(:div, "data-controller": "translatable-fields") do
-      current_locale_input(attr, rich_text, args) + other_locale_inputs(attr, available_locales, rich_text, args)
+      current_locale_input(attr, rich_text, args) + other_locale_inputs(attr, available_locales, rich_text, args) +
+        help_block("-", "data-translatable-fields-target": "translatedFieldsDisplay")
     end
   end
 
@@ -38,10 +39,6 @@ module FormBuilder::TranslatedInputFieldBuilder
     end
   end
 
-  def translated_fields_display
-    content_tag(:span, "-", class: "input-group-text", "data-translatable-fields-target": "translatedFieldsDisplay")
-  end
-
   def with_translation_button
     content_tag(:div, class: "d-flex") do
       yield +
@@ -51,10 +48,8 @@ module FormBuilder::TranslatedInputFieldBuilder
 
   def input_for_locale(attr, locale, rich_text, args = {})
     content_tag(:div, class: "input-group me-2 mb-2") do
-      input_for_locale = content_tag(:span, locale.to_s.upcase, class: "input-group-text") +
+      content_tag(:span, locale.to_s.upcase, class: "input-group-text") +
         (rich_text ? rich_text_area(attr, **args) : input_field(attr, **args))
-      input_for_locale += yield if block_given?
-      input_for_locale
     end
   end
 end

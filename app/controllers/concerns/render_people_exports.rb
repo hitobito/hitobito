@@ -6,8 +6,8 @@
 module RenderPeopleExports
   extend ActiveSupport::Concern
 
-  def render_pdf(people, group = nil)
-    pdf = generate_pdf(people, group)
+  def render_pdf(people, group = nil, title = nil)
+    pdf = generate_pdf(people, title || group&.name)
     send_data pdf, type: :pdf, disposition: "inline"
   rescue Prawn::Errors::CannotFit
     redirect_back(fallback_location: group_people_path(group, returning: true),

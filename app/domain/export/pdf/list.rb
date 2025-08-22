@@ -6,9 +6,9 @@
 module Export::Pdf
   module List
     class Runner
-      def render(contactables, group)
+      def render(contactables, title)
         pdf = Export::Pdf::Document.new(margin: 1.cm).pdf
-        sections.each { |section| section.new(pdf, contactables, group).render }
+        sections.each { |section| section.new(pdf, contactables, title).render }
         footer(pdf)
         pdf.render
       end
@@ -36,8 +36,8 @@ module Export::Pdf
 
     self.runner = Runner
 
-    def self.render(contactables, group)
-      runner.new.render(contactables, group)
+    def self.render(contactables, title)
+      runner.new.render(contactables, title)
     end
   end
 end

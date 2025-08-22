@@ -45,7 +45,7 @@ module Export::Pdf::List
     def table(data)
       pdf.table(data, header: true) do
         rows(0..data.length).borders = []
-        cells.padding = [1, 1, 1, 5]
+        cells.padding = [1, 5, 1, 0]
         cells.overflow = :shrink_to_fit
         cells.single_line = true
         row(0).font_style = :bold

@@ -19,8 +19,6 @@ class CrudTestModel < ActiveRecord::Base # :nodoc:
   validates :birthdate, timeliness: {type: :date, allow_blank: true}
   validates :rating, inclusion: {in: 1..10}
 
-  translates :translated_field, :translated_text_field
-
   default_scope -> { order("name") }
 
   def to_s
@@ -238,6 +236,7 @@ module CrudTestHelper
       t.timestamps null: false
     end
 
+    CrudTestModel.translates :translated_field, :translated_text_field
     CrudTestModel.create_translation_table! translated_field: :string, translated_text_field: :text
   end
 
@@ -258,13 +257,18 @@ module CrudTestHelper
   # Removes the crud_test_models table from the database.
   def reset_db
     c = ActiveRecord::Base.connection
-    [:crud_test_models, :other_crud_test_models, :crud_test_models_other_crud_test_models, :crud_test_model_translations].each do |table|
+    [:crud_test_models, :other_crud_test_models, :crud_test_models_other_crud_test_models].each do |table|
       if c.data_source_exists?(table)
         begin
           c.drop_table(table)
         rescue
           nil
         end
+      end
+    end
+    if c.data_source_exists?(:crud_test_model_translations)
+      without_transaction do
+        CrudTestModel.drop_translation_table!
       end
     end
   end

@@ -349,7 +349,12 @@ describe "StandardFormBuilder" do
     end
 
     it "uses current locale for always visible input" do
-
+      attr = :translated_field
+      I18n.locale = :fr
+      expect(dom).to have_css("input[name='entry[#{attr}]']")
+      Settings.application.languages.keys.excluding(:fr).each do |input_locale|
+        expect(dom).to have_css("input[name='entry[#{attr}_#{input_locale}]']")
+      end
     end
 
     it "does not show translation options if there is only one locale" do
@@ -365,11 +370,12 @@ describe "StandardFormBuilder" do
       expect(dom).not_to have_css("div[class='hidden']")
     end
 
-    it "shows already translated languages" do
+    it "generates labeled translated fields" do
+      dom = Capybara::Node::Simple.new(form.labeled_translated_input_field(:translated_field))
+      expect(dom).to have_css("label[for='entry_translated_field']")
     end
 
-    it "generates labeled translated fields" do
-
+    it "shows already translated languages" do
     end
   end
 end

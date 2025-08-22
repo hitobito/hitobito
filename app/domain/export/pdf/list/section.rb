@@ -5,14 +5,14 @@
 
 module Export::Pdf::List
   class Section
-    attr_reader :pdf, :contactables, :group
+    attr_reader :pdf, :contactables, :title
 
     delegate :bounds, :bounding_box, :cursor, :font_size, to: :pdf
 
-    def initialize(pdf, contactables, group)
+    def initialize(pdf, contactables, title)
       @pdf = pdf
       @contactables = contactables
-      @group = group
+      @title = title
     end
 
     private

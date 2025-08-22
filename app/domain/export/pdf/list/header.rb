@@ -17,7 +17,7 @@ module Export::Pdf::List
     private
 
     def pdf_title
-      group.name
+      title
     end
 
     def render_image

@@ -1158,4 +1158,32 @@ describe Person do
       expect(other_person.reload.street).to eq "newstreet"
     end
   end
+
+  describe "email confirmation" do
+    # Covers security issue, see https://github.com/heartcombo/devise/issues/5783
+    # Can be removed as soon as devise releases https://github.com/heartcombo/devise/pull/5784
+    it "handles race condition security issue" do
+      attacker_email = "attacker@example.com"
+      victim_email = "victim@example.com"
+
+      attacker = Fabricate(:person, password: "passwordpassword", password_confirmation: "passwordpassword")
+      # update the email address of the attacker, but do not confirm it yet
+      attacker.update(email: attacker_email)
+
+      # a concurrent request also updates the email address to the victim, while this request's model is in memory
+      Person.where(id: attacker.id).update_all(
+        unconfirmed_email: victim_email,
+        confirmation_token: "different token"
+      )
+
+      # now we update to the same prior unconfirmed email address, and confirm
+      attacker.update(email: attacker_email)
+      attacker_token = attacker.confirmation_token
+      Person.confirm_by_token(attacker_token)
+
+      attacker.reload
+      assert attacker.confirmed?
+      assert_equal attacker_email, attacker.email
+    end
+  end
 end

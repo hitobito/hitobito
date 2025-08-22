@@ -39,6 +39,10 @@ module Person::DeviseOverrides
   def postpone_email_change_until_confirmation_and_regenerate_confirmation_token
     super
     @show_email_change_info = true
+
+    # Fixes security issue, see https://github.com/heartcombo/devise/issues/5783
+    # Can be removed as soon as devise releases https://github.com/heartcombo/devise/pull/5784
+    unconfirmed_email_will_change!
   end
 
   def show_email_change_info?

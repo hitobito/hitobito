@@ -437,7 +437,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Generates a help block for fields
   def help_block(text = nil, options = {}, &block)
     additional_classes = Array(options.delete(:class))
-    content_tag(:div, text, class: "form-text #{additional_classes.join(" ")}", &block)
+    content_tag(:div, text, class: "form-text #{additional_classes.join(" ")}", **options, &block)
   end
 
   # Returns the list of association entries, either from options[:list],

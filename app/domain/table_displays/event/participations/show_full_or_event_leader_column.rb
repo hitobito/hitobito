@@ -8,7 +8,7 @@ module TableDisplays::Event::Participations
     protected
 
     def allowed?(object, _attr, original_object, _original_attr)
-      event_leader?(original_object) || show_full?(object)
+      index_full_participations?(original_object) || show_full?(object)
     end
 
     private
@@ -17,8 +17,8 @@ module TableDisplays::Event::Participations
       ability.can?(:show_full, person)
     end
 
-    def event_leader?(event)
-      ability.can?(:update, event)
+    def index_full_participations?(event)
+      ability.can?(:index_full_participations, event)
     end
   end
 end

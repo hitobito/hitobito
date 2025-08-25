@@ -1,8 +1,5 @@
-# Abos / MailingLists
+# Mail Relay / Bulk Mails
 
-Hitobito stellt eine simple Implementation von Mailing Listen zur Verfügung.
-Diese können in der Applikation beliebig erstellt und verwaltet werden. Dies
-geschieht in den Modellen `MailingList` und `Subscription`.
 
 Alle E-Mails an die Applikationsdomain (z.B `news@db.jubla.ch`) werden über
 einen [Catch-All](https://de.wikipedia.org/wiki/Catch-All) Mail Account gesammelt. Von der Applikation wird dieser Account

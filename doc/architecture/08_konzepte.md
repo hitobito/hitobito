@@ -246,20 +246,20 @@ bearbeiten. (Das `not_closed_..` trifft nur auf Kurse zu).
 #### Implizite Berechtigungen
 
 Hitobito kennt das Konzept von impliziten Berechtigungen. So impliziert z.B. die Permission
-`group_full` ebenfalls die Permission `group_read`. Das heisst, dass auf einer Rolle mit 
+`group_full` ebenfalls die Permission `group_read`. Das heisst, dass auf einer Rolle mit
 `self.permissions = [:group_full]` automatisch auch die Permission `group_read` gesetzt ist.
 Diese "Implikationen" sind konfiguriert in `Role::Types::PermissionImplications`.
 
 #### Implizite Berechtigungen auf andere Gruppen
 
-Normalerweise sind Berechtigungen immer auf die Gruppe oder das Layer bezogen, zu welcher die Rolle gehört. 
+Normalerweise sind Berechtigungen immer auf die Gruppe oder das Layer bezogen, zu welcher die Rolle gehört.
 Berechtigungen können auch für Gruppen weiter unten in der Gruppenhierarchie gelten, aber nur innerhalb
-desselben Astes der Baumstruktur. Wenn eine Person mit einer Rolle in Gruppe A eine Berechtigung 
+desselben Astes der Baumstruktur. Wenn eine Person mit einer Rolle in Gruppe A eine Berechtigung
 auf Gruppe B haben soll, dann kann der Rolle die gewünschte Berechtigung auf dem ganzen Layer gewährt werden.
 
 Es gibt auch die Möglichkeit, implizite Berechtigungen _auf demselben Layer_ in _spezifischen Gruppentypen_ zu gewähren.
 Diese Berechtigung wird implizit auf alle Gruppen dieses Typs im selben Layer gewährt, unabhängig davon, ob die Person
-in dieser Gruppe eine Rolle hat oder nicht.  
+in dieser Gruppe eine Rolle hat oder nicht.
 Dies wird konfiguriert in `Role::Types::PermissionImplicationsForGroups`.
 
 Beispiel:
@@ -270,7 +270,7 @@ Role::Types::PermissionImplicationsForGroups[:manage_members] =
 
 Eine Person mit einer Rolle mit Permission `manage_members` erhält automatisch die Berechtigung
 `group_full` auf alle Gruppen des Typs `Group::Members` im selben Layer ohne dass sie selbst eine Rolle
-in dieser Gruppe haben muss. 
+in dieser Gruppe haben muss.
 
 ### Anlässe und Kurse
 
@@ -319,7 +319,7 @@ siehe [Qualifikationen](../developer/events/qualifications.md).
 
 ### Mailing Listen / Abos
 
-siehe [Mailing Listen / Abos](../developer/messages/e-mail).
+siehe [Messages](../developer/messages).
 
 ### Single Table Inheritance
 

@@ -1,10 +1,4 @@
-## E-Mail
-
-Hier findest du eine Übersicht sowie die Dokumentation der E-Mail Features von Hitobito
-
-[Abos / Mailing Listen](mailing_lists.md)
-
-### Mailversand
+# Automatische E-Mails
 
 Bei folgenden Aktionen werden Mails versendet: (Wagon Features sind hier nicht
 berücksichtigt)

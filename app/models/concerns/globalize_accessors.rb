@@ -50,9 +50,8 @@ module GlobalizeAccessors
     define_method localized_attr_name_for(attr_name, locale) do
       globalize.stash.contains?(locale, attr_name) ? globalize.send(:fetch_stash, locale, attr_name) : globalize.send(:fetch_attribute, locale, attr_name)
     end
-    attr_column_type = column_type(self.class, attr_name)
     define_method "#{localized_attr_name_for(attr_name, locale)}_type" do
-      attr_column_type
+      self.class.column_type(self, attr_name)
     end
   end
 

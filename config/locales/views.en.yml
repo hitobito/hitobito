@@ -81,6 +81,9 @@ en:
       placeholder_event: "Search event..."
       placeholder_company_name: "search company name..."
 
+    form:
+      additional_languages: "Additional languages filled in:"
+
   list:
     index:
       title: "Listing %{models}"

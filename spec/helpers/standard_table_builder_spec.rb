@@ -2,6 +2,7 @@ require "spec_helper"
 
 describe "StandardTableBuilder" do
   include UtilityHelper
+  include ColumnHelper
   include FormatHelper
 
   let(:entries) { %w[foo bahr] }

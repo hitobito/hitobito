@@ -14,6 +14,7 @@
 # a standard label with them.
 class StandardFormBuilder < ActionView::Helpers::FormBuilder
   include NestedForm::BuilderMixin
+  include FormBuilder::TranslatedInputFieldBuilder
 
   REQUIRED_MARK = ' <span class="required">*</span>'.html_safe
   WIDTH_CLASSES = %w[mw-100 mw-md-60ch]
@@ -26,7 +27,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   delegate :association, :column_type, :column_property, :captionize, :ta, :tag,
     :content_tag, :safe_join, :capture, :add_css_class, :assoc_and_id_attr,
-    :render, :f, :icon,
+    :render, :f, :icon, :action_button,
     to: :template
 
   # Render multiple input fields together with a label for the given attributes.
@@ -477,7 +478,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Generates a help block for fields
   def help_block(text = nil, options = {}, &block)
     additional_classes = Array(options.delete(:class))
-    content_tag(:div, text, class: "form-text #{additional_classes.join(" ")}", &block)
+    content_tag(:div, text, class: "form-text #{additional_classes.join(" ")}", **options, &block)
   end
 
   # Returns the list of association entries, either from options[:list],

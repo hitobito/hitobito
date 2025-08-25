@@ -6,6 +6,7 @@
 # A dummy model used for general testing.
 class CrudTestModel < ActiveRecord::Base # :nodoc:
   include DatetimeAttribute
+  include Globalized
   datetime_attr :last_seen
 
   belongs_to :companion, class_name: "CrudTestModel"
@@ -234,6 +235,9 @@ module CrudTestHelper
 
       t.timestamps null: false
     end
+
+    CrudTestModel.translates :translated_field, :translated_text_field
+    CrudTestModel.create_translation_table! translated_field: :string, translated_text_field: :text
   end
 
   def create_other_crud_test_models_table
@@ -260,6 +264,11 @@ module CrudTestHelper
         rescue
           nil
         end
+      end
+    end
+    if c.data_source_exists?(:crud_test_model_translations)
+      without_transaction do
+        CrudTestModel.drop_translation_table!
       end
     end
   end
@@ -309,7 +318,9 @@ module CrudTestHelper
       gets_up_at: Time.zone.local(2000, 1, 1, index, index),
       last_seen: Time.zone.local(2000 + 10 * index, index, index, 10 + index, 20 + index),
       human: index % 2 == 0,
-      remarks: "#{c} #{str(index + 1)} #{str(index + 2)}\n" * (index % 3 + 1))
+      remarks: "#{c} #{str(index + 1)} #{str(index + 2)}\n" * (index % 3 + 1),
+      translated_field: "#{c} #{str(index + 1)} #{str(index + 2)}\n" * (index % 3 + 1),
+      translated_text_field: "#{c} #{str(index + 1)} #{str(index + 2)}\n" * (index % 3 + 1))
   end
 
   def create_other(index)

@@ -82,6 +82,9 @@ de:
       placeholder_event: "Anlass suchen..."
       placeholder_company_name: "Firmennamen suchen..."
 
+    form:
+      additional_languages: "Zusätzlich ausgefüllte Sprachen"
+
   list:
     index:
       title: "%{models}"

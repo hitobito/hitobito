@@ -11,9 +11,9 @@ module FormBuilder::TranslatedInputFieldBuilder
     available_locales = Settings.application.languages.keys
     return(rich_text ? rich_text_area(attr, **args) : input_field(attr, **args)) if available_locales.length == 1
 
-    content_tag(:div, "data-controller": "translatable-fields") do
+    content_tag(:div, data: {controller: "translatable-fields", "translatable-fields-additional-languages-text-value": I18n.t("global.form.additional_languages").to_s}) do
       current_locale_input(attr, rich_text, args) + other_locale_inputs(attr, available_locales, rich_text, args) +
-        help_block("-", "data-translatable-fields-target": "translatedFieldsDisplay")
+        help_block("", "data-translatable-fields-target": "translatedFieldsDisplay")
     end
   end
 

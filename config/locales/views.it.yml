@@ -80,6 +80,9 @@ it:
       placeholder_event: "Ricerca dell'evento..."
       placeholder_company_name: "Ricerca nome della ditta"
 
+    form:
+      additional_languages: "Lingue aggiuntive compilate"
+
   list:
     index:
       title: "%{models}"

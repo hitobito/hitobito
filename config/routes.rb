@@ -261,6 +261,7 @@ Hitobito::Application.routes.draw do
             resource :mail_dispatch, only: [:create], module: :participations
             member do
               get 'print'
+              resources :guests, only: [:new, :create]
             end
           end
 

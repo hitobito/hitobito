@@ -365,6 +365,36 @@ describe Event::ParticipationsController do
       end
     end
 
+    context "guests" do
+      render_views
+
+      let(:event) do
+        event = Fabricate(:event, groups: [group])
+        event.dates << Fabricate(:event_date, event: event)
+        event.guest_limit = 1
+        event.save!
+        event
+      end
+
+      context "allowed" do
+        before { event.update(guest_limit: 1) }
+
+        it "displays a button to add a guest" do
+          get :new, params: {group_id: group.id, event_id: event.id}
+          expect(response.body).to have_content("Anmelden und Gast hinzufügen (max. 1)")
+        end
+      end
+
+      context "not allowed" do
+        before { event.update(guest_limit: 0) }
+
+        it "does not display button to add a guest" do
+          get :new, params: {group_id: group.id, event_id: event.id}
+          expect(response.body).not_to have_content("Gast hinzufügen")
+        end
+      end
+    end
+
     context "unauthenticated" do
       before { sign_out(user) }
 
@@ -613,6 +643,16 @@ describe Event::ParticipationsController do
         expect(assigns(:participation)).to be_valid
         expect(assigns(:participation).additional_information).to eq("Vegetarier😝")
       end
+
+      context "when the add_another guest button is clicked" do
+        it "persists the participation and redirects to the guest form" do
+          post :create, params: {group_id: group.id, event_id: course.id, event_participation: {}, add_another: true}
+          participation = assigns(:participation)
+          expect(participation).to be_valid
+          expect(participation).to be_persisted
+          is_expected.to redirect_to new_group_event_guest_path(group, course, participation)
+        end
+      end
     end
 
     context "other user" do
@@ -671,7 +711,7 @@ describe Event::ParticipationsController do
     end
 
     it "redirects to event show if own participation" do
-      participation.update_column(:person_id, user.id)
+      participation.update_column(:participant_id, user.id)
       delete :destroy, params: {group_id: group.id, event_id: course.id, id: participation.id}
 
       is_expected.to redirect_to group_event_path(group, course)
@@ -894,9 +934,9 @@ describe Event::ParticipationsController do
     end
 
     it "GET#index lists extra person column" do
-      TableDisplay.register_column(Event::Participation, TableDisplays::PublicColumn, "person.gender")
+      TableDisplay.register_column(Event::Participation, TableDisplays::PolymorphicPublicColumn, "participant.gender")
       table_display = top_leader.table_display_for(Event::Participation)
-      table_display.selected = %w[person.gender]
+      table_display.selected = %w[participant.gender]
       table_display.save!
 
       get :index, params: {group_id: group.id, event_id: course.id}
@@ -961,10 +1001,10 @@ describe Event::ParticipationsController do
     let(:group) { Fabricate(Group::TopGroup.name, parent: groups(:top_group)) }
     let(:user) { Fabricate(:person) }
     let!(:role) { Fabricate(Group::BottomLayer::Leader.name, person: user, group: groups(:bottom_layer_one)) }
-    let!(:participation) { Fabricate(:event_participation, person: user, event: course, active: true) }
+    let!(:participation) { Fabricate(:event_participation, participant: user, event: course, active: true) }
     let(:other_person) { Fabricate(:person, birthday: Date.new(2003, 0o3, 0o3), company_name: "Puzzle ITC Test") }
     let!(:other_role) { Fabricate(Group::TopGroup::Member.name, person: other_person, group: group) }
-    let!(:other_participation) { Fabricate(:event_participation, person: other_person, event: course, active: true) }
+    let!(:other_participation) { Fabricate(:event_participation, participant: other_person, event: course, active: true) }
     let!(:other_event_role) { Fabricate(Event::Course::Role::Participant.name, participation: other_participation) }
 
     before { sign_in(user.reload) }
@@ -974,7 +1014,7 @@ describe Event::ParticipationsController do
       let!(:event_role) { Fabricate(Event::Course::Role::Participant.name, participation: participation) }
 
       it "GET#index lists extra public column" do
-        user.table_display_for(Event::Participation).update!(selected: %w[person.company_name])
+        user.table_display_for(Event::Participation).update!(selected: %w[participant.company_name])
 
         get :index, params: {group_id: group.id, event_id: course.id}
         expect(dom).to have_checked_field "Firmenname"
@@ -982,7 +1022,7 @@ describe Event::ParticipationsController do
       end
 
       it "GET#index lists extra show_full column" do
-        user.table_display_for(Event::Participation).update!(selected: %w[person.birthday])
+        user.table_display_for(Event::Participation).update!(selected: %w[participant.birthday])
 
         get :index, params: {group_id: group.id, event_id: course.id}
         expect(dom).to have_checked_field "Geburtstag"
@@ -994,7 +1034,7 @@ describe Event::ParticipationsController do
       let!(:event_role) { Fabricate(Event::Course::Role::Participant.name, participation: participation) }
 
       it "GET#index lists extra public column" do
-        user.table_display_for(Event::Participation).update!(selected: %w[person.company_name])
+        user.table_display_for(Event::Participation).update!(selected: %w[participant.company_name])
 
         get :index, params: {group_id: group.id, event_id: course.id}
         expect(dom).to have_checked_field "Firmenname"
@@ -1002,7 +1042,7 @@ describe Event::ParticipationsController do
       end
 
       it "GET#index lists extra show_full column, but does not expose data" do
-        user.table_display_for(Event::Participation).update!(selected: %w[person.birthday])
+        user.table_display_for(Event::Participation).update!(selected: %w[participant.birthday])
 
         get :index, params: {group_id: group.id, event_id: course.id}
         expect(dom).to have_checked_field "Geburtstag"
@@ -1014,7 +1054,7 @@ describe Event::ParticipationsController do
       let!(:event_role) { Fabricate(Event::Role::Leader.name, participation: participation) }
 
       it "GET#index lists extra public column" do
-        user.table_display_for(Event::Participation).update!(selected: %w[person.company_name])
+        user.table_display_for(Event::Participation).update!(selected: %w[participant.company_name])
 
         get :index, params: {group_id: group.id, event_id: course.id}
         expect(dom).to have_checked_field "Firmenname"
@@ -1022,7 +1062,7 @@ describe Event::ParticipationsController do
       end
 
       it "GET#index lists extra show_full column" do
-        user.table_display_for(Event::Participation).update!(selected: %w[person.birthday])
+        user.table_display_for(Event::Participation).update!(selected: %w[participant.birthday])
 
         get :index, params: {group_id: group.id, event_id: course.id}
         expect(dom).to have_checked_field "Geburtstag"

@@ -24,6 +24,9 @@
   - entry.used?(:waiting_list) do
     = f.labeled_boolean_field(:waiting_list, caption: t('events.form.caption_waiting_list'))
 
+  - entry.used?(:guest_limit) do
+    = f.labeled_number_field(:guest_limit)
+
   - application_approve_role_exists? && entry.used?(:requires_approval) do
     = f.labeled_boolean_field(:requires_approval, caption: t('events.form.caption_requires_approval'))
 

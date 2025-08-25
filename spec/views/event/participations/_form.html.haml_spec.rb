@@ -7,7 +7,7 @@ require "spec_helper"
 
 describe "event/participations/_form.html.haml" do
   let(:participant) { people(:top_leader) }
-  let(:participation) { Fabricate(:event_participation, person: participant, event: event) }
+  let(:participation) { Fabricate(:event_participation, participant: participant, event: event) }
   let(:user) { participant }
   let(:event) { events(:top_event) }
   let(:group) { event.groups.first }
@@ -25,6 +25,8 @@ describe "event/participations/_form.html.haml" do
 
     allow(view).to receive_messages(path_args: [group, event, decorated])
     allow(view).to receive_messages(entry: decorated)
+    allow(view).to receive_messages(add_another: false)
+    allow(view).to receive_messages(add_another_label: "")
     allow(view).to receive_messages(model_class: Event::Participation, submit_label: "Speichern")
     allow(view).to receive(:current_user) { user }
 

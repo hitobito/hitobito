@@ -53,8 +53,9 @@ class Bounce < ApplicationRecord
     #       independently of bounces, but that also controls the validity/futility.
     def blocked?(email)
       return false if FeatureGate.disabled?("email.bounces")
+      return false if email.blank?
 
-      where(email: email).blocked.exists?
+      where(email: email.strip.downcase).blocked.exists?
     end
   end
 

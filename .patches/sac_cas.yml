@@ -310,7 +310,7 @@
   :wagon: sac_cas
   :source_file: hitobito/app/models/person.rb
   :patch_file: hitobito_sac_cas/app/models/sac_cas/person.rb
-  :patch_file_line: 140
+  :patch_file_line: 143
 - :method: :index
   :constant: Person::HistoryController
   :wagon: sac_cas

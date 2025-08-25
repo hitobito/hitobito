@@ -21,9 +21,7 @@ module FormBuilder::TranslatedInputFieldBuilder
 
   def current_locale_input(attr, rich_text, args = {})
     with_translation_button do
-      input_for_locale(attr, I18n.locale, rich_text, **args, value: @object.send(:"#{attr}_#{I18n.locale}")) do
-        translated_fields_display
-      end
+      input_for_locale(attr, I18n.locale, rich_text, **args, value: @object.send(:"#{attr}_#{I18n.locale}"))
     end
   end
 

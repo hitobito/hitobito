@@ -7,6 +7,9 @@ import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   static targets = ['toggle', 'translatedField', 'translatedFieldsDisplay']
+  static values = {
+    additionalLanguagesText: String
+  }
 
   connect() {
     this.updateTranslatedFields();
@@ -22,9 +25,9 @@ export default class extends Controller {
     }).filter(v => v)
 
     if(translatedLanguages.length > 0) {
-      this.translatedFieldsDisplayTarget.textContent = `+ ${translatedLanguages.join(', ')}`;
+      this.translatedFieldsDisplayTarget.textContent = `${this.additionalLanguagesTextValue}: ${translatedLanguages.join(', ')}`;
     } else {
-      this.translatedFieldsDisplayTarget.textContent = '-';
+      this.translatedFieldsDisplayTarget.textContent = '';
     }
   }
 

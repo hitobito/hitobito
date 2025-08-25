@@ -364,9 +364,5 @@ describe "StandardFormBuilder" do
       dom = Capybara::Node::Simple.new(form.labeled_translated_input_field(:translated_field))
       expect(dom).to have_css("label[for='entry_translated_field']")
     end
-
-    it "shows already translated languages" do
-
-    end
   end
 end

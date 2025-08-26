@@ -1,1 +1,56 @@
-<mxfile userAgent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/600.5.17 (KHTML, like Gecko) Version/8.0.5 Safari/600.5.17" type="device"><diagram>vVddb+o4EP01PPaKEEjpI9CP7WrZi5auevfRJCZYdWLkGAr99XcmGSdOAiwVtEiAfWyPPeec2E7HnyS7J83Wq6mKuOz0utGu4993er27QR9+EdgXQIA1BGItogLyKmAuPjiBXUI3IuJZraNRShqxroOhSlMemhq2VLI+xZrFNnwFzEMm2+iriMyqQIe9oML/4CJe2Wm84K5oyczexoj4km2kuckhyjVhNlaelf8AhGmlIAyWkt2ESyTNElKk/niktVyk5ikt5PQAWsSWyQ2tcSWMWsC3tfhsxdZYROa47vjjpUrNnNo9qGdrFoo0flFrBLqAGLawXPWpXnLk9QtgpjJhhEoBknwJLeOVSSSFbKdDGW65Npx8lEOU3hNXCTd6D12o1YeZ8yFkMu+O6u+Vit6QsJWrIFHXZeSmuIxdEQoF4vQwv36L3zFPN+YDCOwFErONxBaKMRYttMDGGgLT1PodkWaTyFFoFIqDBAlw719swaXD8UIZoxKnw0iKGBsMynZl7vveoMa9ZdSh3j/AfHAF4mlrcYh/5QsAnv59btHnJN1kpaSLp9FIa/WOmFThG/rdMG0smKoUohXYo8Bl3aPjYRjVTlIKo2JOED2SPKrtR22OHRKtfTWXzIhtfcc6xCJFmykBC6nksmLYR8VutDZEpjY65DTK3VUagazONk4jTJFtK0wuaZngWSoPWyr/Of/5NyCj2cUyk6KVgqhnTfOaERyZQV29/1U6ACr/YeXHAKs7YbAp7wflosW/tW0zrgUQgBtsPvyoZRr+qHvIPneFYI6vvsNGg4aNSjt81kbB7f8Eup6R4DRqOunQbnydjaO+KZxnqYO2QdOcbxDXDF5+bfkON5TnrRXRxv2sG5oHeW9IJv8CN9y23DCfvsw6PRjZnf2EwuPzdAR/DT/Asdi4wGieiQ+2yDvkj7M/ZuSQEATL71FN6yQiinDAWOLZPWbhW6zVJo0mSuLRDhP5y/xTqk8XXJqnvPS1T+qGUXLTHz29b7o/ukFAVBDpNxTm0pOmEZQu0TaAWi4z2MouFJHs4Yj4z8P8BZCJFMBBdupxPo+/k/QFg4Zf7THoXjwt5l5/7LhLrj+WUSf5KRPYY841pPXFuZd52dztle4Lcodq9b5U+KR62/QffgM=</diagram></mxfile>
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15" version="28.1.0">
+  <diagram id="0" name="Seite-1">
+    <mxGraphModel dx="1234" dy="831" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="826" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" value="hitobito" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;" parent="1" vertex="1">
+          <mxGeometry x="340" y="190" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="3" value="&lt;div&gt;&lt;div&gt;User&lt;/div&gt;&lt;/div&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;" parent="1" vertex="1">
+          <mxGeometry x="130" y="120" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="4" value="Web GUI" style="html=1;verticalAlign=bottom;endArrow=block;startArrow=none;startFill=0;endFill=1;entryX=0;entryY=0;entryDx=0;entryDy=40.5;entryPerimeter=0;" parent="1" target="2" edge="1">
+          <mxGeometry x="0.0805" y="9" width="80" relative="1" as="geometry">
+            <mxPoint x="180" y="160" as="sourcePoint" />
+            <mxPoint x="20" y="10" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8" value="JSON API" style="html=1;verticalAlign=bottom;endArrow=none;endFill=0;startArrow=block;startFill=1;entryX=1;entryY=0.5;exitX=0;exitY=0;exitPerimeter=0;exitDx=0;exitDy=67;entryDx=0;entryDy=0;" parent="1" source="2" target="15" edge="1">
+          <mxGeometry width="80" relative="1" as="geometry">
+            <mxPoint x="530" y="220" as="sourcePoint" />
+            <mxPoint x="670" y="220" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="14" value="&lt;br&gt;" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;startArrow=block;startFill=1;exitX=0;exitY=0.5;entryX=0;entryY=0;entryDx=180;entryDy=93.5;entryPerimeter=0;exitDx=0;exitDy=0;" parent="1" source="16" edge="1" target="2">
+          <mxGeometry width="80" relative="1" as="geometry">
+            <mxPoint x="190" y="280" as="sourcePoint" />
+            <mxPoint x="340" y="285" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="17" value="SMTP, POP/IMAP" style="text;html=1;resizable=0;;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" parent="14" connectable="0" vertex="1">
+          <mxGeometry x="-0.0667" y="-1" relative="1" as="geometry">
+            <mxPoint x="4" y="-16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="15" value="REST Clients" style="html=1;" parent="1" vertex="1">
+          <mxGeometry x="90" y="240" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="16" value="Mail Server" style="html=1;" parent="1" vertex="1">
+          <mxGeometry x="660" y="260" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="-F_UXGEt6WfHcwAAbxwR-17" value="OAuth Clients" style="html=1;" vertex="1" parent="1">
+          <mxGeometry x="90" y="340" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="-F_UXGEt6WfHcwAAbxwR-18" value="OIDC" style="html=1;verticalAlign=bottom;endArrow=none;endFill=0;startArrow=block;startFill=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0;exitY=0;exitDx=0;exitDy=93.5;exitPerimeter=0;" edge="1" parent="1" source="2" target="-F_UXGEt6WfHcwAAbxwR-17">
+          <mxGeometry x="0.0803" y="-9" width="80" relative="1" as="geometry">
+            <mxPoint x="700" y="260" as="sourcePoint" />
+            <mxPoint x="240" y="300" as="targetPoint" />
+            <mxPoint x="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

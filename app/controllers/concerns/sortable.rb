@@ -82,6 +82,7 @@ module Sortable
     end
 
     def order_alias
+      return params[:sort] unless sort_mappings_with_indifferent_access[params[:sort]].is_a?(Hash)
       sort_mappings_with_indifferent_access[params[:sort]][:order_alias]
     end
 

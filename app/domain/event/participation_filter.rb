@@ -17,10 +17,9 @@ class Event::ParticipationFilter
   ].freeze
 
   class_attribute :load_entries_includes
-  self.load_entries_includes = [:roles, :event,
-    answers: [:question],
-    participant: [:additional_emails, :phone_numbers,
-      :primary_group]]
+  self.load_entries_includes = [:roles, :event, answers: [:question]]
+  class_attribute :load_participant_includes
+  self.load_participant_includes = [:additional_emails, :phone_numbers, :primary_group]
 
   attr_reader :event, :user, :params, :counts
 
@@ -35,6 +34,7 @@ class Event::ParticipationFilter
 
     Event::Participation::PreloadParticipations.preload(records)
 
+    records = records.with_person_participants.with_guest_participants
     @counts = populate_counts(records)
     apply_default_sort(apply_filter_scope(records))
   end
@@ -82,8 +82,14 @@ class Event::ParticipationFilter
   def load_entries
     event.active_participations_without_affiliate_types
       .distinct
+      .includes(load_entries_includes)
       .with_person_participants
-      .with_guest_participants
+      .with_guest_participants.tap do |entries|
+      Event::Participation::PreloadParticipations.preload(
+        entries,
+        participant: load_participant_includes
+      )
+    end
   end
 
   def apply_filter_scope(records, kind = params[:filter])

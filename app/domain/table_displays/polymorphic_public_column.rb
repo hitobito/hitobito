@@ -25,7 +25,20 @@ module TableDisplays
     end
 
     def sort_by(attr)
-      resolve_database_column(attr)
+      relation, column = attr.to_s.split('.')
+
+      # TODO do not hardcode the participant person / guest association here
+      if ::Event::Guest.column_names.include?(column)
+        {
+          order: "CASE event_participations.participant_type WHEN 'Person' THEN people.#{column} WHEN 'Event::Guest' THEN event_guests.#{column} ELSE NULL END AS #{relation}_#{column}_order_statement",
+          order_alias: "#{relation}_#{column}_order_statement"
+        }
+      else
+        {
+          order: "CASE event_participations.participant_type WHEN 'Person' THEN people.#{column} ELSE NULL END AS #{relation}_#{column}_order_statement",
+          order_alias: "#{relation}_#{column}_order_statement"
+        }
+      end
     end
   end
 end

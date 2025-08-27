@@ -40,6 +40,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # The input field is chosen based on the ActiveRecord column type.
   # Use additional html_options for the input element.
   def input_field(attr, html_options = {}) # rubocop:disable Metrics/*
+    if translated_field?(attr, html_options.delete(:already_translated))
+      return translated_input_field(attr, false, html_options)
+    end
+
     type = column_type(@object, attr.to_sym)
     custom_field_method = :"#{type}_field"
 
@@ -79,6 +83,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   # Render an action text input field.
   def rich_text_area(attr, html_options = {})
+    if translated_field?(attr, html_options.delete(:already_translated))
+      return translated_input_field(attr, true, html_options)
+    end
+
     add_css_class(html_options, FORM_CONTROL)
     add_css_class(html_options, "is-invalid") if errors_on?(attr)
     super
@@ -571,6 +579,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   def id_from_value(attr, value)
     "#{attr}_#{value.to_s.gsub(/\s/, "_").gsub(/[^-\w]/, "").downcase}"
+  end
+
+  def translated_field?(attr, already_translated)
+    @object.respond_to?(:translated_attribute_names) && !already_translated && @object.translated_attribute_names.include?(attr)
   end
 end
 

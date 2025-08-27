@@ -6,18 +6,17 @@
 #  https://github.com/hitobito/hitobito.
 
 module FormBuilder::TranslatedInputFieldBuilder
-  def translated_input_field(attr, args = {})
-    rich_text = args.delete(:rich_text) || false
+  private
+
+  def translated_input_field(attr, rich_text, args = {})
     available_locales = Settings.application.languages.keys
-    return(rich_text ? rich_text_area(attr, **args) : input_field(attr, **args)) if available_locales.length == 1
+    return(rich_text ? rich_text_area(attr, **args, already_translated: true) : input_field(attr, **args, already_translated: true)) if available_locales.length == 1
 
     content_tag(:div, data: {controller: "translatable-fields", "translatable-fields-additional-languages-text-value": I18n.t("global.form.additional_languages").to_s}) do
       current_locale_input(attr, rich_text, args) + other_locale_inputs(attr, available_locales, rich_text, args) +
         help_block("", "data-translatable-fields-target": "translatedFieldsDisplay")
     end
   end
-
-  private
 
   def current_locale_input(attr, rich_text, args = {})
     with_translation_button do
@@ -47,7 +46,7 @@ module FormBuilder::TranslatedInputFieldBuilder
   def input_for_locale(attr, locale, rich_text, args = {})
     content_tag(:div, class: "input-group me-2 mb-2") do
       content_tag(:span, locale.to_s.upcase, class: "input-group-text") +
-        (rich_text ? rich_text_area(attr, **args) : input_field(attr, **args))
+        (rich_text ? rich_text_area(attr, **args, already_translated: true) : input_field(attr, **args, already_translated: true))
     end
   end
 end

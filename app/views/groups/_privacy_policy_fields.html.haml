@@ -5,7 +5,7 @@
 
 - if entry.layer?
   = field_set_tag do
-    = f.labeled_translated_input_field(:privacy_policy_title)
+    = f.labeled_input_field(:privacy_policy_title)
 
     = f.labeled :privacy_policy do
       = f.file_field :privacy_policy, type: :file, accept: '.pdf', class: 'mt-1 form-control form-control-sm'

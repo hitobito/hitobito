@@ -294,7 +294,7 @@ describe "StandardFormBuilder" do
     end
 
     let(:dom) {
-      Capybara::Node::Simple.new(form.translated_input_field(:translated_field))
+      Capybara::Node::Simple.new(form.input_field(:translated_field))
     }
 
     it "generates input fields for column types other than text" do
@@ -310,7 +310,7 @@ describe "StandardFormBuilder" do
 
     it "generates textarea for column type text" do
       attr = :translated_text_field
-      dom = Capybara::Node::Simple.new(form.translated_input_field(attr))
+      dom = Capybara::Node::Simple.new(form.input_field(attr))
 
       expect(dom).to have_css("div[class='d-flex'] div[class='input-group me-2 mb-2'] textarea[name='entry[#{attr}]']")
       expect(dom).to have_css("div[class='d-flex'] button[data-action='translatable-fields#toggleFields'][type='button']")
@@ -323,7 +323,7 @@ describe "StandardFormBuilder" do
 
     it "generates rich text fields" do
       attr = :translated_field
-      dom = Capybara::Node::Simple.new(form.translated_input_field(attr, rich_text: true))
+      dom = Capybara::Node::Simple.new(form.rich_text_area(attr))
 
       expect(dom).to have_css("div[class='d-flex'] div[class='input-group me-2 mb-2'] trix-editor#entry_#{attr}")
       expect(dom).to have_css("div[class='d-flex'] button[data-action='translatable-fields#toggleFields'][type='button']")
@@ -353,7 +353,7 @@ describe "StandardFormBuilder" do
       expect(dom).to have_css("div[class='d-flex'] div[class='input-group me-2 mb-2'] input[name='entry[#{attr}]']")
 
       Settings.application.languages = {de: "Deutsch"}
-      dom = Capybara::Node::Simple.new(form.translated_input_field(attr))
+      dom = Capybara::Node::Simple.new(form.input_field(attr))
 
       expect(dom).to have_css("input[name='entry[#{attr}]']")
       expect(dom).not_to have_css("div[class='d-flex'] div[class='input-group me-2 mb-2'] input[name='entry[#{attr}]']")
@@ -361,7 +361,7 @@ describe "StandardFormBuilder" do
     end
 
     it "generates labeled translated fields" do
-      dom = Capybara::Node::Simple.new(form.labeled_translated_input_field(:translated_field))
+      dom = Capybara::Node::Simple.new(form.labeled_input_field(:translated_field))
       expect(dom).to have_css("label[for='entry_translated_field']")
     end
   end

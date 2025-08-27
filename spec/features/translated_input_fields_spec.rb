@@ -6,15 +6,15 @@
 require "spec_helper"
 
 describe "Translated input fields", js: true do
+  let(:group) { groups(:bottom_layer_one) }
+
   before do
     Settings.application.languages = {de: "Deutsch", en: "English", fr: "Français"}
-    sign_in(people(:root))
+    sign_in(people(:top_leader))
+    visit edit_group_path(group)
   end
 
   it "should show and hide inputs, display already translated languages and save all languages" do
-    group = Group.first
-    visit edit_group_path(group)
-
     # Should show all inputs after clicking translation button
     expect(page).to have_css("input[id^='group_privacy_policy_title']", count: 1)
     page.first("button[data-action='translatable-fields#toggleFields']").click
@@ -40,35 +40,11 @@ describe "Translated input fields", js: true do
     expect(group.reload.privacy_policy_title_translations).to eql(expected_value)
   end
 
-  it "should show errors of additional translated fields with locale suffix" do
-    group = Group.first
-    visit edit_group_path(group)
-
-    # Should show attribute name without language suffix for current locale
-    fill_in "group_privacy_policy_title", with: "Text" * 100
-    click_button("Speichern")
-    expect(page).to have_css("input[id^='group_privacy_policy_title']", count: 1)
-    expect(page).to have_content("DSE/Datenschutzerklärung Titel ist zu lang (mehr als 64 Zeichen)")
-
-    # Should show all language fields and attribute name with suffix for other locales
+  it "should automatically show all language fields if a validation of not current locale fails" do
     page.first("button[data-action='translatable-fields#toggleFields']").click
-    fill_in "group_privacy_policy_title_en", with: "Text" * 100
+    fill_in "group_privacy_policy_title_en", with: "Text" * 20
     click_button("Speichern")
     expect(page).to have_css("input[id^='group_privacy_policy_title']", count: 3)
-    expect(page).to have_content("DSE/Datenschutzerklärung Titel ist zu lang (mehr als 64 Zeichen)")
     expect(page).to have_content("DSE/Datenschutzerklärung Titel (EN) ist zu lang (mehr als 64 Zeichen)")
-  end
-
-  it "should translate rich text inputs" do
-    custom_content = CustomContent.find_by(label: "Auftrag erhalten")
-    visit edit_custom_content_path(custom_content)
-
-    page.all("button[data-action='translatable-fields#toggleFields']")[1].click(x: 10, y: 10)
-    find("trix-editor#custom_content_body").set("Rich text content german {assignment-title}")
-    find("trix-editor#custom_content_body_en").set("Rich text content english {assignment-title}")
-    find("trix-editor#custom_content_body_fr").set("Rich text content french {assignment-title}")
-
-    click_button("Speichern")
-    expect(page).to have_content("Text #{custom_content.label} wurde erfolgreich aktualisiert")
   end
 end

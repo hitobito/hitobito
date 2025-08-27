@@ -6,5 +6,5 @@
 
 = entry_form(buttons_bottom: false) do |f|
   = f.hidden_field :label, value: entry.label
-  = f.labeled_translated_input_field :subject
-  = f.labeled_translated_input_field :body, rows: 20, help: entry.available_placeholders, rich_text: true
+  = f.labeled_input_field :subject
+  = f.labeled_rich_text_area :body, rows: 20, help: entry.available_placeholders, rich_text: true

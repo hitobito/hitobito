@@ -10,7 +10,7 @@ class CustomContent::CustomContentPlaceholdersValidator < ActiveModel::EachValid
   def validate_each(record, attribute, value)
     subject = record.subject
     if record.globalize_attribute_names.include? attribute
-      locale = attribute.match(/^.*_([a-z]{2})$/).captures.first
+      locale = attribute.match(Globalized::ATTRIBUTE_LOCALE_REGEX)[:locale]
       subject = record.send(:"subject_#{locale}")
     end
 

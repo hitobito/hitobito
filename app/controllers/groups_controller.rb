@@ -23,7 +23,7 @@ class GroupsController < CrudController
     :self_registration_require_adult_consent,
     :main_self_registration_group,
     :custom_self_registration_title
-  ] + Group.globalize_attribute_names
+  ]
 
   # required to allow api calls
   protect_from_forgery with: :null_session, only: [:index, :show]

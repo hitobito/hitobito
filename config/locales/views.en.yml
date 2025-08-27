@@ -82,7 +82,7 @@ en:
       placeholder_company_name: "search company name..."
 
     form:
-      additional_languages: "Additional languages filled in:"
+      additional_languages: "Additional languages filled in"
 
   list:
     index:

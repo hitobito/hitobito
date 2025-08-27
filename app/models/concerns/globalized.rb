@@ -5,6 +5,7 @@
 
 module Globalized
   extend ActiveSupport::Concern
+  ATTRIBUTE_LOCALE_REGEX = /^(?<attribute>.*)_(?<locale>[a-z]{2})$/
 
   included do
     Rails.autoloaders.main.on_load(class_name) do
@@ -26,7 +27,7 @@ module Globalized
       def self.human_attribute_name(*options)
         attribute = options.first.to_sym
         if globalize_attribute_names.include? attribute
-          attribute, locale = attribute.match(/^(.*)_([a-z]{2})$/).captures
+          attribute, locale = attribute.match(ATTRIBUTE_LOCALE_REGEX).captures
 
           return "#{super(attribute, *options.drop(1))} (#{locale.upcase})"
         end

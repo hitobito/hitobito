@@ -284,7 +284,12 @@ describe "StandardFormBuilder" do
 
   describe "translated fields" do
     before do
+      @cached_languages = Settings.application.languages
       Settings.application.languages = {de: "Deutsch", en: "English", fr: "Français"}
+    end
+
+    after do
+      Settings.application.languages = @cached_languages
     end
 
     let(:dom) {

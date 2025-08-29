@@ -18,8 +18,8 @@ describe "Globalized model" do
     expected_values = {}
     languages.each do |lang|
       title = "Privacy policy title in #{lang}"
-      group.send("privacy_policy_title_#{lang}=", title)
-      expect(group.send("privacy_policy_title_#{lang}")).to eql(title)
+      group.send(:"privacy_policy_title_#{lang}=", title)
+      expect(group.send(:"privacy_policy_title_#{lang}")).to eql(title)
       expected_values[lang] = title
     end
 
@@ -31,8 +31,8 @@ describe "Globalized model" do
     expected_values = []
     languages.each do |lang|
       body = "Custom content body {assignment-title} #{lang}"
-      custom_content.send("body_#{lang}=", body)
-      expect(custom_content.send("body_#{lang}").to_s).to include(body)
+      custom_content.send(:"body_#{lang}=", body)
+      expect(custom_content.send(:"body_#{lang}").to_s).to include(body)
       expected_values.push(body)
     end
 
@@ -46,7 +46,7 @@ describe "Globalized model" do
 
   it "should copy validators on globalized fields and add locale suffix to error messages" do
     languages.each do |lang|
-      group.send("privacy_policy_title_#{lang}=", "Long text" * 20)
+      group.send(:"privacy_policy_title_#{lang}=", "Long text" * 20)
     end
 
     expected_errors = [
@@ -61,7 +61,7 @@ describe "Globalized model" do
 
   it "should validate rich text placeholders on globalized fields" do
     languages.each do |lang|
-      custom_content.send("body_#{lang}=", "Text without placeholder")
+      custom_content.send(:"body_#{lang}=", "Text without placeholder")
     end
 
     expected_errors = [

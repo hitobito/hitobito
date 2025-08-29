@@ -133,7 +133,8 @@ fr:
         message/letter_with_invoice:
           attributes:
             base:
-              invoice_items_invalid: Au moins un poste budgétaire est invalide.
+              invoice_items_required: Mindestens ein Rechnungsposten ist erforderlich
+              invoice_items_invalid: Mindestens ein Rechnungsposten ist ungültig
         oauth/application:
           attributes:
             scopes:

@@ -143,7 +143,7 @@ class CrudController < ListController
 
   # Access params for model
   def permitted_params
-    permitted_attrs += globalized_accessors_to_permit
+    permitted_attrs += globalized_accessors_to_permit if permitted_attrs.present?
     params.require(model_identifier).permit(permitted_attrs)
   end
 
@@ -151,8 +151,8 @@ class CrudController < ListController
     permitted_globalized_accessors = []
     if model_class.include? Globalized
       model_class.globalize_attribute_names.each do |globalize_attribute_name|
-        attr = globalize_attribute_name.match(Globalized::ATTRIBUTE_LOCALE_REGEX)[:attribute].to_sym
-        permitted_globalized_accessors.push(globalize_attribute_name) if permitted_attrs.include? attr
+        attr = globalize_attribute_name.match(Globalized::ATTRIBUTE_LOCALE_REGEX)&.[](:attribute)&.to_sym
+        permitted_globalized_accessors.push(globalize_attribute_name) if attr.present? && permitted_attrs.include?(attr)
       end
     end
     permitted_globalized_accessors

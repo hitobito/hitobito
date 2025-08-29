@@ -8,7 +8,20 @@ module Globalized
   ATTRIBUTE_LOCALE_REGEX = /^(?<attribute>.*)_(?<locale>[a-z]{2})$/
 
   included do
-    Rails.autoloaders.main.on_load(class_name) do
+    before_destroy :remember_translated_label
+
+    class_attribute :list_alphabetically
+    self.list_alphabetically = true
+  end
+
+  module ClassMethods
+    include GlobalizeAccessors
+    def translates(*columns)
+      super(*columns, fallbacks_for_empty_translations: true)
+      globalize_accessors
+    end
+
+    def copy_validators_to_globalized_accessors
       translated_attribute_names.each do |attr|
         attributes = I18n.available_locales.map { |locale| :"#{attr}_#{locale}" }
           .filter { |a| validators_on(a).empty? }
@@ -23,29 +36,16 @@ module Globalized
           end
         end
       end
-
-      def self.human_attribute_name(*options)
-        attribute = options.first.to_sym
-        if globalize_attribute_names.include? attribute
-          attribute, locale = attribute.match(ATTRIBUTE_LOCALE_REGEX).captures
-
-          return "#{super(attribute, *options.drop(1))} (#{locale.upcase})"
-        end
-        super
-      end
     end
 
-    before_destroy :remember_translated_label
+    def human_attribute_name(*options)
+      attribute = options.first.to_sym
+      if globalize_attribute_names.include? attribute
+        attribute, locale = attribute.match(ATTRIBUTE_LOCALE_REGEX).captures
 
-    class_attribute :list_alphabetically
-    self.list_alphabetically = true
-  end
-
-  module ClassMethods
-    include GlobalizeAccessors
-    def translates(*columns)
-      super(*columns, fallbacks_for_empty_translations: true)
-      globalize_accessors
+        return "#{super(attribute, *options.drop(1))} (#{locale.upcase})"
+      end
+      super
     end
 
     # Inspired by https://github.com/rails/actiontext/issues/32#issuecomment-450653800

@@ -45,8 +45,9 @@ module FormBuilder::TranslatedInputFieldBuilder
 
   def input_for_locale(attr, locale, rich_text, args = {})
     content_tag(:div, class: "input-group me-2 mb-2") do
-      content_tag(:span, locale.to_s.upcase, class: "input-group-text") +
-        (rich_text ? rich_text_area(attr, **args, already_translated: true) : input_field(attr, **args, already_translated: true))
+      locale_input = content_tag(:span, locale.to_s.upcase, class: "input-group-text") +
+        (rich_text ? rich_text_area(attr, **args, already_translated: true, toolbar: "#{attr}_toolbar") : input_field(attr, **args, already_translated: true))
+      rich_text ? locale_input.prepend(content_tag("trix-toolbar", nil, id: "#{attr}_toolbar")) : locale_input
     end
   end
 end

@@ -183,7 +183,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_152059) do
     t.string "locale", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "label", null: false
+    t.string "label"
     t.string "subject"
     t.index ["custom_content_id"], name: "index_custom_content_translations_on_custom_content_id"
     t.index ["locale"], name: "index_custom_content_translations_on_locale"
@@ -254,30 +254,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_152059) do
     t.index ["event_id"], name: "index_event_dates_on_event_id"
   end
 
-  create_table "event_guests", force: :cascade do |t|
-    t.bigint "main_applicant_id", null: false
-    t.string "first_name"
-    t.string "last_name"
-    t.string "nickname"
-    t.string "company_name"
-    t.boolean "company"
-    t.string "email"
-    t.string "address_care_of"
-    t.string "street"
-    t.string "housenumber"
-    t.string "postbox"
-    t.string "zip_code"
-    t.string "town"
-    t.string "country"
-    t.string "gender"
-    t.date "birthday"
-    t.string "phone_number"
-    t.string "language"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["main_applicant_id"], name: "index_event_guests_on_main_applicant_id"
-  end
-
   create_table "event_invitations", force: :cascade do |t|
     t.string "participation_type", null: false
     t.datetime "declined_at", precision: nil
@@ -341,19 +317,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_152059) do
 
   create_table "event_participations", id: :serial, force: :cascade do |t|
     t.integer "event_id", null: false
-    t.integer "participant_id", null: false
+    t.integer "person_id", null: false
     t.text "additional_information"
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.boolean "active", default: false, null: false
     t.integer "application_id"
     t.boolean "qualified"
-    t.string "participant_type"
     t.index ["application_id"], name: "index_event_participations_on_application_id"
+    t.index ["event_id", "person_id"], name: "index_event_participations_on_event_id_and_person_id", unique: true
     t.index ["event_id"], name: "index_event_participations_on_event_id"
-    t.index ["participant_id"], name: "index_event_participations_on_participant_id"
-    t.index ["participant_type", "participant_id", "event_id"], name: "index_event_participations_on_polymorphic_and_event", unique: true
-    t.index ["participant_type", "participant_id"], name: "idx_on_participant_type_participant_id_bfb6fab1d7"
+    t.index ["person_id"], name: "index_event_participations_on_person_id"
   end
 
   create_table "event_question_translations", force: :cascade do |t|
@@ -445,7 +419,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_152059) do
     t.integer "minimum_participants"
     t.boolean "automatic_assignment", default: false, null: false
     t.string "visible_contact_attributes", default: "[\"name\", \"address\", \"phone_number\", \"email\", \"social_account\"]"
-    t.integer "guest_limit", default: 0, null: false
     t.index ["kind_id"], name: "index_events_on_kind_id"
     t.index ["shared_access_token"], name: "index_events_on_shared_access_token"
   end

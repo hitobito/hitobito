@@ -32,7 +32,7 @@ describe :event_participation do
       is_expected.to have_text("Wichtige Bemerkungen zu meiner Teilnahme")
     end.to change { Event::Participation.count }.by(1)
 
-    participation = Event::Participation.find_by(event: event, person: person)
+    participation = Event::Participation.find_by(event: event, participation: person)
 
     expect(participation).to be_present
   end

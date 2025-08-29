@@ -44,6 +44,10 @@ class Event::ParticipationAbility < AbilityDsl::Base
     permission(:layer_and_below_full).may(:mail_confirmation).in_same_layer_if_active
   end
 
+  on(Event::Guest) do
+    permission(:any).may(:create).if_participating
+  end
+
   def her_own_or_for_leaded_events
     her_own || for_leaded_events
   end
@@ -62,8 +66,14 @@ class Event::ParticipationAbility < AbilityDsl::Base
       (!event.application_closing_at? || event.application_closing_at >= Time.zone.today)
   end
 
+  def if_participating
+    participating?
+  end
+
   def participating?
-    event.participations.map(&:person_id).include? user.id
+    event.participations.find do |participation|
+      participation.participant_type == Person.sti_name && participation.participant_id == user.id
+    end.present?
   end
 
   def participant_can_show_event?

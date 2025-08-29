@@ -5,14 +5,44 @@
 
 module Globalized
   extend ActiveSupport::Concern
+  ATTRIBUTE_LOCALE_REGEX = /^(?<attribute>.*)_(?<locale>[a-z]{2})$/
 
   included do
     before_destroy :remember_translated_label
   end
 
   module ClassMethods
+    include GlobalizeAccessors
     def translates(*columns)
       super(*columns, fallbacks_for_empty_translations: true)
+      globalize_accessors
+    end
+
+    def copy_validators_to_globalized_accessors
+      translated_attribute_names.each do |attr|
+        attributes = I18n.available_locales.map { |locale| :"#{attr}_#{locale}" }
+          .filter { |a| validators_on(a).empty? }
+
+        next if attributes.empty?
+
+        validators_on(attr).each do |validator|
+          next if validator.is_a?(ActiveRecord::Validations::PresenceValidator) || validator.is_a?(ActiveRecord::Validations::UniquenessValidator)
+
+          attributes.each do |attribute|
+            validates_with validator.class, validator.options.merge(attributes: attribute, unless: proc { attribute.end_with? "_#{I18n.locale}" })
+          end
+        end
+      end
+    end
+
+    def human_attribute_name(*options)
+      attribute = options.first.to_sym
+      if globalize_attribute_names.include? attribute
+        attribute, locale = attribute.match(ATTRIBUTE_LOCALE_REGEX).captures
+
+        return "#{super(attribute, *options.drop(1))} (#{locale.upcase})"
+      end
+      super
     end
 
     # Inspired by https://github.com/rails/actiontext/issues/32#issuecomment-450653800
@@ -25,7 +55,9 @@ module Globalized
 
       after_update do
         columns.each do |col|
-          translation.send(col).save if translation.send(col).changed?
+          translations.each do |translation|
+            translation.send(col).save if translation.send(col).changed?
+          end
         end
       end
 

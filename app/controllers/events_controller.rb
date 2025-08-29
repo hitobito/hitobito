@@ -113,7 +113,7 @@ class EventsController < CrudController
     p = model_params.dup
     p.delete(:type)
     p.delete(:contact)
-    p.permit(permitted_attrs)
+    p.permit(PermittedGlobalizedAttrs.new.permitted_attrs(self.permitted_attrs, entry))
   end
 
   def group
@@ -236,18 +236,7 @@ class EventsController < CrudController
   def assign_attributes
     assign_contact_attrs
     assign_visible_contact_attrs
-    super.tap do |attrs|
-      assign_global_question_translations
-    end
-  end
-
-  # NOTE - as form only sends translations for current locale, we manually add other translations
-  def assign_global_question_translations
-    (entry.admin_questions + entry.application_questions).select(&:derived?).each do |q|
-      template = Event::Question.find(q.derived_from_question_id)
-      q.question_translations = template.question_translations
-      q.choices_translations = template.choices_translations
-    end
+    super
   end
 
   def assign_contact_attrs

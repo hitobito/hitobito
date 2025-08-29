@@ -11,7 +11,12 @@ describe "Globalized model" do
   let(:languages) { Settings.application.languages.keys }
 
   before do
+    @cached_languages = Settings.application.languages
     Settings.application.languages = {de: "Deutsch", en: "English", fr: "Français"}
+  end
+
+  after do
+    Settings.application.languages = @cached_languages
   end
 
   it "should create globalized accessors" do

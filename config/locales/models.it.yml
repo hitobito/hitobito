@@ -133,8 +133,7 @@ it:
         message/letter_with_invoice:
           attributes:
             base:
-              invoice_items_required: È richiesta almeno una voce di un conto
-              invoice_items_invalid: Almeno una voce di un conto non è valida
+              invoice_items_invalid: Almeno una voce di un conto non è valida.
         oauth/application:
           attributes:
             scopes:

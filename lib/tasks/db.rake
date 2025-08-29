@@ -35,6 +35,14 @@ namespace :db do
     Rake::Task["delayed_job:schedule"].invoke
   end
 
+  namespace :test do
+    desc "Generate custom content fixtures"
+    task generate_fixtures: [:environment] do
+      require_relative "../fixtures/custom_contents_generator"
+      Fixtures::CustomContentsGenerator.new.run
+    end
+  end
+
   namespace :migrate do
     desc "Display status of migrations including the originating wagon name"
     task status_all: [:environment] do

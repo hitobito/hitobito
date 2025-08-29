@@ -1,132 +1,120 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
-
-# == Schema Information
-#
-# Table name: custom_contents
-#
-#  id                    :integer          not null, primary key
-#  key                   :string           not null
-#  label                 :string           not null
-#  placeholders_optional :string
-#  placeholders_required :string
-#  subject               :string
-#
-
-login:
-  key: send_login
-  placeholders_required: login-url
-  placeholders_optional: recipient-name, sender-name
-
-login_info:
-  key: "views/devise/sessions/info"
-
-notes:
-  key: notes
-
-bulk_mail_success:
-  key: bulk_mail_success
-  placeholders_required: "mail-subject, delivered-at, mail-to, total-recipients"
-
-bulk_mail_with_failed:
-  key: bulk_mail_with_failed
-  placeholders_required: "mail-subject, delivered-at, mail-to, total-recipients, total-succeeded-recipients, failed-recipients"
-
-content_invoice_notification:
-  key: content_invoice_notification
-  placeholders_optional: invoice-items, invoice-total, payment-information, recipient-name, group-name, group-address, invoice-number
-
-person_add_request_person:
-  key: person_add_request_person
-  placeholders_required: request-body, answer-request-url
-  placeholders_optional: recipient-name, requester-name, requester-roles
-
-person_add_request_responsibles:
-  key: person_add_request_responsibles
-  placeholders_required: person-name, request-body, answer-request-url
-  placeholders_optional: recipient-names, requester-name, requester-roles
-
-person_add_request_approved:
-  key: person_add_request_approved
-  placeholders_required: person-name, request-body
-  placeholders_optional: recipient-name, approver-name, approver-roles
-
-person_add_request_rejected:
-  key: person_add_request_rejected
-  placeholders_required: person-name, request-body
-  placeholders_optional: recipient-name, rejecter-name, rejecter-roles
-
+---
 address_validation_checks:
   key: address_validation_checks
   placeholders_required: invalid-people
-
 assignment_assignee_notification:
   key: assignment_assignee_notification
   placeholders_required: assignment-title
-
-self_registration_notification:
-  key: self_registration_notification
-  placeholders_required: group-name, person-name, person-url
-
-password_compromised_situation:
-  key: password_compromised_situation
-  placeholders_required: person-name
-
-password_compromised_solution:
-  key: password_compromised_solution
-  placeholders_required: person-name
-
-email_compromised_situation:
-  key: email_compromised_situation
-  placeholders_required: person-name
-
-email_compromised_solution:
-  key: email_compromised_solution
-  placeholders_required: person-name
-
-dataleak_situation_id:
-  key: dataleak_situation_id
-  placeholders_required: person-name
-
-dataleak_solution_id:
-  key: dataleak_solution_id
-  placeholders_required: person-name
-
-suspend_person_situation_id:
-  key: suspend_person_situation_id
-  placeholders_required: person-name
-
-suspend_person_solution_id:
-  key: suspend_person_solution_id
-  placeholders_required: person-name
-
-blocked_person_title_id:
-  key: blocked_person_title_id
-  placeholders_required: person-name
-
-blocked_person_situation_id:
-  key: blocked_person_situation_id
-  placeholders_required: person-name
-
-blocked_person_solution_id:
-  key: blocked_person_solution_id
-  placeholders_required: person-name
-
 blocked_person_interval_id:
   key: blocked_person_interval_id
   placeholders_optional: warn-after-days, block-after-days
-
-content_user_password_override:
-  key: content_user_password_override
-  placeholders_required: recipient-name, taker-name
-
+blocked_person_situation_id:
+  key: blocked_person_situation_id
+  placeholders_required: person-name
+blocked_person_solution_id:
+  key: blocked_person_solution_id
+  placeholders_required: person-name
+blocked_person_title_id:
+  key: blocked_person_title_id
+  placeholders_required: person-name
+bulk_mail_failure_notification:
+  key: bulk_mail_failure_notification
+  placeholders_required: subject
+bulk_mail_success:
+  key: bulk_mail_success
+  placeholders_required: mail-subject, delivered-at, mail-to, total-recipients
+bulk_mail_with_failed:
+  key: bulk_mail_with_failed
+  placeholders_required: mail-subject, delivered-at, mail-to, total-recipients, total-succeeded-recipients,
+    failed-recipients
 content_inactivity_block_warning:
   key: content_inactivity_block_warning
   placeholders_required: recipient-name
   placeholders_optional: warn-after-days, block-after-days
-
+content_invoice_notification:
+  key: content_invoice_notification
+  placeholders_optional: recipient-name, group-name, group-address, invoice-number,
+    invoice-items, invoice-total, payment-information
+content_user_impersonation:
+  key: content_user_impersonation
+  placeholders_required: taker-name
+  placeholders_optional: recipient-name
+content_user_password_override:
+  key: content_user_password_override
+  placeholders_required: taker-name, recipient-name
+dataleak_situation_id:
+  key: dataleak_situation_id
+  placeholders_required: person-name
+dataleak_solution_id:
+  key: dataleak_solution_id
+  placeholders_required: person-name
+email_compromised_situation:
+  key: email_compromised_situation
+  placeholders_required: person-name
+email_compromised_solution:
+  key: email_compromised_solution
+  placeholders_required: person-name
+event_application_approval:
+  key: event_application_approval
+  placeholders_required: participant-name, event-details, application-url
+  placeholders_optional: recipient-names
+event_application_confirmation:
+  key: event_application_confirmation
+  placeholders_required: event-details, application-url
+  placeholders_optional: recipient-name
+event_application_notification:
+  key: event_application_notification
+  placeholders_required: event-name, participant-name
+  placeholders_optional: application-url, participation-details
+event_application_pending:
+  key: event_application_pending
+  placeholders_required: event-details, application-url
+  placeholders_optional: recipient-name
+event_cancel_application:
+  key: event_cancel_application
+  placeholders_required: event-details
+  placeholders_optional: recipient-name
+event_register_login:
+  key: event_register_login
+  placeholders_required: event-url
+  placeholders_optional: recipient-name, event-name
 hitobito_log_error:
-  key: "hitobito_log_error"
+  key: hitobito_log_error
   placeholders_required: hitobito-log-url, error-count, time-period, error-log-table
+password_compromised_situation:
+  key: password_compromised_situation
+  placeholders_required: person-name
+password_compromised_solution:
+  key: password_compromised_solution
+  placeholders_required: person-name
+person_add_request_approved:
+  key: person_add_request_approved
+  placeholders_required: person-name, request-body
+  placeholders_optional: recipient-name, approver-name, approver-roles
+person_add_request_person:
+  key: person_add_request_person
+  placeholders_required: request-body, answer-request-url
+  placeholders_optional: recipient-name, requester-name, requester-roles
+person_add_request_rejected:
+  key: person_add_request_rejected
+  placeholders_required: person-name, request-body
+  placeholders_optional: recipient-name, rejecter-name, rejecter-roles
+person_add_request_responsibles:
+  key: person_add_request_responsibles
+  placeholders_required: person-name, request-body, answer-request-url
+  placeholders_optional: recipient-names, requester-name, requester-roles
+self_registration_notification:
+  key: self_registration_notification
+  placeholders_required: person-name, group-name, person-url
+send_login:
+  key: send_login
+  placeholders_required: login-url
+  placeholders_optional: recipient-name, sender-name
+suspend_person_situation_id:
+  key: suspend_person_situation_id
+  placeholders_required: person-name
+suspend_person_solution_id:
+  key: suspend_person_solution_id
+  placeholders_required: person-name
+views/devise/sessions/info:
+  key: views/devise/sessions/info

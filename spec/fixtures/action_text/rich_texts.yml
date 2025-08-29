@@ -1,173 +1,307 @@
-login_de_body:
-  record: login_de (CustomContent::Translation)
-  name: body
-  body: '
-  Hallo {recipient-name}<br/><br/>
-  Willkommen bei <%= Settings.application.name %>!
-  Unter dem folgenden Link kannst du
-  dein Login Passwort setzen:<br/><br/>{login-url}<br/><br/>
-  Bis bald!<br/><br/>{sender-name}'
-
-login_fr_body:
-  record: login_fr (CustomContent::Translation)
-  name: body
-  body: "Salut {recipient-name}, voici ta site login: {login-url}"
-
-notes_body:
-  record: notes (CustomContent::Translation)
-  name: body
-  body: Bla bla bla bla
-
-bulk_mail_success_de_body:
-  record: bulk_mail_success_de (CustomContent::Translation)
-  name: body
-  body: '
-  Deine Mail an {mail-to} wurde verschickt:<br/><br/>
-  Betreff: {mail-subject}<br/>
-  Zeit: {delivered-at}<br/>
-  Empfänger: {total-recipients}<br/><br/>'
-
-bulk_mail_with_failed_de_body:
-  record: bulk_mail_with_failed_de (CustomContent::Translation)
-  name: body
-  body: '
-  Deine Mail an {mail-to} wurde verschickt:<br/><br/>
-  Betreff: {mail-subject}<br/>
-  Zeit: {delivered-at}<br/>
-  Empfänger: {total-succeeded-recipients}/{total-recipients}<br/><br/>
-  Folgende Empfänger konnten nicht zugestellt werden:<br/><br/>{failed-recipients}
-  <br/><br/>
-  '
-
-content_invoice_notification_body:
-  record: content_invoice_notification (CustomContent::Translation)
-  name: body
-  body: '<p>Hallo {recipient-name}</p>
-   <p>Rechnung von:</p>
-   <p><b>Absender: {group-address}</b></p>
-   <br/><br/>
-   {invoice-items}<br/><br/>
-   {invoice-total}<br/><br/>
-   {payment-information}<br/><br/>
-  '
-
-person_add_request_person_body:
-  record: person_add_request_person (CustomContent::Translation)
-  name: body
-  body: 'Hallo {recipient-name}<br/><br/>
-    {requester-name} möchte dich hier hinzufügen: <br><br/>
-    {request-body}<br><br/>
-    {requester-name} hat folgende schreibberechtigten Rollen: <br><br/>
-    {requester-roles}<br><br/>
-    Bitte bestätige oder verwerfe diese Anfrage:<br><br/>
-    {answer-request-url}
-  '
-
-person_add_request_responsibles_body:
-  record: person_add_request_responsibles (CustomContent::Translation)
-  name: body
-  body: 'Hallo {recipient-names}<br/><br/>
-    {requester-name} möchte {person-name} hier hinzufügen: <br/><br/>
-    {request-body}<br/><br/>
-    {requester-name} hat folgende schreibberechtigten Rollen: <br/><br/>
-    {requester-roles}<br/><br/>
-    Bitte bestätige oder verwerfe diese Anfrage:<br/><br/>
-    {answer-request-url}'
-
-person_add_request_approved_body:
-  record: person_add_request_approved (CustomContent::Translation)
-  name: body
-  body: 'Hallo {recipient-name}<br/><br/>
-   {approver-name} hat deine Anfrage für {person-name} freigegeben.<br/><br/>
-   {person-name} wurde zu {request-body} hinzugefügt.<br/><br/>
-   {approver-name} hat folgende schreibberechtigten Rollen: <br/><br/>
-   {approver-roles}<br/><br/>'
-
-person_add_request_rejected_body:
-  record: person_add_request_rejected (CustomContent::Translation)
-  name: body
-  body: 'Hallo {recipient-name}<br/><br/>
-    {rejecter-name} hat deine Anfrage für {person-name} abgelehnt.<br/><br/>
-    {person-name} wird nicht zu {request-body} hinzugefügt.<br/><br/>
-    {rejecter-name} hat folgende schreibberechtigten Rollen: <br/><br/>
-    {rejecter-roles}<br/><br/>'
-
-address_validation_checks_body:
-  record: address_validation_checks (CustomContent::Translation)
-  name: body
-  body: 'Die Personen: {invalid-people} haben Addressen, welche nicht im Archiv gefunden wurden.'
-
-assignment_assignee_notification_body:
-  record: assignment_assignee_notification (CustomContent::Translation)
-  name: body
-  body: 'Sie haben einen neuen Druckauftrag: {assignment-title} erhalten. Login Sie sich bitte ein, um diesen einzusehen.'
-
-self_registration_notification_body:
-  record: self_registration_notification (CustomContent::Translation)
-  name: body
-  body: 'Die Person {person-name} hat sich auf der Gruppe {group-name} per Selbstregistrierung angemeldet:<br/><br/>{person-url}'
-
-
-people_action_index_de_body:
-  record: people_action_index_de (HelpText::Translation)
-  name: body
-  body: 'test'
-
-person_field_name_de_body:
-  record: person_field_name_de (HelpText::Translation)
-  name: body
-  body: 'test'
-
-event_field_name_de_body:
-  record: event_field_name_de (HelpText::Translation)
-  name: body
-  body: 'base'
-
-course_field_name_de_body:
-  record: course_field_name_de (HelpText::Translation)
-  name: body
-  body: 'inherited'
-
-participations_action_index_de_body:
-  record: participations_action_index_de (HelpText::Translation)
-  name: body
-  body: 'test'
-
-events_action_index_de_body:
-  record: events_action_index_de (HelpText::Translation)
-  name: body
-  body: 'test'
-
-letter_body:
-  record: letter (Message)
+---
+Addressen Validations Checks_de:
   name: body
   body: |
-    Hallo<br/><br/>
-    Wir laden <strong>dich</strong> ein!
-    <br/><br/>
-    Bis bald
-letter_invoice:
-  record: with_invoice (Message)
+    <div class="trix-content">
+      Die Personen: {invalid-people} haben Addressen, welche nicht im Archiv gefunden wurden.
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '4'
+Addressen Validations Checks_fr:
   name: body
   body: |
-    Hallo<br/><br/>
-    Dein <strong>Mitgliedsbeitrag</strong> ist fällig!
-    <br/><br/>
-    Bis bald
-
-content_user_password_override_body:
-  record: content_user_password_override (CustomContent::Translation)
+    <div class="trix-content">
+      Les personnes: {invalid-people} ont des adresses, qui n'ont pas été trouvées dans les archives.
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '5'
+Alle Rollen entfernen_de:
   name: body
   body: |
-    Hallo {recipient-name}, <br/>
-    {taker-name} hat auf [#{Settings.application.name}] das Passwort deines Accounts zurückgesetzt.
-    Dies geschieht typischerweise, wenn jemand den Verdacht hat, dass dein Passwort nicht mehr sicher ist. <br/>
-    Im Moment kann sich also niemand mit deinem Account einloggen. Du kannst über die Funktion \"Passwort vergessen\"
-    ein neues Passwort anfordern
-
-content_inactivity_block_warning_body:
-  record: content_inactivity_block_warning (CustomContent::Translation)
+    <div class="trix-content">
+      Dann solltest du {person-name} temporär alle Rollen in deiner Gruppe entfernen.
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '30'
+'Anfrage Personendaten: E-Mail Freigabe abgelehnt_de':
   name: body
   body: |
-    Hallo {recipient-name}, <br/>
-    TBD auf [#{Settings.application.name}] 
+    <div class="trix-content">
+      Hallo {recipient-name}<br><br>{rejecter-name} hat deine Anfrage für {person-name} abgelehnt.<br><br>{person-name} wird nicht zu {request-body} hinzugefügt.<br><br>{rejecter-name} hat folgende schreibberechtigten Rollen: <br><br>{rejecter-roles}<br><br>
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '102'
+'Anfrage Personendaten: E-Mail Freigabe akzeptiert_de':
+  name: body
+  body: |
+    <div class="trix-content">
+      Hallo {recipient-name}<br><br>{approver-name} hat deine Anfrage für {person-name} freigegeben.<br><br>{person-name} wurde zu {request-body} hinzugefügt.<br><br>{approver-name} hat folgende schreibberechtigten Rollen: <br><br>{approver-roles}<br><br>
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '98'
+'Anfrage Personendaten: E-Mail Freigabe durch Person_de':
+  name: body
+  body: |
+    <div class="trix-content">
+      Hallo {recipient-name}<br><br>{requester-name} möchte dich hier hinzufügen: <br><br>{request-body}<br><br>{requester-name} hat folgende schreibberechtigten Rollen: <br><br>{requester-roles}<br><br>Bitte bestätige oder verwerfe diese Anfrage:<br><br>{answer-request-url}
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '90'
+'Anfrage Personendaten: E-Mail Freigabe durch Verantwortliche_de':
+  name: body
+  body: |
+    <div class="trix-content">
+      Hallo {recipient-names}<br><br>{requester-name} möchte {person-name} hier hinzufügen: <br><br>{request-body}<br><br>{requester-name} hat folgende schreibberechtigten Rollen: <br><br>{requester-roles}<br><br>Bitte bestätige oder verwerfe diese Anfrage:<br><br>{answer-request-url}
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '94'
+'Anlass: E-Mail Abmeldebestätigung_de':
+  name: body
+  body: |
+    <div class="trix-content">
+      Hallo {recipient-name}<br><br>Du hast dich von folgendem Anlass abgemeldet:<br><br>{event-details}<br><br>
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '74'
+'Anlass: E-Mail Anmeldebestätigung_de':
+  name: body
+  body: |
+    <div class="trix-content">
+      Hallo {recipient-name}<br><br>Du hast dich für folgenden Anlass angemeldet:<br><br>{event-details}<br><br>Falls du ein Login hast, kannst du deine Anmeldung unter folgender Adresse einsehen und eine Bestätigung ausdrucken:<br><br>{application-url}
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '62'
+'Anlass: E-Mail Freigabe der Anmeldung_de':
+  name: body
+  body: |
+    <div class="trix-content">
+      Hallo {recipient-names}<br><br>{participant-name} hat sich für den folgenden Kurs angemeldet:<br><br>{event-details}<br><br>Bitte bestätige oder verwerfe diese Anmeldung unter der folgenden Adresse:<br><br>{application-url}
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '78'
+'Anlass: E-Mail Teilnehmer-/in hat sich angemeldet_de':
+  name: body
+  body: |
+    <div class="trix-content">
+      Hallo<br><br>{participant-name} hat sich für den Anlass "{event-name}" angemeldet:<br><br>{application-url}<br>
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '70'
+'Anlass: E-Mail Voranmeldung_de':
+  name: body
+  body: |
+    <div class="trix-content">
+      Hallo {recipient-name}<br><br>Wir haben deine Voranmeldung für die Teilnahme an folgendem Anlass erhalten:<br><br>{event-details}<br><br>Deine Anmeldung ist noch nicht definitiv und muss erst noch bestätigt werden.<br><br>Falls du ein Login hast, kannst du deine Anmeldung unter folgender Adresse einsehen:<br><br>{application-url}
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '66'
+'Anlass: Temporäres Login senden_de':
+  name: body
+  body: |
+    <div class="trix-content">
+      Hallo {recipient-name}<br><br>Hier kannst du dich für den Anlass {event-name} anmelden:<br><br>{event-url}<br><br>Wir freuen uns, dich wieder mit dabei zu haben.
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '82'
+Auftrag erhalten_de:
+  name: body
+  body: |
+    <div class="trix-content">
+      Sie haben einen neuen Druckauftrag: {assignment-title} erhalten. Login Sie sich bitte ein, um diesen einzusehen.
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '3'
+Benachrichtigung Selbstregistrierung_de:
+  name: body
+  body: |
+    <div class="trix-content">
+      Die Person {person-name} hat sich auf der Gruppe {group-name} per Selbstregistrierung angemeldet:<br><br>{person-url}
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '1'
+Benutzer impersonierung_de:
+  name: body
+  body: |
+    <div class="trix-content">
+      Hallo {recipient-name}{taker-name} hat auf [hitobito] deinen Account übernommen.Falls du glaubst, dass dieser Zugriff von {taker-name} missbräuchlich ist, melde dich beim Verantwortlichen der Datenbank.
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '110'
+Bulk Mail ist zu gross_de:
+  name: body
+  body: |
+    <div class="trix-content">
+      Die Mail '{subject}' überschreitet die Grösse von 10 MB. Bitte laden Sie die Datei auf einer Cloud
+    hoch und hinterlegen Sie die Datei als Link.
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '126'
+Bulk Mail ist zu gross_fr:
+  name: body
+  body: |
+    <div class="trix-content">
+      Le mail '{subject}' dépasse la taille de 10 Mo. Veuillez télécharger le fichier sur un cloud et dépose le fichier sous forme de lien.
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '127'
+Bulk Mail ist zu gross_it:
+  name: body
+  body: |
+    <div class="trix-content">
+      L'e-mail '{subject}' supera la dimensione di 10 MB. Si prega di caricare il file su un cloud e salvare
+    il file come link.
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '128'
+Daten geleaked_de:
+  name: body
+  body: |
+    <div class="trix-content">
+      Gab es einen Datenmissbrauch oder hat {person-name} unerlaubt Daten weitergegeben?
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '26'
+E-Mail-Adresse nicht sicher_de:
+  name: body
+  body: |
+    <div class="trix-content">
+      Vermutest du, dass jemand die Kontrolle über die E-Mail-Adresse von {person-name} unerlaubt übernommen hat?
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '18'
+Haupt-E-Mail löschen_de:
+  name: body
+  body: |
+    <div class="trix-content">
+      Dafür kannst du die Haupt-E-Mail von {person-name} löschen. Bitte informiere weitere zuständige Personen von diesem Vorfall. Besonders wenn {person-name} noch weitere Rollen ausserhalb deiner Ebene hat.
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '38'
+'Hitobito Log: Täglicher Fehlerbericht_de':
+  name: body
+  body: |
+    <div class="trix-content">
+      Guten Tag, <br><br>Dies ist die automatische Benachrichtigung über Fehler im <a href="{hitobito-log-url}">Hitobito Log</a>.Nachfolgend finden Sie die wichtigsten Informationen und eine Übersicht der ersten Fehler-Einträge der letzten 24 Stunden. <br><strong>Anzahl Fehler</strong>: {error-count} <br><strong>Zeitraum</strong>: {time-period} <br><br><strong>Details zu den ersten 10 Fehler:</strong><br><br>{error-log-table}
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '129'
+Login einer inaktiven Person wird automatisch gesperrt_de:
+  name: body
+  body: |
+    <div class="trix-content">
+      Hallo {recipient-name}<br><br>Du hast dich seit {warn-after-days} Tagen nicht mehr auf hitobito eingeloggt. Falls du dich weiterhin einloggen können möchtest, melde dich bei hitobito an, ansonsten wird dein Login nach weiteren {block-after-days} Tagen automatisch gesperrt.
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '58'
+'Login gesperrt: Beschreibung_de':
+  name: body
+  body: |
+    <div class="trix-content">
+      Das Login von {person-name} wurde gesperrt, und hat daher keinen Zugriff mehr.
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '46'
+'Login gesperrt: Hinweise zum Entsperren_de':
+  name: body
+  body: |
+    <div class="trix-content">
+      Das Login muss von jemandem mit Schreibberechtigungen auf dieser Person wieder entsperrt werden.
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '50'
+Login gesperrt_de:
+  name: body
+  body: |
+    <div class="trix-content">
+      Das Login von {person-name} ist gesperrt
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '42'
+Login senden_de:
+  name: body
+  body: |
+    <div class="trix-content">
+      Hallo {recipient-name}<br><br>Willkommen bei hitobito! Unter dem folgenden Link kannst du dein Login Passwort setzen:<br><br>{login-url}<br><br>Bis bald!<br><br>{sender-name}
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '6'
+Login senden_fr:
+  name: body
+  body: |
+    <div class="trix-content">
+      Salut {recipient-name}<br><br>Bonjour chez hitobito! Voici le link pour mettre ton mot de passe:<br><br>{login-url}<br><br>A bientôt!<br><br>{sender-name}
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '7'
+Login verhindert_de:
+  name: body
+  body: |
+    <div class="trix-content">
+      Hallo {recipient-name}, <br>{taker-name} hat auf [hitobito] das Passwort deines Accounts zurückgesetzt. Dies geschieht typischerweise, wenn jemand den Verdacht hat, dass dein Passwort nicht mehr sicher ist. <br>Im Moment kann sich also niemand mit deinem Account einloggen. Du kannst über die Funktion "Passwort vergessen" ein neues Passwort anfordern
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '114'
+Login über E-Mail verhindern_de:
+  name: body
+  body: |
+    <div class="trix-content">
+      Bitte lösche die Haupt-E-Mail von {person-name} und kläre die Situation ab. Wenn du sicher bist, dass keine unbefugte Person auf diesen Account zugreifen kann, kannst du die Haupt-E-Mail wieder eintragen. Du kannst die Haupt-E-Mail auch temporär als Weitere E-Mail abspeichern, damit du sie später wieder findest.
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '22'
+Passwort absichern_de:
+  name: body
+  body: |
+    <div class="trix-content">
+      Bitte überschreibe das Passwort mit dem folgenden Button. {person-name} kann sich ein neues Passwort über die Funktion "Passwort zurücksetzen" zusenden lassen.
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '14'
+Passwort nicht sicher_de:
+  name: body
+  body: |
+    <div class="trix-content">
+      Vermutest du, dass jemand den Account von {person-name} übernommen hat? Oder ist das Passwort nicht mehr sicher?
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '10'
+Person ausschliessen_de:
+  name: body
+  body: |
+    <div class="trix-content">
+      Möchtest du {person-name} ganz aus Hitobito ausschliessen?
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '34'
+Rechnung_de:
+  name: body
+  body: |
+    <div class="trix-content">
+      Hallo {recipient-name}Rechnung von:Absender: {group-address}<br><br>{invoice-items}<br><br>{invoice-total}<br><br>{payment-information}<br><br>
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '106'
+Sendebericht Abo nicht alle erfolgreich_de:
+  name: body
+  body: |
+    <div class="trix-content">
+      Deine Mail an {mail-to} wurde verschickt:<br><br>Betreff: {mail-subject}<br>Zeit: {delivered-at}<br>Empfänger: {total-succeeded-recipients}/{total-recipients}<br><br>Folgende Empfänger konnten nicht zugestellt werden:<br><br>{failed-recipients}<br><br>
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '122'
+Sendebericht Abo_de:
+  name: body
+  body: |
+    <div class="trix-content">
+      Deine Mail an {mail-to} wurde verschickt:<br><br>Betreff: {mail-subject}<br>Zeit: {delivered-at}<br>Empfänger: {total-recipients}<br><br>
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '118'
+'Sicherheitsübersicht: Inaktive Bentuzer automatisch sperren_de':
+  name: body
+  body: |
+    <div class="trix-content">
+      Personen, welche sich mehr als {warn-after-days} Tage nicht mehr bei hitobito eingeloggt haben, werden vor der Sperrung per E-Mail gewarnt. Loggen sich die Personen danach nicht ein, werden sie nach weiteren {block-after-days} Tagen automatisch gesperrt
+    </div>
+  record_type: CustomContent::Translation
+  record_id: '54'

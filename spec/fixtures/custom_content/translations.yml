@@ -1,123 +1,556 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
-
-login_de:
-  custom_content_id: <%= ActiveRecord::FixtureSet.identify(:login) %>
+---
+address_validation_checks_de:
+  custom_content_id: 31
   locale: de
-  label: Login senden
-  subject: "Willkommen bei <%= Settings.application.name %>"
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
-login_fr:
-  custom_content_id: <%= ActiveRecord::FixtureSet.identify(:login) %>
+  label: Addressen Validations Checks
+  subject: Address Validierungen
+address_validation_checks_fr:
+  custom_content_id: 31
   locale: fr
-  label: Login E-Mail
-  subject: Tes informations login
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
-notes:
-  custom_content_id: <%= ActiveRecord::FixtureSet.identify(:notes) %>
+  label: Addressen Validations Checks
+  subject: Validation des adresses
+assignment_assignee_notification_de:
+  custom_content_id: 32
   locale: de
-  label: Any Notes
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+  label: Auftrag erhalten
+  subject: Druckauftrag erhalten
+blocked_person_interval_id_de:
+  custom_content_id: 13
+  locale: de
+  label: 'Sicherheitsübersicht: Inaktive Bentuzer automatisch sperren'
+  subject: 'Sicherheitsübersicht: Inaktive Benutzer automatisch sperren'
+blocked_person_interval_id_en:
+  custom_content_id: 13
+  locale: en
+  label: Automatically block inactive users
+blocked_person_interval_id_fr:
+  custom_content_id: 13
+  locale: fr
+  label: Bloquer automatiquement les utilisateurs inactifs
+blocked_person_interval_id_it:
+  custom_content_id: 13
+  locale: it
+  label: Bloccare automaticamente gli utenti inattivi
+blocked_person_situation_id_de:
+  custom_content_id: 11
+  locale: de
+  label: 'Login gesperrt: Beschreibung'
+  subject: 'Login gesperrt: Beschreibung'
+blocked_person_situation_id_en:
+  custom_content_id: 11
+  locale: en
+  label: TBD
+blocked_person_situation_id_fr:
+  custom_content_id: 11
+  locale: fr
+  label: TBD
+blocked_person_situation_id_it:
+  custom_content_id: 11
+  locale: it
+  label: TBD
+blocked_person_solution_id_de:
+  custom_content_id: 12
+  locale: de
+  label: 'Login gesperrt: Hinweise zum Entsperren'
+  subject: 'Login gesperrt: Hinweise zum Entsperren'
+blocked_person_solution_id_en:
+  custom_content_id: 12
+  locale: en
+  label: Unblock person
+blocked_person_solution_id_fr:
+  custom_content_id: 12
+  locale: fr
+  label: Débloquer la personne
+blocked_person_solution_id_it:
+  custom_content_id: 12
+  locale: it
+  label: Sbloccare persona
+blocked_person_title_id_de:
+  custom_content_id: 10
+  locale: de
+  label: Login gesperrt
+  subject: Login gesperrt
+blocked_person_title_id_en:
+  custom_content_id: 10
+  locale: en
+  label: TBD
+blocked_person_title_id_fr:
+  custom_content_id: 10
+  locale: fr
+  label: TBD
+blocked_person_title_id_it:
+  custom_content_id: 10
+  locale: it
+  label: TBD
+bulk_mail_failure_notification_de:
+  custom_content_id: 34
+  locale: de
+  label: Bulk Mail ist zu gross
+  subject: Bulk Mail zu gross
+bulk_mail_failure_notification_fr:
+  custom_content_id: 34
+  locale: fr
+  label: Bulk Mail est trop grand
+  subject: Bulk Mail est trop grand
+bulk_mail_failure_notification_it:
+  custom_content_id: 34
+  locale: it
+  label: La posta massiva è troppo grande
+  subject: La posta massiva è troppo grande
 bulk_mail_success_de:
-  custom_content_id: <%= ActiveRecord::FixtureSet.identify(:bulk_mail_success) %>
+  custom_content_id: 29
   locale: de
-  label: 'Sendebericht Abo'
-  subject: 'Sendebericht Mail an {mail-to}'
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
-bulk_mail_with_failed_de:
-  custom_content_id: <%= ActiveRecord::FixtureSet.identify(:bulk_mail_with_failed) %>
-  locale: de
-  label: Sendebericht Abo nicht alle erfolgreich,
+  label: Sendebericht Abo
   subject: Sendebericht Mail an {mail-to}
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
-content_invoice_notification:
-  custom_content_id: <%= ActiveRecord::FixtureSet.identify(:content_invoice_notification) %>
+bulk_mail_success_en:
+  custom_content_id: 29
+  locale: en
+  label: Sendebericht Abo
+bulk_mail_success_fr:
+  custom_content_id: 29
+  locale: fr
+  label: Sendebericht Abo
+bulk_mail_success_it:
+  custom_content_id: 29
+  locale: it
+  label: Sendebericht Abo
+bulk_mail_with_failed_de:
+  custom_content_id: 30
+  locale: de
+  label: Sendebericht Abo nicht alle erfolgreich
+  subject: Sendebericht Mail an {mail-to}
+bulk_mail_with_failed_en:
+  custom_content_id: 30
+  locale: en
+  label: Sendebericht Abo nicht alle erfolgreich
+bulk_mail_with_failed_fr:
+  custom_content_id: 30
+  locale: fr
+  label: Sendebericht Abo nicht alle erfolgreich
+bulk_mail_with_failed_it:
+  custom_content_id: 30
+  locale: it
+  label: Sendebericht Abo nicht alle erfolgreich
+content_inactivity_block_warning_de:
+  custom_content_id: 28
+  locale: de
+  label: Login einer inaktiven Person wird automatisch gesperrt
+  subject: Dein Login auf hitobito wird in bald gesperrt
+content_inactivity_block_warning_en:
+  custom_content_id: 28
+  locale: en
+  label: Automatically block inactive users
+content_inactivity_block_warning_fr:
+  custom_content_id: 28
+  locale: fr
+  label: Bloquer automatiquement les utilisateurs inactifs
+content_inactivity_block_warning_it:
+  custom_content_id: 28
+  locale: it
+  label: Bloccare automaticamente gli utenti inattivi
+content_invoice_notification_de:
+  custom_content_id: 25
   locale: de
   label: Rechnung
   subject: Rechnung {invoice-number} von {group-name}
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
-person_add_request_person:
-  custom_content_id: <%= ActiveRecord::FixtureSet.identify(:person_add_request_person) %>
+content_invoice_notification_en:
+  custom_content_id: 25
+  locale: en
+  label: Rechnung
+content_invoice_notification_fr:
+  custom_content_id: 25
+  locale: fr
+  label: Rechnung
+content_invoice_notification_it:
+  custom_content_id: 25
+  locale: it
+  label: Rechnung
+content_user_impersonation_de:
+  custom_content_id: 26
   locale: de
-  label: 'Anfrage Personendaten: E-Mail Freigabe durch Person'
-  subject: Freigabe deiner Personendaten
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
-person_add_request_responsibles:
-  custom_content_id: <%= ActiveRecord::FixtureSet.identify(:person_add_request_responsibles) %>
+  label: Benutzer impersonierung
+  subject: Dein Account auf [hitobito] wurde von {taker-name} übernommen
+content_user_impersonation_en:
+  custom_content_id: 26
+  locale: en
+  label: Benutzer impersonierung
+content_user_impersonation_fr:
+  custom_content_id: 26
+  locale: fr
+  label: Benutzer impersonierung
+content_user_impersonation_it:
+  custom_content_id: 26
+  locale: it
+  label: Benutzer impersonierung
+content_user_password_override_de:
+  custom_content_id: 27
   locale: de
-  label: 'Anfrage Personendaten: E-Mail Freigabe durch Verantwortliche'
-  subject: Freigabe Personendaten
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
-person_add_request_approved:
-  custom_content_id: <%= ActiveRecord::FixtureSet.identify(:person_add_request_approved) %>
+  label: Login verhindert
+  subject: Login für [hitobito] von {taker-name} verhindert
+content_user_password_override_en:
+  custom_content_id: 27
+  locale: en
+  label: Login prevented
+content_user_password_override_fr:
+  custom_content_id: 27
+  locale: fr
+  label: Connexion empêchée
+content_user_password_override_it:
+  custom_content_id: 27
+  locale: it
+  label: Accesso impedito
+dataleak_situation_id_de:
+  custom_content_id: 6
+  locale: de
+  label: Daten geleaked
+  subject: 'Sicherheitsübersicht: Daten geleaked?'
+dataleak_situation_id_en:
+  custom_content_id: 6
+  locale: en
+  label: Data leaked
+dataleak_situation_id_fr:
+  custom_content_id: 6
+  locale: fr
+  label: Fuite de données
+dataleak_situation_id_it:
+  custom_content_id: 6
+  locale: it
+  label: Dati trapelati
+dataleak_solution_id_de:
+  custom_content_id: 7
+  locale: de
+  label: Alle Rollen entfernen
+  subject: 'Sichheitsübersicht: Lösung zu Datenmissbrauch'
+dataleak_solution_id_en:
+  custom_content_id: 7
+  locale: en
+  label: Remove all rolls
+dataleak_solution_id_fr:
+  custom_content_id: 7
+  locale: fr
+  label: Retirer tous les rôles
+dataleak_solution_id_it:
+  custom_content_id: 7
+  locale: it
+  label: Rimuovere tutti i ruoli
+email_compromised_situation_de:
+  custom_content_id: 4
+  locale: de
+  label: E-Mail-Adresse nicht sicher
+  subject: 'Sicherheitsübersicht: E-Mail-Adresse wurde übernommen?'
+email_compromised_situation_en:
+  custom_content_id: 4
+  locale: en
+  label: E-mail address not secure
+email_compromised_situation_fr:
+  custom_content_id: 4
+  locale: fr
+  label: Adresse e-mail non sécurisée
+email_compromised_situation_it:
+  custom_content_id: 4
+  locale: it
+  label: Indirizzo e-mail non sicuro
+email_compromised_solution_de:
+  custom_content_id: 5
+  locale: de
+  label: Login über E-Mail verhindern
+  subject: 'Sichheitsübersicht: Lösung zu E-Mail-Adresse wurde übernommen'
+email_compromised_solution_en:
+  custom_content_id: 5
+  locale: en
+  label: Prevent login via e-mail
+email_compromised_solution_fr:
+  custom_content_id: 5
+  locale: fr
+  label: Empêcher la connexion par e-mail
+email_compromised_solution_it:
+  custom_content_id: 5
+  locale: it
+  label: Impedire il login via e-mail
+event_application_approval_de:
+  custom_content_id: 17
+  locale: de
+  label: 'Anlass: E-Mail Freigabe der Anmeldung'
+  subject: Freigabe einer Kursanmeldung
+event_application_approval_en:
+  custom_content_id: 17
+  locale: en
+  label: 'Event: Email for participation approval'
+event_application_approval_fr:
+  custom_content_id: 17
+  locale: fr
+  label: 'Événement: E-Mail pour débloquer l''inscription'
+event_application_approval_it:
+  custom_content_id: 17
+  locale: it
+  label: 'Evento: E-mail per l''abilitazione della inscrizione'
+event_application_confirmation_de:
+  custom_content_id: 14
+  locale: de
+  label: 'Anlass: E-Mail Anmeldebestätigung'
+  subject: Bestätigung der Anmeldung
+event_application_confirmation_en:
+  custom_content_id: 14
+  locale: en
+  label: 'Event: Application confirmation email'
+event_application_confirmation_fr:
+  custom_content_id: 14
+  locale: fr
+  label: 'Événement: E-Mail de confirmation de l''inscription'
+event_application_confirmation_it:
+  custom_content_id: 14
+  locale: it
+  label: 'Evento: E-mail per l''affermazione della inscrizione'
+event_application_notification_de:
+  custom_content_id: 16
+  locale: de
+  label: 'Anlass: E-Mail Teilnehmer-/in hat sich angemeldet'
+  subject: 'Anlass: Teilnehmer-/in hat sich angemeldet'
+event_application_notification_en:
+  custom_content_id: 16
+  locale: en
+  label: 'Event: E-Mail Participant has applied'
+event_application_notification_fr:
+  custom_content_id: 16
+  locale: fr
+  label: 'Événement: E-Mail Participant/-e a enregistré'
+event_application_notification_it:
+  custom_content_id: 16
+  locale: it
+  label: 'Evento: E-Mail Participante ha registrato'
+event_application_pending_de:
+  custom_content_id: 15
+  locale: de
+  label: 'Anlass: E-Mail Voranmeldung'
+  subject: Voranmeldung eingegangen
+event_application_pending_en:
+  custom_content_id: 15
+  locale: en
+  label: 'Event: Pre registration email'
+event_application_pending_fr:
+  custom_content_id: 15
+  locale: fr
+  label: 'Événement: Préinscription par E-Mail'
+event_application_pending_it:
+  custom_content_id: 15
+  locale: it
+  label: 'Evento: E-mail pre-registrazione'
+event_cancel_application_de:
+  custom_content_id: 18
+  locale: de
+  label: 'Anlass: E-Mail Abmeldebestätigung'
+  subject: Bestätigung der Abmeldung
+event_cancel_application_en:
+  custom_content_id: 18
+  locale: en
+  label: 'Event: Deregistration confirmation email'
+event_cancel_application_fr:
+  custom_content_id: 18
+  locale: fr
+  label: 'Événement: E-Mail de confirmation de la désinscription'
+event_cancel_application_it:
+  custom_content_id: 18
+  locale: it
+  label: 'Evento: E-mail per l''affermazione della disinscrizione'
+event_register_login_de:
+  custom_content_id: 19
+  locale: de
+  label: 'Anlass: Temporäres Login senden'
+  subject: Anmeldelink für Anlass
+event_register_login_en:
+  custom_content_id: 19
+  locale: en
+  label: 'Event: Send temporary login'
+event_register_login_fr:
+  custom_content_id: 19
+  locale: fr
+  label: 'Événement: Envoyer un login temporaire'
+event_register_login_it:
+  custom_content_id: 19
+  locale: it
+  label: 'Evento: Inviare un login temporaneamente'
+hitobito_log_error_de:
+  custom_content_id: 35
+  locale: de
+  label: 'Hitobito Log: Täglicher Fehlerbericht'
+  subject: "[Hitobito] Täglicher Fehlerbericht"
+password_compromised_situation_de:
+  custom_content_id: 2
+  locale: de
+  label: Passwort nicht sicher
+  subject: 'Sicherheitsübersicht: Account wurde übernommen?'
+password_compromised_situation_en:
+  custom_content_id: 2
+  locale: en
+  label: Password not secure
+password_compromised_situation_fr:
+  custom_content_id: 2
+  locale: fr
+  label: Mot de passe non sécurisé
+password_compromised_situation_it:
+  custom_content_id: 2
+  locale: it
+  label: Password non sicura
+password_compromised_solution_de:
+  custom_content_id: 3
+  locale: de
+  label: Passwort absichern
+  subject: 'Sichheitsübersicht: Lösung zu Account wurde übernommen'
+password_compromised_solution_en:
+  custom_content_id: 3
+  locale: en
+  label: Secure the password
+password_compromised_solution_fr:
+  custom_content_id: 3
+  locale: fr
+  label: Sécuriser le mot de passe
+password_compromised_solution_it:
+  custom_content_id: 3
+  locale: it
+  label: Password sicura
+person_add_request_approved_de:
+  custom_content_id: 23
   locale: de
   label: 'Anfrage Personendaten: E-Mail Freigabe akzeptiert'
   subject: Freigabe der Personendaten akzeptiert
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
-person_add_request_rejected:
-  custom_content_id: <%= ActiveRecord::FixtureSet.identify(:person_add_request_rejected) %>
+person_add_request_approved_en:
+  custom_content_id: 23
+  locale: en
+  label: 'Personal data request: Email approval accepted'
+person_add_request_approved_fr:
+  custom_content_id: 23
+  locale: fr
+  label: 'Demande sur les données personnelles: E-mail libération accepté'
+person_add_request_approved_it:
+  custom_content_id: 23
+  locale: it
+  label: 'Richiesta dei dati personali: Email abilitazione accettata'
+person_add_request_person_de:
+  custom_content_id: 21
+  locale: de
+  label: 'Anfrage Personendaten: E-Mail Freigabe durch Person'
+  subject: Freigabe deiner Personendaten
+person_add_request_person_en:
+  custom_content_id: 21
+  locale: en
+  label: 'Personal data request: E-mail approval by person'
+person_add_request_person_fr:
+  custom_content_id: 21
+  locale: fr
+  label: 'Demande sur les données personnelles: Email pour la libération par la personne'
+person_add_request_person_it:
+  custom_content_id: 21
+  locale: it
+  label: 'Richiesta dei dati personali: E-mail per l''abilitazione per mano della
+    persona'
+person_add_request_rejected_de:
+  custom_content_id: 24
   locale: de
   label: 'Anfrage Personendaten: E-Mail Freigabe abgelehnt'
   subject: Freigabe der Personendaten abgelehnt
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
-address_validation_checks:
-  custom_content_id: <%= ActiveRecord::FixtureSet.identify(:address_validation_checks) %>
+person_add_request_rejected_en:
+  custom_content_id: 24
+  locale: en
+  label: 'Personal data request: Email approval rejected'
+person_add_request_rejected_fr:
+  custom_content_id: 24
+  locale: fr
+  label: 'Demande sur les données personnelles: E-mail libre-accès refusé'
+person_add_request_rejected_it:
+  custom_content_id: 24
+  locale: it
+  label: 'Richiesta dei dati personali: Email abilitazione rifiutata'
+person_add_request_responsibles_de:
+  custom_content_id: 22
   locale: de
-  label: 'Addressen Validations Checks'
-  subject: Address Validierungen
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
-assignment_assignee_notification:
-  custom_content_id: <%= ActiveRecord::FixtureSet.identify(:assignment_assignee_notification) %>
+  label: 'Anfrage Personendaten: E-Mail Freigabe durch Verantwortliche'
+  subject: Freigabe Personendaten
+person_add_request_responsibles_en:
+  custom_content_id: 22
+  locale: en
+  label: 'Personal data request: Email approval by responsibles'
+person_add_request_responsibles_fr:
+  custom_content_id: 22
+  locale: fr
+  label: 'Demande sur les données personnelles: E-mail pour la libération par les
+    responsables'
+person_add_request_responsibles_it:
+  custom_content_id: 22
+  locale: it
+  label: 'Richiesta dei dati personali: E-mail per l''abilitazione per mano dei responsabili'
+self_registration_notification_de:
+  custom_content_id: 33
   locale: de
-  label: 'Auftrag erhalten'
-  subject: Druckauftrag erhalten
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
-self_registration_notification:
-  custom_content_id: <%= ActiveRecord::FixtureSet.identify(:self_registration_notification) %>
+  label: Benachrichtigung Selbstregistrierung
+  subject: Benachrichtigung Selbstregistrierung
+self_registration_notification_en:
+  custom_content_id: 33
+  locale: en
+  label: Self Registration Notification
+send_login_de:
+  custom_content_id: 1
   locale: de
-  label: 'Benachrichtigung Selbstregistrierung'
-  subject: 'Benachrichtigung Selbstregistrierung'
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
-content_user_password_override:
-  custom_content_id: <%= ActiveRecord::FixtureSet.identify(:content_user_password_override) %>
+  label: Login senden
+  subject: Willkommen bei hitobito
+send_login_en:
+  custom_content_id: 1
+  locale: en
+  label: Send login
+send_login_fr:
+  custom_content_id: 1
+  locale: fr
+  label: Envoyer le login
+send_login_it:
+  custom_content_id: 1
+  locale: it
+  label: Inviare il login
+suspend_person_situation_id_de:
+  custom_content_id: 8
   locale: de
-  label: Login verhindert,
-  subject: Login für hitobito von Top Leader verhindert,
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
-content_inactivity_block_warning:
-  custom_content_id: <%= ActiveRecord::FixtureSet.identify(:content_inactivity_block_warning) %>
+  label: Person ausschliessen
+  subject: 'Sicherheitsübersicht: Person ausschliessen?'
+suspend_person_situation_id_en:
+  custom_content_id: 8
+  locale: en
+  label: Exclude person
+suspend_person_situation_id_fr:
+  custom_content_id: 8
+  locale: fr
+  label: Exclure la personne
+suspend_person_situation_id_it:
+  custom_content_id: 8
+  locale: it
+  label: Escludere la persona
+suspend_person_solution_id_de:
+  custom_content_id: 9
   locale: de
-  label: Login wird bald blockiert,
-  subject: Login für hitobito von Top Leader wird bald blockiert,
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
+  label: Haupt-E-Mail löschen
+  subject: 'Sicherheitsübersicht: Lösung bei Person ausschliessen'
+suspend_person_solution_id_en:
+  custom_content_id: 9
+  locale: en
+  label: Delete main email
+suspend_person_solution_id_fr:
+  custom_content_id: 9
+  locale: fr
+  label: Supprimer l'e-mail principal
+suspend_person_solution_id_it:
+  custom_content_id: 9
+  locale: it
+  label: Cancellare l'e-mail principale
+views/devise/sessions/info_de:
+  custom_content_id: 20
+  locale: de
+  label: Login Informationen
+views/devise/sessions/info_en:
+  custom_content_id: 20
+  locale: en
+  label: Login Information
+views/devise/sessions/info_fr:
+  custom_content_id: 20
+  locale: fr
+  label: Informations sur le login
+views/devise/sessions/info_it:
+  custom_content_id: 20
+  locale: it
+  label: Informazioni al login

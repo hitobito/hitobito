@@ -370,10 +370,6 @@ it:
     date: "Data %{index}"
 
   event:
-    guests:
-      new:
-        title: Gast hinzufügen
-        add_more_guests: "Anmelden und weiteren Gast hinzufügen (max. %{limit})"
     run_by: "Eseguito da"
     applied_to: Iscrizioni a
     alternative_dates: date alternativi
@@ -401,8 +397,6 @@ it:
       already_assigned: "Questa persona è già assegnata da un'altra parte."
       maximum_participations_reached: È stato raggiunto il numero massimo di partecipanti consentito. Per confermare ulteriori iscrizioni, è necessario aumentare il numero massimo di partecipanti.
       participation:
-        guest_of_html: "(Gast von %{main_applicant})"
-        guest_of_deleted_participation: "(Gast von abgemeldeter Person)"
         registered_at: "iscrizione il %{datetime}"
         town: Domicilio
       prio_buttons:
@@ -464,15 +458,12 @@ it:
       actions_approval:
         approve_button: "Sbloccare"
         reject_button: "Rifiutare"
-      fields:
-        explain_required_checkmark: "* = Antwort obligatorisch"
-        send_email: E-Mail an Teilnehmer/in senden
       form:
         title_new: "Iscrizione come %{role}"
         title_edit: "Modificare l'iscrizone di %{person}"
         apply: "iscrivere"
-      new:
-        add_guests: "Anmelden und Gast hinzufügen (max. %{limit})"
+        explain_required_checkmark: "* = Antwort obligatorisch"
+        send_email: E-Mail an Teilnehmer/in senden
       application_fields:
         alternative_dates_info: "per favore indica altri corsi che potrebbero andarti bene."
         course_information: "informazioni sui corsi"
@@ -674,10 +665,6 @@ it:
     show:
       link:
         delete: "cancellare iscrizione"
-
-  event/guests:
-    guest_added_successfully: "%{guest} wurde erfolgreich als Gast hinzugefügt."
-    not_allowed_due_to_guest_limit: "Du kannst in diesem Anlass keine weiteren Gäste hinzufügen."
 
   event/invitations:
     export_enqueued: "L'esportazione viene avviata in background e scaricata al termine."
@@ -2108,7 +2095,6 @@ it:
   steps_component:
     next_link: Avanti
     prev_link: Indietro
-    submit: Absenden
 
   household_aside_component:
     add: Creare
@@ -2273,14 +2259,3 @@ it:
     not_found: Codice di verifica non valido
     status_valid: Iscrizione valida
     status_invalid: Nessuna iscrizione valida
-
-  wizards:
-    steps:
-      new_user_form:
-        next_button: Registrieren
-      new_event_guest_contact_data_form:
-        next_button: Weiter
-      new_event_guest_participation_form:
-        next_button: Gast anmelden
-      new_event_guest_contact_data_form_title: Kontaktdaten des Gasts
-      new_event_guest_participation_form_title: Gast anmelden

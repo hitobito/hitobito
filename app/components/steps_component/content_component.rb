@@ -52,6 +52,7 @@ class StepsComponent::ContentComponent < StepsComponent::IteratingComponent
 
   def next_button(title = nil, options = {})
     type = "submit"
+    title ||= I18n.t("#{@partial.tr("/", ".")}.submit_button", default: nil) if last?
     title ||= I18n.t("#{@partial.tr("/", ".")}.next_button", default: nil)
     title ||= if last?
       t("steps_component.submit")

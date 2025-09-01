@@ -23,7 +23,7 @@ module Globalized
 
     def copy_validators_to_globalized_accessors
       translated_attribute_names.each do |attr|
-        attributes = I18n.available_locales.map { |locale| :"#{attr}_#{locale}" }
+        attributes = Settings.application.languages.keys.map { |locale| :"#{attr}_#{locale}" }
           .filter { |a| validators_on(a).empty? }
 
         next if attributes.empty?

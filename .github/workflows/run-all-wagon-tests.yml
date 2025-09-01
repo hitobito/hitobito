@@ -5,13 +5,13 @@ on:
     inputs:
       core_ref:
         description: Use a specific version of the core for the workflow run. Defaults to the main branch (master, or sac-master during a merge freeze).
-        default: "master"
+        default: ""
       wagon_dependency_ref:
         description: Use a specific version of the wagon dependency for the workflow run. Defaults to the main branch (master, or sac-master during a merge freeze).
-        default: "master"
+        default: ""
       wagon_ref:
         description: Use a specific version of the wagon dependency for the workflow run. Defaults to the main branch (master).
-        default: "master"
+        default: ""
   push:
     branches: [ master, sac-master ]
     paths-ignore:
@@ -60,6 +60,18 @@ jobs:
         wagon: ${{ fromJSON(needs.find-wagons.outputs.wagons) }}
       max-parallel: 5 # needed so we don't occupy all the runners with core waiting jobs and the wagon tests can never start
     steps:
+      - name: "Determine common branch and set branch name for wagon"
+        env:
+          INPUT_WAGON_REF: ${{ inputs.wagon_ref }}
+        run: |
+          CORE_REF="$INPUT_CORE_REF"
+          if [ -z "$INPUT_CORE_REF" ]; then
+            CORE_REF=$(git ls-remote --heads https://github.com/${{matrix.wagon.owner}}/${{matrix.wagon.repo}} | cut -d/ -f3- | grep -x "${{github.head_ref || github.ref_name}}" || echo 'master')
+          fi
+
+          echo "WAGON_REF=$WAGON_REF" >> $GITHUB_ENV
+        shell: bash
+
       - name: Trigger ${{ matrix.wagon.name }} wagon tests
         uses: Codex-/return-dispatch@v2.1.0
         id: run-wagon-tests
@@ -67,7 +79,7 @@ jobs:
           token: ${{ secrets.WAGON_TESTS_GITHUB_TOKEN }}
           repo: ${{ matrix.wagon.repo }}
           owner: ${{ matrix.wagon.owner }}
-          ref: ${{ inputs.wagon_ref || 'master' }}
+          ref: ${{ env.WAGON_REF }}
           workflow: tests.yml
           workflow_timeout_seconds: 21600 # wait for up to 6 hours
           workflow_job_steps_retry_seconds: 10 # default is 5, set it higher to not strain the API limit too much

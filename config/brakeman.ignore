@@ -149,25 +149,6 @@
       "note": "No SQL Injection possible here, because no user data is handled"
     },
     {
-      "warning_type": "Unmaintained Dependency",
-      "warning_code": 122,
-      "fingerprint": "64637717c34d529037abb82154ff3ce7c5a83320f82706f8a6c4a67441b3bb2f",
-      "check_name": "EOLRails",
-      "message": "Support for Rails 7.1.5.1 ends on 2025-10-01",
-      "file": "Gemfile.local.lock",
-      "line": 538,
-      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
-      "code": null,
-      "render_path": null,
-      "location": null,
-      "user_input": null,
-      "confidence": "Medium",
-      "cwe_id": [
-        1104
-      ],
-      "note": "The Upgrade is planned for next quarterly release, see https://github.com/hitobito/hitobito/issues/3292"
-    },
-    {
       "warning_type": "SQL Injection",
       "warning_code": 0,
       "fingerprint": "746ac78c11b93a2b9b1c373c17f7bf79935c31dea8607a84170efea45b040b48",
@@ -212,6 +193,25 @@
         89
       ],
       "note": "The parameter is a return value from a method and will always be one of two fixed strings"
+    },
+    {
+      "warning_type": "Unmaintained Dependency",
+      "warning_code": 122,
+      "fingerprint": "98b26f60d776fd41ee6f088c833725145be9aac2d7c5b33780241c273622db42",
+      "check_name": "EOLRails",
+      "message": "Support for Rails 7.1.5.1 ends on 2025-10-01",
+      "file": "Gemfile.lock",
+      "line": 535,
+      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "Medium",
+      "cwe_id": [
+        1104
+      ],
+      "note": "The Upgrade is planned for next quarterly release, see https://github.com/hitobito/hitobito/issues/3292"
     },
     {
       "warning_type": "SQL Injection",

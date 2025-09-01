@@ -25,51 +25,29 @@ runs:
   using: composite
   steps:
     - name: "Determine common branch and set branch name for core"
-      if: github.event_name != 'pull_request'
       env:
         INPUT_CORE_REF: ${{ inputs.core_ref }}
       run: |
         CORE_REF="$INPUT_CORE_REF"
         if [ -z "$INPUT_CORE_REF" ]; then
-          CORE_REF=$(git ls-remote --heads https://github.com/hitobito/hitobito | cut -d/ -f3- | grep -x "${{github.ref_name}}" || echo 'master')
+          CORE_REF=$(git ls-remote --heads https://github.com/hitobito/hitobito | cut -d/ -f3- | grep -x "${{github.head_ref || github.ref_name}}" || echo 'master')
         fi
 
         echo "CORE_REF=$CORE_REF" >> $GITHUB_ENV
       shell: bash
 
     - name: "Determine common branch and set branch name for dependency repo"
-      if: (github.event_name != 'pull_request') && (inputs.wagon_dependency_repository != '')
+      if: inputs.wagon_dependency_repository != ''
       env:
         WAGON_DEPENDENCY_REPO: ${{ inputs.wagon_dependency_repository }}
         INPUT_WDEP_REF: ${{ inputs.wagon_dependency_ref }}
       run: |
         WAGON_DEPENDENCY_REF="$INPUT_WDEP_REF"
         if [ -z "$INPUT_WDEP_REF" ] && [ "$WAGON_DEPENDENCY_REPO" != '' ]; then
-          WAGON_DEPENDENCY_REF=$(git ls-remote --heads https://github.com/hitobito/$WAGON_DEPENDENCY_REPO | cut -d/ -f3- | grep -x "${{github.ref_name}}" || echo 'master')
+          WAGON_DEPENDENCY_REF=$(git ls-remote --heads https://github.com/hitobito/$WAGON_DEPENDENCY_REPO | cut -d/ -f3- | grep -x "${{github.head_ref || github.ref_name}}" || echo 'master')
         fi
 
         echo "WAGON_DEPENDENCY_REF=$WAGON_DEPENDENCY_REF" >> $GITHUB_ENV
-      shell: bash
-
-    - name: "Set branch name"
-      if: github.event_name == 'pull_request'
-      env:
-        WAGON_DEPENDENCY_REPO: ${{ inputs.wagon_dependency_repository }}
-        INPUT_WDEP_REF: ${{ inputs.wagon_dependency_ref }}
-        INPUT_CORE_REF: ${{ inputs.core_ref }}
-      run: |
-        WAGON_DEPENDENCY_REF="$INPUT_WDEP_REF"
-        if [ -z "${INPUT_WDEP_REF}" ] && [ "${WAGON_DEPENDENCY_REPO}" != '' ]; then
-          WAGON_DEPENDENCY_REF=$(git ls-remote --heads https://github.com/hitobito/$WAGON_DEPENDENCY_REPO | cut -d/ -f3- | grep -x "${{github.head_ref}}" || echo 'master')
-        fi
-
-        CORE_REF="$INPUT_CORE_REF"
-        if [ -z "${INPUT_CORE_REF}" ]; then
-          CORE_REF=$(git ls-remote --heads https://github.com/hitobito/hitobito | cut -d/ -f3- | grep -x "${{github.head_ref}}" || echo 'master')
-        fi
-
-        echo "WAGON_DEPENDENCY_REF=$WAGON_DEPENDENCY_REF" >> $GITHUB_ENV
-        echo "CORE_REF=$CORE_REF" >> $GITHUB_ENV
       shell: bash
 
     - name: "Checkout hitobito at ${{ env.CORE_REF }}"

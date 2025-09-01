@@ -27,7 +27,10 @@ class PermittedGlobalizedAttrs
         if k.end_with?("_attributes")
           if v.is_a?(Array)
             relation = k.to_s.sub(/_[^_]*$/, "")
-            klass = @entry.send(relation).model
+            next unless @entry.respond_to?(relation)
+            klass = @entry.send(relation)
+            klass = klass.respond_to?(:model) ? klass.model : klass.class
+            next if klass.blank?
             v.each do |attr|
               v.push(globalized_names_for_attr(attr)) if should_permit?(klass, attr)
             end

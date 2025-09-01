@@ -26,10 +26,10 @@ class PermittedGlobalizedAttrs
       permitted_attr.each do |k, v|
         if k.end_with?("_attributes")
           if v.is_a?(Array)
-            relation = k.to_s.sub(/_[^_]*$/, "")
-            next unless @entry.respond_to?(relation)
-            klass = @entry.send(relation)
-            klass = klass.respond_to?(:model) ? klass.model : klass.class
+            relation = k.to_s.sub(/_[^_]*$/, "").to_sym
+            klass = @entry.class.reflect_on_all_associations.find do |reflection|
+              reflection.name == relation
+            end&.klass
             next if klass.blank?
             v.each do |attr|
               v.push(globalized_names_for_attr(attr)) if should_permit?(klass, attr)

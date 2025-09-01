@@ -64,9 +64,9 @@ jobs:
         env:
           INPUT_WAGON_REF: ${{ inputs.wagon_ref }}
         run: |
-          CORE_REF="$INPUT_CORE_REF"
-          if [ -z "$INPUT_CORE_REF" ]; then
-            CORE_REF=$(git ls-remote --heads https://github.com/${{matrix.wagon.owner}}/${{matrix.wagon.repo}} | cut -d/ -f3- | grep -x "${{github.head_ref || github.ref_name}}" || echo 'master')
+          CORE_REF="${{github.head_ref || github.ref_name}}"
+          if [ -z "$INPUT_WAGON_REF" ]; then
+            WAGON_REF=$(git ls-remote --heads https://github.com/${{matrix.wagon.owner}}/${{matrix.wagon.repo}} | cut -d/ -f3- | grep -x "${{github.head_ref || github.ref_name}}" || echo 'master')
           fi
 
           echo "WAGON_REF=$WAGON_REF" >> $GITHUB_ENV

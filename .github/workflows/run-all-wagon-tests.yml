@@ -64,9 +64,9 @@ jobs:
         env:
           INPUT_WAGON_REF: ${{ inputs.wagon_ref }}
         run: |
-          CORE_REF="${{github.head_ref || github.ref_name}}"
+          COMMON_BRANCH_NAME="${{github.head_ref || github.ref_name}}"
           if [ -z "$INPUT_WAGON_REF" ]; then
-            WAGON_REF=$(git ls-remote --heads https://github.com/${{matrix.wagon.owner}}/${{matrix.wagon.repo}} | cut -d/ -f3- | grep -x "${{github.head_ref || github.ref_name}}" || echo 'master')
+            WAGON_REF=$(git ls-remote --heads https://github.com/${{matrix.wagon.owner}}/${{matrix.wagon.repo}} | cut -d/ -f3- | grep -x "$COMMON_BRANCH_NAME" || echo 'master')
           fi
 
           echo "WAGON_REF=$WAGON_REF" >> $GITHUB_ENV
@@ -85,8 +85,8 @@ jobs:
           workflow_job_steps_retry_seconds: 10 # default is 5, set it higher to not strain the API limit too much
           workflow_inputs: |
             {
-              "core_ref": "${{ github.ref || inputs.core_ref || 'master' }}",
-              "wagon_dependency_ref": "${{ inputs.wagon_dependency_ref || 'master' }}"
+              "core_ref": "${{ github.ref || inputs.core_ref }}",
+              "wagon_dependency_ref": "${{ inputs.wagon_dependency_ref }}"
             }
 
       - name: Link to the triggered wagon tests run

@@ -183,11 +183,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def list_entries
-    filter = event_participation_filter
-    records = filter.list_entries
-      .select(Event::Participation.column_names)
-    @counts = filter.counts
-    records = sort_by_sort_expression(records)
+    records = sort_by_sort_expression(entries_scope)
       .merge(Person.preload_picture)
       .page(params[:page])
 
@@ -197,6 +193,16 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
       current_page: records.current_page,
       per_page: records.limit_value
     }
+    records
+  end
+
+  # Extracted as a separate method, so wagons can add to the scope before sorting and especially
+  # the PreloadPublicAccounts step, which requires to load the page of records into memory
+  def entries_scope
+    filter = event_participation_filter
+    records = filter.list_entries
+      .select(Event::Participation.column_names)
+    @counts = filter.counts
     records
   end
 

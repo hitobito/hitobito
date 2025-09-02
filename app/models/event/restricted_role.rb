@@ -29,6 +29,6 @@ module Event::RestrictedRole
   end
 
   def restricted_role_scope(type)
-    participations.joins(:roles).where(event_roles: {type: type.sti_name})
+    Event::Role.where(type: type.sti_name, participation: participations)
   end
 end

@@ -102,6 +102,10 @@ class Event::Role < ActiveRecord::Base
     participation.person
   end
 
+  def person=(p)
+    participation.participant = p
+  end
+
   def person_id
     person.try(:id)
   end

@@ -18,9 +18,10 @@ class Event::ParticipationFilter
 
   class_attribute :load_entries_includes
   self.load_entries_includes = [:roles, :event,
-    answers: [:question],
-    person: [:additional_emails, :phone_numbers,
-      :primary_group]]
+    answers: [:question]]
+
+  class_attribute :load_participant_includes
+  self.load_participant_includes = [:additional_emails, :phone_numbers, :primary_group]
 
   attr_reader :event, :user, :params, :counts
 
@@ -33,7 +34,7 @@ class Event::ParticipationFilter
   def list_entries
     records = params[:q].present? ? load_entries.where(search_condition) : load_entries
 
-    Event::Participation::PreloadParticipations.preload(records)
+    Event::Participation::PreloadParticipations.preload(records, participant: load_participant_includes)
 
     @counts = populate_counts(records)
     apply_default_sort(apply_filter_scope(records))
@@ -84,6 +85,7 @@ class Event::ParticipationFilter
       .distinct
       .with_person_participants
       .with_guest_participants
+      .includes(load_entries_includes)
   end
 
   def apply_filter_scope(records, kind = params[:filter])

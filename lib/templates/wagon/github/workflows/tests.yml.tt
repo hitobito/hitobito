@@ -14,11 +14,11 @@ on:
       core_ref:
         description: Use a specific version of the core for the workflow run. Defaults to master.
         type: string
-        default: 'master'
+        default: ''
       wagon_dependency_ref:
         description: Not used in this wagon, but accepted for consistency across all wagons.
         type: string
-        default: 'master'
+        default: ''
       distinct_id:
         description: An optional identifier which is simply output again, in order to identify the workflow run when triggered from another repo
         type: string

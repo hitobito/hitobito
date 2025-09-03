@@ -114,7 +114,7 @@ class GroupsController < CrudController
     p = model_params.dup
     p.delete(:type)
     p.delete(:parent_id)
-    p.permit(PermittedGlobalizedAttrs.new(entry).permitted_attrs(permitted_attrs))
+    p.permit(permitted_globalized_attrs)
   end
 
   def load_contacts

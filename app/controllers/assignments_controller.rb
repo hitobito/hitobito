@@ -46,7 +46,7 @@ class AssignmentsController < CrudController
 
   def build_entry
     built_entry = super
-    built_entry.attachment = Message::Letter.find(permitted_params[:attachment_id])
+    built_entry.attachment = Message::Letter.find(model_params[:attachment_id])
     built_entry
   end
 

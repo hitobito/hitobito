@@ -119,7 +119,7 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
     p = model_params.dup
     p.delete(:type)
     p.delete(:contact)
-    p.permit(PermittedGlobalizedAttrs.new(entry).permitted_attrs(permitted_attrs))
+    p.permit(permitted_globalized_attrs)
   end
 
   def group

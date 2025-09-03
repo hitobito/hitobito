@@ -29,7 +29,7 @@ describe Event::Application do
     subject { Event::Application.pending }
 
     context "with assigned event role" do
-      let(:participation) { Fabricate(:event_participation, person: people(:top_leader)) }
+      let(:participation) { Fabricate(:event_participation, participant: people(:top_leader)) }
 
       before { Fabricate(Event::Role::Leader.name.to_sym, participation: participation) }
 
@@ -45,7 +45,7 @@ describe Event::Application do
     end
 
     context "without event role" do
-      let(:participation) { Fabricate(:event_participation, person: people(:top_leader)) }
+      let(:participation) { Fabricate(:event_participation, participant: people(:top_leader)) }
 
       it "does not include rejected appliations" do
         Fabricate(:event_application, priority_1: course, rejected: true, participation: participation)

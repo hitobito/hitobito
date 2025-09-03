@@ -7,7 +7,7 @@ require "spec_helper"
 
 describe "event/participations/_actions_show.html.haml" do
   let(:participant) { people(:top_leader) }
-  let(:participation) { Fabricate(:event_participation, person: participant) }
+  let(:participation) { Fabricate(:event_participation, participant: participant) }
   let(:user) { participant }
   let(:event) { participation.event }
   let(:group) { event.groups.first }

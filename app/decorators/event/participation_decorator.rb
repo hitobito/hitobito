@@ -48,6 +48,18 @@ class Event::ParticipationDecorator < ApplicationDecorator
   end
 
   def town_info
-    "(#{h.t(".town")}: #{person.town})" if person.town
+    "(#{h.t(".town")}: #{person.town})" if participant.town.present?
+  end
+
+  def guests_allowed?
+    allowed_guests > 0
+  end
+
+  def allowed_guests
+    event_guest_limiter.remaining
+  end
+
+  def event_guest_limiter
+    @event_guest_limiter ||= Events::GuestLimiter.for(event, self)
   end
 end

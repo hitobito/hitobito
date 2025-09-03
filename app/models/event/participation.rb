@@ -40,7 +40,25 @@ class Event::Participation < ActiveRecord::Base
   ### ASSOCIATIONS
 
   belongs_to :event, -> { includes(:translations) }, inverse_of: :participations
-  belongs_to :person
+  belongs_to :participant, polymorphic: true
+
+  scope :with_person_participants, -> {
+    joins("LEFT JOIN people ON event_participations.participant_type = 'Person' AND event_participations.participant_id = people.id")
+  }
+
+  scope :with_guest_participants, -> {
+    joins("LEFT JOIN event_guests ON event_participations.participant_type = 'Event::Guest' AND event_participations.participant_id = event_guests.id")
+  }
+
+  scope :guests_of, ->(main_participant) {
+    joins(<<~SQL.squish)
+      INNER JOIN event_guests
+        ON event_participations.participant_type = 'Event::Guest'
+        AND event_participations.participant_id = event_guests.id
+    SQL
+      .where(participant_type: "Event::Guest")
+      .where("event_guests.main_applicant_id = ?", main_participant.id) # rubocop:disable Rails/WhereEquals
+  }
 
   belongs_to :application, inverse_of: :participation, dependent: :destroy, validate: true
 
@@ -55,8 +73,7 @@ class Event::Participation < ActiveRecord::Base
   # price_category is used as enum in hitobito_sac_cas. validates_by_schema cannot be overridden
   # inside a wagon because of the loading order, so it must be excluded in the core instead
   validates_by_schema except: [:price_category]
-  validates :person_id,
-    uniqueness: {scope: :event_id}
+  validates :participant_id, uniqueness: {scope: [:participant_type, :event_id]}
   validates :additional_information,
     length: {allow_nil: true, maximum: (2**16) - 1}
 
@@ -65,6 +82,7 @@ class Event::Participation < ActiveRecord::Base
   before_validation :init, on: :create
   before_validation :set_self_in_nested
   before_create :reset_person_minimized_at
+  before_destroy :destroy_guest_record
 
   # There may be old participations without roles, so they must
   # update the count directly.
@@ -132,8 +150,19 @@ class Event::Participation < ActiveRecord::Base
     !active
   end
 
-  def to_s
-    person.to_s
+  def to_s(*args)
+    person.to_s(*args)
+  end
+
+  def person
+    return unless participant
+    return participant if participant_type == Person.sti_name
+
+    participant.to_person
+  end
+
+  def person=(value)
+    self.participant = value
   end
 
   private
@@ -159,5 +188,9 @@ class Event::Participation < ActiveRecord::Base
 
   def directly_to_waiting_list?(event)
     !event.places_available? && event.waiting_list_available?
+  end
+
+  def destroy_guest_record
+    participant.destroy if participant_type == "Event::Guest"
   end
 end

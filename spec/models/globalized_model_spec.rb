@@ -11,12 +11,11 @@ describe "Globalized model" do
   let(:languages) { Settings.application.languages.keys }
 
   before do
-    @cached_languages = Settings.application.languages
-    Settings.application.languages = {de: "Deutsch", en: "English", fr: "Français"}
-  end
-
-  after do
-    Settings.application.languages = @cached_languages
+    allow(Settings.application).to receive(:languages).and_return({de: "Deutsch", en: "English", fr: "Français"})
+    Group.globalize_accessors
+    CustomContent.globalize_accessors
+    Group.copy_validators_to_globalized_accessors
+    CustomContent.copy_validators_to_globalized_accessors
   end
 
   it "should create globalized accessors" do

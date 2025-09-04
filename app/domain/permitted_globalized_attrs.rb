@@ -20,7 +20,7 @@ class PermittedGlobalizedAttrs
 
   def permit(permitted_attr, klass)
     case permitted_attr
-    when Symbol
+    when Symbol, String
       permit_symbol(permitted_attr, klass)
     when Hash
       permit_hash(permitted_attr)
@@ -69,6 +69,6 @@ class PermittedGlobalizedAttrs
   end
 
   def globalized_names_for_attr(attr)
-    Settings.application.languages.keys.map { |lang| :"#{attr}_#{lang}" }
+    Settings.application.languages.keys.excluding(I18n.locale).map { |lang| :"#{attr}_#{lang}" }
   end
 end

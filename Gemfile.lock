@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/puzzle/graphiti-openapi.git
-  revision: 5f863937573a210f7e3ec8e6c0f6e5863d4f0b1a
+  revision: b36e06e99f02f005035d5470d8b0afd01170b6f5
   tag: standalone/0.6.6
   specs:
     graphiti-openapi (0.6.6)

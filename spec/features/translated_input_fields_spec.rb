@@ -9,14 +9,11 @@ describe "Translated input fields", js: true do
   let(:group) { groups(:bottom_layer_one) }
 
   before do
-    @cached_languages = Settings.application.languages
-    Settings.application.languages = {de: "Deutsch", en: "English", fr: "Français"}
+    allow(Settings.application).to receive(:languages).and_return({de: "Deutsch", en: "English", fr: "Français"})
+    Group.globalize_accessors
+    Group.copy_validators_to_globalized_accessors
     sign_in(people(:top_leader))
     visit edit_group_path(group)
-  end
-
-  after do
-    Settings.application.languages = @cached_languages
   end
 
   it "should show and hide inputs, display already translated languages and save all languages" do

@@ -16,6 +16,8 @@
 #
 
 class SelfRegistrationReason < ApplicationRecord
+  include Globalized
+
   validates_by_schema
 
   has_many :people

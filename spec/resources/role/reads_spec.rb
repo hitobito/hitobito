@@ -25,7 +25,7 @@ describe RoleResource, type: :resource do
     end
 
     def computed_attrs
-      { name: ->(role) { role.decorate.for_json_api[:role_name] } }
+      {name: ->(role) { role.decorate.for_json_api[:role_name] }}
     end
 
     before { params[:filter] = {id: {eq: role.id}} }

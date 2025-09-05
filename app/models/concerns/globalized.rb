@@ -111,6 +111,16 @@ module Globalized
     end
   end
 
+  def attributes
+    return super unless INPUTS_GLOBALIZED
+
+    globalize_attribute_names = self.class.globalize_attribute_names
+    super.map do |attr, value|
+      next {attr => value}.stringify_keys unless globalize_attribute_names.include?(attr.to_sym)
+      {attr => send(attr)}.stringify_keys
+    end.reduce(:merge)
+  end
+
   private
 
   def remember_translated_label

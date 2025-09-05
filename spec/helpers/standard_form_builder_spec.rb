@@ -291,6 +291,7 @@ describe "StandardFormBuilder" do
   describe "translated fields" do
     before do
       allow(Settings.application).to receive(:languages).and_return({de: "Deutsch", en: "English", fr: "Français"})
+      stub_const("Globalized::INPUTS_GLOBALIZED", true)
       CrudTestModel.globalize_accessors
     end
 
@@ -354,6 +355,7 @@ describe "StandardFormBuilder" do
       expect(dom).to have_css("div[class='d-flex'] div[class='input-group me-2 mb-2'] input[name='entry[#{attr}]']")
 
       allow(Settings.application).to receive(:languages).and_return({de: "Deutsch"})
+      stub_const("Globalized::INPUTS_GLOBALIZED", false)
 
       dom = Capybara::Node::Simple.new(form.input_field(attr))
 

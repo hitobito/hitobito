@@ -17,7 +17,7 @@ describe RoleResource, type: :resource do
 
   describe "serialization" do
     def serialized_attrs
-      [:person_id, :group_id, :label, :type, :created_at, :updated_at, :start_on, :end_on]
+      [:person_id, :group_id, :name, :label, :type, :created_at, :updated_at, :start_on, :end_on]
     end
 
     def date_time_attrs

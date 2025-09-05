@@ -17,11 +17,15 @@ describe RoleResource, type: :resource do
 
   describe "serialization" do
     def serialized_attrs
-      [:person_id, :group_id, :name, :label, :type, :created_at, :updated_at, :start_on, :end_on]
+      [:person_id, :group_id, :label, :type, :created_at, :updated_at, :start_on, :end_on]
     end
 
     def date_time_attrs
       [:created_at, :updated_at]
+    end
+
+    def computed_attrs
+      { name: ->(role) { role.decorate.for_json_api[:role_name] } }
     end
 
     before { params[:filter] = {id: {eq: role.id}} }
@@ -42,7 +46,7 @@ describe RoleResource, type: :resource do
         render
         data = jsonapi_data[0]
 
-        expect(data.attributes.symbolize_keys.keys).to match_array [:id, :jsonapi_type] + serialized_attrs
+        expect(data.attributes.symbolize_keys.keys).to match_array [:id, :jsonapi_type] + serialized_attrs + computed_attrs.keys
 
         expect(data.id).to eq(role.id)
         expect(data.jsonapi_type).to eq("roles")
@@ -60,6 +64,10 @@ describe RoleResource, type: :resource do
           else
             expect(data_time).to be_within(1.second).of(role_time)
           end
+        end
+
+        computed_attrs.each do |attr, attr_definition|
+          expect(data.public_send(attr)).to eq(attr_definition.call(role))
         end
       end
     end

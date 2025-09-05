@@ -288,10 +288,6 @@ class Role < ActiveRecord::Base
     I18n.t("global.start_on", date: I18n.l(start_on))
   end
 
-  def name
-    self.class.model_name.human
-  end
-
   private
 
   def nextcloud_group_details

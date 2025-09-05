@@ -13,7 +13,9 @@ class RoleResource < ApplicationResource
     attribute :updated_at, :datetime
     attribute :start_on, :date
     attribute :end_on, :date
-    attribute :name, :string
+    attribute(:name, :string) do
+      @object.decorate.for_json_api[:role_name]
+    end
   end
 
   attribute :person_id, :integer

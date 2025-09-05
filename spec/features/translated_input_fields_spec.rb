@@ -10,6 +10,7 @@ describe "Translated input fields", js: true do
 
   before do
     allow(Settings.application).to receive(:languages).and_return({de: "Deutsch", en: "English", fr: "Français"})
+    stub_const("Globalized::INPUTS_GLOBALIZED", true)
     Group.globalize_accessors
     Group.copy_validators_to_globalized_accessors
     sign_in(people(:top_leader))

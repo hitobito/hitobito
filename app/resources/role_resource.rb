@@ -13,6 +13,7 @@ class RoleResource < ApplicationResource
     attribute :updated_at, :datetime
     attribute :start_on, :date
     attribute :end_on, :date
+    attribute :name, :string
   end
 
   attribute :person_id, :integer

@@ -27,12 +27,6 @@ class RoleDecorator < ApplicationDecorator
     }
   end
 
-  def for_json_api
-    {
-      role_name: object.class.model_name.human
-    }
-  end
-
   private
 
   def formatted_name(strong: false, show_end_on: false, show_start_on: false)

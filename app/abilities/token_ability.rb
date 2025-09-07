@@ -136,6 +136,8 @@ class TokenAbility
   end
 
   def define_mailing_list_abilities
+    can :index, MailingList
+
     can :show, MailingList do |mailing_list|
       token.layer.layer_group == mailing_list.group.layer_group
     end

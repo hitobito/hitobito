@@ -423,6 +423,10 @@ Hitobito::Application.routes.draw do
   get 'api/schema', to: 'json_api/schema#show'
   get 'api/openapi', to: 'json_api/openapi#show'
 
+  get "/mailing_lists/:id", as: :mailing_list, to: redirect { |params, request|
+    request.url.gsub(%r{/mailing_lists}, "/groups/#{MailingList.find(params[:id]).group_id}/mailing_lists")
+  }
+
   scope path: ApplicationResource.endpoint_namespace, module: :json_api,
         constraints: { format: 'jsonapi' }, defaults: { format: 'jsonapi' } do
     resources :people, only: [:index, :show, :update]
@@ -432,11 +436,8 @@ Hitobito::Application.routes.draw do
     resources :event_kind_categories, module: :event, controller: :kind_categories, only: [:index, :show]
     resources :invoices, only: [:index, :show, :update]
     resources :roles, except: [:edit, :new]
+    resources :mailing_lists, only: [:index, :show]
   end
-
-  get "/mailing_lists/:id", as: :mailing_list, to: redirect { |params, request|
-    request.url.gsub(%r{/mailing_lists}, "/groups/#{MailingList.find(params[:id]).group_id}/mailing_lists")
-  }
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

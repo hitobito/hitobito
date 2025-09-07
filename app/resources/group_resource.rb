@@ -63,6 +63,8 @@ class GroupResource < ApplicationResource
     polymorphic_has_many :additional_addresses, as: :contactable
   end
 
+  has_many :mailing_lists, writable: false
+
   filter :with_deleted, :boolean, :single do
     eq do |scope, value|
       next scope unless value

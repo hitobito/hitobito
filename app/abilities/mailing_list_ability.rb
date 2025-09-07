@@ -9,6 +9,7 @@ class MailingListAbility < AbilityDsl::Base
   include AbilityDsl::Constraints::Group
 
   on(::MailingList) do
+    class_side(:index).everybody
     permission(:any).may(:show).subscribable
 
     permission(:group_full).may(:show, :index_subscriptions).in_same_group

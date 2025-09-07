@@ -5,6 +5,7 @@
 - Die Optionen für den E-Mail Adressen Export erscheinen nun wie die übrigen Formate in einem Untermenu.
 - CSV Import unterstützt Rollen Start und Enddatum (#3730)
 - Ein neuer Header weist nun, ausser in production, auf die momentan aktive Umgebung hin. (#3702)
+- Eigener JSON:API Endpoint für Abos (mailing lists) (hitobito_pbs#382)
 
 ## Version 2.7
 

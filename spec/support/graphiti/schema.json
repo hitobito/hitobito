@@ -1784,6 +1784,18 @@
           "writable": "guarded",
           "description": null
         },
+        "picture": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "updated_at": {
+          "type": "datetime",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
         "language": {
           "type": "string",
           "readable": true,
@@ -1829,6 +1841,10 @@
         "gender": {
         },
         "birthday": {
+        },
+        "picture": {
+        },
+        "updated_at": {
         },
         "language": {
         }
@@ -2084,7 +2100,7 @@
             "lte"
           ]
         },
-        "language": {
+        "picture": {
           "type": "string",
           "operators": [
             "eq",
@@ -2108,6 +2124,21 @@
             "gte",
             "lt",
             "lte"
+          ]
+        },
+        "language": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
           ]
         }
       },

@@ -29,6 +29,8 @@ Currently the following endpoints are provided:
 | GET    | /api/event_kinds/:id           | Fetch a single event kind, replace :id with the event's primary key          |
 | GET    | /api/event_kind_categories/    | List all accessible events kind categories                                   |
 | GET    | /api/event_kind_categories/:id | Fetch a single event kind category, replace :id with the event's primary key |
+| GET    | /api/mailing_lists/            | List all accessible mailing lists                                            |
+| GET    | /api/mailing_lists/:id         | Fetch a single mailing_list, replace :id with the list's primary key         |
 
 
 All successful responses do have HTTP Status `2xx`.

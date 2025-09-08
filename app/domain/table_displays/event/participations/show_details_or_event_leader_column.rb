@@ -17,8 +17,8 @@ module TableDisplays::Event::Participations
       ability.can?(:show_details, person)
     end
 
-    def index_full_participations?(event)
-      ability.can?(:index_full_participations, event)
+    def index_full_participations?(participation)
+      ability.can?(:index_full_participations, participation.event)
     end
   end
 end

@@ -30,6 +30,8 @@ class ApplicationMailer < ActionMailer::Base
 
   def custom_content_mail(recipients, content_key, values, headers = {}, context: nil)
     content = CustomContent.get(content_key, context:)
+    return if Array(use_mailing_emails(recipients)).all? { |email| Bounce.blocked?(email) }
+
     headers[:to] = Array(use_mailing_emails(recipients)).reject { |email| Bounce.blocked?(email) }
     headers[:subject] ||= unescape_html(content.subject_with_values(values))
     mail(headers) do |format|

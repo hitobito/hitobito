@@ -32,6 +32,49 @@ RSpec.describe ApplicationMailer, type: :mailer do
     end
   end
 
+  describe "bounce related behaviour" do
+    before do
+      Fabricate(:custom_content,
+        key: "test-content",
+        placeholders_optional: "test-placeholder",
+        subject: "Hello {test-placeholder}")
+
+      @mailer = Class.new(described_class) do
+        def test_mail(*emails) = compose(emails, "test-content")
+
+        def placeholder_test_placeholder = "<a>World</a>"
+      end
+    end
+
+    it "sends if email has no bounce" do
+      expect do
+        @mailer.test_mail("test@example.com").deliver
+      end.to change { ActionMailer::Base.deliveries.count }.by(1)
+    end
+
+    it "keeps on sending if bounce count is below treshold " do
+      Bounce.create!(email: "test@example.com", count: 2)
+      expect do
+        @mailer.test_mail("test@example.com").deliver
+      end.to change { ActionMailer::Base.deliveries.count }.by(1)
+    end
+
+    it "does not send email if blocked bounce exists" do
+      Bounce.create!(email: "test@example.com", count: 3)
+      expect do
+        @mailer.test_mail("test@example.com").deliver
+      end.not_to change { ActionMailer::Base.deliveries.count }
+    end
+
+    it "sends only to emails for which no blocked bounce exists" do
+      Bounce.create!(email: "test@example.com", count: 3)
+      expect do
+        @mailer.test_mail("test@example.com", "test2@example.com").deliver
+      end.to change { ActionMailer::Base.deliveries.count }.by(1)
+      expect(ActionMailer::Base.deliveries.last.to).to eq ["test2@example.com"]
+    end
+  end
+
   describe "body" do
     it "does not unescape html tags" do
       Fabricate(:custom_content, key: "test-content", body: "Hello <a>World</a>")

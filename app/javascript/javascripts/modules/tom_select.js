@@ -10,6 +10,7 @@
   app.tomSelects = {};
 
   app.activateTomSelect = function(element) {
+    if (app.tomSelects.hasOwnProperty(element.id)) return;
     app.tomSelects[element.id] = new TomSelect(`#${element.id}`, {
       plugins: isMultipleSelect(element) ? ["remove_button"] : undefined,
       create: false,

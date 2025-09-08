@@ -580,10 +580,6 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def id_from_value(attr, value)
     "#{attr}_#{value.to_s.gsub(/\s/, "_").gsub(/[^-\w]/, "").downcase}"
   end
-
-  def translated_field?(attr, already_translated)
-    @object.respond_to?(:translated_attribute_names) && !already_translated && @object.translated_attribute_names.include?(attr)
-  end
 end
 
 # rubocop:enable Metrics/ClassLength

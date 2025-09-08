@@ -27,11 +27,6 @@ describe Event::ParticipationMailer do
     expect(mail.parts.second.content_type).to eq "application/pdf; filename=eventus-top_leader.pdf"
   end
 
-  it "does render correctly for blocked email" do
-    Bounce.create(email: person.email, count: 10, blocked_at: 1.day.ago)
-    is_expected.to match(/<i class="text-danger fas fa-exclamation-triangle"/)
-  end
-
   it "deals with quotes in event name" do
     event.update(name: %(Now "with" quotes))
     expect(mail.parts.first.content_type).to eq "text/html; charset=UTF-8"

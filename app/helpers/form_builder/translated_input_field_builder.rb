@@ -50,4 +50,8 @@ module FormBuilder::TranslatedInputFieldBuilder
       rich_text ? locale_input.prepend(content_tag("trix-toolbar", nil, id: "#{attr}_toolbar")) : locale_input
     end
   end
+
+  def translated_field?(attr, already_translated)
+    @object.respond_to?(:translated_attribute_names) && !already_translated && @object.translated_attribute_names.include?(attr)
+  end
 end

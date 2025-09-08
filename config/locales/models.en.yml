@@ -93,9 +93,6 @@ en:
               suffix_present: darf keinen Pfad und keinen Slash am Ende haben
         custom_content:
           placeholder_missing: 'must contain the placeholder %{placeholder} '
-          attributes:
-            body:
-              placeholder_missing: 'must contain the placeholder %{placeholder} '
         event:
           attributes:
             base:

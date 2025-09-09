@@ -44,7 +44,7 @@ module TableDisplays::Event::Participations
     protected
 
     def allowed?(object, _attr, _original_object, _original_attr)
-      ability.can?(:index_full_participations, object.event) || ability.can?(:show_full, object.person)
+      ability.can?(:index_full_participations, object.event)
     end
 
     def question_id(attr)

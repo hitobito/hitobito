@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## unreleased
+
+- Beim Anmelden zu einem Event wurde das Formular der Anmeldefragen überarbeitet um längere Fragen auch auf kleineren Screens besser abzubilden (hitobito/hitobito_sac_cas#1278)
+
 ## Version 2.6
 
 - Texte und Hilfetexte verwenden nun den Inhalt einer Fallback Sprache, wenn die gewünschte Sprache leer ist

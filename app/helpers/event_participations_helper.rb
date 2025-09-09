@@ -8,10 +8,10 @@ module EventParticipationsHelper
     f(participation.created_at.to_date)
   end
 
-  def event_participations_roles_header(t)
+  def event_participations_roles_header(t, event)
     headers = [t.sort_header(:roles, Role.model_name.human(count: 2))]
 
-    if can?(:update, entries.first)
+    if can?(:index_full_participations, event)
       headers << t.sort_header(:created_at,
         Event::Participation.human_attribute_name(:created_at))
     end
@@ -19,10 +19,10 @@ module EventParticipationsHelper
     headers.join(" | ").html_safe
   end
 
-  def event_participations_roles_content(p)
+  def event_participations_roles_content(p, event)
     content = p.roles_short
 
-    if can?(:update, entries.first)
+    if can?(:index_full_participations, event)
       content += content_tag(:p, f(p.created_at.to_date))
     end
 

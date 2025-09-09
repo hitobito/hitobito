@@ -20,8 +20,8 @@ class PersonResource < ApplicationResource
   attribute :first_name, :string
   attribute :last_name, :string
   attribute :nickname, :string
-  attribute :company_name, :string
-  attribute :company, :boolean
+  attribute :company_name, :string if Person.used_attributes.include? :company_name
+  attribute :company, :boolean if Person.used_attributes.include? :company
   attribute :email, :string
   attribute :address, :string, writable: false
   attribute :address_care_of, :string

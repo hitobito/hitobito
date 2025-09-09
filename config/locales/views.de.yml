@@ -466,6 +466,7 @@ de:
         apply: "Anmelden"
         explain_required_checkmark: "* = Antwort obligatorisch"
         send_email: E-Mail an Teilnehmer/in senden
+        registration_details: Anmeldeangaben
       application_fields:
         alternative_dates_info: "Bitte gib weitere Kurse an, welche dir gehen würden."
         course_information: "Informationen zu den Kursen"

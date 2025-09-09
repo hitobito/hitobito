@@ -124,7 +124,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
                                                    additional_emails: [:email]}
   ]
 
-  GENDERS = %w[m w].freeze
+  # rubocop:disable Style/MutableConstant meant to be extended in wagons
+  GENDERS = %w[m w]
 
   # rubocop:disable Style/MutableConstant meant to be extended in wagons
   LANGUAGES = Settings.application

@@ -11,7 +11,7 @@ class PermittedGlobalizedAttrs
   end
 
   def permitted_attrs(original_permitted_attrs)
-    return original_permitted_attrs unless Globalized::INPUTS_GLOBALIZED
+    return original_permitted_attrs unless Globalized.globalize_inputs?
 
     original_permitted_attrs.flat_map do |permitted_attr|
       next permit(permitted_attr, @entry.class)

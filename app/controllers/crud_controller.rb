@@ -143,8 +143,7 @@ class CrudController < ListController
 
   # Access params for model
   def permitted_params
-    self.permitted_attrs = permitted_globalized_attrs
-    params.require(model_identifier).permit(permitted_attrs)
+    params.require(model_identifier).permit(permitted_globalized_attrs)
   end
 
   def permitted_globalized_attrs

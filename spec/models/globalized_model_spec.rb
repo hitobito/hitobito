@@ -11,12 +11,7 @@ describe "Globalized model" do
   let(:languages) { Settings.application.languages.keys }
 
   before do
-    allow(Settings.application).to receive(:languages).and_return({de: "Deutsch", en: "English", fr: "Français"})
-    stub_const("Globalized::INPUTS_GLOBALIZED", true)
-    Group.globalize_accessors
-    CustomContent.globalize_accessors
-    Group.copy_validators_to_globalized_accessors
-    CustomContent.copy_validators_to_globalized_accessors
+    with_globalized_models(Group, CustomContent)
   end
 
   it "should create globalized accessors" do

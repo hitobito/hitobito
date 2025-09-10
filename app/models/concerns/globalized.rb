@@ -22,6 +22,12 @@ module Globalized
       globalize_accessors if Globalized.globalize_inputs?
     end
 
+    # Copies all validators that are defined for globalized attributes to their associated globalized accessors
+    # This happens for all kinds of validators except presence and uniqueness validators
+    # Presence validators are excluded, since a field should only have to be filled in one language, which in this case is the selected locale
+    # Uniqueness validators are excluded, since the globalized accessors are not backed by a DB column
+    # The first condition on the copied validators ensures that validations are not run twice for the current locale (on the base attribute and the globalized accessor)
+    # The second condition ensures that tests still work when they are run with one locale after globalizing the models
     def copy_validators_to_globalized_accessors
       return unless Globalized.globalize_inputs?
 

@@ -528,6 +528,8 @@ describe Event do
     end
 
     it "adds default questions with available translations" do
+      with_globalized_models(Event::Question)
+
       e = Fabricate.build(:event, dates_attributes: [{start_at: Time.zone.today}])
       e.init_questions
       e.save!
@@ -536,11 +538,13 @@ describe Event do
 
       expect(q.question_translations).to eq({
         "de" => "Ich habe folgendes ÖV Abo",
+        "en" => nil,
         "fr" => "J'ai l'abonnement de transports publics suivant"
       })
 
       expect(q.choices_translations).to eq({
         "de" => "GA, Halbtax / unter 16, keine Vergünstigung",
+        "en" => nil,
         "fr" => "AG, demi-tarif / moins de 16 ans, pas de réduction"
       })
     end

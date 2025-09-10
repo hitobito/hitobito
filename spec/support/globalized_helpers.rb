@@ -16,6 +16,5 @@ module GlobalizedHelpers
 
   def stub_languages(languages = {de: "Deutsch", en: "English", fr: "Français"})
     allow(Settings.application).to receive(:languages).and_return(languages)
-    stub_const("Globalized::INPUTS_GLOBALIZED", languages.length > 1)
   end
 end

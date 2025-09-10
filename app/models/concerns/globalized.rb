@@ -6,7 +6,7 @@
 module Globalized
   extend ActiveSupport::Concern
   ATTRIBUTE_LOCALE_REGEX = /^(?<attribute>.*)_(?<locale>[a-z]{2})$/
-  INPUTS_GLOBALIZED = Settings.application.languages.keys.length > 1
+  def self.globalize_inputs? = Settings.application.languages.keys.length > 1
 
   included do
     before_destroy :remember_translated_label
@@ -19,11 +19,11 @@ module Globalized
     include GlobalizeAccessors
     def translates(*columns)
       super(*columns, fallbacks_for_empty_translations: true)
-      globalize_accessors if INPUTS_GLOBALIZED
+      globalize_accessors if Globalized.globalize_inputs?
     end
 
     def copy_validators_to_globalized_accessors
-      return unless INPUTS_GLOBALIZED
+      return unless Globalized.globalize_inputs?
 
       translated_attribute_names.each do |attr|
         attributes = Settings.application.languages.keys.map { |locale| :"#{attr}_#{locale}" }
@@ -42,7 +42,7 @@ module Globalized
     end
 
     def human_attribute_name(*options)
-      return super unless INPUTS_GLOBALIZED
+      return super unless Globalized.globalize_inputs?
 
       attribute = options.first.to_sym
       if globalize_attribute_names.include? attribute
@@ -112,7 +112,7 @@ module Globalized
   end
 
   def attributes
-    return super unless INPUTS_GLOBALIZED
+    return super unless Globalized.globalize_inputs?
 
     globalize_attribute_names = self.class.globalize_attribute_names
     super.map do |attr, value|

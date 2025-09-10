@@ -126,14 +126,14 @@ describe EventsController, js: true do
   end
 
   context "event_questions" do
-    it "orders event questions alphabetically on edit page" do
+    it "orders event questions by id on edit page" do
       Event::Question.where(event_id: nil).second.update!(question: "A question?")
 
       sign_in
       visit edit_group_event_path(event.groups.first, event)
       click_on "Anmeldeangaben"
-      expect(find("#event_application_questions_attributes_0_question+p").text).to eq "A question?"
-      expect(find("#event_application_questions_attributes_1_question+p").text).to eq "Ich bin Vegetarier"
+      expect(find("#event_application_questions_attributes_0_question+p").text).to eq "Ich habe folgendes ÖV Abo"
+      expect(find("#event_application_questions_attributes_1_question+p").text).to eq "A question?"
     end
   end
 end

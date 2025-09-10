@@ -357,12 +357,7 @@ describe EventsController do
         }
 
         before do
-          allow(Settings.application).to receive(:languages).and_return({de: "Deutsch", en: "English", fr: "Français"})
-          stub_const("Globalized::INPUTS_GLOBALIZED", true)
-          Event.globalize_accessors
-          Event.copy_validators_to_globalized_accessors
-          Event::Question.globalize_accessors
-          Event::Question.copy_validators_to_globalized_accessors
+          with_globalized_models(Event::Question)
 
           sign_in(people(:top_leader))
         end

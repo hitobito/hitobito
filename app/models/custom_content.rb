@@ -32,7 +32,8 @@ class CustomContent < ActiveRecord::Base
   validates :label, presence: true
   validates :label, :subject, length: {maximum: 255, allow_nil: true}
   # The custom content placeholders validator checks if the placeholder is either in the body or the subject of the custom content
-  validates :body, length: {allow_nil: true, maximum: 2**16 - 1}, no_attachments: true, custom_content_placeholders: true
+  validates :body, length: {allow_nil: true, maximum: 2**16 - 1}, no_attachments: true
+  validates_with CustomContentPlaceholdersValidator
   validates_by_schema
 
   belongs_to :context, optional: true, polymorphic: true

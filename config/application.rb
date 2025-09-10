@@ -148,7 +148,7 @@ module Hitobito
 
     Rails.autoloaders.main.on_load do |_, value|
       if value.is_a?(Class) && value.ancestors.include?(Globalized)
-        value.send(:copy_validators_to_globalized_accessors)
+        value.copy_validators_to_globalized_accessors
       end
     end
   end

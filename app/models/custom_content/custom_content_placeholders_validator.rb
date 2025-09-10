@@ -6,19 +6,21 @@
 #  https://github.com/hitobito/hitobito.
 
 # This validator checks if the placeholder is either in the body or the subject of the custom content
-class CustomContent::CustomContentPlaceholdersValidator < ActiveModel::EachValidator
-  def validate_each(record, attribute, value)
-    subject = record.subject
-    if Globalized.globalize_inputs? && record.class.globalize_attribute_names.include?(attribute)
-      locale = attribute.match(Globalized::ATTRIBUTE_LOCALE_REGEX)[:locale]
-      subject = record.send(:"subject_#{locale}")
-    end
+class CustomContent::CustomContentPlaceholdersValidator < ActiveModel::Validator
+  def validate(record)
+    return unless Globalized.globalize_inputs?
 
-    return if value.blank? && subject.blank?
+    languages = [I18n.locale] + Settings.application.languages.keys.excluding(I18n.locale)
+    languages.each do |lang|
+      subject_body = [record.send("subject_#{lang}"), record.send("body_#{lang}")]
 
-    record.placeholders_required_list.each do |placeholder|
-      unless [subject, value.to_s].any? { |str| str.to_s.include?(record.placeholder_token(placeholder)) }
-        record.errors.add(attribute, :placeholder_missing, placeholder: record.placeholder_token(placeholder))
+      next if subject_body.all?(&:blank?)
+
+      attribute = (lang == I18n.locale) ? :body : :"body_#{lang}"
+      record.placeholders_required_list.each do |placeholder|
+        unless subject_body.any? { |str| str.to_s.include?(record.placeholder_token(placeholder)) }
+          record.errors.add(attribute, :placeholder_missing, placeholder: record.placeholder_token(placeholder))
+        end
       end
     end
   end

@@ -27,9 +27,8 @@ module Globalized
 
       translated_attribute_names.each do |attr|
         attributes = Settings.application.languages.keys.map { |locale| :"#{attr}_#{locale}" }
-          .filter { |a| validators_on(a).empty? }
 
-        next if attributes.empty?
+        next if attributes.any? { |a| validators_on(a).present? }
 
         validators_on(attr).each do |validator|
           next if validator.is_a?(ActiveRecord::Validations::PresenceValidator) || validator.is_a?(ActiveRecord::Validations::UniquenessValidator)

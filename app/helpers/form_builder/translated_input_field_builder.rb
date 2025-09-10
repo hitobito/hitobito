@@ -10,7 +10,7 @@ module FormBuilder::TranslatedInputFieldBuilder
 
   def translated_input_field(attr, rich_text, args = {})
     available_locales = Settings.application.languages.keys
-    return(rich_text ? rich_text_area(attr, **args, already_translated: true) : input_field(attr, **args, already_translated: true)) unless Globalized::INPUTS_GLOBALIZED
+    return(rich_text ? rich_text_area(attr, **args, already_translated: true) : input_field(attr, **args, already_translated: true)) unless Globalized.globalize_inputs?
 
     content_tag(:div, data: {controller: "translatable-fields", "translatable-fields-additional-languages-text-value": I18n.t("global.form.additional_languages").to_s}) do
       current_locale_input(attr, rich_text, args) + other_locale_inputs(attr, available_locales, rich_text, args) +

@@ -53,6 +53,11 @@ class JsonApiController < ActionController::API
     title: "Unsupported filter parameter",
     message: ->(error) { "The filter parameter is not supported. Message: #{error.message}" }
 
+  register_exception Graphiti::Errors::TypecastFailed,
+    status: 400,
+    title: "Unsupported parameter value",
+    message: ->(error) { "The parameter value is not supported. Message: #{error.message}" }
+
   register_exception CanCan::AccessDenied,
     status: 403,
     title: I18n.t("errors.403.title"),

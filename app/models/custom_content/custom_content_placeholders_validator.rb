@@ -11,7 +11,7 @@ class CustomContent::CustomContentPlaceholdersValidator < ActiveModel::Validator
     languages = [I18n.locale] + Settings.application.languages.keys.excluding(I18n.locale)
     languages.each do |lang|
       subject_body = if Globalized.globalize_inputs?
-        [record.send("subject_#{lang}"), record.send("body_#{lang}")]
+        [record.send(:"subject_#{lang}"), record.send(:"body_#{lang}")]
       else
         [record.subject, record.body]
       end

@@ -39,7 +39,7 @@ describe "StandardFormBuilder" do
      other_ids: :has_many_field,
      more_ids: :has_many_field}.each do |attr, method|
       it "dispatches #{attr} attr to #{method}" do
-        expect(form).to receive(method).with(attr, {class: ""})
+        expect(form).to receive(method).with(attr, {})
         form.input_field(attr)
       end
 

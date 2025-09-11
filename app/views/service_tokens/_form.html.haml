@@ -9,14 +9,10 @@
 
   %fieldset
     = f.labeled(model_class.human_attribute_name(:range), nil, nil, class: 'd-flex flex-column') do
-      %span
-        = f.inline_radio_button(:permission, :layer_read, model_class.human_attribute_name(:layer_read))
-      %span
-        = f.inline_radio_button(:permission, :layer_and_below_read, model_class.human_attribute_name(:layer_and_below_read))
-      %span
-        = f.inline_radio_button(:permission, :layer_full, model_class.human_attribute_name(:layer_full))
-      %span
-        = f.inline_radio_button(:permission, :layer_and_below_full, model_class.human_attribute_name(:layer_and_below_full))
+      = f.inline_radio_button(:permission, :layer_read, model_class.human_attribute_name(:layer_read))
+      = f.inline_radio_button(:permission, :layer_and_below_read, model_class.human_attribute_name(:layer_and_below_read))
+      = f.inline_radio_button(:permission, :layer_full, model_class.human_attribute_name(:layer_full))
+      = f.inline_radio_button(:permission, :layer_and_below_full, model_class.human_attribute_name(:layer_and_below_full))
 
     = f.labeled(model_class.human_attribute_name(:abilities), nil, nil, class: 'd-flex flex-column') do
       = f.boolean_field(:people, caption: model_class.human_attribute_name(:people))

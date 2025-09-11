@@ -9,12 +9,10 @@
 = f.hidden_field(:question_id)
 = f.labeled(:answer, question_label) do
   - if question.choices?
-    - question.choice_items.each_with_index do |q, index|
+    - question.choice_items.each_with_index do |choice, index|
       - if question.one_answer_available? || question.multiple_choices?
-        %div
-          = f.inline_nested_form_custom_checkbox(:answer, q, index)
+        = render 'event/answers/choice_checkbox', f: f, value: choice, index: index
       - else
-        %div
-          = f.inline_radio_button(:answer, q, q, false)
+        = f.inline_radio_button(:answer, choice, choice, false)
   - else
     = f.input_field(:answer)

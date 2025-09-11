@@ -1,0 +1,11 @@
+- name = f.object_name + "[answer][]"
+- sanitized_id = "#{f.object_name}_#{index}".delete("]").gsub(/[^-a-zA-Z0-9:.]/, "_")
+- checked = f.object.answer.to_s.split(", ").include?(value)
+- invalid = f.object.errors.key?(:answer) ? " is-invalid" : ""
+
+.form-check
+  = check_box_tag(name, index + 1, checked,
+        id: sanitized_id,
+        class: "form-check-input" + invalid)
+  = hidden_field_tag(name, index) if index.zero?
+  = label_tag(sanitized_id, value, class: "form-check-label " + invalid)

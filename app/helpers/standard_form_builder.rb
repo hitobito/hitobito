@@ -233,15 +233,17 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   def inline_radio_button(attr, value, caption, inline = true, html_options = {})
     html_options[:class] = html_options[:class].to_s
-    html_options[:class] += " form-check-input align-label"
+    html_options[:class] += " form-check-input"
     invalid = errors_on?(attr) ? " is-invalid" : ""
     html_options[:class] += invalid
 
-    radio_button(attr, value, html_options) +
-      label(id_from_value(attr, value),
-        class: "radio#{inline ? " inline " : " w-90 "} mt-2 form-check-label" + invalid) do
-        caption
-      end
+    content_tag(:div, class: "form-check#{inline ? " form-check-inline " : ""}") do
+      radio_button(attr, value, html_options) +
+        label(id_from_value(attr, value),
+          class: "form-check-label" + invalid) do
+          caption
+        end
+    end
   end
 
   # custom build tags (check_box includes "0" for every value)
@@ -256,26 +258,31 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     hidden_field = index.zero? ? @template.hidden_field_tag(name, index) : ""
     invalid = errors_on?(attr) ? " is-invalid" : ""
 
-    @template.check_box_tag(name, index + 1, checked,
-      id: sanitized_id,
-      class: "form-check-input align-label" + invalid) +
-      hidden_field.html_safe +
-      @template.label_tag(sanitized_id, class: "checkbox mt-2 form-check-label " + invalid) do
-        value
-      end
+    content_tag(:div, class: "form-check") do
+      @template.check_box_tag(name, index + 1, checked,
+        id: sanitized_id,
+        class: "form-check-input" + invalid) +
+        hidden_field.html_safe +
+        @template.label_tag(sanitized_id, class: "form-check-label " + invalid) do
+          value
+        end
+    end
   end
 
   def inline_check_box(attr, value, caption, html_options = {}) # rubocop:disable Metrics/MethodLength
     html_options[:class] = html_options[:class].to_s
+    html_options[:class] += " form-check-input"
     html_options[:class] += " is-invalid" if errors_on?(attr)
     model_param = klass.model_name.param_key
     name = "#{model_param}[#{attr}][]"
     id = id_from_value(attr, value)
     html_options[:id] = "#{model_param}_#{id}"
-    label(id, class: "checkbox inline") do
-      @template.check_box_tag(name, value, @object.send(attr).include?(value), html_options) +
-        " " +
-        caption
+    content_tag(:div, class: "form-check form-check-inline") do
+      label(id, class: "form-check-label") do
+        @template.check_box_tag(name, value, @object.send(attr).include?(value), html_options) +
+          " " +
+          caption
+      end
     end
   end
 

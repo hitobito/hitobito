@@ -8,11 +8,13 @@
 # This validator checks if the placeholder is either in the body or the subject of the custom content
 class CustomContent::CustomContentPlaceholdersValidator < ActiveModel::Validator
   def validate(record)
-    return unless Globalized.globalize_inputs?
-
     languages = [I18n.locale] + Settings.application.languages.keys.excluding(I18n.locale)
     languages.each do |lang|
-      subject_body = [record.send("subject_#{lang}"), record.send("body_#{lang}")]
+      subject_body = if Globalized.globalize_inputs?
+        [record.send("subject_#{lang}"), record.send("body_#{lang}")]
+      else
+        [record.subject, record.body]
+      end
 
       next if subject_body.all?(&:blank?)
 

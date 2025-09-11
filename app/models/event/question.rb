@@ -30,6 +30,8 @@ class Event::Question < ActiveRecord::Base
   include Globalized
   include I18nEnums
 
+  self.sort_alphabetically = Settings.event.questions.sort_alphabetically
+
   # ensure all translated attributes including subclasses are added here
   # as globalize will add it to the base class' translated_attribute_names
   # anyway and break sti subclasses

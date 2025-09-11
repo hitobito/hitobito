@@ -31,16 +31,16 @@ describe :event_participation, js: true do
       Fabricate(:event_question, event: event, question: "A question?")
     end
 
-    it "orders event questions alphabetically on show page" do
+    it "orders event questions by id on show page" do
       visit group_event_participation_path(group, event, participation)
-      expect(find_all("section > dl > dt")[0].text).to eq "A question?"
-      expect(find_all("section > dl > dt")[1].text).to eq "Eine Frage?"
+      expect(find_all("section > dl > dt")[0].text).to eq "Eine Frage?"
+      expect(find_all("section > dl > dt")[1].text).to eq "A question?"
     end
 
-    it "orders event questions alphabetically on edit page" do
+    it "orders event questions by id on edit page" do
       visit edit_group_event_participation_path(group, event, participation)
-      expect(find_all("label.col-form-label")[0].text).to eq "A question?"
-      expect(find_all("label.col-form-label")[1].text).to eq "Eine Frage?"
+      expect(find_all("label.col-form-label")[0].text).to eq "Eine Frage?"
+      expect(find_all("label.col-form-label")[1].text).to eq "A question?"
     end
   end
 

@@ -25,6 +25,7 @@ module Export::Pdf::Participation
 
     def answers
       participation.answers
+        .list
         .joins(:question)
         .includes(:question)
         .where(event_questions: {admin: false})

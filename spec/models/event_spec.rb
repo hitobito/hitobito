@@ -530,17 +530,17 @@ describe Event do
   end
 
   describe "admin_questions" do
-    it "sorts by question asc" do
+    it "sorts by id asc" do
       Event::Question.create!(question: "B", disclosure: :optional, event: event, admin: true)
       Event::Question.create!(question: "A", disclosure: :optional, event: event, admin: true)
-      expect(event.reload.admin_questions.map(&:question)).to eq ["A", "B"]
+      expect(event.reload.admin_questions.map(&:question)).to eq ["B", "A"]
     end
   end
 
   describe "application_questions" do
-    it "sorts by question asc" do
+    it "sorts by id asc" do
       Event::Question.create!(question: "A", disclosure: :optional, event: event)
-      expect(event.reload.application_questions.map(&:question)).to eq ["A", "GA oder Halbtax?", "Ich bin Vegetarier", "Sonst noch was?"]
+      expect(event.reload.application_questions.map(&:question)).to eq ["Ich bin Vegetarier", "Sonst noch was?", "GA oder Halbtax?", "A"]
     end
   end
 

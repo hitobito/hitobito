@@ -39,13 +39,13 @@ describe :event_external_application do
     end.to change { Event::Participation.count }.by(1)
   end
 
-  it "orders event questions alphabetically in event signup form" do
+  it "orders event questions by id in event signup form" do
     Fabricate(:event_question, event: event, question: "Eine Frage?")
     Fabricate(:event_question, event: event, question: "A question?")
     visit group_public_event_path(group_id: group, id: event)
     fill_in_form
     find_all('.bottom .btn-group button[type="submit"]').first.click # submit
-    expect(find("#event_participation_answers_attributes_0_question_id+div > label").text).to eq "A question?"
-    expect(find("#event_participation_answers_attributes_1_question_id+div > label").text).to eq "Eine Frage?"
+    expect(find("#event_participation_answers_attributes_0_question_id+div > label").text).to eq "Eine Frage?"
+    expect(find("#event_participation_answers_attributes_1_question_id+div > label").text).to eq "A question?"
   end
 end

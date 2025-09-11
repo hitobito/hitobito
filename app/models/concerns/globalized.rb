@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2014, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2012-2025, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -8,6 +8,9 @@ module Globalized
 
   included do
     before_destroy :remember_translated_label
+
+    class_attribute :sort_alphabetically
+    self.sort_alphabetically = true
   end
 
   module ClassMethods
@@ -33,11 +36,11 @@ module Globalized
     end
 
     def list
-      left_join_translation
+      scope = left_join_translation
         .includes(:translations)
         .select("#{table_name}.*", translated_label_column)
-        .order("#{translated_label_column} NULLS LAST")
         .distinct
+      sort_alphabetically ? scope.order("#{translated_label_column} NULLS LAST") : scope.order(:id)
     end
 
     def left_join_translation

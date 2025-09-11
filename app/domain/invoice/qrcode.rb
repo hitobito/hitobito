@@ -21,7 +21,7 @@ class Invoice::Qrcode
   def payload
     striped_values(
       metadata,
-      creditor.reverse_merge(iban: @invoice.iban.gsub(/\s+/, "")),
+      creditor.reverse_merge(iban: @invoice.iban&.gsub(/\s+/, "")),
       creditor_final,
       payment,
       debitor,

@@ -108,6 +108,14 @@ describe Invoice::Qrcode do
 
       expect(subject[18]).to be_blank
     end
+
+    context "with nil iban on invoice" do
+      before { invoice.update(iban: nil) }
+
+      it "works" do
+        expect(subject).to have(31).items
+      end
+    end
   end
 
   describe :additional_infos do

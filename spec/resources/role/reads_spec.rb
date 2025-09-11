@@ -24,6 +24,10 @@ describe RoleResource, type: :resource do
       [:created_at, :updated_at]
     end
 
+    def computed_attrs
+      {name: ->(role) { role.class.model_name.human }}
+    end
+
     before { params[:filter] = {id: {eq: role.id}} }
 
     context "without appropriate permission" do
@@ -42,7 +46,7 @@ describe RoleResource, type: :resource do
         render
         data = jsonapi_data[0]
 
-        expect(data.attributes.symbolize_keys.keys).to match_array [:id, :jsonapi_type] + serialized_attrs
+        expect(data.attributes.symbolize_keys.keys).to match_array [:id, :jsonapi_type] + serialized_attrs + computed_attrs.keys
 
         expect(data.id).to eq(role.id)
         expect(data.jsonapi_type).to eq("roles")
@@ -60,6 +64,10 @@ describe RoleResource, type: :resource do
           else
             expect(data_time).to be_within(1.second).of(role_time)
           end
+        end
+
+        computed_attrs.each do |attr, attr_definition|
+          expect(data.public_send(attr)).to eq(attr_definition.call(role))
         end
       end
     end

@@ -13,6 +13,9 @@ class RoleResource < ApplicationResource
     attribute :updated_at, :datetime
     attribute :start_on, :date
     attribute :end_on, :date
+    attribute(:name, :string) do
+      @object.class.model_name.human
+    end
   end
 
   attribute :person_id, :integer

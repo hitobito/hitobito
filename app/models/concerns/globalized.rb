@@ -125,6 +125,12 @@ module Globalized
     super.merge(globalize_attribute_values)
   end
 
+  def valid?(*)
+    without_fallbacks do
+      super
+    end
+  end
+
   private
 
   def remember_translated_label

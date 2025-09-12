@@ -356,7 +356,11 @@ describe EventsController do
           }
         }
 
-        before { sign_in(people(:top_leader)) }
+        before do
+          with_globalized_models(Event::Question)
+
+          sign_in(people(:top_leader))
+        end
 
         it "populates application question with available translations" do
           post :create, params: params.deep_merge(event: {
@@ -364,10 +368,10 @@ describe EventsController do
           })
           expect(response).to redirect_to(group_event_path(group, event))
           expect(question.question_translations).to eq(
-            {"de" => "Ich habe folgendes ÖV Abo", "fr" => "J'ai l'abonnement de transports publics suivant"}
+            {"de" => "Ich habe folgendes ÖV Abo", "en" => nil, "fr" => "J'ai l'abonnement de transports publics suivant"}
           )
           expect(question.choices_translations).to eq(
-            {"de" => "GA, Halbtax / unter 16, keine Vergünstigung", "fr" => "AG, demi-tarif / moins de 16 ans, pas de réduction"}
+            {"de" => "GA, Halbtax / unter 16, keine Vergünstigung", "en" => nil, "fr" => "AG, demi-tarif / moins de 16 ans, pas de réduction"}
           )
         end
 
@@ -377,10 +381,10 @@ describe EventsController do
           })
           expect(response).to redirect_to(group_event_path(group, event))
           expect(question.question_translations).to eq(
-            {"de" => "Ich habe folgendes ÖV Abo", "fr" => "J'ai l'abonnement de transports publics suivant"}
+            {"de" => "Ich habe folgendes ÖV Abo", "en" => nil, "fr" => "J'ai l'abonnement de transports publics suivant"}
           )
           expect(question.choices_translations).to eq(
-            {"de" => "GA, Halbtax / unter 16, keine Vergünstigung", "fr" => "AG, demi-tarif / moins de 16 ans, pas de réduction"}
+            {"de" => "GA, Halbtax / unter 16, keine Vergünstigung", "en" => nil, "fr" => "AG, demi-tarif / moins de 16 ans, pas de réduction"}
           )
         end
       end

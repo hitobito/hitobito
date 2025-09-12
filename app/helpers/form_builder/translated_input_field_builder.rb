@@ -30,7 +30,7 @@ module FormBuilder::TranslatedInputFieldBuilder
         input_for_locale("#{attr}_#{locale}", locale, rich_text, **args, data: {
           "translatable-fields-target": "translatedField",
           action: "input->translatable-fields#updateTranslatedFields trix-change->translatable-fields#updateTranslatedFields"
-        })
+        }, value: @object.send(:"#{attr}_#{locale}"))
       end
       safe_join(other_locale_inputs)
     end

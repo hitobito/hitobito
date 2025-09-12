@@ -12,7 +12,7 @@ describe "Datepicker", js: true do
   let(:person) { people(:root) }
 
   before do
-    Settings.application.languages = {de: "Deutsch", fr: "Français"}
+    stub_languages({de: "Deutsch", fr: "Français"})
     sign_in(person)
     visit list_courses_path(locale: lang) # any path with datepicker is possible
   end

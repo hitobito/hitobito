@@ -1,4 +1,10 @@
 ---
+- :method: :permitted_attrs
+  :constant: GroupsController
+  :wagon: pfadi_de
+  :source_file: hitobito/app/controllers/groups_controller.rb
+  :patch_file: hitobito_pfadi_de/app/controllers/pfadi_de/groups_controller.rb
+  :patch_file_line: 11
 - :method: :tabular_links
   :constant: Dropdown::PeopleExport
   :wagon: youth
@@ -382,13 +388,13 @@
   :wagon: dav
   :source_file: hitobito/app/controllers/people_controller.rb
   :patch_file: hitobito_dav/app/controllers/sac_cas/people_controller.rb
-  :patch_file_line: 19
+  :patch_file_line: 27
 - :method: :tabular_params
   :constant: PeopleController
   :wagon: dav
   :source_file: hitobito/app/controllers/people_controller.rb
   :patch_file: hitobito_dav/app/controllers/sac_cas/people_controller.rb
-  :patch_file_line: 44
+  :patch_file_line: 52
 - :method: :login_status
   :constant: Person
   :wagon: dav
@@ -1066,6 +1072,12 @@
   :wagon: pbs
   :source_file: hitobito/app/abilities/service_token_ability.rb
   :patch_file: hitobito_pbs/app/abilities/pbs/service_token/constraints.rb
+  :patch_file_line: 11
+- :method: :permitted_attrs
+  :constant: GroupsController
+  :wagon: pfadi_de
+  :source_file: hitobito/app/controllers/groups_controller.rb
+  :patch_file: hitobito_pfadi_de/app/controllers/pfadi_de/groups_controller.rb
   :patch_file_line: 11
 - :method: :tabular_links
   :constant: Dropdown::PeopleExport

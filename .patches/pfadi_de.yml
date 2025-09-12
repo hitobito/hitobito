@@ -1,1 +1,7 @@
---- []
+---
+- :method: :permitted_attrs
+  :constant: GroupsController
+  :wagon: pfadi_de
+  :source_file: hitobito/app/controllers/groups_controller.rb
+  :patch_file: hitobito_pfadi_de/app/controllers/pfadi_de/groups_controller.rb
+  :patch_file_line: 11

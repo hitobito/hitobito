@@ -1163,6 +1163,12 @@
   :source_file: hitobito/app/helpers/dropdown/group_edit.rb
   :patch_file: hitobito_sac_cas/app/helpers/sac_cas/dropdown/group_edit.rb
   :patch_file_line: 9
+- :method: :pdf_link
+  :constant: Dropdown::PeopleExport
+  :wagon: sac_cas
+  :source_file: hitobito/app/helpers/dropdown/people_export.rb
+  :patch_file: hitobito_sac_cas/app/helpers/sac_cas/dropdown/people_export.rb
+  :patch_file_line: 34
 - :method: :tabular_links
   :constant: Dropdown::PeopleExport
   :wagon: sac_cas

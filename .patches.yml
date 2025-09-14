@@ -629,12 +629,6 @@
   :source_file: hitobito/app/domain/export/tabular/groups/list.rb
   :patch_file: hitobito_ejv/app/domain/ejv/export/tabular/groups/list.rb
   :patch_file_line: 15
-- :method: :link_with_layer
-  :constant: GroupDecorator
-  :wagon: ejv
-  :source_file: hitobito/app/decorators/group_decorator.rb
-  :patch_file: hitobito_ejv/app/decorators/ejv/group_decorator.rb
-  :patch_file_line: 9
 - :method: :envelope_sender
   :constant: MailRelay::Lists
   :wagon: ejv
@@ -1792,19 +1786,19 @@
   :wagon: swb
   :source_file: hitobito/app/models/role.rb
   :patch_file: hitobito_swb/app/models/swb/role.rb
-  :patch_file_line: 27
+  :patch_file_line: 33
 - :method: :build_new_type
   :constant: RolesController
   :wagon: swb
   :source_file: hitobito/app/controllers/roles_controller.rb
   :patch_file: hitobito_swb/app/controllers/swb/roles_controller.rb
-  :patch_file_line: 23
+  :patch_file_line: 24
 - :method: :create_new_role_and_destroy_old_role
   :constant: RolesController
   :wagon: swb
   :source_file: hitobito/app/controllers/roles_controller.rb
   :patch_file: hitobito_swb/app/controllers/swb/roles_controller.rb
-  :patch_file_line: 29
+  :patch_file_line: 30
 - :method: :tabular_links
   :constant: Dropdown::PeopleExport
   :wagon: sww

@@ -40,16 +40,16 @@
   :wagon: swb
   :source_file: hitobito/app/models/role.rb
   :patch_file: hitobito_swb/app/models/swb/role.rb
-  :patch_file_line: 27
+  :patch_file_line: 33
 - :method: :build_new_type
   :constant: RolesController
   :wagon: swb
   :source_file: hitobito/app/controllers/roles_controller.rb
   :patch_file: hitobito_swb/app/controllers/swb/roles_controller.rb
-  :patch_file_line: 23
+  :patch_file_line: 24
 - :method: :create_new_role_and_destroy_old_role
   :constant: RolesController
   :wagon: swb
   :source_file: hitobito/app/controllers/roles_controller.rb
   :patch_file: hitobito_swb/app/controllers/swb/roles_controller.rb
-  :patch_file_line: 29
+  :patch_file_line: 30

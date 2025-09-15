@@ -6,15 +6,15 @@
 #  https://github.com/hitobito/hitobito.
 
 class PermittedGlobalizedAttrs
-  def initialize(entry)
-    @entry = entry
+  def initialize(model_class)
+    @model_class = model_class
   end
 
   def permitted_attrs(original_permitted_attrs)
     return original_permitted_attrs unless Globalized.globalize_inputs?
 
     original_permitted_attrs.flat_map do |permitted_attr|
-      next permit(permitted_attr, @entry.class)
+      next permit(permitted_attr, @model_class)
     end
   end
 
@@ -56,7 +56,7 @@ class PermittedGlobalizedAttrs
 
   def permit_relation_array(relation_name, relation_array)
     relation = relation_name.to_s.sub(/_[^_]*$/, "").to_sym
-    klass = @entry.class.reflect_on_all_associations.find do |reflection|
+    klass = @model_class.reflect_on_all_associations.find do |reflection|
       reflection.name == relation
     end&.klass
     return {relation_name => relation_array} if klass.blank?

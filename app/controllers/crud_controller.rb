@@ -147,7 +147,7 @@ class CrudController < ListController
   end
 
   def permitted_globalized_attrs
-    PermittedGlobalizedAttrs.new(entry).permitted_attrs(permitted_attrs)
+    PermittedGlobalizedAttrs.new(model_class).permitted_attrs(permitted_attrs)
   end
 
   def model_params

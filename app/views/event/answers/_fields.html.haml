@@ -7,7 +7,7 @@
 - question_label = safe_auto_link(question.question, html: { target: '_blank' })
 - question_label += StandardFormBuilder::REQUIRED_MARK if question.required?
 = f.hidden_field(:question_id)
-.mb-3.pt-2
+.mb-2
   = f.label(:answer, question_label)
   - if question.choices?
     - question.choice_items.each_with_index do |choice, index|

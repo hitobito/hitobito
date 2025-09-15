@@ -9,8 +9,8 @@ module Globalized
   included do
     before_destroy :remember_translated_label
 
-    class_attribute :sort_alphabetically
-    self.sort_alphabetically = true
+    class_attribute :list_alphabetically
+    self.list_alphabetically = true
   end
 
   module ClassMethods
@@ -40,7 +40,7 @@ module Globalized
         .includes(:translations)
         .select("#{table_name}.*", translated_label_column)
         .distinct
-      sort_alphabetically ? scope.order("#{translated_label_column} NULLS LAST") : scope.order(:id)
+      list_alphabetically ? scope.order("#{translated_label_column} NULLS LAST") : scope.order(:id)
     end
 
     def left_join_translation

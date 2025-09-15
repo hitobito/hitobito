@@ -38,6 +38,7 @@ class PersonResource < ApplicationResource
     @object.decorate.picture_full_url
   end
   attribute :updated_at, :datetime
+  attribute :additional_information, :string
 
   FeatureGate.if :person_language do
     attribute :language, :string

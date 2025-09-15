@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## Unreleased
+
+- Eigener JSON:API Endpoint für Abos (mailing lists) (hitobito_pbs#382)
+
 ## Version 2.6
 
 - Texte und Hilfetexte verwenden nun den Inhalt einer Fallback Sprache, wenn die gewünschte Sprache leer ist

@@ -37,7 +37,8 @@ describe PersonResource, type: :resource do
         :birthday,
         :language,
         :primary_group_id,
-        :updated_at
+        :updated_at,
+        :additional_information
       ]
     end
 

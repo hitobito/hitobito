@@ -5,3 +5,5 @@ post-address-sync:
   password:
   query_key:
   batch_key:
+  person_constraints:
+  role_types:

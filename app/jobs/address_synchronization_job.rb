@@ -11,9 +11,6 @@ class AddressSynchronizationJob < CursorBasedPagingJob
   self.progress_message = "Post Adressabgleich: Fortschritt %d%%"
   self.log_category = Synchronize::Addresses::SwissPost::Config::LOG_CATEGORY
 
-  class_attribute :role_types, default: []
-  class_attribute :person_constraints, default: {country: :CH}
-
   def self.exists?
     Delayed::Job.where("handler LIKE ?", "%#{name}%").exists?
   end
@@ -62,8 +59,8 @@ class AddressSynchronizationJob < CursorBasedPagingJob
   def scope
     Person
       .joins(:roles)
-      .where(roles: {type: role_types})
-      .where(person_constraints)
+      .where(config.role_types ? {roles: {type: config.role_types}} : {})
+      .where(Synchronize::Addresses::SwissPost::Config.person_constraints)
       .order(:id)
       .distinct
   end
@@ -86,6 +83,10 @@ class AddressSynchronizationJob < CursorBasedPagingJob
 
   def client
     @client ||= Synchronize::Addresses::SwissPost::Client.new
+  end
+
+  def config
+    @config ||= Synchronize::Addresses::SwissPost::Config
   end
 
   def create_attachment(job)

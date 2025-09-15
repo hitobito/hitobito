@@ -49,6 +49,7 @@ describe Dropdown::LabelItems do
 
   describe "additional_address enabled" do
     before do
+      allow(Settings.additional_address).to receive(:enabled).and_return(true)
       described_class.new(dropdown).add
     end
 

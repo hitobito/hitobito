@@ -12,7 +12,8 @@ module JsonApi
     CONTACT_ACCOUNT_MODELS = [
       AdditionalEmail,
       PhoneNumber,
-      SocialAccount
+      SocialAccount,
+      AdditionalAddress
     ]
 
     attr_reader :main_ability

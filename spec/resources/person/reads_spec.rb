@@ -292,6 +292,35 @@ describe PersonResource, type: :resource do
       end
     end
 
+    describe "additional_addresses" do
+      context "with feature toggle off" do
+        before do
+          params[:include] = "additional_addresses"
+        end
+
+        it "is not available in the API" do
+          expect { render }.to raise_error Graphiti::Errors::InvalidInclude
+        end
+      end
+
+      xcontext "with feature toggle on" do # graphiti somehow caches the resource, so dynamically setting the feature toggle does not work.
+        let!(:additional_address1) { Fabricate(:additional_address, contactable: person, label: "Arbeit") }
+        let!(:additional_address2) { Fabricate(:additional_address, contactable: person, label: "Rechnung") }
+
+        before do
+          allow(Settings.additional_address).to receive(:enabled).and_return(true)
+          params[:include] = "additional_addresses"
+        end
+
+        it "is available in the API" do
+          render
+          additional_addresses = d[0].sideload(:additional_addresses)
+          expect(additional_addresses).to have(2).items
+          expect(additional_addresses.map(&:id)).to match_array [additional_address1.id, additional_address2.id]
+        end
+      end
+    end
+
     describe "roles" do
       before { params[:include] = "roles" }
 

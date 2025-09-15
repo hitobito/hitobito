@@ -31,8 +31,8 @@ class CustomContent < ActiveRecord::Base
   # specify validations for translated attributes explicitly
   validates :label, presence: true
   validates :label, :subject, length: {maximum: 255, allow_nil: true}
-  # The custom content placeholders validator checks if the placeholder is either in the body or the subject of the custom content
   validates :body, length: {allow_nil: true, maximum: 2**16 - 1}, no_attachments: true
+  # The custom content placeholders validator checks if the placeholder is either in the body or the subject of the custom content
   validates_with CustomContentPlaceholdersValidator
   validates_by_schema
 

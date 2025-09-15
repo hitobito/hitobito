@@ -15,14 +15,15 @@ describe AddressSynchronizationJob do
       username: "api",
       password: "secret",
       query_key: "Q1",
-      batch_key: "B1"
+      batch_key: "B1",
+      role_types: role_types,
+      person_constraints: person_constraints
     }
   }
+  let(:person_constraints) { nil }
 
   before do
     Synchronize::Addresses::SwissPost::Config.instance_variable_set(:@config, config.stringify_keys)
-    allow(described_class).to receive(:role_types).and_return(role_types)
-    allow(described_class).to receive(:person_constraints).and_return({})
   end
 
   subject(:job) { described_class.new }
@@ -99,6 +100,31 @@ describe AddressSynchronizationJob do
       expect(followup_job.cursor).to eq people(:top_leader).id
       expect(followup_job.processed_count).to eq 0
       expect(followup_job.processing_count).to eq 2
+    end
+
+    describe "constraints" do
+      context "with person_constraints given" do
+        let(:person_constraints) { {first_name: "Max", town: "Bern"} }
+
+        it "only uploads person in constraint" do
+          Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group), person: Fabricate(:person, first_name: "Max", town: "Bern"))
+          stub_api_request(:post, "/uploadfile", response: {UploadFileResult: {FileToken: :in}}.to_json).with do |req|
+            expect(parse_upload(req).entries.size).to eq 1
+          end
+          job.perform
+        end
+      end
+
+      context "with role_types" do
+        let(:role_types) { %w[Group::TopGroup::Leader] }
+
+        it "only uploads person in constraint" do
+          stub_api_request(:post, "/uploadfile", response: {UploadFileResult: {FileToken: :in}}.to_json).with do |req|
+            expect(parse_upload(req).entries.size).to eq 1
+          end
+          job.perform
+        end
+      end
     end
 
     [0, 2, 3].each do |state|

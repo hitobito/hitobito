@@ -204,7 +204,7 @@ event:
   participations:
     delete_additional_information_after_months: 1200
   questions:
-    sort_alphabetically: false
+    list_alphabetically: false
 
 downloads:
   folder: <%= Rails.root.join('tmp', 'downloads') %>

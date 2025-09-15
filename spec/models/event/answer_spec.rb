@@ -55,10 +55,10 @@ describe Event::Answer do
   context ".list" do
     context "with alphabetic sort turned on" do
       around do |example|
-        original = Event::Question.sort_alphabetically
-        Event::Question.sort_alphabetically = true
+        original = Event::Question.list_alphabetically
+        Event::Question.list_alphabetically = true
         example.run
-        Event::Question.sort_alphabetically = original
+        Event::Question.list_alphabetically = original
       end
 
       it "orders by questions and includes translations" do

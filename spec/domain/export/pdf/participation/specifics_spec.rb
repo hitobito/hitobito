@@ -54,10 +54,10 @@ describe Export::Pdf::Participation::Specifics do
 
   context "with questions set to sort by id (by default)" do
     around do |example|
-      original = Event::Question.sort_alphabetically
-      Event::Question.sort_alphabetically = true
+      original = Event::Question.list_alphabetically
+      Event::Question.list_alphabetically = true
       example.run
-      Event::Question.sort_alphabetically = original
+      Event::Question.list_alphabetically = original
     end
 
     it "renders correctly" do

@@ -12,7 +12,6 @@ describe PermittedGlobalizedAttrs do
     with_globalized_models(Event)
     with_globalized_models(Event::Question)
 
-
     permitted_attrs = EventsController.permitted_attrs.deep_dup + Event.used_attributes.deep_dup
     permitted_globalized_attrs = described_class.new(Event).permitted_attrs(permitted_attrs)
     permitted_globalized_nested_attrs = permitted_globalized_attrs.find { |attr| attr.is_a? Hash }[:application_questions_attributes]
@@ -39,7 +38,7 @@ describe PermittedGlobalizedAttrs do
     permitted_globalized_attrs = described_class.new(Event).permitted_attrs(permitted_attrs)
     permitted_globalized_nested_attrs = permitted_globalized_attrs.find { |attr| attr.is_a? Hash }[:application_questions_attributes]
 
-    expect(permitted_globalized_attrs).not_to include(*[:name_de, :name_en, :name_fr])
-    expect(permitted_globalized_nested_attrs).not_to include(*[:question_de, :question_en, :question_fr])
+    expect(permitted_globalized_attrs).not_to include(:name_de, :name_en, :name_fr)
+    expect(permitted_globalized_nested_attrs).not_to include(:question_de, :question_en, :question_fr)
   end
 end

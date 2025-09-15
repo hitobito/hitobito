@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## unreleased
+
+- Profilbild, letztes Aktualisierungsdatum und zusätzliche Angaben zu Personen sowie der Typ von Rollen ist neu in der JSON:API verfügbar (#3612)
+
 ## Version 2.6
 
 - Beim Anmelden zu einem Event wurde das Formular der Anmeldefragen überarbeitet um längere Fragen auch auf kleineren Screens besser abzubilden (hitobito/hitobito_sac_cas#1278)

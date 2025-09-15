@@ -88,7 +88,7 @@ class FeatureGate
   private
 
   def read_config(feature, settings)
-    config = feature.split(".").reduce(settings) do |acc, property|
+    config = feature.to_s.split(".").reduce(settings) do |acc, property|
       acc.try(property)
     end
 

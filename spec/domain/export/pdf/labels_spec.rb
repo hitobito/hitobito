@@ -40,6 +40,8 @@ describe Export::Pdf::Labels do
   end
 
   context "with additional address" do
+    before { allow(Settings.additional_address).to receive(:enabled).and_return(true) }
+
     let(:label) { "Rechnung" }
 
     it "falls back to original address if undefined" do

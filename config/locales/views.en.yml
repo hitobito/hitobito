@@ -463,6 +463,8 @@ en:
         apply: "Register"
         explain_required_checkmark: "* = Antwort obligatorisch"
         send_email: E-Mail an Teilnehmer/in senden
+        registration_details: Anmeldeangaben
+        administrative_information: Administrationsangaben
       application_fields:
         alternative_dates_info: "Please enter more suitable courses."
         course_information: "Information about the courses"

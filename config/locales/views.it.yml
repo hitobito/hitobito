@@ -464,6 +464,8 @@ it:
         apply: "iscrivere"
         explain_required_checkmark: "* = Antwort obligatorisch"
         send_email: E-Mail an Teilnehmer/in senden
+        registration_details: Anmeldeangaben
+        administrative_information: Administrationsangaben
       application_fields:
         alternative_dates_info: "per favore indica altri corsi che potrebbero andarti bene."
         course_information: "informazioni sui corsi"

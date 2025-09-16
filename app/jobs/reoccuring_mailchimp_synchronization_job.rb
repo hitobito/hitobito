@@ -10,9 +10,14 @@ class ReoccuringMailchimpSynchronizationJob < RecurringJob
 
   def perform_internal
     MailingList.mailchimp.where.not(mailchimp_syncing: true).find_each do |list|
-      next if list.mailchimp_result&.state == :failed
+      next if recently_failed?(list)
 
       MailchimpSynchronizationJob.new(list.id).enqueue!
     end
+  end
+
+  def recently_failed?(list)
+    list.mailchimp_result&.state == :failed &&
+      (list.mailchimp_last_synced_at && list.mailchimp_last_synced_at > 1.week.ago)
   end
 end

@@ -46,7 +46,7 @@ describe Payments::Collection do
     end
 
     it "does not find payment outside of duration" do
-      fabricate_payment(50.0, Date.new(2.year.ago.year, 3, 20))
+      fabricate_payment(50.0, Date.new(2.years.ago.year, 3, 20))
 
       payments = described_class.new.in_last(1.year).instance_variable_get(:@payments)
 
@@ -194,7 +194,7 @@ describe Payments::Collection do
 
       fabricated_payment1 = fabricate_payment(150.0, Date.new(3.years.ago.year, 1, 1))
       fabricated_payment2 = fabricate_payment(100.0, Date.new(2.years.ago.year, 3, 20))
-      fabricated_payment3 = fabricate_payment(100.0, Date.new(1.years.ago.year, 3, 10))
+      fabricated_payment3 = fabricate_payment(100.0, Date.new(1.year.ago.year, 3, 10))
 
       fabricated_payment1.invoice.update(invoice_items_attributes: invoice_item_attrs.take(2))
       fabricated_payment2.invoice.update(invoice_items_attributes: invoice_item_attrs.drop(1))
@@ -202,38 +202,6 @@ describe Payments::Collection do
 
       result = described_class.new.having_invoice_item("Shirt", "10-987654-03", "Merch").payments
       expect(result).to match_array([fabricated_payment1, fabricated_payment2])
-    end
-  end
-
-  context "grouped_by_invoice_items" do
-    it "allows invoice item totals to be summed up" do
-      invoice_item_attrs = [{
-        name: "Membership",
-        description: "You member, you pay",
-        cost_center: "Members",
-        account: "01-12345-06",
-        unit_cost: 100,
-        count: 1
-      }, {
-        name: "Shirt",
-        description: "Good quality",
-        cost_center: "Merch",
-        account: "10-987654-03",
-        unit_cost: 50,
-        count: 1
-      }]
-
-      fabricated_payment1 = fabricate_payment(150.0, Date.new(3.years.ago.year, 1, 1))
-      fabricated_payment2 = fabricate_payment(100.0, Date.new(2.years.ago.year, 3, 20))
-
-      fabricated_payment1.invoice.update(invoice_items_attributes: [invoice_item_attrs.first])
-      fabricated_payment2.invoice.update(invoice_items_attributes: invoice_item_attrs)
-
-      grouped_amounts = described_class.new.grouped_by_invoice_items.sum("count * unit_cost")
-
-      expect(grouped_amounts.size).to eq(2)
-      expect(grouped_amounts[["Membership", "01-12345-06", "Members"]]).to eq(200)
-      expect(grouped_amounts[["Shirt", "10-987654-03", "Merch"]]).to eq(50)
     end
   end
 

@@ -14,7 +14,7 @@ class Invoice::ItemEvaluation
 
   def fetch_evaluations
     rows = []
-    rows += rows_by_invoice_article
+    rows += article_rows
 
     rows << deficit_row if sum_of_deficitary_payments.nonzero?
     rows << excess_row if excess_amount.nonzero?
@@ -28,23 +28,29 @@ class Invoice::ItemEvaluation
 
   private
 
-  def rows_by_invoice_article # rubocop:disable Metrics/MethodLength
-    @rows_by_invoice_article ||= invoice_article_identifiers.collect do |ids|
-      name, account, cost_center = ids
+  def article_rows
+    return @article_rows if @article_rows.present?
+
+    invoice_items_by_article = InvoiceItem.where(invoice_id: payments_of_paid_invoices.payments.pluck(:invoice_id).uniq)
+      .group_by { |invoice_item| [invoice_item.name, invoice_item.account, invoice_item.cost_center] }
+
+    @article_rows = invoice_items_by_article.map do |ids, invoice_items|
+      name, account, cost_center = *ids
+
       {
         name: name,
-        vat: invoice_item_vats(*ids),
-        count: count(*ids),
-        amount_paid: amount_paid_without_vat(*ids) + invoice_item_vats(*ids),
+        vat: invoice_items.sum { |invoice_item| InvoiceItems::Calculation.round(invoice_item.vat) },
+        count: invoice_items.sum(&:count),
+        amount_paid: invoice_items.sum { |invoice_item| InvoiceItems::Calculation.round(invoice_item.total) },
         account: account,
         cost_center: cost_center,
         type: :by_article
       }
-    end.uniq
+    end
   end
 
   def invoice_article_total_amount
-    rows_by_invoice_article.sum { |article| article[:amount_paid] }
+    article_rows.sum { |article| article[:amount_paid] }
   end
 
   def payments_of_paid_invoices
@@ -95,57 +101,5 @@ class Invoice::ItemEvaluation
       cost_center: "",
       type: :excess
     }
-  end
-
-  def count(name, account, cost_center)
-    # Get the relevant invoices
-    relevant_invoice_ids = payments_of_paid_invoices.payments.pluck(:invoice_id)
-
-    # Search invoice items which fit the identifiers and are attached to relevant payments
-    invoice_items = InvoiceItem.where(name: name,
-      account: account,
-      cost_center: cost_center,
-      invoice_id: relevant_invoice_ids)
-
-    amount_of_invoices = invoice_items.pluck(:invoice_id).uniq.size
-
-    # We get the total count by multiplying the count of the item with the amount of found invoices
-    invoice_items.first.count * amount_of_invoices
-  end
-
-  def invoice_item_vats(name, account, cost_center)
-    # Get the relevant invoices
-    relevant_invoice_ids = relevant_payments.of_fully_paid_invoices.payments.pluck(:invoice_id)
-
-    # Search invoice item which fits the identifiers and are attached to relevant payments
-    invoice_item = InvoiceItem.find_by(name: name,
-      account: account,
-      cost_center: cost_center,
-      invoice_id: relevant_invoice_ids)
-
-    # Invoice items with an empty vat_rate will be 0
-    return 0 unless invoice_item.vat_rate&.nonzero?
-
-    # We get the vat by multiplying the vat_rate with the paid amount excluding vat
-    invoice_item.vat_rate / 100 * amount_paid_without_vat(name, account, cost_center)
-  end
-
-  def amount_paid_without_vat(name, account, cost_center)
-    relevant_invoice_ids = payments_of_paid_invoices.payments.pluck(:invoice_id)
-
-    invoice_item = InvoiceItem.find_by(name: name,
-      account: account,
-      cost_center: cost_center,
-      invoice_id: relevant_invoice_ids)
-
-    count(name, account, cost_center) * invoice_item.unit_cost
-  end
-
-  def invoice_article_identifiers
-    # Used for the group statement, thus being identifiers/key when doing calculation
-    # Is used to get all identifiers and then loop to calculate/fetch the values for each article
-
-    payments_of_paid_invoices.grouped_by_invoice_items
-      .pluck(*Payments::Collection.invoice_item_group_attrs)
   end
 end

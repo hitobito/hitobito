@@ -10,7 +10,7 @@ require "spec_helper"
 describe ReoccuringMailchimpSynchronizationJob do
   let(:group) { groups(:top_group) }
 
-  def create(state = nil)
+  def create(state = nil, mailchimp_last_synced_at = nil)
     Fabricate(:mailing_list, group: group, mailchimp_list_id: 1, mailchimp_api_key: 1).tap do |list|
       data = case state
       when :failed then {exception: ArgumentError.new("ouch")}
@@ -18,7 +18,7 @@ describe ReoccuringMailchimpSynchronizationJob do
       when :partial then {foo: {failed: 1}, bar: {success: 1}}
       when :unchanged then {}
       end
-      list.update!(mailchimp_result: Synchronize::Mailchimp::Result.new(data)) if data
+      list.update!(mailchimp_last_synced_at:, mailchimp_result: Synchronize::Mailchimp::Result.new(data)) if data
     end
   end
 
@@ -29,9 +29,21 @@ describe ReoccuringMailchimpSynchronizationJob do
     expect { subject.perform_internal }.not_to(change { Delayed::Job.count })
   end
 
-  it "ignores list with failed result" do
-    create(:failed)
-    expect { subject.perform_internal }.not_to(change { Delayed::Job.count })
+  describe "failed state" do
+    it "ignores recently failed" do
+      create(:failed, 6.days.ago)
+      expect { subject.perform_internal }.not_to(change { Delayed::Job.count })
+    end
+
+    it "uses list failed more than 7 days.ago" do
+      create(:failed, 8.days.ago)
+      expect { subject.perform_internal }.to(change { Delayed::Job.count })
+    end
+
+    it "uses list with nil mailchimp_last_synced_at" do
+      create(:failed, nil)
+      expect { subject.perform_internal }.to(change { Delayed::Job.count })
+    end
   end
 
   [:success, :partial, :unchanged].each do |state|

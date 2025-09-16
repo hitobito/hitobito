@@ -335,6 +335,10 @@ label.radio {
   }
 }
 
+.col-form-label {
+  word-break: break-word;
+}
+
 .controls div.inline {
   display: inline-block;
   padding-top: 5px;

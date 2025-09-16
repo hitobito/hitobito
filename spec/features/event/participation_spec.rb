@@ -39,8 +39,9 @@ describe :event_participation, js: true do
 
     it "orders event questions by id on edit page" do
       visit edit_group_event_participation_path(group, event, participation)
-      expect(find_all("label.col-form-label")[0].text).to eq "Eine Frage?"
-      expect(find_all("label.col-form-label")[1].text).to eq "A question?"
+      expect(find_all("label.col-form-label")[0].text).to eq "Anmeldeangaben"
+      expect(find_all(".fields label")[0].text).to eq "Eine Frage?"
+      expect(find_all(".fields label")[1].text).to eq "A question?"
     end
   end
 

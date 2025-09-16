@@ -16,12 +16,17 @@
   - if params[:for_someone_else]
     = f.labeled_person_field(:person)
 
-  = f.fields_for(:answers, @answers.reject(&:admin?)) do |fans|
-    = render 'event/answers/fields', f: fans
+  - admin_answers, participant_answers = @answers.partition(&:admin?)
 
-  - if params[:for_someone_else] || entry.persisted?
-    = f.fields_for(:answers, @answers.select(&:admin?)) do |fans|
-      = render 'event/answers/fields', f: fans
+  - if participant_answers.present?
+    = f.labeled(t(".registration_details"), class: "mb-2 pt-2") do
+      = f.fields_for(:answers, participant_answers) do |fans|
+        = render 'event/answers/fields', f: fans
+
+  - if admin_answers.present? && (params[:for_someone_else] || entry.persisted?)
+    = f.labeled(t(".administrative_information"), class: "mb-2 pt-2") do
+      = f.fields_for(:answers, admin_answers) do |fans|
+        = render 'event/answers/fields', f: fans
 
   = f.labeled_text_area(:additional_information)
 

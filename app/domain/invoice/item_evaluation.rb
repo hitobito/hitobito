@@ -35,7 +35,7 @@ class Invoice::ItemEvaluation
         name: name,
         vat: invoice_item_vats(*ids),
         count: count(*ids),
-        amount_paid: amount_paid_without_vat(*ids) + invoice_item_vats(*ids),
+        amount_paid: amount_paid(*ids),
         account: account,
         cost_center: cost_center,
         type: :by_article
@@ -113,6 +113,12 @@ class Invoice::ItemEvaluation
     invoice_items.first.count * amount_of_invoices
   end
 
+  def amount_paid(name, account, cost_center)
+    InvoiceItems::Calculation.round(
+      amount_paid_without_vats(name, account, cost_center) + invoice_item_vats(name, account, cost_center)
+    )
+  end
+
   def invoice_item_vats(name, account, cost_center)
     # Get the relevant invoices
     relevant_invoice_ids = relevant_payments.of_fully_paid_invoices.payments.pluck(:invoice_id)
@@ -123,14 +129,12 @@ class Invoice::ItemEvaluation
       cost_center: cost_center,
       invoice_id: relevant_invoice_ids)
 
-    # Invoice items with an empty vat_rate will be 0
-    return 0 unless invoice_item.vat_rate&.nonzero?
+    single_invoice_item_vat = InvoiceItems::Calculation.round(invoice_item.vat / invoice_item.count)
 
-    # We get the vat by multiplying the vat_rate with the paid amount excluding vat
-    invoice_item.vat_rate / 100 * amount_paid_without_vat(name, account, cost_center)
+    count(name, account, cost_center) * single_invoice_item_vat
   end
 
-  def amount_paid_without_vat(name, account, cost_center)
+  def amount_paid_without_vats(name, account, cost_center)
     relevant_invoice_ids = payments_of_paid_invoices.payments.pluck(:invoice_id)
 
     invoice_item = InvoiceItem.find_by(name: name,

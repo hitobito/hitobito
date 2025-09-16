@@ -32,8 +32,12 @@ class Person::Filter::List
   private
 
   def filtered_accessibles
-    filtered = filter_with_selection.unscope(:select).select(:id).distinct
-    accessibles.where(id: filtered)
+    Person
+      .with(accessible_people: accessibles.unscope(:select).select(:id))
+      .with(filtered_people: filter_with_selection.unscope(:select).select(:id))
+      .where("EXISTS (SELECT DISTINCT ON (id) id FROM accessible_people WHERE accessible_people.id = people.id)")
+      .where("EXISTS (SELECT DISTINCT ON (id) id FROM filtered_people WHERE filtered_people.id = people.id)")
+      .select(*accessibles.select_values)
   end
 
   def filter_with_selection

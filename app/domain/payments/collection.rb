@@ -10,12 +10,6 @@
 class Payments::Collection
   attr_reader :payments
 
-  class_attribute :invoice_item_group_attrs
-
-  self.invoice_item_group_attrs = [:"invoice_items.name",
-    :"invoice_items.account",
-    :"invoice_items.cost_center"]
-
   def initialize
     @payments = Payment.list
   end
@@ -56,12 +50,6 @@ class Payments::Collection
                              cost_center: cost_center})
 
     self
-  end
-
-  def grouped_by_invoice_items
-    @payments.joins("INNER JOIN invoices AS invoice ON invoice.id = payments.invoice_id")
-      .joins("INNER JOIN invoice_items ON invoice.id = invoice_items.invoice_id")
-      .group(invoice_item_group_attrs)
   end
 
   def of_fully_paid_invoices

@@ -57,7 +57,7 @@ class InvoiceList < ActiveRecord::Base
   end
 
   def calculated
-    @calculated ||= InvoiceItems::Calculation.new(invoice.invoice_items).calculated
+    @calculated ||= invoice.calculated
   end
 
   def fixed_fee

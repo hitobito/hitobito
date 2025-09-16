@@ -260,14 +260,14 @@ describe Invoice::ItemEvaluation do
       expect(evaluations).to eq([{name: "Membership",
                                   amount_paid: 100,
                                   count: 1,
-                                  vat: 0,
+                                  vat: 0.0,
                                   cost_center: "Members",
                                   account: "01-23456-7",
                                   type: :by_article},
         {name: "Shirt",
-         amount_paid: 63,
+         amount_paid: 63.to_d,
          count: 2,
-         vat: 3,
+         vat: 3.to_d,
          cost_center: "Merch",
          account: "08-76543-2",
          type: :by_article}])
@@ -306,12 +306,80 @@ describe Invoice::ItemEvaluation do
 
       evaluations = described_class.new(top_layer, 2.months.ago, Time.zone.now).fetch_evaluations
       expect(evaluations).to eq([{name: "Teilzahlung",
-                                  amount_paid: 133,
+                                  amount_paid: 133.to_d,
                                   count: 2,
                                   vat: "",
                                   cost_center: "",
                                   account: "",
                                   type: :deficit}])
+    end
+
+    it "rounds vat amount correctly (count == 1)" do
+      invoice_attrs = {
+        title: "Membership",
+        creator: top_leader,
+        recipient: bottom_member,
+        group: top_layer,
+        invoice_items_attributes: [
+          {
+            name: "Membership",
+            unit_cost: 64,
+            count: 1,
+            vat_rate: 8.1,
+            cost_center: "Members",
+            account: "01-23456-7"
+          }
+        ]
+      }
+
+      invoice_1 = Invoice.create(invoice_attrs)
+      invoice_2 = Invoice.create(invoice_attrs)
+
+      Payment.create(amount: 69.20, invoice: invoice_1, received_at: 1.month.ago)
+      Payment.create(amount: 69.20, invoice: invoice_2, received_at: 2.months.ago)
+
+      evaluations = described_class.new(top_layer, 2.months.ago, Time.zone.now).fetch_evaluations
+      expect(evaluations).to eq([{name: "Membership",
+                                  amount_paid: BigDecimal("138.40"),
+                                  count: 2,
+                                  vat: BigDecimal("10.40"),
+                                  cost_center: "Members",
+                                  account: "01-23456-7",
+                                  type: :by_article}])
+    end
+
+    it "rounds vat amount correctly (count > 1)" do
+      invoice_attrs = {
+        title: "Membership",
+        creator: top_leader,
+        recipient: bottom_member,
+        group: top_layer,
+        invoice_items_attributes: [
+          {
+            name: "Membership",
+            unit_cost: 64,
+            count: 2,
+            vat_rate: 8.1,
+            cost_center: "Members",
+            account: "01-23456-7"
+          }
+        ]
+      }
+
+      invoice_1 = Invoice.create(invoice_attrs)
+      invoice_2 = Invoice.create(invoice_attrs)
+
+      Payment.create(amount: 138.35, invoice: invoice_1, received_at: 1.month.ago)
+      Payment.create(amount: 138.35, invoice: invoice_2, received_at: 2.months.ago)
+
+      evaluations = described_class.new(top_layer, 2.months.ago, Time.zone.now).fetch_evaluations
+      expect(evaluations).to eq([{name: "Membership",
+                                  amount_paid: BigDecimal("276.70"),
+                                  count: 4,
+                                  vat: BigDecimal("20.70"),
+                                  cost_center: "Members",
+                                  account: "01-23456-7",
+                                  type: :by_article}])
     end
   end
 end

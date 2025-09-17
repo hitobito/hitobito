@@ -458,14 +458,14 @@ it:
       actions_approval:
         approve_button: "Sbloccare"
         reject_button: "Rifiutare"
-      fields:
-        send_email: E-Mail an Teilnehmer/in senden
-        registration_details: Anmeldeangaben
-        administrative_information: Administrationsangaben
       form:
         title_new: "Iscrizione come %{role}"
         title_edit: "Modificare l'iscrizone di %{person}"
         apply: "iscrivere"
+        explain_required_checkmark: "* = Antwort obligatorisch"
+        send_email: E-Mail an Teilnehmer/in senden
+        registration_details: Anmeldeangaben
+        administrative_information: Administrationsangaben
       application_fields:
         alternative_dates_info: "per favore indica altri corsi che potrebbero andarti bene."
         course_information: "informazioni sui corsi"

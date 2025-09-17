@@ -458,14 +458,14 @@ fr:
       actions_approval:
         approve_button: "Autoriser"
         reject_button: "Refuser"
-      fields:
-        send_email: E-Mail an Teilnehmer/in senden
-        registration_details: Anmeldeangaben
-        administrative_information: Administrationsangaben
       form:
         title_new: "Inscription en tant que %{role}"
         title_edit: "Modifier l'inscription de %{person}"
         apply: "Inscription"
+        explain_required_checkmark: "* = Antwort obligatorisch"
+        send_email: E-Mail an Teilnehmer/in senden
+        registration_details: Anmeldeangaben
+        administrative_information: Administrationsangaben
       application_fields:
         alternative_dates_info: "S'il-te-plaît, indique d'autres cours qui pourraient te convenir."
         course_information: "Informations au sujet des cours"

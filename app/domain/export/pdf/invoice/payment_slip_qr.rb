@@ -18,7 +18,7 @@ module Export::Pdf::Invoice
     WIDTH_RECEIPT = 62.mm
     WIDTH = WIDTH_RECEIPT + WIDTH_PAYMENT
     MARGIN = Export::Pdf::Invoice::MARGIN
-    FONT_FAMILY = "Helvetica"
+    FONT_FAMILY = "LiberationSans"
 
     HEIGHT_WITHOUT_MARGIN = HEIGHT - MARGIN
 

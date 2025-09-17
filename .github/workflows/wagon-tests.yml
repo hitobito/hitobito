@@ -166,6 +166,7 @@ jobs:
           ref: ${{ inputs.core_ref }}
           path: .hitobito_core_repo
           fetch-depth: 1
+          token: ${{ secrets.RELEASE_PREPARATION_TOKEN }}
 
       - name: "Prepare"
         uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup

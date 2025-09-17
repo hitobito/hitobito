@@ -18,7 +18,7 @@ class HouseholdAsideComponent < ApplicationComponent
   attr_reader :member_component, :person, :group
 
   def render?
-    people_in_household? or show_buttons?
+    people_in_household? || show_buttons?
   end
 
   def section_name
@@ -46,6 +46,7 @@ class HouseholdAsideComponent < ApplicationComponent
   end
 
   def people_in_household?
-    @person.household_people.exists?
+    return @people_in_household if defined?(@people_in_household)
+    @people_in_household = @person.household_people.exists?
   end
 end

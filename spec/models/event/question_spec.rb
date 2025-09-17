@@ -149,8 +149,6 @@ describe Event::Question do
     let(:event) { events(:top_course) }
 
     it "creates a copy of the question" do
-      with_globalized_models(Event::Question)
-
       derived_question = global_question.derive
       expect(derived_question.derived_from_question).to eq(global_question)
       derived_question.event = event
@@ -173,8 +171,6 @@ describe Event::Question do
     subject(:derived_question) { global_question.derive }
 
     it "applies only changable attributes for derived questions" do
-      with_globalized_models(Event::Question)
-
       derived_question.update(event: event, question: "No override!", choices: "No,override", multiple_choices: true)
       derived_question.reload
       expect(derived_question.question).to eq(global_question.question)

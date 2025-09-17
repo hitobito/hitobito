@@ -22,6 +22,12 @@ class Export::Pdf::Document
       italic: font_path("NotoSans-Italic.ttf"),
       bold_italic: font_path("NotoSans-BoldItalic.ttf")
     })
+    @pdf.font_families.update("LiberationSans" => {
+      normal: font_path("LiberationSans/LiberationSans-Regular.ttf"),
+      bold: font_path("LiberationSans/LiberationSans-Bold.ttf"),
+      italic: font_path("LiberationSans/LiberationSans-Italic.ttf"),
+      bold_italic: font_path("LiberationSans/LiberationSans-BoldItalic.ttf")
+    })
     @pdf.font "NotoSans"
     @pdf.font_size Settings.pdf.font_size
   end

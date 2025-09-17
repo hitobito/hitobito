@@ -104,6 +104,11 @@ RSpec.configure do |config|
   config.include ViewComponent::TestHelpers, type: :component
   config.include ViewComponent::SystemTestHelpers, type: :component
   config.include Capybara::RSpecMatchers, type: :component
+  # graphiti
+  config.include GraphitiSpecHelpers::RSpec
+  config.include GraphitiSpecHelpers::Sugar
+  config.include Graphiti::Rails::TestHelpers
+  config.include ResourceSpecHelper, type: :resource
 
   config.global_fixtures = :all
 
@@ -111,9 +116,15 @@ RSpec.configure do |config|
     Group.reset_root_id # make sure to use root_id from fixtures, not from seeds
   end
 
-  config.before do
+  config.before do |example|
     ActionMailer::Base.deliveries = []
     Person.stamper = nil
+    # See https://www.graphiti.dev/guides/concepts/error-handling
+    handle_request_exceptions(false)
+
+    unless example.metadata[:with_truemail_validation]
+      allow(Truemail).to receive(:valid?).and_return(true)
+    end
   end
 
   config.before(:each, :draper_with_helpers) do
@@ -180,27 +191,6 @@ RSpec.configure do |config|
     Warden.test_mode!
 
     config.use_transactional_fixtures = true
-  end
-
-  config.before do |ex|
-    next if ex.metadata[:with_truemail_validation]
-    allow(Truemail).to receive(:valid?).and_return(true)
-  end
-
-  config.before do
-    # this job is usually enqueued when a person is created. So it makes sense to
-    # prevent this in test env when using for example Fabricate
-    double({enqueue!: nil})
-  end
-
-  # graphiti
-  config.include GraphitiSpecHelpers::RSpec
-  config.include GraphitiSpecHelpers::Sugar
-  config.include Graphiti::Rails::TestHelpers
-  config.include ResourceSpecHelper, type: :resource
-
-  config.before do
-    handle_request_exceptions(false)
   end
 
   if defined?(RescueRegistry)

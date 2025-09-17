@@ -19,7 +19,7 @@ module Globalized
     include GlobalizeAccessors
     def translates(*columns)
       super(*columns, fallbacks_for_empty_translations: true)
-      globalize_accessors if Globalized.globalize_inputs?
+      globalize_accessors
     end
 
     # Copies all validators that are defined for globalized attributes to their associated globalized accessors
@@ -117,23 +117,29 @@ module Globalized
   end
 
   def attributes
-    return super unless Globalized.globalize_inputs?
-
     globalize_attribute_values = self.class.globalize_attribute_names.inject({}) do |attributes, name|
       attributes.merge(name.to_s => send(name))
     end
     super.merge(globalize_attribute_values)
   end
 
-  def valid?(*)
-    without_fallbacks do
-      super
-    end
-  end
-
   private
 
   def remember_translated_label
     to_s # fetches the required translations and keeps them around
+  end
+end
+
+# Monkey patch the save method of Globalize because we want to use fallbacks, which Globalize normally doesn't
+module Globalize::ActiveRecord::InstanceMethods
+  def save(...)
+    result = Globalize.with_locale(translation.locale || I18n.default_locale) do
+      super
+    end
+    if result
+      globalize.clear_dirty
+    end
+
+    result
   end
 end

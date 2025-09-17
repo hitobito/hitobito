@@ -103,7 +103,7 @@ class EventAbility < AbilityDsl::Base
   end
 
   def if_layer_and_below_full_on_root
-    user_context.permission_layer_ids(:layer_and_below_full).include?(Group.root.id)
+    user_context.permission_layer_ids(:layer_and_below_full).include?(Group.root_id)
   end
 
   def for_participations_read_events_or_visible_fellow_participants

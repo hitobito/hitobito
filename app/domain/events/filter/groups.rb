@@ -51,7 +51,7 @@ module Events::Filter
       Group
         .course_offerers
         .where(id: @user.groups_hierarchy_ids)
-        .where.not(groups: {id: Group.root.id})
+        .where.not(groups: {id: Group.root_id})
         .first
         .try(:hierarchy)
         .try(:course_offerers)

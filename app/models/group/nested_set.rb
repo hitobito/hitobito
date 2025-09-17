@@ -128,4 +128,14 @@ module Group::NestedSet
     first = parent.children[0]
     move_to_left_of(first) unless first == self
   end
+
+  module ClassMethods
+    def root_id
+      @root_id ||= root.id
+    end
+
+    def reset_root_id
+      @root_id = nil
+    end
+  end
 end

@@ -8,10 +8,11 @@
 require "spec_helper"
 
 describe PermittedGlobalizedAttrs do
-  it "adds globalized version of permitted attrs" do
-    with_globalized_models(Event)
-    with_globalized_models(Event::Question)
+  before do
+    with_globalized_models(Event, Event::Question)
+  end
 
+  it "adds globalized version of permitted attrs" do
     permitted_attrs = EventsController.permitted_attrs.deep_dup + Event.used_attributes.deep_dup
     permitted_globalized_attrs = described_class.new(Event).permitted_attrs(permitted_attrs)
     permitted_globalized_nested_attrs = permitted_globalized_attrs.find { |attr| attr.is_a? Hash }[:application_questions_attributes]
@@ -24,9 +25,6 @@ describe PermittedGlobalizedAttrs do
   end
 
   it "doesnt add globalized version of permitted attrs when base attr is not permitted" do
-    with_globalized_models(Event)
-    with_globalized_models(Event::Question)
-
     permitted_attrs = EventsController.permitted_attrs.deep_dup + Event.used_attributes.deep_dup
 
     removed_attr = permitted_attrs.delete(:name)

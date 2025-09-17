@@ -36,7 +36,7 @@ class GroupsController < CrudController
 
   def index
     flash.keep if html_request?
-    redirect_to group_path(Group.root.id, format: request.format.to_sym)
+    redirect_to group_path(Group.root_id, format: request.format.to_sym)
   end
 
   def show

@@ -107,6 +107,10 @@ RSpec.configure do |config|
 
   config.global_fixtures = :all
 
+  config.before(:suite) do
+    Group.reset_root_id # make sure to use root_id from fixtures, not from seeds
+  end
+
   config.before do
     ActionMailer::Base.deliveries = []
     Person.stamper = nil

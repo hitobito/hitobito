@@ -35,6 +35,9 @@ on:
       HEARTBEAT_TOKEN:
         description: "Token to interact with the heartbeat-application"
         required: true
+      RELEASE_PREPARATION_TOKEN:
+        description: "Token to permit patches to push commit"
+        required: true
 
 defaults:
   run:
@@ -166,7 +169,6 @@ jobs:
           ref: ${{ inputs.core_ref }}
           path: .hitobito_core_repo
           fetch-depth: 1
-          token: ${{ secrets.RELEASE_PREPARATION_TOKEN }}
 
       - name: "Prepare"
         uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup
@@ -176,6 +178,7 @@ jobs:
           wagon_dependency_repository: ${{ inputs.wagon_dependency_repository }}
           core_ref: ${{ inputs.core_ref }}
           wagon_dependency_ref: ${{ inputs.wagon_dependency_ref }}
+          token: ${{ secrets.RELEASE_PREPARATION_TOKEN }}
 
       - name: Run ${{ inputs.wagon_repository }} patch generation
         working-directory: ${{ inputs.wagon_repository }}

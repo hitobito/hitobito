@@ -117,7 +117,7 @@ class EventAbility < AbilityDsl::Base
   end
 
   def course_offerers
-    @course_offerers ||= Group.course_offerers.pluck(:id)
+    user_context.course_offerers
   end
 
   def participant_role?

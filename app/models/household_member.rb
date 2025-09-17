@@ -10,12 +10,12 @@ class HouseholdMember
 
   attr_reader :person, :household
 
-  validates_with Households::MemberValidator, unless: -> { validation_context == :update_address }
+  validates_with Households::MemberValidator
 
-  def self.from(people, household)
-    members = people.collect { |p| new(p, household) }
-    ref_person_id = household.reference_person.id
-    members.sort_by { |m| (m.person.id == ref_person_id) ? 0 : 1 }
+  def self.from(household)
+    reference_person = household.reference_person
+    members = Person.where(household_key: reference_person.household_key).where.not(id: reference_person.id)
+    [reference_person, *members].collect { |p| new(p, household) }
   end
 
   def initialize(person, household)

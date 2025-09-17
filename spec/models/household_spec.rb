@@ -268,14 +268,6 @@ describe Household do
   end
 
   describe "address" do
-    def setup
-      Person.validates :street, presence: true
-    end
-
-    def teardown
-      Person._validators.clear
-    end
-
     it "returns household attrs as hash" do
       person.update!(street: "Loriweg", housenumber: "42", zip_code: "6600", town: "Locarno", country: "CH")
       household.add(other_person)
@@ -313,15 +305,13 @@ describe Household do
       person.update!(street: "Langweilige Gasse")
       other_person.update!(street: "Lange Strasse")
       third_person.update!(street: "Breiter Weg")
-      # we add street validation in the spec, because some wagons validate the street/address for presence true
-      # the core itself doesn't, but the issue itself is core related
-      create_household
 
-      person.update_columns(street: nil)
-      expect { household.save!(context: :update_address) }.not_to raise_error
+      create_household # all streets are set to "Langweilige Gasse"
 
-      # remove presence validator from street again
-      Person._validators.clear
+      other_person.update_columns(street: nil)
+      expect { household.update_address! }.not_to raise_error
+
+      expect(other_person.reload.street).to eq("Langweilige Gasse")
     end
   end
 

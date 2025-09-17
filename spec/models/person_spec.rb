@@ -1145,10 +1145,12 @@ describe Person do
   describe "household" do
     let(:person) { people(:top_leader) }
     let(:other_person) { people(:bottom_member) }
+    let(:child) { Fabricate(:person) }
 
     before do
       household = Household.new(person)
       household.add(other_person)
+      household.add(child)
       household.save!
     end
 
@@ -1156,6 +1158,7 @@ describe Person do
       person.update!(street: "newstreet")
 
       expect(other_person.reload.street).to eq "newstreet"
+      expect(child.reload.street).to eq "newstreet"
     end
   end
 

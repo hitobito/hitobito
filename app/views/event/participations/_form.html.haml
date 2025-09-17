@@ -35,10 +35,10 @@
 
   = render_extensions :fields, locals: { f: f }
 
-  %p= t('.explain_required_checkmark') if @event.questions.any?(&:required?)
-
   - if params[:for_someone_else] && @event.course?
     .row.mb-2
       %label.checkbox.col-md-9.offset-md-3.col-lg-8.col-xl-8.offset-xl-2.mw-63ch.mt-1
         = check_box_tag("send_email", true, class: "form-check-input", checked: true)
         %span.ms-1= t(".send_email")
+
+  %p= t('.explain_required_checkmark') if @event.questions.any?(&:required?)

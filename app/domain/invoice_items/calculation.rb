@@ -7,22 +7,14 @@
 
 module InvoiceItems
   class Calculation
-    attr_reader :invoice_items
-
-    def initialize(invoice_items)
-      @invoice_items = invoice_items
-    end
-
-    def calculated
-      @calculated ||= [:total, :cost, :vat].index_with do |field|
-        round(invoice_items.reject(&:frozen?).map(&field).compact.sum(BigDecimal("0.00")))
-      end
-    end
-
-    private
-
-    def round(decimal)
+    def self.round(decimal)
       (decimal / Invoice::ROUND_TO).round * Invoice::ROUND_TO
+    end
+
+    def calculate_total_cost_and_vat(invoice_items)
+      [:total, :cost, :vat].index_with do |field|
+        self.class.round(invoice_items.reject(&:frozen?).map(&field).compact.sum(BigDecimal("0.00")))
+      end
     end
   end
 end

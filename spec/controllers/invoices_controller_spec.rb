@@ -245,8 +245,8 @@ describe InvoicesController do
 
       expect(json[:linked][:invoice_items]).to have(3).items
 
-      expect(json[:links][:"invoices.creator"][:href]).to eq "http://test.host/people/{invoices.creator}.json"
-      expect(json[:links][:"invoices.recipient"][:href]).to eq "http://test.host/people/{invoices.recipient}.json"
+      expect(json[:links][:"invoices.creator"][:href]).to eq "http://test.host/de/people/{invoices.creator}.json"
+      expect(json[:links][:"invoices.recipient"][:href]).to eq "http://test.host/de/people/{invoices.recipient}.json"
     end
 
     context "rendering view" do
@@ -330,8 +330,8 @@ describe InvoicesController do
 
       expect(json[:linked][:invoice_items]).to have(2).items
 
-      expect(json[:links][:"invoices.creator"][:href]).to eq "http://test.host/people/{invoices.creator}.json"
-      expect(json[:links][:"invoices.recipient"][:href]).to eq "http://test.host/people/{invoices.recipient}.json"
+      expect(json[:links][:"invoices.creator"][:href]).to eq "http://test.host/de/people/{invoices.creator}.json"
+      expect(json[:links][:"invoices.recipient"][:href]).to eq "http://test.host/de/people/{invoices.recipient}.json"
     end
   end
 

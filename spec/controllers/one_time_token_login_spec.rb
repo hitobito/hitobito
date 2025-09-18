@@ -25,7 +25,7 @@ describe EventsController do
     user.update_column(:reset_password_sent_at, 50.days.ago)
     get :show, params: {group_id: group.id, id: event.id, onetime_token: token}
 
-    is_expected.to redirect_to(new_person_session_path)
+    is_expected.to redirect_to(new_person_session_path(locale: nil))
     expect(user.reload.reset_password_token).to be_present
     expect(assigns(:current_person)).not_to be_present
   end
@@ -34,7 +34,7 @@ describe EventsController do
     user.generate_reset_password_token!
     get :show, params: {group_id: group.id, id: event.id, onetime_token: "yadayada"}
 
-    is_expected.to redirect_to(new_person_session_path)
+    is_expected.to redirect_to(new_person_session_path(locale: nil))
     expect(user.reload.reset_password_token).to be_present
     expect(assigns(:current_person)).not_to be_present
   end

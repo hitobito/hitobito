@@ -142,11 +142,6 @@ class JsonApiController < ActionController::API
     person_signed_in?
   end
 
-  # Sign in by deprecated user token is not supported by hitobito JSON API
-  def deprecated_user_token_sign_in
-    nil
-  end
-
   # protecting from CSRF attacks
   def assert_media_type_json_api
     return if request.content_type == MEDIA_TYPE

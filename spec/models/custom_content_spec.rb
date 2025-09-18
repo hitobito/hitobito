@@ -66,7 +66,7 @@ describe CustomContent do
     it "creates list with several elements from main custom content" do
       subject.update!(placeholders_required: nil)
       context_custom_content = Fabricate(:custom_content, context: Group.root, key: subject.key)
-      subject.update!(placeholders_required: "login-url, foo ,bar", body: "{login-url}{foo}{bar}")
+      subject.update!(placeholders_required: "login-url, foo ,bar", body: "{login-url}{foo}{bar}", body_fr: "{login-url}{foo}{bar}")
       expect(context_custom_content.placeholders_required_list).to eq(%w[login-url foo bar])
     end
   end
@@ -121,6 +121,7 @@ describe CustomContent do
     it "succeeds if placeholder is used in subject" do
       subject.placeholders_required = "login-url, sender"
       subject.subject = "Mail from {sender}"
+      subject.subject_fr = "Mail from {sender}"
 
       is_expected.to be_valid
     end

@@ -23,7 +23,7 @@ describe Roles::TerminateRoleLink do
 
       expect(described_class.new(role, view).render)
         # rubocop:todo Layout/LineLength
-        .to eq "<a class=\"btn btn-sm btn-outline-primary\" data-remote=\"true\" href=\"/groups/#{role.group.id}/roles/#{role.id}/terminations/new\">Austritt</a>"
+        .to eq "<a class=\"btn btn-sm btn-outline-primary\" data-remote=\"true\" href=\"/de/groups/#{role.group.id}/roles/#{role.id}/terminations/new\">Austritt</a>"
       # rubocop:enable Layout/LineLength
     end
 

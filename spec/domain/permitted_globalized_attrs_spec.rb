@@ -8,10 +8,6 @@
 require "spec_helper"
 
 describe PermittedGlobalizedAttrs do
-  before do
-    with_globalized_models(Event, Event::Question)
-  end
-
   it "adds globalized version of permitted attrs but not for current locale" do
     permitted_attrs = EventsController.permitted_attrs.deep_dup + Event.used_attributes.deep_dup
     permitted_globalized_attrs = described_class.new(Event).permitted_attrs(permitted_attrs)

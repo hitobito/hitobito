@@ -9,7 +9,6 @@ describe "Translated input fields", js: true do
   let(:group) { groups(:bottom_layer_one) }
 
   before do
-    with_globalized_models(Group)
     sign_in(people(:top_leader))
     visit edit_group_path(group)
   end

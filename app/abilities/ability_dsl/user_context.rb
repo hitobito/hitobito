@@ -53,6 +53,10 @@ module AbilityDsl
       @events_with_permission[permission] ||= find_events_with_permission(permission)
     end
 
+    def course_offerers
+      @course_offerers ||= Group.course_offerers.pluck(:id)
+    end
+
     private
 
     def init_permission_lookup_tables

@@ -12,16 +12,17 @@ describe PermittedGlobalizedAttrs do
     with_globalized_models(Event, Event::Question)
   end
 
-  it "adds globalized version of permitted attrs" do
+  it "adds globalized version of permitted attrs but not for current locale" do
     permitted_attrs = EventsController.permitted_attrs.deep_dup + Event.used_attributes.deep_dup
     permitted_globalized_attrs = described_class.new(Event).permitted_attrs(permitted_attrs)
     permitted_globalized_nested_attrs = permitted_globalized_attrs.find { |attr| attr.is_a? Hash }[:application_questions_attributes]
 
-    expected_globalized_attrs = Event.globalize_attribute_names.filter { |a| !a.end_with?("_#{I18n.locale}") }
-    expected_globalized_nested_attrs = Event::Question.globalize_attribute_names.filter { |a| !a.end_with?("_#{I18n.locale}") }
-
+    expected_globalized_attrs, current_locale_attrs = Event.globalize_attribute_names.partition { |a| !a.end_with?("_#{I18n.locale}") }
+    expected_globalized_nested_attrs, current_locale_nested_attrs = Event::Question.globalize_attribute_names.partition { |a| !a.end_with?("_#{I18n.locale}") }
     expect(permitted_globalized_attrs).to include(*expected_globalized_attrs)
+    expect(permitted_globalized_attrs).not_to include(*current_locale_attrs)
     expect(permitted_globalized_nested_attrs).to include(*expected_globalized_nested_attrs)
+    expect(permitted_globalized_nested_attrs).not_to include(*current_locale_nested_attrs)
   end
 
   it "doesnt add globalized version of permitted attrs when base attr is not permitted" do

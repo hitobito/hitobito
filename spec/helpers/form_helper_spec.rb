@@ -33,7 +33,7 @@ describe FormHelper do
     end
 
     it "should contain form tag" do
-      is_expected.to have_selector("form[action='/crud_test_models/#{entry.id}']")
+      is_expected.to have_selector("form[action='/crud_test_models/#{entry.id}?locale=de']")
     end
 
     it "should contain input for name" do
@@ -86,7 +86,7 @@ describe FormHelper do
     context "for existing entry" do
       let(:entry) { crud_test_models(:AAAAA) }
 
-      it { is_expected.to have_selector("form.special.form-horizontal[action='/crud_test_models/#{entry.id}'][method=post]") }
+      it { is_expected.to have_selector("form.special.form-horizontal[action='/crud_test_models/#{entry.id}?locale=de'][method=post]") }
       it { is_expected.to have_selector("input[name=_method][type=hidden][value=patch]", visible: false) }
       it { is_expected.to have_selector("input[name='crud_test_model[name]'][type=text][value=AAAAA]") }
       it { is_expected.to have_selector("input[name='crud_test_model[birthdate]'][type=text][value='01.01.1910']") }
@@ -98,7 +98,7 @@ describe FormHelper do
     context "for new entry" do
       let(:entry) { CrudTestModel.new }
 
-      it { is_expected.to have_selector("form.special.form-horizontal[action='/crud_test_models'][method=post]") }
+      it { is_expected.to have_selector("form.special.form-horizontal[action='/crud_test_models?locale=de'][method=post]") }
       it { is_expected.to have_selector("input[name='crud_test_model[name]'][type=text]") }
       it { is_expected.to have_no_selector("input[name='crud_test_model[name]'][type=text][value]") }
       it { is_expected.to have_selector("input[name='crud_test_model[birthdate]'][type=text]") }
@@ -132,7 +132,7 @@ describe FormHelper do
 
     let(:entry) { crud_test_models(:AAAAA) }
 
-    it { is_expected.to have_selector("form.form-horizontal.special[method=post][action='/crud_test_models/#{entry.id}']") }
+    it { is_expected.to have_selector("form.form-horizontal.special[method=post][action='/crud_test_models/#{entry.id}?locale=de']") }
   end
 
   describe "#field_inheritance_values" do

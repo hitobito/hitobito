@@ -66,6 +66,9 @@ Rails.application.configure do
   # config.action_view.annotate_rendered_view_with_filenames = true
   routes.default_url_options[:host] = "test.host"
 
+  Settings.application.languages = { de: "Deutsch", en: "English", fr: "Français" }
+  default_url_options[:locale] = :de
+
   unless ENV["RAILS_ENABLE_TEST_LOG"]
     logger = ActiveSupport::Logger.new(nil)
     config.logger = ActiveSupport::TaggedLogging.new(logger)

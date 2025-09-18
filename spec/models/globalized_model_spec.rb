@@ -10,10 +10,6 @@ describe "Globalized model" do
   let(:custom_content) { custom_contents(:assignment_assignee_notification) }
   let(:languages) { Settings.application.languages.keys }
 
-  before do
-    with_globalized_models(Group, CustomContent)
-  end
-
   it "should create globalized accessors" do
     expected_values = {}
     languages.each do |lang|

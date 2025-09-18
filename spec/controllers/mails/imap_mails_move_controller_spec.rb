@@ -65,7 +65,7 @@ describe Mails::ImapMailsMoveController do
 
       expect(flash[:notice]).to include "Mail erfolgreich verschoben"
       expect(response).to have_http_status(:found)
-      expect(response.location).to eq("http://test.host/mails/imap/inbox")
+      expect(response.location).to eq("http://test.host/de/mails/imap/inbox")
     end
 
     it "does not allow non-admins to move mails" do

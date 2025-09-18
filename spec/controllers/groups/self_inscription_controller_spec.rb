@@ -50,7 +50,7 @@ describe Groups::SelfInscriptionController do
 
         context "when unautorized" do
           it "renders page" do
-            get :show, params: {group_id: group.id}
+            get :show, params: {group_id: group.id, locale: :de}
 
             is_expected.to redirect_to(new_person_session_path)
           end

@@ -18,6 +18,7 @@ describe "layouts/application.html.haml" do
     allow(view).to receive(:current_user).and_return(person)
     allow(view).to receive(:origin_user).and_return(person)
     allow(view).to receive(:person_home_path).and_return("")
+    allow(view).to receive(:url_for).and_return("")
   end
 
   context "nav-left" do

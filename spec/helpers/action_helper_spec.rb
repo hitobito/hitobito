@@ -30,7 +30,7 @@ describe ActionHelper do
       end
 
       it "should contain person path" do
-        is_expected.to have_selector("a[href='/people/#{entry.id}']")
+        is_expected.to have_selector("a[href='/de/people/#{entry.id}']")
       end
 
       it "should have method delete" do

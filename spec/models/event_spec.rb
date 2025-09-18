@@ -528,8 +528,6 @@ describe Event do
     end
 
     it "adds default questions with available translations" do
-      with_globalized_models(Event::Question)
-
       e = Fabricate.build(:event, dates_attributes: [{start_at: Time.zone.today}])
       e.init_questions
       e.save!

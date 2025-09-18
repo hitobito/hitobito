@@ -6,14 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module GlobalizedHelpers
-  def with_globalized_models(*models)
-    stub_languages
-    models.each do |model|
-      model.globalize_accessors
-      model.copy_validators_to_globalized_accessors
-    end
-  end
-
   def stub_languages(languages = {de: "Deutsch", en: "English", fr: "Français"})
     allow(Settings.application).to receive(:languages).and_return(languages)
   end

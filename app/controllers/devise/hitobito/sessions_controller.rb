@@ -13,7 +13,6 @@ class Devise::Hitobito::SessionsController < Devise::SessionsController
   protect_from_forgery with: :null_session, only: [:new, :create], prepend: true
 
   respond_to :html
-  respond_to :json, only: [:new, :create]
 
   skip_before_action :reject_blocked_person!
   before_action :reset_two_factor_authentication,
@@ -31,12 +30,6 @@ class Devise::Hitobito::SessionsController < Devise::SessionsController
         # there
         after_2fa_path = after_sign_in_path_for(resource)
         return init_two_factor_auth(resource, after_2fa_path)
-      end
-
-      if request.format == :json
-        resource.generate_authentication_token! unless resource.authentication_token?
-        render json: UserSerializer.new(resource, controller: self)
-        return
       end
     end
   end

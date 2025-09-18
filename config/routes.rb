@@ -405,9 +405,6 @@ Hitobito::Application.routes.draw do
 
       get 'users/second_factor' => 'second_factor_authentication#new', as: 'new_users_second_factor'
       post 'users/second_factor' => 'second_factor_authentication#create', as: 'users_second_factor'
-
-      post 'users/token' => 'devise/tokens#create'
-      delete 'users/token' => 'devise/tokens#destroy'
     end
 
     post 'person_add_requests/:id' => 'person/add_requests#approve', as: :person_add_request

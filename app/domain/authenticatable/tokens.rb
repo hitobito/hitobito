@@ -23,15 +23,6 @@ class Authenticatable::Tokens
     end
   end
 
-  def user_from_token
-    @user_from_token ||=
-      begin
-        email = extract_request_token(:user_email)
-        token = extract_request_token(:user_token)
-        email && token && Person.find_by(email: email, authentication_token: token)
-      end
-  end
-
   private
 
   def extract_request_token(token)

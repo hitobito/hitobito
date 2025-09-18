@@ -85,6 +85,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   SEARCHABLE_ATTRS = [:number, {event_translations: [:name], groups: [:name]}]
 
   include Event::Participatable
+  include Event::ContactAttrs
   include FullTextSearchable
   include Globalized
   translates :application_conditions, :description, :name, :signature_confirmation_text
@@ -107,7 +108,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     :signature, :signature_confirmation, :signature_confirmation_text,
     :required_contact_attrs, :hidden_contact_attrs,
     :participations_visible, :globally_visible,
-    :minimum_participants, :automatic_assignment]
+    :minimum_participants, :automatic_assignment, :guest_limit]
 
   # All participation roles that exist for this event
   # Customize in wagons using .register_role_type / .disable_role_type
@@ -158,7 +159,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   has_many :invitations, dependent: :destroy
 
   has_many :participations, dependent: :destroy
-  has_many :people, through: :participations
+  has_many :people, through: :participations, source: :participant, source_type: Person.sti_name
 
   has_many :subscriptions, as: :subscriber, dependent: :destroy
 
@@ -184,6 +185,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     timeliness: {type: :date, allow_blank: true, before: ::Date.new(9999, 12, 31)}
   validates :description, :location, :application_conditions,
     length: {allow_nil: true, maximum: 2**16 - 1}
+  validates :guest_limit, numericality: {only_integer: true, greater_than_or_equal_to: 0}
   validate :assert_type_is_allowed_for_groups
   validate :assert_application_closing_is_after_opening
   validate :assert_required_contact_attrs_valid
@@ -500,15 +502,15 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   def valid_contact_attr?(attr)
     (
-      ParticipationContactData.contact_attrs +
-      ParticipationContactData.contact_associations
+      Event.possible_contact_attrs +
+      Event.possible_contact_associations
     ).map(&:to_s).include?(attr.to_s)
   end
 
   def assert_required_contact_attrs_valid # rubocop:disable Metrics/CyclomaticComplexity
     required_contact_attrs.map(&:to_s).each do |a|
       unless valid_contact_attr?(a) &&
-          ParticipationContactData.contact_associations
+          Event.possible_contact_associations
               .map(&:to_s).exclude?(a)
         errors.add(:base, :contact_attr_invalid, attribute: a)
       end
@@ -524,7 +526,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
       unless valid_contact_attr?(a)
         errors.add(:base, :contact_attr_invalid, attribute: a)
       end
-      if ParticipationContactData.mandatory_contact_attrs.include?(a)
+      if Event.mandatory_contact_attrs.include?(a)
         errors.add(:base, :contact_attr_mandatory, attribute: a)
       end
     end

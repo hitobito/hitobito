@@ -14,14 +14,20 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
 
   self.nesting = Group, Event
 
-  self.permitted_attrs = [:additional_information,
+  self.permitted_attrs = [:additional_information, :participant_id, :participant_type,
     answers_attributes: [:id, :question_id, :answer, answer: []],
     application_attributes: [:id, :priority_2_id, :priority_3_id]]
 
   self.remember_params += [:filter]
 
-  self.sort_mappings = {last_name: "people.last_name",
-                         first_name: "people.first_name",
+  self.sort_mappings = {last_name: {
+                          order: "CASE event_participations.participant_type WHEN 'Person' THEN people.last_name WHEN 'Event::Guest' THEN event_guests.last_name ELSE '' END AS last_name_order_statement",
+                          order_alias: "last_name_order_statement"
+                        },
+                         first_name: {
+                           order: "CASE event_participations.participant_type WHEN 'Person' THEN people.first_name WHEN 'Event::Guest' THEN event_guests.first_name ELSE '' END AS first_name_order_statement",
+                           order_alias: "first_name_order_statement"
+                         },
                          # for sorting roles we dont want to explicitly add a join_table statement when default_sort is configured to role
                          # In case of default_sort being role, order_by_role is already called in the participation_filter (so the joined table is in the query already)
                          roles: {
@@ -33,10 +39,22 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
                              order.concat(["people.last_name", "people.first_name"])
                            end
                          },
-                         nickname: "people.nickname",
-                         zip_code: "people.zip_code",
-                         town: "people.town",
-                         birthday: "people.birthday"}
+                         nickname: {
+                           order: "CASE event_participations.participant_type WHEN 'Person' THEN people.nickname WHEN 'Event::Guest' THEN event_guests.nickname ELSE '' END AS nickname_order_statement",
+                           order_alias: "nickname_order_statement"
+                         },
+                         zip_code: {
+                           order: "CASE event_participations.participant_type WHEN 'Person' THEN people.zip_code WHEN 'Event::Guest' THEN event_guests.zip_code ELSE '' END AS zip_code_order_statement",
+                           order_alias: "zip_code_order_statement"
+                         },
+                         town: {
+                           order: "CASE event_participations.participant_type WHEN 'Person' THEN people.town WHEN 'Event::Guest' THEN event_guests.town ELSE '' END AS town_order_statement",
+                           order_alias: "town_order_statement"
+                         },
+                         birthday: {
+                           order: "CASE event_participations.participant_type WHEN 'Person' THEN people.birthday WHEN 'Event::Guest' THEN event_guests.birthday ELSE NULL END AS birthday_order_statement",
+                           order_alias: "birthday_order_statement"
+                         }}
 
   decorates :group, :event, :participation, :participations, :alternatives
 
@@ -73,7 +91,8 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
           send_notification_email
         end
       end
-      respond_with(entry, success: created, location: return_path)
+
+      respond_with(entry, success: created, location: after_create_location(entry))
     end
   end
 
@@ -85,10 +104,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
       end
       format.pdf { render_entries_pdf(filter_entries) }
       format.csv { render_tabular_in_background(:csv) }
-      format.vcf {
-        render_vcf(filter_entries.includes(person: :phone_numbers)
-                                                      .collect(&:person))
-      }
+      format.vcf { render_vcf(filter_entries.includes(person: :phone_numbers).collect(&:person)) }
       format.xlsx { render_tabular_in_background(:xlsx) }
       format.email { render_emails(filter_entries.collect(&:person), ",") }
       format.email_outlook { render_emails(filter_entries.collect(&:person), ";") }
@@ -167,20 +183,26 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def list_entries
-    filter = event_participation_filter
-    records = filter.list_entries
-      .select(Event::Participation.column_names)
-    @counts = filter.counts
-    records = sort_by_sort_expression(records)
+    records = sort_by_sort_expression(entries_scope)
       .merge(Person.preload_picture)
       .page(params[:page])
 
-    Person::PreloadPublicAccounts.for(records.collect(&:person))
+    Person::PreloadPublicAccounts.for(records.select { |participation| participation.participant_type == Person.sti_name }.collect(&:person))
     @pagination_options = {
       total_pages: records.total_pages,
       current_page: records.current_page,
       per_page: records.limit_value
     }
+    records
+  end
+
+  # Extracted as a separate method, so wagons can add to the scope before sorting and especially
+  # the PreloadPublicAccounts step, which requires to load the page of records into memory
+  def entries_scope
+    filter = event_participation_filter
+    records = filter.list_entries
+      .select(Event::Participation.column_names)
+    @counts = filter.counts
     records
   end
 
@@ -219,7 +241,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def build_entry
-    participation = event.participations.new(person_id: person_id)
+    participation = event.participations.new(participant_id: person_id, participant_type: Person.sti_name)
     role = participation.roles.build(type: role_type)
     role.participation = participation
 
@@ -354,6 +376,18 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     end
   end
 
+  def after_create_location(participation)
+    if participation.persisted? && params.key?(:add_another)
+      return new_group_event_guest_path(
+        params[:group_id],
+        params[:event_id],
+        participation.id
+      )
+    end
+
+    return_path
+  end
+
   def append_mailing_instructions?
     for_current_user? && event.signature?
   end
@@ -391,6 +425,6 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def for_current_user?
-    entry.person_id == current_user&.id
+    entry.participant_type == Person.sti_name && entry.participant_id == current_user&.id
   end
 end

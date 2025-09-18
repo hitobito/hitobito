@@ -84,7 +84,7 @@ class EventAbility < AbilityDsl::Base
   def if_globally_visible_or_participating
     subject.globally_visible? ||
       subject.token_accessible?(user.shared_access_token) ||
-      participant? ||
+      participant_role? ||
       subject.external_applications?
   end
 
@@ -107,7 +107,7 @@ class EventAbility < AbilityDsl::Base
   end
 
   def for_participations_read_events_or_visible_fellow_participants
-    for_participations_read_events || (event.participations_visible? && participant?)
+    for_participations_read_events || (event.participations_visible? && participant_role?)
   end
 
   private
@@ -120,7 +120,7 @@ class EventAbility < AbilityDsl::Base
     @course_offerers ||= Group.course_offerers.pluck(:id)
   end
 
-  def participant?
+  def participant_role?
     user.event_participations
       .select(&:active?)
       .select { |p| p.event == event }

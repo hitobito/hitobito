@@ -8,4 +8,6 @@
 - unless params[:for_someone_else]
   = render 'event/participations/step_wizard', step: 2
 
-= render 'form', submit_label: t('event.participations.form.apply')
+= render 'form', submit_label: t('event.participations.form.apply'),
+                 add_another: entry.guests_allowed?,
+                 add_another_label: t(".add_guests", limit: entry.allowed_guests)

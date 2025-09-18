@@ -289,10 +289,6 @@ describe "StandardFormBuilder" do
   end
 
   describe "translated fields" do
-    before do
-      with_globalized_models(CrudTestModel)
-    end
-
     let(:dom) {
       Capybara::Node::Simple.new(form.input_field(:translated_field))
     }

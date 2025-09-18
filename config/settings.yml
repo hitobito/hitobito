@@ -121,7 +121,6 @@ pdf:
   labels:
     # Minimum border on the right and bottom of each label
     min_border: 4 #mm
-    font_name: Helvetica
 
 # Preset for addresses
 address:

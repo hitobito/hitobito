@@ -356,11 +356,7 @@ describe EventsController do
           }
         }
 
-        before do
-          with_globalized_models(Event::Question)
-
-          sign_in(people(:top_leader))
-        end
+        before { sign_in(people(:top_leader)) }
 
         it "populates application question with available translations" do
           post :create, params: params.deep_merge(event: {

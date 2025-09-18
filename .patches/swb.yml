@@ -29,6 +29,12 @@
   :source_file: hitobito/app/controllers/people_controller.rb
   :patch_file: hitobito_swb/app/controllers/swb/people_controller.rb
   :patch_file_line: 20
+- :method: :model_scope
+  :constant: PeopleController
+  :wagon: swb
+  :source_file: hitobito/app/controllers/people_controller.rb
+  :patch_file: hitobito_swb/app/controllers/swb/people_controller.rb
+  :patch_file_line: 27
 - :method: :full_label
   :constant: PersonDecorator
   :wagon: swb

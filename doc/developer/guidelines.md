@@ -96,6 +96,9 @@ Folgende Punkte müssen beim Erstellen eines Wagons beachtet werden:
 einsprachig, wird Transifex nicht gebraucht.
 * Transifex Projekt Name muss gleich wie der Gem Name des Wagons sein.
 * Die Ursprungssprache ist Deutsch (diese kann über Transifex nicht bearbeitet werden)
+* Falls die deutschen Texte auch über Transifex angepasst werden sollen, dann muss im Transifex
+  Projekt eine Deutsch Variante wie `de_CH` hinzugefügt werden. Diese werden im build Prozess 
+  automatisch für die locale `de` übernommen.
 * Damit Ein-/Mehrzahlformen in allen Sprachen angegeben werden können, müssen in den deutschen
 Localefiles immer die Keys `one` und `other` angegeben werden, auch wenn diese (im Deutschen)
 identisch sind.
@@ -130,6 +133,10 @@ treten in der laufenden Applikation Fehler auf.
 der Texte und sollten bei den entsprechenden Teilen ebenfalls genau so übernommen werden. Auf jedes
 öffnende Tag (`<b>`) muss zwingend ein entsprechendes schliessendes Tag mit Schrägstrich folgen
 (`</b>`).
+* Deutsche Texte können im Transifex angepasst werden, wenn im Projekt eine deutsch Variante locale
+  konfiguriert ist (z.B. `de_CH`). Diese werden im build Prozess automatisch für die locale
+  `de` übernommen. Dies geschieht mit dem rake Task `rails locales:patch_de`. Im development Environment
+  können die deutschen Texte von transifex übernommen werden, indem der Task lokal ausgeführt wird.
 
 
 ### Lizenzen

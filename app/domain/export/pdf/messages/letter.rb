@@ -28,9 +28,7 @@ module Export::Pdf::Messages
     end
 
     def pdf
-      @pdf ||= Export::Pdf::Document.new(**render_options).pdf.tap do |pdf|
-        pdf.font "Helvetica"
-      end
+      @pdf ||= Export::Pdf::Document.new(**render_options).pdf
     end
 
     def render_preview

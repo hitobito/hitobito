@@ -54,15 +54,15 @@ describe Export::Pdf::Messages::LetterWithInvoice do
 
     it "renders text at positions" do
       invoice_text = [
-        [71, 654, "Bottom Member"],
-        [71, 644, "Greatstreet 345"],
-        [71, 633, "3456 Greattown"],
-        [71, 531, "Mitgliedsbeitrag"],
-        [71, 502, "Hallo"],
-        [71, 481, "Dein "],
-        [92, 481, "Mitgliedsbeitrag"],
-        [161, 481, " ist fällig! "],
-        [71, 460, "Bis bald"],
+        [71, 651, "Bottom Member"],
+        [71, 639, "Greatstreet 345"],
+        [71, 626, "3456 Greattown"],
+        [71, 528, "Mitgliedsbeitrag"],
+        [71, 499, "Hallo"],
+        [71, 475, "Dein "],
+        [93, 475, "Mitgliedsbeitrag"],
+        [167, 475, " ist fällig! "],
+        [71, 450, "Bis bald"],
         [28, 290, "Empfangsschein"],
         [28, 265, "Konto / Zahlbar an"],
         [28, 256, "CH93 0076 2011 6238 5295 7"],
@@ -126,7 +126,7 @@ describe Export::Pdf::Messages::LetterWithInvoice do
         letter.message_recipients.first.update!(address: "Foo Member\nGreatstreet 345\n3456 Greattown")
 
         described_class.new(letter).render
-        expect(text_with_position).to include([71, 654, "Foo Member"])
+        expect(text_with_position).to include([71, 651, "Foo Member"])
         expect(text_with_position).to include([360, 183, "Bottom Member"])
       end
     end
@@ -143,9 +143,9 @@ describe Export::Pdf::Messages::LetterWithInvoice do
 
         it "renders only some texts positions" do
           invoice_text = [
-            [71, 654, "Top Leader"],
-            [71, 644, "Funkystreet 42"],
-            [71, 633, "4242 Greattown"],
+            [71, 651, "Top Leader"],
+            [71, 639, "Funkystreet 42"],
+            [71, 626, "4242 Greattown"],
             [28, 290, "Empfangsschein"],
             [28, 265, "Konto / Zahlbar an"],
             [28, 256, "CH93 0076 2011 6238 5295 7"],
@@ -174,9 +174,9 @@ describe Export::Pdf::Messages::LetterWithInvoice do
             [360, 183, "Top Leader"],
             [360, 173, "Funkystreet 42"],
             [360, 162, "4242 Greattown"],
-            [71, 654, "Bottom Member"],
-            [71, 644, "Greatstreet 345"],
-            [71, 633, "3456 Greattown"],
+            [71, 651, "Bottom Member"],
+            [71, 639, "Greatstreet 345"],
+            [71, 626, "3456 Greattown"],
             [28, 290, "Empfangsschein"],
             [28, 265, "Konto / Zahlbar an"],
             [28, 256, "CH93 0076 2011 6238 5295 7"],
@@ -215,15 +215,15 @@ describe Export::Pdf::Messages::LetterWithInvoice do
 
       it "renders all texts at positions" do
         invoice_text = [
-          [71, 654, "Top Leader"],
-          [71, 644, "Funkystreet 42"],
-          [71, 633, "4242 Greattown"],
-          [71, 531, "Mitgliedsbeitrag"],
-          [71, 502, "Hallo"],
-          [71, 481, "Dein "],
-          [92, 481, "Mitgliedsbeitrag"],
-          [161, 481, " ist fällig! "],
-          [71, 460, "Bis bald"],
+          [71, 651, "Top Leader"],
+          [71, 639, "Funkystreet 42"],
+          [71, 626, "4242 Greattown"],
+          [71, 528, "Mitgliedsbeitrag"],
+          [71, 499, "Hallo"],
+          [71, 475, "Dein "],
+          [93, 475, "Mitgliedsbeitrag"],
+          [167, 475, " ist fällig! "],
+          [71, 450, "Bis bald"],
           [28, 290, "Empfangsschein"],
           [28, 265, "Konto / Zahlbar an"],
           [28, 256, "CH93 0076 2011 6238 5295 7"],
@@ -257,15 +257,15 @@ describe Export::Pdf::Messages::LetterWithInvoice do
           [360, 183, "Top Leader"],
           [360, 173, "Funkystreet 42"],
           [360, 162, "4242 Greattown"],
-          [71, 654, "Bottom Member"],
-          [71, 644, "Greatstreet 345"],
-          [71, 633, "3456 Greattown"],
-          [71, 531, "Mitgliedsbeitrag"],
-          [71, 502, "Hallo"],
-          [71, 481, "Dein "],
-          [92, 481, "Mitgliedsbeitrag"],
-          [161, 481, " ist fällig! "],
-          [71, 460, "Bis bald"],
+          [71, 651, "Bottom Member"],
+          [71, 639, "Greatstreet 345"],
+          [71, 626, "3456 Greattown"],
+          [71, 528, "Mitgliedsbeitrag"],
+          [71, 499, "Hallo"],
+          [71, 475, "Dein "],
+          [93, 475, "Mitgliedsbeitrag"],
+          [167, 475, " ist fällig! "],
+          [71, 450, "Bis bald"],
           [28, 290, "Empfangsschein"],
           [28, 265, "Konto / Zahlbar an"],
           [28, 256, "CH93 0076 2011 6238 5295 7"],

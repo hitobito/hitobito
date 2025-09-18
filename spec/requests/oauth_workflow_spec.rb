@@ -18,7 +18,7 @@ describe "OauthWorkflow" do
       get oauth_authorization_path,
         params: {client_id: @app.uid, client_secret: @app.secret, redirect_uri: redirect_uri, response_type: :code,
                  scope: :openid, prompt: :login}
-      expect(response).to redirect_to("http://www.example.com/users/sign_in?oauth=true")
+      expect(response).to redirect_to("http://www.example.com/de/users/sign_in?oauth=true")
     end
 
     it "redirects to oauth login if authenticated but login is set to prompt" do
@@ -26,7 +26,7 @@ describe "OauthWorkflow" do
       get oauth_authorization_path,
         params: {client_id: @app.uid, client_secret: @app.secret, redirect_uri: redirect_uri, response_type: :code,
                  scope: :openid, prompt: "login"}
-      expect(response).to redirect_to("http://www.example.com/users/sign_in?oauth=true")
+      expect(response).to redirect_to("http://www.example.com/de/users/sign_in?oauth=true")
     end
 
     it "prompts for authorization if authenticated and no prompt is set" do

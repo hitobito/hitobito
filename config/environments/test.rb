@@ -76,6 +76,9 @@ Rails.application.configure do
 
   routes.default_url_options[:host] = "test.host"
 
+  Settings.application.languages = { de: "Deutsch", en: "English", fr: "Français" }
+  default_url_options[:locale] = :de
+
   unless ENV["RAILS_ENABLE_TEST_LOG"]
     logger = ActiveSupport::Logger.new(nil)
     config.logger = ActiveSupport::TaggedLogging.new(logger)

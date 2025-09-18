@@ -78,10 +78,18 @@ module ContactableDecorator
   end
 
   def block_icon(email)
-    return unless Bounce.blocked?(email)
+    return unless email_blocked?(email)
 
     h.icon("exclamation-triangle", class: "text-danger",
       title: h.t("contactable.contact_data.blocked_mail_tooltip_title"))
+  end
+
+  def email_blocked?(email)
+    if context[:blocked_emails]
+      context[:blocked_emails].include?(Bounce.normalize_email(email))
+    else
+      Bounce.blocked?(email)
+    end
   end
 
   private

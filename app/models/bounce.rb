@@ -55,7 +55,17 @@ class Bounce < ApplicationRecord
       return false if FeatureGate.disabled?("email.bounces")
       return false if email.blank?
 
-      where(email: email.strip.downcase).blocked.exists?
+      where(email: normalize_email(email)).blocked.exists?
+    end
+
+    def blocked_set(emails)
+      return Hash.new(false) if FeatureGate.disabled?("email.bounces")
+
+      Set.new(where(email: emails.map { |email| normalize_email(email) }).blocked.pluck(:email))
+    end
+
+    def normalize_email(email)
+      email.strip.downcase
     end
   end
 

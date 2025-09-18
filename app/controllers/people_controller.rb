@@ -26,7 +26,7 @@ class PeopleController < CrudController
   # required to allow api calls
   protect_from_forgery with: :null_session, only: [:index, :show]
 
-  decorates :group, :person, :people, :add_requests
+  decorates :group, :person, :add_requests
 
   helper_method :index_full_ability?
 
@@ -47,7 +47,7 @@ class PeopleController < CrudController
 
   def index # rubocop:disable Metrics/AbcSize we support a lot of formats, hence many code-branches
     respond_to do |format|
-      format.html { @people = prepare_entries(filter_entries).page(params[:page]) }
+      format.html { @people = decorated_entries }
       format.pdf { render_pdf_in_background(filter_entries, group, "people_#{group.id}") }
       format.csv { render_tabular_entries_in_background(:csv) }
       format.xlsx { render_tabular_entries_in_background(:xlsx) }
@@ -125,6 +125,15 @@ class PeopleController < CrudController
     super
   end
 
+  def decorated_entries
+    list = prepare_entries(filter_entries).page(params[:page])
+    PaginatingDecorator.new(
+      list,
+      with: PersonDecorator,
+      context: {blocked_emails: load_blocked_emails(list)}
+    )
+  end
+
   def assign_attributes
     if model_params.present? && !can?(:update_email, entry)
       model_params.delete(:email)
@@ -145,6 +154,13 @@ class PeopleController < CrudController
       @add_requests = entry.add_requests.includes(:body, requester: {roles: :group})
       set_add_request_status_notification if show_add_request_status?
     end
+  end
+
+  def load_blocked_emails(people)
+    emails = people.flat_map do |person|
+      [person.email, *person.additional_emails.map(&:value)]
+    end.uniq.compact
+    Bounce.blocked_set(emails)
   end
 
   def show_add_request_status?

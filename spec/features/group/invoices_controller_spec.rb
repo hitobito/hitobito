@@ -96,7 +96,7 @@ describe InvoicesController do
       expect do
         click_link("Rechnung inkl. Einzahlungsschein")
       end.to change { Delayed::Job.count }.by(1)
-      expect(page).to have_current_path("/groups/#{group.id}/invoices/#{invoice.id}?returning=true")
+      expect(page).to have_current_path("/de/groups/#{group.id}/invoices/#{invoice.id}?returning=true")
       expect(page).to have_content(/Die Downloads werden vorbereitet, bitte warten/)
     end
 
@@ -105,7 +105,7 @@ describe InvoicesController do
       expect do
         click_link("Rechnung separat")
       end.to change { Delayed::Job.count }.by(1)
-      expect(page).to have_current_path("/groups/#{group.id}/invoices/#{invoice.id}?returning=true")
+      expect(page).to have_current_path("/de/groups/#{group.id}/invoices/#{invoice.id}?returning=true")
       expect(page).to have_content(/Die Downloads werden vorbereitet, bitte warten/)
     end
 
@@ -114,7 +114,7 @@ describe InvoicesController do
       expect do
         click_link("Einzahlungsschein separat")
       end.to change { Delayed::Job.count }.by(1)
-      expect(page).to have_current_path("/groups/#{group.id}/invoices/#{invoice.id}?returning=true")
+      expect(page).to have_current_path("/de/groups/#{group.id}/invoices/#{invoice.id}?returning=true")
       expect(page).to have_content(/Die Downloads werden vorbereitet, bitte warten/)
     end
   end

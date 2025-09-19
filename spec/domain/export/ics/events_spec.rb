@@ -54,7 +54,7 @@ describe Export::Ics::Events do
       is_expected.to include(contact.person_name)
       is_expected.to include(contact.email)
       url = Rails.application.routes.url_helpers.group_event_url(event.groups.first, event,
-        host: ENV["RAILS_HOST_NAME"], locale: :de)
+        host: ENV["RAILS_HOST_NAME"], locale: nil)
       is_expected.to include(url)
     end
   end

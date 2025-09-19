@@ -208,6 +208,11 @@ RSpec.configure do |config|
       RescueRegistry.context = nil
     end
   end
+
+  # See: https://github.com/rspec/rspec-rails/issues/1275
+  config.before(type: :feature) do
+    self.default_url_options = Rails.application.default_url_options.merge(locale: :de)
+  end
 end
 
 require "capybara/rails"

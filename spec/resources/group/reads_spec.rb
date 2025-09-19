@@ -55,7 +55,7 @@ describe GroupResource, type: :resource do
     def read_attr(attr)
       return group.public_send(attr) unless /self_registration_url/.match?(attr)
 
-      group_self_registration_url(group, locale: nil)
+      group_self_registration_url(group, locale: :de)
     end
 
     it "works" do
@@ -89,7 +89,7 @@ describe GroupResource, type: :resource do
         allow_any_instance_of(Group).to receive(:self_registration_active?).and_return(true)
         render
 
-        expect(jsonapi_data[0]["self_registration_url"]).to eq(group_self_registration_url(group, locale: nil))
+        expect(jsonapi_data[0]["self_registration_url"]).to eq(group_self_registration_url(group, locale: :de))
       end
 
       it "is blank if group.self_registration_active? is false" do

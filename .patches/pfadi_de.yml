@@ -1,4 +1,10 @@
 ---
+- :method: :person_attributes
+  :constant: Export::Tabular::People::PeopleAddress
+  :wagon: pfadi_de
+  :source_file: hitobito/app/domain/export/tabular/people/people_address.rb
+  :patch_file: hitobito_pfadi_de/app/domain/pfadi_de/export/tabular/people/people_address.rb
+  :patch_file_line: 11
 - :method: :permitted_attrs
   :constant: GroupsController
   :wagon: pfadi_de

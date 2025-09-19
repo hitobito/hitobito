@@ -1161,12 +1161,12 @@ describe PeopleController do
 
     it "redirects to login when trying to show page" do
       get :show, params: {group_id: group.id, id: top_leader.id}
-      is_expected.to redirect_to("http://test.host/users/sign_in")
+      is_expected.to redirect_to("http://test.host/de/users/sign_in")
     end
 
     it "redirects to login when trying to index page" do
       get :index, params: {group_id: group.id}
-      is_expected.to redirect_to("http://test.host/users/sign_in")
+      is_expected.to redirect_to("http://test.host/de/users/sign_in")
     end
 
     context "bottom_group" do
@@ -1179,17 +1179,17 @@ describe PeopleController do
 
       it "redirects to login when trying to show leader in list" do
         get :index, params: {group_id: group.id}
-        is_expected.to redirect_to("http://test.host/users/sign_in")
+        is_expected.to redirect_to("http://test.host/de/users/sign_in")
       end
 
       it "redirects to login when trying to show leader" do
         get :show, params: {group_id: group.id, id: @leader.id}
-        is_expected.to redirect_to("http://test.host/users/sign_in")
+        is_expected.to redirect_to("http://test.host/de/users/sign_in")
       end
 
       it "redirects to login when trying to view member" do
         get :show, params: {group_id: group.id, id: @member.id}
-        is_expected.to redirect_to("http://test.host/users/sign_in")
+        is_expected.to redirect_to("http://test.host/de/users/sign_in")
       end
     end
   end

@@ -18,7 +18,7 @@ describe People::Membership::VerificationQrCode do
       expect(person).to receive(:membership_verify_token).and_return("aSuperSweetToken42")
       expect(ENV).to receive(:fetch).with("RAILS_HOST_NAME", "localhost:3000").and_return("hitobito.example.com")
 
-      bottom_member_qr_code = RQRCode::QRCode.new("http://hitobito.example.com/verify_membership/aSuperSweetToken42").to_s
+      bottom_member_qr_code = RQRCode::QRCode.new("http://hitobito.example.com/verify_membership/aSuperSweetToken42?locale=de").to_s
       expect(qr_code.to_s).to eq(bottom_member_qr_code)
     end
   end

@@ -94,6 +94,7 @@ RSpec.configure do |config|
   config.include MailerMacros
   config.include EventMacros
   config.include I18nHelpers
+  config.include GlobalizedHelpers
   config.include QueryHelpers
   config.include ViewHelpers
   config.include Devise::Test::ControllerHelpers, type: :controller
@@ -206,6 +207,11 @@ RSpec.configure do |config|
     config.after do
       RescueRegistry.context = nil
     end
+  end
+
+  # See: https://github.com/rspec/rspec-rails/issues/1275
+  config.before(type: :feature) do
+    self.default_url_options = Rails.application.default_url_options
   end
 end
 

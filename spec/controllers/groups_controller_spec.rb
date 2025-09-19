@@ -14,7 +14,7 @@ describe GroupsController do
   describe "authentication" do
     it "redirects to login" do
       get :show, params: {id: group.id}
-      is_expected.to redirect_to "/users/sign_in"
+      is_expected.to redirect_to "/de/users/sign_in"
     end
 
     it "renders template when signed in" do
@@ -383,7 +383,7 @@ describe GroupsController do
 
     it "GET index redirect to login" do
       get :show, params: {id: group.id}
-      is_expected.to redirect_to("http://test.host/users/sign_in")
+      is_expected.to redirect_to("http://test.host/de/users/sign_in")
     end
   end
 

@@ -660,12 +660,12 @@ describe EventsController do
 
     it "GET index redirects to login" do
       get :index, params: {group_id: group.id}
-      is_expected.to redirect_to("http://test.host/users/sign_in")
+      is_expected.to redirect_to("http://test.host/de/users/sign_in")
     end
 
     it "GET show redirects to login" do
       get :show, params: {group_id: group.id, id: event}
-      is_expected.to redirect_to("http://test.host/users/sign_in")
+      is_expected.to redirect_to("http://test.host/de/users/sign_in")
     end
   end
 

@@ -220,7 +220,7 @@ RSpec.configure do |config|
 
   # See: https://github.com/rspec/rspec-rails/issues/1275
   config.before(type: :feature) do
-    self.default_url_options = Rails.application.default_url_options.merge(locale: :de)
+    self.default_url_options = Rails.application.default_url_options
   end
 end
 

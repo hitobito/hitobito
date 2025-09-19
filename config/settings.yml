@@ -28,8 +28,6 @@ application:
   languages:
     # first entry is considered the default language
     de: Deutsch
-    en: English
-    fr: Français
 
 <% mail_domain = ENV['RAILS_MAIL_DOMAIN'].presence ||
                  ENV['RAILS_HOST_NAME'].presence ||

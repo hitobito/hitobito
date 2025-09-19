@@ -963,12 +963,12 @@ describe PeopleController do
 
       it "redirects when token is nil" do
         get :show, params: {group_id: group.id, id: top_leader.id, user_token: "", user_email: top_leader.email}
-        is_expected.to redirect_to new_person_session_path
+        is_expected.to redirect_to new_person_session_path(locale: nil)
       end
 
       it "redirects when token is invalid" do
         get :show, params: {group_id: group.id, id: top_leader.id, user_token: "yadayada", user_email: top_leader.email}
-        is_expected.to redirect_to new_person_session_path
+        is_expected.to redirect_to new_person_session_path(locale: nil)
       end
 
       it "shows page when token is valid" do
@@ -1193,12 +1193,12 @@ describe PeopleController do
 
     it "redirects to login when trying to show page" do
       get :show, params: {group_id: group.id, id: top_leader.id}
-      is_expected.to redirect_to("http://test.host/de/users/sign_in")
+      is_expected.to redirect_to("http://test.host/users/sign_in")
     end
 
     it "redirects to login when trying to index page" do
       get :index, params: {group_id: group.id}
-      is_expected.to redirect_to("http://test.host/de/users/sign_in")
+      is_expected.to redirect_to("http://test.host/users/sign_in")
     end
 
     context "bottom_group" do
@@ -1211,17 +1211,17 @@ describe PeopleController do
 
       it "redirects to legin when trying to show leader in list" do
         get :index, params: {group_id: group.id}
-        is_expected.to redirect_to("http://test.host/de/users/sign_in")
+        is_expected.to redirect_to("http://test.host/users/sign_in")
       end
 
       it "redirects to login when trying to show leader" do
         get :show, params: {group_id: group.id, id: @leader.id}
-        is_expected.to redirect_to("http://test.host/de/users/sign_in")
+        is_expected.to redirect_to("http://test.host/users/sign_in")
       end
 
       it "redirects to login when trying to view member" do
         get :show, params: {group_id: group.id, id: @member.id}
-        is_expected.to redirect_to("http://test.host/de/users/sign_in")
+        is_expected.to redirect_to("http://test.host/users/sign_in")
       end
     end
   end

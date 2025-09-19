@@ -217,6 +217,11 @@ RSpec.configure do |config|
     match = metadata[:location].match(%r{/spec/([^/]+)/})
     metadata[:type] = match[1].singularize.to_sym
   end
+
+  # See: https://github.com/rspec/rspec-rails/issues/1275
+  config.before(type: :feature) do
+    self.default_url_options = Rails.application.default_url_options.merge(locale: :de)
+  end
 end
 
 require "capybara/rails"

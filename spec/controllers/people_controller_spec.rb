@@ -1177,7 +1177,7 @@ describe PeopleController do
         @leader = Fabricate(Group::BottomGroup::Leader.sti_name, group: group).person
       end
 
-      it "redirects to legin when trying to show leader in list" do
+      it "redirects to login when trying to show leader in list" do
         get :index, params: {group_id: group.id}
         is_expected.to redirect_to("http://test.host/users/sign_in")
       end

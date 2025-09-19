@@ -4,6 +4,11 @@
 #  https://github.com/hitobito/hitobito.
 
 application:
+  languages:
+    de: Deutsch
+    en: English
+    fr: Français
+
   additional_languages:
     en: Englisch
     fr: Französisch

@@ -7,6 +7,7 @@
 ## Version 2.6
 
 - Beim Anmelden zu einem Event wurde das Formular der Anmeldefragen überarbeitet um längere Fragen auch auf kleineren Screens besser abzubilden (hitobito/hitobito_sac_cas#1278)
+- Für eine bessere Unterstützung von Sonderzeichen, wird in PDFs von QR Code Rechnungen jetzt die Schrift Liberation Sans verwendet (#3622)
 
 ## Version 2.6
 

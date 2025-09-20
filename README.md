@@ -97,7 +97,7 @@ Before opening any pull request or issue, please search for existing [issues](ht
 Hitobito made with 💙 and the incredible community:
 
 * Jungwacht Blauring Schweiz
-* [Puzzle ITC GmbH](https://www.puzzle.ch)
+* [Puzzle ITC AG](https://www.puzzle.ch)
 * Pfadibewegung Schweiz
 * Hitobito AG
 * CEVI Regionalverband ZH-SH-GL / CEVI Schweiz

@@ -369,10 +369,6 @@ en:
     date: "Date %{index}"
 
   event:
-    guests:
-      new:
-        title: Gast hinzufügen
-        add_more_guests: "Anmelden und weiteren Gast hinzufügen (max. %{limit})"
     run_by: "Operated by"
     applied_to: Registration to
     alternative_dates: Alternative dates
@@ -400,8 +396,6 @@ en:
       already_assigned: "This person was already assigned or registered for a different event."
       maximum_participations_reached: Die maximal erlaubte Teilnehmerzahl ist erreicht. Um weitere Anmeldungen zu bestätigen, muss die maximale Teilnehmerzahl erhöht werden.
       participation:
-        guest_of_html: "(Gast von %{main_applicant})"
-        guest_of_deleted_participation: "(Gast von abgemeldeter Person)"
         registered_at: "Registration on %{datetime}"
         town: town
       prio_buttons:
@@ -463,16 +457,14 @@ en:
       actions_approval:
         approve_button: "Approve"
         reject_button: "Decline"
-      fields:
-        send_email: E-Mail an Teilnehmer/in senden
-        registration_details: Anmeldeangaben
-        administrative_information: Administrationsangaben
       form:
         title_new: "Register as %{role}"
         title_edit: "Edit registration from %{person}"
         apply: "Register"
-      new:
-        add_guests: "Anmelden und Gast hinzufügen (max. %{limit})"
+        explain_required_checkmark: "* = Antwort obligatorisch"
+        send_email: E-Mail an Teilnehmer/in senden
+        registration_details: Anmeldeangaben
+        administrative_information: Administrationsangaben
       application_fields:
         alternative_dates_info: "Please enter more suitable courses."
         course_information: "Information about the courses"
@@ -671,10 +663,6 @@ en:
     show:
       link:
         delete: "Delete application"
-
-  event/guests:
-    guest_added_successfully: "%{guest} wurde erfolgreich als Gast hinzugefügt."
-    not_allowed_due_to_guest_limit: "Du kannst in diesem Anlass keine weiteren Gäste hinzufügen."
 
   event/invitations:
     export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
@@ -2056,7 +2044,6 @@ en:
   steps_component:
     next_link: Next
     prev_link: Back
-    submit: Absenden
 
   household_aside_component:
     add: Create
@@ -2221,14 +2208,3 @@ en:
     not_found: Ungültiger Verifikationscode
     status_valid: Mitgliedschaft gültig
     status_invalid: Keine gültige Mitgliedschaft
-
-  wizards:
-    steps:
-      new_user_form:
-        next_button: Registrieren
-      new_event_guest_contact_data_form:
-        next_button: Weiter
-      new_event_guest_participation_form:
-        next_button: Gast anmelden
-      new_event_guest_contact_data_form_title: Kontaktdaten des Gasts
-      new_event_guest_participation_form_title: Gast anmelden

@@ -102,7 +102,7 @@ class JsonApiController < ActionController::API
   end
 
   def create
-    resource = resource_class.build(params)
+    resource = resource_class.build(params.except(:id))
     if resource.save
       render jsonapi: resource, status: :created
     else

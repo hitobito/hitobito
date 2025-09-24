@@ -30,6 +30,7 @@ class TokenAbility
   def define_token_abilities
     define_base_abilities
     define_person_abilities if token.people?
+    define_register_people_abilities if token.register_people? && write_permission?
     define_event_abilities if token.events?
     define_group_abilities if token.groups?
     define_role_abilities if token.people? && token.groups?
@@ -81,6 +82,12 @@ class TokenAbility
       Role.where(person: p, group: groups).present? &&
         dynamic_user_ability.can?(:update, p)
     end
+  end
+
+  def define_register_people_abilities
+    groups = token.layer_and_below_full? ? token_layer_and_below : token_layer_and_local_subgroups
+    can :register_people, Group,
+      {id: groups.filter(&:self_registration_active?).map(&:id)}
   end
 
   def define_event_abilities
@@ -143,6 +150,10 @@ class TokenAbility
 
   def token_layer_and_below
     token.layer.self_and_descendants
+  end
+
+  def token_layer_and_local_subgroups
+    Group.where(layer_group_id: token.layer_group_id)
   end
 
   def write_permission?

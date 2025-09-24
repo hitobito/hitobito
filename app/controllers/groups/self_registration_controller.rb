@@ -9,6 +9,7 @@ class Groups::SelfRegistrationController < Wizards::BaseController
   skip_authorization_check
 
   before_action :assert_empty_honeypot
+  before_action :assert_group_not_archived
   before_action :redirect_to_group_if_necessary
 
   helper_method :group, :policy_finder
@@ -57,6 +58,12 @@ class Groups::SelfRegistrationController < Wizards::BaseController
 
   def assert_empty_honeypot
     if params.delete(:verification).present?
+      redirect_to new_person_session_path
+    end
+  end
+
+  def assert_group_not_archived
+    if group.archived_at.present?
       redirect_to new_person_session_path
     end
   end

@@ -5,5 +5,5 @@
       - caption_key = for_someone_else ? 'for_someone_else' : 'for_self'
       = f.boolean_field(:privacy_policy_accepted, caption: t(".acceptance_caption.#{caption_key}"), required: true)
       .privacy-policies
-        - policy_finder.groups.each do |group|
-          = link_to(safe_join([icon('file-alt'), ' ', group.privacy_policy_title]), upload_url(group, :privacy_policy), target: :_blank)
+        - policy_finder.all.each do |policy|
+          = link_to(safe_join([icon('file-alt'), ' ', policy[:title]]), upload_url(policy[:group], :privacy_policy), target: :_blank)

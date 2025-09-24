@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_07_30_120000) do
+ActiveRecord::Schema[7.1].define(version: 2025_09_22_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -1139,6 +1139,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_30_120000) do
     t.boolean "event_participations", default: false, null: false
     t.boolean "mailing_lists", default: false, null: false
     t.string "permission", default: "layer_read", null: false
+    t.boolean "register_people", default: false, null: false
   end
 
   create_table "sessions", id: :serial, force: :cascade do |t|

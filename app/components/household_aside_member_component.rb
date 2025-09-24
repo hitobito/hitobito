@@ -27,7 +27,7 @@ class HouseholdAsideMemberComponent < ApplicationComponent
   private
 
   def entries
-    [person, *person.household_people]
+    @entries ||= [person, *person.household_people]
   end
 
   def person_entry(member)

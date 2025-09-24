@@ -1607,6 +1607,8 @@ it:
       index:
         my_subscriptions: I miei abbonamenti
         available_subscriptions: Abbonamenti disponibili
+        show_all: Mostrare tutti gli abbonamenti
+        show_ancestors: Mostrare gli abbonamenti superiori
       create:
         success: <i>%{person}</i> è stato iscritto/a a <i>%{mailing_list}</i>.
       destroy:

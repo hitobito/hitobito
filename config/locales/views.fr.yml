@@ -1607,6 +1607,8 @@ fr:
       index:
         my_subscriptions: Mes abonnements
         available_subscriptions: Abonnements disponibles
+        show_all: Afficher tous les abonnements
+        show_ancestors: Afficher les abonnements supérieurs
       create:
         success: <i>%{person}</i>a été inscrit-e à <i>%{mailing_list}</i>.
       destroy:

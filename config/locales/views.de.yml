@@ -1596,6 +1596,8 @@ de:
       index:
         my_subscriptions: Meine Abos
         available_subscriptions: Verfügbare Abos
+        show_all: Alle Abos anzeigen
+        show_ancestors: Übergeordnete Abos anzeigen
       create:
         success: <i>%{person}</i> wurde für <i>%{mailing_list}</i> angemeldet.
       destroy:

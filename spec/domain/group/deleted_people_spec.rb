@@ -126,13 +126,13 @@ describe Group::DeletedPeople do
 
     it "doesnt find when not visible from above" do
       Fabricate(Role::External.name.to_sym, group: bottom_group, person: person,
-        start_on: 30.day.ago)
+        start_on: 30.days.ago)
       role_top.destroy
       expect(Group::DeletedPeople.deleted_for(group).count).to eq 0
     end
 
     it "finds multiple people" do
-      end_on = 1.months.ago
+      end_on = 1.month.ago
       role_top.update_column(:end_on, end_on)
       top2 = Fabricate(Group::TopLayer::TopAdmin.name, group: group,
         start_on: 1.year.ago)

@@ -8,10 +8,10 @@ module AbilityDsl
     # rubocop:disable Style/MutableConstant These constants are meant to be extended
     GROUP_PERMISSIONS = [:layer_and_below_full, :layer_and_below_read, :layer_full, :layer_read,
       :group_and_below_full, :group_and_below_read, :group_full, :group_read,
-      :finance, :see_invisible_from_above]
+      :finance, :see_invisible_from_above, :manual_deletion]
 
     LAYER_PERMISSIONS = [:layer_and_below_full, :layer_and_below_read, :layer_full, :layer_read,
-      :finance, :see_invisible_from_above]
+      :finance, :see_invisible_from_above, :manual_deletion]
     # rubocop:enable Style/MutableConstant
 
     attr_reader :user, :admin

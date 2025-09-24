@@ -21,7 +21,12 @@ class People::ManualDeletionsController < ApplicationController
   end
 
   def minimize
-    raise StandardError.new("can not minimize") unless minimizeable?
+    if !minimizeable?
+      # With the :destroy permission, a user can be minimized even though minimizable is false
+      unless can?(:destroy, entry)
+        raise StandardError.new("can not minimize")
+      end
+    end
 
     People::Minimizer.new(entry).run
 
@@ -29,7 +34,12 @@ class People::ManualDeletionsController < ApplicationController
   end
 
   def delete
-    raise StandardError.new("can not delete") unless deleteable?
+    if !deleteable? &&
+        # With the :destroy permission, a user can be deleted even though deletable is false
+        unless can?(:destroy, entry)
+          raise StandardError.new("can not delete")
+        end
+    end
 
     People::Destroyer.new(entry).run
 

@@ -61,7 +61,7 @@ describe AbilityDsl::UserContext do
     it { expect(subject.permission_layer_ids(:layer_and_below_full)).to eq [groups(:bottom_layer_one).id] }
     it { expect(subject.permission_layer_ids(:layer_and_below_read)).to eq [groups(:bottom_layer_one).id] }
     its(:admin) { should be_falsey }
-    its(:all_permissions) { is_expected.to contain_exactly(:layer_and_below_full, :layer_and_below_read, :group_read, :group_and_below_read, :contact_data, :approve_applications) }
+    its(:all_permissions) { is_expected.to contain_exactly(:layer_and_below_full, :layer_and_below_read, :group_read, :group_and_below_read, :contact_data, :approve_applications, :manual_deletion) }
   end
 
   describe "permission implication for groups" do

@@ -17,18 +17,13 @@ describe GroupAbility do
   context "layer and below full" do
     let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
 
+    before do
+      allow(Group::TopGroup::Leader).to receive(:permissions).and_return([:layer_and_below_full])
+    end
+
     context "without specific group" do
       it "may not create subgroup" do
         is_expected.not_to be_able_to(:create, Group.new)
-      end
-    end
-
-    context "in own layer" do
-      let(:role) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)) }
-      let(:group) { role.group }
-
-      it "may manually delete people" do
-        is_expected.to be_able_to(:manually_delete_people, group)
       end
     end
 
@@ -78,6 +73,10 @@ describe GroupAbility do
 
       it "may view log" do
         is_expected.to be_able_to(:log, group)
+      end
+
+      it "may not manually delete people" do
+        is_expected.to_not be_able_to(:manually_delete_people, group)
       end
     end
 
@@ -139,6 +138,10 @@ describe GroupAbility do
   context "layer and below full in lower layer" do
     let(:role) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)) }
 
+    before do
+      allow(Group::BottomLayer::Leader).to receive(:permissions).and_return([:layer_and_below_full])
+    end
+
     context "in own group" do
       let(:group) { role.group }
 
@@ -174,8 +177,8 @@ describe GroupAbility do
         is_expected.to be_able_to(:log, group)
       end
 
-      it "may manually delete people" do
-        is_expected.to be_able_to(:manually_delete_people, group)
+      it "may not manually delete people" do
+        is_expected.not_to be_able_to(:manually_delete_people, group)
       end
     end
 
@@ -691,6 +694,22 @@ describe GroupAbility do
 
     it "layer_full permission may not sync on root group" do
       expect(Ability.new(people(:bottom_member))).not_to be_able_to(:sync_addresses, groups(:top_layer))
+    end
+  end
+
+  describe :manual_deletion do
+    let(:role) { Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: groups(:top_layer)) }
+
+    before do
+      allow(Group::TopLayer::TopAdmin).to receive(:permissions).and_return([:manual_deletion])
+    end
+
+    it "may manually delete people" do
+      is_expected.to be_able_to(:manually_delete_people, groups(:top_layer))
+    end
+
+    it "may not manually delete people in layer below" do
+      is_expected.not_to be_able_to(:manually_delete_people, groups(:bottom_layer_one))
     end
   end
 end

@@ -1,33 +1,38 @@
 = render_attrs(entry, :name, :uid, :secret, :redirect_uri, :additional_audiences, :scopes, :cors_origins, :skip_consent_screen)
 
 %dl.dl-horizontal.border-top.pt-2
-  %dt.muted.float-start.text-end Application Logo
-  %dd
-    = image_tag(upload_url(entry, :logo), size: '64x64')
+  .labeled-grid
+    %dt.muted.float-start.text-end Application Logo
+    %dd
+      = image_tag(upload_url(entry, :logo), size: '64x64')
 
 %dl.dl-horizontal.border-top.pt-2
-  %dt.muted.float-start.text-end Discovery Endpoint
-  %dd
-    %div= oauth_discovery_provider_url(locale: nil)
+  .labeled-grid
+    %dt.muted.float-start.text-end Discovery Endpoint
+    %dd
+      %div= oauth_discovery_provider_url(locale: nil)
 
 %dl.dl-horizontal.border-top.pt-2
-  %dt.muted.float-start.text-end Authorization Endpoint
-  %dd
-    %div= oauth_authorization_url(locale: nil)
-    %div= oauth_spec_link('section-3.1')
-    %div= oauth_spec_link('section-4.1.1')
+  .labeled-grid
+    %dt.muted.float-start.text-end Authorization Endpoint
+    %dd
+      %div= oauth_authorization_url(locale: nil)
+      %div= oauth_spec_link('section-3.1')
+      %div= oauth_spec_link('section-4.1.1')
 
 %dl.dl-horizontal.border-top.pt-2
-  %dt.muted.float-start.text-end Token Endpoint
-  %dd
-    %div= oauth_token_url(locale: nil)
-    %div= oauth_spec_link('section-3.2')
-    %div= oauth_spec_link('section-4.1.3')
+  .labeled-grid
+    %dt.muted.float-start.text-end Token Endpoint
+    %dd
+      %div= oauth_token_url(locale: nil)
+      %div= oauth_spec_link('section-3.2')
+      %div= oauth_spec_link('section-4.1.3')
 
 %dl.dl-horizontal.border-top.pt-2
-  %dt.muted.float-start.text-end Profile Endpoint
-  %dd
-    %div= oauth_profile_url
-    .well
-      %p= t('.profile_endpoint_help')
-      %code= t('.profile_endpoint_example', url: oauth_profile_url)
+  .labeled-grid
+    %dt.muted.float-start.text-end Profile Endpoint
+    %dd
+      %div= oauth_profile_url
+      .well
+        %p= t('.profile_endpoint_help')
+        %code= t('.profile_endpoint_example', url: oauth_profile_url)

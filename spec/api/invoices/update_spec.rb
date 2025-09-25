@@ -38,27 +38,5 @@ RSpec.describe "invoices#show", type: :request do
         }.to change { invoice.reload.state }.to("issued")
       end
     end
-
-    describe "side posting item" do
-      let(:payload) do
-        {
-          data: {
-            id: invoice.id.to_s,
-            type: "invoices",
-            attributes: {
-              state: "issued"
-            }
-          }
-        }
-      end
-
-      it "updates the resource" do
-        expect(InvoiceResource).to receive(:find).and_call_original
-        expect {
-          make_request
-          expect(response.status).to eq(200), response.body
-        }.to change { invoice.reload.state }.to("issued")
-      end
-    end
   end
 end

@@ -25,6 +25,15 @@ class Group::PrivacyPolicyFinder
     end
   end
 
+  def all
+    @all ||= groups.map do |group|
+      {
+        group: group,
+        title: group.privacy_policy_title
+      }
+    end
+  end
+
   private
 
   def already_accepted?

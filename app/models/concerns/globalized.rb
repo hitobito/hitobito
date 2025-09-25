@@ -5,6 +5,8 @@
 
 module Globalized
   extend ActiveSupport::Concern
+  ATTRIBUTE_LOCALE_REGEX = /^(?<attribute>.*)_(?<locale>[a-z]{2})$/
+  def self.globalize_inputs? = Settings.application.languages.keys.length > 1
 
   included do
     before_destroy :remember_translated_label
@@ -14,8 +16,46 @@ module Globalized
   end
 
   module ClassMethods
+    include GlobalizeAccessors
     def translates(*columns)
       super(*columns, fallbacks_for_empty_translations: true)
+      globalize_accessors
+    end
+
+    # Copies all validators that are defined for globalized attributes to their associated globalized accessors
+    # This happens for all kinds of validators except presence and uniqueness validators
+    # Presence validators are excluded, since a field should only have to be filled in one language, which in this case is the selected locale
+    # Uniqueness validators are excluded, since the globalized accessors are not backed by a DB column
+    # The first condition on the copied validators ensures that validations are not run twice for the current locale (on the base attribute and the globalized accessor)
+    # The second condition ensures that tests still work when they are run with one locale after globalizing the models
+    def copy_validators_to_globalized_accessors
+      return unless Globalized.globalize_inputs?
+
+      translated_attribute_names.each do |attr|
+        attributes = Settings.application.languages.keys.map { |locale| :"#{attr}_#{locale}" }
+
+        next if attributes.any? { |a| validators_on(a).present? }
+
+        validators_on(attr).each do |validator|
+          next if validator.is_a?(ActiveRecord::Validations::PresenceValidator) || validator.is_a?(ActiveRecord::Validations::UniquenessValidator)
+
+          attributes.each do |attribute|
+            validates_with validator.class, validator.options.merge(attributes: attribute, if: proc { !attribute.end_with?("_#{I18n.locale}") && Settings.application.languages.key?(attribute[-2..].to_sym) })
+          end
+        end
+      end
+    end
+
+    def human_attribute_name(*options)
+      return super unless Globalized.globalize_inputs?
+
+      attribute = options.first.to_sym
+      if globalize_attribute_names.include? attribute
+        attribute, locale = attribute.match(ATTRIBUTE_LOCALE_REGEX).captures
+
+        return "#{super(attribute, *options.drop(1))} (#{locale.upcase})"
+      end
+      super
     end
 
     # Inspired by https://github.com/rails/actiontext/issues/32#issuecomment-450653800
@@ -28,7 +68,9 @@ module Globalized
 
       after_update do
         columns.each do |col|
-          translation.send(col).save if translation.send(col).changed?
+          translations.each do |translation|
+            translation.send(col).save if translation.send(col).changed?
+          end
         end
       end
 
@@ -74,9 +116,30 @@ module Globalized
     end
   end
 
+  def attributes
+    globalize_attribute_values = self.class.globalize_attribute_names.inject({}) do |attributes, name|
+      attributes.merge(name.to_s => send(name))
+    end
+    super.merge(globalize_attribute_values)
+  end
+
   private
 
   def remember_translated_label
     to_s # fetches the required translations and keeps them around
+  end
+end
+
+# Monkey patch the save method of Globalize because we want to use fallbacks, which Globalize normally doesn't
+module Globalize::ActiveRecord::InstanceMethods
+  def save(...)
+    result = Globalize.with_locale(translation.locale || I18n.default_locale) do
+      super
+    end
+    if result
+      globalize.clear_dirty
+    end
+
+    result
   end
 end

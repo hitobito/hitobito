@@ -32,7 +32,7 @@ describe "event/participations/_actions_show.html.haml" do
 
     before { render }
 
-    its([:href]) { should eq edit_group_person_path(user.groups.first, user, return_url: "/groups/42/events/42/participations/42") }
+    its([:href]) { should eq edit_group_person_path(user.groups.first, user, return_url: "/de/groups/42/events/42/participations/42") }
     its(:text) { should eq " Kontaktdaten ändern" } # space because of icon
   end
 

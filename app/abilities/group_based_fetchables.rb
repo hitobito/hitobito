@@ -71,12 +71,16 @@ class GroupBasedFetchables
   end
 
   def layer_groups_with_permissions(*permissions)
-    groups_with_permissions(*permissions).collect(&:layer_group).uniq
+    ids = permissions.collect { |p| user_context.permission_layer_ids(p) }
+      .flatten
+      .uniq
+    Group.where(id: ids)
   end
 
   def groups_with_permissions(*permissions)
-    permissions.collect { |p| user.groups_with_permission(p) }
+    ids = permissions.collect { |p| user_context.permission_group_ids(p) }
       .flatten
       .uniq
+    Group.where(id: ids)
   end
 end

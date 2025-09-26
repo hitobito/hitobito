@@ -60,10 +60,10 @@ class PersonReadables < GroupBasedReadables
 
   def has_group_based_conditions?
     layer_groups_see_invisible_from_above.present? ||
-      groups_same_group.present? ||
-      groups_above_group.present? ||
-      layer_groups_same_layer.present? ||
-      layer_groups_above.present?
+      group_ids_same_group.present? ||
+      group_ids_above_group.present? ||
+      layer_group_ids_same_layer.present? ||
+      layer_group_ids_above.present?
   end
 
   def contact_data_condition

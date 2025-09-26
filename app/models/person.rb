@@ -427,7 +427,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def greeting_name
-    first_name.presence || nickname.presence || last_name.presence || company_name
+    nickname.presence || first_name.presence || last_name.presence || company_name
   end
 
   def default_group_id

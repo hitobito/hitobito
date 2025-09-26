@@ -1,6 +1,287 @@
 {
   "resources": [
     {
+      "name": "AdditionalAddressResource",
+      "type": "additional_addresses",
+      "graphql_entrypoint": "additionalAddresses",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "label": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "public": {
+          "type": "boolean",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "contactable_id": {
+          "type": "integer",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "contactable_type": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "address_care_of": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "street": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "housenumber": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "postbox": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "zip_code": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "town": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "country": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        }
+      },
+      "extra_attributes": {
+      },
+      "sorts": {
+        "id": {
+        },
+        "label": {
+        },
+        "public": {
+        },
+        "contactable_id": {
+        },
+        "contactable_type": {
+        },
+        "address_care_of": {
+        },
+        "street": {
+        },
+        "housenumber": {
+        },
+        "postbox": {
+        },
+        "zip_code": {
+        },
+        "town": {
+        },
+        "country": {
+        }
+      },
+      "filters": {
+        "id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "public": {
+          "type": "boolean",
+          "operators": [
+            "eq"
+          ],
+          "single": true
+        },
+        "contactable_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "contactable_type": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "address_care_of": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "street": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "housenumber": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "postbox": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "zip_code": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "town": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "country": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        }
+      },
+      "relationships": {
+      },
+      "stats": {
+        "total": [
+          "count"
+        ]
+      }
+    },
+    {
       "name": "AdditionalEmailResource",
       "type": "additional_emails",
       "graphql_entrypoint": "additionalEmails",
@@ -1784,6 +2065,24 @@
           "writable": "guarded",
           "description": null
         },
+        "picture": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "updated_at": {
+          "type": "datetime",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "additional_information": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
         "language": {
           "type": "string",
           "readable": true,
@@ -1829,6 +2128,12 @@
         "gender": {
         },
         "birthday": {
+        },
+        "picture": {
+        },
+        "updated_at": {
+        },
+        "additional_information": {
         },
         "language": {
         }
@@ -2084,7 +2389,7 @@
             "lte"
           ]
         },
-        "language": {
+        "picture": {
           "type": "string",
           "operators": [
             "eq",
@@ -2108,6 +2413,36 @@
             "gte",
             "lt",
             "lte"
+          ]
+        },
+        "additional_information": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "language": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
           ]
         }
       },
@@ -2328,6 +2663,12 @@
           "writable": false,
           "description": null
         },
+        "name": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
         "person_id": {
           "type": "integer",
           "readable": true,
@@ -2365,6 +2706,8 @@
         "start_on": {
         },
         "end_on": {
+        },
+        "name": {
         },
         "person_id": {
         },
@@ -2429,6 +2772,21 @@
             "gte",
             "lt",
             "lte"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
           ]
         },
         "person_id": {

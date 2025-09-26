@@ -59,6 +59,9 @@ class GroupResource < ApplicationResource
   polymorphic_has_many :phone_numbers, as: :contactable
   polymorphic_has_many :social_accounts, as: :contactable
   polymorphic_has_many :additional_emails, as: :contactable
+  FeatureGate.if :additional_address do
+    polymorphic_has_many :additional_addresses, as: :contactable
+  end
 
   filter :with_deleted, :boolean, :single do
     eq do |scope, value|

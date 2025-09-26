@@ -127,66 +127,66 @@ jobs:
         run: |
           bundle exec rake db:seed wagon:seed
 
-  wagon_patches:
-    runs-on: "ubuntu-22.04"
-    permissions:
-      contents: write
-    env:
-      RAILS_DB_ADAPTER: postgresql
-      RAILS_DB_HOST: 127.0.0.1
-      RAILS_DB_PORT: 5432
-      RAILS_DB_USERNAME: hitobito
-      RAILS_DB_PASSWORD: hitobito
-      RAILS_DB_NAME: hitobito_test
-      RAILS_TEST_DB_NAME: hitobito_test
-      RAILS_ENV: test
-    services:
-      postgres:
-        image: postgres:16
-        env:
-          POSTGRES_USER: hitobito
-          POSTGRES_PASSWORD: hitobito
-          POSTGRES_DB: hitobito_test
-        ports:
-          - "5432:5432"
-        options: >-
-          --health-cmd "pg_isready -U hitobito"
-          --health-interval 10s
-          --health-timeout 10s
-          --health-retries 10
-      memcached:
-        image: "memcached"
-        ports: ["11211:11211"]
-
-    steps:
-      - name: Check out the core, which contains the shared setup action
-        uses: actions/checkout@v4
-        with:
-          repository: hitobito/hitobito
-          ref: ${{ inputs.core_ref }}
-          path: .hitobito_core_repo
-          fetch-depth: 1
-
-      - name: "Prepare"
-        uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup
-        with:
-          assets: false
-          wagon_repository: ${{ inputs.wagon_repository }}
-          wagon_dependency_repository: ${{ inputs.wagon_dependency_repository }}
-          core_ref: ${{ inputs.core_ref }}
-          wagon_dependency_ref: ${{ inputs.wagon_dependency_ref }}
-
-      - name: Run ${{ inputs.wagon_repository }} patch generation
-        working-directory: ${{ inputs.wagon_repository }}
-        run: |
-          bundle exec rake app:wagon:patches:generate
-
-      - name: Commit patches
-        uses: stefanzweifel/git-auto-commit-action@v6
-        with:
-          file_pattern: ".patches.yml"
-          commit_message: Updating patches
-          repository: ${{ inputs.wagon_repository }}
+  # wagon_patches:
+  #   runs-on: "ubuntu-22.04"
+  #   permissions:
+  #     contents: write
+  #   env:
+  #     RAILS_DB_ADAPTER: postgresql
+  #     RAILS_DB_HOST: 127.0.0.1
+  #     RAILS_DB_PORT: 5432
+  #     RAILS_DB_USERNAME: hitobito
+  #     RAILS_DB_PASSWORD: hitobito
+  #     RAILS_DB_NAME: hitobito_test
+  #     RAILS_TEST_DB_NAME: hitobito_test
+  #     RAILS_ENV: test
+  #   services:
+  #     postgres:
+  #       image: postgres:16
+  #       env:
+  #         POSTGRES_USER: hitobito
+  #         POSTGRES_PASSWORD: hitobito
+  #         POSTGRES_DB: hitobito_test
+  #       ports:
+  #         - "5432:5432"
+  #       options: >-
+  #         --health-cmd "pg_isready -U hitobito"
+  #         --health-interval 10s
+  #         --health-timeout 10s
+  #         --health-retries 10
+  #     memcached:
+  #       image: "memcached"
+  #       ports: ["11211:11211"]
+  #
+  #   steps:
+  #     - name: Check out the core, which contains the shared setup action
+  #       uses: actions/checkout@v4
+  #       with:
+  #         repository: hitobito/hitobito
+  #         ref: ${{ inputs.core_ref }}
+  #         path: .hitobito_core_repo
+  #         fetch-depth: 1
+  #
+  #     - name: "Prepare"
+  #       uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup
+  #       with:
+  #         assets: false
+  #         wagon_repository: ${{ inputs.wagon_repository }}
+  #         wagon_dependency_repository: ${{ inputs.wagon_dependency_repository }}
+  #         core_ref: ${{ inputs.core_ref }}
+  #         wagon_dependency_ref: ${{ inputs.wagon_dependency_ref }}
+  #
+  #     - name: Run ${{ inputs.wagon_repository }} patch generation
+  #       working-directory: ${{ inputs.wagon_repository }}
+  #       run: |
+  #         bundle exec rake app:wagon:patches:generate
+  #
+  #     - name: Commit patches
+  #       uses: stefanzweifel/git-auto-commit-action@v6
+  #       with:
+  #         file_pattern: ".patches.yml"
+  #         commit_message: Updating patches
+  #         repository: ${{ inputs.wagon_repository }}
 
   wagon_specs:
     name: specs

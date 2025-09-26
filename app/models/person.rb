@@ -137,6 +137,9 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   # rubocop:enable Style/MutableConstant meant to be extended in wagons
 
+  class_attribute :used_attributes
+  self.used_attributes = PUBLIC_ATTRS + INTERNAL_ATTRS
+
   # Configure which Person attributes can be used to identify a person for login.
   class_attribute :devise_login_id_attrs, default: [:email]
 
@@ -171,20 +174,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     attachable.variant :thumb, resize_to_fill: [32, 32]
   end
 
-  def picture_default
-    "profile.svg"
-  end
-
-  def picture_thumb_default
-    "profile.svg"
-  end
-
-  class_attribute :used_attributes
-  self.used_attributes = PUBLIC_ATTRS + INTERNAL_ATTRS
-
   model_stamper
-  stampable stamper_class_name: :person,
-    deleter: false
+  stampable stamper_class_name: :person, deleter: false
 
   has_paper_trail meta: {main_id: ->(p) { p.id }, main_type: sti_name},
     skip: Person::INTERNAL_ATTRS
@@ -192,6 +183,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   acts_as_taggable
 
   strip_attributes except: [:zip_code]
+
+  attr_accessor :household_people_ids, :shared_access_token, :skip_household
 
   ### ASSOCIATIONS
 
@@ -271,8 +264,6 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     accepts_nested_attributes_for :family_members, allow_destroy: true
   end
 
-  attr_accessor :household_people_ids, :shared_access_token
-
   ### VALIDATIONS
 
   validates_by_schema except: [:email, :data_quality]
@@ -298,7 +289,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   before_destroy :destroy_person_duplicates
   after_save :update_household_address
 
-  ### Scopes
+  ### SCOPES
 
   scope :household, -> { where.not(household_key: nil) }
   scope :with_address, -> {
@@ -518,6 +509,14 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     PersonDuplicate.where(person_1: id).or(PersonDuplicate.where(person_2: id)) # rubocop:disable Naming/VariableNumber
   end
 
+  def picture_default
+    "profile.svg"
+  end
+
+  def picture_thumb_default
+    "profile.svg"
+  end
+
   def remove_picture
     false
   end
@@ -564,9 +563,11 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def update_household_address
-    return if household_key.nil? || (Person::ADDRESS_ATTRS & saved_changes.keys).empty? || saved_changes.key?("household_key")
+    return if household_key.nil? ||
+      skip_household ||
+      (Person::ADDRESS_ATTRS & saved_changes.keys).empty? ||
+      saved_changes.key?("household_key")
 
-    # do not use update context to not trigger all validations for all household members
-    household.save!(context: :update_address)
+    household.update_address!
   end
 end

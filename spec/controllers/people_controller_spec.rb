@@ -11,6 +11,8 @@ describe PeopleController do
   let(:top_leader) { people(:top_leader) }
   let(:group) { groups(:top_group) }
 
+  before { allow(Settings.additional_address).to receive(:enabled).and_return(true) }
+
   context "as top leader" do
     before { sign_in(top_leader) }
 

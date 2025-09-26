@@ -64,6 +64,14 @@ class Household
     true
   end
 
+  def update_address!
+    (people - [reference_person]).each do |person|
+      skipping_household(person) do
+        person.update!(address_attrs)
+      end
+    end
+  end
+
   def destroy
     attribute_will_change!(:members)
     members.clear
@@ -160,15 +168,22 @@ class Household
 
     # generate a fresh key if we don't have one yet
     @household_key ||= next_key
-    people.each { |person| person.update!(address_attrs.merge(household_key:)) }
-    # reload the reference_person as this is a different reference to the same person in `people`
-    # which does not know the updated attributes yet.
-    @reference_person.reload
+    people.each do |person|
+      skipping_household(person) do
+        person.update!(address_attrs.merge(household_key:))
+      end
+    end
+  end
+
+  def skipping_household(person)
+    person.skip_household = true
+    yield
+  ensure
+    person.skip_household = false
   end
 
   def fetch_members
-    members = Person.where(household_key: reference_person.household_key)
-    HouseholdMember.from(members, self)
+    HouseholdMember.from(self)
   end
 
   def validate_members

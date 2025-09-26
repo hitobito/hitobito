@@ -36,16 +36,28 @@ describe PersonResource, type: :resource do
         :gender,
         :birthday,
         :language,
-        :primary_group_id
+        :primary_group_id,
+        :updated_at,
+        :additional_information
       ]
     end
 
     def date_time_attrs
+      [:updated_at]
+    end
+
+    def date_attrs
       [:birthday]
     end
 
     def read_restricted_attrs
       [:gender, :birthday]
+    end
+
+    def computed_attrs
+      {
+        picture: ->(person) { person.decorate.picture_full_url }
+      }
     end
 
     before do
@@ -69,17 +81,31 @@ describe PersonResource, type: :resource do
 
         data = jsonapi_data[0]
 
-        expect(data.attributes.symbolize_keys.keys).to match_array [:id, :jsonapi_type] + serialized_attrs
+        expect(data.attributes.symbolize_keys.keys).to match_array [:id, :jsonapi_type] + serialized_attrs + computed_attrs.keys
 
         expect(data.id).to eq(person.id)
         expect(data.jsonapi_type).to eq("people")
 
-        (serialized_attrs - date_time_attrs).each do |attr|
+        (serialized_attrs - date_time_attrs - date_attrs).each do |attr|
           expect(data.public_send(attr)).to eq(person.public_send(attr))
         end
 
-        date_time_attrs.each do |attr|
+        date_attrs.each do |attr|
           expect(data.public_send(attr)).to eq(person.public_send(attr).as_json)
+        end
+
+        date_time_attrs.each do |attr|
+          data_time, person_time = data.public_send(attr)&.to_time, person.public_send(attr)
+          # when time is nil, it should equal nil, if not, it should be equal within 1 second
+          if data_time.nil? || person_time.nil?
+            expect(data_time).to eq(person_time)
+          else
+            expect(data_time).to be_within(1.second).of(person_time)
+          end
+        end
+
+        computed_attrs.each do |attr, attr_definition|
+          expect(data.public_send(attr)).to eq(attr_definition.call(person))
         end
       end
     end
@@ -263,6 +289,35 @@ describe PersonResource, type: :resource do
         additional_emails = d[0].sideload(:additional_emails)
         expect(additional_emails).to have(2).items
         expect(additional_emails.map(&:id)).to match_array [additional_email1.id, additional_email2.id]
+      end
+    end
+
+    describe "additional_addresses" do
+      context "with feature toggle off" do
+        before do
+          params[:include] = "additional_addresses"
+        end
+
+        it "is not available in the API" do
+          expect { render }.to raise_error Graphiti::Errors::InvalidInclude
+        end
+      end
+
+      xcontext "with feature toggle on" do # graphiti somehow caches the resource, so dynamically setting the feature toggle does not work.
+        let!(:additional_address1) { Fabricate(:additional_address, contactable: person, label: "Arbeit") }
+        let!(:additional_address2) { Fabricate(:additional_address, contactable: person, label: "Rechnung") }
+
+        before do
+          allow(Settings.additional_address).to receive(:enabled).and_return(true)
+          params[:include] = "additional_addresses"
+        end
+
+        it "is available in the API" do
+          render
+          additional_addresses = d[0].sideload(:additional_addresses)
+          expect(additional_addresses).to have(2).items
+          expect(additional_addresses.map(&:id)).to match_array [additional_address1.id, additional_address2.id]
+        end
       end
     end
 

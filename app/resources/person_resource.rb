@@ -34,6 +34,11 @@ class PersonResource < ApplicationResource
   attribute :primary_group_id, :integer, writable: false
   attribute :gender, :string, readable: :show_details?, writable: :write_details?
   attribute :birthday, :date, readable: :show_details?, writable: :write_details?
+  attribute :picture, :string do
+    @object.decorate.picture_full_url
+  end
+  attribute :updated_at, :datetime
+  attribute :additional_information, :string
 
   FeatureGate.if :person_language do
     attribute :language, :string
@@ -56,6 +61,9 @@ class PersonResource < ApplicationResource
   polymorphic_has_many :phone_numbers, as: :contactable
   polymorphic_has_many :social_accounts, as: :contactable
   polymorphic_has_many :additional_emails, as: :contactable
+  FeatureGate.if :additional_address do
+    polymorphic_has_many :additional_addresses, as: :contactable
+  end
 
   filter :updated_at, :datetime
 

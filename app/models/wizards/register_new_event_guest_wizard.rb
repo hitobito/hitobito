@@ -62,7 +62,10 @@ class Wizards::RegisterNewEventGuestWizard < Wizards::Base
   private
 
   def build_guest
-    Event::Guest.new(guest_attributes).tap { |guest| guest.main_applicant = guest_of }
+    Event::Guest.new(guest_attributes).tap do |guest|
+      guest.main_applicant = guest_of
+      guest.language ||= guest_of.participant.language # for wagons which require the language
+    end
   end
 
   def build_participation

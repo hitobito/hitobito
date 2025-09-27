@@ -4,7 +4,7 @@
   :wagon: insieme
   :source_file: hitobito/app/controllers/event/participations_controller.rb
   :patch_file: hitobito_insieme/app/controllers/insieme/event/participations_controller.rb
-  :patch_file_line: 17
+  :patch_file_line: 18
 - :method: :save_entry
   :constant: Event::RegisterController
   :wagon: insieme

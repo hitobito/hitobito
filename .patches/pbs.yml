@@ -64,7 +64,7 @@
   :wagon: pbs
   :source_file: hitobito/app/jobs/export/event_participations_export_job.rb
   :patch_file: hitobito_pbs/app/jobs/pbs/export/event_participations_export_job.rb
-  :patch_file_line: 34
+  :patch_file_line: 31
 - :method: :entries
   :constant: Export::EventParticipationsExportJob
   :wagon: pbs
@@ -88,13 +88,19 @@
   :wagon: pbs
   :source_file: hitobito/app/domain/export/tabular/people/participations_full.rb
   :patch_file: hitobito_pbs/app/domain/pbs/export/tabular/people/people_address.rb
-  :patch_file_line: 27
+  :patch_file_line: 26
+- :method: :person_attributes
+  :constant: Export::Tabular::People::PeopleAddress
+  :wagon: pbs
+  :source_file: hitobito/app/domain/export/tabular/people/people_address.rb
+  :patch_file: hitobito_pbs/app/domain/pbs/export/tabular/people/people_address.rb
+  :patch_file_line: 26
 - :method: :person_attributes
   :constant: Export::Tabular::People::PeopleFull
   :wagon: pbs
   :source_file: hitobito/app/domain/export/tabular/people/people_full.rb
   :patch_file: hitobito_pbs/app/domain/pbs/export/tabular/people/people_address.rb
-  :patch_file_line: 27
+  :patch_file_line: 26
 - :method: :activate
   :constant: Group::PersonAddRequestsController
   :wagon: pbs

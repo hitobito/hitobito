@@ -35,12 +35,12 @@
   :source_file: hitobito/app/controllers/event/participation_contact_datas_controller.rb
   :patch_file: hitobito_youth/app/controllers/youth/event/participation_contact_datas_controller.rb
   :patch_file_line: 44
-- :method: :list_entries
+- :method: :entries_scope
   :constant: Event::ParticipationsController
   :wagon: jubla
   :source_file: hitobito/app/controllers/event/participations_controller.rb
   :patch_file: hitobito_jubla/app/controllers/jubla/event/participations_controller.rb
-  :patch_file_line: 20
+  :patch_file_line: 21
 - :method: :filter_scopes
   :constant: Events::FilteredList
   :wagon: youth

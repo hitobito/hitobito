@@ -30,7 +30,7 @@ module VisibleFromAboveCondition
   end
 
   def layer_groups_see_invisible_from_above
-    @layer_groups_unconfined_below ||= layer_groups_with_permissions(:see_invisible_from_above)
+    @layer_groups_unconfined_below ||= Group.where(id: layer_group_ids_with_permissions(:see_invisible_from_above))
   end
 
   private

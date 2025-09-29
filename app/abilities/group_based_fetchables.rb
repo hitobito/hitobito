@@ -33,8 +33,8 @@ class GroupBasedFetchables
   end
 
   def in_same_group_condition(condition)
-    if groups_same_group.present?
-      condition.or("#{Group.quoted_table_name}.id IN (?)", groups_same_group.collect(&:id))
+    if group_ids_same_group.present?
+      condition.or("#{Group.quoted_table_name}.id IN (?)", group_ids_same_group)
     end
   end
 
@@ -48,34 +48,52 @@ class GroupBasedFetchables
   end
 
   def in_same_layer_condition(condition)
-    if layer_groups_same_layer.present?
+    if layer_group_ids_same_layer.present?
       condition.or("#{Group.quoted_table_name}.layer_group_id IN (?)",
-        layer_groups_same_layer.collect(&:id))
+        layer_group_ids_same_layer)
     end
   end
 
   def groups_same_group
-    @groups_same_group ||= groups_with_permissions(*same_group_permissions)
+    @groups_same_group ||= Group.where(id: group_ids_same_group)
   end
 
   def groups_above_group
-    @groups_above_group ||= groups_with_permissions(*above_group_permissions)
+    @groups_above_group ||= Group.where(id: group_ids_above_group)
   end
 
   def layer_groups_same_layer
-    @layer_groups_same_layer ||= layer_groups_with_permissions(*same_layer_permissions)
+    @layer_groups_same_layer ||= Group.where(id: layer_group_ids_same_layer)
   end
 
   def layer_groups_above
-    @layer_groups_above ||= layer_groups_with_permissions(*above_layer_permissions)
+    @layer_groups_above ||= Group.where(id: layer_group_ids_above)
   end
 
-  def layer_groups_with_permissions(*permissions)
-    groups_with_permissions(*permissions).collect(&:layer_group).uniq
+  def group_ids_same_group
+    @group_ids_same_group ||= group_ids_with_permissions(*same_group_permissions)
   end
 
-  def groups_with_permissions(*permissions)
-    permissions.collect { |p| user.groups_with_permission(p) }
+  def group_ids_above_group
+    @group_ids_above_group ||= group_ids_with_permissions(*above_group_permissions)
+  end
+
+  def layer_group_ids_same_layer
+    @layer_group_ids_same_layer ||= layer_group_ids_with_permissions(*same_layer_permissions)
+  end
+
+  def layer_group_ids_above
+    @layer_group_ids_above ||= layer_group_ids_with_permissions(*above_layer_permissions)
+  end
+
+  def layer_group_ids_with_permissions(*permissions)
+    permissions.collect { |p| user_context.permission_layer_ids(p) }
+      .flatten
+      .uniq
+  end
+
+  def group_ids_with_permissions(*permissions)
+    permissions.collect { |p| user_context.permission_group_ids(p) }
       .flatten
       .uniq
   end

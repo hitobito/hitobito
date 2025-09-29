@@ -209,6 +209,11 @@ RSpec.configure do |config|
     end
   end
 
+  # Set it here instead of in test.rb to not interfere with wagon specs
+  config.before do
+    Rails.application.default_url_options[:locale] = :de
+  end
+
   # See: https://github.com/rspec/rspec-rails/issues/1275
   config.before(type: :feature) do
     self.default_url_options = Rails.application.default_url_options

@@ -65,7 +65,6 @@ Rails.application.configure do
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
   routes.default_url_options[:host] = "test.host"
-  default_url_options[:locale] = :de
 
   unless ENV["RAILS_ENABLE_TEST_LOG"]
     logger = ActiveSupport::Logger.new(nil)

@@ -21,6 +21,9 @@ describe "Globalized model" do
 
     group.save!
     expect(group.privacy_policy_title_translations).to eql(expected_values.stringify_keys)
+    languages.each do |lang|
+      expect(group.attributes.dig("privacy_policy_title_#{lang}")).to eql(group.send(:"privacy_policy_title_#{lang}"))
+    end
   end
 
   it "should create globalize accessors for rich text fields" do
@@ -37,6 +40,9 @@ describe "Globalized model" do
 
     body_translations.zip(expected_values) do |body_translation, expected_value|
       expect(body_translation).to include(expected_value)
+    end
+    languages.each do |lang|
+      expect(custom_content.attributes.dig("body_#{lang}").to_s).to eql(custom_content.send(:"body_#{lang}").to_s)
     end
   end
 

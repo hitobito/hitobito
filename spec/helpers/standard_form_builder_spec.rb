@@ -8,10 +8,12 @@
 require "spec_helper"
 
 describe "StandardFormBuilder" do
+  include ActionText::TagHelper
   include FormatHelper
   include I18nHelper
   include FormHelper
   include UtilityHelper
+  include ColumnHelper
   include CrudTestHelper
   include LayoutHelper
   include HelpTextsHelper
@@ -277,6 +279,81 @@ describe "StandardFormBuilder" do
 
     it "ignores errors_on" do
       expect(form.send(:errors_on?, :cutoff_date)).to be_falsey
+    end
+  end
+
+  describe "translated fields" do
+    let(:dom) {
+      Capybara::Node::Simple.new(form.input_field(:translated_field))
+    }
+
+    it "generates input fields for column types other than text" do
+      attr = :translated_field
+      expect(dom).to have_css("div[class='d-flex'] div[class='input-group me-2 mb-2'] input[name='entry[#{attr}]']")
+      expect(dom).to have_css("div[class='d-flex'] button[data-action='translatable-fields#toggleFields'][type='button']")
+
+      expect(dom).not_to have_css("div[class='hidden'] div[class='input-group me-2 mb-2'] input[name='entry[#{attr}]']")
+      Settings.application.languages.keys.excluding(I18n.locale).each do |locale|
+        expect(dom).to have_css("div[class='hidden'] div[class='input-group me-2 mb-2'] input[name='entry[#{attr}_#{locale}]']")
+      end
+    end
+
+    it "generates textarea for column type text" do
+      attr = :translated_text_field
+      dom = Capybara::Node::Simple.new(form.input_field(attr))
+
+      expect(dom).to have_css("div[class='d-flex'] div[class='input-group me-2 mb-2'] textarea[name='entry[#{attr}]']")
+      expect(dom).to have_css("div[class='d-flex'] button[data-action='translatable-fields#toggleFields'][type='button']")
+
+      expect(dom).not_to have_css("div[class='hidden'] div[class='input-group me-2 mb-2'] textarea[name='entry[#{attr}]']")
+      Settings.application.languages.keys.excluding(I18n.locale).each do |locale|
+        expect(dom).to have_css("div[class='hidden'] div[class='input-group me-2 mb-2'] textarea[name='entry[#{attr}_#{locale}]']")
+      end
+    end
+
+    it "generates rich text fields" do
+      attr = :translated_field
+      dom = Capybara::Node::Simple.new(form.rich_text_area(attr))
+
+      expect(dom).to have_css("div[class='d-flex'] div[class='input-group me-2 mb-2'] trix-editor#entry_#{attr}")
+      expect(dom).to have_css("div[class='d-flex'] button[data-action='translatable-fields#toggleFields'][type='button']")
+
+      expect(dom).not_to have_css("div[class='hidden'] div[class='input-group me-2 mb-2'] trix-editor#entry_#{attr}")
+      Settings.application.languages.keys.excluding(I18n.locale).each do |locale|
+        expect(dom).to have_css("div[class='hidden'] div[class='input-group me-2 mb-2'] trix-editor#entry_#{attr}_#{locale}")
+      end
+    end
+
+    it "only generates translation button once" do
+      expect(dom).to have_css("button[data-action='translatable-fields#toggleFields'][type='button']", count: 1)
+    end
+
+    it "uses current locale for always visible input" do
+      attr = :translated_field
+      I18n.locale = :fr
+      expect(dom).to have_css("input[name='entry[#{attr}]']")
+      Settings.application.languages.keys.excluding(:fr).each do |input_locale|
+        expect(dom).to have_css("input[name='entry[#{attr}_#{input_locale}]']")
+      end
+    end
+
+    it "does not show translation options if there is only one locale" do
+      attr = :translated_field
+      expect(dom).to have_css("input[name='entry[#{attr}]']")
+      expect(dom).to have_css("div[class='d-flex'] div[class='input-group me-2 mb-2'] input[name='entry[#{attr}]']")
+
+      stub_languages({de: "Deutsch"})
+
+      dom = Capybara::Node::Simple.new(form.input_field(attr))
+
+      expect(dom).to have_css("input[name='entry[#{attr}]']")
+      expect(dom).not_to have_css("div[class='d-flex'] div[class='input-group me-2 mb-2'] input[name='entry[#{attr}]']")
+      expect(dom).not_to have_css("div[class='hidden']")
+    end
+
+    it "generates labeled translated fields" do
+      dom = Capybara::Node::Simple.new(form.labeled_input_field(:translated_field))
+      expect(dom).to have_css("label[for='entry_translated_field']")
     end
   end
 end

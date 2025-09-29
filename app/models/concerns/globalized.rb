@@ -40,7 +40,7 @@ module Globalized
           next if validator.is_a?(ActiveRecord::Validations::PresenceValidator) || validator.is_a?(ActiveRecord::Validations::UniquenessValidator)
 
           attributes.each do |attribute|
-            validates_with validator.class, validator.options.merge(attributes: attribute, if: proc { !attribute.end_with?("_#{I18n.locale}") && Settings.application.languages.key?(attribute[-2..].to_sym) })
+            validates_with validator.class, validator.options.merge(attributes: attribute, unless: proc { attribute.end_with?("_#{I18n.locale}") })
           end
         end
       end

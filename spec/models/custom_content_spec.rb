@@ -126,9 +126,22 @@ describe CustomContent do
       is_expected.to be_valid
     end
 
+    it "fails if placeholder is missing in additional language" do
+      subject.placeholders_required = "login-url, sender"
+      subject.subject_fr = "Placeholders missing"
+
+      is_expected.not_to be_valid
+    end
+
     it "fails in context when required placeholder from main custom content is missing" do
       context_custom_content = Fabricate(:custom_content, context: Group.root, key: subject.key, body: "{login-url}")
       context_custom_content.body = ""
+      expect(context_custom_content).not_to be_valid
+    end
+
+    it "fails in context when required placeholder from main custom content in additional language is missing" do
+      context_custom_content = Fabricate(:custom_content, context: Group.root, key: subject.key, body: "{login-url}", body_fr: "{login-url}")
+      context_custom_content.body_fr = "Placeholders missing"
       expect(context_custom_content).not_to be_valid
     end
   end

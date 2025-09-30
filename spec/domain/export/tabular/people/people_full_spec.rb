@@ -49,5 +49,16 @@ describe Export::Tabular::People::PeopleFull do
         expect(people_list.data_rows.to_a.first[subject.keys.index(:additional_address_arbeit)]).to start_with("Foo Bar, def")
       end
     end
+
+    context "qualification_kinds" do
+      let(:qualification_kind) { qualification_kinds(:sl) }
+      let!(:qualification) { Fabricate(:qualification, person:, qualification_kind:) }
+
+      it "shows only one header per kind regardless of translations" do
+        qualification_kind.label_translations = {de: "Super Lead DE", fr: "Super Lead FR", it: "Super Lead IT"}
+        qualification_kind.save!
+        expect(subject[:"qualification_kind_#{qualification_kind.id}"]).to eq("Qualifikationsart Super Lead DE / Super Lead FR / Super Lead IT")
+      end
+    end
   end
 end

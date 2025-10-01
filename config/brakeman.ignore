@@ -280,7 +280,7 @@
       "cwe_id": [
         1104
       ],
-      "note": "The Upgrade is planned and in the Sprint Backlog, see https://github.com/hitobito/hitobito/issues/3292
+      "note": "The Upgrade is planned and in the Sprint Backlog, see https://github.com/hitobito/hitobito/issues/3292"
     },
     {
       "warning_type": "SQL Injection",

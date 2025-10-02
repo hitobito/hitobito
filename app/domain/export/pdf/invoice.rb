@@ -12,10 +12,15 @@ module Export::Pdf
     class Runner
       def initialize(invoices, async_download_file)
         @invoices = invoices
+        @invoice_config = invoices.first.invoice_config # we assume that all invoices have the same invoice config
         @async_download_file = async_download_file
       end
 
       def render(options)
+        build_pdf(options).render
+      end
+
+      def build_pdf(options)
         pdf = Export::Pdf::Document.new(margin: MARGIN).pdf
         customize(pdf)
         @invoices.each_with_index do |invoice, position|
@@ -25,7 +30,7 @@ module Export::Pdf
             pdf.start_new_page unless invoice == @invoices.last
           end
         end
-        pdf.render
+        pdf
       end
 
       private

@@ -14,11 +14,14 @@ module Export::Pdf
         @invoices = invoices
         @invoice_config = invoices.first.invoice_config # we assume that all invoices have the same invoice config
         @async_download_file = async_download_file
+        @metadata = {first_pages_of_invoices: [], pages_with_payment_slip: []}
       end
 
       def render(options)
         build_pdf(options).render
       end
+
+      private
 
       def build_pdf(options)
         pdf = Export::Pdf::Document.new(margin: MARGIN).pdf
@@ -32,8 +35,6 @@ module Export::Pdf
         end
         pdf
       end
-
-      private
 
       def reporter
         return unless @async_download_file
@@ -51,6 +52,8 @@ module Export::Pdf
       def invoice_page(pdf, invoice, options) # rubocop:disable Metrics/MethodLength
         section_options = options.slice(:debug, :stamped, :reminders)
 
+        @metadata[:first_pages_of_invoices] += [pdf.page_count]
+
         # render logo if logo_position is set to left or right
         if %w[left right].include?(invoice.logo_position)
           render_logo(pdf, invoice, **section_options)
@@ -65,6 +68,7 @@ module Export::Pdf
         if options[:payment_slip]
           if invoice.payment_slip == "qr"
             payment_slip_qr_class.new(pdf, invoice, section_options).render
+            @metadata[:pages_with_payment_slip] += [pdf.page_count]
           else
             PaymentSlip.new(pdf, invoice, section_options).render
           end

@@ -260,6 +260,15 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   has_many :message_recipients, dependent: :nullify
 
+  has_many :people_managers, foreign_key: :managed_id,
+    dependent: :destroy
+  has_many :people_manageds, class_name: "PeopleManager",
+    foreign_key: :manager_id,
+    dependent: :destroy
+
+  has_many :managers, through: :people_managers
+  has_many :manageds, through: :people_manageds
+
   FeatureGate.if("people.family_members") do
     accepts_nested_attributes_for :family_members, allow_destroy: true
   end
@@ -278,6 +287,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   validates :picture, dimension: {width: {max: 8_000}, height: {max: 8_000}},
     content_type: ["image/jpeg", "image/gif", "image/png"]
   # more validations defined by devise
+
+  validate :assert_either_only_managers_or_manageds
 
   normalizes :email, :unconfirmed_email, with: ->(attribute) { attribute.downcase }
 
@@ -569,5 +580,24 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
       saved_changes.key?("household_key")
 
     household.update_address!
+  end
+
+  def assert_either_only_managers_or_manageds # rubocop:disable Metrics/CyclomaticComplexity,Metrics/AbcSize,Metrics/PerceivedComplexity
+    existent_managers = people_managers.reject { |pm| pm.marked_for_destruction? }
+    existent_manageds = people_manageds.reject { |pm| pm.marked_for_destruction? }
+
+    if existent_managers.any? && existent_manageds.any?
+      errors.add(:base, :cannot_have_managers_and_manageds, name: full_name)
+    elsif PeopleManager.exists?(managed: existent_managers.map(&:manager_id))
+      errors.add(:base, :manager_already_managed)
+    elsif PeopleManager.exists?(manager: existent_manageds.map(&:managed_id))
+      errors.add(:base, :managed_already_manager)
+    end
+  end
+
+  def and_manageds
+    return [self] unless FeatureGate.enabled?("people.people_managers")
+
+    [self, manageds].flatten
   end
 end

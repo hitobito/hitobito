@@ -1,0 +1,17 @@
+- #  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+- #  hitobito and licensed under the Affero General Public License version 3
+- #  or later. See the COPYING file at the top-level directory or at
+- #  https://github.com/hitobito/hitobito_youth.
+
+- content_for(:section_header) do
+  = t('people_managers.manageds_heading')
+  %span.float-end
+    = Dropdown::AddPeopleManager.new(self, person).to_s
+
+= render layout: 'people_managers/section', locals: {list: person.people_manageds} do
+  - person.people_manageds.each do |item|
+    %tr
+      %td
+        %strong= link_to(item.managed, item.managed, data: { turbo_frame: :_top })
+      - if can?(:destroy_managed, item)
+        %td=render 'people_managers/delete_link', path: person_managed_path(person_id: person.id, id: item.id)

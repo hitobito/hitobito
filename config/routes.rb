@@ -59,6 +59,13 @@ Hitobito::Application.routes.draw do
 
     get 'list_groups' => 'group/lists#index', as: :list_groups
 
+    resources :people, only: [] do
+      scope module: 'person' do
+        resources :managers, except: [:edit, :update]
+        resources :manageds, except: [:edit, :update]
+      end
+    end
+
     resources :groups do
       scope module: 'subscriber' do
         resource :subscriber_list, only: [:new] do

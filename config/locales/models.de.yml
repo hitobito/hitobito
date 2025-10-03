@@ -145,6 +145,9 @@ de:
             base:
               max_one_additional_invoice_address: Es kann nur eine Adresse als Rechnungsadresse ausgewählt werden.
               additional_address_labels_must_be_unique: Die Bezeichnungen der weiteren Adressen müssen eindeutig sein.
+              cannot_have_managers_and_manageds: '%{name} kann nicht sowohl Verwalter*innen als auch Kinder haben.'
+              manager_already_managed: Verwalter*in konnte nicht hinzugefügt werden, da er/sie bereits verwaltet wird.
+              managed_already_manager: Kind konnte nicht hinzugefügt werden, da es bereits Verwalter*in ist.
             email:
               taken: >
                         ist bereits vergeben. Diese Adresse muss für alle Personen
@@ -160,6 +163,13 @@ de:
               taken: wurde bereits angefragt
         person_duplicates:
           invalid_role: "Rolle %{role} von %{person} ist fürs Zusammenführen nicht gültig, da die andere Person eventuell bereits eine Rolle hat, welche diese Rolle nicht mehr erlaubt, diese muss manuell korrigiert/etnfernt werden. Info: %{message}"
+        people_manager:
+          manager_and_managed_the_same: Verwalter*in und Kind müssen unterschiedliche Personen sein.
+
+          attributes:
+            manager_id:
+              taken: ist bereits gesetzt.
+          manager_and_managed_the_same: kann sich nicht selber verwalten.
         qualification:
           attributes:
             qualification_kind_id:
@@ -410,6 +420,9 @@ de:
       tag:
         one: Tag
         other: Tags
+      people_manager:
+        one: Verwalter*in
+        other: Verwalter*innen
 
     attributes:
       acts_as_taggable_on/tag:

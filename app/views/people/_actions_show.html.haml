@@ -7,6 +7,9 @@
   = button_action_edit
 
 - if can?(:destroy, entry)
+  // Instead of destroying the user, it would be better to use a "manual deletion modal"
+  // with proper cleanup as here: views/group/deleted_people/_list.html.haml
+  // Since the existing modal is coupled to users without roles, we can't re-use it without corresponding effort.
   = button_action_destroy(nil, { class: "btn-danger", data: { confirm: t('person.confirm_delete',
                                                               person: entry.person) } })
 - if can?(:create_invoice, entry)

@@ -154,11 +154,32 @@ module PaperTrail
     private
 
     def association_change_text(changeset, item)
+      return association_change_text_with_people_manager(changeset, item) if item_type == PeopleManager.sti_name
+
       # used to overwrite in youth wagon
       I18n.t("version.association_change.#{item_class.name.underscore}.#{model.event}",
         default: :"version.association_change.#{model.event}",
         model: item_class.model_name.human,
         label: item ? label_with_fallback(item) : "",
+        changeset: changeset)
+    end
+
+    def association_change_text_with_people_manager(changeset, item)
+      # Since PeopleManager entries are either created or destroyed, accessing changes makes sense
+      changes = object.send(:object_changes_deserialized)
+      manager_id = changes["manager_id"].compact.first
+      managed_id = changes["managed_id"].compact.first
+
+      key, label = if manager_id == main_id
+        ["managed", Person.find_by(id: managed_id)&.person_name]
+      elsif managed_id == main_id
+        ["manager", Person.find_by(id: manager_id)&.person_name]
+      end
+
+      I18n.t("version.association_change.#{item_class.name.underscore}.#{model.event}.#{key}",
+        default: :"version.association_change.#{model.event}",
+        model: item_class.model_name.human,
+        label: label || "(#{I18n.t("version.association_change.deleted_person")})",
         changeset: changeset)
     end
 

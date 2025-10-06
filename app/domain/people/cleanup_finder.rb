@@ -18,6 +18,7 @@ class People::CleanupFinder
       .then { |scope| without_any_roles_or_with_roles_outside_cutoff(scope) }
       .then { |scope| without_participating_in_future_events(scope) }
       .then { |scope| with_current_sign_in_at_outside_cutoff(scope) }
+      .then { |scope| without_people_managers(scope) }
   end
 
   def base_scope
@@ -58,6 +59,20 @@ class People::CleanupFinder
   def with_current_sign_in_at_outside_cutoff(scope)
     scope.where("people.current_sign_in_at <= ? OR people.current_sign_in_at IS NULL",
       current_sign_in_at)
+  end
+
+  def without_people_managers(scope)
+    scope
+      .left_joins(:people_manageds)
+      .where(no_people_manageds_exist.to_sql)
+  end
+
+  def no_people_manageds_exist
+    people_manageds.arel.exists.not
+  end
+
+  def people_manageds
+    PeopleManager.where("people_managers.manager_id = people.id")
   end
 
   def last_role_ended_on

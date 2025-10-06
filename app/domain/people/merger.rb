@@ -43,6 +43,8 @@ module People
       merge_association(:taggings, :taggable, unique_attr: :tag_id)
       merge_qualifications
       merge_household
+      merge_people_managers
+      merge_people_manageds
     end
 
     def merge_contactables(assoc, key, match_label: false)
@@ -96,6 +98,30 @@ module People
         @source.household.remove(@source).save!
       else
         @source.household.add(@target).save!
+      end
+    end
+
+    def merge_people_managers
+      return unless @target.people_managers.any?
+
+      @source.people_managers.each do |pm|
+        next if PeopleManager.exists?(managed: @target, manager: pm.manager)
+
+        dup = pm.dup
+        dup.managed = @target
+        dup.save!
+      end
+    end
+
+    def merge_people_manageds
+      return unless @target.people_manageds.any?
+
+      @source.people_manageds.each do |pm|
+        next if PeopleManager.exists?(manager: @target, managed: pm.managed)
+
+        dup = pm.dup
+        dup.manager = @target
+        dup.save!
       end
     end
 

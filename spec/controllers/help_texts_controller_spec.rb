@@ -13,14 +13,15 @@ describe HelpTextsController do
   before { sign_in(top_leader) }
 
   context "POST create" do
-    it "creates help text and translation" do
+    it "creates help text and translations" do
       attrs = {context: "mailing_lists--mailing_list",
                key: "field.name",
-               body: "<div>designation of the mailing list</div>"}
+               body: "<div>designation of the mailing list</div>",
+               body_fr: "<div>designation of the mailing list in french</div>"}
       expect do
         post :create, xhr: true, params: {help_text: attrs}
       end.to change { HelpText.count }.by(1)
-        .and change { HelpText::Translation.count }.by(1)
+        .and change { HelpText::Translation.count }.by(2)
     end
   end
 end

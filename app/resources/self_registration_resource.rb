@@ -17,8 +17,8 @@ class SelfRegistrationResource < ApplicationResource
     attribute :first_name, :string
     attribute :last_name, :string
     attribute :nickname, :string
-    attribute :company_name, :string
-    attribute :company, :boolean
+    attribute :company_name, :string if FeatureGate.enabled? :self_registration_company
+    attribute :company, :boolean if FeatureGate.enabled? :self_registration_company
     attribute :email, :string
     attribute :adult_consent, :boolean, readable: false
     attribute :privacy_policy_accepted, :boolean
@@ -55,7 +55,7 @@ class SelfRegistrationResource < ApplicationResource
   def check_privacy_policy_accepted(model)
     policy_finder = Group::PrivacyPolicyFinder.for(group: group, person: model)
     return unless policy_finder.acceptance_needed?
-    invalid_request!(:privacy_policy_accepted, :must_be_accepted) unless model.privacy_policy_accepted?
+    validation_error!(model, :privacy_policy_accepted, :must_be_accepted) unless model.privacy_policy_accepted?
   end
 
   def build_role(model)

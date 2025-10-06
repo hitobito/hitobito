@@ -1308,6 +1308,7 @@ de:
   api:
     errors:
       resources:
+        id_must_not_be_set: ID darf nicht gesetzt sein
         role_resource:
           group_id:
             unwritable_attribute: kann nicht geändert werden

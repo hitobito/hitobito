@@ -15,5 +15,9 @@ class Group::BottomGroup < Group
     self.visible_from_above = false
   end
 
-  roles Leader, Member
+  class NoPermissions < ::Role
+    self.permissions = []
+  end
+
+  roles Leader, Member, NoPermissions
 end

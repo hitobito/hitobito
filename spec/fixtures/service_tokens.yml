@@ -39,6 +39,7 @@ permitted_top_layer_token:
   invoices: true
   event_participations: true
   mailing_lists: true
+  register_people: false
 
 permitted_bottom_layer_token:
   layer: bottom_layer_one
@@ -53,6 +54,7 @@ permitted_bottom_layer_token:
   invoices: true
   event_participations: true
   mailing_lists: true
+  register_people: false
 
 rejected_top_layer_token:
   layer: top_layer
@@ -66,3 +68,4 @@ rejected_top_layer_token:
   events: false
   invoices: false
   event_participations: false
+  register_people: false

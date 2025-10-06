@@ -13,7 +13,7 @@ class GroupAbility < AbilityDsl::Base
       .may(:read, :index_events, :"index_event/courses", :index_mailing_lists)
       .if_any_role
     permission(:any)
-      .may(:register_people) # via API
+      .may(:register_people) # via API with session cookie
       .in_self_registration_groups
 
     permission(:contact_data).may(:index_people).all

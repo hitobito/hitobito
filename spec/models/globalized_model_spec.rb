@@ -75,4 +75,18 @@ describe "Globalized model" do
     expect(custom_content).not_to be_valid
     expect(custom_content.errors.full_messages).to match_array(expected_errors)
   end
+
+  it "should not copy presence and uniqueness validators" do
+    expect(Event.validators_on(:name).any?(ActiveModel::Validations::PresenceValidator)).to be_truthy
+    expect(Event.method_defined?(:name_en)).to be_truthy
+    expect(Event.validators_on(:name_en).any?(ActiveModel::Validations::PresenceValidator)).to be_falsey
+  end
+
+  it "presence validated fields should only need one language filled in" do
+    event = events(:top_event)
+    event.name = ""
+    expect(event).not_to be_valid
+    event.name_fr = "French name"
+    expect(event).to be_valid
+  end
 end

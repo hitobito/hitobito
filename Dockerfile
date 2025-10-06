@@ -12,6 +12,7 @@ ARG DEBIAN_VERSION="bookworm"
 # Packages
 ARG BUILD_PACKAGES="nodejs git build-essential libpq-dev libvips42"
 ARG RUN_PACKAGES="shared-mime-info pkg-config libpq-dev libjemalloc-dev libjemalloc2 libvips42"
+ARG EXTRA_PACKAGES=""
 
 # Scripts
 ARG PRE_INSTALL_SCRIPT="\
@@ -95,6 +96,7 @@ FROM ruby:${RUBY_VERSION}-${DEBIAN_VERSION} AS build
 ARG HOME
 ARG PRE_INSTALL_SCRIPT
 ARG BUILD_PACKAGES
+ARG EXTRA_PACKAGES
 ARG INSTALL_SCRIPT
 ARG BUNDLER_VERSION
 ARG PRE_BUILD_SCRIPT
@@ -122,7 +124,7 @@ RUN bash -vxc "${PRE_INSTALL_SCRIPT:-"echo 'no PRE_INSTALL_SCRIPT provided'"}"
 RUN    export DEBIAN_FRONTEND=noninteractive \
     && apt-get update \
     && apt-get upgrade -y \
-    && apt-get install -y --no-install-recommends ${BUILD_PACKAGES}
+    && apt-get install -y --no-install-recommends ${BUILD_PACKAGES} ${EXTRA_PACKAGES}
 
 RUN bash -vxc "${INSTALL_SCRIPT:-"echo 'no INSTALL_SCRIPT provided'"}"
 
@@ -175,6 +177,7 @@ FROM ruby:${RUBY_VERSION}-slim-${DEBIAN_VERSION} AS app
 
 # arguments for steps
 ARG RUN_PACKAGES
+ARG EXTRA_PACKAGES
 ARG BUNDLER_VERSION
 ARG BUNDLE_WITHOUT_GROUPS
 
@@ -205,7 +208,7 @@ RUN adduser --disabled-password --uid 1001 --gid 0 --gecos "" app
 RUN    export DEBIAN_FRONTEND=noninteractive \
     && apt-get update \
     && apt-get upgrade -y \
-    && apt-get install -y ${RUN_PACKAGES} vim curl less \
+    && apt-get install -y ${RUN_PACKAGES} ${EXTRA_PACKAGES} vim curl less \
     && apt-get clean \
     && rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && truncate -s 0 /var/log/*log

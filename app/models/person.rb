@@ -542,6 +542,12 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     attributes.slice(*Person::ADDRESS_ATTRS).symbolize_keys
   end
 
+  def and_manageds
+    return [self] unless FeatureGate.enabled?("people.people_managers")
+
+    [self, manageds].flatten
+  end
+
   private
 
   def override_blank_email
@@ -593,11 +599,5 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     elsif PeopleManager.exists?(manager: existent_manageds.map(&:managed_id))
       errors.add(:base, :managed_already_manager)
     end
-  end
-
-  def and_manageds
-    return [self] unless FeatureGate.enabled?("people.people_managers")
-
-    [self, manageds].flatten
   end
 end

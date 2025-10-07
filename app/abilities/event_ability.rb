@@ -68,17 +68,33 @@ class EventAbility < AbilityDsl::Base
 
     general(:create, :destroy, :application_market, :qualify, :qualifications_read)
       .at_least_one_group_not_deleted
+
+    for_self_or_manageds do
+      # abilities which managers inherit from their managed children
+      class_side(:list_available).if_any_role
+      permission(:any).may(:show).in_same_layer_or_globally_visible_or_participating_or_public
+    end
   end
 
   on(Event::Course) do
     class_side(:list_available).everybody
     class_side(:list_all).if_full_permission_in_course_layer
     class_side(:export_list).if_layer_and_below_full_on_root
+
+    for_self_or_manageds do
+      # abilities which managers inherit from their managed children
+      class_side(:list_available).if_any_role
+      permission(:any).may(:show).in_same_layer_or_globally_visible_or_participating_or_public
+    end
   end
 
   def in_same_layer_or_globally_visible_or_participating
     if_globally_visible_or_participating ||
       contains_any?(user.groups.map(&:layer_group_id), subject.groups.map(&:layer_group_id))
+  end
+
+  def in_same_layer_or_globally_visible_or_participating_or_public
+    in_same_layer_or_globally_visible_or_participating || event.external_applications
   end
 
   def if_globally_visible_or_participating

@@ -96,6 +96,29 @@ class PersonAbility < AbilityDsl::Base
 
     class_side(:create_households).if_any_writing_permissions
     class_side(:query).if_any_writing_permissions_or_any_leaded_events
+
+    # Managers have almost all base permissions on the managed person
+    for_self_or_manageds do
+      permission(:any)
+        .may(:show, :show_details, :show_full, :history, :update, :update_email, :primary_group,
+          :log, :totp_reset)
+        .herself
+
+      class_side(:create_households).if_any_writing_permission_or_any_manageds
+    end
+
+    # People with update permission on a managed person also have the permission to update the
+    # managers of that managed person
+    permission(:group_full).may(:change_managers)
+      .non_restricted_in_same_group_except_self
+    permission(:group_and_below_full).may(:change_managers)
+      .non_restricted_in_same_group_or_below_except_self
+    permission(:layer_full).may(:change_managers)
+      .non_restricted_in_same_layer_except_self
+    permission(:layer_and_below_full).may(:change_managers)
+      .non_restricted_in_same_layer_or_visible_below_except_self
+
+    class_side(:lookup_manageds).if_any_writing_permissions
   end
 
   def if_any_writing_permissions
@@ -195,6 +218,26 @@ class PersonAbility < AbilityDsl::Base
     # restricted roles are not included because the may not be modified
     # in their group (and thus are not vulnerable to email updates)
     subject.roles.reject { |r| r.class.restricted? || r.class.permissions.blank? }
+  end
+
+  def if_any_writing_permission_or_any_manageds
+    if_any_writing_permissions || user_context.user.manageds.any?
+  end
+
+  def non_restricted_in_same_group_except_self
+    non_restricted_in_same_group && !herself
+  end
+
+  def non_restricted_in_same_group_or_below_except_self
+    non_restricted_in_same_group_or_below && !herself
+  end
+
+  def non_restricted_in_same_layer_except_self
+    non_restricted_in_same_layer && !herself
+  end
+
+  def non_restricted_in_same_layer_or_visible_below_except_self
+    non_restricted_in_same_layer_or_visible_below && !herself
   end
 
   def person

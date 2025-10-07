@@ -33,7 +33,7 @@ class PeopleManagersController < ApplicationController
     if success
       redirect_to redirect_to_path
     else
-      render :new, status: :unprocessable_entity, layout: false
+      render :new, status: :unprocessable_content, layout: false
     end
   end
 

@@ -1,0 +1,18 @@
+- #  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+- #  hitobito and licensed under the Affero General Public License version 3
+- #  or later. See the COPYING file at the top-level directory or at
+- #  https://github.com/hitobito/hitobito_youth.
+
+- if !local_assigns.key?(:list)
+  = turbo_frame_tag :people_managers do
+    %h2= yield :section_header
+    = yield
+- else
+  - if list.present?
+    = turbo_frame_tag :people_managers do
+      %h2= yield :section_header
+      %table.table.table-basic
+        %tbody
+          = yield
+  - else
+    = render 'people_managers/list', person: person

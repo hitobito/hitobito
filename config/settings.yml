@@ -178,6 +178,10 @@ people:
     block_after: # e.g. P1M
   family_members:
     enabled: true
+  people_managers:
+    enabled: false
+    self_service_managed_creation:
+      enabled: false
 
 event:
   attachments:

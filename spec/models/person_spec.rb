@@ -1198,4 +1198,34 @@ describe Person do
       assert_equal attacker_email, attacker.email
     end
   end
+
+  describe "people managers" do
+    let(:top_leader) { people(:top_leader) }
+    let(:bottom_member) { people(:bottom_member) }
+
+    it "does not allow for someone to be both manager and managed" do
+      top_leader.managers = [bottom_member]
+      top_leader.manageds = [Fabricate(:person)]
+
+      expect(top_leader).to_not be_valid
+    end
+
+    it "does not allow to manage someone who is manager" do
+      bottom_member.manageds = [Fabricate(:person)]
+      bottom_member.save
+
+      top_leader.manageds = [bottom_member]
+
+      expect(top_leader).to_not be_valid
+    end
+
+    it "can provide a mail to a managed person" do
+      managed = Fabricate(:person, email: nil)
+      expect(bottom_member).to be_valid_email
+
+      managed.managers = [bottom_member]
+
+      expect(managed).to be_valid_email
+    end
+  end
 end

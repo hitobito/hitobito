@@ -52,6 +52,7 @@ class PersonReadables < GroupBasedReadables
     OrCondition.new.tap do |condition|
       condition.or(*herself_condition)
       condition.or(*contact_data_condition) if contact_data_visible?
+      # condition.or(*manager_condition)
       see_invisible_from_above_condition(condition)
       append_group_conditions(condition)
       visible_from_above_condition(condition)
@@ -72,6 +73,10 @@ class PersonReadables < GroupBasedReadables
 
   def herself_condition
     ["people.id = ?", user.id]
+  end
+
+  def manager_condition
+    ["people.id IN (#{PeopleManager.where(manager_id: user.id).select(:managed_id).to_sql})"]
   end
 
   def read_permission_for_this_group?

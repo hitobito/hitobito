@@ -182,6 +182,7 @@ fr:
 
   dropdown/event/participant_add:
     as: "en tant que %{role}"
+    register_new_managed: Saisir et inscrire un nouvel enfant
 
   dropdown/event/participation/mail_dispatch:
     title: Envoyer un e-mail
@@ -672,6 +673,7 @@ fr:
   event/participations:
     full_entry_label: "%{model_label} de <i>%{person}</i> dans <i>%{event}</i>"
     success: "%{full_entry_label} a été ajouté avec succès."
+    success_for_external_manager: '%{full_entry_label} a été créé avec succès.'
     instructions: "Pour l'inscription définitive, tu dois imprimer cette page en utilisant l'option <i>imprimer</i>, puis la signer et l'envoyer par poste à l'adresse indiquée."
     export_enqueued: "l'exportation débute en arrière-plan et est téléchargée quand elle est terminée"
     waiting_list: "Toutes les places sont actuellement prises, l'inscription est sur la liste d'attente."
@@ -2218,6 +2220,15 @@ fr:
         update: "La demande d'accès pour <i>%{label}</i> a été actualisée: %{changeset}"
         destroy: "Il y a eu une réponse pour la demande d'accès de <i>%{label}</i>."
 
+      deleted_person: "Gelöschte Person"
+      people_manager:
+        create:
+          manager: "<i>%{label}</i> a été ajouté.e comme administrateur.trice."
+          managed: "<i>%{label}</i> a été ajouté.e en tant qu'enfant."
+        destroy:
+          manager: "<i>%{label}</i> a été supprimé.e en tant qu'administrateur.trice."
+          managed: "<i>%{label}</i> a été supprimé.e en tant qu'enfant."
+
     impersonate: "Le compte a été repris par %{user}."
     impersonation_done: "Le compte n'est plus utilisé par %{user}."
     password_override: "Le mot de passe de %{user} a été effacé. La connexion est empêchée jusqu'à ce qu'un nouveau mot de passe soit défini."
@@ -2295,3 +2306,13 @@ fr:
         next_button: Inscrire un invité
       new_event_guest_contact_data_form_title: Coordonnées de l'invité
       new_event_guest_participation_form_title: Inscrire un invité
+
+  people_managers:
+    section:
+      manageds_help: Tu ne peux ajouter comme enfants que des personnes dont tu as le droit en écriture.
+    common_heading: Enfants / Administrateur.trice.s
+    managers_heading: Administrateur.trice
+    manageds_heading: Enfants
+    create_managed_person_button: Saisir un enfant
+    assign_managed_person_button: Attribuer un enfant
+    assign_manager_person_button: Attribuer un.e administrateur.trice

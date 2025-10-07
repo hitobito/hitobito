@@ -181,6 +181,7 @@ en:
 
   dropdown/event/participant_add:
     as: "as %{role}"
+    register_new_managed: Register new Child
 
   dropdown/event/participation/mail_dispatch:
     title: E-Mail senden
@@ -666,6 +667,7 @@ en:
   event/participations:
     full_entry_label: "%{model_label} from <i>%{person}</i> in <i>%{event}</i>"
     success: "%{full_entry_label} has successfully been created. Please check the contact data, and update them if necessary."
+    success_for_external_manager: '%{full_entry_label} was created successfully.'
     instructions: "For the definite registration you have to print the confirmation of participation by<i>printing</i>, sign it and send it by mail to the corresponding address."
     export_enqueued: "Export is started in the background and downloaded after completion."
     waiting_list: "All places are currently taken, registration is on the waiting list."
@@ -2164,6 +2166,15 @@ en:
         update: "Update of request for <i>%{label}</i>: %{changeset}"
         destroy: "Request for <i>%{label}</i> has been answered."
 
+      deleted_person: "Gelöschte Person"
+      people_manager:
+        create:
+          manager: "%{label} has been added as a supervisor."
+          managed: " %{label} has been added as a child."
+        destroy:
+          manager: " %{label} has been removed as supervisor."
+          managed: " %{label} has been removed as a child."
+
     impersonate: "Account took over from %{user}"
     impersonation_done: "Account impersonation from %{user} ended."
     password_override: "Passwort wurde von %{user} auf null gesetzt und das Login verhindert, bis ein neues Passwort gesetzt wird."
@@ -2241,3 +2252,14 @@ en:
         next_button: Gast anmelden
       new_event_guest_contact_data_form_title: Kontaktdaten des Gasts
       new_event_guest_participation_form_title: Gast anmelden
+
+  people_managers:
+    section:
+      manageds_help: You can only add individuals as children to whom you have write access.
+    common_heading: Children / supervisors
+    managers_heading: Supervisors
+    manageds_heading: Children
+    create_managed_person_button: Create child
+    assign_managed_person_button: Assign child
+    assign_manager_person_button: Assign supervisor
+

@@ -184,6 +184,7 @@ de:
 
   dropdown/event/participant_add:
     as: "als %{role}"
+    register_new_managed: Neues Kind erfassen und anmelden
 
   dropdown/event/participation/mail_dispatch:
     title: E-Mail senden
@@ -522,6 +523,10 @@ de:
       email_check:
         next: Weiter
         enter_email: Bitte gib deine E-Mailadresse ein, damit du dich für den Anlass anmelden kannst.
+        next_for_manager: Mein Kind anmelden
+      manager_fields:
+        manager_first_name: Vorname erziehungsberechtigte Person
+        manager_last_name: Nachname erziehungsberechtigte Person
 
     invitation_lists:
       create:
@@ -673,6 +678,7 @@ de:
   event/participations:
     full_entry_label: "%{model_label} von <i>%{person}</i> in <i>%{event}</i>"
     success: "%{full_entry_label} wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an."
+    success_for_external_manager: '%{full_entry_label} wurde erfolgreich erstellt.'
     instructions: "Für die definitive Anmeldung musst du die Teilnahmebestätigung über <i>Drucken</i> ausdrucken, unterzeichnen und per Post an die entsprechende Adresse schicken."
     export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
     waiting_list: "Es sind derzeit alle Plätze belegt, die Anmeldung ist auf der Warteliste."
@@ -2291,3 +2297,13 @@ de:
         next_button: Gast anmelden
       new_event_guest_contact_data_form_title: Kontaktdaten des Gasts
       new_event_guest_participation_form_title: Gast anmelden
+
+  people_managers:
+    section:
+      manageds_help: Du kannst nur Personen als Kinder hinzufügen, auf welche du Schreibzugriff hast.
+    common_heading: Kinder / Verwalter*innen
+    managers_heading: Verwalter*innen
+    manageds_heading: Kinder
+    create_managed_person_button: Kind erfassen
+    assign_managed_person_button: Kind zuweisen
+    assign_manager_person_button: Verwalter*in zuweisen

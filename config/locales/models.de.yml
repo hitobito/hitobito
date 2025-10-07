@@ -55,6 +55,10 @@ de:
       messages:
         record_invalid: 'Gültigkeitsprüfung ist fehlgeschlagen: %{errors}'
       models:
+        event/participation_contact_datas/managed:
+          attributes:
+            base:
+              duplicates_present: Diese Person existiert bereits. Bitte kontaktiere die Addressverwaltung um sie als dein Kind zu registrieren.
         roles/termination:
           attributes:
             terminate_on:
@@ -378,6 +382,9 @@ de:
       people_filter:
         one: Filter
         other: Filter
+      people_manager:
+        one: Verwalter*in
+        other: Verwalter*innen
       phone_number:
         one: Telefonnummer
         other: Telefonnummern
@@ -423,10 +430,6 @@ de:
       tag:
         one: Tag
         other: Tags
-      people_manager:
-        one: Verwalter*in
-        other: Verwalter*innen
-
     attributes:
       acts_as_taggable_on/tag:
         name: Name
@@ -549,6 +552,25 @@ de:
         self_registration_reason: Eintrittsgrund
         self_registration_reason_text: Eintrittsgrund
         self_registration_reason_custom_text: Benutzerdefinierter Eintrittsgrund
+        managers: Verwalter*innen
+        manageds: Kinder
+        people_managers: Verwalter*innen
+        people_manageds: Kinder
+        people_managers_attributes: Verwalter*innen
+        people_manageds_attributes: Kinder
+        readable_manageds: Kinder
+
+      people_manager:
+        manager_id: Verwalter*in
+        managed_id: Kind
+
+      people_managers:
+        manager_id: Verwalter*in
+        managed_id: Kind
+
+      people_manageds:
+        manager_id: Kind
+        managed_id: Verwalter*in
 
       person_duplicate:
         birth_year: Jahrgang

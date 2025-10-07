@@ -180,6 +180,7 @@ it:
 
   dropdown/event/participant_add:
     as: "come %{role}"
+    register_new_managed: Registrati e registra un nuovo bambino
 
   dropdown/event/participation/mail_dispatch:
     title: Inviare e-mail
@@ -667,6 +668,7 @@ it:
   event/participations:
     full_entry_label: "%{model_label} da <i>%{person}</i> a <i>%{event}</i>"
     success: "%{full_entry_label} è stato creato con successo."
+    success_for_external_manager: '%{full_entry_label} è stato creato correttamente.'
     instructions: "per l'iscrizione definitiva devi stampare questa pagina tramita <i>stampare<i>, firmarla e spedirla per posta all'indirizzo corrispondente"
     export_enqueued: "L'esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento"
     waiting_list: "Tutti i posti sono attualmente occupati, l'iscrizione è in lista d'attesa."
@@ -2208,6 +2210,15 @@ it:
         update: "La richiesta d'accesso per <i>%{label}</i> è stata aggiornata: %{changeset}"
         destroy: "La richiesta d'accesso per <i>%{label}</i> è stata evasa."
 
+      deleted_person: "Gelöschte Person"
+      people_manager:
+        create:
+          manager: "%{label} è stato aggiunto come gestore/rice."
+          managed: "%{label} è stato aggiunto da bambino."
+        destroy:
+          manager: "%{label} è stato rimosso dal gestori/rice."
+          managed: "%{label} è stata rimossa da bambino."
+
     impersonate: "L'account è stato rilevato da %{user}"
     impersonation_done: "L'account non è più utilizzato da %{user}"
     password_override: "La password è stata azzerata da %{user} e il login impedito fino a che verrà definita una nuova password."
@@ -2285,3 +2296,13 @@ it:
         next_button: Gast anmelden
       new_event_guest_contact_data_form_title: Kontaktdaten des Gasts
       new_event_guest_participation_form_title: Gast anmelden
+
+  people_managers:
+    section:
+      manageds_help: Puoi aggiungere persone solo come bambini a cui hai accesso in scrittura.
+    common_heading: Bambini / Gestori
+    managers_heading: Gestori/rici
+    manageds_heading: Bambini
+    create_managed_person_button: Registrati bambino
+    assign_managed_person_button: Assegna bambino
+    assign_manager_person_button: Assegna Gestore/rice

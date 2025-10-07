@@ -56,6 +56,10 @@ fr:
       messages:
         record_invalid: 'Échec du contrôle de validité: %{errors}'
       models:
+        event/participation_contact_datas/managed:
+          attributes:
+            base:
+              duplicates_present: Cette personne existe déjà. Veuillez contacter les administrateur.trice.s de l'adresse pour l'enregistrer comme votre enfant.
         roles/termination:
           attributes:
             terminate_on:
@@ -146,6 +150,9 @@ fr:
             base:
               max_one_additional_invoice_address: Une seule adresse peut être choisie comme adresse de facturation.
               additional_address_labels_must_be_unique: Les désignations des autres adresses doivent être uniques.
+              cannot_have_managers_and_manageds: '%{name} ne peut pas avoir à la fois des administrateurs* et des enfants.'
+              manager_already_managed: L'administrateur.trice n'a pas pu être ajouté.e, car il/elle est déjà administré.e.
+              managed_already_manager: L'enfant n'a pas pu être ajouté, car il est déjà administrateur
             email:
               taken: >
                   a déjà été attribué. Cette adresse doit être unique pour chaque
@@ -162,6 +169,12 @@ fr:
               taken: a déjà été demandé
         person_duplicates:
           invalid_role: "Le rôle %{role} de %{person} n'est pas valable pour la fusion, car l'autre personne a peut-être déjà un rôle qui n'autorise plus ce rôle, celui-ci doit être corrigé/supprimé manuellement. Info: %{message}"
+        people_manager:
+          manager_and_managed_the_same: Ne peut pas s'auto-gérer.
+          attributes:
+            manager_id:
+              taken: est déjà défini.
+
         qualification:
           attributes:
             qualification_kind_id:
@@ -425,6 +438,10 @@ fr:
         one: Filtre
         many: Filtres
         other: Filtres
+      people_manager:
+        one: Administrateur·trice
+        many: Administrateur·trice·s
+        other: Administrateur·trice·s
       phone_number:
         one: Numéro de téléphone
         many: Numéros de téléphone
@@ -601,6 +618,25 @@ fr:
         self_registration_reason: Motif d'entrée
         self_registration_reason_text: Motif d'entrée
         self_registration_reason_custom_text: Motif d'entrée prédéfini
+        managers: Gérants
+        manageds: Enfants
+        people_managers: Gérants
+        people_manageds: Enfants
+        people_managers_attributes: Gérants
+        people_manageds_attributes: Enfants
+        readable_manageds: Enfants
+
+      people_manager:
+        manager_id: Administrateur.trice
+        managed_id: Enfant
+
+      people_managers:
+        manager_id: Administrateur.trice
+        managed_id: Enfant
+
+      people_manageds:
+        manager_id: Enfant
+        managed_id: Gérant
 
       person_duplicate:
         birth_year: Année de naissance

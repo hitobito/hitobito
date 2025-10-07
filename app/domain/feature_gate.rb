@@ -36,27 +36,19 @@ class FeatureGate
 
   class << self
     # Raise unless the feature is enabled
-    def assert!(feature)
-      new.assert!(feature)
-    end
+    delegate :assert!, to: :new
 
     # Raise if the feature is enabled
-    def refute!(feature)
-      new.refute!(feature)
-    end
+    delegate :refute!, to: :new
 
     # Execute the block if the feature is enabled
     def if(feature, &block)
       new.if(feature, &block)
     end
 
-    def enabled?(feature)
-      new.enabled?(feature)
-    end
+    delegate :enabled?, to: :new
 
-    def disabled?(feature)
-      new.disabled?(feature)
-    end
+    delegate :disabled?, to: :new
   end
 
   def assert!(feature)

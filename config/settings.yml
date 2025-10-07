@@ -178,6 +178,10 @@ people:
     enabled: true
   minimization:
     enabled: false
+  people_managers:
+    enabled: false
+    self_service_managed_creation:
+      enabled: false
 
 event:
   attachments:

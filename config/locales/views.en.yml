@@ -81,6 +81,8 @@ en:
 
     form:
       additional_languages: "Additional languages filled in"
+      locale_indicator: "Language of this input field"
+      input_translation_button: "Show input fields for other available languages"
 
   list:
     index:

@@ -82,11 +82,11 @@ describe "Globalized model" do
     expect(Event.validators_on(:name_en).any?(ActiveModel::Validations::PresenceValidator)).to be_falsey
   end
 
-  it "presence validated fields should only need one language filled in" do
+  it "presence validated fields need current language filled in" do
     event = events(:top_event)
     event.name = ""
     expect(event).not_to be_valid
     event.name_fr = "French name"
-    expect(event).to be_valid
+    expect(event).not_to be_valid
   end
 end

@@ -123,23 +123,15 @@ module Globalized
     super.merge(globalize_attribute_values)
   end
 
+  def valid?(*)
+    without_fallbacks do
+      super
+    end
+  end
+
   private
 
   def remember_translated_label
     to_s # fetches the required translations and keeps them around
-  end
-end
-
-# Monkey patch the save method of Globalize because we want to use fallbacks, which Globalize normally doesn't
-module Globalize::ActiveRecord::InstanceMethods
-  def save(...)
-    result = Globalize.with_locale(translation.locale || I18n.default_locale) do
-      super
-    end
-    if result
-      globalize.clear_dirty
-    end
-
-    result
   end
 end

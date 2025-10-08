@@ -6,7 +6,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ['toggle', 'translatedField', 'translatedFieldsDisplay']
+  static targets = ['toggle', 'translatedField', 'translatedFieldsDisplay', 'localeIndicator']
   static values = {
     additionalLanguagesText: String
   }
@@ -14,6 +14,7 @@ export default class extends Controller {
   connect() {
     this.updateTranslatedFields();
     this.openIfInvalid();
+    this.setLocaleIndicatorWidth();
   }
 
   updateTranslatedFields() {
@@ -40,5 +41,10 @@ export default class extends Controller {
     if(hasInvalidInput) {
       this.toggleFields();
     }
+  }
+
+  setLocaleIndicatorWidth() {
+    const indicatorMaxWidth = Math.max(...this.localeIndicatorTargets.map(e => e.getBoundingClientRect().width))
+    this.localeIndicatorTargets.forEach(e => e.style.width = `${indicatorMaxWidth}px`)
   }
 }

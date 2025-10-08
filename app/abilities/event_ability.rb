@@ -83,7 +83,7 @@ class EventAbility < AbilityDsl::Base
 
     for_self_or_manageds do
       # abilities which managers inherit from their managed children
-      class_side(:list_available).if_any_role
+      class_side(:list_available).everybody
       permission(:any).may(:show).in_same_layer_or_globally_visible_or_participating_or_public
     end
   end

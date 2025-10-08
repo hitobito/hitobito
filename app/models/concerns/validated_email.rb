@@ -13,12 +13,6 @@ module ValidatedEmail
   end
 
   def valid_email?(email = self.email)
-    if FeatureGate.enabled?("people.people_managers")
-      if Person.mailing_emails_for(self).any? { |mail| Truemail.valid?(mail.to_s) }
-        return true
-      end
-    end
-
     Truemail.valid?(email.to_s)
   end
 

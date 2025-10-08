@@ -21,7 +21,8 @@ module FormBuilder::TranslatedInputFieldBuilder
   def current_locale_input(attr, rich_text, args = {})
     content_tag(:div, class: "d-flex") do
       input_for_locale(attr, I18n.locale, rich_text, **args, value: @object.send(:"#{attr}_#{I18n.locale}")) do
-        action_button(nil, nil, "language", {"data-action": "translatable-fields#toggleFields", type: "button", in_button_group: true})
+        action_button(nil, nil, "language",
+          {"data-action": "translatable-fields#toggleFields", type: "button", in_button_group: true, "data-bs-toggle": "tooltip", "data-bs-title": I18n.t("global.form.input_translation_button")})
       end
     end
   end
@@ -40,11 +41,19 @@ module FormBuilder::TranslatedInputFieldBuilder
 
   def input_for_locale(attr, locale, rich_text, args = {})
     content_tag(:div, class: "input-group mb-2") do
-      locale_input = content_tag(:span, locale.to_s.upcase, class: "input-group-text d-flex justify-content-center rounded-start", "data-translatable-fields-target": "localeIndicator") +
+      locale_input = locale_indicator(locale) +
         (rich_text ? rich_text_area(attr, **args, already_translated: true, toolbar: "#{attr}_toolbar") : input_field(attr, **args, already_translated: true))
       locale_input.prepend(content_tag("trix-toolbar", nil, id: "#{attr}_toolbar")) if rich_text
       block_given? ? locale_input + yield : locale_input
     end
+  end
+
+  def locale_indicator(locale)
+    content_tag(
+      :span, locale.to_s.upcase,
+      class: "input-group-text d-flex justify-content-center rounded-start", "data-translatable-fields-target": "localeIndicator",
+      "data-bs-toggle": "tooltip", "data-bs-title": I18n.t("global.form.locale_indicator")
+    )
   end
 
   def translated_field?(attr, already_translated)

@@ -43,8 +43,18 @@ export default class extends Controller {
     }
   }
 
+  // Sets the width of the input-group-text elements so they all have the same width
   setLocaleIndicatorWidth() {
-    const indicatorMaxWidth = Math.max(...this.localeIndicatorTargets.map(e => e.getBoundingClientRect().width))
+    // This is needed because elements with display: none have width 0
+    const parentTab = this.localeIndicatorTargets[0].closest(".tab-content > .tab-pane")
+    if(parentTab) {
+      parentTab.style.display = "block";
+    }
+    const indicatorWidths = this.localeIndicatorTargets.map(e => e.getBoundingClientRect().width);
+    if(parentTab) {
+      parentTab.style.display = "";
+    }
+    const indicatorMaxWidth = Math.max(...indicatorWidths)
     this.localeIndicatorTargets.forEach(e => e.style.width = `${indicatorMaxWidth}px`)
   }
 }

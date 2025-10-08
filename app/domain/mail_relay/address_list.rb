@@ -72,7 +72,7 @@ module MailRelay
     end
 
     def people_and_their_managers
-      persisted_people, new_people = @people.partition(&:persisted?)
+      persisted_people, new_people = *@people.partition(&:persisted?)
       new_people_and_their_managers = new_people + new_people.flat_map(&:managers)
       return new_people_and_their_managers if persisted_people.blank?
 

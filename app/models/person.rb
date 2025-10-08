@@ -265,11 +265,11 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   has_many :message_recipients, dependent: :nullify
 
   has_many :people_managers, foreign_key: :managed_id,
-    inverse_of: :manager,
+    inverse_of: :managed,
     dependent: :destroy
   has_many :people_manageds, class_name: "PeopleManager",
     foreign_key: :manager_id,
-    inverse_of: :managed,
+    inverse_of: :manager,
     dependent: :destroy
 
   has_many :managers, through: :people_managers
@@ -552,6 +552,14 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     return [self] unless FeatureGate.enabled?("people.people_managers")
 
     [self, manageds].flatten
+  end
+
+  def valid_email?(email = self.email)
+    if FeatureGate.enabled?("people.people_managers")
+      super || Person.mailing_emails_for(self).any? { |mail| super(mail) }
+    else
+      super
+    end
   end
 
   private

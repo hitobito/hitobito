@@ -58,7 +58,7 @@ de:
         event/participation_contact_datas/managed:
           attributes:
             base:
-              duplicates_present: Diese Person existiert bereits. Bitte kontaktiere die Addressverwaltung um sie als dein Kind zu registrieren.
+              duplicates_present: Diese Person existiert bereits. Bitte kontaktiere die Adressverwaltung um sie als dein Kind zu registrieren.
         roles/termination:
           attributes:
             terminate_on:

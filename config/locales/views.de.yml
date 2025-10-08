@@ -528,9 +528,13 @@ de:
 
     register:
       register:
-        title: Kontaktdaten der teilnehmenden Person erfassen
+        title:
+          participant: Kontaktdaten der teilnehmenden Person erfassen
+          manager: Kontaktdaten der erziehungsberechtigten Person
         flash:
           privacy_policy_not_accepted: Um die Anmeldung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden.
+        email_check:
+          enter_email: Bitte gib deine E-Mailadresse ein, mit der du dich registrieren möchtest.
       index:
         sign_in: Anmelden
         login: Login
@@ -735,6 +739,8 @@ de:
     registered: "Deine persönlichen Daten wurden aufgenommen. Bitte ergänze nun noch die Angaben für die Anmeldung."
     application_window_closed: "Das Anmeldefenster für diesen Anlass ist geschlossen."
     no_places_available: "Die maximale Teilnehmeranzahl für diesen Anlass ist bereits erreicht."
+    email_sent_manager: 'Wir haben dir ein E-Mail mit einem Link geschickt, wo du dich oder dein Kind direkt für den Anlass anmelden kannst.'
+    registered_manager: 'Deine persönlichen Daten wurden aufgenommen. Du kannst nun deine Kinder via "Anmelden" Knopf anmelden'
 
   event/roles:
     full_entry_label: "Rolle <i>%{role}</i> für <i>%{person}</i>"

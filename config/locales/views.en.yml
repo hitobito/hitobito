@@ -525,9 +525,13 @@ en:
 
     register:
       register:
-        title: Contact details of the participating person
+        title:
+          participant: Enter contact details of the participating individual to complete registration.
+          manager: Contact details of the legal guardian
         flash:
           privacy_policy_not_accepted: To complete the registration, you must agree to the data protection declaration.
+        email_check:
+          enter_email: Please enter the email address you would like to use to register.
       index:
         sign_in: Register
         login: Login
@@ -535,6 +539,10 @@ en:
       email_check:
         next: Continue
         enter_email: Please enter your email address so you can register for the event.
+        next_for_manager: Register my child
+      manager_fields:
+        manager_first_name: First name of legal guardian
+        manager_last_name: Last name of legal guardian
 
     invitation_lists:
       create:
@@ -724,6 +732,8 @@ en:
     registered: "Your personal data are recorded. Please set now the information for the application."
     application_window_closed: "The login window for this event is closed."
     no_places_available: "Die maximale Teilnehmeranzahl für diesen Anlass ist bereits erreicht."
+    email_sent_manager: 'We have sent you an email with a link where you or your child can register directly for the event.'
+    registered_manager: 'Your personal information has been recorded. You can now register your children using the “Register” button'
 
   event/roles:
     full_entry_label: "Role <i>%{role}</i> for <i>%{person}</i>"

@@ -527,9 +527,13 @@ it:
 
     register:
       register:
-        title: Registrare i dati di contatto del/la partecipante
+        title:
+          participant: Raccogliere i dettagli di contatto della persona partecipante
+          manager: Dati di contatto del tutore legale
         flash:
           privacy_policy_not_accepted: Per completare la registrazione, è necessario accettare la dichiarazione sulla protezione dei dati.
+        email_check:
+          enter_email: Inserisci l'indirizzo email che desideri utilizzare per registrarti.
       index:
         sign_in: Iscriversi
         login: Login
@@ -537,6 +541,10 @@ it:
       email_check:
         next: avanti
         enter_email: Inserisci per favore il tuo indirizzo email, affinché tu possa iscriverti all'evento.
+        next_for_manager: Registra il mio bambino
+      manager_fields:
+        manager_first_name: Nome del tutore legale
+        manager_last_name: Cognome del tutore legale
 
     invitation_lists:
       create:
@@ -729,6 +737,8 @@ it:
     registered: "I tuoi dati personali sono stati registrati. Completa ancora solo i dati per l'iscrizione."
     application_window_closed: "il periodo per l'iscrizione per questo evento è terminato."
     no_places_available: "Il numero massimo di partecipanti per questo evento è già stato raggiunto."
+    email_sent_manager: 'Ti abbiamo inviato un''e-mail con un link dove tu o tuo figlio potete registrarvi direttamente all''evento.'
+    registered_manager: 'Le tue informazioni personali sono state registrate. Ora puoi registrare i tuoi figli utilizzando il pulsante “Registrati”.'
 
   event/roles:
     full_entry_label: "ruolo<i>%{role}</i> per <i>%{person}</i>"

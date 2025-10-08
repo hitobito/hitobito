@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- title t('.title')
+- title t(".title.#{manager ? 'manager' : 'participant'}")
 
 - unless self_service_managed_enabled?
   = render 'event/participations/step_wizard', step: 1
@@ -18,8 +18,6 @@
 
   = hidden_field_tag(:manager, manager)
   = hidden_field_tag(:return_url, return_url)
-
-  = render 'event/participation_contact_datas/fields', f: f
 
   - if manager
     = render 'manager_fields', f: f

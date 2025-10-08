@@ -84,6 +84,8 @@ it:
 
     form:
       additional_languages: "Lingue aggiuntive compilate"
+      locale_indicator: "Lingua di questo campo di inserimento"
+      input_translation_button: "Mostra i campi di inserimento per le altre lingue disponibili"
 
   list:
     index:

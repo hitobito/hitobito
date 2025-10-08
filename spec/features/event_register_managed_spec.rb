@@ -103,7 +103,7 @@ describe "EventRegisterManaged", js: true do
           end
 
           it "allows you to create new participation for managed with privacy policy in hierarchy" do
-            file = Rails.root.join("spec/fixtures/files/images/logo.png")
+            file = Rails.root.join("spec", "fixtures", "files", "images", "logo.png")
             image = ActiveStorage::Blob.create_and_upload!(io: File.open(file, "rb"),
               filename: "logo.png",
               content_type: "image/png").signed_id
@@ -347,7 +347,7 @@ describe "EventRegisterManaged", js: true do
     attrs = {application_opening_at: 5.days.ago, groups: [group], globally_visible: false, external_applications: true}
     case type
     when :course
-      attrs.merge!(state: :application_open)
+      attrs[:state] = :application_open
     end
     attrs
   end

@@ -13,7 +13,6 @@ class PeopleManager < ActiveRecord::Base
 
   accepts_nested_attributes_for :managed
   validates :managed_id, presence: true, unless: ->(p) { p.managed.present? }
-  validates :manager_id, presence: true
   validates :manager_id, uniqueness: {scope: :managed_id}
   validate :assert_manager_is_not_managed
 
@@ -22,9 +21,7 @@ class PeopleManager < ActiveRecord::Base
 
   has_paper_trail on: []
 
-  def email
-    manager.email
-  end
+  delegate :email, to: :manager
 
   def phone_number
     manager.phone_numbers.first { _1.public } || manager.phone_numbers.first

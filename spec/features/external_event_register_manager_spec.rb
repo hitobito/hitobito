@@ -140,7 +140,7 @@ describe "ExternalEventRegisterManager", js: true do
              external_applications: true, groups: [group], globally_visible: false}
     case type
     when :course
-      attrs.merge!(state: :application_open)
+      attrs[:state] = :application_open
     end
     attrs
   end

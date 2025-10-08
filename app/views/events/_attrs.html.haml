@@ -3,12 +3,13 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- if @user_participation
+- if @user_participations.present?
   = render 'banner_participating'
-- elsif @my_invitation.try(:status) == :open && event_user_application_possible?(entry)
+- if @open_invitations.present?
   = render 'banner_open_invitation'
-- elsif @my_invitation.try(:status) == :declined
+- if @declined_invitations.present?
   = render 'banner_declined_invitation'
+
 
 #main.row
   %article.col-lg-7

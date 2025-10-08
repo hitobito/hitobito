@@ -183,6 +183,9 @@ fr:
   dropdown/event/participant_add:
     as: "en tant que %{role}"
     register_new_managed: Saisir et inscrire un nouvel enfant
+    disabled_messages:
+      already_exists: 'est déjà inscrit.e'
+      cannot_see_event: 'ne peut pas voir lévénement'
 
   dropdown/event/participation/mail_dispatch:
     title: Envoyer un e-mail
@@ -450,6 +453,17 @@ fr:
       update:
         flash:
           privacy_policy_not_accepted: "Pour terminer l'inscription, il faut accepter la déclaration de protection des données."
+
+    participation_contact_data:
+      managed:
+        update:
+          flash:
+            privacy_policy_not_accepted: 'Pour finaliser l''inscription, il est nécessaire d''accepter la déclaration de protection des données.'
+
+        edit:
+          title: Enregistrer un nouvel enfant et l'inscrire à l'événement
+          save: Continuer
+
     participations:
       edit:
         title: Inscription
@@ -503,6 +517,10 @@ fr:
         waiting_list: Tu es sur la liste d'attente pour cet événement.
         caption: Désinscrire
         confirmation: "Es-tu sûr/sure de vouloir annuler ton inscription à cet évènement?"
+        managed:
+          explanation: "%{person} est inscrit.e à cet événement."
+          pending: "%{person} est préinscrit.e à cette manifestation. L'inscription n'est pas encore définitive et doit être confirmée par le/la responsable de l'événement."
+          waiting_list: "%{person} est sur la liste d'attente pour cet événement."
 
     qualifications:
       index:
@@ -598,11 +616,15 @@ fr:
       add: "ajouter"
     banner_open_invitation:
       explanation: Tu as été invité à cet évènement.
+      managed:
+        explanation: "%{person} a été invité.e à cet événement."
       buttons:
         accept: Inscription
         decline: Désinscription
     banner_declined_invitation:
       explanation: Tu as été invité·e à cet événement et tu as annulé ton inscription.
+      managed:
+        explanation: "%{person} a été invité.e à cette événement et a été désinscrit.e."
     form:
       caption_external_applications: "Les personnes externes peuvent s'inscrire à cet événement."
       caption_prioritization: "Les participants peuvent indiquer deux autres cours alternatifs lors de l'inscription."

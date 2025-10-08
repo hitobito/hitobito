@@ -5,7 +5,10 @@
 
 - title t('.title')
 
-= render 'event/participations/step_wizard', step: 1
+- unless self_service_managed_enabled?
+  = render 'event/participations/step_wizard', step: 1
+
+- return_url = FeatureGate.enabled?('people.people_managers') ? group_event_path(group, event) : new_group_event_participation_path(group, event)
 
 = crud_form(entry,
             url: register_group_event_path(group, event),
@@ -13,6 +16,14 @@
             cancel_url: register_group_event_path(group, event),
             buttons_bottom: true) do |f|
 
+  = hidden_field_tag(:manager, manager)
+  = hidden_field_tag(:return_url, return_url)
+
   = render 'event/participation_contact_datas/fields', f: f
+
+  - if manager
+    = render 'manager_fields', f: f
+  - else
+    = render 'fields', f: f
 
   = f.honeypot(:verification)

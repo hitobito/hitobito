@@ -711,6 +711,56 @@ describe Event::ParticipationsController do
         end.to raise_error(CanCan::AccessDenied)
       end
     end
+
+    context "confirmation mails" do
+      let(:user) { people(:bottom_member) }
+
+      context "as manager" do
+        before do
+          PeopleManager.create!(manager_id: people(:top_leader).id, managed_id: user.id)
+          course.update!(waiting_list: false, maximum_participants: 2, participant_count: 1, automatic_assignment: true)
+        end
+
+        it "sends confirmation mail when registering child" do
+          expect do
+            post :create, params: {group_id: group.id, event_id: course.id, event_participation: {person_id: user.id}}
+            expect(assigns(:participation)).to be_valid
+          end.to change { Delayed::Job.count }
+
+          expect(pending_dj_handlers).to be_one { |h| h =~ /Event::ParticipationNotificationJob/ }
+          expect(pending_dj_handlers).to be_one { |h| h =~ /Event::ParticipationConfirmationJob/ }
+
+          expect(flash[:notice])
+            .to include "Teilnahme von <i>#{user}</i> in <i>Eventus</i> wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an."
+          expect(flash[:warning]).to be_nil
+        end
+      end
+
+      context "as child" do
+        before do
+          sign_in(user)
+          Fabricate(:role, type: Group::TopGroup::Leader.sti_name, person: user, group: groups(:top_group))
+          PeopleManager.create!(manager_id: people(:top_leader).id, managed_id: user.id)
+          course.update!(waiting_list: false, maximum_participants: 2, participant_count: 1, automatic_assignment: true)
+        end
+
+        it "sends confirmation mail to manager when child does not have email" do
+          user.update!(email: nil)
+
+          expect do
+            post :create, params: {group_id: group.id, event_id: course.id, event_participation: {person_id: user.id}}
+            expect(assigns(:participation)).to be_valid
+          end.to change { Delayed::Job.count }
+
+          expect(pending_dj_handlers).to be_one { |h| h =~ /Event::ParticipationNotificationJob/ }
+          expect(pending_dj_handlers).to be_one { |h| h =~ /Event::ParticipationConfirmationJob/ }
+
+          expect(flash[:notice])
+            .to include "Teilnahme von <i>#{user}</i> in <i>Eventus</i> wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an."
+          expect(flash[:warning]).to be_nil
+        end
+      end
+    end
   end
 
   context "DELETE destroy" do
@@ -728,6 +778,27 @@ describe Event::ParticipationsController do
 
       is_expected.to redirect_to group_event_path(group, course)
       expect(Delayed::Job.where("handler LIKE ?", "%CancelApplicationJob%")).to exist
+    end
+
+    context "for managed participation" do
+      let(:managed) { Fabricate(:person) }
+      let!(:manager_relation) { PeopleManager.create(manager: people(:top_leader), managed: managed) }
+
+      let(:participation) do
+        Fabricate(:event_participation,
+          event: course,
+          participant: managed,
+          active: true)
+      end
+
+      it "rediects to event#show" do
+        delete :destroy, params: {group_id: group.id,
+                                  event_id: course.id,
+                                  id: participation.id}
+
+        expect(response).to have_http_status(303)
+        expect(response).to redirect_to(group_event_path(group, course))
+      end
     end
   end
 
@@ -840,6 +911,19 @@ describe Event::ParticipationsController do
 
     it "bottom_member can create when supplying required answer" do
       expect(make_request(people(:bottom_member), "dummy")).to be_valid
+    end
+
+    context "with people_manager active" do
+      before do
+        allow_any_instance_of(FeatureGate).to receive(:enabled?).and_return(false)
+        allow_any_instance_of(FeatureGate).to receive(:enabled?).with("people.people_managers").and_return(true)
+      end
+
+      it "top_leader cannot create child without supplying required answer" do
+        PeopleManager.create!(manager_id: people(:top_leader).id, managed_id: people(:bottom_member).id)
+
+        expect(make_request(people(:top_leader), "", people(:bottom_member).id)).not_to be_valid
+      end
     end
   end
 
@@ -1114,6 +1198,28 @@ describe Event::ParticipationsController do
         get :index, params: {group_id: group.id, event_id: course.id}
         expect(dom).to have_checked_field "Geburtstag"
         expect(dom.find("table tbody")).to have_content "03.03.2003"
+      end
+    end
+
+    context "new" do
+      before { sign_in(user) }
+
+      context "with for_someone_else" do
+        it "renders only one hidden participant_id field" do
+          get :new, params: {group_id: group.id, event_id: course.id, for_someone_else: true, event_role: {type: Event::Course::Role::Participant.sti_name}}
+
+          input = dom.find_css('input[type="hidden"][name="event_participation[participant_id]"]')
+          expect(input.size).to eq(1)
+        end
+      end
+
+      context "without for_someone_else" do
+        it "renders only one hidden participant_id field" do
+          get :new, params: {group_id: group.id, event_id: course.id, for_someone_else: false, event_role: {type: Event::Course::Role::Participant.sti_name}}
+
+          input = dom.find_css('input[type="hidden"][name="event_participation[participant_id]"]')
+          expect(input.size).to eq(1)
+        end
       end
     end
   end

@@ -30,6 +30,10 @@
 - if entry.application && entry.new_record? && entry.participant_type != Event::Guest.sti_name
   = render 'application_fields', f: f
 
+
+- if !params[:for_someone_else] && !f.object.is_a?(Wizards::Steps::NewEventGuestParticipationForm)
+  = f.hidden_field(:participant_id)
+
 = render_extensions :fields, locals: { f: f }
 
 - if params[:for_someone_else] && @event.course?

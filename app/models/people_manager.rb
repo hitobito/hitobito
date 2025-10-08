@@ -7,13 +7,13 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_youth.
 
-class PeopleManager < ActiveRecord::Base
+class PeopleManager < ApplicationRecord
   belongs_to :manager, class_name: "Person", validate: true
   belongs_to :managed, class_name: "Person", validate: true
 
   accepts_nested_attributes_for :managed
   validates :managed_id, presence: true, unless: ->(p) { p.managed.present? }
-  validates :manager_id, uniqueness: {scope: :managed_id}
+  validates :manager_id, presence: true, uniqueness: {scope: :managed_id}
   validate :assert_manager_is_not_managed
 
   after_create :create_paper_trail_versions_for_create_event

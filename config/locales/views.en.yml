@@ -180,6 +180,9 @@ en:
   dropdown/event/participant_add:
     as: "as %{role}"
     register_new_managed: Register new Child
+    disabled_messages:
+      already_exists: 'is already registered'
+      cannot_see_event: 'darf den Anlass nicht sehen'
 
   dropdown/event/participation/mail_dispatch:
     title: E-Mail senden
@@ -446,6 +449,17 @@ en:
       update:
         flash:
           privacy_policy_not_accepted: "To complete the registration, you must agree to the data protection declaration."
+
+    participation_contact_data:
+      managed:
+        update:
+          flash:
+            privacy_policy_not_accepted: 'To complete the registration, you must agree to the data protection declaration.'
+
+        edit:
+          title: Register a new child and register for the event
+          save: Continue
+
     participations:
       edit:
         title: Registration
@@ -497,6 +511,10 @@ en:
         waiting_list: You are on the waiting list for this event.
         caption: Cancel registration
         confirmation: "Are you sure, that you want to cancel your registration?"
+        managed:
+          explanation: "%{person} is registered for this event."
+          pending: "\"%{person} is pre-registered for this event. The registration is not yet final and needs to be confirmed by the organizer.\""
+          waiting_list: "%{person} is on the waiting list for this event."
 
     qualifications:
       index:
@@ -589,11 +607,15 @@ en:
       add: "add"
     banner_open_invitation:
       explanation: You've been invited to this event.
+      managed:
+        explanation: "%{person} wurde zu diesem Anlass eingeladen."
       buttons:
         accept: Register
         decline: Cancel registration
     banner_declined_invitation:
       explanation: Du wurdest zu diesem Anlass eingeladen und hast dich abgemeldet.
+      managed:
+        explanation: "%{person} wurde zu diesem Anlass eingeladen und wurde abgemeldet."
     form:
       caption_external_applications: "Externals can sign up for this event"
       caption_prioritization: "Participants may set two additional courses as alternatives."

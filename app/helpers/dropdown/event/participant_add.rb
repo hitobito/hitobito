@@ -52,6 +52,10 @@ module Dropdown
       end
 
       def init_items(url_options)
+        if FeatureGate.enabled?("people.people_managers") && !url_options[:for_someone_else]
+          return init_items_with_manageds(url_options)
+        end
+
         event.participant_types.each do |type|
           opts = url_options.merge(event_role: {type: type.sti_name})
           link = participate_link(opts)
@@ -65,6 +69,55 @@ module Dropdown
         else
           template.contact_data_group_event_participations_path(group, event, opts)
         end
+      end
+
+      def init_items_with_manageds(url_options)
+        template.current_user.and_manageds.each do |person|
+          opts = url_options.clone
+          opts[:person_id] = person.id unless template.current_user == person
+
+          disabled_message = disabled_message_for_person(person)
+          if disabled_message.present?
+            add_disabled_item(person, disabled_message)
+          elsif event.participant_types.size > 1
+            item = add_item(person.full_name, "#")
+
+            item.sub_items = participant_types_sub_items(opts)
+          else
+            add_participant_item(person, opts)
+          end
+        end
+
+        if register_new_managed?
+          opts = url_options.merge(event_role: {type: event.participant_types.first.sti_name})
+          add_item(
+            translate(".register_new_managed"),
+            template.contact_data_managed_group_event_participations_path(group, event, opts)
+          )
+        end
+      end
+
+      def register_new_managed?
+        event.external_applications? &&
+          FeatureGate.enabled?("people.people_managers.self_service_managed_creation")
+      end
+
+      def disabled_message_for_person(participant)
+        if ::Event::Participation.exists?(participant: participant, event: event)
+          translate(:"disabled_messages.already_exists")
+        elsif ::Ability.new(participant).cannot?(:show, event)
+          translate(:"disabled_messages.cannot_see_event")
+        end
+      end
+
+      def add_participant_item(person, opts)
+        opts = opts.merge(event_role: {type: event.participant_types.first.sti_name})
+        link = participate_link(opts)
+        add_item(person.full_name, link)
+      end
+
+      def add_disabled_item(person, message)
+        add_item("#{person.full_name} (#{message})", "#", disabled_msg: message)
       end
     end
   end

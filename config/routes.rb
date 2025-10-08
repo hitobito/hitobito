@@ -264,6 +264,11 @@ Hitobito::Application.routes.draw do
             collection do
               get 'contact_data', controller: 'participation_contact_datas', action: 'edit'
               post 'contact_data', controller: 'participation_contact_datas', action: 'update'
+
+              scope module: :participation_contact_data do
+                get 'contact_data/managed' => 'managed#edit'
+                post 'contact_data/managed' => 'managed#update'
+              end
             end
             resource :mail_dispatch, only: [:create], module: :participations
             member do

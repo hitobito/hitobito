@@ -60,8 +60,11 @@ class Event::RegisterController < ApplicationController
     entry.valid? && privacy_policy_accepted? && entry.save
   end
 
-  # NOTE: Wagon Hook - youth
   def registered_notice
+    if manager
+      return translate(:registered_manager)
+    end
+
     translate(:registered)
   end
 
@@ -92,8 +95,16 @@ class Event::RegisterController < ApplicationController
     @participation_contact_data ||= contact_data_class.new(event, person, model_params)
   end
 
+  def manager
+    @manager ||= true?(params[:manager]) && self_service_managed_enabled?
+  end
+
   def contact_data_class
-    Event::ParticipationContactData
+    if manager
+      Event::ParticipationContactDatas::Manager
+    else
+      Event::ParticipationContactData
+    end
   end
 
   def model_params
@@ -143,5 +154,10 @@ class Event::RegisterController < ApplicationController
         nil
       end
     end
+  end
+
+  def self_service_managed_enabled?
+    FeatureGate.enabled?("people.people_managers") &&
+      FeatureGate.enabled?("people.people_managers.self_service_managed_creation")
   end
 end

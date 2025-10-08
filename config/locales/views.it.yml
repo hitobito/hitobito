@@ -181,6 +181,9 @@ it:
   dropdown/event/participant_add:
     as: "come %{role}"
     register_new_managed: Registrati e registra un nuovo bambino
+    disabled_messages:
+      already_exists: 'è già registrato'
+      cannot_see_event: 'darf den Anlass nicht sehen'
 
   dropdown/event/participation/mail_dispatch:
     title: Inviare e-mail
@@ -447,6 +450,17 @@ it:
       update:
         flash:
           privacy_policy_not_accepted: "Per completare l'iscrizione deve venir accettata la dichiarazione di protezione dei dati."
+
+    participation_contact_data:
+      managed:
+        update:
+          flash:
+            privacy_policy_not_accepted: 'Per completare la registrazione è necessario accettare la dichiarazione sulla protezione dei dati.'
+
+        edit:
+          title: Registra un nuovo bambino e iscriviti all'evento
+          save: Continua
+
     participations:
       edit:
         title: Iscrizione
@@ -498,6 +512,11 @@ it:
         waiting_list: Sei in lista d'attesa per questo evento.
         caption: Disiscriversi
         confirmation: "Sei sicuro di volerti disiscrivere da questo evento?"
+        managed:
+          explanation: "%{person} è registrato per questo evento."
+          pending: "\"%{person} è pre-registrato per questo evento. La registrazione non è ancora definitiva e deve essere confermata dalla gestione dell'evento.\""
+          waiting_list: "%{person} è in lista d'attesa per questo evento."
+
 
     qualifications:
       index:
@@ -593,11 +612,15 @@ it:
       add: "aggiungere"
     banner_open_invitation:
       explanation: Sei stato invitato a questo evento
+      managed:
+        explanation: "%{person} wurde zu diesem Anlass eingeladen."
       buttons:
         accept: log in
         decline: log out
     banner_declined_invitation:
       explanation: Siete stati invitati a questo evento e avete disdetto.
+      managed:
+        explanation: "%{person} wurde zu diesem Anlass eingeladen und wurde abgemeldet."
     form:
       caption_external_applications: "Esterni possono iscriversi a questo evento."
       caption_prioritization: "I partecipanti possono dare durante l'iscrizione due ulteriori corsi come alternative."

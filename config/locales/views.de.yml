@@ -183,6 +183,9 @@ de:
   dropdown/event/participant_add:
     as: "als %{role}"
     register_new_managed: Neues Kind erfassen und anmelden
+    disabled_messages:
+      already_exists: 'ist bereits angemeldet'
+      cannot_see_event: 'darf den Anlass nicht sehen'
 
   dropdown/event/participation/mail_dispatch:
     title: E-Mail senden
@@ -449,6 +452,17 @@ de:
       update:
         flash:
           privacy_policy_not_accepted: "Um die Anmeldung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden."
+
+    participation_contact_data:
+      managed:
+        update:
+          flash:
+            privacy_policy_not_accepted: 'Um die Anmeldung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden.'
+
+        edit:
+          title: Neues Kind registrieren und am Anlass anmelden
+          save: Weiter
+
     participations:
       edit:
         title: Anmeldung
@@ -500,6 +514,10 @@ de:
         waiting_list: Du bist auf der Warteliste für diesen Anlass.
         caption: Abmelden
         confirmation: "Bist Du sicher, dass Du dich von diesem Anlass abmelden möchtest?"
+        managed:
+          explanation: "%{person} ist für diesen Anlass angemeldet."
+          pending: "%{person} ist für diesen Anlass vorangemeldet. Die Anmeldung ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden."
+          waiting_list: "%{person} ist auf der Warteliste für diesen Anlass."
 
     qualifications:
       index:
@@ -596,11 +614,15 @@ de:
       add: "hinzufügen"
     banner_open_invitation:
       explanation: Du wurdest zu diesem Anlass eingeladen.
+      managed:
+        explanation: "%{person} wurde zu diesem Anlass eingeladen."
       buttons:
         accept: Anmelden
         decline: Abmelden
     banner_declined_invitation:
       explanation: Du wurdest zu diesem Anlass eingeladen und hast dich abgemeldet.
+      managed:
+        explanation: "%{person} wurde zu diesem Anlass eingeladen und wurde abgemeldet."
     form:
       caption_external_applications: "Externe können sich für diesen Anlass anmelden."
       caption_prioritization: "Teilnehmende können bei der Anmeldung zwei weitere Kurse als Alternativen angeben."

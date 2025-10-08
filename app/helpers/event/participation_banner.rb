@@ -41,7 +41,13 @@ class Event::ParticipationBanner
       "explanation"
     end
 
-    t("event.participations.cancel_application.#{key}")
+    if @user_participation.person != @context.current_user
+      key = ["managed", key].join(".")
+    end
+
+    t(key,
+      person: @user_participation.person.full_name,
+      scope: "event.participations.cancel_application")
   end
 
   def status_class

@@ -531,9 +531,13 @@ fr:
 
     register:
       register:
-        title: Saisir les données de contact de la personne participante
+        title:
+          participant: Saisir les coordonnes du/de la participant.e
+          manager: Coordonnées du parent ou du représentant légal.
         flash:
           privacy_policy_not_accepted: Pour terminer l'inscription, il faut accepter la déclaration de protection des données.
+        email_check:
+          enter_email: Veuillez saisir l'adresse e-mail avec laquelle vous souhaitez vous inscrire.
       index:
         sign_in: Inscription
         login: Login
@@ -541,6 +545,10 @@ fr:
       email_check:
         next: Continuer
         enter_email: S'il te plaît, indique ton adresse e-mail pour t'inscrire à cet événement.
+        next_for_manager: Inscrire mon enfant
+      manager_fields:
+        manager_first_name: Prénom du parent ou représentant légal
+        manager_last_name: Nom de famille du parent ou représentant légal
 
     invitation_lists:
       create:
@@ -733,6 +741,8 @@ fr:
     registered: "Tes données personnelles ont été enregistrées. Prière d'apporter les indications complémentaires suivantes en vue de l'inscription."
     application_window_closed: "La fenêtre d'inscription pour cet événement est close."
     no_places_available: "Le nombre maximal de participants pour cet événement est déjà atteint."
+    email_sent_manager: 'Nous t''avons envoyé un e-mail avec un lien pour t''inscrire ou inscrire ton enfant à l''événement.'
+    registered_manager: 'Tes données personnelles ont été enregistrées. Tu peux maintenant inscrire tes enfants en cliquant sur le bouton "Inscription".'
 
   event/roles:
     full_entry_label: "Rôle <i>%{role}</i> pour <i>%{person}</i>"

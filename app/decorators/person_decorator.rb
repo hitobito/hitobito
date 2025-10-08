@@ -234,4 +234,8 @@ class PersonDecorator < ApplicationDecorator
         remote: true)
     end
   end
+
+  def readable_manageds
+    manageds.select { |m| can?(:show, m) }
+  end
 end

@@ -9,7 +9,7 @@ class Event::RegisterController < ApplicationController
   include PrivacyPolicyAcceptable
   include Events::RegistrationClosedInfo
 
-  helper_method :resource, :entry, :group, :event
+  helper_method :resource, :entry, :group, :event, :manager, :self_service_managed_enabled?
 
   before_action :assert_external_application_possible
   before_action :assert_honeypot_is_empty, only: [:check, :register]
@@ -26,7 +26,8 @@ class Event::RegisterController < ApplicationController
       if (user = Person.find_by(email: email))
         # send_login_and_render_index
         Event::SendRegisterLoginJob.new(user, group, event).enqueue!
-        flash.now[:notice] = translate(:person_found) + "\n\n" + translate(:email_sent)
+        email_sent_key = FeatureGate.enabled?("people.people_managers") ? :email_sent_manager : :email_sent
+        flash.now[:notice] = translate(:person_found) + "\n\n" + translate(email_sent_key)
         render "index"
       else
         # register_new_person

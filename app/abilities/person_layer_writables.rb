@@ -47,7 +47,7 @@ class PersonLayerWritables < GroupBasedFetchables
       append_group_conditions(condition)
       visible_from_above_condition(condition)
       see_invisible_from_above_condition(condition)
-      # condition.or(*manager_condition)
+      condition.or(*manager_condition)
     end
   end
 

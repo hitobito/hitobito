@@ -52,7 +52,7 @@ class PersonReadables < GroupBasedReadables
     OrCondition.new.tap do |condition|
       condition.or(*herself_condition)
       condition.or(*contact_data_condition) if contact_data_visible?
-      # condition.or(*manager_condition)
+      condition.or(*manager_condition)
       see_invisible_from_above_condition(condition)
       append_group_conditions(condition)
       visible_from_above_condition(condition)

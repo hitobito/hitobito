@@ -158,3 +158,15 @@ jobs:
       image_ref: rails
       identifier: ${{ needs.settings.outputs.namespace_name }}
     secrets: inherit
+
+  notify:
+    uses: ./.github/workflows/notify-statuscope.yml
+    needs:
+      - settings
+      - deploy
+    with:
+      application: "${{ needs-settings.outputs.namespace_name }}-deploy"
+      result: ${{ needs.deploy.result == 'success' }}
+    secrets:
+      HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}
+      HEARTBEAT_TOKEN: ${{ secrets.HEARTBEAT_TOKEN_DEPLOYMENT }}

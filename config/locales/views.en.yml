@@ -1728,7 +1728,9 @@ en:
         title: "%{full_name} löschen?"
         minimize: "Person minimieren"
         delete: "Person definitiv löschen"
-        explanation: "Sollte die Person gelöscht werden, werden die Daten der Person unwiderruflich gelöscht. Bei der Minimierung wird die Person nicht gelöscht, es werden aber die meisten Personspezifischen Daten entfernt."
+        explanation:
+          delete: Sollte die Person gelöscht werden, werden die Daten der Person unwiderruflich gelöscht.
+          minimize: Bei der Minimierung wird die Person nicht gelöscht, es werden aber die meisten Personspezifischen Daten entfernt.
       minimize:
         success: "%{full_name} wurde erfolgreich minimiert."
       delete:

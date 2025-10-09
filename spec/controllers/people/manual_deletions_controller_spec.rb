@@ -60,34 +60,22 @@ describe People::ManualDeletionsController do
     context "as leader" do
       let(:user) { bottom_leader }
 
-      it "minimizes" do
-        expect(person_with_expired_roles.minimized_at).to be_nil
-
-        post :minimize, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}
-
-        person_with_expired_roles.reload
-
-        expect(person_with_expired_roles.minimized_at).to be_present
-        expect(flash[:notice]).to eq("#{person_with_expired_roles.full_name} wurde erfolgreich minimiert.")
-      end
-
-      context "with recent event participation" do
+      context "when minimization is disabled" do
         before do
-          event = Fabricate(:event, dates: [Event::Date.new(start_at: 10.days.ago)])
-          Event::Participation.create!(event: event, person: person_with_expired_roles)
+          allow_any_instance_of(FeatureGate).to receive(:enabled?).and_return false
         end
 
-        it "does not minimize" do
+        it "raises" do
           expect do
             post :minimize, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}
           end.to raise_error(StandardError)
         end
       end
 
-      context "with old event participation" do
+      context "when minimization is enabled" do
         before do
-          event = Fabricate(:event, dates: [Event::Date.new(start_at: 12.years.ago)])
-          Event::Participation.create!(event: event, person: person_with_expired_roles)
+          allow_any_instance_of(FeatureGate).to receive(:enabled?).and_call_original
+          allow_any_instance_of(FeatureGate).to receive(:enabled?).with("people.minimization").and_return true
         end
 
         it "minimizes" do
@@ -100,17 +88,48 @@ describe People::ManualDeletionsController do
           expect(person_with_expired_roles.minimized_at).to be_present
           expect(flash[:notice]).to eq("#{person_with_expired_roles.full_name} wurde erfolgreich minimiert.")
         end
-      end
 
-      context "when already minimized" do
-        before do
-          person_with_expired_roles.update!(minimized_at: Time.zone.now)
+        context "with recent event participation" do
+          before do
+            event = Fabricate(:event, dates: [Event::Date.new(start_at: 10.days.ago)])
+            Event::Participation.create!(event: event, person: person_with_expired_roles)
+          end
+
+          it "does not minimize" do
+            expect do
+              post :minimize, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}
+            end.to raise_error(StandardError)
+          end
         end
 
-        it "does not minimize" do
-          expect do
+        context "with old event participation" do
+          before do
+            event = Fabricate(:event, dates: [Event::Date.new(start_at: 12.years.ago)])
+            Event::Participation.create!(event: event, person: person_with_expired_roles)
+          end
+
+          it "minimizes" do
+            expect(person_with_expired_roles.minimized_at).to be_nil
+
             post :minimize, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}
-          end.to raise_error(StandardError)
+
+            person_with_expired_roles.reload
+
+            expect(person_with_expired_roles.minimized_at).to be_present
+            expect(flash[:notice]).to eq("#{person_with_expired_roles.full_name} wurde erfolgreich minimiert.")
+          end
+        end
+
+        context "when already minimized" do
+          before do
+            person_with_expired_roles.update!(minimized_at: Time.zone.now)
+          end
+
+          it "does not minimize" do
+            expect do
+              post :minimize, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}
+            end.to raise_error(StandardError)
+          end
         end
       end
     end
@@ -118,21 +137,40 @@ describe People::ManualDeletionsController do
     context "as admin" do
       let(:user) { people(:top_leader) }
 
-      context "with recent event participation" do
+      context "when minimization is disabled" do
         before do
-          event = Fabricate(:event, dates: [Event::Date.new(start_at: 10.days.ago)])
-          Event::Participation.create!(event: event, person: person_with_expired_roles)
+          allow(FeatureGate).to receive(:enabled?).and_return false
         end
 
-        it "minimizes nevertheless" do
-          expect(person_with_expired_roles.minimized_at).to be_nil
+        it "raises" do
+          expect do
+            post :minimize, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}
+          end.to raise_error(StandardError)
+        end
+      end
 
-          post :minimize, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}
+      context "when minimization is enabled" do
+        before do
+          allow_any_instance_of(FeatureGate).to receive(:enabled?).and_call_original
+          allow_any_instance_of(FeatureGate).to receive(:enabled?).with("people.minimization").and_return true
+        end
 
-          person_with_expired_roles.reload
+        context "with recent event participation" do
+          before do
+            event = Fabricate(:event, dates: [Event::Date.new(start_at: 10.days.ago)])
+            Event::Participation.create!(event: event, person: person_with_expired_roles)
+          end
 
-          expect(person_with_expired_roles.minimized_at).to be_present
-          expect(flash[:notice]).to eq("#{person_with_expired_roles.full_name} wurde erfolgreich minimiert.")
+          it "minimizes nevertheless" do
+            expect(person_with_expired_roles.minimized_at).to be_nil
+
+            post :minimize, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}
+
+            person_with_expired_roles.reload
+
+            expect(person_with_expired_roles.minimized_at).to be_present
+            expect(flash[:notice]).to eq("#{person_with_expired_roles.full_name} wurde erfolgreich minimiert.")
+          end
         end
       end
     end

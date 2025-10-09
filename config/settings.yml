@@ -176,6 +176,8 @@ people:
     block_after: # e.g. P1M
   family_members:
     enabled: true
+  minimization:
+    enabled: false
 
 event:
   attachments:

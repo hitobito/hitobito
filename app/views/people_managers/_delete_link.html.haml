@@ -1,0 +1,10 @@
+- #  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+- #  hitobito and licensed under the Affero General Public License version 3
+- #  or later. See the COPYING file at the top-level directory or at
+- #  https://github.com/hitobito/hitobito_youth.
+
+= link_to(icon(:'trash-alt', filled: false),
+  path,
+    title: ti('link.delete'),
+      alt: ti('link.delete'),
+        data: { turbo_method: :delete, turbo_confirm: t('global.confirm_delete') })

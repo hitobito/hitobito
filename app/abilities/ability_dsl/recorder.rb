@@ -37,7 +37,22 @@ module AbilityDsl
       ClassSide.new(@store, @ability_class, @subject_class, actions)
     end
 
+    # All ability conditions in such a block are granted if either the current user
+    # or one of their manageds (children) individually is granted the ability.
+    # In other words, if the abilities defined in a for_self_or_manageds block are granted
+    # to my child, I automatically get the same abilities.
+    def for_self_or_manageds
+      return unless block_given?
+
+      original_include_manageds = AbilityDsl::Recorder::Base.include_manageds
+      AbilityDsl::Recorder::Base.include_manageds = true
+      yield
+      AbilityDsl::Recorder::Base.include_manageds = original_include_manageds
+    end
+
     class Base
+      class_attribute :include_manageds
+
       def initialize(store, ability_class, subject_class)
         @store = store
         @ability_class = ability_class
@@ -64,7 +79,8 @@ module AbilityDsl
           @subject_class,
           action,
           @ability_class,
-          constraint))
+          constraint,
+          {include_manageds: include_manageds}))
       end
     end
 

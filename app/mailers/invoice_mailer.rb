@@ -9,6 +9,10 @@ class InvoiceMailer < ApplicationMailer
   CONTENT_INVOICE_NOTIFICATION = "content_invoice_notification"
 
   def mail(headers = {}, &block)
+    cc = headers[:cc] || []
+    cc |= manager_emails(except: [@invoice.recipient_email])
+    headers = headers.merge({cc: cc})
+
     mail = super
 
     if @invoice.invoice_config.sender_name.present?
@@ -93,5 +97,17 @@ class InvoiceMailer < ApplicationMailer
   def mail_headers(person, email)
     sender = email.blank? ? person : Person.new(email: email)
     with_personal_sender(sender)
+  end
+
+  def manager_emails(except: [])
+    return [] if @invoice.recipient.blank?
+    @invoice.recipient.managers.to_a
+      .map { |manager| invoice_email(manager) }
+      .compact
+      .reject { |email| except.include?(email) }
+  end
+
+  def invoice_email(person)
+    person.additional_emails.find(&:invoices?)&.email || person.email
   end
 end

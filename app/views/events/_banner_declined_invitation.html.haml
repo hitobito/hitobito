@@ -3,5 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-.alert.alert-warning
-  = t('.explanation')
+- @declined_invitations.each do |invitation|
+  .alert.alert-warning
+    - translation_key = invitation.person == current_user ? '.explanation' : '.managed.explanation'
+    = t(translation_key, person: invitation.person.full_name)

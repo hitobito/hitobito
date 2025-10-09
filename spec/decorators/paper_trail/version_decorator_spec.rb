@@ -213,6 +213,59 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
     end
   end
 
+  context "association_change for people_manager" do
+    subject { decorator.association_change }
+
+    let(:top_leader) { people(:top_leader) }
+    let(:bottom_member) { people(:bottom_member) }
+
+    context "as manager" do
+      it "builds create text" do
+        PeopleManager.create(manager: top_leader, managed: bottom_member)
+
+        is_expected.to eq("<i>Bottom Member</i> wurde als Kind hinzugefügt.")
+      end
+
+      it "builds destroy text" do
+        pm = PeopleManager.create(manager: top_leader, managed: bottom_member)
+        pm.destroy!
+
+        is_expected.to eq("<i>Bottom Member</i> wurde als Kind entfernt.")
+      end
+
+      it "works with deleted user" do
+        pm = PeopleManager.create(manager: top_leader, managed: bottom_member)
+        pm.destroy!
+        bottom_member.destroy!
+
+        is_expected.to eq("<i>(Gelöschte Person)</i> wurde als Kind entfernt.")
+      end
+    end
+
+    context "as managed" do
+      it "builds create text" do
+        PeopleManager.create(managed: top_leader, manager: bottom_member)
+
+        is_expected.to eq("<i>Bottom Member</i> wurde als Verwalter*in hinzugefügt.")
+      end
+
+      it "builds destroy text" do
+        pm = PeopleManager.create(managed: top_leader, manager: bottom_member)
+        pm.destroy!
+
+        is_expected.to eq("<i>Bottom Member</i> wurde als Verwalter*in entfernt.")
+      end
+
+      it "works with deleted user" do
+        pm = PeopleManager.create(managed: top_leader, manager: bottom_member)
+        pm.destroy!
+        bottom_member.destroy!
+
+        is_expected.to eq("<i>(Gelöschte Person)</i> wurde als Verwalter*in entfernt.")
+      end
+    end
+  end
+
   def update
     person.update!(town: "Bern", zip_code: "3007")
   end

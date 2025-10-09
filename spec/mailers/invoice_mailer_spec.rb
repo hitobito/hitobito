@@ -83,4 +83,28 @@ describe InvoiceMailer do
       expect(pdf.content_type).to match(/filename=#{invoice.filename}/)
     end
   end
+
+  context "without managers" do
+    its(:cc) { should be_empty }
+  end
+
+  context "with manager" do
+    let(:manager) { people(:bottom_member) }
+    let(:recipient) { invoice.recipient }
+
+    before do
+      recipient.managers << manager
+      recipient.save!
+    end
+
+    its(:cc) { should == [manager.email] }
+
+    context "with invoice email" do
+      before do
+        manager.additional_emails.create!(email: "invoices@example.com", label: "Privat", invoices: true)
+      end
+
+      its(:cc) { should == ["invoices@example.com"] }
+    end
+  end
 end

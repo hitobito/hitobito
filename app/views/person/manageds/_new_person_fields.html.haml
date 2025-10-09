@@ -1,0 +1,14 @@
+- #  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+- #  hitobito and licensed under the Affero General Public License version 3
+- #  or later. See the COPYING file at the top-level directory or at
+- #  https://github.com/hitobito/hitobito_youth.
+
+= f.fields_for(:managed_attributes, Person.new) do |fields|
+  = hidden_field_tag(:create, true)
+  = field_set_tag do
+    = fields.labeled_input_fields :first_name, :last_name, required: true
+    = fields.labeled(:gender) do
+      - (Person::GENDERS + ['']).each do |key|
+        = fields.inline_radio_button(:gender, key, fields.object.gender_label(key))
+    = fields.labeled_string_field(:birthday,
+      help_inline: t('people.fields.format_birthday'), class: 'col-2 form-control form-control-sm d-inline w-25')

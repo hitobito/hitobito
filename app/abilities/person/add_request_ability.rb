@@ -44,6 +44,13 @@ class Person::AddRequestAbility < AbilityDsl::Base
     permission(:layer_and_below_full)
       .may(:add_without_request)
       .active_or_deleted_in_same_layer_or_below
+
+    for_self_or_manageds do
+      # Skip add requests for managers adding their manageds somewhere
+      permission(:any).may(:approve).herself
+      permission(:any).may(:reject).herself_or_her_own
+      permission(:any).may(:add_without_request).herself
+    end
   end
 
   def herself_or_her_own

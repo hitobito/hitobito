@@ -1,0 +1,21 @@
+- #  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+- #  hitobito and licensed under the Affero General Public License version 3
+- #  or later. See the COPYING file at the top-level directory or at
+- #  https://github.com/hitobito/hitobito_youth.
+
+- content_for(:section_header) do
+  = t('people_managers.manageds_heading')
+
+= render layout: 'people_managers/section' do
+  = standard_form(entry, url: person_manageds_path(person), html: {class: 'p-2'}) do |f|
+    = f.error_messages
+    = render('shared/error_messages', errors: entry.manager.errors, object: f.object.manager) if entry.manager&.errors.present?
+    = render('shared/error_messages', errors: entry.managed.errors, object: f.object.managed) if entry.managed&.errors.present?
+
+    - if create_managed? && params[:create]
+      = render "new_person_fields", f: f
+    - else
+      = f.person_field(:managed, { disabled: cannot?(:create_households, Person), data: { url: query_people_path(limit_by_permission: :change_managers) } })
+      %span.help-block= t('.manageds_help')
+
+    = render 'submit_buttons', f: f, cancel_url: person_manageds_path(person)

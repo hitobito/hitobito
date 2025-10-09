@@ -6,6 +6,11 @@
 class Event::ParticipationContactDataAbility < AbilityDsl::Base
   on(Event::ParticipationContactData) do
     permission(:any).may(:show, :update).her_own
+
+    for_self_or_manageds do
+      # abilities which managers inherit from their managed children
+      permission(:any).may(:show, :update).her_own
+    end
   end
 
   def her_own

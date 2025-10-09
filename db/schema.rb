@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_07_30_120000) do
+ActiveRecord::Schema[7.1].define(version: 2025_10_03_093903) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -1011,6 +1011,14 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_30_120000) do
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.index ["group_id", "group_type"], name: "index_people_filters_on_group_id_and_group_type"
+  end
+
+  create_table "people_managers", force: :cascade do |t|
+    t.integer "manager_id", null: false
+    t.integer "managed_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["manager_id", "managed_id"], name: "index_people_managers_on_manager_id_and_managed_id", unique: true
   end
 
   create_table "person_add_request_ignored_approvers", id: :serial, force: :cascade do |t|

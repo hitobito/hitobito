@@ -20,7 +20,10 @@ module Synchronize
       end
 
       def self.recipients(mailing_list)
-        mailing_list.people
+        people = mailing_list.people.pluck(:id)
+        Person.left_joins(:people_manageds).distinct
+          .where(people_manageds: {managed_id: people})
+          .or(Person.distinct.where(id: people))
       end
 
       def self.default_and_additional_addresses(mailing_list)

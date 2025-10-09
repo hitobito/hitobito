@@ -53,5 +53,13 @@ module AbilityDsl
     def ability_classes
       @ability_classes ||= []
     end
+
+    def only_manager_inheritable
+      filtered_configs = configs.select { |_, config| config.options[:include_manageds] }
+      AbilityDsl::Store.new.tap do |clone|
+        clone.instance_variable_set(:@ability_classes, ability_classes)
+        clone.instance_variable_set(:@configs, filtered_configs)
+      end
+    end
   end
 end

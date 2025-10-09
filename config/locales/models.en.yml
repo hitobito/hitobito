@@ -54,6 +54,10 @@ en:
       messages:
         record_invalid: 'Gültigkeitsprüfung ist fehlgeschlagen: %{errors}'
       models:
+        event/participation_contact_datas/managed:
+          attributes:
+            base:
+              duplicates_present: This person already exists. Please contact administrator to register them as your child.
         roles/termination:
           attributes:
             terminate_on:
@@ -144,6 +148,9 @@ en:
             base:
               max_one_additional_invoice_address: Es kann nur eine Adresse als Rechnungsadresse ausgewählt werden.
               additional_address_labels_must_be_unique: Die Bezeichnungen der weiteren Adressen müssen eindeutig sein.
+              cannot_have_managers_and_manageds: '%{name} kann nicht sowohl Verwalter*innen als auch Kinder haben.'
+              manager_already_managed: Supervisor could not be added because he/she is already supervised.
+              managed_already_manager: Child could not be added because he/she is already a supervisor.
             email:
               taken: >
                   is already taken. This address must be unique for every person,
@@ -158,6 +165,13 @@ en:
               taken: was already confirmed
         person_duplicates:
           invalid_role: "Rolle %{role} von %{person} ist fürs Zusammenführen nicht gültig, da die andere Person eventuell bereits eine Rolle hat, welche diese Rolle nicht mehr erlaubt, diese muss manuell korrigiert/etnfernt werden. Info: %{message}"
+        people_manager:
+          manager_and_managed_the_same: Verwalter*in und Kind müssen unterschiedliche Personen sein.
+
+          attributes:
+            manager_id:
+              taken: is already set.
+          manager_and_managed_the_same: cannot manage themselves.
         qualification:
           attributes:
             qualification_kind_id:
@@ -366,6 +380,9 @@ en:
       people_filter:
         one: Filter
         other: Filters
+      people_manager:
+        one: Supervisors
+        other: Supervisors
       phone_number:
         one: Phone number
         other: Phone numbers
@@ -533,6 +550,13 @@ en:
         self_registration_reason: Eintrittsgrund
         self_registration_reason_text: Eintrittsgrund
         self_registration_reason_custom_text: Benutzerdefinierter Eintrittsgrund
+        managers: Supervisors
+        manageds: Children
+        people_managers: Supervisors
+        people_manageds: Children
+        people_managers_attributes: Supervisors
+        people_manageds_attributes: Children
+        readable_manageds: Children
 
       person_duplicate:
         birth_year: Year
@@ -553,6 +577,18 @@ en:
 
       person/add_request/mailing_list:
         label: "%{body} in %{group}"
+
+      people_manager:
+        manager_id: Supervisor
+        managed_id: Child
+
+      people_managers:
+        manager_id: Supervisor
+        managed_id: Child
+
+      people_manageds:
+        manager_id: Child
+        managed_id: Supervisor
 
       group:
         name: Name

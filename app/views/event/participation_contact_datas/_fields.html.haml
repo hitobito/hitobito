@@ -44,6 +44,11 @@
                                   { prompt: true },
                                   class: 'form-select form-select-sm')
 
+- if entry.is_a?(Event::ParticipationContactData)
+  = field_set_tag do
+    - if entry.person != current_user
+      = hidden_field_tag(:person_id, entry.person.id)
+
 = render_extensions :fields, locals: { f: f }
 
 = render('people/privacy_policy_acceptance_field', policy_finder: @policy_finder, f: f, for_someone_else: entry.is_a?(Event::Guest))

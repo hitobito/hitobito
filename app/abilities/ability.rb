@@ -27,6 +27,7 @@ class Ability
     NoteAbility,
     OauthAbility,
     PeopleFilterAbility,
+    PeopleManagerAbility,
     PersonAbility,
     Person::AddRequestAbility,
     QualificationAbility,
@@ -73,9 +74,32 @@ class Ability
     end
   end
 
-  def define_user_abilities(current_store, current_user_context)
+  def define_user_abilities(current_store, current_user_context, include_manageds = true)
     define_instance_side(current_store, current_user_context)
     define_class_side(current_store, current_user_context)
+
+    # Adds to the option to specify ability conditions like this:
+    # on(Event) do
+    #   for_self_or_manageds do
+    #     permission(:foo).may(:bar).some_condition
+    #   end
+    # end
+    # The condition will then grant permission when either the logged in user or one
+    # of their manageds is granted permission. I.e. the logged in user inherits the
+    # permissions of his manageds.
+    # Technically, this is implemented by normally generating the "can :foo, :bar"
+    # statements from the stored ability configs, and then for each of the manageds
+    # generating additional "can :foo, :bar" statements (but only the ones which
+    # originate inside a for_self_or_manageds block in the ability DSL).
+    if include_manageds
+      user.manageds.each do |managed|
+        user_context = AbilityDsl::UserContext.new(managed)
+        store = current_store.only_manager_inheritable
+
+        define_instance_side(store, user_context)
+        define_class_side(store, user_context)
+      end
+    end
   end
 
   def define_instance_side(current_store, current_user_context)

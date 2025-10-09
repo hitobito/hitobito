@@ -169,7 +169,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def after_destroy_path
-    if for_current_user?
+    if participation_of_managed? || for_current_user?
       group_event_path(group, event)
     else
       group_event_application_market_index_path(group, event)
@@ -204,6 +204,14 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
       .select(Event::Participation.column_names)
     @counts = filter.counts
     records
+  end
+
+  def return_path
+    if manager_via_public_event? || (participation_of_managed? && !entry.persisted?)
+      group_event_path(group, event)
+    else
+      super
+    end
   end
 
   def filter_entries
@@ -249,6 +257,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def person_id
+    return model_params[:person_id] if model_params&.key?(:person_id) && current_user && own_or_managed_params_person?
     return current_user&.id unless event.supports_applications
 
     if model_params&.key?(:person_id)
@@ -359,10 +368,19 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def current_user_interested_in_mail?
-    for_current_user? # extended in wagon
+    # send email to kind and verwalter
+    entry.participant_type == Person.sti_name &&
+      current_user.and_manageds.map(&:id).include?(entry.participant_id)
   end
 
   def set_success_notice
+    if !entry.pending? && manager_via_public_event?
+      flash[:notice] ||= translate(:success_for_external_manager,
+        full_entry_label: full_entry_label)
+
+      return
+    end
+
     return super unless action_name.to_s == "create"
 
     if entry.pending?
@@ -426,5 +444,18 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
 
   def for_current_user?
     entry.participant_type == Person.sti_name && entry.participant_id == current_user&.id
+  end
+
+  def own_or_managed_params_person?
+    model_params[:person_id].to_i == current_user.id ||
+      current_user.manageds.pluck(:id).include?(model_params[:person_id].to_i)
+  end
+
+  def manager_via_public_event?
+    participation_of_managed? && current_user.roles.none?
+  end
+
+  def participation_of_managed?
+    current_user.manageds.include?(entry.person)
   end
 end

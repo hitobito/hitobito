@@ -21,5 +21,10 @@ class Event::InvitationAbility < AbilityDsl::Base
       .in_same_layer_or_below_and_invitations_supported
 
     permission(:any).may(:decline).own_invitation
+
+    for_self_or_manageds do
+      # abilities which managers inherit from their managed children
+      permission(:any).may(:decline).own_invitation
+    end
   end
 end

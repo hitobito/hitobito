@@ -33,6 +33,7 @@ class PersonLayerWritables < GroupBasedFetchables
     if conditions.present?
       @scope
         .joins(roles: :group)
+        .left_joins(:people_managers)
         .where(groups: {deleted_at: nil})
         .where(conditions.to_a)
         .distinct
@@ -46,6 +47,11 @@ class PersonLayerWritables < GroupBasedFetchables
       append_group_conditions(condition)
       visible_from_above_condition(condition)
       see_invisible_from_above_condition(condition)
+      condition.or(*manager_condition)
     end
+  end
+
+  def manager_condition
+    ["people_managers.manager_id = ?", user.id]
   end
 end

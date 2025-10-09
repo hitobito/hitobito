@@ -3,9 +3,12 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- title t('.title')
+- title t(".title.#{manager ? 'manager' : 'participant'}")
 
-= render 'event/participations/step_wizard', step: 1
+- unless self_service_managed_enabled?
+  = render 'event/participations/step_wizard', step: 1
+
+- return_url = FeatureGate.enabled?('people.people_managers') ? group_event_path(group, event) : new_group_event_participation_path(group, event)
 
 = crud_form(entry,
             url: register_group_event_path(group, event),
@@ -13,6 +16,12 @@
             cancel_url: register_group_event_path(group, event),
             buttons_bottom: true) do |f|
 
-  = render 'event/participation_contact_datas/fields', f: f
+  = hidden_field_tag(:manager, manager)
+  = hidden_field_tag(:return_url, return_url)
+
+  - if manager
+    = render 'manager_fields', f: f
+  - else
+    = render 'fields', f: f
 
   = f.honeypot(:verification)

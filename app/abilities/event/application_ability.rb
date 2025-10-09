@@ -20,5 +20,10 @@ class Event::ApplicationAbility < AbilityDsl::Base
     permission(:approve_applications)
       .may(:show_priorities, :show_approval, :approve, :reject)
       .for_applicant_in_same_layer
+
+    for_self_or_manageds do
+      # abilities which managers inherit from their managed children
+      permission(:any).may(:show_priorities, :show_approval).her_own
+    end
   end
 end

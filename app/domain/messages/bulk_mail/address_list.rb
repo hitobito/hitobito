@@ -7,7 +7,7 @@
 
 module Messages
   class BulkMail::AddressList
-    attr_reader :people, :labels
+    attr_reader :labels
 
     def initialize(people, labels = [])
       @people = Array(people)
@@ -21,6 +21,12 @@ module Messages
     end
 
     private
+
+    def people
+      Person.left_joins(:people_manageds).distinct
+        .where(people_manageds: {managed_id: @people})
+        .or(Person.distinct.where(id: @people))
+    end
 
     def preferred_addresses(person)
       emails = additional_emails_with_default(person).select do |email|

@@ -24,6 +24,10 @@ on:
         type: string
         required: true
         default: integration
+      extra_packages:
+        description: "List of additional OS-packages to be installed, space-separated"
+        required: false
+        type: string
       push:
         description: "Build and debug things without pushing to the registry"
         type: boolean
@@ -69,6 +73,7 @@ jobs:
             BUILD_COMMIT=${{ inputs.version }}
             HITOBITO_PROJECT=${{ inputs.project }}
             HITOBITO_STAGE=${{ inputs.stage }}
+            EXTRA_PACKAGES=${{ inputs.extra_packages }}
           target: app
           tags: |
             ${{ secrets.PUZZLE_REGISTRY }}/hitobito/${{ inputs.project }}/rails:latest

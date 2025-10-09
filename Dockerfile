@@ -8,11 +8,11 @@ ARG RUBY_VERSION="3.2"
 ARG BUNDLER_VERSION="2.7.1"
 ARG NODEJS_VERSION="16"
 ARG YARN_VERSION="1.22.19"
-ARG DEBIAN_VERSION="bookworm"
+ARG DEBIAN_VERSION="trixie"
 
 # Packages
 ARG BUILD_PACKAGES="nodejs git build-essential libpq-dev libvips42"
-ARG RUN_PACKAGES="shared-mime-info pkg-config libpq-dev libjemalloc-dev libjemalloc2 libvips42"
+ARG RUN_PACKAGES="shared-mime-info pkg-config libpq-dev libjemalloc-dev libjemalloc2 libvips42 libicu76"
 ARG EXTRA_PACKAGES=""
 
 # Scripts
@@ -60,31 +60,6 @@ ARG HOME=/app-src
 ARG PS1="[\$SENTRY_CURRENT_ENV] `uname -n`:\$PWD\$ "
 ARG TZ="Europe/Zurich"
 
-# Add one of these near the end of the file or just the right vars in your build
-
-# # Github specific
-# ARG GITHUB_SHA
-# ARG GITHUB_REPOSITORY
-# ARG GITHUB_REF_NAME
-# ARG BUILD_COMMIT="$GITHUB_SHA"
-# ARG BUILD_REPO="$GITHUB_REPOSITORY"
-# ARG BUILD_REF="$GITHUB_REF_NAME"
-
-# # Gitlab specific
-# ARG CI_COMMIT_SHA
-# ARG CI_REPOSITORY_URL
-# ARG CI_COMMIT_REF_NAME
-# ARG BUILD_COMMIT="$CI_COMMIT_SHA"
-# ARG BUILD_REPO="$CI_REPOSITORY_URL"
-# ARG BUILD_REF="$CI_COMMIT_REF_NAME"
-
-# # Openshift specific
-# ARG OPENSHIFT_BUILD_COMMIT
-# ARG OPENSHIFT_BUILD_SOURCE
-# ARG OPENSHIFT_BUILD_REFERENCE
-# ARG BUILD_COMMIT="$OPENSHIFT_BUILD_COMMIT"
-# ARG BUILD_REPO="$OPENSHIFT_BUILD_SOURCE"
-# ARG BUILD_REF="$OPENSHIFT_BUILD_REFERENCE"
 
 
 #################################
@@ -135,6 +110,7 @@ RUN gem install bundler:${BUNDLER_VERSION} --no-document
 
 # TODO: Load artifacts
 
+# set up app-src directory
 WORKDIR $HOME
 
 # copy entire submodule structure because it is needed for the PRE_BUILD_SCRIPT
@@ -176,6 +152,9 @@ RUN rm -rf vendor/cache/ .git spec/ node_modules/ .npm/
 # This image will be replaced by Openshift
 FROM ruby:${RUBY_VERSION}-slim-${DEBIAN_VERSION} AS app
 
+# Set runtime shell
+SHELL ["/bin/bash", "-c"]
+
 # arguments for steps
 ARG RUN_PACKAGES
 ARG EXTRA_PACKAGES
@@ -183,11 +162,13 @@ ARG BUNDLER_VERSION
 ARG BUNDLE_WITHOUT_GROUPS
 
 # arguments potentially used by steps
-ARG HOME
 ARG NODE_ENV
-ARG PS1
 ARG RACK_ENV
 ARG RAILS_ENV
+
+# data persisted in the image
+ARG HOME
+ARG PS1
 ARG TZ
 
 # Set environment variables available in the image
@@ -199,21 +180,19 @@ ENV PS1="${PS1}" \
     RAILS_ENV="${RAILS_ENV}" \
     RACK_ENV="${RACK_ENV}"
 
-# Set runtime shell
-SHELL ["/bin/bash", "-c"]
-
-# Add user
-RUN adduser --disabled-password --uid 1001 --gid 0 --gecos "" app
-
 # Install dependencies, remove apt!
 RUN    export DEBIAN_FRONTEND=noninteractive \
     && apt-get update \
     && apt-get upgrade -y \
-    && apt-get install -y ${RUN_PACKAGES} ${EXTRA_PACKAGES} vim curl less \
+    && apt-get install -y ${RUN_PACKAGES} ${EXTRA_PACKAGES} adduser vim curl less \
     && apt-get clean \
     && rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && truncate -s 0 /var/log/*log
 
+# Add user
+RUN adduser --disabled-password --uid 1001 --gid 0 --comment "" app
+
+# only after it has been installed
 ENV LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so.2
 
 # Copy deployment ready source code from build
@@ -222,9 +201,7 @@ WORKDIR $HOME
 
 # Create pids folder for puma and
 # set group permissions to folders that need write permissions.
-# Beware that docker builds on OpenShift produce different permissions
-# than local docker builds!
-RUN mkdir -p tmp/pids \
+RUN mkdir -p tmp/pids log \
     && chgrp 0 $HOME \
     && chgrp -R 0 $HOME/tmp \
     && chgrp -R 0 $HOME/log \

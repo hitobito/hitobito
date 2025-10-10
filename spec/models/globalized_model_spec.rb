@@ -54,7 +54,8 @@ describe "Globalized model" do
     expected_errors = [
       "DSE/Datenschutzerklärung Titel ist zu lang (mehr als 64 Zeichen)",
       "DSE/Datenschutzerklärung Titel (EN) ist zu lang (mehr als 64 Zeichen)",
-      "DSE/Datenschutzerklärung Titel (FR) ist zu lang (mehr als 64 Zeichen)"
+      "DSE/Datenschutzerklärung Titel (FR) ist zu lang (mehr als 64 Zeichen)",
+      "DSE/Datenschutzerklärung Titel (IT) ist zu lang (mehr als 64 Zeichen)"
     ]
 
     expect(group).not_to be_valid
@@ -69,7 +70,8 @@ describe "Globalized model" do
     expected_errors = [
       "Inhalt muss den Platzhalter {assignment-title} enthalten",
       "Inhalt (FR) muss den Platzhalter {assignment-title} enthalten",
-      "Inhalt (EN) muss den Platzhalter {assignment-title} enthalten"
+      "Inhalt (EN) muss den Platzhalter {assignment-title} enthalten",
+      "Inhalt (IT) muss den Platzhalter {assignment-title} enthalten"
     ]
 
     expect(custom_content).not_to be_valid

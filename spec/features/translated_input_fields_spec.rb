@@ -17,7 +17,7 @@ describe "Translated input fields", js: true do
     # Should show all inputs after clicking translation button
     expect(page).to have_css("input[id^='group_privacy_policy_title']", count: 1)
     page.first("button[data-action='translatable-fields#toggleFields']").click
-    expect(page).to have_css("input[id^='group_privacy_policy_title']", count: 3)
+    expect(page).to have_css("input[id^='group_privacy_policy_title']", count: 4)
 
     # Should show languages that are filled in besides the current locale
     fill_in "group_privacy_policy_title", with: "German privacy policy title"
@@ -35,7 +35,7 @@ describe "Translated input fields", js: true do
     # Should successfully save all translations
     click_button("Speichern")
     expect(page).to have_content("Gruppe #{group.name} wurde erfolgreich aktualisiert")
-    expected_value = {de: "German privacy policy title", en: "English privacy policy title", fr: "French privacy policy title"}.stringify_keys
+    expected_value = {de: "German privacy policy title", en: "English privacy policy title", fr: "French privacy policy title", it: ""}.stringify_keys
     expect(group.reload.privacy_policy_title_translations).to eql(expected_value)
   end
 
@@ -43,7 +43,7 @@ describe "Translated input fields", js: true do
     page.first("button[data-action='translatable-fields#toggleFields']").click
     fill_in "group_privacy_policy_title_en", with: "Text" * 20
     click_button("Speichern")
-    expect(page).to have_css("input[id^='group_privacy_policy_title']", count: 3)
+    expect(page).to have_css("input[id^='group_privacy_policy_title']", count: 4)
     expect(page).to have_content("DSE/Datenschutzerklärung Titel (EN) ist zu lang (mehr als 64 Zeichen)")
   end
 end

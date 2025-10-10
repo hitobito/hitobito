@@ -34,6 +34,10 @@ on:
         required: false
         type: string
         default: master
+      extra_packages:
+        description: "List of additional OS-packages to be installed, space-separated"
+        required: false
+        type: string
       prevent_prepare:
         description: "Only show commands to prepare, do not execute them"
         required: false
@@ -73,6 +77,10 @@ on:
         required: false
         type: string
         default: master
+      extra_packages:
+        description: "List of additional OS-packages to be installed, space-separated"
+        required: false
+        type: string
       prevent_prepare:
         description: "Only show commands to prepare, do not execute them"
         required: false
@@ -141,6 +149,7 @@ jobs:
       version: ${{ needs.version.outputs.version }}
       stage: ${{ needs.settings.outputs.release_stage }}
       push: ${{ needs.settings.outputs.push_image == 'true' }}
+      extra_packages: ${{ inputs.extra_packages }}
     secrets: inherit
 
   deploy:

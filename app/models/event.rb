@@ -423,7 +423,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   end
 
   def duplicate # rubocop:disable Metrics/AbcSize,Metrics/MethodLength splitting this up does not make it better
-    dup.tap do |event|
+    Event.build(attributes.excluding("id")).tap do |event|
       event.groups = groups
       event.state = nil
       event.application_opening_at = nil
@@ -432,10 +432,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
       event.applicant_count = 0
       event.teamer_count = 0
       application_questions.each do |q|
-        event.application_questions << q.dup
+        event.application_questions.build(q.attributes.excluding("id"))
       end
       admin_questions.each do |q|
-        event.admin_questions << q.dup
+        event.admin_questions.build(q.attributes.excluding("id"))
       end
     end
   end

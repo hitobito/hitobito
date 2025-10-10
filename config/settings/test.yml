@@ -8,6 +8,7 @@ application:
     de: Deutsch
     en: English
     fr: Français
+    it: Italiano
 
   additional_languages:
     en: Englisch

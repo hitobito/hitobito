@@ -920,6 +920,7 @@ de:
               finance: Erstellen und Verwalten von Rechnungen.
               impersonation: Hitobito als andere Person bedienen.
               see_invisible_from_above: Sieht zusätzlich Personen, welche sonst von höheren Ebenen nicht eingesehen werden dürfen.
+              manual_deletion: Löschen von Personen ohne Rollen
           kind:
             member:
               one: Mitglied

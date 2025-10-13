@@ -5,7 +5,7 @@
 
 #people-manual-deletion.modal.fade
   .modal-dialog
-    .modal-content
+    .modal-content{data: { controller: 'manual-deletion' }}
       .modal-header
         %h5.bold.modal-title
           %b= t('.title', full_name: @entry.full_name)
@@ -13,16 +13,29 @@
       .modal-body
         .row-fluid
           .alert.alert-info
-            = t('.explanation')
-          - @all_errors.each do |error|
-            .alert.alert-danger
-              = error
+            = t('.explanation.delete') + (minimizable? ? t(".explanation.minimize") : "")
+          - if @all_errors.any?
+            .alert.alert-warning
+              %p
+                = t('.unable_to_delete')
+
+              %ul
+              - @all_errors.each do |error|
+                %li.ml-3=error
+
+            - if can?(:destroy, @entry)
+              .form-check
+                = check_box_tag :delete_anyways, false, class: 'form-check-input', data: { manual_deletion_target: "toggle", action: 'manual-deletion#toggle' }
+                = label_tag :delete_anyways, t('.delete_anyways')
+
+
       .modal-footer
-        .row-fluid.col-md-12.d-flex.justify-content-around.align-items-baseline
+        .row-fluid.col-md-12.d-flex.align-items-baseline.gap-3.pl-2
           = standard_form(@entry, url: delete_group_person_manual_deletion_path(@group, @entry), method: :post) do |f|
-            = submit_button(f, t('.delete'), disabled: @deleteable_errors.any?)
-          = standard_form(@entry, url: minimize_group_person_manual_deletion_path(@group, @entry), method: :post) do |f|
-            = submit_button(f, t('.minimize'), disabled: @minimizeable_errors.any?)
+            = submit_button(f, t('.delete'), disabled: @deleteable_errors.any?, data: { manual_deletion_target: 'deleteButton' })
+          - if minimizable?
+            = standard_form(@entry, url: minimize_group_person_manual_deletion_path(@group, @entry), method: :post) do |f|
+              = submit_button(f, t('.minimize'), disabled: @minimizable_errors.any?, data: { manual_deletion_target: 'minimizeButton' })
           = link_to(ti('button.cancel'), '#',
             class: 'link cancel',
             onclick: "event.preventDefault(); $('#people-manual-deletion').modal('hide')")

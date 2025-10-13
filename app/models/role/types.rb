@@ -15,7 +15,7 @@ module Role::Types
     :layer_and_below_full, :layer_and_below_read, :layer_full, :layer_read,
     :group_and_below_full, :group_and_below_read, :group_full, :group_read,
     :contact_data, :approve_applications, :finance, :impersonation,
-    :see_invisible_from_above]
+    :see_invisible_from_above, :manual_deletion]
 
   # If a role contains the first permission, the second one is automatically active as well
   PermissionImplications = {layer_and_below_full: :layer_and_below_read,
@@ -106,12 +106,12 @@ module Role::Types
     end
 
     def label_long
-      I18n.translate("activerecord.models.#{model_name.i18n_key}.long",
+      I18n.t("activerecord.models.#{model_name.i18n_key}.long",
         default: label_with_group)
     end
 
     def label_short
-      I18n.translate("activerecord.models.#{model_name.i18n_key}.short",
+      I18n.t("activerecord.models.#{model_name.i18n_key}.short",
         default: label)
     end
 
@@ -119,13 +119,13 @@ module Role::Types
       group_type = model_name.to_s.deconstantize.constantize
       group_key = "activerecord.models.#{group_type.model_name.i18n_key}"
       [label,
-        I18n.translate("#{group_key}.long",
+        I18n.t("#{group_key}.long",
           count: 1,
-          default: I18n.translate(group_key.to_s))].join(" ")
+          default: I18n.t(group_key.to_s))].join(" ")
     end
 
     def description
-      I18n.translate("activerecord.models.#{model_name.i18n_key}.description",
+      I18n.t("activerecord.models.#{model_name.i18n_key}.description",
         default: "")
     end
   end

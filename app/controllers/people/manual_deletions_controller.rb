@@ -11,6 +11,7 @@ class People::ManualDeletionsController < ApplicationController
   before_action :entry
   before_action :authorize_action
   before_action :ensure_rules
+  helper_method :minimizable?
   respond_to :js, only: [:new]
 
   def authorize_action
@@ -21,7 +22,10 @@ class People::ManualDeletionsController < ApplicationController
   end
 
   def minimize
-    raise StandardError.new("can not minimize") unless minimizeable?
+    # With the :destroy permission, a user can be minimized despite errors
+    if !minimizable? || (@minimizable_errors.any? && cannot?(:destroy, entry))
+      raise StandardError.new("can not minimize")
+    end
 
     People::Minimizer.new(entry).run
 
@@ -29,7 +33,10 @@ class People::ManualDeletionsController < ApplicationController
   end
 
   def delete
-    raise StandardError.new("can not delete") unless deleteable?
+    # With the :destroy permission, a user can be deleted despite errors
+    if @deleteable_errors.any? && cannot?(:destroy, entry)
+      raise StandardError.new("can not delete")
+    end
 
     People::Destroyer.new(entry).run
 
@@ -40,13 +47,13 @@ class People::ManualDeletionsController < ApplicationController
 
   def ensure_rules
     @deleteable_errors = []
-    @minimizeable_errors = []
+    @minimizable_errors = []
 
     ensure_universal_rules
-    ensure_minimizeable_rules
     ensure_deleteable_rules
+    ensure_minimizable_rules if minimizable?
 
-    @all_errors = (@deleteable_errors + @minimizeable_errors).uniq
+    @all_errors = (@deleteable_errors + @minimizable_errors).uniq
   end
 
   def ensure_universal_rules
@@ -58,22 +65,18 @@ class People::ManualDeletionsController < ApplicationController
     end
 
     @deleteable_errors += errors
-    @minimizeable_errors += errors
+    @minimizable_errors += errors
   end
 
-  def ensure_minimizeable_rules
-    @minimizeable_errors << t(".errors.already_minimized") if entry.minimized_at.present?
+  def ensure_minimizable_rules
+    @minimizable_errors << t(".errors.already_minimized") if entry.minimized_at.present?
   end
 
   def ensure_deleteable_rules
   end
 
-  def minimizeable?
-    @minimizeable_errors.none?
-  end
-
-  def deleteable?
-    @deleteable_errors.none?
+  def minimizable?
+    FeatureGate.enabled?("people.minimization") && entry.minimized_at.blank?
   end
 
   def participated_in_recent_event?

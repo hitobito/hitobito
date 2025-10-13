@@ -25,103 +25,58 @@ describe People::ManualDeletionsController do
       get :show, xhr: true, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}, format: :js
     end
 
-    context "with feature disabled" do
-      before do
-        allow(Settings.people.manual_deletion).to receive(:enabled).and_return(false)
-      end
+    context "as member" do
+      let(:user) { bottom_member }
 
-      context "as member" do
-        let(:user) { bottom_member }
-
-        it "is disabled" do
-          expect do
-            get_show
-          end.to raise_error(CanCan::AccessDenied)
-        end
-      end
-
-      context "as leader" do
-        let(:user) { bottom_leader }
-
-        it "is disabled" do
-          expect do
-            get_show
-          end.to raise_error(CanCan::AccessDenied)
-        end
+      it "is unauthorized" do
+        expect do
+          get_show
+        end.to raise_error(CanCan::AccessDenied)
       end
     end
 
-    context "with feature enabled" do
-      before do
-        allow(Settings.people.manual_deletion).to receive(:enabled).and_return(true)
-      end
+    context "as leader" do
+      let(:user) { bottom_leader }
 
-      context "as member" do
-        let(:user) { bottom_member }
-
-        it "is unauthorized" do
-          expect do
-            get_show
-          end.to raise_error(CanCan::AccessDenied)
-        end
-      end
-
-      context "as leader" do
-        let(:user) { bottom_leader }
-
-        it "is disabled" do
-          get_show
-          expect(response).to be_successful
-          expect(response).to render_template "people/manual_deletions/show"
-        end
+      it "is disabled" do
+        get_show
+        expect(response).to be_successful
+        expect(response).to render_template "people/manual_deletions/show"
       end
     end
   end
 
   describe "POST #minimize" do
-    context "with feature disabled" do
-      before do
-        allow(Settings.people.manual_deletion).to receive(:enabled).and_return(false)
-      end
+    context "as member" do
+      let(:user) { bottom_member }
 
-      context "as member" do
-        let(:user) { bottom_member }
-
-        it "is disabled" do
-          expect do
-            post :minimize, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}
-          end.to raise_error(CanCan::AccessDenied)
-        end
-      end
-
-      context "as leader" do
-        let(:user) { bottom_leader }
-
-        it "is disabled" do
-          expect do
-            post :minimize, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}
-          end.to raise_error(CanCan::AccessDenied)
-        end
+      it "is unauthorized" do
+        expect do
+          post :minimize, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}
+        end.to raise_error(CanCan::AccessDenied)
       end
     end
 
-    context "with feature enabled" do
-      before do
-        allow(Settings.people.manual_deletion).to receive(:enabled).and_return(true)
-      end
+    context "as leader" do
+      let(:user) { bottom_leader }
 
-      context "as member" do
-        let(:user) { bottom_member }
+      context "when minimization is disabled" do
+        before do
+          allow_any_instance_of(FeatureGate).to receive(:enabled?).and_return false
+        end
 
-        it "is unauthorized" do
+        it "raises" do
           expect do
             post :minimize, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}
-          end.to raise_error(CanCan::AccessDenied)
+          end.to raise_error(StandardError)
         end
       end
 
-      context "as leader" do
-        let(:user) { bottom_leader }
+      context "when minimization is enabled" do
+        before do
+          allow_any_instance_of(FeatureGate).to receive(:enabled?).and_call_original
+          allow_any_instance_of(FeatureGate).to receive(:enabled?).with("people.minimization").and_return true
+        end
 
         it "minimizes" do
           expect(person_with_expired_roles.minimized_at).to be_nil
@@ -178,57 +133,26 @@ describe People::ManualDeletionsController do
         end
       end
     end
-  end
 
-  describe "POST #delete" do
-    context "with feature disabled" do
-      before do
-        allow(Settings.people.manual_deletion).to receive(:enabled).and_return(false)
-      end
+    context "as admin" do
+      let(:user) { people(:top_leader) }
 
-      context "as member" do
-        let(:user) { bottom_member }
+      context "when minimization is disabled" do
+        before do
+          allow(FeatureGate).to receive(:enabled?).and_return false
+        end
 
-        it "is disabled" do
+        it "raises" do
           expect do
-            post :delete, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}
-          end.to raise_error(CanCan::AccessDenied)
+            post :minimize, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}
+          end.to raise_error(StandardError)
         end
       end
 
-      context "as leader" do
-        let(:user) { bottom_leader }
-
-        it "is disabled" do
-          expect do
-            post :delete, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}
-          end.to raise_error(CanCan::AccessDenied)
-        end
-      end
-    end
-
-    context "with feature enabled" do
-      before do
-        allow(Settings.people.manual_deletion).to receive(:enabled).and_return(true)
-      end
-
-      context "as member" do
-        let(:user) { bottom_member }
-
-        it "is unauthorized" do
-          expect do
-            post :delete, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}
-          end.to raise_error(CanCan::AccessDenied)
-        end
-      end
-
-      context "as leader" do
-        let(:user) { bottom_leader }
-
-        it "deletes" do
-          expect do
-            post :delete, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}
-          end.to change { Person.count }.by(-1)
+      context "when minimization is enabled" do
+        before do
+          allow_any_instance_of(FeatureGate).to receive(:enabled?).and_call_original
+          allow_any_instance_of(FeatureGate).to receive(:enabled?).with("people.minimization").and_return true
         end
 
         context "with recent event participation" do
@@ -237,24 +161,81 @@ describe People::ManualDeletionsController do
             Event::Participation.create!(event: event, person: person_with_expired_roles)
           end
 
-          it "does not delete" do
-            expect do
-              post :delete, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}
-            end.to raise_error(StandardError)
+          it "minimizes nevertheless" do
+            expect(person_with_expired_roles.minimized_at).to be_nil
+
+            post :minimize, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}
+
+            person_with_expired_roles.reload
+
+            expect(person_with_expired_roles.minimized_at).to be_present
+            expect(flash[:notice]).to eq("#{person_with_expired_roles.full_name} wurde erfolgreich minimiert.")
           end
         end
+      end
+    end
+  end
 
-        context "with old event participation" do
-          before do
-            event = Fabricate(:event, dates: [Event::Date.new(start_at: 12.years.ago)])
-            Event::Participation.create!(event: event, person: person_with_expired_roles)
-          end
+  describe "POST #delete" do
+    context "as member" do
+      let(:user) { bottom_member }
 
-          it "deletes" do
-            expect do
-              post :delete, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}
-            end.to change { Person.count }.by(-1)
-          end
+      it "is unauthorized" do
+        expect do
+          post :delete, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}
+        end.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    context "as leader" do
+      let(:user) { bottom_leader }
+
+      it "deletes" do
+        expect do
+          post :delete, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}
+        end.to change { Person.count }.by(-1)
+      end
+
+      context "with recent event participation" do
+        before do
+          event = Fabricate(:event, dates: [Event::Date.new(start_at: 10.days.ago)])
+          Event::Participation.create!(event: event, person: person_with_expired_roles)
+        end
+
+        it "does not delete" do
+          expect do
+            post :delete, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}
+          end.to raise_error(StandardError)
+        end
+      end
+
+      context "with old event participation" do
+        before do
+          event = Fabricate(:event, dates: [Event::Date.new(start_at: 12.years.ago)])
+          Event::Participation.create!(event: event, person: person_with_expired_roles)
+        end
+
+        it "deletes" do
+          expect do
+            post :delete, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}
+          end.to change { Person.count }.by(-1)
+        end
+      end
+    end
+
+    context "as admin" do
+      let(:user) { people(:top_leader) }
+
+      context "with recent event participation" do
+        before do
+          event = Fabricate(:event, dates: [Event::Date.new(start_at: 10.days.ago)])
+          Event::Participation.create!(event: event, person: person_with_expired_roles)
+        end
+
+        it "deletes nevertheless" do
+          expect do
+            post :delete, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}
+          end.to change { Person.count }.by(-1)
         end
       end
     end

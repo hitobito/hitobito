@@ -179,6 +179,23 @@ describe FormHelper do
       expect(option["data-default"]).to eq ""
     end
 
+    it "option has globalized target-field values and default data attributes" do
+      @list += [Fabricate.build(:event_kind, general_information: "A description", general_information_en: "An english description")]
+      @mapping = {description: :general_information}
+      options = dom.all("option")
+      languages = Settings.application.languages.keys
+      expect(options.length).to eq(languages.length)
+      options[1..3].zip(languages.excluding(I18n.locale)).each do |option, language|
+        expect(option["data-target-field"]).to eq "event_description_#{language}"
+      end
+      option = options.first
+      expect(option["data-value"]).to eq "A description"
+      expect(option["data-default"]).to eq ""
+      option = options[1]
+      expect(option["data-value"]).to eq "An english description"
+      expect(option["data-default"]).to eq ""
+    end
+
     it "option does render nil value as empty string" do
       @list += [Fabricate.build(:event_kind)]
       @mapping += [:minimum_age]

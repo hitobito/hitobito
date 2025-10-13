@@ -96,7 +96,7 @@ describe StepsComponent::ContentComponent, type: :component do
       described_class.new(partial: wizard.new_user_form.partial, partial_iteration: iterator, form: form, step: 0)
     end
     let(:iterator) { double(:iterator, index: 0, last?: false) }
-    let(:policy_finder) { double(:policy_finder, acceptance_needed?: true, groups: []) }
+    let(:policy_finder) { double(:policy_finder, acceptance_needed?: true, groups: [], all: []) }
 
     subject(:html) { render_inline(component) }
 

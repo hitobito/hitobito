@@ -29,6 +29,7 @@ class GroupResource < ApplicationResource
 
       context.group_self_registration_url(group_id: @object.id)
     end
+    attribute :self_registration_require_adult_consent, :boolean
 
     attribute :archived_at, :datetime
     attribute :created_at, :datetime
@@ -39,6 +40,17 @@ class GroupResource < ApplicationResource
       next unless @object.logo.attached?
 
       context.rails_storage_proxy_url(@object.logo.blob)
+    end
+
+    extra_attribute :privacy_policies, :array do
+      Group::PrivacyPolicyFinder.for(group: @object).all.map do |policy|
+        {
+          group_id: policy[:group].id,
+          group_name: policy[:group].to_s,
+          title: policy[:title],
+          url: context.rails_storage_proxy_url(policy[:group].privacy_policy.blob)
+        }
+      end
     end
   end
 

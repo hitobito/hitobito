@@ -64,6 +64,27 @@ class ApplicationResource < Graphiti::Resource
     destroy_ability.authorize! :destroy, model
   end
 
+  def invalid_request!(*attributes, message)
+    return unless attributes.any?
+    errors = Graphiti::Util::SimpleErrors.new({})
+    i18n_scope = "api.errors.resources.#{self.class.name.demodulize.underscore}"
+    attributes.each do |attr|
+      errors.add(attr, message, message: I18n.t("#{i18n_scope}.#{attr}.#{message}"))
+    end
+    raise Graphiti::Errors::InvalidRequest, errors
+  end
+
+  def validation_error!(model, *attributes, message)
+    return unless attributes.any?
+    i18n_scope = "api.errors.resources.#{self.class.name.demodulize.underscore}"
+    attributes.each do |attr|
+      model.errors.add(attr, message, message: I18n.t("#{i18n_scope}.#{attr}.#{message}"))
+    end
+    raise Graphiti::Errors::ValidationError.new(
+      Graphiti::Util::ValidationResponse.new(model, nil)
+    )
+  end
+
   delegate :can?, to: :current_ability
   delegate :current_ability, to: :context
 

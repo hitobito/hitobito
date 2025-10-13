@@ -32,6 +32,7 @@ describe GroupResource, type: :resource do
         :country,
         :require_person_add_requests,
         :self_registration_url,
+        :self_registration_require_adult_consent,
         :archived_at,
         :created_at,
         :updated_at,

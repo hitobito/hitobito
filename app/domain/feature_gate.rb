@@ -109,4 +109,8 @@ class FeatureGate
   def self_registration_reason_enabled?
     SelfRegistrationReason.exists?
   end
+
+  def self_registration_company_enabled?
+    Wizards::Steps::NewUserForm.support_company
+  end
 end

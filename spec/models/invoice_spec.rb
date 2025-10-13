@@ -238,13 +238,6 @@ describe Invoice do
     expect(invoice.filename(:pdf)).to eq "Rechnung-834963567-1.pdf"
   end
 
-  it ".to_contactables" do
-    expect(contactables(recipient_address: "test")).to have(1).item
-    expect(contactables(recipient_address: "test").first.address).to eq "test"
-    expect(contactables({})).to be_empty
-    expect(contactables({}, recipient_address: "test")).to have(1).item
-  end
-
   it "amount_open returns total amount minus payments" do
     invoice = invoices(:invoice)
     expect(invoice.amount_open).to eq 5.35
@@ -454,7 +447,7 @@ describe Invoice do
     end
 
     it "returns latest reminder" do
-      first_reminder = Fabricate(:payment_reminder, invoice: invoice, due_at: 3.day.ago, created_at: 5.days.ago)
+      first_reminder = Fabricate(:payment_reminder, invoice: invoice, due_at: 3.days.ago, created_at: 5.days.ago)
       expect(invoice.latest_reminder).to eq first_reminder
 
       second_reminder = Fabricate(:payment_reminder, invoice: invoice, due_at: 1.day.ago, created_at: 2.days.ago)
@@ -477,11 +470,6 @@ describe Invoice do
   end
 
   private
-
-  def contactables(*args)
-    invoices = args.collect { |attrs| Invoice.new(attrs) }
-    Invoice.to_contactables(invoices)
-  end
 
   def create_invoice(attrs = {})
     invoice = Invoice.create!(

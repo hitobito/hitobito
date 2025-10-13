@@ -141,15 +141,6 @@ class Invoice < ActiveRecord::Base
       where(condition.to_a)
     end
 
-    def to_contactables(invoices)
-      invoices.collect do |invoice|
-        next if invoice.recipient_address.blank?
-
-        str, no = Address::Parser.new(invoice.recipient_address).parse
-        Person.new(street: str, housenumber: no)
-      end.compact
-    end
-
     def order_by_sequence_number
       order(Arel.sql(order_by_sequence_number_statement.join(", ")))
     end

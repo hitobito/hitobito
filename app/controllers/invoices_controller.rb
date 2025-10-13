@@ -45,15 +45,6 @@ class InvoicesController < CrudController
 
   after_destroy :update_invoice_list_total
 
-  def new
-    recipient = model_params && Person.find(model_params[:recipient_id])
-    if recipient && can?(:update, recipient)
-      entry.recipient_id = recipient.id
-      entry.send(:set_recipient_fields)
-    end
-    entry.attributes = {payment_information: entry.invoice_config.payment_information}
-  end
-
   def index
     respond_to do |format|
       format.html { super }
@@ -75,6 +66,15 @@ class InvoicesController < CrudController
       format.csv { render_invoices_csv([entry]) }
       format.json { render_entry_json }
     end
+  end
+
+  def new
+    recipient = model_params && Person.find(model_params[:recipient_id])
+    if recipient && can?(:update, recipient)
+      entry.recipient_id = recipient.id
+      entry.send(:set_recipient_fields)
+    end
+    entry.attributes = {payment_information: entry.invoice_config.payment_information}
   end
 
   def destroy
@@ -157,7 +157,7 @@ class InvoicesController < CrudController
       return redirect_back(fallback_location: group_invoices_path(group))
     end
 
-    recipients = Invoice.to_contactables(invoices)
+    recipients = invoices.map(&:recipient).compact
     pdf = Export::Pdf::Labels.new(find_and_remember_label_format).generate(recipients)
     send_data pdf, type: :pdf, disposition: "inline"
   rescue Prawn::Errors::CannotFit

@@ -16,15 +16,24 @@ describe Export::Tabular::People::Households do
   end
 
   context "header" do
-    it "includes salutation, name, address attributes and layer group columns" do
+    it "includes correct columns" do
       expect(households.attributes).to eq [
-        :salutation, :name, :address, :zip_code, :town, :country, :layer_group
+        :salutation,
+        :name,
+        :address_care_of,
+        :street,
+        :housenumber,
+        :postbox,
+        :zip_code,
+        :town,
+        :country,
+        :layer_group
       ]
     end
 
     it "translates salutation, name, address attributes and layer group columns" do
       expect(households.attribute_labels.values).to eq [ # comment fool rubocop
-        "Anrede", "Name", "Adresse", "PLZ", "Ort", "Land", "Hauptebene"
+        "Anrede", "Name", "zusätzliche Adresszeile", "Strasse", "Hausnummer", "Postfach", "PLZ", "Ort", "Land", "Hauptebene"
       ]
     end
   end
@@ -32,25 +41,25 @@ describe Export::Tabular::People::Households do
   it "accepts non household people" do
     data = households([leader]).data_rows.to_a
     expect(data).to have(1).item
-    expect(data[0]).to eq [nil, "Top Leader", "Greatstreet 345", "3456", "Greattown", nil, "Top"]
+    expect(data[0]).to eq [nil, "Top Leader", nil, "Greatstreet", "345", nil, "3456", "Greattown", nil, "Top"]
   end
 
   it "accepts a list of non household people" do
     data = households([leader]).data_rows.to_a
     expect(data).to have(1).item
-    expect(data[0]).to eq [nil, "Top Leader", "Greatstreet 345", "3456", "Greattown", nil, "Top"]
+    expect(data[0]).to eq [nil, "Top Leader", nil, "Greatstreet", "345", nil, "3456", "Greattown", nil, "Top"]
   end
 
   it "accepts single person array" do
     data = households([leader]).data_rows.to_a
     expect(data).to have(1).item
-    expect(data[0]).to eq [nil, "Top Leader", "Greatstreet 345", "3456", "Greattown", nil, "Top"]
+    expect(data[0]).to eq [nil, "Top Leader", nil, "Greatstreet", "345", nil, "3456", "Greattown", nil, "Top"]
   end
 
   it "accepts a list of a single person" do
     data = households([leader]).data_rows.to_a
     expect(data).to have(1).item
-    expect(data[0]).to eq [nil, "Top Leader", "Greatstreet 345", "3456", "Greattown", nil, "Top"]
+    expect(data[0]).to eq [nil, "Top Leader", nil, "Greatstreet", "345", nil, "3456", "Greattown", nil, "Top"]
   end
 
   it "aggregates household people, uses first person's address" do
@@ -59,6 +68,6 @@ describe Export::Tabular::People::Households do
     data = households([leader, member]).data_rows.to_a
     expect(data).to have(1).item
     expect(data[0].shift(2)).to eq([nil, "Bottom Member, Top Leader"]).or eq [nil, "Top Leader, Bottom Member"]
-    expect(data[0][..3]).to eq ["Greatstreet 345", "3456", "Greattown", "Schweiz"]
+    expect(data[0][..6]).to eq [nil, "Greatstreet", "345", nil, "3456", "Greattown", "Schweiz"]
   end
 end

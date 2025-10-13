@@ -16,7 +16,7 @@ module Export::Tabular::People
     end
 
     def person_attributes
-      [:salutation, :name, :address, :zip_code, :town, :country, :layer_group]
+      [:salutation, :name, :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country, :layer_group]
     end
 
     def build_attribute_labels

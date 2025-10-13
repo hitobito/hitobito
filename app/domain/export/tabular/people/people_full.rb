@@ -32,8 +32,8 @@ module Export::Tabular::People
         .includes(:translations)
         .where(people: {id: people_ids}).distinct
       qualification_kinds.each_with_object({}) do |qualification_kind, obj|
-        label = qualification_kind.label_translations.values.join(" / ")
-        obj[ContactAccounts.key(qualification_kind, qualification_kind.id.to_s)] = ContactAccounts.human(model, label)
+        label = qualification_kind.label
+        obj[ContactAccounts.key(model, qualification_kind.id.to_s)] = ContactAccounts.human(model, label)
       end
     end
   end

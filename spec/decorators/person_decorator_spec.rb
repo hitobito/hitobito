@@ -176,7 +176,7 @@ describe PersonDecorator, :draper_with_helpers do
     end
 
     it "has redirect url to store image" do
-      attached_person_picture = person.picture.attach(Rack::Test::UploadedFile.new(logo))
+      attached_person_picture = person.picture.attach(Rack::Test::UploadedFile.new(logo, "image/png"))
       expect(attached_person_picture.record).to eq person
       expect(attached_person_picture.name).to eq "picture"
       expect(decorator.picture_full_url).to start_with "http://test.host/rails/active_storage/blobs/redirect"

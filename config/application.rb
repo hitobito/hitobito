@@ -127,7 +127,7 @@ module Hitobito
       config.logger = ActiveSupport::TaggedLogging.new(logger)
     end
 
-    config.responders.error_status = :unprocessable_entity
+    config.responders.error_status = :unprocessable_content
     config.responders.redirect_status = :see_other
 
     config.generators do |g|

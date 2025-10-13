@@ -14,7 +14,7 @@ class Doorkeeper::Hitobito::OidcSessionsController < ActionController::Base # ru
       redirect_to redirect_target, allow_other_host: true,
         notice: I18n.t("devise.sessions.signed_out")
     else
-      render plain: "failed to process token", status: :unprocessable_entity
+      render plain: "failed to process token", status: :unprocessable_content
     end
   end
 

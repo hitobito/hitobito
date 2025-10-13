@@ -24,14 +24,6 @@ describe HouseholdAsideComponent, type: :component do
     render_inline(component)
   end
 
-  let(:helpers) do
-    helpers = double("helpers")
-    allow(component).to receive(:helpers).and_return(helpers)
-    allow(member_component).to receive(:helpers).and_return(helpers)
-    allow(component).to receive(:member_component).and_return(member_component)
-    helpers
-  end
-
   it "shows the buttons when there is a household" do
     stub_can(:show, true)
     stub_can(:create_households, true)
@@ -98,7 +90,9 @@ describe HouseholdAsideComponent, type: :component do
   private
 
   def stub_can(permission, result)
-    allow(helpers).to receive(:can?).with(permission, anything).and_return(result)
+    allow(component).to receive(:can?).with(permission, anything).and_return(result)
+    allow_any_instance_of(HouseholdAsideMemberComponent).to receive(:can?)
+      .with(permission, anything).and_return(result)
   end
 
   def create_household(people)

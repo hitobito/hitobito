@@ -111,6 +111,12 @@ module MailRelay
       self.class.personal_return_path(envelope_receiver_name, sender_email)
     end
 
+    def potential_senders
+      Person.left_joins(:additional_emails)
+        .where("people.email = ? OR additional_emails.email = ?", sender_email, sender_email)
+        .distinct
+    end
+
     private
 
     def prepare_not_allowed_message
@@ -172,12 +178,6 @@ module MailRelay
 
     def sender_is_list_member?
       mailing_list.people.where(id: potential_senders.select(:id)).exists?
-    end
-
-    def potential_senders
-      Person.left_joins(:additional_emails)
-        .where("people.email = ? OR additional_emails.email = ?", sender_email, sender_email)
-        .distinct
     end
 
     def send_reject_message?

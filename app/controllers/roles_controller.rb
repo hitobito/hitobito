@@ -101,7 +101,7 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
       change_type_successfull
     else
       copy_errors(@new_role)
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

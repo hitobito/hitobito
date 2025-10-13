@@ -37,7 +37,7 @@ describe Export::SubscriptionsJob do
 
       lines = file.read.lines
       expect(lines.size).to eq(3)
-      expect(lines[0]).to match(/Name;Adresse;.*/)
+      expect(lines[0]).to match(/Name;zusätzliche Adresszeile;Strasse;.*/)
     end
   end
 

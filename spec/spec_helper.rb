@@ -117,7 +117,7 @@ RSpec.configure do |config|
     request = ActionDispatch::TestRequest.new({})
     request.host = "test.host" # ensure to not remove the test-host
     c.request = request
-    allow(c).to receive(:current_person) { people(:top_leader) }
+    allow(c).to receive(:current_person) { try(:current_user) || people(:top_leader) }
     Draper::ViewContext.current = c.view_context
   end
 

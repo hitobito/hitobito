@@ -20,7 +20,7 @@ module Wizards
       return save_and_redirect if wizard.valid? && wizard.last_step?
 
       wizard.move_on
-      render wizard_action, status: :unprocessable_entity # required for turbo to update
+      render wizard_action, status: :unprocessable_content # required for turbo to update
     end
 
     private

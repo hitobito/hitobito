@@ -11,6 +11,10 @@ module Export::Tabular::Events
 
     self.row_class = Export::Tabular::Events::Row
 
+    def contactable_keys
+      [:name, :address, :zip_code, :town, :email, :phone_numbers]
+    end
+
     private
 
     def build_attribute_labels
@@ -79,10 +83,6 @@ module Export::Tabular::Events
         labels[:"#{prefix}_#{key}"] =
           "#{translated_prefix(prefix)} #{Person.human_attribute_name(key)}"
       end
-    end
-
-    def contactable_keys
-      [:name, :address, :zip_code, :town, :email, :phone_numbers]
     end
 
     def translated_prefix(prefix)

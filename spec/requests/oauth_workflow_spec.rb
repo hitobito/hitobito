@@ -75,7 +75,7 @@ describe "OauthWorkflow" do
     end
 
     context "with jwt" do
-      let(:key) { OpenSSL::PKey::RSA.generate(1024) }
+      let(:key) { OpenSSL::PKey::RSA.generate(2048) }
 
       before do
         allow(Settings.oidc).to receive(:signing_key).and_return(key.to_s.lines)

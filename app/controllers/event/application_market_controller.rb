@@ -23,7 +23,7 @@ class Event::ApplicationMarketController < ApplicationController
     if assigner.createable?
       assigner_add_participant
     else
-      render "participation_exists_error", status: :unprocessable_entity
+      render "participation_exists_error", status: :unprocessable_content
     end
   end
 

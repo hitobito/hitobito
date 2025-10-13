@@ -8,7 +8,7 @@
 source "https://rubygems.org"
 
 gem "rails", "= 7.1.5.2"
-gem "wagons", "~> 0.9.1"
+gem "wagons"
 gem "active_record_distinct_on"
 gem "activerecord-nulldb-adapter"
 gem "activerecord-session_store"
@@ -17,11 +17,11 @@ gem "airbrake"
 gem "awesome_nested_set"
 gem "aws-sdk-s3", require: false
 gem "bcrypt"
-gem "bleib", "~> 0.0.14"
+gem "bleib"
 gem "bootsnap", require: false
 gem "cancancan"
 gem "caxlsx"
-gem "charlock_holmes", "~> 0.7.7"
+gem "charlock_holmes"
 gem "commonmarker"
 gem "config"
 gem "country_select"
@@ -35,21 +35,21 @@ gem "doorkeeper"
 gem "doorkeeper-i18n"
 gem "doorkeeper-jwt"
 gem "doorkeeper-openid_connect"
-gem "draper"
+gem "draper", "4.0.2" # pinned because of https://github.com/drapergem/draper/pull/933
 gem "draper-cancancan"
 gem "dry-validation"
 gem "epics" # client for EBICS-connections to banks
 gem "faker"
 gem "faraday"
-gem "gibbon", "~> 3.4"
-gem "globalize", "~> 7.0"
+gem "gibbon"
+gem "globalize"
 gem "graphiti"
-gem "graphiti-rails", "~> 0.1"
+gem "graphiti-rails"
 gem "haml"
 gem "http_accept_language"
 gem "icalendar"
-gem "image_processing", "~> 1.2"
-gem "json", "< 2.7.0" # pinned to be able to use rdbg. Somehow it has multiple versions otherwise
+gem "image_processing"
+gem "json"
 gem "lograge"
 gem "lograge_activejob"
 gem "lograge-sql"
@@ -65,7 +65,7 @@ gem "paper_trail"
 gem "parallel"
 gem "paranoia"
 gem "pg"
-gem "phonelib", "~> 0.8.4"
+gem "phonelib"
 gem "prawn"
 gem "prawn-markup"
 gem "prawn-table"
@@ -98,9 +98,9 @@ gem "ttfunk", "< 1.8.0"
 gem "turbo-rails"
 gem "validates_by_schema", "~> 0.3.0" # 0.5.1 does not work well with wagons / wagon-migrations
 gem "validates_zipcode"
-gem "validates_timeliness", "~> 7.0.0.beta2"
+gem "validates_timeliness"
 gem "vcard"
-gem "view_component"
+gem "view_component", "3.12.1" # later versions break tests (probably drop at some point)
 gem "webpacker"
 
 # load after others because dependencies
@@ -115,7 +115,7 @@ group :development, :test do
   gem "parallel_tests"
   gem "pry-byebug"
   gem "pry-doc" # provides show-source/$ in the pry-console
-  gem "rspec-rails", "~> 6.0"
+  gem "rspec-rails"
 end
 
 group :development do
@@ -124,11 +124,11 @@ group :development do
   gem "bullet"
   gem "listen"
   gem "request_profiler"
-  gem "rubocop", require: false
-  gem "rubocop-rspec", require: false
+  gem "rubocop", "1.70.0", require: false # pinned for gem upgrade
+  gem "rubocop-rspec", "3.0.2", require: false # pinned for gem upgrade
   gem "spring-commands-rspec"
-  gem "standard", "~> 1.28", require: false
-  gem "standard-rails", require: false
+  gem "standard", "1.44.0", require: false # pinned for gem upgrade
+  gem "standard-rails", "1.1.0", require: false # pinned for gem upgrade
 end
 
 group :test do

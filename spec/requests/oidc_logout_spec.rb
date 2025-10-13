@@ -14,7 +14,7 @@ RSpec.describe "GET /oidc/logout", type: :request do
   let(:token) { Fabricate(:access_token, application: application, scopes: scopes, resource_owner_id: person.id) }
 
   context "without id token" do
-    it "fails with HTTP 422 (unprocessable_entity)" do
+    it "fails with HTTP 422 (unprocessable_content)" do
       get "/oidc/logout"
       expect(response).to have_http_status(:unprocessable_content)
       expect(response.body).to eq "failed to process token"
@@ -24,7 +24,7 @@ RSpec.describe "GET /oidc/logout", type: :request do
   context "with id token" do
     let(:id_token) { Doorkeeper::OpenidConnect::IdToken.new(token) }
 
-    let(:key) { OpenSSL::PKey::RSA.generate(1024) }
+    let(:key) { OpenSSL::PKey::RSA.generate(2048) }
 
     before do
       allow(Doorkeeper::OpenidConnect.configuration).to receive(:signing_key).and_return(key.to_s)

@@ -26,7 +26,7 @@ describe "Globalized model" do
     end
   end
 
-  it "should create globalize accessors for rich text fields" do
+  it "should create globalized accessors for rich text fields" do
     expected_values = []
     languages.each do |lang|
       body = "Custom content body {assignment-title} #{lang}"
@@ -82,6 +82,10 @@ describe "Globalized model" do
     expect(Event.validators_on(:name).any?(ActiveModel::Validations::PresenceValidator)).to be_truthy
     expect(Event.method_defined?(:name_en)).to be_truthy
     expect(Event.validators_on(:name_en).any?(ActiveModel::Validations::PresenceValidator)).to be_falsey
+
+    expect(Event.validators_on(:name).any?(ActiveRecord::Validations::UniquenessValidator)).to be_truthy
+    expect(Event.method_defined?(:name_en)).to be_truthy
+    expect(Event.validators_on(:name_en).any?(ActiveRecord::Validations::UniquenessValidator)).to be_falsey
   end
 
   it "presence validated fields need current language filled in" do
@@ -91,4 +95,8 @@ describe "Globalized model" do
     event.name_fr = "French name"
     expect(event).not_to be_valid
   end
+end
+
+class Event
+  validates :name, uniqueness: true
 end

@@ -985,6 +985,7 @@ fr:
               finance: Création et gestion de factures
               impersonation: Se servir de hitobito comme autre personne.
               see_invisible_from_above: Voit en plus les personnes qui ne peuvent normalement pas être vues par les niveaux supérieurs.
+              manual_deletion: Löschen von Personen ohne Rollen
           kind:
             member:
               one: Membre

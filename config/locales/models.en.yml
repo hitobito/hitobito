@@ -917,6 +917,7 @@ en:
               finance: Create and manage invoices
               impersonation: Use Hitobito as another person
               see_invisible_from_above: Sieht zusätzlich Personen, welche sonst von höheren Ebenen nicht eingesehen werden dürfen.
+              manual_deletion: Löschen von Personen ohne Rollen
           kind:
             member:
               one: Member

@@ -1731,6 +1731,8 @@ en:
         explanation:
           delete: Sollte die Person gelöscht werden, werden die Daten der Person unwiderruflich gelöscht.
           minimize: Bei der Minimierung wird die Person nicht gelöscht, es werden aber die meisten Personspezifischen Daten entfernt.
+        unable_to_delete: "Person kann aus folgenden Gründen nicht gelöscht werden:"
+        delete_anyways: Probleme ignorieren und Person trotzdem löschen
       minimize:
         success: "%{full_name} wurde erfolgreich minimiert."
       delete:

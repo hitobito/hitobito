@@ -40,10 +40,7 @@ class Person::Address
       ]
     end
 
-    [
-      *names,
-      short_address(country_as: :country_label)
-    ].compact.join("\n")
+    (names + full_address(country_as: :country_label)).compact.join("\n")
   end
 
   private
@@ -67,13 +64,13 @@ class Person::Address
     members.map(&:full_name).compact.join(", ")
   end
 
-  def full_address
+  def full_address(country_as: :country)
     [
       address_care_of.to_s.strip.presence,
       address.to_s.strip,
       postbox.to_s.strip.presence,
       zip_code_with_town,
-      country_string(:country)
+      country_string(country_as)
     ].compact
   end
 

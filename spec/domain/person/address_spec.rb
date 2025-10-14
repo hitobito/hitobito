@@ -260,6 +260,6 @@ describe Person::Address do
       TEXT
     end
 
-    it_behaves_like "common address behaviour", country_label: true, postbox: false, company: :replaces
+    it_behaves_like "common address behaviour", country_label: true, postbox: true, company: :replaces
   end
 end

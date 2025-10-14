@@ -73,6 +73,12 @@ describe Export::Pdf::Labels do
       expect(subject.strings).to include("Greatstreet 345")
       expect(subject.strings).to include("3456 Greattown")
     end
+
+    it "renders postbox" do
+      top_leader.update! postbox: "Postfach 10"
+
+      expect(subject.strings).to include("Postfach 10")
+    end
   end
 
   context "when company_name is given" do

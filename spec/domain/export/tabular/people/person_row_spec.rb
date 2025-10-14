@@ -67,4 +67,12 @@ describe Export::Tabular::People::PersonRow do
 
     it { expect(row.fetch(:tags)).to eq "lorem:ipsum, loremipsum" }
   end
+
+  context "qualifications" do
+    let!(:qualification) { Fabricate(:qualification, person:) }
+
+    it do
+      expect(row.fetch(:"qualification_kind_#{qualification.qualification_kind.id}")).to eq qualification.finish_at.to_s
+    end
+  end
 end

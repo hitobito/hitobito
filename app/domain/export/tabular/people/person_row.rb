@@ -57,15 +57,15 @@ module Export::Tabular::People
       contact_account_attribute(entry.additional_addresses, attr)
     end
 
-    def qualification_kind(attr)
-      qualification = find_qualification(attr)
+    def qualification_kind(id)
+      qualification = find_qualification(id)
       qualification.finish_at.try(:to_s) || I18n.t("global.yes") if qualification
     end
 
-    def find_qualification(label)
+    def find_qualification(id)
       entry.decorate.latest_qualifications_uniq_by_kind.find do |q|
         qualification_active?(q) &&
-          ContactAccounts.key(q.qualification_kind.class, q.qualification_kind.label) == label
+          ContactAccounts.key(q.qualification_kind.class, q.qualification_kind.id.to_s) == id
       end
     end
 

@@ -27,11 +27,13 @@ module Export::Tabular::People
 
     def qualification_kinds
       model = QualificationKind
-      labels = QualificationKind
-        .joins(qualifications: :person).where(people: {id: people_ids})
-        .joins(:translations).distinct.pluck(:label)
-      labels.each_with_object({}) do |label, obj|
-        obj[ContactAccounts.key(model, label)] = ContactAccounts.human(model, label)
+      qualification_kinds = QualificationKind
+        .joins(qualifications: :person)
+        .includes(:translations)
+        .where(people: {id: people_ids}).distinct
+      qualification_kinds.each_with_object({}) do |qualification_kind, obj|
+        label = qualification_kind.label
+        obj[ContactAccounts.key(model, qualification_kind.id.to_s)] = ContactAccounts.human(model, label)
       end
     end
   end

@@ -1780,7 +1780,11 @@ fr:
         title: "supprimer %{full_name}?"
         minimize: "Minimiser la personne"
         delete: "Supprimer définitivement la personne"
-        explanation: "Si la personne est supprimée, les données de la personne sont irrémédiablement supprimées. En cas de minimisation, la personne n'est pas supprimée, mais la plupart des données spécifiques à la personne sont supprimées."
+        explanation:
+          delete: Sollte die Person gelöscht werden, werden die Daten der Person unwiderruflich gelöscht.
+          minimize: Bei der Minimierung wird die Person nicht gelöscht, es werden aber die meisten Personspezifischen Daten entfernt.
+        unable_to_delete: "Person kann aus folgenden Gründen nicht gelöscht werden:"
+        delete_anyways: Probleme ignorieren und Person trotzdem löschen
       minimize:
         success: "%{full_name} a été minimisée avec succès."
       delete:

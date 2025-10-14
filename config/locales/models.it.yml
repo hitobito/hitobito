@@ -984,6 +984,7 @@ it:
               finance: Emettere e amministrare fatture
               impersonation: Utilizza Hitobito come altra persona.
               see_invisible_from_above: Vedere altre persone che altrimenti non possono essere viste dai livelli superiori.
+              manual_deletion: Löschen von Personen ohne Rollen
           kind:
             member:
               one: Membro

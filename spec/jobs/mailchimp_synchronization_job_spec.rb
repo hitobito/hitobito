@@ -9,13 +9,13 @@ require "spec_helper"
 
 describe MailchimpSynchronizationJob do
   let(:group) { groups(:top_group) }
-  let(:mailing_list) { Fabricate(:mailing_list, group: group, mailchimp_api_key: "1234") }
+  let(:mailing_list) { Fabricate(:mailing_list, group: group, mailchimp_api_key: "abc-us1") }
   let(:now) { Time.zone.now }
 
   subject { MailchimpSynchronizationJob.new(mailing_list.id) }
 
   before do
-    mailing_list.update!(mailchimp_api_key: "abc", mailchimp_list_id: "1")
+    mailing_list.update!(mailchimp_api_key: "abc-us1", mailchimp_list_id: "1")
   end
 
   it "sets mailing_list state to syncing if jobs eunqueues" do

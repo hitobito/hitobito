@@ -27,7 +27,11 @@ module Synchronize
         @default_tag = format(DEFAULT_TAG, @list.id) if with_default_tag
       end
 
-      def perform
+      def perform # rubocop:disable Metrics/AbcSize
+        unless client.ping_api(error_handler: lambda { |e| result.exception = e })
+          return result
+        end
+
         execute(:create_segments, missing_segments)
         execute(:create_merge_fields, missing_merge_fields)
 

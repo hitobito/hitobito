@@ -325,6 +325,7 @@ describe Synchronize::Mailchimp::Synchronizator do
     before do
       sync.merge_fields = []
 
+      allow(client).to receive(:ping_api).and_return true
       allow(client).to receive(:fetch_merge_fields).and_return([])
       allow(client).to receive(:fetch_segments).and_return([])
       allow(client).to receive(:fetch_members).and_return([])
@@ -366,6 +367,19 @@ describe Synchronize::Mailchimp::Synchronizator do
           1, 1))
         sync.perform
         expect(result.state).to eq :partial
+      end
+    end
+
+    context "ping api fails" do
+      before do
+        expect(client).to receive(:ping_api).and_call_original
+        expect(client.api).to receive_message_chain("ping.retrieve").and_raise Gibbon::MailChimpError, "invalid api key"
+      end
+
+      it "returns result with exception" do
+        result = sync.perform
+
+        expect(result.data[:exception]).to include "invalid api key"
       end
     end
 
@@ -522,6 +536,7 @@ describe Synchronize::Mailchimp::Synchronizator do
     before do
       sync.merge_fields = []
 
+      allow(client).to receive(:ping_api).and_return true
       allow(client).to receive(:fetch_merge_fields).and_return([])
     end
 

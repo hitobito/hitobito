@@ -104,17 +104,31 @@ describe MailingList do
       list.additional_sender = ""
       expect(list).to be_valid
     end
+
     it "succeed with additional_sender" do
       list.additional_sender = "abc@de.ft; *@df.dfd.ee,test@test.test"
       expect(list).to be_valid
     end
+
     it "succeed with additional_sender" do
       list.additional_sender = "abc*dv@test.ch"
       expect(list).to have(1).error_on(:additional_sender)
     end
+
     it "succeed with additional_sender" do
       list.additional_sender = "abc@de.ft;as*d@df.dfd.ee,test@test.test"
       expect(list).to have(1).error_on(:additional_sender)
+    end
+
+    it "validates hyphen in mailchimp_api_key" do
+      list.mailchimp_api_key = "asdf"
+      expect(list).to have(1).error_on(:mailchimp_api_key)
+
+      list.mailchimp_api_key = "123456789-us1"
+      expect(list).to be_valid
+
+      list.mailchimp_api_key = nil
+      expect(list).to be_valid
     end
   end
 
@@ -140,7 +154,7 @@ describe MailingList do
     end
 
     it "does enqueue destroy job if list is connected" do
-      list.update!(mailchimp_api_key: 1, mailchimp_list_id: 1)
+      list.update!(mailchimp_api_key: "asdf-us1", mailchimp_list_id: 1)
       expect { list.destroy }.to change { Delayed::Job.count }.by(1)
     end
   end

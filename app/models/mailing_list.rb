@@ -73,6 +73,7 @@ class MailingList < ActiveRecord::Base
 
   validates :subscribable_for, inclusion: {in: SUBSCRIBABLE_FORS}
   validates :subscribable_mode, inclusion: {in: SUBSCRIBABLE_MODES}, if: :subscribable?
+  validates :mailchimp_api_key, format: {with: /\A[a-z0-9]+-[a-z0-9]+\z/i}, allow_blank: true
 
   normalizes :additional_sender, with: ->(attribute) { attribute.downcase }
 

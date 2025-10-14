@@ -267,6 +267,23 @@ describe Synchronize::Mailchimp::Client do
     end
   end
 
+  context "#ping_api" do
+    it "return true on success" do
+      expect(client).to receive_message_chain("api.ping.retrieve").and_return true
+
+      expect(client.ping_api(error_handler: nil)).to eq true
+    end
+
+    it "calls error handler with exception" do
+      expect(client).to receive_message_chain("api.ping.retrieve").and_raise(Gibbon::MailChimpError, "invalid api key")
+
+      received_exception = nil
+      client.ping_api(error_handler: lambda { |e| received_exception = e })
+
+      expect(received_exception.message).to include "invalid api key"
+    end
+  end
+
   context "#create_merge_field_operation" do
     subject { client.create_merge_field_operation("Gender", "dropdown", {choices: %w[m w]}) }
 

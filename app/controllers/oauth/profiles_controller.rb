@@ -14,7 +14,7 @@ module Oauth
 
     def show
       if scope.blank? || doorkeeper_token.acceptable?(scope)
-        render json: basic_attrs.merge(scope_attrs || {})
+        render json: basic_attrs.merge((scope_attrs || {}).symbolize_keys)
       else
         render json: {error: "invalid scope: #{scope}"}, status: :forbidden
       end

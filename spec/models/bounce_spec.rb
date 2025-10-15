@@ -40,7 +40,7 @@ RSpec.describe Bounce do
     end
 
     it "has the needed SQL" do
-      expect(scope.to_sql).to include "mailing_list_ids && '{42}'"
+      expect(scope.to_sql).to include "mailing_list_ids @> ARRAY[42]::integer[])"
     end
 
     it "filters the right elements" do

@@ -102,7 +102,9 @@ describe FormHelper do
     context "for new entry" do
       let(:entry) { CrudTestModel.new }
 
-      it { is_expected.to have_selector("form.special.form-horizontal[action='/crud_test_models?locale=de'][method=post]") }
+      it do
+        is_expected.to have_selector("form.special.form-horizontal[action='/crud_test_models?locale=de'][method=post]")
+      end
       it { is_expected.to have_selector("input[name='crud_test_model[name]'][type=text]") }
       it { is_expected.to have_no_selector("input[name='crud_test_model[name]'][type=text][value]") }
       it { is_expected.to have_selector("input[name='crud_test_model[birthdate]'][type=text]") }
@@ -136,9 +138,11 @@ describe FormHelper do
 
     let(:entry) { crud_test_models(:AAAAA) }
 
-    it {
-      is_expected.to have_selector("form.form-horizontal.special[method=post][action='/crud_test_models/#{entry.id}?locale=de']")
-    }
+    it do
+      is_expected.to have_selector(
+        "form.form-horizontal.special[method=post][action='/crud_test_models/#{entry.id}?locale=de']"
+      )
+    end
   end
 
   describe "#field_inheritance_values" do
@@ -180,7 +184,10 @@ describe FormHelper do
     end
 
     it "option has globalized target-field values and default data attributes" do
-      @list += [Fabricate.build(:event_kind, general_information: "A description", general_information_en: "An english description")]
+      @list += [Fabricate.build(
+        :event_kind, general_information: "A description",
+        general_information_en: "An english description"
+      )]
       @mapping = {description: :general_information}
       options = dom.all("option")
       languages = Settings.application.languages.keys

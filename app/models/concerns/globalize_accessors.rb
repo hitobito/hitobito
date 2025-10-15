@@ -23,7 +23,8 @@
 module GlobalizeAccessors
   include ColumnHelper
   def globalize_accessors(options = {})
-    options.reverse_merge!(locales: Settings.application.languages.keys, attributes: translated_attribute_names)
+    options.reverse_merge!(locales: Settings.application.languages.keys,
+      attributes: translated_attribute_names)
     class_attribute :globalize_locales, :globalize_attribute_names, instance_writer: false
 
     self.globalize_locales = options[:locales]
@@ -41,14 +42,18 @@ module GlobalizeAccessors
   private
 
   def define_accessors(attr_name, locale)
-    attribute("#{attr_name}_#{locale}", ::ActiveRecord::Type::Value.new) if ::ActiveRecord::VERSION::STRING >= "5.0"
+    if ::ActiveRecord::VERSION::STRING >= "5.0"
+      attribute("#{attr_name}_#{locale}", ::ActiveRecord::Type::Value.new)
+    end
     define_getter(attr_name, locale)
     define_setter(attr_name, locale)
   end
 
   def define_getter(attr_name, locale)
     define_method localized_attr_name_for(attr_name, locale) do
-      globalize.stash.contains?(locale, attr_name) ? globalize.send(:fetch_stash, locale, attr_name) : globalize.send(:fetch_attribute, locale, attr_name)
+      globalize.stash.contains?(locale, attr_name) ?
+        globalize.send(:fetch_stash, locale, attr_name) :
+        globalize.send(:fetch_attribute, locale, attr_name)
     end
     define_method "#{localized_attr_name_for(attr_name, locale)}_type" do
       self.class.column_type(self, attr_name)

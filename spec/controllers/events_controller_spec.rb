@@ -364,11 +364,20 @@ describe EventsController do
           })
           expect(response).to redirect_to(group_event_path(group, event))
           expect(question.question_translations).to eq(
-            {"de" => "Ich habe folgendes ÖV Abo", "en" => nil, "fr" => "J'ai l'abonnement de transports publics suivant", "it" => nil}
+            {
+              "de" => "Ich habe folgendes ÖV Abo",
+              "en" => nil,
+              "fr" => "J'ai l'abonnement de transports publics suivant",
+              "it" => nil
+            }
           )
           expect(question.choices_translations).to eq(
-            {"de" => "GA, Halbtax / unter 16, keine Vergünstigung",
-             "en" => nil, "fr" => "AG, demi-tarif / moins de 16 ans, pas de réduction", "it" => nil}
+            {
+              "de" => "GA, Halbtax / unter 16, keine Vergünstigung",
+              "en" => nil,
+              "fr" => "AG, demi-tarif / moins de 16 ans, pas de réduction",
+              "it" => nil
+            }
           )
         end
 
@@ -378,11 +387,20 @@ describe EventsController do
           })
           expect(response).to redirect_to(group_event_path(group, event))
           expect(question.question_translations).to eq(
-            {"de" => "Ich habe folgendes ÖV Abo", "en" => nil, "fr" => "J'ai l'abonnement de transports publics suivant", "it" => nil}
+            {
+              "de" => "Ich habe folgendes ÖV Abo",
+              "en" => nil,
+              "fr" => "J'ai l'abonnement de transports publics suivant",
+              "it" => nil
+            }
           )
           expect(question.choices_translations).to eq(
-            {"de" => "GA, Halbtax / unter 16, keine Vergünstigung",
-             "en" => nil, "fr" => "AG, demi-tarif / moins de 16 ans, pas de réduction", "it" => nil}
+            {
+              "de" => "GA, Halbtax / unter 16, keine Vergünstigung",
+              "en" => nil,
+              "fr" => "AG, demi-tarif / moins de 16 ans, pas de réduction",
+              "it" => nil
+            }
           )
         end
       end

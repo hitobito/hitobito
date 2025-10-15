@@ -5,7 +5,7 @@
 
 require "spec_helper"
 
-describe "Translated input fields", js: true do
+describe "Globalized input fields", js: true do
   let(:group) { groups(:bottom_layer_one) }
 
   before do
@@ -13,10 +13,10 @@ describe "Translated input fields", js: true do
     visit edit_group_path(group)
   end
 
-  it "should show and hide inputs, display already translated languages and save all languages" do
+  it "should show and hide inputs, display already globalized languages and save all languages" do
     # Should show all inputs after clicking translation button
     expect(page).to have_css("input[id^='group_privacy_policy_title']", count: 1)
-    page.first("button[data-action='translatable-fields#toggleFields']").click
+    page.first("button[data-action='globalized-fields#toggleFields']").click
     expect(page).to have_css("input[id^='group_privacy_policy_title']", count: 4)
 
     # Should show languages that are filled in besides the current locale
@@ -28,7 +28,7 @@ describe "Translated input fields", js: true do
     expect(page).to have_content("Zusätzlich ausgefüllte Sprachen: EN, FR")
 
     # Should still show filled in languages after hiding the language fields again
-    page.first("button[data-action='translatable-fields#toggleFields']").click
+    page.first("button[data-action='globalized-fields#toggleFields']").click
     expect(page).to have_css("input[id^='group_privacy_policy_title']", count: 1)
     expect(page).to have_content("Zusätzlich ausgefüllte Sprachen: EN, FR")
 
@@ -40,7 +40,7 @@ describe "Translated input fields", js: true do
   end
 
   it "should automatically show all language fields if a validation of not current locale fails" do
-    page.first("button[data-action='translatable-fields#toggleFields']").click
+    page.first("button[data-action='globalized-fields#toggleFields']").click
     fill_in "group_privacy_policy_title_en", with: "Text" * 20
     click_button("Speichern")
     expect(page).to have_css("input[id^='group_privacy_policy_title']", count: 4)

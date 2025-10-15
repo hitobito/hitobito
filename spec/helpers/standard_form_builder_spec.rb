@@ -288,15 +288,15 @@ describe "StandardFormBuilder" do
     end
   end
 
-  describe "translated fields" do
+  describe "globalized fields" do
     let(:dom) {
-      Capybara::Node::Simple.new(form.input_field(:translated_field))
+      Capybara::Node::Simple.new(form.input_field(:globalized_field))
     }
 
     it "generates input fields for column types other than text" do
-      attr = :translated_field
+      attr = :globalized_field
       expect(dom).to have_css("div[class='d-flex'] div[class='input-group mb-2'] input[name='entry[#{attr}]']")
-      expect(dom).to have_css("div[class='d-flex'] button[data-action='translatable-fields#toggleFields'][type='button']")
+      expect(dom).to have_css("div[class='d-flex'] button[data-action='globalized-fields#toggleFields'][type='button']")
 
       expect(dom).not_to have_css("div[class='hidden'] div[class='input-group mb-2'] input[name='entry[#{attr}]']")
       Settings.application.languages.keys.excluding(I18n.locale).each do |locale|
@@ -305,11 +305,11 @@ describe "StandardFormBuilder" do
     end
 
     it "generates textarea for column type text" do
-      attr = :translated_text_field
+      attr = :globalized_text_field
       dom = Capybara::Node::Simple.new(form.input_field(attr))
 
       expect(dom).to have_css("div[class='d-flex'] div[class='input-group mb-2'] textarea[name='entry[#{attr}]']")
-      expect(dom).to have_css("div[class='d-flex'] button[data-action='translatable-fields#toggleFields'][type='button']")
+      expect(dom).to have_css("div[class='d-flex'] button[data-action='globalized-fields#toggleFields'][type='button']")
 
       expect(dom).not_to have_css("div[class='hidden'] div[class='input-group mb-2'] textarea[name='entry[#{attr}]']")
       Settings.application.languages.keys.excluding(I18n.locale).each do |locale|
@@ -318,11 +318,11 @@ describe "StandardFormBuilder" do
     end
 
     it "generates rich text fields" do
-      attr = :translated_field
+      attr = :globalized_field
       dom = Capybara::Node::Simple.new(form.rich_text_area(attr))
 
       expect(dom).to have_css("div[class='d-flex'] div[class='input-group mb-2'] trix-editor#entry_#{attr}")
-      expect(dom).to have_css("div[class='d-flex'] button[data-action='translatable-fields#toggleFields'][type='button']")
+      expect(dom).to have_css("div[class='d-flex'] button[data-action='globalized-fields#toggleFields'][type='button']")
 
       expect(dom).not_to have_css("div[class='hidden'] div[class='input-group mb-2'] trix-editor#entry_#{attr}")
       Settings.application.languages.keys.excluding(I18n.locale).each do |locale|
@@ -330,12 +330,12 @@ describe "StandardFormBuilder" do
       end
     end
 
-    it "only generates translation button once" do
-      expect(dom).to have_css("button[data-action='translatable-fields#toggleFields'][type='button']", count: 1)
+    it "only generates globalization button once" do
+      expect(dom).to have_css("button[data-action='globalized-fields#toggleFields'][type='button']", count: 1)
     end
 
     it "uses current locale for always visible input" do
-      attr = :translated_field
+      attr = :globalized_field
       I18n.locale = :fr
       expect(dom).to have_css("input[name='entry[#{attr}]']")
       Settings.application.languages.keys.excluding(:fr).each do |input_locale|
@@ -343,8 +343,8 @@ describe "StandardFormBuilder" do
       end
     end
 
-    it "does not show translation options if there is only one locale" do
-      attr = :translated_field
+    it "does not show globalization options if there is only one locale" do
+      attr = :globalized_field
       expect(dom).to have_css("input[name='entry[#{attr}]']")
       expect(dom).to have_css("div[class='d-flex'] div[class='input-group mb-2'] input[name='entry[#{attr}]']")
 
@@ -357,9 +357,9 @@ describe "StandardFormBuilder" do
       expect(dom).not_to have_css("div[class='hidden']")
     end
 
-    it "generates labeled translated fields" do
-      dom = Capybara::Node::Simple.new(form.labeled_input_field(:translated_field))
-      expect(dom).to have_css("label[for='entry_translated_field']")
+    it "generates labeled globalized fields" do
+      dom = Capybara::Node::Simple.new(form.labeled_input_field(:globalized_field))
+      expect(dom).to have_css("label[for='entry_globalized_field']")
     end
   end
 end

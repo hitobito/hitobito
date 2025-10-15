@@ -13,11 +13,17 @@ module MailerMacros
   end
 
   def expect_no_enqueued_mail_jobs
+    ActiveJob::Base.queue_adapter = :delayed_job
     expect { yield }.not_to change { enqueued_mail_jobs_count }
+  ensure
+    ActiveJob::Base.queue_adapter = :test
   end
 
   def expect_enqueued_mail_jobs(count:)
+    ActiveJob::Base.queue_adapter = :delayed_job
     expect { yield }.to change { enqueued_mail_jobs_count }.by(count)
+  ensure
+    ActiveJob::Base.queue_adapter = :test
   end
 
   def enqueued_mail_jobs_count

@@ -166,6 +166,13 @@ RSpec.configure do |config|
     end
   end
 
+  config.around(:each, :dj_queue) do |example|
+    ActiveJob::Base.queue_adapter = :delayed_job
+    example.run
+  ensure
+    ActiveJob::Base.queue_adapter = :test
+  end
+
   config.around(:each, :time_frozen) do |example|
     freeze_time do
       example.run

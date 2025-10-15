@@ -70,7 +70,7 @@ class MailingListAbility < AbilityDsl::Base
 
   def subscribable
     subject.subscribable? &&
-      Person::Subscriptions.new(user_context.user).subscribable.include?(subject)
+      Person::Subscriptions.new(user_context.user).subscribable.exists?(id: subject.id)
   end
 
   private

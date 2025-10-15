@@ -5,21 +5,23 @@
 
 class Person::SubscriptionsController < ApplicationController
   skip_authorization_check
-  helper_method :subscribed, :subscribable, :person
+  helper_method :subscribable?, :person
+
+  before_action :authorize_person, only: [:create, :destroy]
 
   def index
     authorize!(:show_details, person)
     @group = Group.find(params[:group_id])
+    @grouped_subscribed = grouped_by_layer(subscribed)
+    @grouped_subscribable = grouped_by_layer(subscribable - subscribed)
   end
 
   def create
-    authorize!(:update, person)
     subscriptions.create(mailing_list)
     redirect_with_notice
   end
 
   def destroy
-    authorize!(:update, person)
     subscriptions.destroy(mailing_list)
     redirect_with_notice
   end
@@ -37,15 +39,19 @@ class Person::SubscriptionsController < ApplicationController
   end
 
   def mailing_list
-    @mailing_list ||= MailingList.find(params[:id])
+    @mailing_list ||= subscriptions.subscribable.find(params[:id])
+  end
+
+  def subscribable?(list)
+    subscribable.include?(list)
   end
 
   def subscribed
-    @subscribed ||= grouped_by_layer(subscriptions.subscribed)
+    @subscribed ||= subscriptions.subscribed.includes(group: :layer_group).list.to_a
   end
 
   def subscribable
-    @subscribable ||= grouped_by_layer(subscriptions.subscribable - subscriptions.subscribed)
+    @subscribable ||= subscriptions.subscribable.includes(group: :layer_group).list.to_a
   end
 
   def subscriptions
@@ -53,10 +59,10 @@ class Person::SubscriptionsController < ApplicationController
   end
 
   def grouped_by_layer(mailing_lists)
-    MailingList
-      .includes(group: :layer_group)
-      .list
-      .where(id: mailing_lists.map(&:id))
-      .group_by { _1.group.layer_group }
+    mailing_lists.group_by { _1.group.layer_group }
+  end
+
+  def authorize_person
+    authorize!(:update, person)
   end
 end

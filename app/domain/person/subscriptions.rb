@@ -6,11 +6,8 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::Subscriptions
-  attr_reader :scope
-
-  def initialize(person, scope = MailingList)
+  def initialize(person)
     @person = person
-    @scope = scope
   end
 
   def create(mailing_list)
@@ -23,21 +20,21 @@ class Person::Subscriptions
   end
   alias_method :unsubscribe, :destroy
 
+  # All mailing lists that the person is currently subscribed to -
+  # ignorant of the fact if the person may subscribe themself to the list or not.
   def subscribed # rubocop:todo Metrics/AbcSize
-    scope
+    MailingList
       .where(id: direct_inclusions.select("mailing_list_id"))
-      .or(scope.anyone.or(scope.configured.opt_out).or(scope.nobody).merge(from_group_or_events))
+      .or(MailingList.not_opt_in.merge(from_group_or_events))
       .where.not(id: direct_exclusions.select("mailing_list_id"))
       .where.not(id: globally_excluding_mailing_list_ids)
   end
 
+  # All mailing lists that the person can subscribe to or unsubscribe from -
+  # hence ignorant of the current subscription status.
   def subscribable # rubocop:todo Metrics/AbcSize
-    scope.anyone
-      .or(
-        scope.configured.merge(from_group_or_events)
-             .where(id: direct_exclusions.or(scope.opt_in).select("mailing_list_id"))
-      )
-      .where.not(id: subscribed.map(&:id))
+    MailingList
+      .anyone.or(MailingList.configured.merge(from_group_or_events))
       .where.not(id: globally_excluding_mailing_list_ids)
       .distinct
   end
@@ -45,8 +42,8 @@ class Person::Subscriptions
   private
 
   def globally_excluding_mailing_list_ids
-    @globally_excluding_mailing_list_ids ||= Person::Subscriptions::GlobalExclusions.new(@person.id)
-      .excluding_mailing_list_ids
+    @globally_excluding_mailing_list_ids ||=
+      Person::Subscriptions::GlobalExclusions.new(@person.id).excluding_mailing_list_ids
   end
 
   def change_subscription(mailing_list, excluded)
@@ -65,6 +62,13 @@ class Person::Subscriptions
     mailing_list.subscribed?(@person) == excluded
   end
 
+  def from_group_or_events
+    @from_group_or_events ||=
+      MailingList
+        .where(id: from_events.select("mailing_list_id"))
+        .or(MailingList.where(id: from_groups.select("mailing_list_id")))
+  end
+
   def from_events
     Subscription.events
       .where(subscriber_id: @person.event_participations.active.select("event_id"))
@@ -73,37 +77,34 @@ class Person::Subscriptions
       .where.not(id: tag_excluded_subscription_ids)
   end
 
-  # rubocop:todo Metrics/MethodLength
-  def from_groups # rubocop:todo Metrics/AbcSize # rubocop:todo Metrics/MethodLength
-    return Subscription.none if @person.roles.without_archived.blank?
-
-    sql = <<~SQL.squish
-      related_role_types.role_type = ? AND
-      #{Group.quoted_table_name}.lft <= ? AND
-      #{Group.quoted_table_name}.rgt >= ? AND
-      #{subscription_tags_condition}
-    SQL
-
-    condition = OrCondition.new
-    @person.roles.without_archived.each do |role|
-      condition.or(sql, role.type, role.group.lft, role.group.rgt, @person.tag_ids)
-    end
+  def from_groups # rubocop:todo Metrics/AbcSize
+    role_type_condition = person_related_role_type_condition
+    return Subscription.none if role_type_condition.blank?
 
     Subscription
       .groups
-      .joins("INNER JOIN #{Group.quoted_table_name} ON " \
-             "#{Group.quoted_table_name}.id = subscriptions.subscriber_id")
+      .joins("INNER JOIN groups ON " \
+             "groups.id = subscriptions.subscriber_id")
       .joins(:related_role_types)
       .left_joins(:subscription_tags)
-      .where(condition.to_a)
+      .where(role_type_condition.to_a)
       .where.not(id: tag_excluded_subscription_ids)
   end
-  # rubocop:enable Metrics/MethodLength
 
-  def from_group_or_events
-    scope
-      .where(id: from_events.select("mailing_list_id"))
-      .or(scope.where(id: from_groups.select("mailing_list_id")))
+  def person_related_role_type_condition
+    sql = related_role_type_condition
+    @person.roles.without_archived.each_with_object(OrCondition.new) do |role, condition|
+      condition.or(sql, role.type, role.group.lft, role.group.rgt, @person.tag_ids)
+    end
+  end
+
+  def related_role_type_condition
+    <<~SQL.squish
+      related_role_types.role_type = ? AND
+      groups.lft <= ? AND
+      groups.rgt >= ? AND
+      #{subscription_tags_condition}
+    SQL
   end
 
   def subscription_tags_condition
@@ -116,10 +117,10 @@ class Person::Subscriptions
   end
 
   def direct_inclusions
-    @direct_inclusions ||= @person.subscriptions.where(excluded: false)
+    @person.subscriptions.where(excluded: false)
   end
 
   def direct_exclusions
-    @direct_exclusions ||= @person.subscriptions.where(excluded: true)
+    @person.subscriptions.where(excluded: true)
   end
 end

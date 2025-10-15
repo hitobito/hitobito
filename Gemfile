@@ -7,7 +7,7 @@
 
 source "https://rubygems.org"
 
-gem "rails", "= 7.1.5.2"
+gem "rails", "~> 7.2"
 gem "wagons"
 gem "active_record_distinct_on"
 gem "activerecord-nulldb-adapter"

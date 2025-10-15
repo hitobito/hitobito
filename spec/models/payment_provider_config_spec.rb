@@ -56,6 +56,12 @@ describe PaymentProviderConfig do
   end
 
   context "after_delete" do
+    def jobs_for(provider)
+      Delayed::Job.where(
+        "handler LIKE ?",
+        "%Payments::EbicsImportJob%payment_provider_config_id: #{provider.id}%"
+      )
+    end
     it "deletes all associated ebics import jobs" do
       Payments::EbicsImportJob.new(postfinance_config.id).enqueue!(run_at: 10.seconds.from_now)
       Payments::EbicsImportJob.new(ubs_config.id).enqueue!(run_at: 10.seconds.from_now)
@@ -64,9 +70,8 @@ describe PaymentProviderConfig do
         postfinance_config.destroy!
       end.to change { Delayed::Job.count }.by(-1)
 
-      query = "handler LIKE '%Payments::EbicsImportJob%payment_provider_config_id: ?%'"
-      expect(Delayed::Job.where(query, postfinance_config.id)).to be_empty
-      expect(Delayed::Job.where(query, ubs_config.id)).to be_present
+      expect(jobs_for(postfinance_config)).to be_empty
+      expect(jobs_for(ubs_config)).to be_present
     end
   end
 end

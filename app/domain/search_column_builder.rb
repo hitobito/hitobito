@@ -21,7 +21,7 @@ class SearchColumnBuilder
     # rubocop:todo Layout/LineLength
     # do not run if there are still migrations needed (to prevent running this before wagon migrations)
     # rubocop:enable Layout/LineLength
-    return if ActiveRecord::Base.connection.migration_context.needs_migration?
+    return if migrations_pending?
 
     # Process each searchable model to add a tsvector column and a GIN index
     searchable_models.each do |model|
@@ -32,6 +32,12 @@ class SearchColumnBuilder
   end
 
   private
+
+  def migrations_pending?
+    ActiveRecord::Migration.check_all_pending!
+  rescue ActiveRecord::PendingMigrationError
+    true
+  end
 
   def record_column_creation(table_name, attrs)
     @created_columns[table_name] = @created_columns[table_name].to_a | attrs.to_a

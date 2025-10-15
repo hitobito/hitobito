@@ -14,7 +14,7 @@ module DryCrud
       # If a callback renders or redirects, the action is not rendered.
       def render(*args, &block)
         options = _normalize_render(*args, &block)
-        callback = "render_#{options[:template]}"
+        callback = "render_#{options[:template] || options[:action] || action_name}"
 
         run_callbacks(callback) if respond_to?(:"_#{callback}_callbacks", true)
 

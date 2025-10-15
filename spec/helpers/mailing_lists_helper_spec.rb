@@ -16,13 +16,13 @@ describe MailingListsHelper do
   describe "#format_mailing_list_name" do
     let(:dom) { Capybara::Node::Simple.new(format_mailing_list_name(entry)) }
 
-    it "renders name with link to messages path if user can update" do
-      expect(self).to receive(:can?).with(:update, entry).and_return(true)
-      expect(dom).to have_link "Leaders", href: group_mailing_list_messages_path(entry.group, entry)
+    it "renders name with link to mailing_list path if user can show" do
+      expect(self).to receive(:can?).with(:show, entry).and_return(true)
+      expect(dom).to have_link "Leaders", href: group_mailing_list_path(entry.group, entry)
     end
 
-    it "renders name only if user cannot update" do
-      expect(self).to receive(:can?).with(:update, entry).and_return(false)
+    it "renders name only if user cannot show" do
+      expect(self).to receive(:can?).with(:show, entry).and_return(false)
       expect(dom).not_to have_link "Leaders"
       expect(dom).to have_text "Leaders"
     end

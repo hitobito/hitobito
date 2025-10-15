@@ -124,9 +124,8 @@ RSpec.describe "OAuth index", type: :request do
           it "fails for #{invalid_scope} scope" do
             token = Fabricate(:access_token, application: application, scopes: invalid_scope,
               resource_owner_id: user.id)
-            expect do
-              get url, headers: {Authorization: "Bearer " + token.token}
-            end.to raise_error(CanCan::AccessDenied)
+            get url, headers: {Authorization: "Bearer " + token.token, Accept: "application/json"}
+            expect(response).to be_forbidden
           end
         end
       end

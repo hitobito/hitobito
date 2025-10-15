@@ -30,7 +30,7 @@ class MailLog < ActiveRecord::Base
   STATES = [:retrieved, :bulk_delivering, :completed,
     :sender_rejected, :unknown_recipient,
     :bounce_rejected, :auto_response_rejected].freeze
-  enum status: STATES
+  enum :status, STATES
 
   BULK_MESSAGE_STATUS = {bulk_delivering: :processing,
                          retrieved: :pending,

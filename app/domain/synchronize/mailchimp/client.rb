@@ -51,6 +51,14 @@ module Synchronize
         end.map { |member| downcase_email(member) }
       end
 
+      def ping_api(error_handler:)
+        api.ping.retrieve
+        true
+      rescue Gibbon::MailChimpError, Gibbon::GibbonError => e
+        error_handler&.call(e)
+        false
+      end
+
       def create_segments(names)
         execute_batch(names) do |name|
           create_segment_operation(name)

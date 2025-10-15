@@ -28,6 +28,8 @@ module Synchronize
       end
 
       def perform
+        return result unless ping_successful?
+
         execute(:create_segments, missing_segments)
         execute(:create_merge_fields, missing_merge_fields)
 
@@ -44,6 +46,10 @@ module Synchronize
       end
 
       private
+
+      def ping_successful?
+        client.ping_api(error_handler: lambda { |e| result.exception = e })
+      end
 
       def execute(operation, data)
         payload, response = client.send(operation, data)

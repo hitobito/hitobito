@@ -11,7 +11,7 @@ describe ReoccuringMailchimpSynchronizationJob do
   let(:group) { groups(:top_group) }
 
   def create(state = nil, mailchimp_last_synced_at = nil)
-    Fabricate(:mailing_list, group: group, mailchimp_list_id: 1, mailchimp_api_key: 1).tap do |list|
+    Fabricate(:mailing_list, group: group, mailchimp_list_id: 1, mailchimp_api_key: "abc-us1").tap do |list|
       data = case state
       when :failed then {exception: ArgumentError.new("ouch")}
       when :success then {foo: {total: 1, success: 1}}

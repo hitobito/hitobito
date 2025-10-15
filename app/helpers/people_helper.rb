@@ -142,4 +142,15 @@ module PeopleHelper
     base64_data = Base64.encode64(qr_code.to_blob)
     "data:image/png;base64,#{base64_data}"
   end
+
+  def manual_deletion_error_section(errors, translation_key)
+    return unless errors.any?
+
+    content_tag(:div) do
+      content_tag(:p, t(translation_key)) +
+        content_tag(:ul) do
+          errors.each { |error| concat content_tag(:li, error, class: "ml-3") }
+        end
+    end
+  end
 end

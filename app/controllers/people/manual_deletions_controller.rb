@@ -6,12 +6,10 @@
 #  https://github.com/hitobito/hitobito.
 
 class People::ManualDeletionsController < ApplicationController
-  RECENT_EVENT_CUTOFF_DURATION = 10.years
-
   before_action :entry
   before_action :authorize_action
   before_action :ensure_rules
-  helper_method :minimizable?
+  helper_method :minimizable?, :render_error_section, :disable_delete?, :disable_minimize?
   respond_to :js, only: [:new]
 
   def authorize_action
@@ -23,7 +21,7 @@ class People::ManualDeletionsController < ApplicationController
 
   def minimize
     # With the :destroy permission, a user can be minimized despite errors
-    if !minimizable? || (@minimizable_errors.any? && cannot?(:destroy, entry))
+    if !minimizable? || (disable_minimize? && cannot?(:destroy, entry))
       raise StandardError.new("can not minimize")
     end
 
@@ -34,7 +32,7 @@ class People::ManualDeletionsController < ApplicationController
 
   def delete
     # With the :destroy permission, a user can be deleted despite errors
-    if @deleteable_errors.any? && cannot?(:destroy, entry)
+    if disable_delete? && cannot?(:destroy, entry)
       raise StandardError.new("can not delete")
     end
 
@@ -46,45 +44,37 @@ class People::ManualDeletionsController < ApplicationController
   private
 
   def ensure_rules
-    @deleteable_errors = []
+    @universal_errors = []
+    @deletable_errors = []
     @minimizable_errors = []
 
     ensure_universal_rules
-    ensure_deleteable_rules
+    ensure_deletable_rules
     ensure_minimizable_rules if minimizable?
 
-    @all_errors = (@deleteable_errors + @minimizable_errors).uniq
+    @all_errors = (@universal_errors + @deletable_errors + @minimizable_errors).uniq
   end
 
   def ensure_universal_rules
-    errors = []
+  end
 
-    if participated_in_recent_event?
-      errors << t(".errors.participated_in_recent_event",
-        duration: RECENT_EVENT_CUTOFF_DURATION)
-    end
-
-    @deleteable_errors += errors
-    @minimizable_errors += errors
+  def ensure_deletable_rules
   end
 
   def ensure_minimizable_rules
     @minimizable_errors << t(".errors.already_minimized") if entry.minimized_at.present?
   end
 
-  def ensure_deleteable_rules
-  end
-
   def minimizable?
-    FeatureGate.enabled?("people.minimization") && entry.minimized_at.blank?
+    FeatureGate.enabled?("people.minimization")
   end
 
-  def participated_in_recent_event?
-    Event.joins(:dates, :participations)
-      .where("event_dates.start_at > :cutoff OR event_dates.finish_at > :cutoff",
-        cutoff: RECENT_EVENT_CUTOFF_DURATION.ago)
-      .where(event_participations: {participant_id: entry.id, participant_type: Person.sti_name})
-      .any?
+  def disable_delete?
+    @universal_errors.any? || @deletable_errors.any?
+  end
+
+  def disable_minimize?
+    @universal_errors.any? || @minimizable_errors.any?
   end
 
   def entry

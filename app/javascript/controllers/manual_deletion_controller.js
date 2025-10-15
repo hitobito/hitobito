@@ -8,8 +8,27 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static targets = ["toggle", "deleteButton", "minimizeButton"];
 
+  connect() {
+    // Store initial disabled state of each button
+    this.initialDeleteButtonState = this.deleteButtonTarget.disabled;
+    this.initialMinimizeButtonState = this.minimizeButtonTarget.disabled;
+
+    this.updateButtons();
+  }
+
   toggle() {
-    this.deleteButtonTarget.disabled = !this.toggleTarget.checked
-    this.minimizeButtonTarget.disabled = !this.toggleTarget.checked
+    this.updateButtons();
+  }
+
+  updateButtons() {
+    if (this.toggleTarget.checked) {
+      // Enable both buttons when checked
+      this.deleteButtonTarget.disabled = false;
+      this.minimizeButtonTarget.disabled = false;
+    } else {
+      // Restore original disabled state when unchecked
+      this.deleteButtonTarget.disabled = this.initialDeleteButtonState;
+      this.minimizeButtonTarget.disabled = this.initialMinimizeButtonState;
+    }
   }
 }

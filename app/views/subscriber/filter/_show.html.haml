@@ -5,7 +5,7 @@
 
 %h2
   = t('.title')
-  - if can?(:update, @mailing_list, :filter_chain)
+  - if can?(:update_subscriptions, @mailing_list)
     = link_to edit_group_mailing_list_filter_path(@group.to_param, @mailing_list.to_param) do
       = icon(:edit)
 

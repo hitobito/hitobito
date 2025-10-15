@@ -9,7 +9,7 @@ module Subscriber
 
     decorates :group
 
-    before_action :authorize!
+    before_action :authorize_action!
 
     prepend_before_action :parent
 
@@ -56,11 +56,11 @@ module Subscriber
       group_mailing_list_subscriptions_path(@group, @mailing_list)
     end
 
-    def authorize!
+    def authorize_action!
       if ["edit", "update"].include? action_name
-        super(:update, entry)
+        authorize!(:update, entry)
       else
-        super(:create, @subscription || @mailing_list.subscriptions.new)
+        authorize!(:create, @subscription || @mailing_list.subscriptions.new)
       end
     end
 

@@ -32,9 +32,12 @@ describe Subscriber::FilterController do
         attributes: {"1699698452786" => {"constraint" => "greater", "key" => "years", "value" => "16"}}
       }
     end
+    let(:params) do
+      {group_id: mailing_list.group.id, mailing_list_id: mailing_list.id, filters: filters}
+    end
 
     it "sets the filter values" do
-      put :update, params: {group_id: mailing_list.group.id, mailing_list_id: mailing_list.id, filters: filters}
+      put :update, params: params
 
       expect(response).to redirect_to(group_mailing_list_subscriptions_path(group_id: mailing_list.group.id,
         id: mailing_list.id))
@@ -45,6 +48,15 @@ describe Subscriber::FilterController do
       expect(filter_chain[:language].allowed_values).to contain_exactly("de", "fr")
       expect(filter_chain[:attributes]).to be_a(Person::Filter::Attributes)
       expect(filter_chain[:attributes].args).to eq(filters[:attributes].deep_stringify_keys)
+    end
+
+    it "responds 403 if user has no permission to update filter_chain" do
+      allow(controller).to receive(:authorize!)
+        .with(:update_subscriptions, mailing_list).and_raise(CanCan::AccessDenied)
+
+      expect { put :update, params: params }
+        .to raise_error(CanCan::AccessDenied)
+        .and not_change { mailing_list.reload.filter_chain.to_hash }
     end
   end
 end

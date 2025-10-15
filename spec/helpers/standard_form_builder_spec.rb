@@ -300,7 +300,9 @@ describe "StandardFormBuilder" do
 
       expect(dom).not_to have_css("div[class='hidden'] div[class='input-group mb-2'] input[name='entry[#{attr}]']")
       Settings.application.languages.keys.excluding(I18n.locale).each do |locale|
-        expect(dom).to have_css("div[class='hidden'] div[class='input-group mb-2'] input[name='entry[#{attr}_#{locale}]']")
+        expect(dom).to have_css(
+          "div[class='hidden'] div[class='input-group mb-2'] input[name='entry[#{attr}_#{locale}]']"
+        )
       end
     end
 
@@ -313,7 +315,9 @@ describe "StandardFormBuilder" do
 
       expect(dom).not_to have_css("div[class='hidden'] div[class='input-group mb-2'] textarea[name='entry[#{attr}]']")
       Settings.application.languages.keys.excluding(I18n.locale).each do |locale|
-        expect(dom).to have_css("div[class='hidden'] div[class='input-group mb-2'] textarea[name='entry[#{attr}_#{locale}]']")
+        expect(dom).to have_css(
+          "div[class='hidden'] div[class='input-group mb-2'] textarea[name='entry[#{attr}_#{locale}]']"
+        )
       end
     end
 

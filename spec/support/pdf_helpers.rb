@@ -8,9 +8,12 @@
 module PdfHelpers
   extend ActiveSupport::Concern
 
-  def text_with_position(inspector = PDF::Inspector::Text.analyze(pdf.try(:render) || pdf))
-    inspector.positions.each_with_index.collect do |p, i|
-      p.collect(&:round) + [inspector.show_text[i]]
+  def text_with_position(inspector = nil)
+    @text_with_position ||= begin
+      inspector ||= PDF::Inspector::Text.analyze(pdf.try(:render) || pdf)
+      inspector.positions.each_with_index.collect do |p, i|
+        p.collect(&:round) + [inspector.show_text[i]]
+      end
     end
   end
 

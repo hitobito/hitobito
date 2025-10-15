@@ -34,7 +34,7 @@ class SearchColumnBuilder
   private
 
   def migrations_pending?
-    ActiveRecord::Migration::check_all_pending!
+    ActiveRecord::Migration.check_all_pending!
   rescue ActiveRecord::PendingMigrationError
     true
   end

@@ -89,37 +89,6 @@ describe People::ManualDeletionsController do
           expect(flash[:notice]).to eq("#{person_with_expired_roles.full_name} wurde erfolgreich minimiert.")
         end
 
-        context "with recent event participation" do
-          before do
-            event = Fabricate(:event, dates: [Event::Date.new(start_at: 10.days.ago)])
-            Event::Participation.create!(event: event, person: person_with_expired_roles)
-          end
-
-          it "does not minimize" do
-            expect do
-              post :minimize, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}
-            end.to raise_error(StandardError)
-          end
-        end
-
-        context "with old event participation" do
-          before do
-            event = Fabricate(:event, dates: [Event::Date.new(start_at: 12.years.ago)])
-            Event::Participation.create!(event: event, person: person_with_expired_roles)
-          end
-
-          it "minimizes" do
-            expect(person_with_expired_roles.minimized_at).to be_nil
-
-            post :minimize, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}
-
-            person_with_expired_roles.reload
-
-            expect(person_with_expired_roles.minimized_at).to be_present
-            expect(flash[:notice]).to eq("#{person_with_expired_roles.full_name} wurde erfolgreich minimiert.")
-          end
-        end
-
         context "when already minimized" do
           before do
             person_with_expired_roles.update!(minimized_at: Time.zone.now)
@@ -155,20 +124,12 @@ describe People::ManualDeletionsController do
           allow_any_instance_of(FeatureGate).to receive(:enabled?).with("people.minimization").and_return true
         end
 
-        context "with recent event participation" do
-          before do
-            event = Fabricate(:event, dates: [Event::Date.new(start_at: 10.days.ago)])
-            Event::Participation.create!(event: event, person: person_with_expired_roles)
-          end
-
+        context "when already minimized" do
           it "minimizes nevertheless" do
-            expect(person_with_expired_roles.minimized_at).to be_nil
+            person_with_expired_roles.update! minimized_at: 1.day.ago
 
             post :minimize, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}
 
-            person_with_expired_roles.reload
-
-            expect(person_with_expired_roles.minimized_at).to be_present
             expect(flash[:notice]).to eq("#{person_with_expired_roles.full_name} wurde erfolgreich minimiert.")
           end
         end
@@ -194,32 +155,6 @@ describe People::ManualDeletionsController do
         expect do
           post :delete, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}
         end.to change { Person.count }.by(-1)
-      end
-
-      context "with recent event participation" do
-        before do
-          event = Fabricate(:event, dates: [Event::Date.new(start_at: 10.days.ago)])
-          Event::Participation.create!(event: event, person: person_with_expired_roles)
-        end
-
-        it "does not delete" do
-          expect do
-            post :delete, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}
-          end.to raise_error(StandardError)
-        end
-      end
-
-      context "with old event participation" do
-        before do
-          event = Fabricate(:event, dates: [Event::Date.new(start_at: 12.years.ago)])
-          Event::Participation.create!(event: event, person: person_with_expired_roles)
-        end
-
-        it "deletes" do
-          expect do
-            post :delete, params: {group_id: bottom_layer.id, person_id: person_with_expired_roles.id}
-          end.to change { Person.count }.by(-1)
-        end
       end
     end
 

@@ -49,7 +49,7 @@ module FormBuilder::GlobalizedInputFieldBuilder
 
   def other_locale_inputs(attr, rich_text, args = {})
     content_tag(:div, {class: "hidden", "data-globalized-fields-target": "toggle"}) do
-      other_locale_inputs = Settings.application.languages.keys.excluding(I18n.locale).map do |locale|
+      other_locale_inputs = Globalized.additional_languages.map do |locale|
         input_for_locale("#{attr}_#{locale}", locale, rich_text, **args, data: {
           "globalized-fields-target": "globalizedField",
           action: "input->globalized-fields#updateGlobalizedFieldsDisplay" \

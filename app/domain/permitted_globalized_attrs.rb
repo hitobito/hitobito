@@ -33,7 +33,7 @@ class PermittedGlobalizedAttrs
 
   def permit_symbol(permitted_attr, klass)
     if should_permit?(klass, permitted_attr)
-      return [permitted_attr, *globalized_names_for_attr(permitted_attr)]
+      return [permitted_attr, *Globalized.globalized_names_for_attr(permitted_attr)]
     end
     permitted_attr
   end
@@ -68,9 +68,5 @@ class PermittedGlobalizedAttrs
 
   def should_permit?(klass, attr)
     klass.include?(Globalized) && klass.translated_attribute_names.include?(attr)
-  end
-
-  def globalized_names_for_attr(attr)
-    Settings.application.languages.keys.excluding(I18n.locale).map { |lang| :"#{attr}_#{lang}" }
   end
 end

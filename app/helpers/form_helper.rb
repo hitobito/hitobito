@@ -131,10 +131,8 @@ module FormHelper
     globalized_source_methods = [source_method]
     if model.translated_attribute_names.include?(field) &&
         entity.translated_attribute_names.include?(source_method)
-      Settings.application.languages.keys.excluding(I18n.locale).each do |lang|
-        globalized_fields << :"#{field}_#{lang}"
-        globalized_source_methods << :"#{source_method}_#{lang}"
-      end
+      globalized_fields += Globalized.globalized_names_for_attr(field)
+      globalized_source_methods += Globalized.globalized_names_for_attr(source_method)
     end
     [globalized_fields, globalized_source_methods]
   end

@@ -79,6 +79,10 @@ module MountedAttr
       mounted_attr_configs.collect(&:attr_name)
     end
 
+    def permitted_mounted_attr_names
+      mounted_attr_configs.reject(&:readonly).collect(&:attr_name)
+    end
+
     private
 
     # `attr_type` should be a type symbol registered with the ActiveModel type registry.

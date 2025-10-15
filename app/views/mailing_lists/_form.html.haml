@@ -10,12 +10,11 @@
     = tab_content(:general, default_active: true) do
       %fieldset
       = f.labeled_input_fields(:name, :description, :publisher)
-      - if can?(:update, entry, :subscribable_for)
+      - if can?(:update_subscriptions, entry)
         = f.labeled(:subscribable_for) do
           = f.inline_radio_button(:subscribable_for, :nobody, entry.subscribable_for_label(:nobody), true, data: { hide: :subscribable_mode })
           = f.inline_radio_button(:subscribable_for, :configured, entry.subscribable_for_label(:configured), true, data: { show: :subscribable_mode })
           = f.inline_radio_button(:subscribable_for, :anyone, entry.subscribable_for_label(:anyone), true, data: { hide: :subscribable_mode })
-      - if can?(:update, entry, :subscribable_mode)
         #subscribable_mode{entry.subscribable_for_configured? ? {} : { style: 'display: none;' }}
           = f.labeled(:subscribable_mode) do
             - MailingList::SUBSCRIBABLE_MODES.each do |key|

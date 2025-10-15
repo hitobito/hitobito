@@ -36,5 +36,9 @@ module Subscriber
     def subscriptions_path
       group_mailing_list_subscriptions_path(group_id: mailing_list.group.id, id: mailing_list.id)
     end
+
+    def authorize_action!
+      authorize!(:update_subscriptions, mailing_list)
+    end
   end
 end

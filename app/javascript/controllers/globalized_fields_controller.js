@@ -6,29 +6,29 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ['toggle', 'translatedField', 'translatedFieldsDisplay', 'localeIndicator']
+  static targets = ['toggle', 'globalizedField', 'globalizedFieldsDisplay', 'localeIndicator']
   static values = {
     additionalLanguagesText: String
   }
 
   connect() {
-    this.updateTranslatedFields();
+    this.updateGlobalizedFieldsDisplay();
     this.openIfInvalid();
     this.setLocaleIndicatorWidth();
   }
 
-  updateTranslatedFields() {
-    const translatedLanguages = this.translatedFieldTargets.map(translatedField => {
-      if(translatedField.value) {
-        const id_components = translatedField.id.split('_');
+  updateGlobalizedFieldsDisplay() {
+    const filledOutLanguages = this.globalizedFieldTargets.map(globalizedField => {
+      if(globalizedField.value) {
+        const id_components = globalizedField.id.split('_');
         return id_components[id_components.length - 1].toUpperCase();
       }
     }).filter(v => v)
 
-    if(translatedLanguages.length > 0) {
-      this.translatedFieldsDisplayTarget.textContent = `${this.additionalLanguagesTextValue}: ${translatedLanguages.join(', ')}`;
+    if(filledOutLanguages.length > 0) {
+      this.globalizedFieldsDisplayTarget.textContent = `${this.additionalLanguagesTextValue}: ${filledOutLanguages.join(', ')}`;
     } else {
-      this.translatedFieldsDisplayTarget.textContent = '';
+      this.globalizedFieldsDisplayTarget.textContent = '';
     }
   }
 
@@ -37,7 +37,7 @@ export default class extends Controller {
   }
 
   openIfInvalid() {
-    const hasInvalidInput = this.translatedFieldTargets.some(field => field.classList.contains('is-invalid'));
+    const hasInvalidInput = this.globalizedFieldTargets.some(field => field.classList.contains('is-invalid'));
     if(hasInvalidInput) {
       this.toggleFields();
     }

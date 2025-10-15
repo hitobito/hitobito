@@ -35,7 +35,12 @@ describe "Globalized input fields", js: true do
     # Should successfully save all translations
     click_button("Speichern")
     expect(page).to have_content("Gruppe #{group.name} wurde erfolgreich aktualisiert")
-    expected_value = {de: "German privacy policy title", en: "English privacy policy title", fr: "French privacy policy title", it: ""}.stringify_keys
+    expected_value = {
+      de: "German privacy policy title",
+      en: "English privacy policy title",
+      fr: "French privacy policy title",
+      it: ""
+    }.stringify_keys
     expect(group.reload.privacy_policy_title_translations).to eql(expected_value)
   end
 

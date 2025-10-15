@@ -40,28 +40,28 @@ describe "mailing_lists/_form.html.haml" do
 
   context "subscribable_mode fields" do
     it "are rendered if user can update attribute and list is subscribable" do
-      allow(entry).to receive(:subscribable?).and_return(true)
+      allow(entry).to receive(:subscribable_for_configured?).and_return(true)
       ability.can :update, entry, :subscribable_mode
 
       expect(subject).to have_selector 'input[type=radio][name="mailing_list[subscribable_mode]"]'
     end
 
     it "are not rendered if user can update attribute but list is not subscribable" do
-      allow(entry).to receive(:subscribable?).and_return(false)
+      allow(entry).to receive(:subscribable_for_configured?).and_return(false)
       ability.can :update, entry, :subscribable_mode
 
       expect(subject).to have_no_selector 'input[type=radio][name="mailing_list[subscribable_mode]"]'
     end
 
     it "are not rendered if user cannot update attribute even if list is subscribable" do
-      allow(entry).to receive(:subscribable?).and_return(true)
+      allow(entry).to receive(:subscribable_for_configured?).and_return(true)
       ability.cannot :update, entry, :subscribable_mode
 
       expect(subject).to have_no_selector 'input[type=radio][name="mailing_list[subscribable_mode]"]'
     end
 
     it "are not rendered if user cannot update attribute and list is not subscribable" do
-      allow(entry).to receive(:subscribable?).and_return(false)
+      allow(entry).to receive(:subscribable_for_configured?).and_return(false)
       ability.cannot :update, entry, :subscribable_mode
 
       expect(subject).to have_no_selector 'input[type=radio][name="mailing_list[subscribable_mode]"]'

@@ -4,7 +4,7 @@
 - #  https://github.com/hitobito/hitobito.
 
 %h2=t('.my_subscriptions')
-- subscribed.each do |layer, mailing_lists|
+- @grouped_subscribed.each do |layer, mailing_lists|
   %strong= layer.name
   = table(mailing_lists, class: 'table table-striped table-hover') do |t|
     - t.col(MailingList.human_attribute_name(:name), class: 'col-3') do |list|
@@ -16,11 +16,11 @@
     - t.col(MailingList.human_attribute_name(:mail_address), class: 'col-3') do |list|
       = mail_to list.mail_address
     - t.col('', class: 'col-1 right') do |list|
-      = button_unsubscribe(list, person:, icons: false) if can?(:update, person)
+      = button_unsubscribe(list, person:, icons: false) if subscribable?(list) && can?(:update, person)
 
 
 %h2=t('.available_subscriptions')
-- subscribable.each do |layer, mailing_lists|
+- @grouped_subscribable.each do |layer, mailing_lists|
   %strong= layer.name
   = table(mailing_lists, class: 'table table-striped table-hover') do |t|
     - t.col(MailingList.human_attribute_name(:name), class: 'col-3') do |list|

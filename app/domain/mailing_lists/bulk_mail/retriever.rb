@@ -26,9 +26,10 @@ class MailingLists::BulkMail::Retriever
       mail_processed_before!(imap_mail)
       return
     elsif validator.mail_too_big?
-      sender, subject = imap_mail.sender_email, imap_mail.mail.subject
-      FailureMailer.validation_checks(sender, subject).deliver_now
-      delete_mail(mail_uid)
+      handle_too_big_mail!(imap_mail, mail_uid)
+      return
+    elsif validator.return_path_header_nil?
+      handle_mail_without_path_header!(mail_uid)
       return
     end
 
@@ -133,6 +134,22 @@ class MailingLists::BulkMail::Retriever
     bulk_mail_class(imap_mail).create!(
       subject: encode_subject(imap_mail),
       state: :pending
+    )
+  end
+
+  def handle_too_big_mail!(imap_mail, mail_uid)
+    sender, subject = imap_mail.sender_email, imap_mail.mail.subject
+    FailureMailer.validation_checks(sender, subject).deliver_now
+    delete_mail(mail_uid)
+  end
+
+  def handle_mail_without_path_header!(mail_uid)
+    move_mail_to_failed(mail_uid)
+    Raven.capture_message(
+      "Mail header Return-Path is nil. Mail moved to :failed. See hitobito#3599 for more details.",
+      extra: {
+        mail_uid: mail_uid
+      }
     )
   end
 

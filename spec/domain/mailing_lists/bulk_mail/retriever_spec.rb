@@ -26,6 +26,7 @@ describe MailingLists::BulkMail::Retriever do
     allow(imap_mail_validator).to receive(:valid_mail?).and_return(true)
     allow(imap_mail_validator).to receive(:processed_before?).and_return(false)
     allow(imap_mail_validator).to receive(:mail_too_big?).and_return(false)
+    allow(imap_mail_validator).to receive(:return_path_header_nil?).and_return(false)
   end
 
   context "mails subject" do
@@ -68,6 +69,23 @@ describe MailingLists::BulkMail::Retriever do
           # rubocop:todo Layout/LineLength
           .with("BulkMail Retriever: Ignored invalid email from dude@hitobito.example.com (invalid sender e-mail or no sender name present)")
         # rubocop:enable Layout/LineLength
+
+        retriever.perform
+      end
+    end
+
+    context "return path is nil" do
+      it "moves mail to failed and creates sentry issue" do
+        allow(imap_mail_validator).to receive(:return_path_header_nil?).and_return(true)
+        expect(imap_connector).to receive(:move_by_uid).with(42, :inbox, :failed)
+        expect(Raven).to receive(:capture_message)
+          .exactly(:once)
+          .with(
+            "Mail header Return-Path is nil. Mail moved to :failed. See hitobito#3599 for more details.",
+            extra: {
+              mail_uid: 42
+            }
+          )
 
         retriever.perform
       end

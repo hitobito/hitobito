@@ -28,6 +28,10 @@ module MailingLists::BulkMail
       sender_allowed_for?(mailing_list) || allowed_by_group?(mailing_list)
     end
 
+    def return_path_header_nil?
+      first_header("Return-Path").nil?
+    end
+
     private
 
     def required_header_present?

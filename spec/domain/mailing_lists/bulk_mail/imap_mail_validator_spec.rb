@@ -139,4 +139,22 @@ describe MailingLists::BulkMail::ImapMailValidator do
       end
     end
   end
+
+  describe "return_path_header_nil?" do
+    it "is true if header is nil" do
+      expect(validator.return_path_header_nil?).to eq(true)
+    end
+
+    it "is false if header exists" do
+      imap_mail.mail.header["Return-Path"] = "some value"
+
+      expect(validator.return_path_header_nil?).to eq(false)
+    end
+
+    it "is false if header is blank" do
+      imap_mail.mail.header["Return-Path"] = ""
+
+      expect(validator.return_path_header_nil?).to eq(false)
+    end
+  end
 end

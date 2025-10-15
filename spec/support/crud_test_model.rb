@@ -236,8 +236,8 @@ module CrudTestHelper
       t.timestamps null: false
     end
 
-    CrudTestModel.translates :translated_field, :translated_text_field
-    CrudTestModel.create_translation_table! translated_field: :string, translated_text_field: :text
+    CrudTestModel.translates :globalized_field, :globalized_text_field
+    CrudTestModel.create_translation_table! globalized_field: :string, globalized_text_field: :text
   end
 
   def create_other_crud_test_models_table
@@ -319,8 +319,8 @@ module CrudTestHelper
       last_seen: Time.zone.local(2000 + 10 * index, index, index, 10 + index, 20 + index),
       human: index % 2 == 0,
       remarks: "#{c} #{str(index + 1)} #{str(index + 2)}\n" * (index % 3 + 1),
-      translated_field: "#{c} #{str(index + 1)} #{str(index + 2)}\n" * (index % 3 + 1),
-      translated_text_field: "#{c} #{str(index + 1)} #{str(index + 2)}\n" * (index % 3 + 1))
+      globalized_field: "#{c} #{str(index + 1)} #{str(index + 2)}\n" * (index % 3 + 1),
+      globalized_text_field: "#{c} #{str(index + 1)} #{str(index + 2)}\n" * (index % 3 + 1))
   end
 
   def create_other(index)

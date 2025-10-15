@@ -299,9 +299,9 @@ describe "StandardFormBuilder" do
       expect(dom).to have_css("div[class='d-flex'] button[data-action='globalized-fields#toggleFields'][type='button']")
 
       expect(dom).not_to have_css("div[class='hidden'] div[class='input-group mb-2'] input[name='entry[#{attr}]']")
-      Settings.application.languages.keys.excluding(I18n.locale).each do |locale|
+      Globalized.globalized_names_for_attr(attr).each do |globalized_attr|
         expect(dom).to have_css(
-          "div[class='hidden'] div[class='input-group mb-2'] input[name='entry[#{attr}_#{locale}]']"
+          "div[class='hidden'] div[class='input-group mb-2'] input[name='entry[#{globalized_attr}]']"
         )
       end
     end
@@ -314,9 +314,9 @@ describe "StandardFormBuilder" do
       expect(dom).to have_css("div[class='d-flex'] button[data-action='globalized-fields#toggleFields'][type='button']")
 
       expect(dom).not_to have_css("div[class='hidden'] div[class='input-group mb-2'] textarea[name='entry[#{attr}]']")
-      Settings.application.languages.keys.excluding(I18n.locale).each do |locale|
+      Globalized.globalized_names_for_attr(attr).each do |globalized_attr|
         expect(dom).to have_css(
-          "div[class='hidden'] div[class='input-group mb-2'] textarea[name='entry[#{attr}_#{locale}]']"
+          "div[class='hidden'] div[class='input-group mb-2'] textarea[name='entry[#{globalized_attr}]']"
         )
       end
     end
@@ -329,8 +329,8 @@ describe "StandardFormBuilder" do
       expect(dom).to have_css("div[class='d-flex'] button[data-action='globalized-fields#toggleFields'][type='button']")
 
       expect(dom).not_to have_css("div[class='hidden'] div[class='input-group mb-2'] trix-editor#entry_#{attr}")
-      Settings.application.languages.keys.excluding(I18n.locale).each do |locale|
-        expect(dom).to have_css("div[class='hidden'] div[class='input-group mb-2'] trix-editor#entry_#{attr}_#{locale}")
+      Globalized.globalized_names_for_attr(attr).each do |globalized_attr|
+        expect(dom).to have_css("div[class='hidden'] div[class='input-group mb-2'] trix-editor#entry_#{globalized_attr}")
       end
     end
 
@@ -342,8 +342,8 @@ describe "StandardFormBuilder" do
       attr = :globalized_field
       I18n.locale = :fr
       expect(dom).to have_css("input[name='entry[#{attr}]']")
-      Settings.application.languages.keys.excluding(:fr).each do |input_locale|
-        expect(dom).to have_css("input[name='entry[#{attr}_#{input_locale}]']")
+      Globalized.globalized_names_for_attr(attr).each do |globalized_attr|
+        expect(dom).to have_css("input[name='entry[#{globalized_attr}]']")
       end
     end
 

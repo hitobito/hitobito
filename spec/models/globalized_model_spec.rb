@@ -8,11 +8,10 @@ require "spec_helper"
 describe "Globalized model" do
   let(:group) { groups(:top_layer) }
   let(:custom_content) { custom_contents(:assignment_assignee_notification) }
-  let(:languages) { Settings.application.languages.keys }
 
   it "should create globalized accessors" do
     expected_values = {}
-    languages.each do |lang|
+    Globalized.languages.each do |lang|
       title = "Privacy policy title in #{lang}"
       group.send(:"privacy_policy_title_#{lang}=", title)
       expect(group.send(:"privacy_policy_title_#{lang}")).to eql(title)
@@ -21,14 +20,14 @@ describe "Globalized model" do
 
     group.save!
     expect(group.privacy_policy_title_translations).to eql(expected_values.stringify_keys)
-    languages.each do |lang|
+    Globalized.languages.each do |lang|
       expect(group.attributes.dig("privacy_policy_title_#{lang}")).to eql(group.send(:"privacy_policy_title_#{lang}"))
     end
   end
 
   it "should create globalized accessors for rich text fields" do
     expected_values = []
-    languages.each do |lang|
+    Globalized.languages.each do |lang|
       body = "Custom content body {assignment-title} #{lang}"
       custom_content.send(:"body_#{lang}=", body)
       expect(custom_content.send(:"body_#{lang}").to_s).to include(body)
@@ -41,13 +40,13 @@ describe "Globalized model" do
     body_translations.zip(expected_values) do |body_translation, expected_value|
       expect(body_translation).to include(expected_value)
     end
-    languages.each do |lang|
+    Globalized.languages.each do |lang|
       expect(custom_content.attributes.dig("body_#{lang}").to_s).to eql(custom_content.send(:"body_#{lang}").to_s)
     end
   end
 
   it "should copy validators on globalized fields and add locale suffix to error messages" do
-    languages.each do |lang|
+    Globalized.languages.each do |lang|
       group.send(:"privacy_policy_title_#{lang}=", "Long text" * 20)
     end
 
@@ -63,7 +62,7 @@ describe "Globalized model" do
   end
 
   it "should validate rich text placeholders on globalized fields" do
-    languages.each do |lang|
+    Globalized.languages.each do |lang|
       custom_content.send(:"body_#{lang}=", "Text without placeholder")
     end
 

@@ -207,6 +207,15 @@ RSpec.configure do |config|
       RescueRegistry.context = nil
     end
   end
+
+  # derrive metadata for TAG PROF (see https://test-prof.evilmartians.io/profilers/tag_prof)
+  config.define_derived_metadata(file_path: %r{/spec/}) do |metadata|
+    # do not overwrite type if it's already set
+    next if metadata.key?(:type)
+
+    match = metadata[:location].match(%r{/spec/([^/]+)/})
+    metadata[:type] = match[1].singularize.to_sym
+  end
 end
 
 require "capybara/rails"

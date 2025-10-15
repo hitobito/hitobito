@@ -5,6 +5,7 @@
 
 module Globalized
   extend ActiveSupport::Concern
+
   ATTRIBUTE_LOCALE_REGEX = /^(?<attribute>.*)_(?<locale>[a-z]{2})$/
   def self.globalize_inputs? = Settings.application.languages.keys.length > 1
 
@@ -17,31 +18,43 @@ module Globalized
 
   module ClassMethods
     include GlobalizeAccessors
+
     def translates(*columns)
       super(*columns, fallbacks_for_empty_translations: true)
       globalize_accessors
     end
 
-    # Copies all validators that are defined for globalized attributes to their associated globalized accessors
+    # Copies all validators that are defined for globalized attributes to their
+    # associated globalized accessors
     # This happens for all kinds of validators except presence and uniqueness validators
-    # Presence validators are excluded, since a field should only have to be filled in one language, which in this case is the selected locale
-    # Uniqueness validators are excluded, since the globalized accessors are not backed by a DB column
-    # The first condition on the copied validators ensures that validations are not run twice for the current locale (on the base attribute and the globalized accessor)
-    # The second condition ensures that tests still work when they are run with one locale after globalizing the models
+    # Presence validators are excluded, since a field should only have to be filled in one language,
+    # which in this case is the selected locale
+    # Uniqueness validators are excluded, since the globalized accessors are not backed
+    # by a DB column
+    # The first condition on the copied validators ensures that validations are not run twice for
+    # the current locale (on the base attribute and the globalized accessor)
+
     def copy_validators_to_globalized_accessors
       return unless Globalized.globalize_inputs?
 
       translated_attribute_names.each do |attr|
-        attributes = Settings.application.languages.keys.map { |locale| :"#{attr}_#{locale}" }
+        globalized_attributes =
+          Settings.application.languages.keys.map { |locale| :"#{attr}_#{locale}" }
 
-        next if attributes.any? { |a| validators_on(a).present? }
+        next if globalized_attributes.any? { |a| validators_on(a).present? }
+        copy_validators(attr, globalized_attributes)
+      end
+    end
 
-        validators_on(attr).each do |validator|
-          next if validator.is_a?(ActiveRecord::Validations::PresenceValidator) || validator.is_a?(ActiveRecord::Validations::UniquenessValidator)
+    def copy_validators(attr, globalized_attributes)
+      validators_on(attr).each do |validator|
+        next if validator.is_a?(ActiveRecord::Validations::PresenceValidator) ||
+          validator.is_a?(ActiveRecord::Validations::UniquenessValidator)
 
-          attributes.each do |attribute|
-            validates_with validator.class, validator.options.merge(attributes: attribute, unless: proc { attribute.end_with?("_#{I18n.locale}") })
-          end
+        globalized_attributes.each do |attribute|
+          validates_with validator.class, validator.options.merge(
+            attributes: attribute, unless: proc { attribute.end_with?("_#{I18n.locale}") }
+          )
         end
       end
     end
@@ -117,10 +130,10 @@ module Globalized
   end
 
   def attributes
-    globalize_attribute_values = self.class.globalize_attribute_names.inject({}) do |attributes, name|
-      attributes.merge(name.to_s => send(name))
+    globalized_attribute_values = self.class.globalize_attribute_names.inject({}) do |attrs, name|
+      attrs.merge(name.to_s => send(name))
     end
-    super.merge(globalize_attribute_values)
+    super.merge(globalized_attribute_values)
   end
 
   def valid?(*)

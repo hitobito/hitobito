@@ -5,7 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-# This validator checks if the placeholder is either in the body or the subject of the custom content
+# This validator checks if the placeholder is either in the body or the
+# subject of the custom content
 class CustomContent::CustomContentPlaceholdersValidator < ActiveModel::Validator
   def validate(record)
     languages = [I18n.locale] + Settings.application.languages.keys.excluding(I18n.locale)
@@ -19,10 +20,16 @@ class CustomContent::CustomContentPlaceholdersValidator < ActiveModel::Validator
       next if subject_body.all?(&:blank?)
 
       attribute = (lang == I18n.locale) ? :body : :"body_#{lang}"
-      record.placeholders_required_list.each do |placeholder|
-        unless subject_body.any? { |str| str.to_s.include?(record.placeholder_token(placeholder)) }
-          record.errors.add(attribute, :placeholder_missing, placeholder: record.placeholder_token(placeholder))
-        end
+      add_errors_for_missing_placeholders(record, attribute, subject_body)
+    end
+  end
+
+  def add_errors_for_missing_placeholders(record, attribute, subject_body)
+    record.placeholders_required_list.each do |placeholder|
+      unless subject_body.any? { |str| str.to_s.include?(record.placeholder_token(placeholder)) }
+        record.errors.add(
+          attribute, :placeholder_missing, placeholder: record.placeholder_token(placeholder)
+        )
       end
     end
   end

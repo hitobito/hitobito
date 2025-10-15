@@ -9,7 +9,7 @@
 # subject of the custom content
 class CustomContent::CustomContentPlaceholdersValidator < ActiveModel::Validator
   def validate(record)
-    languages = [I18n.locale] + Settings.application.languages.keys.excluding(I18n.locale)
+    languages = [I18n.locale] + Globalized.additional_languages
     languages.each do |lang|
       subject_body = if Globalized.globalize_inputs?
         [record.send(:"subject_#{lang}"), record.send(:"body_#{lang}")]

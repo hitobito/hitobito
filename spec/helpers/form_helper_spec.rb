@@ -190,9 +190,8 @@ describe FormHelper do
       )]
       @mapping = {description: :general_information}
       options = dom.all("option")
-      languages = Settings.application.languages.keys
-      expect(options.length).to eq(languages.length)
-      options[1..3].zip(languages.excluding(I18n.locale)).each do |option, language|
+      expect(options.length).to eq(Globalized.languages.length)
+      options[1..3].zip(Globalized.additional_languages).each do |option, language|
         expect(option["data-target-field"]).to eq "event_description_#{language}"
       end
       option = options.first

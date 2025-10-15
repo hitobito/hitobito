@@ -72,7 +72,9 @@ class MailingList < ActiveRecord::Base
     format: /\A *(([a-z][a-z0-9\-\_\.]*|\*)@([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,} *(,|;|\Z) *)+\Z/
 
   validates :subscribable_for, inclusion: {in: SUBSCRIBABLE_FORS}
-  validates :subscribable_mode, inclusion: {in: SUBSCRIBABLE_MODES}, if: :subscribable?
+  validates :subscribable_mode,
+    inclusion: {in: SUBSCRIBABLE_MODES},
+    if: :subscribable_for_configured?
   validates :mailchimp_list_id, uniqueness: true, allow_blank: true
   validates :mailchimp_api_key, format: {with: /\A[a-z0-9]+-[a-z0-9]+\z/i}, allow_blank: true
 
@@ -86,6 +88,7 @@ class MailingList < ActiveRecord::Base
   scope :configured, -> { where(subscribable_for: :configured) }
   scope :opt_in, -> { where(subscribable_for: :configured, subscribable_mode: :opt_in) }
   scope :opt_out, -> { where(subscribable_for: :configured, subscribable_mode: :opt_out) }
+  scope :not_opt_in, -> { where("subscribable_mode IS NULL OR subscribable_mode = 'opt_out'") }
   scope :subscribable, -> { where(subscribable_for: [:anyone, :configured]) }
   scope :with_filter_chain, -> { where.not(filter_chain: MailingLists::Filter::Chain.new({})) }
   scope :mailchimp, -> do
@@ -106,7 +109,7 @@ class MailingList < ActiveRecord::Base
   end
 
   def subscribable?
-    (SUBSCRIBABLE_FORS - %w[nobody]).include?(subscribable_for)
+    subscribable_for.to_s != "nobody"
   end
 
   def subscribable_for_configured?
@@ -186,10 +189,10 @@ class MailingList < ActiveRecord::Base
   private
 
   def set_default_subscribable_mode
-    if subscribable? && subscribable_mode.blank?
-      self.subscribable_mode = "opt_out"
-    elsif !subscribable?
+    if !subscribable_for_configured?
       self.subscribable_mode = nil
+    elsif subscribable_mode.blank?
+      self.subscribable_mode = "opt_out"
     end
   end
 

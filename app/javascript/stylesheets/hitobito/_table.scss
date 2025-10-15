@@ -96,6 +96,10 @@ td.action {
   width: 25px;
 }
 
+.table td .btn-group {
+  margin-bottom: 0;
+}
+
 table.roles {
   width: 100%;
   td {
@@ -144,9 +148,4 @@ table tr.divider td:hover {
 
 table td.vertical-middle {
   vertical-align: middle;
-
-  div.btn-group {
-    margin-bottom: 5px;
-    margin-top: 5px;
-  }
 }

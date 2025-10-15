@@ -200,21 +200,22 @@ describe MailingList do
       end
     end
 
-    it "keeps mode when anyone may subscribe" do
+    it "resets mode when anyone may subscribe" do
       leaders.subscribable_mode = "opt_in"
       expect(leaders).to be_valid
-      expect(leaders.subscribable_mode).to eq "opt_in"
+      expect(leaders.subscribable_mode).to be_nil
     end
 
     it "resets mode when not subscribable" do
       leaders.subscribable_for = "nobody"
       leaders.subscribable_mode = "opt_in"
       expect(leaders).to be_valid
-      expect(leaders.subscribable_mode).to be_blank
+      expect(leaders.subscribable_mode).to be_nil
     end
 
     describe "job scheduling" do
       it "schedules cleanup job if subscribable_for is configured" do
+        leaders.update!(subscribable_for: :configured)
         expect do
           leaders.update!(subscribable_mode: :opt_in)
         end.to change { Delayed::Job.count }.by(1)

@@ -15,10 +15,10 @@ describe "person/subscriptions/index.html.haml" do
 
   before do
     allow(view).to receive(:can?)
-    allow(view).to receive(:subscribed).and_return([])
     allow(view).to receive(:person).and_return(person)
-    allow(view).to receive(:subscribable).and_return({group => [list]})
     allow_any_instance_of(MailingListsHelper).to receive(:current_user).and_return(person)
+    @grouped_subscribed = []
+    @grouped_subscribable = {group => [list]}
   end
 
   subject { Capybara::Node::Simple.new(render) }

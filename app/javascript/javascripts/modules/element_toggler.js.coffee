@@ -11,6 +11,8 @@ class app.ElementToggler
 
   hide: ->
     selector = $(@checkbox).data('hide')
+    return unless $("##{selector}").is(':visible')
+
     if @checkbox.checked
       $("##{selector}").slideUp()
     else

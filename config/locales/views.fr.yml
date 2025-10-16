@@ -1781,12 +1781,10 @@ fr:
         minimize: "Minimiser la personne"
         delete: "Supprimer définitivement la personne"
         explanation:
-          delete: Wird eine Person gelöscht, werden sämtliche Daten unwiderruflich entfernt.
-          minimize: Bei der Minimierung wird die Person nicht gelöscht, es werden aber die meisten personspezifischen Daten entfernt.
-        unable_to_delete_or_minimize: "Person kann aus folgenden Gründen nicht gelöscht oder minimiert werden:"
+          delete: Sollte die Person gelöscht werden, werden die Daten der Person unwiderruflich gelöscht.
+          minimize: Bei der Minimierung wird die Person nicht gelöscht, es werden aber die meisten Personspezifischen Daten entfernt.
         unable_to_delete: "Person kann aus folgenden Gründen nicht gelöscht werden:"
-        unable_to_minimize: "Person kann aus folgenden Gründen nicht minimiert werden:"
-        proceed_anyways: Ignorieren und Aktion trotzdem ausführen
+        delete_anyways: Probleme ignorieren und Person trotzdem löschen
       minimize:
         success: "%{full_name} a été minimisée avec succès."
       delete:

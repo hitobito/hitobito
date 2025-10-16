@@ -1,4 +1,10 @@
 GIT
+  remote: https://github.com/amaierhofer/bleib.git
+  revision: 7d40d052420760abd7b7c19660ffeb6283fe9bee
+  specs:
+    bleib (0.0.15)
+
+GIT
   remote: https://github.com/puzzle/graphiti-openapi.git
   revision: b36e06e99f02f005035d5470d8b0afd01170b6f5
   tag: standalone/0.6.6
@@ -150,7 +156,6 @@ GEM
     bigdecimal (3.3.1)
     binding_of_caller (1.0.1)
       debug_inspector (>= 1.2.0)
-    bleib (0.0.15)
     bootsnap (1.18.6)
       msgpack (~> 1.2)
     brakeman (7.1.0)
@@ -836,7 +841,7 @@ DEPENDENCIES
   bcrypt
   better_errors
   binding_of_caller
-  bleib
+  bleib!
   bootsnap
   brakeman
   bullet
@@ -967,4 +972,4 @@ DEPENDENCIES
   wirble
 
 BUNDLED WITH
-   2.5.22
+   2.7.1

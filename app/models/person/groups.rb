@@ -17,6 +17,10 @@ module Person::Groups
     @groups_hierarchy_ids ||= groups.collect(&:hierarchy).flatten.collect(&:id).uniq
   end
 
+  def local_groups_hierachy_ids
+    @local_groups_hierachy_ids ||= groups.collect(&:local_hierarchy).flatten.collect(&:id).uniq
+  end
+
   # All layers this person belongs to.
   def layer_groups
     groups.collect(&:layer_group).uniq

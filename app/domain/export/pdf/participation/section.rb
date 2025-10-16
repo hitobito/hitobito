@@ -112,7 +112,7 @@ module Export::Pdf::Participation
     end
 
     def event_with_kind?
-      event.used_attributes.include?(:kind_id)
+      event.used_attributes.include?(:kind_id) && event.kind.present?
     end
 
     def i18n_event_postfix

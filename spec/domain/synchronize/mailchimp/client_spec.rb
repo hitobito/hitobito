@@ -368,8 +368,7 @@ body: create_tgz([response: {title: :subscriber, detail: "okay", status: 200}.to
         )})
       expect(client).to receive(:sleep).once
       _payload, response = client.create_segments(%w[a])
-      expect(response[:operation_results][0][:title]).to eq "subscriber"
-      expect(response[:operation_results][1][:title]).to eq "subscriber_2"
+      expect(response[:operation_results].pluck(:title)).to match_array(["subscriber", "subscriber_2"])
     end
 
     it "retries fetching of tgz if it fails" do

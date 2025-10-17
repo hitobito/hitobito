@@ -37,10 +37,10 @@ module Synchronize
           :unchanged
         elsif operations.all? { |val| val.key?(:failed) }
           :failed
-        elsif operations.any? { |val| val.key?(:partial) }
-          :partial
         elsif operations.all? { |val| val.key?(:success) }
           :success
+        else
+          :partial
         end
       end
 

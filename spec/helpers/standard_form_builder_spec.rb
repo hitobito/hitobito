@@ -354,7 +354,7 @@ describe "StandardFormBuilder" do
       expect(dom).to have_css("input[name='entry[#{attr}]']")
       expect(dom).to have_css("div[class='d-flex'] div[class='input-group mb-2'] input[name='entry[#{attr}]']")
 
-      stub_languages({de: "Deutsch"})
+      allow(Settings.application).to receive(:languages).and_return({de: "Deutsch"})
 
       dom = Capybara::Node::Simple.new(form.input_field(attr))
 

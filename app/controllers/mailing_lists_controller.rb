@@ -65,5 +65,11 @@ class MailingListsController < CrudController
         serializer: MailingListSerializer)].inject(&:merge)
   end
 
+  def permitted_attrs
+    attrs = super
+    attrs -= [:subscribable_for, :subscribable_mode] unless can?(:update_subscriptions, entry)
+    attrs
+  end
+
   alias_method :group, :parent
 end

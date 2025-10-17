@@ -19,13 +19,13 @@ describe "subscriber/filter/_show.html.haml" do
   subject { Capybara::Node::Simple.new(render) }
 
   it "renders edit link if user can update filter_chain attr" do
-    allow(view).to receive(:can?).with(:update, entry, :filter_chain).and_return(true)
+    allow(view).to receive(:can?).with(:update_subscriptions, entry).and_return(true)
 
     expect(subject).to have_link href: edit_group_mailing_list_filter_path(entry.group, entry)
   end
 
   it "does not render edit link if user cannot update filter_chain attr" do
-    allow(view).to receive(:can?).with(:update, entry, :filter_chain).and_return(false)
+    allow(view).to receive(:can?).with(:update_subscriptions, entry).and_return(false)
 
     expect(subject).to have_no_link href: edit_group_mailing_list_filter_path(entry.group, entry)
   end

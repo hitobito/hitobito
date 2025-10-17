@@ -39,7 +39,7 @@ module Globalized
     # which in this case is the selected locale
     # Uniqueness validators are excluded, since the globalized accessors are not backed
     # by a DB column
-    # The first condition on the copied validators ensures that validations are not run twice for
+    # The condition on the copied validators ensures that validations are not run twice for
     # the current locale (on the base attribute and the globalized accessor)
 
     def copy_validators_to_globalized_accessors

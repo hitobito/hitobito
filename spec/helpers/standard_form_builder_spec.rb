@@ -330,7 +330,9 @@ describe "StandardFormBuilder" do
 
       expect(dom).not_to have_css("div[class='hidden'] div[class='input-group mb-2'] trix-editor#entry_#{attr}")
       Globalized.globalized_names_for_attr(attr).each do |globalized_attr|
-        expect(dom).to have_css("div[class='hidden'] div[class='input-group mb-2'] trix-editor#entry_#{globalized_attr}")
+        expect(dom).to have_css(
+          "div[class='hidden'] div[class='input-group mb-2'] trix-editor#entry_#{globalized_attr}"
+        )
       end
     end
 

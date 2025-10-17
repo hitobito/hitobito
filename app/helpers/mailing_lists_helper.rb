@@ -31,8 +31,9 @@ module MailingListsHelper
 
   def button_toggle_subscription
     if entry.subscribed?(current_user)
-      button_unsubscribe(entry) if can?(:destroy,
-        Subscription.new(mailing_list: entry, subscriber: current_user))
+      if can?(:destroy, Subscription.new(mailing_list: entry, subscriber: current_user))
+        button_unsubscribe(entry)
+      end
     elsif can?(:create, Subscription.new(mailing_list: entry, subscriber: current_user))
       button_subscribe(entry)
     end

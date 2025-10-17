@@ -58,7 +58,7 @@ Doorkeeper::OpenidConnect.configure do
   # end
 
   # Expiration time on or after which the ID Token MUST NOT be accepted for processing. (default 120 seconds).
-  # expiration 600
+  expiration Settings.oidc.jwt_id_token_expires_in
 
   # claims do
   #   normal_claim :_foo_ do |resource_owner|

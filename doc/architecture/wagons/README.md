@@ -78,6 +78,8 @@ If the wagon is the main wagon for a new organization structure, you can additio
 * Configure e-mail-adress for the root account in `config/settings.yml`.
 * If the application is multilingual:
   * create a project in [Transifex](https://www.transifex.com/) (e.g. hitobito_pbs)
+  * if the customer should have the option to define the german texts himself, then add a german variant locale to the
+    transifex project (e.g. `de_CH` for Switzerland)
   * make sure there is all required locale files in the wagon's config/locales folder (all non default language files can be empty on init)
   * create .tx/config and add all files (you might copy it from [here](https://github.com/hitobito/hitobito_die_mitte/blob/master/.tx/config) or use rake tx:init)
 

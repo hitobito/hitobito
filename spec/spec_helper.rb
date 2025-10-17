@@ -119,8 +119,9 @@ RSpec.configure do |config|
   config.before do |example|
     ActionMailer::Base.deliveries = []
     Person.stamper = nil
+
     # See https://www.graphiti.dev/guides/concepts/error-handling
-    handle_request_exceptions(false)
+    handle_request_exceptions(false) if example.metadata[:file_path][%r{\bspec/api/}]
 
     unless example.metadata[:with_truemail_validation]
       allow(Truemail).to receive(:valid?).and_return(true)
@@ -164,6 +165,13 @@ RSpec.configure do |config|
     keeping_stdout do
       example.run
     end
+  end
+
+  config.around(:each, :dj_queue) do |example|
+    ActiveJob::Base.queue_adapter = :delayed_job
+    example.run
+  ensure
+    ActiveJob::Base.queue_adapter = :test
   end
 
   config.around(:each, :time_frozen) do |example|

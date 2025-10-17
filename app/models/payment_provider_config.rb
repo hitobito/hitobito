@@ -30,7 +30,7 @@ class PaymentProviderConfig < ActiveRecord::Base
   include Encryptable
   include I18nEnums
 
-  enum status: {draft: 0, pending: 1, registered: 2}
+  enum :status, [:draft, :pending, :registered]
   i18n_enum :payment_provider, Settings.payment_providers.map(&:name)
 
   belongs_to :invoice_config
@@ -60,7 +60,9 @@ class PaymentProviderConfig < ActiveRecord::Base
   end
 
   def clear_scheduled_ebics_import_jobs
-    Delayed::Job.where("handler LIKE '%Payments::EbicsImportJob%payment_provider_config_id: ?%'",
-      id).delete_all
+    Delayed::Job.where(
+      "handler LIKE ?",
+      "%Payments::EbicsImportJob%payment_provider_config_id: #{id}%"
+    ).delete_all
   end
 end

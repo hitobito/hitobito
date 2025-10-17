@@ -7,7 +7,7 @@
 
 source "https://rubygems.org"
 
-gem "rails", "= 7.1.5.2"
+gem "rails", "~> 8.0"
 gem "wagons"
 gem "active_record_distinct_on"
 gem "activerecord-nulldb-adapter"
@@ -100,7 +100,7 @@ gem "validates_by_schema", "~> 0.3.0" # 0.5.1 does not work well with wagons / w
 gem "validates_zipcode"
 gem "validates_timeliness"
 gem "vcard"
-gem "view_component", "3.12.1" # later versions break tests (probably drop at some point)
+gem "view_component", "~> 3.12" # later versions break tests (probably drop at some point)
 gem "webpacker"
 
 # load after others because dependencies

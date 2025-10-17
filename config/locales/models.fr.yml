@@ -1418,7 +1418,7 @@ fr:
         many: "%{resource} n'a pas pu être sauvegardé : %{count} erreurs."
         other: "%{resource} n'a pas pu être sauvegardé : %{count} erreurs."
       # active_storage_validations
-      content_type_invalid: "n'accepte que les types de données suivantes : %{authorized_types}"
+      content_type_invalid: "akzeptiert nur die folgenden Dateitypen: %{authorized_human_content_types}"
       file_size_out_of_range: "ne doit pas être plus grand que %{max_size}"
       limit_out_of_range: "Le nombre est en dehors des valeurs limites (%{min} - %{max})"
       image_metadata_missing: "n'est pas une image valide"

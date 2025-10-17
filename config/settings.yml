@@ -258,6 +258,7 @@ oidc:
   use_jwt_access_token: false
   access_token_expires_in: <%= 2.hours %>
   refresh_token_expires_in: <%= 180.days %>
+  jwt_id_token_expires_in: <%= 2.minutes %>
 
 table_displays: true
 

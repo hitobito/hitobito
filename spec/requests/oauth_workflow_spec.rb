@@ -9,6 +9,10 @@ describe "OauthWorkflow" do
     @app = Oauth::Application.create!(name: "MyApp", redirect_uri: redirect_uri)
   end
 
+  def jwt_decode(payload)
+    JWT.decode(payload, key.public_key, true, algorithms: "RS256").first
+  end
+
   describe "obtaining grant" do
     it "redirects to oauth login if not authenticated" do
       get oauth_authorization_path,
@@ -75,17 +79,40 @@ describe "OauthWorkflow" do
 
       before do
         allow(Settings.oidc).to receive(:signing_key).and_return(key.to_s.lines)
+        allow(Doorkeeper::OpenidConnect.configuration).to receive(:signing_key).and_return(key.to_s)
         expect(Doorkeeper::JWT.configuration).to receive(:secret_key).and_return(key.to_s)
         expect(Doorkeeper.config).to receive(:access_token_generator).and_return("::Doorkeeper::JWT")
       end
 
+      def make_request_with(grant)
+        post oauth_token_path, params: {
+          client_id: @app.uid, client_secret: @app.secret, redirect_uri: redirect_uri, code: grant.token,
+          grant_type: "authorization_code"
+        }
+      end
+
+      def create_grant(scopes: nil)
+        @app.access_grants.create!(resource_owner_id: user.id, expires_in: 10, redirect_uri:, scopes:)
+      end
+
       it "returns jwt as access_token" do
-        grant = @app.access_grants.create!(resource_owner_id: user.id, expires_in: 10, redirect_uri: redirect_uri)
-        post oauth_token_path,
-          params: {client_id: @app.uid, client_secret: @app.secret, redirect_uri: redirect_uri, code: grant.token,
-                   grant_type: "authorization_code"}
-        jwt = JWT.decode(json["access_token"], key.public_key, true, algorithms: "RS256")
-        expect(jwt.first.keys.sort).to match_array %w[iss aud iat exp jti sub]
+        make_request_with(create_grant)
+        expect(json.keys).to match_array %w[access_token token_type expires_in created_at]
+        expect(jwt_decode(json["access_token"])["exp"]).to be_within(10).of(2.hours.from_now.to_i)
+      end
+
+      it "can configure scopes" do
+        @app.update(scopes: "email openid")
+        make_request_with(create_grant(scopes: "email openid"))
+        expect(json.keys).to match_array %w[access_token token_type expires_in created_at scope id_token]
+        expect(jwt_decode(json["id_token"])["exp"]).to be_within(10).of(2.minutes.from_now.to_i)
+      end
+
+      it "can configure expiry of id token" do
+        @app.update(scopes: "email openid")
+        allow(Doorkeeper::OpenidConnect.configuration).to receive(:expiration).and_return(2.hours)
+        make_request_with(create_grant(scopes: "email openid"))
+        expect(jwt_decode(json["id_token"])["exp"]).to be_within(10).of(2.hours.from_now.to_i)
       end
     end
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_07_30_120000) do
+ActiveRecord::Schema[7.1].define(version: 2025_08_15_105604) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -183,7 +183,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_30_120000) do
     t.string "locale", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "label", null: false
+    t.string "label"
     t.string "subject"
     t.index ["custom_content_id"], name: "index_custom_content_translations_on_custom_content_id"
     t.index ["locale"], name: "index_custom_content_translations_on_locale"

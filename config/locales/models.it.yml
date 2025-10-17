@@ -1417,7 +1417,7 @@ it:
         many: "non si è potuto salvare %{resource}: %{count} errori."
         other: "non si è potuto salvare %{resource}: %{count} errori."
       # active_storage_validations
-      content_type_invalid: "akzeptiert nur die folgenden Dateitypen: %{authorized_human_content_types}"
+      content_type_invalid: "akzeptiert nur die folgenden Dateitypen: %{authorized_types}"
       file_size_out_of_range: "non può essere più grande di %{max_size}"
       limit_out_of_range: "Il numero è fuori dall'intervallo valevole (%{min} - %{max})"
       image_metadata_missing: "non è un'immagine valida"

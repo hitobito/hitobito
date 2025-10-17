@@ -1343,7 +1343,7 @@ en:
         one: "Could not save %{resource}: one error."
         other: "Could not save %{resource}: %{count} errors."
       # active_storage_validations
-      content_type_invalid: "akzeptiert nur die folgenden Dateitypen: %{authorized_human_content_types}"
+      content_type_invalid: "akzeptiert nur die folgenden Dateitypen: %{authorized_types}"
       file_size_out_of_range: "darf nicht grösser als %{max_size} sein"
       limit_out_of_range: "Anzahl ist ausserhalb des gültigen Bereichs (%{min} - %{max})"
       image_metadata_missing: "ist kein gültiges Bild"

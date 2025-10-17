@@ -8,7 +8,9 @@ module Globalized
 
   ATTRIBUTE_LOCALE_REGEX = /^(?<attribute>.*)_(?<locale>[a-z]{2})$/
   def self.languages = Settings.application.languages.keys
+
   def self.additional_languages = languages.excluding(I18n.locale)
+
   def self.globalize_inputs? = languages.length > 1
 
   def self.globalized_names_for_attr(attr, only_additional = true)

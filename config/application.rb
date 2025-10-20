@@ -148,12 +148,6 @@ module Hitobito
     def self.build_info
       @build_info ||= File.read("#{Rails.root}/BUILD_INFO").strip rescue ''
     end
-
-    Rails.autoloaders.main.on_load do |_, value|
-      if value.is_a?(Class) && value.ancestors.include?(Globalized)
-        value.copy_validators_to_globalized_accessors
-      end
-    end
   end
 end
 

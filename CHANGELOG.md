@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## Unreleased
+
+- Eigener JSON:API Endpoint für Abos (mailing lists) (hitobito_pbs#382)
+
 ## Version 2.6
 
 - Uprade auf rails 8 (#3292)

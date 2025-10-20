@@ -1632,6 +1632,11 @@
           "type": "has_many",
           "description": null,
           "resource": "AdditionalEmailResource"
+        },
+        "mailing_lists": {
+          "type": "has_many",
+          "description": null,
+          "resource": "MailingListResource"
         }
       },
       "stats": {
@@ -1885,6 +1890,333 @@
           "type": "has_many",
           "description": null,
           "resource": "InvoiceItemResource"
+        }
+      },
+      "stats": {
+        "total": [
+          "count"
+        ]
+      }
+    },
+    {
+      "name": "MailingListResource",
+      "type": "mailing_lists",
+      "graphql_entrypoint": "mailingLists",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "name": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "group_id": {
+          "type": "integer",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "description": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "publisher": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "mail_name": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "additional_sender": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "subscribable_for": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "subscribable_mode": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "subscribers_may_post": {
+          "type": "boolean",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "anyone_may_post": {
+          "type": "boolean",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "preferred_labels": {
+          "type": "array",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "delivery_report": {
+          "type": "boolean",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "main_email": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "subscribable": {
+          "type": "boolean",
+          "readable": true,
+          "writable": true,
+          "description": null
+        }
+      },
+      "extra_attributes": {
+        "subscribers": {
+          "type": "array",
+          "readable": true,
+          "description": null
+        }
+      },
+      "sorts": {
+        "id": {
+        },
+        "name": {
+        },
+        "group_id": {
+        },
+        "description": {
+        },
+        "publisher": {
+        },
+        "mail_name": {
+        },
+        "additional_sender": {
+        },
+        "subscribable_for": {
+        },
+        "subscribable_mode": {
+        },
+        "subscribers_may_post": {
+        },
+        "anyone_may_post": {
+        },
+        "preferred_labels": {
+        },
+        "delivery_report": {
+        },
+        "main_email": {
+        },
+        "subscribable": {
+        }
+      },
+      "filters": {
+        "id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "group_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "publisher": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "mail_name": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "additional_sender": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "subscribable_for": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "subscribable_mode": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "subscribers_may_post": {
+          "type": "boolean",
+          "operators": [
+            "eq"
+          ],
+          "single": true
+        },
+        "anyone_may_post": {
+          "type": "boolean",
+          "operators": [
+            "eq"
+          ],
+          "single": true
+        },
+        "preferred_labels": {
+          "type": "array",
+          "operators": [
+            "eq"
+          ]
+        },
+        "delivery_report": {
+          "type": "boolean",
+          "operators": [
+            "eq"
+          ],
+          "single": true
+        },
+        "main_email": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "subscribable": {
+          "type": "boolean",
+          "operators": [
+            "eq"
+          ],
+          "single": true
+        }
+      },
+      "relationships": {
+        "group": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "GroupResource"
         }
       },
       "stats": {
@@ -3060,6 +3392,16 @@
         },
         "update": {
           "resource": "InvoiceResource"
+        }
+      }
+    },
+    "/api/mailing_lists": {
+      "actions": {
+        "index": {
+          "resource": "MailingListResource"
+        },
+        "show": {
+          "resource": "MailingListResource"
         }
       }
     },

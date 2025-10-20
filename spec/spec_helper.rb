@@ -120,9 +120,6 @@ RSpec.configure do |config|
     ActionMailer::Base.deliveries = []
     Person.stamper = nil
 
-    # See https://www.graphiti.dev/guides/concepts/error-handling
-    handle_request_exceptions(false) if example.metadata[:file_path][%r{\bspec/api/}]
-
     unless example.metadata[:with_truemail_validation]
       allow(Truemail).to receive(:valid?).and_return(true)
     end

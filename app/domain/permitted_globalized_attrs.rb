@@ -6,21 +6,22 @@
 #  https://github.com/hitobito/hitobito.
 
 class PermittedGlobalizedAttrs
-  def initialize(model_class)
+  def initialize(model_class, original_permitted_attrs)
     @model_class = model_class
+    @original_permitted_attrs = original_permitted_attrs
   end
 
-  def permitted_attrs(original_permitted_attrs)
-    return original_permitted_attrs unless Globalized.globalize_inputs?
+  def permitted_attrs
+    return @original_permitted_attrs unless Globalized.globalize_inputs?
 
-    original_permitted_attrs.flat_map do |permitted_attr|
-      next permit(permitted_attr, @model_class)
+    @original_permitted_attrs.flat_map do |permitted_attr|
+      permit(permitted_attr)
     end
   end
 
   private
 
-  def permit(permitted_attr, klass)
+  def permit(permitted_attr, klass = @model_class)
     case permitted_attr
     when Symbol, String
       permit_symbol(permitted_attr, klass)
@@ -32,10 +33,9 @@ class PermittedGlobalizedAttrs
   end
 
   def permit_symbol(permitted_attr, klass)
-    if should_permit?(klass, permitted_attr)
-      return [permitted_attr, *Globalized.globalized_names_for_attr(permitted_attr)]
-    end
-    permitted_attr
+    return permitted_attr unless should_permit?(klass, permitted_attr)
+
+    [permitted_attr, *Globalized.globalized_names_for_attr(permitted_attr)]
   end
 
   def permit_hash(permitted_attr)
@@ -43,14 +43,15 @@ class PermittedGlobalizedAttrs
       if k.end_with?("_attributes")
         case v
         when Array
-          next permit_relation_array(k, v)
+          permit_relation_array(k, v)
         when Hash
-          next {k => permit_hash(v)}
+          {k => permit_hash(v)}
         else
-          next {k => v}
+          {k => v}
         end
+      else
+        {k => v}
       end
-      next {k => v}
     end.reduce(:merge)
   end
 
@@ -61,7 +62,7 @@ class PermittedGlobalizedAttrs
     end&.klass
     return {relation_name => relation_array} if klass.blank?
     updated_relation_array = relation_array.flat_map do |permitted_attr|
-      next permit(permitted_attr, klass)
+      permit(permitted_attr, klass)
     end
     {relation_name => updated_relation_array}
   end

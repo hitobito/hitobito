@@ -126,7 +126,8 @@ RUN    bundle config set --local deployment 'true' \
     && bundle config set --local without ${BUNDLE_WITHOUT_GROUPS} \
     && bundle install \
     && bundle clean \
-    && bundle exec bootsnap precompile --gemfile
+    && bundle exec bootsnap precompile --gemfile \
+    && bundle exec rails locales:patch_de
 
 # only copy things needed for yarning
 # COPY package.json yarn.lock ./

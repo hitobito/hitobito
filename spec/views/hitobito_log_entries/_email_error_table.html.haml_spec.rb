@@ -1,3 +1,8 @@
+# Copyright (c) 2012-2025, Hitobito AG. This file is part of
+# hitobito and licensed under the Affero General Public License version 3
+# or later. See the COPYING file at the top-level directory or at
+# https://github.com/hitobito/hitobito.
+
 require "spec_helper"
 
 describe "hitobito_log_entries/_email_error_table.html.haml" do
@@ -6,6 +11,8 @@ describe "hitobito_log_entries/_email_error_table.html.haml" do
   let(:dom) { Capybara::Node::Simple.new(@rendered) }
 
   before do
+    allow(controller).to receive(:current_user).and_return(people(:top_leader))
+
     render partial: "hitobito_log_entries/email_error_table", locals: {error_log_entries: log_entries}
   end
 
@@ -24,7 +31,7 @@ describe "hitobito_log_entries/_email_error_table.html.haml" do
 
   it "displays each log entries details" do
     log_entries.each do |entry|
-      expect(dom).to have_text(I18n.l(entry.created_at))
+      expect(dom).to have_text(I18n.l(entry.created_at, format: :date_time_millis))
       expect(dom).to have_text(entry.category)
       expect(dom).to have_text(entry.message)
     end
@@ -32,7 +39,7 @@ describe "hitobito_log_entries/_email_error_table.html.haml" do
 
   it "formats payload correctly if present" do
     entry_with_payload = log_entries.find { |entry| entry.payload.present? }
-    expect(dom).to have_text(entry_with_payload.payload.to_json)
+    expect(dom).to have_text(entry_with_payload.payload)
   end
 
   it "displays subject as link" do

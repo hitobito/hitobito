@@ -14,10 +14,10 @@
   %tbody
     - error_log_entries.each do |entry|
       %tr
-        %td{ style: "padding: 10px;" }= I18n.l(entry.created_at)
-        %td{ style: "padding: 10px;" }= entry.category
-        %td{ style: "padding: 10px;" }= link_to entry.subject&.to_s, polymorphic_path(entry.subject) if entry.subject
-        %td{ style: "padding: 10px;" }= entry.message
-        %td{ style: "padding: 10px; white-space: pre-wrap; word-break: break-word;" }= entry.payload.to_json
+        %td{ style: "padding: 10px;" }= format_attr(entry, :created_at)
+        %td{ style: "padding: 10px;" }= format_attr(entry, :category)
+        %td{ style: "padding: 10px;" }= format_attr(entry, :subject)
+        %td{ style: "padding: 10px;" }= format_attr(entry, :message)
+        %td{ style: "padding: 10px; white-space: pre-wrap; word-break: break-word;" }= format_attr(entry, :payload)
 
 

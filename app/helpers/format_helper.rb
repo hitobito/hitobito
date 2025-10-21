@@ -233,9 +233,12 @@ module FormatHelper
   end
 
   # Returns true if no link should be created when formatting the given association.
+  #
+  # NOTE: as it might be used outside of a request (mailers), we check for env before
+  # engaging warden and cancancan
   def assoc_link?(val)
     respond_to?(:"#{val.class.base_class.model_name.singular_route_key}_path") &&
-      can?(:show, val)
+      (!respond_to?(:env) || can?(:show, val))
   end
 
   def object_class(obj)

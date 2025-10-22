@@ -14,7 +14,7 @@
 # a standard label with them.
 class StandardFormBuilder < ActionView::Helpers::FormBuilder
   include NestedForm::BuilderMixin
-  include FormBuilder::GlobalizedInputFieldBuilder
+  include Globalized::GlobalizedInputFieldHelpers
 
   REQUIRED_MARK = ' <span class="required">*</span>'.html_safe
   WIDTH_CLASSES = "mw-100 mw-md-60ch"
@@ -40,6 +40,9 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # The input field is chosen based on the ActiveRecord column type.
   # Use additional html_options for the input element.
   def input_field(attr, html_options = {}) # rubocop:disable Metrics/*
+    # Checks if the attr is a globalized attr (translates: ...) and automatically generates
+    # a globalized input field for it, allowing the user to fill in the field in
+    # all available languages.
     if globalized_field?(attr, html_options.delete(:already_globalized))
       return globalized_input_field(attr, html_options)
     end
@@ -83,6 +86,9 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   # Render an action text input field.
   def rich_text_area(attr, html_options = {})
+    # Checks if the attr is a globalized attr (translates: ...) and automatically generates
+    # a globalized rich text area for it, allowing the user to fill in the field in
+    # all available languages.
     if globalized_field?(attr, html_options.delete(:already_globalized))
       return globalized_rich_text_area(attr, html_options)
     end

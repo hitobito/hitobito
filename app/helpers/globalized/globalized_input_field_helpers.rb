@@ -5,7 +5,13 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module FormBuilder::GlobalizedInputFieldBuilder
+# Helper methods included in the standard form builder used to
+# create globalized input fields, which allow the user to
+# fill in an input for a globalized attribute in all available languages. The
+# already_globalized argument is passed to the input field, which tells
+# the standard form builder to render the actual input field instead of calling
+# the helpers in here again.
+module Globalized::GlobalizedInputFieldHelpers
   private
 
   def globalized_input_field(attr, args = {})

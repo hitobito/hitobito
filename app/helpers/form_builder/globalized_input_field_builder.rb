@@ -8,9 +8,23 @@
 module FormBuilder::GlobalizedInputFieldBuilder
   private
 
-  def globalized_input_field(attr, rich_text, args = {})
-    return default_input_field(attr, rich_text, args) unless Globalized.globalize_inputs?
+  def globalized_input_field(attr, args = {})
+    unless Globalized.globalize_inputs?
+      return input_field(attr, **args, already_globalized: true)
+    end
 
+    globalized_inputs(attr, false, args)
+  end
+
+  def globalized_rich_text_area(attr, args = {})
+    unless Globalized.globalize_inputs?
+      return rich_text_area(attr, **args, already_globalized: true)
+    end
+
+    globalized_inputs(attr, true, args)
+  end
+
+  def globalized_inputs(attr, rich_text, args = {})
     content_tag(:div, data: {
       controller: "globalized-fields",
       "globalized-fields-additional-languages-text-value":
@@ -19,14 +33,6 @@ module FormBuilder::GlobalizedInputFieldBuilder
       current_locale_input(attr, rich_text, args) +
         other_locale_inputs(attr, rich_text, args) +
         help_block("", "data-globalized-fields-target": "globalizedFieldsDisplay")
-    end
-  end
-
-  def default_input_field(attr, rich_text, args = {})
-    if rich_text
-      rich_text_area(attr, **args, already_globalized: true)
-    else
-      input_field(attr, **args, already_globalized: true)
     end
   end
 
@@ -62,13 +68,24 @@ module FormBuilder::GlobalizedInputFieldBuilder
 
   def input_for_locale(attr, locale, rich_text, args = {})
     content_tag(:div, class: "input-group mb-2") do
-      locale_input = locale_indicator(locale) +
-        (rich_text ?
-           rich_text_area(attr, **args, already_globalized: true, toolbar: "#{attr}_toolbar") :
-           input_field(attr, **args, already_globalized: true))
-      locale_input.prepend(content_tag("trix-toolbar", nil, id: "#{attr}_toolbar")) if rich_text
+      if rich_text
+        locale_input = rich_text_area_for_locale(attr, locale, args)
+      else
+        locale_input = input_field_for_locale(attr, locale, args)
+      end
       block_given? ? locale_input + yield : locale_input
     end
+  end
+
+  def rich_text_area_for_locale(attr, locale, args = {})
+    content_tag("trix-toolbar", nil, id: "#{attr}_toolbar") +
+      locale_indicator(locale) +
+      rich_text_area(attr, **args, already_globalized: true, toolbar: "#{attr}_toolbar")
+  end
+
+  def input_field_for_locale(attr, locale, args = {})
+    locale_indicator(locale) +
+      input_field(attr, **args, already_globalized: true)
   end
 
   def locale_indicator(locale)

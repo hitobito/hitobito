@@ -41,7 +41,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Use additional html_options for the input element.
   def input_field(attr, html_options = {}) # rubocop:disable Metrics/*
     if globalized_field?(attr, html_options.delete(:already_globalized))
-      return globalized_input_field(attr, false, html_options)
+      return globalized_input_field(attr, html_options)
     end
 
     type = column_type(@object, attr.to_sym)
@@ -84,7 +84,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render an action text input field.
   def rich_text_area(attr, html_options = {})
     if globalized_field?(attr, html_options.delete(:already_globalized))
-      return globalized_input_field(attr, true, html_options)
+      return globalized_rich_text_area(attr, html_options)
     end
 
     add_css_class(html_options, FORM_CONTROL)

@@ -45,7 +45,7 @@ describe "Globalized model" do
     end
   end
 
-  it "should copy validators on globalized fields and add locale suffix to error messages" do
+  it "should copy validators on globalized fields and add locale suffix to human attribute name" do
     Globalized.languages.each do |lang|
       group.send(:"privacy_policy_title_#{lang}=", "Long text" * 20)
     end

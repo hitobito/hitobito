@@ -3,6 +3,7 @@
 ## unreleased
 
 - Profilbild, letztes Aktualisierungsdatum und zusätzliche Angaben zu Personen sowie der Typ von Rollen ist neu in der JSON:API verfügbar (#3612)
+- Zusätzliche Personen Attribute können im Address-Feld gerendert werden (z.B. Pronomen) (hitobito/hitobito_pbs#416)
 
 ## Version 2.6
 

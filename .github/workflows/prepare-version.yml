@@ -107,6 +107,7 @@ jobs:
           git submodule foreach "git fetch && git fetch --tags"
           # although requested, the branch might not be present everywhere
           if [[ $TARGET_BRANCH != "master" ]]; then
+            echo "Requested target-branch: ${TARGET_BRANCH}"
             git submodule foreach "git branch --all --list '*${TARGET_BRANCH}*'"
             git submodule foreach "git switch -c ${TARGET_BRANCH} --track origin/${TARGET_BRANCH}; true"
             git submodule foreach "git switch master; git switch ${TARGET_BRANCH}; true"

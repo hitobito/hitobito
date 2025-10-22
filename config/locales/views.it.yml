@@ -1779,7 +1779,13 @@ it:
         title: "cancellare %{full_name}?"
         minimize: "Minimizzare la persona"
         delete: "Cancellare definitivamente una persona"
-        explanation: "Se la persona viene cancellata, i suoi dati vengono eliminati irrevocabilmente. Se la persona viene minimizzata, non viene eliminata, ma viene rimossa la maggior parte dei dati specifici della persona."
+        explanation:
+          delete: Wird eine Person gelöscht, werden sämtliche Daten unwiderruflich entfernt.
+          minimize: Bei der Minimierung wird die Person nicht gelöscht, es werden aber die meisten personspezifischen Daten entfernt.
+        unable_to_delete_or_minimize: "Person kann aus folgenden Gründen nicht gelöscht oder minimiert werden:"
+        unable_to_delete: "Person kann aus folgenden Gründen nicht gelöscht werden:"
+        unable_to_minimize: "Person kann aus folgenden Gründen nicht minimiert werden:"
+        proceed_anyways: Ignorieren und Aktion trotzdem ausführen
       minimize:
         success: "%{full_name} è stato minimizzato con successo."
       delete:

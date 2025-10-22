@@ -45,7 +45,21 @@ describe "Globalized model" do
     end
   end
 
-  it "should copy validators on globalized fields and add locale suffix to human attribute name" do
+  it "should add locale suffix to human attribute name" do
+    expected_attributes_human_attribute_names = {
+      "privacy_policy_title": "DSE/Datenschutzerklärung Titel",
+      "privacy_policy_title_de": "DSE/Datenschutzerklärung Titel (DE)",
+      "privacy_policy_title_en": "DSE/Datenschutzerklärung Titel (EN)",
+      "privacy_policy_title_fr": "DSE/Datenschutzerklärung Titel (FR)",
+      "privacy_policy_title_it": "DSE/Datenschutzerklärung Titel (IT)"
+    }
+
+    expected_attributes_human_attribute_names.each do |attr, human_attr_name|
+      expect(Group.human_attribute_name(attr)).to eq(human_attr_name)
+    end
+  end
+
+  it "should copy validators on globalized fields and use globalized human attribute names in error message" do
     Globalized.languages.each do |lang|
       group.send(:"privacy_policy_title_#{lang}=", "Long text" * 20)
     end
@@ -55,6 +69,18 @@ describe "Globalized model" do
       "DSE/Datenschutzerklärung Titel (EN) ist zu lang (mehr als 64 Zeichen)",
       "DSE/Datenschutzerklärung Titel (FR) ist zu lang (mehr als 64 Zeichen)",
       "DSE/Datenschutzerklärung Titel (IT) ist zu lang (mehr als 64 Zeichen)"
+    ]
+
+    expect(group).not_to be_valid
+    expect(group.errors.full_messages).to match_array(expected_errors)
+
+    I18n.locale = :fr
+
+    expected_errors = [
+      "Déclaration de protection des données - Titre est trop long (pas plus de 64 caractères)",
+      "Déclaration de protection des données - Titre (DE) est trop long (pas plus de 64 caractères)",
+      "Déclaration de protection des données - Titre (EN) est trop long (pas plus de 64 caractères)",
+      "Déclaration de protection des données - Titre (IT) est trop long (pas plus de 64 caractères)",
     ]
 
     expect(group).not_to be_valid

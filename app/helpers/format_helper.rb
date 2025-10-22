@@ -238,7 +238,7 @@ module FormatHelper
   # engaging warden and cancancan
   def assoc_link?(val)
     respond_to?(:"#{val.class.base_class.model_name.singular_route_key}_path") &&
-      (!respond_to?(:env) || can?(:show, val))
+      (!respond_to?(:request) || can?(:show, val))
   end
 
   def object_class(obj)

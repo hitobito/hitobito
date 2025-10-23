@@ -146,19 +146,16 @@ describe MailingLists::Subscribers do
     end
   end
 
-  context "opt_in" do
+  context "subscribable_for" do
     let(:list) { mailing_lists(:leaders) }
     let(:group) { groups(:top_group) }
     let(:role) { roles(:top_leader) }
     let(:person) { role.person }
 
-    before do
-      Subscription.destroy_all
-      list.update!(subscribable_mode: :opt_in, subscribable_for:)
-    end
+    before { Subscription.destroy_all }
 
-    context "only configured may subscribed" do
-      let(:subscribable_for) { :configured }
+    context "only configured may subscribe with opt-in" do
+      before { list.update!(subscribable_mode: :opt_in, subscribable_for: :configured) }
 
       it "excludes person if only group subscription exists" do
         create_subscription(group, false, role.type)
@@ -197,12 +194,12 @@ describe MailingLists::Subscribers do
       end
     end
 
-    context "anyone may be subscribed" do
-      let(:subscribable_for) { :anyone }
+    context "anyone may subscribe" do
+      before { list.update!(subscribable_for: :anyone) }
 
-      it "excludes person if only group subscription exists" do
+      it "includes person if only group subscription exists" do
         create_subscription(group, false, role.type)
-        expect(subject).to be_empty
+        expect(subject).to eq [person]
       end
 
       it "includes person if direct subscription exists" do
@@ -216,9 +213,8 @@ describe MailingLists::Subscribers do
         expect(subject).to eq [person]
       end
 
-      it "includes person if event and direct subscription exists" do
+      it "includes person if event subscription exists" do
         create_event_subscription
-        create_subscription(person)
         expect(subject).to eq [person]
       end
 

@@ -31,7 +31,7 @@ describe Person::SubscriptionsController do
       leaders.subscriptions.create(subscriber: top_leader)
       sign_in(top_leader)
       get :index, params: {group_id: top_group.id, person_id: top_leader.id}
-      expect(assigns(:subscribed)).to have(1).items
+      expect(assigns(:grouped_subscribed)).to have(1).items
     end
 
     it "sorts subscribed lists by name and groups by layer" do
@@ -40,14 +40,15 @@ describe Person::SubscriptionsController do
       first.subscriptions.create(subscriber: top_leader)
       sign_in(top_leader)
       get :index, params: {group_id: top_group.id, person_id: top_leader.id}
-      expect(assigns(:subscribed)).to eq({bottom_layer => [first], top_layer => [leaders]})
+      expect(assigns(:grouped_subscribed)).to eq({bottom_layer => [first], top_layer => [leaders]})
     end
 
     it "sorts subscribable lists by name" do
       first = bottom_group.mailing_lists.create!(name: "00 - First", subscribable_for: :anyone)
       sign_in(top_leader)
       get :index, params: {group_id: top_group.id, person_id: top_leader.id}
-      expect(assigns(:subscribable)).to eq({bottom_layer => [first], top_layer => [leaders, members, top_group_list]})
+      expect(assigns(:grouped_subscribable)).to eq({bottom_layer => [first],
+top_layer => [leaders, members, top_group_list]})
     end
   end
 
@@ -67,41 +68,195 @@ describe Person::SubscriptionsController do
       expect(response).to redirect_to group_person_subscriptions_path(top_group, top_leader)
       expect(flash[:notice]).to eq "<i>Top Leader</i> wurde für <i>Leaders</i> angemeldet."
     end
+
+    it "may not create subscription for non-subscribable mailing list" do
+      leaders.update!(subscribable_for: :nobody)
+      sign_in(top_leader)
+      expect do
+        expect do
+          post :create, params: {group_id: top_group.id, person_id: top_leader.id, id: leaders.id}
+        end.to raise_error(ActiveRecord::RecordNotFound)
+      end.not_to change { top_leader.subscriptions.count }
+    end
+
+    it "may create subscription for subscribable mailing list if configured" do
+      leaders.update!(subscribable_for: :configured, subscribable_mode: :opt_in)
+      leaders.subscriptions.create(
+        subscriber: top_group,
+        role_types: [Group::TopGroup::Leader]
+      )
+      sign_in(top_leader)
+      expect do
+        post :create, params: {group_id: top_group.id, person_id: top_leader.id, id: leaders.id}
+      end.to change { top_leader.subscriptions.count }.by(1)
+      expect(response).to redirect_to group_person_subscriptions_path(top_group, top_leader)
+      expect(flash[:notice]).to eq "<i>Top Leader</i> wurde für <i>Leaders</i> angemeldet."
+    end
+
+    it "may create subscription for subscribable mailing list if configured and opt-out, but does nothing" do
+      leaders.update!(subscribable_for: :configured, subscribable_mode: :opt_out)
+      leaders.subscriptions.create(
+        subscriber: top_group,
+        role_types: [Group::TopGroup::Leader]
+      )
+      sign_in(top_leader)
+      expect do
+        post :create, params: {group_id: top_group.id, person_id: top_leader.id, id: leaders.id}
+      end.not_to change { top_leader.subscriptions.count }
+      expect(response).to redirect_to group_person_subscriptions_path(top_group, top_leader)
+      expect(flash[:notice]).to eq "<i>Top Leader</i> wurde für <i>Leaders</i> angemeldet."
+    end
+
+    it "may not create subscription for subscribable mailing list if not configured" do
+      leaders.update!(subscribable_for: :configured, subscribable_mode: :opt_in)
+      leaders.subscriptions.create(
+        subscriber: top_group,
+        role_types: [Group::TopGroup::Member]
+      )
+      sign_in(top_leader)
+      expect do
+        expect do
+          post :create, params: {group_id: top_group.id, person_id: top_leader.id, id: leaders.id}
+        end.to raise_error(ActiveRecord::RecordNotFound)
+      end.not_to change { top_leader.subscriptions.count }
+    end
   end
 
   context "DELETE#destroy" do
     it "may not delete subscriptions for other user" do
-      subscription = leaders.subscriptions.create(subscriber: top_leader)
-      list_id = subscription.mailing_list.id
+      leaders.subscriptions.create(subscriber: top_leader)
 
       sign_in(bottom_member)
       expect do
-        delete :destroy, params: {group_id: top_group.id, person_id: top_leader.id, id: list_id}
+        delete :destroy, params: {group_id: top_group.id, person_id: top_leader.id, id: leaders.id}
       end.to raise_error CanCan::AccessDenied
     end
 
     it "may delete my own subscriptions" do
-      subscription = leaders.subscriptions.create(subscriber: top_leader)
-      list_id = subscription.mailing_list.id
+      leaders.subscriptions.create(subscriber: top_leader)
 
       sign_in(top_leader)
       expect do
-        delete :destroy, params: {group_id: top_group.id, person_id: top_leader.id, id: list_id}
+        delete :destroy, params: {group_id: top_group.id, person_id: top_leader.id, id: leaders.id}
       end.to change { top_leader.subscriptions.count }.by(-1)
       expect(response).to redirect_to group_person_subscriptions_path(top_group, top_leader)
       expect(flash[:notice]).to eq "<i>Top Leader</i> wurde von <i>Leaders</i> abgemeldet."
     end
 
-    it "may create excluding subscription subscriptions" do
-      subscription = leaders.subscriptions.create(
-        subscriber: top_group,
-        role_types: [Group::TopGroup::Leader]
-      )
-      list_id = subscription.mailing_list.id
+    it "may not delete subscriptions for direct subscription in non-subscribable mailing list" do
+      leaders.update!(subscribable_for: :nobody)
+      leaders.subscriptions.create(subscriber: top_leader)
 
       sign_in(top_leader)
       expect do
-        delete :destroy, params: {group_id: top_group.id, person_id: top_leader.id, id: list_id}
+        expect do
+          delete :destroy, params: {group_id: top_group.id, person_id: top_leader.id, id: leaders.id}
+        end.to raise_error(ActiveRecord::RecordNotFound)
+      end.not_to change { top_leader.subscriptions.count }
+    end
+
+    it "may not delete subscriptions for group subscription in non-subscribable mailing list" do
+      leaders.update!(subscribable_for: :nobody)
+      leaders.subscriptions.create(
+        subscriber: top_group,
+        role_types: [Group::TopGroup::Leader]
+      )
+
+      sign_in(top_leader)
+      expect do
+        expect do
+          delete :destroy, params: {group_id: top_group.id, person_id: top_leader.id, id: leaders.id}
+        end.to raise_error(ActiveRecord::RecordNotFound)
+      end.not_to change { top_leader.subscriptions.count }
+    end
+
+    it "may delete subscriptions for subscribable mailing list if configured and opt-out" do
+      leaders.update!(subscribable_for: :configured, subscribable_mode: :opt_out)
+      leaders.subscriptions.create(
+        subscriber: top_group,
+        role_types: [Group::TopGroup::Leader]
+      )
+
+      sign_in(top_leader)
+      expect do
+        delete :destroy, params: {group_id: top_group.id, person_id: top_leader.id, id: leaders.id}
+      end.to change { top_leader.subscriptions.count }.by(1)
+      expect(response).to redirect_to group_person_subscriptions_path(top_group, top_leader)
+      expect(flash[:notice]).to eq "<i>Top Leader</i> wurde von <i>Leaders</i> abgemeldet."
+    end
+
+    it "may delete subscriptions for subscribable mailing list if configured and opt-in" do
+      leaders.update!(subscribable_for: :configured, subscribable_mode: :opt_in)
+      leaders.subscriptions.create(
+        subscriber: top_group,
+        role_types: [Group::TopGroup::Leader]
+      )
+      leaders.subscriptions.create(subscriber: top_leader)
+
+      sign_in(top_leader)
+      expect do
+        delete :destroy, params: {group_id: top_group.id, person_id: top_leader.id, id: leaders.id}
+      end.to change { top_leader.subscriptions.count }.by(-1)
+      expect(response).to redirect_to group_person_subscriptions_path(top_group, top_leader)
+      expect(flash[:notice]).to eq "<i>Top Leader</i> wurde von <i>Leaders</i> abgemeldet."
+    end
+
+    it "does not delete subscriptions for subscribable mailing list if configured and opt-in but not subscribed" do
+      leaders.update!(subscribable_for: :configured, subscribable_mode: :opt_in)
+      leaders.subscriptions.create(
+        subscriber: top_group,
+        role_types: [Group::TopGroup::Leader]
+      )
+
+      sign_in(top_leader)
+      expect do
+        delete :destroy, params: {group_id: top_group.id, person_id: top_leader.id, id: leaders.id}
+      end.not_to change { top_leader.subscriptions.count }
+      expect(response).to redirect_to group_person_subscriptions_path(top_group, top_leader)
+      expect(flash[:notice]).to eq "<i>Top Leader</i> wurde von <i>Leaders</i> abgemeldet."
+    end
+
+    it "may not delete subscriptions for subscribable mailing list if not configured" do
+      leaders.update!(subscribable_for: :configured, subscribable_mode: :opt_out)
+      leaders.subscriptions.create(subscriber: top_leader)
+      leaders.subscriptions.create(
+        subscriber: top_group,
+        role_types: [Group::TopGroup::Member]
+      )
+
+      sign_in(top_leader)
+      expect do
+        expect do
+          delete :destroy, params: {group_id: top_group.id, person_id: top_leader.id, id: leaders.id}
+        end.to raise_error(ActiveRecord::RecordNotFound)
+      end.not_to change { top_leader.subscriptions.count }
+    end
+
+    it "may not delete subscriptions for subscribable mailing list if not configured and opt-in" do
+      leaders.update!(subscribable_for: :configured, subscribable_mode: :opt_in)
+      leaders.subscriptions.create(subscriber: top_leader)
+      leaders.subscriptions.create(
+        subscriber: top_group,
+        role_types: [Group::TopGroup::Member]
+      )
+
+      sign_in(top_leader)
+      expect do
+        expect do
+          delete :destroy, params: {group_id: top_group.id, person_id: top_leader.id, id: leaders.id}
+        end.to raise_error(ActiveRecord::RecordNotFound)
+      end.not_to change { top_leader.subscriptions.count }
+    end
+
+    it "may create group subscription exclusion" do
+      leaders.subscriptions.create(
+        subscriber: top_group,
+        role_types: [Group::TopGroup::Leader]
+      )
+
+      sign_in(top_leader)
+      expect do
+        delete :destroy, params: {group_id: top_group.id, person_id: top_leader.id, id: leaders.id}
       end.to change { top_leader.subscriptions.count }.by(1)
 
       expect(response).to redirect_to group_person_subscriptions_path(top_group, top_leader)

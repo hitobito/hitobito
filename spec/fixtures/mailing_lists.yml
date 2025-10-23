@@ -40,18 +40,15 @@ leaders:
   name: Leaders
   mail_name: leaders
   subscribable_for: anyone
-  subscribable_mode: opt_out
 
 members:
   group: top_layer
   name: Members
   mail_name: members
   subscribable_for: anyone
-  subscribable_mode: opt_out
 
 top_group:
   group: top_group
   name: Top group mailing list
   mail_name: top-group
   subscribable_for: anyone
-  subscribable_mode: opt_out

@@ -130,4 +130,35 @@ describe MailingListsController do
       end
     end
   end
+
+  describe "PATCH update" do
+    before { sign_in(top_leader) }
+
+    let(:mailing_list) { Fabricate(:mailing_list, group: groups(:top_layer), subscribable_for: "anyone") }
+    let(:params) do
+      {
+        group_id: mailing_list.group_id,
+        id: mailing_list.id,
+        mailing_list: {
+          name: "new name",
+          description: "new description",
+          subscribable_for: "nobody"
+        }
+      }
+    end
+
+    it "updates record" do
+      expect { patch :update, params: params }
+        .to change { mailing_list.reload.name }.to("new name")
+        .and change { mailing_list.reload.subscribable_for }.to("nobody")
+    end
+
+    it "ignores params if user has no permission" do
+      allow(controller).to receive(:can?).with(:update_subscriptions, mailing_list).and_return(false)
+
+      expect { patch :update, params: params }
+        .to change { mailing_list.reload.name }.to("new name")
+        .and not_change { mailing_list.reload.subscribable_for }
+    end
+  end
 end

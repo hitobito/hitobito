@@ -434,6 +434,10 @@ Hitobito::Application.routes.draw do
     resources :roles, except: [:edit, :new]
   end
 
+  get "/mailing_lists/:id", as: :mailing_list, to: redirect { |params, request|
+    request.url.gsub(%r{/mailing_lists}, "/groups/#{MailingList.find(params[:id]).group_id}/mailing_lists")
+  }
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

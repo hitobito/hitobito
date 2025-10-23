@@ -25,7 +25,7 @@ class Event::Attachment < ActiveRecord::Base
   belongs_to :event
 
   VISIBILITIES = ["team", "participants", "global"].freeze
-  enum visibility: VISIBILITIES.zip(VISIBILITIES).to_h
+  enum :visibility, VISIBILITIES.zip(VISIBILITIES).to_h
 
   # this could become a has_many_attached on Event
   has_one_attached :file

@@ -31,9 +31,7 @@ class Payments::Collection
 
     from = duration.ago.beginning_of_year
     to = 1.year.ago.end_of_year
-    @payments = @payments.where("payments.received_at >= ?" \
-                                  "AND payments.received_at <= ?", from, to)
-
+    @payments = @payments.where(received_at: (from..to))
     self
   end
 

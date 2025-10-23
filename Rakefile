@@ -25,12 +25,12 @@ Rake::Task.tasks.each do |task|
   end
 end
 
-if defined?(STATS_DIRECTORIES)
-  STATS_DIRECTORIES << ["Abilities", "#{Rails.root.join("app", "abilities")}"]
-  STATS_DIRECTORIES << ["Decorators", "#{Rails.root.join("app", "decorators")}"]
-  STATS_DIRECTORIES << ["Domain", "#{Rails.root.join("app", "domain")}"]
-  STATS_DIRECTORIES << ["Jobs", "#{Rails.root.join("app", "jobs")}"]
-  STATS_DIRECTORIES << ["Mailers", "#{Rails.root.join("app", "mailers")}"]
-  STATS_DIRECTORIES << ["Serializers", "#{Rails.root.join("app", "serializers")}"]
-  STATS_DIRECTORIES << ["Utils", "#{Rails.root.join("app", "utils")}"]
+if defined?(Rails::CodeStatistics)
+  Rails::CodeStatistics.register_directory("Abilities", "#{Rails.root.join("app", "abilities")}")
+  Rails::CodeStatistics.register_directory("Decorators", "#{Rails.root.join("app", "decorators")}")
+  Rails::CodeStatistics.register_directory("Domain", "#{Rails.root.join("app", "domain")}")
+  Rails::CodeStatistics.register_directory("Jobs", "#{Rails.root.join("app", "jobs")}")
+  Rails::CodeStatistics.register_directory("Mailers", "#{Rails.root.join("app", "mailers")}")
+  Rails::CodeStatistics.register_directory("Serializers", "#{Rails.root.join("app", "serializers")}")
+  Rails::CodeStatistics.register_directory("Utils", "#{Rails.root.join("app", "utils")}")
 end

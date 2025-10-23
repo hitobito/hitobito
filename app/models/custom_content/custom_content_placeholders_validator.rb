@@ -26,7 +26,7 @@ class CustomContent::CustomContentPlaceholdersValidator < ActiveModel::Validator
 
   def add_errors_for_missing_placeholders(record, attribute, subject_body)
     record.placeholders_required_list.each do |placeholder|
-      unless subject_body.any? { |str| str.to_s.include?(record.placeholder_token(placeholder)) }
+      if subject_body.none? { |str| str.to_s.include?(record.placeholder_token(placeholder)) }
         record.errors.add(
           attribute, :placeholder_missing, placeholder: record.placeholder_token(placeholder)
         )

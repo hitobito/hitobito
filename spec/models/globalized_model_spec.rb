@@ -10,39 +10,49 @@ describe "Globalized model" do
   let(:custom_content) { custom_contents(:assignment_assignee_notification) }
 
   it "should create globalized accessors" do
-    expected_values = {}
-    Globalized.languages.each do |lang|
-      title = "Privacy policy title in #{lang}"
-      group.send(:"privacy_policy_title_#{lang}=", title)
-      expect(group.send(:"privacy_policy_title_#{lang}")).to eql(title)
-      expected_values[lang] = title
+    privacy_policy_titles = Globalized.languages.each_with_object({}) do |lang, hash|
+      hash[:"privacy_policy_title_#{lang}"] = "Privacy policy title in #{lang}"
     end
 
-    group.save!
-    expect(group.privacy_policy_title_translations).to eql(expected_values.stringify_keys)
+    group.update!(privacy_policy_titles)
+
+    expect(group.privacy_policy_title_en).to eq("Privacy policy title in en")
+
+    privacy_policy_title_translations = group.privacy_policy_title_translations
+    expect(privacy_policy_title_translations.keys).to match_array(%w[de en fr it])
+    expect(privacy_policy_title_translations.values).to eql(privacy_policy_titles.values)
     Globalized.languages.each do |lang|
-      expect(group.attributes.dig("privacy_policy_title_#{lang}")).to eql(group.send(:"privacy_policy_title_#{lang}"))
+      expect(group.attributes["privacy_policy_title_#{lang}"]).to eql(group.send(:"privacy_policy_title_#{lang}"))
     end
   end
 
   it "should create globalized accessors for rich text fields" do
-    expected_values = []
-    Globalized.languages.each do |lang|
-      body = "Custom content body {assignment-title} #{lang}"
-      custom_content.send(:"body_#{lang}=", body)
-      expect(custom_content.send(:"body_#{lang}").to_s).to include(body)
-      expected_values.push(body)
+    custom_content_bodies = Globalized.languages.each_with_object({}) do |lang, hash|
+      hash[:"body_#{lang}"] = "Custom content body {assignment-title} #{lang}"
     end
 
-    custom_content.save!
-    body_translations = custom_content.body_translations.values.map(&:to_s)
+    custom_content.update!(custom_content_bodies)
 
-    body_translations.zip(expected_values) do |body_translation, expected_value|
-      expect(body_translation).to include(expected_value)
-    end
+    expect(custom_content.body_fr.to_s).to include("Custom content body {assignment-title} fr")
+
+    body_translations = custom_content.body_translations
+    body_translations.transform_values!(&:to_s)
+    expect(body_translations.keys).to match_array(%w[de en fr it])
+    expect(body_translations.values.join).to include(*custom_content_bodies.values)
     Globalized.languages.each do |lang|
-      expect(custom_content.attributes.dig("body_#{lang}").to_s).to eql(custom_content.send(:"body_#{lang}").to_s)
+      expect(custom_content.attributes["body_#{lang}"].to_s).to eql(custom_content.send(:"body_#{lang}").to_s)
     end
+  end
+
+  it "should return translation for current locale when normal accessor is called" do
+    group.update!({privacy_policy_title_de: "In german", privacy_policy_title_fr: "In french"})
+    custom_content.update!({body_de: "In german {assignment-title}", body_fr: "In french {assignment-title}"})
+
+    expect(group.privacy_policy_title).to eq(group.privacy_policy_title_de)
+    expect(custom_content.body).to eq(custom_content.body_de)
+    I18n.locale = :fr
+    expect(group.privacy_policy_title).to eq(group.privacy_policy_title_fr)
+    expect(custom_content.body).to eq(custom_content.body_fr)
   end
 
   it "should add locale suffix to human attribute name" do

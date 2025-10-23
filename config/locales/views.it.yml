@@ -762,7 +762,7 @@ it:
   filter_navigation/event/participations:
     predefined_filters:
       all: tutte le persone
-      teamers: direzione
+      teamers: Gruppo di direzione
       participants: partecipanti
 
   full_text:

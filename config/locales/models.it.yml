@@ -279,7 +279,7 @@ it:
       event/role/leader:
         one: Responsabile
         many: Responsabile
-        other: Responsabile
+        other: Responsabile principale
       event/role/cook:
         one: Cucina
         many: Cucina

@@ -714,11 +714,60 @@ fr:
         admin_questions: Données administratives
         no_name: "[Sans nom]"
         visible_contact_attributes: "Options d'affichage (personne de contact)"
+        guest_limit: Maximale Anzahl Gäste
 
       event/contact_attrs:
         required: Obligatoire
         optional: Optionnel
         hidden: Ne pas afficher
+
+      event/guest:
+        first_name: Vorname
+        last_name: Nachname
+        nickname: Übername
+        company_name: Firmenname
+        email: Haupt-E-Mail
+        address_care_of: zusätzliche Adresszeile
+        street: Strasse
+        housenumber: Hausnummer
+        postbox: Postfach
+        zip_code: PLZ
+        town: Ort
+        country: Land
+        gender: Geschlecht
+        genders:
+          m: männlich
+          w: weiblich
+          _nil: unbekannt
+        birthday: Geburtstag
+        phone_number: Telefonnummer
+        language: Sprache
+        main_applicant: Hauptperson
+
+      participant:
+        first_name: Vorname
+        last_name: Nachname
+        nickname: Übername
+        company_name: Firmenname
+        email: Haupt-E-Mail
+        address_care_of: zusätzliche Adresszeile
+        street: Strasse
+        housenumber: Hausnummer
+        postbox: Postfach
+        zip_code: PLZ
+        town: Ort
+        country: Land
+        gender: Geschlecht
+        genders:
+          m: männlich
+          w: weiblich
+          _nil: unbekannt
+        birthday: Geburtstag
+        phone_number: Telefonnummer
+        language: Sprache
+        main_applicant: Hauptperson
+        additional_information: Zusätzliche Angaben
+        phone_numbers: Telefonnummern
 
       event/answer:
         answer: Réponse
@@ -801,7 +850,7 @@ fr:
           declined: Refusé
 
       event/participation:
-        person_id: Person
+        participant_id: Teilnehmer
         event_id: Événement
         additional_information: Commentaires
         answers: Questions
@@ -936,6 +985,7 @@ fr:
               finance: Création et gestion de factures
               impersonation: Se servir de hitobito comme autre personne.
               see_invisible_from_above: Voit en plus les personnes qui ne peuvent normalement pas être vues par les niveaux supérieurs.
+              manual_deletion: Löschen von Personen ohne Rollen
           kind:
             member:
               one: Membre
@@ -1368,7 +1418,7 @@ fr:
         many: "%{resource} n'a pas pu être sauvegardé : %{count} erreurs."
         other: "%{resource} n'a pas pu être sauvegardé : %{count} erreurs."
       # active_storage_validations
-      content_type_invalid: "akzeptiert nur die folgenden Dateitypen: %{authorized_types}"
+      content_type_invalid: "akzeptiert nur die folgenden Dateitypen: %{authorized_human_content_types}"
       file_size_out_of_range: "ne doit pas être plus grand que %{max_size}"
       limit_out_of_range: "Le nombre est en dehors des valeurs limites (%{min} - %{max})"
       image_metadata_missing: "n'est pas une image valide"

@@ -10,7 +10,7 @@ require "spec_helper"
 describe PermittedGlobalizedAttrs do
   it "adds globalized version of permitted attrs but not for current locale" do
     permitted_attrs = EventsController.permitted_attrs.deep_dup + Event.used_attributes.deep_dup
-    permitted_globalized_attrs = described_class.new(Event).permitted_attrs(permitted_attrs)
+    permitted_globalized_attrs = described_class.new(Event, permitted_attrs).permitted_attrs
     permitted_globalized_nested_attrs =
       permitted_globalized_attrs.find { |attr| attr.is_a? Hash }[:application_questions_attributes]
 
@@ -34,7 +34,7 @@ describe PermittedGlobalizedAttrs do
     expect(removed_attr).not_to be_nil
     expect(removed_nested_attr).not_to be_nil
 
-    permitted_globalized_attrs = described_class.new(Event).permitted_attrs(permitted_attrs)
+    permitted_globalized_attrs = described_class.new(Event, permitted_attrs).permitted_attrs
     permitted_globalized_nested_attrs =
       permitted_globalized_attrs.find { |attr| attr.is_a? Hash }[:application_questions_attributes]
 

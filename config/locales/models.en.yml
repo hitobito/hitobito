@@ -646,60 +646,11 @@ en:
         admin_questions: Administrationsangaben
         no_name: "[Kein Name]"
         visible_contact_attributes: "Anzeigeoptionen (Kontaktperson)"
-        guest_limit: Maximale Anzahl Gäste
 
       event/contact_attrs:
         required: Mandatory
         optional: Optional
         hidden: Do not display
-
-      event/guest:
-        first_name: Vorname
-        last_name: Nachname
-        nickname: Übername
-        company_name: Firmenname
-        email: Haupt-E-Mail
-        address_care_of: zusätzliche Adresszeile
-        street: Strasse
-        housenumber: Hausnummer
-        postbox: Postfach
-        zip_code: PLZ
-        town: Ort
-        country: Land
-        gender: Geschlecht
-        genders:
-          m: männlich
-          w: weiblich
-          _nil: unbekannt
-        birthday: Geburtstag
-        phone_number: Telefonnummer
-        language: Sprache
-        main_applicant: Hauptperson
-
-      participant:
-        first_name: Vorname
-        last_name: Nachname
-        nickname: Übername
-        company_name: Firmenname
-        email: Haupt-E-Mail
-        address_care_of: zusätzliche Adresszeile
-        street: Strasse
-        housenumber: Hausnummer
-        postbox: Postfach
-        zip_code: PLZ
-        town: Ort
-        country: Land
-        gender: Geschlecht
-        genders:
-          m: männlich
-          w: weiblich
-          _nil: unbekannt
-        birthday: Geburtstag
-        phone_number: Telefonnummer
-        language: Sprache
-        main_applicant: Hauptperson
-        additional_information: Zusätzliche Angaben
-        phone_numbers: Telefonnummern
 
       event/answer:
         answer: Reply
@@ -782,7 +733,7 @@ en:
           declined: Declined
 
       event/participation:
-        participant_id: Teilnehmer
+        person_id: Person
         event_id: Event
         additional_information: Comments
         answers: Questions
@@ -917,7 +868,6 @@ en:
               finance: Create and manage invoices
               impersonation: Use Hitobito as another person
               see_invisible_from_above: Sieht zusätzlich Personen, welche sonst von höheren Ebenen nicht eingesehen werden dürfen.
-              manual_deletion: Löschen von Personen ohne Rollen
           kind:
             member:
               one: Member
@@ -1343,7 +1293,7 @@ en:
         one: "Could not save %{resource}: one error."
         other: "Could not save %{resource}: %{count} errors."
       # active_storage_validations
-      content_type_invalid: "akzeptiert nur die folgenden Dateitypen: %{authorized_human_content_types}"
+      content_type_invalid: "akzeptiert nur die folgenden Dateitypen: %{authorized_types}"
       file_size_out_of_range: "darf nicht grösser als %{max_size} sein"
       limit_out_of_range: "Anzahl ist ausserhalb des gültigen Bereichs (%{min} - %{max})"
       image_metadata_missing: "ist kein gültiges Bild"

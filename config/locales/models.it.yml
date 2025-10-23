@@ -713,60 +713,11 @@ it:
         admin_questions: Dati amministrativi
         no_name: "[Nessun nome]"
         visible_contact_attributes: "Opzioni di visualizzazione (persona di contatto)"
-        guest_limit: Maximale Anzahl Gäste
 
       event/contact_attrs:
         required: Obbligatorio
         optional: Facoltativo
         hidden: Non visualizzare
-
-      event/guest:
-        first_name: Vorname
-        last_name: Nachname
-        nickname: Übername
-        company_name: Firmenname
-        email: Haupt-E-Mail
-        address_care_of: zusätzliche Adresszeile
-        street: Strasse
-        housenumber: Hausnummer
-        postbox: Postfach
-        zip_code: PLZ
-        town: Ort
-        country: Land
-        gender: Geschlecht
-        genders:
-          m: männlich
-          w: weiblich
-          _nil: unbekannt
-        birthday: Geburtstag
-        phone_number: Telefonnummer
-        language: Sprache
-        main_applicant: Hauptperson
-
-      participant:
-        first_name: Vorname
-        last_name: Nachname
-        nickname: Übername
-        company_name: Firmenname
-        email: Haupt-E-Mail
-        address_care_of: zusätzliche Adresszeile
-        street: Strasse
-        housenumber: Hausnummer
-        postbox: Postfach
-        zip_code: PLZ
-        town: Ort
-        country: Land
-        gender: Geschlecht
-        genders:
-          m: männlich
-          w: weiblich
-          _nil: unbekannt
-        birthday: Geburtstag
-        phone_number: Telefonnummer
-        language: Sprache
-        main_applicant: Hauptperson
-        additional_information: Zusätzliche Angaben
-        phone_numbers: Telefonnummern
 
       event/answer:
         answer: Risposta
@@ -849,7 +800,7 @@ it:
           declined: rifiutato
 
       event/participation:
-        participant_id: Teilnehmer
+        person_id: Person
         event_id: Evento
         additional_information: Osservazioni
         answers: Domande
@@ -984,7 +935,6 @@ it:
               finance: Emettere e amministrare fatture
               impersonation: Utilizza Hitobito come altra persona.
               see_invisible_from_above: Vedere altre persone che altrimenti non possono essere viste dai livelli superiori.
-              manual_deletion: Löschen von Personen ohne Rollen
           kind:
             member:
               one: Membro
@@ -1417,7 +1367,7 @@ it:
         many: "non si è potuto salvare %{resource}: %{count} errori."
         other: "non si è potuto salvare %{resource}: %{count} errori."
       # active_storage_validations
-      content_type_invalid: "akzeptiert nur die folgenden Dateitypen: %{authorized_human_content_types}"
+      content_type_invalid: "akzeptiert nur die folgenden Dateitypen: %{authorized_types}"
       file_size_out_of_range: "non può essere più grande di %{max_size}"
       limit_out_of_range: "Il numero è fuori dall'intervallo valevole (%{min} - %{max})"
       image_metadata_missing: "non è un'immagine valida"

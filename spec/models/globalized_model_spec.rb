@@ -47,11 +47,11 @@ describe "Globalized model" do
 
   it "should add locale suffix to human attribute name" do
     expected_attributes_human_attribute_names = {
-      "privacy_policy_title": "DSE/Datenschutzerklärung Titel",
-      "privacy_policy_title_de": "DSE/Datenschutzerklärung Titel (DE)",
-      "privacy_policy_title_en": "DSE/Datenschutzerklärung Titel (EN)",
-      "privacy_policy_title_fr": "DSE/Datenschutzerklärung Titel (FR)",
-      "privacy_policy_title_it": "DSE/Datenschutzerklärung Titel (IT)"
+      privacy_policy_title: "DSE/Datenschutzerklärung Titel",
+      privacy_policy_title_de: "DSE/Datenschutzerklärung Titel (DE)",
+      privacy_policy_title_en: "DSE/Datenschutzerklärung Titel (EN)",
+      privacy_policy_title_fr: "DSE/Datenschutzerklärung Titel (FR)",
+      privacy_policy_title_it: "DSE/Datenschutzerklärung Titel (IT)"
     }
 
     expected_attributes_human_attribute_names.each do |attr, human_attr_name|
@@ -80,7 +80,7 @@ describe "Globalized model" do
       "Déclaration de protection des données - Titre est trop long (pas plus de 64 caractères)",
       "Déclaration de protection des données - Titre (DE) est trop long (pas plus de 64 caractères)",
       "Déclaration de protection des données - Titre (EN) est trop long (pas plus de 64 caractères)",
-      "Déclaration de protection des données - Titre (IT) est trop long (pas plus de 64 caractères)",
+      "Déclaration de protection des données - Titre (IT) est trop long (pas plus de 64 caractères)"
     ]
 
     expect(group).not_to be_valid

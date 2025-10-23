@@ -74,10 +74,10 @@ module Globalized::GlobalizedInputFieldHelpers
 
   def input_for_locale(attr, locale, rich_text, args = {})
     content_tag(:div, class: "input-group mb-2") do
-      if rich_text
-        locale_input = rich_text_area_for_locale(attr, locale, args)
+      locale_input = if rich_text
+        rich_text_area_for_locale(attr, locale, args)
       else
-        locale_input = input_field_for_locale(attr, locale, args)
+        input_field_for_locale(attr, locale, args)
       end
       block_given? ? locale_input + yield : locale_input
     end

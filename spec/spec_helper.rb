@@ -96,6 +96,7 @@ RSpec.configure do |config|
   config.include I18nHelpers
   config.include QueryHelpers
   config.include ViewHelpers
+  config.include OutsideLanguageScope
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::IntegrationHelpers, type: :request
   config.include FeatureHelpers, type: :feature

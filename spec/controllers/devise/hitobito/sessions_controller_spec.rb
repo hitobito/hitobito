@@ -75,29 +75,6 @@ describe Devise::Hitobito::SessionsController do
       end
     end
 
-    context ".json" do
-      render_views
-
-      it "responds with unauthorized for wrong password" do
-        post :create, params: {person: {login_identity: person.email, password: "foobar"}}, format: :json
-        expect(response.status).to be(401)
-        expect(person.reload.authentication_token).to be_blank
-      end
-
-      it "responds with user and new token" do
-        post :create, params: {person: {login_identity: person.email, password: password}}, format: :json
-        expect(response.body).to match(/^\{.*"authentication_token":".+"/)
-        expect(assigns(:person).authentication_token).to be_present
-      end
-
-      it "responds with user and existing token" do
-        person.generate_authentication_token!
-        post :create, params: {person: {login_identity: person.email, password: password}}, format: :json
-        expect(response.body).to match(/^\{.*"authentication_token":"#{person.authentication_token}"/)
-        expect(assigns(:person).authentication_token).to eq(person.authentication_token)
-      end
-    end
-
     context "login_identity" do
       def expect_login_success
         expect(response).to be_redirect

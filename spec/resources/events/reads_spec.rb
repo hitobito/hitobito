@@ -60,7 +60,7 @@ describe EventResource, type: :resource do
         event.update!(external_applications: true)
         render
         expect(jsonapi_data[0].attributes["external_application_link"]).to eq(
-          "http://example.com/de/groups/834963567/public_events/783393749"
+          "http://example.com/groups/834963567/public_events/783393749"
         )
       end
     end

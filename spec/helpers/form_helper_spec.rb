@@ -33,7 +33,7 @@ describe FormHelper do
     end
 
     it "should contain form tag" do
-      is_expected.to have_selector("form[action='/crud_test_models/#{entry.id}?locale=de']")
+      is_expected.to have_selector("form[action='/de/crud_test_models/#{entry.id}']")
     end
 
     it "should contain input for name" do
@@ -88,7 +88,7 @@ describe FormHelper do
 
       it {
         # rubocop:todo Layout/LineLength
-        is_expected.to have_selector("form.special.form-horizontal[action='/crud_test_models/#{entry.id}?locale=de'][method=post]")
+        is_expected.to have_selector("form.special.form-horizontal[action='/de/crud_test_models/#{entry.id}'][method=post]")
         # rubocop:enable Layout/LineLength
       }
       it { is_expected.to have_selector("input[name=_method][type=hidden][value=patch]", visible: false) }
@@ -103,7 +103,7 @@ describe FormHelper do
       let(:entry) { CrudTestModel.new }
 
       it do
-        is_expected.to have_selector("form.special.form-horizontal[action='/crud_test_models?locale=de'][method=post]")
+        is_expected.to have_selector("form.special.form-horizontal[action='/de/crud_test_models'][method=post]")
       end
       it { is_expected.to have_selector("input[name='crud_test_model[name]'][type=text]") }
       it { is_expected.to have_no_selector("input[name='crud_test_model[name]'][type=text][value]") }
@@ -140,7 +140,7 @@ describe FormHelper do
 
     it do
       is_expected.to have_selector(
-        "form.form-horizontal.special[method=post][action='/crud_test_models/#{entry.id}?locale=de']"
+        "form.form-horizontal.special[method=post][action='/de/crud_test_models/#{entry.id}']"
       )
     end
   end

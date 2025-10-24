@@ -7,6 +7,7 @@
 class CrudTestModel < ActiveRecord::Base # :nodoc:
   include DatetimeAttribute
   include Globalized
+
   datetime_attr :last_seen
 
   belongs_to :companion, class_name: "CrudTestModel"
@@ -286,9 +287,15 @@ module CrudTestHelper
 
   def with_test_routing
     with_routing do |set|
-      set.draw { resources :crud_test_models }
+      set.draw do
+        extend LanguageRouteScope
+
+        language_scope do
+          resources :crud_test_models
+        end
+      end
       # used to define a controller in these tests
-      set.default_url_options = {controller: "crud_test_models"}
+      set.default_url_options = {controller: "crud_test_models", locale: :de}
       yield
     end
   end

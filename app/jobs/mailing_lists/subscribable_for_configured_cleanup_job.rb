@@ -5,8 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module Subscriptions
-  class OptInCleanupJob < BaseJob
+module MailingLists
+  class SubscribableForConfiguredCleanupJob < BaseJob
     self.parameters = [:mailing_list_id]
 
     def initialize(mailing_list_id)
@@ -15,7 +15,7 @@ module Subscriptions
     end
 
     def perform
-      allowed = MailingLists::Subscribers.new(list).allowed_to_opt_in.pluck(:id)
+      allowed = allowed_people.pluck(:id)
       subscribed = list.subscriptions.people.pluck(:subscriber_id)
 
       list.subscriptions.people.where(subscriber_id: subscribed - allowed).destroy_all
@@ -25,6 +25,10 @@ module Subscriptions
 
     def list
       @list ||= MailingList.find(@mailing_list_id)
+    end
+
+    def allowed_people
+      MailingLists::Subscribers.new(list).people_as_configured(use_people_subscriptions: false)
     end
   end
 end

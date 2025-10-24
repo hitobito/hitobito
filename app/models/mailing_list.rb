@@ -81,7 +81,8 @@ class MailingList < ActiveRecord::Base
   normalizes :additional_sender, with: ->(attribute) { attribute.downcase }
 
   after_destroy :schedule_mailchimp_destroy, if: :mailchimp?
-  after_save :schedule_opt_in_cleanup, if: :opt_in?
+
+  after_save :schedule_opt_in_cleanup, if: -> { subscribable_for_will_change! == "configured" }
 
   scope :list, -> { order(:name) }
   scope :anyone, -> { where(subscribable_for: :anyone) }
@@ -181,9 +182,9 @@ class MailingList < ActiveRecord::Base
   end
 
   def schedule_opt_in_cleanup
-    return unless subscribable_mode_previously_was == "opt_out"
-
-    Subscriptions::OptInCleanupJob.new(id).enqueue!
+    if subscriptions.people.included.exists?
+      MailingLists::SubscribableForConfiguredCleanupJob.new(id).enqueue!
+    end
   end
 
   private

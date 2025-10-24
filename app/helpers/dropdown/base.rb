@@ -24,9 +24,8 @@ module Dropdown
     end
 
     def to_s
-      template.content_tag(:div, class: "btn-group dropdown") do
-        render_dropdown_button +
-          render_items
+      template.content_tag(:div, id: id, class: "btn-group dropdown") do
+        render_dropdown_button + render_items
       end
     end
 
@@ -82,6 +81,10 @@ module Dropdown
       template.content_tag_nested(:ul, items, html_options) do |item|
         item.render(template)
       end
+    end
+
+    def id
+      @id ||= self.class.name.underscore.tr("/", "_")
     end
   end
 

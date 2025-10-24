@@ -30,8 +30,7 @@ module Dropdown
       pdf_link
       mailchimp_link
       label_links
-      email_addresses_link
-      email_addresses_link_outlook
+      email_addresses_links
     end
 
     def tabular_links(format) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
@@ -69,16 +68,17 @@ module Dropdown
       end
     end
 
-    def email_addresses_link
-      if @email_addresses
-        add_item(translate(:emails), params.merge(format: :email), target: :_blank)
-      end
-    end
+    def email_addresses_links
+      return unless @email_addresses
 
-    def email_addresses_link_outlook
-      if @email_addresses
-        add_item(translate(:emails_outlook), params.merge(format: :email_outlook), target: :_blank)
-      end
+      item = add_item(translate(:emails), "#")
+      item.sub_items << Item.new(translate(:emails_comma_separated),
+        params.merge(format: :email),
+        target: :_blank)
+      item.sub_items << Item.new(translate(:emails_semicolon_separated),
+        params.merge(format: :email_outlook),
+        target: :_blank)
+      item
     end
 
     def pdf_link

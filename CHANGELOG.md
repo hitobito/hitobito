@@ -1,5 +1,7 @@
 # Hitobito Changelog
 
+- Die Optionen für den E-Mail Adressen Export erscheinen nun wie die übrigen Formate in einem Untermenu.
+
 ## Version 2.6
 
 - Uprade auf rails 8 (#3292)

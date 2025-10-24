@@ -106,37 +106,18 @@ module FormHelper
   def field_inheritance_values(list, fields)
     model = model_class.new
     options = list.flat_map do |entity|
-      fields.collect do |field, source_method = field|
-        globalized_field_inheritance_values(model, entity, field, source_method)
+      with_globalized(fields, model, entity).collect do |field, source_method|
+        content_tag(:option, "", data: {
+          source_id: entity.id,
+          target_field: [entry.model_name.param_key, field].join("_"),
+          value: entity.send(source_method).to_s,
+          default: model.send(field).to_s
+        })
       end
     end
     content_tag(:datalist, safe_join(options))
   end
 
-  def globalized_field_inheritance_values(model, entity, field, source_method)
-    fields, source_methods =
-      globalized_fields_and_source_methods(model, entity, field, source_method)
-    fields.zip(source_methods).map do |globalized_field, globalized_source_method|
-      content_tag(:option, "", data: {
-        source_id: entity.id,
-        target_field: [entry.model_name.param_key, globalized_field].join("_"),
-        value: entity.send(globalized_source_method).to_s,
-        default: model.send(globalized_field).to_s
-      })
-    end
-  end
-
-  def globalized_fields_and_source_methods(model, entity, field, source_method)
-    globalized_fields = [field]
-    globalized_source_methods = [source_method]
-    if model.class.ancestors.include?(Globalized) && entity.class.ancestors.include?(Globalized) &&
-        model.translated_attribute_names.include?(field) &&
-        entity.translated_attribute_names.include?(source_method)
-      globalized_fields += Globalized.globalized_names_for_attr(field)
-      globalized_source_methods += Globalized.globalized_names_for_attr(source_method)
-    end
-    [globalized_fields, globalized_source_methods]
-  end
 
   def cancel_link(url)
     link_to(ti(:"button.cancel"), url, class: "link cancel")
@@ -171,5 +152,23 @@ module FormHelper
     cancel_url_edit = options.delete(:cancel_url_edit)
     url = record.new_record? ? cancel_url_new : cancel_url_edit
     url || cancel_url || polymorphic_path(object)
+  end
+
+  def with_globalized(fields, model, entity)
+    fields.inject(fields.dup) do |globalized_fields, (field, source_method)|
+      source_method ||= field
+      if should_globalize?(model, entity, field, source_method)
+        globalized_field_names = Globalized.globalized_names_for_attr(field)
+        globalized_source_method_names = Globalized.globalized_names_for_attr(source_method)
+        globalized_fields.merge(globalized_field_names.zip(globalized_source_method_names).to_h)
+      end
+    end
+  end
+
+  def should_globalize?(model, entity, field, source_method)
+    model.class.ancestors.include?(Globalized) &&
+      entity.class.ancestors.include?(Globalized) &&
+      model.translated_attribute_names.include?(field) &&
+      entity.translated_attribute_names.include?(source_method)
   end
 end

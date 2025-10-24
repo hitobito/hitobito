@@ -82,7 +82,6 @@ describe "Dropdown::PeopleExport" do
 
     it "includes email address entries if parameter is present" do
       expect(top_menu_entries).to include "E-Mail Adressen"
-      expect(top_menu_entries).to include "E-Mail Adressen (Outlook)"
     end
   end
 

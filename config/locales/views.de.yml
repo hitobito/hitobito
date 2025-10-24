@@ -204,7 +204,8 @@ de:
     labels: "Etiketten"
     pdf: "PDF"
     emails: "E-Mail Adressen"
-    emails_outlook: "E-Mail Adressen (Outlook)"
+    emails_comma_separated: "Komma getrennt (Apple Mail, Thunderbird, ...)"
+    emails_semicolon_separated: "Semikolon getrennt (Outlook)"
     addresses: "Adressliste"
     households: "Haushaltsliste"
     everything: "Alle Angaben"
@@ -1521,7 +1522,6 @@ de:
         mailing_list:
           approved: "Die Zugriffsanfrage für %{person} wurde bereits freigegeben."
           rejected: "Die Zugriffsanfrage für %{person} wurde bereits abgelehnt."
-
 
     impersonation:
       create:

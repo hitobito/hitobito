@@ -156,12 +156,14 @@ module FormHelper
   # Adds globalized versions of fields and source_methods to the original
   # fields hash
   def with_globalized(fields, model, entity)
-    fields.inject(fields.dup) do |globalized_fields, (field, source_method)|
+    fields.inject({}) do |globalized_fields, (field, source_method)|
       source_method ||= field
       if should_globalize?(model, entity, field, source_method)
-        globalized_field_names = Globalized.globalized_names_for_attr(field)
-        globalized_source_method_names = Globalized.globalized_names_for_attr(source_method)
-        globalized_fields.merge(globalized_field_names.zip(globalized_source_method_names).to_h)
+        fields = [field] + Globalized.globalized_names_for_attr(field)
+        source_methods = [source_method] + Globalized.globalized_names_for_attr(source_method)
+        globalized_fields.merge(fields.zip(source_methods).to_h)
+      else
+        globalized_fields.merge({field => source_method})
       end
     end
   end

@@ -213,18 +213,23 @@ describe MailingList do
       expect(leaders.subscribable_mode).to be_nil
     end
 
-    describe "job scheduling" do
-      it "schedules cleanup job if subscribable_for is configured" do
-        leaders.update!(subscribable_for: :configured)
+    describe "changing to subscribable_for_configured" do
+      it "schedules cleanup job if people subscription exists" do
+        leaders.subscriptions.create!(subscriber: people(:bottom_member))
         expect do
-          leaders.update!(subscribable_mode: :opt_in)
+          leaders.update!(subscribable_for: :configured)
         end.to change { Delayed::Job.count }.by(1)
       end
 
-      it "does not schedule job on other attr changes" do
-        leaders.update!(subscribable_mode: :opt_in)
+      it "does not schedule without people subscription" do
         expect do
           leaders.update!(subscribable_for: :configured)
+        end.not_to change { Delayed::Job.count }
+      end
+
+      it "does not schedule when changing to nobody" do
+        expect do
+          leaders.update!(subscribable_for: :nobody)
         end.not_to change { Delayed::Job.count }
       end
     end

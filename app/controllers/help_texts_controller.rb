@@ -34,7 +34,9 @@ class HelpTextsController < SimpleCrudController
     return false unless entry.valid?
 
     entry.save!
-    entry.translation.help_text_id = entry.id
-    entry.body.save!
+    entry.translations.each do |t|
+      t.help_text_id = entry.id
+    end
+    entry.save!
   end
 end

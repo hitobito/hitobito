@@ -80,6 +80,11 @@ de:
       placeholder_event: "Anlass suchen..."
       placeholder_company_name: "Firmennamen suchen..."
 
+    form:
+      additional_languages: "Zusätzlich ausgefüllte Sprachen"
+      locale_indicator: "Sprache dieses Eingabefelds"
+      input_translation_button: "Eingabefelder für weitere verfügbare Sprachen anzeigen"
+
   list:
     index:
       title: "%{models}"

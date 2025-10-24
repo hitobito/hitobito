@@ -117,7 +117,6 @@ module FormHelper
     content_tag(:datalist, safe_join(options))
   end
 
-
   def cancel_link(url)
     link_to(ti(:"button.cancel"), url, class: "link cancel")
   end
@@ -153,6 +152,8 @@ module FormHelper
     url || cancel_url || polymorphic_path(object)
   end
 
+  # Adds globalized versions of fields and source_methods to the original
+  # fields hash
   def with_globalized(fields, model, entity)
     fields.inject(fields.dup) do |globalized_fields, (field, source_method)|
       source_method ||= field

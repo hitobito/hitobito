@@ -372,8 +372,8 @@ fr:
   event:
     guests:
       new:
-        title: Gast hinzufügen
-        add_more_guests: "Anmelden und weiteren Gast hinzufügen (max. %{limit})"
+        title: Ajouter un invité
+        add_more_guests: "Se connecter et ajouter un autre invité (max. %{limit})"
     run_by: "Réalisé par "
     applied_to: Inscription auprès de
     alternative_dates: Dates alternatives
@@ -401,8 +401,8 @@ fr:
       already_assigned: "Cette personne est déjà attribuée à un autre endroit."
       maximum_participations_reached: Le nombre maximal de participants autorisé est atteint. Pour confirmer d'autres inscriptions, le nombre maximal de participants doit être augmenté.
       participation:
-        guest_of_html: "(Gast von %{main_applicant})"
-        guest_of_deleted_participation: "(Gast von abgemeldeter Person)"
+        guest_of_html: "(Invité de %{main_applicant})"
+        guest_of_deleted_participation: "(Invité d'une personne déconnectée)"
         registered_at: "Inscription le %{datetime}"
         town: Domicile
       prio_buttons:
@@ -465,15 +465,15 @@ fr:
         approve_button: "Autoriser"
         reject_button: "Refuser"
       fields:
-        send_email: E-Mail an Teilnehmer/in senden
-        registration_details: Anmeldeangaben
-        administrative_information: Administrationsangaben
+        send_email: Envoyer un e-mail au participant·e
+        registration_details: Données pour l'inscription
+        administrative_information: Données administratives
       form:
         title_new: "Inscription en tant que %{role}"
         title_edit: "Modifier l'inscription de %{person}"
         apply: "Inscription"
       new:
-        add_guests: "Anmelden und Gast hinzufügen (max. %{limit})"
+        add_guests: "Se connecter et ajouter un invité (max. %{limit})"
       application_fields:
         alternative_dates_info: "S'il-te-plaît, indique d'autres cours qui pourraient te convenir."
         course_information: "Informations au sujet des cours"
@@ -679,8 +679,8 @@ fr:
         delete: "Effacer l'inscription"
 
   event/guests:
-    guest_added_successfully: "%{guest} wurde erfolgreich als Gast hinzugefügt."
-    not_allowed_due_to_guest_limit: "Du kannst in diesem Anlass keine weiteren Gäste hinzufügen."
+    guest_added_successfully: "%{guest} a été ajouté avec succès en tant qu'invité."
+    not_allowed_due_to_guest_limit: "Tu ne peux pas ajouter d'autres invités à cette événement."
 
   event/invitations:
     export_enqueued: "L'exportation a commencé en tâche de fond et sera téléchargée une fois terminée."
@@ -776,7 +776,7 @@ fr:
     archive:
       flash:
         success: Le groupe a été archivé avec succès.
-        failure: "Gruppe konnte nicht archiviert werden: %{error}"
+        failure: "Le groupe n'a pas pu être archivé: %{error}"
 
     deleted_people:
       list:
@@ -829,7 +829,7 @@ fr:
           Voulez-vous vraiment archiver ce groupe? Le groupe ne pourra plus être modifié
           et les rôles attribués seront aussi archivés.
       membership_invoice_button: Facture de membre
-      sync_addresses_button: Adressenabgleich
+      sync_addresses_button: Comparaison d'adresses
     attrs:
       contact_details: "Contacts"
       additional_information: "Informations supplémentaires"
@@ -1055,7 +1055,7 @@ fr:
         Les réponses à des e-mails concernant les factures doivent être envoyées à l'adresse de l'utilisateur.rice actuel.le ou à l'adresse configurée ici.
       email_validation: Ne doit pas être une adresse e-mail.
       sender_name_help: Les e-mails de facturation sont envoyés sous ce nom.
-      custom_content_help: Diese E-Mail Vorlage wird beim versenden von Rechnungen verwendet. Wenn keine E-Mail Vorlage hinterlegt wird, wird die globale E-Mail Vorlage verwendet.
+      custom_content_help: Ce modèle d'e-mail est utilisé lors de l'envoi de factures. Si aucun modèle d'e-mail n'est défini, le modèle d'e-mail global sera utilisé.
     reminder_fields:
       third_level: "Pour tous les rappels suivants, les données du troisième rappel sont reprises."
     provider_fields:
@@ -1545,7 +1545,7 @@ fr:
 
     impersonation:
       create:
-        email_must_be_confirmed: Die Person hat ihre E-Mail Adresse noch nicht bestätigt und kann somit nicht imitiert werden.
+        email_must_be_confirmed: La personne n'a pas encore confirmé son adresse e-mail et ne peut donc pas être imitée.
 
     history:
       events:
@@ -1710,8 +1710,8 @@ fr:
   people:
     addresses_sync:
       create:
-        scheduled: Der Adressenabgleich wurde erfolgreich gestartet.
-        running: Aktuell ist noch ein Adressenabgleich in Arbeit.
+        scheduled: La comparaison d'adresses a été lancée avec succès.
+        running: Actuellement, une comparaison des adresses est encore en cours.
 
     send_password_instructions: Les données d'authentification ont été envoyées.
     send_password_instructions_invalid_email: Les informations de login n'ont pas été envoyées étant donné que l'adresse e-mail indiquée n'est pas valable.
@@ -1735,7 +1735,7 @@ fr:
 
       impersonate_user: Imiter
       impersonate_user_tooltip: Tu peux utiliser utiliser hitobito comme si tu étais enregistré comme cette personne.
-      impersonate_user_tooltip_disabled: Diese Person kann erst imitiert werden, nachdem die E-Mail Adresse bestätigt wurde.
+      impersonate_user_tooltip_disabled: Cette personne ne peut être imitée qu'une fois l'adresse électronique confirmée.
 
     actions_index:
       add_person: Ajouter une personne
@@ -1781,12 +1781,12 @@ fr:
         minimize: "Minimiser la personne"
         delete: "Supprimer définitivement la personne"
         explanation:
-          delete: Wird eine Person gelöscht, werden sämtliche Daten unwiderruflich entfernt.
-          minimize: Bei der Minimierung wird die Person nicht gelöscht, es werden aber die meisten personspezifischen Daten entfernt.
-        unable_to_delete_or_minimize: "Person kann aus folgenden Gründen nicht gelöscht oder minimiert werden:"
-        unable_to_delete: "Person kann aus folgenden Gründen nicht gelöscht werden:"
-        unable_to_minimize: "Person kann aus folgenden Gründen nicht minimiert werden:"
-        proceed_anyways: Ignorieren und Aktion trotzdem ausführen
+          delete: Si une personne est supprimée, toutes ses données sont irrévocablement supprimées.
+          minimize: La minimisation ne supprime pas la personne, mais elle supprime la plupart des données spécifiques à la personne.
+        unable_to_delete_or_minimize: "La personne ne peut pas être supprimée ou minimisée pour les raisons suivantes:"
+        unable_to_delete: "La personne ne peut pas être supprimée pour les raisons suivantes:"
+        unable_to_minimize: "La personne ne peut pas être minimisée pour les raisons suivantes:"
+        proceed_anyways: Ignorer et exécuter quand même l'action
       minimize:
         success: "%{full_name} a été minimisée avec succès."
       delete:
@@ -2116,7 +2116,7 @@ fr:
   steps_component:
     next_link: Continuer
     prev_link: Retour
-    submit: Absenden
+    submit: Envoyer
 
   household_aside_component:
     add: Créer
@@ -2285,10 +2285,10 @@ fr:
   wizards:
     steps:
       new_user_form:
-        next_button: Registrieren
+        next_button: Créer un compte
       new_event_guest_contact_data_form:
-        next_button: Weiter
+        next_button: Continuer
       new_event_guest_participation_form:
-        next_button: Gast anmelden
-      new_event_guest_contact_data_form_title: Kontaktdaten des Gasts
-      new_event_guest_participation_form_title: Gast anmelden
+        next_button: Inscrire un invité
+      new_event_guest_contact_data_form_title: Coordonnées de l'invité
+      new_event_guest_participation_form_title: Inscrire un invité

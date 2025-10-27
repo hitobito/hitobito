@@ -133,8 +133,8 @@ it:
         message/letter_with_invoice:
           attributes:
             base:
-              invoice_items_required: Mindestens ein Rechnungsposten ist erforderlich
-              invoice_items_invalid: Mindestens ein Rechnungsposten ist ungültig
+              invoice_items_required: È richiesta almeno una voce di fattura
+              invoice_items_invalid: Almeno una voce della fattura non è valida
         oauth/application:
           attributes:
             scopes:
@@ -713,7 +713,7 @@ it:
         admin_questions: Dati amministrativi
         no_name: "[Nessun nome]"
         visible_contact_attributes: "Opzioni di visualizzazione (persona di contatto)"
-        guest_limit: Maximale Anzahl Gäste
+        guest_limit: Numero massimo di ospiti
 
       event/contact_attrs:
         required: Obbligatorio
@@ -721,52 +721,52 @@ it:
         hidden: Non visualizzare
 
       event/guest:
-        first_name: Vorname
-        last_name: Nachname
-        nickname: Übername
-        company_name: Firmenname
-        email: Haupt-E-Mail
-        address_care_of: zusätzliche Adresszeile
-        street: Strasse
-        housenumber: Hausnummer
-        postbox: Postfach
-        zip_code: PLZ
-        town: Ort
-        country: Land
-        gender: Geschlecht
+        first_name: Nome
+        last_name: Cognome
+        nickname: Soprannome
+        company_name: Nome della ditta
+        email: Email principale
+        address_care_of: Riga dell'indirizzo aggiuntiva
+        street: Strada
+        housenumber: Numero civico
+        postbox: Casella postale
+        zip_code: NAP
+        town: Luogo
+        country: Nazione
+        gender: Sesso
         genders:
-          m: männlich
-          w: weiblich
-          _nil: unbekannt
-        birthday: Geburtstag
-        phone_number: Telefonnummer
-        language: Sprache
-        main_applicant: Hauptperson
+          m: maschile
+          w: donna
+          _nil: sconosciuto
+        birthday: Data di nascita
+        phone_number: Numero di telefono
+        language: Lingua
+        main_applicant: Personaggio principale
 
       participant:
-        first_name: Vorname
-        last_name: Nachname
-        nickname: Übername
-        company_name: Firmenname
-        email: Haupt-E-Mail
-        address_care_of: zusätzliche Adresszeile
-        street: Strasse
-        housenumber: Hausnummer
-        postbox: Postfach
-        zip_code: PLZ
-        town: Ort
-        country: Land
-        gender: Geschlecht
+        first_name: Nome
+        last_name: Cognome
+        nickname: Soprannome
+        company_name: Nome della ditta
+        email: Email principale
+        address_care_of: Riga dell'indirizzo aggiuntiva
+        street: Strada
+        housenumber: Numero civico
+        postbox: Casella postale
+        zip_code: NAP
+        town: Luogo
+        country: Nazione
+        gender: Sesso
         genders:
-          m: männlich
-          w: weiblich
-          _nil: unbekannt
-        birthday: Geburtstag
-        phone_number: Telefonnummer
-        language: Sprache
-        main_applicant: Hauptperson
-        additional_information: Zusätzliche Angaben
-        phone_numbers: Telefonnummern
+          m: maschile
+          w: donna
+          _nil: sconosciuto
+        birthday: Data di nascita
+        phone_number: Numero di telefono
+        language: Lingua
+        main_applicant: Personaggio principale
+        additional_information: Dati supplementari
+        phone_numbers: Numeri di telefono
 
       event/answer:
         answer: Risposta
@@ -849,7 +849,7 @@ it:
           declined: rifiutato
 
       event/participation:
-        participant_id: Teilnehmer
+        participant_id: Partecipante
         event_id: Evento
         additional_information: Osservazioni
         answers: Domande
@@ -984,7 +984,7 @@ it:
               finance: Emettere e amministrare fatture
               impersonation: Utilizza Hitobito come altra persona.
               see_invisible_from_above: Vedere altre persone che altrimenti non possono essere viste dai livelli superiori.
-              manual_deletion: Löschen von Personen ohne Rollen
+              manual_deletion: Eliminazione di persone senza ruoli
           kind:
             member:
               one: Membro
@@ -1417,7 +1417,7 @@ it:
         many: "non si è potuto salvare %{resource}: %{count} errori."
         other: "non si è potuto salvare %{resource}: %{count} errori."
       # active_storage_validations
-      content_type_invalid: "akzeptiert nur die folgenden Dateitypen: %{authorized_human_content_types}"
+      content_type_invalid: "accetta solo i seguenti tipi di file: %{authorized_human_content_types}"
       file_size_out_of_range: "non può essere più grande di %{max_size}"
       limit_out_of_range: "Il numero è fuori dall'intervallo valevole (%{min} - %{max})"
       image_metadata_missing: "non è un'immagine valida"

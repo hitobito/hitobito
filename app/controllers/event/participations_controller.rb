@@ -314,7 +314,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   def assign_attributes
     super
 
-    entry.enforce_required_answers = for_current_user?
+    entry.enforce_required_answers = enforce_required_answers?
   end
 
   def init_answers
@@ -388,6 +388,10 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def current_user_interested_in_mail?
+    for_current_user? # extended in wagon
+  end
+
+  def enforce_required_answers?
     for_current_user? # extended in wagon
   end
 

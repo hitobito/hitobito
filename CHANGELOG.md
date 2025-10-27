@@ -2,7 +2,7 @@
 
 ## Version 2.6
 
-- Uprade auf rails 8 (#3292)
+- Upgrade auf rails 8 (#3292)
 - Profilbild, letztes Aktualisierungsdatum und zusätzliche Angaben zu Personen sowie der Typ von Rollen ist neu in der JSON:API verfügbar (#3612)
 - Abmeldelinks werden nur für Abos angezeigt, für welche sich Personen selbst an-/abmelden können (hitobito_sac_cas#2018)
 

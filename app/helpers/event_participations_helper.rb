@@ -9,7 +9,7 @@ module EventParticipationsHelper
   end
 
   def event_participations_roles_header(t, event)
-    headers = [t.sort_header(:roles, Role.model_name.human(count: 2))]
+    headers = [t.sort_header(:roles, event.roles_label)]
 
     if can?(:index_full_participations, event)
       headers << t.sort_header(:created_at,

@@ -9,7 +9,7 @@
     = table(participations, class: 'table table-striped table-fixed') do |t|
       - t.col(t('.event_label')) do |p|
         = p.event.labeled_link
-      - t.col(Role.model_name.human) do |p|
+      - t.col(participations.first.event.roles_label(count: 1)) do |p|
         = p.list_roles
       - t.col(Event::Date.model_name.human(count: 2)) do |p|
         = p.event.dates_full

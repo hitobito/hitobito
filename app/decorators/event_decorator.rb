@@ -129,4 +129,8 @@ class EventDecorator < ApplicationDecorator
 
     safe_join(contact_attributes.values_at(*visible_contact_attributes.map(&:to_sym)))
   end
+
+  def roles_label(count = 2)
+    Role.model_name.human(count)
+  end
 end

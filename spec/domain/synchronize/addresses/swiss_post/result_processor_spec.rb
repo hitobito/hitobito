@@ -46,6 +46,14 @@ describe Synchronize::Addresses::SwissPost::ResultProcessor do
         .and change { top_leader.zip_code }.to("1234")
     end
 
+    it "uses liberal parsing allowing quotes in values" do
+      expect do
+        process_with do |data|
+          data.entries.last["StreetName"] = 'rather "mediocre" Street'
+        end
+      end.to change { top_leader.reload.street }.to('rather "mediocre" Street')
+    end
+
     {
       first_name: "Prename",
       last_name: "Name",

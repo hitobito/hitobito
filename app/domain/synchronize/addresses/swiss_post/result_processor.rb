@@ -25,6 +25,13 @@ module Synchronize::Addresses::SwissPost
       town: "TownName"
     }
 
+    CSV_OPTIONS = {
+      col_sep: Config::COL_SEP,
+      row_sep: Config::ROW_SEP,
+      headers: true,
+      liberal_parsing: true
+    }
+
     def initialize(text)
       @data = parse(text)
     end
@@ -84,7 +91,7 @@ module Synchronize::Addresses::SwissPost
 
     def parse(text)
       CSV
-        .parse(text, col_sep: Config::COL_SEP, row_sep: Config::ROW_SEP, headers: true)
+        .parse(text, **CSV_OPTIONS)
         .delete_if { |row| row["CorrectionType"] == "0" }
         .delete_if { |row| (UPDATING_QSTATS + LOGGINGS_QSTATS.keys).exclude?(row["QSTAT"]) }
     end

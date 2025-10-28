@@ -714,7 +714,7 @@ fr:
         admin_questions: Données administratives
         no_name: "[Sans nom]"
         visible_contact_attributes: "Options d'affichage (personne de contact)"
-        guest_limit: Nombre maximum d'invités
+        guest_limit: Maximale Anzahl Gäste pro Person
 
       event/contact_attrs:
         required: Obligatoire

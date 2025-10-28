@@ -713,7 +713,7 @@ it:
         admin_questions: Dati amministrativi
         no_name: "[Nessun nome]"
         visible_contact_attributes: "Opzioni di visualizzazione (persona di contatto)"
-        guest_limit: Numero massimo di ospiti
+        guest_limit: Maximale Anzahl Gäste pro Person
 
       event/contact_attrs:
         required: Obbligatorio

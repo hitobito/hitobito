@@ -8,18 +8,19 @@
 module TableDisplays
   class PolymorphicColumn < Column
     SUBTYPE_MAPPINGS = {
-      participant: %w[Person Event::Guest]
+      participant: %w[Person ::Event::Guest]
     }
+
+    def label(attr)
+      return super if attr.to_s.exclude?(".")
+
+      read_label_from_subtypes(*resolve_path(attr))
+    end
 
     protected
 
     def resolve_database_joins(path, model_class = @model_class) # rubocop:todo Metrics/AbcSize
-      return {} unless path.to_s.include? "."
-
-      path_parts = path.to_s.split(".")
-      raise "Error in TableDisplay-configuration" if path_parts.count > 2
-
-      relation, column_name = path.to_s.split(".")
+      relation, column_name = resolve_path(path)
       association = model_class.reflect_on_association(relation)
 
       subselects = SUBTYPE_MAPPINGS[relation.to_sym].each do |type_model|
@@ -37,6 +38,24 @@ module TableDisplays
 
     def resolve_database_column(path, model_class = @model_class)
       path.to_s
+    end
+
+    def resolve_path(path)
+      return {} unless path.to_s.include? "."
+
+      path.to_s.split(".").tap do |path_parts|
+        raise "Error in TableDisplay-configuration" if path_parts.count > 2
+      end
+    end
+
+    def read_label_from_subtypes(relation, column_name)
+      model_classes = SUBTYPE_MAPPINGS[relation.to_sym].map do |klass|
+        Object.const_get(klass) # constanize would return TableDisplays::Event
+      end
+
+      model_classes
+        .find { |c| c.new.respond_to?(column_name) }
+        &.human_attribute_name(column_name)
     end
   end
 end

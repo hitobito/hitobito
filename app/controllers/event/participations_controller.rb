@@ -76,7 +76,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
                            order_alias: "birthday_order_statement"
                          }}
 
-  decorates :group, :event, :participation, :participations, :alternatives
+  decorates :group, :event, :participation, :alternatives
 
   # load before authorization
   prepend_before_action :entry, only: [:show, :new, :create, :edit, :update, :destroy, :print]
@@ -119,7 +119,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   def index # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     respond_to do |format|
       format.html do
-        entries
+        @participations = decorated_entries
         @person_add_requests = fetch_person_add_requests
       end
       format.pdf { render_entries_pdf(filter_entries) }
@@ -156,6 +156,21 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   private
+
+  def decorated_entries
+    PaginatingDecorator.new(
+      entries,
+      with: Event::ParticipationDecorator,
+      context: {blocked_emails: load_blocked_emails(entries.flat_map(&:person))}
+    )
+  end
+
+  def load_blocked_emails(people)
+    emails = people.flat_map do |person|
+      [person.email, *person.additional_emails.map(&:value)]
+    end.uniq.compact
+    Bounce.blocked_set(emails)
+  end
 
   def render_entries_pdf(entries)
     render_pdf(entries.collect(&:person), group, event.to_s)

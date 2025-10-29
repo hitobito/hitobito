@@ -202,7 +202,8 @@ it:
     labels: "etichette"
     pdf: "PDF"
     emails: "indirizzi email"
-    emails_outlook: "Indirizzi email (Outlook)"
+    emails_comma_separated: "Komma getrennt (Apple Mail, Thunderbird, ...)"
+    emails_semicolon_separated: "Semikolon getrennt (Outlook)"
     addresses: "lista di indirizzi"
     households: "Lista dei nuclei famigliari"
     everything: "tutti i dati"
@@ -1538,7 +1539,6 @@ it:
         mailing_list:
           approved: "La richiesta d'accesso per %{person} è già stata accettata."
           rejected: "La richiesta d'accesso per %{person} è già stata rifiutata."
-
 
     impersonation:
       create:

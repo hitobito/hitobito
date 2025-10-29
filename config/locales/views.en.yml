@@ -201,7 +201,8 @@ en:
     labels: "Labels"
     pdf: "PDF"
     emails: "E-Mail addresses"
-    emails_outlook: "E-Mail addresses (Outlook)"
+    emails_comma_separated: "Komma getrennt (Apple Mail, Thunderbird, ...)"
+    emails_semicolon_separated: "Semikolon getrennt (Outlook)"
     addresses: "Address list"
     households: "Households"
     everything: "All information"
@@ -1501,7 +1502,6 @@ en:
         mailing_list:
           approved: "The request for access for %{person} has already been granted."
           rejected: "The request for access for %{person} has already been denied."
-
 
     impersonation:
       create:

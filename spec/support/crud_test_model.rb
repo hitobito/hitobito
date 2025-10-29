@@ -66,7 +66,7 @@ class CrudTestModelsController < CrudController # :nodoc:
   self.sort_mappings = {chatty: "length(remarks)"}
   self.permitted_attrs = [:name, :email, :password, :whatever, :children,
     :companion_id, :rating, :income, :birthdate,
-    :gets_up_at, :last_seen, :human, :remarks]
+    :gets_up_at, :last_seen, :human, :remarks, :globalized_field, :globalized_text_field]
 
   skip_authorize_resource
   skip_authorization_check

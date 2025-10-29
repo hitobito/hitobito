@@ -12,6 +12,7 @@
 
 - Beim Anmelden zu einem Event wurde das Formular der Anmeldefragen überarbeitet um längere Fragen auch auf kleineren Screens besser abzubilden (hitobito/hitobito_sac_cas#1278)
 - Für eine bessere Unterstützung von Sonderzeichen, wird in PDFs von QR Code Rechnungen jetzt die Schrift Liberation Sans verwendet (#3622)
+- Die Personal API Tokens Login-Methode wurde abgeschaltet, nachdem sie 4 Jahre lang zur Abschaltung angekündigt waren. Allfällige Drittapplikationen können stattdessen die sichereren Service Tokens oder OAuth API-Zugriff verwenden, und sollten auch dringend auf die neue JSON:API migrieren, da die alte read-only REST API auch bereits seit einem Jahr deprecated ist. (#3635)
 
 ## Version 2.6
 

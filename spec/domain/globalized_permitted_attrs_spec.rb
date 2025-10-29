@@ -10,7 +10,7 @@ require "spec_helper"
 describe GlobalizedPermittedAttrs do
   include GlobalizedTestModels
 
-  let(:permitted_attrs) { [:title, :body, { comment_attributes: [:title, :content] }] }
+  let(:permitted_attrs) { [:title, :body, {comment_attributes: [:title, :content]}] }
 
   let(:globalized_permitted_attrs) do
     described_class.new(GlobalizedTestModels::Post, permitted_attrs).permitted_attrs

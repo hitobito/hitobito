@@ -64,9 +64,10 @@ module FormHelper
   end
 
   def button_toolbar(form, toolbar_class:, &block)
-    offset_classes = "offset-md-3 offset-xl-2"
+    toolbar_class = toolbar_class.to_s
+    toolbar_class += " offset-md-3 offset-xl-2" unless toolbar_class.include?("offset-")
     content_tag(:div, class: "row mb-2 mt-0") do
-      content_tag(:div, class: "#{toolbar_class} #{offset_classes}") do
+      content_tag(:div, class: toolbar_class) do
         capture(form, &block)
       end
     end

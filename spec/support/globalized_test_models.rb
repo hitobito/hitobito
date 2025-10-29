@@ -1,0 +1,39 @@
+module GlobalizedTestModels
+  class Post
+    def self.include?(module_)
+      return true if module_ == Globalized
+
+      super
+    end
+
+    def self.translated_attribute_names
+      %i[title body]
+    end
+
+    def self.reflect_on_all_associations
+      [StubbedReflection.new]
+    end
+  end
+
+  class Comment
+    def self.include?(module_)
+      return true if module_ == Globalized
+
+      super
+    end
+
+    def self.translated_attribute_names
+      %i[title content]
+    end
+  end
+
+  class StubbedReflection
+    def name
+      :comment
+    end
+
+    def klass
+      Comment
+    end
+  end
+end

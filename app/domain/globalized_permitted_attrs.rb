@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class PermittedGlobalizedAttrs
+class GlobalizedPermittedAttrs
   def initialize(model_class, original_permitted_attrs)
     @model_class = model_class
     @original_permitted_attrs = original_permitted_attrs

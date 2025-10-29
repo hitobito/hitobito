@@ -63,7 +63,7 @@ describe Event::ParticipationsController do
     end
 
     it "pages correctly" do
-      expect(Kaminari.config).to receive(:default_per_page).and_return(1)
+      allow(Kaminari.config).to receive(:default_per_page).and_return(1)
       get :index, params: {group_id: group.id, event_id: course.id}
       expect(assigns(:participations)).to have(1).item
       expect(assigns(:pagination_options)).to eq(total_pages: 2, current_page: 1, per_page: 1)
@@ -977,6 +977,39 @@ describe Event::ParticipationsController do
       get :index, params: {group_id: group.id, event_id: course.id}
       expect(dom).to have_checked_field "GA oder Halbtax?"
       # successfully renders, even though no answer is present in the database
+    end
+
+    describe "preloading" do
+      it "GET#index preloads answers and person" do
+        expect_query_count do
+          get :index, params: {group_id: group.id, event_id: course.id}
+          participation = assigns(:participations).first
+          expect(participation.answers).to be_loaded
+          expect(participation.person.phone_numbers).to be_loaded
+        end.to eq(62)
+      end
+
+      it "GET#index still preloads when sorting" do
+        expect_query_count do
+          get :index, params: {group_id: group.id, event_id: course.id, sort: "last_name"}
+          participation = assigns(:participations).first
+          expect(participation.answers).to be_loaded
+          expect(participation.person.phone_numbers).to be_loaded
+        end.to eq(59)
+      end
+
+      it "GET#index preloads questions but increase query count when " do
+        TableDisplay.register_multi_column(Event::Participation, TableDisplays::Event::Participations::QuestionColumn)
+        table_display = top_leader.table_display_for(Event::Participation)
+        table_display.selected = %W[event_question_#{question.id}]
+        table_display.save!
+        expect_query_count do
+          get :index, params: {group_id: group.id, event_id: course.id}
+          participation = assigns(:participations).first
+          expect(participation.answers).to be_loaded
+          expect(participation.person.phone_numbers).to be_loaded
+        end.to eq(88)
+      end
     end
 
     # currently not implemented, view https://github.com/hitobito/hitobito/issues/2955

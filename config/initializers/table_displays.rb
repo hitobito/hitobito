@@ -25,5 +25,5 @@ Rails.application.config.to_prepare do
   TableDisplay.register_column(Event::Participation, TableDisplays::Event::Participations::ShowDetailsOrEventLeaderColumn, show_details_person_attrs.map { |column| "participant.#{column}" })
   TableDisplay.register_column(Event::Participation, TableDisplays::People::PolymorphicLayerGroupLabelColumn, "participant.layer_group_label")
   TableDisplay.register_multi_column(Event::Participation, TableDisplays::Event::Participations::QuestionColumn)
-  TableDisplay.register_column(Event::Participation, TableDisplays::Event::Participations::ShowDetailsOrEventLeaderColumn, :"participant.additional_information")
+  TableDisplay.register_column(Event::Participation, TableDisplays::ShowDetailsColumn, :"additional_information")
 end

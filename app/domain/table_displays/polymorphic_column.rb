@@ -19,7 +19,8 @@ module TableDisplays
 
     def sort_by(attr)
       _, column_name = resolve_path(attr)
-      ::Event::ParticipationsController.polymorphic_sort_mapping(column_name)
+      guests = ::Event::Guest.column_names.include?(column_name)
+      ::Event::ParticipationsController.polymorphic_sort_mapping(column_name, guests:)
     end
 
     protected

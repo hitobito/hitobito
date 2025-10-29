@@ -110,7 +110,13 @@ describe TableDisplay do
       TableDisplay.register_column(Event::Participation, TableDisplays::PolymorphicPublicColumn,
         :"participant.birthday")
       subject.selected = %w[participant.birthday]
-      expect(subject.sort_statements([])).to eq("participant.birthday": "participant.birthday")
+      expect(subject.sort_statements([])).to eq({
+        "participant.birthday": {
+          order: "CASE event_participations.participant_type WHEN 'Person' THEN people.birthday " \
+            "WHEN 'Event::Guest' THEN event_guests.birthday END AS birthday_order_statement",
+          order_alias: "birthday_order_statement"
+        }
+      })
     end
 
     it "builds custom sort statements for questions" do

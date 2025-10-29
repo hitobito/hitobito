@@ -31,4 +31,18 @@ describe TableDisplays::PolymorphicColumn do
       expect(column.label("participant.main_applicant")).to eq "Hauptperson"
     end
   end
+
+  describe "required_model_joins" do
+    it "returns empty hash if no join is needed" do
+      expect(column.required_model_joins("additional_information")).to eq({})
+    end
+
+    it "returns person if attribute is on person" do
+      expect(column.required_model_joins("participant.phone_numbers")).to eq({})
+    end
+
+    it "returns human attribute name of guest" do
+      expect(column.required_model_joins("participant.main_applicant")).to eq({})
+    end
+  end
 end

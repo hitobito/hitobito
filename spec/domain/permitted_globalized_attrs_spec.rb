@@ -48,7 +48,7 @@ describe PermittedGlobalizedAttrs do
 
   it "doesnt add globalized version of permitted attrs for relations when base attr not permitted" do
     permitted_attrs.find { |attr| attr.is_a? Hash }[:related_test_model_attributes]
-                   .delete(:other_globalized_relation_attr)
+      .delete(:other_globalized_relation_attr)
 
     permitted_globalized_relation_attrs =
       permitted_globalized_attrs.find { |attr| attr.is_a? Hash }[:related_test_model_attributes]

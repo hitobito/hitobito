@@ -97,17 +97,27 @@ describe "Globalized model" do
     expect(group.errors.full_messages).to match_array(expected_errors)
   end
 
-  it "should validate rich text placeholders on globalized fields" do
-    Globalized.languages.each do |lang|
-      custom_content.send(:"body_#{lang}=", "Text without placeholder")
-    end
-
+  it "should validate rich text placeholders on globalized custom content" do
     expected_errors = [
       "Inhalt muss den Platzhalter {assignment-title} enthalten",
       "Inhalt (FR) muss den Platzhalter {assignment-title} enthalten",
       "Inhalt (EN) muss den Platzhalter {assignment-title} enthalten",
       "Inhalt (IT) muss den Platzhalter {assignment-title} enthalten"
     ]
+
+    Globalized.languages.each do |lang|
+      custom_content.send(:"subject_#{lang}=", "")
+      custom_content.send(:"body_#{lang}=", "Text without placeholder")
+    end
+
+    expect(custom_content).not_to be_valid
+    expect(custom_content.errors.full_messages).to match_array(expected_errors)
+
+
+    Globalized.languages.each do |lang|
+      custom_content.send(:"subject_#{lang}=", "Text without placeholder")
+      custom_content.send(:"body_#{lang}=", "")
+    end
 
     expect(custom_content).not_to be_valid
     expect(custom_content.errors.full_messages).to match_array(expected_errors)

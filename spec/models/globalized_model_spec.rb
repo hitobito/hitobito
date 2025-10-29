@@ -113,7 +113,6 @@ describe "Globalized model" do
     expect(custom_content).not_to be_valid
     expect(custom_content.errors.full_messages).to match_array(expected_errors)
 
-
     Globalized.languages.each do |lang|
       custom_content.send(:"subject_#{lang}=", "Text without placeholder")
       custom_content.send(:"body_#{lang}=", "")

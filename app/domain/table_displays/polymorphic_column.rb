@@ -17,23 +17,15 @@ module TableDisplays
       read_label_from_subtypes(*resolve_path(attr))
     end
 
+    def sort_by(attr)
+      _, column_name = resolve_path(attr)
+      ::Event::ParticipationsController.polymorphic_sort_mapping(column_name)
+    end
+
     protected
 
-    def resolve_database_joins(path, model_class = @model_class) # rubocop:todo Metrics/AbcSize
-      relation, column_name = resolve_path(path)
-      association = model_class.reflect_on_association(relation)
-
-      subselects = SUBTYPE_MAPPINGS[relation.to_sym].each do |type_model|
-        [type_model.tableize.tr("/", "_"), type_model]
-      end.map do |table, type|
-        "SELECT #{table}.#{column_name}, '#{type}' AS type FROM #{table}"
-      end
-
-      <<~SQL.squish
-        LEFT JOIN (#{subselects.join(" UNION ")}) AS #{relation}
-        ON #{relation}.id = #{model_class.table_name}.#{association.foreign_key}
-        AND #{relation}.type = #{model_class.table_name}.#{association.foreign_type}
-      SQL
+    def resolve_database_joins(path, model_class = @model_class)
+      {}
     end
 
     def resolve_database_column(path, model_class = @model_class)

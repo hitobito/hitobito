@@ -97,7 +97,8 @@ module Sortable
     end
 
     def order_alias
-      sort_mappings_with_indifferent_access[params[:sort]][:order_alias]
+      sort_mappings_with_indifferent_access[params[:sort]].is_a?(Hash) &&
+        sort_mappings_with_indifferent_access[params[:sort]][:order_alias]
     end
 
     # Return the sort expression to be used in the list query.

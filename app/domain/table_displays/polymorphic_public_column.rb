@@ -23,9 +23,5 @@ module TableDisplays
         template.format_attr(target, target_attr) if target.respond_to?(target_attr)
       end
     end
-
-    def sort_by(attr)
-      resolve_database_column(attr)
-    end
   end
 end

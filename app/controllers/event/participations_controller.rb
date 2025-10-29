@@ -20,61 +20,44 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
 
   self.remember_params += [:filter]
 
-  self.sort_mappings = {last_name: {
-                          # rubocop:todo Layout/LineLength
-                          order: "CASE event_participations.participant_type WHEN 'Person' THEN people.last_name WHEN 'Event::Guest' THEN event_guests.last_name ELSE '' END AS last_name_order_statement",
-                          # rubocop:enable Layout/LineLength
-                          order_alias: "last_name_order_statement"
-                        },
-                         first_name: {
-                           # rubocop:todo Layout/LineLength
-                           order: "CASE event_participations.participant_type WHEN 'Person' THEN people.first_name WHEN 'Event::Guest' THEN event_guests.first_name ELSE '' END AS first_name_order_statement",
-                           # rubocop:enable Layout/LineLength
-                           order_alias: "first_name_order_statement"
-                         },
-                         # rubocop:todo Layout/LineLength
-                         # for sorting roles we dont want to explicitly add a join_table statement when default_sort is configured to role
-                         # rubocop:enable Layout/LineLength
-                         # rubocop:todo Layout/LineLength
-                         # In case of default_sort being role, order_by_role is already called in the participation_filter (so the joined table is in the query already)
-                         # rubocop:enable Layout/LineLength
-                         roles: {
-                           joins: [:roles].tap do |joins|
-                             # rubocop:todo Layout/LineLength
-                             joins << "INNER JOIN event_role_type_orders ON event_roles.type = event_role_type_orders.name" unless Settings.people.default_sort == "role"
-                             # rubocop:enable Layout/LineLength
-                           end,
-                           order: [].tap do |order|
-                             # rubocop:todo Layout/LineLength
-                             order << "event_role_type_orders.order_weight" unless Settings.people.default_sort == "role"
-                             # rubocop:enable Layout/LineLength
-                             order.concat(["people.last_name", "people.first_name"])
-                           end
-                         },
-                         nickname: {
-                           # rubocop:todo Layout/LineLength
-                           order: "CASE event_participations.participant_type WHEN 'Person' THEN people.nickname WHEN 'Event::Guest' THEN event_guests.nickname ELSE '' END AS nickname_order_statement",
-                           # rubocop:enable Layout/LineLength
-                           order_alias: "nickname_order_statement"
-                         },
-                         zip_code: {
-                           # rubocop:todo Layout/LineLength
-                           order: "CASE event_participations.participant_type WHEN 'Person' THEN people.zip_code WHEN 'Event::Guest' THEN event_guests.zip_code ELSE '' END AS zip_code_order_statement",
-                           # rubocop:enable Layout/LineLength
-                           order_alias: "zip_code_order_statement"
-                         },
-                         town: {
-                           # rubocop:todo Layout/LineLength
-                           order: "CASE event_participations.participant_type WHEN 'Person' THEN people.town WHEN 'Event::Guest' THEN event_guests.town ELSE '' END AS town_order_statement",
-                           # rubocop:enable Layout/LineLength
-                           order_alias: "town_order_statement"
-                         },
-                         birthday: {
-                           # rubocop:todo Layout/LineLength
-                           order: "CASE event_participations.participant_type WHEN 'Person' THEN people.birthday WHEN 'Event::Guest' THEN event_guests.birthday ELSE NULL END AS birthday_order_statement",
-                           # rubocop:enable Layout/LineLength
-                           order_alias: "birthday_order_statement"
-                         }}
+  class << self
+    def polymorphic_sort_mapping(column)
+      if [Person, Event::Guest].all? { |c| c.column_names.include?(column) }
+        order_alias = "#{column}_order_statement"
+        order_statement = "CASE event_participations.participant_type WHEN 'Person' " \
+          "THEN people.#{column} " \
+          "WHEN 'Event::Guest' THEN event_guests.#{column} END AS #{order_alias}"
+        {order: order_statement, order_alias: order_alias}
+      else
+        {order: "people.#{column}"}
+      end
+    end
+  end
+
+  self.sort_mappings = {
+    last_name: polymorphic_sort_mapping(:last_name),
+    first_name: polymorphic_sort_mapping(:first_name),
+    nickname: polymorphic_sort_mapping(:nickname),
+    zip_code: polymorphic_sort_mapping(:zip_code),
+    town: polymorphic_sort_mapping(:town),
+    birthday: polymorphic_sort_mapping(:birthday),
+    # for sorting roles we dont want to explicitly add a join_table statement when default_sort is
+    # configured to role. In case of default_sort being role, order_by_role is already called in
+    # the participation_filter (so the joined table is in the query already)
+    roles: {
+      joins: [:roles].tap do |joins|
+        # rubocop:todo Layout/LineLength
+        joins << "INNER JOIN event_role_type_orders ON event_roles.type = event_role_type_orders.name" unless Settings.people.default_sort == "role"
+        # rubocop:enable Layout/LineLength
+      end,
+      order: [].tap do |order|
+        # rubocop:todo Layout/LineLength
+        order << "event_role_type_orders.order_weight" unless Settings.people.default_sort == "role"
+        # rubocop:enable Layout/LineLength
+        order.concat(["people.last_name", "people.first_name"])
+      end
+    }
+  }
 
   decorates :group, :event, :participation, :alternatives
 

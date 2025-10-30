@@ -1,6 +1,9 @@
 # Hitobito Changelog
 
 ## unreleased
+- Mehrsprachige Felder sind nun in den Formularen als solche erkennbar und können in allen verfügbaren Sprachen einer Umgebung erfasst werden (#3560)
+
+## Version 2.7
 
 - Die Labels von Telefonnummern, E-Mails und Social Medias werden in der JSON API sprachabhängig zurückgegeben (hitobito_sac_cas#2066)
 - Spalten in Excel Exporten können neu als Datum, Dezimalzahl oder Betrag formattiert werden (hitobito_sac_cas#1665)

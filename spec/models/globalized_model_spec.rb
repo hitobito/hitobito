@@ -21,7 +21,7 @@ describe "Globalized model" do
     expect(group.privacy_policy_title_en).to eq("Privacy policy title in en")
 
     privacy_policy_title_translations = group.privacy_policy_title_translations
-    expect(privacy_policy_title_translations.keys).to match_array(%w[de en fr it])
+    expect(privacy_policy_title_translations.keys).to match_array(Globalized.languages.map(&:to_s))
     expect(privacy_policy_title_translations.values).to eql(privacy_policy_titles.values)
     Globalized.languages.each do |lang|
       expect(group.attributes["privacy_policy_title_#{lang}"]).to eql(group.send(:"privacy_policy_title_#{lang}"))
@@ -39,7 +39,7 @@ describe "Globalized model" do
 
     body_translations = custom_content.body_translations
     body_translations.transform_values!(&:to_s)
-    expect(body_translations.keys).to match_array(%w[de en fr it])
+    expect(body_translations.keys).to match_array(Globalized.languages.map(&:to_s))
     expect(body_translations.values.join).to include(*custom_content_bodies.values)
     Globalized.languages.each do |lang|
       expect(custom_content.attributes["body_#{lang}"].to_s).to eql(custom_content.send(:"body_#{lang}").to_s)

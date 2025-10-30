@@ -1,8 +1,6 @@
 module GlobalizedTestModels
-  class Post
-    def self.ancestors
-      [Globalized]
-    end
+  class Post < ActiveRecord::Base
+    include Globalized
 
     def self.translated_attribute_names
       %i[title body]
@@ -13,10 +11,8 @@ module GlobalizedTestModels
     end
   end
 
-  class Comment
-    def self.ancestors
-      [Globalized]
-    end
+  class Comment < ActiveRecord::Base
+    include Globalized
 
     def self.translated_attribute_names
       %i[title content]

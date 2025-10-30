@@ -195,6 +195,7 @@ describe FormHelper do
         expect(option["data-target-field"]).to eq "event_description_#{language}"
       end
       option = options.first
+      expect(option["data-target-field"]).to eq "event_description"
       expect(option["data-value"]).to eq "A description"
       expect(option["data-default"]).to eq ""
       option = options[1]

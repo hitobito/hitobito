@@ -6,6 +6,8 @@
 require "spec_helper"
 
 describe "Globalized model" do
+  include GlobalizedTestModels
+
   let(:group) { groups(:top_layer) }
   let(:custom_content) { custom_contents(:assignment_assignee_notification) }
 
@@ -122,10 +124,18 @@ describe "Globalized model" do
     expect(custom_content.errors.full_messages).to match_array(expected_errors)
   end
 
-  it "should not copy presence validators" do
-    expect(Event.validators_on(:name).any?(ActiveModel::Validations::PresenceValidator)).to be_truthy
-    expect(Event.method_defined?(:name_en)).to be_truthy
-    expect(Event.validators_on(:name_en).any?(ActiveModel::Validations::PresenceValidator)).to be_falsey
+  it "should not copy presence and uniqueness validators" do
+    GlobalizedTestModels::ValidatorsTestModel.copy_validators_to_globalized_accessors
+
+    attr_validators = GlobalizedTestModels::ValidatorsTestModel.validators_on(:attr)
+    expect(attr_validators.any?(ActiveRecord::Validations::LengthValidator)).to be_truthy
+    expect(attr_validators.any?(ActiveRecord::Validations::PresenceValidator)).to be_truthy
+    expect(attr_validators.any?(ActiveRecord::Validations::UniquenessValidator)).to be_truthy
+
+    globalized_attr_validators = GlobalizedTestModels::ValidatorsTestModel.validators_on(:attr_en)
+    expect(globalized_attr_validators.any?(ActiveRecord::Validations::LengthValidator)).to be_truthy
+    expect(globalized_attr_validators.any?(ActiveRecord::Validations::PresenceValidator)).to be_falsey
+    expect(globalized_attr_validators.any?(ActiveRecord::Validations::UniquenessValidator)).to be_falsey
   end
 
   it "presence validated fields need current language filled in" do

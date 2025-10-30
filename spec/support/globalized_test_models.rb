@@ -36,4 +36,12 @@ module GlobalizedTestModels
       Comment
     end
   end
+
+  class ValidatorsTestModel < ActiveRecord::Base
+    include Globalized
+
+    def self.translated_attribute_names = [:attr]
+
+    validates :attr, uniqueness: true, presence: true, length: {maximum: 28}
+  end
 end

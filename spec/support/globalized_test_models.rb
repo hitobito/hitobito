@@ -1,9 +1,7 @@
 module GlobalizedTestModels
   class Post
-    def self.include?(module_)
-      return true if module_ == Globalized
-
-      super
+    def self.ancestors
+      [Globalized]
     end
 
     def self.translated_attribute_names
@@ -16,10 +14,8 @@ module GlobalizedTestModels
   end
 
   class Comment
-    def self.include?(module_)
-      return true if module_ == Globalized
-
-      super
+    def self.ancestors
+      [Globalized]
     end
 
     def self.translated_attribute_names

@@ -1,27 +1,21 @@
 # Hitobito Changelog
 
+## unreleased
+
 - Die Optionen für den E-Mail Adressen Export erscheinen nun wie die übrigen Formate in einem Untermenu.
+- Mehrsprachige Felder sind nun in den Formularen als solche erkennbar und können in allen verfügbaren Sprachen einer Umgebung erfasst werden (#3560)
 
 ## Version 2.6
 
 - Upgrade auf rails 8 (#3292)
 - Profilbild, letztes Aktualisierungsdatum und zusätzliche Angaben zu Personen sowie der Typ von Rollen ist neu in der JSON:API verfügbar (#3612)
 - Abmeldelinks werden nur für Abos angezeigt, für welche sich Personen selbst an-/abmelden können (hitobito_sac_cas#2018)
-
-## Version 2.6
-
 - Beim Anmelden zu einem Event wurde das Formular der Anmeldefragen überarbeitet um längere Fragen auch auf kleineren Screens besser abzubilden (hitobito/hitobito_sac_cas#1278)
 - Für eine bessere Unterstützung von Sonderzeichen, wird in PDFs von QR Code Rechnungen jetzt die Schrift Liberation Sans verwendet (#3622)
-
-## Version 2.6
-
 - Texte und Hilfetexte verwenden nun den Inhalt einer Fallback Sprache, wenn die gewünschte Sprache leer ist
 - Für PDF Generierung wird nun die Schriftart "Noto Sans (Latin, Cyrillic and Greek)" als Fallback Schriftart verwendet (#2372)
 - Personen Adressen können mit der Schweizer Post abgeglichen werden (#)
 - Beim Zusammenführen von Duplikaten wird auch der Haushalt berücksichtig (hitobito/hitobito_sww#275)
-
-## Version 2.6
-
 - Referenznummer von Rechnung wird neu auch auf Empfangsschein angezegit (hitobito_sww#238)
 - Sortierung von Rechnungstabelle wird bei PDF Exports beachtet (hitobito_sww#237)
 - Beim zusammenführen von Duplikaten werden neu auch Rechnungen, Notizen, Tags, Abos, Familienmitglieder, Event Einladungen und Teilnahmen, Anfragen und Qualifikationen übernommen (hitobito_sww#139)

@@ -117,6 +117,6 @@ class TableDisplay < ActiveRecord::Base
   end
 
   def relevant_multi_columns
-    multi_columns.fetch(table_model_class, [])
+    multi_columns.to_h.fetch(table_model_class, [])
   end
 end

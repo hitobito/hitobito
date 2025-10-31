@@ -4,7 +4,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module TableDisplays::Event::Participations
-  class ShowFullOrEventLeaderColumn < TableDisplays::PublicColumn
+  class ShowFullOrEventLeaderColumn < TableDisplays::PolymorphicPublicColumn
     protected
 
     def allowed?(object, _attr, original_object, _original_attr)

@@ -12,6 +12,8 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   include ActionView::Helpers::SanitizeHelper
   prepend RenderTableDisplays
 
+  class_attribute :additional_participant_includes, default: []
+
   self.nesting = Group, Event
 
   self.permitted_attrs = [:additional_information, :participant_id, :participant_type,
@@ -20,63 +22,42 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
 
   self.remember_params += [:filter]
 
-  self.sort_mappings = {last_name: {
-                          # rubocop:todo Layout/LineLength
-                          order: "CASE event_participations.participant_type WHEN 'Person' THEN people.last_name WHEN 'Event::Guest' THEN event_guests.last_name ELSE '' END AS last_name_order_statement",
-                          # rubocop:enable Layout/LineLength
-                          order_alias: "last_name_order_statement"
-                        },
-                         first_name: {
-                           # rubocop:todo Layout/LineLength
-                           order: "CASE event_participations.participant_type WHEN 'Person' THEN people.first_name WHEN 'Event::Guest' THEN event_guests.first_name ELSE '' END AS first_name_order_statement",
-                           # rubocop:enable Layout/LineLength
-                           order_alias: "first_name_order_statement"
-                         },
-                         # rubocop:todo Layout/LineLength
-                         # for sorting roles we dont want to explicitly add a join_table statement when default_sort is configured to role
-                         # rubocop:enable Layout/LineLength
-                         # rubocop:todo Layout/LineLength
-                         # In case of default_sort being role, order_by_role is already called in the participation_filter (so the joined table is in the query already)
-                         # rubocop:enable Layout/LineLength
-                         roles: {
-                           joins: [:roles].tap do |joins|
-                             # rubocop:todo Layout/LineLength
-                             joins << "INNER JOIN event_role_type_orders ON event_roles.type = event_role_type_orders.name" unless Settings.people.default_sort == "role"
-                             # rubocop:enable Layout/LineLength
-                           end,
-                           order: [].tap do |order|
-                             # rubocop:todo Layout/LineLength
-                             order << "event_role_type_orders.order_weight" unless Settings.people.default_sort == "role"
-                             # rubocop:enable Layout/LineLength
-                             order.concat(["people.last_name", "people.first_name"])
-                           end
-                         },
-                         nickname: {
-                           # rubocop:todo Layout/LineLength
-                           order: "CASE event_participations.participant_type WHEN 'Person' THEN people.nickname WHEN 'Event::Guest' THEN event_guests.nickname ELSE '' END AS nickname_order_statement",
-                           # rubocop:enable Layout/LineLength
-                           order_alias: "nickname_order_statement"
-                         },
-                         zip_code: {
-                           # rubocop:todo Layout/LineLength
-                           order: "CASE event_participations.participant_type WHEN 'Person' THEN people.zip_code WHEN 'Event::Guest' THEN event_guests.zip_code ELSE '' END AS zip_code_order_statement",
-                           # rubocop:enable Layout/LineLength
-                           order_alias: "zip_code_order_statement"
-                         },
-                         town: {
-                           # rubocop:todo Layout/LineLength
-                           order: "CASE event_participations.participant_type WHEN 'Person' THEN people.town WHEN 'Event::Guest' THEN event_guests.town ELSE '' END AS town_order_statement",
-                           # rubocop:enable Layout/LineLength
-                           order_alias: "town_order_statement"
-                         },
-                         birthday: {
-                           # rubocop:todo Layout/LineLength
-                           order: "CASE event_participations.participant_type WHEN 'Person' THEN people.birthday WHEN 'Event::Guest' THEN event_guests.birthday ELSE NULL END AS birthday_order_statement",
-                           # rubocop:enable Layout/LineLength
-                           order_alias: "birthday_order_statement"
-                         }}
+  class << self
+    def polymorphic_sort_mapping(column, guests: true)
+      return {order: "people.#{column}"} unless guests
 
-  decorates :group, :event, :participation, :participations, :alternatives
+      order_alias = "#{column}_order_statement"
+      order_statement = "CASE event_participations.participant_type WHEN 'Person' " \
+        "THEN people.#{column} " \
+        "WHEN 'Event::Guest' THEN event_guests.#{column} END AS #{order_alias}"
+      {order: order_statement, order_alias: order_alias}
+    end
+  end
+
+  self.sort_mappings = {
+    last_name: polymorphic_sort_mapping(:last_name),
+    first_name: polymorphic_sort_mapping(:first_name),
+    nickname: polymorphic_sort_mapping(:nickname),
+    zip_code: polymorphic_sort_mapping(:zip_code),
+    town: polymorphic_sort_mapping(:town),
+    birthday: polymorphic_sort_mapping(:birthday),
+    # for sorting roles we dont want to explicitly add a join_table statement when default_sort is
+    # configured to role. In case of default_sort being role, order_by_role is already called in
+    # the participation_filter (so the joined table is in the query already)
+    roles: {
+      joins: [:roles].tap do |joins|
+        next if Settings.people.default_sort == "role"
+        joins << "INNER JOIN event_role_type_orders ON " \
+          "event_roles.type = event_role_type_orders.name"
+      end,
+      order: [].tap do |order|
+        order << "event_role_type_orders.order_weight" unless Settings.people.default_sort == "role"
+        order.concat(["people.last_name", "people.first_name"])
+      end
+    }
+  }
+
+  decorates :group, :event, :participation, :alternatives
 
   # load before authorization
   prepend_before_action :entry, only: [:show, :new, :create, :edit, :update, :destroy, :print]
@@ -118,17 +99,14 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
 
   def index # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     respond_to do |format|
-      format.html do
-        entries
-        @person_add_requests = fetch_person_add_requests
-      end
-      format.pdf { render_entries_pdf(filter_entries) }
+      format.html { render_entries_html }
+      format.json { render_entries_json }
       format.csv { render_tabular_in_background(:csv) }
-      format.vcf { render_vcf(filter_entries.includes(person: :phone_numbers).collect(&:person)) }
       format.xlsx { render_tabular_in_background(:xlsx) }
-      format.email { render_emails(filter_entries.collect(&:person), ",") }
-      format.email_outlook { render_emails(filter_entries.collect(&:person), ";") }
-      format.json { render_entries_json(filter_entries) }
+      format.pdf { render_entries_pdf(unpaged_entries) }
+      format.vcf { render_vcf(unpaged_entries.map(&:person)) }
+      format.email { render_emails(unpaged_entries.map(&:person), ",") }
+      format.email_outlook { render_emails(unpaged_entries.map(&:person), ";") }
     end
   end
 
@@ -157,6 +135,54 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
 
   private
 
+  def decorated_entries
+    # Preload just before render as list_entries (overriden by `RenderTableDisplays`) modifies scope
+    # invalidates relation and  any custom preloading done up until that point
+    #
+    # Custom Preloader is necessary because includes do not work with the complexity of the query
+    preload(entries)
+
+    PaginatingDecorator.new(
+      entries,
+      with: Event::ParticipationDecorator,
+      context: {blocked_emails: load_blocked_emails(entries.flat_map(&:person))}
+    )
+  end
+
+  def list_entries
+    sort_by_sort_expression(filter_entries).page(params[:page])
+  end
+
+  def preload(participations)
+    ActiveRecord::Associations::Preloader.new(
+      records: participations,
+      associations: [
+        :roles,
+        :event,
+        answers: [:question],
+        participant: [
+          :additional_emails,
+          :phone_numbers,
+          :primary_group
+        ] + additional_participant_includes + [picture_attachment: :blob]
+      ]
+    ).call
+  end
+
+  # NOTE adds joins and filters, might be overriden in wagon for custom columns (jubla)
+  def filter_entries
+    @filtered_entries ||= event_participation_filter.list_entries
+  end
+
+  def unpaged_entries = entries.except(:limit, :offset)
+
+  def load_blocked_emails(people)
+    emails = people.flat_map do |person|
+      [person.email, *person.additional_emails.map(&:value)]
+    end.uniq.compact
+    Bounce.blocked_set(emails)
+  end
+
   def render_entries_pdf(entries)
     render_pdf(entries.collect(&:person), group, event.to_s)
   end
@@ -172,7 +198,18 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     )
   end
 
-  def render_entries_json(entries)
+  def render_entries_html
+    @participations = decorated_entries
+    @person_add_requests = fetch_person_add_requests
+    @pagination_options = {
+      total_pages: entries.total_pages,
+      current_page: entries.current_page,
+      per_page: entries.limit_value
+    }
+    @counts = event_participation_filter.counts
+  end
+
+  def render_entries_json
     paged_entries = entries.page(params[:page])
     render json: [paging_properties(paged_entries),
       ListSerializer.new(paged_entries.decorate,
@@ -184,8 +221,11 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def sort_mappings_with_indifferent_access
-    list = event_participation_filter.list_entries.page(params[:page])
-    super.merge(current_person.table_display_for(Event::Participation).sort_statements(list))
+    @sort_mappings_with_indifferent_accesss ||= super.merge(
+      current_person.table_display_for(Event::Participation).sort_statements(
+        filter_entries.includes(event: :questions)
+      )
+    )
   end
 
   def after_destroy_path
@@ -202,34 +242,9 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     redirect_to return_path || group_event_participations_path(group, event), alert: msg if msg
   end
 
-  def list_entries
-    records = sort_by_sort_expression(entries_scope)
-      .merge(Person.preload_picture)
-      .page(params[:page])
-
-    Person::PreloadPublicAccounts.for(records.select { |participation|
-      participation.participant_type == Person.sti_name
-    }.collect(&:person))
-    @pagination_options = {
-      total_pages: records.total_pages,
-      current_page: records.current_page,
-      per_page: records.limit_value
-    }
-    records
-  end
-
-  # Extracted as a separate method, so wagons can add to the scope before sorting and especially
-  # the PreloadPublicAccounts step, which requires to load the page of records into memory
-  def entries_scope
-    filter = event_participation_filter
-    records = filter.list_entries
-      .select(Event::Participation.column_names)
-    @counts = filter.counts
-    records
-  end
-
-  def filter_entries
-    event_participation_filter.list_entries
+  def order_by_id_statement(ids)
+    cases = ids.map.with_index { |id, index| "WHEN #{id} THEN #{index}" }
+    Arel.sql(["CASE id", *cases, "END"].join("\n")) if cases.present?
   end
 
   def authorize_class

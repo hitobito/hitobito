@@ -361,15 +361,19 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
     caption_or_content ||= captionize(attr, klass)
 
-    label_classes = html_options.delete(:label_class) || "col-md-3 col-xl-2 pb-1"
-    label_classes += " col-form-label text-md-end"
+    label_classes = html_options.delete(:label_class) || "col-md-3 col-xl-2"
+    label_classes += " col-form-label text-md-end pb-1"
     label_classes += " required" if mark_as_required || required?(attr)
 
-    add_css_class(html_options, "labeled col-md-9 col-lg-8 col-xl-8 mw-63ch")
-    css_classes = {"no-attachments": no_attachments?(attr),
-                   row: true, "mb-2": true}
+    add_css_class(html_options, "labeled")
+    unless html_options[:class].include?("col-")
+      add_css_class(html_options, "col-md-9 col-lg-8 col-xl-8 mw-63ch")
+    end
 
-    content_tag(:div, class: css_classes.select { |_css, show| show }.keys.join(" ")) do
+    row_classes = "row mb-2"
+    row_classes += " no-attachments" if no_attachments?(attr)
+
+    content_tag(:div, class: row_classes) do
       label(attr, caption_or_content, class: label_classes) +
         content_tag(:div, content, html_options)
     end
@@ -524,10 +528,11 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
-  def build_labeled_field(field_method, *args) # rubocop:disable Metrics/MethodLength
+  def build_labeled_field(field_method, *args) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     options = args.extract_options!
     label = options.delete(:label)
     label_class = options.delete(:label_class)
+    content_class = options.delete(:content_class)
     addon = options.delete(:addon)
     help = options.delete(:help)
     help_inline = options.delete(:help_inline)
@@ -539,7 +544,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     content = with_addon(addon, content) if addon.present?
     with_labeled_field_help(attr, help, help_inline) { |element| content << element }
 
-    labeled(attr, caption, content, required: options[:required], label_class: label_class)
+    labeled(attr, caption, content,
+      required: options[:required],
+      label_class: label_class,
+      class: content_class)
   end
 
   def with_labeled_field_help(attr, help, help_inline)

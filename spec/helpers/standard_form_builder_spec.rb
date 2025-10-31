@@ -60,7 +60,7 @@ describe "StandardFormBuilder" do
     context "when required" do
       subject { form.labeled_input_field(:name) }
 
-      it { is_expected.to include('class="col-md-3 col-xl-2 pb-1 col-form-label text-md-end required"') }
+      it { is_expected.to include('class="col-md-3 col-xl-2 col-form-label text-md-end pb-1 required"') }
     end
 
     context "when not required" do
@@ -80,7 +80,7 @@ describe "StandardFormBuilder" do
 
       it {
         is_expected.to include(form.label(:name, "Some Caption",
-          class: "col-md-3 col-xl-2 pb-1 col-form-label text-md-end required"))
+          class: "col-md-3 col-xl-2 col-form-label text-md-end pb-1 required"))
       }
     end
 
@@ -96,7 +96,7 @@ describe "StandardFormBuilder" do
 
       it {
         is_expected.to include(form.label(:name, "Some Caption",
-          class: "custom-class col-form-label text-md-end required"))
+          class: "custom-class col-form-label text-md-end pb-1 required"))
       }
     end
   end

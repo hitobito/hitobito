@@ -15,16 +15,16 @@ module Export::Tabular
     attr_reader :ability, :list
 
     class << self
-      def export(format, *)
-        generator(format).new(new(*)).call
+      def export(format, *, **)
+        generator(format).new(new(*, **)).call
       end
 
-      def xlsx(*)
-        export(:xlsx, *)
+      def xlsx(*, **)
+        export(:xlsx, *, **)
       end
 
-      def csv(*)
-        export(:csv, *)
+      def csv(*, **)
+        export(:csv, *, **)
       end
 
       private

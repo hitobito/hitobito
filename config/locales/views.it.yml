@@ -25,6 +25,8 @@ it:
     start_on: da %{date}
     not_allowed: "Mancanza di autorizzazione"
 
+    environment: Ambiente
+
     gender:
       male: maschile
       female: femminile

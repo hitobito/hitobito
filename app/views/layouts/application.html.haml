@@ -25,18 +25,17 @@
     = yield(:head)
 
   %body{class: ('is-logged-out' unless person_signed_in?), data: { controller: 'remote-autocomplete' } }
+    = render 'layouts/environment_header'
     #modal-placeholder
     %main
       = render 'layouts/file_download' if current_user
       = render 'layouts/synchronization' if current_user
       - if origin_user
         = render 'layouts/user_impersonation'
-
-    - if render_header_logo?
-      %header.logo
-        = link_to(header_logo, root_path, class: 'logo-image')
-
     #page{class: ('is-nav-not-rendered' unless render_nav?)}
+      - if render_header_logo?
+        %header.logo
+          = link_to(header_logo, root_path, class: 'logo-image')
       - if render_nav?
         %nav.nav-left
           = render 'layouts/nav'

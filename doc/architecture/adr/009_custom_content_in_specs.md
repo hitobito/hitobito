@@ -33,6 +33,7 @@ festlegen und die andere loswerden.
 ### Generieren von fixtures aus seeds
 
 + Anpassungen werden nur an 1 Stelle gemacht
+- Generierung muss von einem Dev gestartet werden
 
 
 ## Kommentar/Advice

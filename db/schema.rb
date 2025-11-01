@@ -183,7 +183,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_17_132141) do
     t.string "locale", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "label", null: false
+    t.string "label"
     t.string "subject"
     t.index ["custom_content_id"], name: "index_custom_content_translations_on_custom_content_id"
     t.index ["locale"], name: "index_custom_content_translations_on_locale"

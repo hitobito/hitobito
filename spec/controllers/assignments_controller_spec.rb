@@ -156,7 +156,7 @@ describe AssignmentsController do
         }
 
         expect(response).to render_template(:new)
-        expect(response.body).to include('action="/assignments"')
+        expect(response.body).to include('action="/de/assignments"')
       end
     end
   end

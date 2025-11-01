@@ -34,6 +34,7 @@ export default class extends Controller {
       input.checked = (/true/).test(value)
     } else {
       input.value = value;
+      input.dispatchEvent(new Event('input'));
     }
   }
 

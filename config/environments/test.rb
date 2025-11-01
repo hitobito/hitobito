@@ -75,6 +75,7 @@ Rails.application.configure do
   config.action_controller.raise_on_missing_callback_actions = true
 
   routes.default_url_options[:host] = "test.host"
+  default_url_options[:locale] = :de
 
   unless ENV["RAILS_ENABLE_TEST_LOG"]
     logger = ActiveSupport::Logger.new(nil)

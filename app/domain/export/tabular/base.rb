@@ -72,6 +72,9 @@ module Export::Tabular
       end
     end
 
+    # Overwrite to set a custom sheet name for xlsx exports.
+    def sheet_name = nil
+
     private
 
     def build_attribute_labels

@@ -206,7 +206,7 @@ describe Person::Address do
       {label: nil, street: "Lagistrasse", housenumber: "12a", zip_code: 1080, town: "Jamestown", invoices: true}
     }
 
-    it_behaves_like "common address behaviour", country_label: false, postbox: true, company: :adds,
+    it_behaves_like "common address behaviour", country_label: false, postbox: false, company: :adds,
       label_handling: false
 
     it "uses invoice address if additional address with invoice flag exists" do

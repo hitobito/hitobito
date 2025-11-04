@@ -71,4 +71,10 @@ describe Export::Tabular::Base do
       iterate(array)
     end
   end
+
+  describe "#sheet_name" do
+    it "is nil" do
+      expect(tabular.new(Person.limit(1)).sheet_name).to be_nil
+    end
+  end
 end

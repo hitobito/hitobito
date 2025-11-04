@@ -44,13 +44,9 @@ describe "TomSelect Stimulus Controller", js: true do
       def tom_select_params = params.permit!.to_h.select { |k, _| k =~ /^data-tom-select-/ }
     })
 
-    Rails.application.routes.send(:eval_block, lambda do
+    draw_test_routes do
       get "/tom_select", to: "tom_select#new"
-    end)
-  end
-
-  after do
-    Rails.application.reload_routes!
+    end
   end
 
   it "initializes tom_select" do

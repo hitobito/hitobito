@@ -27,17 +27,21 @@ module Export::Xlsx
     private
 
     def generate
-      package = Axlsx::Package.new do |p|
+      build_package.to_stream.read
+    end
+
+    def build_package
+      Axlsx::Package.new do |p|
         p.workbook do |wb|
           build_sheets(wb)
         end
       end
-      package.to_stream.read
     end
 
     def build_sheets(wb)
       load_style_definitions(wb.styles)
-      wb.add_worksheet do |sheet|
+
+      wb.add_worksheet(name: sheet_name) do |sheet|
         add_header_rows(sheet)
         add_attribute_label_row(sheet)
         add_data_rows(sheet)
@@ -52,13 +56,6 @@ module Export::Xlsx
       exportable.header_rows.each_with_index do |row, index|
         sheet.add_row(row, row_style(style.header_style(index)))
       end
-    end
-
-    def add_auto_filter(sheet)
-      return unless exportable.auto_filter
-      range = "#{sheet.rows[exportable.header_rows.size].cells.first.r}:" \
-              "#{sheet.rows.last.cells.last.r}"
-      sheet.auto_filter = range
     end
 
     def add_attribute_label_row(sheet)
@@ -80,6 +77,13 @@ module Export::Xlsx
 
     def apply_column_widths(sheet)
       sheet.column_widths(*style.column_widths)
+    end
+
+    def add_auto_filter(sheet)
+      return unless exportable.auto_filter
+      range = "#{sheet.rows[exportable.header_rows.size].cells.first.r}:" \
+              "#{sheet.rows.last.cells.last.r}"
+      sheet.auto_filter = range
     end
 
     def load_style_definitions(workbook_styles)
@@ -109,6 +113,16 @@ module Export::Xlsx
         style_definition(s)[:style]
       end
       {style: styles}
+    end
+
+    # Limit the sheet name length to `Axlsx::WORKSHEET_MAX_NAME_LENGTH` characters.
+    # See also:
+    # MS Office requires that the name attribute be less than or equal to 31 characters in length
+    # and follow the character limitations for sheet-name and sheet-name-special in Formulas
+    # ("[ISO/IEC-29500-1] §18.17").
+    # https://learn.microsoft.com/en-us/openspecs/office_standards/ms-oi29500/ebf12ea5-2bb4-4af5-ab26-563f22d3f895
+    def sheet_name
+      exportable.sheet_name&.first(Axlsx::WORKSHEET_MAX_NAME_LENGTH)
     end
   end
 end

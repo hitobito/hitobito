@@ -44,6 +44,7 @@
         html: true,
         placement: toggler.dataset.bsPlacement || "auto",
         content: toggler.dataset.bsContent,
+        title: toggler.dataset.bsTitle || toggler.title || "",
       }).show();
 
       // remove the element to avoid misfires on dropdowns

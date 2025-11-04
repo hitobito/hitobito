@@ -131,6 +131,14 @@ describe MailingList do
       expect(list).to be_valid
     end
 
+    it "validates numericality of mailchimp_list_id" do
+      list.mailchimp_list_id = " 2"
+      expect(list).to have(1).error_on(:mailchimp_list_id)
+
+      list.mailchimp_list_id = "2"
+      expect(list).to be_valid
+    end
+
     it "fails with duplicate mailchimp_list_id" do
       Fabricate(:mailing_list, mailchimp_list_id: 42, group: groups(:bottom_layer_one))
       list.mailchimp_list_id = 42

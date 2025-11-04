@@ -1,0 +1,59 @@
+name: 'Update many production instances at once'
+
+on:
+  workflow_dispatch:
+    inputs:
+      instances:
+        type: string
+        description: "demo, cevi, die_mitte, digisus_lab, dsj, ejv, glp, insieme, jemk, jubla, multitenancy, pbs, pro_natura, sbv, sjas, skv, svse, swb, sww"
+        required: true
+      release:
+        type: choice
+        description: "Type of Release: regular, patch or custom"
+        required: true
+        default: "regular"
+        options:
+          - regular
+          - patch
+          - custom
+      version:
+        type: string
+        description: "next version number, if Release is custom"
+        required: false
+      branch:
+        type: string
+        description: "Branch to be released"
+        required: false
+        default: "master"
+
+jobs:
+  find-instances:
+    name: 'Find all selected hitobito instances'
+    runs-on: 'ubuntu-latest'
+    outputs:
+      instances: ${{ steps.format-instance-names.outputs.wagons }}
+    steps:
+      - name: 'Format instance names'
+        id: format-instance-names
+        run: |
+          INSTANCES=$(echo "${{ inputs.instances }}" | jq -Rc 'scan("\\w+")')
+          echo $INSTANCES
+          echo "instances=$INSTANCES" | tr -d "\n" >> $GITHUB_OUTPUT
+
+  release:
+    name: 'Update ${{ matrix.instance }} production'
+    needs:
+      - find-instances
+    strategy:
+      fail-fast: false
+      matrix:
+        instance: ${{ fromJSON(needs.find-instances.outputs.instances) }}
+      max-parallel: 5 # needed so we don't occupy all the runners
+    uses: hitobito/hitobito/.github/workflows/release.yml@master
+    with:
+      composition: hitobito/ose_composition_${{ matrix.instance }}
+      release_type: ${{ inputs.release }}
+      next_version: ${{ inputs.version }}
+      stage: production
+      target_branch: ${{ inputs.branch }}
+    secrets: inherit

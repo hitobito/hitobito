@@ -34,14 +34,10 @@ describe "FormFieldToggle Stimulus Controller", js: true do
       end
     })
 
-    Rails.application.routes.send(:eval_block, lambda do
+    draw_test_routes do
       get "/form_field_toggle", to: "form_field_toggle#new"
-    end)
+    end
     visit "/form_field_toggle"
-  end
-
-  after do
-    Rails.application.reload_routes!
   end
 
   it "does simple toggling of single element" do

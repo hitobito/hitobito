@@ -44,13 +44,9 @@ describe "DisableToggle Stimulus Controller", js: true do
       end
     })
 
-    Rails.application.routes.send(:eval_block, lambda do
+    draw_test_routes do
       get "/disable_toggle", to: "disable_toggle#new"
-    end)
-  end
-
-  after do
-    Rails.application.reload_routes!
+    end
   end
 
   it "initializes disable_toggle" do

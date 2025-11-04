@@ -15,7 +15,7 @@
       %tbody
         - grouped_roles.each do |group, roles|
           %tr
-            %td
+            %tdg
               = GroupDecorator.new(group).primary_group_toggle_link(entry, @group) if toggle_link
 
             %td
@@ -39,4 +39,3 @@
                                                       return_url: group_person_path(group.id, entry.id)),
                                   :plus,
                                   class: 'btn btn-sm btn-outline-primary')
-

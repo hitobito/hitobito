@@ -13,18 +13,22 @@ class Invoice::Qrcode
   QR_CROSS_X = (QR_CODE_EDGE_SIDE_PX / 2) - SWISS_CROSS_EDGE_SIDE_PX / 2
   QR_CROSS_Y = (QR_CODE_EDGE_SIDE_PX / 2) - SWISS_CROSS_EDGE_SIDE_PX / 2
 
+  QR_CODE_VALUES_KEYS = [:address_type, :full_name, :street, :housenumber, :zip_code,
+    :town, :country]
+
   def initialize(invoice)
     @invoice = invoice
   end
 
-  # see https://www.paymentstandards.ch/dam/downloads/ig-qr-bill-de.pdf 4.3.3
+  # https://www.six-group.com/dam/download/banking-services/standardization/qr-bill/ig-qr-bill-v2.3-de.pdf
+  # see "4.2.2 Datenelemente in der QR-Rechnung"
   def payload
     striped_values(
       metadata,
-      creditor.reverse_merge(iban: @invoice.iban&.gsub(/\s+/, "")),
+      creditor.to_h.reverse_merge(iban: @invoice.iban&.gsub(/\s+/, "")),
       creditor_final,
       payment,
-      debitor,
+      debitor.to_h,
       payment_reference,
       additional_infos,
       alternative_payment
@@ -36,20 +40,20 @@ class Invoice::Qrcode
   end
 
   def creditor
-    extract_contact(@invoice.payee)
+    @creditor ||= Invoice::QrcodeAddress.new(@invoice.qr_code_creditor_values)
+  end
+
+  def debitor
+    @debitor ||= Invoice::QrcodeAddress.new(@invoice.qr_code_debitor_values)
   end
 
   def creditor_final
-    extract_contact(@invoice.payee).keys.product([nil]).to_h # optional, mock with nil values
+    debitor.to_h.keys.product([nil]).to_h # optional, mock with nil values
   end
 
   def payment
     amount = format("%<total>.2f", total: @invoice.amount_open) if show_total?
     {amount: amount, currency: @invoice.currency}
-  end
-
-  def debitor
-    extract_contact(@invoice.recipient_address)
   end
 
   def payment_reference
@@ -92,17 +96,6 @@ class Invoice::Qrcode
     end
   end
 
-  def creditor_values
-    values = creditor.except(:address_type, :town, :zip, :country)
-      .reverse_merge(iban: @invoice.iban)
-    striped_values(values).join("\n")
-  end
-
-  def debitor_values
-    values = debitor.except(:address_type, :town, :zip, :country)
-    striped_values(values).join("\n")
-  end
-
   private
 
   def generate_png # rubocop:disable Metrics/MethodLength
@@ -117,28 +110,6 @@ class Invoice::Qrcode
       resize_exactly_to: false,
       resize_gte_to: false
     )
-  end
-
-  def extract_contact(contactable) # rubocop:disable Metrics/MethodLength
-    parts = contactable.to_s.strip.split(/\r*\n/)
-    address_line1 = nil
-    address_line2 = nil
-    if parts.count > 1
-      address_line1 = parts.last
-    end
-    if parts.count > 2
-      address_line2 = address_line1
-      address_line1 = parts.second_to_last
-    end
-    {
-      address_type: "K",
-      full_name: parts.first,
-      address_line1: address_line1,
-      address_line2: address_line2,
-      zip_code: nil,
-      town: nil,
-      country: "CH"
-    }
   end
 
   def striped_values(*hashes)

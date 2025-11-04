@@ -12,8 +12,9 @@ describe Invoice::Qrcode do
       payment_slip: :qr,
       total: 1500,
       iban: "CH93 0076 2011 6238 5295 7",
-      payee: "Acme Corp\nHallesche Str. 37\n3007 Hinterdupfing",
       recipient_address: "Max Mustermann\nMusterweg 2\n8000 Alt Tylerland",
+      qr_code_creditor_values: ["S", "Acme Corp", "Hallesche Str.", "37", "3007", "Hinterdupfing", "CH"],
+      qr_code_debitor_values: ["S", "Max Mustermann", "Musterweg", "2", "8000", "Alt Tylerland", "CH"],
       reference: "RF561A1"
     )
   end
@@ -46,12 +47,12 @@ describe Invoice::Qrcode do
     end
 
     it "has recipient info of combined type" do
-      expect(subject[4]).to eq "K"
+      expect(subject[4]).to eq "S"
       expect(subject[5]).to eq "Acme Corp"
-      expect(subject[6]).to eq "Hallesche Str. 37"
-      expect(subject[7]).to eq "3007 Hinterdupfing"
-      expect(subject[8]).to be_blank
-      expect(subject[9]).to be_blank
+      expect(subject[6]).to eq "Hallesche Str."
+      expect(subject[7]).to eq "37"
+      expect(subject[8]).to eq "3007"
+      expect(subject[9]).to eq "Hinterdupfing"
       expect(subject[10]).to eq "CH"
     end
 
@@ -73,12 +74,12 @@ describe Invoice::Qrcode do
     end
 
     it "has final payment recipient of combined type" do
-      expect(subject[20]).to eq "K"
+      expect(subject[20]).to eq "S"
       expect(subject[21]).to eq "Max Mustermann"
-      expect(subject[22]).to eq "Musterweg 2"
-      expect(subject[23]).to eq "8000 Alt Tylerland"
-      expect(subject[24]).to be_blank
-      expect(subject[25]).to be_blank
+      expect(subject[22]).to eq "Musterweg"
+      expect(subject[23]).to eq "2"
+      expect(subject[24]).to eq "8000"
+      expect(subject[25]).to eq "Alt Tylerland"
       expect(subject[26]).to eq "CH"
     end
 
@@ -137,47 +138,12 @@ describe Invoice::Qrcode do
   describe :debitor do
     subject { invoice.qrcode.debitor }
 
-    it "is extracted from recipient_address" do
-      expect(subject[:address_type]).to eq "K"
-      expect(subject[:full_name]).to eq "Max Mustermann"
-      expect(subject[:address_line1]).to eq "Musterweg 2"
-      expect(subject[:address_line2]).to eq "8000 Alt Tylerland"
-      expect(subject[:zip_code]).to be_blank
-      expect(subject[:town]).to be_blank
-      expect(subject[:country]).to eq "CH"
-    end
-
-    it "handles empty values" do
-      invoice.recipient_address = "Max Mustermann"
-      expect(subject[:address_type]).to eq "K"
-      expect(subject[:full_name]).to eq "Max Mustermann"
-      %i[address_line1 address_line2 zip_code town].each do |key|
-        expect(subject).to have_key(key)
-        expect(subject[key]).to be_blank
-      end
-      expect(subject[:country]).to eq "CH"
-    end
-
-    it "handles zip without town" do
-      invoice.recipient_address = "Max Mustermann\nMusterweg 2\n8000"
-      expect(subject[:address_type]).to eq "K"
-      expect(subject[:full_name]).to eq "Max Mustermann"
-      expect(subject[:address_line1]).to eq "Musterweg 2"
-      expect(subject[:address_line2]).to eq "8000"
-      expect(subject[:zip_code]).to be_blank
-      expect(subject[:town]).to be_blank
-      expect(subject[:country]).to eq "CH"
-    end
-
-    it "handles blank lines" do
-      invoice.recipient_address = "Max Mustermann\n \n"
-      expect(subject[:address_type]).to eq "K"
-      expect(subject[:full_name]).to eq "Max Mustermann"
-      expect(subject[:address_line1]).to be_blank
-      expect(subject[:address_line2]).to be_blank
-      expect(subject[:zip_code]).to be_blank
-      expect(subject[:town]).to be_blank
-      expect(subject[:country]).to eq "CH"
+    it "is qr code address" do
+      expect(subject.readable_address).to eq <<~TEXT.chomp
+        Max Mustermann
+        Musterweg 2
+        8000 Alt Tylerland
+      TEXT
     end
   end
 

@@ -99,5 +99,6 @@ jobs:
           echo git diff
           git add .
           git commit -m "Update ${PARENT}/${IMAGE_REF} from '${OLD_TAG}' to '${NEW_TAG}'"
+          git pull --rebase
           git push origin "${REPO_BRANCH}"
 

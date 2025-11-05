@@ -26,6 +26,9 @@ on:
         required: false
         default: "master"
 
+permissions:
+  contents: write
+
 jobs:
   find-instances:
     name: 'Find all selected hitobito instances'
@@ -49,7 +52,7 @@ jobs:
       matrix:
         instance: ${{ fromJSON(needs.find-instances.outputs.instances) }}
       max-parallel: 5 # needed so we don't occupy all the runners
-    uses: hitobito/hitobito/.github/workflows/release.yml@master
+    uses: ./.github/workflows/release.yml@master
     with:
       composition: hitobito/ose_composition_${{ matrix.instance }}
       release_type: ${{ inputs.release }}

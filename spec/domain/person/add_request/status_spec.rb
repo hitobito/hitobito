@@ -48,4 +48,42 @@ describe Person::AddRequest::Status do
       end
     end
   end
+
+  context "Event" do
+    let(:body) { events(:top_event) }
+
+    it "resolves to correct subclass" do
+      expect(subject).to be_a(Person::AddRequest::Status::Event)
+    end
+
+    context "#pending?" do
+      it "is false if no request exists" do
+        expect(subject).not_to be_pending
+      end
+
+      it "is true if request exists" do
+        Person::AddRequest::Event.create!(
+          person: person,
+          requester: requester,
+          body: body,
+          role_type: body.class.role_types.first.sti_name
+        )
+        expect(subject).to be_pending
+      end
+    end
+
+    context "#created?" do
+      it "is false if no event participation exists" do
+        expect(subject).not_to be_created
+      end
+
+      it "is true if event participation exists" do
+        Fabricate(:event_participation,
+          participant: person,
+          event: body,
+          application: Fabricate(:event_application))
+        expect(subject).to be_created
+      end
+    end
+  end
 end

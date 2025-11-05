@@ -11,6 +11,10 @@ on:
         description: "Stage of release to be prepared, e.g. integration"
         required: true
         type: string
+      target_branch:
+        description: "Release a specific branch of the core and wagons. Leave empty for intelligent defaults"
+        required: false
+        type: string
       release_type:
         description: "Type of Release: regular, patch or custom"
         required: false
@@ -41,6 +45,8 @@ on:
         value: ${{ jobs.settings.outputs.repo_url }}
       composition_branch:
         value: ${{ jobs.settings.outputs.composition_branch }}
+      target_branch:
+        value: ${{ jobs.settings.outputs.target_branch }}
       release_stage:
         value: ${{ jobs.settings.outputs.release_stage }}
       release_type:
@@ -63,6 +69,7 @@ jobs:
       repo_name: ${{ steps.determine.outputs.repo_name }}
       repo_url: ${{ steps.determine.outputs.repo_url }}
       composition_branch: ${{ steps.determine.outputs.branch }}
+      target_branch: ${{ steps.determine.outputs.target_branch }}
       release_stage: ${{ steps.determine.outputs.stage }}
       release_type: ${{ steps.determine.outputs.release_type }}
       namespace_name: ${{ steps.determine.outputs.namespace_name }}
@@ -77,6 +84,8 @@ jobs:
           STAGE: ${{ inputs.stage }}
           REPO: ${{ inputs.repository }}
           RELEASE_TYPE: ${{ inputs.release_type }}
+          TARGET_BRANCH: ${{ inputs.target_branch }}
+          INTEGRATION_DEPLOY_BRANCH: ${{ values.INTEGRATION_DEPLOY_BRANCH }}
           DRY_RUN: ${{ inputs.prevent_prepare }}
           DRY_PUSH: ${{ inputs.prevent_push }}
           DRY_DEPLOY: ${{ inputs.prevent_deployment }}
@@ -108,12 +117,14 @@ jobs:
           case $STAGE in
             production)
               echo "branch=production" >> "$GITHUB_OUTPUT"
+              echo "target_branch=${TARGET_BRANCH:-stable}" >> "$GITHUB_OUTPUT"
               echo "release_type=${RELEASE_TYPE}" >> "$GITHUB_OUTPUT"
               echo "namespace_name=hit-${project//_/-}-prod" >> "$GITHUB_OUTPUT"
             ;;
 
             integration)
               echo "branch=devel" >> "$GITHUB_OUTPUT"
+              echo "target_branch=${TARGET_BRANCH:-${INTEGRATION_DEPLOY_BRANCH:-master}}" >> "$GITHUB_OUTPUT"
               echo "release_type=integration" >> "$GITHUB_OUTPUT"
               echo "namespace_name=hit-${project//_/-}-int" >> "$GITHUB_OUTPUT"
             ;;

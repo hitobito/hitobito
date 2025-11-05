@@ -20,11 +20,10 @@ on:
         type: string
         description: "next version number, if Release is custom"
         required: false
-      branch:
-        type: string
-        description: "Branch to be released"
+      target_branch:
+        description: "Release a specific branch of the core and wagons. Leave empty for intelligent defaults"
         required: false
-        default: "master"
+        type: string
 
 permissions:
   contents: write
@@ -58,5 +57,5 @@ jobs:
       release_type: ${{ inputs.release }}
       next_version: ${{ inputs.version }}
       stage: production
-      target_branch: ${{ inputs.branch }}
+      target_branch: ${{ inputs.target_branch }}
     secrets: inherit

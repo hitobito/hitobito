@@ -30,10 +30,9 @@ on:
         required: false
         type: string
       target_branch:
-        description: "Branch of individual repos, mostly: master"
+        description: "Release a specific branch of the core and wagons. Leave empty for intelligent defaults"
         required: false
         type: string
-        default: master
       extra_packages:
         description: "List of additional OS-packages to be installed, space-separated"
         required: false
@@ -73,10 +72,9 @@ on:
         required: true
         type: string
       target_branch:
-        description: "Branch of individual repos, mostly: master"
+        description: "Release a specific branch of the core and wagons. Leave empty for intelligent defaults"
         required: false
         type: string
-        default: master
       extra_packages:
         description: "List of additional OS-packages to be installed, space-separated"
         required: false
@@ -106,6 +104,7 @@ jobs:
     with:
       repository: ${{ inputs.composition }}
       stage: ${{ inputs.stage }}
+      target_branch: ${{ inputs.target_branch }}
       release_type: ${{ inputs.release_type }}
       prevent_prepare: ${{ inputs.prevent_prepare }}
       prevent_push: ${{ inputs.prevent_push }}
@@ -131,7 +130,7 @@ jobs:
       composition_branch: ${{ needs.settings.outputs.composition_branch }}
       version: ${{ needs.version.outputs.version }}
       stage: ${{ needs.settings.outputs.release_stage }}
-      target_branch: ${{ inputs.target_branch }}
+      target_branch: ${{ needs.settings.outputs.target_branch }}
       dry_run: ${{ needs.settings.outputs.dry_run }}
     secrets: inherit
 

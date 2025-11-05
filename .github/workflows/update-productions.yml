@@ -52,7 +52,7 @@ jobs:
       matrix:
         instance: ${{ fromJSON(needs.find-instances.outputs.instances) }}
       max-parallel: 5 # needed so we don't occupy all the runners
-    uses: ./.github/workflows/release.yml@master
+    uses: ./.github/workflows/release.yml
     with:
       composition: hitobito/ose_composition_${{ matrix.instance }}
       release_type: ${{ inputs.release }}

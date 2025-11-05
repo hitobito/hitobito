@@ -87,7 +87,6 @@ gem "rswag-api", "~> 2.13"
 gem "rswag-ui", "~> 2.13"
 gem "rubyzip"
 gem "seed-fu"
-gem "sentry-raven"
 gem "simpleidn"
 gem "simple_xlsx_reader" # import data from xlsx files (used in some wagons)
 gem "sorted_set"
@@ -102,6 +101,9 @@ gem "validates_timeliness"
 gem "vcard"
 gem "view_component", "~> 3.12" # later versions break tests (probably drop at some point)
 gem "webpacker"
+gem "sentry-ruby"
+gem "sentry-rails"
+gem "sentry-delayed_job"
 
 # load after others because dependencies
 gem "kaminari"

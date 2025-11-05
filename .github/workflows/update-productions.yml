@@ -34,7 +34,7 @@ jobs:
     name: 'Find all selected hitobito instances'
     runs-on: 'ubuntu-latest'
     outputs:
-      instances: ${{ steps.format-instance-names.outputs.wagons }}
+      instances: ${{ steps.format-instance-names.outputs.instances }}
     steps:
       - name: 'Format instance names'
         id: format-instance-names

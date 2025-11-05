@@ -3,6 +3,7 @@
 ## unreleased
 
 - Die Optionen für den E-Mail Adressen Export erscheinen nun wie die übrigen Formate in einem Untermenu.
+- Ein neuer Header weist nun, ausser in production, auf die momentan aktive Umgebung hin.
 
 ## Version 2.7
 

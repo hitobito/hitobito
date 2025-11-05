@@ -25,6 +25,8 @@ de:
     start_on: ab %{date}
     not_allowed: "fehlende Berechtigung"
 
+    environment: Umgebung
+
     gender:
       male: männlich
       female: weiblich

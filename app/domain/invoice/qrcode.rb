@@ -40,11 +40,11 @@ class Invoice::Qrcode
   end
 
   def creditor
-    @creditor ||= Invoice::QrcodeAddress.new(@invoice.qr_code_creditor_values)
+    @invoice.qr_payment_payee_address
   end
 
   def debitor
-    @debitor ||= Invoice::QrcodeAddress.new(@invoice.qr_code_debitor_values)
+    @invoice.qr_payment_recipient_address
   end
 
   def creditor_final

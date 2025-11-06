@@ -13,8 +13,10 @@ describe Invoice::Qrcode do
       total: 1500,
       iban: "CH93 0076 2011 6238 5295 7",
       recipient_address: "Max Mustermann\nMusterweg 2\n8000 Alt Tylerland",
-      qr_code_creditor_values: ["S", "Acme Corp", "Hallesche Str.", "37", "3007", "Hinterdupfing", "CH"],
-      qr_code_debitor_values: ["S", "Max Mustermann", "Musterweg", "2", "8000", "Alt Tylerland", "CH"],
+      qr_payment_recipient_address: {address_type: "S", full_name: "Max Mustermann", street: "Musterweg",
+                                     housenumber: "2", zip_code: "8000", town: "Alt Tylerland", country: "CH"},
+      qr_payment_payee_address: {address_type: "S", full_name: "Acme Corp", street: "Hallesche Str.",
+                                 housenumber: "37", zip_code: "3007", town: "Hinterdupfing", country: "CH"},
       reference: "RF561A1"
     )
   end

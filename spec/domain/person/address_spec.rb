@@ -249,6 +249,50 @@ describe Person::Address do
     end
   end
 
+  describe "#for_invoice_qr_address" do
+    subject(:qr_address) { address.for_invoice_qr_address }
+
+    it "returns qr code address" do
+      expect(qr_address.address_type).to eq "S"
+      expect(qr_address.full_name).to eq "Top Leader"
+      expect(qr_address.street).to eq "Greatstreet"
+      expect(qr_address.housenumber).to eq "345"
+      expect(qr_address.zip_code).to eq "3456"
+      expect(qr_address.town).to eq "Greattown"
+      expect(qr_address.country).to eq nil
+    end
+
+    it "uses invoice address if additional address with invoice flag exists" do
+      build_additional_address(
+        {
+          label: nil,
+          name: "Foo Bar",
+          uses_contactable_name: false,
+          street: "Lagistrasse",
+          housenumber: "12a",
+          zip_code: 1080,
+          town: "Jamestown",
+          invoices: true
+        }
+      )
+
+      expect(qr_address.address_type).to eq "S"
+      expect(qr_address.full_name).to eq "Foo Bar"
+      expect(qr_address.street).to eq "Lagistrasse"
+      expect(qr_address.housenumber).to eq "12a"
+      expect(qr_address.zip_code).to eq "1080"
+      expect(qr_address.town).to eq "Jamestown"
+      expect(qr_address.country).to eq nil
+    end
+
+    it "uses company name for companies" do
+      person.company_name = "Company Name"
+      person.company = true
+
+      expect(qr_address.full_name).to eq "Company Name"
+    end
+  end
+
   describe "#for_pdf_label" do
     def text(name: person.to_s, nickname: false) = address.for_pdf_label(name, nickname)
 

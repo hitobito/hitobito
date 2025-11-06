@@ -117,6 +117,8 @@ describe Invoice do
     expect(invoice.recipient).to eq person
     expect(invoice.recipient_email).to eq person.email
     expect(invoice.recipient_address).to eq "Top Leader\nGreatstreet 345\n3003 Greattown\n"
+    expect(invoice.qr_payment_recipient_address.address_type).to eq "S"
+    expect(invoice.qr_payment_recipient_address.full_name).to eq "Top Leader"
   end
 
   it "#save prefers additional email with invoice flag over recipient email" do

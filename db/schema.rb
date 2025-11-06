@@ -663,8 +663,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_151959) do
     t.bigint "invoice_list_id"
     t.string "reference", null: false
     t.boolean "hide_total", default: false, null: false
-    t.string "qr_code_creditor_values", default: [nil, nil, nil, nil, nil, nil, nil], null: false, array: true
-    t.string "qr_code_debitor_values", default: [nil, nil, nil, nil, nil, nil, nil], null: false, array: true
+    t.text "qr_payment_payee_address"
+    t.text "qr_payment_recipient_address"
     t.index ["esr_number"], name: "index_invoices_on_esr_number"
     t.index ["group_id"], name: "index_invoices_on_group_id"
     t.index ["invoice_list_id"], name: "index_invoices_on_invoice_list_id"

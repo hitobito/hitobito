@@ -81,6 +81,9 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   has_many :payments, dependent: :destroy
   has_many :payment_reminders, dependent: :destroy
 
+  attribute :qr_payment_payee_address, Invoice::Qrcode::AddressType.new
+  attribute :qr_payment_recipient_address, Invoice::Qrcode::AddressType.new
+
   before_validation :set_sequence_number, on: :create, if: :group
   before_validation :set_payment_attributes, on: :create, if: :group
   before_validation :set_esr_number, on: :create, if: :group
@@ -301,13 +304,17 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   end
 
   def set_recipient_fields!
+    address = Person::Address.new(recipient)
     self.recipient_email = invoice_email
-    self.recipient_address = Person::Address.new(recipient).for_invoice
+    self.recipient_address = address.for_invoice
+    self.qr_payment_recipient_address = address.for_invoice_qr_address if qr?
   end
 
   def set_recipient_fields
+    address = Person::Address.new(recipient)
     self.recipient_email ||= invoice_email
-    self.recipient_address ||= Person::Address.new(recipient).for_invoice
+    self.recipient_address ||= address.for_invoice
+    self.qr_payment_recipient_address ||= address.for_invoice_qr_address if qr?
   end
 
   def item_invalid?(attributes)

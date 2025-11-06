@@ -11,8 +11,8 @@ on:
         type: choice
         description: Type of release. Regular is for normal, planned releases. Patch is for hotfixes and single-customer fix releases. Use custom to manually set a version number.
         required: true
-        # default: regular # No default set, to force a conscious choice. Otherwise, in the stress of a Hotfix, a regular release could be selected.
         options:
+          - " " # Empty by default, to force a conscious choice. Otherwise, in the stress of a Hotfix, a regular release could be selected accidentally.
           - regular
           - patch
           - custom
@@ -29,6 +29,15 @@ permissions:
   contents: write
 
 jobs:
+  check-release-type:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check that a release type has been selected
+        run: |
+          if [[ "${{ inputs.release }}" == " " ]]; then
+            echo "No release type selected. Aborting."
+            exit 1
+          fi
   find-instances:
     name: Find all selected hitobito instances
     runs-on: ubuntu-latest
@@ -45,6 +54,7 @@ jobs:
   release:
     name: Update ${{ matrix.instance }} production
     needs:
+      - check-release-type
       - find-instances
     strategy:
       fail-fast: false

@@ -85,7 +85,7 @@ jobs:
           REPO: ${{ inputs.repository }}
           RELEASE_TYPE: ${{ inputs.release_type }}
           TARGET_BRANCH: ${{ inputs.target_branch }}
-          INTEGRATION_DEPLOY_BRANCH: ${{ values.INTEGRATION_DEPLOY_BRANCH }}
+          INTEGRATION_DEPLOY_BRANCH: ${{ vars.INTEGRATION_DEPLOY_BRANCH }}
           DRY_RUN: ${{ inputs.prevent_prepare }}
           DRY_PUSH: ${{ inputs.prevent_push }}
           DRY_DEPLOY: ${{ inputs.prevent_deployment }}

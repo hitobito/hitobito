@@ -15,19 +15,31 @@ describe TagListsController do
 
   context "authorization" do
     it "filters out people whose tags we cannot manage from create request" do
-      post :create, params: {group_id: group.id, ids: [root.id, bottom_member.id].join(","), tags: "Tagname"}
+      post :create, params: {
+        group_id: group.id,
+        ids: [root.id, bottom_member.id].join(","),
+        tags: "Tagname"
+      }
 
       expect(assigns(:manageable_people)).to contain_exactly bottom_member
     end
 
     it "leaves people whose tags we can manage from create request" do
-      post :create, params: {group_id: group.id, ids: [leader.id, bottom_member.id].join(","), tags: "Tagname"}
+      post :create, params: {
+        group_id: group.id,
+        ids: [leader.id, bottom_member.id].join(","),
+        tags: "Tagname"
+      }
 
       expect(assigns(:manageable_people)).to contain_exactly leader, bottom_member
     end
 
     it "filters out people whose tags we cannot manage from destroy request" do
-      post :destroy, params: {group_id: group.id, ids: [root.id, bottom_member.id].join(","), tags: "Tagname"}
+      post :destroy, params: {
+        group_id: group.id,
+        ids: [root.id, bottom_member.id].join(","),
+        tags: "Tagname"
+      }
 
       expect(assigns(:manageable_people)).to contain_exactly bottom_member
     end
@@ -35,11 +47,15 @@ describe TagListsController do
 
   context "GET modal for bulk creating tags" do
     it "shows modal for select people" do
-      person_query_double = double('person_query')
+      person_query_double = double("person_query")
       allow(Person).to receive(:from).and_return(person_query_double)
       allow(person_query_double).to receive(:count).and_return(2)
 
-      get :new, xhr: true, params: {group_id: group.id, ids: [leader.id, bottom_member.id].join(",")}, format: :js
+      get :new, xhr: true, params: {
+        group_id: group.id,
+        ids: [leader.id, bottom_member.id].join(",")
+      }, format: :js
+
       expect(response).to have_http_status(:ok)
       expect(response).to render_template("tag_lists/new")
 
@@ -53,7 +69,13 @@ describe TagListsController do
         p.roles.map { |r| r.class.id }
       end.flatten.uniq
 
-      get :new, xhr: true, params: {group_id: group.id, ids: "all", filters: { role: { kind: 'active_today', role_type_ids: role_type_ids } }, range: 'deep'}, format: :js
+      get :new, xhr: true,
+        params: {
+          group_id: group.id,
+          ids: "all",
+          filters: {role: {kind: "active_today", role_type_ids: role_type_ids}},
+          range: "deep"
+        }, format: :js
 
       expect(response).to have_http_status(:ok)
       expect(response).to render_template("tag_lists/new")
@@ -88,7 +110,11 @@ describe TagListsController do
 
   context "GET modal for bulk deleting tags" do
     it "shows modal" do
-      get :deletable, xhr: true, params: {group_id: group.id, ids: [leader.id, bottom_member.id].join(",")}, format: :js
+      get :deletable, xhr: true, params: {
+                                   group_id: group.id,
+                                   ids: [leader.id, bottom_member.id].join(",")
+                                 },
+        format: :js
       expect(response).to have_http_status(:ok)
       expect(response).to render_template("tag_lists/deletable")
       expect(assigns(:manageable_people)).to contain_exactly leader, bottom_member

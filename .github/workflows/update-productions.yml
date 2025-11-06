@@ -30,9 +30,10 @@ permissions:
 
 jobs:
   check-release-type:
+    name: Check that a release type has been selected
     runs-on: ubuntu-latest
     steps:
-      - name: Check that a release type has been selected
+      - name: Check release type
         run: |
           if [[ "${{ inputs.release }}" == "-- please select --" ]]; then
             echo "No release type selected. Aborting."

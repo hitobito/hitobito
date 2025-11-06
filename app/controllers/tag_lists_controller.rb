@@ -50,7 +50,7 @@ class TagListsController < ListController
   end
 
   def manageable_people_ids
-    @managed_people_ids ||= @managed_people.map(&:id)
+    @manageable_people_ids ||= @manageable_people.map(&:id)
   end
 
   def manageable_people

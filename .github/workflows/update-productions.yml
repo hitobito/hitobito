@@ -1,41 +1,41 @@
-name: 'Update many production instances at once'
+name: Update many production instances at once
 
 on:
   workflow_dispatch:
     inputs:
       instances:
         type: string
-        description: "demo, cevi, die_mitte, digisus_lab, dsj, ejv, glp, insieme, jemk, jubla, multitenancy, pbs, pro_natura, sbv, sjas, skv, svse, swb, sww"
+        description: demo, cevi, die_mitte, digisus_lab, dsj, ejv, glp, insieme, jemk, jubla, multitenancy, pbs, pro_natura, sbv, sjas, skv, svse, swb, sww
         required: true
       release:
         type: choice
-        description: "Type of Release: regular, patch or custom"
+        description: Type of release. Regular is for normal, planned releases. Patch is for hotfixes and single-customer fix releases. Use custom to manually set a version number.
         required: true
-        default: "regular"
+        default: regular
         options:
           - regular
           - patch
           - custom
       version:
         type: string
-        description: "next version number, if Release is custom"
+        description: Manually set version number, if release type is custom
         required: false
       target_branch:
-        description: "Release a specific branch of the core and wagons. Leave empty for intelligent defaults"
-        required: false
         type: string
+        description: Release a specific branch of the core and wagons. Leave empty for intelligent defaults.
+        required: false
 
 permissions:
   contents: write
 
 jobs:
   find-instances:
-    name: 'Find all selected hitobito instances'
-    runs-on: 'ubuntu-latest'
+    name: Find all selected hitobito instances
+    runs-on: ubuntu-latest
     outputs:
       instances: ${{ steps.format-instance-names.outputs.instances }}
     steps:
-      - name: 'Format instance names'
+      - name: Format instance names
         id: format-instance-names
         run: |
           INSTANCES=$(echo "${{ inputs.instances }}" | jq -Rc '[splits("[ ,]+")]')
@@ -43,7 +43,7 @@ jobs:
           echo "instances=$INSTANCES" | tr -d "\n" >> $GITHUB_OUTPUT
 
   release:
-    name: 'Update ${{ matrix.instance }} production'
+    name: Update ${{ matrix.instance }} production
     needs:
       - find-instances
     strategy:

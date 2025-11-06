@@ -4,7 +4,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::ParticipationListsController < SimpleCrudController
-  include FilteredPeople # provides all_filtered_or_listed_people, person_filter and list_filter_args
+  include FilteredPeople # provides all_filtered_or_listed_people, person_filter, list_filter_args
 
   skip_authorization_check
   skip_authorize_resource

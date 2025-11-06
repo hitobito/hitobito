@@ -7,7 +7,7 @@
 
 module Subscriber
   class SubscriberListsController < SimpleCrudController
-    include FilteredPeople # provides all_filtered_or_listed_people, person_filter and list_filter_args
+    include FilteredPeople # provides all_filtered_or_listed_people, person_filter, list_filter_args
 
     helper_method :group
 

@@ -8,7 +8,7 @@ module MultiselectHelper
     count = scope.unscope(:limit).count
 
     content_tag(:label, class: "extended_all btn btn-link d-inline d-none") do
-      check_box_tag(:extended_all, count, false, data: {ids: 'all'}, class: "d-none") +
+      check_box_tag(:extended_all, count, false, data: {ids: "all"}, class: "d-none") +
         content_tag(:span, t("global.extended_select_all", count: count))
     end
   end

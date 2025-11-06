@@ -56,7 +56,7 @@ class TagListsController < ListController
   def manageable_people
     @manageable_people ||= if params[:ids] == "all"
       params.delete(:ids)
-      @manageable_people_ids = %w(all)
+      @manageable_people_ids = %w[all]
 
       person_filter(PersonFullReadables).entries.includes(:tags).distinct
     else

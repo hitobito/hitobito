@@ -47,6 +47,31 @@ module Release
       execute "git submodule status"
     end
 
+    # rubocop:disable Metrics/MethodLength
+    def retry_with_reset(max_attempts: 5, &block)
+      attempt = 1
+
+      begin
+        yield
+      rescue => e
+        if attempt >= max_attempts
+          notify "Failed after #{max_attempts} attempts: #{e.message}"
+          raise e
+        end
+
+        notify "Attempt #{attempt} failed: #{e.message}. Resetting to upstream and retrying..."
+        execute "git reset --hard @{u}"
+
+        sleep_time = 2**attempt
+        notify "Waiting #{sleep_time} seconds before retry..."
+        sleep(sleep_time)
+
+        attempt += 1
+        retry
+      end
+    end
+    # rubocop:enable Metrics/MethodLength
+
     def tag(name)
       notify "tagging #{name}"
       execute "git tag -f #{name}"
@@ -54,7 +79,7 @@ module Release
 
     def push
       notify "pushing code and tags"
-      confirm_and_execute "git pull --rebase && git push origin && git push origin --force --tags"
+      confirm_and_execute "git push origin && git push origin --force --tags"
     end
   end
 end

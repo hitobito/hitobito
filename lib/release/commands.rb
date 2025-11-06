@@ -21,21 +21,24 @@ module Release
           in_dir("hitobito") do
             break if existing_version_again?
 
-            update_translations
-            update_changelog
-            update_version file: "VERSION"
-
-            release_version @version
+            retry_with_reset do
+              update_translations
+              update_changelog
+              update_version file: "VERSION"
+              release_version @version
+            end
           end
 
           @all_wagons.each do |wagon|
             in_dir("hitobito_#{wagon}") do
               break if existing_version_again?
 
-              update_translations
-              update_changelog
-              update_version file: "lib/hitobito_#{wagon}/version.rb"
-              release_version @version
+              retry_with_reset do
+                update_translations
+                update_changelog
+                update_version file: "lib/hitobito_#{wagon}/version.rb"
+                release_version @version
+              end
             end
           end
 
@@ -45,9 +48,11 @@ module Release
               update_submodules(branch: "production")
             end
 
-            update_submodule_content(to: @version)
-            record_submodule_state
-            release_version @version
+            retry_with_reset do
+              update_submodule_content(to: @version)
+              record_submodule_state
+              release_version @version
+            end
           end
         end
       end
@@ -73,8 +78,10 @@ module Release
               update_submodules(branch: "devel")
             end
 
-            record_submodule_state
-            release_version @version
+            retry_with_reset do
+              record_submodule_state
+              release_version @version
+            end
           end
         end
       end

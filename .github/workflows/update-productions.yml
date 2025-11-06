@@ -12,7 +12,7 @@ on:
         description: Type of release. Regular is for normal, planned releases. Patch is for hotfixes and single-customer fix releases. Use custom to manually set a version number.
         required: true
         options:
-          - " " # Empty by default, to force a conscious choice. Otherwise, in the stress of a Hotfix, a regular release could be selected accidentally.
+          - "-- please select --" # Empty by default, to force a conscious choice. Otherwise, in the stress of a Hotfix, a regular release could be selected accidentally.
           - regular
           - patch
           - custom
@@ -34,7 +34,7 @@ jobs:
     steps:
       - name: Check that a release type has been selected
         run: |
-          if [[ "${{ inputs.release }}" == " " ]]; then
+          if [[ "${{ inputs.release }}" == "-- please select --" ]]; then
             echo "No release type selected. Aborting."
             exit 1
           fi

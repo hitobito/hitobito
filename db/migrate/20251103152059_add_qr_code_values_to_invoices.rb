@@ -13,9 +13,23 @@ class AddQrCodeValuesToInvoices < ActiveRecord::Migration[8.0]
       )
     end
 
-    # TODO: drop payee
 
-    # TODO: remove invoice config payee and add new columns street, housenumber, town, etc.
+    add_column :invoice_configs, :payee_name, :string
+    add_column :invoice_configs, :payee_street, :string
+    add_column :invoice_configs, :payee_housenumber, :string
+    add_column :invoice_configs, :payee_zip_code, :string
+    add_column :invoice_configs, :payee_town, :string
+    add_column :invoice_configs, :payee_country, :string
+
+    # To be discussed:
+    # * shall we try to get at least the payee name?
+    InvoiceConfig.find_each do |invoice_config|
+      invoice_config.update(
+        payee_name: invoice_config.payee.split("\n").first
+      ) if invoice_config.payee.present?
+    end
+
+    remove_column :invoice_configs, :payee
   end
 
   def qr_code_address_for(address)

@@ -7,6 +7,10 @@ class Invoice::Qrcode::Address < Data.define(:address_type, :full_name, :street,
   :zip_code, :town, :country)
   VALID_ADDRESS_TYPES = ["K", "S"]
 
+  # TODO:
+  # * max allowed name is 70 chars
+  # * max allowed street is 70 chars
+  #
   def initialize(**params)
     normalized = params.transform_values { |v| v&.to_s&.strip }
 
@@ -15,6 +19,16 @@ class Invoice::Qrcode::Address < Data.define(:address_type, :full_name, :street,
     end
 
     super(**normalized)
+  end
+
+  def self.from_invoice_config(invoice_config)
+    new(address_type: "S",
+      full_name: invoice_config.payee_name,
+      street: invoice_config.payee_street,
+      housenumber: invoice_config.payee_housenumber,
+      zip_code: invoice_config.payee_zip_code,
+      town: invoice_config.payee_town,
+      country: invoice_config.payee_country)
   end
 
   def readable_address

@@ -5,7 +5,9 @@
 
 %dl.dl-horizontal
   = labeled_attr(entry, :address)
-  = labeled_attr(entry, :payee)
+  -# TODO: ask ama how to render with newlines
+  -# to be discussed: why is the order of the attributes different here?
+  = labeled_attr(entry, :payee_address)
   = labeled_attr(entry, :due_days)
   = labeled_attr(entry, :payment_information)
   = labeled_attr(entry, :vat_number)

@@ -289,10 +289,12 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
 
   def set_payment_attributes
     [:address, :account_number, :iban, :payment_slip,
-      :beneficiary, :payee, :participant_number,
+      :beneficiary, :participant_number,
       :vat_number, :currency].each do |at|
       assign_attributes(at => invoice_config.send(at))
     end
+
+    self.qr_payment_payee_address = Invoice::Qrcode::Address.from_invoice_config(invoice_config)
   end
 
   def set_dates # rubocop:disable Metrics/CyclomaticComplexity

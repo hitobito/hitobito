@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_03_151959) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_03_152059) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -584,7 +584,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_151959) do
     t.string "iban"
     t.string "payment_slip", default: "qr", null: false
     t.text "beneficiary"
-    t.text "payee"
     t.string "participant_number"
     t.string "email"
     t.string "vat_number"
@@ -594,6 +593,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_151959) do
     t.string "sender_name"
     t.string "logo_position", default: "disabled", null: false
     t.integer "reference_prefix"
+    t.string "payee_name"
+    t.string "payee_street"
+    t.string "payee_housenumber"
+    t.string "payee_zip_code"
+    t.string "payee_town"
+    t.string "payee_country"
     t.index ["group_id"], name: "index_invoice_configs_on_group_id"
   end
 

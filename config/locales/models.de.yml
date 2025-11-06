@@ -1182,7 +1182,8 @@ de:
           disabled: Kein Logo
           left: Links
           right: Rechts
-        payee: Einzahlung für
+        payee_address: Einzahlung für
+        payee_name: Einzahlung für
         payment_slip: Einzahlungsschein
         payment_slips:
           qr: QR Rechnung

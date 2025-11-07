@@ -3,9 +3,9 @@
 
 The hitobito JSON:API implements the open standard [json:api](https://jsonapi.org) v1.1 with media type [application/vnd.api+json](http://www.iana.org/assignments/media-types/application/vnd.api+json).
 
-Visit your hitobito's [Swagger UI](/api-docs) for detailed documentation and a sandbox for testing/developing requests. (Reload if you get a blank page on the first visit).
+Visit your hitobito's Swagger UI at _your-hitobito-url_[/api-docs](/api-docs) for detailed documentation and a sandbox for testing/developing requests. (Reload if you get a blank page on the first visit).
 
-This documentation is about the new JSON API introduced in 2023. Check the [legacy Api documentation](/doc/developer/common/api/rest_api.md) for the old Api.
+This documentation is about the new JSON API introduced in 2023. Check the [legacy Api documentation](/doc/developer/common/api/rest_api.md) for the old, deprecated Api.
 
 ### Endpoints
 

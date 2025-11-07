@@ -25,6 +25,31 @@ module Release
       result
     end
 
+    # rubocop:disable Metrics/MethodLength
+    def retry_with_reset(max_attempts: 5, &block)
+      attempt = 1
+
+      begin
+        yield
+      rescue => e
+        if attempt >= max_attempts
+          notify "Failed after #{max_attempts} attempts: #{e.message}"
+          raise e
+        end
+
+        notify "Attempt #{attempt} failed: #{e.message}. Resetting to upstream and retrying..."
+        execute "git reset --hard @{u}"
+
+        sleep_time = 2**attempt
+        notify "Waiting #{sleep_time} seconds before retry..."
+        sleep(sleep_time)
+
+        attempt += 1
+        retry
+      end
+    end
+    # rubocop:enable Metrics/MethodLength
+
     def cli
       @cli ||= begin
         require "highline"

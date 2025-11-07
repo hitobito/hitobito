@@ -38,7 +38,7 @@ module Release
         end
 
         notify "Attempt #{attempt} failed: #{e.message}. Resetting to upstream and retrying..."
-        execute "git reset --hard @{u}"
+        execute "git reset --hard @{u}" # @{u} is a special git ref for 'current-upstream-branch'
 
         sleep_time = 2**attempt
         notify "Waiting #{sleep_time} seconds before retry..."

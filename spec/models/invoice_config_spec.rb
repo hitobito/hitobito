@@ -47,14 +47,6 @@ describe InvoiceConfig do
         :payee_name, :payee_street, :payee_housenumber, :payee_zip_code, :payee_town, :payee_country, :iban
       ]
     end
-
-    # TODO:
-    # to be discussed: do we really need the payee when there is on payment slip?
-    it "no_ps" do
-      subject.payment_slip = "no_ps"
-      expect(subject).not_to be_valid
-      expect(subject.errors.attribute_names).to eq [:payee]
-    end
   end
 
   it "validates correct iban format" do

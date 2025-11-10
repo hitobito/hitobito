@@ -584,7 +584,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_152059) do
     t.string "iban"
     t.string "payment_slip", default: "qr", null: false
     t.text "beneficiary"
-    t.text "payee"
     t.string "participant_number"
     t.string "email"
     t.string "vat_number"

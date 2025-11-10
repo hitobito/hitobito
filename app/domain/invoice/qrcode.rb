@@ -13,9 +13,6 @@ class Invoice::Qrcode
   QR_CROSS_X = (QR_CODE_EDGE_SIDE_PX / 2) - SWISS_CROSS_EDGE_SIDE_PX / 2
   QR_CROSS_Y = (QR_CODE_EDGE_SIDE_PX / 2) - SWISS_CROSS_EDGE_SIDE_PX / 2
 
-  QR_CODE_VALUES_KEYS = [:address_type, :full_name, :street, :housenumber, :zip_code,
-    :town, :country]
-
   def initialize(invoice)
     @invoice = invoice
   end
@@ -25,10 +22,10 @@ class Invoice::Qrcode
   def payload
     striped_values(
       metadata,
-      creditor.to_h.reverse_merge(iban: @invoice.iban&.gsub(/\s+/, "")),
+      creditor.reverse_merge(iban: @invoice.iban&.gsub(/\s+/, "")),
       creditor_final,
       payment,
-      debitor.to_h,
+      debitor,
       payment_reference,
       additional_infos,
       alternative_payment
@@ -40,11 +37,35 @@ class Invoice::Qrcode
   end
 
   def creditor
-    @invoice.qr_payment_payee_address
+    if @invoice.payee_name.blank?
+      return deprecated_creditor
+    end
+
+    {
+      address_type: "S",
+      name: @invoice.payee_name,
+      street: @invoice.payee_street,
+      housenumber: @invoice.payee_housenumber,
+      zip_code: @invoice.payee_zip_code,
+      town: @invoice.payee_town,
+      country: @invoice.payee_country
+    }
   end
 
   def debitor
-    @invoice.qr_payment_recipient_address
+    if @invoice.recipient_name.blank?
+      return deprecated_debitor
+    end
+
+    {
+      address_type: "S",
+      name: @invoice.recipient_name,
+      street: @invoice.recipient_street,
+      housenumber: @invoice.recipient_housenumber,
+      zip_code: @invoice.recipient_zip_code,
+      town: @invoice.recipient_town,
+      country: @invoice.recipient_country
+    }
   end
 
   def creditor_final
@@ -122,5 +143,46 @@ class Invoice::Qrcode
 
   def show_total?
     !@invoice.hide_total? && @invoice.total.nonzero?
+  end
+
+  def deprecated_creditor
+    name, address_line1, address_line2 = deprecated_parse_address(@invoice.payee)
+    {
+      address_type: "K",
+      name: name,
+      address_line1: address_line1,
+      address_line2: address_line2,
+      zip_code: nil,
+      town: nil,
+      country: nil
+    }
+  end
+
+  def deprecated_debitor
+    name, address_line1, address_line2 = deprecated_parse_address(@invoice.recipient_address)
+    {
+      address_type: "K",
+      name: name,
+      address_line1: address_line1,
+      address_line2: address_line2,
+      zip_code: nil,
+      town: nil,
+      country: nil
+    }
+  end
+
+  def deprecated_parse_address(address)
+    parts = address.to_s.strip.split(/\r*\n/)
+    address_line1 = nil
+    address_line2 = nil
+    if parts.count > 1
+      address_line1 = parts.last
+    end
+    if parts.count > 2
+      address_line2 = address_line1
+      address_line1 = parts.second_to_last
+    end
+
+    [parts.first, address_line1, address_line2]
   end
 end

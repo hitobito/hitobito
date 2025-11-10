@@ -81,9 +81,6 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   has_many :payments, dependent: :destroy
   has_many :payment_reminders, dependent: :destroy
 
-  attribute :qr_payment_payee_address, Invoice::Qrcode::AddressType.new
-  attribute :qr_payment_recipient_address, Invoice::Qrcode::AddressType.new
-
   before_validation :set_sequence_number, on: :create, if: :group
   before_validation :set_payment_attributes, on: :create, if: :group
   before_validation :set_esr_number, on: :create, if: :group
@@ -213,10 +210,6 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
     invoice_items.any?(&:dynamic)
   end
 
-  def recipient_name
-    recipient.try(:greeting_name) || recipient_name_from_recipient_address
-  end
-
   def filename(extension = "pdf")
     format("%<type>s-%<number>s.%<ext>s",
       type: self.class.model_name.human,
@@ -288,13 +281,14 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   end
 
   def set_payment_attributes
-    [:address, :account_number, :iban, :payment_slip,
-      :beneficiary, :participant_number,
-      :vat_number, :currency].each do |at|
-      assign_attributes(at => invoice_config.send(at))
-    end
-
-    self.qr_payment_payee_address = Invoice::Qrcode::Address.from_invoice_config(invoice_config)
+    assign_attributes(
+      invoice_config.slice(
+        [:address, :account_number, :iban, :payment_slip,
+          :beneficiary, :participant_number, :vat_number, :currency,
+          :payee_name, :payee_street, :payee_housenumber, :payee_zip_code,
+          :payee_town, :payee_country]
+      )
+    )
   end
 
   def set_dates # rubocop:disable Metrics/CyclomaticComplexity
@@ -306,17 +300,17 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   end
 
   def set_recipient_fields!
-    address = Person::Address.new(recipient)
     self.recipient_email = invoice_email
-    self.recipient_address = address.for_invoice
-    self.qr_payment_recipient_address = address.for_invoice_qr_address if qr?
+
+    attributes = Person::Address.new(recipient).invoice_recipient_address_attributes
+    assign_attributes(attributes)
   end
 
   def set_recipient_fields
-    address = Person::Address.new(recipient)
     self.recipient_email ||= invoice_email
-    self.recipient_address ||= address.for_invoice
-    self.qr_payment_recipient_address ||= address.for_invoice_qr_address if qr?
+
+    attributes = Person::Address.new(recipient).invoice_recipient_address_attributes
+    assign_attributes(attributes.select { |key, _| send(key).nil? })
   end
 
   def item_invalid?(attributes)
@@ -325,10 +319,6 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
 
   def increment_sequence_number
     invoice_config.increment!(:sequence_number) # rubocop:disable Rails/SkipsModelValidations
-  end
-
-  def recipient_name_from_recipient_address
-    recipient_address.to_s.split("\n").first.presence
   end
 
   def assert_sendable?

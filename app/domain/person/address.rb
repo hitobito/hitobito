@@ -25,19 +25,6 @@ class Person::Address
     (person_and_company_name + short_address).compact.join("\n")
   end
 
-  # To be discussed:
-  # * do we really want to extend the domain/person/address with generating the qr code address?
-  def for_invoice_qr_address
-    @addressable = additional_addresses.find(&:invoices?) || person
-    Invoice::Qrcode::Address.new(address_type: "S",
-      full_name: qr_payment_recipient_name,
-      street: street,
-      housenumber: housenumber,
-      zip_code: zip_code,
-      town: town,
-      country: country)
-  end
-
   def for_household_letter(members)
     [combine_household_names(members), full_address].compact.join("\n")
   end
@@ -56,6 +43,18 @@ class Person::Address
     (names + full_address(country_as: :country_label)).compact.join("\n")
   end
 
+  def invoice_recipient_address_attributes
+    {
+      recipient_address: for_invoice,
+      recipient_name: invoice_recipient_name,
+      recipient_street: street,
+      recipient_housenumber: housenumber,
+      recipient_zip_code: zip_code,
+      recipient_town: town,
+      recipient_country: country
+    }
+  end
+
   private
 
   attr_reader :person, :name, :addressable
@@ -71,16 +70,6 @@ class Person::Address
       [@person.company_name.to_s.squish, @person.full_name.to_s.squish].uniq.compact_blank
     else
       [@person.full_name.to_s.squish]
-    end
-  end
-
-  def qr_payment_recipient_name
-    if addressable.is_a?(AdditionalAddress)
-      addressable.name
-    elsif company?
-      @person.company_name.to_s.squish
-    else
-      @person.full_name.to_s.squish
     end
   end
 
@@ -120,5 +109,16 @@ class Person::Address
 
   def print_nickname?(nickname)
     nickname && @person.respond_to?(:nickname) && @person.nickname.present?
+  end
+
+  def invoice_recipient_name
+    @addressable = additional_addresses.find(&:invoices?) || person
+    if addressable.is_a?(AdditionalAddress)
+      addressable.name
+    elsif company?
+      @person.company_name.to_s.squish
+    else
+      @person.full_name.to_s.squish
+    end
   end
 end

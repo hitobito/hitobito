@@ -584,6 +584,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_152059) do
     t.string "iban"
     t.string "payment_slip", default: "qr", null: false
     t.text "beneficiary"
+    t.text "payee"
     t.string "participant_number"
     t.string "email"
     t.string "vat_number"
@@ -668,8 +669,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_152059) do
     t.bigint "invoice_list_id"
     t.string "reference", null: false
     t.boolean "hide_total", default: false, null: false
-    t.text "qr_payment_payee_address"
-    t.text "qr_payment_recipient_address"
+    t.string "recipient_name"
+    t.string "recipient_street"
+    t.string "recipient_housenumber"
+    t.string "recipient_zip_code"
+    t.string "recipient_town"
+    t.string "recipient_country"
+    t.string "payee_name"
+    t.string "payee_street"
+    t.string "payee_housenumber"
+    t.string "payee_zip_code"
+    t.string "payee_town"
+    t.string "payee_country"
     t.index ["esr_number"], name: "index_invoices_on_esr_number"
     t.index ["group_id"], name: "index_invoices_on_group_id"
     t.index ["invoice_list_id"], name: "index_invoices_on_invoice_list_id"

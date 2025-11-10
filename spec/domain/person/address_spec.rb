@@ -249,17 +249,19 @@ describe Person::Address do
     end
   end
 
-  describe "#for_invoice_qr_address" do
-    subject(:qr_address) { address.for_invoice_qr_address }
+  describe "#invoice_recipient_address_attributes" do
+    subject(:attributes) { address.invoice_recipient_address_attributes }
 
     it "returns qr code address" do
-      expect(qr_address.address_type).to eq "S"
-      expect(qr_address.full_name).to eq "Top Leader"
-      expect(qr_address.street).to eq "Greatstreet"
-      expect(qr_address.housenumber).to eq "345"
-      expect(qr_address.zip_code).to eq "3456"
-      expect(qr_address.town).to eq "Greattown"
-      expect(qr_address.country).to eq nil
+      expect(attributes).to eq({
+        recipient_address: "Top Leader\nGreatstreet 345\n3456 Greattown\n",
+        recipient_housenumber: "345",
+        recipient_name: "Top Leader",
+        recipient_street: "Greatstreet",
+        recipient_town: "Greattown",
+        recipient_zip_code: "3456",
+        recipient_country: "CH"
+      })
     end
 
     it "uses invoice address if additional address with invoice flag exists" do
@@ -276,20 +278,22 @@ describe Person::Address do
         }
       )
 
-      expect(qr_address.address_type).to eq "S"
-      expect(qr_address.full_name).to eq "Foo Bar"
-      expect(qr_address.street).to eq "Lagistrasse"
-      expect(qr_address.housenumber).to eq "12a"
-      expect(qr_address.zip_code).to eq "1080"
-      expect(qr_address.town).to eq "Jamestown"
-      expect(qr_address.country).to eq nil
+      expect(attributes).to eq({
+        recipient_address: "Foo Bar\nLagistrasse 12a\n1080 Jamestown\n",
+        recipient_country: nil,
+        recipient_housenumber: "12a",
+        recipient_name: "Foo Bar",
+        recipient_street: "Lagistrasse",
+        recipient_town: "Jamestown",
+        recipient_zip_code: "1080"
+      })
     end
 
     it "uses company name for companies" do
       person.company_name = "Company Name"
       person.company = true
 
-      expect(qr_address.full_name).to eq "Company Name"
+      expect(attributes[:recipient_name]).to eq "Company Name"
     end
   end
 

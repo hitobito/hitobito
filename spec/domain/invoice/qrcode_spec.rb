@@ -13,10 +13,18 @@ describe Invoice::Qrcode do
       total: 1500,
       iban: "CH93 0076 2011 6238 5295 7",
       recipient_address: "Max Mustermann\nMusterweg 2\n8000 Alt Tylerland",
-      qr_payment_recipient_address: {address_type: "S", full_name: "Max Mustermann", street: "Musterweg",
-                                     housenumber: "2", zip_code: "8000", town: "Alt Tylerland", country: "CH"},
-      qr_payment_payee_address: {address_type: "S", full_name: "Acme Corp", street: "Hallesche Str.",
-                                 housenumber: "37", zip_code: "3007", town: "Hinterdupfing", country: "CH"},
+      recipient_name: "Max Mustermann",
+      recipient_street: "Musterweg",
+      recipient_housenumber: "2",
+      recipient_zip_code: "8000",
+      recipient_town: "Alt Tylerland",
+      recipient_country: "CH",
+      payee_name: "Acme Corp",
+      payee_street: "Hallesche Str.",
+      payee_housenumber: "37",
+      payee_zip_code: "3007",
+      payee_town: "Hinterdupfing",
+      payee_country: "CH",
       reference: "RF561A1"
     )
   end
@@ -119,6 +127,52 @@ describe Invoice::Qrcode do
         expect(subject).to have(31).items
       end
     end
+
+    context "for deprecated address format" do
+      let(:invoice) do
+        Invoice.new(
+          sequence_number: "1-1",
+          payment_slip: :qr,
+          total: 1500,
+          iban: "CH93 0076 2011 6238 5295 7",
+          reference: "RF561A1",
+          recipient_address: "Max Mustermann\nMusterweg 2\n8000 Alt Tylerland",
+          recipient_name: nil,
+          recipient_street: nil,
+          recipient_housenumber: nil,
+          recipient_zip_code: nil,
+          recipient_town: nil,
+          recipient_country: nil,
+          payee: "Acme Corp\nHallesche Str. 37\n3007 Hinterdupfing",
+          payee_name: nil,
+          payee_street: nil,
+          payee_housenumber: nil,
+          payee_zip_code: nil,
+          payee_town: nil,
+          payee_country: nil
+        )
+      end
+
+      it "has deprecated address type payload" do
+        expect(subject[4]).to eq "K"
+        expect(subject[5]).to eq "Acme Corp"
+        expect(subject[6]).to eq "Hallesche Str. 37"
+        expect(subject[7]).to eq "3007 Hinterdupfing"
+        expect(subject[8]).to eq ""
+        expect(subject[9]).to eq ""
+        expect(subject[10]).to eq ""
+      end
+
+      it "has deprecated address type payload for recipient" do
+        expect(subject[20]).to eq "K"
+        expect(subject[21]).to eq "Max Mustermann"
+        expect(subject[22]).to eq "Musterweg 2"
+        expect(subject[23]).to eq "8000 Alt Tylerland"
+        expect(subject[24]).to eq ""
+        expect(subject[25]).to eq ""
+        expect(subject[26]).to eq ""
+      end
+    end
   end
 
   describe :additional_infos do
@@ -134,18 +188,6 @@ describe Invoice::Qrcode do
     it "truncates payment_purpose to 120 chars" do
       invoice.payment_purpose = "A" * 121
       expect(subject[:purpose].size).to eq 120
-    end
-  end
-
-  describe :debitor do
-    subject { invoice.qrcode.debitor }
-
-    it "is qr code address" do
-      expect(subject.readable_address).to eq <<~TEXT.chomp
-        Max Mustermann
-        Musterweg 2
-        8000 Alt Tylerland
-      TEXT
     end
   end
 

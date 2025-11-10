@@ -112,13 +112,18 @@ describe Invoice do
   end
 
   it "#save sets recipient and related fields, keeps empty fields" do
-    person.update(zip_code: 3003)
+    person.update(zip_code: 3003, country: "CH")
     invoice = create_invoice
     expect(invoice.recipient).to eq person
     expect(invoice.recipient_email).to eq person.email
     expect(invoice.recipient_address).to eq "Top Leader\nGreatstreet 345\n3003 Greattown\n"
-    expect(invoice.qr_payment_recipient_address.address_type).to eq "S"
-    expect(invoice.qr_payment_recipient_address.full_name).to eq "Top Leader"
+
+    expect(invoice.recipient_name).to eq "Top Leader"
+    expect(invoice.recipient_street).to eq "Greatstreet"
+    expect(invoice.recipient_housenumber).to eq "345"
+    expect(invoice.recipient_zip_code).to eq "3003"
+    expect(invoice.recipient_town).to eq "Greattown"
+    expect(invoice.recipient_country).to eq "CH"
   end
 
   it "#save prefers additional email with invoice flag over recipient email" do
@@ -172,6 +177,12 @@ describe Invoice do
     expect(invoice.beneficiary).to eq invoice_config.beneficiary
     expect(invoice.participant_number).to eq invoice_config.participant_number
     expect(invoice.vat_number).to eq invoice_config.vat_number
+    expect(invoice.payee_name).to eq invoice_config.payee_name
+    expect(invoice.payee_street).to eq invoice_config.payee_street
+    expect(invoice.payee_housenumber).to eq invoice_config.payee_housenumber
+    expect(invoice.payee_zip_code).to eq invoice_config.payee_zip_code
+    expect(invoice.payee_town).to eq invoice_config.payee_town
+    expect(invoice.payee_country).to eq invoice_config.payee_country
   end
 
   context "reference" do
@@ -271,16 +282,6 @@ describe Invoice do
 
     Fabricate(:invoice, group: other, recipient: person)
     expect { other.really_destroy! }.to(change { other.invoices.count })
-  end
-
-  it "#recipient_name is read from recipient if present" do
-    expect(create_invoice.recipient_name).to eq "Top"
-  end
-
-  it "#recipient_name is read from recipient_address if recipient is missing" do
-    invoice = create_invoice
-    invoice.update(recipient: nil)
-    expect(invoice.recipient_name).to eq "Top Leader"
   end
 
   it "#order_by_sequence_number orders invoices correctly by sequence number" do

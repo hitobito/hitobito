@@ -13,9 +13,6 @@ class Invoice::Qrcode
   QR_CROSS_X = (QR_CODE_EDGE_SIDE_PX / 2) - SWISS_CROSS_EDGE_SIDE_PX / 2
   QR_CROSS_Y = (QR_CODE_EDGE_SIDE_PX / 2) - SWISS_CROSS_EDGE_SIDE_PX / 2
 
-  QR_CODE_VALUES_KEYS = [:address_type, :full_name, :street, :housenumber, :zip_code,
-    :town, :country]
-
   def initialize(invoice)
     @invoice = invoice
   end

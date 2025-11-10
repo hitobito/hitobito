@@ -210,4 +210,65 @@ describe Invoice::Qrcode do
       expect(invoice.qrcode.payment_reference[:reference]).to eq("GTRBS")
     end
   end
+
+  describe :formatted_debitor do
+    subject { invoice.qrcode.formatted_debitor }
+
+    it "returns formatted debitor" do
+      expect(subject).to eq <<~TEXT.chomp
+        Max Mustermann
+        Musterweg 2
+        8000 Alt Tylerland
+      TEXT
+    end
+
+    context "with deprecated attributes" do
+      let(:invoice) do
+        Invoice.new(
+          recipient_address: "Max Mustermann\nMusterweg 2\n8000 Alt Tylerland",
+          recipient_name: nil
+        )
+      end
+
+      it "returns formatted debitor from recipient_address" do
+        expect(subject).to eq <<~TEXT.chomp
+          Max Mustermann
+          Musterweg 2
+          8000 Alt Tylerland
+        TEXT
+      end
+    end
+  end
+
+  describe :formatted_creditor do
+    subject { invoice.qrcode.formatted_creditor }
+
+    it "returns formatted creditor" do
+      expect(subject).to eq <<~TEXT.chomp
+        CH93 0076 2011 6238 5295 7
+        Acme Corp
+        Hallesche Str. 37
+        3007 Hinterdupfing
+      TEXT
+    end
+
+    context "with deprecated attributes" do
+      let(:invoice) do
+        Invoice.new(
+          iban: "CH93 0076 2011 6238 5295 7",
+          payee: "Acme Corp\nHallesche Str. 37\n3007 Hinterdupfing",
+          payee_name: nil
+        )
+      end
+
+      it "returns formatted creditor from payee" do
+        expect(subject).to eq <<~TEXT.chomp
+          CH93 0076 2011 6238 5295 7
+          Acme Corp
+          Hallesche Str. 37
+          3007 Hinterdupfing
+        TEXT
+      end
+    end
+  end
 end

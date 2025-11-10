@@ -59,7 +59,7 @@ describe Dropdown::InvoiceNew do
     end
 
     it "adds disabled item for finance_group with invalid invoice_config" do
-      InvoiceConfig.update_all(payment_slip: "qr", payee: "not-enough-lines")
+      InvoiceConfig.update_all(payment_slip: "qr", payee_name: nil)
       expected_path = new_invoice_path
       expect(dropdown.items).to have(1).item
       item = dropdown.items.first
@@ -93,7 +93,7 @@ describe Dropdown::InvoiceNew do
       end
 
       it "with invalid invoice_config renders disabled link" do
-        finance_group.invoice_config.update_columns(payment_slip: "qr", payee: "not-enough-lines")
+        finance_group.invoice_config.update_columns(payment_slip: "qr", payee_name: nil)
         expect(finance_group.reload.invoice_config).to be_invalid
 
         expect(html).not_to have_link(href: new_invoice_path)

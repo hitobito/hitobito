@@ -35,7 +35,7 @@ class InvoiceMailer < ApplicationMailer
   end
 
   def placeholder_recipient_name
-    @invoice.greeting_name || @invoice.recipient_name || @invoice.recipient_email
+    @invoice.recipient_name || @invoice.recipient_email
   end
 
   def placeholder_invoice_number

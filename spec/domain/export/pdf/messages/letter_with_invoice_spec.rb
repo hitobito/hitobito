@@ -19,7 +19,17 @@ describe Export::Pdf::Messages::LetterWithInvoice do
 
   subject { pdf }
 
-  before { invoice_configs(:top_layer).update(payment_slip: :qr, payee: "Hans Gerber\nEine Strasse 42\n1234 Dorf") }
+  before do
+    invoice_configs(:top_layer).update(
+      payment_slip: :qr,
+      payee_name: "Hans Gerber",
+      payee_street: "Eine Strasse",
+      payee_housenumber: "42",
+      payee_zip_code: "1234",
+      payee_town: "Dorf",
+      payee_country: "CH"
+    )
+  end
 
   before do
     Subscription.create!(mailing_list: letter.mailing_list,

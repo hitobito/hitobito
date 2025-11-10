@@ -61,10 +61,7 @@ class InvoiceConfig < ActiveRecord::Base
   validates :group_id, uniqueness: true
   validates :email, format: Devise.email_regexp, allow_blank: true
 
-  # TODO: to be discussed:
-  # street and housenumber are not mandatory on a qr bill
-  validates :payee_name, :payee_street, :payee_housenumber,
-    :payee_zip_code, :payee_town, :payee_country,
+  validates :payee_name, :payee_zip_code, :payee_town, :payee_country,
     presence: true, on: :update, if: :qr?
 
   # TODO: probably the if condition is not correct, verification needed
@@ -115,7 +112,12 @@ class InvoiceConfig < ActiveRecord::Base
   end
 
   def payee_address
-    Invoice::Qrcode::Address.from_invoice_config(self).readable_address
+    [
+      payee_name,
+      [payee_street, payee_housenumber].compact.join(" "),
+      [payee_zip_code, payee_town].compact.join(" "),
+      payee_country
+    ].compact_blank.join("\n")
   end
 
   private

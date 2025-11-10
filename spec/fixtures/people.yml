@@ -92,7 +92,6 @@ top_leader:
   housenumber: 345
   zip_code: 3456
   town: Greattown
-  country: CH
   additional_information: bla bla
   primary_group: top_group
   contact_data_visible: true

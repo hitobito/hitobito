@@ -13,6 +13,9 @@ class Invoice::Qrcode
   QR_CROSS_X = (QR_CODE_EDGE_SIDE_PX / 2) - SWISS_CROSS_EDGE_SIDE_PX / 2
   QR_CROSS_Y = (QR_CODE_EDGE_SIDE_PX / 2) - SWISS_CROSS_EDGE_SIDE_PX / 2
 
+  QR_CODE_VALUES_KEYS = [:address_type, :full_name, :street, :housenumber, :zip_code,
+    :town, :country]
+
   def initialize(invoice)
     @invoice = invoice
   end
@@ -117,6 +120,17 @@ class Invoice::Qrcode
     end
   end
 
+  def formatted_creditor
+    [
+      @invoice.iban,
+      format_address(creditor)
+    ].join("\n")
+  end
+
+  def formatted_debitor
+    format_address debitor
+  end
+
   private
 
   def generate_png # rubocop:disable Metrics/MethodLength
@@ -143,6 +157,22 @@ class Invoice::Qrcode
 
   def show_total?
     !@invoice.hide_total? && @invoice.total.nonzero?
+  end
+
+  def format_address(address_attrs)
+    if address_attrs[:address_type] == "K"
+      [
+        address_attrs[:name],
+        address_attrs[:address_line1],
+        address_attrs[:address_line2]
+      ]
+    else
+      [
+        address_attrs[:name],
+        [address_attrs[:street], address_attrs[:housenumber]].compact.join(" "),
+        [address_attrs[:zip_code], address_attrs[:town]].compact.join(" ")
+      ]
+    end.compact_blank.join("\n")
   end
 
   def deprecated_creditor

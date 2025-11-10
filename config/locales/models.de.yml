@@ -1184,6 +1184,11 @@ de:
           right: Rechts
         payee_address: Einzahlung für
         payee_name: Einzahlung für
+        payee_street: Strasse
+        payee_housenumber: Hausnummer
+        payee_zip_code: PLZ
+        payee_town: Ort
+        payee_country: Land
         payment_slip: Einzahlungsschein
         payment_slips:
           qr: QR Rechnung

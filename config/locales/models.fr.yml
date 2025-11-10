@@ -1251,6 +1251,11 @@ fr:
           left: Gauche
           right: Droite
         payee: Paiement à
+        payee_name: Paiement à
+        street: Rue
+        zip_code: CP
+        town: Ville
+        country: Pays
         payment_slip: Bulletin de versement
         payment_slips:
           qr: Facture QR

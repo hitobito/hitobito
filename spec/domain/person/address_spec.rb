@@ -253,6 +253,8 @@ describe Person::Address do
     subject(:attributes) { address.invoice_recipient_address_attributes }
 
     it "returns qr code address" do
+      person.country = "CH"
+
       expect(attributes).to eq({
         recipient_address: "Top Leader\nGreatstreet 345\n3456 Greattown\n",
         recipient_housenumber: "345",

@@ -1250,6 +1250,12 @@ it:
           left: Sinistra
           right: Destra
         payee: Versamento per
+        payee_name: Versamento per
+        street: Strada
+        housenumber: Numero civico
+        zip_code: NAP
+        town: Luogo
+        country: Nazione
         payment_slip: Polizza di versamento
         payment_slips:
           qr: Fattura QR

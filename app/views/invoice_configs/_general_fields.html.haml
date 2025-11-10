@@ -7,7 +7,7 @@
 -# to be discussed: we could hide the address when it is not a qr payment
 %h3.form-subtitle.mt-5= t('.payment')
 = f.labeled_input_field :payee_name
-= f.labeled(:payee_street, Person.human_attribute_name(:street), class: 'd-flex') do
+= f.labeled(:payee_street, InvoiceConfig.human_attribute_name(:payee_street), class: 'd-flex') do
   %div.col-9
     = f.input_field(:payee_street, data: { provide: 'entity', updater: 'AddressTypeahead.update', url: addresses_query_url })
   %div.col-2.offset-1
@@ -18,7 +18,7 @@
     = f.input_field(:payee_zip_code, maxlength: 10)
   %div.col-6.col-md-7.col-lg-8.offset-1
     = f.input_field(:payee_town)
-= f.labeled(:payee_country, Person.human_attribute_name(:country)) do
+= f.labeled(:payee_country) do
   .shown.ms-0
     = f.country_field(:payee_country)
 

@@ -37,7 +37,7 @@ class Invoice::Qrcode
   end
 
   def creditor
-    if @invoice.payee_name.blank?
+    if @invoice.payee_name.blank? && @invoice.payee.present?
       return deprecated_creditor
     end
 
@@ -53,7 +53,7 @@ class Invoice::Qrcode
   end
 
   def debitor
-    if @invoice.recipient_name.blank?
+    if @invoice.recipient_name.blank? && @invoice.recipient_address.present?
       return deprecated_debitor
     end
 

@@ -439,7 +439,13 @@ Hitobito::Application.routes.draw do
   scope path: ApplicationResource.endpoint_namespace, module: :json_api,
         constraints: { format: 'jsonapi' }, defaults: { format: 'jsonapi' } do
     resources :people, only: [:index, :show, :update]
-    resources :groups, only: [:index, :show]
+    resources :groups, only: [:index, :show] do
+      member do
+        FeatureGate.if('groups.self_registration') do
+          resources :self_registrations, only: [:create]
+        end
+      end
+    end
     resources :events, only: [:index, :show]
     resources :event_kinds, module: :event, controller: :kinds, only: [:index, :show]
     resources :event_kind_categories, module: :event, controller: :kind_categories, only: [:index, :show]

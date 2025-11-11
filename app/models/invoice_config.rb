@@ -59,11 +59,12 @@ class InvoiceConfig < ActiveRecord::Base
   has_one :custom_content, dependent: :destroy, as: :context
 
   validates :group_id, uniqueness: true
-  validates :payee, presence: true, on: :update
   validates :email, format: Devise.email_regexp, allow_blank: true
 
-  # TODO: probably the if condition is not correct, verification needed
-  validates :iban, presence: true, on: :update, if: :qr?
+  validates :payee_name, :payee_zip_code, :payee_town, :payee_country,
+    presence: true, on: :update
+
+  validates :iban, presence: true, on: :update
   validates :iban, iban: true, on: :update, allow_blank: true
 
   validates :donation_calculation_year_amount, numericality: {only_integer: true,
@@ -77,7 +78,6 @@ class InvoiceConfig < ActiveRecord::Base
   validates :logo_position, inclusion: {in: ->(_) { logo_positions }}
 
   validate :correct_check_digit
-  validate :correct_payee_qr_format, if: :qr?
 
   validates :sender_name, format: {without: Devise.email_regexp}
 
@@ -110,6 +110,15 @@ class InvoiceConfig < ActiveRecord::Base
       donation_increase_percentage.present?
   end
 
+  def payee_address
+    [
+      payee_name,
+      [payee_street, payee_housenumber].compact.join(" "),
+      [payee_zip_code, payee_town].compact.join(" "),
+      payee_country
+    ].compact_blank.join("\n")
+  end
+
   private
 
   def correct_check_digit
@@ -122,12 +131,6 @@ class InvoiceConfig < ActiveRecord::Base
     return if payment_slip.check_digit(splitted.join) == check_digit.to_i
 
     errors.add(:account_number, :invalid_check_digit)
-  end
-
-  def correct_payee_qr_format
-    return if payee&.lines&.count(&:present?)&.== 3
-
-    errors.add(:payee, :must_have_3_lines)
   end
 
   def logo_enabled?

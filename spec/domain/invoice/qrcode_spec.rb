@@ -12,8 +12,19 @@ describe Invoice::Qrcode do
       payment_slip: :qr,
       total: 1500,
       iban: "CH93 0076 2011 6238 5295 7",
-      payee: "Acme Corp\nHallesche Str. 37\n3007 Hinterdupfing",
       recipient_address: "Max Mustermann\nMusterweg 2\n8000 Alt Tylerland",
+      recipient_name: "Max Mustermann",
+      recipient_street: "Musterweg",
+      recipient_housenumber: "2",
+      recipient_zip_code: "8000",
+      recipient_town: "Alt Tylerland",
+      recipient_country: "CH",
+      payee_name: "Acme Corp",
+      payee_street: "Hallesche Str.",
+      payee_housenumber: "37",
+      payee_zip_code: "3007",
+      payee_town: "Hinterdupfing",
+      payee_country: "CH",
       reference: "RF561A1"
     )
   end
@@ -46,12 +57,12 @@ describe Invoice::Qrcode do
     end
 
     it "has recipient info of combined type" do
-      expect(subject[4]).to eq "K"
+      expect(subject[4]).to eq "S"
       expect(subject[5]).to eq "Acme Corp"
-      expect(subject[6]).to eq "Hallesche Str. 37"
-      expect(subject[7]).to eq "3007 Hinterdupfing"
-      expect(subject[8]).to be_blank
-      expect(subject[9]).to be_blank
+      expect(subject[6]).to eq "Hallesche Str."
+      expect(subject[7]).to eq "37"
+      expect(subject[8]).to eq "3007"
+      expect(subject[9]).to eq "Hinterdupfing"
       expect(subject[10]).to eq "CH"
     end
 
@@ -73,12 +84,12 @@ describe Invoice::Qrcode do
     end
 
     it "has final payment recipient of combined type" do
-      expect(subject[20]).to eq "K"
+      expect(subject[20]).to eq "S"
       expect(subject[21]).to eq "Max Mustermann"
-      expect(subject[22]).to eq "Musterweg 2"
-      expect(subject[23]).to eq "8000 Alt Tylerland"
-      expect(subject[24]).to be_blank
-      expect(subject[25]).to be_blank
+      expect(subject[22]).to eq "Musterweg"
+      expect(subject[23]).to eq "2"
+      expect(subject[24]).to eq "8000"
+      expect(subject[25]).to eq "Alt Tylerland"
       expect(subject[26]).to eq "CH"
     end
 
@@ -116,6 +127,52 @@ describe Invoice::Qrcode do
         expect(subject).to have(31).items
       end
     end
+
+    context "for deprecated address format" do
+      let(:invoice) do
+        Invoice.new(
+          sequence_number: "1-1",
+          payment_slip: :qr,
+          total: 1500,
+          iban: "CH93 0076 2011 6238 5295 7",
+          reference: "RF561A1",
+          recipient_address: "Max Mustermann\nMusterweg 2\n8000 Alt Tylerland",
+          recipient_name: nil,
+          recipient_street: nil,
+          recipient_housenumber: nil,
+          recipient_zip_code: nil,
+          recipient_town: nil,
+          recipient_country: nil,
+          payee: "Acme Corp\nHallesche Str. 37\n3007 Hinterdupfing",
+          payee_name: nil,
+          payee_street: nil,
+          payee_housenumber: nil,
+          payee_zip_code: nil,
+          payee_town: nil,
+          payee_country: nil
+        )
+      end
+
+      it "has deprecated address type payload" do
+        expect(subject[4]).to eq "K"
+        expect(subject[5]).to eq "Acme Corp"
+        expect(subject[6]).to eq "Hallesche Str. 37"
+        expect(subject[7]).to eq "3007 Hinterdupfing"
+        expect(subject[8]).to eq ""
+        expect(subject[9]).to eq ""
+        expect(subject[10]).to eq ""
+      end
+
+      it "has deprecated address type payload for recipient" do
+        expect(subject[20]).to eq "K"
+        expect(subject[21]).to eq "Max Mustermann"
+        expect(subject[22]).to eq "Musterweg 2"
+        expect(subject[23]).to eq "8000 Alt Tylerland"
+        expect(subject[24]).to eq ""
+        expect(subject[25]).to eq ""
+        expect(subject[26]).to eq ""
+      end
+    end
   end
 
   describe :additional_infos do
@@ -131,53 +188,6 @@ describe Invoice::Qrcode do
     it "truncates payment_purpose to 120 chars" do
       invoice.payment_purpose = "A" * 121
       expect(subject[:purpose].size).to eq 120
-    end
-  end
-
-  describe :debitor do
-    subject { invoice.qrcode.debitor }
-
-    it "is extracted from recipient_address" do
-      expect(subject[:address_type]).to eq "K"
-      expect(subject[:full_name]).to eq "Max Mustermann"
-      expect(subject[:address_line1]).to eq "Musterweg 2"
-      expect(subject[:address_line2]).to eq "8000 Alt Tylerland"
-      expect(subject[:zip_code]).to be_blank
-      expect(subject[:town]).to be_blank
-      expect(subject[:country]).to eq "CH"
-    end
-
-    it "handles empty values" do
-      invoice.recipient_address = "Max Mustermann"
-      expect(subject[:address_type]).to eq "K"
-      expect(subject[:full_name]).to eq "Max Mustermann"
-      %i[address_line1 address_line2 zip_code town].each do |key|
-        expect(subject).to have_key(key)
-        expect(subject[key]).to be_blank
-      end
-      expect(subject[:country]).to eq "CH"
-    end
-
-    it "handles zip without town" do
-      invoice.recipient_address = "Max Mustermann\nMusterweg 2\n8000"
-      expect(subject[:address_type]).to eq "K"
-      expect(subject[:full_name]).to eq "Max Mustermann"
-      expect(subject[:address_line1]).to eq "Musterweg 2"
-      expect(subject[:address_line2]).to eq "8000"
-      expect(subject[:zip_code]).to be_blank
-      expect(subject[:town]).to be_blank
-      expect(subject[:country]).to eq "CH"
-    end
-
-    it "handles blank lines" do
-      invoice.recipient_address = "Max Mustermann\n \n"
-      expect(subject[:address_type]).to eq "K"
-      expect(subject[:full_name]).to eq "Max Mustermann"
-      expect(subject[:address_line1]).to be_blank
-      expect(subject[:address_line2]).to be_blank
-      expect(subject[:zip_code]).to be_blank
-      expect(subject[:town]).to be_blank
-      expect(subject[:country]).to eq "CH"
     end
   end
 
@@ -198,6 +208,67 @@ describe Invoice::Qrcode do
       invoice.reference = "GTRBS"
       expect(invoice.qrcode.payment_reference[:type]).to eq("QRR")
       expect(invoice.qrcode.payment_reference[:reference]).to eq("GTRBS")
+    end
+  end
+
+  describe :formatted_debitor do
+    subject { invoice.qrcode.formatted_debitor }
+
+    it "returns formatted debitor" do
+      expect(subject).to eq <<~TEXT.chomp
+        Max Mustermann
+        Musterweg 2
+        8000 Alt Tylerland
+      TEXT
+    end
+
+    context "with deprecated attributes" do
+      let(:invoice) do
+        Invoice.new(
+          recipient_address: "Max Mustermann\nMusterweg 2\n8000 Alt Tylerland",
+          recipient_name: nil
+        )
+      end
+
+      it "returns formatted debitor from recipient_address" do
+        expect(subject).to eq <<~TEXT.chomp
+          Max Mustermann
+          Musterweg 2
+          8000 Alt Tylerland
+        TEXT
+      end
+    end
+  end
+
+  describe :formatted_creditor do
+    subject { invoice.qrcode.formatted_creditor }
+
+    it "returns formatted creditor" do
+      expect(subject).to eq <<~TEXT.chomp
+        CH93 0076 2011 6238 5295 7
+        Acme Corp
+        Hallesche Str. 37
+        3007 Hinterdupfing
+      TEXT
+    end
+
+    context "with deprecated attributes" do
+      let(:invoice) do
+        Invoice.new(
+          iban: "CH93 0076 2011 6238 5295 7",
+          payee: "Acme Corp\nHallesche Str. 37\n3007 Hinterdupfing",
+          payee_name: nil
+        )
+      end
+
+      it "returns formatted creditor from payee" do
+        expect(subject).to eq <<~TEXT.chomp
+          CH93 0076 2011 6238 5295 7
+          Acme Corp
+          Hallesche Str. 37
+          3007 Hinterdupfing
+        TEXT
+      end
     end
   end
 end

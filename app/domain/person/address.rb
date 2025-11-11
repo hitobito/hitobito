@@ -43,12 +43,24 @@ class Person::Address
     (names + full_address(country_as: :country_label)).compact.join("\n")
   end
 
+  def invoice_recipient_address_attributes
+    {
+      recipient_address: for_invoice,
+      recipient_name: invoice_recipient_name,
+      recipient_street: street,
+      recipient_housenumber: housenumber,
+      recipient_zip_code: zip_code,
+      recipient_town: town,
+      recipient_country: country
+    }
+  end
+
   private
 
   attr_reader :person, :name, :addressable
 
-  delegate :address, :address_care_of, :postbox, :zip_code, :town, :name, :country_label,
-    :ignored_country?, to: :addressable
+  delegate :address, :address_care_of, :postbox, :street, :housenumber, :zip_code, :town, :country,
+    :name, :country_label, :ignored_country?, to: :addressable
   delegate :company?, :additional_addresses, to: :person
 
   def person_and_company_name
@@ -97,5 +109,16 @@ class Person::Address
 
   def print_nickname?(nickname)
     nickname && @person.respond_to?(:nickname) && @person.nickname.present?
+  end
+
+  def invoice_recipient_name
+    @addressable = additional_addresses.find(&:invoices?) || person
+    if addressable.is_a?(AdditionalAddress)
+      addressable.name
+    elsif company?
+      @person.company_name.to_s.squish
+    else
+      @person.full_name.to_s.squish
+    end
   end
 end

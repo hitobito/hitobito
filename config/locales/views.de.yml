@@ -1039,8 +1039,9 @@ de:
         provider_initialization_failed: Einrichten der Zahlungsschnittstelle %{payment_provider} ist fehlgeschlagen
         provider_initialization_succeeded: Einrichten der Zahlungsschnittstelle %{payment_provider} war erfolgreich
     general_fields:
-      payment: "Einzahlung"
+      payment: "Einzahlung für"
       payment_information_help: "Wird in jeder Rechnung aufgeführt, kann pro Rechnung angepasst werden"
+      deprecated_payee_help: "Alter Zahlungsempfänger vor Umstellung auf neues QR-Rechnungsformat"
       address_help: "Erscheint auf dem Brief als Absenderadresse"
       payee_help: "Erscheint auf dem Einzahlungsschein"
       beneficiary_help: "Erscheint auf dem Einzahlungsschein"

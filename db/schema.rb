@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_17_132141) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_03_152059) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -594,6 +594,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_17_132141) do
     t.string "sender_name"
     t.string "logo_position", default: "disabled", null: false
     t.integer "reference_prefix"
+    t.string "payee_name"
+    t.string "payee_street"
+    t.string "payee_housenumber"
+    t.string "payee_zip_code"
+    t.string "payee_town"
+    t.string "payee_country", default: "CH"
     t.index ["group_id"], name: "index_invoice_configs_on_group_id"
   end
 
@@ -663,6 +669,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_17_132141) do
     t.bigint "invoice_list_id"
     t.string "reference", null: false
     t.boolean "hide_total", default: false, null: false
+    t.string "recipient_name"
+    t.string "recipient_street"
+    t.string "recipient_housenumber"
+    t.string "recipient_zip_code"
+    t.string "recipient_town"
+    t.string "recipient_country"
+    t.string "payee_name"
+    t.string "payee_street"
+    t.string "payee_housenumber"
+    t.string "payee_zip_code"
+    t.string "payee_town"
+    t.string "payee_country"
     t.index ["esr_number"], name: "index_invoices_on_esr_number"
     t.index ["group_id"], name: "index_invoices_on_group_id"
     t.index ["invoice_list_id"], name: "index_invoices_on_invoice_list_id"

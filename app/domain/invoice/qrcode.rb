@@ -15,9 +15,11 @@ class Invoice::Qrcode
 
   def initialize(invoice)
     @invoice = invoice
+    @deprecations = Deprecations.new(invoice)
   end
 
-  # see https://www.paymentstandards.ch/dam/downloads/ig-qr-bill-de.pdf 4.3.3
+  # https://www.six-group.com/dam/download/banking-services/standardization/qr-bill/ig-qr-bill-v2.3-de.pdf
+  # see "4.2.2 Datenelemente in der QR-Rechnung"
   def payload
     striped_values(
       metadata,
@@ -36,20 +38,44 @@ class Invoice::Qrcode
   end
 
   def creditor
-    extract_contact(@invoice.payee)
+    if @deprecations.deprecated_creditor?
+      return @deprecations.creditor
+    end
+
+    {
+      address_type: "S",
+      name: @invoice.payee_name,
+      street: @invoice.payee_street,
+      housenumber: @invoice.payee_housenumber,
+      zip_code: @invoice.payee_zip_code,
+      town: @invoice.payee_town,
+      country: @invoice.payee_country
+    }
+  end
+
+  def debitor
+    if @deprecations.deprecated_debitor?
+      return @deprecations.debitor
+    end
+
+    {
+      address_type: "S",
+      name: @invoice.recipient_name,
+      street: @invoice.recipient_street,
+      housenumber: @invoice.recipient_housenumber,
+      zip_code: @invoice.recipient_zip_code,
+      town: @invoice.recipient_town,
+      country: @invoice.recipient_country
+    }
   end
 
   def creditor_final
-    extract_contact(@invoice.payee).keys.product([nil]).to_h # optional, mock with nil values
+    debitor.to_h.keys.product([nil]).to_h # optional, mock with nil values
   end
 
   def payment
     amount = format("%<total>.2f", total: @invoice.amount_open) if show_total?
     {amount: amount, currency: @invoice.currency}
-  end
-
-  def debitor
-    extract_contact(@invoice.recipient_address)
   end
 
   def payment_reference
@@ -92,15 +118,15 @@ class Invoice::Qrcode
     end
   end
 
-  def creditor_values
-    values = creditor.except(:address_type, :town, :zip, :country)
-      .reverse_merge(iban: @invoice.iban)
-    striped_values(values).join("\n")
+  def formatted_creditor
+    [
+      @invoice.iban,
+      format_address(creditor)
+    ].join("\n")
   end
 
-  def debitor_values
-    values = debitor.except(:address_type, :town, :zip, :country)
-    striped_values(values).join("\n")
+  def formatted_debitor
+    format_address debitor
   end
 
   private
@@ -119,37 +145,31 @@ class Invoice::Qrcode
     )
   end
 
-  def extract_contact(contactable) # rubocop:disable Metrics/MethodLength
-    parts = contactable.to_s.strip.split(/\r*\n/)
-    address_line1 = nil
-    address_line2 = nil
-    if parts.count > 1
-      address_line1 = parts.last
-    end
-    if parts.count > 2
-      address_line2 = address_line1
-      address_line1 = parts.second_to_last
-    end
-    {
-      address_type: "K",
-      full_name: parts.first,
-      address_line1: address_line1,
-      address_line2: address_line2,
-      zip_code: nil,
-      town: nil,
-      country: "CH"
-    }
-  end
-
-  def striped_values(*hashes)
-    hashes.collect { |obj| obj.values.collect(&:to_s).collect(&:strip) }
-  end
-
   def image(filename)
     Rails.root.join("app/domain/invoice/assets/#{filename}")
   end
 
   def show_total?
     !@invoice.hide_total? && @invoice.total.nonzero?
+  end
+
+  def format_address(address_attrs)
+    if address_attrs[:address_type] == "K"
+      [
+        address_attrs[:name],
+        address_attrs[:address_line1],
+        address_attrs[:address_line2]
+      ]
+    else
+      [
+        address_attrs[:name],
+        [address_attrs[:street], address_attrs[:housenumber]].compact.join(" "),
+        [address_attrs[:zip_code], address_attrs[:town]].compact.join(" ")
+      ]
+    end.compact_blank.join("\n")
+  end
+
+  def striped_values(*hashes)
+    hashes.collect { |obj| obj.values.collect(&:to_s).collect(&:strip) }
   end
 end

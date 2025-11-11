@@ -193,9 +193,6 @@ de:
               invalid_check_digit: 'ist nicht gültig; Inkorrekte Prüfziffer'
             logo:
               attached_unless_disabled: 'muss angegeben werden, wenn eine Logoposition gewählt ist'
-            payee:
-              to_long: 'darf höchstens 2 Zeilen enthalten'
-              must_have_3_lines: 'muss genau 3 Zeilen enthalten'
         role:
           attributes:
             end_on:
@@ -1182,7 +1179,14 @@ de:
           disabled: Kein Logo
           left: Links
           right: Rechts
-        payee: Einzahlung für
+        payee: Alter Zahlungsempfänger
+        payee_address: Einzahlung für
+        payee_name: Name
+        payee_street: Strasse
+        payee_housenumber: Hausnummer
+        payee_zip_code: PLZ
+        payee_town: Ort
+        payee_country: Land
         payment_slip: Einzahlungsschein
         payment_slips:
           qr: QR Rechnung

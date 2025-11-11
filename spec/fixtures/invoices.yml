@@ -54,6 +54,17 @@ invoice:
   group: bottom_layer_one
   recipient: top_leader
   recipient_email: top_leader@example.com
+  recipient_street: Greatstreet
+  recipient_housenumber: 345
+  recipient_zip_code: 3456
+  recipient_town: Greattown
+  recipient_country: CH
+  payee_name: Hitobito AG
+  payee_street: Belpstrasse
+  payee_housenumber: 37
+  payee_zip_code: 3007
+  payee_town: Bern
+  payee_country: CH
   payment_slip: ch_esr
   sequence_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-2
   esr_number: "00 00376 80338 90000 00000 00021"
@@ -67,6 +78,17 @@ sent:
   group: bottom_layer_one
   recipient: top_leader
   recipient_email: top_leader@example.com
+  recipient_street: Greatstreet
+  recipient_housenumber: 345
+  recipient_zip_code: 3456
+  recipient_town: Greattown
+  recipient_country: CH
+  payee_name: Hitobito AG
+  payee_street: Belpstrasse
+  payee_housenumber: 37
+  payee_zip_code: 3007
+  payee_town: Bern
+  payee_country: CH
   payment_slip: ch_esr
   sequence_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-3
   esr_number: "00 00376 80338 90000 00000 00036"

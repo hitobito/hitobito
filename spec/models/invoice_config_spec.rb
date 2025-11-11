@@ -43,42 +43,10 @@ describe InvoiceConfig do
     it "qr" do
       subject.payment_slip = "qr"
       expect(subject).not_to be_valid
-      expect(subject.errors.attribute_names).to eq [:payee, :iban]
+      expect(subject.errors.attribute_names).to eq [
+        :payee_name, :payee_zip_code, :payee_town, :iban
+      ]
     end
-
-    it "no_ps" do
-      subject.payment_slip = "no_ps"
-      expect(subject).not_to be_valid
-      expect(subject.errors.attribute_names).to eq [:payee]
-    end
-  end
-
-  it "validates correct payee format for qr payment_slip" do
-    invoice_config.update(payment_slip: "qr", payee: "anything goes NOT")
-    expect(invoice_config).not_to be_valid
-    expect(invoice_config.errors.full_messages).to eq ["Einzahlung für muss genau 3 Zeilen enthalten"]
-
-    invoice_config.update(
-      payment_slip: "qr",
-      payee: <<~PAYEE
-        Mando Muster
-        Einestrasse 1
-        4242 Kaff
-        One more line
-      PAYEE
-    )
-    expect(invoice_config).not_to be_valid
-    expect(invoice_config.errors.full_messages).to eq ["Einzahlung für muss genau 3 Zeilen enthalten"]
-
-    invoice_config.update(
-      payment_slip: "qr",
-      payee: <<~PAYEE
-        Mando Muster
-        Einestrasse 1
-        4242 Kaff
-      PAYEE
-    )
-    expect(invoice_config).to be_valid
   end
 
   it "validates correct iban format" do
@@ -86,12 +54,6 @@ describe InvoiceConfig do
 
     expect(invoice_config).not_to be_valid
     expect(invoice_config.errors.full_messages).to include("IBAN ist nicht gültig")
-  end
-
-  it "validates presence of payee" do
-    invoice_config.update(payee: "")
-
-    expect(invoice_config).not_to be_valid
   end
 
   it "validates account_number check digit if post payment" do

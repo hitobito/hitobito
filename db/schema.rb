@@ -580,11 +580,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_152059) do
     t.integer "group_id", null: false
     t.text "address"
     t.text "payment_information"
-    t.text "payee"
     t.string "account_number"
     t.string "iban"
     t.string "payment_slip", default: "qr", null: false
     t.text "beneficiary"
+    t.text "payee"
     t.string "participant_number"
     t.string "email"
     t.string "vat_number"
@@ -599,7 +599,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_152059) do
     t.string "payee_housenumber"
     t.string "payee_zip_code"
     t.string "payee_town"
-    t.string "payee_country"
+    t.string "payee_country", default: "CH"
     t.index ["group_id"], name: "index_invoice_configs_on_group_id"
   end
 

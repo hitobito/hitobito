@@ -44,7 +44,7 @@ describe InvoiceConfig do
       subject.payment_slip = "qr"
       expect(subject).not_to be_valid
       expect(subject.errors.attribute_names).to eq [
-        :payee_name, :payee_zip_code, :payee_town, :payee_country, :iban
+        :payee_name, :payee_zip_code, :payee_town, :iban
       ]
     end
   end

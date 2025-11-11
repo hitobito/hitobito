@@ -191,6 +191,9 @@ en:
               invalid_check_digit: 'is not valid; Incorrect check digit'
             logo:
               attached_unless_disabled: 'muss angegeben werden, wenn eine Logoposition gewählt ist'
+            payee:
+              to_long: 'is too long, may only have 2 lines'
+              must_have_3_lines: 'muss genau 3 Zeilen enthalten'
         role:
           attributes:
             end_on:

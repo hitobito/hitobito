@@ -195,6 +195,9 @@ fr:
               invalid_check_digit: 'n''est pas valable ; code de vérification incorrect'
             logo:
               attached_unless_disabled: 'doit être indiqué si une position de logo est sélectionnée'
+            payee:
+              to_long: 'doit contenir 2 lignes au maximum'
+              must_have_3_lines: 'doit contenir exactement 3 lignes'
         role:
           attributes:
             end_on:
@@ -1248,11 +1251,6 @@ fr:
           left: Gauche
           right: Droite
         payee: Paiement à
-        payee_name: Paiement à
-        street: Rue
-        zip_code: CP
-        town: Ville
-        country: Pays
         payment_slip: Bulletin de versement
         payment_slips:
           qr: Facture QR

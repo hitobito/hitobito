@@ -29,6 +29,7 @@ class JsonApiController < ActionController::API
 
   before_action :assert_media_type_json_api, only: [:update, :create]
   before_action :ensure_id_param_consistency, except: [:index, :create]
+  before_action :ensure_no_id_param, only: [:create]
 
   class JsonApiUnauthorized < StandardError; end
 
@@ -102,7 +103,7 @@ class JsonApiController < ActionController::API
   end
 
   def create
-    resource = resource_class.build(params)
+    resource = resource_class.build(params.except(:id))
     if resource.save
       render jsonapi: resource, status: :created
     else
@@ -169,5 +170,22 @@ class JsonApiController < ActionController::API
     param_id = params[:id].presence || return
 
     raise ActionController::BadRequest if data_id.to_s != param_id.to_s
+  end
+
+  def ensure_no_id_param
+    # make sure no id is passed in the payload
+    errors = Graphiti::Util::SimpleErrors.new({})
+
+    if params.dig(:data, :id).present?
+      errors.add("data.id", :must_not_be_set,
+        message: I18n.t("api.errors.resources.id_must_not_be_set"))
+    end
+
+    if params.dig(:data, :attributes, :id).present?
+      errors.add("data.attributes.id", :must_not_be_set,
+        message: I18n.t("api.errors.resources.id_must_not_be_set"))
+    end
+
+    raise Graphiti::Errors::InvalidRequest, errors if errors.count > 0
   end
 end

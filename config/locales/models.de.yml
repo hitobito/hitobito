@@ -1345,6 +1345,18 @@ de:
         included_calendar_tags: Nur mit Tags
         excluded_calendar_tags: Ausgeschlossene Tags
 
+  api:
+    errors:
+      resources:
+        id_must_not_be_set: ID darf nicht gesetzt sein
+        role_resource:
+          group_id:
+            unwritable_attribute: kann nicht geändert werden
+          person_id:
+            unwritable_attribute: kann nicht geändert werden
+          type:
+            unwritable_attribute: kann nicht geändert werden
+
   doorkeeper:
     scopes:
       email: Lesen deiner E-Mail Adresse

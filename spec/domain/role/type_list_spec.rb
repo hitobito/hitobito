@@ -19,7 +19,8 @@ describe Role::TypeList do
       ["Bottom Layer",
         {"Bottom Layer" => [Group::BottomLayer::Leader, Group::BottomLayer::LocalGuide,
           Group::BottomLayer::Member, Group::BottomLayer::BasicPermissionsOnly],
-         "Bottom Group" => [Group::BottomGroup::Leader, Group::BottomGroup::Member]}],
+         "Bottom Group" => [Group::BottomGroup::Leader, Group::BottomGroup::Member,
+           Group::BottomGroup::NoPermissions]}],
 
       ["Global",
         {
@@ -35,7 +36,8 @@ describe Role::TypeList do
       ["Bottom Layer",
         {"Bottom Layer" => [Group::BottomLayer::Leader, Group::BottomLayer::LocalGuide,
           Group::BottomLayer::Member, Group::BottomLayer::BasicPermissionsOnly],
-         "Bottom Group" => [Group::BottomGroup::Leader, Group::BottomGroup::Member],
+         "Bottom Group" => [Group::BottomGroup::Leader, Group::BottomGroup::Member,
+           Group::BottomGroup::NoPermissions],
          "Global Group" => [Group::GlobalGroup::Leader, Group::GlobalGroup::Member]}],
 
       ["Global",
@@ -62,7 +64,8 @@ describe Role::TypeList do
     expect(list.to_enum.to_a).to eq([
 
       ["Bottom Group",
-        {"Bottom Group" => [Group::BottomGroup::Leader, Group::BottomGroup::Member],
+        {"Bottom Group" => [Group::BottomGroup::Leader, Group::BottomGroup::Member,
+          Group::BottomGroup::NoPermissions],
          "Global Group" => [Group::GlobalGroup::Leader, Group::GlobalGroup::Member]}],
       ["Global",
         {"Global" => [Role::External]}]
@@ -77,7 +80,8 @@ describe Role::TypeList do
         Group::TopGroup::GroupManager Group::TopGroup::Member Group::TopGroup::InvisiblePeopleManager
         Group::BottomLayer::Leader Group::BottomLayer::LocalGuide Group::BottomLayer::Member
         Group::BottomLayer::BasicPermissionsOnly Group::BottomGroup::Leader
-        Group::BottomGroup::Member Group::GlobalGroup::Leader Group::GlobalGroup::Member Role::External])
+        Group::BottomGroup::Member Group::BottomGroup::NoPermissions Group::GlobalGroup::Leader
+        Group::GlobalGroup::Member Role::External])
     end
 
     it "with block" do
@@ -97,6 +101,7 @@ describe Role::TypeList do
         {layer: "Bottom Layer", group: "Bottom Layer", role: Group::BottomLayer::BasicPermissionsOnly},
         {layer: "Bottom Layer", group: "Bottom Group", role: Group::BottomGroup::Leader},
         {layer: "Bottom Layer", group: "Bottom Group", role: Group::BottomGroup::Member},
+        {layer: "Bottom Layer", group: "Bottom Group", role: Group::BottomGroup::NoPermissions},
         {layer: "Global", group: "Global Group", role: Group::GlobalGroup::Leader},
         {layer: "Global", group: "Global Group", role: Group::GlobalGroup::Member},
         {layer: "Global", group: "Global", role: Role::External}

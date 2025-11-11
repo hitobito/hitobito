@@ -587,6 +587,41 @@ describe Group do
     end
   end
 
+  context :self_registration do
+    let(:group) { groups(:bottom_group_one_one) }
+
+    describe :self_registration_active? do
+      before do
+        allow(FeatureGate).to receive(:enabled?).with("groups.self_registration").and_return(true)
+        group.update!(self_registration_role_type: Group::BottomGroup::NoPermissions.name)
+      end
+
+      it "is active if all conditions are met" do
+        expect(group).to be_self_registration_active
+      end
+
+      it "is not active if feature toggle is off" do
+        allow(FeatureGate).to receive(:enabled?).with("groups.self_registration").and_return(false)
+        expect(group).not_to be_self_registration_active
+      end
+
+      it "is not active if role type with permissions is selected" do
+        group.self_registration_role_type = Group::BottomGroup::Member.name
+        expect(group).not_to be_self_registration_active
+      end
+
+      it "is not active if role type is invalid for other reasons" do
+        allow_any_instance_of(GroupDecorator).to receive(:allowed_roles_for_self_registration).and_return([])
+        expect(group).not_to be_self_registration_active
+      end
+
+      it "is not active if group is archived" do
+        group.archived_at = 1.day.ago
+        expect(group).not_to be_self_registration_active
+      end
+    end
+  end
+
   describe "e-mail validation" do
     let(:group) { groups(:top_layer) }
 

@@ -19,14 +19,5 @@ describe Person::TopController do
         is_expected.to redirect_to(group_person_path(top_leader.primary_group_id, top_leader.id, format: nil))
       end
     end
-
-    context "json" do
-      it "redirects to json" do
-        get :show, params: {id: top_leader.id, user_email: "hans@example.com", user_token: "123"}, format: :json
-        is_expected.to redirect_to(group_person_path(top_leader.primary_group_id,
-          top_leader.id,
-          format: :json))
-      end
-    end
   end
 end

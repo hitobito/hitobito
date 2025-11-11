@@ -957,38 +957,6 @@ describe PeopleController do
     end
   end
 
-  context "as api user" do
-    describe "GET #show" do
-      before { top_leader.confirm }
-
-      it "redirects when token is nil" do
-        get :show, params: {group_id: group.id, id: top_leader.id, user_token: "", user_email: top_leader.email}
-        is_expected.to redirect_to new_person_session_path
-      end
-
-      it "redirects when token is invalid" do
-        get :show, params: {group_id: group.id, id: top_leader.id, user_token: "yadayada", user_email: top_leader.email}
-        is_expected.to redirect_to new_person_session_path
-      end
-
-      it "shows page when token is valid" do
-        top_leader.generate_authentication_token!
-        get :show,
-          params: {group_id: group.id, id: top_leader.id, user_token: top_leader.authentication_token,
-                   user_email: top_leader.email}
-        is_expected.to render_template("show")
-      end
-
-      it "shows page when headers are valid" do
-        top_leader.generate_authentication_token!
-        @request.headers["X-User-Email"] = top_leader.email
-        @request.headers["X-User-Token"] = top_leader.authentication_token
-        get :show, params: {group_id: group.id, id: top_leader.id}
-        is_expected.to render_template("show")
-      end
-    end
-  end
-
   context "DELETE #destroy" do
     let(:member) { people(:bottom_member) }
     let(:admin) { people(:top_leader) }

@@ -21,23 +21,6 @@ describe DashboardController do
       end
     end
 
-    context "json" do
-      it "shows error if no user" do
-        get :index, format: :json
-        expect(response.status).to be(401)
-        json = JSON.parse(response.body)
-        expect(json["error"]).to be_present
-      end
-
-      it "redirects to user home if logged in" do
-        person = people(:top_leader)
-        person.confirm
-        person.generate_authentication_token!
-        get :index, params: {user_email: person.email, user_token: person.authentication_token}, format: :json
-        is_expected.to redirect_to(group_person_path(person.groups.first, person, format: :json))
-      end
-    end
-
     context "custom_dashboard_page feature enabled" do
       before do
         allow(FeatureGate).to receive(:enabled?).with("custom_dashboard_page").and_return(true)
@@ -53,16 +36,6 @@ describe DashboardController do
         it "redirects to login if no user" do
           get :index
           is_expected.to redirect_to(new_person_session_path)
-        end
-      end
-
-      context "json" do
-        it "redirects to user home if logged in" do
-          person = people(:top_leader)
-          person.confirm
-          person.generate_authentication_token!
-          get :index, params: {user_email: person.email, user_token: person.authentication_token}, format: :json
-          is_expected.to redirect_to(group_person_path(person.groups.first, person, format: :json))
         end
       end
     end

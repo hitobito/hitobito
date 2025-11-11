@@ -11,7 +11,7 @@ module Export::Pdf::Invoice
     delegate :start_new_page, :move_cursor_to, :horizontal_line, :vertical_line,
       :stroke, :bounds, :font, :text_box, :move_down, to: :pdf
 
-    delegate :creditor_values, :debitor_values, to: "invoice.qrcode"
+    delegate :formatted_creditor, :formatted_debitor, to: "invoice.qrcode"
 
     HEIGHT = 105.mm
     WIDTH_PAYMENT = 148.mm
@@ -161,7 +161,7 @@ module Export::Pdf::Invoice
         bold do
           text t("creditor_heading")
         end
-        text creditor_values
+        text formatted_creditor
       end
     end
 
@@ -179,7 +179,7 @@ module Export::Pdf::Invoice
         bold do
           text t("debitor_heading")
         end
-        text debitor_values
+        text formatted_debitor
       end
     end
 

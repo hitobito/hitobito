@@ -5,7 +5,8 @@
 
 class InvoiceConfigsController < CrudController
   self.nesting = Group
-  self.permitted_attrs = [:payment_information, :address, :iban, :payment_slip, :payee,
+  self.permitted_attrs = [:payment_information, :address, :iban, :payment_slip,
+    :payee_name, :payee_street, :payee_housenumber, :payee_zip_code, :payee_town, :payee_country,
     :email, :vat_number, :currency, :due_days, :sender_name, :reference_prefix,
     :donation_calculation_year_amount, :donation_increase_percentage,
     :logo, :logo_position, :remove_logo,

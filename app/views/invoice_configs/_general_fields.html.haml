@@ -5,11 +5,30 @@
 = f.labeled_input_field :vat_number
 
 %h3.form-subtitle.mt-5= t('.payment')
-= f.labeled_input_field :payee, rows: 3, help: t('.payee_help')
+-# Show the old payee information as long the new information was not added yet.
+-# This logic can be removed as soon as all customers have migrated.
+- if [:payee_name, :payee_zip_code, :payee_town].any? { |key| entry.send(key).blank? }
+  = f.labeled_input_field :payee, rows: 3, help: t('.deprecated_payee_help'), disabled: true
+
+= f.labeled_input_field :payee_name
+= f.labeled(:payee_street, InvoiceConfig.human_attribute_name(:payee_street), class: 'd-flex') do
+  %div.col-9
+    = f.input_field(:payee_street)
+  %div.col-2.offset-1
+    = f.input_field(:payee_housenumber, placeholder: 'No')
+
+= f.labeled(:payee_zip_code, t('contactable.fields.zip_town'), class: 'd-flex') do
+  %div.col-5.col-md-4.col-lg-3
+    = f.input_field(:payee_zip_code, maxlength: 10)
+  %div.col-6.col-md-7.col-lg-8.offset-1
+    = f.input_field(:payee_town)
+= f.labeled(:payee_country) do
+  .shown.ms-0
+    = f.country_field(:payee_country)
+
 = f.labeled_input_field :iban, help: t('.iban_example')
 = f.labeled(:payment_slip) do
   = f.collection_select(:payment_slip, InvoiceConfig.payment_slip_labels.to_a, :first, :second, {}, class: 'form-select form-select-sm')
-
 = f.labeled_input_field :reference_prefix
 
 %h3.form-subtitle.mt-5= t('.variable_donation_appeal')

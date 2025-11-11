@@ -249,6 +249,56 @@ describe Person::Address do
     end
   end
 
+  describe "#invoice_recipient_address_attributes" do
+    subject(:attributes) { address.invoice_recipient_address_attributes }
+
+    it "returns qr code address" do
+      person.country = "CH"
+
+      expect(attributes).to eq({
+        recipient_address: "Top Leader\nGreatstreet 345\n3456 Greattown\n",
+        recipient_housenumber: "345",
+        recipient_name: "Top Leader",
+        recipient_street: "Greatstreet",
+        recipient_town: "Greattown",
+        recipient_zip_code: "3456",
+        recipient_country: "CH"
+      })
+    end
+
+    it "uses invoice address if additional address with invoice flag exists" do
+      build_additional_address(
+        {
+          label: nil,
+          name: "Foo Bar",
+          uses_contactable_name: false,
+          street: "Lagistrasse",
+          housenumber: "12a",
+          zip_code: 1080,
+          town: "Jamestown",
+          invoices: true
+        }
+      )
+
+      expect(attributes).to eq({
+        recipient_address: "Foo Bar\nLagistrasse 12a\n1080 Jamestown\n",
+        recipient_country: nil,
+        recipient_housenumber: "12a",
+        recipient_name: "Foo Bar",
+        recipient_street: "Lagistrasse",
+        recipient_town: "Jamestown",
+        recipient_zip_code: "1080"
+      })
+    end
+
+    it "uses company name for companies" do
+      person.company_name = "Company Name"
+      person.company = true
+
+      expect(attributes[:recipient_name]).to eq "Company Name"
+    end
+  end
+
   describe "#for_pdf_label" do
     def text(name: person.to_s, nickname: false) = address.for_pdf_label(name, nickname)
 

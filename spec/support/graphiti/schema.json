@@ -3218,6 +3218,94 @@
       }
     },
     {
+      "name": "SelfRegistrationResource",
+      "type": "self_registrations",
+      "graphql_entrypoint": "selfRegistrations",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "first_name": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "last_name": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "nickname": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "company_name": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "company": {
+          "type": "boolean",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "email": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "adult_consent": {
+          "type": "boolean",
+          "readable": false,
+          "writable": true,
+          "description": null
+        },
+        "privacy_policy_accepted": {
+          "type": "boolean",
+          "readable": true,
+          "writable": true,
+          "description": null
+        }
+      },
+      "extra_attributes": {
+      },
+      "sorts": {
+        "id": {
+        }
+      },
+      "filters": {
+        "id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        }
+      },
+      "relationships": {
+      },
+      "stats": {
+        "total": [
+          "count"
+        ]
+      }
+    },
+    {
       "name": "SocialAccountResource",
       "type": "social_accounts",
       "graphql_entrypoint": "socialAccounts",
@@ -3454,6 +3542,13 @@
         },
         "destroy": {
           "resource": "RoleResource"
+        }
+      }
+    },
+    "/api/groups/1/self_registrations": {
+      "actions": {
+        "create": {
+          "resource": "SelfRegistrationResource"
         }
       }
     }

@@ -1329,6 +1329,7 @@ de:
         layer_full: Lese- und Schreibrechte auf dieser Ebene
         layer_and_below_full: Lese- und Schreibrechte auf dieser und darunterliegenden Ebenen
         people: Personen
+        register_people: Neue Personen registrieren (braucht Schreibrechte)
         groups: Gruppen
         events: Anlässe
         invoices: Rechnungen
@@ -1356,6 +1357,7 @@ de:
       people: Lesen aller Personen, auf die du Zugriff hast
       invoices: Lesen aller Rechnungen, auf die du Zugriff hast
       mailing_lists: Lesen aller Abos, auf die du Zugriff hast
+      register_people: Neue Personen registrieren
       nextcloud: Lesen deiner Nextcloud-Gruppen und deines Anzeigenamens
 
   fixed_fees:

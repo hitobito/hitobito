@@ -1356,6 +1356,11 @@ de:
             unwritable_attribute: kann nicht geändert werden
           type:
             unwritable_attribute: kann nicht geändert werden
+        self_registration_resource:
+          adult_consent:
+            must_be_accepted: muss akzeptiert werden
+          privacy_policy_accepted:
+            must_be_accepted: muss akzeptiert werden
 
   doorkeeper:
     scopes:

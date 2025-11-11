@@ -1245,6 +1245,12 @@
           "writable": false,
           "description": null
         },
+        "self_registration_require_adult_consent": {
+          "type": "boolean",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
         "archived_at": {
           "type": "datetime",
           "readable": true,
@@ -1273,6 +1279,11 @@
       "extra_attributes": {
         "logo": {
           "type": "string",
+          "readable": true,
+          "description": null
+        },
+        "privacy_policies": {
+          "type": "array",
           "readable": true,
           "description": null
         }
@@ -1309,6 +1320,8 @@
         "require_person_add_requests": {
         },
         "self_registration_url": {
+        },
+        "self_registration_require_adult_consent": {
         },
         "archived_at": {
         },
@@ -1527,6 +1540,13 @@
             "match",
             "not_match"
           ]
+        },
+        "self_registration_require_adult_consent": {
+          "type": "boolean",
+          "operators": [
+            "eq"
+          ],
+          "single": true
         },
         "archived_at": {
           "type": "datetime",

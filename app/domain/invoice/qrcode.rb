@@ -15,6 +15,7 @@ class Invoice::Qrcode
 
   def initialize(invoice)
     @invoice = invoice
+    @deprecations = Deprecations.new(invoice)
   end
 
   # https://www.six-group.com/dam/download/banking-services/standardization/qr-bill/ig-qr-bill-v2.3-de.pdf
@@ -37,8 +38,8 @@ class Invoice::Qrcode
   end
 
   def creditor
-    if @invoice.payee_name.blank? && @invoice.payee.present?
-      return deprecated_creditor
+    if @deprecations.deprecated_creditor?
+      return @deprecations.creditor
     end
 
     {
@@ -53,8 +54,8 @@ class Invoice::Qrcode
   end
 
   def debitor
-    if @invoice.recipient_name.blank? && @invoice.recipient_address.present?
-      return deprecated_debitor
+    if @deprecations.deprecated_debitor?
+      return @deprecations.debitor
     end
 
     {
@@ -144,10 +145,6 @@ class Invoice::Qrcode
     )
   end
 
-  def striped_values(*hashes)
-    hashes.collect { |obj| obj.values.collect(&:to_s).collect(&:strip) }
-  end
-
   def image(filename)
     Rails.root.join("app/domain/invoice/assets/#{filename}")
   end
@@ -172,44 +169,7 @@ class Invoice::Qrcode
     end.compact_blank.join("\n")
   end
 
-  def deprecated_creditor
-    name, address_line1, address_line2 = deprecated_parse_address(@invoice.payee)
-    {
-      address_type: "K",
-      name: name,
-      address_line1: address_line1,
-      address_line2: address_line2,
-      zip_code: nil,
-      town: nil,
-      country: nil
-    }
-  end
-
-  def deprecated_debitor
-    name, address_line1, address_line2 = deprecated_parse_address(@invoice.recipient_address)
-    {
-      address_type: "K",
-      name: name,
-      address_line1: address_line1,
-      address_line2: address_line2,
-      zip_code: nil,
-      town: nil,
-      country: nil
-    }
-  end
-
-  def deprecated_parse_address(address)
-    parts = address.to_s.strip.split(/\r*\n/)
-    address_line1 = nil
-    address_line2 = nil
-    if parts.count > 1
-      address_line1 = parts.last
-    end
-    if parts.count > 2
-      address_line2 = address_line1
-      address_line1 = parts.second_to_last
-    end
-
-    [parts.first, address_line1, address_line2]
+  def striped_values(*hashes)
+    hashes.collect { |obj| obj.values.collect(&:to_s).collect(&:strip) }
   end
 end

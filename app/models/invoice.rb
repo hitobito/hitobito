@@ -283,10 +283,9 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   def set_payment_attributes
     assign_attributes(
       invoice_config.slice(
-        [:address, :account_number, :iban, :payment_slip,
-          :beneficiary, :participant_number, :vat_number, :currency,
-          :payee_name, :payee_street, :payee_housenumber, :payee_zip_code,
-          :payee_town, :payee_country]
+        :address, :account_number, :iban, :payment_slip, :beneficiary,
+        :participant_number, :vat_number, :currency, :payee_name, :payee_street,
+        :payee_housenumber, :payee_zip_code, :payee_town, :payee_country
       )
     )
   end

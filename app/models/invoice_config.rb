@@ -62,10 +62,9 @@ class InvoiceConfig < ActiveRecord::Base
   validates :email, format: Devise.email_regexp, allow_blank: true
 
   validates :payee_name, :payee_zip_code, :payee_town, :payee_country,
-    presence: true, on: :update, if: :qr?
+    presence: true, on: :update
 
-  # TODO: probably the if condition is not correct, verification needed
-  validates :iban, presence: true, on: :update, if: :qr?
+  validates :iban, presence: true, on: :update
   validates :iban, iban: true, on: :update, allow_blank: true
 
   validates :donation_calculation_year_amount, numericality: {only_integer: true,

@@ -580,6 +580,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_152059) do
     t.integer "group_id", null: false
     t.text "address"
     t.text "payment_information"
+    t.text "payee"
     t.string "account_number"
     t.string "iban"
     t.string "payment_slip", default: "qr", null: false

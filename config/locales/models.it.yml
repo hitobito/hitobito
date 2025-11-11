@@ -194,9 +194,6 @@ it:
               invalid_check_digit: 'non valido; cifra di controllo non corretta'
             logo:
               attached_unless_disabled: 'deve essere specificato se si seleziona una posizione del logo'
-            payee:
-              to_long: 'può contenere al massimo 2 righe'
-              must_have_3_lines: 'deve contenere esattamente 3 righe'
         role:
           attributes:
             end_on:

@@ -19,16 +19,8 @@ class AddStructuredAddressesToInvoices < ActiveRecord::Migration[8.0]
     add_column :invoice_configs, :payee_housenumber, :string
     add_column :invoice_configs, :payee_zip_code, :string
     add_column :invoice_configs, :payee_town, :string
-    add_column :invoice_configs, :payee_country, :string
+    add_column :invoice_configs, :payee_country, :string, default: "CH"
 
-    # Just migrate the first line as payee_name.
-    # The other values must be added manually by the customers.
-    InvoiceConfig.find_each do |invoice_config|
-      invoice_config.update(
-        payee_name: invoice_config.payee.split("\n").first
-      ) if invoice_config.payee.present?
-    end
-
-    remove_column :invoice_configs, :payee
+    InvoiceConfig.update_all(payee_country: "CH")
   end
 end

@@ -9,7 +9,7 @@ module AsyncDownload
     filename ||= AsyncDownloadFile.create_name(name, current_person.id)
     Cookies::AsyncDownload.new(cookies).set(name: filename, type: format)
     yield filename
-    flash[:notice] = translate(:export_enqueued)
+    flash[:notice] = translate(:export_enqueued, default: :"groups.export_enqueued")
 
     if render_command
       render_command.call

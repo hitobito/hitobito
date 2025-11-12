@@ -191,9 +191,6 @@ en:
               invalid_check_digit: 'is not valid; Incorrect check digit'
             logo:
               attached_unless_disabled: 'muss angegeben werden, wenn eine Logoposition gewählt ist'
-            payee:
-              to_long: 'is too long, may only have 2 lines'
-              must_have_3_lines: 'muss genau 3 Zeilen enthalten'
         role:
           attributes:
             end_on:
@@ -1176,7 +1173,14 @@ en:
           disabled: Kein Logo
           left: Links
           right: Rechts
-        payee: Deposit for
+        payee: Alter Zahlungsempfänger
+        payee_address: Einzahlung für
+        payee_name: Name
+        payee_street: Strasse
+        payee_housenumber: Hausnummer
+        payee_zip_code: PLZ
+        payee_town: Ort
+        payee_country: Land
         payment_slip: Payment slip
         payment_slips:
           qr: QR invoice

@@ -144,6 +144,19 @@ class Event::Question < ActiveRecord::Base
     end
   end
 
+  def choices_attributes=(attributes)
+    languages = [I18n.locale] + Globalized.additional_languages
+    choices_grouped_by_translation = attributes.values.map(&:values).transpose
+
+    languages.each do |lang|
+      send("choices_#{lang}=", choices_grouped_by_translation.shift.join(", "))
+    end
+  end
+
+  def self.reflect_on_all_associations
+    super + [ChoiceForm::ChoiceReflection.new]
+  end
+
   private
 
   def add_answer_to_participations

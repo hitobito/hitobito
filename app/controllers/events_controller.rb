@@ -27,12 +27,18 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
       ],
       application_questions_attributes: [
         # rubocop:todo Layout/LineLength
-        :id, :question, :choices, :multiple_choices, :disclosure, :type, :derived_from_question_id, :_destroy
+        :id, :question, :multiple_choices, :disclosure, :type, :derived_from_question_id, :_destroy,
+        {
+          choices_attributes: [:choice]
+        }
         # rubocop:enable Layout/LineLength
       ],
       admin_questions_attributes: [
         # rubocop:todo Layout/LineLength
-        :id, :question, :choices, :multiple_choices, :disclosure, :type, :derived_from_question_id, :_destroy
+        :id, :question, :multiple_choices, :disclosure, :type, :derived_from_question_id, :_destroy,
+        {
+          choices_attributes: [:choice]
+        }
         # rubocop:enable Layout/LineLength
       ]
     }]

@@ -1039,8 +1039,9 @@ it:
         provider_initialization_failed: L'impostazione dell'interfaccia per il pagameno %{payment_provider} non è riuscita
         provider_initialization_succeeded: L'impostazione dell'interfaccia per il pagamento %{payment_provider} è riuscita
     general_fields:
-      payment: "Versamento"
+      payment: "Einzahlung für"
       payment_information_help: "Viene indicato su ogni fattura, può essere modificato in ogni fattura"
+      deprecated_payee_help: "Alter Zahlungsempfänger vor Umstellung auf neues QR-Rechnungsformat"
       address_help: "Compare sulla lettera come indirizzo del mittente"
       payee_help: "Compare sulla polizza di versamento"
       beneficiary_help: "Compare sulla polizza di versamento"

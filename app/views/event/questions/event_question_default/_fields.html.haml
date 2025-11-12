@@ -4,12 +4,14 @@
     = f.hidden_field(:question)
     %p.py-2= question.question
   - if question.choice_items.any?
-    = f.labeled(:choices, simple_list(question.choice_items, class: 'ps-3 my-2')) 
-    = f.labeled(:multiple_choices) do 
+    = f.labeled(:choices, simple_list(question.choice_items, class: 'ps-3 my-2'))
+    = f.labeled(:multiple_choices) do
       %p.py-2
         = question.multiple_choices ? icon(:check) : icon(:times)
 
 - else
   = f.labeled_input_field(:question)
-  = f.labeled_input_field(:choices, help: t('events.form.explain_choices'))
+  - question.define_singleton_method(:choices_attributes=) { }
+  = f.nested_fields_for(:choices, nil, ChoiceForm::Form.new.choices(question), {model_object: ChoiceForm::Choice.new([]) }) do |ff|
+    = ff.labeled_input_field(:choice)
   = f.labeled_boolean_field(:multiple_choices)

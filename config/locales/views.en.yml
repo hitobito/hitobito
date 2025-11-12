@@ -79,11 +79,6 @@ en:
       placeholder_event: "Search event..."
       placeholder_company_name: "search company name..."
 
-    form:
-      additional_languages: "Additional languages filled in"
-      locale_indicator: "Language of this input field"
-      input_translation_button: "Show input fields for other available languages"
-
   list:
     index:
       title: "Listing %{models}"

@@ -47,4 +47,9 @@ module CsvImportHelper
   def csv_import_tag_values(p)
     p.tag_list.to_s
   end
+
+  def csv_import_role_value(p, attr)
+    value = p.roles.find { |r| r.type == @role_type.to_s }.send(attr)
+    f(value)
+  end
 end

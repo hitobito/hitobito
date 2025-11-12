@@ -1,8 +1,9 @@
 # Hitobito Changelog
 
-## Version 2.6
+## unreleased
 
 - Die Optionen für den E-Mail Adressen Export erscheinen nun wie die übrigen Formate in einem Untermenu.
+- CSV Import unterstützt Rollen Start und Enddatum (#3730)
 - Ein neuer Header weist nun, ausser in production, auf die momentan aktive Umgebung hin. (#3702)
 
 ## Version 2.7

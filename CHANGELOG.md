@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## unreleased
+## Version 2.7
 
 - Die Optionen für den E-Mail Adressen Export erscheinen nun wie die übrigen Formate in einem Untermenu.
 - Mehrsprachige Felder sind nun in den Formularen als solche erkennbar und können in allen verfügbaren Sprachen einer Umgebung erfasst werden (#3560)

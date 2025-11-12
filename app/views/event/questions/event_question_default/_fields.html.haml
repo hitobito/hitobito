@@ -11,7 +11,6 @@
 
 - else
   = f.labeled_input_field(:question)
-  - question.define_singleton_method(:choices_attributes=) { }
   = f.nested_fields_for(:choices, nil, ChoiceForm::Form.new.choices(question), {model_object: ChoiceForm::Choice.new([]) }) do |ff|
     = ff.labeled_input_field(:choice)
   = f.labeled_boolean_field(:multiple_choices)

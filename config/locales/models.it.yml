@@ -194,9 +194,6 @@ it:
               invalid_check_digit: 'non valido; cifra di controllo non corretta'
             logo:
               attached_unless_disabled: 'deve essere specificato se si seleziona una posizione del logo'
-            payee:
-              to_long: 'può contenere al massimo 2 righe'
-              must_have_3_lines: 'deve contenere esattamente 3 righe'
         role:
           attributes:
             end_on:
@@ -1249,7 +1246,14 @@ it:
           disabled: Nessun logo
           left: Sinistra
           right: Destra
-        payee: Versamento per
+        payee: Alter Zahlungsempfänger
+        payee_address: Einzahlung für
+        payee_name: Name
+        payee_street: Strasse
+        payee_housenumber: Hausnummer
+        payee_zip_code: PLZ
+        payee_town: Ort
+        payee_country: Land
         payment_slip: Polizza di versamento
         payment_slips:
           qr: Fattura QR

@@ -1026,8 +1026,9 @@ en:
         provider_initialization_failed: Set up of the payment interface %{payment_provider} failed
         provider_initialization_succeeded: Setting up the payment interface %{payment_provider} was successful
     general_fields:
-      payment: "Payment"
+      payment: "Einzahlung für"
       payment_information_help: "Listed in each invoice, can be adjusted per invoice"
+      deprecated_payee_help: "Alter Zahlungsempfänger vor Umstellung auf neues QR-Rechnungsformat"
       address_help: "Sender address on letter"
       payee_help: "for the payment slip"
       beneficiary_help: "for the payment slip"

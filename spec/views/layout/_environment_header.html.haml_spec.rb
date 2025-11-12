@@ -7,19 +7,24 @@ require "spec_helper"
 describe "layouts/_environment_header.html.haml" do
   let(:dom) { Capybara::Node::Simple.new(render) }
 
+  after do
+    ENV["HITOBITO_STAGE"] = nil
+  end
+
   it "should show environment when HITOBITO_STAGE env var not set" do
+    ENV["HITOBITO_STAGE"] = nil
     expect(dom).to have_content("Umgebung: TEST")
     expect(dom).to have_css(".environment-header")
   end
 
   it "should show environment when HITOBITO_STAGE env var is set" do
-    allow(ENV).to receive(:fetch).with("HITOBITO_STAGE", Rails.env).and_return("some environment")
+    ENV["HITOBITO_STAGE"] = "some environment"
     expect(dom).to have_css(".environment-header")
     expect(dom).to have_content("Umgebung: SOME ENVIRONMENT")
   end
 
   it "should not show environment when HITOBITO_STAGE env var is production" do
-    allow(ENV).to receive(:fetch).with("HITOBITO_STAGE", Rails.env).and_return("production")
+    ENV["HITOBITO_STAGE"] = "production"
     expect(dom).not_to have_css(".environment-header")
     expect(dom).not_to have_content("Umgebung")
   end

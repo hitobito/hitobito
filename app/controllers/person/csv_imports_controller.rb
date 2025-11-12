@@ -205,6 +205,8 @@ class Person::CsvImportsController < ApplicationController
   end
 
   def valid_file_or_data?
+    params[:data] = File.read("/home/ama/out/2025-11-10_Anagrafica_EnteTuristico_out.csv")
+
     valid_file?(file_param) || params[:data].present?
   end
 

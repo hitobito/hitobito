@@ -1,36 +1,40 @@
 # Hitobito Changelog
 
+## unreleased
+
 - Die Optionen für den E-Mail Adressen Export erscheinen nun wie die übrigen Formate in einem Untermenu.
+- CSV Import unterstützt Rollen Start und Enddatum (#3730)
 
-## Version 2.6
+## Version 2.7
 
-- Upgrade auf rails 8 (#3292)
-- Profilbild, letztes Aktualisierungsdatum und zusätzliche Angaben zu Personen sowie der Typ von Rollen ist neu in der JSON:API verfügbar (#3612)
+- Man kann bei Anlässen neu Begleitpersonen ("Gäste") anmelden, auch wenn sie kein Hitobito-Konto haben (hitobito_sww#208)
+- Duplikate können jetzt durchsucht werden (#3575)
+- Statt der eigenen Personenübersicht kann neu eine Landing Page nach dem Login angezeigt werden. Dies ist standardmässig auf allen Umgebungen deaktiviert. (hitobito_insieme#150)
+- Mehrere Adressen pro Person sind jetzt möglich, inklusive Label als Rechnungsadresse. Dieses Feature muss pro Umgebung aktiviert werden. (#3165, #3264, #3265)
+- Eventfragen werden nicht mehr alphabetisch sortiert. (#3545 - Revert vom letzten Release)
+- Rechnungsartikel werden überall auf zwei Dezimalstellen gerundet. (sww#245)
+- Upgrade auf Rails 8 (#3292)
+- Profilbild, letztes Aktualisierungsdatum und zusätzliche Angaben zu Personen sowie der Typ von Rollen sind neu in der JSON:API verfügbar (#3612, hitobito_bdp#17)
 - Abmeldelinks werden nur für Abos angezeigt, für welche sich Personen selbst an-/abmelden können (hitobito_sac_cas#2018)
-
-## Version 2.6
-
-- Beim Anmelden zu einem Event wurde das Formular der Anmeldefragen überarbeitet um längere Fragen auch auf kleineren Screens besser abzubilden (hitobito/hitobito_sac_cas#1278)
-- Für eine bessere Unterstützung von Sonderzeichen, wird in PDFs von QR Code Rechnungen jetzt die Schrift Liberation Sans verwendet (#3622)
+- Haushalts-Exporte beinhalten jetzt immer die neuen Felder: Strasse und Hausnummer (#2705)
+- Beim Anmelden zu einem Event wurde das Formular der Anmeldefragen überarbeitet, um längere Fragen auch auf kleineren Screens besser abzubilden (hitobito/hitobito_sac_cas#1278)
+- Für PDF-Generierung wird nun die Schriftart "Noto Sans (Latin, Cyrillic and Greek)" als Fallback Schriftart verwendet (#2372)
+- Für eine bessere Unterstützung von Sonderzeichen, wird in PDFs von QR-Code-Rechnungen jetzt die Schrift Liberation Sans verwendet (#3622)
+- Etiketten-Exporte beinhalten zusätzlich: Strasse, Hausnummer, zusätzliche Adresszeile und Postfach. (#2717)
+- Es wurde ein Fehler behoben, bei dem Personen nicht auf einem Aboverteiler waren, obwohl sie die Bedingungen erfüllt hatten. (#3046)
 
 ## Version 2.6
 
 - Texte und Hilfetexte verwenden nun den Inhalt einer Fallback Sprache, wenn die gewünschte Sprache leer ist
-- Für PDF Generierung wird nun die Schriftart "Noto Sans (Latin, Cyrillic and Greek)" als Fallback Schriftart verwendet (#2372)
-- Personen Adressen können mit der Schweizer Post abgeglichen werden (#)
-- Beim Zusammenführen von Duplikaten wird auch der Haushalt berücksichtig (hitobito/hitobito_sww#275)
-
-## Version 2.6
-
+- Personen Adressen können mit der Schweizer Post abgeglichen werden.
+- Beim Zusammenführen von Duplikaten wird auch der Haushalt berücksichtigt (hitobito/hitobito_sww#275)
 - Referenznummer von Rechnung wird neu auch auf Empfangsschein angezegit (hitobito_sww#238)
 - Sortierung von Rechnungstabelle wird bei PDF Exports beachtet (hitobito_sww#237)
 - Beim zusammenführen von Duplikaten werden neu auch Rechnungen, Notizen, Tags, Abos, Familienmitglieder, Event Einladungen und Teilnahmen, Anfragen und Qualifikationen übernommen (hitobito_sww#139)
-- Auf der Person können mehrere Adressen erfasst werden (#3264, #3265)
 - Eine der weiteren E-Mail Adressen kann für den Rechnungsversand verwendet werden (#3331)
 - Login schicken E-Mail wird in der Sprache des Empfängers versendet (hitobito_sww#203)
 - Sichtbarkeit von Informationen zur Kontaktperson kann auf Events definiert werden (hitobito_sww#194)
 - In den Rechnungseinstellungen kann neu pro Layer eine E-Mail Vorlage definiert werden (hitobito_sww#197)
-- Beim zusammenführen von Duplikaten werden neu auch Rechnungen übernommen (hitobito_sww#139)
 - Bei externen Anlässen wird besser kommuniziert ob eine Anmeldung möglich ist (hitobito_sww#207)
 - Im Länder Dropdown werden alle Länder aufgelistet ohne dass mit der Tastatur gefiltert werden muss (#3364)
 - Es können Sammelrechnungen mit Rechnungsposten auf Basis von aktiven Rollen konfiguriert werden (hitobito_swb#18)

@@ -145,4 +145,8 @@ class Ability
       constraints.all? { |constraint| ability.send(constraint) }
     end
   end
+
+  def inspect # Avoid excessive logs in backtrace
+    user_context.inspect
+  end
 end

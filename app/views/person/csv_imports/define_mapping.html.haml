@@ -15,6 +15,7 @@
       - if @can_manage_tags
         = t('.keep_behaviour_tags')
 
+    .mt-1
     %label.radio
       = radio_button_tag(:update_behaviour,
                          :override,
@@ -23,7 +24,7 @@
       - if @can_manage_tags
         = t('.override_behaviour_tags')
 
-    %p.help-block= t('.update_behaviour_explanation')
+    %p.mt-2.help-block= t('.update_behaviour_explanation')
 
   = field_set_tag t('.choose_role') do
     = f.labeled :role_type, Role.model_name.human do

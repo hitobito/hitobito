@@ -107,7 +107,9 @@ class FeatureGate
     false
   end
 
+  # Avoid excessive requerying on people list
   def self_registration_reason_enabled?
-    SelfRegistrationReason.exists?
+    return @@self_registration_enabled if defined?(@@self_registration_enabled)
+    @@self_registration_enabled = SelfRegistrationReason.exists?
   end
 end

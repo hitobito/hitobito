@@ -21,6 +21,8 @@ describe FeatureGate do
   end
 
   context "self_registration_reason" do
+    after { FeatureGate.remove_class_variable(:@@self_registration_enabled) }
+
     it "is enabled when SelfRegistrationReason exists" do
       expect(SelfRegistrationReason.count).to be > 0
       expect(FeatureGate.enabled?(:self_registration_reason)).to eq(true)

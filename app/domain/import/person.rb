@@ -10,13 +10,16 @@ module Import
     attr_reader :person, :attributes, :override, :can_manage_tags, :role,
       :phone_numbers, :social_accounts, :additional_emails, :tags
 
+    ROLE_ATTRIBUTES = %w[start_on end_on]
+
     class << self
       def fields
         all = person_attributes +
           Import::ContactAccountFields.new(AdditionalEmail).fields +
           Import::ContactAccountFields.new(PhoneNumber).fields +
           Import::ContactAccountFields.new(SocialAccount).fields +
-          tag_attributes
+          tag_attributes +
+          role_attributes
 
         all.sort_by { |entry| entry[:value] }
       end
@@ -29,6 +32,12 @@ module Import
 
       def tag_attributes
         [{key: "tags", value: ActsAsTaggableOn::Tag.model_name.human(count: 2)}]
+      end
+
+      def role_attributes
+        ROLE_ATTRIBUTES.map do |attr|
+          {key: attr, value: Role.human_attribute_name(attr)}
+        end
       end
 
       # alle attributes - technische attributes
@@ -54,10 +63,10 @@ module Import
       assign_tags
     end
 
-    def add_role(group, role_type)
+    def add_role(group, role_type, role_attributes = {})
       return if person.roles.any? { |role| role.group == group && role.type == role_type.sti_name }
 
-      @role = person.roles.build
+      @role = person.roles.build(role_attributes)
       @role.group = group
       @role.type = role_type.sti_name
       @role

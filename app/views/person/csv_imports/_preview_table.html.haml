@@ -24,3 +24,7 @@
     - if field_mappings.values.include?('tags') && @can_manage_tags
       - t.col(ActsAsTaggableOn::Tag.model_name.human(count: 2)) do |p|
         = csv_import_tag_values(p)
+
+    - (Import::Person.role_attributes.pluck(:key) & field_mappings.values).each do |attr|
+      - t.col(Role.human_attribute_name(attr)) do |p|
+        = csv_import_role_value(p, attr)

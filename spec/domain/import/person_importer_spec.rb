@@ -30,6 +30,19 @@ describe Import::PersonImporter do
     end
   end
 
+  context "role attributes" do
+    let(:data) {
+      [{first_name: "foo", start_on: "2024-11-23"}]
+    }
+
+    let(:role) { Person.find_by(first_name: "foo").roles.last }
+
+    it "sets role start date" do
+      subject.import
+      expect(role.start_on).to eq Date.new(2024, 11, 23)
+    end
+  end
+
   context "creates associations" do
     let(:data) do
       [{first_name: "foo",

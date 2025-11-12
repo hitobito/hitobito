@@ -8,18 +8,15 @@
 
 body {
   padding: 0;
-  height: 100vh;
   background: $body-background;
 }
 
 /* Header */
 .logo {
   position: absolute;
-  top: 1rem;
-  left: 1rem;
-  margin: 0;
+  margin: 1rem 0 0 1rem;
   padding: 0.5rem;
-  z-index: 100;
+  z-index: 80;
   // for a box around the logo, if the Logo cannot be directly on the page background:
   @if ($logo-background-color != none) {
     padding: 10px;
@@ -53,6 +50,11 @@ body {
       color: $white;
     }
   }
+}
+
+.environment-header {
+  z-index: 90;
+  background-color: $danger;
 }
 
 /* Content */

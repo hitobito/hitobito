@@ -1,13 +1,9 @@
 // Info Bar
-.info-bar{
-  height: 30px;
-  div {
-    text-align: center;
-    padding: 10px;
-    position: fixed;
-    width: 100%;
-    z-index: 1000;
+.info-bar div{
+  text-align: center;
+  padding: 10px;
+  width: 100%;
+  z-index: 80;
 
-    a { color: black; margin-left: 30px}
-  }
+  a { color: black; margin-left: 30px}
 }

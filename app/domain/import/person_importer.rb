@@ -15,7 +15,7 @@ module Import
     attr_accessor :user_ability
 
     def initialize(data, group, role_type, options = {})
-      @data = data
+      @data = data.map(&:with_indifferent_access)
       @group = group
       @role_type = role_type
       @options = options
@@ -61,17 +61,20 @@ module Import
 
     def populate_people
       data.each_with_index.map do |attributes, index|
-        populate_person(attributes.with_indifferent_access, index)
+        person_attrs = attributes.except(*Import::Person::ROLE_ATTRIBUTES)
+        role_attrs = attributes.slice(*Import::Person::ROLE_ATTRIBUTES)
+
+        populate_person(index, person_attrs, role_attrs.compact_blank)
       end
     end
 
-    def populate_person(attributes, index)
-      person = duplicate_finder.find(attributes) || ::Person.new
-      attributes.delete(:email) if illegal_email_update?(person)
+    def populate_person(index, person_attrs, role_attrs)
+      person = duplicate_finder.find(person_attrs) || ::Person.new
+      person_attrs.delete(:email) if illegal_email_update?(person)
 
-      import_person = Import::Person.new(person, attributes, options)
+      import_person = Import::Person.new(person, person_attrs, options)
       import_person.populate
-      import_person.add_role(group, role_type)
+      import_person.add_role(group, role_type, role_attrs)
 
       count_person(import_person, index)
       import_person

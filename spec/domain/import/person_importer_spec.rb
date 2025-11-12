@@ -30,6 +30,38 @@ describe Import::PersonImporter do
     end
   end
 
+  context "role attributes" do
+    let(:data) {
+      [{first_name: "foo", start_on: "2024-11-23", end_on: "2025-12-31"}]
+    }
+
+    let(:role) { Person.find_by(first_name: "foo").roles.with_inactive.last }
+
+    it "sets role start date and end date" do
+      travel_to(Time.zone.local(2025, 11, 12)) do
+        subject.import
+        expect(role.start_on).to eq Date.new(2024, 11, 23)
+        expect(role.end_on).to eq Date.new(2025, 12, 31)
+      end
+    end
+
+    it "uses defaults when blank" do
+      data[0][:start_on] = nil
+      data[0][:end_on] = nil
+      subject.import
+      expect(role.start_on).to eq Date.current
+      expect(role.end_on).to be_nil
+    end
+
+    it "uses defaults when missing" do
+      data[0].delete(:start_on)
+      data[0].delete(:end_on)
+      subject.import
+      expect(role.start_on).to eq Date.current
+      expect(role.end_on).to be_nil
+    end
+  end
+
   context "creates associations" do
     let(:data) do
       [{first_name: "foo",

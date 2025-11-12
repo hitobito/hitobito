@@ -34,5 +34,23 @@ module ChoiceForm
     def translated_attribute_names
       [:choice]
     end
+
+    def self.translated_attribute_names
+      [:choice]
+    end
+
+    def self.ancestors
+      [Globalized] + super
+    end
+  end
+
+  class ChoiceReflection
+    def name
+      :choices
+    end
+
+    def klass
+      Choice
+    end
   end
 end

@@ -25,8 +25,6 @@ en:
     start_on: from%{date}
     not_allowed: "insufficient permissions"
 
-    environment: Environment
-
     gender:
       male: male
       female: female

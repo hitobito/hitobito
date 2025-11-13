@@ -15,6 +15,7 @@ module Synchronize
       }.freeze
 
       PERMANENTLY_DELETED_REGEX = /\A(.*?)\swas\spermanently\sdeleted/
+      COMPLICANCE_STATE_REGEX = /\A(.*?)\sis\salready\sa\slist\smember\sin\scompliance\sstate/
 
       attr_reader :data
 
@@ -50,7 +51,8 @@ module Synchronize
 
       def forgotten_emails
         operation_results(:subscribe_members).map do |op|
-          op[:detail].to_s[PERMANENTLY_DELETED_REGEX, 1]
+          detail = op[:detail].to_s
+          detail[PERMANENTLY_DELETED_REGEX, 1] || detail[COMPLICANCE_STATE_REGEX, 1]
         end.compact_blank
       end
 

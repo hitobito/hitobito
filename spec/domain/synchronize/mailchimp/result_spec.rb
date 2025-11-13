@@ -87,11 +87,15 @@ describe Synchronize::Mailchimp::Result do
   it "does track forgottten emails" do
     results = [
       {title: "Deleted", detail: "test1@example.com was permanently deleted", status: 400},
-      {title: "Deleted", detail: "test2@example.com was permanently deleted", status: 400}
+      {title: "Deleted", detail: "test2@example.com was permanently deleted", status: 400},
+      {title: "Member In Compliance State",
+       detail: "test3@example.com is already a list member in compliance state " \
+         "due to unsubscribe, bounce, or compliance review.",
+       status: 400}
     ]
-    subject.track(:subscribe_members, payload, response(total: 2, finished: 0, failed: 2, results:))
+    subject.track(:subscribe_members, payload, response(total: 3, finished: 0, failed: 3, results:))
     expect(subject.state).to eq :failed
-    expect(subject.forgotten_emails).to eq %w[test1@example.com test2@example.com]
+    expect(subject.forgotten_emails).to eq %w[test1@example.com test2@example.com test3@example.com]
   end
 
   it "does add operation results if failed" do

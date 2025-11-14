@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::Filter::Role < Person::Filter::Base
-  KINDS = %w[active created deleted inactive inactive_but_existing]
+  KINDS = %w[active started created deleted inactive inactive_but_existing]
 
   include ParamConverters
 
@@ -104,7 +104,8 @@ class Person::Filter::Role < Person::Filter::Base
 
   def duration_conditions(scope)
     case args[:kind]
-    when "created" then {roles: {start_on: date_range}}
+    when "started" then {roles: {start_on: date_range}}
+    when "created" then {roles: {created_at: date_range}}
     when "deleted" then {roles: {end_on: date_range}}
     when "inactive", "inactive_but_existing" then inactive_role_conditions(scope)
     else active_role_condition
@@ -133,7 +134,7 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def default_range_today?
-    !%w[active created deleted].include?(args[:kind])
+    !%w[active started created deleted].include?(args[:kind])
   end
 
   def today

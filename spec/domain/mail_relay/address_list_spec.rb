@@ -94,8 +94,14 @@ describe MailRelay::AddressList do
   context "with people_managers feature" do
     let(:top_leader) { people(:top_leader) }
     let(:bottom_member) { people(:bottom_member) }
-    let(:manager) { Fabricate(:person, first_name: "People Manager", email: "people_manager@example.com", primary_group: groups(:bottom_group_two_one)) }
-    let(:managed) { Fabricate(:person, first_name: "People Managed", email: "people_managed@example.com", primary_group: groups(:bottom_group_two_one)) }
+    let(:manager) {
+      Fabricate(:person, first_name: "People Manager", email: "people_manager@example.com",
+        primary_group: groups(:bottom_group_two_one))
+    }
+    let(:managed) {
+      Fabricate(:person, first_name: "People Managed", email: "people_managed@example.com",
+        primary_group: groups(:bottom_group_two_one))
+    }
 
     before do
       managed.update! managers: [manager]
@@ -165,10 +171,6 @@ describe MailRelay::AddressList do
           manager.email
         ])
       end
-    end
-
-    def entries(people = Person.all, labels = [])
-      described_class.new(people, labels).entries
     end
   end
 end

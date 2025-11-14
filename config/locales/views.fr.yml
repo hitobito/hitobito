@@ -1043,9 +1043,9 @@ fr:
         provider_initialization_failed: La mise en place de l'interface pour le paiment %{payment_provider}a échoué.
         provider_initialization_succeeded: La mise en place de l'interface pour le paiment %{payment_provider} a réussi.
     general_fields:
-      payment: "Einzahlung für"
+      payment: "Paiement à"
       payment_information_help: "Apparaît sur chaque facture, mais peut être adapté pour une facture"
-      deprecated_payee_help: "Alter Zahlungsempfänger vor Umstellung auf neues QR-Rechnungsformat"
+      deprecated_payee_help: "Ancien bénéficiaire avant le passage au nouveau format de facture QR"
       address_help: "Adresse de l'expéditeur qui apparaît sur la lettre"
       payee_help: "apparaît sur le bulletin de versement"
       beneficiary_help: "apparaît sur le bulletin de versement"

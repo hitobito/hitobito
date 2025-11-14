@@ -1247,14 +1247,14 @@ fr:
           disabled: Pas de logo
           left: Gauche
           right: Droite
-        payee: Alter Zahlungsempfänger
-        payee_address: Einzahlung für
-        payee_name: Name
-        payee_street: Strasse
-        payee_housenumber: Hausnummer
-        payee_zip_code: PLZ
-        payee_town: Ort
-        payee_country: Land
+        payee: Ancien bénéficiaire
+        payee_address: Paiement à
+        payee_name: Nom
+        payee_street: Rue
+        payee_housenumber: Numéro de la maison
+        payee_zip_code: CP
+        payee_town: Ville
+        payee_country: Pays
         payment_slip: Bulletin de versement
         payment_slips:
           qr: Facture QR

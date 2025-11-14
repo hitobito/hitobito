@@ -1246,14 +1246,14 @@ it:
           disabled: Nessun logo
           left: Sinistra
           right: Destra
-        payee: Alter Zahlungsempfänger
-        payee_address: Einzahlung für
-        payee_name: Name
-        payee_street: Strasse
-        payee_housenumber: Hausnummer
-        payee_zip_code: PLZ
-        payee_town: Ort
-        payee_country: Land
+        payee: Vecchio beneficiario
+        payee_address: Versamento per
+        payee_name: Nome
+        payee_street: Strada
+        payee_housenumber: Numero civico
+        payee_zip_code: CAP
+        payee_town: Luogo
+        payee_country: Nazione
         payment_slip: Polizza di versamento
         payment_slips:
           qr: Fattura QR

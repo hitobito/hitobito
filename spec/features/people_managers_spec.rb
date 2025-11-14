@@ -39,7 +39,8 @@ describe "people management", :js do
   before do
     allow(FeatureGate).to receive(:enabled?).and_call_original
     allow(FeatureGate).to receive(:enabled?).with("people.people_managers").and_return(people_managers_enabled?)
-    allow(FeatureGate).to receive(:enabled?).with("people.people_managers.self_service_managed_creation").and_return(people_managers_self_service_managed_creation_enabled?)
+    allow(FeatureGate).to receive(:enabled?).with("people.people_managers.self_service_managed_creation")
+      .and_return(people_managers_self_service_managed_creation_enabled?)
   end
 
   it "does not show managers since feature is disabled by default" do
@@ -93,7 +94,8 @@ describe "people management", :js do
         click_dropdown("Kind zuweisen")
         find_person "Bottom Member"
         click_on "Speichern"
-        expect(page).to have_css(".alert-danger", text: "Bottom Member kann nicht sowohl Verwalter*innen als auch Kinder haben.")
+        expect(page).to have_css(".alert-danger",
+          text: "Bottom Member kann nicht sowohl Verwalter*innen als auch Kinder haben.")
       end
     end
 

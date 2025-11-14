@@ -12,7 +12,9 @@ describe Event::ApplicationAbility do
 
   let(:course) { Fabricate(:course) }
   let(:application) { Fabricate(:event_application, priority_1: course, priority_2: nil) }
-  let!(:participation) { Fabricate(:event_participation, event: course, application: application, participant: applicant) }
+  let!(:participation) {
+    Fabricate(:event_participation, event: course, application: application, participant: applicant)
+  }
 
   subject { Ability.new(user) }
 

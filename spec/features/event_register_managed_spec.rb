@@ -39,7 +39,8 @@ describe "EventRegisterManaged", js: true do
             allow_any_instance_of(FeatureGate).to receive(:enabled?).with(:self_registration_reason).and_return(false)
             allow_any_instance_of(FeatureGate).to receive(:enabled?).with("people.people_managers").and_return(false)
             allow_any_instance_of(FeatureGate).to receive(:enabled?).with("email.bounces").and_return(true)
-            allow_any_instance_of(FeatureGate).to receive(:enabled?).with("people.people_managers.self_service_managed_creation").and_return(false)
+            allow_any_instance_of(FeatureGate).to receive(:enabled?)
+              .with("people.people_managers.self_service_managed_creation").and_return(false)
           end
 
           it "does not show dropdown option for existing managed" do
@@ -56,7 +57,8 @@ describe "EventRegisterManaged", js: true do
             allow_any_instance_of(FeatureGate).to receive(:enabled?).with(:self_registration_reason).and_return(false)
             allow_any_instance_of(FeatureGate).to receive(:enabled?).with("people.people_managers").and_return(true)
             allow_any_instance_of(FeatureGate).to receive(:enabled?).with("email.bounces").and_return(true)
-            allow_any_instance_of(FeatureGate).to receive(:enabled?).with("people.people_managers.self_service_managed_creation").and_return(false)
+            allow_any_instance_of(FeatureGate).to receive(:enabled?)
+              .with("people.people_managers.self_service_managed_creation").and_return(false)
           end
 
           it "shows dropdown option for existing managed" do
@@ -74,7 +76,8 @@ describe "EventRegisterManaged", js: true do
 
             expect(page).to have_css("a.dropdown-toggle", text: /Anmelden/i)
             find("a.dropdown-toggle", text: /Anmelden/i).click
-            expect(page).to have_css("ul.dropdown-menu li a.disabled", text: "#{managed.full_name} (ist bereits angemeldet)", exact_text: true)
+            expect(page).to have_css("ul.dropdown-menu li a.disabled",
+              text: "#{managed.full_name} (ist bereits angemeldet)", exact_text: true)
           end
 
           it "allows you to create new participation for managed" do
@@ -147,14 +150,16 @@ describe "EventRegisterManaged", js: true do
             before do
               allow_any_instance_of(FeatureGate).to receive(:enabled?).with(:self_registration_reason).and_return(false)
               allow_any_instance_of(FeatureGate).to receive(:enabled?).with("email.bounces").and_return(true)
-              allow_any_instance_of(FeatureGate).to receive(:enabled?).with("people.people_managers.self_service_managed_creation").and_return(false)
+              allow_any_instance_of(FeatureGate).to receive(:enabled?)
+                .with("people.people_managers.self_service_managed_creation").and_return(false)
               allow_any_instance_of(FeatureGate).to receive(:enabled?).with("people.people_managers").and_return(false)
             end
 
             it "does not show invitation for existing managed" do
               visit group_event_path(group, event)
 
-              expect(page).to_not have_css(".alert-warning", text: /#{managed.full_name} wurde zu diesem Anlass eingeladen/i)
+              expect(page).to_not have_css(".alert-warning",
+                text: /#{managed.full_name} wurde zu diesem Anlass eingeladen/i)
             end
           end
 
@@ -163,19 +168,22 @@ describe "EventRegisterManaged", js: true do
               allow_any_instance_of(FeatureGate).to receive(:enabled?).with(:self_registration_reason).and_return(false)
               allow_any_instance_of(FeatureGate).to receive(:enabled?).with("people.people_managers").and_return(true)
               allow_any_instance_of(FeatureGate).to receive(:enabled?).with("email.bounces").and_return(true)
-              allow_any_instance_of(FeatureGate).to receive(:enabled?).with("people.people_managers.self_service_managed_creation").and_return(true)
+              allow_any_instance_of(FeatureGate).to receive(:enabled?)
+                .with("people.people_managers.self_service_managed_creation").and_return(true)
             end
 
             it "shows invitation for existing managed" do
               visit group_event_path(group, event)
 
-              expect(page).to have_css(".alert-warning", text: /#{managed.full_name} wurde zu diesem Anlass eingeladen/i)
+              expect(page).to have_css(".alert-warning",
+                text: /#{managed.full_name} wurde zu diesem Anlass eingeladen/i)
             end
 
             it "allows you to create new participation for managed" do
               visit group_event_path(group, event)
 
-              expect(page).to have_css(".alert-warning", text: /#{managed.full_name} wurde zu diesem Anlass eingeladen/i)
+              expect(page).to have_css(".alert-warning",
+                text: /#{managed.full_name} wurde zu diesem Anlass eingeladen/i)
               find(".alert-warning a.btn", text: /Anmelden/i).click
 
               expect(page).to have_content "Kontaktangaben der teilnehmenden Person"
@@ -208,7 +216,8 @@ describe "EventRegisterManaged", js: true do
 
           context "with self_service_managed_creation feature toggle disabled" do
             before do
-              allow_any_instance_of(FeatureGate).to receive(:enabled?).with("people.people_managers.self_service_managed_creation").and_return(false)
+              allow_any_instance_of(FeatureGate).to receive(:enabled?)
+                .with("people.people_managers.self_service_managed_creation").and_return(false)
             end
 
             it "does not show dropdown option for new managed" do
@@ -222,7 +231,8 @@ describe "EventRegisterManaged", js: true do
 
           context "with self_service_managed_creation feature toggle enabled" do
             before do
-              allow_any_instance_of(FeatureGate).to receive(:enabled?).with("people.people_managers.self_service_managed_creation").and_return(true)
+              allow_any_instance_of(FeatureGate).to receive(:enabled?)
+                .with("people.people_managers.self_service_managed_creation").and_return(true)
             end
 
             it "does not show dropdown option for new managed" do
@@ -244,7 +254,8 @@ describe "EventRegisterManaged", js: true do
 
           context "with self_service_managed_creation feature toggle disabled" do
             before do
-              allow_any_instance_of(FeatureGate).to receive(:enabled?).with("people.people_managers.self_service_managed_creation").and_return(false)
+              allow_any_instance_of(FeatureGate).to receive(:enabled?)
+                .with("people.people_managers.self_service_managed_creation").and_return(false)
             end
 
             it "does not show dropdown option for new managed" do
@@ -258,7 +269,8 @@ describe "EventRegisterManaged", js: true do
 
           context "with self_service_managed_creation feature toggle enabled" do
             before do
-              allow_any_instance_of(FeatureGate).to receive(:enabled?).with("people.people_managers.self_service_managed_creation").and_return(true)
+              allow_any_instance_of(FeatureGate).to receive(:enabled?)
+                .with("people.people_managers.self_service_managed_creation").and_return(true)
             end
 
             it "shows dropdown option for new managed" do

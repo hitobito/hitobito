@@ -26,7 +26,7 @@ class Event::RegisterController < ApplicationController
       if (user = Person.find_by(email: email))
         # send_login_and_render_index
         Event::SendRegisterLoginJob.new(user, group, event).enqueue!
-        email_sent_key = FeatureGate.enabled?("people.people_managers") ? :email_sent_manager : :email_sent
+        email_sent_key = FeatureGate.enabled?("people.people_managers") ? :email_sent_manager : :email_sent # rubocop:disable Layout/LineLength
         flash.now[:notice] = translate(:person_found) + "\n\n" + translate(email_sent_key)
         render "index"
       else

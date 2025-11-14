@@ -154,7 +154,10 @@ module PaperTrail
     private
 
     def association_change_text(changeset, item)
-      return association_change_text_with_people_manager(changeset, item) if item_type == PeopleManager.sti_name
+      if item_type == PeopleManager.sti_name
+        return association_change_text_with_people_manager(changeset,
+          item)
+      end
 
       # used to overwrite in youth wagon
       I18n.t("version.association_change.#{item_class.name.underscore}.#{model.event}",
@@ -164,7 +167,7 @@ module PaperTrail
         changeset: changeset)
     end
 
-    def association_change_text_with_people_manager(changeset, item)
+    def association_change_text_with_people_manager(changeset, item) # rubocop:todo Metrics/CyclomaticComplexity, Metrics/AbcSize
       # Since PeopleManager entries are either created or destroyed, accessing changes makes sense
       changes = object.send(:object_changes_deserialized)
       manager_id = changes["manager_id"].compact.first

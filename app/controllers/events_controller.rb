@@ -154,7 +154,7 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
     end
   end
 
-  def load_my_invitation
+  def load_my_invitation # rubocop:todo Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity
     @invitations = current_user&.and_manageds&.map do |person|
       person.event_invitations.find_by(event_id: entry.id)
     end&.compact

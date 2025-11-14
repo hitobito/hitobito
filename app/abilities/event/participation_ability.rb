@@ -9,7 +9,7 @@ class Event::ParticipationAbility < AbilityDsl::Base
   include AbilityDsl::Constraints::Event
   include AbilityDsl::Constraints::Event::Participation
 
-  on(Event::Participation) do
+  on(Event::Participation) do # rubocop:disable Metrics/BlockLength
     permission(:any).may(:show).her_own_or_for_participations_read_events
     permission(:any).may(:show_details, :print).her_own_or_for_participations_full_events
     permission(:any).may(:create).her_own_if_application_possible
@@ -95,7 +95,8 @@ class Event::ParticipationAbility < AbilityDsl::Base
   end
 
   def participant_can_show_event?
-    participation.person && AbilityWithoutManagerAbilities.new(participation.person).can?(:show, participation.event)
+    participation.person && AbilityWithoutManagerAbilities.new(participation.person).can?(:show,
+      participation.event)
   end
 
   private

@@ -12,7 +12,9 @@ describe "ExternalEventRegisterManager", js: true do
   let(:group) { groups(:top_layer) }
 
   before do
-    CustomContent.create!(key: "views/devise/sessions/info", label: "foo", body: "dummy custom content has to be created because the youth wagon does not have built-in custom content fixtures")
+    CustomContent.create!(key: "views/devise/sessions/info", label: "foo",
+      body: "dummy custom content has to be created because" \
+              "the youth wagon does not have built-in custom content fixtures")
   end
 
   [:event, :course].each do |event_type|
@@ -23,13 +25,15 @@ describe "ExternalEventRegisterManager", js: true do
         before do
           allow_any_instance_of(FeatureGate).to receive(:enabled?).with("groups.self_registration").and_return(false)
           allow_any_instance_of(FeatureGate).to receive(:enabled?).with("people.people_managers").and_return(false)
-          allow_any_instance_of(FeatureGate).to receive(:enabled?).with("people.people_managers.self_service_managed_creation").and_return(true)
+          allow_any_instance_of(FeatureGate).to receive(:enabled?)
+            .with("people.people_managers.self_service_managed_creation").and_return(true)
           allow_any_instance_of(FeatureGate).to receive(:enabled?).and_return(false)
         end
 
         context "with self_service_managed_creation feature toggle disabled" do
           before do
-            allow_any_instance_of(FeatureGate).to receive(:enabled?).with("people.people_managers.self_service_managed_creation").and_return(false)
+            allow_any_instance_of(FeatureGate).to receive(:enabled?)
+              .with("people.people_managers.self_service_managed_creation").and_return(false)
           end
 
           it "does not show button for registering manager" do
@@ -41,7 +45,8 @@ describe "ExternalEventRegisterManager", js: true do
 
         context "with self_service_managed_creation feature toggle enabled" do
           before do
-            allow_any_instance_of(FeatureGate).to receive(:enabled?).with("people.people_managers.self_service_managed_creation").and_return(true)
+            allow_any_instance_of(FeatureGate).to receive(:enabled?)
+              .with("people.people_managers.self_service_managed_creation").and_return(true)
           end
 
           it "does not show button for registering manager" do
@@ -57,13 +62,15 @@ describe "ExternalEventRegisterManager", js: true do
           allow_any_instance_of(FeatureGate).to receive(:enabled?).with(:self_registration_reason).and_return(false)
           allow_any_instance_of(FeatureGate).to receive(:enabled?).with("groups.self_registration").and_return(false)
           allow_any_instance_of(FeatureGate).to receive(:enabled?).with("people.people_managers").and_return(true)
-          allow_any_instance_of(FeatureGate).to receive(:enabled?).with("people.people_managers.self_service_managed_creation").and_return(true)
+          allow_any_instance_of(FeatureGate).to receive(:enabled?)
+            .with("people.people_managers.self_service_managed_creation").and_return(true)
           allow_any_instance_of(FeatureGate).to receive(:enabled?).and_return(true)
         end
 
         context "with self_service_managed_creation feature toggle disabled" do
           before do
-            allow_any_instance_of(FeatureGate).to receive(:enabled?).with("people.people_managers.self_service_managed_creation").and_return(false)
+            allow_any_instance_of(FeatureGate).to receive(:enabled?)
+              .with("people.people_managers.self_service_managed_creation").and_return(false)
           end
 
           it "does not show button for registering manager" do
@@ -75,7 +82,8 @@ describe "ExternalEventRegisterManager", js: true do
 
         context "with self_service_managed_creation feature toggle enabled" do
           before do
-            allow_any_instance_of(FeatureGate).to receive(:enabled?).with("people.people_managers.self_service_managed_creation").and_return(true)
+            allow_any_instance_of(FeatureGate).to receive(:enabled?)
+              .with("people.people_managers.self_service_managed_creation").and_return(true)
           end
 
           it "creates an external event manager and participation for managed" do
@@ -93,7 +101,9 @@ describe "ExternalEventRegisterManager", js: true do
 
             expect do
               find_all('.offset-md-3.offset-xl-2 .btn-group button[type="submit"]').first.click # submit
-              expect(page).to have_text('Deine persönlichen Daten wurden aufgenommen. Du kannst nun deine Kinder via "Anmelden" Knopf anmelden')
+              expect(page).to have_text(
+                'Deine persönlichen Daten wurden aufgenommen. Du kannst nun deine Kinder via "Anmelden" Knopf anmelden'
+              )
             end.to change { Person.count }.by(1)
 
             expect(current_path).to eq(group_event_path(group, event))
@@ -150,7 +160,8 @@ describe "ExternalEventRegisterManager", js: true do
     when Event.sti_name
       "Teilnahme von #{person.full_name} in #{event.name} wurde erfolgreich erstellt."
     when Event::Course.sti_name
-      "#{person.full_name} ist für diesen Anlass vorangemeldet. Die Anmeldung ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden."
+      "#{person.full_name} ist für diesen Anlass vorangemeldet." \
+      " Die Anmeldung ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden."
     end
   end
 end

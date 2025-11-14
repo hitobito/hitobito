@@ -25,7 +25,7 @@ module Dropdown
       template.action_button(@items.first.label, @items.first.url, :plus, class: "btn-sm")
     end
 
-    def init_items
+    def init_items # rubocop:todo Metrics/CyclomaticComplexity
       add_assign_manager_item if create_manager? && manageds.none?
       add_assign_managed_item if create_managed? && managers.none?
       add_create_managed_item if create_new_managed? && managers.none?

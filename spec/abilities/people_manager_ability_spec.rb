@@ -20,7 +20,8 @@ describe PeopleManagerAbility do
   before do
     allow(FeatureGate).to receive(:enabled?).and_return false
     allow(FeatureGate).to receive(:enabled?).with("people.people_managers").and_return true
-    allow(FeatureGate).to receive(:enabled?).with("people.people_managers.self_service_managed_creation").and_return true
+    allow(FeatureGate).to receive(:enabled?).with("people.people_managers.self_service_managed_creation")
+      .and_return true
   end
 
   describe :show do

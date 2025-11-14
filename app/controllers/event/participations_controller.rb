@@ -137,7 +137,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
 
   def decorated_entries
     # Preload just before render as list_entries (overriden by `RenderTableDisplays`) modifies scope
-    # invalidates relation and  any custom preloading done up until that point
+    # invalidates relation and any custom preloading done up until that point
     #
     # Custom Preloader is necessary because includes do not work with the complexity of the query
     preload(entries)

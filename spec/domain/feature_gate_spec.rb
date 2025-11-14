@@ -21,7 +21,17 @@ describe FeatureGate do
   end
 
   context "self_registration_reason" do
-    after { FeatureGate.remove_class_variable(:@@self_registration_enabled) }
+    def remove_cached_class_variable
+      if FeatureGate.class_variable_defined?(:@@self_registration_enabled)
+        FeatureGate.remove_class_variable(:@@self_registration_enabled)
+      end
+    end
+
+    around do |example|
+      remove_cached_class_variable
+      example.run
+      remove_cached_class_variable
+    end
 
     it "is enabled when SelfRegistrationReason exists" do
       expect(SelfRegistrationReason.count).to be > 0

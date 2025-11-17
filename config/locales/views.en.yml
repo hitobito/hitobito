@@ -181,6 +181,10 @@ en:
 
   dropdown/event/participant_add:
     as: "as %{role}"
+    register_new_managed: Register new Child
+    disabled_messages:
+      already_exists: 'is already registered'
+      cannot_see_event: 'darf den Anlass nicht sehen'
 
   dropdown/event/participation/mail_dispatch:
     title: E-Mail senden
@@ -448,6 +452,17 @@ en:
       update:
         flash:
           privacy_policy_not_accepted: "To complete the registration, you must agree to the data protection declaration."
+
+    participation_contact_data:
+      managed:
+        update:
+          flash:
+            privacy_policy_not_accepted: 'To complete the registration, you must agree to the data protection declaration.'
+
+        edit:
+          title: Register a new child and register for the event
+          save: Continue
+
     participations:
       edit:
         title: Registration
@@ -499,6 +514,10 @@ en:
         waiting_list: You are on the waiting list for this event.
         caption: Cancel registration
         confirmation: "Are you sure, that you want to cancel your registration?"
+        managed:
+          explanation: "%{person} is registered for this event."
+          pending: "\"%{person} is pre-registered for this event. The registration is not yet final and needs to be confirmed by the organizer.\""
+          waiting_list: "%{person} is on the waiting list for this event."
 
     qualifications:
       index:
@@ -509,9 +528,13 @@ en:
 
     register:
       register:
-        title: Contact details of the participating person
+        title:
+          participant: Enter contact details of the participating individual to complete registration.
+          manager: Contact details of the legal guardian
         flash:
           privacy_policy_not_accepted: To complete the registration, you must agree to the data protection declaration.
+        email_check:
+          enter_email: Please enter the email address you would like to use to register.
       index:
         sign_in: Register
         login: Login
@@ -519,6 +542,10 @@ en:
       email_check:
         next: Continue
         enter_email: Please enter your email address so you can register for the event.
+        next_for_manager: Register my child
+      manager_fields:
+        manager_first_name: First name of legal guardian
+        manager_last_name: Last name of legal guardian
 
     invitation_lists:
       create:
@@ -591,11 +618,15 @@ en:
       add: "add"
     banner_open_invitation:
       explanation: You've been invited to this event.
+      managed:
+        explanation: "%{person} wurde zu diesem Anlass eingeladen."
       buttons:
         accept: Register
         decline: Cancel registration
     banner_declined_invitation:
       explanation: Du wurdest zu diesem Anlass eingeladen und hast dich abgemeldet.
+      managed:
+        explanation: "%{person} wurde zu diesem Anlass eingeladen und wurde abgemeldet."
     form:
       caption_external_applications: "Externals can sign up for this event"
       caption_prioritization: "Participants may set two additional courses as alternatives."
@@ -666,6 +697,7 @@ en:
   event/participations:
     full_entry_label: "%{model_label} from <i>%{person}</i> in <i>%{event}</i>"
     success: "%{full_entry_label} has successfully been created. Please check the contact data, and update them if necessary."
+    success_for_external_manager: '%{full_entry_label} was created successfully.'
     instructions: "For the definite registration you have to print the confirmation of participation by<i>printing</i>, sign it and send it by mail to the corresponding address."
     export_enqueued: "Export is started in the background and downloaded after completion."
     waiting_list: "All places are currently taken, registration is on the waiting list."
@@ -703,6 +735,8 @@ en:
     registered: "Your personal data are recorded. Please set now the information for the application."
     application_window_closed: "The login window for this event is closed."
     no_places_available: "Die maximale Teilnehmeranzahl für diesen Anlass ist bereits erreicht."
+    email_sent_manager: 'We have sent you an email with a link where you or your child can register directly for the event.'
+    registered_manager: 'Your personal information has been recorded. You can now register your children using the “Register” button'
 
   event/roles:
     full_entry_label: "Role <i>%{role}</i> for <i>%{person}</i>"
@@ -2164,6 +2198,15 @@ en:
         update: "Update of request for <i>%{label}</i>: %{changeset}"
         destroy: "Request for <i>%{label}</i> has been answered."
 
+      deleted_person: "Gelöschte Person"
+      people_manager:
+        create:
+          manager: "%{label} has been added as a supervisor."
+          managed: " %{label} has been added as a child."
+        destroy:
+          manager: " %{label} has been removed as supervisor."
+          managed: " %{label} has been removed as a child."
+
     impersonate: "Account took over from %{user}"
     impersonation_done: "Account impersonation from %{user} ended."
     password_override: "Passwort wurde von %{user} auf null gesetzt und das Login verhindert, bis ein neues Passwort gesetzt wird."
@@ -2241,3 +2284,14 @@ en:
         next_button: Gast anmelden
       new_event_guest_contact_data_form_title: Kontaktdaten des Gasts
       new_event_guest_participation_form_title: Gast anmelden
+
+  people_managers:
+    section:
+      manageds_help: You can only add individuals as children to whom you have write access.
+    common_heading: Children / supervisors
+    managers_heading: Supervisors
+    manageds_heading: Children
+    create_managed_person_button: Create child
+    assign_managed_person_button: Assign child
+    assign_manager_person_button: Assign supervisor
+

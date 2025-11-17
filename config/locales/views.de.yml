@@ -184,6 +184,10 @@ de:
 
   dropdown/event/participant_add:
     as: "als %{role}"
+    register_new_managed: Neues Kind erfassen und anmelden
+    disabled_messages:
+      already_exists: 'ist bereits angemeldet'
+      cannot_see_event: 'darf den Anlass nicht sehen'
 
   dropdown/event/participation/mail_dispatch:
     title: E-Mail senden
@@ -451,6 +455,17 @@ de:
       update:
         flash:
           privacy_policy_not_accepted: "Um die Anmeldung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden."
+
+    participation_contact_data:
+      managed:
+        update:
+          flash:
+            privacy_policy_not_accepted: 'Um die Anmeldung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden.'
+
+        edit:
+          title: Neues Kind registrieren und am Anlass anmelden
+          save: Weiter
+
     participations:
       edit:
         title: Anmeldung
@@ -502,6 +517,10 @@ de:
         waiting_list: Du bist auf der Warteliste für diesen Anlass.
         caption: Abmelden
         confirmation: "Bist Du sicher, dass Du dich von diesem Anlass abmelden möchtest?"
+        managed:
+          explanation: "%{person} ist für diesen Anlass angemeldet."
+          pending: "%{person} ist für diesen Anlass vorangemeldet. Die Anmeldung ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden."
+          waiting_list: "%{person} ist auf der Warteliste für diesen Anlass."
 
     qualifications:
       index:
@@ -512,9 +531,13 @@ de:
 
     register:
       register:
-        title: Kontaktdaten der teilnehmenden Person erfassen
+        title:
+          participant: Kontaktdaten der teilnehmenden Person erfassen
+          manager: Kontaktdaten der erziehungsberechtigten Person
         flash:
           privacy_policy_not_accepted: Um die Anmeldung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden.
+        email_check:
+          enter_email: Bitte gib deine E-Mailadresse ein, mit der du dich registrieren möchtest.
       index:
         sign_in: Anmelden
         login: Login
@@ -522,6 +545,10 @@ de:
       email_check:
         next: Weiter
         enter_email: Bitte gib deine E-Mailadresse ein, damit du dich für den Anlass anmelden kannst.
+        next_for_manager: Mein Kind anmelden
+      manager_fields:
+        manager_first_name: Vorname erziehungsberechtigte Person
+        manager_last_name: Nachname erziehungsberechtigte Person
 
     invitation_lists:
       create:
@@ -594,11 +621,15 @@ de:
       add: "hinzufügen"
     banner_open_invitation:
       explanation: Du wurdest zu diesem Anlass eingeladen.
+      managed:
+        explanation: "%{person} wurde zu diesem Anlass eingeladen."
       buttons:
         accept: Anmelden
         decline: Abmelden
     banner_declined_invitation:
       explanation: Du wurdest zu diesem Anlass eingeladen und hast dich abgemeldet.
+      managed:
+        explanation: "%{person} wurde zu diesem Anlass eingeladen und wurde abgemeldet."
     form:
       caption_external_applications: "Externe können sich für diesen Anlass anmelden."
       caption_prioritization: "Teilnehmende können bei der Anmeldung zwei weitere Kurse als Alternativen angeben."
@@ -673,6 +704,7 @@ de:
   event/participations:
     full_entry_label: "%{model_label} von <i>%{person}</i> in <i>%{event}</i>"
     success: "%{full_entry_label} wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an."
+    success_for_external_manager: '%{full_entry_label} wurde erfolgreich erstellt.'
     instructions: "Für die definitive Anmeldung musst du die Teilnahmebestätigung über <i>Drucken</i> ausdrucken, unterzeichnen und per Post an die entsprechende Adresse schicken."
     export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
     waiting_list: "Es sind derzeit alle Plätze belegt, die Anmeldung ist auf der Warteliste."
@@ -710,6 +742,8 @@ de:
     registered: "Deine persönlichen Daten wurden aufgenommen. Bitte ergänze nun noch die Angaben für die Anmeldung."
     application_window_closed: "Das Anmeldefenster für diesen Anlass ist geschlossen."
     no_places_available: "Die maximale Teilnehmeranzahl für diesen Anlass ist bereits erreicht."
+    email_sent_manager: 'Wir haben dir ein E-Mail mit einem Link geschickt, wo du dich oder dein Kind direkt für den Anlass anmelden kannst.'
+    registered_manager: 'Deine persönlichen Daten wurden aufgenommen. Du kannst nun deine Kinder via "Anmelden" Knopf anmelden'
 
   event/roles:
     full_entry_label: "Rolle <i>%{role}</i> für <i>%{person}</i>"
@@ -2205,6 +2239,15 @@ de:
         update: "Zugriffsanfrage für <i>%{label}</i> wurde aktualisiert: %{changeset}"
         destroy: "Zugriffsanfrage für <i>%{label}</i> wurde beantwortet."
 
+      deleted_person: "Gelöschte Person"
+      people_manager:
+        create:
+          manager: "<i>%{label}</i> wurde als Verwalter*in hinzugefügt."
+          managed: "<i>%{label}</i> wurde als Kind hinzugefügt."
+        destroy:
+          manager: "<i>%{label}</i> wurde als Verwalter*in entfernt."
+          managed: "<i>%{label}</i> wurde als Kind entfernt."
+
     impersonate: "Account wurde von %{user} übernommen."
     impersonation_done: "Account wird nicht mehr von %{user} verwendet."
     password_override: "Passwort wurde von %{user} auf null gesetzt und das Login verhindert, bis ein neues Passwort gesetzt wird."
@@ -2282,3 +2325,13 @@ de:
         next_button: Gast anmelden
       new_event_guest_contact_data_form_title: Kontaktdaten des Gasts
       new_event_guest_participation_form_title: Gast anmelden
+
+  people_managers:
+    section:
+      manageds_help: Du kannst nur Personen als Kinder hinzufügen, auf welche du Schreibzugriff hast.
+    common_heading: Kinder / Verwalter*innen
+    managers_heading: Verwalter*innen
+    manageds_heading: Kinder
+    create_managed_person_button: Kind erfassen
+    assign_managed_person_button: Kind zuweisen
+    assign_manager_person_button: Verwalter*in zuweisen

@@ -145,18 +145,42 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
   end
 
   def load_user_participation
+    @user_participations = current_user&.and_manageds&.map do |person|
+      person.event_participations.find_by(event_id: entry.id)
+    end&.compact
+
     if current_user
       @user_participation = current_user.event_participations.find_by(event_id: entry.id)
     end
   end
 
-  def load_my_invitation
+  def load_my_invitation # rubocop:todo Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity
+    @invitations = current_user&.and_manageds&.map do |person|
+      person.event_invitations.find_by(event_id: entry.id)
+    end&.compact
+
+    @open_invitations = @invitations.select do |invitation|
+      invitation.status == :open &&
+        event_user_application_possible?(invitation.person)
+    end.compact
+
+    @declined_invitations = @invitations.select do |invitation|
+      invitation.status == :declined
+    end.compact
+
     if current_user
       invitation = current_user.event_invitations.find_by(event_id: entry.id)
       if invitation.present?
         @my_invitation = invitation
       end
     end
+  end
+
+  def event_user_application_possible?(person = current_user)
+    participation = entry.participations.new
+    participation.person = person
+
+    entry.application_possible? && can?(:new, participation)
   end
 
   def init_questions

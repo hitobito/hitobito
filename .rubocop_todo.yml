@@ -212,3 +212,9 @@ Style/SafeNavigation:
     - 'app/helpers/roles_helper.rb'
     - 'app/jobs/event/participation_cleanup_answers_job.rb'
     - 'app/jobs/person/send_add_request_job.rb'
+
+# Offense count: 1
+# This cop supports unsafe autocorrection (--autocorrect-all).
+Rails/RedundantPresenceValidationOnBelongsTo:
+  Exclude:
+    - 'app/models/people_manager.rb'

@@ -34,7 +34,8 @@ class Event::ParticipationContactDatasController < ApplicationController
     new_group_event_participation_path(
       group,
       event,
-      event_role: {type: params[:event_role][:type]}
+      {event_role: {type: params[:event_role][:type]},
+       event_participation: {person_id: entry.person.id}}
     )
   end
 
@@ -60,6 +61,8 @@ class Event::ParticipationContactDatasController < ApplicationController
   end
 
   def contact_data_class
+    return Event::ParticipationContactDatas::Managed if participation_for_managed?
+
     Event::ParticipationContactData
   end
 
@@ -76,14 +79,30 @@ class Event::ParticipationContactDatasController < ApplicationController
   end
 
   def permitted_attrs
-    PeopleController.permitted_attrs
+    PeopleController.permitted_attrs + [:privacy_policy_accepted]
   end
 
   def person
-    @person ||= entry&.person || current_user
+    @person ||= entry&.person || params_person || current_user
+  end
+
+  def params_person
+    current_user.manageds.find(params[:person_id]) if params[:person_id].present?
   end
 
   def privacy_policy_param
-    params[:event_participation_contact_data][:privacy_policy_accepted]
+    params.dig(contact_data_param_key, :privacy_policy_accepted)
+  end
+
+  def participation_for_managed?
+    current_user.manageds.include?(params_person)
+  end
+
+  def contact_data_param_key
+    if participation_for_managed?
+      :event_participation_contact_datas_managed
+    else
+      :event_participation_contact_data
+    end
   end
 end

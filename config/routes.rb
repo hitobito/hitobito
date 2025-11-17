@@ -59,6 +59,13 @@ Hitobito::Application.routes.draw do
 
     get 'list_groups' => 'group/lists#index', as: :list_groups
 
+    resources :people, only: [] do
+      scope module: 'person' do
+        resources :managers, except: [:edit, :update]
+        resources :manageds, except: [:edit, :update]
+      end
+    end
+
     resources :groups do
       scope module: 'subscriber' do
         resource :subscriber_list, only: [:new] do
@@ -257,6 +264,11 @@ Hitobito::Application.routes.draw do
             collection do
               get 'contact_data', controller: 'participation_contact_datas', action: 'edit'
               post 'contact_data', controller: 'participation_contact_datas', action: 'update'
+
+              scope module: :participation_contact_data do
+                get 'contact_data/managed' => 'managed#edit'
+                post 'contact_data/managed' => 'managed#update'
+              end
             end
             resource :mail_dispatch, only: [:create], module: :participations
             member do

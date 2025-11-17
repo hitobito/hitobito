@@ -153,4 +153,22 @@ module PeopleHelper
         end
     end
   end
+
+  def format_person_readable_manageds(person)
+    manageds = person.decorate.readable_manageds
+    if manageds.size.zero?
+      ta(:no_entry, association(person, :readable_manageds))
+    else
+      simple_list(manageds, class: "unstyled") { |val| assoc_link(val) }
+    end
+  end
+
+  def format_person_managers(person)
+    managers = person.managers
+    if managers.size.zero?
+      ta(:no_entry, association(person, :managers))
+    else
+      simple_list(managers, class: "unstyled") { |val| assoc_link(val) }
+    end
+  end
 end

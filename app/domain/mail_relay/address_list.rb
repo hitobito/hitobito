@@ -5,7 +5,7 @@
 
 module MailRelay
   class AddressList
-    attr_reader :people, :labels
+    attr_reader :labels
 
     def initialize(people, labels = [])
       @people = Array(people)
@@ -19,6 +19,14 @@ module MailRelay
     end
 
     private
+
+    def people
+      if FeatureGate.enabled? "people.people_managers"
+        return people_and_their_managers
+      end
+
+      @people
+    end
 
     def preferred_emails(person)
       additional_emails_with_default(person).select do |email|
@@ -61,6 +69,18 @@ module MailRelay
     def additional_emails_scope
       AdditionalEmail.where(contactable_type: Person.sti_name,
         contactable_id: people.collect(&:id))
+    end
+
+    def people_and_their_managers
+      persisted_people, new_people = *@people.partition(&:persisted?)
+      new_people_and_their_managers = new_people + new_people.flat_map(&:managers)
+      return new_people_and_their_managers if persisted_people.blank?
+
+      fetched_people_and_their_managers = Person.left_joins(:people_manageds).distinct
+        .where(people_manageds: {managed_id: persisted_people})
+        .or(Person.distinct.where(id: persisted_people))
+
+      fetched_people_and_their_managers + new_people_and_their_managers
     end
   end
 end

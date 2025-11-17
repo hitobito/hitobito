@@ -12,7 +12,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   include ActionView::Helpers::SanitizeHelper
   prepend RenderTableDisplays
 
-  class_attribute :additional_participant_includes, default: []
+  class_attribute :additional_participant_includes, default: [:application]
 
   self.nesting = Group, Event
 
@@ -229,7 +229,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def after_destroy_path
-    if for_current_user?
+    if participation_of_managed? || for_current_user?
       group_event_path(group, event)
     else
       group_event_application_market_index_path(group, event)
@@ -245,6 +245,14 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   def order_by_id_statement(ids)
     cases = ids.map.with_index { |id, index| "WHEN #{id} THEN #{index}" }
     Arel.sql(["CASE id", *cases, "END"].join("\n")) if cases.present?
+  end
+
+  def return_path
+    if manager_via_public_event? || (participation_of_managed? && !entry.persisted?)
+      group_event_path(group, event)
+    else
+      super
+    end
   end
 
   def authorize_class
@@ -286,7 +294,10 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     participation
   end
 
-  def person_id # rubocop:todo Metrics/CyclomaticComplexity
+  def person_id # rubocop:todo Metrics/CyclomaticComplexity, Metrics/AbcSize
+    if model_params&.key?(:person_id) && current_user && own_or_managed_params_person?
+      return model_params[:person_id]
+    end
     return current_user&.id unless event.supports_applications
 
     if model_params&.key?(:person_id)
@@ -403,15 +414,23 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def current_user_interested_in_mail?
-    for_current_user? # extended in wagon
+    # send email to kind and verwalter
+    for_current_user_or_managed?
   end
 
   def enforce_required_answers?
-    for_current_user? # extended in wagon
+    for_current_user_or_managed?
   end
 
   # rubocop:todo Metrics/AbcSize
   def set_success_notice # rubocop:todo Metrics/CyclomaticComplexity # rubocop:todo Metrics/AbcSize
+    if !entry.pending? && manager_via_public_event?
+      flash[:notice] ||= translate(:success_for_external_manager,
+        full_entry_label: full_entry_label)
+
+      return
+    end
+
     return super unless action_name.to_s == "create"
 
     if entry.pending?
@@ -476,5 +495,23 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
 
   def for_current_user?
     entry.participant_type == Person.sti_name && entry.participant_id == current_user&.id
+  end
+
+  def for_current_user_or_managed?
+    entry.participant_type == Person.sti_name &&
+      current_user.and_manageds.map(&:id).include?(entry.participant_id)
+  end
+
+  def own_or_managed_params_person?
+    model_params[:person_id].to_i == current_user.id ||
+      current_user.manageds.pluck(:id).include?(model_params[:person_id].to_i)
+  end
+
+  def manager_via_public_event?
+    participation_of_managed? && current_user.roles.none?
+  end
+
+  def participation_of_managed?
+    current_user.manageds.include?(entry.person)
   end
 end

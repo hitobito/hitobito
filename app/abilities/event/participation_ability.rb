@@ -9,7 +9,7 @@ class Event::ParticipationAbility < AbilityDsl::Base
   include AbilityDsl::Constraints::Event
   include AbilityDsl::Constraints::Event::Participation
 
-  on(Event::Participation) do
+  on(Event::Participation) do # rubocop:disable Metrics/BlockLength
     permission(:any).may(:show).her_own_or_for_participations_read_events
     permission(:any).may(:show_details, :print).her_own_or_for_participations_full_events
     permission(:any).may(:create).her_own_if_application_possible
@@ -42,6 +42,16 @@ class Event::ParticipationAbility < AbilityDsl::Base
     permission(:group_and_below_full).may(:mail_confirmation).in_same_group_or_below_if_active
     permission(:layer_full).may(:mail_confirmation).in_same_layer_if_active
     permission(:layer_and_below_full).may(:mail_confirmation).in_same_layer_if_active
+
+    for_self_or_manageds do
+      permission(:any).may(:create).her_own_if_application_possible
+      permission(:any).may(:destroy).her_own_if_application_cancelable
+      general(:create).at_least_one_group_not_deleted
+    end
+    # abilities which managers inherit from their managed children
+    permission(:any).may(:show).her_own_or_manager_or_for_participations_read_events
+    permission(:any).may(:show_details, :print)
+      .her_own_or_manager_or_for_participations_full_events
   end
 
   on(Event::Guest) do
@@ -66,6 +76,14 @@ class Event::ParticipationAbility < AbilityDsl::Base
       (!event.application_closing_at? || event.application_closing_at >= Time.zone.today)
   end
 
+  def her_own_or_manager_or_for_participations_read_events
+    her_own_or_for_participations_read_events || manager
+  end
+
+  def her_own_or_manager_or_for_participations_full_events
+    her_own_or_for_participations_full_events || manager
+  end
+
   def if_participating
     participating?
   end
@@ -77,12 +95,21 @@ class Event::ParticipationAbility < AbilityDsl::Base
   end
 
   def participant_can_show_event?
-    participation.person && (Ability.new(participation.person).can? :show, participation.event)
+    participation.person && AbilityWithoutManagerAbilities.new(participation.person).can?(:show,
+      participation.event)
   end
 
   private
 
   def participation
     subject
+  end
+
+  def manager
+    contains_any?([user.id], person.managers.pluck(:id))
+  end
+
+  def person
+    participation.person
   end
 end

@@ -9,4 +9,7 @@
   = f.error_messages
   = f.labeled_input_field(:email)
   = f.honeypot(:verification)
-  = f.indented(submit_button(f, t('.next')))
+  = f.indented(submit_button(f, t('.next'))) do
+    = submit_button(f, t('.next'))
+    - if FeatureGate.enabled?('people.people_managers') && FeatureGate.enabled?('people.people_managers.self_service_managed_creation')
+      = submit_button(f, t('.next_for_manager'), formaction: register_group_event_path(group, event, manager: true))

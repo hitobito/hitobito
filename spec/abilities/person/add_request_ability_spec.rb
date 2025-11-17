@@ -273,6 +273,40 @@ describe Person::AddRequestAbility do
     end
   end
 
+  context "as manager" do
+    let(:bottom_layer) { groups(:bottom_layer_one) }
+    let(:role) { Fabricate(Group::BottomLayer::BasicPermissionsOnly.sti_name.to_sym, group: bottom_layer) }
+
+    it "is allowed for managed person" do
+      other = Fabricate(Group::BottomLayer::Member.sti_name.to_sym, group: bottom_layer).person
+      other.managers = [role.person]
+
+      request = create_request(other)
+
+      is_expected.to be_able_to(:approve, request)
+      is_expected.to be_able_to(:reject, request)
+      is_expected.to be_able_to(:add_without_request, request)
+    end
+
+    it "is not allowed for not managed person" do
+      other = Fabricate(Group::BottomLayer::Member.sti_name.to_sym, group: bottom_layer).person
+      request = create_request(other)
+
+      is_expected.to_not be_able_to(:approve, request)
+      is_expected.to_not be_able_to(:reject, request)
+      is_expected.to_not be_able_to(:add_without_request, request)
+    end
+
+    it "is allowed to reject if created by managed person" do
+      other = Fabricate(Group::BottomLayer::Member.sti_name.to_sym, group: bottom_layer).person
+      requester = Fabricate(Group::BottomLayer::Leader.sti_name.to_sym, group: bottom_layer).person
+      requester.managers = [role.person]
+      request = create_request(other, requester: requester)
+
+      is_expected.to be_able_to(:reject, request)
+    end
+  end
+
   def create_request(person, requester: people(:bottom_member))
     Person::AddRequest::Group.create!(
       person: person,

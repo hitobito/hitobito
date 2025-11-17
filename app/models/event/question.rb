@@ -144,17 +144,27 @@ class Event::Question < ActiveRecord::Base
     end
   end
 
+  def choices
+    choice_items_by_choice.map { |choice_translations| ChoiceForm::Choice.new(choice_translations) }
+  end
+
   def choices_attributes=(attributes)
     languages = [I18n.locale] + Globalized.additional_languages
-    choices_grouped_by_translation = attributes.values.map(&:values).transpose
+    choice_items_by_translation = attributes.values.map(&:values).transpose
 
-    languages.each do |lang|
-      send("choices_#{lang}=", choices_grouped_by_translation.shift.join(", "))
+    languages.zip(choice_items_by_translation).each do |lang, choices|
+      send("choices_#{lang}=", choices.join(","))
     end
   end
 
   def self.reflect_on_all_associations
     super + [ChoiceForm::ChoiceReflection.new]
+  end
+
+  def self.reflect_on_association(association)
+    return super unless association == :choices
+
+    ChoiceForm::ChoiceReflection.new
   end
 
   private
@@ -170,6 +180,29 @@ class Event::Question < ActiveRecord::Base
       else
         participation.answers << answers.new
       end
+    end
+  end
+
+  # Regroups the choice items to be grouped by choice instead of by translation
+  # Example: [["Alter", "Adresse"], ["Age", "Address"]]
+  # -> [{de: "Alter", en: "Age"}, {de: "Adresse", en: "Address"}]
+  def choice_items_by_choice
+    choice_items_by_translation = Globalized.languages.map do |lang|
+      choices_in_lang = send("choices_#{lang}") || ""
+      choices_in_lang.split(",").collect(&:strip)
+    end
+    choice_items_by_choice = normalize_2d_array(choice_items_by_translation).transpose
+    choice_items_by_choice.map do |choice_translations|
+      Globalized.languages.zip(choice_translations).to_h
+    end
+  end
+
+  # Normalizes an array of subarrays to make all subarrays the size of the
+  # biggest subarray so transposing is possible
+  def normalize_2d_array(array)
+    max_subarray_length = array.max_by(&:length).length
+    array.map do |sub_array|
+      sub_array.in_groups_of(max_subarray_length.nonzero? || 1, "").flatten
     end
   end
 end

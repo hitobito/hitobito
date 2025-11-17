@@ -9,6 +9,9 @@ module ChoiceForm
       end
     end
 
+    def _destroy
+    end
+
     def id
     end
 

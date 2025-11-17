@@ -16,10 +16,6 @@ class Groups::SelfRegistrationController < Wizards::BaseController
 
   private
 
-  def notification_email
-    group.self_registration_notification_email
-  end
-
   def model_class
     Wizards::RegisterNewUserWizard
   end

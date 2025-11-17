@@ -70,6 +70,7 @@ class GlobalizedPermittedAttrs
   end
 
   def should_permit?(klass, attr)
-    klass.ancestors.include?(Globalized) && klass.translated_attribute_names.include?(attr.to_sym)
+    klass.respond_to?(:translated_attribute_names) &&
+      klass.translated_attribute_names.include?(attr.to_sym)
   end
 end

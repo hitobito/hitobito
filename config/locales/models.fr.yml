@@ -98,7 +98,9 @@ fr:
               missing_scheme: doit contenir un protocole (http:// ou https://)
               suffix_present: ne doit pas contenir de chemin de fichier ni finir par un backslash
         custom_content:
-          placeholder_missing: 'doit contenir la variable %{placeholder}'
+          attributes:
+            body:
+              placeholder_missing: 'doit contenir la variable %{placeholder}'
         event:
           attributes:
             base:

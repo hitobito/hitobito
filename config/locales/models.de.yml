@@ -1374,7 +1374,6 @@ de:
       people: Lesen aller Personen, auf die du Zugriff hast
       invoices: Lesen aller Rechnungen, auf die du Zugriff hast
       mailing_lists: Lesen aller Abos, auf die du Zugriff hast
-      register_people: Neue Personen registrieren
       nextcloud: Lesen deiner Nextcloud-Gruppen und deines Anzeigenamens
 
   fixed_fees:

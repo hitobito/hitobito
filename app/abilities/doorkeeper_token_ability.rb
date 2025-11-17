@@ -28,16 +28,13 @@ class DoorkeeperTokenAbility
 
   private
 
-  # rubocop:disable Metrics/CyclomaticComplexity
   def define_token_abilities
     define_group_abilities if token.acceptable?(:groups)
     define_event_abilities if token.acceptable?(:events)
     define_person_abilities if token.acceptable?(:people)
     define_invoice_abilities if token.acceptable?(:invoices)
     define_mailing_list_abilities if token.acceptable?(:mailing_lists)
-    define_register_people_abilities if token.acceptable?(:register_people)
   end
-  # rubocop:enable Metrics/CyclomaticComplexity
 
   def define_all_abilities
     define_group_abilities
@@ -45,7 +42,6 @@ class DoorkeeperTokenAbility
     define_person_abilities
     define_invoice_abilities
     define_mailing_list_abilities
-    define_register_people_abilities
   end
 
   def define_group_abilities
@@ -131,12 +127,6 @@ class DoorkeeperTokenAbility
     # oauth token in order to support that logic
     can :update, Group do |g|
       user_ability.can?(:update, g)
-    end
-  end
-
-  def define_register_people_abilities
-    can :register_people, Group do |g|
-      g.self_registration_active?
     end
   end
 end

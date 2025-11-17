@@ -94,8 +94,7 @@ Doorkeeper.configure do
   #
   default_scopes :email
   optional_scopes :name, :with_roles, :openid, :api,
-    :events, :groups, :people, :invoices, :mailing_lists,
-    :register_people
+    :events, :groups, :people, :invoices, :mailing_lists
 
   enforce_configured_scopes
 

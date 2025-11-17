@@ -11,7 +11,7 @@
 
 - else
   = f.labeled_input_field(:question)
-  = f.nested_fields_for(:choices) do |ff|
-    = ff.labeled_input_field(:choice)
-    .controls.align-with-form= f.link_to_remove(ta(:remove))
+  = f.nested_fields_for(:choices) do |choices_form|
+    = choices_form.labeled_input_field(:choice)
+    .controls.align-with-form= choices_form.link_to_remove(ta(:remove))
   = f.labeled_boolean_field(:multiple_choices)

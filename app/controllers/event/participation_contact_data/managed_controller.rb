@@ -12,7 +12,7 @@ class Event::ParticipationContactData::ManagedController <
   def update
     if any_duplicates?
       entry.errors.add(:base, :duplicates_present) if any_duplicates?
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     else
       super
     end

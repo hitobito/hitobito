@@ -600,11 +600,6 @@ describe Group do
         expect(group).to be_self_registration_active
       end
 
-      it "is not active if feature toggle is off" do
-        allow(FeatureGate).to receive(:enabled?).with("groups.self_registration").and_return(false)
-        expect(group).not_to be_self_registration_active
-      end
-
       it "is not active if role type with permissions is selected" do
         group.self_registration_role_type = Group::BottomGroup::Member.name
         expect(group).not_to be_self_registration_active

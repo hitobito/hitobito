@@ -284,8 +284,6 @@ messages:
   body_font_size: 9
 
 groups:
-  self_registration:
-    enabled: true
   statistics:
     enabled: true
   nextcloud:

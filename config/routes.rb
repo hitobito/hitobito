@@ -441,9 +441,7 @@ Hitobito::Application.routes.draw do
     resources :people, only: [:index, :show, :update]
     resources :groups, only: [:index, :show] do
       member do
-        FeatureGate.if('groups.self_registration') do
-          resources :self_registrations, only: [:create]
-        end
+        resources :self_registrations, only: [:create]
       end
     end
     resources :events, only: [:index, :show]

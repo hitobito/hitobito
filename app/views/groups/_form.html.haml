@@ -18,7 +18,7 @@
     = tab_content(:contactable) do
       = render 'contactable/fields', f: f
 
-    - if FeatureGate.enabled?('groups.self_registration') && entry.supports_self_registration?
+    - if entry.supports_self_registration?
       = tab_content(:self_registration) do
         = render 'self_registration_fields', f: f
 

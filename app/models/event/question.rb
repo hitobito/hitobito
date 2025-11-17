@@ -149,11 +149,12 @@ class Event::Question < ActiveRecord::Base
   end
 
   def choices_attributes=(attributes)
+    attributes.filter! { |_, v| [1, "1", true, "true"].exclude?(v["_destroy"]) }
     languages = [I18n.locale] + Globalized.additional_languages
     choice_items_by_translation = attributes.values.map(&:values).transpose
 
     languages.zip(choice_items_by_translation).each do |lang, choices|
-      send("choices_#{lang}=", choices.join(","))
+      send("choices_#{lang}=", choices&.join(","))
     end
   end
 
@@ -189,8 +190,11 @@ class Event::Question < ActiveRecord::Base
   def choice_items_by_choice
     choice_items_by_translation = Globalized.languages.map do |lang|
       choices_in_lang = send("choices_#{lang}") || ""
-      choices_in_lang.split(",").collect(&:strip)
+      choices_in_lang.split(",", -1).collect(&:strip).presence || [""]
     end
+
+    return [] if choice_items_by_translation.all? { |choice_items| choice_items == [""] }
+
     choice_items_by_choice = normalize_2d_array(choice_items_by_translation).transpose
     choice_items_by_choice.map do |choice_translations|
       Globalized.languages.zip(choice_translations).to_h

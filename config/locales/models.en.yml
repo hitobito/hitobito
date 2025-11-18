@@ -1324,6 +1324,7 @@ en:
         layer_full: Lese- und Schreibrechte auf dieser Ebene
         layer_and_below_full: Lese- und Schreibrechte auf dieser und darunterliegenden Ebenen
         people: People
+        register_people: Neue Personen registrieren (braucht Schreibrechte)
         groups: Groups
         events: Events
         invoices: Invoices
@@ -1338,6 +1339,23 @@ en:
         excluded_calendar_groups: Ausgeschlossene Gruppen
         included_calendar_tags: Nur mit Tags
         excluded_calendar_tags: Ausgeschlossene Tags
+
+  api:
+    errors:
+      resources:
+        id_must_not_be_set: ID darf nicht gesetzt sein
+        role_resource:
+          group_id:
+            unwritable_attribute: kann nicht geändert werden
+          person_id:
+            unwritable_attribute: kann nicht geändert werden
+          type:
+            unwritable_attribute: kann nicht geändert werden
+        self_registration_resource:
+          adult_consent:
+            must_be_accepted: muss akzeptiert werden
+          privacy_policy_accepted:
+            must_be_accepted: muss akzeptiert werden
 
   doorkeeper:
     scopes:

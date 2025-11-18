@@ -889,6 +889,8 @@ en:
       count: Number
       distribution: Distribution
     self_registration:
+      alert:
+        not_active: Die Selbstregistrierung ist in dieser Gruppe nicht möglich.
       show:
         meta_description: Self-registration page for Hitobito
       form:

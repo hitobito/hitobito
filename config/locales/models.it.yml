@@ -56,10 +56,6 @@ it:
       messages:
         record_invalid: 'Il controllo di validità è fallito: %{errors}'
       models:
-        event/participation_contact_datas/managed:
-          attributes:
-            base:
-              duplicates_present: Questa persona esiste già. Contatta l'amministrazione degli indirizzi per registrarli.
         roles/termination:
           attributes:
             terminate_on:
@@ -150,9 +146,6 @@ it:
             base:
               max_one_additional_invoice_address: È possibile selezionare un solo indirizzo come indirizzo di fatturazione.
               additional_address_labels_must_be_unique: Le denominazioni degli altri indirizzi devono essere univoche.
-              cannot_have_managers_and_manageds: '%{name} kann nicht sowohl Verwalter*innen als auch Kinder haben.'
-              manager_already_managed: Impossibile aggiungere gestore/rice perché è già gestito.
-              managed_already_manager: Impossibile aggiungere bambino/a perché è già un/a gestore/rice.
             email:
               taken: >
                   è già stato assegnato. Questo indirizzo deve essere univoco, visto
@@ -168,13 +161,6 @@ it:
               taken: è già stato chiesto
         person_duplicates:
           invalid_role: "Il ruolo %{role} di %{person} non è valido per l'unione, poiché l'altra persona potrebbe già avere un ruolo che non consente più questo ruolo, che deve essere corretto/rimosso manualmente. Informazioni: %{message}"
-        people_manager:
-          manager_and_managed_the_same: Verwalter*in und Kind müssen unterschiedliche Personen sein.
-
-          attributes:
-            manager_id:
-              taken: è già impostato.
-          manager_and_managed_the_same: kann sich nicht selber verwalten.
         qualification:
           attributes:
             qualification_kind_id:
@@ -435,10 +421,6 @@ it:
         one: filtro
         many: Filtri
         other: Filtri
-      people_manager:
-        one: Verwalter*in
-        many: Verwalter*innen
-        other: Verwalter*innen
       phone_number:
         one: numero di telefono
         many: Numeri di telefono
@@ -615,25 +597,6 @@ it:
         self_registration_reason: Motivo dell'ingresso
         self_registration_reason_text: Motivo dell'ingresso
         self_registration_reason_custom_text: Motivo di ingresso definito dall'utente
-        managers: Gestori
-        manageds: Bambini
-        people_managers: Gestori
-        people_manageds: Bambini
-        people_managers_attributes: Gestore
-        people_manageds_attributes: Bambini
-        readable_manageds: Bambini
-
-      people_manager:
-        manager_id: Gestore/rice
-        managed_id: Bambino
-
-      people_managers:
-        manager_id: Gestore
-        managed_id: Bambino/a
-
-      people_manageds:
-        manager_id: Bambino/a
-        managed_id: Gestore/rice
 
       person_duplicate:
         birth_year: Anno di nascita

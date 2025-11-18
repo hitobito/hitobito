@@ -3,6 +3,4 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= f.labeled(:gender) do
-  - (Person::GENDERS + ['']).each do |key|
-    = f.inline_radio_button(:gender, key, entry.gender_label(key))
+= f.labeled_radio_buttons(:gender, Person::GENDERS + [''])

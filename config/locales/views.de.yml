@@ -1925,6 +1925,8 @@ de:
       filters_role_kind:
         active_today: Aktuell aktive Rollen
         active: aktive Rollen
+        started: gestartete Rollen
+        started_help: Ein Rolle wurde gestartet, wenn sie im gewählten Zeitraum aktiv geworden ist.
         created: erstellte Rollen
         deleted: gelöschte Rollen
         inactive: inaktive oder nie vorhandene Rollen

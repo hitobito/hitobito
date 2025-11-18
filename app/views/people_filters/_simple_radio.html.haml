@@ -1,6 +1,9 @@
 - key = attr.gsub(/\W+/, '_').gsub(/_+$/, '')
 - caption ||= "people_filters.form.#{key}.#{value}"
+- help ||= "people_filters.form.#{key}.#{value}_help"
 
 = label_tag("#{key}_#{value}", class: 'radio') do
   = radio_button_tag(attr, value, checked)
   = t(caption)
+  - if I18n.exists? help
+    = icon(:"info-circle", title: t(help))

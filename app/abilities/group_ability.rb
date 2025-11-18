@@ -12,6 +12,9 @@ class GroupAbility < AbilityDsl::Base
     permission(:any)
       .may(:read, :index_events, :"index_event/courses", :index_mailing_lists)
       .if_any_role
+    permission(:any)
+      .may(:register_people) # via API with session cookie
+      .in_self_registration_groups
 
     permission(:contact_data).may(:index_people).all
 
@@ -158,6 +161,10 @@ class GroupAbility < AbilityDsl::Base
 
   def service_token_in_same_layer
     in_same_layer
+  end
+
+  def in_self_registration_groups
+    group.self_registration_active?
   end
 
   private

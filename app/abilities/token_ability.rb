@@ -31,6 +31,7 @@ class TokenAbility
   def define_token_abilities # rubocop:todo Metrics/CyclomaticComplexity # rubocop:todo Metrics/AbcSize
     define_base_abilities
     define_person_abilities if token.people?
+    define_register_people_abilities if token.register_people? && write_permission?
     define_event_abilities if token.events?
     define_group_abilities if token.groups?
     define_role_abilities if token.people? && token.groups?
@@ -86,6 +87,12 @@ class TokenAbility
     end
   end
   # rubocop:enable Metrics/CyclomaticComplexity
+
+  def define_register_people_abilities
+    groups = token.layer_and_below_full? ? token_layer_and_below : token.layer.groups_in_same_layer
+    can :register_people, Group,
+      {id: groups.filter(&:self_registration_active?).map(&:id)}
+  end
 
   def define_event_abilities
     can :list_available, Event

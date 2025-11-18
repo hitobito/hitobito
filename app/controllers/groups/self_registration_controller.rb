@@ -9,15 +9,12 @@ class Groups::SelfRegistrationController < Wizards::BaseController
   skip_authorization_check
 
   before_action :assert_empty_honeypot
+  before_action :assert_self_registration_active
   before_action :redirect_to_group_if_necessary
 
   helper_method :group, :policy_finder
 
   private
-
-  def notification_email
-    group.self_registration_notification_email
-  end
 
   def model_class
     Wizards::RegisterNewUserWizard
@@ -28,8 +25,6 @@ class Groups::SelfRegistrationController < Wizards::BaseController
   end
 
   def redirect_to_group_if_necessary
-    return redirect_to group_path(group) unless group.self_registration_active?
-
     redirect_to group_self_inscription_path(group) if signed_in?
   end
 
@@ -58,6 +53,12 @@ class Groups::SelfRegistrationController < Wizards::BaseController
   def assert_empty_honeypot
     if params.delete(:verification).present?
       redirect_to new_person_session_path
+    end
+  end
+
+  def assert_self_registration_active
+    unless group.self_registration_active?
+      redirect_to group_path(group), alert: I18n.t("groups.self_registration.alert.not_active")
     end
   end
 

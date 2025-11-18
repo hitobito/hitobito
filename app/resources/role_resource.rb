@@ -46,11 +46,7 @@ class RoleResource < ApplicationResource
   private
 
   def raise_when_changing_readonly_attr(model)
-    errors = Graphiti::Util::SimpleErrors.new({})
-    [:group_id, :person_id, :type].each do |attr|
-      next unless model.changes.key?(attr.to_s)
-      errors.add(attr, :unwritable_attribute, message: "cannot be written")
-    end
-    raise Graphiti::Errors::InvalidRequest, errors if errors.any?
+    changed = [:group_id, :person_id, :type].filter { |attr| model.changes.key?(attr.to_s) }
+    invalid_request!(*changed, :unwritable_attribute) if changed.any?
   end
 end

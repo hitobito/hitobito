@@ -534,4 +534,121 @@ describe TokenAbility do
       end
     end
   end
+
+  describe :register_people do
+    let(:token) { service_tokens(:permitted_top_layer_token) }
+    let(:top_group) { groups(:top_layer) }
+    let(:top_subgroup) { groups(:top_group) }
+    let(:bottom_group) { groups(:bottom_layer_one) }
+
+    before do
+      allow_any_instance_of(Group).to receive(:self_registration_active?).and_return(true)
+    end
+
+    context "authorized with layer_and_below_full" do
+      before do
+        token.update(register_people: true, permission: :layer_and_below_full)
+      end
+
+      it "may register people in token layer" do
+        is_expected.to be_able_to(:register_people, top_group)
+      end
+
+      it "may register people in same layer" do
+        is_expected.to be_able_to(:register_people, top_subgroup)
+      end
+
+      it "may not register people in token layer if self registration not active" do
+        allow_any_instance_of(Group).to receive(:self_registration_active?).and_return(false)
+        is_expected.not_to be_able_to(:register_people, top_group)
+      end
+
+      it "may not register people in same layer if self registration not active" do
+        allow_any_instance_of(Group).to receive(:self_registration_active?).and_return(false)
+        is_expected.not_to be_able_to(:register_people, top_subgroup)
+      end
+
+      it "may register people in layer below" do
+        is_expected.to be_able_to(:register_people, bottom_group)
+      end
+
+      it "may not register people in layer above" do
+        token.update(layer_group_id: bottom_group.id)
+        is_expected.not_to be_able_to(:register_people, top_group)
+      end
+    end
+
+    context "authorized with layer_full" do
+      before { token.update(register_people: true, permission: :layer_full) }
+
+      it "may register people in token layer" do
+        is_expected.to be_able_to(:register_people, top_group)
+      end
+
+      it "may register people in same layer" do
+        is_expected.to be_able_to(:register_people, top_subgroup)
+      end
+
+      it "may not register people in token layer if self registration not active" do
+        allow_any_instance_of(Group).to receive(:self_registration_active?).and_return(false)
+        is_expected.not_to be_able_to(:register_people, top_group)
+      end
+
+      it "may not register people in same layer if self registration not active" do
+        allow_any_instance_of(Group).to receive(:self_registration_active?).and_return(false)
+        is_expected.not_to be_able_to(:register_people, top_subgroup)
+      end
+
+      it "may not register people in layer below" do
+        is_expected.not_to be_able_to(:register_people, bottom_group)
+      end
+
+      it "may not register people in layer above" do
+        token.update(layer_group_id: bottom_group.id)
+        is_expected.not_to be_able_to(:register_people, top_group)
+      end
+    end
+
+    context "without register_people permission" do
+      before { token.update(register_people: false, permission: :layer_and_below_full) }
+
+      it "may not register people in token layer" do
+        is_expected.not_to be_able_to(:register_people, top_group)
+      end
+
+      it "may not register people in same layer" do
+        is_expected.not_to be_able_to(:register_people, top_subgroup)
+      end
+
+      it "may not register people in layer below" do
+        is_expected.not_to be_able_to(:register_people, bottom_group)
+      end
+
+      it "may not register people in layer above" do
+        token.update(layer_group_id: bottom_group.id)
+        is_expected.not_to be_able_to(:register_people, top_group)
+      end
+    end
+
+    context "without _full permission" do
+      before { token.update(register_people: true, permission: :layer_and_below_read) }
+
+      it "may not register people in token layer" do
+        is_expected.not_to be_able_to(:register_people, top_group)
+      end
+
+      it "may not register people in same layer" do
+        is_expected.not_to be_able_to(:register_people, top_subgroup)
+      end
+
+      it "may not register people in layer below" do
+        is_expected.not_to be_able_to(:register_people, bottom_group)
+      end
+
+      it "may not register people in layer above" do
+        token.update(layer_group_id: bottom_group.id)
+        is_expected.not_to be_able_to(:register_people, top_group)
+      end
+    end
+  end
 end

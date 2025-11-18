@@ -1165,6 +1165,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_152059) do
     t.boolean "event_participations", default: false, null: false
     t.boolean "mailing_lists", default: false, null: false
     t.string "permission", default: "layer_read", null: false
+    t.boolean "register_people", default: false, null: false
   end
 
   create_table "sessions", id: :serial, force: :cascade do |t|

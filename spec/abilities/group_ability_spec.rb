@@ -712,4 +712,18 @@ describe GroupAbility do
       is_expected.not_to be_able_to(:manually_delete_people, groups(:bottom_layer_one))
     end
   end
+
+  context "using the self registration API with a session cookie" do
+    let(:ability) { Ability.new(people(:bottom_member)) }
+
+    it "may register_people in group with self registration active" do
+      allow_any_instance_of(Group).to receive(:self_registration_active?).and_return(true)
+      is_expected.to be_able_to(:register_people, groups(:bottom_layer_one))
+    end
+
+    it "may not register_people in group with self registration inactive" do
+      allow_any_instance_of(Group).to receive(:self_registration_active?).and_return(false)
+      is_expected.not_to be_able_to(:register_people, groups(:bottom_layer_one))
+    end
+  end
 end

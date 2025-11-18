@@ -84,8 +84,7 @@ class GroupsController < CrudController
   private
 
   def update_main_self_registration_group
-    return unless FeatureGate.enabled?("groups.self_registration") &&
-      entry.saved_change_to_main_self_registration_group? &&
+    return unless entry.saved_change_to_main_self_registration_group? &&
       entry.main_self_registration_group
 
     Group.where.not(id: entry.id).update_all(main_self_registration_group: false)

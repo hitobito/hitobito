@@ -106,7 +106,8 @@ class Event::ParticipationAbility < AbilityDsl::Base
   end
 
   def manager
-    contains_any?([user.id], person.managers.pluck(:id))
+    manager_ids = person&.managers&.pluck(:id) || []
+    contains_any?([user.id], manager_ids)
   end
 
   def person

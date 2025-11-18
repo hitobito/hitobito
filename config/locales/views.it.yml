@@ -182,6 +182,10 @@ it:
 
   dropdown/event/participant_add:
     as: "come %{role}"
+    register_new_managed: Neues Kind erfassen und anmelden
+    disabled_messages:
+      already_exists: 'ist bereits angemeldet'
+      cannot_see_event: 'darf den Anlass nicht sehen'
 
   dropdown/event/participation/mail_dispatch:
     title: Inviare e-mail
@@ -449,6 +453,17 @@ it:
       update:
         flash:
           privacy_policy_not_accepted: "Per completare l'iscrizione deve venir accettata la dichiarazione di protezione dei dati."
+
+    participation_contact_data:
+      managed:
+        update:
+          flash:
+            privacy_policy_not_accepted: 'Um die Anmeldung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden.'
+
+        edit:
+          title: Neues Kind registrieren und am Anlass anmelden
+          save: Weiter
+
     participations:
       edit:
         title: Iscrizione
@@ -500,6 +515,10 @@ it:
         waiting_list: Sei in lista d'attesa per questo evento.
         caption: Disiscriversi
         confirmation: "Sei sicuro di volerti disiscrivere da questo evento?"
+        managed:
+          explanation: "%{person} ist für diesen Anlass angemeldet."
+          pending: "%{person} ist für diesen Anlass vorangemeldet. Die Anmeldung ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden."
+          waiting_list: "%{person} ist auf der Warteliste für diesen Anlass."
 
     qualifications:
       index:
@@ -510,9 +529,13 @@ it:
 
     register:
       register:
-        title: Registrare i dati di contatto del/la partecipante
+        title:
+          participant: Kontaktdaten der teilnehmenden Person erfassen
+          manager: Kontaktdaten der erziehungsberechtigten Person
         flash:
           privacy_policy_not_accepted: Per completare la registrazione, è necessario accettare la dichiarazione sulla protezione dei dati.
+        email_check:
+          enter_email: Bitte gib deine E-Mailadresse ein, mit der du dich registrieren möchtest.
       index:
         sign_in: Iscriversi
         login: Login
@@ -520,6 +543,10 @@ it:
       email_check:
         next: avanti
         enter_email: Inserisci per favore il tuo indirizzo email, affinché tu possa iscriverti all'evento.
+        next_for_manager: Mein Kind anmelden
+      manager_fields:
+        manager_first_name: Vorname erziehungsberechtigte Person
+        manager_last_name: Nachname erziehungsberechtigte Person
 
     invitation_lists:
       create:
@@ -595,11 +622,15 @@ it:
       add: "aggiungere"
     banner_open_invitation:
       explanation: Sei stato invitato a questo evento
+      managed:
+        explanation: "%{person} wurde zu diesem Anlass eingeladen."
       buttons:
         accept: log in
         decline: log out
     banner_declined_invitation:
       explanation: Siete stati invitati a questo evento e avete disdetto.
+      managed:
+        explanation: "%{person} wurde zu diesem Anlass eingeladen und wurde abgemeldet."
     form:
       caption_external_applications: "Esterni possono iscriversi a questo evento."
       caption_prioritization: "I partecipanti possono dare durante l'iscrizione due ulteriori corsi come alternative."
@@ -670,6 +701,7 @@ it:
   event/participations:
     full_entry_label: "%{model_label} da <i>%{person}</i> a <i>%{event}</i>"
     success: "%{full_entry_label} è stato creato con successo."
+    success_for_external_manager: '%{full_entry_label} wurde erfolgreich erstellt.'
     instructions: "per l'iscrizione definitiva devi stampare questa pagina tramita <i>stampare<i>, firmarla e spedirla per posta all'indirizzo corrispondente"
     export_enqueued: "L'esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento"
     waiting_list: "Tutti i posti sono attualmente occupati, l'iscrizione è in lista d'attesa."
@@ -707,6 +739,8 @@ it:
     registered: "I tuoi dati personali sono stati registrati. Completa ancora solo i dati per l'iscrizione."
     application_window_closed: "il periodo per l'iscrizione per questo evento è terminato."
     no_places_available: "Il numero massimo di partecipanti per questo evento è già stato raggiunto."
+    email_sent_manager: 'Wir haben dir ein E-Mail mit einem Link geschickt, wo du dich oder dein Kind direkt für den Anlass anmelden kannst.'
+    registered_manager: 'Deine persönlichen Daten wurden aufgenommen. Du kannst nun deine Kinder via "Anmelden" Knopf anmelden'
 
   event/roles:
     full_entry_label: "ruolo<i>%{role}</i> per <i>%{person}</i>"
@@ -2217,6 +2251,15 @@ it:
         update: "La richiesta d'accesso per <i>%{label}</i> è stata aggiornata: %{changeset}"
         destroy: "La richiesta d'accesso per <i>%{label}</i> è stata evasa."
 
+      deleted_person: "Gelöschte Person"
+      people_manager:
+        create:
+          manager: "<i>%{label}</i> wurde als Verwalter*in hinzugefügt."
+          managed: "<i>%{label}</i> wurde als Kind hinzugefügt."
+        destroy:
+          manager: "<i>%{label}</i> wurde als Verwalter*in entfernt."
+          managed: "<i>%{label}</i> wurde als Kind entfernt."
+
     impersonate: "L'account è stato rilevato da %{user}"
     impersonation_done: "L'account non è più utilizzato da %{user}"
     password_override: "La password è stata azzerata da %{user} e il login impedito fino a che verrà definita una nuova password."
@@ -2294,3 +2337,13 @@ it:
         next_button: Accesso ospite
       new_event_guest_contact_data_form_title: Dati di contatto dell'ospite
       new_event_guest_participation_form_title: Accesso ospite
+
+  people_managers:
+    section:
+      manageds_help: Du kannst nur Personen als Kinder hinzufügen, auf welche du Schreibzugriff hast.
+    common_heading: Kinder / Verwalter*innen
+    managers_heading: Verwalter*innen
+    manageds_heading: Kinder
+    create_managed_person_button: Kind erfassen
+    assign_managed_person_button: Kind zuweisen
+    assign_manager_person_button: Verwalter*in zuweisen

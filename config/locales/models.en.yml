@@ -54,6 +54,10 @@ en:
       messages:
         record_invalid: 'Gültigkeitsprüfung ist fehlgeschlagen: %{errors}'
       models:
+        event/participation_contact_datas/managed:
+          attributes:
+            base:
+              duplicates_present: Diese Person existiert bereits. Bitte kontaktiere die Adressverwaltung um sie als dein Kind zu registrieren.
         roles/termination:
           attributes:
             terminate_on:
@@ -144,6 +148,9 @@ en:
             base:
               max_one_additional_invoice_address: Es kann nur eine Adresse als Rechnungsadresse ausgewählt werden.
               additional_address_labels_must_be_unique: Die Bezeichnungen der weiteren Adressen müssen eindeutig sein.
+              cannot_have_managers_and_manageds: '%{name} kann nicht sowohl Verwalter*innen als auch Kinder haben.'
+              manager_already_managed: Verwalter*in konnte nicht hinzugefügt werden, da er/sie bereits verwaltet wird.
+              managed_already_manager: Kind konnte nicht hinzugefügt werden, da es bereits Verwalter*in ist.
             email:
               taken: >
                   is already taken. This address must be unique for every person,
@@ -158,6 +165,13 @@ en:
               taken: was already confirmed
         person_duplicates:
           invalid_role: "Rolle %{role} von %{person} ist fürs Zusammenführen nicht gültig, da die andere Person eventuell bereits eine Rolle hat, welche diese Rolle nicht mehr erlaubt, diese muss manuell korrigiert/etnfernt werden. Info: %{message}"
+        people_manager:
+          manager_and_managed_the_same: Verwalter*in und Kind müssen unterschiedliche Personen sein.
+
+          attributes:
+            manager_id:
+              taken: ist bereits gesetzt.
+          manager_and_managed_the_same: kann sich nicht selber verwalten.
         qualification:
           attributes:
             qualification_kind_id:
@@ -363,6 +377,9 @@ en:
       people_filter:
         one: Filter
         other: Filters
+      people_manager:
+        one: Verwalter*in
+        other: Verwalter*innen
       phone_number:
         one: Phone number
         other: Phone numbers
@@ -530,6 +547,25 @@ en:
         self_registration_reason: Eintrittsgrund
         self_registration_reason_text: Eintrittsgrund
         self_registration_reason_custom_text: Benutzerdefinierter Eintrittsgrund
+        managers: Verwalter*innen
+        manageds: Kinder
+        people_managers: Verwalter*innen
+        people_manageds: Kinder
+        people_managers_attributes: Verwalter*innen
+        people_manageds_attributes: Kinder
+        readable_manageds: Kinder
+
+      people_manager:
+        manager_id: Verwalter*in
+        managed_id: Kind
+
+      people_managers:
+        manager_id: Verwalter*in
+        managed_id: Kind
+
+      people_manageds:
+        manager_id: Kind
+        managed_id: Verwalter*in
 
       person_duplicate:
         birth_year: Year

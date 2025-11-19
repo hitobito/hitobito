@@ -97,7 +97,7 @@ module Globalized::GlobalizedInputFieldHelpers
   def locale_indicator(locale)
     content_tag(
       :span, locale.to_s.upcase,
-      class: "input-group-text d-flex justify-content-center rounded-start locale-indicator",
+      class: "input-group-text d-flex justify-content-center locale-indicator bg-transparent",
       "data-globalized-fields-target": "localeIndicator",
       "data-bs-toggle": "tooltip", "data-bs-title": I18n.t("global.form.locale_indicator")
     )

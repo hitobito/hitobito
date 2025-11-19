@@ -892,3 +892,21 @@ form[aria-busy=true] {
 .locale-indicator {
   width: 2.5em;
 }
+
+// Override bootstrap selector to only consider visible elements for resetting the border radius
+.input-group > :not(:first-child):not(.dropdown-menu):not(.form-floating):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback),
+.input-group > .form-floating:not(:first-child) > .form-control,
+.input-group > .form-floating:not(:first-child) > .form-select {
+  margin-left: 0;
+  border-top-left-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+}
+
+// Apply style to all visible children but the first one instead and ignore toolbar
+.input-group > :nth-child(n+2 of :not(.d-none):not(.hidden):not(.invisible):not([type="hidden"]):not(trix-toolbar)):not(.dropdown-menu):not(.form-floating):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback),
+.input-group > .form-floating:nth-child(n+2 of :not(.d-none):not(.hidden):not(.invisible):not([type="hidden"]):not(trix-toolbar)) > .form-control,
+.input-group > .form-floating:nth-child(n+2 of :not(.d-none):not(.hidden):not(.invisible):not([type="hidden"]):not(trix-toolbar)) > .form-select {
+  margin-left: -1px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}

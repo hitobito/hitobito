@@ -11,9 +11,6 @@
 - Die Personal API Tokens Login-Methode wurde abgeschaltet, nachdem sie 4 Jahre lang zur Abschaltung angekündigt waren. Allfällige Drittapplikationen können stattdessen die sichereren Service Tokens oder OAuth API-Zugriff verwenden, und sollten auch dringend auf die neue JSON:API migrieren, da die alte read-only REST API auch bereits seit einem Jahr deprecated ist. (#3635)
 - Die Registrierung neuer Personen ist neu auch via API möglich. Dies erlaubt es, externe Anmeldeformulare zu programmieren. Die Spielregeln sind dabei dieselben wie bei der Selbstregistrierung direkt im hitobito UI. Dazu wurden auch die Datenschutzerklärung und Einverständnis von Erziehungsberechtigten in der API verfügbar gemacht (#3440)
 - Neuer Personenfilter "im Zeitraum gestartete Rollen" (#3315).
-
-## Version 2.7
-
 - Die Optionen für den E-Mail Adressen Export erscheinen nun wie die übrigen Formate in einem Untermenu. (#3693)
 - CSV Import unterstützt Rollen Start und Enddatum (#3730)
 - Man kann bei Anlässen neu Begleitpersonen ("Gäste") anmelden, auch wenn sie kein Hitobito-Konto haben (hitobito_sww#208)

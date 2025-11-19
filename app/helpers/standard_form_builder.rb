@@ -212,7 +212,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
-  def radio_buttons(attr, values, *args)
+  def radio_buttons(attr, values, *args) # rubocop:disable Metrics/MethodLength
     html_options = args.extract_options!
     klass_key = if args.any?
       args.last
@@ -223,8 +223,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
 
     attr_key = "activerecord.attributes.#{klass_key}.#{attr.to_s.pluralize}"
-
     safe_join(values) { |value|
+      if value == ""
+        value = "_nil"
+      end
       caption = I18n.t("#{attr_key}.#{value}")
       inline_radio_button(attr, value, caption, html_options)
     }

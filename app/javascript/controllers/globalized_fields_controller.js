@@ -14,7 +14,6 @@ export default class extends Controller {
   connect() {
     this.updateGlobalizedFieldsDisplay();
     this.openIfInvalid();
-    this.setLocaleIndicatorWidth();
   }
 
   updateGlobalizedFieldsDisplay() {
@@ -41,20 +40,5 @@ export default class extends Controller {
     if(hasInvalidInput) {
       this.toggleFields();
     }
-  }
-
-  // Sets the width of the input-group-text elements so they all have the same width
-  setLocaleIndicatorWidth() {
-    // This is needed because elements with display: none have width 0
-    const parentTab = this.localeIndicatorTargets[0].closest(".tab-content > .tab-pane")
-    if(parentTab) {
-      parentTab.style.display = "block";
-    }
-    const indicatorWidths = this.localeIndicatorTargets.map(e => e.getBoundingClientRect().width);
-    if(parentTab) {
-      parentTab.style.display = "";
-    }
-    const indicatorMaxWidth = Math.max(...indicatorWidths)
-    this.localeIndicatorTargets.forEach(e => e.style.width = `${indicatorMaxWidth}px`)
   }
 }

@@ -73,7 +73,7 @@ module Globalized::GlobalizedInputFieldHelpers
   end
 
   def input_for_locale(attr, locale, rich_text, args = {})
-    content_tag(:div, class: "input-group mb-2") do
+    content_tag(:div, class: "input-group input-group-sm mb-2") do
       locale_input = if rich_text
         rich_text_area_for_locale(attr, locale, args)
       else

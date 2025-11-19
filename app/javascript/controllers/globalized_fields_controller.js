@@ -14,6 +14,7 @@ export default class extends Controller {
   connect() {
     this.updateGlobalizedFieldsDisplay();
     this.openIfInvalid();
+    this.localeIndicatorTargets[0].classList.add('d-none')
   }
 
   updateGlobalizedFieldsDisplay() {
@@ -33,6 +34,7 @@ export default class extends Controller {
 
   toggleFields() {
     this.toggleTarget.classList.toggle('hidden');
+    this.localeIndicatorTargets[0].classList.toggle('d-none');
   }
 
   openIfInvalid() {

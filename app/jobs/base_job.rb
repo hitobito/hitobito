@@ -49,8 +49,8 @@ class BaseJob
     logger.error(exception.message)
     logger.error(exception.backtrace.join("\n"))
     Airbrake.notify(exception, cgi_data: ENV.to_hash, parameters: payload)
-    # Sentry notification is done directly by sentry-raven gem, no need to call it here
-    # Raven.capture_exception(exception, logger: "delayed_job")
+    # Sentry notification is done directly by sentry-delayed-job gem, no need to call it here
+    # Sentry.capture_exception(exception, logger: "delayed_job")
   end
 
   def delayed_jobs

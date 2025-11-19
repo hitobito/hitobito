@@ -17,14 +17,14 @@ class JsonApiController < ActionController::API
     # still notify of errors we have not handled explicitly
     unless registered_exception?(e)
       Airbrake.notify(e)
-      Raven.capture_exception(e)
+      Sentry.capture_exception(e)
     end
   end
 
   include ActionController::Cookies
   include Localizable
   include Authenticatable
-  include Sentry
+  include SentryContext
   include PaperTrailed
 
   before_action :assert_media_type_json_api, only: [:update, :create]

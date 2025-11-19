@@ -24,7 +24,7 @@ describe JsonApiController do
 
     it "does triggers error trackers" do
       expect(Airbrake).to receive(:notify).with(kind_of(RuntimeError))
-      expect(Raven).to receive(:capture_exception).with(kind_of(RuntimeError))
+      expect(Sentry).to receive(:capture_exception).with(kind_of(RuntimeError))
       get :index
     end
   end
@@ -43,7 +43,7 @@ describe JsonApiController do
 
     it "does not triggers error trackers" do
       expect(Airbrake).not_to receive(:notify).with(kind_of(RuntimeError))
-      expect(Raven).not_to receive(:capture_exception).with(kind_of(RuntimeError))
+      expect(Sentry).not_to receive(:capture_exception).with(kind_of(RuntimeError))
       get :index
     end
   end

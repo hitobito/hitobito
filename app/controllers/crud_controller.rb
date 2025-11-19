@@ -125,7 +125,7 @@ class CrudController < ListController
   def save_entry
     entry.save
   rescue PG::Error => e
-    Raven.capture_exception(e, extra: {params: params})
+    Sentry.capture_exception(e, extra: {params: params})
     Airbrake.notify(e, parameters: params)
     logger.error e.message
     false

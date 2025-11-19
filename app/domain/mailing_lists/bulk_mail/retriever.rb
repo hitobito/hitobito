@@ -145,7 +145,7 @@ class MailingLists::BulkMail::Retriever
 
   def handle_mail_without_path_header!(mail_uid)
     move_mail_to_failed(mail_uid)
-    Raven.capture_message(
+    Sentry.capture_message(
       "Mail header Return-Path is nil. Mail moved to :failed. See hitobito#3599 for more details.",
       extra: {
         mail_uid: mail_uid

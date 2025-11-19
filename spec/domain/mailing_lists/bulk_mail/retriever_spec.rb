@@ -78,7 +78,7 @@ describe MailingLists::BulkMail::Retriever do
       it "moves mail to failed and creates sentry issue" do
         allow(imap_mail_validator).to receive(:return_path_header_nil?).and_return(true)
         expect(imap_connector).to receive(:move_by_uid).with(42, :inbox, :failed)
-        expect(Raven).to receive(:capture_message)
+        expect(Sentry).to receive(:capture_message)
           .exactly(:once)
           .with(
             "Mail header Return-Path is nil. Mail moved to :failed. See hitobito#3599 for more details.",

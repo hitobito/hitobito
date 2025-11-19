@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   include Stampable
   include Translatable
   include ERB::Util
-  include Sentry
+  include SentryContext
   include ParamConverters
   include PaperTrailed
   include Turbo::Redirection

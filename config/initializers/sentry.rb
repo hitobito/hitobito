@@ -8,14 +8,13 @@
 #
 
 Rails.application.reloader.to_prepare do
-  Raven.configure do |config|
-    config.sanitize_fields = Rails.application.config.filter_parameters.map(&:to_s)
-
-
-    # This patches rails and no longer works with current rails version
-    config.rails_report_rescued_exceptions = false
-
+  Sentry.init do |config|
+    config.dsn = ENV["SENTRY_DSN"]
+    config.rails.report_rescued_exceptions = false
     config.release = Rails.application.class.versions(Rails.root.join("VERSION")).first.chomp
+
+    # send sensitive information like ip, cookie, request body and query params
+    config.send_default_pii = true
 
     analyzer = [
       ENV["OPENSHIFT_BUILD_NAMESPACE"], # hit-jubla-int
@@ -26,8 +25,7 @@ Rails.application.reloader.to_prepare do
       ProjectAnalyzer.new(name)
     end
 
-    config.tags[:project] = analyzer.project
-    config.current_environment = analyzer.stage if ENV["SENTRY_CURRENT_ENV"].blank?
+    config.environment = analyzer.stage if ENV["SENTRY_CURRENT_ENV"].blank?
 
     config.app_dirs_pattern = /(app|config|lib|db|bin|spec|vendor\/wagons)/
 
@@ -56,5 +54,31 @@ Rails.application.reloader.to_prepare do
       *setup_and_connection_errors,
       *misbehaving_client_errors
     ]
+
+    # Scrubbing data as recommended
+    # https://docs.sentry.io/platforms/ruby/guides/rails/data-management/sensitive-data/#scrubbing-data
+    filter = ActiveSupport::ParameterFilter.new(Rails.application.config.filter_parameters)
+    config.before_send = lambda do |event, _hint|
+      # Sanitize extra data
+      if event.extra
+        event.extra = filter.filter(event.extra)
+      end
+
+      # Sanitize user data
+      if event.user
+        event.user = filter.filter(event.user)
+      end
+
+      # Sanitize context data (if present)
+      if event.contexts
+        event.contexts = filter.filter(event.contexts)
+      end
+
+      # Add project tag
+      event.tags[:project] = analyzer.project
+
+      # Return the sanitized event object
+      event
+    end
   end
 end

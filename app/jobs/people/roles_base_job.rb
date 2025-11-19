@@ -22,6 +22,6 @@ class People::RolesBaseJob < RecurringJob
   end
 
   def notify(message)
-    Raven.capture_exception(self.class.const_get(:Error).new(message))
+    Sentry.capture_exception(self.class.const_get(:Error).new(message))
   end
 end

@@ -212,13 +212,21 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
-  def radio_buttons(attr, values, html_options = {})
-    klass_key = klass.base_class.model_name.i18n_key
+  def radio_buttons(attr, values, *args)
+    html_options = args.extract_options!
+    klass_key = if args.any?
+      args.last
+    elsif klass.respond_to?(:base_class)
+      klass.base_class.model_name.i18n_key
+    else
+      klass.model_name.i18n_key
+    end
+
     attr_key = "activerecord.attributes.#{klass_key}.#{attr.to_s.pluralize}"
 
     safe_join(values) { |value|
-      value_key = I18n.t("#{attr_key}.#{value}")
-      inline_radio_button(attr, value, value_key, html_options)
+      caption = I18n.t("#{attr_key}.#{value}")
+      inline_radio_button(attr, value, caption, html_options)
     }
   end
 

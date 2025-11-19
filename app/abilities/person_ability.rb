@@ -14,11 +14,9 @@ class PersonAbility < AbilityDsl::Base
     permission(:admin).may(:totp_reset).all
     permission(:admin).may(:totp_disable).if_two_factor_authentication_not_enforced
 
-    permission(:any).may(:show, :update, :update_email, :primary_group, :totp_reset, :security)
-      .herself
-    permission(:any)
-      .may(:show_details, :show_full, :history, :log, :index_invoices, :update_settings)
-      .herself_unless_only_basic_permissions_roles
+    permission(:any).may(:security).herself
+    permission(:any).may(:index_invoices,
+      :update_settings).herself_unless_only_basic_permissions_roles
     permission(:any).may(:totp_disable).herself_if_two_factor_authentication_not_enforced
 
     permission(:contact_data).may(:show).other_with_contact_data
@@ -99,10 +97,11 @@ class PersonAbility < AbilityDsl::Base
 
     # Managers have almost all base permissions on the managed person
     for_self_or_manageds do
+      permission(:any).may(:show, :update, :update_email, :primary_group, :totp_reset).herself
+
       permission(:any)
-        .may(:show, :show_details, :show_full, :history, :update, :update_email, :primary_group,
-          :log, :totp_reset)
-        .herself
+        .may(:show_details, :show_full, :history, :log)
+        .herself_unless_only_basic_permissions_roles
 
       class_side(:create_households).if_any_writing_permission_or_any_manageds
     end

@@ -295,10 +295,14 @@ describe "StandardFormBuilder" do
 
     it "generates input fields for column types other than text" do
       attr = :globalized_field
-      expect(dom).to have_css("div[class='d-flex'] div[class='input-group input-group-sm mb-2'] input[name='entry[#{attr}]']")
+      expect(dom).to have_css(
+        "div[class='d-flex'] div[class='input-group input-group-sm mb-2'] input[name='entry[#{attr}]']"
+      )
       expect(dom).to have_css("div[class='d-flex'] button[data-action='globalized-fields#toggleFields'][type='button']")
 
-      expect(dom).not_to have_css("div[class='hidden'] div[class='input-group input-group-sm mb-2'] input[name='entry[#{attr}]']")
+      expect(dom).not_to have_css(
+        "div[class='hidden'] div[class='input-group input-group-sm mb-2'] input[name='entry[#{attr}]']"
+      )
       Globalized.globalized_names_for_attr(attr).each do |globalized_attr|
         expect(dom).to have_css(
           "div[class='hidden'] div[class='input-group input-group-sm mb-2'] input[name='entry[#{globalized_attr}]']"
@@ -310,10 +314,14 @@ describe "StandardFormBuilder" do
       attr = :globalized_text_field
       dom = Capybara::Node::Simple.new(form.input_field(attr))
 
-      expect(dom).to have_css("div[class='d-flex'] div[class='input-group input-group-sm mb-2'] textarea[name='entry[#{attr}]']")
+      expect(dom).to have_css(
+        "div[class='d-flex'] div[class='input-group input-group-sm mb-2'] textarea[name='entry[#{attr}]']"
+      )
       expect(dom).to have_css("div[class='d-flex'] button[data-action='globalized-fields#toggleFields'][type='button']")
 
-      expect(dom).not_to have_css("div[class='hidden'] div[class='input-group input-group-sm mb-2'] textarea[name='entry[#{attr}]']")
+      expect(dom).not_to have_css(
+        "div[class='hidden'] div[class='input-group input-group-sm mb-2'] textarea[name='entry[#{attr}]']"
+      )
       Globalized.globalized_names_for_attr(attr).each do |globalized_attr|
         expect(dom).to have_css(
           "div[class='hidden'] div[class='input-group input-group-sm mb-2'] textarea[name='entry[#{globalized_attr}]']"
@@ -325,10 +333,14 @@ describe "StandardFormBuilder" do
       attr = :globalized_field
       dom = Capybara::Node::Simple.new(form.rich_text_area(attr))
 
-      expect(dom).to have_css("div[class='d-flex'] div[class='input-group input-group-sm mb-2'] trix-editor#entry_#{attr}")
+      expect(dom).to have_css(
+        "div[class='d-flex'] div[class='input-group input-group-sm mb-2'] trix-editor#entry_#{attr}"
+      )
       expect(dom).to have_css("div[class='d-flex'] button[data-action='globalized-fields#toggleFields'][type='button']")
 
-      expect(dom).not_to have_css("div[class='hidden'] div[class='input-group input-group-sm mb-2'] trix-editor#entry_#{attr}")
+      expect(dom).not_to have_css(
+        "div[class='hidden'] div[class='input-group input-group-sm mb-2'] trix-editor#entry_#{attr}"
+      )
       Globalized.globalized_names_for_attr(attr).each do |globalized_attr|
         expect(dom).to have_css(
           "div[class='hidden'] div[class='input-group input-group-sm mb-2'] trix-editor#entry_#{globalized_attr}"
@@ -352,14 +364,18 @@ describe "StandardFormBuilder" do
     it "does not show globalization options if there is only one locale" do
       attr = :globalized_field
       expect(dom).to have_css("input[name='entry[#{attr}]']")
-      expect(dom).to have_css("div[class='d-flex'] div[class='input-group input-group-sm mb-2'] input[name='entry[#{attr}]']")
+      expect(dom).to have_css(
+        "div[class='d-flex'] div[class='input-group input-group-sm mb-2'] input[name='entry[#{attr}]']"
+      )
 
       allow(Settings.application).to receive(:languages).and_return({de: "Deutsch"})
 
       dom = Capybara::Node::Simple.new(form.input_field(attr))
 
       expect(dom).to have_css("input[name='entry[#{attr}]']")
-      expect(dom).not_to have_css("div[class='d-flex'] div[class='input-group input-group-sm mb-2'] input[name='entry[#{attr}]']")
+      expect(dom).not_to have_css(
+        "div[class='d-flex'] div[class='input-group input-group-sm mb-2'] input[name='entry[#{attr}]']"
+      )
       expect(dom).not_to have_css("div[class='hidden']")
     end
 

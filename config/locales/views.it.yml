@@ -1938,7 +1938,7 @@ it:
         active_today: Ruoli attualmente attivi
         active: il ruolo era attivo.
         started: gestartete Rollen
-        started_help: Ein Rolle wurde gestartet, wenn sie im gewählten Zeitraum aktiv geworden ist.
+        started_help: Bezieht sich auf das "Von" Datum auf der Rolle
         created: il ruolo è stato creato.
         deleted: il ruolo è stato cancellato.
         inactive: ruoli inattivi o mai disponibili

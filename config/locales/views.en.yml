@@ -1887,7 +1887,7 @@ en:
         active_today: Aktuell aktive Rollen
         active: role was active
         started: gestartete Rollen
-        started_help: Ein Rolle wurde gestartet, wenn sie im gewählten Zeitraum aktiv geworden ist.
+        started_help: Bezieht sich auf das "Von" Datum auf der Rolle
         created: role was made.
         deleted: role has been deleted.
         inactive: inaktive oder nie vorhandene Rollen

@@ -1939,7 +1939,7 @@ fr:
         active_today: ' Rôle actif actuel'
         active: le rôle était actif.
         started: gestartete Rollen
-        started_help: Ein Rolle wurde gestartet, wenn sie im gewählten Zeitraum aktiv geworden ist.
+        started_help: Bezieht sich auf das "Von" Datum auf der Rolle
         created: le rôle a été établi.
         deleted: le rôle a été effacé.
         inactive: rôles inactifs ou qui n’existent pas

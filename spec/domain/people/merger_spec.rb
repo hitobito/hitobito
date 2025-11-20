@@ -633,6 +633,39 @@ describe People::Merger do
       expect(person.manageds.first).to eq(managed)
     end
 
-    xit "merges pictures"
+    context "pictures" do
+      it "set target picture when only source has one" do
+        expect(@target.picture).not_to be_attached
+        @source.picture.attach(
+          io: File.open("spec/fixtures/person/test_picture.jpg"),
+          filename: "source.jpg"
+        )
+
+        expect do
+          merger.merge!
+        end.to change(Person, :count).by(-1)
+
+        expect(@target.picture).to be_attached
+        expect(@target.picture.filename).to eq "source.jpg"
+      end
+
+      it "does not overwrite target picture when already set" do
+        @target.picture.attach(
+          io: File.open("spec/fixtures/person/test_picture.jpg"),
+          filename: "target.jpg"
+        )
+        @source.picture.attach(
+          io: File.open("spec/fixtures/person/test_picture.jpg"),
+          filename: "source.jpg"
+        )
+
+        expect do
+          merger.merge!
+        end.to change(Person, :count).by(-1)
+
+        expect(@target.picture).to be_attached
+        expect(@target.picture.filename.to_s).to eq("target.jpg")
+      end
+    end
   end
 end

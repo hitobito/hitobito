@@ -915,7 +915,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_21_120000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "title"
-    t.string "text"
+    t.text "text"
     t.index ["locale"], name: "index_payment_reminder_config_translations_on_locale"
     t.index ["payment_reminder_config_id"], name: "index_1502ce89689ed6b058f113a54ae6292c8ecef22d"
   end

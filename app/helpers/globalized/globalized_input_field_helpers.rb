@@ -105,6 +105,6 @@ module Globalized::GlobalizedInputFieldHelpers
 
   def globalized_field?(attr, already_globalized)
     @object.respond_to?(:translated_attribute_names) &&
-      !already_globalized && @object.translated_attribute_names.include?(attr)
+      !already_globalized && @object.translated_attribute_names.include?(attr.to_sym)
   end
 end

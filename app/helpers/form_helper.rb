@@ -158,6 +158,8 @@ module FormHelper
   def with_globalized(fields, model, entity)
     fields.inject({}) do |globalized_fields, (field, source_method)|
       source_method ||= field
+      field = field.to_sym
+      source_method = source_method.to_sym
       if should_globalize?(model, entity, field, source_method)
         fields = [field] + Globalized.globalized_names_for_attr(field)
         source_methods = [source_method] + Globalized.globalized_names_for_attr(source_method)

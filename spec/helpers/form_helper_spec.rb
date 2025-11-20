@@ -203,6 +203,22 @@ describe FormHelper do
       expect(option["data-default"]).to eq ""
     end
 
+    it "option data-value does not use fallback when empty" do
+      @list += [Fabricate.build(
+        :event_kind, general_information: "", general_information_en: "An english description"
+      )]
+      @mapping = {description: :general_information}
+      options = dom.all("option")
+      option = options.first
+      expect(option["data-target-field"]).to eq "event_description"
+      expect(option["data-value"]).to eq ""
+      expect(option["data-default"]).to eq ""
+      option = options[1]
+      expect(option["data-target-field"]).to eq "event_description_en"
+      expect(option["data-value"]).to eq "An english description"
+      expect(option["data-default"]).to eq ""
+    end
+
     it "option does render nil value as empty string" do
       @list += [Fabricate.build(:event_kind)]
       @mapping += [:minimum_age]

@@ -104,17 +104,15 @@ module FormHelper
   end
 
   def field_inheritance_values(list, fields)
+    old_i18n_fallbacks = I18n.fallbacks.deep_dup
+    I18n.fallbacks = nil
     model = model_class.new
     options = list.flat_map do |entity|
       with_globalized(fields, model, entity).collect do |field, source_method|
-        content_tag(:option, "", data: {
-          source_id: entity.id,
-          target_field: [entry.model_name.param_key, field].join("_"),
-          value: entity.send(source_method).to_s,
-          default: model.send(field).to_s
-        })
+        field_inheritance_option(entity, model, field, source_method)
       end
     end
+    I18n.fallbacks = old_i18n_fallbacks
     content_tag(:datalist, safe_join(options))
   end
 
@@ -175,5 +173,14 @@ module FormHelper
       entity.class.ancestors.include?(Globalized) &&
       model.translated_attribute_names.include?(field) &&
       entity.translated_attribute_names.include?(source_method)
+  end
+
+  def field_inheritance_option(entity, model, field, source_method)
+    content_tag(:option, "", data: {
+      source_id: entity.id,
+      target_field: [entry.model_name.param_key, field].join("_"),
+      value: entity.send(source_method).to_s,
+      default: model.send(field).to_s
+    })
   end
 end

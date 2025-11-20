@@ -61,20 +61,6 @@ describe AsyncDownloadsController do
     end
   end
 
-  context "csv" do
-    xit "sends file with specific encoding" do
-      allow(Settings.csv).to receive_messages(encoding: "ISO-8859-1")
-      filename = AsyncDownloadFile.create_name("test", person.id)
-      Cookies::AsyncDownload.new(cookies).set(name: filename, type: "csv")
-      generate_test_file(filename, :csv)
-
-      get :show, params: {id: filename, file_type: "csv"}
-
-      expect(response.body).to match("this is a testfile")
-      expect(response.body.encoding.to_s).to eq("ISO-8859-1")
-    end
-  end
-
   context "exist" do
     it "render json status 200 if file exists and person has access" do
       filename = AsyncDownloadFile.create_name("test", person.id)

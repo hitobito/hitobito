@@ -670,7 +670,7 @@ describe Person do
     expect(attrs[:active_years]).to eq(label: "Active years", type: :custom_type)
   end
 
-  xdescribe "#picture" do
+  describe "#picture" do
     let(:person) { Fabricate(:person) }
 
     before do
@@ -681,15 +681,11 @@ describe Person do
       person.picture.analyze
     end
 
-    describe "default" do
-      it "scales down an image to be exactly 32 by 32 pixels" do
-        expect(person.picture.variant(:thumb).metadata).to be_nil # 32x32
-      end
-    end
-
     describe "#thumb" do
-      it "scales down an image to be no wider than 512 pixels" do
-        expect(person.picture).to have_dimensions(512, 512)
+      it "correct size is defined" do
+        variant = person.picture.variant(:thumb)
+        transformations = variant.variation.transformations
+        expect(transformations[:resize_to_fill]).to eq([32, 32])
       end
     end
   end

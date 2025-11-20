@@ -8,7 +8,7 @@
     %span
       .count
       = ti('selected')
-    = extended_all_checkbox(@mails)
+    -# extended_all_checkbox is disabled here because handling mails that way is not intended
     .actions
       = imap_mail_move_button :inbox
       = imap_mail_move_button :spam

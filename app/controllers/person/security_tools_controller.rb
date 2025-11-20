@@ -41,6 +41,7 @@ class Person::SecurityToolsController < ApplicationController
 
   def password_override
     person.encrypted_password = nil
+    person.forget_me!
     person.save
     notify
     if herself?

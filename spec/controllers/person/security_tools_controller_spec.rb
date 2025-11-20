@@ -61,6 +61,30 @@ describe Person::SecurityToolsController do
     end
   end
 
+  describe "POST#password_override" do
+    let(:person) { bottom_member }
+
+    it "resets fields and notifies user" do
+      person.update!(
+        password: "passwordpassword",
+        password_confirmation: "passwordpassword",
+        remember_created_at: Time.current
+      )
+
+      post :password_override, params: {group_id: person.primary_group.id, id: person.id}
+
+      person.reload
+      expect(person.encrypted_password).to be_nil
+      expect(person.remember_created_at).to be_nil
+      expect(ActionMailer::Base.deliveries.count).to eq 1
+      email = ActionMailer::Base.deliveries.last
+      expect(email.to).to eq([person.email])
+      expect(email.subject).to match(/Login für hitobito .* verhindert/)
+      expect(response).to redirect_to(group_person_path(person.primary_group, person))
+      expect(flash[:notice]).to match(/Das Passwort wurde überschrieben./)
+    end
+  end
+
   describe "POST#block_person" do
     let(:person) { bottom_member }
     let(:nesting) { {group_id: person.primary_group.id, id: person.id} }

@@ -26,13 +26,6 @@ describe SearchStrategies::InvoiceSearch do
         expect(result).to include(invoices(:invoice))
       end
 
-      # infix search wasn't implemented
-      xit "finds invoices with Infix term" do
-        result = search_class(invoices(:invoice).to_s[1..5]).search_fulltext
-
-        expect(result).to include(invoices(:invoice))
-      end
-
       context "without any params" do
         it "returns nothing" do
           result = search_class.search_fulltext

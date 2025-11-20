@@ -224,10 +224,12 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
     attr_key = "activerecord.attributes.#{klass_key}.#{attr.to_s.pluralize}"
     safe_join(values) { |value|
-      if value == ""
-        value = "_nil"
+      caption = if value == ""
+        I18n.t("#{attr_key}._nil")
+      else
+        I18n.t("#{attr_key}.#{value}")
       end
-      caption = I18n.t("#{attr_key}.#{value}")
+
       inline_radio_button(attr, value, caption, html_options)
     }
   end

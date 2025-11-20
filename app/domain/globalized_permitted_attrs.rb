@@ -68,6 +68,6 @@ class GlobalizedPermittedAttrs
   end
 
   def should_permit?(klass, attr)
-    klass.ancestors.include?(Globalized) && klass.translated_attribute_names.include?(attr)
+    klass.ancestors.include?(Globalized) && klass.translated_attribute_names.include?(attr.to_sym)
   end
 end

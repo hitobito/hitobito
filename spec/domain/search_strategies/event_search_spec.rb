@@ -20,13 +20,6 @@ describe SearchStrategies::EventSearch do
         expect(result).to include(events(:top_course))
       end
 
-      # infix search wasn't implemented
-      xit "finds events with Infix term" do
-        result = search_class(events(:top_course).to_s[1..5]).search_fulltext
-
-        expect(result).to include(events(:top_course))
-      end
-
       context "without any params" do
         it "returns nothing" do
           result = search_class.search_fulltext

@@ -62,13 +62,6 @@ describe SearchStrategies::PersonSearch do
         expect(result).to include(@bg_leader)
       end
 
-      # infix search wasn't implemented
-      xit "finds accessible person with Infix term" do
-        result = search_class(@bg_leader.last_name[1..5]).search_fulltext
-
-        expect(result).to include(@bg_leader)
-      end
-
       it "does not find not accessible person" do
         result = search_class(@bg_member.last_name[0..5]).search_fulltext
 

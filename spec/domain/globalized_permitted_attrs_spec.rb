@@ -10,7 +10,7 @@ require "spec_helper"
 describe GlobalizedPermittedAttrs do
   include GlobalizedTestModels
 
-  let(:permitted_attrs) { [:title, :body, {comment_attributes: [:title, :content]}] }
+  let(:permitted_attrs) { [:not_globalized, :title, :body, {comment_attributes: [:title, :content, :not_globalized]}] }
 
   let(:globalized_permitted_attrs) do
     described_class.new(GlobalizedTestModels::Post, permitted_attrs).permitted_attrs
@@ -42,7 +42,7 @@ describe GlobalizedPermittedAttrs do
   end
 
   it "adds globalized version of permitted attrs for relations except for current locale" do
-    globalized_comment_permitted_attrs = globalized_permitted_attrs.find { |attr| attr.is_a? Hash }[:comment_attributes]
+    globalized_comment_permitted_attrs = globalized_permitted_attrs.last[:comment_attributes]
 
     expected_attrs = attrs_with_globalized_versions(:title, :content)
 
@@ -52,7 +52,7 @@ describe GlobalizedPermittedAttrs do
 
   it "adds globalized version of permitted attrs for relations except for current locale when locale is changed" do
     I18n.locale = :en
-    globalized_comment_permitted_attrs = globalized_permitted_attrs.find { |attr| attr.is_a? Hash }[:comment_attributes]
+    globalized_comment_permitted_attrs = globalized_permitted_attrs.last[:comment_attributes]
 
     expected_attrs = attrs_with_globalized_versions(:title, :content)
 
@@ -61,14 +61,26 @@ describe GlobalizedPermittedAttrs do
   end
 
   it "doesnt add globalized version of permitted attrs for relations when base attr not permitted" do
-    permitted_attrs.find { |attr| attr.is_a? Hash }[:comment_attributes].delete(:content)
-    globalized_comment_permitted_attrs = globalized_permitted_attrs.find { |attr| attr.is_a? Hash }[:comment_attributes]
+    permitted_attrs.last[:comment_attributes].delete(:content)
+    globalized_comment_permitted_attrs = globalized_permitted_attrs.last[:comment_attributes]
 
     expected_attrs = attrs_with_globalized_versions(:title)
     unexpected_attrs = attrs_with_globalized_versions(:content, only_additional: false)
 
     expect(globalized_comment_permitted_attrs).to include(*expected_attrs)
     expect(globalized_comment_permitted_attrs).not_to include(*unexpected_attrs)
+  end
+
+  it "still includes non globalized attrs but does not globalize them" do
+    expected_attr = :not_globalized
+    unexpected_attr = Globalized.globalized_names_for_attr(:not_globalized)
+
+    expect(globalized_permitted_attrs).to include(expected_attr)
+    expect(globalized_permitted_attrs).not_to include(unexpected_attr)
+
+    globalized_comment_permitted_attrs = globalized_permitted_attrs.last[:comment_attributes]
+    expect(globalized_comment_permitted_attrs).to include(expected_attr)
+    expect(globalized_comment_permitted_attrs).not_to include(unexpected_attr)
   end
 
   def attrs_with_globalized_versions(*attrs, only_additional: true)

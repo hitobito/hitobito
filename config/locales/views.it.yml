@@ -1102,7 +1102,7 @@ it:
       body: Contenuti
       remove: Rimuovere il modello di e-mail
 
-  invoice_lists:
+  invoice_runs:
     destroys:
       show:
         title: Annullamento di fatture collettive
@@ -1171,7 +1171,7 @@ it:
       one: "La fattura è stata annullata"
       other: "%{count} fatture sono state annullate."
 
-  invoice_lists/fixed_fee:
+  invoice_runs/fixed_fee:
     recipient_role_group_mismatch: "Non è stato possibile identificare alcun destinatario per i seguenti gruppi: %{groups}"
 
   payments:

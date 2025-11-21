@@ -16,13 +16,13 @@ The invoice config may have many templates (`MessageTemplate`) which consist of 
 
 The invoice articles can be managed in the main navigation under **Invoices**. These articles can then be inserted when creating an invoice.
 
-## `InvoiceList`
+## `InvoiceRun`
 
-Collective invoices are used to create an invoice for several people. The collective invoices created can be found in the main navigation under **Invoices**.
+Invoice runs are used to create an invoice for several people. The invoice runs created can be found in the main navigation under **Invoices**.
 
-![Collective invoices](_diagrams/invoices-invoice-list.png)
+![Invoice runs](_diagrams/invoices-invoice-list.png)
 
 ### `Message::LetterWithInvoice`
 
-In addition to letters, [invoice letters](../messages/README.md#messageletterwithinvoice) can be created for recipients for subscriptions (MailingList). The `Message::LetterWithInvoice` entry is linked to a collective invoice `InvoiceList`.
+In addition to letters, [invoice letters](../messages/README.md#messageletterwithinvoice) can be created for recipients for subscriptions (MailingList). The `Message::LetterWithInvoice` entry is linked to a collective invoice `InvoiceRun`.
 

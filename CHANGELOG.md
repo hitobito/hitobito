@@ -9,6 +9,7 @@
 - Die Personal API Tokens Login-Methode wurde abgeschaltet, nachdem sie 4 Jahre lang zur Abschaltung angekündigt waren. Allfällige Drittapplikationen können stattdessen die sichereren Service Tokens oder OAuth API-Zugriff verwenden, und sollten auch dringend auf die neue JSON:API migrieren, da die alte read-only REST API auch bereits seit einem Jahr deprecated ist (#3635)
 - Die Registrierung neuer Personen ist neu auch via API möglich. Dies erlaubt es, externe Anmeldeformulare zu programmieren. Die Spielregeln sind dabei dieselben wie bei der Selbstregistrierung direkt im hitobito UI. Dazu wurden auch die Datenschutzerklärung und Einverständnis von Erziehungsberechtigten in der API verfügbar gemacht (#3440)
 - Neuer Personenfilter "im Zeitraum gestartete Rollen" (#3315)
+- Die bisherigen Sammelrechnungen wurden zu Rechnungsläufen umbenannt, um den Begriff "Sammelrechnung" in Zukunft für wiederholbare, Rechnungsperioden-basierte Verbandsabrechnungen und Gruppenrechnungen zu Verfügung zu haben (#3746)
 
 ## Version 2.7
 
@@ -44,7 +45,7 @@
 - In den Rechnungseinstellungen kann neu pro Layer eine E-Mail Vorlage definiert werden (hitobito_sww#197)
 - Bei externen Anlässen wird besser kommuniziert ob eine Anmeldung möglich ist (hitobito_sww#207)
 - Im Länder Dropdown werden alle Länder aufgelistet ohne dass mit der Tastatur gefiltert werden muss (#3364)
-- Es können Sammelrechnungen mit Rechnungsposten auf Basis von aktiven Rollen konfiguriert werden (hitobito_swb#18)
+- Es können Rechnungsläufe mit Rechnungsposten auf Basis von aktiven Rollen konfiguriert werden (hitobito_swb#18)
 - Teilnahmen haben neu einen Knopf um auf das Personenprofil zu navigieren
 - Eine Rechnung kann im Originalzustand gedruckt werden, bzw. ohne Mahnungen (hitobito_sww#173)
 - E-Mail-Bounces werden erfasst und angezeigt. Nach 3 Bounces wird der Mailversand gestoppt. (hitobito#3053)
@@ -133,10 +134,10 @@
 
 - Der Buchungsbeleg berücksichtigt neu keine Rechnungen mit dem Status "Storniert" (hitobito_sww#136)
 - Im Gruppen-Log werden neu auch Änderungen an der Gruppe selber aufgezeichnet (hitobito_sac_cas#73)
-- Das Feld "Gestellt am" einer Rechnung oder Sammelrechnung kann neu auch manuell gesetzt werden (hitobito_sww#135)
+- Das Feld "Gestellt am" einer Rechnung oder eines Rechnungslaufs kann neu auch manuell gesetzt werden (hitobito_sww#135)
 - Der Gruppen-Tab "Einstellungen" wurde entfernt und die Optionen sind neu in der Bearbeitungsansicht der Gruppe unter dem Tab "Abos" (#2165)
 - Einführung von Gruppen-Attributen sowie Migration der Gruppen-Einstellungen (#2165)
-- Sammelrechnungen können neu gelöscht werden (#1387)
+- Rechnungsläufe können neu gelöscht werden (#1387)
 - Neu gibt es für Gruppen mit aktivierter Selbstregistrierung eine Seite, über welche sich eingeloggte Personen
   in der Gruppe einschreiben können (#2180)
 - Logo kann auf Rechnungen angezeigt werden (#hitobito_sww#144)
@@ -152,7 +153,7 @@
 - Diverse Verbesserungen bei Anlass-Einladungen. Personen die im ganzen Layer Berechtigungen haben, können auch in Anlässen des ganzen Layers andere Personen einladen. Ein neuer Hinweis erklärt, dass die Einladungen nicht per Mail versendet werden. Einladungen können neu sortiert und gelöscht werden, dafür nicht mehr doppelt erfasst. Wenn man eine Einladung ablehnt, wird einem das weiterhin zur Information angezeigt. Merci @nchiapol! (#2045, #2051)
 - Tags auf Anlässen können jetzt von denselben Personen entfernt werden, die sie auch erfassen können. Merci @davudevren! (#2050)
 - Das Profilbild einer Person kann neu via Klick gross angezeigt werden. Merci @bergerar! (#2044)
-- Die Rechnungsliste einer Sammelrechnung zeigt neu standardmässig nicht mehr Rechnungen vom aktuellen Jahr, sondern alle Rechnungen seit Erstellung der Sammelrechnung an. Merci @lukas-buergi! (#2047)
+- Die Rechnungsliste eines Rechnungslaufs zeigt neu standardmässig nicht mehr Rechnungen vom aktuellen Jahr, sondern alle Rechnungen seit Erstellung des Rechnungslaufs an. Merci @lukas-buergi! (#2047)
 - Die Zwei-Faktor-Authentisierung ist jetzt etwas kulanter, wenn man den Code knapp zu spät eingibt, sowie bei der Verwendung von Hardware OTP Keys. Merci @cleverer! (#2052)
 - Die Ansicht um Zwei-Faktor-Authentisierung einzurichten wurde für Mobile optimiert, und man kann die Zwei-Faktor-Authentisierung jetzt auch einrichten, ohne den QR-Code zu scannen, indem man das Secret kopiert. Merci @TeamBattino! (#2046)
 - Rollen können neu als `self.basic_permissions_only = true` markiert werden. Dies führt zu eingeschränkten Ansichten und Berechtigungen für die betroffene Person (sww#120)

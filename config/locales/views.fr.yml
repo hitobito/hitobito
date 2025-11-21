@@ -1104,7 +1104,7 @@ fr:
       body: Contenu
       remove: Supprimer le modèle d'e-mail
 
-  invoice_lists:
+  invoice_runs:
     destroys:
       show:
         title: Supprimer une facture collective
@@ -1173,7 +1173,7 @@ fr:
       one: "La facture a été annulée."
       other: "%{count} factures ont été annulées."
 
-  invoice_lists/fixed_fee:
+  invoice_runs/fixed_fee:
     recipient_role_group_mismatch: "Aucun destinataire n'a pu être identifié pour les groupes suivants: %{groups}"
 
   payments:

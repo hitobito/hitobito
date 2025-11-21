@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module InvoiceLists
+module InvoiceRuns
   class RoleItem < Item
     def initialize(fee:, key:, unit_cost:, roles:, layer_group_ids: nil)
       super(fee:, key:, unit_cost:, layer_group_ids:)

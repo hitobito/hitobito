@@ -33,14 +33,14 @@
 #  updated_at          :datetime         not null
 #  creator_id          :integer
 #  group_id            :integer          not null
-#  invoice_list_id     :bigint
+#  invoice_run_id     :bigint
 #  recipient_id        :integer
 #
 # Indexes
 #
 #  index_invoices_on_esr_number       (esr_number)
 #  index_invoices_on_group_id         (group_id)
-#  index_invoices_on_invoice_list_id  (invoice_list_id)
+#  index_invoices_on_invoice_run_id  (invoice_run_id)
 #  index_invoices_on_recipient_id     (recipient_id)
 #  index_invoices_on_sequence_number  (sequence_number)
 #
@@ -98,9 +98,9 @@ describe Invoice do
     end
   end
 
-  it "accepts that an invoice in state issued or sent has no items if  part of an invoice_list" do
+  it "accepts that an invoice in state issued or sent has no items if  part of an invoice_run" do
     invoice = create_invoice
-    invoice.update(invoice_list: InvoiceList.create!(group: group, title: "list"))
+    invoice.update(invoice_run: InvoiceRun.create!(group: group, title: "list"))
     invoice.update(state: :issued)
     expect(invoice).to be_valid
     invoice.reload.update(state: :sent)

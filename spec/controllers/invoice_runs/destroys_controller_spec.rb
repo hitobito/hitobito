@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe InvoiceLists::DestroysController do
+describe InvoiceRuns::DestroysController do
   let(:layer) { groups(:top_layer) }
 
   let(:draft_invoices) do
@@ -17,9 +17,9 @@ describe InvoiceLists::DestroysController do
     end
   end
 
-  let(:invoice_list) { InvoiceList.create(title: "membership fee", invoices: draft_invoices, group: layer) }
+  let(:invoice_run) { InvoiceRun.create(title: "membership fee", invoices: draft_invoices, group: layer) }
 
-  let(:params) { {group_id: layer.id, invoice_list_id: invoice_list.id} }
+  let(:params) { {group_id: layer.id, invoice_run_id: invoice_run.id} }
 
   before { sign_in(user) }
 
@@ -47,19 +47,19 @@ describe InvoiceLists::DestroysController do
     context "with finance permission in same layer" do
       let(:user) { people(:top_leader) }
 
-      context "for invoice list with only draft invoices" do
-        it "deletes invoice_list" do
-          expect(InvoiceList.exists?(invoice_list.id)).to be(true)
+      context "for invoice run with only draft invoices" do
+        it "deletes invoice_run" do
+          expect(InvoiceRun.exists?(invoice_run.id)).to be(true)
 
           expect do
             delete :destroy, params: params
-          end.to change { InvoiceList.count }.by(-1)
+          end.to change { InvoiceRun.count }.by(-1)
 
-          expect(InvoiceList.exists?(invoice_list.id)).to be(false)
+          expect(InvoiceRun.exists?(invoice_run.id)).to be(false)
         end
       end
 
-      context "for invoice list with not only draft invoices" do
+      context "for invoice run with not only draft invoices" do
         before { draft_invoices.sample.update(state: :sent) }
 
         it "raises error" do

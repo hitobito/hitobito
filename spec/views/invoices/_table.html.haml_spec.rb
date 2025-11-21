@@ -15,7 +15,7 @@ describe "invoices/_table.html.haml" do
     allow(view).to receive(:parent).and_return(group)
     allow(view).to receive(:url_for).and_return("/invoices?sort=title&sort_dir=asc")
     allow(view).to receive(:sortable?).and_return(true)
-    allow(view).to receive(:invoice_list).and_return(nil)
+    allow(view).to receive(:invoice_run).and_return(nil)
     allow(view).to receive(:group).and_return(group)
     allow(view).to receive(:current_user).and_return(person)
   end

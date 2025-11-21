@@ -219,6 +219,26 @@ describe FormHelper do
       expect(option["data-default"]).to eq ""
     end
 
+
+    it "uses correct values when locale is not default locale" do
+      @list += [Fabricate.build(
+        :event_kind, general_information: "A german description", general_information_en: "An english description"
+      )]
+      @mapping = {description: :general_information}
+
+      I18n.locale = :en
+
+      options = dom.all("option")
+      option = options.first
+      expect(option["data-target-field"]).to eq "event_description"
+      expect(option["data-value"]).to eq "An english description"
+      expect(option["data-default"]).to eq ""
+      option = options[1]
+      expect(option["data-target-field"]).to eq "event_description_de"
+      expect(option["data-value"]).to eq "A german description"
+      expect(option["data-default"]).to eq ""
+    end
+
     it "option does render nil value as empty string" do
       @list += [Fabricate.build(:event_kind)]
       @mapping += [:minimum_age]

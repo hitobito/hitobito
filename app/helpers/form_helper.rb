@@ -104,15 +104,12 @@ module FormHelper
   end
 
   def field_inheritance_values(list, fields)
-    old_i18n_fallbacks = I18n.fallbacks.deep_dup
-    I18n.fallbacks = nil
     model = model_class.new
     options = list.flat_map do |entity|
       with_globalized(fields, model, entity).collect do |field, source_method|
         field_inheritance_option(entity, model, field, source_method)
       end
     end
-    I18n.fallbacks = old_i18n_fallbacks
     content_tag(:datalist, safe_join(options))
   end
 
@@ -160,7 +157,8 @@ module FormHelper
       source_method = source_method.to_sym
       if should_globalize?(model, entity, field, source_method)
         fields = [field] + Globalized.globalized_names_for_attr(field)
-        source_methods = [source_method] + Globalized.globalized_names_for_attr(source_method)
+        source_methods = [:"#{source_method}_#{I18n.locale}"] +
+          Globalized.globalized_names_for_attr(source_method)
         globalized_fields.merge(fields.zip(source_methods).to_h)
       else
         globalized_fields.merge({field => source_method})

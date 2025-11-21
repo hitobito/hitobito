@@ -138,6 +138,14 @@ describe "Globalized model" do
     expect(globalized_attr_validators.any?(ActiveRecord::Validations::UniquenessValidator)).to be_falsey
   end
 
+  it "should copy validators only once" do
+    GlobalizedTestModels::ValidatorsTestModel.copy_validators_to_globalized_accessors
+    GlobalizedTestModels::ValidatorsTestModel.copy_validators_to_globalized_accessors
+
+    globalized_attr_validators = GlobalizedTestModels::ValidatorsTestModel.validators_on(:attr_en)
+    expect(globalized_attr_validators.length).to eql(1)
+  end
+
   it "presence validated fields need current language filled in" do
     event = events(:top_event)
     event.name = ""

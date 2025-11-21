@@ -6,14 +6,14 @@
 #  https://github.com/hitobito/hitobito.
 
 module InvoicesHelper
-  def format_invoice_list_amount_paid(invoice_list)
-    invoice = invoice_list.invoice || invoice_list.group.invoices.build
-    invoice.decorate.format_currency(invoice_list.amount_paid)
+  def format_invoice_run_amount_paid(invoice_run)
+    invoice = invoice_run.invoice || invoice_run.group.invoices.build
+    invoice.decorate.format_currency(invoice_run.amount_paid)
   end
 
-  def format_invoice_list_amount_total(invoice_list)
-    invoice = invoice_list.invoice || invoice_list.group.invoices.build
-    invoice.decorate.format_currency(invoice_list.amount_total)
+  def format_invoice_run_amount_total(invoice_run)
+    invoice = invoice_run.invoice || invoice_run.group.invoices.build
+    invoice.decorate.format_currency(invoice_run.amount_total)
   end
 
   def format_invoice_state(invoice)
@@ -47,7 +47,7 @@ module InvoicesHelper
   def invoice_link(invoice)
     case parent
     when Group then group_invoice_path(invoice.group_id, invoice)
-    when InvoiceList then group_invoice_list_invoice_path(parent.group, parent, invoice)
+    when InvoiceRun then group_invoice_run_invoice_path(parent.group, parent, invoice)
     end
   end
 
@@ -76,7 +76,7 @@ module InvoicesHelper
   end
 
   def invoices_print_dropdown
-    if parent.is_a?(InvoiceList) && Message::LetterWithInvoice.exists?(invoice_list: parent)
+    if parent.is_a?(InvoiceRun) && Message::LetterWithInvoice.exists?(invoice_run: parent)
       Dropdown::LetterWithInvoice.new(self, params, :print).print
     else
       Dropdown::Invoices.new(self, params, :print).print

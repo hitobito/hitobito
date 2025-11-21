@@ -316,9 +316,9 @@ de:
       invoice_item:
         one: Rechnungsposten
         other: Rechnungsposten
-      invoice_list:
-        one: Sammelrechnung
-        other: Sammelrechnungen
+      invoice_run:
+        one: Rechnungslauf
+        other: Rechnungsläufe
       label_format:
         one: Etikettenformat
         other: Etikettenformate
@@ -1247,7 +1247,7 @@ de:
         account: Konto
 
 
-      invoice_list:
+      invoice_run:
         title: Titel
         receiver: Empfänger
         recipients_total: Empfänger Insgesamt

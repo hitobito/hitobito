@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe InvoiceLists::RoleItem do
+describe InvoiceRuns::RoleItem do
   let(:attrs) {
     {fee: :membership, key: :members, unit_cost: 10, roles: [
       Group::BottomLayer::Member.sti_name

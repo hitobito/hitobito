@@ -314,9 +314,9 @@ en:
       invoice_item:
         one: Invoice Item
         other: Invoice Items
-      invoice_list:
-        one: Collective invoice
-        other: Collective invoices
+      invoice_run:
+        one: Invoice run
+        other: Invoice runs
       label_format:
         one: Label format
         other: Label formats
@@ -1242,7 +1242,7 @@ en:
         account: Account
 
 
-      invoice_list:
+      invoice_run:
         title: Title
         receiver: Recipient
         recipients_total: Recipients total

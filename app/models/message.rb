@@ -30,13 +30,13 @@
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
 #  bounce_parent_id      :integer
-#  invoice_list_id       :bigint
+#  invoice_run_id       :bigint
 #  mailing_list_id       :bigint
 #  sender_id             :bigint
 #
 # Indexes
 #
-#  index_messages_on_invoice_list_id  (invoice_list_id)
+#  index_messages_on_invoice_run_id  (invoice_run_id)
 #  index_messages_on_mailing_list_id  (mailing_list_id)
 #  index_messages_on_sender_id        (sender_id)
 #
@@ -56,7 +56,7 @@ class Message < ActiveRecord::Base
 
   i18n_enum :state, STATES, scopes: true, queries: true
 
-  belongs_to :invoice_list
+  belongs_to :invoice_run
   belongs_to :mailing_list
   belongs_to :sender, class_name: "Person"
   has_many :message_recipients, dependent: :restrict_with_error

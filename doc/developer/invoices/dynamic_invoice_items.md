@@ -30,7 +30,7 @@ The `InvoiceItem` model provides the `dynamic_cost_parameters` which allow for p
 
 #### Wagon defined parameters
 
-The wagon can then define more parameters which will be rendered into the `InvoiceListsController#new` form
+The wagon can then define more parameters which will be rendered into the `InvoiceRunsController#new` form
 
 Inside your invoice_items/example.rb:
 

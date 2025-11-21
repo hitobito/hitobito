@@ -24,17 +24,17 @@ describe Sheet::Invoice do
     let(:group) { groups(:bottom_group_one_one) }
     let(:mailing_list) { mailing_lists(:leaders) }
 
-    let(:sheet) { Sheet::Invoice.new(self, invoice_list, invoice) }
-    let(:invoice_list) { InvoiceList.create(title: "Mitgliedsbeiträge", group_id: group.id, receiver: mailing_list) }
+    let(:sheet) { Sheet::Invoice.new(self, invoice_run, invoice) }
+    let(:invoice_run) { InvoiceRun.create(title: "Mitgliedsbeiträge", group_id: group.id, receiver: mailing_list) }
 
     it "uses title of invoice with receiver" do
-      view.params[:invoice_list_id] = invoice_list.id
+      view.params[:invoice_run_id] = invoice_run.id
       expect(sheet.title).to eq "Testrechnung - Leaders (Abo)"
     end
 
     it "uses title of invoice without reciever" do
-      view.params[:invoice_list_id] = invoice_list.id
-      invoice_list.update!(receiver_id: nil, receiver_type: nil)
+      view.params[:invoice_run_id] = invoice_run.id
+      invoice_run.update!(receiver_id: nil, receiver_type: nil)
       expect(sheet.title).to eq "Testrechnung"
     end
   end

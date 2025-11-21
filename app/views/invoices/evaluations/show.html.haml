@@ -27,7 +27,7 @@
       %tr
         - cols.each do |col|
           %td
-            = link_invoice_list_by_article(group, from, to, entry) do
+            = link_invoice_run_by_article(group, from, to, entry) do
               - if currency_cols.include? col
                 = format_currency entry[col], unit: "" if entry[col].present? # The value could combine amounts of multiple currencies
               - else

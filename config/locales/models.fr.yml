@@ -352,7 +352,7 @@ fr:
         one: postes de factures
         many: Détails de la facture
         other: Détails de la facture
-      invoice_list:
+      invoice_run:
         one: Facture collective
         many: Facture collective
         other: Facture collective
@@ -1317,7 +1317,7 @@ fr:
         account: Compte
 
 
-      invoice_list:
+      invoice_run:
         title: Titre
         receiver: Destinataire
         recipients_total: Nombre total de destinataires

@@ -29,7 +29,7 @@ class Invoice::PaymentProcessor
   def process
     Payment.transaction do
       valid_payments.all?(&:save) || (raise ActiveRecord::Rollback)
-      invoice_lists.each(&:update_paid)
+      invoice_runs.each(&:update_paid)
       valid_payments.count
     end
   rescue StandardError => e
@@ -137,8 +137,8 @@ class Invoice::PaymentProcessor
     @invoices ||= invoices_by_reference
   end
 
-  def invoice_lists
-    InvoiceList.where(id: invoices.values.collect(&:invoice_list_id))
+  def invoice_runs
+    InvoiceRun.where(id: invoices.values.collect(&:invoice_run_id))
   end
 
   def invoices_by_reference

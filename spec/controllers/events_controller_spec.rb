@@ -364,11 +364,20 @@ describe EventsController do
           })
           expect(response).to redirect_to(group_event_path(group, event))
           expect(question.question_translations).to eq(
-            {"de" => "Ich habe folgendes ÖV Abo", "fr" => "J'ai l'abonnement de transports publics suivant"}
+            {
+              "de" => "Ich habe folgendes ÖV Abo",
+              "en" => nil,
+              "fr" => "J'ai l'abonnement de transports publics suivant",
+              "it" => nil
+            }
           )
           expect(question.choices_translations).to eq(
-            {"de" => "GA, Halbtax / unter 16, keine Vergünstigung",
-             "fr" => "AG, demi-tarif / moins de 16 ans, pas de réduction"}
+            {
+              "de" => "GA, Halbtax / unter 16, keine Vergünstigung",
+              "en" => nil,
+              "fr" => "AG, demi-tarif / moins de 16 ans, pas de réduction",
+              "it" => nil
+            }
           )
         end
 
@@ -378,11 +387,20 @@ describe EventsController do
           })
           expect(response).to redirect_to(group_event_path(group, event))
           expect(question.question_translations).to eq(
-            {"de" => "Ich habe folgendes ÖV Abo", "fr" => "J'ai l'abonnement de transports publics suivant"}
+            {
+              "de" => "Ich habe folgendes ÖV Abo",
+              "en" => nil,
+              "fr" => "J'ai l'abonnement de transports publics suivant",
+              "it" => nil
+            }
           )
           expect(question.choices_translations).to eq(
-            {"de" => "GA, Halbtax / unter 16, keine Vergünstigung",
-             "fr" => "AG, demi-tarif / moins de 16 ans, pas de réduction"}
+            {
+              "de" => "GA, Halbtax / unter 16, keine Vergünstigung",
+              "en" => nil,
+              "fr" => "AG, demi-tarif / moins de 16 ans, pas de réduction",
+              "it" => nil
+            }
           )
         end
       end
@@ -660,12 +678,12 @@ describe EventsController do
 
     it "GET index redirects to login" do
       get :index, params: {group_id: group.id}
-      is_expected.to redirect_to("http://test.host/users/sign_in")
+      is_expected.to redirect_to("http://test.host/de/users/sign_in")
     end
 
     it "GET show redirects to login" do
       get :show, params: {group_id: group.id, id: event}
-      is_expected.to redirect_to("http://test.host/users/sign_in")
+      is_expected.to redirect_to("http://test.host/de/users/sign_in")
     end
   end
 

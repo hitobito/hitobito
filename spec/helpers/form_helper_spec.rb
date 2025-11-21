@@ -10,6 +10,7 @@ describe FormHelper do
   include I18nHelper
   include TableHelper
   include UtilityHelper
+  include ColumnHelper
   include LayoutHelper
   include FormatHelper
   include CrudTestHelper
@@ -32,7 +33,7 @@ describe FormHelper do
     end
 
     it "should contain form tag" do
-      is_expected.to have_selector("form[action='/crud_test_models/#{entry.id}']")
+      is_expected.to have_selector("form[action='/de/crud_test_models/#{entry.id}']")
     end
 
     it "should contain input for name" do
@@ -87,7 +88,7 @@ describe FormHelper do
 
       it {
         # rubocop:todo Layout/LineLength
-        is_expected.to have_selector("form.special.form-horizontal[action='/crud_test_models/#{entry.id}'][method=post]")
+        is_expected.to have_selector("form.special.form-horizontal[action='/de/crud_test_models/#{entry.id}'][method=post]")
         # rubocop:enable Layout/LineLength
       }
       it { is_expected.to have_selector("input[name=_method][type=hidden][value=patch]", visible: false) }
@@ -101,7 +102,9 @@ describe FormHelper do
     context "for new entry" do
       let(:entry) { CrudTestModel.new }
 
-      it { is_expected.to have_selector("form.special.form-horizontal[action='/crud_test_models'][method=post]") }
+      it do
+        is_expected.to have_selector("form.special.form-horizontal[action='/de/crud_test_models'][method=post]")
+      end
       it { is_expected.to have_selector("input[name='crud_test_model[name]'][type=text]") }
       it { is_expected.to have_no_selector("input[name='crud_test_model[name]'][type=text][value]") }
       it { is_expected.to have_selector("input[name='crud_test_model[birthdate]'][type=text]") }
@@ -135,9 +138,11 @@ describe FormHelper do
 
     let(:entry) { crud_test_models(:AAAAA) }
 
-    it {
-      is_expected.to have_selector("form.form-horizontal.special[method=post][action='/crud_test_models/#{entry.id}']")
-    }
+    it do
+      is_expected.to have_selector(
+        "form.form-horizontal.special[method=post][action='/de/crud_test_models/#{entry.id}']"
+      )
+    end
   end
 
   describe "#field_inheritance_values" do
@@ -175,6 +180,61 @@ describe FormHelper do
       option = dom.find("option")
       expect(option["data-target-field"]).to eq "event_minimum_age"
       expect(option["data-value"]).to eq "6"
+      expect(option["data-default"]).to eq ""
+    end
+
+    it "option has globalized target-field values and default data attributes" do
+      @list += [Fabricate.build(
+        :event_kind, general_information: "A description",
+        general_information_en: "An english description"
+      )]
+      @mapping = {description: :general_information}
+      options = dom.all("option")
+      expect(options.length).to eq(Globalized.languages.length)
+      options[1..3].zip(Globalized.additional_languages).each do |option, language|
+        expect(option["data-target-field"]).to eq "event_description_#{language}"
+      end
+      option = options.first
+      expect(option["data-target-field"]).to eq "event_description"
+      expect(option["data-value"]).to eq "A description"
+      expect(option["data-default"]).to eq ""
+      option = options[1]
+      expect(option["data-value"]).to eq "An english description"
+      expect(option["data-default"]).to eq ""
+    end
+
+    it "option data-value does not use fallback when empty" do
+      @list += [Fabricate.build(
+        :event_kind, general_information: "", general_information_en: "An english description"
+      )]
+      @mapping = {description: :general_information}
+      options = dom.all("option")
+      option = options.first
+      expect(option["data-target-field"]).to eq "event_description"
+      expect(option["data-value"]).to eq ""
+      expect(option["data-default"]).to eq ""
+      option = options[1]
+      expect(option["data-target-field"]).to eq "event_description_en"
+      expect(option["data-value"]).to eq "An english description"
+      expect(option["data-default"]).to eq ""
+    end
+
+    it "uses correct values when locale is not default locale" do
+      @list += [Fabricate.build(
+        :event_kind, general_information: "A german description", general_information_en: "An english description"
+      )]
+      @mapping = {description: :general_information}
+
+      I18n.locale = :en
+
+      options = dom.all("option")
+      option = options.first
+      expect(option["data-target-field"]).to eq "event_description"
+      expect(option["data-value"]).to eq "An english description"
+      expect(option["data-default"]).to eq ""
+      option = options[1]
+      expect(option["data-target-field"]).to eq "event_description_de"
+      expect(option["data-value"]).to eq "A german description"
       expect(option["data-default"]).to eq ""
     end
 

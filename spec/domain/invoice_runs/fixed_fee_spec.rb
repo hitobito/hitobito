@@ -7,8 +7,8 @@
 
 require "spec_helper"
 
-describe InvoiceLists::FixedFee do
-  let(:list) { InvoiceList.new(invoice: Invoice.new) }
+describe InvoiceRuns::FixedFee do
+  let(:list) { InvoiceRun.new(invoice: Invoice.new) }
 
   subject(:fee) { described_class.for(:membership) }
 
@@ -29,8 +29,8 @@ describe InvoiceLists::FixedFee do
     it "has an invoice item for each configured membership fee item" do
       expect(fee).to have(2).items
       members, leaders = fee.items
-      expect(members).to be_kind_of(InvoiceLists::RoleItem)
-      expect(leaders).to be_kind_of(InvoiceLists::RoleItem)
+      expect(members).to be_kind_of(InvoiceRuns::RoleItem)
+      expect(leaders).to be_kind_of(InvoiceRuns::RoleItem)
     end
 
     it "builds item with translated name and dynamic_cost_parameter" do
@@ -44,7 +44,7 @@ describe InvoiceLists::FixedFee do
 
   describe "#prepare" do
     let(:flash) {}
-    let(:list) { InvoiceList.new(invoice: Invoice.new) }
+    let(:list) { InvoiceRun.new(invoice: Invoice.new) }
     let(:layer_one) { groups(:bottom_layer_one) }
     let(:layer_two) { groups(:bottom_layer_two) }
 
@@ -55,8 +55,8 @@ describe InvoiceLists::FixedFee do
       fee.prepare(list)
 
       expect(list.receivers).to eq [
-        InvoiceLists::Receiver.new(id: person_one.id, layer_group_id: layer_one.id),
-        InvoiceLists::Receiver.new(id: person_two.id, layer_group_id: layer_two.id)
+        InvoiceRuns::Receiver.new(id: person_one.id, layer_group_id: layer_one.id),
+        InvoiceRuns::Receiver.new(id: person_two.id, layer_group_id: layer_two.id)
       ]
       expect(list.invoice).to have(2).invoice_items
       leaders, members = list.invoice.invoice_items
@@ -69,7 +69,7 @@ describe InvoiceLists::FixedFee do
       person_one = Fabricate(Group::BottomLayer::Leader.sti_name, group: layer_one).person
       fee.prepare(list)
       expect(list.receivers).to eq [
-        InvoiceLists::Receiver.new(id: person_one.id, layer_group_id: layer_one.id)
+        InvoiceRuns::Receiver.new(id: person_one.id, layer_group_id: layer_one.id)
       ]
       leaders, members = list.invoice.invoice_items
       expect(members.count).to eq 1

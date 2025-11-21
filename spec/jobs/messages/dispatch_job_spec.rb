@@ -66,7 +66,7 @@ describe Messages::DispatchJob do
 
     subject { Messages::DispatchJob.new(message) }
 
-    pending "creates reciepts invoices and invoice_list " do
+    pending "creates reciepts invoices and invoice_run " do
       expect_any_instance_of(Messages::LetterWithInvoiceDispatch).to receive(:perform)
       subject.perform
     end

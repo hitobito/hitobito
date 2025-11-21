@@ -27,7 +27,7 @@ describe Messages::DispatchesController do
 
     it "POST#create redirects to assignments#new" do
       post :create, params: {message_id: message.id}
-      expect(message.reload.invoice_list).to be_persisted
+      expect(message.reload.invoice_run).to be_persisted
       expect(response).to redirect_to new_assignment_redirect_path(message)
       # rubocop:todo Layout/LineLength
       expect(flash[:alert]).to eq "Sobald der Druckauftrag erstellt wurde, kann der Rechnungsbrief nicht mehr bearbeitet werden."

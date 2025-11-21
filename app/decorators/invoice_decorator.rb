@@ -6,11 +6,11 @@
 class InvoiceDecorator < ApplicationDecorator
   decorates :invoice
 
-  delegate :group_invoice_list_invoice_path, :group_invoice_path, to: :helpers
+  delegate :group_invoice_run_invoice_path, :group_invoice_path, to: :helpers
 
   def show_path
-    if invoice_list
-      group_invoice_list_invoice_path(group, invoice_list, model)
+    if invoice_run
+      group_invoice_run_invoice_path(group, invoice_run, model)
     else
       group_invoice_path(group, model)
     end

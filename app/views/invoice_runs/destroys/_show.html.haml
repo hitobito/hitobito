@@ -11,7 +11,7 @@
           %b= t('.title')
 
       = standard_form(path_args(entry),
-        url: group_invoice_list_invoice_lists_destroy_path(entry.group, entry),
+        url: group_invoice_run_invoice_runs_destroy_path(entry.group, entry),
         method: :delete) do |f|
         .modal-body
           .row-fluid

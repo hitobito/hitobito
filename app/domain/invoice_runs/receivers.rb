@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module InvoiceLists
+module InvoiceRuns
   class Receivers
     attr_reader :role_types, :layer, :layer_group_ids
 

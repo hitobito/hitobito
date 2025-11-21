@@ -16,7 +16,7 @@ describe SettingsContract do
           block_after: "P1Y"
         }
       },
-      invoice_lists: {
+      invoice_runs: {
         fixed_fees: {
           membership: {
 

@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe InvoiceLists::Receiver do
+describe InvoiceRuns::Receiver do
   describe "::load" do
     def load(array) = described_class.load(array.to_yaml)
 

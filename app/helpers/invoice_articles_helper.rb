@@ -9,7 +9,7 @@ module InvoiceArticlesHelper
     number_to_currency(invoice_article.unit_cost, unit: currency)
   end
 
-  def link_invoice_list_by_article(group, from, to, entry)
+  def link_invoice_run_by_article(group, from, to, entry)
     link_to(group_invoices_by_article_index_path(
       group_id: group.id,
       from: from,

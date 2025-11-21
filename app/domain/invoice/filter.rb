@@ -16,7 +16,7 @@ class Invoice::Filter
     scope = apply_scope(scope, params[:state], Invoice::STATES)
     scope = apply_scope(scope, params[:due_since], Invoice::DUE_SINCE)
     scope = filter_by_ids(scope)
-    scope = filter_by_invoice_list_id(scope)
+    scope = filter_by_invoice_run_id(scope)
     scope = scope.draft_or_issued(from: params[:from],
       to: params[:to])
 
@@ -35,10 +35,10 @@ class Invoice::Filter
     params[:state] == "cancelled"
   end
 
-  def filter_by_invoice_list_id(relation)
-    return relation if params[:invoice_list_id].blank?
+  def filter_by_invoice_run_id(relation)
+    return relation if params[:invoice_run_id].blank?
 
-    relation.where(invoice_list_id: params[:invoice_list_id])
+    relation.where(invoice_run_id: params[:invoice_run_id])
   end
 
   def filter_by_ids(relation)

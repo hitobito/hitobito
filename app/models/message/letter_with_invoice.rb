@@ -30,26 +30,26 @@
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
 #  bounce_parent_id      :integer
-#  invoice_list_id       :bigint
+#  invoice_run_id       :bigint
 #  mailing_list_id       :bigint
 #  sender_id             :bigint
 #
 # Indexes
 #
-#  index_messages_on_invoice_list_id  (invoice_list_id)
+#  index_messages_on_invoice_run_id  (invoice_run_id)
 #  index_messages_on_mailing_list_id  (mailing_list_id)
 #  index_messages_on_sender_id        (sender_id)
 #
 
 class Message::LetterWithInvoice < Message::Letter
-  belongs_to :invoice_list
+  belongs_to :invoice_run
   serialize :invoice_attributes, type: Hash, coder: YAML
   validate :assert_valid_invoice_items
 
   self.icon = :"file-invoice"
 
-  def invoice_list
-    @invoice_list ||= InvoiceList.create!(
+  def invoice_run
+    @invoice_run ||= InvoiceRun.create!(
       title: subject,
       group: group.layer_group,
       receiver: mailing_list,
@@ -68,18 +68,18 @@ class Message::LetterWithInvoice < Message::Letter
   end
 
   def invoice_for(receiver)
-    invoice_list_id ? load_invoice_for(receiver) : build_invoice_for(receiver)
+    invoice_run_id ? load_invoice_for(receiver) : build_invoice_for(receiver)
   end
 
   def recipients
-    recipients = invoice_list_id ? recipients_from_invoices : recipients_from_mailing_list
+    recipients = invoice_run_id ? recipients_from_invoices : recipients_from_mailing_list
     recipients.merge(Person.with_address)
   end
 
   private
 
   def recipients_from_invoices
-    invoices = Invoice.joins(:invoice_list).where(invoice_list_id: invoice_list_id)
+    invoices = Invoice.joins(:invoice_run).where(invoice_run_id: invoice_run_id)
     Person.where(id: invoices.select("recipient_id"))
   end
 
@@ -88,7 +88,7 @@ class Message::LetterWithInvoice < Message::Letter
   end
 
   def load_invoice_for(receiver)
-    Invoice.find_by(invoice_list_id: invoice_list_id, recipient: receiver).tap do |invoice|
+    Invoice.find_by(invoice_run_id: invoice_run_id, recipient: receiver).tap do |invoice|
       raise "Didn't find invoice for recipient " + receiver.inspect unless invoice
     end
   end

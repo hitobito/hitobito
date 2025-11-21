@@ -29,7 +29,7 @@ class Invoices::RecalculateController < ApplicationController
   end
 
   def permitted_params
-    invoice_params = params.dig(:invoice_list, :invoice) || params[:invoice]
+    invoice_params = params.dig(:invoice_run, :invoice) || params[:invoice]
     # rubocop:todo Layout/LineLength
     permitted_params = invoice_params ? invoice_params.permit(InvoicesController.permitted_attrs) : {}
     # rubocop:enable Layout/LineLength

@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: invoice_lists
+# Table name: invoice_runs
 #
 #  id                    :bigint           not null, primary key
 #  amount_paid           :decimal(15, 2)   default(0.0), not null
@@ -20,14 +20,14 @@
 #
 # Indexes
 #
-#  index_invoice_lists_on_creator_id                     (creator_id)
-#  index_invoice_lists_on_group_id                       (group_id)
-#  index_invoice_lists_on_receiver_type_and_receiver_id  (receiver_type,receiver_id)
+#  index_invoice_runs_on_creator_id                     (creator_id)
+#  index_invoice_runs_on_group_id                       (group_id)
+#  index_invoice_runs_on_receiver_type_and_receiver_id  (receiver_type,receiver_id)
 #
 
 require "spec_helper"
 
-describe InvoiceList do
+describe InvoiceRun do
   let(:list) { mailing_lists(:leaders) }
   let(:group) { groups(:top_layer) }
   let(:person) { people(:top_leader) }
@@ -115,16 +115,16 @@ describe InvoiceList do
     it "accepts receivers as integers" do
       subject.receivers = [1, 2]
       expect(subject.receivers).to eq [
-        InvoiceLists::Receiver.new(id: 1),
-        InvoiceLists::Receiver.new(id: 2)
+        InvoiceRuns::Receiver.new(id: 1),
+        InvoiceRuns::Receiver.new(id: 2)
       ]
     end
 
     it "accepts receivers as models" do
-      subject.receivers = [InvoiceLists::Receiver.new(id: 1), InvoiceLists::Receiver.new(id: 2)]
+      subject.receivers = [InvoiceRuns::Receiver.new(id: 1), InvoiceRuns::Receiver.new(id: 2)]
       expect(subject.receivers).to eq [
-        InvoiceLists::Receiver.new(id: 1),
-        InvoiceLists::Receiver.new(id: 2)
+        InvoiceRuns::Receiver.new(id: 1),
+        InvoiceRuns::Receiver.new(id: 2)
       ]
     end
   end

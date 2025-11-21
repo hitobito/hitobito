@@ -46,7 +46,7 @@ class Payments::EbicsImport
       end
 
       if payment.save
-        payment.invoice&.invoice_list&.update_paid
+        payment.invoice&.invoice_run&.update_paid
       else
         payment.status = :invalid
       end

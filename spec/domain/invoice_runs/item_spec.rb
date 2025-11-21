@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe InvoiceLists::Item do
+describe InvoiceRuns::Item do
   let(:attrs) { {fee: :membership, key: :members, unit_cost: 10, layer_group_ids: nil} }
 
   subject(:item) { described_class.new(**attrs) }

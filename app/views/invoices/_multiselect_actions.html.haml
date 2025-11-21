@@ -12,6 +12,6 @@
     = extended_all_checkbox(@invoices)
     .actions
       = invoice_sending_dropdown
-      = action_button(t('invoices.cancel'), group_invoice_list_path(group, invoice_list_id: invoice_list&.id), :'trash-alt', 'data-method': :delete, data: { checkable: true })
+      = action_button(t('invoices.cancel'), group_invoice_run_path(group, invoice_run_id: invoice_run&.id), :'trash-alt', 'data-method': :delete, data: { checkable: true })
       = invoices_print_dropdown
 

@@ -26,7 +26,7 @@ class GlobalizedPermittedAttrs
     when Symbol, String
       permit_symbol(permitted_attr, klass)
     when Hash
-      permit_hash(permitted_attr)
+      permit_hash(permitted_attr, klass)
     else
       permitted_attr
     end
@@ -35,17 +35,17 @@ class GlobalizedPermittedAttrs
   def permit_symbol(permitted_attr, klass)
     return permitted_attr unless should_permit?(klass, permitted_attr)
 
-    [permitted_attr, *Globalized.globalized_names_for_attr(permitted_attr)]
+    [permitted_attr.to_sym, *Globalized.globalized_names_for_attr(permitted_attr)]
   end
 
-  def permit_hash(permitted_attr)
+  def permit_hash(permitted_attr, klass)
     permitted_attr.map do |k, v|
-      if k.end_with?("_attributes")
+      if k.end_with?("_attributes") && (model_class = relation_class_from_name(k, klass))
         case v
         when Array
-          permit_relation_array(k, v)
+          permit_relation_array(k, v, model_class)
         when Hash
-          {k => permit_hash(v)}
+          {k => permit_hash(v, model_class)}
         else
           {k => v}
         end
@@ -55,19 +55,22 @@ class GlobalizedPermittedAttrs
     end.reduce(:merge)
   end
 
-  def permit_relation_array(relation_name, relation_array)
-    relation = relation_name.to_s.sub(/_[^_]*$/, "").to_sym
-    klass = @model_class.reflect_on_all_associations.find do |reflection|
-      reflection.name == relation
-    end&.klass
-    return {relation_name => relation_array} if klass.blank?
+  def permit_relation_array(relation_name, relation_array, klass)
     updated_relation_array = relation_array.flat_map do |permitted_attr|
       permit(permitted_attr, klass)
     end
     {relation_name => updated_relation_array}
   end
 
+  def relation_class_from_name(relation_name, klass)
+    relation = relation_name.to_s.sub(/_[^_]*$/, "").to_sym
+    klass.reflect_on_all_associations.find do |reflection|
+      reflection.name == relation
+    end&.klass
+  end
+
   def should_permit?(klass, attr)
-    klass.ancestors.include?(Globalized) && klass.translated_attribute_names.include?(attr.to_sym)
+    klass.respond_to?(:translated_attribute_names) &&
+      klass.translated_attribute_names.include?(attr.to_sym)
   end
 end

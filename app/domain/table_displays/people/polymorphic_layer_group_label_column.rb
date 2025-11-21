@@ -30,7 +30,7 @@ module TableDisplays::People
       if template && target.respond_to?(target_attr)
         template.format_attr(target, target_attr)
       else
-        target.layer_group.name
+        target.layer_group&.name
       end
     end
   end

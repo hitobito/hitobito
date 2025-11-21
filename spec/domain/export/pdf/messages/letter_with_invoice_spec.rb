@@ -113,25 +113,25 @@ describe Export::Pdf::Messages::LetterWithInvoice do
       end
     end
 
-    context "persisted invoice list" do
+    context "persisted invoice run" do
       it "renders iban from invoice config when no persisted invoice exists" do
         group.invoice_config.update(iban: "CH10 0221 1981 6169 5329 8")
         expect(text_with_position).to include([360, 279, "CH10 0221 1981 6169 5329 8"])
       end
 
       it "renders iban from invoice when persisted invoice exists" do
-        list = InvoiceList.create(group: group, title: "title")
-        list.invoices.create!(title: :title, recipient_id: bottom_member.id, total: 10, group: group)
-        letter.invoice_list_id = list.id
+        run = InvoiceRun.create(group: group, title: "title")
+        run.invoices.create!(title: :title, recipient_id: bottom_member.id, total: 10, group: group)
+        letter.invoice_run_id = run.id
 
         group.invoice_config.update!(iban: "CH10 0221 1981 6169 5329 8")
         expect(text_with_position).to include([360, 279, "CH93 0076 2011 6238 5295 7"])
       end
 
       it "mixes person and invoice address" do
-        list = InvoiceList.create!(group: group, title: "title")
-        list.invoices.create!(title: :title, recipient_id: bottom_member.id, total: 10, group: group)
-        letter.invoice_list_id = list.id
+        run = InvoiceRun.create!(group: group, title: "title")
+        run.invoices.create!(title: :title, recipient_id: bottom_member.id, total: 10, group: group)
+        letter.invoice_run_id = run.id
 
         letter.message_recipients.first.update!(address: "Foo Member\nGreatstreet 345\n3456 Greattown")
 

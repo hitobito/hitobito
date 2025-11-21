@@ -32,7 +32,7 @@ additional_address:
     - Arbeit
     - Andere
 
-invoice_lists:
+invoice_runs:
   fixed_fees:
     membership:
       enabled: true

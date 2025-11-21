@@ -38,14 +38,14 @@
 #  updated_at          :datetime         not null
 #  creator_id          :integer
 #  group_id            :integer          not null
-#  invoice_list_id     :bigint
+#  invoice_run_id     :bigint
 #  recipient_id        :integer
 #
 # Indexes
 #
 #  index_invoices_on_esr_number       (esr_number)
 #  index_invoices_on_group_id         (group_id)
-#  index_invoices_on_invoice_list_id  (invoice_list_id)
+#  index_invoices_on_invoice_run_id  (invoice_run_id)
 #  index_invoices_on_recipient_id     (recipient_id)
 #  index_invoices_on_sequence_number  (sequence_number)
 #
@@ -75,7 +75,7 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   belongs_to :group
   belongs_to :recipient, class_name: "Person"
   belongs_to :creator, class_name: "Person"
-  belongs_to :invoice_list, optional: true
+  belongs_to :invoice_run, optional: true
 
   has_many :invoice_items, dependent: :destroy
   has_many :payments, dependent: :destroy
@@ -91,7 +91,7 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
 
   validates :state, inclusion: {in: STATES}
   validates :due_at, timeliness: {after: :sent_at}, presence: true, if: :sent?
-  validates :invoice_items, presence: true, if: -> { (issued? || sent?) && !invoice_list }
+  validates :invoice_items, presence: true, if: -> { (issued? || sent?) && !invoice_run }
   validate :assert_sendable?, unless: :recipient_id?
 
   normalizes :recipient_email, with: ->(attribute) { attribute.downcase }
@@ -115,7 +115,7 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   scope :one_month, -> { where(invoices: {due_at: ...1.month.ago.to_date}) }
   scope :visible, -> { where.not(state: :cancelled) }
   scope :remindable, -> { where(state: STATES_REMINDABLE) }
-  scope :standalone, -> { where(invoice_list_id: nil) }
+  scope :standalone, -> { where(invoice_run_id: nil) }
 
   class << self
     def with_aggregated_payments
@@ -187,7 +187,7 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
 
   def recalculate!
     update_attribute(:total, calculated[:total] || 0) # rubocop:disable Rails/SkipsModelValidations
-    invoice_list&.update_total
+    invoice_run&.update_total
   end
 
   def to_s

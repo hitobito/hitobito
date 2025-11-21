@@ -9,15 +9,15 @@ module Messages
   class LetterWithInvoiceDispatch < LetterDispatch
     def initialize(*args)
       super
-      @invoice_list = @message.invoice_list
-      @invoice_list.invoice = @message.invoice
+      @invoice_run = @message.invoice_run
+      @invoice_run.invoice = @message.invoice
     end
 
     def run
       super
 
-      @message.update!(invoice_list_id: @invoice_list.id)
-      batch_create # create invoices for all people on the invoice list
+      @message.update!(invoice_run_id: @invoice_run.id)
+      batch_create # create invoices for all people on the invoice run
       # rubocop:todo Layout/LineLength
       batch_update # update invoices by advancing their state, sending mail and create reminders if needed
       # rubocop:enable Layout/LineLength
@@ -25,7 +25,7 @@ module Messages
     end
 
     def batch_create
-      batch_create = Invoice::BatchCreate.new(@invoice_list, @people)
+      batch_create = Invoice::BatchCreate.new(@invoice_run, @people)
       batch_create.call
 
       @message.update!(
@@ -35,7 +35,7 @@ module Messages
     end
 
     def batch_update
-      Invoice::BatchUpdate.new(@invoice_list.reload.invoices).call
+      Invoice::BatchUpdate.new(@invoice_run.reload.invoices).call
     end
 
     # disable household addresses for letter with invoice

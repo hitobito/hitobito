@@ -3,7 +3,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class InvoiceListsController < CrudController
+class InvoiceRunsController < CrudController
   include YearBasedPaging
 
   LIMIT_CREATE = 100
@@ -52,7 +52,7 @@ class InvoiceListsController < CrudController
     if entry.valid? && entry.save
       Invoice::BatchCreate.call(entry, LIMIT_CREATE)
       message = flash_message_create(count: entry.recipient_ids_count, title: entry.title)
-      params[:invoice_list_id] = entry.id  # NOTE: make return_path behave as expected
+      params[:invoice_run_id] = entry.id  # NOTE: make return_path behave as expected
       redirect_to return_path, notice: message
       session.delete :invoice_referer
     else
@@ -69,15 +69,15 @@ class InvoiceListsController < CrudController
   end
 
   # rubocop:disable Rails/SkipsModelValidations
-  # NOTE: quiet suprisingly this destroy cancels invoices within list, the destroy of the
-  # list itself is handled by invoice_lists/destroy controller
+  # NOTE: quite suprisingly, this destroy cancels invoices within the run.
+  # The destroy of the run itself is handled by invoice_runs/destroy controller
   def destroy
-    count = InvoiceList.transaction do
+    count = InvoiceRun.transaction do
       cancel_all_invoices.tap do
         entry.update_total
       end
     end
-    params[:invoice_list_id] = entry.id  # NOTE: make return_path behave as expected
+    params[:invoice_run_id] = entry.id  # NOTE: make return_path behave as expected
     key = (count > 0) ? :notice : :alert
     redirect_to(return_path, key => flash_message(count: count))
   end
@@ -93,11 +93,11 @@ class InvoiceListsController < CrudController
   private
 
   def entry
-    model_ivar_get || model_ivar_set(params[:invoice_list_id] ? find_entry : build_entry)
+    model_ivar_get || model_ivar_set(params[:invoice_run_id] ? find_entry : build_entry)
   end
 
   def find_entry
-    parent.invoice_lists.find(params[:invoice_list_id])
+    parent.invoice_runs.find(params[:invoice_run_id])
   end
 
   def list_entries
@@ -105,18 +105,18 @@ class InvoiceListsController < CrudController
   end
 
   def return_path # rubocop:todo Metrics/AbcSize
-    invoice_list_id = params[:invoice_list_id].presence
+    invoice_run_id = params[:invoice_run_id].presence
     if params[:singular]
-      if invoice_list_id
-        group_invoice_list_invoice_path(parent, invoice_list_id: invoice_list_id,
+      if invoice_run_id
+        group_invoice_run_invoice_path(parent, invoice_run_id: invoice_run_id,
           id: invoices.first.id)
       else
         group_invoice_path(parent, invoices.first)
       end
-    elsif params.dig(:invoice_list, :receiver_id)
-      group_invoice_lists_path(parent)
-    elsif invoice_list_id
-      group_invoice_list_invoices_path(parent, invoice_list_id: invoice_list_id, returning: true)
+    elsif params.dig(:invoice_run, :receiver_id)
+      group_invoice_runs_path(parent)
+    elsif invoice_run_id
+      group_invoice_run_invoices_path(parent, invoice_run_id: invoice_run_id, returning: true)
     else
       group_invoices_path(parent, returning: true)
     end
@@ -166,7 +166,7 @@ class InvoiceListsController < CrudController
     end
 
     if fixed_fees?
-      InvoiceLists::FixedFee.for(params[:fixed_fees]).prepare(entry) do |key, text|
+      InvoiceRuns::FixedFee.for(params[:fixed_fees]).prepare(entry) do |key, text|
         flash.now[key] = text
       end
     end
@@ -191,7 +191,7 @@ class InvoiceListsController < CrudController
       next unless permitted.dig(:invoice, :invoice_items_attributes)
 
       permitted.dig(:invoice, :invoice_items_attributes).each do |index, attrs|
-        parameters = params.dig(:invoice_list, :invoice, :invoice_items_attributes,
+        parameters = params.dig(:invoice_run, :invoice, :invoice_items_attributes,
           index, :dynamic_cost_parameters)
         attrs[:dynamic_cost_parameters] = parameters&.to_unsafe_hash || {}
       end

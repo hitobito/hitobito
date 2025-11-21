@@ -1,10 +1,10 @@
 require "spec_helper"
 
-describe "invoice_lists/_form.html.haml" do
+describe "invoice_runs/_form.html.haml" do
   let(:group) { groups(:bottom_layer_one) }
   let(:person) { people(:bottom_member) }
   let(:invoice) { group.invoices.build }
-  let(:invoice_list) { InvoiceList.new(group: group, recipient_ids: "1,2", invoice: invoice) }
+  let(:invoice_run) { InvoiceRun.new(group: group, recipient_ids: "1,2", invoice: invoice) }
   let(:dom) { Capybara::Node::Simple.new(render) }
 
   before do
@@ -12,9 +12,9 @@ describe "invoice_lists/_form.html.haml" do
       current_user: person,
       parent: group,
       cancel_url: "",
-      model_class: InvoiceList,
-      entry: invoice_list,
-      path_args: [group, invoice_list]
+      model_class: InvoiceRun,
+      entry: invoice_run,
+      path_args: [group, invoice_run]
     })
 
     allow(controller).to receive_messages(current_user: person)

@@ -8,17 +8,17 @@
 module Sheet
   class Invoice < Base
     def title
-      return ::Invoice.model_name.human(count: 2) unless invoice_list
+      return ::Invoice.model_name.human(count: 2) unless invoice_run
       if entry
         [entry.title, title_from_receiver].compact.join(" - ")
       else
-        [invoice_list.title, title_from_receiver].compact.join(" - ")
+        [invoice_run.title, title_from_receiver].compact.join(" - ")
       end
     end
 
     def parent_sheet
       @parent_sheet ||= begin
-        parent_sheet_class = invoice_list ? Sheet::InvoiceList : Sheet::Group
+        parent_sheet_class = invoice_run ? Sheet::InvoiceRun : Sheet::Group
         create_parent(parent_sheet_class)
       end
     end
@@ -33,12 +33,12 @@ module Sheet
 
     private
 
-    def invoice_list
-      @invoice_list ||= ::InvoiceList.find_by(id: view.params[:invoice_list_id])
+    def invoice_run
+      @invoice_run ||= ::InvoiceRun.find_by(id: view.params[:invoice_run_id])
     end
 
     def title_from_receiver
-      invoice_list.receiver_label if invoice_list.receiver
+      invoice_run.receiver_label if invoice_run.receiver
     end
   end
 end

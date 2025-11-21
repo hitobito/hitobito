@@ -36,7 +36,7 @@ These PDFs can then be downloaded by a print shop employee, who have their own a
 
 Letters with additional invoice options (invoice items).
 
-First, the PDF from the LetterDispatch is generated. After that, the Invoices for a given InvoiceList are generated and sent.
+First, the PDF from the LetterDispatch is generated. After that, the Invoices for a given InvoiceRun are generated and sent.
 
 ## `Message::BulkMail`
 

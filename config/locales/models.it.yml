@@ -351,7 +351,7 @@ it:
         one: Voce contabile
         many: Voci contabili
         other: Voci contabili
-      invoice_list:
+      invoice_run:
         one: Fattura collettiva
         many: Fatture collettive
         other: Fatture collettive
@@ -1316,7 +1316,7 @@ it:
         account: Conto
 
 
-      invoice_list:
+      invoice_run:
         title: Titolo
         receiver: Destinatario
         recipients_total: Destinatario complessivo

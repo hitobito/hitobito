@@ -7,8 +7,8 @@
 
 require "spec_helper"
 
-describe InvoiceLists::Receivers do
-  let(:config) { Settings.invoice_lists.fixed_fees.membership.receivers }
+describe InvoiceRuns::Receivers do
+  let(:config) { Settings.invoice_runs.fixed_fees.membership.receivers }
   let(:top_leader) { roles(:top_leader) }
 
   subject(:receivers) { described_class.new(config) }

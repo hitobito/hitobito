@@ -7,7 +7,7 @@
 
 # == Schema Information
 #
-# Table name: invoice_lists
+# Table name: invoice_runs
 #
 #  id                    :bigint           not null, primary key
 #  amount_paid           :decimal(15, 2)   default(0.0), not null
@@ -27,13 +27,13 @@
 #
 # Indexes
 #
-#  index_invoice_lists_on_creator_id                     (creator_id)
-#  index_invoice_lists_on_group_id                       (group_id)
-#  index_invoice_lists_on_receiver_type_and_receiver_id  (receiver_type,receiver_id)
+#  index_invoice_runs_on_creator_id                     (creator_id)
+#  index_invoice_runs_on_group_id                       (group_id)
+#  index_invoice_runs_on_receiver_type_and_receiver_id  (receiver_type,receiver_id)
 #
 
-class InvoiceList < ActiveRecord::Base
-  serialize :receivers, type: Array, coder: InvoiceLists::Receiver
+class InvoiceRun < ActiveRecord::Base
+  serialize :receivers, type: Array, coder: InvoiceRuns::Receiver
   serialize :invalid_recipient_ids, type: Array, coder: YAML
   belongs_to :group
   belongs_to :receiver, polymorphic: true

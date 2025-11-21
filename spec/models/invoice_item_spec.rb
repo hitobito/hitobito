@@ -125,14 +125,14 @@ describe InvoiceItem do
       }.to change { new_invoice.attributes }
     end
 
-    it "recalculates invoice list" do
-      invoice_list = InvoiceList.create!(group: invoice.group, title: new_invoice.title)
-      new_invoice.update!(invoice_list: invoice_list)
-      invoice_list.update_total
+    it "recalculates invoice run" do
+      invoice_run = InvoiceRun.create!(group: invoice.group, title: new_invoice.title)
+      new_invoice.update!(invoice_run: invoice_run)
+      invoice_run.update_total
       expect {
         item.update!(unit_cost: 20)
-        invoice_list.reload
-      }.to change { invoice_list.amount_total }.from(10).to(20)
+        invoice_run.reload
+      }.to change { invoice_run.amount_total }.from(10).to(20)
     end
   end
 

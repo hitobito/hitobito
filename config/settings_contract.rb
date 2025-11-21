@@ -18,7 +18,7 @@ class SettingsContract < Dry::Validation::Contract
         required(:block_after).maybe(:string)
       end
     end
-    required(:invoice_lists).schema do
+    required(:invoice_runs).schema do
       required(:fixed_fees).schema do
         required(:membership).schema do
           required(:enabled).filled(:bool)

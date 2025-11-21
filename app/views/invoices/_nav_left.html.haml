@@ -11,8 +11,8 @@
       = parent_group
       = link_to icon('link'), parent_group, class: 'inline'
     %ul
-      = nav t('navigation.invoices/single'), group_invoices_path(layer_id), %w(invoices), %w(invoice_lists evaluations)
-      = nav InvoiceList.model_name.human(count: 2), group_invoice_lists_path(layer_id), %w(invoice_lists)
+      = nav t('navigation.invoices/single'), group_invoices_path(layer_id), %w(invoices), %w(invoice_runs evaluations)
+      = nav InvoiceRun.model_name.human(count: 2), group_invoice_runs_path(layer_id), %w(invoice_runs)
       = nav t('navigation.invoices/evaluations'), group_invoices_evaluations_path(layer_id), %w(invoice_evaluations)
       = nav InvoiceArticle.model_name.human(count: 2), group_invoice_articles_path(layer_id), %w(invoice_articles)
       = nav t('navigation.admin'), group_invoice_config_path(layer_id), %w(invoice_config)

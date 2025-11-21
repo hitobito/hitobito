@@ -12,10 +12,10 @@
   :patch_file: hitobito_swb/app/domain/swb/export/tabular/people/people_address.rb
   :patch_file_line: 9
 - :method: :cancel_all_invoices
-  :constant: InvoiceListsController
+  :constant: InvoiceRunsController
   :wagon: swb
-  :source_file: hitobito/app/controllers/invoice_lists_controller.rb
-  :patch_file: hitobito_swb/app/controllers/swb/invoice_lists_controller.rb
+  :source_file: hitobito/app/controllers/invoice_runs_controller.rb
+  :patch_file: hitobito_swb/app/controllers/swb/invoice_runs_controller.rb
   :patch_file_line: 11
 - :method: :index
   :constant: JsonApi::EventsController

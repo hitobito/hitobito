@@ -26,8 +26,10 @@ export default class extends Controller {
     }).filter(v => v)
 
     if(filledOutLanguages.length > 0) {
+      this.globalizedFieldsDisplayTarget.classList.remove('d-none')
       this.globalizedFieldsDisplayTarget.textContent = `${this.additionalLanguagesTextValue}: ${filledOutLanguages.join(', ')}`;
     } else {
+      this.globalizedFieldsDisplayTarget.classList.add('d-none')
       this.globalizedFieldsDisplayTarget.textContent = '';
     }
   }

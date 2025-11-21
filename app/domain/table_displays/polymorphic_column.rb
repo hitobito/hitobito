@@ -46,9 +46,9 @@ module TableDisplays
         Object.const_get(klass) # constanize would return TableDisplays::Event
       end
 
-      model_classes
-        .find { |c| c.new.respond_to?(column_name) }
-        &.human_attribute_name(column_name)
+      model_classes.find do |c|
+        I18n.exists?("activerecord.attributes.#{c.model_name.i18n_key}.#{column_name}")
+      end&.human_attribute_name(column_name)
     end
   end
 end

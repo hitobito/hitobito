@@ -219,7 +219,6 @@ describe FormHelper do
       expect(option["data-default"]).to eq ""
     end
 
-
     it "uses correct values when locale is not default locale" do
       @list += [Fabricate.build(
         :event_kind, general_information: "A german description", general_information_en: "An english description"

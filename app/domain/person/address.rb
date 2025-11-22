@@ -22,7 +22,7 @@ class Person::Address
   # Use to populate invoices#recipient_address, might be overriden in wagons
   def for_invoice
     @addressable = additional_addresses.find(&:invoices?) || person
-    (person_and_company_name + short_address).compact.join("\n")
+    (person_and_company_name + full_address).compact.join("\n")
   end
 
   def for_household_letter(members)
@@ -64,7 +64,7 @@ class Person::Address
   delegate :company?, :additional_addresses, to: :person
 
   def person_and_company_name
-    return [name, address_care_of].compact_blank if addressable.is_a?(AdditionalAddress)
+    return [name].compact_blank if addressable.is_a?(AdditionalAddress)
 
     if company?
       [@person.company_name.to_s.squish, @person.full_name.to_s.squish].uniq.compact_blank

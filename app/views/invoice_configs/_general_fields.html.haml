@@ -7,7 +7,7 @@
 %h3.form-subtitle.mt-5= t('.payment')
 -# Show the old payee information as long the new information was not added yet.
 -# This logic can be removed as soon as all customers have migrated.
-- if [:payee_name, :payee_zip_code, :payee_town].any? { |key| entry.send(key).blank? }
+- if entry.payee.present? && [:payee_name, :payee_zip_code, :payee_town].any? { |key| entry.send(key).blank? }
   = f.labeled_input_field :payee, rows: 3, help: t('.deprecated_payee_help'), disabled: true
 
 = f.labeled_input_field :payee_name

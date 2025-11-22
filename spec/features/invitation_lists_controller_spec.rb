@@ -35,34 +35,4 @@ describe Event::InvitationListsController, js: true do
     expect(page).to have_content(/Einladung für #{role1.person.first_name} #{role1.person.last_name} als Teilnehmer\/-in wurde erstellt./)
     # rubocop:enable Layout/LineLength
   end
-
-  xit "mass-invite" do
-    visit group_people_path(top_layer)
-    click_link("Weitere Ansichten")
-    click_link("Gesamte Ebene")
-    find("input#all").click
-    click_link("Zu Veranstaltung hinzufügen")
-    click_link("Anlass (Einladung)")
-
-    expect(page).to have_content("Personen zu einem Anlass einladen")
-    fill_in(id: "q", with: event.name)
-
-    dropdown = find('ul[role="listbox"]')
-    expect(dropdown).to have_content(event.name)
-    find('ul[role="listbox"] li[role="option"]', text: event.name).click
-
-    find("select#role_type option")
-    # still broken: select never gets populated in tests,
-    # but works for manual tests
-
-    click_button("Einladen")
-
-    expect(page).to have_content(/erfolgreich zum Anlass #{event.name} eingeladen/)
-  end
-
-  xit "download invitation list" do
-    # Might be nice to add, but
-    # there seems to be no feature specs with a download
-    # so I have no idea where to start
-  end
 end

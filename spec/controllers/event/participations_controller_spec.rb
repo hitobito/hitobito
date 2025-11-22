@@ -1098,23 +1098,6 @@ describe Event::ParticipationsController do
       end
     end
 
-    # currently not implemented, view https://github.com/hitobito/hitobito/issues/2955
-    xit "GET#index sorts by extra event application question" do
-      TableDisplay.register_multi_column(Event::Participation, TableDisplays::Event::Participations::QuestionColumn)
-      table_display = top_leader.table_display_for(Event::Participation)
-      table_display.selected = %W[event_question_#{question.id}]
-      table_display.save!
-      role = Fabricate(:event_role, type: participation.roles.first.type)
-      other = Fabricate(:event_participation, event: course, roles: [role], active: true)
-
-      participation.answers.create!(question: question, answer: "GA")
-      other.answers.find { |a| a.question == question }.update(answer: "Halbtax")
-
-      get :index, params: {group_id: group.id, event_id: course.id,
-                           sort: "event_question_#{question.id}", sort_dir: :desc}
-      expect(assigns(:participations).first).to eq other
-    end
-
     it "GET#index exports to csv using TableDisplay" do
       get :index, params: {group_id: group.id, event_id: course.id, selection: true}, format: :csv
       expect(flash[:notice]).to match(

@@ -89,20 +89,6 @@ describe SearchStrategies::PersonSearch do
       it "does not throw error when user enters invalid date" do
         expect { search_class("43.45.2000").search_fulltext }.not_to raise_error
       end
-
-      # flacky
-      xit "finds deleted people" do
-        result = search_class(@deleted_leader.last_name[0..5]).search_fulltext
-
-        expect(result).to include(@deleted_leader)
-      end
-
-      # flacky
-      xit "finds deleted, not accessible people" do
-        result = search_class(@deleted_bg_member.last_name[0..5]).search_fulltext
-
-        expect(result).to include(@deleted_bg_member)
-      end
     end
 
     context "as leader" do

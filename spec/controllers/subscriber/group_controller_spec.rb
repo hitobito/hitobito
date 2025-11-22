@@ -27,18 +27,13 @@ describe Subscriber::GroupController do
           group.class.static_name = false
         end
 
-        # TODO: Postgres discuss this issue with Niklas (SearchStrategies)
         context "top group" do
           before do
             get :query, params: {q: "bot", group_id: group.id, mailing_list_id: list.id}
           end
 
           it { is_expected.to match(/#{label} → Bottom One/) }
-          xit { is_expected.to match(/Bottom One → Group 11/) }
-          xit { is_expected.to match(/Bottom One → Group 12/) }
           it { is_expected.to match(/#{label} → Bottom Two/) }
-          xit { is_expected.to match(/Bottom Two → Group 21/) }
-          xit { is_expected.not_to match(/Bottom One → Group 111/) }
 
           context "archived bottom layer" do
             before do

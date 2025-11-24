@@ -458,11 +458,11 @@ fr:
       managed:
         update:
           flash:
-            privacy_policy_not_accepted: 'Um die Anmeldung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden.'
+            privacy_policy_not_accepted: 'Pour terminer l''inscription, il faut accepter la déclaration de protection des données.'
 
         edit:
-          title: Neues Kind registrieren und am Anlass anmelden
-          save: Weiter
+          title: Saisir un nouvel enfant et l'inscrire à l'événement
+          save: Continuer
 
     participations:
       edit:

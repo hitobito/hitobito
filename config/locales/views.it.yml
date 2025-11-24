@@ -182,10 +182,10 @@ it:
 
   dropdown/event/participant_add:
     as: "come %{role}"
-    register_new_managed: Neues Kind erfassen und anmelden
+    register_new_managed: Registrare e iscrivere un nuovo bambino
     disabled_messages:
-      already_exists: 'ist bereits angemeldet'
-      cannot_see_event: 'darf den Anlass nicht sehen'
+      already_exists: 'È già registrato'
+      cannot_see_event: 'Non ha il permesso di vedere l''evento'
 
   dropdown/event/participation/mail_dispatch:
     title: Inviare e-mail
@@ -458,11 +458,11 @@ it:
       managed:
         update:
           flash:
-            privacy_policy_not_accepted: 'Um die Anmeldung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden.'
+            privacy_policy_not_accepted: 'Per completare la registrazione è necessario accettare la dichiarazione sulla protezione dei dati'
 
         edit:
-          title: Neues Kind registrieren und am Anlass anmelden
-          save: Weiter
+          title: Registrare un nuovo bambino e iscriverlo all'evento
+          save: Continuare
 
     participations:
       edit:
@@ -516,9 +516,9 @@ it:
         caption: Disiscriversi
         confirmation: "Sei sicuro di volerti disiscrivere da questo evento?"
         managed:
-          explanation: "%{person} ist für diesen Anlass angemeldet."
-          pending: "%{person} ist für diesen Anlass vorangemeldet. Die Anmeldung ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden."
-          waiting_list: "%{person} ist auf der Warteliste für diesen Anlass."
+          explanation: "%{person}è iscritto a questo evento."
+          pending: "%{person}è pre-iscritto a questo evento. La registrazione non è ancora definitiva e deve essere confermata dall'organizzatore dell'evento."
+          waiting_list: "%{person} è sulla lista d'attesa per questo evento."
 
     qualifications:
       index:
@@ -530,12 +530,12 @@ it:
     register:
       register:
         title:
-          participant: Kontaktdaten der teilnehmenden Person erfassen
-          manager: Kontaktdaten der erziehungsberechtigten Person
+          participant: Registrare i dati di contatto del partecipante
+          manager: Dati di contatto del genitore o tutore legale.
         flash:
           privacy_policy_not_accepted: Per completare la registrazione, è necessario accettare la dichiarazione sulla protezione dei dati.
         email_check:
-          enter_email: Bitte gib deine E-Mailadresse ein, mit der du dich registrieren möchtest.
+          enter_email: Indicare l'indirizzo e-mail con cui si desidera effettuare la registrazione.
       index:
         sign_in: Iscriversi
         login: Login
@@ -543,7 +543,7 @@ it:
       email_check:
         next: avanti
         enter_email: Inserisci per favore il tuo indirizzo email, affinché tu possa iscriverti all'evento.
-        next_for_manager: Mein Kind anmelden
+        next_for_manager: Iscrivere il/la mio bambino/a
       manager_fields:
         manager_first_name: Vorname erziehungsberechtigte Person
         manager_last_name: Nachname erziehungsberechtigte Person

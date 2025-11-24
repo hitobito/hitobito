@@ -59,7 +59,7 @@ fr:
         event/participation_contact_datas/managed:
           attributes:
             base:
-              duplicates_present: Diese Person existiert bereits. Bitte kontaktiere die Adressverwaltung um sie als dein Kind zu registrieren.
+              duplicates_present: Cette personne existe déjà. Veuillez contacter le.a gestionnaire d'adresses pour l'enregistrer comme votre enfant.
         roles/termination:
           attributes:
             terminate_on:
@@ -630,10 +630,10 @@ fr:
 
       people_managers:
         manager_id: Verwalter*in
-        managed_id: Kind
+        managed_id: Enfant
 
       people_manageds:
-        manager_id: Kind
+        manager_id: Enfant
         managed_id: Verwalter*in
 
       person_duplicate:
@@ -1421,7 +1421,7 @@ fr:
         id_must_not_be_set: ID darf nicht gesetzt sein
         role_resource:
           group_id:
-            unwritable_attribute: kann nicht geändert werden
+            unwritable_attribute: Ne peut pas être modifié
           person_id:
             unwritable_attribute: kann nicht geändert werden
           type:

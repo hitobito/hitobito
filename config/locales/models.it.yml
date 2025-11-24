@@ -59,7 +59,7 @@ it:
         event/participation_contact_datas/managed:
           attributes:
             base:
-              duplicates_present: Diese Person existiert bereits. Bitte kontaktiere die Adressverwaltung um sie als dein Kind zu registrieren.
+              duplicates_present: Questa persona esiste già. Contattare il/la responsabilie della gestione gli indirizzi per registrarla come tuo figlio.
         roles/termination:
           attributes:
             terminate_on:
@@ -615,25 +615,25 @@ it:
         self_registration_reason: Motivo dell'ingresso
         self_registration_reason_text: Motivo dell'ingresso
         self_registration_reason_custom_text: Motivo di ingresso definito dall'utente
-        managers: Verwalter*innen
-        manageds: Kinder
-        people_managers: Verwalter*innen
-        people_manageds: Kinder
-        people_managers_attributes: Verwalter*innen
-        people_manageds_attributes: Kinder
-        readable_manageds: Kinder
+        managers: Amministratori/amministratrici
+        manageds: Bambini
+        people_managers: Amministratori/amministratrici
+        people_manageds: Bambini
+        people_managers_attributes: Amministratori/amministratrici
+        people_manageds_attributes: Bambini
+        readable_manageds: Bambini
 
       people_manager:
-        manager_id: Verwalter*in
-        managed_id: Kind
+        manager_id: Amministratore/amministratrice
+        managed_id: Bambino
 
       people_managers:
-        manager_id: Verwalter*in
-        managed_id: Kind
+        manager_id: Amministratore/amministratrice
+        managed_id: Bambino
 
       people_manageds:
-        manager_id: Kind
-        managed_id: Verwalter*in
+        manager_id: Bambino
+        managed_id: Amministratore/amministratrice
 
       person_duplicate:
         birth_year: Anno di nascita
@@ -712,12 +712,12 @@ it:
         state: Stato
         name: Nome
         number: Numero
-        motto: Motto
+        motto: Tema
         cost: Costi
         contact: Persona di contatto
         notify_contact_on_participations: Avvisare della nuova registrazione via e-mail la persona di contatto
         maximum_participants: Numero massimo di partecipanti
-        minimum_participants: Numero massimo di partecipanti
+        minimum_participants: Numero minimo di partecipanti
         contact_id: Persona di contatto
         description: Descrizione
         location: Luogo / Indirizzo
@@ -1398,7 +1398,7 @@ it:
         layer_full: Diritti di lettura e scrittura per questo livello
         layer_and_below_full: Diritti di lettura e scrittura per questo livello e per i livelli inferiori
         people: Persone
-        register_people: Neue Personen registrieren (braucht Schreibrechte)
+        register_people: Registrare una nuova persona (richiede autorizzazione)
         groups: Gruppi
         events: Eventi
         invoices: Fatture
@@ -1417,19 +1417,19 @@ it:
   api:
     errors:
       resources:
-        id_must_not_be_set: ID darf nicht gesetzt sein
+        id_must_not_be_set: L'ID non deve essere configurato
         role_resource:
           group_id:
-            unwritable_attribute: kann nicht geändert werden
+            unwritable_attribute: Non può essere modificato
           person_id:
-            unwritable_attribute: kann nicht geändert werden
+            unwritable_attribute: Non può essere modificato
           type:
-            unwritable_attribute: kann nicht geändert werden
+            unwritable_attribute: Non può essere modificato
         self_registration_resource:
           adult_consent:
-            must_be_accepted: muss akzeptiert werden
+            must_be_accepted: Deve essere accettato
           privacy_policy_accepted:
-            must_be_accepted: muss akzeptiert werden
+            must_be_accepted: Deve essere accettato
 
   doorkeeper:
     scopes:

@@ -193,8 +193,6 @@ class Event::Question < ActiveRecord::Base
       choices_in_lang.split(",", -1).collect(&:strip).presence || [""]
     end
 
-    return [] if choice_items_by_translation.all? { |choice_items| choice_items == [""] }
-
     choice_items_by_choice = normalize_2d_array(choice_items_by_translation).transpose
     choice_items_by_choice.map do |choice_translations|
       Globalized.languages.zip(choice_translations).to_h

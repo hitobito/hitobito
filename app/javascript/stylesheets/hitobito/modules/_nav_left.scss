@@ -32,29 +32,32 @@
   }
 
   a.is-active,
-  li.is-active > a {
+  li.is-active>a {
     background-color: desaturate(lighten($link-color, 50%), 20%);
     border-left: 3px solid $link-color;
   }
 
   a.is-archived,
-  li.is-archived > a {
+  li.is-archived>a {
     color: desaturate(lighten($link-color, 20%), 80%);
   }
 
   .nav-left-section {
     background-color: $gray-lighter;
     border-top: 1px solid $gray-light;
-    & > a {
+
+    &>a {
       font-size: 1.2rem;
       padding: 0.9rem;
       padding-left: $nav-left-padding;
+
       i {
         width: $nav-left-icon-width + 0.5rem;
         margin-left: -0.5rem;
         text-align: center;
       }
     }
+
     &.active {
       background-color: $white;
       padding-bottom: 1rem;
@@ -63,6 +66,7 @@
     a.nav-left-close {
       font-size: 1rem;
       cursor: pointer; // to react to touch events
+
       i {
         width: auto;
       }
@@ -91,23 +95,27 @@
     border-left: 3px solid transparent;
   }
 
-  .nav-left-section-link ~ .divider,
-  .nav-left-list > li.divider:first-child {
+  .nav-left-section-link~.divider,
+  .nav-left-list>li.divider:first-child {
     margin-top: 0;
   }
 
   .options {
     padding: 1rem 0;
+
     .lang {
       white-space: nowrap;
     }
+
     .lang a {
       display: inline;
       padding: 0rem;
     }
+
     .lang {
       padding-left: $nav-left-padding-full;
     }
+
     .lang .active {
       color: $black;
       text-decoration: none;
@@ -121,19 +129,36 @@
   ul ul ul a {
     padding-left: 1 * $hierarchy-shift-width + $nav-left-padding-full;
   }
+
   ul ul ul ul a {
     padding-left: 2 * $hierarchy-shift-width + $nav-left-padding-full;
   }
+
   ul ul ul ul ul a {
     padding-left: 3 * $hierarchy-shift-width + $nav-left-padding-full;
   }
+
   ul ul ul ul ul ul ul a {
     padding-left: 4 * $hierarchy-shift-width + $nav-left-padding-full;
   }
+
   ul ul ul ul ul ul ul ul a {
     padding-left: 5 * $hierarchy-shift-width + $nav-left-padding-full;
   }
+
   ul ul ul ul ul ul ul ul ul a {
     padding-left: 6 * $hierarchy-shift-width + $nav-left-padding-full;
+  }
+
+  ul ul ul ul ul ul ul ul ul ul a {
+    padding-left: 7 * $hierarchy-shift-width + $nav-left-padding-full;
+  }
+
+  ul ul ul ul ul ul ul ul ul ul ul a {
+    padding-left: 8 * $hierarchy-shift-width + $nav-left-padding-full;
+  }
+
+  ul ul ul ul ul ul ul ul ul ul ul ul a {
+    padding-left: 9 * $hierarchy-shift-width + $nav-left-padding-full;
   }
 }

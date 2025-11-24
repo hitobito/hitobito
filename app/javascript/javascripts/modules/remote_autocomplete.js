@@ -189,8 +189,12 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
 
   // set insertFields function for nested-form gem
   window.nestedFormEvents.insertFields = function(content, assoc, link) {
-    var el = $(link).closest('form').find(`#${assoc}_fields`);
-    var nel = el.append($(content));
+    var target = $(link).data('target');
+    if (target) {
+      var nel = $(content).appendTo($(target));
+    } else {
+      var nel = $(content).insertBefore(link);
+    }
     nel.find("[data-provide=entity]").each(app.setupEntityTypeahead);
     return nel;
   };

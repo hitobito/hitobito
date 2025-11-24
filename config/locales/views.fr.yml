@@ -182,6 +182,10 @@ fr:
 
   dropdown/event/participant_add:
     as: "en tant que %{role}"
+    register_new_managed: Neues Kind erfassen und anmelden
+    disabled_messages:
+      already_exists: 'ist bereits angemeldet'
+      cannot_see_event: 'darf den Anlass nicht sehen'
 
   dropdown/event/participation/mail_dispatch:
     title: Envoyer un e-mail
@@ -449,6 +453,17 @@ fr:
       update:
         flash:
           privacy_policy_not_accepted: "Pour terminer l'inscription, il faut accepter la déclaration de protection des données."
+
+    participation_contact_data:
+      managed:
+        update:
+          flash:
+            privacy_policy_not_accepted: 'Pour terminer l''inscription, il faut accepter la déclaration de protection des données.'
+
+        edit:
+          title: Saisir un nouvel enfant et l'inscrire à l'événement
+          save: Continuer
+
     participations:
       edit:
         title: Inscription
@@ -502,6 +517,10 @@ fr:
         waiting_list: Tu es sur la liste d'attente pour cet événement.
         caption: Désinscrire
         confirmation: "Es-tu sûr/sure de vouloir annuler ton inscription à cet évènement?"
+        managed:
+          explanation: "%{person} ist für diesen Anlass angemeldet."
+          pending: "%{person} ist für diesen Anlass vorangemeldet. Die Anmeldung ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden."
+          waiting_list: "%{person} ist auf der Warteliste für diesen Anlass."
 
     qualifications:
       index:
@@ -512,9 +531,13 @@ fr:
 
     register:
       register:
-        title: Saisir les données de contact de la personne participante
+        title:
+          participant: Kontaktdaten der teilnehmenden Person erfassen
+          manager: Kontaktdaten der erziehungsberechtigten Person
         flash:
           privacy_policy_not_accepted: Pour terminer l'inscription, il faut accepter la déclaration de protection des données.
+        email_check:
+          enter_email: Bitte gib deine E-Mailadresse ein, mit der du dich registrieren möchtest.
       index:
         sign_in: Inscription
         login: Login
@@ -522,6 +545,10 @@ fr:
       email_check:
         next: Continuer
         enter_email: S'il te plaît, indique ton adresse e-mail pour t'inscrire à cet événement.
+        next_for_manager: Mein Kind anmelden
+      manager_fields:
+        manager_first_name: Vorname erziehungsberechtigte Person
+        manager_last_name: Nachname erziehungsberechtigte Person
 
     invitation_lists:
       create:
@@ -597,11 +624,15 @@ fr:
       add: "ajouter"
     banner_open_invitation:
       explanation: Tu as été invité à cet évènement.
+      managed:
+        explanation: "%{person} wurde zu diesem Anlass eingeladen."
       buttons:
         accept: Inscription
         decline: Désinscription
     banner_declined_invitation:
       explanation: Tu as été invité·e à cet événement et tu as annulé ton inscription.
+      managed:
+        explanation: "%{person} wurde zu diesem Anlass eingeladen und wurde abgemeldet."
     form:
       caption_external_applications: "Les personnes externes peuvent s'inscrire à cet événement."
       caption_prioritization: "Les participants peuvent indiquer deux autres cours alternatifs lors de l'inscription."
@@ -672,6 +703,7 @@ fr:
   event/participations:
     full_entry_label: "%{model_label} de <i>%{person}</i> dans <i>%{event}</i>"
     success: "%{full_entry_label} a été ajouté avec succès."
+    success_for_external_manager: '%{full_entry_label} wurde erfolgreich erstellt.'
     instructions: "Pour l'inscription définitive, tu dois imprimer cette page en utilisant l'option <i>imprimer</i>, puis la signer et l'envoyer par poste à l'adresse indiquée."
     export_enqueued: "l'exportation débute en arrière-plan et est téléchargée quand elle est terminée"
     waiting_list: "Toutes les places sont actuellement prises, l'inscription est sur la liste d'attente."
@@ -709,6 +741,8 @@ fr:
     registered: "Tes données personnelles ont été enregistrées. Prière d'apporter les indications complémentaires suivantes en vue de l'inscription."
     application_window_closed: "La fenêtre d'inscription pour cet événement est close."
     no_places_available: "Le nombre maximal de participants pour cet événement est déjà atteint."
+    email_sent_manager: 'Wir haben dir ein E-Mail mit einem Link geschickt, wo du dich oder dein Kind direkt für den Anlass anmelden kannst.'
+    registered_manager: 'Deine persönlichen Daten wurden aufgenommen. Du kannst nun deine Kinder via "Anmelden" Knopf anmelden'
 
   event/roles:
     full_entry_label: "Rôle <i>%{role}</i> pour <i>%{person}</i>"
@@ -867,6 +901,8 @@ fr:
       count: Nombre
       distribution: Répartition
     self_registration:
+      alert:
+        not_active: Die Selbstregistrierung ist in dieser Gruppe nicht möglich.
       show:
         meta_description: Page d'auto-inscription pour Hitobito
       form:
@@ -1902,6 +1938,8 @@ fr:
       filters_role_kind:
         active_today: ' Rôle actif actuel'
         active: le rôle était actif.
+        started: gestartete Rollen
+        started_help: Bezieht sich auf das "Von" Datum auf der Rolle
         created: le rôle a été établi.
         deleted: le rôle a été effacé.
         inactive: rôles inactifs ou qui n’existent pas
@@ -2218,6 +2256,15 @@ fr:
         update: "La demande d'accès pour <i>%{label}</i> a été actualisée: %{changeset}"
         destroy: "Il y a eu une réponse pour la demande d'accès de <i>%{label}</i>."
 
+      deleted_person: "Gelöschte Person"
+      people_manager:
+        create:
+          manager: "<i>%{label}</i> wurde als Verwalter*in hinzugefügt."
+          managed: "<i>%{label}</i> wurde als Kind hinzugefügt."
+        destroy:
+          manager: "<i>%{label}</i> wurde als Verwalter*in entfernt."
+          managed: "<i>%{label}</i> wurde als Kind entfernt."
+
     impersonate: "Le compte a été repris par %{user}."
     impersonation_done: "Le compte n'est plus utilisé par %{user}."
     password_override: "Le mot de passe de %{user} a été effacé. La connexion est empêchée jusqu'à ce qu'un nouveau mot de passe soit défini."
@@ -2295,3 +2342,13 @@ fr:
         next_button: Inscrire un invité
       new_event_guest_contact_data_form_title: Coordonnées de l'invité
       new_event_guest_participation_form_title: Inscrire un invité
+
+  people_managers:
+    section:
+      manageds_help: Du kannst nur Personen als Kinder hinzufügen, auf welche du Schreibzugriff hast.
+    common_heading: Kinder / Verwalter*innen
+    managers_heading: Verwalter*innen
+    manageds_heading: Kinder
+    create_managed_person_button: Kind erfassen
+    assign_managed_person_button: Kind zuweisen
+    assign_manager_person_button: Verwalter*in zuweisen

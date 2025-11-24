@@ -56,6 +56,10 @@ fr:
       messages:
         record_invalid: 'Échec du contrôle de validité: %{errors}'
       models:
+        event/participation_contact_datas/managed:
+          attributes:
+            base:
+              duplicates_present: Cette personne existe déjà. Veuillez contacter le.a gestionnaire d'adresses pour l'enregistrer comme votre enfant.
         roles/termination:
           attributes:
             terminate_on:
@@ -146,6 +150,9 @@ fr:
             base:
               max_one_additional_invoice_address: Une seule adresse peut être choisie comme adresse de facturation.
               additional_address_labels_must_be_unique: Les désignations des autres adresses doivent être uniques.
+              cannot_have_managers_and_manageds: '%{name} kann nicht sowohl Verwalter*innen als auch Kinder haben.'
+              manager_already_managed: Verwalter*in konnte nicht hinzugefügt werden, da er/sie bereits verwaltet wird.
+              managed_already_manager: Kind konnte nicht hinzugefügt werden, da es bereits Verwalter*in ist.
             email:
               taken: >
                   a déjà été attribué. Cette adresse doit être unique pour chaque
@@ -162,6 +169,13 @@ fr:
               taken: a déjà été demandé
         person_duplicates:
           invalid_role: "Le rôle %{role} de %{person} n'est pas valable pour la fusion, car l'autre personne a peut-être déjà un rôle qui n'autorise plus ce rôle, celui-ci doit être corrigé/supprimé manuellement. Info: %{message}"
+        people_manager:
+          manager_and_managed_the_same: Verwalter*in und Kind müssen unterschiedliche Personen sein.
+
+          attributes:
+            manager_id:
+              taken: ist bereits gesetzt.
+          manager_and_managed_the_same: kann sich nicht selber verwalten.
         qualification:
           attributes:
             qualification_kind_id:
@@ -422,6 +436,10 @@ fr:
         one: Filtre
         many: Filtres
         other: Filtres
+      people_manager:
+        one: Verwalter*in
+        many: Verwalter*innen
+        other: Verwalter*innen
       phone_number:
         one: Numéro de téléphone
         many: Numéros de téléphone
@@ -598,6 +616,25 @@ fr:
         self_registration_reason: Motif d'entrée
         self_registration_reason_text: Motif d'entrée
         self_registration_reason_custom_text: Motif d'entrée prédéfini
+        managers: Verwalter*innen
+        manageds: Kinder
+        people_managers: Verwalter*innen
+        people_manageds: Kinder
+        people_managers_attributes: Verwalter*innen
+        people_manageds_attributes: Kinder
+        readable_manageds: Kinder
+
+      people_manager:
+        manager_id: Verwalter*in
+        managed_id: Kind
+
+      people_managers:
+        manager_id: Verwalter*in
+        managed_id: Enfant
+
+      people_manageds:
+        manager_id: Enfant
+        managed_id: Verwalter*in
 
       person_duplicate:
         birth_year: Année de naissance
@@ -1362,6 +1399,7 @@ fr:
         layer_full: Droits d'écriture et lecture à ce niveau
         layer_and_below_full: Droits d'écriture et lecture à ce niveau et aux niveaux inférieurs
         people: Personnes
+        register_people: Neue Personen registrieren (braucht Schreibrechte)
         groups: Groupes
         events: Événements
         invoices: Factures
@@ -1376,6 +1414,23 @@ fr:
         excluded_calendar_groups: Groups exclues
         included_calendar_tags: Seulement avec tags
         excluded_calendar_tags: Tags exclues
+
+  api:
+    errors:
+      resources:
+        id_must_not_be_set: ID darf nicht gesetzt sein
+        role_resource:
+          group_id:
+            unwritable_attribute: Ne peut pas être modifié
+          person_id:
+            unwritable_attribute: kann nicht geändert werden
+          type:
+            unwritable_attribute: kann nicht geändert werden
+        self_registration_resource:
+          adult_consent:
+            must_be_accepted: muss akzeptiert werden
+          privacy_policy_accepted:
+            must_be_accepted: muss akzeptiert werden
 
   doorkeeper:
     scopes:

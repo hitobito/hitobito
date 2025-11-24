@@ -56,6 +56,10 @@ it:
       messages:
         record_invalid: 'Il controllo di validità è fallito: %{errors}'
       models:
+        event/participation_contact_datas/managed:
+          attributes:
+            base:
+              duplicates_present: Questa persona esiste già. Contattare il/la responsabilie della gestione gli indirizzi per registrarla come tuo figlio.
         roles/termination:
           attributes:
             terminate_on:
@@ -146,6 +150,9 @@ it:
             base:
               max_one_additional_invoice_address: È possibile selezionare un solo indirizzo come indirizzo di fatturazione.
               additional_address_labels_must_be_unique: Le denominazioni degli altri indirizzi devono essere univoche.
+              cannot_have_managers_and_manageds: '%{name} kann nicht sowohl Verwalter*innen als auch Kinder haben.'
+              manager_already_managed: Verwalter*in konnte nicht hinzugefügt werden, da er/sie bereits verwaltet wird.
+              managed_already_manager: Kind konnte nicht hinzugefügt werden, da es bereits Verwalter*in ist.
             email:
               taken: >
                   è già stato assegnato. Questo indirizzo deve essere univoco, visto
@@ -161,6 +168,13 @@ it:
               taken: è già stato chiesto
         person_duplicates:
           invalid_role: "Il ruolo %{role} di %{person} non è valido per l'unione, poiché l'altra persona potrebbe già avere un ruolo che non consente più questo ruolo, che deve essere corretto/rimosso manualmente. Informazioni: %{message}"
+        people_manager:
+          manager_and_managed_the_same: Verwalter*in und Kind müssen unterschiedliche Personen sein.
+
+          attributes:
+            manager_id:
+              taken: ist bereits gesetzt.
+          manager_and_managed_the_same: kann sich nicht selber verwalten.
         qualification:
           attributes:
             qualification_kind_id:
@@ -421,6 +435,10 @@ it:
         one: filtro
         many: Filtri
         other: Filtri
+      people_manager:
+        one: Verwalter*in
+        many: Verwalter*innen
+        other: Verwalter*innen
       phone_number:
         one: numero di telefono
         many: Numeri di telefono
@@ -597,6 +615,25 @@ it:
         self_registration_reason: Motivo dell'ingresso
         self_registration_reason_text: Motivo dell'ingresso
         self_registration_reason_custom_text: Motivo di ingresso definito dall'utente
+        managers: Amministratori/amministratrici
+        manageds: Bambini
+        people_managers: Amministratori/amministratrici
+        people_manageds: Bambini
+        people_managers_attributes: Amministratori/amministratrici
+        people_manageds_attributes: Bambini
+        readable_manageds: Bambini
+
+      people_manager:
+        manager_id: Amministratore/amministratrice
+        managed_id: Bambino
+
+      people_managers:
+        manager_id: Amministratore/amministratrice
+        managed_id: Bambino
+
+      people_manageds:
+        manager_id: Bambino
+        managed_id: Amministratore/amministratrice
 
       person_duplicate:
         birth_year: Anno di nascita
@@ -675,12 +712,12 @@ it:
         state: Stato
         name: Nome
         number: Numero
-        motto: Motto
+        motto: Tema
         cost: Costi
         contact: Persona di contatto
         notify_contact_on_participations: Avvisare della nuova registrazione via e-mail la persona di contatto
         maximum_participants: Numero massimo di partecipanti
-        minimum_participants: Numero massimo di partecipanti
+        minimum_participants: Numero minimo di partecipanti
         contact_id: Persona di contatto
         description: Descrizione
         location: Luogo / Indirizzo
@@ -1361,6 +1398,7 @@ it:
         layer_full: Diritti di lettura e scrittura per questo livello
         layer_and_below_full: Diritti di lettura e scrittura per questo livello e per i livelli inferiori
         people: Persone
+        register_people: Registrare una nuova persona (richiede autorizzazione)
         groups: Gruppi
         events: Eventi
         invoices: Fatture
@@ -1375,6 +1413,23 @@ it:
         excluded_calendar_groups: Gruppi esclusi
         included_calendar_tags: Solo con tags
         excluded_calendar_tags: Tags esclusi
+
+  api:
+    errors:
+      resources:
+        id_must_not_be_set: L'ID non deve essere configurato
+        role_resource:
+          group_id:
+            unwritable_attribute: Non può essere modificato
+          person_id:
+            unwritable_attribute: Non può essere modificato
+          type:
+            unwritable_attribute: Non può essere modificato
+        self_registration_resource:
+          adult_consent:
+            must_be_accepted: Deve essere accettato
+          privacy_policy_accepted:
+            must_be_accepted: Deve essere accettato
 
   doorkeeper:
     scopes:

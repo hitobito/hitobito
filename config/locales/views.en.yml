@@ -181,6 +181,10 @@ en:
 
   dropdown/event/participant_add:
     as: "as %{role}"
+    register_new_managed: Neues Kind erfassen und anmelden
+    disabled_messages:
+      already_exists: 'ist bereits angemeldet'
+      cannot_see_event: 'darf den Anlass nicht sehen'
 
   dropdown/event/participation/mail_dispatch:
     title: E-Mail senden
@@ -448,6 +452,17 @@ en:
       update:
         flash:
           privacy_policy_not_accepted: "To complete the registration, you must agree to the data protection declaration."
+
+    participation_contact_data:
+      managed:
+        update:
+          flash:
+            privacy_policy_not_accepted: 'Um die Anmeldung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden.'
+
+        edit:
+          title: Neues Kind registrieren und am Anlass anmelden
+          save: Weiter
+
     participations:
       edit:
         title: Registration
@@ -499,6 +514,10 @@ en:
         waiting_list: You are on the waiting list for this event.
         caption: Cancel registration
         confirmation: "Are you sure, that you want to cancel your registration?"
+        managed:
+          explanation: "%{person} ist für diesen Anlass angemeldet."
+          pending: "%{person} ist für diesen Anlass vorangemeldet. Die Anmeldung ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden."
+          waiting_list: "%{person} ist auf der Warteliste für diesen Anlass."
 
     qualifications:
       index:
@@ -509,9 +528,13 @@ en:
 
     register:
       register:
-        title: Contact details of the participating person
+        title:
+          participant: Kontaktdaten der teilnehmenden Person erfassen
+          manager: Kontaktdaten der erziehungsberechtigten Person
         flash:
           privacy_policy_not_accepted: To complete the registration, you must agree to the data protection declaration.
+        email_check:
+          enter_email: Bitte gib deine E-Mailadresse ein, mit der du dich registrieren möchtest.
       index:
         sign_in: Register
         login: Login
@@ -519,6 +542,10 @@ en:
       email_check:
         next: Continue
         enter_email: Please enter your email address so you can register for the event.
+        next_for_manager: Mein Kind anmelden
+      manager_fields:
+        manager_first_name: Vorname erziehungsberechtigte Person
+        manager_last_name: Nachname erziehungsberechtigte Person
 
     invitation_lists:
       create:
@@ -591,11 +618,15 @@ en:
       add: "add"
     banner_open_invitation:
       explanation: You've been invited to this event.
+      managed:
+        explanation: "%{person} wurde zu diesem Anlass eingeladen."
       buttons:
         accept: Register
         decline: Cancel registration
     banner_declined_invitation:
       explanation: Du wurdest zu diesem Anlass eingeladen und hast dich abgemeldet.
+      managed:
+        explanation: "%{person} wurde zu diesem Anlass eingeladen und wurde abgemeldet."
     form:
       caption_external_applications: "Externals can sign up for this event"
       caption_prioritization: "Participants may set two additional courses as alternatives."
@@ -666,6 +697,7 @@ en:
   event/participations:
     full_entry_label: "%{model_label} from <i>%{person}</i> in <i>%{event}</i>"
     success: "%{full_entry_label} has successfully been created. Please check the contact data, and update them if necessary."
+    success_for_external_manager: '%{full_entry_label} wurde erfolgreich erstellt.'
     instructions: "For the definite registration you have to print the confirmation of participation by<i>printing</i>, sign it and send it by mail to the corresponding address."
     export_enqueued: "Export is started in the background and downloaded after completion."
     waiting_list: "All places are currently taken, registration is on the waiting list."
@@ -703,6 +735,8 @@ en:
     registered: "Your personal data are recorded. Please set now the information for the application."
     application_window_closed: "The login window for this event is closed."
     no_places_available: "Die maximale Teilnehmeranzahl für diesen Anlass ist bereits erreicht."
+    email_sent_manager: 'Wir haben dir ein E-Mail mit einem Link geschickt, wo du dich oder dein Kind direkt für den Anlass anmelden kannst.'
+    registered_manager: 'Deine persönlichen Daten wurden aufgenommen. Du kannst nun deine Kinder via "Anmelden" Knopf anmelden'
 
   event/roles:
     full_entry_label: "Role <i>%{role}</i> for <i>%{person}</i>"
@@ -855,6 +889,8 @@ en:
       count: Number
       distribution: Distribution
     self_registration:
+      alert:
+        not_active: Die Selbstregistrierung ist in dieser Gruppe nicht möglich.
       show:
         meta_description: Self-registration page for Hitobito
       form:
@@ -1850,6 +1886,8 @@ en:
       filters_role_kind:
         active_today: Aktuell aktive Rollen
         active: role was active
+        started: gestartete Rollen
+        started_help: Bezieht sich auf das "Von" Datum auf der Rolle
         created: role was made.
         deleted: role has been deleted.
         inactive: inaktive oder nie vorhandene Rollen
@@ -2164,6 +2202,15 @@ en:
         update: "Update of request for <i>%{label}</i>: %{changeset}"
         destroy: "Request for <i>%{label}</i> has been answered."
 
+      deleted_person: "Gelöschte Person"
+      people_manager:
+        create:
+          manager: "<i>%{label}</i> wurde als Verwalter*in hinzugefügt."
+          managed: "<i>%{label}</i> wurde als Kind hinzugefügt."
+        destroy:
+          manager: "<i>%{label}</i> wurde als Verwalter*in entfernt."
+          managed: "<i>%{label}</i> wurde als Kind entfernt."
+
     impersonate: "Account took over from %{user}"
     impersonation_done: "Account impersonation from %{user} ended."
     password_override: "Passwort wurde von %{user} auf null gesetzt und das Login verhindert, bis ein neues Passwort gesetzt wird."
@@ -2241,3 +2288,13 @@ en:
         next_button: Gast anmelden
       new_event_guest_contact_data_form_title: Kontaktdaten des Gasts
       new_event_guest_participation_form_title: Gast anmelden
+
+  people_managers:
+    section:
+      manageds_help: Du kannst nur Personen als Kinder hinzufügen, auf welche du Schreibzugriff hast.
+    common_heading: Kinder / Verwalter*innen
+    managers_heading: Verwalter*innen
+    manageds_heading: Kinder
+    create_managed_person_button: Kind erfassen
+    assign_managed_person_button: Kind zuweisen
+    assign_manager_person_button: Verwalter*in zuweisen

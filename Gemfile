@@ -20,7 +20,7 @@ gem "bcrypt"
 gem "bleib"
 gem "bootsnap", require: false
 gem "cancancan"
-gem "caxlsx"
+gem "caxlsx", "< 4.3.0" # 4.3.0 and upwards produces corrupted xlsx files
 gem "charlock_holmes"
 gem "commonmarker"
 gem "config"

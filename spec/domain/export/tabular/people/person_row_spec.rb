@@ -72,7 +72,7 @@ describe Export::Tabular::People::PersonRow do
   end
 
   context "qualifications" do
-    let!(:qualification) { Fabricate(:qualification, person:) }
+    let!(:qualification) { Fabricate(:qualification, qualified_at: 1.day.ago, person:) }
 
     it do
       expect(row.fetch(:"qualification_kind_#{qualification.qualification_kind.id}")).to eq qualification.finish_at.to_s

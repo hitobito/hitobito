@@ -149,10 +149,11 @@ class Event::Question < ActiveRecord::Base
   end
 
   def choices_attributes=(attributes)
-    attributes.filter! { |_, v| [1, "1", true, "true"].exclude?(v["_destroy"]) }
-    languages = [I18n.locale] + Globalized.additional_languages
-    choice_items_by_translation = attributes.values.map(&:values).transpose
+    attributes.filter! { |_, v| [1, "1", true, "true"].exclude?(v.delete("_destroy")) }
+    choice_items_by_translation =
+      attributes.values.map(&:values).filter { |v| v.any?(&:present?) }.transpose
 
+    languages = [I18n.locale] + Globalized.additional_languages
     languages.zip(choice_items_by_translation).each do |lang, choices|
       send("choices_#{lang}=", choices&.join(","))
     end
@@ -189,9 +190,11 @@ class Event::Question < ActiveRecord::Base
   # -> [{de: "Alter", en: "Age"}, {de: "Adresse", en: "Address"}]
   def choice_items_by_choice
     choice_items_by_translation = Globalized.languages.map do |lang|
-      choices_in_lang = send("choices_#{lang}") || ""
-      choices_in_lang.split(",", -1).collect(&:strip).presence || [""]
+      choices_in_lang = send("choices_#{lang}")
+      choices_in_lang&.split(",", -1)&.collect(&:strip)
     end
+
+    return [] unless choice_items_by_translation.any?
 
     choice_items_by_choice = normalize_2d_array(choice_items_by_translation).transpose
     choice_items_by_choice.map do |choice_translations|
@@ -200,11 +203,15 @@ class Event::Question < ActiveRecord::Base
   end
 
   # Normalizes an array of subarrays to make all subarrays the size of the
-  # biggest subarray so transposing is possible
+  # biggest subarray so transposing is possible. Falsy values are also converted
+  # to an array of matching size consisting of empty strings.
   def normalize_2d_array(array)
-    max_subarray_length = array.max_by(&:length).length
-    array.map do |sub_array|
-      sub_array.in_groups_of(max_subarray_length.nonzero? || 1, "").flatten
+    clean_array = array.map { |sub_array| sub_array || [] }
+    max_subarray_length = clean_array.max_by(&:length).length
+    clean_array.map do |sub_array|
+      next Array.new(max_subarray_length, "") if sub_array.empty?
+
+      sub_array.in_groups_of(max_subarray_length, "").flatten
     end
   end
 end

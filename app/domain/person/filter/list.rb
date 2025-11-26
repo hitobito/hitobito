@@ -38,7 +38,7 @@ class Person::Filter::List
   end
 
   def filter_with_selection
-    @ids.present? ? filter.where(id: @ids) : filter
+    (@ids.present? && @ids != %w[all]) ? filter.where(id: @ids) : filter
   end
 
   def filter

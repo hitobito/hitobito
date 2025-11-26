@@ -28,8 +28,12 @@ describe Person::Filter::List do
 
     context "with future role" do
       before do
-        Fabricate(bottom_group.role_types.first.sti_name.to_sym, person: top_leader, group: bottom_group,
-          start_on: 1.day.from_now)
+        Fabricate(
+          group.role_types.first.sti_name.to_sym,
+          person: person,
+          group: group,
+          start_on: 1.day.from_now
+        )
       end
 
       it "does not include future role" do

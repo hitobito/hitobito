@@ -26,8 +26,15 @@ require "spec_helper"
 describe PeopleFilter do
   context "#filter_chain=" do
     it "assigns hash to filter_chain" do
-      filter = PeopleFilter.new(filter_chain: {role: {role_type_ids: [2, 3, 4]}})
-      expect(filter.filter_chain.to_params["role"]).to eq(role_type_ids: "2-3-4")
+      filter = PeopleFilter.new(
+        filter_chain: {
+          role: {
+            role_type_ids: [2, 3, 4]
+          }
+        }
+      )
+      expect(filter.filter_chain.to_params["role"])
+        .to eq(role_type_ids: "2-3-4")
     end
   end
 end

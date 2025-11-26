@@ -2,6 +2,7 @@
 
 ## unreleased
 
+- Teilnehmende eines Anlasses können diesen immer ansehen, unabhängig von ihrer Rolle (hitobito_sac_cas#2110)
 - Das Erstellen von neuen Tags kann nun separat berechtigt werden (hitobito_sac_cas#2065)
 - Ein neuer Header weist nun, ausser in production, auf die momentan aktive Umgebung hin (#3702)
 - Eigener JSON:API Endpoint für Abos (mailing lists) (hitobito_pbs#382)

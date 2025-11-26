@@ -100,7 +100,7 @@ class EventAbility < AbilityDsl::Base
   def if_globally_visible_or_participating
     subject.globally_visible? ||
       subject.token_accessible?(user.shared_access_token) ||
-      participant_role? ||
+      participating? ||
       subject.external_applications?
   end
 
@@ -123,7 +123,7 @@ class EventAbility < AbilityDsl::Base
   end
 
   def for_participations_read_events_or_visible_fellow_participants
-    for_participations_read_events || (event.participations_visible? && participant_role?)
+    for_participations_read_events || (event.participations_visible? && participating?)
   end
 
   private
@@ -136,11 +136,7 @@ class EventAbility < AbilityDsl::Base
     user_context.course_offerers
   end
 
-  def participant_role?
-    user.event_participations
-      .select(&:active?)
-      .select { |p| p.event == event }
-      .flat_map(&:roles)
-      .any? { |r| r.is_a?(Event::Role::Participant) }
+  def participating?
+    user.event_participations.any? { |p| p.active? && p.event == event }
   end
 end

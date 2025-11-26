@@ -1180,7 +1180,15 @@ describe EventAbility do
     let(:role) do
       Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one))
     end
-    let(:participation) { Fabricate(:event_participation, participant: user, event: event) }
+
+    it "may show event" do
+      is_expected.to be_able_to(:show, event)
+    end
+
+    it "may not index participations" do
+      event.participations_visible = true
+      is_expected.not_to be_able_to(:index_participations, event)
+    end
 
     context Event::Participation do
       it "may create his participation" do
@@ -1188,13 +1196,31 @@ describe EventAbility do
         p.participant = user
         is_expected.to be_able_to(:create, p)
       end
+    end
 
-      it "may show his participation" do
-        is_expected.to be_able_to(:show, participation)
+    context "participating" do
+      let!(:participation) { Fabricate(:event_participation, participant: user, event: event) }
+
+      it "may index participations as participant" do
+        Fabricate(Event::Role::Participant.name.to_sym, participation: participation)
+        event.participations_visible = true
+        is_expected.to be_able_to(:index_participations, event)
       end
 
-      it "may not update his participation" do
-        is_expected.not_to be_able_to(:update, participation)
+      it "may index participations as leader" do
+        Fabricate(Event::Role::Leader.name.to_sym, participation: participation)
+        event.participations_visible = true
+        is_expected.to be_able_to(:index_participations, event)
+      end
+
+      context Event::Participation do
+        it "may show his participation" do
+          is_expected.to be_able_to(:show, participation)
+        end
+
+        it "may not update his participation" do
+          is_expected.not_to be_able_to(:update, participation)
+        end
       end
     end
   end
@@ -1203,26 +1229,61 @@ describe EventAbility do
     let(:role) do
       Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_two))
     end
-    let(:event) { Fabricate(:event, groups: [groups(:bottom_layer_one)]) }
-    let(:participation) { Fabricate(:event_participation, participant: user, event: event) }
+    let(:event) { Fabricate(:event, groups: [groups(:bottom_layer_one)], globally_visible: false) }
+
+    it "may not show event" do
+      is_expected.not_to be_able_to(:show, event)
+    end
+
+    it "may not index participations" do
+      event.participations_visible = true
+      is_expected.not_to be_able_to(:index_participations, event)
+    end
 
     context Event::Participation do
-      it "may create his participation" do
+      it "may not create his participation" do
         allow(participation.event).to receive_messages(application_possible?: true)
-        is_expected.to be_able_to(:create, participation)
-      end
-
-      it "may not create his participation if application is not possible" do
-        allow(participation.event).to receive_messages(application_possible?: false)
         is_expected.not_to be_able_to(:create, participation)
       end
+    end
 
-      it "may show his participation" do
-        is_expected.to be_able_to(:show, participation)
+    context "participating" do
+      let!(:participation) { Fabricate(:event_participation, participant: user, event: event) }
+
+      context "as participant" do
+        before { Fabricate(Event::Role::Participant.name.to_sym, participation: participation) }
+
+        it "may show event" do
+          is_expected.to be_able_to(:show, event)
+        end
+
+        it "may index participations as participant" do
+          event.participations_visible = true
+          is_expected.to be_able_to(:index_participations, event)
+        end
       end
 
-      it "may not update his participation" do
-        is_expected.not_to be_able_to(:update, participation)
+      context "as leader" do
+        before { Fabricate(Event::Role::Leader.name.to_sym, participation: participation) }
+
+        it "may show event" do
+          is_expected.to be_able_to(:show, event)
+        end
+
+        it "may index participations as leader" do
+          event.participations_visible = true
+          is_expected.to be_able_to(:index_participations, event)
+        end
+      end
+
+      context Event::Participation do
+        it "may show his participation" do
+          is_expected.to be_able_to(:show, participation)
+        end
+
+        it "may not update his participation" do
+          is_expected.not_to be_able_to(:update, participation)
+        end
       end
     end
   end
@@ -1320,12 +1381,12 @@ describe EventAbility do
 
     subject { Ability.new(person_without_roles) }
 
-    it "may show if external applications enabled" do
+    it "may show event if globally visible" do
       is_expected.to be_able_to(:show, events(:top_course))
     end
 
-    it "may not show if external applications disabled" do
-      events(:top_event)[:globally_visible] = false
+    it "may not show event if not globally visible" do
+      events(:top_event).globally_visible = false
       is_expected.to_not be_able_to(:show, events(:top_event))
     end
 

@@ -80,7 +80,7 @@ class Event::Question < ActiveRecord::Base
   def derive(disclosure: nil)
     return unless global? # prevent deriving questions that are attached to an event
 
-    dup.tap do |derived_question|
+    Event::Question.build(attributes.excluding("id")).tap do |derived_question|
       derived_question.derived_from_question = self
       derived_question.disclosure = disclosure if disclosure.present?
     end

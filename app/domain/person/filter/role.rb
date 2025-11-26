@@ -22,6 +22,7 @@ class Person::Filter::Role < Person::Filter::Base
     scope = scope
       .where(type_conditions(scope))
       .where(duration_conditions(scope))
+
     if include_archived?
       scope
     else

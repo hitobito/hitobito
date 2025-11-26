@@ -21,7 +21,6 @@
 @import "./modules/chip";
 @import "./modules/contactable";
 @import "./modules/event_kinds";
-@import "./modules/event_tags";
 @import "./modules/group";
 @import "./modules/hitobito_log";
 @import "./modules/households";
@@ -33,10 +32,10 @@
 @import "./modules/nav_left";
 @import "./modules/note";
 @import "./modules/person_duplicates";
-@import "./modules/person_tags";
 @import "./modules/privacy_policy";
 @import "./modules/profil";
 @import "./modules/step_wizard";
+@import "./modules/taggable";
 @import "./modules/totp";
 @import "./modules/turbo_progress_bar";
 @import "./modules/ui-datepicker";

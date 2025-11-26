@@ -17,8 +17,9 @@ describe "people/_attrs.html.haml" do
   end
 
   before do
-    assign(:qualifications, [])
     assign(:group, group)
+    assign(:qualifications, [])
+    assign(:tags, [])
     person.phone_numbers.create(label: "private phone", public: false)
     allow(view).to receive_messages(parent: top_group)
     allow(view).to receive_messages(entry: PersonDecorator.decorate(person))

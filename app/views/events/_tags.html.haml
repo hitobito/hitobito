@@ -6,22 +6,10 @@
 - if @tags
   %dl.dl-horizontal
     = labeled ActsAsTaggableOn::Tag.model_name.human(count: 2) do
-      = render 'event/tags/list', tags: @tags
+      - assignable = can?(:assign_tags, entry)
+      - path = group_event_tags_path(@group, entry)
 
-      - if can? :update, entry
-        %button.chip.chip-add.event-tag-add
-          = t('events.add_tag')
-          = icon(:plus)
+      = render 'taggable/list', tags: @tags, path: path, deletable: assignable
 
-        = form_for(entry.tags.new, url: group_event_tags_path(@group, entry), remote: true,
-                       html: {class: 'event-tags-add-form', style: 'display:none'}) do |f|
-          = f.text_field(:name, placeholder: t('events.add_tag'),
-                                        data: { provide: 'entity',
-                                                url: group_event_tags_query_path(group_id: @group.id,
-                                                                                 event_id: entry.id),
-                                                submit: true },
-                                                class: 'form-control form-control-sm')
-
-          %button.btn.btn-sm.btn-primary.d-inline{type: :submit}
-            = t('global.ok')
-            = spinner
+      - if assignable
+        = render 'taggable/form', path: path

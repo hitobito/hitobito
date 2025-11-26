@@ -1,1 +1,2 @@
-App.PersonTags.updateTags('#{escape_javascript(render 'person/tags/list', tags: @tags)}');
+- content = render 'taggable/list', tags: @tags, path: group_person_tags_path(@group, @person), deletable: true
+App.Taggable.updateTags('#{escape_javascript(content)}');

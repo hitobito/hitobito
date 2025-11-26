@@ -15,11 +15,11 @@
     %p
       = t('.only_persons_with')
       - subscription.subscription_tags.included.each do |subscription_tag|
-        %span.label.label-inverse.person-tag= format_tag_name(subscription_tag.tag)
+        %span.chip.tag.d-inline= format_tag_name(subscription_tag.tag)
   - if subscription.subscription_tags.excluded.any?
     %p
       = t('.persons_excluded_with')
       - subscription.subscription_tags.excluded.each do |subscription_tag|
-        %span.label.label-inverse.person-tag= format_tag_name(subscription_tag.tag)
+        %span.chip.tag.d-inline= format_tag_name(subscription_tag.tag)
 - else
   = subscription.to_s(:list)

@@ -100,8 +100,8 @@ xdescribe Subscriber::GroupController, js: true do
         expect(page).to have_content("Abonnent Bottom One wurde erfolgreich")
 
         expect(page).to have_content("Nur Personen mit:")
-        is_expected.to have_selector("span.person-tag", text: "Haupt-E-Mail ungültig")
-        is_expected.to have_selector("span.person-tag", text: "Weitere E-Mail ungültig")
+        is_expected.to have_selector("span.tag", text: "Haupt-E-Mail ungültig")
+        is_expected.to have_selector("span.tag", text: "Weitere E-Mail ungültig")
       end
     end
 
@@ -126,8 +126,8 @@ xdescribe Subscriber::GroupController, js: true do
         expect(page).to have_content("Abonnent Bottom One wurde erfolgreich")
 
         expect(page).to have_content("Personen ausschliessen mit:")
-        is_expected.to have_selector("span.person-tag", text: "Haupt-E-Mail ungültig")
-        is_expected.to have_selector("span.person-tag", text: "Weitere E-Mail ungültig")
+        is_expected.to have_selector("span.tag", text: "Haupt-E-Mail ungültig")
+        is_expected.to have_selector("span.tag", text: "Weitere E-Mail ungültig")
       end
     end
 
@@ -159,8 +159,8 @@ xdescribe Subscriber::GroupController, js: true do
 
         expect(page).to have_content("Personen ausschliessen mit:")
         expect(page).to have_content("Nur Personen mit:")
-        is_expected.to have_selector("span.person-tag", text: "Haupt-E-Mail ungültig", count: 2)
-        is_expected.to have_selector("span.person-tag", text: "Weitere E-Mail ungültig", count: 2)
+        is_expected.to have_selector("span.tag", text: "Haupt-E-Mail ungültig", count: 2)
+        is_expected.to have_selector("span.tag", text: "Weitere E-Mail ungültig", count: 2)
       end
     end
   end

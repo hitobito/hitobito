@@ -1,24 +1,27 @@
-.person-tags-category {
+.taggable-category {
   display: table-row;
   margin-top: 12px;
 }
-.person-tags-category-title,
-.person-tags-category-list {
+.taggable-category-title,
+.taggable-category-list {
   display: table-cell;
   padding-bottom: 6px;
   vertical-align: top;
 }
 
-.person-tags-category-title {
+.taggable-category-title {
   padding-bottom: 10px;
   padding-right: 10px;
   text-align: right;
   padding-top: 2px;
 }
 
-.person-tags-add-form {
-  display: flex;
+.taggable-add-form {
   margin-bottom: 4px;
+
+  .input-group {
+    position: static;
+  }
 
   input[type="text"] {
     margin-bottom: 0 !important;

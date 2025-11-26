@@ -44,7 +44,7 @@ describe EventAbility do
         is_expected.to be_able_to(:update, event)
       end
 
-      [:manage_tags, :manage_attachments].each do |action|
+      [:create_tags, :assign_tags, :manage_attachments].each do |action|
         it "may #{action} on event in his layer" do
           is_expected.to be_able_to(action, event)
         end
@@ -59,7 +59,7 @@ describe EventAbility do
         is_expected.to be_able_to(:update, other)
       end
 
-      [:manage_tags, :manage_attachments].each do |action|
+      [:create_tags, :assign_tags, :manage_attachments].each do |action|
         it "may #{action} on event in lower layer" do
           other = Fabricate(:event, groups: [groups(:bottom_layer_one)], globally_visible: false)
           is_expected.to be_able_to(action, other)
@@ -81,7 +81,7 @@ describe EventAbility do
           is_expected.not_to be_able_to(:update, other)
         end
 
-        [:manage_tags, :manage_attachments].each do |action|
+        [:create_tags, :assign_tags, :manage_attachments].each do |action|
           it "may not #{action} event" do
             other = Fabricate(:event, groups: [groups(:bottom_layer_two)])
             is_expected.not_to be_able_to(action, other)
@@ -230,7 +230,7 @@ describe EventAbility do
         is_expected.to be_able_to(:update, event)
       end
 
-      [:manage_tags, :manage_attachments].each do |action|
+      [:create_tags, :assign_tags, :manage_attachments].each do |action|
         it "may #{action} on event in his layer" do
           is_expected.to be_able_to(action, event)
         end
@@ -245,7 +245,7 @@ describe EventAbility do
         is_expected.not_to be_able_to(:update, other)
       end
 
-      [:manage_tags, :manage_attachments].each do |action|
+      [:create_tags, :assign_tags, :manage_attachments].each do |action|
         it "may not #{action} on event in lower layer" do
           other = Fabricate(:event, groups: [groups(:bottom_layer_one)])
           is_expected.not_to be_able_to(action, other)
@@ -374,7 +374,7 @@ describe EventAbility do
           is_expected.to be_able_to(:update, event)
         end
 
-        [:manage_tags, :manage_attachments].each do |action|
+        [:create_tags, :assign_tags, :manage_attachments].each do |action|
           it "may #{action} on event" do
             is_expected.to be_able_to(action, event)
           end
@@ -423,7 +423,7 @@ describe EventAbility do
           is_expected.to be_able_to(:update, event)
         end
 
-        [:manage_tags, :manage_attachments].each do |action|
+        [:create_tags, :assign_tags, :manage_attachments].each do |action|
           it "may #{action} on event" do
             is_expected.to be_able_to(action, event)
           end
@@ -449,7 +449,7 @@ describe EventAbility do
           is_expected.not_to be_able_to(:update, event)
         end
 
-        [:manage_tags, :manage_attachments].each do |action|
+        [:create_tags, :assign_tags, :manage_attachments].each do |action|
           it "may not #{action} on event" do
             is_expected.not_to be_able_to(action, event)
           end
@@ -601,7 +601,7 @@ describe EventAbility do
         is_expected.to be_able_to(:update, event)
       end
 
-      [:manage_tags, :manage_attachments].each do |action|
+      [:create_tags, :assign_tags, :manage_attachments].each do |action|
         it "may #{action} on event in his group" do
           is_expected.to be_able_to(action, event)
         end
@@ -620,7 +620,7 @@ describe EventAbility do
         is_expected.not_to be_able_to(:update, other)
       end
 
-      [:manage_tags, :manage_attachments].each do |action|
+      [:create_tags, :assign_tags, :manage_attachments].each do |action|
         it "may not #{action} on event in other group" do
           other = Fabricate(:event, groups: [groups(:bottom_group_one_two)])
           is_expected.not_to be_able_to(action, other)
@@ -816,7 +816,7 @@ describe EventAbility do
         is_expected.to be_able_to(:update, event)
       end
 
-      [:manage_tags, :manage_attachments].each do |action|
+      [:create_tags, :assign_tags, :manage_attachments].each do |action|
         it "may #{action} on his event" do
           is_expected.to be_able_to(action, event)
         end
@@ -835,7 +835,7 @@ describe EventAbility do
         is_expected.not_to be_able_to(:update, other)
       end
 
-      [:manage_tags, :manage_attachments].each do |action|
+      [:create_tags, :assign_tags, :manage_attachments].each do |action|
         it "may not #{action} on other event" do
           other = Fabricate(:event, groups: [group])
           is_expected.not_to be_able_to(action, other)
@@ -854,7 +854,7 @@ describe EventAbility do
           is_expected.to be_able_to(:update, event)
         end
 
-        [:manage_tags, :manage_attachments].each do |action|
+        [:create_tags, :assign_tags, :manage_attachments].each do |action|
           it "may not #{action} on event" do
             is_expected.to be_able_to(action, event)
           end
@@ -957,7 +957,7 @@ describe EventAbility do
         is_expected.not_to be_able_to(:update, event)
       end
 
-      [:manage_tags, :manage_attachments].each do |action|
+      [:create_tags, :assign_tags, :manage_attachments].each do |action|
         it "may not #{action} on his event" do
           is_expected.not_to be_able_to(action, event)
         end
@@ -981,7 +981,7 @@ describe EventAbility do
         is_expected.not_to be_able_to(:update, other)
       end
 
-      [:manage_tags, :manage_attachments].each do |action|
+      [:create_tags, :assign_tags, :manage_attachments].each do |action|
         it "may not #{action} on other event" do
           other = Fabricate(:event, groups: [groups(:bottom_layer_one)])
           is_expected.not_to be_able_to(action, other)
@@ -1105,7 +1105,7 @@ describe EventAbility do
         is_expected.not_to be_able_to(:update, event)
       end
 
-      [:manage_tags, :manage_attachments].each do |action|
+      [:create_tags, :assign_tags, :manage_attachments].each do |action|
         it "may not #{action} on his event" do
           is_expected.not_to be_able_to(action, event)
         end

@@ -2,22 +2,23 @@
 
 ## unreleased
 
-- Ein neuer Header weist nun, ausser in production, auf die momentan aktive Umgebung hin. (#3702)
+- Das Erstellen von neuen Tags kann nun separat berechtigt werden (hitobito_sac_cas#2065)
+- Ein neuer Header weist nun, ausser in production, auf die momentan aktive Umgebung hin (#3702)
 - Eigener JSON:API Endpoint für Abos (mailing lists) (hitobito_pbs#382)
-- Die Personal API Tokens Login-Methode wurde abgeschaltet, nachdem sie 4 Jahre lang zur Abschaltung angekündigt waren. Allfällige Drittapplikationen können stattdessen die sichereren Service Tokens oder OAuth API-Zugriff verwenden, und sollten auch dringend auf die neue JSON:API migrieren, da die alte read-only REST API auch bereits seit einem Jahr deprecated ist. (#3635)
+- Die Personal API Tokens Login-Methode wurde abgeschaltet, nachdem sie 4 Jahre lang zur Abschaltung angekündigt waren. Allfällige Drittapplikationen können stattdessen die sichereren Service Tokens oder OAuth API-Zugriff verwenden, und sollten auch dringend auf die neue JSON:API migrieren, da die alte read-only REST API auch bereits seit einem Jahr deprecated ist (#3635)
 - Die Registrierung neuer Personen ist neu auch via API möglich. Dies erlaubt es, externe Anmeldeformulare zu programmieren. Die Spielregeln sind dabei dieselben wie bei der Selbstregistrierung direkt im hitobito UI. Dazu wurden auch die Datenschutzerklärung und Einverständnis von Erziehungsberechtigten in der API verfügbar gemacht (#3440)
-- Neuer Personenfilter "im Zeitraum gestartete Rollen" (#3315).
+- Neuer Personenfilter "im Zeitraum gestartete Rollen" (#3315)
 
 ## Version 2.7
 
-- Die Optionen für den E-Mail Adressen Export erscheinen nun wie die übrigen Formate in einem Untermenu. (#3693)
+- Die Optionen für den E-Mail Adressen Export erscheinen nun wie die übrigen Formate in einem Untermenu (#3693)
 - CSV Import unterstützt Rollen Start und Enddatum (#3730)
 - Man kann bei Anlässen neu Begleitpersonen ("Gäste") anmelden, auch wenn sie kein Hitobito-Konto haben (hitobito_sww#208)
 - Duplikate können jetzt durchsucht werden (#3575)
-- Statt der eigenen Personenübersicht kann neu eine Landing Page nach dem Login angezeigt werden. Dies ist standardmässig auf allen Umgebungen deaktiviert. (hitobito_insieme#150)
-- Mehrere Adressen pro Person sind jetzt möglich, inklusive Label als Rechnungsadresse. Dieses Feature muss pro Umgebung aktiviert werden. (#3165, #3264, #3265)
-- Eventfragen werden nicht mehr alphabetisch sortiert. (#3545 - Revert vom letzten Release)
-- Rechnungsartikel werden überall auf zwei Dezimalstellen gerundet. (sww#245)
+- Statt der eigenen Personenübersicht kann neu eine Landing Page nach dem Login angezeigt werden. Dies ist standardmässig auf allen Umgebungen deaktiviert (hitobito_insieme#150)
+- Mehrere Adressen pro Person sind jetzt möglich, inklusive Label als Rechnungsadresse. Dieses Feature muss pro Umgebung aktiviert werden (#3165, #3264, #3265)
+- Eventfragen werden nicht mehr alphabetisch sortiert (#3545 - Revert vom letzten Release)
+- Rechnungsartikel werden überall auf zwei Dezimalstellen gerundet (sww#245)
 - Upgrade auf Rails 8 (#3292)
 - Profilbild, letztes Aktualisierungsdatum und zusätzliche Angaben zu Personen sowie der Typ von Rollen sind neu in der JSON:API verfügbar (#3612, hitobito_bdp#17)
 - Abmeldelinks werden nur für Abos angezeigt, für welche sich Personen selbst an-/abmelden können (hitobito_sac_cas#2018)
@@ -31,7 +32,7 @@
 ## Version 2.6
 
 - Texte und Hilfetexte verwenden nun den Inhalt einer Fallback Sprache, wenn die gewünschte Sprache leer ist
-- Personen Adressen können mit der Schweizer Post abgeglichen werden.
+- Personen Adressen können mit der Schweizer Post abgeglichen werden
 - Beim Zusammenführen von Duplikaten wird auch der Haushalt berücksichtigt (hitobito/hitobito_sww#275)
 - Referenznummer von Rechnung wird neu auch auf Empfangsschein angezegit (hitobito_sww#238)
 - Sortierung von Rechnungstabelle wird bei PDF Exports beachtet (hitobito_sww#237)

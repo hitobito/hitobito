@@ -40,7 +40,7 @@ class TagListsController < ListController
   end
 
   def manageable_people
-    @manageable_people ||= people.select { |person| current_ability.can?(:manage_tags, person) }
+    @manageable_people ||= people.select { |person| current_ability.can?(:assign_tags, person) }
   end
 
   def people

@@ -3,27 +3,18 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- if can?(:index_tags, entry) || can?(:manage_tags, entry)
-  %section.tags
+
+- assignable = can?(:assign_tags, entry)
+- if assignable || can?(:show_tags, entry)
+  %section
     %h2= ActsAsTaggableOn::Tag.model_name.human(count: 2)
-    = render 'person/tags/list', tags: @tags
 
-    - if can?(:manage_tags, entry)
-      %button.chip.chip-add.person-tag-add
-        = t('.add_tag')
-        = icon(:plus)
+    - path = group_person_tags_path(@group, entry)
 
-      = form_for(entry.tags.new, url: group_person_tags_path(@group, entry), remote: true,
-                 html: {class: 'person-tags-add-form', style: 'display:none'}) do |f|
-        = f.text_field(:name, placeholder: t('.add_tag'),
-                                  class: 'form-control form-control-sm me-3',
-                                  data: { provide: 'entity',
-                                          url: group_person_tags_query_path(group_id: @group.id,
-                                                                            person_id: entry.id),
-                                          submit: true })
+    = render 'taggable/list', tags: @tags, path: path, deletable: assignable
 
-        %button.btn.btn-sm.btn-primary{type: :submit}
-          = t('global.ok')
-          = spinner
+    - if assignable
+      = render 'taggable/form', path: path
+
     - elsif @tags.blank?
-      = t('.no_entry')
+      = t('taggable.no_entry')

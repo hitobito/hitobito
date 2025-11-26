@@ -114,7 +114,7 @@ class PersonSerializer < ApplicationSerializer
       :household_key
 
     property :picture, item.picture_full_url
-    property :tags, item.tag_list if h.can?(:index_tags, item)
+    property :tags, item.tag_list if h.can?(:show_tags, item)
 
     apply_extensions(:public)
 

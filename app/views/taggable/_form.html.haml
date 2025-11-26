@@ -1,0 +1,27 @@
+-#  Copyright (c) 2025, SAC CAS. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+
+%button.chip.chip-add.tag-add
+  = t('taggable.add_tag')
+  = icon(:plus)
+
+= form_for(entry.tags.new,
+           url: path,
+           remote: true,
+           html: {class: 'taggable-add-form', style: 'display: none;'}) do |f|
+
+  .input-group
+    = f.text_field(:name,
+                    placeholder: t('taggable.add_tag'),
+                    class: 'form-control form-control-sm me-3',
+                    data: { provide: 'entity', url: "#{path}/query", submit: true })
+
+    %button.btn.btn-sm.btn-primary{type: :submit}
+      = t('global.ok')
+      = spinner
+
+  .error-message.text-danger{style: 'display: none;'}
+    = t('taggable.cannot_create')

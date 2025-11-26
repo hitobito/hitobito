@@ -1,0 +1,8 @@
+.tags
+  - tags.each do |category, category_tags|
+    .taggable-category
+      .taggable-category-title{class: tags.length == 1 && category == :other ? 'd-none' : nil}
+        = format_tag_category(category)
+      .taggable-category-list
+        - category_tags.each do |tag|
+          = render 'taggable/tag', tag: tag, path: path, deletable: deletable

@@ -20,7 +20,7 @@ class EventAbility < AbilityDsl::Base
     permission(:any)
       .may(:index_full_participations)
       .for_participations_full_events
-    permission(:any).may(:update, :manage_tags, :manage_attachments).for_leaded_events
+    permission(:any).may(:update, :create_tags, :assign_tags, :manage_attachments).for_leaded_events
     permission(:any).may(:qualify, :qualifications_read).for_qualify_event
 
     permission(:group_full)
@@ -30,7 +30,7 @@ class EventAbility < AbilityDsl::Base
       .may(:index_invitations)
       .in_same_group_and_invitations_supported
     permission(:group_full)
-      .may(:create, :update, :destroy, :manage_tags, :manage_attachments)
+      .may(:create, :update, :destroy, :create_tags, :assign_tags, :manage_attachments)
       .in_same_group_if_active
 
     permission(:group_and_below_full)
@@ -40,7 +40,7 @@ class EventAbility < AbilityDsl::Base
       .may(:index_invitations)
       .in_same_group_or_below_and_invitations_supported
     permission(:group_and_below_full)
-      .may(:create, :update, :destroy, :manage_tags, :manage_attachments)
+      .may(:create, :update, :destroy, :create_tags, :assign_tags, :manage_attachments)
       .in_same_group_or_below_if_active
 
     permission(:layer_full)
@@ -49,7 +49,7 @@ class EventAbility < AbilityDsl::Base
     permission(:layer_full).may(:index_invitations).in_same_layer_and_invitations_supported
     permission(:layer_full)
       .may(:update, :create, :destroy, :application_market, :qualify,
-        :manage_tags, :manage_attachments)
+        :create_tags, :assign_tags, :manage_attachments)
       .in_same_layer_if_active
 
     permission(:layer_and_below_full)
@@ -59,7 +59,7 @@ class EventAbility < AbilityDsl::Base
       .may(:index_invitations)
       .in_same_layer_or_below_and_invitations_supported
     permission(:layer_and_below_full)
-      .may(:update, :manage_tags, :manage_attachments)
+      .may(:update, :create_tags, :assign_tags, :manage_attachments)
       .in_same_layer_or_below_if_active
     permission(:layer_and_below_full).may(:qualifications_read).in_same_layer
     permission(:layer_and_below_full)

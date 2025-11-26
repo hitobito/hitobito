@@ -1,0 +1,9 @@
+%span.chip.tag{data: {tag_id: tag.id, bs_toggle: 'tooltip', bs_html: 'true'}, title: tag.hitobito_tooltip }
+  = format_tag_name(tag)
+  - if deletable
+    = link_to icon(:times),
+              "#{path}?#{{name: tag.name}.to_param}",
+              method: :delete,
+              remote: true,
+              class: 'tag-remove',
+              data: { tag_id: tag.id }

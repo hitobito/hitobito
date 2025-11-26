@@ -1,1 +1,2 @@
-App.EventTags.updateTags('#{escape_javascript(render 'event/tags/list', tags: @tags)}');
+- content = render 'taggable/list', tags: @tags, path: group_event_tags_path(@group, @event), deletable: true
+App.Taggable.updateTags('#{escape_javascript(content)}');

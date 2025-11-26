@@ -61,8 +61,6 @@ describe Person::TagsController do
       }
 
       expect(bottom_member.tags.count).to eq(1)
-      expect(assigns(:tags).first.first).to eq(:other)
-      expect(assigns(:tags).first.second.first.name).to eq("lorem")
       is_expected.to redirect_to group_person_path(bottom_member.groups.first, bottom_member)
     end
 
@@ -87,7 +85,7 @@ describe Person::TagsController do
       }
 
       expect(bottom_member.tags.count).to eq(1)
-      expect(assigns(:tags).first.second.first.name).to eq("lorem")
+      expect(bottom_member.tags.first.name).to eq("lorem")
     end
 
     it "trims leading whitespace characters of word to find matching tag" do
@@ -100,7 +98,7 @@ describe Person::TagsController do
       }
 
       expect(bottom_member.tags.count).to eq(1)
-      expect(assigns(:tags).first.second.first.name).to eq("lorem")
+      expect(bottom_member.tags.first.name).to eq("lorem")
     end
 
     it "tag with space in between is not the same as tag without spaces" do
@@ -117,7 +115,7 @@ describe Person::TagsController do
       }
 
       expect(bottom_member.tags.count).to eq(2)
-      expect(assigns(:tags).last.second.first.name).to eq("lor em")
+      expect(bottom_member.tags.last.name).to eq("lor em")
     end
 
     it "trims whitespace around : to prevent error for nested tags" do
@@ -130,7 +128,23 @@ describe Person::TagsController do
       }
 
       expect(bottom_member.tags.count).to eq(1)
-      expect(assigns(:tags).first.second.first.name).to eq("lorem:ipsum")
+      expect(bottom_member.tags.first.name).to eq("lorem:ipsum")
+    end
+
+    context "as js" do
+      it "creates person tag" do
+        post :create, params: {
+          group_id: bottom_member.groups.first.id,
+          person_id: bottom_member.id,
+          acts_as_taggable_on_tag: {name: "lorem"},
+          format: :js
+        }
+
+        expect(bottom_member.tags.count).to eq(1)
+        expect(assigns(:tags).first.first).to eq(:other)
+        expect(assigns(:tags).first.second.first.name).to eq("lorem")
+        is_expected.to render_template("create")
+      end
     end
   end
 

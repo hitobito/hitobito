@@ -87,16 +87,16 @@ describe PersonAbility do
     it "may show notes, tags and security in same layer" do
       other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group))
       is_expected.to be_able_to(:index_notes, other.person.reload)
-      is_expected.to be_able_to(:index_tags, other.person)
-      is_expected.to be_able_to(:manage_tags, other.person)
+      is_expected.to be_able_to(:show_tags, other.person)
+      is_expected.to be_able_to(:assign_tags, other.person)
       is_expected.to be_able_to(:security, other.person)
     end
 
     it "may show notes, tags and security in lower layer" do
       other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one))
       is_expected.to be_able_to(:index_notes, other.person.reload)
-      is_expected.to be_able_to(:index_tags, other.person)
-      is_expected.to be_able_to(:manage_tags, other.person)
+      is_expected.to be_able_to(:show_tags, other.person)
+      is_expected.to be_able_to(:assign_tags, other.person)
       is_expected.to be_able_to(:security, other.person)
     end
 
@@ -273,21 +273,21 @@ describe PersonAbility do
     it "may show notes and tags in same layer" do
       other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one))
       is_expected.to be_able_to(:index_notes, other.person.reload)
-      is_expected.to be_able_to(:index_tags, other.person)
-      is_expected.to be_able_to(:manage_tags, other.person)
+      is_expected.to be_able_to(:show_tags, other.person)
+      is_expected.to be_able_to(:assign_tags, other.person)
     end
 
     it "may show notes and tags in lower group" do
       other = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one))
       is_expected.to be_able_to(:index_notes, other.person.reload)
-      is_expected.to be_able_to(:index_tags, other.person)
-      is_expected.to be_able_to(:manage_tags, other.person)
+      is_expected.to be_able_to(:show_tags, other.person)
+      is_expected.to be_able_to(:assign_tags, other.person)
     end
 
     it "may not show notes and tags in upper layer" do
       other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group))
-      is_expected.not_to be_able_to(:index_tags, other.person.reload)
-      is_expected.not_to be_able_to(:manage_tags, other.person)
+      is_expected.not_to be_able_to(:show_tags, other.person.reload)
+      is_expected.not_to be_able_to(:assign_tags, other.person)
     end
 
     it "may show person with ended role in upper layer" do
@@ -486,15 +486,15 @@ describe PersonAbility do
     it "may show notes and tags in same layer" do
       other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group))
       is_expected.to be_able_to(:index_notes, other.person.reload)
-      is_expected.to be_able_to(:index_tags, other.person)
-      is_expected.to be_able_to(:manage_tags, other.person)
+      is_expected.to be_able_to(:show_tags, other.person)
+      is_expected.to be_able_to(:assign_tags, other.person)
     end
 
     it "may not show notes and tags in lower layer" do
       other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one))
       is_expected.not_to be_able_to(:index_notes, other.person.reload)
-      is_expected.not_to be_able_to(:index_tags, other.person)
-      is_expected.not_to be_able_to(:manage_tags, other.person)
+      is_expected.not_to be_able_to(:show_tags, other.person)
+      is_expected.not_to be_able_to(:assign_tags, other.person)
     end
 
     it "may show person with ended role in layer" do
@@ -656,22 +656,22 @@ describe PersonAbility do
     it "may show notes and tags in same layer" do
       other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one))
       is_expected.to be_able_to(:index_notes, other.person.reload)
-      is_expected.to be_able_to(:index_tags, other.person)
-      is_expected.to be_able_to(:manage_tags, other.person)
+      is_expected.to be_able_to(:show_tags, other.person)
+      is_expected.to be_able_to(:assign_tags, other.person)
     end
 
     it "may show notes and tags in lower group" do
       other = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one))
       is_expected.to be_able_to(:index_notes, other.person.reload)
-      is_expected.to be_able_to(:index_tags, other.person)
-      is_expected.to be_able_to(:manage_tags, other.person)
+      is_expected.to be_able_to(:show_tags, other.person)
+      is_expected.to be_able_to(:assign_tags, other.person)
     end
 
     it "may not show notes and tags in upper layer" do
       other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group))
       is_expected.not_to be_able_to(:index_notes, other.person.reload)
-      is_expected.not_to be_able_to(:index_tags, other.person)
-      is_expected.not_to be_able_to(:manage_tags, other.person)
+      is_expected.not_to be_able_to(:show_tags, other.person)
+      is_expected.not_to be_able_to(:assign_tags, other.person)
     end
 
     it "may not show person with ended role in layer" do
@@ -771,15 +771,15 @@ describe PersonAbility do
     it "may not show notes and tags in same layer" do
       other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group))
       is_expected.not_to be_able_to(:index_notes, other.person.reload)
-      is_expected.not_to be_able_to(:index_tags, other.person)
-      is_expected.not_to be_able_to(:manage_tags, other.person)
+      is_expected.not_to be_able_to(:show_tags, other.person)
+      is_expected.not_to be_able_to(:assign_tags, other.person)
     end
 
     it "may not show notes and tags in lower layer" do
       other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one))
       is_expected.not_to be_able_to(:index_notes, other.person.reload)
-      is_expected.not_to be_able_to(:index_tags, other.person)
-      is_expected.not_to be_able_to(:manage_tags, other.person)
+      is_expected.not_to be_able_to(:show_tags, other.person)
+      is_expected.not_to be_able_to(:assign_tags, other.person)
     end
 
     it "may not show person with ended role in layer" do
@@ -1016,20 +1016,20 @@ describe PersonAbility do
 
     it "may index and manage tags in same group" do
       other = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: groups(:top_layer))
-      is_expected.to be_able_to(:index_tags, other.person.reload)
-      is_expected.to be_able_to(:manage_tags, other.person)
+      is_expected.to be_able_to(:show_tags, other.person.reload)
+      is_expected.to be_able_to(:assign_tags, other.person)
     end
 
     it "may index and manage tags in below group" do
       other = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group))
-      is_expected.to be_able_to(:index_tags, other.person.reload)
-      is_expected.to be_able_to(:manage_tags, other.person)
+      is_expected.to be_able_to(:show_tags, other.person.reload)
+      is_expected.to be_able_to(:assign_tags, other.person)
     end
 
     it "may not index or manage tags in below layer" do
       other = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one))
-      is_expected.not_to be_able_to(:index_tags, other.person.reload)
-      is_expected.not_to be_able_to(:manage_tags, other.person)
+      is_expected.not_to be_able_to(:show_tags, other.person.reload)
+      is_expected.not_to be_able_to(:assign_tags, other.person)
     end
 
     it "may create households" do
@@ -1131,14 +1131,14 @@ describe PersonAbility do
 
     it "may not index and manage tags in same group" do
       other = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: groups(:top_layer))
-      is_expected.not_to be_able_to(:index_tags, other.person.reload)
-      is_expected.not_to be_able_to(:manage_tags, other.person)
+      is_expected.not_to be_able_to(:show_tags, other.person.reload)
+      is_expected.not_to be_able_to(:assign_tags, other.person)
     end
 
     it "may not index and manage tags in below group" do
       other = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group))
-      is_expected.not_to be_able_to(:index_tags, other.person.reload)
-      is_expected.not_to be_able_to(:manage_tags, other.person)
+      is_expected.not_to be_able_to(:show_tags, other.person.reload)
+      is_expected.not_to be_able_to(:assign_tags, other.person)
     end
 
     it "may not create households" do
@@ -1263,8 +1263,8 @@ describe PersonAbility do
 
     it "may index and manage tags in same group" do
       other = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one))
-      is_expected.to be_able_to(:index_tags, other.person.reload)
-      is_expected.to be_able_to(:manage_tags, other.person)
+      is_expected.to be_able_to(:show_tags, other.person.reload)
+      is_expected.to be_able_to(:assign_tags, other.person)
     end
 
     it "may create households" do

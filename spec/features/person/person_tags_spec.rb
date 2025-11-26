@@ -19,7 +19,7 @@ describe "Person Tags", js: true do
   end
 
   context "listing" do
-    context "user without :index_tags permission" do
+    context "user without :show_tags permission" do
       let(:user) { secretary }
 
       it "does not show tags section" do
@@ -27,7 +27,7 @@ describe "Person Tags", js: true do
       end
     end
 
-    context "user with :index_tags permission" do
+    context "user with :show_tags permission" do
       let(:user) { leader }
 
       it "lists tags without categories" do
@@ -36,10 +36,10 @@ describe "Person Tags", js: true do
         visit group_person_path(group_id: group.id, id: person.id)
 
         expect(page).to have_content("Tags")
-        expect(all(".person-tags-category").length).to eq(1)
-        expect(page).to have_no_selector(".person-tags-category-title")
-        expect(all(".person-tag")[0].text).to eq("ipsum")
-        expect(all(".person-tag")[1].text).to eq("lorem")
+        expect(all(".taggable-category").length).to eq(1)
+        expect(page).to have_no_selector(".taggable-category-title")
+        expect(all(".tag")[0].text).to eq("ipsum")
+        expect(all(".tag")[1].text).to eq("lorem")
       end
 
       it "lists tags grouped by categories" do
@@ -49,15 +49,15 @@ describe "Person Tags", js: true do
         visit group_person_path(group_id: group.id, id: person.id)
 
         expect(page).to have_content("Tags")
-        expect(all(".person-tags-category").length).to eq(4)
-        expect(all(".person-tags-category-title").map(&:text)).to eq(%w[fruit vegetable Validierung Andere])
-        expect(all(".person-tags-category")[0].all(".person-tag").map(&:text))
+        expect(all(".taggable-category").length).to eq(4)
+        expect(all(".taggable-category-title").map(&:text)).to eq(%w[fruit vegetable Validierung Andere])
+        expect(all(".taggable-category")[0].all(".tag").map(&:text))
           .to eq(%w[apple banana])
-        expect(all(".person-tags-category")[1].all(".person-tag").map(&:text))
+        expect(all(".taggable-category")[1].all(".tag").map(&:text))
           .to eq(%w[potato])
-        expect(all(".person-tags-category")[2].all(".person-tag").map(&:text))
+        expect(all(".taggable-category")[2].all(".tag").map(&:text))
           .to eq(["Haupt-E-Mail ungültig"])
-        expect(all(".person-tags-category")[3].all(".person-tag").map(&:text))
+        expect(all(".taggable-category")[3].all(".tag").map(&:text))
           .to eq(%w[pizza])
       end
     end
@@ -72,46 +72,46 @@ describe "Person Tags", js: true do
 
     it "adds newly created tags" do
       expect(page).to have_content("Tags")
-      expect(page).to have_selector(".person-tag-add")
-      expect(page).to have_no_selector(".person-tags-add-form")
+      expect(page).to have_selector(".tag-add")
+      expect(page).to have_no_selector(".taggable-add-form")
 
-      find(".person-tag-add").click
-      expect(page).to have_no_selector(".person-tag-add")
-      expect(page).to have_selector(".person-tags-add-form")
+      find(".tag-add").click
+      expect(page).to have_no_selector(".tag-add")
+      expect(page).to have_selector(".taggable-add-form")
 
-      within ".person-tags-add-form" do
+      within ".taggable-add-form" do
         fill_in "acts_as_taggable_on_tag[name]", with: "pizza"
       end
-      find(".person-tags-add-form button").click
-      expect(page).to have_selector(".person-tag", text: "pizza")
+      find(".taggable-add-form button").click
+      expect(page).to have_selector(".tag", text: "pizza")
       person.reload
       expect(person.tags.count).to eq(1)
       expect(person.tag_list).to eq(["pizza"])
-      expect(page).to have_selector(".person-tag-add")
-      expect(page).to have_no_selector(".person-tags-add-form")
+      expect(page).to have_selector(".tag-add")
+      expect(page).to have_no_selector(".taggable-add-form")
 
-      find(".person-tag-add").click
-      within ".person-tags-add-form" do
+      find(".tag-add").click
+      within ".taggable-add-form" do
         fill_in "acts_as_taggable_on_tag[name]", with: "pas"
       end
       expect(page).to have_selector('ul[role="listbox"] li[role="option"]', text: "pasta")
       find('ul[role="listbox"] li[role="option"]').click
-      find(".person-tags-add-form button").click
-      expect(page).to have_selector(".person-tag", text: "pasta")
+      find(".taggable-add-form button").click
+      expect(page).to have_selector(".tag", text: "pasta")
       person.reload
       expect(person.tags.count).to eq(2)
       expect(Set.new(person.tag_list)).to eq(Set.new(["pizza", "pasta"]))
 
-      find(".person-tag-add").click
-      within ".person-tags-add-form" do
+      find(".tag-add").click
+      within ".taggable-add-form" do
         fill_in "acts_as_taggable_on_tag[name]", with: "fruit:banana"
       end
-      find(".person-tags-add-form button").click
-      expect(page).to have_selector(".person-tags-category", count: 2)
-      expect(all(".person-tags-category-title").map(&:text)).to eq(%w[fruit Andere])
-      expect(all(".person-tags-category")[0].all(".person-tag").map(&:text))
+      find(".taggable-add-form button").click
+      expect(page).to have_selector(".taggable-category", count: 2)
+      expect(all(".taggable-category-title").map(&:text)).to eq(%w[fruit Andere])
+      expect(all(".taggable-category")[0].all(".tag").map(&:text))
         .to eq(%w[banana])
-      expect(all(".person-tags-category")[1].all(".person-tag").map(&:text))
+      expect(all(".taggable-category")[1].all(".tag").map(&:text))
         .to eq(%w[pasta pizza])
       person.reload
       expect(person.tags.count).to eq(3)
@@ -127,17 +127,17 @@ describe "Person Tags", js: true do
     end
 
     it "removes deleted tags" do
-      expect(page).to have_selector(".person-tags-category", count: 2)
-      expect(page).to have_selector(".person-tag-remove", count: 3)
+      expect(page).to have_selector(".taggable-category", count: 2)
+      expect(page).to have_selector(".tag-remove", count: 3)
 
-      find(".person-tag", text: "apple").find(".person-tag-remove").click
-      expect(page).to have_selector(".person-tags-category", count: 2)
-      expect(all(".person-tags-category")[0].all(".person-tag").map(&:text))
+      find(".tag", text: "apple").find(".tag-remove").click
+      expect(page).to have_selector(".taggable-category", count: 2)
+      expect(all(".taggable-category")[0].all(".tag").map(&:text))
         .to eq(%w[banana])
 
-      find(".person-tag", text: "banana").find(".person-tag-remove").click
-      expect(page).to have_selector(".person-tags-category", count: 1)
-      expect(all(".person-tags-category")[0].all(".person-tag").map(&:text))
+      find(".tag", text: "banana").find(".tag-remove").click
+      expect(page).to have_selector(".taggable-category", count: 1)
+      expect(all(".taggable-category")[0].all(".tag").map(&:text))
         .to eq(%w[pizza])
     end
   end

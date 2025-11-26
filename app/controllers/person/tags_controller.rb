@@ -1,81 +1,27 @@
 # frozen_string_literal: true
 
-class Person::TagsController < ApplicationController
-  class_attribute :permitted_attrs
+#  Copyright (c) 2022, Pfadibewegung Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
 
-  before_action :load_group
-  before_action :load_person
+class Person::TagsController < TaggableController
+  before_action :load_group, :load_person
 
   decorates :group, :person
 
-  respond_to :html
-
-  self.permitted_attrs = [:name]
-
-  def query
-    authorize!(:index_tags, @person)
-    tags = []
-
-    if params.key?(:q) && params[:q].size >= 3
-      tags = available_tags(params[:q]).map { |tag| {label: tag} }
-    end
-
-    render json: tags
-  end
-
-  def create
-    authorize!(:manage_tags, @person)
-    create_tag(permitted_params[:name])
-    @tags = person_tags
-
-    respond_to do |format|
-      format.html { redirect_to group_person_path(@group, @person) }
-      format.js # create.js.haml
-    end
-  end
-
-  def destroy
-    authorize!(:manage_tags, @person)
-    @person.tag_list.remove(params[:name])
-    @person.save!
-
-    respond_to do |format|
-      format.html { redirect_to group_person_path(@group, @person) }
-      format.js # destroy.js.haml
-    end
-  end
-
   private
 
-  def person_tags
+  def entry
     @person
-      .reload
-      .tags
-      .order(:name)
-      .grouped_by_category
   end
 
-  def create_tag(name)
-    return if name.blank?
-
-    ActsAsTaggableOn::Tagging.find_or_create_by!(
-      taggable: @person,
-      tag: ActsAsTaggableOn::Tag.find_or_create_by(name: name.strip.gsub(/\s*:\s*/, ":")),
-      context: "tags"
-    )
-  end
-
-  def permitted_params
-    params.require(:acts_as_taggable_on_tag).permit(permitted_attrs)
+  def entry_path
+    group_person_path(@group, @person)
   end
 
   def available_tags(query)
-    ActsAsTaggableOn::Tag
-      .where("name LIKE ?", "%#{query}%")
-      .where.not(name: excluded_tags)
-      .order(:name)
-      .limit(10)
-      .pluck(:name)
+    super.where.not(name: excluded_tags)
   end
 
   def excluded_tags

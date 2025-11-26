@@ -179,4 +179,115 @@ describe Event::Question do
       expect(derived_question.event).to eq(event)
     end
   end
+
+  describe "globalized choices" do
+    let(:event) { events(:top_course) }
+    let(:question) { event.application_questions.first }
+
+    it "should return choices if only one translation is filled out and others are empty strings" do
+      question.choices_de = "Ja, Nein"
+      Globalized.additional_languages.each do |lang|
+        question.send("choices_#{lang}=", "")
+      end
+
+      choices = question.choices
+
+      expect(choices.length).to eql(2)
+      expect(choices.first.choice).to eql("Ja")
+      expect(choices.first.choice_de).to eql("Ja")
+      expect(choices.first.choice_en).to eql("")
+      expect(choices.second.choice).to eql("Nein")
+      expect(choices.second.choice_de).to eql("Nein")
+      expect(choices.second.choice_fr).to eql("")
+    end
+
+    it "should return choices if only one translation is filled out and others are nil" do
+      question.choices_de = "Ja, Nein"
+      Globalized.additional_languages.each do |lang|
+        question.send("choices_#{lang}=", nil)
+      end
+
+      choices = question.choices
+
+      expect(choices.length).to eql(2)
+      expect(choices.first.choice).to eql("Ja")
+      expect(choices.first.choice_de).to eql("Ja")
+      expect(choices.first.choice_it).to eql("")
+      expect(choices.second.choice).to eql("Nein")
+      expect(choices.second.choice_de).to eql("Nein")
+      expect(choices.second.choice_fr).to eql("")
+    end
+
+    it "should return choices if only one translation is filled out and others are empty strings or nil" do
+      question.choices_de = "Ja, Nein"
+      question.choices_en = ""
+      question.choices_fr = nil
+      question.choices_it = nil
+
+      choices = question.choices
+
+      expect(choices.length).to eql(2)
+      expect(choices.first.choice).to eql("Ja")
+      expect(choices.first.choice_de).to eql("Ja")
+      expect(choices.first.choice_en).to eql("")
+      expect(choices.second.choice).to eql("Nein")
+      expect(choices.second.choice_de).to eql("Nein")
+      expect(choices.second.choice_fr).to eql("")
+    end
+
+    it "should return all translations" do
+      question.choices_de = "Ja, Nein, Vielleicht"
+      question.choices_en = "Yes, No, Maybe"
+      question.choices_fr = "Oui, Non, Peut-être"
+      question.choices_it = ""
+
+      choices = question.choices
+
+      expect(choices.length).to eql(3)
+      expect(choices.first.choice_de).to eql("Ja")
+      expect(choices.first.choice_en).to eql("Yes")
+      expect(choices.first.choice_fr).to eql("Oui")
+      expect(choices.first.choice_it).to eql("")
+
+      expect(choices.second.choice_de).to eql("Nein")
+      expect(choices.second.choice_en).to eql("No")
+      expect(choices.second.choice_fr).to eql("Non")
+      expect(choices.second.choice_it).to eql("")
+
+      expect(choices.third.choice_de).to eql("Vielleicht")
+      expect(choices.third.choice_en).to eql("Maybe")
+      expect(choices.third.choice_fr).to eql("Peut-être")
+      expect(choices.third.choice_it).to eql("")
+    end
+
+    it "should return choice in current locale" do
+      langs_choices = {de: "Ja", en: "Yes", fr: "Oui", it: "Sì"}
+
+      langs_choices.each do |lang, choice|
+        question.send("choices_#{lang}=", choice)
+      end
+
+      question_choice = question.choices.first
+      langs_choices.each do |lang, choice|
+        I18n.locale = lang
+        expect(question_choice.choice).to eql(choice)
+      end
+    end
+
+    it "should return empty array if all translations are empty strings" do
+      Globalized.languages.each do |lang|
+        question.send("choices_#{lang}=", "")
+      end
+
+      expect(question.choices).to eql([])
+    end
+
+    it "should return empty array if all translations are nil" do
+      Globalized.languages.each do |lang|
+        question.send("choices_#{lang}=", nil)
+      end
+
+      expect(question.choices).to eql([])
+    end
+  end
 end

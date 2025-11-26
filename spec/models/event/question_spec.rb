@@ -237,7 +237,7 @@ describe Event::Question do
 
     it "should return all translations" do
       question.choices_de = "Ja, Nein, Vielleicht"
-      question.choices_en = "Yes, No, Maybe"
+      question.choices_en = "Yes,No,Maybe"
       question.choices_fr = "Oui, Non, Peut-être"
       question.choices_it = ""
 
@@ -288,6 +288,62 @@ describe Event::Question do
       end
 
       expect(question.choices).to eql([])
+    end
+  end
+
+  describe "#choices_attributes=" do
+    let(:event) { events(:top_course) }
+    let(:question) { event.application_questions.first }
+
+    it "should correctly serialize choices" do
+      choices_attributes = {"100": {choice: "Ja", choice_en: "Yes", choice_fr: "Oui", choice_it: "Sì", _destroy: ""},
+                            "101": {choice: "Nein", choice_en: "No", choice_fr: "Non", choice_it: "No", _destroy: ""}}
+      choices_attributes.deep_stringify_keys!
+
+      question.choices_attributes = choices_attributes
+      question.save!
+
+      choices = question.reload.choices
+      expect(choices.length).to eql(2)
+
+      expect(question.choices_de).to eql("Ja,Nein")
+      expect(question.choices_en).to eql("Yes,No")
+      expect(question.choices_fr).to eql("Oui,Non")
+      expect(question.choices_it).to eql("Sì,No")
+    end
+
+    it "should save choices as nil if all choices are empty" do
+      choices_attributes = {"100": {choice: "", choice_en: "", choice_fr: "", choice_it: "", _destroy: ""},
+                            "101": {choice: nil, choice_en: nil, choice_fr: nil, choice_it: nil, _destroy: nil}}
+      choices_attributes.deep_stringify_keys!
+
+      question.choices_attributes = choices_attributes
+      question.save!
+
+      choices = question.reload.choices
+      expect(choices).to eql([])
+
+      expect(question.choices_de).to eql(nil)
+      expect(question.choices_en).to eql(nil)
+      expect(question.choices_fr).to eql(nil)
+      expect(question.choices_it).to eql(nil)
+    end
+
+    it "should delete choices that are marked for deletion" do
+      choices_attributes = {"100": {choice: "Del", choice_en: "Del", choice_fr: "Del", choice_it: "Del", _destroy: "1"},
+                            "101": {choice: "Ja", choice_en: "Yes", choice_fr: "Oui", choice_it: "Sì", _destroy: ""}}
+      choices_attributes.deep_stringify_keys!
+
+      question.choices_attributes = choices_attributes
+      question.save!
+
+      choices = question.reload.choices
+      expect(choices.length).to eql(1)
+
+      expect(question.choices_de).to eql("Ja")
+      expect(question.choices_en).to eql("Yes")
+      expect(question.choices_fr).to eql("Oui")
+      expect(question.choices_it).to eql("Sì")
     end
   end
 end

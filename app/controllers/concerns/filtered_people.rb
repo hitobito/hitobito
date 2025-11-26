@@ -32,8 +32,9 @@ module FilteredPeople
   end
 
   def person_filter(accessibles_class = nil)
-    @person_filter ||= Person::Filter::List.new(group, current_user, list_filter_args,
-      accessibles_class)
+    @person_filter ||= Person::Filter::List.new(
+      group, current_user, list_filter_args, accessibles_class
+    )
   end
 
   def list_filter_args

@@ -13,6 +13,14 @@ class Person::Address
     @addressable = additional_addresses.find { |a| a.label == label } || person
   end
 
+  def for_invoice
+    @addressable = additional_addresses.find(&:invoices?) || person
+    # TODO: Carlo, i do not understand why person_and_company_name include the address_care_of for
+    # additional addresses. This fails in one of the specs (which is good, since it is redundant).
+    # Therefore, the same error exists in the `for_letter` method as well...
+    (person_and_company_name + full_address).compact.join("\n")
+  end
+
   def for_letter
     (person_and_company_name + full_address).compact.join("\n")
   end

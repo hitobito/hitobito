@@ -17,6 +17,10 @@ h1 + .help-text {
   top: 0x;
 }
 
+select + .help-text-trigger + .help-text {
+  margin-top: 0px;
+}
+
 
 .form-horizontal .controls .help-text {
   float: none;

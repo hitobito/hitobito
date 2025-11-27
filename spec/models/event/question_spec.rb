@@ -180,7 +180,7 @@ describe Event::Question do
     end
   end
 
-  describe "globalized choices" do
+  describe "#choices" do
     let(:event) { events(:top_course) }
     let(:question) { event.application_questions.first }
 
@@ -271,6 +271,7 @@ describe Event::Question do
       langs_choices.each do |lang, choice|
         I18n.locale = lang
         expect(question_choice.choice).to eql(choice)
+        expect(question_choice.choice_en).to eql("Yes")
       end
     end
 
@@ -298,6 +299,24 @@ describe Event::Question do
     it "should correctly serialize choices" do
       choices_attributes = {"100": {choice: "Ja", choice_en: "Yes", choice_fr: "Oui", choice_it: "Sì", _destroy: ""},
                             "101": {choice: "Nein", choice_en: "No", choice_fr: "Non", choice_it: "No", _destroy: ""}}
+      choices_attributes.deep_stringify_keys!
+
+      question.choices_attributes = choices_attributes
+      question.save!
+
+      choices = question.reload.choices
+      expect(choices.length).to eql(2)
+
+      expect(question.choices_de).to eql("Ja,Nein")
+      expect(question.choices_en).to eql("Yes,No")
+      expect(question.choices_fr).to eql("Oui,Non")
+      expect(question.choices_it).to eql("Sì,No")
+    end
+
+    it "should correctly serialize choices when locale is changed" do
+      I18n.locale = :fr
+      choices_attributes = {"100": {choice: "Oui", choice_de: "Ja", choice_en: "Yes", choice_it: "Sì", _destroy: ""},
+                            "101": {choice: "Non", choice_de: "Nein", choice_en: "No", choice_it: "No", _destroy: ""}}
       choices_attributes.deep_stringify_keys!
 
       question.choices_attributes = choices_attributes

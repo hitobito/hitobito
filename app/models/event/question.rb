@@ -145,7 +145,16 @@ class Event::Question < ActiveRecord::Base
   end
 
   def choices
-    choice_items_by_choice.map { |choice_translations| ChoiceForm::Choice.new(choice_translations) }
+    # Adds the locale to the choice items grouped by choice
+    # Example: [["Alter", "Age"], ["Adresse", "Address"]]
+    # -> [{de: "Alter", en: "Age"}, {de: "Adresse", en: "Address"}]
+    choice_items_by_choice_with_locales = choice_items_by_choice.map do |choice_translations|
+      Globalized.languages.zip(choice_translations).to_h
+    end
+
+    choice_items_by_choice_with_locales.map do |choice_translations|
+      ChoiceForm::Choice.new(choice_translations)
+    end
   end
 
   def choices_attributes=(attributes)
@@ -155,7 +164,7 @@ class Event::Question < ActiveRecord::Base
 
     languages = [I18n.locale] + Globalized.additional_languages
     languages.zip(choice_items_by_translation).each do |lang, choices|
-      send("choices_#{lang}=", choices&.join(","))
+      send(:"choices_#{lang}=", choices&.join(","))
     end
   end
 
@@ -187,19 +196,16 @@ class Event::Question < ActiveRecord::Base
 
   # Regroups the choice items to be grouped by choice instead of by translation
   # Example: [["Alter", "Adresse"], ["Age", "Address"]]
-  # -> [{de: "Alter", en: "Age"}, {de: "Adresse", en: "Address"}]
+  # -> [["Alter", "Age"], ["Adresse", "Address"]]
   def choice_items_by_choice
     choice_items_by_translation = Globalized.languages.map do |lang|
-      choices_in_lang = send("choices_#{lang}")
+      choices_in_lang = send(:"choices_#{lang}")
       choices_in_lang&.split(",", -1)&.collect(&:strip)
     end
 
     return [] unless choice_items_by_translation.any?
 
-    choice_items_by_choice = normalize_2d_array(choice_items_by_translation).transpose
-    choice_items_by_choice.map do |choice_translations|
-      Globalized.languages.zip(choice_translations).to_h
-    end
+    normalize_2d_array(choice_items_by_translation).transpose
   end
 
   # Normalizes an array of subarrays to make all subarrays the size of the

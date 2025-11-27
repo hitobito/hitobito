@@ -260,6 +260,27 @@ describe Event::Question do
       expect(choices.third.choice_it).to eql("")
     end
 
+    it "should return all translations if number of questions is not the same in all languages" do
+      question.choices_de = "Ja, Nein, Vielleicht"
+      question.choices_en = "Yes,No"
+      question.choices_fr = "Oui,,Peut-être"
+
+      choices = question.choices
+
+      expect(choices.length).to eql(3)
+      expect(choices.first.choice_de).to eql("Ja")
+      expect(choices.first.choice_en).to eql("Yes")
+      expect(choices.first.choice_fr).to eql("Oui")
+
+      expect(choices.second.choice_de).to eql("Nein")
+      expect(choices.second.choice_en).to eql("No")
+      expect(choices.second.choice_fr).to eql("")
+
+      expect(choices.third.choice_de).to eql("Vielleicht")
+      expect(choices.third.choice_en).to eql("")
+      expect(choices.third.choice_fr).to eql("Peut-être")
+    end
+
     it "should return choice in current locale" do
       langs_choices = {de: "Ja", en: "Yes", fr: "Oui", it: "Sì"}
 

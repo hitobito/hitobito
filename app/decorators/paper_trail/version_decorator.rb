@@ -4,7 +4,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module PaperTrail
-  class VersionDecorator < ApplicationDecorator
+  class VersionDecorator < ApplicationDecorator # rubocop:disable Metrics/ClassLength
     def header(include_changed_object: false)
       fields = [created_at]
       if author
@@ -21,8 +21,10 @@ module PaperTrail
     end
 
     def changed_object
-      if model.main.present? && model.main_type == "Person"
-        h.link_to_if(can?(:show, model.main), model.main.to_s, h.person_path(model.main.id))
+      main = model.main
+      if main.present? && model.main_type == "Person"
+        h.content_tag(:strong,
+          h.link_to_if(can?(:show, main), main.to_s, h.person_path(main.id)))
       end
     end
 

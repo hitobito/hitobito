@@ -187,7 +187,7 @@ describe Event::Question do
     it "should return choices if only one translation is filled out and others are empty strings" do
       question.choices_de = "Ja, Nein"
       Globalized.additional_languages.each do |lang|
-        question.send("choices_#{lang}=", "")
+        question.send(:"choices_#{lang}=", "")
       end
 
       choices = question.choices
@@ -204,7 +204,7 @@ describe Event::Question do
     it "should return choices if only one translation is filled out and others are nil" do
       question.choices_de = "Ja, Nein"
       Globalized.additional_languages.each do |lang|
-        question.send("choices_#{lang}=", nil)
+        question.send(:"choices_#{lang}=", nil)
       end
 
       choices = question.choices
@@ -264,7 +264,7 @@ describe Event::Question do
       langs_choices = {de: "Ja", en: "Yes", fr: "Oui", it: "Sì"}
 
       langs_choices.each do |lang, choice|
-        question.send("choices_#{lang}=", choice)
+        question.send(:"choices_#{lang}=", choice)
       end
 
       question_choice = question.choices.first
@@ -277,7 +277,7 @@ describe Event::Question do
 
     it "should return empty array if all translations are empty strings" do
       Globalized.languages.each do |lang|
-        question.send("choices_#{lang}=", "")
+        question.send(:"choices_#{lang}=", "")
       end
 
       expect(question.choices).to eql([])
@@ -285,7 +285,7 @@ describe Event::Question do
 
     it "should return empty array if all translations are nil" do
       Globalized.languages.each do |lang|
-        question.send("choices_#{lang}=", nil)
+        question.send(:"choices_#{lang}=", nil)
       end
 
       expect(question.choices).to eql([])

@@ -12,7 +12,6 @@ describe Invoice::Qrcode do
       payment_slip: :qr,
       total: 1500,
       iban: "CH93 0076 2011 6238 5295 7",
-      recipient_address: "Max Mustermann\nMusterweg 2\n8000 Alt Tylerland",
       recipient_name: "Max Mustermann",
       recipient_street: "Musterweg",
       recipient_housenumber: "2",
@@ -120,6 +119,12 @@ describe Invoice::Qrcode do
       expect(subject[18]).to be_blank
     end
 
+    it "uses company name if set" do
+      invoice.recipient_company_name = "Muster GmbH"
+
+      expect(subject[21]).to eq "Muster GmbH"
+    end
+
     context "with nil iban on invoice" do
       before { invoice.update(iban: nil) }
 
@@ -136,14 +141,14 @@ describe Invoice::Qrcode do
           total: 1500,
           iban: "CH93 0076 2011 6238 5295 7",
           reference: "RF561A1",
-          recipient_address: "Max Mustermann\nMusterweg 2\n8000 Alt Tylerland",
+          deprecated_recipient_address: "Max Mustermann\nMusterweg 2\n8000 Alt Tylerland",
           recipient_name: nil,
           recipient_street: nil,
           recipient_housenumber: nil,
           recipient_zip_code: nil,
           recipient_town: nil,
           recipient_country: nil,
-          payee: "Acme Corp\nHallesche Str. 37\n3007 Hinterdupfing",
+          deprecated_payee: "Acme Corp\nHallesche Str. 37\n3007 Hinterdupfing",
           payee_name: nil,
           payee_street: nil,
           payee_housenumber: nil,
@@ -225,7 +230,7 @@ describe Invoice::Qrcode do
     context "with deprecated attributes" do
       let(:invoice) do
         Invoice.new(
-          recipient_address: "Max Mustermann\nMusterweg 2\n8000 Alt Tylerland",
+          deprecated_recipient_address: "Max Mustermann\nMusterweg 2\n8000 Alt Tylerland",
           recipient_name: nil
         )
       end
@@ -256,7 +261,7 @@ describe Invoice::Qrcode do
       let(:invoice) do
         Invoice.new(
           iban: "CH93 0076 2011 6238 5295 7",
-          payee: "Acme Corp\nHallesche Str. 37\n3007 Hinterdupfing",
+          deprecated_payee: "Acme Corp\nHallesche Str. 37\n3007 Hinterdupfing",
           payee_name: nil
         )
       end

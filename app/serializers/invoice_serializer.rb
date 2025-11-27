@@ -59,7 +59,6 @@ class InvoiceSerializer < ApplicationSerializer
       :esr_number,
       :description,
       :recipient_email,
-      :recipient_address,
       :sent_at,
       :due_at,
       :total,
@@ -72,7 +71,6 @@ class InvoiceSerializer < ApplicationSerializer
       :payment_purpose,
       :payment_information,
       :beneficiary,
-      :payee,
       :participant_number,
       :vat_number
 
@@ -88,5 +86,24 @@ class InvoiceSerializer < ApplicationSerializer
     entities :invoice_items, item.invoice_items, InvoiceItemSerializer
     entities :payments, item.payments, PaymentSerializer
     entities :payment_reminders, item.payment_reminders, PaymentReminderSerializer
+
+    property :recipient_address, recipient_address
+    property :payee, payee
+  end
+
+  def recipient_address
+    if item.recipient_address_values.empty?
+      item.deprecated_recipient_address
+    else
+      item.recipient_address_values.join("\n")
+    end
+  end
+
+  def payee
+    if item.payee_address_values.empty?
+      item.deprecated_payee
+    else
+      item.payee_address_values.join("\n")
+    end
   end
 end

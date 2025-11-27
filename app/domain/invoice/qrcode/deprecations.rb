@@ -7,21 +7,23 @@
 # and parsed during QR code generation.
 # With the migration to structured address fields (payee_name, payee_street, etc.), this class
 # enables generating QR codes for invoices still using the old format.
+# For transparancy, payee and recipient_address have been renamed
+# to deprecated_payee and deprecated_recipient_address.
 class Invoice::Qrcode::Deprecations
   def initialize(invoice)
     @invoice = invoice
   end
 
   def deprecated_creditor?
-    @invoice.payee_name.blank? && @invoice.payee.present?
+    @invoice.payee_name.blank? && @invoice.deprecated_payee.present?
   end
 
   def deprecated_debitor?
-    @invoice.recipient_name.blank? && @invoice.recipient_address.present?
+    @invoice.recipient_name.blank? && @invoice.deprecated_recipient_address.present?
   end
 
   def creditor
-    name, address_line1, address_line2 = parse_address(@invoice.payee)
+    name, address_line1, address_line2 = parse_address(@invoice.deprecated_payee)
     {
       address_type: "K",
       name: name,
@@ -34,7 +36,7 @@ class Invoice::Qrcode::Deprecations
   end
 
   def debitor
-    name, address_line1, address_line2 = parse_address(@invoice.recipient_address)
+    name, address_line1, address_line2 = parse_address(@invoice.deprecated_recipient_address)
     {
       address_type: "K",
       name: name,

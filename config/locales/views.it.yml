@@ -184,8 +184,8 @@ it:
     as: "come %{role}"
     register_new_managed: Registrare e iscrivere un nuovo bambino
     disabled_messages:
-      already_exists: 'È già registrato'
-      cannot_see_event: 'Non ha il permesso di vedere l''evento'
+      already_exists: "È già registrato"
+      cannot_see_event: "Non ha il permesso di vedere l'evento"
 
   dropdown/event/participation/mail_dispatch:
     title: Inviare e-mail
@@ -458,7 +458,7 @@ it:
       managed:
         update:
           flash:
-            privacy_policy_not_accepted: 'Per completare la registrazione è necessario accettare la dichiarazione sulla protezione dei dati'
+            privacy_policy_not_accepted: "Per completare la registrazione è necessario accettare la dichiarazione sulla protezione dei dati"
 
         edit:
           title: Registrare un nuovo bambino e iscriverlo all'evento
@@ -678,7 +678,6 @@ it:
     tabs:
       participants: "partecipanti"
     export_enqueued: "L'esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento"
-    add_tag: Aggiungere tag
 
   event/applications:
     approved: "L'iscrizione è stata accettata"
@@ -701,7 +700,7 @@ it:
   event/participations:
     full_entry_label: "%{model_label} da <i>%{person}</i> a <i>%{event}</i>"
     success: "%{full_entry_label} è stato creato con successo."
-    success_for_external_manager: '%{full_entry_label} wurde erfolgreich erstellt.'
+    success_for_external_manager: "%{full_entry_label} wurde erfolgreich erstellt."
     instructions: "per l'iscrizione definitiva devi stampare questa pagina tramita <i>stampare<i>, firmarla e spedirla per posta all'indirizzo corrispondente"
     export_enqueued: "L'esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento"
     waiting_list: "Tutti i posti sono attualmente occupati, l'iscrizione è in lista d'attesa."
@@ -739,7 +738,7 @@ it:
     registered: "I tuoi dati personali sono stati registrati. Completa ancora solo i dati per l'iscrizione."
     application_window_closed: "il periodo per l'iscrizione per questo evento è terminato."
     no_places_available: "Il numero massimo di partecipanti per questo evento è già stato raggiunto."
-    email_sent_manager: 'Wir haben dir ein E-Mail mit einem Link geschickt, wo du dich oder dein Kind direkt für den Anlass anmelden kannst.'
+    email_sent_manager: "Wir haben dir ein E-Mail mit einem Link geschickt, wo du dich oder dein Kind direkt für den Anlass anmelden kannst."
     registered_manager: 'Deine persönlichen Daten wurden aufgenommen. Du kannst nun deine Kinder via "Anmelden" Knopf anmelden'
 
   event/roles:
@@ -1856,9 +1855,6 @@ it:
       add_role: Aggiungi ruolo
       set_main_group: Impostare il gruppo principale
 
-    tags:
-      add_tag: Aggiungere un tag
-      no_entry: (nessuno)
     export_enqueued: "L'esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento"
     export_email_needed: "Per l'esportazione è necessario un indirizzo e-mail"
 
@@ -2238,6 +2234,11 @@ it:
       only_persons_with: "Solo persone con"
       persons_excluded_with: "Escludere le persone con:"
     export_enqueued: "L'esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento"
+
+  taggable:
+    add_tag: Tag hinzufügen
+    cannot_create: Bitte wähle einen bestehenden Tag aus
+    no_entry: (keine)
 
   version:
     attribute_change:

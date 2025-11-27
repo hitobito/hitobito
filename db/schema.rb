@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_21_120000) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_25_142227) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -645,7 +645,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_21_120000) do
     t.string "esr_number", null: false
     t.text "description"
     t.string "recipient_email"
-    t.text "recipient_address"
+    t.text "deprecated_recipient_address"
     t.date "sent_at"
     t.date "due_at"
     t.integer "group_id", null: false
@@ -661,7 +661,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_21_120000) do
     t.text "payment_information"
     t.string "payment_slip", default: "ch_es", null: false
     t.text "beneficiary"
-    t.text "payee"
+    t.text "deprecated_payee"
     t.string "participant_number"
     t.integer "creator_id"
     t.string "vat_number"
@@ -681,6 +681,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_21_120000) do
     t.string "payee_zip_code"
     t.string "payee_town"
     t.string "payee_country"
+    t.string "recipient_company_name"
+    t.string "recipient_address_care_of"
+    t.string "recipient_postbox"
     t.index ["esr_number"], name: "index_invoices_on_esr_number"
     t.index ["group_id"], name: "index_invoices_on_group_id"
     t.index ["invoice_run_id"], name: "index_invoices_on_invoice_run_id"

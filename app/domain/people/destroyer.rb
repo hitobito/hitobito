@@ -38,9 +38,7 @@ class People::Destroyer
   end
 
   def nullify_invoices!
-    Invoice.where(recipient: @person).update(recipient_email: @person.email,
-      recipient_address: invoice_address,
-      recipient: nil)
+    Invoice.where(recipient: @person).update(recipient: nil)
     Invoice.where(creator: @person).update(creator: nil)
   end
 
@@ -49,9 +47,5 @@ class People::Destroyer
       .where(family_key: @person.family_members.pluck(:family_key))
       .having("COUNT(*) <= 2")
       .group(:family_key)
-  end
-
-  def invoice_address
-    Person::Address.new(@person).for_invoice
   end
 end

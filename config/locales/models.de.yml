@@ -192,6 +192,7 @@ de:
 
         invoice:
           recipient_address_or_email_required: 'Empfänger Adresse oder E-Mail muss ausgefüllt werden'
+          recipient_name_or_company_name_required: 'Firmenname oder Name muss ausgefüllt werden'
           attributes:
             invoice_config:
               invalid: 'ist nicht gültig; passen Sie die Einstellungen an, bevor sie eine Rechnung erstellen'
@@ -1162,6 +1163,14 @@ de:
           cancelled: Storniert
         recipient: Empfänger
         recipient_email: Empfänger E-Mail
+        recipient_company_name: Firmenname
+        recipient_name: Name
+        recipient_address_care_of: zusatz. Adresszeile
+        recipient_postbox: Postfach
+        recipient_country: Land
+        recipient_street: Strasse
+        recipient_zip_code: PLZ
+        recipient_town: Ort
         recipient_address: Empfänger Adresse
         due_at: Fällig am
         issued_at: Gestellt am
@@ -1176,7 +1185,7 @@ de:
         payment_purpose: Zahlungszweck
         address: Absender Adresse
         beneficiary: Zugunsten von
-        payee: Name / Firma
+        payee: Einzahlung für
         account_number: Kontonummer
         iban: IBAN
         payment_slip: Einzahlungsschein

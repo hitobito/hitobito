@@ -92,11 +92,15 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   validates :state, inclusion: {in: STATES}
   validates :due_at, timeliness: {after: :sent_at}, presence: true, if: :sent?
   validates :invoice_items, presence: true, if: -> { (issued? || sent?) && !invoice_run }
+  validates :title, presence: true
+  validate :recipient_name_present?
+  validates :recipient_street, :recipient_zip_code, :recipient_town, :recipient_country,
+    presence: true
   validate :assert_sendable?, unless: :recipient_id?
 
   normalizes :recipient_email, with: ->(attribute) { attribute.downcase }
 
-  before_create :set_recipient_fields, if: :recipient
+  before_validation :set_recipient_fields, if: :recipient
   after_create :increment_sequence_number
 
   accepts_nested_attributes_for :invoice_items, allow_destroy: true
@@ -257,6 +261,41 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
     payment_reminders.max_by(&:created_at)
   end
 
+  def recipient_address_values
+    [
+      recipient_company_name,
+      recipient_name,
+      recipient_address_care_of,
+      recipient_street_with_housenumber,
+      recipient_postbox,
+      recipient_town_with_zip_code
+    ].uniq.compact_blank
+  end
+
+  def recipient_street_with_housenumber
+    [recipient_street, recipient_housenumber].compact_blank.join(" ")
+  end
+
+  def recipient_town_with_zip_code
+    [recipient_zip_code, recipient_town].compact_blank.join(" ")
+  end
+
+  def payee_address_values
+    [
+      payee_name,
+      payee_street_with_housenumber,
+      payee_town_with_zip_code
+    ].compact_blank
+  end
+
+  def payee_street_with_housenumber
+    [payee_street, payee_housenumber].compact_blank.join(" ")
+  end
+
+  def payee_town_with_zip_code
+    [payee_zip_code, payee_town].compact_blank.join(" ")
+  end
+
   private
 
   # on index we join aggregated payments
@@ -321,8 +360,19 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   end
 
   def assert_sendable?
-    if recipient_email.blank? && recipient_address.blank?
+    # This assertion only makes sense for old invoices,
+    # since for new invoices, recipient_address_values must be set
+    return unless persisted?
+    return if recipient_address_values.any?
+
+    if recipient_email.blank? && deprecated_recipient_address.blank?
       errors.add(:base, :recipient_address_or_email_required)
+    end
+  end
+
+  def recipient_name_present?
+    if recipient_name.blank? && recipient_company_name.blank?
+      errors.add(:base, :recipient_name_or_company_name_required)
     end
   end
 

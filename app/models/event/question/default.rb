@@ -28,7 +28,7 @@
 
 class Event::Question::Default < Event::Question
   def choice_items
-    choices.to_s.split(",").collect(&:strip)
+    send("choices_#{I18n.locale}").to_s.split(",").collect(&:strip)
   end
 
   def one_answer_available?

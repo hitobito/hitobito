@@ -96,8 +96,10 @@ module InvoicesHelper
   end
 
   def invoice_receiver_address(invoice)
+    return if invoice.recipient_address_values.empty? && invoice.deprecated_recipient_address.blank?
+
     first_line, *other_lines = if invoice.recipient_address_values.empty?
-      # Old invoices do not have recipient_address_values, why we have to use the old address
+      # Old invoices do not have recipient_address_values, therefore we have to use the old address
       invoice.deprecated_recipient_address&.split("\n") || []
     else
       invoice.recipient_address_values

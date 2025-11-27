@@ -16,7 +16,20 @@ describe InvoicesHelper do
   let(:top_leader) { people(:top_leader) }
 
   describe "#invoice_receiver_address" do
-    it "is nil if recipient address is not set" do
+    it "is nil if recipient address values are not set" do
+      invoice.update_columns(
+        recipient_id: nil,
+        recipient_email: nil,
+        deprecated_recipient_address: nil,
+        recipient_company_name: nil,
+        recipient_name: nil,
+        recipient_address_care_of: nil,
+        recipient_street: nil,
+        recipient_housenumber: nil,
+        recipient_postbox: nil,
+        recipient_zip_code: nil,
+        recipient_town: nil
+      )
       expect(invoice_receiver_address(invoice)).to be_nil
     end
 

@@ -22,14 +22,21 @@ describe InvoicesController, type: :controller do
     it "escapes recipient display" do
       invoice.update(
         invoice_run_id: invoice_run.id,
-        recipient_address: "Hello <script>alert(1)</script>\nworld<script>alert(2)</script>",
+        recipient_street: "Hello <script>alert(1)</script>\nworld<script>alert(2)</script>",
         recipient_email: "test<script>alert(3)</script>@example.com"
       )
       get :show, params: {group_id: group.id, invoice_run_id: invoice_run.id, id: invoice.id}
       recipient_address = dom.first(".address").native
-      # rubocop:todo Layout/LineLength
-      expect(recipient_address.inner_html).to match(/<p><b>Hello &lt;script&gt;alert\(1\)&lt;\/script&gt;<\/b><br>world&lt;script&gt;alert\(2\)&lt;\/script&gt;<br><a href="mailto:test%3Cscript%3Ealert%283%29%3C%2Fscript%3E@example\.com">test&lt;script&gt;alert\(3\)&lt;\/script&gt;@example\.com<\/a><\/p>/)
-      # rubocop:enable Layout/LineLength
+      expect(recipient_address.inner_html).to match(/
+        <p><b>Top\sLeader<\/b><br>
+        Hello\s&lt;script&gt;alert\(1\)&lt;\/script&gt;\sworld&lt;script&gt;
+          alert\(2\)
+        &lt;\/script&gt;\s345<br>
+        3456\sGreattown<br>
+        <a\shref="mailto:test%3Cscript%3Ealert%283%29%3C%2Fscript%3E@example\.com">
+          test&lt;script&gt;alert\(3\)&lt;\/script&gt;@example\.com
+        <\/a><\/p>
+      /x)
     end
   end
 end

@@ -199,6 +199,58 @@ describe Person::Address do
       uses_additional_address_name: false
   end
 
+  describe "#for_invoice" do
+    subject(:text) { address.for_invoice }
+
+    let(:attrs) {
+      {label: nil, street: "Lagistrasse", housenumber: "12a", zip_code: 1080, town: "Jamestown", invoices: true}
+    }
+
+    it_behaves_like "common address behaviour", country_label: false, postbox: true, company: :adds,
+      label_handling: false
+
+    it "uses invoice address if additional address with invoice flag exists" do
+      build_additional_address(attrs)
+      expect(text).to eq <<~TEXT
+        Top Leader
+        Lagistrasse 12a
+        1080 Jamestown
+      TEXT
+    end
+
+    it "uses address_care_of from additional address" do
+      build_additional_address(attrs.merge(address_care_of: "c/o Finance"))
+      # TODO: see comment in domain/person/address.rb
+      expect(text).to eq <<~TEXT
+        Top Leader
+        c/o Finance
+        Lagistrasse 12a
+        1080 Jamestown
+      TEXT
+    end
+
+    it "uses address_care_of from additional address" do
+      build_additional_address(attrs.merge(address_care_of: "c/o Finance", name: "Foo Bar",
+        uses_contactable_name: false))
+      # TODO: see comment in domain/person/address.rb
+      expect(text).to eq <<~TEXT
+        Foo Bar
+        c/o Finance
+        Lagistrasse 12a
+        1080 Jamestown
+      TEXT
+    end
+
+    it "does not print blank address_care_of line" do
+      build_additional_address(attrs.merge(address_care_of: "", name: "Foo Bar", uses_contactable_name: false))
+      expect(text).to eq <<~TEXT
+        Foo Bar
+        Lagistrasse 12a
+        1080 Jamestown
+      TEXT
+    end
+  end
+
   describe "#invoice_recipient_address_attributes" do
     subject(:attributes) { address.invoice_recipient_address_attributes }
 

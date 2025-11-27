@@ -73,8 +73,36 @@ describe Invoice do
     end.to change { invoice_config.reload.sequence_number }.by(2)
   end
 
-  it "validates that at least one email or an address is specified if no recipient" do
+  it "validates that the structured address is specified if no recipient" do
     invoice = Invoice.create(title: "invoice", group: group)
+    expect(invoice).not_to be_valid
+    expect(invoice.errors.full_messages)
+      .to include("Firmenname oder Name muss ausgefüllt werden")
+    expect(invoice.errors.full_messages)
+      .to include("Strasse muss ausgefüllt werden")
+    expect(invoice.errors.full_messages)
+      .to include("PLZ muss ausgefüllt werden")
+    expect(invoice.errors.full_messages)
+      .to include("Ort muss ausgefüllt werden")
+    expect(invoice.errors.full_messages)
+      .to include("Land muss ausgefüllt werden")
+  end
+
+  it "validates that on old invoices, at least one email or an address is specified if no recipient" do
+    invoice = create_invoice
+    invoice.update_columns(
+      recipient_id: nil,
+      recipient_email: nil,
+      deprecated_recipient_address: nil,
+      recipient_company_name: nil,
+      recipient_name: nil,
+      recipient_address_care_of: nil,
+      recipient_street: nil,
+      recipient_housenumber: nil,
+      recipient_postbox: nil,
+      recipient_zip_code: nil,
+      recipient_town: nil
+    )
     expect(invoice).not_to be_valid
     expect(invoice.errors.full_messages)
       .to include("Empfänger Adresse oder E-Mail muss ausgefüllt werden")

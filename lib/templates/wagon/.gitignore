@@ -26,3 +26,6 @@ coverage
 .tool-versions
 .pry_history
 .envrc
+
+db/schema.rb
+db/schema.rb.diff

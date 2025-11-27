@@ -112,15 +112,19 @@ describe Invoice do
   end
 
   it "#save sets recipient and related fields, keeps empty fields" do
-    person.update(zip_code: 3003, country: "CH")
+    person.update!(zip_code: 3003, country: "CH", company: true, company_name: "Top ITC", address_care_of: "Office",
+      postbox: "Postfach")
+
     invoice = create_invoice
     expect(invoice.recipient).to eq person
     expect(invoice.recipient_email).to eq person.email
-    expect(invoice.recipient_address).to eq "Top Leader\nGreatstreet 345\n3003 Greattown\n"
 
+    expect(invoice.recipient_company_name).to eq "Top ITC"
     expect(invoice.recipient_name).to eq "Top Leader"
+    expect(invoice.recipient_address_care_of).to eq "Office"
     expect(invoice.recipient_street).to eq "Greatstreet"
     expect(invoice.recipient_housenumber).to eq "345"
+    expect(invoice.recipient_postbox).to eq "Postfach"
     expect(invoice.recipient_zip_code).to eq "3003"
     expect(invoice.recipient_town).to eq "Greattown"
     expect(invoice.recipient_country).to eq "CH"
@@ -168,7 +172,7 @@ describe Invoice do
   end
 
   it "#create sets payment attributes from invoice_config" do
-    invoice = Invoice.create(title: "test_invoice", group: group, recipient_address: "address")
+    invoice = Invoice.create(title: "test_invoice", group: group)
 
     expect(invoice.address).to eq invoice_config.address
     expect(invoice.account_number).to eq invoice_config.account_number
@@ -460,17 +464,6 @@ describe Invoice do
     it "returns nil when no reminder is present" do
       expect(invoice.latest_reminder).to be_nil
     end
-  end
-
-  it "reads invoices address" do
-    person.additional_addresses.create!(label: "Arbeit", street: "Lagistrasse", housenumber: "12a", zip_code: 1080,
-      town: "Jamestown", country: "CH", invoices: true)
-    invoice = create_invoice
-    expect(invoice.recipient_address).to eq <<~TEXT
-      Top Leader
-      Lagistrasse 12a
-      1080 Jamestown
-    TEXT
   end
 
   private

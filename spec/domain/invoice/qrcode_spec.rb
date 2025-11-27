@@ -120,6 +120,12 @@ describe Invoice::Qrcode do
       expect(subject[18]).to be_blank
     end
 
+    it "uses company name if set" do
+      invoice.recipient_company_name = "Muster GmbH"
+
+      expect(subject[21]).to eq "Muster GmbH"
+    end
+
     context "with nil iban on invoice" do
       before { invoice.update(iban: nil) }
 

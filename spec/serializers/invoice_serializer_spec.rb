@@ -90,6 +90,8 @@ describe InvoiceSerializer do
       expect(subject[:state].to_s).to eq "draft"
       expect(subject[:total].to_s).to eq "5.35"
       expect(subject[:sequence_number].to_s).to eq invoice.sequence_number
+      expect(subject[:payee]).to eq "Hitobito AG\nBelpstrasse 37\n3007 Bern"
+      expect(subject[:recipient_address]).to eq "Top Leader\nGreatstreet 345\n3456 Greattown"
     end
 
     it "includes group link" do
@@ -104,6 +106,20 @@ describe InvoiceSerializer do
       expect(subject[:links][:recipient]).to eq top_leader.id.to_s
       expect(hash[:links]).to have_key("invoices.creator")
       expect(hash[:links]).to have_key("invoices.recipient")
+    end
+
+    it "returns deprecated recipient address for old invoices" do
+      invoice.assign_attributes(
+        deprecated_recipient_address: "Old Address Format",
+        recipient_name: nil,
+        recipient_street: nil,
+        recipient_town: nil,
+        recipient_zip_code: nil,
+        recipient_country: nil,
+        recipient_housenumber: nil
+      )
+
+      expect(subject[:recipient_address]).to eq "Old Address Format"
     end
   end
 

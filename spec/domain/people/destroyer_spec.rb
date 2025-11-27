@@ -122,23 +122,12 @@ describe People::Destroyer do
 
   it "nullifies invoices with person as recipient" do
     invoice = Fabricate(:invoice, group: group, recipient: person)
-    person_address = Person::Address.new(person).for_invoice
-    person_email = person.email
-
-    expect(invoice.recipient).to eq(person)
-    expect(invoice.recipient_address).to eq(person_address)
-    expect(invoice.recipient_email).to eq(person_email)
 
     expect do
       subject.run
     end.to change { Person.count }.by(-1)
       .and change { Invoice.count }.by(0)
-
-    invoice.reload
-
-    expect(invoice.recipient).to be_nil
-    expect(invoice.recipient_address).to eq(person_address)
-    expect(invoice.recipient_email).to eq(person_email)
+      .and change { invoice.reload.recipient }.to nil
   end
 
   it "nullifies invoices with person as recipient" do

@@ -77,7 +77,7 @@ describe Message::LetterWithInvoice do
         invoice = subject.invoice_for(recipient)
         expect(invoice).to be_valid
         expect(invoice).to be_new_record
-        expect(invoice.recipient_address).to be_present
+        expect(invoice.recipient_name).to be_present
       end
 
       it "#recipients uses recipients from mailing_list" do
@@ -96,7 +96,7 @@ describe Message::LetterWithInvoice do
       it "#invoice_for loads persisted invoice" do
         invoice = subject.invoice_for(recipient)
         expect(invoice).to be_persisted
-        expect(invoice.recipient_address).to be_present
+        expect(invoice.recipient_name).to be_present
       end
 
       it "#recipients uses invoice recipients" do

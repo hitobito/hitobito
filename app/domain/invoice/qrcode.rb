@@ -60,7 +60,7 @@ class Invoice::Qrcode
 
     {
       address_type: "S",
-      name: @invoice.recipient_name,
+      name: @invoice.recipient_company_name.presence || @invoice.recipient_name,
       street: @invoice.recipient_street,
       housenumber: @invoice.recipient_housenumber,
       zip_code: @invoice.recipient_zip_code,

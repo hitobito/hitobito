@@ -6,8 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::Address
-  INVOICE_LABEL = "Rechnung"
-
   def initialize(person, label: nil, name: nil)
     @person = person
     @name = name
@@ -17,12 +15,6 @@ class Person::Address
 
   def for_letter
     (person_and_company_name + full_address).compact.join("\n")
-  end
-
-  # Use to populate invoices#recipient_address, might be overriden in wagons
-  def for_invoice
-    @addressable = additional_addresses.find(&:invoices?) || person
-    (person_and_company_name + short_address).compact.join("\n")
   end
 
   def for_household_letter(members)
@@ -44,14 +36,18 @@ class Person::Address
   end
 
   def invoice_recipient_address_attributes
+    @addressable = additional_addresses.find(&:invoices?) || person
+
     {
-      recipient_address: for_invoice,
+      recipient_address_care_of: address_care_of,
+      recipient_company_name: company? ? company_name : nil,
       recipient_name: invoice_recipient_name,
       recipient_street: street,
       recipient_housenumber: housenumber,
+      recipient_postbox: postbox,
       recipient_zip_code: zip_code,
       recipient_town: town,
-      recipient_country: country
+      recipient_country: country || default_country
     }
   end
 
@@ -61,7 +57,7 @@ class Person::Address
 
   delegate :address, :address_care_of, :postbox, :street, :housenumber, :zip_code, :town, :country,
     :name, :country_label, :ignored_country?, to: :addressable
-  delegate :company?, :additional_addresses, to: :person
+  delegate :company?, :additional_addresses, :company_name, to: :person
 
   def person_and_company_name
     return [name, address_care_of].compact_blank if addressable.is_a?(AdditionalAddress)
@@ -112,11 +108,8 @@ class Person::Address
   end
 
   def invoice_recipient_name
-    @addressable = additional_addresses.find(&:invoices?) || person
-    if addressable.is_a?(AdditionalAddress)
-      addressable.name
-    elsif company?
-      @person.company_name.to_s.squish
+    if @addressable.is_a?(AdditionalAddress)
+      @addressable.name
     else
       @person.full_name.to_s.squish
     end

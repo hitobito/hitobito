@@ -3,7 +3,7 @@
   = f.labeled(:question) do
     = f.hidden_field(:question)
     %p.py-2= question.question
-  - if question.choice_items.any?
+  - if question.choices.any?
     = f.labeled(:choices, simple_list(question.choice_items, class: 'ps-3 my-2'))
     = f.labeled(:multiple_choices) do
       %p.py-2

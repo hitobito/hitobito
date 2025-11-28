@@ -39,21 +39,21 @@ describe Event::Question::Default do
     end
 
     it "is valid without choices" do
-      expect(subject.choice_items).to be_empty
+      expect(subject.choices).to be_empty
 
       is_expected.to be_valid
     end
 
     it "is valid with several choices" do
       subject.choices = "ja,nein,vielleicht"
-      expect(subject.choice_items).to have(3).items
+      expect(subject.choices).to have(3).items
 
       is_expected.to be_valid
     end
 
     it "is valid with one choice" do
       subject.choices = "ja"
-      expect(subject.choice_items).to have(1).item
+      expect(subject.choices).to have(1).item
 
       is_expected.to be_valid
     end
@@ -63,7 +63,7 @@ describe Event::Question::Default do
     subject { described_class.new(question: "Test?", choices: "ja") }
 
     it "knows that it only has one answer" do
-      is_expected.to be_one_answer_available
+      expect(subject.choices).to be_one
     end
 
     it "may be required" do

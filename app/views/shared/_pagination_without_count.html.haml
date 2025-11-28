@@ -3,13 +3,11 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- options = local_assigns.fetch(:options, {})
+- options = local_assigns.fetch(:options, {}).merge(class: 'page-link')
 
-- if path_to_prev_page(models, **options)
-  %ul.pagination.pagination-sm.float-end
-    %li.page-item= link_to_previous_page models, t('global.button.back'), **options.merge(class: 'page-link')
-    %li.page-item= link_to_next_page models, t('global.button.next'), **options.merge(class: 'page-link')
-- else
-  %ul.pagination.pagination-sm.float-end
-    %li.page-item= link_to_next_page models, t('global.button.next'), **options.merge(class: 'page-link')
+.clearfix
+  %ul.pagination.pagination-sm.float-end.mb-0
+    - if path_to_prev_page(models, **options)
+      %li.page-item= link_to_previous_page models, t('global.button.back'), **options
+    %li.page-item= link_to_next_page models, t('global.button.next'), **options
 

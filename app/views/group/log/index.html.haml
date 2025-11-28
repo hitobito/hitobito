@@ -4,16 +4,17 @@
 -#  https://github.com/hitobito/hitobito.
 
 - if @versions.present?
-
   = render "shared/pagination_without_count", models: @versions
-  - @versions.group_by(&:created_at).each do |created_at, versions|
-    .row.log-item
+
+  - @versions.group_by { |v| [v.created_at, v.main, v.whodunnit]}.each do |header, versions|
+    .row.mb-3
       .col-4
-        %h4
-          = versions.first.header(include_changed_object: true)
-      .log-infos.col-8
+        = versions.first.header(include_changed_object: true)
+      .col-8
+        %br
         - versions.each do |v|
           = v.changes
+
   = render "shared/pagination_without_count", models: @versions
 
 - else

@@ -13,7 +13,9 @@ class Group::LogController < ApplicationController
   decorates :group, :versions
 
   def index
-    @versions = PaperTrail::Version.where(id: people_versions)
+    @versions = PaperTrail::Version
+      .changed
+      .where(id: people_versions)
       .or(PaperTrail::Version.where(id: group_versions))
       .left_joins(:role)
       .includes(:item)
@@ -25,13 +27,13 @@ class Group::LogController < ApplicationController
   private
 
   def group_versions
-    @group_versions ||= PaperTrail::Version.distinct
+    @group_versions ||= PaperTrail::Version.changed.distinct
       .where(main_type: Group.sti_name)
       .where(main_id: entry.id)
   end
 
   def people_versions
-    @people_versions ||= PaperTrail::Version.distinct
+    @people_versions ||= PaperTrail::Version.changed.distinct
       .where(version_conditions)
   end
 

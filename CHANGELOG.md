@@ -2,6 +2,7 @@
 
 ## unreleased
 
+- Logs auf Gruppen werden korrekt aggregiert dargestellt (hitobito_sac_cas#2087)
 - Teilnehmende eines Anlasses können diesen immer ansehen, unabhängig von ihrer Rolle (hitobito_sac_cas#2110)
 - Das Erstellen von neuen Tags kann nun separat berechtigt werden (hitobito_sac_cas#2065)
 - Ein neuer Header weist nun, ausser in production, auf die momentan aktive Umgebung hin (#3702)

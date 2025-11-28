@@ -69,9 +69,9 @@ module Export::Tabular
       elsif value == false
         I18n.t("global.no")
       elsif value.is_a?(Time)
-        (format == :xlsx) ? value.to_s : "#{I18n.l(value.to_date)} #{I18n.l(value, format: :time)}"
+        (format == :xlsx) ? value : "#{I18n.l(value.to_date)} #{I18n.l(value, format: :time)}"
       elsif value.is_a?(Date)
-        (format == :xlsx) ? value.to_s : I18n.l(value)
+        (format == :xlsx) ? value : I18n.l(value)
       else
         value
       end

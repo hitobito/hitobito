@@ -2,6 +2,7 @@
 
 ## unreleased
 
+- Spalten in Excel Exporten können neu als Datum, Dezimalzahl oder Betrag formattiert werden (hitobito_sac_cas#1665)
 - Logs auf Gruppen werden korrekt aggregiert dargestellt (hitobito_sac_cas#2087)
 - Teilnehmende eines Anlasses können diesen immer ansehen, unabhängig von ihrer Rolle (hitobito_sac_cas#2110)
 - Das Erstellen von neuen Tags kann nun separat berechtigt werden (hitobito_sac_cas#2065)

@@ -63,7 +63,7 @@ class Event::ParticipationAbility < AbilityDsl::Base
   end
 
   def her_own_or_for_participations_read_events
-    her_own || (event.participations_visible? && participating?) || for_participations_read_events
+    her_own || (event.participations_visible? && participating) || for_participations_read_events
   end
 
   def her_own_if_application_possible
@@ -84,19 +84,14 @@ class Event::ParticipationAbility < AbilityDsl::Base
     her_own_or_for_participations_full_events || manager
   end
 
-  def if_participating
-    participating?
+  def participating
+    user_context.participations.any? { |p| p.event_id == event.id }
   end
-
-  def participating?
-    event.participations.find do |participation|
-      participation.participant_type == Person.sti_name && participation.participant_id == user.id
-    end.present?
-  end
+  alias_method :if_participating, :participating
 
   def participant_can_show_event?
-    participation.person && AbilityWithoutManagerAbilities.new(participation.person).can?(:show,
-      participation.event)
+    participation.person &&
+      AbilityWithoutManagerAbilities.new(person).can?(:show, event)
   end
 
   private

@@ -2,6 +2,7 @@
 
 ## unreleased
 
+- Es können jetzt Hilfetexte für Radio Buttons, Dropdowns, Personenfelder und weitere Arten von Feldern angezeigt werden (#967)
 - Das Erstellen von neuen Tags kann nun separat berechtigt werden (hitobito_sac_cas#2065)
 - Ein neuer Header weist nun, ausser in production, auf die momentan aktive Umgebung hin (#3702)
 - Eigener JSON:API Endpoint für Abos (mailing lists) (hitobito_pbs#382)

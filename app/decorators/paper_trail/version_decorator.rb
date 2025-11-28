@@ -21,11 +21,19 @@ module PaperTrail
     end
 
     def changed_object
-      main = model.main
-      if main.present? && model.main_type == "Person"
-        h.content_tag(:strong,
-          h.link_to_if(can?(:show, main), main.to_s, h.person_path(main.id)))
+      return unless model.main
+
+      case model.main_type
+      when "Person"
+        link_to_changed_object(h.person_path(model.main.id))
+      when "Group"
+        link_to_changed_object(h.group_path(model.main.id))
       end
+    end
+
+    def link_to_changed_object(path)
+      h.content_tag(:strong,
+        h.link_to_if(can?(:show, model.main), model.main.to_s, path))
     end
 
     def author

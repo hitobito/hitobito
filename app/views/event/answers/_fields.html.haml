@@ -10,10 +10,11 @@
 .mb-2
   = f.label(:answer, question_label)
   - if question.choices?
-    - question.choice_items.each_with_index do |choice, index|
-      - if question.one_answer_available? || question.multiple_choices?
-        = render 'event/answers/choice_checkbox', f: f, value: choice, index: index
+    - question.choices.each_with_index do |choice, index|
+      - checked = choice.checked?(f.object.answer)
+      - if question.with_checkboxes?
+        = render 'event/answers/choice_checkbox', f: f, value: choice.choice, index: index, checked:
       - else
-        = f.inline_radio_button(:answer, choice, choice, false)
+        = f.inline_radio_button(:answer, choice.choice, choice.choice, false, {checked:})
   - else
     = f.input_field(:answer)

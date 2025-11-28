@@ -353,9 +353,9 @@ fr:
         many: Détails de la facture
         other: Détails de la facture
       invoice_run:
-        one: Facture collective
-        many: Facture collective
-        other: Facture collective
+        one: Rechnungslauf
+        many: Rechnungsläufe
+        other: Rechnungsläufe
       label_format:
         one: format d'étiquette
         many: Formats d'étiquettes
@@ -1318,12 +1318,12 @@ fr:
 
 
       invoice_run:
-        title: Titre
-        receiver: Destinataire
-        recipients_total: Nombre total de destinataires
-        recipients_paid: Paiement versé
-        amount_total: Montant total
-        amount_paid: Montant payé
+        title: Titel
+        receiver: Empfänger
+        recipients_total: Empfänger Insgesamt
+        recipients_paid: Empfänger Bezahlt
+        amount_total: Betrag insgesamt
+        amount_paid: Betrag bezahlt
 
       # used for nested attributes
       invoice_items:

@@ -352,9 +352,9 @@ it:
         many: Voci contabili
         other: Voci contabili
       invoice_run:
-        one: Fattura collettiva
-        many: Fatture collettive
-        other: Fatture collettive
+        one: Rechnungslauf
+        many: Rechnungsläufe
+        other: Rechnungsläufe
       label_format:
         one: formato delle etichette
         many: Formati delle etichette
@@ -1317,12 +1317,12 @@ it:
 
 
       invoice_run:
-        title: Titolo
-        receiver: Destinatario
-        recipients_total: Destinatario complessivo
-        recipients_paid: Destinatario pagato
-        amount_total: Importo complessivo
-        amount_paid: Importo pagato
+        title: Titel
+        receiver: Empfänger
+        recipients_total: Empfänger Insgesamt
+        recipients_paid: Empfänger Bezahlt
+        amount_total: Betrag insgesamt
+        amount_paid: Betrag bezahlt
 
       # used for nested attributes
       invoice_items:

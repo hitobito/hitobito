@@ -6,9 +6,9 @@
 #  https://github.com/hitobito/hitobito_cvp.
 
 module Sheet
-  class InvoiceList < Base
+  class InvoiceRun < Base
     def title
-      return ::InvoiceList.model_name.human(count: 2) if child && no_invoice_or_shared_title?
+      return ::InvoiceRun.model_name.human(count: 2) if child && no_invoice_or_shared_title?
       return entry.title if child&.entry
       super
     end
@@ -19,7 +19,7 @@ module Sheet
 
     def parent_link_url
       unless no_invoice_or_shared_title?
-        return view.group_invoice_list_invoices_path(entry.group,
+        return view.group_invoice_run_invoices_path(entry.group,
           entry)
       end
       super
@@ -39,7 +39,7 @@ module Sheet
     end
 
     def link_url
-      view.group_invoice_lists_path(view.group, returning: true)
+      view.group_invoice_runs_path(view.group, returning: true)
     end
 
     def no_invoice_or_shared_title?

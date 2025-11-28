@@ -107,7 +107,7 @@ additional_address:
 address_sync:
   enabled: false
 
-invoice_lists:
+invoice_runs:
   fixed_fees:
     membership:
       enabled: false

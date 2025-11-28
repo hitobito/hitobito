@@ -67,10 +67,10 @@ describe Invoice::PaymentProcessor do
     )
   end
 
-  it "creates payment and marks invoice as payed and updates invoice_list" do
-    list = InvoiceList.create!(title: :title, group: invoice.group)
+  it "creates payment and marks invoice as payed and updates invoice_run" do
+    list = InvoiceRun.create!(title: :title, group: invoice.group)
     invoice.update_columns(reference: "000000000000100000000000905",
-      invoice_list_id: list.id,
+      invoice_run_id: list.id,
       total: 710.82)
     expect do
       expect(parser.process).to eq 5
@@ -86,9 +86,9 @@ describe Invoice::PaymentProcessor do
   end
 
   it "creates payment, saves transaction xml and payee" do
-    list = InvoiceList.create!(title: :title, group: invoice.group)
+    list = InvoiceRun.create!(title: :title, group: invoice.group)
     invoice.update_columns(reference: "000000000000100000000000905",
-      invoice_list_id: list.id,
+      invoice_run_id: list.id,
       total: 710.82)
     expect do
       expect(parser.process).to eq 5

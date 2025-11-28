@@ -23,9 +23,9 @@ describe Invoice::Filter do
     expect(filtered.count).to eq 1
   end
 
-  it "filters by invoice_list_id" do
-    invoice.update(invoice_list_id: 1)
-    filtered = Invoice::Filter.new(invoice_list_id: 1).apply(Invoice)
+  it "filters by invoice_run_id" do
+    invoice.update(invoice_run_id: 1)
+    filtered = Invoice::Filter.new(invoice_run_id: 1).apply(Invoice)
     expect(filtered.count).to eq 1
   end
 end

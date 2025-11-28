@@ -76,22 +76,22 @@ describe :invoices, js: true do
     end
   end
 
-  describe "invoice_lists" do
+  describe "invoice_runs" do
     let(:group) { groups(:bottom_layer_one) }
     let(:user) { people(:bottom_member) }
 
     let(:letter) { messages(:with_invoice) }
     let!(:sent) { invoices(:sent) }
-    let!(:invoice_list) { letter.create_invoice_list(title: "test", group_id: group.id) }
+    let!(:invoice_run) { letter.create_invoice_run(title: "test", group_id: group.id) }
 
     describe "GET #index" do
       before do
         update_issued_at_to_current_year
-        sent.update(invoice_list: invoice_list)
+        sent.update(invoice_run: invoice_run)
       end
 
-      it "shows separate export options when viewing invoice list invoices" do
-        visit group_invoice_list_invoices_path(group_id: group.id, invoice_list_id: invoice_list.id)
+      it "shows separate export options when viewing invoice run invoices" do
+        visit group_invoice_run_invoices_path(group_id: group.id, invoice_run_id: invoice_run.id)
         find("#all").click
         print = page.find_link("Drucken")
         print.click
@@ -104,8 +104,8 @@ describe :invoices, js: true do
       end
 
       it "shows single letter_with_invoice export option when viewing invoices from letter with invoice" do
-        invoice_list.update(message: letter)
-        visit group_invoice_list_invoices_path(group_id: group.id, invoice_list_id: invoice_list.id)
+        invoice_run.update(message: letter)
+        visit group_invoice_run_invoices_path(group_id: group.id, invoice_run_id: invoice_run.id)
         find("#all").click
         print = page.find_link("Drucken")
         print.click

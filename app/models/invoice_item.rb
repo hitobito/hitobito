@@ -41,7 +41,7 @@ class InvoiceItem < ActiveRecord::Base
   self.dynamic = false
 
   # Allows to define the parameters for dynamic cost calculation.
-  # These will also be rendered as an input on the invoice_list form.
+  # These will also be rendered as an input on the invoice_run form.
   # Example:
   # self.dynamic_cost_parameter_definitions = {
   #   defined_at: :date

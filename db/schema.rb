@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_18_111642) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_21_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -618,7 +618,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_18_111642) do
     t.index ["invoice_id"], name: "index_invoice_items_on_invoice_id"
   end
 
-  create_table "invoice_lists", force: :cascade do |t|
+  create_table "invoice_runs", force: :cascade do |t|
     t.string "receiver_type"
     t.bigint "receiver_id"
     t.bigint "group_id"
@@ -633,9 +633,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_18_111642) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "receivers"
-    t.index ["creator_id"], name: "index_invoice_lists_on_creator_id"
-    t.index ["group_id"], name: "index_invoice_lists_on_group_id"
-    t.index ["receiver_type", "receiver_id"], name: "index_invoice_lists_on_receiver_type_and_receiver_id"
+    t.index ["creator_id"], name: "index_invoice_runs_on_creator_id"
+    t.index ["group_id"], name: "index_invoice_runs_on_group_id"
+    t.index ["receiver_type", "receiver_id"], name: "index_invoice_runs_on_receiver_type_and_receiver_id"
   end
 
   create_table "invoices", id: :serial, force: :cascade do |t|
@@ -666,7 +666,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_18_111642) do
     t.integer "creator_id"
     t.string "vat_number"
     t.string "currency", default: "CHF", null: false
-    t.bigint "invoice_list_id"
+    t.bigint "invoice_run_id"
     t.string "reference", null: false
     t.boolean "hide_total", default: false, null: false
     t.string "recipient_name"
@@ -683,7 +683,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_18_111642) do
     t.string "payee_country"
     t.index ["esr_number"], name: "index_invoices_on_esr_number"
     t.index ["group_id"], name: "index_invoices_on_group_id"
-    t.index ["invoice_list_id"], name: "index_invoices_on_invoice_list_id"
+    t.index ["invoice_run_id"], name: "index_invoices_on_invoice_run_id"
     t.index ["recipient_id"], name: "index_invoices_on_recipient_id"
     t.index ["sequence_number"], name: "index_invoices_on_sequence_number"
   end
@@ -800,7 +800,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_18_111642) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "invoice_attributes"
-    t.bigint "invoice_list_id"
+    t.bigint "invoice_run_id"
     t.text "text"
     t.string "salutation"
     t.string "pp_post"
@@ -812,7 +812,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_18_111642) do
     t.string "uid"
     t.integer "bounce_parent_id"
     t.integer "blocked_count", default: 0
-    t.index ["invoice_list_id"], name: "index_messages_on_invoice_list_id"
+    t.index ["invoice_run_id"], name: "index_messages_on_invoice_run_id"
     t.index ["mailing_list_id"], name: "index_messages_on_mailing_list_id"
     t.index ["sender_id"], name: "index_messages_on_sender_id"
   end

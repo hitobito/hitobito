@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class InvoiceLists::FixedFee
+class InvoiceRuns::FixedFee
   attr_reader :fee, :config, :layer_group_ids
 
   def self.for(fee, layer_group_ids = nil)
@@ -15,13 +15,13 @@ class InvoiceLists::FixedFee
   def initialize(fee, layer_group_ids = nil)
     @fee = fee
     @layer_group_ids = layer_group_ids
-    @config = Settings.invoice_lists.fixed_fees.send(fee)
+    @config = Settings.invoice_runs.fixed_fees.send(fee)
     fail "No config exists for #{fee}" unless config
   end
 
-  def prepare(invoice_list)
-    invoice_list.receivers = receivers.build
-    invoice_list.invoice.invoice_items = invoice_items
+  def prepare(invoice_run)
+    invoice_run.receivers = receivers.build
+    invoice_run.invoice.invoice_items = invoice_items
 
     if block_given? && receivers.layers_with_missing_receiver.any?
       yield [:warning, missing_receivers_message]
@@ -29,7 +29,7 @@ class InvoiceLists::FixedFee
   end
 
   def receivers
-    @receivers ||= InvoiceLists::Receivers.new(config.receivers, layer_group_ids)
+    @receivers ||= InvoiceRuns::Receivers.new(config.receivers, layer_group_ids)
   end
 
   def items
@@ -51,10 +51,10 @@ class InvoiceLists::FixedFee
   end
 
   def t(key, options = {})
-    I18n.t(key, **options.merge(scope: "invoice_lists/fixed_fee"))
+    I18n.t(key, **options.merge(scope: "invoice_runs/fixed_fee"))
   end
 
   def item_class_for(attrs)
-    InvoiceLists::RoleItem
+    InvoiceRuns::RoleItem
   end
 end

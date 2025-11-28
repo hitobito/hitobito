@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module InvoiceLists
+module InvoiceRuns
   Receiver = Data.define(:id, :layer_group_id) do
     def initialize(id:, layer_group_id: nil)
       super

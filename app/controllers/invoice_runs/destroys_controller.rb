@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class InvoiceLists::DestroysController < CrudController
+class InvoiceRuns::DestroysController < CrudController
   skip_authorization_check
   skip_authorize_resource
 
@@ -27,13 +27,13 @@ class InvoiceLists::DestroysController < CrudController
   end
 
   def self.model_class
-    InvoiceList
+    InvoiceRun
   end
 
   private
 
   def destroy_return_path(_destroyed, _options = {})
-    group_invoice_lists_path(entry.group)
+    group_invoice_runs_path(entry.group)
   end
 
   def deletable?
@@ -45,7 +45,7 @@ class InvoiceLists::DestroysController < CrudController
   end
 
   def entry
-    @entry ||= InvoiceList.find(params[:invoice_list_id])
+    @entry ||= InvoiceRun.find(params[:invoice_run_id])
   end
 
   def group

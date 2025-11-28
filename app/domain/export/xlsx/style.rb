@@ -26,12 +26,23 @@ module Export::Xlsx
       end
     end
 
+    A4 = 9
     LABEL_BACKGROUND = Settings.xlsx.label_background
+
+    # These formats are using localization in Excel to format dates and numbers in the given locale
+    # https://github.com/randym/axlsx/blob/master/lib/axlsx/stylesheet/num_fmt.rb
+    NUM_FORMATS = {
+      decimal: 2, # '0.00'
+      currency: 2, # '0.00'
+      date: 14, # 'dd.mm.yyyy'
+      time: 20, # 'HH:MM'
+      datetime: 22 # 'dd.mm.yyyy HH:MM'
+    }
 
     class_attribute :style_definition_labels, :data_row_height
 
     # extend in subclass and add your own definitions
-    self.style_definition_labels = [:default, :attribute_labels, :centered]
+    self.style_definition_labels = [:default, :attribute_labels, :centered] + NUM_FORMATS.keys
 
     def style_definitions
       style_definition_labels.each_with_object({}) do |l, d|
@@ -68,7 +79,7 @@ module Export::Xlsx
 
     # override in subclass to define page setup
     def page_setup
-      {paper_size: 9, # Default A4
+      {paper_size: A4,
        fit_to_height: 1,
        orientation: :landscape}
     end
@@ -92,16 +103,18 @@ module Export::Xlsx
       }
     end
 
-    def date_style
-      default_style.deep_merge(style: {numFmts: NUM_FMT_YYYYMMDD})
-    end
-
     def attribute_labels_style
       default_style.deep_merge(style: {bg_color: LABEL_BACKGROUND})
     end
 
     def centered_style
       default_style.deep_merge(style: {alignment: {horizontal: :center}})
+    end
+
+    NUM_FORMATS.each do |key, fmt|
+      define_method(:"#{key}_style") do
+        default_style.deep_merge(style: {num_fmt: fmt})
+      end
     end
   end
 end

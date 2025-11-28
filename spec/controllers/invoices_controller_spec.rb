@@ -168,15 +168,15 @@ describe InvoicesController do
       end.to change { Delayed::Job.count }.by(1)
     end
 
-    context "invoice list" do
+    context "invoice run" do
       let(:sent) { invoices(:sent) }
       let(:letter) { messages(:with_invoice) }
-      let(:invoice_list) { messages(:with_invoice).create_invoice_list(title: "test", group_id: group.id) }
+      let(:invoice_run) { messages(:with_invoice).create_invoice_run(title: "test", group_id: group.id) }
       let(:top_leader) { people(:top_leader) }
 
       before do
         update_issued_at_to_current_year
-        sent.update(invoice_list: invoice_list)
+        sent.update(invoice_run: invoice_run)
       end
 
       it "does not include invoice when viewing group invoices" do
@@ -184,14 +184,14 @@ describe InvoicesController do
         expect(assigns(:invoices)).not_to include sent
       end
 
-      it "does include invoice when viewing invoice list invoices" do
-        get :index, params: {group_id: group.id, invoice_list_id: invoice_list.id}
+      it "does include invoice when viewing invoice run invoices" do
+        get :index, params: {group_id: group.id, invoice_run_id: invoice_run.id}
         expect(assigns(:invoices)).to include sent
       end
 
       it "does render pdf using invoice renderer" do
         expect do
-          get :index, params: {group_id: group.id, invoice_list_id: invoice_list.id}, format: :pdf
+          get :index, params: {group_id: group.id, invoice_run_id: invoice_run.id}, format: :pdf
         end.to change { Delayed::Job.count }.by(1)
       end
 
@@ -204,13 +204,13 @@ describe InvoicesController do
           country: "CH"
         )
 
-        invoice_list.update(message: letter)
+        invoice_run.update(message: letter)
 
         expect(Export::MessageJob).to receive(:new)
           .with(:pdf, person.id, letter.id, Hash)
           .and_call_original
         expect do
-          get :index, params: {group_id: group.id, invoice_list_id: invoice_list.id}, format: :pdf
+          get :index, params: {group_id: group.id, invoice_run_id: invoice_run.id}, format: :pdf
         end.to change { Delayed::Job.count }.by(1)
       end
     end
@@ -345,25 +345,25 @@ describe InvoicesController do
       expect(flash[:notice]).to eq "Rechnung wurde storniert."
     end
 
-    it "updates and redirects to invoice_list" do
-      list = InvoiceList.create(title: "List", group: group, invoices: [invoice, invoices(:sent)])
+    it "updates and redirects to invoice_run" do
+      run = InvoiceRun.create(title: "List", group: group, invoices: [invoice, invoices(:sent)])
 
-      list.update_total
-      expect(list.recipients_total).to eq(2)
-      expect(list.amount_total.to_f).to eq(5.85)
+      run.update_total
+      expect(run.recipients_total).to eq(2)
+      expect(run.amount_total.to_f).to eq(5.85)
 
       invoice.reload
 
       expect do
-        delete :destroy, params: {group_id: group.id, invoice_list_id: list.id, id: invoice.id}
+        delete :destroy, params: {group_id: group.id, invoice_run_id: run.id, id: invoice.id}
       end.not_to change { group.invoices.count }
-      expect(response).to redirect_to(group_invoice_list_invoices_path(group, list, returning: true))
+      expect(response).to redirect_to(group_invoice_run_invoices_path(group, run, returning: true))
       expect(invoice.reload.state).to eq "cancelled"
 
-      list.reload
+      run.reload
 
-      expect(list.recipients_total).to eq(1)
-      expect(list.amount_total).to eq(0.5)
+      expect(run.recipients_total).to eq(1)
+      expect(run.amount_total).to eq(0.5)
     end
   end
 

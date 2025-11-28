@@ -23,7 +23,7 @@ class PaymentsController < CrudController
     Payment.transaction do
       invoice = parents.last
       if entry.save
-        invoice.invoice_list&.update_paid
+        invoice.invoice_run&.update_paid
         redirect_to(invoice.decorate.show_path, notice: flash_message)
       else
         flash[:payment] = permitted_params.to_h

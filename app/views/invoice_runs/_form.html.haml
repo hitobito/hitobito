@@ -1,0 +1,37 @@
+-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+= entry_form(url: group_invoice_run_path(parent),
+             cancel_url: cancel_url,
+             data: { group: group_path(parent) }) do |f|
+
+  - if entry.receiver
+    = f.hidden_field :receiver_id
+    = f.hidden_field :receiver_type
+
+  - if entry.recipient_ids
+    = f.hidden_field :recipient_ids
+
+  = f.fields_for :invoice, entry.invoice do |fi|
+    = render "invoices/message_template", f: fi, group: entry
+    = fi.labeled_input_field :title, help: t('.recipient_info', count: entry.recipient_ids_count), data: { message_template_target: :title }
+    = fi.labeled_input_field :description, rows: 3, data: { message_template_target: :body }
+    = fi.labeled_input_field :payment_information
+    = fi.labeled_input_field :payment_purpose
+    = fi.labeled_date_field :issued_at unless fixed_fees?
+    = render_extensions :form_invoice_fields, locals: { f: fi }
+    - if fixed_fees?
+      = render "fixed_fees", invoice_items: fi.object.invoice_items
+    - else
+      = field_set_tag do
+        = render "invoice_articles", f: fi, group: parent
+
+      = field_set_tag do
+        = fi.labeled_inline_fields_for :invoice_items, 'invoice_items'
+
+      = field_set_tag do
+        = fi.labeled_input_field :hide_total
+
+      = render "invoices/recalculate/calculated", invoice: fi.object.decorate

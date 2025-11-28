@@ -18,7 +18,7 @@ describe Invoice::BatchCreate do
       subscriber: group,
       role_types: [Group::TopGroup::Leader])
 
-    list = InvoiceList.create!(receiver: mailing_list, group: group, title: :title)
+    list = InvoiceRun.create!(receiver: mailing_list, group: group, title: :title)
 
     invoice = Invoice.new(title: "invoice", group: group)
     invoice.invoice_items.build(name: "pens", unit_cost: 1.5)
@@ -49,7 +49,7 @@ describe Invoice::BatchCreate do
     expect(group.roles.size).to eq(4)
     expect(group.people.size).to eq(4) # people relation goes via roles and are currently not distinct
 
-    list = InvoiceList.create!(receiver: group, group: group, title: :title)
+    list = InvoiceRun.create!(receiver: group, group: group, title: :title)
 
     invoice = Invoice.new(title: "invoice", group: group)
     invoice.invoice_items.build(name: "pens", unit_cost: 1.5)
@@ -73,7 +73,7 @@ describe Invoice::BatchCreate do
       subscriber: group,
       role_types: [Group::TopGroup::Leader])
 
-    list = InvoiceList.create!(receiver: mailing_list, group: group, title: :title)
+    list = InvoiceRun.create!(receiver: mailing_list, group: group, title: :title)
 
     invoice = Invoice.new(title: "invoice", group: group)
     invoice.invoice_items.build(name: "pens", unit_cost: 1.5)
@@ -94,7 +94,7 @@ describe Invoice::BatchCreate do
   end
 
   it "#call does not create any list model for recipient_ids" do
-    list = InvoiceList.new(group: group)
+    list = InvoiceRun.new(group: group)
     list.recipient_ids = [person.id, other_person.id].join(",")
 
     invoice = Invoice.new(title: "invoice", group: group)
@@ -114,7 +114,7 @@ describe Invoice::BatchCreate do
       subscriber: group,
       role_types: [Group::TopGroup::Leader])
 
-    list = InvoiceList.new(receiver: mailing_list, group: group, title: :title)
+    list = InvoiceRun.new(receiver: mailing_list, group: group, title: :title)
     invoice = Invoice.new(title: "invoice", group: group)
     invoice.invoice_items.build(name: "pens", unit_cost: 1.5)
     list.invoice = invoice
@@ -132,9 +132,9 @@ describe Invoice::BatchCreate do
   describe "fixed memberhip fee" do
     let!(:receiver) { Fabricate(Group::BottomLayer::Leader.sti_name, group: groups(:bottom_layer_one)) }
     let!(:list) do
-      list = InvoiceList.new(group: group, title: :title)
+      list = InvoiceRun.new(group: group, title: :title)
       list.invoice = Invoice.new(title: "invoice", group: group, issued_at: Time.zone.today)
-      InvoiceLists::FixedFee.for(:membership).prepare(list)
+      InvoiceRuns::FixedFee.for(:membership).prepare(list)
       list.tap(&:save!).reload
     end
 

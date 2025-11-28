@@ -46,21 +46,21 @@ module Dropdown
     # rubocop:todo Metrics/AbcSize
     def path(finance_group, invoice_items = []) # rubocop:disable Metrics/MethodLength
       if @mailing_list
-        template.new_group_invoice_list_path(
+        template.new_group_invoice_run_path(
           finance_group,
-          invoice_list: {receiver_id: @mailing_list.id, receiver_type: @mailing_list.class},
+          invoice_run: {receiver_id: @mailing_list.id, receiver_type: @mailing_list.class},
           invoice_items: invoice_items
         )
       elsif @filter
-        template.new_group_invoice_list_path(
+        template.new_group_invoice_run_path(
           finance_group,
-          filter: @filter.merge(group_id: @group.id), invoice_list: {recipient_ids: ""},
+          filter: @filter.merge(group_id: @group.id), invoice_run: {recipient_ids: ""},
           invoice_items: invoice_items
         )
       elsif @group
-        template.new_group_invoice_list_path(
+        template.new_group_invoice_run_path(
           finance_group,
-          invoice_list: {receiver_id: @group.id, receiver_type: @group.class.base_class},
+          invoice_run: {receiver_id: @group.id, receiver_type: @group.class.base_class},
           invoice_items: invoice_items
         )
       elsif @people.one?
@@ -70,9 +70,9 @@ module Dropdown
           invoice_items: invoice_items
         )
       else
-        template.new_group_invoice_list_path(
+        template.new_group_invoice_run_path(
           finance_group,
-          invoice_list: {recipient_ids: @people.collect(&:id).join(",")},
+          invoice_run: {recipient_ids: @people.collect(&:id).join(",")},
           invoice_items: invoice_items
         )
       end

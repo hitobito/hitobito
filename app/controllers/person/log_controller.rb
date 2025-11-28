@@ -11,7 +11,9 @@ class Person::LogController < ApplicationController
   decorates :group, :person, :versions
 
   def index
-    @versions = PaperTrail::Version.where(version_conditions)
+    @versions = PaperTrail::Version
+      .changed
+      .where(version_conditions)
       .reorder("created_at DESC, id DESC")
       .includes(:item)
       .page(params[:page])

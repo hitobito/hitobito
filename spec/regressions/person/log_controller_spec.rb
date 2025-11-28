@@ -12,8 +12,11 @@ describe Person::LogController, type: :controller do
   let(:top_group) { groups(:top_group) }
   let(:test_entry) { top_leader }
   let(:dom) { Capybara::Node::Simple.new(response.body) }
+  let(:now) { Time.zone.local(2025, 11, 28, 9, 33) }
 
   before { sign_in(top_leader) }
+
+  def text_at(css) = dom.find(".row#{css}").text.strip
 
   describe "GET index", versioning: true do
     it "renders empty log" do
@@ -22,7 +25,15 @@ describe Person::LogController, type: :controller do
       expect(response.body).to match(/keine Änderungen/)
     end
 
-    it "renders log in correct order" do
+    it "ignores versions without object changes" do
+      test_entry.update!(town: "Bern", zip_code: "3007", email: "new@hito.example.com")
+      test_entry.versions.last.update(object_changes: nil)
+      get :index, params: {id: test_entry.id, group_id: top_group.id}
+
+      expect(response.body).to match(/keine Änderungen/)
+    end
+
+    it "renders log entries" do
       Fabricate(:social_account, contactable: test_entry, label: "Foo", name: "Bar")
       test_entry.update!(town: "Bern", zip_code: "3007", email: "new@hito.example.com")
       test_entry.confirm
@@ -49,6 +60,23 @@ describe Person::LogController, type: :controller do
         "Ort wurde von Greattown auf Bern geändert.",
         "Social Media Adresse Bar (Foo) wurde hinzugefügt."
       ]
+    end
+
+    it "renders log in correct order" do
+      travel_to(now - 1.day) do
+        Fabricate(:social_account, contactable: test_entry, label: "Foo", name: "Bar")
+      end
+      travel_to(now - 2.day) do
+        test_entry.update!(town: "Bern", zip_code: "3007", email: "new@hito.example.com")
+      end
+      get :index, params: {id: test_entry.id, group_id: top_group.id}
+
+      expect(text_at(".mb-3:nth-of-type(1) .col-4")).to eq "Donnerstag, 27. November 2025, 09:33 Uhr"
+      expect(text_at(".mb-3:nth-of-type(1) .col-8")).to eq "Social Media Adresse Bar (Foo) wurde hinzugefügt."
+      expect(text_at(".mb-3:nth-of-type(2) .col-4")).to eq "Mittwoch, 26. November 2025, 09:33 Uhr"
+      expect(text_at(".mb-3:nth-of-type(2) .col-8")).to(
+        eq("PLZ wurde von 3456 auf 3007 geändert.Ort wurde von Greattown auf Bern geändert.")
+      )
     end
   end
 end

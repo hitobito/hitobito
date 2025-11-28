@@ -33,6 +33,7 @@ module PaperTrail
   class Version < ActiveRecord::Base
     include PaperTrail::VersionConcern
 
+    scope :changed, -> { where.not(object_changes: nil) }
     belongs_to :main, polymorphic: true
 
     # Scoped association for joining roles

@@ -36,8 +36,19 @@ describe Person::LogController, type: :controller do
       Fabricate(:phone_number, contactable: test_entry, label: "Foo", number: "079 123 45 67")
       get :index, params: {id: test_entry.id, group_id: top_group.id}
 
-      expect(dom.all("h4").size).to eq(1)
-      expect(dom.all("#content div").size).to eq(12)
+      expect(dom.all(".row.mb-3").size).to eq(1)
+      expect(dom.all(".row.mb-3 .col-8 div").size).to eq(7)
+
+      changes = (1..7).map { |x| dom.find(".row.mb-3 .col-8 div:nth-child(#{x})").text }
+      expect(changes).to eq [
+        "Telefonnummer +41 79 123 45 67 (Foo) wurde hinzugefügt.",
+        "Zugriffsanfrage für Top Group TopGroup wurde gestellt.",
+        "Telefonnummer +41 79 123 45 67 (Foo) wurde hinzugefügt.",
+        "Haupt-E-Mail wurde von top_leader@example.com auf new@hito.example.com geändert.",
+        "PLZ wurde von 3456 auf 3007 geändert.",
+        "Ort wurde von Greattown auf Bern geändert.",
+        "Social Media Adresse Bar (Foo) wurde hinzugefügt."
+      ]
     end
   end
 end

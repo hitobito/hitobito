@@ -2,6 +2,7 @@
 
 ## unreleased
 
+- Die Labels von Telefonnummern, E-Mails und Social Medias werden in der JSON API sprachabhängig zurückgegeben (hitobito_sac_cas#2066)
 - Spalten in Excel Exporten können neu als Datum, Dezimalzahl oder Betrag formattiert werden (hitobito_sac_cas#1665)
 - Logs auf Gruppen werden korrekt aggregiert dargestellt (hitobito_sac_cas#2087)
 - Teilnehmende eines Anlasses können diesen immer ansehen, unabhängig von ihrer Rolle (hitobito_sac_cas#2110)

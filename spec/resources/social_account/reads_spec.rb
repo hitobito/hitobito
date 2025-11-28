@@ -19,7 +19,7 @@ describe SocialAccountResource, type: :resource do
   describe "serialization" do
     let(:role) { roles(:bottom_member) }
     let!(:person) { role.person }
-    let!(:social_account) { Fabricate(:social_account, contactable: person) }
+    let!(:social_account) { Fabricate(:social_account, contactable: person, label: "Webseite") }
 
     context "without appropriate permission" do
       let(:user) { Fabricate(:person) }
@@ -33,16 +33,23 @@ describe SocialAccountResource, type: :resource do
     context "with appropriate permission" do
       let!(:user_role) { Fabricate(Group::BottomLayer::Leader.name, person: Fabricate(:person), group: role.group) }
 
-      it "works" do
+      it "contains data" do
         render
         data = jsonapi_data[0]
         expect(data.id).to eq(social_account.id)
         expect(data.jsonapi_type).to eq("social_accounts")
         expect(data.contactable_id).to eq person.id
         expect(data.contactable_type).to eq "Person"
-        expect(data.label).to eq social_account.label
+        expect(data.label).to eq "Webseite"
         expect(data.name).to eq social_account.name
         expect(data.public).to eq social_account.public
+      end
+
+      it "translates label" do
+        I18n.with_locale(:fr) { render }
+        data = jsonapi_data[0]
+        expect(data.id).to eq(social_account.id)
+        expect(data.label).to eq "Site web"
       end
     end
   end

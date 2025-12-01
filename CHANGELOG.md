@@ -2,10 +2,6 @@
 
 ## unreleased
 
-- Mehrsprachige Felder sind nun in den Formularen als solche erkennbar und können in allen verfügbaren Sprachen einer Umgebung erfasst werden (#3560)
-
-## Version 2.7
-
 - Spalten in Excel Exporten können neu als Datum, Dezimalzahl oder Betrag formattiert werden (hitobito_sac_cas#1665)
 - Logs auf Gruppen werden korrekt aggregiert dargestellt (hitobito_sac_cas#2087)
 - Teilnehmende eines Anlasses können diesen immer ansehen, unabhängig von ihrer Rolle (hitobito_sac_cas#2110)
@@ -14,9 +10,13 @@
 - Eigener JSON:API Endpoint für Abos (mailing lists) (hitobito_pbs#382)
 - Die Personal API Tokens Login-Methode wurde abgeschaltet, nachdem sie 4 Jahre lang zur Abschaltung angekündigt waren. Allfällige Drittapplikationen können stattdessen die sichereren Service Tokens oder OAuth API-Zugriff verwenden, und sollten auch dringend auf die neue JSON:API migrieren, da die alte read-only REST API auch bereits seit einem Jahr deprecated ist (#3635)
 - Die Registrierung neuer Personen ist neu auch via API möglich. Dies erlaubt es, externe Anmeldeformulare zu programmieren. Die Spielregeln sind dabei dieselben wie bei der Selbstregistrierung direkt im hitobito UI. Dazu wurden auch die Datenschutzerklärung und Einverständnis von Erziehungsberechtigten in der API verfügbar gemacht (#3440)
-- Neuer Personenfilter "im Zeitraum gestartete Rollen" (#3315).
+- Neuer Personenfilter "im Zeitraum gestartete Rollen" (#3315)
 - Die bisherigen Sammelrechnungen wurden zu Rechnungsläufen umbenannt, um den Begriff "Sammelrechnung" in Zukunft für wiederholbare, Rechnungsperioden-basierte Verbandsabrechnungen und Gruppenrechnungen zu Verfügung zu haben (#3746)
-- Die Optionen für den E-Mail Adressen Export erscheinen nun wie die übrigen Formate in einem Untermenu. (#3693)
+- Mehrsprachige Felder sind nun in den Formularen als solche erkennbar und können in allen verfügbaren Sprachen einer Umgebung erfasst werden (#3560)
+
+## Version 2.7
+
+- Die Optionen für den E-Mail Adressen Export erscheinen nun wie die übrigen Formate in einem Untermenu (#3693)
 - CSV Import unterstützt Rollen Start und Enddatum (#3730)
 - Man kann bei Anlässen neu Begleitpersonen ("Gäste") anmelden, auch wenn sie kein Hitobito-Konto haben (hitobito_sww#208)
 - Duplikate können jetzt durchsucht werden (#3575)

@@ -2102,6 +2102,10 @@ de:
         other: "%{count} Rollen erstellen"
 
   tags:
+    list:
+      confirm_delete: >
+        Wollen Sie diesen Eintrag wirklich löschen?
+        Dies löscht das Tag aus allen Personenprofilen, Abos und Personenfiltern in welchen es noch verwendet wird.
     multiselect_actions:
       merge_tags: Zusammenführen
     categories:

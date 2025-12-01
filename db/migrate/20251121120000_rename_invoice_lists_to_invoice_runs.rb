@@ -22,8 +22,7 @@ class RenameInvoiceListsToInvoiceRuns < ActiveRecord::Migration[8.0]
       WHERE
         t.relname = 'invoice_lists'
         AND c.contype = 'p'
-        AND t.relkind = 'r' -- 'r' for regular table
-        AND t.relnamespace = (SELECT oid FROM pg_namespace WHERE nspname = 'public');
+        AND t.relkind = 'r' -- 'r' for regular table;
     SQL
     result.first["primary_key_index_name"]
   end

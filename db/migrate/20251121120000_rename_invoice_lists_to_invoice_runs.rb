@@ -1,8 +1,12 @@
 class RenameInvoiceListsToInvoiceRuns < ActiveRecord::Migration[8.0]
   def change
-    # Since the table was initially created with mysql the pkey index does not follow the naming convention the postgres adapter expects.
-    # Thus we rename it beforehand
-    rename_index(:invoice_lists, find_pkey_index_name, :invoice_lists_pkey)
+    # Since the table was initially created with mysql (on old instances), the pkey index does not
+    # follow the naming convention the postgres adapter expects.
+    # Thus we rename it beforehand if the name is wrong
+    old_pkey = find_pkey_index_name
+    unless old_pkey.to_sym == :invoice_lists_pkey
+      rename_index(:invoice_lists, old_pkey, :invoice_lists_pkey)
+    end
 
     rename_table(:invoice_lists, :invoice_runs)
     rename_column(:invoices, :invoice_list_id, :invoice_run_id)

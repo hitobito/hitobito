@@ -536,12 +536,16 @@ describe Event do
 
       expect(q.question_translations).to eq({
         "de" => "Ich habe folgendes ÖV Abo",
-        "fr" => "J'ai l'abonnement de transports publics suivant"
+        "en" => nil,
+        "fr" => "J'ai l'abonnement de transports publics suivant",
+        "it" => nil
       })
 
       expect(q.choices_translations).to eq({
         "de" => "GA, Halbtax / unter 16, keine Vergünstigung",
-        "fr" => "AG, demi-tarif / moins de 16 ans, pas de réduction"
+        "en" => nil,
+        "fr" => "AG, demi-tarif / moins de 16 ans, pas de réduction",
+        "it" => nil
       })
     end
   end

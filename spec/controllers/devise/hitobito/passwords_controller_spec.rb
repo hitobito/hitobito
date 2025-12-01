@@ -59,7 +59,7 @@ describe Devise::Hitobito::PasswordsController do
       # of the issue: https://github.com/hitobito/hitobito_sac_cas/issues/1392
       it "should use previous_locale if person language is not a registered language in application" do
         @original_locales = I18n.available_locales.dup
-        I18n.available_locales = Settings.application.languages.keys
+        I18n.available_locales = [:de]
         person.update!(language: "en")
         expect(I18n.locale).to eq(:de)
         expect(I18n).not_to receive(:"locale=").with("en")

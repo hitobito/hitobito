@@ -53,7 +53,7 @@ describe Export::Ics::Events do
       is_expected.to include(event.description)
       is_expected.to include(contact.person_name)
       is_expected.to include(contact.email)
-      url = Rails.application.routes.url_helpers.group_event_url(event.groups.first, event,
+      url = Rails.application.routes.url_helpers.group_event_url(group_id: event.groups.first.id, id: event.id,
         host: ENV["RAILS_HOST_NAME"])
       is_expected.to include(url)
     end

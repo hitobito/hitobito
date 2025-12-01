@@ -6,6 +6,8 @@
 # A dummy model used for general testing.
 class CrudTestModel < ActiveRecord::Base # :nodoc:
   include DatetimeAttribute
+  include Globalized
+
   datetime_attr :last_seen
 
   belongs_to :companion, class_name: "CrudTestModel"
@@ -64,7 +66,7 @@ class CrudTestModelsController < CrudController # :nodoc:
   self.sort_mappings = {chatty: "length(remarks)"}
   self.permitted_attrs = [:name, :email, :password, :whatever, :children,
     :companion_id, :rating, :income, :birthdate,
-    :gets_up_at, :last_seen, :human, :remarks]
+    :gets_up_at, :last_seen, :human, :remarks, :globalized_field, :globalized_text_field]
 
   skip_authorize_resource
   skip_authorization_check
@@ -234,6 +236,9 @@ module CrudTestHelper
 
       t.timestamps null: false
     end
+
+    CrudTestModel.translates :globalized_field, :globalized_text_field
+    CrudTestModel.create_translation_table! globalized_field: :string, globalized_text_field: :text
   end
 
   def create_other_crud_test_models_table
@@ -262,6 +267,11 @@ module CrudTestHelper
         end
       end
     end
+    if c.data_source_exists?(:crud_test_model_translations)
+      without_transaction do
+        CrudTestModel.drop_translation_table!
+      end
+    end
   end
 
   # Creates 6 dummy entries for the crud_test_models table.
@@ -277,9 +287,15 @@ module CrudTestHelper
 
   def with_test_routing
     with_routing do |set|
-      set.draw { resources :crud_test_models }
+      set.draw do
+        extend LanguageRouteScope
+
+        language_scope do
+          resources :crud_test_models
+        end
+      end
       # used to define a controller in these tests
-      set.default_url_options = {controller: "crud_test_models"}
+      set.default_url_options = {controller: "crud_test_models", locale: :de}
       yield
     end
   end
@@ -309,7 +325,9 @@ module CrudTestHelper
       gets_up_at: Time.zone.local(2000, 1, 1, index, index),
       last_seen: Time.zone.local(2000 + 10 * index, index, index, 10 + index, 20 + index),
       human: index % 2 == 0,
-      remarks: "#{c} #{str(index + 1)} #{str(index + 2)}\n" * (index % 3 + 1))
+      remarks: "#{c} #{str(index + 1)} #{str(index + 2)}\n" * (index % 3 + 1),
+      globalized_field: "#{c} #{str(index + 1)} #{str(index + 2)}\n" * (index % 3 + 1),
+      globalized_text_field: "#{c} #{str(index + 1)} #{str(index + 2)}\n" * (index % 3 + 1))
   end
 
   def create_other(index)

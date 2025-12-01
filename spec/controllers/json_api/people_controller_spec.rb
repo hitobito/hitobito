@@ -534,7 +534,7 @@ describe JsonApi::PeopleController, type: [:request] do
 
           expect(errors.first.status).to eq("403")
           expect(errors.first.title).to eq("Zugriff verweigert")
-          expect(errors.first.detail).to eq("Du bist nicht berechtigt auf diese Resource zuzugreifen.")
+          expect(errors.first.detail).to eq("You are not authorized to access this resource.")
         end
 
         it "returns person from token`s layer with layer_read permission" do

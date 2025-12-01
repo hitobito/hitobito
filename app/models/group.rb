@@ -118,8 +118,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   attr_readonly :type
 
-  translates :custom_self_registration_title
-  translates :privacy_policy_title
+  translates :custom_self_registration_title, :privacy_policy_title
 
   ### CALLBACKS
 

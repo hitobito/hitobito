@@ -12,6 +12,7 @@
 - Die Registrierung neuer Personen ist neu auch via API möglich. Dies erlaubt es, externe Anmeldeformulare zu programmieren. Die Spielregeln sind dabei dieselben wie bei der Selbstregistrierung direkt im hitobito UI. Dazu wurden auch die Datenschutzerklärung und Einverständnis von Erziehungsberechtigten in der API verfügbar gemacht (#3440)
 - Neuer Personenfilter "im Zeitraum gestartete Rollen" (#3315)
 - Die bisherigen Sammelrechnungen wurden zu Rechnungsläufen umbenannt, um den Begriff "Sammelrechnung" in Zukunft für wiederholbare, Rechnungsperioden-basierte Verbandsabrechnungen und Gruppenrechnungen zu Verfügung zu haben (#3746)
+- Mehrsprachige Felder sind nun in den Formularen als solche erkennbar und können in allen verfügbaren Sprachen einer Umgebung erfasst werden (#3560)
 
 ## Version 2.7
 

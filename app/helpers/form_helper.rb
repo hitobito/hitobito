@@ -106,7 +106,7 @@ module FormHelper
   def field_inheritance_values(list, fields)
     model = model_class.new
     options = list.flat_map do |entity|
-      fields.collect do |field, source_method = field|
+      with_globalized(fields, model, entity).collect do |field, source_method|
         content_tag(:option, "", data: {
           source_id: entity.id,
           target_field: [entry.model_name.param_key, field].join("_"),
@@ -151,5 +151,30 @@ module FormHelper
     cancel_url_edit = options.delete(:cancel_url_edit)
     url = record.new_record? ? cancel_url_new : cancel_url_edit
     url || cancel_url || polymorphic_path(object)
+  end
+
+  # Adds globalized versions of fields and source_methods to the original
+  # fields hash
+  def with_globalized(fields, model, entity)
+    fields.inject({}) do |globalized_fields, (field, source_method)|
+      source_method ||= field
+      field = field.to_sym
+      source_method = source_method.to_sym
+      if should_globalize?(model, entity, field, source_method)
+        fields = [field] + Globalized.globalized_names_for_attr(field)
+        source_methods = [:"#{source_method}_#{I18n.locale}"] +
+          Globalized.globalized_names_for_attr(source_method)
+        globalized_fields.merge(fields.zip(source_methods).to_h)
+      else
+        globalized_fields.merge({field => source_method})
+      end
+    end
+  end
+
+  def should_globalize?(model, entity, field, source_method)
+    model.class.ancestors.include?(Globalized) &&
+      entity.class.ancestors.include?(Globalized) &&
+      model.translated_attribute_names.include?(field) &&
+      entity.translated_attribute_names.include?(source_method)
   end
 end

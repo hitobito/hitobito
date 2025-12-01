@@ -213,7 +213,7 @@ describe PeopleController, type: :controller do
         get :show, params: params
         expect(header).to eq "Anmeldungen"
         expect(label_link[:href]).to eq(<<~URL.chomp)
-          /groups/#{course.group_ids.first}/events/#{course.id}/participations/#{appl.participation.id}
+          /de/groups/#{course.group_ids.first}/events/#{course.id}/participations/#{appl.participation.id}
         URL
         expect(label_link.text).to match(/Eventus/)
         expect(label.text).to match(/Top/)

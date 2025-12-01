@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe People::Membership::VerificationQrCode do
+describe People::Membership::VerificationQrCode, :outside_language_scope do
   let(:person) { people(:bottom_member) }
   let(:qr_code) { described_class.new(person).generate }
 

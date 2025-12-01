@@ -96,9 +96,7 @@ en:
               missing_scheme: has to contain a protocol-scheme (http:// or https://)
               suffix_present: darf keinen Pfad und keinen Slash am Ende haben
         custom_content:
-          attributes:
-            body:
-              placeholder_missing: 'must contain the placeholder %{placeholder} '
+          placeholder_missing: 'muss den Platzhalter %{placeholder} enthalten'
         event:
           attributes:
             base:
@@ -314,9 +312,9 @@ en:
       invoice_item:
         one: Invoice Item
         other: Invoice Items
-      invoice_list:
-        one: Collective invoice
-        other: Collective invoices
+      invoice_run:
+        one: Rechnungslauf
+        other: Rechnungsläufe
       label_format:
         one: Label format
         other: Label formats
@@ -1242,13 +1240,13 @@ en:
         account: Account
 
 
-      invoice_list:
-        title: Title
-        receiver: Recipient
-        recipients_total: Recipients total
-        recipients_paid: Recipient paid
-        amount_total: Amount total
-        amount_paid: Amount paid
+      invoice_run:
+        title: Titel
+        receiver: Empfänger
+        recipients_total: Empfänger Insgesamt
+        recipients_paid: Empfänger Bezahlt
+        amount_total: Betrag insgesamt
+        amount_paid: Betrag bezahlt
 
       # used for nested attributes
       invoice_items:

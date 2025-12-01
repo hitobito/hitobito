@@ -98,9 +98,7 @@ it:
               missing_scheme: deve contenere un protocollo (http:// oppure https://)
               suffix_present: alla fine non può avere ne un indirizzo ne un slash
         custom_content:
-          attributes:
-            body:
-              placeholder_missing: 'deve contenere il carattere %{placeholder}'
+          placeholder_missing: 'muss den Platzhalter %{placeholder} enthalten'
         event:
           attributes:
             base:
@@ -351,10 +349,10 @@ it:
         one: Voce contabile
         many: Voci contabili
         other: Voci contabili
-      invoice_list:
-        one: Fattura collettiva
-        many: Fatture collettive
-        other: Fatture collettive
+      invoice_run:
+        one: Rechnungslauf
+        many: Rechnungsläufe
+        other: Rechnungsläufe
       label_format:
         one: formato delle etichette
         many: Formati delle etichette
@@ -1316,13 +1314,13 @@ it:
         account: Conto
 
 
-      invoice_list:
-        title: Titolo
-        receiver: Destinatario
-        recipients_total: Destinatario complessivo
-        recipients_paid: Destinatario pagato
-        amount_total: Importo complessivo
-        amount_paid: Importo pagato
+      invoice_run:
+        title: Titel
+        receiver: Empfänger
+        recipients_total: Empfänger Insgesamt
+        recipients_paid: Empfänger Bezahlt
+        amount_total: Betrag insgesamt
+        amount_paid: Betrag bezahlt
 
       # used for nested attributes
       invoice_items:

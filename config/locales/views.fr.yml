@@ -82,6 +82,11 @@ fr:
       placeholder_event: "Chercher un événement …."
       placeholder_company_name: "Chercher un nom d'entreprise…"
 
+    form:
+      additional_languages: "Zusätzlich ausgefüllte Sprachen"
+      locale_indicator: "Sprache dieses Eingabefelds"
+      input_translation_button: "Eingabefelder für weitere verfügbare Sprachen anzeigen"
+
   list:
     index:
       title: "%{models}"
@@ -184,8 +189,8 @@ fr:
     as: "en tant que %{role}"
     register_new_managed: Neues Kind erfassen und anmelden
     disabled_messages:
-      already_exists: 'ist bereits angemeldet'
-      cannot_see_event: 'darf den Anlass nicht sehen'
+      already_exists: "ist bereits angemeldet"
+      cannot_see_event: "darf den Anlass nicht sehen"
 
   dropdown/event/participation/mail_dispatch:
     title: Envoyer un e-mail
@@ -458,7 +463,7 @@ fr:
       managed:
         update:
           flash:
-            privacy_policy_not_accepted: 'Pour terminer l''inscription, il faut accepter la déclaration de protection des données.'
+            privacy_policy_not_accepted: "Pour terminer l'inscription, il faut accepter la déclaration de protection des données."
 
         edit:
           title: Saisir un nouvel enfant et l'inscrire à l'événement
@@ -680,7 +685,6 @@ fr:
     tabs:
       participants: "Participants"
     export_enqueued: "l'exportation débute en arrière-plan et est téléchargée quand elle est terminée"
-    add_tag: Rajouter tag
 
   event/applications:
     approved: "L'inscription a été autorisée."
@@ -703,7 +707,7 @@ fr:
   event/participations:
     full_entry_label: "%{model_label} de <i>%{person}</i> dans <i>%{event}</i>"
     success: "%{full_entry_label} a été ajouté avec succès."
-    success_for_external_manager: '%{full_entry_label} wurde erfolgreich erstellt.'
+    success_for_external_manager: "%{full_entry_label} wurde erfolgreich erstellt."
     instructions: "Pour l'inscription définitive, tu dois imprimer cette page en utilisant l'option <i>imprimer</i>, puis la signer et l'envoyer par poste à l'adresse indiquée."
     export_enqueued: "l'exportation débute en arrière-plan et est téléchargée quand elle est terminée"
     waiting_list: "Toutes les places sont actuellement prises, l'inscription est sur la liste d'attente."
@@ -741,7 +745,7 @@ fr:
     registered: "Tes données personnelles ont été enregistrées. Prière d'apporter les indications complémentaires suivantes en vue de l'inscription."
     application_window_closed: "La fenêtre d'inscription pour cet événement est close."
     no_places_available: "Le nombre maximal de participants pour cet événement est déjà atteint."
-    email_sent_manager: 'Wir haben dir ein E-Mail mit einem Link geschickt, wo du dich oder dein Kind direkt für den Anlass anmelden kannst.'
+    email_sent_manager: "Wir haben dir ein E-Mail mit einem Link geschickt, wo du dich oder dein Kind direkt für den Anlass anmelden kannst."
     registered_manager: 'Deine persönlichen Daten wurden aufgenommen. Du kannst nun deine Kinder via "Anmelden" Knopf anmelden'
 
   event/roles:
@@ -1105,77 +1109,77 @@ fr:
       body: Contenu
       remove: Supprimer le modèle d'e-mail
 
-  invoice_lists:
+  invoice_runs:
     destroys:
       show:
-        title: Supprimer une facture collective
-        non_draft_info: 'La facture collective contient au moins une facture qui n''a ni le statut "Brouillon" ni le statut "Annulé". La facture collective ne peut donc pas être supprimée.'
-        confirm_delete: Voulez-vous vraiment supprimer la facture collective?
+        title: Rechnungslauf löschen
+        non_draft_info: 'Im Rechnungslauf ist mindestens eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann der Rechnungslauf nicht gelöscht werden.'
+        confirm_delete: Wollen Sie den Rechnungslauf wirklich löschen?
     form:
       invoice_articles:
         variable_donation:
-          name: demande de dons variable
-          number: dons
-          description: demande de dons basée sur les sommes de dons existant déjà
+          name: Variabler Spendenaufruf
+          number: Spenden
+          description: Spendenaufruf anhand bereits vorhandenen Spendenbeträgen
       recipient_info:
-        one: "La facture est établie pour und personne"
-        many: "La facture est établie pour %{count} personnes"
-        other: "La facture est établie pour %{count} personnes"
+        one: "Rechnung wird für eine Person erstellt."
+        many: "Rechnung wird für %{count} Personen erstellt."
+        other: "Rechnung wird für %{count} Personen erstellt."
     create:
-      one: "La facture <i>%{title}</i> a été établie pour un destinataire"
-      many: "La facture<i>%{title}</i> a été établie pour %{count} destinataires."
-      other: "La facture<i>%{title}</i> a été établie pour %{count} destinataires."
-    create_batch: "La facture <i>%{title}</i>est créée pour %{count} destinataire-s en arrière-plan."
+      one: "Rechnung <i>%{title}</i> wurde erstellt."
+      many: "Rechnung <i>%{title}</i> wurde für %{count} Empfänger erstellt."
+      other: "Rechnung <i>%{title}</i> wurde für %{count} Empfänger erstellt."
+    create_batch: "Rechnung <i>%{title}</i> wird für %{count} Empfänger im Hintergrund erstellt."
     update:
-      zero: "Choisir au moins une facture."
-      model_error: "La facture %{number} n'est pas valable - %{error}."
+      zero: "Es muss mindestens eine Rechnung ausgewählt werden."
+      model_error: "Rechnung %{number} ist ungültig - %{error}."
       issued:
-        one: "%{count} les factures ont été établies."
-        many: "%{count} les factures ont été établies."
-        other: "%{count} les factures ont été établies."
+        one: "Rechnung %{number} wurde gestellt."
+        many: "%{count} Rechnungen wurden gestellt."
+        other: "%{count} Rechnungen wurden gestellt."
       reminded:
-        one: "des rappels ont été établis pour %{count} factures"
-        many: "Des rappels ont été établis pour %{count}  factures"
-        other: "Des rappels ont été établis pour %{count}  factures"
+        one: "Rechnung %{number} wurde gemahnt."
+        many: "%{count} Rechnungen wurden gemahnt."
+        other: "%{count} Rechnungen wurden gemahnt."
       send_notification:
-        one: "%{count} factures sont envoyées en arrière-plan par e-mail."
-        many: "%{count} factures sont envoyées en arrière-plan par e-mail."
-        other: "%{count} factures sont envoyées en arrière-plan par e-mail."
+        one: "Rechnung %{number} wird im Hintergrund per E-Mail verschickt."
+        many: "%{count} Rechnungen werden im Hintergrund per E-Mail verschickt."
+        other: "%{count} Rechnungen werden im Hintergrund per E-Mail verschickt."
       invalid_state:
-        one: "%{count} factures ont déjà été établies."
-        many: "%{count} factures ont déjà été établies."
-        other: "%{count} factures ont déjà été établies."
+        one: "Rechnung %{number} wurde bereits gestellt."
+        many: "%{count} Rechnungen wurde bereits gestellt."
+        other: "%{count} Rechnungen wurde bereits gestellt."
       issued_invalid:
-        one: "%{count} factures ont déjà été établies."
-        many: "%{count}  factures ont déjà été établies."
-        other: "%{count}  factures ont déjà été établies."
+        one: "Rechnung %{number} wurde bereits gestellt."
+        many: "%{count} Rechnungen wurde bereits gestellt."
+        other: "%{count} Rechnungen wurde bereits gestellt."
       sent_invalid:
-        one: "%{count} factures ont déjà été envoyées."
-        many: "%{count} factures ont déjà été"
-        other: "%{count} factures ont déjà été"
+        one: "Rechnung %{number} wurde bereits verschickt."
+        many: "%{count} Rechnungen wurde bereits verschickt."
+        other: "%{count} Rechnungen wurde bereits verschickt."
       payed_invalid:
-        one: "%{count} factures ont déjà été payées"
-        many: "%{count} ont déjà été payées."
-        other: "%{count} ont déjà été payées."
+        one: "Rechnung %{number} wurde bereits bezahlt."
+        many: "%{count} Rechnungen wurde bereits bezahlt."
+        other: "%{count} Rechnungen wurde bereits bezahlt."
       reminded_invalid:
-        one: "%{count} rappels ont déjà été établis."
-        many: "%{count} rappels ont déjà été établis."
-        other: "%{count} rappels ont déjà été établis."
+        one: "Mahnung %{number} wurde bereits erstellt."
+        many: "%{count} Mahnungen wurden bereits erstellt."
+        other: "%{count} Mahnungen wurden bereits erstellt."
       recipient_email_invalid:
-        one: "%{count} factures n'ont pas pu être envoyées car il n'y a pas d'e-mail de destinataire."
-        many: "%{count} factures n'ont pas pu être envoyées car il n'y a pas d'e-mail de destinataire."
-        other: "%{count} factures n'ont pas pu être envoyées car il n'y a pas d'e-mail de destinataire."
+        one: "Rechnung %{number} konnte nicht verschickt werden, da keine Empfänger E-Mail hinterlegt ist."
+        many: "%{count} Rechnungen konnten nicht verschickt werden, da keine Empfänger E-Mails hinterlegt sind."
+        other: "%{count} Rechnungen konnten nicht verschickt werden, da keine Empfänger E-Mails hinterlegt sind."
       payment_reminders_missing:
-        one: "%{count} rappels de factures n'"
-        many: "%{count} rappels de factures n'ont pas pu être établis car les réglages de rappel ne sont pas valables."
-        other: "%{count} rappels de factures n'ont pas pu être établis car les réglages de rappel ne sont pas valables."
+        one: "Rechnung %{number} konnte nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
+        many: "%{count} Rechnungen konnten nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
+        other: "%{count} Rechnungen konnten nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
     destroy:
-      zero: "Choisir d'abord une facture"
-      one: "La facture a été annulée."
-      other: "%{count} factures ont été annulées."
+      zero: "Zuerst muss eine Rechnung ausgewählt werden."
+      one: "Rechnung wurde storniert."
+      other: "%{count} Rechnungen wurden storniert."
 
-  invoice_lists/fixed_fee:
-    recipient_role_group_mismatch: "Aucun destinataire n'a pu être identifié pour les groupes suivants: %{groups}"
+  invoice_runs/fixed_fee:
+    recipient_role_group_mismatch: "Für folgende Gruppen konnte kein Empfänger ermittelt werden: %{groups}"
 
   payments:
     export_enqueued: "L'exportation a commencé en tâche de fond et sera téléchargée une fois terminée."
@@ -1857,9 +1861,6 @@ fr:
       add_role: Ajouter un rôle
       set_main_group: Déterminer le groupe principal
 
-    tags:
-      add_tag: Ajouter un tag…
-      no_entry: (aucun)
     export_enqueued: "L'exportation commence en arrière-plan et sera téléchargé après avoir été complété."
     export_email_needed: "Adresse e-mail requise pour l'export."
 
@@ -2239,6 +2240,11 @@ fr:
       only_persons_with: "Seulement personnes avec:"
       persons_excluded_with: "Personnes exclues avec:"
     export_enqueued: "L'exportation commence en arrière-plan et sera téléchargé après avoir été complété."
+
+  taggable:
+    add_tag: Tag hinzufügen
+    cannot_create: Bitte wähle einen bestehenden Tag aus
+    no_entry: (keine)
 
   version:
     attribute_change:

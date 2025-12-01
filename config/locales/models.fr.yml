@@ -98,9 +98,7 @@ fr:
               missing_scheme: doit contenir un protocole (http:// ou https://)
               suffix_present: ne doit pas contenir de chemin de fichier ni finir par un backslash
         custom_content:
-          attributes:
-            body:
-              placeholder_missing: 'doit contenir la variable %{placeholder}'
+          placeholder_missing: 'muss den Platzhalter %{placeholder} enthalten'
         event:
           attributes:
             base:
@@ -352,10 +350,10 @@ fr:
         one: postes de factures
         many: Détails de la facture
         other: Détails de la facture
-      invoice_list:
-        one: Facture collective
-        many: Facture collective
-        other: Facture collective
+      invoice_run:
+        one: Rechnungslauf
+        many: Rechnungsläufe
+        other: Rechnungsläufe
       label_format:
         one: format d'étiquette
         many: Formats d'étiquettes
@@ -1317,13 +1315,13 @@ fr:
         account: Compte
 
 
-      invoice_list:
-        title: Titre
-        receiver: Destinataire
-        recipients_total: Nombre total de destinataires
-        recipients_paid: Paiement versé
-        amount_total: Montant total
-        amount_paid: Montant payé
+      invoice_run:
+        title: Titel
+        receiver: Empfänger
+        recipients_total: Empfänger Insgesamt
+        recipients_paid: Empfänger Bezahlt
+        amount_total: Betrag insgesamt
+        amount_paid: Betrag bezahlt
 
       # used for nested attributes
       invoice_items:

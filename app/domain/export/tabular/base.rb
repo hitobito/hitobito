@@ -70,7 +70,7 @@ module Export::Tabular
     end
 
     def data_rows(format = nil)
-      return enum_for(:data_rows) unless block_given?
+      return enum_for(:data_rows, format) unless block_given?
 
       Iterator.new(list, batch_size).each do |entry|
         yield values(entry, format)

@@ -9,6 +9,13 @@ export default class extends Controller {
   static targets = ["toggled"];
 
   toggle(event) {
-    this.toggledTarget.toggleAttribute("disabled")
+    const togglers = this.element.querySelectorAll(
+      "[data-action='disable-toggle#toggle']",
+    );
+    if (Array.from(togglers).every((cb) => cb.checked === true)) {
+      this.toggledTarget.disabled = false;
+    } else {
+      this.toggledTarget.disabled = true;
+    }
   }
 }

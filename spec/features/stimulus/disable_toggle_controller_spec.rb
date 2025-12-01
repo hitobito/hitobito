@@ -8,14 +8,16 @@
 require "spec_helper"
 
 describe "DisableToggle Stimulus Controller", js: true do
-  before do
+  let(:ctrl) { "disable-toggle" }
+
+  def stub_form_with
     stub_const("DisableToggleController", Class.new(ActionController::Base) { # rubocop:disable Rails/ApplicationController
       include Webpacker::Helper
       include ActionView::Helpers::AssetTagHelper
 
       helper_method :disable_toggle_tag
 
-      def new
+      define_method :new do
         # The HTML for your form element
         render inline: <<~HTML
           <head>
@@ -26,20 +28,8 @@ describe "DisableToggle Stimulus Controller", js: true do
           </head>
           <body>
             <h1>DisableToggle Test</h1>
-            #{disable_toggle_tag}
+            #{yield}
           </body>
-        HTML
-      end
-
-      def disable_toggle_tag
-        ctrl = "disable-toggle"
-        <<~HTML
-          <form data-controller="#{ctrl}">
-            <label for="#{ctrl}-checkbox">Click me to enable button</label>
-            <input type="checkbox" id="#{ctrl}-checkbox" name="#{ctrl}-checkbox" value="1" data-action="#{ctrl}#toggle"/>
-            <br/>
-            <input type="button" id="#{ctrl}-button" data-#{ctrl}-target="toggled"} disabled="disabled" value="Toggled"/>
-          </form>
         HTML
       end
     })
@@ -47,10 +37,21 @@ describe "DisableToggle Stimulus Controller", js: true do
     draw_test_routes do
       get "/disable_toggle", to: "disable_toggle#new"
     end
+
+    visit "/disable_toggle"
   end
 
   it "initializes disable_toggle" do
-    visit "/disable_toggle"
+    stub_form_with do
+      <<~HTML
+        <form data-controller="#{ctrl}">
+          <label for="#{ctrl}-checkbox">Click me to enable button</label>
+          <input type="checkbox" id="#{ctrl}-checkbox" name="#{ctrl}-checkbox" value="1" data-action="#{ctrl}#toggle"/>
+          <br/>
+          <input type="button" id="#{ctrl}-button" data-#{ctrl}-target="toggled"} disabled="disabled" value="Toggled"/>
+        </form>
+      HTML
+    end
 
     expect(page).to have_button "Toggled", disabled: true
 
@@ -61,6 +62,34 @@ describe "DisableToggle Stimulus Controller", js: true do
     expect(page).to have_button "Toggled", disabled: true
 
     check "Click me to enable button"
+    expect(page).to have_button "Toggled", disabled: false
+  end
+
+  it "initializes disable_toggle" do
+    stub_form_with do
+      <<~HTML
+        <form data-controller="#{ctrl}">
+          <label for="#{ctrl}-checkbox-1">Click 1 to enable button</label>
+          <input type="checkbox" id="#{ctrl}-checkbox-1" name="#{ctrl}-checkbox" value="1" data-action="#{ctrl}#toggle"/>
+          <label for="#{ctrl}-checkbox-2">Click 2 to enable button</label>
+          <input type="checkbox" id="#{ctrl}-checkbox-2" name="#{ctrl}-checkbox" value="1" data-action="#{ctrl}#toggle"/>
+          <br/>
+          <input type="button" id="#{ctrl}-button" data-#{ctrl}-target="toggled"} disabled="disabled" value="Toggled"/>
+        </form>
+      HTML
+    end
+
+    expect(page).to have_button "Toggled", disabled: true
+
+    check "Click 1 to enable button"
+    expect(page).to have_button "Toggled", disabled: true
+    check "Click 2 to enable button"
+    expect(page).to have_button "Toggled", disabled: false
+
+    uncheck "Click 1 to enable button"
+    expect(page).to have_button "Toggled", disabled: true
+
+    check "Click 1 to enable button"
     expect(page).to have_button "Toggled", disabled: false
   end
 end

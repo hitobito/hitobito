@@ -1105,74 +1105,74 @@ it:
   invoice_runs:
     destroys:
       show:
-        title: Annullamento di fatture collettive
-        non_draft_info: 'La fattura collettiva contiene almeno una fattura che non ha lo stato "Bozza" o "Annullato". Pertanto, la fattura collettiva non può essere cancellata.'
-        confirm_delete: Vuoi davvero annullare la fattura collettiva?
+        title: Rechnungslauf löschen
+        non_draft_info: 'Im Rechnungslauf ist mindestens eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann der Rechnungslauf nicht gelöscht werden.'
+        confirm_delete: Wollen Sie den Rechnungslauf wirklich löschen?
     form:
       invoice_articles:
         variable_donation:
-          name: Appello per donazioni variabili
-          number: Donazioni
-          description: Appello per donazioni sulla base di donazioni esistenti
+          name: Variabler Spendenaufruf
+          number: Spenden
+          description: Spendenaufruf anhand bereits vorhandenen Spendenbeträgen
       recipient_info:
-        one: "La fattura viene redatta per 1 persona"
-        many: "La fattura viene redatta per %{count} persone"
-        other: "La fattura viene redatta per %{count} persone"
+        one: "Rechnung wird für eine Person erstellt."
+        many: "Rechnung wird für %{count} Personen erstellt."
+        other: "Rechnung wird für %{count} Personen erstellt."
     create:
-      one: "La fattura %{title} viene redatta per una persona"
-      many: "La fattura %{title} viene redatta per %{count} persone"
-      other: "La fattura %{title} viene redatta per %{count} persone"
-    create_batch: "La fattura <i>%{title}</i> viene creata in sottofonto per  %{count} destinatari."
+      one: "Rechnung <i>%{title}</i> wurde erstellt."
+      many: "Rechnung <i>%{title}</i> wurde für %{count} Empfänger erstellt."
+      other: "Rechnung <i>%{title}</i> wurde für %{count} Empfänger erstellt."
+    create_batch: "Rechnung <i>%{title}</i> wird für %{count} Empfänger im Hintergrund erstellt."
     update:
-      zero: "Deve venir selezionata almeno una fattura."
-      model_error: "La fattura %{number} non è valida - %{error}"
+      zero: "Es muss mindestens eine Rechnung ausgewählt werden."
+      model_error: "Rechnung %{number} ist ungültig - %{error}."
       issued:
-        one: "La fattura %{number} è stata emessa."
-        many: "%{count} fattura sono state emesse."
-        other: "%{count} fattura sono state emesse."
+        one: "Rechnung %{number} wurde gestellt."
+        many: "%{count} Rechnungen wurden gestellt."
+        other: "%{count} Rechnungen wurden gestellt."
       reminded:
-        one: "Per la fattura %{number} è stato inviato il sollecito."
-        many: "Per %{count} fatture è stato inviato il sollecito."
-        other: "Per %{count} fatture è stato inviato il sollecito."
+        one: "Rechnung %{number} wurde gemahnt."
+        many: "%{count} Rechnungen wurden gemahnt."
+        other: "%{count} Rechnungen wurden gemahnt."
       send_notification:
-        one: "La fattura %{number} viene inviata per e-mail in sottofondo"
-        many: "%{count} fatture vengono inviate per e-mail in sottofondo"
-        other: "%{count} fatture vengono inviate per e-mail in sottofondo"
+        one: "Rechnung %{number} wird im Hintergrund per E-Mail verschickt."
+        many: "%{count} Rechnungen werden im Hintergrund per E-Mail verschickt."
+        other: "%{count} Rechnungen werden im Hintergrund per E-Mail verschickt."
       invalid_state:
-        one: "La fattura %{number} è appena stata emessa."
-        many: "%{count} fatture sono appena state emesse."
-        other: "%{count} fatture sono appena state emesse."
+        one: "Rechnung %{number} wurde bereits gestellt."
+        many: "%{count} Rechnungen wurde bereits gestellt."
+        other: "%{count} Rechnungen wurde bereits gestellt."
       issued_invalid:
-        one: "La fattura %{number} è appena stata emessa"
-        many: " %{count} fatture sono appena state emesse."
-        other: " %{count} fatture sono appena state emesse."
+        one: "Rechnung %{number} wurde bereits gestellt."
+        many: "%{count} Rechnungen wurde bereits gestellt."
+        other: "%{count} Rechnungen wurde bereits gestellt."
       sent_invalid:
-        one: "La fattura %{number} è appena stata inviata."
-        many: "%{count} fatture sono appena state inviate."
-        other: "%{count} fatture sono appena state inviate."
+        one: "Rechnung %{number} wurde bereits verschickt."
+        many: "%{count} Rechnungen wurde bereits verschickt."
+        other: "%{count} Rechnungen wurde bereits verschickt."
       payed_invalid:
-        one: "La fattura %{number} è appena stata pagata."
-        many: "%{count} fatture sono appena state pagate."
-        other: "%{count} fatture sono appena state pagate."
+        one: "Rechnung %{number} wurde bereits bezahlt."
+        many: "%{count} Rechnungen wurde bereits bezahlt."
+        other: "%{count} Rechnungen wurde bereits bezahlt."
       reminded_invalid:
-        one: "Il sollecito %{number} è appena stato emesso."
-        many: "%{count} solleciti sono appena stati emessi."
-        other: "%{count} solleciti sono appena stati emessi."
+        one: "Mahnung %{number} wurde bereits erstellt."
+        many: "%{count} Mahnungen wurden bereits erstellt."
+        other: "%{count} Mahnungen wurden bereits erstellt."
       recipient_email_invalid:
-        one: "La fattura %{number} non può essere inviata perché non è stato indicato nessun destinatario dell'e-mail"
-        many: "%{count} fatture non possono essere inviate perché non sono stati indicato i destinatari degli e-mail"
-        other: "%{count} fatture non possono essere inviate perché non sono stati indicato i destinatari degli e-mail"
+        one: "Rechnung %{number} konnte nicht verschickt werden, da keine Empfänger E-Mail hinterlegt ist."
+        many: "%{count} Rechnungen konnten nicht verschickt werden, da keine Empfänger E-Mails hinterlegt sind."
+        other: "%{count} Rechnungen konnten nicht verschickt werden, da keine Empfänger E-Mails hinterlegt sind."
       payment_reminders_missing:
-        one: "Per la fattura %{number} non è stato inviato il sollecito in quanto le impostazioni per il sollecito non sono valide."
-        many: "Per %{count} fatture non è stato inviato il sollecito in quanto le impostazioni per il sollecito non sono valide."
-        other: "Per %{count} fatture non è stato inviato il sollecito in quanto le impostazioni per il sollecito non sono valide."
+        one: "Rechnung %{number} konnte nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
+        many: "%{count} Rechnungen konnten nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
+        other: "%{count} Rechnungen konnten nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
     destroy:
-      zero: "Dapprima deve essere selezionata una fattura."
-      one: "La fattura è stata annullata"
-      other: "%{count} fatture sono state annullate."
+      zero: "Zuerst muss eine Rechnung ausgewählt werden."
+      one: "Rechnung wurde storniert."
+      other: "%{count} Rechnungen wurden storniert."
 
   invoice_runs/fixed_fee:
-    recipient_role_group_mismatch: "Non è stato possibile identificare alcun destinatario per i seguenti gruppi: %{groups}"
+    recipient_role_group_mismatch: "Für folgende Gruppen konnte kein Empfänger ermittelt werden: %{groups}"
 
   payments:
     export_enqueued: "L'esportazione viene iniziata in retroscena e verrà scaricata al termine."

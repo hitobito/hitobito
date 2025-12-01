@@ -315,8 +315,8 @@ en:
         one: Invoice Item
         other: Invoice Items
       invoice_run:
-        one: Invoice run
-        other: Invoice runs
+        one: Rechnungslauf
+        other: Rechnungsläufe
       label_format:
         one: Label format
         other: Label formats
@@ -1243,12 +1243,12 @@ en:
 
 
       invoice_run:
-        title: Title
-        receiver: Recipient
-        recipients_total: Recipients total
-        recipients_paid: Recipient paid
-        amount_total: Amount total
-        amount_paid: Amount paid
+        title: Titel
+        receiver: Empfänger
+        recipients_total: Empfänger Insgesamt
+        recipients_paid: Empfänger Bezahlt
+        amount_total: Betrag insgesamt
+        amount_paid: Betrag bezahlt
 
       # used for nested attributes
       invoice_items:

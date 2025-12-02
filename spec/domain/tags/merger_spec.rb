@@ -17,7 +17,7 @@ describe Tags::Merger do
   let!(:all_tag_owner) { fabricate_tagged_person([tag1, tag2]) }
   let!(:validation_tags) do
     PersonTags::Validation.tag_names.collect do |t|
-      ActsAsTaggableOn::Tag.create!(name: t)
+      ActsAsTaggableOn::Tag.find_or_create_by!(name: t)
     end
   end
 

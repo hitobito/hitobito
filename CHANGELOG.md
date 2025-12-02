@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## unreleased
+## Version 2.7
 
 - Spalten in Excel Exporten können neu als Datum, Dezimalzahl oder Betrag formattiert werden (hitobito_sac_cas#1665)
 - Logs auf Gruppen werden korrekt aggregiert dargestellt (hitobito_sac_cas#2087)

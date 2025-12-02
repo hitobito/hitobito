@@ -1661,6 +1661,7 @@ de:
           email_primary_invalid: Haupt-E-Mail ungültig
           email_additional_invalid: Weitere E-Mail ungültig
           address_invalid: Adresse befindet sich nicht im Verzeichnis
+          post_address_check_invalid: Post-Adressabgleich fehlerhaft
 
     security_tools:
       index:

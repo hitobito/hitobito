@@ -13,14 +13,15 @@ describe Synchronize::Addresses::SwissPost::ResultProcessor do
   let(:options) { {col_sep: "\t", row_sep: "\r\n", headers: true} }
   let(:log_entry) { HitobitoLogEntry.last }
   let(:log_entry_attrs) { {category: "cleanup", subject: top_leader, level: "info"} }
+  let(:invalid_tag) { PersonTags::Validation.post_address_check_invalid }
 
   def process_with
     data = CSV.parse(result, **options)
     yield data
-    described_class.new(data.to_csv(**options)).process
+    described_class.new(data.to_csv(**options), invalid_tag).process
   end
 
-  subject(:processor) { described_class.new(result) }
+  subject(:processor) { described_class.new(result, invalid_tag) }
 
   describe "single field update" do
     it "updates housenumber" do
@@ -130,12 +131,35 @@ describe Synchronize::Addresses::SwissPost::ResultProcessor do
           data.entries.last["ZIPCode"] = "invalid"
         end
       end.to change { HitobitoLogEntry.count }.by(1)
+        .and change { top_leader.tags.count }.by(1)
         .and not_change { top_leader.reload.attributes }
+
       expect(log_entry).to have_attributes(log_entry_attrs.merge(
-        # rubocop:todo Layout/LineLength
-        message: "Die Personendaten der Post konnten für Top Leader (572407901) nicht übernommen werden", level: "error"
-        # rubocop:enable Layout/LineLength
+        message: "Die Personendaten der Post konnten für Top Leader (572407901) nicht übernommen werden",
+        level: "error"
       ))
+
+      tagging = top_leader.reload.taggings.first
+      expect(tagging.tag.to_s).to eq "category_validation:post_address_check_invalid"
+      expect(tagging.hitobito_tooltip).to eq "Die Personendaten der Post konnten für Top Leader (572407901) " \
+        "nicht übernommen werden"
+    end
+
+    it "does not duplicate existing tags" do
+      top_leader.taggings.create!(tag: PersonTags::Validation.post_address_check_invalid, context: :tags)
+      expect do
+        process_with do |data|
+          data.entries.last["ZIPCode"] = "invalid"
+        end
+      end.to change { HitobitoLogEntry.count }.by(1)
+        .and not_change { top_leader.reload.tags.count }
+    end
+
+    it "clears tag on successful update" do
+      top_leader.taggings.create!(tag: PersonTags::Validation.post_address_check_invalid, context: :tags)
+      expect do
+        processor.process
+      end.to change { top_leader.reload.tags.count }.by(-1)
     end
   end
 

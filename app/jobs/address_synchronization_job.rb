@@ -7,6 +7,7 @@
 
 class AddressSynchronizationJob < CursorBasedPagingJob
   attr_reader :batch_token, :upload_token, :result_token, :data
+
   self.parameters += [:batch_token, :upload_token, :result_token]
   self.progress_message = "Post Adressabgleich: Fortschritt %d%%"
   self.log_category = Synchronize::Addresses::SwissPost::Config::LOG_CATEGORY
@@ -54,7 +55,7 @@ class AddressSynchronizationJob < CursorBasedPagingJob
 
   def process_result
     @data = client.download_file(result_token)
-    Synchronize::Addresses::SwissPost::ResultProcessor.new(data).process
+    Synchronize::Addresses::SwissPost::ResultProcessor.new(data, invalid_tag).process
   end
 
   def scope
@@ -79,7 +80,7 @@ class AddressSynchronizationJob < CursorBasedPagingJob
   end
 
   def generate_data(batch)
-    Synchronize::Addresses::SwissPost::Generator.new(batch).generate
+    Synchronize::Addresses::SwissPost::Generator.new(batch, invalid_tag).generate
   end
 
   def client
@@ -88,6 +89,10 @@ class AddressSynchronizationJob < CursorBasedPagingJob
 
   def config
     @config ||= Synchronize::Addresses::SwissPost::Config
+  end
+
+  def invalid_tag
+    @invalid_tag ||= PersonTags::Validation.post_address_check_invalid
   end
 
   def create_attachment(job)

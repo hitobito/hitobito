@@ -53,6 +53,7 @@ module Contactable
       allow_destroy: true
 
     before_validation :set_self_in_nested
+    before_validation :correct_common_autocomplete_issues
 
     validates :country, inclusion: Countries.codes, allow_blank: true
 
@@ -86,6 +87,21 @@ module Contactable
     if additional_addresses.map(&:label).tally.values.max > 1
       errors.add(:base, :additional_address_labels_must_be_unique)
     end
+  end
+
+  def correct_common_autocomplete_issues
+    self.postbox = nil if likely_autocompleted?(postbox)
+    self.address_care_of = nil if likely_autocompleted?(address_care_of)
+  end
+
+  def likely_autocompleted?(value)
+    [
+      street,
+      housenumber,
+      zip_code.to_s,
+      town,
+      [street, housenumber].join(" ")
+    ].compact_blank.map(&:to_s).include?(value.to_s)
   end
 
   module ClassMethods

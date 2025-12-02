@@ -96,9 +96,7 @@ en:
               missing_scheme: has to contain a protocol-scheme (http:// or https://)
               suffix_present: darf keinen Pfad und keinen Slash am Ende haben
         custom_content:
-          attributes:
-            body:
-              placeholder_missing: 'must contain the placeholder %{placeholder} '
+          placeholder_missing: 'muss den Platzhalter %{placeholder} enthalten'
         event:
           attributes:
             base:

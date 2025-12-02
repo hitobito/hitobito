@@ -10,7 +10,7 @@ Bisher wurden Namespaces in Singular und in Plural benannt.
 Zudem wurden auch Klassen als Namespaces verwendet (z.B. ActiveRecord Model Klassen).
 
 Dadurch ist es vielfach nicht eindeutig ersichtlich, ob ein Namespace ein Modul oder eine Klasse ist. 
-Zudem ist es häuffig nicht klar, unter welchem Namespace eine neue Klasse erstellt werden soll. 
+Zudem ist es häufig nicht klar, unter welchem Namespace eine neue Klasse erstellt werden soll. 
 
 ## Empfehlung
 

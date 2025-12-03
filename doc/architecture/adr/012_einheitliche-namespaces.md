@@ -14,5 +14,6 @@ Zudem ist es häufig nicht klar, unter welchem Namespace eine neue Klasse erstel
 
 ## Empfehlung
 
-* Es sollen möglichst nur Module als Namespaces verwenden. In Klassen sollen nur weitere Klassen genestet sein, wenn diese ausschiesslich innerhalb der "Namespace-Klasse" verwendet werden ("private" Klassen).
-* Namespaces welche thematisch zu einem Model gehören, sollen mit pluralisiertem Namen des Models benannt werden (z.B. `Group` → `Groups`).
+* Viele Namespaces sind von Model Namen abgeleitet. Diese sollen mit einem Namen im Plural benannt werden. 
+* Namespaces sollen entsprechend möglichst Module sein, keine Klassen.
+* Ausnahme bilden Models, welche zu einem Hauptmodell gehören (z.B. `Event::Date`) oder STI Models (z.B. `Group::Kanton`). 

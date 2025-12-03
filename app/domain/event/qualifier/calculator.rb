@@ -48,18 +48,22 @@ class Event::Qualifier::Calculator
         next if course.qualification_date < start_of_relevant_period
 
         @days[id] += course.training_days.to_f
-        CourseRecord.new(id, course.qualification_date, course.training_days.to_f, @days[id])
+        CourseRecord.new(id, course.qualification_date, course.training_days.to_f,
+          @days[id].round(2)) # avoid floating point imprecision
       end
     end.compact
   end
 
   def prolonging_qualification_kind_ids(course)
-    course.kind.event_kind_qualification_kinds
-      # rubocop:todo Layout/LineLength
-      .select { |q| q.prolongation? && q.qualification_kind.required_training_days && q.role == @role.to_s }
-      # rubocop:enable Layout/LineLength
-      .map { |q| [q.qualification_kind_id, start_of_relevant_period(q.qualification_kind)] }
-      .uniq
+    prolonging_qualification_kinds(course).uniq.map do |q|
+      [q.qualification_kind_id, start_of_relevant_period(q.qualification_kind)]
+    end
+  end
+
+  def prolonging_qualification_kinds(course)
+    course.kind.event_kind_qualification_kinds.select do |q|
+      q.prolongation? && q.qualification_kind.required_training_days && q.role == @role.to_s
+    end
   end
 
   def start_of_relevant_period(qualification_kind)

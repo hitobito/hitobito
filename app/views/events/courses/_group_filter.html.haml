@@ -3,6 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
+- filter = 'events--courses--group-filter'
 .course-group-filter.mt-3
   = f.label(:group_ids, t(".filter_by_layer"), class: "control-label")
   .control-group
@@ -18,11 +19,11 @@
                            placeholder: t(".select_layers"),
                            controller: "tom-select" } })
 
-      .group-filter-quick-add-tags
-        %button.chip.chip-add.group-filter-clear{id: "group-filter-clear", type: :button, data: {"clear-values": "group-filter-select"} }
+      .group-filter-quick-add-tags{data: { controller: filter, "#{filter}-tom-select-outlet": '#group-filter-select'} }
+        %button.chip.chip-add.group-filter-clear{type: :button, data: {action: "#{filter}#clear"} }
           = t(".all_layers")
           = icon(:times)
         - quick_select_course_groups.each do |group|
-          %button.chip.chip-add.group-filter-add{id: "group-filter-add-#{group.id}", type: :button, data: {"add-value": group.id, "add-to": "group-filter-select"} }
+          %button.chip.chip-add.group-filter-add{type: :button, data: {action: "#{filter}#add", "#{filter}-id-param": group.id} }
             = group.name
             = icon(:plus)

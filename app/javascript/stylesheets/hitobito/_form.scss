@@ -884,7 +884,7 @@ form[aria-busy=true] {
     display: block !important;
   }
 
-  .fa-times {
+  .fa-times:not([data-ignore-form-busy]) {
     display: none;
   }
 }

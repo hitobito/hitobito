@@ -32,8 +32,10 @@ module Synchronize::Addresses::SwissPost
       liberal_parsing: true
     }
 
-    def initialize(text)
+    def initialize(text, invalid_tag)
       @data = parse(text)
+      @invalid_tag = invalid_tag
+      @updated_people_ids = []
     end
 
     def process
@@ -44,11 +46,12 @@ module Synchronize::Addresses::SwissPost
           create_log_entry(person, *LOGGINGS_QSTATS[qstat])
         end
       end
+      destroy_obsolete_taggings
     end
 
     private
 
-    attr_reader :data
+    attr_reader :data, :invalid_tag, :updated_people_ids
 
     def each_potential_update
       people = Person.where(id: data.pluck("KDNR")).index_by(&:id)
@@ -65,9 +68,10 @@ module Synchronize::Addresses::SwissPost
       person.attributes = attrs
       person.postbox = row["POBoxTerm"].present? ? read_postbox(row) : nil
 
-      unless person.save
-        create_log_entry(person, :error,
-          "Die Personendaten der Post konnten für #{person} (#{person.id}) nicht übernommen werden")
+      if person.save
+        updated_people_ids << person.id
+      else
+        create_tag_and_log_error(person)
       end
     end
 
@@ -78,6 +82,26 @@ module Synchronize::Addresses::SwissPost
         (row["POBoxZIP"] || row["ZIPCode"]).presence,
         (row["POBoxTownName"] || row["TownName"]).presence
       ].compact_blank.join(" ")
+    end
+
+    def create_tag_and_log_error(person)
+      message = "Die Personendaten der Post konnten für #{person} (#{person.id}) nicht " \
+        "übernommen werden"
+      create_log_entry(person, :error, message)
+      create_tag(person.taggings, message, invalid_tag)
+    end
+
+    def create_tag(taggings, message, tag)
+      taggings.find_or_create_by!(tag:, context: :tags).tap do |tagging|
+        tagging.update!(hitobito_tooltip: message)
+      end
+    end
+
+    def destroy_obsolete_taggings
+      invalid_tag.taggings.where(
+        taggable_id: updated_people_ids,
+        taggable_type: "Person"
+      ).destroy_all
     end
 
     def create_log_entry(person, level, message)

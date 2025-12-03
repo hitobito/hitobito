@@ -20,8 +20,9 @@ module Synchronize::Addresses::SwissPost
       town: "Ort"
     }
 
-    def initialize(scope)
+    def initialize(scope, invalid_tag)
       @scope = scope
+      @invalid_tag = invalid_tag
     end
 
     def generate
@@ -30,11 +31,13 @@ module Synchronize::Addresses::SwissPost
 
     private
 
+    attr_reader :invalid_tag, :scope
+
     def data
       CSV.generate(col_sep: Config::COL_SEP, row_sep: Config::ROW_SEP) do |csv|
         csv << FIELDS.values
 
-        @scope.find_each do |person|
+        scope.find_each do |person|
           values = values_from(person)
           csv << values if values
         end
@@ -48,14 +51,25 @@ module Synchronize::Addresses::SwissPost
 
       values if values.all? { |v| v.to_s.encode(Config::ENCODING) }
     rescue Encoding::UndefinedConversionError
+      message = "Die Personendaten zu #{person}(#{person.id}) konnten nicht übertragen werden"
+      create_log_entry(person, message)
+      create_tag(person.taggings, message, invalid_tag)
+      false
+    end
+
+    def create_tag(taggings, message, tag)
+      taggings.find_or_create_by!(tag:, context: :tags).tap do |tagging|
+        tagging.update!(hitobito_tooltip: message)
+      end
+    end
+
+    def create_log_entry(person, message)
       HitobitoLogEntry.create!(
         category: Config::LOG_CATEGORY,
         subject: person,
         level: :warn,
-        message: "Die Personendaten zu #{person}(#{person.id}) konnten nicht übertragen werden"
+        message:
       )
-
-      false
     end
 
     def company(person)

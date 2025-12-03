@@ -1672,6 +1672,7 @@ fr:
           email_primary_invalid: Adresse e-mail principale non valide
           email_additional_invalid: Adresse e-mail supplémentaire non valide
           address_invalid: L'adresse ne se trouve pas dans la liste.
+          post_address_check_invalid: Post-Adressabgleich fehlerhaft
 
     security_tools:
       index:
@@ -2115,6 +2116,11 @@ fr:
         many: "Créer %{count} rôles"
         other: "Créer %{count} rôles"
   tags:
+    list:
+      confirm_delete: >
+          Wollen Sie diesen Eintrag wirklich löschen? Dies löscht das Tag aus allen
+          Personenprofilen, Abos und Personenfiltern in welchen es noch verwendet
+          wird.
     multiselect_actions:
       merge_tags: Merge
     categories:

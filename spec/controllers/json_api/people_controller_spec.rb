@@ -110,9 +110,8 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(response).to have_http_status(200)
           expect(d.size).to eq(2)
 
-          person = d.first
+          person = d.find { |p| p.id == bottom_member.id }
 
-          expect(person.id).to eq(bottom_member.id)
           expect(person.jsonapi_type).to eq("people")
 
           person_attrs.each do |attr|

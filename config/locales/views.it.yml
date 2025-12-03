@@ -1672,6 +1672,7 @@ it:
           email_primary_invalid: Email principale non valida
           email_additional_invalid: Altre email non valida
           address_invalid: L'idirizzo non si trova nell'indirizzario
+          post_address_check_invalid: Post-Adressabgleich fehlerhaft
 
     security_tools:
       index:
@@ -2114,6 +2115,11 @@ it:
         many: "Creare %{count} ruoli "
         other: "Creare %{count} ruoli "
   tags:
+    list:
+      confirm_delete: >
+          Wollen Sie diesen Eintrag wirklich löschen? Dies löscht das Tag aus allen
+          Personenprofilen, Abos und Personenfiltern in welchen es noch verwendet
+          wird.
     multiselect_actions:
       merge_tags: Merge
     categories:

@@ -1632,6 +1632,7 @@ en:
           email_primary_invalid: Main email is invalid
           email_additional_invalid: Further email is invalid
           address_invalid: Address not in directory
+          post_address_check_invalid: Post-Adressabgleich fehlerhaft
 
     security_tools:
       index:
@@ -2062,6 +2063,11 @@ en:
         one: "One role has been created"
         other: "%{count} roles created"
   tags:
+    list:
+      confirm_delete: >
+          Wollen Sie diesen Eintrag wirklich löschen? Dies löscht das Tag aus allen
+          Personenprofilen, Abos und Personenfiltern in welchen es noch verwendet
+          wird.
     multiselect_actions:
       merge_tags: Merge
     categories:

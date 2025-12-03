@@ -183,6 +183,18 @@ describe Event::Qualifier::Calculator do
       expect(calculator.start_at(gl)).to eq 2.months.ago.to_date
     end
 
+    it "equals start_at of first course that matches or exceeds training days with floating point" do
+      gl.update!(required_training_days: 3)
+      add_course(training_days: 0.3, start_at: 7.months.ago)
+      add_course(training_days: 0.4, start_at: 6.months.ago)
+      add_course(training_days: 0.3, start_at: 5.months.ago)
+      add_course(training_days: 0.7, start_at: 4.months.ago)
+      add_course(training_days: 0.7, start_at: 3.months.ago)
+      add_course(training_days: 0.2, start_at: 2.months.ago)
+      add_course(training_days: 0.7, start_at: 1.month.ago)
+      expect(calculator.start_at(gl)).to eq 6.months.ago.to_date
+    end
+
     it "is nil when we pass a different qualification_kind" do
       add_course(training_days: 2, start_at: 1.month.ago)
       expect(calculator.start_at(qualification_kinds(:sl))).to be_nil

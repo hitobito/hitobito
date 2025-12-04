@@ -1,8 +1,8 @@
 # ADR-012 Einheitliche Namespaces
 
-Status: **Vorschlag**
+Status: **Entscheid**
 
-Entscheid: **Entscheidung noch offen**
+Entscheid: **Umsetzen gemäss Empfehlung**
 
 ## Kontext
 

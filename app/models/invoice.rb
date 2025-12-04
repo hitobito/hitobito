@@ -276,7 +276,8 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
       recipient_address_care_of,
       recipient_street_with_housenumber,
       recipient_postbox,
-      recipient_town_with_zip_code
+      recipient_town_with_zip_code,
+      ((recipient_country == Settings.countries.prioritized.first) ? nil : recipient_country)
     ].uniq.compact_blank
   end
 

@@ -56,6 +56,19 @@ class Person::Address
     }
   end
 
+  def invoice_payee_address_attributes
+    @addressable = additional_addresses.find(&:invoices?) || person
+
+    {
+      payee_name: invoice_recipient_name,
+      payee_street: street,
+      payee_housenumber: housenumber,
+      payee_zip_code: zip_code,
+      payee_town: town,
+      payee_country: country || default_country
+    }
+  end
+
   private
 
   attr_reader :person, :name, :addressable

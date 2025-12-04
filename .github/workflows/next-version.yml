@@ -36,6 +36,7 @@ jobs:
         with:
           repository: ${{ inputs.composition_repo }}
           ref: ${{ inputs.composition_ref }}
+          submodules: true
 
       - name: "Set up Ruby"
         uses: ruby/setup-ruby@v1
@@ -47,24 +48,14 @@ jobs:
         run: |
           gem install cmdparse
 
-      - name: "Get all tags from repo to determine the version"
-        run: |
-          git fetch --tags
-
-      - name: 'Install helper-script'
-        env:
-          VERSION_SOURCE: "https://raw.githubusercontent.com/hitobito/hitobito/master/bin/version"
-        run: |
-          mkdir -p bin
-          curl --silent -k  "$VERSION_SOURCE" > bin/version
-          chmod a+x bin/version
-
       - name: "Determine next version"
         id: determine
         env:
           RELEASE_TYPE: ${{ inputs.release_type }}
           NEXT_VERSION: ${{ inputs.next_version }}
+        working-directory: hitobito
         run: |
+          git fetch --tags
           echo "Requesting next '$RELEASE_TYPE'-version"
           next_version=$(bin/version suggest "$RELEASE_TYPE" "$NEXT_VERSION")
 

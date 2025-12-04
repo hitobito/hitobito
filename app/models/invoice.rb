@@ -261,6 +261,14 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
     payment_reminders.max_by(&:created_at)
   end
 
+  def recipient_address
+    if recipient_address_values.empty?
+      deprecated_recipient_address
+    else
+      recipient_address_values.join("\n")
+    end
+  end
+
   def recipient_address_values
     [
       recipient_company_name,
@@ -278,6 +286,14 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
 
   def recipient_town_with_zip_code
     [recipient_zip_code, recipient_town].compact_blank.join(" ")
+  end
+
+  def payee
+    if payee_address_values.empty?
+      deprecated_payee
+    else
+      payee_address_values.join("\n")
+    end
   end
 
   def payee_address_values

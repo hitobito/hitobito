@@ -41,14 +41,6 @@ module Export::Tabular::Invoices
       end
     end
 
-    def recipient_address
-      if entry.recipient_address_values.empty?
-        entry.deprecated_recipient_address
-      else
-        entry.recipient_address_values.join("\n")
-      end
-    end
-
     private
 
     def with_precision(number)

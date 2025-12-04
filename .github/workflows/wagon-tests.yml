@@ -263,8 +263,8 @@ jobs:
       ( contains((inputs.core_ref || inputs.main_branch), inputs.main_branch) ) &&
       ( contains((inputs.wagon_dependency_ref || inputs.main_branch), inputs.main_branch) )
     with:
-      repository: ${{ inputs.wagon_repository }}
-      test_result: ${{ needs.wagon_rubocop.result == 'success' && needs.wagon_specs.result == 'success' && needs.wagon_feature_specs.result == 'success' && needs.wagon_seeds.result == 'success' }}
+      application: "${{ inputs.wagon_repository }}-tests"
+      result: ${{ needs.wagon_rubocop.result == 'success' && needs.wagon_specs.result == 'success' && needs.wagon_feature_specs.result == 'success' && needs.wagon_seeds.result == 'success' }}
     secrets:
       HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}
       HEARTBEAT_TOKEN: ${{ secrets.HEARTBEAT_TOKEN }}

@@ -22,7 +22,7 @@
       .group-filter-quick-add-tags{data: { controller: filter, "#{filter}-tom-select-outlet": '#group-filter-select'} }
         %button.chip.chip-add.group-filter-clear{type: :button, data: {action: "#{filter}#clear"} }
           = t(".all_layers")
-          = icon(:times)
+          = icon(:times, data: { ignore_form_busy: true})
         - quick_select_course_groups.each do |group|
           %button.chip.chip-add.group-filter-add{type: :button, data: {action: "#{filter}#add", "#{filter}-id-param": group.id} }
             = group.name

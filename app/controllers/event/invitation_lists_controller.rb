@@ -4,6 +4,8 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::InvitationListsController < SimpleCrudController
+  include FilteredPeople # provides all_filtered_or_listed_people, person_filter, list_filter_args
+
   skip_authorization_check
   skip_authorize_resource
 
@@ -22,7 +24,7 @@ class Event::InvitationListsController < SimpleCrudController
   end
 
   def new
-    @people_ids = params[:ids]
+    @people_ids ||= params[:ids]
     @event_type = params[:type]
     @event_label = params[:label]
     render "new"
@@ -63,10 +65,6 @@ class Event::InvitationListsController < SimpleCrudController
   end
 
   def people
-    @people ||= Person.where(id: people_ids).distinct
-  end
-
-  def people_ids
-    list_param(:ids)
+    @people ||= all_filtered_or_listed_people
   end
 end

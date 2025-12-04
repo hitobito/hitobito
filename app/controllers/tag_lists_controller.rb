@@ -29,7 +29,7 @@ class TagListsController < ListController
   end
 
   def new
-    @people_count = Person.from(manageable_people).count
+    @people_count = manageable_people_ids.count
   end
 
   def deletable
@@ -50,20 +50,21 @@ class TagListsController < ListController
   end
 
   def manageable_people_ids
-    @manageable_people_ids ||= @manageable_people.map(&:id)
+    @manageable_people_ids ||= manageable_people.map(&:id)
   end
 
   def manageable_people
-    # assing_tags, not manage_tags
-    # @manageable_people ||= people.select { |person| current_ability.can?(:assign_tags, person) }
     @manageable_people ||= if params[:ids] == "all"
       params.delete(:ids)
       @manageable_people_ids = %w[all]
 
       person_filter(PersonFullReadables).entries.includes(:tags).distinct
     else
-      Person.where(id: list_param(:ids)).includes(:tags).distinct
-        .select { |person| current_ability.can?(:manage_tags, person) }
+      # @manageable_people ||= people.select { |person| current_ability.can?(:assign_tags, person) }
+      Person.includes(:tags)
+        .where(id: list_param(:ids))
+        .distinct
+        .select { |person| current_ability.can?(:assign_tags, person) }
     end
   end
 

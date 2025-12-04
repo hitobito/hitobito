@@ -227,6 +227,28 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
+  def radio_buttons(attr, values, *args) # rubocop:disable Metrics/MethodLength
+    html_options = args.extract_options!
+    klass_key = if args.any?
+      args.last
+    elsif klass.respond_to?(:base_class)
+      klass.base_class.model_name.i18n_key
+    else
+      klass.model_name.i18n_key
+    end
+
+    attr_key = "activerecord.attributes.#{klass_key}.#{attr.to_s.pluralize}"
+    safe_join(values) { |value|
+      caption = if value == ""
+        I18n.t("#{attr_key}._nil")
+      else
+        I18n.t("#{attr_key}.#{value}")
+      end
+
+      inline_radio_button(attr, value, caption, html_options)
+    }
+  end
+
   def inline_radio_button(attr, value, caption, inline = true, html_options = {})
     add_css_class(html_options, "form-check-input")
     add_css_class(html_options, "is-invalid") if errors_on?(attr)

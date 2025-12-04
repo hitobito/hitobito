@@ -83,9 +83,9 @@ it:
       placeholder_company_name: "Ricerca nome della ditta"
 
     form:
-      additional_languages: "Zusätzlich ausgefüllte Sprachen"
-      locale_indicator: "Sprache dieses Eingabefelds"
-      input_translation_button: "Eingabefelder für weitere verfügbare Sprachen anzeigen"
+      additional_languages: "Lingue aggiuntive compilate"
+      locale_indicator: "Lingua di questo campo di inserimento"
+      input_translation_button: "Mostra i campi di inserimento per le altre lingue disponibili"
 
   list:
     index:

@@ -48,14 +48,6 @@ jobs:
         run: |
           gem install cmdparse
 
-      - name: 'Install helper-script'
-        env:
-          VERSION_SOURCE: "https://raw.githubusercontent.com/hitobito/hitobito/master/bin/version"
-        run: |
-          mkdir -p bin
-          curl --silent -k  "$VERSION_SOURCE" > bin/version
-          chmod a+x bin/version
-
       - name: "Determine next version"
         id: determine
         env:

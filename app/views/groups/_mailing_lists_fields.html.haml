@@ -1,4 +1,5 @@
-%h3.form-subtitle.mt-3= Message::Letter.model_name.human(count: 2)
+.row
+  %h3.form-subtitle.col-md-3.col-xl-2.mt-3= Message::Letter.model_name.human(count: 2)
 = f.labeled :letter_logo do
   = f.file_field :letter_logo, type: :file, accept: Settings.application.image_upload.content_types.join(','), class: 'form-control form-control-sm w-25'
 
@@ -10,7 +11,8 @@
     = f.inline_radio_button(:letter_address_position, value, t("activerecord.attributes.group.letter_address_positions.#{value}"))
 = render_extensions :mailing_lists_letter_fields, locals: { f: f }
 
-%h3.form-subtitle= Message::TextMessage.model_name.human(count: 2)
+.row
+  %h3.form-subtitle.col-md-3.col-xl-2.mt-3= Message::TextMessage.model_name.human(count: 2)
 = f.labeled_input_field(:text_message_username)
 = f.labeled_input_field(:text_message_password)
 = f.labeled(:text_message_provider) do

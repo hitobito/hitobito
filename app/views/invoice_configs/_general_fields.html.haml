@@ -4,7 +4,8 @@
 = f.labeled_input_field :payment_information, rows: 2, help: t('.payment_information_help')
 = f.labeled_input_field :vat_number
 
-%h3.form-subtitle.mt-5= t('.payment')
+.row
+  %h3.form-subtitle.col-md-3.col-xl-2.mt-5= t('.payment')
 -# Show the old payee information as long the new information was not added yet.
 -# This logic can be removed as soon as all customers have migrated.
 - if [:payee_name, :payee_zip_code, :payee_town].any? { |key| entry.send(key).blank? }
@@ -31,6 +32,7 @@
   = f.collection_select(:payment_slip, InvoiceConfig.payment_slip_labels.to_a, :first, :second, {}, class: 'form-select form-select-sm')
 = f.labeled_input_field :reference_prefix
 
-%h3.form-subtitle.mt-5= t('.variable_donation_appeal')
+.row
+  %h3.form-subtitle.col-md-3.col-xl-2.mt-5= t('.variable_donation_appeal')
 = f.labeled_input_field :donation_calculation_year_amount, help: t('.donation_calculation_year_amount_explanation')
 = f.labeled_input_field :donation_increase_percentage, help: t('.donation_increase_percentage_explanation')

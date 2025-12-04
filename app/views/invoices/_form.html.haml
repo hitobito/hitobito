@@ -16,7 +16,8 @@
     = f.labeled_input_field :issued_at
 
   = field_set_tag nil, class: 'invoice-form-recipient-fields' do
-    %h3.form-subtitle= Invoice.human_attribute_name(:recipient)
+    .row
+      %h3.form-subtitle.col-md-3.col-xl-2.mt-2.mb-3= Invoice.human_attribute_name(:recipient)
 
     = f.labeled_input_field :recipient_email
 

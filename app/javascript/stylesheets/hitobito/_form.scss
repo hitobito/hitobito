@@ -193,8 +193,17 @@ td {
 }
 
 .form-subtitle {
-  margin-left: 245px;
+  padding-right: calc(var(--bs-gutter-x) * 0.5);
+  padding-left: calc(var(--bs-gutter-x) * 0.5);
+  margin-top: var(--bs-gutter-y);
 }
+
+@media screen and (min-width: 768px) {
+  .form-subtitle {
+    text-align: end;
+  }
+}
+
 /*
 select,
 textarea,

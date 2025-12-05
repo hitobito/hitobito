@@ -52,21 +52,11 @@ jobs:
           echo $INSTANCES
           echo "instances=$INSTANCES" | tr -d "\n" >> $GITHUB_OUTPUT
 
-  version:
-    name: Determine the new version number for all selected instances
-    uses: ./.github/workflows/next-version.yml
-    with:
-      composition_repo: hitobito/ose_composition_demo # any composition repo would work, what matters are the tags present in the core
-      composition_ref: production
-      release_type: ${{ inputs.release }}
-      next_version: ${{ inputs.version }}
-
   release:
-    name: Update ${{ matrix.instance }} production to ${{ needs.version.outputs.version }}
+    name: Update ${{ matrix.instance }} production
     needs:
       - check-release-type
       - find-instances
-      - version
     strategy:
       fail-fast: false
       matrix:
@@ -75,8 +65,8 @@ jobs:
     uses: ./.github/workflows/release.yml
     with:
       composition: hitobito/ose_composition_${{ matrix.instance }}
-      release_type: custom
-      next_version: ${{ needs.version.outputs.version }}
+      release_type: ${{ inputs.release }}
+      next_version: ${{ inputs.version }}
       stage: production
       target_branch: ${{ inputs.target_branch }}
     secrets: inherit

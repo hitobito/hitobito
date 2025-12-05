@@ -83,9 +83,9 @@ fr:
       placeholder_company_name: "Chercher un nom d'entreprise…"
 
     form:
-      additional_languages: "Zusätzlich ausgefüllte Sprachen"
-      locale_indicator: "Sprache dieses Eingabefelds"
-      input_translation_button: "Eingabefelder für weitere verfügbare Sprachen anzeigen"
+      additional_languages: "Langues supplémentaires renseignées"
+      locale_indicator: "Langue de ce champ de saisie"
+      input_translation_button: "Afficher les champs de saisie pour les autres langues disponibles"
 
   list:
     index:
@@ -1672,6 +1672,7 @@ fr:
           email_primary_invalid: Adresse e-mail principale non valide
           email_additional_invalid: Adresse e-mail supplémentaire non valide
           address_invalid: L'adresse ne se trouve pas dans la liste.
+          post_address_check_invalid: Post-Adressabgleich fehlerhaft
 
     security_tools:
       index:
@@ -2115,6 +2116,11 @@ fr:
         many: "Créer %{count} rôles"
         other: "Créer %{count} rôles"
   tags:
+    list:
+      confirm_delete: >
+          Wollen Sie diesen Eintrag wirklich löschen? Dies löscht das Tag aus allen
+          Personenprofilen, Abos und Personenfiltern in welchen es noch verwendet
+          wird.
     multiselect_actions:
       merge_tags: Merge
     categories:

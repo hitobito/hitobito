@@ -28,15 +28,15 @@
 
 class Event::Question::Default < Event::Question
   def choice_items
-    choices.map { |choice| choice.choice }
+    deserialized_choices.map { |choice| choice.choice }
   end
 
   def with_choices?
-    choices.present?
+    deserialized_choices.present?
   end
 
   def with_checkboxes?
-    multiple_choices? || choices.one?
+    multiple_choices? || deserialized_choices.one?
   end
 
   def translation_class

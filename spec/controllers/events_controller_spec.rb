@@ -468,13 +468,20 @@ describe EventsController do
                 name: "1"
               },
               application_questions_attributes: {
-                q1.id.to_s => {id: q1.id, question: "Whoo?", disclosure: :optional},
-                q2.id.to_s => {id: q2.id, _destroy: true},
-                "999" => {question: "How much?", choices: "1,2,3", disclosure: :optional}
+                q1.id.to_s => {id: q1.id, question: "Whoo?", disclosure: :optional, choices_attributes: {}},
+                q2.id.to_s => {id: q2.id, _destroy: true, choices_attributes: {}},
+                "999" => {question: "How much?", disclosure: :optional, choices_attributes: {
+                  "1" => {choice: "1"},
+                  "2" => {choice: "2"},
+                  "3" => {choice: "3"}
+                }}
               },
               admin_questions_attributes: {
-                q3.id.to_s => {id: q3.id, _destroy: true},
-                "999" => {question: "Powned?", choices: "ja, nein", disclosure: :optional}
+                q3.id.to_s => {id: q3.id, _destroy: true, choices_attributes: {}},
+                "999" => {question: "Powned?", disclosure: :optional, choices_attributes: {
+                  "1" => {choice: "ja"},
+                  "2" => {choice: "nein"}
+                }}
               }
             }
           }
@@ -482,7 +489,7 @@ describe EventsController do
         end.not_to(change { Event::Question.count })
 
         expect(event.reload.name).to eq "testevent"
-        questions = event.questions.order(:question)
+        questions = event.questions.with_translations(I18n.locale).order(:question)
         expect(questions.size).to eq(3)
         first = questions.first
         expect(first.question).to eq "How much?"

@@ -9,9 +9,35 @@ require "spec_helper"
 
 module ChoiceForm
   describe Choice do
-    describe "choice fallbacks" do
-      let(:choice) { Choice.new(@choice_translations) }
+    let(:choice) { Choice.new(@choice_translations) }
 
+    describe "creates accessors for locales" do
+      it "should create globalized accessors" do
+        @choice_translations = {de: "Ja", en: "Yes", fr: "Oui", it: "Sì"}
+
+        @choice_translations.each do |lang, expected_choice|
+          expect(choice.send(:"choice_#{lang}")).to eql(expected_choice)
+        end
+
+        I18n.locale = :fr
+
+        @choice_translations.each do |lang, expected_choice|
+          expect(choice.send(:"choice_#{lang}")).to eql(expected_choice)
+        end
+      end
+
+      it "should return choice in current locale" do
+        @choice_translations = {de: "Ja", en: "Yes", fr: "Oui", it: "Sì"}
+
+        @choice_translations.each do |lang, expected_choice|
+          I18n.locale = lang
+          expect(choice.choice).to eql(expected_choice)
+          expect(choice.choice_en).to eql("Yes")
+        end
+      end
+    end
+
+    describe "choice fallbacks" do
       it "should use current locale when fallbacks are false" do
         stub_fallbacks(false)
 

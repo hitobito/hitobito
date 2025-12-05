@@ -42,7 +42,7 @@ module ChoiceForm
       case fallbacks
       when true
         choice_with_fallback(I18n.default_locale)
-      when Symbol || String
+      when Symbol, String
         choice_with_fallback(fallbacks.to_sym)
       when Array
         fallback_from_array(fallbacks)

@@ -189,14 +189,15 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
 
   // set insertFields function for nested-form gem
   window.nestedFormEvents.insertFields = function(content, assoc, link) {
-    var target = $(link).data('target');
+    const target = $(link).data('target');
+    let newElement;
     if (target) {
-      var nel = $(content).appendTo($(target));
+      newElement = $(target).append($(content));
     } else {
-      var nel = $(content).insertBefore(link);
+      newElement = $(link).closest('.controls').parent().find(`#${assoc}_fields`).append($(content));
     }
-    nel.find("[data-provide=entity]").each(app.setupEntityTypeahead);
-    return nel;
+    newElement.find("[data-provide=entity]").each(app.setupEntityTypeahead);
+    return newElement;
   };
 
   app.setupRemoteAutocomplete = function() {

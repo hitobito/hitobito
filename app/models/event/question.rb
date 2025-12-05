@@ -144,7 +144,7 @@ class Event::Question < ActiveRecord::Base
     end
   end
 
-  def choices
+  def deserialized_choices
     # Adds the locale to the choice items grouped by choice
     # Example: [["Alter", "Age"], ["Adresse", "Address"]]
     # -> [{de: "Alter", en: "Age"}, {de: "Adresse", en: "Address"}]

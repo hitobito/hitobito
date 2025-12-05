@@ -10,7 +10,7 @@
 .mb-2
   = f.label(:answer, question_label)
   - if question.choices?
-    - question.choices.each_with_index do |choice, index|
+    - question.deserialized_choices.each_with_index do |choice, index|
       - checked = choice.checked?(f.object.answer)
       - if question.with_checkboxes?
         = render 'event/answers/choice_checkbox', f: f, value: choice.choice, index: index, checked:

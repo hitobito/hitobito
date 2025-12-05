@@ -88,6 +88,7 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   before_validation :set_dates, on: :update
   before_validation :set_self_in_nested
   before_validation :recalculate
+  before_validation :set_recipient_fields, on: :create, if: :recipient
 
   validates :state, inclusion: {in: STATES}
   validates :due_at, timeliness: {after: :sent_at}, presence: true, if: :sent?
@@ -100,7 +101,6 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
 
   normalizes :recipient_email, with: ->(attribute) { attribute.downcase }
 
-  before_validation :set_recipient_fields, if: :recipient
   after_create :increment_sequence_number
 
   accepts_nested_attributes_for :invoice_items, allow_destroy: true

@@ -6,20 +6,19 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::Address
-  def initialize(person, label: nil, name: nil)
+  def initialize(person, label: nil)
     @person = person
-    @name = name
     @label = label
     @addressable = additional_addresses.find { |a| a.label == label } || person
   end
 
-  def for_invoice
-    @addressable = additional_addresses.find(&:invoices?) || person
+  def for_letter
     (person_and_company_name + full_address).compact.join("\n")
   end
 
-  def for_letter
-    (person_and_company_name + full_address).compact.join("\n")
+  def for_letter_with_invoice
+    @addressable = additional_addresses.find(&:invoices?) || person
+    for_letter
   end
 
   def for_household_letter(members)
@@ -31,7 +30,7 @@ class Person::Address
       [addressable.name]
     else
       [
-        (person.company_name if print_company?(name)),
+        (company_name if print_company?(name)),
         (person.nickname if print_nickname?(nickname)),
         name.presence
       ]
@@ -40,13 +39,14 @@ class Person::Address
     (names + full_address(country_as: :country_label)).compact.join("\n")
   end
 
+  # Used to populate invoices#recipient_* fields, may be overridden in wagons
   def invoice_recipient_address_attributes
     @addressable = additional_addresses.find(&:invoices?) || person
 
     {
       recipient_address_care_of: address_care_of,
       recipient_company_name: company? ? company_name : nil,
-      recipient_name: invoice_recipient_name,
+      recipient_name: addressable.full_name.to_s.squish,
       recipient_street: street,
       recipient_housenumber: housenumber,
       recipient_postbox: postbox,
@@ -56,11 +56,12 @@ class Person::Address
     }
   end
 
+  # Used to populate invoices#payee_* fields, may be overridden in wagons
   def invoice_payee_address_attributes
     @addressable = additional_addresses.find(&:invoices?) || person
 
     {
-      payee_name: invoice_recipient_name,
+      payee_name: addressable.full_name.to_s.squish,
       payee_street: street,
       payee_housenumber: housenumber,
       payee_zip_code: zip_code,
@@ -71,19 +72,17 @@ class Person::Address
 
   private
 
-  attr_reader :person, :name, :addressable
+  attr_reader :person, :addressable
 
   delegate :address, :address_care_of, :postbox, :street, :housenumber, :zip_code, :town, :country,
-    :name, :country_label, :ignored_country?, to: :addressable
-  delegate :company?, :additional_addresses, :company_name, to: :person
+    :name, :country_label, :ignored_country?, :full_name, to: :addressable
+  delegate :company?, :additional_addresses, :company_name, :company_name?, to: :person
 
   def person_and_company_name
-    return [name].compact_blank if addressable.is_a?(AdditionalAddress)
-
-    if company?
-      [@person.company_name.to_s.squish, @person.full_name.to_s.squish].uniq.compact_blank
+    if !addressable.is_a?(AdditionalAddress) && company?
+      [company_name.to_s.squish, full_name.to_s.squish].uniq.compact_blank
     else
-      [@person.full_name.to_s.squish]
+      [full_name.to_s.squish].compact_blank
     end
   end
 
@@ -101,14 +100,6 @@ class Person::Address
     ].compact
   end
 
-  def short_address(country_as: :country)
-    [
-      address.to_s.strip,
-      zip_code_with_town,
-      country_string(country_as)
-    ].compact
-  end
-
   def zip_code_with_town = [zip_code, town].compact.join(" ").squish
 
   def country_string(country_as) = ignored_country? ? "" : addressable.send(country_as)
@@ -118,18 +109,10 @@ class Person::Address
   end
 
   def print_company?(name)
-    @person.try(:company) && @person.company_name? && @person.company_name != name
+    person.try(:company) && company_name? && company_name != name
   end
 
   def print_nickname?(nickname)
-    nickname && @person.respond_to?(:nickname) && @person.nickname.present?
-  end
-
-  def invoice_recipient_name
-    if @addressable.is_a?(AdditionalAddress)
-      @addressable.name
-    else
-      @person.full_name.to_s.squish
-    end
+    nickname && person.respond_to?(:nickname) && person.nickname.present?
   end
 end

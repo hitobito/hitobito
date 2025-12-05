@@ -79,6 +79,7 @@ sent:
   group: bottom_layer_one
   recipient: top_leader
   recipient_email: top_leader@example.com
+  recipient_name: "Top Leader"
   recipient_street: Greatstreet
   recipient_housenumber: 345
   recipient_zip_code: 3456

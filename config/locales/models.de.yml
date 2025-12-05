@@ -441,7 +441,7 @@ de:
         town: Ort
         country: Land
         postbox: Postfach
-        address_care_of: zusatz. Adresszeile
+        address_care_of: zusätz. Adresszeile
         public: Öffentlich
 
       additional_addresses:
@@ -1165,7 +1165,7 @@ de:
         recipient_email: Empfänger E-Mail
         recipient_company_name: Firmenname
         recipient_name: Name
-        recipient_address_care_of: zusatz. Adresszeile
+        recipient_address_care_of: zusätz. Adresszeile
         recipient_postbox: Postfach
         recipient_country: Land
         recipient_street: Strasse

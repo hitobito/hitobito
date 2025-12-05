@@ -26,7 +26,7 @@ module Export::Pdf::Invoice
     end
 
     def deprecated_receiver_address_data
-      # Old invoices do not have recipient_address_values, why we have to use the old address
+      # Old invoices do not have recipient_address_values, so we have to use the old address
       invoice.deprecated_recipient_address&.split("\n")&.compact_blank&.take(3) || []
     end
 

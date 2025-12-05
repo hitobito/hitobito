@@ -11,15 +11,14 @@ describe Person::Address do
   let(:person) { people(:top_leader) }
   let(:label) { nil }
   let(:name) { nil }
-  let(:address) { described_class.new(person, label:, name: nil) }
+  let(:address) { described_class.new(person, label:) }
 
   def build_additional_address(attrs)
     person.additional_addresses.build(attrs).tap(&:valid?)
   end
 
-  # rubocop:todo Layout/LineLength
-  shared_examples "common address behaviour" do |country_label:, postbox:, company:, uses_additional_address_name: true, label_handling: true|
-    # rubocop:enable Layout/LineLength
+  shared_examples "common address behaviour" do |country_label:, postbox:, company:,
+    uses_additional_address_name: true, label_handling: true|
     context "common" do
       it "renders name, text and town with zip code" do
         expect(text).to eq <<~TEXT
@@ -199,8 +198,8 @@ describe Person::Address do
       uses_additional_address_name: false
   end
 
-  describe "#for_invoice" do
-    subject(:text) { address.for_invoice }
+  describe "#for_letter_with_invoice" do
+    subject(:text) { address.for_letter_with_invoice }
 
     let(:attrs) {
       {label: nil, street: "Lagistrasse", housenumber: "12a", zip_code: 1080, town: "Jamestown", invoices: true}
@@ -220,7 +219,6 @@ describe Person::Address do
 
     it "uses address_care_of from additional address" do
       build_additional_address(attrs.merge(address_care_of: "c/o Finance"))
-      # TODO: see comment in domain/person/address.rb
       expect(text).to eq <<~TEXT
         Top Leader
         c/o Finance
@@ -232,7 +230,6 @@ describe Person::Address do
     it "uses address_care_of from additional address" do
       build_additional_address(attrs.merge(address_care_of: "c/o Finance", name: "Foo Bar",
         uses_contactable_name: false))
-      # TODO: see comment in domain/person/address.rb
       expect(text).to eq <<~TEXT
         Foo Bar
         c/o Finance

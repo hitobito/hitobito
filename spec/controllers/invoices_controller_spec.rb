@@ -43,14 +43,14 @@ describe InvoicesController do
       get :new, params: {group_id: group.id}
       expect(response).to be_successful
       expect(assigns(:invoice).recipient_id).to be_nil
-      expect(assigns(:invoice).recipient_address).to be_nil
+      expect(assigns(:invoice).recipient_name).to be_nil
     end
 
     it "GET#new creating invoice for with recipient_id" do
       get :new, params: {group_id: group.id, invoice: {recipient_id: person.id}}
       expect(response).to be_successful
       expect(assigns(:invoice).recipient).to be_present
-      expect(assigns(:invoice).recipient_address).to be_present
+      expect(assigns(:invoice).recipient_name).to be_present
     end
   end
 
@@ -380,13 +380,14 @@ describe InvoicesController do
       expect do
         post :create,
           params: {group_id: group.id,
-                   invoice: {title: "current_user", recipient_id: person.id,
-                             recipient_address: "Tim Testermann\nAlphastrasse 1\n8000 Zürich"}}
+                   invoice: {title: "current_user", recipient_id: person.id, recipient_name: "Tim Testermann",
+                             recipient_street: "Alphastrasse", recipient_housenumber: "1", recipient_zip_code: "8000",
+                             recipient_town: "Zürich"}}
       end.to change { Invoice.count }.by(1)
 
-      # rubocop:todo Layout/LineLength
-      expect(Invoice.find_by(title: "current_user").recipient_address).to eq("Tim Testermann\nAlphastrasse 1\n8000 Zürich")
-      # rubocop:enable Layout/LineLength
+      expect(Invoice.find_by(title: "current_user").recipient_address_values).to eq [
+        "Tim Testermann", "Alphastrasse 1", "8000 Zürich"
+      ]
     end
 
     it "POST#create allows to manually adjust the recipient email" do

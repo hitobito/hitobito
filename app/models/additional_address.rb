@@ -47,6 +47,8 @@ class AdditionalAddress < ApplicationRecord
     Settings.additional_address.predefined_labels
   end
 
+  def full_name = name
+
   def to_s = value
 
   def value

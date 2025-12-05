@@ -59,7 +59,6 @@ class InvoiceSerializer < ApplicationSerializer
       :esr_number,
       :description,
       :recipient_email,
-      :recipient_address,
       :sent_at,
       :due_at,
       :total,
@@ -72,7 +71,6 @@ class InvoiceSerializer < ApplicationSerializer
       :payment_purpose,
       :payment_information,
       :beneficiary,
-      :payee,
       :participant_number,
       :vat_number
 
@@ -88,5 +86,8 @@ class InvoiceSerializer < ApplicationSerializer
     entities :invoice_items, item.invoice_items, InvoiceItemSerializer
     entities :payments, item.payments, PaymentSerializer
     entities :payment_reminders, item.payment_reminders, PaymentReminderSerializer
+
+    property :recipient_address, item.recipient_address
+    property :payee, item.payee
   end
 end

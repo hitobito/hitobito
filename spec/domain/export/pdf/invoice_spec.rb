@@ -26,8 +26,16 @@ describe Export::Pdf::Invoice do
         iban: "CH93 0076 2011 6238 5295 7",
         reference: "RF561A",
         esr_number: "00 00834 96356 70000 00000 00019",
-        payee: "Acme Corp\nHallesche Str. 37\n3007 Hinterdupfing",
-        recipient_address: "Max Mustermann\nMusterweg 2\n8000 Alt Tylerland",
+        payee_name: "Acme Corp",
+        payee_street: "Hallesche Str.",
+        payee_housenumber: "37",
+        payee_zip_code: "3007",
+        payee_town: "Hinterdupfing",
+        recipient_name: "Max Mustermann",
+        recipient_street: "Musterweg",
+        recipient_housenumber: "2",
+        recipient_zip_code: "8000",
+        recipient_town: "Alt Tylerland",
         issued_at: Date.new(2022, 9, 26),
         due_at: Date.new(2022, 10, 26),
         creator: person,
@@ -872,8 +880,16 @@ describe Export::Pdf::Invoice do
         iban: "CH93 0076 2011 6238 5295 7",
         reference: "RF561A",
         esr_number: "00 00834 96356 70000 00000 00019",
-        payee: "Acme Corp\nHallesche Str. 37\n3007 Hinterdupfing",
-        recipient_address: "Max Mustermann\nMusterweg 2\n8000 Alt Tylerland"
+        payee_name: "Acme Corp",
+        payee_street: "Hallesche Str.",
+        payee_housenumber: "37",
+        payee_zip_code: "3007",
+        payee_town: "Hinterdupfing",
+        recipient_name: "Max Mustermann",
+        recipient_street: "Musterweg",
+        recipient_housenumber: "2",
+        recipient_zip_code: "8000",
+        recipient_town: "Alt Tylerland"
       )
     end
 
@@ -1002,6 +1018,43 @@ describe Export::Pdf::Invoice do
 
       invoice_text.each_with_index do |text, i|
         expect(text_with_position[i]).to eq(text)
+      end
+    end
+
+    describe "with deprecated address values" do
+      let(:invoice) do
+        build_invoice(
+          sequence_number: "1-1",
+          payment_slip: :qr,
+          total: 1500,
+          iban: "CH93 0076 2011 6238 5295 7",
+          reference: "RF561A",
+          esr_number: "00 00834 96356 70000 00000 00019",
+          deprecated_payee: "Deprecated Acme Corp\nHallesche Str. 37\n3007 Hinterdupfing",
+          deprecated_recipient_address: "Deprecated Max Mustermann\nMusterweg 2\n8000 Alt Tylerland"
+        )
+      end
+
+      it "uses deprecated values" do
+        invoice.hide_total = true
+        invoice_text = [
+          [14, 275, "Empfangsschein"],
+          [14, 251, "Konto / Zahlbar an"],
+          [14, 242, "CH93 0076 2011 6238 5295 7"],
+          [14, 233, "Deprecated Acme Corp"],
+          [14, 225, "Hallesche Str. 37"],
+          [14, 216, "3007 Hinterdupfing"],
+          [14, 197, "Referenznummer"],
+          [14, 189, "00 00834 96356 70000 00000 00019"],
+          [14, 170, "Zahlbar durch"],
+          [14, 161, "Deprecated Max Mustermann"],
+          [14, 152, "Musterweg 2"],
+          [14, 144, "8000 Alt Tylerland"]
+        ]
+
+        invoice_text.each_with_index do |text, i|
+          expect(text_with_position[i]).to eq(text)
+        end
       end
     end
   end

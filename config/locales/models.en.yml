@@ -438,7 +438,7 @@ en:
         town: Ort
         country: Land
         postbox: Postfach
-        address_care_of: zusatz. Adresszeile
+        address_care_of: zusätz. Adresszeile
         public: Öffentlich
 
       additional_addresses:

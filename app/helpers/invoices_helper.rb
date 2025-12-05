@@ -29,8 +29,12 @@ module InvoicesHelper
   def format_invoice_recipient(invoice)
     if invoice.recipient
       link_to(invoice.recipient, invoice.recipient)
-    else
-      invoice.recipient_address.split("\n").first
+    elsif invoice.recipient_company_name.present?
+      invoice.recipient_company_name
+    elsif invoice.recipient_name.present?
+      invoice.recipient_name
+    elsif invoice.deprecated_recipient_address.present?
+      invoice.deprecated_recipient_address.split("\n").first
     end
   end
 
@@ -92,17 +96,25 @@ module InvoicesHelper
   end
 
   def invoice_receiver_address(invoice)
-    return unless invoice.recipient_address
+    return if invoice.recipient_address_values.empty? && invoice.deprecated_recipient_address.blank?
 
-    name, *address = invoice.recipient_address.split("\n")
-    name = link_to(invoice.recipient, invoice.recipient) if name == invoice.recipient&.full_name
+    first_line, *other_lines = if invoice.recipient_address_values.empty?
+      # Old invoices do not have recipient_address_values, therefore we have to use the old address
+      invoice.deprecated_recipient_address&.split("\n") || []
+    else
+      invoice.recipient_address_values
+    end
 
     content_tag(:p) do
       safe_join([
-        content_tag(:b) { name },
-        *address,
+        content_tag(:b) { first_line },
+        *other_lines,
         mail_to(invoice.recipient_email)
       ], "<br/>".html_safe)
     end
+  end
+
+  def invoice_payee_address(invoice)
+    invoice.payee_address_values.join(", ")
   end
 end

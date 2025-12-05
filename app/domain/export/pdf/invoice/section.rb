@@ -18,11 +18,16 @@ module Export::Pdf::Invoice
     end
 
     def receiver_address_data
-      @receiver_address_data ||= tabelize(invoice.recipient_address)
+      @receiver_address_data ||= if invoice.recipient_address_values.empty?
+        deprecated_receiver_address_data
+      else
+        invoice.recipient_address_values
+      end.map { |v| [v] }
     end
 
-    def tabelize(string)
-      string.to_s.split("\n").compact_blank.collect { |ra| [ra] }
+    def deprecated_receiver_address_data
+      # Old invoices do not have recipient_address_values, so we have to use the old address
+      invoice.deprecated_recipient_address&.split("\n")&.compact_blank&.take(3) || []
     end
 
     def table(table, options)

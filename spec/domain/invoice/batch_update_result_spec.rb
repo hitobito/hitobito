@@ -53,7 +53,7 @@ describe Invoice::BatchUpdateResult do
   end
 
   it "tracks model_error on single invoice" do
-    invoice = Fabricate(:invoice, recipient_address: "a@a.com", group: sent.group)
+    invoice = Fabricate(:invoice, deprecated_recipient_address: "a@a.com", group: sent.group)
     expect(invoice.update(state: :sent)).to be_falsey
     subject.track_model_error(invoice)
     expect(subject).to be_present

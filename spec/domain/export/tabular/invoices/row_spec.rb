@@ -35,7 +35,7 @@ describe Export::Tabular::Invoices::Row do
        "esr_number" => "00 00376 80338 90000 00000 00021",
        "description" => nil,
        "recipient_email" => "top_leader@example.com",
-       "recipient_address" => nil,
+       "recipient_address" => "Top Leader\nGreatstreet 345\n3456 Greattown",
        "sent_at" => nil,
        "due_at" => nil,
        "cost" => "5.00",
@@ -53,5 +53,19 @@ describe Export::Tabular::Invoices::Row do
   it "does add precision for whole numbers" do
     invoice.total = 10
     expect(subject.total).to eq "10.00"
+  end
+
+  it "returns deprecated recipient address for old invoices" do
+    invoice.assign_attributes(
+      deprecated_recipient_address: "Old Address Format",
+      recipient_name: nil,
+      recipient_street: nil,
+      recipient_town: nil,
+      recipient_zip_code: nil,
+      recipient_country: nil,
+      recipient_housenumber: nil
+    )
+
+    expect(subject.fetch(:recipient_address)).to eq "Old Address Format"
   end
 end

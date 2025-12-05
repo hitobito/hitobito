@@ -20,25 +20,40 @@ describe :event_guest, js: true do
     visit "/de/list_courses?filter[since]=01.01.2012"
   end
 
+  def submit_with
+    expect(page).to have_css "#event_courses_list:not([aria-busy])"
+    yield
+    click_button "Suchen"
+    expect(page).to have_css "#event_courses_list[aria-busy]"
+    expect(page).to have_css "#event_courses_list:not([aria-busy])"
+  end
+
   def deselect(group)
     find("div[data-value='#{group.id}'] a").click
-    click_button "Suchen"
   end
 
   it "can deselect and select courses in layer via quicklink" do
     expect(page).to have_css "strong", text: "Top Course"
     expect(page).not_to have_text "Keine Einträge gefunden"
-    deselect top_layer
+    submit_with do
+      deselect top_layer
+    end
     expect(page).to have_text "Keine Einträge gefunden"
-    click_on "Top"
+    submit_with do
+      click_on "Top"
+    end
     expect(page).not_to have_text "Keine Einträge gefunden"
     expect(page).to have_css "strong", text: "Top Course"
   end
 
   it "can deselect and select courses in layer via quicklink" do
-    deselect top_layer
+    submit_with do
+      deselect top_layer
+    end
     expect(page).to have_text "Keine Einträge gefunden"
-    click_on "Alle Gruppen"
+    submit_with do
+      click_on "Alle Gruppen"
+    end
     expect(page).not_to have_text "Keine Einträge gefunden"
     expect(page).to have_css "strong", text: "Top Course"
   end

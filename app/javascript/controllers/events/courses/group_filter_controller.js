@@ -10,11 +10,9 @@ export default class extends Controller {
 
   add({ params: { id } }) {
     this.tomSelectOutlet.tom.addItem(id, true);
-    this.element.closest("form").requestSubmit();
   }
 
   clear(event) {
     this.tomSelectOutlet.tom.clear(true);
-    this.element.closest("form").requestSubmit();
   }
 }

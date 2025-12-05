@@ -130,6 +130,10 @@ module Group::NestedSet
   end
 
   module ClassMethods
+    def layers
+      where("id = layer_group_id")
+    end
+
     def root_id
       @root_id ||= root.id
     end

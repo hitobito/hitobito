@@ -641,6 +641,16 @@ describe Person do
         .and_return([:finance])
       expect(person.finance_groups).to eq [groups(:top_layer)]
     end
+
+    it "returns all layers for complete finance permission" do
+      allow_any_instance_of(Group::TopGroup::Leader).to receive(:permissions)
+        .and_return([:complete_finance])
+      expect(person.finance_groups).to match_array([
+        groups(:top_layer),
+        groups(:bottom_layer_one),
+        groups(:bottom_layer_two)
+      ])
+    end
   end
 
   it "#filter_attrs returns list of filterable attributes" do

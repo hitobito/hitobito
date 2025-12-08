@@ -11,7 +11,7 @@
 
 - else
   = f.labeled_input_field(:question)
-  = f.nested_fields_for(:choices, nil, question.deserialized_choices, {model_object: [ChoiceForm::Choice.new], link_to_add_title: t("event.questions.add_choice")}) do |choices_form|
+  = f.nested_fields_for(:choices, nil, question.deserialized_choices, {model_object: [Choice.new], link_to_add_title: t("event.questions.add_choice")}) do |choices_form|
     .mb-2
       = choices_form.labeled_input_field(:choice)
       .controls.align-with-form.mt--2= choices_form.link_to_remove(ta(:remove))

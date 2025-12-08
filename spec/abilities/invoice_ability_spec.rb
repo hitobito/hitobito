@@ -130,7 +130,7 @@ describe InvoiceAbility do
     end
   end
 
-  context "with complete_finance permission" do
+  context "with layer_and_below_finance permission" do
     let(:role) { roles(:top_leader) }
 
     Group.layers.each do |layer|
@@ -139,7 +139,7 @@ describe InvoiceAbility do
         layer.invoice_config.update(sequence_number: "1")
 
         allow_any_instance_of(Group::TopGroup::Leader).to receive(:permissions)
-          .and_return([:complete_finance])
+          .and_return([:layer_and_below_finance])
       end
 
       context "on invoice" do

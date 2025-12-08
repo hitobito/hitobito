@@ -18,15 +18,15 @@ describe Ability do
   end
 
   describe "#user_finance_layer_ids" do
-    def stub_complete_finance_permission_on(role_type)
-      allow_any_instance_of(role_type).to receive(:permissions).and_return([:complete_finance])
+    def stub_layer_and_below_finance_permission_on(role_type)
+      allow_any_instance_of(role_type).to receive(:permissions).and_return([:layer_and_below_finance])
     end
     it "includes layers for which finance permission is set" do
       expect(ability.user_finance_layer_ids).to eq [groups(:top_layer).id]
     end
 
-    it "includes self and sub layers if complete_finance permission is set" do
-      stub_complete_finance_permission_on(Group::TopGroup::Leader)
+    it "includes self and sub layers if layer_and_below_finance permission is set" do
+      stub_layer_and_below_finance_permission_on(Group::TopGroup::Leader)
 
       expect(ability.user_finance_layer_ids).to match_array([
         top_layer.id,
@@ -40,7 +40,7 @@ describe Ability do
 
       it "includes self but excludes top layer" do
         Fabricate(Group::BottomLayer::LocalGuide.sti_name, group: bottom_layer_one, person: user)
-        stub_complete_finance_permission_on(Group::BottomLayer::LocalGuide)
+        stub_layer_and_below_finance_permission_on(Group::BottomLayer::LocalGuide)
         expect(ability.user_finance_layer_ids).to match_array([
           bottom_layer_one.id
         ])

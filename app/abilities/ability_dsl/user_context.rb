@@ -11,7 +11,7 @@ module AbilityDsl
       :finance, :see_invisible_from_above, :manual_deletion]
 
     LAYER_PERMISSIONS = [:layer_and_below_full, :layer_and_below_read, :layer_full, :layer_read,
-      :finance, :see_invisible_from_above, :manual_deletion, :complete_finance]
+      :finance, :see_invisible_from_above, :manual_deletion, :layer_and_below_finance]
     # rubocop:enable Style/MutableConstant
 
     attr_reader :user, :admin
@@ -70,7 +70,7 @@ module AbilityDsl
     end
 
     def init_derived_finance_permission
-      user.groups_with_permission(:complete_finance).each do |group|
+      user.groups_with_permission(:layer_and_below_finance).each do |group|
         layer_ids = group.layer_group.self_and_descendants.merge(Group.layers).pluck(:id)
         grant_groups_permissions(:finance, layer_ids)
         @permissions_layer_ids[:finance] = layer_ids

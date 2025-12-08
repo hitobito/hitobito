@@ -61,7 +61,7 @@ class Ability
   end
 
   def user_finance_layer_ids
-    user_context.permission_layer_ids(:finance)
+    user.root? ? Group.layers.pluck(:id) : user_context.permission_layer_ids(:finance)
   end
 
   private

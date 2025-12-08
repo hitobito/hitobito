@@ -195,6 +195,8 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   }
 
   scope :without_archived, -> { where(archived_at: nil) }
+  scope :without_deleted, -> { where(deleted_at: nil) }
+  scope :without_archived_or_deleted, -> { without_archived.without_deleted }
 
   ### CLASS METHODS
 

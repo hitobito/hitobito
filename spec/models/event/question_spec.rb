@@ -258,7 +258,8 @@ describe Event::Question do
 
     it "should correctly serialize choices" do
       choices_attributes = {"100": {choice: "Ja", choice_en: "Yes", choice_fr: "Oui", choice_it: "Sì", _destroy: ""},
-                            "101": {choice: "Nein", choice_en: "No", choice_fr: "Non", choice_it: "No", _destroy: ""}}
+                            "101": {choice: "", choice_en: "", choice_fr: "", choice_it: "", _destroy: ""},
+                            "102": {choice: "Nein", choice_en: "No", choice_fr: "Non", choice_it: "No", _destroy: ""}}
       choices_attributes.deep_stringify_keys!
 
       question.choices_attributes = choices_attributes
@@ -275,7 +276,8 @@ describe Event::Question do
     it "should correctly serialize choices when locale is changed" do
       I18n.locale = :fr
       choices_attributes = {"100": {choice: "Oui", choice_de: "Ja", choice_en: "Yes", choice_it: "Sì", _destroy: ""},
-                            "101": {choice: "Non", choice_de: "Nein", choice_en: "No", choice_it: "No", _destroy: ""}}
+                            "101": {choice: "", choice_en: "", choice_fr: "", choice_it: "", _destroy: ""},
+                            "102": {choice: "Non", choice_de: "Nein", choice_en: "No", choice_it: "No", _destroy: ""}}
       choices_attributes.deep_stringify_keys!
 
       question.choices_attributes = choices_attributes

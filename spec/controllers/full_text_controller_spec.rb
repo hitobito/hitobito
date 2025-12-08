@@ -18,10 +18,6 @@ describe FullTextController, type: :controller do
   end
 
   describe "GET index" do
-    before do
-      sign_in(people(:top_leader))
-    end
-
     it "finds person" do
       get :index, params: {q: "Bottom"}
 
@@ -67,13 +63,14 @@ describe FullTextController, type: :controller do
         expect(response).to redirect_to(invoice_path(invoices(:invoice)))
       end
 
-      it "finds nothing when lacking finance permission" do
-        allow(Group::TopGroup::Leader).to receive(:permission).and_return(
-          [:admin, :layer_and_below_full, :contact_data, :impersonation]
-        )
-        get :index, params: {q: invoices(:invoice).title[0..5]}
+      context "when lacking finance permission" do
+        let(:current_user) { Fabricate(Group::TopLayer::TopAdmin.sti_name, group: groups(:top_layer)).person }
 
-        expect(assigns(:invoices)).to include(invoices(:invoice))
+        it "finds nothing when lacking finance permission" do
+          get :index, params: {q: invoices(:invoice).title[0..5]}
+
+          expect(assigns(:invoices)).to be_nil
+        end
       end
     end
 
@@ -130,9 +127,8 @@ describe FullTextController, type: :controller do
     it "displays groups tab" do
       group_search_instance = instance_double(SearchStrategies::GroupSearch)
       allow(SearchStrategies::GroupSearch).to receive(:new).and_return(group_search_instance)
-      # rubocop:todo Layout/LineLength
-      allow(group_search_instance).to receive(:search_fulltext).and_return(Group.where(id: groups(:bottom_layer_one).id))
-      # rubocop:enable Layout/LineLength
+      allow(group_search_instance).to receive(:search_fulltext)
+        .and_return(Group.where(id: groups(:bottom_layer_one).id))
 
       get :index, params: {q: "query with group results"}
       expect(assigns(:active_tab)).to eq(:groups)

@@ -197,6 +197,9 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
       newElement = $(link).closest('.controls').parent().find(`#${assoc}_fields`).append($(content));
     }
     newElement.find("[data-provide=entity]").each(app.setupEntityTypeahead);
+    // Needed to activate the tooltips of the newly inserted fields.
+    // The eventListener for this event is in tooltips.js.
+    document.dispatchEvent(new CustomEvent("activateTooltips"));
     return newElement;
   };
 

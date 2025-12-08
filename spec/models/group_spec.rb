@@ -81,6 +81,26 @@ describe Group do
     expect(fixture_values).to eq Group.order(:id).pluck(:layer_group_id)
   end
 
+  describe "archived and deleted scopes" do
+    let(:group) { groups(:bottom_group_two_one) }
+
+    it "archiving excludes group from scopes" do
+      expect do
+        group.archive!
+      end.to change { Group.without_archived.count }.by(-1)
+        .and change { Group.without_archived_or_deleted.count }.by(-1)
+        .and not_change { Group.without_deleted.count }
+    end
+
+    it "destroying excludes group from scopes" do
+      expect do
+        group.destroy
+      end.to change { Group.without_deleted.count }.by(-1)
+        .and change { Group.without_archived_or_deleted.count }.by(-1)
+        .and not_change { Group.without_archived.count }
+    end
+  end
+
   context "#roles" do
     let(:group) { groups(:top_group) }
 

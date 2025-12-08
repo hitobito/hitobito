@@ -3,8 +3,8 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= form_for(:filter, { method: :get, data: { turbo_frame: :event_courses_list} }) do |f|
-  .d-lg-flex.gap-3
+= form_for(:filter, { method: :get, data: { turbo_frame: :event_courses_list}, id: "course-filter" }) do |f|
+  .d-grid.gap-2
     .control-group
       = f.label :since, t(".time_period"), class: "control-label"
       .input-group
@@ -26,7 +26,7 @@
     - if course_states_used?
       .control-group
         = f.label :states, Event::Course.human_attribute_name(:state), class: "control-label"
-        .input-group{style: 'min-width: 200px'}
+        .input-group
           = f.select(:states,
                    options_from_collection_for_select(course_state_collection, :second, :first, @states),
                    {},

@@ -579,6 +579,9 @@ de:
         event_search: Anlass Suchen...
         submit: Hinzufügen
 
+    questions:
+      add_choice: "Antwortmöglichkeit hinzufügen"
+
   assignments:
     attachment: "Anhang anzeigen"
     form:

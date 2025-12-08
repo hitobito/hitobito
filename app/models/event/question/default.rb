@@ -62,7 +62,7 @@ class Event::Question::Default < Event::Question
 
     # have submit index + 1 and handle reset via index 0
     index_array = raw_answer.map { |i| i.to_i - 1 }
-    answer.answer = valid_index_based_values(index_array, 0...choices.size) || nil
+    answer.answer = valid_index_based_values(index_array, 0...deserialized_choices.size) || nil
   end
 
   def valid_index_based_values(index_array, valid_range)

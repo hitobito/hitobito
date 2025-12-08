@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_25_142227) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_08_083532) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -684,10 +684,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_25_142227) do
     t.string "recipient_company_name"
     t.string "recipient_address_care_of"
     t.string "recipient_postbox"
+    t.string "recipient_type"
     t.index ["esr_number"], name: "index_invoices_on_esr_number"
     t.index ["group_id"], name: "index_invoices_on_group_id"
     t.index ["invoice_run_id"], name: "index_invoices_on_invoice_run_id"
-    t.index ["recipient_id"], name: "index_invoices_on_recipient_id"
+    t.index ["recipient_type", "recipient_id"], name: "index_invoices_on_recipient_type_and_recipient_id"
     t.index ["sequence_number"], name: "index_invoices_on_sequence_number"
   end
 

@@ -153,7 +153,7 @@ class Event::Question < ActiveRecord::Base
     end
 
     choice_items_by_choice_with_locales.map do |choice_translations|
-      ChoiceForm::Choice.new(choice_translations)
+      Choice.new(choice_translations)
     end
   end
 
@@ -169,13 +169,13 @@ class Event::Question < ActiveRecord::Base
   end
 
   def self.reflect_on_all_associations
-    super + [ChoiceForm::ChoiceReflection.new]
+    super + [Choice::Reflection.new]
   end
 
   def self.reflect_on_association(association)
     return super unless association == :choices
 
-    ChoiceForm::ChoiceReflection.new
+    Choice::Reflection.new
   end
 
   private

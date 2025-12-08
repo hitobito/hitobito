@@ -193,6 +193,7 @@ it:
 
         invoice:
           recipient_address_or_email_required: 'deve essere riempito l''indirizzo del ricevente oppure l''e-mail'
+          recipient_name_or_company_name_required: 'Firmenname oder Name muss ausgefüllt werden'
           attributes:
             invoice_config:
               invalid: 'non valido; modificate le impostazioni prima di redigere una fattura'
@@ -506,7 +507,7 @@ it:
         town: Luogo
         country: Nazione
         postbox: Casella postale
-        address_care_of: Riga dell'indirizzo aggiuntiva
+        address_care_of: zusätz. Adresszeile
         public: Pubblico
 
       additional_addresses:
@@ -1231,6 +1232,14 @@ it:
           cancelled: Cancellato
         recipient: Destinatario
         recipient_email: Email del destinatario
+        recipient_company_name: Firmenname
+        recipient_name: Name
+        recipient_address_care_of: zusätz. Adresszeile
+        recipient_postbox: Postfach
+        recipient_country: Land
+        recipient_street: Strasse
+        recipient_zip_code: PLZ
+        recipient_town: Ort
         recipient_address: Indirizzo del destinatario
         due_at: Scade il
         issued_at: Emesso il
@@ -1245,7 +1254,7 @@ it:
         payment_purpose: Motivo del pagamento
         address: Indirizzo del mittente
         beneficiary: A favore di
-        payee: Nome / Ditta
+        payee: Einzahlung für
         account_number: Numero di conto
         iban: IBAN
         payment_slip: Polizza di versamento

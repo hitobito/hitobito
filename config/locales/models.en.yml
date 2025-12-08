@@ -190,6 +190,7 @@ en:
 
         invoice:
           recipient_address_or_email_required: 'Recipient address or email must be provided'
+          recipient_name_or_company_name_required: 'Firmenname oder Name muss ausgefüllt werden'
           attributes:
             invoice_config:
               invalid: 'is not valid; adjust the settings before creating an invoice'
@@ -1157,6 +1158,14 @@ en:
           cancelled: Cancelled
         recipient: Recipient
         recipient_email: Recipient e-mail
+        recipient_company_name: Firmenname
+        recipient_name: Name
+        recipient_address_care_of: zusätz. Adresszeile
+        recipient_postbox: Postfach
+        recipient_country: Land
+        recipient_street: Strasse
+        recipient_zip_code: PLZ
+        recipient_town: Ort
         recipient_address: Recipient address
         due_at: Due at
         issued_at: Issued at
@@ -1171,7 +1180,7 @@ en:
         payment_purpose: Payment purpose
         address: Sender address
         beneficiary: Beneficiary
-        payee: Name / Organization
+        payee: Einzahlung für
         account_number: Account Number
         iban: IBAN
         payment_slip: Payment slip

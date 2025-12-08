@@ -7,12 +7,33 @@ import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   static outlets = ["tom-select"];
+  static targets = [ "chip", "clear" ];
 
   add({ params: { id } }) {
     this.tomSelectOutlet.tom.addItem(id, true);
+    this.change();
   }
 
   clear(event) {
     this.tomSelectOutlet.tom.clear(true);
+    this.change();
+  }
+
+  change() {
+    let selected = this.tomSelectOutlet.tom.getValue();
+    this.chipTargets.forEach(chip => {
+      chip.style.display = 'none';
+      let id = chip.dataset["events-Courses-GroupFilterIdParam"];
+      if (!selected.includes(id)) chip.style.display = 'inline';
+    })
+    if (selected.length > 0) {
+      this.clearTarget.style.display = 'inline';
+    } else {
+      this.clearTarget.style.display = 'none';
+    }
+  }
+
+  connect() {
+    this.change();
   }
 }

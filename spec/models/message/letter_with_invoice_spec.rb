@@ -25,13 +25,13 @@
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
 #  bounce_parent_id      :integer
-#  invoice_list_id       :bigint
+#  invoice_run_id       :bigint
 #  mailing_list_id       :bigint
 #  sender_id             :bigint
 #
 # Indexes
 #
-#  index_messages_on_invoice_list_id  (invoice_list_id)
+#  index_messages_on_invoice_run_id  (invoice_run_id)
 #  index_messages_on_mailing_list_id  (mailing_list_id)
 #  index_messages_on_sender_id        (sender_id)
 #
@@ -59,11 +59,11 @@ describe Message::LetterWithInvoice do
     expect(message.reload.invoice.invoice_items.first.name).to eq "Mitgliedsbeitrag 2021"
   end
 
-  it "builds valid invoice_list" do
+  it "builds valid invoice_run" do
     message = messages(:with_invoice)
-    expect(message.invoice_list).to be_valid
+    expect(message.invoice_run).to be_valid
     message.save
-    expect(message.invoice_list).to be_persisted
+    expect(message.invoice_run).to be_persisted
   end
 
   describe "reading recipients and invoices" do
@@ -72,12 +72,12 @@ describe Message::LetterWithInvoice do
 
     subject { messages(:with_invoice) }
 
-    context "without invoice list" do
+    context "without invoice run" do
       it "#invoice_for builds valid invoice" do
         invoice = subject.invoice_for(recipient)
         expect(invoice).to be_valid
         expect(invoice).to be_new_record
-        expect(invoice.recipient_address).to be_present
+        expect(invoice.recipient_name).to be_present
       end
 
       it "#recipients uses recipients from mailing_list" do
@@ -86,17 +86,17 @@ describe Message::LetterWithInvoice do
       end
     end
 
-    context "with invoice list" do
+    context "with invoice run" do
       before do
-        list = InvoiceList.create(group: group, title: "title")
-        list.invoices.create!(title: :title, recipient_id: recipient.id, total: 10, group: group)
-        subject.invoice_list_id = list.id
+        run = InvoiceRun.create(group: group, title: "title")
+        run.invoices.create!(title: :title, recipient_id: recipient.id, total: 10, group: group)
+        subject.invoice_run_id = run.id
       end
 
       it "#invoice_for loads persisted invoice" do
         invoice = subject.invoice_for(recipient)
         expect(invoice).to be_persisted
-        expect(invoice.recipient_address).to be_present
+        expect(invoice.recipient_name).to be_present
       end
 
       it "#recipients uses invoice recipients" do

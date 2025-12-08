@@ -21,29 +21,29 @@ describe Messages::LetterWithInvoiceDispatch do
     top_leader.update!(street: "Fantasia", housenumber: "42", zip_code: "4242", town: "Melmac")
   end
 
-  it "updates message invoice_list and invoices" do
+  it "updates message invoice_run and invoices" do
     dispatch.run
     expect(message.reload.success_count).to eq 1
-    expect(message.reload.invoice_list).to be_present
+    expect(message.reload.invoice_run).to be_present
   end
 
   it "returns a result" do
     expect(dispatch.run.finished?).to be_truthy
   end
 
-  it "creates invoice_list and invoices" do
-    expect { dispatch.run }.to change { InvoiceList.count }.by(1)
+  it "creates invoice_run and invoices" do
+    expect { dispatch.run }.to change { InvoiceRun.count }.by(1)
 
     expect(recipient_entries.count).to eq(1)
-    expect(message.invoice_list.reload.invoices).to have(1).item
-    expect(message.invoice_list.recipients_processed).to eq 1
-    expect(message.invoice_list.invalid_recipient_ids).to eq []
+    expect(message.invoice_run.reload.invoices).to have(1).item
+    expect(message.invoice_run.recipients_processed).to eq 1
+    expect(message.invoice_run.invalid_recipient_ids).to eq []
   end
 
   it "creates and issues invoice" do
     expect { dispatch.run }.to change { Invoice.count }.by(1)
 
-    invoice = message.invoice_list.reload.invoices.first
+    invoice = message.invoice_run.reload.invoices.first
     expect(invoice.state).to eq "issued"
     expect(invoice.title).to eq message.subject
     expect(invoice.invoice_items).to have(1).item
@@ -54,7 +54,7 @@ describe Messages::LetterWithInvoiceDispatch do
     expect { dispatch.run }.not_to(change { Invoice.count })
     expect(message.reload.success_count).to eq 0
     expect(message.reload.failed_count).to eq 1
-    expect(message.invoice_list.recipients_processed).to eq 0
-    expect(message.invoice_list.invalid_recipient_ids).to eq [top_leader.id]
+    expect(message.invoice_run.recipients_processed).to eq 0
+    expect(message.invoice_run.invalid_recipient_ids).to eq [top_leader.id]
   end
 end

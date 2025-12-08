@@ -36,14 +36,14 @@
 #  updated_at                  :datetime         not null
 #  creator_id                  :integer
 #  group_id                    :integer          not null
-#  invoice_list_id             :bigint
+#  invoice_run_id             :bigint
 #  recipient_id                :integer
 #
 # Indexes
 #
 #  index_invoices_on_esr_number       (esr_number)
 #  index_invoices_on_group_id         (group_id)
-#  index_invoices_on_invoice_list_id  (invoice_list_id)
+#  index_invoices_on_invoice_run_id  (invoice_run_id)
 #  index_invoices_on_recipient_id     (recipient_id)
 #  index_invoices_on_sequence_number  (sequence_number)
 #  invoices_search_column_gin_idx     (search_column) USING gin
@@ -51,6 +51,11 @@
 
 Fabricator(:invoice) do
   title { Faker::Name.name }
+  recipient_name { Faker::Name.name }
+  recipient_street { Faker::Address.street_address }
+  recipient_zip_code { Faker::Address.zip_code[0..3] }
+  recipient_town { Faker::Address.city }
+  recipient_country { Faker::Address.country }
 end
 
 Fabricator(:invoice_article) do

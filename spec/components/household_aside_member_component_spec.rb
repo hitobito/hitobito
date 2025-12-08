@@ -24,7 +24,7 @@ describe HouseholdAsideMemberComponent, type: :component do
     expect(
       rendered_component
     ).to include(
-      '<a data-turbo-frame="_top" href="/people/572407901">Top Leader</a></strong>'
+      '<a data-turbo-frame="_top" href="/de/people/572407901">Top Leader</a></strong>'
     )
 
     expect(

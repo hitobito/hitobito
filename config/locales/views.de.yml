@@ -82,6 +82,11 @@ de:
       placeholder_event: "Anlass suchen..."
       placeholder_company_name: "Firmennamen suchen..."
 
+    form:
+      additional_languages: "Zusätzlich ausgefüllte Sprachen"
+      locale_indicator: "Sprache dieses Eingabefelds"
+      input_translation_button: "Eingabefelder für weitere verfügbare Sprachen anzeigen"
+
   list:
     index:
       title: "%{models}"
@@ -1103,12 +1108,12 @@ de:
       body: Inhalt
       remove: E-Mail Vorlage entfernen
 
-  invoice_lists:
+  invoice_runs:
     destroys:
       show:
-        title: Sammelrechnung löschen
-        non_draft_info: 'In der Sammelrechnung ist mindestens eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann die Sammelrechnung nicht gelöscht werden.'
-        confirm_delete: Wollen Sie die Sammelrechnung wirklich löschen?
+        title: Rechnungslauf löschen
+        non_draft_info: 'Im Rechnungslauf ist mindestens eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann der Rechnungslauf nicht gelöscht werden.'
+        confirm_delete: Wollen Sie den Rechnungslauf wirklich löschen?
     form:
       invoice_articles:
         variable_donation:
@@ -1161,7 +1166,7 @@ de:
       one: "Rechnung wurde storniert."
       other: "%{count} Rechnungen wurden storniert."
 
-  invoice_lists/fixed_fee:
+  invoice_runs/fixed_fee:
     recipient_role_group_mismatch: "Für folgende Gruppen konnte kein Empfänger ermittelt werden: %{groups}"
 
   payments:
@@ -1656,6 +1661,7 @@ de:
           email_primary_invalid: Haupt-E-Mail ungültig
           email_additional_invalid: Weitere E-Mail ungültig
           address_invalid: Adresse befindet sich nicht im Verzeichnis
+          post_address_check_invalid: Post-Adressabgleich fehlerhaft
 
     security_tools:
       index:
@@ -2097,6 +2103,10 @@ de:
         other: "%{count} Rollen erstellen"
 
   tags:
+    list:
+      confirm_delete: >
+        Wollen Sie diesen Eintrag wirklich löschen?
+        Dies löscht das Tag aus allen Personenprofilen, Abos und Personenfiltern in welchen es noch verwendet wird.
     multiselect_actions:
       merge_tags: Zusammenführen
     categories:

@@ -11,7 +11,7 @@ class InvoicesController < CrudController
   decorates :invoice
 
   self.nesting = Group
-  self.optional_nesting = [InvoiceList]
+  self.optional_nesting = [InvoiceRun]
 
   self.sort_mappings = {
     last_payment_at: Invoice.order_by_payment_statement,
@@ -20,12 +20,14 @@ class InvoicesController < CrudController
     sequence_number: Invoice.order_by_sequence_number_statement
   }
 
-  self.remember_params += [:year, :state, :due_since, :invoice_list_id]
+  self.remember_params += [:year, :state, :due_since, :invoice_run_id]
 
   self.search_columns = [:title, :sequence_number, "people.last_name", "people.first_name",
     "people.email", "people.company_name"]
   self.permitted_attrs = [:title, :description, :state, :due_at, :issued_at,
-    :recipient_id, :recipient_email, :recipient_address,
+    :recipient_id, :recipient_email, :recipient_company_name, :recipient_name,
+    :recipient_address_care_of, :recipient_street, :recipient_housenumber, :recipient_postbox,
+    :recipient_town, :recipient_zip_code, :recipient_country,
     :payment_information, :payment_purpose, :hide_total,
     invoice_items_attributes: [
       :id,
@@ -41,9 +43,9 @@ class InvoicesController < CrudController
 
   before_render_index :year_from
 
-  helper_method :group, :invoice_list
+  helper_method :group, :invoice_run
 
-  after_destroy :update_invoice_list_total
+  after_destroy :update_invoice_run_total
 
   def index
     respond_to do |format|
@@ -86,8 +88,8 @@ class InvoicesController < CrudController
   private
 
   def invoices_return_path
-    if invoice_list
-      group_invoice_list_invoices_path(group, invoice_list, returning: true)
+    if invoice_run
+      group_invoice_run_invoices_path(group, invoice_run, returning: true)
     else
       group_invoices_path(group, returning: true)
     end
@@ -130,7 +132,7 @@ class InvoicesController < CrudController
   end
 
   def render_invoices_pdf(invoices)
-    letter = parent.message if parent.is_a?(InvoiceList)
+    letter = parent.message if parent.is_a?(InvoiceRun)
     if letter
       render_pdf_in_background(letter)
     else
@@ -167,7 +169,7 @@ class InvoicesController < CrudController
   def list_entries
     scope = super.list.with_aggregated_payments
     scope = scope.includes(:recipient).references(:recipient)
-    scope = scope.standalone unless parents.any?(InvoiceList)
+    scope = scope.standalone unless parents.any?(InvoiceRun)
     scope = scope.page(params[:page]) unless params[:ids]
     Invoice::Filter.new(params).apply(scope)
   end
@@ -197,20 +199,20 @@ class InvoicesController < CrudController
   end
 
   def group
-    parent.is_a?(InvoiceList) ? parent.group : parent
+    parent.is_a?(InvoiceRun) ? parent.group : parent
   end
 
-  def invoice_list
-    parent if parent.is_a?(InvoiceList)
+  def invoice_run
+    parent if parent.is_a?(InvoiceRun)
   end
 
-  def update_invoice_list_total
-    entry.invoice_list&.update_total
+  def update_invoice_run_total
+    entry.invoice_run&.update_total
   end
 
   def year_from
-    if invoice_list
-      @year_from ||= invoice_list.created_at.year
+    if invoice_run
+      @year_from ||= invoice_run.created_at.year
     end
   end
 end

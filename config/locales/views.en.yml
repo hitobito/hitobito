@@ -81,6 +81,11 @@ en:
       placeholder_event: "Search event..."
       placeholder_company_name: "search company name..."
 
+    form:
+      additional_languages: "Additional languages filled in"
+      locale_indicator: "Language of this input field"
+      input_translation_button: "Show input fields for other available languages"
+
   list:
     index:
       title: "Listing %{models}"
@@ -1089,12 +1094,12 @@ en:
       body: Inhalt
       remove: E-Mail Vorlage entfernen
 
-  invoice_lists:
+  invoice_runs:
     destroys:
       show:
-        title: Sammelrechnung löschen
-        non_draft_info: 'In der Sammelrechnung ist mindestens eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann die Sammelrechnung nicht gelöscht werden.'
-        confirm_delete: Wollen Sie die Sammelrechnung wirklich löschen?
+        title: Rechnungslauf löschen
+        non_draft_info: 'Im Rechnungslauf ist mindestens eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann der Rechnungslauf nicht gelöscht werden.'
+        confirm_delete: Wollen Sie den Rechnungslauf wirklich löschen?
     form:
       invoice_articles:
         variable_donation:
@@ -1102,51 +1107,51 @@ en:
           number: Spenden
           description: Spendenaufruf anhand bereits vorhandenen Spendenbeträgen
       recipient_info:
-        one: "Invoice created for one person."
-        other: "Invoice created for %{count}person(s)"
+        one: "Rechnung wird für eine Person erstellt."
+        other: "Rechnung wird für %{count} Personen erstellt."
     create:
-      one: "Invoice <i>%{title}</i>created."
-      other: "Invoice <i>%{title}</i>created for %{count}recipients."
-    create_batch: "Invoice <i>%{title}</i>is beeing created for %{count}recipients."
+      one: "Rechnung <i>%{title}</i> wurde erstellt."
+      other: "Rechnung <i>%{title}</i> wurde für %{count} Empfänger erstellt."
+    create_batch: "Rechnung <i>%{title}</i> wird für %{count} Empfänger im Hintergrund erstellt."
     update:
-      zero: "Select at least one invoice."
-      model_error: "Invoice %{number}not valid - %{error}."
+      zero: "Es muss mindestens eine Rechnung ausgewählt werden."
+      model_error: "Rechnung %{number} ist ungültig - %{error}."
       issued:
-        one: "Invoice %{number}has been created."
-        other: "%{count}invoices created."
+        one: "Rechnung %{number} wurde gestellt."
+        other: "%{count} Rechnungen wurden gestellt."
       reminded:
-        one: "Invoice %{number}has been reminded."
-        other: "%{count}invoices reminded."
+        one: "Rechnung %{number} wurde gemahnt."
+        other: "%{count} Rechnungen wurden gemahnt."
       send_notification:
-        one: "Invoice %{number} will be sent by e-mail."
-        other: "%{count}invoices will be sent by e-mail."
+        one: "Rechnung %{number} wird im Hintergrund per E-Mail verschickt."
+        other: "%{count} Rechnungen werden im Hintergrund per E-Mail verschickt."
       invalid_state:
-        one: "Invoice %{number}has already been sent."
-        other: "%{count}invoices have already been created"
+        one: "Rechnung %{number} wurde bereits gestellt."
+        other: "%{count} Rechnungen wurde bereits gestellt."
       issued_invalid:
-        one: "Invoice %{number}has already been submitted."
-        other: "%{count}invoices have been submitted."
+        one: "Rechnung %{number} wurde bereits gestellt."
+        other: "%{count} Rechnungen wurde bereits gestellt."
       sent_invalid:
-        one: "Invoice %{number}has already been sent."
-        other: "%{count}invoices have already been sent."
+        one: "Rechnung %{number} wurde bereits verschickt."
+        other: "%{count} Rechnungen wurde bereits verschickt."
       payed_invalid:
-        one: "Invoice %{number}has already been paid."
-        other: "%{count}invoices have already been paid."
+        one: "Rechnung %{number} wurde bereits bezahlt."
+        other: "%{count} Rechnungen wurde bereits bezahlt."
       reminded_invalid:
-        one: "Reminder %{number}has already been sent."
-        other: "%{count}reminders have already been sent."
+        one: "Mahnung %{number} wurde bereits erstellt."
+        other: "%{count} Mahnungen wurden bereits erstellt."
       recipient_email_invalid:
-        one: "Invoice %{number} could not be sent because no recipient email is stored"
-        other: "%{count}invoices could not be sent because no recipient emails are stored."
+        one: "Rechnung %{number} konnte nicht verschickt werden, da keine Empfänger E-Mail hinterlegt ist."
+        other: "%{count} Rechnungen konnten nicht verschickt werden, da keine Empfänger E-Mails hinterlegt sind."
       payment_reminders_missing:
-        one: "Invoice %{number}could not be reminded because reminder settings are invalid."
-        other: "%{count}reminders could not be sent because reminder settings are invalid."
+        one: "Rechnung %{number} konnte nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
+        other: "%{count} Rechnungen konnten nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
     destroy:
-      zero: "Choose an invoice first."
-      one: "Invoice cancelled"
-      other: "%{count}invoices have been canceled."
+      zero: "Zuerst muss eine Rechnung ausgewählt werden."
+      one: "Rechnung wurde storniert."
+      other: "%{count} Rechnungen wurden storniert."
 
-  invoice_lists/fixed_fee:
+  invoice_runs/fixed_fee:
     recipient_role_group_mismatch: "Für folgende Gruppen konnte kein Empfänger ermittelt werden: %{groups}"
 
   payments:
@@ -1627,6 +1632,7 @@ en:
           email_primary_invalid: Main email is invalid
           email_additional_invalid: Further email is invalid
           address_invalid: Address not in directory
+          post_address_check_invalid: Post-Adressabgleich fehlerhaft
 
     security_tools:
       index:
@@ -2057,6 +2063,11 @@ en:
         one: "One role has been created"
         other: "%{count} roles created"
   tags:
+    list:
+      confirm_delete: >
+          Wollen Sie diesen Eintrag wirklich löschen? Dies löscht das Tag aus allen
+          Personenprofilen, Abos und Personenfiltern in welchen es noch verwendet
+          wird.
     multiselect_actions:
       merge_tags: Merge
     categories:

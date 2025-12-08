@@ -34,11 +34,11 @@ describe "invoices/_attrs.html.haml" do
       expect(payment_form.find("a.cancel")["href"]).to eq group_invoice_path(group, invoice)
     end
 
-    it "renders correct path for invoice list invoice" do
-      invoice_list = InvoiceList.create!(title: "test", group:)
-      invoice.update!(invoice_list:)
+    it "renders correct path for invoice run invoice" do
+      invoice_run = InvoiceRun.create!(title: "test", group:)
+      invoice.update!(invoice_run:)
       expect(payment_form["action"]).to eq group_invoice_payments_path(group, invoice)
-      expect(payment_form.find("a.cancel")["href"]).to eq group_invoice_list_invoice_path(group, invoice_list, invoice)
+      expect(payment_form.find("a.cancel")["href"]).to eq group_invoice_run_invoice_path(group, invoice_run, invoice)
     end
   end
 end

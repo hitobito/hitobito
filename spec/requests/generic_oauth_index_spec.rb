@@ -26,7 +26,7 @@ RSpec.describe "OAuth index", type: :request do
   end
 
   scopes = ["groups", "people", "events", "invoices", "mailing_lists"]
-  sign_in_url = "http://www.example.com/users/sign_in"
+  sign_in_url = "http://www.example.com/de/users/sign_in"
 
   scopes.each do |scope|
     describe get_endpoint(scope) do

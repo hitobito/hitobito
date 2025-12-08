@@ -98,9 +98,7 @@ it:
               missing_scheme: deve contenere un protocollo (http:// oppure https://)
               suffix_present: alla fine non può avere ne un indirizzo ne un slash
         custom_content:
-          attributes:
-            body:
-              placeholder_missing: 'deve contenere il carattere %{placeholder}'
+          placeholder_missing: 'deve contenere il carattere %{placeholder}'
         event:
           attributes:
             base:
@@ -195,6 +193,7 @@ it:
 
         invoice:
           recipient_address_or_email_required: 'deve essere riempito l''indirizzo del ricevente oppure l''e-mail'
+          recipient_name_or_company_name_required: 'Firmenname oder Name muss ausgefüllt werden'
           attributes:
             invoice_config:
               invalid: 'non valido; modificate le impostazioni prima di redigere una fattura'
@@ -351,10 +350,10 @@ it:
         one: Voce contabile
         many: Voci contabili
         other: Voci contabili
-      invoice_list:
-        one: Fattura collettiva
-        many: Fatture collettive
-        other: Fatture collettive
+      invoice_run:
+        one: Rechnungslauf
+        many: Rechnungsläufe
+        other: Rechnungsläufe
       label_format:
         one: formato delle etichette
         many: Formati delle etichette
@@ -508,7 +507,7 @@ it:
         town: Luogo
         country: Nazione
         postbox: Casella postale
-        address_care_of: Riga dell'indirizzo aggiuntiva
+        address_care_of: zusätz. Adresszeile
         public: Pubblico
 
       additional_addresses:
@@ -1233,6 +1232,14 @@ it:
           cancelled: Cancellato
         recipient: Destinatario
         recipient_email: Email del destinatario
+        recipient_company_name: Firmenname
+        recipient_name: Name
+        recipient_address_care_of: zusätz. Adresszeile
+        recipient_postbox: Postfach
+        recipient_country: Land
+        recipient_street: Strasse
+        recipient_zip_code: PLZ
+        recipient_town: Ort
         recipient_address: Indirizzo del destinatario
         due_at: Scade il
         issued_at: Emesso il
@@ -1247,7 +1254,7 @@ it:
         payment_purpose: Motivo del pagamento
         address: Indirizzo del mittente
         beneficiary: A favore di
-        payee: Nome / Ditta
+        payee: Einzahlung für
         account_number: Numero di conto
         iban: IBAN
         payment_slip: Polizza di versamento
@@ -1316,13 +1323,13 @@ it:
         account: Conto
 
 
-      invoice_list:
-        title: Titolo
-        receiver: Destinatario
-        recipients_total: Destinatario complessivo
-        recipients_paid: Destinatario pagato
-        amount_total: Importo complessivo
-        amount_paid: Importo pagato
+      invoice_run:
+        title: Titel
+        receiver: Empfänger
+        recipients_total: Empfänger Insgesamt
+        recipients_paid: Empfänger Bezahlt
+        amount_total: Betrag insgesamt
+        amount_paid: Betrag bezahlt
 
       # used for nested attributes
       invoice_items:

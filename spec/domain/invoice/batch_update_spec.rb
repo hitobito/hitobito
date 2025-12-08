@@ -72,7 +72,7 @@ describe Invoice::BatchUpdate do
   end
 
   it "does not change invoice to sent if recipient_email is missing" do
-    draft.update(recipient_email: nil)
+    draft.update_columns(recipient_email: nil)
 
     expect do
       expect { update([draft], person) }.not_to change { draft.reload.state }
@@ -170,7 +170,7 @@ describe Invoice::BatchUpdate do
     end
 
     it "uses current locale when invoice recipient is external" do
-      sent.update_columns(due_at: 31.days.ago, recipient_id: nil)
+      sent.update_columns(due_at: 31.days.ago, recipient_id: nil, recipient_name: "Foobar")
       update([sent], person)
 
       expect(sent.payment_reminders.first.title).to eq "title"

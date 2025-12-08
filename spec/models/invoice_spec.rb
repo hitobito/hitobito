@@ -33,14 +33,14 @@
 #  updated_at          :datetime         not null
 #  creator_id          :integer
 #  group_id            :integer          not null
-#  invoice_list_id     :bigint
+#  invoice_run_id     :bigint
 #  recipient_id        :integer
 #
 # Indexes
 #
 #  index_invoices_on_esr_number       (esr_number)
 #  index_invoices_on_group_id         (group_id)
-#  index_invoices_on_invoice_list_id  (invoice_list_id)
+#  index_invoices_on_invoice_run_id  (invoice_run_id)
 #  index_invoices_on_recipient_id     (recipient_id)
 #  index_invoices_on_sequence_number  (sequence_number)
 #
@@ -73,8 +73,36 @@ describe Invoice do
     end.to change { invoice_config.reload.sequence_number }.by(2)
   end
 
-  it "validates that at least one email or an address is specified if no recipient" do
+  it "validates that the structured address is specified if no recipient" do
     invoice = Invoice.create(title: "invoice", group: group)
+    expect(invoice).not_to be_valid
+    expect(invoice.errors.full_messages)
+      .to include("Firmenname oder Name muss ausgefüllt werden")
+    expect(invoice.errors.full_messages)
+      .to include("Strasse muss ausgefüllt werden")
+    expect(invoice.errors.full_messages)
+      .to include("PLZ muss ausgefüllt werden")
+    expect(invoice.errors.full_messages)
+      .to include("Ort muss ausgefüllt werden")
+    expect(invoice.errors.full_messages)
+      .to include("Land muss ausgefüllt werden")
+  end
+
+  it "validates that on old invoices, at least one email or an address is specified if no recipient" do
+    invoice = create_invoice
+    invoice.update_columns(
+      recipient_id: nil,
+      recipient_email: nil,
+      deprecated_recipient_address: nil,
+      recipient_company_name: nil,
+      recipient_name: nil,
+      recipient_address_care_of: nil,
+      recipient_street: nil,
+      recipient_housenumber: nil,
+      recipient_postbox: nil,
+      recipient_zip_code: nil,
+      recipient_town: nil
+    )
     expect(invoice).not_to be_valid
     expect(invoice.errors.full_messages)
       .to include("Empfänger Adresse oder E-Mail muss ausgefüllt werden")
@@ -98,9 +126,9 @@ describe Invoice do
     end
   end
 
-  it "accepts that an invoice in state issued or sent has no items if  part of an invoice_list" do
+  it "accepts that an invoice in state issued or sent has no items if  part of an invoice_run" do
     invoice = create_invoice
-    invoice.update(invoice_list: InvoiceList.create!(group: group, title: "list"))
+    invoice.update(invoice_run: InvoiceRun.create!(group: group, title: "list"))
     invoice.update(state: :issued)
     expect(invoice).to be_valid
     invoice.reload.update(state: :sent)
@@ -112,15 +140,19 @@ describe Invoice do
   end
 
   it "#save sets recipient and related fields, keeps empty fields" do
-    person.update(zip_code: 3003, country: "CH")
+    person.update!(zip_code: 3003, country: "CH", company: true, company_name: "Top ITC", address_care_of: "Office",
+      postbox: "Postfach")
+
     invoice = create_invoice
     expect(invoice.recipient).to eq person
     expect(invoice.recipient_email).to eq person.email
-    expect(invoice.recipient_address).to eq "Top Leader\nGreatstreet 345\n3003 Greattown\n"
 
+    expect(invoice.recipient_company_name).to eq "Top ITC"
     expect(invoice.recipient_name).to eq "Top Leader"
+    expect(invoice.recipient_address_care_of).to eq "Office"
     expect(invoice.recipient_street).to eq "Greatstreet"
     expect(invoice.recipient_housenumber).to eq "345"
+    expect(invoice.recipient_postbox).to eq "Postfach"
     expect(invoice.recipient_zip_code).to eq "3003"
     expect(invoice.recipient_town).to eq "Greattown"
     expect(invoice.recipient_country).to eq "CH"
@@ -168,7 +200,7 @@ describe Invoice do
   end
 
   it "#create sets payment attributes from invoice_config" do
-    invoice = Invoice.create(title: "test_invoice", group: group, recipient_address: "address")
+    invoice = Invoice.create(title: "test_invoice", group: group)
 
     expect(invoice.address).to eq invoice_config.address
     expect(invoice.account_number).to eq invoice_config.account_number
@@ -460,17 +492,6 @@ describe Invoice do
     it "returns nil when no reminder is present" do
       expect(invoice.latest_reminder).to be_nil
     end
-  end
-
-  it "reads invoices address" do
-    person.additional_addresses.create!(label: "Arbeit", street: "Lagistrasse", housenumber: "12a", zip_code: 1080,
-      town: "Jamestown", country: "CH", invoices: true)
-    invoice = create_invoice
-    expect(invoice.recipient_address).to eq <<~TEXT
-      Top Leader
-      Lagistrasse 12a
-      1080 Jamestown
-    TEXT
   end
 
   private

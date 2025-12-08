@@ -13,7 +13,7 @@ module ContactAccountResource
   extend ActiveSupport::Concern
 
   included do
-    attribute :label, :string
+    attribute(:label, :string) { @object.translated_label }
     attribute :public, :boolean
 
     attribute :contactable_id, :integer

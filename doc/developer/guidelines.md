@@ -15,6 +15,10 @@ Violations sind unmittelbar zu korrigieren.
 
 Das selbe gilt für Warnungen, welche im CI auftreten (Brakeman, ...).
 
+### Naming Conventions
+
+* Namespaces: die Konvention ist in 
+  [ADR-012 Einheitliche Namespaces](../architecture/decisions/012_einheitliche-namespaces.md) beschrieben.
 
 ### Spezifische Guidelines
 

@@ -23,15 +23,15 @@ describe PaymentsController do
       expect(response).to redirect_to(group_invoice_path(group, invoice))
     end
 
-    it "valid arguments create payment and updates invoice_list" do
-      list = InvoiceList.create(title: :title, group: invoice.group)
-      invoice.update(state: :sent, invoice_list: list)
+    it "valid arguments create payment and updates invoice_run" do
+      list = InvoiceRun.create(title: :title, group: invoice.group)
+      invoice.update(state: :sent, invoice_run: list)
       expect do
         post :create, params: {group_id: group.id, invoice_id: invoice.id, payment: {amount: invoice.total}}
       end.to change { invoice.payments.count }.by(1)
 
       expect(flash[:notice]).to be_present
-      expect(response).to redirect_to(group_invoice_list_invoice_path(group, list, invoice))
+      expect(response).to redirect_to(group_invoice_run_invoice_path(group, list, invoice))
       expect(list.reload.recipients_paid).to eq 1
       expect(list.amount_paid).to eq invoice.total
     end

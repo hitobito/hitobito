@@ -96,9 +96,7 @@ en:
               missing_scheme: has to contain a protocol-scheme (http:// or https://)
               suffix_present: darf keinen Pfad und keinen Slash am Ende haben
         custom_content:
-          attributes:
-            body:
-              placeholder_missing: 'must contain the placeholder %{placeholder} '
+          placeholder_missing: 'must contain the placeholder %{placeholder}'
         event:
           attributes:
             base:
@@ -192,6 +190,7 @@ en:
 
         invoice:
           recipient_address_or_email_required: 'Recipient address or email must be provided'
+          recipient_name_or_company_name_required: 'Firmenname oder Name muss ausgefüllt werden'
           attributes:
             invoice_config:
               invalid: 'is not valid; adjust the settings before creating an invoice'
@@ -314,9 +313,9 @@ en:
       invoice_item:
         one: Invoice Item
         other: Invoice Items
-      invoice_list:
-        one: Collective invoice
-        other: Collective invoices
+      invoice_run:
+        one: Rechnungslauf
+        other: Rechnungsläufe
       label_format:
         one: Label format
         other: Label formats
@@ -440,7 +439,7 @@ en:
         town: Ort
         country: Land
         postbox: Postfach
-        address_care_of: zusatz. Adresszeile
+        address_care_of: zusätz. Adresszeile
         public: Öffentlich
 
       additional_addresses:
@@ -1159,6 +1158,14 @@ en:
           cancelled: Cancelled
         recipient: Recipient
         recipient_email: Recipient e-mail
+        recipient_company_name: Firmenname
+        recipient_name: Name
+        recipient_address_care_of: zusätz. Adresszeile
+        recipient_postbox: Postfach
+        recipient_country: Land
+        recipient_street: Strasse
+        recipient_zip_code: PLZ
+        recipient_town: Ort
         recipient_address: Recipient address
         due_at: Due at
         issued_at: Issued at
@@ -1173,7 +1180,7 @@ en:
         payment_purpose: Payment purpose
         address: Sender address
         beneficiary: Beneficiary
-        payee: Name / Organization
+        payee: Einzahlung für
         account_number: Account Number
         iban: IBAN
         payment_slip: Payment slip
@@ -1242,13 +1249,13 @@ en:
         account: Account
 
 
-      invoice_list:
-        title: Title
-        receiver: Recipient
-        recipients_total: Recipients total
-        recipients_paid: Recipient paid
-        amount_total: Amount total
-        amount_paid: Amount paid
+      invoice_run:
+        title: Titel
+        receiver: Empfänger
+        recipients_total: Empfänger Insgesamt
+        recipients_paid: Empfänger Bezahlt
+        amount_total: Betrag insgesamt
+        amount_paid: Betrag bezahlt
 
       # used for nested attributes
       invoice_items:

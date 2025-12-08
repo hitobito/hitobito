@@ -11,15 +11,14 @@ describe Person::Address do
   let(:person) { people(:top_leader) }
   let(:label) { nil }
   let(:name) { nil }
-  let(:address) { described_class.new(person, label:, name: nil) }
+  let(:address) { described_class.new(person, label:) }
 
   def build_additional_address(attrs)
     person.additional_addresses.build(attrs).tap(&:valid?)
   end
 
-  # rubocop:todo Layout/LineLength
-  shared_examples "common address behaviour" do |country_label:, postbox:, company:, uses_additional_address_name: true, label_handling: true|
-    # rubocop:enable Layout/LineLength
+  shared_examples "common address behaviour" do |country_label:, postbox:, company:,
+    uses_additional_address_name: true, label_handling: true|
     context "common" do
       it "renders name, text and town with zip code" do
         expect(text).to eq <<~TEXT
@@ -199,14 +198,14 @@ describe Person::Address do
       uses_additional_address_name: false
   end
 
-  describe "#for_invoice" do
-    subject(:text) { address.for_invoice }
+  describe "#for_letter_with_invoice" do
+    subject(:text) { address.for_letter_with_invoice }
 
     let(:attrs) {
       {label: nil, street: "Lagistrasse", housenumber: "12a", zip_code: 1080, town: "Jamestown", invoices: true}
     }
 
-    it_behaves_like "common address behaviour", country_label: false, postbox: false, company: :adds,
+    it_behaves_like "common address behaviour", country_label: false, postbox: true, company: :adds,
       label_handling: false
 
     it "uses invoice address if additional address with invoice flag exists" do
@@ -256,10 +255,12 @@ describe Person::Address do
       person.country = "CH"
 
       expect(attributes).to eq({
-        recipient_address: "Top Leader\nGreatstreet 345\n3456 Greattown\n",
-        recipient_housenumber: "345",
+        recipient_company_name: nil,
         recipient_name: "Top Leader",
+        recipient_address_care_of: nil,
+        recipient_housenumber: "345",
         recipient_street: "Greatstreet",
+        recipient_postbox: nil,
         recipient_town: "Greattown",
         recipient_zip_code: "3456",
         recipient_country: "CH"
@@ -272,8 +273,10 @@ describe Person::Address do
           label: nil,
           name: "Foo Bar",
           uses_contactable_name: false,
+          address_care_of: "Office",
           street: "Lagistrasse",
           housenumber: "12a",
+          postbox: "Postfach",
           zip_code: 1080,
           town: "Jamestown",
           invoices: true
@@ -281,21 +284,30 @@ describe Person::Address do
       )
 
       expect(attributes).to eq({
-        recipient_address: "Foo Bar\nLagistrasse 12a\n1080 Jamestown\n",
-        recipient_country: nil,
-        recipient_housenumber: "12a",
+        recipient_company_name: nil,
         recipient_name: "Foo Bar",
+        recipient_address_care_of: "Office",
+        recipient_housenumber: "12a",
+        recipient_postbox: "Postfach",
         recipient_street: "Lagistrasse",
+        recipient_zip_code: "1080",
         recipient_town: "Jamestown",
-        recipient_zip_code: "1080"
+        recipient_country: "CH"
       })
     end
 
-    it "uses company name for companies" do
+    it "sets company name for companies" do
       person.company_name = "Company Name"
       person.company = true
 
-      expect(attributes[:recipient_name]).to eq "Company Name"
+      expect(attributes[:recipient_company_name]).to eq "Company Name"
+    end
+
+    it "does not use company name, if not a company" do
+      person.company_name = "Company Name"
+      person.company = false
+
+      expect(attributes[:recipient_company_name]).to be_nil
     end
   end
 

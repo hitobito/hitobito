@@ -101,6 +101,17 @@ describe TagsController do
       expect(response).to redirect_to(tags_path(returning: true))
     end
 
+    it "deletes given tag and associated subscription_tag" do
+      subscription_tag = SubscriptionTag.create!(tag: tag, subscription: subscriptions(:leaders_group), excluded: false)
+      expect do
+        delete :destroy, params: {id: tag.id}
+      end.to change { ActsAsTaggableOn::Tag.count }.by(-1)
+        .and change { SubscriptionTag.count }.by(-1)
+
+      expect(response).to redirect_to(tags_path(returning: true))
+      expect(SubscriptionTag.where(id: subscription_tag.id)).to_not exist
+    end
+
     it "is not possible to delete validation tags" do
       validation_tags.each do |t|
         expect do

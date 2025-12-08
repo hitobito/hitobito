@@ -118,8 +118,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   attr_readonly :type
 
-  translates :custom_self_registration_title
-  translates :privacy_policy_title
+  translates :custom_self_registration_title, :privacy_policy_title
 
   ### CALLBACKS
 
@@ -162,7 +161,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   has_one :invoice_config, dependent: :destroy
   has_many :invoices
-  has_many :invoice_lists
+  has_many :invoice_runs
   has_many :invoice_articles, dependent: :destroy
   has_many :invoice_items, through: :invoices
 
@@ -259,12 +258,12 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
     # load events to destroy orphaned later
     event_list = events.to_a
-    invoice_list = invoices.to_a
+    invoice_run = invoices.to_a
 
     super
 
     event_list.each { |e| destroy_orphaned_event(e) }
-    invoice_list.each(&:destroy)
+    invoice_run.each(&:destroy)
   end
 
   def decorator_class

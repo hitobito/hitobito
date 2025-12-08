@@ -9,6 +9,7 @@ require "spec_helper"
 
 describe TableDisplays::People::LayerGroupLabelColumn, type: :helper do
   include UtilityHelper
+  include ColumnHelper
   include FormatHelper
 
   let(:person) { people(:top_leader).decorate }

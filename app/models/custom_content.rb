@@ -32,9 +32,10 @@ class CustomContent < ActiveRecord::Base
   validates :label, presence: true
   validates :label, :subject, length: {maximum: 255, allow_nil: true}
   validates :body, length: {allow_nil: true, maximum: 2**16 - 1}, no_attachments: true
+  # The custom content placeholders validator checks if the placeholder is either in the body
+  # or the subject of the custom content
+  validates_with CustomContentPlaceholdersValidator
   validates_by_schema
-
-  validate :assert_required_placeholders_are_used
 
   belongs_to :context, optional: true, polymorphic: true
 
@@ -106,14 +107,6 @@ class CustomContent < ActiveRecord::Base
 
   def as_list(placeholders)
     placeholders.to_s.split(",").collect(&:strip)
-  end
-
-  def assert_required_placeholders_are_used
-    placeholders_required_list.each do |placeholder|
-      unless [subject, body.to_s].any? { |str| str.to_s.include?(placeholder_token(placeholder)) }
-        errors.add(:body, :placeholder_missing, placeholder: placeholder_token(placeholder))
-      end
-    end
   end
 
   def check_placeholders_exist(placeholders)

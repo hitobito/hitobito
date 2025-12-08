@@ -70,6 +70,12 @@ describe Export::Tabular::Base do
       expect(array).to receive(:each).once.and_call_original
       iterate(array)
     end
+
+    it "keeps format if called without without block as in xlsx generator" do
+      exportable = tabular.new(Person.limit(1))
+      expect(exportable).to receive(:data_rows).twice.with(:xlsx).and_call_original
+      exportable.data_rows(:xlsx).each_with_index {}
+    end
   end
 
   describe "#sheet_name" do

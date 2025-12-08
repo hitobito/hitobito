@@ -63,9 +63,10 @@ module Export::Xlsx
     end
 
     def add_data_rows(sheet)
+      column_styles = exportable.attribute_styles
       exportable.data_rows(:xlsx).each_with_index do |row, index|
         options = {}
-        options.merge!(row_style(style.row_style(index)))
+        options.merge!(data_row_style(index, column_styles))
         options.merge!(data_row_height(style.data_row_height))
         sheet.add_row(row, options)
       end
@@ -100,11 +101,21 @@ module Export::Xlsx
       @style_definitions[key].deep_dup
     end
 
-    def row_style(style)
-      if style.is_a?(Array)
-        cell_styles(style)
+    def data_row_style(index, column_styles)
+      styles = style.row_style(index)
+      if styles == :default && column_styles.present?
+        styles = Array.new(exportable.attributes.size) do |i|
+          column_styles[i] || :default
+        end
+      end
+      row_style(styles)
+    end
+
+    def row_style(styles)
+      if styles.is_a?(Array)
+        cell_styles(styles)
       else
-        style_definition(style)
+        style_definition(styles)
       end
     end
 

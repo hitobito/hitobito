@@ -5,6 +5,10 @@
 
 module Export::Tabular::People
   class PeopleFull < PeopleAddress
+    self.styled_attrs = {
+      date: [:birthday]
+    }
+
     def person_attributes
       super +
         (Person.column_names.collect(&:to_sym) -

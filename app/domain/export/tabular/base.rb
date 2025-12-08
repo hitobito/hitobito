@@ -7,10 +7,15 @@
 module Export::Tabular
   # Base class for csv/xlsx export
   class Base
-    class_attribute :model_class, :row_class, :auto_filter, :batch_size
+    class_attribute :model_class, :row_class, :auto_filter, :batch_size, :styled_attrs
     self.row_class = Export::Tabular::Row
     self.auto_filter = true
     self.batch_size = 1000
+
+    # Styled attrs is a hash with style keys and array values of corresponding
+    # attribute strings or regexps. Style keys are defined in Export::Xlsx::Style.
+    # The standard styles are primarly used to define the formatting style of a value.
+    self.styled_attrs = {}
 
     attr_reader :ability, :list
 
@@ -65,7 +70,7 @@ module Export::Tabular
     end
 
     def data_rows(format = nil)
-      return enum_for(:data_rows) unless block_given?
+      return enum_for(:data_rows, format) unless block_given?
 
       Iterator.new(list, batch_size).each do |entry|
         yield values(entry, format)
@@ -74,6 +79,18 @@ module Export::Tabular
 
     # Overwrite to set a custom sheet name for xlsx exports.
     def sheet_name = nil
+
+    # Style references for axlsx
+    def attribute_styles
+      styled_attrs.each_with_object({}) do |(key, names), columns|
+        attributes.each_with_index do |attr, i|
+          # col may be a string or a regexp
+          if names.any? { |name| name === attr } # rubocop:disable Style/CaseEquality
+            columns[i] = key
+          end
+        end
+      end
+    end
 
     private
 

@@ -6,6 +6,9 @@
 module Export::Tabular::People
   class ParticipationsFull < PeopleFull
     self.row_class = ParticipationRow
+    self.styled_attrs = {
+      date: [:birthday, :created_at]
+    }
 
     def build_attribute_labels
       labels = super

@@ -4,6 +4,12 @@
 #  https://github.com/hitobito/hitobito.
 
 application:
+  languages:
+    de: Deutsch
+    en: English
+    fr: Français
+    it: Italiano
+
   additional_languages:
     en: Englisch
     fr: Französisch
@@ -32,7 +38,7 @@ additional_address:
     - Arbeit
     - Andere
 
-invoice_lists:
+invoice_runs:
   fixed_fees:
     membership:
       enabled: true

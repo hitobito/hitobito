@@ -14,6 +14,7 @@
 # a standard label with them.
 class StandardFormBuilder < ActionView::Helpers::FormBuilder
   include NestedForm::BuilderMixin
+  include Globalized::GlobalizedInputFieldHelpers
 
   REQUIRED_MARK = ' <span class="required">*</span>'.html_safe
   WIDTH_CLASSES = "mw-100 mw-md-60ch"
@@ -26,7 +27,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   delegate :association, :column_type, :column_property, :captionize, :ta, :tag,
     :content_tag, :safe_join, :capture, :add_css_class, :assoc_and_id_attr,
-    :render, :f, :icon, :check_box_tag,
+    :render, :f, :icon, :check_box_tag, :action_button,
     to: :template
 
   # Render multiple input fields together with a label for the given attributes.
@@ -39,6 +40,13 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # The input field is chosen based on the ActiveRecord column type.
   # Use additional html_options for the input element.
   def input_field(attr, html_options = {}) # rubocop:disable Metrics/*
+    # Checks if the attr is a globalized attr (translates: ...) and automatically generates
+    # a globalized input field for it, allowing the user to fill in the field in
+    # all available languages.
+    if globalized_field?(attr, html_options.delete(:already_globalized))
+      return globalized_input_field(attr, html_options)
+    end
+
     type = column_type(@object, attr.to_sym)
     custom_field_method = :"#{type}_field"
 
@@ -78,6 +86,13 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   # Render an action text input field.
   def rich_text_area(attr, html_options = {})
+    # Checks if the attr is a globalized attr (translates: ...) and automatically generates
+    # a globalized rich text area for it, allowing the user to fill in the field in
+    # all available languages.
+    if globalized_field?(attr, html_options.delete(:already_globalized))
+      return globalized_rich_text_area(attr, html_options)
+    end
+
     add_css_class(html_options, FORM_CONTROL)
     add_css_class(html_options, "is-invalid") if errors_on?(attr)
     super
@@ -438,7 +453,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Generates a help block for fields
   def help_block(text = nil, options = {}, &block)
     additional_classes = Array(options.delete(:class))
-    content_tag(:div, text, class: "form-text #{additional_classes.join(" ")}", &block)
+    content_tag(:div, text, class: "form-text #{additional_classes.join(" ")}", **options, &block)
   end
 
   # Returns the list of association entries, either from options[:list],

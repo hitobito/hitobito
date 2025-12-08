@@ -19,3 +19,4 @@
             %br/
         %p
           = render_changelog_link
+  = yield(:footer) if content_for?(:footer)

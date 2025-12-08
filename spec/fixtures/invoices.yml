@@ -36,14 +36,14 @@
 #  updated_at                  :datetime         not null
 #  creator_id                  :integer
 #  group_id                    :integer          not null
-#  invoice_list_id             :bigint
+#  invoice_run_id             :bigint
 #  recipient_id                :integer
 #
 # Indexes
 #
 #  index_invoices_on_esr_number       (esr_number)
 #  index_invoices_on_group_id         (group_id)
-#  index_invoices_on_invoice_list_id  (invoice_list_id)
+#  index_invoices_on_invoice_run_id  (invoice_run_id)
 #  index_invoices_on_recipient_id     (recipient_id)
 #  index_invoices_on_sequence_number  (sequence_number)
 #  invoices_search_column_gin_idx     (search_column) USING gin
@@ -54,6 +54,7 @@ invoice:
   group: bottom_layer_one
   recipient: top_leader
   recipient_email: top_leader@example.com
+  recipient_name: "Top Leader"
   recipient_street: Greatstreet
   recipient_housenumber: 345
   recipient_zip_code: 3456
@@ -78,6 +79,7 @@ sent:
   group: bottom_layer_one
   recipient: top_leader
   recipient_email: top_leader@example.com
+  recipient_name: "Top Leader"
   recipient_street: Greatstreet
   recipient_housenumber: 345
   recipient_zip_code: 3456

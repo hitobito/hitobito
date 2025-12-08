@@ -38,14 +38,14 @@
 #  updated_at          :datetime         not null
 #  creator_id          :integer
 #  group_id            :integer          not null
-#  invoice_list_id     :bigint
+#  invoice_run_id     :bigint
 #  recipient_id        :integer
 #
 # Indexes
 #
 #  index_invoices_on_esr_number       (esr_number)
 #  index_invoices_on_group_id         (group_id)
-#  index_invoices_on_invoice_list_id  (invoice_list_id)
+#  index_invoices_on_invoice_run_id  (invoice_run_id)
 #  index_invoices_on_recipient_id     (recipient_id)
 #  index_invoices_on_sequence_number  (sequence_number)
 #
@@ -75,7 +75,7 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   belongs_to :group
   belongs_to :recipient, class_name: "Person"
   belongs_to :creator, class_name: "Person"
-  belongs_to :invoice_list, optional: true
+  belongs_to :invoice_run, optional: true
 
   has_many :invoice_items, dependent: :destroy
   has_many :payments, dependent: :destroy
@@ -88,15 +88,19 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   before_validation :set_dates, on: :update
   before_validation :set_self_in_nested
   before_validation :recalculate
+  before_validation :set_recipient_fields, on: :create, if: :recipient
 
   validates :state, inclusion: {in: STATES}
   validates :due_at, timeliness: {after: :sent_at}, presence: true, if: :sent?
-  validates :invoice_items, presence: true, if: -> { (issued? || sent?) && !invoice_list }
+  validates :invoice_items, presence: true, if: -> { (issued? || sent?) && !invoice_run }
+  validates :title, presence: true
+  validate :recipient_name_present?
+  validates :recipient_street, :recipient_zip_code, :recipient_town, :recipient_country,
+    presence: true
   validate :assert_sendable?, unless: :recipient_id?
 
   normalizes :recipient_email, with: ->(attribute) { attribute.downcase }
 
-  before_create :set_recipient_fields, if: :recipient
   after_create :increment_sequence_number
 
   accepts_nested_attributes_for :invoice_items, allow_destroy: true
@@ -115,7 +119,7 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   scope :one_month, -> { where(invoices: {due_at: ...1.month.ago.to_date}) }
   scope :visible, -> { where.not(state: :cancelled) }
   scope :remindable, -> { where(state: STATES_REMINDABLE) }
-  scope :standalone, -> { where(invoice_list_id: nil) }
+  scope :standalone, -> { where(invoice_run_id: nil) }
 
   class << self
     def with_aggregated_payments
@@ -187,7 +191,7 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
 
   def recalculate!
     update_attribute(:total, calculated[:total] || 0) # rubocop:disable Rails/SkipsModelValidations
-    invoice_list&.update_total
+    invoice_run&.update_total
   end
 
   def to_s
@@ -257,6 +261,58 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
     payment_reminders.max_by(&:created_at)
   end
 
+  def recipient_address
+    if recipient_address_values.empty?
+      deprecated_recipient_address
+    else
+      recipient_address_values.join("\n")
+    end
+  end
+
+  def recipient_address_values
+    [
+      recipient_company_name,
+      recipient_name,
+      recipient_address_care_of,
+      recipient_street_with_housenumber,
+      recipient_postbox,
+      recipient_town_with_zip_code,
+      ((recipient_country == Settings.countries.prioritized.first) ? nil : recipient_country)
+    ].uniq.compact_blank
+  end
+
+  def recipient_street_with_housenumber
+    [recipient_street, recipient_housenumber].compact_blank.join(" ")
+  end
+
+  def recipient_town_with_zip_code
+    [recipient_zip_code, recipient_town].compact_blank.join(" ")
+  end
+
+  def payee
+    if payee_address_values.empty?
+      deprecated_payee
+    else
+      payee_address_values.join("\n")
+    end
+  end
+
+  def payee_address_values
+    [
+      payee_name,
+      payee_street_with_housenumber,
+      payee_town_with_zip_code
+    ].compact_blank
+  end
+
+  def payee_street_with_housenumber
+    [payee_street, payee_housenumber].compact_blank.join(" ")
+  end
+
+  def payee_town_with_zip_code
+    [payee_zip_code, payee_town].compact_blank.join(" ")
+  end
+
   private
 
   # on index we join aggregated payments
@@ -321,8 +377,19 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   end
 
   def assert_sendable?
-    if recipient_email.blank? && recipient_address.blank?
+    # This assertion only makes sense for old invoices,
+    # since for new invoices, recipient_address_values must be set
+    return unless persisted?
+    return if recipient_address_values.any?
+
+    if recipient_email.blank? && deprecated_recipient_address.blank?
       errors.add(:base, :recipient_address_or_email_required)
+    end
+  end
+
+  def recipient_name_present?
+    if recipient_name.blank? && recipient_company_name.blank?
+      errors.add(:base, :recipient_name_or_company_name_required)
     end
   end
 

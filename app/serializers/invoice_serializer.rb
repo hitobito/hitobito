@@ -36,14 +36,14 @@
 #  updated_at                  :datetime         not null
 #  creator_id                  :integer
 #  group_id                    :integer          not null
-#  invoice_list_id             :bigint
+#  invoice_run_id             :bigint
 #  recipient_id                :integer
 #
 # Indexes
 #
 #  index_invoices_on_esr_number       (esr_number)
 #  index_invoices_on_group_id         (group_id)
-#  index_invoices_on_invoice_list_id  (invoice_list_id)
+#  index_invoices_on_invoice_run_id  (invoice_run_id)
 #  index_invoices_on_recipient_id     (recipient_id)
 #  index_invoices_on_sequence_number  (sequence_number)
 #  invoices_search_column_gin_idx     (search_column) USING gin
@@ -59,7 +59,6 @@ class InvoiceSerializer < ApplicationSerializer
       :esr_number,
       :description,
       :recipient_email,
-      :recipient_address,
       :sent_at,
       :due_at,
       :total,
@@ -72,7 +71,6 @@ class InvoiceSerializer < ApplicationSerializer
       :payment_purpose,
       :payment_information,
       :beneficiary,
-      :payee,
       :participant_number,
       :vat_number
 
@@ -88,5 +86,8 @@ class InvoiceSerializer < ApplicationSerializer
     entities :invoice_items, item.invoice_items, InvoiceItemSerializer
     entities :payments, item.payments, PaymentSerializer
     entities :payment_reminders, item.payment_reminders, PaymentReminderSerializer
+
+    property :recipient_address, item.recipient_address
+    property :payee, item.payee
   end
 end

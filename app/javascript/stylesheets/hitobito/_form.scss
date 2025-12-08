@@ -564,7 +564,7 @@ td.revoke {
   }
 
   #course-filter div.d-grid {
-    grid-template-columns: 1fr 1fr 9fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 
   .align-with-form {
@@ -844,10 +844,6 @@ label.required::after {
 
 .width-60 {
   width: 60px;
-}
-
-.w-150-px {
-  width: 150px;
 }
 
 .btn-link {

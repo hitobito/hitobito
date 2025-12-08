@@ -17,7 +17,7 @@ describe Events::CoursesController, type: :controller do
 
   let(:dom) { Capybara::Node::Simple.new(response.body) }
 
-  let(:multiselect) { dom.find("#course-filter .select.shown") }
+  let(:multiselect) { dom.find("form[data-turbo-frame=event_courses_list] .select.shown") }
   let(:top_layer) { groups(:top_layer) }
   let(:top_group) { groups(:top_group) }
 
@@ -51,7 +51,7 @@ describe Events::CoursesController, type: :controller do
   context "date filters" do
     before { get :index }
 
-    let(:form) { dom.find("form#course-filter") }
+    let(:form) { dom.find("form[data-turbo-frame=event_courses_list]") }
 
     it "form contains default date fields" do
       expect(form).to have_css("input.date", count: 2)
@@ -68,7 +68,7 @@ describe Events::CoursesController, type: :controller do
   end
 
   context "state filter" do
-    let(:form) { dom.find("form#course-filter") }
+    let(:form) { dom.find("form[data-turbo-frame=event_courses_list]") }
 
     it "is not shown because no states are configure in the core" do
       get :index
@@ -143,7 +143,7 @@ describe Events::CoursesController, type: :controller do
 
   context "courses content" do
     let(:slk) { event_kinds(:slk) }
-    let(:main) { dom.find("#main") }
+    let(:main) { dom.find("#event_courses_list") }
     let(:slk_ev) {
       Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk), maximum_participants: 20,
         state: "Geplant")

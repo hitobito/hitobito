@@ -50,7 +50,7 @@ de:
         terminate_on: Austrittsdatum
       household:
         members: Haushaltsmitglieder
-      choice_form/choice:
+      choice:
         choice: Antwortmöglichkeit
 
     errors:

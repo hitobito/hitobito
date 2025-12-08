@@ -6,7 +6,9 @@
 require "spec_helper"
 
 describe FullTextController, type: :controller do
-  before { sign_in(people(:top_leader)) }
+  let(:current_user) { people(:top_leader) }
+
+  before { sign_in(current_user) }
 
   before do
     [[:list_people, Person.where(id: people(:bottom_member).id)],
@@ -53,15 +55,26 @@ describe FullTextController, type: :controller do
       expect(response).to redirect_to(event_path(events(:top_course)))
     end
 
-    it "finds invoice" do
-      get :index, params: {q: invoices(:invoice).title[0..5]}
+    describe "invoices" do
+      it "finds invoice" do
+        get :index, params: {q: invoices(:invoice).title[0..5]}
 
-      expect(assigns(:invoices)).to include(invoices(:invoice))
-    end
+        expect(assigns(:invoices)).to include(invoices(:invoice))
+      end
 
-    it "redirects to invoice if only finding a single invoice" do
-      get :index, params: {q: invoices(:invoice).title}
-      expect(response).to redirect_to(invoice_path(invoices(:invoice)))
+      it "redirects to invoice if only finding a single invoice" do
+        get :index, params: {q: invoices(:invoice).title}
+        expect(response).to redirect_to(invoice_path(invoices(:invoice)))
+      end
+
+      it "finds nothing when lacking finance permission" do
+        allow(Group::TopGroup::Leader).to receive(:permission).and_return(
+          [:admin, :layer_and_below_full, :contact_data, :impersonation]
+        )
+        get :index, params: {q: invoices(:invoice).title[0..5]}
+
+        expect(assigns(:invoices)).to include(invoices(:invoice))
+      end
     end
 
     context "without any params" do

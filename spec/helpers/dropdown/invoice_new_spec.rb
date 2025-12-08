@@ -15,7 +15,7 @@ describe Dropdown::InvoiceNew do
   let(:recipient) { OpenStruct.new(id: 42) }
   let(:dropdown) { Dropdown::InvoiceNew.new(self, people: [recipient]) }
   let(:current_user) { people(:top_leader) }
-  let(:finance_group) { current_user.finance_groups.first }
+  let(:finance_group) { Group.find(Ability.new(current_user).user_finance_layer_ids[0]) }
   let(:ability) { Ability.new(current_user) }
   let(:new_invoice_path) { new_group_invoice_path(group_id: finance_group, invoice: {recipient_id: recipient.id}) }
   let(:invalid_msg) { I18n.t("activerecord.errors.models.invoice_config.not_valid") }

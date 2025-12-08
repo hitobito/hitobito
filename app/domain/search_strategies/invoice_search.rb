@@ -7,7 +7,6 @@ module SearchStrategies
   class InvoiceSearch < Base
     def search_fulltext
       return no_invoices unless term_present?
-      return no_invoices if @user.finance_groups.empty?
 
       Invoice.search(@term).limit(@limit)
     end

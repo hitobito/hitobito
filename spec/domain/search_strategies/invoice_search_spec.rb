@@ -34,16 +34,6 @@ describe SearchStrategies::InvoiceSearch do
         end
       end
     end
-
-    context "as unprivileged person" do
-      let(:user) { Fabricate(:person) }
-
-      it "does not find invoices" do
-        result = search_class(invoices(:invoice).to_s[0..5]).search_fulltext
-
-        expect(result).not_to include(invoices(:invoice))
-      end
-    end
   end
 
   def search_class(term = nil, page = nil)

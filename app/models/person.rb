@@ -507,14 +507,6 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     primary_group&.layer_group
   end
 
-  def finance_groups
-    return Group.layers if root? || groups_with_permission(:complete_finance).any?
-
-    groups_with_permission(:finance)
-      .flat_map(&:layer_group)
-      .uniq
-  end
-
   def table_display_for(table_model_class)
     @table_display ||= TableDisplay.for(self, table_model_class)
   end

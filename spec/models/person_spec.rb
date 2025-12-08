@@ -632,27 +632,6 @@ describe Person do
     end
   end
 
-  describe "#finance_groups" do
-    let(:person) { people(:top_leader) }
-
-    it "returns uniq list of layer groups on which user has finance permission" do
-      Fabricate(Group::TopLayer::TopAdmin.name.to_s, person: person, group: groups(:top_layer))
-      allow_any_instance_of(Group::TopLayer::TopAdmin).to receive(:permissions)
-        .and_return([:finance])
-      expect(person.finance_groups).to eq [groups(:top_layer)]
-    end
-
-    it "returns all layers for complete finance permission" do
-      allow_any_instance_of(Group::TopGroup::Leader).to receive(:permissions)
-        .and_return([:complete_finance])
-      expect(person.finance_groups).to match_array([
-        groups(:top_layer),
-        groups(:bottom_layer_one),
-        groups(:bottom_layer_two)
-      ])
-    end
-  end
-
   it "#filter_attrs returns list of filterable attributes" do
     attrs = Person.filter_attrs
     expect(attrs[:first_name]).to eq(label: "Vorname", type: :string)

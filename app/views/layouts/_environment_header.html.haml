@@ -1,4 +1,6 @@
 - hitobito_env = ENV.fetch("HITOBITO_STAGE", Rails.env.to_s)
 - unless hitobito_env == "production"
+  %style
+    html { scroll-padding-block-start: 60px; }
   .environment-header.d-flex.align-items-center.p-3.w-100.position-sticky.top-0.text-white
     %h1.m-0= "#{t("global.environment")}: #{hitobito_env.upcase}"

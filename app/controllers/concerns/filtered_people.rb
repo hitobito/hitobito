@@ -38,7 +38,7 @@ module FilteredPeople
   end
 
   def list_filter_args
-    if params[:filter_id]
+    if params[:filter_id].present?
       # DB-Stored filter with prepared params
       PeopleFilter.for_group(group).find(params[:filter_id]).to_params
     else

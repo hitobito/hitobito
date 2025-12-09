@@ -57,7 +57,7 @@ module Subscriber
     end
 
     def non_subscribed_people_ids
-      people.pluck(:id) -
+      people.unscope(:order).pluck(:id) -
         mailing_list.subscriptions
           .where(subscriber_type: Person.sti_name)
           .pluck(:subscriber_id)

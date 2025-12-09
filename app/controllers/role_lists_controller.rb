@@ -97,6 +97,11 @@ class RoleListsController < CrudController
   end
 
   def role_list
-    @role_list ||= Role::List.new(current_ability, params)
+    @role_list ||= begin
+      role_list_params = params.dup
+      role_list_params[:ids] = all_filtered_or_listed_people.unscope(:order).pluck(:id).join(",")
+
+      Role::List.new(current_ability, role_list_params)
+    end
   end
 end

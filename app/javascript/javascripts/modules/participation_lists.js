@@ -12,7 +12,7 @@ app.ParticipationLists = {
     event = JSON.parse(e);
     form = $('form#new_event_participation')[0];
     $("#new_event_participation button[type='submit']").prop('disabled', false);
-    form.action = form.action.replace(/(\d|-)*?(?=\/\w*$)/, event['id']);
+    form.action = form.action.replace('-1', event['id']);
     metaToken = $('meta[name=csrf-token]')[0].content;
     form.elements['authenticity_token'].value = metaToken;
     app.ParticipationLists.resetOptions(event.types);

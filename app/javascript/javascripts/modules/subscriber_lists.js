@@ -12,7 +12,7 @@ app.SubscriberLists = {
     mailingList = JSON.parse(e);
     form = $('form#new_subscription')[0];
     $("#new_subscription button[type='submit']").prop('disabled', false);
-    form.action = form.action.replace(/(\d|-)*?(?=\/\w*$)/, mailingList['id']);
+    form.action = form.action.replace('-1', mailingList['id']);
     metaToken = $('meta[name=csrf-token]')[0].content;
     form.elements['authenticity_token'].value = metaToken;
     return mailingList.label;

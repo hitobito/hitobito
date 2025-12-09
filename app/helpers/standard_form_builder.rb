@@ -370,10 +370,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     if block
       content = capture(&block)
     elsif content.nil?
-      content = caption_or_content
+      content = caption_or_content.presence || +""
       caption_or_content = nil
     end
-    content << render_help_text(attr)
+    content << render_help_text(attr).to_s
     content << field_help if field_help.present?
 
     caption_or_content ||= captionize(attr, klass)

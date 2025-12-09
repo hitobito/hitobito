@@ -10,8 +10,7 @@
         %h5.bold.modal-title
           %b= t('.title', event_label: @event_label)
 
-      = standard_form(path_args(Subscription.new), url: group_mailing_list_subscriber_list_path(group, -1),
-        method: :post) do |f|
+      = standard_form(path_args(Subscription.new), url: group_mailing_list_subscriber_list_path(group, -1, params.permit(:filter_id, :range, :filters)), method: :post) do |f|
         .modal-body
           .row-fluid
             = hidden_field_tag('ids', @people_ids)

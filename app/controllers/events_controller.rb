@@ -14,7 +14,8 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
   self.nesting = Group
 
   # Respective event attrs are added in corresponding instance method.
-  self.permitted_attrs = [:signature, :signature_confirmation, :signature_confirmation_text,
+  self.permitted_attrs = [
+    :signature, :signature_confirmation, :signature_confirmation_text,
     :display_booking_info, :participations_visible,
     :notify_contact_on_participations,
     {
@@ -26,16 +27,15 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
         :_destroy
       ],
       application_questions_attributes: [
-        # rubocop:todo Layout/LineLength
-        :id, :question, :choices, :multiple_choices, :disclosure, :type, :derived_from_question_id, :_destroy
-        # rubocop:enable Layout/LineLength
+        :id, :question, :choices, :multiple_choices, :disclosure, :type,
+        :derived_from_question_id, :_destroy
       ],
       admin_questions_attributes: [
-        # rubocop:todo Layout/LineLength
-        :id, :question, :choices, :multiple_choices, :disclosure, :type, :derived_from_question_id, :_destroy
-        # rubocop:enable Layout/LineLength
+        :id, :question, :choices, :multiple_choices, :disclosure, :type,
+        :derived_from_question_id, :_destroy
       ]
-    }]
+    }
+  ]
 
   self.remember_params += [:year]
 

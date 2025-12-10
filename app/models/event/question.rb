@@ -164,7 +164,7 @@ class Event::Question < ActiveRecord::Base
 
     languages = [I18n.locale] + Globalized.additional_languages
     languages.zip(choice_items_by_translation).each do |lang, choices|
-      send(:"choices_#{lang}=", choices&.join(","))
+      send(:"choices_#{lang}=", escaped_choices_string(choices))
     end
   end
 
@@ -200,7 +200,7 @@ class Event::Question < ActiveRecord::Base
   def choice_items_by_choice
     choice_items_by_translation = Globalized.languages.map do |lang|
       choices_in_lang = send(:"choices_#{lang}")
-      choices_in_lang&.split(",", -1)&.collect(&:strip)
+      choices_in_lang&.split(",", -1)&.collect { |choice| choice.gsub("\\u002C", ",").strip }
     end
 
     return [] unless choice_items_by_translation.any?
@@ -219,5 +219,11 @@ class Event::Question < ActiveRecord::Base
 
       sub_array.in_groups_of(max_subarray_length, "").flatten
     end
+  end
+
+  # Escapes all commas in the choices before joining them by comma. The escaping is done so
+  # choices can include commas in the text without breaking the serialization and deserialization.
+  def escaped_choices_string(choices)
+    choices&.map { |choice| choice.gsub(",", "\\u002C") }&.join(",")
   end
 end

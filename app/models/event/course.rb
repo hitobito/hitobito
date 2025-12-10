@@ -67,7 +67,7 @@ class Event::Course < Event
 
   self.used_attributes -= [:guest_limit]
   self.used_attributes += [:number, :kind_id, :state, :priorization, :group_ids,
-    :requires_approval, :display_booking_info, :waiting_list,
+    :requires_approval, :display_booking_info, :automatic_assignment, :waiting_list,
     :minimum_participants]
 
   self.role_types = [Event::Role::Leader,

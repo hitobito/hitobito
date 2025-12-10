@@ -235,6 +235,21 @@ describe Event::Question do
       expect(choices.third.choice_translations).to eql({de: "Vielleicht", en: "", fr: "Peut-être", it: ""})
     end
 
+    it "should return escaped commas as comma" do
+      question.choices_translations = {
+        de: "Wahl 1,Wahl\\u002C 2",
+        en: "Choice 1,Choice\\u002C 2"
+      }
+
+      choices = question.deserialized_choices
+
+      expect(choices.length).to eql(2)
+      expect(choices.first.choice_translations).to eql({de: "Wahl 1", en: "Choice 1", fr: "", it: ""})
+      expect(choices.second.choice_translations).to eql(
+        {de: "Wahl, 2", en: "Choice, 2", fr: "", it: ""}
+      )
+    end
+
     it "should return empty array if all translations are empty strings" do
       Globalized.languages.each do |lang|
         question.send(:"choices_#{lang}=", "")
@@ -289,6 +304,24 @@ describe Event::Question do
       expect(question.choices_en).to eql("Yes,No")
       expect(question.choices_fr).to eql("Oui,Non")
       expect(question.choices_it).to eql("Sì,No")
+    end
+
+    it "should escape commas in choices" do
+      choices_attributes = {
+        "100": {choice: "Wahl 1", choice_en: "Choice 1", choice_fr: "", choice_it: "", _destroy: ""},
+        "101": {choice: "Wahl, 2", choice_en: "Choice, 2", choice_fr: "", choice_it: "", _destroy: ""}
+      }
+      choices_attributes.deep_stringify_keys!
+
+      question.choices_attributes = choices_attributes
+      question.save!
+
+      expect(question.reload.deserialized_choices.length).to eql(2)
+
+      expect(question.choices_de).to eql("Wahl 1,Wahl\\u002C 2")
+      expect(question.choices_en).to eql("Choice 1,Choice\\u002C 2")
+      expect(question.choices_fr).to eql(",")
+      expect(question.choices_it).to eql(",")
     end
 
     it "should save choices as nil if all choices are empty" do

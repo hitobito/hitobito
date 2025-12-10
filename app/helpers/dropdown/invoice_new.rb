@@ -109,9 +109,7 @@ module Dropdown
 
     def finance_groups
       # rubocop:todo Layout/LineLength
-      @finance_groups ||= Group.where(id: current_ability.user_finance_layer_ids)
-        .includes(:invoice_config)
-        .includes(invoice_config: [:rich_text_header, :logo_attachment])
+      @finance_groups ||= Group.where(id: current_ability.user_finance_layer_ids).includes(:invoice_config)
       # rubocop:enable Layout/LineLength
     end
 

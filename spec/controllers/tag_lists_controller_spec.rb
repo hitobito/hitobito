@@ -13,6 +13,8 @@ describe TagListsController do
   let(:bottom_member) { people(:bottom_member) }
   let(:root) { people(:root) }
 
+  let(:tag_list_double) { double("tag_list") }
+
   context "authorization" do
     it "filters out people whose tags we cannot manage from create request" do
       post :create, params: {

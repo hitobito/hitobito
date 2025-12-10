@@ -60,7 +60,6 @@ class TagListsController < ListController
 
       person_filter(PersonFullReadables).entries.includes(:tags).distinct
     else
-      # @manageable_people ||= people.select { |person| current_ability.can?(:assign_tags, person) }
       Person.includes(:tags)
         .where(id: list_param(:ids))
         .distinct

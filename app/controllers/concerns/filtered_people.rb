@@ -13,6 +13,7 @@
 # depends on methods to determine the current user and group
 module FilteredPeople
   extend ActiveSupport::Concern
+  include ParamConverters # for list_param
 
   included do
     helper_method :list_filter_args
@@ -32,7 +33,7 @@ module FilteredPeople
   end
 
   def person_filter(accessibles_class = nil)
-    @person_filter ||= Person::Filter::List.new(
+    @person_filter = Person::Filter::List.new(
       group, current_user, list_filter_args, accessibles_class
     )
   end

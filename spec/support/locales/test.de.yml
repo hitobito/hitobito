@@ -20,6 +20,7 @@ de:
 
       group/top_layer/top_admin: Admin
       group/top_group/leader: Leader
+      group/top_group/finance_manager: Finance Manager
       group/top_group/secretary: Secretary
       group/top_group/local_guide: Local Guide
       group/top_group/local_secretary: Local Secretary
@@ -30,6 +31,7 @@ de:
       group/bottom_layer/local_guide: Local Guide
       group/bottom_layer/member: Member
       group/bottom_group/leader: Leader
+      group/bottom_group/finance_manager: Finance Manager
       group/bottom_group/member: Member
       group/global_group/leader: Leader
       group/global_group/member: Member

@@ -175,23 +175,23 @@ describe Group::Merger do
     end
 
     it "moves invoices" do
-      expect(group1.invoices.count).to eq 2
-      expect(group2.invoices.count).to eq 1
+      expect(group1.issued_invoices.count).to eq 2
+      expect(group2.issued_invoices.count).to eq 1
 
       merger.merge!
 
-      expect(new_group.invoices.count).to eq 3
+      expect(new_group.issued_invoices.count).to eq 3
     end
 
     it "moves even invalid invoices" do
-      expect(group1.invoices.count).to eq 2
-      expect(group2.invoices.count).to eq 1
-      group1.invoices[0].update_attribute(:state, "foobar")
-      expect(group1.invoices[0]).not_to be_valid
+      expect(group1.issued_invoices.count).to eq 2
+      expect(group2.issued_invoices.count).to eq 1
+      group1.issued_invoices[0].update_attribute(:state, "foobar")
+      expect(group1.issued_invoices[0]).not_to be_valid
 
       merger.merge!
 
-      expect(new_group.invoices.count).to eq 3
+      expect(new_group.issued_invoices.count).to eq 3
     end
 
     it "moves invoice-articles" do

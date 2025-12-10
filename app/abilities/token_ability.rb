@@ -134,7 +134,7 @@ class TokenAbility
   end
 
   def define_invoice_abilities
-    can :index_invoices, Group do |group|
+    can :index_issued_invoices, Group do |group|
       token.layer == group
     end
 

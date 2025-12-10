@@ -137,7 +137,7 @@ describe Person::Filter::Attributes do
             let(:key) { "birthday" }
 
             it "returns people with matching attribute" do
-              expect(entries.size).to eq(1)
+              expect(entries.size).to eq group.people.reject(&:birthday).size
               # top leaders birthday is nil
               expect(entries).to include(people(:top_leader))
             end
@@ -296,7 +296,7 @@ describe Person::Filter::Attributes do
         let(:constraint) { "blank" }
 
         it "returns people with matching attribute" do
-          expect(entries.size).to eq(1)
+          expect(entries.size).to eq group.people.reject(&:birthday).size
           # top leaders birthday is nil
           expect(entries).to include(people(:top_leader))
         end
@@ -321,7 +321,7 @@ describe Person::Filter::Attributes do
             let(:value) { nil }
 
             it "does not fail or filter" do
-              expect(entries.size).to eq(4)
+              expect(entries.size).to eq group.people.count
             end
           end
         end
@@ -446,10 +446,8 @@ describe Person::Filter::Attributes do
             else 27
             end
           end
-          expect(entries.size).to eq(2)
-          expect(entries).to include(user)
-          expect(entries).to include(@tg_member1)
-          expect(entries).not_to include(@tg_member2)
+          expect(entries.size).to eq(3)
+          expect(entries).to contain_exactly(user, @tg_member1, people(:top_finance_manager))
         end
       end
     end

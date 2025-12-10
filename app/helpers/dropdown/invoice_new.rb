@@ -66,7 +66,10 @@ module Dropdown
       elsif @people.one?
         template.new_group_invoice_path(
           finance_group,
-          invoice: {recipient_id: @people.first.id},
+          invoice: {
+            recipient_id: @people.first.id,
+            recipient_type: "Person"
+          },
           invoice_items: invoice_items
         )
       else

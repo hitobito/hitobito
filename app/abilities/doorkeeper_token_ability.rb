@@ -103,8 +103,8 @@ class DoorkeeperTokenAbility
       user_ability.can?(:show, i)
     end
 
-    can :index_invoices, Group do |g|
-      user_ability.can?(:index_invoices, g)
+    can :index_issued_invoices, Group do |g|
+      user_ability.can?(:index_issued_invoices, g)
     end
   end
 

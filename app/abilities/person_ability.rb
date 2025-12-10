@@ -16,7 +16,7 @@ class PersonAbility < AbilityDsl::Base
 
     permission(:any).may(:security).herself
     permission(:any)
-      .may(:index_invoices, :update_settings)
+      .may(:index_received_invoices, :update_settings)
       .herself_unless_only_basic_permissions_roles
     permission(:any).may(:totp_disable).herself_if_two_factor_authentication_not_enforced
 
@@ -82,8 +82,8 @@ class PersonAbility < AbilityDsl::Base
     permission(:layer_and_below_full).may(:show).deleted_people_in_same_layer_or_below
     permission(:layer_and_below_full).may(:totp_reset).in_same_layer_or_below
 
-    permission(:finance).may(:index_invoices).in_same_layer_or_below
-    permission(:finance).may(:create_invoice).in_same_layer_or_below
+    permission(:finance).may(:index_received_invoices).in_same_layer_or_below
+    permission(:finance).may(:create_received_invoice).in_same_layer_or_below
 
     permission(:admin).may(:show).people_without_roles
 

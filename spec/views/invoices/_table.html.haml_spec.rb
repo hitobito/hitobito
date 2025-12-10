@@ -5,7 +5,7 @@ describe "invoices/_table.html.haml" do
   let(:person) { people(:bottom_member) }
   let(:invoice) { Fabricate(:invoice, group: group, recipient: person) }
   let(:payed_invoice) { Fabricate(:invoice, group: group, recipient: person, state: :payed) }
-  let(:invoices) { group.invoices }
+  let(:invoices) { group.issued_invoices }
   let(:paginated_invoices) { invoices.page(1).per(10) }
   let(:dom) { Capybara::Node::Simple.new(render) }
 

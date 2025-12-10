@@ -59,15 +59,15 @@ describe FullTextController, type: :controller do
       end
 
       it "redirects to invoice if only finding a single invoice" do
-        get :index, params: {q: invoices(:invoice).title}
-        expect(response).to redirect_to(invoice_path(invoices(:invoice)))
+        get :index, params: {q: invoices(:group_invoice).title}
+        expect(response).to redirect_to(invoice_path(invoices(:group_invoice)))
       end
 
       context "when lacking finance permission" do
         let(:current_user) { Fabricate(Group::TopLayer::TopAdmin.sti_name, group: groups(:top_layer)).person }
 
         it "finds nothing when lacking finance permission" do
-          get :index, params: {q: invoices(:invoice).title[0..5]}
+          get :index, params: {q: invoices(:group_invoice).title[0..5]}
 
           expect(assigns(:invoices)).to be_nil
         end

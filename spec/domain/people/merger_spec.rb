@@ -87,7 +87,7 @@ describe People::Merger do
         .and not_change { Invoice.count }
 
       person.reload
-      expect(person.invoices.count).to eq 3
+      expect(person.received_invoices.count).to eq 3
       expect(target_invoice_1.reload.recipient).to eq person
       expect(source_invoice_1.reload.recipient).to eq person
       expect(source_invoice_2.reload.recipient).to eq person

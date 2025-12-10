@@ -55,8 +55,8 @@ describe InvoiceRuns::FixedFee do
       fee.prepare(list)
 
       expect(list.receivers).to eq [
-        InvoiceRuns::Receiver.new(id: person_one.id, layer_group_id: layer_one.id),
-        InvoiceRuns::Receiver.new(id: person_two.id, layer_group_id: layer_two.id)
+        InvoiceRuns::Receiver.new(id: person_one.id, type: "Person", layer_group_id: layer_one.id),
+        InvoiceRuns::Receiver.new(id: person_two.id, type: "Person", layer_group_id: layer_two.id)
       ]
       expect(list.invoice).to have(2).invoice_items
       leaders, members = list.invoice.invoice_items
@@ -69,7 +69,7 @@ describe InvoiceRuns::FixedFee do
       person_one = Fabricate(Group::BottomLayer::Leader.sti_name, group: layer_one).person
       fee.prepare(list)
       expect(list.receivers).to eq [
-        InvoiceRuns::Receiver.new(id: person_one.id, layer_group_id: layer_one.id)
+        InvoiceRuns::Receiver.new(id: person_one.id, type: "Person", layer_group_id: layer_one.id)
       ]
       leaders, members = list.invoice.invoice_items
       expect(members.count).to eq 1

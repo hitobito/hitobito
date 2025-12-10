@@ -160,10 +160,10 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     dependent: :destroy
 
   has_one :invoice_config, dependent: :destroy
-  has_many :invoices
+  has_many :issued_invoices, inverse_of: :group, class_name: "Invoice"
   has_many :invoice_runs
   has_many :invoice_articles, dependent: :destroy
-  has_many :invoice_items, through: :invoices
+  has_many :invoice_items, through: :issued_invoices
 
   has_many :service_tokens,
     foreign_key: :layer_group_id,
@@ -260,7 +260,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
     # load events to destroy orphaned later
     event_list = events.to_a
-    invoice_run = invoices.to_a
+    invoice_run = issued_invoices.to_a
 
     super
 

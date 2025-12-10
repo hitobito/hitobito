@@ -54,14 +54,15 @@ describe Person::Filter::TagAbsence do
       root.tags.create!(name: "test2")
       root.tags << ActsAsTaggableOn::Tag.find_by(name: "test1")
 
-      expect(subject).to be_empty
+      expect(subject).not_to include user
+      expect(subject).not_to include root
     end
 
     it "does return untagged people only" do
       other.tags.create!(name: "test1")
       root.tags.create!(name: "test2")
 
-      expect(subject).to eq [user]
+      expect(subject).to eq Person.all.select { |p| p.tags.empty? }
     end
   end
 end

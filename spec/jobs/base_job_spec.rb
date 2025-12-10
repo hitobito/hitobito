@@ -64,7 +64,6 @@ describe BaseJob do
     it "does instrument notification with use_background_job_logging=true" do
       described_class.use_background_job_logging = true
       job = subscribe { run_job(BaseJob.new) }
-
       expect(notifications.keys).to match_array [
         "job_started.background_job",
         "job_finished.background_job"

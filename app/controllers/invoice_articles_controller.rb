@@ -18,6 +18,6 @@ class InvoiceArticlesController < CrudController
   private
 
   def authorize_class
-    authorize!(:index_invoices, parent)
+    authorize!(:index_issued_invoices, parent)
   end
 end

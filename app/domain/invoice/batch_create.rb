@@ -59,9 +59,10 @@ class Invoice::BatchCreate
       title: invoice_run.fixed_fee ? title_with_layer(recipient.layer_group_id) : invoice.title,
       creator_id: invoice_run.creator_id,
       invoice_run_id: invoice_run.id,
-      recipient_id: recipient.id
+      recipient_id: recipient.id,
+      recipient_type: recipient.type
     )
-    invoice = invoice_run.group.invoices.build(invoice_attrs)
+    invoice = invoice_run.group.issued_invoices.build(invoice_attrs)
 
     add_invoice_items(invoice, recipient)
     invoice.save if invoice.invoice_items.any?
@@ -103,7 +104,7 @@ class Invoice::BatchCreate
     return invoice_run.receivers if invoice_run.receivers.present?
 
     invoice_run.recipients.find_each.lazy.map do |person|
-      InvoiceRuns::Receiver.new(id: person.id)
+      InvoiceRuns::Receiver.new(id: person.id, type: person.class.sti_name)
     end
   end
 

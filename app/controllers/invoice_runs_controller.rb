@@ -127,7 +127,7 @@ class InvoiceRunsController < CrudController
   end
 
   def invoices
-    parent.invoices.where(id: list_param(:ids))
+    parent.issued_invoices.where(id: list_param(:ids))
   end
 
   def flash_message(action: action_name, count: nil, title: nil)
@@ -155,7 +155,8 @@ class InvoiceRunsController < CrudController
       entry.attributes = permitted_params.slice(:receiver_id, :receiver_type, :recipient_ids)
     end
     entry.creator = current_user
-    entry.invoice = parent.invoices.build(model_params.present? ? permitted_params[:invoice] : {})
+    entry.invoice = parent.issued_invoices
+      .build(model_params.present? ? permitted_params[:invoice] : {})
 
     if params[:invoice_items].present?
       entry.invoice.invoice_items = params[:invoice_items].map do |type|
@@ -182,7 +183,7 @@ class InvoiceRunsController < CrudController
   end
 
   def authorize_class
-    authorize!(:index_invoices, parent)
+    authorize!(:index_issued_invoices, parent)
   end
 
   def permitted_params

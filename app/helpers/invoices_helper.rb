@@ -7,12 +7,12 @@
 
 module InvoicesHelper
   def format_invoice_run_amount_paid(invoice_run)
-    invoice = invoice_run.invoice || invoice_run.group.invoices.build
+    invoice = invoice_run.invoice || invoice_run.group.issued_invoices.build
     invoice.decorate.format_currency(invoice_run.amount_paid)
   end
 
   def format_invoice_run_amount_total(invoice_run)
-    invoice = invoice_run.invoice || invoice_run.group.invoices.build
+    invoice = invoice_run.invoice || invoice_run.group.issued_invoices.build
     invoice.decorate.format_currency(invoice_run.amount_total)
   end
 

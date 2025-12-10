@@ -27,7 +27,7 @@ describe Invoice::BatchCreate do
 
     expect do
       Invoice::BatchCreate.call(run)
-    end.to change { [group.invoices.count, group.invoice_items.count] }.by([1, 2])
+    end.to change { [group.issued_invoices.count, group.invoice_items.count] }.by([1, 2])
     expect(run.reload).to have(1).invoices
     expect(run.receiver).to eq mailing_list
     expect(run.recipients_total).to eq 1
@@ -38,7 +38,7 @@ describe Invoice::BatchCreate do
 
   it "#call creates invoices for group distinct people regardless of role count" do
     group = groups(:bottom_layer_one)
-    group.invoices.destroy_all
+    group.issued_invoices.destroy_all
 
     # rubocop:todo Layout/LineLength
     Fabricate(Group::BottomLayer::Leader.sti_name.to_sym, person: other_person, group: group) # second role for other_person
@@ -58,7 +58,7 @@ describe Invoice::BatchCreate do
 
     expect do
       Invoice::BatchCreate.call(run)
-    end.to change { [group.invoices.count, group.invoice_items.count] }.by([3, 6])
+    end.to change { [group.issued_invoices.count, group.invoice_items.count] }.by([3, 6])
     expect(run.reload).to have(3).invoices
     expect(run.receiver).to eq group
     expect(run.recipients_total).to eq 3
@@ -83,7 +83,7 @@ describe Invoice::BatchCreate do
     expect do
       Invoice::BatchCreate.call(run, 1)
       Delayed::Job.last.payload_object.perform
-    end.to change { [group.invoices.count, group.invoice_items.count] }.by([2, 4])
+    end.to change { [group.issued_invoices.count, group.invoice_items.count] }.by([2, 4])
     expect(run.reload).to have(2).invoices
     expect(run.receiver).to eq mailing_list
     expect(run.recipients_total).to eq 2
@@ -104,7 +104,7 @@ describe Invoice::BatchCreate do
 
     expect do
       Invoice::BatchCreate.call(run)
-    end.to change { [group.invoices.count, group.invoice_items.count] }.by([2, 4])
+    end.to change { [group.issued_invoices.count, group.invoice_items.count] }.by([2, 4])
     expect(run).not_to be_persisted
   end
 
@@ -125,7 +125,7 @@ describe Invoice::BatchCreate do
 
     expect do
       Invoice::BatchCreate.new(run).call
-    end.to change { [group.invoices.count, group.invoice_items.count] }.by([1, 1])
+    end.to change { [group.issued_invoices.count, group.invoice_items.count] }.by([1, 1])
     expect(run.invalid_recipient_ids).to have(1).item
   end
 
@@ -141,8 +141,8 @@ describe Invoice::BatchCreate do
     it "includes layer name in title" do
       expect do
         Invoice::BatchCreate.new(run).call
-      end.to change { group.invoices.count }.by(1)
-      expect(group.invoices.last.title).to eq "invoice - Bottom One"
+      end.to change { group.issued_invoices.count }.by(1)
+      expect(group.issued_invoices.last.title).to eq "invoice - Bottom One"
     end
 
     it "has an invoice item for each configured membership fee item" do

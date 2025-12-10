@@ -558,22 +558,64 @@ describe GroupAbility do
   end
 
   context "finance" do
-    let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
+    context "with role in top layer" do
+      let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
 
-    it "may not index invoices on random group" do
-      is_expected.not_to be_able_to(:index_invoices, Group.new)
+      it "may not index issued_invoices on random group" do
+        is_expected.not_to be_able_to(:index_issued_invoices, Group.new)
+      end
+
+      it "may not index issued_invoices in own group" do
+        is_expected.not_to be_able_to(:index_issued_invoices, groups(:top_group))
+      end
+
+      it "may not index issued_invoices in lower layer layer_group" do
+        is_expected.not_to be_able_to(:index_issued_invoices, groups(:bottom_layer_one))
+      end
+
+      it "may index issued_invoices in own layer layer_group" do
+        is_expected.to be_able_to(:index_issued_invoices, groups(:top_layer))
+      end
+
+      it "may not index received_invoices in random group" do
+        is_expected.not_to be_able_to(:index_received_invoices, Group.new)
+      end
+
+      it "may index received_invoices in own group" do
+        is_expected.to be_able_to(:index_received_invoices, groups(:top_group))
+      end
+
+      it "may index received_invoices in lower layer group" do
+        is_expected.to be_able_to(:index_received_invoices, groups(:bottom_layer_one))
+      end
     end
 
-    it "may not index in own group" do
-      is_expected.not_to be_able_to(:index_invoices, groups(:top_group))
-    end
+    context "with role in lower layer" do
+      let(:role) { Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one)) }
 
-    it "may not index in bottom layer group" do
-      is_expected.not_to be_able_to(:index_invoices, groups(:bottom_layer_one))
-    end
+      it "may not index issued_invoices in higher layer group" do
+        is_expected.not_to be_able_to(:index_issued_invoices, groups(:top_group))
+      end
 
-    it "may index in top layer layer group" do
-      is_expected.to be_able_to(:index_invoices, groups(:top_layer))
+      it "may not index issued_invoices in sibling layer group" do
+        is_expected.not_to be_able_to(:index_issued_invoices, groups(:bottom_layer_two))
+      end
+
+      it "may index issued_invoices in own layer layer_group" do
+        is_expected.to be_able_to(:index_issued_invoices, groups(:bottom_layer_one))
+      end
+
+      it "may not index received_invoices in higher layer group group" do
+        is_expected.not_to be_able_to(:index_received_invoices, groups(:top_group))
+      end
+
+      it "may not index received_invoices in sibling layer group" do
+        is_expected.not_to be_able_to(:index_received_invoices, groups(:bottom_layer_two))
+      end
+
+      it "may index received_invoices in own layer layer_group" do
+        is_expected.to be_able_to(:index_received_invoices, groups(:bottom_layer_one))
+      end
     end
   end
 

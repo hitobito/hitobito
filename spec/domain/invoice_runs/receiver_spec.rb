@@ -12,15 +12,20 @@ describe InvoiceRuns::Receiver do
     def load(array) = described_class.load(array.to_yaml)
 
     it "loads structured receiver" do
-      expect(load([{id: 1, layer_group_id: 1}])).to eq [described_class.new(id: 1, layer_group_id: 1)]
+      expect(load([{id: 1, type: "Person", layer_group_id: 1}]))
+        .to eq [described_class.new(id: 1, type: "Person", layer_group_id: 1)]
+    end
+
+    it "loads structured receiver with implicit type" do
+      expect(load([{id: 1, layer_group_id: 1}])).to eq [described_class.new(id: 1, type: "Person", layer_group_id: 1)]
     end
 
     it "loads string receiver" do
-      expect(load(["1"])).to eq [described_class.new(id: 1, layer_group_id: nil)]
+      expect(load(["1"])).to eq [described_class.new(id: 1, type: "Person", layer_group_id: nil)]
     end
 
     it "loads integer receiver" do
-      expect(load([1])).to eq [described_class.new(id: 1, layer_group_id: nil)]
+      expect(load([1])).to eq [described_class.new(id: 1, type: "Person", layer_group_id: nil)]
     end
 
     it "loads multiple mixed receivers receiver" do
@@ -30,9 +35,9 @@ describe InvoiceRuns::Receiver do
         3
       ]
       expect(load(list)).to eq [
-        described_class.new(id: 1, layer_group_id: 1),
-        described_class.new(id: 2, layer_group_id: nil),
-        described_class.new(id: 3, layer_group_id: nil)
+        described_class.new(id: 1, type: "Person", layer_group_id: 1),
+        described_class.new(id: 2, type: "Person", layer_group_id: nil),
+        described_class.new(id: 3, type: "Person", layer_group_id: nil)
       ]
     end
 

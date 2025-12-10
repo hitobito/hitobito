@@ -346,31 +346,31 @@ describe TokenAbility do
       end
 
       it "may show" do
-        is_expected.to be_able_to(:show, token.layer.invoices.build)
-        is_expected.to be_able_to(:show, token.layer.invoices.build.invoice_items.build)
+        is_expected.to be_able_to(:show, token.layer.issued_invoices.build)
+        is_expected.to be_able_to(:show, token.layer.issued_invoices.build.invoice_items.build)
       end
 
       it "may show independently if group access" do
         token.update!(groups: false)
-        is_expected.to be_able_to(:show, token.layer.invoices.build)
-        is_expected.to be_able_to(:show, token.layer.invoices.build.invoice_items.build)
+        is_expected.to be_able_to(:show, token.layer.issued_invoices.build)
+        is_expected.to be_able_to(:show, token.layer.issued_invoices.build.invoice_items.build)
       end
 
-      it "may index_invoices" do
-        is_expected.to be_able_to(:index_invoices, token.layer)
+      it "may index_issued_invoices" do
+        is_expected.to be_able_to(:index_issued_invoices, token.layer)
       end
 
-      it "may index_invoices independently of group access" do
+      it "may index_issued_invoices independently of group access" do
         token.update!(groups: false)
-        is_expected.to be_able_to(:index_invoices, token.layer)
+        is_expected.to be_able_to(:index_issued_invoices, token.layer)
       end
 
-      it "may not index_invoices of sub layer" do
-        is_expected.not_to be_able_to(:index_invoices, groups(:bottom_layer_one))
+      it "may not index_issued_invoices of sub layer" do
+        is_expected.not_to be_able_to(:index_issued_invoices, groups(:bottom_layer_one))
       end
 
       it "may not show invoice of sub layer" do
-        is_expected.not_to be_able_to(:show, groups(:bottom_layer_one).invoices.build)
+        is_expected.not_to be_able_to(:show, groups(:bottom_layer_one).issued_invoices.build)
       end
     end
 
@@ -378,15 +378,15 @@ describe TokenAbility do
       let(:token) { service_tokens(:rejected_top_layer_token) }
 
       it "may not show" do
-        is_expected.not_to be_able_to(:show, token.layer.invoices.build)
+        is_expected.not_to be_able_to(:show, token.layer.issued_invoices.build)
       end
 
-      it "may not index_invoices" do
-        is_expected.not_to be_able_to(:index_invoices, token.layer)
+      it "may not index_issued_invoices" do
+        is_expected.not_to be_able_to(:index_issued_invoices, token.layer)
       end
 
-      it "may not index_invoices of sub layer" do
-        is_expected.not_to be_able_to(:index_invoices, groups(:bottom_layer_one))
+      it "may not index_issued_invoices of sub layer" do
+        is_expected.not_to be_able_to(:index_issued_invoices, groups(:bottom_layer_one))
       end
     end
   end

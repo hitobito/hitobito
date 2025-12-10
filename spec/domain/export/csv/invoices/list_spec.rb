@@ -9,7 +9,7 @@ require "csv"
 describe Export::Tabular::Invoices::List do
   let(:group) { groups(:bottom_layer_one) }
 
-  let(:list) { group.invoices }
+  let(:list) { group.issued_invoices }
   let(:data) { Export::Tabular::Invoices::List.csv(list) }
   let(:data_without_bom) { data.gsub(Regexp.new("^#{Export::Csv::UTF8_BOM}"), "") }
   let(:csv) { CSV.parse(data_without_bom, headers: true, col_sep: Settings.csv.separator) }
@@ -32,7 +32,7 @@ describe Export::Tabular::Invoices::List do
   context "first row" do
     subject { csv[0] }
 
-    its(["Titel"]) { should == "Invoice" }
+    its(["Titel"]) { should == invoices(:invoice).title }
     its(["Nummer"]) { should == invoices(:invoice).sequence_number }
     its(["Status"]) { should == "Entwurf" }
     its(["Referenz Nummer"]) { should == invoices(:invoice).esr_number }
@@ -52,7 +52,7 @@ describe Export::Tabular::Invoices::List do
 
     let(:invoice) { invoices(:sent) }
 
-    its(["Titel"]) { should == "Sent" }
+    its(["Titel"]) { should == invoice.title }
     its(["Nummer"]) { should == invoice.sequence_number }
     its(["Status"]) { should == "per Mail versendet" }
     its(["Referenz Nummer"]) { should == invoice.esr_number }

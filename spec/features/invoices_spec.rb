@@ -56,7 +56,7 @@ describe :invoices, js: true do
         click_link("Rechnung stellen / mahnen")
         click_link("Status setzen (Gestellt/Gemahnt)")
 
-        expect(group.invoices).to all(be_issued)
+        expect(group.issued_invoices).to all(be_issued)
         expect(page).to have_content("51 Rechnungen wurden gestellt")
       end
 

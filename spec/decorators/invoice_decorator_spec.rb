@@ -5,7 +5,7 @@ describe InvoiceDecorator do
     it "is read from invoice_config for new record" do
       group = groups(:top_layer)
       group.invoice_config.update(currency: "EUR")
-      expect(group.invoices.build.decorate.currency).to eq "EUR"
+      expect(group.issued_invoices.build.decorate.currency).to eq "EUR"
     end
 
     it "is read from invoice for persisted record" do

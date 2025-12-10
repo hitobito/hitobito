@@ -45,6 +45,8 @@ module Contactable
     has_many :additional_emails, as: :contactable, dependent: :destroy
     has_many :additional_addresses, as: :contactable, dependent: :destroy
 
+    has_many :invoices, as: :recipient, dependent: :nullify
+
     belongs_to :location, foreign_key: "zip_code", primary_key: "zip_code", inverse_of: false
 
     # rubocop:todo Layout/LineLength

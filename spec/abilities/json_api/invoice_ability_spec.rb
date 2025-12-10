@@ -19,10 +19,10 @@ describe JsonApi::InvoiceAbility do
 
     it "filters invoices according to layer" do
       expect(accessible_by(:bottom_member)).to have(2).items
-      expect(accessible_by(:top_leader)).to be_empty
+      expect(accessible_by(:top_leader)).to match_array(invoices(:group_invoice))
 
       invoice = Fabricate(:invoice, group: top_group, recipient: bottom_member)
-      expect(accessible_by(:top_leader)).to eq [invoice]
+      expect(accessible_by(:top_leader)).to match_array [invoice, invoices(:group_invoice)]
       expect(accessible_by(:bottom_member)).to have(2).items
     end
 
@@ -45,10 +45,10 @@ describe JsonApi::InvoiceAbility do
 
     it "filters invoices according to layer" do
       expect(accessible_by(:permitted_bottom_layer_token)).to have(2).items
-      expect(accessible_by(:permitted_top_layer_token)).to be_empty
+      expect(accessible_by(:permitted_top_layer_token)).to match_array invoices(:group_invoice)
 
       invoice = Fabricate(:invoice, group: top_group, recipient: bottom_member)
-      expect(accessible_by(:permitted_top_layer_token)).to eq [invoice]
+      expect(accessible_by(:permitted_top_layer_token)).to match_array [invoice, invoices(:group_invoice)]
       expect(accessible_by(:permitted_bottom_layer_token)).to have(2).items
     end
 

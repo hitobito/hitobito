@@ -13,7 +13,7 @@
 #  account_number      :string
 #  address             :text
 #  beneficiary         :text
-#  currency            :string           default("CHF"), not null
+#  currency            :string           default1("CHF"), not null
 #  description         :text
 #  due_at              :date
 #  esr_number          :string           not null
@@ -73,7 +73,7 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   QR_ID_RANGE = (30_000..31_999)
 
   belongs_to :group
-  belongs_to :recipient, class_name: "Person"
+  belongs_to :recipient, polymorphic: true
   belongs_to :creator, class_name: "Person"
   belongs_to :invoice_run, optional: true
 
@@ -120,6 +120,7 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   scope :visible, -> { where.not(state: :cancelled) }
   scope :remindable, -> { where(state: STATES_REMINDABLE) }
   scope :standalone, -> { where(invoice_run_id: nil) }
+  scope :preload_recipients, -> { extending(PreloadRecipients) }
 
   class << self
     def with_aggregated_payments
@@ -357,14 +358,14 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   def set_recipient_fields!
     self.recipient_email = invoice_email
 
-    attributes = Person::Address.new(recipient).invoice_recipient_address_attributes
+    attributes = Contactable::Address.new(recipient).invoice_recipient_address_attributes
     assign_attributes(attributes)
   end
 
   def set_recipient_fields
     self.recipient_email ||= invoice_email
 
-    attributes = Person::Address.new(recipient).invoice_recipient_address_attributes
+    attributes = Contactable::Address.new(recipient).invoice_recipient_address_attributes
     assign_attributes(attributes.select { |key, _| send(key).nil? })
   end
 

@@ -17,7 +17,7 @@ module InvoiceRuns
 
     def build
       roles.map do |role|
-        Receiver.new(id: role.person_id, layer_group_id: role.group.layer_group_id)
+        Receiver.new(id: role.person_id, type: "Person", layer_group_id: role.group.layer_group_id)
       end
     end
 

@@ -60,8 +60,8 @@ describe FullTextController, type: :controller do
     end
 
     it "redirects to invoice if only finding a single invoice" do
-      get :index, params: {q: invoices(:invoice).title}
-      expect(response).to redirect_to(invoice_path(invoices(:invoice)))
+      get :index, params: {q: invoices(:group_invoice).title}
+      expect(response).to redirect_to(invoice_path(invoices(:group_invoice)))
     end
 
     context "without any params" do

@@ -29,7 +29,7 @@ describe Export::Tabular::Invoices::Row do
   it "reads a set of attributes from invoice" do
     values = Export::Tabular::Invoices::List::INCLUDED_ATTRS.collect { |x| [x, subject.fetch(x)] }.to_h
     expect(values).to match(
-      {"title" => "Invoice",
+      {"title" => invoice.title,
        "sequence_number" => "376803389-2",
        "state" => "Entwurf",
        "esr_number" => "00 00376 80338 90000 00000 00021",

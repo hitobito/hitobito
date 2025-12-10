@@ -233,8 +233,6 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     inverse_of: :person,
     dependent: :destroy
 
-  has_many :invoices, foreign_key: :recipient_id, inverse_of: :recipient
-
   has_many :add_requests, dependent: :destroy
 
   has_many :notes, dependent: :destroy, as: :subject

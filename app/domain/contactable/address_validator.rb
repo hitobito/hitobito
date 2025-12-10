@@ -37,7 +37,7 @@ module Contactable
     def invalid?(person)
       street = person.street
       number = person.housenumber
-      addresses = Address.for(person.zip_code, street)
+      addresses = ::Address.for(person.zip_code, street)
       addresses.empty? || invalid_number?(addresses, number)
     end
 

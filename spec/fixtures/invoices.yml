@@ -105,7 +105,7 @@ sent:
 
 
 group_invoice:
-  title: Top Group Invoice
+  title: Top Layer Invoice
   group: top_group
   recipient: top_group (Group)
   recipient_email: top_group@example.com
@@ -122,9 +122,9 @@ group_invoice:
   payee_town: Bern
   payee_country: CH
   payment_slip: ch_esr
-  sequence_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-4
+  sequence_number: <%= ActiveRecord::FixtureSet.identify(:top_group) %>-1
   esr_number: "00 00376 80338 90000 00000 00021"
   reference: 000037680338900000000000021
-  account_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-3
-  participant_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-4
+  account_number: <%= ActiveRecord::FixtureSet.identify(:top_group) %>-1
+  participant_number: <%= ActiveRecord::FixtureSet.identify(:top_group) %>-1
   total: 15.75

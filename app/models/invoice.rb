@@ -94,6 +94,7 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   validates :due_at, timeliness: {after: :sent_at}, presence: true, if: :sent?
   validates :invoice_items, presence: true, if: -> { (issued? || sent?) && !invoice_run }
   validates :title, presence: true
+  validates :recipient, contactable: true
   validate :recipient_name_present?
   validates :recipient_street, :recipient_zip_code, :recipient_town, :recipient_country,
     presence: true

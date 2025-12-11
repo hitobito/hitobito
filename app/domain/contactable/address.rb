@@ -85,14 +85,14 @@ class Contactable::Address
 
   def with_invoice_addressable
     original_addressable = @addressable
-    @addressable = find_invoice_addressable
+    @addressable = invoice_addressable
     yield
   ensure
     @addressable = original_addressable
   end
 
-  def find_invoice_addressable
-    additional_addresses.find(&:invoices?) || contactable
+  def invoice_addressable
+    @invoice_addressable ||= additional_addresses.find(&:invoices?) || contactable
   end
 
   def contactable_and_company_name

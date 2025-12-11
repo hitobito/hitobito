@@ -77,7 +77,7 @@ class Contactable::Address
 
   delegate :address, :address_care_of, :postbox, :street, :housenumber, :zip_code, :town, :country,
     :name, :country_label, :ignored_country?, to: :addressable
-  delegate :additional_addresses, :company_name, :company_name?, to: :contactable
+  delegate :additional_addresses, :company_name, to: :contactable
 
   def company? = contactable.try(:company?)
 
@@ -124,6 +124,8 @@ class Contactable::Address
   def default_country
     Settings.countries.prioritized.first
   end
+
+  def company_name? = contactable.try(:company_name?)
 
   def print_company?(name)
     contactable.try(:company) && company_name? && company_name != name

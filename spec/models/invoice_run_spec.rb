@@ -115,16 +115,19 @@ describe InvoiceRun do
     it "accepts receivers as integers" do
       subject.receivers = [1, 2]
       expect(subject.receivers).to eq [
-        InvoiceRuns::Receiver.new(id: 1),
-        InvoiceRuns::Receiver.new(id: 2)
+        InvoiceRuns::Receiver.new(id: 1, type: "Person"),
+        InvoiceRuns::Receiver.new(id: 2, type: "Person")
       ]
     end
 
     it "accepts receivers as models" do
-      subject.receivers = [InvoiceRuns::Receiver.new(id: 1), InvoiceRuns::Receiver.new(id: 2)]
+      subject.receivers = [
+        InvoiceRuns::Receiver.new(id: 1, type: "Person"),
+        InvoiceRuns::Receiver.new(id: 2, type: "Person")
+      ]
       expect(subject.receivers).to eq [
-        InvoiceRuns::Receiver.new(id: 1),
-        InvoiceRuns::Receiver.new(id: 2)
+        InvoiceRuns::Receiver.new(id: 1, type: "Person"),
+        InvoiceRuns::Receiver.new(id: 2, type: "Person")
       ]
     end
   end
@@ -132,8 +135,8 @@ describe InvoiceRun do
   it "#update_paid updates payment informations" do
     subject.update(group: group, title: :title)
 
-    invoice = subject.invoices.create!(title: :title, recipient_id: person.id, total: 10, group: group)
-    subject.invoices.create!(title: :title, recipient_id: other_person.id, total: 20, group: group)
+    invoice = subject.invoices.create!(title: :title, recipient: person, total: 10, group: group)
+    subject.invoices.create!(title: :title, recipient: other_person, total: 20, group: group)
     invoice.payments.create!(amount: 10)
 
     expect do

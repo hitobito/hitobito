@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe Person::Address do
+describe Contactable::Address do
   let(:person) { people(:top_leader) }
   let(:label) { nil }
   let(:name) { nil }

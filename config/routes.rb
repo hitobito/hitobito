@@ -6,28 +6,28 @@
 #  https://github.com/hitobito/hitobito.
 
 Hitobito::Application.routes.draw do
-
   extend LanguageRouteScope
 
-  root to: 'dashboard#index'
-  get '/dashboard', to: 'dashboard#dashboard'
+  root to: "dashboard#index"
+  get "/dashboard", to: "dashboard#dashboard"
 
-  get '/healthz', to: 'healthz#show'
-  get '/healthz/mail', to: 'healthz/mail#show'
-  get '/healthz/truemail', to: 'healthz#show'
+  get "/healthz", to: "healthz#show"
+  get "/healthz/mail", to: "healthz/mail#show"
+  get "/healthz/truemail", to: "healthz#show"
 
   use_doorkeeper_openid_connect
 
   # custom oidc RP logout
   # https://openid.net/specs/openid-connect-rpinitiated-1_0.html#RPLogout
-  get '/oidc/logout', to: 'doorkeeper/hitobito/oidc_sessions#destroy'
-  post '/oidc/logout', to: 'doorkeeper/hitobito/oidc_sessions#destroy'
+  get "/oidc/logout", to: "doorkeeper/hitobito/oidc_sessions#destroy"
+  post "/oidc/logout", to: "doorkeeper/hitobito/oidc_sessions#destroy"
 
   use_doorkeeper do # we only use tokens and authorizations
     skip_controllers :applications, :token_info, :authorized_applications
   end
 
-  get '/verify_membership/:verify_token' => 'people/membership/verify#show', as: 'verify_membership'
+  get "/verify_membership/:verify_token" => "people/membership/verify#show",
+    :as => "verify_membership"
 
   language_scope do
     namespace :oauth do
@@ -41,35 +41,35 @@ Hitobito::Application.routes.draw do
       resources :active_authorizations, only: [:index, :destroy]
     end
 
-    %w(404 500 503).each do |code|
+    %w[404 500 503].each do |code|
       get code, to: "errors#show#{code}"
     end
 
-    get '/blocked' => 'blocked#index', as: :blocked
+    get "/blocked" => "blocked#index", :as => :blocked
 
-    get '/addresses/query' => 'addresses#query'
+    get "/addresses/query" => "addresses#query"
 
-    get '/people/query' => 'person/query#index', as: :query_people
-    get '/people/query_household/(:person_id)' => 'person/query_household#index',
-        as: :query_household
-    get '/people/company_name' => 'person/company_name#index', as: :query_company_name
-    get '/people/:id' => 'person/top#show', as: :person
-    get '/events/:id' => 'event/top#show', as: :event
-    get '/invoices/:id' => 'invoices/top#show', as: :invoices
+    get "/people/query" => "person/query#index", :as => :query_people
+    get "/people/query_household/(:person_id)" => "person/query_household#index",
+      :as => :query_household
+    get "/people/company_name" => "person/company_name#index", :as => :query_company_name
+    get "/people/:id" => "person/top#show", :as => :person
+    get "/events/:id" => "event/top#show", :as => :event
+    get "/invoices/:id" => "invoices/top#show", :as => :invoices
 
-    get 'list_groups' => 'group/lists#index', as: :list_groups
+    get "list_groups" => "group/lists#index", :as => :list_groups
 
     resources :people, only: [] do
-      scope module: 'person' do
+      scope module: "person" do
         resources :managers, except: [:edit, :update]
         resources :manageds, except: [:edit, :update]
       end
     end
 
     resources :groups do
-      scope module: 'subscriber' do
+      scope module: "subscriber" do
         resource :subscriber_list, only: [:new] do
-          get 'typeahead' => 'subscriber_lists#typeahead'
+          get "typeahead" => "subscriber_lists#typeahead"
         end
       end
       member do
@@ -77,50 +77,52 @@ Hitobito::Application.routes.draw do
         get :export_subgroups
         post :reactivate
 
-        get 'merge' => 'group/merge#select'
-        post 'merge' => 'group/merge#perform'
+        get "merge" => "group/merge#select"
+        post "merge" => "group/merge#perform"
 
-        get 'move' => 'group/move#select'
-        post 'move' => 'group/move#perform'
+        get "move" => "group/move#select"
+        post "move" => "group/move#perform"
 
-        post 'archive' => 'group/archive#create'
+        post "archive" => "group/archive#create"
       end
 
-      get 'self_registration' => 'groups/self_registration#show'
-      post 'self_registration' => 'groups/self_registration#create'
+      get "self_registration" => "groups/self_registration#show"
+      post "self_registration" => "groups/self_registration#create"
 
-      get 'self_inscription' => 'groups/self_inscription#show'
-      post 'self_inscription' => 'groups/self_inscription#create'
+      get "self_inscription" => "groups/self_inscription#show"
+      post "self_inscription" => "groups/self_inscription#create"
 
-      FeatureGate.if('groups.statistics') do
+      FeatureGate.if("groups.statistics") do
         resources :statistics, only: [:index], module: :group
       end
 
-      get 'log' => 'group/log#index'
+      get "log" => "group/log#index"
 
       resource :addresses_sync, only: :create, module: :people
       resources :payments, only: :index
       resources :invoices do
         resources :payments, only: :create
         collection do
-          resource :evaluations, only: [:show], module: :invoices, as: 'invoices_evaluations'
-          resources :by_article, only: [:index], module: :invoices, as: 'invoices_by_article'
-          resources :recalculate, only: [:new], module: :invoices, as: 'recalculate'
+          resource :evaluations, only: [:show], module: :invoices, as: "invoices_evaluations"
+          resources :by_article, only: [:index], module: :invoices, as: "invoices_by_article"
+          resources :recalculate, only: [:new], module: :invoices, as: "recalculate"
         end
       end
       resources :invoice_articles
       resource :invoice_config, only: [:edit, :show, :update]
 
+      get "group_invoices" => "contactables/invoices#index"
+
       resources :payment_provider_configs, only: [] do
         member do
-          get 'ini_letter' => 'payment_provider_configs/ini_letter#show'
+          get "ini_letter" => "payment_provider_configs/ini_letter#show"
         end
       end
 
       resource :invoice_run, except: [:edit, :show]
       resources :invoice_runs, only: [:index] do
         resource :destroy, only: [:show, :destroy], module: :invoice_runs,
-                           as: 'invoice_runs_destroy'
+          as: "invoice_runs_destroy"
         resources :invoices
       end
       resource :payment_process, only: [:new, :show, :create]
@@ -130,65 +132,66 @@ Hitobito::Application.routes.draw do
       resources :people, except: [:new, :create] do
         resource :household, except: [:new, :create]
 
-        scope module: 'people' do
+        scope module: "people" do
           resource :manual_deletion, only: [:show] do
             post :minimize
             post :delete
           end
         end
 
+        resources :invoices, module: "contactables", only: [:index]
+
         member do
           post :send_password_instructions
           put :primary_group
 
-          post 'totp_reset' => 'people/totp_reset#create', as: 'totp_reset'
-          post 'totp_disable' => 'people/totp_disable#create', as: 'totp_disable'
-          post 'password_override' => 'person/security_tools#password_override'
-          post 'block' => 'person/security_tools#block_person'
-          post 'unblock' => 'person/security_tools#unblock_person'
+          post "totp_reset" => "people/totp_reset#create", :as => "totp_reset"
+          post "totp_disable" => "people/totp_disable#create", :as => "totp_disable"
+          post "password_override" => "person/security_tools#password_override"
+          post "block" => "person/security_tools#block_person"
+          post "unblock" => "person/security_tools#unblock_person"
 
-          get 'history' => 'person/history#index'
-          get 'log' => 'person/log#index'
-          get 'security_tools' => 'person/security_tools#index'
-          get 'colleagues' => 'person/colleagues#index'
-          get 'personal_invoices' => 'person/invoices#index'
-          get 'messages' => 'person/messages#index'
+          get "history" => "person/history#index"
+          get "log" => "person/log#index"
+          get "security_tools" => "person/security_tools#index"
+          get "colleagues" => "person/colleagues#index"
+          get "messages" => "person/messages#index"
         end
 
         resources :notes, only: [:create, :destroy]
         resources :qualifications, only: [:new, :create, :destroy]
-        get 'qualifications' => 'qualifications#new' # route required for language switch
+        get "qualifications" => "qualifications#new" # route required for language switch
 
         resources :assignments, only: [:show, :edit, :update]
-        scope module: 'person' do
+        scope module: "person" do
           resources :assignments, only: [:index]
           resources :subscriptions, only: [:index, :create, :destroy]
-          post 'tags' => 'tags#create'
-          delete 'tags' => 'tags#destroy'
-          get 'tags/query' => 'tags#query'
-          post 'impersonate' => 'impersonation#create'
-          delete 'impersonate' => 'impersonation#destroy'
+          post "tags" => "tags#create"
+          delete "tags" => "tags#destroy"
+          get "tags/query" => "tags#query"
+          post "impersonate" => "impersonation#create"
+          delete "impersonate" => "impersonation#destroy"
         end
       end
 
       resources :person_duplicates, only: [:index] do
         member do
-          get 'merge' => 'person_duplicates/merge#new', as: 'new_merge'
-          post 'merge' => 'person_duplicates/merge#create', as: 'merge'
-          get 'ignore' => 'person_duplicates/ignore#new', as: 'new_ignore'
-          post 'ignore' => 'person_duplicates/ignore#create', as: 'ignore'
+          get "merge" => "person_duplicates/merge#new", :as => "new_merge"
+          post "merge" => "person_duplicates/merge#create", :as => "merge"
+          get "ignore" => "person_duplicates/ignore#new", :as => "new_ignore"
+          post "ignore" => "person_duplicates/ignore#create", :as => "ignore"
         end
       end
 
       resource :tag_list, only: [:destroy, :create, :new] do
-        get 'deletable' => 'tag_lists#deletable'
+        get "deletable" => "tag_lists#deletable"
       end
 
       resource :role_list, only: [:destroy, :create, :new] do
-        get 'deletable' => 'role_lists#deletable'
-        get 'move'      => 'role_lists#move'
-        get 'movable'   => 'role_lists#movable'
-        put 'move'      => 'role_lists#update'
+        get "deletable" => "role_lists#deletable"
+        get "move" => "role_lists#move"
+        get "movable" => "role_lists#movable"
+        put "move" => "role_lists#update"
       end
       resources :roles, except: [:index, :show] do
         collection do
@@ -196,63 +199,61 @@ Hitobito::Application.routes.draw do
           get :role_types
         end
 
-        resources :terminations, module: :roles, only: %w(new create)
+        resources :terminations, module: :roles, only: %w[new create]
       end
-      get 'roles' => 'roles#new' # route required for language switch
-      get 'roles/:id' => 'roles#edit' # route required for language switch
+      get "roles" => "roles#new" # route required for language switch
+      get "roles/:id" => "roles#edit" # route required for language switch
 
       resources :people_filters, only: [:new, :create, :edit, :update, :destroy]
-      get 'people_filters' => 'people_filters#new' # route required for language switch
+      get "people_filters" => "people_filters#new" # route required for language switch
 
+      get "deleted_people" => "group/deleted_people#index"
 
-      get 'deleted_people' => 'group/deleted_people#index'
+      get "person_add_requests" => "group/person_add_requests#index", :as => :person_add_requests
+      post "person_add_requests" => "group/person_add_requests#activate"
+      delete "person_add_requests" => "group/person_add_requests#deactivate"
 
-      get 'person_add_requests' => 'group/person_add_requests#index', as: :person_add_requests
-      post 'person_add_requests' => 'group/person_add_requests#activate'
-      delete 'person_add_requests' => 'group/person_add_requests#deactivate'
+      put "person_add_request_ignored_approvers" =>
+            "group/person_add_request_ignored_approvers#update",
+        :as => "person_add_request_ignored_approvers"
 
-      put 'person_add_request_ignored_approvers' =>
-            'group/person_add_request_ignored_approvers#update',
-          as: 'person_add_request_ignored_approvers'
-
-      get 'public_events/:id' => 'public_events#show', as: :public_event
-      get 'events/participation_lists/new' => 'event/participation_lists#new'
-      get 'events/invitation_lists/new' => 'event/invitation_lists#new'
+      get "public_events/:id" => "public_events#show", :as => :public_event
+      get "events/participation_lists/new" => "event/participation_lists#new"
+      get "events/invitation_lists/new" => "event/invitation_lists#new"
 
       resources :events do
         collection do
-          get 'simple' => 'events#index'
-          get 'course' => 'events#index', type: 'Event::Course'
-          get 'typeahead' => 'events#typeahead'
+          get "simple" => "events#index"
+          get "course" => "events#index", :type => "Event::Course"
+          get "typeahead" => "events#typeahead"
         end
 
-        scope module: 'event' do
-
+        scope module: "event" do
           member do
-            get  'register' => 'register#index'
-            post 'register' => 'register#check'
-            put  'register' => 'register#register'
+            get "register" => "register#index"
+            post "register" => "register#check"
+            put "register" => "register#register"
           end
 
           resources :application_market, only: :index do
             member do
-              put    'waiting_list' => 'application_market#put_on_waiting_list'
-              delete 'waiting_list' => 'application_market#remove_from_waiting_list'
-              put    'participant' => 'application_market#add_participant'
-              delete 'participant' => 'application_market#remove_participant'
+              put "waiting_list" => "application_market#put_on_waiting_list"
+              delete "waiting_list" => "application_market#remove_from_waiting_list"
+              put "participant" => "application_market#add_participant"
+              delete "participant" => "application_market#remove_participant"
             end
           end
 
           resource :invitation_lists, only: :create
           resources :invitations, only: [:index, :new, :create, :edit, :destroy] do
             member do
-              post 'decline' => 'invitations/decline#create'
+              post "decline" => "invitations/decline#create"
             end
           end
 
           resources :applications, only: [] do
             member do
-              put    :approve
+              put :approve
               delete :reject
             end
           end
@@ -262,33 +263,32 @@ Hitobito::Application.routes.draw do
           resource :participation_lists, only: :create
           resources :participations do
             collection do
-              get 'contact_data', controller: 'participation_contact_datas', action: 'edit'
-              post 'contact_data', controller: 'participation_contact_datas', action: 'update'
+              get "contact_data", controller: "participation_contact_datas", action: "edit"
+              post "contact_data", controller: "participation_contact_datas", action: "update"
 
               scope module: :participation_contact_data do
-                get 'contact_data/managed' => 'managed#edit'
-                post 'contact_data/managed' => 'managed#update'
+                get "contact_data/managed" => "managed#edit"
+                post "contact_data/managed" => "managed#update"
               end
             end
             resource :mail_dispatch, only: [:create], module: :participations
             member do
-              get 'print'
+              get "print"
               resources :guests, only: [:new, :create]
             end
           end
 
           resources :roles, except: [:index, :show]
-          get 'roles' => 'roles#new' # route required for language switch
-          get 'roles/:id' => 'roles#edit' # route required for language switch
+          get "roles" => "roles#new" # route required for language switch
+          get "roles/:id" => "roles#edit" # route required for language switch
 
-          get 'qualifications' => 'qualifications#index'
-          put 'qualifications' => 'qualifications#update'
+          get "qualifications" => "qualifications#index"
+          put "qualifications" => "qualifications#update"
 
-          post 'tags' => 'tags#create'
-          delete 'tags' => 'tags#destroy'
-          get 'tags/query' => 'tags#query'
+          post "tags" => "tags#create"
+          delete "tags" => "tags#destroy"
+          get "tags/query" => "tags#query"
         end
-
       end
 
       resources :mailing_lists do
@@ -297,73 +297,70 @@ Hitobito::Application.routes.draw do
 
         resources :subscriptions, only: [:index, :destroy] do
           collection do
-            resources :person, only: [:new, :create], controller: 'subscriber/person'
-            get 'person' => 'subscriber/person#new' # route required for language switch
+            resources :person, only: [:new, :create], controller: "subscriber/person"
+            get "person" => "subscriber/person#new" # route required for language switch
 
             resources :exclude_person, only: [:new, :create],
-                                       controller: 'subscriber/exclude_person'
-            get 'exclude_person' => 'subscriber/exclude_person#new' # route required for language switch
+              controller: "subscriber/exclude_person"
+            get "exclude_person" => "subscriber/exclude_person#new" # route required for language switch
 
             resources :group, only: [:new, :create, :edit, :update],
-                              controller: 'subscriber/group' do
+              controller: "subscriber/group" do
               collection do
                 get :query
                 get :roles
               end
             end
-            get 'group' => 'subscriber/group#new' # route required for language switch
+            get "group" => "subscriber/group#new" # route required for language switch
 
-            resources :event, only: [:new, :create], controller: 'subscriber/event' do
+            resources :event, only: [:new, :create], controller: "subscriber/event" do
               collection do
                 get :query
               end
             end
-            get 'event' => 'subscriber/event#new' # route required for language switch
+            get "event" => "subscriber/event#new" # route required for language switch
 
-            resource :filter, only: [:edit, :update], controller: 'subscriber/filter'
-
+            resource :filter, only: [:edit, :update], controller: "subscriber/filter"
           end
-
         end
 
         resources :mailchimp_synchronizations, only: [:create]
-        resources :recipient_counts, controller: 'mailing_lists/recipient_counts', only: [:index]
+        resources :recipient_counts, controller: "mailing_lists/recipient_counts", only: [:index]
         resources :bounces, only: [:index]
       end
 
       resources :calendars do
-        get 'feed' => 'calendars/feeds#index'
+        get "feed" => "calendars/feeds#index"
       end
 
-      resource :csv_imports, only: [:new, :create], controller: 'person/csv_imports' do
+      resource :csv_imports, only: [:new, :create], controller: "person/csv_imports" do
         member do
           post :define_mapping
           post :preview
-          get 'define_mapping' => 'person/csv_imports#new' # route required for language switch
-          get 'preview'        => 'person/csv_imports#new' # route required for language switch
+          get "define_mapping" => "person/csv_imports#new" # route required for language switch
+          get "preview" => "person/csv_imports#new" # route required for language switch
         end
       end
 
       resources :service_tokens
-
     end # resources :group
 
-    get 'list_courses' => 'events/courses#index', as: :list_courses
-    get 'list_events' => 'event/lists#events', as: :list_events
+    get "list_courses" => "events/courses#index", :as => :list_courses
+    get "list_events" => "event/lists#events", :as => :list_events
 
-    get 'full' => 'full_text#index'
+    get "full" => "full_text#index"
 
-    resources :event_kinds, module: 'event', controller: 'kinds'
-    resources :event_kind_categories, module: 'event', controller: 'kind_categories'
+    resources :event_kinds, module: "event", controller: "kinds"
+    resources :event_kind_categories, module: "event", controller: "kind_categories"
 
-    get 'hitobito_log_entries(/:category)', to: 'hitobito_log_entries#index',
-                                            as: :hitobito_log_entries
+    get "hitobito_log_entries(/:category)", to: "hitobito_log_entries#index",
+      as: :hitobito_log_entries
 
-    scope 'mails', module: :mails do
-      scope 'imap' do
-        get ':mailbox' => 'imap_mails#index', as: :imap_mails
-        delete ':mailbox' => 'imap_mails#destroy', as: :imap_mails_destroy
-        patch ':mailbox/move' => 'imap_mails_move#create', as: :imap_mails_move
+    scope "mails", module: :mails do
+      scope "imap" do
+        get ":mailbox" => "imap_mails#index", :as => :imap_mails
+        delete ":mailbox" => "imap_mails#destroy", :as => :imap_mails_destroy
+        patch ":mailbox/move" => "imap_mails_move#create", :as => :imap_mails_move
       end
 
       resources :bounces, only: [:index]
@@ -372,50 +369,52 @@ Hitobito::Application.routes.draw do
     resources :qualification_kinds
     resources :tags, except: :show do
       collection do
-        get 'merge' => 'tags/merge#new', as: 'new_merge'
-        post 'merge' => 'tags/merge#create', as: 'merge'
+        get "merge" => "tags/merge#new", :as => "new_merge"
+        post "merge" => "tags/merge#create", :as => "merge"
       end
     end
 
     resources :label_formats do
       collection do
-        resource :settings, controller: 'label_format/settings', as: 'label_format_settings'
+        resource :settings, controller: "label_format/settings", as: "label_format_settings"
       end
     end
 
     resources :self_registration_reasons
 
     resources :custom_contents, only: [:index, :edit, :update]
-    get 'custom_contents/:id' => 'custom_contents#edit'
+    get "custom_contents/:id" => "custom_contents#edit"
 
     resource :event_feed, only: [:show, :update]
     resources :help_texts, except: [:show]
 
     devise_for :service_tokens, only: [:sessions]
-    devise_for :people, skip: [:registrations], path: 'users', controllers: {
-      passwords: 'devise/hitobito/passwords',
-      registrations: 'devise/hitobito/registrations',
-      sessions: 'devise/hitobito/sessions'
+    devise_for :people, skip: [:registrations], path: "users", controllers: {
+      passwords: "devise/hitobito/passwords",
+      registrations: "devise/hitobito/registrations",
+      sessions: "devise/hitobito/sessions"
     }
-    devise_for :oauth_tokens, skip: :all, class_name: 'Oauth::AccessToken'
+    devise_for :oauth_tokens, skip: :all, class_name: "Oauth::AccessToken"
     as :person do
-      get 'users/edit' => 'devise/hitobito/registrations#edit', :as => 'edit_person_registration'
-      put 'users' => 'devise/hitobito/registrations#update', :as => 'person_registration'
-      get 'users' => 'devise/hitobito/registrations#edit' # route required for language switch
+      get "users/edit" => "devise/hitobito/registrations#edit", :as => "edit_person_registration"
+      put "users" => "devise/hitobito/registrations#update", :as => "person_registration"
+      get "users" => "devise/hitobito/registrations#edit" # route required for language switch
 
-      get 'users/second_factor' => 'second_factor_authentication#new', as: 'new_users_second_factor'
-      post 'users/second_factor' => 'second_factor_authentication#create', as: 'users_second_factor'
+      get "users/second_factor" => "second_factor_authentication#new",
+        :as => "new_users_second_factor"
+      post "users/second_factor" => "second_factor_authentication#create",
+        :as => "users_second_factor"
     end
 
-    post 'person_add_requests/:id' => 'person/add_requests#approve', as: :person_add_request
-    delete 'person_add_requests/:id' => 'person/add_requests#reject'
+    post "person_add_requests/:id" => "person/add_requests#approve", :as => :person_add_request
+    delete "person_add_requests/:id" => "person/add_requests#reject"
 
-    get 'changelog' => 'changelog#index'
+    get "changelog" => "changelog#index"
 
-    get 'downloads/:id' => 'async_downloads#show'
-    get 'downloads/:id/exists' => 'async_downloads#exists?'
+    get "downloads/:id" => "async_downloads#show"
+    get "downloads/:id/exists" => "async_downloads#exists?"
 
-    get 'synchronizations/:id' => 'async_synchronizations#show'
+    get "synchronizations/:id" => "async_synchronizations#show"
 
     resources :assignments, only: [:new, :create]
     resources :table_displays, only: [:create]
@@ -425,19 +424,19 @@ Hitobito::Application.routes.draw do
     end
   end # scope locale
 
-  get '/api', to: 'json_api/documentation#index'
-  mount Rswag::Ui::Engine => '/api-docs'
-  mount Rswag::Api::Engine => '/api-docs'
+  get "/api", to: "json_api/documentation#index"
+  mount Rswag::Ui::Engine => "/api-docs"
+  mount Rswag::Api::Engine => "/api-docs"
 
-  get 'api/schema', to: 'json_api/schema#show'
-  get 'api/openapi', to: 'json_api/openapi#show'
+  get "api/schema", to: "json_api/schema#show"
+  get "api/openapi", to: "json_api/openapi#show"
 
   get "/mailing_lists/:id", as: :mailing_list, to: redirect { |params, request|
     request.url.gsub(%r{/mailing_lists}, "/groups/#{MailingList.find(params[:id]).group_id}/mailing_lists")
   }
 
   scope path: ApplicationResource.endpoint_namespace, module: :json_api,
-        constraints: { format: 'jsonapi' }, defaults: { format: 'jsonapi' } do
+    constraints: {format: "jsonapi"}, defaults: {format: "jsonapi"} do
     resources :people, only: [:index, :show, :update]
     resources :groups, only: [:index, :show] do
       member do
@@ -446,7 +445,8 @@ Hitobito::Application.routes.draw do
     end
     resources :events, only: [:index, :show]
     resources :event_kinds, module: :event, controller: :kinds, only: [:index, :show]
-    resources :event_kind_categories, module: :event, controller: :kind_categories, only: [:index, :show]
+    resources :event_kind_categories, module: :event, controller: :kind_categories,
+      only: [:index, :show]
     resources :invoices, only: [:index, :show, :update]
     resources :roles, except: [:edit, :new]
     resources :mailing_lists, only: [:index, :show]

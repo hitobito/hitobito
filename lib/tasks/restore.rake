@@ -68,7 +68,7 @@ class BackupRestorer
     switch_mode(:sql)
 
     only_missing do
-      @group.invoices.each do |invoice|
+      @group.issued_invoices.each do |invoice|
         @result << dump(invoice)
 
         invoice.invoice_items.each do |invoice_item|
@@ -135,7 +135,7 @@ class BackupRestorer
   def script_invoices # rubocop:todo Metrics/AbcSize # rubocop:todo Metrics/MethodLength
     switch_mode(:ruby)
 
-    @group.invoices.each do |invoice|
+    @group.issued_invoices.each do |invoice|
       @result << <<~RUBY
         inv_id = if Invoice.where(sequence_number: '#{invoice.sequence_number}').exists?
                    puts 'Skipping existing Invoice #{invoice.sequence_number}'

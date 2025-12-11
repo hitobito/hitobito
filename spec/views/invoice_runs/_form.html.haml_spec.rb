@@ -3,7 +3,7 @@ require "spec_helper"
 describe "invoice_runs/_form.html.haml" do
   let(:group) { groups(:bottom_layer_one) }
   let(:person) { people(:bottom_member) }
-  let(:invoice) { group.invoices.build }
+  let(:invoice) { group.issued_invoices.build }
   let(:invoice_run) { InvoiceRun.new(group: group, recipient_ids: "1,2", invoice: invoice) }
   let(:dom) { Capybara::Node::Simple.new(render) }
 

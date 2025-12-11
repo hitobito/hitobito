@@ -6,17 +6,18 @@
 #  https://github.com/hitobito/hitobito.
 
 module InvoiceRuns
-  Receiver = Data.define(:id, :layer_group_id) do
-    def initialize(id:, layer_group_id: nil)
+  Receiver = Data.define(:id, :type, :layer_group_id) do
+    def initialize(id:, type:, layer_group_id: nil)
       super
     end
 
     def self.load(yaml)
       YAML.load(yaml).map do |row|
         case row
-        in { id:, layer_group_id: } then new(id:, layer_group_id:)
-        in Integer then new(id: row)
-        in String then new(id: Integer(row))
+        in { id:, type:, layer_group_id: } then new(id:, type:, layer_group_id:)
+        in { id:, layer_group_id: } then new(id:, type: "Person", layer_group_id:)
+        in Integer then new(id: row, type: "Person")
+        in String then new(id: Integer(row), type: "Person")
         end
       end
     end

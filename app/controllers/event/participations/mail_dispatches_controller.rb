@@ -26,16 +26,20 @@ class Event::Participations::MailDispatchesController < ApplicationController
 
   def event = @event ||= Event.find(params[:event_id])
 
-  def participation = @participation ||= Event::Participation.find(params[:participation_id])
+  def participation
+    @participation ||= Event::Participation.find(params[:participation_id])
+  end
 
-  def mail_type = @mail_type ||= params[:mail_type]
+  def mail_type
+    @mail_type ||= params[:mail_type]
+  end
 
-  # rubocop:todo Layout/LineLength
-  def mail_type_valid? = Event::Participation::MANUALLY_SENDABLE_PARTICIPANT_MAILS.include?(mail_type)
-  # rubocop:enable Layout/LineLength
+  def mail_type_valid?
+    Event::Participation::MANUALLY_SENDABLE_PARTICIPANT_MAILS.include?(mail_type)
+  end
 
-  # rubocop:todo Layout/LineLength
-  def redirect_to_success = redirect_to group_event_participation_path(group, event, participation),
-    # rubocop:enable Layout/LineLength
-    flash: {notice: t(".success")}
+  def redirect_to_success
+    redirect_to group_event_participation_path(group, event, participation),
+      flash: {notice: t(".success")}
+  end
 end

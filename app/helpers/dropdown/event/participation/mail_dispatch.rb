@@ -25,18 +25,35 @@ module Dropdown::Event::Participation
     private
 
     def init_items
-      Event::Participation::MANUALLY_SENDABLE_PARTICIPANT_MAILS.each do |type|
-        add_mail_item(type)
+      load_custom_contents.each do |custom_content|
+        add_mail_item(custom_content)
       end
     end
 
-    def add_mail_item(mail_type)
+    def load_custom_contents
+      keys = custom_content_keys
+      CustomContent.where(key: keys).includes(:translations).sort_by { |c| keys.index(c.key) }
+    end
+
+    def custom_content_keys
+      Event::Participation::MANUALLY_SENDABLE_PARTICIPANT_MAILS
+    end
+
+    def add_mail_item(custom_content)
       add_item(
-        CustomContent.find_by(key: mail_type)&.label,
-        template.group_event_participation_mail_dispatch_path(group, course, participation,
-          mail_type: mail_type),
+        custom_content.label,
+        mail_dispatch_path(custom_content.key),
         method: :post,
         "data-confirm": translate(".confirmation")
+      )
+    end
+
+    def mail_dispatch_path(mail_type)
+      template.group_event_participation_mail_dispatch_path(
+        group,
+        course,
+        participation,
+        mail_type:
       )
     end
   end

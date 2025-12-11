@@ -29,4 +29,8 @@ class Contactables::InvoicesController < ListController
   def recipient_type = contactable.class.sti_name
 
   def authorize_class = authorize!(:index_invoices, contactable)
+
+  def parent_scope
+    parent.received_invoices
+  end
 end

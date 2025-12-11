@@ -45,7 +45,7 @@ module Contactable
     has_many :additional_emails, as: :contactable, dependent: :destroy
     has_many :additional_addresses, as: :contactable, dependent: :destroy
 
-    has_many :invoices, as: :recipient, dependent: :nullify
+    has_many :received_invoices, inverse_of: :recipient, dependent: :nullify, class_name: "Invoice"
 
     belongs_to :location, foreign_key: "zip_code", primary_key: "zip_code", inverse_of: false
 

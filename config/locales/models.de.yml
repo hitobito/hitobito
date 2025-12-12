@@ -1324,6 +1324,8 @@ de:
           valiant: Valiant
           zkb: Zürcher Kantonalbank
           zugerkb: Zuger Kantonalbank
+          ukb: Urner Kantonalbank
+          bcn: Banque Cantonale Neuchâteloise
 
       service_token:
         name: Name

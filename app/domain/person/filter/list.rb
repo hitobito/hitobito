@@ -8,13 +8,14 @@
 class Person::Filter::List
   attr_reader :group, :user, :chain, :range, :name
 
-  def initialize(group, user, params = {})
+  def initialize(group, user, params = {}, accessibles_class = nil)
     @group = group
     @user = user
     @chain = Person::Filter::Chain.new(params[:filters])
     @range = params[:range]
     @name = params[:name]
     @ids = params[:ids].to_s.split(",")
+    @accessibles_class = accessibles_class
   end
 
   def entries
@@ -37,7 +38,7 @@ class Person::Filter::List
   end
 
   def filter_with_selection
-    @ids.present? ? filter.where(id: @ids) : filter
+    (@ids.present? && @ids != %w[all]) ? filter.where(id: @ids) : filter
   end
 
   def filter
@@ -71,12 +72,11 @@ class Person::Filter::List
   end
 
   def accessibles_class
-    abilities = chain.required_abilities
-    if abilities.include?(:full)
-      PersonFullReadables
-    else
-      PersonReadables
-    end
+    @accessibles_class ||= full_ability_needed? ? PersonFullReadables : PersonReadables
+  end
+
+  def full_ability_needed?
+    chain.required_abilities.include?(:full)
   end
 
   def group_range?

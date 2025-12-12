@@ -127,7 +127,7 @@ class InvoiceRunsController < CrudController
   end
 
   def invoices
-    parent.invoices.where(id: list_param(:ids))
+    Invoice::Filter.new(params).apply(parent.invoices)
   end
 
   def flash_message(action: action_name, count: nil, title: nil)
@@ -147,7 +147,7 @@ class InvoiceRunsController < CrudController
   # rubocop:todo Metrics/CyclomaticComplexity
   # rubocop:todo Metrics/MethodLength
   def assign_attributes # rubocop:disable Metrics/AbcSize # rubocop:todo Metrics/MethodLength
-    if params[:ids].present?
+    if params[:ids].present? && params[:ids] != :all
       entry.recipient_ids = params[:ids]
     elsif params[:filter].present?
       entry.recipient_ids = recipient_ids_from_people_filter

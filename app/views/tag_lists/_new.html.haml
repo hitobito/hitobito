@@ -11,7 +11,7 @@
           .row-fluid
 
             - unless @people_count.zero?
-              = hidden_field_tag('ids', @manageable_people.map(&:id).join(','))
+              = hidden_field_tag('ids', @manageable_people_ids.join(','))
               = f.text_field(:tags,
                              name: :tags,
                              class: 'tag-list-add form-control form-control-sm',

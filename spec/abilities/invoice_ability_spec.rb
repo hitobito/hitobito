@@ -154,12 +154,12 @@ describe InvoiceAbility do
         end
       end
 
-      context "on invoice list" do
-        let(:invoice_list) { InvoiceRun.create(group: layer, receiver: layer) }
+      context "on invoice run" do
+        let(:invoice_run) { InvoiceRun.create(group: layer, receiver: layer) }
 
         [:update, :destroy, :create, :index_invoices].each do |action|
           it "can #{action} in #{layer.name}" do
-            is_expected.to be_able_to(action, invoice_list)
+            is_expected.to be_able_to(action, invoice_run)
           end
         end
       end

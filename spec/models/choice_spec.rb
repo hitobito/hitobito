@@ -92,6 +92,13 @@ describe Choice do
       expect(choice.choice).to eql("Fallback")
     end
 
+    it "should use correct fallback when fallbacks are a string" do
+      stub_fallbacks("en")
+
+      @choice_translations = {de: "", en: "Fallback", fr: "", it: ""}
+      expect(choice.choice).to eql("Fallback")
+    end
+
     it "should return original value if fallbacks are also not present" do
       stub_fallbacks({de: :it, en: :fr})
 

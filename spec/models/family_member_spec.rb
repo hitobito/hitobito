@@ -1,23 +1,4 @@
 # frozen_string_literal: true
-
-# == Schema Information
-#
-# Table name: family_members
-#
-#  id         :bigint           not null, primary key
-#  family_key :string           not null
-#  kind       :string           not null
-#  other_id   :bigint           not null
-#  person_id  :bigint           not null
-#
-# Indexes
-#
-#  index_family_members_on_family_key              (family_key)
-#  index_family_members_on_other_id                (other_id)
-#  index_family_members_on_person_id               (person_id)
-#  index_family_members_on_person_id_and_other_id  (person_id,other_id) UNIQUE
-#
-
 require "spec_helper"
 
 describe FamilyMember do

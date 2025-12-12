@@ -4,27 +4,6 @@
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
-
-# == Schema Information
-#
-# Table name: addresses
-#
-#  id               :bigint           not null, primary key
-#  numbers          :text
-#  state            :string(128)      not null
-#  street_long      :string(128)      not null
-#  street_long_old  :string(128)      not null
-#  street_short     :string(128)      not null
-#  street_short_old :string(128)      not null
-#  town             :string(128)      not null
-#  zip_code         :integer          not null
-#
-# Indexes
-#
-#  addresses_search_column_gin_idx               (search_column) USING gin
-#  index_addresses_on_zip_code_and_street_short  (zip_code,street_short)
-#
-
 bs_bern:
   street_short: Belpstrasse
   street_short_old: Belpstrasse

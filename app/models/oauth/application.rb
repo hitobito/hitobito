@@ -4,28 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
-# == Schema Information
-#
-# Table name: oauth_applications
-#
-#  id                   :integer          not null, primary key
-#  additional_audiences :string
-#  confidential         :boolean          default(TRUE), not null
-#  name                 :string           not null
-#  redirect_uri         :text             not null
-#  scopes               :string           default(""), not null
-#  secret               :string           not null
-#  skip_consent_screen  :boolean          default(FALSE)
-#  uid                  :string           not null
-#  created_at           :datetime         not null
-#  updated_at           :datetime         not null
-#
-# Indexes
-#
-#  index_oauth_applications_on_uid  (uid) UNIQUE
-#
-
 module Oauth
   class Application < Doorkeeper::Application
     has_many :access_grants, dependent: :delete_all, class_name: "Oauth::AccessGrant"

@@ -4,20 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
-# == Schema Information
-#
-# Table name: event_attachments
-#
-#  id         :integer          not null, primary key
-#  visibility :string
-#  event_id   :integer          not null
-#
-# Indexes
-#
-#  index_event_attachments_on_event_id  (event_id)
-#
-
 class Event::Attachment < ActiveRecord::Base
   MAX_FILE_SIZE = Settings.event.attachments.max_file_size.megabytes
   CONTENT_TYPES = Settings.event.attachments.content_types

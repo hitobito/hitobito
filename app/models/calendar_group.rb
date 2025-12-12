@@ -4,24 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
-# == Schema Information
-#
-# Table name: calendar_groups
-#
-#  id             :bigint           not null, primary key
-#  event_type     :string
-#  excluded       :boolean          default(FALSE)
-#  with_subgroups :boolean          default(FALSE)
-#  calendar_id    :bigint           not null
-#  group_id       :bigint           not null
-#
-# Indexes
-#
-#  index_calendar_groups_on_calendar_id  (calendar_id)
-#  index_calendar_groups_on_group_id     (group_id)
-#
-
 class CalendarGroup < ActiveRecord::Base
   belongs_to :calendar
   belongs_to :group

@@ -1,18 +1,3 @@
-# == Schema Information
-#
-# Table name: calendars
-#
-#  id          :bigint           not null, primary key
-#  description :text
-#  name        :string           not null
-#  token       :string           not null
-#  group_id    :bigint           not null
-#
-# Indexes
-#
-#  index_calendars_on_group_id  (group_id)
-#
-
 require "spec_helper"
 
 describe Calendar do

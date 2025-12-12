@@ -4,22 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
-# == Schema Information
-#
-# Table name: help_texts
-#
-#  id         :integer          not null, primary key
-#  controller :string(100)      not null
-#  kind       :string(100)      not null
-#  model      :string(100)
-#  name       :string(100)      not null
-#
-# Indexes
-#
-#  index_help_texts_fields  (controller,model,kind,name) UNIQUE
-#
-
 class HelpText < ActiveRecord::Base
   COLUMN_BLACKLIST = %w[id created_at updated_at deleted_at].freeze
 

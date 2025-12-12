@@ -1,16 +1,3 @@
-# == Schema Information
-#
-# Table name: person_add_request_ignored_approvers
-#
-#  id        :integer          not null, primary key
-#  group_id  :integer          not null
-#  person_id :integer          not null
-#
-# Indexes
-#
-#  person_add_request_ignored_approvers_index  (group_id,person_id) UNIQUE
-#
-
 #  Copyright (c) 2012-2015, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at

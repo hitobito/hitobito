@@ -25,7 +25,7 @@ class Choice
   end
 
   def to_s
-    @choice
+    choice
   end
 
   def translated_attribute_names

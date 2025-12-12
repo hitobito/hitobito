@@ -12,17 +12,29 @@ module Dropdown
 
       class << self
         def for_user(template, group, event, user)
-          if user_participates_in?(user, event)
+          if adding_managed_possible?(user, event)
+            new(template, group, event, I18n.t("event_decorator.apply"), :check).to_s
+          elsif user_participates_in?(user, event)
             new(template, group, event, I18n.t("event_decorator.applied")).disabled_button
           else
             new(template, group, event, I18n.t("event_decorator.apply")).to_s
           end
         end
 
+        def register_new_managed?(event)
+          event.external_applications? &&
+            FeatureGate.enabled?("people.people_managers.self_service_managed_creation")
+        end
+
         private
 
         def user_participates_in?(user, event)
           user.event_participations.map(&:event_id).include?(event.id)
+        end
+
+        def adding_managed_possible?(user, event)
+          FeatureGate.enabled?("people.people_managers") &&
+            (user.manageds.exists? || register_new_managed?(event))
         end
       end
 
@@ -89,7 +101,7 @@ module Dropdown
           end
         end
 
-        if register_new_managed?
+        if self.class.register_new_managed?(event)
           opts = url_options.merge(event_role: {type: event.participant_types.first.sti_name})
           add_item(
             translate(".register_new_managed"),
@@ -98,11 +110,6 @@ module Dropdown
         end
       end
       # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
-
-      def register_new_managed?
-        event.external_applications? &&
-          FeatureGate.enabled?("people.people_managers.self_service_managed_creation")
-      end
 
       def disabled_message_for_person(participant)
         if ::Event::Participation.exists?(participant: participant, event: event)

@@ -12,15 +12,18 @@ class MailingLists::BulkMail::Retriever
     return abort_imap_unavailable unless imap_server_available?
 
     mail_uids.each do |mail_uid|
-      process_mail(mail_uid)
+      imap_mail = fetch_mail(mail_uid)
+      if imap_mail
+        process_mail(imap_mail, mail_uid)
+      else
+        Rails.logger.warn "Could not retrieve mail for #{mail_uid}"
+      end
     end
   end
 
   private
 
-  def process_mail(mail_uid)
-    imap_mail = fetch_mail(mail_uid)
-
+  def process_mail(imap_mail, mail_uid)
     validator = validator(imap_mail)
     if validator.processed_before?
       mail_processed_before!(imap_mail)

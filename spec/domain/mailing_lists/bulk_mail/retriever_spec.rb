@@ -421,6 +421,13 @@ describe MailingLists::BulkMail::Retriever do
       expect(message.subject).to eq(nil)
       expect(message.state).to eq("pending")
     end
+
+    it "skips processing if email cannot be retrieved from imap" do
+      build_imap_mail(42, nil)
+      allow(imap_connector).to receive(:fetch_mail_by_uid).with(42, :inbox).and_return(nil)
+      expect(retriever).not_to receive(:process_mail)
+      retriever.perform
+    end
   end
 
   private

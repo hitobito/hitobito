@@ -947,6 +947,7 @@ en:
               qualify: Creating qualifications for people at this level and all lower levels.
               approve_applications: Confirmation of course registrations for people at this level.
               finance: Create and manage invoices
+              layer_and_below_finance: Erstellen und Verwalten von Rechnungen auf dieser Ebene und allen darunter liegenden Ebenen.
               impersonation: Use Hitobito as another person
               see_invisible_from_above: Sieht zusätzlich Personen, welche sonst von höheren Ebenen nicht eingesehen werden dürfen.
               manual_deletion: Löschen von Personen ohne Rollen
@@ -1318,6 +1319,8 @@ en:
           valiant: Valiant
           zkb: Zürcher Kantonalbank
           zugerkb: Zuger Kantonalbank
+          ukb: Urner Kantonalbank
+          bcn: Banque Cantonale Neuchâteloise
 
       service_token:
         name: Name

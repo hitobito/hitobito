@@ -27,10 +27,10 @@ module I18nEnums
 
       define_method(:"#{attr}_label") do |value = nil|
         value ||= send(attr)
-        begin
-          I18n.t("#{prefix}.#{value.to_s.downcase.presence || NIL_KEY}")
-        rescue I18n::MissingTranslationData
-          nil
+        if value.present?
+          I18n.t("#{prefix}.#{value.to_s.downcase}")
+        else
+          I18n.t("#{prefix}.#{NIL_KEY}", default: "")
         end
       end
 

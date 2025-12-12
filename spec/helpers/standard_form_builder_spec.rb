@@ -158,6 +158,20 @@ describe "StandardFormBuilder" do
     end
   end
 
+  describe "#boolean_field" do
+    it "has no caption by default" do
+      html = Capybara::Node::Simple.new(form.boolean_field(:human))
+      expect(html).to have_css(".form-check input.form-check-input")
+      expect(html).to have_css(".form-check label.form-check-label", exact_text: " ")
+    end
+
+    it "has custom caption" do
+      html = Capybara::Node::Simple.new(form.boolean_field(:human, caption: "no animal, fungus or plant"))
+      expect(html).to have_css(".form-check input.form-check-input")
+      expect(html).to have_css(".form-check label.form-check-label", text: "no animal, fungus or plant")
+    end
+  end
+
   describe "#country_field" do
     let(:entry) { OpenStruct.new(country: nil) }
 

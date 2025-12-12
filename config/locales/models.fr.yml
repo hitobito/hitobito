@@ -1016,6 +1016,7 @@ fr:
               qualify: Saisie de qualifications pour les personnes à ce niveau et aux niveaux inférieurs.
               approve_applications: Confirmation des inscriptions aux cours pour les personnes de ce niveau.
               finance: Création et gestion de factures
+              layer_and_below_finance: Erstellen und Verwalten von Rechnungen auf dieser Ebene und allen darunter liegenden Ebenen.
               impersonation: Se servir de hitobito comme autre personne.
               see_invisible_from_above: Voit en plus les personnes qui ne peuvent normalement pas être vues par les niveaux supérieurs.
               manual_deletion: Suppression des personnes sans rôle
@@ -1393,6 +1394,8 @@ fr:
           valiant: Valiant
           zkb: Zürcher Kantonalbank
           zugerkb: Zuger Kantonalbank
+          ukb: Urner Kantonalbank
+          bcn: Banque Cantonale Neuchâteloise
 
       service_token:
         name: Nom

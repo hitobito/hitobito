@@ -195,7 +195,6 @@ module Export::Pdf::Invoice
         text_box invoice.currency, at: [0, cursor]
 
         if invoice.total.zero? || invoice.hide_total?
-          move_down 12
           blank_amount_rectangle
         else
           amount = number_with_precision(invoice.amount_open, precision: 2, delimiter: " ")

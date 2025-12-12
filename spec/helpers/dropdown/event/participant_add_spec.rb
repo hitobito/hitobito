@@ -15,11 +15,22 @@ describe Dropdown::Event::ParticipantAdd do
 
   subject { Capybara.string(dropdown.to_s) }
 
-  def menu = subject.find(".btn-group > ul.dropdown-menu")
-
   it "renders button" do
     is_expected.to have_content "Registrieren"
     is_expected.to_not have_css("ul.dropdown-menu li")
+  end
+
+  context ".for_user" do
+    let(:dropdown) { described_class.for_user(self, group, event, current_user) }
+
+    it "renders button" do
+      is_expected.to have_content "Anmelden"
+    end
+
+    it "renders disabled button for participant" do
+      Event::Participation.create!(event: event, participant: current_user)
+      is_expected.to have_content "Angemeldet"
+    end
   end
 
   context "with feature people_managers active" do
@@ -57,6 +68,15 @@ describe Dropdown::Event::ParticipantAdd do
             person_id: bottom_member.id
           }
         ))
+      end
+
+      context ".for_user" do
+        let(:dropdown) { described_class.for_user(self, group, event, current_user) }
+
+        it "renders button for participant" do
+          Event::Participation.create!(event: event, participant: current_user)
+          is_expected.to have_content "Anmelden"
+        end
       end
     end
   end

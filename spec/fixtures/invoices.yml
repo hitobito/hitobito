@@ -105,8 +105,8 @@ sent:
 
 
 group_invoice:
-  title: Top Layer Invoice
-  group: top_group
+  title: Group Invoice
+  group: top_layer
   recipient: top_group (Group)
   recipient_email: top_group@example.com
   recipient_name: Top Group Collective

@@ -38,7 +38,7 @@ describe InvoicesController do
     end
   end
 
-  context "new" do
+  context "GET#new" do
     it "GET#new supports creating invoice for without recipient params" do
       get :new, params: {group_id: group.id}
       expect(response).to be_successful
@@ -54,7 +54,7 @@ describe InvoicesController do
     end
   end
 
-  context "index" do
+  context "GET#index" do
     it "GET#index finds invoices by title" do
       update_issued_at_to_current_year
       get :index, params: {group_id: group.id, q: "Sent"}
@@ -66,25 +66,25 @@ describe InvoicesController do
       expect(assigns(:invoices)).to have(1).item
     end
 
-    it "GET#index finds invoices by recipient.last_name" do
+    it "GET#index finds invoices by recipient people.last_name" do
       update_issued_at_to_current_year
       get :index, params: {group_id: group.id, q: people(:top_leader).last_name}
       expect(assigns(:invoices)).to have(2).item
     end
 
-    it "GET#index finds invoices by recipient.first_name" do
+    it "GET#index finds invoices by recipient people.first_name" do
       update_issued_at_to_current_year
       get :index, params: {group_id: group.id, q: people(:top_leader).first_name}
       expect(assigns(:invoices)).to have(2).item
     end
 
-    it "GET#index finds invoices by recipient.email" do
+    it "GET#index finds invoices by recipient people.email" do
       update_issued_at_to_current_year
       get :index, params: {group_id: group.id, q: people(:top_leader).email}
       expect(assigns(:invoices)).to have(2).item
     end
 
-    it "GET#index finds invoices by recipient.company_name" do
+    it "GET#index finds invoices by recipient people.company_name" do
       update_issued_at_to_current_year
       people(:top_leader).update!(company_name: "Hitobito Fanclub")
       get :index, params: {group_id: group.id, q: "hitobito"}
@@ -103,6 +103,24 @@ describe InvoicesController do
     it "GET#index finds nothing for dummy" do
       get :index, params: {group_id: group.id, q: "dummy"}
       expect(assigns(:invoices)).to be_empty
+    end
+
+    context "group invoices" do
+      let(:group) { groups(:top_layer) }
+      let(:person) { people(:top_leader) }
+
+      it "GET#index finds invoices by recipient groups.name" do
+        update_issued_at_to_current_year
+        get :index, params: {group_id: group.id, q: groups(:top_group).name}
+        expect(assigns(:invoices)).to have(1).item
+      end
+
+      it "GET#index finds invoices by recipient groups.email" do
+        groups(:top_group).update!(email: "top_group@example.com")
+        update_issued_at_to_current_year
+        get :index, params: {group_id: group.id, q: groups(:top_group).email}
+        expect(assigns(:invoices)).to have(1).item
+      end
     end
 
     it "filters invoices by state" do
@@ -261,7 +279,7 @@ describe InvoicesController do
     end
   end
 
-  context "show" do
+  context "GET#show" do
     it "GET#show assigns payment if invoice has been sent" do
       invoice.update(state: :sent)
       get :show, params: {group_id: group.id, id: invoice.id}
@@ -367,7 +385,7 @@ describe InvoicesController do
     end
   end
 
-  context "post" do
+  context "POST#create" do
     it "POST#create sets creator_id to current_user" do
       expect do
         post :create, params: {group_id: group.id, invoice: {

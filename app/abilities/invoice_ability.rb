@@ -62,6 +62,9 @@ class InvoiceAbility < AbilityDsl::Base
   end
 
   def in_layer_with_receiver_if_active
-    in_layer_with_receiver && !subject.receiver.group.archived?
+    if in_layer_with_receiver
+      group = subject.receiver.is_a?(Group) ? subject.receiver : subject.receiver.group
+      !group.archived?
+    end
   end
 end

@@ -6,7 +6,9 @@
 require "spec_helper"
 
 describe FullTextController, type: :controller do
-  before { sign_in(people(:top_leader)) }
+  let(:current_user) { people(:top_leader) }
+
+  before { sign_in(current_user) }
 
   before do
     [[:list_people, Person.where(id: people(:bottom_member).id)],
@@ -16,10 +18,6 @@ describe FullTextController, type: :controller do
   end
 
   describe "GET index" do
-    before do
-      sign_in(people(:top_leader))
-    end
-
     it "finds person" do
       get :index, params: {q: "Bottom"}
 
@@ -53,15 +51,27 @@ describe FullTextController, type: :controller do
       expect(response).to redirect_to(event_path(events(:top_course)))
     end
 
-    it "finds invoice" do
-      get :index, params: {q: invoices(:invoice).title[0..5]}
+    describe "invoices" do
+      it "finds invoice" do
+        get :index, params: {q: invoices(:invoice).title[0..5]}
 
-      expect(assigns(:invoices)).to include(invoices(:invoice))
-    end
+        expect(assigns(:invoices)).to include(invoices(:invoice))
+      end
 
-    it "redirects to invoice if only finding a single invoice" do
-      get :index, params: {q: invoices(:invoice).title}
-      expect(response).to redirect_to(invoice_path(invoices(:invoice)))
+      it "redirects to invoice if only finding a single invoice" do
+        get :index, params: {q: invoices(:invoice).title}
+        expect(response).to redirect_to(invoice_path(invoices(:invoice)))
+      end
+
+      context "when lacking finance permission" do
+        let(:current_user) { Fabricate(Group::TopLayer::TopAdmin.sti_name, group: groups(:top_layer)).person }
+
+        it "finds nothing when lacking finance permission" do
+          get :index, params: {q: invoices(:invoice).title[0..5]}
+
+          expect(assigns(:invoices)).to be_nil
+        end
+      end
     end
 
     context "without any params" do
@@ -117,9 +127,8 @@ describe FullTextController, type: :controller do
     it "displays groups tab" do
       group_search_instance = instance_double(SearchStrategies::GroupSearch)
       allow(SearchStrategies::GroupSearch).to receive(:new).and_return(group_search_instance)
-      # rubocop:todo Layout/LineLength
-      allow(group_search_instance).to receive(:search_fulltext).and_return(Group.where(id: groups(:bottom_layer_one).id))
-      # rubocop:enable Layout/LineLength
+      allow(group_search_instance).to receive(:search_fulltext)
+        .and_return(Group.where(id: groups(:bottom_layer_one).id))
 
       get :index, params: {q: "query with group results"}
       expect(assigns(:active_tab)).to eq(:groups)

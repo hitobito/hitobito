@@ -12,12 +12,12 @@ class FullTextController < ApplicationController
 
   respond_to :html
 
-  SEARCHABLE_MODELS = {
-    people: SearchStrategies::PersonSearch,
-    groups: SearchStrategies::GroupSearch,
-    events: SearchStrategies::EventSearch,
-    invoices: SearchStrategies::InvoiceSearch
-  }.freeze
+  SEARCHABLE_MODELS = [
+    [:people, SearchStrategies::PersonSearch],
+    [:groups, SearchStrategies::GroupSearch],
+    [:events, SearchStrategies::EventSearch],
+    [:invoices, SearchStrategies::InvoiceSearch, -> { current_ability.can?(:index, Invoice) }]
+  ].freeze
 
   def index
     respond_to do |format|
@@ -31,9 +31,7 @@ class FullTextController < ApplicationController
   private
 
   def query_results # rubocop:todo Metrics/AbcSize
-    SEARCHABLE_MODELS.each do |key, search_class|
-      result = search_class.new(current_user, query_param, params[:page]).search_fulltext
-
+    each_search_result do |key, result|
       if key == :invoices || key == :events
         instance_variable_set(:"@#{key}", with_query { send(:"decorate_#{key}", result) })
       else
@@ -49,19 +47,24 @@ class FullTextController < ApplicationController
   end
 
   def query_json_results
-    SEARCHABLE_MODELS.each do |key, search_class|
+    each_search_result do |key, result|
       instance_variable_set(
-        :"@#{key}", search_class.new(current_user, query_param, params[:page], limit: 5)
-                              .search_fulltext
-                              .collect { |i|
-                      "#{key.to_s.singularize.titleize}Decorator"
-                                                    .constantize.new(i)
-                                                    .as_quicksearch
-                    }
+        :"@#{key}", result.collect { |i|
+          "#{key.to_s.singularize.titleize}Decorator"
+            .constantize.new(i)
+            .as_quicksearch
+        }
       )
     end
 
     results_with_separator(@people, @groups, @events, @invoices)
+  end
+
+  def each_search_result(limit: nil)
+    SEARCHABLE_MODELS.each do |key, search_class, condition|
+      next if condition && !instance_exec(&condition)
+      yield key, search_class.new(current_user, query_param, params[:page], limit:).search_fulltext
+    end
   end
 
   def results_with_separator(*sets)

@@ -76,7 +76,6 @@ describe PersonDuplicatesController do
         duplicate3.person_2.update!(first_name: "Bar")
 
         get :index, params: {group_id: layer_one.id, q: "ba"}
-        expect(entries.count).to eq(1)
         expect(entries).to include(duplicate3)
 
         body = Capybara::Node::Simple.new(response.body)

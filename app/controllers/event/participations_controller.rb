@@ -84,12 +84,9 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     with_person_add_request do
       created = with_callbacks(:create, :save) do
         entry.transaction do
-          next false unless save_entry
-
-          # a confirmation email gets sent automatically when assigning a
-          # place. in the other case, send one explicitely
-          directly_assign_place? ? directly_assign_place : send_confirmation_email
-          send_notification_email
+          save_entry.tap do |success|
+            process_created_participation if success
+          end
         end
       end
 
@@ -348,16 +345,6 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     entry.init_application
   end
 
-  def directly_assign_place?
-    event.places_available? &&
-      (event.attr_used?(:automatic_assignment) && event.automatic_assignment?)
-  end
-
-  def directly_assign_place
-    assigner = Event::ParticipantAssigner.new(event, @participation)
-    assigner.add_participant if assigner.createable?
-  end
-
   def load_priorities
     if entry.application && event.priorization && current_user
       @alternatives = event.class.application_possible
@@ -391,16 +378,35 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     sanitize(label, tags: %w[i])
   end
 
+  def process_created_participation
+    if event.supports_applications? && directly_assign_place?
+      directly_assign_place
+    else
+      # A confirmation email when adding someone else gets sent automatically
+      # when assigning a place. In the other case, send one explicitely.
+      # No confirmation email for participants applying for themselves.
+      send_confirmation_email
+    end
+    send_notification_email
+  end
+
+  def directly_assign_place?
+    event.places_available? &&
+      (event.attr_used?(:automatic_assignment) && event.automatic_assignment?)
+  end
+
+  def directly_assign_place
+    assigner = Event::ParticipantAssigner.new(event, @participation)
+    assigner.add_participant if assigner.createable?
+  end
+
   def send_confirmation_email
-    # rubocop:todo Layout/LineLength
-    # send_email? is used when adding someone_else and checking the checkmark to send the confirmation mail
-    # rubocop:enable Layout/LineLength
-    # rubocop:todo Layout/LineLength
-    # while current_user_interested_in_mail? makes sure to send the confirmation if you're registering yourself for the event.
-    # rubocop:enable Layout/LineLength
-    # rubocop:todo Layout/LineLength
-    Event::ParticipationConfirmationJob.new(entry).enqueue! if send_email? || current_user_interested_in_mail?
-    # rubocop:enable Layout/LineLength
+    # send_email? is used when adding someone_else and checking the checkmark to send the
+    # confirmation mail while current_user_interested_in_mail? makes sure to send the
+    # confirmation if you're registering yourself for the event.
+    if send_email? || current_user_interested_in_mail?
+      Event::ParticipationConfirmationJob.new(entry).enqueue!
+    end
   end
 
   def send_notification_email
@@ -422,8 +428,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     for_current_user_or_managed?
   end
 
-  # rubocop:todo Metrics/AbcSize
-  def set_success_notice # rubocop:todo Metrics/CyclomaticComplexity # rubocop:todo Metrics/AbcSize
+  def set_success_notice # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize
     if !entry.pending? && manager_via_public_event?
       flash[:notice] ||= translate(:success_for_external_manager,
         full_entry_label: full_entry_label)
@@ -443,7 +448,6 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
       flash[:notice] ||= notice
     end
   end
-  # rubocop:enable Metrics/AbcSize
 
   def after_create_location(participation)
     if participation.persisted? && params.key?(:add_another)

@@ -4,7 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: payees
@@ -22,7 +21,6 @@
 #  index_payees_on_payment_id  (payment_id)
 #  index_payees_on_person_id   (person_id)
 #
-
 class Payee < ActiveRecord::Base
   belongs_to :payment
   belongs_to :person, optional: true

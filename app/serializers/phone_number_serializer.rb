@@ -2,7 +2,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: phone_numbers
@@ -17,9 +16,7 @@
 # Indexes
 #
 #  index_phone_numbers_on_contactable_id_and_contactable_type  (contactable_id,contactable_type)
-#  phone_numbers_search_column_gin_idx                         (search_column) USING gin
 #
-
 class PhoneNumberSerializer < ContactAccountSerializer
   schema do
     contact_properties

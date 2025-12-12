@@ -4,7 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: payment_provider_configs
@@ -25,7 +24,6 @@
 #
 #  index_payment_provider_configs_on_invoice_config_id  (invoice_config_id)
 #
-
 class PaymentProviderConfig < ActiveRecord::Base
   include Encryptable
   include I18nEnums

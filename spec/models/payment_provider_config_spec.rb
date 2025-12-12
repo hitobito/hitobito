@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+#
 # == Schema Information
 #
 # Table name: payment_provider_configs
@@ -20,7 +21,6 @@
 #
 #  index_payment_provider_configs_on_invoice_config_id  (invoice_config_id)
 #
-
 require "spec_helper"
 
 describe PaymentProviderConfig do

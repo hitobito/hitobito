@@ -2,7 +2,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: related_role_types
@@ -17,7 +16,6 @@
 #  index_related_role_types_on_relation_id_and_relation_type  (relation_id,relation_type)
 #  index_related_role_types_on_role_type                      (role_type)
 #
-
 class RelatedRoleType < ActiveRecord::Base
   belongs_to :relation, polymorphic: true
 

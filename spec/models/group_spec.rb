@@ -4,7 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: groups
@@ -51,13 +50,11 @@
 #
 # Indexes
 #
-#  groups_search_column_gin_idx    (search_column) USING gin
 #  index_groups_on_layer_group_id  (layer_group_id)
 #  index_groups_on_lft_and_rgt     (lft,rgt)
 #  index_groups_on_parent_id       (parent_id)
 #  index_groups_on_type            (type)
 #
-
 require "spec_helper"
 
 describe Group do

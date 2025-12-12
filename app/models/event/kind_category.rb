@@ -4,19 +4,18 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: event_kind_categories
 #
-#  id         :bigint           not null, primary key
-#  deleted_at :datetime
-#  label      :string
-#  order      :integer
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id                     :bigint           not null, primary key
+#  deleted_at             :datetime
+#  label                  :string
+#  order                  :integer
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  event_kind_category_id :bigint           not null
 #
-
 class Event::KindCategory < ActiveRecord::Base
   include Globalized
   translates :label

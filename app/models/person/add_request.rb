@@ -4,7 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: person_add_requests
@@ -22,7 +21,6 @@
 #  index_person_add_requests_on_person_id         (person_id)
 #  index_person_add_requests_on_type_and_body_id  (type,body_id)
 #
-
 class Person::AddRequest < ActiveRecord::Base
   has_paper_trail meta: {main_id: ->(r) { r.person_id },
                          main_type: Person.sti_name}

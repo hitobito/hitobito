@@ -115,9 +115,9 @@ GEM
     airbrake-ruby (6.2.2)
       rbtree3 (~> 0.6)
     amazing_print (2.0.0)
-    annotate (2.6.5)
-      activerecord (>= 2.3.0)
-      rake (>= 0.8.7)
+    annotaterb (4.20.0)
+      activerecord (>= 6.0.0)
+      activesupport (>= 6.0.0)
     ast (2.4.3)
     awesome_nested_set (3.8.0)
       activerecord (>= 4.0.0, < 8.1)
@@ -142,7 +142,7 @@ GEM
       aws-eventstream (~> 1, >= 1.0.2)
     base64 (0.3.0)
     bcrypt (3.1.20)
-    benchmark (0.4.1)
+    benchmark (0.5.0)
     better_errors (2.10.1)
       erubi (>= 1.0.0)
       rack (>= 0.9.0)
@@ -197,7 +197,7 @@ GEM
     config (5.6.1)
       deep_merge (~> 1.2, >= 1.2.1)
       ostruct
-    connection_pool (2.5.4)
+    connection_pool (3.0.2)
     countries (8.0.4)
       unaccent (~> 0.3)
     country_select (11.0.0)
@@ -438,7 +438,7 @@ GEM
     mini_magick (5.3.1)
       logger
     mini_mime (1.1.5)
-    minitest (5.26.0)
+    minitest (5.27.0)
     msgpack (1.8.0)
     multi_json (1.17.0)
     nested_form (0.3.2)
@@ -594,7 +594,7 @@ GEM
       tsort (>= 0.2)
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
-    rake (13.3.0)
+    rake (13.3.1)
     rb-fsevent (0.11.2)
     rb-inotify (0.11.1)
       ffi (~> 1.0)
@@ -772,7 +772,7 @@ GEM
     thor (1.4.0)
     tilt (2.6.1)
     timeliness (0.5.3)
-    timeout (0.4.3)
+    timeout (0.5.0)
     transproc (1.1.1)
     truemail (3.3.1)
       simpleidn (~> 0.2.1)
@@ -788,7 +788,7 @@ GEM
       unicode-emoji (~> 4.1)
     unicode-emoji (4.1.0)
     uniform_notifier (1.18.0)
-    uri (1.0.4)
+    uri (1.1.1)
     useragent (0.16.11)
     validates_by_schema (0.3.1)
       activerecord (>= 3.1.0)
@@ -840,7 +840,7 @@ DEPENDENCIES
   acts-as-taggable-on
   airbrake
   amazing_print
-  annotate
+  annotaterb
   awesome_nested_set
   aws-sdk-s3
   bcrypt

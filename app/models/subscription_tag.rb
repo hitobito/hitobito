@@ -2,7 +2,6 @@
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: subscription_tags
@@ -22,7 +21,6 @@
 #  fk_rails_...  (subscription_id => subscriptions.id)
 #  fk_rails_...  (tag_id => tags.id)
 #
-
 class SubscriptionTag < ActiveRecord::Base
   belongs_to :subscription
   belongs_to :tag, class_name: "ActsAsTaggableOn::Tag"

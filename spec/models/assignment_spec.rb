@@ -18,7 +18,6 @@
 #  index_assignments_on_creator_id  (creator_id)
 #  index_assignments_on_person_id   (person_id)
 #
-
 require "spec_helper"
 
 describe Assignment do

@@ -7,6 +7,22 @@
 
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
+# == Schema Information
+#
+# Table name: message_templates
+#
+#  id             :bigint           not null, primary key
+#  body           :text
+#  templated_type :string
+#  title          :string           not null
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  templated_id   :bigint
+#
+# Indexes
+#
+#  index_message_templates_on_templated  (templated_type,templated_id)
+#
 top_layer_one:
   templated: top_layer (InvoiceConfig)
   title: Some invoice template

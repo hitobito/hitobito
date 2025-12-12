@@ -4,7 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: event_kind_qualification_kinds
@@ -22,7 +21,6 @@
 #  index_event_kind_qualification_kinds_on_category  (category)
 #  index_event_kind_qualification_kinds_on_role      (role)
 #
-
 class Event::KindQualificationKind < ActiveRecord::Base
   include I18nEnums
 

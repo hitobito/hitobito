@@ -4,7 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: background_job_log_entries
@@ -26,7 +25,6 @@
 #  index_background_job_log_entries_on_job_id_and_attempt  (job_id,attempt) UNIQUE
 #  index_background_job_log_entries_on_job_name            (job_name)
 #
-
 class BackgroundJobLogEntry < ApplicationRecord
   validates_by_schema
 

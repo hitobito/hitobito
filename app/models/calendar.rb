@@ -4,7 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: calendars
@@ -19,7 +18,6 @@
 #
 #  index_calendars_on_group_id  (group_id)
 #
-
 class Calendar < ActiveRecord::Base
   belongs_to :group
 

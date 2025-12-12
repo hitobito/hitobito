@@ -28,19 +28,15 @@
 
 class Event::Question::Default < Event::Question
   def choice_items
-    choices.to_s.split(",").collect(&:strip)
-  end
-
-  def one_answer_available?
-    choice_items.compact.one?
+    deserialized_choices.map { |choice| choice.choice }
   end
 
   def with_choices?
-    choice_items.present?
+    deserialized_choices.present?
   end
 
   def with_checkboxes?
-    multiple_choices? || one_answer_available?
+    multiple_choices? || deserialized_choices.one?
   end
 
   def translation_class
@@ -66,7 +62,7 @@ class Event::Question::Default < Event::Question
 
     # have submit index + 1 and handle reset via index 0
     index_array = raw_answer.map { |i| i.to_i - 1 }
-    answer.answer = valid_index_based_values(index_array, 0...choice_items.size) || nil
+    answer.answer = valid_index_based_values(index_array, 0...deserialized_choices.size) || nil
   end
 
   def valid_index_based_values(index_array, valid_range)

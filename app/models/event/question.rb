@@ -144,6 +144,40 @@ class Event::Question < ActiveRecord::Base
     end
   end
 
+  def deserialized_choices
+    # Adds the locale to the choice items grouped by choice
+    # Example: [["Alter", "Age"], ["Adresse", "Address"]]
+    # -> [{de: "Alter", en: "Age"}, {de: "Adresse", en: "Address"}]
+    choice_items_by_choice_with_locales = choice_items_by_choice.map do |choice_translations|
+      Globalized.languages.zip(choice_translations).to_h
+    end
+
+    choice_items_by_choice_with_locales.map do |choice_translations|
+      Choice.new(choice_translations)
+    end
+  end
+
+  def choices_attributes=(attributes)
+    attributes.filter! { |_, v| [1, "1", true, "true"].exclude?(v.delete("_destroy")) }
+    choice_items_by_translation =
+      attributes.values.map(&:values).filter { |v| v.any?(&:present?) }.transpose
+
+    languages = [I18n.locale] + Globalized.additional_languages
+    languages.zip(choice_items_by_translation).each do |lang, choices|
+      send(:"choices_#{lang}=", escaped_choices_string(choices))
+    end
+  end
+
+  def self.reflect_on_all_associations
+    super + [Choice::Reflection.new]
+  end
+
+  def self.reflect_on_association(association)
+    return super unless association == :choices
+
+    Choice::Reflection.new
+  end
+
   private
 
   def add_answer_to_participations
@@ -158,5 +192,38 @@ class Event::Question < ActiveRecord::Base
         participation.answers << answers.new
       end
     end
+  end
+
+  # Regroups the choice items to be grouped by choice instead of by translation
+  # Example: [["Alter", "Adresse"], ["Age", "Address"]]
+  # -> [["Alter", "Age"], ["Adresse", "Address"]]
+  def choice_items_by_choice
+    choice_items_by_translation = Globalized.languages.map do |lang|
+      choices_in_lang = send(:"choices_#{lang}")
+      choices_in_lang&.split(",", -1)&.collect { |choice| choice.gsub("\\u002C", ",").strip }
+    end
+
+    return [] unless choice_items_by_translation.any?
+
+    normalize_2d_array(choice_items_by_translation).transpose
+  end
+
+  # Normalizes an array of subarrays to make all subarrays the size of the
+  # biggest subarray so transposing is possible. Falsy values are also converted
+  # to an array of matching size consisting of empty strings.
+  def normalize_2d_array(array)
+    clean_array = array.map { |sub_array| sub_array || [] }
+    max_subarray_length = clean_array.max_by(&:length).length
+    clean_array.map do |sub_array|
+      next Array.new(max_subarray_length, "") if sub_array.empty?
+
+      sub_array.in_groups_of(max_subarray_length, "").flatten
+    end
+  end
+
+  # Escapes all commas in the choices before joining them by comma. The escaping is done so
+  # choices can include commas in the text without breaking the serialization and deserialization.
+  def escaped_choices_string(choices)
+    choices&.map { |choice| choice.gsub(",", "\\u002C") }&.join(",")
   end
 end

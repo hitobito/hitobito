@@ -15,6 +15,7 @@
 - Die bisherigen Sammelrechnungen wurden zu Rechnungsläufen umbenannt, um den Begriff "Sammelrechnung" in Zukunft für wiederholbare, Rechnungsperioden-basierte Verbandsabrechnungen und Gruppenrechnungen zu Verfügung zu haben (#3746)
 - Mehrsprachige Felder sind nun in den Formularen als solche erkennbar und können in allen verfügbaren Sprachen einer Umgebung erfasst werden (#3560)
 - Es können jetzt Hilfetexte für Radio Buttons, Dropdowns, Personenfelder und weitere Arten von Feldern angezeigt werden (#967)
+- Bei Eventfragen können nun die Antwortmöglichkeiten wie die Fragen selbst in einem dynamischen Formular hinzugefügt und entfernt werden. Bisher wurden diese als kommaseparierter String erfasst (#3563)
 
 ## Version 2.7
 

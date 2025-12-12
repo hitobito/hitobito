@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 # == Schema Information
 #
 # Table name: payments
@@ -18,7 +17,6 @@
 #  index_payments_on_invoice_id              (invoice_id)
 #  index_payments_on_transaction_identifier  (transaction_identifier) UNIQUE
 #
-
 require "spec_helper"
 
 describe Payment do

@@ -4,7 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: people
@@ -84,7 +83,6 @@
 #
 #  fk_rails_...  (self_registration_reason_id => self_registration_reasons.id)
 #
-
 class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   PUBLIC_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
     :id, :first_name, :last_name, :nickname, :company_name, :company,

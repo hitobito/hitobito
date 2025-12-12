@@ -4,7 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: events
@@ -21,6 +20,7 @@
 #  display_booking_info             :boolean          default(TRUE), not null
 #  external_applications            :boolean          default(FALSE)
 #  globally_visible                 :boolean
+#  guest_limit                      :integer          default(0), not null
 #  hidden_contact_attrs             :text
 #  location                         :text
 #  maximum_participants             :integer
@@ -43,12 +43,14 @@
 #  teamer_count                     :integer          default(0)
 #  training_days                    :decimal(5, 2)
 #  type                             :string
+#  visible_contact_attributes       :string           default(["name", "address", "phone_number", "email", "social_account"])
 #  waiting_list                     :boolean          default(TRUE), not null
 #  created_at                       :datetime
 #  updated_at                       :datetime
 #  application_contact_id           :integer
 #  contact_id                       :integer
 #  creator_id                       :integer
+#  event_id                         :integer          not null
 #  kind_id                          :integer
 #  updater_id                       :integer
 #
@@ -58,7 +60,6 @@
 #  index_events_on_kind_id              (kind_id)
 #  index_events_on_shared_access_token  (shared_access_token)
 #
-
 require "spec_helper"
 
 describe Event::Course do

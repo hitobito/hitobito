@@ -2,7 +2,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: additional_emails
@@ -18,12 +17,10 @@
 #
 # Indexes
 #
+#  additional_emails_search_column_gin_idx                         (search_column) USING gin
 #  index_additional_emails_on_contactable_id_and_contactable_type  (contactable_id,contactable_type)
-# rubocop:todo Layout/LineLength
 #  index_additional_emails_on_contactable_where_invoices_true      (contactable_id,contactable_type) UNIQUE WHERE (invoices = true)
-# rubocop:enable Layout/LineLength
 #
-
 Fabricator(:additional_email) do
   contactable { Fabricate(:person) }
   email { "#{Faker::Internet.user_name}@hitobito.example.com" }

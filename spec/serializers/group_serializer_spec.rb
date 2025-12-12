@@ -4,13 +4,11 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: groups
 #
 #  id                                      :integer          not null, primary key
-#  address                                 :string(1024)
 #  address_care_of                         :string
 #  archived_at                             :datetime
 #  country                                 :string
@@ -58,7 +56,6 @@
 #  index_groups_on_parent_id       (parent_id)
 #  index_groups_on_type            (type)
 #
-
 require "spec_helper"
 
 describe GroupSerializer do

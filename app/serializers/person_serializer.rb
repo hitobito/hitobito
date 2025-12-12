@@ -4,14 +4,14 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
+# Serializes a single person. Expects the following context arguments:
+#  * group - The group this person is showed for
 # == Schema Information
 #
 # Table name: people
 #
 #  id                                   :integer          not null, primary key
 #  additional_information               :text
-#  address                              :string(1024)
 #  address_care_of                      :string
 #  authentication_token                 :string
 #  birthday                             :date
@@ -85,9 +85,6 @@
 #
 #  fk_rails_...  (self_registration_reason_id => self_registration_reasons.id)
 #
-
-# Serializes a single person. Expects the following context arguments:
-#  * group - The group this person is showed for
 class PersonSerializer < ApplicationSerializer
   include ContactableSerializer
 

@@ -4,7 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: invoice_items
@@ -24,9 +23,9 @@
 #
 # Indexes
 #
-#  index_invoice_items_on_invoice_id  (invoice_id)
+#  index_invoice_items_on_invoice_id    (invoice_id)
+#  invoice_items_search_column_gin_idx  (search_column) USING gin
 #
-
 class InvoiceItem < ActiveRecord::Base
   # used to map declassified type string to class constant
   class_attribute :type_mappings

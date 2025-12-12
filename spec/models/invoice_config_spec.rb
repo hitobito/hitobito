@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 # == Schema Information
 #
 # Table name: invoice_configs
@@ -17,8 +16,15 @@
 #  logo_position                    :string           default("disabled"), not null
 #  participant_number               :string
 #  payee                            :text
+#  payee_country                    :string           default("CH")
+#  payee_housenumber                :string
+#  payee_name                       :string
+#  payee_street                     :string
+#  payee_town                       :string
+#  payee_zip_code                   :string
 #  payment_information              :text
 #  payment_slip                     :string           default("qr"), not null
+#  reference_prefix                 :integer
 #  sender_name                      :string
 #  sequence_number                  :integer          default(1), not null
 #  vat_number                       :string
@@ -28,7 +34,6 @@
 #
 #  index_invoice_configs_on_group_id  (group_id)
 #
-
 require "spec_helper"
 
 describe InvoiceConfig do

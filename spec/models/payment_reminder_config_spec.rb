@@ -2,12 +2,13 @@
 #
 # Table name: payment_reminder_configs
 #
-#  id                :integer          not null, primary key
-#  due_days          :integer          not null
-#  level             :integer          not null
-#  text              :string           not null
-#  title             :string           not null
-#  invoice_config_id :integer          not null
+#  id                       :integer          not null, primary key
+#  due_days                 :integer          not null
+#  level                    :integer          not null
+#  show_invoice_description :boolean          default(TRUE), not null
+#  text                     :text
+#  title                    :string
+#  invoice_config_id        :integer          not null
 #
 # Indexes
 #

@@ -16,7 +16,6 @@
 #  index_mail_logs_on_mail_hash   (mail_hash)
 #  index_mail_logs_on_message_id  (message_id)
 #
-
 require "spec_helper"
 
 describe MailLog do

@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 # == Schema Information
 #
 # Table name: notes
@@ -16,7 +15,6 @@
 #
 #  index_notes_on_subject_id  (subject_id)
 #
-
 require "spec_helper"
 
 describe Note do

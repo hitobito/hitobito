@@ -1,12 +1,14 @@
 # ADR-013 Entkoppelung von Übersetzungen und Releases
 
-Status: **Vorschlag**
+Status: **Entscheid**
 
-Entscheid: **Offen**
+Entscheid: Nutzung der transifex-Integration mit Commits
 
-Aktuell werden die Übersetzungen während des Deployment verwaltet. Wir können transifex direkt mit Github verbinden und so Übersetzungen und Releases unabhängig voneinander managen.
+Aktuell kann maximal ein Abstand von 60 Minuten zwischen den Commit eingestellt werden. Der minimale Übersetzungsgrad ist 1%. Diese Einstellung wählen wir, damit wir bisher möglichst alle Übersetzungen übernommen werden und gleichzeitig eine leichte zeitliche Gruppierung von Übersetzungen stattfindet.
 
 ## Kontext
+
+Aktuell werden die Übersetzungen während des Deployment verwaltet. Wir können transifex direkt mit Github verbinden und so Übersetzungen und Releases unabhängig voneinander managen.
 
 Bei einem Integration-Release werden die Quellen hochgeladen und die Übersetzungen geholt. Bei einem Production-Release werden nur Übersetzungen geholt. In beiden Fällen werden die Dateien in git gespeichert und nachher in das Repo gepusht.
 
@@ -28,7 +30,7 @@ Die Umstellung kann nach und nach gemacht werden, da auch mit der Integration we
 
 ## Optionen
 
-### Nutzung der transifex-Integration
+### Nutzung der transifex-Integration mit PRs
 
 #### Vorteile
 - Trennung von Release und Übernahme der Übersetzungen in den Source.
@@ -37,6 +39,20 @@ Die Umstellung kann nach und nach gemacht werden, da auch mit der Integration we
 #### Nachteile
 - ein Entwickler muss sich um den PR kümmern
 - wenn das Übersetzungslimit zu hoch gewählt wird, können bereits vorhandene Dateien wieder gelöscht werden.
+
+#### Aufwände
+- Alle Wagons müssen umgestellt werden
+- kann nach und nach passieren
+
+### Nutzung der transifex-Integration mit Commits
+
+#### Vorteile
+- Trennung von Release und Übernahme der Übersetzungen in den Source.
+- automatische, zeitnahe Übernahme von Übersetzungen
+- Nachvollziehbarkeit durch Prefixes in den Commits
+
+#### Nachteile
+- Je nach Benutzung von Transifex durch Übersetzer können viele Commits entstehen.
 
 #### Aufwände
 - Alle Wagons müssen umgestellt werden
@@ -67,3 +83,7 @@ Die Umstellung kann nach und nach gemacht werden, da auch mit der Integration we
 - vermutlich wird es eine WV-Aufgabe und reduziert damit unser Wartungsbudget
 
 ## Kommentare/Advice
+
+### codez 2025-12-05
+
+Ich sehe den Mehrwert der PRs durch Transifex nicht. Momentan wird beim Release alles ungeschaut aus Transifex übernommen. Entsprechend könnten die Changes aus Transifex auch direkt committed werden (idealerweise nicht jeder einzelne, sondern über einige Stunden zusammengefasst). Auf jeden Fall würde ich mehr Automatisierung anstreben, und nicht weniger.

@@ -471,16 +471,16 @@ describe EventsController do
                 q1.id.to_s => {id: q1.id, question: "Whoo?", disclosure: :optional, choices_attributes: {}},
                 q2.id.to_s => {id: q2.id, _destroy: true, choices_attributes: {}},
                 "999" => {question: "How much?", disclosure: :optional, choices_attributes: {
-                  "1" => {choice: "1"},
-                  "2" => {choice: "2"},
-                  "3" => {choice: "3"}
+                  "1" => {choice: "1", choice_en: "", choice_fr: "", choice_it: ""},
+                  "2" => {choice: "2", choice_en: "", choice_fr: "", choice_it: ""},
+                  "3" => {choice: "3", choice_en: "", choice_fr: "", choice_it: ""}
                 }}
               },
               admin_questions_attributes: {
                 q3.id.to_s => {id: q3.id, _destroy: true, choices_attributes: {}},
                 "999" => {question: "Powned?", disclosure: :optional, choices_attributes: {
-                  "1" => {choice: "ja"},
-                  "2" => {choice: "nein"}
+                  "1" => {choice: "ja", choice_en: "", choice_fr: "", choice_it: ""},
+                  "2" => {choice: "nein", choice_en: "", choice_fr: "", choice_it: ""}
                 }}
               }
             }
@@ -500,6 +500,55 @@ describe EventsController do
         third = questions.third
         expect(third.question).to eq "Whoo?"
         expect(third.admin).to eq false
+      end
+
+      it "question choices stay deleted when form is invalid after deleting all choices" do
+        q1 = event.questions.create!(question: "Who?", disclosure: :optional, choices: "all,some")
+        q2 = event.questions.create!(question: "Payed?", disclosure: :optional, admin: true, choices: "yes,no")
+
+        put :update, params: {
+          group_id: group.id,
+          id: event.id,
+          event: {
+            name: "",
+            application_questions_attributes: {
+              q1.id.to_s => {id: q1.id, question: "Who?", disclosure: :optional, choices_attributes: {
+                "1" => {choice: "all", choice_en: "", choice_fr: "", choice_it: "", _destroy: true},
+                "2" => {choice: "some", choice_en: "", choice_fr: "", choice_it: "", _destroy: true}
+              }}
+            },
+            admin_questions_attributes: {
+              q2.id.to_s => {id: q2.id, question: "Payed?", disclosure: :optional, choices_attributes: {
+                "1" => {choice: "yes", choice_en: "", choice_fr: "", choice_it: "", _destroy: true},
+                "2" => {choice: "no", choice_en: "", choice_fr: "", choice_it: "", _destroy: true}
+              }}
+            }
+          }
+        }
+
+        assigned_event = assigns(:event)
+        expect(assigned_event).not_to be_valid
+        expect(assigned_event.application_questions.all? { |q| q.choices.nil? }).to be_truthy
+        expect(assigned_event.admin_questions.all? { |q| q.choices.nil? }).to be_truthy
+
+        put :update, params: {
+          group_id: group.id,
+          id: event.id,
+          event: {
+            name: "",
+            application_questions_attributes: {
+              q1.id.to_s => {id: q1.id, question: "Who?", disclosure: :optional}
+            },
+            admin_questions_attributes: {
+              q2.id.to_s => {id: q2.id, question: "Payed?", disclosure: :optional}
+            }
+          }
+        }
+
+        assigned_event = assigns(:event)
+        expect(assigned_event).not_to be_valid
+        expect(assigned_event.application_questions.all? { |q| q.choices.nil? }).to be_truthy
+        expect(assigned_event.admin_questions.all? { |q| q.choices.nil? }).to be_truthy
       end
 
       it "validates permission to read contact person" do

@@ -1,4 +1,17 @@
 # frozen_string_literal: true
+# == Schema Information
+#
+# Table name: table_displays
+#
+#  id                :integer          not null, primary key
+#  selected          :text
+#  table_model_class :string           not null
+#  person_id         :integer          not null
+#
+# Indexes
+#
+#  index_table_displays_on_person_id_and_table_model_class  (person_id,table_model_class) UNIQUE
+#
 require "spec_helper"
 
 describe TableDisplay do

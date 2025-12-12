@@ -1,3 +1,29 @@
+# == Schema Information
+#
+# Table name: invoice_runs
+#
+#  id                    :bigint           not null, primary key
+#  amount_paid           :decimal(15, 2)   default(0.0), not null
+#  amount_total          :decimal(15, 2)   default(0.0), not null
+#  invalid_recipient_ids :text
+#  receiver_type         :string
+#  receivers             :text
+#  recipients_paid       :integer          default(0), not null
+#  recipients_processed  :integer          default(0), not null
+#  recipients_total      :integer          default(0), not null
+#  title                 :string           not null
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#  creator_id            :bigint
+#  group_id              :bigint
+#  receiver_id           :bigint
+#
+# Indexes
+#
+#  index_invoice_runs_on_creator_id                     (creator_id)
+#  index_invoice_runs_on_group_id                       (group_id)
+#  index_invoice_runs_on_receiver_type_and_receiver_id  (receiver_type,receiver_id)
+#
 require "spec_helper"
 
 describe InvoiceRun do

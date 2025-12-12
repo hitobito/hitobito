@@ -4,6 +4,21 @@
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
+# == Schema Information
+#
+# Table name: person_duplicates
+#
+#  id          :bigint           not null, primary key
+#  ignore      :boolean          default(FALSE), not null
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  person_1_id :integer          not null
+#  person_2_id :integer          not null
+#
+# Indexes
+#
+#  index_person_duplicates_on_person_1_id_and_person_2_id  (person_1_id,person_2_id) UNIQUE
+#
 require "spec_helper"
 
 describe PersonDuplicate do

@@ -4,6 +4,19 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+# == Schema Information
+#
+# Table name: table_displays
+#
+#  id                :integer          not null, primary key
+#  selected          :text
+#  table_model_class :string           not null
+#  person_id         :integer          not null
+#
+# Indexes
+#
+#  index_table_displays_on_person_id_and_table_model_class  (person_id,table_model_class) UNIQUE
+#
 class TableDisplay < ActiveRecord::Base
   validates_by_schema
 

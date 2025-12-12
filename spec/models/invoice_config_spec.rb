@@ -1,4 +1,39 @@
 # frozen_string_literal: true
+# == Schema Information
+#
+# Table name: invoice_configs
+#
+#  id                               :integer          not null, primary key
+#  account_number                   :string
+#  address                          :text
+#  beneficiary                      :text
+#  currency                         :string           default("CHF"), not null
+#  donation_calculation_year_amount :integer
+#  donation_increase_percentage     :integer
+#  due_days                         :integer          default(30), not null
+#  email                            :string
+#  iban                             :string
+#  logo_position                    :string           default("disabled"), not null
+#  participant_number               :string
+#  payee                            :text
+#  payee_country                    :string           default("CH")
+#  payee_housenumber                :string
+#  payee_name                       :string
+#  payee_street                     :string
+#  payee_town                       :string
+#  payee_zip_code                   :string
+#  payment_information              :text
+#  payment_slip                     :string           default("qr"), not null
+#  reference_prefix                 :integer
+#  sender_name                      :string
+#  sequence_number                  :integer          default(1), not null
+#  vat_number                       :string
+#  group_id                         :integer          not null
+#
+# Indexes
+#
+#  index_invoice_configs_on_group_id  (group_id)
+#
 require "spec_helper"
 
 describe InvoiceConfig do

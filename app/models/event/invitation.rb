@@ -4,6 +4,24 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+# == Schema Information
+#
+# Table name: event_invitations
+#
+#  id                 :bigint           not null, primary key
+#  declined_at        :datetime
+#  participation_type :string           not null
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  event_id           :bigint           not null
+#  person_id          :bigint           not null
+#
+# Indexes
+#
+#  index_event_invitations_on_event_id                (event_id)
+#  index_event_invitations_on_event_id_and_person_id  (event_id,person_id) UNIQUE
+#  index_event_invitations_on_person_id               (person_id)
+#
 class Event::Invitation < ActiveRecord::Base
   self.demodulized_route_keys = true
 

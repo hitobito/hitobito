@@ -1,4 +1,20 @@
 # frozen_string_literal: true
+# == Schema Information
+#
+# Table name: notes
+#
+#  id           :integer          not null, primary key
+#  subject_type :string
+#  text         :text
+#  created_at   :datetime
+#  updated_at   :datetime
+#  author_id    :integer          not null
+#  subject_id   :integer          not null
+#
+# Indexes
+#
+#  index_notes_on_subject_id  (subject_id)
+#
 require "spec_helper"
 
 describe Note do

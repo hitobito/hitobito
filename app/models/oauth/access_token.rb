@@ -2,6 +2,31 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+# == Schema Information
+#
+# Table name: oauth_access_tokens
+#
+#  id                     :integer          not null, primary key
+#  expires_in             :integer
+#  previous_refresh_token :string           default(""), not null
+#  refresh_token          :string
+#  revoked_at             :datetime
+#  scopes                 :string
+#  token                  :string           not null
+#  created_at             :datetime         not null
+#  application_id         :integer
+#  resource_owner_id      :integer
+#
+# Indexes
+#
+#  index_oauth_access_tokens_on_refresh_token      (refresh_token) UNIQUE
+#  index_oauth_access_tokens_on_resource_owner_id  (resource_owner_id)
+#  index_oauth_access_tokens_on_token              (token) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (application_id => oauth_applications.id)
+#
 module Oauth
   class AccessToken < Doorkeeper::AccessToken
     belongs_to :person, foreign_key: :resource_owner_id, inverse_of: :access_tokens

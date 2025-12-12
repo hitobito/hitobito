@@ -1,4 +1,17 @@
 # frozen_string_literal: true
+# == Schema Information
+#
+# Table name: async_download_files
+#
+#  id         :bigint           not null, primary key
+#  filetype   :string
+#  name       :string           not null
+#  progress   :integer
+#  timestamp  :string           not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  person_id  :integer          not null
+#
 require "spec_helper"
 
 describe AsyncDownloadFile do

@@ -1,4 +1,24 @@
 # frozen_string_literal: true
+# == Schema Information
+#
+# Table name: payment_provider_configs
+#
+#  id                 :bigint           not null, primary key
+#  encrypted_keys     :text
+#  encrypted_password :string
+#  partner_identifier :string
+#  payment_provider   :string
+#  status             :integer          default("draft"), not null
+#  synced_at          :datetime
+#  user_identifier    :string
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  invoice_config_id  :bigint
+#
+# Indexes
+#
+#  index_payment_provider_configs_on_invoice_config_id  (invoice_config_id)
+#
 require "spec_helper"
 
 describe PaymentProviderConfig do

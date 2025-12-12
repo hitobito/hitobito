@@ -4,6 +4,22 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+# == Schema Information
+#
+# Table name: event_kinds
+#
+#  id                     :integer          not null, primary key
+#  application_conditions :text
+#  deleted_at             :datetime
+#  general_information    :text
+#  label                  :string           not null
+#  minimum_age            :integer
+#  short_name             :string
+#  created_at             :datetime
+#  updated_at             :datetime
+#  event_kind_id          :integer          not null
+#  kind_category_id       :integer
+#
 class Event::Kind < ActiveRecord::Base
   include Paranoia::Globalized
 

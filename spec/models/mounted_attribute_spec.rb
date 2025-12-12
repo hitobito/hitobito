@@ -1,4 +1,16 @@
 # frozen_string_literal: true
+# == Schema Information
+#
+# Table name: mounted_attributes
+#
+#  id         :bigint           not null, primary key
+#  entry_type :string           not null
+#  key        :string           not null
+#  value      :text
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  entry_id   :integer          not null
+#
 require "spec_helper"
 
 describe MountedAttribute do

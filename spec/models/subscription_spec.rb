@@ -3,6 +3,21 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+# == Schema Information
+#
+# Table name: subscriptions
+#
+#  id              :integer          not null, primary key
+#  excluded        :boolean          default(FALSE), not null
+#  subscriber_type :string           not null
+#  mailing_list_id :integer          not null
+#  subscriber_id   :integer          not null
+#
+# Indexes
+#
+#  index_subscriptions_on_mailing_list_id                    (mailing_list_id)
+#  index_subscriptions_on_subscriber_id_and_subscriber_type  (subscriber_id,subscriber_type)
+#
 require "spec_helper"
 
 describe Subscription do

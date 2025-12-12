@@ -1,3 +1,23 @@
+# == Schema Information
+#
+# Table name: assignments
+#
+#  id              :bigint           not null, primary key
+#  attachment_type :string
+#  description     :text             not null
+#  read_at         :date
+#  title           :string           not null
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  attachment_id   :integer
+#  creator_id      :bigint           not null
+#  person_id       :bigint           not null
+#
+# Indexes
+#
+#  index_assignments_on_creator_id  (creator_id)
+#  index_assignments_on_person_id   (person_id)
+#
 require "spec_helper"
 
 describe Assignment do

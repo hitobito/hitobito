@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: help_texts
+#
+#  id         :integer          not null, primary key
+#  controller :string(100)      not null
+#  kind       :string(100)      not null
+#  model      :string(100)
+#  name       :string(100)      not null
+#
+# Indexes
+#
+#  index_help_texts_fields  (controller,model,kind,name) UNIQUE
+#
 require "spec_helper"
 
 describe HelpText do

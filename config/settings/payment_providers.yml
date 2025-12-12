@@ -84,3 +84,15 @@ payment_providers:
     host_id: ZGKBEBICS
     encryption_hash: 78 8F 17 44 38 46 94 77 CD 98 F0 DC D4 EA C6 B0 0E 75 D9 B9 8F 1B 0F 9B B8 5D 2B 5D A1 89 36 10
     authentication_hash: 03 50 12 3E 9C BF C1 BB 95 5E 0C E2 0B A2 B1 28 18 EC CD 56 15 11 22 17 81 8C 76 E4 A4 D3 37 75
+
+  - name: ukb
+    url: https://www.ebics.swisscom.com/ebics-server/ebics.aspx
+    host_id: EBICSUKB
+    encryption_hash: 61 0d cc 3e d7 22 b2 15 29 a1 fb 80 df d1 ce c3 18 74 28 14 58 15 6d 4f a8 e0 37 80 8b 05 6a 02
+    authentication_hash: d6 a5 bb 3c 53 1a 85 af cc 07 b0 fd 8d 9d 4d 8b 4c 9c 6f 4f 73 4f 48 74 35 e4 64 7d 8a 27 23 2d
+
+  - name: bcn
+    url: https://www.ebics.swisscom.com/EBICS-Server/EBICS.aspx
+    host_id: BCNEBICS
+    encryption_hash: cf 96 84 cd 93 d9 77 79 d5 8d 52 db 81 bb d0 31 5f 1f 2d a6 97 ba a3 f1 ef 39 01 0a fd 95 E4 ec
+    authentication_hash: 88 0d e9 4a 5b 7d 28 c9 23 66 96 9d df 4a a4 3c bf 74 F1 98 42 1a c8 76 78 03 be 71 ae c8 5a 2a

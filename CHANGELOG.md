@@ -2,6 +2,7 @@
 
 ## unreleased
 
+- Die Banken Urner Kantonalbank und Banque Cantonale Neuchâteloise wurden als Ebics Zahlungsschnittstellen hinzugefügt (#3782)
 - Die Labels von Telefonnummern, E-Mails und Social Medias werden in der JSON API sprachabhängig zurückgegeben (hitobito_sac_cas#2066)
 - Spalten in Excel Exporten können neu als Datum, Dezimalzahl oder Betrag formattiert werden (hitobito_sac_cas#1665)
 - Logs auf Gruppen werden korrekt aggregiert dargestellt (hitobito_sac_cas#2087)

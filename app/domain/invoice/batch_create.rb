@@ -103,8 +103,11 @@ class Invoice::BatchCreate
   def receivers
     return invoice_run.receivers if invoice_run.receivers.present?
 
-    invoice_run.recipients.find_each.lazy.map do |person|
-      InvoiceRuns::Receiver.new(id: person.id, type: person.class.sti_name)
+    invoice_run.recipients.find_each.lazy.map do |recipient|
+      InvoiceRuns::Receiver.new(
+        id: recipient.id,
+        type: recipient.class.sti_name
+      )
     end
   end
 

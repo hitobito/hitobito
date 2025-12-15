@@ -9,6 +9,7 @@ module InvoiceRuns
   Receiver = Data.define(:id, :type, :layer_group_id) do
     def initialize(id:, type:, layer_group_id: nil)
       super
+      ensure_valid_type
     end
 
     def self.load(yaml)
@@ -26,6 +27,15 @@ module InvoiceRuns
       list.map do |row|
         row.is_a?(self) ? row.to_h : row
       end.to_yaml
+    end
+
+    private
+
+    def ensure_valid_type
+      clazz = type.to_s.safe_constantize or raise ArgumentError, "Unknown type #{type.inspect}"
+      return if clazz < Contactable
+
+      raise ArgumentError, "Invalid type #{type.inspect}, must be a Contactable"
     end
   end
 end

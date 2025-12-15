@@ -8,6 +8,20 @@
 require "spec_helper"
 
 describe InvoiceRuns::Receiver do
+  describe "#new" do
+    it "accepts valid type" do
+      expect(described_class.new(id: 1, type: "Person").type).to eq "Person"
+      expect(described_class.new(id: 1, type: "Group").type).to eq "Group"
+    end
+
+    it "rejects invalid type" do
+      expect { described_class.new(id: 1, type: "Invoice") }
+        .to raise_error(ArgumentError, /Invalid type/)
+      expect { described_class.new(id: 1, type: "NonExistingClass") }
+        .to raise_error(ArgumentError, /Unknown type/)
+    end
+  end
+
   describe "::load" do
     def load(array) = described_class.load(array.to_yaml)
 

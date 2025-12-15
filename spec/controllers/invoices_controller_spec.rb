@@ -46,8 +46,17 @@ describe InvoicesController do
       expect(assigns(:invoice).recipient_name).to be_nil
     end
 
-    it "GET#new creating invoice for with recipient params" do
+    it "GET#new creating invoice for with Person recipient params" do
       get :new, params: {group_id: group.id, invoice: {recipient_type: "Person", recipient_id: person.id}}
+      expect(response).to be_successful
+      expect(assigns(:invoice).recipient).to be_present
+      expect(assigns(:invoice).recipient_name).to be_present
+    end
+
+    it "GET#new creating invoice for with Group recipient params" do
+      group = groups(:top_layer) 
+      sign_in(people(:top_leader))
+      get :new, params: {group_id: group.id, invoice: {recipient_type: "Group", recipient_id: group.id}}
       expect(response).to be_successful
       expect(assigns(:invoice).recipient).to be_present
       expect(assigns(:invoice).recipient_name).to be_present

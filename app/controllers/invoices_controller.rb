@@ -190,7 +190,7 @@ class InvoicesController < CrudController
     )
     scope = scope.standalone unless parents.any?(InvoiceRun)
     scope = scope.page(params[:page]) unless params[:ids]
-    Invoice::Filter.new(params).apply(scope)
+    Invoice::Filter.new(params).apply(scope).preload_recipients
   end
 
   def payment_attrs

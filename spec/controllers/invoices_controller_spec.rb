@@ -54,7 +54,7 @@ describe InvoicesController do
     end
 
     it "GET#new creating invoice for with Group recipient params" do
-      group = groups(:top_layer) 
+      group = groups(:top_layer)
       sign_in(people(:top_leader))
       get :new, params: {group_id: group.id, invoice: {recipient_type: "Group", recipient_id: group.id}}
       expect(response).to be_successful
@@ -64,52 +64,76 @@ describe InvoicesController do
   end
 
   context "GET#index" do
-    it "GET#index finds invoices by title" do
+    it "preloads recipients" do
+      invoices(:group_invoice).update!(group_id: group.id)
+
+      get :index, params: {group_id: group.id}
+
+      expect_query_count("Invoice Load": 1, "Person Load": 1, "Group Load": 1) do
+        assigns(:invoices).to_a
+      end
+
+      invoices = assigns(:invoices).to_a
+
+      expect_query_count do
+        invoices.each do |invoice|
+          invoice.recipient.to_s
+        end
+      end.to eq 0 # recipients are preloaded, so no additional queries
+    end
+
+    it "finds invoices by title" do
       update_issued_at_to_current_year
+
       get :index, params: {group_id: group.id, q: "Sent"}
       expect(assigns(:invoices)).to have(1).item
     end
 
-    it "GET#index finds invoices by sequence_number" do
+    it "finds invoices by sequence_number" do
       get :index, params: {group_id: group.id, q: invoices(:invoice).sequence_number}
       expect(assigns(:invoices)).to have(1).item
     end
 
-    it "GET#index finds invoices by recipient people.last_name" do
+    it "finds invoices by recipient people.last_name" do
       update_issued_at_to_current_year
+
       get :index, params: {group_id: group.id, q: people(:top_leader).last_name}
       expect(assigns(:invoices)).to have(2).item
     end
 
-    it "GET#index finds invoices by recipient people.first_name" do
+    it "finds invoices by recipient people.first_name" do
       update_issued_at_to_current_year
+
       get :index, params: {group_id: group.id, q: people(:top_leader).first_name}
       expect(assigns(:invoices)).to have(2).item
     end
 
-    it "GET#index finds invoices by recipient people.email" do
+    it "finds invoices by recipient people.email" do
       update_issued_at_to_current_year
+
       get :index, params: {group_id: group.id, q: people(:top_leader).email}
       expect(assigns(:invoices)).to have(2).item
     end
 
-    it "GET#index finds invoices by recipient people.company_name" do
+    it "finds invoices by recipient people.company_name" do
       update_issued_at_to_current_year
       people(:top_leader).update!(company_name: "Hitobito Fanclub")
+
       get :index, params: {group_id: group.id, q: "hitobito"}
       expect(assigns(:invoices)).to have(2).item
     end
 
-    it "GET#index finds nothing by owner.company_name" do
+    it "finds nothing by owner.company_name" do
       update_issued_at_to_current_year
       creator = people(:bottom_member)
       creator.update!(company_name: "Greedy Ltd")
       Invoice.update_all(creator_id: creator.id)
+
       get :index, params: {group_id: group.id, q: creator.company_name}
       expect(assigns(:invoices)).to be_empty
     end
 
-    it "GET#index finds nothing for dummy" do
+    it "finds nothing for dummy" do
       get :index, params: {group_id: group.id, q: "dummy"}
       expect(assigns(:invoices)).to be_empty
     end

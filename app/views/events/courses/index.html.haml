@@ -15,7 +15,7 @@
     = Dropdown::Event::EventsExport.new(self, params).to_s
     = render_extensions :buttons
 
-= turbo_frame_tag(:event_courses_list) do
+= turbo_frame_tag(:event_courses_list, target: :_top) do
   %section
     = grouped_table(@grouped_events, manager || display_any_booking_info? ? 4 : 3) do |event|
       %td

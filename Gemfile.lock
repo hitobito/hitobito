@@ -451,8 +451,11 @@ GEM
       net-protocol
     net-protocol (0.2.2)
       timeout
+    net-sftp (4.0.0)
+      net-ssh (>= 5.0.0, < 8.0.0)
     net-smtp (0.5.1)
       net-protocol
+    net-ssh (7.0.1)
     netrc (0.11.0)
     niceql (0.6.2)
     nio4r (2.7.4)
@@ -901,6 +904,8 @@ DEPENDENCIES
   mime-types
   mini_magick
   nested_form
+  net-sftp
+  net-ssh
   nokogiri
   oat
   open_api-schema_validator

@@ -17,6 +17,7 @@ describe :invoices, js: true do
 
   describe "multiselect" do
     let!(:invoices) do
+      group.issued_invoices.destroy_all
       invoice_count.times.map do
         Fabricate(:invoice, creator: user, group: group, recipient: people(:bottom_member), state: :draft,
           invoice_items: [InvoiceItem.new(count: 1, unit_cost: 100, name: "Test")])

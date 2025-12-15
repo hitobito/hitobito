@@ -42,6 +42,34 @@ describe "event/participations/_list.html.haml" do
     expect(dom).to have_text "Pflichtangaben fehlen"
   end
 
+  describe "guest" do
+    let(:participant_name) { participation.participant.to_s(:list) }
+    let(:guest) { Fabricate(:event_guest, main_applicant: participation) }
+    let(:guest_name) { guest.to_s(:list) }
+
+    it "renders main applicant name" do
+      login_as(people(:top_leader))
+      allow(view).to receive_messages(entries: Kaminari.paginate_array(
+        [participation.decorate, Fabricate(:event_participation, event:, participant: guest).decorate]
+      ).page(1))
+
+      expect(dom).to have_css "tr:nth-of-type(1) td:nth-of-type(2)", text: participant_name
+      expect(dom).not_to have_css "tr:nth-of-type(1) td:nth-of-type(2)", text: guest_name
+      expect(dom).to have_css "tr:nth-of-type(2) td:nth-of-type(2)", text: guest_name
+      expect(dom).to have_css "tr:nth-of-type(2) td:nth-of-type(2)", text: "(Gast von #{participant_name})"
+    end
+
+    it "does not fail if main application participation no longer exists" do
+      login_as(people(:top_leader))
+      guest_participation = Fabricate(:event_participation, event:, participant: guest)
+      participation.destroy!
+      allow(view).to receive_messages(entries: Kaminari.paginate_array([guest_participation.reload.decorate]).page(1))
+
+      expect(dom).to have_css "tr:nth-of-type(1) td:nth-of-type(2)", text: guest_name
+      expect(dom).to have_css "tr:nth-of-type(1) td:nth-of-type(2)", text: "(Gast von abgemeldeter Person)"
+    end
+  end
+
   it "navigates outside of frame" do
     login_as(people(:top_leader))
     expect(dom).to have_css("turbo-frame#search_results[target=_top]")

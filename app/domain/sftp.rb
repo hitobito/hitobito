@@ -12,6 +12,10 @@ class Sftp
   ConnectionError = Class.new(StandardError)
 
   def initialize(config)
+    ConfigContract.new.call(config.to_h).tap do |result|
+      raise ArgumentError, format_config_errors(result) if result.failure?
+    end
+
     @config = config
   end
 
@@ -71,5 +75,9 @@ class Sftp
       {password: @config.password}
     end
     credentials.merge(non_interactive: true, port: @config.port).compact
+  end
+
+  def format_config_errors(result)
+    "Invalid SFTP configuration: #{result.errors(full: true).to_h.values.join(", ")}"
   end
 end

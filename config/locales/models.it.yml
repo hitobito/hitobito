@@ -735,7 +735,7 @@ it:
         teamer_count: Numero di organizzatori
         participant_count: Numero di partecipanti
         applicant_count: Numero di iscrizioni
-        applications_cancelable: Disiscrizione possibile
+        applications_cancelable: Abmeldung
         display_booking_info: Visualizza stato iscrizioni
         participations_visible: Visibilità dei partecipanti
         waiting_list: Lista d'attesa nazionale

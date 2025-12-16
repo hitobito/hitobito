@@ -667,7 +667,7 @@ en:
         teamer_count: Leaders count
         participant_count: Participants count
         applicant_count: Registrations count
-        applications_cancelable: Deregistration possible
+        applications_cancelable: Abmeldung
         display_booking_info: Display number of registrations
         participations_visible: Visibility of participants
         waiting_list: national waiting list

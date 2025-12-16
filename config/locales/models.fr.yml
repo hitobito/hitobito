@@ -736,7 +736,7 @@ fr:
         teamer_count: Nombre d'équipe de direction
         participant_count: Nombre de participant-e-s
         applicant_count: Nombre d'inscriptions
-        applications_cancelable: Désinscription possible
+        applications_cancelable: Abmeldung
         display_booking_info: Voir l'état des inscriptions
         participations_visible: Visibilité des participants
         waiting_list: liste d'attente nationale

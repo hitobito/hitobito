@@ -5,7 +5,7 @@
 
 %td
   %strong= link_to(p.to_s(:list), group_event_participation_path(@group, @event, p.id))
-  = render 'event/participations/guest_of_info', main_applicant: p.participant.main_applicant, render_link: true if p.guest?
+  = render 'event/participations/guest_of_info', main_applicant: p.participant.main_applicant if p.guest?
   %br/
   = p.person_location_information
   %br/

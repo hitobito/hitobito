@@ -160,7 +160,8 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
         participant: [
           :additional_emails,
           :phone_numbers,
-          :primary_group
+          :primary_group,
+          {main_applicant: :participant}
         ] + additional_participant_includes + [picture_attachment: :blob]
       ]
     ).call

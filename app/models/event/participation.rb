@@ -171,6 +171,10 @@ class Event::Participation < ActiveRecord::Base
     self.participant = value
   end
 
+  def guest?
+    participant_type == Event::Guest.sti_name
+  end
+
   private
 
   def set_self_in_nested

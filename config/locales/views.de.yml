@@ -415,8 +415,6 @@ de:
       already_assigned: "Diese Person ist bereits anderweitig zugeteilt oder bei diesem Anlass angemeldet."
       maximum_participations_reached: Die maximal erlaubte Teilnehmerzahl ist erreicht. Um weitere Anmeldungen zu bestätigen, muss die maximale Teilnehmerzahl erhöht werden.
       participation:
-        guest_of_html: "(Gast von %{main_applicant})"
-        guest_of_deleted_participation: "(Gast von abgemeldeter Person)"
         registered_at: "Anmeldung am %{datetime}"
         town: Wohnort
       prio_buttons:
@@ -516,6 +514,9 @@ de:
         on_waiting_list: Auf Warteliste
       list:
         incomplete: Pflichtangaben fehlen
+      guest_of_info:
+        with_main_applicant: "(Gast von %{main_applicant_name})"
+        without_main_applicant: "(Gast von abgemeldeter Person)"
       cancel_application:
         explanation: Du bist für diesen Anlass angemeldet.
         pending: Du bist für diesen Anlass vorangemeldet. Die Anmeldung ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden.

@@ -4,10 +4,6 @@
 -#  https://github.com/hitobito/hitobito.
 
 - if main_applicant.present?
-  - main_applicant_name = main_applicant.to_s(:list)
-  - if local_assigns[:render_link]
-    = t(".with_main_applicant", main_applicant_name: link_to(main_applicant_name, group_event_participation_path(@group, @event, main_applicant))).html_safe
-  - else
-    = t(".with_main_applicant", main_applicant_name: main_applicant_name)
+  = t(".with_main_applicant", main_applicant_name: link_to(main_applicant.to_s(:list), group_event_participation_path(@group, @event, main_applicant))).html_safe
 - else
   = t(".without_main_applicant")

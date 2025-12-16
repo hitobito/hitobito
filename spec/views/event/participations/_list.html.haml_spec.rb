@@ -52,11 +52,13 @@ describe "event/participations/_list.html.haml" do
       allow(view).to receive_messages(entries: Kaminari.paginate_array(
         [participation.decorate, Fabricate(:event_participation, event:, participant: guest).decorate]
       ).page(1))
+      main_participant_link = link_to(participation.participant.to_s(:list),
+        group_event_participation_path(event.groups.first, event, participation))
 
       expect(dom).to have_css "tr:nth-of-type(1) td:nth-of-type(2)", text: participant_name
       expect(dom).not_to have_css "tr:nth-of-type(1) td:nth-of-type(2)", text: guest_name
       expect(dom).to have_css "tr:nth-of-type(2) td:nth-of-type(2)", text: guest_name
-      expect(dom).to have_css "tr:nth-of-type(2) td:nth-of-type(2)", text: "(Gast von #{participant_name})"
+      expect(@rendered).to include("(Gast von #{main_participant_link})")
     end
 
     it "does not fail if main application participation no longer exists" do

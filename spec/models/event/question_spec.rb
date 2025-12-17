@@ -282,10 +282,9 @@ describe Event::Question do
 
       expect(question.reload.deserialized_choices.length).to eql(2)
 
-      expect(question.choices_de).to eql("Ja,Nein")
-      expect(question.choices_en).to eql("Yes,No")
-      expect(question.choices_fr).to eql("Oui,Non")
-      expect(question.choices_it).to eql("Sì,No")
+      expect(question.choices_translations).to eql(
+        {de: "Ja,Nein", en: "Yes,No", fr: "Oui,Non", it: "Sì,No"}.stringify_keys
+      )
     end
 
     it "should correctly serialize choices when locale is changed" do
@@ -300,10 +299,9 @@ describe Event::Question do
 
       expect(question.reload.deserialized_choices.length).to eql(2)
 
-      expect(question.choices_de).to eql("Ja,Nein")
-      expect(question.choices_en).to eql("Yes,No")
-      expect(question.choices_fr).to eql("Oui,Non")
-      expect(question.choices_it).to eql("Sì,No")
+      expect(question.choices_translations).to eql(
+        {de: "Ja,Nein", en: "Yes,No", fr: "Oui,Non", it: "Sì,No"}.stringify_keys
+      )
     end
 
     it "should escape commas in choices" do
@@ -318,10 +316,9 @@ describe Event::Question do
 
       expect(question.reload.deserialized_choices.length).to eql(2)
 
-      expect(question.choices_de).to eql("Wahl 1,Wahl\\u002C 2")
-      expect(question.choices_en).to eql("Choice 1,Choice\\u002C 2")
-      expect(question.choices_fr).to eql(",")
-      expect(question.choices_it).to eql(",")
+      expect(question.choices_translations).to eql(
+        {de: "Wahl 1,Wahl\\u002C 2", en: "Choice 1,Choice\\u002C 2", fr: ",", it: ","}.stringify_keys
+      )
     end
 
     it "should save choices as nil if all choices are empty" do
@@ -334,10 +331,7 @@ describe Event::Question do
 
       expect(question.reload.deserialized_choices).to eql([])
 
-      expect(question.choices_de).to eql(nil)
-      expect(question.choices_en).to eql(nil)
-      expect(question.choices_fr).to eql(nil)
-      expect(question.choices_it).to eql(nil)
+      expect(question.choices_translations).to eql({de: nil, en: nil, fr: nil, it: nil}.stringify_keys)
     end
 
     it "should delete choices that are marked for deletion" do
@@ -350,10 +344,7 @@ describe Event::Question do
 
       expect(question.reload.deserialized_choices.length).to eql(1)
 
-      expect(question.choices_de).to eql("Ja")
-      expect(question.choices_en).to eql("Yes")
-      expect(question.choices_fr).to eql("Oui")
-      expect(question.choices_it).to eql("Sì")
+      expect(question.choices_translations).to eql({de: "Ja", en: "Yes", fr: "Oui", it: "Sì"}.stringify_keys)
     end
   end
 end

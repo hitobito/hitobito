@@ -10,21 +10,26 @@ class BounceSeeder
     created_at = Faker::Time.between(from: DateTime.now - 14.days, to: DateTime.now - 3.days)
 
     count = Faker::Number.between(from: 1, to: 10)
-    email = Faker::Internet.email(domain: 'example.net')
     blocked_at = count > Bounce::BLOCK_THRESHOLD ? created_at.advance(day: 1).to_date : nil
     mailing_list_ids = []
 
     updated_at = [blocked_at, created_at].compact.max
 
     Bounce.seed({
-      email:,
+      email: generate_unused_email,
       count:,
       blocked_at:,
       mailing_list_ids:,
       created_at:,
       updated_at:
     }).first
-  rescue ActiveRecord::RecordNotUnique # in case same email is seeded multiple times
-    retry
+  end
+
+  private
+
+  def generate_unused_email
+    Faker::Internet.email(domain: 'example.net').then do |email|
+      Bounce.where(email:).exists? ? unique_email : email
+    end
   end
 end

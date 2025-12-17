@@ -38,6 +38,12 @@ class Choice
   def _destroy
   end
 
+  # Event question answers are saved by the actual value(s) of the selected choice(s).
+  # If the question is multiple choice the values of the choices are saved as comma
+  # separated string in the answer.
+  # To know if a choice is selected when rendering the radiobuttons/checkboxes we
+  # check if any of the answers is included in the translations of the choice.
+  # This ensures that the choice is still selected when changing the locale of the client.
   def checked?(answer)
     answer.to_s.split(",").map(&:strip).any? { |a| choice_translations.value?(a) }
   end

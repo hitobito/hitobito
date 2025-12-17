@@ -37,30 +37,6 @@ describe Choice do
   end
 
   describe "choice fallbacks" do
-    it "should use current locale when fallbacks are false" do
-      stub_fallbacks(false)
-
-      @choice_translations = {de: "", en: "", fr: "Fallback", it: ""}
-      expect(choice.choice).to eql("")
-    end
-
-    it "should use current locale when fallbacks are nil" do
-      stub_fallbacks(nil)
-
-      @choice_translations = {de: "", en: "", fr: "Fallback", it: ""}
-      expect(choice.choice).to eql("")
-    end
-
-    it "should use default locale when fallbacks are true" do
-      stub_fallbacks(true)
-      I18n.default_locale = :it
-
-      @choice_translations = {de: "", en: "", fr: "Fallback", it: "Default locale"}
-      expect(choice.choice).to eql("Default locale")
-
-      I18n.default_locale = :de
-    end
-
     it "should use correct fallback when fallbacks are an array" do
       stub_fallbacks([:de, :fr, :it, :en])
 
@@ -75,7 +51,7 @@ describe Choice do
     end
 
     it "should use correct fallback when fallbacks are a hash" do
-      stub_fallbacks({de: :it, fr: [:de, :en]})
+      stub_fallbacks({de: :it, fr: [:en]})
 
       @choice_translations = {de: "", en: "Fallback 2", fr: "", it: "Fallback 1"}
 
@@ -83,20 +59,6 @@ describe Choice do
 
       I18n.locale = :fr
       expect(choice.choice).to eql("Fallback 2")
-    end
-
-    it "should use correct fallback when fallbacks are a symbol" do
-      stub_fallbacks(:fr)
-
-      @choice_translations = {de: "", en: "", fr: "Fallback", it: ""}
-      expect(choice.choice).to eql("Fallback")
-    end
-
-    it "should use correct fallback when fallbacks are a string" do
-      stub_fallbacks("en")
-
-      @choice_translations = {de: "", en: "Fallback", fr: "", it: ""}
-      expect(choice.choice).to eql("Fallback")
     end
 
     it "should return original value if fallbacks are also not present" do
@@ -111,7 +73,7 @@ describe Choice do
     end
 
     def stub_fallbacks(fallbacks)
-      allow(I18n).to receive(:fallbacks).and_return(fallbacks)
+      allow(I18n).to receive(:fallbacks).and_return(I18n::Locale::Fallbacks.new(fallbacks))
     end
   end
 

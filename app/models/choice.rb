@@ -8,20 +8,19 @@ class Choice
 
   def initialize(choice_translations = {})
     @choice_translations = choice_translations
-    define_singleton_method(:choice) do
-      choice_with_fallbacks
-    end
-    Globalized.languages.each do |lang|
-      define_singleton_method(:"choice_#{lang}") { @choice_translations[lang] }
-    end
   end
 
   attr_accessor :choice_translations
 
-  def _destroy
+  def id
   end
 
-  def id
+  def choice
+    choice_with_fallbacks
+  end
+
+  Globalized.languages.each do |lang|
+    define_method(:"choice_#{lang}") { @choice_translations[lang] }
   end
 
   def to_s
@@ -34,6 +33,9 @@ class Choice
 
   def self.translated_attribute_names
     [:choice]
+  end
+
+  def _destroy
   end
 
   def checked?(answer)

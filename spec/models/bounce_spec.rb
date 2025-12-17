@@ -68,6 +68,12 @@ RSpec.describe Bounce do
       end.to change(described_class, :count).by(1)
     end
 
+    it "noops if email is from list_domain" do
+      expect do
+        described_class.record("foo@localhost")
+      end.not_to change(described_class, :count)
+    end
+
     it "returns the bounce-instance" do
       expect(described_class.record("foo@example.com")).to be_a described_class
     end

@@ -31,7 +31,10 @@ class Bounce < ApplicationRecord
 
   class << self
     def record(email, mailing_list_id: nil)
-      bounce = find_or_initialize_by(email: email.strip.downcase)
+      sanitized_email = email.strip.downcase
+      return if sanitized_email.split("@").last == Settings.email.list_domain
+
+      bounce = find_or_initialize_by(email: sanitized_email)
       if mailing_list_id.present?
         bounce.mailing_list_ids ||= []
 

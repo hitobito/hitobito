@@ -50,34 +50,10 @@ class Choice
 
   private
 
-  def choice_with_fallbacks(fallbacks = I18n.fallbacks)
-    case fallbacks
-    when true
-      choice_with_fallback(I18n.default_locale)
-    when Symbol, String
-      choice_with_fallback(fallbacks.to_sym)
-    when Array
-      fallback_from_array(fallbacks)
-    when Hash
-      choice_with_fallbacks(fallbacks[I18n.locale])
-    else
+  def choice_with_fallbacks
+    fallback_chain = I18n.fallbacks[I18n.locale]
+
+    fallback_chain.map { |locale| @choice_translations[locale] }.find(&:present?) ||
       @choice_translations[I18n.locale]
-    end
-  end
-
-  def fallback_from_array(fallbacks)
-    fallbacks.map { |fallback| @choice_translations[fallback] }.find(&:present?) ||
-      @choice_translations[I18n.locale]
-  end
-
-  def choice_with_fallback(fallback)
-    current_choice = @choice_translations[I18n.locale]
-    fallback_choice = @choice_translations[fallback]
-
-    if current_choice.present? || (current_choice.blank? && fallback_choice.blank?)
-      return current_choice
-    end
-
-    fallback_choice
   end
 end

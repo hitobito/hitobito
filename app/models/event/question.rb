@@ -146,8 +146,8 @@ class Event::Question < ActiveRecord::Base
 
   def deserialized_choices
     # Adds the locale to the choice items grouped by choice
-    # Example: [["Alter", "Age"], ["Adresse", "Address"]]
-    # -> [{de: "Alter", en: "Age"}, {de: "Adresse", en: "Address"}]
+    # Example: [["Ja", "Yes"], ["Nein", "No"]]
+    # -> [{de: "Ja", en: "Yes"}, {de: "Nein", en: "No"}]
     choice_items_by_choice_with_locales = choice_items_by_choice.map do |choice_translations|
       Globalized.languages.zip(choice_translations).to_h
     end
@@ -157,6 +157,18 @@ class Event::Question < ActiveRecord::Base
     end
   end
 
+  # Serializes the choices by grouping them by translation and then saving them as
+  # comma separated string.
+  # Commas in the actual text of the choices are escaped before saving to not mess
+  # with the deserialization.
+  # Choices where all translations are empty are ignored.
+  #
+  # Example:
+  # { choices_attributes:
+  #   { 1: { choice: "Ja", choice_en: "Yes" }, 2: { choice: "Nein", choice: "No" } }
+  # }
+  # -> choices: "Ja,Nein"
+  # -> choices_en: "Yes,No"
   def choices_attributes=(attributes)
     attributes.filter! { |_, v| [1, "1", true, "true"].exclude?(v.delete("_destroy")) }
     choice_items_by_translation =
@@ -194,13 +206,15 @@ class Event::Question < ActiveRecord::Base
     end
   end
 
-  # Regroups the choice items to be grouped by choice instead of by translation
-  # Example: [["Alter", "Adresse"], ["Age", "Address"]]
-  # -> [["Alter", "Age"], ["Adresse", "Address"]]
+  # Regroups the choice items to be grouped by choice instead of by translation.
+  # If there is not the same amount of choices in all languages they are filled up
+  # with empty strings.
+  # Example: [["Ja", "Nein"], ["Yes", "No"]]
+  # -> [["Ja", "Yes"], ["Nein", "No"]]
   def choice_items_by_choice
     choice_items_by_translation = Globalized.languages.map do |lang|
       choices_in_lang = send(:"choices_#{lang}")
-      choices_in_lang&.split(",", -1)&.collect { |choice| choice.gsub("\\u002C", ",").strip }
+      unescaped_choices(choices_in_lang)
     end
 
     return [] unless choice_items_by_translation.any?
@@ -221,9 +235,18 @@ class Event::Question < ActiveRecord::Base
     end
   end
 
+  COMMA_UNICODE = "\\u002C"
+
   # Escapes all commas in the choices before joining them by comma. The escaping is done so
   # choices can include commas in the text without breaking the serialization and deserialization.
   def escaped_choices_string(choices)
-    choices&.map { |choice| choice.gsub(",", "\\u002C") }&.join(",")
+    choices&.collect { |choice| choice.gsub(",", COMMA_UNICODE) }&.join(",")
+  end
+
+  # Splits the comma separated choices by comma and then unescapes all commas in the
+  # actual text of the choices. These are escaped from the user input before saving
+  # so we can serialize and deserialize the choices correctly.
+  def unescaped_choices(choices)
+    choices&.split(",", -1)&.collect { |choice| choice.gsub(COMMA_UNICODE, ",").strip }
   end
 end

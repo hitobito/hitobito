@@ -413,8 +413,6 @@ fr:
       already_assigned: "Cette personne est déjà attribuée à un autre endroit."
       maximum_participations_reached: Le nombre maximal de participants autorisé est atteint. Pour confirmer d'autres inscriptions, le nombre maximal de participants doit être augmenté.
       participation:
-        guest_of_html: "(Invité de %{main_applicant})"
-        guest_of_deleted_participation: "(Invité d'une personne déconnectée)"
         registered_at: "Inscription le %{datetime}"
         town: Domicile
       prio_buttons:
@@ -514,6 +512,9 @@ fr:
         on_waiting_list: Sur la liste d'attente
       list:
         incomplete: des indications obligatoires manquent
+      guest_of_info:
+        with_main_applicant: "(Gast von %{main_applicant_name})"
+        without_main_applicant: "(Gast von abgemeldeter Person)"
       cancel_application:
         explanation: Tu es déjà inscrit-e à cet évènement.
         pending: ' 

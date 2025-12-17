@@ -245,7 +245,7 @@ class Event::Question < ActiveRecord::Base
 
   # Splits the comma separated choices by comma and then unescapes all commas in the
   # actual text of the choices. These are escaped from the user input before saving
-  # so we can serialize and deserialize the choices correctly.
+  # so we can deserialize the choices correctly.
   def unescaped_choices(choices)
     choices&.split(",", -1)&.collect { |choice| choice.gsub(COMMA_UNICODE, ",").strip }
   end

@@ -433,7 +433,7 @@ en:
       additional_address:
         translated_label: Bezeichnung
         street_and_number: Strasse/Nummer
-        housenumber: Hausnummer
+        housenumber: Number
         postbox: Postfach
         zip_code: PLZ
         town: Ort

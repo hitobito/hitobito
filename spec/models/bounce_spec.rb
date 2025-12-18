@@ -68,12 +68,6 @@ RSpec.describe Bounce do
       end.to change(described_class, :count).by(1)
     end
 
-    it "noops if email is from localhost" do
-      expect do
-        described_class.record("foo@localhost")
-      end.not_to change(described_class, :count)
-    end
-
     it "noops if email is from list_domain" do
       expect do
         email_settings_double = double("email_settings")

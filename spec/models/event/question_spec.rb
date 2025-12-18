@@ -214,6 +214,7 @@ describe Event::Question do
 
       choices = question.deserialized_choices
 
+      expect(choices.length).to eql(3)
       expect(choices.first.choice_translations).to eql({de: "Ja", en: "Yes", fr: "Oui", it: "Sì"})
       expect(choices.second.choice_translations).to eql({de: "Nein", en: "No", fr: "Non", it: "No"})
       expect(choices.third.choice_translations).to eql({de: "Vielleicht", en: "Maybe", fr: "Peut-être", it: "Forse"})

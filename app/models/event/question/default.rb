@@ -28,7 +28,7 @@
 
 class Event::Question::Default < Event::Question
   def choice_items
-    deserialized_choices.map { |choice| choice.choice }
+    deserialized_choices.map(&:choice)
   end
 
   def with_choices?

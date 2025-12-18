@@ -73,7 +73,7 @@ class Bounce < ApplicationRecord
 
     def application_domain?(domain)
       ActionDispatch::HostAuthorization::Permissions.new(
-        Rails.application.config.hosts + [Settings.email.list_domain, "localhost"]
+        Rails.application.config.hosts + [Settings.email.list_domain]
       ).allows?(domain)
     end
   end

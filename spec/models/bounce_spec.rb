@@ -84,7 +84,7 @@ RSpec.describe Bounce do
       end.not_to change(described_class, :count)
     end
 
-    it "noops if email is from list_domain" do
+    it "noops if email is from allowed host" do
       expect do
         Rails.application.config.hosts << "db.example.org"
 

@@ -165,7 +165,7 @@ class Event::Question < ActiveRecord::Base
   #
   # Example:
   # { choices_attributes:
-  #   { 1: { choice: "Ja", choice_en: "Yes" }, 2: { choice: "Nein", choice: "No" } }
+  #   { 1: { choice: "Ja", choice_en: "Yes" }, 2: { choice: "Nein", choice_en: "No" } }
   # }
   # -> choices: "Ja,Nein"
   # -> choices_en: "Yes,No"

@@ -6,10 +6,17 @@
 - id ||= nil
 :plain
   var el = #{id ? "'##{id}'".html_safe : "$('body').data('popover')"};
-  $($('body').data('popover')).popover('hide');
-  $(el).popover({content: '#{j(render('modal', group: entry.group))}',
-                 title: "#{t(title_key, person: entry.person)}",
-                 container: 'body',
-                 placement: 'bottom',
-                 sanitize: false,
-                 html: true }).popover('show');
+  const instance = Popover.getInstance(el);
+
+  if (instance) {
+    instance.dispose();
+  }
+
+  Popover.getOrCreateInstance(el, {
+    container: "body",
+    sanitize: false,
+    html: true,
+    placement: "bottom",
+    content:'#{j(render('modal', group: entry.group))}',
+    title:"#{t(title_key, person: entry.person)}"
+  }).show();

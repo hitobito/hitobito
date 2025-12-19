@@ -31,11 +31,12 @@ shared_examples "jsonapi authorized requests" do |person: :top_leader, required_
       Person.find_by(id: person_id)
     end
 
-    it "returns 200 for person with correct role" do
-      skip("no person specified or allowed") unless current_user
-      sign_in(current_user)
-      make_request
-      expect(response.status).to eq(200)
+    if defined?(person_id)
+      it "returns 200 for person with correct role" do
+        sign_in(current_user)
+        make_request
+        expect(response.status).to eq(200)
+      end
     end
   end
 

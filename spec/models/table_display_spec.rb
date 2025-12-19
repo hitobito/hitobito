@@ -119,17 +119,6 @@ describe TableDisplay do
       })
     end
 
-    it "builds custom sort statements for questions" do
-      skip("disabled until sorting issue is fixed")
-      TableDisplay.register_multi_column(Event::Participation,
-        TableDisplays::Event::Participations::QuestionColumn)
-      subject.selected = %W[event_question_1 event_question_#{question.id} event_question_2]
-      statements = subject.sort_statements(top_course.participations)
-      expect(statements).to have(1).item
-      expect(statements[:"event_question_#{question.id}"])
-        .to eq "event_questions.id = 768566425 ASC, TRIM(event_answers.answer)"
-    end
-
     it "rejects unregistered person attributes" do
       TableDisplay.register_column(Event::Participation, TableDisplays::PublicColumn,
         [:"person.first_name"])

@@ -30,9 +30,11 @@ de:
       group/bottom_layer/leader: Leader
       group/bottom_layer/local_guide: Local Guide
       group/bottom_layer/member: Member
+      group/bottom_layer/basic_permissions_only: Basic Permissions
       group/bottom_group/leader: Leader
       group/bottom_group/finance_manager: Finance Manager
       group/bottom_group/member: Member
+      group/bottom_group/no_permissions: No Permissions
       group/global_group/leader: Leader
       group/global_group/member: Member
       role/external: External

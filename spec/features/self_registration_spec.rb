@@ -13,8 +13,6 @@ describe :self_registration, js: true do
   before do
     group.self_registration_role_type = self_registration_role
     group.save!
-
-    allow(Settings.groups.self_registration).to receive(:enabled).and_return(true)
   end
 
   def complete_main_person_form

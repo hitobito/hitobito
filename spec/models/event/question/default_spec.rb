@@ -115,6 +115,19 @@ describe Event::Question::Default do
 
         its(:answer) { is_expected.to be_nil }
       end
+
+      context "values containing commas" do
+        let(:answer_param) { %w[1 2] }
+
+        before do
+          question.choices = "Antwort\\u002C aber mit Komma, Antwort 2, Antwort 3"
+          subject.answer = answer_param
+          subject.save
+        end
+
+        its(:answer) { is_expected.to eql("Antwort, aber mit Komma, Antwort 2") }
+        its(:escaped_answer) { is_expected.to eql("Antwort\\u002C aber mit Komma, Antwort 2") }
+      end
     end
 
     context "validates answers to single-answer questions correctly: " do

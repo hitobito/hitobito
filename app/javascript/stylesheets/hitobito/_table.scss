@@ -149,3 +149,11 @@ table tr.divider td:hover {
 table td.vertical-middle {
   vertical-align: middle;
 }
+
+table td > ul {
+  margin-bottom: 0;
+
+  > li {
+    margin-left: 20px;
+  }
+}

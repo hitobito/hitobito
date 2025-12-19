@@ -13,9 +13,6 @@ describe :self_inscription do
     user.update!(password: password, password_confirmation: password)
     group.self_registration_role_type = self_registration_role
     group.save!
-
-    allow(Settings.groups.self_registration).to receive(:enabled).and_return(true)
-
     expect(user.reload.roles.where(group_id: group.id, type: self_registration_role.name)).not_to exist
   end
 

@@ -30,38 +30,32 @@ describe Group::DeletedPeopleController, js: true do
     end
 
     it "cancel closes popover" do
-      obsolete_node_safe do
-        click_link "Abbrechen"
-        sleep(2)
-        expect(page).to have_no_css(".popover")
-      end
+      expect(page).to have_css(".popover")
+      click_link "Abbrechen"
+      expect(page).to have_no_css(".popover")
     end
 
     it "creates role" do
-      obsolete_node_safe do
-        find("#role_type_select #role_type").click
-        find("#role_type_select #role_type").find("option", text: "Leader").click
+      find("#role_type_select #role_type").click
+      find("#role_type_select #role_type").find("option", text: "Leader").click
 
-        click_button "Speichern"
-        expect(page).to have_no_css(".popover")
-        expect(cell).to have_text "Leader"
-      end
+      click_button "Speichern"
+      expect(page).to have_no_css(".popover")
+      expect(cell).to have_text "Leader"
     end
 
     it "informs about missing type selection" do
-      obsolete_node_safe do
-        skip "undefined method `map' for nil:NilClass"
-        find("#role_group_id_chosen a.chosen-single").click
-        find("#role_group_id_chosen ul.chosen-results").find("li", text: "Group 12").click
-        fill_in("role_label", with: "dummy")
-        click_button "Speichern"
-        expect(page).to have_selector(".popover .alert-danger", text: "Rolle muss ausgefüllt werden")
+      find("#role_group_id").click
+      find("#role_group_id").find("option", text: "Group 12").click
+      fill_in("role_label", with: "dummy")
+      click_button "Speichern"
 
-        find("#role_type_select a.chosen-single").click
-        find("#role_type_select ul.chosen-results").find("li", text: "Leader").click
-        click_button "Speichern"
-        expect(cell).to have_text "Group 12"
-      end
+      expect(page).to have_selector(".popover .alert-danger", text: "Rolle muss ausgefüllt werden")
+
+      find("#role_type_select").click
+      find("#role_type_select").find("option", text: "Leader").click
+      click_button "Speichern"
+      expect(cell).to have_text "Group 12"
     end
   end
 end

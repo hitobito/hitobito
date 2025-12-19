@@ -69,223 +69,209 @@ describe Event::ApplicationMarketController do
 
   describe "requests are mutually undoable", js: true do
     context "waiting_list" do
-      it "starting from application", unstable: true do
-        obsolete_node_safe do
-          sign_in
-          visit group_event_application_market_index_path(group.id, event.id)
+      it "starting from application" do
+        sign_in
+        visit group_event_application_market_index_path(group.id, event.id)
 
-          participants = find("#participants").text
-          applications = find("#applications").text
+        participants = find("#participants").text
+        applications = find("#applications").text
 
-          appl_id = "event_participation_#{appl_prio_1.id}"
-          expect(all("#applications ##{appl_id} td").last).to have_selector(".fa-minus")
+        appl_id = "event_participation_#{appl_prio_1.id}"
+        expect(all("#applications ##{appl_id} td").last).to have_selector(".fa-minus")
 
-          find("#applications ##{appl_id} td div a", text: "Warteliste").click
-          fill_in("event_application_waiting_list_comment", with: "only if possible")
-          find("button.btn-primary", text: "Anmeldung aktualisieren").click
-          skip("cannot find icon .fa-ok")
-          expect(all("#applications ##{appl_id} td").last).to have_selector(".fa-ok")
-          expect(all("#applications ##{appl_id} td").last).to have_selector(".fa-comment")
+        find("#applications ##{appl_id} td div a", text: "Warteliste").click
+        fill_in("event_application_waiting_list_comment", with: "only if possible")
+        find("button.btn-primary", text: "Anmeldung aktualisieren").click
+        expect(all("#applications ##{appl_id} td").last).to have_selector(".fa-check")
+        expect(all("#applications ##{appl_id} td").last).to have_selector(".fa-comment")
 
-          find("#applications ##{appl_id} td div a", text: "Warteliste").click
-          expect(all("#applications ##{appl_id} td").last).to have_selector(".fa-minus")
-          expect(all("#applications ##{appl_id} td").last).to have_no_selector(".fa-comment")
+        click_on "nationale Warteliste"
+        expect(all("#applications ##{appl_id} td").last).to have_selector(".fa-minus")
+        expect(all("#applications ##{appl_id} td").last).to have_no_selector(".fa-comment")
 
-          visit group_event_application_market_index_path(group.id, event.id)
+        visit group_event_application_market_index_path(group.id, event.id)
 
-          expect(find("#participants").text).to eq(participants)
-          expect(find("#applications").text).to eq(applications)
-        end
+        expect(find("#participants").text).to eq(participants)
+        expect(find("#applications").text).to eq(applications)
       end
 
       it "starting from application on waiting list" do
-        obsolete_node_safe do
-          sign_in
-          visit group_event_application_market_index_path(group.id, event.id)
+        sign_in
+        visit group_event_application_market_index_path(group.id, event.id)
 
-          find("#waiting_list").set(true)
-          click_button("Aktualisieren")
+        find("#waiting_list").set(true)
+        click_button("Aktualisieren")
 
-          participants = find("#participants").text
-          applications = find("#applications").text
+        participants = find("#participants").text
+        applications = find("#applications").text
 
-          appl_id = "event_participation_#{appl_waiting.id}"
-          skip("cannot find icon .fa-ok")
-          expect(all("#applications ##{appl_id} td").last).to have_selector(".fa-ok")
+        appl_id = "event_participation_#{appl_waiting.id}"
+        within("##{appl_id}") { click_on "Warteliste" }
 
-          find("#applications ##{appl_id} td div a", text: "Warteliste").click
+        expect(all("#applications ##{appl_id} td").last).to have_selector(".fa-minus")
 
-          expect(all("#applications ##{appl_id} td").last).to have_selector(".fa-minus")
+        find("##{appl_id} .fa-minus").click
+        click_on "Anmeldung aktualisieren"
+        expect(all("#applications ##{appl_id} td").last).to have_selector(".fa-check")
+        expect(all("#applications ##{appl_id} td").last).to have_no_selector(".fa-comment")
 
-          find("#applications ##{appl_id} td div a", text: "Warteliste").click
-          find("#applications ##{appl_id} button.btn-primary").click
-          expect(all("#applications ##{appl_id} td").last).to have_selector(".fa-ok")
-          expect(all("#applications ##{appl_id} td").last).to have_no_selector(".fa-comment")
+        visit group_event_application_market_index_path(group.id, event.id, "prio[]" => 1, :waiting_list => true)
 
-          visit group_event_application_market_index_path(group.id, event.id, "prio[]" => 1, :waiting_list => true)
-
-          expect(find("#participants").text).to eq(participants)
-          expect(find("#applications").text).to eq(applications)
-        end
+        expect(find("#participants").text).to eq(participants)
+        expect(find("#applications").text).to eq(applications)
       end
     end
 
     context "participant" do
       it "starting from application" do
-        obsolete_node_safe do
-          sign_in
-          visit group_event_application_market_index_path(group.id, event.id)
+        sign_in
+        visit group_event_application_market_index_path(group.id, event.id)
 
-          participants = find("#participants").text
-          applications = find("#applications").text
+        participants = find("#participants").text
+        applications = find("#applications").text
 
-          appl_id = "event_participation_#{appl_prio_1.id}"
-          appl_text = appl_prio_1.decorate.to_s(:list)
+        appl_id = "event_participation_#{appl_prio_1.id}"
+        appl_text = appl_prio_1.decorate.to_s(:list)
 
-          all("#applications ##{appl_id} td").first.find("a").click
+        all("#applications ##{appl_id} td").first.find("a").click
 
-          expect do
-            expect(page).to have_text "Bestätigen ohne E-Mail"
-            click_on "Bestätigen ohne E-Mail"
-            sleep(0.5)
-            click_on "Abbrechen"
-            expect(page).to have_no_text "Bestätigen ohne E-Mail"
-          end.not_to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }
+        expect do
+          expect(page).to have_text "Bestätigen ohne E-Mail"
+          click_on "Bestätigen ohne E-Mail"
+          sleep(0.5)
+          click_on "Abbrechen"
+          expect(page).to have_no_text "Bestätigen ohne E-Mail"
+        end.not_to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }
 
-          expect(page).to have_no_selector("#applications ##{appl_id}")
+        expect(page).to have_no_selector("#applications ##{appl_id}")
 
-          # first do find().should have_content to make capybara wait for animation, then all().last
-          expect(find("#participants")).to have_content(appl_prio_1.person.to_s(:list))
-          expect(all("#participants tr").last).to have_content(appl_prio_1.person.to_s(:list))
+        # first do find().should have_content to make capybara wait for animation, then all().last
+        expect(find("#participants")).to have_content(appl_prio_1.person.to_s(:list))
+        expect(all("#participants tr").last).to have_content(appl_prio_1.person.to_s(:list))
 
-          expect(page).to have_selector("#participants ##{appl_id}")
-          expect(page).to have_css("#participants", text: appl_text)
+        expect(page).to have_selector("#participants ##{appl_id}")
+        expect(page).to have_css("#participants", text: appl_text)
 
-          all("#participants ##{appl_id} td").last.find("a").click
+        all("#participants ##{appl_id} td").last.find("a").click
 
-          expect do
-            expect(page).to have_text "Bestätigen und E-Mail senden"
-            click_on "Bestätigen und E-Mail senden"
-            sleep(0.5)
-            click_on "Abbrechen"
-            expect(page).to have_no_text "Bestätigen und E-Mail senden"
-          end.to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }.by(1)
+        expect do
+          expect(page).to have_text "Bestätigen und E-Mail senden"
+          click_on "Bestätigen und E-Mail senden"
+          sleep(0.5)
+          click_on "Abbrechen"
+          expect(page).to have_no_text "Bestätigen und E-Mail senden"
+        end.to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }.by(1)
 
-          expect(page).to have_css("#applications", text: appl_text)
-          expect(page).to have_no_selector("#participants ##{appl_id}")
+        expect(page).to have_css("#applications", text: appl_text)
+        expect(page).to have_no_selector("#participants ##{appl_id}")
 
-          # first do find().should have_content to make capybara wait for animation, then all().last
-          expect(find("#applications")).to have_content(appl_prio_1.person.to_s(:list))
-          expect(all("#applications tr").last).to have_content(appl_prio_1.person.to_s(:list))
+        # first do find().should have_content to make capybara wait for animation, then all().last
+        expect(find("#applications")).to have_content(appl_prio_1.person.to_s(:list))
+        expect(all("#applications tr").last).to have_content(appl_prio_1.person.to_s(:list))
 
-          visit group_event_application_market_index_path(group.id, event.id)
+        visit group_event_application_market_index_path(group.id, event.id)
 
-          expect(find("#participants").text).to eq(participants)
-          expect(find("#applications").text).to eq(applications)
-        end
+        expect(find("#participants").text).to eq(participants)
+        expect(find("#applications").text).to eq(applications)
       end
 
       it "starting from application on waiting list" do
-        obsolete_node_safe do
-          sign_in
-          visit group_event_application_market_index_path(group.id, event.id)
+        sign_in
+        visit group_event_application_market_index_path(group.id, event.id)
 
-          find("#waiting_list").set(true)
-          click_button("Aktualisieren")
-          expect(page).to have_css("#applications tr", count: 2)
+        find("#waiting_list").set(true)
+        click_button("Aktualisieren")
+        expect(page).to have_css("#applications tr", count: 2)
 
-          participants = find("#participants").text
-          applications = find("#applications").text
+        participants = find("#participants").text
+        applications = find("#applications").text
 
-          appl_id = "event_participation_#{appl_waiting.id}"
+        appl_id = "event_participation_#{appl_waiting.id}"
 
-          all("#applications ##{appl_id} td").first.find("a").click
+        all("#applications ##{appl_id} td").first.find("a").click
 
-          expect do
-            expect(page).to have_text "Bestätigen ohne E-Mail"
-            click_on "Bestätigen ohne E-Mail"
-            sleep(0.5)
-            click_on "Abbrechen"
-            expect(page).to have_no_text "Bestätigen ohne E-Mail"
-          end.not_to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }
+        expect do
+          expect(page).to have_text "Bestätigen ohne E-Mail"
+          click_on "Bestätigen ohne E-Mail"
+          sleep(0.5)
+          click_on "Abbrechen"
+          expect(page).to have_no_text "Bestätigen ohne E-Mail"
+        end.not_to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }
 
-          # first do find().should have_content to make capybara wait for animation, then all().last
-          expect(find("#participants")).to have_content(appl_waiting.person.to_s(:list))
-          expect(all("#participants tr").last).to have_content(appl_waiting.person.to_s(:list))
-          expect(page).to have_no_selector("#applications ##{appl_id}")
+        # first do find().should have_content to make capybara wait for animation, then all().last
+        expect(find("#participants")).to have_content(appl_waiting.person.to_s(:list))
+        expect(all("#participants tr").last).to have_content(appl_waiting.person.to_s(:list))
+        expect(page).to have_no_selector("#applications ##{appl_id}")
 
-          all("#participants ##{appl_id} td").last.find("a").click
+        all("#participants ##{appl_id} td").last.find("a").click
 
-          expect do
-            expect(page).to have_text "Bestätigen und E-Mail senden"
-            click_on "Bestätigen und E-Mail senden"
-            sleep(0.5)
-            click_on "Abbrechen"
-            expect(page).to have_no_text "Bestätigen und E-Mail senden"
-          end.to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }.by(1)
+        expect do
+          expect(page).to have_text "Bestätigen und E-Mail senden"
+          click_on "Bestätigen und E-Mail senden"
+          sleep(0.5)
+          click_on "Abbrechen"
+          expect(page).to have_no_text "Bestätigen und E-Mail senden"
+        end.to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }.by(1)
 
-          expect(page).to have_no_selector("#participants ##{appl_id}")
+        expect(page).to have_no_selector("#participants ##{appl_id}")
 
-          # first do find().should have_content to make capybara wait for animation, then all().last
-          expect(find("#applications")).to have_content(appl_waiting.person.to_s(:list))
-          expect(all("#applications tr").last).to have_content(appl_waiting.person.to_s(:list))
-          expect(all("#applications tr").last).to have_selector(".fa-minus")
+        # first do find().should have_content to make capybara wait for animation, then all().last
+        expect(find("#applications")).to have_content(appl_waiting.person.to_s(:list))
+        expect(all("#applications tr").last).to have_content(appl_waiting.person.to_s(:list))
+        expect(all("#applications tr").last).to have_selector(".fa-minus")
 
-          visit group_event_application_market_index_path(group.id, event.id, "prio[]" => 1, :waiting_list => true)
+        visit group_event_application_market_index_path(group.id, event.id, "prio[]" => 1, :waiting_list => true)
 
-          # once assigned, a participant is removed from the waiting list
-          expect(page).to have_no_selector("#applications ##{appl_id}")
+        # once assigned, a participant is removed from the waiting list
+        expect(page).to have_no_selector("#applications ##{appl_id}")
 
-          expect(find("#participants").text).to eq(participants)
-          expect(find("#applications").text).not_to eq(applications)
-        end
+        expect(find("#participants").text).to eq(participants)
+        expect(find("#applications").text).not_to eq(applications)
       end
 
       it "starting from participant" do
-        obsolete_node_safe do
-          sign_in
-          visit group_event_application_market_index_path(group.id, event.id)
+        sign_in
+        visit group_event_application_market_index_path(group.id, event.id)
 
-          participants = find("#participants").text
-          applications = find("#applications").text
+        participants = find("#participants").text
+        applications = find("#applications").text
 
-          appl_id = "event_participation_#{appl_participant.id}"
+        appl_id = "event_participation_#{appl_participant.id}"
 
-          all("#participants ##{appl_id} td").last.find("a").click
+        all("#participants ##{appl_id} td").last.find("a").click
 
-          expect do
-            expect(page).to have_text "Bestätigen und E-Mail senden"
-            click_on "Bestätigen und E-Mail senden"
-            sleep(0.5)
-            click_on "Abbrechen"
-            expect(page).to have_no_text "Bestätigen und E-Mail senden"
-          end.to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }.by(1)
+        expect do
+          expect(page).to have_text "Bestätigen und E-Mail senden"
+          click_on "Bestätigen und E-Mail senden"
+          sleep(0.5)
+          click_on "Abbrechen"
+          expect(page).to have_no_text "Bestätigen und E-Mail senden"
+        end.to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }.by(1)
 
-          expect(page).to have_no_selector("#participants ##{appl_id}")
+        expect(page).to have_no_selector("#participants ##{appl_id}")
 
-          # first do find().should have_content to make capybara wait for animation, then all().last
-          expect(find("#applications")).to have_content(appl_participant.person.to_s(:list))
-          expect(all("#applications tr").last).to have_content(appl_participant.person.to_s(:list))
-          all("#applications ##{appl_id} td").first.find("a").click
+        # first do find().should have_content to make capybara wait for animation, then all().last
+        expect(find("#applications")).to have_content(appl_participant.person.to_s(:list))
+        expect(all("#applications tr").last).to have_content(appl_participant.person.to_s(:list))
+        all("#applications ##{appl_id} td").first.find("a").click
 
-          expect do
-            expect(page).to have_text "Bestätigen ohne E-Mail"
-            click_on "Bestätigen ohne E-Mail"
-            sleep(0.5)
-            click_on "Abbrechen"
-            expect(page).to have_no_text "Bestätigen ohne E-Mail"
-          end.not_to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }
+        expect do
+          expect(page).to have_text "Bestätigen ohne E-Mail"
+          click_on "Bestätigen ohne E-Mail"
+          sleep(0.5)
+          click_on "Abbrechen"
+          expect(page).to have_no_text "Bestätigen ohne E-Mail"
+        end.not_to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }
 
-          # first do find().should have_content to make capybara wait for animation, then all().last
-          expect(find("#participants tr")).to have_content(appl_participant.person.to_s(:list))
-          expect(all("#participants tr").last).to have_content(appl_participant.person.to_s(:list))
-          expect(page).to have_no_selector("#applications ##{appl_id}")
+        # first do find().should have_content to make capybara wait for animation, then all().last
+        expect(find("#participants tr")).to have_content(appl_participant.person.to_s(:list))
+        expect(all("#participants tr").last).to have_content(appl_participant.person.to_s(:list))
+        expect(page).to have_no_selector("#applications ##{appl_id}")
 
-          visit group_event_application_market_index_path(group.id, event.id)
+        visit group_event_application_market_index_path(group.id, event.id)
 
-          expect(find("#participants").text).to eq(participants)
-          expect(find("#applications").text).to eq(applications)
-        end
+        expect(find("#participants").text).to eq(participants)
+        expect(find("#applications").text).to eq(applications)
       end
 
       it "displays custom error alert when person from national waiting list did not accept J&S data sharing" do
@@ -300,9 +286,8 @@ describe Event::ApplicationMarketController do
         sleep(3)
         alert_text = page.driver.browser.switch_to.alert.text
         expect(alert_text).to include(
-          # rubocop:todo Layout/LineLength
-          "Die maximal erlaubte Teilnehmerzahl ist erreicht. Um weitere Anmeldungen zu bestätigen, muss die maximale Teilnehmerzahl erhöht werden."
-          # rubocop:enable Layout/LineLength
+          "Die maximal erlaubte Teilnehmerzahl ist erreicht. Um weitere Anmeldungen zu bestätigen, muss die " \
+          "maximale Teilnehmerzahl erhöht werden."
         )
       end
     end

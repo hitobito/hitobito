@@ -100,7 +100,7 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
     if create_new_role_and_destroy_old_role
       change_type_successfull
     else
-      copy_errors(@new_role)
+      prepare_for_rerender_edit
       render :edit, status: :unprocessable_content
     end
   end
@@ -133,9 +133,11 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
     new_role
   end
 
-  def copy_errors(new_role)
-    entry.attributes = new_role.attributes.except("id", "terminated")
-    new_role.errors.each do |error|
+  # copies attributes and errors and sets original group for form path
+  def prepare_for_rerender_edit
+    @original_group = Group.find(params[:group_id])
+    entry.attributes = @new_role.attributes.except("id", "terminated")
+    @new_role.errors.each do |error|
       entry.errors.add(error.attribute, error.message)
     end
   end

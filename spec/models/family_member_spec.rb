@@ -140,8 +140,6 @@ describe FamilyMember do
       end.to raise_error(FamilyMember::FamilyKeyMismatch)
     end
 
-    it "cannot be changed after creation"
-
     it "does not collide with other family-keys" do
       one, two, three, other = 4.times.map { SecureRandom.uuid }
 

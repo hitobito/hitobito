@@ -149,33 +149,6 @@ describe PersonResource, type: :resource do
           expect(data.language).to eq("de")
         end
       end
-
-      # rubocop:todo Layout/LineLength
-      # This is currently skipped since the FeatureGate that we're trying to mock is being done when loading the constant.
-      # rubocop:enable Layout/LineLength
-      # rubocop:todo Layout/LineLength
-      # As seen in the before block, we're trying to remove the language attribute from the attributes and then reload the constant
-      # rubocop:enable Layout/LineLength
-      # that seemingly still does not get this spec to work though
-      context "disabled", :skip do
-        before do
-          expect_any_instance_of(FeatureGate).to receive(:person_language_enabled?).and_return(false)
-
-          PersonResource.config[:attributes].delete(:language)
-          load "app/resources/person_resource.rb"
-        end
-
-        it "does not include language" do
-          render
-
-          data = jsonapi_data[0]
-
-          expect(data.id).to eq(person.id)
-          expect(data.jsonapi_type).to eq("people")
-
-          expect(data.attributes.symbolize_keys.keys).to_not include(:language)
-        end
-      end
     end
   end
 
@@ -298,33 +271,12 @@ describe PersonResource, type: :resource do
     end
 
     describe "additional_addresses" do
-      context "with feature toggle off" do
-        before do
-          params[:include] = "additional_addresses"
-        end
-
-        it "is not available in the API" do
-          expect { render }.to raise_error Graphiti::Errors::InvalidInclude
-        end
+      before do
+        params[:include] = "additional_addresses"
       end
 
-      # rubocop:todo Layout/LineLength
-      xcontext "with feature toggle on" do # graphiti somehow caches the resource, so dynamically setting the feature toggle does not work.
-        # rubocop:enable Layout/LineLength
-        let!(:additional_address1) { Fabricate(:additional_address, contactable: person, label: "Arbeit") }
-        let!(:additional_address2) { Fabricate(:additional_address, contactable: person, label: "Rechnung") }
-
-        before do
-          allow(Settings.additional_address).to receive(:enabled).and_return(true)
-          params[:include] = "additional_addresses"
-        end
-
-        it "is available in the API" do
-          render
-          additional_addresses = d[0].sideload(:additional_addresses)
-          expect(additional_addresses).to have(2).items
-          expect(additional_addresses.map(&:id)).to match_array [additional_address1.id, additional_address2.id]
-        end
+      it "is not available in the API as feature toggled" do
+        expect { render }.to raise_error Graphiti::Errors::InvalidInclude
       end
     end
 

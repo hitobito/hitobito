@@ -4,7 +4,9 @@
 -#  https://github.com/hitobito/hitobito.
 
 - action = entry.persisted? ? :update : :create
-= standard_form [group, entry], controller: :roles, action: action, remote: true  do |f|
+- action_path = entry.persisted? ? [@original_group || group, entry] : [group, entry]
+
+= standard_form action_path, controller: :roles, action: action, remote: true  do |f|
   = f.error_messages
   - if @group_selection.present? && @group_selection.size > 1
     = f.labeled(:group_id) do

@@ -241,6 +241,8 @@ class Event::Question < ActiveRecord::Base
   # actual text of the choices. These are escaped from the user input before saving
   # so we can deserialize the choices correctly.
   def unescaped_choices(choices)
-    choices.to_s.split(",", -1).collect { |choice| choice.gsub(Choice::ESCAPED_SEPARATOR, ",").strip }
+    choices.to_s.split(",", -1).collect do |choice|
+      choice.gsub(Choice::ESCAPED_SEPARATOR, ",").strip
+    end
   end
 end

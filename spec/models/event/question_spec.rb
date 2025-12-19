@@ -322,7 +322,7 @@ describe Event::Question do
       )
     end
 
-    it "should save choices as nil if all choices are empty" do
+    it "should save choices as empty strings if all choices are empty" do
       choices_attributes = {"100": {choice: "", choice_en: "", choice_fr: "", choice_it: "", _destroy: ""},
                             "101": {choice: nil, choice_en: nil, choice_fr: nil, choice_it: nil, _destroy: nil}}
       choices_attributes.deep_stringify_keys!
@@ -332,7 +332,7 @@ describe Event::Question do
 
       expect(question.reload.deserialized_choices).to eql([])
 
-      expect(question.choices_translations).to eql({de: nil, en: nil, fr: nil, it: nil}.stringify_keys)
+      expect(question.choices_translations).to eql({de: "", en: "", fr: "", it: ""}.stringify_keys)
     end
 
     it "should delete choices that are marked for deletion" do

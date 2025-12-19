@@ -78,27 +78,27 @@ describe Choice do
   end
 
   describe "#checked?" do
-    let(:choice1) { Choice.new({de: "Choice 1 DE", en: "Choice 1 EN", fr: "Choice 1 FR", it: "Choice 1 IT"}) }
+    let(:choice1) { Choice.new({de: "Choice 1, DE", en: "Choice 1, EN", fr: "Choice 1, FR", it: "Choice 1, IT"}) }
     let(:choice2) { Choice.new({de: "Choice 2 DE", en: "Choice 2 EN", fr: "Choice 2 FR", it: "Choice 2 IT"}) }
     let(:choice3) { Choice.new({de: "Choice 3 DE", en: "Choice 3 EN", fr: "Choice 3 FR", it: "Choice 3 IT"}) }
 
     it "should return true for checked option if single choice is selectable" do
-      answers = "Choice 1 EN"
+      unescaped_answer = "Choice 1\\u002C EN"
       Globalized.languages.each do |lang|
         I18n.locale = lang
-        expect(choice1.checked?(answers)).to be_truthy
-        expect(choice2.checked?(answers)).to be_falsy
-        expect(choice3.checked?(answers)).to be_falsy
+        expect(choice1.checked?(unescaped_answer)).to be_truthy
+        expect(choice2.checked?(unescaped_answer)).to be_falsy
+        expect(choice3.checked?(unescaped_answer)).to be_falsy
       end
     end
 
     it "should return true for all checked options if multiple choices are selectable" do
-      answers = "Choice 1 EN,Choice 3 EN"
+      unescaped_answer = "Choice 1\\u002C EN,Choice 3 EN"
       Globalized.languages.each do |lang|
         I18n.locale = lang
-        expect(choice1.checked?(answers)).to be_truthy
-        expect(choice2.checked?(answers)).to be_falsy
-        expect(choice3.checked?(answers)).to be_truthy
+        expect(choice1.checked?(unescaped_answer)).to be_truthy
+        expect(choice2.checked?(unescaped_answer)).to be_falsy
+        expect(choice3.checked?(unescaped_answer)).to be_truthy
       end
     end
   end

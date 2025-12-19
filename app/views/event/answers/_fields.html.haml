@@ -11,7 +11,7 @@
   = f.label(:answer, question_label)
   - if question.choices?
     - question.deserialized_choices.each_with_index do |choice, index|
-      - checked = choice.checked?(f.object.answer)
+      - checked = choice.checked?(f.object.escaped_answer)
       - if question.with_checkboxes?
         = render 'event/answers/choice_checkbox', f: f, value: choice.choice, index: index, checked:
       - else

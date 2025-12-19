@@ -217,36 +217,30 @@ class Event::Question < ActiveRecord::Base
       unescaped_choices(choices_in_lang)
     end
 
-    return [] unless choice_items_by_translation.any?
-
     normalize_2d_array(choice_items_by_translation).transpose
   end
 
   # Normalizes an array of subarrays to make all subarrays the size of the
-  # biggest subarray so transposing is possible. Falsy values are also converted
-  # to an array of matching size consisting of empty strings.
+  # biggest subarray so transposing is possible.
   def normalize_2d_array(array)
-    clean_array = array.map { |sub_array| sub_array || [] }
-    max_subarray_length = clean_array.max_by(&:length).length
-    clean_array.map do |sub_array|
+    max_subarray_length = array.max_by(&:length).length
+    array.map do |sub_array|
       next Array.new(max_subarray_length, "") if sub_array.empty?
 
       sub_array.in_groups_of(max_subarray_length, "").flatten
     end
   end
 
-  COMMA_UNICODE = "\\u002C"
-
   # Escapes all commas in the choices before joining them by comma. The escaping is done so
   # choices can include commas in the text without breaking the serialization and deserialization.
   def escaped_choices_string(choices)
-    choices&.collect { |choice| choice.gsub(",", COMMA_UNICODE) }&.join(",")
+    choices.to_a.collect { |choice| choice.gsub(",", Choice::ESCAPED_SEPARATOR) }.join(",")
   end
 
   # Splits the comma separated choices by comma and then unescapes all commas in the
   # actual text of the choices. These are escaped from the user input before saving
   # so we can deserialize the choices correctly.
   def unescaped_choices(choices)
-    choices&.split(",", -1)&.collect { |choice| choice.gsub(COMMA_UNICODE, ",").strip }
+    choices.to_s.split(",", -1).collect { |choice| choice.gsub(Choice::ESCAPED_SEPARATOR, ",").strip }
   end
 end

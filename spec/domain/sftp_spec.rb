@@ -11,10 +11,11 @@ describe Sftp do
   let(:config) do
     Config::Options.new(
       host: "sftp.local",
+      port: 22,
       user: "hitobito",
       password: "password",
       private_key: "private key",
-      port: 22
+      remote_path: "upload/path"
     )
   end
   let(:session) { instance_double("Net::SFTP::Session", connect!: true) }
@@ -88,8 +89,8 @@ describe Sftp do
     it "creates missing directories in the path" do
       allow(sftp).to receive(:directory?).and_return(false)
 
-      expect(sftp).to receive(:create_remote_dir).with("sektionen")
-      expect(sftp).to receive(:create_remote_dir).with("sektionen/1650")
+      expect(sftp).to receive(:create_remote_dir).with(Pathname.new("sektionen"))
+      expect(sftp).to receive(:create_remote_dir).with(Pathname.new("sektionen/1650"))
 
       sftp.upload_file("data", file_path)
     end

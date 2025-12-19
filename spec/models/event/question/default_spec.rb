@@ -92,7 +92,7 @@ describe Event::Question::Default do
       before do
         question.update_attribute(:multiple_choices, true) # rubocop:disable Rails/SkipsModelValidations
         subject.answer = answer_param
-        subject.save
+        subject.valid?
       end
 
       context "valid array values (position + 1)" do
@@ -116,17 +116,31 @@ describe Event::Question::Default do
         its(:answer) { is_expected.to be_nil }
       end
 
-      context "values containing commas" do
+      context "escaping of commas in values" do
         let(:answer_param) { %w[1 2] }
 
         before do
           question.choices = "Antwort\\u002C aber mit Komma, Antwort 2, Antwort 3"
           subject.answer = answer_param
-          subject.save
+          subject.valid?
         end
 
         its(:answer) { is_expected.to eql("Antwort, aber mit Komma, Antwort 2") }
         its(:escaped_answer) { is_expected.to eql("Antwort\\u002C aber mit Komma, Antwort 2") }
+        it { is_expected.to have(0).errors_on(:answer) }
+      end
+    end
+
+    context "answer= for string values (radiobuttons)" do
+      it "should escape commas from answer" do
+        question.choices = "Antwort\\u002C aber mit Komma, Antwort 2, Antwort 3"
+        answer = question.reload.answers.build
+        answer.answer = "Antwort, aber mit Komma"
+        answer.valid?
+
+        expect(answer.answer).to eql("Antwort, aber mit Komma")
+        expect(answer.escaped_answer).to eql("Antwort\\u002C aber mit Komma")
+        expect(answer.errors_on(:answer).count).to eql(0)
       end
     end
 

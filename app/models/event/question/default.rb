@@ -72,6 +72,6 @@ class Event::Question::Default < Event::Question
       end
     end.compact
 
-    indexes.present? ? indexes.join(", ") : nil
+    indexes.present? ? indexes.map { |i| i.gsub(",", Choice::ESCAPED_SEPARATOR) }.join(", ") : nil
   end
 end

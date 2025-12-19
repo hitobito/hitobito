@@ -90,4 +90,16 @@ describe Event::Answer do
       end
     end
   end
+
+  describe "answer escaping" do
+    it "should return unescaped answer when calling #answer" do
+      answer.answer = "Some answer\\u002C containing a comma"
+      expect(answer.answer).to eql("Some answer, containing a comma")
+    end
+
+    it "should return escaped answer when calling #escaped_answer" do
+      answer.answer = "Some answer\\u002C containing a comma"
+      expect(answer.escaped_answer).to eql("Some answer\\u002C containing a comma")
+    end
+  end
 end

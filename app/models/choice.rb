@@ -12,6 +12,12 @@ class Choice
 
   attr_accessor :choice_translations
 
+  # Choices are serialized as comma separated string. To allow the serialization
+  # and deserialization of choices containing this separator we escape all commas
+  # in the choices by replacing them with their Unicode representation
+  # before serialization.
+  ESCAPED_SEPARATOR = "\\u002C"
+
   def id
   end
 
@@ -41,11 +47,15 @@ class Choice
   # Event question answers are saved by the actual value(s) of the selected choice(s).
   # If the question is multiple choice the values of the choices are saved as comma
   # separated string in the answer.
+  # To make answers work when choices contain commas, all commas are escaped
+  # before saving the answers.
   # To know if a choice is selected when rendering the radiobuttons/checkboxes we
   # check if any of the answers is included in the translations of the choice.
   # This ensures that the choice is still selected when changing the locale of the client.
-  def checked?(answer)
-    answer.to_s.split(",").map(&:strip).any? { |a| choice_translations.value?(a) }
+  def checked?(escaped_answer)
+    escaped_answers = escaped_answer.to_s.split(",")
+    unescaped_answers = escaped_answers.map { |a| a.gsub(ESCAPED_SEPARATOR, ",").strip }
+    unescaped_answers.any? { |a| choice_translations.value?(a) }
   end
 
   private

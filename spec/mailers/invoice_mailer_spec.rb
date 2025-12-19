@@ -89,8 +89,23 @@ describe InvoiceMailer do
   end
 
   describe :pdf_body do
+    let(:invoice) { invoices(:sent) }
+
     it "includes filename" do
       expect(pdf.content_type).to match(/filename=#{invoice.filename}/)
+    end
+
+    it "renders invoice with payment reminders" do
+      Fabricate(
+        :payment_reminder,
+        invoice:,
+        due_at: invoice.due_at + 1.day,
+        title: "Zahlungserinnerung",
+        text: "Im hektischen Alltag .."
+      )
+      texts = PDF::Inspector::Text.analyze(pdf.body.raw_source).show_text
+      expect(texts).to include "Zahlungserinnerung - Sent"
+      expect(texts).to include "Im hektischen Alltag .."
     end
   end
 

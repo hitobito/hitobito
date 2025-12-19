@@ -91,7 +91,7 @@ class InvoiceMailer < ApplicationMailer
   end
 
   def pdf_options
-    {articles: true, payment_slip: true}
+    {articles: true, payment_slip: true, reminders: true}
   end
 
   def mail_headers(person, email)

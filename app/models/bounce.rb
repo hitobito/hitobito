@@ -31,7 +31,10 @@ class Bounce < ApplicationRecord
 
   class << self
     def record(email, mailing_list_id: nil)
-      bounce = find_or_initialize_by(email: email.strip.downcase)
+      sanitized_email = normalize_email(email)
+      return if application_domain?(sanitized_email.split("@").last)
+
+      bounce = find_or_initialize_by(email: sanitized_email)
       if mailing_list_id.present?
         bounce.mailing_list_ids ||= []
 
@@ -64,6 +67,14 @@ class Bounce < ApplicationRecord
 
     def normalize_email(email)
       email.strip.downcase
+    end
+
+    private
+
+    def application_domain?(domain)
+      ActionDispatch::HostAuthorization::Permissions.new(
+        Rails.application.config.hosts + [Settings.email.list_domain]
+      ).allows?(domain)
     end
   end
 

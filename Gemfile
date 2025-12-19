@@ -59,6 +59,8 @@ gem "matrix" # required but removed from stlib since ruby 3.2
 gem "mime-types"
 gem "mini_magick"
 gem "nested_form"
+gem "net-sftp"
+gem "net-ssh"
 gem "nokogiri"
 gem "oat"
 gem "paper_trail"

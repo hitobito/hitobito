@@ -13,7 +13,7 @@ describe PeopleController, js: true do
   context "inline editing of role" do
     let(:group) { groups(:bottom_layer_one) }
     let(:row) { find("#content table.table").all("tr").find { |row| row.text =~ /Member Bottom/ } }
-    let(:cell) { row.all("td")[2] }
+    let(:cell) { row.all("td")[3] }
 
     before do
       sign_in(user)
@@ -33,56 +33,44 @@ describe PeopleController, js: true do
       let(:user) { people(:top_leader) }
 
       before {
-        within(cell) {
-          skip "Unable to find Bearbeiten"
-          click_link "Bearbeiten"
-        }
+        cell.find("a").click
+        expect(page).to have_css(".popover")
       }
 
       it "cancel closes popover" do
-        obsolete_node_safe do
-          click_link "Abbrechen"
-          expect(page).to have_no_css(".popover")
-        end
+        click_link "Abbrechen"
+        expect(page).to have_no_css(".popover")
       end
 
       it "changes role" do
-        obsolete_node_safe do
-          find("#role_type_select #role_type").click
-          find("#role_type_select #role_type").find("option", text: "Leader").click
+        select "Leader", from: "Rolle"
 
-          click_button "Speichern"
-          expect(page).to have_no_css(".popover")
-          expect(cell).to have_text "Leader"
-        end
+        click_button "Speichern"
+        expect(page).to have_no_css(".popover")
+        expect(cell).to have_text "Leader"
       end
 
       it "changes role and group" do
-        obsolete_node_safe do
-          find("#role_group_id_chosen #role_type").click
-          find("#role_group_id_chosen #role_type").find("option", text: "Group 111").click
-
-          find("#role_type_select #role_type").click
-          find("#role_type_select #role_type").find("option", text: "Leader").click
-          click_button "Speichern"
-          expect(cell).to have_text "Group 111"
-        end
+        select "Group 111", from: "Gruppe"
+        expect(page).to have_select "Rolle", selected: "", options: ["", "No Permissions", "Leader"]
+        select "No Permissions", from: "Rolle"
+        click_button "Speichern"
+        expect(page).to have_no_css(".popover")
+        expect(cell).to have_text "No Permissions"
       end
 
       it "informs about missing type selection" do
-        obsolete_node_safe do
-          find("#role_group_id_chosen #role_type").click
-          find("#role_group_id_chosen #role_type").find("option", text: "Group 111").click
-          fill_in("role_label", with: "dummy")
+        select "Group 111", from: "Gruppe"
+        expect(page).to have_select "Rolle", selected: "", options: ["", "No Permissions", "Leader"]
+        fill_in("role_label", with: "dummy")
+        click_button "Speichern"
+        expect(page).to have_selector(".popover .alert-danger", text: "Rolle muss ausgefüllt werden")
 
-          click_button "Speichern"
-          expect(page).to have_selector(".popover .alert-danger", text: "Rolle muss ausgefüllt werden")
-
-          find("#role_type_select #role_type").click
-          find("#role_type_select #role_type").find("option", text: "Leader").click
-          click_button "Speichern"
-          expect(cell).to have_text "Group 111"
-        end
+        select "Group 111", from: "Gruppe"
+        expect(page).to have_select "Rolle", selected: "", options: ["", "No Permissions", "Leader"]
+        select "Leader", from: "Rolle"
+        click_button "Speichern"
+        expect(cell).to have_text "Leader"
       end
     end
   end

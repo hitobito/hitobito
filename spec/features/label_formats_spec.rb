@@ -25,16 +25,12 @@ describe LabelFormatsController, js: true do
     end
 
     it "displays global label formats" do
-      obsolete_node_safe do
-        expect_global_to_be :visible
-      end
+      expect_global_to_be :visible
     end
 
     it "hides global formats if switch is toggled" do
-      obsolete_node_safe do
-        toggle.click
-        expect_global_to_be :invisible
-      end
+      toggle.click
+      expect_global_to_be :invisible
     end
   end
 
@@ -44,16 +40,12 @@ describe LabelFormatsController, js: true do
     end
 
     it "displays global label formats" do
-      obsolete_node_safe do
-        expect_global_to_be :invisible
-      end
+      expect_global_to_be :invisible
     end
 
     it "hides global formats if switch is toggled" do
-      obsolete_node_safe do
-        toggle.click
-        expect_global_to_be :visible
-      end
+      toggle.click
+      expect_global_to_be :visible
     end
   end
 end

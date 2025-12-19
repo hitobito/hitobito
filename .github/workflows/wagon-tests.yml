@@ -75,6 +75,60 @@ jobs:
         run: |
           bundle exec rake app:rubocop
 
+  wagon_pending_specs:
+    name: pending_specs
+    runs-on: "ubuntu-22.04"
+    env:
+      HEADLESS: true
+      RAILS_DB_ADAPTER: postgresql
+      RAILS_DB_HOST: 127.0.0.1
+      RAILS_DB_PORT: 5432
+      RAILS_DB_USERNAME: hitobito
+      RAILS_DB_PASSWORD: hitobito
+      RAILS_DB_NAME: hitobito_development
+      RAILS_ENV: test
+      DISABLE_TEST_SCHEMA_MAINTENANCE: true
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: hitobito
+          POSTGRES_PASSWORD: hitobito
+          POSTGRES_DB: hitobito_development
+        ports:
+          - "5432:5432"
+        options: >-
+          --health-cmd "pg_isready -U hitobito"
+          --health-interval 10s
+          --health-timeout 10s
+          --health-retries 10
+    steps:
+      - name: echo distinct ID ${{ inputs.distinct_id }}
+        run: echo ${{ inputs.distinct_id }}
+        working-directory: .
+
+      - name: Check out core with shared setup action
+        uses: actions/checkout@v4
+        with:
+          repository: hitobito/hitobito
+          ref: ${{ inputs.core_ref }}
+          path: .hitobito_core_repo
+          fetch-depth: 1
+
+      - name: "Prepare"
+        uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup
+        with:
+          assets: false
+          wagon_repository: ${{ inputs.wagon_repository }}
+          wagon_dependency_repository: ${{ inputs.wagon_dependency_repository }}
+          core_ref: ${{ inputs.core_ref }}
+          wagon_dependency_ref: ${{ inputs.wagon_dependency_ref }}
+
+      - name: ${{ inputs.wagon_repository }} Check pending specs
+        working-directory: ${{ inputs.wagon_repository }}
+        run: |
+          bundle exec rake app:ci:check_pending
+
   wagon_seeds:
     name: seeds
     runs-on: "ubuntu-22.04"
@@ -256,7 +310,7 @@ jobs:
 
   notify_statuscope:
     uses: ./.github/workflows/notify-statuscope.yml
-    needs: [wagon_rubocop, wagon_specs, wagon_feature_specs, wagon_seeds]
+    needs: [wagon_rubocop, wagon_specs, wagon_feature_specs, wagon_seeds, wagon_pending_specs]
     if: >-
       ( success() || failure() ) &&
       ( github.ref_name == 'master' || github.ref_name == 'stable' ) &&
@@ -264,7 +318,7 @@ jobs:
       ( contains((inputs.wagon_dependency_ref || inputs.main_branch), inputs.main_branch) )
     with:
       repository: ${{ inputs.wagon_repository }}
-      test_result: ${{ needs.wagon_rubocop.result == 'success' && needs.wagon_specs.result == 'success' && needs.wagon_feature_specs.result == 'success' && needs.wagon_seeds.result == 'success' }}
+      test_result: ${{ needs.wagon_rubocop.result == 'success' && needs.wagon_specs.result == 'success' && needs.wagon_feature_specs.result == 'success' && needs.wagon_seeds.result == 'success' && needs.wagon_pending_specs.result == 'success'}}
     secrets:
       HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}
       HEARTBEAT_TOKEN: ${{ secrets.HEARTBEAT_TOKEN }}

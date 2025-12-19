@@ -11,65 +11,55 @@ describe "Person Autocomplete", js: true do
   let(:group) { groups(:top_group) }
 
   it "knows about visibility of dropdown menu" do
-    skip "Expected to find text 'Person hinzufügen'"
-    obsolete_node_safe do
-      sign_in
-      visit root_path
-      expect(page).to have_content("TopGroup")
-      expect(page).to have_content("Personen")
-      click_link "Personen"
-      is_expected.to have_content " Person hinzufügen"
-      click_link "Person hinzufügen"
-      is_expected.to have_content "Person hinzufügen"
-    end
+    sign_in
+    visit root_path
+    expect(page).to have_content("TopGroup")
+    expect(page).to have_content("Personen")
+    click_link "Personen"
+    is_expected.to have_content "1 Person angezeigt."
+    is_expected.to have_link "Person hinzufügen"
+    click_link "Person hinzufügen"
+    is_expected.to have_link "Person hinzufügen"
   end
 
   context "highlights content in typeahead" do
     it "for non-existing queries" do
-      obsolete_node_safe do
-        sign_in
-        visit new_group_role_path(group)
-        fill_in "Person", with: "gcxy"
-        expect(page).to have_no_selector('ul[role="listbox"]')
-      end
+      sign_in
+      visit new_group_role_path(group)
+      fill_in "Person", with: "gcxy"
+      expect(page).to have_no_selector('ul[role="listbox"]')
     end
 
     it "for regular queries" do
-      obsolete_node_safe do
-        sign_in
-        visit new_group_role_path(group)
+      sign_in
+      visit new_group_role_path(group)
 
-        fill_in "Person", with: "Top"
-        expect(page).to have_selector('ul[role="listbox"] li[role="option"]', text: "Top Leader")
-        expect(find('ul[role="listbox"] li[role="option"]')).to have_selector("mark", text: "Top")
-      end
+      fill_in "Person", with: "Top"
+      expect(page).to have_selector('ul[role="listbox"] li[role="option"]', text: "Top Leader")
+      expect(find('ul[role="listbox"] li[role="option"]')).to have_selector("mark", text: "Top")
     end
 
     it "for queries with /" do
       people(:top_leader).update!(first_name: "Top /")
-      obsolete_node_safe do
-        sign_in
-        visit new_group_role_path(group)
+      sign_in
+      visit new_group_role_path(group)
 
-        fill_in "Person", with: "Top /"
-        expect(page).to have_selector('ul[role="listbox"] li[role="option"]', text: "Top / Leader")
-        expect(find('ul[role="listbox"] li[role="option"]')).to have_selector("mark", text: "Top /")
-      end
+      fill_in "Person", with: "Top /"
+      expect(page).to have_selector('ul[role="listbox"] li[role="option"]', text: "Top / Leader")
+      expect(find('ul[role="listbox"] li[role="option"]')).to have_selector("mark", text: "Top /")
     end
 
     it "saves content from autocomplete" do
-      obsolete_node_safe do
-        sign_in
-        visit new_group_role_path(group, role: {type: "Group::TopGroup::Leader"})
+      sign_in
+      visit new_group_role_path(group, role: {type: "Group::TopGroup::Leader"})
 
-        # search name only
-        fill_in "Person", with: "Top"
-        expect(find('ul[role="listbox"] li[role="option"]')).to have_content "Top Leader"
-        find('ul[role="listbox"] li[role="option"]').click
+      # search name only
+      fill_in "Person", with: "Top"
+      expect(find('ul[role="listbox"] li[role="option"]')).to have_content "Top Leader"
+      find('ul[role="listbox"] li[role="option"]').click
 
-        all("form .btn-group").first.click_button "Speichern"
-        is_expected.to have_content "Rolle Leader für Top Leader in TopGroup wurde erfolgreich erstellt."
-      end
+      all("form .btn-group").first.click_button "Speichern"
+      is_expected.to have_content "Rolle Leader für Top Leader in TopGroup wurde erfolgreich erstellt."
     end
   end
 end

@@ -44,6 +44,22 @@ namespace :ci do
                "bundle exec rake app:rubocop app:ci:setup:rspec spec:all")
   end
 
+  desc "Check for pending specs"
+  task check_pending: :environment do
+    require "rspec/core"
+    args = "-f json --dry-run spec"
+    options = RSpec::Core::ConfigurationOptions.new(args.split)
+    out = StringIO.new
+    RSpec::Core::Runner.new(options).run($stderr, out)
+    examples = JSON.parse(out.string)["examples"]
+    if examples.empty?
+      puts JSON.pretty_generate(out.string)
+      abort("General failure")
+    end
+    pending = examples.select { |ex| ex["status"] == "pending" }
+    abort("Failing because of pending specs\n\n#{JSON.pretty_generate(pending)}") if pending.any?
+  end
+
   namespace :setup do
     task :env do
       require "pathname"

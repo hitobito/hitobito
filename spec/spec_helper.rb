@@ -10,8 +10,6 @@ unless ENV["NO_COVERAGE"]
   SimpleCov.start "rails"
 end
 
-DB_CLEANER_STRATEGY = :truncation
-
 ENV["RAILS_ENV"] = "test"
 ENV["RAILS_GROUPS"] = "assets"
 require File.expand_path("../config/environment", __dir__)

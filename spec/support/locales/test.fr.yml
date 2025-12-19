@@ -28,9 +28,11 @@ fr:
       group/top_group/member: Membre
       group/bottom_layer/leader: Leadre
       group/bottom_layer/local_guide: Guide Local
+      group/bottom_layer/basic_permissions_only: Permissions Basic
       group/bottom_layer/member: Membre
       group/bottom_group/leader: Leadre
       group/bottom_group/member: Membre
+      group/bottom_group/no_permissions: Pas de Permissions
       group/global_group/leader: Leadre
       group/global_group/member: Membre
       role/external: Externe

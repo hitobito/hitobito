@@ -190,6 +190,7 @@ en:
 
         invoice:
           recipient_address_or_email_required: 'Recipient address or email must be provided'
+          recipient_name_or_company_name_required: 'Firmenname oder Name muss ausgefüllt werden'
           attributes:
             invoice_config:
               invalid: 'is not valid; adjust the settings before creating an invoice'
@@ -432,13 +433,13 @@ en:
       additional_address:
         translated_label: Bezeichnung
         street_and_number: Strasse/Nummer
-        housenumber: Hausnummer
+        housenumber: Number
         postbox: Postfach
         zip_code: PLZ
         town: Ort
         country: Land
         postbox: Postfach
-        address_care_of: zusatz. Adresszeile
+        address_care_of: zusätz. Adresszeile
         public: Öffentlich
 
       additional_addresses:
@@ -666,7 +667,7 @@ en:
         teamer_count: Leaders count
         participant_count: Participants count
         applicant_count: Registrations count
-        applications_cancelable: Deregistration possible
+        applications_cancelable: Abmeldung
         display_booking_info: Display number of registrations
         participations_visible: Visibility of participants
         waiting_list: national waiting list
@@ -946,6 +947,7 @@ en:
               qualify: Creating qualifications for people at this level and all lower levels.
               approve_applications: Confirmation of course registrations for people at this level.
               finance: Create and manage invoices
+              layer_and_below_finance: Erstellen und Verwalten von Rechnungen auf dieser Ebene und allen darunter liegenden Ebenen.
               impersonation: Use Hitobito as another person
               see_invisible_from_above: Sieht zusätzlich Personen, welche sonst von höheren Ebenen nicht eingesehen werden dürfen.
               manual_deletion: Löschen von Personen ohne Rollen
@@ -1157,6 +1159,14 @@ en:
           cancelled: Cancelled
         recipient: Recipient
         recipient_email: Recipient e-mail
+        recipient_company_name: Firmenname
+        recipient_name: Name
+        recipient_address_care_of: zusätz. Adresszeile
+        recipient_postbox: Postfach
+        recipient_country: Land
+        recipient_street: Strasse
+        recipient_zip_code: PLZ
+        recipient_town: Ort
         recipient_address: Recipient address
         due_at: Due at
         issued_at: Issued at
@@ -1171,7 +1181,7 @@ en:
         payment_purpose: Payment purpose
         address: Sender address
         beneficiary: Beneficiary
-        payee: Name / Organization
+        payee: Einzahlung für
         account_number: Account Number
         iban: IBAN
         payment_slip: Payment slip
@@ -1309,6 +1319,8 @@ en:
           valiant: Valiant
           zkb: Zürcher Kantonalbank
           zugerkb: Zuger Kantonalbank
+          ukb: Urner Kantonalbank
+          bcn: Banque Cantonale Neuchâteloise
 
       service_token:
         name: Name

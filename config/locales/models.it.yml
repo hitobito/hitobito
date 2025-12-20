@@ -193,6 +193,7 @@ it:
 
         invoice:
           recipient_address_or_email_required: 'deve essere riempito l''indirizzo del ricevente oppure l''e-mail'
+          recipient_name_or_company_name_required: 'Firmenname oder Name muss ausgefüllt werden'
           attributes:
             invoice_config:
               invalid: 'non valido; modificate le impostazioni prima di redigere una fattura'
@@ -506,7 +507,7 @@ it:
         town: Luogo
         country: Nazione
         postbox: Casella postale
-        address_care_of: Riga dell'indirizzo aggiuntiva
+        address_care_of: zusätz. Adresszeile
         public: Pubblico
 
       additional_addresses:
@@ -734,7 +735,7 @@ it:
         teamer_count: Numero di organizzatori
         participant_count: Numero di partecipanti
         applicant_count: Numero di iscrizioni
-        applications_cancelable: Disiscrizione possibile
+        applications_cancelable: Abmeldung
         display_booking_info: Visualizza stato iscrizioni
         participations_visible: Visibilità dei partecipanti
         waiting_list: Lista d'attesa nazionale
@@ -1014,6 +1015,7 @@ it:
               qualify: Creare le qualifiche per le persone su questo livello e su quelli inferiori.
               approve_applications: Confermare le iscrizioni ai corse per le persone su questo livello.
               finance: Emettere e amministrare fatture
+              layer_and_below_finance: Erstellen und Verwalten von Rechnungen auf dieser Ebene und allen darunter liegenden Ebenen.
               impersonation: Utilizza Hitobito come altra persona.
               see_invisible_from_above: Vedere altre persone che altrimenti non possono essere viste dai livelli superiori.
               manual_deletion: Eliminazione di persone senza ruoli
@@ -1231,6 +1233,14 @@ it:
           cancelled: Cancellato
         recipient: Destinatario
         recipient_email: Email del destinatario
+        recipient_company_name: Firmenname
+        recipient_name: Name
+        recipient_address_care_of: zusätz. Adresszeile
+        recipient_postbox: Postfach
+        recipient_country: Land
+        recipient_street: Strasse
+        recipient_zip_code: PLZ
+        recipient_town: Ort
         recipient_address: Indirizzo del destinatario
         due_at: Scade il
         issued_at: Emesso il
@@ -1245,7 +1255,7 @@ it:
         payment_purpose: Motivo del pagamento
         address: Indirizzo del mittente
         beneficiary: A favore di
-        payee: Nome / Ditta
+        payee: Einzahlung für
         account_number: Numero di conto
         iban: IBAN
         payment_slip: Polizza di versamento
@@ -1383,6 +1393,8 @@ it:
           valiant: Valiant
           zkb: Zürcher Kantonalbank
           zugerkb: Zuger Kantonalbank
+          ukb: Urner Kantonalbank
+          bcn: Banque Cantonale Neuchâteloise
 
       service_token:
         name: Cognome

@@ -412,8 +412,6 @@ en:
       already_assigned: "This person was already assigned or registered for a different event."
       maximum_participations_reached: Die maximal erlaubte Teilnehmerzahl ist erreicht. Um weitere Anmeldungen zu bestätigen, muss die maximale Teilnehmerzahl erhöht werden.
       participation:
-        guest_of_html: "(Gast von %{main_applicant})"
-        guest_of_deleted_participation: "(Gast von abgemeldeter Person)"
         registered_at: "Registration on %{datetime}"
         town: town
       prio_buttons:
@@ -513,6 +511,9 @@ en:
         on_waiting_list: On waiting list
       list:
         incomplete: Required data is missing
+      guest_of_info:
+        with_main_applicant: "(Gast von %{main_applicant_name})"
+        without_main_applicant: "(Gast von abgemeldeter Person)"
       cancel_application:
         explanation: You are registered for this event.
         pending: You are pre-registered for this event. The registration is not yet final and must be confirmed by the organizer.

@@ -29,7 +29,7 @@ class BounceSeeder
 
   def generate_unused_email
     Faker::Internet.email(domain: 'example.net').then do |email|
-      Bounce.where(email:).exists? ? unique_email : email
+      Bounce.where(email:).exists? ? generate_unused_email : email
     end
   end
 end

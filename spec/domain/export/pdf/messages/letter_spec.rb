@@ -50,31 +50,31 @@ describe Export::Pdf::Messages::Letter do
 
       it "renders text at positions without sender address" do
         expect(text_with_position).to match_array [
-          [71, 651, "Bottom Member"],
-          [71, 639, "Greatstreet 345"],
-          [71, 626, "3456 Greattown"],
-          [71, 528, "Information"],
-          [71, 499, "Hallo"],
-          [71, 475, "Wir laden "],
-          [113, 475, "dich"],
-          [132, 475, " ein! "],
-          [71, 450, "Bis bald"]
+          [71, 654, "Bottom Member"],
+          [71, 644, "Greatstreet 345"],
+          [71, 634, "3456 Greattown"],
+          [71, 531, "Information"],
+          [71, 502, "Hallo"],
+          [71, 483, "Wir laden "],
+          [111, 483, "dich"],
+          [130, 483, " ein! "],
+          [71, 463, "Bis bald"]
         ]
       end
 
       it "renders text at positions with group sender address" do
         letter.update!(pp_post: "Group 11, Lakeview 42, 4242 Wanaka")
         expect(text_with_position).to match_array [
-          [71, 669, "Group 11, Lakeview 42, 4242 Wanaka"],
-          [71, 651, "Bottom Member"],
-          [71, 639, "Greatstreet 345"],
-          [71, 626, "3456 Greattown"],
-          [71, 528, "Information"],
-          [71, 499, "Hallo"],
-          [71, 475, "Wir laden "],
-          [113, 475, "dich"],
-          [132, 475, " ein! "],
-          [71, 450, "Bis bald"]
+          [71, 672, "Group 11, Lakeview 42, 4242 Wanaka"],
+          [71, 654, "Bottom Member"],
+          [71, 644, "Greatstreet 345"],
+          [71, 634, "3456 Greattown"],
+          [71, 531, "Information"],
+          [71, 502, "Hallo"],
+          [71, 483, "Wir laden "],
+          [111, 483, "dich"],
+          [130, 483, " ein! "],
+          [71, 463, "Bis bald"]
         ]
       end
 
@@ -101,25 +101,25 @@ describe Export::Pdf::Messages::Letter do
         Messages::LetterDispatch.new(letter).run
         analyzer = PDF::Inspector::Text.analyze(described_class.new(letter, options).render)
 
-        expect(text_with_position(analyzer)).to eq [
-          [71, 651, "Top Leader"],
-          [71, 639, "Funkystreet 42"],
-          [71, 626, "4242 Greattown"],
-          [71, 528, "Information"],
-          [71, 499, "Hallo"],
-          [71, 475, "Wir laden "],
-          [113, 475, "dich"],
-          [132, 475, " ein! "],
-          [71, 450, "Bis bald"],
-          [71, 651, "Bottom Member"],
-          [71, 639, "Greatstreet 345"],
-          [71, 626, "3456 Greattown"],
-          [71, 528, "Information"],
-          [71, 499, "Hallo"],
-          [71, 475, "Wir laden "],
-          [113, 475, "dich"],
-          [132, 475, " ein! "],
-          [71, 450, "Bis bald"]
+        expect(text_with_position(analyzer)).to match_array [
+          [71, 654, "Top Leader"],
+          [71, 644, "Funkystreet 42"],
+          [71, 634, "4242 Greattown"],
+          [71, 531, "Information"],
+          [71, 502, "Hallo"],
+          [71, 483, "Wir laden "],
+          [111, 483, "dich"],
+          [130, 483, " ein! "],
+          [71, 463, "Bis bald"],
+          [71, 654, "Bottom Member"],
+          [71, 644, "Greatstreet 345"],
+          [71, 634, "3456 Greattown"],
+          [71, 531, "Information"],
+          [71, 502, "Hallo"],
+          [71, 483, "Wir laden "],
+          [111, 483, "dich"],
+          [130, 483, " ein! "],
+          [71, 463, "Bis bald"]
         ]
 
         people(:bottom_member).update!(last_name: "First")
@@ -130,25 +130,25 @@ describe Export::Pdf::Messages::Letter do
         Messages::LetterDispatch.new(letter2).run
         analyzer = PDF::Inspector::Text.analyze(described_class.new(letter2, options).render)
 
-        expect(text_with_position(analyzer)).to eq [
-          [71, 651, "Bottom First"],
-          [71, 639, "Greatstreet 345"],
-          [71, 626, "3456 Greattown"],
-          [71, 528, "Information"],
-          [71, 499, "Hallo"],
-          [71, 475, "Wir laden "],
-          [113, 475, "dich"],
-          [132, 475, " ein! "],
-          [71, 450, "Bis bald"],
-          [71, 651, "Top Leader"],
-          [71, 639, "Funkystreet 42"],
-          [71, 626, "4242 Greattown"],
-          [71, 528, "Information"],
-          [71, 499, "Hallo"],
-          [71, 475, "Wir laden "],
-          [113, 475, "dich"],
-          [132, 475, " ein! "],
-          [71, 450, "Bis bald"]
+        expect(text_with_position(analyzer)).to match_array [
+          [71, 654, "Bottom First"],
+          [71, 644, "Greatstreet 345"],
+          [71, 634, "3456 Greattown"],
+          [71, 531, "Information"],
+          [71, 502, "Hallo"],
+          [71, 483, "Wir laden "],
+          [111, 483, "dich"],
+          [130, 483, " ein! "],
+          [71, 463, "Bis bald"],
+          [71, 654, "Top Leader"],
+          [71, 644, "Funkystreet 42"],
+          [71, 634, "4242 Greattown"],
+          [71, 531, "Information"],
+          [71, 502, "Hallo"],
+          [71, 483, "Wir laden "],
+          [111, 483, "dich"],
+          [130, 483, " ein! "],
+          [71, 463, "Bis bald"]
         ]
       end
     end
@@ -167,37 +167,37 @@ describe Export::Pdf::Messages::Letter do
 
       it "renders addresses and content" do
         expect(text_with_position).to eq [
-          [71, 651, "Top Leader"],
-          [71, 639, "Funkystreet 42"],
-          [71, 626, "4242 Greattown"],
-          [71, 528, "Information"],
-          [71, 499, "Hallo"],
-          [71, 475, "Wir laden "],
-          [113, 475, "dich"],
-          [132, 475, " ein! "],
-          [71, 450, "Bis bald"],
-          [71, 651, "Bottom Member"],
-          [71, 639, "Greatstreet 345"],
-          [71, 626, "3456 Greattown"],
-          [71, 528, "Information"],
-          [71, 499, "Hallo"],
-          [71, 475, "Wir laden "],
-          [113, 475, "dich"],
-          [132, 475, " ein! "],
-          [71, 450, "Bis bald"]
+          [71, 654, "Top Leader"],
+          [71, 644, "Funkystreet 42"],
+          [71, 634, "4242 Greattown"],
+          [71, 531, "Information"],
+          [71, 502, "Hallo"],
+          [71, 483, "Wir laden "],
+          [111, 483, "dich"],
+          [130, 483, " ein! "],
+          [71, 463, "Bis bald"],
+          [71, 654, "Bottom Member"],
+          [71, 644, "Greatstreet 345"],
+          [71, 634, "3456 Greattown"],
+          [71, 531, "Information"],
+          [71, 502, "Hallo"],
+          [71, 483, "Wir laden "],
+          [111, 483, "dich"],
+          [130, 483, " ein! "],
+          [71, 463, "Bis bald"]
         ]
         expect(stamps).to be_nil
       end
 
       it "renders only addresses has stamps" do
         options[:stamped] = true
-        expect(text_with_position).to eq [
-          [71, 651, "Top Leader"],
-          [71, 639, "Funkystreet 42"],
-          [71, 626, "4242 Greattown"],
-          [71, 651, "Bottom Member"],
-          [71, 639, "Greatstreet 345"],
-          [71, 626, "3456 Greattown"]
+        expect(text_with_position).to match_array [
+          [71, 654, "Top Leader"],
+          [71, 644, "Funkystreet 42"],
+          [71, 634, "4242 Greattown"],
+          [71, 654, "Bottom Member"],
+          [71, 644, "Greatstreet 345"],
+          [71, 634, "3456 Greattown"]
         ]
         expect(stamps.keys).to eq [:render_logo_right, :render_shipping_info, :render_subject,
           :render_content]
@@ -213,12 +213,13 @@ describe Export::Pdf::Messages::Letter do
   end
 
   context "household addresses" do
-    let(:housemate1) {
+    let(:housemate1) do
       Fabricate(:person_with_address, first_name: "Anton", last_name: "Abraham", country: "DE", zip_code: "12345")
-    }
-    let(:housemate2) {
+    end
+
+    let(:housemate2) do
       Fabricate(:person_with_address, first_name: "Zora", last_name: "Zaugg", country: "DE", zip_code: "12345")
-    }
+    end
     let(:other_housemate) do
       Fabricate(:person_with_address, first_name: "Altra", last_name: "Mates", country: "DE", zip_code: "12345")
     end
@@ -240,34 +241,34 @@ describe Export::Pdf::Messages::Letter do
       Messages::LetterDispatch.new(letter).run
 
       expect(text_with_position).to match_array [
-        [71, 651, "Anton Abraham, Zora Zaugg"],
-        [71, 639, housemate1.address],
-        [71, 626, "#{housemate1.zip_code} #{housemate1.town}"],
-        [71, 614, housemate1.country],
-        [71, 528, "Information"],
-        [71, 499, "Hallo"],
-        [71, 475, "Wir laden "],
-        [113, 475, "dich"],
-        [132, 475, " ein! "],
-        [71, 450, "Bis bald"],
-        [71, 651, "Bottom Member"],
-        [71, 639, "Greatstreet 345"],
-        [71, 626, "3456 Greattown"],
-        [71, 528, "Information"],
-        [71, 499, "Hallo"],
-        [71, 475, "Wir laden "],
-        [113, 475, "dich"],
-        [132, 475, " ein! "],
-        [71, 450, "Bis bald"],
-        [71, 651, "Top Leader"],
-        [71, 639, "Funkystreet 42"],
-        [71, 626, "4242 Greattown"],
-        [71, 528, "Information"],
-        [71, 499, "Hallo"],
-        [71, 475, "Wir laden "],
-        [113, 475, "dich"],
-        [132, 475, " ein! "],
-        [71, 450, "Bis bald"]
+        [71, 654, "Anton Abraham, Zora Zaugg"],
+        [71, 644, housemate1.address],
+        [71, 634, "#{housemate1.zip_code} #{housemate1.town}"],
+        [71, 625, housemate1.country],
+        [71, 531, "Information"],
+        [71, 502, "Hallo"],
+        [71, 483, "Wir laden "],
+        [111, 483, "dich"],
+        [130, 483, " ein! "],
+        [71, 463, "Bis bald"],
+        [71, 654, "Bottom Member"],
+        [71, 644, "Greatstreet 345"],
+        [71, 634, "3456 Greattown"],
+        [71, 531, "Information"],
+        [71, 502, "Hallo"],
+        [71, 483, "Wir laden "],
+        [111, 483, "dich"],
+        [130, 483, " ein! "],
+        [71, 463, "Bis bald"],
+        [71, 654, "Top Leader"],
+        [71, 644, "Funkystreet 42"],
+        [71, 634, "4242 Greattown"],
+        [71, 531, "Information"],
+        [71, 502, "Hallo"],
+        [71, 483, "Wir laden "],
+        [111, 483, "dich"],
+        [130, 483, " ein! "],
+        [71, 463, "Bis bald"]
       ]
     end
 
@@ -280,16 +281,16 @@ describe Export::Pdf::Messages::Letter do
       Messages::LetterDispatch.new(letter).run
 
       expect(text_with_position).to match_array [
-        [71, 651, "Anton Abraham, Top Leader, Altra"],
-        [71, 639, "Mates, Bottom Member, Zora Zaugg"],
-        [71, 626, "Greatstreet 345"],
-        [71, 614, "3456 Greattown"],
-        [71, 528, "Information"],
-        [71, 499, "Hallo"],
-        [71, 475, "Wir laden "],
-        [113, 475, "dich"],
-        [132, 475, " ein! "],
-        [71, 450, "Bis bald"]
+        [71, 654, "Anton Abraham, Top Leader, Altra"],
+        [71, 644, "Mates, Bottom Member, Zora Zaugg"],
+        [71, 634, "Greatstreet 345"],
+        [71, 625, "3456 Greattown"],
+        [71, 531, "Information"],
+        [71, 502, "Hallo"],
+        [71, 483, "Wir laden "],
+        [111, 483, "dich"],
+        [130, 483, " ein! "],
+        [71, 463, "Bis bald"]
       ]
     end
   end
@@ -306,15 +307,15 @@ describe Export::Pdf::Messages::Letter do
 
     it "creates preview without persisted message recipients" do
       expect(text_with_position).to match_array [
-        [71, 651, "Bottom Member"],
-        [71, 639, "Greatstreet 345"],
-        [71, 626, "3456 Greattown"],
-        [71, 528, "Information"],
-        [71, 499, "Hallo"],
-        [71, 475, "Wir laden "],
-        [113, 475, "dich"],
-        [132, 475, " ein! "],
-        [71, 450, "Bis bald"]
+        [71, 654, "Bottom Member"],
+        [71, 644, "Greatstreet 345"],
+        [71, 634, "3456 Greattown"],
+        [71, 531, "Information"],
+        [71, 502, "Hallo"],
+        [71, 483, "Wir laden "],
+        [111, 483, "dich"],
+        [130, 483, " ein! "],
+        [71, 463, "Bis bald"]
       ]
       expect(letter.message_recipients.reload.count).to eq(0)
     end
@@ -361,29 +362,29 @@ describe Export::Pdf::Messages::Letter do
         create_household(housemate3, housemate4)
         create_household(other_housemate, people(:top_leader))
         expect(text_with_position).to match_array [
-          [71, 651, "Anton Abraham, Zora Zaugg"],
-          [71, 639, housemate1.address],
-          [71, 626, "#{housemate1.zip_code} #{housemate1.town}"],
-          [71, 614, housemate1.country],
-          [71, 528, "Brief"],
-          [71, 499, "Hallo"],
-          [71, 651, "Bettina Büttel, Carlo Colorado"],
-          [71, 639, housemate3.address],
-          [71, 626, "#{housemate3.zip_code} #{housemate3.town}"],
-          [71, 614, housemate3.country],
-          [71, 528, "Brief"],
-          [71, 499, "Hallo"],
-          [71, 651, "Bottom Member"],
-          [71, 639, bottom_member.address],
-          [71, 626, "#{bottom_member.zip_code} #{bottom_member.town}"],
-          [71, 528, "Brief"],
-          [71, 499, "Hallo"],
-          [71, 651, "Dominik Dachs"],
-          [71, 639, single_person.address],
-          [71, 626, "#{single_person.zip_code} #{single_person.town}"],
-          [71, 614, single_person.country],
-          [71, 528, "Brief"],
-          [71, 499, "Hallo"]
+          [71, 654, "Anton Abraham, Zora Zaugg"],
+          [71, 644, housemate1.address],
+          [71, 634, "#{housemate1.zip_code} #{housemate1.town}"],
+          [71, 625, housemate1.country],
+          [71, 531, "Brief"],
+          [71, 502, "Hallo"],
+          [71, 654, "Bettina Büttel, Carlo Colorado"],
+          [71, 644, housemate3.address],
+          [71, 634, "#{housemate3.zip_code} #{housemate3.town}"],
+          [71, 625, housemate3.country],
+          [71, 531, "Brief"],
+          [71, 502, "Hallo"],
+          [71, 654, "Bottom Member"],
+          [71, 644, bottom_member.address],
+          [71, 634, "#{bottom_member.zip_code} #{bottom_member.town}"],
+          [71, 531, "Brief"],
+          [71, 502, "Hallo"],
+          [71, 654, "Dominik Dachs"],
+          [71, 644, single_person.address],
+          [71, 634, "#{single_person.zip_code} #{single_person.town}"],
+          [71, 625, single_person.country],
+          [71, 531, "Brief"],
+          [71, 502, "Hallo"]
         ]
       end
 
@@ -392,29 +393,29 @@ describe Export::Pdf::Messages::Letter do
         create_household(people(:top_leader), other_housemate)
 
         expect(text_with_position).to match_array [
-          [71, 651, "Anton Abraham, Bettina Büttel, Carlo"],
-          [71, 639, "Colorado, Zora Zaugg"],
-          [71, 626, housemate1.address],
-          [71, 614, "#{housemate1.zip_code} #{housemate1.town}"],
-          [71, 651, housemate1.country],
-          [71, 528, "Brief"],
-          [71, 499, "Hallo"],
-          [71, 651, "Bottom Member"],
-          [71, 639, bottom_member.address],
-          [71, 626, "#{bottom_member.zip_code} #{bottom_member.town}"],
-          [71, 528, "Brief"],
-          [71, 499, "Hallo"],
-          [71, 651, "Top Leader"],
-          [71, 639, top_leader.address],
-          [71, 626, "#{top_leader.zip_code} #{top_leader.town}"],
-          [71, 528, "Brief"],
-          [71, 499, "Hallo"],
-          [71, 651, "Dominik Dachs"],
-          [71, 639, single_person.address],
-          [71, 626, "#{single_person.zip_code} #{single_person.town}"],
-          [71, 614, single_person.country],
-          [71, 528, "Brief"],
-          [71, 499, "Hallo"]
+          [71, 654, "Anton Abraham, Bettina Büttel, Carlo"],
+          [71, 644, "Colorado, Zora Zaugg"],
+          [71, 634, housemate1.address],
+          [71, 625, "#{housemate1.zip_code} #{housemate1.town}"],
+          [71, 615, housemate1.country],
+          [71, 531, "Brief"],
+          [71, 502, "Hallo"],
+          [71, 654, "Bottom Member"],
+          [71, 644, bottom_member.address],
+          [71, 634, "#{bottom_member.zip_code} #{bottom_member.town}"],
+          [71, 531, "Brief"],
+          [71, 502, "Hallo"],
+          [71, 654, "Top Leader"],
+          [71, 644, top_leader.address],
+          [71, 634, "#{top_leader.zip_code} #{top_leader.town}"],
+          [71, 531, "Brief"],
+          [71, 502, "Hallo"],
+          [71, 654, "Dominik Dachs"],
+          [71, 644, single_person.address],
+          [71, 634, "#{single_person.zip_code} #{single_person.town}"],
+          [71, 625, single_person.country],
+          [71, 531, "Brief"],
+          [71, 502, "Hallo"]
         ]
       end
     end

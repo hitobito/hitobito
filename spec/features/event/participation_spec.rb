@@ -61,9 +61,9 @@ describe :event_participation, js: true do
       click_button("Anmelden")
 
       expect(page).to have_content(
-                        "Teilnahme von #{person.full_name} in #{event.name} wurde erfolgreich erstellt. " \
-                          "Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an."
-                      )
+        "Teilnahme von #{person.full_name} in #{event.name} wurde erfolgreich erstellt. " \
+          "Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an."
+      )
 
       within(".btn-toolbar") do
         click_link("Bearbeiten")
@@ -96,9 +96,9 @@ describe :event_participation, js: true do
       click_button("Anmelden")
 
       expect(page).to have_content(
-                        "Teilnahme von #{person.full_name} in #{event.name} wurde erfolgreich erstellt. " \
-                          "Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an."
-                      )
+        "Teilnahme von #{person.full_name} in #{event.name} wurde erfolgreich erstellt. " \
+          "Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an."
+      )
 
       within(".btn-toolbar") do
         click_link("Bearbeiten")

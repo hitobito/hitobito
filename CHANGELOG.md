@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## Version 2.7
+## Version 2.8
 
 - Die Banken Urner Kantonalbank und Banque Cantonale Neuchâteloise wurden als Ebics Zahlungsschnittstellen hinzugefügt (#3782)
 - Die Option "Automatische Zuteilung" war auf einfachen Anlässen wirkungslos und wurde dort entfernt (#2706)

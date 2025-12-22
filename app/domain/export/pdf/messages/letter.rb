@@ -28,7 +28,9 @@ module Export::Pdf::Messages
     end
 
     def pdf
-      @pdf ||= Export::Pdf::Document.new(**render_options).pdf
+      @pdf ||= Export::Pdf::Document.new(**render_options).pdf.tap do |pdf|
+        pdf.font "LiberationSans"
+      end
     end
 
     def render_preview

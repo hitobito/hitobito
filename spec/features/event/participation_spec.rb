@@ -43,6 +43,77 @@ describe :event_participation, js: true do
       expect(find_all(".fields label")[0].text).to eq "Eine Frage?"
       expect(find_all(".fields label")[1].text).to eq "A question?"
     end
+
+    it "shows correct answers as selected on edit page for multiple choice questions" do
+      Event::Question.destroy_all
+      Fabricate(:event_question, event: event, question: "A question?", multiple_choices: true,
+        choices: "Answer 1\\u002C with comma, Answer 2, Answer 3\\u002C with\\u002C multiple commas")
+      visit group_event_path(group_id: group, id: event)
+      click_link("Anmelden")
+      within(".bottom .btn-group") do
+        click_button("Weiter")
+      end
+      expect(page).to have_content("Anmeldeangaben")
+
+      check("Answer 1, with comma")
+      check("Answer 3, with, multiple commas")
+
+      click_button("Anmelden")
+
+      expect(page).to have_content(
+                        "Teilnahme von #{person.full_name} in #{event.name} wurde erfolgreich erstellt. " \
+                          "Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an."
+                      )
+
+      within(".btn-toolbar") do
+        click_link("Bearbeiten")
+      end
+
+      expect(page).to have_content("Anmeldung von #{person.full_name} bearbeiten")
+
+      Globalized.languages.each do |lang|
+        click_link(lang.to_s.upcase)
+        expect(page).to have_current_path(/\/#{lang}\//)
+        expect(page).to have_checked_field("Answer 1, with comma")
+        expect(page).to have_unchecked_field("Answer 2")
+        expect(page).to have_checked_field("Answer 3, with, multiple commas")
+      end
+    end
+
+    it "shows correct answers as selected on edit page for single choice questions" do
+      Event::Question.destroy_all
+      Fabricate(:event_question, event: event, question: "A question?",
+        choices: "Answer 1\\u002C with comma, Answer 2\\u002C with\\u002C multiple commas, Answer 3")
+      visit group_event_path(group_id: group, id: event)
+      click_link("Anmelden")
+      within(".bottom .btn-group") do
+        click_button("Weiter")
+      end
+      expect(page).to have_content("Anmeldeangaben")
+
+      choose("Answer 2, with, multiple commas")
+
+      click_button("Anmelden")
+
+      expect(page).to have_content(
+                        "Teilnahme von #{person.full_name} in #{event.name} wurde erfolgreich erstellt. " \
+                          "Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an."
+                      )
+
+      within(".btn-toolbar") do
+        click_link("Bearbeiten")
+      end
+
+      expect(page).to have_content("Anmeldung von #{person.full_name} bearbeiten")
+
+      Globalized.languages.each do |lang|
+        click_link(lang.to_s.upcase)
+        expect(page).to have_current_path(/\/#{lang}\//)
+        expect(page).to have_unchecked_field("Answer 1, with comma")
+        expect(page).to have_checked_field("Answer 2, with, multiple commas")
+        expect(page).to have_unchecked_field("Answer 3")
+      end
+    end
   end
 
   context "with privacy policies in hierarchy" do

@@ -26,8 +26,7 @@ Hitobito::Application.routes.draw do
     skip_controllers :applications, :token_info, :authorized_applications
   end
 
-  get "/verify_membership/:verify_token" => "people/membership/verify#show",
-    :as => "verify_membership"
+  get "/verify_membership/:verify_token" => "people/membership/verify#show", as: "verify_membership"
 
   language_scope do
     namespace :oauth do
@@ -45,19 +44,19 @@ Hitobito::Application.routes.draw do
       get code, to: "errors#show#{code}"
     end
 
-    get "/blocked" => "blocked#index", :as => :blocked
+    get "/blocked" => "blocked#index", as: :blocked
 
     get "/addresses/query" => "addresses#query"
 
-    get "/people/query" => "person/query#index", :as => :query_people
+    get "/people/query" => "person/query#index", as: :query_people
     get "/people/query_household/(:person_id)" => "person/query_household#index",
-      :as => :query_household
-    get "/people/company_name" => "person/company_name#index", :as => :query_company_name
-    get "/people/:id" => "person/top#show", :as => :person
-    get "/events/:id" => "event/top#show", :as => :event
-    get "/invoices/:id" => "invoices/top#show", :as => :invoices
+      as: :query_household
+    get "/people/company_name" => "person/company_name#index", as: :query_company_name
+    get "/people/:id" => "person/top#show", as: :person
+    get "/events/:id" => "event/top#show", as: :event
+    get "/invoices/:id" => "invoices/top#show", as: :invoices
 
-    get "list_groups" => "group/lists#index", :as => :list_groups
+    get "list_groups" => "group/lists#index", as: :list_groups
 
     resources :people, only: [] do
       scope module: "person" do
@@ -111,7 +110,7 @@ Hitobito::Application.routes.draw do
       resources :invoice_articles
       resource :invoice_config, only: [:edit, :show, :update]
 
-      get "group_invoices" => "contactables/invoices#index"
+      get "received_invoices" => "contactables/invoices#index"
 
       resources :payment_provider_configs, only: [] do
         member do
@@ -139,14 +138,12 @@ Hitobito::Application.routes.draw do
           end
         end
 
-        resources :invoices, module: "contactables", only: [:index]
-
         member do
           post :send_password_instructions
           put :primary_group
 
-          post "totp_reset" => "people/totp_reset#create", :as => "totp_reset"
-          post "totp_disable" => "people/totp_disable#create", :as => "totp_disable"
+          post "totp_reset" => "people/totp_reset#create", as: "totp_reset"
+          post "totp_disable" => "people/totp_disable#create", as: "totp_disable"
           post "password_override" => "person/security_tools#password_override"
           post "block" => "person/security_tools#block_person"
           post "unblock" => "person/security_tools#unblock_person"
@@ -157,6 +154,8 @@ Hitobito::Application.routes.draw do
           get "colleagues" => "person/colleagues#index"
           get "messages" => "person/messages#index"
         end
+
+        get "received_invoices" => "contactables/invoices#index"
 
         resources :notes, only: [:create, :destroy]
         resources :qualifications, only: [:new, :create, :destroy]
@@ -176,10 +175,10 @@ Hitobito::Application.routes.draw do
 
       resources :person_duplicates, only: [:index] do
         member do
-          get "merge" => "person_duplicates/merge#new", :as => "new_merge"
-          post "merge" => "person_duplicates/merge#create", :as => "merge"
-          get "ignore" => "person_duplicates/ignore#new", :as => "new_ignore"
-          post "ignore" => "person_duplicates/ignore#create", :as => "ignore"
+          get "merge" => "person_duplicates/merge#new", as: "new_merge"
+          post "merge" => "person_duplicates/merge#create", as: "merge"
+          get "ignore" => "person_duplicates/ignore#new", as: "new_ignore"
+          post "ignore" => "person_duplicates/ignore#create", as: "ignore"
         end
       end
 
@@ -189,9 +188,9 @@ Hitobito::Application.routes.draw do
 
       resource :role_list, only: [:destroy, :create, :new] do
         get "deletable" => "role_lists#deletable"
-        get "move" => "role_lists#move"
-        get "movable" => "role_lists#movable"
-        put "move" => "role_lists#update"
+        get "move"      => "role_lists#move"
+        get "movable"   => "role_lists#movable"
+        put "move"      => "role_lists#update"
       end
       resources :roles, except: [:index, :show] do
         collection do
@@ -209,37 +208,37 @@ Hitobito::Application.routes.draw do
 
       get "deleted_people" => "group/deleted_people#index"
 
-      get "person_add_requests" => "group/person_add_requests#index", :as => :person_add_requests
+      get "person_add_requests" => "group/person_add_requests#index", as: :person_add_requests
       post "person_add_requests" => "group/person_add_requests#activate"
       delete "person_add_requests" => "group/person_add_requests#deactivate"
 
       put "person_add_request_ignored_approvers" =>
-            "group/person_add_request_ignored_approvers#update",
-        :as => "person_add_request_ignored_approvers"
+        "group/person_add_request_ignored_approvers#update",
+        as: "person_add_request_ignored_approvers"
 
-      get "public_events/:id" => "public_events#show", :as => :public_event
+      get "public_events/:id" => "public_events#show", as: :public_event
       get "events/participation_lists/new" => "event/participation_lists#new"
       get "events/invitation_lists/new" => "event/invitation_lists#new"
 
       resources :events do
         collection do
           get "simple" => "events#index"
-          get "course" => "events#index", :type => "Event::Course"
+          get "course" => "events#index", type: "Event::Course"
           get "typeahead" => "events#typeahead"
         end
 
         scope module: "event" do
           member do
-            get "register" => "register#index"
+            get  "register" => "register#index"
             post "register" => "register#check"
-            put "register" => "register#register"
+            put  "register" => "register#register"
           end
 
           resources :application_market, only: :index do
             member do
-              put "waiting_list" => "application_market#put_on_waiting_list"
+              put    "waiting_list" => "application_market#put_on_waiting_list"
               delete "waiting_list" => "application_market#remove_from_waiting_list"
-              put "participant" => "application_market#add_participant"
+              put    "participant" => "application_market#add_participant"
               delete "participant" => "application_market#remove_participant"
             end
           end
@@ -253,7 +252,7 @@ Hitobito::Application.routes.draw do
 
           resources :applications, only: [] do
             member do
-              put :approve
+              put    :approve
               delete :reject
             end
           end
@@ -338,15 +337,15 @@ Hitobito::Application.routes.draw do
           post :define_mapping
           post :preview
           get "define_mapping" => "person/csv_imports#new" # route required for language switch
-          get "preview" => "person/csv_imports#new" # route required for language switch
+          get "preview"        => "person/csv_imports#new" # route required for language switch
         end
       end
 
       resources :service_tokens
     end # resources :group
 
-    get "list_courses" => "events/courses#index", :as => :list_courses
-    get "list_events" => "event/lists#events", :as => :list_events
+    get "list_courses" => "events/courses#index", as: :list_courses
+    get "list_events" => "event/lists#events", as: :list_events
 
     get "full" => "full_text#index"
 
@@ -358,9 +357,9 @@ Hitobito::Application.routes.draw do
 
     scope "mails", module: :mails do
       scope "imap" do
-        get ":mailbox" => "imap_mails#index", :as => :imap_mails
-        delete ":mailbox" => "imap_mails#destroy", :as => :imap_mails_destroy
-        patch ":mailbox/move" => "imap_mails_move#create", :as => :imap_mails_move
+        get ":mailbox" => "imap_mails#index", as: :imap_mails
+        delete ":mailbox" => "imap_mails#destroy", as: :imap_mails_destroy
+        patch ":mailbox/move" => "imap_mails_move#create", as: :imap_mails_move
       end
 
       resources :bounces, only: [:index]
@@ -369,8 +368,8 @@ Hitobito::Application.routes.draw do
     resources :qualification_kinds
     resources :tags, except: :show do
       collection do
-        get "merge" => "tags/merge#new", :as => "new_merge"
-        post "merge" => "tags/merge#create", :as => "merge"
+        get "merge" => "tags/merge#new", as: "new_merge"
+        post "merge" => "tags/merge#create", as: "merge"
       end
     end
 
@@ -400,13 +399,11 @@ Hitobito::Application.routes.draw do
       put "users" => "devise/hitobito/registrations#update", :as => "person_registration"
       get "users" => "devise/hitobito/registrations#edit" # route required for language switch
 
-      get "users/second_factor" => "second_factor_authentication#new",
-        :as => "new_users_second_factor"
-      post "users/second_factor" => "second_factor_authentication#create",
-        :as => "users_second_factor"
+      get "users/second_factor" => "second_factor_authentication#new", as: "new_users_second_factor"
+      post "users/second_factor" => "second_factor_authentication#create", as: "users_second_factor"
     end
 
-    post "person_add_requests/:id" => "person/add_requests#approve", :as => :person_add_request
+    post "person_add_requests/:id" => "person/add_requests#approve", as: :person_add_request
     delete "person_add_requests/:id" => "person/add_requests#reject"
 
     get "changelog" => "changelog#index"
@@ -436,7 +433,7 @@ Hitobito::Application.routes.draw do
   }
 
   scope path: ApplicationResource.endpoint_namespace, module: :json_api,
-    constraints: {format: "jsonapi"}, defaults: {format: "jsonapi"} do
+    constraints: { format: "jsonapi" }, defaults: { format: "jsonapi" } do
     resources :people, only: [:index, :show, :update]
     resources :groups, only: [:index, :show] do
       member do

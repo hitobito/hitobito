@@ -13,7 +13,7 @@
 #  account_number      :string
 #  address             :text
 #  beneficiary         :text
-#  currency            :string           default1("CHF"), not null
+#  currency            :string           default("CHF"), not null
 #  description         :text
 #  due_at              :date
 #  esr_number          :string           not null
@@ -94,7 +94,8 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   validates :due_at, timeliness: {after: :sent_at}, presence: true, if: :sent?
   validates :invoice_items, presence: true, if: -> { (issued? || sent?) && !invoice_run }
   validates :title, presence: true
-  validates :recipient, contactable: true
+  # In external invoices, the recipient type may also be blank
+  validates :recipient_type, inclusion: {in: ["Person", "Group"]}, allow_blank: true
   validate :recipient_name_present?
   validates :recipient_street, :recipient_zip_code, :recipient_town, :recipient_country,
     presence: true
@@ -121,7 +122,7 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   scope :visible, -> { where.not(state: :cancelled) }
   scope :remindable, -> { where(state: STATES_REMINDABLE) }
   scope :standalone, -> { where(invoice_run_id: nil) }
-  scope :preload_recipients, -> { extending(PreloadRecipients) }
+  scope :with_recipients, -> { extending(PreloadRecipients) }
 
   class << self
     def with_aggregated_payments

@@ -177,7 +177,7 @@ class InvoicesController < CrudController
   end
 
   def parent_scope
-    parent.respond_to?(:issued_invoices) ? parent.issued_invoices : parent.group.issued_invoices
+    parent.is_a?(InvoiceRun) ? parent.invoices : parent.issued_invoices
   end
 
   def list_entries
@@ -190,7 +190,7 @@ class InvoicesController < CrudController
     )
     scope = scope.standalone unless parents.any?(InvoiceRun)
     scope = scope.page(params[:page]) unless params[:ids]
-    Invoice::Filter.new(params).apply(scope).preload_recipients
+    Invoice::Filter.new(params).apply(scope).with_recipients
   end
 
   def payment_attrs

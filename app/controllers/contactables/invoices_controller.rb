@@ -21,7 +21,7 @@ class Contactables::InvoicesController < ListController
   end
 
   def contactable
-    @contactable ||= parents.find { |p| p.is_a?(Person) } || @group
+    @contactable ||= parent
   end
 
   def recipient_table_name = contactable.class.table_name

@@ -104,7 +104,7 @@ describe InvoiceMailer do
         text: "Im hektischen Alltag .."
       )
       texts = PDF::Inspector::Text.analyze(pdf.body.raw_source).show_text
-      expect(texts).to include "Zahlungserinnerung - Sent"
+      expect(texts).to include "Zahlungserinnerung - Sent Person Invoice"
       expect(texts).to include "Im hektischen Alltag .."
     end
   end

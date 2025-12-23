@@ -20,7 +20,7 @@ module Sheet
     end
 
     tab "people.tabs.invoices",
-      :group_person_invoices_path,
+      :group_person_received_invoices_path,
       if: (lambda do |view, group, person|
         view.can?(:index_issued_invoices, group) || view.can?(:index_received_invoices, person)
       end)

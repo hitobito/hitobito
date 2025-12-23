@@ -15,7 +15,7 @@ describe InvoiceRuns::Item do
   describe "with models" do
     subject(:invoice_item) { item.to_invoice_item }
 
-    before { allow(item).to receive(:models).and_return(people(:top_leader, :bottom_member)) }
+    before { allow(item).to receive(:models).and_return(Role.joins(:group)) }
 
     it "uses models for counts, presence and total_cost" do
       expect(item.count).to eq 2

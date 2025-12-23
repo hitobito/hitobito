@@ -44,13 +44,11 @@ class Contactable::Address
       {
         recipient_address_care_of: address_care_of,
         recipient_company_name: company? ? company_name : nil,
-        recipient_name: (
-          addressable.respond_to?(:full_name) ? addressable.full_name : addressable.name
-        ).to_s.squish,
+        recipient_name: full_name.to_s.squish,
         recipient_street: street,
         recipient_housenumber: housenumber,
         recipient_postbox: postbox,
-        recipient_zip_code: zip_code,
+        recipient_zip_code: zip_code.to_s,
         recipient_town: town,
         recipient_country: country || default_country
       }
@@ -61,7 +59,7 @@ class Contactable::Address
   def invoice_payee_address_attributes
     with_invoice_addressable do
       {
-        payee_name: addressable.full_name.to_s.squish,
+        payee_name: full_name.to_s.squish,
         payee_street: street,
         payee_housenumber: housenumber,
         payee_zip_code: zip_code,

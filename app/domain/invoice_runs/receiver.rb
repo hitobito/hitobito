@@ -16,6 +16,7 @@ module InvoiceRuns
       YAML.load(yaml).map do |row|
         case row
         in { id:, type:, layer_group_id: } then new(id:, type:, layer_group_id:)
+        # TODO The following typeless variants can be removed starting mid 2026
         in { id:, layer_group_id: } then new(id:, type: "Person", layer_group_id:)
         in Integer then new(id: row, type: "Person")
         in String then new(id: Integer(row), type: "Person")
